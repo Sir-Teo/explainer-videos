@@ -131,8 +131,7 @@ class Outro(VoiceoverScene):
             "star, is the open problem from the frontier. Pause here if you'd like to try them."
         ) as vo:
             self.play(FadeIn(ps.head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in ps.rows], lag_ratio=0.3), run_time=5.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in ps.rows], lag_ratio=0.3), run_time=6.0)
         self.wait(4.0)
         self.clear_scene()
 

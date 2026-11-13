@@ -144,4 +144,153 @@
       else if (key === "j") respond(1);
     });
   };
+
+  // ---- Part 2: try to be random, against a program that guesses your next press --------------------------------
+  W.berandom = function (el) {
+    var w = null;
+    var S = { phase: "idle", who: "you", seq: [], box: null, runCache: {} };
+    var YOU = "#f2f2f2", COIN = "#4fd1c5", GUESS = "#ff9f5a";
+
+    // The predictor of the film: for each press, find the longest recent context (up to `depth` presses) after
+    // which one key has led the other by at least two, and bet on that key; with nothing to go on, bet on a switch.
+    // Returns one guess per press, plus the guess for the press that has not been made yet.
+    function predict(seq, depth) {
+      var counts = {}, guesses = [], i, k, key, c, g;
+      for (i = 0; i <= seq.length; i++) {
+        g = -1;
+        for (k = Math.min(depth, i); k >= 1 && g < 0; k--) {
+          c = counts[seq.slice(i - k, i).join("")];
+          if (c && Math.abs(c[0] - c[1]) >= 2) g = c[1] > c[0] ? 1 : 0;
+        }
+        if (g < 0) g = i ? 1 - seq[i - 1] : 0;
+        guesses.push(g);
+        if (i === seq.length) break;
+        for (k = 1; k <= Math.min(depth, i); k++) {
+          key = seq.slice(i - k, i).join("");
+          if (!counts[key]) counts[key] = [0, 0];
+          counts[key][seq[i]]++;
+        }
+      }
+      return guesses;
+    }
+    function longestRun(seq) {
+      var best = seq.length ? 1 : 0, run = 1, i;
+      for (i = 1; i < seq.length; i++) { run = seq[i] === seq[i - 1] ? run + 1 : 1; if (run > best) best = run; }
+      return best;
+    }
+    function switches(seq) {
+      var s = 0, i;
+      for (i = 1; i < seq.length; i++) if (seq[i] !== seq[i - 1]) s++;
+      return seq.length > 1 ? s / (seq.length - 1) : NaN;
+    }
+    function coinSeq(n, seed) { var r = QB.rng(seed), o = [], i; for (i = 0; i < n; i++) o.push(r() < 0.5 ? 0 : 1); return o; }
+    function coinRun(n) { // the mean longest run of a fair coin in n tosses, by simulation (cached)
+      if (!S.runCache[n]) {
+        var tot = 0, k;
+        for (k = 0; k < 400; k++) tot += longestRun(coinSeq(n, 7000 + 31 * k + n));
+        S.runCache[n] = tot / 400;
+      }
+      return S.runCache[n];
+    }
+    function press(side) {
+      if (S.phase !== "run" || !w) return;
+      S.seq.push(side);
+      if (S.seq.length >= w.v.n) S.phase = "done";
+      w.render();
+    }
+
+    w = QB.widget(el, {
+      title: "Be random, if you can",
+      sub: "Press F and J (or tap the left and right halves of the dark panel) in as random an order as you can. Before every press, a small program has already guessed it from what you did earlier. A fair coin beats it half the time. Do you?",
+      panels: 2, height: 300,
+      controls: [
+        { k: "n", label: "Presses in a run", min: 30, max: 150, step: 10, value: 60, fmt: function (x) { return x.toFixed(0); } },
+        { k: "depth", label: "How many presses back the program looks", min: 1, max: 5, step: 1, value: 3, fmt: function (x) { return x.toFixed(0); } },
+      ],
+      buttons: [
+        { label: "Start", act: function () { S.seq = []; S.who = "you"; S.phase = "run"; } },
+        { label: "Let a coin play instead", act: function (state, v) { S.who = "coin"; S.seq = coinSeq(v.n, 100 + (state.seed || 1) * 13 + (S.coins = (S.coins || 0) + 1)); S.phase = "done"; } },
+        { label: "Clear", act: function () { S.seq = []; S.phase = "idle"; S.who = "you"; } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = g[0].box, cx = b.x + b.w / 2, cy = b.y + b.h / 2, i;
+        var seq = S.seq, n = seq.length, guesses = predict(seq, v.depth), hits = 0, col = S.who === "coin" ? COIN : YOU;
+        var run = [], k;
+        for (i = 0; i < n; i++) { if (guesses[i] === seq[i]) hits++; run.push(hits / (i + 1)); }
+        S.box = b; S.hits = hits;
+        ctx.save();
+        ctx.fillStyle = "#05070b"; ctx.fillRect(b.x + 6, b.y + 6, b.w - 12, b.h - 12);
+        ctx.strokeStyle = C.idea; ctx.lineWidth = 2; ctx.strokeRect(b.x + 6, b.y + 6, b.w - 12, b.h - 12);
+        ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if (S.phase === "run") { // a faint divider, and the two keys
+          ctx.strokeStyle = "#1b2230"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cx, b.y + 40); ctx.lineTo(cx, b.y + b.h - 70); ctx.stroke();
+          ctx.font = "600 34px system-ui, sans-serif"; ctx.fillStyle = C.muted;
+          ctx.fillText("F", b.x + b.w * 0.25, cy - 28); ctx.fillText("J", b.x + b.w * 0.75, cy - 28);
+          ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText((v.n - n) + " presses to go", cx, b.y + 24);
+          if (n) {
+            var ok = guesses[n - 1] === seq[n - 1];
+            ctx.fillStyle = ok ? GUESS : C.muted;
+            ctx.fillText("it guessed " + (guesses[n - 1] ? "J" : "F") + (ok ? ": right" : ": wrong"), cx, cy + 14);
+          } else { ctx.fillText("its first guess is made", cx, cy + 14); }
+        } else {
+          ctx.fillStyle = C.ink; ctx.font = "600 15px system-ui, sans-serif";
+          ctx.fillText(S.phase === "done" ? (S.who === "coin" ? "A coin played." : "Run finished.") : "On you", cx, cy - 40);
+          ctx.fillStyle = C.muted; ctx.font = "12.5px system-ui, sans-serif";
+          if (S.phase === "idle") wrap(ctx, "Press Start, then F and J (or tap a side) in as random an order as you can.", cx, cy - 10, b.w - 44, 17);
+          else wrap(ctx, "The program guessed " + hits + " of " + n + " presses. Now compare with a coin, or try again.", cx, cy - 10, b.w - 44, 17);
+        }
+        // the most recent presses, as squares: filled for J, hollow for F
+        var show = Math.min(n, Math.floor((b.w - 40) / 11)), x0 = cx - show * 5.5, y0 = b.y + b.h - 44;
+        for (i = 0; i < show; i++) {
+          k = n - show + i;
+          ctx.fillStyle = seq[k] ? col : "#2a3242";
+          ctx.fillRect(x0 + i * 11, y0, 9, 9);
+          ctx.fillStyle = guesses[k] === seq[k] ? GUESS : "transparent";
+          ctx.fillRect(x0 + i * 11, y0 + 12, 9, 3);
+        }
+        if (show) { ctx.fillStyle = C.muted; ctx.font = "11px system-ui, sans-serif"; ctx.fillText("your presses (bright: J); orange underline: guessed", cx, y0 + 26); }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [1, Math.max(v.n, 2)], y: [0, 1], title: "Share of presses the program has guessed so far", xlabel: "press number", ylabel: "guessed" });
+        var xs = [], up = [], lo = [];
+        for (i = 4; i <= v.n; i++) { xs.push(i); up.push(Math.min(1, 0.5 + 1 / Math.sqrt(i))); lo.push(Math.max(0, 0.5 - 1 / Math.sqrt(i))); }
+        a.line(xs, up, { color: C.muted, width: 1, dash: [4, 4] });
+        a.line(xs, lo, { color: C.muted, width: 1, dash: [4, 4] });
+        a.hline(0.5, { color: C.muted });
+        a.text(1, 0.5, "a coin: 50%", { color: C.muted, dx: 8, dy: 12, size: 11 });
+        a.text(v.n, Math.min(0.97, 0.5 + 1 / Math.sqrt(v.n) + 0.06), "within chance", { color: C.muted, align: "right", size: 11 });
+        if (n > 1) {
+          var px = []; for (i = 0; i < n; i++) px.push(i + 1);
+          a.line(px, run, { color: col, width: 2.5 });
+          a.dots([n], [run[n - 1]], { color: col, r: 4 });
+        }
+      },
+      readout: function (v) {
+        var n = S.seq.length, sw = switches(S.seq);
+        return [
+          [S.who === "coin" ? "the coin, guessed" : "you, guessed", n ? QB.pct(S.hits / n, 0) : "–"],
+          ["switched keys", n > 1 ? QB.pct(sw, 0) + " (a coin: 50%)" : "–"],
+          ["longest run", n ? longestRun(S.seq) + " (a coin: about " + fmt(coinRun(Math.max(n, 2)), 1) + ")" : "–"],
+          ["presses", String(n)],
+        ];
+      },
+      note: "Nothing you press is stored or sent: the sequence lives in this page and is gone when you close it. The program does nothing clever. It remembers what you pressed the last few times the same keys had just come up, and once you have leaned one way it bets on that; with nothing to go on, it bets that you will switch. People asked to be random switch too often and avoid long runs, which is exactly what it feeds on. One run proves little: with 60 presses anything between about 37% and 63% is within a coin's own luck (the dashed band), so try several runs, and then let a coin play. This is why, in an experiment, the order of conditions and the assignment to groups are left to a shuffled deck and never to the experimenter.",
+    });
+
+    var canvas = el.querySelector("canvas");
+    if (canvas) canvas.addEventListener("pointerdown", function (e) {
+      if (S.phase !== "run" || !S.box) return;
+      var rect = canvas.getBoundingClientRect(), x = e.clientX - rect.left, y = e.clientY - rect.top, b = S.box;
+      if (x < b.x || x > b.x + b.w || y < b.y || y > b.y + b.h) return;
+      e.preventDefault();
+      press(x < b.x + b.w / 2 ? 0 : 1);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (S.phase !== "run" || e.repeat) return;
+      var key = (e.key || "").toLowerCase();
+      if (key === "f") press(0);
+      else if (key === "j") press(1);
+    });
+  };
 })();

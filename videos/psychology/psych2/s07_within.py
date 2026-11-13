@@ -119,8 +119,8 @@ class Within(VoiceoverScene):
         head = heading(r"The price: \ whatever comes second is not the same person")
         edges = np.asarray(d["edges"])
         top = float(d["hist_within"].max()) * 1.12
-        A = axes([-40, 24], [0, top], x_length=8.6, y_length=3.3, xticks=[-40, -30, -20, -10, 0, 10, 20],
-                 xlabel=r"effect reported (ms)", center=[-2.1, -1.0, 0])
+        A = axes([-40, 24], [0, top], x_length=8.6, y_length=2.9, xticks=[-40, -30, -20, -10, 0, 10, 20],
+                 xlabel=r"effect reported (ms)", center=[-2.1, -1.35, 0])
         ax = A.ax
         hu = hist(ax, edges, d["hist_unbalanced"], BIAS, 0.7)
         hw = hist(ax, edges, d["hist_within"], P.ACCENT, 0.7)
@@ -129,8 +129,8 @@ class Within(VoiceoverScene):
 
         def session(text, color):
             t = label(text, font_size=24, color=WHITE)
-            box = RoundedRectangle(width=1.9, height=0.55, corner_radius=0.1, stroke_width=0, fill_color=color,
-                                   fill_opacity=0.55)
+            box = RoundedRectangle(width=max(1.9, t.width + 0.4), height=0.55, corner_radius=0.1, stroke_width=0,
+                                   fill_color=color, fill_opacity=0.55)
             return VGroup(box, t)
 
         plain = VGroup(session(r"no game", CTRL), MathTex(r"\rightarrow", font_size=36, color=GREY_B),
@@ -141,14 +141,18 @@ class Within(VoiceoverScene):
         bad = VGroup(label(r"everyone:", font_size=24, color=BIAS), plain).arrange(RIGHT, buff=0.3)
         good = VGroup(label(r"half, by shuffle:", font_size=24, color=P.ACCENT), half1,
                       label(r"the other half:", font_size=24, color=P.ACCENT), half2).arrange(RIGHT, buff=0.3)
-        bad.move_to([-1.6, 2.35, 0])
-        good.scale_to_fit_width(12.8).move_to([0, 1.55, 0])
+        bad.move_to([-1.6, 2.5, 0])
+        generic = VGroup(session(r"first session", GREY_C), MathTex(r"\rightarrow", font_size=36, color=GREY_B),
+                         session(r"second session", GREY_C),
+                         label(rf"about {d['practice_first_retest']:.0f} ms faster, from practice alone", font_size=24,
+                               color=BIAS)).arrange(RIGHT, buff=0.25).move_to([0, 2.5, 0])
+        good.scale_to_fit_width(12.8).move_to([0, 1.75, 0])
         notes = VGroup(
             label(rf"control first for all: \ ${d['mean_unbalanced']:.1f}$ ms", font_size=28, color=BIAS),
             label(rf"practice ({d['practice_first_retest']:.0f} ms) is credited to the game", font_size=24,
                   color=GREY_A),
             label(rf"counterbalanced: \ ${d['mean_within']:.1f}$ ms", font_size=28, color=P.ACCENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.75, -0.9, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to([4.75, -1.2, 0])
         if notes.get_right()[0] > 6.95:
             notes.shift(LEFT * (notes.get_right()[0] - 6.95))
         tag = simulated_tag()
@@ -165,8 +169,9 @@ class Within(VoiceoverScene):
             "give back a memory. Then it has to be two groups."
         ) as vo:
             self.play(FadeIn(head), FadeIn(A), Create(truth), FadeIn(tlab), FadeIn(tag))
+            self.play(LaggedStart(*[FadeIn(g_, shift=RIGHT * 0.15) for g_ in generic], lag_ratio=0.5), run_time=4.0)
             vo.wait_until("a")
-            self.play(FadeIn(bad, shift=DOWN * 0.15))
+            self.play(FadeOut(generic), FadeIn(bad, shift=DOWN * 0.15))
             vo.wait_until("b")
             self.play(FadeIn(hu, lag_ratio=0.05), FadeIn(notes[0]), FadeIn(notes[1]), run_time=2.0)
             vo.wait_until("c")
@@ -200,7 +205,12 @@ class Within(VoiceoverScene):
                      label(r"possible orders", font_size=28, color=GREY_A),
                      wrapped_label(r"complete counterbalancing: \ one group of people for each", 3.6, 22, GREY_A))
         cnt.arrange(DOWN, buff=0.15)
-        g = VGroup(cnt, cyc, wil).arrange(RIGHT, buff=1.0, aligned_edge=UP).move_to([0, -0.2, 0])
+        g = VGroup(cnt, cyc, wil).arrange(RIGHT, buff=0.9, aligned_edge=UP).scale(1.3)
+        if g.width > 13.2:
+            g.width = 13.2
+        g.move_to([0.2, -0.35, 0])
+        two = self.square([[0, 1], [1, 0]], cell=0.9, title=r"two conditions: \ two orders",
+                          sub=r"half the people take each").move_to([0, -0.3, 0])
         axes_ = VGroup(label(r"position in the session $\rightarrow$", font_size=20, color=GREY_B),
                        label(r"group of people $\downarrow$", font_size=20, color=GREY_B))
         axes_[0].next_to(cyc.cells, UP, buff=0.04).align_to(cyc.cells, LEFT)
@@ -218,9 +228,10 @@ class Within(VoiceoverScene):
             "effect are balanced. This is a small piece of combinatorics that every within-person experiment "
             "in the series will lean on."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(two[1]), LaggedStart(*[FadeIn(c) for c in two.cells], lag_ratio=0.2),
+                      FadeIn(two[2]))
             vo.wait_until("a")
-            self.play(FadeIn(cnt, shift=UP * 0.15))
+            self.play(FadeOut(two), FadeIn(cnt, shift=UP * 0.15))
             vo.wait_until("b")
             self.play(FadeIn(cyc[1]), FadeIn(axes_[1]), LaggedStart(*[FadeIn(c) for c in cyc.cells], lag_ratio=0.05),
                       run_time=2.5)

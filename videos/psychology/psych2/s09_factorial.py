@@ -24,16 +24,16 @@ class Factorial(VoiceoverScene):
 
     def mini(self, ys, title, verdict, color) -> VGroup:
         """A small 2 by 2 plot: two lines over 'no game' and 'game'."""
-        A = axes([0.5, 2.5], [0, 4], x_length=3.0, y_length=2.4, center=ORIGIN)
+        A = axes([0.5, 2.5], [0, 4], x_length=3.6, y_length=3.3, center=ORIGIN)
         ax = A.ax
         g = VGroup(A)
         for (a, b), c in zip(ys, (QUICK, SLOW)):
             g.add(Line(ax.c2p(1, a), ax.c2p(2, b), color=c, stroke_width=5), Dot(ax.c2p(1, a), radius=0.07, color=c),
                   Dot(ax.c2p(2, b), radius=0.07, color=c))
-        xl = VGroup(label(r"no game", font_size=20, color=GREY_A).next_to(ax.c2p(1, 0), DOWN, buff=0.12),
-                    label(r"game", font_size=20, color=GREY_A).next_to(ax.c2p(2, 0), DOWN, buff=0.12))
-        t = label(title, font_size=28, color=WHITE).next_to(A, UP, buff=0.25)
-        v = wrapped_label(verdict, 3.6, 24, color).next_to(xl, DOWN, buff=0.25)
+        xl = VGroup(label(r"no game", font_size=22, color=GREY_A).next_to(ax.c2p(1, 0), DOWN, buff=0.12),
+                    label(r"game", font_size=22, color=GREY_A).next_to(ax.c2p(2, 0), DOWN, buff=0.12))
+        t = label(title, font_size=32, color=WHITE).next_to(A, UP, buff=0.25)
+        v = wrapped_label(verdict, 4.0, 27, color).next_to(xl, DOWN, buff=0.25)
         g.add(xl, t, v)
         return g
 
@@ -44,7 +44,20 @@ class Factorial(VoiceoverScene):
         b = self.mini(((1.4, 1.1), (3.1, 2.0)), r"fanning", r"it helps the slow more: \ an interaction", P.ACCENT)
         c = self.mini(((1.4, 2.4), (3.1, 2.0)), r"crossing", r"it helps one group and hurts the other: \ the "
                       r"average effect hides both", BIAS)
-        g = VGroup(a, b, c).arrange(RIGHT, buff=0.75, aligned_edge=UP).move_to([0, -0.35, 0])
+        g = VGroup(a, b, c).arrange(RIGHT, buff=0.55, aligned_edge=UP)
+        if g.width > 13.4:
+            g.width = 13.4
+        g.move_to([0, -0.75, 0])
+        # the design itself, before its three possible outcomes
+        cells = VGroup()
+        for i, who in enumerate((r"quick people", r"slow people")):
+            for j, what in enumerate((r"no game", r"game")):
+                sq = RoundedRectangle(width=3.0, height=1.1, corner_radius=0.12, stroke_color=(QUICK, SLOW)[i],
+                                      stroke_width=2.5, fill_color=CARD_FILL, fill_opacity=1)
+                sq.move_to([(j - 0.5) * 3.3 + 1.0, (0.5 - i) * 1.35 - 0.6, 0])
+                cells.add(VGroup(sq, label(rf"{who}, {what}", font_size=24, color=WHITE).move_to(sq)))
+        four = label(r"four cells: \ two factors, crossed", font_size=30, color=GREY_A).next_to(cells, DOWN, buff=0.4)
+        design = VGroup(cells, four)
         leg = legend([(QUICK, r"quick people"), (SLOW, r"slow people")], font_size=24)
         leg.arrange(RIGHT, buff=0.8).next_to(head, DOWN, buff=0.3)
         sch = schematic_tag(UR)
@@ -61,7 +74,12 @@ class Factorial(VoiceoverScene):
             "law. Very often it is the law."
         ) as vo:
             self.play(FadeIn(head), FadeIn(leg), FadeIn(sch))
-            for mark, m in zip("abc", (a, b, c)):
+            self.play(LaggedStart(*[FadeIn(c_, shift=UP * 0.1) for c_ in cells], lag_ratio=0.4), FadeIn(four),
+                      run_time=4.0)
+            vo.wait_until("a")
+            self.play(FadeOut(design))
+            self.play(FadeIn(a, shift=UP * 0.15))
+            for mark, m in zip("bc", (b, c)):
                 vo.wait_until(mark)
                 self.play(FadeIn(m, shift=UP * 0.15))
             vo.wait_until("d")
@@ -74,7 +92,7 @@ class Factorial(VoiceoverScene):
         head = heading(r"A game that takes a tenth off every reaction time")
 
         def plot(vals, center, ylabel, yr, yticks, yfmt=None):
-            A = axes([0.5, 2.5], yr, x_length=3.6, y_length=3.4, ylabel=ylabel, yticks=yticks, yfmt=yfmt,
+            A = axes([0.5, 2.5], yr, x_length=3.5, y_length=3.5, ylabel=ylabel, yticks=yticks, yfmt=yfmt,
                      center=center)
             ax = A.ax
             g = VGroup(A)
@@ -85,9 +103,12 @@ class Factorial(VoiceoverScene):
                   label(r"game", font_size=22, color=GREY_A).next_to(ax.c2p(2, yr[0]), DOWN, buff=0.15))
             return g
 
-        left = plot(ms, [-4.3, -0.35, 0], r"milliseconds", [170, 245], [180, 200, 220, 240])
-        right = plot(logs, [1.0, -0.35, 0], r"logarithm of milliseconds", [5.15, 5.5], [5.2, 5.3, 5.4, 5.5],
+        left = plot(ms, [-4.75, -0.2, 0], r"milliseconds", [170, 245], [180, 200, 220, 240])
+        right = plot(logs, [-0.25, -0.2, 0], r"logarithm of milliseconds", [5.15, 5.5], [5.2, 5.3, 5.4, 5.5],
                      yfmt=lambda v: rf"{v:.1f}")
+        rule = MathTex(r"\text{with the game}", r"=", r"0.9 \times", r"\text{without it}", font_size=56)
+        rule[2].set_color(P.ACCENT)
+        rule.move_to([0, 0.2, 0])
         gains = VGroup(label(rf"quick: \ ${d['gain_ms'][0]:.0f}$ ms", font_size=26, color=QUICK),
                        label(rf"slow: \ ${d['gain_ms'][1]:.0f}$ ms", font_size=26, color=SLOW),
                        label(rf"interaction: \ ${d['interaction_ms']:.1f}$ ms", font_size=26, color=P.ACCENT))
@@ -97,9 +118,10 @@ class Factorial(VoiceoverScene):
                      label(r"interaction: \ none", font_size=26, color=TRUTH))
         pct.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(right, DOWN, buff=0.25)
         moral = VGroup(
-            wrapped_label(r"The same data. \ Whether there is an interaction depends on the scale.", 3.9, 28, WHITE),
-            wrapped_label(r"Lines that cross survive any scale. \ Lines that only fan may not.", 3.9, 26, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([5.05, 0.3, 0])
+            wrapped_label(r"The same data. \ Whether there is an interaction depends on the scale.", 3.7, 28, WHITE),
+            wrapped_label(r"Lines that cross survive any scale. \ Lines that only fan may not.", 3.7, 26, GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.85, 0.3, 0])
+        keep_in_frame(moral, 0.25)
         tag = simulated_tag(rf"simulated: the Pool, {fmt_int(d['n'])} people")
         with self.voiceover(
             "One warning about interactions, and it's computed, so you can check it. Suppose the game takes a "
@@ -115,7 +137,9 @@ class Factorial(VoiceoverScene):
             "matters all through the series, wherever one group starts higher than another."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
+            self.play(Write(rule), run_time=2.0)
             vo.wait_until("a")
+            self.play(FadeOut(rule))
             self.play(FadeIn(left, shift=UP * 0.15))
             self.play(FadeIn(gains, lag_ratio=0.3))
             vo.wait_until("b")

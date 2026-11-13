@@ -293,13 +293,19 @@ def compute_be_random() -> dict:
                      "longest_run": float(runs.mean()), "accuracy": float(acc.mean()),
                      "accuracy_sd": float(acc.std())}
         hists[name] = np.bincount(np.minimum(runs, 12), minlength=13)[1:] / reps
+    # the chance that 20 tosses of a fair coin contain a run of four or more: count the sequences that do not
+    # free[r]: the number of sequences so far with no run of four that end in a run of length r
+    free = {r: (2.0 if r == 1 else 0.0) for r in (1, 2, 3)}
+    for _ in range(19):
+        free = {1: free[1] + free[2] + free[3], 2: free[1], 3: free[2]}
+    p_run4 = 1 - sum(free.values()) / 2 ** 20
     example_person = lab.human_like_sequence(40, 0.6, rng(502))
     example_coin = lab.human_like_sequence(40, 0.5, rng(503))
     assert out["person"]["accuracy"] > out["coin"]["accuracy"] + 0.03 and abs(out["coin"]["accuracy"] - 0.5) < 0.01
     assert out["person"]["longest_run"] < out["coin"]["longest_run"]
     return {"n_press": n_press, "p_person": 0.6, "person": out["person"], "coin": out["coin"],
             "example_person": example_person, "example_coin": example_coin,
-            "run_lengths": np.arange(1, 13), "hist_runs_person": hists["person"], "hist_runs_coin": hists["coin"],
+            "p_run4_in_20": p_run4, "run_lengths": np.arange(1, 13), "hist_runs_person": hists["person"], "hist_runs_coin": hists["coin"],
             "expected_longest_run_coin": float(math.log2(n_press))}
 
 

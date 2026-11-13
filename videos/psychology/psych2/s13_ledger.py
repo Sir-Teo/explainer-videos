@@ -54,8 +54,8 @@ class Ledger(VoiceoverScene):
             "teacher has nothing else to go on. <bookmark mark='d'/> Subjects do what they think is wanted: "
             "replicated, and when it was finally measured, modest. <bookmark mark='e'/> And people can't be "
             "random: replicated for seventy years, which is why the shuffling is done by cards. "
-            f"<bookmark mark='f'/> That makes {total} rows in the Ledger. Notice that three of today's five carry "
-            "a qualification. That's roughly the proportion to expect for the rest of the series."
+            f"<bookmark mark='f'/> That makes {total} rows in the Ledger. Notice that two of today's five are not "
+            "simply replicated. That's roughly the proportion to expect for the rest of the series."
         ) as vo:
             self.play(FadeIn(board.head))
             for mark, row in zip("abcde", board.rows):

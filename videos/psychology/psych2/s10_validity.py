@@ -64,9 +64,11 @@ class Validity(VoiceoverScene):
             "people say which one they're arguing about."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
-            for mark, t in zip("abcd", tiles):
+            ghosts = tiles.copy().set_opacity(0.22)
+            self.play(LaggedStart(*[FadeIn(g_, shift=UP * 0.1) for g_ in ghosts], lag_ratio=0.3), run_time=4.0)
+            for mark, g_, t in zip("abcd", ghosts, tiles):
                 vo.wait_until(mark)
-                self.play(FadeIn(t, shift=UP * 0.15))
+                self.play(FadeOut(g_), FadeIn(t))
         self.clear_scene()
 
     def weird(self):
@@ -75,16 +77,16 @@ class Validity(VoiceoverScene):
         west = 96
         us = 68
         cols = [P.ACCENT] * us + ["#7EC8F5"] * (west - us) + [GREY_C] * (n - west)
-        crowd = people_row(n, cols, height=0.42, buff=0.1, per_row=20).move_to([-2.6, -0.15, 0])
+        crowd = people_row(n, cols, height=0.42, buff=0.1, per_row=20).move_to([-2.9, -0.15, 0])
         cap = label(r"of every 100 samples in six leading psychology journals, 2003 to 2007:", font_size=26)
         cap.next_to(crowd, UP, buff=0.35).align_to(crowd, LEFT)
         facts = VGroup(
-            label(rf"{us} from the United States", font_size=32, color=P.ACCENT),
-            label(rf"{west} from Western industrial countries", font_size=32, color="#7EC8F5"),
-            wrapped_label(r"countries with about 12\% of the world's people", 4.6, 26, GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.6, 0.3, 0])
-        if facts.get_right()[0] > 6.95:
-            facts.shift(LEFT * (facts.get_right()[0] - 6.95))
+            label(rf"{us} from the United States", font_size=30, color=P.ACCENT),
+            label(rf"{west} from Western industrial", font_size=30, color="#7EC8F5"),
+            label(r"countries, which hold about", font_size=26, color=GREY_A),
+            label(r"12\% of the world's people", font_size=26, color=GREY_A),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.6, 0.3, 0])
+        keep_in_frame(facts, 0.3)
         word = VGroup(label(r"WEIRD:", font_size=34, color=P.ACCENT),
                       label(r"Western, Educated, Industrialized, Rich, Democratic", font_size=30))
         word.arrange(RIGHT, buff=0.3).to_edge(DOWN, buff=0.8)
@@ -109,13 +111,13 @@ class Validity(VoiceoverScene):
             self.play(*[grey[i].animate.set_color(P.ACCENT) for i in range(us)], FadeIn(facts[0]))
             vo.wait_until("b")
             self.play(*[grey[i].animate.set_color("#7EC8F5") for i in range(us, west)], FadeIn(facts[1]),
-                      FadeIn(facts[2]))
+                      FadeIn(facts[2]), FadeIn(facts[3]))
             vo.wait_until("c")
             self.play(FadeIn(word, shift=UP * 0.15))
         self.clear_scene()
 
     def sketch(self, kind) -> VGroup:
-        A = axes([0, 10], [0, 10], x_length=3.2, y_length=2.1, center=ORIGIN)
+        A = axes([0, 10], [0, 10], x_length=3.8, y_length=2.5, center=ORIGIN)
         ax = A.ax
         g = VGroup(A)
         if kind == "rd":  # a jump at a cutoff
@@ -131,7 +133,7 @@ class Validity(VoiceoverScene):
                   DashedLine(ax.c2p(5, 0), ax.c2p(5, 9.5), color=GREY_B, stroke_width=2))
         else:  # a lottery
             for k in range(8):
-                g.add(card(RED_CARD if k % 3 == 0 else BLACK_CARD, 0.26, 0.38).move_to(ax.c2p(1.2 + 1.1 * k, 5)))
+                g.add(card(RED_CARD if k % 3 == 0 else BLACK_CARD, 0.3, 0.44).move_to(ax.c2p(1.2 + 1.1 * k, 5)))
         return g
 
     def quasi(self):
@@ -146,10 +148,17 @@ class Validity(VoiceoverScene):
                                                 r"untreated one"),
         ):
             pic = self.sketch(kind)
-            t = VGroup(label(name, font_size=30, color=P.ACCENT), wrapped_label(text, 3.8, 24, WHITE))
+            t = VGroup(label(name, font_size=32, color=P.ACCENT), wrapped_label(text, 4.1, 25, WHITE))
             t.arrange(DOWN, buff=0.12)
             items.add(VGroup(pic, t).arrange(DOWN, buff=0.3))
-        items.arrange(RIGHT, buff=0.55, aligned_edge=UP).move_to([0, -0.1, 0])
+        items.arrange(RIGHT, buff=0.45, aligned_edge=UP)
+        if items.width > 13.4:
+            items.width = 13.4
+        items.move_to([0, -0.2, 0])
+        cannot = VGroup(label(r"You cannot assign people to", font_size=34, color=GREY_A),
+                        VGroup(*[label(t, font_size=44, color=WHITE) for t in (r"a childhood", r"a stroke",
+                                                                              r"an earthquake")])
+                        .arrange(RIGHT, buff=0.9)).arrange(DOWN, buff=0.4).move_to([0, 0.2, 0])
         foot = label(r"each replaces the shuffle with an assumption, and says which one: \ \emph{Statistics, Built}, "
                      r"Parts 35 to 37", font_size=26, color=GREY_A).to_edge(DOWN, buff=0.7)
         sch = schematic_tag(UR)
@@ -165,8 +174,12 @@ class Validity(VoiceoverScene):
             "three parts on them. For today the point is the ranking: a design is as good as its answer to the "
             "question, what else could explain this?"
         ) as vo:
-            self.play(FadeIn(head), FadeIn(sch))
-            for mark, it in zip("abc", items):
+            self.play(FadeIn(head), FadeIn(sch), FadeIn(cannot[0]))
+            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in cannot[1]], lag_ratio=0.5), run_time=3.0)
+            vo.wait_until("a")
+            self.play(FadeOut(cannot))
+            self.play(FadeIn(items[0], shift=UP * 0.15))
+            for mark, it in zip("bc", items[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(it, shift=UP * 0.15))
             vo.wait_until("d")

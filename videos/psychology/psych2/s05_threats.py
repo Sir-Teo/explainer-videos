@@ -39,24 +39,26 @@ class Threats(VoiceoverScene):
         d = load("threats")
         ds = d["designs"]
         head = heading(r"One useless game, six studies", font_size=34)
-        rail = effect_rail(-50, 10, length=6.4, ticks=[-40, -30, -20, -10, 0, 10], font_size=20)
-        rail.move_to([3.55, -3.0, 0])
+        rail = effect_rail(-50, 10, length=6.0, ticks=[-40, -30, -20, -10, 0, 10], font_size=20)
+        rail.move_to([3.85, -3.05, 0])
         x0 = rail.x(0)
-        zero = Line([x0, rail.axis.get_y() + 0.05, 0], [x0, 2.55, 0], color=TRUTH, stroke_width=3)
-        zlab = label(r"the truth: \ 0", font_size=24, color=TRUTH).next_to(zero, UP, buff=0.08)
-        rows, marks = VGroup(), VGroup()
+        zero = Line([x0, rail.axis.get_y() + 0.05, 0], [x0, 2.75, 0], color=TRUTH, stroke_width=3)
+        zlab = label(r"the truth: \ 0", font_size=24, color=TRUTH).next_to(zero, UP, buff=0.06)
+        names, details, marks = VGroup(), VGroup(), VGroup()
         for i, (key, name, study, why_) in enumerate(DESIGNS):
-            y = 2.15 - 0.78 * i
+            y = 2.3 - 0.9 * i
             e = ds[key]
-            t = VGroup(label(name, font_size=30, color=BIAS), label(study, font_size=22, color=WHITE),
-                       label(why_, font_size=20, color=GREY_B)).arrange(DOWN, aligned_edge=LEFT, buff=0.04)
-            t.move_to([-6.75, y, 0], aligned_edge=LEFT)
-            if t.width > 6.6:
-                t.scale_to_fit_width(6.6).move_to([-6.75, y, 0], aligned_edge=LEFT)
+            nm = label(name, font_size=32, color=BIAS).move_to([-6.85, y, 0], aligned_edge=LEFT)
+            t = VGroup(label(study, font_size=24, color=WHITE), label(why_, font_size=21, color=GREY_B))
+            t.arrange(DOWN, aligned_edge=LEFT, buff=0.04).move_to([-4.6, y, 0], aligned_edge=LEFT)
+            if t.get_right()[0] > 0.6:
+                t.scale_to_fit_width(5.2).move_to([-4.6, y, 0], aligned_edge=LEFT)
             m = estimate_mark(rail, y, e["effect"], e["lo"], e["hi"], BIAS)
-            v = label(rf"${e['effect']:.0f}$", font_size=28, color=BIAS).next_to(m, LEFT, buff=0.15)
-            rows.add(t)
+            v = label(rf"${e['effect']:.0f}$", font_size=30, color=BIAS).next_to(m, LEFT, buff=0.15)
+            names.add(nm)
+            details.add(t)
             marks.add(VGroup(m, v))
+        head.to_edge(UP, buff=0.25)
         tag = simulated_tag(rf"simulated: the Pool, {d['n']} people a study; \ the game's true effect is zero")
         with self.voiceover(
             "The single group measured twice is one of a family. In 1963 Donald Campbell and Julian Stanley "
@@ -75,10 +77,13 @@ class Threats(VoiceoverScene):
             "unevenly. Here the slowest players got bored and quit, and only the finishers were measured. "
             "<bookmark mark='g'/> Six studies, six effects, every interval clear of zero, and nothing there."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(rail), Create(zero), FadeIn(zlab), FadeIn(tag))
-            for mark, t, m in zip("abcdef", rows, marks):
+            self.play(FadeIn(head), FadeIn(rail), FadeIn(tag))
+            ghosts = VGroup(*[nm.copy().set_color(GREY_C) for nm in names])
+            self.play(LaggedStart(*[FadeIn(g_, shift=RIGHT * 0.15) for g_ in ghosts], lag_ratio=0.25), run_time=4.0)
+            self.play(Create(zero), FadeIn(zlab))
+            for mark, g_, nm, t, m in zip("abcdef", ghosts, names, details, marks):
                 vo.wait_until(mark)
-                self.play(FadeIn(t, shift=RIGHT * 0.15))
+                self.play(ReplacementTransform(g_, nm), FadeIn(t, shift=RIGHT * 0.15))
                 self.play(FadeIn(m, shift=LEFT * 0.2))
             vo.wait_until("g")
             self.play(LaggedStart(*[Indicate(m[1], color=WHITE, scale_factor=1.25) for m in marks], lag_ratio=0.15),
@@ -92,8 +97,8 @@ class Threats(VoiceoverScene):
         rng = np.random.default_rng(12)
         n = 220
         true = rng.normal(0, 1.0, n)
-        first = true + rng.normal(0, 0.75, n)
-        second = true + rng.normal(0, 0.75, n)
+        first = np.clip(true + rng.normal(0, 0.75, n), -3.3, 3.3)
+        second = np.clip(true + rng.normal(0, 0.75, n), -3.3, 3.3)
         A = axes([-3.6, 3.6], [-3.6, 3.6], x_length=5.6, y_length=5.0, xlabel=r"first test (slower $\rightarrow$)",
                  ylabel=r"second test", center=[-3.5, -0.45, 0])
         ax = A.ax
@@ -101,7 +106,7 @@ class Threats(VoiceoverScene):
         sel = first >= cut
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.045, color=P.POOL).set_opacity(0.8) for a, b in zip(first, second)])
         diag = DashedLine(ax.c2p(-3.4, -3.4), ax.c2p(3.4, 3.4), color=GREY_B, stroke_width=2)
-        dlab = label(r"no change", font_size=20, color=GREY_B).next_to(ax.c2p(-2.6, -2.6), DR, buff=0.05)
+        dlab = label(r"no change", font_size=22, color=GREY_B).move_to(ax.c2p(-0.6, -3.0))
         band = Rectangle(width=ax.c2p(3.5, 0)[0] - ax.c2p(cut, 0)[0], height=5.0, stroke_width=0, fill_color=BIAS,
                          fill_opacity=0.14).move_to([(ax.c2p(3.5, 0)[0] + ax.c2p(cut, 0)[0]) / 2, ax.c2p(0, 0)[1], 0])
         chosen = VGroup(*[dots[i] for i in np.flatnonzero(sel)])
@@ -196,7 +201,7 @@ class Threats(VoiceoverScene):
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, float(counts.max()) * 1.1), color=TRUTH, stroke_width=3)
         zlab = label(r"the truth: \ 0", font_size=24, color=TRUTH).next_to(zero, UP, buff=0.06)
         facts = VGroup(
-            label(rf"mean of 500 studies: \ ${e['mean']:+.1f}$ ms", font_size=30, color=CTRL),
+            label(rf"mean of 500 studies: \ ${signed(e['mean'])}$ ms", font_size=30, color=CTRL),
             label(rf"``significant'' in {100 * e['share_significant']:.0f}\% of them", font_size=30, color=WHITE),
             label(r"as advertised: \ 5\%", font_size=26, color=GREY_A),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([5.0, 0.4, 0])

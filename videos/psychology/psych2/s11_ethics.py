@@ -118,15 +118,13 @@ class Ethics(VoiceoverScene):
             (r"Justice", r"who bears the burden, and who gets the benefit?", r"no group is studied because it is "
                                                                              r"convenient or powerless", JUSTICE),
         ):
-            t = VGroup(label(name, font_size=34, color=color), label(means, font_size=26, color=WHITE),
-                       wrapped_label(practice, 3.6, 23, GREY_A)).arrange(DOWN, buff=0.2)
-            box = RoundedRectangle(width=4.2, height=3.3, corner_radius=0.15, stroke_color=color, stroke_width=2.5,
+            t = VGroup(label(name, font_size=36, color=color), wrapped_label(means, 3.7, 28, WHITE),
+                       wrapped_label(practice, 3.7, 24, GREY_A)).arrange(DOWN, buff=0.28)
+            box = RoundedRectangle(width=4.3, height=3.9, corner_radius=0.15, stroke_color=color, stroke_width=2.5,
                                    fill_color=CARD_FILL, fill_opacity=0.95)
             t.move_to(box)
-            if t.width > 3.9:
-                t.scale_to_fit_width(3.9)
             cards.add(VGroup(box, t))
-        cards.arrange(RIGHT, buff=0.3).move_to([0, 0.35, 0])
+        cards.arrange(RIGHT, buff=0.3).move_to([0, 0.45, 0])
         dec = wrapped_label(r"Deception: \ only when the question cannot be asked without it, never about the "
                             r"risks, and always followed by a full account (debriefing).", 12.6, 28, P.ACCENT)
         dec.to_edge(DOWN, buff=0.7)

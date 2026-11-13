@@ -414,40 +414,50 @@ millisecond timing can and cannot be trusted to in a browser.
 Psychology*; Donders 1868/1969; Sternberg 1969; Marr 1982 ch. 1; Miller 2003; Danziger 1990; Dennett 1978;
 Roelofs 2018.
 
-### Part 2 · The Experiment (~50)
+### Part 2 · The Experiment (~56)
 *Question:* how do you ask a mind a question without telling it the answer?
 *Story:* a horse does arithmetic and a commission of experts finds no trick. One young psychologist varies who
 knows the answer, and the ability vanishes. Every design rule in psychology is in that story: the comparison, the
 control, the blind, and randomization, which psychologists used first.
-1. Hook: Clever Hans in Berlin, 1904. The Hans Commission's report.
-2. Pfungst's experiments: questioner knows or does not; blinkers; distance. The cue was the questioner's posture.
-   Pfungst then plays the horse himself.
-3. Variables, operational definitions, and the comparison: why one group is never enough.
-4. Confounds, drawn as a causal graph. Selection, history, maturation, testing, regression, attrition, with a
-   worked example of each on the Pool.
-5. Random assignment: Peirce and Jastrow's playing cards (1884), the first randomized experiment, and why it
-   works (computed: balance in expectation).
-6. Between and within designs; carry-over; counterbalancing and Latin squares; power bought by pairing (computed).
-7. Expectancy and demand: Rosenthal's "bright" rats and Pygmalion (and their record), Orne's demand
-   characteristics, the placebo, single and double blinds.
-8. Factorial designs and interactions, drawn. Why "it depends" is a finding. Scale dependence of interactions.
-9. Quasi-experiments and when randomization is impossible (link to *Statistics, Built* Parts 35–37).
-10. Validity, four kinds (Shadish, Cook and Campbell). The WEIRD sample problem as external validity (paid off in
-    Part 38).
-11. Ethics as design: Milgram and the reaction, Tuskegee, the Belmont Report (1979), consent, deception and
-    debriefing, the IRB.
-12. The experiment runner: a design is a small program; the Pool runs it.
+0. Hook: Clever Hans in Berlin, 1904. The commission of thirteen and its report of 12 September.
+1. Pfungst's experiments: the questioner knows or does not (98% against 8%); blinders (89% against 6%); the cue,
+   a movement of the head; the questioner moved away, with the cue-reading model; Pfungst plays the horse, and 23
+   of 25 people give him the signal.
+2. On you: Chevreul's pendulum (ideomotor action); be a coin, and why a program can guess you.
+3. Compared with what? Variables, operational definitions, and why one group is never enough: a useless game
+   "works" in a group tested twice, and a control group shows why.
+4. Six ways to fool yourself: testing, history, maturation, regression, selection, attrition, each run on the Pool
+   with the truth zero. Regression to the mean, drawn. The confound. The randomized experiment, 500 times.
+5. Shuffling the cards: Peirce and Jastrow's deck (1884), the first randomized experiment; what a shuffle balances,
+   measured or not, and by how much (computed); the randomization test.
+6. Between and within designs: what pairing buys (computed), carry-over, counterbalancing, Latin and Williams
+   squares.
+7. Expectancy and demand: Rosenthal and Fode's rats, Pygmalion and its record, detection dogs (Lit et al. 2011),
+   Orne's demand characteristics measured (de Quidt et al. 2018), the placebo, single, double and triple blinds.
+8. Factorial designs and interactions, drawn. Why "it depends" is a finding. Scale dependence of interactions
+   (computed).
+9. Validity, four kinds (Shadish, Cook and Campbell). The WEIRD sample problem as external validity (paid off in
+   Part 38). Quasi-experiments for when randomization is impossible (link to *Statistics, Built* Parts 35–37).
+10. Ethics as design: deception, Milgram, Tuskegee, the Belmont Report (1979), consent and debriefing, the ethics
+    board; the rules for this series' own experiments.
+11. The experiment runner: a design is a small program; the Pool runs it. Hans as four numbers.
+12. The Ledger.
+13. In practice: A/B tests, clinical trials, user studies; five questions for any study.
+14. Frontier: blinds that cannot be kept (Mitchell et al. 2021), the balanced placebo design and its price,
+    demand measured directly, who gets studied.
 
-*Psyche:* the Pool and `explainer.psychology.lab`: designs as objects (assign, counterbalance, run, analyse); each
-threat to validity simulated with the truth known.
-*On you:* an ideomotor demonstration (a pendulum that answers your own question); find the confound in five
-described studies.
-*Ledger:* Clever Hans (`replicated` as the expectancy effect in animals); Rosenthal and Jacobson's Pygmalion
-(`contested`: small and conditional); the Hawthorne effect (`story and record`, told in Part 53).
+*Psyche:* `cueing` (Clever Hans as a cue reader, fitted to Pfungst's counts); the Pool's sessions; and
+`explainer.psychology.lab`: assignment, counterbalancing, the comparison and its test, power, and each threat to
+validity simulated with the truth known.
+*On you:* an ideomotor demonstration (a pendulum that answers your own thought); try to be random, against a
+program that guesses your next key press.
+*Ledger:* an animal reads its handler (`replicated`); the "bright" rats (`not directly tested`); teacher
+expectancy and IQ (`replicated, smaller`); demand effects (`replicated`); people cannot be random (`replicated`).
+The Hawthorne effect is left to Part 53.
 *In practice:* A/B tests, clinical trials and user studies are these designs; "who is blind?" is the first question
 to ask of any of them.
-*Frontier:* demand effects measured directly (de Quidt, Haushofer & Roth 2018); online samples and data quality;
-when a blind cannot be kept (psychotherapy, psychedelics), and what designs do about it.
+*Frontier:* demand effects measured directly (de Quidt, Haushofer & Roth 2018); when a blind cannot be kept
+(psychotherapy, psychedelics), and what designs do about it; whether findings hold beyond the samples studied.
 *Reading:* Pfungst 1907/1911; Peirce & Jastrow 1884; Shadish, Cook & Campbell 2002; Rosenthal 1966; Orne 1962;
 Campbell & Stanley 1963; the Belmont Report.
 
@@ -3003,4 +3013,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 |---|---|---|
 | 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. The Chinese guide (`PSYCHOLOGY_ZH_GUIDE.md`) and text table are in place. Still to do: the Ledger gate tool, the shared browser task kit (Part 1's interactive carries its own trial loop) | |
 | 1 | built, English and Chinese: 14 chapters, hook and outro; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 46 min |
-| 2 | in progress, the second pilot: sources verified into the Archive, the laboratory (`lab.py`), the cue-reading model (`psyche/cueing.py`) and `compute.py` written and tested; scenes next | |
+| 2 | built in English, the second pilot: 14 chapters, hook and outro; the laboratory (`lab.py`), the cue-reading model (`psyche/cueing.py`), five Ledger rows; course entry, lab and interactive checked. Chinese edition next. Open checks in its README | 56 min |

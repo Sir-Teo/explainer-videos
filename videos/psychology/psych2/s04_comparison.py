@@ -129,7 +129,7 @@ class Comparison(VoiceoverScene):
         rows = VGroup(
             label(rf"played: \ ${gain('treated'):+.1f}$ ms", font_size=36, color=TREAT),
             label(rf"did not: \ ${gain('control'):+.1f}$ ms", font_size=36, color=CTRL),
-            label(rf"difference: \ ${wc['effect']:+.1f}$ ms, \ interval ${wc['lo']:.1f}$ to ${wc['hi']:+.1f}$",
+            label(rf"difference: \ ${signed(wc['effect'])}$ ms, \ interval ${wc['lo']:.1f}$ to ${wc['hi']:+.1f}$",
                   font_size=36, color=TRUTH),
         ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to([3.4, 0.9, 0])
         idea = VGroup(
@@ -143,7 +143,7 @@ class Comparison(VoiceoverScene):
             "through exactly the same week: the same test before, the same test after. <bookmark mark='c'/> The "
             f"players improve by {abs(gain('treated')):.1f} milliseconds. The others improve by "
             f"{abs(gain('control')):.1f}. <bookmark mark='d'/> The difference between the two groups is the "
-            f"game's effect, and it comes out at {wc['effect']:.1f}, give or take three: nothing, which is the "
+            f"game's effect, and it comes out at {signed(wc['effect'])}, give or take three: nothing, which is the "
             "truth. <bookmark mark='e'/> That second group is called a control group, and what it gives you is "
             "the answer to a question you can never ask of one person: what would have happened anyway? An "
             "experiment is a comparison, and a single group compared with its own past is the most common way "

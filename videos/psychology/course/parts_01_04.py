@@ -60,4 +60,66 @@ PARTS = [
         also=(("psyche.chronometry", "explainer/psychology/psyche/chronometry.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=2, level="U", widget="berandom",
+        question="How do you ask a mind a question without telling it the answer?",
+        story="Berlin, 1904: a horse named Hans answers arithmetic with his hoof, and a commission of thirteen, a "
+              "circus manager and the director of the Psychological Institute among them, finds no trick. A "
+              "student, Oskar Pfungst, changes one thing at a time and counts. Hans is right 98 times in 100 when "
+              "the questioner knows the answer and 8 in 100 when he does not; 89 in 100 when he can see the "
+              "questioner and 6 when he cannot. The questioners were giving the answer away with a movement of the "
+              "head of about a millimetre, and 23 of 25 people did the same for Pfungst in the laboratory. The part "
+              "builds the rules of design from that story. A game that does nothing is studied on the Pool by one "
+              "group tested twice, and appears to work; a control group shows why. Campbell and Stanley's six "
+              "unsound designs each find an effect where the truth is zero. Peirce and Jastrow's shuffled deck of "
+              "1884, the first randomized experiment, balances even what nobody measured and supplies its own "
+              "test. Each person serving as their own control buys precision, if the order is counterbalanced. "
+              "Expectations leak from experimenters to rats, pupils and police dogs, and from subjects who want "
+              "to help; the blind is the remedy. The part ends with interactions and their dependence on scale, "
+              "four kinds of validity, who gets studied, and the rules that protect the people in an experiment.",
+        handoff="What a measurement measures is Part 3, and the analyst as the last unblinded observer is Part 4, "
+                "where the randomization test returns. The curve fitted to Hans's eyesight is the psychometric "
+                "function of Part 11, and false alarms are Part 12. Milgram's study is examined in Part 34, the "
+                "reach of findings beyond Western samples in Part 38, placebo-controlled trials of therapy in "
+                "Part 42, and a many-laboratory replication in Part 43. Every later part runs its designs through "
+                "the laboratory built here.",
+        outside="Means, standard deviations and the idea of a sampling distribution. The power calculations of "
+                "chapter 6 use the normal curve.",
+        objectives={
+            "U": ["Explain what Pfungst varied, what he found, and why a blind removes the effect.",
+                  "Name the six classical threats to a before-and-after study, and the change of design that "
+                  "answers each.",
+                  "Say what random assignment balances that matching cannot, and why people cannot do the "
+                  "randomizing themselves."],
+            "M": ["Derive the standard deviation of the difference between two randomized groups, and the number "
+                  "of people a between-person and a within-person design need for a given power.",
+                  "Carry out a randomization test, and construct a Williams square for four conditions.",
+                  "Show by example that an interaction can be removed by a change of scale, and say which "
+                  "interactions cannot."],
+            "D": ["Separate a treatment's effect from the effect of knowing one's assignment, and state what each "
+                  "available design assumes.",
+                  "Say what a measurement of demand effects licenses, and what it does not."],
+            "I": ["Ask of any study: compared with what, who decided who got what, who knew, who dropped out, and "
+                  "who was studied.",
+                  "Recognize an A/B test, a clinical trial and a counterbalanced user study as the designs of "
+                  "this part, and name the analysis that answers attrition."],
+        },
+        results=[
+            ("Balance after a shuffle", r"\operatorname{SD}\!\left[\bar x_1-\bar x_0\right]"
+                                        r"=\sigma\sqrt{\tfrac{1}{n_1}+\tfrac{1}{n_0}}=\frac{2\sigma}{\sqrt n}"),
+            ("People needed, two groups", r"n_{\text{per group}}=2\left(\frac{z_{1-\alpha/2}+z_{1-\beta}}{d}"
+                                          r"\right)^{2}"),
+            ("People needed, each both ways", r"n=2(1-\rho)\left(\frac{z_{1-\alpha/2}+z_{1-\beta}}{d}"
+                                              r"\right)^{2}"),
+            ("Randomization test", r"p=\Pr\nolimits_{\text{shuffles}}\!\left(|\bar y_1-\bar y_0|\ge "
+                                   r"|\text{observed}|\right)"),
+            ("Interaction contrast", r"(\bar y_{11}-\bar y_{10})-(\bar y_{01}-\bar y_{00})"),
+            ("A cue read at a distance", r"p(\text{detect}\mid D)=(1-\lambda)\,\Phi\!\left("
+                                         r"\frac{\ln(D_0/D)}{\sigma}\right)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("The laboratory", "explainer/psychology/lab.py"),
+              ("psyche.cueing", "explainer/psychology/psyche/cueing.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

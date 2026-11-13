@@ -25,8 +25,8 @@ class Shuffle(VoiceoverScene):
     def peirce(self):
         pj = archive.PEIRCE_JASTROW_1884.data
         hc = history_card(1884, r"Charles Peirce and Joseph Jastrow, Johns Hopkins", r"can a person feel a "
-                          r"difference in pressure too small to be sure of?", color=P.ARCHIVE, width=8.6,
-                          font_size=30).to_edge(UP, buff=0.4)
+                          r"difference in pressure too small to be sure of?", color=P.ARCHIVE, width=10.6,
+                          font_size=28).to_edge(UP, buff=0.35)
         # the apparatus, in outline: a finger under a balance beam, a screen, an operator with a deck
         beam = Line([-5.6, -0.6, 0], [-2.4, -0.6, 0], color=GREY_A, stroke_width=5)
         fulcrum = Triangle(stroke_width=0, fill_color=GREY_B, fill_opacity=1).scale(0.22).move_to([-4.0, -0.82, 0])
@@ -37,28 +37,29 @@ class Shuffle(VoiceoverScene):
         weight.move_to([-2.6, -1.15, 0])
         finger = RoundedRectangle(width=1.3, height=0.34, corner_radius=0.16, stroke_width=0, fill_color=P.HUMAN,
                                   fill_opacity=0.9).move_to([-5.9, -0.36, 0])
-        screen = Rectangle(width=0.14, height=2.8, stroke_width=0, fill_color=GREY_C, fill_opacity=1)
-        screen.move_to([-4.75, -0.2, 0])
+        screen = Rectangle(width=0.14, height=2.3, stroke_width=0, fill_color=GREY_C, fill_opacity=1)
+        screen.move_to([-4.75, -0.45, 0])
         s_lab = label(r"a screen", font_size=22, color=GREY_B).next_to(screen, UP, buff=0.1)
         subj = label(r"the subject", font_size=24, color=P.HUMAN).move_to([-6.0, -1.0, 0])
-        oper = label(r"the operator", font_size=24, color=GREY_A).move_to([-2.9, -2.0, 0])
+        oper = label(r"the operator", font_size=24, color=GREY_A).move_to([-1.2, -1.1, 0])
         rig = VGroup(beam, fulcrum, pan, weight, finger, screen, s_lab, subj, oper)
         # the deck
         rng = np.random.default_rng(1884)
         colors = [RED_CARD] * 12 + [BLACK_CARD] * 13
         rng.shuffle(colors)
-        deck = VGroup(*[card(c, 0.34, 0.5) for c in colors]).arrange_in_grid(rows=1, buff=0.05)
-        deck.move_to([2.9, 0.35, 0])
+        deck = VGroup(*[card(c, 0.25, 0.4) for c in colors]).arrange_in_grid(rows=1, buff=0.04)
+        deck.move_to([3.15, 0.6, 0])
         d_lab = label(r"a pack of 25: \ 12 red, 13 black, well shuffled", font_size=26).next_to(deck, UP, buff=0.2)
         rule = VGroup(
-            VGroup(card(RED_CARD, 0.34, 0.5), label(r"heavier first, then lighter", font_size=26)).arrange(RIGHT, buff=0.25),
-            VGroup(card(BLACK_CARD, 0.34, 0.5), label(r"lighter first, then heavier", font_size=26)).arrange(RIGHT, buff=0.25),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(deck, DOWN, buff=0.4).align_to(deck, LEFT)
+            VGroup(card(RED_CARD, 0.3, 0.44), label(r"heavier first, then lighter", font_size=26)).arrange(RIGHT, buff=0.25),
+            VGroup(card(BLACK_CARD, 0.3, 0.44), label(r"lighter first, then heavier", font_size=26)).arrange(RIGHT, buff=0.25),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(deck, DOWN, buff=0.3).align_to(deck, LEFT)
         conf = label(r"the subject answers, and rates his confidence: \ 0, 1, 2 or 3", font_size=24, color=GREY_A)
-        conf.next_to(rule, DOWN, buff=0.3).align_to(deck, LEFT)
+        conf.next_to(rule, DOWN, buff=0.22).align_to(deck, LEFT)
+        keep_in_frame(conf)
         quote = quote_card(r"Any possible psychological guessing of what change the operator was likely to select "
                            r"was avoided.", r"Peirce and Jastrow, \emph{On small differences in sensation} (1884)",
-                           width=12.4, font_size=30).to_edge(DOWN, buff=0.7)
+                           width=12.4, font_size=26).to_edge(DOWN, buff=0.75)
         src = historical_tag(archive.PEIRCE_JASTROW_1884.cite)
         assert pj["trials_per_pack"] == 25
         with self.voiceover(
@@ -94,9 +95,9 @@ class Shuffle(VoiceoverScene):
         head = heading(rf"Shuffle {d['n']} people into two groups, {fmt_int(d['shuffles'])} times")
         edges = np.asarray(d["edges"])
         top = float(max(d["hist_age"].max(), d["hist_keen"].max())) * 1.15
-        A = axes([-1.0, 1.0], [0, top], x_length=9.4, y_length=3.7,
+        A = axes([-1.0, 1.0], [0, top], x_length=8.4, y_length=3.7,
                  xlabel=r"difference between the two groups, in standard deviations", xticks=[-1, -0.5, 0, 0.5, 1],
-                 center=[-1.0, -0.2, 0])
+                 center=[1.6, -0.2, 0])
         ax = A.ax
         h_age = hist(ax, edges, d["hist_age"], CTRL, 0.6)
         h_keen = hist(ax, edges, d["hist_keen"], P.ACCENT, 0.45)
@@ -104,18 +105,20 @@ class Shuffle(VoiceoverScene):
         leg.next_to(ax.c2p(1.0, top), DL, buff=0.1)
         zero = DashedLine(ax.c2p(0, 0), ax.c2p(0, top), color=TRUTH, stroke_width=2)
 
-        def flag(x, text, color, up):
-            x_ = max(min(x, 1.0), -1.0)
-            p0 = ax.c2p(x_, 0)
+        def flag(x, lines, color, up, label_x=None):
+            p0 = ax.c2p(x, 0)
             ln = Line(p0, p0 + UP * up, color=color, stroke_width=4)
-            t = label(text, font_size=24, color=color).next_to(ln, UP, buff=0.08)
-            return VGroup(ln, t)
+            t = VGroup(*[label(t_, font_size=24, color=color) for t_ in lines]).arrange(DOWN, aligned_edge=RIGHT,
+                                                                                     buff=0.06)
+            anchor = np.array([ax.c2p(x if label_x is None else label_x, 0)[0], ln.get_end()[1], 0])
+            t.next_to(anchor, LEFT, buff=0.15).align_to(anchor, UP)
+            return VGroup(ln, keep_in_frame(t))
 
-        f_self = flag(ss["speed"], rf"people choose: \ ${ss['speed']:.2f}$ in speed", BIAS, 2.3)
-        f_eye = flag(eye["speed"], rf"experimenter chooses ``at random'': \ ${eye['speed']:.2f}$", "#F2A65A", 1.5)
-        for f in (f_self, f_eye):
-            if f[1].get_left()[0] < -6.9:
-                f[1].shift(RIGHT * (-6.9 - f[1].get_left()[0]))
+        left_most = min(ss["speed"], eye["speed"])
+        f_self = flag(ss["speed"], (r"people choose their group:", rf"${ss['speed']:.2f}$ SD in speed"), BIAS, 2.9,
+                      left_most)
+        f_eye = flag(eye["speed"], (r"the experimenter chooses,", rf"``at random'': \ ${eye['speed']:.2f}$ SD"),
+                     "#F2A65A", 1.5, left_most)
         facts = VGroup(
             label(rf"the shuffle: \ centred on 0, \ spread ${d['sd_keen']:.2f}$", font_size=30, color=TRUTH),
             MathTex(rf"\sqrt{{4 / n}} = {d['theory_sd']:.2f}", font_size=34, color=GREY_A),
@@ -161,8 +164,18 @@ class Shuffle(VoiceoverScene):
         bars = hist(ax, edges, counts, GREY_B, 0.6)
         obs = Line(ax.c2p(st["effect"], 0), ax.c2p(st["effect"], top * 0.95), color=TREAT, stroke_width=5)
         mirror = DashedLine(ax.c2p(-st["effect"], 0), ax.c2p(-st["effect"], top * 0.95), color=TREAT, stroke_width=2)
-        obs_lab = label(rf"what this study found: \ ${st['effect']:.1f}$ ms", font_size=26, color=TREAT)
-        obs_lab.next_to(obs, UP, buff=0.08)
+        obs_lab = label(rf"${st['effect']:.1f}$", font_size=28, color=TREAT).next_to(obs, UP, buff=0.08)
+        rng = np.random.default_rng(1935)
+        centres = (edges[:-1] + edges[1:]) / 2
+        deals = rng.choice(centres, size=7, p=counts / counts.sum()) + rng.uniform(-0.3, 0.3, 7)
+        hand = [RED_CARD] * 8 + [BLACK_CARD] * 8
+        cards = VGroup(*[card(c, 0.3, 0.44) for c in hand]).arrange(RIGHT, buff=0.07)
+        cards.next_to(A, UP, buff=0.25).set_x(ax.c2p(0, 0)[0])
+        c_lab = label(r"deal again", font_size=24, color=GREY_A).next_to(cards, LEFT, buff=0.3)
+        drops = VGroup(*[Dot(ax.c2p(v, top * 0.06), radius=0.08, color=WHITE) for v in deals])
+        asked = VGroup(label(rf"this study: \ ${st['effect']:.1f}$ ms", font_size=34, color=TREAT),
+                       label(r"the game, or the shuffle?", font_size=28, color=WHITE))
+        asked.arrange(DOWN, aligned_edge=LEFT, buff=0.12)
         steps = VGroup(
             wrapped_label(r"1. \ Suppose the game did nothing: every score would be the same whichever group its "
                           r"owner had landed in.", 4.4, 25, WHITE),
@@ -170,7 +183,8 @@ class Shuffle(VoiceoverScene):
                           WHITE),
             wrapped_label(rf"3. \ A difference this large turns up {100 * st['p_randomization']:.1f}\% of the time.",
                           4.4, 25, TREAT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.75, 0.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.75, -0.35, 0])
+        asked.next_to(steps, UP, buff=0.4).align_to(steps, LEFT)
         truth = label(rf"the effect planted in the Pool: \ ${st['true']:.0f}$ ms; \ {100 * d['coverage']:.0f}\% of "
                       rf"400 such intervals contain it", font_size=26, color=TRUTH).to_edge(DOWN, buff=0.75)
         tag = simulated_tag()
@@ -189,12 +203,18 @@ class Shuffle(VoiceoverScene):
             "something to stand on, and Ronald Fisher made that the foundation of experimental design in 1935."
         ) as vo:
             self.play(FadeIn(head), FadeIn(A), FadeIn(tag))
+            self.play(FadeIn(asked, shift=LEFT * 0.15), Create(obs), FadeIn(obs_lab))
             vo.wait_until("a")
-            self.play(FadeIn(steps[0], shift=LEFT * 0.15))
+            self.play(FadeIn(steps[0], shift=LEFT * 0.15), FadeIn(cards, lag_ratio=0.05), FadeIn(c_lab))
+            for k in range(len(deals)):
+                rng.shuffle(hand)
+                self.play(*[c_.animate.set_fill(col) for c_, col in zip(cards, hand)], run_time=0.45)
+                self.play(FadeIn(drops[k], shift=DOWN * 0.3), run_time=0.35)
             vo.wait_until("b")
-            self.play(FadeIn(steps[1], shift=LEFT * 0.15), FadeIn(bars, lag_ratio=0.05), run_time=3.0)
+            self.play(FadeIn(steps[1], shift=LEFT * 0.15), FadeOut(drops), FadeIn(bars, lag_ratio=0.05),
+                      run_time=3.0)
             vo.wait_until("c")
-            self.play(Create(obs), FadeIn(obs_lab), Create(mirror), FadeIn(steps[2], shift=LEFT * 0.15))
+            self.play(Create(mirror), FadeIn(steps[2], shift=LEFT * 0.15), Indicate(obs, color=TREAT))
             vo.wait_until("d")
             self.play(FadeIn(truth, shift=UP * 0.15))
         self.clear_scene()

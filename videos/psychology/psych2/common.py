@@ -23,6 +23,22 @@ KANT = P.KANT
 COND = ("#7EC8F5", "#F2C14E", "#F28FB8", "#7BD88F")  # four conditions of a within-person design
 
 
+def signed(x: float, digits: int = 1) -> str:
+    """A number with its sign, and a plain zero for anything that rounds to zero (never ``-0.0``)."""
+    v = round(float(x), digits)
+    return f"{0:.{digits}f}" if v == 0 else f"{v:+.{digits}f}"
+
+
+def keep_in_frame(mob, margin: float = 0.2):
+    """Shift ``mob`` sideways so that it does not cross the left or right edge of the frame."""
+    half = config.frame_width / 2 - margin
+    if mob.get_left()[0] < -half:
+        mob.shift(RIGHT * (-half - mob.get_left()[0]))
+    if mob.get_right()[0] > half:
+        mob.shift(LEFT * (mob.get_right()[0] - half))
+    return mob
+
+
 def horse(height: float = 2.2, color=HORSE) -> VGroup:
     """Hans, in profile, facing right.  ``.leg`` is the right foreleg (the one that taps), ``.pivot`` its shoulder,
     ``.eye`` the eye."""

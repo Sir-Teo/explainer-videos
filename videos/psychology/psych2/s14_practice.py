@@ -5,11 +5,11 @@ from videos.psychology.psych2.common import *  # noqa: F403
 AB, TRIAL, UX = "#7EC8F5", "#7BD88F", "#F2C14E"
 
 
-def tile(title: str, lines, color, width=4.25) -> VGroup:
-    t = label(title, font_size=34, color=color)
-    body = VGroup(*[wrapped_label(ln, width - 0.6, 24, WHITE) for ln in lines]).arrange(DOWN, aligned_edge=LEFT,
-                                                                                         buff=0.2)
-    inner = VGroup(t, body).arrange(DOWN, aligned_edge=LEFT, buff=0.3)
+def tile(title: str, lines, color, width=4.4) -> VGroup:
+    t = label(title, font_size=42, color=color)
+    body = VGroup(*[wrapped_label(ln, width - 0.6, 29, WHITE) for ln in lines]).arrange(DOWN, aligned_edge=LEFT,
+                                                                                         buff=0.3)
+    inner = VGroup(t, body).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
     box = RoundedRectangle(width=width, height=inner.height + 0.6, corner_radius=0.14, stroke_color=color,
                            stroke_width=2, fill_color=CARD_FILL, fill_opacity=0.95)
     inner.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.3)
@@ -43,9 +43,10 @@ class Practice(VoiceoverScene):
             tile(r"user study", [r"each tester tries every design: \ within-person",
                                  r"the order is counterbalanced",
                                  r"the person running the session did not build the design"], UX),
-        ).arrange(RIGHT, buff=0.3, aligned_edge=UP).next_to(head, DOWN, buff=0.45)
+        ).arrange(RIGHT, buff=0.25, aligned_edge=UP)
         if tiles.width > 13.6:
             tiles.width = 13.6
+        tiles.next_to(head, DOWN, buff=0.8)
         with self.voiceover(
             "None of this stayed in psychology. <bookmark mark='a'/> When a website tests a new button, it "
             "shows the new page to a random half of its visitors and the old page to the rest. That's a "
@@ -65,7 +66,7 @@ class Practice(VoiceoverScene):
 
     def in_practice(self):
         head = label(r"In practice", font_size=48, color=P.ACCENT)
-        qs = VGroup(*[label(t, font_size=36, color=WHITE) for t in (
+        qs = VGroup(*[label(t, font_size=40, color=WHITE) for t in (
             r"1. \ Compared with what?",
             r"2. \ Who decided who got what?",
             r"3. \ Who knew?",
@@ -75,7 +76,15 @@ class Practice(VoiceoverScene):
         who = wrapped_label(r"Who uses this: \ experimenters of every kind, product and data teams, clinical "
                             r"researchers, policy evaluators, and anyone reading a headline that says ``study "
                             r"finds''.", 12.4, 28, GREY_A)
-        g = VGroup(head, qs, who).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to(ORIGIN)
+        g = VGroup(head, qs, who).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to(ORIGIN)
+        news = VGroup(label(r"STUDY FINDS:", font_size=30, color=TREAT),
+                      label(r"brain game makes you faster", font_size=34, color=WHITE),
+                      label(r"an invented headline", font_size=20, color=GREY_B)).arrange(DOWN, buff=0.14)
+        frame = RoundedRectangle(width=news.width + 0.8, height=news.height + 0.6, corner_radius=0.12,
+                                 stroke_color=GREY_B, stroke_width=2, fill_color=CARD_FILL, fill_opacity=1)
+        news.move_to(frame)
+        paper = VGroup(frame, news).next_to(qs, RIGHT, buff=0.8)
+        keep_in_frame(paper, 0.4)
         with self.voiceover(
             "So here is this part's practice card, and it's five questions long. You can put them to any study, "
             "in any field, including the ones in the news tomorrow. <bookmark mark='a'/> Compared with what? "
@@ -84,7 +93,7 @@ class Practice(VoiceoverScene):
             "<bookmark mark='f'/> A study that can answer all five has earned a hearing. It hasn't yet earned "
             "belief. That takes the next two parts."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(paper, shift=LEFT * 0.2))
             for mark, q in zip("abcde", qs):
                 vo.wait_until(mark)
                 self.play(FadeIn(q, shift=RIGHT * 0.2))

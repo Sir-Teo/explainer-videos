@@ -27,7 +27,7 @@ class Frontier(VoiceoverScene):
 
         def arm(n, wrong, color, name):
             cols = [color] * (n - wrong) + [GREY_C] * wrong
-            crowd = people_row(n, cols, height=0.42, buff=0.09, per_row=23)
+            crowd = people_row(n, cols, height=0.4, buff=0.08, per_row=23)
             t = label(name, font_size=28, color=color).next_to(crowd, UP, buff=0.15).align_to(crowd, LEFT)
             w = label(rf"at least {wrong} guessed wrong", font_size=24, color=GREY_B)
             w.next_to(crowd, DOWN, buff=0.12).align_to(crowd, LEFT)
@@ -35,12 +35,14 @@ class Frontier(VoiceoverScene):
 
         a = arm(m["n_drug"], drug_wrong, TREAT, rf"the drug: \ {m['n_drug']} people")
         b = arm(m["n_placebo"], plac_wrong, CTRL, rf"the placebo: \ {m['n_placebo']} people")
-        arms = VGroup(a, b).arrange(DOWN, buff=0.5, aligned_edge=LEFT).move_to([-1.3, 0.35, 0])
+        arms = VGroup(a, b).arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to([-2.3, 0.0, 0])
         key = VGroup(label(r"coloured: \ did not guess wrong", font_size=24, color=WHITE),
                      label(r"grey: \ guessed the other arm", font_size=24, color=GREY_B))
-        key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).move_to([5.0, 0.6, 0])
-        if key.get_right()[0] > 6.95:
-            key.shift(LEFT * (key.get_right()[0] - 6.95))
+        key.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(arms, RIGHT, buff=0.5)
+        keep_in_frame(key)
+        words = VGroup(*[label(t, font_size=40, color=c) for t, c in (
+            (r"randomized", P.ACCENT), (r"placebo-controlled", CTRL), (r"double-blind", BLIND))])
+        words.arrange(RIGHT, buff=0.9).move_to([0, 0.4, 0])
         q = wrapped_label(r"The drug group improved more. \ How much of that is the drug, and how much is knowing "
                           r"you got it?", 12.4, 30, P.ACCENT).to_edge(DOWN, buff=0.9)
         src = published_tag(archive.MITCHELL_2021.cite + r"; \ the authors' own count, which they call anecdotal")
@@ -58,7 +60,9 @@ class Frontier(VoiceoverScene):
             "same holds for any talking therapy, where no one can be blind to having had it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
+            self.play(LaggedStart(*[FadeIn(w_, shift=UP * 0.15) for w_ in words], lag_ratio=0.5), run_time=3.0)
             vo.wait_until("a")
+            self.play(words.animate.scale(0.55).next_to(head, DOWN, buff=0.2))
             self.play(FadeIn(a[1]), FadeIn(b[1]))
             vo.wait_until("b")
             self.play(FadeIn(a[0], lag_ratio=0.02), FadeIn(a[2]), FadeIn(key))
@@ -86,14 +90,17 @@ class Frontier(VoiceoverScene):
                        enumerate(labels_top)])
         left = VGroup(*[label(t, font_size=26, color=WHITE).next_to(grid[2 * i], LEFT, buff=0.3) for i, t in
                         enumerate(labels_left)])
-        table = VGroup(grid, top, left).move_to([0, 0.25, 0])
+        table = VGroup(grid, top, left).move_to([-2.4, 0.25, 0])
         note_ = wrapped_label(r"The balanced placebo design: \ a factorial, as in chapter 8. \ Its price is "
                               r"chapter 10: \ half the people are told something false.", 12.4, 28, GREY_A)
         note_.to_edge(DOWN, buff=0.85)
-        others = VGroup(*[label(t, font_size=26, color=WHITE) for t in (
-            r"an active placebo, with side effects of its own", r"ask everyone to guess their arm, and report it",
-            r"several doses: \ does more drug do more?")])
-        others.arrange(DOWN, aligned_edge=LEFT, buff=0.2)
+        others = VGroup(label(r"what trials do in practice:", font_size=26, color=GREY_A),
+                        *[wrapped_label(t, 4.3, 27, WHITE) for t in (
+                            r"an active placebo, with side effects of its own",
+                            r"ask everyone to guess their arm, and report it",
+                            r"several doses: \ does more drug do more?")])
+        others.arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(table, RIGHT, buff=0.7)
+        keep_in_frame(others)
         with self.voiceover(
             "What can a designer do? You have the tools already. <bookmark mark='a'/> If two things are "
             "tangled, cross them. Give the drug or a placebo, and separately, tell people they're getting the "
@@ -101,7 +108,8 @@ class Frontier(VoiceoverScene):
             "one has the belief without the drug, and the factorial pulls the two effects apart. It's called "
             "the balanced placebo design. <bookmark mark='c'/> And you can see its price at once. Half the "
             "participants are told something false about what's in their bodies, which is the chapter on ethics "
-            "meeting the chapter on design head on. So in practice trials use weaker tools: a placebo with "
+            "meeting the chapter on design head on. <bookmark mark='d'/> So in practice trials use weaker tools: a "
+            "placebo with "
             "noticeable effects of its own, a routine question asking everyone to guess their group, a range "
             "of doses. None of them fully solves it. It's an open problem with large consequences, since "
             "several treatments now being tested are ones nobody could mistake for a sugar pill."
@@ -115,6 +123,8 @@ class Frontier(VoiceoverScene):
                                                                                   scale_factor=1.06))
             vo.wait_until("c")
             self.play(FadeIn(note_, shift=UP * 0.15))
+            vo.wait_until("d")
+            self.play(LaggedStart(*[FadeIn(o, shift=LEFT * 0.15) for o in others], lag_ratio=0.5), run_time=4.0)
         self.clear_scene()
 
     def open_questions(self):

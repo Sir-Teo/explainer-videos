@@ -227,8 +227,8 @@ def longest_run(seq) -> int:
 
 def predict_presses(seq, depth: int = 3) -> dict:
     """Guess each press of a two-key sequence before it is made, from the presses so far: find the longest recent
-    context (up to ``depth`` presses) that has occurred before, and bet on what followed it most often; with
-    nothing to go on, bet that the person will switch keys.  This is the predictor of the Part 2 interactive
+    context (up to ``depth`` presses) after which one key has led the other by at least two, and bet on that key;
+    with nothing to go on, bet that the person will switch keys.  This is the predictor of the Part 2 interactive
     (after the "mind-reading machines" of Hagelbarger and Shannon, 1953).  Returns the share of presses guessed
     and the guesses."""
     seq = [int(x) for x in seq]
@@ -238,7 +238,7 @@ def predict_presses(seq, depth: int = 3) -> dict:
         guess = None
         for k in range(min(depth, i), 0, -1):
             c = counts.get(tuple(seq[i - k:i]))
-            if c and c[0] != c[1]:
+            if c and abs(c[0] - c[1]) >= 2:  # trust a context only once it has leaned one way by two
                 guess = int(c[1] > c[0])
                 break
         if guess is None:

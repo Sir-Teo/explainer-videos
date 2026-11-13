@@ -44,12 +44,18 @@ class Expectancy(VoiceoverScene):
         lb = label(r"told ``maze-bright''", font_size=26, color=P.ACCENT).next_to(ax.c2p(5, bright[-1]), UL, buff=0.12)
         ld = label(r"told ``maze-dull''", font_size=26, color=BLIND).next_to(ax.c2p(5, dull[-1]), DL, buff=0.2)
         facts = VGroup(
-            wrapped_label(r"the rats were ordinary laboratory rats; \ the labels were dealt at random", 5.0, 27,
+            wrapped_label(r"the rats were ordinary laboratory rats; \ the labels were dealt at random", 5.4, 26,
                           WHITE),
             label(rf"``bright'': \ {d['mean_bright']:.2f} correct a day", font_size=30, color=P.ACCENT),
             label(rf"``dull'': \ {d['mean_dull']:.2f}", font_size=30, color=BLIND),
             label(rf"half as many again, \ from a label", font_size=30, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).move_to([4.0, 0.2, 0])
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.24).move_to([4.0, -1.0, 0])
+        teams = VGroup()
+        for text, color in ((r"six students: \ ``your rats are maze-bright''", P.ACCENT),
+                            (r"six students: \ ``your rats are maze-dull''", BLIND)):
+            teams.add(VGroup(people_row(6, color, height=0.55, buff=0.14), label(text, font_size=24, color=color))
+                      .arrange(DOWN, buff=0.1, aligned_edge=LEFT))
+        teams.arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to([4.0, 1.75, 0]).align_to(facts, LEFT)
         src = historical_tag(archive.ROSENTHAL_FODE_1963.cite + r", Table 1")
         assert 1.45 < d["ratio"] < 1.55
         with self.voiceover(
@@ -65,6 +71,8 @@ class Expectancy(VoiceoverScene):
             "was one small study, and the Ledger will have something to say about it at the end of the part."
         ) as vo:
             self.play(FadeIn(head), FadeIn(A), FadeIn(src))
+            self.play(FadeIn(teams[0], shift=LEFT * 0.15))
+            self.play(FadeIn(teams[1], shift=LEFT * 0.15))
             vo.wait_until("a")
             self.play(FadeIn(facts[0], shift=LEFT * 0.15))
             vo.wait_until("b")
@@ -80,32 +88,36 @@ class Expectancy(VoiceoverScene):
         ra = d["raudenbush"]
         head = heading(r"From the maze to the classroom")
         hc = history_card(1968, r"Rosenthal and Jacobson, \ \emph{Pygmalion in the Classroom}", r"teachers are told "
-                          r"that certain pupils, picked at random, are about to bloom", color=P.ARCHIVE, width=7.4,
-                          font_size=28).move_to([-3.3, 1.85, 0])
+                          r"that certain pupils, picked at random, are about to bloom", color=P.ARCHIVE, width=6.4,
+                          font_size=26).move_to([-3.75, 1.75, 0])
         claim = wrapped_label(r"reported: \ a year later, the named children had gained more in IQ, most of all "
-                              r"in the first two grades", 7.0, 28, WHITE).next_to(hc, DOWN, buff=0.35)
+                              r"in the first two grades", 6.2, 27, WHITE).next_to(hc, DOWN, buff=0.35)
         claim.align_to(hc, LEFT)
         # the record
         unit = 7.0
-        x0 = 1.9
+        x0 = 0.9
         bars = VGroup()
         for i, (lab_, e, k) in enumerate(zip(ra["labels"], ra["effect"], ra["k"])):
-            y = 1.7 - 1.25 * i
+            y = 1.35 - 1.2 * i
             w = abs(e) * unit
             bar = Rectangle(width=max(w, 0.03), height=0.55, stroke_width=0,
                             fill_color=STATUS_COLOR["replicated, smaller"] if e > 0.1 else GREY_B, fill_opacity=0.9)
             bar.move_to([x0 + (w / 2 if e >= 0 else -w / 2), y, 0])
-            nm = label(rf"teacher had known the class: \ {lab_}", font_size=24, color=WHITE)
-            nm.next_to([x0, y + 0.3, 0], UP, buff=0.06).align_to([x0 - 0.3, 0, 0], LEFT)
+            nm = label(lab_, font_size=26, color=WHITE)
+            nm.next_to([x0, y + 0.3, 0], UP, buff=0.06).align_to([x0 + 0.1, 0, 0], LEFT)
             val = label(rf"${e:+.2f}$", font_size=32, color=WHITE).next_to(bar, RIGHT if e >= 0 else LEFT, buff=0.15)
             kk = label(rf"{k} experiments", font_size=20, color=GREY_B).next_to(val, RIGHT, buff=0.25)
             if e < 0:
                 val.next_to([x0, y, 0], RIGHT, buff=0.15)
                 kk.next_to(val, RIGHT, buff=0.25)
             bars.add(VGroup(bar, nm, val, kk))
-        base = Line([x0, 2.1, 0], [x0, -1.3, 0], color=GREY_B, stroke_width=2)
-        rec = label(rf"the record: \ {ra['experiments']} experiments, effect in standard deviations", font_size=24,
-                    color=GREY_A).move_to([4.2, 2.75, 0])
+        base = Line([x0, 1.95, 0], [x0, -1.45, 0], color=GREY_B, stroke_width=2)
+        rec = VGroup(label(rf"the record: \ {ra['experiments']} experiments", font_size=28, color=WHITE),
+                     label(r"effect on IQ, in standard deviations, by how long the teacher", font_size=21,
+                           color=GREY_A),
+                     label(r"had known the class before being told", font_size=21, color=GREY_A))
+        rec.arrange(DOWN, aligned_edge=LEFT, buff=0.06).move_to([x0 - 0.1, 2.6, 0], aligned_edge=LEFT)
+        keep_in_frame(rec)
         chip = status_chip("replicated, smaller", 26).next_to(bars, DOWN, buff=0.35).align_to(bars, LEFT)
         moral = wrapped_label(r"The effect is there while the teacher knows nothing else about the child, and gone "
                               r"once she does.", 12.6, 32, P.ACCENT).to_edge(DOWN, buff=0.8)
@@ -143,14 +155,15 @@ class Expectancy(VoiceoverScene):
                                 fill_color=PANEL_FILL, fill_opacity=1).move_to([-3.2, -0.2, 0])
         marker = Rectangle(width=0.5, height=0.36, stroke_width=0, fill_color=BIAS, fill_opacity=1)
         marker.move_to(room.get_center() + UR * 1.0)
-        m_lab = wrapped_label(r"a red paper: \ ``the scent is here''", 2.4, 22, BIAS).next_to(marker, UP, buff=0.1)
+        m_lab = label(r"a red paper: \ ``the scent is here''", font_size=22, color=BIAS)
+        m_lab.next_to(room.get_corner(UL), DR, buff=0.15)
         nothing = label(r"no drug or explosive scent anywhere", font_size=26, color=TRUTH)
         nothing.next_to(room, DOWN, buff=0.2)
         rng = np.random.default_rng(3)
         alerts = VGroup()
         for k in range(26):
             near = k < 15
-            pos = (marker.get_center() + np.append(rng.normal(0, 0.35, 2), 0) if near else
+            pos = (marker.get_center() + np.append(np.clip(rng.normal(0, 0.35, 2), -0.65, 0.65), 0) if near else
                    room.get_center() + np.array([rng.uniform(-2.8, 2.8), rng.uniform(-1.5, 1.5), 0]))
             alerts.add(Star(n=5, outer_radius=0.11, inner_radius=0.05, stroke_width=0, fill_color=P.ACCENT,
                             fill_opacity=0.9).move_to(pos))
@@ -160,7 +173,7 @@ class Expectancy(VoiceoverScene):
             wrapped_label(r"every one of them wrong, and more of them where the handler had been told the scent "
                           r"was", 5.2, 28, WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.7, 0.1, 0])
-        sch = note(r"room: schematic").next_to(room, UP, buff=0.08).align_to(room, RIGHT)
+        sch = note(r"room: schematic").next_to(room, UP, buff=0.08).align_to(room, LEFT)
         src = published_tag(archive.LIT_2011.cite)
         with self.voiceover(
             "If you think this belongs to the nineteen-sixties, here is Clever Hans in 2011. Lisa Lit and her "
@@ -190,20 +203,35 @@ class Expectancy(VoiceoverScene):
         hc = history_card(1962, r"Martin Orne", r"\emph{demand characteristics}: \ the cues that tell a subject what "
                           r"the experiment is hoping for", color=P.ARCHIVE, width=8.2, font_size=30)
         hc.to_edge(UP, buff=1.2)
-        fig = little_person(1.3, color=P.HUMAN).move_to([-4.6, -1.2, 0])
+        fig = little_person(1.2, color=P.HUMAN).move_to([-6.2, -1.2, 0])
         thought = VGroup(*[label(t, font_size=28, color=GREY_A) for t in (
             r"``What is this study about?''", r"``What would a good subject do?''")])
-        thought.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(fig, RIGHT, buff=0.5)
+        thought.arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(fig, RIGHT, buff=0.35)
         size = VGroup(
             label(r"measured in 2018, in eleven standard tasks:", font_size=26, color=GREY_A),
-            label(rf"hypothesis hinted: \ about {d['weak_mean']:.2f} SD", font_size=32, color=P.ACCENT),
-            label(rf"compliance asked for outright: \ {d['strong'][0]:.2f} to {d['strong'][1]:.0f} SD", font_size=32,
+            label(rf"hypothesis hinted: \ about {d['weak_mean']:.2f} SD", font_size=30, color=P.ACCENT),
+            label(rf"asked outright to go along: \ {d['strong'][0]:.2f} to {d['strong'][1]:.0f} SD", font_size=30,
                   color=BIAS),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([3.4, -1.3, 0])
-        if size.get_right()[0] > 6.95:
-            size.shift(LEFT * (size.get_right()[0] - 6.95))
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.0, -1.25, 0])
+        keep_in_frame(size)
+        if size.get_left()[0] < thought.get_right()[0] + 0.4:
+            size.scale_to_fit_width(6.9 - thought.get_right()[0] - 0.4).set_x((6.9 + thought.get_right()[0] + 0.4) / 2)
         placebo = wrapped_label(r"The same thing in medicine has an older name: \ the placebo.", 12.4, 30, WHITE)
         placebo.to_edge(DOWN, buff=0.8)
+        # the two directions of the leak
+        e_fig = VGroup(little_person(1.5, color=P.ACCENT), label(r"the experimenter", font_size=28, color=P.ACCENT))
+        s_fig = VGroup(little_person(1.5, color=P.HUMAN), label(r"the subject", font_size=28, color=P.HUMAN))
+        for f_ in (e_fig, s_fig):
+            f_.arrange(DOWN, buff=0.15)
+        e_fig.move_to([-3.4, 0.1, 0])
+        s_fig.move_to([3.4, 0.1, 0])
+        there = Arrow(e_fig[0].get_right() + UP * 0.35, s_fig[0].get_left() + UP * 0.35, buff=0.3, color=P.ACCENT,
+                      stroke_width=5)
+        back = Arrow(s_fig[0].get_left() + DOWN * 0.35, e_fig[0].get_right() + DOWN * 0.35, buff=0.3, color=TREAT,
+                     stroke_width=5)
+        t_lab = label(r"what the experimenter expects", font_size=26, color=P.ACCENT).next_to(there, UP, buff=0.1)
+        b_lab = label(r"what the subject thinks is wanted", font_size=26, color=TREAT).next_to(back, DOWN, buff=0.1)
+        leak = VGroup(e_fig, s_fig, there, back, t_lab, b_lab)
         src = published_tag(archive.DE_QUIDT_2018.cite)
         with self.voiceover(
             "So far the leak has run from the experimenter to the subject. It also runs the other way, and "
@@ -218,8 +246,11 @@ class Expectancy(VoiceoverScene):
             "report feeling better. In every case the cure is the one from the courtyard in Berlin. Arrange "
             "that the person who could leak the answer doesn't have it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(e_fig), FadeIn(s_fig))
+            self.play(GrowArrow(there), FadeIn(t_lab))
+            self.play(GrowArrow(back), FadeIn(b_lab), run_time=1.5)
             vo.wait_until("a")
+            self.play(FadeOut(leak))
             self.play(FadeIn(hc, shift=UP * 0.15), FadeIn(fig))
             self.play(LaggedStart(*[FadeIn(t, shift=RIGHT * 0.15) for t in thought], lag_ratio=0.6), run_time=3.0)
             vo.wait_until("b")
