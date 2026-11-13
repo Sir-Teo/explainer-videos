@@ -17,7 +17,9 @@ and attributions are the published ones, listed under Sources.
   first question for the ear (which pair is the fifth?).
 * **2. What sets the pitch.** Length, tension and mass, one at a time, on the simulated string; Mersenne's laws
   (*Harmonie universelle*, 1636) and Mersenne's count of a slow string's swings; the test: twenty-four random
-  strings, pitch measured from the motion alone, exponents fitted (−1, 1/2, −1/2) and the constant (1/2).
+  strings, pitch measured from the motion alone, exponents fitted (−1, 1/2, −1/2) and the constant (1/2); a
+  worked example (a guitar's top string carries 72.6 N; an octave from the peg alone would take four times
+  that, and the wire breaks first, which is why a guitar's strings differ in thickness).
 * **3. A wave on a string.** A bump on a rope: it keeps its shape, travels at a steady speed, reflects upside down;
   the reflection as an image wave on an imaginary rope; superposition; the speed √(T/μ), timed in the simulation;
   the pitch of a string as the number of round trips per second, f = c / 2L, heard and seen in slow motion.

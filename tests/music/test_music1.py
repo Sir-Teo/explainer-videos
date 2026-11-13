@@ -87,6 +87,23 @@ def test_the_beats_are_in_the_clip_itself():
     assert rise(bad) > 0.2 and rise(good) < 0.02
 
 
+def test_every_listening_window_says_what_it_is():
+    """With the sound off, the subtitles name each example: every window passes its words to the cue sheet."""
+    import re
+    from pathlib import Path
+
+    from explainer.music.sound import plain
+
+    here = Path(compute.__file__).parent
+    for module, _, _ in SCENES:
+        src = (here / f"{module}.py").read_text()
+        assert not re.search(r"window\(snd\)", src), f"{module}: a listening window without a caption"
+        assert src.count("self.listen(") <= src.count("window(snd"), f"{module}: a window without its strip"
+    assert plain(r"lower, \ upper, \ both") == "lower, upper, both"
+    assert plain(r"plucked at $\tfrac{1}{5}$") == "plucked at 1/5"
+    assert plain(r"\textbf{A}, \ then B") == "A, then B"
+
+
 def test_the_ear_thread():
     """Three to six pause-and-listen questions in a part (SYLLABUS section 1)."""
     from pathlib import Path

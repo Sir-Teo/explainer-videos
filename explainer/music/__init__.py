@@ -375,6 +375,8 @@ def listen_bar(snd: SoundTracker, text: str = r"listen", width=3.2, color=None, 
         m.put_start_and_end_on(track.get_start(), track.get_start() + (track.get_end() - track.get_start()) * max(a, 1e-3))
 
     snd.drive(fill, upd)
+    if text and text != r"listen":
+        snd.caption(text)
     return g
 
 

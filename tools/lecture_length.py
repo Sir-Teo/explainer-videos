@@ -8,7 +8,7 @@
 
 The estimate counts the words of every ``self.voiceover(...)`` line in the scene source at the series' pace (140
 words a minute for the AI series, measured on Part 1; 168 for *Quant, Built*, measured on its rendered Parts 1 and
-10, whose CPU voice is faster) and adds the time animations run outside narration (``self.wait`` and the
+10, whose CPU voice is faster; 172 for *Music, Built*, measured on its narrated Part 1) and adds the time animations run outside narration (``self.wait`` and the
 default 1 s per ``self.play`` outside a voiceover block are ignored: they are small).  Lines built from data
 (f-strings) count their literal words plus three per placeholder.  When a render exists, each scene's measured
 duration (from its ``.narration.json``) replaces the estimate, unless the scene's source is newer than that render
@@ -35,7 +35,7 @@ sys.path.insert(0, str(ROOT))
 from explainer.paths import VIDEOS, video_dir, video_package  # noqa: E402
 
 WPM = 140
-SERIES_WPM = {"quant": 168}
+SERIES_WPM = {"quant": 168, "music": 172}  # music: measured on Part 1's narrated build (listening counted apart)
 FLOORS = {"cs": 50.0}  # minutes; other series: 30
 CEILINGS = {"music": 60.0}  # minutes; other series: none
 CLIP_NAME = re.compile(r'clip\(f?"([a-z_0-9]+\.[a-z_0-9]+)"\)')

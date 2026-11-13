@@ -28,6 +28,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from contextlib import contextmanager
 from pathlib import Path
 
@@ -51,6 +52,15 @@ def clip_loader(cache, store):
         return store.load(name)
 
     return clip
+
+
+def plain(tex: str) -> str:
+    """A caption written for the screen (LaTeX spacing and emphasis) as plain words for a subtitle."""
+    t = re.sub(r"\\[td]?frac\{([^{}]*)\}\{([^{}]*)\}", r"\1/\2", tex)
+    t = re.sub(r"\\(?:textbf|textit|emph|textsc|text)\{([^{}]*)\}", r"\1", t)
+    t = t.replace("\\\\", " ").replace("\\ ", " ").replace("\\,", " ").replace("$", "")
+    t = re.sub(r"\\[a-zA-Z]+", " ", t).replace("{", "").replace("}", "")
+    return re.sub(r"\s+", " ", t).strip()
 
 
 class SoundTracker:
@@ -110,6 +120,12 @@ class SoundTracker:
         self._driven.append((mob, upd))
         return mob
 
+    def caption(self, text: str) -> None:
+        """What a viewer with the sound off should read while this clip plays: it goes to the cue sheet, and the
+        build writes it into the subtitles as ``[sound: ...]``."""
+        if getattr(self, "cue", None) is not None:
+            self.cue["caption"] = plain(text)
+
     def show(self, *mobs):
         """Add mobjects that belong to this clip (a listening strip, a sound tag): they leave the scene when the
         window closes."""
@@ -151,7 +167,9 @@ class SoundScene(VoiceoverScene):
         if not os.environ.get("EXPLAINER_SOUND_STEMS") and not getattr(self.renderer, "_original_skipping_status", False):
             pcm = Path(clip.meta["path"]).with_suffix(".pcm.wav")
             self.renderer.file_writer.add_sound(str(pcm), start, gain_db or None)
-        return SoundTracker(self, clip, start)
+        snd = SoundTracker(self, clip, start)
+        snd.cue = self._cues[-1]
+        return snd
 
     @contextmanager
     def listen(self, clip: Clip, gain_db: float = 0.0, pad: float = 0.3):

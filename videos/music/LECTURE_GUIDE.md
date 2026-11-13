@@ -45,10 +45,14 @@ series map, the listening tag and the ledger of variations).
   plucked near its end is nearly an impulse train). `tests/music/test_musicN.py` holds every clip between −24 and
   −15 LUFS momentary and under −1.5 dBTP.
 - **Nothing is normalized after the fact.** The build mixes the music stem with a fixed gain and checks the
-  true-peak ceiling; it does not limit. If the ceiling fails, lower the clip in `compute.py`.
+  true-peak ceiling; it does not limit. If the ceiling fails, lower the clip in `compute.py`. (The narration stem alone is
+  limited after its gain: the voice has rare peaks 20 dB above its loudness.)
 - **Comparisons are honest.** Two clips the viewer is asked to compare keep their computed relative level (save
   them with one gain from one `mix` or one `concat`), unless the comparison is about something other than level,
   in which case both are set to the same level and the narration says so.
+- **Every window says what it is.** The words on the listening strip (`window(snd, r"lower, \ upper, \ both")`)
+  go to the cue sheet and from there into the subtitles, with the clip's label. A window without words fails
+  `tests/music/test_musicN.py`.
 - **Every clip carries a label** (`physical model` or `synthesized`; later `sampled`, `recorded for this series`),
   shown in the corner while it plays (`window(snd, ...)` in `common.py` puts up the tag and the listening bar).
 - **Narration never talks over an example.** `with self.listen(clip) as snd:` opens a window with no narration in
@@ -90,11 +94,13 @@ series map, the listening tag and the ledger of variations).
 
 ## Length
 
-The plan gave Part 1 about 45 minutes; the first draft ran 62. A part is 30 to 60 minutes *including* its
-listening windows and pauses (`tools/lecture_length.py musicN` counts them and fails above 60). Budget before
-writing: at 140 words a minute, twelve to fourteen chapters of 450 to 520 words, three to four minutes of
-listening, and no chapter over four and a half minutes. When a part runs long, cut a worked example whose result
-the lab already has, not a derivation step.
+A part is 30 to 60 minutes *including* its listening windows and pauses (`tools/lecture_length.py musicN` counts
+them and fails outside that range). The narrator reads about 172 words a minute; the silent preview
+(`EXPLAINER_TTS=silent`) keeps time at 140, so it runs a fifth longer than the film will: Part 1's silent preview
+is 57 minutes and its narrated film 47. Judge length on the narrated build or on the tool's estimate, never on the
+preview's duration. Budget before writing: twelve to fifteen chapters of 450 to 550 words, three to four minutes
+of listening, a worked example with a predict-pause, and no chapter over four and a half minutes. If a part does
+run long, cut a second example of a point already made, not a derivation step and not the worked example.
 
 ## The ear thread, the Tune, the Chain
 
@@ -124,6 +130,7 @@ python tools/qa_sound.py musicN --sync                      # overlap, labels, p
 python tools/dead_air.py renders/musicN_480p.mp4 --sound musicN
 python tools/lecture_length.py musicN                       # 30 to 60 minutes, listening included
 python tools/check_course.py music N                        # course row, lab, interactive (in a browser)
+python tools/check_narration.py musicN                      # after a narrated build: Whisper against the script
 python -m pytest -q tests/music
 ```
 

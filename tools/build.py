@@ -72,9 +72,12 @@ def master_filter(measure_cmd: list[str]) -> str:
 # Music, Built: scenes that play computed clips (explainer/music/sound.py) write a cue sheet beside each render.  The
 # master's music is mixed from those cues in float, stereo, 48 kHz, and joins the narration here.  The narration alone
 # is high-passed and brought to -16 LUFS by one constant gain; the music stem's gain is fixed, so the levels written
-# in a part's compute.py are the levels in the film.  Nothing is limited: a mix over the ceiling stops the build.
+# in a part's compute.py are the levels in the film.  The voice has a few peaks some 20 dB above its loudness, so
+# the narration (and only the narration) passes a look-ahead limiter after its gain; on Part 1 that moves its
+# loudness by 0.1 LU.  The music is never limited: a mix over the ceiling stops the build.
 MUSIC_GAIN_DB = 0.0
 NARRATION_LUFS = -16.0
+NARRATION_LIMIT = 0.75   # linear, about -2.5 dBFS: true peaks stay under -1.5 dBTP
 PEAK_CEILING_DBTP = -1.0
 
 
@@ -97,8 +100,9 @@ def sound_master(concat_list: Path, music: Path) -> str:
                          text=True, capture_output=True, check=True).stderr
     m = json.loads(err[err.rindex("{"): err.rindex("}") + 1])
     gain = 0.0 if m["input_i"] == "-inf" else max(-20.0, min(20.0, NARRATION_LUFS - float(m["input_i"])))
-    graph = (f"[0:a]{HIGHPASS},volume={gain:.2f}dB,aresample=48000[n];[3:a]volume={MUSIC_GAIN_DB:.2f}dB[m];"
-             f"[n][m]amix=inputs=2:duration=longest:normalize=0")
+    limiter = f"alimiter=level_in=1:level_out=1:limit={NARRATION_LIMIT}:attack=5:release=80:level=disabled"
+    graph = (f"[0:a]{HIGHPASS},volume={gain:.2f}dB,{limiter},aresample=48000[n];"
+             f"[3:a]volume={MUSIC_GAIN_DB:.2f}dB[m];[n][m]amix=inputs=2:duration=longest:normalize=0")
     err = subprocess.run(["ffmpeg", "-nostats", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-f", "lavfi",
                           "-i", "anullsrc", "-f", "lavfi", "-i", "anullsrc", "-i", str(music),
                           "-filter_complex", graph + ",ebur128=peak=true[a]", "-map", "[a]", "-t", "36000",
@@ -248,7 +252,14 @@ def main():
         dur = ffprobe_duration(norm)
         sheet = mp4.with_suffix(".cues.json")
         if sheet.exists():
-            sound_cues += [{**c, "start": c["start"] + offset} for c in json.loads(sheet.read_text())["cues"]]
+            heard = json.loads(sheet.read_text())["cues"]
+            sound_cues += [{**c, "start": c["start"] + offset} for c in heard]
+            # a viewer with the sound off reads what each example is: "[sound: lower, upper, both (physical model)]"
+            for c in heard:
+                if c.get("window") and not c.get("underscore"):
+                    what = ", ".join(x for x in (c.get("caption"), c.get("label")) if x) or "an example"
+                    cues.append((offset + c["start"], offset + c["start"] + min(c["duration"], 6.0),
+                                 f"[{'声音' if args.lang == 'zh' else 'sound'}: {what}]"))
         cues += subtitle_cues(lines, offset, args.lang,
                               preserve_terms=getattr(manifest, "SUBTITLE_TERM_BOUNDARIES", False) is True)
         if chapter:
@@ -259,7 +270,7 @@ def main():
     concat_list = work / "concat.txt"
     concat_list.write_text("".join(f"file '{p}'\n" for p in parts))
     srt = out_dir / f"{name}.srt"
-    srt.write_text(to_srt(cues))
+    srt.write_text(to_srt(sorted(cues, key=lambda c: c[0])))
 
     ffmeta = work / "chapters.ffmeta"
     lines = [";FFMETADATA1", f"title={narration_lang.video_title(args.video, manifest.TITLE, args.lang)}"]

@@ -306,8 +306,11 @@ bass, a kick drum and the lowest two octaves of the piano. The series therefore 
 - the high-pass applies to the narration stem only;
 - loudness is anchored on the narration (the same −16 LUFS target), and the music stem's gain is fixed for the
   whole series, so relative levels between examples are the ones written in the code;
-- a true-peak ceiling of −1.5 dBTP is enforced by a check, not by a limiter: a part that exceeds it fails the
-  gate and is fixed at the source;
+- a true-peak ceiling (−1.5 dBTP for every clip, −1.0 dBTP for the mixed film) is enforced on the music by a
+  check, not by a limiter: a part that exceeds it fails the gate and is fixed at the source;
+- the narration, and only the narration, passes a look-ahead limiter after its gain (found on Part 1's first
+  narrated build: the voice has rare peaks some 20 dB above its loudness; limiting them moves its loudness by
+  0.1 LU);
 - Part 57 explains this chain on screen and measures the series' own masters with the meter it builds.
 
 **Gates** (`tools/qa_sound.py`, new):
@@ -1355,17 +1358,20 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 |---|---|
 | 2026-11-13 | The plan (this file and `README.md`). |
 | 2026-11-13 | **Phase 0**: the clip store and loudness meter, `SoundScene` and cue sheets, stem mixing and the music master in `tools/build.py`, `tools/qa_sound.py`, Monochord's first layer (the stiff, lossy, stretching string, checked three ways), the scene instruments of §4 that Part 1 needs, and the test film `videos/music/soundcheck/` (picture-to-sound offsets within one frame). |
-| 2026-11-13 | **Part 1, *One String***: 15 chapters, 57.1 min of which 3.4 min listening in 40 windows; 3 pause-and-listen questions; Variation 1; Lab 1 and the plucked-string interactive; all gates clean on the 480p silent preview. Lessons in `LECTURE_GUIDE.md`. |
+| 2026-11-13 | **Part 1, *One String***: 15 chapters, 46.9 min narrated (English, 480p preview) of which 3.4 min listening in 40 windows; 3 pause-and-listen questions and a worked example with a predict-pause; Variation 1; Lab 1 and the plucked-string interactive; every gate clean, the narration listen-tested (`tools/check_narration.py`). Lessons in `LECTURE_GUIDE.md`. |
 
 **Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
-before Part 10 is opened), `tools/make.py` registration (with the narrated masters), the optional `music-qa`
-extra. **Not yet done for Part 1:** the narrated master (the preview is silent-narration at 480p; the music stem
-is final) and the Chinese edition (Phase 6).
+before Part 10 is opened), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for
+Part 1:** the 1080p master (the narrated film has been built and gated at 480p), a human listening pass (every
+sound so far has been judged by measurement and by spectrogram, none by ear), and the Chinese edition (Phase 6).
 
-**Changes to the plan made by the pilot.** Part 1 runs 57 minutes, not the ~45 first estimated: the chapter
-count was right but each chapter needed its listening windows. Estimates in §5 for the other parts of Act I
-should be read as narration time; add three to four minutes of listening. Levels are set by the loudest 400 ms,
-not by integrated loudness (§3), because plucked sounds are peaky.
+**Changes to the plan made by the pilot.**
+- Levels are set by the loudest 400 ms, not by integrated loudness (§3), because plucked sounds are peaky.
+- The narration alone passes a limiter (§3); the music still never does.
+- The subtitles carry a line for every listening window (`[sound: lower, upper, both, physical model]`), written
+  from the cue sheets, so the film can be followed with the sound off (§1, *See what you hear*).
+- The narrator reads about 172 words a minute, not 140: a silent preview (which keeps time at 140) of Part 1 runs
+  57 minutes, the narrated film 47. `tools/lecture_length.py` now estimates the series at the measured pace.
 
 ## 9. Decisions for the owner
 

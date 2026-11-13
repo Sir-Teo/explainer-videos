@@ -29,7 +29,7 @@ class Hook(SoundScene):
         self.play(FadeIn(mono), FadeIn(slots), run_time=0.6)
         prev = None
         with self.listen(c) as snd:
-            window(snd)
+            window(snd, r"the Tune, \ on one string")
             for k, n in enumerate(c.notes):
                 snd.wait_until(f"n{k}")
                 if prev is not None:

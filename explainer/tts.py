@@ -48,6 +48,7 @@ def _voice() -> str:
 # ---------------------------------------------------------------------------
 LEXICON: list[tuple[str, str]] = [
     # Music, Built: people and instruments (misaki reads these as English spellings otherwise)
+    (r"\bJean (?=[Dd]['’]Alembert)", "[Jean](/ʒˈɑn/) "),
     (r"\b[Dd]['’]Alembert['’]s", "[Dalembert's](/dˌæləmbˈɛɹz/)"),
     (r"\b[Dd]['’]Alembert\b", "[Dalembert](/dˌæləmbˈɛɹ/)"),
     (r"\bKirchhoff['’]s", "[Kirchhoffs](/kˈɪɹkhɔfs/)"),
