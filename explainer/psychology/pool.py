@@ -25,6 +25,14 @@ Reaction time (Part 1; times in ms)
     The planted values are in :data:`TRUTH`; ``tests/psychology/test_pool.py`` checks that large samples recover
     them.
 
+Sessions (Part 2; times in ms)
+    A person measured twice does not give the same number twice.  ``practice`` is how much faster the person's
+    simple reaction gets with repeated sessions (a gain that approaches its ceiling geometrically),
+    ``PRACTICE_RATE`` the share of the remaining gain picked up at each session, ``DAY_SD`` the day-to-day wobble
+    of a person's own mean, and ``keen`` a standardized eagerness to sign up for things, which goes with being
+    young and quick.  :meth:`Pool.session_rt` returns one session's mean simple reaction time for each person;
+    ``explainer.psychology.lab`` builds its designs, sound and unsound, on it.
+
 Nothing here imports manim.
 """
 
@@ -50,12 +58,23 @@ RT_STAGES = {
     "discriminate": (40.0, 0.30, 0.50),
     "choose_bit": (50.0, 0.30, 0.50),  # ms per bit of response uncertainty
 }
+PRACTICE_MEAN = 12.0  # ms: the mean total gain in simple RT from practice, over many sessions
+PRACTICE_CV = 0.5
+PRACTICE_RATE = 0.6  # the share of the remaining gain made at each new session
+DAY_SD = 6.0  # ms: day-to-day standard deviation of one person's mean simple RT
+KEEN_SPEED = -0.45  # loading of eagerness on general slowness (quick people sign up)
+KEEN_AGE = -0.30  # ... and on standardized age (young people sign up)
+
 TRUTH = {
     "rt_stages": RT_STAGES,
     "age_slope": AGE_SLOPE,
     "gonogo_decides": 0.5,  # the share of people for whom go/no-go includes the choice
     "cv_base": 0.12,  # trial-to-trial CV of sensing and responding
     "cv_stage": 0.60,  # trial-to-trial CV of the inserted stages
+    "practice_mean": PRACTICE_MEAN,
+    "practice_rate": PRACTICE_RATE,
+    "day_sd": DAY_SD,
+    "keen": {"speed": KEEN_SPEED, "age": KEEN_AGE},
 }
 
 
@@ -73,6 +92,11 @@ class Pool:
             setattr(self, name, median * np.exp(s * z))
         self.respond = self.respond + AGE_SLOPE * (self.age - AGE_REF)
         self.gonogo_decides = rng.random(n) < TRUTH["gonogo_decides"]
+        # --- sessions (Part 2): drawn after everything above, so Part 1's people are unchanged ---
+        self.practice = rng.gamma(1 / PRACTICE_CV ** 2, PRACTICE_MEAN * PRACTICE_CV ** 2, size=n)
+        z_age = (self.age - self.age.mean()) / self.age.std()
+        rest = math.sqrt(1 - KEEN_SPEED ** 2 - KEEN_AGE ** 2)
+        self.keen = KEEN_SPEED * self.speed + KEEN_AGE * z_age + rest * rng.standard_normal(n)
 
     # ------------------------------------------------------------------
     def sample(self, k: int, seed: int = 0, among=None) -> np.ndarray:
@@ -130,3 +154,31 @@ class Pool:
             out.append(Trials("rt", np.repeat(ids, n_trials), np.full(rt.size, method), rt.ravel(),
                               np.ones(rt.size, dtype=bool)))
         return Trials.concat(out)
+
+    # ------------------------------------------------------------------
+    # Sessions (Part 2)
+    # ------------------------------------------------------------------
+    def simple_mean(self, ids) -> np.ndarray:
+        """Each person's own long-run mean simple reaction time before any practice (ms)."""
+        ids = np.asarray(ids)
+        return self.sense[ids] + self.respond[ids]
+
+    def practice_gain(self, ids, session: int) -> np.ndarray:
+        """How much faster (ms) each person is at session ``session`` (0 is the first) than at session 0."""
+        ids = np.asarray(ids)
+        return self.practice[ids] * (1 - (1 - PRACTICE_RATE) ** session)
+
+    def session_rt(self, ids, session: int = 0, n_trials: int = 20, seed: int = 0, shift=0.0) -> np.ndarray:
+        """The mean simple reaction time (ms) of each person in ``ids`` over ``n_trials`` trials of one session.
+
+        ``session`` counts the person's earlier sessions (practice makes later ones faster); ``shift`` is added
+        to everyone (or, as an array, to each person): a treatment effect, or something that happened to the
+        whole laboratory.  The same ``seed`` and ``session`` give the same numbers.
+        """
+        ids = np.asarray(ids)
+        rng = np.random.Generator(np.random.PCG64([self.seed, 23, seed, session]))
+        cv = TRUTH["cv_base"]
+        trial_sd = cv * np.sqrt(self.sense[ids] ** 2 + self.respond[ids] ** 2)
+        mean = self.simple_mean(ids) - self.practice_gain(ids, session) + np.asarray(shift, dtype=float)
+        day = DAY_SD * rng.standard_normal(len(ids))
+        return mean + day + trial_sd / math.sqrt(n_trials) * rng.standard_normal(len(ids))
