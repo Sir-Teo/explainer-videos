@@ -460,4 +460,108 @@
       note: "Four pure fifths overshoot a pure major third by the syntonic comma, 21.5 cents, and twelve pure fifths overshoot seven octaves by the Pythagorean comma, 23.5 cents. Narrowing each of eleven fifths by a fraction x of the syntonic comma improves the eight thirds that lie inside the chain and pushes the error into the twelfth fifth and the four thirds that cross it. x = 0 is Pythagorean tuning; x = 1/4 is quarter-comma meantone (Aron, 1523); x = 1/3 makes the minor thirds pure; x close to 1/11 shares the Pythagorean comma among all twelve fifths, which is equal temperament. Well temperaments such as Werckmeister's narrow only some of the fifths, and are not on this slider. The sound is computed in your browser. Simulated.",
     });
   };
+
+  // ---- Part 7: a bow on a string ------------------------------------------------------------------------------
+  // Velocity waves travel both ways from the bow; at the bow the string must satisfy the string (a straight line)
+  // and the rosin (a falling curve of friction against sliding speed), keeping its state where both would do.
+  var BOW = { z: 0.25, muS: 0.8, muD: 0.3, v0: 0.05, gBridge: 0.97, aBridge: 0.1, gNut: 0.995, hz: 196, half: 225 };
+  function schellengLimits(beta, speed) {
+    var r = BOW.z * (1 + BOW.gBridge) / (1 - BOW.gBridge);
+    return { max: 2 * BOW.z * speed / (beta * (BOW.muS - BOW.muD)), min: BOW.z * BOW.z * speed / (2 * r * beta * beta * (BOW.muS - BOW.muD)) };
+  }
+  function bowString(beta, force, speed, seconds) {
+    var half = BOW.half, rate = 2 * BOW.hz * half, n1 = Math.max(Math.round(beta * half), 1), n2 = half - n1, steps = Math.floor(seconds * rate);
+    var toB = new Float64Array(n1), fromB = new Float64Array(n1), toN = new Float64Array(n2), fromN = new Float64Array(n2);
+    var v = new Float32Array(steps), bridge = new Float32Array(steps), slip = new Uint8Array(steps);
+    var start = Math.max(force, 0.6 * schellengLimits(n1 / half, speed).max), ease = Math.log(force / start), attack = 0.3 * rate;
+    var i1 = 0, i2 = 0, lp = 0, stick = true, s, z = BOW.z;
+    for (s = 0; s < steps; s++) {
+      var fb = start * Math.exp(ease * Math.min(1, s / attack)), k = fb / (2 * z);
+      var vib = fromB[i1], vin = fromN[i2], vh = vib + vin, a = speed - vh, f2, sg = a >= 0 ? 1 : -1, aa = a * sg;
+      var b = aa - k * BOW.muD - BOW.v0, disc = b * b + 4 * BOW.v0 * (aa - k * BOW.muS);
+      if (aa > k * BOW.muS) { f2 = sg * (aa - 0.5 * (b + Math.sqrt(disc))); stick = false; }
+      else if (!stick && disc >= 0 && b > 0) f2 = sg * (aa - 0.5 * (b + Math.sqrt(disc)));
+      else { f2 = a; stick = true; }
+      v[s] = vh + f2; slip[s] = stick ? 0 : 1;
+      var arrB = toB[i1], arrN = toN[i2];
+      lp = (1 - BOW.aBridge) * arrB + BOW.aBridge * lp;
+      fromB[i1] = -BOW.gBridge * lp; fromN[i2] = -BOW.gNut * arrN;
+      toB[i1] = vin + f2; toN[i2] = vib + f2;
+      bridge[s] = z * (arrB + BOW.gBridge * lp);
+      if (++i1 === n1) i1 = 0;
+      if (++i2 === n2) i2 = 0;
+    }
+    // what it settled into: the last thirty periods
+    var P = 2 * half, from = steps - 30 * P, slips = 0, i, lag, best = P, top = -1e300, mean = 0;
+    for (i = from; i < steps; i++) { slips += slip[i]; mean += bridge[i]; }
+    mean /= 30 * P;
+    for (lag = Math.round(0.96 * P); lag <= Math.round(1.6 * P); lag++) {
+      var acc = 0;
+      for (i = from + lag; i < steps; i += 3) acc += (bridge[i] - mean) * (bridge[i - lag] - mean);
+      acc /= (steps - from - lag);
+      if (acc > top * 1.0005) { top = acc; best = lag; }
+    }
+    var frac = slips / (30 * P), realBeta = n1 / half, pitch = P / best, kind;
+    if (frac < 1e-6) kind = "stuck: the bow never lets go";
+    else if (Math.abs(pitch - 1) > 0.01 || frac < 0.75 * realBeta) kind = "too hard: the string cannot let go on time";
+    else if (frac > 1.3 * realBeta) kind = "too lightly: the string slips more than once a period";
+    else kind = "the Helmholtz motion";
+    return { v: v, bridge: bridge, rate: rate, period: P, frac: frac, beta: realBeta, pitch: pitch, kind: kind, ok: kind === "the Helmholtz motion" };
+  }
+  function bowSound(d) { // the force on the bridge, at half the simulation's rate, through a few resonances standing for a violin's body
+    var rate = d.rate / 2, len = Math.floor(d.bridge.length / 2), x = new Float32Array(len), y = new Float32Array(len), i, j, peak = 0, mean = 0;
+    for (i = 0; i < len; i++) { x[i] = 0.5 * (d.bridge[2 * i] + d.bridge[2 * i + 1]); mean += x[i]; }
+    mean /= len;
+    var modes = [[275, 18, 1.0], [460, 22, 1.3], [540, 22, 1.5], [1100, 10, 0.7], [2500, 3, 2.2]];
+    for (j = 0; j < modes.length; j++) {
+      var w = 2 * Math.PI * modes[j][0] / rate, r = Math.exp(-w / (2 * modes[j][1])), a1 = 2 * r * Math.cos(w), a2 = -r * r, g = modes[j][2] * (1 - r), y1 = 0, y2 = 0, x1 = 0;
+      for (i = 0; i < len; i++) { var xi = x[i] - mean, out = g * (xi - x1) + a1 * y1 + a2 * y2; x1 = xi; y2 = y1; y1 = out; y[i] += out; }
+    }
+    for (i = 0; i < len; i++) peak = Math.max(peak, Math.abs(y[i]));
+    var fade = Math.floor(0.05 * rate), tail = Math.floor(0.1 * rate);
+    for (i = 0; i < len; i++) y[i] *= (0.3 / (peak || 1)) * Math.min(1, i / fade) * Math.min(1, (len - i) / tail);
+    return play(y, rate);
+  }
+  W.bow = function (el) {
+    QB.widget(el, {
+      title: "Inside Schelleng's wedge",
+      sub: "A string under a bow, simulated as you move the sliders. Left: the speed of the string at the bow through two periods. In the Helmholtz motion it rides with the bow, then flies back once. Right: Schelleng's diagram, with his two limits for the bow speed you have chosen and a dot where you are. Push the force up through the top of the wedge, or let it fall through the bottom, and watch what the string does instead. Press Bow to hear it.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "beta", label: "Where the bow is: fraction of the string from the bridge", min: 0.04, max: 0.3, step: 0.01, value: 0.1, fmt: function (x) { return fmt(x, 2); } },
+        { k: "lf", label: "Bow force (N)", min: -2, max: 1.2, step: 0.02, value: -0.04, fmt: function (x) { return fmt(Math.pow(10, x), Math.pow(10, x) < 0.1 ? 3 : 2); } },
+        { k: "speed", label: "Bow speed (m/s)", min: 0.05, max: 0.5, step: 0.01, value: 0.2, fmt: function (x) { return fmt(x, 2); } },
+      ],
+      buttons: [
+        { label: "Bow the string", act: function (s, v) { s.sound = bowSound(bowString(v.beta, Math.pow(10, v.lf), v.speed, 1.5)); } },
+      ],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var force = Math.pow(10, v.lf), d = bowString(v.beta, force, v.speed, 0.8), P = d.period, n = d.v.length, xs = [], ys = [], i, lo = 0, hi = v.speed;
+        for (i = 0; i < 2 * P; i++) { var y = d.v[n - 2 * P + i]; xs.push(i / P); ys.push(y); lo = Math.min(lo, y); hi = Math.max(hi, y); }
+        s.d = d;
+        var a = g[0].axes({ x: [0, 2], y: [lo * 1.1 - 0.05, hi * 1.3 + 0.1], title: "The string's speed under the bow (m/s)", xlabel: "time (periods of the open string)", xticks: [0, 0.5, 1, 1.5, 2] });
+        a.hline(v.speed, { color: C.gain });
+        a.line(xs, ys, { color: d.ok ? C.idea : C.loss, width: 2 });
+        var bs = [], mx = [], mn = [];
+        for (i = 0; i <= 40; i++) { var be = 0.035 * Math.pow(0.32 / 0.035, i / 40), L = schellengLimits(be, v.speed); bs.push(be); mx.push(L.max); mn.push(L.min); }
+        var b = g[1].axes({ x: [0.035, 0.32], y: [0.005, 20], logx: true, logy: true, title: "Bow force (N) against bow position", xlabel: "fraction of the string from the bridge",
+                            xticks: [0.04, 0.07, 0.1, 0.2, 0.3], yticks: [0.01, 0.1, 1, 10] });
+        b.area(bs, mx, mn, { color: C.gain, alpha: 0.14 });
+        b.line(bs, mx, { color: C.loss, width: 1.8 });
+        b.line(bs, mn, { color: C.spot, width: 1.8 });
+        b.dots([d.beta], [force], { color: d.ok ? C.idea : C.loss, r: 5 });
+        b.legend([["Schelleng's largest force", C.loss], ["his smallest", C.spot]], { pos: "tr" });
+      },
+      readout: function (v, s) {
+        var d = s.d || bowString(v.beta, Math.pow(10, v.lf), v.speed, 0.8), L = schellengLimits(d.beta, v.speed);
+        return [["the string is in", d.kind],
+                ["it slips for", fmt(100 * d.frac, 1) + "% of each period (Helmholtz: " + fmt(100 * d.beta, 1) + "%)"],
+                ["its pitch", fmt(196 * d.pitch, 1) + " Hz (the open string: 196.0)"],
+                ["Schelleng's limits here", fmt(L.min, 3) + " to " + fmt(L.max, 2) + " N"],
+                ["sound", s.sound === null ? "press Bow" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "The model is the one the film uses (McIntyre, Schumacher and Woodhouse, 1983): waves travelling both ways from a bow at one point, a bridge that reflects a little less than everything, and rosin whose friction falls from 0.8 of the bow's force when the string is stuck to 0.3 when it slides fast. Each note is started as a player starts it, with a firmer bow that is eased to the force you chose in the first third of a second. Schelleng's two lines (1973) are formulas, not this model's own limits: the largest force goes as speed over distance and this string follows it closely; the smallest goes as speed over distance squared, and this string needs two or three times as much. A real string also twists, and real rosin warms and softens as it slides, so a violin's wedge is not exactly either. The sound is the force on the bridge through five resonances standing for a violin's body, computed in your browser. Simulated.",
+    });
+  };
 })();

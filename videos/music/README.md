@@ -34,9 +34,10 @@ are in [`SYLLABUS.md`](SYLLABUS.md).
 the rights rule as written; sixty-eight parts; English first; see [`SYLLABUS.md`](SYLLABUS.md) §9). Phase 0, the sound pipeline, is built and proven on
 a test film (`videos/music/soundcheck/`). **Part 1, *One String*, is built**: fifteen chapters, 47 minutes narrated, with its
 lab, its interactive and its problem set ([`music1/README.md`](music1/README.md)). How a part is made, with the
-lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). **Parts 2 to 6 are built** too: *Waves in Air* (34 minutes; [`music2/README.md`](music2/README.md)), *The Spectrum* (33 minutes;
+lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). **Parts 2 to 7 are built** too: *Waves in Air* (34 minutes; [`music2/README.md`](music2/README.md)), *The Spectrum* (33 minutes;
 [`music3/README.md`](music3/README.md)), *The Ear* (48 minutes; [`music4/README.md`](music4/README.md)), *Consonance* (39 minutes;
-[`music5/README.md`](music5/README.md)) and *Tuning* (37 minutes; [`music6/README.md`](music6/README.md)); the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
+[`music5/README.md`](music5/README.md)), *Tuning* (37 minutes; [`music6/README.md`](music6/README.md)) and *Strings, Hammers and Bows* (39 minutes;
+[`music7/README.md`](music7/README.md)); the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
 
 ## The story
 
@@ -142,7 +143,7 @@ instruments in `explainer/music/`:
 | 4 | The Ear | the cochlea as a frequency analyzer, critical bands, loudness and equal-loudness contours, masking, pitch by place and by timing, the missing fundamental, hearing loss | a gammatone cochlea; the Tune with its fundamentals removed, and as Shepard tones |
 | 5 | Consonance | Pythagoras, Galileo, Euler, Rameau, Helmholtz's beats, Plomp and Levelt, Sethares's curves, harmonicity, the Tsimane' experiment | dissonance curves that find the just ratios; a timbre whose "octave" is 2.1 |
 | 6 | Tuning | the Pythagorean and syntonic commas, just intonation, meantone and wolves, well temperament, Zhu Zaiyu and Stevin, continued fractions and why 12, stretched pianos | the tuning lattice; the Tune in eight temperaments; a comma pump that drifts flat |
-| 7 | Strings, Hammers and Bows | guitar bodies, the piano's hammer and inharmonicity, Helmholtz motion of the bowed string, the Schelleng diagram, the blind tests of Stradivari | plucked, struck and bowed physical models; the Railsback curve derived |
+| 7 | Strings, Hammers and Bows | guitar bodies, the piano's hammer and inharmonicity, Helmholtz motion of the bowed string, the Schelleng diagram, the blind tests of Stradivari | plucked, struck and bowed physical models; Schelleng's wedge found by simulation |
 | 8 | Pipes, Reeds and Voices | bores and impedance, why a clarinet lacks even harmonics, the reed as a valve, brass bells and mouthpieces, the source-filter voice, formants, overtone singing | a clarinet model, a brass model and a voice that sings vowels |
 | 9 | Drums, Bars and Bells | Bessel modes of a membrane, how timpani and tabla become harmonic, tuned bars, the bell's minor third, Chladni figures, "can one hear the shape of a drum?" | modal percussion; two different drums with the same spectrum, computed |
 | **II** | **Notes** | | |

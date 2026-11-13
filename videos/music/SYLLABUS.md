@@ -576,18 +576,34 @@ lattices (Part 33).
 Temperament in China and Europe*.
 
 ### Part 7 · Strings, Hammers and Bows (~55)
-*Story:* In blind tests published in 2012 and 2014, soloists playing in a hotel room and a concert hall preferred new violins to
-Stradivaris and could not tell which was which. So what makes a violin? The part builds a guitar, a piano and a
-violin from the string of Part 1 and finds where each instrument's character lives.
-*Covers:* the guitar's body modes and air resonance; the piano's hammer, stiffness and inharmonicity, paired
-strings and the double decay, the soundboard; the bowed string's stick-slip, Helmholtz motion, the Schelleng
-diagram and the wolf note; bridges and radiation.
-*Built and computed:* Karplus–Strong grown into a waveguide; a stiff struck string; a bowed string with friction
-that reproduces the Helmholtz corner and Schelleng's limits; the Railsback curve from inharmonicity.
-*Variation 7:* the Tune for plucked, struck and bowed strings.
-*Frontier:* what violin measurements do and do not explain; hammer-felt hysteresis; real-time finite-difference
-instruments.
-*Reading:* Fletcher & Rossing; Woodhouse's papers on the bowed string; Fritz et al. (2012, 2014).
+*Story:* In blind tests published in 2012 and 2014, players in a hotel room and soloists in a concert hall preferred
+new violins to Stradivaris and could not tell which was which. So what makes a violin? The part builds a guitar, a
+piano and a violin from the string of Part 1 and finds where each instrument's character lives.
+1. Hook: four notes plucked, struck and bowed, all from one string; the blind tests; the plan.
+2. A string cannot be heard: why a string needs a body (an ear question); the body as a filter; a tap; loud or long.
+3. A plate, a hole and a box of air: the guitar's two-mass model (a worked example); the dip; the low E.
+4. A pluck in three lines: Karplus and Strong; the loop lap by lap; why it is a string; its pitch.
+5. The hammer: Cristofori; felt that stiffens; three touches (an ear question); the striking point (a worked example).
+6. A string that is also a bar: stiffness and sharp partials (a worked example; an ear question); living with it.
+7. Three strings for one note: loud or long (an ear question); Weinreich's coupled strings; the two-stage decay.
+8. Stick and slip: rosin; the string under the bow; Helmholtz's corner; the sawtooth on the bridge.
+9. How hard to press: speed, force and place (an ear question); Schelleng's diagram; nearer the bridge (a worked
+   example); starting the note.
+10. The violin's box: the body's response; vibrato as a change of colour; the wolf.
+11. Frontier: the blind tests again; what nobody can do yet; instruments made of arithmetic.
+12. Variation 7: the Tune for a guitar, a piano and a violin. Outro: problems, payoffs, and the bow's loop in air.
+
+*Covers:* why a string needs a body; the guitar's air and plate resonances; Karplus–Strong; the piano's hammer,
+stiffness and inharmonicity, paired strings and the double decay; the bowed string's stick-slip, Helmholtz
+motion, the Schelleng diagram and the wolf note; a violin's signature modes and bridge hill; vibrato.
+*Built and computed:* `instruments/strings.py`: Karplus–Strong; a felt hammer on a stiff string; two strings on a
+yielding bridge; a bowed string with friction that reproduces the Helmholtz corner and, in outline, Schelleng's
+limits; guitar and violin bodies as banks of resonances; the two-mass guitar.
+*Variation 7:* the Tune for plucked, struck and bowed strings, alone, in pairs and together.
+*Frontier:* what violin measurements do and do not explain; rosin that warms; the measured Schelleng diagram;
+hammer-felt hysteresis; real-time finite-difference instruments.
+*Reading:* Fletcher & Rossing; Cremer; Woodhouse's papers on the bowed string; Weinreich (1977); Fritz et al.
+(2012, 2014, 2017).
 
 ### Part 8 · Pipes, Reeds and Voices (~55)
 *Story:* A flute and a clarinet of the same length: the clarinet sounds almost an octave lower and its even
@@ -1460,6 +1476,7 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-13 | **Part 4, *The Ear***: 13 chapters, 48.1 min narrated of which 1.9 min listening in 16 windows; 6 pause-and-listen questions, 4 demonstrations to listen for, 8 worked examples with predict-pauses; Variation 4 (no fundamentals, then no octaves); Lab 4 and the missing-fundamental interactive; Monochord's ear (`monochord/ear.py`: middle ear, long-wave cochlea, gammatone bank, threshold and masking, nerve and autocorrelation pitch, Shepard tones, noise dose, Hopf oscillator; `tests/music/test_ear.py`); shared scene helpers moved into `explainer/music/kit.py`; every gate clean, narration listen-tested. Forward references in Parts 2 and 3 corrected to the syllabus numbering. |
 | 2026-11-13 | **Part 5, *Consonance***: 12 chapters, 38.7 min narrated of which 2.5 min listening in 16 windows; 6 pause-and-listen questions, 3 demonstrations to listen for, 3 worked examples with predict-pauses; Variation 5 (a bent timbre and its own intervals); Lab 5 and the dissonance-curve interactive; Monochord's consonance layer (`monochord/consonance.py`: Euler's gradus, beats, the Plomp–Levelt curve, dissonance curves, stretched partials, harmonicity, the fundamental bass; `tests/music/test_consonance.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 6, *Tuning***: 12 chapters, 37.3 min narrated of which 2.3 min listening in 16 windows; 4 pause-and-listen questions, 4 demonstrations to listen for, 6 worked examples with predict-pauses; Variation 6 (the Tune with chords in eight tunings); Lab 6 and the temperament interactive; Monochord's tuning layer (`monochord/tuning.py`: commas, Pythagorean, just, meantone, Werckmeister III, equal divisions, continued fractions, beat rates, the comma pump, stretched octaves; `tests/music/test_tuning.py`, against Barbour's tables); sustained-tone helpers in `partkit.py`; every gate clean. |
+| 2026-11-13 | **Part 7, *Strings, Hammers and Bows***: 12 chapters, 39.2 min narrated of which 1.7 min listening in 12 windows; 5 pause-and-listen questions, 1 demonstration to listen for, 4 worked examples with predict-pauses; Variation 7 (a guitar, a piano and a violin from one string); Lab 7 and the bowed-string interactive (Schelleng's wedge, simulated in the page); Monochord's string instruments (`instruments/strings.py`: Karplus–Strong, a felt hammer on a stiff string, coupled unisons, a bowed string with stick-slip friction, Schelleng's limits, the two-mass guitar, bodies as banks of resonances; `tests/music/test_strings.py`); every gate clean, narration listen-tested. |
 
 **Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
 before Part 10 is opened), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for

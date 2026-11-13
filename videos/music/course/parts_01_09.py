@@ -303,4 +303,55 @@ PARTS = [
         I=(7, 8, 9),
         also=(("Monochord's tunings: commas, temperaments, beats, the comma pump, stretched octaves", "explainer/music/monochord/tuning.py"),),
     ),
+    Part(
+        n=7, level="U", widget="bow",
+        question="What turns a vibrating string into a guitar, a piano or a violin, and why is one of them so much "
+                 "harder to play than the others?",
+        story="In blind tests, players and soloists preferred new violins to Stradivaris and could not tell which was "
+              "which; so what is a violin? The part builds three instruments round the string of Part 1. A string is "
+              "too thin to move air, so every instrument fastens it to a body, which takes its energy, radiates it "
+              "and filters it. A guitar's body is a flexible plate on a bottle of air: two resonances that push each "
+              "other apart. A plucked string is, to a computer, a loop of numbers and an average (Karplus and Strong). "
+              "The piano replaces the pluck by a thrown hammer whose felt stiffens as it is squeezed, so a harder "
+              "blow is shorter and brighter; its thick steel strings are partly bars, and their partials run sharp; "
+              "and its notes have three strings each, which, tuned a hair apart, give a loud beginning and a long "
+              "tail (Weinreich). The violin replaces the pluck by a bow: rosin grips and lets go, Helmholtz's corner "
+              "runs round the string, and the bridge feels a sawtooth. That motion exists only between a largest and "
+              "a smallest bow force (Schelleng's wedge), which is why the violin is hard. A violin's body has sharp "
+              "resonances, so vibrato changes the colour of a note as well as its pitch, and a resonance that is too "
+              "strong makes a wolf. The Tune is played by all three.",
+        handoff="The bow's loop, a steady push turned into vibration by something that grips and lets go, returns "
+                "with air in place of rosin in reeds, lips and the voice (Part 8). Stiffness without tension is a "
+                "bar or a bell (Part 9). Plucked, struck and bowed become colours for an orchestrator (Part 41); "
+                "Karplus and Strong's loop becomes the comb filter and the reverberator (Part 49), and the models "
+                "of this part become synthesizers (Part 52).",
+        outside="Part 1 for the string, its partials and stiffness; Part 2 for the bottle; Part 3 for a sawtooth's "
+                "spectrum; Parts 4 to 6 for the missing fundamental, roughness and stretched octaves. Newton's "
+                "second law; decibels.",
+        objectives={
+            "U": ["Explain why a string needs a body, and what the body does to the sound.",
+                  "Say how plucking, striking and bowing each decide a string's partials.",
+                  "Describe stick and slip, the Helmholtz motion and the limits on bow force."],
+            "M": ["Use the two-mass model to place a guitar's two lowest resonances.",
+                  "Compute a stiff string's partials, and the slip time and flyback speed of a bowed string.",
+                  "Write Karplus and Strong's algorithm and predict its pitch."],
+            "D": ["Say what blind tests of old and new violins did and did not show.",
+                  "Name what the standard models of rosin, felt and the bow leave out."],
+            "I": ["Trade bow speed, force and contact point for loudness and brightness.",
+                  "Voice a hammer or tune a unison knowing what each changes.",
+                  "Choose between a sample and a physical model for a string sound."],
+        },
+        results=[
+            ("A plate on a bottle of air", r"f_-^2 + f_+^2 = f_h^2 + f_p^2"),
+            ("Karplus and Strong", r"y_t = \tfrac12\,(y_{t-N} + y_{t-N-1}),\qquad f = \frac{f_s}{N + \tfrac12}"),
+            ("A felt hammer", r"F = K\,x^{p},\quad p \approx 2.5"),
+            ("A stiff string", r"f_n = n f_1 \sqrt{\frac{1 + B n^2}{1 + B}}"),
+            ("The Helmholtz motion", r"\text{slip} = \beta T,\qquad v_\text{slip} = -\,v_b\,\frac{1-\beta}{\beta},\qquad a_n \propto \frac1n"),
+            ("Schelleng's limits", r"F_{\max} = \frac{2 Z v_b}{\beta\,(\mu_s - \mu_d)},\qquad F_{\min} = \frac{Z^2 v_b}{2 R\,\beta^2 (\mu_s - \mu_d)}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7),
+        D=(10,),
+        I=(8, 9),
+        also=(("Monochord's strings: a plucked loop, a hammer, coupled unisons, a bow, bodies", "explainer/music/monochord/instruments/strings.py"),),
+    ),
 ]

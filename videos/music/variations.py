@@ -17,6 +17,8 @@ LEDGER = [
      "measure": r"the same intervals are 4 times rougher with ordinary partials"},
     {"part": 6, "title": r"with chords, in eight tunings: Pythagorean, meantone and its wolf, Werckmeister, 12, 19, 31 and 53", "seconds": 38.05,
      "measure": r"its chords are from 1 to 31 cents out of tune"},
+    {"part": 7, "title": r"for plucked, struck and bowed strings: a guitar, a piano and a violin built from one string", "seconds": 28.8,
+     "measure": r"the bowed string's force is a sawtooth to within 0.2 dB"},
 ]
 
 
