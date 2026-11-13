@@ -47,11 +47,13 @@ Manim videos with local neural narration. See README.md for layout and build com
 - *Computer Science, Built* (`videos/cs/`): sixty-one parts in eleven acts (`cs1` … `cs61`: a CS degree plus industry practice in Acts I–X, a research tier in Act XI and a *Frontier* chapter in every part), Parts 1–61 built or in progress; the series plan
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
-- *Music, Built* (`videos/music/`): sixty-eight parts in twelve acts (`music1` … `music68`), Part 1 built; the
+- *Music, Built* (`videos/music/`): sixty-eight parts in twelve acts (`music1` … `music68`), Parts 1–2 built
+  (progress in `videos/music/SYLLABUS.md` §8); the
   series plan is `videos/music/README.md`, the standard, devices (Monochord, the Tune and the Variations, the Chain,
   the Library), the sound pipeline and the part-by-part plan are `videos/music/SYLLABUS.md`, the working guide
   `videos/music/LECTURE_GUIDE.md`. Monochord, the instrument the series builds, is `explainer/music/monochord/`
-  (no manim; tested in `tests/music/`); scenes are `SoundScene`s (`explainer/music/sound.py`) and play clips from the
+  (no manim; tested in `tests/music/`; a part's `compute.py` starts from `monochord/partkit.py`, its scenes from
+  `explainer/music/kit.py`, its tests from `tests/music/partcheck.py`); scenes are `SoundScene`s (`explainer/music/sound.py`) and play clips from the
   part's `ClipStore` inside `with self.listen(clip) as snd:` windows, the picture driven by `snd.drive(...)`. Every
   sound is computed by the part's `compute.py`; no third-party recordings are played as music. Gates besides the
   usual ones: `tools/qa_sound.py musicN --sync`, `tools/dead_air.py <film> --sound musicN`, and

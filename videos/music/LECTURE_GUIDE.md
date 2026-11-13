@@ -26,6 +26,17 @@ Monochord, the instrument, is `explainer/music/monochord/` and never imports man
 `partial_bars`, `Spectrogram`, `MonochordView`; `__init__.py`: the chapter card, the Chain, the timeline, the
 series map, the listening tag and the ledger of variations).
 
+From Part 2 on a part starts from two kits, so that its own files hold only what is its own:
+
+- `explainer/music/monochord/partkit.py` for `compute.py`: `saver(CLIPS, LEVEL)` (level, peak ceiling, label,
+  store), `string_note` (Part 1's monochord, the series' reference sound), `play_tune(voice, ...)` (the Tune played
+  by whatever the part built), `envelope`, `resample`.
+- `explainer/music/kit.py` for the scenes (`from explainer.music.kit import *` in `common.py`): the palette by
+  name, `say`, `window`, `ring`, `follow`, `Meter`, `film`, `FieldView` (a film of a field in a plane; `start(fps)`
+  lets it run under narration), `ParcelRow`, `TubeView`, `Trace`, `bottle_shape`, `open_chapter`.
+- `videos/music/variations.py` keeps the ledger rows of the finished parts; add the part's row when it is done.
+- `tests/music/partcheck.py` holds the checks every part passes (`check_part(compute, SCENES)`).
+
 ## Order of work
 
 1. **`compute.py` first, complete, with its checks.** A sound is a result. Write the experiment, save the numbers
@@ -77,6 +88,18 @@ series map, the listening tag and the ledger of variations).
   draws at the old place); a `Spectrogram` is a `Group`, so anything that contains one is a `Group`;
   `always_redraw` must return the same kind of mobject every frame.
 
+## Pictures that went wrong in Part 2, and the rule each one left
+
+- **A `Lens` keeps the end points it was made with.** Shift its tube afterwards and the blur jumps back the first
+  time a clip drives it. Place the thing first, make its blur second. The same goes for curves drawn on axes:
+  move the axes and their curves as one group.
+- **Do not name an attribute after a manim method.** `self.scale = ...` on a mobject breaks every `FadeIn`.
+- **A simulated film that starts at a bookmark leaves bare axes or an empty box before it.** Let it run from the
+  first word (`FieldView.start(fps)` with the frame rate chosen to fill the narration).
+- **A simulation's box is not open space.** The first diffraction run had a low-frequency error because its
+  absorbing edge was thinner than a wavelength; a rule for every 2-D run: the sponge at least a wavelength of the
+  lowest frequency reported, and the result checked against something published (Maekawa's chart).
+
 ## Numbers that went wrong in the pilot, and the rule each one left
 
 - **A pickup at a quarter of the string hears no fourth or eighth partial.** Observation points sit at an
@@ -98,7 +121,9 @@ A part is 30 to 60 minutes *including* its listening windows and pauses (`tools/
 them and fails outside that range). The narrator reads about 172 words a minute; the silent preview
 (`EXPLAINER_TTS=silent`) keeps time at 140, so it runs a fifth longer than the film will: Part 1's silent preview
 is 57 minutes and its narrated film 47. Judge length on the narrated build or on the tool's estimate, never on the
-preview's duration. Budget before writing: twelve to fifteen chapters of 450 to 550 words, three to four minutes
+preview's duration. (Part 2's first cut had 4,700 words in fourteen chapters and would have run 31 minutes: count
+the words before rendering, `words / 172 + listening + about 10 percent`.) Budget before writing: twelve to
+fifteen chapters of 450 to 550 words, three to four minutes
 of listening, a worked example with a predict-pause, and no chapter over four and a half minutes. If a part does
 run long, cut a second example of a point already made, not a derivation step and not the worked example.
 

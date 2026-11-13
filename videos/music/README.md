@@ -34,7 +34,8 @@ are in [`SYLLABUS.md`](SYLLABUS.md).
 the rights rule as written; sixty-eight parts; English first; see [`SYLLABUS.md`](SYLLABUS.md) §9). Phase 0, the sound pipeline, is built and proven on
 a test film (`videos/music/soundcheck/`). **Part 1, *One String*, is built**: fifteen chapters, 47 minutes narrated, with its
 lab, its interactive and its problem set ([`music1/README.md`](music1/README.md)). How a part is made, with the
-lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md).
+lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). **Part 2, *Waves in Air*, is built** too (34 minutes;
+[`music2/README.md`](music2/README.md)); the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
 
 ## The story
 
