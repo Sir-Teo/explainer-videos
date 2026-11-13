@@ -568,36 +568,49 @@ Schijen & Lakens 2021; Chambers 2017; Ritchie 2020.
 
 ## Act II · The Wet Machine
 
-### Part 5 · The Neuron (~55)
+### Part 5 · The Neuron (~58)
 *Question:* what is the mind's smallest moving part, and what does it compute?
 *Story:* Helmholtz showed the nerve signal is slow. A century later Hodgkin and Huxley, with a squid axon and a
 hand calculator, wrote four equations that reproduce it to the millisecond. It is psychology's best model of
 anything, and the template for every model in the series: measure, write equations, simulate, compare.
-1. Hook: Galvani's frog, Helmholtz's timing, and the question of what moves.
-2. Cajal against Golgi: the neuron doctrine. Anatomy of a neuron, drawn.
-3. Ions and the membrane: diffusion against electrical force. The Nernst potential derived; Goldman's equation.
-4. The membrane as a circuit: capacitance, leak, the time constant (derived; the RC curve on screen).
-5. The squid giant axon and the voltage clamp (Cole; Hodgkin and Huxley 1939–52). What they measured.
-6. The model: sodium and potassium conductances, the gates m, h and n, their rates fitted to clamp data. Four
-   equations.
-7. The action potential, computed: threshold, all-or-none, the refractory period, each traced to a gate.
-8. Propagation: the cable equation, the length constant, myelin and saltatory conduction. Helmholtz's speed
-   recovered.
-9. Reduction: the phase plane, nullclines, FitzHugh–Nagumo; two ways to start firing (Hodgkin's classes as
-   bifurcations).
-10. Integrate-and-fire: what is kept and lost. The f–I curve.
-11. Codes: rate, timing, Poisson variability, the Fano factor; Adrian's stretch receptor (1926).
-12. What one neuron can compute: thresholds, coincidence detection, dendrites as a two-layer network.
+0. Hook: Galvani's frog and Volta's objection; Helmholtz's speed against a wire's; four equations and a speed
+   they were never fitted to (18.8 m/s computed, 21.2 measured).
+1. Cajal against Golgi: the neuron doctrine. Anatomy of a neuron, drawn, with its direction.
+2. Ions and the membrane: diffusion against electrical force. The Nernst potential; two batteries; Goldman's
+   equation as a dial between them.
+3. The membrane as a circuit: capacitance, leak, the time constant (the RC curve on screen). A membrane adds up a
+   few milliseconds and forgets the rest.
+4. The squid giant axon, the overshoot of 1939 and the voltage clamp (Cole; Hodgkin, Huxley and Katz): the loop
+   between voltage and channels, how the clamp breaks it, and the two conductances it showed.
+5. The model: why a fourth power gives a delay; the gates m, h and n, their steady values and speeds; four
+   equations, fitted only to clamp data.
+6. The action potential, computed: one spike with its conductances; threshold and all-or-none; the absolute and
+   relative refractory periods, each traced to a gate.
+7. Propagation: passive spread and the length constant; the travelling spike on the 1952 axon (18.7 m/s
+   recomputed); speed against radius, and myelin. Helmholtz's speed recovered.
+8. Reduction: FitzHugh-Nagumo; the phase plane, where threshold, size and dead time are geometry; two ways to
+   start firing (Hodgkin's classes).
+9. Integrate-and-fire: what is kept and lost. The f-I curve in closed form, checked against simulation.
+10. On you: reading a spike train. Adrian and Zotterman's rate code (1926); three trains to rank; Poisson
+    variability, the Fano factor, and why a brain pools many cells.
+11. What one neuron can compute: a threshold unit and the table it cannot produce; coincidence detection;
+    dendrites as a two-layer network.
+12. The Ledger. 13. In practice: talking to nerves. 14. Frontier: how much is one neuron?
 
-*Psyche:* `neuron`: Hodgkin–Huxley integrated and checked against the 1952 figures; the cable; FHN; LIF with its
-closed-form f–I curve; a spike-train generator.
-*On you:* spikes as sound: hear a rate code, then guess the stimulus.
-*Ledger:* the Hodgkin–Huxley model (`replicated`; the standard of quantitative success).
-*In practice:* cochlear implants, deep-brain stimulators and anaesthetics act on these mechanisms; neuromorphic
-chips implement the reductions.
-*Frontier:* dendritic computation in human cortical neurons (Gidon et al. 2020 **(verify)**); how many parameters
-a single-neuron model needs; glia.
-*Reading:* Hodgkin & Huxley 1952; Kandel et al. chs. on membrane and action potential; Dayan & Abbott chs. 5–6;
+*Psyche:* `neuron` (`explainer/psychology/psyche/neuron.py`): Nernst and Goldman; the RC membrane;
+Hodgkin-Huxley with the clamp, threshold, refractory period and firing rate; the cable, with the 1952 conduction
+speed as a test; FitzHugh-Nagumo; LIF with its closed-form f-I curve; Poisson trains and the Fano factor; a
+neuron with thresholding branches, and an exact test of whether a point neuron can match a table.
+*On you:* three spike trains to rank in the film. The interactive is the same task as an experiment: which of
+two recordings came from the stronger stimulus, at recording lengths from 50 ms to a second, set against a
+reader who counts; each pair can also be heard as clicks, as Adrian heard his.
+*Ledger:* the Hodgkin-Huxley model (`replicated`; the standard of quantitative success). Shown without rows,
+with reasons: the rate code (due in Part 11), the neuron doctrine, the dendritic spikes of 2020.
+*In practice:* cochlear implants, local anaesthetics and deep-brain stimulators act on these mechanisms;
+neuromorphic chips implement the reductions. What the membrane tells an engineer, and what it cannot.
+*Frontier:* graded dendritic spikes in human cortical neurons (Gidon et al. 2020, from secondary accounts); how
+many parameters a single-neuron model needs; rate against timing; glia; whether the mind needs this level.
+*Reading:* Hodgkin & Huxley 1952; Kandel et al. chs. on membrane and action potential; Dayan & Abbott chs. 5-6;
 Izhikevich, *Dynamical Systems in Neuroscience*; Koch, *Biophysics of Computation*; Finger, *Minds Behind the
 Brain*.
 
@@ -3045,3 +3058,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 2 | built, English and Chinese, the second pilot: 14 chapters, hook and outro; the laboratory (`lab.py`), the cue-reading model (`psyche/cueing.py`), five Ledger rows; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 56 min |
 | 3 | built, English and Chinese: 14 chapters, hook and outro; the measurement library (`measure.py`), the Pool's traits, methods and conflict task, three Ledger rows; course entry, lab and interactive (the Forer reading) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 56 min |
 | 4 | built, English and Chinese: 14 chapters, hook and outro; the false-positive lab (`evidence.py`), six Ledger rows (the plan's twenty were cut to what could be sourced and dated), nine Archive datasets; course entry, lab and interactive (the forking paths) checked; narration table and on-screen text translated and dry-run. Act I is complete. Open checks in its README | 48 min |
+| 5 | built, English and Chinese: 14 chapters, hook and outro; Psyche's neuron (`psyche/neuron.py`, eleven tests, the 1952 conduction speed recomputed), one Ledger row, five Archive datasets; course entry for Act II, lab and interactive (reading a spike train) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 58 min |

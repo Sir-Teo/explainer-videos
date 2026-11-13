@@ -1,7 +1,7 @@
 # Psychology, Built (心理学，从零搭建)
 
 **Status (2026-11-13): the plan is accepted, the shared code is in place, the two pilots (Parts 1 and 2,
-English and Chinese) were reviewed and accepted, and Act I is complete: Parts 3 and 4 are built** (English and Chinese). This file is the plan; the standard every part meets, the
+English and Chinese) were reviewed and accepted, Act I is complete (Parts 1 to 4), and Act II has begun with Part 5, *The Neuron*** (all in English and Chinese). This file is the plan; the standard every part meets, the
 devices and all sixty-two parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with the progress table in
 its §9.
 
@@ -271,7 +271,7 @@ own, and the syllabus lists them):
 
 | Module | What it is |
 |---|---|
-| `psyche/` | Psyche, the model subject: one module per faculty. So far `chronometry` (serial stages, Donders' subtraction, the insertion test, additive factors, Hick's law, the ex-Gaussian) and `cueing` (Clever Hans as a reader of an involuntary cue) |
+| `psyche/` | Psyche, the model subject: one module per faculty. So far `chronometry` (serial stages, Donders' subtraction, the insertion test, additive factors, Hick's law, the ex-Gaussian) `cueing` (Clever Hans as a reader of an involuntary cue) and `neuron` (Nernst and Goldman, Hodgkin-Huxley with the clamp and the cable, FitzHugh-Nagumo, integrate-and-fire, spike trains, dendritic branches) |
 | `lab.py` | the laboratory: assignment by shuffle, counterbalancing, the comparison and its randomization test, power, and the sound and unsound designs run on the Pool with the truth known |
 | `measure.py` | measurement: Stevens's scale types, reliability, Spearman-Brown, alpha, the correction for attenuation, kappa, the intraclass correlation, the multitrait-multimethod matrix, a factor model against a network, the cancellation conditions |
 | `evidence.py` | the false-positive lab: effect sizes, power, optional stopping, the four forks, a literature with a publication filter, p-curves, replications planned from the printed effect, equivalence tests, a Bayes factor |

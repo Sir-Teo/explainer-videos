@@ -206,6 +206,39 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | dashboard; metric; primary metric | 仪表盘；指标；主要指标 |
 | the false-positive lab | 假阳性实验室 |
 
+## Part 5: the neuron
+
+| English | 中文 |
+|---|---|
+| neuron; the neuron doctrine | 神经元；神经元学说 |
+| dendrite; cell body; axon; terminal | 树突；胞体；轴突；末梢 |
+| nerve signal; action potential; spike | 神经信号；动作电位；锋电位 |
+| impulse (Adrian's word) | 冲动 |
+| to fire; firing rate | 发放；发放频率 |
+| membrane; membrane potential | 膜（细胞膜）；膜电位 |
+| ion; sodium; potassium; calcium | 离子；钠；钾；钙 |
+| channel; gate; door (informal) | 通道；门 |
+| conductance; capacitance; resistance | 电导；电容；电阻 |
+| battery (an ion's equilibrium potential) | 电池 |
+| Nernst potential; Goldman equation | 能斯特电位；戈德曼方程 |
+| resting potential; at rest | 静息电位；静息时 |
+| time constant; length constant | 时间常数；长度常数 |
+| voltage clamp; step (of voltage) | 电压钳；阶跃 |
+| threshold; all-or-none | 阈值；全或无 |
+| refractory period (dead time); absolute, relative | 不应期；绝对，相对 |
+| overshoot | 超射 |
+| squid giant axon | 乌贼巨轴突 |
+| myelin; gap (node) | 髓鞘；缺口 |
+| phase plane; recovery variable | 相平面；恢复变量 |
+| integrate-and-fire | 积分发放 |
+| rate code; spike train | 频率编码；信号串 |
+| Fano factor; Poisson train | 法诺因子；泊松信号串 |
+| coincidence detection | 重合检测 |
+| compartment (of a model neuron) | 房室 |
+| glia | 胶质细胞 |
+| cochlear implant; local anaesthetic; deep-brain stimulator; neuromorphic chip | 人工耳蜗；局部麻醉药；脑深部电刺激器；神经形态芯片 |
+| perceptron | 感知机 |
+
 ## Names
 
 | English | 中文 |
@@ -252,6 +285,16 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Andrew Gelman, Eric Loken | 安德鲁·格尔曼，埃里克·洛肯 |
 | Diederik Stapel | 迪德里克·斯塔佩尔 |
 | Luigi Galvani | 路易吉·伽伐尼 |
+| Luigi Galvani, Alessandro Volta | 路易吉·伽伐尼，亚历山德罗·伏打 |
+| Camillo Golgi, Santiago Ramón y Cajal | 卡米洛·高尔基，圣地亚哥·拉蒙-卡哈尔 |
+| Walther Nernst, David Goldman | 瓦尔特·能斯特，戈德曼 |
+| Alan Hodgkin, Andrew Huxley, Bernard Katz | 艾伦·霍奇金，安德鲁·赫胥黎，伯纳德·卡茨 |
+| Kenneth Cole, Howard Curtis, George Marmont | 肯尼思·科尔，霍华德·柯蒂斯，乔治·马蒙特 |
+| John Zachary Young | 约翰·扎卡里·扬 |
+| Richard FitzHugh, Jinichi Nagumo, Louis Lapicque | 理查德·菲茨休，南云仁一，路易·拉皮克 |
+| Edgar Adrian, Yngve Zotterman | 埃德加·阿德里安，英韦·佐特曼 |
+| Otto Loewi | 奥托·勒维 |
+| Bologna, Plymouth | 博洛尼亚，普利茅斯 |
 | Königsberg, Leipzig, Utrecht, Würzburg, Cornell | 柯尼斯堡，莱比锡，乌得勒支，维尔茨堡，康奈尔 |
 
 ## Titles
