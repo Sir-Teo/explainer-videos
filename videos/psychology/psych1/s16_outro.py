@@ -50,7 +50,10 @@ class Outro(VoiceoverScene):
         head = label(r"Part 1, \ in ten lines", font_size=42).to_edge(UP, buff=0.35)
         if rows.width > 13.2:
             rows.width = 13.2
-        rows.next_to(head, DOWN, buff=0.45)
+        room = head.get_bottom()[1] - 0.4 + 3.7  # Chinese lines are taller: keep the tenth inside the frame
+        if rows.height > room:
+            rows.scale_to_fit_height(room)
+        rows.next_to(head, DOWN, buff=0.4)
         with self.voiceover(
             "Part one in ten lines. <bookmark mark='a'/> Kant gave three reasons why the mind could never be a "
             "subject for science. Helmholtz showed that a signal in a nerve takes time, and measured its speed "

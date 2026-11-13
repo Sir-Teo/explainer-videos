@@ -41,6 +41,7 @@ P = SimpleNamespace(
     # bookkeeping
     ACCENT="#F7D154",  # the series' accent: chapter cards, the lit timeline and levels, "On you"
     ARCHIVE="#E3B98A",  # the Archive: historical data, with its source
+    KANT="#C9B8FF",  # Kant's three objections, and the wager board that keeps score against them
     MECH="#FF9F5A",  # a faculty of the Homunculus replaced by mechanism (= PSYCHE)
     PERSON=GREY_A,  # a faculty still drawn as a little person
     GRID=GREY_D,

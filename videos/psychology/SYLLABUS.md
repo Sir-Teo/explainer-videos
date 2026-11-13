@@ -2940,9 +2940,13 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
    - The browser task kit for the Battery (`course/site/widgets/00_tasks.js`: trial loops, timing, local-only
      storage), since every part's interactive needs it, and a scripted participant for `tools/check_course.py`.
    - `tests/psychology/`: the Pool's planted truths are recoverable; the Ledger's schema; a silent smoke render.
-1. **Pilot: Part 1,** then **Part 12** (Signal and Noise) as the second pilot, because it exercises everything a
-   typical part needs: an On-you task, a Psyche module with a closed form, a fit to data, Ledger rows, and an
-   industry payoff. Delivered with previews and contact sheets. **Review with the user**, then lock the standard.
+1. **Pilots: Part 1, then Part 2** (The Experiment). The first draft of this plan named Part 12 as the second
+   pilot; it is Part 2 instead, for two reasons found while building Part 1: the course tools and the site count a
+   series' parts from 1 without gaps, so a part built out of order would not appear; and Part 1 ends on Part 2's
+   hook. Part 2 still exercises what a typical part needs (an experiment on the viewer, a model fitted to
+   historical data, designs run on the Pool, Ledger rows, an industry payoff), and Part 12 becomes the checkpoint
+   for the methods standard when Act III is reached. Delivered with previews and contact sheets. **Review with
+   the user**, then lock the standard.
 2. **Act by act,** reviewing at each milestone:
    - Acts I–IV (Parts 2–17): method, brain, senses, learning. About 14 hours.
    - Acts V–VI (Parts 18–29): cognition, motivation, emotion.
@@ -2997,6 +3001,6 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 
 | Part | State | Length |
 |---|---|---|
-| 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. Still to do: the Chinese guide and text table, the Ledger gate tool, the shared browser task kit (Part 1's interactive carries its own trial loop) | |
-| 1 | built in English: 14 chapters, hook and outro; course entry, lab and interactive checked. Chinese edition not started. Open checks in its README | 46 min |
-| 12 | next: the second pilot | |
+| 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. The Chinese guide (`PSYCHOLOGY_ZH_GUIDE.md`) and text table are in place. Still to do: the Ledger gate tool, the shared browser task kit (Part 1's interactive carries its own trial loop) | |
+| 1 | built, English and Chinese: 14 chapters, hook and outro; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 46 min |
+| 2 | in progress, the second pilot: sources verified into the Archive, the laboratory (`lab.py`), the cue-reading model (`psyche/cueing.py`) and `compute.py` written and tested; scenes next | |

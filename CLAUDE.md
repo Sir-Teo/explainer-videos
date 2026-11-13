@@ -18,7 +18,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   manim; `python -m videos.stats.labs 12`), `videos/<series>/course/site/widgets/*.js` one interactive per part.
   `python tools/check_course.py <series> N` checks a part end to end (it drives the interactive in a browser);
   `tests/test_courses.py` runs every lab. *Quant, Built* keeps its own older copy of the same scheme.
-- Chinese narration: `videos/<series>/<name>/narration_zh.json`; each bilingual series (`analysis`, `ai`, `philosophy`) keeps its on-screen text
+- Chinese narration: `videos/<series>/<name>/narration_zh.json`; each bilingual series (`analysis`, `ai`, `philosophy`, `psychology`) keeps its on-screen text
   table (`<series>_text_zh.json`) and term guide in `videos/<series>/`.
 - *AI, Built* (`videos/ai/`): thirty-one parts (`ai1` … `ai31`); the series plan is `videos/ai/README.md`, the
   chapter-by-chapter syllabus and the lecture standard every part meets are `videos/ai/SYLLABUS.md`; shared
@@ -57,3 +57,4 @@ Manim videos with local neural narration. See README.md for layout and build com
   (`ledger.py`; every finding a part presents gets a row with sources and the date checked), the Archive (`archive/`,
   every dataset registered in `archive/SOURCES.md`), and the cards, maps and instruments in `__init__.py` and `viz.py`.
   A part's interactive is an experiment the reader takes part in; it stores and sends nothing.
+  Chinese narration tables in `psychN/zh_lines.py`; terms in `videos/psychology/PSYCHOLOGY_ZH_GUIDE.md`.

@@ -1,7 +1,7 @@
 # Psychology, Built (心理学，从零搭建)
 
-**Status (2026-11-13): the plan is accepted, the shared code is in place, and Part 1 is built** (English; the
-Chinese edition and the second pilot, Part 12, are next). This file is the plan; the standard every part meets, the
+**Status (2026-11-13): the plan is accepted, the shared code is in place, and Part 1 is built** (English and
+Chinese; the second pilot, Part 2, is in progress). This file is the plan; the standard every part meets, the
 devices and all sixty-two parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with the progress table in
 its §9.
 

@@ -70,8 +70,11 @@ class Insertion(VoiceoverScene):
             t.arrange(RIGHT, buff=0.2, aligned_edge=DOWN).next_to(b.cells[0], LEFT, buff=0.3)
             tot = MathTex(rf"{d[k]:.0f}", font_size=34, color=P.HUMAN).next_to(b.cells[-1], RIGHT, buff=0.25)
             tags[(k, i)] = VGroup(t, tot)
-        same = label(r"the same three averages", font_size=30, color=P.HUMAN)
-        same.next_to(VGroup(*[tags[k][1] for k in tags]), RIGHT, buff=0.35)
+        same = VGroup(label(r"the same", font_size=30, color=P.HUMAN),
+                      label(r"three averages", font_size=30, color=P.HUMAN)).arrange(DOWN, buff=0.1)
+        same.next_to(VGroup(*[tags[k][1] for k in tags]), RIGHT, buff=0.45)
+        if same.get_right()[0] > 6.85:  # keep the label inside the frame
+            same.shift(LEFT * (same.get_right()[0] - 6.85))
         arrows = VGroup(*[Line(same.get_left() + LEFT * 0.05, tags[k][1].get_right() + RIGHT * 0.05, color=GREY_C,
                                stroke_width=1.5) for k in tags])
         note_ = quote_card(r"In Donders' own laboratory notebook, never published, his students show no difference "
