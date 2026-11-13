@@ -161,7 +161,7 @@ class Outro(VoiceoverScene):
         self.clear_scene()
 
     def next_part(self):
-        hm = homunculus_map(done=1, height=6.2).move_to([-3.9, 0.1, 0])
+        hm = homunculus_map(done=1, height=6.2).move_to([-3.7, 0.1, 0])
         tally = label(r"the laboratory is open; \ one faculty begun", font_size=26, color=P.MECH)
         tally.next_to(hm, DOWN, buff=0.15)
         nxt = VGroup(label(r"Part 3", font_size=32, color=GREY_B), label(r"The Measure", font_size=54),

@@ -108,6 +108,37 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | human factors | 人因 |
 | chronoscope | 计时器 |
 | tuning fork, drum | 音叉，鼓 |
+| questioner (of Hans) | 提问者 |
+| blind; single, double, triple blind | 盲法；单盲，双盲，三盲 |
+| "procedure without knowledge" (Pfungst) | “不知情的程序” |
+| blinders | 眼罩 |
+| ideomotor action | 念动动作 |
+| control group; treatment | 对照组；处理 |
+| independent, dependent variable; operational definition | 自变量，因变量；操作性定义 |
+| threats: testing, history, maturation, regression, selection, attrition | 测验效应，历史，成熟，回归，选择，流失 |
+| regression to the mean | 向平均数回归 |
+| confound | 混淆因素 |
+| the shuffle; to shuffle people into groups | 洗牌；洗牌分组 |
+| randomization; randomization test | 随机化；随机化检验 |
+| spread (of a set of results) | 离散程度 |
+| eagerness (the Pool's unmeasured trait) | 积极程度 |
+| the game (Part 2's invented treatment) | 游戏 |
+| between-person, within-person design | 两组设计，被试内设计（“每个人做自己的对照”） |
+| counterbalancing; counterbalanced | 平衡顺序；顺序平衡 |
+| Latin square, Williams square | 拉丁方，威廉姆斯方 |
+| experimenter expectancy; demand characteristics | 实验者的期望；要求特征 |
+| handler; alert (of a detection dog) | 训导员；示警 |
+| placebo; active placebo; balanced placebo design | 安慰剂；活性安慰剂；平衡安慰剂设计 |
+| factorial design; interaction | 析因设计；交互作用 |
+| parallel, fanning, crossing (lines of an interaction plot) | 平行，张开，交叉 |
+| statistical conclusion, internal, construct, external validity | 统计结论效度，内部效度，构念效度，外部效度 |
+| WEIRD | WEIRD（西方的、受过教育的、工业化的、富裕的、民主的） |
+| natural experiment; cutoff | 自然实验；分数线 |
+| intention to treat | 意向治疗分析 |
+| informed consent; debriefing; deception | 知情同意；事后说明；欺瞒 |
+| ethics board | 伦理委员会 |
+| respect for persons, beneficence, justice | 尊重个人，有利，公正 |
+| arm (of a trial) | 组 |
 
 ## Names
 
@@ -128,6 +159,15 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | David Marr, Daniel Dennett | 大卫·马尔，丹尼尔·丹尼特 |
 | Francis Galton, David Woods, Ardi Roelofs | 弗朗西斯·高尔顿，大卫·伍兹，阿尔迪·鲁洛夫斯 |
 | Clever Hans | 聪明的汉斯 |
+| Wilhelm von Osten, Carl Stumpf, Oskar Pfungst | 威廉·冯·奥斯滕，卡尔·施通普夫，奥斯卡·普丰斯特 |
+| Michel Chevreul, William Carpenter | 谢弗勒尔，卡彭特 |
+| Charles Peirce, Joseph Jastrow | 查尔斯·皮尔士，约瑟夫·贾斯特罗 |
+| Ronald Fisher | 费希尔 |
+| Donald Campbell, Julian Stanley | 坎贝尔，斯坦利 |
+| Robert Rosenthal, Kermit Fode, Lenore Jacobson | 罗森塔尔，福德，雅各布森 |
+| Stephen Raudenbush, Martin Orne, Willem Wagenaar | 劳登布什，马丁·奥恩，瓦赫纳尔 |
+| Stanley Milgram | 米尔格拉姆 |
+| Tuskegee, Alabama | 亚拉巴马州塔斯基吉 |
 | Königsberg, Leipzig, Utrecht, Würzburg, Cornell | 柯尼斯堡，莱比锡，乌得勒支，维尔茨堡，康奈尔 |
 
 ## Titles
@@ -144,6 +184,11 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | *Cognitive Psychology* | 《认知心理学》 |
 | *Vision* | 《视觉》 |
 | *Brainstorms* | 《头脑风暴》 |
+| *Clever Hans* (*Das Pferd des Herrn von Osten*) | 《聪明的汉斯》 |
+| "On Small Differences in Sensation" | 《论感觉的微小差别》 |
+| *The Design of Experiments* | 《实验设计》 |
+| *Pygmalion in the Classroom* | 《课堂里的皮格马利翁》 |
+| *The Belmont Report* | 《贝尔蒙报告》 |
 
 ## The parts
 

@@ -89,7 +89,7 @@ class Expectancy(VoiceoverScene):
         head = heading(r"From the maze to the classroom")
         hc = history_card(1968, r"Rosenthal and Jacobson, \ \emph{Pygmalion in the Classroom}", r"teachers are told "
                           r"that certain pupils, picked at random, are about to bloom", color=P.ARCHIVE, width=6.4,
-                          font_size=26).move_to([-3.75, 1.75, 0])
+                          font_size=26).move_to([-3.55, 1.75, 0])
         claim = wrapped_label(r"reported: \ a year later, the named children had gained more in IQ, most of all "
                               r"in the first two grades", 6.2, 27, WHITE).next_to(hc, DOWN, buff=0.35)
         claim.align_to(hc, LEFT)

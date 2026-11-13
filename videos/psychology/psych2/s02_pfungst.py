@@ -111,20 +111,20 @@ class Pfungst(VoiceoverScene):
 
     def cue(self):
         head = heading(r"What the horse was reading")
-        hans = horse(2.4).move_to([-4.4, -1.0, 0])
-        asker = questioner(2.4).move_to([1.2, -0.95, 0])
+        hans = horse(2.4).move_to([-4.4, -0.4, 0])
+        asker = questioner(2.4).move_to([1.2, -0.35, 0])
         target = VGroup(label(r"the answer is", font_size=26, color=GREY_A), MathTex(r"5", font_size=60, color=KNOWS))
         target.arrange(RIGHT, buff=0.25).next_to(asker, UP, buff=0.5)
-        counter = label(r"0", font_size=72, color=HORSE).move_to([-1.6, 1.3, 0])
+        counter = label(r"0", font_size=72, color=HORSE).move_to([-1.6, 1.8, 0])
         steps = VGroup(
             label(r"the tapping starts: \ the questioner leans forward a little, to count", font_size=28),
             label(r"the right count is reached: \ the tension lets go, and the head comes up", font_size=28,
                   color=KNOWS),
             label(r"a fifth of a millimetre is enough", font_size=28, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.85)
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.75)
         # a magnifier on the head
         lens = Circle(radius=1.15, stroke_color=P.ACCENT, stroke_width=3, fill_color="#101726", fill_opacity=1)
-        lens.move_to([4.8, 0.9, 0])
+        lens.move_to([4.8, 1.3, 0])
         big = Circle(radius=0.55, stroke_width=0, fill_color=P.HUMAN, fill_opacity=0.9).move_to(lens).shift(DOWN * 0.25)
         ghost = big.copy().set_fill(opacity=0.25)
         up = Arrow(big.get_top() + UP * 0.02, big.get_top() + UP * 0.5, buff=0, color=KNOWS, stroke_width=5,

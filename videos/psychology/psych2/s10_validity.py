@@ -77,7 +77,7 @@ class Validity(VoiceoverScene):
         west = 96
         us = 68
         cols = [P.ACCENT] * us + ["#7EC8F5"] * (west - us) + [GREY_C] * (n - west)
-        crowd = people_row(n, cols, height=0.42, buff=0.1, per_row=20).move_to([-2.9, -0.15, 0])
+        crowd = people_row(n, cols, height=0.42, buff=0.1, per_row=20).move_to([-2.6, -0.15, 0])
         cap = label(r"of every 100 samples in six leading psychology journals, 2003 to 2007:", font_size=26)
         cap.next_to(crowd, UP, buff=0.35).align_to(crowd, LEFT)
         facts = VGroup(
