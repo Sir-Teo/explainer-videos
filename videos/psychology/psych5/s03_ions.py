@@ -39,7 +39,7 @@ class Ions(VoiceoverScene):
         diff = Arrow([-1.3, -1.0, 0], [-1.3, 1.0, 0], color=K, stroke_width=6, buff=0)
         diff_l = label(r"diffusion", font_size=26, color=K).next_to(diff.get_end(), LEFT, buff=0.15).shift(DOWN * 0.15)
         field = Arrow([1.3, 1.0, 0], [1.3, -1.0, 0], color=THRESH, stroke_width=6, buff=0)
-        field_l = label(r"voltage", font_size=26, color=THRESH).next_to(field.get_end(), RIGHT, buff=0.15).shift(UP * 0.15)
+        field_l = label(r"voltage", font_size=26, color=THRESH).next_to(field.get_start(), UR, buff=0.06)
         charges = VGroup(*[label(r"$+$", font_size=30, color=THRESH).move_to([x, 0.62, 0]) for x in (-3.4, -2.2, 2.2, 3.4)],
                          *[label(r"$-$", font_size=30, color=THRESH).move_to([x, -0.62, 0]) for x in (-3.4, -2.2, 2.2, 3.4)])
         meter = VGroup(label(r"inside, relative to outside", font_size=22, color=GREY_A),

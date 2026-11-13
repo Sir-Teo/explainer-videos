@@ -2362,7 +2362,7 @@
   "$-72$ mV": "$-72$ 毫伏",
   "schematic; \\ concentrations in mM, the usual figures for a squid axon": "示意图；浓度单位为mM，是乌贼轴突的常用数值",
   "The Nernst potential: \\ where the two forces balance": "能斯特电位：两个力平衡的地方",
-  "E \\;=\\; \\frac{RT}{zF}\\,\\ln\\frac{[\\text{outside}]}{[\\text{inside}]}": "E \\;=\\; \\frac{RT}{zF}\\,\\ln\\frac{[\\text{outside}]}{[\\text{inside}]}",
+  "E \\;=\\; \\frac{RT}{zF}\\,\\ln\\frac{[\\text{outside}]}{[\\text{inside}]}": "E \\;=\\; \\frac{RT}{zF}\\,\\ln\\frac{[\\text{膜外}]}{[\\text{膜内}]}",
   "potassium outside (mM, log scale)": "膜外的钾（mM，对数刻度）",
   "$E_K$ (mV)": "$E_K$（毫伏）",
   "potassium": "钾",
