@@ -48,14 +48,15 @@ Manim videos with local neural narration. See README.md for layout and build com
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
 - *Psychology, Built* (`videos/psychology/`): sixty-two parts planned in thirteen acts (`psych1` … `psych62`: a degree,
-  the graduate methods sequence, industry practice and a research tier); Parts 1 to 3 are built. The folders are `psychN` while
+  the graduate methods sequence, industry practice and a research tier); Parts 1 to 4 (Act I) are built. The folders are `psychN` while
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
   plan is `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the progress table are
   `videos/psychology/SYLLABUS.md`. Shared code in `explainer/psychology/` (tested in `tests/psychology/`): the model
   subject Psyche (`psyche/`, one module per faculty; so far `chronometry` and `cueing`), the laboratory (`lab.py`:
   designs run on the Pool with the truth known; a part that shows a study picks it by rule, the median of many, never
   by its result), the measurement library (`measure.py`: scale types, reliability, attenuation, alpha, kappa, the
-  multitrait-multimethod matrix), the Pool (`pool.py`, 100,000 simulated
+  multitrait-multimethod matrix), the false-positive lab (`evidence.py`: power, forking paths, a filtered literature and
+  its replications, p-curves, equivalence tests), the Pool (`pool.py`, 100,000 simulated
   people, always tagged simulated), the Battery (`battery.py`, tasks behind one `run`), the Replication Ledger
   (`ledger.py`; every finding a part presents gets a row with sources and the date checked, and `tools/check_ledger.py psychN` fails a part that shows a study with neither a row nor a `ledger.shown` reason), the Archive (`archive/`,
   every dataset registered in `archive/SOURCES.md`), and the cards, maps and instruments in `__init__.py` and `viz.py`.

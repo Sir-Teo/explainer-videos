@@ -111,7 +111,7 @@ class Power(VoiceoverScene):
         tag = note(r"simulated: the false-positive lab").to_corner(DR, buff=0.2)
         with self.voiceover(
             "Here's what low power does to a literature, and it does two things, not one. Take a real effect of "
-            f"moderate size, d of {d['d_true']}, and let two thousand laboratories each study it with "
+            f"moderate size, d of {d['d_true']}, <bookmark mark='s'/> and let two thousand laboratories each study it with "
             f"{d['n']} people a group, which for a long time was a common sample. <bookmark mark='a'/> "
             "Their estimates scatter widely round the truth, as they must. <bookmark mark='b'/> Only "
             f"{100 * d['found']:.0f} per cent of them reach significance. So the first cost is the obvious one: "
@@ -124,8 +124,8 @@ class Power(VoiceoverScene):
             "again."
         ) as vo:
             self.play(FadeIn(head), FadeIn(A), Create(truth), FadeIn(tl), FadeIn(tag))
-            vo.wait_until("a")
-            self.play(FadeIn(allb, lag_ratio=0.03), run_time=2.5)
+            vo.wait_until("s")
+            self.play(FadeIn(allb, lag_ratio=0.2), run_time=6.0)
             vo.wait_until("b")
             self.play(FadeIn(sigb, lag_ratio=0.03), FadeIn(side[0]), run_time=2.0)
             self.play(FadeIn(side[1]))

@@ -70,7 +70,7 @@ class Hook(VoiceoverScene):
         cards.arrange(RIGHT, buff=0.2).move_to([0, 1.2, 0])
         facts = VGroup(
             big_number(rf"{fmt_int(d['participants_more_than'])}+", r"participants", WHITE, 60, 3.0),
-            big_number(rf"{d['significant']} of {d['experiments']}", r"statistically significant", SIG, 60, 3.4),
+            big_number(rf"{d['significant']} of the {d['experiments']}", r"statistically significant", SIG, 60, 3.4),
             big_number(rf"$d = {r2(d['mean_d'])}$", r"the average size of the effect", TRUTH, 60, 3.6),
         ).arrange(RIGHT, buff=0.9, aligned_edge=UP).move_to([0, -1.5, 0])
         src = published_tag(archive.BEM_2011.cite)
