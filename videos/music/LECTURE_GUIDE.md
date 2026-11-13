@@ -106,6 +106,15 @@ the lab already has, not a derivation step.
   notes are checked in the tests.
 - Each chapter card lights the links of the Chain the chapter touches and the years it visits on the timeline.
 
+## Names the voice must say
+
+Music's history is French, German, Italian and Greek names, and the narrator reads them as English spellings unless
+told otherwise (d'Alembert came out as "duh-LEM-bert", Kirchhoff as "kerch-hoff"). Before the narrated build, list
+every capitalised word of the part's narration with the phonemes the voice will use, and add what is wrong to
+`LEXICON` in `explainer/tts.py` (inline IPA, `[Sauveur](/sOvˈɜɹ/)`; a possessive needs its own entry, written so
+that the plain entry cannot match inside it). Single letters and symbols (`X of x`, `c t`, `mu`) are already
+handled there.
+
 ## Gates
 
 ```

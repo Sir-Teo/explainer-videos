@@ -47,6 +47,20 @@ def _voice() -> str:
 # Kokoro (misaki G2P) accepts inline IPA overrides: [word](/ipa/).
 # ---------------------------------------------------------------------------
 LEXICON: list[tuple[str, str]] = [
+    # Music, Built: people and instruments (misaki reads these as English spellings otherwise)
+    (r"\b[Dd]['’]Alembert['’]s", "[Dalembert's](/dˌæləmbˈɛɹz/)"),
+    (r"\b[Dd]['’]Alembert\b", "[Dalembert](/dˌæləmbˈɛɹ/)"),
+    (r"\bKirchhoff['’]s", "[Kirchhoffs](/kˈɪɹkhɔfs/)"),
+    (r"\bKirchhoff\b", "[Kirchhoff](/kˈɪɹkhɔf/)"),
+    (r"\bvon Helmholtz\b", "[von](/fɑn/) Helmholtz"),
+    (r"\bHelmholtz\b", "[Helmholtz](/hˈɛlmhOlts/)"),
+    (r"\bSauveur\b", "[Sauveur](/sOvˈɜɹ/)"),
+    (r"\bNicomachus\b", "[Nicomachus](/nɪkˈɑməkəs/)"),
+    (r"\bBoethius\b", "[Boethius](/bOˈiθiəs/)"),
+    (r"\bVincenzo\b", "[Vincenzo](/vɪnʧˈɛntsO/)"),
+    (r"\bGalilei\b", "[Galilei](/ɡˌæləlˈAi/)"),
+    (r"\bLevelt\b", "[Levelt](/lˈAvəlt/)"),
+    (r"\btanpura\b", "[tanpura](/tɑnpˈʊɹə/)"),
     (r"Navier[–—-]Stokes", "[Navier](/nævjˈeɪ/) Stokes"),
     (r"\bNavier\b", "[Navier](/nævjˈeɪ/)"),
     (r"\bLeray\b", "[Leray](/ləɹˈeɪ/)"),
