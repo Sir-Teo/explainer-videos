@@ -56,7 +56,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   designs run on the Pool with the truth known; a part that shows a study picks it by rule, the median of many, never
   by its result), the Pool (`pool.py`, 100,000 simulated
   people, always tagged simulated), the Battery (`battery.py`, tasks behind one `run`), the Replication Ledger
-  (`ledger.py`; every finding a part presents gets a row with sources and the date checked), the Archive (`archive/`,
+  (`ledger.py`; every finding a part presents gets a row with sources and the date checked, and `tools/check_ledger.py psychN` fails a part that shows a study with neither a row nor a `ledger.shown` reason), the Archive (`archive/`,
   every dataset registered in `archive/SOURCES.md`), and the cards, maps and instruments in `__init__.py` and `viz.py`.
   A part's interactive is an experiment the reader takes part in; it stores and sends nothing.
   Chinese narration tables in `psychN/zh_lines.py`; terms in `videos/psychology/PSYCHOLOGY_ZH_GUIDE.md`.

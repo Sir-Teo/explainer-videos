@@ -119,8 +119,10 @@ translated.
 
 **Gates per part:** `tools/lecture_length.py` (floor 30 min; a part that would pass 60 is split or trimmed),
 `contact_sheet.py`, `dead_air.py`, `collect_text.py --check`, `check_narration.py`, `zh_lines.py --verify`, the
-part's `tests/psychology/test_*.py`, and **(Psy)** a Ledger check, to be written in Phase 0: every study card on
-screen has a Ledger row with a source and a date.
+part's `tests/psychology/test_*.py`, and **(Psy)** the Ledger gate, `tools/check_ledger.py psychN`: every study a
+part shows (each Archive dataset its scenes and computations use, each author and year in a source tag) has a
+Ledger row with its sources and the date they were checked, or a `ledger.shown` declaration that says why it has
+none and, where a row is due later, which part enters it. A deferred row fails the gate once that part is built.
 
 ### 1.1 The research tier
 
@@ -3011,6 +3013,6 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 
 | Part | State | Length |
 |---|---|---|
-| 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. The Chinese guide (`PSYCHOLOGY_ZH_GUIDE.md`) and text table are in place. Still to do: the Ledger gate tool, the shared browser task kit (Part 1's interactive carries its own trial loop) | |
+| 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. The Chinese guide (`PSYCHOLOGY_ZH_GUIDE.md`) and text table are in place, and the Ledger gate (`tools/check_ledger.py`, run by `tools/make.py`). Still to do: the shared browser task kit (Part 1's interactive carries its own trial loop) | |
 | 1 | built, English and Chinese: 14 chapters, hook and outro; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 46 min |
-| 2 | built in English, the second pilot: 14 chapters, hook and outro; the laboratory (`lab.py`), the cue-reading model (`psyche/cueing.py`), five Ledger rows; course entry, lab and interactive checked. Chinese edition next. Open checks in its README | 56 min |
+| 2 | built, English and Chinese, the second pilot: 14 chapters, hook and outro; the laboratory (`lab.py`), the cue-reading model (`psyche/cueing.py`), five Ledger rows; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 56 min |

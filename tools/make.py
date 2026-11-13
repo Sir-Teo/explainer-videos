@@ -221,6 +221,14 @@ def check_text(video: str) -> None:
     print("    " + last[0])
 
 
+def check_ledger(video: str) -> None:
+    """*Psychology, Built*: every study the part shows has its Ledger row (tools/check_ledger.py)."""
+    print(f"== {video}: the Ledger gate")
+    r = subprocess.run([sys.executable, "tools/check_ledger.py", video], cwd=ROOT, capture_output=True, text=True)
+    (LOGS / f"{video}.ledger.log").write_text(r.stdout + r.stderr)
+    print("    " + ((r.stdout + r.stderr).strip().splitlines()[-1:] or ["?"])[0])
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("videos", nargs="*")
@@ -257,6 +265,8 @@ def main():
                 build(v, lang, args)
         if "check" in args.steps and "zh" in langs:
             check_text(v)
+        if "check" in args.steps and series_of(v) == "psychology":
+            check_ledger(v)
         print(f"== {v}: finished ({(time.time() - t0) / 60:.0f} min so far); renders/ has the results")
 
 

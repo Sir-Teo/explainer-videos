@@ -62,9 +62,16 @@ python -m videos.psychology.psych2.compute            # every number (a few seco
 python tools/qa_scene.py psych2 Pfungst               # one chapter, silent, at 480p, with a contact sheet
 EXPLAINER_TTS=silent python tools/build.py psych2 -q l   # the whole part, silent preview
 python tools/build.py psych2                          # 1080p30 with narration
+python tools/qa_scene.py psych2 Pfungst --lang zh     # the Chinese edition of one chapter
+python tools/make.py psych2                           # both editions, with the checks a long build needs
 python -m videos.psychology.labs 2                    # the lab: six wrong designs and one right one
+python tools/check_ledger.py psych2                   # every study shown has its Ledger row, or a reason
 python -m pytest tests/psychology                     # the laboratory, the Pool, the Ledger and the Archive
 ```
+
+The Chinese edition is `zh_lines.py` (the narration, line by line) and the series table
+`videos/psychology/psychology_text_zh.json` (the text on screen); the terms are in
+[`PSYCHOLOGY_ZH_GUIDE.md`](../PSYCHOLOGY_ZH_GUIDE.md). Code on screen stays as it is run; its comments are translated.
 
 ## Chapters
 

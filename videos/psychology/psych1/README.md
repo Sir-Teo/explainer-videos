@@ -76,6 +76,7 @@ EXPLAINER_TTS=silent python tools/build.py psych1 -q l   # the whole part, silen
 python tools/build.py psych1                          # 1080p30 with narration
 python tools/qa_scene.py psych1 Donders --lang zh     # the Chinese edition of one chapter
 python tools/make.py psych1                           # both editions, with the checks a long build needs
+python tools/check_ledger.py psych1                   # every study shown has its Ledger row, or a reason
 python -m pytest tests/psychology                     # Psyche, the Pool, the Ledger and the Archive
 ```
 

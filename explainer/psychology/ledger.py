@@ -12,6 +12,10 @@ and every row carries its date.
 Rows live in :data:`LEDGER`, added with :func:`add` below, grouped by the part that enters them.  The drawing of a
 row (``ledger_card``) and of the whole board (``ledger_board``) is in :mod:`explainer.psychology.viz`.
 
+A row names the Archive datasets it rests on (``data``).  A study that a part shows without entering a row is
+declared with :func:`shown`, with the reason and, where a row is due later, the part that will enter it.  The gate
+``tools/check_ledger.py psychN`` reads both: every study a part shows has a row, or a stated reason for having none.
+
 Nothing here imports manim.
 """
 
@@ -19,7 +23,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
-__all__ = ["STATUSES", "Study", "Finding", "LEDGER", "add", "get", "rows", "counts"]
+__all__ = ["STATUSES", "Study", "Finding", "Shown", "LEDGER", "SHOWN", "add", "shown", "get", "rows", "counts"]
 
 # status -> what it means (SYLLABUS.md, §2.5)
 STATUSES = {
@@ -62,6 +66,7 @@ class Finding:
     note: str = ""  # what the status needs said about it
     sources: tuple = ()  # full references
     checked: str = ""  # ISO date the row was last checked against its sources
+    data: tuple = ()  # the Archive datasets the row rests on, by name ("PFUNGST_1907")
 
     def __post_init__(self):
         if self.status not in STATUSES:
@@ -78,6 +83,34 @@ def add(f: Finding) -> Finding:
         raise ValueError(f"duplicate Ledger row {f.key!r}")
     LEDGER[f.key] = f
     return f
+
+
+@dataclass(frozen=True)
+class Shown:
+    """A study a part shows without entering a Ledger row for it.  ``name`` is an Archive dataset
+    (``"KANT_1786"``) or the source line of a tag as the scene writes it; ``why`` says why there is no row;
+    ``row_in`` is the later part that will enter one, when one is due."""
+
+    part: int
+    name: str
+    why: str
+    row_in: int | None = None
+
+    def __post_init__(self):
+        if not self.why.strip():
+            raise ValueError(f"Part {self.part}, {self.name}: say why it has no Ledger row")
+        if self.row_in is not None and self.row_in <= self.part:
+            raise ValueError(f"Part {self.part}, {self.name}: a row due in Part {self.row_in} is not later")
+
+
+SHOWN: list = []
+
+
+def shown(part: int, name: str, why: str, row_in: int | None = None) -> Shown:
+    if any(s.part == part and s.name == name for s in SHOWN):
+        raise ValueError(f"Part {part}: {name!r} is declared twice")
+    SHOWN.append(Shown(part, name, why, row_in))
+    return SHOWN[-1]
 
 
 def get(key: str) -> Finding:
@@ -134,6 +167,7 @@ add(Finding(
              "H. Helmholtz, Vorlaeufiger Bericht ueber die Fortpflanzungsgeschwindigkeit der Nervenreizung, "
              "Archiv fuer Anatomie, Physiologie und wissenschaftliche Medicin (1850) 71-73"),
     checked="2026-11-13",
+    data=("HELMHOLTZ_1850",),
 ))
 
 add(Finding(
@@ -148,6 +182,7 @@ add(Finding(
     note="The ordering is one of the most reproduced facts in psychology; Hick's law is its quantitative form.",
     sources=(_DONDERS, _ROELOFS),
     checked="2026-11-13",
+    data=("DONDERS_1868",),
 ))
 
 add(Finding(
@@ -168,6 +203,7 @@ add(Finding(
              "S. Sternberg, The discovery of processing stages: extensions of Donders' method, Acta Psychologica "
              "30 (1969) 276-315"),
     checked="2026-11-13",
+    data=("DONDERS_1868",),
 ))
 
 add(Finding(
@@ -207,11 +243,16 @@ add(Finding(
              "D. L. Woods, J. M. Wyma, E. W. Yund, T. J. Herron and B. Reed, Factors influencing the latency of "
              "simple reaction time, Frontiers in Human Neuroscience 9 (2015) 131"),
     checked="2026-11-13",
+    data=("WOODS_2015",),
 ))
 
 
+shown(1, "KANT_1786", "an argument, quoted from its source; not an empirical finding")
+shown(1, "EBBINGHAUS_1885", "the first forgetting curve, shown as a historical first; the curve and its "
+      "replication are entered with memory", row_in=20)
+
 # ---------------------------------------------------------------------------
-# Part 2
+# Part 2 · The Experiment
 # ---------------------------------------------------------------------------
 _PFUNGST = ("O. Pfungst, Clever Hans (The Horse of Mr. von Osten): A Contribution to Experimental Animal and Human "
             "Psychology, transl. C. L. Rahn (1911; German original 1907)")
@@ -233,6 +274,7 @@ add(Finding(
          "invented, a questioner who does not know the answer, is the blind.",
     sources=(_PFUNGST, _LIT),
     checked="2026-11-13",
+    data=("PFUNGST_1907", "LIT_2011"),
 ))
 
 add(Finding(
@@ -254,6 +296,7 @@ add(Finding(
              "R. Rosenthal, On the social psychology of the psychological experiment: the experimenter's hypothesis "
              "as unintended determinant of experimental results, American Scientist 51 (1963) 268-283"),
     checked="2026-11-13",
+    data=("ROSENTHAL_FODE_1963",),
 ))
 
 add(Finding(
@@ -275,6 +318,7 @@ add(Finding(
              "credibility of expectancy induction: a synthesis of findings from 18 experiments, Journal of "
              "Educational Psychology 76 (1984) 85-97"),
     checked="2026-11-13",
+    data=("RAUDENBUSH_1984",),
 ))
 
 add(Finding(
@@ -293,6 +337,7 @@ add(Finding(
              "J. de Quidt, J. Haushofer and C. Roth, Measuring and bounding experimenter demand, American Economic "
              "Review 108 (2018) 3266-3302"),
     checked="2026-11-13",
+    data=("DE_QUIDT_2018",),
 ))
 
 add(Finding(
@@ -313,3 +358,9 @@ add(Finding(
              "Psychological Review 104 (1997) 301-318"),
     checked="2026-11-13",
 ))
+
+shown(2, "PEIRCE_JASTROW_1884", "shown for its method, the shuffled deck; its result is not presented")
+shown(2, "MITCHELL_2021", "shown for the authors' own count of who guessed their arm, which they call anecdotal; "
+      "the trial's result is not presented", row_in=42)
+shown(2, r"Arnett (2008); \ Henrich, Heine \& Norenzayan (2010)", "a count of who is sampled, shown to pose "
+      "the question of external validity", row_in=38)

@@ -1,7 +1,7 @@
 # Psychology, Built (心理学，从零搭建)
 
 **Status (2026-11-13): the plan is accepted, the shared code is in place, and Parts 1 and 2, the two pilots,
-are built** (Part 1 in English and Chinese; Part 2 in English, its Chinese edition next). This file is the plan; the standard every part meets, the
+are built** (both in English and Chinese). This file is the plan; the standard every part meets, the
 devices and all sixty-two parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with the progress table in
 its §9.
 
@@ -275,7 +275,7 @@ own, and the syllabus lists them):
 | `lab.py` | the laboratory: assignment by shuffle, counterbalancing, the comparison and its randomization test, power, and the sound and unsound designs run on the Pool with the truth known |
 | `pool.py` | the Pool: 100,000 simulated people with planted truths, always tagged *simulated* on screen |
 | `battery.py` | the Battery: the tasks, and one `run(task, model)` interface that Psyche, the Pool and the browser share |
-| `ledger.py` | the Replication Ledger: one validated row per finding, with sources and the date checked |
+| `ledger.py` | the Replication Ledger: one validated row per finding, with sources and the date checked; `tools/check_ledger.py psychN` is its gate (every study a part shows has a row, or a stated reason) |
 | `archive/` | the Archive: historical and published numbers, each with its source in `archive/SOURCES.md` |
 | `__init__.py`, `viz.py`, `style.py` | chapter cards with the timeline and levels strips, the series map, the Homunculus map, the demo stage, stage bars, ledger cards and boards, the palette |
 
