@@ -127,7 +127,7 @@ python -m videos.music.labs 3                                  # the lab (writes
    of N/4, Σ w²(n − mH) = 3/2 for every n (the squared Hann window is 3/8 − ½cos + ⅛cos 2·, and the cosines cancel
    over four hops), so the division is by a constant and the reconstruction is exact to rounding (about 10⁻¹⁶)
    away from the first and last window. This is the engine of every phase vocoder, spectral effect and audio
-   codec in Parts 53 and 59.
+   codec in Parts 50 and 58.
 
 5. **★ Research.** Build a reassigned constant-Q transform, and measure how accurately it finds the onsets and
    pitches of Monochord's notes against an ordinary one.

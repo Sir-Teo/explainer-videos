@@ -126,10 +126,10 @@ class Outro(SoundScene):
         pay = payoff_card([
             (r"the spectrogram", [4, 7, 8, 9]),
             (r"resonators as an analyser; \ phase", [4]),
-            (r"brightness, attack and flux", [5, 41, 48]),
-            (r"the fast transform, \ windows, \ leakage", [49, 57, 59]),
+            (r"brightness, attack and flux", [5, 41, 51]),
+            (r"the fast transform, \ windows, \ leakage", [48, 49, 58]),
             (r"constant Q", [61, 62]),
-            (r"noise and its colours", [44, 50, 55]),
+            (r"noise and its colours", [46, 51, 55]),
         ], font_size=26)
         with self.voiceover(
             "Where does this come back? The spectrogram is in almost every part from here on. Resonators and phase "

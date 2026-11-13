@@ -326,3 +326,80 @@ def plain_title(title: str) -> str:
     from explainer.music.sound import plain
 
     return plain(title).rstrip(".?!")
+
+
+# ---------------------------------------------------------------------------
+# Shared by the parts from Part 4 on: frequency on a logarithmic axis, pictures with a playhead, boxes for the
+# sounds of an ear question, a card for a demonstration
+# ---------------------------------------------------------------------------
+def hz_name(f: float) -> str:
+    """A frequency for an axis: ``500``, ``1\\,k``, ``4.186\\,k`` (math mode)."""
+    return rf"{f / 1000:g}\,\mathrm{{k}}" if f >= 1000 else f"{f:g}"
+
+
+def faxes(f_lo, f_hi, y_range, x_length=8.0, y_length=3.4, ylabel="", yticks=None, fticks=(100, 1000, 10000),
+          xlabel=r"frequency (Hz)", font_size=20, yfmt=None) -> VGroup:
+    """Axes whose x is frequency on a logarithmic scale.  ``g.at(f, y)`` is the point for frequency f."""
+    g = axes([np.log10(f_lo), np.log10(f_hi)], y_range, x_length=x_length, y_length=y_length, xlabel=xlabel, ylabel=ylabel,
+             xticks=[float(np.log10(f)) for f in fticks], yticks=yticks, xfmt=lambda v: hz_name(float(round(10 ** v, 6))),
+             yfmt=yfmt, font_size=font_size)
+    g.at = lambda f, y: g.ax.c2p(float(np.log10(f)), y)
+    return g
+
+
+def fcurve(g, f, y, color, stroke_width=3):
+    """A curve on :func:`faxes`."""
+    return curve(g.ax, np.log10(np.asarray(f, dtype=float)), np.asarray(y, dtype=float), color, stroke_width=stroke_width)
+
+
+def picture(a: np.ndarray, lo: float, hi: float, width: float, height: float) -> Group:
+    """A stored picture of data (row 0 the lowest) with a thin frame; ``.playhead`` runs across it."""
+    img = heat_image(np.asarray(a)[::-1], lo, hi, width, height)
+    frame = Rectangle(width=width, height=height, stroke_color=GREY_D, stroke_width=1.2)
+    head = Line(frame.get_corner(DL), frame.get_corner(UL), color=MC.PLAY, stroke_width=2).set_opacity(0)
+    g = Group(img, frame, head)
+    g.frame, g.playhead = frame, head
+    return g
+
+
+def sweep(g, seconds: float):
+    """``fn(mob, t)`` that moves a picture's playhead across it in ``seconds`` (for ``snd.drive``)."""
+    x0, x1 = g.frame.get_left()[0], g.frame.get_right()[0]
+    return lambda m, t: m.set_x(x0 + (x1 - x0) * float(np.clip(t / seconds, 0, 1)))
+
+
+def boxes(names=("A", "B"), buff: float = 1.2, width: float = 2.4, height: float = 1.3, font_size: int = 54) -> VGroup:
+    """Boxes that stand for the sounds of an ear question; :func:`pulse` lights one while its sound plays."""
+    return VGroup(*[VGroup(RoundedRectangle(width=width, height=height, corner_radius=0.15, stroke_color=GREY_C, stroke_width=2),
+                           label(t, font_size=font_size, color=GREY_A)) for t in names]).arrange(RIGHT, buff=buff)
+
+
+def pulse(snd, mob, t0: float, t1: float, rate: float = 18.0, color=None, buff: float = 0.1):
+    """Light a frame around ``mob`` between clip times ``t0`` and ``t1`` (it flickers, so the picture is never still)."""
+    glow = SurroundingRectangle(mob, color=color or EAR, buff=buff, stroke_width=4, corner_radius=0.12)
+    snd.show(glow)
+    snd.drive(glow, lambda m, t: m.set_stroke(opacity=(0.6 + 0.4 * np.sin(rate * t)) if t0 <= t < t1 else 0.0))
+    return glow
+
+
+def listen_note(text: str, color=None, width: float = 8.0, font_size=28) -> VGroup:
+    """What to listen for in a demonstration (not one of a part's pause-and-listen questions: nothing to commit to,
+    only something to notice)."""
+    from explainer.ai.lecture import _body, _card
+
+    color = color or EAR
+    head = VGroup(speaker_icon(0.2, color), label(r"Listen for this", font_size=font_size - 6, color=color)).arrange(RIGHT, buff=0.18)
+    return _card(head, _body(text, width - 0.8, font_size), color, width, accent=False)
+
+
+def rows_card(rows, left: float = -6.2, text_left: float = -3.6, top: float = 2.1, step: float = 1.35, name_size: int = 30,
+              text_size: int = 24, color=None) -> VGroup:
+    """Rows of (name, text): the name at the left, what it means beside it.  ``.rows[i]`` is a row."""
+    out = VGroup()
+    for k, (name, text) in enumerate(rows):
+        r = VGroup(label(name, font_size=name_size, color=color or TUNE), label(text, font_size=text_size, color=GREY_A))
+        r[0].move_to(RIGHT * left, aligned_edge=LEFT)
+        r[1].move_to(RIGHT * text_left, aligned_edge=LEFT)
+        r.shift(UP * (top - step * k))
+        out.add(r)
+    return out

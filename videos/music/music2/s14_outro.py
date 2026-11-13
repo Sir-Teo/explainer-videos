@@ -129,7 +129,7 @@ class Outro(SoundScene):
             (r"pipes, \ end corrections, \ odd and even partials", [8]),
             (r"Helmholtz resonators", [7, 8, 54]),
             (r"impedance and radiation", [7, 54]),
-            (r"diffraction and interference", [55, 58]),
+            (r"diffraction and interference", [55, 59]),
             (r"the 2-D simulator", [9, 55]),
         ], font_size=26)
         with self.voiceover(

@@ -469,17 +469,38 @@ uncertainty product measured; a reassigned spectrogram.
 
 ### Part 4 · The Ear (~50)
 *Story:* Békésy won the 1961 Nobel Prize for the travelling wave he saw in the cochleas of cadavers. The living
-ear is far more sensitive and so sharply tuned that it must contain an amplifier; in 1978 Kemp put a
-microphone in an ear canal and recorded the ear making sound. The part follows a tone from the eardrum to a pitch,
-and finds a pitch that is not in the signal.
+ear is far more sensitive and so sharply tuned that it must contain an amplifier, as Gold argued in 1948; in 1978
+Kemp put a microphone in an ear canal and recorded the ear making sound. The part follows a tone from the eardrum
+to a pitch, and finds a pitch that is not in the signal.
+1. Hook: two pure tones and the third that the ear adds; Kemp, Gold and Békésy; the plan.
+2. From air to water: the impedance mismatch; the middle ear as a transformer (a worked example); the ear canal as
+   a stopped pipe.
+3. A wave that sorts: the cochlea unrolled; the travelling wave in a model and why it stops; seven octaves, equal
+   distances (a worked example); Greenwood's map; hair cells.
+4. How fine is the ruler: Fletcher's experiment; the ERB formula (a worked example); beats, roughness, two tones
+   (an ear question); a cochleagram; resolved and unresolved partials.
+5. How loud is loud: a sweep at constant pressure; the threshold; phons and the A weighting (an ear question);
+   sones; a worked example (sixteen violins).
+6. What a loud sound hides: the masked threshold (a worked example and an ear question); upward spread; uses.
+7. A second clock: phase locking and volleys; where the clock stops; the smallest audible step (an ear question).
+8. The pitch that is not there: a note without its fundamental (an ear question); distortion ruled out; the
+   autocorrelation model; a worked example; Schouten's shift; uses.
+9. Where pitch stops: the Tune above 5 kHz; the model's pitch strength and the piano's range.
+10. Two kinds of high: Shepard's scale (an ear question); chroma and height.
+11. The only pair you get: hair cells, the noise notch, a safe dose (a worked example); no sound.
+12. Frontier: outer hair cells as the amplifier; the cube-root law; the third tone with a guide; emissions; what is
+    not known.
+13. Variation 4: the Tune without fundamentals, then without octaves. Outro: problems, payoffs, two pairs of strings.
+
 *Covers:* the middle ear as an impedance match; the cochlea's place map; hair cells and the active process;
-critical bands (Bark, ERB); loudness, phons, sones and ISO 226; masking; just-noticeable differences; place and
-timing theories of pitch, phase locking and why the piano stops near 4 kHz; the missing fundamental; Shepard
-tones; noise-induced hearing loss and how to avoid it.
-*Built and computed:* a gammatone cochleagram; an autocorrelation pitch model that predicts the missing
-fundamental; masking patterns reused in Part 58.
+critical bands (ERB); loudness, phons, sones and the A weighting; masking; just-noticeable differences; place and
+timing theories of pitch, phase locking and why the piano stops near 4 kHz; the missing fundamental and the shifted
+residue; Shepard tones; noise-induced hearing loss and how to avoid it.
+*Built and computed:* Monochord's ear (`monochord/ear.py`): a middle-ear transformer, a long-wave cochlea, a
+gammatone bank and cochleagram, a threshold and masking model, an autocorrelation pitch model that predicts the
+missing fundamental and Schouten's shift, a Hopf oscillator; masking patterns reused in Part 58.
 *Variation 4:* the Tune with its fundamentals removed, still heard at pitch; then as Shepard tones.
-*Frontier:* the cochlear amplifier; hidden hearing loss; music through cochlear implants.
+*Frontier:* the cochlear amplifier; hidden hearing loss; music through cochlear implants; regeneration.
 *Reading:* Moore, *An Introduction to the Psychology of Hearing*; Plack; Pickles.
 
 ### Part 5 · Consonance (~50)
@@ -1396,6 +1417,7 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-13 | **Part 1, *One String***: 15 chapters, 46.9 min narrated (English, 480p preview) of which 3.4 min listening in 40 windows; 3 pause-and-listen questions and a worked example with a predict-pause; Variation 1; Lab 1 and the plucked-string interactive; every gate clean, the narration listen-tested (`tools/check_narration.py`). Lessons in `LECTURE_GUIDE.md`. |
 | 2026-11-13 | **Part 2, *Waves in Air***: 14 chapters, 33.5 min narrated of which 1.9 min listening in 18 windows; 3 pause-and-listen questions, 3 worked examples with predict-pauses; Variation 2 (six bottles); Lab 2 and the bottle interactive; Monochord's air layer (`physics/air.py`: gas parcels, sound in a plane, tubes; `tests/music/test_air.py`); the kits for later parts (`monochord/partkit.py`, `explainer/music/kit.py`, `tests/music/partcheck.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 3, *The Spectrum***: 13 chapters, 32.5 min narrated of which 1.8 min listening in 15 windows; 3 pause-and-listen questions, 2 worked examples with predict-pauses; Variation 3 (additive); Lab 3 and the Fourier-sum interactive; Monochord's analysis layer (`dsp/fourier.py`: FFT, windows, STFT, constant Q, uncertainty, noise, reassignment; `tests/music/test_fourier.py`); every gate clean, narration listen-tested. |
+| 2026-11-13 | **Part 4, *The Ear***: 13 chapters, 48.1 min narrated of which 1.9 min listening in 16 windows; 6 pause-and-listen questions, 4 demonstrations to listen for, 8 worked examples with predict-pauses; Variation 4 (no fundamentals, then no octaves); Lab 4 and the missing-fundamental interactive; Monochord's ear (`monochord/ear.py`: middle ear, long-wave cochlea, gammatone bank, threshold and masking, nerve and autocorrelation pitch, Shepard tones, noise dose, Hopf oscillator; `tests/music/test_ear.py`); shared scene helpers moved into `explainer/music/kit.py`; every gate clean, narration listen-tested. Forward references in Parts 2 and 3 corrected to the syllabus numbering. |
 
 **Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
 before Part 10 is opened), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for

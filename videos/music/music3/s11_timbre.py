@@ -118,7 +118,7 @@ class Timbre(SoundScene):
             "Their answers needed three axes: brightness, attack, and how the spectrum moves during the note. "
             "Timbre is a recipe that changes in time, and the first tenth of a second matters most. Synthesizer "
             "builders learned this the practical way: the first thing they gave every sound was a shape in time, an "
-            "attack, a decay, a level to hold and a release. We will build that in Part 50."
+            "attack, a decay, a level to hold and a release. We will build that in Part 51."
         ) as vo:
             ask = label(r"So what else is there?", font_size=40, color=TUNE).to_corner(UL, buff=0.6)
             self.play(FadeIn(ask))

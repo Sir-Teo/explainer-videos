@@ -116,8 +116,8 @@ PARTS = [
               "Timbre is a recipe that changes in time. The Tune is assembled from pure tones.",
         handoff="The spectrogram is in almost every later part. Resonators, phase and the tone with no fundamental "
                 "open Part 4, on the ear. Brightness, attack and flux return in consonance (Part 5), orchestration "
-                "(Part 41) and synthesis (Parts 48, 50). The fast transform, windows and overlap-add are the basis "
-                "of digital audio (Part 49), effects (Part 53) and codecs (Part 59); constant Q is the input of the "
+                "(Part 41) and synthesis (Parts 51, 52). The fast transform, windows and overlap-add are the basis "
+                "of digital audio (Part 48), effects (Parts 49, 50) and codecs (Part 58); constant Q is the input of the "
                 "listening machines of Parts 61 and 62.",
         outside="Parts 1 and 2 for partials, modes and resonators. Sines and cosines; an integral as an average. "
                 "Complex exponentials appear once, in the definition of the DFT, and the film says what they mean.",
@@ -146,5 +146,57 @@ PARTS = [
         D=(11,),
         I=(2, 6, 7, 8),
         also=(("Monochord's analysis: FFT, windows, STFT, constant Q, reassignment", "explainer/music/monochord/dsp/fourier.py"),),
+    ),
+    Part(
+        n=4, level="U", widget="missingfund",
+        question="What does the ear do to a sound before you hear it: how does it sort frequencies, how loud is loud, "
+                 "and where does a note's pitch come from?",
+        story="In 1978 David Kemp put a microphone in an ear canal and recorded the ear sending sound back; thirty "
+              "years earlier Thomas Gold had argued that the inner ear must contain an amplifier, against Békésy, "
+              "whose Nobel-winning travelling waves were seen in the ears of cadavers. The part follows a sound in. "
+              "The middle ear is a transformer that matches air to fluid, and the ear canal a quarter-wave pipe "
+              "from Part 2. In a model cochlea a wave travels along the membrane and stops where the membrane's own "
+              "note matches it, so that equal ratios of frequency are equal distances. Fletcher's experiment gives "
+              "the width of the ear's filters: a little over a whole tone, wider in the bass, so the first eight "
+              "partials of a note are heard singly and the rest as a crowd. Loudness is not pressure (ten times the "
+              "power is twice as loud), and a loud sound hides its neighbours. The nerve also carries timing, up to "
+              "a few thousand hertz, and from timing comes pitch: a note keeps its pitch without its fundamental, "
+              "follows Schouten's shift, and stops being a note where the piano stops. Shepard's endless scale "
+              "separates chroma from height. A chapter without sound works out a safe dose. At the frontier the "
+              "outer hair cells turn out to be Gold's amplifier: sharp, compressive, and audible as a third tone "
+              "that the ear adds to two. The Tune is played with no fundamentals, and then with no octaves.",
+        handoff="Critical bands, beats and roughness are the foundation of consonance (Part 5) and tuning (Part 6). "
+                "The pitch the ear supplies becomes the root of a chord (Part 13). Masking returns in orchestration "
+                "(Part 41), mixing (Part 56) and audio coding (Part 58); phons, sones and weighting in mastering "
+                "(Part 57). The autocorrelation pitch model is the starting point of transcription (Part 61), and "
+                "chroma the representation of Part 62.",
+        outside="Parts 1 to 3: partials, pipes and impedance, the spectrum and the spectrogram. Decibels and "
+                "logarithms. A mass on a spring and its resonance.",
+        objectives={
+            "U": ["Trace a sound from the ear canal to the auditory nerve and say what each stage does.",
+                  "Explain the cochlea's place map, a critical band, and why a note keeps its pitch without its fundamental.",
+                  "Work out a safe listening time from a level in dBA."],
+            "M": ["Compute the middle ear's pressure gain and the power transmitted with and without it.",
+                  "Use the ERB formula to decide which partials of a note are resolved, and read a masked threshold.",
+                  "Describe the autocorrelation model of pitch and what it predicts for a shifted complex."],
+            "D": ["Explain why an oscillator at a Hopf bifurcation compresses, sharpens and distorts.",
+                  "Describe cochlear synaptopathy and why an audiogram does not show it.",
+                  "Say what a cochlear implant removes from the two codes of pitch."],
+            "I": ["Read levels in dBA, phons and sones, and know which one a meter shows.",
+                  "Use masking to decide what in a mix or a codec can be dropped or must be moved.",
+                  "Imply a bass note with its partials on a system that cannot reproduce it."],
+        },
+        results=[
+            ("The middle ear", r"\frac{p_\text{window}}{p_\text{drum}} = \frac{A_\text{drum}}{A_\text{stapes}}\times\text{lever} \approx 22\ (27\ \text{dB})"),
+            ("The ear's filter (Glasberg and Moore)", r"\text{ERB}(f) = 24.7\,\bigl(4.37\,f_\text{kHz} + 1\bigr)\ \text{Hz}"),
+            ("Stevens's law", r"\text{loudness} \propto \text{power}^{0.3}:\quad +10\ \text{dB} = \times 2"),
+            ("Pitch as a period", r"\text{pitch} = 1 / \arg\max_\tau \sum_\text{bands} r_\text{band}(\tau)"),
+            ("A safe dose (NIOSH)", r"T = \frac{8\ \text{h}}{2^{(L - 85)/3}}"),
+            ("At the edge of oscillation", r"\text{response} \propto \text{force}^{1/3}"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7, 8, 9),
+        D=(11,),
+        I=(5, 10),
+        also=(("Monochord's ear: middle ear, cochlea, auditory filters, loudness, masking, pitch", "explainer/music/monochord/ear.py"),),
     ),
 ]

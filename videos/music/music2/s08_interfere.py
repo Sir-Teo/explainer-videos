@@ -168,7 +168,7 @@ class Interfere(SoundScene):
             "above middle C. <bookmark mark='a'/> And every odd multiple of it as well. The music reaches you with a "
             "row of notches cut out of it, like the teeth of a comb, and the notches fall somewhere else in the next "
             "seat. That is why the same recording sounds different from every seat when it comes from two "
-            "loudspeakers, a problem Part 58 has to deal with. It is also how noise-cancelling headphones work: they "
+            "loudspeakers, a problem Part 59 has to deal with. It is also how noise-cancelling headphones work: they "
             "are a second source, placed so that your ear is always in a dark band."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(ans[0]))

@@ -122,7 +122,7 @@ class Noise(SoundScene):
             "appearance. In 1975 Richard Voss and John Clarke measured how the loudness and the pitch of recorded "
             "music drift up and down over minutes, from Bach to ragtime to talk radio. The drift had a pink "
             "spectrum. Music, it seems, is neither as unpredictable as white noise nor as sluggish as brown. We "
-            "will come back to that in Part 44."
+            "will come back to that in Part 46."
         ) as vo:
             self.play(FadeIn(items[0]))
             vo.wait_until("a")

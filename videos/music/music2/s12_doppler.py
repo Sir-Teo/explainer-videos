@@ -157,7 +157,7 @@ class Doppler(SoundScene):
             "half. <bookmark mark='a'/> Your ear measured a speed. Police radar measures a car's speed the same way, "
             "ultrasound measures the speed of blood, and astronomers measure the speed of galaxies. In music the "
             "effect is built into one famous instrument: the rotating loudspeaker of an electric organ, which we "
-            "will meet in Part 53."
+            "will meet in Part 49."
         ) as vo:
             self.play(FadeIn(ans), boxes[0][0].animate.set_stroke(GOOD, width=4))
             vo.wait_until("a")

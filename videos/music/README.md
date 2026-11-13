@@ -35,7 +35,7 @@ the rights rule as written; sixty-eight parts; English first; see [`SYLLABUS.md`
 a test film (`videos/music/soundcheck/`). **Part 1, *One String*, is built**: fifteen chapters, 47 minutes narrated, with its
 lab, its interactive and its problem set ([`music1/README.md`](music1/README.md)). How a part is made, with the
 lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). **Part 2, *Waves in Air*** (34 minutes; [`music2/README.md`](music2/README.md)) **and Part 3, *The Spectrum*** (33
-minutes; [`music3/README.md`](music3/README.md)) **are built** too; the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
+minutes; [`music3/README.md`](music3/README.md)) **and Part 4, *The Ear*** (48 minutes; [`music4/README.md`](music4/README.md)) **are built** too; the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
 
 ## The story
 

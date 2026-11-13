@@ -238,4 +238,79 @@
       note: "Fourier series of three waves: a square (odd harmonics, 1/n), a sawtooth (all harmonics, 1/n) and a triangle (odd harmonics, 1/n²). The overshoot beside a jump settles near 9 percent however many terms are used (Gibbs). Scrambling the phases leaves the amount of every harmonic untouched; on this note the ear hears little difference, and on a much lower note it would hear more. The sound is computed in your browser. Simulated.",
     });
   };
+
+  // ---- Part 4: a pitch that is not in the sound ---------------------------------------------------------------
+  // The note's partials, the lowest of them removed or all of them moved; the pitch is read where the wave's
+  // autocorrelation first comes back to its height (Licklider's idea, on the wave itself rather than on a model of
+  // the nerve).
+  function partialsOf(v) {
+    var out = [], n;
+    for (n = v.lowest; n < v.lowest + v.count; n++) out.push(n * v.f0 + v.shift);
+    return out;
+  }
+  function acfAt(freqs, tau) { var a = 0, i; for (i = 0; i < freqs.length; i++) a += Math.cos(2 * Math.PI * freqs[i] * tau); return a / freqs.length; }
+  function pitchOf(freqs, lo, hi) { // the first delay at which the wave nearly repeats (within 3% of the best)
+    var n = 4000, best = -2, bestTau = 1 / hi, i, tau, a, vals = [];
+    for (i = 0; i <= n; i++) { tau = 1 / hi + (1 / lo - 1 / hi) * i / n; a = acfAt(freqs, tau); vals.push(a); if (a > best) { best = a; bestTau = tau; } }
+    for (i = 1; i < n; i++) {
+      if (vals[i] > vals[i - 1] && vals[i] >= vals[i + 1] && vals[i] > best - 0.03) { bestTau = 1 / hi + (1 / lo - 1 / hi) * i / n; best = vals[i]; break; }
+    }
+    return { hz: 1 / bestTau, height: best };
+  }
+  function toneSound(freqs) {
+    var rate = 44100, len = Math.floor(1.3 * rate), y = new Float32Array(len), i, k, peak = 0;
+    for (k = 0; k < freqs.length; k++) {
+      if (freqs[k] > 0.45 * rate) continue;
+      var w = 2 * Math.PI * freqs[k] / rate;
+      for (i = 0; i < len; i++) y[i] += Math.sin(w * i);
+    }
+    for (i = 0; i < len; i++) peak = Math.max(peak, Math.abs(y[i]));
+    var fade = Math.floor(0.02 * rate), tail = Math.floor(0.08 * rate);
+    for (i = 0; i < len; i++) y[i] *= (0.25 / (peak || 1)) * Math.min(1, i / fade) * Math.min(1, (len - i) / tail);
+    return play(y, rate);
+  }
+  W.missingfund = function (el) {
+    QB.widget(el, {
+      title: "A note without its fundamental",
+      sub: "Left: the partials of a note. Raise the lowest partial and the bottom of the note disappears; the dashed lines are what was removed. Right: how well the wave lines up with a delayed copy of itself. Its first full return marks the period, and so the pitch, although no partial may be there. Then move every partial up by the same number of hertz: the spacing stays, the pitch does not. Press Play to compare the sound with a pure tone at the pitch.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "f0", label: "The note (Hz)", min: 100, max: 400, step: 10, value: 200 },
+        { k: "lowest", label: "Lowest partial present", min: 1, max: 8, step: 1, value: 4 },
+        { k: "count", label: "Number of partials", min: 1, max: 8, step: 1, value: 5 },
+        { k: "shift", label: "Move every partial up (Hz)", min: 0, max: 100, step: 5, value: 0 },
+      ],
+      buttons: [
+        { label: "Play the partials", act: function (s, v) { s.sound = toneSound(partialsOf(v)); } },
+        { label: "Play a pure tone at the pitch", act: function (s, v) { s.sound = toneSound([pitchOf(partialsOf(v), v.f0 / 2.2, v.f0 * 2.2).hz]); } },
+      ],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var fs = partialsOf(v), top = Math.max(2000, fs[fs.length - 1] * 1.1), n, i;
+        var a = g[0].axes({ x: [0, top], y: [0, 1.15], title: "What is in the sound", xlabel: "frequency (Hz)", yticks: [] });
+        for (n = 1; n < v.lowest; n++) a.line([n * v.f0, n * v.f0], [0, 1], { color: C.muted, width: 1.2, dash: [3, 4] });
+        for (i = 0; i < fs.length; i++) a.line([fs[i], fs[i]], [0, 1], { color: v.shift === 0 ? C.idea : C.loss, width: 3 });
+        var p = pitchOf(fs, v.f0 / 2.2, v.f0 * 2.2);
+        s.p = p;
+        a.line([p.hz, p.hz], [0, 0.45], { color: C.gain, width: 2, dash: [2, 3] });
+        a.legend([["partials present", v.shift === 0 ? C.idea : C.loss], ["removed", C.muted], ["the pitch heard", C.gain]], { pos: "tr" });
+        var xs = [], ys = [], tmax = 2.4 / v.f0;
+        for (i = 0; i <= 600; i++) { var tau = tmax * i / 600; xs.push(1000 * tau); ys.push(acfAt(fs, tau)); }
+        var b = g[1].axes({ x: [0, 1000 * tmax], y: [-1.1, 1.15], title: "The wave against a delayed copy of itself", xlabel: "delay (ms)", yticks: [-1, 0, 1] });
+        b.hline(0, { dash: [2, 3] });
+        b.line(xs, ys, { color: C.spot, width: 2 });
+        b.vline(1000 / p.hz, { color: C.gain, width: 1.6 });
+        b.vline(1000 / v.f0, { color: C.muted });
+      },
+      readout: function (v, s) {
+        var fs = partialsOf(v), p = s.p || pitchOf(fs, v.f0 / 2.2, v.f0 * 2.2), cents = 1200 * Math.log(p.hz / v.f0) / Math.log(2);
+        return [["partials", fs.map(function (f) { return fmt(f, 0); }).join(", ") + " Hz"],
+                ["energy at the note's own frequency", (v.lowest === 1 && v.shift === 0) ? "yes" : "none"],
+                ["pitch (first return of the wave)", fmt(p.hz, 1) + " Hz, " + (Math.abs(cents) < 0.5 ? "the note" : fmt(Math.abs(cents), 0) + " cents " + (cents > 0 ? "above" : "below") + " the note")],
+                ["spacing of the partials", fmt(v.f0, 0) + " Hz, whatever the shift"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "A note's pitch is the period of its wave, not its lowest partial: remove partials 1, 2 and 3 and the wave still repeats at the same rate (Seebeck 1841; Schouten 1940). Moving every partial up by the same amount keeps their spacing but changes the delay at which the wave best lines up with itself, and listeners hear the pitch rise by about the shift divided by the number of the middle partial (Schouten's shifted residue). With one partial alone the pitch is that partial; with only high partials (lowest 7 or 8) real listeners hear a weaker pitch than this simple calculation suggests, because the ear no longer resolves them. The sound is computed in your browser. Simulated.",
+    });
+  };
 })();
