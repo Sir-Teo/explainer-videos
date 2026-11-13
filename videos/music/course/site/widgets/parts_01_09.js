@@ -166,4 +166,76 @@
       note: "A bottle of 330 ml with a body 6 cm wide; the neck's length includes 1.46 radii for the air that moves at its two ends. The solid curve is the lowest root of tan(kL_neck) tan(kL_body) = A_neck / A_body; Helmholtz's formula is its long-wavelength limit and runs sharp. The sound is one resonance with a quality factor of 33, struck or fed with noise, computed in your browser. Simulated.",
     });
   };
+
+  // ---- Part 3: a sum of sines ---------------------------------------------------------------------------------
+  var F3 = 196.0;
+  function recipe(shape, n) { // amplitude of harmonic n
+    if (shape === 0) return (n % 2) ? 4 / (Math.PI * n) : 0;                 // square
+    if (shape === 1) return 2 / (Math.PI * n);                               // sawtooth
+    return (n % 2) ? 8 / (Math.PI * Math.PI * n * n) * ((n % 4 === 1) ? 1 : -1) : 0;   // triangle
+  }
+  function targetWave(shape, x) {
+    x = x - Math.floor(x);
+    if (shape === 0) return x < 0.5 ? 1 : -1;
+    if (shape === 1) return 1 - 2 * x;
+    return x < 0.25 ? 4 * x : (x < 0.75 ? 2 - 4 * x : 4 * x - 4);
+  }
+  function phaseOf(n, scramble) { var r = Math.sin(n * 12.9898) * 43758.5453; return scramble * 2 * Math.PI * (r - Math.floor(r)); }
+  function sumWave(shape, terms, scramble, x) {
+    var y = 0, n;
+    for (n = 1; n <= terms; n++) y += recipe(shape, n) * Math.sin(2 * Math.PI * n * x + phaseOf(n, scramble));
+    return y;
+  }
+  function sumSound(shape, terms, scramble) {
+    var rate = 44100, len = Math.floor(1.4 * rate), y = new Float32Array(len), n, i, peak = 0;
+    for (n = 1; n <= terms; n++) {
+      var a = recipe(shape, n); if (a === 0 || n * F3 > 0.45 * rate) continue;
+      var w = 2 * Math.PI * n * F3 / rate, ph = phaseOf(n, scramble);
+      for (i = 0; i < len; i++) y[i] += a * Math.sin(w * i + ph);
+    }
+    for (i = 0; i < len; i++) peak = Math.max(peak, Math.abs(y[i]));
+    var fade = Math.floor(0.01 * rate), tail = Math.floor(0.08 * rate);
+    for (i = 0; i < len; i++) y[i] *= (0.28 / (peak || 1)) * Math.min(1, i / fade) * Math.min(1, (len - i) / tail);
+    return play(y, rate);
+  }
+  var SHAPES = ["square", "sawtooth", "triangle"];
+  W.fouriersum = function (el) {
+    QB.widget(el, {
+      title: "Build a wave from pure tones",
+      sub: "Left: the sum of the first few sines of a square, a sawtooth or a triangle wave, against the wave itself. Right: the recipe, the amount of each harmonic. Add terms and watch the corners form (and the overshoot at a jump refuse to shrink). Scramble the phases: the recipe on the right does not change, the wave on the left does. Press Play to hear what does and does not change.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "shape", label: "Wave (0 square, 1 sawtooth, 2 triangle)", min: 0, max: 2, step: 1, value: 0, fmt: function (x) { return SHAPES[x]; } },
+        { k: "terms", label: "Harmonics in the sum", min: 1, max: 40, step: 1, value: 5 },
+        { k: "scramble", label: "Scramble the phases", min: 0, max: 1, step: 0.05, value: 0, fmt: function (x) { return fmt(x, 2); } },
+      ],
+      buttons: [
+        { label: "Play", act: function (s, v) { s.sound = sumSound(v.shape, v.terms, v.scramble); } },
+      ],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var xs = [], ys = [], ts = [], i, top = 0;
+        for (i = 0; i <= 400; i++) { var x = 2 * i / 400; xs.push(x); ys.push(sumWave(v.shape, v.terms, v.scramble, x)); ts.push(targetWave(v.shape, x)); top = Math.max(top, Math.abs(ys[i])); }
+        s.over = v.scramble === 0 ? Math.max(0, top - 1) / 2 : null;
+        var a = g[0].axes({ x: [0, 2], y: [-1.6, 1.6], title: "The wave", xlabel: "two periods", xticks: [0, 1, 2], yticks: [-1, 0, 1] });
+        a.hline(0, { dash: [2, 3] });
+        a.line(xs, ts, { color: C.muted, width: 1.4, dash: [5, 4] });
+        a.line(xs, ys, { color: C.idea, width: 2.2 });
+        a.legend([["sum of " + v.terms + (v.terms === 1 ? " harmonic" : " harmonics"), C.idea], ["the " + SHAPES[v.shape] + " wave", C.muted]], { pos: "tr" });
+        var ns = [], hs = [], cen = 0, tot = 0, n, big = Math.abs(recipe(v.shape, 1));
+        for (n = 1; n <= 20; n++) { ns.push(n); hs.push(Math.abs(recipe(v.shape, n)) / big); }
+        for (n = 1; n <= v.terms; n++) { var p = Math.pow(recipe(v.shape, n), 2); cen += n * p; tot += p; }
+        s.cen = tot > 0 ? cen / tot : 1;
+        var b = g[1].axes({ x: [0.3, 20.7], y: [0, 1.08], title: "The recipe: how much of each harmonic", xlabel: "harmonic", xticks: [1, 5, 10, 15, 20], yticks: [0, 0.5, 1] });
+        b.bars(ns, hs, 0.7, { color: function (k) { return k < v.terms ? C.spot : C.line; } });
+      },
+      readout: function (v, s) {
+        return [["brightness (mean harmonic number)", fmt(s.cen || 1, 2)],
+                ["overshoot at the jump", s.over === null ? "phases scrambled" : (v.shape === 2 ? "none: a triangle has no jump" : QB.pct(s.over, 1) + " of the jump")],
+                ["phases", v.scramble === 0 ? "as Fourier's recipe gives them" : "scrambled: same recipe, different wave"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing G3, 196 Hz" : "not available in this browser")]];
+      },
+      note: "Fourier series of three waves: a square (odd harmonics, 1/n), a sawtooth (all harmonics, 1/n) and a triangle (odd harmonics, 1/n²). The overshoot beside a jump settles near 9 percent however many terms are used (Gibbs). Scrambling the phases leaves the amount of every harmonic untouched; on this note the ear hears little difference, and on a much lower note it would hear more. The sound is computed in your browser. Simulated.",
+    });
+  };
 })();

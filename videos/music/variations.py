@@ -9,6 +9,8 @@ LEDGER = [
      "measure": r"every interval within 0.6 cents of its ratio"},
     {"part": 2, "title": r"on six bottles, tuned by how much water is in them", "seconds": 26.4,
      "measure": r"every bottle within 1 cent of its note"},
+    {"part": 3, "title": r"assembled from pure tones: 1, 2, 3, 5, 8 and 16 partials, phrase by phrase", "seconds": 27.95,
+     "measure": r"its brightness rises 2.2 times from the first phrase to the last"},
 ]
 
 

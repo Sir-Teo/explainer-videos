@@ -438,16 +438,32 @@ tube and bottle resonances against the formulas.
 *Frontier:* nonlinear propagation and the "brassy" trombone; thermoacoustics.
 *Reading:* Kinsler et al.; Pierce, *Acoustics*; Rossing, Moore & Wheeler.
 
-### Part 3 · The Spectrum (~50)
+### Part 3 · The Spectrum (~40)
 *Story:* In 1807 the Paris Academy declined to publish Fourier's claim that any function is a sum of sines. A
 square wave built on screen one harmonic at a time shows why they doubted and why he was right. Then a surprise:
-cut the first tenth of a second off a recorded note and nobody can name the instrument. Timbre is not only the
-spectrum.
-*Covers:* Fourier series and transform; the DFT (callback to the FFT); Ohm's acoustic law and Helmholtz's
-resonators; the short-time transform; windows and leakage; the Gabor limit; constant-Q and wavelets; phase and
-when it is audible; noise colors; attack, decay and spectral flux.
-*Built and computed:* STFT and constant-Q checked against `scipy.signal`; the uncertainty product measured.
-*Variation 3:* the Tune assembled additively, one partial at a time.
+play one plucked note backwards, and its spectrum is unchanged while its sound is another instrument. Timbre is not
+only the spectrum.
+1. Hook: a square wave assembled from pure tones; Fourier, Lagrange and the Academy; three questions.
+2. A sum of sines: why sines; coefficients as averages; partial sums; Gibbs; the transform of a sound that happens
+   once; an ear question.
+3. From a recipe to a machine: the DFT, the fast algorithm written out and timed, a pluck's spectrum; a worked example.
+4. What the ear does with it: Ohm's law, Helmholtz's resonators, a resonator bank on our string; Seebeck.
+5. The other half of the recipe: phase, heard at a low note and not at a high one.
+6. Time and frequency together: the spectrogram built column by column; how to read one; a gliding pitch.
+7. What a window costs: leakage, three windows against Harris's table, a weak tone revealed.
+8. The limit: one sound through two windows; counting cycles; Gabor's relation measured; tone bursts; an ear question.
+9. A ruler for music: constant Q; the Tune on both rulers.
+10. Sounds with no pitch: white, pink and brown noise; why noise spectra are averaged.
+11. More than the spectrum: one pluck forwards, backwards and without its attack; attack, brightness, flux.
+12. Frontier: reassignment; listeners who beat the uncertainty limit.
+13. Variation 3: the Tune assembled additively. Outro: problems, payoffs, and a tone with no fundamental.
+
+*Covers:* Fourier series and transform; the DFT and the FFT; Ohm's acoustic law and Helmholtz's resonators; the
+short-time transform; windows and leakage; the Gabor limit; constant-Q and wavelets; phase and when it is audible;
+noise colors; attack, decay and spectral flux.
+*Built and computed:* an FFT, STFT and constant-Q transform checked against numpy and `scipy.signal`; the
+uncertainty product measured; a reassigned spectrogram.
+*Variation 3:* the Tune assembled additively, more partials in every phrase.
 *Frontier:* reassignment and superresolution; listeners who beat the Gabor limit (Oppenheim & Magnasco 2013).
 *Reading:* Hartmann; Müller ch. 2; Smith, *Mathematics of the DFT*.
 

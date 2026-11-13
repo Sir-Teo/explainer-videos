@@ -99,4 +99,52 @@ PARTS = [
         I=(6, 7, 10, 11),
         also=(("Monochord's air: parcels, sound in a plane, tubes", "explainer/music/monochord/physics/air.py"),),
     ),
+    Part(
+        n=3, level="U", widget="fouriersum",
+        question="Can every sound be taken apart into pure tones, what does the taking apart cost, and is the list "
+                 "of pure tones everything there is to a sound?",
+        story="In 1807 the Paris Academy would not print Fourier's claim that any curve is a sum of sines; Lagrange "
+              "objected that smooth curves cannot make a corner. A square wave assembled one sine at a time shows "
+              "what Fourier meant, the coefficients turn out to be averages, and the overshoot at a jump never goes "
+              "away. A computer does the same for samples, and since Cooley and Tukey does it fast. Helmholtz tested "
+              "Ohm's law of hearing with resonators, each one a bottle from Part 2, and a bank of them on our string "
+              "agrees with the transform. Phase turns out to matter only where the ear cannot separate the partials. "
+              "To watch a recipe change one needs a window, which costs leakage, and behind the window stands "
+              "Gabor's limit: no sound is both short and narrow in frequency. A constant-Q ruler suits music better "
+              "than equal bins; noise has a spectrum that must be averaged. Then the test of Helmholtz's second "
+              "claim: one pluck played backwards has exactly the same spectrum and is a different instrument. "
+              "Timbre is a recipe that changes in time. The Tune is assembled from pure tones.",
+        handoff="The spectrogram is in almost every later part. Resonators, phase and the tone with no fundamental "
+                "open Part 4, on the ear. Brightness, attack and flux return in consonance (Part 5), orchestration "
+                "(Part 41) and synthesis (Parts 48, 50). The fast transform, windows and overlap-add are the basis "
+                "of digital audio (Part 49), effects (Part 53) and codecs (Part 59); constant Q is the input of the "
+                "listening machines of Parts 61 and 62.",
+        outside="Parts 1 and 2 for partials, modes and resonators. Sines and cosines; an integral as an average. "
+                "Complex exponentials appear once, in the definition of the DFT, and the film says what they mean.",
+        objectives={
+            "U": ["Read a spectrum and a spectrogram: partials, onsets, glides, noise.",
+                  "Say what a window does to a spectrum and why a short sound cannot have a sharp pitch.",
+                  "Explain why two sounds with the same spectrum can sound different, and name what else matters."],
+            "M": ["Compute Fourier coefficients as projections and explain the Gibbs overshoot.",
+                  "State the DFT, the idea and cost of the FFT, and the meaning of a bin.",
+                  "State Gabor's uncertainty relation and choose a window length for a given task."],
+            "D": ["Describe reassignment and when it sharpens a time-frequency picture.",
+                  "Explain why human listeners can beat the uncertainty limit without contradiction."],
+            "I": ["Choose a window and a bin width before trusting a spectrum analyser.",
+                  "Use a constant-Q or mel picture as the input to a music-analysis task.",
+                  "Shape a sound's identity by its attack rather than by its steady spectrum."],
+        },
+        results=[
+            ("Fourier's recipe", r"b_n = \frac{2}{T}\int_0^T f(t)\,\sin\frac{2\pi n t}{T}\,dt"),
+            ("The discrete Fourier transform", r"X[k] = \sum_{n=0}^{N-1} x[n]\,e^{-2\pi i k n / N}"),
+            ("The Gibbs overshoot", r"\approx 8.95\%\ \text{of the jump, for any number of terms}"),
+            ("Gabor's limit", r"\Delta t \cdot \Delta f \ge \frac{1}{4\pi}"),
+            ("Constant Q", r"Q = \frac{f}{\Delta f} = \frac{1}{2^{1/b} - 1}\quad (b\ \text{bins per octave})"),
+            ("Noise colours", r"S(f) \propto f^{-\beta}:\ \beta = 0\ \text{white},\ 1\ \text{pink},\ 2\ \text{brown}"),
+        ],
+        U=(0, 1, 3, 4, 5, 9, 10),
+        D=(11,),
+        I=(2, 6, 7, 8),
+        also=(("Monochord's analysis: FFT, windows, STFT, constant Q, reassignment", "explainer/music/monochord/dsp/fourier.py"),),
+    ),
 ]
