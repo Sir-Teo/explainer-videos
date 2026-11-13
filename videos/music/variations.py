@@ -13,6 +13,10 @@ LEDGER = [
      "measure": r"its brightness rises 2.2 times from the first phrase to the last"},
     {"part": 4, "title": r"with no fundamentals, then with no octaves: the notes the ear supplies", "seconds": 27.105,
      "measure": r"the pitch model finds every missing fundamental within a cent"},
+    {"part": 5, "title": r"in a bent timbre, in parallel `fifths' that only that timbre makes smooth", "seconds": 27.55,
+     "measure": r"the same intervals are 4 times rougher with ordinary partials"},
+    {"part": 6, "title": r"with chords, in eight tunings: Pythagorean, meantone and its wolf, Werckmeister, 12, 19, 31 and 53", "seconds": 38.05,
+     "measure": r"its chords are from 1 to 31 cents out of tune"},
 ]
 
 

@@ -199,4 +199,108 @@ PARTS = [
         I=(5, 10),
         also=(("Monochord's ear: middle ear, cochlea, auditory filters, loudness, masking, pitch", "explainer/music/monochord/ear.py"),),
     ),
+    Part(
+        n=5, level="U", widget="dissonance",
+        question="Why do some notes belong together: is it number, beating, fusion, or habit, and can the answer be "
+                 "computed?",
+        story="A timbre is played in which an exact octave grinds and one eighty-four cents too wide is smooth. Six "
+              "answers to why some notes belong together are then computed in turn. Pythagoras's small ratios and "
+              "Euler's formula of 1739 rank the intervals almost as musicians do, and are defeated by a fifth five "
+              "cents wide, whose ratio is enormous and whose sound is hardly changed. Galileo's coinciding pulses "
+              "turn out to be the same arithmetic, and a rhythm of three against two, played a hundred times "
+              "faster, becomes a fifth. Two close tones beat at the difference of their frequencies, which is how "
+              "tuners work; beats too fast to follow are roughness, and Helmholtz made roughness the cause of "
+              "dissonance. Plomp and Levelt measured it in 1965: worst a quarter of a critical band apart, and for "
+              "pure tones indifferent to ratios. Summed over the partials of two notes, their curve has valleys "
+              "exactly at the just ratios, and Sethares's stretched partials move the valleys, which explains the "
+              "opening. Stumpf's fusion, Rameau's fundamental bass and Part 4's pitch model give a second cause, "
+              "harmonicity, which separates the major from the minor triad where roughness cannot. The Tsimane' "
+              "show that the preference itself is learned. The frontier is a composite model and a quarter of a "
+              "million judgments collected online. The Tune is played in a bent timbre, in intervals that only "
+              "that timbre makes smooth.",
+        handoff="Beats, and valleys that tolerate small errors, are the whole basis of tuning (Part 6). Inharmonic "
+                "partials and their scales return with stiff strings (Part 7), bells (Part 9), the gamelan (Part 36) "
+                "and synthesis (Part 52). The fundamental bass becomes the theory of chords and progressions (Parts "
+                "13 and 18); the treatment of dissonance is counterpoint (Parts 16 and 17). What is learned returns "
+                "in expectation (Part 46) and in the musics of the world (Parts 34 to 37, 47).",
+        outside="Parts 1, 3 and 4: partials, the spectrum, critical bands and the pitch of a set of partials. Ratios "
+                "and prime factors. The sum-to-product identity for two sines.",
+        objectives={
+            "U": ["Name the just ratios of the consonant intervals and say what Pythagoras, Galileo and Euler claimed.",
+                  "Explain beats and use them to tune one note to another.",
+                  "Say why consonance depends on timbre, and why a major and a minor triad differ."],
+            "M": ["Compute Euler's gradus and the beat rate of two tones.",
+                  "Compute a dissonance curve from Plomp and Levelt's curve and a set of partials, and find its minima.",
+                  "Find the fundamental bass of a chord of exact ratios and relate it to harmonicity."],
+            "D": ["Compare interference, harmonicity and familiarity as predictors of consonance ratings.",
+                  "Describe what cross-cultural and large online experiments have and have not settled."],
+            "I": ["Voice chords for smoothness: wide in the bass, and aware of each instrument's partials.",
+                  "Design a scale for an inharmonic timbre, or a timbre for a given scale.",
+                  "Diagnose roughness between two parts in a mix as competition inside a critical band."],
+        },
+        results=[
+            ("Euler's gradus", r"\Gamma(p{:}q) = 1 + \sum_i k_i\,(p_i - 1),\quad \operatorname{lcm}(p,q) = \prod_i p_i^{k_i}"),
+            ("Beats", r"\sin 2\pi f_1 t + \sin 2\pi f_2 t = 2\cos\bigl(\pi(f_1 - f_2)t\bigr)\,\sin\bigl(\pi(f_1 + f_2)t\bigr)"),
+            ("Roughness of two pure tones", r"d(f_1,f_2) = e^{-3.5\,s\,\Delta f} - e^{-5.75\,s\,\Delta f},\quad s = \frac{0.24}{0.0207\,f_1 + 18.96}"),
+            ("A dissonance curve", r"D(r) = \sum_{i<j} \min(a_i, a_j)\; d(f_i, f_j)\ \text{over the partials of both tones}"),
+            ("Stretched partials", r"f_k = f_1\,k^{\log_2 A}\ \Rightarrow\ \text{valleys at } r^{\log_2 A}"),
+            ("The fundamental bass", r"4{:}5{:}6 \to \tfrac14 f,\qquad 10{:}12{:}15 \to \tfrac{1}{10} f"),
+        ],
+        U=(0, 1, 2, 3, 5, 7, 8),
+        D=(10,),
+        I=(4, 6, 9),
+        also=(("Monochord's consonance: ratios, beats, roughness, dissonance curves, harmonicity", "explainer/music/monochord/consonance.py"),),
+    ),
+    Part(
+        n=6, level="U", widget="temperament",
+        question="If the pure intervals cannot all be had at once, where should an instrument put the error, and why "
+                 "did the world settle on twelve equal steps?",
+        story="A progression of four chords is sung four times in perfectly pure chords, and ends most of a semitone "
+              "flat. The cause is arithmetic. Twelve pure fifths overshoot seven octaves by the Pythagorean comma, and "
+              "no stack of fifths can ever close, because no power of three is a power of two; four pure fifths "
+              "overshoot a pure third by the syntonic comma; three pure thirds fall short of an octave. Pythagorean "
+              "tuning keeps eleven fifths pure and pays with a wolf and restless thirds. Just intonation, laid out as "
+              "a lattice of fifths and thirds, makes chords pure, needs two versions of some notes, and drifts by a "
+              "comma each time round the pump. Then three ways of tempering. Quarter-comma meantone narrows each "
+              "fifth until the thirds are pure in eight keys, and leaves a wolf in the others. Werckmeister's well "
+              "temperament closes the circle and grades the error, so that every key is usable and each has its own "
+              "character: the tuning of Bach's title. Equal temperament, computed by Zhu Zaiyu in 1584 to "
+              "twenty-four decimal places, makes every key the same, with thirds fourteen cents wide; it is tuned by "
+              "counting beats and laid out on every guitar's frets. Twelve is the denominator of the best small "
+              "fraction for a fifth; nineteen, thirty-one and fifty-three do better and are harder to play. Pianos "
+              "stretch their octaves because their strings are stiff, and voices and strings adjust every note. The "
+              "Tune is played with chords in eight tunings.",
+        handoff="The stretched octave returns with the piano's string (Part 7). The twelve notes become scales and "
+                "keys (Parts 12 and 15); the lattice of fifths and thirds returns as a map of chords (Parts 13, 31 "
+                "and 32). Commas and continued fractions return when scales are treated as mathematics (Part 33). "
+                "Other divisions of the octave belong to raga, maqam and gamelan (Parts 34 to 36), and tuning "
+                "tables to synthesizers and MIDI (Parts 50 and 53).",
+        outside="Part 1 for ratios and stiff strings; Part 5 for beats and for why the just ratios are smooth. "
+                "Fractions, powers and logarithms; cents.",
+        objectives={
+            "U": ["Explain the Pythagorean and syntonic commas and why no chain of pure fifths closes.",
+                  "Describe Pythagorean tuning, just intonation, meantone, a well temperament and equal temperament by what each keeps pure.",
+                  "Say what equal temperament costs, and how a tuner sets it."],
+            "M": ["Compute any note of a tuning in cents and in hertz, and the beat rate of an interval.",
+                  "Follow a comma pump in exact fractions and predict its drift.",
+                  "Use the continued fraction of log2(3/2) to explain 12, 41 and 53."],
+            "D": ["Describe adaptive tuning and the trade it makes between purity and stability.",
+                  "Weigh the evidence for and against a proposed historical temperament."],
+            "I": ["Choose a temperament for a repertoire, and retune an instrument or a synthesizer to it.",
+                  "Place frets, or check a guitar's intonation, from the twelfth root of two.",
+                  "Tune held chords in an ensemble: thirds low, and the pitch anchored."],
+        },
+        results=[
+            ("The Pythagorean comma", r"\frac{(3/2)^{12}}{2^{7}} = \frac{531441}{524288}\quad (23.46\ \text{cents})"),
+            ("The syntonic comma", r"\frac{(3/2)^{4}}{4}\Big/\frac54 = \frac{81}{80}\quad (21.51\ \text{cents})"),
+            ("Quarter-comma meantone", r"\text{fifth} = \sqrt[4]{5} = 696.6\ \text{cents};\quad \text{wolf} = 737.6"),
+            ("Equal temperament", r"f_k = f_0\,2^{k/12},\qquad 2^{1/12} = 1.0594630943\ldots"),
+            ("Beats of a tempered interval", r"\text{beats} = \lvert\, q f_\text{high} - p f_\text{low} \rvert \quad (\text{nearly } p{:}q)"),
+            ("Why twelve", r"\log_2\tfrac32 = [0;1,1,2,2,3,\ldots]:\ \tfrac12,\ \tfrac35,\ \tfrac7{12},\ \tfrac{24}{41},\ \tfrac{31}{53}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6),
+        D=(10,),
+        I=(7, 8, 9),
+        also=(("Monochord's tunings: commas, temperaments, beats, the comma pump, stretched octaves", "explainer/music/monochord/tuning.py"),),
+    ),
 ]

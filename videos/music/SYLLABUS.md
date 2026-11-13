@@ -504,30 +504,70 @@ missing fundamental and Schouten's shift, a Hopf oscillator; masking patterns re
 *Reading:* Moore, *An Introduction to the Psychology of Hearing*; Plack; Pickles.
 
 ### Part 5 · Consonance (~50)
-*Story:* Six answers in 2,500 years: number (Pythagoras), coinciding pulses (Galileo), a formula (Euler), the
-overtone series (Rameau), beats (Helmholtz), fusion (Stumpf). Then Plomp and Levelt (1965) measure it, Sethares
+*Story:* Six answers in 2,500 years: number (Pythagoras), coinciding pulses (Galileo), the overtone series
+(Rameau), a formula (Euler), beats (Helmholtz), fusion (Stumpf). Then Plomp and Levelt (1965) measure it, Sethares
 shows that the consonant intervals move when the timbre does, and McDermott's team (2016) finds a society with
 no preference at all. The part computes each theory and lets the viewer hear where each fails.
-*Covers:* beats and roughness; the critical band and the Plomp–Levelt curve; dissonance curves for harmonic and
-inharmonic timbres; harmonicity and virtual pitch; familiarity and culture; why major and minor triads differ
-though their intervals match.
-*Built and computed:* dissonance curves whose minima fall on the just ratios; a timbre with stretched partials
-for which a 2.1:1 "octave" is the smooth one; a consonance map of all triads.
-*Variation 5:* the Tune in parallel intervals that are consonant only for the bent timbre.
-*Frontier:* composite models (Harrison & Pearce 2020); large online experiments on timbre and consonance
-**(verify)**; what remains unexplained.
+1. Hook: an exact octave that grinds and a wide one that is smooth; six answers; the plan.
+2. Number: the monochord's ratios; Euler's gradus (a worked example) for thirteen intervals; a fifth five cents
+   wide (an ear question).
+3. Pulses that coincide: Galileo; three against two, sped up into a fifth; the same flaw, and why to keep the idea.
+4. Beats: the sum of two close tones; 1, 4 and 12 a second; tuning by beats (a worked example); roughness.
+5. Roughness, measured: Plomp and Levelt's curve and the critical band; two pure tones gliding apart (an ear
+   question); a pure fifth and a pure tritone.
+6. A curve with no ratios in it: the partials of two notes; a fifth and a tritone (a worked example); the
+   dissonance curve and its valleys; the curve heard.
+7. Bend the timbre: stretched partials move every valley; four sounds (an ear question); pianos, bells, gamelan.
+8. One note or two: fusion; the note inside 4:5:6 (an ear question); the fundamental bass; harmonicity from Part
+   4's pitch model; one tone to each ear.
+9. Major and minor: the same intervals (an ear question); 4:5:6 and 10:12:15; four triads; a map of all triads.
+10. What is learned: a history of the third; the Tsimane'; three layers.
+11. Frontier: a composite model; a quarter of a million judgments online; what is not known.
+12. Variation 5: the Tune in a bent timbre. Outro: problems, payoffs, and twelve fifths that do not close.
+
+*Covers:* ratio theories (Pythagoras, Zarlino, Euler, Tenney); Galileo's coincidence theory; beats and roughness;
+the critical band and the Plomp–Levelt curve; dissonance curves for harmonic and inharmonic timbres; harmonicity,
+fusion and the fundamental bass; why major and minor triads differ though their intervals match; familiarity and
+culture.
+*Built and computed:* Monochord's consonance layer (`monochord/consonance.py`): Euler's gradus, beats, the
+Plomp–Levelt curve in Sethares's form, dissonance curves whose minima fall on the just ratios, a timbre with
+stretched partials for which a 2.1:1 "octave" is the smooth one, harmonicity from Part 4's pitch model, a
+roughness map of all triads.
+*Variation 5:* the Tune in a bent timbre, in parallel intervals that are consonant only for that timbre.
+*Frontier:* composite models (Harrison & Pearce 2020); large online experiments on timbre and consonance (Marjieh
+et al. 2024); what remains unexplained.
 *Reading:* Helmholtz, *On the Sensations of Tone*; Sethares, *Tuning, Timbre, Spectrum, Scale*; McDermott et al.
 (2016).
 
 ### Part 6 · Tuning (~55)
-*Story:* In 1584 Zhu Zaiyu, a prince of the Ming, computed the twelfth root of two to twenty-five digits on an
-abacus. He was solving a problem every keyboard has: twelve pure fifths overshoot seven octaves, so the circle
-does not close. A choir that sings pure chords round one common progression ends a fifth of a semitone flat.
-Every tuning system is a decision about where to hide the error.
-*Covers:* the Pythagorean and syntonic commas; just intonation as a lattice; meantone and its wolf; the well
-temperaments and key character; equal temperament (Zhu, Stevin); continued fractions of log₂(3/2) and why 12, 41
-and 53; 19 and 31 for thirds; the comma pump; the piano's stretched octaves; how choirs and quartets adjust.
-*Built and computed:* `tuning.py` in exact rationals; beat rates a tuner counts; the drift of a comma pump.
+*Story:* In 1584 Zhu Zaiyu, a prince of the Ming, computed the twelfth root of two to twenty-four decimal places
+on an abacus. He was solving a problem every keyboard has: twelve pure fifths overshoot seven octaves, so the
+circle does not close. A choir that sings pure chords round one common progression ends a fifth of a semitone
+flat. Every tuning system is a decision about where to hide the error.
+1. Hook: one progression four times in pure chords, sinking 86 cents; Zhu Zaiyu; the plan.
+2. The circle that will not close: twelve fifths and the Pythagorean comma; a worked example (no power of three is a
+   power of two); Pythagorean tuning and its wolf.
+3. The other comma: four fifths against a pure third (an ear question); three thirds against an octave; just
+   intonation as a lattice; its wolf.
+4. The comma pump: a worked example in exact fractions; four rounds; Benedetti.
+5. Pure thirds, and a wolf: quarter-comma meantone (a worked example); three tunings of one chord; the wolf (an ear
+   question); split keys.
+6. Well tempered: Werckmeister III; the thirds of four tunings in every key; key character (an ear question); Bach.
+7. Equal: the twelfth root of two; an abacus and a guitar (a worked example); what it costs (an ear question); the
+   beats a tuner counts (a worked example); three centuries to win.
+8. Why twelve: every equal division from 4 to 60; the continued fraction of log₂(3/2) (a worked example); five and
+   seven; 19, 31 and 53.
+9. The piano's stretched octaves: stiff strings; a model of Railsback's curve.
+10. What players do: free instruments; a quartet's open strings; do choirs drift; the pitch of A.
+11. Frontier: adaptive tuning; Bach's title page; what is not known.
+12. Variation 6: the Tune in eight tunings. Outro: problems, payoffs, and a plucked string.
+
+*Covers:* the Pythagorean and syntonic commas and the diesis; just intonation as a lattice; meantone and its wolf;
+the well temperaments and key character; equal temperament (Zhu, Stevin), fret placement and tuning by beats;
+continued fractions of log₂(3/2) and why 12, 41 and 53; 19 and 31 for thirds; the comma pump; the piano's stretched
+octaves; how choirs and quartets adjust; concert pitch.
+*Built and computed:* `tuning.py` in exact rationals, checked against Barbour's tables; beat rates a tuner counts;
+the drift of a comma pump; a model of Railsback's curve.
 *Variation 6:* the Tune in Pythagorean, quarter-comma meantone (a good key and the wolf key), Werckmeister III,
 12, 19, 31 and 53 equal divisions.
 *Frontier:* adaptive tuning; what tuning Bach meant (the 2005 hypothesis and its critics); temperaments as
@@ -1418,6 +1458,8 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-13 | **Part 2, *Waves in Air***: 14 chapters, 33.5 min narrated of which 1.9 min listening in 18 windows; 3 pause-and-listen questions, 3 worked examples with predict-pauses; Variation 2 (six bottles); Lab 2 and the bottle interactive; Monochord's air layer (`physics/air.py`: gas parcels, sound in a plane, tubes; `tests/music/test_air.py`); the kits for later parts (`monochord/partkit.py`, `explainer/music/kit.py`, `tests/music/partcheck.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 3, *The Spectrum***: 13 chapters, 32.5 min narrated of which 1.8 min listening in 15 windows; 3 pause-and-listen questions, 2 worked examples with predict-pauses; Variation 3 (additive); Lab 3 and the Fourier-sum interactive; Monochord's analysis layer (`dsp/fourier.py`: FFT, windows, STFT, constant Q, uncertainty, noise, reassignment; `tests/music/test_fourier.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 4, *The Ear***: 13 chapters, 48.1 min narrated of which 1.9 min listening in 16 windows; 6 pause-and-listen questions, 4 demonstrations to listen for, 8 worked examples with predict-pauses; Variation 4 (no fundamentals, then no octaves); Lab 4 and the missing-fundamental interactive; Monochord's ear (`monochord/ear.py`: middle ear, long-wave cochlea, gammatone bank, threshold and masking, nerve and autocorrelation pitch, Shepard tones, noise dose, Hopf oscillator; `tests/music/test_ear.py`); shared scene helpers moved into `explainer/music/kit.py`; every gate clean, narration listen-tested. Forward references in Parts 2 and 3 corrected to the syllabus numbering. |
+| 2026-11-13 | **Part 5, *Consonance***: 12 chapters, 38.7 min narrated of which 2.5 min listening in 16 windows; 6 pause-and-listen questions, 3 demonstrations to listen for, 3 worked examples with predict-pauses; Variation 5 (a bent timbre and its own intervals); Lab 5 and the dissonance-curve interactive; Monochord's consonance layer (`monochord/consonance.py`: Euler's gradus, beats, the Plomp–Levelt curve, dissonance curves, stretched partials, harmonicity, the fundamental bass; `tests/music/test_consonance.py`); every gate clean, narration listen-tested. |
+| 2026-11-13 | **Part 6, *Tuning***: 12 chapters, 37.3 min narrated of which 2.3 min listening in 16 windows; 4 pause-and-listen questions, 4 demonstrations to listen for, 6 worked examples with predict-pauses; Variation 6 (the Tune with chords in eight tunings); Lab 6 and the temperament interactive; Monochord's tuning layer (`monochord/tuning.py`: commas, Pythagorean, just, meantone, Werckmeister III, equal divisions, continued fractions, beat rates, the comma pump, stretched octaves; `tests/music/test_tuning.py`, against Barbour's tables); sustained-tone helpers in `partkit.py`; every gate clean. |
 
 **Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
 before Part 10 is opened), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for

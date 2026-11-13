@@ -77,3 +77,29 @@ def resample(y: np.ndarray, sr_in: float, sr_out: int = SR) -> np.ndarray:
 
     g = np.gcd(int(round(sr_in)), int(sr_out))
     return resample_poly(np.asarray(y, dtype=np.float64), int(sr_out) // g, int(round(sr_in)) // g)
+
+
+# ---------------------------------------------------------------------------
+# A plain sustained tone, for the parts that compare intervals and tunings (Parts 5, 6)
+# ---------------------------------------------------------------------------
+def partials_wave(freqs, amps, seconds: float, decay: float = 0.0, sr: int = SR) -> np.ndarray:
+    """Sines added up; ``decay`` (per second) makes each die away, the higher partials faster."""
+    t = np.arange(int(seconds * sr)) / sr
+    y = np.zeros(len(t))
+    for k, (f, a) in enumerate(zip(freqs, amps)):
+        if f < 0.45 * sr:
+            y += a * np.sin(2 * np.pi * f * t) * (np.exp(-decay * (1 + 0.35 * k) * t) if decay else 1.0)
+    return y
+
+
+def organ_tone(hz: float, seconds: float, partials: int = 7, rolloff: float = 0.88, decay: float = 0.0, b: float = 0.0) -> np.ndarray:
+    """A tone of ``partials`` partials, each ``rolloff`` of the one below; ``b`` is the inharmonicity of a stiff
+    string (partial n at n f sqrt(1 + b n^2), scaled so that the first partial is ``hz``)."""
+    n = np.arange(1, partials + 1)
+    f = hz * n * np.sqrt((1 + b * n * n) / (1 + b))
+    return partials_wave(f, rolloff ** (n - 1.0), seconds, decay)
+
+
+def organ_chord(freqs, seconds: float, fade=(0.03, 0.12), **kw) -> Clip:
+    """Several :func:`organ_tone` notes together."""
+    return Clip(sum(organ_tone(f, seconds, **kw) for f in freqs)).fade(*fade)

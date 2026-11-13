@@ -313,4 +313,151 @@
       note: "A note's pitch is the period of its wave, not its lowest partial: remove partials 1, 2 and 3 and the wave still repeats at the same rate (Seebeck 1841; Schouten 1940). Moving every partial up by the same amount keeps their spacing but changes the delay at which the wave best lines up with itself, and listeners hear the pitch rise by about the shift divided by the number of the middle partial (Schouten's shifted residue). With one partial alone the pitch is that partial; with only high partials (lowest 7 or 8) real listeners hear a weaker pitch than this simple calculation suggests, because the ear no longer resolves them. The sound is computed in your browser. Simulated.",
     });
   };
+
+  // ---- Part 5: a dissonance curve you can bend ------------------------------------------------------------------
+  // Plomp and Levelt's curve as fitted by Sethares (1993), summed over every pair of partials of two tones.
+  function pairRough(f1, f2, a1, a2) {
+    var lo = Math.min(f1, f2), s = 0.24 / (0.0207 * lo + 18.96), d = Math.abs(f2 - f1);
+    return Math.min(a1, a2) * (Math.exp(-3.5 * s * d) - Math.exp(-5.75 * s * d));
+  }
+  function tonePartials(f0, n, roll, stretch) {
+    var fs = [], as = [], k, p = Math.log(stretch) / Math.log(2);
+    for (k = 1; k <= n; k++) { fs.push(f0 * Math.pow(k, p)); as.push(Math.pow(roll, k - 1)); }
+    return { f: fs, a: as };
+  }
+  function dyadRough(ratio, t) {
+    var i, j, n = t.f.length, r = 0;
+    for (i = 0; i < n; i++) for (j = i + 1; j < n; j++) r += pairRough(t.f[i], t.f[j], t.a[i], t.a[j]) + pairRough(ratio * t.f[i], ratio * t.f[j], t.a[i], t.a[j]);
+    for (i = 0; i < n; i++) for (j = 0; j < n; j++) r += pairRough(t.f[i], ratio * t.f[j], t.a[i], t.a[j]);
+    return r;
+  }
+  function dyadSound(ratio, t) {
+    var rate = 44100, len = Math.floor(1.8 * rate), y = new Float32Array(len), i, k, peak = 0;
+    for (k = 0; k < t.f.length; k++) {
+      var w1 = 2 * Math.PI * t.f[k] / rate, w2 = w1 * ratio, a = t.a[k];
+      for (i = 0; i < len; i++) y[i] += a * ((t.f[k] < 0.45 * rate ? Math.sin(w1 * i) : 0) + (t.f[k] * ratio < 0.45 * rate ? Math.sin(w2 * i) : 0));
+    }
+    for (i = 0; i < len; i++) peak = Math.max(peak, Math.abs(y[i]));
+    var fade = Math.floor(0.03 * rate), tail = Math.floor(0.12 * rate);
+    for (i = 0; i < len; i++) y[i] *= (0.25 / (peak || 1)) * Math.min(1, i / fade) * Math.min(1, (len - i) / tail);
+    return play(y, rate);
+  }
+  var JUSTS = [[1, 1], [6, 5], [5, 4], [4, 3], [3, 2], [5, 3], [2, 1]];
+  W.dissonance = function (el) {
+    QB.widget(el, {
+      title: "Move the valleys",
+      sub: "Left: the roughness of two tones against the interval between them, summed over every pair of their partials; the dotted lines are the just ratios. Right: the partials of the two tones at the interval you have chosen. With whole-multiple partials (stretch 2) the valleys sit on the just ratios. Change the stretch and the valleys move; give the tone one partial and they vanish. Press Play to hear the interval in this timbre.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "cents", label: "Interval (cents)", min: 0, max: 1400, step: 5, value: 700 },
+        { k: "stretch", label: "Stretch of the partials (2 = harmonic)", min: 1.8, max: 2.3, step: 0.01, value: 2, fmt: function (x) { return fmt(x, 2); } },
+        { k: "n", label: "Partials in each tone", min: 1, max: 10, step: 1, value: 7 },
+        { k: "f0", label: "Lower note (Hz)", min: 65, max: 520, step: 5, value: 260 },
+      ],
+      buttons: [
+        { label: "Play the two notes", act: function (s, v) { s.sound = dyadSound(Math.pow(2, v.cents / 1200), tonePartials(v.f0, v.n, 0.88, v.stretch)); } },
+      ],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var t = tonePartials(v.f0, v.n, 0.88, v.stretch), xs = [], ys = [], i, top = 0, best = null;
+        for (i = 0; i <= 560; i++) { var c = 1400 * i / 560, r = dyadRough(Math.pow(2, c / 1200), t); xs.push(c); ys.push(r); top = Math.max(top, r); }
+        var ratio = Math.pow(2, v.cents / 1200), here = dyadRough(ratio, t);
+        for (i = 1; i < 560; i++) if (ys[i] < ys[i - 1] && ys[i] <= ys[i + 1] && (best === null || Math.abs(xs[i] - v.cents) < Math.abs(best - v.cents))) best = xs[i];
+        s.here = here; s.top = top; s.best = best;
+        var a = g[0].axes({ x: [0, 1400], y: [0, top * 1.12 + 1e-6], title: "Roughness against interval", xlabel: "interval (cents)", xticks: [0, 200, 400, 600, 800, 1000, 1200, 1400], yticks: [] });
+        for (i = 0; i < JUSTS.length; i++) a.vline(1200 * Math.log(JUSTS[i][0] / JUSTS[i][1]) / Math.log(2), { color: C.muted });
+        a.line(xs, ys, { color: C.loss, width: 2 });
+        a.vline(v.cents, { color: C.idea, width: 2, dash: [1, 0] });
+        var fmax = Math.max(t.f[t.f.length - 1] * ratio * 1.05, 4 * v.f0);
+        var b = g[1].axes({ x: [0, fmax], y: [0, 1.15], title: "The partials of the two tones", xlabel: "frequency (Hz)", yticks: [] });
+        for (i = 0; i < t.f.length; i++) {
+          b.line([t.f[i], t.f[i]], [0, t.a[i]], { color: C.spot, width: 3 });
+          b.line([t.f[i] * ratio, t.f[i] * ratio], [0, t.a[i] * 0.92], { color: C.idea, width: 3 });
+        }
+        b.legend([["lower tone", C.spot], ["upper tone", C.idea]], { pos: "tr" });
+      },
+      readout: function (v, s) {
+        var ratio = Math.pow(2, v.cents / 1200);
+        return [["interval", fmt(v.cents, 0) + " cents, a ratio of " + fmt(ratio, 3)],
+                ["roughness here", fmt(100 * (s.here || 0) / (s.top || 1), 0) + "% of the worst interval"],
+                ["nearest valley", s.best === null ? "none: a pure tone has no valleys beyond the first band" : fmt(s.best, 0) + " cents (" + fmt(Math.pow(2, s.best / 1200), 3) + ")"],
+                ["the octave of this timbre", fmt(v.stretch, 2) + " : 1, " + fmt(1200 * Math.log(v.stretch) / Math.log(2), 0) + " cents"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "The roughness of two pure tones follows Plomp and Levelt's curve (1965), in the form fitted by Sethares (1993): none in unison, worst about a quarter of a critical band apart, gone by about one band. For two tones with partials it is added up over every pair. With one partial the curve has a single hump and no special intervals. With whole-multiple partials its valleys are the just ratios (the dotted lines). Stretch the partials and each valley moves to its old ratio raised to the power log2(stretch): a timbre has its own consonances. Lower the bottom note and the valleys fill in, because the ear's bands are wider in the bass. Roughness is one ingredient of consonance; harmonicity and familiarity are the others. The sound is computed in your browser. Simulated.",
+    });
+  };
+
+  // ---- Part 6: where to hide the comma ----------------------------------------------------------------------------
+  // A chain of eleven fifths, E flat to G sharp, each narrowed by a fraction of the syntonic comma; the twelfth
+  // fifth (G sharp to E flat) takes whatever is left.
+  var CHAIN = ["E♭", "B♭", "F", "C", "G", "D", "A", "E", "B", "F♯", "C♯", "G♯"];
+  var PURE5 = 1200 * Math.log(1.5) / Math.LN2, PURE3 = 1200 * Math.log(1.25) / Math.LN2, SYN = 1200 * Math.log(81 / 80) / Math.LN2;
+  function temper(x) { // cents above C of each note of the chain, and the sizes of the twelve fifths and thirds
+    var size = PURE5 - x * SYN, pos = [], i;
+    for (i = 0; i < 12; i++) pos.push((((i - 3) * size) % 1200 + 1200) % 1200);
+    var fifths = [], thirds = [];
+    for (i = 0; i < 12; i++) {
+      fifths.push(((pos[(i + 1) % 12] - pos[i]) % 1200 + 1200) % 1200 - PURE5);
+      thirds.push(((pos[(i + 4) % 12] - pos[i]) % 1200 + 1200) % 1200 - PURE3);
+    }
+    return { size: size, pos: pos, fifths: fifths, thirds: thirds };
+  }
+  function triadSound(t, k) {
+    var c4 = 261.6256, f = [t.pos[k], t.pos[(k + 4) % 12], t.pos[(k + 1) % 12]].map(function (c) { return c4 * Math.pow(2, c / 1200); }), i, j, n;
+    for (i = 1; i < 3; i++) while (f[i] < f[i - 1]) f[i] *= 2;
+    if (f[0] > c4 * 1.6) f = f.map(function (x) { return x / 2; });
+    var rate = 44100, len = Math.floor(2.0 * rate), y = new Float32Array(len), peak = 0;
+    for (j = 0; j < 3; j++) for (n = 1; n <= 7; n++) {
+      var w = 2 * Math.PI * f[j] * n / rate, a = Math.pow(0.88, n - 1);
+      for (i = 0; i < len; i++) y[i] += a * Math.sin(w * i);
+    }
+    for (i = 0; i < len; i++) peak = Math.max(peak, Math.abs(y[i]));
+    var fade = Math.floor(0.03 * rate), tail = Math.floor(0.12 * rate);
+    for (i = 0; i < len; i++) y[i] *= (0.25 / (peak || 1)) * Math.min(1, i / fade) * Math.min(1, (len - i) / tail);
+    return play(y, rate);
+  }
+  function nameOf(x) {
+    if (x < 0.005) return "Pythagorean tuning: every fifth pure";
+    if (Math.abs(x - 1 / 11) < 0.006) return "very nearly twelve equal steps";
+    if (Math.abs(x - 1 / 6) < 0.006) return "sixth-comma meantone";
+    if (Math.abs(x - 1 / 4) < 0.006) return "quarter-comma meantone: pure major thirds";
+    if (Math.abs(x - 1 / 3) < 0.006) return "third-comma meantone: pure minor thirds";
+    return "a meantone temperament";
+  }
+  W.temperament = function (el) {
+    QB.widget(el, {
+      title: "Where to hide the comma",
+      sub: "Eleven fifths in a chain, each narrowed by a fraction of the comma; the twelfth takes what is left. Left: how far each of the twelve fifths is from pure. Right: how far the major third on each note is from pure. At nothing, the fifths are pure and the thirds a comma wide. At a quarter, eight thirds are pure and four are wolves. Near one eleventh, everything is equal. Choose a key and press Play to hear its chord.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "x", label: "Fraction of the comma taken from each fifth", min: 0, max: 0.34, step: 0.005, value: 0.25, fmt: function (x) { return fmt(x, 3); } },
+        { k: "key", label: "Key of the chord", min: 0, max: 11, step: 1, value: 3, fmt: function (k) { return CHAIN[k] + " major"; } },
+      ],
+      buttons: [
+        { label: "Play the chord", act: function (s, v) { s.sound = triadSound(temper(v.x), v.key); } },
+      ],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var t = temper(v.x), idx = [], i;
+        s.t = t;
+        for (i = 0; i < 12; i++) idx.push(i);
+        var a = g[0].axes({ x: [-0.7, 11.7], y: [-45, 45], title: "The twelve fifths: cents from pure", xlabel: "the fifth above each note, E♭ to G♯", xticks: [], yticks: [-40, -20, 0, 20, 40] });
+        a.hline(0, {});
+        a.bars(idx, t.fifths, 0.7, { color: function (k) { return k === 11 ? C.loss : C.spot; } });
+        var b = g[1].axes({ x: [-0.7, 11.7], y: [-12, 45], title: "The twelve major thirds: cents from pure", xlabel: "the third above each note, E♭ to G♯", xticks: [], yticks: [0, 20, 40] });
+        b.hline(0, {});
+        b.bars(idx, t.thirds, 0.7, { color: function (k) { return k === v.key ? C.idea : (Math.abs(t.thirds[k]) > 25 ? C.loss : C.gain); } });
+      },
+      readout: function (v, s) {
+        var t = s.t || temper(v.x);
+        return [["this is", nameOf(v.x)],
+                ["each fifth", fmt(t.size, 1) + " cents (" + fmt(t.size - PURE5, 1) + " from pure)"],
+                ["the twelfth fifth, G♯ to E♭", fmt(t.fifths[11], 1) + " cents from pure" + (Math.abs(t.fifths[11]) > 15 ? ": a wolf" : "")],
+                ["the chord on " + CHAIN[v.key], "third " + fmt(t.thirds[v.key], 1) + ", fifth " + fmt(t.fifths[v.key], 1) + " cents from pure"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Four pure fifths overshoot a pure major third by the syntonic comma, 21.5 cents, and twelve pure fifths overshoot seven octaves by the Pythagorean comma, 23.5 cents. Narrowing each of eleven fifths by a fraction x of the syntonic comma improves the eight thirds that lie inside the chain and pushes the error into the twelfth fifth and the four thirds that cross it. x = 0 is Pythagorean tuning; x = 1/4 is quarter-comma meantone (Aron, 1523); x = 1/3 makes the minor thirds pure; x close to 1/11 shares the Pythagorean comma among all twelve fifths, which is equal temperament. Well temperaments such as Werckmeister's narrow only some of the fifths, and are not on this slider. The sound is computed in your browser. Simulated.",
+    });
+  };
 })();
