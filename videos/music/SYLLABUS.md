@@ -1395,6 +1395,7 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-13 | **Phase 0**: the clip store and loudness meter, `SoundScene` and cue sheets, stem mixing and the music master in `tools/build.py`, `tools/qa_sound.py`, Monochord's first layer (the stiff, lossy, stretching string, checked three ways), the scene instruments of §4 that Part 1 needs, and the test film `videos/music/soundcheck/` (picture-to-sound offsets within one frame). |
 | 2026-11-13 | **Part 1, *One String***: 15 chapters, 46.9 min narrated (English, 480p preview) of which 3.4 min listening in 40 windows; 3 pause-and-listen questions and a worked example with a predict-pause; Variation 1; Lab 1 and the plucked-string interactive; every gate clean, the narration listen-tested (`tools/check_narration.py`). Lessons in `LECTURE_GUIDE.md`. |
 | 2026-11-13 | **Part 2, *Waves in Air***: 14 chapters, 33.5 min narrated of which 1.9 min listening in 18 windows; 3 pause-and-listen questions, 3 worked examples with predict-pauses; Variation 2 (six bottles); Lab 2 and the bottle interactive; Monochord's air layer (`physics/air.py`: gas parcels, sound in a plane, tubes; `tests/music/test_air.py`); the kits for later parts (`monochord/partkit.py`, `explainer/music/kit.py`, `tests/music/partcheck.py`); every gate clean, narration listen-tested. |
+| 2026-11-13 | **Part 3, *The Spectrum***: 13 chapters, 32.5 min narrated of which 1.8 min listening in 15 windows; 3 pause-and-listen questions, 2 worked examples with predict-pauses; Variation 3 (additive); Lab 3 and the Fourier-sum interactive; Monochord's analysis layer (`dsp/fourier.py`: FFT, windows, STFT, constant Q, uncertainty, noise, reassignment; `tests/music/test_fourier.py`); every gate clean, narration listen-tested. |
 
 **Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
 before Part 10 is opened), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for
@@ -1406,6 +1407,8 @@ sound so far has been judged by measurement and by spectrogram, none by ear), an
 - The narration alone passes a limiter (§3); the music still never does.
 - The subtitles carry a line for every listening window (`[sound: lower, upper, both, physical model]`), written
   from the cue sheets, so the film can be followed with the sound off (§1, *See what you hear*).
+- Parts 2 and 3 run 33 minutes, under the ~40 and ~50 first planned: fourteen and thirteen chapters of two to
+  three minutes. The gate (30 to 60) is met; from Part 4 on, a part is drafted at 6,500 words or more.
 - The narrator reads about 172 words a minute, not 140: a silent preview (which keeps time at 140) of Part 1 runs
   57 minutes, the narrated film 47. `tools/lecture_length.py` now estimates the series at the measured pace.
 

@@ -43,9 +43,16 @@ class Ohm(SoundScene):
             "your ear while a note sounds. If the note contains the globe's frequency, the globe sings. If not, it "
             "stays silent."
         ) as vo:
+            three = VGroup(label(r"a sound taken apart into pure tones", font_size=30, color=GREY_A),
+                           label(r"on paper: \ Fourier", font_size=34, color=GOOD), label(r"in a computer: \ the fast transform", font_size=34, color=GOOD),
+                           label(r"in the ear?", font_size=40, color=EAR)).arrange(DOWN, buff=0.4).move_to(RIGHT * 3.2 + UP * 0.3)
+            self.play(FadeIn(three[0]), FadeIn(three[1]), run_time=0.6)
+            self.play(FadeIn(three[2]), run_time=0.6)
+            self.play(FadeIn(three[3]), run_time=0.6)
             vo.wait_until("a")
             self.play(FadeIn(card))
             vo.wait_until("b")
+            self.play(FadeOut(three), run_time=0.3)
             self.play(FadeIn(hc), LaggedStart(*[FadeIn(g) for g in globes], lag_ratio=0.3), run_time=2.0)
             vo.wait_until("c")
             self.play(FadeIn(gcap))
