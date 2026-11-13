@@ -167,10 +167,13 @@ def exact_rate(string: String, N: int) -> float:
     return string.c * N / string.L
 
 
-def _loop(u, up, steps, lam2, mu2, s0k, s1, every, pick, snaps, force, out):
-    """One bead at a time: the scalar loop numba compiles."""
+def _loop(u, up, steps, lam2, mu2, s0k, s1, every, pick, snaps, force, out, ld, dk, n_on, gam, tens):
+    """One bead at a time: the scalar loop numba compiles.
+
+    ``ld``, ``dk``, ``n_on``: a damper at bead ``ld`` (extra loss ``dk`` per step) from step ``n_on`` on, or
+    ``ld < 0`` for none.  ``gam``: the stretching nonlinearity, as (EA / 2 L T) / h; ``tens`` records the tension
+    factor ``1 + gam * sum (du)^2`` at every step."""
     N = len(u) - 1
-    A = 1.0 / (1.0 + s0k)
     un = np.zeros_like(u)
     j = 0
     for n in range(steps):
@@ -179,6 +182,14 @@ def _loop(u, up, steps, lam2, mu2, s0k, s1, every, pick, snaps, force, out):
             j += 1
         force[n] = u[1] - u[0]
         out[n] = u[pick]
+        f = 1.0
+        if gam != 0.0:
+            acc = 0.0
+            for l in range(N):
+                d = u[l + 1] - u[l]
+                acc += d * d
+            f = 1.0 + gam * acc
+        tens[n] = f
         for l in range(1, N):
             dxx = u[l + 1] - 2.0 * u[l] + u[l - 1]
             dxxp = up[l + 1] - 2.0 * up[l] + up[l - 1]
@@ -188,16 +199,17 @@ def _loop(u, up, steps, lam2, mu2, s0k, s1, every, pick, snaps, force, out):
                 dxxxx = up2 - 4.0 * u[l + 1] + 6.0 * u[l] - 4.0 * u[l - 1] + um2
             else:
                 dxxxx = 0.0
-            un[l] = A * (2.0 * u[l] - (1.0 - s0k) * up[l] + lam2 * dxx - mu2 * dxxxx + s1 * (dxx - dxxp))
+            loss = s0k + dk if (l == ld and n >= n_on) else s0k
+            un[l] = (2.0 * u[l] - (1.0 - loss) * up[l] + f * lam2 * dxx - mu2 * dxxxx + s1 * (dxx - dxxp)) / (1.0 + loss)
         for l in range(1, N):
             up[l] = u[l]
             u[l] = un[l]
     return j
 
 
-def _loop_numpy(u, up, steps, lam2, mu2, s0k, s1, every, pick, snaps, force, out):
+def _loop_numpy(u, up, steps, lam2, mu2, s0k, s1, every, pick, snaps, force, out, ld, dk, n_on, gam, tens):
     """The same update with whole-array arithmetic, for machines without numba (the labs)."""
-    A = 1.0 / (1.0 + s0k)
+    loss = np.full(len(u) - 2, s0k)
     j = 0
     for n in range(steps):
         if every > 0 and n % every == 0:
@@ -205,14 +217,18 @@ def _loop_numpy(u, up, steps, lam2, mu2, s0k, s1, every, pick, snaps, force, out
             j += 1
         force[n] = u[1] - u[0]
         out[n] = u[pick]
+        f = 1.0 + gam * float(np.sum(np.diff(u) ** 2)) if gam != 0.0 else 1.0
+        tens[n] = f
+        if ld >= 0 and n == n_on:
+            loss[ld - 1] = s0k + dk
         dxx = u[2:] - 2.0 * u[1:-1] + u[:-2]
         dxxp = up[2:] - 2.0 * up[1:-1] + up[:-2]
-        new = 2.0 * u[1:-1] - (1.0 - s0k) * up[1:-1] + lam2 * dxx + s1 * (dxx - dxxp)
+        new = 2.0 * u[1:-1] - (1.0 - loss) * up[1:-1] + f * lam2 * dxx + s1 * (dxx - dxxp)
         if mu2 != 0.0:
             ext = np.concatenate(([-u[1]], u, [-u[-2]]))
             new -= mu2 * (ext[4:] - 4.0 * ext[3:-1] + 6.0 * ext[2:-2] - 4.0 * ext[1:-3] + ext[:-4])
         up[1:-1] = u[1:-1]
-        u[1:-1] = A * new
+        u[1:-1] = new / (1.0 + loss)
     return j
 
 
@@ -230,21 +246,36 @@ class Run:
     force: np.ndarray        # T du/dx at x = 0, one value per time step (newtons per unit of displacement amplitude)
     pickup: np.ndarray       # displacement at the pickup point, one value per time step
     courant: float
+    tension: np.ndarray      # tension as a multiple of the string's own, one value per time step (1 when linear)
+
+
+def stretch_gamma(string: String, EA: float) -> float:
+    """The Kirchhoff-Carrier coefficient: the tension rises by the factor ``1 + gamma * integral of (du/dx)^2 dx``
+    when the string is stretched by its own displacement.  ``EA`` is Young's modulus times the wire's area, in N."""
+    return EA / (2.0 * string.L * string.T)
 
 
 def simulate(string: String, u0, seconds: float, sr: float | None = None, N: int | None = None,
-             snapshot_every: int = 0, pickup: float = 0.2371, fast: bool = True) -> Run:
+             snapshot_every: int = 0, pickup: float = 0.2371, fast: bool = True, damper: tuple | None = None,
+             EA: float = 0.0, headroom: float = 1.0) -> Run:
     """Release the string from rest in the shape ``u0`` and step it forward.
 
     ``u0`` is an array on the grid (N+1 points, both ends zero) or a function of x.  Give ``sr`` (the scheme then
     takes the finest stable grid) or ``N`` (an ideal string then runs at the exact rate).  ``snapshot_every`` keeps
-    every k-th shape; ``pickup`` is where the displacement is read, as a fraction of the length."""
+    every k-th shape; ``pickup`` is where the displacement is read, as a fraction of the length.
+
+    ``damper = (where, rate, from_seconds)``: a finger laid on the string at the fraction ``where`` from that moment,
+    as a point loss of ``rate`` (m/s: the damping force per unit velocity, divided by the mass per unit length).
+
+    ``EA > 0`` turns on the stretching nonlinearity (Kirchhoff 1883, Carrier 1945): the tension is no longer a
+    constant but rises with the string's own elongation.  ``headroom`` (> 1) coarsens the grid so the scheme stays
+    stable when the tension rises by up to that factor."""
     if sr is None and N is None:
         raise ValueError("give sr or N")
     if sr is None:
         sr = exact_rate(string, N)
     if N is None:
-        N = grid_for(string, sr)
+        N = grid_for(string.with_(T=string.T * headroom), sr)
     k, h = 1.0 / sr, string.L / N
     x = np.linspace(0.0, string.L, N + 1)
     u = np.array(u0(x) if callable(u0) else u0, dtype=np.float64)
@@ -257,6 +288,10 @@ def simulate(string: String, u0, seconds: float, sr: float | None = None, N: int
         raise ValueError(f"unstable: Courant number {np.sqrt(lam2):.4f} > 1")
     s0k = string.sigma0 * k
     s1 = 2 * string.sigma1 * k / h ** 2
+    gam = stretch_gamma(string, EA) / h if EA else 0.0
+    f0 = 1.0 + gam * float(np.sum(np.diff(u) ** 2))
+    if lam2 * f0 > 1 + 1e-9:
+        raise ValueError(f"unstable: the stretched string needs headroom of at least {f0:.3f}")
     # the step before the start, for zero initial velocity (second order): u(-k) = u(+k)
     up = u.copy()
     dxx = np.zeros_like(u)
@@ -265,12 +300,31 @@ def simulate(string: String, u0, seconds: float, sr: float | None = None, N: int
     if mu2:
         ext = np.concatenate([[-u[1]], u, [-u[-2]]])
         d4[1:-1] = ext[4:] - 4 * ext[3:-1] + 6 * ext[2:-2] - 4 * ext[1:-3] + ext[:-4]
-    up[1:-1] = u[1:-1] + 0.5 * (lam2 * dxx[1:-1] - mu2 * d4[1:-1])
+    up[1:-1] = u[1:-1] + 0.5 * (f0 * lam2 * dxx[1:-1] - mu2 * d4[1:-1])
     steps = int(round(seconds * sr))
     frames = (steps + snapshot_every - 1) // snapshot_every if snapshot_every else 0
     snaps = np.zeros((max(frames, 1), N + 1))
-    force, out = np.zeros(steps), np.zeros(steps)
+    force, out, tens = np.zeros(steps), np.zeros(steps), np.ones(steps)
     pick = int(np.clip(round(pickup * N), 1, N - 1))
-    (_loop_fast if fast else _loop_numpy)(u, up, steps, lam2, mu2, s0k, s1, snapshot_every, pick, snaps, force, out)
+    ld, dk, n_on = -1, 0.0, 0
+    if damper is not None:
+        where, rate, t_on = damper
+        ld = int(np.clip(round(where * N), 1, N - 1))
+        dk = rate / h * k
+        n_on = int(round(t_on * sr))
+    (_loop_fast if fast else _loop_numpy)(u, up, steps, lam2, mu2, s0k, s1, snapshot_every, pick, snaps, force, out,
+                                          ld, dk, n_on, gam, tens)
     t_snap = np.arange(frames) * snapshot_every / sr if snapshot_every else np.zeros(0)
-    return Run(string, sr, N, x, t_snap, snaps[:frames], force * string.T / h, out, float(np.sqrt(lam2)))
+    return Run(string, sr, N, x, t_snap, snaps[:frames], force * string.T / h, out, float(np.sqrt(lam2)), tens)
+
+
+def energy(run_snaps: np.ndarray, string: String, sr: float) -> np.ndarray:
+    """The discrete energy of an ideal string between consecutive stored steps (store every step):
+    kinetic ``mu/2 (du/dt)^2`` plus potential ``T/2 (du/dx at n+1)(du/dx at n)``, summed over the grid.  The explicit
+    scheme conserves this quantity exactly (Bilbao, sec. 6.2.6), which is why it cannot blow up below its limit."""
+    N = run_snaps.shape[1] - 1
+    h, k = string.L / N, 1.0 / sr
+    a, b = run_snaps[:-1], run_snaps[1:]
+    kin = 0.5 * string.mu * h * np.sum(((b - a) / k) ** 2, axis=1)
+    pot = 0.5 * string.T / h * np.sum(np.diff(b, axis=1) * np.diff(a, axis=1), axis=1)
+    return kin + pot

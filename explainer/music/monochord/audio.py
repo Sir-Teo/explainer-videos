@@ -21,6 +21,10 @@ from pathlib import Path
 import numpy as np
 
 SR = 48_000  # the series' sample rate
+# Levels are set by the loudest 400 ms of a clip (Clip.at_level), in LUFS.  The narration is mastered to -16 LUFS
+# integrated, whose loudest moments read about -12.
+EXAMPLE_LEVEL = -15.0  # an example in a listening window
+QUIET_LEVEL = -21.0    # an example meant to sit back, or to run under narration
 
 
 @dataclass
@@ -126,7 +130,7 @@ class Clip:
             return self
         return self.gain(target - now)
 
-    def at_level(self, target: float = -15.0) -> "Clip":
+    def at_level(self, target: float = EXAMPLE_LEVEL) -> "Clip":
         """The clip scaled so that its loudest 400 ms reads ``target`` LUFS (BS.1770 momentary loudness).  This is
         how the series sets the level of an example: a note that dies away and a sustained tone then sound about
         equally loud, which integrated loudness (an average over the whole clip) does not give."""

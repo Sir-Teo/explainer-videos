@@ -7,8 +7,8 @@ import numpy as np
 import pytest
 
 from explainer.music.monochord.dsp import f0_autocorr, partials
-from explainer.music.monochord.physics import (String, dalembert, modal, modal_bridge_force, pluck_modes,
-                                               pluck_shape, simulate, sine_coefficients)
+from explainer.music.monochord.physics import (String, dalembert, energy, modal, modal_bridge_force, pluck_modes,
+                                               pluck_shape, simulate, sine_coefficients, stretch_gamma)
 
 
 def test_ideal_scheme_is_dalembert_exactly():
@@ -104,3 +104,44 @@ def test_numpy_and_compiled_loops_agree():
     a = simulate(s, u0, 0.01, sr=48_000, fast=True)
     b = simulate(s, u0, 0.01, sr=48_000, fast=False)
     assert np.abs(a.pickup - b.pickup).max() < 1e-15
+
+
+def test_ideal_scheme_conserves_energy():
+    s = String.tuned(110.0)
+    run = simulate(s, lambda x: pluck_shape(x, s.L, 0.2, 1e-3), 0.05, N=200, snapshot_every=1)
+    e = energy(run.snaps, s, run.sr)
+    assert np.abs(e / e[0] - 1).max() < 1e-12
+    # and that energy is the work done in pulling the string aside: T/2 integral (du/dx)^2
+    assert e[0] == pytest.approx(0.5 * s.T * 1e-6 / (0.2 * 0.8 * s.L), rel=2e-2)
+
+
+def test_finger_on_a_node_leaves_only_the_modes_with_a_node_there():
+    s = String.tuned(130.81, L=1.0, mu=0.00154, sigma0=0.55, sigma1=4e-4)
+    u0 = lambda x: pluck_shape(x, s.L, 0.137, 1e-3)  # noqa: E731
+    run = simulate(s, u0, 1.0, sr=48_000, damper=(0.5, 6.0, 0.2))
+    before = partials(run.pickup[: int(0.2 * run.sr)], run.sr, s.f1, 6)
+    after = partials(run.pickup[int(0.6 * run.sr):], run.sr, s.f1, 6)
+    for n in (1, 3, 5):   # an antinode under the finger: gone
+        assert before[n - 1]["db"] - after[n - 1]["db"] > 40, n
+    for n in (2, 4, 6):   # a node under the finger: they do not feel it
+        assert before[n - 1]["db"] - after[n - 1]["db"] < 6, n
+
+
+def test_stretching_raises_the_pitch_as_predicted():
+    """Kirchhoff-Carrier: a hard pluck sounds sharp.  The square root of the mean tension is the first estimate of
+    by how much; the true shift is larger, because the tension is highest just when the string is most bent (for a
+    single mode, Duffing's 3/8 against the average's 1/4: a factor of 1.5)."""
+    s = String.tuned(130.81, L=1.0, mu=0.00154)
+    EA = 2.0e11 * np.pi * 0.00025 ** 2
+    soft = simulate(s, lambda x: pluck_shape(x, s.L, 0.18, 1e-4), 0.3, sr=48_000, EA=EA, headroom=1.3)
+    hard = simulate(s, lambda x: pluck_shape(x, s.L, 0.18, 1e-2), 0.3, sr=48_000, EA=EA, headroom=1.3, N=soft.N)
+    f_soft = f0_autocorr(soft.pickup, soft.sr, 60, 400)
+    f_hard = f0_autocorr(hard.pickup, hard.sr, 60, 400)
+    assert f_soft == pytest.approx(s.f1, rel=1e-3)
+    predicted = np.sqrt(hard.tension.mean())
+    shift, estimate = f_hard / f_soft - 1, predicted - 1
+    assert estimate < shift < 1.5 * estimate
+    assert predicted > 1.02            # about half a semitone for a centimetre on a metre of steel wire
+    # the static stretch of the pluck itself, in closed form
+    g = stretch_gamma(s, EA)
+    assert hard.tension[0] == pytest.approx(1 + g * 1e-4 / (0.18 * 0.82 * s.L), rel=1e-3)

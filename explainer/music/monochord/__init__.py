@@ -8,9 +8,11 @@ imports manim: the labs and the tests use it directly, and the films only draw w
   derived on screen in Part 57; the films need it from Part 1 to keep their own levels honest);
 * :mod:`.pitch`: frequencies, ratios, cents and note names;
 * :mod:`.dsp`: spectra, partial tracking, a fundamental-frequency estimate (Part 3 derives them);
-* :mod:`.physics.string`: the string of Part 1 by finite differences and by modes.
+* :mod:`.physics.string`: the string of Part 1 by finite differences and by modes;
+* :mod:`.instruments`: the plucked string as sound;
+* :mod:`.tune`: the Tune, as data.
 
 Every layer is checked against something that does not share its code (``tests/music/``).
 """
 
-from .audio import SR, Clip, ClipStore, concat, mix, silence  # noqa: F401
+from .audio import EXAMPLE_LEVEL, QUIET_LEVEL, SR, Clip, ClipStore, concat, mix, silence  # noqa: F401

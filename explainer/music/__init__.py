@@ -94,7 +94,7 @@ def act_of(part: int) -> int:
     raise ValueError(part)
 
 
-def series_map(current: int | None = None, done: int = 0, font_size=15, width=13.5, height=7.3) -> VGroup:
+def series_map(current: int | None = None, done: int = 0, font_size=17, width=13.6, height=7.3) -> VGroup:
     """The twelve acts in two rows of six; each part a line.  Parts up to ``done`` are white, ``current`` is gold and
     boxed, the rest are dim.  ``.part[p]`` is the line of part p; ``.cols[i]`` act i+1."""
     cols = VGroup()
@@ -104,13 +104,13 @@ def series_map(current: int | None = None, done: int = 0, font_size=15, width=13
         for p in range(a, b + 1):
             color = MC.TUNE if p == current else (WHITE if p <= done else GREY_C)
             rows.add(label(rf"{p}.\ {SHORT[p]}", font_size=font_size, color=color))
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        if head.width > 2.2:
-            head.width = 2.2
+        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.11)
+        if head.width > 2.3:
+            head.width = 2.3
         col = VGroup(head, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
         col.head, col.rows = head, rows
         cols.add(col)
-    cols.arrange_in_grid(rows=2, cols=6, buff=(0.3, 0.4), cell_alignment=UL)
+    cols.arrange_in_grid(rows=2, cols=6, buff=(0.22, 0.4), cell_alignment=UL)
     if cols.width > width:
         cols.width = width
     if cols.height > height:

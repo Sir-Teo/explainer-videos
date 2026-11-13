@@ -16,12 +16,13 @@ import numpy as np
 from ..audio import SR, Clip, mix
 from ..physics.string import String, pluck_modes
 
-# The series' monochord: a metre-long steel string over a box, tuned to C3 when open.  The losses are chosen so the
-# fundamental rings for several seconds and a 3 kHz partial for about a third of one (typical of a wire string on a
-# wooden instrument: Fletcher & Rossing, *The Physics of Musical Instruments*, sec. 2.11-2.13); the stiffness is that
-# of a 0.5 mm steel wire.
+# The series' monochord: a metre of 0.5 mm steel wire over a box, tuned to C3 when open (a tension of about 105 N,
+# the weight of eleven kilograms).  The stiffness is that wire's (E = 200 GPa).  The losses are chosen so that the
+# fundamental takes about seven seconds to fall by 60 dB and a partial at 3 kHz under half a second, which is how
+# a wire string on a wooden box behaves: its brightness fades long before its pitch does (Fletcher & Rossing, *The
+# Physics of Musical Instruments*, sec. 2.11-2.13, 5.5).
 C3 = 130.8127826502993
-MONOCHORD_STRING = String.tuned(C3, L=1.0, mu=0.00154, kappa=0.63, sigma0=0.55, sigma1=4.0e-4)
+MONOCHORD_STRING = String.tuned(C3, L=1.0, mu=0.00154, kappa=0.63, sigma0=0.9, sigma1=3.0e-3)
 
 F_MAX = 18_000.0
 
@@ -72,6 +73,30 @@ def plucked(f1: float | None = None, seconds: float = 3.0, beta: float = 0.18, s
         k = int(round(release * sr))
         if k < n_samp:
             y[k:] *= np.exp(-(t[k:] - t[k]) / 0.035)
+    peak = np.abs(y).max()
+    return (y / peak if peak > 0 else y).astype(np.float32)
+
+
+def released(shape, seconds: float = 3.0, string: String | None = None, sr: int = SR, f_max: float = F_MAX) -> np.ndarray:
+    """The bridge force of a string let go from rest in any shape: ``shape`` is a function on [0, 1] (the fraction
+    of the length) that vanishes at both ends.  Its sine coefficients are found numerically; the rest is as for a
+    pluck.  Peak 1."""
+    from ..physics.string import sine_coefficients
+
+    s = string or MONOCHORD_STRING
+    n_max = 1
+    while s.mode_freq(n_max + 1) < f_max and n_max < 400:
+        n_max += 1
+    x = np.linspace(0.0, 1.0, 4001)
+    a = sine_coefficients(np.asarray(shape(x), dtype=np.float64) * np.sin(np.pi * x) ** 0, n_max)
+    n = np.arange(1, n_max + 1, dtype=np.float64)
+    force = a * n
+    t = np.arange(int(round(seconds * sr))) / sr
+    y = np.zeros(len(t))
+    w, dec = 2 * np.pi * s.mode_freq(n), s.mode_decay(n)
+    for i in range(n_max):
+        if abs(force[i]) > 1e-9 * np.abs(force).max():
+            y += force[i] * np.exp(-dec[i] * t) * np.cos(w[i] * t)
     peak = np.abs(y).max()
     return (y / peak if peak > 0 else y).astype(np.float32)
 

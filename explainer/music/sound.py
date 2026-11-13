@@ -31,12 +31,9 @@ import os
 from contextlib import contextmanager
 from pathlib import Path
 
-from explainer.music.monochord.audio import Clip
+from explainer.music.monochord.audio import EXAMPLE_LEVEL, QUIET_LEVEL, Clip  # noqa: F401
 from explainer.voiceover import VoiceoverScene
 
-EXAMPLE_LEVEL = -15.0  # LUFS, loudest 400 ms: the level an example is authored at (Clip.at_level); the narration
-#                        is mastered to -16 LUFS integrated, whose loudest moments read about -12
-QUIET_LEVEL = -21.0    # an example meant to sit back, or to run under narration
 PEAK_CEILING_DB = -1.5  # dBTP: nothing in a master may exceed it (checked, never limited)
 
 

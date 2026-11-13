@@ -57,28 +57,31 @@ def partials(y: np.ndarray, sr: float, f0: float, count: int = 12, search: float
     return out
 
 
-def f0_autocorr(y: np.ndarray, sr: float, fmin: float = 40.0, fmax: float = 2000.0) -> float:
-    """Fundamental frequency from the highest peak of the autocorrelation between the lags of ``fmax`` and ``fmin``,
-    refined by a parabola.  It knows nothing about strings: it only asks after how long the signal repeats."""
+def f0_autocorr(y: np.ndarray, sr: float, fmin: float = 40.0, fmax: float = 2000.0, up: int = 8) -> float:
+    """Fundamental frequency from the autocorrelation: the first lag between those of ``fmax`` and ``fmin`` at which
+    the signal lines up with itself again.  It knows nothing about strings: it only asks after how long the signal
+    repeats.  The autocorrelation is evaluated ``up`` times finer than the sampling (band-limited interpolation) and
+    the peak refined by a parabola, so the answer is good to a small fraction of a cent."""
     y = np.asarray(y, dtype=np.float64)
     y = y - y.mean()
     n = len(y)
     nfft = int(2 ** np.ceil(np.log2(2 * n)))
     spec = np.fft.rfft(y, nfft)
-    ac = np.fft.irfft(spec * np.conj(spec))[:n]
-    ac = ac / np.maximum(n - np.arange(n), 1)  # unbiased: each lag averaged over the samples that overlap
-    lo, hi = max(1, int(sr / fmax)), min(int(sr / fmin), n - 2)
+    ac = np.fft.irfft(spec * np.conj(spec), up * nfft)[: up * n] * up
+    lag = np.arange(up * n) / up
+    ac = ac / np.maximum(n - lag, 1.0)  # unbiased: each lag averaged over the samples that overlap
+    lo, hi = max(1, int(up * sr / fmax)), min(int(up * sr / fmin), up * n - 2)
     seg = ac[lo:hi + 1]
     # a periodic signal repeats after one period, and after two, and three: take the first lag that is a local
     # maximum nearly as high as the highest
     top = seg.max()
     peaks = np.flatnonzero((seg[1:-1] >= seg[:-2]) & (seg[1:-1] > seg[2:]) & (seg[1:-1] >= 0.9 * top)) + 1
     k = lo + (int(peaks[0]) if peaks.size else int(np.argmax(seg)))
-    k = min(max(k, 1), n - 2)
+    k = min(max(k, 1), up * n - 2)
     a, b, c = ac[k - 1], ac[k], ac[k + 1]
     d = a - 2 * b + c
     off = 0.0 if d == 0 else 0.5 * (a - c) / d
-    return float(sr / (k + off))
+    return float(up * sr / (k + off))
 
 
 def stft_db(y: np.ndarray, sr: float, n_fft: int = 2048, hop: int = 256, floor_db: float = -90.0):
