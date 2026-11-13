@@ -1,8 +1,9 @@
 # Psychology, Built (心理学，从零搭建)
 
-**Status: plan of record, draft 1 (2026-11-13).** Nothing is built yet. This file is the plan; the standard every
-part meets, the devices and all sixty-two parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md). The open
-decisions are listed at the end of this file and in the syllabus (§8).
+**Status (2026-11-13): the plan is accepted, the shared code is in place, and Part 1 is built** (English; the
+Chinese edition and the second pilot, Part 12, are next). This file is the plan; the standard every part meets, the
+devices and all sixty-two parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with the progress table in
+its §9.
 
 This is a sixty-two-part course in psychology on video: **an undergraduate degree, the graduate methods sequence,
 the practice industry runs on, and a research tier**. It covers the brain and the senses, learning, memory, language,
@@ -264,18 +265,28 @@ own, and the syllabus lists them):
 * **Bilingual.** English and Chinese, as the other series: `narration_zh.json`, `psychology_text_zh.json`,
   `PSYCHOLOGY_ZH_GUIDE.md`.
 
-## Shared code (planned)
+## Shared code
 
-`explainer/psychology/` will hold Psyche (`psyche/`), the Pool, the Battery, the Ledger, the Archive, the
-Homunculus map, chapter cards with the timeline and levels strips, and the instruments in `viz.py`. It reuses
-`explainer.stats.kit` (mixed models, shrinkage and meta-analysis, factor analysis and MDS, IRT, the probabilistic
-programming language for hierarchical fits) and `explainer.ai.autodiff`, and the language model of *AI, Built* for
-reading-time predictions. The course material follows `videos/coursekit` (a course entry, a lab and an interactive
-per part); for this series the interactive is the part's experiment on the reader.
+`explainer/psychology/` holds what every part shares:
 
-## Decisions to confirm
+| Module | What it is |
+|---|---|
+| `psyche/` | Psyche, the model subject: one module per faculty. So far `chronometry` (serial stages, Donders' subtraction, the insertion test, additive factors, Hick's law, the ex-Gaussian) |
+| `pool.py` | the Pool: 100,000 simulated people with planted truths, always tagged *simulated* on screen |
+| `battery.py` | the Battery: the tasks, and one `run(task, model)` interface that Psyche, the Pool and the browser share |
+| `ledger.py` | the Replication Ledger: one validated row per finding, with sources and the date checked |
+| `archive/` | the Archive: historical and published numbers, each with its source in `archive/SOURCES.md` |
+| `__init__.py`, `viz.py`, `style.py` | chapter cards with the timeline and levels strips, the series map, the Homunculus map, the demo stage, stage bars, ledger cards and boards, the palette |
 
-These are my defaults; each is cheap to change now and expensive later. Details in the syllabus, §8.
+Tests are in `tests/psychology/`. The code reuses `explainer.stats.kit` (mixed models, shrinkage and meta-analysis,
+factor analysis and MDS, IRT, the probabilistic programming language for hierarchical fits) and
+`explainer.ai.autodiff`, and will use the language model of *AI, Built* for reading-time predictions. The course
+material follows `videos/coursekit` (a course entry, a lab and an interactive per part); for this series the
+interactive is the part's experiment on the reader.
+
+## Decisions taken
+
+The defaults below were accepted on 2026-11-13 and the series is being built to them. Details in the syllabus, §8.
 
 1. **Scope: sixty-two parts, about 52 hours.** The alternative is a first season of Parts 1–43 (the degree, about
    36 hours) with Acts XI–XIII committed to later.

@@ -32,7 +32,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 VIDEOS = ROOT / "videos"
-SERIES = ("ai", "stats", "cs", "philosophy", "analysis")
+SERIES = ("ai", "stats", "cs", "philosophy", "analysis", "psychology")
+PREFIX = {"psychology": "psych"}  # a series whose videos are not named <series>N: videos/psychology/psych1
 TRACK_TIERS = {"U": "U", "M": "UMI", "D": "UMDI", "I": "UI"}  # the tiers each track watches
 TOLERANT = False  # tools/check_course.py sets this: skip a table module that does not import (someone is writing it)
 _NUMBERED = re.compile(r"^(\d+)\.\s+(.*)$")
@@ -91,13 +92,18 @@ class Course:
     @functools.cached_property
     def n_parts(self) -> int:
         n = 0
-        while (VIDEOS / self.series / f"{self.series}{n + 1}" / "manifest.py").exists():
+        while (VIDEOS / self.series / f"{self.prefix}{n + 1}" / "manifest.py").exists():
             n += 1
         return n
 
+    @property
+    def prefix(self) -> str:
+        """The name of a part's folder without its number: ``stats`` in ``stats12``, ``psych`` in ``psych12``."""
+        return PREFIX.get(self.series, self.series)
+
     def manifest(self, n: int) -> tuple:
         """(film title, [(module, class, chapter title)]) of Part ``n``."""
-        m = runpy.run_path(str(VIDEOS / self.series / f"{self.series}{n}" / "manifest.py"))
+        m = runpy.run_path(str(VIDEOS / self.series / f"{self.prefix}{n}" / "manifest.py"))
         return m["TITLE"], [tuple(s) for s in m["SCENES"]]
 
     def title(self, n: int) -> str:

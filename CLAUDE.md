@@ -47,8 +47,13 @@ Manim videos with local neural narration. See README.md for layout and build com
 - *Computer Science, Built* (`videos/cs/`): sixty-one parts in eleven acts (`cs1` … `cs61`: a CS degree plus industry practice in Acts I–X, a research tier in Act XI and a *Frontier* chapter in every part), Parts 1–61 built or in progress; the series plan
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
-- *Psychology, Built* (`videos/psychology/`): planned, sixty-two parts in thirteen acts (`psych1` … `psych62`: a degree,
-  the graduate methods sequence, industry practice and a research tier); nothing is built yet. The series plan is
-  `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the open decisions are
-  `videos/psychology/SYLLABUS.md`. Its model subject (Psyche), the Pool, the Battery and the Replication Ledger will
-  live in `explainer/psychology/`.
+- *Psychology, Built* (`videos/psychology/`): sixty-two parts planned in thirteen acts (`psych1` … `psych62`: a degree,
+  the graduate methods sequence, industry practice and a research tier); Part 1 is built. The folders are `psychN` while
+  the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
+  plan is `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the progress table are
+  `videos/psychology/SYLLABUS.md`. Shared code in `explainer/psychology/` (tested in `tests/psychology/`): the model
+  subject Psyche (`psyche/`, one module per faculty; so far `chronometry`), the Pool (`pool.py`, 100,000 simulated
+  people, always tagged simulated), the Battery (`battery.py`, tasks behind one `run`), the Replication Ledger
+  (`ledger.py`; every finding a part presents gets a row with sources and the date checked), the Archive (`archive/`,
+  every dataset registered in `archive/SOURCES.md`), and the cards, maps and instruments in `__init__.py` and `viz.py`.
+  A part's interactive is an experiment the reader takes part in; it stores and sends nothing.

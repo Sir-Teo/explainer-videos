@@ -371,40 +371,48 @@ you:* is the demonstration.
 
 ## Act I · Asking a Mind a Question
 
-### Part 1 · Kant's Wager (~50)
+### Part 1 · Kant's Wager (~46)
 *Question:* can a mind be measured?
-*Story:* Kant gives three reasons why psychology can never be a science. Fechner, Helmholtz and Donders answer the
-first by timing and scaling the mind. A century of schools argues over what the measurements are of. The series
-takes the modern answer: explain a capacity by building something that has it.
-1. Hook: Kant, 1786. Three objections on screen. The series will keep score against them.
-2. On you: simple reaction time, then a choice. Your two numbers differ. Why?
-3. Helmholtz times the nerve impulse (1850): the apparatus, the arithmetic, about 27 metres a second in the frog.
-   Thought takes time, so it can be measured.
-4. Donders' subtraction method (1868): simple, go/no-go and choice reaction times; stages as additive durations.
-   The assumption of pure insertion, and Sternberg's additive-factors repair (1969).
+*Story:* Kant gives three reasons why psychology can never be a science. Helmholtz, Donders, Fechner and Ebbinghaus
+answer the first by timing and scaling the mind. A century of schools argues over what the measurements are of. The
+series takes the modern answer: explain a capacity by building something that has it.
+0. Hook: Kant, 1786. Three objections on screen. The series will keep score against them.
+1. On you: simple reaction time, then a choice. Your two numbers differ. Why?
+2. Helmholtz times the nerve impulse (1850): the apparatus, the arithmetic, 25 to 43 metres a second in the frog
+   from his own distances and delays. Thought takes time, so it can be measured.
+3. Donders' subtraction method (1868): simple, go/no-go and choice reaction times; stages as additive durations.
+   Psyche's first module runs his three tasks.
+4. What subtraction assumes: pure insertion. Two worlds with the same three means; the variances tell them apart.
+   Sternberg's additive-factors repair (1969).
 5. Fechner's morning (1850) and the *Elements* (1860): measuring sensation in just-noticeable steps (paid off in
    Part 11).
-6. Wundt's laboratory (1879), Ebbinghaus (1885), James's *Principles* (1890): what an experiment on the mind
-   looked like, and why introspection stalled (the imageless-thought dispute).
+6. Wundt's laboratory (1879), Ebbinghaus (1885, his own savings table), James's *Principles* (1890): what an
+   experiment on the mind looked like, and why introspection stalled (the imageless-thought dispute).
 7. Behaviourism: Watson 1913, Skinner. What banning the mind bought, and what it could not explain (Lashley on
    serial order, 1951; Tolman's maps).
 8. The cognitive revolution: 1956 (Miller, Newell and Simon, Chomsky), the computer as a licence to talk about
-   inner states.
+   inner states; Hick's law as a stage model's prediction.
 9. Marr's three levels (1982) with one worked example, the cash register, then reaction time itself.
-10. The brain arrives (Part 7), and so does doubt (Part 4). The map of the field and of the series.
-11. The Homunculus: why "a part of you decides" explains nothing, and the rule for discharging it.
-12. The devices: Psyche, the Pool, the Battery, the Ledger. The first Ledger row is Donders'.
+10. The Homunculus: why "a part of you decides" explains nothing, and the rule for discharging it. The map of
+    twenty faculties.
+11. The devices: Psyche, the Pool, the Battery, the Archive, and the map of the series.
+12. The Ledger opens: the anatomy of a row, the seven verdicts, the first five rows.
+13. In practice: reaction time on the road, on a screen, in the clinic, on the track.
+14. Frontier: what is a reaction time measuring? Stages against cascades; the group mean that describes no one;
+    whether the Victorians were faster; what a browser's clock can be trusted with.
 
-*Psyche:* `chronometry`: a serial-stage simulator; Donders' three tasks reproduced; additive factors shown as
-parallel lines; a fit to an open reaction-time dataset.
-*On you:* simple and choice reaction time; the published distributions revealed.
-*Ledger:* Donders' subtraction (holds, with the insertion caveat); Hick's law as a preview.
-*In practice:* reaction time is still the workhorse measure of UX latency budgets, driver testing and cognitive
-screening.
+*Psyche:* `chronometry`: a serial-stage simulator; Donders' three tasks reproduced; a rival with the same means
+and different variances; additive factors shown as parallel lines; Hick's law; the ex-Gaussian fit.
+*On you:* simple and choice reaction time; the published norm revealed (Woods et al. 2015, 1,469 adults).
+*Ledger:* nerve conduction speed (replicated); the ordering of Donders' three tasks (replicated); his differences
+as pure stages (contested); Hick's law, a preview (replicated); "the Victorians were faster" (contested).
+*In practice:* reaction time is still the workhorse measure of UX latency budgets, road design, sports timing and
+cognitive screening.
 *Frontier:* is there a single "mental speed"? Stage models against cascade and accumulator models; what
 millisecond timing can and cannot be trusted to in a browser.
 *Reading:* Kant, *Metaphysical Foundations of Natural Science*, Preface; Boring, *A History of Experimental
-Psychology*; Donders 1868/1969; Sternberg 1969; Marr 1982 ch. 1; Miller 2003; Danziger 1990; Dennett 1978.
+Psychology*; Donders 1868/1969; Sternberg 1969; Marr 1982 ch. 1; Miller 2003; Danziger 1990; Dennett 1978;
+Roelofs 2018.
 
 ### Part 2 · The Experiment (~50)
 *Question:* how do you ask a mind a question without telling it the answer?
@@ -2948,9 +2956,9 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
    gates; the course entry, lab and interactive (`videos/coursekit/AUTHORING.md`); the Chinese edition and its
    gates; commit and push.
 
-## 8. Decisions to confirm, and open risks
+## 8. Decisions, and open risks
 
-**Decisions** (my default first):
+**Decisions** (the default, listed first in each, was accepted on 2026-11-13):
 
 1. **Sixty-two parts**, or a first season of 1–43 with the rest committed later. The acts are separable: XI, XII
    and XIII each stand on the degree and not on each other.
@@ -2989,4 +2997,6 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 
 | Part | State | Length |
 |---|---|---|
-| 0 | not started | |
+| 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. Still to do: the Chinese guide and text table, the Ledger gate tool, the shared browser task kit (Part 1's interactive carries its own trial loop) | |
+| 1 | built in English: 14 chapters, hook and outro; course entry, lab and interactive checked. Chinese edition not started. Open checks in its README | 46 min |
+| 12 | next: the second pilot | |
