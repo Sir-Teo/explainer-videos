@@ -20,7 +20,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "PFUNGST_1907", "PEIRCE_JASTROW_1884", "ROSENTHAL_FODE_1963", "RAUDENBUSH_1984", "DE_QUIDT_2018",
            "LIT_2011", "MITCHELL_2021", "STEVENS_1946", "FORER_1949", "JOHANSSON_2005", "CREDE_2017", "HEDGE_2018",
            "FLAKE_FRIED_2020", "BEM_2011", "COHEN_1962", "SIMMONS_2011", "OSC_2015", "MANY_LABS", "CAMERER_2018",
-           "SCHEEL_2021", "LEVELT_2012", "DREBER_2015", "PROTZKO_2023"]
+           "SCHEEL_2021", "LEVELT_2012", "DREBER_2015", "PROTZKO_2023", "HODGKIN_HUXLEY_1952", "COLE_CURTIS_1939",
+           "ADRIAN_1926", "GOLGI_CAJAL_1906", "GIDON_2020"]
 
 
 @dataclass(frozen=True)
@@ -598,8 +599,96 @@ PROTZKO_2023 = Dataset(
           "authors": "all authors agreed to the retraction, for the incorrect statements about preregistration"},
 )
 
+# ---------------------------------------------------------------------------
+# Part 5
+# ---------------------------------------------------------------------------
+HODGKIN_HUXLEY_1952 = Dataset(
+    key="hodgkin_huxley_1952",
+    title="Hodgkin and Huxley's model of the squid giant axon, and its computed action potential",
+    source="A. L. Hodgkin and A. F. Huxley, A quantitative description of membrane current and its application to "
+           "conduction and excitation in nerve, Journal of Physiology 117 (1952) 500-544; A. L. Hodgkin and "
+           "A. F. Huxley, Action potentials recorded from inside a nerve fibre, Nature 144 (1939) 710-712; "
+           "A. F. Huxley, From overshoot to voltage clamp, Trends in Neurosciences 25 (2002) 553-558",
+    cite=r"Hodgkin \& Huxley (1952)",
+    checked="the computed speed (18.8 m/s at 18.5 C) from a textbook figure adapted from the 1952 paper (Sterratt "
+            "et al., Principles of Computational Modelling in Neuroscience, ch. 3) and the 1939 voltages from "
+            "Huxley's retrospective, both through a web search, 2026-11-13; the conductances and rate functions "
+            "are the standard ones, as every text prints them; the measured speed (21.2 m/s), the axon's radius "
+            "and its axoplasm resistivity are from memory of the paper, which was not read",
+    licence="facts and published equations; no data file is redistributed",
+    data={
+        "g_na": 120.0, "g_k": 36.0, "g_l": 0.3, "c": 1.0,  # mS/cm^2 and uF/cm^2
+        "e_na_rel": 115.0, "e_k_rel": -12.0, "e_l_rel": 10.6,  # mV from rest, depolarization positive
+        "temp_c": 6.3,  # the temperature the rate constants are given for
+        "velocity_computed": 18.8, "velocity_temp_c": 18.5,  # m/s, computed by hand
+        "velocity_observed": 21.2,  # m/s (unverified here)
+        "radius_um": 238.0, "resistivity_ohm_cm": 35.4,  # the axon of the propagated action potential (unverified)
+        "rest_1939_mv": -45.0, "peak_1939_mv": 40.0,  # as Huxley recalls the first intracellular records
+        "nobel": 1963,
+    },
+)
+
+COLE_CURTIS_1939 = Dataset(
+    key="cole_curtis_1939",
+    title="The membrane's conductance rises during the action potential; its capacitance does not",
+    source="K. S. Cole and H. J. Curtis, Electric impedance of the squid giant axon during activity, Journal of "
+           "General Physiology 22 (1939) 649-670; the giant axon: J. Z. Young (1936)",
+    cite=r"Cole \& Curtis (1939)",
+    checked="from the Marine Biological Laboratory's history pages and Cole's National Academy memoir, through a "
+            "web search, 2026-11-13; the paper was not read",
+    licence="facts only",
+    data={"finding": "an increase in membrane conductance without an accompanying change in capacitance",
+          "summer": 1938, "giant_axon": 1936},
+)
+
+ADRIAN_1926 = Dataset(
+    key="adrian_1926",
+    title="One sensory fibre: impulses of constant size, more frequent with more stretch",
+    source="E. D. Adrian and Y. Zotterman, The impulses produced by sensory nerve-endings. Part II. The response "
+           "of a single end-organ, Journal of Physiology 61 (1926) 151-171",
+    cite=r"Adrian \& Zotterman (1926)",
+    checked="from secondary accounts through a web search, 2026-11-13: the preparation (the nerve to a frog's "
+            "sternocutaneous muscle) and the finding; the paper and its records were not read, so no rates are "
+            "quoted",
+    licence="facts only",
+    data={"preparation": "the nerve to the sternocutaneous muscle of a frog",
+          "finding": "discrete impulses of similar amplitude and duration; only their frequency changes with "
+                     "stretch"},
+)
+
+GOLGI_CAJAL_1906 = Dataset(
+    key="golgi_cajal_1906",
+    title="One net or many cells: Golgi and Cajal",
+    source="The Nobel Prize in Physiology or Medicine 1906 (C. Golgi and S. Ramon y Cajal); nobelprize.org, How "
+           "Golgi shared the 1906 Nobel Prize in Physiology or Medicine with Cajal",
+    cite=r"Nobel Prize in Physiology or Medicine (1906)",
+    checked="from the Nobel Foundation's article and encyclopedic accounts through a web search, 2026-11-13",
+    licence="facts only",
+    data={"year": 1906, "golgi": "the reticular theory: one continuous network",
+          "cajal": "the neuron doctrine: separate cells", "stain": "Cajal's evidence came from Golgi's own stain",
+          "settled": "by electron microscopy, in the 1950s"},
+)
+
+GIDON_2020 = Dataset(
+    key="gidon_2020",
+    title="Graded dendritic spikes in human cortical neurons",
+    source="A. Gidon, T. A. Zolnik, P. Fidzinski, F. Bolduan, A. Papoutsi, P. Poirazi, M. Holtkamp, I. Vida and "
+           "M. E. Larkum, Dendritic action potentials and computation in human layer 2/3 cortical neurons, "
+           "Science 367 (2020) 83-87",
+    cite=r"Gidon et al.\ (2020)",
+    checked="from the authors' laboratory pages, the deposited manuscript's record and press accounts through a "
+            "web search, 2026-11-13; the article was not read",
+    licence="facts only",
+    data={"tissue": "slices of human cortex removed in surgery for epilepsy or tumours",
+          "finding": "calcium-mediated dendritic spikes whose amplitude is largest for inputs at threshold and "
+                     "smaller for stronger ones",
+          "claim": "in the authors' models, one such dendrite computes exclusive-or",
+          "limit": "ex vivo tissue; whether other species have the same spikes is not known"},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
                           FLAKE_FRIED_2020, BEM_2011, COHEN_1962, SIMMONS_2011, OSC_2015, MANY_LABS, CAMERER_2018,
-                          SCHEEL_2021, LEVELT_2012, DREBER_2015, PROTZKO_2023)}
+                          SCHEEL_2021, LEVELT_2012, DREBER_2015, PROTZKO_2023, HODGKIN_HUXLEY_1952,
+                          COLE_CURTIS_1939, ADRIAN_1926, GOLGI_CAJAL_1906, GIDON_2020)}

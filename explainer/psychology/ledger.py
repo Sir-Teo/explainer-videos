@@ -559,6 +559,35 @@ add(Finding(
     data=("MANY_LABS",),
 ))
 
+# ---------------------------------------------------------------------------
+# Part 5
+# ---------------------------------------------------------------------------
+add(Finding(
+    key="hodgkin_huxley", part=5, title=r"The Hodgkin--Huxley model",
+    claim="Voltage-dependent sodium and potassium conductances, measured under voltage clamp, account for the "
+          "action potential and its speed.",
+    original=Study("Hodgkin and Huxley", 1952, n="squid giant axons",
+                   design="currents measured with the voltage held fixed, fitted by four equations; the action "
+                          "potential then computed from them",
+                   effect=18.8, unit="m/s",
+                   found="a computed conduction speed of 18.8 m/s against 21.2 measured, with the spike's shape, "
+                         "threshold and refractory period"),
+    status="replicated",
+    record=(
+        Study("this series", 2026, n="the published equations", design="integrated on a cable in Psyche's neuron",
+              effect=18.7, unit="m/s", found="18.7 m/s recomputed"),
+    ),
+    note="The series' standard of quantitative success: measure, write equations, compute, compare. Cole and "
+         "Curtis had shown in 1939 that the membrane's conductance rises during the impulse, which the model "
+         "requires. It is a model of one membrane, and its gates were later identified with ion channels.",
+    sources=("A. L. Hodgkin and A. F. Huxley, A quantitative description of membrane current and its application "
+             "to conduction and excitation in nerve, Journal of Physiology 117 (1952) 500-544",
+             "K. S. Cole and H. J. Curtis, Electric impedance of the squid giant axon during activity, Journal of "
+             "General Physiology 22 (1939) 649-670"),
+    checked="2026-11-13",
+    data=("HODGKIN_HUXLEY_1952", "COLE_CURTIS_1939"),
+))
+
 shown(4, "SIMMONS_2011", "a simulation of what flexible analysis does to a null result, recomputed here: a "
       "demonstration, not an empirical finding")
 shown(4, "SCHEEL_2021", "a comparison of two literatures; shown at the frontier as early evidence on a reform, "
