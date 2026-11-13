@@ -606,15 +606,36 @@ hammer-felt hysteresis; real-time finite-difference instruments.
 (2012, 2014, 2017).
 
 ### Part 8 · Pipes, Reeds and Voices (~55)
-*Story:* A flute and a clarinet of the same length: the clarinet sounds almost an octave lower and its even
-harmonics are missing. A singer in Tuva sings two notes at once. Both follow from one idea, a source driving a
-resonator, and the part ends with Monochord singing.
-*Covers:* cylinders and cones; input impedance; the reed as a pressure-controlled valve; overblowing and register
-holes; brass lips, the bell and mouthpiece and the pedal note; the flute's jet; the organ as additive synthesis;
-the voice: folds, source and filter, formants and vowels, the singer's formant, registers, overtone singing.
-*Built and computed:* bore impedances by transfer matrices; a clarinet and a brass model; a source-filter voice.
-*Variation 8:* the Tune for a wind quartet and a voice.
-*Frontier:* vocal-fold models; nonlinear propagation in brass; printed bores.
+*Story:* A flute and a clarinet of the same length: the clarinet sounds an octave lower and its even
+harmonics are nearly missing. A singer in Tuva sings two notes at once. Both follow from one idea, a valve
+feeding a resonator, and the part ends with Monochord singing.
+1. Hook: two pipes of one length (an ear question); one voice, two notes; the plan.
+2. A column of air: open and closed ends; odd and whole series; the impedance of a pipe; the end correction; how
+   long is a flute (a worked example).
+3. A valve that pressure closes: the reed's flow curve; one puff, four trips; a square wave; blowing harder (an ear
+   question); why a third.
+4. Holes: a hole against a saw; where the holes go (a worked example); the register hole and the twelfth.
+5. Cones: a cone has every harmonic; the missing tip and the mouthpiece; cone or cylinder (an ear question).
+6. Lips and brass: a valve with its own frequency; what a bell and a mouthpiece do; the staircase and a call; the
+   pedal note; three valves (a worked example).
+7. A jet and an edge: the flute's valve; overblowing; octave or twelfth (an ear question); the organ's stops.
+8. The voice, a source and a filter: the folds; the pulse; formants; a source through three filters.
+9. Vowels: a mouth at rest (a worked example); two tubes for ah and ee; the map of two formants; three vowels (an
+   ear question).
+10. What singers do: ring (an ear question); a soprano's tuned resonance; overtone singing.
+11. Frontier: the folds, the player's own tract, shock waves in brass, the jet; instruments designed backwards.
+12. Variation 8: the Tune for five valves on five columns of air. Outro: problems, payoffs, and overtones that are
+    not harmonics.
+
+*Covers:* cylinders and cones; input impedance; the reed as a pressure-controlled valve and its threshold; tone
+holes and register holes; brass lips, the bell and mouthpiece and the pedal note; valves; the flute's jet and
+overblowing; the organ as additive synthesis; the voice: folds, source and filter, formants and vowels, the
+singer's formant, a soprano's resonance tuning, overtone singing.
+*Built and computed:* `instruments/winds.py`: bore impedances by transfer matrices and reflection functions; a
+reed, a lip and a jet model on any bore; a source-filter voice; formants of tubes.
+*Variation 8:* the Tune for a flute, a clarinet, a saxophone, a trumpet and a voice.
+*Frontier:* vocal-fold models; the player's vocal tract; nonlinear propagation in brass; computed and printed
+bores.
 *Reading:* Benade; Fletcher & Rossing; Sundberg, *The Science of the Singing Voice*; McIntyre, Schumacher &
 Woodhouse (1983).
 
@@ -1477,6 +1498,7 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-13 | **Part 5, *Consonance***: 12 chapters, 38.7 min narrated of which 2.5 min listening in 16 windows; 6 pause-and-listen questions, 3 demonstrations to listen for, 3 worked examples with predict-pauses; Variation 5 (a bent timbre and its own intervals); Lab 5 and the dissonance-curve interactive; Monochord's consonance layer (`monochord/consonance.py`: Euler's gradus, beats, the Plomp–Levelt curve, dissonance curves, stretched partials, harmonicity, the fundamental bass; `tests/music/test_consonance.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 6, *Tuning***: 12 chapters, 37.3 min narrated of which 2.3 min listening in 16 windows; 4 pause-and-listen questions, 4 demonstrations to listen for, 6 worked examples with predict-pauses; Variation 6 (the Tune with chords in eight tunings); Lab 6 and the temperament interactive; Monochord's tuning layer (`monochord/tuning.py`: commas, Pythagorean, just, meantone, Werckmeister III, equal divisions, continued fractions, beat rates, the comma pump, stretched octaves; `tests/music/test_tuning.py`, against Barbour's tables); sustained-tone helpers in `partkit.py`; every gate clean. |
 | 2026-11-13 | **Part 7, *Strings, Hammers and Bows***: 12 chapters, 39.2 min narrated of which 1.7 min listening in 12 windows; 5 pause-and-listen questions, 1 demonstration to listen for, 4 worked examples with predict-pauses; Variation 7 (a guitar, a piano and a violin from one string); Lab 7 and the bowed-string interactive (Schelleng's wedge, simulated in the page); Monochord's string instruments (`instruments/strings.py`: Karplus–Strong, a felt hammer on a stiff string, coupled unisons, a bowed string with stick-slip friction, Schelleng's limits, the two-mass guitar, bodies as banks of resonances; `tests/music/test_strings.py`); every gate clean, narration listen-tested. |
+| 2026-11-13 | **Part 8, *Pipes, Reeds and Voices***: 12 chapters, 40.6 min narrated of which 1.6 min listening in 15 windows; 6 pause-and-listen questions, 6 demonstrations to listen for, 4 worked examples with predict-pauses; Variation 8 (a flute, a clarinet, a saxophone, a trumpet and a voice, each tuned by being built, blown and trimmed); Lab 8 and the vowel interactive (a two-tube mouth, its formants computed in the page); Monochord's winds (`instruments/winds.py`: bores by transfer matrices with wall losses and radiation, reflection functions, a reed valve, a lip valve, a jet, a source-filter voice, formants of tubes; `tests/music/test_winds.py`); every gate clean, narration listen-tested. |
 
 **Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
 before Part 10 is opened), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for

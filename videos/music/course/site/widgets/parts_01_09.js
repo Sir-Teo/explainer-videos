@@ -564,4 +564,108 @@
       note: "The model is the one the film uses (McIntyre, Schumacher and Woodhouse, 1983): waves travelling both ways from a bow at one point, a bridge that reflects a little less than everything, and rosin whose friction falls from 0.8 of the bow's force when the string is stuck to 0.3 when it slides fast. Each note is started as a player starts it, with a firmer bow that is eased to the force you chose in the first third of a second. Schelleng's two lines (1973) are formulas, not this model's own limits: the largest force goes as speed over distance and this string follows it closely; the smallest goes as speed over distance squared, and this string needs two or three times as much. A real string also twists, and real rosin warms and softens as it slides, so a violin's wedge is not exactly either. The sound is the force on the bridge through five resonances standing for a violin's body, computed in your browser. Simulated.",
     });
   };
+
+  // ---- Part 8: shape a vowel -------------------------------------------------------------------------------------
+  // The throat and mouth as two tubes end to end, closed at the folds and open at the lips.  The formants are the
+  // peaks of the tube's input impedance seen from the folds, found from two transfer matrices (complex arithmetic).
+  var VOWELS = [["heed", 270, 2290, 3010], ["hid", 390, 1990, 2550], ["head", 530, 1840, 2480], ["had", 660, 1720, 2410], ["hod", 730, 1090, 2440],
+                ["hawed", 570, 840, 2410], ["hood", 440, 1020, 2240], ["who'd", 300, 870, 2240], ["hud", 640, 1190, 2390], ["heard", 490, 1350, 1690]];
+  function cmul(a, b) { return [a[0] * b[0] - a[1] * b[1], a[0] * b[1] + a[1] * b[0]]; }
+  function cadd(a, b) { return [a[0] + b[0], a[1] + b[1]]; }
+  function cdiv(a, b) { var d = b[0] * b[0] + b[1] * b[1]; return [(a[0] * b[0] + a[1] * b[1]) / d, (a[1] * b[0] - a[0] * b[1]) / d]; }
+  function ccos(z) { return [Math.cos(z[0]) * Math.cosh(z[1]), -Math.sin(z[0]) * Math.sinh(z[1])]; }
+  function csin(z) { return [Math.sin(z[0]) * Math.cosh(z[1]), Math.cos(z[0]) * Math.sinh(z[1])]; }
+  function tractResponse(a1, l1, a2, l2, f) { // |Z_in| of the two tubes (areas in cm^2, lengths in cm), in units of the first tube's own impedance
+    var c = 343, rho = 1.2, S1 = a1 * 1e-4, S2 = a2 * 1e-4, r2 = Math.sqrt(S2 / Math.PI), z1 = rho * c / S1, z2 = rho * c / S2;
+    var k = 2 * Math.PI * f / c, loss = 0.012 * Math.sqrt(f / 500), kk = [k, -k * loss], ka = Math.min(k * r2, 1.5);
+    var zl = [z2 * 0.25 * ka * ka, z2 * 0.6133 * ka];                                // the open mouth
+    function through(zc, len, zload) { // the impedance seen through a tube of impedance zc and length len
+      var kl = [kk[0] * len, kk[1] * len], cs = ccos(kl), sn = csin(kl);
+      var num = cadd(cmul(zload, cs), cmul([0, zc], sn)), den = cadd(cmul(cmul([0, 1 / zc], sn), zload), cs);
+      return cdiv(num, den);
+    }
+    var z = through(z1, l1 / 100, through(z2, l2 / 100, zl));
+    return Math.sqrt(z[0] * z[0] + z[1] * z[1]) / z1;
+  }
+  function tractFormants(a1, l1, a2, l2) {
+    var out = [], prev = 0, cur = tractResponse(a1, l1, a2, l2, 100), f, next;
+    for (f = 105; f <= 4500 && out.length < 3; f += 5) {
+      next = tractResponse(a1, l1, a2, l2, f + 5);
+      if (cur > prev && cur >= next) out.push(f);
+      prev = cur; cur = next;
+    }
+    while (out.length < 3) out.push(out.length ? out[out.length - 1] + 1000 : 500 + 1000 * out.length);
+    return out;
+  }
+  function nearestVowel(f1, f2) {
+    var best = 0, bd = 1e9, i;
+    for (i = 0; i < VOWELS.length; i++) {
+      var d = Math.pow(Math.log(f1 / VOWELS[i][1]), 2) + Math.pow(Math.log(f2 / VOWELS[i][2]), 2);
+      if (d < bd) { bd = d; best = i; }
+    }
+    return { word: VOWELS[best][0], cents: 1200 * Math.sqrt(bd) / Math.log(2) };
+  }
+  function singVowel(hz, formants) { // pulses of the folds through a resonator for each formant, and out of the mouth
+    var rate = 44100, len = Math.floor(1.5 * rate), x = new Float32Array(len), i, j, t = 0, peak = 0;
+    while (t < len) { // Rosenberg's pulse: the flow rises, falls faster, and stops while the folds are shut
+      var period = rate / (hz * (1 + 0.004 * (Math.random() - 0.5))), open = 0.6 * period, rise = open * 2 / 3, fall = open - rise, i0 = Math.floor(t);
+      for (i = i0; i < Math.min(len, i0 + Math.ceil(open)); i++) {
+        var u = i - t;
+        x[i] = u < rise ? 0.5 * (1 - Math.cos(Math.PI * u / rise)) : Math.cos(0.5 * Math.PI * Math.min(1, (u - rise) / fall));
+      }
+      t += period;
+    }
+    var all = formants.concat([3500, 4500]);
+    for (j = 0; j < all.length; j++) {
+      var bw = 50 + all[j] / 20, r = Math.exp(-Math.PI * bw / rate), b = 2 * r * Math.cos(2 * Math.PI * all[j] / rate), c = -r * r, a = 1 - b - c, y1 = 0, y2 = 0;
+      for (i = 0; i < len; i++) { var v = a * x[i] + b * y1 + c * y2; y2 = y1; y1 = v; x[i] = v; }
+    }
+    for (i = len - 1; i > 0; i--) x[i] -= x[i - 1];
+    x[0] = 0;
+    for (i = 0; i < len; i++) peak = Math.max(peak, Math.abs(x[i]));
+    var fade = Math.floor(0.04 * rate), tail = Math.floor(0.12 * rate);
+    for (i = 0; i < len; i++) x[i] *= (0.3 / (peak || 1)) * Math.min(1, i / fade) * Math.min(1, (len - i) / tail);
+    return play(x, rate);
+  }
+  W.vowel = function (el) {
+    QB.widget(el, {
+      title: "Shape a vowel",
+      sub: "The throat and mouth as two tubes: a back one, from the folds, and a front one, to the lips. Left: how strongly the tube answers at each frequency, with the harmonics of the sung note as thin lines. Its three lowest peaks are the formants. Right: the first two formants on the map of Peterson and Barney's ten vowels. Make the back tube narrow and the front wide for the vowel of hod; the back wide and the front narrow for heed; both the same for a mouth at rest. Then change the pitch: the dot does not move.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "a1", label: "Back tube: area (cm²)", min: 0.5, max: 10, step: 0.25, value: 1, fmt: function (x) { return fmt(x, 2); } },
+        { k: "a2", label: "Front tube: area (cm²)", min: 0.5, max: 10, step: 0.25, value: 9, fmt: function (x) { return fmt(x, 2); } },
+        { k: "l1", label: "Back tube: length (cm)", min: 4, max: 12, step: 0.25, value: 9, fmt: function (x) { return fmt(x, 2); } },
+        { k: "l2", label: "Front tube: length (cm)", min: 4, max: 12, step: 0.25, value: 9, fmt: function (x) { return fmt(x, 2); } },
+        { k: "hz", label: "Pitch of the voice (Hz)", min: 80, max: 400, step: 5, value: 110 },
+      ],
+      buttons: [
+        { label: "Sing it", act: function (s, v) { s.sound = singVowel(v.hz, tractFormants(v.a1, v.l1, v.a2, v.l2)); } },
+      ],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var fs = [], ys = [], f, top = 0, i;
+        for (f = 100; f <= 4000; f += 10) { var z = 20 * Math.log(tractResponse(v.a1, v.l1, v.a2, v.l2, f)) / Math.LN10; fs.push(f); ys.push(z); top = Math.max(top, z); }
+        var fm = tractFormants(v.a1, v.l1, v.a2, v.l2);
+        s.fm = fm;
+        var a = g[0].axes({ x: [0, 4000], y: [top - 60, top + 6], title: "How strongly the tube answers (dB)", xlabel: "frequency (Hz)", xticks: [0, 1000, 2000, 3000, 4000], yticks: [] });
+        for (i = 1; i * v.hz < 4000; i++) a.vline(i * v.hz, { color: C.muted, dash: [1, 0], width: 0.6 });
+        a.line(fs, ys, { color: C.idea, width: 2.2 });
+        for (i = 0; i < 3; i++) a.vline(fm[i], { color: C.loss, width: 1.4 });
+        var b = g[1].axes({ x: [200, 850], y: [600, 2600], title: "The map of vowels", xlabel: "first formant (Hz)", xticks: [300, 500, 700], yticks: [1000, 1500, 2000, 2500] });
+        b.dots(VOWELS.map(function (w) { return w[1]; }), VOWELS.map(function (w) { return w[2]; }), { color: C.muted, r: 4 });
+        for (i = 0; i < VOWELS.length; i++) b.text(VOWELS[i][1] + 12, VOWELS[i][2], VOWELS[i][0], { color: C.muted, align: "left" });
+        b.dots([fm[0]], [fm[1]], { color: C.loss, r: 6 });
+      },
+      readout: function (v, s) {
+        var fm = s.fm || tractFormants(v.a1, v.l1, v.a2, v.l2), n = nearestVowel(fm[0], fm[1]);
+        return [["formants", fm[0] + ", " + fm[1] + ", " + fm[2] + " Hz"],
+                ["nearest vowel on the map", "the one in “" + n.word + "”" + (n.cents > 400 ? " (not close)" : "")],
+                ["the tube", fmt(v.l1 + v.l2, 1) + " cm from folds to lips; a plain tube that long would give " + fmt(34300 / (4 * (v.l1 + v.l2)), 0) + ", " + fmt(3 * 34300 / (4 * (v.l1 + v.l2)), 0) + ", " + fmt(5 * 34300 / (4 * (v.l1 + v.l2)), 0) + " Hz"],
+                ["harmonics of the voice", "every " + fmt(v.hz, 0) + " Hz"],
+                ["sound", s.sound === null ? "press Sing" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Two tubes of two widths are the oldest cartoon of a mouth (Fant, 1960), and they land within a semitone or so of the formants Peterson and Barney measured in 1952 for the vowels of hod (a narrow throat, a wide mouth) and heed (a wide throat, a narrow gap). The curve is the tube's input impedance seen from the vocal folds, with a little damping and an open, radiating mouth; rounded lips, the nose and the true shape of the tongue are not in it, so the back rounded vowels (who'd, hood) cannot be reached with two tubes. The sound is a train of pulses through one resonator for each formant, computed in your browser: the pitch comes from the pulses and the vowel from the resonators, independently. Simulated.",
+    });
+  };
 })();

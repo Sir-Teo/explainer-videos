@@ -19,6 +19,8 @@ LEDGER = [
      "measure": r"its chords are from 1 to 31 cents out of tune"},
     {"part": 7, "title": r"for plucked, struck and bowed strings: a guitar, a piano and a violin built from one string", "seconds": 28.8,
      "measure": r"the bowed string's force is a sawtooth to within 0.2 dB"},
+    {"part": 8, "title": r"for a flute, a clarinet, a saxophone, a trumpet and a voice: five valves on five columns of air", "seconds": 27.28,
+     "measure": r"every wind note within 8 cents of its pitch"},
 ]
 
 

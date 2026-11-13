@@ -354,4 +354,56 @@ PARTS = [
         I=(8, 9),
         also=(("Monochord's strings: a plucked loop, a hammer, coupled unisons, a bow, bodies", "explainer/music/monochord/instruments/strings.py"),),
     ),
+    Part(
+        n=8, level="U", widget="vowel",
+        question="Why does a reed lower a pipe by an octave, how does a tube with no holes play a tune, and what "
+                 "makes a vowel?",
+        story="Two pipes of the same length, one blown across its end and one through a reed, sound an octave "
+              "apart; and a singer in Tuva sings two notes at once. One idea covers both: a column of air that "
+              "resonates, and a valve that lets breath through in time with it. A pipe open at both ends has every "
+              "harmonic; a reed closes one end, so a clarinet sounds an octave lower and has the odd ones. The reed "
+              "is a valve that pressure closes, and it feeds the pipe only above a third of the pressure that shuts "
+              "it. Holes shorten the pipe, and a register hole hands the note to the next resonance: an octave for "
+              "a flute, a twelfth for a clarinet. A cone, with a mouthpiece in place of its missing tip, has every "
+              "harmonic: the oboe and the saxophone. A brass player's lips are a valve with a frequency of their "
+              "own, and a bell and a mouthpiece bend a stopped pipe's odd resonances into a whole series. A flute's "
+              "valve is a jet of air whose crossing must take half a period, so blowing harder finds the octave; an "
+              "organ's stops add partials one rank at a time. The voice is a source and a filter: the folds set "
+              "the pitch, the tube above them sets the vowel, and a vowel is a place on a map of two formants. "
+              "Singers move the filter on purpose: for ring, for a soprano's high notes, and for a second note "
+              "drawn out of the first. The Tune is played by five valves on five columns of air.",
+        handoff="Strings and air columns are long and thin and nearly harmonic; drums, bars and bells are not "
+                "(Part 9). The colours of the winds return in orchestration (Part 41); adding partials and "
+                "filtering a rich source become two kinds of synthesis (Part 51), and loops of delay a third "
+                "(Part 52). The source and the filter return as the way speech is coded (Part 58), and the voice "
+                "when we ask where music came from (Part 47).",
+        outside="Part 2 for waves in tubes and the bottle; Part 3 for harmonics and a square wave; Part 4 for "
+                "fusion and the missing fundamental; Part 7 for a valve that feeds a resonator. Trigonometry; "
+                "decibels.",
+        objectives={
+            "U": ["Explain the resonances of open and stopped pipes, cones and a trumpet's bore.",
+                  "Describe how a reed, a pair of lips and a jet each feed a column of air.",
+                  "Explain the voice as a source and a filter, and a vowel as a pattern of formants."],
+            "M": ["Compute a bore's input impedance by transfer matrices, with an end correction.",
+                  "Derive the reed's threshold from its flow curve.",
+                  "Find the formants of a tube, and place a vowel on the map of two formants."],
+            "D": ["Say what the simple models of folds, lips, jets and loud brass leave out.",
+                  "Describe how players and singers tune the vocal tract."],
+            "I": ["Place and size a tone hole; correct a valve combination.",
+                  "Use formants: for intelligibility, for a singer's ring, for a synthetic voice.",
+                  "Choose registers and dynamics on a wind instrument knowing what each does to the tone."],
+        },
+        results=[
+            ("Pipes", r"\text{open: } f_n = \frac{n c}{2L'};\qquad \text{stopped: } f_n = \frac{(2n-1)\,c}{4L'};\qquad L' = L + 0.61\,a \ \text{per open end}"),
+            ("A reed's flow", r"u = \zeta\,(1-\Delta)\sqrt{\Delta},\qquad \frac{du}{d\Delta} = 0 \ \text{at}\ \Delta = \tfrac13"),
+            ("A tube's transfer matrix", r"\begin{pmatrix} p_1 \\ U_1 \end{pmatrix} = \begin{pmatrix} \cos kL & j Z_c \sin kL \\ (j/Z_c)\sin kL & \cos kL \end{pmatrix} \begin{pmatrix} p_2 \\ U_2 \end{pmatrix}"),
+            ("Valves do not add up", r"1.122 + 1.189 - 1 = 1.311 < 2^{5/12} = 1.335 \quad (30\ \text{cents sharp})"),
+            ("A mouth at rest", r"F_k = \frac{(2k-1)\,c}{4L} \approx 500,\ 1500,\ 2500\ \text{Hz} \quad (L = 17.5\ \text{cm})"),
+            ("Source and filter", r"\text{sound}(f) = \text{source}(f) \times \text{filter}(f),\qquad \text{source} \approx -12\ \text{dB per octave}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8),
+        D=(10,),
+        I=(9,),
+        also=(("Monochord's winds: bores by transfer matrices, a reed, lips, a jet, a source-filter voice", "explainer/music/monochord/instruments/winds.py"),),
+    ),
 ]

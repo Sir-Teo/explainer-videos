@@ -34,10 +34,10 @@ are in [`SYLLABUS.md`](SYLLABUS.md).
 the rights rule as written; sixty-eight parts; English first; see [`SYLLABUS.md`](SYLLABUS.md) §9). Phase 0, the sound pipeline, is built and proven on
 a test film (`videos/music/soundcheck/`). **Part 1, *One String*, is built**: fifteen chapters, 47 minutes narrated, with its
 lab, its interactive and its problem set ([`music1/README.md`](music1/README.md)). How a part is made, with the
-lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). **Parts 2 to 7 are built** too: *Waves in Air* (34 minutes; [`music2/README.md`](music2/README.md)), *The Spectrum* (33 minutes;
+lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). **Parts 2 to 8 are built** too: *Waves in Air* (34 minutes; [`music2/README.md`](music2/README.md)), *The Spectrum* (33 minutes;
 [`music3/README.md`](music3/README.md)), *The Ear* (48 minutes; [`music4/README.md`](music4/README.md)), *Consonance* (39 minutes;
-[`music5/README.md`](music5/README.md)), *Tuning* (37 minutes; [`music6/README.md`](music6/README.md)) and *Strings, Hammers and Bows* (39 minutes;
-[`music7/README.md`](music7/README.md)); the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
+[`music5/README.md`](music5/README.md)), *Tuning* (37 minutes; [`music6/README.md`](music6/README.md)), *Strings, Hammers and Bows* (39 minutes;
+[`music7/README.md`](music7/README.md)) and *Pipes, Reeds and Voices* (41 minutes; [`music8/README.md`](music8/README.md)); the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
 
 ## The story
 
