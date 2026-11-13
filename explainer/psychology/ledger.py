@@ -597,3 +597,9 @@ shown(4, "DREBER_2015", "prediction markets on replications: shown at the fronti
       row_in=50)
 shown(4, "PROTZKO_2023", "a retracted report about replication rates, shown at the frontier for what its "
       "retraction says about the reforms; entered with meta-science", row_in=50)
+
+shown(5, "ADRIAN_1926", "the rate code of a single sensory fibre: told here as the discovery it was, with schematic "
+      "trains; entered with the senses", row_in=11)
+shown(5, "GOLGI_CAJAL_1906", "the neuron doctrine: a settled piece of anatomy, told as history")
+shown(5, "GIDON_2020", "one laboratory's report of graded dendritic spikes in human cortex, shown at the frontier "
+      "and not yet repeated elsewhere")
