@@ -18,6 +18,7 @@ from __future__ import annotations
 import argparse
 import importlib
 import json
+import re
 import os
 import subprocess
 import sys
@@ -66,6 +67,52 @@ def master_filter(measure_cmd: list[str]) -> str:
     return (f"{HIGHPASS},{LOUDNORM}:measured_I={m['input_i']}:measured_TP={m['input_tp']}"
             f":measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}"
             f":offset={m['target_offset']}:linear=true")
+
+
+# Music, Built: scenes that play computed clips (explainer/music/sound.py) write a cue sheet beside each render.  The
+# master's music is mixed from those cues in float, stereo, 48 kHz, and joins the narration here.  The narration alone
+# is high-passed and brought to -16 LUFS by one constant gain; the music stem's gain is fixed, so the levels written
+# in a part's compute.py are the levels in the film.  Nothing is limited: a mix over the ceiling stops the build.
+MUSIC_GAIN_DB = 0.0
+NARRATION_LUFS = -16.0
+PEAK_CEILING_DBTP = -1.0
+
+
+def music_stem(cues: list[dict], seconds: float, out: Path) -> None:
+    """The film's music stem: every cue's clip at its start time and gain, as a float WAV."""
+    from explainer.music.monochord.audio import Clip, mix
+
+    placed = []
+    for c in cues:
+        clip = Clip.read(Path(c["path"]))
+        placed.append((Clip(clip.stereo, clip.sr), c["start"], c["gain_db"]))
+    mix(placed, duration=seconds).write(out)
+
+
+def sound_master(concat_list: Path, music: Path) -> str:
+    """The filter graph that joins the narration (input 0) and the music stem (input 3); stops if the mix peaks
+    above the ceiling."""
+    err = subprocess.run(["ffmpeg", "-v", "info", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
+                          "-af", f"{HIGHPASS},{LOUDNORM}:print_format=json", "-f", "null", "-"],
+                         text=True, capture_output=True, check=True).stderr
+    m = json.loads(err[err.rindex("{"): err.rindex("}") + 1])
+    gain = 0.0 if m["input_i"] == "-inf" else max(-20.0, min(20.0, NARRATION_LUFS - float(m["input_i"])))
+    graph = (f"[0:a]{HIGHPASS},volume={gain:.2f}dB,aresample=48000[n];[3:a]volume={MUSIC_GAIN_DB:.2f}dB[m];"
+             f"[n][m]amix=inputs=2:duration=longest:normalize=0")
+    err = subprocess.run(["ffmpeg", "-nostats", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-f", "lavfi",
+                          "-i", "anullsrc", "-f", "lavfi", "-i", "anullsrc", "-i", str(music),
+                          "-filter_complex", graph + ",ebur128=peak=true[a]", "-map", "[a]", "-t", "36000",
+                          "-f", "null", "-"], text=True, capture_output=True).stderr
+    if "Summary:" not in err:
+        sys.exit("could not measure the mixed soundtrack:\n" + err[-2000:])
+    summary = err[err.rindex("Summary:"):]
+    peak = float(re.search(r"Peak:\s+(-?[\d.]+|-inf) dBFS", summary).group(1).replace("-inf", "-200"))
+    loud = re.search(r"I:\s+(-?[\d.]+) LUFS", summary).group(1)
+    print(f"soundtrack: narration {gain:+.1f} dB, mix {loud} LUFS integrated, true peak {peak:.1f} dBTP")
+    if peak > PEAK_CEILING_DBTP:
+        sys.exit(f"the mixed soundtrack peaks at {peak:.1f} dBTP, above the ceiling of {PEAK_CEILING_DBTP} dBTP: "
+                 "lower the clip at its source (python tools/qa_sound.py <video> names it)")
+    return graph + "[a]"
 
 
 def scene_output(media: Path, module: str, cls: str, quality: str, fps: int) -> Path:
@@ -149,6 +196,7 @@ def main():
     args = ap.parse_args()
     os.environ["EXPLAINER_LANG"] = args.lang  # the scene renders inherit it
     os.environ["EXPLAINER_VIDEO"] = args.video  # and the video's name (explainer/zh_text.py finds its series' table)
+    os.environ["EXPLAINER_SOUND_STEMS"] = "1"  # scenes with computed sound leave it to the cue sheet (music_stem)
 
     manifest = importlib.import_module(f"{video_package(args.video)}.manifest")
     scenes = manifest.SCENES
@@ -187,7 +235,7 @@ def main():
     suffix += "" if args.lang == "en" else f"_{args.lang}"
     name = f"{args.video}{suffix}"
 
-    parts, cues, chapters, offset = [], [], [], 0.0
+    parts, cues, chapters, offset, sound_cues = [], [], [], 0.0, []
     for module, cls, chapter in scenes:
         mp4 = scene_output(media, module, cls, args.quality, args.fps)
         if not mp4.exists():
@@ -198,6 +246,9 @@ def main():
         check_narration_audio(mp4, lines)
         normalize(mp4, norm, lossless=args.crf is not None)
         dur = ffprobe_duration(norm)
+        sheet = mp4.with_suffix(".cues.json")
+        if sheet.exists():
+            sound_cues += [{**c, "start": c["start"] + offset} for c in json.loads(sheet.read_text())["cues"]]
         cues += subtitle_cues(lines, offset, args.lang,
                               preserve_terms=getattr(manifest, "SUBTITLE_TERM_BOUNDARIES", False) is True)
         if chapter:
@@ -218,18 +269,27 @@ def main():
     ffmeta.write_text("\n".join(lines) + "\n")
 
     final = out_dir / f"{name}.mp4"
-    audio_filter = master_filter([
-        "ffmpeg", "-v", "info", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
-        "-af", f"{HIGHPASS},{LOUDNORM}:print_format=json", "-f", "null", "-",
-    ])
-    run([
-        "ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(concat_list),
-        "-i", str(srt), "-i", str(ffmeta), "-map", "0", "-map", "1", "-map_metadata", "2",
-        "-c:v", "copy", "-af", audio_filter, "-ar", "48000", "-c:a", "aac",
-        "-b:a", "384k" if args.crf is not None else "192k",
-        "-c:s", "mov_text", "-metadata:s:s:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }",
-        "-metadata:s:a:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }", "-movflags", "+faststart", str(final),
-    ])
+    tail = ["-ar", "48000", "-c:a", "aac", "-b:a", "384k" if args.crf is not None else "192k",
+            "-c:s", "mov_text", "-metadata:s:s:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }",
+            "-metadata:s:a:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }", "-movflags", "+faststart",
+            str(final)]
+    if sound_cues:  # Music, Built: the narration and the music stem are mastered apart and then joined
+        music = work / "music.wav"
+        music_stem(sound_cues, offset, music)
+        graph = sound_master(concat_list, music)
+        run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(concat_list),
+             "-i", str(srt), "-i", str(ffmeta), "-i", str(music), "-filter_complex", graph,
+             "-map", "0:v", "-map", "[a]", "-map", "1", "-map_metadata", "2", "-c:v", "copy", *tail])
+    else:
+        audio_filter = master_filter([
+            "ffmpeg", "-v", "info", "-f", "concat", "-safe", "0", "-i", str(concat_list), "-vn",
+            "-af", f"{HIGHPASS},{LOUDNORM}:print_format=json", "-f", "null", "-",
+        ])
+        run([
+            "ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(concat_list),
+            "-i", str(srt), "-i", str(ffmeta), "-map", "0", "-map", "1", "-map_metadata", "2",
+            "-c:v", "copy", "-af", audio_filter, *tail,
+        ])
     yt = "\n".join(f"{int(s // 60)}:{int(s % 60):02d} {t}" for s, t in chapters)
     (out_dir / f"{name}.chapters.txt").write_text(yt + "\n")
     print(f"\nWrote {final.relative_to(ROOT)}  ({offset / 60:.1f} min)")
