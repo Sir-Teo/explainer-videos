@@ -78,6 +78,8 @@ class RealStrings(SoundScene):
         eq[3].set_color(LEVEL), eq[4].set_color(FORCE)
         notes = VGroup(label(r"a brake on all motion alike", font_size=24, color=LEVEL).next_to(eq[3], DOWN, buff=0.2),
                        label(r"a brake on sharp bends", font_size=24, color=FORCE).next_to(eq[4], DOWN, buff=0.2))
+        notes[0].shift(LEFT * 1.3)
+        notes[1].shift(RIGHT * 1.0)
         ymax = max(r["decay_model"] for r in rows) * 1.12
         g = axes([0.5, 12.5], [0, ymax], x_length=6.6, y_length=3.4, xlabel=r"partial", ylabel=r"decay rate (per second)",
                  xticks=[1, 4, 8, 12], yticks=[0, 2, 4], font_size=20)
@@ -98,7 +100,7 @@ class RealStrings(SoundScene):
             "<bookmark mark='b'/> The other brakes sharp bends harder than gentle ones, so it takes more from the "
             "high modes, which are all bends. Each mode then dies away at its own steady rate."
         ) as vo:
-            self.play(FadeIn(eq[:3]))
+            self.play(FadeIn(eq[:3]), FadeIn(g))
             vo.wait_until("a")
             self.play(FadeIn(eq[3]), FadeIn(notes[0]))
             vo.wait_until("b")
@@ -111,7 +113,7 @@ class RealStrings(SoundScene):
             f"{say(rows[11]['t60'], 1)}. That is what you saw in the spectrogram: a note that starts bright and "
             "ends as almost a pure tone."
         ) as vo:
-            self.play(FadeIn(g), Create(line), FadeIn(leg[0]))
+            self.play(Create(line), FadeIn(leg[0]))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(p, scale=0.5) for p in pts], lag_ratio=0.08), FadeIn(leg[1]))
             vo.wait_until("b")
@@ -147,11 +149,23 @@ class RealStrings(SoundScene):
             "<bookmark mark='b'/> The effect is that the upper modes come out sharp. The partials are no longer "
             "exactly one, two, three times the fundamental. They are stretched."
         ) as vo:
-            self.play(FadeIn(eq[:3]))
+            from explainer.music.monochord.physics import pluck_shape
+            xs = np.linspace(0, 1, 161)
+            limp = pluck_shape(xs, 1.0, 0.3, 1.0)
+            kern = np.exp(-0.5 * (np.linspace(-1, 1, 41) / 0.45) ** 2)
+            stiff_shape = np.convolve(np.pad(limp, 20, mode="edge"), kern / kern.sum(), mode="valid")
+            va = StringView(width=5.4, scale=1.3).move_to(LEFT * 3.4 + DOWN * 1.1)
+            vb = StringView(width=5.4, scale=1.3, color=BAD).move_to(RIGHT * 3.4 + DOWN * 1.1)
+            va.set_shape(limp)
+            vb.set_shape(stiff_shape * np.sin(np.pi * xs) ** 0.05)
+            la = label(r"a perfectly limp string: \ a sharp corner costs nothing", font_size=24, color=GREY_A).next_to(va, DOWN, buff=0.3)
+            lb = label(r"a stiff wire: \ it will not take the corner", font_size=24, color=BAD).next_to(vb, DOWN, buff=0.3)
+            self.play(FadeIn(eq[:3]), FadeIn(va), FadeIn(la), FadeIn(vb), FadeIn(lb))
             vo.wait_until("a")
             self.play(FadeIn(eq[3]))
             vo.wait_until("b")
             self.play(Write(res))
+        self.play(FadeOut(va), FadeOut(vb), FadeOut(la), FadeOut(lb), run_time=0.4)
         with self.voiceover(
             f"On our half-millimetre wire the stretch is small: by the twelfth partial, {say(rows[11]['sharp_cents'])} "
             "cents. <bookmark mark='a'/> Make the wire six times stiffer, as if it were a thin rod, and the twelfth "
@@ -166,10 +180,11 @@ class RealStrings(SoundScene):
             head = Line(g.ax.c2p(0.5, 0), g.ax.c2p(0.5, ymax), color=WHITE, stroke_width=1.5)
             snd.show(head)
             snd.drive(head, lambda m, t: m.set_x(g.ax.c2p(0.5 + 12 * min(t / c.duration, 1.0), 0)[0]))
-        payoff = VGroup(label(r"where this comes back", font_size=24, color=GREY_B),
-                        label(r"Part 6: \ why a piano's octaves are tuned wide", font_size=26, color=TUNE),
-                        label(r"Part 7: \ the piano's string; \quad Part 9: \ no tension at all, a bar", font_size=26,
-                              color=TUNE)).arrange(DOWN, buff=0.14).move_to(RIGHT * 3.6 + DOWN * 2.6)
+        payoff = VGroup(label(r"where this comes back", font_size=22, color=GREY_B),
+                        label(r"Part 6: \ why a piano's octaves are tuned wide", font_size=24, color=TUNE),
+                        label(r"Part 7: \ the piano's string", font_size=24, color=TUNE),
+                        label(r"Part 9: \ no tension at all: \ a bar", font_size=24, color=TUNE)
+                        ).arrange(DOWN, buff=0.12, aligned_edge=LEFT).move_to(RIGHT * 4.0 + DOWN * 2.4)
         with self.voiceover(
             "It no longer sounds quite like a string. It is on the way to a bell, or a struck bar. A piano's bass "
             "strings are short and thick, so they are stiff, and this stretched ladder of partials is a large part "

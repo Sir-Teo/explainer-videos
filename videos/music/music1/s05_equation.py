@@ -168,11 +168,11 @@ class Equation(SoundScene):
                            for t in none])
         with self.voiceover(
             "Now Newton. A bead's mass is mu, the mass of a metre of string, times h. <bookmark mark='a'/> Mass "
-            "times acceleration equals force. That one line is all the physics there is in a string. "
-            "<bookmark mark='b'/> It is also our whole simulation. These two lines are from the code that made "
-            "every sound you have heard so far. <bookmark mark='c'/> The first compares each bead with its two "
-            "neighbours. The second moves every bead one small step forward in time. <bookmark mark='d'/> There is "
-            "no pitch in there. No ratios, no harmonics, no Mersenne."
+            "times acceleration equals force. That one line is all the physics in a string. <bookmark mark='b'/> It "
+            "is also our whole simulation. These two lines are from the code that made every sound so far. "
+            "<bookmark mark='c'/> The first compares each bead with its neighbours. The second moves every bead one "
+            "small step forward in time. <bookmark mark='d'/> No pitch in there. No ratios, no harmonics, no "
+            "Mersenne."
         ) as vo:
             self.play(tidy.animate.move_to(UP * 2.3), run_time=0.6)
             vo.wait_until("a")
@@ -277,8 +277,8 @@ class Equation(SoundScene):
                             r"equation", width=5.2).to_corner(DR, buff=0.4)
         with self.voiceover(
             "This is the wave equation. <bookmark mark='a'/> Jean d'Alembert wrote it down for the vibrating string "
-            "in 1747. It was among the very first times anyone stated a law of physics as an equation between rates "
-            "of change in space and in time, and physics has been written that way ever since."
+            "in 1747: one of the first laws of physics stated as an equation between rates of change in space and "
+            "in time."
         ) as vo:
             self.play(FadeOut(newton), *[FadeOut(m) for m in rows[:2] + whys])
             self.play(rows[2].animate.scale(1.25).move_to(LEFT * 3.2 + UP * 0.4), run_time=0.7)

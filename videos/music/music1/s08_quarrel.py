@@ -65,11 +65,10 @@ class Quarrel(SoundScene):
         with self.voiceover(
             "D'Alembert published his travelling waves in 1747, and he was strict about what counted as a shape: "
             "it had to be given by one formula. <bookmark mark='a'/> The next year Leonhard Euler disagreed. A string "
-            "can be pulled into any curve a hand can draw, he said, corners included. A plucked string is two "
-            "straight lines, and no single formula gives you that. <bookmark mark='b'/> Then, in 1753, Daniel "
-            "Bernoulli made a far bolder claim. Every motion of a string, he said, is a sum of the simple modes, "
-            "the standing sine waves. He had no proof. What he had was his ears: a musician hears those tones "
-            "sounding together."
+            "can be pulled into any curve a hand can draw, corners included. A plucked string is two straight "
+            "lines, and no single formula gives you that. <bookmark mark='b'/> Then, in 1753, Daniel Bernoulli made "
+            "a bolder claim. Every motion of a string is a sum of the standing sine waves. He had no proof. He had "
+            "his ears: a musician hears those tones sounding together."
         ) as vo:
             self.play(FadeIn(rows[0], shift=RIGHT * 0.2))
             vo.wait_until("a")
@@ -184,13 +183,12 @@ class Quarrel(SoundScene):
                       label(r"\textit{Analysis, Built}: \ what it means for such a sum to converge", font_size=28,
                             color=GREY_A)).arrange(DOWN, buff=0.15).move_to(DOWN * 2.85)
         with self.voiceover(
-            "It was settled in 1807 by a man who was not thinking about music at all. Joseph Fourier was studying "
-            "how heat spreads, and he claimed that any shape whatever is a sum of sines, and he gave the recipe for "
-            "how much of each. <bookmark mark='a'/> The old guard, Lagrange among them, would not print it. Making "
-            "the claim rigorous took another twenty years, and to do it mathematicians had to decide what a "
-            "function is. <bookmark mark='b'/> A quarrel about a harpsichord string ended up rebuilding the "
-            "foundations of mathematics. We will use Fourier's recipe in the very next chapter, and Part 3 is "
-            "built on it."
+            "It was settled in 1807 by a man who was not thinking about music. Joseph Fourier was studying how "
+            "heat spreads, and he claimed that any shape whatever is a sum of sines, and gave the recipe for how "
+            "much of each. <bookmark mark='a'/> The old guard, Lagrange among them, would not print it. Making it "
+            "rigorous took twenty more years, and mathematicians had to decide what a function is. "
+            "<bookmark mark='b'/> A quarrel about a string ended up rebuilding the foundations of mathematics. We "
+            "use Fourier's recipe in the next chapter, and Part 3 is built on it."
         ) as vo:
             self.play(FadeIn(card, shift=UP * 0.2), FadeIn(drawn), FadeIn(summed), FadeIn(counter), FadeIn(ctag))
             self.play(terms.animate.set_value(24), run_time=vo.until("a"), rate_func=linear)

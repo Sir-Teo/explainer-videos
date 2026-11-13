@@ -25,7 +25,6 @@ class Mersenne(SoundScene):
         self.knobs()
         self.laws()
         self.experiment()
-        self.worked()
 
     # ------------------------------------------------------------------
     def card(self):
@@ -220,62 +219,9 @@ class Mersenne(SoundScene):
         with self.voiceover(
             "Minus one, a half, minus a half, and one half. The formula was never typed into the simulation. "
             "<bookmark mark='a'/> All it was given is Newton's second law, applied to each small piece of the string. "
-            "So Mersenne's laws must follow from Newton's. In two chapters we will see how."
+            "So Mersenne's laws must follow from Newton's. To see how, we first have to watch a string move."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(told, shift=UP * 0.2))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def worked(self):
-        g = load("mersenne")["guitar"]
-        title = label(r"A worked example: \ a guitar's top string", font_size=36).to_edge(UP, buff=0.45)
-        given = VGroup(
-            MathTex(rf"L = {g['L'] * 1000:.0f}\ \text{{mm}}", font_size=38, color=RATIO),
-            MathTex(rf"\mu = {g['mu_g_per_m']:.2f}\ \text{{g/m}}", font_size=38, color=MASS),
-            MathTex(rf"f = {g['hz']:.1f}\ \text{{Hz}} \quad (\text{{E}}_4)", font_size=38, color=FREQ),
-        ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(LEFT * 4.2 + UP * 1.0)
-        solve = MathTex(r"T", r"=", r"\mu \,(2 L f)^2", r"=", rf"{g['T']:.0f}\ \text{{N}}", font_size=50)
-        solve.move_to(RIGHT * 2.2 + UP * 1.4)
-        solve[0].set_color(FORCE), solve[4].set_color(FORCE)
-        kg = label(rf"the weight of {g['kgf']:.1f} kilograms", font_size=32, color=FORCE).next_to(solve, DOWN, buff=0.3)
-        ask = pause_card(r"To raise this string a whole octave with the peg alone, \\ how much tension would it take?",
-                         width=9.0).move_to(DOWN * 1.6)
-        ans = MathTex(rf"4 \times {g['T']:.0f}\ \text{{N}} = {g['octave_T']:.0f}\ \text{{N}}", font_size=44, color=FORCE)
-        ans2 = label(rf"the weight of {g['octave_kgf']:.0f} kilograms on a wire a quarter of a millimetre thick: "
-                     r"\ it breaks first", font_size=28, color=GREY_A)
-        VGroup(ans, ans2).arrange(DOWN, buff=0.25).move_to(DOWN * 1.7)
-        with self.voiceover(
-            "One worked example, with a real string. The top string of a guitar is steel, a quarter of a millimetre "
-            "thick. <bookmark mark='a'/> It is "
-            f"{say(g['L'] * 1000)} millimetres long, a metre of it weighs {say(g['mu_g_per_m'], 1)} grams, and it is "
-            f"tuned to the E above middle C, {say(g['hz'], 1)} hertz. <bookmark mark='b'/> Solve the law for the "
-            f"tension, and you get {say(g['T'])} newtons: the weight of about {say(g['kgf'])} kilograms, hanging "
-            "from that one thin wire."
-        ) as vo:
-            wire = bench(7.0).move_to(DOWN * 2.2)
-            wire.string.set_stroke(width=2)
-            wtag = label(r"steel, \ 0.25 mm", font_size=24, color=GREY_A).next_to(wire.string, UP, buff=0.2)
-            self.play(FadeIn(title), FadeIn(wire), FadeIn(wtag))
-            vo.wait_until("a")
-            self.play(FadeIn(given))
-            vo.wait_until("b")
-            self.play(Write(solve), run_time=1.5)
-            self.play(FadeIn(kg))
-        with self.voiceover(
-            "Now you predict. Suppose you wanted this string an octave higher, and all you did was turn the peg. "
-            "How much tension would that take?"
-        ):
-            self.play(FadeOut(wire), FadeOut(wtag), FadeIn(ask, shift=UP * 0.2))
-        self.wait(1.5)
-        with self.voiceover(
-            f"Four times as much: {say(g['octave_T'])} newtons, about {say(g['octave_kgf'])} kilograms. The wire "
-            "breaks long before that. <bookmark mark='a'/> This is why the six strings of a guitar differ in "
-            "thickness and not much in tension: each one carries roughly the same load, and the mass does the "
-            "work. So we have the law. What we do not have is the reason. For that we need to watch a string move."
-        ) as vo:
-            self.play(FadeOut(ask), FadeIn(ans), FadeIn(ans2))
-            vo.wait_until("a")
         self.wait(0.3)
         self.clear_scene()

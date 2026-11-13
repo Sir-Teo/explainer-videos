@@ -182,8 +182,8 @@ def chain(lit=(), width=9.4, font_size=18, detour: bool | None = None) -> VGroup
     g.link = {p.key: p for p in top}
     if show_detour:
         bot, bot_arrows = row(DETOUR)
-        VGroup(bot, bot_arrows).next_to(top, DOWN, buff=0.38)
         air = g.link["air"]
+        VGroup(bot, bot_arrows).next_to(top, DOWN, buff=0.5).set_x(air.get_x())
         down = Arrow(air.get_bottom() + LEFT * 0.12, bot[0].get_top(), buff=0.05, color=GREY_C, stroke_width=1.4,
                      tip_length=0.1, max_tip_length_to_length_ratio=0.5)
         up = Arrow(bot[-1].get_top(), air.get_bottom() + RIGHT * 0.12, buff=0.05, color=GREY_C, stroke_width=1.4,

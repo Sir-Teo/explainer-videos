@@ -25,7 +25,6 @@ class Pluck(SoundScene):
         self.formula()
         self.compare()
         self.practice()
-        self.quiz()
 
     # ------------------------------------------------------------------
     def card(self):
@@ -238,38 +237,10 @@ class Pluck(SoundScene):
                 snd.show(lens)
                 nxt = snd.time_of(f"p{i + 1}") if i + 1 < len(d["sweep_betas"]) else None
                 snd.drive(lens, ring(at=snd.time_of(f"p{i}") + 0.12, rate=2.0, stop_at=nxt))
-        self.wait(0.2)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def quiz(self):
-        d = load("pluck")
-        q = listen_card(r"The same note, \ plucked twice: \ A and B. \\ Which one was plucked in the middle of the "
-                        r"string?", width=9.4).to_edge(UP, buff=0.6)
-        boxes = VGroup(*[VGroup(RoundedRectangle(width=2.6, height=1.6, corner_radius=0.15, stroke_color=GREY_C,
-                                                 stroke_width=2), label(t, font_size=60, color=GREY_A))
-                         for t in ("A", "B")]).arrange(RIGHT, buff=1.4).shift(DOWN * 0.6)
-        with self.voiceover("A question for your ears. The same note, plucked twice. Which one was plucked in the "
-                            "middle of the string?"):
-            self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(boxes))
-        with self.listen(clip("pluck.quiz")) as snd:
-            window(snd, r"A, \ then B")
-            for key, box in zip("AB", boxes):
-                snd.wait_until(key)
-                self.play(box[0].animate.set_stroke(EAR, width=4), box[1].animate.set_color(EAR), run_time=0.2)
-                snd.wait_until(snd.time_of(key) + 1.6)
-                self.play(box[0].animate.set_stroke(GREY_C, width=2), box[1].animate.set_color(GREY_A), run_time=0.2)
-        v = [StringView(width=2.4, scale=0.4, stroke_width=3) for _ in range(2)]
-        v[0].set_shape(pluck_shape(X, 1.0, 0.1, 1.0))
-        v[1].set_shape(pluck_shape(X, 1.0, 0.5, 1.0))
-        for view, box in zip(v, boxes):
-            view.next_to(box, DOWN, buff=0.45)
         with self.voiceover(
-            f"{d['quiz_answer']}. The hollow one, with its even partials missing. A was plucked a tenth of the way "
-            "along. <bookmark mark='a'/> So one pluck sets a dozen modes going at once, in amounts we can now "
-            "calculate. The obvious question is whether we actually hear them."
-        ) as vo:
-            self.play(FadeIn(v[0]), FadeIn(v[1]), boxes[1][0].animate.set_stroke(GOOD, width=4))
-            vo.wait_until("a")
-        self.wait(0.3)
+            "So one pluck sets a dozen modes going at once, in amounts we can calculate. The obvious question is "
+            "whether we actually hear them."
+        ):
+            self.play(Indicate(bars, color=TUNE, scale_factor=1.03))
+        self.wait(0.2)
         self.clear_scene()

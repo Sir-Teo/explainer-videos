@@ -117,6 +117,22 @@ COURSES = [
              "Schematics are labelled schematic and made-up examples illustrative.",
     ),
     Course(
+        key="music", prefix="music", name="Music, Built", zh="音乐，从零搭建", mark="♪",
+        colors=("#f7d154", "#f472b6"),
+        kicker="A sixty-eight-part course in music: sound, theory, history, craft, technology and industry",
+        tagline="One simulated string, grown part by part into an orchestra, a studio and machines that listen, "
+                "with every sound made by the course's own code.",
+        lede="Stop a stretched string at half its length and it sounds an octave higher; at two thirds, a fifth. "
+             "The Pythagoreans built a cosmos on that, and left a question that has been open for 2,500 years: why "
+             "do simple ratios sound good? The course follows the string from a single wire to an orchestra, a "
+             "studio and a model that writes songs. It derives its mathematics on screen, builds an instrument "
+             "called Monochord in code, and plays what it builds: every sound is computed, and everything you "
+             "hear you also see.",
+        story=("The story", "How it looks and sounds"),
+        note="Every sound is computed by the part's own code; no recordings are played as music. Every number on "
+             "screen is computed, measured or cited.",
+    ),
+    Course(
         key="philosophy", prefix="philosophy", name="Philosophy, Built", zh="哲学，从零搭建", mark="P",
         colors=("#e879f9", "#f7d154"),
         kicker="A forty-two-part course in philosophy, from the first arguments to aligned machines",

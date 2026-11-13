@@ -127,14 +127,12 @@ class Frontier(SoundScene):
         why_ = label(r"a scheme that keeps a positive energy exactly \ cannot blow up", font_size=30, color=TUNE)
         why_.move_to(DOWN * 2.6)
         with self.voiceover(
-            "Once the equation is no longer linear, there is a second frontier, and it is in the computer. How do "
-            "you know a simulation of a violent, nonlinear string will not simply explode? "
-            "<bookmark mark='a'/> The modern answer is energy. Our bead scheme has a quantity, the beads' energy of "
-            "motion plus the energy of stretch between neighbours, that it conserves, not approximately, but "
-            f"exactly. <bookmark mark='b'/> Over {say(d['steps'])} steps it wanders by a few parts in ten to the "
-            f"{abs(expo)}, which is rounding error. <bookmark mark='c'/> A scheme with an exactly conserved, positive "
-            "energy cannot blow up. Since about 2009 this has become the way physical models of instruments are "
-            "designed: energy first, then the scheme."
+            "There is a second frontier, in the computer. How do you know a simulation of a violent, nonlinear "
+            "string will not simply explode? <bookmark mark='a'/> The modern answer is energy. Our bead scheme has "
+            "a quantity, the energy of motion plus the energy of stretch, that it conserves exactly. "
+            f"<bookmark mark='b'/> Over {say(d['steps'])} steps it wanders by a few parts in ten to the "
+            f"{abs(expo)}: rounding error. <bookmark mark='c'/> A scheme that keeps a positive energy exactly cannot "
+            "blow up, and physical models of instruments are now designed that way: energy first, then the scheme."
         ) as vo:
             beads = StringView(width=9.0, scale=0.7, stroke_width=2).move_to(DOWN * 0.6)
             shape_ = pluck_shape(np.linspace(0, 1, 25), 1.0, 0.3, 1.0)

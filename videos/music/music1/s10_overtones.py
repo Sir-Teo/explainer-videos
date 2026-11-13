@@ -183,11 +183,10 @@ class Overtones(SoundScene):
         cap2 = label(rf"how long each one lasts \ (from {t[0]['t60']:.0f} s down to {t[9]['t60']:.1f} s)", font_size=24,
                      color=GREY_B).next_to(life, UP, buff=0.15)
         with self.voiceover(
-            "Some words, because they are used loosely. Any single frequency in a sound is a partial. "
-            "<bookmark mark='a'/> The lowest is the fundamental. <bookmark mark='b'/> Partials at whole multiples of "
-            "it are harmonics. <bookmark mark='c'/> Overtone means a partial above the fundamental, so the first "
-            "overtone is the second harmonic, which has confused students for three centuries. "
-            "<bookmark mark='d'/> And timbre is whatever lets you tell two sounds apart when their pitch and "
+            "Some words. Any single frequency in a sound is a partial. <bookmark mark='a'/> The lowest is the "
+            "fundamental. <bookmark mark='b'/> Partials at whole multiples of it are harmonics. "
+            "<bookmark mark='c'/> An overtone is a partial above the fundamental, so the first overtone is the "
+            "second harmonic. <bookmark mark='d'/> And timbre is what tells two sounds apart when their pitch and "
             "loudness are the same."
         ) as vo:
             self.play(FadeIn(terms[0]))

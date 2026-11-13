@@ -117,32 +117,3 @@ def two_strings(ratio: float, f1: float = C3, seconds: float = 4.0, beta: float 
     a = Clip(plucked(f1, seconds, beta))
     b = Clip(plucked(f1 * ratio, seconds - stagger, beta))
     return mix([(a, 0.0, 0.0, -0.35), (b, stagger, 0.0, 0.35)]).fade(0.002, 0.15).at_lufs(level)
-
-
-# ---------------------------------------------------------------------------
-# The anvil of the legend (illustrative)
-# ---------------------------------------------------------------------------
-# A struck steel block rings at frequencies set by the block, whatever hits it.  The partial ratios below are those
-# of a free bar (1 : 2.76 : 5.40 : 8.93), a stand-in for the low modes of an anvil's horn and body; only the claim
-# "the same block gives the same pitches under every hammer" is physics, the particular numbers are not a measurement.
-_ANVIL = ((1.0, 1.0, 5.0), (2.756, 0.7, 7.0), (5.404, 0.55, 10.0), (8.933, 0.4, 14.0), (13.34, 0.25, 20.0))
-
-
-def anvil(hammer_mass: float = 1.0, base_hz: float = 880.0, seconds: float = 1.6, sr: int = SR) -> np.ndarray:
-    """An illustrative anvil struck by a hammer of the given relative mass.  A heavier hammer stays in contact longer
-    (Hertz: contact time grows as mass^(2/5)), so it excites the high modes less and hits harder; the pitches do not
-    move."""
-    n = int(round(seconds * sr))
-    t = np.arange(n) / sr
-    contact = 0.00025 * hammer_mass ** 0.4          # seconds
-    y = np.zeros(n)
-    for ratio, amp, decay in _ANVIL:
-        f = base_hz * ratio
-        # a half-sine force pulse of this duration has this much spectrum at f (first lobe)
-        z = f * contact
-        drive = abs(np.cos(np.pi * z) / (1 - 4 * z * z)) if abs(1 - 4 * z * z) > 1e-6 else np.pi / 4
-        y += amp * drive * np.exp(-decay * t) * np.sin(2 * np.pi * f * t)
-    y *= hammer_mass ** 0.6                         # a heavier hammer delivers more impulse
-    k = max(2, int(contact * sr))
-    y[:k] *= 0.5 - 0.5 * np.cos(np.pi * np.arange(k) / k)
-    return y.astype(np.float32)

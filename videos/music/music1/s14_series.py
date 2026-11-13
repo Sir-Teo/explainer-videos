@@ -30,25 +30,22 @@ class Series(SoundScene):
                    (r"1701 -- 1807", r"Sauveur, \ Bernoulli, \ Fourier", r"because every tone is a ladder of partials",
                     r"mathematics"),
                    (r"1863", r"Helmholtz", r"because shared partials do not beat", r"physiology"),
-                   (r"1965", r"Plomp and Levelt", r"because of how finely the ear separates frequencies", r"psychology"),
-                   (r"2016", r"McDermott and colleagues", r"partly, \ because we were brought up to think so",
-                    r"anthropology")]
+                   (r"1965", r"Plomp and Levelt", r"because of how the ear separates frequencies", r"psychology"),
+                   (r"2016", r"McDermott and colleagues", r"partly because we learn to think so", r"anthropology")]
         rows = VGroup()
         for yr, who, what, field in answers:
             rows.add(VGroup(label(yr, font_size=26, color=HIST), label(who, font_size=26),
                             label(what, font_size=26, color=GREY_A), label(field, font_size=24, color=TUNE)))
-        xs = [-6.5, -4.1, -0.4, 5.1]
+        xs = [-6.7, -4.5, -1.0, 5.0]
         for i, r in enumerate(rows):
             for cell, x in zip(r, xs):
                 cell.move_to([x, 1.9 - 0.78 * i, 0], aligned_edge=LEFT)
         with self.voiceover(
-            "This part answered one question completely: why a string has a pitch. The other question, why simple "
-            "ratios sound good, we have only started. <bookmark mark='a'/> It has been answered six times in "
-            "twenty-five centuries, and each answer came from a different science. Number. <bookmark mark='b'/> "
-            "Vibration. <bookmark mark='c'/> The ladder of partials. <bookmark mark='d'/> Beats. "
-            "<bookmark mark='e'/> The fine structure of the ear. <bookmark mark='f'/> And, in 2016, an experiment "
-            "in the Amazon that suggests part of the answer is simply habit. To follow the question we will need "
-            "all of those sciences, and that is the plan of this series."
+            "This part answered one question completely: why a string has a pitch. The other one, why simple "
+            "ratios sound good, has been answered six times in twenty-five centuries, <bookmark mark='a'/> each "
+            "time by a different science. Number. <bookmark mark='b'/> Vibration. <bookmark mark='c'/> Partials. "
+            "<bookmark mark='d'/> Beats. <bookmark mark='e'/> The ear. <bookmark mark='f'/> And, in 2016, habit. "
+            "To follow that question we will need all six sciences, and that is the plan of this series."
         ) as vo:
             self.play(FadeIn(q))
             for mark, r in zip("abcdef", rows):
@@ -99,16 +96,16 @@ class Series(SoundScene):
 
     # ------------------------------------------------------------------
     def rules(self):
-        ch = chain(lit=("instrument",), detour=True, width=12.4).move_to(UP * 2.4)
+        ch = chain(lit=("instrument",), detour=True, width=13.0, font_size=22).move_to(UP * 2.3)
         cap = label(r"\textbf{the Chain}: \ the path a piece of music travels", font_size=28, color=GREY_A).next_to(ch, UP, buff=0.3)
         tune = VGroup(label(r"\textbf{the Tune}", font_size=32, color=TUNE),
                       label(r"one melody through all sixty-eight parts: \ each part writes a variation with what it "
-                            r"has just built", font_size=26, color=GREY_A)).arrange(RIGHT, buff=0.4).move_to(DOWN * 0.2)
+                            r"has just built", font_size=26, color=GREY_A)).arrange(RIGHT, buff=0.4).move_to(UP * 0.3)
         rules = VGroup(
             label(r"Everything you hear, you see.", font_size=32, color=WHITE),
             label(r"Every sound is computed by the series' own code.", font_size=32, color=WHITE),
             label(r"Every part trains your ear as well as your pencil.", font_size=32, color=EAR),
-        ).arrange(DOWN, buff=0.28).move_to(DOWN * 2.1)
+        ).arrange(DOWN, buff=0.3).move_to(DOWN * 1.7)
         with self.voiceover(
             "The second is a map. Music travels a chain: from a mind to a score, through a player's hands and an "
             "instrument, across the air to an ear and into another mind. <bookmark mark='a'/> Today we lit one link. "

@@ -39,7 +39,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 _NAMESPACES = ("explainer", "explainer.ai", "explainer.analysis", "explainer.stats", "explainer.cs",
-               "explainer.philosophy", "explainer.quant")
+               "explainer.philosophy", "explainer.quant", "explainer.music")
 
 
 def _standalone() -> None:
@@ -84,6 +84,7 @@ class Lab:
     rows: list = field(default_factory=list)
     fig: object = None
     note: str = ""
+    audio: object = None  # Music, Built: a sound to go with the figure (anything with ``write_pcm16(path)``)
 
     def row(self, label: str, value, fmt: str = "") -> None:
         self.rows.append((label, format(value, fmt) if fmt else str(value)))
@@ -155,7 +156,7 @@ def main(series: str | None = None) -> None:
 
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     if series is None:
-        ap.add_argument("series", help="ai, stats, cs, philosophy or analysis")
+        ap.add_argument("series", help="ai, stats, cs, philosophy, analysis or music")
     ap.add_argument("parts", nargs="*", type=int, help="part numbers")
     ap.add_argument("--all", action="store_true", help="run every lab")
     ap.add_argument("--list", action="store_true", help="list the labs and exit")
@@ -180,6 +181,9 @@ def main(series: str | None = None) -> None:
 
             plt.show()
         out = save(lab, Path(args.out or ROOT / "renders" / "labs" / series) / f"lab{part:02d}.png")
+        if lab.audio is not None:
+            lab.audio.write_pcm16(out.with_suffix(".wav"))
+            print(f"\nsound:  {out.with_suffix('.wav')}")
         print(f"\nfigure: {out}   ({time.time() - start:.1f} s)\n\nNow change it:")
         for task in module.TASKS:
             print(f"  - {task}")

@@ -9,7 +9,7 @@ Monochord (``explainer/music/monochord``); the dates and the attributions are th
 
 Items:
     hammers     the legend's numbers (12, 9, 8, 6), what they give as lengths and as hanging weights, the weights
-                that are needed instead (Vincenzo Galilei), an illustrative anvil, and the Tune's first phrase
+                that are needed instead (Vincenzo Galilei), and the Tune's first phrase
     ratios      the monochord: the open string and its stops at 1/2, 2/3 and 3/4, each simulated and its pitch
                 measured; the pairs as sound; a which-is-the-fifth question
     mersenne    the pitch against length, tension and mass on simulated strings, the exponents fitted to twenty-four
@@ -44,7 +44,7 @@ import numpy as np
 from explainer.ai.cache import Cache
 from explainer.music.monochord import EXAMPLE_LEVEL, QUIET_LEVEL, SR, Clip, ClipStore, concat, mix, tune
 from explainer.music.monochord.dsp import f0_autocorr, partials
-from explainer.music.monochord.instruments import MONOCHORD_STRING, anvil, plucked, pure_tone, released
+from explainer.music.monochord.instruments import MONOCHORD_STRING, plucked, pure_tone, released
 from explainer.music.monochord.instruments.plucked import C3, pluck_partials
 from explainer.music.monochord.loudness import integrated, momentary_max, true_peak_db
 from explainer.music.monochord.physics import (String, dalembert, energy, pluck_modes, pluck_shape, simulate,
@@ -103,10 +103,7 @@ def compute_hammers() -> dict:
         as_weights[name] = {"weights": [a, b], "ratio": r, "cents": cents(r), "measured_ratio": m,
                             "measured_cents": cents(m), "wanted_cents": cents(a / b)}
     needed = {"octave": [4, 1], "fifth": [9, 4], "fourth": [16, 9]}
-    # the anvil of the story: four hammers, one block (illustrative)
-    strikes = [Clip(anvil(w / 6.0)).fade(0.0005, 0.2) for w in weights]
-    a = concat(strikes, gap=0.05, names=[f"h{w}" for w in weights])
-    info = {"anvil": save("hammers.anvil", a, "illustrative")}
+    info = {}
     # weights hung on the string: 6 units, then 12 (the legend says an octave), then 24 (what an octave takes)
     w6 = note(seconds=1.7)
     w12 = Clip(plucked(seconds=1.7, string=STRING.with_(T=STRING.T * 2))).fade(0.002, 0.04)

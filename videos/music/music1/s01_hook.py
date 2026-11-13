@@ -113,7 +113,6 @@ class Hook(SoundScene):
     # ------------------------------------------------------------------
     def anvil(self):
         d = load("hammers")
-        c = clip("hammers.anvil")
         false_ = label(r"It is false.", font_size=84, color=BAD)
         both = label(r"Both halves.", font_size=44, color=GREY_A).next_to(false_, DOWN, buff=0.4)
         with self.voiceover("It is false. <bookmark mark='a'/> Both halves of it.") as vo:
@@ -121,34 +120,19 @@ class Hook(SoundScene):
             vo.wait_until("a")
             self.play(FadeIn(both))
         self.clear_scene(run_time=0.6)
-        anv = anvil_shape(3.0).move_to(LEFT * 3.4 + DOWN * 1.6)
+        anv = anvil_shape(3.0).move_to(DOWN * 1.7)
         hams = VGroup(*[hammer(w, 0.8) for w in d["weights"]]).arrange(RIGHT, buff=0.45, aligned_edge=DOWN)
         hams.next_to(anv, UP, buff=0.9)
-        # the ring of the block: the same five partials under every hammer
-        ratios = [1.0, 2.756, 5.404, 8.933, 13.34]
-        panel = Rectangle(width=4.6, height=4.4, stroke_color=GREY_D, stroke_width=1.2).move_to(RIGHT * 3.4 + DOWN * 0.2)
-        lines = VGroup(*[Line(panel.get_left() + RIGHT * 0.3, panel.get_right() + LEFT * 0.3, color=MC.FREQ,
-                              stroke_width=4).set_y(panel.get_bottom()[1] + 0.35 + 3.7 * np.log(r) / np.log(13.34))
-                         for r in ratios])
-        cap = label(r"the anvil's partials", font_size=26, color=MC.FREQ).next_to(panel, UP, buff=0.15)
-        axis = label(r"frequency $\rightarrow$", font_size=22, color=GREY_B).rotate(PI / 2).next_to(panel, LEFT, buff=0.15)
+        cap = label(r"the ring belongs to the anvil, \ not to the hammer", font_size=30, color=GREY_A).to_edge(UP, buff=0.7)
         with self.voiceover(
-            "Take the hammers first. Strike one anvil with four hammers, <bookmark mark='a'/> and the ring you hear "
-            "belongs to the anvil. A heavier hammer hits harder and duller. The notes do not move."
-        ) as vo:
-            self.play(FadeIn(anv), FadeIn(hams))
-            vo.wait_until("a")
-            self.play(FadeIn(panel), FadeIn(cap), FadeIn(axis), FadeIn(lines.set_opacity(0.25)))
-        with self.listen(c) as snd:
-            window(snd, r"four hammers, one anvil", kind="illustrative")
-            for k, w in enumerate(d["weights"]):
-                snd.wait_until(f"h{w}")
+            "The hammers first. Strike one anvil with four hammers and the ring you hear belongs to the anvil. "
+            "Change the hammer, and the notes do not move."
+        ):
+            self.play(FadeIn(anv), FadeIn(hams), FadeIn(cap))
+            for k in range(4):
                 home = hams[k].get_center()
-                self.play(hams[k].animate.move_to(anv.get_top() + UP * 0.75 + LEFT * 0.4), run_time=0.12)
-                bright = [min(1.0, 0.45 + 0.55 * (6 / w) ** (0.4 * j)) for j in range(5)]
-                for ln, b in zip(lines, bright):
-                    ln.set_opacity(b)
-                self.play(hams[k].animate.move_to(home), lines.animate.set_opacity(0.25), run_time=1.2)
+                self.play(hams[k].animate.move_to(anv.get_top() + UP * 0.6 + LEFT * 0.4), run_time=0.25)
+                self.play(hams[k].animate.move_to(home), run_time=0.35)
         self.wait(0.2)
         self.clear_scene()
 
@@ -264,11 +248,9 @@ class Hook(SoundScene):
         with self.voiceover(
             "This is Part 1 of Music, Built: sixty-eight lectures that start with one string and end with an "
             "orchestra, a recording studio, and machines that listen and compose. Everything you hear in this series "
-            "is made by the code we write along the way. <bookmark mark='a'/> In this part: the monochord and its "
-            "numbers. What sets the pitch of a string, tested on a string we simulate. The wave equation, derived "
-            "from Newton's law. Two pictures of the same motion, travelling waves and standing waves, and the quarrel "
-            "between them. The plucked string, and why one string is already a chord. And a first answer to "
-            "Pythagoras."
+            "is made by the code we write along the way. <bookmark mark='a'/> In this part: the monochord. What sets "
+            "the pitch of a string. The wave equation, from Newton's law. Travelling waves, standing waves, and the "
+            "quarrel between them. Why one string is already a chord. And a first answer to Pythagoras."
         ) as vo:
             self.play(FadeIn(title), FadeIn(smap))
             vo.wait_until("a")
