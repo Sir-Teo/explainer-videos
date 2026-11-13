@@ -55,16 +55,45 @@ class Ratios(SoundScene):
         self.play(FadeOut(card))
 
     def play_pair(self, key: str, combs: Combs, text: str):
-        with self.listen(clip(f"coincide.{key}")) as snd:
+        """Lower string, upper string, both.  Each partial's line lights when its string is plucked and fades at
+        the rate that partial dies away in the sound (the decay times measured in chapter nine)."""
+        c = clip(f"coincide.{key}")
+        row = load("coincide")["rows"][key]
+        tab = load("overtones")["table"]
+        slope, base = np.polyfit([r["hz"] ** 2 for r in tab], [6.91 / r["t60"] for r in tab], 1)
+        t_hi, t_both = c.events["hi"], c.events["both"]
+
+        def ringer(hz, onsets, silent=None):
+            rate = base + slope * hz * hz
+
+            def fn(m, t):
+                if silent and silent[0] <= t < silent[1]:
+                    level = None
+                else:
+                    on = [o for o in onsets if o <= t]
+                    level = float(np.exp(-rate * (t - on[-1]))) if on else None
+                line = m[0] if len(m.submobjects) else m
+                line.set_stroke(opacity=0.12 if level is None else 0.25 + 0.75 * level)
+                if len(m.submobjects):
+                    m[1].set_opacity(0.3 if level is None else 1.0)
+            return fn
+
+        with self.listen(c) as snd:
             window(snd, text, detail=r"two strings, \ left and right", tag_corner=DR)
-            combs.lower.set_opacity(1.0)
-            combs.upper.set_opacity(0.2)
-            snd.wait_until("hi")
-            combs.lower.set_opacity(0.2)
-            combs.upper.set_opacity(1.0)
+            for tick, hz in zip(combs.lower, row["lower"]):
+                snd.drive(tick, ringer(hz, (0.0, t_both), silent=(t_hi, t_both)))
+            for tick, hz in zip(combs.upper, row["upper"]):
+                snd.drive(tick, ringer(hz, (t_hi, t_both), silent=(0.0, t_hi)))
             snd.wait_until("both")
-            combs.lower.set_opacity(1.0)
-            self.play(FadeIn(combs.links), run_time=0.4)
+            if len(combs.links):
+                self.add(combs.links)
+                for link, (n, _) in zip(combs.links, [nm for nm in row["meets"] if nm[1] <= len(row["upper"])]):
+                    snd.drive(link, ringer(row["lower"][n - 1], (t_both,)))
+        for part in (combs.lower, combs.upper):
+            for tick in part:
+                tick[0].set_stroke(opacity=1.0)
+                tick[1].set_opacity(1.0)
+        combs.links.set_stroke(opacity=1.0)
 
     # ------------------------------------------------------------------
     def octave(self):
@@ -83,10 +112,10 @@ class Ratios(SoundScene):
             "one frequency axis. The lower string's ladder below the line, <bookmark mark='b'/> the upper string's "
             "above it. Start with the octave, where the upper string is twice as high."
         ) as vo:
-            self.play(Create(combs.axis), FadeIn(ax),
-                      LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in combs.lower], lag_ratio=0.25), run_time=5.0)
+            self.play(FadeIn(title), Create(combs.axis), FadeIn(ax), FadeIn(combs.lower[0]), run_time=0.6)
+            self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.1) for t in combs.lower[1:]], lag_ratio=0.25), run_time=4.4)
             vo.wait_until("a")
-            self.play(FadeIn(names[0]), FadeIn(title))
+            self.play(FadeIn(names[0]))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(t, shift=DOWN * 0.1) for t in combs.upper], lag_ratio=0.06), FadeIn(names[1]),
                       run_time=1.5)
@@ -203,28 +232,57 @@ class Ratios(SoundScene):
             self.play(FadeIn(cap[1]))
             vo.wait_until("b")
             self.play(FadeIn(combs))
+        measured = d["band"]
+        rate = measured["rate"]
+        heard = {k: np.array(measured["env"][k]) for k in ("mistuned", "pure")}
+
+        def band_of(key, color):
+            return Lens([-5.6, 1.5, 0], [5.6, 1.5, 0], amp=1.15, color=color, opacity=0.5, shape=heard[key], n=400)
+
+        def sweep(snd, t0, seconds):
+            h = Line([-5.6, 0.5, 0], [-5.6, 2.5, 0], color=WHITE, stroke_width=2)
+            snd.show(h)
+            snd.drive(h, lambda mob, t: mob.set_x(-5.6 + 11.2 * float(np.clip((t - t0) / seconds, 0, 1))))
+            return h
+
+        cap2 = VGroup(label(rf"both strings: \ the band round {m['hz'][0]:.0f} hertz", font_size=26, color=FREQ),
+                      label(r"filtered out of the sound you are hearing", font_size=26, color=GREY_A)
+                      ).arrange(DOWN, buff=0.12).to_edge(UP, buff=0.4)
         with self.listen(c) as snd:
             window(snd, r"the pair, \ the mistuned fifth, \ the true fifth")
-            snd.show(head)
-            snd.drive(head, lambda mob, t: mob.set_x(-5.6 + 11.2 * float(np.clip(t / dur, 0, 1))))
+            head = sweep(snd, t_pair, dur)
             pair.set_color(BAD)
             snd.wait_until("mistuned")
-            self.remove(head)
-            snd.drive(pair, lambda mob, t: mob.set_stroke(
-                opacity=0.25 + 0.75 * abs(np.cos(np.pi * m["beat_hz"] * (t - t_bad))) if t < t_pure else 1.0))
+            self.remove(head, band, *cap)
+            bad = band_of("mistuned", BAD)
+            self.add(bad, cap2)
+            head = sweep(snd, t_bad, measured["seconds"])
+
+            def throb(mob, t):
+                i = int(np.clip((t - t_bad) * rate, 0, len(heard["mistuned"]) - 1))
+                mob.set_stroke(opacity=1.0 if t >= t_pure else 0.2 + 0.8 * min(1.0, heard["mistuned"][i] / 0.57))
+
+            snd.drive(pair, throb)
             verdict = label(r"mistuned: \ the third partial of one fights the second of the other", font_size=26,
                             color=BAD).next_to(combs, UP, buff=0.3)
             snd.show(verdict)
             snd.wait_until("pure")
-            self.remove(verdict)
+            self.remove(verdict, head, bad)
             pair.set_color(GOOD)
+            good = band_of("pure", GOOD)
+            self.add(good)
+            sweep(snd, t_pure, measured["seconds"])
             ok = label(r"in tune: \ the same frequency, \ no beats", font_size=26, color=GOOD).next_to(combs, UP, buff=0.3)
-            snd.show(ok)
+            self.add(ok)
         with self.voiceover(
             "That slow throb is how instruments are tuned. You do not judge the note; you listen for the beats and "
-            "slow them down until they stop."
-        ):
+            "slow them down until they stop. <bookmark mark='a'/> And the picture was not a cartoon. It is the band "
+            "where those two partials sit, filtered out of the sound you heard, and in the mistuned fifth it swells "
+            f"{say(measured['beat_hz_measured'], 1)} times a second: the difference of the two frequencies."
+        ) as vo:
             self.play(Indicate(pair, color=GOOD, scale_factor=1.2))
+            vo.wait_until("a")
+            self.play(FadeOut(good), FadeIn(bad), FadeOut(ok), run_time=0.6)
         self.wait(0.3)
         self.clear_scene()
 

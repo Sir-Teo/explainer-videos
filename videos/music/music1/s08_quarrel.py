@@ -112,9 +112,9 @@ class Quarrel(SoundScene):
             "in grey. <bookmark mark='a'/> We will build it from modes: one, then two, three, five, ten, thirty. "
             "Each time, you will hear the string as it would sound with only those modes in it."
         ) as vo:
-            self.play(FadeIn(target), FadeIn(s))
+            self.play(FadeIn(target), FadeIn(s), FadeIn(bars), FadeIn(blab))
             vo.wait_until("a")
-            self.play(FadeIn(bars), FadeIn(blab), FadeIn(count))
+            self.play(FadeIn(count))
         with self.listen(c) as snd:
             window(snd, r"1, 2, 3, 5, 10, 30 modes, \ then all")
             for N, row in zip(d["heard"], d["heard_sums"]):

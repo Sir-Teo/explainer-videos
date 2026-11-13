@@ -8,7 +8,7 @@ Manim videos with local neural narration. See README.md for layout and build com
 - Generated and git-ignored: `media/`, `renders/`, `published/`, `.cache/`, `_site/`. Narration/manim caches are keyed by video
   name and scene module name, so renaming either invalidates them.
 - Course sites (GitHub Pages, `.github/workflows/course-site.yml`): `tools/course_site.py` builds `_site/`, *Quant, Built*
-  from its own course table and every other series (`ai`, `stats`, `cs`, `philosophy`, `analysis`, the single films) through
+  from its own course table and every other series (`ai`, `stats`, `cs`, `philosophy`, `music`, `analysis`, the single films) through
   `tools/series_site.py`, which only parses each part's `manifest.py` and `README.md` and the series' `README.md` (its
   `## The parts` table gives the acts and each part's row) and `SYLLABUS.md` (`Part N · ` headings); README sections whose
   headings read as QA or review logs are left off the pages. Keep those shapes; `tests/test_series_site.py` checks them.
@@ -47,7 +47,13 @@ Manim videos with local neural narration. See README.md for layout and build com
 - *Computer Science, Built* (`videos/cs/`): sixty-one parts in eleven acts (`cs1` … `cs61`: a CS degree plus industry practice in Acts I–X, a research tier in Act XI and a *Frontier* chapter in every part), Parts 1–61 built or in progress; the series plan
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
-- *Music, Built* (`videos/music/`): planned, nothing built. Sixty-eight parts in twelve acts (`music1` … `music68`); the
+- *Music, Built* (`videos/music/`): sixty-eight parts in twelve acts (`music1` … `music68`), Part 1 built; the
   series plan is `videos/music/README.md`, the standard, devices (Monochord, the Tune and the Variations, the Chain,
-  the Library), the sound pipeline and the part-by-part plan are `videos/music/SYLLABUS.md` (open decisions in its §9).
-  Every sound is computed by the part's `compute.py`; no third-party recordings are played as music.
+  the Library), the sound pipeline and the part-by-part plan are `videos/music/SYLLABUS.md`, the working guide
+  `videos/music/LECTURE_GUIDE.md`. Monochord, the instrument the series builds, is `explainer/music/monochord/`
+  (no manim; tested in `tests/music/`); scenes are `SoundScene`s (`explainer/music/sound.py`) and play clips from the
+  part's `ClipStore` inside `with self.listen(clip) as snd:` windows, the picture driven by `snd.drive(...)`. Every
+  sound is computed by the part's `compute.py`; no third-party recordings are played as music. Gates besides the
+  usual ones: `tools/qa_sound.py musicN --sync`, `tools/dead_air.py <film> --sound musicN`, and
+  `tools/lecture_length.py musicN` (30–60 minutes, listening included). `videos/music/soundcheck/` is the pipeline's
+  two-minute test film.

@@ -143,11 +143,16 @@ class Mersenne(SoundScene):
         half.next_to(box, DOWN, buff=0.2)
         # a string long and slack enough to count: its slow swing, and a tally
         long = StringView(width=5.6, scale=0.45, stroke_width=3).move_to(LEFT * 3.6 + DOWN * 1.6)
-        tr = ValueTracker(0.0)
         xs_ = np.linspace(0, 1, 60)
-        long.add_updater(lambda m: m.set_shape(np.sin(np.pi * xs_) * np.cos(2 * PI * 0.8 * tr.get_value())))
+        clock = {"t": 0.0, "from": None}
+
+        def swing(m, dt):
+            clock["t"] += dt
+            m.set_shape(np.sin(np.pi * xs_) * np.cos(2 * PI * 0.8 * clock["t"]))
+
+        long.add_updater(swing)
         tally = Integer(0, font_size=54, color=TUNE).next_to(long, DOWN, buff=0.75)
-        tally.add_updater(lambda m: m.set_value(int(0.8 * tr.get_value())))
+        tally.add_updater(lambda m: m.set_value(int(0.8 * (clock["t"] - clock["from"])) if clock["from"] is not None else 0))
         cap = label(r"a string long and slack enough to count", font_size=24, color=GREY_A).next_to(long, UP, buff=0.75)
         with self.voiceover(
             "These three rules are called Mersenne's laws. Marin Mersenne was a friar in Paris, and in 1636 he "
@@ -157,12 +162,13 @@ class Mersenne(SoundScene):
             "had done. He made strings so long and slack that he could count their swings by eye, then used his own "
             "laws to scale up, and so put the first actual number, vibrations per second, on a musical note."
         ) as vo:
-            self.play(FadeIn(card, shift=RIGHT * 0.2))
+            self.play(FadeIn(card, shift=RIGHT * 0.2), FadeIn(long))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r, shift=LEFT * 0.2) for r in rows], lag_ratio=0.5), run_time=3.0)
             vo.wait_until("b")
-            self.play(FadeIn(long), FadeIn(cap), FadeIn(tally), run_time=0.6)
-            self.play(tr.animate.set_value(vo.remaining() + 0.1), run_time=vo.remaining() + 0.1, rate_func=linear)
+            clock["from"] = clock["t"]
+            self.play(FadeIn(cap), FadeIn(tally), run_time=0.6)
+            self.wait(vo.remaining() + 0.1)
         long.clear_updaters()
         tally.clear_updaters()
         self.play(FadeOut(long), FadeOut(cap), FadeOut(tally), run_time=0.5)
@@ -198,8 +204,20 @@ class Mersenne(SoundScene):
             MathTex(rf"c = {e['mu']:.3f}", font_size=40, color=MASS),
             MathTex(rf"C = {d['constant']:.3f}", font_size=40, color=GOOD),
         ).arrange(DOWN, buff=0.28, aligned_edge=LEFT).move_to(RIGHT * 3.6 + UP * 0.3)
+        home = fit[0].get_left()
         told = label(r"what the simulation was told: \ Newton's law, for each small piece of string", font_size=26,
                      color=TUNE).to_edge(DOWN, buff=0.5)
+        # the strings themselves, to scale: length across, mass as thickness, tension as colour (slack to taut)
+        t_lo, t_hi = min(r["T"] for r in tab), max(r["T"] for r in tab)
+        herd = VGroup()
+        for r in tab:
+            line = Line(ORIGIN, RIGHT * 1.6 * r["L"], stroke_width=1.5 + 4.5 * np.sqrt(r["mu"] / 0.00786),
+                        color=interpolate_color(ManimColor(GREY_C), ManimColor(FORCE), (r["T"] - t_lo) / (t_hi - t_lo)))
+            herd.add(VGroup(Triangle(color=WHITE, fill_opacity=1).scale(0.04).move_to(line.get_start() + DOWN * 0.05),
+                            line, Triangle(color=WHITE, fill_opacity=1).scale(0.04).move_to(line.get_end() + DOWN * 0.05)))
+        herd.arrange_in_grid(rows=8, cols=3, buff=(0.35, 0.3), cell_alignment=LEFT).move_to(RIGHT * 3.3 + DOWN * 0.75)
+        key = label(r"longer or shorter, \ heavier is thicker, \ tauter is brighter", font_size=22, color=GREY_B)
+        key.next_to(herd, DOWN, buff=0.3)
         with self.voiceover(
             "Do the laws hold for our string? Here is the test. We made up "
             f"{d['strings']} strings with random lengths, tensions and masses, simulated each one, and measured its "
@@ -209,11 +227,15 @@ class Mersenne(SoundScene):
             f"<bookmark mark='c'/> it finds {say(e['L'], 3)} for the length, {say(e['T'], 3)} for the tension, "
             f"{say(e['mu'], 3)} for the mass, and a constant of {say(d['constant'], 3)}."
         ) as vo:
-            self.play(FadeIn(g), Create(diag))
+            fit[0].move_to(RIGHT * 3.5 + UP * 2.9)
+            self.play(FadeIn(g), Create(diag), FadeIn(fit[0]), run_time=0.8)
+            self.play(LaggedStart(*[FadeIn(h, shift=RIGHT * 0.15) for h in herd], lag_ratio=0.12), run_time=4.0)
+            self.play(FadeIn(key), run_time=0.4)
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(p, scale=0.5) for p in pts], lag_ratio=0.05), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(fit[0]), FadeIn(fit[1]))
+            self.play(FadeOut(herd), FadeOut(key), fit[0].animate.move_to(home, aligned_edge=LEFT), run_time=0.6)
+            self.play(FadeIn(fit[1]))
             vo.wait_until("c")
             self.play(LaggedStart(*[FadeIn(r) for r in fit[2:]], lag_ratio=0.6), run_time=4.0)
         with self.voiceover(

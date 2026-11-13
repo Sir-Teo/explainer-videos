@@ -64,8 +64,13 @@ class Modes(SoundScene):
             "does that. <bookmark mark='d'/> And a sine that is zero at both ends has to fit a whole number of "
             "half-waves into the string."
         ) as vo:
-            self.play(FadeIn(s))
+            head = VGroup(label(r"not a shape that travels", font_size=34, color=GREY_B),
+                          label(r"a shape that stays where it is, \ and swings", font_size=38, color=STR)
+                          ).arrange(DOWN, buff=0.3).move_to(DOWN * 0.4)
+            self.play(FadeIn(s), FadeIn(head[0]))
+            self.play(FadeIn(head[1], shift=UP * 0.15))
             vo.wait_until("a")
+            self.play(FadeOut(head), run_time=0.3)
             step(0)
             vo.wait_until("b")
             step(1)

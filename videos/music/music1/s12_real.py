@@ -85,6 +85,9 @@ class RealStrings(SoundScene):
                  xticks=[1, 4, 8, 12], yticks=[0, 2, 4], font_size=20)
         g.move_to(LEFT * 3.0 + DOWN * 1.2)
         line = curve(g.ax, [r["n"] for r in rows], [r["decay_model"] for r in rows], FORCE, stroke_width=2.5)
+        # the first term alone: the same rate for every mode (sigma_0, read off the model's first two values)
+        sigma0 = rows[0]["decay_model"] - (rows[1]["decay_model"] - rows[0]["decay_model"]) / 3
+        flat = DashedLine(g.ax.c2p(1, sigma0), g.ax.c2p(12, sigma0), color=LEVEL, stroke_width=2.5, dash_length=0.12)
         pts = VGroup(*[Dot(g.ax.c2p(r["n"], r["decay_measured"]), radius=0.07, color=TUNE) for r in rows])
         leg = VGroup(VGroup(Line(ORIGIN, RIGHT * 0.4, color=FORCE, stroke_width=3),
                             label(r"the model: \ $\sigma_0 + \sigma_1 (n\pi/L)^2$", font_size=24, color=FORCE)).arrange(RIGHT, buff=0.15),
@@ -102,9 +105,10 @@ class RealStrings(SoundScene):
         ) as vo:
             self.play(FadeIn(eq[:3]), FadeIn(g))
             vo.wait_until("a")
-            self.play(FadeIn(eq[3]), FadeIn(notes[0]))
+            self.play(FadeIn(eq[3]), FadeIn(notes[0]), Create(flat))
             vo.wait_until("b")
             self.play(FadeIn(eq[4]), FadeIn(notes[1]))
+            self.play(ReplacementTransform(flat.copy().set_opacity(0.0), line), run_time=1.6)
         with self.voiceover(
             "Here is that rate for the first twelve partials: the curve from the equation, "
             "<bookmark mark='a'/> and the points measured on the bead simulation. They agree to within "
@@ -113,7 +117,7 @@ class RealStrings(SoundScene):
             f"{say(rows[11]['t60'], 1)}. That is what you saw in the spectrogram: a note that starts bright and "
             "ends as almost a pure tone."
         ) as vo:
-            self.play(Create(line), FadeIn(leg[0]))
+            self.play(FadeIn(leg[0]), Indicate(line, color=FORCE, scale_factor=1.03))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(p, scale=0.5) for p in pts], lag_ratio=0.08), FadeIn(leg[1]))
             vo.wait_until("b")

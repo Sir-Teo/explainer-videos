@@ -76,6 +76,26 @@ def test_shared_partials_and_beats():
     assert c["mistuned"]["beat_hz"] == pytest.approx(2.73, abs=0.02)
 
 
+def test_the_beats_are_in_the_clip_itself():
+    """The picture of the mistuned fifth is the band round the two partials, filtered out of the clip that is heard."""
+    c = load("coincide")
+    band = c["band"]
+    assert band["beat_hz_measured"] == pytest.approx(c["mistuned"]["beat_hz"], abs=0.05)
+    bad, good = (np.array(band["env"][k]) for k in ("mistuned", "pure"))
+    # after the attack the mistuned band rises again and again; the true one only falls
+    rise = lambda e: float(max(e[i + 10] - e[i] for i in range(10, 290)))
+    assert rise(bad) > 0.2 and rise(good) < 0.02
+
+
+def test_the_ear_thread():
+    """Three to six pause-and-listen questions in a part (SYLLABUS section 1)."""
+    from pathlib import Path
+
+    here = Path(compute.__file__).parent
+    asked = sum((here / f"{module}.py").read_text().count("listen_card(") for module, _, _ in SCENES)
+    assert 3 <= asked <= 6, asked
+
+
 def test_real_strings_and_the_frontier():
     r = load("real")
     assert r["decay_worst_rel"] < 0.02

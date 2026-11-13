@@ -25,6 +25,7 @@ class Pluck(SoundScene):
         self.formula()
         self.compare()
         self.practice()
+        self.quiz()
 
     # ------------------------------------------------------------------
     def card(self):
@@ -237,10 +238,46 @@ class Pluck(SoundScene):
                 snd.show(lens)
                 nxt = snd.time_of(f"p{i + 1}") if i + 1 < len(d["sweep_betas"]) else None
                 snd.drive(lens, ring(at=snd.time_of(f"p{i}") + 0.12, rate=2.0, stop_at=nxt))
-        with self.voiceover(
-            "So one pluck sets a dozen modes going at once, in amounts we can calculate. The obvious question is "
-            "whether we actually hear them."
-        ):
-            self.play(Indicate(bars, color=TUNE, scale_factor=1.03))
         self.wait(0.2)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def quiz(self):
+        d = load("pluck")
+        q = listen_card(r"The same note, \ plucked twice: \ A and B. \\ Which one was plucked in the middle of the "
+                        r"string?", width=9.4).to_edge(UP, buff=0.6)
+        boxes = VGroup(*[VGroup(RoundedRectangle(width=2.6, height=1.6, corner_radius=0.15, stroke_color=GREY_C,
+                                                 stroke_width=2), label(t, font_size=60, color=GREY_A))
+                         for t in ("A", "B")]).arrange(RIGHT, buff=1.4).shift(DOWN * 0.6)
+        with self.voiceover("A question for your ears. The same note, plucked twice. Which one was plucked in the "
+                            "middle of the string?"):
+            self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(boxes))
+        c = clip("pluck.quiz")
+        with self.listen(c) as snd:
+            window(snd, r"A, \ then B", tag_corner=DR)
+            for i, (key, box) in enumerate(zip("AB", boxes)):
+                snd.wait_until(key)
+                box[1].set_color(EAR)
+                glow = box[0].copy().set_stroke(EAR, width=5)
+                snd.show(glow)
+                t0 = snd.time_of(key)
+                t1 = snd.time_of("B") if i == 0 else c.duration
+                # the box's edge fades with the note: no picture of the string, which would give the answer away
+                snd.drive(glow, lambda m, t, t0=t0, t1=t1: m.set_stroke(
+                    opacity=float(np.exp(-2.2 * max(t - t0, 0.0))) if t < t1 else 0.0))
+                snd.wait_until(t1 - 0.05)
+                box[1].set_color(GREY_A)
+        v = [StringView(width=2.4, scale=0.4, stroke_width=3) for _ in range(2)]
+        v[0].set_shape(pluck_shape(X, 1.0, 0.1, 1.0))
+        v[1].set_shape(pluck_shape(X, 1.0, 0.5, 1.0))
+        for view, box in zip(v, boxes):
+            view.next_to(box, DOWN, buff=0.45)
+        with self.voiceover(
+            f"{d['quiz_answer']}. The hollow one, with its even partials missing. A was plucked a tenth of the way "
+            "along. <bookmark mark='a'/> So one pluck sets a dozen modes going at once, in amounts we can "
+            "calculate. The obvious question is whether we actually hear them."
+        ) as vo:
+            self.play(FadeIn(v[0]), FadeIn(v[1]), boxes[1][0].animate.set_stroke(GOOD, width=4))
+            vo.wait_until("a")
+        self.wait(0.3)
         self.clear_scene()

@@ -400,6 +400,24 @@ def two(ratio: float, seconds: float = 3.2) -> Clip:
     return mix([(lo, 0.0, 0.0, -0.3), (hi, 0.0, 0.0, 0.3)])
 
 
+ENV_RATE = 100   # samples a second of a stored envelope
+
+
+def band_envelope(c: Clip, lo: float, hi: float, start: float = 0.0, seconds: float | None = None) -> np.ndarray:
+    """The envelope of one frequency band of a clip (both channels summed), ``ENV_RATE`` values a second."""
+    from scipy.signal import hilbert
+
+    y = np.asarray(c.mono, dtype=float)
+    spec = np.fft.rfft(y)
+    hz = np.fft.rfftfreq(len(y), 1 / c.sr)
+    spec[(hz < lo) | (hz > hi)] = 0.0
+    a = np.abs(hilbert(np.fft.irfft(spec, len(y))))
+    i0 = int(start * c.sr)
+    i1 = len(a) if seconds is None else min(len(a), i0 + int(seconds * c.sr))
+    step = c.sr // ENV_RATE
+    return a[i0:i1:step]
+
+
 def compute_coincide() -> dict:
     f = IDEAL.f1
     rows, info = {}, {}
@@ -422,9 +440,20 @@ def compute_coincide() -> dict:
     seq = concat([pair.at_level(SOFT + 3), two(r_bad, 4.0).at_level(LEVEL), two(1.5, 4.0).at_level(LEVEL)],
                  gap=0.4, names=["pair", "mistuned", "pure"])
     info["beats"] = save("coincide.beats", seq, needs="headphones for the left-right split")
+    # What the picture shows while the two fifths play: the loudness of the band where the two partials meet,
+    # filtered out of the very clip that is heard.
+    band = (3 * f * 0.93, 3 * f * 1.07)
+    env = {k: band_envelope(seq, *band, start=seq.events[k], seconds=4.0) for k in ("mistuned", "pure")}
+    top = max(float(np.max(v)) for v in env.values())
+    env = {k: (v / top).tolist() for k, v in env.items()}
+    dips = np.array(env["mistuned"][20:300])       # the first three seconds, after the attack
+    troughs = [i for i in range(1, len(dips) - 1) if dips[i] < dips[i - 1] and dips[i] <= dips[i + 1]
+               and dips[i] < 0.5 * max(dips[max(i - 20, 0):i + 20])]
+    measured = ENV_RATE / float(np.mean(np.diff(troughs))) if len(troughs) > 2 else 0.0
     return {"rows": rows, "clips": info, "mistuned": {"cents": off, "ratio": r_bad, "beat_hz": beat,
                                                        "lower_partial": 3, "upper_partial": 2,
-                                                       "hz": [3 * f, 2 * f * r_bad]}}
+                                                       "hz": [3 * f, 2 * f * r_bad]},
+            "band": {"hz": list(band), "rate": ENV_RATE, "seconds": 4.0, "env": env, "beat_hz_measured": measured}}
 
 
 # ---------------------------------------------------------------------------

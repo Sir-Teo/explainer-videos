@@ -73,6 +73,7 @@ its brightness fades before its pitch does (`explainer/music/monochord/instrumen
 | `modes` | a finger at 1/2 and 1/3 of a ringing string (a point damper) | which modes have a node there |
 | `fourier` | partial sums of the pluck and their error | the 1/N law |
 | `pluck` | partial levels of the bridge force at four plucking points | sin(nπβ)/n (to 0.4 dB) |
+| `coincide` | the partials two strings share at 2 : 1, 3 : 2, 4 : 3 and the tritone; the band round 392 Hz filtered out of the mistuned fifth | 6, 4, 3, 0 of twelve; beats at f₂ − f₁ = 2.73 Hz (2.74 measured in the clip) |
 | `real` | each partial's decay, and its sharpening by stiffness | σ₀ + σ₁(nπ/L)²; n f₁√(1 + Bn²) |
 | `nonlinear` | the stretching string (Kirchhoff–Carrier); the scheme's energy | √(mean tension) as a lower estimate; exact conservation |
 | `tune` | Variation 1, and each note's interval above the open string | its ratio (to 0.6 cents) |
@@ -92,9 +93,11 @@ depends on stereo.
 ```bash
 python -m videos.music.music1.compute                          # numbers and sounds (under a minute)
 EXPLAINER_TTS=silent python tools/build.py music1 -q l --fps 15   # a silent-narration preview, with the sounds
-python tools/qa_sound.py music1                                # the sound gates
+python tools/qa_sound.py music1 --sync                         # the sound gates
+python tools/dead_air.py renders/music1_480p.mp4 --sound music1   # no empty screen; no sound over a still one
+python tools/lecture_length.py music1                          # 30 to 60 minutes, listening included
 python tools/build.py music1                                   # 1080p30, narrated
-python -m pytest -q tests/music                                # Monochord against its references
+python -m pytest -q tests/music                                # Monochord against its references; this part's claims and clips
 python -m videos.music.labs 1                                  # the lab (writes a figure and a short WAV)
 ```
 

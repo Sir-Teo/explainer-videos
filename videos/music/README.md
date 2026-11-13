@@ -27,11 +27,14 @@ something that runs, and plays what it builds. Two rules hold for every minute:
    its own engine, rendered from public-domain scores or from material written for the series, by the part's
    `compute.py`. Numbers follow the rule of the other series: a computation, a measurement or a cited source.
 
-The videos will be `music1` … `music68`. The standard, the devices, the sound pipeline and the part-by-part plan
+The videos are `music1` … `music68`. The standard, the devices, the sound pipeline and the part-by-part plan
 are in [`SYLLABUS.md`](SYLLABUS.md).
 
-**Status:** plan of record, draft 1 (2026-11-13). Nothing is built. The decisions that are still the owner's are
-listed in [`SYLLABUS.md`](SYLLABUS.md) §9.
+**Status (2026-11-13):** production runs on the plan's proposed defaults (the Tune is *Ah! vous dirai-je, maman*;
+the rights rule as written; sixty-eight parts; English first; see [`SYLLABUS.md`](SYLLABUS.md) §9). Phase 0, the sound pipeline, is built and proven on
+a test film (`videos/music/soundcheck/`). **Part 1, *One String*, is built**: fifteen chapters, 57 minutes, with its
+lab, its interactive and its problem set ([`music1/README.md`](music1/README.md)). How a part is made, with the
+lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md).
 
 ## The story
 

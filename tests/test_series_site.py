@@ -45,6 +45,20 @@ def test_the_readme_tables_and_syllabi_are_read():
     assert all(site.syllabus_entry("cs", n)["story"] for n in range(1, 62))
 
 
+def test_a_series_in_progress_is_read_too():
+    """*Music, Built* has its whole plan and its first parts: the acts cover the plan, the entries are what is built."""
+    entries = site.entries("music")
+    assert [e.video for e in entries][:1] == ["music1"] and entries[0].title == "One String"
+    covered = [n for _, _, (a, b), _ in site.acts("music") for n in range(a, b + 1)]
+    assert covered == list(range(1, 69))
+    assert sorted(site.parts_table("music")[1]) == list(range(1, 69))
+    for e in entries:
+        assert site.card_line(e) and site.syllabus_entry("music", e.n)["plan"], e.video
+        assert sum(site.chapter_minutes(e)) > 30, e.video
+        kinds = {k for k, *_ in site.split_readme(e.dir / "README.md")["en"]}
+        assert {"problems", "sources", "build"} <= kinds, (e.video, kinds)
+
+
 def test_lengths_come_from_the_narration():
     for key in PARTS:
         for e in site.entries(key):

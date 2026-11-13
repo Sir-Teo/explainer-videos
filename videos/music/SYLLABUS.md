@@ -1351,9 +1351,28 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 
 ## 8. Progress
 
-Nothing built. Updated as parts land.
+| Date | What landed |
+|---|---|
+| 2026-11-13 | The plan (this file and `README.md`). |
+| 2026-11-13 | **Phase 0**: the clip store and loudness meter, `SoundScene` and cue sheets, stem mixing and the music master in `tools/build.py`, `tools/qa_sound.py`, Monochord's first layer (the stiff, lossy, stretching string, checked three ways), the scene instruments of §4 that Part 1 needs, and the test film `videos/music/soundcheck/` (picture-to-sound offsets within one frame). |
+| 2026-11-13 | **Part 1, *One String***: 15 chapters, 57.1 min of which 3.4 min listening in 40 windows; 3 pause-and-listen questions; Variation 1; Lab 1 and the plucked-string interactive; all gates clean on the 480p silent preview. Lessons in `LECTURE_GUIDE.md`. |
+
+**Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
+before Part 10 is opened), `tools/make.py` registration (with the narrated masters), the optional `music-qa`
+extra. **Not yet done for Part 1:** the narrated master (the preview is silent-narration at 480p; the music stem
+is final) and the Chinese edition (Phase 6).
+
+**Changes to the plan made by the pilot.** Part 1 runs 57 minutes, not the ~45 first estimated: the chapter
+count was right but each chapter needed its listening windows. Estimates in §5 for the other parts of Act I
+should be read as narration time; add three to four minutes of listening. Levels are set by the loudest 400 ms,
+not by integrated loudness (§3), because plucked sounds are peaky.
 
 ## 9. Decisions for the owner
+
+*2026-11-13: the owner read the plan and said to proceed. Production therefore runs on the proposed defaults:
+items 1, 2, 4, 6 and 7 as written; item 3 English first, Chinese in Phase 6; item 5 after the engraver pilot,
+before Part 10. Any of them can still be changed; the Tune (item 1) is the only one that gets more expensive to
+change with every part.*
 
 1. **The Tune.** *Ah! vous dirai-je, maman* is proposed for the reasons in §2.2. The alternative is a theme
    written for the series. A familiar tune makes every transformation audible to everyone; an original one avoids
