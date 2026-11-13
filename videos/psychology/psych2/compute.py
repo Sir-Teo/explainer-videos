@@ -162,7 +162,7 @@ def compute_balance() -> dict:
                 "speed": lab.balance(speed, chosen)}
     # an experimenter assigning "at random" by eye, who tends to put the alert-looking (quick) people in the
     # treatment: a mild preference is enough
-    by_eye = (speed + 30.0 * g.standard_normal(N) < np.median(speed)).astype(int)
+    by_eye = (speed + 75.0 * g.standard_normal(N) < np.median(speed)).astype(int)
     eye = {"age": lab.balance(age, by_eye), "speed": lab.balance(speed, by_eye)}
     edges = np.linspace(-0.6, 0.6, 41)
     theory_sd = math.sqrt(4 / N)

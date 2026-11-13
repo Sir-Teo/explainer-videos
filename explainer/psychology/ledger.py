@@ -208,3 +208,108 @@ add(Finding(
              "simple reaction time, Frontiers in Human Neuroscience 9 (2015) 131"),
     checked="2026-11-13",
 ))
+
+
+# ---------------------------------------------------------------------------
+# Part 2
+# ---------------------------------------------------------------------------
+_PFUNGST = ("O. Pfungst, Clever Hans (The Horse of Mr. von Osten): A Contribution to Experimental Animal and Human "
+            "Psychology, transl. C. L. Rahn (1911; German original 1907)")
+_LIT = ("L. Lit, J. B. Schweitzer and A. M. Oberbauer, Handler beliefs affect scent detection dog outcomes, Animal "
+        "Cognition 14 (2011) 387-394")
+
+add(Finding(
+    key="clever_hans", part=2, title=r"An animal reads its handler",
+    claim="An animal's apparent answers can be produced by cues its handler gives without knowing it.",
+    original=Study("Pfungst", 1907, n="one horse, some hundreds of tests",
+                   design="the questioner knows the answer or not; the horse can see him or not",
+                   found="98% right when the questioner knew the answer, 8% when he did not; 89% when the horse "
+                         "could see him, 6% when it could not"),
+    status="replicated",
+    record=(Study("Lit, Schweitzer and Oberbauer", 2011, n="18 certified detection-dog teams",
+                  design="searches with no target scent anywhere; handlers told where the scent was",
+                  found="225 alerts, more of them at the places the handlers believed held the scent"),),
+    note="Pfungst then took the horse's place: 23 of 25 people gave him the cue without knowing it. The remedy he "
+         "invented, a questioner who does not know the answer, is the blind.",
+    sources=(_PFUNGST, _LIT),
+    checked="2026-11-13",
+))
+
+add(Finding(
+    key="bright_rats", part=2, title=r"``Bright'' rats learn faster",
+    claim="Rats labelled maze-bright at random learn a maze faster than rats labelled maze-dull, because of what "
+          "their experimenters expect.",
+    original=Study("Rosenthal and Fode", 1963, n="12 student experimenters, 60 rats",
+                   design="five rats each, ten runs a day for five days, labels assigned at random",
+                   effect=0.78, unit="correct runs per rat per day",
+                   found="2.32 correct runs a day for the 'bright' rats against 1.54 for the 'dull' (one-tailed "
+                         "p = .01)"),
+    status="not directly tested",
+    record=(Study("Rosenthal and Lawson", 1964, design="the same laboratory, Skinner boxes in place of the maze",
+                  found="reported by its authors as essentially the same result"),),
+    note="One small study with one-tailed tests, repeated in its own laboratory; we know of no independent direct "
+         "replication. That handlers' beliefs reach animals is separately established (the row above).",
+    sources=("R. Rosenthal and K. L. Fode, The effect of experimenter bias on the performance of the albino rat, "
+             "Behavioral Science 8 (1963) 183-189",
+             "R. Rosenthal, On the social psychology of the psychological experiment: the experimenter's hypothesis "
+             "as unintended determinant of experimental results, American Scientist 51 (1963) 268-283"),
+    checked="2026-11-13",
+))
+
+add(Finding(
+    key="pygmalion", part=2, title=r"Teachers' expectations raise IQ",
+    claim="Telling teachers that certain pupils, chosen at random, are about to bloom raises those pupils' IQ "
+          "scores.",
+    original=Study("Rosenthal and Jacobson", 1968, n="one elementary school",
+                   design="about a fifth of the pupils named to their teachers as likely to bloom",
+                   found="larger IQ gains for the named pupils, concentrated in the first two grades"),
+    status="replicated, smaller",
+    record=(Study("Raudenbush", 1984, n="18 experiments", design="meta-analysis by weeks of prior contact",
+                  effect=0.32, unit="d",
+                  found="0.32 when teachers had not yet met the pupils, 0.26 after one week, -0.04 after more than "
+                        "two weeks"),),
+    note="The effect is there when teachers do not yet know their pupils, and gone once they do: a teacher "
+         "believes her own two weeks of evidence over a researcher's list.",
+    sources=("R. Rosenthal and L. Jacobson, Pygmalion in the Classroom (1968)",
+             "S. W. Raudenbush, Magnitude of teacher expectancy effects on pupil IQ as a function of the "
+             "credibility of expectancy induction: a synthesis of findings from 18 experiments, Journal of "
+             "Educational Psychology 76 (1984) 85-97"),
+    checked="2026-11-13",
+))
+
+add(Finding(
+    key="demand", part=2, title=r"Subjects do what they think is wanted",
+    claim="Participants shift their behaviour toward what they take the experimenter's hypothesis to be.",
+    original=Study("Orne", 1962, design="observations and argument: the 'demand characteristics' of an experiment",
+                   found="subjects treat an experiment as a problem to solve and try to be good subjects"),
+    status="replicated",
+    record=(Study("de Quidt, Haushofer and Roth", 2018, n="about 19,000 participants, 11 standard tasks",
+                  design="the hypothesis is signalled, or compliance is asked for outright", effect=0.13, unit="SD",
+                  found="about 0.13 SD on average when the hypothesis is only signalled; 0.25 to 1 SD when "
+                        "participants are asked to go along with it"),),
+    note="Real and measurable, and usually modest: the size depends on how plainly the hypothesis shows.",
+    sources=("M. T. Orne, On the social psychology of the psychological experiment: with particular reference to "
+             "demand characteristics and their implications, American Psychologist 17 (1962) 776-783",
+             "J. de Quidt, J. Haushofer and C. Roth, Measuring and bounding experimenter demand, American Economic "
+             "Review 108 (2018) 3266-3302"),
+    checked="2026-11-13",
+))
+
+add(Finding(
+    key="not_random", part=2, title=r"People cannot be random",
+    claim="People asked to produce a random sequence switch between the alternatives too often and avoid long "
+          "runs.",
+    original=Study("Wagenaar", 1972, n="a review of earlier studies", design="sequences produced on request",
+                   found="systematic departures from randomness, most often too many alternations"),
+    status="replicated",
+    record=(Study("Falk and Konold", 1997, n="a review of generation and judgment studies",
+                  found="sequences that alternate about 60% of the time are the ones produced, and judged most "
+                        "random"),),
+    note="Why assignment and order are left to a shuffled deck and never to the experimenter's sense of what is "
+         "random.",
+    sources=("W. A. Wagenaar, Generation of random sequences by human subjects: a critical survey of literature, "
+             "Psychological Bulletin 77 (1972) 65-72",
+             "R. Falk and C. Konold, Making sense of randomness: implicit encoding as a basis for judgment, "
+             "Psychological Review 104 (1997) 301-318"),
+    checked="2026-11-13",
+))
