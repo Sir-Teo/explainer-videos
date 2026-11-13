@@ -668,4 +668,77 @@
       note: "Two tubes of two widths are the oldest cartoon of a mouth (Fant, 1960), and they land within a semitone or so of the formants Peterson and Barney measured in 1952 for the vowels of hod (a narrow throat, a wide mouth) and heed (a wide throat, a narrow gap). The curve is the tube's input impedance seen from the vocal folds, with a little damping and an open, radiating mouth; rounded lips, the nose and the true shape of the tongue are not in it, so the back rounded vowels (who'd, hood) cannot be reached with two tubes. The sound is a train of pulses through one resonator for each formant, computed in your browser: the pitch comes from the pulses and the vowel from the resonators, independently. Simulated.",
     });
   };
+
+  // ---- Part 9: strike a drum -------------------------------------------------------------------------------------
+  // A round skin's modes (m still diameters, the n-th zero of the Bessel function J_m), bare, loaded by air as in a
+  // kettledrum (measured), or loaded at its centre as in a tabla (computed in the film).
+  function besselJ(m, x) { // (1/pi) * integral over 0..pi of cos(m t - x sin t) dt
+    var n = 160, s = 0, i;
+    for (i = 0; i <= n; i++) { var t = Math.PI * i / n; s += (i === 0 || i === n ? 0.5 : 1) * Math.cos(m * t - x * Math.sin(t)); }
+    return s / n;
+  }
+  var SKIN_MODES = [[0, 1, 2.4048], [1, 1, 3.8317], [2, 1, 5.1356], [0, 2, 5.5201], [3, 1, 6.3802], [1, 2, 7.0156], [4, 1, 7.5883], [2, 2, 8.4172], [0, 3, 8.6537], [5, 1, 8.7715]];
+  var DRUMS = [
+    { name: "a bare skin", unit: "the lowest mode", ratios: SKIN_MODES.map(function (r) { return r[2] / 2.4048; }), modes: SKIN_MODES, series: [1, 2, 3, 4, 5], fastZero: true },
+    { name: "a kettledrum (measured)", unit: "the lowest ringing mode", ratios: [0.85, 1.0, 1.5, 1.98, 2.44, 2.91], modes: [[0, 1, 2.4048], [1, 1, 3.8317], [2, 1, 5.1356], [3, 1, 6.3802], [4, 1, 7.5883], [5, 1, 8.7715]], series: [1, 1.5, 2, 2.5, 3], fastZero: true },
+    { name: "a tabla (a heavy patch at the centre)", unit: "the lowest mode", ratios: [1.0, 1.94, 2.95, 3.05, 3.97, 4.10, 4.82, 4.96, 5.14], modes: [[0, 1, 2.4048], [1, 1, 3.8317], [2, 1, 5.1356], [0, 2, 5.5201], [3, 1, 6.3802], [1, 2, 7.0156], [0, 3, 8.6537], [4, 1, 7.5883], [2, 2, 8.4172]], series: [1, 2, 3, 4, 5], fastZero: false },
+  ];
+  function strikeAmounts(drum, at) { return drum.modes.map(function (r) { return Math.abs(besselJ(r[0], r[2] * at)); }); }
+  function drumSound(drum, at, hz) {
+    var rate = 44100, len = Math.floor(1.6 * rate), y = new Float32Array(len), amps = strikeAmounts(drum, at), i, k, peak = 0;
+    for (k = 0; k < drum.ratios.length; k++) {
+      var f = hz * drum.ratios[k], w = 2 * Math.PI * f / rate, d = (3 + 2 * drum.ratios[k]) * (drum.fastZero && drum.modes[k][0] === 0 ? 4 : 1) / rate;
+      for (i = 0; i < len; i++) y[i] += amps[k] * Math.exp(-d * i) * Math.sin(w * i);
+    }
+    for (i = 0; i < len; i++) { y[i] *= Math.min(1, i / 60); peak = Math.max(peak, Math.abs(y[i])); }
+    for (i = 0; i < len; i++) y[i] *= 0.3 / (peak || 1) * Math.min(1, (len - i) / 4000);
+    return play(y, rate);
+  }
+  function worstMiss(drum) { // how far the nearest mode is from each wanted frequency, in cents: the worst of them
+    var worst = 0, i, k;
+    for (i = 0; i < drum.series.length; i++) {
+      var best = 1e9;
+      for (k = 0; k < drum.ratios.length; k++) best = Math.min(best, Math.abs(1200 * Math.log(drum.ratios[k] / drum.series[i]) / Math.LN2));
+      worst = Math.max(worst, best);
+    }
+    return worst;
+  }
+  W.drum = function (el) {
+    QB.widget(el, {
+      title: "Strike a drum",
+      sub: "Choose a drum and where to strike it. Left: how strongly the blow starts each mode (a mode is started in proportion to how much the skin moves, in that mode, at the point struck). Right: where the modes stand in frequency, with dotted lines where a musician would want them. Strike a bare skin at its centre and only the modes with no still diameter sound, and they die at once. Move outwards and the ringing modes join. Then change the drum.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "kind", label: "The drum", min: 0, max: 2, step: 1, value: 0, fmt: function (k) { return DRUMS[k].name; } },
+        { k: "at", label: "Where it is struck (0 centre, 1 rim)", min: 0, max: 0.95, step: 0.01, value: 0.6, fmt: function (x) { return fmt(x, 2); } },
+        { k: "hz", label: "Its note (Hz)", min: 60, max: 300, step: 5, value: 110 },
+      ],
+      buttons: [
+        { label: "Strike it", act: function (s, v) { s.sound = drumSound(DRUMS[v.kind], v.at, v.hz); } },
+      ],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var drum = DRUMS[v.kind], amps = strikeAmounts(drum, v.at), idx = [], i, top = 0;
+        for (i = 0; i < amps.length; i++) { idx.push(i + 1); top = Math.max(top, amps[i]); }
+        s.amps = amps;
+        var a = g[0].axes({ x: [0.3, amps.length + 0.7], y: [0, Math.max(top, 0.05) * 1.15], title: "How strongly each mode is started", xlabel: "modes, lowest first", xticks: idx, yticks: [] });
+        a.bars(idx, amps, 0.7, { color: function (k) { return drum.modes[k][0] === 0 ? C.loss : C.idea; } });
+        a.legend([["no still diameter (dies fast)", C.loss], ["with diameters (rings)", C.idea]], { pos: "tr" });
+        var hi = drum.ratios[drum.ratios.length - 1] + 0.3;
+        var b = g[1].axes({ x: [0.5, hi], y: [0, 1], title: "Where the modes stand, in units of " + drum.unit, xlabel: "frequency ratio", yticks: [] });
+        for (i = 0; i < drum.series.length; i++) b.vline(drum.series[i], { color: C.muted });
+        for (i = 0; i < drum.ratios.length; i++) b.line([drum.ratios[i], drum.ratios[i]], [0, 0.15 + 0.8 * amps[i] / (top || 1)], { color: drum.modes[i][0] === 0 ? C.loss : C.idea, width: 3 });
+      },
+      readout: function (v, s) {
+        var drum = DRUMS[v.kind], amps = s.amps || strikeAmounts(drum, v.at), best = 0, i;
+        for (i = 1; i < amps.length; i++) if (amps[i] > amps[best]) best = i;
+        return [["the drum", drum.name],
+                ["its modes", drum.ratios.map(function (r) { return fmt(r, 2); }).join(", ")],
+                ["worst miss from the dotted lines", fmt(worstMiss(drum), 0) + " cents"],
+                ["the mode this blow starts most", "number " + (best + 1) + ", at " + fmt(drum.ratios[best], 2) + " (" + drum.modes[best][0] + " still diameters)"],
+                ["sound", s.sound === null ? "press Strike" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "A bare skin's modes follow the zeros of the Bessel functions, and form no series: the worst of the first five whole numbers is missed by more than a fourth. A kettledrum's ringing modes, measured by Rossing (1982), stand close to 1, 1.5, 2, 2.5, 3 because the air the skin must move slows its low modes most; its lowest mode of all, with no still diameter, sits below the series and dies in a fraction of a second. A tabla's modes are those computed in the film for a skin whose centre, out to four tenths of the radius, is about ten times as heavy: nine modes gathered near 1, 2, 3, 4, 5. For the kettledrum and the tabla the strength of each mode at the point struck is taken from the bare skin's mode shapes, which is an approximation. The sound is a sum of dying partials, computed in your browser. Simulated.",
+    });
+  };
 })();

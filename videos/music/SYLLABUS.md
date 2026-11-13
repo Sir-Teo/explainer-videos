@@ -643,12 +643,28 @@ Woodhouse (1983).
 *Story:* "Can one hear the shape of a drum?" Kac asked in 1966. In 1992 the answer came: no, and here are two
 different drums with identical spectra. Meanwhile instrument makers had solved the opposite problem for
 centuries: how to make a membrane or a bar, which nature tunes badly, sing in tune.
-*Covers:* membrane modes and Bessel zeros; how air loading and technique make the timpani nearly harmonic, and
-how a loaded skin does it for the tabla (Raman); bars and their undercut tuning; the bell's partials and its
-minor third; Chladni's figures; cymbals and gongs; the steelpan.
-*Built and computed:* a membrane solver; modal synthesis; the isospectral pair computed.
-*Variation 9:* the Tune on marimba, bells and steelpan.
-*Frontier:* nonlinear plates and gongs; inverse problems; hearing material and size.
+1. Hook: a string and a drum on one note; Kac's question; the plan.
+2. A skin: its modes; the first interval of a drum (a worked example); where it is struck (an ear question).
+3. A drum with a note: the kettledrum's modes, bare, estimated and measured (an ear question); which octave.
+4. A patch of paste: Raman on the tabla; a loaded skin computed; bare and loaded.
+5. Bars: thickness over length squared (a worked example); a free bar's modes; the arch; plain or carved (an ear
+   question); the tube beneath.
+6. Bells: the partials; the strike note as a missing fundamental; the minor third (an ear question); the
+   major-third bell.
+7. Plates and sand: Chladni's figures; what the sand started.
+8. Gongs and cymbals: pitch that follows loudness; a crash.
+9. The steelpan: a dome tuned with a hammer.
+10. Hearing a shape: Weyl's law; the two drums of 1992, computed (an ear question); the answer.
+11. Frontier: hearing material, size and shape; design run backwards.
+12. Variation 9: the Tune on marimba, bells, steelpan and kettledrums. Outro: problems, payoffs, the end of Act I.
+
+*Covers:* membrane modes and Bessel zeros; how air loading makes the timpani nearly harmonic, and how a loaded
+skin does it for the tabla (Raman); bars and their undercut tuning; the bell's partials, its strike note and its
+minor third; Chladni's figures; gongs and cymbals; the steelpan; Weyl's law and the isospectral drums.
+*Built and computed:* `instruments/percussion.py`: a membrane solver for any polygon (the isospectral pair
+computed), a loaded membrane, a beam solver for carved bars, modal synthesis.
+*Variation 9:* the Tune on marimba, bells, steelpan and kettledrums.
+*Frontier:* hearing material and size; which shapes can be heard; nonlinear plates and gongs; inverse design.
 *Reading:* Rossing, *Science of Percussion Instruments*; Kac (1966); Gordon, Webb & Wolpert (1992).
 
 ## Act II · Notes
@@ -1499,6 +1515,7 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-13 | **Part 6, *Tuning***: 12 chapters, 37.3 min narrated of which 2.3 min listening in 16 windows; 4 pause-and-listen questions, 4 demonstrations to listen for, 6 worked examples with predict-pauses; Variation 6 (the Tune with chords in eight tunings); Lab 6 and the temperament interactive; Monochord's tuning layer (`monochord/tuning.py`: commas, Pythagorean, just, meantone, Werckmeister III, equal divisions, continued fractions, beat rates, the comma pump, stretched octaves; `tests/music/test_tuning.py`, against Barbour's tables); sustained-tone helpers in `partkit.py`; every gate clean. |
 | 2026-11-13 | **Part 7, *Strings, Hammers and Bows***: 12 chapters, 39.2 min narrated of which 1.7 min listening in 12 windows; 5 pause-and-listen questions, 1 demonstration to listen for, 4 worked examples with predict-pauses; Variation 7 (a guitar, a piano and a violin from one string); Lab 7 and the bowed-string interactive (Schelleng's wedge, simulated in the page); Monochord's string instruments (`instruments/strings.py`: Karplus–Strong, a felt hammer on a stiff string, coupled unisons, a bowed string with stick-slip friction, Schelleng's limits, the two-mass guitar, bodies as banks of resonances; `tests/music/test_strings.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 8, *Pipes, Reeds and Voices***: 12 chapters, 40.6 min narrated of which 1.6 min listening in 15 windows; 6 pause-and-listen questions, 6 demonstrations to listen for, 4 worked examples with predict-pauses; Variation 8 (a flute, a clarinet, a saxophone, a trumpet and a voice, each tuned by being built, blown and trimmed); Lab 8 and the vowel interactive (a two-tube mouth, its formants computed in the page); Monochord's winds (`instruments/winds.py`: bores by transfer matrices with wall losses and radiation, reflection functions, a reed valve, a lip valve, a jet, a source-filter voice, formants of tubes; `tests/music/test_winds.py`); every gate clean, narration listen-tested. |
+| 2026-11-13 | **Part 9, *Drums, Bars and Bells***: 12 chapters, 34.1 min narrated of which 1.8 min listening in 16 windows; 5 pause-and-listen questions, 7 demonstrations to listen for, 3 worked examples with predict-pauses; Variation 9 (marimba, bells, steelpan and kettledrums); Lab 9 and the drum interactive (where a skin is struck, bare, as a kettledrum and as a tabla); Monochord's percussion (`instruments/percussion.py`: Bessel modes, a finite-element membrane for any polygon with the isospectral drums of 1992 computed and checked against Driscoll's values, a loaded membrane, a beam solver for carved bars, bells from published partials, Chladni figures, gliding gongs, modal synthesis; `tests/music/test_percussion.py`); every gate clean, narration listen-tested. **Act I is complete.** The engraver pilot for Part 10 could not be run in this session: installing Verovio's wheel was refused by the session's permission policy, so the choice of engraver (§9, item 5) is still the owner's to make. |
 
 **Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
 before Part 10 is opened), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for

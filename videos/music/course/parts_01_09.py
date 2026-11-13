@@ -406,4 +406,55 @@ PARTS = [
         I=(9,),
         also=(("Monochord's winds: bores by transfer matrices, a reed, lips, a jet, a source-filter voice", "explainer/music/monochord/instruments/winds.py"),),
     ),
+    Part(
+        n=9, level="U", widget="drum",
+        question="Why does a drum go thump when a string sings, how were skins, bars and bells taught to play in "
+                 "tune, and can one hear the shape of a drum?",
+        story="A string and a drum on the same lowest frequency: one has a note and the other a thump, because a "
+              "round skin's overtones follow the zeros of Bessel functions (1, 1.59, 2.14, 2.30) and form no "
+              "series. Makers found ways round nature. A kettledrum's skin is loaded by the air it must move, which "
+              "slows its low modes into something close to 1 : 1.5 : 2 : 2.5. A tabla's skin carries a patch of "
+              "paste at its centre, and its modes gather at 1, 2, 3, 4, 5. A bar is held straight by stiffness, so "
+              "its pitch goes as thickness over length squared and its overtones are at 2.76 and 5.40; an arch cut "
+              "underneath moves them to 4 and 10, and a marimba is born. A bell's strike note is a missing "
+              "fundamental, supplied by the ear from partials at 2, 3 and 4 times it, and every traditional bell "
+              "carries a minor third. Sand on a bowed plate draws its still lines, Chladni's figures, and the "
+              "prize offered for explaining them gave Sophie Germain's plate equation. A gong's pitch follows its "
+              "loudness, a cymbal's crash is a cascade through hundreds of modes, and a steelpan's notes are domes "
+              "hammered until three modes agree. Last, Kac's question, the makers' problem reversed: the overtones "
+              "of a drum give its area and its rim, but two different drums can share every one of them. The Tune "
+              "is played on a marimba, bells, a steelpan and kettledrums. Act I ends here.",
+        handoff="Act II begins with notation (Part 10) and rhythm (Part 11), where drums keep time. Scales fitted "
+                "to bronze, not to strings, belong to the gamelan (Part 36); percussion is colour for an "
+                "orchestrator (Part 41). A list of dying partials is a way to synthesize sound (Parts 51 and 52), "
+                "and the sharp start of a struck note is what a transcriber looks for (Part 61).",
+        outside="Part 1 for modes and stiffness; Part 2 for the air; Part 4 for the missing fundamental and "
+                "fusion; Part 5 for what inharmonic partials do to consonance; Part 8 for the stopped tube. "
+                "Square roots and logarithms; no Bessel functions are needed beyond a table of their zeros.",
+        objectives={
+            "U": ["Describe the modes of a skin, a bar and a bell, and why none is a harmonic series.",
+                  "Explain how the kettledrum, the tabla, the marimba and the bell are tuned.",
+                  "Say what a drum's overtones do and do not determine about its shape."],
+            "M": ["Find a drum's overtones from Bessel zeros, and a bar's scaling with length and thickness.",
+                  "Compute the modes of a bar with an arch, and of a membrane of any outline.",
+                  "Use Weyl's law to read a drum's area and rim from its spectrum."],
+            "D": ["State Kac's question, its answer, and what remains open.",
+                  "Say what is and is not known about hearing material, size and shape."],
+            "I": ["Choose where to strike, and with what, for the tone wanted.",
+                  "Tune a bar or a drumhead knowing which modes each adjustment moves.",
+                  "Build a struck sound from a list of partials and decays."],
+        },
+        results=[
+            ("A round skin", r"f_{mn} = \frac{j_{mn}}{2\pi a}\sqrt{\frac{T}{\sigma}}:\quad 1,\ 1.593,\ 2.136,\ 2.295,\ 2.653 \ldots"),
+            ("A kettledrum, measured", r"f_{11} : f_{21} : f_{31} : f_{41} \approx 1 : 1.50 : 1.98 : 2.44"),
+            ("A free bar", r"f \propto \frac{h}{L^2}\sqrt{\frac{E}{\rho}},\qquad f_1 : f_2 : f_3 = 1 : 2.76 : 5.40"),
+            ("A marimba's arch", r"1 : 2.76 : 5.40 \;\longrightarrow\; 1 : 4 : 10"),
+            ("A bell", r"\text{hum} : \text{prime} : \text{tierce} : \text{quint} : \text{nominal} = \tfrac12 : 1 : 1.2 : 1.5 : 2"),
+            ("Weyl's law", r"N(\lambda) \approx \frac{A}{4\pi}\,\lambda - \frac{P}{4\pi}\sqrt{\lambda}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8),
+        D=(9, 10),
+        I=(),
+        also=(("Monochord's percussion: membranes of any outline, loaded skins, carved bars, bells, plates, gongs", "explainer/music/monochord/instruments/percussion.py"),),
+    ),
 ]
