@@ -171,6 +171,41 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | questionable measurement practices | 可疑的测量做法 |
 | a reading (of one's character); sketch | 解读；速写 |
 
+## Part 4: evidence
+
+| English | 中文 |
+|---|---|
+| effect size; Cohen's d | 效应量；d |
+| overlap (of two distributions) | 重叠 |
+| variation explained | 解释的变异 |
+| p-value; significant; not significant | p值；显著；不显著 |
+| power (of a study) | 统计功效（简称功效） |
+| false positive; false alarm | 假阳性；误报 |
+| the garden of forking paths | 小径分岔的花园 |
+| the plan (the planned analysis) | 原计划（计划中的分析） |
+| outcome; outlier; covariate | 结果指标；极端值；协变量 |
+| the file drawer; publication bias | 文件抽屉；发表偏倚 |
+| funnel plot | 漏斗图 |
+| the winner's curse | 赢家的诅咒 |
+| p-curve | p曲线 |
+| optional stopping (looking and stopping) | 选择性停止 |
+| HARKing | 先知道结果再提假设（HARKing） |
+| fabrication; flexibility | 捏造；灵活 |
+| fraud | 造假 |
+| the Reproducibility Project | 可重复性项目 |
+| replication; original (study) | 重复研究；原始研究 |
+| replication rate | 重复率 |
+| preregistration; registered report | 预注册；注册报告 |
+| exploratory; confirmatory | 探索性的；验证性的 |
+| Many Labs | “多实验室”项目 |
+| equivalence test; Bayes factor | 等价检验；贝叶斯因子 |
+| margin of error (confidence interval) | 误差范围（置信区间） |
+| prediction (betting) market | 博彩市场（预测市场） |
+| precognition | 预知 |
+| priming; imagined contact | 启动效应；想象接触 |
+| dashboard; metric; primary metric | 仪表盘；指标；主要指标 |
+| the false-positive lab | 假阳性实验室 |
+
 ## Names
 
 | English | 中文 |
@@ -211,6 +246,12 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Craig Hedge | 克雷格·赫奇 |
 | Joel Michell | 乔尔·米歇尔 |
 | Jessica Flake, Eiko Fried | 杰西卡·弗莱克，艾科·弗里德 |
+| Daryl Bem | 达里尔·贝姆 |
+| Joseph Simmons, Leif Nelson, Uri Simonsohn | 西蒙斯，纳尔逊，西蒙松 |
+| Robert Rosenthal (the file drawer) | 罗森塔尔 |
+| Andrew Gelman, Eric Loken | 安德鲁·格尔曼，埃里克·洛肯 |
+| Diederik Stapel | 迪德里克·斯塔佩尔 |
+| Luigi Galvani | 路易吉·伽伐尼 |
 | Königsberg, Leipzig, Utrecht, Würzburg, Cornell | 柯尼斯堡，莱比锡，乌得勒支，维尔茨堡，康奈尔 |
 
 ## Titles
@@ -235,6 +276,9 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | "On the Theory of Scales of Measurement" | 《论测量量表的理论》 |
 | "The Proof and Measurement of Association between Two Things" | 《两事物之间关联的证明与测量》 |
 | "Telling More Than We Can Know" | 《说出的比能知道的多》 |
+| "Feeling the Future" | 《预感未来》 |
+| "False-Positive Psychology" | 《假阳性心理学》 |
+| *Science*, *Nature* | 《科学》，《自然》 |
 
 ## The parts
 

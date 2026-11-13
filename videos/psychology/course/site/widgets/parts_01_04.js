@@ -323,4 +323,177 @@
       note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. What was kept back: the six questions do nothing, and every reader is shown the same description, whatever they answer. It is made of six of the thirteen statements that Bertram Forer handed to each of his 39 students in 1949 as the result of a personality test; they rated it 4.26 out of 5 on average. If your rating was high, that is the usual result. The statements are true of nearly everyone, so a description that fits you this well has told you nothing about yourself, and your agreement is no evidence that a test behind it measured anything. A measurement has to tell people apart.",
     });
   };
+
+  // ---- Part 4: one dataset in which nothing is going on, and four defensible choices about how to analyse it ----
+  W.forkingpaths = function (el) {
+    var w = null;
+    var FORKS = [["Which outcome?", "reaction time", "error rate"],
+      ["Outliers?", "keep everyone", "drop beyond 2.5 SD"],
+      ["Adjust for age?", "no", "yes"],
+      ["More people?", "stop at 20 a group", "add 10 a group"]];
+    var HIT = "#f2c14e", MISS = "#8fa3bf";
+    var S = { phase: "idle", seed: 0, data: null, choice: [0, 0, 0, 0], row: 0, tried: {}, all: null, many: null };
+
+    // Two groups of 30 drawn from one population: age, a mean reaction time, and an error rate that goes with it.
+    function makeData(seed) {
+      var u = QB.rng(7919 * seed + 13), d = { age: [[], []], rt: [[], []], err: [[], []] }, g, i, k;
+      for (g = 0; g < 2; g++) for (i = 0; i < 30; i++) {
+        var age = 18 + Math.floor(48 * u()), z = u.normal(), s = 0;
+        for (k = 0; k < 24; k++) s += -30 * Math.log(1 - u());
+        d.age[g].push(age);
+        d.rt[g].push(300 + 0.6 * (age - 40) + 24 * z + s / 12 - 60);
+        d.err[g].push(6 + 2 * (0.55 * z + Math.sqrt(1 - 0.55 * 0.55) * u.normal()));
+      }
+      return d;
+    }
+    function solve(A, b) {
+      var n = b.length, i, j, k, M = A.map(function (r, q) { return r.concat([b[q]]); });
+      for (i = 0; i < n; i++) {
+        var piv = i;
+        for (j = i + 1; j < n; j++) if (Math.abs(M[j][i]) > Math.abs(M[piv][i])) piv = j;
+        var t = M[i]; M[i] = M[piv]; M[piv] = t;
+        for (j = i + 1; j < n; j++) { var f = M[j][i] / M[i][i]; for (k = i; k <= n; k++) M[j][k] -= f * M[i][k]; }
+      }
+      var x = new Array(n);
+      for (i = n - 1; i >= 0; i--) { var s = M[i][n]; for (j = i + 1; j < n; j++) s -= M[i][j] * x[j]; x[i] = s / M[i][i]; }
+      return x;
+    }
+    // The p-value of the group difference by least squares, for one setting of the four switches.
+    function pvalue(d, c) {
+      var k = c[3] ? 30 : 20, score = c[0] ? d.err : d.rt, y = [], X = [], g, i, a, r, m = 0, n = 0, s2 = 0;
+      var lo = -Infinity, hi = Infinity;
+      if (c[1]) {
+        for (g = 0; g < 2; g++) for (i = 0; i < k; i++) { m += score[g][i]; n++; }
+        m /= n;
+        for (g = 0; g < 2; g++) for (i = 0; i < k; i++) s2 += (score[g][i] - m) * (score[g][i] - m);
+        var sd = Math.sqrt(s2 / (n - 1)); lo = m - 2.5 * sd; hi = m + 2.5 * sd;
+      }
+      for (g = 0; g < 2; g++) for (i = 0; i < k; i++) {
+        var v = score[g][i];
+        if (v <= lo || v >= hi) continue;
+        y.push(v); X.push(c[2] ? [1, 1 - g, d.age[g][i]] : [1, 1 - g]);
+      }
+      var p = X[0].length, A = [], b = [];
+      for (a = 0; a < p; a++) { A.push(new Array(p).fill(0)); b.push(0); }
+      for (i = 0; i < y.length; i++) for (a = 0; a < p; a++) { b[a] += X[i][a] * y[i]; for (r = 0; r < p; r++) A[a][r] += X[i][a] * X[i][r]; }
+      var beta = solve(A, b), e1 = new Array(p).fill(0), rss = 0;
+      e1[1] = 1;
+      var inv11 = solve(A, e1)[1];
+      for (i = 0; i < y.length; i++) { var fit = 0; for (a = 0; a < p; a++) fit += X[i][a] * beta[a]; rss += (y[i] - fit) * (y[i] - fit); }
+      var df = y.length - p, t = beta[1] / Math.sqrt(rss / df * inv11);
+      var z = Math.sqrt(df * Math.log(1 + t * t / df)) * (8 * df + 1) / (8 * df + 3); // Wallace's normal approximation to t
+      return 2 * (1 - QB.cdf(z));
+    }
+    function sixteen(d) {
+      var o = [], i;
+      for (i = 0; i < 16; i++) { var c = [(i >> 3) & 1, (i >> 2) & 1, (i >> 1) & 1, i & 1]; o.push({ c: c, p: pvalue(d, c) }); }
+      return o;
+    }
+    function pText(p) { return p < 0.001 ? "< .001" : p.toFixed(3).replace(/^0/, ""); }
+    function current() { return S.tried[S.choice.join("")]; }
+    function smallest() { var m = 1, k; for (k in S.tried) m = Math.min(m, S.tried[k]); return m; }
+    function record() { S.tried[S.choice.join("")] = pvalue(S.data, S.choice); }
+    function begin(seed) {
+      S.seed = seed; S.data = makeData(seed); S.choice = [0, 0, 0, 0]; S.row = 0; S.tried = {}; S.all = null; S.phase = "test";
+      record();
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "test"; }, respond: answer });
+    function answer(side) {
+      if (S.phase !== "test" || !w) return;
+      S.choice[S.row] = side; S.row = (S.row + 1) % FORKS.length; task.count++;
+      record(); w.render();
+    }
+
+    w = QB.widget(el, {
+      title: "Four choices and a study of nothing",
+      sub: "A game was tested on two groups, and in this page the game does nothing: both groups are drawn from the same population. The planned analysis is the left-hand option of every row. Go through the rows and choose (F for the left option, J for the right, or tap a side); each choice reruns the analysis. Can you get p below .05 without doing anything you could not defend? The page opens on dataset 3, the first in which the plan fails and another analysis succeeds; move the slider and press Start for the others, most of which give nothing whatever you choose.",
+      panels: 2, height: 360, weights: [1.25, 1],
+      controls: [
+        { k: "seed", label: "Dataset", min: 1, max: 300, step: 1, value: 3, fmt: function (x) { return "number " + x.toFixed(0); } },
+      ],
+      buttons: [
+        { label: "Start", act: function (state, v) { begin(v.seed); } },
+        { label: "Show all sixteen", act: function () { if (S.data) { S.all = sixteen(S.data); S.phase = "reveal"; } } },
+        { label: "Run 1,000 datasets", act: function () {
+          var plan = 0, any = 0, i;
+          for (i = 0; i < 1000; i++) {
+            var all = sixteen(makeData(1000 + i)), hit = false;
+            if (all[0].p < 0.05) plan++;
+            all.forEach(function (r) { if (r.p < 0.05) hit = true; });
+            if (hit) any++;
+          }
+          S.many = { plan: plan / 1000, any: any / 1000 };
+        } },
+        { label: "Clear", act: function () { S.phase = "idle"; S.data = null; S.tried = {}; S.all = null; S.many = null; S.choice = [0, 0, 0, 0]; S.row = 0; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), i, j;
+        ctx.save();
+        ctx.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(ctx, b, "On you", "Press Start. One study of a game that does nothing, and four choices about how to analyse it.");
+        } else {
+          var small = b.w < 420, top = b.y + 42, rh = (b.h - 42 - 58) / FORKS.length, cur = current();
+          ctx.textAlign = "left"; ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("dataset " + S.seed + ": a game that does nothing", b.x + 18, b.y + 24);
+          for (i = 0; i < FORKS.length; i++) {
+            var y0 = top + i * rh, active = S.phase === "test" && i === S.row;
+            ctx.textAlign = "left"; ctx.fillStyle = active ? C.ink : C.muted;
+            ctx.font = (active ? "600 " : "") + "12px system-ui, sans-serif";
+            ctx.fillText((active ? "▸ " : "") + FORKS[i][0], b.x + 18, y0 + 8);
+            for (j = 0; j < 2; j++) {
+              var bw = (b.w - 44) / 2, bx = b.x + 18 + j * (bw + 8), on = S.choice[i] === j;
+              ctx.strokeStyle = on ? HIT : "#2a3242"; ctx.lineWidth = on ? 2 : 1;
+              ctx.strokeRect(bx, y0 + 19, bw, rh - 27);
+              ctx.fillStyle = on ? C.ink : C.muted; ctx.textAlign = "center";
+              ctx.font = (small ? 11 : 12.5) + "px system-ui, sans-serif";
+              ctx.fillText(FORKS[i][j + 1], bx + bw / 2, y0 + 19 + (rh - 27) / 2);
+            }
+          }
+          ctx.textAlign = "center";
+          ctx.fillStyle = cur < 0.05 ? HIT : MISS; ctx.font = "600 15px system-ui, sans-serif";
+          ctx.fillText("this analysis: p = " + pText(cur) + (cur < 0.05 ? ", significant" : ""), b.cx, b.y + b.h - 40);
+          ctx.fillStyle = C.muted; ctx.font = "11.5px system-ui, sans-serif";
+          ctx.fillText(S.phase === "test" ? (small ? "F or tap left.  J or tap right." : "F or tap the left half: left option.  J or the right half: right option.")
+            : (small ? "Press Start for another dataset." : "All sixteen are on the other panel. Press Start for another dataset."), b.cx, b.y + b.h - 19);
+        }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [0, 1], y: [0, 3], title: S.phase === "reveal" ? "All sixteen analyses of this dataset" : "The analyses you have run", xlabel: "p-value", noY: true });
+        a.vline(0.05, { color: HIT });
+        a.text(0.05, 2.78, ".05", { color: HIT, dx: 5, size: 11 });
+        var xs = [], ys = [], hx = [], hy = [], jr = QB.rng(11), hits = 0, list = [], k;
+        if (S.phase === "reveal") S.all.forEach(function (r) { list.push(r.p); });
+        else for (k in S.tried) list.push(S.tried[k]);
+        list.forEach(function (p) {
+          var yy = 0.35 + 0.6 * jr();
+          if (p < 0.05) { hx.push(p); hy.push(yy); hits++; } else { xs.push(p); ys.push(yy); }
+        });
+        if (xs.length) a.dots(xs, ys, { color: MISS, r: 5, alpha: 0.9 });
+        if (hx.length) a.dots(hx, hy, { color: HIT, r: 6, alpha: 1 });
+        if (S.phase === "idle") {
+          a.text(0.12, 2.2, "Every analysis you run is a dot here.", { color: C.muted, dx: 4, size: 11.5 });
+        } else if (S.phase === "test") {
+          a.text(0.12, 2.3, "analyses run: " + list.length + " of 16", { color: C.muted, dx: 4, size: 11.5 });
+          a.text(0.12, 1.95, "smallest p so far: " + pText(smallest()), { color: smallest() < 0.05 ? HIT : C.muted, dx: 4, size: 11.5, bold: smallest() < 0.05 });
+          a.text(0.12, 1.6, "the plan gave " + pText(S.tried["0000"]), { color: C.muted, dx: 4, size: 11.5 });
+        } else {
+          a.text(0.12, 2.3, hits + " of the 16 give p below .05", { color: hits ? HIT : C.muted, dx: 4, size: 11.5, bold: true });
+          a.text(0.12, 1.95, "the plan gave " + pText(S.tried["0000"]), { color: C.muted, dx: 4, size: 11.5 });
+          a.text(0.12, 1.6, "The game does nothing in every dataset.", { color: C.muted, dx: 4, size: 11.5 });
+        }
+        if (S.many) a.text(0.12, 1.2, "1,000 datasets: the plan " + QB.pct(S.many.plan, 0) + ", any of sixteen " + QB.pct(S.many.any, 0), { color: C.ink, dx: 4, size: 11.5 });
+      },
+      readout: function () {
+        var n = Object.keys(S.tried).length;
+        return [
+          ["this analysis", S.data ? "p = " + pText(current()) : "–"],
+          ["analyses run", S.data ? n + " of 16" : "–"],
+          ["smallest p so far", S.data ? pText(smallest()) : "–"],
+          ["1,000 datasets: plan, any of 16", S.many ? QB.pct(S.many.plan, 0) + ", " + QB.pct(S.many.any, 0) : "press Run 1,000 datasets"],
+        ];
+      },
+      note: "Nothing you choose is stored or sent: it lives in this page and is gone when you close it. Every dataset here is generated in the page with no effect of the game, so every p-value below .05 is a false alarm. Each right-hand option is one a careful researcher could defend: errors are a fair measure of performance, dropping extreme scores is standard, age does slow reaction times, and twenty a group is small. Run on its own, the planned analysis is wrong about one time in twenty. If the data are allowed to pick among the sixteen, at least one succeeds in close to one dataset in five (press Run 1,000 datasets), and with the stronger choices studied by Simmons, Nelson and Simonsohn (2011) the figure reached 61%. No single choice here is the error. The error is choosing after seeing which way each one points, and the remedy is to write the analysis down before the data arrive.",
+    });
+  };
 })();

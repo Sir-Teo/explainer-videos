@@ -33,6 +33,7 @@ and summarized, not stored. Dates are the day the check was made.
 | `scheel_2021` | Positive results: 96% of 152 standard reports, 44% of 71 Registered Reports | Scheel, Schijen and Lakens, *AMPPS* 4 (2021) | facts only | 2026-11-13: abstract read (Europe PMC, preprint record) |
 | `levelt_2012` | Fraud established in 55 of Stapel's publications; the committees' remark on research culture | Levelt, Noort and Drenth Committees, *Flawed Science* (2012) | facts only | 2026-11-13: from university news reports of the final report; the report itself was not read |
 | `dreber_2015` | Prediction markets on 44 replications; median prior probability of the tested hypotheses 9% | Dreber et al., *PNAS* 112 (2015) 15343–15347 ([PMC4687569](https://pmc.ncbi.nlm.nih.gov/articles/PMC4687569/)) | open access (summary statistics) | 2026-11-13: abstract read |
+| `protzko_2023` | A 2023 report that findings made with the reformed practices replicate at a high rate, retracted in 2024: analyses were not preregistered as stated | Protzko et al., *Nature Human Behaviour* 8 (2024) 311–319; Retraction Note, same volume ([PMC11493675](https://pmc.ncbi.nlm.nih.gov/articles/PMC11493675/)) | facts only | 2026-11-13: the retraction note as summarized by a web search; neither the article nor the note read in full |
 
 ## Looked for and not used
 

@@ -510,43 +510,59 @@ schmeasurement (Flake & Fried 2020): how measures are reported and altered.
 *Reading:* Stevens 1946; Spearman 1904a; Lord & Novick 1968; Cronbach 1951; Cronbach & Meehl 1955; Campbell &
 Fiske 1959; Luce & Tukey 1964; Michell 1999; Borsboom 2005; Hedge, Powell & Sumner 2018; Flake & Fried 2020.
 
-### Part 4 · The Evidence (~55)
+### Part 4 · The Evidence (~48)
 *Question:* when should a finding be believed?
 *Story:* in 2011 a leading journal publishes nine experiments showing that people can feel the future. The methods
 are the field's standard methods. Either precognition is real or the standard methods can prove anything. Within
 four years the field has shown which, by rerunning a hundred of its own studies, and has begun to rebuild its
-rules. The Ledger opens here.
-1. Hook: Bem, "Feeling the Future" (2011). The reactions: the methods are ordinary.
-2. Effect sizes and their pictures: d, r, odds ratios; what d = 0.2, 0.5 and 0.8 look like; why "significant"
-   says so little.
-3. The p-value, exactly, and the six things it is not (link to *Statistics, Built* Part 10).
-4. Power: Cohen's 1962 survey of a year of a journal, and how little changed in fifty years. What an underpowered
-   literature looks like (computed on the Pool).
-5. On you: forking paths. One null dataset, four innocent choices; make it significant. Simmons, Nelson and
-   Simonsohn's 61% (2011), recomputed.
-6. Publication bias: the file drawer, the funnel plot's missing corner, the winner's curse. A literature of a
-   thousand laboratories on a true d = 0 and on a true d = 0.2 (computed).
-7. HARKing, optional stopping and the garden of forking paths; why honesty is not enough.
-8. Meehl's warning (1967, 1978): in soft psychology everything correlates with everything, so rejecting a null is
-   a weak test of a theory.
-9. Fraud is the smaller problem: Stapel (2011) and what distinguished fabrication from flexibility.
-10. The Reproducibility Project (2015): one hundred studies; 97% of originals significant, 36% of replications;
-    effects about half the size. What it showed and what it did not (the 2016 exchange).
-11. The repairs: preregistration, registered reports, multi-site replications (Many Labs), open data, larger
-    samples, and Bayes factors and equivalence tests for claiming an absence.
-12. What survived. The Ledger's first board: robust classics beside fallen ones, and the pattern in which is which.
+rules. Act I ends, and from here every part closes with its Ledger rows.
+0. Hook: Bem, "Feeling the Future" (2011): nine experiments, more than a thousand participants, ordinary methods.
+   Kant's third objection in its last form: the scientist as the observer who disturbs.
+1. Effect sizes and their pictures: d as overlap and as the chance one person beats another; d = 0.2, 0.5 and 0.8
+   drawn; the same effect as a correlation and as variance explained; a tiny effect made "significant" by sample
+   size alone.
+2. The p-value, exactly (one study against 20,000 shuffles), and the six things it is not (link to *Statistics,
+   Built* Part 10).
+3. Power: Cohen's 1962 survey of a year of a journal, and no rise 24 years later. Two thousand small studies of a
+   real effect: three in four miss it, and the rest report twice the truth. The share of significant findings
+   that are true.
+4. On you: forking paths. One null dataset, four defensible choices, sixteen analyses; 5% becomes 18% (computed).
+   Simmons, Nelson and Simonsohn's 61% (2011), recomputed with `statkit.multiple`.
+5. The file drawer: a literature of a thousand laboratories on a true d = 0 and on a true d = 0.2 (computed), the
+   funnel's missing corner, the winner's curse against study size, and three p-curves.
+6. Honest people, wrong results: optional stopping (5% becomes 20% with ten looks), HARKing, and the garden of
+   forking paths when only one analysis is run. Why the remedy has to be a procedure.
+7. Meehl's warning (1967): in people everything correlates a little with everything, so rejecting a null is a
+   weak test of a theory; physics and psychology; why the series builds models that predict numbers.
+8. Fraud is the smaller problem: Stapel (2011), and what distinguished fabrication from flexibility.
+9. The Reproducibility Project (2015): 97% of originals significant, 36% of replications, effects about half the
+   size; the 2016 exchange; a simulated literature in which most findings are true and most replications fail,
+   and what a replication rate can and cannot measure.
+10. The repairs: preregistration and registered reports (96% against 44% positive results), Many Labs 1 and 2,
+    and equivalence tests and Bayes factors for claiming an absence.
+11. What survives: "will it replicate?" on six findings from the Ledger so far; what the survivors have in common;
+    what predicted success (the strength of the original evidence; peers' bets).
+12. The Ledger. 13. In practice: twenty metrics on a dashboard. 14. Frontier: have the reforms worked?
 
-*Psyche:* the false-positive lab: a literature simulator on the Pool with knobs for sample size, flexibility and
-publication filter; p-curves and funnel plots drawn from it (reusing `statkit.multiple`'s p-hacking simulator).
-*On you:* the forking-paths exercise; "will it replicate?" on six one-line findings.
-*Ledger:* Bem's precognition (`failed`); the Ledger's schema and its first twenty rows from the Reproducibility
-Project and Many Labs.
+*Psyche:* no new faculty. The false-positive lab (`explainer/psychology/evidence.py`): effect sizes, power,
+optional stopping, the four forks, a literature with a publication filter, p-curves, replications planned from the
+printed effect, equivalence tests and a Bayes factor (reusing `statkit.multiple`'s p-hacking simulator).
+*On you:* the forking-paths exercise (in the film, and as the part's interactive); six findings to bet on.
+*Ledger:* Bem's precognition (`failed`); published studies are underpowered (`replicated`); published effects
+shrink when repeated (`replicated`); flag priming and currency priming (`failed`); imagined contact (`contested`).
+The plan called for the Ledger's first twenty rows from the Reproducibility Project and Many Labs here. Six were
+entered, each with its sources read and a date; the other findings of those projects get their rows in the parts
+that present them. Shown without rows, with reasons: the Simmons simulation, the Stapel inquiry, and three pieces
+of meta-science due in Part 50 (registered reports, prediction markets, the retracted report of 2023).
 *In practice:* the same arithmetic governs product experiments, biomarker claims and any dashboard with many
-metrics.
-*Frontier:* have the reforms worked? Registered reports' rate of null results; replication rates since 2015;
-prediction markets for replicability; the claim that some subfields were hit and others spared.
-*Reading:* Bem 2011; Simmons, Nelson & Simonsohn 2011; Cohen 1962, 1994; Meehl 1967, 1978; Open Science
-Collaboration 2015; Klein et al. 2014, 2018; Nosek et al. 2018; Chambers 2017; Ritchie 2020.
+metrics; the four repairs carry over one for one.
+*Frontier:* the best journals are not exempt (Camerer et al. 2018); the field can price its own findings (Dreber
+et al. 2015); whether findings made under the new rules are more often true is open, and a 2023 report that they
+are was retracted in 2024. Research problem: a study that could show whether registered reports give truer
+findings, and not merely fewer positive ones.
+*Reading:* Bem 2011; Cohen 1962; Meehl 1967, 1978; Rosenthal 1979; Kerr 1998; Simmons, Nelson & Simonsohn 2011;
+Gelman & Loken 2013; Open Science Collaboration 2015; Klein et al. 2014, 2018; Camerer et al. 2018; Scheel,
+Schijen & Lakens 2021; Chambers 2017; Ritchie 2020.
 
 ---
 

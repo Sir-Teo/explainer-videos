@@ -184,4 +184,64 @@ PARTS = [
               ("The Pool", "explainer/psychology/pool.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=4, level="U", widget="forkingpaths",
+        question="When should a finding be believed?",
+        story="In 2011 a leading journal publishes nine experiments, on more than a thousand people, in which "
+              "responses appear to be influenced by events that have not yet happened. The designs and the "
+              "statistics are the field's ordinary ones, so either the future reaches back or those methods can "
+              "produce a finding out of nothing. The part builds the tools first: an effect size as an overlap "
+              "of two curves, the p-value and six things it is not, and power, which Cohen found in 1962 to be "
+              "about a coin toss for an effect of ordinary size. Then it shows three ways in which honest work "
+              "produces false results. The viewer makes a study of nothing significant with four defensible "
+              "choices. A thousand simulated laboratories print only their successes, and a literature about "
+              "nothing reports a medium effect. A researcher looks at the data after every ten people and stops "
+              "when it works. Meehl's warning follows: with enough people everything correlates with everything, "
+              "so rejecting no effect is a weak test of a theory. Fabrication is set apart from flexibility. "
+              "The Reproducibility Project runs a hundred published studies again (97% significant becomes 36%, "
+              "at half the size), and a simulated literature shows how most findings can be true while most "
+              "replications fail. The repairs are procedures: preregistration, registered reports, many "
+              "laboratories on one protocol, and equivalence tests for claiming an absence. The Ledger gets six "
+              "rows, and Act I ends.",
+        handoff="Every later part ends with its Ledger rows. The classic social experiments are re-examined in "
+                "Part 34 and social priming in Part 35. Part 43 runs a preregistered replication on screen. "
+                "Bayes factors are built in Part 48, and p-curves, corrections for bias and the evidence on "
+                "registered reports in Part 50. The winner's curse returns with nudges at scale in Part 55. "
+                "The false-positive lab built here is used wherever a later part asks how much to believe a "
+                "result.",
+        outside="The normal curve, a standard error, and the idea of a test from Part 2. The exact treatment of "
+                "tests and intervals is Statistics, Built Parts 10 and 11.",
+        objectives={
+            "U": ["Read an effect size as an overlap and as the chance that one person beats another, and say "
+                  "why a small p-value does not mean a large effect.",
+                  "State what a p-value is, and reject six common readings of it.",
+                  "Explain how flexible analysis, optional stopping and selective publication each produce "
+                  "false or inflated findings without dishonesty."],
+            "M": ["Compute power and the sample a study needs, and the share of significant findings that are "
+                  "true from the share of hypotheses that are and the power.",
+                  "Predict the mean printed effect and the replication rate of a filtered literature, and read "
+                  "a funnel plot and a p-curve.",
+                  "Decide from an interval and a stated bound whether a study has shown an absence."],
+            "D": ["Say what a replication rate does and does not measure, and why the 2016 exchange could not "
+                  "be settled by the project's own data.",
+                  "State Meehl's paradox, and what kind of prediction escapes it."],
+            "I": ["Recognize the garden of forking paths in a dashboard of many metrics, a subgroup analysis "
+                  "or a set of backtests, and name the four repairs.",
+                  "Judge a published finding by its sample, its p-value, its surprise and its replications "
+                  "before relying on it."],
+        },
+        results=[
+            ("Effect size", r"d=\frac{\bar x_1-\bar x_2}{s}"),
+            ("Overlap of two groups", r"2\,\Phi\!\left(-\tfrac{|d|}{2}\right)"),
+            ("Sample for a given power", r"n\approx\frac{2\,(z_{1-\alpha/2}+z_{1-\beta})^2}{d^2}\ \text{per group}"),
+            ("Significant findings that are true",
+             r"\frac{\pi(1-\beta)}{\pi(1-\beta)+(1-\pi)\alpha}"),
+            ("At least one false alarm in k independent looks", r"1-(1-\alpha)^k"),
+            ("Smallest effect a study can print", r"|d|\ge z_{1-\alpha/2}\sqrt{2/n}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("The false-positive lab", "explainer/psychology/evidence.py"),
+              ("The Replication Ledger", "explainer/psychology/ledger.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

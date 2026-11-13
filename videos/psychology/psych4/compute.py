@@ -168,7 +168,10 @@ def compute_meehl() -> dict:
     z = np.arctanh(r) * np.sqrt(ns - 3)
     sig = stats.norm.sf(E.Z975 - z) + stats.norm.cdf(-E.Z975 - z)
     n80 = int(math.ceil(((E.Z975 + stats.norm.ppf(0.8)) / math.atanh(r)) ** 2 + 3))
-    return {"r": r, "ns": ns, "significant": sig, "n_for_80": n80, "variance_explained": r * r}
+    dense = np.logspace(math.log10(40), 5, 160)
+    zd = np.arctanh(r) * np.sqrt(dense - 3)
+    return {"r": r, "ns": ns, "significant": sig, "n_for_80": n80, "variance_explained": r * r,
+            "curve_n": dense, "curve": stats.norm.sf(E.Z975 - zd) + stats.norm.cdf(-E.Z975 - zd)}
 
 
 def compute_rpp() -> dict:
@@ -209,8 +212,15 @@ def compute_absence() -> dict:
 
 def compute_dashboard() -> dict:
     ks = np.arange(1, 41)
+    # twenty metrics on which nothing changed: the first dataset with exactly one of them below .05
+    for seed in range(1000):
+        z = rng(900 + seed).standard_normal(20)
+        p = 2 * stats.norm.sf(np.abs(z))
+        if int((p < 0.05).sum()) == 1:
+            break
     return {"k": ks, "any": 1 - 0.95 ** ks, "at_20": float(1 - 0.95 ** 20), "at_5": float(1 - 0.95 ** 5),
-            "bonferroni_20": 0.05 / 20}
+            "bonferroni_20": 0.05 / 20, "example_seed": seed, "example_z": z, "example_p": p,
+            "example_hit": int(np.argmin(p))}
 
 
 ITEMS = {

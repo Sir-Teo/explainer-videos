@@ -566,3 +566,5 @@ shown(4, "SCHEEL_2021", "a comparison of two literatures; shown at the frontier 
 shown(4, "LEVELT_2012", "the findings of an inquiry into one case of fraud")
 shown(4, "DREBER_2015", "prediction markets on replications: shown at the frontier, entered with meta-science",
       row_in=50)
+shown(4, "PROTZKO_2023", "a retracted report about replication rates, shown at the frontier for what its "
+      "retraction says about the reforms; entered with meta-science", row_in=50)

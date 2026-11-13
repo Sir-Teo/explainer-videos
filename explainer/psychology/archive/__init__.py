@@ -20,7 +20,7 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "PFUNGST_1907", "PEIRCE_JASTROW_1884", "ROSENTHAL_FODE_1963", "RAUDENBUSH_1984", "DE_QUIDT_2018",
            "LIT_2011", "MITCHELL_2021", "STEVENS_1946", "FORER_1949", "JOHANSSON_2005", "CREDE_2017", "HEDGE_2018",
            "FLAKE_FRIED_2020", "BEM_2011", "COHEN_1962", "SIMMONS_2011", "OSC_2015", "MANY_LABS", "CAMERER_2018",
-           "SCHEEL_2021", "LEVELT_2012", "DREBER_2015"]
+           "SCHEEL_2021", "LEVELT_2012", "DREBER_2015", "PROTZKO_2023"]
 
 
 @dataclass(frozen=True)
@@ -582,8 +582,24 @@ DREBER_2015 = Dataset(
                      "same participants"},
 )
 
+PROTZKO_2023 = Dataset(
+    key="protzko_2023",
+    title="A claim that reformed practices give highly replicable findings, and its retraction",
+    source="J. Protzko et al., High replicability of newly discovered social-behavioural findings is achievable, "
+           "Nature Human Behaviour 8 (2024) 311-319 (published online 2023); Retraction Note, Nature Human "
+           "Behaviour 8 (2024) 2067 (24 September 2024)",
+    cite=r"Protzko et al.\ (2023); \ retraction note (2024)",
+    checked="the retraction note as summarized from PubMed Central (PMC11493675) by a web search, 2026-11-13; "
+            "neither the article nor the note was read in full",
+    licence="facts only",
+    data={"published": 2023, "retracted": 2024,
+          "reasons": "several measures and analyses had not been preregistered as the article stated, and the "
+                     "hypotheses the study was designed to test were misstated",
+          "authors": "all authors agreed to the retraction, for the incorrect statements about preregistration"},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
                           FLAKE_FRIED_2020, BEM_2011, COHEN_1962, SIMMONS_2011, OSC_2015, MANY_LABS, CAMERER_2018,
-                          SCHEEL_2021, LEVELT_2012, DREBER_2015)}
+                          SCHEEL_2021, LEVELT_2012, DREBER_2015, PROTZKO_2023)}
