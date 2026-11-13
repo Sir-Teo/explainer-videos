@@ -33,6 +33,25 @@ Sessions (Part 2; times in ms)
     young and quick.  :meth:`Pool.session_rt` returns one session's mean simple reaction time for each person;
     ``explainer.psychology.lab`` builds its designs, sound and unsound, on it.
 
+Traits and how they show (Part 3; standardized)
+    Three traits, ``conscientious``, ``neurotic`` and ``extravert``, with the correlations of :data:`TRAIT_R`, and
+    ``grit``, which correlates :data:`GRIT_R` with conscientiousness (the corrected correlation of Crede, Tynan and
+    Harms 2017: a second name for nearly the same thing).  A trait is never seen.  What is seen is an answer, and
+    an answer also carries the way it was obtained: ``style`` holds one independent standardized quantity per
+    method (:data:`METHODS`: how a person tends to answer questionnaires, how they come across to a friend, how
+    they look in a record).  :meth:`Pool.items` returns item answers, on a rating scale or continuous, as
+
+        y = loading * trait + method_loading * style[method] + rest * e,        e ~ N(0, 1) per item and occasion,
+
+    and :meth:`Pool.scale` their sum.  Because the truth is stored, a score's reliability and validity are
+    known exactly and not estimated; ``explainer.psychology.measure`` holds the estimators that are graded
+    against them.
+
+    ``conflict`` is a person's true interference effect in a conflict task of the Stroop or flanker kind, in ms:
+    everyone has one (:data:`CONFLICT_MEAN`), and people differ in it only a little (:data:`CONFLICT_SD`).
+    :meth:`Pool.conflict_task` runs a session.  It is the Pool's version of the reliability paradox (Hedge, Powell
+    and Sumner 2018), and Battery task 3 will be built on it in Part 18.
+
 Nothing here imports manim.
 """
 
@@ -64,6 +83,17 @@ PRACTICE_RATE = 0.6  # the share of the remaining gain made at each new session
 DAY_SD = 6.0  # ms: day-to-day standard deviation of one person's mean simple RT
 KEEN_SPEED = -0.45  # loading of eagerness on general slowness (quick people sign up)
 KEEN_AGE = -0.30  # ... and on standardized age (young people sign up)
+# Part 3: traits, and the methods by which they are seen
+TRAITS = ("conscientious", "neurotic", "extravert")
+TRAIT_R = {("conscientious", "neurotic"): -0.25, ("conscientious", "extravert"): 0.10,
+           ("neurotic", "extravert"): -0.20}
+GRIT_R = 0.84  # grit with conscientiousness, corrected for unreliability (Crede, Tynan & Harms 2017)
+METHODS = ("self", "peer", "record")  # a questionnaire, a friend's rating, a count from records
+CUTS = {5: (-1.5, -0.5, 0.5, 1.5), 7: (-1.75, -1.05, -0.35, 0.35, 1.05, 1.75)}  # rating-scale thresholds
+CONFLICT_MEAN, CONFLICT_SD = 60.0, 17.0  # ms: the interference effect, and how little people differ in it
+CONFLICT_BASE, CONFLICT_BASE_S = 430.0, 0.15  # ms: median congruent RT, and its spread (log scale) with speed
+CONFLICT_TRIAL_SD = 100.0  # ms: trial-to-trial standard deviation in both conditions
+CONFLICT_DAY_SD = 15.0  # ms: a day's shift of a person's whole level (the same in both conditions)
 
 TRUTH = {
     "rt_stages": RT_STAGES,
@@ -75,6 +105,9 @@ TRUTH = {
     "practice_rate": PRACTICE_RATE,
     "day_sd": DAY_SD,
     "keen": {"speed": KEEN_SPEED, "age": KEEN_AGE},
+    "trait_r": TRAIT_R,
+    "grit_r": GRIT_R,
+    "conflict": {"mean": CONFLICT_MEAN, "sd": CONFLICT_SD, "trial_sd": CONFLICT_TRIAL_SD},
 }
 
 
@@ -97,6 +130,18 @@ class Pool:
         z_age = (self.age - self.age.mean()) / self.age.std()
         rest = math.sqrt(1 - KEEN_SPEED ** 2 - KEEN_AGE ** 2)
         self.keen = KEEN_SPEED * self.speed + KEEN_AGE * z_age + rest * rng.standard_normal(n)
+        # --- traits and methods (Part 3): drawn after everything above ---
+        corr = np.eye(len(TRAITS))
+        for (a, b), r in TRAIT_R.items():
+            i, j = TRAITS.index(a), TRAITS.index(b)
+            corr[i, j] = corr[j, i] = r
+        z = rng.standard_normal((n, len(TRAITS))) @ np.linalg.cholesky(corr).T
+        for k, name in enumerate(TRAITS):
+            setattr(self, name, z[:, k])
+        self.grit = GRIT_R * self.conscientious + math.sqrt(1 - GRIT_R ** 2) * rng.standard_normal(n)
+        self.style = {m: rng.standard_normal(n) for m in METHODS}
+        s2 = math.log(1 + (CONFLICT_SD / CONFLICT_MEAN) ** 2)  # a lognormal with the stated mean and SD
+        self.conflict = CONFLICT_MEAN * np.exp(math.sqrt(s2) * rng.standard_normal(n) - s2 / 2)
 
     # ------------------------------------------------------------------
     def sample(self, k: int, seed: int = 0, among=None) -> np.ndarray:
@@ -182,3 +227,41 @@ class Pool:
         mean = self.simple_mean(ids) - self.practice_gain(ids, session) + np.asarray(shift, dtype=float)
         day = DAY_SD * rng.standard_normal(len(ids))
         return mean + day + trial_sd / math.sqrt(n_trials) * rng.standard_normal(len(ids))
+
+    # ------------------------------------------------------------------
+    # Part 3: answers, scales, and a conflict task
+    # ------------------------------------------------------------------
+    def items(self, trait: str, ids, k: int, seed: int = 0, loading=0.6, method: str | None = None,
+              method_loading: float = 0.0, points: int | None = 5) -> np.ndarray:
+        """Answers of the people ``ids`` to ``k`` items that tap ``trait`` (any standardized attribute of the
+        Pool).  ``loading`` is one number or one per item; ``method`` adds that method's style with
+        ``method_loading``.  ``points`` cuts the answer into a rating scale of 5 or 7 (1 is lowest); ``None``
+        leaves it continuous.  ``seed`` is the occasion: the same seed gives the same answers."""
+        ids = np.asarray(ids)
+        lam = np.broadcast_to(np.asarray(loading, dtype=float), (k,))
+        rest = 1 - lam ** 2 - method_loading ** 2
+        if np.any(rest < 0):
+            raise ValueError("loading and method_loading leave no room for error")
+        rng = np.random.Generator(np.random.PCG64([self.seed, 303, seed]))
+        y = lam * getattr(self, trait)[ids, None] + np.sqrt(rest) * rng.standard_normal((len(ids), k))
+        if method is not None:
+            y = y + method_loading * self.style[method][ids, None]
+        if points is None:
+            return y
+        return 1 + np.searchsorted(np.asarray(CUTS[points]), y)
+
+    def scale(self, trait: str, ids, k: int, seed: int = 0, **kw) -> np.ndarray:
+        """The sum score of a ``k``-item scale (see :meth:`items`)."""
+        return self.items(trait, ids, k, seed, **kw).sum(axis=1).astype(float)
+
+    def conflict_task(self, ids, n_trials: int = 120, seed: int = 0) -> dict:
+        """One session of a conflict task for the people ``ids``: mean RT (ms) over ``n_trials`` congruent and
+        ``n_trials`` incongruent trials, and their difference, the ``cost``.  A person's level shifts from day to
+        day, the same in both conditions, so the shift cancels in the cost."""
+        ids = np.asarray(ids)
+        rng = np.random.Generator(np.random.PCG64([self.seed, 304, seed]))
+        base = CONFLICT_BASE * np.exp(CONFLICT_BASE_S * self.speed[ids]) + CONFLICT_DAY_SD * rng.standard_normal(len(ids))
+        noise = CONFLICT_TRIAL_SD / math.sqrt(n_trials)
+        congruent = base + noise * rng.standard_normal(len(ids))
+        incongruent = base + self.conflict[ids] + noise * rng.standard_normal(len(ids))
+        return {"congruent": congruent, "incongruent": incongruent, "cost": incongruent - congruent}

@@ -225,4 +225,102 @@
       note: "Nothing you press is stored or sent: the sequence lives in this page and is gone when you close it. The program does nothing clever. It remembers what you pressed the last few times the same keys had just come up, and once you have leaned one way it bets on that; with nothing to go on, it bets that you will switch. People asked to be random switch too often and avoid long runs, which is exactly what it feeds on. One run proves little: with 60 presses anything between about 37% and 63% is within a coin's own luck (the dashed band), so try several runs, and then let a coin play. This is why, in an experiment, the order of conditions and the assignment to groups are left to a shuffled deck and never to the experimenter.",
     });
   };
+
+  // ---- Part 3: a reading of your character, and what your rating of it is worth ------------------------------
+  W.forer = function (el) {
+    var w = null;
+    var PAIRS = [["mountains", "the sea"], ["morning", "evening"], ["a plan", "seeing what happens"],
+      ["a book", "a party"], ["the city", "the countryside"], ["numbers", "words"]];
+    // six of the thirteen statements of Forer (1949)
+    var READING = ["You have a great need for other people to like and admire you.",
+      "You have a tendency to be critical of yourself.",
+      "You have a great deal of unused capacity which you have not turned to your advantage.",
+      "Disciplined and self-controlled outside, you tend to be worrisome and insecure inside.",
+      "At times you have serious doubts as to whether you have made the right decision or done the right thing.",
+      "At times you are extroverted, affable, sociable, while at other times you are introverted, wary, reserved."];
+    var FORER = 4.26, YOU = "#f2c14e", CLASS = "#9fd8f0";
+    var S = { phase: "idle", answers: [], ratings: [], patterns: [] };
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "test"; }, respond: answer });
+    function answer(side) {
+      if (S.phase !== "test" || !w) return;
+      S.answers.push(side); task.count++;
+      if (S.answers.length >= PAIRS.length) S.phase = "reading";
+      w.render();
+    }
+    function pattern() { var o = "", i; for (i = 0; i < S.answers.length; i++) o += S.answers[i] ? "J" : "F"; return o; }
+
+    w = QB.widget(el, {
+      title: "A reading of your character",
+      sub: "An experiment on how accurate a description of you feels. Answer six quick questions (F for the left word, J for the right, or tap a side), read the short description that follows, and rate how well it fits you. One thing about the experiment is kept back until you have given your rating, and it is explained straight afterwards.",
+      panels: 2, height: 340, weights: [1.3, 1],
+      controls: [
+        { k: "rating", label: "How well does the description fit you?", min: 0, max: 5, step: 1, value: 3, fmt: function (x) { return x.toFixed(0) + (x === 0 ? " (poorly)" : x === 5 ? " (perfectly)" : ""); } },
+      ],
+      buttons: [
+        { label: "Start", act: function () { S.answers = []; S.phase = "test"; } },
+        { label: "Give my rating", act: function (state, v) { if (S.phase === "reading") { S.ratings.push(v.rating); S.patterns.push(pattern()); S.phase = "reveal"; } } },
+        { label: "Clear", act: function () { S.phase = "idle"; S.answers = []; S.ratings = []; S.patterns = []; } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), i, y;
+        ctx.save();
+        ctx.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(ctx, b, "On you", "Press Start. Six quick questions come first, then a description of your character to rate.");
+        } else if (S.phase === "test") {
+          var n = S.answers.length, pair = PAIRS[n];
+          ctx.textAlign = "center";
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("question " + (n + 1) + " of " + PAIRS.length + ": which do you prefer?", b.cx, b.y + 26);
+          ctx.strokeStyle = "#1b2230"; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(b.cx, b.y + 50); ctx.lineTo(b.cx, b.y + b.h - 50); ctx.stroke();
+          ctx.fillStyle = C.ink; ctx.font = "600 " + (b.w < 380 ? 17 : 22) + "px system-ui, sans-serif";
+          T.wrap(ctx, pair[0], b.x + b.w * 0.25, b.cy - 8, b.w * 0.42, 24);
+          T.wrap(ctx, pair[1], b.x + b.w * 0.75, b.cy - 8, b.w * 0.42, 24);
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("F, or tap here", b.x + b.w * 0.25, b.y + b.h - 28);
+          ctx.fillText("J, or tap here", b.x + b.w * 0.75, b.y + b.h - 28);
+        } else {
+          var small = b.w < 420, lh = small ? 14 : 16;
+          ctx.textAlign = "left";
+          ctx.fillStyle = S.phase === "reveal" ? C.muted : YOU; ctx.font = "600 12.5px system-ui, sans-serif";
+          ctx.fillText(S.phase === "reveal" ? "The description you rated" : "Your reading", b.x + 20, b.y + 24);
+          ctx.fillStyle = S.phase === "reveal" ? C.muted : C.ink; ctx.font = (small ? 11.5 : 12.5) + "px system-ui, sans-serif";
+          y = b.y + 46;
+          for (i = 0; i < READING.length; i++) y = T.wrap(ctx, READING[i], b.x + 20, y, b.w - 40, lh) + 3;
+          if (S.phase === "reading") {
+            ctx.fillStyle = YOU; ctx.font = "600 12.5px system-ui, sans-serif";
+            T.wrap(ctx, "Set the slider to your rating, then press Give my rating.", b.x + 20, Math.min(y + 12, b.y + b.h - 22), b.w - 40, lh);
+          }
+        }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [0, 5], y: [0, 3], title: S.phase === "reveal" ? "Everyone gets the same description" : "How well it fits, from 0 to 5", xlabel: "rating (0 poorly, 5 perfectly)", noY: true });
+        if (S.phase === "reveal") {
+          a.vline(FORER, { color: CLASS });
+          a.text(FORER, 2.72, "Forer's 39 students, 1949: 4.26", { color: CLASS, align: "right", dx: -6, size: 11 });
+          a.text(0, 1.95, "34 of the 39 gave it 4 or 5.", { color: C.muted, dx: 8, size: 11.5 });
+          a.text(0, 1.55, "It did not depend on your six answers:", { color: C.muted, dx: 8, size: 11.5 });
+          a.text(0, 1.2, "press Start and answer differently.", { color: C.muted, dx: 8, size: 11.5 });
+          var xs = [], ys = [], jr = QB.rng(5);
+          for (i = 0; i < S.ratings.length; i++) { xs.push(S.ratings[i]); ys.push(0.45 + 0.3 * (jr() - 0.5)); }
+          a.dots(xs, ys, { color: YOU, r: 5, alpha: 0.9 });
+          a.text(0, 0.82, "your rating" + (S.ratings.length > 1 ? "s" : ""), { color: YOU, dx: 8, size: 11.5, bold: true });
+        } else {
+          a.vline(v.rating, { color: YOU });
+          a.text(v.rating, 2.72, "the slider: " + v.rating.toFixed(0), { color: YOU, align: v.rating > 2.5 ? "right" : "left", dx: v.rating > 2.5 ? -6 : 6, size: 11 });
+          a.text(0, 1.6, S.phase === "reading" ? "Rate the whole description." : "The description appears after the six questions.", { color: C.muted, dx: 8, size: 11.5 });
+        }
+      },
+      readout: function () {
+        var n = S.ratings.length;
+        return [
+          ["your rating", n ? String(S.ratings[n - 1]) + " of 5" : "–"],
+          ["Forer's class, 1949", S.phase === "reveal" ? "4.26 of 5" : "after your rating"],
+          ["your six answers", S.answers.length ? pattern() : "–"],
+          ["descriptions rated", String(n)],
+        ];
+      },
+      note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. What was kept back: the six questions do nothing, and every reader is shown the same description, whatever they answer. It is made of six of the thirteen statements that Bertram Forer handed to each of his 39 students in 1949 as the result of a personality test; they rated it 4.26 out of 5 on average. If your rating was high, that is the usual result. The statements are true of nearly everyone, so a description that fits you this well has told you nothing about yourself, and your agreement is no evidence that a test behind it measured anything. A measurement has to tell people apart.",
+    });
+  };
 })();

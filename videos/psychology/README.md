@@ -1,7 +1,7 @@
 # Psychology, Built (心理学，从零搭建)
 
-**Status (2026-11-13): the plan is accepted, the shared code is in place, and Parts 1 and 2, the two pilots,
-are built** (both in English and Chinese). This file is the plan; the standard every part meets, the
+**Status (2026-11-13): the plan is accepted, the shared code is in place, the two pilots (Parts 1 and 2,
+English and Chinese) were reviewed and accepted, and Part 3 is built** (English; its Chinese edition is next). This file is the plan; the standard every part meets, the
 devices and all sixty-two parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with the progress table in
 its §9.
 
@@ -273,6 +273,7 @@ own, and the syllabus lists them):
 |---|---|
 | `psyche/` | Psyche, the model subject: one module per faculty. So far `chronometry` (serial stages, Donders' subtraction, the insertion test, additive factors, Hick's law, the ex-Gaussian) and `cueing` (Clever Hans as a reader of an involuntary cue) |
 | `lab.py` | the laboratory: assignment by shuffle, counterbalancing, the comparison and its randomization test, power, and the sound and unsound designs run on the Pool with the truth known |
+| `measure.py` | measurement: Stevens's scale types, reliability, Spearman-Brown, alpha, the correction for attenuation, kappa, the intraclass correlation, the multitrait-multimethod matrix, a factor model against a network, the cancellation conditions |
 | `pool.py` | the Pool: 100,000 simulated people with planted truths, always tagged *simulated* on screen |
 | `battery.py` | the Battery: the tasks, and one `run(task, model)` interface that Psyche, the Pool and the browser share |
 | `ledger.py` | the Replication Ledger: one validated row per finding, with sources and the date checked; `tools/check_ledger.py psychN` is its gate (every study a part shows has a row, or a stated reason) |

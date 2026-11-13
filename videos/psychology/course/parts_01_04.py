@@ -122,4 +122,66 @@ PARTS = [
               ("psyche.cueing", "explainer/psychology/psyche/cueing.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=3, level="U", widget="forer",
+        question="What does a number attached to a mind mean?",
+        story="In 1932 the British Association appoints nineteen physicists and psychologists to decide whether a "
+              "sensation can be measured; in 1940 they report that they cannot agree. The physicists' objection is "
+              "that measurement means addition, as rods are laid end to end, and sensations cannot be added. "
+              "Stevens replies by asking what may be done to a number without losing what it records, which gives "
+              "four kinds of scale and a test for whether a sentence about numbers says anything. The part "
+              "computes when the old quarrel over averaging ratings matters: exactly when two groups' answers "
+              "cross. A second reply, conjoint measurement, shows that an order with enough structure implies a "
+              "scale with nothing added to anything. The viewer then rates a personality sketch, and learns that "
+              "Forer gave the same sketch to all 39 of his students, who rated it 4.26 out of 5: a measure has "
+              "to tell people apart. From there the part builds classical test theory on the Pool, where true "
+              "scores are known: a score as true score plus error, reliability as a share of variance, Spearman's "
+              "correction for attenuation and its cost, the Spearman-Brown formula, Cronbach's alpha and what it "
+              "does not show, and error that comes from the day or from the judge. Validity is treated as an "
+              "argument: the nomological network, and a multitrait-multimethod matrix with method variance "
+              "planted. Grit and conscientiousness show two names for nearly one thing. A hidden cause and a "
+              "network of mutual causes are shown to imply the same correlations. The part ends with what people "
+              "can report about themselves (choice blindness) and the reliability paradox.",
+        handoff="Flexible analysis and what counts as evidence are Part 4. What an observer can report returns as "
+                "the threshold in Part 11. Grit is examined in Part 28, factor analysis in Part 32, symptom "
+                "networks in Part 39, and the two pictures of a construct are set against each other in Part 44. "
+                "Conjoint measurement becomes the modern theory of test items in Part 46, and the reliability "
+                "paradox is put to work in Parts 47 and 59. Every later part that shows a score uses the "
+                "measurement library built here.",
+        outside="Variance, covariance and correlation. The derivations use only that the variance of a sum of "
+                "unrelated quantities is the sum of their variances.",
+        objectives={
+            "U": ["Name Stevens's four scales, the transformations each permits, and decide whether a statement "
+                  "about numbers survives them.",
+                  "Explain why agreement that a description fits is no evidence that a test measures anything.",
+                  "Say what reliability and validity are, why a reliable measure need not be valid, and what the "
+                  "jingle and jangle fallacies are."],
+            "M": ["Derive reliability as the correlation of parallel forms, the Spearman-Brown formula and the "
+                  "correction for attenuation from X = T + E.",
+                  "Compute Cronbach's alpha, Cohen's kappa and an intraclass correlation, and say which source of "
+                  "error each one counts.",
+                  "Decide from two groups' answer shares whether a comparison of mean ratings can be reversed by "
+                  "respacing the scale."],
+            "D": ["State what a test of quantitative structure requires, and why it is hard to apply to data "
+                  "with error.",
+                  "Explain why a set of correlations cannot distinguish a common cause from a network of mutual "
+                  "causes, and what could."],
+            "I": ["Ask of any score: what kind of scale, how much error, consistent across what, what shows it "
+                  "measures what its name says, and whether it is a new name for an old thing.",
+                  "Explain why a task that gives a robust experimental effect can be a poor test of individuals, "
+                  "and what follows for choosing a metric."],
+        },
+        results=[
+            ("True score and error", r"X=T+E,\qquad \operatorname{Var}(X)=\operatorname{Var}(T)+\operatorname{Var}(E)"),
+            ("Reliability", r"r_{xx}=\frac{\operatorname{Var}(T)}{\operatorname{Var}(X)}=\operatorname{corr}(X,X')"),
+            ("Spearman-Brown", r"r_k=\frac{k\,r}{1+(k-1)\,r}"),
+            ("Correction for attenuation", r"\rho_{T_xT_y}=\frac{r_{xy}}{\sqrt{r_{xx}\,r_{yy}}}"),
+            ("Cronbach's alpha", r"\alpha=\frac{k}{k-1}\left(1-\frac{\sum_i\sigma_i^2}{\sigma_X^2}\right)"),
+            ("Cohen's kappa", r"\kappa=\frac{p_{\text{observed}}-p_{\text{chance}}}{1-p_{\text{chance}}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("The measurement library", "explainer/psychology/measure.py"),
+              ("The Pool", "explainer/psychology/pool.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

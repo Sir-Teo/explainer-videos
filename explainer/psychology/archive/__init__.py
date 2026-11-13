@@ -18,7 +18,8 @@ from dataclasses import dataclass, field
 
 __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBBINGHAUS_1885", "WOODS_2015",
            "PFUNGST_1907", "PEIRCE_JASTROW_1884", "ROSENTHAL_FODE_1963", "RAUDENBUSH_1984", "DE_QUIDT_2018",
-           "LIT_2011", "MITCHELL_2021"]
+           "LIT_2011", "MITCHELL_2021", "STEVENS_1946", "FORER_1949", "JOHANSSON_2005", "CREDE_2017", "HEDGE_2018",
+           "FLAKE_FRIED_2020"]
 
 
 @dataclass(frozen=True)
@@ -295,6 +296,144 @@ MITCHELL_2021 = Dataset(
     },
 )
 
+# ---------------------------------------------------------------------------
+# Part 3
+# ---------------------------------------------------------------------------
+STEVENS_1946 = Dataset(
+    key="stevens_1946",
+    title="The committee that could not agree whether sensation can be measured, and Stevens's four scales",
+    source="S. S. Stevens, On the theory of scales of measurement, Science 103 (1946) 677-680; its account of the "
+           "British Association's committee (appointed 1932; interim report 1938; final report 1940, 'Quantitative "
+           "estimates of sensory events')",
+    cite=r"Stevens (1946)",
+    checked="the opening section and Table 1 read from a scan of the article, 2026-11-13; the committee's own "
+            "reports were not read",
+    licence="facts and a short quotation",
+    data={
+        "appointed": 1932, "interim_report": 1938, "final_report": 1940, "members": 19,
+        "sections": ("A, Mathematical and Physical Sciences", "J, Psychology"),
+        "question": "the possibility of quantitative estimates of sensory events",
+        "example": "the sone scale of loudness (Stevens and Davis, 1938)",
+        "quote": "any law purporting to express a quantitative relation between sensation intensity and stimulus "
+                 "intensity is not merely false but is in fact meaningless unless and until a meaning can be given "
+                 "to the concept of addition as applied to sensation",
+        "quote_by": "one member, in the final report (as quoted by Stevens)",
+        "definition": "the assignment of numerals to objects or events according to rules",
+        # scale -> (what must be determined, the transformations that leave the scale's form unchanged,
+        #           the statistics that keep their meaning; each scale also keeps those above it)
+        "scales": {
+            "nominal": ("equality", "any one-to-one relabelling", "number of cases, mode"),
+            "ordinal": ("greater or less", "any increasing function", "median, percentiles"),
+            "interval": ("equality of differences", "x' = ax + b", "mean, standard deviation, correlation"),
+            "ratio": ("equality of ratios", "x' = ax", "coefficient of variation"),
+        },
+    },
+)
+
+FORER_1949 = Dataset(
+    key="forer_1949",
+    title="Forer's classroom demonstration: one personality sketch for everyone",
+    source="B. R. Forer, The fallacy of personal validation: a classroom demonstration of gullibility, Journal of "
+           "Abnormal and Social Psychology 44 (1949) 118-123; as described by D. H. Dickson and I. W. Kelly, "
+           "Psychological Reports 57 (1985) 367-382",
+    cite=r"Forer (1949)",
+    checked="the design and results read from Dickson and Kelly's review (39 students; ratings from 0 to 5; mean "
+            "given as 4.3; nobody below 2, five below 4), 2026-11-13; the mean to two places, 4.26, and the "
+            "statements are as reproduced in secondary sources and were not read in the 1949 article",
+    licence="facts and short quotations",
+    data={
+        "n": 39, "scale": (0, 5), "mean": 4.26, "below_4": 5, "lowest": 2, "statements": 13,
+        "test": "the Diagnostic Interest Blank",
+        "origin": "taken largely from a newsstand astrology book",
+        # six of the thirteen statements
+        "sample": (
+            "You have a great need for other people to like and admire you.",
+            "You have a tendency to be critical of yourself.",
+            "You have a great deal of unused capacity which you have not turned to your advantage.",
+            "Disciplined and self-controlled outside, you tend to be worrisome and insecure inside.",
+            "At times you have serious doubts as to whether you have made the right decision or done the right "
+            "thing.",
+            "At times you are extroverted, affable, sociable, while at other times you are introverted, wary, "
+            "reserved.",
+        ),
+    },
+)
+
+JOHANSSON_2005 = Dataset(
+    key="johansson_2005",
+    title="Choice blindness: people explain a choice they did not make",
+    source="P. Johansson, L. Hall, S. Sikstrom and A. Olsson, Failure to detect mismatches between intention and "
+           "outcome in a simple decision task, Science 310 (2005) 116-119; summarized by its first author in "
+           "P. Johansson, Choice Blindness (doctoral thesis, Lund University, 2006)",
+    cite=r"Johansson et al.\ (2005)",
+    checked="the author's summary of the paper read from the thesis (Lund University research portal), 2026-11-13",
+    licence="facts only",
+    data={
+        "n": 120, "trials": 15, "manipulated": 3,
+        "detected_at_most": 0.26,  # "counting all forms of detection ... no more than 26% of the manipulated trials"
+        "would_have_noticed": 0.84,  # of those who detected nothing, the share sure they would have noticed
+        "task": "choose the more attractive of two faces; the photographs are covertly exchanged; explain the choice",
+    },
+)
+
+CREDE_2017 = Dataset(
+    key="crede_2017",
+    title="Grit and conscientiousness: a meta-analysis",
+    source="M. Crede, M. C. Tynan and P. D. Harms, Much ado about grit: a meta-analytic synthesis of the grit "
+           "literature, Journal of Personality and Social Psychology 113 (2017) 492-511",
+    cite=r"Cred\'e, Tynan \& Harms (2017)",
+    checked="the abstract and the Results read from a copy of the article, 2026-11-13",
+    licence="facts only",
+    data={
+        "samples": 88, "people": 66_807,
+        "grit_conscientiousness": {"rho": 0.84, "k": 22, "n": 18_826},  # corrected for unreliability
+        "perseverance_conscientiousness": {"rho": 0.83, "k": 8, "n": 4_967},
+        "consistency_conscientiousness": {"rho": 0.61, "k": 8, "n": 4_967},
+        "grit_academic_performance": {"rho": 0.18, "k": 39, "n": 13_141},
+    },
+)
+
+HEDGE_2018 = Dataset(
+    key="hedge_2018",
+    title="The reliability paradox: robust tasks, unreliable individual differences",
+    source="C. Hedge, G. Powell and P. Sumner, The reliability paradox: why robust cognitive tasks do not produce "
+           "reliable individual differences, Behavior Research Methods 50 (2018) 1166-1186",
+    cite=r"Hedge, Powell \& Sumner (2018)",
+    checked="the abstract, Method and the text on Table 1 read from the open-access article, 2026-11-13",
+    licence="CC BY (summary statistics only are used)",
+    data={
+        "tasks": ("flanker", "Stroop", "stop-signal", "go/no-go", "Posner cueing", "Navon", "SNARC"),
+        "retest_weeks": 3, "n": (50, 62, 42),  # Studies 1 to 3, before a few missed second sessions
+        "icc_range": (0.0, 0.82),
+        "stroop_rt_cost": (0.60, 0.66),  # Studies 1 and 2
+        "flanker_rt_cost": 0.40,  # Study 1 ...
+        "flanker_components": (0.74, 0.66),  # ... while congruent and incongruent RTs themselves are reliable
+        "flanker_sem_ms": 15,
+        "gonogo_commission": 0.76,
+        "many_labs_3_stroop_replicated": 1.0,  # Ebersole et al. (2016), as cited there
+    },
+)
+
+FLAKE_FRIED_2020 = Dataset(
+    key="flake_fried_2020",
+    title="How measures are reported and altered in published psychology",
+    source="J. K. Flake and E. I. Fried, Measurement schmeasurement: questionable measurement practices and how to "
+           "avoid them, Advances in Methods and Practices in Psychological Science 3 (2020) 456-465, and the "
+           "surveys it reports (Flake, Pek and Hehman 2017; Weidman, Steckler and Tracy 2017; Elson et al. 2014; "
+           "Santor, Gregus and Welch 2006)",
+    cite=r"Flake \& Fried (2020)",
+    checked="read from a copy of the article, 2026-11-13; the surveys it cites were not read",
+    licence="facts only",
+    data={
+        "scales_reviewed": 433,  # a random sample of studies in JPSP, 2014 (Flake, Pek & Hehman 2017)
+        "no_source": 0.40, "no_item_count": 0.19, "no_response_scale": 0.09,
+        "emotion_instances": 356, "emotion_no_development": 0.69,  # Weidman et al. (2017)
+        "crtt_ways": 150, "crtt_publications": 130,  # one aggression task, scored in over 150 ways
+        "depression_scales": 280,
+    },
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
-                          MITCHELL_2021)}
+                          MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
+                          FLAKE_FRIED_2020)}

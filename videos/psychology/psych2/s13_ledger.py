@@ -45,7 +45,7 @@ class Ledger(VoiceoverScene):
 
     def rows(self):
         board = ledger_board(ledger.rows(part=2), font_size=30)
-        total = len(ledger.LEDGER)
+        total = len(ledger.rows(upto=PART))
         tally = label(rf"the Ledger so far: \ {total} rows", font_size=28, color=GREY_A).to_edge(DOWN, buff=0.7)
         with self.voiceover(
             "And the five together. <bookmark mark='a'/> An animal reads its handler: replicated, from a horse "

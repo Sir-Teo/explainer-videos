@@ -463,43 +463,52 @@ to ask of any of them.
 *Reading:* Pfungst 1907/1911; Peirce & Jastrow 1884; Shadish, Cook & Campbell 2002; Rosenthal 1966; Orne 1962;
 Campbell & Stanley 1963; the Belmont Report.
 
-### Part 3 · The Measure (~50)
+### Part 3 · The Measure (~56)
 *Question:* what does a number attached to a mind mean?
 *Story:* in 1940 a committee of physicists and psychologists reports that it cannot agree whether sensation can be
 measured at all. Stevens answers by asking what operations a number survives. Spearman has already asked the other
 question, how much of a score is error. The two answers, scale type and reliability, plus the hardest question,
 validity, decide what every later number in the series is worth.
-1. Hook: the Ferguson Committee's final report, 1940. Campbell's objection: no addition, no measurement.
-2. Stevens's four scales (1946) as groups of permissible transformations; what statistics survive each. The
-   century-long quarrel over Likert means, and when it matters (computed).
-3. Representational measurement: from an ordering to a scale; conjoint measurement in one picture (paid off in
-   Part 46).
-4. On you: the Forer reading. Everyone gets the same paragraph. Forer's class rated it 4.26 out of 5 (1949).
-5. True score and error: X = T + E. Reliability as a variance ratio, derived.
-6. Spearman 1904: attenuation. The correlation between two noisy measures, and the correction (derived; checked
-   on the Pool).
-7. Longer tests are better tests: Spearman–Brown derived; Cronbach's α derived, what it assumes and what it is
-   not (unidimensionality); test–retest, parallel forms, inter-rater agreement and kappa.
-8. Validity: content, criterion, construct. Cronbach and Meehl's nomological network (1955); the
-   multitrait–multimethod matrix (Campbell and Fiske 1959), drawn and computed.
-9. Jingle and jangle: one name for two things, two names for one. Grit and conscientiousness as the example.
-10. Constructs as latent variables, and the alternative (a network of causes): a preview of Parts 32, 39 and 44.
-11. Measuring in milliseconds and in self-report: what introspection can deliver (Nisbett and Wilson 1977; choice
-    blindness, Johansson et al. 2005).
-12. The reliability paradox, first statement: the tasks that give the most robust effects make the worst tests of
-    individuals (paid off in Parts 47 and 59).
+0. Hook: the British Association's committee, 1932 to 1940. The physicists' objection: no addition, no
+   measurement. Kant's first objection returns in a sharper form. Three questions for any number.
+1. Stevens's four scales (1946) as groups of permissible transformations; the test of a meaningful statement. The
+   quarrel over averaging ratings, computed: the order of two means can be reversed by respacing the scale
+   exactly when the two groups' answers cross; sums of many items are forgiving.
+2. From an order to a scale: conjoint measurement in one picture (three people, three questions), and a table
+   that fails (paid off in Part 46).
+3. On you: the Forer reading. Everyone gets the same sketch. Forer's class of 39 rated it 4.26 out of 5 (1949). A
+   measure has to tell people apart.
+4. True score and error: X = T + E, one person tested 300 times; reliability as a variance ratio, derived; the
+   correlation of parallel forms.
+5. Spearman 1904: attenuation and its correction (derived; checked on the Pool across test lengths), and what
+   the correction costs in studies of 60 people.
+6. Longer tests are better tests: Spearman-Brown derived; Cronbach's alpha, what it assumes and what it is not
+   (unidimensionality); error from the day (retest) and from the judge (kappa); the measurement library.
+7. Validity: content, criterion, construct. Cronbach and Meehl's nomological network (1955); the
+   multitrait-multimethod matrix (Campbell and Fiske 1959), computed with method variance planted.
+8. Jingle and jangle: one name for two things, two names for one. Grit and conscientiousness (0.84).
+9. What is a construct? A hidden cause, and a network of mutual causes, imply the same correlations: a preview of
+   Parts 32, 39 and 44.
+10. Asking people: what introspection can deliver (Nisbett and Wilson 1977; choice blindness, Johansson et al.
+    2005).
+11. The reliability paradox, first statement: the tasks that give the most robust effects make the worst tests of
+    individuals (Hedge, Powell and Sumner 2018; paid off in Parts 47 and 59).
+12. The Ledger. 13. In practice: every score is a measurement; five questions for any score. 14. Frontier.
 
-*Psyche:* a classical-test-theory simulator on the Pool: reliability against test length, attenuation and its
-correction, α under violated assumptions, an MTMM matrix with planted method variance.
-*On you:* the Forer effect.
-*Ledger:* the Barnum/Forer effect (`replicated`); telling more than we can know (`replicated`, with limits);
-choice blindness (`replicated`).
+*Psyche:* no new faculty. The measurement library (`explainer/psychology/measure.py`) and a block of the Pool:
+three traits, grit, a response style per method, rating-scale items, a conflict task. Reliability against test
+length, attenuation and its correction, alpha under violated assumptions, an MTMM matrix with planted method
+variance, a factor model against a network.
+*On you:* the Forer effect (in the film, and as the part's interactive).
+*Ledger:* the Barnum/Forer effect (`replicated`); telling more than we can know (`replicated`, for reports of
+causes); choice blindness (`replicated`). Deferred with reasons: grit beyond conscientiousness (Part 28), the
+reliability paradox (Part 59).
 *In practice:* every hiring test, survey scale, clinical questionnaire and product metric is a measurement with a
 reliability and a validity argument, or without one.
 *Frontier:* is psychological measurement quantitative at all (Michell)? Generalizability theory; measurement
-schmeasurement (Flake & Fried 2020): how often scales are altered and unvalidated.
+schmeasurement (Flake & Fried 2020): how measures are reported and altered.
 *Reading:* Stevens 1946; Spearman 1904a; Lord & Novick 1968; Cronbach 1951; Cronbach & Meehl 1955; Campbell &
-Fiske 1959; Michell 1999; Borsboom 2005; Flake & Fried 2020.
+Fiske 1959; Luce & Tukey 1964; Michell 1999; Borsboom 2005; Hedge, Powell & Sumner 2018; Flake & Fried 2020.
 
 ### Part 4 · The Evidence (~55)
 *Question:* when should a finding be believed?
@@ -2958,8 +2967,9 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
    series' parts from 1 without gaps, so a part built out of order would not appear; and Part 1 ends on Part 2's
    hook. Part 2 still exercises what a typical part needs (an experiment on the viewer, a model fitted to
    historical data, designs run on the Pool, Ledger rows, an industry payoff), and Part 12 becomes the checkpoint
-   for the methods standard when Act III is reached. Delivered with previews and contact sheets. **Review with
-   the user**, then lock the standard.
+   for the methods standard when Act III is reached. Delivered with previews and contact sheets. **Reviewed
+   with the user on 2026-11-13 and accepted as they stand; the standard of §1 is locked** and the parts now follow
+   in order.
 2. **Act by act,** reviewing at each milestone:
    - Acts I–IV (Parts 2–17): method, brain, senses, learning. About 14 hours.
    - Acts V–VI (Parts 18–29): cognition, motivation, emotion.
@@ -3017,3 +3027,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. The Chinese guide (`PSYCHOLOGY_ZH_GUIDE.md`) and text table are in place, and the Ledger gate (`tools/check_ledger.py`, run by `tools/make.py`). The browser task kit (`course/site/widgets/00_tasks.js`: keys and taps, timing, the timed-trial loop; nothing stored or sent) carries the interactives of Parts 1 and 2, and `tools/check_widgets.js` plays a scripted participant against it. Phase 0 is complete | |
 | 1 | built, English and Chinese: 14 chapters, hook and outro; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 46 min |
 | 2 | built, English and Chinese, the second pilot: 14 chapters, hook and outro; the laboratory (`lab.py`), the cue-reading model (`psyche/cueing.py`), five Ledger rows; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 56 min |
+| 3 | built in English: 14 chapters, hook and outro; the measurement library (`measure.py`), the Pool's traits, methods and conflict task, three Ledger rows; course entry, lab and interactive (the Forer reading) checked. Chinese edition next. Open checks in its README | 56 min |

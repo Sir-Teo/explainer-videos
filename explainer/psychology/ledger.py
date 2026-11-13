@@ -364,3 +364,79 @@ shown(2, "MITCHELL_2021", "shown for the authors' own count of who guessed their
       "the trial's result is not presented", row_in=42)
 shown(2, r"Arnett (2008); \ Henrich, Heine \& Norenzayan (2010)", "a count of who is sampled, shown to pose "
       "the question of external validity", row_in=38)
+
+# ---------------------------------------------------------------------------
+# Part 3 · The Measure
+# ---------------------------------------------------------------------------
+_JOHANSSON = ("P. Johansson, L. Hall, S. Sikstrom and A. Olsson, Failure to detect mismatches between intention and "
+              "outcome in a simple decision task, Science 310 (2005) 116-119")
+
+add(Finding(
+    key="barnum", part=3, title=r"A general sketch feels personal",
+    claim="People accept a personality description made of general statements as an accurate description of "
+          "themselves in particular.",
+    original=Study("Forer", 1949, n="39 students", design="one sketch of thirteen statements, given to every "
+                   "student as the result of their own test; rated from 0 to 5", effect=4.26, unit="of 5",
+                   found="mean rating 4.26 of 5; nobody below 2, five below 4"),
+    status="replicated",
+    record=(Study("Dickson and Kelly", 1985, n="a review of the studies since 1949",
+                  found="general sketches are accepted as accurate throughout; more so the more general and the "
+                        "more favourable they are, and depending on the kind of assessment they claim to rest on"),),
+    note="Why a reader's agreement that a description fits is no evidence that the test behind it measures "
+         "anything: the sketch would have fitted anyone.",
+    sources=("B. R. Forer, The fallacy of personal validation: a classroom demonstration of gullibility, Journal of "
+             "Abnormal and Social Psychology 44 (1949) 118-123",
+             "D. H. Dickson and I. W. Kelly, The 'Barnum effect' in personality assessment: a review of the "
+             "literature, Psychological Reports 57 (1985) 367-382"),
+    checked="2026-11-13",
+    data=("FORER_1949",),
+))
+
+add(Finding(
+    key="telling_more", part=3, title=r"Telling more than we can know",
+    claim="People's reports of why they acted are often inferences from plausible theories, and not observations "
+          "of the process that produced the act.",
+    original=Study("Nisbett and Wilson", 1977, n="a review of experiments",
+                   design="a cause of behaviour is manipulated, and people are asked why they acted",
+                   found="people often fail to report causes that moved them, report ones that did not, and give "
+                         "the reasons an outside observer would guess"),
+    status="replicated",
+    record=(Study("Johansson, Hall, Sikstrom and Olsson", 2005, n="120 participants",
+                  design="the outcome of a choice is covertly swapped, so a report can be checked against it",
+                  found="reasons are given as readily for a choice that was not made as for one that was"),),
+    note="The limit matters as much as the finding: it concerns reports of causes. It does not show that people "
+         "cannot report what they currently see, feel or intend, and how far it reaches is still argued.",
+    sources=("R. E. Nisbett and T. D. Wilson, Telling more than we can know: verbal reports on mental processes, "
+             "Psychological Review 84 (1977) 231-259", _JOHANSSON),
+    checked="2026-11-13",
+))
+
+add(Finding(
+    key="choice_blindness", part=3, title=r"Choice blindness",
+    claim="People often fail to notice that the outcome of a choice has been swapped, and then give reasons for "
+          "the choice they did not make.",
+    original=Study("Johansson, Hall, Sikstrom and Olsson", 2005, n="120 participants, 15 choices each",
+                   design="choose the more attractive of two faces; on 3 trials the photographs are exchanged",
+                   effect=0.26, unit="detected, at most",
+                   found="no more than 26% of the swaps were detected, counting every sign of detection"),
+    status="replicated",
+    record=(Study("Hall, Johansson, Tarning, Sikstrom and Deutgen", 2010, n="shoppers at a supermarket stall",
+                  design="taste two jams or smell two teas, choose, then sample the choice again, swapped",
+                  found="no more than a third of the swaps were detected"),),
+    note="Of those who noticed nothing in the first study, 84% said they would have noticed such a swap.",
+    sources=(_JOHANSSON,
+             "P. Johansson, Choice Blindness: The Incongruence of Intention, Action and Introspection (doctoral "
+             "thesis, Lund University, 2006)",
+             "L. Hall, P. Johansson, B. Tarning, S. Sikstrom and T. Deutgen, Magic at the marketplace: choice "
+             "blindness for the taste of jam and the smell of tea, Cognition 117 (2010) 54-61"),
+    checked="2026-11-13",
+    data=("JOHANSSON_2005",),
+))
+
+shown(3, "STEVENS_1946", "a committee's disagreement and a classification of scales: an argument, not an empirical "
+      "finding")
+shown(3, "CREDE_2017", "shown as the example of two names for nearly one thing; whether grit adds anything to "
+      "conscientiousness is entered with motivation", row_in=28)
+shown(3, "HEDGE_2018", "the reliability paradox is stated here and paid off with its record later", row_in=59)
+shown(3, "FLAKE_FRIED_2020", "counts of how measures are reported in journals: a description of practice, not a "
+      "finding about minds")
