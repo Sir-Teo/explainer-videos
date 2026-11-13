@@ -56,8 +56,9 @@ class OnYou(VoiceoverScene):
                           r"later each is handed ``their'' result", color=P.ARCHIVE, width=7.4, font_size=26)
         hc.move_to([-3.2, 2.35, 0])
         high = d["n"] - d["below_4"]
-        crowd = people_row(d["n"], [P.ACCENT] * high + [GREY_C] * d["below_4"], height=0.62, buff=0.15, per_row=13)
+        crowd = people_row(d["n"], [P.ACCENT] * high + [GREY_C] * d["below_4"], height=0.56, buff=0.11, per_row=13)
         crowd.move_to([-3.2, -0.55, 0])
+        keep_in_frame(crowd, 0.35)
         cap = label(rf"{high} of {d['n']} rated it 4 or 5", font_size=30, color=P.ACCENT).next_to(crowd, DOWN, buff=0.3)
         big = VGroup(label(r"mean rating", font_size=26, color=GREY_A),
                      label(rf"{d['mean']:.2f}", font_size=96, color=P.ACCENT),

@@ -139,6 +139,37 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | ethics board | 伦理委员会 |
 | respect for persons, beneficence, justice | 尊重个人，有利，公正 |
 | arm (of a trial) | 组 |
+| measurement; to measure | 测量 |
+| scale (of measurement); rating scale | 量表；评定量表 |
+| nominal, ordinal, interval, ratio scale | 称名量表，顺序量表，等距量表，比率量表 |
+| permissible transformation; to respace (a rating scale) | 允许的变换；重排间距 |
+| sone | 宋 |
+| conjoint measurement; double cancellation | 联合测量；双重消去 |
+| true score, error, observed score | 真分数，误差，观察分数 |
+| reliability; validity | 信度；效度 |
+| standard error of measurement | 测量标准误 |
+| parallel form (a second form of a test) | 复本 |
+| attenuation; correction for attenuation | 衰减；衰减校正 |
+| Spearman-Brown formula | 斯皮尔曼–布朗公式 |
+| Cronbach's alpha | α系数（克龙巴赫） |
+| test-retest; agreement between sessions | 重测；两次之间的一致性 |
+| Cohen's kappa | kappa系数（科恩） |
+| content, criterion, construct validity | 内容效度，效标效度，构念效度 |
+| nomological network | 法则网络 |
+| multitrait-multimethod matrix | 多特质–多方法矩阵 |
+| convergent validity; method variance | 聚合效度；方法变异 |
+| jingle fallacy; jangle fallacy | 同名异实；异名同实 |
+| conscientiousness, neuroticism, extraversion | 尽责性，神经质，外向性 |
+| grit | 坚毅 |
+| construct; latent variable; network (of symptoms) | 构念；潜变量；网络 |
+| factor analysis; loading | 因素分析；载荷 |
+| self-report; introspection | 自我报告；内省 |
+| choice blindness | 选择盲 |
+| the reliability paradox | 信度悖论 |
+| conflict task; cost (of conflict); flanker; Stroop | 冲突任务；代价；侧翼；斯特鲁普 |
+| generalizability theory | 概化理论 |
+| questionable measurement practices | 可疑的测量做法 |
+| a reading (of one's character); sketch | 解读；速写 |
 
 ## Names
 
@@ -168,6 +199,18 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Stephen Raudenbush, Martin Orne, Willem Wagenaar | 劳登布什，马丁·奥恩，瓦赫纳尔 |
 | Stanley Milgram | 米尔格拉姆 |
 | Tuskegee, Alabama | 亚拉巴马州塔斯基吉 |
+| the British Association for the Advancement of Science | 英国科学促进会 |
+| Norman Campbell (the physicist); Donald Campbell | 诺曼·坎贝尔；唐纳德·坎贝尔 |
+| Stanley Smith Stevens | 斯坦利·史蒂文斯 |
+| Duncan Luce, John Tukey | 卢斯，图基 |
+| Bertram Forer | 伯特伦·福勒 |
+| Charles Spearman, William Brown | 查尔斯·斯皮尔曼，威廉·布朗 |
+| Lee Cronbach, Paul Meehl, Donald Fiske | 李·克龙巴赫，保罗·米尔，唐纳德·菲斯克 |
+| Jacob Cohen, Truman Kelley | 科恩，凯利 |
+| Richard Nisbett, Timothy Wilson | 理查德·尼斯贝特，蒂莫西·威尔逊 |
+| Craig Hedge | 克雷格·赫奇 |
+| Joel Michell | 乔尔·米歇尔 |
+| Jessica Flake, Eiko Fried | 杰西卡·弗莱克，艾科·弗里德 |
 | Königsberg, Leipzig, Utrecht, Würzburg, Cornell | 柯尼斯堡，莱比锡，乌得勒支，维尔茨堡，康奈尔 |
 
 ## Titles
@@ -189,6 +232,9 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | *The Design of Experiments* | 《实验设计》 |
 | *Pygmalion in the Classroom* | 《课堂里的皮格马利翁》 |
 | *The Belmont Report* | 《贝尔蒙报告》 |
+| "On the Theory of Scales of Measurement" | 《论测量量表的理论》 |
+| "The Proof and Measurement of Association between Two Things" | 《两事物之间关联的证明与测量》 |
+| "Telling More Than We Can Know" | 《说出的比能知道的多》 |
 
 ## The parts
 
