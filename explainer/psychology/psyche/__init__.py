@@ -16,5 +16,8 @@ Modules so far, with the part that introduces each:
 =================  ====  ===============================================================================
 ``chronometry``     1    serial stage models of reaction time: Donders' subtraction, pure insertion and
                          its distributional test, additive factors, Hick's logarithm, the ex-Gaussian
+``cueing``          2    an observer who reads a questioner: Clever Hans as a psychometric function
+``neuron``          5    Nernst and Goldman, the membrane as a circuit, Hodgkin and Huxley with the voltage
+                         clamp and the cable, FitzHugh-Nagumo, integrate-and-fire, spike trains, dendrites
 =================  ====  ===============================================================================
 """
