@@ -406,15 +406,34 @@ tolerance; Mersenne's three laws recovered by regression; pluck-position spectra
 *Reading:* Mersenne, *Harmonie universelle* (1636); Fletcher & Rossing ch. 2; Benade; Bilbao, *Numerical Sound
 Synthesis*; Cohen, *Quantifying Music*.
 
-### Part 2 · Waves in Air (~40)
+### Part 2 · Waves in Air (~35)
 *Story:* In 1883 Krakatoa was heard nearly 5,000 km away and its pressure wave was recorded circling the globe.
 Sound is a pressure wave, and almost everything odd about it (bass that goes round corners, a bottle that hums
 one note, a siren that drops as it passes) follows from its wavelength.
+1. Hook: the Tune on six bottles; Krakatoa heard at Rodrigues four hours later; seven passages on the barographs.
+2. Sound needs air: Boyle's jar (1660); the monochord at a thousandth of an atmosphere; sound in helium, water, steel.
+3. What moves: a row of gas parcels; pressure and displacement; p = ρcu; how small audible motion is.
+4. The speed of sound: Newton's 15% error, Laplace's adiabatic correction, both run as simulations; temperature
+   and the pitch of a pipe.
+5. How loud: intensity, the bel and the decibel; one string and ten; an ear question (3 dB or 6 dB).
+6. Spreading: the inverse-square law, simulated on a spherical ray; a string at 1, 2, 4, 8 m; a worked example.
+7. Round the corner: wavelength; a wall at 170 Hz and at 1,360 Hz; the loss against Maekawa's chart; the Tune
+   behind the wall.
+8. Two sources: interference, Young's rule, a walk through the pattern; comb filtering between two loudspeakers.
+9. Air in a pipe: open and stopped pipes, simulated; the end correction; flute and clarinet; an ear question.
+10. A bottle: Helmholtz's resonator, the exact two-tube root and the simulation; filling it.
+11. Why a string needs a box: impedance; a step, air to water, a flare against a sudden opening.
+12. A source that moves: Doppler's formula derived; Buys Ballot's train; an ear question.
+13. Frontier: steepening against Fubini's solution; shock waves in trombones; thermoacoustics; Tonga 2022.
+14. Variation 2: the Tune on six bottles tuned by their filling. Outro: problems, payoffs. Can every sound be
+    taken apart?
+
 *Covers:* Boyle's bell in a vacuum; pressure and particle velocity; the speed of sound, Newton's 15% error and
 Laplace's adiabatic correction; intensity and the decibel; the inverse-square law; wavelengths from 17 m to 17 mm
 and diffraction; interference; standing waves in open and stopped tubes; the Helmholtz resonator; impedance; the
 Doppler effect.
-*Built and computed:* a 2-D finite-difference acoustic simulator; tube and bottle resonances against the formulas.
+*Built and computed:* a chain of gas parcels, a 2-D finite-difference acoustic simulator and a variable-area tube;
+tube and bottle resonances against the formulas.
 *Variation 2:* the Tune on bottles tuned by their filling.
 *Frontier:* nonlinear propagation and the "brassy" trombone; thermoacoustics.
 *Reading:* Kinsler et al.; Pierce, *Acoustics*; Rossing, Moore & Wheeler.
