@@ -283,7 +283,8 @@ Tests are in `tests/psychology/`. The code reuses `explainer.stats.kit` (mixed m
 factor analysis and MDS, IRT, the probabilistic programming language for hierarchical fits) and
 `explainer.ai.autodiff`, and will use the language model of *AI, Built* for reading-time predictions. The course
 material follows `videos/coursekit` (a course entry, a lab and an interactive per part); for this series the
-interactive is the part's experiment on the reader.
+interactive is the part's experiment on the reader, built on the task kit
+(`course/site/widgets/00_tasks.js`); it keeps its data in the page and sends nothing.
 
 ## Decisions taken
 

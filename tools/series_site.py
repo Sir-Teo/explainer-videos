@@ -557,13 +557,14 @@ def widgets_defined(key: str) -> set:
 
 def write_widgets(out: Path, key: str, only: set | None = None) -> None:
     """assets/widgets-<series>.js: the site's canvas library, the series' interactives, then the boot call.
-    ``only``: just the files that define these widgets (a check of some parts must not depend on the others)."""
+    ``only``: just the files that define these widgets (a check of some parts must not depend on the others), and
+    any file that defines none, which is code the interactives share (psychology's ``00_tasks.js``)."""
     core = quant_site.ASSETS / "widgets"
     source = widget_source(key)
     if only is not None:
         files = sorted((VIDEOS / key / "course" / "site" / "widgets").glob("*.js"))
-        source = "\n".join(t for t in (f.read_text() for f in files)
-                           if set(re.findall(r"\bW\.([A-Za-z0-9_]+) = function", t)) & only)
+        defined = [(t, set(re.findall(r"\bW\.([A-Za-z0-9_]+) = function", t))) for t in (f.read_text() for f in files)]
+        source = "\n".join(t for t, names in defined if not names or names & only)
     (out / "assets" / f"widgets-{key}.js").write_text(
         "\n".join([(core / "00_core.js").read_text(), source, (core / "99_boot.js").read_text()]))
 

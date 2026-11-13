@@ -113,6 +113,15 @@ One canvas widget per part, on the site's small library: read `videos/quant/cour
 - Custom drawing beyond `Axes` (a graph, a grid of cells, a machine's tape) uses `g.ctx` or `g[i].ctx` with
   `g[i].box` directly; keep text at 11px or more and inside its box at 390px width (panels stack on phones).
 - Colours carry meaning consistently within the widget and are named in a legend or in the text.
+- *Psychology, Built* only: the interactive is an experiment the reader takes part in, on the task kit
+  `videos/psychology/course/site/widgets/00_tasks.js` (read it, and `parts_01_04.js` for the idiom). Register the
+  experiment before `QB.widget` with `QB.task.create(el, {keys, accepting, respond})`, or `QB.task.timed(el, {...})`
+  for a timed-trial loop (foreperiod, stimulus, one response, feedback; the log is in the Battery's trial format);
+  draw its panel with `QB.task.stage(g, i, task)`, which is also where taps are read (left half 0, right half 1).
+  The first button starts the experiment, and a task counts each response it records: the checker's scripted
+  participant presses that button, answers by key and by tap when a task is ready, and fails the page if nothing
+  was recorded. An experiment keeps its data in the page's memory: no storage, cookies or network
+  (`tests/psychology/test_task_kit.py`). Say in the `note` that nothing is stored or sent.
 
 ## What not to touch
 

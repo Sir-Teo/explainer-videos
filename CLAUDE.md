@@ -58,5 +58,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   people, always tagged simulated), the Battery (`battery.py`, tasks behind one `run`), the Replication Ledger
   (`ledger.py`; every finding a part presents gets a row with sources and the date checked, and `tools/check_ledger.py psychN` fails a part that shows a study with neither a row nor a `ledger.shown` reason), the Archive (`archive/`,
   every dataset registered in `archive/SOURCES.md`), and the cards, maps and instruments in `__init__.py` and `viz.py`.
-  A part's interactive is an experiment the reader takes part in; it stores and sends nothing.
+  A part's interactive is an experiment the reader takes part in, built on the task kit
+  (`course/site/widgets/00_tasks.js`, `QB.task`); it stores and sends nothing, and `tools/check_course.py` plays a
+  scripted participant against it.
   Chinese narration tables in `psychN/zh_lines.py`; terms in `videos/psychology/PSYCHOLOGY_ZH_GUIDE.md`.

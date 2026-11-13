@@ -2949,8 +2949,9 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
    - Tools: a `Course` entry for `psychology` (prefix `psych`) in `tools/series_site.py` with its test count in
      `tests/test_series_site.py`; `psychology` added to `videos/coursekit.SERIES` and, if bilingual, to `BILINGUAL`
      in `tools/make.py`; `--series psychology` for the QA and packaging tools; the Ledger gate.
-   - The browser task kit for the Battery (`course/site/widgets/00_tasks.js`: trial loops, timing, local-only
-     storage), since every part's interactive needs it, and a scripted participant for `tools/check_course.py`.
+   - The browser task kit for the Battery (`course/site/widgets/00_tasks.js`: keys and taps, timing, the
+     timed-trial loop; data kept in the page's memory only), since every part's interactive needs it, and a
+     scripted participant for `tools/check_course.py`.
    - `tests/psychology/`: the Pool's planted truths are recoverable; the Ledger's schema; a silent smoke render.
 1. **Pilots: Part 1, then Part 2** (The Experiment). The first draft of this plan named Part 12 as the second
    pilot; it is Part 2 instead, for two reasons found while building Part 1: the course tools and the site count a
@@ -3013,6 +3014,6 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 
 | Part | State | Length |
 |---|---|---|
-| 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. The Chinese guide (`PSYCHOLOGY_ZH_GUIDE.md`) and text table are in place, and the Ledger gate (`tools/check_ledger.py`, run by `tools/make.py`). Still to do: the shared browser task kit (Part 1's interactive carries its own trial loop) | |
+| 0 | built: `explainer/psychology/` (Psyche's `chronometry`, the Pool, the Battery, the Ledger, the Archive, cards, maps and the first instruments), `tests/psychology/`, the course kit and site entries. The Chinese guide (`PSYCHOLOGY_ZH_GUIDE.md`) and text table are in place, and the Ledger gate (`tools/check_ledger.py`, run by `tools/make.py`). The browser task kit (`course/site/widgets/00_tasks.js`: keys and taps, timing, the timed-trial loop; nothing stored or sent) carries the interactives of Parts 1 and 2, and `tools/check_widgets.js` plays a scripted participant against it. Phase 0 is complete | |
 | 1 | built, English and Chinese: 14 chapters, hook and outro; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 46 min |
 | 2 | built, English and Chinese, the second pilot: 14 chapters, hook and outro; the laboratory (`lab.py`), the cue-reading model (`psyche/cueing.py`), five Ledger rows; course entry, lab and interactive checked; narration table and on-screen text translated and dry-run. Open checks in its README | 56 min |
