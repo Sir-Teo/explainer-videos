@@ -251,3 +251,32 @@ def clipped_segments(xs, ys, rectangle):
         if lo <= hi:
             result.append((start+lo*delta, start+hi*delta))
     return result
+
+
+def place_labels(dots, texts, all_dots=None, inside=None, font_size=15, color=GREY_A):
+    """Label dots with the first free spot around them, so names overlap neither each other nor any dot.
+
+    Tries the four corners and then the two sides, near and then further out; if nothing is free it keeps the
+    placement that overlaps least.  ``inside`` = (lower-left, upper-right) scene points keeps names off the axes."""
+    def hit(a, b, pad=0.02):
+        return not (abs(a.get_center()[0] - b.get_center()[0]) > (a.width + b.width) / 2 + pad
+                    or abs(a.get_center()[1] - b.get_center()[1]) > (a.height + b.height) / 2 + pad)
+
+    out, others = VGroup(), list(all_dots if all_dots is not None else dots)
+    for d, t in zip(dots, texts):
+        best = None
+        for buff in (0.04, 0.12, 0.22):
+            for direction in (UR, UL, DR, DL, RIGHT, LEFT):
+                m = label(t, font_size=font_size, color=color).next_to(d, direction, buff=buff)
+                n = sum(hit(m, o) for o in out) + sum(hit(m, o) for o in others if o is not d)
+                if inside is not None and (m.get_left()[0] < inside[0][0] + 0.03 or m.get_right()[0] > inside[1][0]
+                                           or m.get_bottom()[1] < inside[0][1] or m.get_top()[1] > inside[1][1]):
+                    n += 3  # off the plot area costs more than touching a dot
+                if best is None or n < best[0]:
+                    best = (n, m)
+                if n == 0:
+                    break
+            if best[0] == 0:
+                break
+        out.add(best[1])
+    return out
