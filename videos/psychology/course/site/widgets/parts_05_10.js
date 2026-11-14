@@ -470,4 +470,122 @@
       note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The plots are generated here, each with exactly the correlation shown. The rule is Part 3's: if two measures have reliabilities Rx and Ry, the correlation between them cannot exceed the square root of Rx times Ry, even when what they measure is perfectly related. A published correlation above that line was selected, or is a lucky small sample.",
     });
   };
+
+  // Part 9: two clouds of twin pairs; decide whether genes or the shared home account for more
+  W.twins = function (el) {
+    var w = null;
+    var BLOCK = 12, N = 40, OK = "#5bd18b", BAD = "#ef6f6c", MZ = "#7ec8f5", DZ = "#f28fb8", GENE = "#5bd18b", HOME = "#f2a65a";
+    var CASES = [[0.6, 0.1], [0.2, 0.5], [0.5, 0.2], [0.1, 0.6], [0.7, 0.0], [0.3, 0.5], [0.4, 0.2], [0.0, 0.6],
+                 [0.5, 0.3], [0.2, 0.4], [0.3, 0.1], [0.1, 0.4], [0.6, 0.2], [0.1, 0.3], [0.4, 0.1], [0.3, 0.6]];
+    var S = { phase: "idle", trial: 0, seed: 0, cur: null, log: [], last: null };
+
+    function sample(u, r) {
+      // N pairs whose sample correlation is exactly r
+      var x = [], y = [], i, mx = 0, my = 0, sx = 0, sy = 0, sxy = 0;
+      function g() { var a = 0, k; for (k = 0; k < 6; k++) a += u(); return (a - 3) * 1.414; }
+      for (i = 0; i < N; i++) { x.push(g()); y.push(g()); mx += x[i] / N; my += y[i] / N; }
+      for (i = 0; i < N; i++) { x[i] -= mx; y[i] -= my; sx += x[i] * x[i]; }
+      sx = Math.sqrt(sx / N);
+      for (i = 0; i < N; i++) { x[i] /= sx; sxy += x[i] * y[i] / N; }
+      for (i = 0; i < N; i++) { y[i] -= sxy * x[i]; sy += y[i] * y[i]; }
+      sy = Math.sqrt(sy / N);
+      for (i = 0; i < N; i++) y[i] = r * x[i] + Math.sqrt(1 - r * r) * y[i] / sy;
+      return { x: x, y: y };
+    }
+    function next() {
+      S.trial++;
+      var u = QB.rng(9103 * S.seed + 41 * S.trial + 7);
+      var c = CASES[(5 * S.seed + 3 * S.trial + Math.floor(u() * 4)) % CASES.length];
+      var a2 = c[0], c2 = c[1], rmz = Math.round((a2 + c2) * 100) / 100, rdz = Math.round((a2 / 2 + c2) * 100) / 100;
+      S.cur = { a2: a2, c2: c2, rmz: rmz, rdz: rdz, mz: sample(u, rmz), dz: sample(u, rdz), genes: a2 > c2 };
+      S.phase = "show"; w.render();
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "show"; }, respond: answer });
+    function answer(side) {
+      if (S.phase !== "show" || !w) return;
+      var said = side === 0, right = said === S.cur.genes;
+      S.last = { right: right, a2: S.cur.a2, c2: S.cur.c2 };
+      S.log.push({ rmz: S.cur.rmz, rdz: S.cur.rdz, right: right }); task.count++;
+      S.phase = "feedback"; w.render();
+      task.later(function () { if (S.trial >= BLOCK) { S.phase = "done"; w.render(); } else next(); }, 1600);
+    }
+    function score() { var k = 0, i; for (i = 0; i < S.log.length; i++) if (S.log[i].right) k++; return { n: S.log.length, k: k }; }
+    function cloud(ctx, pts, x0, y0, side, col, name, r) {
+      var i;
+      ctx.strokeStyle = "#2a3242"; ctx.lineWidth = 1; ctx.strokeRect(x0, y0, side, side);
+      ctx.fillStyle = col;
+      for (i = 0; i < N; i++) {
+        ctx.beginPath();
+        ctx.arc(x0 + side / 2 + pts.x[i] * side / 5.8, y0 + side / 2 - pts.y[i] * side / 5.8, 2.8, 0, 6.2832); ctx.fill();
+      }
+      ctx.textAlign = "center"; ctx.font = "600 13px system-ui, sans-serif";
+      ctx.fillText(name, x0 + side / 2, y0 - 12);
+      ctx.fillStyle = C.ink; ctx.font = "600 15px system-ui, sans-serif";
+      ctx.fillText("r = " + r.toFixed(2), x0 + side / 2, y0 + side + 16);
+    }
+
+    w = QB.widget(el, {
+      title: "Genes, or the shared home?",
+      sub: "Each trial shows the same trait in forty pairs of identical twins and forty pairs of fraternal twins raised together: one twin across, the other up. From the two correlations, decide which accounts for more of the differences between people: their genes, or the home they share. F, or tap the left half: genes. J, or tap the right half: the shared home.",
+      panels: 2, height: 360, weights: [1.35, 1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: function () { task.clear(); S.seed++; S.trial = 0; next(); } },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.trial = 0; S.log = []; S.cur = null; S.last = null; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), i, sc = score();
+        ctx.save();
+        ctx.textBaseline = "middle"; ctx.textAlign = "center";
+        if (S.phase === "idle") {
+          T.message(ctx, b, "On you", "Press Start. Twelve traits. For each, read the two correlations and decide: more from genes, or more from the shared home?");
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "Block finished.", "You judged " + sc.k + " of " + sc.n + " correctly. The rule: genes account for more when the fraternal correlation is less than three quarters of the identical one.");
+        } else {
+          var c = S.cur, side = Math.max(60, Math.min(b.h - 120, (b.w - 70) / 2)), gap = Math.max(14, b.w - 2 * side - 40);
+          var x0 = b.x + (b.w - 2 * side - gap) / 2, y0 = b.y + 58;
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("trait " + S.trial + " of " + BLOCK, b.cx, b.y + 18);
+          cloud(ctx, c.mz, x0, y0, side, MZ, "identical pairs", c.rmz);
+          cloud(ctx, c.dz, x0 + side + gap, y0, side, DZ, "fraternal pairs", c.rdz);
+          ctx.textAlign = "center";
+          if (S.phase === "feedback" && S.last) {
+            ctx.fillStyle = S.last.right ? OK : BAD; ctx.font = "600 13px system-ui, sans-serif";
+            ctx.fillText((S.last.right ? "Right. " : "No. ") + "Genes " + S.last.a2.toFixed(2) + ", shared home " + S.last.c2.toFixed(2) + ".", b.cx, b.y + b.h - 22);
+          } else {
+            ctx.fillStyle = C.muted; ctx.font = "12.5px system-ui, sans-serif";
+            ctx.fillText(b.w < 420 ? "F / left: genes      J / right: home" : "F, or tap the left half: genes        J, or tap the right half: the shared home",
+              b.cx, b.y + b.h - 22);
+          }
+        }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [0, 1.0], y: [0, 1.0], title: "Each trait: the two correlations", xlabel: "identical twins' correlation" });
+        a.line([0, 1.0], [0, 1.0], { color: HOME, width: 1.5 });
+        a.line([0, 1.0], [0, 0.5], { color: GENE, width: 1.5 });
+        a.line([0, 1.0], [0, 0.75], { color: C.muted, width: 1, dash: [4, 4] });
+        a.text(0.03, 0.95, "fraternal correlation, upward", { color: C.muted, size: 10.5 });
+        a.text(0.28, 0.5, "all home", { color: HOME, size: 11 });
+        a.text(0.62, 0.24, "all genes", { color: GENE, size: 11 });
+        if (S.log.length) {
+          var xs = [], ys = [], cols = [];
+          for (i = 0; i < S.log.length; i++) { xs.push(S.log[i].rmz); ys.push(S.log[i].rdz); cols.push(S.log[i].right ? OK : BAD); }
+          a.dots(xs, ys, { color: function (k) { return cols[k]; }, r: 5, alpha: 0.95 });
+          a.text(0.03, 0.86, "green: you were right", { color: OK, size: 11.5, bold: true });
+        } else {
+          a.text(0.03, 0.86, "Your answers appear here.", { color: C.muted, size: 11.5 });
+        }
+      },
+      readout: function () {
+        var sc = score();
+        return [
+          ["traits judged", String(sc.n)],
+          ["judged correctly", sc.n ? sc.k + " of " + sc.n : "–"],
+          ["genes' share", "2 x (identical - fraternal)"],
+          ["shared home's share", "2 x fraternal - identical"],
+        ];
+      },
+      note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The clouds are generated here, each with exactly the correlation shown, from shares fixed for the trial. The shares are Falconer's: identical twins share all of their genes and their home, fraternal twins half of the genes that differ between people and their home. On the plot, a trait on the upper line owes everything to the home and one on the lower line everything to genes; the dashed line between them is where the two are equal. The arithmetic assumes what the film's chapter 4 tests: equal environments, random mating, genes that add.",
+    });
+  };
 })();

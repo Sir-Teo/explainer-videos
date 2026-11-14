@@ -82,6 +82,29 @@ and summarized, not stored. Dates are the day the check was made.
 | `kanwisher_1997` | The fusiform face area | Kanwisher, McDermott and Chun, *J. Neurosci.* 17 (1997) 4302–4311 | facts only | 2026-11-14: from reviews |
 | `ganis_2011` | fMRI lie detection defeated by a covert countermeasure; excluded by a court | Ganis et al., *NeuroImage* 55 (2011) 312–319; *United States v. Semrau* (2012) | facts only | 2026-11-14: the abstract and case summaries |
 | `barker_1985` | The first transcranial magnetic stimulation | Barker, Jalinous and Freeston, *Lancet* 325 (1985) 1106–1107 | facts only | 2026-11-14: the PubMed record |
+| `bouchard_1990` | The Minnesota Study of Twins Reared Apart; the 'Jim twins' | Bouchard et al., *Science* 250 (1990) 223–228 | facts only | 2026-11-14: summaries and press accounts; pair counts differ between sources and are not given |
+| `galton_1875` | Galton's 'nature and nurture' and his twin questionnaire; 'eugenics' coined 1883 | Galton, *Fraser's Magazine* 12 (1875) 566–576; *Hereditary Genius* (1869) | facts only | 2026-11-14: histories of the twin method |
+| `fisher_1918` | Many Mendelian factors give continuous variation | Fisher, *Trans. R. Soc. Edinburgh* 52 (1918) 399–433 | facts only | 2026-11-14: histories of quantitative genetics |
+| `bouchard_mcgue_1981` | 111 studies of familial resemblance in intelligence: identical twins .86, fraternal .60 | Bouchard and McGue, *Science* 212 (1981) 1055–1059 | facts only | 2026-11-14: the abstract; .86 confirmed by a citing paper, .60 from memory (open check) |
+| `polderman_2015` | Fifty years of twin studies: 17,804 traits, mean heritability 49% | Polderman et al., *Nat. Genet.* 47 (2015) 702–709 | facts only | 2026-11-14: the abstract |
+| `turkheimer_2000` | Three laws of behaviour genetics (and a fourth) | Turkheimer, *Curr. Dir. Psychol. Sci.* 9 (2000) 160–164; Chabris et al., *CDPS* 24 (2015) | facts only | 2026-11-14: the abstract and commentary |
+| `turkheimer_2003` | Heritability of children's IQ near zero in poor families | Turkheimer et al., *Psychol. Sci.* 14 (2003) 623–628 | facts only | 2026-11-14: the abstract; later samples mixed |
+| `haworth_2010` | Heritability of cognitive ability: 41%, 55%, 66% at 9, 12, 17 | Haworth et al., *Mol. Psychiatry* 15 (2010) 1112–1120 | facts only | 2026-11-14: the abstract |
+| `ncd_risc_2016` | A century of change in adult height | NCD-RisC, *eLife* 5 (2016) e13410 | facts only | 2026-11-14: the abstract |
+| `heritability_table` | Twin heritabilities of six traits | Sullivan et al. 2003; Faraone and Larsson 2019; Tick et al. 2016; Branigan et al. 2013; Vukasović and Bratko 2015; Haworth et al. 2010 | facts only | 2026-11-14: each abstract or a summary |
+| `caspi_2003` | 5-HTTLPR, life stress and depression; the 2009 meta-analysis | Caspi et al., *Science* 301 (2003) 386–389; Risch et al., *JAMA* 301 (2009) 2462–2471 | facts only | 2026-11-14: summaries of both |
+| `border_2019` | Eighteen candidate genes for depression in samples up to 443,264 | Border et al., *Am. J. Psychiatry* 176 (2019) 376–387 | facts only | 2026-11-14: the abstract |
+| `chabris_2012` | Twelve candidate variants for intelligence: 1 of 32 tests significant | Chabris et al., *Psychol. Sci.* 23 (2012) 1314–1323 | facts only | 2026-11-14: the abstract |
+| `rietveld_2013` | The first GWAS of educational attainment: 126,559 people, three variants | Rietveld et al., *Science* 340 (2013) 1467–1471 | facts only | 2026-11-14: the abstract |
+| `lee_2018` | Educational attainment in 1.1 million and in 3 million people | Lee et al., *Nat. Genet.* 50 (2018) 1112–1121; Okbay et al., *Nat. Genet.* 54 (2022) 437–449 | facts only | 2026-11-14: both abstracts |
+| `kong_2018` | Genetic nurture: non-transmitted alleles have 29.9% of the transmitted effect | Kong et al., *Science* 359 (2018) 424–428 | facts only | 2026-11-14: the abstract |
+| `howe_2022` | Within-sibship GWAS in 178,086 siblings | Howe et al., *Nat. Genet.* 54 (2022) 581–592 | facts only | 2026-11-14: the abstract |
+| `yengo_2022` | Height in 5.4 million people: 12,111 variants | Yengo et al., *Nature* 610 (2022) 704–712 | facts only | 2026-11-14: the abstract |
+| `martin_2019` | Polygenic scores predict worse outside European ancestry | Martin et al., *Nat. Genet.* 51 (2019) 584–591 | facts only | 2026-11-14: news summaries and the preprint |
+| `karavani_2019` | Choosing among ten embryos by a polygenic score: about 2.5 IQ points | Karavani et al., *Cell* 179 (2019) 1424–1435 | facts only | 2026-11-14: summaries of the paper |
+| `buss_1989` | Mate preferences in 37 cultures | Buss, *Behav. Brain Sci.* 12 (1989) 1–49 | facts only | 2026-11-14: summaries of the paper |
+| `heijmans_2008` | IGF2 methylation after the Dutch Hunger Winter; maternal care in rats | Heijmans et al., *PNAS* 105 (2008) 17046–17049; Weaver et al., *Nat. Neurosci.* 7 (2004) 847–854 | facts only | 2026-11-14: both abstracts |
+| `weir_2002` | A crow bends a wire into a hook; the 2016 field study | Weir, Chappell and Kacelnik, *Science* 297 (2002) 981 | facts only | 2026-11-14: accounts of both studies; the 2016 reference from memory |
 
 ## Looked for and not used
 

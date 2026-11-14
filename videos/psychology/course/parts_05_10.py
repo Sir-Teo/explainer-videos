@@ -242,4 +242,63 @@ PARTS = [
               ("Its tests", "tests/psychology/test_imaging.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=9, level="U", widget="twins",
+        question="How much of who you are did you inherit, and what does that question mean?",
+        story="In 1979 identical twins separated as babies meet at thirty-nine and find a list of shared habits. "
+              "The list proves nothing: two strangers compared on two hundred things share about ten. The design "
+              "behind it does. A family passes on genes and a home together, so a family tree cannot say which "
+              "did the work; twins and adoption can. Many small genes add up to a bell curve, and a score splits "
+              "into additive genes, the home a family shares, and everything else. Identical twins share all of "
+              "the first two and fraternal twins half of the genes, so twice the difference between their "
+              "correlations is the heritability: four lines of algebra, and the series' first path diagram. On "
+              "the Pool the design gives back what was planted, slowly, and then fails as each of its four "
+              "assumptions is switched off, two failures inflating the genes and two the home. The viewer "
+              "guesses six heritabilities. Then what the number is not: not fixedness (height rose twenty "
+              "centimetres in a century), not about groups (seed from one sack in two fields), not about a "
+              "person, not a constant. Three laws: everything is heritable, the shared home counts for less, "
+              "much is neither. The search for the genes: a decade of candidate genes tested in samples that "
+              "could not see them, whose findings failed; then a million tests at once, a threshold of five in "
+              "a hundred million, and thousands of positions of tiny effect. A polygenic score predicts the "
+              "averages of groups and says little about one person, and between siblings its effect is smaller, "
+              "because part of it is the home the parents' genes made. Evolution supplies hypotheses and "
+              "stories; the difference is whether they can fail.",
+        handoff="Reasoning about cheats as a test of an evolutionary claim is Part 24; how people understand a "
+                "risk is Part 26; temperament and parenting are Part 30; intelligence, its heritability across "
+                "wealth and age, and the history of eugenics are Part 32; personality is Part 33; mate "
+                "preferences are Part 37; the genetics of disorders are Parts 40 and 41. Path diagrams are "
+                "fitted in earnest from Part 44.",
+        outside="Part 2's confounds and random assignment, Part 3's correlation and variance, Part 4's power, "
+                "forking paths and the winner's curse, and Part 8's correction for many tests. Maximum "
+                "likelihood is used as a tool in chapter 4 and explained in Part 44.",
+        objectives={
+            "U": ["Explain why resemblance within families cannot separate genes from a shared home, and how "
+                  "twins and adoption can.",
+                  "State what heritability is, and four things it is not.",
+                  "Say why candidate-gene findings failed and why genome-wide studies need enormous samples."],
+            "M": ["Derive Falconer's formula from the two twin correlations, compute the three shares, and "
+                  "attach a standard error.",
+                  "Read a path diagram of the ACE model and say what each line asserts.",
+                  "Compute the sample needed to detect a variant of a given size, the number of false hits "
+                  "among a million tests, and what a score of a given accuracy says about one person."],
+            "D": ["Simulate a twin study with an assumption broken and predict the direction of the bias.",
+                  "Explain why a polygenic score's effect is smaller between siblings, and what the gap can "
+                  "and cannot be attributed to."],
+            "I": ["Tell a test for a single-gene condition from a polygenic score, and do the arithmetic of a "
+                  "consumer score and of embryo selection.",
+                  "Ask six questions of any claim about genes and behaviour."],
+        },
+        results=[
+            ("A score in three parts", r"P=A+C+E,\qquad h^{2}=\frac{\operatorname{Var}(A)}{\operatorname{Var}(P)}"),
+            ("Falconer's formula", r"h^{2}=2\,(r_{MZ}-r_{DZ}),\qquad c^{2}=2\,r_{DZ}-r_{MZ},\qquad e^{2}=1-r_{MZ}"),
+            ("Parents and children", r"\mathbb{E}[\text{child}\mid\text{midparent}]=h^{2}\times\text{midparent}"),
+            ("People needed for one variant", r"n\approx\frac{(z_{\alpha/2}+z_{\beta})^{2}\,(1-r^{2})}{r^{2}}"),
+            ("Genome-wide significance", r"\alpha=\frac{0.05}{10^{6}}=5\times10^{-8}"),
+            ("What a score predicts", r"R^{2}\approx h^{2}\,\frac{n\,h^{2}}{n\,h^{2}+m}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's genes module", "explainer/psychology/psyche/genes.py"),
+              ("Its tests", "tests/psychology/test_genes.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

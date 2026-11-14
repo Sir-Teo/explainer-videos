@@ -28,7 +28,11 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "BENNETT_2009", "HUBEL_WIESEL_1959", "BERGER_1929", "KUTAS_HILLYARD_1980", "OGAWA_1990",
            "LOGOTHETIS_2001", "BOYNTON_1996", "EKLUND_2016", "VUL_2009", "POLDRACK_2006",
            "MAREK_2022", "ELLIOTT_2020", "TANG_2023", "OWEN_2010", "KANWISHER_1997",
-           "GANIS_2011", "BARKER_1985"]
+           "GANIS_2011", "BARKER_1985",
+           "BOUCHARD_1990", "GALTON_1875", "FISHER_1918", "BOUCHARD_MCGUE_1981", "POLDERMAN_2015", "TURKHEIMER_2000",
+           "TURKHEIMER_2003", "HAWORTH_2010", "NCD_RISC_2016", "HERITABILITY_TABLE", "CASPI_2003", "BORDER_2019",
+           "CHABRIS_2012", "RIETVELD_2013", "LEE_2018", "KONG_2018", "HOWE_2022", "YENGO_2022", "MARTIN_2019",
+           "KARAVANI_2019", "BUSS_1989", "HEIJMANS_2008", "WEIR_2002"]
 
 
 @dataclass(frozen=True)
@@ -1311,6 +1315,307 @@ BARKER_1985 = Dataset(
 )
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 9: genes and evolution
+# ---------------------------------------------------------------------------------------------------------------
+_P9 = "through a web search, 2026-11-14; the paper was not read"
+
+BOUCHARD_1990 = Dataset(
+    key="bouchard_1990",
+    title="The Minnesota Study of Twins Reared Apart, and the 'Jim twins' who began it",
+    source="T. J. Bouchard, D. T. Lykken, M. McGue, N. L. Segal and A. Tellegen, Sources of human psychological "
+           "differences: the Minnesota Study of Twins Reared Apart, Science 250 (1990) 223-228",
+    cite=r"Bouchard et al.\ (1990)",
+    checked="summaries of the paper and press accounts of the Jim twins " + _P9 + ". Secondary sources disagree on "
+            "the number of pairs (48 or 56 reared-apart identical pairs), so none is given; the twins' coincidences "
+            "are as the newspapers told them",
+    licence="facts only",
+    data={"reunited": 1979, "age": 39, "iq_variance_genetic": 0.70, "names": ("Jim Lewis", "Jim Springer"),
+          "coincidences": ("both named James by their adoptive parents", "first wives both called Linda",
+                           "second wives both called Betty", "sons called James Alan and James Allan",
+                           "each had a dog called Toy")},
+)
+
+GALTON_1875 = Dataset(
+    key="galton_1875",
+    title="Galton's 'nature and nurture', and his questionnaire on twins",
+    source="F. Galton, The history of twins, as a criterion of the relative powers of nature and nurture, Fraser's "
+           "Magazine 12 (1875) 566-576; Hereditary Genius (1869); Inquiries into Human Faculty (1883), where the "
+           "word 'eugenics' is coined",
+    cite=r"Galton (1875)",
+    checked="histories of the twin method " + _P9 + ". Galton did not compare identical with fraternal twins as "
+            "the later method does; that comparison dates from the 1920s",
+    licence="facts only",
+    data={"hereditary_genius": 1869, "twins": 1875, "eugenics_coined": 1883},
+)
+
+FISHER_1918 = Dataset(
+    key="fisher_1918",
+    title="Many Mendelian factors of small effect give continuous variation and the correlations between relatives",
+    source="R. A. Fisher, The correlation between relatives on the supposition of Mendelian inheritance, "
+           "Transactions of the Royal Society of Edinburgh 52 (1918) 399-433",
+    cite=r"Fisher (1918)",
+    checked="histories of quantitative genetics " + _P9,
+    licence="facts only",
+    data={"year": 1918},
+)
+
+BOUCHARD_MCGUE_1981 = Dataset(
+    key="bouchard_mcgue_1981",
+    title="A review of 111 studies of familial resemblance in measured intelligence",
+    source="T. J. Bouchard and M. McGue, Familial studies of intelligence: a review, Science 212 (1981) 1055-1059",
+    cite=r"Bouchard \& McGue (1981)",
+    checked="the abstract " + _P9 + ". The correlation of .86 for identical twins reared together is confirmed by a "
+            "later paper that cites it; the .60 for fraternal twins is from memory of the paper's figure and is an "
+            "open check",
+    licence="facts only",
+    data={"studies": 111, "correlations": 526, "pairings": 113_942, "r_mz": 0.86, "r_dz": 0.60},
+)
+
+POLDERMAN_2015 = Dataset(
+    key="polderman_2015",
+    title="Fifty years of twin studies: 17,804 traits",
+    source="T. J. C. Polderman et al., Meta-analysis of the heritability of human traits based on fifty years of twin "
+           "studies, Nature Genetics 47 (2015) 702-709",
+    cite=r"Polderman et al.\ (2015)",
+    checked="the abstract " + _P9,
+    licence="facts only",
+    data={"traits": 17_804, "publications": 2_748, "pairs": 14_558_903, "h2": 0.49, "additive_share": 0.69,
+          "years": (1958, 2012)},
+)
+
+TURKHEIMER_2000 = Dataset(
+    key="turkheimer_2000",
+    title="Three laws of behaviour genetics",
+    source="E. Turkheimer, Three laws of behavior genetics and what they mean, Current Directions in Psychological "
+           "Science 9 (2000) 160-164; C. F. Chabris et al., The fourth law of behavior genetics, Current Directions "
+           "in Psychological Science 24 (2015) 304-312",
+    cite=r"Turkheimer (2000)",
+    checked="the abstract and later commentary " + _P9,
+    licence="facts only",
+    data={"laws": ("All human behavioural traits are heritable.",
+                   "The effect of being raised in the same family is smaller than the effect of genes.",
+                   "A substantial part of the variation is accounted for by neither genes nor families."),
+          "fourth": "A typical trait is associated with very many genetic variants, each of very small effect."},
+)
+
+TURKHEIMER_2003 = Dataset(
+    key="turkheimer_2003",
+    title="Among poor families the heritability of children's IQ was near zero",
+    source="E. Turkheimer, A. Haley, M. Waldron, B. D'Onofrio and I. I. Gottesman, Socioeconomic status modifies "
+           "heritability of IQ in young children, Psychological Science 14 (2003) 623-628",
+    cite=r"Turkheimer et al.\ (2003)",
+    checked="the abstract " + _P9 + ". Later samples are mixed: the pattern has been found again in the United "
+            "States and not in several European samples",
+    licence="facts only",
+    data={"pairs": 319, "mz_pairs": 114, "age": 7, "poor_shared": 0.60, "poor_genes": "close to zero",
+          "affluent": "almost exactly the reverse"},
+)
+
+HAWORTH_2010 = Dataset(
+    key="haworth_2010",
+    title="The heritability of general cognitive ability rises from childhood to young adulthood",
+    source="C. M. A. Haworth et al., The heritability of general cognitive ability increases linearly from childhood "
+           "to young adulthood, Molecular Psychiatry 15 (2010) 1112-1120",
+    cite=r"Haworth et al.\ (2010)",
+    checked="the abstract " + _P9,
+    licence="facts only",
+    data={"pairs": 11_000, "countries": 4, "ages": (9, 12, 17), "h2": (0.41, 0.55, 0.66)},
+)
+
+NCD_RISC_2016 = Dataset(
+    key="ncd_risc_2016",
+    title="A century of change in adult height",
+    source="NCD Risk Factor Collaboration, A century of trends in adult human height, eLife 5 (2016) e13410",
+    cite=r"NCD-RisC (2016)",
+    checked="the abstract " + _P9,
+    licence="facts only (CC BY article)",
+    data={"studies": 1_472, "people": 18_600_000, "born": (1896, 1996), "korean_women_cm": 20.2,
+          "iranian_men_cm": 16.5, "dutch_men_cm": 182.5},
+)
+
+HERITABILITY_TABLE = Dataset(
+    key="heritability_table",
+    title="Twin-study heritabilities of six traits, from meta-analyses",
+    source="P. F. Sullivan, K. S. Kendler and M. C. Neale, Schizophrenia as a complex trait, Archives of General "
+           "Psychiatry 60 (2003) 1187-1192; S. V. Faraone and H. Larsson, Genetics of attention deficit hyperactivity "
+           "disorder, Molecular Psychiatry 24 (2019) 562-575; B. Tick et al., Heritability of autism spectrum "
+           "disorders, Journal of Child Psychology and Psychiatry 57 (2016) 585-595; A. R. Branigan, K. J. McCallum "
+           "and J. Freese, Variation in the heritability of educational attainment, Social Forces 92 (2013) 109-140; "
+           "T. Vukasovic and D. Bratko, Heritability of personality, Psychological Bulletin 141 (2015) 769-785; "
+           "Haworth et al. (2010)",
+    cite=r"meta-analyses of twin studies, 2003--2019",
+    checked="each abstract or a summary of it " + _P9 + ". These are twin estimates and rest on the twin design's "
+            "assumptions",
+    licence="facts only",
+    data={"traits": (("which language you speak", 0.0, "by construction: nobody inherits a language"),
+                     ("years of schooling", 0.40, "Branigan et al. 2013"),
+                     ("personality traits", 0.47, "Vukasovic & Bratko 2015, twin studies"),
+                     ("cognitive ability at 17", 0.66, "Haworth et al. 2010"),
+                     ("ADHD", 0.74, "Faraone & Larsson 2019"),
+                     ("schizophrenia", 0.81, "Sullivan et al. 2003")),
+          "autism_range": (0.64, 0.91), "cognitive_at_9": 0.41, "personality_family_studies": 0.22},
+)
+
+CASPI_2003 = Dataset(
+    key="caspi_2003",
+    title="A serotonin-transporter variant, stressful life events and depression: the claim and its tests",
+    source="A. Caspi et al., Influence of life stress on depression: moderation by a polymorphism in the 5-HTT gene, "
+           "Science 301 (2003) 386-389; N. Risch et al., Interaction between the serotonin transporter gene "
+           "(5-HTTLPR), stressful life events, and risk of depression: a meta-analysis, JAMA 301 (2009) 2462-2471",
+    cite=r"Caspi et al.\ (2003)",
+    checked="summaries of both papers " + _P9 + ". A 2011 meta-analysis of 54 studies found the interaction again; "
+            "the large preregistered analysis of 2019 did not",
+    licence="facts only",
+    data={"cohort": "Dunedin, New Zealand", "risch_studies": 14, "risch_people": 14_000},
+)
+
+BORDER_2019 = Dataset(
+    key="border_2019",
+    title="Eighteen candidate genes for depression, tested in samples of up to 443,264",
+    source="R. Border et al., No support for historical candidate gene or candidate gene-by-interaction hypotheses "
+           "for major depression across multiple large samples, American Journal of Psychiatry 176 (2019) 376-387",
+    cite=r"Border et al.\ (2019)",
+    checked="the abstract " + _P9,
+    licence="facts only",
+    data={"genes": 18, "n_min": 62_138, "n_max": 443_264, "studied_at_least": 10},
+)
+
+CHABRIS_2012 = Dataset(
+    key="chabris_2012",
+    title="Twelve published genetic associations with intelligence, retested",
+    source="C. F. Chabris et al., Most reported genetic associations with general intelligence are probably false "
+           "positives, Psychological Science 23 (2012) 1314-1323",
+    cite=r"Chabris et al.\ (2012)",
+    checked="the abstract " + _P9,
+    licence="facts only",
+    data={"variants": 12, "samples": (5_571, 1_759, 2_441), "tests": 32, "significant": 1, "expected": (10, 15)},
+)
+
+RIETVELD_2013 = Dataset(
+    key="rietveld_2013",
+    title="The first genome-wide association study of educational attainment",
+    source="C. A. Rietveld et al., GWAS of 126,559 individuals identifies genetic variants associated with "
+           "educational attainment, Science 340 (2013) 1467-1471",
+    cite=r"Rietveld et al.\ (2013)",
+    checked="the abstract " + _P9,
+    licence="facts only",
+    data={"n": 126_559, "discovery": 101_069, "replication": 25_490, "snps": 3, "r2_per_snp": 0.0002,
+          "months_per_allele": 1, "score_r2": 0.02},
+)
+
+LEE_2018 = Dataset(
+    key="lee_2018",
+    title="Educational attainment in 1.1 million people, and in 3 million",
+    source="J. J. Lee et al., Gene discovery and polygenic prediction from a genome-wide association study of "
+           "educational attainment in 1.1 million individuals, Nature Genetics 50 (2018) 1112-1121; A. Okbay et al., "
+           "Polygenic prediction of educational attainment within and between families from genome-wide association "
+           "analyses in 3 million individuals, Nature Genetics 54 (2022) 437-449",
+    cite=r"Lee et al.\ (2018)",
+    checked="both abstracts " + _P9,
+    licence="facts only",
+    data={"n": 1_100_000, "snps": 1_271, "score_r2": (0.11, 0.13), "cognitive_r2": (0.07, 0.10),
+          "within_family_smaller": 0.40,
+          "okbay_n": 3_000_000, "okbay_snps": 3_952, "okbay_r2": (0.12, 0.16)},
+)
+
+KONG_2018 = Dataset(
+    key="kong_2018",
+    title="Genetic nurture: the alleles parents did not pass on still predict their children's schooling",
+    source="A. Kong et al., The nature of nurture: effects of parental genotypes, Science 359 (2018) 424-428",
+    cite=r"Kong et al.\ (2018)",
+    checked="the abstract " + _P9,
+    licence="facts only",
+    data={"probands": 21_637, "share_of_transmitted": 0.299},
+)
+
+HOWE_2022 = Dataset(
+    key="howe_2022",
+    title="Genome-wide association within sibships",
+    source="L. J. Howe et al., Within-sibship genome-wide association analyses decrease bias in estimates of direct "
+           "genetic effects, Nature Genetics 54 (2022) 581-592",
+    cite=r"Howe et al.\ (2022)",
+    checked="the abstract " + _P9,
+    licence="facts only",
+    data={"siblings": 178_086, "cohorts": 19, "phenotypes": 25,
+          "smaller_within": ("height", "educational attainment", "cognitive ability", "depressive symptoms",
+                             "smoking")},
+)
+
+YENGO_2022 = Dataset(
+    key="yengo_2022",
+    title="Height in 5.4 million people: the common variants are nearly all found",
+    source="L. Yengo et al., A saturated map of common genetic variants associated with human height, Nature 610 "
+           "(2022) 704-712",
+    cite=r"Yengo et al.\ (2022)",
+    checked="the abstract " + _P9 + ". The twin heritability of height of about 0.8 set beside it is the textbook "
+            "figure",
+    licence="facts only",
+    data={"n": 5_400_000, "snps": 12_111, "variance_european": 0.40, "variance_all_common": 0.45,
+          "variance_other": (0.10, 0.20), "twin_h2": 0.8},
+)
+
+MARTIN_2019 = Dataset(
+    key="martin_2019",
+    title="Polygenic scores built in Europeans predict worse in everyone else",
+    source="A. R. Martin et al., Clinical use of current polygenic risk scores may exacerbate health disparities, "
+           "Nature Genetics 51 (2019) 584-591",
+    cite=r"Martin et al.\ (2019)",
+    checked="news summaries of the paper and its preprint " + _P9 + ". The preprint gives 'about 2- to 5-fold' for "
+            "East Asian and African ancestries; the share of participants of European descent (79%) is from a "
+            "truncated excerpt",
+    licence="facts only",
+    data={"fold_lower_african": 4.5, "fold_lower_east_asian": 2.0, "european_share": 0.79},
+)
+
+KARAVANI_2019 = Dataset(
+    key="karavani_2019",
+    title="What choosing among embryos by a polygenic score would gain",
+    source="E. Karavani et al., Screening human embryos for polygenic traits has limited utility, Cell 179 (2019) "
+           "1424-1435",
+    cite=r"Karavani et al.\ (2019)",
+    checked="summaries of the paper " + _P9,
+    licence="facts only",
+    data={"embryos": 10, "iq_points": 2.5, "height_cm": 2.5},
+)
+
+BUSS_1989 = Dataset(
+    key="buss_1989",
+    title="Mate preferences in 37 cultures",
+    source="D. M. Buss, Sex differences in human mate preferences: evolutionary hypotheses tested in 37 cultures, "
+           "Behavioral and Brain Sciences 12 (1989) 1-49",
+    cite=r"Buss (1989)",
+    checked="summaries of the paper " + _P9 + ". Most samples were urban, educated and from industrial countries, "
+            "as the author notes",
+    licence="facts only",
+    data={"people": 10_047, "cultures": 37, "countries": 33, "financial_prospects": 36, "younger_mates": 37},
+)
+
+HEIJMANS_2008 = Dataset(
+    key="heijmans_2008",
+    title="Methylation of a growth gene six decades after the Dutch Hunger Winter",
+    source="B. T. Heijmans et al., Persistent epigenetic differences associated with prenatal exposure to famine in "
+           "humans, PNAS 105 (2008) 17046-17049; I. C. G. Weaver et al., Epigenetic programming by maternal "
+           "behavior, Nature Neuroscience 7 (2004) 847-854",
+    cite=r"Heijmans et al.\ (2008)",
+    checked="both abstracts " + _P9,
+    licence="facts only",
+    data={"people": 60, "famine": (1944, 1945), "gene": "IGF2", "compared_with": "unexposed same-sex siblings"},
+)
+
+WEIR_2002 = Dataset(
+    key="weir_2002",
+    title="A crow bends a wire into a hook",
+    source="A. A. S. Weir, J. Chappell and A. Kacelnik, Shaping of hooks in New Caledonian crows, Science 297 (2002) "
+           "981; C. Rutz et al., Tool bending in New Caledonian crows, Royal Society Open Science 3 (2016) 160439",
+    cite=r"Weir et al.\ (2002)",
+    checked="accounts of both studies " + _P9 + "; the reference of the 2016 study is from memory",
+    licence="facts only",
+    data={"bird": "Betty", "later": "wild crows bend their twig tools as a matter of routine, so the feat was less of "
+                                    "an invention than it looked"},
+)
+
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -1326,4 +1631,8 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           BENNETT_2009, HUBEL_WIESEL_1959, BERGER_1929, KUTAS_HILLYARD_1980, OGAWA_1990,
                           LOGOTHETIS_2001, BOYNTON_1996, EKLUND_2016, VUL_2009, POLDRACK_2006,
                           MAREK_2022, ELLIOTT_2020, TANG_2023, OWEN_2010, KANWISHER_1997,
-                          GANIS_2011, BARKER_1985)}
+                          GANIS_2011, BARKER_1985,
+                          BOUCHARD_1990, GALTON_1875, FISHER_1918, BOUCHARD_MCGUE_1981, POLDERMAN_2015,
+                          TURKHEIMER_2000, TURKHEIMER_2003, HAWORTH_2010, NCD_RISC_2016, HERITABILITY_TABLE,
+                          CASPI_2003, BORDER_2019, CHABRIS_2012, RIETVELD_2013, LEE_2018, KONG_2018, HOWE_2022,
+                          YENGO_2022, MARTIN_2019, KARAVANI_2019, BUSS_1989, HEIJMANS_2008, WEIR_2002)}

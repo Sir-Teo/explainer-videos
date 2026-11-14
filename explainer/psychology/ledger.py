@@ -860,3 +860,97 @@ shown(8, "BARKER_1985", "the history of an instrument")
 shown(8, "MAREK_2022", "a methods result at the frontier, disputed in its details", row_in=43)
 shown(8, "ELLIOTT_2020", "a methods result at the frontier")
 shown(8, "TANG_2023", "one laboratory's result at the frontier, described without figures")
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 9: genes and evolution
+# ---------------------------------------------------------------------------------------------------------------
+add(Finding(
+    key="twin_heritability", part=9, title=r"Twins and the heritability of psychological traits",
+    claim="On almost every psychological trait, identical twins are more alike than fraternal twins.",
+    original=Study("Bouchard and McGue", 1981, n="111 studies, 113,942 pairings of relatives",
+                   design="a review of correlations in intelligence-test scores",
+                   found="identical twins raised together correlate .86, fraternal twins less"),
+    status="replicated",
+    record=(Study("Polderman and colleagues", 2015, n="14.5 million twin pairs, 17,804 traits",
+                  design="a meta-analysis of fifty years of twin studies",
+                  found="a mean heritability of 49%; almost no trait at zero"),),
+    note="What repeats is the pattern of correlations. Reading it as a share for genes rests on the twin design's "
+         "assumptions, and the share describes a population in its environments, not a person.",
+    sources=("T. J. Bouchard and M. McGue, Familial studies of intelligence: a review, Science 212 (1981) 1055-1059",
+             "T. J. C. Polderman et al., Meta-analysis of the heritability of human traits based on fifty years of "
+             "twin studies, Nature Genetics 47 (2015) 702-709"),
+    checked="2026-11-14",
+    data=("BOUCHARD_MCGUE_1981", "POLDERMAN_2015"),
+))
+
+add(Finding(
+    key="candidate_genes", part=9, title=r"Candidate genes for behaviour",
+    claim="Common variants in a few named genes explain who becomes depressed after stress, or who scores higher "
+          "on tests.",
+    original=Study("Caspi and colleagues", 2003, n="a birth cohort in Dunedin, New Zealand",
+                   design="a serotonin-transporter variant, stressful life events and depression",
+                   found="more depression after stress in carriers of the short version"),
+    status="failed",
+    record=(Study("Risch and colleagues", 2009, n="14 studies, more than 14,000 people",
+                  design="a meta-analysis of the same interaction",
+                  found="no association, with or without stress"),
+            Study("Chabris and colleagues", 2012, n="three samples, 9,771 people",
+                  design="12 published variants for intelligence, retested",
+                  found="1 of 32 tests significant; 10 to 15 expected if the effects were real"),
+            Study("Border and colleagues", 2019, n="up to 443,264 people",
+                  design="18 candidate genes for depression, preregistered",
+                  found="no support for any of them, alone or with stress")),
+    note="A 2011 meta-analysis of 54 studies found the interaction again; the large preregistered tests did not. "
+         "Small samples, flexible analyses and selective publication: Part 4's mechanism.",
+    sources=("A. Caspi et al., Influence of life stress on depression: moderation by a polymorphism in the 5-HTT "
+             "gene, Science 301 (2003) 386-389",
+             "N. Risch et al., Interaction between the serotonin transporter gene (5-HTTLPR), stressful life events, "
+             "and risk of depression, JAMA 301 (2009) 2462-2471",
+             "C. F. Chabris et al., Most reported genetic associations with general intelligence are probably false "
+             "positives, Psychological Science 23 (2012) 1314-1323",
+             "R. Border et al., No support for historical candidate gene or candidate gene-by-interaction hypotheses "
+             "for major depression across multiple large samples, American Journal of Psychiatry 176 (2019) 376-387"),
+    checked="2026-11-14",
+    data=("CASPI_2003", "CHABRIS_2012", "BORDER_2019"),
+))
+
+add(Finding(
+    key="education_polygenic_score", part=9, title=r"A polygenic score for years of schooling",
+    claim="A score added up from many common gene variants predicts how far a person goes in school.",
+    original=Study("Rietveld and colleagues", 2013, n="126,559 people", design="a genome-wide association study",
+                   found="three variants; a score from all variants predicts about 2% of the variation"),
+    status="replicated",
+    record=(Study("Lee and colleagues", 2018, n="1.1 million people", design="a genome-wide association study",
+                  found="1,271 variants; a score predicts 11 to 13%; effects about 40% smaller within families"),
+            Study("Okbay and colleagues", 2022, n="3 million people", design="a genome-wide association study",
+                  found="3,952 variants; a score predicts 12 to 16%")),
+    note="It predicts the averages of groups far better than it predicts a person; part of it is the parents' genes "
+         "acting through the home; and it predicts poorly in people whose ancestry differs from the samples it was "
+         "built on.",
+    sources=("C. A. Rietveld et al., GWAS of 126,559 individuals identifies genetic variants associated with "
+             "educational attainment, Science 340 (2013) 1467-1471",
+             "J. J. Lee et al., Gene discovery and polygenic prediction from a genome-wide association study of "
+             "educational attainment in 1.1 million individuals, Nature Genetics 50 (2018) 1112-1121",
+             "A. Okbay et al., Polygenic prediction of educational attainment within and between families from "
+             "genome-wide association analyses in 3 million individuals, Nature Genetics 54 (2022) 437-449"),
+    checked="2026-11-14",
+    data=("RIETVELD_2013", "LEE_2018"),
+))
+
+shown(9, "BOUCHARD_1990", "an anecdote and the study it began; its figure is quoted as that study's own")
+shown(9, "GALTON_1875", "the history of a question")
+shown(9, "FISHER_1918", "theory, checked here by simulation")
+shown(9, "TURKHEIMER_2000", "a summary of a literature; the evidence is the row on twin heritability")
+shown(9, "TURKHEIMER_2003", "one study with mixed replications, shown as the example of a heritability that depends "
+                            "on the environment", row_in=32)
+shown(9, "HAWORTH_2010", "a description of how an estimate changes with age", row_in=32)
+shown(9, "NCD_RISC_2016", "a description of populations")
+shown(9, "HERITABILITY_TABLE", "meta-analytic values; the evidence is the row on twin heritability")
+shown(9, "KONG_2018", "a methods result at the frontier")
+shown(9, "HOWE_2022", "a methods result at the frontier")
+shown(9, "YENGO_2022", "a result about height, set beside the twin estimate")
+shown(9, "MARTIN_2019", "a methods result at the frontier")
+shown(9, "KARAVANI_2019", "a simulation study, set beside the series' own formula")
+shown(9, "BUSS_1989", "the example of a cross-cultural test; its claim is entered with mate preferences", row_in=37)
+shown(9, "HEIJMANS_2008", "physiology, told with its limits")
+shown(9, "WEIR_2002", "comparative cognition, told with its later qualification")

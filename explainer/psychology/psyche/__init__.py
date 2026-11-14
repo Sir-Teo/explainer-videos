@@ -28,5 +28,9 @@ Modules so far, with the part that introduces each:
                          and event-related potentials; the Fourier pair behind an MR image; the haemodynamic
                          response and the linear model; a synthetic brain under four thresholds; circular
                          selection; reverse inference, the reliability ceiling, small studies of small effects
+``genes``           9    many loci make a bell curve; twin, adoption and family designs under the infinitesimal
+                         model, with each assumption switchable; Falconer and a maximum-likelihood ACE fit;
+                         a genome-wide association study and polygenic scores; within- and between-family
+                         effects; stratification; the gain from choosing among embryos
 =================  ====  ===============================================================================
 """
