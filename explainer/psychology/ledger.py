@@ -761,6 +761,17 @@ shown(7, "WERNICKE_1874", "a diagram and the syndrome it predicted: told as the 
       "it organizes is the row on Broca's area")
 shown(7, "LASHLEY_1929", "a famous negative result, told as history with its critics; memory's location is argued "
       "in Part 20", row_in=20)
+shown(17, "FRANK_2004", "one study of learning from reward and punishment, described; disorders are Part 39")
+shown(17, "WILSON_2014", "a study of exploration, described without figures")
+shown(17, "TOLMAN_1948", "a theoretical paper, told as history")
+shown(17, "ADAMS_DICKINSON_1981", "the devaluation test, described; motivation is entered with Part 28", row_in=28)
+shown(17, "MOMENNEJAD_2017", "a test of the successor representation, described with its partial result")
+shown(17, "HOWE_2013", "dopamine ramps, described at the frontier of the dopamine story")
+shown(17, "DABNEY_2020", "a distributional code, described; replicated in a second region since")
+shown(17, "REDISH_2004", "a model, run on Psyche; addiction is entered in Part 41", row_in=41)
+shown(17, "LI_2010", "an engineering result, cited as an application")
+shown(17, "WEINTRAUB_2010", "a cross-sectional survey quoted for its rates")
+shown(17, "WANG_2018", "a model at the frontier")
 shown(16, "PAVLOV_1927", "the method and its vocabulary, told as history; the curves shown are Psyche's")
 shown(16, "FERSTER_SKINNER_1957", "schedules of reinforcement, whose signatures are drawn on Psyche, not from their records")
 shown(16, "WASSERMAN_1993", "human contingency judgment, cited for its main result; judgment is entered with Part 26")
@@ -1666,6 +1677,85 @@ add(Finding(
              "Clinical Psychology 9 (2013) 215-248"),
     checked="2026-11-14",
     data=("BOUTON_BOLLES_1979",),
+))
+
+add(Finding(
+    key="dopamine_rpe", part=17, title=r"Dopamine as a prediction error",
+    claim="Midbrain dopamine neurons signal reward prediction errors: they fire to unpredicted rewards and to cues "
+          "that predict reward, and dip when a predicted reward is omitted.",
+    original=Study("Schultz, Dayan and Montague", 1997, n="recordings in monkeys", design="single dopamine neurons "
+                   "during cue-juice conditioning, compared with the temporal-difference error",
+                   found="the error's three signatures: at unpredicted reward, at the cue, a dip at omission"),
+    status="replicated",
+    record=(Study("Steinberg and colleagues", 2013, n="groups of rats", design="optogenetic stimulation of dopamine "
+                  "neurons at reward time in a blocking design",
+                  found="the blocked cue was learned: an artificial error teaches"),),
+    note="The error signature has been found across species and methods, and shown to be causal for learning. "
+         "Whether it is all dopamine signals, given ramps, movement-related firing and salience responses, is argued.",
+    sources=("W. Schultz, P. Dayan and P. R. Montague, A neural substrate of prediction and reward, Science 275 (1997) "
+             "1593-1599",
+             "E. E. Steinberg et al., A causal link between prediction errors, dopamine neurons and learning, Nature "
+             "Neuroscience 16 (2013) 966-973"),
+    checked="2026-11-14",
+    data=("SCHULTZ_1997", "STEINBERG_2013"),
+))
+
+add(Finding(
+    key="two_step", part=17, title=r"Model-based choice in the two-step task",
+    claim="In the two-step task, people's repeat choices show both a model-free and a model-based signature.",
+    original=Study("Daw, Gershman, Seymour, Dayan and Dolan", 2011, n="17 people",
+                   design="a two-stage choice with common and rare transitions; striatal imaging",
+                   found="a mixture of the two signatures, and both kinds of error in the striatum"),
+    status="replicated",
+    record=(Study("Feher da Silva and Hare", 2020, n="online and laboratory samples",
+                  design="the task with careful instructions and a story",
+                  found="choices almost entirely model-based"),),
+    note="The pattern of stay probabilities replicates widely. What the mixture weight measures is contested: a "
+         "model-free learner with richer states can mimic it, and some apparent habit may be misunderstanding of "
+         "the task.",
+    sources=("N. D. Daw et al., Model-based influences on humans' choices and striatal prediction errors, Neuron 69 "
+             "(2011) 1204-1215",
+             "C. Feher da Silva and T. A. Hare, Humans primarily use model-based inference in the two-stage task, "
+             "Nature Human Behaviour 4 (2020) 1053-1066"),
+    checked="2026-11-14",
+    data=("DAW_2011", "FEHER_DA_SILVA_2020"),
+))
+
+add(Finding(
+    key="latent_learning", part=17, title=r"Latent learning",
+    claim="Rats that explore a maze without reward learn its layout, and show it as soon as a reward is introduced.",
+    original=Study("Tolman and Honzik", 1930, n="three groups of rats", design="daily maze runs; food every day, "
+                   "never, or from day 11",
+                   found="the day after food appeared, the late group ran about as well as rats fed all along"),
+    status="replicated",
+    record=(Study("Thistlethwaite", 1951, n="a review", design="the latent-learning experiments to date",
+                  found="found in most, with failures in some designs"),),
+    note="Latent learning is robust where animals can explore freely. It was the founding evidence for cognitive "
+         "maps, which place and grid cells later made literal.",
+    sources=("E. C. Tolman and C. H. Honzik, Introduction and removal of reward, and maze performance in rats, "
+             "University of California Publications in Psychology 4 (1930) 257-275",
+             "D. Thistlethwaite, A critical review of latent learning and related experiments, Psychological "
+             "Bulletin 48 (1951) 97-129"),
+    checked="2026-11-14",
+    data=("TOLMAN_HONZIK_1930",),
+))
+
+add(Finding(
+    key="grid_cells", part=17, title=r"Grid cells",
+    claim="Neurons in the entorhinal cortex fire at many locations arranged on a triangular lattice as an animal "
+          "moves through space.",
+    original=Study("Hafting, Fyhn, Molden, Moser and Moser", 2005, n="rats", design="recordings in medial "
+                   "entorhinal cortex during free foraging", found="firing fields on a regular triangular grid"),
+    status="replicated",
+    record=(Study("Doeller, Barry and Burgess", 2010, n="people", design="functional imaging during virtual "
+                  "navigation", found="a six-fold, grid-like signal"),),
+    note="Grid cells have been found in mice, bats and monkeys, and grid-like signals in human imaging. The cells "
+         "are secure; what grid-like codes do in human thought is newer work.",
+    sources=("T. Hafting et al., Microstructure of a spatial map in the entorhinal cortex, Nature 436 (2005) 801-806",
+             "C. F. Doeller, C. Barry and N. Burgess, Evidence for grid cells in a human memory network, Nature 463 "
+             "(2010) 657-661"),
+    checked="2026-11-14",
+    data=("HAFTING_2005",),
 ))
 
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "

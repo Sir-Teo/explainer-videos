@@ -4,8 +4,8 @@
 Chinese) were reviewed and accepted, and Acts I and II are complete (Parts 1 to 10): Act II is *The Neuron*,
 *Synapses and Circuits*, *The Brain*, *Reading the Brain*, *Genes and Evolution* and *Chemistry and Clocks*. Act III,
 the senses, has begun with Part 11, *The Threshold*, Part 12, *Signal and Noise*, Part 13, *The Eye and the
-Code*, Part 14, *Seeing as Inference*, and Part 15, *The Other Senses*, which completes Act III** (all in English and
-Chinese). This file is the plan;
+Code*, Part 14, *Seeing as Inference*, and Part 15, *The Other Senses*, which completes Act III; Act IV, learning, has
+begun with Part 16, *Conditioning*** (all in English and Chinese). This file is the plan;
 the standard every part meets, the devices and all sixty-two parts chapter by chapter are in
 [`SYLLABUS.md`](SYLLABUS.md), with the progress table in its §9.
 
@@ -179,7 +179,7 @@ The series draws in the manner of 3Blue1Brown with the instruments of `explainer
 | 14 | Seeing as Inference | Two squares on a checkerboard send identical light and look different | the inverse problem, Gestalt laws as priors, disparity derived and a random-dot stereogram, constancy and its illusions, the normal posterior and shrinkage, cue combination predicted and tested, light from above and the slow prior, the aperture problem, retinex, objects and invariance, faces, a small network that learns texture | a Bayesian observer, a cue combiner, retinex and a convolutional network | your own Müller-Lyer illusion, by two staircases |
 | 15 | The Other Senses | A note heard at 200 Hz in a sound with nothing at 200 Hz | the decibel as Fechner's law, the cochlea as a filter bank, masking, pitch by autocorrelation, interaural delays and Jeffress's circuit, scene analysis, categorical speech and the McGurk effect, roughness and consonance, touch and the rubber hand, the gate control of pain, smell's code and the trillion smells, balance | a cochlea, a pitch model, a Jeffress array and a gate | which way a missing fundamental moves |
 | **IV** | **Learning** | | | | |
-| 16 | Conditioning | Pavlov's dogs; Kamin's blocked rats | classical and operant conditioning, contingency, blocking, Rescorla–Wagner derived, attention models, schedules, the matching law, extinction and its return, preparedness | an associative learner; an operant chamber | condition yourself in two minutes |
+| 16 | Conditioning | Pavlov's dogs; Kamin's blocked rats | classical and operant conditioning, contingency, blocking, Rescorla–Wagner derived, attention models, schedules, the matching law, extinction and its return, preparedness | an associative learner, an operant chamber and a meliorating chooser | the gardener's game: predict the plants, reveal your ΔP |
 | 17 | Reward and Prediction | Schultz's monkeys, 1997 | temporal-difference learning, dopamine as prediction error, actor–critic, model-based and model-free control, cognitive maps and the successor representation, explore and exploit | a TD agent with a dopamine trace | a two-armed bandit |
 | **V** | **Thinking** | | | | |
 | 18 | Attention | the gorilla nobody saw | filters early and late, spatial cueing, feature integration and guided search, the attentional blink, load, biased competition, the normalization model | a saliency map; guided search | visual search; the Stroop task |

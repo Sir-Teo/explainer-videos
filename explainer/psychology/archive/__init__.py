@@ -43,7 +43,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "HECHT_1942", "BAYLOR_1979", "TINSLEY_2016", "KUFFLER_1953", "CAMPBELL_ROBSON_1968", "BLAKEMORE_CAMPBELL_1969", "LAFER_SOUSA_2015", "MILNER_1991", "JORDAN_2010", "COLOUR_TABLES", "OKABE_ITO",
            "ADELSON_1995", "ERNST_BANKS_2002", "ALAIS_BURR_2004", "RAHNEV_DENISON_2018", "WEISS_2002", "THOMPSON_1982", "ADAMS_2004", "SEGALL_1966", "AMIR_FIRESTONE_2025", "GAUTHIER_1999", "YIN_1969", "YAMINS_2014", "GEIRHOS_2019", "VONG_2024", "WHEATSTONE_1838",
            "BEKESY_1960", "KEMP_1978", "LIBERMAN_1957", "MCMURRAY_2002", "MCGURK_1976", "MALLICK_2015", "BOTVINICK_COHEN_1998", "LUSH_2020", "MELZACK_WALL_1965", "LEVINE_1978", "HANIG_1901", "BUSHDID_2014", "MCDERMOTT_2016", "KUJAWA_LIBERMAN_2009",
-           "PAVLOV_1927", "THORNDIKE_1898", "WATSON_RAYNER_1920", "HARRIS_1979", "FERSTER_SKINNER_1957", "RESCORLA_1968", "WASSERMAN_1993", "KAMIN_1969", "MAES_2016", "RESCORLA_WAGNER_1972", "LUBOW_MOORE_1959", "BOUTON_BOLLES_1979", "MACKINTOSH_PEARCE_HALL", "GALLISTEL_GIBBON_2000", "HERRNSTEIN_1961", "GARCIA_KOELLING_1966", "BRELAND_1961", "BANDURA_1961", "PRENDERGAST_2006", "ZENDLE_CAIRNS_2018", "GERSHMAN_2010", "MITCHELL_2009", "SCHILLER_2010"]
+           "PAVLOV_1927", "THORNDIKE_1898", "WATSON_RAYNER_1920", "HARRIS_1979", "FERSTER_SKINNER_1957", "RESCORLA_1968", "WASSERMAN_1993", "KAMIN_1969", "MAES_2016", "RESCORLA_WAGNER_1972", "LUBOW_MOORE_1959", "BOUTON_BOLLES_1979", "MACKINTOSH_PEARCE_HALL", "GALLISTEL_GIBBON_2000", "HERRNSTEIN_1961", "GARCIA_KOELLING_1966", "BRELAND_1961", "BANDURA_1961", "PRENDERGAST_2006", "ZENDLE_CAIRNS_2018", "GERSHMAN_2010", "MITCHELL_2009", "SCHILLER_2010",
+           "SCHULTZ_1997", "STEINBERG_2013", "FRANK_2004", "WILSON_2014", "TOLMAN_HONZIK_1930", "TOLMAN_1948", "HAFTING_2005", "ADAMS_DICKINSON_1981", "DAW_2011", "FEHER_DA_SILVA_2020", "MOMENNEJAD_2017", "HOWE_2013", "DABNEY_2020", "REDISH_2004", "LI_2010", "WEINTRAUB_2010", "WANG_2018"]
 
 
 @dataclass(frozen=True)
@@ -2855,6 +2856,178 @@ SCHILLER_2010 = Dataset(
     data={"follow_up": "about a year, in a subset"},
 )
 
+_P17 = "through a web search, 2026-11-14"
+
+SCHULTZ_1997 = Dataset(
+    key="schultz_1997",
+    title='Dopamine neurons and the temporal-difference error',
+    source='W. Schultz, P. Dayan and P. R. Montague, A neural substrate of prediction and reward, Science 275 (1997) 1593-1599',
+    cite=r"Schultz, Dayan \& Montague (1997)",
+    checked='from memory and later reviews, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+STEINBERG_2013 = Dataset(
+    key="steinberg_2013",
+    title='An artificial prediction error teaches',
+    source='E. E. Steinberg, R. Keiflin, J. R. Boivin, I. B. Witten, K. Deisseroth and P. H. Janak, A causal link between prediction errors, dopamine neurons and learning, Nature Neuroscience 16 (2013) 966-973',
+    cite=r"Steinberg et al.\ (2013)",
+    checked='the abstract and commentaries, ' + _P17,
+    licence="facts only",
+    data={"design": "blocking and extinction in rats, with optogenetic stimulation of dopamine neurons"},
+)
+
+FRANK_2004 = Dataset(
+    key="frank_2004",
+    title="Learning from reward and punishment in Parkinson's disease",
+    source="M. J. Frank, L. C. Seeberger and R. C. O'Reilly, By carrot or by stick: cognitive reinforcement learning in parkinsonism, Science 306 (2004) 1940-1943",
+    cite=r"Frank, Seeberger \& O'Reilly (2004)",
+    checked='the abstract and later reviews, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+WILSON_2014 = Dataset(
+    key="wilson_2014",
+    title='Directed and random exploration',
+    source='R. C. Wilson, A. Geana, J. M. White, E. A. Ludvig and J. D. Cohen, Humans use directed and random exploration to solve the explore-exploit dilemma, Journal of Experimental Psychology: General 143 (2014) 2074-2081',
+    cite=r"Wilson et al.\ (2014)",
+    checked='from memory and later reviews, ' + _P17,
+    licence="facts only",
+    data={"horizons": [1, 6]},
+)
+
+TOLMAN_HONZIK_1930 = Dataset(
+    key="tolman_honzik_1930",
+    title='Latent learning in the maze',
+    source='E. C. Tolman and C. H. Honzik, Introduction and removal of reward, and maze performance in rats, University of California Publications in Psychology 4 (1930) 257-275; D. Thistlethwaite, A critical review of latent learning and related experiments, Psychological Bulletin 48 (1951) 97-129',
+    cite=r"Tolman \& Honzik (1930)",
+    checked='textbook accounts and a review of the design, ' + _P17,
+    licence="facts only",
+    data={"groups": "fed daily; never fed; fed from day 11"},
+)
+
+TOLMAN_1948 = Dataset(
+    key="tolman_1948",
+    title='Cognitive maps',
+    source='E. C. Tolman, Cognitive maps in rats and men, Psychological Review 55 (1948) 189-208',
+    cite=r"Tolman (1948)",
+    checked='from memory, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+HAFTING_2005 = Dataset(
+    key="hafting_2005",
+    title='Place cells and grid cells',
+    source="J. O'Keefe and J. Dostrovsky, The hippocampus as a spatial map, Brain Research 34 (1971) 171-175; T. Hafting, M. Fyhn, S. Molden, M.-B. Moser and E. I. Moser, Microstructure of a spatial map in the entorhinal cortex, Nature 436 (2005) 801-806; C. F. Doeller, C. Barry and N. Burgess, Evidence for grid cells in a human memory network, Nature 463 (2010) 657-661",
+    cite=r"O'Keefe \& Dostrovsky (1971); \ Hafting et al.\ (2005)",
+    checked='from memory and the Nobel record, ' + _P17,
+    licence="facts only",
+    data={"nobel": 2014},
+)
+
+ADAMS_DICKINSON_1981 = Dataset(
+    key="adams_dickinson_1981",
+    title='Devaluation, and habits after overtraining',
+    source='C. D. Adams and A. Dickinson, Instrumental responding following reinforcer devaluation, Quarterly Journal of Experimental Psychology 33B (1981) 109-121; C. D. Adams, Variations in the sensitivity of instrumental responding to reinforcer devaluation, Quarterly Journal of Experimental Psychology 34B (1982) 77-98',
+    cite=r"Adams \& Dickinson (1981); \ Adams (1982)",
+    checked='reviews of the method, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+DAW_2011 = Dataset(
+    key="daw_2011",
+    title='The two-step task',
+    source="N. D. Daw, S. J. Gershman, B. Seymour, P. Dayan and R. J. Dolan, Model-based influences on humans' choices and striatal prediction errors, Neuron 69 (2011) 1204-1215",
+    cite=r"Daw et al.\ (2011)",
+    checked='the abstract, ' + _P17,
+    licence="facts only",
+    data={"participants": 17, "common": 0.7},
+)
+
+FEHER_DA_SILVA_2020 = Dataset(
+    key="feher_da_silva_2020",
+    title='The two-step task, explained carefully',
+    source='C. Feher da Silva and T. A. Hare, Humans primarily use model-based inference in the two-stage task, Nature Human Behaviour 4 (2020) 1053-1066; T. Akam, R. Costa and P. Dayan, Simple plans or sophisticated habits?, PLoS Computational Biology 11 (2015) e1004648',
+    cite=r"Feher da Silva \& Hare (2020)",
+    checked='from memory and later reviews, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+MOMENNEJAD_2017 = Dataset(
+    key="momennejad_2017",
+    title='The successor representation in people',
+    source='I. Momennejad, E. M. Russek, J. H. Cheong, M. M. Botvinick, N. D. Daw and S. J. Gershman, The successor representation in human reinforcement learning, Nature Human Behaviour 1 (2017) 680-692; P. Dayan, Improving generalization for temporal difference learning: the successor representation, Neural Computation 5 (1993) 613-624',
+    cite=r"Momennejad et al.\ (2017)",
+    checked='the abstract and a later modelling paper, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+HOWE_2013 = Dataset(
+    key="howe_2013",
+    title='Dopamine ramps',
+    source='M. W. Howe, P. L. Tierney, S. G. Sandberg, P. E. M. Phillips and A. M. Graybiel, Prolonged dopamine signalling in striatum signals proximity and value of distant rewards, Nature 500 (2013) 575-579',
+    cite=r"Howe et al.\ (2013)",
+    checked='from memory and later reviews, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+DABNEY_2020 = Dataset(
+    key="dabney_2020",
+    title='A distributional code in dopamine neurons',
+    source='W. Dabney, Z. Kurth-Nelson, N. Uchida, C. K. Starkweather, D. Hassabis, R. Munos and M. Botvinick, A distributional code for value in dopamine-based reinforcement learning, Nature 577 (2020) 671-675',
+    cite=r"Dabney et al.\ (2020)",
+    checked='the abstract and later replications, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+REDISH_2004 = Dataset(
+    key="redish_2004",
+    title='Addiction as a computational process gone awry',
+    source='A. D. Redish, Addiction as a computational process gone awry, Science 306 (2004) 1944-1947',
+    cite=r"Redish (2004)",
+    checked='from memory, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+LI_2010 = Dataset(
+    key="li_2010",
+    title='A contextual bandit for news',
+    source='L. Li, W. Chu, J. Langford and R. E. Schapire, A contextual-bandit approach to personalized news article recommendation, Proceedings of WWW (2010) 661-670',
+    cite=r"Li et al.\ (2010)",
+    checked='from memory, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
+WEINTRAUB_2010 = Dataset(
+    key="weintraub_2010",
+    title="Impulse-control disorders in Parkinson's disease",
+    source='D. Weintraub et al., Impulse control disorders in Parkinson disease: a cross-sectional study of 3090 patients, Archives of Neurology 67 (2010) 589-595',
+    cite=r"Weintraub et al.\ (2010)",
+    checked='the record and secondary summaries, ' + _P17,
+    licence="facts only",
+    data={"patients": 3090, "any": 13.6, "agonist": 17.1, "levodopa": 6.9},
+)
+
+WANG_2018 = Dataset(
+    key="wang_2018",
+    title='Prefrontal cortex as a meta-reinforcement-learning system',
+    source='J. X. Wang, Z. Kurth-Nelson, D. Kumaran, D. Tirumala, H. Soyer, J. Z. Leibo, D. Hassabis and M. Botvinick, Prefrontal cortex as a meta-reinforcement learning system, Nature Neuroscience 21 (2018) 860-868; H. F. Harlow, The formation of learning sets, Psychological Review 56 (1949) 51-65',
+    cite=r"Wang et al.\ (2018)",
+    checked='from memory, ' + _P17,
+    licence="facts only",
+    data={},
+)
+
 
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
@@ -2886,4 +3059,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           HECHT_1942, BAYLOR_1979, TINSLEY_2016, KUFFLER_1953, CAMPBELL_ROBSON_1968, BLAKEMORE_CAMPBELL_1969, LAFER_SOUSA_2015, MILNER_1991, JORDAN_2010, COLOUR_TABLES, OKABE_ITO,
                           ADELSON_1995, ERNST_BANKS_2002, ALAIS_BURR_2004, RAHNEV_DENISON_2018, WEISS_2002, THOMPSON_1982, ADAMS_2004, SEGALL_1966, AMIR_FIRESTONE_2025, GAUTHIER_1999, YIN_1969, YAMINS_2014, GEIRHOS_2019, VONG_2024, WHEATSTONE_1838,
                           BEKESY_1960, KEMP_1978, LIBERMAN_1957, MCMURRAY_2002, MCGURK_1976, MALLICK_2015, BOTVINICK_COHEN_1998, LUSH_2020, MELZACK_WALL_1965, LEVINE_1978, HANIG_1901, BUSHDID_2014, MCDERMOTT_2016, KUJAWA_LIBERMAN_2009,
-                          PAVLOV_1927, THORNDIKE_1898, WATSON_RAYNER_1920, HARRIS_1979, FERSTER_SKINNER_1957, RESCORLA_1968, WASSERMAN_1993, KAMIN_1969, MAES_2016, RESCORLA_WAGNER_1972, LUBOW_MOORE_1959, BOUTON_BOLLES_1979, MACKINTOSH_PEARCE_HALL, GALLISTEL_GIBBON_2000, HERRNSTEIN_1961, GARCIA_KOELLING_1966, BRELAND_1961, BANDURA_1961, PRENDERGAST_2006, ZENDLE_CAIRNS_2018, GERSHMAN_2010, MITCHELL_2009, SCHILLER_2010)}
+                          PAVLOV_1927, THORNDIKE_1898, WATSON_RAYNER_1920, HARRIS_1979, FERSTER_SKINNER_1957, RESCORLA_1968, WASSERMAN_1993, KAMIN_1969, MAES_2016, RESCORLA_WAGNER_1972, LUBOW_MOORE_1959, BOUTON_BOLLES_1979, MACKINTOSH_PEARCE_HALL, GALLISTEL_GIBBON_2000, HERRNSTEIN_1961, GARCIA_KOELLING_1966, BRELAND_1961, BANDURA_1961, PRENDERGAST_2006, ZENDLE_CAIRNS_2018, GERSHMAN_2010, MITCHELL_2009, SCHILLER_2010,
+                          SCHULTZ_1997, STEINBERG_2013, FRANK_2004, WILSON_2014, TOLMAN_HONZIK_1930, TOLMAN_1948, HAFTING_2005, ADAMS_DICKINSON_1981, DAW_2011, FEHER_DA_SILVA_2020, MOMENNEJAD_2017, HOWE_2013, DABNEY_2020, REDISH_2004, LI_2010, WEINTRAUB_2010, WANG_2018)}

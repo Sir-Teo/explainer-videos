@@ -580,6 +580,26 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | hearing aid; compression; cochlear implant; perceptual coding; codec | 助听器；压缩；人工耳蜗；感知编码；编解码器 |
 | hidden hearing loss; synaptopathy; sensitization; mismatch negativity | 隐性听力损失；突触病变；敏化；失匹配负波 |
 
+
+## Part 16: conditioning
+
+| English | 中文 |
+|---|---|
+| conditioning (classical, Pavlovian; operant, instrumental) | 条件作用（经典、巴甫洛夫式；操作性、工具性） |
+| unconditioned stimulus, response (US, UR); conditioned stimulus, response (CS, CR) | 无条件刺激、反应；条件刺激、反应 |
+| acquisition; extinction; spontaneous recovery; generalization; discrimination | 习得；消退；自发恢复；泛化；分化 |
+| law of effect; reinforcement; shaping by successive approximation; cumulative record | 效果律；强化；逐步逼近的塑造；累积记录 |
+| fixed ratio, variable ratio, fixed interval, variable interval (schedules) | 固定比率、可变比率、固定间隔、可变间隔（强化程序） |
+| partial reinforcement extinction effect | 部分强化消退效应 |
+| contingency (ΔP); outcome-density effect; truly random control | 关联性（德尔塔P）；结果密度效应；真随机对照 |
+| blocking, unblocking; overshadowing; conditioned inhibition; overexpectation | 阻断、解除阻断；遮蔽；条件抑制；过度预期 |
+| prediction error; associative strength; associability; the Rescorla–Wagner rule; delta rule | 预测误差；联结强度；可联结性；雷斯科拉-瓦格纳规则；德尔塔规则 |
+| latent inhibition; renewal (ABA, ABC, AAB); reinstatement | 潜伏抑制；复燃（ABA、ABC、AAB）；重建 |
+| peak procedure; scalar property; rate estimation; autoshaping | 峰值程序；标量性质；速率估计；自动塑造 |
+| matching law; undermatching; melioration; concurrent schedules | 匹配律；匹配不足；改善；并发程序 |
+| taste aversion; preparedness; instinctive drift; observational learning | 味觉厌恶；准备性；本能漂移；观察学习 |
+| exposure therapy; contingency management; token economy; clicker; loot box | 暴露疗法；权变管理；代币制；响片；战利品箱 |
+| conditioned tolerance; reconsolidation; latent cause; propositional learning | 条件性耐受；再巩固；潜在原因；命题学习 |
 ## Names
 
 | English | 中文 |
@@ -726,6 +746,13 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Caroline Bushdid; Richard Gerkin, Jason Castro; Markus Meister; James Reason, Joseph Brand | 卡罗琳·布什迪德；理查德·格金，贾森·卡斯特罗；马库斯·迈斯特；詹姆斯·里森，约瑟夫·布兰德 |
 | Sharon Kujawa, Charles Liberman; Risto Näätänen; Brian Moore | 莎伦·库亚瓦，查尔斯·利伯曼；里斯托·纳塔宁；布赖恩·穆尔 |
 | François-Emmanuel Roux; Evan Gordon | 弗朗索瓦-埃马纽埃尔·鲁；埃文·戈登 |
+| Ivan Pavlov; Daniel Todes; Edward Thorndike; Rosalie Rayner; Ben Harris | 伊万·巴甫洛夫；丹尼尔·托德斯；爱德华·桑代克；罗莎莉·雷纳；本·哈里斯 |
+| B. F. Skinner, Charles Ferster; Robert Rescorla, Allan Wagner; Leon Kamin; Bernard Widrow, Ted Hoff | 斯金纳，查尔斯·弗斯特；罗伯特·雷斯科拉，艾伦·瓦格纳；利昂·卡明；伯纳德·威德罗，特德·霍夫 |
+| Edward Kremer; Gretchen Chapman, Steven Robbins; Edward Wasserman; Robert Lubow, Ulrich Moore | 爱德华·克雷默；格雷琴·查普曼，史蒂文·罗宾斯；爱德华·瓦瑟曼；罗伯特·卢博，乌尔里希·穆尔 |
+| Mark Bouton, Robert Bolles; Nicholas Mackintosh; John Pearce, Geoffrey Hall; Randy Gallistel, John Gibbon | 马克·布顿，罗伯特·博尔斯；尼古拉斯·麦金托什；约翰·皮尔斯，杰弗里·霍尔；兰迪·加利斯特尔，约翰·吉本 |
+| Richard Herrnstein, William Baum, Drazen Prelec; John Garcia, Robert Koelling; Keller and Marian Breland | 理查德·赫恩斯坦，威廉·鲍姆，德拉赞·普雷莱茨；约翰·加西亚，罗伯特·克林；凯勒和玛丽安·布里兰 |
+| Martin Seligman; Albert Bandura, Dorothea Ross, Sheila Ross; Tom Beckers; David Zendle, Paul Cairns | 马丁·塞利格曼；阿尔伯特·班杜拉，多萝西娅·罗斯，希拉·罗斯；汤姆·贝克斯；戴维·曾德尔，保罗·凯恩斯 |
+| Chris Mitchell, Jan De Houwer, Peter Lovibond; Sam Gershman, David Blei, Yael Niv; Daniela Schiller | 克里斯·米切尔，扬·德豪尔，彼得·洛维邦德；萨姆·格什曼，戴维·布莱，亚埃尔·尼夫；达妮埃拉·席勒 |
 
 ## Titles
 

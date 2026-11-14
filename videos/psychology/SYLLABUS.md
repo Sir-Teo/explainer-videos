@@ -1202,40 +1202,57 @@ Analysis*; Liberman et al. 1957; McGurk & MacDonald 1976; Melzack & Wall 1965; W
 ## Act IV · Learning
 
 ### Part 16 · Conditioning (~55)
-*Question:* what, exactly, is learned when a bell comes to mean food?
-*Story:* Pavlov thought pairing was enough. In 1968–69 two experiments break that idea: Rescorla shows that
-pairing without contingency teaches nothing, and Kamin shows that a perfectly paired cue is ignored if the
-outcome was already predicted. Learning is driven by surprise. In 1972 Rescorla and Wagner write surprise as one
-line of algebra, and the line still runs half of computational psychology.
-1. Hook: Pavlov's laboratory (the bell is mostly legend; the method was not). Acquisition, extinction,
-   spontaneous recovery, generalization.
-2. Thorndike's puzzle box (1898) and the law of effect; Watson and "Little Albert" (1920), as run and as retold.
-3. Skinner: the operant chamber, shaping, the cumulative record; schedules of reinforcement and their signatures
-   (the scallop, the post-reinforcement pause), simulated.
-4. On you: a two-minute contingency-learning game. Your ratings track ΔP.
-5. Contiguity is not enough: Rescorla's truly random control (1968). Contingency as P(US|CS) − P(US|no CS).
-6. Kamin's blocking (1969): the experiment, the result, the idea of surprise.
-7. Rescorla–Wagner (1972): ΔV = αβ(λ − ΣV), derived as gradient descent on squared error (the delta rule; link to
-   *AI, Built* Part 9). Acquisition, extinction, blocking, overshadowing, conditioned inhibition and
-   overexpectation, each computed.
-8. What the model gets wrong: latent inhibition, spontaneous recovery, renewal. Extinction is new learning
-   (Bouton), not erasure. This is why fears return (Part 40).
-9. Attention to cues: Mackintosh (1975) and Pearce–Hall (1980), and the hybrid.
-10. Timing: the conditioned response is timed; rate-estimation theory as a rival to associations.
-11. Choice: Herrnstein's matching law (1961) derived and simulated; melioration against maximizing.
-12. Constraints: taste aversion in one trial across hours (Garcia and Koelling 1966); the misbehaviour of
-    organisms (Breland and Breland 1961); preparedness; learning by watching (Bandura's Bobo doll, 1961).
+*Question:* what, exactly, is learned when a signal comes to mean food?
+*Story:* Pavlov's dogs salivate to a signal; the response fades in extinction and part of it is back the next day.
+Two dogs with the same forty pairings learn different things if food also comes, for one of them, without the signal.
+In 1968–69 two experiments break the idea that pairing is enough: Rescorla's random control and Kamin's blocking.
+Learning is driven by surprise; in 1972 Rescorla and Wagner write it as one line, which is gradient descent on a
+squared prediction error and whose asymptote is the contingency. Its failures show that extinction is new learning
+bound to context, which is why fears return. Act IV begins here.
+0. Hook: Pavlov's laboratory (Nobel 1904; metronomes and buzzers, the bell mostly legend, after Todes); acquisition,
+   extinction and next-day recovery on Psyche; the two dogs; objectives.
+1. Pavlov's method: US, UR, CS, CR and "conditional"; a generalization gradient and discrimination; experimental
+   neurosis; substitution against preparation (freezing, conditioned tolerance from Part 10; Rescorla 1988).
+2. The law of effect: Thorndike's puzzle box with Psyche's law-of-effect cat (one cat and the median of 200);
+   Watson's behaviourism; Little Albert from the paper's own notes (seven pairings; Albert taken from the hospital
+   with the fear in place), and as retold (Harris 1979; the disputed identity).
+3. Skinner's box: the chamber and the cumulative recorder; shaping (79% rewarded against 0.3% when waiting for the
+   target); FR, VR, FI and VI records with their signatures; the partial reinforcement extinction effect.
+4. Contingency, not pairing: On you, the fertilizer game (24 plants, ΔP = 0 with blooms common); ΔP and the
+   outcome-density effect; Wasserman et al. (1993); Rescorla (1968) Experiment 2, its ten groups and three statements.
+5. Blocking: Kamin's design (1969); surprise; unblocking.
+6. The Rescorla–Wagner rule: the terms; the derivation as gradient descent (Widrow and Hoff's delta rule; *AI, Built*
+   Part 9); acquisition and extinction; blocking on the error surface over (V_noise, V_light).
+7. What the rule predicts: overshadowing, conditioned inhibition and overexpectation (Kremer 1978); with the context
+   as a cue the asymptote is ΔP (Chapman and Robbins 1990); Rescorla's ten groups on Psyche.
+8. What the rule gets wrong: latent inhibition (Lubow and Moore 1959); renewal (Bouton and Bolles 1979) with a
+   two-memory model, which wrongly makes AAB as strong as ABC; spontaneous recovery as a drifting context.
+9. Attention to cues: Mackintosh (1975) against Pearce and Hall (1980), run on one history with opposite results;
+   evidence for both in people.
+10. Time: the peak procedure and the scalar property; the I/T law (Gallistel and Gibbon 2000) against Rescorla–Wagner.
+11. Choice: the matching law (Herrnstein 1961; Baum 1979) from melioration on Psyche; exclusive choice on two ratio
+    keys; the melioration trap (Herrnstein and Prelec 1991).
+12. Biology's limits: Garcia and Koelling (1966); the Brelands' raccoon and pigs; preparedness; the Bobo doll
+    (Bandura, Ross and Ross 1961) and monkeys' observational fear of snakes.
+13. The Ledger. 14. In practice: exposure therapy designed around renewal; clickers, shaping and token economies;
+    contingency management (d = 0.42 over 47 comparisons; fading after the rewards stop); loot boxes as variable-ratio
+    schedules (Zendle and Cairns 2018). 15. Frontier: what is solid and argued; propositional learning (Mitchell, De
+    Houwer and Lovibond 2009); latent causes and gradual extinction (Gershman, Blei and Niv 2010); reconsolidation
+    (Schiller et al. 2010).
 
-*Psyche:* `conditioning`: Rescorla–Wagner, Mackintosh, Pearce–Hall, a context-dependent extinction model, an
-operant chamber with the four basic schedules, matching; each run on the classic designs.
-*On you:* the contingency game.
-*Ledger:* blocking (`replicated`; smaller and less universal than textbooks say, Maes et al. 2016); taste
-aversion (`replicated`); Little Albert (`story and record`: one infant, weak data, no deconditioning); the
-matching law (`replicated`); renewal (`replicated`).
-*In practice:* exposure therapy, animal training, token economies, contingency management for addiction; the
-design of loot boxes and variable rewards (Part 52).
-*Frontier:* is learning associative or propositional in humans? Latent-cause models of extinction; one-shot
-learning.
+*Psyche:* `conditioning`: Rescorla–Wagner for any design and its exact asymptote, Mackintosh, Pearce–Hall, a
+two-memory model of extinction, Thorndike's box, shaping, the four schedules, concurrent schedules chosen by
+melioration, a melioration trap, scalar timing and the I/T law; each run on the classic designs.
+*On you:* the gardener's game: four batches of plants, predictions that reveal the contingency learned.
+*Ledger:* blocking (`replicated, smaller`: Maes et al. 2016); taste aversion (`replicated`); conditioned tolerance
+(`replicated`, deferred from Part 10); Little Albert (`story and record`); the matching law (`replicated`); renewal
+(`replicated`). Shown without rows, with reasons: Pavlov, Ferster and Skinner, Wasserman et al., Rescorla (1968),
+Rescorla and Wagner, Lubow and Moore (Part 18), Mackintosh and Pearce–Hall, Gallistel and Gibbon, the Brelands,
+Bandura et al., Prendergast et al. (Part 42), Zendle and Cairns, Mitchell et al., Gershman et al., Schiller et al.
+(Part 21).
+*In practice:* exposure therapy, animal training, token economies, contingency management for addiction; loot boxes
+and variable rewards (Part 52).
+*Frontier:* is learning associative or propositional in humans? Latent-cause models of extinction; reconsolidation.
 *Reading:* Pavlov 1927; Rescorla 1968, 1988 ("It's not what you think it is"); Kamin 1969; Rescorla & Wagner
 1972; Bouton, *Learning and Behavior*; Herrnstein 1961; Garcia & Koelling 1966; Gallistel & Gibbon 2000.
 
@@ -3279,3 +3296,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 13 | built, English and Chinese: 15 chapters, hook and outro; Psyche's vision (`psyche/vision.py`, twelve tests) and the colour tables, five Ledger rows (one deferred from Part 5), eleven Archive datasets; course entry, lab and interactive (the reader's contrast sensitivity at four stripe widths) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 52 min |
 | 14 | built, English and Chinese: 14 chapters, hook and outro; Psyche's inference (`psyche/infer.py`, six tests, with a one-layer convolutional network in numpy), four Ledger rows, fifteen Archive datasets; course entry, lab and interactive (the reader's own Müller-Lyer illusion, by two staircases) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 64 min |
 | 15 | built, English and Chinese: 15 chapters, hook and outro, with demonstrations played in the film; Psyche's hearing (`psyche/hearing.py`, ten tests) and `VoiceoverScene.sound`, six Ledger rows (one deferred from Part 7), fourteen Archive datasets; course entry, lab and interactive (which way a missing fundamental moves, in Web Audio) checked; narration table and on-screen text translated and dry-run. Act III is complete. Open checks in its README | 55 min |
+| 16 | built, English and Chinese: 15 chapters, hook and outro; Psyche's conditioning (`psyche/conditioning.py`, twelve tests), six Ledger rows (one deferred from Part 10), twenty-three Archive datasets; course entry, lab and interactive (the gardener's game: predictions that reveal the contingency learned) checked; narration table and on-screen text translated and dry-run. Act IV begins. Open checks in its README | 54 min |

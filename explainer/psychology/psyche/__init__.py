@@ -62,5 +62,9 @@ Modules so far, with the part that introduces each:
 ``conditioning``    16   Rescorla-Wagner for any design and its exact asymptote (ΔP); Mackintosh and
                          Pearce-Hall attention; extinction bound to context (renewal, spontaneous recovery);
                          Thorndike's box; shaping; the four schedules; melioration and matching; timing
+``rl``              17   TD learning on a delay line (the dopamine error and its migration); second-order
+                         conditioning; Q-learning bandits fitted by likelihood; exploration policies; a maze
+                         with latent learning; the two-step task; the successor representation; a
+                         distributional code; Redish's drug that cannot be predicted away
 =================  ====  ===============================================================================
 """
