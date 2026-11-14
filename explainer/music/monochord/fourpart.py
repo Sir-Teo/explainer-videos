@@ -296,7 +296,7 @@ def voicings_under(soprano: int, members, tonic: int, leading: int | None = None
     return out
 
 
-DEFAULT_WEIGHTS = {"chord": 1.0, "melody": 1.0, "motion": 0.25, "bass": 0.08, "parallel": 6.0, "hidden": 1.5, "overlap": 1.0, "leap": 0.6,
+DEFAULT_WEIGHTS = {"chord": 1.0, "melody": 1.0, "motion": 0.05, "bass": 0.02, "parallel": 6.0, "hidden": 1.5, "overlap": 1.0, "leap": 0.6,
                    "inversion": 0.4, "leading": 3.0, "seventh": 3.0, "end": 2.0, "doubling": 0.6, "repeat": 1.0, "start": 1.0}
 RULE_WEIGHTS = ("parallel", "hidden", "overlap", "leap", "leading", "seventh", "inversion", "doubling")
 

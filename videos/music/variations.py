@@ -37,6 +37,8 @@ LEDGER = [
      "measure": r"the key finder names the key of 14 of its 14 phrases"},
     {"part": 16, "title": r"as a cantus firmus: in organum, then with a voice above it in each of the five species", "seconds": 52.2,
      "measure": r"notes beginning together: 100\% in organum, 0\% in fourth species"},
+    {"part": 17, "title": r"as a chorale for four voices: chosen chord by chord, then corrected by the rules", "seconds": 78.22,
+     "measure": r"parallel fifths and octaves: 6 before the corrections, 0 after"},
 ]
 
 

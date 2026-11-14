@@ -84,6 +84,31 @@ class Chorale:
         return [o for _, o, _, f in self.voices[0] if f]
 
 
+def melody_key(c: Chorale, n: int = 8) -> tuple:
+    """A fingerprint of a chorale's tune: the first ``n`` moves of its soprano on the beats, repeated notes merged,
+    so that the same tune in another key or with other passing notes has the same key."""
+    s = [ch[0] for _, ch, _ in c.beats()]
+    s = [x for i, x in enumerate(s) if i == 0 or x != s[i - 1]]
+    return tuple(s[i + 1] - s[i] for i in range(min(n, len(s) - 1)))
+
+
+def tunes(book) -> dict:
+    """The chorales grouped by tune: {fingerprint: [chorale, ...]}."""
+    out: dict = {}
+    for c in book:
+        out.setdefault(melody_key(c), []).append(c)
+    return out
+
+
+def split(book, every: int = 5, offset: int = 0) -> tuple[list, list]:
+    """Train and test chorales, split by tune (every ``every``-th tune is held out), so that no tune in the test set
+    has been seen, in any setting, in training."""
+    groups = sorted(tunes(book).values(), key=lambda g: g[0].name)
+    test = [c for k, g in enumerate(groups) if k % every == offset for c in g]
+    names = {c.name for c in test}
+    return [c for c in book if c.name not in names], test
+
+
 def load(path: Path = DATA) -> list[Chorale]:
     with gzip.open(path, "rt", encoding="utf-8") as f:
         raw = json.load(f)
