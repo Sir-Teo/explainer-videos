@@ -93,6 +93,8 @@ class Piano(SoundScene):
             window(snd, r"every C, \ then the new ones", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
             flash(snd, old, [d["starts"]["old"] + 1.25 * i for i in range(len(old))], hot=WHITE, base=TUNE)
             flash(snd, new, [d["starts"]["new"] + 1.75 * i for i in range(len(new))], hot=WHITE, base=BLUE)
+            pulse(snd, old, d["starts"]["old"], d["starts"]["new"] - 0.2, buff=0.15, color=TUNE)
+            pulse(snd, new, d["starts"]["new"], c.duration, buff=0.15, color=BLUE)
         self.wait(0.3)
         self.clear_scene()
 

@@ -62,6 +62,8 @@ class Wagner(SoundScene):
             window(snd, r"a cadence, \ then Tristan", detail=r"Part 7's bowed string", corner=DL, tag_corner=DR)
             flash(snd, list(gp), [d["starts"]["plain"] + 2 * d["unit"] * i for i in range(4)], hot=WHITE, base=GREY_A)
             flash(snd, list(gt), [d["starts"]["tristan"] + 2 * d["unit"] * i for i in range(4)], hot=WHITE, base=TUNE)
+            pulse(snd, VGroup(*gp), d["starts"]["plain"], d["starts"]["tristan"] - 0.2, buff=0.15, color=GREY_A)
+            pulse(snd, VGroup(*gt), d["starts"]["tristan"], c.duration, buff=0.15, color=TUNE)
         self.wait(0.3)
         self.clear_scene()
 
