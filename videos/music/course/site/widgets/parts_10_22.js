@@ -204,4 +204,74 @@
       note: "The index adds up, for every note that is followed by a silent pulse stronger than itself, the difference of the two weights (Longuet-Higgins and Lee, 1984). The same five strokes can confirm the metre or fight it, depending only on where they start: sliding a rhythm is the cheapest way there is to make a new one. Push the tempo up and note the sixteenth's length; near 100 ms the pulses stop being countable."
     });
   };
+
+  // ---- Part 12: stack a generator ----------------------------------------------------------------------------
+  function stackNotes(n, cents) {              // n notes a generator apart, folded into one octave, sorted (in cents)
+    var out = [], k;
+    for (k = 0; k < n; k++) out.push(((k * cents) % 1200 + 1200) % 1200);
+    out.sort(function (a, b) { return a - b; });
+    return out;
+  }
+  function stackGaps(notes) {
+    var g = [], k;
+    for (k = 0; k < notes.length; k++) g.push((k + 1 < notes.length ? notes[k + 1] : notes[0] + 1200) - notes[k]);
+    return g;
+  }
+  function gapKinds(gaps) {                    // the different sizes of step, largest first
+    var sorted = gaps.slice().sort(function (a, b) { return b - a; }), kinds = [], k;
+    for (k = 0; k < sorted.length; k++) if (!kinds.length || Math.abs(kinds[kinds.length - 1] - sorted[k]) > 0.05) kinds.push(sorted[k]);
+    return kinds;
+  }
+  function scaleSound(notes) {
+    var rate = 44100, step = 0.28, out = new Float32Array(Math.floor(((notes.length + 1) * step + 0.9) * rate)), i, n, h;
+    var all = notes.concat([1200]);
+    for (i = 0; i < all.length; i++) {
+      var hz = 261.63 * Math.pow(2, all[i] / 1200), start = Math.floor(i * step * rate), len = Math.floor(0.8 * rate);
+      for (n = 0; n < len && start + n < out.length; n++) {
+        var t = n / rate, y = 0;
+        for (h = 1; h <= 6; h++) y += Math.sin(2 * Math.PI * hz * h * t) / (h * h) * Math.exp(-t * (2.5 + 0.9 * h));
+        out[start + n] += 0.3 * y * Math.min(1, t / 0.004);
+      }
+    }
+    return play(out, rate);
+  }
+
+  W.scale = function (el) {
+    QB.widget(el, {
+      title: "Stack a fifth, and watch the steps",
+      sub: "Notes one generator apart, folded into an octave. Left: the notes round the octave (once round is 1200 cents). Right: the steps between neighbours, in order round the circle. Count the sizes of step: there are never more than three, and at some numbers of notes only two.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "gen", label: "The generator (cents; a pure fifth is 702)", min: 680, max: 719.5, step: 0.5, value: 702 },
+        { k: "n", label: "Notes in the stack", min: 2, max: 24, step: 1, value: 7 },
+      ],
+      buttons: [
+        { label: "Play the scale", act: function (s) { s.sound = scaleSound(s.notes); } },
+      ],
+      init: function (s) { s.sound = null; s.notes = []; },
+      draw: function (g, v, s) {
+        var gen = v.gen === 702 ? 701.955 : v.gen, notes = stackNotes(v.n, gen), gaps = stackGaps(notes), kinds = gapKinds(gaps), i;
+        s.notes = notes; s.gaps = gaps; s.kinds = kinds;
+        var a = g[0].axes({ x: [-1.35, 1.35], y: [-1.35, 1.35], title: "The notes, round the octave", xticks: [], yticks: [] });
+        var cx = [], cy = [], px = [], py = [];
+        for (i = 0; i <= 96; i++) { cx.push(Math.sin(2 * Math.PI * i / 96)); cy.push(Math.cos(2 * Math.PI * i / 96)); }
+        a.line(cx, cy, { color: C.muted, width: 1 });
+        for (i = 0; i < notes.length; i++) { px.push(Math.sin(2 * Math.PI * notes[i] / 1200)); py.push(Math.cos(2 * Math.PI * notes[i] / 1200)); }
+        a.dots(px, py, { color: kinds.length === 2 ? C.idea : C.implied, r: 5 });
+        var idx = [];
+        for (i = 0; i < gaps.length; i++) idx.push(i + 1);
+        var b = g[1].axes({ x: [0.3, gaps.length + 0.7], y: [0, Math.max.apply(null, gaps) * 1.15], title: "The steps between neighbours (cents)", xlabel: "step", xticks: [], ylabel: "cents" });
+        b.bars(idx, gaps, 0.7, { color: function (k) { return Math.abs(gaps[k] - kinds[0]) < 0.05 ? C.idea : (kinds.length > 1 && Math.abs(gaps[k] - kinds[1]) < 0.05 ? C.implied : C.loss); } });
+      },
+      readout: function (v, s) {
+        var words = ["", "one size", "two sizes", "three sizes"];
+        return [["notes", String(v.n)],
+                ["sizes of step", words[Math.min(s.kinds.length, 3)] + ":  " + s.kinds.map(function (k) { return fmt(k, 1); }).join(", ") + " cents"],
+                ["largest over smallest", s.kinds[s.kinds.length - 1] < 0.05 ? "notes coincide" : fmt(s.kinds[0] / s.kinds[s.kinds.length - 1], 2)],
+                ["names for this size", v.n === 5 ? "pentatonic" : v.n === 7 ? "diatonic" : v.n === 12 ? "chromatic" : "-"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "With a pure fifth, two sizes of step occur at 2, 3, 5, 7, 12, 17, 29, 41 and 53 notes: the denominators that come out of the continued fraction for the fifth's size. Five, seven and twelve are the pentatonic, diatonic and chromatic scales. Narrow the generator to 697 cents (meantone) and the list becomes 5, 7, 12, 19, 31; widen it and 17 and 22 appear. The three-gap theorem says that no setting will ever show four sizes."
+    });
+  };
 })();

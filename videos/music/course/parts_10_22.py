@@ -114,4 +114,58 @@ PARTS = [
         also=(("Monochord's rhythm engine: metres, syncopation, the pulse, polyrhythm, swing, the telephone game", "explainer/music/monochord/rhythm.py"),
               ("A kit of struck things for marking time", "explainer/music/monochord/instruments/drumkit.py")),
     ),
+    Part(
+        n=12, level="U", widget="scale",
+        question="Why do keyboards have seven white keys and five black, what makes that choice of notes special, "
+                 "and how many scales could there be?",
+        story="Every octave of every keyboard has seven white keys and five black, and the part derives that "
+              "layout from the fifth of Part 1. Stack fifths and fold them into an octave: at five, seven and "
+              "twelve notes the steps between neighbours come in just two sizes, and those stacks are the "
+              "pentatonic, diatonic and chromatic scales. The three-gap theorem says a stack never has more than "
+              "three sizes of step, and the sizes at which it has two (2, 3, 5, 7, 12, 17, 29, 41, 53) are the "
+              "denominators of Part 6's continued fraction. Seven notes give seven modes, which fall in order of "
+              "brightness along the chain of fifths, each the one before with a single note lowered. The white "
+              "keys are also the most even way to choose seven notes of twelve; every kind of interval in them "
+              "comes in two sizes, with the tritone as a single landmark; and each interval occurs a different "
+              "number of times (2, 5, 4, 3, 6, 1), so that a move of a fifth changes one note, which is the "
+              "system of keys. Minor borrows a leading note and so has three forms. Whole-tone and octatonic "
+              "scales map onto themselves and have no home. A fourth can be filled six ways, and south Indian "
+              "theory makes 2 x 6 x 6 = 72 parent scales that way; maqam and slendro divide the octave where no "
+              "piano key lies. Burnside's lemma counts 352 shapes of scale on twelve notes, 66 of them with seven "
+              "notes, and among those the white keys are the most even, have the most fifths and are the "
+              "smoothest. The frontier is why the world's scales have five to seven unequal steps. The Tune is "
+              "played in the seven modes and in scales of five, six and eight notes.",
+        handoff="Part 13 sounds the notes of a scale together: intervals and chords. Melody moves through the "
+                "scale in Part 14; the deep-scale property becomes the system of keys in Part 15; evenness and "
+                "necklaces return in Part 33; raga, maqam and the gamelan's tunings get Parts 34 to 36; the "
+                "blues scale and its bent notes, Part 38.",
+        outside="Part 1 for the fifth; Part 5 for roughness; Part 6 for commas, meantone and continued fractions; "
+                "Part 10 for the hexachord and spelling; Part 11 for necklaces. Counting and modular arithmetic.",
+        objectives={
+            "U": ["Build the pentatonic, diatonic and chromatic scales by stacking fifths.",
+                  "Name the seven modes, put them in order of brightness, and write each on any note.",
+                  "Write the three forms of the minor scale and say what each is for."],
+            "M": ["Find the sizes of step in a stack of any generator, and where there are two.",
+                  "Compute a scale's interval vector, its common tones under transposition, and its evenness.",
+                  "Count scale shapes with Burnside's lemma, and the melakartas by their rule."],
+            "D": ["State the three-gap theorem and its link to continued fractions.",
+                  "Set out the competing explanations for scales of five to seven unequal steps."],
+            "I": ["Choose a mode or a symmetric scale for the colour it gives.",
+                  "Move between keys by the notes they share.",
+                  "Lay out the notes of an instrument that plays one scale."],
+        },
+        results=[
+            ("Stacks of fifths", r"\text{two sizes of step at } n = 2, 3, 5, 7, 12, 17, 29, 41, 53"),
+            ("The three-gap theorem", r"\{k\alpha \bmod 1\}_{k<n} \text{ cut the circle into gaps of at most three lengths}"),
+            ("The most even seven of twelve", r"\left\lfloor \tfrac{12k + 5}{7} \right\rfloor = 0, 2, 4, 5, 7, 9, 11"),
+            ("The diatonic interval vector", r"\langle 2, 5, 4, 3, 6, 1 \rangle"),
+            ("Scale shapes on twelve notes", r"\tfrac{1}{12}\sum_{d \mid 12} \varphi(d)\, 2^{12/d} = 352"),
+            ("Parent scales", r"2 \times \tbinom{4}{2} \times \tbinom{4}{2} = 72"),
+        ],
+        U=(0, 1, 3, 4, 5, 6),
+        D=(2, 10),
+        I=(7, 8, 9),
+        also=(("Monochord's scales: stacks, modes, evenness, interval vectors, necklaces, parent scales", "explainer/music/monochord/scales.py"),
+              ("Pictures of scales: a keyboard, the octave as a circle, steps as a bar", "explainer/music/scaleviz.py")),
+    ),
 ]

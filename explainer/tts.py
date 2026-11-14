@@ -148,6 +148,13 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bclaves\b", "[claves](/klˈɑvAz/)"),
     (r"\bclave\b", "[clave](/klˈɑvA/)"),
     (r"\bLonguet-Higgins\b", "[Longuet](/lˈɔŋɡɪt/) Higgins"),
+    # Part 12: scales
+    (r"\bAeolian\b", "[Aeolian](/iˈOliən/)"),
+    (r"\bLocrian\b", "[Locrian](/lˈOkɹiən/)"),
+    (r"\bIonian\b", "[Ionian](/IˈOniən/)"),
+    (r"\bOlivier Messiaen\b", "[Olivier](/ɔlˈɪviˌA/) [Messiaen](/mˈɛsiˌɑn/)"),
+    (r"\bmaqams\b", "[maqams](/məkˈɑmz/)"),
+    (r"\bmaqam\b", "[maqam](/məkˈɑm/)"),
     (r"\bsul ponticello\b", "sool ponticello"),
     (r"\bsul tasto\b", "sool [tasto](/tˈɑstO/)"),
     (r"Navier[–—-]Stokes", "[Navier](/nævjˈeɪ/) Stokes"),

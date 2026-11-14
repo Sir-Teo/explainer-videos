@@ -27,6 +27,8 @@ LEDGER = [
      "measure": r"its page is 168 bits; its sound, \ 127{,}000 times as many"},
     {"part": 11, "title": r"straight, as a waltz, in five, in seven, swung, and with a hemiola", "seconds": 32.01,
      "measure": r"its bars are counted in 4, 3, 5 and 7, and in six two ways"},
+    {"part": 12, "title": r"in the seven modes, brightest to darkest, then pentatonic, whole-tone and octatonic", "seconds": 41.2,
+     "measure": r"from Lydian to Locrian, 6 notes fall a semitone, one at a time"},
 ]
 
 
