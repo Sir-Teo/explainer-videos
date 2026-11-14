@@ -35,6 +35,8 @@ LEDGER = [
      "measure": r"the expected continuation costs 1.1 bits a note; the least expected, 7.8"},
     {"part": 15, "title": r"through all twelve keys, down the circle of fifths, to a deceptive cadence", "seconds": 49.24,
      "measure": r"the key finder names the key of 14 of its 14 phrases"},
+    {"part": 16, "title": r"as a cantus firmus: in organum, then with a voice above it in each of the five species", "seconds": 52.2,
+     "measure": r"notes beginning together: 100\% in organum, 0\% in fourth species"},
 ]
 
 

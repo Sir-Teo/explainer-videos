@@ -141,14 +141,14 @@ def _allowed(ctx: _Ctx, i: int, prev: int | None, prev_move: int, run: int, cp: 
     if i == n - 1 and "cadence" in R:
         if vc != 0 or abs(move) > 2:
             return False, 0
-        if (pv in (9, 3) if not below else pv in (3, 15)) is False:
+        if pv % 12 not in (3, 9):                                    # a sixth opening to the octave, or a third closing to the unison
             return False, 0
     if i == n - 2 and "cadence" in R:
         final = cf[-1]
-        # the counterpoint is a step from its final note: above, the leading note under the octave; below, the step above
-        if not below and (cp - final) % 12 != 11:
-            return False, 0
-        if below and (cp - final) % 12 != 2:
+        # the two voices share the cadence's two steps: if the cantus falls to the final (2 to 1), the counterpoint
+        # rises to it from the leading note (7 to 1); if the cantus rises to it, the counterpoint falls from the step above
+        want = 11 if cf[-2] > cf[-1] else 2
+        if (cp - final) % 12 != want:
             return False, 0
     return True, new_run
 
@@ -286,9 +286,11 @@ def _step(p: int, d: int) -> int:
     return q
 
 
-def _patterns(n: int, c: int, prev: int | None, first: bool, pen: bool, lead: int, rng) -> list[tuple]:
+def _patterns(n: int, c: int, prev: int | None, first: bool, pen: bool, lead: int, rng, broken: bool = False) -> list[tuple]:
     """Candidate bars for species ``n`` over cantus note ``c``: tuples of (pitch, beats, tied).  Dissonances are
-    allowed only where the species allows them, and are checked against the next note later."""
+    allowed only where the species allows them, and are checked against the next note later.  With ``broken``, a
+    fourth-species bar may break the ligature (two untied consonant half notes) when no tied bar will do, as Fux
+    allows where the cantus leaps."""
     near = [p for p in range(c, c + 17) if p % 12 in WHITE and _is_cons(c, p) and (prev is None or (p != prev and _ok_melodic(prev, p)))]
     if first:
         near = [p for p in near if (p - c) % 12 in PERFECT and p > c]
@@ -296,7 +298,14 @@ def _patterns(n: int, c: int, prev: int | None, first: bool, pen: bool, lead: in
     near.sort(key=lambda p: 0 if prev is None else abs(p - prev) + rng.random() * 3)
     near = near[:5]
     out = []
-    if n == 2:
+    if n == 1:
+        for x in near:
+            if pen and x != lead:
+                continue
+            out.append(((x, 4.0, False),))
+        if pen and not out and lead is not None and _is_cons(c, lead) and (prev is None or _ok_melodic(prev, lead)):
+            out.append(((lead, 4.0, False),))
+    elif n == 2:
         for x in near:
             if pen:
                 if abs(x - lead) <= 4 and x != lead:
@@ -330,6 +339,8 @@ def _patterns(n: int, c: int, prev: int | None, first: bool, pen: bool, lead: in
                     out.append(((h, 2.0, True), (lead, 2.0, False)))
                 continue
             if not _is_cons(c, h):
+                if (h - c) % 12 not in (10, 11, 5, 2):
+                    continue                                         # 7-6, 4-3 and 2-3 suspensions; no tritone
                 r = _step(h, -1)
                 if _is_cons(c, r) and (r - c) % 12 in IMPERFECT:
                     out.append(((h, 2.0, True), (r, 2.0, False)))
@@ -340,6 +351,8 @@ def _patterns(n: int, c: int, prev: int | None, first: bool, pen: bool, lead: in
         if first:
             out = [((None, 2.0, False), (x, 2.0, False)) for x in near]
     rng.shuffle(out)
+    if broken and n == 4 and not first and not pen:
+        out += [((x, 2.0, False), (y, 2.0, False)) for x in near for y in near if y != x and abs(y - x) <= 5]
     return out
 
 
@@ -354,7 +367,7 @@ def _bar_ok(c: int, nxt_c: int | None, bar: tuple, nxt_first: int | None, prev: 
     for a, b in zip(seq, seq[1:]):
         if a == b and not (n == 4):
             return False
-        if not _ok_melodic(a, b) and a != b:
+        if (not _ok_melodic(a, b) and a != b) or abs(a - b) > 8:
             return False
     for k, (q, beats, tied) in enumerate(bar):
         if q is None:
@@ -367,7 +380,11 @@ def _bar_ok(c: int, nxt_c: int | None, bar: tuple, nxt_first: int | None, prev: 
             return False
         before = bar[k - 1][0] if bar[k - 1][0] is not None else prev
         after = bar[k + 1][0] if k + 1 < len(bar) else nxt_first
-        if before is None or after is None or abs(q - before) > 2 or abs(after - q) > 2 or after == q:
+        if before is None or abs(q - before) > 2 or q == before:
+            return False
+        if after is None and k == len(bar) - 1:
+            continue                                                 # left by step into the next bar: required of the next bar
+        if after is None or abs(after - q) > 2 or after == q:
             return False
     down = bar[0][0] if bar[0][0] is not None else bar[1][0]
     if prev_down is not None and down is not None:
@@ -389,33 +406,38 @@ def species(cf, n: int, rng=None, tries: int = 400) -> list[tuple[int, float, fl
     if n == 1:
         cp = best(cf, tries=max(tries, 500), seed=int(rng.integers(0, 10_000)))
         return [(p, 4.0 * k, 4.0) for k, p in enumerate(cp)]
-    best_line, best_s = None, -1e9
     final = cf[-1]
-    for _ in range(tries):
-        kinds = [n if n != 5 else int(rng.choice([2, 3, 4, 3, 2])) for _ in cf]
-        if n == 5:
-            kinds[0], kinds[-2] = 2, 4
-        line = _search(cf, kinds, final, rng)
-        if line is None:
-            continue
-        s = _species_score(cf, line)
-        if s > best_s:
-            best_line, best_s = line, s
-    return best_line
+    for broken in (False, True):                                     # strict first; then let fourth species break a tie
+        best_line, best_s = None, -1e9
+        for _ in range(tries):
+            kinds = [n if n != 5 else int(rng.choice([2, 3, 4, 3, 2])) for _ in cf]
+            if n == 5:
+                kinds[0], kinds[-2] = 2, 4
+            line = _search(cf, kinds, final, rng, broken=broken)
+            if line is None:
+                continue
+            s = _species_score(cf, line)
+            if s > best_s:
+                best_line, best_s = line, s
+        if best_line is not None or n not in (4, 5):
+            return best_line
+    return None
 
 
-def _search(cf, kinds, final, rng, budget: int = 3000):
+def _search(cf, kinds, final, rng, budget: int = 3000, broken: bool = False):
     bars = len(cf)
     lead_all = [p for p in range(min(cf), max(cf) + 17) if (p - final) % 12 == 11]
     calls = [0]
 
-    def go(b, prev, prev_down, acc):
+    def go(b, prev, prev_down, acc, need=None):
         calls[0] += 1
         if calls[0] > budget:
             return None
         c = cf[b]
         if b == bars - 1:
             ends = [p for p in range(c, c + 17) if (p - final) % 12 == 0 and prev is not None and 0 < abs(p - prev) <= 2]
+            if need is not None:
+                ends = [p for p in ends if p == need]
             if not ends:
                 return None
             return acc + [((ends[0], 4.0, False),)]
@@ -423,20 +445,25 @@ def _search(cf, kinds, final, rng, budget: int = 3000):
         lead = min(lead_all, key=lambda p: abs(p - (prev if prev is not None else p))) if lead_all else None
         if pen and lead is not None and lead <= c:
             return None
-        for bar in _patterns(kinds[b], c, prev, b == 0, pen, lead, rng):
-            nxt_first = None
+        for bar in _patterns(kinds[b], c, prev, b == 0, pen, lead, rng, broken):
+            first_note = bar[0][0] if bar[0][0] is not None else bar[1][0]
+            if need is not None and (first_note != need or bar[0][2]):
+                continue                                             # a passing note must go on, by step, in the same direction
             if not _bar_ok(c, cf[b + 1], bar, None, prev, prev_down, kinds[b]):
                 continue
             last = bar[-1][0]
-            down = bar[0][0] if bar[0][0] is not None else bar[1][0]
-            res = go(b + 1, last, (c, down), acc + [bar])
-            if res is not None:
-                # a weak-beat dissonance at the end of this bar must step to the next downbeat
-                nb = res[b + 1]
-                nd = nb[0][0]
-                q = bar[-1][0]
-                if not _is_cons(c, q) and (nd is None or abs(nd - q) > 2 or nd == q):
+            down = first_note
+            nxt_need = None
+            if not _is_cons(c, last):
+                before = bar[-2][0] if len(bar) > 1 and bar[-2][0] is not None else prev
+                if before is None:
                     continue
+                d = 1 if last > before else -1
+                nxt_need = _step(last, d)
+                if kinds[b + 1] == 4 or not _is_cons(cf[b + 1], nxt_need):
+                    continue
+            res = go(b + 1, last, (c, down), acc + [bar], nxt_need)
+            if res is not None:
                 return res
         return None
 
@@ -468,6 +495,12 @@ def _species_score(cf, line) -> float:
     s += 1.5 if ps.count(top) == 1 else -1.0
     ind = independence(line, [(c, 4.0 * k, 4.0) for k, c in enumerate(cf)])
     s += 4.0 * ind["contrary"] - 8.0 * ind["fused"]
+    for p, a, d in line:                                             # a dissonance correctly placed is the point of species 2 to 4
+        k = int(a // 4)
+        if k < len(cf) and a % 4 != 0 and (p - cf[k]) % 12 not in CONSONANT:
+            s += 0.6
+        if a % 4 == 2 and d > 2 and k + 1 < len(cf) and (p - cf[k + 1]) % 12 not in CONSONANT:
+            s += 0.8
     return s
 
 

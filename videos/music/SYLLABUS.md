@@ -844,13 +844,35 @@ Structures*.
 ### Part 16 · Two Voices (~55)
 *Story:* Every harmony student is told that parallel fifths are forbidden. In the ninth century they were the
 rule. In 2001 Huron derived the textbook's rules from experiments on how hearing separates sounds into streams:
-the rules are instructions for keeping two voices audible as two. The part teaches Fux's species as engineering.
-*Covers:* organum; cantus firmus; the four motions; species one to five; passing tones, neighbours and
-suspensions; stream segregation, fusion and onset synchrony; independence measured; Bach's inventions.
-*Built and computed:* a species checker and a search-based generator; every valid first-species line against the
-Tune, counted; rules removed one at a time and the damage measured.
-*Variation 16:* the Tune as cantus firmus through the five species.
-*Frontier:* corpus tests of the perceptual account; counterpoint as constraint satisfaction.
+the rules are instructions for keeping two voices audible as two. The part teaches Fux's species as engineering:
+it counts every line his rules allow, removes the rules one at a time, and measures what breaks.
+1. Hook: the Tune with a voice a fifth below it, and with a counterpoint above it; the forbidden rule; the plan.
+2. One voice, made thicker: the *Musica enchiriadis*; simple and composite organum; parallel, oblique and free
+   organum heard and measured; the timeline to 1500.
+3. When two notes become one: Stumpf's fusion; shared harmonics, 1/q; octaves or thirds (an ear question).
+4. Moving together: the four motions; common fate and pitch co-modulation; how often the rules choose contrary
+   motion.
+5. Starting together: an octave, together and 35 ms apart (an ear question); how late is late; onsets by species.
+6. Fux's exercise: the *Gradus*; the cantus; twelve rules and what each protects; the best line; a line below.
+7. How many good lines: the funnel to 152; counting by hand (a worked example); the redundant rule; the Tune.
+8. Remove a rule: the damage, rule by rule; two broken lines (an ear question).
+9. Two notes against one: passing dissonance; second species heard.
+10. Four notes against one: neighbours and skips; third species heard.
+11. Held over: preparation, suspension, resolution; the same notes held over (an ear question); fourth species.
+12. Florid, and independent: fifth species; independence measured, organum to florid; Huron's six principles.
+13. Frontier: counterpoint by machine; corpus tests of the perceptual account; what makes a good line.
+14. Variation 16: the Tune as a cantus firmus. Outro: problems, payoffs.
+
+*Covers:* organum (parallel, oblique, free); cantus firmus; the four motions; species one to five; passing tones,
+neighbours and suspensions; counterpoint below the cantus; stream segregation, tonal fusion, pitch co-modulation
+and onset synchrony; independence measured; Huron's derivation of the rules.
+*Built and computed:* `monochord/counterpoint.py`: Fux's twelve rules as exact predicates; every first-species line
+counted by dynamic programming and sampled uniformly; a checker; species two to five by randomized search; an
+independence measure; rules removed one at a time and the damage measured on uniform samples. Bach's Inventions
+are cited from Huron's corpus studies, not analysed here (no score files offline).
+*Variation 16:* the Tune as cantus firmus, in organum and then through the five species.
+*Frontier:* corpus tests of the perceptual account; counterpoint as constraint satisfaction; what makes one good
+line better than another.
 *Reading:* Fux, *Gradus ad Parnassum* (1725); Huron (2001); Jeppesen; Salzer & Schachter.
 
 ### Part 17 · Four Voices (~55)

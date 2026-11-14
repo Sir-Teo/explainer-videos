@@ -345,4 +345,57 @@ PARTS = [
         also=(("Monochord's keys: profiles, key finders, the map of keys", "explainer/music/monochord/key.py"),
               ("Pictures of keys: the circle of fifths, the torus laid flat, a meter of keys", "explainer/music/keyviz.py")),
     ),
+    Part(
+        n=16, level="U", widget="counterpoint", prereq=(4, 7, 14, 15),
+        question="What makes two voices sound like two, and how do the rules of counterpoint keep them apart?",
+        story="Around 900 the Musica enchiriadis taught singers to double a chant a fifth below; eight centuries "
+              "later Fux forbade exactly that, parallel fifths. The two rules are not opposed: organum wanted one "
+              "voice made thicker, counterpoint wants two voices heard as two. Part 4's harmonics explain why "
+              "fifths and octaves fuse (most shared partials: strength 1/2 and 1 against 1/4 for a major third); "
+              "moving together binds two notes into one stream, and starting together does too, so a 35 ms "
+              "head start pulls a voice out of a chord. Fux's Gradus ad Parnassum (1725) sets a cantus firmus "
+              "and twelve rules for a line above it. Monochord counts the lines exactly by dynamic programming: "
+              "of 4,628,074,479,616 sequences of keys, 152 obey every rule, one in thirty billion; over the "
+              "Tune, about 24 billion. Removing one rule at a time shows what each does: without consonance "
+              "184 times as many lines, a third of their verticals dissonant; without the direct-motion rule "
+              "fused moments appear (9 in a hundred); the parallel-fifths rule removes nothing the "
+              "direct-motion rule has not already removed. Almost every rule follows from Huron's six "
+              "perceptual principles: toneness, minimum masking, tonal fusion, pitch proximity, pitch "
+              "co-modulation, onset synchrony. The species add ways to move apart in time: passing and "
+              "neighbouring dissonances on weak beats, then suspensions, dissonance as delay; notes beginning "
+              "together fall from 100% in first species to 52, 27 and 5% in the second, third and fourth. "
+              "Counterpoint by machine began with Schottstaedt's species program (1984) and Ebcioglu's chorale "
+              "rules (1988); a line the rules allow is not yet a good line. The Tune becomes a cantus firmus: in "
+              "organum, then under each species in turn.",
+        handoff="Four voices and the rules of voice leading in Part 17; progressions in Part 18; canon and fugue "
+                "in Part 20; the Renaissance and Palestrina in Parts 23 and 24; composing machines in Part 42; "
+                "separating voices in a recording in Part 64.",
+        outside="Part 4 for harmonics and fusion; Part 7 for the piano; Part 14 for pitch proximity and the leap "
+                "rule; Part 15 for the leading note and cadences. Counting by dynamic programming; a little "
+                "probability.",
+        objectives={
+            "U": ["Name the four kinds of motion between two voices, by eye and by ear.",
+                  "Write a first-species line above a cantus firmus, and check it against Fux's twelve rules.",
+                  "Place passing, neighbouring and suspended dissonances where the species allow them."],
+            "M": ["Count the lines that obey a set of rules by dynamic programming, and sample one uniformly.",
+                  "Measure what a rule does by removing it, and find a rule that is redundant given the others.",
+                  "Measure two voices' independence: motion, fused moments, and onsets in common."],
+            "D": ["Derive the rules of voice leading from Huron's perceptual principles, and say which rules they do not explain.",
+                  "Say what a constraint solver for counterpoint leaves out, and how one could test whether composers obey the principles more than chance."],
+            "I": ["Keep two parts apart in an arrangement: by motion, by register, and by timing.",
+                  "Hear when two instruments fuse in a mix, and separate them by moving one, or by a small offset in time."],
+        },
+        results=[
+            ("Fusion by shared harmonics", r"p\!:\!q \ \text{in lowest terms}: \ \text{strength} = 1/q; \ \text{octave } 1, \ \text{fifth } \tfrac12, \ \text{fourth, major sixth } \tfrac13, \ \text{major third } \tfrac14"),
+            ("Lines over Fux's cantus", r"4{,}628{,}074{,}479{,}616 \ \to \ 152 \ \text{lines obey all twelve rules} \ (\approx 1 \text{ in } 3 \times 10^{10})"),
+            ("Counting by dynamic programming", r"N_i(p, s) = \sum_{p' : \ \text{allowed}(i, p, s \to p')} N_{i+1}(p', s')"),
+            ("A redundant rule", r"\#\{\text{all rules but parallel fifths}\} = 152 = \#\{\text{all rules}\}"),
+            ("Notes beginning together", r"\text{organum and species 1: } 100\%; \quad \text{species 2, 3, 4: } 52\%, \ 27\%, \ 5\%"),
+            ("Fused moments", r"\text{organum } 100\%; \quad \text{every species } 0\%"),
+        ],
+        U=(0, 1, 3, 5, 8, 9, 10),
+        D=(12,),
+        I=(4,),
+        also=(("Monochord's counterpoint: Fux's rules, exact counts, the five species, independence", "explainer/music/monochord/counterpoint.py"),),
+    ),
 ]

@@ -70,3 +70,25 @@ def test_species():
     org = K.organum([60, 60, 67, 67, 69, 69, 67])
     ind = K.independence([(p, k, 1) for k, p in enumerate([60, 60, 67, 67, 69, 69, 67])], [(p, k, 1) for k, p in enumerate(org)])
     assert ind["fused"] == 1.0 and ind["parallel"] == 1.0
+
+
+def test_below_the_cantus_and_other_cadences():
+    # below: the first note an octave or unison under the cantus, the leading note a third below it at the cadence
+    assert K.count(CF, below=True) == 42
+    line = K.best(CF, below=True, tries=600)
+    assert K.check(CF, line, below=True) == [] and K.vertical(CF[0], line[0], True) % 12 == 0 and line[-2] % 12 == 1
+    short = [62, 65, 64, 62]
+    import itertools
+    cands = K.candidates(short, below=True)
+    assert sum(1 for l in itertools.product(*cands) if not K.check(short, list(l), below=True)) == K.count(short, below=True)
+    # a cantus that rises to its final: the counterpoint falls to it from the step above
+    up = [60, 62, 65, 64, 62, 59, 60]
+    assert K.count(up) > 0 and all(l[-2] % 12 == 2 for l in (K.sample(up, rng=np.random.default_rng(s)) for s in range(20)))
+
+
+def test_fourth_species_breaks_a_tie_only_when_it_must():
+    cf = [60, 62, 65, 64, 62, 67, 65, 64, 62, 60]                 # a leap of a fifth up: no unbroken chain of ties fits
+    assert K._search(cf, [4] * len(cf), cf[-1], np.random.default_rng(0), budget=30000) is None
+    line = K.species(cf, 4, np.random.default_rng(1), tries=20)
+    assert line is not None and line[-1][0] % 12 == 0
+    assert K.independence(line, [(c, 4.0 * k, 4.0) for k, c in enumerate(cf)])["fused"] == 0
