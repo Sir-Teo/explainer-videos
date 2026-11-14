@@ -20,10 +20,10 @@ class Outro(SoundScene):
         v = load("variation")
         c = clip("tune.variation23")
         head = VGroup(label(r"Variation 23", font_size=48, color=TUNE), label(r"the Tune, \ three centuries early", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.5, aligned_edge=DOWN).to_edge(UP, buff=0.3)
-        g1 = mroll(d["chant"], width=3.6, height=1.6, lo=58, hi=79, color=TUNE)
-        g2 = voices_roll([d["chant"], d["organum"]], width=3.6, height=1.6, colors=[TUNE, BLUE], lo=58, hi=79)
+        g1 = mroll(d["chant"], width=3.9, height=2.6, lo=58, hi=79, color=TUNE)
+        g2 = voices_roll([d["chant"], d["organum"]], width=3.9, height=2.6, colors=[TUNE, BLUE], lo=58, hi=79)
         m = d["motet"]
-        g3 = voices_roll([m["upper"], m["tenor"]], width=3.6, height=1.6, colors=[TUNE, GREY_A], lo=50, hi=79)
+        g3 = voices_roll([m["upper"], m["tenor"]], width=3.9, height=2.6, colors=[TUNE, GREY_A], lo=50, hi=79)
         cols = VGroup(*[VGroup(label(t, font_size=20, color=GREY_A), g).arrange(DOWN, buff=0.25) for t, g in (
             (r"as chant", g1), (r"as organum at the fifth", g2), (r"as an isorhythmic motet", g3))]).arrange(RIGHT, buff=0.55).move_to(UP * 0.4)
         with self.voiceover(

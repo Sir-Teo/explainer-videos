@@ -45,7 +45,7 @@ class Subtilior(SoundScene):
         labs_ = VGroup(label(r"three to the span", font_size=19, color=EAR), label(r"four to the span", font_size=19, color=TUNE),
                        label(r"two to the span", font_size=19, color=BLUE)).arrange(RIGHT, buff=0.8).next_to(g, UP, buff=0.3)
         head = label(r"three voices in proportion \ (ours)", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
-        cap = label(r"they agree only at the dashed lines: \ the common grid is twelve to the span", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.4)
+        cap = label(r"they agree only at the dashed lines: \ the common grid is twelve to the span", font_size=21, color=GREY_A).next_to(g, DOWN, buff=0.3)
         with self.voiceover(
             "Here is the idea in its simplest form, computed for the film: three voices dividing the same span of time "
             "into three, four and two. They agree only at the dashed lines. To place every note on one grid you need "

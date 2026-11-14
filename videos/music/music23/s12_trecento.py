@@ -40,9 +40,7 @@ class Trecento(SoundScene):
             "are for three voices. It is not a random sample of the century, and nothing in it is by Machaut, but it is "
             "large enough to count."
         ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows_], lag_ratio=0.15), run_time=1.5)
+            self.play(FadeIn(head), LaggedStart(*[FadeIn(r) for r in rows_], lag_ratio=0.15), run_time=1.5)
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in kinds], lag_ratio=0.2), run_time=1.5)
         self.wait(0.4)
@@ -81,9 +79,9 @@ class Trecento(SoundScene):
             "A century after Pérotin, the beat still belongs to the perfect intervals, while thirds and sixths, "
             "officially imperfect, do most of the work in between."
         ) as vo:
-            self.play(FadeIn(cap), FadeIn(key))
+            self.play(FadeIn(cap), FadeIn(key), FadeIn(bars[0]))
             vo.wait_until("a")
-            self.play(FadeIn(bars[0]))
+            self.play(Indicate(bars[0], color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(bars[1]))
         self.wait(0.4)

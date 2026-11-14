@@ -16,16 +16,16 @@ class Frontier(SoundScene):
     def ficta(self):
         d = load("census")["ficta"]
         kinds = sorted(d["kinds"].items(), key=lambda x: -x[1])
-        bars = columns([v for _, v in kinds], [k.replace("♯", r"$\sharp$").replace("♭", r"$\flat$") for k, _ in kinds], width=5.6, height=2.6, color=EAR, fmt="{:.0f}", font_size=18)
-        bars.move_to(LEFT * 3.3 + DOWN * 0.3)
+        bars = columns([v for _, v in kinds], [k.replace("♯", r"$\sharp$").replace("♭", r"$\flat$") for k, _ in kinds], width=5.0, height=2.6, color=EAR, fmt="{:.0f}", font_size=20)
+        bars.move_to(LEFT * 3.7 + DOWN * 0.3)
         t = label(r"notes outside Guido's gamut, \ by name", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.35)
-        side = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
+        side = VGroup(*[label(s, font_size=24, color=c_) for s, c_ in (
             (rf"{d['outside']:,} of {d['notes']:,} notes \ ({100 * d['outside'] / d['notes']:.1f} in 100)".replace(",", "{,}"), WHITE),
-            (r"none of them in Guido's gamut: \ \textit{musica ficta}, \ `feigned music'", WHITE),
-            (rf"{100 * d['rising'] / d['outside']:.0f} in 100 rise a semitone to the next note: \ leading tones", TUNE),
-            (r"mostly the editors' choices, \ by the singers' rules: \ for necessity and for beauty", EAR))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 6.2))
-        side.move_to(RIGHT * 3.2 + DOWN * 0.2)
+            (r"outside the gamut: \ \textit{musica ficta}, \ `feigned music'", WHITE),
+            (rf"{100 * d['rising'] / d['outside']:.0f} in 100 rise a semitone next: \ leading tones", TUNE),
+            (r"mostly added by editors, \ by the singers' rules", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 6.4))
+        side.move_to(RIGHT * 3.3 + DOWN * 0.2)
         with self.voiceover(
             "Everything counted in this part was counted in a modern edition, and an edition is an interpretation. "
             "<bookmark mark='a'/> Take the sharps. In the corpus, "
