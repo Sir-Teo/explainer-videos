@@ -38,10 +38,10 @@ lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). **Parts 2 to 9
 [`music3/README.md`](music3/README.md)), *The Ear* (48 minutes; [`music4/README.md`](music4/README.md)), *Consonance* (39 minutes;
 [`music5/README.md`](music5/README.md)), *Tuning* (37 minutes; [`music6/README.md`](music6/README.md)), *Strings, Hammers and Bows* (39 minutes;
 [`music7/README.md`](music7/README.md)), *Pipes, Reeds and Voices* (41 minutes; [`music8/README.md`](music8/README.md)) and *Drums, Bars and Bells* (34 minutes;
-[`music9/README.md`](music9/README.md)). **Act II has begun** with Part 10, *Writing It Down* (38 minutes;
+[`music9/README.md`](music9/README.md)). **Act II is built**: Part 10, *Writing It Down* (38 minutes;
 [`music10/README.md`](music10/README.md)) Part 11, *Rhythm and Meter* (32 minutes; [`music11/README.md`](music11/README.md)), Part 12, *Scales and Modes* (32 minutes;
-[`music12/README.md`](music12/README.md)), Part 13, *Intervals and Chords* (40 minutes; [`music13/README.md`](music13/README.md)) and Part 14, *Melody* (33 minutes;
-[`music14/README.md`](music14/README.md)); the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
+[`music12/README.md`](music12/README.md)), Part 13, *Intervals and Chords* (40 minutes; [`music13/README.md`](music13/README.md)), Part 14, *Melody* (33 minutes;
+[`music14/README.md`](music14/README.md)) and Part 15, *Key* (34 minutes; [`music15/README.md`](music15/README.md)), which completes Act II; the running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
 
 ## The story
 

@@ -446,4 +446,92 @@
       note: "With no memory and notes that crowd the middle, about eight leaps in ten turn back, though nothing in the urn knows what a leap is. Set the crowding to zero: the notes are now equally likely, and still most leaps turn back, because a leap away from the middle lands near an edge. Give the notes a liking for their neighbours and the melody begins to sound like a tune; the three bars keep their order. In the fifty-four tunes of the film the figures are 75, 78 and 20."
     });
   };
+  // ---- Part 15: a key finder you can watch ---------------------------------------------------------------------
+  var TUNES15 = [{"name": "the Tune", "mode": "major", "p": [0, 0, 7, 7, 9, 9, 7, 5, 5, 4, 4, 2, 2, 0, 7, 7, 5, 5, 4, 4, 2, 7, 7, 5], "b": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 1.0]}, {"name": "Frère Jacques", "mode": "major", "p": [0, 2, 4, 0, 0, 2, 4, 0, 4, 5, 7, 4, 5, 7, 7, 9, 7, 5, 4, 0, 7, 9, 7, 5], "b": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, 0.5, 0.5, 0.5, 0.5, 1.0, 1.0, 0.5, 0.5, 0.5, 0.5]}, {"name": "Ode to Joy", "mode": "major", "p": [4, 4, 5, 7, 7, 5, 4, 2, 0, 0, 2, 4, 4, 2, 2, 4, 4, 5, 7, 7, 5, 4, 2, 0], "b": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.5, 0.5, 2.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]}, {"name": "Greensleeves", "mode": "minor", "p": [0, 3, 5, 7, 9, 7, 5, 2, -2, 0, 2, 3, 0, 0, -1, 0, 2, -1, -5, 0, 3, 5, 7, 9], "b": [1.0, 2.0, 1.0, 1.5, 0.5, 1.0, 2.0, 1.0, 1.5, 0.5, 1.0, 2.0, 1.0, 1.5, 0.5, 1.0, 2.0, 1.0, 2.0, 1.0, 2.0, 1.0, 1.5, 0.5]}, {"name": "Happy Birthday to You", "mode": "major", "p": [-5, -5, -3, -5, 0, -1, -5, -5, -3, -5, 2, 0, -5, -5, 7, 4, 0, -1, -3, 5, 5, 4, 0, 2], "b": [0.75, 0.25, 1.0, 1.0, 1.0, 2.0, 0.75, 0.25, 1.0, 1.0, 1.0, 2.0, 0.75, 0.25, 1.0, 1.0, 1.0, 1.0, 1.0, 0.75, 0.25, 1.0, 1.0, 1.0]}, {"name": "Amazing Grace", "mode": "major", "p": [-5, 0, 4, 0, 4, 2, 0, -3, -5, -5, 0, 4, 0, 4, 2, 4, 7, 4, 7, 7, 4, 0, 4, 2], "b": [1.0, 2.0, 0.5, 0.5, 2.0, 1.0, 2.0, 1.0, 2.0, 1.0, 2.0, 0.5, 0.5, 2.0, 0.5, 0.5, 3.0, 0.5, 0.5, 2.0, 0.5, 0.5, 2.0, 1.0]}, {"name": "Drunken Sailor", "mode": "minor", "p": [7, 7, 7, 7, 7, 7, 7, 0, 3, 7, 5, 5, 5, 5, 5, 5, 5, -2, 2, 5, 7, 7, 7, 7], "b": [1.0, 0.5, 0.5, 1.0, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0, 0.5, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 0.5, 1.0]}];
+  var KK15 = [[6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88], [6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17]];
+  var TP15 = [[0.748, 0.060, 0.488, 0.082, 0.670, 0.460, 0.096, 0.715, 0.104, 0.366, 0.057, 0.400], [0.712, 0.084, 0.474, 0.618, 0.049, 0.460, 0.105, 0.747, 0.404, 0.067, 0.133, 0.330]];
+  var NAMES15 = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
+  function corr15(a, b) {
+    var n = a.length, ma = 0, mb = 0, i, sab = 0, saa = 0, sbb = 0;
+    for (i = 0; i < n; i++) { ma += a[i] / n; mb += b[i] / n; }
+    for (i = 0; i < n; i++) { sab += (a[i] - ma) * (b[i] - mb); saa += (a[i] - ma) * (a[i] - ma); sbb += (b[i] - mb) * (b[i] - mb); }
+    return saa > 0 && sbb > 0 ? sab / Math.sqrt(saa * sbb) : 0;
+  }
+  // the share of time on each of the twelve notes in the first n notes of a tune, moved up by `shift` semitones
+  function dist15(tune, n, shift) {
+    var d = [], i, total = 0;
+    for (i = 0; i < 12; i++) d.push(0);
+    for (i = 0; i < Math.min(n, tune.p.length); i++) { d[(((tune.p[i] + shift) % 12) + 12) % 12] += tune.b[i]; total += tune.b[i]; }
+    for (i = 0; i < 12; i++) d[i] /= Math.max(total, 1e-9);
+    return d;
+  }
+  // the correlation of the notes with each of the 24 keys' profiles: 12 major, then 12 minor
+  function scores15(d, prof) {
+    var out = [], mode, t, k;
+    for (mode = 0; mode < 2; mode++) for (t = 0; t < 12; t++) {
+      var p = [];
+      for (k = 0; k < 12; k++) p.push(prof[mode][(k - t + 12) % 12]);
+      out.push(corr15(d, p));
+    }
+    return out;
+  }
+  function tuneSound15(tune, n, shift) {
+    var rate = 44100, beat = 0.34, total = 0, i, k, h;
+    for (i = 0; i < Math.min(n, tune.p.length); i++) total += tune.b[i];
+    var out = new Float32Array(Math.floor((total * beat + 0.9) * rate)), t0 = 0;
+    for (i = 0; i < Math.min(n, tune.p.length); i++) {
+      var hz = 261.63 * Math.pow(2, (tune.p[i] + shift) / 12), start = Math.floor(t0 * rate), len = Math.floor((tune.b[i] * beat + 0.5) * rate);
+      for (k = 0; k < len && start + k < out.length; k++) {
+        var t = k / rate, y = 0;
+        for (h = 1; h <= 6; h++) y += Math.sin(2 * Math.PI * hz * h * t) / (h * h) * Math.exp(-t * (2.5 + 0.9 * h));
+        out[start + k] += 0.3 * y * Math.min(1, t / 0.004);
+      }
+      t0 += tune.b[i] * beat;
+    }
+    return play(out, rate);
+  }
+
+  W.key = function (el) {
+    QB.widget(el, {
+      title: "A key finder you can watch",
+      sub: "Choose a tune, move it to any key, and let the key finder hear its first few notes. Left: how much of the time each of the twelve notes has sounded. Right: how well that matches each of the 24 keys (twelve major, then twelve minor); the tallest bar is the key finder's answer. Add notes one at a time and watch it change its mind.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "tune", label: "The tune (0 the Tune, 1 Frère Jacques, 2 Ode to Joy, 3 Greensleeves, 4 Happy Birthday, 5 Amazing Grace, 6 Drunken Sailor)", min: 0, max: 6, step: 1, value: 0 },
+        { k: "n", label: "Notes heard so far", min: 1, max: 24, step: 1, value: 7 },
+        { k: "shift", label: "Moved up by so many semitones (0 puts the home note on C)", min: 0, max: 11, step: 1, value: 0 },
+        { k: "prof", label: "Profiles (0: listeners' ratings, 1982; 1: counts from music, 2007)", min: 0, max: 1, step: 1, value: 1 },
+      ],
+      buttons: [
+        { label: "Play the notes heard", act: function (s, v) { s.sound = tuneSound15(TUNES15[s.tune], s.n, s.shift); } },
+      ],
+      init: function (s) { s.sound = null; s.tune = 0; s.n = 7; s.shift = 0; },
+      draw: function (g, v, s) {
+        var tune = TUNES15[v.tune], d = dist15(tune, v.n, v.shift), sc = scores15(d, v.prof ? TP15 : KK15), idx = [], i, best = 0;
+        s.tune = v.tune; s.n = v.n; s.shift = v.shift; s.scores = sc;
+        for (i = 0; i < 24; i++) if (sc[i] > sc[best]) best = i;
+        s.best = best;
+        var second = best === 0 ? 1 : 0;
+        for (i = 0; i < 24; i++) if (i !== best && sc[i] > sc[second]) second = i;
+        s.second = second;
+        var twelve = [];
+        for (i = 0; i < 12; i++) twelve.push(i + 1);
+        var a = g[0].axes({ x: [0.3, 12.7], y: [0, Math.max.apply(null, d) * 1.15 + 0.01], title: "Time on each note so far", xlabel: "C  D♭  D  E♭  E  F  F♯  G  A♭  A  B♭  B", xticks: [], ylabel: "share" });
+        a.bars(twelve, d, 0.7, { color: C.idea });
+        for (i = 0; i < 24; i++) idx.push(i + 1);
+        var b = g[1].axes({ x: [0.3, 24.7], y: [-1, 1], title: "Match with each key: 12 major, then 12 minor", xlabel: "C major ... B major   |   C minor ... B minor", xticks: [], ylabel: "correlation" });
+        b.bars(idx, sc, 0.7, { color: function (k) { return k === best ? C.loss : (k < 12 ? C.idea : C.implied); } });
+      },
+      readout: function (v, s) {
+        var name = function (k) { return NAMES15[k % 12] + (k < 12 ? " major" : " minor"); };
+        var tune = TUNES15[v.tune], truth = NAMES15[v.shift % 12] + " " + tune.mode;
+        return [["tune", tune.name + ", home note on " + NAMES15[v.shift % 12]],
+                ["the key finder says", name(s.best) + "  (r = " + fmt(s.scores[s.best], 2) + ")"],
+                ["its second choice", name(s.second) + "  (r = " + fmt(s.scores[s.second], 2) + ")"],
+                ["is it right?", name(s.best) === truth ? "yes" : "no: the tune is in " + truth + (v.tune === 6 ? " (Dorian: a mode the key finder does not know)" : "")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "With the listeners' ratings the key finder often names the key a fifth too high; with profiles counted from music it is right on nearly every whole tune. Watch the Tune: after its first phrase the answer is C major, at the start of the second phrase (two long Fs) it wavers toward F major, and it settles again by the end, because the Tune has no seventh degree to decide between the two. Drunken Sailor has D as its home and the notes of C major, and neither profile was built for that."
+    });
+  };
 })();

@@ -286,4 +286,63 @@ PARTS = [
               ("The corpus: fifty-four traditional tunes in scale degrees", "explainer/music/monochord/tunes.py"),
               ("Pictures of melodies: a tune as bars in time and pitch, bar charts, a tune against itself", "explainer/music/melodyviz.py")),
     ),
+    Part(
+        n=15, level="U", widget="key",
+        question="What is a key, where does a listener's sense of home come from, and how can a machine find it?",
+        story="Play four chords and then a single tone, and every listener can say how well the tone fits. Krumhansl "
+              "and Kessler did that in 1982 for all twelve notes: the ratings form a hierarchy, the tonic on top, "
+              "then its triad, then the scale, then the five notes outside it. The same ranking is found by "
+              "counting how much of the time each note sounds in fifty-four tunes (r = 0.92), newcomers to "
+              "Indian music pick up a raga's ranking from short passages, and children acquire a key over "
+              "years: a key is learned statistics. In a key the seven chords have three jobs (tonic, "
+              "predominant, dominant), because the chords on four and five hold every leaning note of Part 14, "
+              "and four cadences punctuate phrases. A key finder correlates the notes of a piece with the "
+              "profile of each of the 24 keys. With the listeners' ratings it is right 81 times in a hundred on "
+              "the tunes in all twelve keys, usually missing by a fifth; with profiles counted from music, 98; "
+              "\"the last note\" alone is right 91 times; five notes are usually enough. The best clue is the "
+              "rarest interval: two notes a tritone apart lie in only two major scales, and one more note "
+              "decides. The Tune uses six notes that belong to C major and F major alike, which is why the "
+              "key finder wavers and why a key is a matter of weights, not of membership. Keys a fifth apart "
+              "share six notes; the 24 profiles' similarities lay the keys on a torus, with relative and "
+              "parallel minors beside each major key; signatures are addresses on the circle of fifths. Music "
+              "leaves home by a new leading note and a pivot chord: keys a fifth apart share four triads, two "
+              "fifths apart two, further none; a tonicization visits and a modulation stays. A minor key "
+              "borrows a major dominant. A Dorian sea shanty is in neither mode, and the key finder says so "
+              "by being wrong. In equal temperament every key is the same key, moved; the characters of keys "
+              "came from unequal tunings. The frontier is whether keys are everywhere, when major and minor "
+              "condensed out of the modes, and what exactly a listener stores. The Tune travels through all "
+              "twelve keys and ends on a deceptive cadence.",
+        handoff="Act III begins: two voices in Part 16, four in Part 17, progressions in Part 18, distant keys "
+                "quickly in Part 19. Form as a journey between keys is Part 21. The torus returns as geometry "
+                "in Part 32, and finding the key of a recording in Part 62.",
+        outside="Part 6 for temperaments; Part 12 for the scale, the line of fifths and the interval vector; "
+                "Part 13 for triads, the dominant seventh and Roman numerals; Part 14 for tendency tones, phrase "
+                "endings and the corpus. Correlation; Bayes's rule; a little linear algebra for the map.",
+        objectives={
+            "U": ["Name a key from its signature, and give its relative and parallel keys.",
+                  "Say what job each chord of a major key does, and name the four cadences by ear.",
+                  "Tell a tonicization from a modulation, and find a pivot chord between neighbouring keys."],
+            "M": ["Find the key of a passage by correlating its notes with 24 profiles, and by Bayes's rule.",
+                  "Count the major scales that contain a set of notes, from the interval vector.",
+                  "Compute the similarity of two keys' profiles, and place the keys by multidimensional scaling."],
+            "D": ["Set out the evidence that key profiles are learned from the statistics of music.",
+                  "Say what a profile leaves out (order), and what would decide between profiles and grammars."],
+            "I": ["Transpose a song to suit a voice, and plan the keys of a programme.",
+                  "Harmonize a tune with tonic, predominant and dominant chords.",
+                  "Move between keys smoothly, by pivot chords and by neighbours on the circle of fifths."],
+        },
+        results=[
+            ("The probe-tone hierarchy (C major)", r"6.35 \ (\text{tonic}) > 4.8 \ (\text{triad}) > 3.5 \ (\text{scale}) > 2.4 \ (\text{outside})"),
+            ("Ratings and counts", r"r(\text{ratings}, \text{time on each note in 54 tunes}) = 0.92"),
+            ("The key finder", r"\hat{k} = \arg\max_k \ \operatorname{corr}(d, P_k), \qquad k \in \{24 \text{ keys}\}"),
+            ("Scales containing a pair of notes", r"v = \langle 2, 5, 4, 3, 6, 1 \rangle: \ \text{a fifth is in 6 major scales, a tritone in 2}"),
+            ("Notes two keys share", r"7 - d \quad (d \le 5 \text{ fifths apart}); \qquad \text{triads shared: } 4, 2, 0"),
+            ("Nearest keys to C major", r"r: \ \text{A minor } 0.65, \ \text{G, F } 0.59, \ \text{E minor } 0.54, \ \text{C minor } 0.51"),
+        ],
+        U=(0, 1, 3, 4, 8, 9, 10),
+        D=(2, 12),
+        I=(11,),
+        also=(("Monochord's keys: profiles, key finders, the map of keys", "explainer/music/monochord/key.py"),
+              ("Pictures of keys: the circle of fifths, the torus laid flat, a meter of keys", "explainer/music/keyviz.py")),
+    ),
 ]
