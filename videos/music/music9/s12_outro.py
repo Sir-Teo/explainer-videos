@@ -188,8 +188,8 @@ class Outro(SoundScene):
             "does with it, why some sounds agree, and how strings, pipes, skins and metal are persuaded to "
             "make them. <bookmark mark='a'/> What we have not done is play anything but one small tune. To "
             "go further, music has to be remembered, and handed to someone else. Around the year 1025 a "
-            "monk named Guido drew four lines across a page and boasted that a choirboy could now learn in "
-            "days what used to take years. <bookmark mark='b'/> That is where Act Two begins. Part 10: "
+            "monk named Guido drew four lines across a page and boasted that a singer could now learn in a "
+            "year or two what used to take ten. <bookmark mark='b'/> That is where Act Two begins. Part 10: "
             "Writing It Down."
         ) as vo:
             self.play(FadeIn(act[0]))

@@ -671,13 +671,29 @@ computed), a loaded membrane, a beam solver for carved bars, modal synthesis.
 
 ### Part 10 · Writing It Down (~45)
 *Story:* A clay tablet from Ugarit, about 1400 BCE, holds the oldest notated song, and scholars disagree on how it
-goes. Around 1025 Guido of Arezzo boasted that with his staff a boy could learn in days what had taken years.
-Notation is a coordinate system, time against pitch, drawn three centuries before Oresme. The part asks what each
-system keeps and what it throws away.
+goes. Around 1025 Guido of Arezzo claimed that with his lines a singer could learn in a year or two what had taken
+ten. Notation is a coordinate system, time against pitch, drawn three centuries before Oresme. The part asks what
+each system keeps and what it throws away.
+1. Hook: the tablet's first line, read two ways; Isidore: sounds cannot be written down; the plan.
+2. A reminder: neumes; three melodies that fit the same signs (an ear question); counting them; the first line.
+3. Guido's lines: the staff and its clefs; the staff as a graph; *Ut queant laxis*; the hidden half step.
+4. How long? Franco's shapes; perfect and imperfect time; a note read by its neighbours; dots and ties (a
+   predict-pause); the rule for dots.
+5. Bars and scores: part books; the score and the bar line; a note cut at a bar line; what was added later.
+6. What to do: tablature and its count of fingerings, by dynamic programming; figured bass, realized twice.
+7. Numbers and characters: gongche; Rousseau and jianpu; guqin tablature; graphic scores.
+8. Holes and bytes: the piano roll; MIDI's bytes; what a key number forgets (an ear question: G♯ and A♭).
+9. The page as data: MusicXML and MEI; round trips; the table of what each notation keeps.
+10. How many bits? Files; 168 bits against 21 million; the page played exactly and played well (an ear question).
+11. Frontier: reading a page back, as a toy that a tilt breaks (an ear question); where the field stands.
+12. Variation 10: the Tune in ten notations, and a last phrase as none of them says. Outro: problems, payoffs.
+
 *Covers:* neumes; the staff and the hexachord; mensural notation and the invention of written duration; barlines
 and scores; tablature; figured bass; jianpu, gongche and guqin tablature; graphic scores; piano rolls; MIDI,
 MusicXML and MEI; the bits in a score against the bits in its recording.
-*Built and computed:* Monochord's `score` module, its readers and writers, and the engraver bridge.
+*Built and computed:* Monochord's `score` module (spelled pitches, exact durations; MusicXML, MEI, MIDI, ABC,
+LilyPond and jianpu writers; MusicXML and MIDI readers; contours, tablature, figured bass, mensural lengths,
+performance rules, a toy page reader), and the series' engraver (`explainer/music/staff.py`).
 *Variation 10:* the Tune in ten notations, then what none of them recorded.
 *Frontier:* optical music recognition; encoding standards; digital critical editions.
 *Reading:* Kelly, *Capturing Music*; Gould, *Behind Bars*; Selfridge-Field (ed.), *Beyond MIDI*.
@@ -1478,7 +1494,7 @@ final ledger; Monochord's layers, tests and references in one table.
 | A music mastering profile and stem mixing | `tools/build.py` | narration-only high-pass; fixed music gain; peak gate |
 | Sound QA | `tools/qa_sound.py`, `tools/dead_air.py` | sync, overlap, peaks, silence, phone audition |
 | Listening time in the length estimate; floor 30, ceiling 60 | `tools/lecture_length.py` | reads cue sheets |
-| The engraver bridge | `explainer/music/score/engrave.py` | Verovio or LilyPond, chosen by the pilot |
+| The engraver | `explainer/music/staff.py` (`Staff`), `explainer/music/notations.py` | the series' own, on the installed FreeSerif music symbols (Part 10); Verovio or LilyPond behind the same interface if the owner chooses (§9) |
 | Series registration | `explainer/paths.py`, `tools/series_site.py`, `tools/make.py`, `tests/test_series_site.py` | when Part 1 lands |
 | Sound in interactives | the widget core, `tools/check_widgets.js` | Web Audio, started by a click |
 | Optional test references | `pyproject.toml` extra `music-qa` | `librosa`, `mir_eval`; never needed to build a film |
@@ -1516,9 +1532,10 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-13 | **Part 7, *Strings, Hammers and Bows***: 12 chapters, 39.2 min narrated of which 1.7 min listening in 12 windows; 5 pause-and-listen questions, 1 demonstration to listen for, 4 worked examples with predict-pauses; Variation 7 (a guitar, a piano and a violin from one string); Lab 7 and the bowed-string interactive (Schelleng's wedge, simulated in the page); Monochord's string instruments (`instruments/strings.py`: Karplus–Strong, a felt hammer on a stiff string, coupled unisons, a bowed string with stick-slip friction, Schelleng's limits, the two-mass guitar, bodies as banks of resonances; `tests/music/test_strings.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 8, *Pipes, Reeds and Voices***: 12 chapters, 40.6 min narrated of which 1.6 min listening in 15 windows; 6 pause-and-listen questions, 6 demonstrations to listen for, 4 worked examples with predict-pauses; Variation 8 (a flute, a clarinet, a saxophone, a trumpet and a voice, each tuned by being built, blown and trimmed); Lab 8 and the vowel interactive (a two-tube mouth, its formants computed in the page); Monochord's winds (`instruments/winds.py`: bores by transfer matrices with wall losses and radiation, reflection functions, a reed valve, a lip valve, a jet, a source-filter voice, formants of tubes; `tests/music/test_winds.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 9, *Drums, Bars and Bells***: 12 chapters, 34.1 min narrated of which 1.8 min listening in 16 windows; 5 pause-and-listen questions, 7 demonstrations to listen for, 3 worked examples with predict-pauses; Variation 9 (marimba, bells, steelpan and kettledrums); Lab 9 and the drum interactive (where a skin is struck, bare, as a kettledrum and as a tabla); Monochord's percussion (`instruments/percussion.py`: Bessel modes, a finite-element membrane for any polygon with the isospectral drums of 1992 computed and checked against Driscoll's values, a loaded membrane, a beam solver for carved bars, bells from published partials, Chladni figures, gliding gongs, modal synthesis; `tests/music/test_percussion.py`); every gate clean, narration listen-tested. **Act I is complete.** The engraver pilot for Part 10 could not be run in this session: installing Verovio's wheel was refused by the session's permission policy, so the choice of engraver (§9, item 5) is still the owner's to make. |
+| 2026-11-14 | **Part 10, *Writing It Down***: 12 chapters, 37.7 min narrated of which 3.4 min listening in 12 windows; 4 pause-and-listen questions, 5 demonstrations to listen for, 1 predict-pause; Variation 10 (the Tune read from ten notations, two to a phrase, and a sixth phrase played by four rules of performance); Lab 10 and the notation interactive (every melody that fits a row of neumes, on a staff, as a piano roll and in numbers); Monochord's score (`monochord/score/`: spelled pitches and exact durations, MusicXML, MEI, MIDI, ABC, LilyPond and jianpu writers, MusicXML and MIDI readers, contour counts, tablature by dynamic programming, figured-bass realizations, Franco's rules, performance rules, a toy page reader; `tests/music/test_score.py`, `test_notations.py`); every gate clean, narration listen-tested. **The engraver:** with Verovio not installable in this session, the series now has its own (`explainer/music/staff.py`, tested in `tests/music/test_staff.py`): one voice to a staff, clefs, key and time signatures, beams, dots, ties, accidentals, ledger lines, rests and words, drawn from the installed FreeSerif music symbols, with a time-to-page map for cursors. It needs no new dependency; it has no chords, slurs or second voices yet, and can be replaced behind the same `Staff` interface if the owner prefers Verovio (§9, item 5). Part 9's closing line about Guido was corrected (a year or two in place of ten) and its film rebuilt. |
 
-**Still open from §6:** the engraver bridge and `Staff` (needed from Part 10; the Verovio/LilyPond pilot comes
-before Part 10 is opened), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for
+**Still open from §6:** chords, slurs and a second voice on a staff in the series' engraver (needed from Parts 13
+and 16), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for
 Part 1:** the 1080p master (the narrated film has been built and gated at 480p), a human listening pass (every
 sound so far has been judged by measurement and by spectrogram, none by ear), and the Chinese edition (Phase 6).
 
@@ -1548,7 +1565,11 @@ change with every part.*
 3. **Languages.** English and Chinese as planned, or English first.
 4. **The number of parts.** Sixty-eight is the comprehensive plan. A fifty-part cut would merge 8–9, 23–24, 34–37
    into two, 51–52, 61–62, and 65–66, and fold 67 into 68.
-5. **The engraver.** Add one dependency (Verovio's wheel, or a system LilyPond) after the pilot's test.
+5. **The engraver.** Part 10 was built with the series' own engraver (`explainer/music/staff.py`), which needs no
+   new dependency, because installing Verovio's wheel was refused by the build session's permission policy. It
+   draws one voice to a staff and will have to grow chords, slurs and second voices for Parts 13 to 22. The
+   alternative is still open: approve one dependency (Verovio's wheel, or a system LilyPond) and the scenes keep
+   working, since they use only the `Staff` interface.
 6. **The compute exceptions** for Parts 64 and 66 (up to 6 h and 8 h on CPU, resumable), or smaller models with
    weaker results.
 7. **Length.** The gate is 30–60 minutes including listening windows; Part 68 is planned at the ceiling.

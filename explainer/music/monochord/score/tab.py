@@ -34,15 +34,18 @@ def _cost(a, b) -> float:
     return 1.0 * move + 0.3 * abs(s2 - s1) + 0.15 * f2
 
 
-def fingering(midis, tuning=GUITAR, frets: int = 12) -> dict:
-    """The tablature with the least movement (dynamic programming over every choice for every note)."""
+def fingering(midis, tuning=GUITAR, frets: int = 12, cost=None, first=None) -> dict:
+    """The tablature with the least movement (dynamic programming over every choice for every note).  ``cost(a, b)``
+    replaces the cost of going from position ``a`` to ``b``; ``first(a)`` the cost of starting at ``a``."""
+    cost = cost or _cost
+    first = first or (lambda a: 0.15 * a[1])
     options = [positions(m, tuning, frets) for m in midis]
     if any(not o for o in options):
         raise ValueError("a note is off the instrument")
-    best = [np.array([0.15 * f for _, f in options[0]])]
+    best = [np.array([first(a) for a in options[0]])]
     back = []
     for k in range(1, len(options)):
-        c = np.array([[best[-1][i] + _cost(a, b) for i, a in enumerate(options[k - 1])] for b in options[k]])
+        c = np.array([[best[-1][i] + cost(a, b) for i, a in enumerate(options[k - 1])] for b in options[k]])
         back.append(c.argmin(axis=1))
         best.append(c.min(axis=1))
     j = int(best[-1].argmin())

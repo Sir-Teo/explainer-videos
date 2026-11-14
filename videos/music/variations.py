@@ -23,6 +23,8 @@ LEDGER = [
      "measure": r"every wind note within 8 cents of its pitch"},
     {"part": 9, "title": r"for marimba, bells, steelpan and kettledrums: four instruments that had to be tuned against their nature", "seconds": 29.5,
      "measure": r"its marimba's bars have overtones at 4.00 and 10.0 times their notes"},
+    {"part": 10, "title": r"in ten notations, and then as none of them says", "seconds": 28.45,
+     "measure": r"its page is 168 bits; its sound, \ 127{,}000 times as many"},
 ]
 
 
