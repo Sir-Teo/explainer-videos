@@ -62,15 +62,15 @@ class Dissonance(SoundScene):
         g = d["groups"]["Palestrina"]
         sh = g["shares"]
         order = ["passing", "suspension", "neighbour", "cambiata", "anticipation", "free"]
-        bars = columns([100 * sh[k] for k in order], order, width=8.4, height=2.8, color=TUNE, fmt="{:.1f}", font_size=19)
-        bars.move_to(LEFT * 1.6 + DOWN * 0.3)
+        bars = columns([100 * sh[k] for k in order], order, width=6.6, height=2.8, color=TUNE, fmt="{:.1f}", font_size=19)
+        bars.move_to(LEFT * 2.9 + DOWN * 0.3)
         t = label(rf"all {g['total']:,} dissonances against the bass in Palestrina's {g['pieces']:,} movements, \ in 100s".replace(",", "{,}"), font_size=20, color=GREY_A).to_edge(UP, buff=0.6)
-        side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
+        side = VGroup(*[label(s, font_size=24, color=c_) for s, c_ in (
             (rf"free: \ {100 * sh['free']:.1f} in 100", RED),
             (rf"half the movements: \ under {100 * d['palestrina_free_quantiles'][1]:.0f} in 100", WHITE),
-            (r"some `free' ones are the program's: \ figures it does not know, \ encoding slips", GREY_A))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 3.9))
-        side.move_to(RIGHT * 5.0 + DOWN * 0.2)
+            (r"some `free' ones are the program's: \ unknown figures, \ slips", GREY_A))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 5.4))
+        side.move_to(RIGHT * 3.75 + DOWN * 0.2)
         with self.voiceover(
             f"Now count. A program finds every dissonance against the bass in all {say(g['pieces'])} movements, "
             f"{say(g['total'])} of them, and classifies each by how it is approached and left. <bookmark mark='a'/> "

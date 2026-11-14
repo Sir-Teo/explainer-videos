@@ -33,10 +33,10 @@ class Masses(SoundScene):
             "parody Mass, a whole polyphonic piece, a motet or a chanson, is reworked: its points of imitation, its "
             "cadences, its textures, rearranged into a new work. Most of Palestrina's later Masses are of that kind."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), *[FadeIn(cell[0]) for cell in cells])
             for mark, cell in zip("abc", cells):
                 vo.wait_until(mark)
-                self.play(FadeIn(cell))
+                self.play(FadeIn(cell[1]))
         self.wait(0.4)
         self.clear_scene()
 

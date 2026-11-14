@@ -176,7 +176,7 @@ def compute_kinds() -> dict:
     demos = {
         "passing": ([(72, 0, 2), (71, 2, 2), (69, 4, 4)], [(57, 0, 8)]),
         "neighbour": ([(72, 0, 2), (74, 2, 2), (72, 4, 4)], [(57, 0, 8)]),
-        "suspension": ([(72, 0, 4), (72, 4, 2), (71, 6, 2), (72, 8, 4)], [(57, 0, 4), (62, 4, 4), (60, 8, 4)]),
+        "suspension": ([(72, 0, 6), (71, 6, 2), (72, 8, 4)], [(57, 0, 4), (62, 4, 4), (60, 8, 4)]),
         "cambiata": ([(72, 0, 2), (71, 2, 2), (67, 4, 2), (69, 6, 2), (71, 8, 4)], [(57, 0, 4), (55, 4, 4), (56, 8, 4)]),
     }
     clips, starts = [], {}
@@ -184,7 +184,7 @@ def compute_kinds() -> dict:
         clips.append(sing([u, l], 0.3, parts=["alto", "bass"]).at_level(LEVEL))
     s = concat(clips, gap=0.8, names=list(demos))
     # the ear question: the same cadence with the dissonance prepared (a suspension) and struck freely
-    prep = [[(72, 0, 4), (72, 4, 2), (71, 6, 2), (72, 8, 4)], [(57, 0, 4), (62, 4, 4), (60, 8, 4)]]
+    prep = [[(72, 0, 6), (71, 6, 2), (72, 8, 4)], [(57, 0, 4), (62, 4, 4), (60, 8, 4)]]
     free = [[(69, 0, 4), (72, 4, 2), (71, 6, 2), (72, 8, 4)], [(57, 0, 4), (62, 4, 4), (60, 8, 4)]]
     cA = sing(free, 0.32, parts=["alto", "bass"])
     cB = sing(prep, 0.32, parts=["alto", "bass"])

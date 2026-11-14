@@ -84,7 +84,7 @@ def run(seed=0):
     for k in range(10):
         prepared = bool(rng.random() < 0.5)
         tr = int(rng.integers(-3, 4))
-        up = [(72 + tr, 0, 4), (72 + tr, 4, 2), (71 + tr, 6, 2), (72 + tr, 8, 4)] if prepared else [(69 + tr, 0, 4), (72 + tr, 4, 2), (71 + tr, 6, 2), (72 + tr, 8, 4)]
+        up = [(72 + tr, 0, 6), (71 + tr, 6, 2), (72 + tr, 8, 4)] if prepared else [(69 + tr, 0, 4), (72 + tr, 4, 2), (71 + tr, 6, 2), (72 + tr, 8, 4)]
         lo = [(57 + tr, 0, 4), (62 + tr, 4, 4), (60 + tr, 8, 4)]
         clips.append(sing([up, lo], 0.28))
         answers.append("prepared" if prepared else "struck")
