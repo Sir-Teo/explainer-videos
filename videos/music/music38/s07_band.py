@@ -64,7 +64,7 @@ class Band(SoundScene):
     def riff(self):
         d = load("band")
         c = clip("band.riff")
-        ch = chart(d["changes"], cell_w=2.5, cell_h=0.8, size=20).move_to(UP * 0.6)
+        ch = chart(d["changes"], cell_w=2.5, cell_h=0.8, size=20).move_to(UP * 0.35)
         marks = VGroup()
         for b2 in range(6):
             marks.add(Rectangle(width=2.35, height=0.12, stroke_width=0, fill_color=TUNE, fill_opacity=0.9).next_to(ch.bars[2 * b2], DOWN, buff=-0.2))

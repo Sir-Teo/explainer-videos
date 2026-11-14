@@ -58,12 +58,11 @@ class Hook(SoundScene):
         self.add(g.dots)
         beat = 60.0 / d["bpm"]
         r = d["ratio"]
-        x0 = g.ticks[1].get_center()[0]
-        x1 = g.ticks[2].get_center()[0]
+        x0, x1 = -3.0, 3.0
         xs = x0 + (x1 - x0) * r / (1 + r)
-        long_ = Line([x0, -0.9, 0], [xs, -0.9, 0], color=TUNE, stroke_width=8)
-        short = Line([xs, -0.9, 0], [x1, -0.9, 0], color=EAR, stroke_width=8)
-        lab = VGroup(label(r"long", font_size=18, color=TUNE).next_to(long_, DOWN, buff=0.12), label(r"short", font_size=18, color=EAR).next_to(short, DOWN, buff=0.12))
+        long_ = Line([x0, -1.0, 0], [xs, -1.0, 0], color=TUNE, stroke_width=14)
+        short = Line([xs, -1.0, 0], [x1, -1.0, 0], color=EAR, stroke_width=14)
+        lab = VGroup(label(r"one beat, \ enlarged: \ long", font_size=20, color=TUNE).next_to(long_, DOWN, buff=0.15), label(r"short", font_size=20, color=EAR).next_to(short, DOWN, buff=0.15))
         ans = label(rf"about three times: \ at {d['bpm']} beats a minute the long note takes three quarters of the beat", font_size=21, color=TUNE).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             f"About three times. At {say(d['bpm'])} beats a minute, the long note takes three quarters of the beat and the "
@@ -71,7 +70,7 @@ class Hook(SoundScene):
             "and not the two-to-one of a triplet either. Here is the same line played straight, for comparison."
         ):
             self.play(FadeOut(cap), Create(long_), Create(short), FadeIn(lab), FadeIn(ans))
-        g2 = swing_grid(d["times"]["straight"], d["bpm"], beats, color=BLUE).move_to(DOWN * 2.0)
+        g2 = swing_grid(d["times"]["straight"], d["bpm"], beats, color=BLUE).move_to(DOWN * 2.55)
         self.play(FadeOut(ans), FadeIn(g2.ticks))
         with self.listen(clip("hook.straight")) as snd:
             window(snd, r"the same line, \ straight", detail=r"piano, \ string and cymbal models", corner=DL, tag_corner=DR)

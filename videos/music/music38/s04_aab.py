@@ -45,7 +45,7 @@ class AAB(SoundScene):
     def hear(self):
         d = load("callresp")
         c = clip("callresp.aab")
-        ch = chart(d["changes"], cell_w=2.5, cell_h=0.8, size=20).move_to(UP * 0.7)
+        ch = chart(d["changes"], cell_w=2.5, cell_h=0.8, size=20).move_to(UP * 0.35)
         marks = VGroup()
         for line0, col, txt in ((0, TUNE, r"voice"), (4, TUNE, r"voice"), (8, EAR, r"voice")):
             for k in range(2):

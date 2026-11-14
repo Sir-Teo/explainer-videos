@@ -35,15 +35,12 @@ class Form(SoundScene):
     # ------------------------------------------------------------------
     def chart_(self):
         d = load("form")
-        ch = chart(d["changes"]).move_to(UP * 0.3)
-        roman = VGroup(*[label(r, font_size=16, color=GREY_A).next_to(b, DOWN, buff=0.05).shift(UP * 0.35) for r, b in zip(d["roman"], ch.bars)])
-        lines = VGroup(label(r"lines 1--4: \ the tonic, \ I", font_size=19, color=TUNE),
-                       label(r"lines 5--8: \ to the subdominant, \ IV, \ and back", font_size=19, color=BLUE),
-                       label(r"lines 9--12: \ the dominant, \ V, \ IV, \ home, \ and V to start again", font_size=19, color=EAR))
-        for l_, i in zip(lines, (0, 4, 8)):
-            l_.next_to(ch.bars[i + 3], RIGHT, buff=0.3)
+        ch = chart(d["changes"], cell_w=2.4, cell_h=0.85).move_to(UP * 0.9)
+        roman = VGroup(*[label(r, font_size=16, color=GREY_A).move_to(b[0].get_corner(DR) + UL * 0.2 + LEFT * 0.1) for r, b in zip(d["roman"], ch.bars)])
+        lines = VGroup(label(r"bars 1--4: \ the tonic, \ I", font_size=20, color=TUNE),
+                       label(r"bars 5--8: \ to the subdominant, \ IV, \ and back", font_size=20, color=BLUE),
+                       label(r"bars 9--12: \ the dominant, \ V, \ IV, \ home, \ and V to start again", font_size=20, color=EAR)).arrange(DOWN, buff=0.18, aligned_edge=LEFT).next_to(ch, DOWN, buff=0.45)
         g = VGroup(ch, roman, lines)
-        g.scale_to_fit_width(min(g.width, 13.0)).move_to(DOWN * 0.1)
         head = label(r"the twelve-bar blues, \ in C", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "The commonest blues form is twelve bars long, in three lines of four. <bookmark mark='a'/> The first line stays "
@@ -84,13 +81,13 @@ class Form(SoundScene):
     # ------------------------------------------------------------------
     def variants(self):
         d = load("form")
-        quick = chart(d["quick"], cell_w=1.55, cell_h=0.6, size=17, per_row=12)
-        basic = chart(d["changes"], cell_w=1.55, cell_h=0.6, size=17, per_row=12)
-        jazz = chart(d["jazz"], cell_w=1.55, cell_h=0.6, size=15, per_row=12)
+        quick = chart(d["quick"], cell_w=1.9, cell_h=0.48, size=17, per_row=6)
+        basic = chart(d["changes"], cell_w=1.9, cell_h=0.48, size=17, per_row=6)
+        jazz = chart(d["jazz"], cell_w=1.9, cell_h=0.48, size=16, per_row=6)
         rows_ = VGroup(VGroup(label(r"basic", font_size=18, color=TUNE), basic).arrange(DOWN, buff=0.12),
                        VGroup(label(r"quick change: \ IV in bar 2", font_size=18, color=BLUE), quick).arrange(DOWN, buff=0.12),
                        VGroup(label(r"a jazz blues: \ ii--V's and passing chords", font_size=18, color=EAR), jazz).arrange(DOWN, buff=0.12)).arrange(DOWN, buff=0.45)
-        rows_.scale_to_fit_width(min(rows_.width, 13.0)).move_to(DOWN * 0.1)
+        rows_.scale_to_fit_height(min(rows_.height, 6.6)).move_to(DOWN * 0.15)
         with self.voiceover(
             "The form has many variants. <bookmark mark='a'/> The quick change visits F in the second bar. "
             "<bookmark mark='b'/> A jazz blues fills the frame with more chords: a two-five into F in bar four, a diminished "
