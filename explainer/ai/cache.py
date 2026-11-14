@@ -60,6 +60,18 @@ class Partial:
         self.path.unlink(missing_ok=True)
 
 
+
+def _jsonable(o):
+    """JSON for what ``json`` cannot encode: arrays become lists (as ``tolist`` gives them), NumPy scalars Python ones.
+    (``default=float`` alone fails on any array that is not 0-dimensional, so an item that returns nested arrays
+    could only be cached through a ``nest()`` wrapper that ran under ``python -m ...compute``.)"""
+    if isinstance(o, np.ndarray):
+        return o.tolist()
+    if isinstance(o, np.generic):
+        return o.item()
+    return float(o)
+
+
 class Cache:
     def __init__(self, part: str):
         self.part = part
@@ -115,7 +127,7 @@ class Cache:
         else:
             npz.unlink(missing_ok=True)
         tmp = self.path(name).with_suffix(".tmp.json")
-        tmp.write_text(json.dumps(rest, ensure_ascii=False, indent=1, default=float))
+        tmp.write_text(json.dumps(rest, ensure_ascii=False, indent=1, default=_jsonable))
         tmp.replace(self.path(name))
         (self.dir / f"{name}.partial.json").unlink(missing_ok=True)  # the item is whole: its pieces can go
 
