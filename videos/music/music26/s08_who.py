@@ -9,6 +9,8 @@ class Who(SoundScene):
     def construct(self):
         chapter(self, 7, r"Who wrote this, \ fairly", r"Can a program tell Haydn from Mozart?")
         self.test()
+        self.scatter()
+        self.null()
         self.why()
 
     # ------------------------------------------------------------------
@@ -45,6 +47,71 @@ class Who(SoundScene):
         ) as vo:
             self.play(FadeIn(tab))
             for mark, r in zip("abcde", side):
+                vo.wait_until(mark)
+                self.play(FadeIn(r))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def scatter(self):
+        d = load("style")
+        X = np.array(d["X"])
+        fi = d["features"].index("register span")
+        fj = d["features"].index("cadences per bar")
+        xs, ys = X[:, fi], 100 * X[:, fj]
+        ax = Axes(x_range=[18, 42, 4], y_range=[0, 16, 4], x_length=7.6, y_length=4.4, tips=False,
+                  axis_config={"color": GREY_B, "include_numbers": True, "font_size": 18}).move_to(LEFT * 2.0 + DOWN * 0.4)
+        xl = label(r"register span \ (semitones, \ lowest to highest note)", font_size=18, color=GREY_A).next_to(ax, DOWN, buff=0.25)
+        yl = label(r"cadences \ per 100 bars", font_size=18, color=GREY_A).next_to(ax, LEFT, buff=0.2).shift(UP * 1.2)
+        col = {"haydn": BLUE, "mozart": TUNE, "beethoven": EAR}
+        dots = {c: VGroup() for c in col}
+        for x, y_, c in zip(xs, ys, d["y"]):
+            dots[c].add(Dot(ax.c2p(x, y_), radius=0.07, color=col[c]))
+        key = VGroup(*[label(n, font_size=22, color=col[c]) for c, n in (("haydn", r"Haydn"), ("mozart", r"Mozart"), ("beethoven", r"Beethoven"))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 4.6 + UP * 1.2)
+        note = label(r"each dot: \ one movement", font_size=19, color=GREY_A).next_to(key, DOWN, buff=0.5)
+        with self.voiceover(
+            "Look at the two best single features together, one dot for each movement. Across, the register span, from the "
+            "cello's lowest note to the first violin's highest. Up, the cadences the detector finds in a hundred bars. "
+            "<bookmark mark='a'/> Haydn's movements. <bookmark mark='b'/> Mozart's, on top of them. <bookmark mark='c'/> "
+            "And Beethoven's, spread to the right: he uses more of the instruments' range, and that is most of what the "
+            "test can see. Haydn and Mozart occupy the same cloud."
+        ) as vo:
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(note))
+            for mark, c in zip("abc", ("haydn", "mozart", "beethoven")):
+                vo.wait_until(mark)
+                self.play(LaggedStart(*[FadeIn(x_, scale=0.5) for x_ in dots[c]], lag_ratio=0.08), FadeIn(key[("haydn", "mozart", "beethoven").index(c)]), run_time=1.4)
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def null(self):
+        d = load("style")
+        n = len(d["y"])
+        counts = np.bincount(np.round(np.array(d["null"]) * n).astype(int), minlength=n + 1)
+        ks = list(range(4, 25))
+        real = int(round(d["acc26"] * n))
+        bars = columns([counts[k] for k in ks], [str(k) if k % 2 == 0 else "" for k in ks], width=8.4, height=2.8, color=GREY_B,
+                       hot=(ks.index(real),), hot_color=TUNE, font_size=16)
+        bars.move_to(LEFT * 1.8 + DOWN * 0.3)
+        t = label(r"movements attributed correctly, \ out of 33: \ 2000 shuffles of the composers' names", font_size=19, color=GREY_A).next_to(bars, UP, buff=0.35)
+        side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
+            (rf"shuffled names: \ about {np.mean(d['null']) * n:.0f} right, \ by luck", GREY_A),
+            (rf"the real names: \ {real} right", TUNE),
+            (rf"as many by luck: \ {100 * d['p_perm']:.0f} shuffles in 100", WHITE),
+            (r"the features do carry something of the composer, \ just not much", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 4.6))
+        side.move_to(RIGHT * 4.6 + DOWN * 0.2)
+        with self.voiceover(
+            "Is the test then learning nothing? The standard way to ask is to shuffle the names. Give the thirty-three "
+            "movements their composers' names at random, run the same test, and count the hits; do it two thousand times. "
+            f"<bookmark mark='a'/> With shuffled names the test gets about {say(round(np.mean(d['null']) * n))} right, by luck. "
+            f"<bookmark mark='b'/> With the real names it gets {say(real)}. <bookmark mark='c'/> Only about "
+            f"{say(round(100 * d['p_perm']))} shuffles in a hundred do as well. <bookmark mark='d'/> So the features carry "
+            "real information about the composer, though less than a trivial rule that always says Mozart: two different "
+            "questions, and both answers are true."
+        ) as vo:
+            self.play(FadeIn(t), FadeIn(bars))
+            for mark, r in zip("abcd", side):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

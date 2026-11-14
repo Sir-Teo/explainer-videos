@@ -13,6 +13,8 @@ class Quartet(SoundScene):
         self.genre()
         self.hunt()
         self.counted()
+        self.minuet()
+        self.op33()
 
     # ------------------------------------------------------------------
     def genre(self):
@@ -86,4 +88,41 @@ class Quartet(SoundScene):
                 vo.wait_until(mark)
                 self.play(FadeIn(gg))
         self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def op33(self):
+        items = [
+            (r"1781: \ Haydn offers his Op. 33 quartets, \ `written in a new and special way'", WHITE),
+            (r"a sales pitch, \ and a fair description: \ the motives pass between all four instruments", WHITE),
+            (r"accompaniment and melody trade places: \ `obbligato' accompaniment", WHITE),
+            (r"Mozart's answer: \ six quartets dedicated to Haydn, \ 1782--1785", TUNE),
+            (r"Haydn to Mozart's father: \ `the greatest composer known to me in person or by name'", GREY_A),
+        ]
+        rows_scene(self, r"a new and special way", items,
+                   "One letter marks the turn. <bookmark mark='b'/> In 1781 Haydn offered his Opus 33 quartets to subscribers as written in a new and special way. <bookmark mark='c'/> It was a sales pitch, and also a fair description: the motives pass between all four players, <bookmark mark='d'/> and accompaniment and melody trade places, so that no part is mere filler. <bookmark mark='e'/> Mozart answered with six quartets dedicated to Haydn, written between 1782 and 1785, the Hunt among them. <bookmark mark='f'/> After hearing some of them, Haydn told Mozart's father that his son was the greatest composer he knew in person or by name.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def minuet(self):
+        d = load("minuet")
+        c = clip("minuet.haydn")
+        vs = d["voices"]
+        g = voices_roll(vs, width=11.0, height=3.0, colors=[TUNE, BLUE, EAR, GREY_A], bar_h=0.1).move_to(DOWN * 0.2)
+        bb = d["bar_beats"]
+        x0, W = g.frame.get_left()[0], g.frame.width
+        ticks = VGroup(*[Line([x0 + W * k * bb / g.total, g.frame.get_bottom()[1] - 0.1, 0], [x0 + W * k * bb / g.total, g.frame.get_bottom()[1] - 0.3, 0], color=GREY_B, stroke_width=2) for k in range(9)])
+        head = label(r"Haydn, \ Op. 74 No. 1, \ the minuet: \ eight bars in three", font_size=24, color=GREY_A).to_edge(UP, buff=0.5)
+        cap = label(rf"{d['in34']} of the {d['n']} movements are in 3/4: \ minuets, \ scherzos \ and others", font_size=21, color=GREY_A).next_to(ticks, DOWN, buff=0.3)
+        with self.voiceover(
+            "A Classical quartet usually has four movements: a fast sonata-form movement, a slow one, a minuet and trio, and "
+            "a fast finale. The minuet is the one dance left from the Baroque suite of Part 25, still in three, still in two "
+            f"repeated halves; {say(d['in34'])} of the thirty-three movements here are in three-four time. Haydn's minuets are "
+            "rarely courtly; listen to this one's energy."
+        ):
+            self.play(FadeIn(head), FadeIn(g), FadeIn(ticks), FadeIn(cap))
+        with self.listen(c) as snd:
+            window(snd, r"a minuet", detail=r"from the encoding, \ Part 7's bowed string", corner=UL, tag_corner=UR)
+            flash_voices(snd, g, vs, 0.0, d["unit"], colors=[TUNE, BLUE, EAR, GREY_A])
+            cursor(snd, g, 0.0, d["unit"])
+        self.wait(0.3)
         self.clear_scene()

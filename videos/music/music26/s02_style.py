@@ -9,8 +9,11 @@ class Style(SoundScene):
     def construct(self):
         chapter(self, 1, r"A style of shared expectations", r"Why could a piece be funny?", extra=((1781, r"Haydn's Op. 33"),))
         self.galant()
+        self.empfindsam()
         self.schemata()
+        self.k265()
         self.joke()
+        self.concerts()
 
     # ------------------------------------------------------------------
     def galant(self):
@@ -65,3 +68,39 @@ class Style(SoundScene):
                    "phrase returns, and stops in mid-air. <bookmark mark='e'/> The joke only works because everyone in the "
                    "room knew exactly how a piece ought to end. <bookmark mark='f'/> That is the Classical style: "
                    "conventions so firmly shared that a composer could play with them, and the audience would get it.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def k265(self):
+        items = [
+            (r"K. 265: \ a theme and twelve variations, \ each keeping the theme's harmony and phrase plan", WHITE),
+            (r"variations 1 to 7: \ running figures in one hand or the other, \ triplets, \ syncopations", WHITE),
+            (r"variation 8: \ the minore, \ in C minor, \ with imitation", WHITE),
+            (r"variation 11: \ Adagio, \ ornamented; \ variation 12: \ a fast finale in triple time", TUNE),
+            (r"the plan of a Classical variation set, \ which Variation 26 imitates", GREY_A),
+        ]
+        rows_scene(self, r"Mozart's twelve variations", items,
+                   "Mozart's set shows the vocabulary in order. <bookmark mark='b'/> Twelve variations, each keeping the theme's harmony and its plan of four-bar phrases. <bookmark mark='c'/> The first seven decorate it with running figures in one hand or the other, triplets and syncopations. <bookmark mark='d'/> The eighth turns to C minor, the minore, with the hands imitating each other. <bookmark mark='e'/> The eleventh is a slow, ornamented Adagio, and the twelfth a fast finale in triple time. <bookmark mark='f'/> That is the plan of a Classical variation set, and this part's own variation at the end follows it.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def concerts(self):
+        items = [
+            (r"Vienna: \ concerts in theatres, \ halls and private houses; \ Mozart's own subscription concerts \ (1784)", WHITE),
+            (r"London: \ Salomon's concerts bring Haydn in 1791 and 1794", WHITE),
+            (r"publishers in Vienna, \ Paris and London sell parts and keyboard arrangements", WHITE),
+            (r"a public that pays expects to understand at once", TUNE),
+            (r"the style is clear because its audience is wide", GREY_A),
+        ]
+        rows_scene(self, r"a public for music", items,
+                   "Who listened? <bookmark mark='b'/> In Vienna, audiences in theatres, halls and private houses; in 1784 Mozart sold subscriptions to his own concerts. <bookmark mark='c'/> In London, the violinist and impresario Johann Peter Salomon brought Haydn over twice in the 1790s for concert seasons that made him a celebrity. <bookmark mark='d'/> Publishers in Vienna, Paris and London sold the parts, and keyboard arrangements for the home. <bookmark mark='e'/> A public that pays expects to understand at first hearing, <bookmark mark='f'/> and the clarity of the style is partly a consequence of the width of its audience.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def empfindsam(self):
+        items = [
+            (r"Carl Philipp Emanuel Bach, \ Bach's second son, \ in Berlin and Hamburg", WHITE),
+            (r"\textit{Empfindsamkeit}: \ sudden changes of mood, \ sighs, \ silences, \ surprising harmonies", WHITE),
+            (r"his \textit{Essay on the True Art of Playing Keyboard Instruments} \ (1753, \ 1762)", WHITE),
+            (r"Haydn is said to have owed a great deal to it", TUNE),
+            (r"galant ease and sensitive expression: \ the two sides the Classical style joined", GREY_A),
+        ]
+        rows_scene(self, r"the sensitive style", items,
+                   "The galant was not the only new manner. <bookmark mark='b'/> Carl Philipp Emanuel Bach, Johann Sebastian's second son, worked for the Prussian king in Berlin and then in Hamburg, <bookmark mark='c'/> and his keyboard music cultivated the sensitive style: sudden changes of mood, sighing figures, silences, harmonies that turn where they are not expected. <bookmark mark='d'/> His Essay on the True Art of Playing Keyboard Instruments, published in two parts in 1753 and 1762, taught a generation how to play and how to improvise. <bookmark mark='e'/> Haydn is reported to have said that he owed a great deal to it. <bookmark mark='f'/> The galant's ease and the sensitive style's expression are the two sides that the Classical style joined.", marks="cdef")

@@ -18,6 +18,8 @@ Items:
     figures     the Tune over three accompaniments: block chords, an Alberti bass, repeated notes
     three       Haydn, Mozart and Beethoven: lengths, ranges, an excerpt of each (an ear question: which is Beethoven?)
     style       the fair attribution test: Part 24's features against the Classical ones
+    keys        the second key of every movement (a census); Beethoven's Op. 59 No. 2 finale, which opens in the wrong key
+    minuet      Haydn's Op. 74 No. 1, the minuet's first strain, heard
     tune        Variation 26: theme, minore, adagio, finale
     variation   the Variations ledger, row 26
 """
@@ -239,9 +241,12 @@ def compute_style() -> dict:
     a26 = PS.loo_centroid(X26, y)
     singles = sorted(((PS.loo_centroid(X26[:, [k]], y)["accuracy"], f) for k, f in enumerate(CL.FEATURES)), reverse=True)
     means = {c: [float(x) for x in X26[np.array(y) == c].mean(0)] for c in ("haydn", "mozart", "beethoven")}
+    rng = np.random.default_rng(26)
+    null = np.array([PS.loo_centroid(X26, list(rng.permutation(y)))["accuracy"] for _ in range(2000)])
     return {"n": len(ms), "counts": dict(Counter(y)), "acc24": a24["accuracy"], "acc26": a26["accuracy"], "conf26": a26["confusion"], "conf24": a24["confusion"],
             "singles": [[f, a] for a, f in singles], "means": means, "features": list(CL.FEATURES),
-            "chance": max(Counter(y).values()) / len(y)}
+            "chance": max(Counter(y).values()) / len(y), "X": X26.tolist(), "y": y, "names": [m.name for m in ms],
+            "null": null.tolist(), "p_perm": float((1 + np.sum(null >= a26["accuracy"] - 1e-12)) / (1 + len(null)))}
 
 
 def compute_tune() -> dict:
@@ -291,7 +296,96 @@ def compute_variation() -> dict:
             "clip": "tune.variation26"}
 
 
-ITEMS = {"hook": compute_hook, "phrases": compute_phrases, "plan": compute_plan, "texture": compute_texture, "figures": compute_figures,
+def compute_forms() -> dict:
+    """A period (antecedent to a half cadence, consequent to a full one) and a sentence (an idea, its repetition a step
+    higher, a quicker continuation to the cadence), on the Tune's material."""
+    ant = [(72, 0, 1), (72, 1, 1), (79, 2, 1), (79, 3, 1), (81, 4, 1), (81, 5, 1), (79, 6, 2)]
+    con = [(72, 8, 1), (72, 9, 1), (79, 10, 1), (79, 11, 1), (77, 12, 1), (76, 13, 1), (74, 14, 1), (72, 15, 1)]
+    per_h = ["I", "I", "IV", "V", "I", "I", "V7", "I"]
+    idea = [(72, 0, 1), (72, 1, 1), (79, 2, 1), (79, 3, 1)]
+    rep = [(74, 4, 1), (74, 5, 1), (81, 6, 1), (81, 7, 1)]
+    cont = [(81, 8, 0.5), (79, 8.5, 0.5), (77, 9, 0.5), (76, 9.5, 0.5), (77, 10, 0.5), (76, 10.5, 0.5), (74, 11, 0.5), (72, 11.5, 0.5), (74, 12, 1), (71, 13, 1), (72, 14, 2)]
+    sen_h = ["I", "I", "V7", "V7", "I", "IV", "V7", "I"]
+    unit = 0.4
+    cP = place([ant + con, accompany("block", per_h)], piano, unit, gains=[0.0, -6.0])
+    cS = place([idea + rep + cont, accompany("block", sen_h)], piano, unit, gains=[0.0, -6.0])
+    s_ = concat([cP.at_level(LEVEL), cS.at_level(LEVEL)], gap=1.2, names=["period", "sentence"])
+    return {"period": rows(ant + con), "period_acc": rows(accompany("block", per_h)), "sentence": rows(idea + rep + cont), "sentence_acc": rows(accompany("block", sen_h)),
+            "unit": unit, "starts": {k: float(s_.events[k]) for k in ("period", "sentence")},
+            "clips": {"two": save("forms.two", s_, level=None, detail="an eight-bar period and an eight-bar sentence on the Tune's material, Part 7's piano")}}
+
+
+def compute_develop() -> dict:
+    ms = movements()
+    m = [x for x in ms if x.name == "opus74no1/movement1"][0]
+    ex = excerpt(m, 60, 8)
+    c = place(ex, bowed, 0.24, gains=[0, -1, -2, -1])
+    s_ = concat([c.at_level(LEVEL)], gap=0.0, names=["dev"])
+    return {"voices": [rows(v) for v in ex], "unit": 0.24, "start_bar": 60,
+            "clips": {"dev": save("plan.development", s_, level=None, detail="Haydn, Op. 74 No. 1, first movement, bars 61-68 (the development), from the encoding, Part 7's bowed string")}}
+
+
+def compute_dynamics() -> dict:
+    tl = tune_line()[:7]
+    out, t = [], 0.0
+    for rep in range(3):
+        for p, o, d in tl:
+            out.append((p, t + o, d))
+        t += 8
+    vel = [0.5 + 1.4 * k / (len(out) - 1) for k in range(len(out))]
+    placed = []
+    for (p, o, d), v in zip(out, vel):
+        placed.append((piano(p, d * 0.4 * 1.02, velocity=round(v, 2)), o * 0.4, 0.0))
+    c = Clip(mix(placed, duration=24 * 0.4 + 1.2).y, SR)
+    s_ = concat([c.at_level(LEVEL)], gap=0.0, names=["cresc"])
+    return {"notes": rows(out), "velocity": vel, "unit": 0.4,
+            "clips": {"cresc": save("piano.crescendo", s_, level=None, detail="the Tune's first phrase three times in a long crescendo, hammer velocity rising, Part 7's piano")}}
+
+
+def compute_keys() -> dict:
+    """Where does each movement go first?  Part 15's tracker, eight-bar windows, the first new key that holds; counted
+    only where the tracker reads the same key in the first and the last window, so that the home key is trustworthy."""
+    ms = movements()
+    rows_, tally = [], Counter()
+    for m in ms:
+        pl = CL.tonal_plan(m)
+        home = tuple(pl[0]["key"])
+        if tuple(pl[-1]["key"]) != home:
+            rows_.append({"name": m.name, "composer": m.composer, "home": list(home), "second": None, "rel": None, "agree": False})
+            continue
+        sk = CL.second_key(pl)
+        rel = None if sk is None else ("V" if sk[:2] == (7, "major") else "III" if sk[:2] == (3, "major") and home[1] == "minor"
+                                       else "v" if sk[:2] == (7, "minor") else "other")
+        tally[(home[1], rel)] += 1
+        rows_.append({"name": m.name, "composer": m.composer, "home": list(home), "second": None if sk is None else list(sk), "rel": rel, "agree": True})
+    m = [x for x in ms if x.name == "opus59no2/movement4"][0]
+    plan4 = CL.tonal_plan(m, window_bars=4, hop_bars=2)
+    ex = excerpt(m, 0, 16)
+    unit = 0.22
+    c = place(ex, bowed, unit, gains=[0, -1, -2, -1])
+    s_ = concat([c.at_level(LEVEL)], gap=0.0, names=["wrong"])
+    settle = next(t["bar"] for i, t in enumerate(plan4) if all(tuple(u["key"]) == (4, "minor") for u in plan4[i:i + 5]))
+    return {"rows": rows_, "tally": {f"{a}|{b}": n for (a, b), n in tally.items()},
+            "agree": sum(r["agree"] for r in rows_), "major": sum(1 for r in rows_ if r["agree"] and r["home"][1] == "major"),
+            "minor": sum(1 for r in rows_ if r["agree"] and r["home"][1] == "minor"),
+            "plan4": [{"bar": t["bar"], "key": list(t["key"])} for t in plan4[:30]], "settle": float(settle),
+            "voices": [rows(v) for v in ex], "unit": unit, "bar_beats": m.bar / 24.0,
+            "clips": {"wrong": save("keys.wrong", s_, level=None, detail="Beethoven, String Quartet Op. 59 No. 2, finale, bars 1-16 from the encoding: an E minor movement that begins in C major, Part 7's bowed string")}}
+
+
+def compute_minuet() -> dict:
+    ms = movements()
+    m = [x for x in ms if x.name == "opus74no1/movement3"][0]
+    ex = excerpt(m, 0, 8)
+    unit = 0.3
+    c = place(ex, bowed, unit, gains=[0, -1, -2, -1])
+    s_ = concat([c.at_level(LEVEL)], gap=0.0, names=["minuet"])
+    threes = [r for r in ms if r.time[0] == 3 and r.time[1] == 4]
+    return {"voices": [rows(v) for v in ex], "unit": unit, "bar_beats": m.bar / 24.0, "in34": len(threes), "n": len(ms),
+            "clips": {"minuet": save("minuet.haydn", s_, level=None, detail="Haydn, String Quartet Op. 74 No. 1, third movement (Menuetto), bars 1-8 from the encoding, Part 7's bowed string")}}
+
+
+ITEMS = {"hook": compute_hook, "forms": compute_forms, "develop": compute_develop, "dynamics": compute_dynamics, "keys": compute_keys, "minuet": compute_minuet, "phrases": compute_phrases, "plan": compute_plan, "texture": compute_texture, "figures": compute_figures,
          "three": compute_three, "style": compute_style, "tune": compute_tune, "variation": compute_variation}
 
 

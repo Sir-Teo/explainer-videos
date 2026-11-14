@@ -9,6 +9,7 @@ class Frontier(SoundScene):
     def construct(self):
         chapter(self, 9, r"Frontier: \ style as learned statistics", r"Can a style be learned rather than described?")
         self.learned()
+        self.others()
         self.problem()
 
     # ------------------------------------------------------------------
@@ -54,3 +55,15 @@ class Frontier(SoundScene):
                 self.play(FadeIn(r))
         self.wait(0.4)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def others(self):
+        items = [
+            (r"Joseph Bologne, \ Chevalier de Saint-Georges: \ violinist, \ composer, \ conductor of the Paris concerts", WHITE),
+            (r"Luigi Boccherini in Madrid: \ over a hundred string quintets", WHITE),
+            (r"Marianna Martines in Vienna: \ keyboard music, \ cantatas, \ admired by Haydn and Mozart", WHITE),
+            (r"the corpus has none of them: \ a style learned only from three men is a narrow style", TUNE),
+            (r"encoding more of the repertory is itself a research contribution", GREY_A),
+        ]
+        rows_scene(self, r"beyond the canon", items,
+                   "One more limit belongs to the frontier. <bookmark mark='b'/> Joseph Bologne, the Chevalier de Saint-Georges, was a celebrated violinist, composer and conductor in Paris; <bookmark mark='c'/> Luigi Boccherini in Madrid wrote over a hundred string quintets; <bookmark mark='d'/> Marianna Martines in Vienna wrote keyboard music and cantatas admired by Haydn and Mozart. <bookmark mark='e'/> The corpus has none of them, and a style learned only from three men is a narrow style. <bookmark mark='f'/> Encoding more of the repertory is itself a contribution to research.", marks="cdef")

@@ -13,6 +13,8 @@ class Figures(SoundScene):
         chapter(self, 5, r"The accompaniment", r"How do you keep a slow harmony moving?")
         self.three()
         self.counted()
+        self.sturm()
+        self.learned()
 
     # ------------------------------------------------------------------
     def three(self):
@@ -71,3 +73,27 @@ class Figures(SoundScene):
                 self.play(FadeIn(r))
         self.wait(0.4)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def learned(self):
+        items = [
+            (r"the galant style had pushed counterpoint aside", WHITE),
+            (r"in the 1780s it came back as a topic: \ the `learned style' \ (Part 22)", WHITE),
+            (r"fugal passages in quartet finales; \ Mozart's \textit{Jupiter} symphony ends with five themes in counterpoint", WHITE),
+            (r"strict writing as a contrast, \ a special effect, \ inside a homophonic style", TUNE),
+            (r"Beethoven's late quartets push it furthest: \ the \textit{Grosse Fuge}", GREY_A),
+        ]
+        rows_scene(self, r"the learned style returns", items,
+                   "Counterpoint did not disappear. <bookmark mark='b'/> The galant manner had pushed it aside, <bookmark mark='c'/> but in the 1780s it came back as a topic, the learned style of Part 22's list: <bookmark mark='d'/> fugal passages in quartet finales, and the last movement of Mozart's Jupiter symphony, which combines five themes at once. <bookmark mark='e'/> Strict writing became a contrast, a special effect inside a style built on melody and accompaniment. <bookmark mark='f'/> Beethoven's late quartets push it furthest, in the Great Fugue.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def sturm(self):
+        items = [
+            (r"around 1770: \ minor keys, \ wide leaps, \ sudden outbursts", WHITE),
+            (r"Haydn's `Farewell' symphony \ (No. 45, \ 1772), \ in F$\sharp$ minor", WHITE),
+            (r"the players leave one by one, \ a hint to the prince that they wanted to go home", TUNE),
+            (r"Op. 20 \ (1772): \ three of the six quartets end with fugues", WHITE),
+            (r"`Sturm und Drang': \ a later label, \ borrowed from literature", GREY_A),
+        ]
+        rows_scene(self, r"storm and stress", items,
+                   "Around 1770 the style had a darker phase. <bookmark mark='b'/> Haydn and others wrote in minor keys, with wide leaps and sudden outbursts. <bookmark mark='c'/> His Farewell symphony, number forty-five, of 1772, is in the rare key of F sharp minor, <bookmark mark='d'/> and in its finale the players stop and leave one by one, a hint to the prince that the musicians wanted to go home to their families. <bookmark mark='e'/> In the same year three of his six Opus 20 quartets end with fugues. <bookmark mark='f'/> The label storm and stress was borrowed later from the literature of the time.", marks="cdef")

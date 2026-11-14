@@ -73,7 +73,7 @@ class Suite(SoundScene):
     # ------------------------------------------------------------------
     def binary(self):
         items = [
-            (r"each dance: \ two halves, \ each repeated: \ \|: A :\|\|: B :\|", WHITE),
+            (r"each dance: \ two halves, \ each repeated: \ $\|{:}$ A ${:}\|\,\|{:}$ B ${:}\|$", WHITE),
             (r"the first half travels from the tonic to the dominant \ (or, \ in minor, \ the relative major)", WHITE),
             (r"the second half travels back, \ often through other keys", WHITE),
             (r"the end of the second half often echoes the end of the first, \ now at home", TUNE),

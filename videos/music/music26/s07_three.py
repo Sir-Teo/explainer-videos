@@ -10,7 +10,12 @@ class Three(SoundScene):
         chapter(self, 6, r"Haydn, \ Mozart, \ Beethoven", r"What did each do with the same language?", extra=((1806, r"Beethoven's `Razumovsky' quartets"),))
         self.careers()
         self.measured()
+        self.london()
+        self.beethoven()
+        self.wrong()
         self.quiz()
+        self.figaro()
+        self.gluck()
 
     # ------------------------------------------------------------------
     def careers(self):
@@ -65,6 +70,46 @@ class Three(SoundScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
+    def wrong(self):
+        d = load("keys")
+        c = clip("keys.wrong")
+        vs = d["voices"]
+        g = voices_roll(vs, width=11.4, height=2.8, colors=[TUNE, BLUE, EAR, GREY_A], bar_h=0.09).move_to(UP * 0.5)
+        bb = d["bar_beats"]
+        x0, W = g.frame.get_left()[0], g.frame.width
+        strip = VGroup()
+        for w in d["plan4"]:
+            if w["bar"] > 14:
+                break
+            k = tuple(w["key"])
+            col = TUNE if k == (0, "major") else (EAR if k == (4, "minor") else GREY_B)
+            a = x0 + W * w["bar"] * bb / g.total
+            r = Rectangle(width=W * 2 * bb / g.total - 0.04, height=0.32, stroke_width=0, fill_color=col, fill_opacity=0.85)
+            r.move_to([a + W * bb / g.total, -1.55, 0])
+            strip.add(r)
+        key_l = VGroup(label(r"C major", font_size=20, color=TUNE), label(r"E minor", font_size=20, color=EAR)).arrange(RIGHT, buff=0.6).next_to(strip, DOWN, buff=0.3)
+        head = label(r"Beethoven, \ Op. 59 No. 2, \ finale: \ a movement in E minor", font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
+        cap = label(r"the tracker, \ four bars at a time", font_size=19, color=GREY_A).next_to(strip, LEFT, buff=0.25)
+        with self.voiceover(
+            "Here is that joke. The finale of Beethoven's second Razumovsky quartet is in E minor. But its theme begins "
+            "firmly in C major, and only swerves to E minor at its cadence; then it starts again in C. Below the score, "
+            "the tracker reads four bars at a time: C, E minor, C, E minor, as if it cannot decide. Listen for the swerve."
+        ):
+            self.play(FadeIn(head), FadeIn(g), FadeIn(strip), FadeIn(key_l), FadeIn(cap))
+        with self.listen(c) as snd:
+            window(snd, r"C major, \ or E minor?", detail=r"from the encoding, \ Part 7's bowed string", corner=UL, tag_corner=UR)
+            flash_voices(snd, g, vs, 0.0, d["unit"], colors=[TUNE, BLUE, EAR, GREY_A])
+            cursor(snd, g, 0.0, d["unit"])
+        with self.voiceover(
+            f"The theme keeps doing this, and the tracker only settles on E minor for good around bar {say(round(d['settle']))}. "
+            "A listener who knows the style expects a movement to begin in its home key. Beethoven makes the home key "
+            "something the movement has to win, and the expectation is what makes the joke work."
+        ):
+            self.play(Indicate(strip, color=WHITE, scale_factor=1.03))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
     def quiz(self):
         d = load("three")
         c = clip("three.quiz")
@@ -97,3 +142,51 @@ class Three(SoundScene):
             self.play(FadeIn(ans))
         self.wait(0.4)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def beethoven(self):
+        items = [
+            (r"the Fifth Symphony \ (1808): \ four notes, \ short--short--short--long", WHITE),
+            (r"the rhythm runs through every movement, \ in every instrument", WHITE),
+            (r"development no longer a section: \ the whole movement develops", WHITE),
+            (r"the codas grow into second developments", TUNE),
+            (r"the Classical language, \ pushed until it carries a personal drama", GREY_A),
+        ]
+        rows_scene(self, r"a motive worked to exhaustion", items,
+                   "Beethoven's other expansion was of the motive. <bookmark mark='b'/> His Fifth Symphony, of 1808, begins with four notes, three short and a long, <bookmark mark='c'/> and that rhythm runs through every movement and every instrument. <bookmark mark='d'/> Development stops being one section of the form and becomes what the whole movement does; <bookmark mark='e'/> the codas grow into second developments. <bookmark mark='f'/> It is the Classical language pushed until it carries what listeners heard as a personal drama, and that is where Part 27 begins.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def figaro(self):
+        items = [
+            (r"Mozart, \ \textit{The Marriage of Figaro} \ (1786): \ the end of Act II", WHITE),
+            (r"twenty minutes of continuous music, \ characters entering one by one", WHITE),
+            (r"each new turn of the plot: \ a new key, \ a new tempo, \ a new texture", WHITE),
+            (r"by the end, \ seven singers at once, \ each in character", TUNE),
+            (r"the sonata's drama of keys, \ put on a stage with real people", GREY_A),
+        ]
+        rows_scene(self, r"music that moves with the plot", items,
+                   "Mozart's opera ensembles show what the language could do in a theatre. <bookmark mark='b'/> The end of the second act of The Marriage of Figaro, of 1786, <bookmark mark='c'/> is twenty minutes of continuous music in which characters arrive one at a time, <bookmark mark='d'/> each new turn of the plot marked by a new key, a new tempo, a new texture, <bookmark mark='e'/> until seven singers are singing at once, each still in character. <bookmark mark='f'/> It is the sonata's drama of keys put on a stage with real people.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def london(self):
+        items = [
+            (r"1790: \ Prince Nikolaus dies; \ the impresario Johann Peter Salomon brings Haydn to London", WHITE),
+            (r"two visits, \ 1791--1795: \ twelve `London' symphonies for public concerts", WHITE),
+            (r"the `Surprise' \ (No. 94): \ a quiet tune, \ then a sudden loud chord", WHITE),
+            (r"a paying public, \ not a court: \ the music addresses them directly", TUNE),
+            (r"he came home rich and famous: \ \textit{The Creation} \ (1798) followed", GREY_A),
+        ]
+        rows_scene(self, r"Haydn in London", items,
+                   "Haydn's career turned in 1790. <bookmark mark='b'/> His prince died, the household orchestra was dismissed, and the violinist and impresario Johann Peter Salomon brought him to London. <bookmark mark='c'/> On two visits, between 1791 and 1795, he wrote twelve symphonies for London's public concerts. <bookmark mark='d'/> In the slow movement of the Surprise symphony, a quiet tune is interrupted by a sudden loud chord, a joke on an audience that might be dozing. <bookmark mark='e'/> This was music addressed to a paying public, not to a court. <bookmark mark='f'/> He came home rich and famous, and wrote the oratorio The Creation.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def gluck(self):
+        items = [
+            (r"Christoph Willibald Gluck, \ \textit{Orfeo ed Euridice} \ (Vienna, \ 1762)", WHITE),
+            (r"against the singers' showpieces: \ the music must serve the drama", WHITE),
+            (r"the preface to \textit{Alceste} \ (1769): \ `a beautiful simplicity'", WHITE),
+            (r"recitative accompanied by the orchestra, \ the chorus in the action", TUNE),
+            (r"Mozart's operas take the reform and add the sonata's drama of keys", GREY_A),
+        ]
+        rows_scene(self, r"opera reformed", items,
+                   "Opera had its own revolution. <bookmark mark='b'/> In Vienna in 1762 Christoph Willibald Gluck staged Orfeo ed Euridice, <bookmark mark='c'/> and turned against the showpiece arias in which singers decorated the music to display themselves: the music should serve the drama. <bookmark mark='d'/> The preface to his Alceste, of 1769, asks for a beautiful simplicity. <bookmark mark='e'/> Recitative is accompanied by the whole orchestra, and the chorus takes part in the action. <bookmark mark='f'/> Mozart's operas inherit that reform and add to it the sonata's drama of keys.", marks="cdef")

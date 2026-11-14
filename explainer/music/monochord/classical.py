@@ -144,3 +144,16 @@ def tonal_plan(m: Movement, window_bars: int = 8, hop_bars: int = 2) -> list[dic
         dist = K.distribution([p for p, _ in sel], [d for _, d in sel])
         out.append({"bar": float(start), "key": K.find_key(dist)})
     return out
+
+
+def second_key(plan: list[dict]) -> tuple | None:
+    """The first key other than the opening one that holds for two windows running, as (semitones above the home tonic,
+    mode, bar), or None if the plan never leaves home."""
+    keys = [tuple(t["key"]) for t in plan]
+    if not keys:
+        return None
+    home = keys[0]
+    for i in range(1, len(keys) - 1):
+        if keys[i] != home and keys[i] == keys[i + 1]:
+            return ((keys[i][0] - home[0]) % 12, keys[i][1], float(plan[i]["bar"]))
+    return None

@@ -10,6 +10,7 @@ class Phrases(SoundScene):
         chapter(self, 2, r"Periodic phrasing", r"How long is a Classical phrase?", extra=((1793, r"Koch's \textit{Versuch}"),))
         self.quiz()
         self.period()
+        self.forms()
         self.counted()
 
     # ------------------------------------------------------------------
@@ -62,6 +63,30 @@ class Phrases(SoundScene):
                    "continuation driving to the cadence. <bookmark mark='e'/> The theorist Heinrich Christoph Koch "
                    "described this phrasing at the time, building melodies from two-bar units the way sentences are built "
                    "from clauses. <bookmark mark='f'/> William Caplin's modern theory of formal functions makes it exact.", marks="cdef")
+
+    # ------------------------------------------------------------------
+    def forms(self):
+        d = load("forms")
+        c = clip("forms.two")
+        gP = voices_roll([d["period"], d["period_acc"]], width=5.4, height=2.6, colors=[TUNE, GREY_A], lo=40, hi=86, bar_h=0.12).move_to(LEFT * 3.3 + DOWN * 0.3)
+        gS = voices_roll([d["sentence"], d["sentence_acc"]], width=5.4, height=2.6, colors=[EAR, GREY_A], lo=40, hi=86, bar_h=0.12).move_to(RIGHT * 3.3 + DOWN * 0.3)
+        lP = label(r"a period: \ question, \ answer", font_size=22, color=TUNE).next_to(gP, UP, buff=0.3)
+        lS = label(r"a sentence: \ idea, \ idea again, \ drive to the cadence", font_size=22, color=EAR).next_to(gS, UP, buff=0.3)
+        head = label(r"two eight-bar themes on the Tune \ (ours)", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
+        with self.voiceover(
+            "Hear the two shapes on the Tune's own material. First a period: the antecedent to the half cadence, the "
+            "consequent to the full one. Then a sentence: the idea, the idea again a step higher, and a quicker "
+            "continuation in running notes, driving to the cadence."
+        ):
+            self.play(FadeIn(head), FadeIn(gP), FadeIn(gS), FadeIn(lP), FadeIn(lS))
+        with self.listen(c) as snd:
+            window(snd, r"a period, \ then a sentence", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
+            flash_voices(snd, gP, [d["period"], d["period_acc"]], d["starts"]["period"], d["unit"], colors=[TUNE, GREY_A])
+            flash_voices(snd, gS, [d["sentence"], d["sentence_acc"]], d["starts"]["sentence"], d["unit"], colors=[EAR, GREY_A])
+            pulse(snd, lP, d["starts"]["period"], d["starts"]["sentence"] - 0.5, buff=0.08)
+            pulse(snd, lS, d["starts"]["sentence"], c.duration, buff=0.08)
+        self.wait(0.3)
+        self.clear_scene()
 
     # ------------------------------------------------------------------
     def counted(self):
