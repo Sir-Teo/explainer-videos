@@ -39,6 +39,8 @@ LEDGER = [
      "measure": r"notes beginning together: 100\% in organum, 0\% in fourth species"},
     {"part": 17, "title": r"as a chorale for four voices: chosen chord by chord, then corrected by the rules", "seconds": 78.22,
      "measure": r"parallel fifths and octaves: 6 before the corrections, 0 after"},
+    {"part": 18, "title": r"over the Romanesca, a lament bass, and two pedals: three basses, one tune", "seconds": 32.78,
+     "measure": r"24 chords, every one holding the Tune's note; 0 parallel fifths or octaves"},
 ]
 
 
