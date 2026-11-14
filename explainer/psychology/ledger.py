@@ -669,3 +669,14 @@ shown(5, "ADRIAN_1926", "the rate code of a single sensory fibre: told here as t
 shown(5, "GOLGI_CAJAL_1906", "the neuron doctrine: a settled piece of anatomy, told as history")
 shown(5, "GIDON_2020", "one laboratory's report of graded dendritic spikes in human cortex, shown at the frontier "
       "and not yet repeated elsewhere")
+
+shown(6, "LOEWI_1921", "chemical transmission at a synapse: settled physiology, told as the history it is (the dream "
+      "is Loewi's own later account, and the part says so)")
+shown(6, "HEBB_1949", "a postulate, quoted; it is a hypothesis about a rule, and the finding that bears on it is the "
+      "row on long-term potentiation")
+shown(6, "DEL_CASTILLO_KATZ_1954", "release in packets: settled physiology, told as history; the histogram on "
+      "screen is a model synapse's and is tagged as computed")
+shown(6, "LIU_2012", "one laboratory's reactivation of a tagged memory in mice, shown at the frontier; whether "
+      "strengthened synapses are the memory is argued with the evidence in Part 20", row_in=20)
+shown(6, "TURNER_2008", "the registered and the published record of one class of drug trials, shown as a case of "
+      "Part 4's file drawer in an industry; entered with the evidence on treatments", row_in=42)

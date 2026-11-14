@@ -45,6 +45,9 @@ and summarized, not stored. Dates are the day the check was made.
 | `bi_poo_1998` | Spike-timing-dependent plasticity; a window of about 20 ms | Bi and Poo, *J. Neurosci.* 18 (1998) 10464–10472 | facts only | 2026-11-14: the abstract as summarized by a web search |
 | `hartline_ratliff_1957` | Mutual inhibition of receptor units in the eye of *Limulus*, linear in the neighbour's activity | Hartline and Ratliff, *J. Gen. Physiol.* 40 (1957) 357–376 | facts only | 2026-11-14: the abstract as summarized from PubMed Central; volume and pages from memory |
 | `geier_2008` | Curving the streets of the Hermann grid abolishes the spots; the classical account (Baumgartner 1960) | Geier, Bernáth, Hudák and Séra, *Perception* 37 (2008) 651–665 | facts only | 2026-11-14: from the first author's pages and secondary summaries; the paper not read |
+| `del_castillo_katz_1954` | Transmitter released in packets of one size at the frog's nerve-muscle junction | del Castillo and Katz, *J. Physiol.* 124 (1954) 560–573 | facts only | 2026-11-14: the PubMed Central record and a 2006 retrospective through a web search; the paper not read; no figure quoted |
+| `liu_2012` | Light delivered to cells tagged during fear learning makes mice freeze in another box | Liu, Ramirez et al., *Nature* 484 (2012) 381–385 | facts only | 2026-11-14: the abstract as summarized by a web search; the paper not read; no percentages quoted |
+| `turner_2008` | 74 registered antidepressant trials: 51% positive by the regulator's analysis, 94% in the published literature | Turner et al., *NEJM* 358 (2008) 252–260 | facts only | 2026-11-14: the abstract's figures from the PubMed record and summaries; the paper not read |
 
 ## Looked for and not used
 

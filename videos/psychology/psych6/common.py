@@ -96,3 +96,38 @@ def inhibit(a, b, color=INH, buff: float = 0.1, width: float = 4) -> VGroup:
 def trace(ax, t, v, color, width: float = 3.5):
     """A curve on ``ax`` (a thin wrapper, so that scenes read as 'a trace')."""
     return curve(ax, t, v, color, stroke_width=width)
+
+
+def picture(arr, height: float = 4.0, smooth: bool = False) -> ImageMobject:
+    """A 2-D array of values in 0..1 as a grey image (0 black, 1 white)."""
+    a = np.clip(np.asarray(arr, float), 0.0, 1.0)
+    rgb = np.repeat((a * 255).astype(np.uint8)[:, :, None], 3, axis=2)
+    img = ImageMobject(rgb)
+    img.set_resampling_algorithm(RESAMPLING_ALGORITHMS["bilinear" if smooth else "nearest"])
+    img.scale_to_fit_height(height)
+    return img
+
+
+def grey_strip(values, width: float = 6.0, height: float = 0.9, lo: float = 0.0, hi: float = 1.0) -> VGroup:
+    """A row of grey bars, one per value (``lo`` black, ``hi`` white): a light pattern drawn as light."""
+    v = np.asarray(values, float)
+    w = width / len(v)
+    g = VGroup()
+    for i, x in enumerate(v):
+        shade = float(np.clip((x - lo) / (hi - lo), 0, 1))
+        col = ManimColor.from_rgb((shade, shade, shade))
+        g.add(Rectangle(width=w * 1.02, height=height, stroke_width=0, fill_color=col, fill_opacity=1).move_to(
+            [(i + 0.5) * w - width / 2, 0, 0]))
+    return g
+
+
+def light_strip(values, width: float = 6.0, height: float = 0.9, lo: float = 0.2, hi: float = 3.0,
+                smooth: bool = False) -> ImageMobject:
+    """A light pattern drawn as light: one grey level per value (``lo`` black, ``hi`` white), as an image, so
+    that neighbouring levels meet without seams.  ``smooth`` interpolates between the values."""
+    v = np.asarray(values, float)
+    cols = np.interp(np.linspace(0, len(v) - 1, 8 * len(v)), np.arange(len(v)), v) if smooth else np.repeat(v, 8)
+    img = picture(np.tile((cols - lo) / (hi - lo), (4, 1)), height=height, smooth=smooth)
+    img.stretch_to_fit_width(width)
+    img.stretch_to_fit_height(height)
+    return img

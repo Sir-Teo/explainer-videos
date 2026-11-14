@@ -63,4 +63,67 @@ PARTS = [
               ("Its tests", "tests/psychology/test_neuron.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=6, level="U", widget="gridspots",
+        question="How do neurons talk, and how does talking change them?",
+        story="For half a century physiologists argued over what crosses the gap between two neurons, a current "
+              "or a chemical. In 1921 Otto Loewi slows one frog's heart through its nerve, moves the fluid to a "
+              "second heart, and the second slows too. The connection is chemical, and a chemical step has "
+              "quantities in it that can change. The part takes the synapse apart: six steps from spike to "
+              "clearance, transmitter released in packets by chance (Katz), two kinds of receptor, and the "
+              "handful of places where a drug can act. It computes how a membrane adds its inputs within about "
+              "ten milliseconds and how a shunt divides. Then learning: Hebb's rule, local and unstable; Oja's "
+              "repair, which makes a cell find the first principal component of its inputs; long-term "
+              "potentiation, the NMDA receptor as the molecule that detects input and output together, spike "
+              "timing, and a sliding threshold that makes a cell selective. Three circuits follow from one "
+              "motif, mutual inhibition: neighbours that inhibit each other exaggerate edges (the horseshoe "
+              "crab, Mach's bands); with self-excitation two rivals choose and hold the choice; with fatigue "
+              "they alternate, as the spinal cord does in walking. Populations of excitatory and inhibitory "
+              "cells rest, oscillate or saturate as their drive rises, and the neuromodulators set gain and "
+              "learning rate. The viewer looks at the Hermann grid, hears and computes its textbook "
+              "explanation, and watches it fail on a grid with curved streets.",
+        handoff="Where things are in a brain, and what recordings measure, are Parts 7 and 8. Lateral "
+                "inhibition returns in the retina (Part 13), dopamine as the third factor of a learning rule in "
+                "Part 17, a choice held in activity as working memory in Part 19, and whether long-term "
+                "potentiation is how memories are stored in Part 20. The circuit that decides is tested against "
+                "reaction times in Part 25, the four families of drug meet the disorders in Parts 40 to 42, and "
+                "learning without a local rule is Part 58.",
+        outside="Part 5's membrane: batteries, conductances and the time constant. Vectors and the idea of a "
+                "principal component help in chapter 4, which derives what it uses. Chapters 8 to 10 read "
+                "differential equations as 'relaxes toward', which is explained there.",
+        objectives={
+            "U": ["Follow a signal across a chemical synapse step by step, and say where each of four families "
+                  "of drug acts.",
+                  "Explain why a neuron responds to inputs that arrive together, and what excitation and "
+                  "inhibition do to its voltage.",
+                  "Say what Hebb's rule is, what long-term potentiation showed, and how mutual inhibition "
+                  "sharpens an edge, holds a choice and makes a rhythm."],
+            "M": ["Compute a synapse's mean response, variance and failure rate from n, p and q, and the steady "
+                  "voltage of a membrane with a shunt.",
+                  "Show that Hebb's rule diverges along the first eigenvector of the inputs' correlations, and "
+                  "derive Oja's rule and its fixed point.",
+                  "Write the equations of lateral inhibition, a winner-take-all pair, a half-centre oscillator "
+                  "and Wilson and Cowan's populations, and say what each parameter sets."],
+            "D": ["Say what the curved Hermann grid shows about testing a model, and what a model must predict "
+                  "beyond the effect it was built for.",
+                  "State what is and is not established about where a memory is stored, and design an "
+                  "experiment that separates strengthened synapses from chosen cells."],
+            "I": ["Read a dose-occupancy curve and the shift a competitive antagonist makes, and connect a "
+                  "drug's site of action to its side effects.",
+                  "Compare the registered and the published record of a set of trials, and say what each "
+                  "would lead a reader to believe."],
+        },
+        results=[
+            ("A synapse's strength", r"\langle \text{response}\rangle=n\,p\,q,\qquad P(\text{failure})=(1-p)^n"),
+            ("A shunt divides", r"V-E_L=\frac{g_E\,(E_E-E_L)}{g_L+g_E+g_I}"),
+            ("Hebb's rule, and Oja's", r"\Delta w=\eta\,x\,y,\qquad \Delta w=\eta\,y\,(x-y\,w)"),
+            ("Lateral inhibition", r"r_i=e_i-\sum_{j\neq i}k_{ij}\,r_j"),
+            ("Wilson and Cowan", r"\tau\,\dot E=-E+S(w_{EE}E-w_{EI}I+P)"),
+            ("Receptor occupancy", r"\frac{[D]}{[D]+K_d}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's circuits", "explainer/psychology/psyche/circuits.py"),
+              ("Their tests", "tests/psychology/test_circuits.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

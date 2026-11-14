@@ -25,8 +25,8 @@ Items:
                  the same pair without its loop, and the time to decide against the size of the difference
     rhythm       a half-centre oscillator: the two outputs and their fatigue; the period against the time
                  constant of fatigue; the same pair with too little inhibition
-    populations  Wilson and Cowan's excitatory and inhibitory populations: rest, a rhythm, and amplitude and
-                 frequency against the drive
+    populations  Wilson and Cowan's excitatory and inhibitory populations: rest, a rhythm, saturation, and the
+                 range of the excitatory activity and the frequency against the drive
     knobs        a neuromodulator as a gain on a unit's response curve, and as a learning rate for Oja's rule
 """
 
@@ -100,18 +100,23 @@ def compute_hebb() -> dict:
 
 def compute_plasticity() -> dict:
     dt = np.linspace(-100, 100, 401)
-    b = C.bcm([[1.0, 0.2], [0.2, 1.0]], rng=rng(63))
+    b = C.bcm([[1.0, 0.2], [0.2, 1.0]], eta=0.005, rng=rng(63))
     first = int(np.argmax(b["final"]))
+    late = slice(3 * len(b["theta"]) // 4, None)
+    # with two patterns shown equally often, the selective fixed point has theta = y^2 / 2 = y, so y = 2
     return {"dt": dt, "stdp": C.stdp(dt), "window": 20, "at_plus_10": float(C.stdp(10.0)), "at_minus_10": float(C.stdp(-10.0)),
             "bcm_steps": np.arange(len(b["theta"])) * 50, "bcm_pref": b["response"][:, first],
-            "bcm_other": b["response"][:, 1 - first], "bcm_theta": b["theta"], "bcm_final": np.sort(b["final"])[::-1],
-            "bcm_selectivity": b["selectivity"]}
+            "bcm_other": b["response"][:, 1 - first], "bcm_theta": b["theta"],
+            "bcm_start": b["response"][0], "bcm_late_pref": float(b["response"][late, first].mean()),
+            "bcm_late_other": float(b["response"][late, 1 - first].mean()),
+            "bcm_late_theta": float(b["theta"][late].mean()), "bcm_predicted": 2.0}
 
 
 def compute_lateral() -> dict:
     n = 80
     step = np.r_[np.full(n // 2, 1.0), np.full(n // 2, 2.0)]
-    ramp = np.r_[np.full(25, 1.0), np.linspace(1.0, 2.0, 30), np.full(25, 2.0)]
+    foot, top = 35, 45
+    ramp = np.r_[np.full(foot, 1.0), np.linspace(1.0, 2.0, top - foot), np.full(n - top, 2.0)]
     flat = np.full(n, 1.5)
     r_step, r_ramp, r_flat = C.lateral(step), C.lateral(ramp), C.lateral(flat)
     k = C.inhibition_kernel(n)[n // 2]
@@ -119,7 +124,8 @@ def compute_lateral() -> dict:
     return {"x": np.arange(n), "step": step, "ramp": ramp, "flat": flat, "r_step": r_step, "r_ramp": r_ramp,
             "r_flat": r_flat, "kernel_x": np.arange(n) - n // 2, "kernel": k, "low": low, "high": high,
             "dark_band": float(r_step[n // 2 - 6:n // 2].min()), "bright_band": float(r_step[n // 2:n // 2 + 6].max()),
-            "contrast_in": 2.0, "contrast_out": high / low,
+            "contrast_in": 2.0, "contrast_out": high / low, "foot": foot, "top": top,
+            "ramp_dip": float(r_ramp[foot - 6:foot + 4].min()), "ramp_peak": float(r_ramp[top - 4:top + 6].max()),
             "edge_out": float(r_step[n // 2:n // 2 + 6].max() / r_step[n // 2 - 6:n // 2].min())}
 
 
@@ -166,19 +172,24 @@ def compute_rhythm() -> dict:
 
 def compute_populations() -> dict:
     wc = C.WilsonCowan()
-    rest, osc = wc.simulate(0.0), wc.simulate(1.25)
-    drives = np.linspace(0.0, 3.0, 61)
-    amp, freq = [], []
+    rest, osc, sat = wc.simulate(0.0), wc.simulate(1.25), wc.simulate(3.5)
+    drives = np.linspace(0.0, 4.0, 81)
+    amp, freq, lo, hi = [], [], [], []
     for p in drives:
         s = wc.simulate(float(p))
+        late = s["e"][len(s["e"]) // 2:]
         amp.append(s["amplitude"])
         freq.append(s["frequency"])
+        lo.append(float(late.min()))
+        hi.append(float(late.max()))
     amp, freq = np.array(amp), np.array(freq)
     on = drives[amp > 0.05]
     keep = slice(None, None, 10)
     return {"t": rest["t"][keep], "rest_e": rest["e"][keep], "osc_e": osc["e"][keep], "osc_i": osc["i"][keep],
-            "frequency": osc["frequency"], "amplitude": osc["amplitude"], "drives": drives, "amp": amp, "freq": freq,
-            "onset": float(on.min()) if len(on) else float("nan"), "offset": float(on.max()) if len(on) else float("nan")}
+            "sat_e": sat["e"][keep], "frequency": osc["frequency"], "amplitude": osc["amplitude"], "drives": drives,
+            "amp": amp, "freq": freq, "e_lo": np.array(lo), "e_hi": np.array(hi),
+            "onset": float(on.min()), "offset": float(on.max()), "freq_max": float(freq.max()),
+            "freq_onset": float(freq[amp > 0.05][0]), "sat_level": float(sat["e"][-1])}
 
 
 def compute_knobs() -> dict:

@@ -139,4 +139,115 @@
       note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The recordings are simulated: a model cell that fires at random moments, 20 times a second under the weaker stimulus and 30 under the stronger. With a long recording the difference is plain. With a short one it often is not, and nobody could do better: the curve is the best that any reader can manage by counting, about 62% for 50 ms and 92% for a second. A brain has to act within a fraction of a second, so it cannot count one cell for long. It reads many cells at once instead, which is one reason it has so many. Press Hear this pair to listen as Adrian did in 1926, with each signal a click (left recording first).",
     });
   };
+
+  // ---- Part 6: the Hermann grid with straighter or wavier streets; do you see the grey spots? --------------------
+  W.gridspots = function (el) {
+    var w = null;
+    // waviness: the amplitude of each street's sine, as a share of the street's width
+    var LEVELS = [0, 0.1, 0.2, 0.3, 0.4, 0.6], BLOCK = 12, YOU = "#f2c14e", MODEL = "#5bd18b";
+    // The receptive-field account, computed by Psyche (psyche/circuits.py, hermann_response): how much dimmer a
+    // centre-surround filter makes a crossing than a street, relative to the straight grid.
+    var PRED = [1.0, 0.95, 0.91, 0.78, 0.63, 0.36];
+    var S = { phase: "idle", trial: 0, level: 0, order: [], log: [], seed: 0, img: null, key: "" };
+
+    function grid(wave, px) {
+      // five squares of 4 units with streets of 1 unit, as in the film: 26 units across
+      var n = Math.max(130, Math.min(390, Math.round(px / 26) * 26)), unit = n / 26, street = unit, period = 5 * unit;
+      var c = document.createElement("canvas"); c.width = n; c.height = n;
+      var ctx = c.getContext("2d"), im = ctx.createImageData(n, n), d = im.data, x, y, k, on, amp = wave * street, i = 0;
+      var sx = new Float32Array(n), cen = [];
+      for (k = 0; k <= 5; k++) cen.push(k * period + street / 2);
+      for (x = 0; x < n; x++) sx[x] = amp * Math.sin(2 * Math.PI * (x + 0.5 - street / 2) / period);
+      for (y = 0; y < n; y++) {
+        for (x = 0; x < n; x++) {
+          on = false;
+          for (k = 0; k <= 5 && !on; k++) {
+            if (Math.abs(y + 0.5 - cen[k] - sx[x]) < street / 2 || Math.abs(x + 0.5 - cen[k] - sx[y]) < street / 2) on = true;
+          }
+          d[i] = d[i + 1] = d[i + 2] = on ? 255 : 0; d[i + 3] = 255; i += 4;
+        }
+      }
+      ctx.putImageData(im, 0, 0);
+      return c;
+    }
+    function next() {
+      S.trial++;
+      S.level = S.order[(S.trial - 1) % S.order.length];
+      S.phase = "show"; S.img = null;
+      w.render();
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "show"; }, respond: answer });
+    function answer(side) {
+      if (S.phase !== "show" || !w) return;
+      S.log.push({ level: S.level, spots: side === 0 }); task.count++;
+      S.phase = "gap"; w.render();
+      task.later(function () { if (S.trial >= BLOCK) { S.phase = "done"; w.render(); } else next(); }, 450);
+    }
+    function share(level) {
+      var n = 0, k = 0, i;
+      for (i = 0; i < S.log.length; i++) if (level === undefined || S.log[i].level === level) { n++; if (S.log[i].spots) k++; }
+      return { n: n, k: k };
+    }
+
+    w = QB.widget(el, {
+      title: "A grid of grey spots",
+      sub: "Black squares and white streets. Look at the whole grid for a moment, not at any one crossing, and say whether faint grey spots sit on the crossings: F if you see them, J if you do not (or tap the left or the right half). The streets are straight on some trials and wavy on others. Twelve grids make a block.",
+      panels: 2, height: 360, weights: [1.25, 1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: function () {
+          task.clear(); S.seed++; S.trial = 0;
+          var u = QB.rng(6001 * S.seed + 17), pool = LEVELS.concat(LEVELS), i, j, t;
+          for (i = pool.length - 1; i > 0; i--) { j = Math.floor(u() * (i + 1)); t = pool[i]; pool[i] = pool[j]; pool[j] = t; }
+          S.order = pool; next();
+        } },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.trial = 0; S.log = []; S.img = null; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), i;
+        ctx.save();
+        ctx.textBaseline = "middle"; ctx.textAlign = "center";
+        if (S.phase === "idle") {
+          T.message(ctx, b, "On you", "Press Start. Twelve grids, some with straight streets and some with wavy ones; for each, say whether you see grey spots at the crossings.");
+        } else if (S.phase === "done") {
+          var st = share(0), wv = share(0.6);
+          T.message(ctx, b, "Block finished.",
+            "Straight streets: spots on " + st.k + " of " + st.n + ". The waviest: on " + wv.k + " of " + wv.n + ". Press Start for another block; your answers collect on the other panel, beside what the receptive-field account predicts.");
+        } else if (S.phase === "show") {
+          var side = Math.max(60, Math.min(b.w - 40, b.h - 86)), key = S.level + ":" + Math.round(side);
+          if (!S.img || S.key !== key) { S.img = grid(S.level, side); S.key = key; }
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(S.img, b.cx - side / 2, b.y + 40, side, side);
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("grid " + S.trial + " of " + BLOCK, b.cx, b.y + 22);
+          ctx.fillText(b.w < 420 ? "F / left: spots      J / right: none" : "F, or tap the left half: I see spots        J, or tap the right half: none",
+            b.cx, b.y + b.h - 24);
+        }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [-0.05, 0.68], y: [-0.05, 1.12], title: "Spots seen, by the waviness of the streets", xlabel: "waviness (share of a street's width)" });
+        a.hline(0, { color: "#2a3242" });
+        a.line(LEVELS, PRED, { color: MODEL });
+        a.text(0.66, PRED[5] + 0.1, "the receptive-field account", { color: MODEL, align: "right", size: 11 });
+        var xs = [], ys = [];
+        for (i = 0; i < LEVELS.length; i++) { var sc = share(LEVELS[i]); if (sc.n) { xs.push(LEVELS[i]); ys.push(sc.k / sc.n); } }
+        if (xs.length) {
+          a.dots(xs, ys, { color: YOU, r: 6, alpha: 0.95 });
+          a.text(-0.04, 1.06, "you: share of grids with spots", { color: YOU, dx: 2, size: 11.5, bold: true });
+        } else {
+          a.text(-0.04, 1.06, "Your answers appear here as dots.", { color: C.muted, dx: 2, size: 11.5 });
+        }
+      },
+      readout: function () {
+        var all = share(), st = share(0), wv = share(0.6);
+        return [
+          ["grids judged", String(all.n)],
+          ["spots on straight streets", st.n ? st.k + " of " + st.n : "–"],
+          ["spots on the waviest", wv.n ? wv.k + " of " + wv.n : "–"],
+          ["the account's dimming at the waviest", QB.pct(PRED[5], 0) + " of straight"],
+        ];
+      },
+      note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The green line is not data. It is the textbook explanation, computed: a centre-surround filter makes a crossing dimmer than a street because more of its surround is lit, and the line shows how much dimmer, relative to the straight grid. On that account the spots should fade gradually as the streets bend, and should still be there at moderate waviness. Geier and his colleagues reported in 2008 that for most observers a slight curve is enough to abolish them. If your dots fall to zero while the line is still high, you have repeated the observation that put the explanation in doubt. There is no right answer on any trial: the experiment is asking what you see. The effect depends on the size of the grid on your screen and on where you look, so try it at arm's length without fixing on one crossing.",
+    });
+  };
 })();

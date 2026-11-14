@@ -22,7 +22,7 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "FLAKE_FRIED_2020", "BEM_2011", "COHEN_1962", "SIMMONS_2011", "OSC_2015", "MANY_LABS", "CAMERER_2018",
            "SCHEEL_2021", "LEVELT_2012", "DREBER_2015", "PROTZKO_2023", "HODGKIN_HUXLEY_1952", "COLE_CURTIS_1939",
            "ADRIAN_1926", "GOLGI_CAJAL_1906", "GIDON_2020", "LOEWI_1921", "HEBB_1949", "BLISS_LOMO_1973", "BI_POO_1998",
-           "HARTLINE_RATLIFF_1957", "GEIER_2008"]
+           "HARTLINE_RATLIFF_1957", "GEIER_2008", "DEL_CASTILLO_KATZ_1954", "LIU_2012", "TURNER_2008"]
 
 
 @dataclass(frozen=True)
@@ -777,10 +777,62 @@ GEIER_2008 = Dataset(
                      "predicts no change"},
 )
 
+DEL_CASTILLO_KATZ_1954 = Dataset(
+    key="del_castillo_katz_1954",
+    title="Transmitter is released in packets of one size",
+    source="J. del Castillo and B. Katz, Quantal components of the end-plate potential, Journal of Physiology 124 "
+           "(1954) 560-573; the spontaneous miniature potentials: P. Fatt and B. Katz, Journal of Physiology 117 "
+           "(1952) 109-128",
+    cite=r"del Castillo \& Katz (1954)",
+    checked="the reference, the preparation and the conclusion from the PubMed Central record and a 2006 "
+            "retrospective through a web search, 2026-11-14; the paper was not read, so the histogram the part "
+            "shows is a model synapse's and no figure is quoted from the paper",
+    licence="facts only",
+    data={"preparation": "the frog's nerve-muscle junction, with calcium lowered and magnesium raised so that "
+                         "little transmitter is released",
+          "finding": "the response to a nerve impulse is built of whole numbers of a unit, and the unit is the "
+                     "size of the miniature potentials that occur spontaneously",
+          "nobel": 1970},
+)
+
+LIU_2012 = Dataset(
+    key="liu_2012",
+    title="Reactivating the cells that were active during learning brings back the memory",
+    source="X. Liu, S. Ramirez, P. T. Pang, C. B. Puryear, A. Govindarajan, K. Deisseroth and S. Tonegawa, "
+           "Optogenetic stimulation of a hippocampal engram activates fear memory recall, Nature 484 (2012) 381-385; "
+           "the false memory: S. Ramirez et al., Science 341 (2013) 387-391",
+    cite=r"Liu et al.\ (2012)",
+    checked="the abstract's statements as summarized from the MIT repository and PubMed Central by a web search, "
+            "2026-11-14; the paper was not read, so no freezing percentages are quoted; the 2013 reference from "
+            "memory",
+    licence="facts only",
+    data={"animal": "mice", "where": "the dentate gyrus of the hippocampus",
+          "design": "cells active during fear learning in one box are made to carry a light-sensitive channel; "
+                    "later, in a different box, light is delivered to them",
+          "finding": "the mice freeze when the light is on, and not otherwise",
+          "controls": "no freezing with light in mice that were not fear conditioned, or whose tagged cells "
+                      "carried no channel, or whose tagged cells came from a neutral box"},
+)
+
+TURNER_2008 = Dataset(
+    key="turner_2008",
+    title="Antidepressant trials as registered with the regulator, and as published",
+    source="E. H. Turner, A. M. Matthews, E. Linardatos, R. A. Tell and R. Rosenthal, Selective publication of "
+           "antidepressant trials and its influence on apparent efficacy, New England Journal of Medicine 358 "
+           "(2008) 252-260",
+    cite=r"Turner et al.\ (2008)",
+    checked="the abstract's figures from the PubMed record and secondary summaries through a web search, "
+            "2026-11-14; the paper was not read, and its effect-size comparison is not quoted",
+    licence="facts only",
+    data={"trials": 74, "drugs": 12, "patients": 12564, "positive_fda": 0.51, "positive_published": 0.94,
+          "positive_trials": 38, "positive_published_count": 37},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
                           FLAKE_FRIED_2020, BEM_2011, COHEN_1962, SIMMONS_2011, OSC_2015, MANY_LABS, CAMERER_2018,
                           SCHEEL_2021, LEVELT_2012, DREBER_2015, PROTZKO_2023, HODGKIN_HUXLEY_1952,
                           COLE_CURTIS_1939, ADRIAN_1926, GOLGI_CAJAL_1906, GIDON_2020, LOEWI_1921, HEBB_1949,
-                          BLISS_LOMO_1973, BI_POO_1998, HARTLINE_RATLIFF_1957, GEIER_2008)}
+                          BLISS_LOMO_1973, BI_POO_1998, HARTLINE_RATLIFF_1957, GEIER_2008,
+                          DEL_CASTILLO_KATZ_1954, LIU_2012, TURNER_2008)}
