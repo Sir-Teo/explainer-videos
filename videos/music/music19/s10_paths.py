@@ -112,9 +112,8 @@ class Paths(SoundScene):
             f"once in each direction: {say(n_edges)} of them with pivot chords. This is breadth-first search, and it "
             "finds shortest routes in any network whose steps all cost the same."
         ) as vo:
-            self.play(FadeIn(cols[0]))
+            self.play(FadeIn(cols[0]), FadeIn(rows_[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows_[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows_[1]))
             vo.wait_until("c")

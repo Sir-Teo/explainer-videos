@@ -107,9 +107,8 @@ class Trapdoor(SoundScene):
             "on the circle of fifths, in a single chord. Schubert, Liszt and Wagner used these doors constantly; "
             "Liszt's diminished sevenths, in the storms of his piano music, are doors left swinging."
         ) as vo:
-            self.play(Create(ring), FadeIn(labs))
+            self.play(Create(ring), FadeIn(labs), FadeIn(rows_[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows_[0]))
             vo.wait_until("b")
             self.play(Create(sq), FadeIn(rows_[1]))
             self.play(LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.2), FadeIn(tdots))

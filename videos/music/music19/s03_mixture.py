@@ -28,8 +28,8 @@ class Mixture(SoundScene):
             "Schubert made this his signature: a major tune turning minor for a phrase, and back, the change of mode "
             "as an expression in itself."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcd", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcd", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)
@@ -58,8 +58,11 @@ class Mixture(SoundScene):
             self.play(FadeIn(cells))
         with self.listen(c) as snd:
             window(snd, r"iv; \ $\flat$VI, \ $\flat$VII; \ $\flat$III", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
-            for k, name in enumerate(("iv", "flat6", "flat3")):
+            order = ("iv", "flat6", "flat3")
+            for k, name in enumerate(order):
                 flash(snd, list(cells[k][1]), d["times"][name], hot=WHITE, base=TUNE)
+                end = d["starts"][order[k + 1]] - 0.3 if k < 2 else c.duration
+                pulse(snd, cells[k][2], d["starts"][name], end, buff=0.08)
         self.wait(0.3)
         self.clear_scene()
 

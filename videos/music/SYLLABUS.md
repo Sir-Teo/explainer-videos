@@ -976,12 +976,31 @@ Music*.
 in six voices. Bach sent back the *Musical Offering*, with canons posed as riddles: one played backwards against
 itself, one that rises a tone each time round and never arrives. The part asks which melodies can be combined with
 themselves, and solves for them.
+1. Hook: Potsdam, the royal theme heard, the *Musical Offering*; the plan.
+2. Rounds: *Frère Jacques* in three voices, heard; why rounds work; every tune of the corpus ranked as a round.
+3. Canon at every interval: the Goldberg canons; a solver that counts canons exactly; three heard.
+4. Four forms of a line: an ear question (backwards or upside down?); the four forms heard; Klein's four-group.
+5. Invertible counterpoint: an ear question (which counter-line survives inversion?); the octave, tenth and twelfth.
+6. Slower, and in riddles: augmentation heard; mensuration canons; puzzle canons.
+7. The crab canon: counted from both ends; one on the Tune's head, heard; Hofstadter.
+8. A canon that never arrives: the *Canon per tonos* in Shepard tones; strange loops.
+9. Subject and answer: the fugue's parts; an ear question (real or tonal answer?); the tonal answer as a rule.
+10. An exposition, built: a countersubject by Viterbi search; three voices heard.
+11. Stretto: every stretto of the phrase; two and three entries heard; the corpus and the king's theme.
+12. *The Art of Fugue*: one subject; B-A-C-H heard; the unfinished fugue.
+13. Frontier: computational fugue analysis; generation; recognizing transformed melodies.
+14. Variation 20: the Tune as a canon, a crab canon and an exposition. Outro: problems, payoffs.
+
 *Covers:* rounds; canon at every interval; invertible counterpoint; inversion, retrograde, augmentation and the
-group they form; the fugue: subject, real and tonal answers, countersubject, episode, stretto, pedal; *The Art of
-Fugue*.
-*Built and computed:* a canon solver; the stretto possibilities of the *Well-Tempered Clavier*'s subjects, found
-and compared with what Bach used; the rising canon rendered with Shepard tones.
-*Variation 20:* the Tune as a round, a crab canon and a three-voice exposition.
+group they form; mensuration and puzzle canons; the crab and the endlessly rising canon; the fugue: subject, real and
+tonal answers, countersubject, episode, stretto, pedal; *The Art of Fugue*.
+*Built and computed:* `monochord/canon.py`: line transformations and the four forms' table; a judge of lines sounding
+together; rounds ranked over the corpus; canons counted exactly at every interval and sampled; crab canons counted
+from both ends and sampled; invertible-counterpoint maps; real and tonal answers; a Viterbi free voice for
+countersubjects; a stretto finder; the rising canon rendered with Shepard tones. No fugue scores were available
+offline, so the stretto search runs on the Tune, the corpus and the royal theme (rhythm simplified), not on the
+*Well-Tempered Clavier*, and the film says so.
+*Variation 20:* the whole Tune as a canon at the fourth below, a crab canon on its head, and a three-voice exposition.
 *Frontier:* automatic fugue analysis and generation.
 *Reading:* Mann, *The Study of Fugue*; Gauldin; Hofstadter, *Gödel, Escher, Bach*.
 

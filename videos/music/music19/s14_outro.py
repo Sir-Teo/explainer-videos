@@ -37,6 +37,7 @@ class Outro(SoundScene):
         shown = None
         with self.listen(c) as snd:
             window(snd, r"Variation 19", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
+            pulse(snd, head[0], 0.0, c.duration, buff=0.1)
             for name in d["order"]:
                 snd.wait_until(name)
                 if shown is not None:

@@ -551,4 +551,49 @@ PARTS = [
         I=(8,),
         also=(("Monochord's chromatic toolkit: applied chords, sixths, the diminished seventh, the pathfinder, tension", "explainer/music/monochord/chromatic.py"),),
     ),
+    Part(
+        n=20, level="U", widget="canon", prereq=(14, 16, 17, 19),
+        question="Which melodies can be combined with themselves, and how is a fugue built from them?",
+        story="On 7 May 1747 Frederick the Great gave Bach a theme and asked for a fugue; Bach answered with the Musical "
+              "Offering, a six-voice fugue and canons set as riddles. A round works when every piece of a tune agrees "
+              "with every other: sung against itself in three voices, Part 14's tunes rank Frère Jacques, Row, Row, Row "
+              "Your Boat and Three Blind Mice first, third and fourth of 54, though the program was never told which "
+              "were rounds. Canons exist at every interval, as Bach's Goldberg canons show; a dynamic programme counts "
+              "them exactly, about one melody in 536 at the fifth and one in 1,539 at the fourth, the hardest interval. "
+              "The four forms of a line, prime, inversion, retrograde and retrograde inversion, make Klein's four-group. "
+              "Invertible counterpoint at the octave turns fifths into fourths, so a counter-line without fifths survives "
+              "the swap and one with them does not. Crab canons, counted from both ends, grow about 25-fold for every "
+              "two notes; a canon raised a tone each lap and played in Shepard tones climbs for ever. A fugue's tonal "
+              "answer swaps tonic and dominant in the subject's head; a Viterbi search writes a countersubject, and a "
+              "three-voice exposition on the Tune comes out with no dissonant beat; the Tune's phrase allows 11 "
+              "strettos, the closest two beats behind a fourth below. The Art of Fugue does all of this to one subject "
+              "and ends, unfinished, on B-A-C-H. The Tune is heard as a canon, a crab canon and an exposition.",
+        handoff="Form in Part 21; Renaissance imitation in Part 24; the Baroque fugue in Part 25; twelve-tone rows in Part 29; "
+                "phasing and tiling canons in Parts 30 and 33; tempo canons in Part 53.",
+        outside="Part 4 for Shepard tones; Part 14 for the tunes; Part 16 for two-voice rules; Part 17 for Viterbi search; "
+                "Part 19 for keys. Dynamic programming and small groups.",
+        objectives={
+            "U": ["Sing or play a round and say why it works; name the four forms of a line and recognize them by ear.",
+                  "Identify subject, answer, countersubject and stretto in a fugue exposition.",
+                  "Write the tonal answer to a subject that begins on tonic and dominant."],
+            "M": ["Count canons exactly by dynamic programming over the leader's last notes, and crab canons from both ends.",
+                  "Judge two or three lines for dissonant beats and parallels, and list a subject's strettos.",
+                  "Write a countersubject by Viterbi search, invertible at the octave."],
+            "D": ["Show that prime, inversion, retrograde and retrograde inversion form Klein's four-group, and what adding transposition gives.",
+                  "Describe computational fugue analysis and what makes entry detection hard."],
+            "I": ["Teach harmony through rounds; plan a canon at a chosen interval and delay.",
+                  "Use delay and echo as canons at the unison, timed to the beat or the bar."],
+        },
+        results=[
+            ("Rounds found", r"\text{Frère Jacques, Row Row, Three Blind Mice: places } 1, 3, 4 \text{ of } 54"),
+            ("Canons at every interval", r"n = 12: \ 1{,}378{,}924 \text{ at the fifth}, \ 479{,}936 \text{ at the fourth, of } 738{,}663{,}910"),
+            ("The four forms", r"\{P, I, R, RI\} \cong \mathbb{Z}_2 \times \mathbb{Z}_2"),
+            ("Crab canons", r"N(12) = 193{,}459{,}554 \approx 25 \, N(10)"),
+            ("Inversion at the octave", r"s \mapsto 7 - s: \ \text{fifth} \to \text{fourth}, \ \text{third} \leftrightarrow \text{sixth}"),
+        ],
+        U=(0, 1, 3, 4, 7, 8, 11),
+        D=(12,),
+        I=(9,),
+        also=(("Monochord's canon tools: forms, a judge, canon and crab counters, answers, strettos, a free voice", "explainer/music/monochord/canon.py"),),
+    ),
 ]

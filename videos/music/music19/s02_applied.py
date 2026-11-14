@@ -59,6 +59,7 @@ class Applied(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"applied dominants in C", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
             flash(snd, list(names), d["times"], hot=WHITE, base=TUNE)
+            pulse(snd, cap, 0.0, c.duration, buff=0.08)
         self.wait(0.3)
         self.clear_scene()
 

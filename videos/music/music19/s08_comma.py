@@ -36,6 +36,8 @@ class Comma(SoundScene):
             flash(snd, list(bars.pure), [ev[f"n{k}"] for k in range(1, 5)], hot=WHITE, base=TUNE)
             pulse(snd, bars.gap, ev["both"], ev["equal"] - 0.3, buff=0.1)
             flash(snd, list(bars.equal), [ev["equal"] + 0.8 * k for k in range(1, 5)], hot=WHITE, base=GREY_B)
+            pulse(snd, bars.heads[0], 0.0, ev["equal"] - 0.2, buff=0.08)
+            pulse(snd, bars.heads[1], ev["equal"], c.duration, buff=0.08)
         with self.voiceover(
             f"The second. With pure thirds, each of ratio six to five, four of them overshoot the octave by "
             f"{say(round(d['four minor thirds']))} cents, more than half a semitone, and the two notes grind against "
@@ -88,8 +90,8 @@ class Comma(SoundScene):
             "only in equal temperament. <bookmark mark='e'/> And so does every trapdoor that depends on F sharp being "
             "the same note as G flat."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcde", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcde", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)
@@ -144,8 +146,8 @@ class Comma(SoundScene):
             "choir that tunes each chord pure through a chain of enharmonic changes drifts in pitch: the comma comes "
             "back. <bookmark mark='e'/> Chromatic harmony is an idea that needs a tuning to make it possible."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcde", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcde", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

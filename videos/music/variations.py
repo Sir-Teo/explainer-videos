@@ -43,6 +43,8 @@ LEDGER = [
      "measure": r"24 chords, every one holding the Tune's note; 0 parallel fifths or octaves"},
     {"part": 19, "title": r"with borrowed chords, with the Neapolitan, and through a diminished-seventh trapdoor into A$\flat$", "seconds": 42.2,
      "measure": r"24 chords, 13 of them outside C major; one chord carries the Tune four keys away; 0 parallels"},
+    {"part": 20, "title": r"as a canon at the fourth below, a crab canon, and a three-voice fugue exposition", "seconds": 38.92,
+     "measure": r"the whole Tune against itself two beats later: 2 dissonant beats in 46"},
 ]
 
 

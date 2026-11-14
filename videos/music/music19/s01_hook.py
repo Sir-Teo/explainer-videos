@@ -51,8 +51,8 @@ class Hook(SoundScene):
             "reading is a different theory of what harmony is. <bookmark mark='d'/> And every one of them starts from "
             "something small: a single note borrowed from outside the key, to lean on the note next door."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcd", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcd", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)
@@ -77,8 +77,8 @@ class Hook(SoundScene):
             "finds the shortest way to any key, and a number for tension. <bookmark mark='f'/> And then back to the "
             "chord at the start."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, s in zip("abcdef", steps):
+            self.play(FadeIn(head), FadeIn(steps[0]))
+            for mark, s in zip("bcdef", steps[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(s))
         self.wait(0.4)

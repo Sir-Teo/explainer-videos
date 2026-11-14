@@ -169,10 +169,9 @@ class Tension(SoundScene):
             "the phrase, tension rising toward the cadence and draining away at the close. Building such trees "
             "automatically is Part 22's subject."
         ) as vo:
-            self.play(FadeIn(leaves), FadeIn(seqn), FadeIn(tags[1]))
+            self.play(FadeIn(leaves), FadeIn(seqn), FadeIn(tags[1]), FadeIn(rows_[0]))
             vo.wait_until("a")
             self.play(FadeIn(top), Create(edges), run_time=2.0)
-            self.play(FadeIn(rows_[0]))
             vo.wait_until("b")
             self.play(FadeIn(rows_[1]))
             vo.wait_until("c")

@@ -124,6 +124,8 @@ class Mediants(SoundScene):
             flash(snd, list(n1), d["times"]["thirds"], hot=WHITE, base=TUNE)
             sing_chords(snd, g2, d["times"]["hexatonic"])
             flash(snd, list(n2), d["times"]["hexatonic"], hot=WHITE, base=TUNE)
+            pulse(snd, t1, 0.0, d["starts"]["hexatonic"] - 0.3, buff=0.08)
+            pulse(snd, t2, d["starts"]["hexatonic"], c.duration, buff=0.08)
         with self.voiceover(
             "The ear follows the smallest motion, not the key signature. A minimal step can carry the music into a "
             "chord no key contains, and the listener accepts it, because each voice has barely moved. This is the "

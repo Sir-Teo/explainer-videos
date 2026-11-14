@@ -96,8 +96,8 @@ class Frontier(SoundScene):
             "and the dominant seventh are nearly even, which may be one reason why they became the chords of tonal "
             "music: they can always move smoothly somewhere."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcdef", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcdef", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)
@@ -122,8 +122,8 @@ class Frontier(SoundScene):
             "this music best described as a grammar, the subject of Part 22, or as a geometry of smooth motion, or "
             "both at once?"
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcd", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcd", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

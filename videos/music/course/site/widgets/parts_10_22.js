@@ -976,4 +976,86 @@
       note: "From C, close the doors and F sharp major takes two steps, through E minor; open them and the diminished seventh of C, respelled, reaches it in one, the film's chapter 9. Try C major to D flat major: one step through the German sixth. The doors work only on an equally tempered keyboard, where F sharp and G flat are one key (chapter 7)."
     });
   };
+
+  // ---- Part 20: a melody against itself ---------------------------------------------------------------------------
+  var CN20 = {"The Tune":[[72,0.0,1.0],[72,1.0,1.0],[79,2.0,1.0],[79,3.0,1.0],[81,4.0,1.0],[81,5.0,1.0],[79,6.0,2.0],[77,8.0,1.0],[77,9.0,1.0],[76,10.0,1.0],[76,11.0,1.0],[74,12.0,1.0],[74,13.0,1.0],[72,14.0,2.0],[79,16.0,1.0],[79,17.0,1.0],[77,18.0,1.0],[77,19.0,1.0],[76,20.0,1.0],[76,21.0,1.0],[74,22.0,2.0],[79,24.0,1.0],[79,25.0,1.0],[77,26.0,1.0],[77,27.0,1.0],[76,28.0,1.0],[76,29.0,1.0],[74,30.0,2.0],[72,32.0,1.0],[72,33.0,1.0],[79,34.0,1.0],[79,35.0,1.0],[81,36.0,1.0],[81,37.0,1.0],[79,38.0,2.0],[77,40.0,1.0],[77,41.0,1.0],[76,42.0,1.0],[76,43.0,1.0],[74,44.0,1.0],[74,45.0,1.0],[72,46.0,2.0]],"Frère Jacques":[[67,0.0,1.0],[69,1.0,1.0],[71,2.0,1.0],[67,3.0,1.0],[67,4.0,1.0],[69,5.0,1.0],[71,6.0,1.0],[67,7.0,1.0],[71,8.0,1.0],[72,9.0,1.0],[74,10.0,2.0],[71,12.0,1.0],[72,13.0,1.0],[74,14.0,2.0],[74,16.0,0.5],[76,16.5,0.5],[74,17.0,0.5],[72,17.5,0.5],[71,18.0,1.0],[67,19.0,1.0],[74,20.0,0.5],[76,20.5,0.5],[74,21.0,0.5],[72,21.5,0.5],[71,22.0,1.0],[67,23.0,1.0],[67,24.0,1.0],[62,25.0,1.0],[67,26.0,2.0],[67,28.0,1.0],[62,29.0,1.0],[67,30.0,2.0]],"Row, Row, Row Your Boat":[[67,0.0,1.0],[67,1.0,1.0],[67,2.0,0.67],[69,2.67,0.33],[71,3.0,1.0],[71,4.0,0.67],[69,4.67,0.33],[71,5.0,0.67],[72,5.67,0.33],[74,6.0,2.0],[79,8.0,0.33],[79,8.33,0.33],[79,8.66,0.33],[74,8.99,0.33],[74,9.32,0.33],[74,9.65,0.33],[71,9.98,0.33],[71,10.31,0.33],[71,10.64,0.33],[67,10.97,0.33],[67,11.3,0.33],[67,11.63,0.33],[74,11.96,0.67],[72,12.63,0.33],[71,12.96,0.67],[69,13.63,0.33],[67,13.96,2.0]],"Three Blind Mice":[[71,0.0,1.0],[69,1.0,1.0],[67,2.0,2.0],[71,4.0,1.0],[69,5.0,1.0],[67,6.0,2.0],[74,8.0,1.0],[72,9.0,0.5],[72,9.5,0.5],[71,10.0,2.0],[74,12.0,1.0],[72,13.0,0.5],[72,13.5,0.5],[71,14.0,2.0],[74,16.0,0.5],[79,16.5,0.5],[79,17.0,0.5],[78,17.5,0.5],[76,18.0,0.5],[78,18.5,0.5],[79,19.0,0.5],[74,19.5,0.5],[74,20.0,1.0],[74,21.0,0.5],[79,21.5,0.5],[79,22.0,0.5],[78,22.5,0.5],[76,23.0,0.5],[78,23.5,0.5],[79,24.0,0.5],[74,24.5,0.5],[74,25.0,1.0],[74,26.0,0.5],[72,26.5,0.5],[71,27.0,1.0],[69,28.0,1.0],[67,29.0,2.0]],"The royal theme (rhythm simplified)":[[60,0.0,2.0],[63,2.0,2.0],[67,4.0,2.0],[68,6.0,2.0],[59,8.0,3.0],[67,11.0,1.0],[66,12.0,1.0],[65,13.0,1.0],[64,14.0,1.0],[63,15.0,1.0],[62,16.0,1.0],[61,17.0,1.0],[60,18.0,1.0],[59,19.0,0.5],[55,19.5,0.5],[60,20.0,1.0],[65,21.0,1.0],[63,22.0,1.0],[62,23.0,1.0],[60,24.0,2.0]]};
+  var CN20_NAMES = Object.keys(CN20);
+  var FORM20 = ["as it is", "upside down", "backwards", "upside down and backwards"];
+  function form20(ln, f) {
+    var out = ln.map(function (n) { return n.slice(); }), ax = ln[0][0], T = 0;
+    ln.forEach(function (n) { T = Math.max(T, n[1] + n[2]); });
+    if (f === 1 || f === 3) out = out.map(function (n) { return [2 * ax - n[0], n[1], n[2]]; });
+    if (f === 2 || f === 3) out = out.map(function (n) { return [n[0], T - n[1] - n[2], n[2]]; }).sort(function (a, b) { return a[1] - b[1]; });
+    return out;
+  }
+  function sounding20(ln, t) { for (var i = 0; i < ln.length; i++) if (ln[i][1] - 1e-9 <= t && t < ln[i][1] + ln[i][2] - 1e-9) return ln[i][0]; return null; }
+  function judge20(a, b, beat) {
+    var T = 0, out = { diss: [], par: [], beats: 0 }, prev = null, t;
+    [a, b].forEach(function (ln) { ln.forEach(function (n) { T = Math.max(T, n[1] + n[2]); }); });
+    for (t = 0; t < T - 1e-9; t += beat) {
+      var p = sounding20(a, t), q = sounding20(b, t);
+      if (p === null || q === null) { prev = null; continue; }
+      out.beats++;
+      var iv = Math.abs(p - q) % 12;
+      if ([0, 3, 4, 7, 8, 9].indexOf(iv) < 0) out.diss.push(t);
+      if (prev) {
+        var iv0 = Math.abs(prev[0] - prev[1]) % 12;
+        if (iv0 === iv && (iv === 0 || iv === 7) && p !== prev[0] && q !== prev[1] && (p - prev[0]) * (q - prev[1]) > 0) out.par.push(t);
+      }
+      prev = [p, q];
+    }
+    return out;
+  }
+  function canonSound20(a, b, beat) {
+    var rate = 44100, T = 0, k, v, n, h;
+    [a, b].forEach(function (ln) { ln.forEach(function (x) { T = Math.max(T, x[1] + x[2]); }); });
+    var out = new Float32Array(Math.floor((T * beat + 1.2) * rate));
+    [a, b].forEach(function (ln) {
+      ln.forEach(function (x) {
+        var hz = 440 * Math.pow(2, (x[0] - 69) / 12), start = Math.floor(x[1] * beat * rate), len = Math.floor((x[2] * beat + 0.5) * rate);
+        for (n = 0; n < len && start + n < out.length; n++) {
+          var t = n / rate, y = 0;
+          for (h = 1; h <= 6; h++) y += Math.sin(2 * Math.PI * hz * h * t) * Math.pow(0.55, h - 1) * Math.exp(-t * (2.0 + h));
+          out[start + n] += 0.08 * y * Math.min(1, t / 0.004);
+        }
+      });
+    });
+    return play(out, rate);
+  }
+  W.canon = function (el) {
+    QB.widget(el, {
+      title: "A melody against itself",
+      sub: "Choose a melody, then when a second voice enters (beats after the first), how far away (semitones), and in which form. The page judges every beat where both voices sound, as the film's judge does: pink where the two make a second, fourth, seventh or tritone, blue where they move in parallel fifths or octaves. A round is a canon at 0 semitones; the Tune works best two beats behind at -5.",
+      panels: 1, height: 300,
+      controls: [
+        { k: "m", label: "Melody", min: 0, max: CN20_NAMES.length - 1, step: 1, value: 0, fmt: function (i) { return CN20_NAMES[i]; } },
+        { k: "d", label: "Second voice enters after (beats)", min: 0, max: 16, step: 1, value: 2 },
+        { k: "i", label: "Interval (semitones)", min: -24, max: 12, step: 1, value: -5 },
+        { k: "f", label: "Form", min: 0, max: 3, step: 1, value: 0, fmt: function (i) { return FORM20[i]; } },
+      ],
+      buttons: [{ label: "Play the canon", act: function (s) { s.sound = canonSound20(s.a, s.b, 0.3); } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var a = CN20[CN20_NAMES[v.m]], b = form20(a, v.f).map(function (n) { return [n[0] + v.i, n[1] + v.d, n[2]]; });
+        s.a = a; s.b = b;
+        var T = 0, lo = 200, hi = 0;
+        [a, b].forEach(function (ln) { ln.forEach(function (n) { T = Math.max(T, n[1] + n[2]); lo = Math.min(lo, n[0]); hi = Math.max(hi, n[0]); }); });
+        s.j = judge20(a, b, 1);
+        var ax = g[0].axes({ x: [0, T], y: [lo - 2, hi + 2], title: CN20_NAMES[v.m] + ": the first voice (gold) and the second (pink)", xlabel: "beats", ylabel: "key number" });
+        s.j.diss.forEach(function (t) { ax.line([t + 0.5, t + 0.5], [lo - 2, hi + 2], { color: "rgba(244,114,182,0.35)", width: 8 }); });
+        s.j.par.forEach(function (t) { ax.line([t + 0.5, t + 0.5], [lo - 2, hi + 2], { color: "rgba(125,211,252,0.35)", width: 8 }); });
+        [[a, C.idea], [b, "#F472B6"]].forEach(function (pair) {
+          pair[0].forEach(function (n) { ax.line([n[1] + 0.05, n[1] + n[2] - 0.05], [n[0], n[0]], { color: pair[1], width: 4 }); });
+        });
+      },
+      readout: function (v, s) {
+        var j = s.j, rate = j.beats ? 100 * (j.beats - j.diss.length) / j.beats : 0;
+        return [["beats with both voices", String(j.beats)],
+                ["dissonant beats", String(j.diss.length) + (j.beats ? "  (" + fmt(rate, 0) + " in a hundred agree)" : "")],
+                ["parallel fifths or octaves", String(j.par.length)],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Try Frère Jacques entering after 8 beats at 0: a round, and almost every beat agrees. Then the Tune after 2 beats at -5: the film's Variation 20, two dissonant beats in 46. The royal theme resists every setting: its chromatic slide clashes with itself almost everywhere. Turn a melody backwards and start both voices together (a delay of 0): that is a crab canon, and few melodies survive it."
+    });
+  };
 })();

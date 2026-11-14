@@ -35,6 +35,7 @@ class Tristan(SoundScene):
             window(snd, r"\textit{Tristan}, \ again", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
             pulse(snd, nm[0], d["chord_at"][0], d["resolve_at"][0] - 0.2, buff=0.1)
             pulse(snd, nm[1], d["resolve_at"][0], d["starts"]["second"] - 0.4, buff=0.1)
+            pulse(snd, st, d["starts"]["second"], c.duration, buff=0.15)
         with self.voiceover(
             "<bookmark mark='a'/> The second chord is easy. <bookmark mark='b'/> E, G sharp, B, D: a dominant seventh. "
             "<bookmark mark='c'/> It is the dominant of A minor, and the prelude never gives us A minor: each phrase "
@@ -71,7 +72,8 @@ class Tristan(SoundScene):
             "said it has no function at all. It is a moment of pure tension, defined by the lines that pass through it, "
             "each of which moves by a semitone."
         ) as vo:
-            for mark, c_ in zip("abcd", cards):
+            self.play(FadeIn(cards[0]))
+            for mark, c_ in zip("bcd", cards[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(c_))
         self.wait(0.4)
