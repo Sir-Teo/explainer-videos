@@ -40,7 +40,7 @@ class Piano(SoundScene):
         d = load("keyboards")
         kb = d["keyboards"]
         lo, hi = 20, 110
-        x0, W = -3.6, 9.0
+        x0, W = -1.4, 7.4
         y0, dy = 1.9, 0.62
         rows_ = VGroup()
         for i, k in enumerate(kb):
@@ -76,7 +76,7 @@ class Piano(SoundScene):
         lo, hi = 20, 110
         x0, W = -5.2, 10.4
         kb = VGroup(*[Rectangle(width=W / (hi - lo) * 0.9, height=1.1 if (m % 12) not in (1, 3, 6, 8, 10) else 0.7, stroke_width=0.5, stroke_color=GREY_B,
-                                fill_color=WHITE if (m % 12) not in (1, 3, 6, 8, 10) else "#222", fill_opacity=0.25 if 29 <= m <= 89 else 0.08)
+                                fill_color=WHITE if (m % 12) not in (1, 3, 6, 8, 10) else "#222", fill_opacity=0.6 if 29 <= m <= 89 else 0.12)
                       .move_to([x0 + W * (m - lo) / (hi - lo), 0.3 + (0.2 if (m % 12) in (1, 3, 6, 8, 10) else 0.0), 0]) for m in range(21, 109)])
         old = VGroup(*[Dot([x0 + W * (m - lo) / (hi - lo), -0.55, 0], radius=0.09, color=TUNE) for m in d["cs_old"]])
         new = VGroup(*[Dot([x0 + W * (m - lo) / (hi - lo), -0.55, 0], radius=0.09, color=BLUE) for m in d["cs_new"]])
@@ -88,10 +88,9 @@ class Piano(SoundScene):
             "the century added at either end: a deep C one, and C seven and C eight at the top, which on Part 7's piano "
             "model, as on a real one, are short, bright and almost pitchless."
         ):
-            self.play(FadeIn(head), FadeIn(kb), FadeIn(lab_old), FadeIn(lab_new))
+            self.play(FadeIn(head), FadeIn(kb), FadeIn(lab_old), FadeIn(lab_new), FadeIn(old), FadeIn(new))
         with self.listen(c) as snd:
             window(snd, r"every C, \ then the new ones", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
-            snd.show(old[0])
             flash(snd, old, [d["starts"]["old"] + 1.25 * i for i in range(len(old))], hot=WHITE, base=TUNE)
             flash(snd, new, [d["starts"]["new"] + 1.75 * i for i in range(len(new))], hot=WHITE, base=BLUE)
         self.wait(0.3)
@@ -124,9 +123,9 @@ class Piano(SoundScene):
             "of 1911 take the whole of the middle. Nine pieces prove nothing on their own, but they point the same way as "
             "the instruments: the music filled the space it was given."
         ) as vo:
-            self.play(FadeIn(lim), FadeIn(cap))
+            self.play(FadeIn(lim), FadeIn(cap), FadeIn(rows_[0]))
             vo.wait_until("a")
-            self.play(FadeIn(rows_[0]))
+            self.play(Indicate(rows_[0], color=WHITE, scale_factor=1.04))
             vo.wait_until("b")
             self.play(LaggedStart(*[FadeIn(r) for r in rows_[1:6]], lag_ratio=0.2), run_time=1.5)
             vo.wait_until("c")

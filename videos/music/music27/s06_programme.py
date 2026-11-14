@@ -45,10 +45,10 @@ class Programme(SoundScene):
             ln = d["lines"][k]
             ac = d["acc"][k]
             total = max(n[1] + n[2] for n in ln + ac)
-            g = voices_roll([ln, ac], width=6.8 * min(1.0, total / 16) + 0.6, height=0.85, colors=[TUNE, GREY_A], lo=34, hi=84, bar_h=0.07)
+            g = voices_roll([ln, ac], width=6.8 * min(1.0, total / 16) + 0.6, height=0.7, colors=[TUNE, GREY_A], lo=34, hi=84, bar_h=0.06)
             rows_.add(VGroup(label(NAME[k], font_size=19, color=GREY_A), g).arrange(RIGHT, buff=0.4))
             rolls.append(g)
-        rows_.arrange(DOWN, buff=0.28, aligned_edge=LEFT).move_to(DOWN * 0.15)
+        rows_.arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to(UP * 0.05)
         head = label(r"the Tune's first phrase as an \textit{idée fixe} \ (ours, \ after Berlioz's plan)", font_size=24, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Here is the idea with the Tune's first phrase standing in for Berlioz's melody. The theme, plainly. At the ball, "
@@ -58,7 +58,7 @@ class Programme(SoundScene):
         ):
             self.play(FadeIn(head), FadeIn(rows_))
         with self.listen(c) as snd:
-            window(snd, r"one theme, \ five guises", detail=r"Part 7's bowed string and piano", corner=DR, tag_corner=UR)
+            window(snd, r"one theme, \ five guises", detail=r"Part 7's bowed string and piano", corner=DL, tag_corner=DR)
             for i, k in enumerate(KINDS):
                 st = d["starts"][k]
                 flash_voices(snd, rolls[i], [d["lines"][k], d["acc"][k]], st, d["units"][k], colors=[TUNE, GREY_A])
@@ -85,9 +85,9 @@ class Programme(SoundScene):
             "count leaves out, as it leaves out the strings. <bookmark mark='c'/> Brahms in 1876 is more classical again, at nineteen; the century "
             "did not move in one direction."
         ) as vo:
-            self.play(FadeIn(t))
+            self.play(FadeIn(t), FadeIn(bars))
             vo.wait_until("a")
-            self.play(FadeIn(bars), FadeIn(names[:3]))
+            self.play(FadeIn(names[:3]))
             vo.wait_until("b")
             self.play(FadeIn(names[3]), FadeIn(note))
             vo.wait_until("c")

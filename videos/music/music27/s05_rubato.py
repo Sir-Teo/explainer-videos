@@ -50,7 +50,7 @@ class Rubato(SoundScene):
         with self.voiceover(
             "The second kind has a simple model, the phrase arch, after the psychologist Neil Todd. <bookmark mark='a'/> "
             "Strict time is a flat line. <bookmark mark='b'/> Under the arch, each phrase begins a little slow, speeds into "
-            "its middle, and slows again into its end, here by up to a fifth either way; the slowing at the end is what "
+            "its middle, and slows again into its end, here a tenth faster in the middle and a fifth slower at the ends; the slowing at the end is what "
             "tells a listener a phrase is closing. Measurements of many pianists playing the same piece, by Bruno Repp "
             "among others, find shapes like this, with every player bending a little differently."
         ) as vo:
