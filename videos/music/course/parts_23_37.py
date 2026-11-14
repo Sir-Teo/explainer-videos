@@ -444,4 +444,45 @@ PARTS = [
         I=(4,),
         also=(("Monochord's geometry of chords: minimal voice leading, the strip, evenness, OPTIC counts, Fourier, Bach", "explainer/music/monochord/geometry.py"),),
     ),
+    Part(
+        n=33, level="M", widget="euclid", prereq=(6, 11, 12, 29, 31, 32),
+        question="Why does an algorithm for timing a neutron accelerator generate the rhythms of the world, and what else does the same mathematics build?",
+        story="Bjorklund's algorithm for spreading k pulses over n slots is Euclid's algorithm run on sequences, and its "
+              "output is the tresillo, the cinquillo, the West African bell and bossa nova, each a rotation of a Euclidean "
+              "rhythm and the most even of its kind. Read the bell pattern's twelve pulses as semitones and it is the major "
+              "scale: one maximally even shape, found twice. Stacks of fifths have two step sizes at 2, 3, 5, 7, 12, 17, 29, "
+              "41 and 53, the convergents of the fifth's continued fraction and their sums; the golden ratio gives the "
+              "Fibonacci numbers. Arom's oddity property is impossible above half the pulses; homometric rhythms share "
+              "every interval. A Vuza canon at period 72, found by exact cover and verified, tiles time with neither rhythm "
+              "nor entries repeating. Sanskrit metre counted rhythms of light and heavy syllables and found Fibonacci, and "
+              "its mnemonic yamātārājabhānasalagāḥ is a de Bruijn sequence. Plain Bob Minimus rings all 24 orders of four "
+              "bells. Temperaments are linear maps with commas in the kernel, and a search rediscovers 12, 19, 31 and 53; "
+              "Bohlen and Pierce drop the octave for thirteen steps of the 3:1 tritave.",
+        handoff="Tala in Part 34; timelines in their musical worlds in Part 37; tunings for new instruments in Part 52; "
+                "algorithmic composition in Part 65; research in music in Part 67.",
+        outside="Part 6 for commas and temperaments; Part 11 for rhythm and syncopation; Part 12 for maximal evenness; Part "
+                "29 for homometry; Part 31 for Hamiltonian tours; Part 32 for evenness. Euclid's algorithm, continued "
+                "fractions, the three-gap theorem, exact cover, permutation groups, linear maps.",
+        objectives={
+            "U": ["Hear and construct Euclidean rhythms, and recognise the same shape as a scale.",
+                  "Explain the oddity property and why it cannot hold above half the pulses.",
+                  "Explain change ringing as a walk through every order of the bells."],
+            "M": ["Implement Bjorklund's algorithm and the moment-of-symmetry test, and relate them to continued fractions.",
+                  "Search for tiling canons by exact cover and test them for periodicity.",
+                  "Treat a temperament as a linear map and find the commas it tempers out."],
+            "D": ["Design a study of whether maximal evenness reflects culture or cognition."],
+            "I": ["Choose an equal temperament for an instrument by the commas it tempers out and its errors."],
+        },
+        results=[
+            ("Euclid", r"E(3,8) = \texttt{x..x..x.}, \ E(7,12) = \text{the major scale}"),
+            ("Two step sizes", r"2, 3, 5, 7, 12, 17, 29, 41, 53 \text{ fifths}"),
+            ("A Vuza canon", r"\{0,8,16,18,26,34\} \oplus \{0,1,5,24,25,29,30,36,49,53,60,66\} = \mathbb{Z}_{72}"),
+            ("Pingala", r"1, 2, 3, 5, 8, 13, 21 \text{ rhythms of } 1 \ldots 7 \text{ beats}"),
+            ("12-tone val", r"\langle 12\ 19\ 28] \cdot [-4, 4, -1\rangle = 0 \ (81/80 \text{ tempered out})"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 9),
+        D=(10,),
+        I=(8,),
+        also=(("Monochord's mathematics of rhythm and scale: Euclid, moments of symmetry, oddity, tilings, prosody, ringing, temperaments", "explainer/music/monochord/mathmusic.py"),),
+    ),
 ]

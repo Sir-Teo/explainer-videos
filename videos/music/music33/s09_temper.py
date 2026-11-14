@@ -80,27 +80,36 @@ class Temper(SoundScene):
     # ------------------------------------------------------------------
     def hear(self):
         d = load("temper")
-        c = clip("temper.four")
-        cells = VGroup()
-        for k, nm in (("12", r"12 steps"), ("19", r"19 steps"), ("31", r"31 steps"), ("just", r"just")):
-            ch = d["chords"][k]
-            cells.add(VGroup(label(nm, font_size=26, color=TUNE if k == "just" else WHITE),
-                             label(rf"third {ch['third']:.1f}", font_size=18, color=GREY_A), label(rf"fifth {ch['fifth']:.1f}", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.2))
-        cells.arrange(RIGHT, buff=1.2).move_to(UP * 0.2)
-        head = label(r"a C major triad in four tunings \ (cents)", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
+        c = clip("temper.quiz")
+        card = listen_card(r"A C major triad, \ four times, \ in four tunings: \ 12, \ 19 and 31 equal steps, \ and just. \ "
+                           r"Which one is just, \ A, \ B, \ C or D? \ Listen for the chord that is still.", width=10.4)
         with self.voiceover(
-            "Hear the difference in one chord. A C major triad with the thirds and fifths of twelve, nineteen and thirty-one "
-            "equal steps, and then just. Twelve's third is fourteen cents wide and shimmers; nineteen's is seven cents narrow; "
-            "thirty-one's is within one cent of pure, though its fifth is five cents narrow; the just triad is still."
+            "A question for your ears. One C major triad, four times, in four tunings: twelve, nineteen and thirty-one equal "
+            "steps, and just intonation, in some order. Which one is just? Listen for the chord whose sound is perfectly "
+            "still, with no slow beating."
         ):
-            self.play(FadeIn(head), FadeIn(cells))
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        cells = VGroup(*[label(k, font_size=44, color=GREY_A) for k in "ABCD"]).arrange(RIGHT, buff=2.2).move_to(UP * 0.8)
+        self.play(FadeOut(card), FadeIn(cells))
         with self.listen(c) as snd:
-            window(snd, r"12, \ 19, \ 31, \ just", detail=r"Part 7's piano, \ retuned", corner=DL, tag_corner=DR)
-            ks = ["12", "19", "31", "just"]
-            for i, k in enumerate(ks):
-                end = d["starts"][ks[i + 1]] - 0.3 if i < 3 else c.duration
-                pulse(snd, cells[i], d["starts"][k], end, buff=0.08)
-        self.wait(0.3)
+            window(snd, r"A, \ B, \ C, \ D", detail=r"Part 7's piano, \ retuned", corner=DL, tag_corner=DR)
+            for i, k in enumerate("ABCD"):
+                end = d["starts"]["ABCD"[i + 1]] - 0.5 if i < 3 else c.duration
+                pulse(snd, cells[i], d["starts"][k], end, buff=0.12)
+        names = {"12": r"12 steps", "19": r"19 steps", "31": r"31 steps", "just": r"just"}
+        ans = VGroup()
+        for i, k in enumerate(d["order"]):
+            ch = d["chords"][k]
+            ans.add(VGroup(label(names[k], font_size=22, color=TUNE if k == "just" else WHITE), label(rf"third {ch['third']:.1f}", font_size=17, color=GREY_A),
+                           label(rf"fifth {ch['fifth']:.1f}", font_size=17, color=GREY_A)).arrange(DOWN, buff=0.15).next_to(cells[i], DOWN, buff=0.4))
+        with self.voiceover(
+            "B is just. A is nineteen steps, its third seven cents narrow; C is twelve, its third fourteen cents wide, the "
+            "familiar shimmer of the piano; D is thirty-one, its third within one cent of pure but its fifth five cents "
+            "narrow. The differences are small, and the ear hears them as motion inside the chord, the beating of Part 5."
+        ):
+            self.play(FadeIn(ans))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------

@@ -1376,14 +1376,32 @@ Fourier Space*.
 *Story:* An algorithm written to time pulses in a neutron accelerator turned out to generate the rhythms of
 Cuba, Ghana, Bulgaria and Persia: it is Euclid's algorithm. The same mathematics makes scales. The part follows
 it to a question about tiling the line that touches an open conjecture.
+1. Hook: the tresillo, cinquillo and bell pattern heard as necklaces; Bjorklund and Toussaint; Toussaint's work; the plan.
+2. Euclid's rhythms: Bjorklund's process step by step; why it is Euclid's; rotations; Toussaint's catalogue checked; an ear question (which five-in-eight is even?); all seven necklaces ranked.
+3. One shape, rhythm and scale: E(7,12) is the major scale, heard both ways; maximal evenness; three layers heard; the shape elsewhere.
+4. Stacks of fifths: two or three step sizes; the three-gap theorem; continued fractions and moments of symmetry; 5, 7 and 12 heard; the golden ratio and Fibonacci.
+5. Oddity and homometry: Arom's property and the pigeonhole bound; odd rhythms counted; an ear question (same intervals?); both properties; meaning.
+6. Tiling the line: a small canon heard; a Vuza canon at 72 found, verified and heard; the search; why 72; composers; Hajós.
+7. Pingala's syllables: the rhythms of five beats heard; Fibonacci; the meru; yamātārāja as a de Bruijn sequence heard; history.
+8. Change ringing: plain hunt on four and six (heard); Plain Bob Minimus, every order once, heard; bells and groups.
+9. Temperaments as linear maps: vals and commas; the finder; an ear question (which triad is just?); instruments; regular temperaments.
+10. A scale without octaves: Bohlen–Pierce heard on odd and all harmonics; why it works; since.
+11. Frontier: Fuglede's conjecture; Coven–Meyerowitz; open problems; the field; the research problem.
+12. Variation 33: the Tune as a Vuza canon, in plain hunt, in Bohlen–Pierce. Outro: problems, payoffs.
+
 *Covers:* Euclidean rhythms and maximal evenness; well-formed scales and continued fractions; rhythmic oddity;
 homometry; tiling canons and Vuza's aperiodic canons; de Bruijn sequences and Fibonacci numbers in Sanskrit
 prosody; change ringing as walks on a Cayley graph; regular temperaments as linear maps with commas in the
 kernel; the Bohlen–Pierce scale.
-*Built and computed:* the Euclidean generator; a Vuza canon found and verified at period 72; a ringing method
-generated; a temperament finder that rediscovers 12, 19, 31 and 53.
-*Variation 33:* the Tune as a tiling canon; rung on bells; in Bohlen–Pierce.
-*Frontier:* tilings and the spectral conjecture; open problems in mathematical music theory.
+*Built and computed:* `monochord/mathmusic.py`: Bjorklund's generator and its stages; Toussaint's catalogue checked
+as rotations; moment-of-symmetry sizes and convergents; oddity counts and homometric classes; tilings by exact cover,
+with a Vuza canon at period 72 found and verified (1,296 tilings by its rhythm, 432 aperiodic); Pingala's counts, the
+meru and a de Bruijn check of the mnemonic; plain hunt and Plain Bob Minimus (24 distinct rows); vals, commas and a
+temperament finder whose records include 12, 19, 31 and 53; the Bohlen–Pierce step.
+*Variation 33:* the Tune as the twelve voices of the Vuza canon; rung in plain hunt; in Bohlen–Pierce.
+*Frontier:* tilings and the spectral conjecture; open problems in mathematical music theory; whether maximal
+evenness is cultural or cognitive.
+*Rights:* every sound is the film's own (§2.4); traditional rhythms are played as bare timelines and attributed.
 *Reading:* Toussaint, *The Geometry of Musical Rhythm*; Amiot; Hall's and Benson's surveys.
 
 ## Act VI · Many Musics

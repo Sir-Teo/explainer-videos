@@ -21,7 +21,7 @@ Items:
     canon       a small rhythmic canon, and a Vuza canon at period 72 found by search and verified, each heard
     prosody     Pingala's counts (Fibonacci); the rhythms of length 5; yamātārājabhānasalagāḥ as a de Bruijn sequence, heard
     ringing     plain hunt and Plain Bob Minimus on four bells: every order once, heard
-    temper      equal divisions ranked by their fifths and thirds; vals and commas; a major triad in 12, 19, 31 and just, heard
+    temper      equal divisions ranked by their fifths and thirds; vals and commas; a major triad in 19, just, 12 and 31 (an ear question: which is just?)
     bp          the Bohlen–Pierce scale on odd-harmonic and ordinary tones, and its 3:5:7 chord, heard
     tune        Variation 33: the Tune as a tiling canon, rung on bells, and in Bohlen–Pierce
     variation   the Variations ledger, row 33
@@ -359,16 +359,20 @@ def compute_temper() -> dict:
         v = MM.patent_val(n)
         vals[str(n)] = {"val": list(v), "tempers": {k: MM.tempers_out(v, r) for k, r in commas.items()}, **MM.edo_error(n)}
     clips, chords = [], {}
-    for name, third, fifth in (("12", 400.0, 700.0), ("19", 1200 * 6 / 19, 1200 * 11 / 19), ("31", 1200 * 10 / 31, 1200 * 18 / 31),
-                               ("just", 1200 * log2(1.25), 1200 * log2(1.5))):
+    tunings = {"12": (400.0, 700.0), "19": (1200 * 6 / 19, 1200 * 11 / 19), "31": (1200 * 10 / 31, 1200 * 18 / 31),
+               "just": (1200 * log2(1.25), 1200 * log2(1.5))}
+    order = ["19", "just", "12", "31"]                                  # played as A, B, C, D
+    for name in order:
+        third, fifth = tunings[name]
         ch = [60, 60 + third / 100, 60 + fifth / 100]
         parts = [(piano(m, 2.2, 0.9), 0.0, -2.0) for m in ch]
         clips.append(Clip(mix(parts, duration=2.8).y, SR).at_level(LEVEL))
         chords[name] = {"third": third, "fifth": fifth}
-    s_ = concat(clips, gap=0.5, names=["12", "19", "31", "just"])
-    return {"best": best, "vals": vals, "chords": chords, "starts": {k: float(s_.events[k]) for k in ("12", "19", "31", "just")},
+    s_ = concat(clips, gap=0.8, names=list("ABCD"))
+    return {"best": best, "vals": vals, "chords": chords, "order": order, "answer": "ABCD"[order.index("just")],
+            "starts": {k: float(s_.events[k]) for k in "ABCD"},
             "commas": {k: list(MM.monzo(r)) for k, r in commas.items()},
-            "clips": {"four": save("temper.four", s_, detail="a C major triad with the third and fifth of 12, 19 and 31 equal steps, then just (5:4 and 3:2); Part 7's piano, retuned")}}
+            "clips": {"four": save("temper.quiz", s_, detail="a C major triad four times: with the third and fifth of 19 equal steps, just (5:4 and 3:2), 12 and 31 equal steps; Part 7's piano, retuned")}}
 
 
 def compute_bp() -> dict:

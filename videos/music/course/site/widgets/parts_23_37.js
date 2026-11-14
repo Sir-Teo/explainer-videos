@@ -735,4 +735,84 @@
       note: "C major to F major is three semitones; to F sharp major, six, the most any triad needs. Move one slider by a quarter tone at a time from C major towards C minor: the point slides along the straight line between them, through the neutral triad."
     });
   };
+  // ------------------------------------------------------------------------------------------- Part 33: Euclidean rhythms
+  function euclid33(k, n) {
+    if (k <= 0) { var z = []; for (var i = 0; i < n; i++) z.push(0); return z; }
+    if (k >= n) { var o = []; for (var j = 0; j < n; j++) o.push(1); return o; }
+    var a = [], b = [], q;
+    for (q = 0; q < k; q++) a.push([1]);
+    for (q = 0; q < n - k; q++) b.push([0]);
+    while (b.length > 1) {
+      var m = Math.min(a.length, b.length), na = [];
+      for (q = 0; q < m; q++) na.push(a[q].concat(b[q]));
+      var rest = a.length > m ? a.slice(m) : b.slice(m);
+      a = na; b = rest;
+    }
+    var out = [];
+    a.concat(b).forEach(function (g) { out = out.concat(g); });
+    return out;
+  }
+  function rot33(p, r) { var n = p.length; return p.map(function (_, i) { return p[(i + r) % n]; }); }
+  function gaps33(p) {
+    var on = []; p.forEach(function (x, i) { if (x) on.push(i); });
+    return on.map(function (o, i) { var nx = on[(i + 1) % on.length]; var d = (nx - o + p.length) % p.length; return d === 0 ? p.length : d; });
+  }
+  function odd33(p) { var n = p.length; if (n % 2) return null; for (var i = 0; i < n / 2; i++) if (p[i] && p[i + n / 2]) return false; return true; }
+  var NAMED33 = { "3,8": "tresillo", "5,8": "cinquillo", "2,5": "khafif-e-ramal", "3,7": "ruchenitza", "4,9": "aksak", "5,12": "a Venda timeline",
+                  "7,12": "the West African bell", "5,16": "bossa nova", "7,16": "a samba pattern", "3,4": "cumbia", "4,12": "four even beats" };
+  W.euclid = function (el) {
+    QB.widget(el, {
+      title: "Euclidean rhythms: k strokes spread over n pulses",
+      sub: "Bjorklund's algorithm, the one that timed a neutron accelerator, run in the page. Choose the strokes and pulses; rotate the necklace to start on a different stroke; and layer a second Euclidean rhythm against it. Read the clock as twelve semitones instead and E(7,12) is the major scale.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "k", label: "Strokes k", min: 1, max: 16, step: 1, value: 5 },
+        { k: "n", label: "Pulses n", min: 2, max: 24, step: 1, value: 8 },
+        { k: "r", label: "Rotation", min: 0, max: 23, step: 1, value: 0 },
+        { k: "k2", label: "Second layer: strokes", min: 0, max: 16, step: 1, value: 3 }
+      ],
+      buttons: [{ label: "Play (four cycles)", act: function (s) {
+        var notes = [], pulse = 0.16, n = s.p.length;
+        for (var c = 0; c < 4; c++) {
+          s.p.forEach(function (x, i) { if (x) notes.push([84, (c * n + i) * pulse / 0.16, 0.5]); });
+          s.p2.forEach(function (x, i) { if (x) notes.push([60, (c * n + i) * pulse / 0.16, 0.5]); });
+        }
+        s.sound = play(notesSound(notes, 0.16), 44100);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var k = Math.min(v.k, v.n), k2 = Math.min(v.k2, v.n);
+        s.p = rot33(euclid33(k, v.n), v.r % v.n);
+        s.p2 = k2 > 0 ? euclid33(k2, v.n) : [];
+        var a = g[0].axes({ x: [-1.4, 1.4], y: [-1.3, 1.3], title: "The necklace: E(" + k + ", " + v.n + ") in gold, the second layer in blue", noX: true, noY: true });
+        var cx = [], cy = [], i;
+        for (i = 0; i <= 100; i++) { cx.push(Math.cos(2 * Math.PI * i / 100)); cy.push(Math.sin(2 * Math.PI * i / 100)); }
+        a.line(cx, cy, { color: "#3a475c", width: 1 });
+        var px = [], py = [], ox = [], oy = [], bx = [], by = [];
+        for (i = 0; i < v.n; i++) {
+          var ang = Math.PI / 2 - 2 * Math.PI * i / v.n, x = Math.cos(ang), y = Math.sin(ang);
+          px.push(x); py.push(y);
+          if (s.p[i]) { ox.push(x); oy.push(y); }
+          if (s.p2[i]) { bx.push(0.75 * x); by.push(0.75 * y); }
+        }
+        a.dots(px, py, { r: 2.5, color: "#6b7280" });
+        if (ox.length > 1) a.line(ox.concat([ox[0]]), oy.concat([oy[0]]), { color: C.idea, width: 2 });
+        a.dots(ox, oy, { r: 6, color: C.idea });
+        if (bx.length > 1) a.line(bx.concat([bx[0]]), by.concat([by[0]]), { color: "#60A5FA", width: 1.5 });
+        a.dots(bx, by, { r: 4.5, color: "#60A5FA" });
+        var gp = gaps33(s.p);
+        var b = g[1].axes({ x: [-0.6, gp.length - 0.4], y: [0, Math.max.apply(null, gp) + 1], title: "Gaps between strokes, in pulses", xlabel: "stroke" });
+        b.bars(gp.map(function (_, j) { return j; }), gp, 0.6, { color: C.idea });
+      },
+      readout: function (v, s) {
+        var k = Math.min(v.k, v.n), gp = gaps33(s.p), od = odd33(s.p);
+        return [["rhythm", s.p.map(function (x) { return x ? "x" : "."; }).join("")],
+                ["gaps (never differing by more than one)", gp.join(" ")],
+                ["oddity (no strokes half a cycle apart)", od === null ? "only defined for an even number of pulses" : (od ? "yes" : "no")],
+                ["known as", NAMED33[k + "," + v.n] || "—"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Try 3 in 8 (the tresillo), 5 in 8 (the cinquillo), 7 in 12 (the bell pattern, and the major scale), 5 in 16 against 3. More than half the pulses and the oddity property is impossible: two strokes must face each other."
+    });
+  };
 })();
