@@ -53,6 +53,8 @@ LEDGER = [
      "measure": r"a color of 7 pitches through a talea of 4 notes: they meet again after 28 notes"},
     {"part": 24, "title": r"as a four-voice point of imitation", "seconds": 9.64,
      "measure": r"four entries four beats apart; after the last entry 12 of 12 beats consonant above the bass"},
+    {"part": 25, "title": r"as a French overture and as a chaconne with an ornamented reprise", "seconds": 21.44,
+     "measure": r"a ground of 8 bass notes heard twice; the reprise adds 26 ornament notes to 14"},
 ]
 
 
