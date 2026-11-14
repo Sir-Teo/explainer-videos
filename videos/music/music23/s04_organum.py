@@ -79,8 +79,7 @@ class Organum(SoundScene):
         en = [[p, k, 1.0] for k, p in enumerate(d["enchiriadis"])]
         g = voices_roll([ch, en], width=10.0, height=2.4, colors=[TUNE, BLUE], lo=57, hi=67).move_to(UP * 0.5)
         floor = DashedLine(g.frame.get_left() + UP * (g.frame.height * (60 - 57) / 10 - g.frame.height / 2), g.frame.get_right() + UP * (g.frame.height * (60 - 57) / 10 - g.frame.height / 2), color=GREY_B, stroke_width=1.5)
-        fl = label(r"C: \ the organal voice may not go lower", font_size=18, color=GREY_B).next_to(floor, LEFT, buff=0.1).shift(DOWN * 0.25)
-        fl.scale_to_fit_width(min(fl.width, 3.0))
+        fl = label(r"C: \ the organal voice may not go lower", font_size=20, color=GREY_B).next_to(g, DOWN, buff=0.25).align_to(g, RIGHT)
         cap = VGroup(label(r"the organal voice holds on C while the chant moves: \ oblique motion", font_size=22, color=WHITE),
                      label(r"and the two meet in a unison at the end: \ the \textit{occursus}", font_size=22, color=TUNE),
                      label(r"for the first time, \ the two voices do different things", font_size=22, color=EAR)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
