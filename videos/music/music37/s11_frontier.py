@@ -41,29 +41,35 @@ class Frontier(SoundScene):
                     g.add(Rectangle(width=2.2 * pr, height=0.55, stroke_color=GREY_B, stroke_width=1.2, fill_color=col, fill_opacity=0.75 if k == 0 else 0.35))
             g.arrange(RIGHT, buff=0.0)
             return VGroup(label(name, font_size=19, color=col), g).arrange(RIGHT, buff=0.35)
-        ev = beat_row(d["even"], BLUE, r"equal")
-        un = beat_row(d["uneven"], EAR, r"unequal")
-        rows_ = VGroup(ev, un).arrange(DOWN, buff=0.6, aligned_edge=RIGHT).move_to(UP * 0.4)
-        props = label(r"illustrative proportions \ (ours): \ " + r" \ : \ ".join(f"{x:.2f}" for x in d["uneven"]), font_size=19, color=GREY_A).to_edge(DOWN, buff=1.0)
+        card = listen_card(r"A drum divides each beat into three. \ It plays twice: \ once with three equal parts, \ "
+                           r"once with three unequal ones. \ Which is unequal, \ the first or the second?", width=10.4)
         with self.voiceover(
-            "Hear the difference with proportions of our own: a beat divided into three equal parts, and then into three "
-            "unequal ones, short, medium and long. The unequal version is not meant as a measurement of any piece, only to "
-            "make the idea audible. Listen for whether the second still feels steady."
+            "A question for your ears. A drum divides each beat into three strokes, and plays twice: once with the three "
+            "parts equal, once with them unequal, short, medium and long, in proportions of our own that are not a "
+            "measurement of any piece. Which is the unequal one, the first or the second?"
         ):
-            self.play(FadeIn(rows_), FadeIn(props))
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        ev = beat_row(d["even"], BLUE, r"first")
+        un = beat_row(d["uneven"], EAR, r"second")
+        rows_ = VGroup(ev, un).arrange(DOWN, buff=0.6, aligned_edge=RIGHT).move_to(UP * 0.4)
+        cover = VGroup(*[SurroundingRectangle(r[1], buff=0.05, stroke_width=0, fill_color=BLACK, fill_opacity=1.0) for r in rows_])
+        props = label(r"illustrative proportions \ (ours): \ " + r" \ : \ ".join(f"{x:.2f}" for x in d["uneven"]), font_size=19, color=GREY_A).to_edge(DOWN, buff=1.0)
+        self.play(FadeOut(card), FadeIn(rows_), FadeIn(cover))
         beat = d["beat"]
         clips_ = {"even": clip("uneven.even"), "uneven": clip("uneven.uneven")}
         for name, row, prop in (("even", ev, d["even"]), ("uneven", un, d["uneven"])):
             c = clips_[name]
             offs = np.concatenate([[0.0], np.cumsum(prop)])
             with self.listen(c) as snd:
-                window(snd, {"even": r"equal thirds", "uneven": r"unequal thirds"}[name], detail=r"membrane models", corner=DL, tag_corner=DR)
-                for b in range(16):
-                    for k in range(3):
-                        t0 = (b + offs[k]) * beat
-                        t1 = (b + offs[k + 1]) * beat - 0.02
-                        pulse(snd, row[1][(b % 4) * 3 + k], t0, t1, buff=0.02)
+                window(snd, {"even": r"the first", "uneven": r"the second"}[name], detail=r"membrane models", corner=DL, tag_corner=DR)
+                pulse(snd, row[0], 0.0, c.duration, buff=0.1)
             self.wait(0.3)
+        with self.voiceover(
+            "The second is the unequal one. Here are both, drawn to scale: in the first the three parts of each beat are the "
+            "same width; in the second they grow, short, medium, long."
+        ):
+            self.play(FadeOut(cover), FadeIn(props))
         ans = label(r"steady, \ but on a different grid", font_size=22, color=TUNE).next_to(props, UP, buff=0.4)
         with self.voiceover(
             "To most listeners raised on equal subdivisions the second sounds lopsided at first, and then steady, but on a "

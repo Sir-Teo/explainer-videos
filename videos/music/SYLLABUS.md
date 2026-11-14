@@ -1496,17 +1496,35 @@ with interlocking elaboration.
 *Rights:* every sound is the film's own model (§2.4); melodies are ours; gamelan tunings are illustrative and say so.
 *Reading:* von Falkenhausen, *Suspended Music*; Tenzer, *Gamelan Gong Kebyar*; Sumarsam; Sethares ch. 10.
 
-### Part 37 · Timelines (~50)
+### Part 37 · Timelines (~40)
 *Story:* One bell pattern, seven strokes in twelve pulses, is heard from Ghana to Cuba to Brazil. Written as
 steps it reads 2-2-1-2-2-2-1: the major scale, turned into time. The part studies musics organized around such
 timelines, and an instrument whose best-known melodies are played by no one: they form in the listener's ear.
+1. Hook: an ear question (where is the beat?); the pattern in four and in six, heard; where it is heard; the plan.
+2. The standard pattern: its steps and the major scale's; bell, scale and both heard; seven rotations, seven modes; Dorian and Aeolian heard; maximal evenness; a deep set (2 5 4 3 6 1); a caution.
+3. Measuring timelines: five measures; ten timelines measured; off-beat pulses drawn; four claves heard; centrality by swap distance; what the measures cannot say.
+4. An Ewe ensemble: the Ewe; six parts of ours; the parts entering, heard; a part is a relation; the lead drum; learning the parts.
+5. Three against two: four, six and three beats in twelve; four, six, both and the bell heard; hemiola; the debate over notation; two notations drawn; where is one?
+6. Interlocking and hocket: hocket; the Tune on two panpipes, heard; five single-pitch pipes, heard; Arom's method; why hocket.
+7. The mbira: the instrument; a clamped tine's partials, heard plain and buzzing; how it is played; kushaura and kutsinhira, heard; the bira; the mbira travels.
+8. Inherent patterns: Kubik and the amadinda; an ear question (which melody do the high notes make?); the streaming model; the same notes slowly, heard; what the model leaves out; composers who listened.
+9. The clave: tresillo, cinquillo and habanera heard; the tresillo travels; three-two and two-three heard; the anticipated bass; a son texture heard; son and salsa.
+10. Samba, and call and response: samba; a batucada of ours drawn and heard; two surdos in conversation; call and response; a call and response of ours heard; no seam.
+11. Frontier: non-isochronous subdivision; an ear question (which beat is divided unequally?); meter across cultures; the research problem; archives and ethics.
+12. Variation 37: the Tune as an inherent pattern of two mbira parts, then over the standard pattern on claves. Outro: problems, payoffs.
+
 *Covers:* the standard pattern; Ewe ensemble parts; three against two as a generating idea; the debate over how
 to write and count it; interlocking and hocket; the mbira and its inherent patterns; the clave; samba; call and
 response.
-*Built and computed:* evenness, oddity and off-beatness for a table of timelines; inherent patterns predicted
-by the streaming model.
-*Variation 37:* a study: the Tune emerging as an inherent pattern from interlocking parts; then over a clave.
+*Built and computed:* `monochord/timelines.py`: evenness, Euclidean test, oddity and off-beatness for a table of
+ten timelines; swap distances and centrality (son clave the most central of six, total 6); interval content (the
+standard pattern's 2 5 4 3 6 1); rotations as modes; hocket by pitch sets; a clamped tine (1 : 6.27 : 17.55) with
+buzz; a streaming model and interlocking parts designed so that a target melody is their high stream.
+*Variation 37:* a study: the Tune emerging as an inherent pattern from two interlocking mbira parts (8 of its
+notes in one part, 6 in the other); then over the standard pattern on claves.
 *Frontier:* non-isochronous subdivision measured; meter across cultures; archives and ethics.
+*Rights:* every part, pattern and melody played is ours; the timelines are the well-known ones, as commonly
+transcribed (§2.4); every sound is the film's own model.
 *Reading:* Agawu, *Representing African Music*; Locke; Berliner, *The Soul of Mbira*; Arom; Toussaint.
 
 ### Part 38 · Blues and Swing (~55)

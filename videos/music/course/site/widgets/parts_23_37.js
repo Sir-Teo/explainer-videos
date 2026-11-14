@@ -948,4 +948,103 @@
       note: "At 0 Hz the pair is in unison and the shimmer disappears. Keeping the beat rate constant means the detuning in cents shrinks as the pitch rises: Balinese tuners tune the beat, not the interval."
     });
   };
+  var TL37 = [["standard pattern", "x.x.xx.x.x.x"], ["son clave", "x..x..x...x.x..."], ["rumba clave", "x..x...x..x.x..."],
+              ["bossa nova", "x..x..x...x..x.."], ["gahu", "x..x..x...x...x."], ["soli", "x.x.x..x.x.."], ["tresillo", "x..x..x."],
+              ["cinquillo", "x.xx.xx."], ["soukous", "x..x..x...xx...."], ["shiko", "x...x.x...x.x..."]];
+  function gcd37(a, b) { while (b) { var t = b; b = a % b; a = t; } return a; }
+  function euclid37(k, n) {
+    var a = [], b = [], i;
+    for (i = 0; i < k; i++) a.push([1]);
+    for (i = 0; i < n - k; i++) b.push([0]);
+    while (b.length > 1) {
+      var m = Math.min(a.length, b.length), na = [];
+      for (i = 0; i < m; i++) na.push(a[i].concat(b[i]));
+      b = a.length > m ? a.slice(m) : b.slice(m);
+      a = na;
+    }
+    return [].concat.apply([], a.concat(b));
+  }
+  function metrics37(p) {
+    var n = p.length, on = [], i, j;
+    for (i = 0; i < n; i++) if (p[i] === "x") on.push(i);
+    var k = on.length, pat = on.map(function () { return 0; });
+    var bits = []; for (i = 0; i < n; i++) bits.push(p[i] === "x" ? 1 : 0);
+    var e = euclid37(k, n), eu = false;
+    for (var r = 0; r < n && !eu; r++) { var ok = true; for (i = 0; i < n; i++) if (bits[(i + r) % n] !== e[i]) { ok = false; break; } eu = ok; }
+    var x = on.map(function (o) { return 12 * o / n; }), best = 1e9;
+    for (r = 0; r < k; r++) {
+      var y = x.slice(r).concat(x.slice(0, r).map(function (v) { return v + 12; })), ee = [], c = 0;
+      for (i = 0; i < k; i++) { ee.push(y[i] - 12 * i / k); c += ee[i] / k; }
+      var ss = 0; for (i = 0; i < k; i++) ss += (ee[i] - c) * (ee[i] - c);
+      best = Math.min(best, Math.sqrt(ss));
+    }
+    var odd = n % 2 === 0, ic = [];
+    for (i = 0; i <= n / 2; i++) ic.push(0);
+    for (i = 0; i < k; i++) for (j = i + 1; j < k; j++) {
+      var d = (on[j] - on[i]) % n; d = Math.min(d, n - d); ic[d] += 1;
+      if (n % 2 === 0 && d === n / 2) odd = false;
+    }
+    var off = on.filter(function (o) { return gcd37(o, n) === 1; }).length;
+    var steps = on.map(function (o, i2) { return ((on[(i2 + 1) % k] - o) % n + n) % n || n; });
+    return { n: n, k: k, on: on, even: best * n / 12, euclid: eu, odd: odd, off: off, ic: ic.slice(1), steps: steps };
+  }
+  function bell37(t) {
+    var f = [840, 840 * 2.18, 840 * 3.41, 840 * 4.93], a = [1, 0.55, 0.3, 0.15], d = [6, 9, 14, 20], y = 0;
+    for (var i = 0; i < 4; i++) y += a[i] * Math.exp(-d[i] * t) * Math.sin(2 * Math.PI * f[i] * t);
+    return y * Math.min(1, t / 0.0015);
+  }
+
+  W.timeline = function (el) {
+    QB.widget(el, {
+      title: "Timelines measured: evenness, oddity, off-beatness",
+      sub: "Pick a well-known timeline and rotate it. The circle shows its strokes on the cycle; the page measures how far it lies from perfectly even spacing, whether Bjorklund's algorithm produces it, whether two strokes ever cut the cycle in half (oddity), and how many strokes fall on off-beat pulses (those sharing no factor with the cycle's length). Play it on a model iron bell.",
+      panels: 1, height: 300,
+      controls: [
+        { k: "which", label: "Timeline", min: 0, max: TL37.length - 1, step: 1, value: 0, fmt: function (x) { return TL37[x][0]; } },
+        { k: "rot", label: "Start on stroke", min: 0, max: 6, step: 1, value: 0, fmt: function (x) { return String(x + 1); } }
+      ],
+      buttons: [{ label: "Play four cycles", act: function (s) {
+        var rate = 44100, pulse = s.p.length === 16 ? 0.15 : (s.p.length === 8 ? 0.15 : 0.2), cyc = s.p.length * pulse;
+        var n = Math.floor((4 * cyc + 0.8) * rate), out = new Float32Array(n);
+        for (var c = 0; c < 4; c++) for (var i = 0; i < s.p.length; i++) if (s.p[i] === "x") {
+          var t0 = c * cyc + i * pulse, i0 = Math.floor(t0 * rate);
+          for (var j = 0; j < 0.6 * rate && i0 + j < n; j++) out[i0 + j] += 0.25 * bell37(j / rate);
+        }
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var base = TL37[v.which][1], m0 = metrics37(base), r = v.rot % m0.k, o = m0.on[r], n = base.length, p = "";
+        for (var i = 0; i < n; i++) p += base[(o + i) % n];
+        s.p = p;
+        var m = metrics37(p);
+        s.m = m;
+        var a = g[0].axes({ x: [-1.5, 1.5], y: [-1.25, 1.25], title: TL37[v.which][0] + " from stroke " + (r + 1) + ":  " + p, xlabel: "" });
+        var cx = [], cy = [];
+        for (i = 0; i <= 120; i++) { cx.push(Math.cos(2 * Math.PI * i / 120)); cy.push(Math.sin(2 * Math.PI * i / 120)); }
+        a.line(cx, cy, { color: "#3A4250", width: 1.5 });
+        var px = [], py = [], qx = [], qy = [], ox = [], oy = [];
+        for (i = 0; i < n; i++) {
+          var ang = Math.PI / 2 - 2 * Math.PI * i / n, X = Math.cos(ang), Y = Math.sin(ang);
+          px.push(X); py.push(Y);
+          if (gcd37(i, n) === 1) { ox.push(X); oy.push(Y); }
+          if (p[i] === "x") { qx.push(X); qy.push(Y); }
+        }
+        a.dots(px, py, { r: 3, color: "#8A93A0" });
+        a.dots(ox, oy, { r: 8, color: "rgba(244,114,182,0.35)" });
+        a.line(qx.concat([qx[0]]), qy.concat([qy[0]]), { color: C.idea, width: 2 });
+        a.dots(qx, qy, { r: 6, color: C.idea });
+      },
+      readout: function (v, s) {
+        var m = s.m;
+        return [["strokes / pulses", m.k + " in " + m.n + "; steps " + m.steps.join(" ")],
+                ["from even (0 = perfect)", m.even.toFixed(2) + (m.euclid ? "; Euclidean" : "; not Euclidean")],
+                ["oddity", m.odd ? "yes: no two strokes halve the cycle" : "no: two strokes face each other"],
+                ["off-beat strokes (pink pulses)", String(m.off)],
+                ["how often each distance occurs", m.ic.join(" ")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "The standard pattern's steps, 2 2 1 2 2 2 1, are the major scale's; its rotations are the seven modes. Rotating a timeline never changes its evenness or interval content, but it changes which strokes fall on the off-beat pulses."
+    });
+  };
 })();

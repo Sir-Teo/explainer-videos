@@ -606,4 +606,47 @@ PARTS = [
         I=(8,),
         also=(("Monochord's bronze and silk: a two-tone bell, the lü, Jing Fang's chain, the qin's hui, bar spectra, paired tuning, colotomy, interlocking", "explainer/music/monochord/bronze.py"),),
     ),
+    Part(
+        n=37, level="U", widget="timeline", prereq=(9, 11, 12, 16, 33, 36),
+        question="Why is one bell pattern heard from Ghana to Cuba to Brazil, and how can an ensemble play a melody that none of its players plays?",
+        story="The standard pattern, seven strokes in twelve pulses, has the steps of the major scale, 2 2 1 2 2 2 1, and its "
+              "rotations are the seven modes; both are maximally even and both are deep, every distance between strokes "
+              "occurring a different number of times (2 5 4 3 6 1). Timelines can be measured: evenness, Euclidean or not, "
+              "Arom's oddity, Toussaint's off-beatness (the standard pattern strikes three of the four off-beat pulses), and "
+              "centrality, by which son clave is the nearest of six five-stroke claves to the others. An ensemble of ours in "
+              "the manner of the Ewe defines every part against the bell, and twelve pulses carry four beats and six at "
+              "once; scholars from Jones to Agawu have argued over how to write that down. Hocket shares a melody among "
+              "players by pitch, on panpipes and single-pitch pipes. The mbira's tines are clamped bars whose second "
+              "partial lies 6.27 times the first, so their notes are nearly pure; two interlocking parts make inherent "
+              "patterns that a simple streaming model predicts, and that vanish when the parts are slowed. The tresillo, "
+              "the clave and the anticipated bass of son, samba's batucada and call and response carry these ideas "
+              "through the Americas, and measurements of Malian drumming show that a beat need not be divided equally. "
+              "The Tune is played as an inherent pattern of two mbira parts, neither of which plays it.",
+        handoff="Swing, the blues and the tresillo in Part 38; the riff and the loop in Part 40; composing with emergent "
+                "patterns in Part 42; auditory streaming in Part 45; meter and universals in Part 47.",
+        outside="Part 9 for bars and membranes; Part 11 for meter; Part 12 for modes; Part 16 for streams; Part 33 for "
+                "Euclidean rhythms and evenness; Part 36 for interlocking parts. Bjorklund's algorithm, swap distances, "
+                "auditory streaming.",
+        objectives={
+            "U": ["Hear the standard pattern against four beats and against six, and explain its likeness to the major scale.",
+                  "Hear an ensemble built part by part against a timeline, and hocket on pipes.",
+                  "Hear an inherent pattern appear at speed and disappear when slowed."],
+            "M": ["Compute evenness, oddity, off-beatness and interval content for any timeline.",
+                  "Compute swap distances and find the most central of a family of rhythms.",
+                  "Design two interlocking parts whose combined high stream is a given melody."],
+            "D": ["Design a study of how rhythm categories, including uneven subdivisions, are learned."],
+            "I": ["Write interlocking parts for an ensemble, so that beginners make one melody together."],
+        },
+        results=[
+            ("The standard pattern", r"\text{steps } 2\,2\,1\,2\,2\,2\,1 = \text{the major scale}"),
+            ("Deep", r"\text{distances } 1..6 \text{ occur } 2, 5, 4, 3, 6, 1 \text{ times}"),
+            ("Off-beat pulses", r"\gcd(k, n) = 1: \ 1, 5, 7, 11 \text{ in } 12"),
+            ("Centrality", r"\text{son clave: total swap distance } 6, \text{ the least of six}"),
+            ("A clamped tine", r"\text{partials } 1 : 6.27 : 17.55"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 8, 9),
+        D=(10,),
+        I=(7,),
+        also=(("Monochord's timelines: measures, swap distance, rotations, hocket, the mbira tine, streaming and inherent patterns", "explainer/music/monochord/timelines.py"),),
+    ),
 ]

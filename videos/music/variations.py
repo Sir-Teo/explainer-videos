@@ -77,6 +77,8 @@ LEDGER = [
      "measure": r"of 14 notes, 2 move off the piano's keys in Rast, 6 change in Bayati, 4 in Hijaz"},
     {"part": 36, "title": r"in qin harmonics, then as balungan with interlocking parts", "seconds": 18.8,
      "measure": r"14 notes as harmonics, the worst 8 cents from equal temperament; a 16-beat balungan, 4 pulses a beat"},
+    {"part": 37, "title": r"as an inherent pattern of two interlocking parts, then over the standard pattern", "seconds": 38.8,
+     "measure": r"14 notes heard, 8 played by one part and 6 by the other; 48 pulses, 8 a second"},
 ]
 
 
