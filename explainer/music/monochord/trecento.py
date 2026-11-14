@@ -76,8 +76,10 @@ def composer_of(name: str, composer: str) -> str:
     c = re.sub(r"\s+[A-Z]{1,2}-[A-Za-z]+.*$", "", c)                  # a manuscript siglum after the name
     if c.lower().startswith("anonymous") or c.lower().startswith("anon"):
         c = "anonymous"
-    if not c:
-        c = "Johannes Ciconia" if name.startswith("PMFC_24") else "anonymous"
+    hints = {"PMFC_24": "Johannes Ciconia", "PMFC_06_Giovanni": "Giovanni da Cascia", "PMFC_06_Piero": "Piero",
+             "PMFC_06-Jacopo": "Jacopo da Bologna", "PMFC_04": "Francesco Landini"}
+    if not c or c == "anonymous":
+        c = next((v for k, v in hints.items() if name.startswith(k)), c or "anonymous")
     if "ciconia" in c.lower():
         c = "Johannes Ciconia"
     return c
