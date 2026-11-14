@@ -82,11 +82,11 @@ class Ornament(SoundScene):
     # ------------------------------------------------------------------
     def tastes(self):
         items = [
-            (r"1702: \\ François Raguenet praises Italian music: \\ bold, \\ virtuosic, \\ surprising", WHITE),
-            (r"1704: \\ Le Cerf de la Viéville replies: \\ French music is natural, \\ tender, \\ reasonable", WHITE),
-            (r"Italy: \\ the singer's free ornaments; \\ France: \\ small ornaments written as signs", WHITE),
-            (r"1724: \\ Couperin's \\textit{Les goûts réunis}: \\ the tastes reunited", TUNE),
-            (r"Germany's composers, \\ Bach among them, \\ took from both", GREY_A),
+            (r"1702: \ François Raguenet praises Italian music: \ bold, \ virtuosic, \ surprising", WHITE),
+            (r"1704: \ Le Cerf de la Viéville replies: \ French music is natural, \ tender, \ reasonable", WHITE),
+            (r"Italy: \ the singer's free ornaments; \ France: \ small ornaments written as signs", WHITE),
+            (r"1724: \ Couperin's \textit{Les goûts réunis}: \ the tastes reunited", TUNE),
+            (r"Germany's composers, \ Bach among them, \ took from both", GREY_A),
         ]
         rows_scene(self, r"French and Italian taste", items,
                    "Ornament was also a matter of national taste. <bookmark mark='b'/> In 1702 a French priest, François Raguenet, published a comparison praising Italian music for its boldness and surprise. <bookmark mark='c'/> A Parisian critic, Le Cerf de la Viéville, replied that French music was more natural, tender and reasonable. <bookmark mark='d'/> Italians left ornaments to the singer's invention; the French wrote small ornaments into the score as signs. <bookmark mark='e'/> In 1724 Couperin published a set called The Tastes Reunited, <bookmark mark='f'/> and German composers, Bach among them, took freely from both.", marks="cdef")

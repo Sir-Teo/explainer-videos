@@ -91,10 +91,10 @@ class Masters(SoundScene):
     # ------------------------------------------------------------------
     def others(self):
         items = [
-            (r"Georg Philipp Telemann: \\ the most prolific, \\ thousands of works, \\ the most famous German of his day", WHITE),
-            (r"Domenico Scarlatti, \\ in Lisbon and Madrid: \\ 555 keyboard sonatas, \\ each in two halves", WHITE),
-            (r"Henry Purcell, \\ London: \\ \\textit{Dido and Aeneas}, \\ songs, \\ grounds", WHITE),
-            (r"Elisabeth Jacquet de La Guerre, \\ Paris: \\ harpsichord suites, \\ an opera \\ (1694)", TUNE),
+            (r"Georg Philipp Telemann: \ the most prolific, \ thousands of works, \ the most famous German of his day", WHITE),
+            (r"Domenico Scarlatti, \ in Lisbon and Madrid: \ 555 keyboard sonatas, \ each in two halves", WHITE),
+            (r"Henry Purcell, \ London: \ \textit{Dido and Aeneas}, \ songs, \ grounds", WHITE),
+            (r"Elisabeth Jacquet de La Guerre, \ Paris: \ harpsichord suites, \ an opera \ (1694)", TUNE),
             (r"fame then and fame now are different lists", GREY_A),
         ]
         rows_scene(self, r"and many more", items,

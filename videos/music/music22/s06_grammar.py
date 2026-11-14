@@ -56,9 +56,7 @@ class Grammar(SoundScene):
             "musician means by the function of a chord: not what it is, but what it does, and to which other chord it "
             "belongs."
         ) as vo:
-            self.play(FadeIn(c1))
-            vo.wait_until("a")
-            self.play(FadeIn(t1))
+            self.play(FadeIn(c1), FadeIn(t1))
             vo.wait_until("b")
             self.play(FadeIn(c2), FadeIn(t2))
             vo.wait_until("c")

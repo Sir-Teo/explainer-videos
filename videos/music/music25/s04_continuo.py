@@ -131,9 +131,9 @@ class Continuo(SoundScene):
     # ------------------------------------------------------------------
     def partimento(self):
         items = [
-            (r"Naples, \\ eighteenth century: \\ orphans trained as musicians in the conservatories", WHITE),
-            (r"the partimento: \\ an unfigured bass to be realized at the keyboard, \\ day after day", WHITE),
-            (r"the rule of the octave: \\ a chord for every step of the scale in the bass \\ (Part 18)", WHITE),
+            (r"Naples, \ eighteenth century: \ orphans trained as musicians in the conservatories", WHITE),
+            (r"the partimento: \ an unfigured bass to be realized at the keyboard, \ day after day", WHITE),
+            (r"the rule of the octave: \ a chord for every step of the scale in the bass \ (Part 18)", WHITE),
             (r"composition taught as improvisation over a bass", TUNE),
             (r"its graduates staffed the courts and opera houses of Europe", GREY_A),
         ]

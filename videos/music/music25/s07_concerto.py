@@ -97,10 +97,10 @@ class Concerto(SoundScene):
     # ------------------------------------------------------------------
     def seasons(self):
         items = [
-            (r"1725: \\ Vivaldi's \\textit{The Four Seasons}, \\ each concerto printed with a sonnet", WHITE),
-            (r"birdsong, \\ a storm, \\ a barking dog, \\ a drunken peasant, \\ ice: \\ marked in the score", WHITE),
-            (r"the ritornello is the season; \\ the episodes are its events", WHITE),
-            (r"program music: \\ instruments telling a story without words", TUNE),
+            (r"1725: \ Vivaldi's \textit{The Four Seasons}, \ each concerto printed with a sonnet", WHITE),
+            (r"birdsong, \ a storm, \ a barking dog, \ a drunken peasant, \ ice: \ marked in the score", WHITE),
+            (r"the ritornello is the season; \ the episodes are its events", WHITE),
+            (r"program music: \ instruments telling a story without words", TUNE),
             (r"the same form carries both the abstract and the pictorial", GREY_A),
         ]
         rows_scene(self, r"concertos with a story", items,

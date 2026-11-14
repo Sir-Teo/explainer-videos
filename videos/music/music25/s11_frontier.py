@@ -104,10 +104,10 @@ class Frontier(SoundScene):
     # ------------------------------------------------------------------
     def instruments(self):
         items = [
-            (r"gut strings, \\ lighter bows, \\ less tension: \\ a softer, \\ quicker sound", WHITE),
-            (r"natural trumpets and horns: \\ only the notes of the harmonic series \\ (Part 8)", WHITE),
-            (r"recorders and one-keyed flutes; \\ oboes with few keys", WHITE),
-            (r"surviving instruments, \\ often altered later: \\ evidence to read with care", TUNE),
+            (r"gut strings, \ lighter bows, \ less tension: \ a softer, \ quicker sound", WHITE),
+            (r"natural trumpets and horns: \ only the notes of the harmonic series \ (Part 8)", WHITE),
+            (r"recorders and one-keyed flutes; \ oboes with few keys", WHITE),
+            (r"surviving instruments, \ often altered later: \ evidence to read with care", TUNE),
             (r"copies made today test the treatises against what the instruments can do", GREY_A),
         ]
         rows_scene(self, r"the instruments themselves", items,

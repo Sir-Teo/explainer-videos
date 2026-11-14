@@ -97,10 +97,10 @@ class Keys(SoundScene):
     # ------------------------------------------------------------------
     def circle(self):
         items = [
-            (r"1711: \\ Johann David Heinichen draws a musical circle of all 24 keys", WHITE),
-            (r"major keys round the circle of fifths, \\ each beside its relative minor", WHITE),
-            (r"a map for modulation: \\ neighbours on the circle share most of their notes \\ (Part 15)", WHITE),
-            (r"possible only once every key is playable: \\ a consequence of well temperament", TUNE),
+            (r"1711: \ Johann David Heinichen draws a musical circle of all 24 keys", WHITE),
+            (r"major keys round the circle of fifths, \ each beside its relative minor", WHITE),
+            (r"a map for modulation: \ neighbours on the circle share most of their notes \ (Part 15)", WHITE),
+            (r"possible only once every key is playable: \ a consequence of well temperament", TUNE),
             (r"Part 19's pathfinder walks the same map", GREY_A),
         ]
         rows_scene(self, r"the circle of keys", items,

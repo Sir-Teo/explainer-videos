@@ -124,11 +124,11 @@ class Temperament(SoundScene):
     # ------------------------------------------------------------------
     def equal(self):
         items = [
-            (r"1584: \\ Zhu Zaiyu, \\ a Ming prince, \\ computes twelve equal semitones to many digits", WHITE),
-            (r"about 1605: \\ Simon Stevin in the Netherlands, \\ independently", WHITE),
-            (r"lutes and viols, \\ with frets across all strings, \\ were close to equal already", WHITE),
-            (r"keyboards resisted: \\ the thirds of equal temperament are 14 cents wide", TUNE),
-            (r"it became standard only in the nineteenth century \\ (Part 27)", GREY_A),
+            (r"1584: \ Zhu Zaiyu, \ a Ming prince, \ computes twelve equal semitones to many digits", WHITE),
+            (r"about 1605: \ Simon Stevin in the Netherlands, \ independently", WHITE),
+            (r"lutes and viols, \ with frets across all strings, \ were close to equal already", WHITE),
+            (r"keyboards resisted: \ the thirds of equal temperament are 14 cents wide", TUNE),
+            (r"it became standard only in the nineteenth century \ (Part 27)", GREY_A),
         ]
         rows_scene(self, r"equal, early", items,
                    "Equal temperament itself was not new. <bookmark mark='b'/> In 1584 Zhu Zaiyu, a prince of the Ming dynasty in China, computed the twelfth root of two to many digits and built pipes to it. <bookmark mark='c'/> Around 1605 the Flemish engineer Simon Stevin did the same, independently. <bookmark mark='d'/> Fretted instruments like the lute and viol, with each fret running under every string, were already close to equal. <bookmark mark='e'/> Keyboard players resisted it because its thirds are fourteen cents wide, <bookmark mark='f'/> and it became the standard only in the nineteenth century, as Part 27 will show.", marks="cdef")

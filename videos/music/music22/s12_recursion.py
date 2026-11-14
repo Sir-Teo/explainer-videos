@@ -63,7 +63,6 @@ class Recursion(SoundScene):
             "the dominant, the dominant, I. <bookmark mark='b'/> Then four deep: E seven, A seven, D seven, G, and home "
             "to C, each chord the dominant of the next, the chain of applied dominants from Part 19."
         ) as vo:
-            vo.wait_until("a")
             self.play(FadeIn(la), FadeIn(sa))
             vo.wait_until("b")
             self.play(FadeIn(lb), FadeIn(sb))

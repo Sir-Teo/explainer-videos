@@ -79,11 +79,11 @@ class Monody(SoundScene):
     # ------------------------------------------------------------------
     def graces(self):
         items = [
-            (r"Caccini's preface: \\ how to sing the new music", WHITE),
-            (r"the \\textit{esclamazione}: \\ a note begun softly and swelled, \\ for a cry of feeling", WHITE),
-            (r"the \\textit{trillo}: \\ one note repeated faster and faster, \\ in the throat", WHITE),
-            (r"\\textit{sprezzatura}: \\ a noble carelessness of rhythm, \\ as in speech", TUNE),
-            (r"the written notes are a skeleton; \\ the singer supplies the life", GREY_A),
+            (r"Caccini's preface: \ how to sing the new music", WHITE),
+            (r"the \textit{esclamazione}: \ a note begun softly and swelled, \ for a cry of feeling", WHITE),
+            (r"the \textit{trillo}: \ one note repeated faster and faster, \ in the throat", WHITE),
+            (r"\textit{sprezzatura}: \ a noble carelessness of rhythm, \ as in speech", TUNE),
+            (r"the written notes are a skeleton; \ the singer supplies the life", GREY_A),
         ]
         rows_scene(self, r"the singer's graces", items,
                    "Caccini's book is also a singing manual. <bookmark mark='b'/> Its preface explains how the new music should be sung. <bookmark mark='c'/> The esclamazione, a note begun softly and swelled, for a cry of feeling. <bookmark mark='d'/> The trillo, a single note repeated faster and faster in the throat, which is not our trill at all. <bookmark mark='e'/> And sprezzatura, a noble carelessness, letting the rhythm bend as speech does. <bookmark mark='f'/> The written notes were a skeleton, and the singer supplied the life: the same lesson as Part 22's reductions, from the other side.", marks="cdef")
