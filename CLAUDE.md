@@ -48,11 +48,11 @@ Manim videos with local neural narration. See README.md for layout and build com
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
 - *Psychology, Built* (`videos/psychology/`): sixty-two parts planned in thirteen acts (`psych1` … `psych62`: a degree,
-  the graduate methods sequence, industry practice and a research tier); Parts 1 to 5 are built (Act I, and the first part of Act II). The folders are `psychN` while
+  the graduate methods sequence, industry practice and a research tier); Parts 1 to 6 are built (Act I, and the first two parts of Act II). The folders are `psychN` while
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
   plan is `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the progress table are
   `videos/psychology/SYLLABUS.md`. Shared code in `explainer/psychology/` (tested in `tests/psychology/`): the model
-  subject Psyche (`psyche/`, one module per faculty; so far `chronometry`, `cueing` and `neuron`), the laboratory (`lab.py`:
+  subject Psyche (`psyche/`, one module per faculty; so far `chronometry`, `cueing`, `neuron` and `circuits`), the laboratory (`lab.py`:
   designs run on the Pool with the truth known; a part that shows a study picks it by rule, the median of many, never
   by its result), the measurement library (`measure.py`: scale types, reliability, attenuation, alpha, kappa, the
   multitrait-multimethod matrix), the false-positive lab (`evidence.py`: power, forking paths, a filtered literature and

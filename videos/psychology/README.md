@@ -1,7 +1,7 @@
 # Psychology, Built (心理学，从零搭建)
 
 **Status (2026-11-13): the plan is accepted, the shared code is in place, the two pilots (Parts 1 and 2,
-English and Chinese) were reviewed and accepted, Act I is complete (Parts 1 to 4), and Act II has begun with Part 5, *The Neuron*** (all in English and Chinese). This file is the plan; the standard every part meets, the
+English and Chinese) were reviewed and accepted, Act I is complete (Parts 1 to 4), and Act II has begun with Part 5, *The Neuron*, and Part 6, *Synapses and Circuits*** (all in English and Chinese). This file is the plan; the standard every part meets, the
 devices and all sixty-two parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with the progress table in
 its §9.
 
@@ -163,7 +163,7 @@ The series draws in the manner of 3Blue1Brown with the instruments of `explainer
 | 4 | The Evidence | "Feeling the Future", 2011 | effect sizes, power, what a p-value is, flexible analysis, publication bias, the 2015 replication project, preregistration and registered reports | the Replication Ledger; a false-positive lab | forking paths: make a null result significant |
 | **II** | **The Wet Machine** | | | | |
 | 5 | The Neuron | Helmholtz times a frog's nerve; the squid's giant axon | Nernst and Goldman, the RC membrane, Hodgkin–Huxley derived, phase planes and bifurcations, cable theory, integrate-and-fire | a Hodgkin–Huxley neuron and its reductions | hear a spike train |
-| 6 | Synapses and Circuits | Loewi's dream, 1921 | transmitters and receptors, synaptic integration, Hebb, LTP and STDP, lateral inhibition, winner-take-all, oscillators, where drugs act | plastic synapses; small circuits | Mach bands and the Hermann grid |
+| 6 | Synapses and Circuits | Loewi's two frog hearts, 1921 | packets and receptors, synaptic integration and shunting, Hebb and Oja, LTP and spike timing, lateral inhibition, winner-take-all, half-centre oscillators, Wilson and Cowan's populations, where drugs act | plastic synapses; three small circuits; populations | Mach bands and the Hermann grid, straight and curved |
 | 7 | The Brain | Phineas Gage, 1848; Tan; H.M. | anatomy in 3D, lesions and double dissociation, the split brain, maps and homunculi, plasticity, the localization debate | a lesionable architecture | find your blind spot |
 | 8 | Reading the Brain | a dead salmon in a scanner | EEG and ERPs, the BOLD signal as a convolution, the GLM, multiple comparisons, circular analysis, reverse inference, TMS, optogenetics | a forward model from neurons to BOLD | spot the voodoo correlation |
 | 9 | Genes and Evolution | the Minnesota twins | Mendel to polygenes, twin and adoption designs, Falconer and the ACE model, what heritability is not, GWAS and polygenic scores, candidate genes, evolutionary psychology | the Pool's families and genomes | guess the heritability |
@@ -271,7 +271,7 @@ own, and the syllabus lists them):
 
 | Module | What it is |
 |---|---|
-| `psyche/` | Psyche, the model subject: one module per faculty. So far `chronometry` (serial stages, Donders' subtraction, the insertion test, additive factors, Hick's law, the ex-Gaussian) `cueing` (Clever Hans as a reader of an involuntary cue) and `neuron` (Nernst and Goldman, Hodgkin-Huxley with the clamp and the cable, FitzHugh-Nagumo, integrate-and-fire, spike trains, dendritic branches) |
+| `psyche/` | Psyche, the model subject: one module per faculty. So far `chronometry` (serial stages, Donders' subtraction, the insertion test, additive factors, Hick's law, the ex-Gaussian) `cueing` (Clever Hans as a reader of an involuntary cue), `neuron` (Nernst and Goldman, Hodgkin-Huxley with the clamp and the cable, FitzHugh-Nagumo, integrate-and-fire, spike trains, dendritic branches) and `circuits` (synapses on a membrane, Hebb's, Oja's and the BCM rule, lateral inhibition and the Hermann grid, winner-take-all, a half-centre oscillator, Wilson and Cowan's populations) |
 | `lab.py` | the laboratory: assignment by shuffle, counterbalancing, the comparison and its randomization test, power, and the sound and unsound designs run on the Pool with the truth known |
 | `measure.py` | measurement: Stevens's scale types, reliability, Spearman-Brown, alpha, the correction for attenuation, kappa, the intraclass correlation, the multitrait-multimethod matrix, a factor model against a network, the cancellation conditions |
 | `evidence.py` | the false-positive lab: effect sizes, power, optional stopping, the four forks, a literature with a publication filter, p-curves, replications planned from the printed effect, equivalence tests, a Bayes factor |

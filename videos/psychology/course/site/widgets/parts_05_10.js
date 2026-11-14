@@ -228,7 +228,7 @@
         var a = g[1].axes({ x: [-0.05, 0.68], y: [-0.05, 1.12], title: "Spots seen, by the waviness of the streets", xlabel: "waviness (share of a street's width)" });
         a.hline(0, { color: "#2a3242" });
         a.line(LEVELS, PRED, { color: MODEL });
-        a.text(0.66, PRED[5] + 0.1, "the receptive-field account", { color: MODEL, align: "right", size: 11 });
+        a.text(0.66, PRED[5] - 0.16, "the receptive-field account", { color: MODEL, align: "right", size: 11 });
         var xs = [], ys = [];
         for (i = 0; i < LEVELS.length; i++) { var sc = share(LEVELS[i]); if (sc.n) { xs.push(LEVELS[i]); ys.push(sc.k / sc.n); } }
         if (xs.length) {

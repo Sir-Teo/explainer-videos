@@ -614,38 +614,56 @@ many parameters a single-neuron model needs; rate against timing; glia; whether 
 Izhikevich, *Dynamical Systems in Neuroscience*; Koch, *Biophysics of Computation*; Finger, *Minds Behind the
 Brain*.
 
-### Part 6 · Synapses and Circuits (~50)
+### Part 6 · Synapses and Circuits (~62)
 *Question:* how do neurons talk, and how does talking change them?
-*Story:* on Easter Saturday 1921 Otto Loewi wakes from a dream with an experiment: two frog hearts and a shared
-bath. The synapse is chemical. That makes it adjustable, and Hebb guesses the rule. Small circuits built from
-adjustable synapses already sharpen edges, hold a decision and keep a rhythm.
-1. Hook: Loewi's dream and the two hearts. Soup against sparks (Eccles and Dale).
-2. The chemical synapse step by step: vesicles, quanta (Katz), receptors, reuptake. Ionotropic and metabotropic.
-3. The transmitters and where the drugs act: glutamate, GABA, dopamine, serotonin, noradrenaline, acetylcholine,
-   opioids. Agonists and antagonists on one diagram (used again in Parts 10 and 40–42).
-4. Synaptic integration: EPSPs and IPSPs summing in time and space (computed on Part 5's neuron); shunting
-   inhibition as division.
-5. Hebb's postulate (1949) and its instability; Oja's rule finds a principal component (derived, computed).
-6. LTP found (Bliss and Lømo 1973); the NMDA receptor as a coincidence detector; spike-timing-dependent
-   plasticity (Bi and Poo 1998).
-7. Lateral inhibition: Hartline's horseshoe crab; Mach bands computed; the Hermann grid.
-8. Recurrent excitation and inhibition: winner-take-all, a circuit that holds a choice (returns in Parts 19, 25).
-9. Rhythm: half-centre oscillators and central pattern generators; the lamprey's swim.
-10. Populations: Wilson–Cowan equations, the excitation–inhibition balance, oscillations and what the EEG's
-    rhythms are (paid off in Part 8).
-11. Neuromodulators as gain and learning-rate knobs (a preview of Part 17's dopamine).
+*Story:* on the night before Easter Sunday 1921 Otto Loewi wakes with an experiment: two frog hearts and a
+transfer of fluid. The synapse is chemical. That makes it adjustable, and Hebb guesses the rule. Small circuits
+built on one motif, mutual inhibition, already sharpen edges, hold a decision and keep a rhythm.
+0. Hook: the gap; sparks against soups; Loewi's two hearts; why a chemical step can be adjusted (Eccles gives up
+   in 1951).
+1. The chemical synapse in six steps; transmitter released in packets by chance (Katz), strength as n p q; two
+   kinds of receptor, and the direction a channel pulls.
+2. Seven transmitters in two groups, the wiring and the broadcast; agonist and antagonist; six places where a
+   drug can act, on one diagram (used again in Parts 10 and 40-42).
+3. Adding up: one EPSP against the threshold; summation in time (within about 10 ms); many inputs add to less
+   than their sum; shunting inhibition as division.
+4. Hebb's postulate (1949), local and unstable (run until it diverges); Oja's rule derived; a cell that finds the
+   first principal component.
+5. Long-term potentiation (Bliss and Lømo 1973, as a sketch of the design); the NMDA receptor as an AND; spike
+   timing (Bi and Poo 1998); a sliding threshold (BCM) and a cell that becomes selective, settling where the
+   rule says.
+6. Lateral inhibition: Hartline's horseshoe crab; a row of units shown an edge (a ratio of 2 becomes 4.3);
+   Mach's bands on the viewer and in the model.
+7. On you: the Hermann grid; the receptive-field account, computed; Geier's curved grid, where the account still
+   predicts spots and none are seen.
+8. A circuit that decides: two rivals, winner-take-all, a choice held after the evidence has gone, and harder
+   choices taking longer (returns in Parts 19, 25).
+9. A circuit that keeps time: Graham Brown's cats (1911); mutual inhibition with fatigue; what sets the tempo and
+   what stops the rhythm; one motif, three behaviours.
+10. Populations: Berger's rhythm; Wilson and Cowan's two equations; rest, rhythm and saturation as the drive
+    rises (paid off in Part 8).
+11. Knobs: the neuromodulators as gain and as learning rate; a three-factor rule (a preview of Part 17).
+12. The Ledger. 13. In practice: drugs at the synapse. 14. Frontier: where is a memory?
 
-*Psyche:* `circuits`: conductance synapses; Hebb, Oja, BCM and STDP rules with their fixed points; a lateral-
-inhibition sheet; a winner-take-all pair; a half-centre oscillator; Wilson–Cowan.
-*On you:* Mach bands and the Hermann grid, predicted by the model before you look.
-*Ledger:* LTP as a memory mechanism (`replicated`, with the causal link argued in Part 20); the Hermann grid's
-textbook explanation (`story and record`: the curved-grid variant breaks the receptive-field account).
-*In practice:* psychopharmacology; why SSRIs, benzodiazepines, stimulants and antipsychotics do what they do at
-the synapse.
-*Frontier:* the engram (optogenetic tagging and reactivation of memories in mice); whether STDP is the rule in
-vivo; backpropagation and the brain (taken up in Part 58).
-*Reading:* Loewi 1921; Hebb 1949; Bliss & Lømo 1973; Bi & Poo 1998; Hartline & Ratliff 1957; Dayan & Abbott chs.
-7–8; Marder & Bucher 2001; Valenstein, *The War of the Soups and the Sparks*.
+*Psyche:* `circuits` (`explainer/psychology/psyche/circuits.py`): conductance synapses on a passive membrane;
+Hebb's, Oja's and the BCM rule and a spike-timing window; a row of units with lateral inhibition; a
+centre-surround filter and the Hermann grid, straight and curved; a winner-take-all pair; a half-centre
+oscillator; Wilson and Cowan's populations.
+*On you:* Mach's bands and the Hermann grid in the film, each predicted by the model first. The interactive is
+the grid as an experiment: the reader judges grids with straight and wavy streets, and their reports collect
+beside what the receptive-field account predicts.
+*Ledger:* long-term potentiation (`replicated`, with the link to memory argued in Part 20); lateral inhibition
+(`replicated`); the Hermann grid's textbook explanation (`story and record`). Shown without rows, with reasons:
+Loewi, Katz's packets, Hebb's postulate, the tagged memory of 2012 (due in Part 20), and the registered and
+published antidepressant trials (due in Part 42).
+*In practice:* receptor occupancy and the shift a competitive antagonist makes; SSRIs, benzodiazepines,
+stimulants and antipsychotics at the synapse, each with its catch; Turner et al.'s registered against published
+trials (51% positive against 94%).
+*Frontier:* a memory switched on with light (Liu et al. 2012, from the abstract); whether the memory is in the
+synapses or the cells; whether spike timing is the rule in a living brain; credit assignment (Part 58).
+*Reading:* Loewi 1921; del Castillo & Katz 1954; Hebb 1949; Oja 1982; Bienenstock, Cooper & Munro 1982; Bliss &
+Lømo 1973; Bi & Poo 1998; Hartline & Ratliff 1957; Geier et al. 2008; Graham Brown 1911; Wilson & Cowan 1972;
+Liu et al. 2012; Turner et al. 2008; Dayan & Abbott chs. 7-8; Valenstein, *The War of the Soups and the Sparks*.
 
 ### Part 7 · The Brain (~55)
 *Question:* is the mind in one place or everywhere?
@@ -3059,3 +3077,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 3 | built, English and Chinese: 14 chapters, hook and outro; the measurement library (`measure.py`), the Pool's traits, methods and conflict task, three Ledger rows; course entry, lab and interactive (the Forer reading) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 56 min |
 | 4 | built, English and Chinese: 14 chapters, hook and outro; the false-positive lab (`evidence.py`), six Ledger rows (the plan's twenty were cut to what could be sourced and dated), nine Archive datasets; course entry, lab and interactive (the forking paths) checked; narration table and on-screen text translated and dry-run. Act I is complete. Open checks in its README | 48 min |
 | 5 | built, English and Chinese: 14 chapters, hook and outro; Psyche's neuron (`psyche/neuron.py`, eleven tests, the 1952 conduction speed recomputed), one Ledger row, five Archive datasets; course entry for Act II, lab and interactive (reading a spike train) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 58 min |
+| 6 | built, English and Chinese: 14 chapters, hook and outro; Psyche's circuits (`psyche/circuits.py`, eleven tests), three Ledger rows, nine Archive datasets; course entry, lab and interactive (the Hermann grid with straight and wavy streets) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 62 min |
