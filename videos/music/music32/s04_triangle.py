@@ -125,7 +125,7 @@ class Triangle(SoundScene):
                    "twelve semitones to the sum, and you are back among the same chords with the triangle turned. "
                    "<bookmark mark='d'/> The four augmented triads run straight down the middle, and the twenty-four major and "
                    "minor triads coil round them. <bookmark mark='e'/> A small voice leading between two triads is a short step "
-                   "between neighbouring points on that coil.", marks="cdef")
+                   "between neighbouring points on that coil.", marks="bcde")
 
     # ------------------------------------------------------------------
     def neighbours(self):

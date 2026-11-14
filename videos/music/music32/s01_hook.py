@@ -78,7 +78,7 @@ class Hook(SoundScene):
                    "Quinn, he described a whole family of such spaces, built from five symmetries. <bookmark mark='e'/> And "
                    "he made a claim this part will test: the familiar chords of Western music sit exactly where short paths "
                    "join them to their own transpositions, which is why harmony and smooth voice leading can work together.",
-                   marks="cdef")
+                   marks="bcde")
 
     # ------------------------------------------------------------------
     def plan(self):
