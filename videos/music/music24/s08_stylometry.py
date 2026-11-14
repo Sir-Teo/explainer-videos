@@ -13,6 +13,7 @@ class Stylometry(SoundScene):
     def construct(self):
         chapter(self, 7, r"Who wrote this? \ A statistical answer", r"Can twelve numbers recognize a composer?")
         self.method()
+        self.picture()
         self.composers()
         self.books()
         self.quiz()
@@ -35,6 +36,49 @@ class Stylometry(SoundScene):
                    "And test it honestly: hide each piece in turn, build the centroids from all the others, and see "
                    "whether the hidden one is recognized. <bookmark mark='f'/> The accuracy on pieces the method has not "
                    "seen is the only number worth reporting.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def picture(self):
+        s = load("style")
+        pts = s["scatter"]
+        ax = Axes(x_range=[0, 0.8, 0.2], y_range=[0, 0.6, 0.2], x_length=6.6, y_length=4.2, tips=False,
+                  axis_config={"color": GREY_B, "stroke_width": 1.5, "include_numbers": True, "font_size": 18}).move_to(LEFT * 2.2 + DOWN * 0.3)
+        xl = label(r"share of free dissonance", font_size=19, color=GREY_A).next_to(ax, DOWN, buff=0.35)
+        yl = label(r"share of suspensions", font_size=19, color=GREY_A).rotate(PI / 2).next_to(ax, LEFT, buff=0.45)
+        dots = VGroup(*[Dot(ax.c2p(min(x, 0.79), min(y, 0.59)), radius=0.055, color=TUNE if lab == "Palestrina" else EAR, fill_opacity=0.85) for x, y, lab in pts])
+        cen = VGroup()
+        for lab, col in (("Palestrina", TUNE), ("Monteverdi", EAR)):
+            xs = [x for x, y, l in pts if l == lab]
+            ys = [y for x, y, l in pts if l == lab]
+            cen.add(VGroup(Cross(stroke_color=WHITE, stroke_width=4).scale(0.13).move_to(ax.c2p(np.mean(xs), np.mean(ys))),
+                           label(lab, font_size=20, color=col).next_to(ax.c2p(np.mean(xs), np.mean(ys)), UR, buff=0.1)))
+        side = VGroup(*[label(t, font_size=21, color=c_) for t, c_ in (
+            (r"each dot: \ one piece, \ two of its twelve numbers", WHITE),
+            (r"crosses: \ the centroids", WHITE),
+            (r"in twelve dimensions the same idea: \ the nearest cross wins", TUNE),
+            (r"each number first rescaled \ (mean 0, \ spread 1), \ so no one feature dominates", GREY_A))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 4.6))
+        side.move_to(RIGHT * 4.3 + DOWN * 0.2)
+        with self.voiceover(
+            "Two of the twelve numbers can be drawn. <bookmark mark='a'/> Each dot is one piece: across, its share of "
+            "free dissonance; up, its share of suspensions. Palestrina's movements, in gold, sit in a tight cloud at the "
+            "upper left: many suspensions, almost no free dissonance. Monteverdi's madrigals, in pink, spread out to the "
+            "right and down. <bookmark mark='b'/> The crosses are the two centroids. <bookmark mark='c'/> With all twelve "
+            "numbers the picture has twelve dimensions, but the rule is the same: a hidden piece goes to the nearest "
+            "cross. <bookmark mark='d'/> Each number is first rescaled to a common spread, so that a feature measured in "
+            "large units cannot outvote the others."
+        ) as vo:
+            self.play(Create(ax), FadeIn(xl), FadeIn(yl))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(d_) for d_ in dots], lag_ratio=0.01), FadeIn(side[0]), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(cen), FadeIn(side[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[2]))
+            vo.wait_until("d")
+            self.play(FadeIn(side[3]))
+        self.wait(0.4)
+        self.clear_scene()
 
     # ------------------------------------------------------------------
     def composers(self):

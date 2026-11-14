@@ -79,7 +79,9 @@ class Imitation(SoundScene):
             "Palestrina's Mass movements open with imitation, <bookmark mark='b'/> and of the later entries, "
             f"{say(d['exact'])} out of {say(d['followers'])} copy the intervals exactly; the rest adjust a step, as a "
             "tonal answer does in Part 20. <bookmark mark='c'/> They enter at the octave, the fourth or the fifth, the "
-            "intervals that keep the mode's half steps in the same places. <bookmark mark='d'/> Monteverdi's madrigals "
+            "intervals that keep the mode's half steps in the same places: a motive that steps E to F in one voice steps "
+            "B to C a fifth higher, and the half step is still a half step. At the second it would not be, which is "
+            "one of this part's problems. <bookmark mark='d'/> Monteverdi's madrigals "
             f"open imitatively only {say(round(100 * d['share_monteverdi']))} times in a hundred: in his music the words "
             "come first."
         ) as vo:

@@ -9,6 +9,7 @@ class Thirds(SoundScene):
     def construct(self):
         chapter(self, 1, r"Thirds and sixths become consonant", r"When did the third become a resting place?", extra=((1440, r"the \textit{contenance angloise}"),))
         self.english()
+        self.fauxbourdon()
         self.census()
         self.endings()
 
@@ -31,6 +32,30 @@ class Thirds(SoundScene):
                    "<bookmark mark='f'/> And, as Part 6 showed, a third tuned pure, five to four, is smooth, while the "
                    "Pythagorean third of the old theory, eighty-one to sixty-four, is rough; singers tuning by ear could "
                    "make the difference.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def fauxbourdon(self):
+        d = load("fauxbourdon")
+        c = clip("thirds.fauxbourdon")
+        vs = d["voices"]
+        g = voices_roll(vs, width=11.0, height=3.0, colors=[TUNE, BLUE, GREY_A], bar_h=0.13).move_to(DOWN * 0.2)
+        names = VGroup(label(r"the melody", font_size=19, color=TUNE), label(r"a fourth below it", font_size=19, color=BLUE),
+                       label(r"a sixth below it", font_size=19, color=GREY_A)).arrange(RIGHT, buff=0.8).next_to(g, UP, buff=0.3)
+        head = label(r"fauxbourdon: \ a chain of sixth chords \ (the Tune's first phrases)", font_size=26, color=GREY_A).to_edge(UP, buff=0.45)
+        cap = label(r"opening and closing on an octave and a fifth; \ in between, \ every chord holds a third", font_size=21, color=GREY_A).next_to(g, DOWN, buff=0.35)
+        with self.voiceover(
+            "One continental technique of the 1430s made the new sound almost mechanically. In fauxbourdon, false bass, "
+            "a melody is sung with a voice a sixth below it and another a fourth below it, so that every chord in between "
+            "is a third and a sixth above the bass, and only the first and last open out to an octave and a fifth. Du Fay "
+            "used it in hymns and psalms. Here is the Tune's opening sung that way."
+        ):
+            self.play(FadeIn(head), FadeIn(g), FadeIn(names), FadeIn(cap))
+        with self.listen(c) as snd:
+            window(snd, r"fauxbourdon", detail=r"three synthetic voices", kind="synthesized", corner=DL, tag_corner=DR)
+            flash_voices(snd, g, vs, 0.0, d["unit"], colors=[TUNE, BLUE, GREY_A])
+            cursor(snd, g, 0.0, d["unit"])
+        self.wait(0.3)
+        self.clear_scene()
 
     # ------------------------------------------------------------------
     def census(self):

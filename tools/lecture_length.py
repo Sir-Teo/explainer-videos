@@ -45,6 +45,7 @@ def wpm(video: str) -> float:
     return SERIES_WPM.get(video_dir(video).parent.name, WPM)
 
 BOOKMARK = re.compile(r"<bookmark[^>]*/>")
+NARRATING = {"rows_scene": 3}  # scene helpers that speak a script passed as this positional argument
 
 
 def narration_words(path: Path, cls: str) -> int:
@@ -53,10 +54,14 @@ def narration_words(path: Path, cls: str) -> int:
         if not (isinstance(node, ast.ClassDef) and node.name == cls):
             continue
         for call in ast.walk(node):
-            if not (isinstance(call, ast.Call) and isinstance(call.func, ast.Attribute)
-                    and (call.func.attr == "voiceover" or call.func.attr.endswith("_voiceover")) and call.args):
+            if not isinstance(call, ast.Call):
                 continue
-            arg = call.args[0]
+            if isinstance(call.func, ast.Attribute) and (call.func.attr == "voiceover" or call.func.attr.endswith("_voiceover")) and call.args:
+                arg = call.args[0]
+            elif isinstance(call.func, ast.Name) and call.func.id in NARRATING and len(call.args) > NARRATING[call.func.id]:
+                arg = call.args[NARRATING[call.func.id]]       # a part's helper that narrates a script it is given
+            else:
+                continue
             for sub in ast.walk(arg):
                 if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
                     words += len(BOOKMARK.sub(" ", sub.value).split())

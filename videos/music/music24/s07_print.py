@@ -10,6 +10,7 @@ class Print(SoundScene):
         chapter(self, 6, r"Printing, and Josquin's name", r"What happens to a composer's name when music is sold?", extra=((1501, r"Petrucci's \textit{Odhecaton}"),))
         self.petrucci()
         self.josquin()
+        self.canon()
         self.evidence()
 
     # ------------------------------------------------------------------
@@ -49,6 +50,24 @@ class Print(SoundScene):
                    "other composers' names in earlier sources; some are in the style of a younger generation. "
                    "<bookmark mark='e'/> Modern scholars have shrunk the list, and some once-famous motets are no longer "
                    "thought to be his. How do you decide?")
+
+    # ------------------------------------------------------------------
+    def canon(self):
+        items = [
+            (r"1547: \ Glarean's \textit{Dodecachordon} prints Josquin's music as models of perfection", WHITE),
+            (r"the first time a composer's works are held up as classics after his death", WHITE),
+            (r"Palestrina, \ a generation later, \ becomes the model of church style for three centuries", WHITE),
+            (r"a canon of great works makes attribution matter: \ a piece is worth more under a great name", TUNE),
+            (r"and makes it harder: \ the great name attracts the doubtful pieces", EAR),
+        ]
+        rows_scene(self, r"the first classics", items,
+                   "Fame did something else new. <bookmark mark='b'/> In 1547 the theorist Heinrich Glarean printed "
+                   "Josquin's music in his treatise as models of perfection, <bookmark mark='c'/> one of the first times "
+                   "a composer's works were held up as classics after his death. <bookmark mark='d'/> A generation later "
+                   "Palestrina became the model of church style, and remained so for three centuries; Fux's textbook of "
+                   "Part 16 is one result. <bookmark mark='e'/> A canon of great works makes attribution matter: the same "
+                   "piece is worth more under a great name. <bookmark mark='f'/> And it makes attribution harder, because "
+                   "a great name attracts the doubtful pieces.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def evidence(self):

@@ -51,6 +51,8 @@ LEDGER = [
      "measure": r"12 skeleton notes grown into 37; on 15 of 24 strong beats a note of the chord"},
     {"part": 23, "title": r"as chant, as organum at the fifth below, and as the color of an isorhythmic motet", "seconds": 28.04,
      "measure": r"a color of 7 pitches through a talea of 4 notes: they meet again after 28 notes"},
+    {"part": 24, "title": r"as a four-voice point of imitation", "seconds": 9.64,
+     "measure": r"four entries four beats apart; after the last entry 12 of 12 beats consonant above the bass"},
 ]
 
 

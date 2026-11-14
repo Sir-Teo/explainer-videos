@@ -229,7 +229,9 @@ def compute_style() -> dict:
         thr = (f[m][yy[m] == 0].mean() + f[m][yy[m] == 1].mean()) / 2
         hits += int((f[i] > thr) == bool(yy[i]))
     cruda = [i for i, p in enumerate(mon) if p.name == "madrigal.5.1"][0]
-    return {"composer": {"n": len(y1), "accuracy": a1["accuracy"], "confusion": a1["confusion"], "weights": w1},
+    fi, si = PS.FEATURES.index("free"), PS.FEATURES.index("suspension")
+    scatter = [[float(x[fi]), float(x[si]), lab] for x, lab in zip(X1, y1)]
+    return {"scatter": scatter, "composer": {"n": len(y1), "accuracy": a1["accuracy"], "confusion": a1["confusion"], "weights": w1},
             "books": {"n": len(y2), "accuracy": a2["accuracy"], "confusion": a2["confusion"], "weights": w2, "one_feature": hits / len(f),
                       "cruda_pred": a2["pred"][cruda]},
             "features": list(PS.FEATURES)}
@@ -391,7 +393,67 @@ def compute_variation() -> dict:
             "clip": "tune.variation24"}
 
 
-ITEMS = {"hook": compute_hook, "thirds": compute_thirds, "imitation": compute_imitation, "masses": compute_masses,
+def compute_fauxbourdon() -> dict:
+    """Fauxbourdon on the Tune's first phrase as a chant: the melody on top, a voice a sixth below, a middle voice a
+    fourth below the top, opening and closing on an octave and fifth."""
+    t = M.corpus([M.THE_TUNE])[0]
+    mel, a = [], 0.0
+    for p, d in zip(t.pitches[:14], t.beats[:14]):
+        mel.append((72 + p, a, float(d)))
+        a += d
+    white = (0, 2, 4, 5, 7, 9, 11)
+
+    def down(p, steps):
+        q, k = p, 0
+        while k < steps:
+            q -= 1
+            if q % 12 in white:
+                k += 1
+        return q
+    low = [(down(p, 5), o, d) for p, o, d in mel]             # a sixth below
+    mid = [(down(p, 3), o, d) for p, o, d in mel]             # a fourth below
+    low[0] = (mel[0][0] - 12, low[0][1], low[0][2])
+    low[-1] = (mel[-1][0] - 12, low[-1][1], low[-1][2])
+    mid[0] = (mel[0][0] - 5, mid[0][1], mid[0][2])
+    mid[-1] = (mel[-1][0] - 5, mid[-1][1], mid[-1][2])
+    c = sing([mel, mid, low], 0.36, parts=["alto", "tenor", "bass"])
+    s_ = concat([c.at_level(LEVEL)], gap=0.0, names=["fb"])
+    return {"voices": [rows(v) for v in (mel, mid, low)], "unit": 0.36,
+            "clips": {"fb": save("thirds.fauxbourdon", s_, level=None, detail="the Tune's first two phrases in fauxbourdon: the melody, a fourth below it, a sixth below it")}}
+
+
+def compute_line() -> dict:
+    """One voice of Palestrina alone: a long line, with its leaps and how it recovers."""
+    _, pal, _ = corpus()
+    p = [x for x in pal if "Marcelli" in x.work and x.title.lower().startswith("agnus")][0] if any("Marcelli" in x.work and x.title.lower().startswith("agnus") for x in pal) else pal[100]
+    v = p.voices[0]
+    seg = [n for n in v if n[1] < 12 * p.bar]
+    t0 = seg[0][1]
+    notes = [(q, (o - t0) / 24.0, d / 24.0) for q, o, d in seg]
+    leaps = []
+    for k in range(len(notes) - 1):
+        iv = notes[k + 1][0] - notes[k][0]
+        if abs(iv) >= 5:
+            nx = notes[k + 2][0] - notes[k + 1][0] if k + 2 < len(notes) else 0
+            leaps.append({"at": k + 1, "size": iv, "recovered": bool(nx and 1 <= abs(nx) <= 2 and np.sign(nx) == -np.sign(iv))})
+    c = sing([notes], 0.3, parts=["alto"])
+    s_ = concat([c.at_level(LEVEL)], gap=0.0, names=["line"])
+    return {"work": p.work, "title": p.title, "notes": rows(notes), "quarter": 0.3, "leaps": leaps,
+            "high": int(max(q for q, _, _ in notes)), "low": int(min(q for q, _, _ in notes)),
+            "clips": {"line": save("melody.line", s_, level=None, detail=f"Palestrina, {p.work}, {p.title}: the top voice alone, sung from the encoding")}}
+
+
+def compute_madrigal() -> dict:
+    _, _, mon = corpus()
+    p = [x for x in mon if x.book == 3][0]
+    ex = excerpt(p, 8)
+    c = sing(ex, 0.3)
+    s_ = concat([c.at_level(LEVEL)], gap=0.0, names=["m"])
+    return {"name": p.name, "title": p.title, "voices": [rows(v) for v in ex], "quarter": 0.3,
+            "clips": {"opening": save("madrigal.opening", s_, level=None, detail=f"Monteverdi, Book 3 (1592), {p.name}: the opening, sung from the encoding")}}
+
+
+ITEMS = {"hook": compute_hook, "thirds": compute_thirds, "imitation": compute_imitation, "masses": compute_masses, "fauxbourdon": compute_fauxbourdon, "line": compute_line, "madrigal": compute_madrigal,
          "dissonance": compute_dissonance, "kinds": compute_kinds, "melody": compute_melody, "style": compute_style, "quiz": compute_quiz,
          "cruda": compute_cruda, "tuning": compute_tuning, "chromatic": compute_chromatic, "tune": compute_tune, "variation": compute_variation}
 

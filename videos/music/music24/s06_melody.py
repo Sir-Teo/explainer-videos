@@ -9,6 +9,7 @@ class Melody(SoundScene):
     def construct(self):
         chapter(self, 5, r"The line", r"What makes a line singable?")
         self.rules()
+        self.line()
         self.counted()
 
     # ------------------------------------------------------------------
@@ -28,6 +29,33 @@ class Melody(SoundScene):
                    "folk tunes. <bookmark mark='e'/> One high point, reached and left gently. <bookmark mark='f'/> The "
                    "point of all this: every voice is a good melody on its own, and the texture is four or five of them "
                    "at once.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def line(self):
+        d = load("line")
+        c = clip("melody.line")
+        notes = d["notes"]
+        g = mroll(notes, width=11.4, height=2.6, lo=d["low"] - 1, hi=d["high"] + 1, total=max(n[1] + n[2] for n in notes)).move_to(DOWN * 0.1)
+        marks = VGroup()
+        for lp in d["leaps"]:
+            k = lp["at"]
+            marks.add(Arrow(g.notes[k - 1].get_right(), g.notes[k].get_left(), buff=0.02, color=EAR, stroke_width=3, max_tip_length_to_length_ratio=0.3))
+        top = max(range(len(notes)), key=lambda k: notes[k][0])
+        hi = SurroundingRectangle(g.notes[top], color=WHITE, buff=0.05)
+        head = label(rf"Palestrina, \ \textit{{{d['work']}}}, \ {d['title']}: \ the top voice alone", font_size=24, color=GREY_A).to_edge(UP, buff=0.45)
+        cap = label(rf"{len(notes)} notes, \ {len(d['leaps'])} leap of a fifth or more, \ turned back by step; \ one high point", font_size=21, color=GREY_A).next_to(g, DOWN, buff=0.4)
+        with self.voiceover(
+            "Here is one line of Palestrina on its own: the top voice of the second Agnus Dei of the Missa Papae Marcelli, "
+            "twelve bars, sung by one synthetic voice. Almost every move is a step; the one large leap, marked, is "
+            "followed at once by a step back the other way; and the line rises to a single high point and settles. "
+            "Listen to how little it needs the other voices."
+        ):
+            self.play(FadeIn(head), FadeIn(g), FadeIn(marks), FadeIn(hi), FadeIn(cap))
+        with self.listen(c) as snd:
+            window(snd, r"one line of Palestrina", detail=r"from the encoding, \ one synthetic voice", kind="synthesized", corner=DL, tag_corner=DR)
+            flash(snd, g.notes, [n[1] * d["quarter"] for n in notes], hot=WHITE, base=TUNE)
+        self.wait(0.3)
+        self.clear_scene()
 
     # ------------------------------------------------------------------
     def counted(self):
