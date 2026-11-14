@@ -39,6 +39,12 @@ and summarized, not stored. Dates are the day the check was made.
 | `adrian_1926` | A single sensory fibre: impulses of constant size whose frequency changes with stretch | Adrian and Zotterman, *J. Physiol.* 61 (1926) 151–171 | facts only | 2026-11-13: from secondary accounts; no rates quoted |
 | `golgi_cajal_1906` | The 1906 Nobel Prize shared by Golgi (one network) and Cajal (separate cells) | Nobel Foundation | facts only | 2026-11-13: the Foundation's article and encyclopedic accounts |
 | `gidon_2020` | Graded calcium spikes in the dendrites of human layer 2/3 neurons; exclusive-or in the authors' models | Gidon et al., *Science* 367 (2020) 83–87 | facts only | 2026-11-13: from the authors' pages and press accounts; the article not read |
+| `loewi_1921` | Two frog hearts and a transferred fluid; Vagusstoff; the dream, as Loewi told it | Loewi, *Pflügers Archiv* 189 (1921) 239–242 | facts only | 2026-11-14: from encyclopedic and historical accounts; the paper not read; the dream is his own later account |
+| `hebb_1949` | Hebb's postulate, quoted | Hebb, *The Organization of Behavior* (1949), p. 62 | a short quotation | 2026-11-14: as quoted in textbooks, from memory; the book not opened |
+| `bliss_lomo_1973` | Long-lasting potentiation in the dentate gyrus of the anaesthetized rabbit | Bliss and Lømo, *J. Physiol.* 232 (1973) 331–356 | facts only | 2026-11-14: title and preparation from later reviews; no effect sizes quoted |
+| `bi_poo_1998` | Spike-timing-dependent plasticity; a window of about 20 ms | Bi and Poo, *J. Neurosci.* 18 (1998) 10464–10472 | facts only | 2026-11-14: the abstract as summarized by a web search |
+| `hartline_ratliff_1957` | Mutual inhibition of receptor units in the eye of *Limulus*, linear in the neighbour's activity | Hartline and Ratliff, *J. Gen. Physiol.* 40 (1957) 357–376 | facts only | 2026-11-14: the abstract as summarized from PubMed Central; volume and pages from memory |
+| `geier_2008` | Curving the streets of the Hermann grid abolishes the spots; the classical account (Baumgartner 1960) | Geier, Bernáth, Hudák and Séra, *Perception* 37 (2008) 651–665 | facts only | 2026-11-14: from the first author's pages and secondary summaries; the paper not read |
 
 ## Looked for and not used
 

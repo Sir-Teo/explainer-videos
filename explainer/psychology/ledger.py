@@ -598,6 +598,72 @@ shown(4, "DREBER_2015", "prediction markets on replications: shown at the fronti
 shown(4, "PROTZKO_2023", "a retracted report about replication rates, shown at the frontier for what its "
       "retraction says about the reforms; entered with meta-science", row_in=50)
 
+# ---------------------------------------------------------------------------
+# Part 6
+# ---------------------------------------------------------------------------
+add(Finding(
+    key="ltp", part=6, title=r"Long-term potentiation",
+    claim="A brief burst of strong activity leaves a synapse stronger for a long time.",
+    original=Study("Bliss and Lomo", 1973, n="anaesthetized rabbits",
+                   design="brief trains of fast stimulation of the perforant path; single test pulses before and "
+                          "after",
+                   found="the response in the dentate gyrus stays enlarged long after the trains"),
+    status="replicated",
+    record=(
+        Study("Bi and Poo", 1998, n="pairs of cultured hippocampal neurons",
+              design="single input and output spikes paired at chosen intervals",
+              found="strengthening when the input comes first, weakening when it comes after, within about 20 ms"),
+    ),
+    note="That synapses can be strengthened by use is not in doubt. Whether this is how memories are stored is a "
+         "separate claim, argued in Part 20.",
+    sources=("T. V. P. Bliss and T. Lomo, Long-lasting potentiation of synaptic transmission in the dentate area "
+             "of the anaesthetized rabbit following stimulation of the perforant path, Journal of Physiology 232 "
+             "(1973) 331-356",
+             "G.-Q. Bi and M.-M. Poo, Synaptic modifications in cultured hippocampal neurons, Journal of "
+             "Neuroscience 18 (1998) 10464-10472"),
+    checked="2026-11-14",
+    data=("BLISS_LOMO_1973", "BI_POO_1998"),
+))
+
+add(Finding(
+    key="lateral_inhibition", part=6, title=r"Lateral inhibition",
+    claim="Neighbouring receptors in an eye inhibit one another, in proportion to how active each one is.",
+    original=Study("Hartline and Ratliff", 1957, n="single optic nerve fibres of the horseshoe crab",
+                   design="two receptor units lit together and apart, each fibre's impulses counted",
+                   found="the inhibition on each unit is a linear function of the other's activity"),
+    status="replicated",
+    record=(
+        Study("Hartline and Ratliff", 1958, n="several units lit", found="the inhibitory influences add"),
+    ),
+    note="The equations of the eye of one animal. They predict the bands Mach described in 1865 at an edge of "
+         "light, and the series recomputes them.",
+    sources=("H. K. Hartline and F. Ratliff, Inhibitory interaction of receptor units in the eye of Limulus, "
+             "Journal of General Physiology 40 (1957) 357-376",),
+    checked="2026-11-14",
+    data=("HARTLINE_RATLIFF_1957",),
+))
+
+add(Finding(
+    key="hermann_grid", part=6, title=r"The Hermann grid, explained by receptive fields",
+    claim="The grey spots at the crossings of the Hermann grid are produced by centre-surround receptive fields.",
+    original=Study("Baumgartner", 1960, n="", design="an argument from the receptive fields of retinal cells",
+                   found="a cell centred on a crossing has more of its surround lit, and so responds less"),
+    status="story and record",
+    record=(
+        Study("Geier, Bernath, Hudak and Sera", 2008, n="observers of altered grids",
+              design="the streets given a slight curve, the receptive-field account's conditions unchanged",
+              found="the spots vanish"),
+    ),
+    note="The textbook explanation predicts spots where none are seen. Lateral inhibition is real; this "
+         "application of it is at best incomplete, and the mechanism is still disputed.",
+    sources=("J. Geier, L. Bernath, M. Hudak and L. Sera, Straightness as the main factor of the Hermann grid "
+             "illusion, Perception 37 (2008) 651-665",
+             "G. Baumgartner, Indirekte Groessenbestimmung der rezeptiven Felder der Retina beim Menschen mittels "
+             "der Hermannschen Gittertaeuschung, Pfluegers Archiv 272 (1960) 21-22"),
+    checked="2026-11-14",
+    data=("GEIER_2008",),
+))
+
 shown(5, "ADRIAN_1926", "the rate code of a single sensory fibre: told here as the discovery it was, with schematic "
       "trains; entered with the senses", row_in=11)
 shown(5, "GOLGI_CAJAL_1906", "the neuron doctrine: a settled piece of anatomy, told as history")

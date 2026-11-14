@@ -21,7 +21,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "LIT_2011", "MITCHELL_2021", "STEVENS_1946", "FORER_1949", "JOHANSSON_2005", "CREDE_2017", "HEDGE_2018",
            "FLAKE_FRIED_2020", "BEM_2011", "COHEN_1962", "SIMMONS_2011", "OSC_2015", "MANY_LABS", "CAMERER_2018",
            "SCHEEL_2021", "LEVELT_2012", "DREBER_2015", "PROTZKO_2023", "HODGKIN_HUXLEY_1952", "COLE_CURTIS_1939",
-           "ADRIAN_1926", "GOLGI_CAJAL_1906", "GIDON_2020"]
+           "ADRIAN_1926", "GOLGI_CAJAL_1906", "GIDON_2020", "LOEWI_1921", "HEBB_1949", "BLISS_LOMO_1973", "BI_POO_1998",
+           "HARTLINE_RATLIFF_1957", "GEIER_2008"]
 
 
 @dataclass(frozen=True)
@@ -686,9 +687,100 @@ GIDON_2020 = Dataset(
           "limit": "ex vivo tissue; whether other species have the same spikes is not known"},
 )
 
+# ---------------------------------------------------------------------------
+# Part 6
+# ---------------------------------------------------------------------------
+LOEWI_1921 = Dataset(
+    key="loewi_1921",
+    title="Two frog hearts and a shared fluid: the nerve's effect on the heart is carried by a chemical",
+    source="O. Loewi, Ueber humorale Uebertragbarkeit der Herznervenwirkung, Pfluegers Archiv 189 (1921) 239-242",
+    cite=r"Loewi (1921)",
+    checked="the reference, the design and the result from encyclopedic and historical accounts through a web search, "
+            "2026-11-14; the paper was not read; the dream is Loewi's own later account, and historians note that "
+            "how much of it is accurate is unclear",
+    licence="facts only",
+    data={"year": 1921, "design": "two beating frog hearts, one with its vagus nerve; fluid from the first is moved "
+                                  "to the second",
+          "result": "stimulating the vagus slows the first heart, and the fluid then slows the second",
+          "substance": "Vagusstoff, later identified as acetylcholine",
+          "dream": "by his own account the idea came in a dream on the night before Easter Sunday; he wrote it down, "
+                   "could not read the note in the morning, and it returned the next night"},
+)
+
+HEBB_1949 = Dataset(
+    key="hebb_1949",
+    title="Hebb's postulate",
+    source="D. O. Hebb, The Organization of Behavior (Wiley, 1949), p. 62",
+    cite=r"Hebb (1949)",
+    checked="the postulate as it is quoted in every textbook, from memory, 2026-11-14; the book was not opened",
+    licence="a short quotation",
+    data={"postulate": "When an axon of cell A is near enough to excite a cell B and repeatedly or persistently "
+                       "takes part in firing it, some growth process or metabolic change takes place in one or "
+                       "both cells such that A's efficiency, as one of the cells firing B, is increased."},
+)
+
+BLISS_LOMO_1973 = Dataset(
+    key="bliss_lomo_1973",
+    title="Long-lasting potentiation of a synapse after a burst of stimulation",
+    source="T. V. P. Bliss and T. Lomo, Long-lasting potentiation of synaptic transmission in the dentate area of "
+           "the anaesthetized rabbit following stimulation of the perforant path, Journal of Physiology 232 (1973) "
+           "331-356",
+    cite=r"Bliss \& L\o mo (1973)",
+    checked="the title, the preparation and the journal reference from later reviews through a web search, "
+            "2026-11-14; the paper was not read, so no size or duration of the effect is quoted",
+    licence="facts only",
+    data={"animal": "anaesthetized rabbit", "pathway": "perforant path to the dentate gyrus of the hippocampus",
+          "finding": "after brief trains of high-frequency stimulation the response to a single test pulse stays "
+                     "enlarged for a long time"},
+)
+
+BI_POO_1998 = Dataset(
+    key="bi_poo_1998",
+    title="The sign of a synaptic change depends on the order of two spikes",
+    source="G.-Q. Bi and M.-M. Poo, Synaptic modifications in cultured hippocampal neurons: dependence on spike "
+           "timing, synaptic strength, and postsynaptic cell type, Journal of Neuroscience 18 (1998) 10464-10472",
+    cite=r"Bi \& Poo (1998)",
+    checked="the abstract as summarized by a web search, 2026-11-14: a window of about 20 ms; the paper was not read",
+    licence="facts only",
+    data={"window_ms": 20, "preparation": "pairs of cultured hippocampal neurons",
+          "finding": "input before the output spike strengthens the synapse; input after it weakens the synapse"},
+)
+
+HARTLINE_RATLIFF_1957 = Dataset(
+    key="hartline_ratliff_1957",
+    title="Neighbouring receptors in the eye of the horseshoe crab inhibit one another",
+    source="H. K. Hartline and F. Ratliff, Inhibitory interaction of receptor units in the eye of Limulus, Journal "
+           "of General Physiology 40 (1957) 357-376; The Nobel Prize in Physiology or Medicine 1967",
+    cite=r"Hartline \& Ratliff (1957)",
+    checked="the abstract's statements as summarized from PubMed Central by a web search, 2026-11-14; the volume "
+            "and pages from memory",
+    licence="facts only",
+    data={"animal": "the horseshoe crab, Limulus", "nobel": 1967,
+          "finding": "with two receptor units lit, the inhibition on each is a linear function of the activity of "
+                     "the other",
+          "later": "the inhibitory influences of several units add (1958)"},
+)
+
+GEIER_2008 = Dataset(
+    key="geier_2008",
+    title="Curving the streets of the Hermann grid abolishes its spots",
+    source="J. Geier, L. Bernath, M. Hudak and L. Sera, Straightness as the main factor of the Hermann grid "
+           "illusion, Perception 37 (2008) 651-665; the account it challenges: G. Baumgartner (1960)",
+    cite=r"Geier et al.\ (2008)",
+    checked="from the first author's own pages and secondary summaries through a web search, 2026-11-14; the paper "
+            "was not read; later authors (Bach 2008; Schiller and Carvey 2005) also find the classical account "
+            "incomplete, and the mechanism is still disputed",
+    licence="facts only",
+    data={"classical": "the spots come from centre-surround receptive fields: more surround is lit at a crossing "
+                       "(Baumgartner 1960)",
+          "finding": "a slight curvature of the streets makes the spots vanish, although the classical account "
+                     "predicts no change"},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
                           FLAKE_FRIED_2020, BEM_2011, COHEN_1962, SIMMONS_2011, OSC_2015, MANY_LABS, CAMERER_2018,
                           SCHEEL_2021, LEVELT_2012, DREBER_2015, PROTZKO_2023, HODGKIN_HUXLEY_1952,
-                          COLE_CURTIS_1939, ADRIAN_1926, GOLGI_CAJAL_1906, GIDON_2020)}
+                          COLE_CURTIS_1939, ADRIAN_1926, GOLGI_CAJAL_1906, GIDON_2020, LOEWI_1921, HEBB_1949,
+                          BLISS_LOMO_1973, BI_POO_1998, HARTLINE_RATLIFF_1957, GEIER_2008)}
