@@ -22,18 +22,23 @@ class Even(SoundScene):
         panels = VGroup()
         dots_all = {}
         for size, x0 in ((3, -3.3), (4, 3.3)):
-            ax = Axes(x_range=[0, 5, 1], y_range=[0, size + 1, 1], x_length=5.2, y_length=3.4, tips=False,
+            ax = Axes(x_range=[0, 5, 1], y_range=[0, size + 1, 1], x_length=5.6, y_length=4.0, tips=False,
                       axis_config={"color": GREY_B, "include_numbers": True, "font_size": 16}).move_to(RIGHT * x0 + DOWN * 0.4)
             rows_ = [r for r in d["rows"] if r["size"] == size]
             dots = VGroup()
             tags = VGroup()
+            ngood = 0
             for r in rows_:
                 good = r["vl"] < size
                 dt = Dot(ax.c2p(r["even"], r["vl"]), radius=0.08 if good else 0.06, color=TUNE if good else GREY_B)
                 dots.add(dt)
                 t = TAGS.get(tuple(r["prime"]))
                 if t:
-                    tags.add(label(t, font_size=15, color=TUNE if good else GREY_A).next_to(dt, UP if good else UP, buff=0.12))
+                    if good:
+                        ngood += 1
+                        tags.add(label(t, font_size=15, color=TUNE).next_to(dt, DOWN if ngood % 2 == 0 else UP, buff=0.14))
+                    else:
+                        tags.add(label(t, font_size=15, color=GREY_A).next_to(dt, UP, buff=0.12))
             line = DashedLine(ax.c2p(0, size), ax.c2p(5, size), color=EAR, stroke_width=1.5)
             ttl = label(rf"{size}-note chord types \ ({len(rows_)})", font_size=20, color=GREY_A).next_to(ax, UP, buff=0.25)
             xl = label(r"distance from even", font_size=17, color=GREY_A).next_to(ax, DOWN, buff=0.3)
