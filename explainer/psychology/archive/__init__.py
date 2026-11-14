@@ -38,7 +38,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "XIE_2013", "PHOENIX_1959", "TEIGEN_1994", "ROENNEBERG_2004",
            "WEBER_1834", "FECHNER_1860", "STEVENS_1957", "POULTON_1968", "LEVITT_1971", "WATSON_PELLI_1983",
            "WICHMANN_HILL_2001", "MCGILL_GOLDBERG_1968", "HALBERDA_2008", "GIBBON_1977", "LESMES_2010",
-           "DEVRIES_ROSE", "BERNOULLI_1738", "PLATEAU_1872", "THURSTONE_1927"]
+           "DEVRIES_ROSE", "BERNOULLI_1738", "PLATEAU_1872", "THURSTONE_1927",
+           "MACKWORTH_1948", "PETERSON_1954", "TANNER_SWETS_1954", "WOLFE_2005", "FLECK_MITROFF_2007", "GIGERENZER_HOFFRAGE_1995", "RATCLIFF_1992", "YONELINAS_1994", "SEE_1995", "SWETS_2000", "SWETS_1961", "MANISCALCO_LAU_2012", "MICKES_2012"]
 
 
 @dataclass(frozen=True)
@@ -1999,6 +2000,153 @@ THURSTONE_1927 = Dataset(
     data={"offences": 19},
 )
 
+# ---------------------------------------------------------------------------------- Part 12: signal and noise
+_P12 = "through a web search, 2026-11-14; the original was not read"
+
+MACKWORTH_1948 = Dataset(
+    key="mackworth_1948",
+    title="The breakdown of vigilance: radar observers and the Clock Test",
+    source="N. H. Mackworth, The breakdown of vigilance during prolonged visual search, Quarterly Journal of "
+           "Experimental Psychology 1 (1948) 6-21",
+    cite=r"Mackworth (1948)",
+    checked="encyclopaedia entries and reviews " + _P12 + "; the detection rates are not given",
+    licence="facts only",
+    data={"session_hours": 2},
+)
+
+PETERSON_1954 = Dataset(
+    key="peterson_1954",
+    title="The theory of signal detectability, from Michigan",
+    source="W. W. Peterson, T. G. Birdsall and W. C. Fox, The theory of signal detectability, Transactions of the "
+           "IRE Professional Group on Information Theory 4(4) (1954) 171-212",
+    cite=r"Peterson, Birdsall \& Fox (1954)",
+    checked="the library record and later accounts " + _P12,
+    licence="facts only",
+    data={},
+)
+
+TANNER_SWETS_1954 = Dataset(
+    key="tanner_swets_1954",
+    title="A decision-making theory of visual detection",
+    source="W. P. Tanner Jr. and J. A. Swets, A decision-making theory of visual detection, Psychological Review 61 "
+           "(1954) 401-409; D. M. Green and J. A. Swets, Signal Detection Theory and Psychophysics (1966)",
+    cite=r"Tanner \& Swets (1954)",
+    checked="citations " + _P12 + "; the pages are from memory",
+    licence="facts only",
+    data={},
+)
+
+WOLFE_2005 = Dataset(
+    key="wolfe_2005",
+    title="Rare items often missed in visual searches",
+    source="J. M. Wolfe, T. S. Horowitz and N. M. Kenner, Rare items often missed in visual searches, Nature 435 "
+           "(2005) 439-440",
+    cite=r"Wolfe et al.\ (2005)",
+    checked="the paper's text as reproduced in a public copy " + _P12,
+    licence="facts only",
+    data={"prevalence": (0.5, 0.1, 0.01), "miss": (0.11, 0.25, 0.52)},
+)
+
+FLECK_MITROFF_2007 = Dataset(
+    key="fleck_mitroff_2007",
+    title="Rare targets are rarely missed in correctable search",
+    source="M. S. Fleck and S. R. Mitroff, Rare targets are rarely missed in correctable search, Psychological "
+           "Science 18 (2007) 943-947",
+    cite=r"Fleck \& Mitroff (2007)",
+    checked="later papers' summaries " + _P12 + "; the volume and pages are from memory",
+    licence="facts only",
+    data={},
+)
+
+GIGERENZER_HOFFRAGE_1995 = Dataset(
+    key="gigerenzer_hoffrage_1995",
+    title="The mammogram problem in probabilities and in natural frequencies",
+    source="G. Gigerenzer and U. Hoffrage, How to improve Bayesian reasoning without instruction: frequency formats, "
+           "Psychological Review 102 (1995) 684-704; D. M. Eddy, Probabilistic reasoning in clinical medicine (1982)",
+    cite=r"Gigerenzer \& Hoffrage (1995)",
+    checked="later papers quoting the problem and the result " + _P12,
+    licence="facts only",
+    data={"prevalence": 0.01, "sensitivity": 0.8, "false_positive": 0.096, "correct_prob": 0.16, "correct_freq": 0.46},
+)
+
+RATCLIFF_1992 = Dataset(
+    key="ratcliff_1992",
+    title="Recognition memory's zROC slope of about 0.8",
+    source="R. Ratcliff, C.-F. Sheu and S. D. Gronlund, Testing global memory models using ROC curves, "
+           "Psychological Review 99 (1992) 518-535",
+    cite=r"Ratcliff et al.\ (1992)",
+    checked="reviews that cite the slope " + _P12 + "; the title and pages are from memory",
+    licence="facts only",
+    data={"slope": 0.8},
+)
+
+YONELINAS_1994 = Dataset(
+    key="yonelinas_1994",
+    title="A dual-process account of recognition ROCs",
+    source="A. P. Yonelinas, Receiver-operating characteristics in recognition memory: evidence for a dual-process "
+           "model, Journal of Experimental Psychology: Learning, Memory, and Cognition 20 (1994) 1341-1354",
+    cite=r"Yonelinas (1994)",
+    checked="the author's posted copy, by its first page " + _P12,
+    licence="facts only",
+    data={},
+)
+
+SEE_1995 = Dataset(
+    key="see_1995",
+    title="A meta-analysis of the sensitivity decrement in vigilance",
+    source="J. E. See, S. R. Howe, J. S. Warm and W. N. Dember, A meta-analysis of the sensitivity decrement in "
+           "vigilance, Psychological Bulletin 117 (1995) 230-249",
+    cite=r"See et al.\ (1995)",
+    checked="the abstract as quoted " + _P12,
+    licence="facts only",
+    data={"studies": 42},
+)
+
+SWETS_2000 = Dataset(
+    key="swets_2000",
+    title="Psychological science can improve diagnostic decisions",
+    source="J. A. Swets, R. M. Dawes and J. Monahan, Psychological science can improve diagnostic decisions, "
+           "Psychological Science in the Public Interest 1 (2000) 1-26",
+    cite=r"Swets, Dawes \& Monahan (2000)",
+    checked="the abstract " + _P12,
+    licence="facts only",
+    data={},
+)
+
+SWETS_1961 = Dataset(
+    key="swets_1961",
+    title="Decision processes in perception",
+    source="J. A. Swets, W. P. Tanner Jr. and T. G. Birdsall, Decision processes in perception, Psychological "
+           "Review 68 (1961) 301-340",
+    cite=r"Swets, Tanner \& Birdsall (1961)",
+    checked="later reviews describing it " + _P12 + "; the pages are from memory",
+    licence="facts only",
+    data={},
+)
+
+MANISCALCO_LAU_2012 = Dataset(
+    key="maniscalco_lau_2012",
+    title="Meta-d': how much of the evidence confidence can use",
+    source="B. Maniscalco and H. Lau, A signal detection theoretic approach for estimating metacognitive sensitivity "
+           "from confidence ratings, Consciousness and Cognition 21 (2012) 422-430",
+    cite=r"Maniscalco \& Lau (2012)",
+    checked="the abstract " + _P12,
+    licence="facts only",
+    data={},
+)
+
+MICKES_2012 = Dataset(
+    key="mickes_2012",
+    title="ROC analysis of police line-ups: simultaneous against sequential",
+    source="L. Mickes, H. D. Flowe and J. T. Wixted, Receiver operating characteristic analysis of eyewitness "
+           "memory: comparing the diagnostic accuracy of simultaneous versus sequential lineups, Journal of "
+           "Experimental Psychology: Applied 18 (2012) 361-376",
+    cite=r"Mickes, Flowe \& Wixted (2012)",
+    checked="the paper's posted copy, by its summary and one table as quoted " + _P12,
+    licence="facts only",
+    data={"sequential": (0.44, 0.15), "simultaneous": (0.52, 0.28)},
+)
+
 
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
@@ -2025,4 +2173,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           XIE_2013, PHOENIX_1959, TEIGEN_1994, ROENNEBERG_2004,
                           WEBER_1834, FECHNER_1860, STEVENS_1957, POULTON_1968, LEVITT_1971, WATSON_PELLI_1983,
                           WICHMANN_HILL_2001, MCGILL_GOLDBERG_1968, HALBERDA_2008, GIBBON_1977, LESMES_2010,
-                          DEVRIES_ROSE, BERNOULLI_1738, PLATEAU_1872, THURSTONE_1927)}
+                          DEVRIES_ROSE, BERNOULLI_1738, PLATEAU_1872, THURSTONE_1927,
+                          MACKWORTH_1948, PETERSON_1954, TANNER_SWETS_1954, WOLFE_2005, FLECK_MITROFF_2007, GIGERENZER_HOFFRAGE_1995, RATCLIFF_1992, YONELINAS_1994, SEE_1995, SWETS_2000, SWETS_1961, MANISCALCO_LAU_2012, MICKES_2012)}

@@ -192,7 +192,7 @@ Modules, with the part that introduces each:
 | `body` | 10 | a light-driven clock (free running, entrainment, phase response, jet lag); the two-process model of sleep and an alertness curve; lapses under short sleep; a hormone loop with feedback; receptor occupancy, blockers and half-lives; an opponent process; tolerance tied to a place; chronotype |
 | `body` | 10 | a circadian oscillator; the two-process model; an HPA feedback loop; receptor occupancy and tolerance |
 | `psychophysics` | 11 | an observer with floor, Weber and photon noise; psychometric functions; constant stimuli, limits and adjustment; staircases and QUEST; ML fits with bootstrap intervals and goodness of fit; Fechner's count; Stevens's power law and cross-modality matching; the triangle test; Thurstone's Case V |
-| `sdt` | 12 | equal- and unequal-variance observers; yes–no, rating and 2AFC; ROC and d′; ideal observers |
+| `sdt` | 12 | equal- and unequal-variance observers; d′, c and β; yes–no, rating, 2AFC and m-AFC; ROCs and zROCs fitted by maximum likelihood; the ideal observer under base rates and payoffs; high-threshold and dual-process rivals; predictive value; prevalence |
 | `vision` | 13 | an optical point spread; cone fundamentals and colour matching; centre–surround and Gabor banks; contrast normalization |
 | `infer` | 14 | Bayesian observers; cue combination; the motion prior; a small recognition network with a behavioural readout |
 | `hearing` | 15 | a gammatone filter bank; autocorrelation pitch; a Jeffress coincidence array; a gate-control circuit |
@@ -977,36 +977,48 @@ Practical Introduction*; Levitt 1971; Watson & Pelli 1983; Wichmann & Hill 2001;
 
 ### Part 12 · Signal and Noise (~50)
 *Question:* when you say "yes, I saw it", how much of that is seeing and how much is willingness to say yes?
-*Story:* wartime radar operators miss targets and report ghosts, and it turns out no instruction can fix one
-error without causing the other. Engineers and psychologists at Michigan turn that trade-off into a theory with
-two numbers: how well you can tell, and where you draw the line. It is the most exported idea in psychology.
-1. Hook: the radar screen. Hits, misses, false alarms, correct rejections.
-2. Why the threshold idea fails: change the payoff or the base rate and the "threshold" moves (computed).
-3. The model: two overlapping distributions and a criterion. d′ and c derived from hit and false-alarm rates.
-4. The ROC curve: sweep the criterion; the area under it; rating-scale ROCs from confidence.
-5. On you: an old/new judgment with confidence. Your ROC, drawn.
-6. The ideal observer: the likelihood ratio is the best decision variable (Neyman–Pearson; link to *Statistics,
-   Built* Part 10). The optimal criterion from payoffs and base rates.
-7. Two-alternative forced choice: why it removes bias and why d′ gains a factor of root two (derived).
-8. Unequal variances and curved zROCs: recognition memory's slope of about 0.8 (returns in Part 21).
-9. Rival models: high-threshold and mixture models, and how ROC shape separates them.
-10. Base rates: a rare target and a good detector still give mostly false alarms (the mammogram arithmetic;
-    natural frequencies).
-11. The prevalence effect: when targets are rare, observers miss more (Wolfe et al. 2005). Returns in Part 51.
-12. The same picture everywhere: diagnosis, line-ups, spam filters, hiring. A table of what plays the role of
-    signal, noise and criterion in each.
+*Story:* wartime radar observers miss real contacts, more as the watch wears on, and report ghosts. Mackworth's
+Clock Test (1948) reproduces the decline, but a hit rate cannot tell an unseen target from an unspoken one.
+Engineers at Michigan and then Tanner and Swets (1954) turn the trade-off into a theory with two numbers, one for
+seeing and one for saying. It is the third objection's day in Kant's wager.
+0. Hook: the radar screen; Mackworth's Clock Test; the third objection; objectives.
+1. Four outcomes, two free numbers; one observer under five reward schemes (hits 97% to 37%, d′ 1.5 throughout);
+   the correction for guessing slides from 0.87 to 0.29 with d′ fixed.
+2. Two distributions and a line: d′ = z(H) − z(F) and c derived; two knobs; chapter 1 in the two numbers.
+3. The ROC traced by sliding the criterion; the family by d′ and its area (0.856 = Φ(d′/√2)); two tests with the
+   same area that cross (56% against 29% hits at 2% false alarms); a whole ROC from confidence ratings.
+4. On you: twelve words studied, twenty-four tested; d′ from a table with the log-linear correction.
+5. The ideal observer: the likelihood ratio and Neyman–Pearson; base rates and payoffs set β (1, 4, 19); at 5%
+   prevalence the best line gets 95.2% and "always no" 95%.
+6. Fitting: zROCs and slope 1/σ; a rating study fitted by maximum likelihood (slope 0.81, χ² = 5.5); recognition's
+   slope of about 0.8 (Ratcliff, Sheu & Gronlund 1992).
+7. Forced choice: Φ(d′/√2) derived; m alternatives and a lower floor.
+8. Rivals: the high-threshold line against curved data; Yonelinas's recollection plus familiarity fits as well.
+9. Base rates: the mammogram (8 of 103; Gigerenzer & Hoffrage 1995); Bayes's rule in odds (a second positive:
+   41%); the same test at 1% and 10% prevalence.
+10. The prevalence effect (Wolfe et al. 2005: 11%, 25%, 52%); a criterion that follows the base rate; Fleck and
+    Mitroff's correctable search; threat-image projection.
+11. The watch revisited: two watchers with one hit rate and opposite false alarms; See et al. (1995).
+12. The Ledger. 13. In practice: signal, noise and criterion across fields; double reading (√2 if independent);
+    police line-ups and the diagnosticity ratio (Mickes, Flowe & Wixted 2012); ROC against precision and recall.
+    14. Frontier: what is solid and argued; confidence's own ROC and meta-d′ (Maniscalco & Lau 2012).
 
-*Psyche:* `sdt`: equal- and unequal-variance observers for yes–no, rating and 2AFC; ROC fitting by maximum
-likelihood; the ideal observer under payoffs.
-*On you:* the confidence-rating recognition test; the mammogram problem.
-*Ledger:* criterion shifts with payoffs and base rates (`replicated`); the prevalence effect (`replicated`);
-subliminal perception claims that relied on thresholds without SDT (`contested`).
-*In practice:* radiology, airport screening, quality inspection, alarm design, classifier evaluation (the ROC
-entered machine learning from here).
-*Frontier:* confidence and metacognition (meta-d′, Part 25); whether the decision variable is one-dimensional;
-criterion setting as learning.
-*Reading:* Tanner & Swets 1954; Green & Swets 1966; Macmillan & Creelman, *Detection Theory*; Swets, Dawes &
-Monahan 2000; Wixted 2020; Gigerenzer & Hoffrage 1995.
+*Psyche:* `sdt` (`explainer/psychology/psyche/sdt.py`): equal- and unequal-variance observers; d′, c and β from
+rates with the log-linear correction; ROCs, zROCs and their area; rating ROCs simulated and fitted by maximum
+likelihood; the likelihood ratio and the ideal criterion under base rates and payoffs; two- and m-alternative
+choice; high-threshold and dual-process ROCs; natural frequencies and predictive value; criteria that follow
+prevalence.
+*On you:* the in-film old/new test. The interactive is a recognition test with a six-point confidence scale that
+draws the reader's ROC and gives d′, c and the area.
+*Ledger:* the criterion moves while sensitivity stays (`replicated`); the prevalence effect (`replicated`);
+recognition's zROC slope below one (`replicated`). Shown without rows, with reasons: Mackworth and See et al.
+(Part 51), the mammogram (Part 26), meta-d′ (Part 25), Swets, Dawes & Monahan, and the line-up study (Part 21).
+*In practice:* radiology and double reading, airport screening, alarms, line-ups, classifier ROC and
+precision-recall.
+*Frontier:* metacognition and meta-d′; whether the evidence is one-dimensional; criterion learning.
+*Reading:* Tanner & Swets 1954; Swets, Tanner & Birdsall 1961; Green & Swets 1966; Macmillan & Creelman,
+*Detection Theory*; Wickens, *Elementary Signal Detection Theory*; Swets, Dawes & Monahan 2000; Gigerenzer &
+Hoffrage 1995; Wolfe et al. 2005; Mickes et al. 2012.
 
 ### Part 13 · The Eye and the Code (~55)
 *Question:* what does the eye tell the brain?
@@ -3203,3 +3215,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 9 | built, English and Chinese: 14 chapters, hook and outro; Psyche's genes (`psyche/genes.py`, sixteen tests), three Ledger rows, twenty-three Archive datasets; course entry, lab and interactive (genes or the shared home, read from two twin correlations) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 60 min |
 | 10 | built, English and Chinese: 14 chapters, hook and outro; Psyche's body (`psyche/body.py`, fourteen tests), four Ledger rows, sixteen Archive datasets; course entry, lab and interactive (a vigilance task beside the reader's own rating of alertness) checked; narration table and on-screen text translated and dry-run. Act II is complete. Open checks in its README | 59 min |
 | 11 | built, English and Chinese: 14 chapters, hook and outro; Psyche's psychophysics (`psyche/psychophysics.py`, twenty-four tests) and Battery task 2, two Ledger rows, fifteen Archive datasets; course entry, lab and interactive (the reader's own threshold, by staircase, with a fitted curve) checked; narration table and on-screen text translated and dry-run. Act III begins. Open checks in its README | 48 min |
+| 12 | built, English and Chinese: 14 chapters, hook and outro; Psyche's sdt (`psyche/sdt.py`, eleven tests), three Ledger rows, thirteen Archive datasets; course entry, lab and interactive (a recognition test with confidence that draws the reader's ROC) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 44 min |

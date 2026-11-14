@@ -56,4 +56,53 @@ PARTS = [
               ("The Battery's threshold task", "explainer/psychology/battery.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=12, level="U", widget="oldnew",
+        question="When you say 'yes, I saw it', how much of that is seeing and how much is saying?",
+        story="Radar observers on wartime patrols missed real contacts, more as the watch wore on, and Mackworth's "
+              "Clock Test of 1948 reproduced the decline. But a miss can mean the target went unseen or that the "
+              "observer was not sure enough to say so, and a hit rate cannot tell which. Detection theory can. "
+              "Every detection has four outcomes, carried by two numbers, the hit and false-alarm rates; one "
+              "observer under five reward schemes moves its hit rate from 97% to 37% while its sensitivity stays "
+              "put. Two normal distributions and a criterion turn the two rates into d' for seeing and c for "
+              "saying. Sliding the criterion traces the ROC, whose area is the two-choice score; confidence "
+              "ratings trace a whole curve in one session. The viewer takes a recognition test and reads off a "
+              "d'. The ideal observer compares the likelihood ratio with the odds and the stakes, and when signals "
+              "are rare the most accurate rule is nearly silence. Rating ROCs fitted by maximum likelihood test "
+              "whether the two spreads are equal; recognition's slope is about 0.8. Forced choice scores "
+              "Phi(d'/root 2) with no criterion. Curved ROCs retired the gate-like threshold, though a "
+              "recollection-plus-familiarity mixture fits recognition as well. A positive mammogram is cancer "
+              "about 8% of the time, clearer in natural frequencies. Rare targets are missed more, partly because "
+              "the criterion follows the base rate and partly because searches end too soon. On the watch, the "
+              "false alarms tell caution from fatigue.",
+        handoff="Single photons and the eye's own noise are Part 13. Recognition and false memories are Part 21, "
+                "confidence over time Part 25, base rates and judgment Part 26, awareness measured with d' Part "
+                "27, alarms and rare targets Part 51, and hiring as detection Part 53.",
+        outside="Part 11's psychometric function and forced choice, and the normal distribution and its quantile. "
+                "Likelihood ratios are introduced here; the Neyman-Pearson lemma is proved in Statistics, Built.",
+        objectives={
+            "U": ["Name the four outcomes of a detection and explain why a hit rate alone is uninterpretable.",
+                  "Compute d' and c from a hit rate and a false-alarm rate, and say what each measures.",
+                  "Read an ROC: what moving along it and moving between curves mean."],
+            "M": ["Derive the ideal criterion from the likelihood ratio, the base rate and the payoffs.",
+                  "Fit a rating ROC by maximum likelihood and test equal against unequal variances.",
+                  "Derive the two-alternative score Phi(d'/root 2) and the area under the ROC."],
+            "D": ["Explain how the shape of an ROC separates threshold, detection and mixture models, and its limits.",
+                  "Assess the competing accounts of the prevalence effect and of the vigilance decrement."],
+            "I": ["Choose between ROC and precision-recall curves for a classifier with rare positives.",
+                  "Explain the share of positive tests that are real from prevalence, hits and false alarms."],
+        },
+        results=[
+            ("Sensitivity", r"d' = z(H) - z(F)"),
+            ("Criterion", r"c = -\tfrac12\,\bigl(z(H) + z(F)\bigr)"),
+            ("The ideal rule", r"\ell(x) > \frac{P(N)}{P(S)}\cdot\frac{V_{cr} + C_{fa}}{V_{hit} + C_{miss}}"),
+            ("Area under the ROC", r"A = \Phi\!\left(d' / \sqrt{1 + \sigma_s^2}\right)"),
+            ("Two-alternative choice", r"P_c = \Phi(d'/\sqrt2)"),
+            ("Positive predictive value", r"\frac{pH}{pH + (1-p)F}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, 9, 12), D=(10, 11, 14), I=(13,),
+        also=(("Psyche's detection module", "explainer/psychology/psyche/sdt.py"),
+              ("Its tests", "tests/psychology/test_sdt.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

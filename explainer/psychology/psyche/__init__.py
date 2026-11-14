@@ -39,6 +39,11 @@ Modules so far, with the part that introduces each:
 ``psychophysics``   11   an observer whose noise grows with the signal (Weber's law and its failure near the
                          floor); the psychometric function and its maximum-likelihood fit with a bootstrap;
                          Fechner's three methods; staircases and a Bayesian placement rule; Fechner's and
-                         Stevens's scales; magnitude estimation and cross-modality matching
+                         Stevens's scales; magnitude estimation and cross-modality matching; photon noise;
+                         the triangle test; paired comparisons and Thurstone's Case V
+``sdt``             12   the equal- and unequal-variance observer; d' and c from rates; ROCs, zROCs and their
+                         area; rating ROCs fitted by maximum likelihood; the ideal observer under base rates
+                         and payoffs; forced choice; high-threshold and dual-process rivals; natural
+                         frequencies; the prevalence effect
 =================  ====  ===============================================================================
 """

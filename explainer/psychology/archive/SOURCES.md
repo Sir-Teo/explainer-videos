@@ -136,6 +136,19 @@ and summarized, not stored. Dates are the day the check was made.
 | `bernoulli_1738` | The value of a gain falls with wealth | Bernoulli, *Comment. Acad. Sci. Imp. Petrop.* 5 (1738); Sommer's translation, *Econometrica* 22 (1954) 23–36 | public domain | 2026-11-14: the translation's section 10 as quoted |
 | `plateau_1872` | Painters' middle grey and the first power law | Plateau, *Bull. Acad. R. Belg.* 33 (1872) | public domain | 2026-11-14: later papers' accounts |
 | `thurstone_1927` | The law of comparative judgment | Thurstone, *Psychol. Rev.* 34 (1927) 273–286; *J. Abnorm. Soc. Psychol.* 21 (1927) 384–400 | facts only | 2026-11-14: citations and a replication's account |
+| `mackworth_1948` | Radar observers and the Clock Test | Mackworth, *Q. J. Exp. Psychol.* 1 (1948) 6–21 | facts only | 2026-11-14: encyclopaedia entries and reviews |
+| `peterson_1954` | The theory of signal detectability | Peterson, Birdsall and Fox, *Trans. IRE PGIT* 4 (1954) 171–212 | facts only | 2026-11-14: the library record |
+| `tanner_swets_1954` | A decision-making theory of visual detection | Tanner and Swets, *Psychol. Rev.* 61 (1954) 401–409 | facts only | 2026-11-14: citations |
+| `wolfe_2005` | Rare items often missed | Wolfe, Horowitz and Kenner, *Nature* 435 (2005) 439–440 | facts only | 2026-11-14: a public copy of the text |
+| `fleck_mitroff_2007` | Rare targets in correctable search | Fleck and Mitroff, *Psychol. Sci.* 18 (2007) | facts only | 2026-11-14: later summaries |
+| `gigerenzer_hoffrage_1995` | The mammogram problem | Gigerenzer and Hoffrage, *Psychol. Rev.* 102 (1995) 684–704 | facts only | 2026-11-14: later papers quoting it |
+| `ratcliff_1992` | Recognition's zROC slope | Ratcliff, Sheu and Gronlund, *Psychol. Rev.* 99 (1992) | facts only | 2026-11-14: reviews |
+| `yonelinas_1994` | Dual-process recognition ROCs | Yonelinas, *JEP: LMC* 20 (1994) 1341–1354 | facts only | 2026-11-14: the author's posted copy |
+| `see_1995` | The sensitivity decrement in vigilance | See, Howe, Warm and Dember, *Psychol. Bull.* 117 (1995) 230–249 | facts only | 2026-11-14: the abstract |
+| `swets_2000` | Improving diagnostic decisions | Swets, Dawes and Monahan, *Psychol. Sci. Public Interest* 1 (2000) 1–26 | facts only | 2026-11-14: the abstract |
+| `swets_1961` | Decision processes in perception | Swets, Tanner and Birdsall, *Psychol. Rev.* 68 (1961) 301–340 | facts only | 2026-11-14: later reviews |
+| `maniscalco_lau_2012` | Meta-d' | Maniscalco and Lau, *Conscious. Cogn.* 21 (2012) 422–430 | facts only | 2026-11-14: the abstract |
+| `mickes_2012` | ROC analysis of line-ups | Mickes, Flowe and Wixted, *J. Exp. Psychol. Appl.* 18 (2012) 361–376 | facts only | 2026-11-14: the posted copy's summary |
 
 ## Looked for and not used
 

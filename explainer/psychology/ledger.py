@@ -1099,3 +1099,78 @@ shown(11, "DEVRIES_ROSE", "a theory of the threshold, run on Psyche; the eye's t
 shown(11, "BERNOULLI_1738", "a theory of value, a preview; choices under risk are entered in Part 26", row_in=26)
 shown(11, "PLATEAU_1872", "a historical proposal; the power law's row is Stevens's")
 shown(11, "THURSTONE_1927", "a method, run on simulated judges; scaling judgments is entered in Part 46", row_in=46)
+
+# ------------------------------------------------------------------------------------------- Part 12: signal and noise
+add(Finding(
+    key="criterion_shift", part=12, title=r"The criterion moves; the sensitivity stays",
+    claim="Changing the payoffs or the base rate of signals moves where an observer says yes, while the observer's "
+          "sensitivity stays the same.",
+    original=Study("Tanner and Swets", 1954, n="a few trained observers", design="visual detection of a faint "
+                   "spot under different instructions and probabilities", found="the yes rate for signals and for "
+                   "blanks moved together along one curve, as a decision model predicts"),
+    status="replicated",
+    record=(Study("Swets, Tanner and Birdsall", 1961, n="trained observers", design="payoffs and a priori "
+                  "probabilities varied, and confidence ratings", found="points from payoffs, probabilities and "
+                  "ratings fall on one ROC"),
+            Study("Green and Swets", 1966, n="a review of many laboratories", design="detection in vision and "
+                  "hearing", found="the separation of sensitivity and criterion holds across senses and tasks")),
+    note="The separation is the foundation of detection theory and holds wherever it has been tested in the "
+         "laboratory. Observers do move their criterion, but usually not as far as an ideal observer would.",
+    sources=("W. P. Tanner Jr. and J. A. Swets, A decision-making theory of visual detection, Psychological Review "
+             "61 (1954) 401-409",
+             "J. A. Swets, W. P. Tanner Jr. and T. G. Birdsall, Decision processes in perception, Psychological "
+             "Review 68 (1961) 301-340",
+             "D. M. Green and J. A. Swets, Signal Detection Theory and Psychophysics (1966)"),
+    checked="2026-11-14",
+    data=("TANNER_SWETS_1954", "SWETS_1961"),
+))
+
+add(Finding(
+    key="prevalence_effect", part=12, title=r"The prevalence effect",
+    claim="When targets are rare, searchers miss more of them.",
+    original=Study("Wolfe, Horowitz and Kenner", 2005, n="observers in a laboratory search", design="a tool hidden "
+                   "among overlapping objects, like a baggage X-ray, present on 50%, 10% or 1% of displays", found="misses rose from 11% to 25% "
+                   "to 52% as targets grew rare; false alarms stayed rare"),
+    status="replicated",
+    record=(Study("Fleck and Mitroff", 2007, n="observers in the same kind of search", design="observers allowed "
+                  "to correct a response they had just made", found="most of the extra misses disappeared: they "
+                  "were responses given too quickly, not targets unseen"),),
+    note="Rare targets are missed more often in laboratory search after laboratory search. Why is argued: "
+         "a criterion that moves toward 'absent', searches that end too soon, and responses given too fast all "
+         "contribute.",
+    sources=("J. M. Wolfe, T. S. Horowitz and N. M. Kenner, Rare items often missed in visual searches, Nature 435 "
+             "(2005) 439-440",
+             "M. S. Fleck and S. R. Mitroff, Rare targets are rarely missed in correctable search, Psychological "
+             "Science 18 (2007) 943-947"),
+    checked="2026-11-14",
+    data=("WOLFE_2005", "FLECK_MITROFF_2007"),
+))
+
+add(Finding(
+    key="zroc_slope", part=12, title=r"Recognition's zROC slope",
+    claim="In recognition memory the z-transformed ROC has a slope below one, about 0.8: the evidence for studied "
+          "items varies more than the evidence for new ones.",
+    original=Study("Ratcliff, Sheu and Gronlund", 1992, n="several experiments", design="old-new recognition with "
+                   "confidence ratings", found="zROC slopes near 0.8, fairly constant across conditions"),
+    status="replicated",
+    record=(Study("Yonelinas", 1994, n="three experiments", design="recognition ROCs fitted by rival models",
+                  found="the curved, asymmetric ROC is also fitted by a mixture of recollection and familiarity"),),
+    note="The slope below one repeats in study after study. What it means is argued: unequal variances, or a "
+         "threshold-like recollection added to graded familiarity. The slope also falls as memory gets stronger.",
+    sources=("R. Ratcliff, C.-F. Sheu and S. D. Gronlund, Testing global memory models using ROC curves, "
+             "Psychological Review 99 (1992) 518-535",
+             "A. P. Yonelinas, Receiver-operating characteristics in recognition memory: evidence for a dual-process "
+             "model, Journal of Experimental Psychology: Learning, Memory, and Cognition 20 (1994) 1341-1354"),
+    checked="2026-11-14",
+    data=("RATCLIFF_1992", "YONELINAS_1994"),
+))
+
+shown(12, "MACKWORTH_1948", "the vigilance decrement, told as the story that started the field; vigilance is entered "
+      "in Part 51", row_in=51)
+shown(12, "SEE_1995", "a meta-analysis shown for its conclusion about the watch; vigilance is entered in Part 51",
+      row_in=51)
+shown(12, "GIGERENZER_HOFFRAGE_1995", "base-rate reasoning, a preview; judgment under uncertainty is entered in "
+      "Part 26", row_in=26)
+shown(12, "MANISCALCO_LAU_2012", "a method at the frontier; confidence is entered in Part 25", row_in=25)
+shown(12, "SWETS_2000", "a review of applications, not a finding")
+shown(12, "MICKES_2012", "line-ups, a preview of a live dispute; eyewitness memory is entered in Part 21", row_in=21)

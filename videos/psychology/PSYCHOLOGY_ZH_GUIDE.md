@@ -482,6 +482,30 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | paired comparison; law of comparative judgment; Case V | 配对比较；比较判断律；情形V |
 | contrast sensitivity function (CSF); the quick CSF | 对比敏感度函数（CSF）；快速CSF |
 
+## Part 12: signal and noise
+
+| English | 中文 |
+|---|---|
+| signal detection theory; signal; noise | 信号检测论；信号；噪声 |
+| hit; miss; false alarm; correct rejection | 击中；漏报；虚报；正确拒斥 |
+| hit rate; false-alarm rate | 击中率；虚报率 |
+| sensitivity, d′ (read "d prime"); criterion, c; β | 敏感度，d′（读作“d撇”）；判断标准，c值；β |
+| the evidence; blank trial; signal trial | 证据；空白试验；信号试验 |
+| ROC (receiver operating characteristic); area under the curve (AUC); zROC | ROC（接收者操作特征曲线）；曲线下面积（AUC）；zROC |
+| confidence rating; rating scale | 信心评分；评分量表 |
+| likelihood ratio; ideal observer; Neyman–Pearson lemma | 似然比；理想观察者；奈曼–皮尔逊引理 |
+| payoff; base rate; prevalence | 报酬；基础比率；流行率（出现频率） |
+| equal and unequal variance; slope; intercept | 等方差与不等方差；斜率；截距 |
+| forced choice; m alternatives | 迫选；m个选项 |
+| high-threshold model; correction for guessing | 高阈限模型；猜测校正 |
+| recollection; familiarity; dual-process model | 回想；熟悉感；双加工模型 |
+| natural frequencies; positive predictive value; odds | 自然频数；阳性预测值；几率 |
+| prevalence effect; threat-image projection | 流行率效应；威胁图像投放 |
+| vigilance decrement; watch; Clock Test | 警觉衰减；值守；时钟测试 |
+| double reading; line-up (simultaneous, sequential); diagnosticity ratio | 双人读片；列队辨认（同时式、顺序式）；诊断性比率 |
+| precision; recall | 精确率；召回率 |
+| metacognition; type 2 ROC; meta-d′ | 元认知；第二类ROC；元d′ |
+
 ## Names
 
 | English | 中文 |
@@ -588,6 +612,12 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | S. S. Stevens, Gösta Ekman, E. C. Poulton | 史蒂文斯，约斯塔·埃克曼，普尔顿 |
 | Harry Levitt; Andrew Watson, Denis Pelli; Felix Wichmann, Jeremy Hill | 哈里·莱维特；安德鲁·沃森，丹尼斯·佩利；费利克斯·维希曼，杰里米·希尔 |
 | Daniel Bernoulli; Louis Thurstone; John Gibbon; Kingdom and Prins | 丹尼尔·伯努利；路易斯·瑟斯顿；约翰·吉本；金登和普林斯 |
+| Norman Mackworth; Wilson Tanner, John Swets, Theodore Birdsall; Peterson, Fox | 诺曼·麦克沃思；威尔逊·坦纳，约翰·斯韦茨，西奥多·伯索尔；彼得森，福克斯 |
+| David Green; Roger Ratcliff; Andrew Yonelinas | 戴维·格林；罗杰·拉特克利夫；安德鲁·约内利纳斯 |
+| Gerd Gigerenzer, Ulrich Hoffrage; David Eddy | 格尔德·吉仁泽，乌尔里希·霍夫拉格；戴维·埃迪 |
+| Jeremy Wolfe, Todd Horowitz, Naomi Kenner; Fleck, Mitroff; See, Howe, Warm, Dember | 杰里米·沃尔夫，托德·霍罗威茨，娜奥米·肯纳；弗莱克，米特罗夫；西，豪，沃姆，登伯 |
+| Robyn Dawes, John Monahan; Laura Mickes, Heather Flowe, John Wixted | 罗宾·道斯，约翰·莫纳汉；劳拉·米克斯，希瑟·弗洛，约翰·维克斯特德 |
+| Brian Maniscalco, Hakwan Lau; Macmillan and Creelman | 布赖恩·马尼斯卡尔科，刘克顽；麦克米伦和克里尔曼 |
 
 ## Titles
 
