@@ -75,8 +75,9 @@ class Improve(SoundScene):
             "is what composers mean by voice leading and what machines took decades to learn. That is the "
             "frontier."
         ) as vo:
+            self.play(FadeIn(t))
             vo.wait_until("a")
-            self.play(FadeIn(ch), FadeIn(t))
+            self.play(FadeIn(ch))
             vo.wait_until("b")
             self.play(FadeIn(side))
         self.wait(0.4)
