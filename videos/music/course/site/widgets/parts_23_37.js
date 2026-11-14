@@ -815,4 +815,56 @@
       note: "Try 3 in 8 (the tresillo), 5 in 8 (the cinquillo), 7 in 12 (the bell pattern, and the major scale), 5 in 16 against 3. More than half the pulses and the oddity property is impossible: two strokes must face each other."
     });
   };
+  // ------------------------------------------------------------------------------------------------ Part 34: the tihai
+  var TALAS34 = {
+    16: { name: "Teentaal", vib: [4, 4, 4, 4], marks: ["X", "2", "0", "3"] },
+    10: { name: "Jhaptaal", vib: [2, 3, 2, 3], marks: ["X", "2", "0", "3"] },
+    7: { name: "Rupak", vib: [3, 2, 2], marks: ["0", "1", "2"] },
+    12: { name: "Ektaal", vib: [2, 2, 2, 2, 2, 2], marks: ["X", "0", "2", "0", "3", "4"] }
+  };
+  var CYC34 = [16, 10, 7, 12];
+  W.tihai = function (el) {
+    QB.widget(el, {
+      title: "The tihai: a phrase three times, landing on sam",
+      sub: "Choose a tala, the beat the tihai starts on, the phrase length p and the gap g. The page plays a cycle of clicks, then the tihai, and checks the equation: (start - 1) + 3p + 2g - 1 must be a multiple of the cycle for the last stroke to fall on sam.",
+      panels: 1, height: 230,
+      controls: [
+        { k: "c", label: "Tala", min: 0, max: 3, step: 1, value: 0, fmt: function (x) { var n = CYC34[x]; return TALAS34[n].name + " (" + n + ")"; } },
+        { k: "s", label: "Start beat", min: 1, max: 16, step: 1, value: 5 },
+        { k: "p", label: "Phrase length p", min: 1, max: 8, step: 1, value: 3 },
+        { k: "g", label: "Gap g", min: 0, max: 4, step: 1, value: 2 }
+      ],
+      buttons: [{ label: "Play", act: function (s) {
+        var notes = [], i, n = s.n;
+        for (i = 0; i < n; i++) notes.push([i === 0 ? 72 : 67, i, 0.4]);
+        s.strokes.forEach(function (t) { notes.push([79, n + t, 0.5]); });
+        notes.push([84, n + Math.ceil((s.last + 1) / n) * n, 0.9]);
+        s.sound = play(notesSound(notes, 0.3), 44100);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var n = CYC34[v.c], t = TALAS34[n], start = Math.min(v.s, n);
+        s.n = n;
+        var strokes = [], pos = start - 1, k, i;
+        for (k = 0; k < 3; k++) { for (i = 0; i < v.p; i++) strokes.push(pos + i); pos += v.p + v.g; }
+        s.strokes = strokes; s.last = strokes[strokes.length - 1];
+        s.ok = s.last % n === 0;
+        var span = Math.max(n, s.last + 1), cycles = Math.ceil((s.last + 1) / n);
+        var a = g[0].axes({ x: [-0.5, cycles * n + 0.5], y: [-1, 2.2], title: "Beats from the tihai's cycle (gold: the tihai's strokes; gold ring: sam)", noY: true, xlabel: "beat (0 = sam)" });
+        var xs = [], ys = [];
+        for (i = 0; i <= cycles * n; i++) { xs.push(i); ys.push(0); }
+        a.dots(xs, ys, { r: 3, color: "#6b7280" });
+        for (i = 0; i <= cycles; i++) a.vline(i * n, { color: C.idea, width: 1.5, dash: [3, 3] });
+        a.dots(strokes, strokes.map(function () { return 1; }), { r: 6, color: s.ok ? C.idea : "#F472B6" });
+        a.text(0, 1.8, t.name + ": sections " + t.vib.join(" + "), { color: C.muted, size: 11 });
+      },
+      readout: function (v, s) {
+        var n = CYC34[v.c];
+        return [["equation", "(" + Math.min(v.s, n) + " - 1) + 3×" + v.p + " + 2×" + v.g + " - 1 = " + s.last + (s.ok ? " = " + (s.last / n) + " × " + n + "  ✓ lands on sam" : "  (not a multiple of " + n + ")")],
+                ["kind", v.g === 0 ? "bedam (no gaps)" : "dumdar (with gaps)"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "In Teentaal, start on beat 5 with p = 3, g = 2 (the film's hook), or on beat 3 with p = 5, g = 0. In Jhaptaal try starting on beat 6. Change one number by one and the landing misses."
+    });
+  };
 })();

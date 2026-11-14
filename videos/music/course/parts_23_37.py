@@ -485,4 +485,45 @@ PARTS = [
         I=(8,),
         also=(("Monochord's mathematics of rhythm and scale: Euclid, moments of symmetry, oddity, tilings, prosody, ringing, temperaments", "explainer/music/monochord/mathmusic.py"),),
     ),
+    Part(
+        n=34, level="U", widget="tihai", prereq=(5, 6, 11, 12, 14, 15, 33),
+        question="What are the two systems behind Indian classical music, and how does a drummer land a phrase exactly on sam?",
+        story="Near the end of a solo the tabla player launches a phrase three times and lands on the first beat of the "
+              "cycle: a tihai, the equation (start - 1) + 3p + 2g - 1 = 0 modulo the cycle, solved in real time. Behind it "
+              "are two systems. The drone: a tanpura whose curved bridge, modelled here as a string by finite differences "
+              "with a one-sided contact, more than doubles its brightness for the first third of a second. The swaras: "
+              "twelve positions, the 22 shrutis as one reconstruction, a pure Ga that locks onto the drone where a tempered "
+              "one beats ten times a second, and intonation that musicians vary by raga and phrase. A raga is far more than "
+              "a scale: Yaman and Bilawal differ by one note and a habit of movement; Bhupali uses five; gamakas mean that "
+              "much of the time is spent between the named notes. Bhatkhande's ten thaats are ten of 32 possible scales; "
+              "Venkatamakhin's 72 melakartas are generated and numbered, 29 the major scale. Tala is a cycle of claps and "
+              "waves, Teentaal, Jhaptaal and Rupak heard and Adi kept by hand; a performance moves from alap to gat. The "
+              "Tune becomes Bilawal: an alap over the drone, a gat in Teentaal, and a tihai landing on sam.",
+        handoff="Maqam in Part 35; timelines in Part 37; improvisation and composing in Part 42; universals in Part 47; pitch "
+                "and beat tracking in Parts 61 and 62.",
+        outside="Part 5 for beats and consonance; Part 6 for commas; Part 11 for metre; Part 12 for scales; Part 14 for "
+                "melody models; Part 15 for key profiles; Part 33 for cycles and modular arithmetic. Finite differences, "
+                "modular arithmetic, combinatorics of scales.",
+        objectives={
+            "U": ["Hear a raga's notes against the drone, and tell two ragas with nearly the same scale apart.",
+                  "Keep a tala by hand and hear where sam falls.",
+                  "Explain what the tanpura's curved bridge does to its sound."],
+            "M": ["Solve the tihai equation for any tala, start and phrase.",
+                  "Generate the thaats and the 72 melakartas, and place any scale among them.",
+                  "Model a string with a one-sided contact and measure its brightness."],
+            "D": ["Design a study of which features listeners use to recognise a raga."],
+            "I": ["Work with the tradition's teaching methods (sargam, bols) when learning or recording this music."],
+        },
+        results=[
+            ("The tihai", r"(s - 1) + 3p + 2g - 1 \equiv 0 \pmod{\text{cycle}}"),
+            ("Jawari", r"\text{brightness } 1217 \text{ vs } 474 \text{ Hz at } 0.1 \text{ s}"),
+            ("Ga on the drone", r"400 \text{ cents beats } \approx 10 \text{ Hz}; \ 386 \text{ cents is still}"),
+            ("Thaats", r"10 \text{ of } 2^5 = 32"),
+            ("Melakartas", r"2 \times 6 \times 6 = 72; \ \#29 = \text{major}, \ \#65 = \text{Lydian}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8),
+        D=(10,),
+        I=(9,),
+        also=(("Monochord's raga and tala: a jawari string, tabla strokes, thaats, melakartas, a tihai solver, gamaka contours", "explainer/music/monochord/raga.py"),),
+    ),
 ]

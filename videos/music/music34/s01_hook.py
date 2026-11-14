@@ -10,7 +10,7 @@ class Hook(SoundScene):
         self.tihai()
         self.respect()
         self.plan()
-        self.listen()
+        self.habits()
 
     # ------------------------------------------------------------------
     def tihai(self):
@@ -93,7 +93,7 @@ class Hook(SoundScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def listen(self):
+    def habits(self):
         items = [
             (r"find Sa in the drone first, \ and hear every note against it", WHITE),
             (r"in the alap, \ notice which notes are dwelt on, \ and how each is approached", WHITE),

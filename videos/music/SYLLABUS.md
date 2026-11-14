@@ -1410,12 +1410,30 @@ evenness is cultural or cognitive.
 *Story:* Near the end of a solo the player launches a phrase three times, and musicians and audience land
 together on the first beat of the cycle. The tihai is arithmetic done in real time. The part learns the two
 systems behind it: raga, which is far more than a scale, and tala.
+1. Hook: Teentaal and a tihai heard; a note on the traditions; how to listen; the plan.
+2. The drone: its role; the curved bridge; one string with sharp and curved bridges heard; the drone retuned to Ma; the physics.
+3. Swara and shruti: seven swaras, twelve positions; the 22 shrutis; two Res a comma apart heard; an ear question (which Ga beats?); Sa and Pa fixed; intonation measured.
+4. More than a scale: what a raga is; an ear question (Bilawal or Yaman?); Bhupali heard; grammar; vadi and samvadi; time and mood.
+5. Gamaka: kinds; the space between the notes; plain and ornamented heard; a pitch histogram; the south; kampita heard.
+6. Thaats and melakartas: 10 of 32; one phrase in three thaats heard; the 72 generated; what thaats leave out; katapayadi.
+7. Tala: cycles; three thekas heard; tala is not the drum; Carnatic tala; Adi tala by hand heard; tempo.
+8. The tihai equation: the equation; a solver's table; an ear question (bedam or dumdar?); tihais of tihais; chakkardars counted.
+9. How a performance unfolds: alap, jor, jhala, gat; the alap; a jhala heard; the gat; time and audience; songs.
+10. Two traditions, and how they are taught: north and south; teacher and student; bols; instruments; today.
+11. Frontier: computing raga; limits; machines that play ragas; the research problem.
+12. Variation 34: the Tune as Bilawal: alap, gat, tihai. Outro: problems, payoffs.
+
 *Covers:* the drone and the tanpura's buzzing bridge; swara and the shruti question, with measured intonation;
 ascent, descent and characteristic phrases; gamaka; thaat and the seventy-two melakartas; alap, jor, jhala and
 gat; tala cycles; the tihai equation; Hindustani and Carnatic practice; how it is taught.
-*Built and computed:* a tihai solver; the melakarta table generated; a tanpura model; pitch histograms.
+*Built and computed:* `monochord/raga.py`: a tanpura string by finite differences with a one-sided curved bridge
+(brightness more than doubled for the first third of a second); tabla strokes by modal synthesis; the 32 thaat
+scales and the 72 melakartas generated and numbered; a tihai solver checked by counting strokes, and chakkardars;
+gamaka contours and a pitch histogram.
 *Variation 34:* a study: the Tune's scale as Bilawal, an alap over the drone, then a gat with a tihai.
-*Frontier:* computational raga analysis; intonation studies.
+*Frontier:* computational raga analysis; intonation studies; what listeners attend to.
+*Rights:* every sound is the film's own model (§2.4); the phrases are ours, in the manner of the ragas named; the
+traditions are described with their own terms and sources.
 *Reading:* Jairazbhoy; Bor (ed.), *The Raga Guide*; Clayton, *Time in Indian Music*; the CompMusic studies.
 
 ### Part 35 · Maqam (~50)
