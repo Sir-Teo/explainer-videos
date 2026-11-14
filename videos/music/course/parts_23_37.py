@@ -359,4 +359,46 @@ PARTS = [
         I=(8,),
         also=(("Monochord's sound-mass toolkit: tape operations, phasing, Poisson clouds, sieves, clusters, spectra orchestrated", "explainer/music/monochord/soundmass.py"),),
     ),
+    Part(
+        n=31, level="U", widget="tonnetz", prereq=(5, 13, 15, 19, 27, 28, 29),
+        question="When late-Romantic and film harmony leaves the key behind, what logic connects its chords?",
+        story="Two chords that share no key can still sound inevitable. Hugo Riemann's moves name the logic: P, L and R "
+              "each keep two notes of a triad and move the third by a semitone or a whole tone. Built by brute force, the "
+              "PLR group and the transpositions and inversions are both of order 24, commute, and each acts on the 24 "
+              "triads in exactly one way: two dual groups, and L and R alone generate the first, a dihedral group in which "
+              "LR has order 12. Euler's lattice, closed by equal temperament into a torus, draws every triad as a "
+              "triangle; from C major there are 1, 3, 6, 8, 5 and 1 triads at 0 to 5 steps, B flat minor alone the "
+              "farthest. Repeating P and L walks the hexatonic scale, P and R the octatonic; the families split the "
+              "triads four and three ways, and an augmented triad sits one semitone from six of them. The chain R, L, R, "
+              "L... visits all 24 triads, as Beethoven's Ninth begins to, and is one of exactly 62 tours. Film composers use "
+              "chromatic mediants for wonder and the hexatonic pole for the uncanny; jazz moves through three keys a major "
+              "third apart, and the tritone substitution is the same idea for seventh chords. The Tune is harmonized by a "
+              "walk on the Tonnetz that rediscovers tonic, subdominant and dominant.",
+        handoff="The geometry of chords in Part 32; the mathematics of scales in Part 33; jazz harmony in Part 39; music for "
+                "picture in Part 44; chord recognition in Part 62.",
+        outside="Part 6 for Euler's lattice and the comma; Part 13 for triads; Part 19 for the hexatonic cycle; Part 27 for "
+                "Tristan; Part 28 for the symmetric scales; Part 29 for inversion. Group actions, dihedral groups, "
+                "breadth-first search, Hamiltonian cycles.",
+        objectives={
+            "U": ["Hear and name P, L and R, and the chromatic mediants and hexatonic pole built from them.",
+                  "Find a triad's place on the Tonnetz and walk between triads by flips.",
+                  "Explain why the R-L chain visits every triad."],
+            "M": ["Build the PLR and T/I groups by brute force and show they commute and act simply transitively.",
+                  "Count distances, cycles, systems and Hamiltonian tours on the PLR graph.",
+                  "Compare PLR distance with voice-leading distance."],
+            "D": ["Design a listening experiment that separates the circle of keys, the Tonnetz and voice leading."],
+            "I": ["Score a cue with mediants and poles, and harmonize a melody by a walk on the Tonnetz."],
+        },
+        results=[
+            ("The moves", r"P, L, R: \text{ two notes kept, one moved } 1 \text{ or } 2 \text{ semitones}"),
+            ("Two groups", r"|\langle P,L,R \rangle| = |\langle T,I \rangle| = 24, \ \text{commuting}"),
+            ("The dihedral relations", r"P^2 = L^2 = R^2 = 1, \ (LR)^{12} = 1, \ P = R(LR)^3"),
+            ("Distances from C", r"1, 3, 6, 8, 5, 1 \text{ triads at } 0 \ldots 5 \text{ steps}"),
+            ("Tours", r"62 \text{ Hamiltonian cycles; one without } P"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7),
+        D=(8,),
+        I=(6,),
+        also=(("Monochord's neo-Riemannian toolkit: P, L, R, the two groups, the Tonnetz, cycles, tours, seventh chords", "explainer/music/monochord/neoriemann.py"),),
+    ),
 ]

@@ -1310,12 +1310,31 @@ Rest Is Noise*.
 *Story:* A film score moves between two major chords that share no key and the audience feels wonder. Functional
 harmony has nothing to say about it. Lewin's idea (1987) does: stop naming chords and name the moves between
 them. The moves form a group, and the part computes it.
+1. Hook: a film-style progression of our own heard, each pair keeping one note; the plan.
+2. Naming the moves: P, L and R from C major (an ear question: which is P?) and from A minor, heard; a table of what each move does; Riemann's dualism; two-step moves heard; Lewin.
+3. Two groups, one duality: both groups of 24 by brute force, commuting and simply transitive; the commuting square heard; orders and P = R(LR)³, a dihedral group; distance; meaning.
+4. The Tonnetz: Euler's lattice; moves as flips; the torus; distances from C major (1, 3, 6, 8, 5, 1); a random walk heard; history; the comma that keeps the just lattice open, heard; isomorphic keyboards.
+5. Hexatonic and octatonic cycles: both heard; their scales; Cohn's systems; four and three families; Rimsky-Korsakov and Stravinsky; Weitzmann's region heard.
+6. The long chain: Beethoven's Ninth (Cohn); nineteen triads heard; an ear question (which chain stays in one key?); all 24; why; 62 tours, one heard.
+7. Wonder, and the uncanny: chromatic mediants; an ear question (the hexatonic pole); three trips from C heard; Lehman; scoring with moves; the Romantics.
+8. Thirds in jazz: Coltrane changes named; three keys on the Tonnetz; the skeleton heard in our voicing; seventh chords two semitones from C7, the tritone substitution and *Tristan*'s move heard; beyond triads.
+9. Frontier: Krumhansl's ratings; PLR against voice-leading distance; other spaces; learned embeddings; an audit; the research problem.
+10. Variation 31: the Tune harmonized by a walk on the Tonnetz. Outro: problems, payoffs.
+
 *Covers:* intervals as a group acting on a space; the T/I group on the twenty-four triads; P, L and R; the PLR
-group and its duality with T/I; the Tonnetz as a torus; hexatonic and octatonic cycles; the long chain in
-Beethoven's Ninth; third-related cycles in jazz (Part 39).
-*Built and computed:* both groups built by brute force, their order and duality checked; shortest PLR paths.
-*Variation 31:* the Tune harmonized by a walk on the Tonnetz.
-*Frontier:* generalized Tonnetze; how listeners judge distance between triads.
+group and its duality with T/I; the dihedral relations; the Tonnetz as a torus and the comma that keeps the just
+lattice open; hexatonic and octatonic cycles and systems; Weitzmann's region; the long chain in Beethoven's Ninth and
+the Hamiltonian tours of the triads; chromatic mediants and the hexatonic pole in film; third-related cycles in jazz
+(Part 39) and parsimonious seventh chords.
+*Built and computed:* `monochord/neoriemann.py`: P, L, R and T/I on the 24 triads; both groups by closure, their
+orders, commutation and simple transitivity; breadth-first distances and shortest words; cycles and their orbits;
+orders of words; every Hamiltonian cycle of the PLR graph (62); Weitzmann's regions; voice leading for three and four
+voices; dominant and half-diminished seventh neighbours; a dynamic-programming harmonizer on the Tonnetz.
+*Variation 31:* the Tune harmonized by a walk on the Tonnetz: C, C, A minor, C, F, C, G, C.
+*Frontier:* generalized Tonnetze and other spaces; how listeners judge distance between triads; learned chord
+embeddings.
+*Rights:* every sound is the film's own (§2.4); Beethoven's chain is heard as triads in our voicing; the Coltrane tune
+and the film scores are named and analysed, not played.
 *Reading:* Lewin (1987); Cohn, *Audacious Euphony*; Crans, Fiore & Satyendra (2009); Lehman, *Hollywood Harmony*.
 
 ### Part 32 · The Geometry of Chords (~55)

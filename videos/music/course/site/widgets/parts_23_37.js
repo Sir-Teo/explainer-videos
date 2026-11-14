@@ -547,4 +547,115 @@
       note: "Play both versions at the same rate: the random one bursts and pauses, the even one is heard as a pulse. A random process's counts vary as much as their mean; that variance is the clumping you hear."
     });
   };
+  // ---------------------------------------------------------------------------------------------- Part 31: the Tonnetz
+  var TRI31 = [];
+  (function () { for (var r = 0; r < 12; r++) { TRI31.push([r, "M"]); TRI31.push([r, "m"]); } })();
+  var PCN31 = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+  function name31(t) { return PCN31[t[0]] + (t[1] === "m" ? "m" : ""); }
+  function pcs31(t) { var r = t[0]; return t[1] === "M" ? [r, (r + 4) % 12, (r + 7) % 12] : [r, (r + 3) % 12, (r + 7) % 12]; }
+  function mv31(k, t) {
+    var r = t[0], q = t[1];
+    if (k === "P") return [r, q === "M" ? "m" : "M"];
+    if (k === "R") return q === "M" ? [(r + 9) % 12, "m"] : [(r + 3) % 12, "M"];
+    return q === "M" ? [(r + 4) % 12, "m"] : [(r + 8) % 12, "M"];
+  }
+  function key31(t) { return t[0] + t[1]; }
+  function path31(a, b) {
+    var prev = {}, q = [a], seen = {}; seen[key31(a)] = true;
+    while (q.length) {
+      var t = q.shift();
+      if (key31(t) === key31(b)) break;
+      ["P", "L", "R"].forEach(function (k) { var u = mv31(k, t); if (!seen[key31(u)]) { seen[key31(u)] = true; prev[key31(u)] = [t, k]; q.push(u); } });
+    }
+    var out = [b], word = "", cur = b;
+    while (key31(cur) !== key31(a)) { var pr = prev[key31(cur)]; word = pr[1] + word; cur = pr[0]; out.unshift(cur); }
+    return { chain: out, word: word };
+  }
+  function vl31(a, b) {
+    var A = pcs31(a).slice().sort(function (x, y) { return x - y; }), B = pcs31(b), best = 99;
+    [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]].forEach(function (p) {
+      var d = 0; for (var i = 0; i < 3; i++) { var x = ((B[p[i]] - A[i]) % 12 + 12) % 12; d += Math.min(x, 12 - x); }
+      best = Math.min(best, d);
+    });
+    return best;
+  }
+  function voice31(chain) {
+    var out = [], prev = null;
+    chain.forEach(function (t) {
+      var s = pcs31(t), notes = [];
+      if (!prev) { notes = s.map(function (pc) { return 55 + ((pc - 55) % 12 + 12) % 12; }).sort(function (x, y) { return x - y; }); }
+      else {
+        var used = {};
+        prev.forEach(function (m) {
+          var best = null;
+          s.forEach(function (pc) { if (used[pc]) return; var c = m + ((pc - m + 6) % 12 + 12) % 12 - 6; if (best === null || Math.abs(c - m) < Math.abs(best[0] - m)) best = [c, pc]; });
+          notes.push(best[0]); used[best[1]] = true;
+        });
+      }
+      out.push(notes); prev = notes;
+    });
+    return out;
+  }
+  W.tonnetz = function (el) {
+    QB.widget(el, {
+      title: "The Tonnetz: the shortest walk between two triads",
+      sub: "Every pitch class is a node: a fifth to the right, a major third up and to the right, a minor third up and to the left. Every triangle is a triad, major pointing up and minor pointing down. Choose two triads: the page finds the fewest P, L and R flips between them, by breadth-first search, and draws the walk.",
+      panels: 1, height: 340,
+      controls: [
+        { k: "a", label: "From", min: 0, max: 23, step: 1, value: 0, fmt: function (x) { return name31(TRI31[x]); } },
+        { k: "b", label: "To", min: 0, max: 23, step: 1, value: 17, fmt: function (x) { return name31(TRI31[x]); } }
+      ],
+      buttons: [{ label: "Play the walk", act: function (s) {
+        var notes = [];
+        voice31(s.chain).forEach(function (ch, i) { ch.forEach(function (m) { notes.push([m, i, 0.95]); }); notes.push([s.chain[i][0] + 36, i, 0.95]); });
+        s.sound = play(notesSound(notes, 0.8), 44100);
+      } }],
+      init: function (s) { s.sound = null; s.chain = []; },
+      draw: function (g, v, s) {
+        var A = TRI31[v.a], B = TRI31[v.b], res = path31(A, B);
+        s.chain = res.chain; s.word = res.word;
+        var a = g[0].axes({ x: [-3.2, 7.2], y: [-2.6, 3.4], title: "The Tonnetz, with the walk", noX: true, noY: true });
+        var i, j, X = function (i, j) { return i + 0.5 * j; }, Y = function (i, j) { return 0.866 * j; };
+        var pc = function (i, j) { return ((7 * i + 4 * j) % 12 + 12) % 12; };
+        for (j = -3; j <= 4; j++) for (i = -5; i <= 8; i++) {
+          a.line([X(i, j), X(i + 1, j)], [Y(i, j), Y(i + 1, j)], { color: "#3a475c", width: 1 });
+          a.line([X(i, j), X(i, j + 1)], [Y(i, j), Y(i, j + 1)], { color: "#3a475c", width: 1 });
+          a.line([X(i + 1, j), X(i, j + 1)], [Y(i + 1, j), Y(i, j + 1)], { color: "#3a475c", width: 1 });
+        }
+        // a triangle for each triad of the walk, each the nearest copy to the last
+        var cx = 2, cy = 0.4, tris = [];
+        res.chain.forEach(function (t) {
+          var best = null;
+          for (j = -3; j <= 3; j++) for (i = -5; i <= 7; i++) {
+            if (pc(i, j) !== t[0]) continue;
+            var pts = t[1] === "M" ? [[i, j], [i + 1, j], [i, j + 1]] : [[i, j], [i + 1, j], [i + 1, j - 1]];
+            var mx = 0, my = 0; pts.forEach(function (p) { mx += X(p[0], p[1]) / 3; my += Y(p[0], p[1]) / 3; });
+            var d = (mx - cx) * (mx - cx) + (my - cy) * (my - cy);
+            if (best === null || d < best[0]) best = [d, pts, mx, my];
+          }
+          tris.push(best); cx = best[2]; cy = best[3];
+        });
+        tris.forEach(function (tr, k) {
+          var p = tr[1], col = k === 0 ? C.idea : (k === tris.length - 1 ? "#F472B6" : "#60A5FA");
+          a.line([X(p[0][0], p[0][1]), X(p[1][0], p[1][1]), X(p[2][0], p[2][1]), X(p[0][0], p[0][1])],
+                 [Y(p[0][0], p[0][1]), Y(p[1][0], p[1][1]), Y(p[2][0], p[2][1]), Y(p[0][0], p[0][1])], { color: col, width: 3.5 });
+          a.text(tr[2], tr[3], name31(res.chain[k]), { align: "center", color: col, size: 11, bold: true });
+        });
+        tris.slice(1).forEach(function (tr, k) { a.line([tris[k][2], tr[2]], [tris[k][3], tr[3]], { color: C.muted, width: 1.2, dash: [3, 3] }); });
+        for (j = -3; j <= 4; j++) for (i = -5; i <= 8; i++) {
+          var x = X(i, j), y = Y(i, j);
+          if (x < -3.1 || x > 7.1 || y < -2.5 || y > 3.3) continue;
+          a.text(x, y, PCN31[pc(i, j)], { align: "center", size: 10.5, bg: true, color: C.muted });
+        }
+      },
+      readout: function (v, s) {
+        var A = TRI31[v.a], B = TRI31[v.b], common = pcs31(A).filter(function (x) { return pcs31(B).indexOf(x) >= 0; }).length;
+        return [["walk", s.chain.map(name31).join(" → ")],
+                ["shortest word", (s.word || "(the same triad)") + " — " + s.word.length + " step" + (s.word.length === 1 ? "" : "s")],
+                ["notes in common; semitones moved directly", common + "; " + vl31(A, B)],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "C major to B flat minor is five steps, the farthest any triad is from C; C major to A flat minor, the hexatonic pole, is three steps yet only three semitones of voice leading. Distance in moves and distance in semitones are two different measures."
+    });
+  };
 })();

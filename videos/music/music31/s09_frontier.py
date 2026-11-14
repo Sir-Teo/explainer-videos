@@ -95,8 +95,8 @@ class Frontier(SoundScene):
             "from C major in P, L and R steps, and the fewest semitones the three voices must move to reach it. "
             f"<bookmark mark='a'/> The two agree fairly well, a correlation of {say(round(d['r'], 2))}. <bookmark mark='b'/> "
             "Close in moves usually means close in voice leading. <bookmark mark='c'/> But not always: the triads that need "
-            "the most voice leading, six semitones, are D, F sharp and B flat major, and they are not all the farthest in "
-            "moves. <bookmark mark='d'/> Which distance the ear uses is exactly the frontier's question."
+            "the most voice leading, six semitones, are D, F sharp and B flat major, and none of them is the farthest in "
+            "moves: that is B flat minor. <bookmark mark='d'/> Which distance the ear uses is exactly the frontier's question."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(dots))
             for mark, r in zip("abcd", side):

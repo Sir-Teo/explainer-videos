@@ -65,6 +65,8 @@ LEDGER = [
      "measure": r"row 0 7 9 11 1 2 4 6 8 10 3 5; 36 notes from three of its 48 forms"},
     {"part": 30, "title": r"phased against itself, as a cloud of glissandi, and on the harmonics of a string", "seconds": 32.22,
      "measure": r"30 glissandi; on C's harmonics the Tune's A is -59 cents and its F +51 cents from the piano's"},
+    {"part": 31, "title": r"harmonized by a walk on the Tonnetz", "seconds": 8.7,
+     "measure": r"8 chords: C C Am C F C G C; moves = R R RL LR LR RL"},
 ]
 
 
