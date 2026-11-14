@@ -54,7 +54,7 @@ class Thirds(SoundScene):
 
     # ------------------------------------------------------------------
     def lattice(self):
-        tz = tonnetz(radius=0.42, cols=7, rows_=5, origin=(-5.6, -2.6))
+        tz = tonnetz(radius=0.42, cols=4, rows_=4, origin=(-6.2, -2.3))
         tris = VGroup()
         cols = {11: TUNE, 7: BLUE, 3: EAR}
         for pc, (i, j) in ((7, (1, 0)), (11, (1, 1)), (3, (1, 2))):      # G, B, E flat: up the major-third axis
@@ -65,7 +65,8 @@ class Thirds(SoundScene):
         side = VGroup(label(r"on the Tonnetz \ (Part 31): \ fifths to the right, \ major thirds up and to the right", font_size=19, color=WHITE),
                       label(r"the three tonic triads lie in a line up the major-third axis", font_size=19, color=TUNE),
                       label(r"far apart in fifths: \ each key is four fifths from the next", font_size=19, color=WHITE),
-                      label(r"in a ii--V--I the harmony steps to a neighbour; \ here it jumps across the lattice", font_size=19, color=EAR)).arrange(DOWN, buff=0.28, aligned_edge=LEFT).to_edge(RIGHT, buff=0.3).shift(UP * 0.6)
+                      label(r"in a ii--V--I the harmony steps to a neighbour; \ here it jumps across the lattice", font_size=19, color=EAR)).arrange(DOWN, buff=0.28, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 6.2)).to_edge(RIGHT, buff=0.3).shift(UP * 0.6)
         head = label(r"the three tonic triads on the Tonnetz", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Now put the three tonic chords on Part 31's Tonnetz, where fifths run to the right and major thirds up and to the "
