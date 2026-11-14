@@ -658,4 +658,81 @@
       note: "C major to B flat minor is five steps, the farthest any triad is from C; C major to A flat minor, the hexatonic pole, is three steps yet only three semitones of voice leading. Distance in moves and distance in semitones are two different measures."
     });
   };
+  // ------------------------------------------------------------------------------------- Part 32: the triangle of chords
+  function sorted32(c) { return c.map(function (x) { return ((x % 12) + 12) % 12; }).sort(function (a, b) { return a - b; }); }
+  function vl32(a, b) {
+    var best = null, P = [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]];
+    P.forEach(function (p) {
+      var mv = [], tot = 0;
+      for (var i = 0; i < 3; i++) { var d = ((b[p[i]] - a[i]) % 12 + 12) % 12; if (d > 6) d -= 12; mv.push(d); tot += Math.abs(d); }
+      if (best === null || tot < best[0] - 1e-9) best = [tot, mv];
+    });
+    return best;
+  }
+  function even32(c) {
+    var x = sorted32(c), best = 1e9;
+    for (var r = 0; r < 3; r++) {
+      var y = x.slice(r).concat(x.slice(0, r).map(function (v) { return v + 12; }));
+      var e = y.map(function (v, i) { return v - 4 * i; }), m = (e[0] + e[1] + e[2]) / 3;
+      best = Math.min(best, Math.sqrt(e.reduce(function (s, v) { return s + (v - m) * (v - m); }, 0)));
+    }
+    return best;
+  }
+  function shapeXY32(c) {
+    var x = sorted32(c), st = [x[1] - x[0], x[2] - x[1], 12 - (x[2] - x[0])];
+    var V = [[0, 1], [-0.866, -0.5], [0.866, -0.5]], px = 0, py = 0;
+    for (var k = 0; k < 3; k++) { px += st[k] / 12 * V[k][0]; py += st[k] / 12 * V[k][1]; }
+    return [px, py];
+  }
+  function dft32(c, k) {
+    var re = 0, im = 0; c.forEach(function (x) { re += Math.cos(2 * Math.PI * k * x / 12); im -= Math.sin(2 * Math.PI * k * x / 12); });
+    return Math.sqrt(re * re + im * im);
+  }
+  var TARGETS32 = [["C major", [0, 4, 7]], ["C minor", [0, 3, 7]], ["F major", [5, 9, 0]], ["E major", [4, 8, 11]], ["A flat major", [8, 0, 3]],
+                   ["F sharp major", [6, 10, 1]], ["augmented C", [0, 4, 8]], ["diminished C", [0, 3, 6]], ["cluster C C# D", [0, 1, 2]]];
+  W.chordtriangle = function (el) {
+    QB.widget(el, {
+      title: "Three-note chords: the triangle, and the shortest way between two",
+      sub: "Set three notes by sliders, in quarter-semitone steps if you like: the chord is a point in the triangle of shapes, with the perfectly even augmented triad at its centre. Choose a target chord: the page finds the smallest voice leading, the fewest semitones three voices must move, by trying every way to assign notes to voices.",
+      panels: 1, height: 330,
+      controls: [
+        { k: "n1", label: "Note 1", min: 0, max: 11.75, step: 0.25, value: 0, fmt: function (x) { return x.toFixed(2); } },
+        { k: "n2", label: "Note 2", min: 0, max: 11.75, step: 0.25, value: 4, fmt: function (x) { return x.toFixed(2); } },
+        { k: "n3", label: "Note 3", min: 0, max: 11.75, step: 0.25, value: 7, fmt: function (x) { return x.toFixed(2); } },
+        { k: "t", label: "Target", min: 0, max: TARGETS32.length - 1, step: 1, value: 2, fmt: function (x) { return TARGETS32[x][0]; } }
+      ],
+      buttons: [{ label: "Play: chord, target, chord", act: function (s) {
+        var a = s.A.map(function (x) { return 60 + x; }), b = a.map(function (x, i) { return x + s.moves[i]; }), notes = [];
+        [a, b, a, b].forEach(function (ch, i) { ch.forEach(function (m) { notes.push([m, i, 0.95]); }); });
+        s.sound = play(notesSound(notes, 0.9), 44100);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.A = sorted32([v.n1, v.n2, v.n3]);
+        var B = TARGETS32[v.t][1], r = vl32(s.A, B);
+        s.size = r[0]; s.moves = r[1];
+        var a = g[0].axes({ x: [-1.6, 1.6], y: [-0.75, 1.15], title: "The triangle of three-note shapes (transposition forgotten)", noX: true, noY: true });
+        a.line([0, -0.866, 0.866, 0], [1, -0.5, -0.5, 1], { color: C.muted, width: 1.5 });
+        var xs = [], ys = [], cs = [];
+        for (var p = 0; p <= 12; p++) for (var q = 0; q <= 12 - p; q++) {
+          var xy = shapeXY32([0, p, p + q]); xs.push(xy[0]); ys.push(xy[1]); cs.push(even32([0, p, p + q]));
+        }
+        a.dots(xs, ys, { r: 2.5, color: function (i) { return cs[i] < 1 ? C.idea : "#4b5563"; } });
+        var pa = shapeXY32(s.A), pb = shapeXY32(B);
+        a.line([pa[0], pb[0]], [pa[1], pb[1]], { color: C.muted, width: 1.2, dash: [4, 4] });
+        a.dots([pb[0]], [pb[1]], { r: 7, color: "#60A5FA" });
+        a.dots([pa[0]], [pa[1]], { r: 7, color: "#F472B6" });
+        a.text(pa[0], pa[1] + 0.08, "your chord", { align: "center", color: "#F472B6", size: 11 });
+        a.text(pb[0], pb[1] - 0.09, TARGETS32[v.t][0], { align: "center", color: "#60A5FA", size: 11 });
+        a.text(0, 0.05, "augmented", { align: "center", color: C.muted, size: 10 });
+      },
+      readout: function (v, s) {
+        return [["your chord (pitch classes)", s.A.map(function (x) { return x.toFixed(2); }).join(", ")],
+                ["distance from even; |F3|, |F5|", even32(s.A).toFixed(2) + "; " + dft32(s.A, 3).toFixed(2) + ", " + dft32(s.A, 5).toFixed(2)],
+                ["smallest voice leading to " + TARGETS32[v.t][0], s.size.toFixed(2) + " semitones: moves " + s.moves.map(function (m) { return (m >= 0 ? "+" : "") + m.toFixed(2); }).join(", ")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "C major to F major is three semitones; to F sharp major, six, the most any triad needs. Move one slider by a quarter tone at a time from C major towards C minor: the point slides along the straight line between them, through the neutral triad."
+    });
+  };
 })();

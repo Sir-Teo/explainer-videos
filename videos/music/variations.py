@@ -67,6 +67,8 @@ LEDGER = [
      "measure": r"30 glissandi; on C's harmonics the Tune's A is -59 cents and its F +51 cents from the piano's"},
     {"part": 31, "title": r"harmonized by a walk on the Tonnetz", "seconds": 8.7,
      "measure": r"8 chords: C C Am C F C G C; moves = R R RL LR LR RL"},
+    {"part": 32, "title": r"harmonized by the shortest paths, then rerouted through chromatic chords", "seconds": 17.8,
+     "measure": r"C C A C Fm C Gm C; 16 then 18 semitones of voice leading"},
 ]
 
 

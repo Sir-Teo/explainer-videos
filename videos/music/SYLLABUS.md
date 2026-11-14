@@ -1342,13 +1342,33 @@ and the film scores are named and analysed, not played.
 Tymoczko's geometry a voice leading is a path and its size is a length, and the familiar chords of Western music
 sit exactly where short paths connect them to their own transpositions. That is why harmony and counterpoint
 could be made to agree.
-*Covers:* chords as unordered points; the orbifolds for two, three and four notes; voice-leading size;
-near-evenness; the OPTIC symmetries; scales as chords; the Fourier transform of a pitch-class set and what each
-coefficient hears.
-*Built and computed:* chord space as an instrument; a minimal voice-leading solver; the DFT of every set class;
-how close Bach's voice leadings are to minimal.
-*Variation 32:* the Tune's harmony as a path, then rerouted through distant chords by the shortest steps.
-*Frontier:* Fourier approaches to harmony; what the geometry does not explain.
+1. Hook: crossing and bouncing voices (an ear question: they cannot be told apart); *Science*, 2006; the plan.
+2. Chords as points: the plane of voices; folding by octave and permutation; a short history; why fold.
+3. The Möbius strip: the 78 dyads; parallel, contrary and oblique motion heard; the edge; a first-species line as a path of shortest steps, heard.
+4. Three notes: the triangle of shapes; from a cluster to the augmented triad heard; major to minor by quarter-tones heard; the twisted prism; four notes; distances from C major.
+5. The size of a voice leading: an ear question (3 semitones against 15); three norms; chords of different sizes; the algorithm.
+6. Nearly even chords: evenness against the cheapest move to a transposition; three small moves heard; Chopin; why it matters.
+7. Scales are chords too: the 38 seven-note types by evenness; three keys heard; the circle of fifths measured; jazz; two levels.
+8. Five symmetries: OPTIC; a chord and its mirror heard; counts by brute force; names.
+9. Fourier: the transform of a set; six portraits; an ear question (the fifths chord); phases; history.
+10. How smooth is Bach?: *Wachet auf* heard and measured; all 364 chorales; an ear question (Bach's voices or shuffled); the parity theorem; limits.
+11. Frontier: what the geometry cannot see; the argument; rival geometries; other tunings; the research problem.
+12. Variation 32: the Tune by shortest paths, then rerouted through chromatic chords. Outro: problems, payoffs.
+
+*Covers:* chords as unordered points; the orbifolds for two, three and four notes; voice-leading size and its
+norms; near-evenness; the OPTIC symmetries; scales as chords and the circle of fifths as shortest paths; the
+Fourier transform of a pitch-class set and what each coefficient hears.
+*Built and computed:* `monochord/geometry.py`: minimal voice leading for chords of any equal size and tuning, in
+three norms; the Möbius strip coordinates; the triangle of shapes; evenness and the cheapest move to a
+transposition; OPTIC counts by brute force; DFT magnitudes and their champions; Bach's voice leadings against the
+minimum with a shuffled control (17,339 changes; upper voices minimal 67 times in 100; the excess always even);
+semitone paths between chords.
+*Variation 32:* the Tune's harmony as a path of smallest voice leadings (16 semitones), then rerouted through
+chords outside the key (18).
+*Frontier:* Fourier approaches to harmony; what the geometry does not explain; whether voice-leading size predicts
+perceived smoothness.
+*Rights:* every sound is the film's own (§2.4); Bach's chorale is public domain, played from the corpus encoding;
+Chopin's prelude is described, not played.
 *Reading:* Tymoczko (2006) and *A Geometry of Music*; Callender, Quinn & Tymoczko (2008); Amiot, *Music Through
 Fourier Space*.
 
