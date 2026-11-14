@@ -50,7 +50,7 @@ class Measured(SoundScene):
                   axis_config={"color": GREY_B, "font_size": 18},
                   x_axis_config={"include_numbers": True, "numbers_to_include": [1400, 1500, 1600, 1700, 1800, 1900], "decimal_number_config": {"group_with_commas": False, "num_decimal_places": 0}},
                   y_axis_config={"include_numbers": True}).move_to(DOWN * 0.45 + RIGHT * 0.3)
-        yl = label(ylab, font_size=19, color=GREY_A).next_to(ax, LEFT, buff=0.12).shift(UP * 1.7 + RIGHT * 0.6)
+        yl = label(ylab, font_size=19, color=GREY_A).next_to(ax.y_axis, UP, buff=0.15).shift(RIGHT * 1.0)
         return ax, yl
 
     def scatter(self):
@@ -126,11 +126,11 @@ class Measured(SoundScene):
         bars.move_to(LEFT * 3.4 + DOWN * 0.4)
         t = label(r"chromaticism, \ in 100: \ pieces from 1800 to 1900", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.35)
         side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
-            (rf"{d['n_songs']} songs: \ Schubert, \ Schumann, \ Verdi, \ Foster, \ Lili`uokalani, \ Johnson", WHITE),
-            (rf"{d['n_inst']} instrumental pieces: \ quartets, \ piano pieces, \ a concerto, \ a trio", WHITE),
-            (r"in this Library, \ genre matters as much as date", TUNE),
-            (r"a tune for singing stays near its key; \ an accompaniment or a development wanders", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 6.2))
+            (rf"{d['n_songs']} songs: \ Schubert to Johnson", WHITE),
+            (rf"{d['n_inst']} instrumental pieces", WHITE),
+            (r"genre matters as much as date", TUNE),
+            (r"tunes stay home; \ accompaniments wander", EAR))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 5.6))
         side.move_to(RIGHT * 3.1 + DOWN * 0.2)
         with self.voiceover(
             "Why does including the songs blur the trend? Compare the nineteenth-century pieces by kind. "
