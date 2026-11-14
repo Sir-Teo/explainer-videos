@@ -47,6 +47,8 @@ LEDGER = [
      "measure": r"the whole Tune against itself two beats later: 2 dissonant beats in 46"},
     {"part": 21, "title": r"as a miniature sonata whose second theme is its own first phrase, inverted", "seconds": 47.48,
      "measure": r"its 11 section boundaries found from the sound alone: 9 within two beats"},
+    {"part": 22, "title": r"reduced to its skeleton, a note every four beats, and regrown along a different derivation", "seconds": 42.0,
+     "measure": r"12 skeleton notes grown into 37; on 15 of 24 strong beats a note of the chord"},
 ]
 
 

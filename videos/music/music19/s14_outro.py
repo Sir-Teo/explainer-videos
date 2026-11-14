@@ -127,7 +127,7 @@ class Outro(SoundScene):
             (r"analysis: \ is chromatic harmony a grammar?", [22]),
             (r"the Romantic century: \ a chromaticism index", [27]),
             (r"new scales: \ the octatonic and whole-tone collections", [28]),
-            (r"jazz: \ tritone substitution and reharmonization", [39]),
+            (r"blues and jazz: \ tritone substitution and reharmonization", [38, 39]),
             (r"film music", [44]),
         ], font_size=26)
         with self.voiceover(

@@ -16,6 +16,7 @@ class Phrase(SoundScene):
         chapter(self, 1, r"Phrase, \ period, \ sentence", r"What is the smallest complete thought in music?", extra=((1998, r"Caplin's \textit{Classical Form}"),))
         self.terms()
         self.quiz()
+        self.functions()
         self.why()
 
     # ------------------------------------------------------------------
@@ -71,6 +72,44 @@ class Phrase(SoundScene):
             "idea again, then a run down the scale, A G F E D C, to the cadence."
         ):
             self.play(FadeIn(ann))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def functions(self):
+        d = load("phrase")
+        g = melody_roll(d["A"]["melody"], width=10.0, height=2.0).move_to(UP * 0.6)
+        T = sum(x[1] for x in d["A"]["melody"])
+        spans = [(0, 4, r"basic idea", TUNE), (4, 8, r"basic idea again", TUNE), (8, 12, r"continuation: \ fragments", BLUE), (12, 16, r"cadence", EAR)]
+        marks = VGroup()
+        for a, b, t, c_ in spans:
+            x0 = g.frame.get_left()[0] + g.frame.width * a / T
+            x1 = g.frame.get_left()[0] + g.frame.width * b / T
+            ln = Line([x0 + 0.05, g.frame.get_bottom()[1] - 0.25, 0], [x1 - 0.05, g.frame.get_bottom()[1] - 0.25, 0], color=c_, stroke_width=4)
+            marks.add(VGroup(ln, label(t, font_size=20, color=c_).next_to(ln, DOWN, buff=0.12)))
+        rows_ = VGroup(*[label(t, font_size=24, color=c_) for t, c_ in (
+            (r"Caplin names each part of a theme by its job: \ its formal function", WHITE),
+            (r"presentation: \ an idea, \ then the idea again; \ continuation: \ fragments, \ faster harmony; \ cadential: \ the close", WHITE),
+            (r"the same idea in another place does another job", TUNE))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(DOWN, buff=0.5)
+        rows_.scale_to_fit_width(min(rows_.width, 12.6))
+        with self.voiceover(
+            "Caplin's theory goes further than names: it says what each part of a theme does, its formal function. "
+            "<bookmark mark='a'/> In the sentence, the first four bars present: an idea, then the idea again, so the "
+            "listener learns it. <bookmark mark='b'/> The next bars continue: they break the idea into fragments and "
+            "speed up the harmony, which signals that something is about to happen. <bookmark mark='c'/> The last bars "
+            "are cadential: they close. <bookmark mark='d'/> The point is that function is not content. The same four "
+            "notes could begin a piece or end one; what they do depends on where they are, and listeners hear the "
+            "difference."
+        ) as vo:
+            self.play(FadeIn(g), FadeIn(rows_[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(marks[0]), FadeIn(marks[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(marks[2]), FadeIn(rows_[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(marks[3]))
+            vo.wait_until("d")
+            self.play(FadeIn(rows_[2]))
         self.wait(0.4)
         self.clear_scene()
 

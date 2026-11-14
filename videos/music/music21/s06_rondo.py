@@ -10,6 +10,7 @@ class Rondo(SoundScene):
         chapter(self, 5, r"Rondo and variation", r"How else can a piece come back to its start?")
         self.quiz()
         self.picture()
+        self.relatives()
         self.variation()
 
     # ------------------------------------------------------------------
@@ -74,6 +75,30 @@ class Rondo(SoundScene):
             window(snd, r"the variations: \ A A1 A2 A1", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
             self.add(diag_cursor(snd, imgs[1][1], d["variations"]["beats"], d["variations"]["beat"]))
             pulse(snd, imgs[1][0], 0.0, c.duration, buff=0.08)
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def relatives(self):
+        rows_ = VGroup(*[label(t, font_size=25, color=c_) for t, c_ in (
+            (r"the Baroque concerto's ritornello form: \ the orchestra's refrain returns in different keys", WHITE),
+            (r"between returns, \ the soloist's episodes travel", WHITE),
+            (r"the sonata-rondo: \ A B A C A B A, \ with B first in the dominant and then at home", WHITE),
+            (r"the refrain is the anchor; \ the episodes are the journey", TUNE))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
+        head = label(r"the rondo's relatives", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        with self.voiceover(
+            "The rondo has relatives. <bookmark mark='a'/> In the Baroque concerto, the orchestra's opening, the "
+            "ritornello, returns between the soloist's passages, but in different keys each time, and often shortened. "
+            "<bookmark mark='b'/> Between the returns, the soloist's episodes travel from key to key. "
+            "<bookmark mark='c'/> In the classical era, the rondo absorbed the sonata's logic: in the sonata-rondo, A B A "
+            "C A B A, the B section appears first in the dominant and, near the end, at home, exactly like a sonata's "
+            "second theme. <bookmark mark='d'/> In all of them, the refrain is the anchor and the episodes are the "
+            "journey."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcd", rows_[1:]):
+                vo.wait_until(mark)
+                self.play(FadeIn(r))
         self.wait(0.4)
         self.clear_scene()
 

@@ -10,6 +10,7 @@ class Frontier(SoundScene):
         chapter(self, 12, r"Frontier: \ form at scale", r"What is known about form, \ and what is not?", extra=((2011, r"the SALAMI annotations"),),
                 spoken="Frontier: form at scale")
         self.listeners()
+        self.cycles()
         self.machines()
         self.open()
 
@@ -36,6 +37,33 @@ class Frontier(SoundScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
+                vo.wait_until(mark)
+                self.play(FadeIn(r))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def cycles(self):
+        rows_ = VGroup(*[label(t, font_size=24, color=c_) for t, c_ in (
+            (r"European forms are journeys: \ away and back", WHITE),
+            (r"Javanese gamelan: \ a cycle marked by the great gong, \ repeated, \ layered, \ sped up and slowed", WHITE),
+            (r"a Hindustani raga performance: \ \textit{alap}, \ \textit{jor}, \ \textit{jhala}, \ a slow growth of pulse and density", WHITE),
+            (r"a dance-music track: \ a loop, \ with layers added and taken away", WHITE),
+            (r"form as a cycle, \ or as a growth, \ not as a return: \ Parts 31 and 40", TUNE))]).arrange(DOWN, buff=0.36, aligned_edge=LEFT)
+        rows_.scale_to_fit_width(min(rows_.width, 12.6))
+        rows_.move_to(DOWN * 0.1)
+        head = label(r"other ways to hold time together", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        with self.voiceover(
+            "The forms of this part are journeys, away and back. Not every tradition plans time that way. "
+            "<bookmark mark='a'/> In Javanese gamelan, a piece is a cycle marked by the great gong, repeated with layers "
+            "of elaboration, sped up and slowed down. <bookmark mark='b'/> A performance of a Hindustani raga grows: a "
+            "free, unmetred opening, then a pulse, then faster and denser playing, then a composition with drums. "
+            "<bookmark mark='c'/> A dance-music track is a loop, with layers added and taken away. "
+            "<bookmark mark='d'/> Form as a cycle, or as a growth, rather than a return: Parts 34, 36 and 40 take these up, "
+            "and they are a reminder that the self-similarity picture shows any of them."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("abcd", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

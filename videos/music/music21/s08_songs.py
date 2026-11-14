@@ -60,7 +60,7 @@ class Songs(SoundScene):
             (r"the twelve-bar blues: \ three lines of four bars", WHITE),
             (r"I for four bars; \ IV, \ IV, \ I, \ I; \ V, \ IV, \ I, \ I", WHITE),
             (r"a form that is a chord progression", TUNE),
-            (r"repeated for as long as the singer has verses \ (Part 39)", GREY_A))]).arrange(DOWN, buff=0.36, aligned_edge=LEFT)
+            (r"repeated for as long as the singer has verses \ (Part 38)", GREY_A))]).arrange(DOWN, buff=0.36, aligned_edge=LEFT)
         rows_.scale_to_fit_width(min(rows_.width, 5.6))
         rows_.move_to(RIGHT * 3.8 + DOWN * 0.1)
         with self.voiceover(
@@ -75,7 +75,7 @@ class Songs(SoundScene):
                 flash(snd, [cells[k][0]], [d["starts"][k] * d["beat"]], hot=WHITE, base=BARS_C[b], hold=4 * d["beat"] * 0.8)
         with self.voiceover(
             "The form is the progression, repeated as long as the singer has verses, and the melody is free to change "
-            "every time. Part 39 builds jazz on top of it."
+            "every time. Part 38 is about the blues, and Part 39 builds jazz on top of it."
         ):
             self.play(FadeIn(rows_[2]), FadeIn(rows_[3]))
         self.wait(0.4)

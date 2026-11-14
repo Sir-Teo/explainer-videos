@@ -1039,11 +1039,28 @@ the segmenter scored on all of them. The "Library" of the plan is, for now, Part
 does it on its surface: it climbs to the fifth and walks down. The part takes the claim seriously as a theory,
 states it as a grammar, parses with it, and reports what the grammar explains, what it cannot, and why the theory
 and its author are argued over.
+1. Hook: the Tune and its time-span reduction, level by level, heard; Schenker; the plan.
+2. Reduction and prolongation: passing, neighbour, arpeggiation; an ear question (which skeleton fits?).
+3. The Ursatz: line and bass; an ear question (which bass makes the descent close?); descents at the ends of tunes.
+4. Grouping and metre: GTTM's preference rules on the Tune; the metrical grid; computational GTTM.
+5. A time-span reduction: heads by a sum of preferences; the Tune's levels; prolongational reduction.
+6. Harmony as a grammar: Rohrmeier's core rules; trees; recursion.
+7. Parsing and ambiguity: CYK; Catalan growth of parses; what the grammar cannot parse.
+8. A grammar learned from Bach: inside-outside on the chorales; bits per chord against n-grams; what it learned.
+9. Growing a melody: the elaboration grammar; an ear question (which melody is the grammar's?); the copy rule.
+10. Other ways to analyse: expectation, topics, transformations, semiotics.
+11. A theory and its author: Schenker; the 2019–2020 argument; the positions.
+12. Is harmony recursive: tree depths of Bach's phrases; Koelsch's nested chorales; Part 21's limits.
+13. Frontier: grammars induced from data; jazz parsing.
+14. Variation 22: the Tune reduced and regrown. Outro: problems, payoffs.
+
 *Covers:* reduction and prolongation; the Ursatz; Lerdahl and Jackendoff's grouping, meter and reductions as
 preference rules; harmony as a context-free grammar; parsing and ambiguity; other approaches (implication,
-semiotics, topics); the 2020 controversy.
-*Built and computed:* a probabilistic grammar of chord sequences trained on the Library; a time-span reduction
-of the Tune, each level played.
+semiotics, topics, transformations); the 2020 controversy.
+*Built and computed:* `monochord/grammar.py`: a time-span reducer, grouping preference strengths, a melodic
+elaboration grammar, a functional PCFG with inside-outside training, Viterbi parsing and parse counting, a latent PCFG
+induced from data, n-gram baselines; trained and scored on Part 17's chorales cut at their fermatas (the "Library" of
+the plan is, for now, the chorales and Part 14's tunes); the Tune's reduction played level by level.
 *Variation 22:* the Tune reduced to its skeleton and regrown along a different derivation.
 *Frontier:* grammars induced from data; whether harmony is recursive: the evidence.
 *Reading:* Cadwallader & Gagné; Lerdahl & Jackendoff (1983); Rohrmeier (2011).

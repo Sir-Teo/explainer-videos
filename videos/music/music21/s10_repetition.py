@@ -9,6 +9,7 @@ class Repetition(SoundScene):
     def construct(self):
         chapter(self, 9, r"Why so much repetition?", r"How much of a tune is a repeat?", extra=((2014, r"Margulis's \textit{On Repeat}"),))
         self.measure()
+        self.extremes()
         self.why()
 
     # ------------------------------------------------------------------
@@ -36,6 +37,32 @@ class Repetition(SoundScene):
             for mark, r in zip("abc", side[:3]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def extremes(self):
+        d = load("repetition")
+        t = sorted(d["tunes"], key=lambda x: x["share"])
+        zero = [x for x in t if x["share"] == 0]
+        top = t[-4:][::-1]
+        nm = lambda s: s.split(" (")[0]  # noqa: E731
+        left = VGroup(label(r"most repetitive", font_size=26, color=TUNE),
+                      *[label(tex(nm(x["name"])) + rf": \ {100 * x['share']:.0f}", font_size=22, color=WHITE) for x in top]).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to(LEFT * 3.4 + DOWN * 0.1)
+        right = VGroup(label(rf"no four-note figure repeated: \ {len(zero)} tunes", font_size=26, color=EAR),
+                       *[label(tex(nm(x["name"])), font_size=22, color=WHITE) for x in zero[:4]]).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to(RIGHT * 3.2 + DOWN * 0.1)
+        with self.voiceover(
+            f"The extremes are telling. <bookmark mark='a'/> The most repetitive tune in the collection is the Tune itself, "
+            f"followed by O Tannenbaum and Amazing Grace. <bookmark mark='b'/> At the other end, {say(len(zero))} tunes "
+            "never repeat a four-note figure exactly, and one of them is Row, Row, Row Your Boat. That is not a "
+            "contradiction: a round repeats in its other voices, not within itself. Its line keeps moving so that, sung "
+            "against itself, it sounds full; the repetition is in the form, not in the tune."
+        ) as vo:
+            self.play(FadeIn(left[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(left[1:]))
+            vo.wait_until("b")
+            self.play(FadeIn(right))
         self.wait(0.4)
         self.clear_scene()
 

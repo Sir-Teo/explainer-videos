@@ -23,6 +23,7 @@ class Sonata(SoundScene):
         chapter(self, 6, r"Sonata: \ a drama of keys", r"Why does a sonata go away, \ and how does it come back?", extra=((2006, r"Hepokoski and Darcy's sonata theory"),))
         self.plan()
         self.keys()
+        self.near()
         self.drama()
 
     # ------------------------------------------------------------------
@@ -86,6 +87,30 @@ class Sonata(SoundScene):
             self.play(FadeIn(secs[2]))
             vo.wait_until("d")
             self.play(FadeIn(secs[3]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def near(self):
+        rows_ = VGroup(*[label(t, font_size=25, color=c_) for t, c_ in (
+            (r"the keys the development visits: \ A minor, \ F major, \ D minor, \ then G", WHITE),
+            (r"Part 19's pathfinder: \ each is one pivot chord from C", WHITE),
+            (r"the miniature never leaves C's neighbourhood", WHITE),
+            (r"Beethoven's developments go further: \ to keys two or three steps away, \ by the doors of Part 19", TUNE),
+            (r"the farther the journey, \ the stronger the return", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
+        head = label(r"how far does the development go?", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        with self.voiceover(
+            "How far does the miniature travel? <bookmark mark='a'/> Its development visits A minor, F major and D "
+            "minor before the dominant. <bookmark mark='b'/> Ask Part 19's pathfinder: every one of them is a single "
+            "pivot chord away from C. <bookmark mark='c'/> The miniature never leaves C's neighbourhood. "
+            "<bookmark mark='d'/> Real developments, Beethoven's above all, go much further, to keys two or three steps "
+            "away, often through the enharmonic doors of Part 19. <bookmark mark='e'/> The farther the journey, the "
+            "more the return means: the recapitulation is felt as a homecoming in proportion to the distance travelled."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcde", rows_[1:]):
+                vo.wait_until(mark)
+                self.play(FadeIn(r))
         self.wait(0.4)
         self.clear_scene()
 

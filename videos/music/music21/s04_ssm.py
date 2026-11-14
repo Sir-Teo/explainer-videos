@@ -10,6 +10,7 @@ class Ssm(SoundScene):
         chapter(self, 3, r"Seeing repetition", r"Can a picture show the form of a piece?", extra=((1999, r"Foote's self-similarity matrix"),))
         self.build()
         self.read()
+        self.lag()
         self.from_sound()
 
     # ------------------------------------------------------------------
@@ -84,6 +85,42 @@ class Ssm(SoundScene):
             self.play(Create(box2), FadeIn(rows_[3]))
             vo.wait_until("e")
             self.play(FadeIn(rows_[4]))
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def lag(self):
+        d = load("tune")
+        S = np.array(d["ssm_melody"])
+        n = S.shape[0]
+        Lg = np.zeros((n, n))
+        for t in range(n):
+            for l in range(n):
+                if t - l >= 0:
+                    Lg[l, t] = S[t, t - l]
+        img = ssm_image(S, size=3.8).move_to(LEFT * 3.6 + DOWN * 0.2)
+        lag = ssm_image(Lg, size=3.8).move_to(RIGHT * 2.2 + DOWN * 0.2)
+        t1 = label(r"time against time", font_size=22, color=GREY_A).next_to(img, UP, buff=0.25)
+        t2 = label(r"time across, \ lag down", font_size=22, color=GREY_A).next_to(lag, UP, buff=0.25)
+        arrow = Arrow(img.get_right(), lag.get_left(), buff=0.2, color=GREY_B)
+        y32 = lag.get_top()[1] - lag.height * 32 / n
+        mark = DashedLine([lag.get_left()[0], y32, 0], [lag.get_right()[0], y32, 0], color=EAR, stroke_width=2)
+        side = VGroup(label(r"a repeat 32 beats later: \ a line at lag 32", font_size=20, color=EAR),
+                      label(r"stripes become horizontal lines", font_size=20, color=WHITE)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).next_to(lag, RIGHT, buff=0.3)
+        with self.voiceover(
+            "There is a second way to draw the same numbers. <bookmark mark='a'/> Instead of time against time, plot "
+            "time across and the lag, how far back you are comparing, down. <bookmark mark='b'/> Now every repeat "
+            "becomes a horizontal line at its lag: the Tune's return of its opening, thirty-two beats later, is a line "
+            "at lag thirty-two, starting when the return starts. <bookmark mark='c'/> Lines are easier for a program to "
+            "find than diagonal stripes, and this time-lag picture is how repetition-based segmenters find the seams "
+            "that novelty misses: problem four asks you to build one."
+        ) as vo:
+            self.play(FadeIn(img), FadeIn(t1))
+            vo.wait_until("a")
+            self.play(GrowArrow(arrow), FadeIn(lag), FadeIn(t2))
+            vo.wait_until("b")
+            self.play(Create(mark), FadeIn(side))
+            vo.wait_until("c")
         self.wait(0.4)
         self.clear_scene()
 

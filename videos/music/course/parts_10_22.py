@@ -523,8 +523,8 @@ PARTS = [
               "leading. The Tune is harmonized with borrowed chords, with the Neapolitan, and through a trapdoor into "
               "A flat.",
         handoff="Canon and fugue in Part 20; form as a journey between keys in Part 21; grammars of harmony in Part 22; "
-                "the Romantic century's chromaticism in Part 27; symmetric scales in Part 28; jazz reharmonization in "
-                "Part 39; film music in Part 44.",
+                "the Romantic century's chromaticism in Part 27; symmetric scales in Part 28; blues and jazz reharmonization in "
+                "Parts 38 and 39; film music in Part 44.",
         outside="Part 6 for commas and temperaments; Part 15 for keys, pivot chords and the probe-tone hierarchy; Part 17 "
                 "for four-part voice leading; Part 18 for functions. Modular arithmetic and breadth-first search.",
         objectives={
