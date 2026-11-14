@@ -1527,20 +1527,39 @@ notes in one part, 6 in the other); then over the standard pattern on claves.
 transcribed (§2.4); every sound is the film's own model.
 *Reading:* Agawu, *Representing African Music*; Locke; Berliner, *The Soul of Mbira*; Arom; Toussaint.
 
-### Part 38 · Blues and Swing (~55)
+### Part 38 · Blues and Swing (~35)
 *Story:* "What is swing?" The proverbial answer is that if you have to ask you will never know. It can be
 measured: the long-short ratio falls from about three to one in a slow tempo to even in a fast one, and soloists
 place their downbeats late and their off-beats on time. The part builds the blues, ragtime and the swing band,
 and a model that swings.
+1. Hook: an ear question (how much longer is the long note?); the line straight; swing can be measured; the plan.
+2. The twelve-bar blues: origins; the form in C; one chorus heard; the quick change and a jazz blues; the seventh as home; a shared map.
+3. Blue notes: an ear question (which third is neither?); where blue notes live; a region, not a note; the blues scale; Kubik on origins.
+4. Call and response, the blues lyric: an AAB verse of ours; the verse with guitar answers heard; who answers; the singers; why AAB.
+5. Ragtime and stride: Joplin; Maple Leaf Rag's first strain heard; bars 1-4 hand by hand heard; the strain counted; the march form; stride.
+6. Swing, measured: the model and its short note; the ride pattern at three tempos heard; the studies; late downbeats heard; groove.
+7. The swing band: the era; the sections; a riff chart of ours heard; riffs and Kansas City; the arrangers.
+8. Walking bass and the ride: the rhythm section; the generator's rules; two choruses heard; the line counted; the bassists.
+9. Sevenths and guide tones: five seventh chords; guide tones through ii-V-I; guide tones heard; the jazz blues counted; voicings.
+10. ii-V-I, turnarounds and the tritone substitution: two-five-one; an ear question (which bass slides?); the shared tritone; three turnarounds heard; bebop.
+11. Frontier: microtiming argued over; random deviations heard; jazz as data; the research problem; credit.
+12. Variation 38: the Tune as a twelve-bar blues, a rag and a riff chart. Outro: problems, payoffs.
+
 *Covers:* the twelve-bar form and its harmony; blue notes; call and response; ragtime and stride; the big band;
 walking bass and ride pattern; seventh chords as the unit; guide tones; ii–V–I; turnarounds; the tritone
 substitution.
-*Built and computed:* a swing model fitted to published ratios; a guide-tone solver; Joplin rendered from the
-score.
-*Variation 38:* the Tune as a twelve-bar blues, a rag and a riff chart.
-*Frontier:* microtiming studies of swing **(verify the 2022 paper)**; jazz corpora.
-*Rights:* public-domain rags and blues; later standards by their changes and by original lines (§2.4).
-*Reading:* Schuller, *Early Jazz*; Levine, *The Jazz Theory Book*; Friberg & Sundström (2002).
+*Built and computed:* `monochord/blues.py`: chord symbols and the twelve-bar forms; a swing model (3:1 at 120
+beats a minute to 1:1 at 300, a line through Friberg and Sundström's trend, not a fit) and its short note (near
+100 ms at fast tempos); a walking-bass generator and a guide-tone solver as shortest paths (every change approached
+by a semitone; ii–V–I in 2 semitones); tritone substitutes; a syncopation count; Joplin rendered from the score
+(46 of 85 right-hand attacks between the eighths in the first strain, against 3 of 45 in the left hand).
+*Variation 38:* the Tune as a twelve-bar blues (thirds 35 cents below E), a rag (18 of 44 right-hand attacks
+syncopated) and a riff chart (swung 2.7 to 1).
+*Frontier:* microtiming studies of swing (Datseris and others, 2019; Nelias and others, 2022); jazz corpora.
+*Rights:* Joplin is in the public domain and played from the score; every other line, riff and verse is ours;
+later standards only by name (§2.4).
+*Reading:* Kubik, *Africa and the Blues*; Berlin, *Ragtime*; Schuller, *The Swing Era*; Berliner, *Thinking in
+Jazz*; Friberg & Sundström (2002); Benadon (2006).
 
 ### Part 39 · Changes (~55)
 *Story:* 5 May 1959. A pianist is handed a tune with twenty-six chords in sixteen bars, moving through three keys

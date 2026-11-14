@@ -138,27 +138,35 @@ def walking_bass(changes: list[list[str]], lo: int = 36, hi: int = 55, start: in
         cands.append(cs)
         cost_here.append(cc)
     INF = 1e18
-    D = [[INF] * len(c) for c in cands]
-    back = [[-1] * len(c) for c in cands]
-    for j, m in enumerate(cands[0]):
-        D[0][j] = cost_here[0][j] + (abs(m - start) if start is not None else abs(m - 43) * 0.2)
-    for i in range(1, n):
-        for j, m in enumerate(cands[i]):
-            best, arg = INF, -1
-            for k, q in enumerate(cands[i - 1]):
-                leap = abs(m - q)
-                if leap == 0 or leap > 7:
-                    continue
-                v = D[i - 1][k] + leap + (2.0 if leap > 4 else 0.0)
-                if v < best:
-                    best, arg = v, k
-            D[i][j], back[i][j] = best + cost_here[i][j], arg
-    j = int(np.argmin(D[-1]))
-    out = [cands[-1][j]]
-    for i in range(n - 1, 0, -1):
-        j = back[i][j]
-        out.append(cands[i - 1][j])
-    return out[::-1]
+    best_line, best_cost = None, INF
+    for j0, m0 in enumerate(cands[0]):                              # the cycle closes: the last note approaches the first
+        D = [[INF] * len(c) for c in cands]
+        back = [[-1] * len(c) for c in cands]
+        D[0][j0] = cost_here[0][j0] + (abs(m0 - start) if start is not None else abs(m0 - 43) * 0.2)
+        for i in range(1, n):
+            for j, m in enumerate(cands[i]):
+                best, arg = INF, -1
+                for k, q in enumerate(cands[i - 1]):
+                    if D[i - 1][k] >= INF:
+                        continue
+                    leap = abs(m - q)
+                    if leap == 0 or leap > 7:
+                        continue
+                    v = D[i - 1][k] + leap + (2.0 if leap > 4 else 0.0)
+                    if v < best:
+                        best, arg = v, k
+                D[i][j], back[i][j] = best + cost_here[i][j], arg
+        for j, m in enumerate(cands[-1]):
+            if abs(m - m0) == 1 and D[-1][j] < best_cost:
+                out = [m]
+                jj = j
+                for i in range(n - 1, 0, -1):
+                    jj = back[i][jj]
+                    out.append(cands[i - 1][jj])
+                best_line, best_cost = out[::-1], D[-1][j]
+    if best_line is None:
+        raise ValueError("no walking line obeys the rules in this range")
+    return best_line
 
 
 # ------------------------------------------------------------------------------------------------- guide tones

@@ -19,7 +19,7 @@ class Frontier(SoundScene):
         items = [
             (r"timelines are written on equal pulses; \ are they played that way?", WHITE),
             (r"Rainer Polak \ (2010) \ measured jembe drumming from Mali, \ stroke by stroke", WHITE),
-            (r"the three parts of a beat were systematically \textit{unequal}, \ in stable proportions", WHITE),
+            (r"the three parts of a beat were systematically \textit{unequal}, \ in consistent proportions", WHITE),
             (r"Polak and London \ (2014): \ an uneven grid can be a meter in its own right", TUNE),
             (r"not sloppiness, \ and not swing: \ a learned, \ shared template", GREY_A),
         ]

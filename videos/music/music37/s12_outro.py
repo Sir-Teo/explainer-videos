@@ -25,7 +25,7 @@ class Outro(SoundScene):
         head = VGroup(label(r"Variation 37", font_size=48, color=TUNE), label(r"the Tune that nobody plays", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.5, aligned_edge=DOWN).to_edge(UP, buff=0.3)
         roll = voices_roll([a, b], width=11.4, height=2.8, colors=[TUNE, BLUE], total=n, lo=53, hi=83, bar_h=0.11).move_to(DOWN * 0.1)
         leg = VGroup(label(r"part A: \ even pulses", font_size=18, color=TUNE), label(r"part B: \ odd pulses", font_size=18, color=BLUE)).arrange(RIGHT, buff=0.8).next_to(roll, UP, buff=0.25)
-        stage = VGroup(*[label(t, font_size=19, color=GREY_A) for t in (r"A alone", r"B alone", r"both", r"over the bell pattern on claves")]).arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=0.7)
+        stage = VGroup(*[label(t, font_size=19, color=GREY_A) for t in (r"A alone", r"B alone", r"both", r"over the bell pattern on claves")]).arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=1.25)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here the Tune's first "
             "two phrases become an inherent pattern. The program places each of its fourteen notes on a grid of forty-eight "

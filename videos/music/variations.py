@@ -79,6 +79,8 @@ LEDGER = [
      "measure": r"14 notes as harmonics, the worst 8 cents from equal temperament; a 16-beat balungan, 4 pulses a beat"},
     {"part": 37, "title": r"as an inherent pattern of two interlocking parts, then over the standard pattern", "seconds": 38.8,
      "measure": r"14 notes heard, 8 played by one part and 6 by the other; 48 pulses, 8 a second"},
+    {"part": 38, "title": r"as a twelve-bar blues, a rag and a riff chart", "seconds": 64.4,
+     "measure": r"blues thirds 35 cents below E; in the rag 18 of 44 right-hand onsets syncopated; the riff swung 2.7 to 1"},
 ]
 
 
