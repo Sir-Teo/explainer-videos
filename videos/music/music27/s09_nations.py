@@ -65,7 +65,7 @@ class Nations(SoundScene):
             (r"his \textit{New World} symphony \ (1893): \ pentatonic tunes, \ heard as American", WHITE),
             (r"the Fisk Jubilee Singers \ (from 1871) \ carried spirituals to concert halls in America and Europe", WHITE),
             (r"Joplin's rags: \ a published, \ notated art; \ he also wrote an opera, \ \textit{Treemonisha}", TUNE),
-            (r"Liliʻuokalani, \ the last monarch of Hawaiʻi: \ \textit{Aloha ʻOe} \ (1878), \ in the Library", GREY_A),
+            (r"Lili`uokalani, \ the last monarch of Hawai`i: \ \textit{Aloha `Oe} \ (1878), \ in the Library", GREY_A),
         ]
         rows_scene(self, r"new worlds", items,
                    "The argument crossed the Atlantic. <bookmark mark='b'/> Antonín Dvořák, directing a conservatory in New "
@@ -73,8 +73,8 @@ class Nations(SoundScene):
                    "<bookmark mark='c'/> and his New World symphony of 1893 has pentatonic tunes that audiences heard as "
                    "American. <bookmark mark='d'/> The Fisk Jubilee Singers, from 1871, had already carried spirituals to "
                    "concert halls in America and Europe. <bookmark mark='e'/> Joplin's rags were a published, notated art, "
-                   "and he wrote an opera, Treemonisha. <bookmark mark='f'/> And Liliʻuokalani, the last monarch of the "
-                   "Hawaiian Kingdom, wrote Aloha ʻOe in 1878; in the Library it is the piece with the clearest key of all.",
+                   "and he wrote an opera, Treemonisha. <bookmark mark='f'/> And Liliuokalani, the last monarch of the "
+                   "Hawaiian Kingdom, wrote Aloha Oe in 1878; in the Library it is the piece with the clearest key of all.",
                    marks="cdef")
 
     # ------------------------------------------------------------------

@@ -234,4 +234,46 @@ PARTS = [
         I=(7,),
         also=(("Monochord's Romantic toolkit: whole-score readers, chromaticism and clarity, transformations, the phrase arch, the mazurka's beats", "explainer/music/monochord/romantic.py"),),
     ),
+    Part(
+        n=28, level="U", widget="symmetric", prereq=(6, 11, 12, 15, 21, 27),
+        question="What did composers build when they left the major and minor scales, and how can a claim about a scale be tested?",
+        story="At the 1889 Paris Exposition Debussy heard a Javanese gamelan, and within twenty-five years composers had "
+              "rebuilt their scales and rhythms. The whole-tone scale has one step size and only two transpositions, so "
+              "it has no home; of the 352 shapes a set of pitch classes can take, just 15 map onto themselves under some "
+              "transposition, every one a pattern repeated every 1, 2, 3, 4 or 6 semitones, and Messiaen's seven modes "
+              "are the large ones. Planing slides one chord shape under a melody; the octatonic scale holds C major and "
+              "F sharp major together, and a key-finder shows two clear keys making one unclear one. Displaced accents "
+              "keep the pulse and lose the metre; Bartók's additive rhythms are counted by the Padovan numbers, and a "
+              "golden-section claim with ten loose landmarks succeeds by chance 61 times in 100. A four-note passage "
+              "fits some octatonic scale by chance 42 times in 100 and some diatonic one 49 times, which is why the "
+              "octatonic debate needs long passages and null models. The Tune is planed in whole-tone chords, then set "
+              "over an octatonic ostinato with accents placed by chance.",
+        handoff="Twelve tones in Part 29; transformations and the geometry of chords in Parts 31 and 32; rhythm and scale as "
+                "mathematics in Part 33; the gamelan in Part 36; loops and sequencers in Part 53.",
+        outside="Part 6 for equal temperament; Part 9 for bars and gongs; Part 11 for syncopation and polyrhythm; Part 12 for "
+                "scales and Burnside's count; Part 15 for key profiles; Part 21 for the golden section. Group actions on "
+                "Z12, cosets, recurrences, exact null models.",
+        objectives={
+            "U": ["Hear the whole-tone scale, planing, the octatonic, displaced accents and additive rhythm.",
+                  "Explain why the whole-tone and octatonic scales have no home key.",
+                  "Recognize bitonality and say what makes two layers sound like two keys."],
+            "M": ["Enumerate the pitch-class sets with limited transposition and prove they are unions of cosets.",
+                  "Compute the exact chance that a k-note set fits a scale, and count additive and palindromic rhythms.",
+                  "Test a golden-section claim against a null model with landmarks and tolerance."],
+            "D": ["Design a corpus test of the octatonic in Stravinsky with rival explanations and a chance baseline.",
+                  "Evaluate the historical evidence for the 1913 'riot'."],
+            "I": ["Turn a pattern-finding claim into a test with a stated null model, fixed before looking."],
+        },
+        results=[
+            ("Symmetric scales", r"352 \text{ shapes}; \ 15 \text{ symmetric}; \ \text{Messiaen's 7 are the large ones}"),
+            ("Fits by chance", r"4 \text{ notes: octatonic } 42\%, \ \text{diatonic } 49\%; \ 7 \text{ notes: } 3\%, \ 1.5\%"),
+            ("Two keys at once", r"\text{tune } r = 0.96 \ (\text{C}), \ \text{chords } 0.83 \ (\text{F}\sharp), \ \text{together } 0.74"),
+            ("The golden section", r"88 \text{ bars, } \pm 2, \ 10 \text{ landmarks: } 61\% \text{ by chance}"),
+            ("Rhythms", r"\text{groupings of 12 pulses: } 12; \ \text{palindromes of 16: } 193 \text{ of } 20{,}569"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, 8, 9),
+        D=(10,),
+        I=(6,),
+        also=(("Monochord's modern toolkit: symmetry census, chance fits, additive and palindromic rhythms, the golden-section null", "explainer/music/monochord/modern.py"),),
+    ),
 ]

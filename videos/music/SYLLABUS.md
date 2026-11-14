@@ -1222,14 +1222,29 @@ keyboard compasses and the winds five symphonies call for (from the scores, in p
 *Story:* At the 1889 Paris Exposition Debussy heard a Javanese gamelan and wrote that it made Western percussion sound
 like the noise of a country fair. Within twenty-five years composers had rebuilt music from other scales and other
 rhythms, and one première in 1913 became a legend of riot. The part enumerates the symmetric scales they used.
+1. Hook: Paris 1889; a gamelan texture of our own heard; the plan.
+2. A scale without a home: the whole-tone clock; an ear question (which has no half steps?); Scriabin's chord; Voiles; the pentatonic; slendro against the black keys heard; smaller steps.
+3. Every symmetric scale: 352 shapes; the 15 symmetric ones; Messiaen's first three modes heard; the hexatonic; why so few; Messiaen's modes.
+4. Chords that slide: planing; an ear question (which is planed?); planing after Debussy; the sunken cathedral.
+5. The octatonic: the scale; its four triads heard; scale, chord and ostinato heard; Rimsky-Korsakov and Stravinsky.
+6. Rhythm set loose: the Rite; an ear question (where is the downbeat?); why the ear gives up; changing metres; layered ostinatos heard.
+7. Bartók: fieldwork; additive rhythms heard; counted; the axis system; the golden section claimed; its null model.
+8. Two keys at once: bitonality; Ives; the Tune over F sharp heard; one key and two fitted; Paris between the wars.
+9. Messiaen: the Quartet; a palindrome heard; palindromes counted; an added value heard; more techniques.
+10. 1913, and after: not impressionism; the first night; the legend; after the Rite; others in the room.
+11. Frontier: the octatonic debate; fits by chance; sets as data; the research problem.
+12. Variation 28: whole-tone planing, an octatonic ostinato. Outro: problems, payoffs.
+
 *Covers:* whole-tone, pentatonic and octatonic collections; planing; ostinato and displaced accents; polychords;
 Bartók's fieldwork, symmetry and additive rhythm; Messiaen's modes of limited transposition and non-retrogradable
 rhythms; the golden-section claims.
-*Built and computed:* every transposition-symmetric scale enumerated; a statistical test of the golden-section
-claim on a null model.
+*Built and computed:* `monochord/modern.py`: every one of the 4,096 pitch-class sets examined (352 shapes, 15 with
+limited transposition, each a union of cosets, Messiaen's seven among them); the exact chance that a k-note set fits an
+octatonic, diatonic or whole-tone scale; one key against two fitted to a bitonal texture; additive rhythms (the Padovan
+numbers) and palindromes counted; the golden section against a null model with landmarks and tolerance.
 *Variation 28:* the Tune in whole-tone planing, then as an octatonic ostinato with moving accents.
 *Frontier:* the octatonic debate; computational analysis of early modernism.
-*Rights:* analysis and original pastiche where a work is in copyright (§2.4).
+*Rights:* analysis and original pastiche where a work is in copyright (§2.4); every example in the film is ours.
 *Reading:* Taruskin vol. 4; Antokoletz; Tymoczko (2002).
 
 ### Part 29 · Twelve Tones (~50)

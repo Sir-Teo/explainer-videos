@@ -76,11 +76,11 @@ class Florid(SoundScene):
             "first written for three voices. <bookmark mark='d'/> Three voices moving at once is discant three times "
             "over, and it makes the question unavoidable: how do several moving voices keep together?"
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(left[0]), FadeIn(right[0]))
             vo.wait_until("a")
-            self.play(FadeIn(left))
+            self.play(FadeIn(left[1:]))
             vo.wait_until("b")
-            self.play(FadeIn(right))
+            self.play(FadeIn(right[1:]))
             vo.wait_until("c")
             self.play(FadeIn(cap[0]))
             vo.wait_until("d")

@@ -381,4 +381,62 @@
       note: "A phrase arch keeps each phrase about its written length while moving time from its ends to its middle; stolen time keeps the bar lines exactly where they were. Recorded pianists do both, in proportions that changed over the twentieth century."
     });
   };
+
+  // ---- Part 28: a scale's symmetry ------------------------------------------------------------------------------
+  var NAMES28 = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+  var SCALES28 = { "octatonic": [0, 1, 3, 4, 6, 7, 9, 10], "diatonic": [0, 2, 4, 5, 7, 9, 11], "whole-tone": [0, 2, 4, 6, 8, 10], "pentatonic": [0, 2, 4, 7, 9] };
+  var MODES28 = [[0, 2, 4, 6, 8, 10], [0, 1, 3, 4, 6, 7, 9, 10], [0, 2, 3, 4, 6, 7, 8, 10, 11], [0, 1, 2, 5, 6, 7, 8, 11], [0, 1, 5, 6, 7, 11], [0, 2, 4, 5, 6, 8, 10, 11], [0, 1, 2, 3, 5, 6, 7, 8, 9, 11]];
+  function mask28(pcs) { var m = 0; pcs.forEach(function (p) { m |= 1 << (((p % 12) + 12) % 12); }); return m; }
+  function rot28(m, k) { k = ((k % 12) + 12) % 12; return ((m << k) | (m >>> (12 - k))) & 4095; }
+  function period28(m) { for (var k = 1; k <= 12; k++) if (rot28(m, k) === m) return k; return 12; }
+  function tclass28(m) { var best = m; for (var k = 1; k < 12; k++) best = Math.min(best, rot28(m, k)); return best; }
+  function fits28(m, sc) { var s = mask28(sc); for (var k = 0; k < 12; k++) if ((m & ~rot28(s, k)) === 0) return true; return false; }
+  function pop28(m) { var c = 0; while (m) { c += m & 1; m >>>= 1; } return c; }
+  var CHANCE28 = {};
+  function chance28(k, name) {
+    var key = name + k; if (CHANCE28[key] !== undefined) return CHANCE28[key];
+    var hits = 0, tot = 0;
+    for (var m = 0; m < 4096; m++) if (pop28(m) === k) { tot++; if (fits28(m, SCALES28[name])) hits++; }
+    return (CHANCE28[key] = tot ? hits / tot : 0);
+  }
+  W.symmetric = function (el) {
+    var ctl = [], init = [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0];
+    for (var i = 0; i < 12; i++) ctl.push({ k: "p" + i, label: NAMES28[i], min: 0, max: 1, step: 1, value: init[i], fmt: function (x) { return x ? "in" : "out"; } });
+    QB.widget(el, {
+      title: "Does your scale map onto itself?",
+      sub: "Switch pitch classes in and out. The page finds how many different transpositions your set has (12 for most sets; fewer for the fifteen symmetric shapes, Messiaen's seven modes among them), which common scales contain it, and how often a random set of the same size would fit each scale by chance, as the film computed.",
+      panels: 2, height: 300,
+      controls: ctl,
+      buttons: [{ label: "Play", act: function (s) { s.sound = s.notes.length ? play(notesSound(s.notes, 0.32), 44100) : false; } }],
+      init: function (s) { s.sound = null; s.notes = []; },
+      draw: function (g, v, s) {
+        var pcs = []; for (var i = 0; i < 12; i++) if (v["p" + i]) pcs.push(i);
+        var m = mask28(pcs);
+        s.pcs = pcs; s.m = m; s.per = pcs.length ? period28(m) : 1;
+        s.mode = 0; MODES28.forEach(function (md, j) { if (tclass28(mask28(md)) === tclass28(m)) s.mode = j + 1; });
+        s.notes = pcs.map(function (p, j) { return [60 + p, j, 1]; }).concat(pcs.length ? [[72 + pcs[0], pcs.length, 1.5]] : []);
+        var a = g[0].axes({ x: [-1.5, 1.5], y: [-1.5, 1.5], title: "The twelve pitch classes", xticks: [], yticks: [] });
+        var cx = [], cy = [];
+        for (i = 0; i <= 60; i++) { cx.push(Math.cos(2 * Math.PI * i / 60)); cy.push(Math.sin(2 * Math.PI * i / 60)); }
+        a.line(cx, cy, { color: "#8A93A0", width: 1 });
+        var px = pcs.map(function (p) { return Math.sin(2 * Math.PI * p / 12); }), py = pcs.map(function (p) { return Math.cos(2 * Math.PI * p / 12); });
+        if (pcs.length > 1) a.line(px.concat([px[0]]), py.concat([py[0]]), { color: C.idea, width: 2 });
+        a.dots(px, py, { color: C.idea, r: 6 });
+        for (i = 0; i < 12; i++) a.text(1.3 * Math.sin(2 * Math.PI * i / 12), 1.3 * Math.cos(2 * Math.PI * i / 12), NAMES28[i], { align: "center", size: 11, color: v["p" + i] ? C.ink : C.muted });
+        var names = ["octatonic", "diatonic", "whole-tone", "pentatonic"], k = pcs.length;
+        var b = g[1].axes({ x: [-0.6, 3.6], y: [0, 1], title: "Chance a random " + k + "-note set fits", xticks: [], ylabel: "share" });
+        b.bars([0, 1, 2, 3], names.map(function (n) { return k ? chance28(k, n) : 0; }), 0.6, { color: function (j) { return fits28(m, SCALES28[names[j]]) ? C.idea : "#8A93A0"; } });
+        names.forEach(function (n, j) { b.text(j, 0, n, { align: "center", base: "top", dy: 7, size: 10, color: C.muted }); });
+      },
+      readout: function (v, s) {
+        var inside = Object.keys(SCALES28).filter(function (n) { return fits28(s.m, SCALES28[n]); });
+        return [["notes", s.pcs.map(function (p) { return NAMES28[p]; }).join(" ") || "none"],
+                ["different transpositions", String(s.per) + (s.per < 12 && s.pcs.length && s.pcs.length < 12 ? ": limited transposition" : "")],
+                ["Messiaen's mode", s.mode ? String(s.mode) : "none"],
+                ["scales that contain it (gold)", inside.length ? inside.join(", ") : "none of these"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Every symmetric set repeats a pattern every 1, 2, 3, 4 or 6 semitones. And a set that fits a scale is evidence only when a random set of its size would rarely fit: with four or five notes, it often would."
+    });
+  };
 })();

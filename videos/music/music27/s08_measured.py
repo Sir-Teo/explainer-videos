@@ -126,7 +126,7 @@ class Measured(SoundScene):
         bars.move_to(LEFT * 3.4 + DOWN * 0.4)
         t = label(r"chromaticism, \ in 100: \ pieces from 1800 to 1900", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.35)
         side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
-            (rf"{d['n_songs']} songs: \ Schubert, \ Schumann, \ Verdi, \ Foster, \ Liliʻuokalani, \ Johnson", WHITE),
+            (rf"{d['n_songs']} songs: \ Schubert, \ Schumann, \ Verdi, \ Foster, \ Lili`uokalani, \ Johnson", WHITE),
             (rf"{d['n_inst']} instrumental pieces: \ quartets, \ piano pieces, \ a concerto, \ a trio", WHITE),
             (r"in this Library, \ genre matters as much as date", TUNE),
             (r"a tune for singing stays near its key; \ an accompaniment or a development wanders", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
