@@ -72,7 +72,7 @@ class Rondo(SoundScene):
             self.play(FadeIn(imgs[1]), FadeIn(cap))
         c = clip("forms.variations")
         with self.listen(c) as snd:
-            window(snd, r"the variations: \ A A1 A2 A1", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
+            window(snd, r"the variations: \ A A1 A2 A1", detail=r"Part 7's piano", corner=UL, tag_corner=UR)
             self.add(diag_cursor(snd, imgs[1][1], d["variations"]["beats"], d["variations"]["beat"]))
             pulse(snd, imgs[1][0], 0.0, c.duration, buff=0.08)
         self.wait(0.4)

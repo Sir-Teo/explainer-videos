@@ -296,7 +296,7 @@ def compute_isorhythm() -> dict:
         for v in pc.voices:
             f = MD.bar_prints(v, pc.bar)
             per_voice.append(float(np.mean([f[i] == f[i + P] for i in range(len(f) - P)])))
-        vitry.append({"title": pc.title, "lag": P, "bars": pc.length // pc.bar, "shares": per_voice,
+        vitry.append({"title": pc.title, "lag": P, "bars": pc.length // pc.bar, "shares": per_voice, "scan": {str(k): v for k, v in sc["scan"].items()},
                       "chance": MD.shuffled_share(pc.voices[2], pc.bar, rng, trials=10)})
     return {"color": color, "talea": talea, "notes": rows(notes), "upper": rows(upper), "periods": per, "unit": 0.2,
             "vitry": vitry, "scans": scans, "isorhythmic": [x["title"] for x in iso], "n_iso": len(iso),
