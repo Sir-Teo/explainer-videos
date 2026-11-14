@@ -452,4 +452,54 @@ PARTS = [
               ("Monochord's four-part writing: rules, labels, a chord model, the harmonizer", "explainer/music/monochord/fourpart.py"),
               ("A four-part choir from Part 8's voice", "explainer/music/monochord/instruments/choir.py")),
     ),
+    Part(
+        n=18, level="U", widget="progression", prereq=(13, 15, 17),
+        question="Does harmony have a syntax, and how did composers learn it?",
+        story="In eighteenth-century Naples the conservatories were orphanages that turned boys into the most "
+              "employable composers in Europe, by having them play harmony above bass lines, partimenti, thousands "
+              "of times. Harmony has a syntax, and the part measures it on Bach's chorales. Chords have jobs, "
+              "tonic, subdominant, dominant, and the jobs come in an order: 3,446 moves go round the cycle T, S, "
+              "D, T against 1,038 the other way, and dominant to subdominant is rarest of all. Roots fall by fifths "
+              "39 times in a hundred, and the forward motions (falling fifths and thirds, rising steps) are 69 in a "
+              "hundred. The next chord costs 3.4 bits when the last is known, against 4.9 for the same chords "
+              "shuffled and 6.1 if all were equally likely; a deceptive cadence costs about four. Sequences repeat a "
+              "step; new chords land on strong beats and speed up into cadences. Campion's rule of the octave (1716) "
+              "gives a chord for every note of a rising or falling scale; a few lines of code realize an unfigured "
+              "bass with it, and Bach's own chords on stepwise basses fall within it about half the time. "
+              "Gjerdingen's galant schemata (Romanesca, Prinner, Fonte, Monte, Ponte and others) are stock phrases; "
+              "a strict detector finds almost none in the chorales, which belong to an older practice, but their "
+              "melodies are everywhere in the series' tunes, and the Tune's second half is a Prinner. Ground basses, "
+              "from the lament to la Folia, freeze a progression into a piece. The frontier asks whether harmony is "
+              "a chain, a tree or a stock of phrases, for listeners as well as analysts. The Tune is heard over three "
+              "basses.",
+        handoff="Chromatic harmony in Part 19; canon and fugue in Part 20; form as a journey between keys in Part 21; "
+                "the Baroque and the classical style in Parts 25 and 26; jazz's ii-V-I in Part 39 and pop's four "
+                "chords in Part 40.",
+        outside="Part 13 for chords and Roman numerals; Part 14 for information and bits; Part 15 for functions and "
+                "cadences; Part 17 for the chorales and voice leading. Conditional probability and cross-entropy.",
+        objectives={
+            "U": ["Label chords by function and root motion, and hear a falling fifth from a rising one.",
+                  "Play the rule of the octave up and down in C major, and realize a simple unfigured bass.",
+                  "Name and recognize the Romanesca, Prinner, Fonte, Monte and the common ground basses."],
+            "M": ["Count function transitions and root motions in a corpus, with a shuffled control.",
+                  "Measure the predictability of a chord sequence as cross-entropy on held-out pieces.",
+                  "Write a schema detector and estimate its false-positive rate by shuffling."],
+            "D": ["Compare chain, tree and construction-grammar accounts of harmonic syntax, and what evidence would decide between them.",
+                  "Say what corpus studies of rock, Billboard songs and Beethoven show about the universality of the syntax."],
+            "I": ["Harmonize a bass at the keyboard by the rule of the octave, and vary a ground.",
+                  "Build an arrangement from schemata: an opening, a reply, a sequence, a cadence."],
+        },
+        results=[
+            ("The cycle of functions", r"T\to S\to D\to T: \ 3{,}446 \quad \text{against the cycle: } 1{,}038 \quad D\to S: 290"),
+            ("Root motion", r"\text{falling fifths } 39\%; \ \text{forward (fifth down, third down, step up) } 69\%"),
+            ("How predictable", r"H(\text{chord} \mid \text{last}) \approx 3.4 \text{ bits} \ (\text{shuffled } 4.9, \ \text{uniform } 6.1)"),
+            ("Harmonic rhythm", r"\text{new chord: beats 1, 3 } 78, 79\%; \ \text{beats 2, 4 } 65, 60\%; \ \text{before a fermata } 92\%"),
+            ("The rule of the octave", r"\text{Bach's chord within the rule's on stepwise basses: } 49\% \ (804 \text{ beats})"),
+            ("Schemata in the chorales", r"13 \text{ in 185 major chorales; shuffled } 2: \ \text{a different style}"),
+        ],
+        U=(0, 1, 2, 5, 6, 8, 11),
+        D=(12,),
+        I=(9,),
+        also=(("Monochord's syntax of harmony: functions, root motion, n-grams, the rule of the octave, schemata, grounds", "explainer/music/monochord/progression.py"),),
+    ),
 ]

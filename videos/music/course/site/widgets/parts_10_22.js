@@ -797,4 +797,85 @@
       note: "Set the parallel penalty to zero and red lines appear: Bach's chords, chosen by habit alone, move in fifths and octaves all the time. Raise the motion penalty and the inner voices freeze; lower it to zero and they wander. On the Passion Chorale the search agrees with Bach on about half the beats and never breaks the rule; what it cannot do, at any setting, is give the alto and tenor lines worth singing. (This page's search is the film's with its smaller penalties fixed.)"
     });
   };
+
+  // ---- Part 18: a progression you can score -----------------------------------------------------------------------
+  // Chord-to-chord probabilities counted from 280 of Bach's major chorales (the film's model of pairs), the upper voices
+  // of each chord placed by the shortest way.
+  var PG18 = {"names":["I","ii","iii","IV","V","vi","vii°","V7","ii7","II"],"pcs":{"I":[0,4,7],"ii":[2,5,9],"iii":[4,7,11],"IV":[5,9,0],"V":[7,11,2],"vi":[9,0,4],"vii°":[11,2,5],"V7":[7,11,2,5],"ii7":[2,5,9,0],"II":[2,6,9]},"roots":{"I":0,"ii":2,"iii":4,"IV":5,"V":7,"vi":9,"vii°":11,"V7":7,"ii7":2,"II":2},"T":{"I":{"I":0.0417,"ii":0.0394,"iii":0.0167,"IV":0.1929,"V":0.3109,"vi":0.0885,"vii°":0.0235,"V7":0.0356,"ii7":0.0719,"II":0.025},"ii":{"I":0.2219,"ii":0.0147,"iii":0.0348,"IV":0.0348,"V":0.0924,"vi":0.1096,"vii°":0.0147,"V7":0.0837,"ii7":0.0204,"II":0.006},"iii":{"I":0.1395,"ii":0.0452,"iii":0.0005,"IV":0.1494,"V":0.0749,"vi":0.1841,"vii°":0.0055,"V7":0.0154,"ii7":0.0154,"II":0.0104},"IV":{"I":0.3298,"ii":0.0872,"iii":0.0285,"IV":0.0204,"V":0.1418,"vi":0.0467,"vii°":0.0568,"V7":0.0669,"ii7":0.0406,"II":0.0224},"V":{"I":0.5175,"ii":0.0492,"iii":0.0474,"IV":0.0446,"V":0.0196,"vi":0.0678,"vii°":0.0029,"V7":0.0353,"ii7":0.0094,"II":0.0492},"vi":{"I":0.1407,"ii":0.0675,"iii":0.0872,"IV":0.0754,"V":0.1565,"vi":0.0101,"vii°":0.02,"V7":0.016,"ii7":0.0872,"II":0.0378},"vii°":{"I":0.5344,"ii":0.0215,"iii":0.0626,"IV":0.0318,"V":0.0421,"vi":0.001,"vii°":0.001,"V7":0.0728,"ii7":0.0318,"II":0.001},"V7":{"I":0.6905,"ii":0.0268,"iii":0.018,"IV":0.0224,"V":0.04,"vi":0.062,"vii°":0.0004,"V7":0.018,"ii7":0.0136,"II":0.0004},"ii7":{"I":0.2499,"ii":0.0051,"iii":0.0143,"IV":0.0282,"V":0.43,"vi":0.0051,"vii°":0.0189,"V7":0.1067,"ii7":0.0143,"II":0.0051},"II":{"I":0.0402,"ii":0.0005,"iii":0.0154,"IV":0.0005,"V":0.7201,"vi":0.0104,"vii°":0.0005,"V7":0.0203,"ii7":0.0005,"II":0.0104}},"U":{"I":0.2453,"ii":0.0576,"iii":0.0329,"IV":0.0824,"V":0.182,"vi":0.0844,"vii°":0.0154,"V7":0.0373,"ii7":0.0355,"II":0.0329},"func":{"I":"T","ii":"S","iii":"T","IV":"S","V":"D","vi":"T","vii°":"D","V7":"D","ii7":"S","II":"S"}};
+  var MOT18 = { 0: "same", 1: "step up", 2: "step up", 3: "third up", 4: "third up", 5: "fifth down", 6: "tritone", 7: "fifth up", 8: "third down", 9: "third down", 10: "step down", 11: "step down" };
+  function voice18(prev, pcs, bass) {
+    var best = null, bc = 1e9, s, a, t;
+    for (s = 60; s <= 79; s++) for (a = 55; a < s; a++) for (t = 50; t < a; t++) {
+      if (pcs.indexOf(s % 12) < 0 || pcs.indexOf(a % 12) < 0 || pcs.indexOf(t % 12) < 0 || s - a > 12 || a - t > 12 || t <= bass) continue;
+      var have = [s % 12, a % 12, t % 12, bass % 12], ok = true, k;
+      for (k = 0; k < pcs.length; k++) if (have.indexOf(pcs[k]) < 0 && !(pcs.length === 4 && k === 2)) ok = false;
+      if (!ok) continue;
+      var c = prev ? Math.abs(s - prev[0]) + Math.abs(a - prev[1]) + Math.abs(t - prev[2]) : Math.abs(s - 72) + Math.abs(a - 67) + Math.abs(t - 64);
+      if (c < bc) { bc = c; best = [s, a, t, bass]; }
+    }
+    return best;
+  }
+  function progSound18(chords) {
+    var rate = 44100, dur = 0.9, out = new Float32Array(Math.floor((chords.length * dur + 1.2) * rate)), k, v, n, h;
+    for (k = 0; k < chords.length; k++) for (v = 0; v < 4; v++) {
+      var hz = 440 * Math.pow(2, (chords[k][v] - 69) / 12), start = Math.floor(k * dur * rate), len = Math.floor((dur + 0.6) * rate);
+      for (n = 0; n < len && start + n < out.length; n++) {
+        var t = n / rate, y = 0;
+        for (h = 1; h <= 6; h++) y += Math.sin(2 * Math.PI * hz * h * t) * Math.pow(0.6, h - 1) * Math.exp(-t * (1.5 + h));
+        out[start + n] += 0.07 * y * Math.min(1, t / 0.004);
+      }
+    }
+    return play(out, rate);
+  }
+
+  W.progression = function (el) {
+    var opts = PG18.names.map(function (n, i) { return i + ": " + n; }).join(", ");
+    QB.widget(el, {
+      title: "A progression, scored by Bach's habits",
+      sub: "Choose four chords in C major. The page voices them by the shortest way, names each chord's job (tonic, subdominant, dominant) and how its root moves, and scores the progression with the model of pairs learned from Bach's chorales: the bits each chord costs given the one before. A low score is a progression Bach often wrote; a high one, a surprise. Chords: " + opts + ".",
+      panels: 2, height: 280,
+      controls: [
+        { k: "c1", label: "First chord", min: 0, max: 9, step: 1, value: 0 },
+        { k: "c2", label: "Second chord", min: 0, max: 9, step: 1, value: 3 },
+        { k: "c3", label: "Third chord", min: 0, max: 9, step: 1, value: 4 },
+        { k: "c4", label: "Fourth chord", min: 0, max: 9, step: 1, value: 0 },
+      ],
+      buttons: [{ label: "Play the progression", act: function (s) { s.sound = progSound18(s.chords); } }],
+      init: function (s) { s.sound = null; s.chords = []; },
+      draw: function (g, v, s) {
+        var idx = [v.c1, v.c2, v.c3, v.c4], names = idx.map(function (i) { return PG18.names[i]; }), chords = [], prev = null, k;
+        for (k = 0; k < 4; k++) {
+          var root = PG18.roots[names[k]], bass = 40 + ((root + 8) % 12);
+          var ch = voice18(prev, PG18.pcs[names[k]], bass) || [72, 67, 64, bass];
+          chords.push(ch); prev = ch;
+        }
+        s.chords = chords; s.names = names;
+        var bits = [-Math.log2(PG18.U[names[0]])];
+        for (k = 1; k < 4; k++) bits.push(-Math.log2(PG18.T[names[k - 1]][names[k]]));
+        s.bits = bits;
+        s.motions = [];
+        for (k = 1; k < 4; k++) s.motions.push(MOT18[((PG18.roots[names[k]] - PG18.roots[names[k - 1]]) % 12 + 12) % 12]);
+        var a = g[0].axes({ x: [0.5, 4.5], y: [38, 82], title: "The four chords, voiced", xlabel: "chord", ylabel: "key number", xticks: [1, 2, 3, 4] });
+        var cols = [C.idea, "#F472B6", "#A3E635", "#7DD3FC"];
+        for (var vv = 0; vv < 4; vv++) {
+          var ys = chords.map(function (c) { return c[vv]; });
+          a.line([1, 2, 3, 4], ys, { color: cols[vv], width: 1.5 });
+          a.dots([1, 2, 3, 4], ys, { color: cols[vv], r: 4 });
+        }
+        for (k = 0; k < 4; k++) a.text(k + 1, 80, names[k] + " (" + PG18.func[names[k]] + ")", { align: "center", size: 11, color: C.ink });
+        var b = g[1].axes({ x: [0.3, 4.7], y: [0, 9], title: "Surprise: bits for each chord", xticks: [], ylabel: "bits" });
+        b.bars([1, 2, 3, 4], bits, 0.6, { color: function (i) { return bits[i] > 4 ? C.loss : C.idea; } });
+        for (k = 0; k < 4; k++) b.text(k + 1, 0, names[k], { align: "center", base: "top", dy: 7, color: C.muted });
+      },
+      readout: function (v, s) {
+        var tot = s.bits.reduce(function (x, y) { return x + y; }, 0);
+        return [["the progression", s.names.join(" - ") + "  (" + s.names.map(function (n) { return PG18.func[n]; }).join(" ") + ")"],
+                ["root motion", s.motions.join(", ")],
+                ["bits, chord by chord", s.bits.map(function (b) { return fmt(b, 1); }).join(", ")],
+                ["average", fmt(tot / 4, 2) + " bits a chord (Bach's chorales average about 3.4)"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "I-IV-V-I costs little: each step is one Bach takes often. Swap the middle chords (I-V-IV-I) and the third chord jumps in surprise: dominant back to subdominant is the rarest move of the film's triangle. Try vi-ii-V-I, falling fifths all the way, and then V-vi at the end, the deceptive cadence, about four bits. The model knows only pairs, so it cannot tell a cadence in the middle of a phrase from one at its end."
+    });
+  };
 })();

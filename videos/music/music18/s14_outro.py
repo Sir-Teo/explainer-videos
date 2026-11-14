@@ -163,6 +163,7 @@ class Outro(SoundScene):
     # ------------------------------------------------------------------
     def next_part(self):
         q = label(r"how can music reach a distant key in a single chord?", font_size=30, color=EAR).move_to(UP * 0.4)
+        top = label(r"one key, \ and its neighbours", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
         nxt = VGroup(label(r"Part 19", font_size=32, color=GREY_B), label(r"Chromatic Harmony", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "This part's syntax keeps to one key, and moves from it to its neighbours. <bookmark mark='a'/> But in "
@@ -170,6 +171,7 @@ class Outro(SoundScene):
             "or two by a semitone. How does a chord change its meaning on the way? <bookmark mark='b'/> Next time. "
             "Part 19: Chromatic Harmony."
         ) as vo:
+            self.play(FadeIn(top))
             vo.wait_until("a")
             self.play(FadeIn(q))
             vo.wait_until("b")

@@ -46,8 +46,8 @@ class Naples(SoundScene):
     def rule(self):
         d = load("octave")
         c = clip("octave.updown")
-        su = block_staff(d["up"], width=6.2, beats=2).move_to(LEFT * 3.3 + UP * 0.4)
-        sd = block_staff(d["down"], width=6.2, beats=2).move_to(RIGHT * 3.3 + UP * 0.4)
+        su = block_staff(d["up"], width=5.7, beats=2).move_to(LEFT * 3.5 + UP * 0.4)
+        sd = block_staff(d["down"], width=5.7, beats=2).move_to(RIGHT * 3.5 + UP * 0.4)
         fu = VGroup(*[label(d["rule"]["up"][str(k)] if d["rule"]["up"][str(k)] != "5/3" else "", font_size=18, color=TUNE) for k in range(1, 9)])
         fd = VGroup(*[label(d["rule"]["down"][str(k)].replace("#", r"$\sharp$") if d["rule"]["down"][str(k)] != "5/3" else "", font_size=18, color=TUNE) for k in range(8, 0, -1)])
         for grp, stf in ((fu, su), (fd, sd)):
