@@ -110,19 +110,20 @@ def hebb(x, eta: float = 0.01, w0=None, rule: str = "hebb", epochs: int = 1, rng
     rng = rng or np.random.default_rng(0)
     w = rng.standard_normal(x.shape[1]) * 0.1 if w0 is None else np.array(w0, float)
     pc = principal_component(x)
-    norms, cosines = [], []
+    norms, cosines, path = [], [], [w.copy()]
     for _ in range(epochs):
         for row in x[rng.permutation(len(x))]:
             y = w @ row
             w = w + eta * y * (row - y * w if rule == "oja" else row)
             n = np.linalg.norm(w)
             norms.append(n)
+            path.append(w.copy())
             cosines.append(abs(w @ pc) / max(n, 1e-300))
             if n > 1e6:  # plain Hebb has diverged
                 break
         if norms[-1] > 1e6:
             break
-    return {"w": w, "norm": np.array(norms), "cosine": np.array(cosines), "pc": pc}
+    return {"w": w, "norm": np.array(norms), "cosine": np.array(cosines), "pc": pc, "path": np.array(path)}
 
 
 def principal_component(x) -> np.ndarray:
@@ -195,21 +196,24 @@ def dog(image, centre: float, surround: float | None = None, balance: float = 1.
     return gaussian_filter(img, centre) - balance * gaussian_filter(img, surround or 3 * centre)
 
 
-def hermann_grid(squares: int = 5, square: int = 40, street: int = 10) -> np.ndarray:
-    """Black squares on white streets, as an array of 0 and 1."""
-    n = squares * square + (squares + 1) * street
-    img = np.ones((n, n))
-    for a in range(squares):
-        for b in range(squares):
-            y0, x0 = street + a * (square + street), street + b * (square + street)
-            img[y0:y0 + square, x0:x0 + square] = 0.0
-    return img
+def hermann_grid(squares: int = 5, square: int = 40, street: int = 10, wave: float = 0.0) -> np.ndarray:
+    """Black squares on white streets, as an array of 0 and 1.  ``wave`` (pixels) bends each street into a sine
+    of that amplitude with one period per square, leaving the crossings where they were: Geier's curved grid."""
+    period = square + street
+    n = squares * period + street
+    yy, xx = np.mgrid[0:n, 0:n].astype(float)
+    centre = (np.arange(squares + 1) * period + street / 2 - 0.5)[:, None, None]
+    horiz = np.abs(yy[None] - centre - wave * np.sin(2 * np.pi * (xx[None] - street / 2 + 0.5) / period)) < street / 2
+    vert = np.abs(xx[None] - centre - wave * np.sin(2 * np.pi * (yy[None] - street / 2 + 0.5) / period)) < street / 2
+    return (horiz.any(axis=0) | vert.any(axis=0)).astype(float)
 
 
-def hermann_response(squares: int = 5, square: int = 40, street: int = 10, centre: float | None = None) -> dict:
+def hermann_response(squares: int = 5, square: int = 40, street: int = 10, centre: float | None = None,
+                     wave: float = 0.0) -> dict:
     """The centre-surround response at a crossing and half-way along a street, for a centre matched to the
-    street."""
-    img = hermann_grid(squares, square, street)
+    street.  (With ``wave`` the street's mid-point is where the sine crosses zero, so the same two pixels are
+    compared.)"""
+    img = hermann_grid(squares, square, street, wave)
     out = dog(img, centre or street / 5)
     period = square + street
     mid = (squares // 2) * period + street // 2  # the centre line of a middle street
