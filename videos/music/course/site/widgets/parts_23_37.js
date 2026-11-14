@@ -497,4 +497,54 @@
       note: "Try {0, 1, 4, 6} and {0, 1, 3, 7}: different prime forms, the same vector [111111]. Then any six notes: the complement's vector always matches."
     });
   };
+
+  // ---- Part 30: a cloud, random or even ------------------------------------------------------------------------------
+  function rng30(seed) { var x = seed * 2654435761 % 4294967296 || 1; return function () { x ^= x << 13; x >>>= 0; x ^= x >>> 17; x ^= x << 5; x >>>= 0; return x / 4294967296; }; }
+  function fact30(k) { var f = 1; for (var i = 2; i <= k; i++) f *= i; return f; }
+  W.poissoncloud = function (el) {
+    QB.widget(el, {
+      title: "A cloud of notes: random or even?",
+      sub: "Notes at random moments (a Poisson process, as in Xenakis's clouds) or evenly spaced, at the rate you choose. Left: the cloud over ten seconds. Right: how many seconds held 0, 1, 2 ... notes over ten minutes of the same cloud, against Poisson's law. Random moments clump; even ones never do.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "rate", label: "Notes per second", min: 1, max: 20, step: 1, value: 5, fmt: function (x) { return x + " a second"; } },
+        { k: "even", label: "Timing", min: 0, max: 1, step: 1, value: 0, fmt: function (x) { return x ? "evenly spaced" : "random (Poisson)"; } },
+        { k: "seed", label: "Seed", min: 1, max: 20, step: 1, value: 1, fmt: function (x) { return String(x); } }
+      ],
+      buttons: [{ label: "Play", act: function (s) { s.sound = play(notesSound(s.notes, 1.0), 44100); } }],
+      init: function (s) { s.sound = null; s.notes = []; },
+      draw: function (g, v, s) {
+        var r = rng30(v.seed), t = 0, on = [], i;
+        if (v.even) { for (i = 0; i < v.rate * 10; i++) on.push(i / v.rate); }
+        else { while (true) { t += -Math.log(1 - r()) / v.rate; if (t >= 10) break; on.push(t); } }
+        s.notes = on.map(function (x) { return [60 + Math.floor(r() * 24), x, 0.15]; });
+        var a = g[0].axes({ x: [0, 10], y: [58, 86], title: "Ten seconds of the cloud", xlabel: "seconds", ylabel: "key number" });
+        s.notes.forEach(function (n) { a.line([n[1], n[1] + 0.12], [n[0], n[0]], { color: C.idea, width: 5 }); });
+        var counts = [], k, hist = [];
+        var r2 = rng30(v.seed + 100);
+        for (i = 0; i < 600; i++) {
+          var c = 0;
+          if (v.even) c = v.rate; else { var tt = -Math.log(1 - r2()) / v.rate; while (tt < 1) { c++; tt += -Math.log(1 - r2()) / v.rate; } }
+          counts.push(c);
+        }
+        var top = Math.max(12, v.rate * 2 + 4);
+        for (k = 0; k <= top; k++) hist.push(0);
+        counts.forEach(function (c) { if (c <= top) hist[c]++; });
+        var mean = counts.reduce(function (p, q) { return p + q; }, 0) / 600;
+        s.var = counts.reduce(function (p, q) { return p + (q - mean) * (q - mean); }, 0) / 600; s.mean = mean;
+        var ymax = Math.max.apply(null, hist) * 1.15;
+        var b = g[1].axes({ x: [-0.6, top + 0.6], y: [0, ymax], title: "Seconds holding k notes (bars) and Poisson's law (dots)", xlabel: "k" });
+        b.bars(hist.map(function (_, j) { return j; }), hist, 0.7, { color: C.idea });
+        var px = [], py = [];
+        for (k = 0; k <= top; k++) { px.push(k); py.push(600 * Math.exp(-v.rate) * Math.pow(v.rate, k) / fact30(k)); }
+        b.dots(px, py, { color: "#F472B6", r: 4 });
+      },
+      readout: function (v, s) {
+        return [["per-second counts: mean, variance", s.mean.toFixed(2) + ", " + s.var.toFixed(2)],
+                ["Poisson says", "mean = variance = " + v.rate + (v.even ? " (an even cloud has variance 0)" : "")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Play both versions at the same rate: the random one bursts and pauses, the even one is heard as a pulse. A random process's counts vary as much as their mean; that variance is the clumping you hear."
+    });
+  };
 })();

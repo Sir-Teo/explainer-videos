@@ -318,4 +318,45 @@ PARTS = [
         I=(3,),
         also=(("Monochord's atonal toolkit: prime forms, interval vectors, set classes, Z-pairs, rows, all-interval and combinatorial searches", "explainer/music/monochord/atonal.py"),),
     ),
+    Part(
+        n=30, level="U", widget="poissoncloud", prereq=(1, 2, 3, 5, 7, 28, 29),
+        question="What happened when composers stopped arranging notes and started arranging sound, chance and process?",
+        story="In 1948 Pierre Schaeffer closed the groove of a disc of train noises and heard music. Tape let sounds be "
+              "re-speeded, reversed and cut: without its first quarter-second a bell hardly sounds like a bell. Cage gave "
+              "his choices to chance and, in 4'33'', to the room. Cologne built sounds from sine waves; Stockhausen's "
+              "Studie II used 81 frequencies, each the 25th root of 5 above the last. Xenakis composed the statistics of "
+              "clouds: their onsets form a Poisson process, whose per-second counts match Poisson's law and clump in a "
+              "way the ear hears at once, and his sieves build scales from residue classes, one repeating only every 35 "
+              "semitones. Clusters beat about eight times a second, which is why sound masses are rough. Two loops of one "
+              "figure pass through twelve alignments, symmetric about the middle; a brass note's sixteen harmonics, "
+              "given to an ensemble, rebuild it between the piano's keys. The Tune is phased against itself, turned "
+              "into a cloud of glissandi, and played on a string's harmonics, where its A is 59 cents flat.",
+        handoff="Transformations in Part 31; the mathematics of loops and rhythm in Part 33; the auditory scene in Part 45; "
+                "filters in Part 49; synthesis in Parts 51 and 52; the studio in Part 53; generative audio in Part 66.",
+        outside="Part 1 for the string's harmonics; Part 2 for tape speed; Part 3 for Fourier; Part 5 for beats and "
+                "roughness; Part 7 for the instruments; Part 8 for the lips and the voice; Part 9 for bells. The Poisson "
+                "process, residue classes, the Chinese remainder theorem, harmonic analysis.",
+        objectives={
+            "U": ["Hear what tape speed, reversal and a cut attack do to a sound.",
+                  "Hear a random cloud against an even one, a cluster against an open chord, and two loops drifting apart.",
+                  "Explain spectral orchestration and why it needs pitches between the piano's keys."],
+            "M": ["Simulate a Poisson process and check its counts against Poisson's law.",
+                  "Build scales from sieves, and count a phased figure's alignments.",
+                  "Measure a tone's harmonics and orchestrate them by register."],
+            "D": ["Design an experiment on when sonification beats a plot.",
+                  "Analyse a process piece as a walk through a finite set of states."],
+            "I": ["Build a unit-generator patch, and use random processes with controlled statistics in sound design."],
+        },
+        results=[
+            ("Tape", r"\times 2 \text{ speed: up an octave, half as long; the bell without its attack}"),
+            ("Studie II", r"81 \text{ frequencies}, \ \sqrt[25]{5} = 111.45 \text{ cents apart}"),
+            ("A Poisson cloud", r"\text{mean} = \text{variance} = \lambda; \ \text{gaps' spread} = \text{mean}"),
+            ("A cluster", r"\tfrac12 \text{ semitone apart near C4: } 8 \text{ beats/s}"),
+            ("Harmonics against keys", r"5: -14, \ 7: -31, \ 11: \pm 49, \ 13: +41 \text{ cents}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7),
+        D=(9,),
+        I=(8,),
+        also=(("Monochord's sound-mass toolkit: tape operations, phasing, Poisson clouds, sieves, clusters, spectra orchestrated", "explainer/music/monochord/soundmass.py"),),
+    ),
 ]

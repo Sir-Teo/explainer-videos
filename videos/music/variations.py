@@ -63,6 +63,8 @@ LEDGER = [
      "measure": r"14 augmented triads planed; 9 accents placed at random on 32 ostinato notes"},
     {"part": 29, "title": r"as a twelve-tone row grown from its own intervals, then scattered in points", "seconds": 21.5,
      "measure": r"row 0 7 9 11 1 2 4 6 8 10 3 5; 36 notes from three of its 48 forms"},
+    {"part": 30, "title": r"phased against itself, as a cloud of glissandi, and on the harmonics of a string", "seconds": 32.22,
+     "measure": r"30 glissandi; on C's harmonics the Tune's A is -59 cents and its F +51 cents from the piano's"},
 ]
 
 

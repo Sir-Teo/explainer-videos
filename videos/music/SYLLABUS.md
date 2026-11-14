@@ -1281,12 +1281,28 @@ music21 corpus (both now in the public domain) and heard.
 *Story:* 1948, a Paris radio studio: Pierre Schaeffer closes the groove of a disc of train noises and hears music.
 1952: a pianist sits in silence for four minutes and thirty-three seconds. 1965: two tape loops of one preacher
 drift apart. After the war composers stopped arranging notes and started arranging sound, chance and process.
+1. Hook: Paris 1948; a closed groove of our own heard; the plan.
+2. Music from recordings: tape; the Tune at three speeds heard; an ear question (which bell is untouched?); the sound object; the room as instrument; tape elsewhere.
+3. Chance and silence: Cage; 4'33''; the Tune by dice heard; happenings and Fluxus; open works.
+4. The electronic studio: Cologne; Studie II's sine mixtures heard; studios elsewhere; Varèse; Columbia-Princeton.
+5. Xenakis: the engineer; a cloud of glissandi heard; an ear question (random or even?); Poisson's law; a thickening cloud heard; drawing sound; sieves heard.
+6. Sound masses: Penderecki and Ligeti; a cluster heard; its beats; cluster against open chord heard; writing a mass down; inside the sound.
+7. Process and phasing: Reich; a figure phased heard; its twelve alignments; speech becomes melody; minimalism; an additive figure heard.
+8. A spectrum, orchestrated: Grisey; an ear question (which is the ensemble?); the harmonics measured; the spectrum assembling heard; harmonics against keys; the name; after Grisey.
+9. The computer sings: the first computer music; a unit-generator patch heard; Daisy Bell; synthesizers reach the public; FM; what changed.
+10. Frontier: composing with machines; learned sound; listening to data; the research problem.
+11. Variation 30: phased, a cloud of glissandi, on a string's harmonics. Outro: problems, payoffs.
+
 *Covers:* musique concrète; chance and indeterminacy; the electronic studio; Xenakis's stochastic music and
 sieves; sound masses; minimalism and phasing; spectral music (a spectrum orchestrated); early computer music.
-*Built and computed:* a phasing engine and the resulting patterns it passes through; stochastic clouds from
-Poisson onsets; the spectrum of our trombone model orchestrated for our ensemble.
+*Built and computed:* `monochord/soundmass.py`: tape operations (speed, reversal, loops, the cut attack); a phasing
+engine and the twelve alignments a figure passes through; Poisson clouds checked against Poisson's law; sieves (the
+diatonic by the Chinese remainder theorem, a non-octave scale of period 35); cluster beat rates; the spectrum of a brass
+tone from Part 8's lips on a long bore, measured and orchestrated for piano, bowed strings and voice; Studie II's scale;
+a unit-generator patch.
 *Variation 30:* the Tune phased against itself; as a cloud of glissandi; as the spectrum of Part 1's string.
 *Frontier:* computer-assisted composition; sonification.
+*Rights:* every sound is the film's own (§2.4); the works are described.
 *Reading:* Xenakis, *Formalized Music*; Reich, *Writings on Music*; Fineberg (ed.) on spectral music; Ross, *The
 Rest Is Noise*.
 
