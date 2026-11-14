@@ -855,7 +855,8 @@ shown(8, "BOYNTON_1996", "a property of the measurement, used as a model")
 shown(8, "EKLUND_2016", "a result about a statistical method")
 shown(8, "VUL_2009", "a result about a method of analysis; the simulation beside it is the series' own")
 shown(8, "POLDRACK_2006", "an argument about inference, with its own numbers shown")
-shown(8, "KANWISHER_1997", "shown as the example of a robust activation with a disputed reading", row_in=14)
+shown(8, "KANWISHER_1997", "shown as the example of a robust activation with a disputed reading; its row "
+      "(face_area) is entered in Part 14")
 shown(8, "BARKER_1985", "the history of an instrument")
 shown(8, "MAREK_2022", "a methods result at the frontier, disputed in its details", row_in=43)
 shown(8, "ELLIOTT_2020", "a methods result at the frontier")
@@ -1305,3 +1306,101 @@ shown(13, "MILNER_1991", "a single patient, told as the case that founded a theo
       "blindsight, is entered in Part 27", row_in=27)
 shown(13, "COLOUR_TABLES", "standard tables, the measurements on which colour science is built, not a finding")
 shown(13, "OKABE_ITO", "a design recommendation, not a finding")
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 14: Seeing as Inference
+# ---------------------------------------------------------------------------------------------------------------
+add(Finding(
+    key="cue_combination", part=14, title=r"Cues weighted by reliability",
+    claim="When two senses report the same property, people combine them roughly as an optimal observer would: each "
+          "cue weighted by its reliability, and the combined estimate less variable than either alone.",
+    original=Study("Ernst and Banks", 2002, n="4 observers", design="the height of a ridge, seen and felt, with noise "
+                   "added to the visual display", found="weights and combined thresholds close to the maximum-likelihood "
+                   "prediction from each sense alone"),
+    status="replicated",
+    record=(Study("Alais and Burr", 2004, n="a few observers", design="locating flashes and clicks",
+                  found="the ventriloquist effect follows near-optimal combination of vision and hearing"),
+            Study("Rahnev and Denison", 2018, n="a review", design="the literature on optimality in perception",
+                  found="many documented departures from optimality, cue combination included")),
+    note="Reliability-weighted combination has been found across many pairs of senses and cues. It is not universal: "
+         "children combine some cues later in development, and the review lists many conditions in which observers "
+         "fall short of the optimal weights.",
+    sources=("M. O. Ernst and M. S. Banks, Humans integrate visual and haptic information in a statistically optimal "
+             "fashion, Nature 415 (2002) 429-433",
+             "D. Alais and D. Burr, The ventriloquist effect results from near-optimal bimodal integration, Current "
+             "Biology 14 (2004) 257-262",
+             "D. Rahnev and R. N. Denison, Suboptimality in perceptual decision making, Behavioral and Brain Sciences "
+             "41 (2018) e223"),
+    checked="2026-11-14",
+    data=("ERNST_BANKS_2002", "ALAIS_BURR_2004", "RAHNEV_DENISON_2018"),
+))
+
+add(Finding(
+    key="contrast_speed", part=14, title=r"Low contrast looks slower",
+    claim="A moving pattern of low contrast looks slower than the same pattern at high contrast.",
+    original=Study("Thompson", 1982, n="a few observers", design="matching the speeds of gratings of different "
+                   "contrast", found="lower contrast, lower perceived speed, at least below about 8 cycles a second"),
+    status="replicated",
+    record=(Study("Weiss, Simoncelli and Adelson", 2002, n="model and demonstrations", design="an ideal observer with a "
+                  "prior favouring slow speeds", found="the slowing, and several other motion illusions, predicted"),),
+    note="The slowing at low contrast is robust for slow and moderate speeds; at high temporal frequencies the results "
+         "are mixed, and some studies find low contrast speeding things up.",
+    sources=("P. Thompson, Perceived rate of movement depends on contrast, Vision Research 22 (1982) 377-380",
+             "Y. Weiss, E. P. Simoncelli and E. H. Adelson, Motion illusions as optimal percepts, Nature Neuroscience "
+             "5 (2002) 598-604",
+             "P. Thompson, K. Brooks and S. T. Hammett, Speed can go up as well as down at low contrast, Vision "
+             "Research 46 (2006) 782-786"),
+    checked="2026-11-14",
+    data=("THOMPSON_1982", "WEISS_2002"),
+))
+
+add(Finding(
+    key="muller_lyer_culture", part=14, title=r"The Müller-Lyer illusion and culture",
+    claim="The Müller-Lyer illusion is much weaker in people who grow up without rectangular buildings.",
+    original=Study("Segall, Campbell and Herskovits", 1966, n="over a dozen societies", design="choosing which of two "
+                   "lines looked longer", found="large differences; San foragers least susceptible, European-derived "
+                   "samples most"),
+    status="contested",
+    record=(Study("Gandhi, Kalia, Ganesh and Sinha", 2015, n="newly sighted children aged 8 to 16",
+                  design="the Ponzo and Müller-Lyer figures, within 48 hours of cataract surgery",
+                  found="both illusions at once, without visual experience of corners"),
+            Study("Amir and Firestone", 2025, n="a review", design="the cross-cultural and comparative evidence",
+                  found="the original differences may reflect method; the illusion appears in many animals")),
+    note="That the illusion itself is real is not in doubt. Whether its size depends on a carpentered environment is "
+         "now disputed, and the original study has not been repeated with modern methods.",
+    sources=("M. H. Segall, D. T. Campbell and M. J. Herskovits, The Influence of Culture on Visual Perception "
+             "(Bobbs-Merrill, 1966)",
+             "T. Gandhi, A. Kalia, S. Ganesh and P. Sinha, Immediate susceptibility to visual illusions after sight "
+             "onset, Current Biology 25 (2015) R358-R359",
+             "D. Amir and C. Firestone, Is visual perception WEIRD? The Müller-Lyer illusion and the cultural "
+             "byproduct hypothesis, Psychological Review (2025)"),
+    checked="2026-11-14",
+    data=("SEGALL_1966", "AMIR_FIRESTONE_2025"),
+))
+
+add(Finding(
+    key="face_area", part=14, title=r"The fusiform face area",
+    claim="A region of the fusiform gyrus responds much more to faces than to other objects, in most people tested.",
+    original=Study("Kanwisher, McDermott and Chun", 1997, n="15 people", design="fMRI to faces, objects, houses and "
+                   "hands", found="a face-selective region in 12 of 15"),
+    status="replicated",
+    record=(Study("Gauthier et al.", 1999, n="a few observers", design="fMRI before and after training on novel "
+                  "objects", found="the region's response to the trained objects rose with expertise"),),
+    note="The region's face selectivity has been found in study after study. What it is selective for, faces as such "
+         "or any category a person is expert in, is still argued.",
+    sources=("N. Kanwisher, J. McDermott and M. M. Chun, The fusiform face area: a module in human extrastriate cortex "
+             "specialized for face perception, Journal of Neuroscience 17 (1997) 4302-4311",
+             "I. Gauthier, M. J. Tarr, A. W. Anderson, P. Skudlarski and J. C. Gore, Activation of the middle fusiform "
+             "'face area' increases with expertise in recognizing novel objects, Nature Neuroscience 2 (1999) 568-573"),
+    checked="2026-11-14",
+    data=("KANWISHER_1997", "GAUTHIER_1999"),
+))
+
+shown(14, "ADELSON_1995", "a demonstration, redrawn and explained by a model; lightness is not a finding in dispute")
+shown(14, "ADAMS_2004", "a single experiment showing that a prior can be retrained, told as an example")
+shown(14, "YIN_1969", "a classic demonstration of the face inversion effect, told as history; faces are entered with the face area")
+shown(14, "YAMINS_2014", "a modelling result at the frontier; deep networks as models are entered in Part 60", row_in=60)
+shown(14, "GEIRHOS_2019", "a property of artificial networks, reproduced on a small one; not a finding about minds")
+shown(14, "VONG_2024", "a modelling result at the frontier; learning from an infant's experience is entered in "
+      "Part 30", row_in=30)
+shown(14, "WHEATSTONE_1838", "the history of an instrument and a stimulus")

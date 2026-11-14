@@ -1078,43 +1078,66 @@ Campbell & Robson 1968; Blakemore & Campbell 1969; Heeger 1992; Stockman & Sharp
 Wandell, *Foundations of Vision*; Rodieck, *The First Steps in Seeing*; Hubel, *Eye, Brain, and Vision*.
 
 ### Part 14 · Seeing as Inference (~55)
-*Question:* why does a grey square look white, and how can a flat image yield a solid world?
-*Story:* two squares on Adelson's checkerboard send identical light and look different. That is the visual system
+*Question:* if every image fits many worlds, how does seeing choose one?
+*Story:* two squares on a checkerboard send identical light and look different. That is the visual system
 working: the image underdetermines the world, so seeing must be a bet. Helmholtz called it unconscious inference.
-The modern version says which bet is optimal, and people come remarkably close.
-1. Hook and On you: the checker shadow. Measure it; the squares are the same.
-2. The inverse problem: infinitely many scenes for one image (the Ames room, drawn from above).
-3. Gestalt psychology: grouping laws, figure and ground, Kanizsa's triangle. Laws as descriptions waiting for an
-   explanation.
-4. Depth: binocular disparity (Wheatstone 1838; Julesz's random-dot stereograms), motion parallax, pictorial
-   cues. The geometry derived.
-5. Constancies of size, shape and lightness; the Müller-Lyer and Ponzo illusions as constancy misapplied (and
-   the cross-cultural data, Part 38).
-6. Bayes for perception: likelihood from the image, prior from the world, posterior as the percept (derived with
-   Gaussians).
-7. Cue combination: two noisy cues should be weighted by their reliabilities. Ernst and Banks (2002): vision and
-   touch combined as predicted, with the predicted reduction in variance.
-8. Priors made visible: light from above; the slow-motion prior explains the aperture problem and why low-contrast
-   things seem slower (Weiss, Simoncelli and Adelson 2002).
-9. Recognizing objects: Marr's stages; templates, features and parts; invariance as the hard problem.
-10. Faces: inversion, the Thatcher illusion, prosopagnosia, the fusiform face area and the expertise dispute.
-11. Deep networks as models of the ventral stream: what they predict (Yamins et al. 2014) and where they differ
-    from people (texture bias, adversarial images). Continued in Part 60.
-12. Perception and action (Gibson's affordances), and predictive coding in one picture (Part 58).
+The modern version says which bet is optimal, and people come remarkably close. For Kant's third objection: cue
+weights read from choices, never from reports, and an illusion that knowing does not undo.
+0. Hook: the checkerboard in shadow (Psyche's own board, after Adelson 1995): both squares send 0.40; seeing is a
+   bet; objectives.
+1. The inverse problem: one 2° image from every size and distance on a line; the Ames room from above.
+2. Grouping and the Gestalt laws: proximity, similarity, continuation and closure read as priors (edge statistics
+   in natural images); Kanizsa's triangle and V2's illusory-contour cells (1984); Rubin's vase and border ownership
+   (2000).
+3. Depth from two eyes: disparity derived, δ ≈ IΔd/d² (1 cm gives 8.49′ at 0.5 m, 0.54′ at 2 m, 0.022′ at 10 m;
+   thresholds of a few seconds of arc); Wheatstone's stereoscope (1838); a random-dot stereogram to free-fuse
+   (Julesz 1960); the cues for one eye.
+4. Constancy, and illusions: size constancy; Ponzo; Müller-Lyer and Gregory's misapplied constancy (1963); Segall,
+   Campbell & Herskovits (1966), newly sighted children (Gandhi et al. 2015) and Amir & Firestone's reopening (2025).
+5. Bayes for perception: the rule; a normal prior (0, 1.5) and measurement (4, 1) give a posterior of 2.77, σ 0.83;
+   completing the square (precisions add, means are precision-weighted, w = 0.692); shrinkage as noise grows; the
+   biased posterior mean's error 0.69 against 1.
+6. Combining cues: the weights and the combined variance derived; Ernst & Banks (2002); Psyche at the bench (weights
+   predicted 0.88 to 0.31 and recovered from conflict trials; combined σ predicted and measured within 2%), with the
+   caution that Psyche is optimal by construction; the ventriloquist reversed (Alais & Burr 2004); children (Gori et
+   al. 2008); departures (Rahnev & Denison 2018); why an advance prediction makes it a test.
+7. Priors made visible: bumps and dents (light from above, Ramachandran 1988), retrained by touch (Adams, Graf &
+   Ernst 2004); low contrast looks slower (Thompson 1982) under a slow prior (0.92, 0.50, 0.10 of the speed in the
+   model); fog in a simulator (1998) and fog that thickens with distance (2012); the aperture problem and the MAP
+   velocity for two edges (8° and 30° off course, at 0.82 and 0.44 of the speed, toward the vector average).
+8. The two squares, explained: light as surface times illumination; retinex (Land & McCann 1971) gives 0.50 and 0.96
+   (true ratio 2, found 1.94); where edges are not enough (Gilchrist 1977; Knill & Kersten 1991).
+9. Recognizing objects: pixel templates fail (a disc nearer a square than the square moved); Marr's stages; geons
+   (Biederman 1987), and the rival of remembered views (Bülthoff & Edelman 1992); 150 ms (Thorpe et al. 1996).
+10. Faces: inversion (Yin 1969) and the composite face; a schematic Thatcher illusion; the fusiform face area (12 of
+    15), face patches (97%), prosopagnosia and super-recognizers; greebles and the expertise dispute.
+11. Deep networks as models: IT predicted (Yamins et al. 2014); a one-layer network trained here learns texture
+    (283 of 299 conflict answers), and shape when textures are shuffled (147 to 66). Continued in Part 60.
+12. The Ledger. 13. In practice: the vergence-accommodation conflict (Hoffman et al. 2008); disruptive colouring and
+    countershading (Cuthill et al. 2005); stickers on a stop sign (2018) and the human in the loop.
+14. Frontier: what is solid and argued; priors as world statistics (Geisler 2001; Stocker & Simoncelli 2006);
+    Molyneux's question answered (Held et al. 2011); one child's head camera (Vong et al. 2024); what "Bayesian"
+    commits you to (Bowers & Davis 2012; Part 58); Gibson's affordances.
 
-*Psyche:* `infer`: Gaussian cue combination with fitted weights; a lightness model that reproduces the checker
-shadow; the motion prior; a small convolutional network with a behavioural readout compared on error patterns.
-*On you:* six illusions, each predicted by the model before it is shown; a stereogram.
-*Ledger:* optimal cue combination (`replicated`, with documented exceptions); the Müller-Lyer illusion
-(`replicated`; size varies across societies); the FFA's selectivity (`replicated`; what it is selective for,
-`contested`).
-*In practice:* VR and stereo displays (cue conflicts and discomfort), camouflage, medical image reading, computer
-vision evaluation against human error patterns.
-*Frontier:* where the priors come from; what "Bayesian" commits a model to (Part 58); whether networks trained on
-a child's visual input learn child-like recognition **(verify)**.
-*Reading:* Helmholtz, *Treatise on Physiological Optics* vol. 3; Marr 1982; Knill & Richards (eds.) 1996; Ernst &
-Banks 2002; Weiss, Simoncelli & Adelson 2002; Palmer, *Vision Science*; Kanwisher, McDermott & Chun 1997; Yamins
-& DiCarlo 2016.
+*Psyche:* `infer` (`explainer/psychology/psyche/infer.py`, six tests): the normal posterior and reliability-weighted
+combination; a two-interval observer with one or two cues and a conflict, with a cumulative-normal fit; speed under a
+slow prior; edge constraints, the MAP velocity and the vector average; the checkerboard in shadow and retinex;
+disparity, random-dot stereograms and size-distance invariance; textured shapes and a one-layer convolutional network
+in numpy, with its texture bias.
+*On you:* the checkerboard; a random-dot stereogram; bumps and dents; the Thatcher illusion. The course's interactive
+measures the reader's own Müller-Lyer illusion with two interleaved staircases and reports the point of equality.
+*Ledger:* reliability-weighted cue combination (`replicated`, with documented departures); low contrast looks slower
+(`replicated`, for slow and moderate speeds); the Müller-Lyer illusion's dependence on culture (`contested`); the
+fusiform face area (`replicated`; what it is selective for is argued). Shown without rows, with reasons: Adelson's
+checkerboard, Adams et al. (2004), Yin (1969), Yamins et al. (Part 60), Geirhos et al., Vong et al. (Part 30) and
+Wheatstone's stereoscope.
+*In practice:* headsets and the vergence-accommodation conflict, camouflage, machine vision and the human in the
+loop.
+*Frontier:* where priors come from; what "Bayesian" commits a model to (Part 58); learning from one child's
+experience (Part 30); Gibson.
+*Reading:* Helmholtz, *Handbuch der physiologischen Optik*; Marr 1982; Knill & Richards (eds.) 1996; Ernst & Banks
+2002; Weiss, Simoncelli & Adelson 2002; Palmer, *Vision Science*; Frisby & Stone, *Seeing*; Kanwisher, McDermott &
+Chun 1997; Yamins et al. 2014; Geirhos et al. 2019.
 
 ### Part 15 · The Other Senses (~55)
 *Question:* how do pressure waves become a voice, and why does pain not follow the injury?
@@ -3235,3 +3258,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 11 | built, English and Chinese: 14 chapters, hook and outro; Psyche's psychophysics (`psyche/psychophysics.py`, twenty-four tests) and Battery task 2, two Ledger rows, fifteen Archive datasets; course entry, lab and interactive (the reader's own threshold, by staircase, with a fitted curve) checked; narration table and on-screen text translated and dry-run. Act III begins. Open checks in its README | 48 min |
 | 12 | built, English and Chinese: 14 chapters, hook and outro; Psyche's sdt (`psyche/sdt.py`, eleven tests), three Ledger rows, thirteen Archive datasets; course entry, lab and interactive (a recognition test with confidence that draws the reader's ROC) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 44 min |
 | 13 | built, English and Chinese: 15 chapters, hook and outro; Psyche's vision (`psyche/vision.py`, twelve tests) and the colour tables, five Ledger rows (one deferred from Part 5), eleven Archive datasets; course entry, lab and interactive (the reader's contrast sensitivity at four stripe widths) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 52 min |
+| 14 | built, English and Chinese: 14 chapters, hook and outro; Psyche's inference (`psyche/infer.py`, six tests, with a one-layer convolutional network in numpy), four Ledger rows, fifteen Archive datasets; course entry, lab and interactive (the reader's own Müller-Lyer illusion, by two staircases) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 64 min |

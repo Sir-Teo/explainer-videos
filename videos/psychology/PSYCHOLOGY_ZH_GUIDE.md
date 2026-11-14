@@ -531,6 +531,31 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | ventral stream (what); dorsal stream (where, how); visual form agnosia | 腹侧通路（是什么）；背侧通路（在哪里、怎么做）；视觉形状失认 |
 | chroma subsampling (4:2:0) | 色度二次采样（4:2:0） |
 
+## Part 14: seeing as inference
+
+| English | 中文 |
+|---|---|
+| seeing as inference; unconscious inference; the inverse problem | 看见即推断；无意识推断；逆问题 |
+| prior; likelihood; posterior; precision; shrinkage | 先验；似然；后验；精度；收缩 |
+| completing the square; precision-weighted average; bias and variance | 配方；按精度加权的平均；偏差与方差 |
+| Gestalt laws: proximity, similarity, good continuation, closure | 格式塔定律：接近性、相似性、良好连续、闭合 |
+| illusory contour; figure and ground; border ownership | 错觉轮廓；图形与背景；边界归属 |
+| binocular disparity; stereoscope; random-dot stereogram; free fusion | 双眼视差；立体镜；随机点立体图；自由融合 |
+| stereoacuity; hyperacuity; motion parallax; texture gradient | 立体视敏度；超视敏；运动视差；纹理梯度 |
+| vergence; accommodation; vergence-accommodation conflict | 辐辏；调节；辐辏与调节的冲突 |
+| size constancy; lightness; reflectance; illumination; retinex | 大小恒常性；明度；反射率；照度；retinex |
+| the Ames room; the Ponzo illusion; the Müller-Lyer illusion; carpentered world | 艾姆斯房间；庞佐错觉；米勒-莱尔错觉；横平竖直的人造环境 |
+| cue combination; reliability; cue conflict; point of subjective equality | 线索整合；可靠性；线索冲突；主观相等点 |
+| ventriloquist effect | 腹语效应 |
+| light-from-above prior; slow-speed prior | 光从上方来的先验；慢速先验 |
+| the aperture problem; intersection of constraints; vector average; MAP | 孔径问题；约束交点；向量平均；最大后验 |
+| invariance; primal sketch; 2½-D sketch; 3-D model; geons; view-based | 不变性；初始草图；二点五维草图；三维模型；几何离子；基于视角的 |
+| face inversion; composite face; the Thatcher illusion | 面孔倒置；合成面孔；撒切尔错觉 |
+| fusiform face area; face patches; prosopagnosia; super-recognizer; greebles | 梭状回面孔区；面孔斑块；面孔失认症；超级识别者；格里布尔 |
+| convolutional network; texture bias; cue-conflict image; adversarial example | 卷积网络；纹理偏好；线索冲突图像；对抗样本 |
+| disruptive colouring; countershading | 破坏性斑纹；反荫蔽 |
+| Molyneux's question; affordance; optic array | 莫利纽克斯问题；可供性；光学阵列 |
+
 ## Names
 
 | English | 中文 |
@@ -653,6 +678,19 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Johannes von Kries; Rosa Lafer-Sousa, Katherine Hermann, Bevil Conway; Pascal Wallisch; Witzel, Racey, O'Regan | 约翰内斯·冯·克里斯；罗莎·拉弗-索萨，凯瑟琳·赫尔曼，贝维尔·康韦；帕斯卡·瓦利施；维策尔，雷西，奥里根 |
 | Leslie Ungerleider, Mortimer Mishkin; Melvyn Goodale, David Milner; D.F. | 莱斯莉·昂格莱德，莫蒂默·米什金；梅尔文·古德尔，大卫·米尔纳；D.F. |
 | Bruno Olshausen, David Field; Gabriele Jordan; Brian Wandell | 布鲁诺·奥尔斯豪森，大卫·菲尔德；加布里埃莱·乔丹；布赖恩·万德尔 |
+| Edward Adelson; Hermann von Helmholtz; Adelbert Ames; Max Wertheimer; Gaetano Kanizsa; Edgar Rubin | 爱德华·阿德尔森；赫尔曼·冯·亥姆霍兹；阿德尔伯特·艾姆斯；马克斯·韦特海默；加埃塔诺·卡尼萨；埃德加·鲁宾 |
+| Rüdiger von der Heydt; Charles Wheatstone; Bela Julesz; Mario Ponzo; Franz Müller-Lyer; Richard Gregory | 吕迪格·冯·德·海特；查尔斯·惠斯通；贝拉·尤勒斯；马里奥·庞佐；弗朗茨·米勒-莱尔；理查德·格雷戈里 |
+| Marshall Segall, Donald Campbell, Melville Herskovits; Dorsa Amir, Chaz Firestone | 马歇尔·西格尔，唐纳德·坎贝尔，梅尔维尔·赫斯科维茨；多尔萨·阿米尔，查兹·费尔斯通 |
+| Marc Ernst, Martin Banks; David Alais, David Burr; Monica Gori; Dobromir Rahnev, Rachel Denison | 马克·恩斯特，马丁·班克斯；大卫·阿莱，大卫·伯尔；莫妮卡·戈里；多布罗米尔·拉内夫，雷切尔·丹尼森 |
+| Vilayanur Ramachandran; Wendy Adams, Erich Graf; Peter Thompson; Yair Weiss, Eero Simoncelli | 维拉亚努尔·拉马钱德兰；温迪·亚当斯，埃里希·格拉夫；彼得·汤普森；雅伊尔·韦斯，伊罗·西蒙切利 |
+| Robert Snowden, Nicola Stimpson, Roy Ruddle; Paolo Pretto | 罗伯特·斯诺登，尼古拉·斯廷普森，罗伊·拉德尔；保罗·普雷托 |
+| Edwin Land, John McCann; Alan Gilchrist; David Knill, Daniel Kersten | 埃德温·兰德，约翰·麦肯；艾伦·吉尔克里斯特；戴维·尼尔，丹尼尔·克斯滕 |
+| David Marr; Irving Biederman; Heinrich Bülthoff, Shimon Edelman; Simon Thorpe | 戴维·马尔；欧文·比德曼；海因里希·比尔托夫，希蒙·埃德尔曼；西蒙·索普 |
+| Robert Yin; Andrew Young; Nancy Kanwisher; Doris Tsao; Isabel Gauthier | 罗伯特·殷；安德鲁·扬；南希·坎维舍；曹颖；伊莎贝尔·高蒂尔 |
+| Daniel Yamins, James DiCarlo; Robert Geirhos; Christian Szegedy | 丹尼尔·亚明斯，詹姆斯·迪卡洛；罗伯特·盖尔霍斯；克里斯蒂安·塞格迪 |
+| David Hoffman, Martin Banks; Innes Cuthill; Karla Evans; Trafton Drew, Melissa Võ, Jeremy Wolfe; Kevin Eykholt | 戴维·霍夫曼，马丁·班克斯；因尼斯·卡思希尔；卡拉·埃文斯；特拉夫顿·德鲁，梅丽莎·沃，杰里米·沃尔夫；凯文·艾克霍尔特 |
+| William Molyneux, John Locke; Richard Held, Pawan Sinha; Wai Keen Vong, Brenden Lake; James Gibson | 威廉·莫利纽克斯，约翰·洛克；理查德·赫尔德，帕万·辛哈；Wai Keen Vong，布伦登·莱克；詹姆斯·吉布森 |
+| Alan Stocker; Jeffrey Bowers, Colin Davis | 艾伦·斯托克；杰弗里·鲍尔斯，科林·戴维斯 |
 
 ## Titles
 

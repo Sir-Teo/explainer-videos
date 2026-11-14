@@ -40,7 +40,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "WICHMANN_HILL_2001", "MCGILL_GOLDBERG_1968", "HALBERDA_2008", "GIBBON_1977", "LESMES_2010",
            "DEVRIES_ROSE", "BERNOULLI_1738", "PLATEAU_1872", "THURSTONE_1927",
            "MACKWORTH_1948", "PETERSON_1954", "TANNER_SWETS_1954", "WOLFE_2005", "FLECK_MITROFF_2007", "GIGERENZER_HOFFRAGE_1995", "RATCLIFF_1992", "YONELINAS_1994", "SEE_1995", "SWETS_2000", "SWETS_1961", "MANISCALCO_LAU_2012", "MICKES_2012",
-           "HECHT_1942", "BAYLOR_1979", "TINSLEY_2016", "KUFFLER_1953", "CAMPBELL_ROBSON_1968", "BLAKEMORE_CAMPBELL_1969", "LAFER_SOUSA_2015", "MILNER_1991", "JORDAN_2010", "COLOUR_TABLES", "OKABE_ITO"]
+           "HECHT_1942", "BAYLOR_1979", "TINSLEY_2016", "KUFFLER_1953", "CAMPBELL_ROBSON_1968", "BLAKEMORE_CAMPBELL_1969", "LAFER_SOUSA_2015", "MILNER_1991", "JORDAN_2010", "COLOUR_TABLES", "OKABE_ITO",
+           "ADELSON_1995", "ERNST_BANKS_2002", "ALAIS_BURR_2004", "RAHNEV_DENISON_2018", "WEISS_2002", "THOMPSON_1982", "ADAMS_2004", "SEGALL_1966", "AMIR_FIRESTONE_2025", "GAUTHIER_1999", "YIN_1969", "YAMINS_2014", "GEIRHOS_2019", "VONG_2024", "WHEATSTONE_1838"]
 
 
 @dataclass(frozen=True)
@@ -2285,6 +2286,179 @@ OKABE_ITO = Dataset(
 )
 
 
+# ---------------------------------------------------------------------------
+# Part 14
+# ---------------------------------------------------------------------------
+_P14 = "through a web search, 2026-11-14"
+
+ADELSON_1995 = Dataset(
+    key="adelson_1995",
+    title="The checker-shadow illusion",
+    source="E. H. Adelson, Checkershadow illusion (MIT, 1995); E. H. Adelson, Lightness perception and lightness "
+           "illusions, in M. Gazzaniga (ed.), The New Cognitive Neurosciences, 2nd ed. (MIT Press, 2000) 339-351",
+    cite=r"Adelson (1995)",
+    checked="demonstration pages and later accounts, " + _P14 + "; the image is not reproduced (the film draws its own)",
+    licence="facts only",
+    data={"finding": "two squares of equal luminance, one in a cast shadow, look very different"},
+)
+
+ERNST_BANKS_2002 = Dataset(
+    key="ernst_banks_2002",
+    title="Visual and haptic cues combined as an optimal observer would",
+    source="M. O. Ernst and M. S. Banks, Humans integrate visual and haptic information in a statistically optimal "
+           "fashion, Nature 415 (2002) 429-433",
+    cite=r"Ernst \& Banks (2002)",
+    checked="the abstract and later accounts, " + _P14,
+    licence="facts only",
+    data={"task": "height of a ridge, seen and felt", "noise": "visual noise added to shift the weights"},
+)
+
+ALAIS_BURR_2004 = Dataset(
+    key="alais_burr_2004",
+    title="The ventriloquist effect as near-optimal combination",
+    source="D. Alais and D. Burr, The ventriloquist effect results from near-optimal bimodal integration, Current "
+           "Biology 14 (2004) 257-262",
+    cite=r"Alais \& Burr (2004)",
+    checked="the abstract, " + _P14 + "; pages from memory",
+    licence="facts only",
+    data={},
+)
+
+RAHNEV_DENISON_2018 = Dataset(
+    key="rahnev_denison_2018",
+    title="Suboptimality in perceptual decision making",
+    source="D. Rahnev and R. N. Denison, Suboptimality in perceptual decision making, Behavioral and Brain Sciences 41 "
+           "(2018) e223",
+    cite=r"Rahnev \& Denison (2018)",
+    checked="the abstract, " + _P14,
+    licence="facts only",
+    data={"classes": 8},
+)
+
+WEISS_2002 = Dataset(
+    key="weiss_2002",
+    title="Motion illusions as optimal percepts",
+    source="Y. Weiss, E. P. Simoncelli and E. H. Adelson, Motion illusions as optimal percepts, Nature Neuroscience 5 "
+           "(2002) 598-604",
+    cite=r"Weiss, Simoncelli \& Adelson (2002)",
+    checked="the authors' abstract pages and a commentary, " + _P14,
+    licence="facts only",
+    data={"assumptions": ("noisy measurements, worse at low contrast", "a prior favouring slow speeds")},
+)
+
+THOMPSON_1982 = Dataset(
+    key="thompson_1982",
+    title="Low-contrast motion looks slower",
+    source="P. Thompson, Perceived rate of movement depends on contrast, Vision Research 22 (1982) 377-380",
+    cite=r"Thompson (1982)",
+    checked="later papers' accounts, " + _P14,
+    licence="facts only",
+    data={"reversal_hz": 8},
+)
+
+ADAMS_2004 = Dataset(
+    key="adams_2004",
+    title="Experience can change the light-from-above prior",
+    source="W. J. Adams, E. W. Graf and M. O. Ernst, Experience can change the 'light-from-above' prior, Nature "
+           "Neuroscience 7 (2004) 1057-1058",
+    cite=r"Adams, Graf \& Ernst (2004)",
+    checked="the abstract and a conference abstract, " + _P14,
+    licence="facts only",
+    data={},
+)
+
+SEGALL_1966 = Dataset(
+    key="segall_1966",
+    title="The Müller-Lyer illusion across societies",
+    source="M. H. Segall, D. T. Campbell and M. J. Herskovits, The Influence of Culture on Visual Perception "
+           "(Bobbs-Merrill, 1966); and Cultural differences in the perception of geometric illusions, Science 139 "
+           "(1963) 769-771",
+    cite=r"Segall, Campbell \& Herskovits (1966)",
+    checked="secondary accounts, " + _P14 + "; Science pages from memory",
+    licence="facts only",
+    data={"least": "San foragers of the Kalahari", "most": "the European-derived samples"},
+)
+
+AMIR_FIRESTONE_2025 = Dataset(
+    key="amir_firestone_2025",
+    title="Is visual perception WEIRD?",
+    source="D. Amir and C. Firestone, Is visual perception WEIRD? The Müller-Lyer illusion and the cultural byproduct "
+           "hypothesis, Psychological Review (2025)",
+    cite=r"Amir \& Firestone (2025)",
+    checked="the authors' posted copy's summary and press coverage, " + _P14,
+    licence="facts only",
+    data={},
+)
+
+GAUTHIER_1999 = Dataset(
+    key="gauthier_1999",
+    title="Expertise with greebles recruits the face area",
+    source="I. Gauthier, M. J. Tarr, A. W. Anderson, P. Skudlarski and J. C. Gore, Activation of the middle fusiform "
+           "'face area' increases with expertise in recognizing novel objects, Nature Neuroscience 2 (1999) 568-573",
+    cite=r"Gauthier et al.\ (1999)",
+    checked="later accounts of the debate, " + _P14 + "; author list and pages from memory",
+    licence="facts only",
+    data={},
+)
+
+YIN_1969 = Dataset(
+    key="yin_1969",
+    title="Looking at upside-down faces",
+    source="R. K. Yin, Looking at upside-down faces, Journal of Experimental Psychology 81 (1969) 141-145",
+    cite=r"Yin (1969)",
+    checked="later accounts, " + _P14,
+    licence="facts only",
+    data={},
+)
+
+YAMINS_2014 = Dataset(
+    key="yamins_2014",
+    title="Performance-optimized networks predict IT responses",
+    source="D. L. K. Yamins, H. Hong, C. F. Cadieu, E. A. Solomon, D. Seibert and J. J. DiCarlo, Performance-optimized "
+           "hierarchical models predict neural responses in higher visual cortex, PNAS 111 (2014) 8619-8624",
+    cite=r"Yamins et al.\ (2014)",
+    checked="the abstract, " + _P14,
+    licence="facts only",
+    data={"it_neurons": 168},
+)
+
+GEIRHOS_2019 = Dataset(
+    key="geirhos_2019",
+    title="ImageNet-trained networks are biased towards texture",
+    source="R. Geirhos, P. Rubisch, C. Michaelis, M. Bethge, F. A. Wichmann and W. Brendel, ImageNet-trained CNNs are "
+           "biased towards texture; increasing shape bias improves accuracy and robustness, ICLR (2019)",
+    cite=r"Geirhos et al.\ (2019)",
+    checked="the preprint's abstract, " + _P14,
+    licence="facts only",
+    data={},
+)
+
+VONG_2024 = Dataset(
+    key="vong_2024",
+    title="Learning words through one child's eyes and ears",
+    source="W. K. Vong, W. Wang, A. E. Orhan and B. M. Lake, Grounded language acquisition through the eyes and ears "
+           "of a single child, Science 383 (2024) 504-511; A. E. Orhan, V. V. Gupta and B. M. Lake, Self-supervised "
+           "learning through the eyes of a child, NeurIPS (2020)",
+    cite=r"Vong et al.\ (2024); \ Orhan et al.\ (2020)",
+    checked="the abstracts and press releases, " + _P14,
+    licence="facts only",
+    data={"hours": 61, "ages_months": (6, 25)},
+)
+
+WHEATSTONE_1838 = Dataset(
+    key="wheatstone_1838",
+    title="The stereoscope",
+    source="C. Wheatstone, Contributions to the physiology of vision. Part the first. On some remarkable, and hitherto "
+           "unobserved, phenomena of binocular vision, Philosophical Transactions of the Royal Society 128 (1838) "
+           "371-394; B. Julesz, Binocular depth perception of computer-generated patterns, Bell System Technical "
+           "Journal 39 (1960) 1125-1162",
+    cite=r"Wheatstone (1838); \ Julesz (1960)",
+    checked="historical accounts, " + _P14 + "; Julesz's date is given as 1959 or 1960 in different sources",
+    licence="public domain (Wheatstone); facts only",
+    data={},
+)
+
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -2312,4 +2486,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           WICHMANN_HILL_2001, MCGILL_GOLDBERG_1968, HALBERDA_2008, GIBBON_1977, LESMES_2010,
                           DEVRIES_ROSE, BERNOULLI_1738, PLATEAU_1872, THURSTONE_1927,
                           MACKWORTH_1948, PETERSON_1954, TANNER_SWETS_1954, WOLFE_2005, FLECK_MITROFF_2007, GIGERENZER_HOFFRAGE_1995, RATCLIFF_1992, YONELINAS_1994, SEE_1995, SWETS_2000, SWETS_1961, MANISCALCO_LAU_2012, MICKES_2012,
-                          HECHT_1942, BAYLOR_1979, TINSLEY_2016, KUFFLER_1953, CAMPBELL_ROBSON_1968, BLAKEMORE_CAMPBELL_1969, LAFER_SOUSA_2015, MILNER_1991, JORDAN_2010, COLOUR_TABLES, OKABE_ITO)}
+                          HECHT_1942, BAYLOR_1979, TINSLEY_2016, KUFFLER_1953, CAMPBELL_ROBSON_1968, BLAKEMORE_CAMPBELL_1969, LAFER_SOUSA_2015, MILNER_1991, JORDAN_2010, COLOUR_TABLES, OKABE_ITO,
+                          ADELSON_1995, ERNST_BANKS_2002, ALAIS_BURR_2004, RAHNEV_DENISON_2018, WEISS_2002, THOMPSON_1982, ADAMS_2004, SEGALL_1966, AMIR_FIRESTONE_2025, GAUTHIER_1999, YIN_1969, YAMINS_2014, GEIRHOS_2019, VONG_2024, WHEATSTONE_1838)}

@@ -50,5 +50,10 @@ Modules so far, with the part that introduces each:
                          Gabor fields, simple and complex cells; normalization; the CSF and its fit; cone
                          fundamentals, colour matching, metamers, chromaticity; opponent channels, dichromacy
                          and von Kries constancy
+``infer``           14   the normal posterior and reliability-weighted combination; a two-interval observer
+                         with one or two cues and a conflict; speed under a slow prior; edge constraints and
+                         the MAP velocity; a checkerboard in shadow and retinex; disparity and random-dot
+                         stereograms; textured shapes and a one-layer convolutional network with its texture
+                         bias
 =================  ====  ===============================================================================
 """

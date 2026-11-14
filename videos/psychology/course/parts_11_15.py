@@ -152,4 +152,53 @@ PARTS = [
               ("The colour tables", "explainer/psychology/archive/_colour_tables.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+Part(
+        n=14, level="U", widget="illusion",
+        question="If every image fits many worlds, how does seeing choose one?",
+        story="Two squares on a checkerboard send the eye the same light, and one looks dark and the other light: the "
+              "viewer sees surfaces, with the shadow taken out. Every image fits many scenes, as the Ames room shows, so "
+              "seeing must add assumptions. The Gestalt laws of grouping read as priors about objects; Kanizsa's "
+              "triangle has edges that are not in the image, and Rubin's vase shows that an edge belongs to one side. "
+              "Two eyes give disparity, which falls with the square of distance; Wheatstone's stereoscope and Julesz's "
+              "random dots show it is enough for depth. Size constancy multiplies by seen distance, and makes the Ponzo "
+              "and Müller-Lyer illusions on a page; the carpentered-world explanation is now contested. Bayes's rule "
+              "with normal distributions gives precisions that add and means weighted by precision, shrinkage toward "
+              "the prior, and a biased percept that is more accurate. Cue combination is predicted from each sense "
+              "alone, checked on Psyche and by Ernst and Banks, and explains the ventriloquist. Light from above and a "
+              "preference for slow motion are priors the viewer can see; the second solves the aperture problem. "
+              "Retinex explains the two squares. Objects need invariance, faces are seen as wholes in cortex of their "
+              "own, and deep networks predict the brain yet answer by texture until their diet changes.",
+        handoff="The other senses are Part 15, prediction errors in learning Part 17, attention and expectation "
+                "Part 18, what infants know Part 30, displays and the human in the loop Part 51, the predictive brain "
+                "Part 58, and deep networks as models of minds Part 60.",
+        outside="Part 4's Bayes's rule, Part 11's psychometric functions and staircases, Part 12's forced choice, and "
+                "Part 13's cells and filters. Normal distributions, completing the square, and a little vector "
+                "geometry.",
+        objectives={
+            "U": ["Explain why a retinal image cannot fix the scene, with an example of size and distance.",
+                  "State the Gestalt laws of grouping and read them as assumptions about objects.",
+                  "Explain size constancy and how it produces the Ponzo and Müller-Lyer illusions."],
+            "M": ["Derive the normal posterior by completing the square, and the weights of two combined cues.",
+                  "Derive binocular disparity and its fall with the square of distance.",
+                  "Compute the MAP velocity for two edges under a slow prior, and show it tends to the intersection "
+                  "of constraints."],
+            "D": ["Judge when a Bayesian model of perception is a test and when it is a description after the fact.",
+                  "Weigh the evidence on whether the Müller-Lyer illusion depends on culture, and on what the face "
+                  "area is selective for."],
+            "I": ["Explain the vergence-accommodation conflict in headsets and what a display must do about it.",
+                  "Say how machine vision's errors differ from people's, and what that means for a human in the loop."],
+        },
+        results=[
+            ("Bayes for perception", r"p(s \mid x) \propto p(x \mid s)\, p(s)"),
+            ("Precisions add", r"\frac{1}{\sigma_{\text{post}}^2} = \frac{1}{\sigma^2} + \frac{1}{\sigma_0^2}"),
+            ("Cue weights", r"w_V = \frac{1/\sigma_V^2}{1/\sigma_V^2 + 1/\sigma_H^2}"),
+            ("Disparity", r"\delta \approx \frac{I\,\Delta d}{d^2}"),
+            ("Size constancy", r"\text{size} = 2\,d\,\tan(\theta/2)"),
+            ("Lightness", r"L = R \times E,\ \log L = \log R + \log E"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12), D=(11, 14), I=(13,),
+        also=(("Psyche's inference module", "explainer/psychology/psyche/infer.py"),
+              ("Its tests", "tests/psychology/test_infer.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

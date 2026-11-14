@@ -344,4 +344,108 @@
       note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The stripes are sine gratings in a soft round window, drawn in the grey levels your screen is asked to show, with a little random dither so contrasts below one grey level (about 0.8%) are not simply lost. Cycles across a patch become cycles per degree only once you fix the patch's size on your screen and your distance: at arm's length a 4 cm patch spans about 4 degrees, so the four widths are roughly 0.4, 1, 2.5 and 6 cycles per degree. Each width has its own two-down one-up staircase (chapter 7 of Part 11), and the threshold is the geometric mean of its last four turning points. Most people are most sensitive to the middle widths and need much more contrast for the finest: the band-pass shape of chapter 6.",
     });
   };
+  // ---- Part 14: which shaft is longer?  Two staircases find your own Müller-Lyer illusion --------------------------
+  W.illusion = function (el) {
+    var w = null, NPER = 20, YOU = "#f2c14e", UPC = "#7ec8f5", DNC = "#b39ddb";
+    var S = { phase: "idle", trial: 0, seed: 0, order: [], k: 0, jit: [0, 0], last: null, st: [] };
+    function fresh() {  // comparison length as a ratio of the standard: one staircase starts long, one short
+      S.st = [{ r: 1.45, dir: 0, rev: [], hist: [] }, { r: 0.85, dir: 0, rev: [], hist: [] }];
+    }
+    fresh();
+    function pse(st) {
+      var r = st.rev.slice(-4), s = 0, i;
+      if (!r.length) return st.hist.length ? st.r : NaN;
+      for (i = 0; i < r.length; i++) s += Math.log(r[i]);
+      return Math.exp(s / r.length);
+    }
+    function both() {
+      var a = pse(S.st[0]), b = pse(S.st[1]);
+      if (isNaN(a)) return b; if (isNaN(b)) return a;
+      return Math.sqrt(a * b);
+    }
+    function next() {
+      var u = QB.rng(7919 * S.seed + 41 * S.trial + 3);
+      S.k = S.order[S.trial]; S.jit = [u() - 0.5, u() - 0.5]; S.trial++;
+      S.phase = "show"; w.render();
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "show"; }, respond: answer });
+    function answer(which) {  // 0: the left shaft (fins out) looks longer; 1: the right one (fins in)
+      if (S.phase !== "show" || !w) return;
+      var st = S.st[S.k], d = which === 1 ? -1 : 1;  // right looked longer: shorten it
+      st.hist.push(st.r); task.count++; S.last = which;
+      if (st.dir !== 0 && d !== st.dir) st.rev.push(st.r);
+      st.dir = d;
+      var step = st.rev.length >= 2 ? 1.025 : 1.07;
+      st.r = Math.max(0.6, Math.min(1.7, d > 0 ? st.r * step : st.r / step));
+      S.phase = "feedback"; w.render();
+      task.later(function () { if (S.trial >= S.order.length) { S.phase = "done"; w.render(); } else next(); }, 300);
+    }
+    function start() {
+      task.clear(); S.seed++; S.trial = 0; fresh();
+      var u = QB.rng(104729 * S.seed + 29), order = [], i, j, t;
+      for (i = 0; i < NPER; i++) { order.push(0); order.push(1); }
+      for (i = order.length - 1; i > 0; i--) { j = Math.floor(u() * (i + 1)); t = order[i]; order[i] = order[j]; order[j] = t; }
+      S.order = order; next();
+    }
+    function shaft(ctx, cx, y, len, out, fin) {
+      var a = 35 * Math.PI / 180, x0 = cx - len / 2, x1 = cx + len / 2, s = out ? 1 : -1;
+      ctx.beginPath(); ctx.moveTo(x0, y); ctx.lineTo(x1, y);
+      ctx.moveTo(x0, y); ctx.lineTo(x0 - s * fin * Math.cos(a), y - fin * Math.sin(a));
+      ctx.moveTo(x0, y); ctx.lineTo(x0 - s * fin * Math.cos(a), y + fin * Math.sin(a));
+      ctx.moveTo(x1, y); ctx.lineTo(x1 + s * fin * Math.cos(a), y - fin * Math.sin(a));
+      ctx.moveTo(x1, y); ctx.lineTo(x1 + s * fin * Math.cos(a), y + fin * Math.sin(a));
+      ctx.stroke();
+    }
+
+    w = QB.widget(el, {
+      title: "Which shaft is longer? Your own Müller-Lyer illusion",
+      sub: "Two shafts: the left one has its fins turned out, the right one has them turned in. Judge only the shafts, end to end. F, or tap the left half: the left shaft is longer. J, or tap the right half: the right one is longer. There is no right answer to learn. Two staircases, mixed at random, change the right shaft's length after every answer, one starting long and one short; both settle where the two look equal. After 40 trials the page reports your illusion.",
+      panels: 2, height: 340, weights: [1.15, 1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.trial = 0; fresh(); S.last = null; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(ctx, b, "On you", "Press Start. Forty judgments, about two minutes. Answer quickly, by how the shafts look.");
+        } else if (S.phase === "done") {
+          var p = both();
+          T.message(ctx, b, "Finished.", "The two shafts looked equal when the fins-in shaft was " + (100 * (p - 1)).toFixed(0) + "% longer than the fins-out one. That is the size of your illusion here; in the laboratory it is often 10 to 30%, and it depends on the fins' angle and length.");
+        } else {
+          var L = Math.max(50, Math.min(b.w * 0.22, 150)), fin = Math.max(10, L * 0.2), st = S.st[S.k];
+          ctx.strokeStyle = YOU; ctx.lineWidth = 3; ctx.lineCap = "round";
+          var sh = Math.min(30, b.h * 0.15), yc = b.y + b.h / 2;
+          shaft(ctx, b.x + b.w * 0.27, yc + S.jit[0] * sh, L, true, fin);
+          shaft(ctx, b.x + b.w * 0.73, yc + S.jit[1] * sh, L * st.r, false, fin);
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("trial " + S.trial + " of " + S.order.length, b.cx, b.y + 16);
+          ctx.font = "12.5px system-ui, sans-serif";
+          ctx.fillText(S.phase === "feedback" ? "Noted" : (b.w < 420 ? "F / left        J / right" : "F, or tap the left half: left        J, or tap the right half: right"), b.cx, b.y + b.h - 16);
+        }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [0, NPER + 1], y: [0.6, 1.8], title: "The right shaft's length, as a share of the left",
+          xlabel: "trial in each staircase" });
+        [0, 1].forEach(function (k) {
+          var h = S.st[k].hist, xs = [], i;
+          for (i = 0; i < h.length; i++) xs.push(i + 1);
+          if (h.length > 1) a.line(xs, h, { color: k ? DNC : UPC, width: 2 });
+          if (h.length) a.dots(xs, h, { color: k ? DNC : UPC, r: 3 });
+        });
+        a.line([0, NPER + 1], [1, 1], { color: C.muted, width: 1 });
+        var q = both();
+        if (S.phase === "done" && !isNaN(q)) a.line([0, NPER + 1], [q, q], { color: YOU, width: 2 });
+      },
+      readout: function () {
+        var a = pse(S.st[0]), b2 = pse(S.st[1]), q = both();
+        var f = function (v) { return isNaN(v) ? "–" : (100 * v).toFixed(0) + "%"; };
+        return [["trials", String(S.trial)], ["staircase from long", f(a)], ["staircase from short", f(b2)],
+          ["point of equality", f(q)], ["illusion", isNaN(q) ? "–" : (100 * (q - 1)).toFixed(0) + "%"]];
+      },
+      note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. Each staircase lengthens the right shaft after you call the left one longer and shortens it after you call the right one longer, by 7% at first and 2.5% after its second turning point, so it hovers where you answer each way half the time: the point of subjective equality (Part 11, chapter 7). Each staircase's estimate is the geometric mean of its last four turning points, and the two are averaged; starting one long and one short guards against a bias toward the first answer. The shafts are shifted up and down at random so that their ends are not compared along one line. Chapter 4 gives Gregory's account of the illusion, and why its link to rectangular buildings is now contested.",
+    });
+  };
 })();
