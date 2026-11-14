@@ -665,43 +665,60 @@ synapses or the cells; whether spike timing is the rule in a living brain; credi
 Lømo 1973; Bi & Poo 1998; Hartline & Ratliff 1957; Geier et al. 2008; Graham Brown 1911; Wilson & Cowan 1972;
 Liu et al. 2012; Turner et al. 2008; Dayan & Abbott chs. 7-8; Valenstein, *The War of the Soups and the Sparks*.
 
-### Part 7 · The Brain (~55)
+### Part 7 · The Brain (~63)
 *Question:* is the mind in one place or everywhere?
-*Story:* an iron bar passes through Phineas Gage's skull in 1848 and he walks to the doctor. A patient who can
-say only "tan" gives Broca a place for speech. A surgeon removes Henry Molaison's hippocampi and memory formation
-stops while everything else stays. Damage is psychology's oldest experiment, and its logic, the double
-dissociation, is how a box-and-arrow model gets tested.
-1. Hook: Gage. What the record supports and what a century of retelling added.
-2. A tour in 3D: brainstem, cerebellum, thalamus, basal ganglia, limbic structures, the four lobes, white matter.
-   What each is for, in one line each, with the caveat that the line is too simple.
-3. Phrenology: Gall's good idea (localization) and bad method. Flourens's pigeons. Lashley's search for the
-   engram and "mass action".
-4. Broca (1861) and Wernicke (1874): two aphasias and the first circuit diagram of a function.
-5. The logic of dissociation: single, double, and what each licenses (drawn as crossed lesion diagrams; simulated
-   in a lesionable architecture, where a single-system model can fake a dissociation).
-6. Maps: Penfield's homunculus, retinotopy, tonotopy. Cortical magnification computed.
-7. H.M. (1953): what was removed, what was lost, what was spared (mirror tracing). Memory is not one thing.
-8. The split brain (Sperry and Gazzaniga): what each hemisphere can report; the interpreter. The left-brain,
-   right-brain myth against the lateralization data.
-9. Neglect, agnosia, prosopagnosia, blindsight (returns in Parts 14, 27): the catalogue of things that can break
-   alone.
-10. Plasticity: remapping after amputation, critical periods (Hubel and Wiesel), London taxi drivers, recovery
-    after stroke.
-11. Localization against distribution today: networks, hubs, degeneracy. The 10% myth, with the metabolic
-    arithmetic.
+*Story:* an iron rod passes through Phineas Gage's head in 1848 and he lives; the record of what changed in him
+is a few sentences. A patient who can say only "tan" gives Broca a place for speech. A surgeon removes Henry
+Molaison's hippocampi and the making of new memories stops while everything else stays. Damage is psychology's
+oldest experiment, and its logic, the double dissociation, is how a box-and-arrow model gets tested, and how it
+gets fooled.
+0. Hook: Gage. The story against the record; one place or everywhere; damage as an experiment nobody chose.
+1. A tour: four numbers (86 billion neurons, 19% in the cortex, 2% of weight, 20% of energy); four lobes, the
+   cerebellum and the brainstem from the side; six structures on the inner face; each line too simple.
+2. Gall's good idea (parts with jobs) and bad method (no way to fail). Flourens's removals. Lashley's mass
+   action, reproduced in a model cortex where every job has a place and the task can be done six ways.
+3. Broca (1861) and Wernicke (1874): two aphasias; the diagram as a model, lesioned, and the third syndrome it
+   predicted; Broca's own specimens scanned in 2007 (Dronkers et al.).
+4. The logic of dissociation: one resource gives a single dissociation; a double one rules it out; with noisy
+   tests a screen of 100 one-resource patients shows both patterns half the time; four rules.
+5. Maps: Penfield's strip (126 patients); cortical magnification, M = 17.3/(E + 0.75) mm per degree; 46% of the
+   map within ten degrees of the centre of gaze; letters that each take the same length of cortex.
+6. On you: the blind spot of the right eye found on screen; a gap in a line that is not seen; the geometry.
+7. H.M. (1953): what was removed, what was lost, what was spared; mirror tracing learned without the memory of
+   learning it; what one patient can and cannot carry.
+8. The split brain: one word, two answers; the interpreter; left-brained and right-brained "types" against
+   what local lateralization predicts (Nielsen et al. 2013).
+9. Things that break alone: neglect, visual agnosia, prosopagnosia, blindsight (returning in Parts 14, 18, 27),
+   read with chapter 4's rules.
+10. A brain that rewires: the critical period (Wiesel and Hubel), a map redrawn in an adult (Merzenich), the
+    taxi drivers before and after training (Maguire).
+11. One place, or everywhere? Specialized, connected, redundant: the unit is a network. The ten-percent myth
+    against the energy bill.
+12. The Ledger. 13. In practice: one patient, one question. 14. Frontier: mapping damage in thousands.
 
-*Psyche:* `brain`: a box-and-arrow architecture whose parts can be lesioned, run on Battery tasks; dissociation
-logic tested against single- and multi-system models; a magnification-factor fit.
-*On you:* find your blind spot and measure its size; a pointing demonstration of filling-in.
-*Ledger:* Gage's personality change (`story and record`); Broca's area and speech (`replicated, refined`: the
-lesions were larger than the area); the taxi-driver hippocampus (`replicated`); left-brain and right-brain
-"types" (`failed`).
-*In practice:* clinical neuropsychology: the assessment after stroke, injury and in dementia is dissociation logic
-applied to one person.
-*Frontier:* lesion–symptom mapping with thousands of patients; the cerebellum's role in cognition; whether
-cortical "areas" are the right unit.
-*Reading:* Macmillan, *An Odd Kind of Fame*; Scoville & Milner 1957; Corkin, *Permanent Present Tense*; Gazzaniga
-2005; Shallice, *From Neuropsychology to Mental Structure*; Kandel et al.; Dronkers et al. 2007.
+*Psyche:* `brain` (`explainer/psychology/psyche/brain.py`): a box-and-arrow architecture whose modules can be
+lesioned (the language diagram, a memory architecture); Lashley's maze in a model cortex; patients under one
+resource and under two, with noisy tests; the single-case t test; cortical magnification and the blind spot's
+geometry; lesion-symptom mapping on a sheet fed by one artery.
+*On you:* the blind spot and filling-in, in the film. The interactive measures it: a dot sweeps outward and
+inward while the reader fixes a cross and presses when it vanishes and when it returns; the two directions
+cancel the reaction time, and the page reports the hole's width as a share of its distance out.
+*Ledger:* Gage's personality change (`story and record`); Broca's area and speech (`replicated`, refined: the
+lesions were larger than the area); the taxi drivers' hippocampus (`replicated`); left-brained and right-brained
+"types" (`failed`). Shown without rows, with reasons: Wernicke and the diagram, Lashley, Penfield, the
+magnification formula, H.M. (due in Part 20), the split brain and blindsight (due in Part 27), the neuron count
+and the energy share, the critical period (due in Part 30), the remapped hand, and the bias in lesion maps.
+*In practice:* clinical neuropsychology as one comparison done carefully: a patient's score against eight
+controls by z (1 in 700) and by the single-case t test (1 in 76); the chance that a healthy person fails at
+least one of 10 or 20 tests (40%, 64%); what goes in the report.
+*Frontier:* lesion-symptom mapping in thousands of patients; the displacement an artery puts in the map, shown
+in a simulation (2.4 voxels against 1.1) and in 581 real strokes (Mah et al. 2014); disconnection; the
+cerebellum's part in cognition; whether cortical "areas" are the right unit.
+*Reading:* Macmillan, *An Odd Kind of Fame*; Harlow 1868; Broca 1861; Dronkers et al. 2007; Wernicke 1874;
+Lichtheim 1885; Lashley 1929; Penfield & Boldrey 1937; Horton & Hoyt 1991; Scoville & Milner 1957; Corkin,
+*Permanent Present Tense*; Gazzaniga & LeDoux 1978; Nielsen et al. 2013; Weiskrantz et al. 1974; Wiesel & Hubel
+1963; Merzenich et al. 1984; Maguire et al. 2000; Woollett & Maguire 2011; Crawford & Howell 1998; Mah et al.
+2014; Shallice, *From Neuropsychology to Mental Structure*; Kolb & Whishaw.
 
 ### Part 8 · Reading the Brain (~55)
 *Question:* what can a brain scan tell you about a mind?
@@ -3078,3 +3095,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 4 | built, English and Chinese: 14 chapters, hook and outro; the false-positive lab (`evidence.py`), six Ledger rows (the plan's twenty were cut to what could be sourced and dated), nine Archive datasets; course entry, lab and interactive (the forking paths) checked; narration table and on-screen text translated and dry-run. Act I is complete. Open checks in its README | 48 min |
 | 5 | built, English and Chinese: 14 chapters, hook and outro; Psyche's neuron (`psyche/neuron.py`, eleven tests, the 1952 conduction speed recomputed), one Ledger row, five Archive datasets; course entry for Act II, lab and interactive (reading a spike train) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 58 min |
 | 6 | built, English and Chinese: 14 chapters, hook and outro; Psyche's circuits (`psyche/circuits.py`, eleven tests), three Ledger rows, nine Archive datasets; course entry, lab and interactive (the Hermann grid with straight and wavy streets) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 62 min |
+| 7 | built, English and Chinese: 14 chapters, hook and outro; Psyche's brain (`psyche/brain.py`, ten tests), four Ledger rows, seventeen Archive datasets; course entry, lab and interactive (the reader's own blind spot, measured with outward and inward sweeps) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 63 min |

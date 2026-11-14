@@ -81,8 +81,9 @@ class Practice(VoiceoverScene):
         d = load("practice")
         head = heading(r"Eight controls are a sample, \ not the population")
         A, dots, case, mean, mean_l, case_l = self._line(d, y=1.2)
-        eq = MathTex(r"t = \frac{x - \bar{c}}{s\,\sqrt{(n + 1)/n}}", rf"\;=\; {d['t']:.2f}",
-                     rf"\qquad \text{{on }} n - 1 = {d['df']} \text{{ degrees of freedom}}", font_size=38)
+        eq = VGroup(MathTex(r"t = \frac{x - \bar{c}}{s\,\sqrt{(n + 1)/n}}", font_size=38),
+                    MathTex(rf"=\; {d['t']:.2f}", font_size=38),
+                    label(rf"on $n - 1 = {d['df']}$ degrees of freedom", font_size=30)).arrange(RIGHT, buff=0.35)
         eq.move_to([0, -0.9, 0])
         if eq.width > 12.6:
             eq.width = 12.6
@@ -135,7 +136,7 @@ class Practice(VoiceoverScene):
                              label(pct(v), font_size=28, color=WHITE).next_to(ax.c2p(k, v), UL, buff=0.08)))
         rows = VGroup(
             wrapped_label(r"``fails'': \ scores below the 5th percentile of healthy people", 5.8, 29, WHITE),
-            MathTex(r"P(\text{at least one of } k) = 1 - 0.95^{\,k}", font_size=36, color=THRESH),
+            label(r"$P($at least one of $k) = 1 - 0.95^{\,k}$", font_size=31, color=THRESH),
             wrapped_label(rf"10 tests: \ {pct(d['ten'])}. \ \ 20 tests: \ {pct(d['twenty'])}.", 5.6, 30, WHITE),
             wrapped_label(r"One low score in a long battery is what health looks like. \ A deficit is a "
                           r"pattern: \ several low scores that go together, \ and a reason.", 5.8, 29, P.ACCENT),

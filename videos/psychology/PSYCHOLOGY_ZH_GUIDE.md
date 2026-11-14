@@ -281,6 +281,49 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | tolerance; dependence; placebo; regulator | 耐受；依赖；安慰剂；监管机构 |
 | engram; to tag (cells); optical fibre; to freeze | 记忆痕迹；标记；光纤；僵住 |
 
+## Part 7: the brain
+
+| English | 中文 |
+|---|---|
+| the brain (the organ); the mind | 大脑；心灵 |
+| lobe; frontal, parietal, temporal, occipital | 叶；额叶，顶叶，颞叶，枕叶 |
+| cerebral cortex; hemisphere; cerebellum; brainstem | 大脑皮层；半球；小脑；脑干 |
+| corpus callosum; thalamus; basal ganglia | 胼胝体；丘脑；基底神经节 |
+| hippocampus; amygdala; hypothalamus | 海马；杏仁核；下丘脑 |
+| grey matter; white matter; fibre tract | 灰质；白质；纤维束 |
+| lesion; damage; to remove (tissue) | 损伤；损伤；切除 |
+| faculty (of the mind) | 能力 |
+| phrenology; bump (on the skull) | 颅相学；包 |
+| mass action; memory trace | 整体作用；记忆的痕迹 |
+| aphasia; conduction aphasia | 失语症；传导性失语 |
+| Broca's area; Wernicke's area | 布罗卡区；韦尼克区 |
+| to understand, to speak, to repeat | 理解，说话，复述 |
+| box-and-arrow diagram; module; pathway | 方框和箭头的图；模块；通路 |
+| single dissociation; double dissociation | 单一分离；双重分离 |
+| resource; impaired; normal; cutoff | 资源；受损；正常；分界线 |
+| necessity (of tissue for a task) | 必要性 |
+| a screen (of patients) | 筛查 |
+| map (on the cortex); cortical magnification | 地图；皮层放大 |
+| eccentricity; centre of gaze; field of view | 离心度；视线中心；视野 |
+| blind spot; optic nerve; receptors; filling in | 盲点；视神经；感受器；填补 |
+| epilepsy; seizure; stroke | 癫痫；发作；中风 |
+| mirror tracing; skill; recollection | 镜画；技能；回忆 |
+| split brain; the interpreter | 裂脑；解释器 |
+| left-brained, right-brained; a (whole-brain) type | 左脑型，右脑型；（全脑）类型 |
+| lateralization; to lean (left, right) | 偏侧化；偏向 |
+| neglect; visual agnosia; prosopagnosia; blindsight | 忽视症；视觉失认症；面孔失认症；盲视 |
+| plasticity; critical period; to rewire; remapping | 可塑性；关键期；重新接线；重新映射 |
+| lazy eye (amblyopia) | 弱视 |
+| network; specialized; connected; redundant | 网络；有分工的；相连的；有冗余的 |
+| the ten-percent myth | 10%的迷思 |
+| clinical neuropsychologist; battery (of tests) | 临床神经心理学家；成套测验 |
+| control sample; z-score; single-case t test; degrees of freedom | 对照样本；z分数；单病例t检验；自由度 |
+| percentile; base rate | 百分位；基础率 |
+| lesion-symptom mapping; voxel; overlap | 损伤—症状映射；体素；重叠 |
+| artery; trunk; branch; territory (of an artery) | 动脉；主干；分支；供血区 |
+| disconnection | 断连 |
+| the tamping iron; stagecoach | 铁棍；驿站马车 |
+
 ## Names
 
 | English | 中文 |
@@ -350,6 +393,16 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Xu Liu, Steve Ramirez | 刘旭，史蒂夫·拉米雷斯 |
 | Erick Turner | 埃里克·特纳 |
 | Phineas Gage | 菲尼亚斯·盖奇 |
+| John Harlow, Malcolm Macmillan | 约翰·哈洛，马尔科姆·麦克米伦 |
+| Franz Joseph Gall, Pierre Flourens | 弗朗茨·约瑟夫·加尔，皮埃尔·弗卢朗 |
+| Paul Broca, Leborgne ("Tan") | 保罗·布罗卡，勒博涅（“Tan”，保留原文） |
+| Carl Wernicke, Ludwig Lichtheim, Nina Dronkers | 卡尔·韦尼克，路德维希·利希特海姆，尼娜·德隆克斯 |
+| Wilder Penfield, Edwin Boldrey | 怀尔德·彭菲尔德，埃德温·博尔德里 |
+| Henry Molaison (H.M.), William Scoville, Brenda Milner | 亨利·莫莱森（H.M.），威廉·斯科维尔，布伦达·米尔纳 |
+| Roger Sperry, Michael Gazzaniga | 罗杰·斯佩里，迈克尔·加扎尼加 |
+| Torsten Wiesel, David Hubel, Michael Merzenich | 托斯坦·维泽尔，大卫·休伯尔，迈克尔·梅策尼希 |
+| Eleanor Maguire, Katherine Woollett, Jared Nielsen | 埃莉诺·马奎尔，凯瑟琳·伍利特，贾里德·尼尔森 |
+| Cavendish, Bicêtre, Montreal, Hartford, Caltech, Utah | 卡文迪什，比塞特，蒙特利尔，哈特福德，加州理工学院，犹他 |
 | Graz, Oslo, Jena, Vermont | 格拉茨，奥斯陆，耶拿，佛蒙特 |
 | Bologna, Plymouth | 博洛尼亚，普利茅斯 |
 | Königsberg, Leipzig, Utrecht, Würzburg, Cornell | 柯尼斯堡，莱比锡，乌得勒支，维尔茨堡，康奈尔 |
