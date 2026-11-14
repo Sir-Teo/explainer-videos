@@ -84,8 +84,8 @@ class Frontier(SoundScene):
             "nineteenth-century harmony change fastest? <bookmark mark='e'/> An answer with intervals rather than "
             "anecdotes would rewrite one of music history's most familiar stories."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcde", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcde", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

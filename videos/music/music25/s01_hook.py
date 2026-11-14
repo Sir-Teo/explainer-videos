@@ -91,8 +91,8 @@ class Hook(SoundScene):
             "<bookmark mark='e'/> Out of that argument, and the one between Artusi and Monteverdi, came opera, the "
             "figured bass, and the major and minor keys."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcde", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcde", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

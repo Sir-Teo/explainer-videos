@@ -79,9 +79,9 @@ class Madrigal(SoundScene):
             "fit the music to the matter of the words. And the harsh dissonance for a word of pain is where the "
             "rules of the last chapters began to break."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ex[0]))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c_) for c_ in ex], lag_ratio=0.3), run_time=3.0)
+            self.play(LaggedStart(*[FadeIn(c_) for c_ in ex[1:]], lag_ratio=0.3), run_time=3.0)
             vo.wait_until("b")
             self.play(FadeIn(cap[0]))
             vo.wait_until("c")

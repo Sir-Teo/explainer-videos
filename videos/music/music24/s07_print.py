@@ -89,9 +89,9 @@ class Print(SoundScene):
             "mistaken attribution can teach the test the wrong style. The next chapter builds such a test, and asks what "
             "it can and cannot show."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(cols[0]))
             vo.wait_until("a")
-            self.play(FadeIn(cols[0]))
+            self.play(Indicate(cols[0], color=WHITE, scale_factor=1.03))
             vo.wait_until("b")
             self.play(FadeIn(cols[1]))
             vo.wait_until("c")

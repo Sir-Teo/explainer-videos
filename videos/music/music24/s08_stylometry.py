@@ -141,8 +141,8 @@ class Stylometry(SoundScene):
             "<bookmark mark='e'/> With forty-eight pieces, a few pieces either way is noise; these are rough numbers, and "
             "an attribution built on them alone would be irresponsible."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcde", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcde", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

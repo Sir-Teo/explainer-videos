@@ -85,8 +85,8 @@ class Frontier(SoundScene):
             "<bookmark mark='d'/> How much of a repertoire is octatonic beyond chance, and where? <bookmark mark='e'/> A "
             "model comparison rather than a list of examples would settle part of an old argument."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcde", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcde", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

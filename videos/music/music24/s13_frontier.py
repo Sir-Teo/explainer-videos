@@ -67,8 +67,8 @@ class Frontier(SoundScene):
             "from some manuscripts and prints and test on pieces from others. <bookmark mark='e'/> If the accuracy "
             "collapses, the test was recognizing scribes and printers, not composers."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcde", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcde", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

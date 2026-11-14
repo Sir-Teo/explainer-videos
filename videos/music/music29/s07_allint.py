@@ -106,7 +106,7 @@ class Allint(SoundScene):
                    "programme, a secret love affair, with initials spelled out in notes. <bookmark mark='d'/> His Violin "
                    "Concerto, of 1935, uses a row built from interlocking triads, and quotes a Bach chorale. "
                    "<bookmark mark='e'/> A row can sound tonal if its pieces are tonal; the method does not fix the style.",
-                   marks="cdef")
+                   marks="bcde")
 
     # ------------------------------------------------------------------
     def machines(self):
