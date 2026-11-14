@@ -71,6 +71,8 @@ LEDGER = [
      "measure": r"C C A C Fm C Gm C; 16 then 18 semitones of voice leading"},
     {"part": 33, "title": r"as a Vuza canon, rung in plain hunt, and in Bohlen–Pierce", "seconds": 26.6,
      "measure": r"72 pulses, 12 voices, each pulse struck once; 8 changes on 4 bells; 14 notes in 13 steps to the tritave"},
+    {"part": 34, "title": r"as Bilawal: an alap over the drone, then a gat in Teentaal with a tihai", "seconds": 27.3,
+     "measure": r"alap of 9 notes; a gat of 16 beats; tihai 3 + 2 + 3 + 2 + 3 beats from beat 5, its last stroke on sam"},
 ]
 
 
