@@ -1104,13 +1104,33 @@ Fourteenth Century*; everything heard sung by Part 17's choir.
 *Story:* Josquin des Prez was the first composer made famous by the printing press, and the press also put his
 name on other people's music. A large share of what once carried his name is now doubted. The part learns the
 style well enough to ask a statistical question: who wrote this?
+1. Hook: Forster's remark; the Kyrie of the Missa Papae Marcelli, heard; the plan.
+2. Thirds and sixths become consonant: the contenance angloise; fauxbourdon on the Tune; thirds, triads and final chords counted; two endings heard.
+3. Imitation as structure: points of imitation, one heard; how many movements open imitatively, at what interval.
+4. The Mass, three ways: cantus firmus, paraphrase, imitation; the corpus; Trent and the legend.
+5. Palestrina's style as rules: the dissonance treatments heard; 102,279 dissonances classified; an ear question (prepared or struck?).
+6. The line: melodic rules; one line heard; forbidden intervals and recovered leaps counted.
+7. Printing, and Josquin's name: Petrucci; Josquin; the first classics; two kinds of evidence.
+8. Who wrote this: features, centroids, leave-one-out; Palestrina against Monteverdi, and Monteverdi's books; an ear question (which is Palestrina?).
+9. The madrigal and word painting: a Monteverdi opening heard; madrigalisms.
+10. The second practice: Artusi; Cruda Amarilli heard with its free dissonances; the books counted; the reply.
+11. Zarlino's triad, Vicentino's thirty-one tones: an ear question (one chord, three tunings); meantone; the archicembalo.
+12. Chromaticism and ficta: Glarean's twelve modes; Gesualdo; a chromatic progression heard; unwritten accidentals.
+13. Frontier: attribution and ficta by machine.
+14. Variation 24: the Tune as a point of imitation. Outro: problems, payoffs.
+
 *Covers:* thirds and sixths become consonant; imitation as structure; mass types; the madrigal and word painting;
 Palestrina's style as rules; Petrucci (1501); Zarlino's just triad; musica ficta; Gesualdo; Vicentino's
 thirty-one tones.
-*Built and computed:* a stylometric attribution test on secure works; adherence to Palestrina's rules measured.
+*Built and computed:* `monochord/palestrina.py`: a dissonance classifier (passing, neighbour, suspension, cambiata,
+anticipation, free), melodic and sonority censuses, an imitation detector, twelve stylometric features with a
+nearest-centroid leave-one-out test, triads in cents; `monochord/renaissance.py`: a Humdrum reader and the corpus
+(Palestrina's 1,318 Mass movements, Monteverdi's 48 madrigals from Books 3 to 5, from the music21 corpus). The
+attribution test is run on secure works of two composers and on one composer's books, not on Josquin (no Josquin corpus
+was available offline), and the film says why the first comparison is the wrong one.
 *Variation 24:* the Tune as a four-voice point of imitation.
 *Frontier:* computational attribution; modelling ficta.
-*Reading:* Atlas, *Renaissance Music*; Jeppesen; Rodin (ed.), the Josquin Research Project **(verify licence)**.
+*Reading:* Atlas, *Renaissance Music*; Jeppesen; Rodin (ed.), the Josquin Research Project.
 
 ### Part 25 · The Baroque (~50)
 *Story:* Around 1600 a Bologna theorist attacked Monteverdi for a dissonance that broke the rules, and Monteverdi

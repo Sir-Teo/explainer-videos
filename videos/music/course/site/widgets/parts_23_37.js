@@ -98,4 +98,84 @@
       note: "With 7 pitches and 5 notes the two cycles share no factor, so every (talea note, pitch) pair occurs once before they realign after 35 notes: the Chinese remainder theorem, sung. Give them a common factor (12 pitches against 6 notes) and they realign much sooner, visiting only some pairs. Machaut and de Vitry often chose a color that holds a whole number of taleae, so that the two lined up at every statement; diminution replays the same talea faster, as the later sections of many motets do."
     });
   };
+  // ---- Part 24: how is this dissonance treated? -------------------------------------------------------------------
+  var WHITE24 = [0, 2, 4, 5, 7, 9, 11], NM24 = ["C", "D", "E", "F", "G", "A", "B"];
+  function wk24(i) { return 12 * Math.floor(i / 7) + WHITE24[((i % 7) + 7) % 7] + 48; }       // white-key index -> key number
+  function wname24(i) { return NM24[((i % 7) + 7) % 7] + (Math.floor(i / 7) + 3); }
+  var CONS24 = { 0: 1, 3: 1, 4: 1, 7: 1, 8: 1, 9: 1 };
+  var PAL24 = { passing: 55.2, suspension: 30.9, neighbour: 10.1, cambiata: 1.0, anticipation: 0.3, free: 2.6 };
+  function classify24(up, tie, b1, b2) {
+    // up: four key numbers on beats 0..3; tie: the note of beat 1 held into beat 2 (same pitch); bass b1 on 0-1, b2 on 2-3
+    var notes = [], out = [], k;
+    for (k = 0; k < 4; k++) {
+      if (k === 2 && tie && up[2] === up[1]) { notes[notes.length - 1].end = 3; continue; }
+      notes.push({ p: up[k], start: k, end: k + 1 });
+    }
+    function bassAt(t) { return t < 2 ? b1 : b2; }
+    function step(a, b) { var d = Math.abs(a - b); return d >= 1 && d <= 2; }
+    for (k = 0; k < notes.length; k++) {
+      var n = notes[k], pr = notes[k - 1], nx = notes[k + 1];
+      var times = [n.start];
+      if (n.start < 2 && n.end > 2 && b2 !== b1) times.push(2);          // the bass moves under a held note
+      times.forEach(function (t) {
+        var ic = ((n.p - bassAt(t)) % 12 + 12) % 12;
+        if (CONS24[ic]) { out.push({ k: k, t: t, kind: "consonant" }); return; }
+        var kind = "free";
+        if (t > n.start) {
+          var prepared = CONS24[((n.p - bassAt(n.start)) % 12 + 12) % 12];
+          kind = (prepared && nx && n.p - nx.p >= 1 && n.p - nx.p <= 2) ? "suspension" : "free";
+        } else if (pr && nx && step(n.p, pr.p) && step(nx.p, n.p)) {
+          kind = (Math.sign(n.p - pr.p) === Math.sign(nx.p - n.p)) ? "passing" : "neighbour";
+        } else if (pr && nx && pr.p - n.p >= 1 && pr.p - n.p <= 2 && n.p - nx.p >= 3 && n.p - nx.p <= 4) {
+          kind = "cambiata";
+        }
+        out.push({ k: k, t: t, kind: kind });
+      });
+    }
+    return { notes: notes, marks: out };
+  }
+  var KC24 = { consonant: "#8A93A0", passing: C.idea, suspension: "#F472B6", neighbour: "#7DD3FC", cambiata: "#A3E635", anticipation: "#94A3B8", free: C.loss };
+  W.treatment = function (el) {
+    var ctl = [];
+    for (var q = 1; q <= 4; q++) ctl.push({ k: "u" + q, label: "Upper voice, beat " + q, min: 7, max: 18, step: 1, value: [14, 14, 14, 13][q - 1], fmt: wname24 });
+    ctl.push({ k: "tie", label: "Hold beat 2 into beat 3 (if the same note)", min: 0, max: 1, step: 1, value: 1, fmt: function (i) { return i ? "held" : "struck again"; } });
+    ctl.push({ k: "b1", label: "Bass, beats 1-2", min: 0, max: 11, step: 1, value: 5, fmt: wname24 });
+    ctl.push({ k: "b2", label: "Bass, beats 3-4", min: 0, max: 11, step: 1, value: 8, fmt: wname24 });
+    QB.widget(el, {
+      title: "How is this dissonance treated?",
+      sub: "Two voices over four beats. Set the upper voice's four notes and the two bass notes; hold the second note into the third to make a suspension. Each moment where the upper voice clashes with the bass (a second, fourth, tritone or seventh) is classified by Jeppesen's rules, as the film's program does on Palestrina's 102,279 dissonances: passing, neighbour, suspension, cambiata, or free. Right: how Palestrina's dissonances divide.",
+      panels: 2, height: 290,
+      controls: ctl,
+      buttons: [{ label: "Play", act: function (s) { s.sound = play(notesSound(s.play, 0.42), 44100); } }],
+      init: function (s) { s.sound = null; s.play = []; },
+      draw: function (g, v, s) {
+        var up = [wk24(v.u1), wk24(v.u2), wk24(v.u3), wk24(v.u4)], b1 = wk24(v.b1), b2 = wk24(v.b2);
+        var R = classify24(up, v.tie, b1, b2);
+        s.R = R;
+        s.play = R.notes.map(function (n) { return [n.p, n.start, n.end - n.start]; }).concat([[b1, 0, 2], [b2, 2, 2]]);
+        var lo = Math.min(b1, b2, Math.min.apply(null, up)) - 2, hi = Math.max(b1, b2, Math.max.apply(null, up)) + 3;
+        var a = g[0].axes({ x: [0, 4], y: [lo, hi], title: "The two voices", xlabel: "beat", ylabel: "key number", xticks: [0, 1, 2, 3, 4] });
+        a.line([0, 2], [b1, b1], { color: "#8A93A0", width: 7 });
+        a.line([2, 4], [b2, b2], { color: "#8A93A0", width: 7 });
+        R.notes.forEach(function (n) { a.line([n.start + 0.04, n.end - 0.04], [n.p, n.p], { color: C.ink, width: 7 }); });
+        R.marks.forEach(function (m) {
+          if (m.kind === "consonant") return;
+          var n = R.notes[m.k];
+          a.dots([m.t + 0.12], [n.p + 1.2], { color: KC24[m.kind], r: 6 });
+          a.text(m.t + 0.12, n.p + 2.0, m.kind, { align: "left", size: 11, color: KC24[m.kind] });
+        });
+        var ks = ["passing", "suspension", "neighbour", "cambiata", "free"];
+        var b = g[1].axes({ x: [-0.6, 4.6], y: [0, 60], title: "Palestrina's dissonances, in 100", xticks: [], ylabel: "share" });
+        b.bars([0, 1, 2, 3, 4], ks.map(function (k) { return PAL24[k]; }), 0.6, { color: function (i) { return KC24[ks[i]]; } });
+        ks.forEach(function (k, i) { b.text(i, 0, k, { align: "center", base: "top", dy: 7, size: 10, color: C.muted }); });
+      },
+      readout: function (v, s) {
+        var ds = s.R.marks.filter(function (m) { return m.kind !== "consonant"; });
+        return [["dissonances", ds.length ? ds.map(function (m) { return "beat " + (m.t + 1) + ": " + m.kind; }).join("; ") : "none: every beat consonant"],
+                ["in Palestrina", ds.length ? ds.map(function (m) { return m.kind + " " + PAL24[m.kind] + " in 100"; }).join("; ") : "-"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "The opening setting is a 7-6 suspension: C over A is a third, the bass moves to D under the held C (a seventh), and C falls to B. Strike the C again instead of holding it and the same seventh becomes free, as in Monteverdi's madrigals. Try C B A over a held A for a passing note, C D C for a neighbour, and C B G A over A then G for a cambiata."
+    });
+  };
 })();

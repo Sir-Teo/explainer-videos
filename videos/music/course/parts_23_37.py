@@ -55,4 +55,53 @@ PARTS = [
         also=(("Monochord's medieval toolkit: modes, hexachords, organum, rhythmic modes, mensuration, isorhythm, census", "explainer/music/monochord/medieval.py"),
               ("The fourteenth-century corpus: 89 pieces from the edition's encodings", "explainer/music/monochord/trecento.py")),
     ),
+    Part(
+        n=24, level="U", widget="treatment", prereq=(6, 14, 16, 20, 23),
+        question="What made sixteenth-century polyphony sound as it does, and can its style be measured well enough to "
+                 "say who wrote a piece?",
+        story="In 1540 a Nuremberg publisher remembered a remark: now that Josquin is dead, he is putting out more works "
+              "than when he was alive. Printing had made Josquin a brand and his works a puzzle, and the part learns the "
+              "century's style well enough to ask a statistical question: who wrote this? Thirds and sixths become the "
+              "sound of the music, in 84 sonorities in 100 of Palestrina's 1,318 Mass movements against 51 in Part 23's "
+              "fourteenth century, and a place to end, in 90 of his final chords against 1 in 89. Equal voices build "
+              "pieces from points of imitation: 70 in 100 of his movements open with one, at the octave, fourth or fifth. "
+              "Of his 102,279 dissonances against the bass, a program finds 55 in 100 passing, 31 suspensions, 10 "
+              "neighbours and 2.6 free: the rules Jeppesen wrote down are habits followed ninety-seven times in a "
+              "hundred. A nearest-centroid test on twelve features recognizes Palestrina from Monteverdi 95 times in "
+              "100, which is the wrong question (genre, date and encoding differ), and Monteverdi's 1592 madrigals from "
+              "his 1603 and 1605 ones 73 times in 100. The second practice that Artusi attacked in Cruda Amarilli is "
+              "there in the numbers: free dissonance rises from 23 in 100 in Book 3 to 45 and 49. Zarlino's 4:5:6 "
+              "triad, meantone and Vicentino's thirty-one tones answer what tuning a world of triads wants; Gesualdo "
+              "pushes the modes to breaking. The Tune becomes a four-voice point of imitation.",
+        handoff="The Baroque, figured bass and the second practice as the norm in Part 25; meantone and well temperament in "
+                "Parts 6 and 25; nineteenth-century chromaticism in Part 27; the song in Part 40; style by statistics in "
+                "Parts 62 and 67.",
+        outside="Part 6 for tuning; Part 14 for gap fill; Part 16 for species counterpoint; Part 17 for the choir; Part "
+                "20 for imitation and the counterpoint search; Part 23 for the fourteenth-century corpus and musica "
+                "ficta. Standardization, nearest-centroid classification, leave-one-out validation.",
+        objectives={
+            "U": ["Hear the difference between a fourteenth-century and a sixteenth-century ending, and a point of imitation.",
+                  "Recognize passing notes, neighbours, suspensions and cambiatas, and a prepared from a struck dissonance.",
+                  "Explain the three kinds of Mass and what a madrigal sets to music."],
+            "M": ["Classify every dissonance in a piece by its treatment, and measure sonorities, imitation and melodic leaps in a corpus.",
+                  "Build a stylometric test with standardized features and leave-one-out, and say what it confounds.",
+                  "Compute the third and fifth of just, Pythagorean, meantone and equal tunings in cents."],
+            "D": ["Design an attribution test held out by source, and interpret its failure modes.",
+                  "Model editorial accidentals as uncertain data and propose how to measure editors' disagreement."],
+            "I": ["Tune thirds pure in a choir and explain why they differ from the piano's.",
+                  "Write a point of imitation and complete it in free counterpoint."],
+        },
+        results=[
+            ("Sonorities with a third", r"51\% \text{ (14th century)} \to 84\% \text{ (Palestrina)}; \ \text{final chords } 1/89 \to 90\%"),
+            ("Palestrina's dissonances", r"102{,}279: \ \text{passing } 55\%, \ \text{suspension } 31\%, \ \text{neighbour } 10\%, \ \text{free } 2.6\%"),
+            ("The second practice", r"\text{free dissonance: Book 3 } 23\%, \ \text{Book 4 } 45\%, \ \text{Book 5 } 49\%"),
+            ("Attribution", r"\text{Palestrina vs Monteverdi } 95\% \ (\text{confounded}); \ \text{Book 3 vs Books 4--5 } 73\%"),
+            ("Thirty-one tones", r"10 \text{ steps} = 387.1 \text{ cents}, \ 0.8 \text{ above } 5{:}4"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 8, 9),
+        D=(12,),
+        I=(10,),
+        also=(("Monochord's sixteenth-century toolkit: dissonance treatment, melody, sonority, imitation, stylometry, tuning", "explainer/music/monochord/palestrina.py"),
+              ("The sixteenth-century corpus: Palestrina's Masses and Monteverdi's madrigals", "explainer/music/monochord/renaissance.py")),
+    ),
 ]
