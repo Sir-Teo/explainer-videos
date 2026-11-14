@@ -680,3 +680,94 @@ shown(6, "LIU_2012", "one laboratory's reactivation of a tagged memory in mice, 
       "strengthened synapses are the memory is argued with the evidence in Part 20", row_in=20)
 shown(6, "TURNER_2008", "the registered and the published record of one class of drug trials, shown as a case of "
       "Part 4's file drawer in an industry; entered with the evidence on treatments", row_in=42)
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 7: the brain
+# ---------------------------------------------------------------------------------------------------------------
+add(Finding(
+    key="gage", part=7, title=r"Phineas Gage",
+    claim="Damage to the frontal lobes changed a careful, capable man into an impulsive and unreliable one.",
+    original=Study("Harlow", 1868, n="one patient", design="his doctor's account, written twenty years after the "
+                                                              "accident",
+                   found="'no longer Gage', in the words of his friends"),
+    status="story and record",
+    record=(Study("Macmillan", 2000, n="the surviving documents", design="a history of the case",
+                  found="the record of a change is a few sentences; he later held a demanding job for years"),),
+    note="He survived, and something changed. How much, for how long, and whether he recovered are not in the "
+         "record; most of what textbooks add is not in it either.",
+    sources=("J. M. Harlow, Recovery from the passage of an iron bar through the head, Publications of the "
+             "Massachusetts Medical Society 2 (1868) 327-347",
+             "M. Macmillan, An Odd Kind of Fame: Stories of Phineas Gage (MIT Press, 2000)"),
+    checked="2026-11-14",
+    data=("HARLOW_1868",),
+))
+
+add(Finding(
+    key="broca_area", part=7, title=r"Broca's area and speech",
+    claim="Damage to the lower rear part of the left frontal lobe takes away fluent speech and spares understanding.",
+    original=Study("Broca", 1861, n="one patient, then more", design="speech in life, the brain after death",
+                   found="a lesion of the left frontal lobe in a man who could say one syllable"),
+    status="replicated",
+    record=(Study("Dronkers, Plaisant, Iba-Zizen and Cabanis", 2007, n="Broca's two preserved brains",
+                  design="magnetic resonance imaging", found="the damage ran far beyond the area that carries "
+                                                             "his name, into deep tissue and a long fibre tract"),),
+    note="Replicated, and refined: the left frontal lobe matters for speech, and the lasting syndrome needs more "
+         "damage than the area on the textbook's diagram.",
+    sources=("P. Broca, Bulletin de la Societe d'Anthropologie 2 (1861) 235-238",
+             "N. F. Dronkers et al., Paul Broca's historic cases, Brain 130 (2007) 1432-1441"),
+    checked="2026-11-14",
+    data=("BROCA_1861", "DRONKERS_2007"),
+))
+
+add(Finding(
+    key="taxi_hippocampus", part=7, title=r"The taxi drivers' hippocampus",
+    claim="Years of navigating London enlarge the back of the hippocampus.",
+    original=Study("Maguire and colleagues", 2000, n="16 drivers and matched controls",
+                   design="brain scans compared, and related to years of driving",
+                   found="more grey matter at the back of the hippocampus, more with more years"),
+    status="replicated",
+    record=(Study("Woollett and Maguire", 2011, n="79 trainees and 31 controls", design="scanned before and after "
+                                                                                       "years of training",
+                  found="growth in the 39 who qualified, none in the 20 who failed or in controls"),),
+    note="The first study could not say which came first. The second followed people through the training. It "
+         "is one laboratory and one skill.",
+    sources=("E. A. Maguire et al., Navigation-related structural change in the hippocampi of taxi drivers, PNAS "
+             "97 (2000) 4398-4403",
+             "K. Woollett and E. A. Maguire, Current Biology 21 (2011) 2109-2114"),
+    checked="2026-11-14",
+    data=("MAGUIRE_2000",),
+))
+
+add(Finding(
+    key="brain_types", part=7, title=r"Left-brained and right-brained people",
+    claim="People differ in which hemisphere dominates, and that makes them logical or creative.",
+    original=Study("Pines, in a magazine article", 1973, n="", design="an extrapolation from patients whose "
+                                                                         "hemispheres had been separated",
+                   found="'We are left-brained or right-brained'"),
+    status="failed",
+    record=(Study("Nielsen and colleagues", 2013, n="1,011 people", design="lateralization of 7,266 regions' "
+                                                                           "connections at rest",
+                  found="lateralization is local: not consistent with a whole-brain type"),),
+    note="The hemispheres do differ in what they do. The claim that fails is that a person is one or the other.",
+    sources=("M. Pines, We are left-brained or right-brained, New York Times Magazine, 9 September 1973; R. E. "
+             "Ornstein, The Psychology of Consciousness (1972)",
+             "J. A. Nielsen et al., An evaluation of the left-brain vs. right-brain hypothesis with resting state "
+             "functional connectivity magnetic resonance imaging, PLoS ONE 8 (2013) e71275"),
+    checked="2026-11-14",
+    data=("NIELSEN_2013",),
+))
+
+shown(7, "WERNICKE_1874", "a diagram and the syndrome it predicted: told as the history of a model; the finding "
+      "it organizes is the row on Broca's area")
+shown(7, "LASHLEY_1929", "a famous negative result, told as history with its critics; memory's location is argued "
+      "in Part 20", row_in=20)
+shown(7, "PENFIELD_BOLDREY_1937", "the body's map on the cortex: settled anatomy, told as history; entered with "
+      "the senses", row_in=15)
+shown(7, "HORTON_HOYT_1991", "a measured map used as a formula; the part computes with it")
+shown(7, "SCOVILLE_MILNER_1957", "one patient, told as the case it was; what it shows about memory is argued in "
+      "Part 20", row_in=20)
+shown(7, "AZEVEDO_2009", "a count, used as a number")
+shown(7, "RAICHLE_2002", "a measurement of energy use, used as a number")
+shown(7, "WEISKRANTZ_1974", "one patient, described without figures; blindsight is entered with awareness",
+      row_in=27)
+shown(7, "MAH_2014", "a methods finding shown at the frontier, beside the series' own simulation")

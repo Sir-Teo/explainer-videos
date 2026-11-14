@@ -48,6 +48,20 @@ and summarized, not stored. Dates are the day the check was made.
 | `del_castillo_katz_1954` | Transmitter released in packets of one size at the frog's nerve-muscle junction | del Castillo and Katz, *J. Physiol.* 124 (1954) 560–573 | facts only | 2026-11-14: the PubMed Central record and a 2006 retrospective through a web search; the paper not read; no figure quoted |
 | `liu_2012` | Light delivered to cells tagged during fear learning makes mice freeze in another box | Liu, Ramirez et al., *Nature* 484 (2012) 381–385 | facts only | 2026-11-14: the abstract as summarized by a web search; the paper not read; no percentages quoted |
 | `turner_2008` | 74 registered antidepressant trials: 51% positive by the regulator's analysis, 94% in the published literature | Turner et al., *NEJM* 358 (2008) 252–260 | facts only | 2026-11-14: the abstract's figures from the PubMed record and summaries; the paper not read |
+| `harlow_1868` | Phineas Gage, 13 September 1848; what Harlow reported in 1848 and 1868 | Harlow (1848, 1868); Macmillan, *An Odd Kind of Fame* (2000) | facts only | 2026-11-14: from encyclopedic accounts; none of the three was read; the rod's size and the year of death differ between sources |
+| `broca_1861` | Leborgne ("Tan") and the left frontal lobe | Broca, *Bull. Soc. Anthropol.* 2 (1861) 235–238 | facts only | 2026-11-14: from historical accounts; the paper not read |
+| `dronkers_2007` | Broca's preserved brains scanned: the damage ran beyond Broca's area | Dronkers et al., *Brain* 130 (2007) 1432–1441 | facts only | 2026-11-14: abstract page, letters and a news report; the paper not read |
+| `wernicke_1874` | A sensory aphasia, a connection, and a predicted conduction aphasia; Lichtheim's diagram | Wernicke (1874); Lichtheim, *Brain* 7 (1885) | facts only | 2026-11-14: from reviews; neither read |
+| `lashley_1929` | Maze learning depends on how much cortex is removed, hardly on where | Lashley (1929, 1950) | facts only | 2026-11-14: from encyclopedic accounts; a much-quoted sentence could not be confirmed and is not quoted |
+| `penfield_boldrey_1937` | The body mapped on the cortex in 126 patients | Penfield and Boldrey, *Brain* 60 (1937) | facts only | 2026-11-14: number of patients from a review; the paper not read |
+| `horton_hoyt_1991` | Cortical magnification of human V1: 17.3 / (E + 0.75) mm per degree | Horton and Hoyt, *Arch. Ophthalmol.* 109 (1991) 816–824 | facts only | 2026-11-14: the formula from a citing paper |
+| `scoville_milner_1957` | H.M.: what was removed in 1953, what was lost, and a skill that was learned | Scoville and Milner, *JNNP* 20 (1957) 11–21; Milner (1962) | facts only | 2026-11-14: from PubMed Central and reviews; the paper not read; only the year of the operation is used |
+| `nielsen_2013` | 1,011 people: lateralization is local, not a property of the whole brain | Nielsen et al., *PLoS ONE* 8 (2013) e71275 | facts only (open access) | 2026-11-14: the abstract |
+| `maguire_2000` | 16 taxi drivers; 79 trainees followed, 39 qualified | Maguire et al., *PNAS* 97 (2000); Woollett and Maguire, *Curr. Biol.* 21 (2011) | facts only | 2026-11-14: secondary accounts and the 2011 paper's PubMed Central record |
+| `azevedo_2009` | 86.1 ± 8.1 billion neurons; 19% of them in the cerebral cortex | Azevedo et al., *J. Comp. Neurol.* 513 (2009) 532–541 | facts only | 2026-11-14: the abstract |
+| `raichle_2002` | The brain: about 2% of body weight, about 20% of its energy | Raichle and Gusnard, *PNAS* 99 (2002) 10237–10239 | facts only | 2026-11-14: the opening lines |
+| `weiskrantz_1974` | Blindsight in patient D.B. | Weiskrantz et al., *Brain* 97 (1974) 709–728 | facts only | 2026-11-14: from reviews; no figures quoted |
+| `mah_2014` | Lesion-deficit maps in 581 stroke patients are displaced along arterial territories | Mah et al., *Brain* 137 (2014) 2522–2531 | facts only | 2026-11-14: the abstract and a later summary; no millimetres quoted |
 
 ## Looked for and not used
 

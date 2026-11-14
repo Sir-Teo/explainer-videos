@@ -22,7 +22,9 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "FLAKE_FRIED_2020", "BEM_2011", "COHEN_1962", "SIMMONS_2011", "OSC_2015", "MANY_LABS", "CAMERER_2018",
            "SCHEEL_2021", "LEVELT_2012", "DREBER_2015", "PROTZKO_2023", "HODGKIN_HUXLEY_1952", "COLE_CURTIS_1939",
            "ADRIAN_1926", "GOLGI_CAJAL_1906", "GIDON_2020", "LOEWI_1921", "HEBB_1949", "BLISS_LOMO_1973", "BI_POO_1998",
-           "HARTLINE_RATLIFF_1957", "GEIER_2008", "DEL_CASTILLO_KATZ_1954", "LIU_2012", "TURNER_2008"]
+           "HARTLINE_RATLIFF_1957", "GEIER_2008", "DEL_CASTILLO_KATZ_1954", "LIU_2012", "TURNER_2008",
+           "HARLOW_1868", "BROCA_1861", "DRONKERS_2007", "WERNICKE_1874", "LASHLEY_1929", "PENFIELD_BOLDREY_1937", "HORTON_HOYT_1991",
+           "SCOVILLE_MILNER_1957", "NIELSEN_2013", "MAGUIRE_2000", "AZEVEDO_2009", "RAICHLE_2002", "WEISKRANTZ_1974", "MAH_2014"]
 
 
 @dataclass(frozen=True)
@@ -828,6 +830,200 @@ TURNER_2008 = Dataset(
           "positive_trials": 38, "positive_published_count": 37},
 )
 
+HARLOW_1868 = Dataset(
+    key="harlow_1868",
+    title="Phineas Gage: an iron rod through the left frontal lobe, and what his doctor reported",
+    source="J. M. Harlow, Passage of an iron rod through the head, Boston Medical and Surgical Journal 39 (1848) "
+           "389-393; Recovery from the passage of an iron bar through the head, Publications of the Massachusetts "
+           "Medical Society 2 (1868) 327-347; the critical history: M. Macmillan, An Odd Kind of Fame (MIT Press, 2000)",
+    cite=r"Harlow (1848, 1868)",
+    checked="the date, place and outline from encyclopedic accounts through a web search, 2026-11-14; neither "
+            "report nor Macmillan's book was read; sources differ on the rod's dimensions and on the year of his "
+            "death, so the part gives neither as exact",
+    licence="facts only",
+    data={"date": "13 September 1848", "place": "Cavendish, Vermont", "job": "railway construction foreman",
+          "rod": "a tamping iron usually given as about 110 cm long, 3 cm across and 6 kg",
+          "reported": "Harlow wrote in 1868 that to his friends he was 'no longer Gage'",
+          "later": "worked with horses in New Hampshire, then for years as a stagecoach driver in Chile; died in "
+                   "San Francisco about twelve years after the accident",
+          "thin": "the change of character rests on a few sentences written twenty years later"},
+)
+
+BROCA_1861 = Dataset(
+    key="broca_1861",
+    title="Leborgne ('Tan'): loss of speech with a lesion of the left frontal lobe",
+    source="P. Broca, Perte de la parole, ramollissement chronique et destruction partielle du lobe anterieur "
+           "gauche du cerveau, Bulletin de la Societe d'Anthropologie 2 (1861) 235-238",
+    cite=r"Broca (1861)",
+    checked="the reference and outline from historical accounts through a web search, 2026-11-14; the paper was "
+            "not read",
+    licence="facts only",
+    data={"patient": "Leborgne, called Tan after the one syllable he could say", "died": "April 1861, at Bicetre",
+          "lesion": "the lower rear part of the left frontal lobe"},
+)
+
+DRONKERS_2007 = Dataset(
+    key="dronkers_2007",
+    title="Broca's two preserved brains, scanned",
+    source="N. F. Dronkers, O. Plaisant, M. T. Iba-Zizen and E. A. Cabanis, Paul Broca's historic cases: high "
+           "resolution MR imaging of the brains of Leborgne and Lelong, Brain 130 (2007) 1432-1441",
+    cite=r"Dronkers et al.\ (2007)",
+    checked="the findings from the journal's abstract page, letters about the paper and a news report through a "
+            "web search, 2026-11-14; the paper was not read",
+    licence="facts only",
+    data={"finding": "in both brains the damage ran well beyond the surface region Broca described, into deeper "
+                     "tissue including a long fibre tract (the superior longitudinal fasciculus)",
+          "area": "neither brain's damage covered the whole of what is now called Broca's area"},
+)
+
+WERNICKE_1874 = Dataset(
+    key="wernicke_1874",
+    title="A second aphasia, a connection between two centres, and a predicted third",
+    source="C. Wernicke, Der aphasische Symptomencomplex (Breslau, 1874); L. Lichtheim, On aphasia, Brain 7 (1885) "
+           "433-484",
+    cite=r"Wernicke (1874); Lichtheim (1885)",
+    checked="from reviews through a web search, 2026-11-14; neither work was read",
+    licence="facts only",
+    data={"sensory": "fluent speech with poor understanding, from damage further back, in the temporal lobe",
+          "predicted": "conduction aphasia: damage to the connection alone, sparing both centres",
+          "caveat": "the authors used their diagrams as aids to reasoning and did not claim they were anatomy"},
+)
+
+LASHLEY_1929 = Dataset(
+    key="lashley_1929",
+    title="The search for the engram: maze learning and the amount of cortex removed",
+    source="K. S. Lashley, Brain Mechanisms and Intelligence (University of Chicago Press, 1929); In search of the "
+           "engram, Symposia of the Society for Experimental Biology 4 (1950) 454-482",
+    cite=r"Lashley (1929, 1950)",
+    checked="the outline from encyclopedic accounts through a web search, 2026-11-14; neither work was read, and a "
+            "sentence often quoted from the 1950 paper could not be confirmed, so it is not quoted",
+    licence="facts only",
+    data={"finding": "how badly a rat learned a maze depended on how much cortex was removed and hardly on where",
+          "years": 30, "critics": "a maze can be solved by many senses, so removing any one region leaves others"},
+)
+
+PENFIELD_BOLDREY_1937 = Dataset(
+    key="penfield_boldrey_1937",
+    title="The body mapped on the cortex by electrical stimulation during surgery",
+    source="W. Penfield and E. Boldrey, Somatic motor and sensory representation in the cerebral cortex of man as "
+           "studied by electrical stimulation, Brain 60 (1937) 389-443",
+    cite=r"Penfield \& Boldrey (1937)",
+    checked="the number of patients and the dates from a review on PubMed Central through a web search, "
+            "2026-11-14; the paper was not read; volume and pages from memory",
+    licence="facts only",
+    data={"patients": 126, "years": "1928 to 1936", "method": "patients awake under local anaesthesia, the "
+                                                             "exposed cortex touched with a weak current"},
+)
+
+HORTON_HOYT_1991 = Dataset(
+    key="horton_hoyt_1991",
+    title="The map of the visual field on human primary visual cortex",
+    source="J. C. Horton and W. F. Hoyt, The representation of the visual field in human striate cortex: a revision "
+           "of the classic Holmes map, Archives of Ophthalmology 109 (1991) 816-824",
+    cite=r"Horton \& Hoyt (1991)",
+    checked="the reference from PubMed and the magnification formula from a paper that cites it, through a web "
+            "search, 2026-11-14; the paper was not read",
+    licence="facts only",
+    data={"m0": 17.3, "e2": 0.75, "formula": "mm of cortex per degree = 17.3 / (eccentricity + 0.75)"},
+)
+
+SCOVILLE_MILNER_1957 = Dataset(
+    key="scoville_milner_1957",
+    title="H.M.: loss of new memories after removal of the inner temporal lobes on both sides",
+    source="W. B. Scoville and B. Milner, Loss of recent memory after bilateral hippocampal lesions, Journal of "
+           "Neurology, Neurosurgery and Psychiatry 20 (1957) 11-21; the skill: B. Milner (1962)",
+    cite=r"Scoville \& Milner (1957)",
+    checked="the outline, the year of the operation and the mirror-tracing result from PubMed Central and review "
+            "articles through a web search, 2026-11-14; the paper was not read; sources give two dates in 1953 "
+            "for the operation, so only the year is used",
+    licence="facts only",
+    data={"year": 1953, "patient": "Henry Molaison, known in print as H.M. until his death in 2008",
+          "removed": "the inner part of both temporal lobes, including most of the hippocampus",
+          "lost": "the ability to lay down new memories of facts and events",
+          "skill": "over three days of mirror tracing his errors fell, with no memory of having done it before"},
+)
+
+NIELSEN_2013 = Dataset(
+    key="nielsen_2013",
+    title="Are people left-brained or right-brained?  Resting connectivity in 1,011 people",
+    source="J. A. Nielsen, B. A. Zielinski, M. A. Ferguson, J. E. Lainhart and J. S. Anderson, An evaluation of the "
+           "left-brain vs. right-brain hypothesis with resting state functional connectivity magnetic resonance "
+           "imaging, PLoS ONE 8 (2013) e71275",
+    cite=r"Nielsen et al.\ (2013)",
+    checked="the abstract from PubMed Central through a web search, 2026-11-14; the paper was not read",
+    licence="facts only; the article is open access",
+    data={"people": 1011, "ages": "7 to 29", "regions": 7266,
+          "finding": "lateralized connections were independent of one another across people; the data were 'not "
+                     "consistent with a whole-brain phenotype' of stronger left or right networks"},
+)
+
+MAGUIRE_2000 = Dataset(
+    key="maguire_2000",
+    title="London taxi drivers and the back of the hippocampus",
+    source="E. A. Maguire et al., Navigation-related structural change in the hippocampi of taxi drivers, PNAS 97 "
+           "(2000) 4398-4403; K. Woollett and E. A. Maguire, Acquiring 'the Knowledge' of London's layout drives "
+           "structural brain changes, Current Biology 21 (2011) 2109-2114",
+    cite=r"Maguire et al.\ (2000)",
+    checked="the samples and findings from secondary accounts, a funder's press release and the PubMed Central "
+            "record of the 2011 paper through a web search, 2026-11-14; neither paper was read; the 2000 paper's "
+            "title and pages from memory",
+    licence="facts only",
+    data={"drivers": 16, "years_driving": 14.3,
+          "finding": "more grey matter at the back of the hippocampus than in matched controls, more with more "
+                     "years of driving",
+          "trainees": 79, "qualified": 39, "failed": 20, "controls": 31,
+          "followup": "the back of the hippocampus grew in the trainees who qualified, and not in those who "
+                      "failed or in controls"},
+)
+
+AZEVEDO_2009 = Dataset(
+    key="azevedo_2009",
+    title="How many neurons a human brain has",
+    source="F. A. C. Azevedo et al., Equal numbers of neuronal and nonneuronal cells make the human brain an "
+           "isometrically scaled-up primate brain, Journal of Comparative Neurology 513 (2009) 532-541",
+    cite=r"Azevedo et al.\ (2009)",
+    checked="the abstract's figures from PubMed through a web search, 2026-11-14; the paper was not read",
+    licence="facts only",
+    data={"neurons": 86.1e9, "neurons_sd": 8.1e9, "other_cells": 84.6e9, "cortex_share": 0.19},
+)
+
+RAICHLE_2002 = Dataset(
+    key="raichle_2002",
+    title="The brain's share of the body's mass and of its energy",
+    source="M. E. Raichle and D. A. Gusnard, Appraising the brain's energy budget, PNAS 99 (2002) 10237-10239",
+    cite=r"Raichle \& Gusnard (2002)",
+    checked="the opening lines from PubMed Central through a web search, 2026-11-14",
+    licence="facts only",
+    data={"mass_share": 0.02, "energy_share": 0.20},
+)
+
+WEISKRANTZ_1974 = Dataset(
+    key="weiskrantz_1974",
+    title="Blindsight: responding to what one reports not seeing",
+    source="L. Weiskrantz, E. K. Warrington, M. D. Sanders and J. Marshall, Visual capacity in the hemianopic field "
+           "following a restricted occipital ablation, Brain 97 (1974) 709-728",
+    cite=r"Weiskrantz et al.\ (1974)",
+    checked="the reference from PubMed and the outline from review articles through a web search, 2026-11-14; "
+            "the paper was not read, so no figures are quoted",
+    licence="facts only",
+    data={"patient": "D.B.", "finding": "he could point to and tell apart things shown in the part of the field "
+                                         "where he said he saw nothing, and called his answers guesses"},
+)
+
+MAH_2014 = Dataset(
+    key="mah_2014",
+    title="Lesion-deficit maps are displaced by the way strokes spread",
+    source="Y.-H. Mah, M. Husain, G. Rees and P. Nachev, Human brain lesion-deficit inference remapped, Brain 137 "
+           "(2014) 2522-2531",
+    cite=r"Mah et al.\ (2014)",
+    checked="the abstract from PubMed Central and a later paper's summary through a web search, 2026-11-14; the "
+            "paper was not read, so no displacement in millimetres is quoted",
+    licence="facts only",
+    data={"patients": 581, "finding": "testing each point of the brain separately mislocalizes a function, "
+                                      "because damage at one point goes with damage at others; the error "
+                                      "follows the territories of the arteries"},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -835,4 +1031,7 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           SCHEEL_2021, LEVELT_2012, DREBER_2015, PROTZKO_2023, HODGKIN_HUXLEY_1952,
                           COLE_CURTIS_1939, ADRIAN_1926, GOLGI_CAJAL_1906, GIDON_2020, LOEWI_1921, HEBB_1949,
                           BLISS_LOMO_1973, BI_POO_1998, HARTLINE_RATLIFF_1957, GEIER_2008,
-                          DEL_CASTILLO_KATZ_1954, LIU_2012, TURNER_2008)}
+                          DEL_CASTILLO_KATZ_1954, LIU_2012, TURNER_2008,
+                          HARLOW_1868, BROCA_1861, DRONKERS_2007, WERNICKE_1874, LASHLEY_1929, PENFIELD_BOLDREY_1937,
+                          HORTON_HOYT_1991, SCOVILLE_MILNER_1957, NIELSEN_2013, MAGUIRE_2000, AZEVEDO_2009,
+                          RAICHLE_2002, WEISKRANTZ_1974, MAH_2014)}
