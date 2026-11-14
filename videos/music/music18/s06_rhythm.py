@@ -9,6 +9,7 @@ class Rhythm(SoundScene):
     def construct(self):
         chapter(self, 5, r"When chords change", r"Where in the bar does harmony move?")
         self.where()
+        self.control()
         self.cadence()
 
     def cadence(self):
@@ -34,6 +35,38 @@ class Rhythm(SoundScene):
         self.wait(0.4)
         self.clear_scene()
 
+    def control(self):
+        d = load("rhythm")
+        real = [100 * x for x in d["change"]]
+        shuf = [100 * x for x in d["shuffled"]]
+        a = columns(real, [r"1", r"2", r"3", r"4"], width=4.4, height=2.6, color=WEAK, hot=(0, 2), hot_color=TUNE, fmt="{:.0f}", font_size=22, top=100)
+        b = columns(shuf, [r"1", r"2", r"3", r"4"], width=4.4, height=2.6, color=WEAK, hot=(), hot_color=TUNE, fmt="{:.0f}", font_size=22, top=100)
+        ta = label(r"Bach's order", font_size=24, color=TUNE).next_to(a, UP, buff=0.35)
+        tb = label(r"the same chords, \ shuffled", font_size=24, color=GREY_A).next_to(b, UP, buff=0.35)
+        g = VGroup(VGroup(ta, a), VGroup(tb, b)).arrange(RIGHT, buff=1.0).move_to(LEFT * 1.6 + DOWN * 0.4)
+        head = label(r"is it the metre, \ or chance?", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        side = VGroup(label(r"shuffled: \ every beat alike", font_size=24, color=WHITE),
+                      label(r"the effect is the weak beats \ holding the chord", font_size=24, color=TUNE),
+                      label(r"20 shuffles of every chorale in four", font_size=20, color=GREY_B)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 4.7 + DOWN * 0.3)
+        with self.voiceover(
+            "Could that pattern be chance? Every claim of this kind needs a control. <bookmark mark='a'/> Take each "
+            "chorale's own chords and shuffle them among its beats, twenty times over: the same chords, the same "
+            f"metre, but the order lost. <bookmark mark='b'/> Shuffled, every beat brings a new chord about "
+            f"{say(round(sum(shuf) / 4))} times in a hundred, strong or weak alike. <bookmark mark='c'/> So the strong "
+            "beats are not unusual; they change chord about as often as a random order would. What Bach's order "
+            f"adds is the weak beats holding on: {say(round(real[1]))} and {say(round(real[3]))} instead of about "
+            f"{say(round(shuf[1]))}. The metre shows up as harmony that waits for the next strong beat."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(g[0]))
+            vo.wait_until("a")
+            self.play(FadeIn(g[1]))
+            vo.wait_until("b")
+            self.play(FadeIn(side[0]), FadeIn(side[2]))
+            vo.wait_until("c")
+            self.play(FadeIn(side[1]))
+        self.wait(0.4)
+        self.clear_scene()
+
     def where(self):
         d = load("rhythm")
         vals = [100 * x for x in d["change"]]
@@ -56,9 +89,9 @@ class Rhythm(SoundScene):
             "of chord change is called harmonic rhythm, and composers set it against the rhythm of the notes: "
             "quick notes over slow harmony, as in these chorales, or the other way round."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ch), FadeIn(t))
             vo.wait_until("a")
-            self.play(FadeIn(ch), FadeIn(t))
+            self.play(Indicate(ch.bars[0], color=TUNE), Indicate(ch.bars[2], color=TUNE))
             vo.wait_until("b")
             self.play(FadeIn(side))
         self.wait(0.4)

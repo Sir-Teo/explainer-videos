@@ -29,8 +29,8 @@ class Schemata(SoundScene):
             "opening, some come after the double bar, some lead to the end. <bookmark mark='d'/> A composer "
             "learned them as a speaker learns the phrases of a language, and could improvise with them."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcd", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcd", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

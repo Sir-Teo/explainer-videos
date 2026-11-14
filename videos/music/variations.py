@@ -41,6 +41,8 @@ LEDGER = [
      "measure": r"parallel fifths and octaves: 6 before the corrections, 0 after"},
     {"part": 18, "title": r"over the Romanesca, a lament bass, and two pedals: three basses, one tune", "seconds": 32.78,
      "measure": r"24 chords, every one holding the Tune's note; 0 parallel fifths or octaves"},
+    {"part": 19, "title": r"with borrowed chords, with the Neapolitan, and through a diminished-seventh trapdoor into A$\flat$", "seconds": 42.2,
+     "measure": r"24 chords, 13 of them outside C major; one chord carries the Tune four keys away; 0 parallels"},
 ]
 
 

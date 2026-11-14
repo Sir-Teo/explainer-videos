@@ -34,9 +34,9 @@ class RootMotion(SoundScene):
             "this way in 2000: falling fifths, falling thirds and rising steps carry harmony forward, the "
             f"others hold it back, and in Bach the forward kind is {say(round(100 * fw / (fw + bw)))} in a hundred."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ch), FadeIn(t))
             vo.wait_until("a")
-            self.play(FadeIn(ch), FadeIn(t))
+            self.play(Indicate(ch.bars[0], color=TUNE))
             vo.wait_until("c")
             self.play(FadeIn(cap))
         self.wait(0.4)

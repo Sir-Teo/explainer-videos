@@ -502,4 +502,53 @@ PARTS = [
         I=(9,),
         also=(("Monochord's syntax of harmony: functions, root motion, n-grams, the rule of the octave, schemata, grounds", "explainer/music/monochord/progression.py"),),
     ),
+    Part(
+        n=19, level="U", widget="chromatic", prereq=(6, 15, 17, 18),
+        question="How can music reach a distant key in a single chord, and what makes that possible?",
+        story="Four notes at the opening of Tristan und Isolde (1859) have been argued over for 160 years. They are "
+              "the end of a road that starts with one borrowed note. A leading note borrowed from outside the key "
+              "makes any chord a temporary home: these applied dominants fill about 9 beats in a hundred of Bach's "
+              "major chorales. A major key borrows the minor's chords; the Neapolitan and the augmented sixths "
+              "approach the dominant from outside the key, the sixths closing on it from both sides. The diminished "
+              "seventh cuts the octave into four equal minor thirds, so any of its notes can be a leading note: one "
+              "chord opens eight keys, and the three diminished sevenths share out all 24. The German sixth is a "
+              "dominant seventh spelled another way, and leaving it as one falls through a trapdoor into the key a "
+              "semitone up. These doors exist only in equal temperament: four pure minor thirds overshoot the octave "
+              "by 62.6 cents, three pure major thirds fall 41.1 short. Smooth motion opens a second road, the "
+              "chromatic mediants and Cohn's hexatonic cycle, six triads each a semitone of motion from the last. A "
+              "breadth-first search over the 24 keys finds 11 one step from C with pivot chords alone and 19 with the "
+              "doors; Lerdahl's chord distance turns each step into a number and a progression into a tension curve. "
+              "The Tristan chord's four readings are four theories of harmony; as pitch classes it reaches its "
+              "resolution with two semitones of motion, and the frontier treats harmony as a geometry of voice "
+              "leading. The Tune is harmonized with borrowed chords, with the Neapolitan, and through a trapdoor into "
+              "A flat.",
+        handoff="Canon and fugue in Part 20; form as a journey between keys in Part 21; grammars of harmony in Part 22; "
+                "the Romantic century's chromaticism in Part 27; symmetric scales in Part 28; jazz reharmonization in "
+                "Part 39; film music in Part 44.",
+        outside="Part 6 for commas and temperaments; Part 15 for keys, pivot chords and the probe-tone hierarchy; Part 17 "
+                "for four-part voice leading; Part 18 for functions. Modular arithmetic and breadth-first search.",
+        objectives={
+            "U": ["Spell and resolve applied dominants, the Neapolitan sixth and the three augmented sixths in any key.",
+                  "Resolve a diminished seventh to each of its eight keys, and hear an enharmonic modulation.",
+                  "Hear the difference between a predominant iv6, N6 and an augmented sixth."],
+            "M": ["Compute the comma between stacks of pure thirds and the octave, and say why the doors need equal temperament.",
+                  "Search a graph of keys for the shortest modulation, with and without enharmonic doors.",
+                  "Compute Lerdahl's chord distance and a tension curve for a progression."],
+            "D": ["Describe the neo-Riemannian transformations and the voice-leading geometry of chords, and what they explain that keys do not.",
+                  "Compare the readings of the Tristan chord and the theories of harmony behind them."],
+            "I": ["Reharmonize a melody with mixture, applied dominants and a chromatic mediant, keeping the voice leading clean.",
+                  "Use a diminished seventh or a German sixth to modulate to a distant key at the keyboard."],
+        },
+        results=[
+            ("Applied dominants in Bach", r"934 \text{ of } 10{,}014 \text{ beats in the major chorales} \approx 9\%"),
+            ("Four minor thirds", r"1200\log_2 (6/5)^4 - 1200 = +62.6 \text{ cents}; \quad \text{three major thirds: } -41.1"),
+            ("One chord, eight keys", r"\text{3 diminished sevenths} \times 8 \text{ keys} = 24, \ \text{each key once}"),
+            ("The pathfinder", r"\text{from C: } 11 + 12 \text{ keys at 1, 2 steps (pivots)}; \ 19 + 4 \text{ (with doors)}"),
+            ("Lerdahl's distance", r"\delta = i + j + k: \ \text{I}\to\text{V} = 5, \ \text{I}\to\text{vi} = 7, \ \text{C}\to\text{F}\sharp = 23"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 11),
+        D=(12,),
+        I=(8,),
+        also=(("Monochord's chromatic toolkit: applied chords, sixths, the diminished seventh, the pathfinder, tension", "explainer/music/monochord/chromatic.py"),),
+    ),
 ]

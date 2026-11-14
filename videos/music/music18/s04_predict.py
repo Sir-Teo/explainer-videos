@@ -100,8 +100,8 @@ class Predict(SoundScene):
             "where much of the emotion in music comes from: an expectation set up, then delayed, or denied, or "
             "fulfilled at last."
         ) as vo:
-            self.play(FadeIn(head))
-            for mark, r in zip("abcd", rows_):
+            self.play(FadeIn(head), FadeIn(rows_[0]))
+            for mark, r in zip("bcd", rows_[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
         self.wait(0.4)

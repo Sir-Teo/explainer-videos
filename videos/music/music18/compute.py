@@ -220,7 +220,25 @@ def compute_rhythm() -> dict:
             box = near if d <= 2 else far
             box[0] += a[:2] != z[:2]
             box[1] += 1
-    return {"change": [pos[k] / tot[k] for k in range(4)], "beats": [tot[k] for k in range(4)], "near_cadence": near[0] / near[1], "elsewhere": far[0] / far[1]}
+    # a control: the same chorales' chords, shuffled among the beats of each chorale (the metre kept, the order lost)
+    rng = np.random.default_rng(18)
+    spos, stot = Counter(), Counter()
+    for _ in range(20):
+        for c in b:
+            if c.time != (4, 4):
+                continue
+            labs = F.beat_labels(c)
+            seq = [x["label"][:2] if x["label"] else None for x in labs]
+            perm = [seq[i] for i in rng.permutation(len(seq))]
+            prev = None
+            for x, s in zip(labs, perm):
+                p = (x["tick"] % (4 * BC.TICKS)) // BC.TICKS
+                stot[p] += 1
+                if prev is not None and s is not None and s != prev:
+                    spos[p] += 1
+                prev = s if s is not None else prev
+    return {"change": [pos[k] / tot[k] for k in range(4)], "beats": [tot[k] for k in range(4)], "near_cadence": near[0] / near[1], "elsewhere": far[0] / far[1],
+            "shuffled": [spos[k] / stot[k] for k in range(4)]}
 
 
 def compute_octave() -> dict:

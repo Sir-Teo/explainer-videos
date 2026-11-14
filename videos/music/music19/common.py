@@ -28,10 +28,10 @@ def chapter(scene, number, title, question, lit=(), extra=(), spoken=None):
     open_chapter(scene, number, title, question, lit=lit, part=PART, extra=extra, spoken=spoken)
 
 
-def block_staff(chords, width: float = 6.0, space: float = 0.15, key: int = 0, beats: int = 2) -> GrandStaff:
+def block_staff(chords, width: float = 6.0, space: float = 0.15, key: int = 0, beats: int = 2, flats: bool | None = None) -> GrandStaff:
     """Chords (S, A, T, B) on a grand staff: soprano and alto on the treble staff, tenor and bass on the bass staff."""
     def pitch(m):
-        return SC.Pitch.from_midi(int(m), flats=key < 0)
+        return SC.Pitch.from_midi(int(m), flats=(key < 0) if flats is None else flats)
 
     d = Fraction(beats, 4)
     up = SC.Voice([SC.Chord(tuple({pitch(c[0]), pitch(c[1])}), d) if c[0] != c[1] else SC.Note(pitch(c[0]), d) for c in chords], clef="treble")

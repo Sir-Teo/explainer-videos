@@ -98,6 +98,8 @@ class Naples(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"a bass, \ then its realization", detail=r"a plucked string", corner=DL, tag_corner=DR)
             flash(snd, list(line.dots), [d["starts"]["bass"] + t for t in d["times"]["bass"]], hot=WHITE, base=VOICE_C[3])
+            pulse(snd, tl, d["starts"]["bass"], d["starts"]["full"] - 0.4, buff=0.1)
+            pulse(snd, tg, d["starts"]["full"], c.duration, buff=0.1)
             sing_chords(snd, g, d["times"]["full"], start=d["starts"]["full"])
         with self.voiceover(
             "It is correct and a little dull, which is what a student's first realization was. The art came "

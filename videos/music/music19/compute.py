@@ -193,9 +193,32 @@ def compute_mixture() -> dict:
         clips[name] = play(chords_events(chords, beats=2.0))
     s = seq(clips)
     times = {n: [float(s.events[f"{n}.t{k}"]) for k in range(len(out[n]))] for n in out}
+    # Bach: borrowed chords on the beat in the major chorales; the last chord of the minor chorales (the Picardy third)
+    book = BC.load()
+    borrowed_names = {(5, "minor"): "iv", (8, "major"): "♭VI", (10, "major"): "♭VII", (3, "major"): "♭III", (8, "7"): "♭VI7", (10, "7"): "♭VII7"}
+    hits, beats, final = Counter(), 0, Counter()
+    for ch in book:
+        labs = F.beat_labels(ch)
+        if ch.mode == "major":
+            for x in labs:
+                beats += 1
+                lab = x["label"]
+                if lab and (lab[0], lab[1]) in borrowed_names:
+                    hits[borrowed_names[(lab[0], lab[1])]] += 1
+        else:
+            last = [x for x in labs if x["label"]][-1]["label"]
+            final[f"{last[0]} {last[1]}"] += 1
+    # a minor cadence twice: ending minor, then with a Picardy third
+    pic = {"minor": realize([((0, 3, 7), 48), ((5, 8, 0), 53), ((7, 11, 2, 5), 43), ((0, 3, 7), 48)], start=(72, 67, 63, 48)),
+           "Picardy": realize([((0, 3, 7), 48), ((5, 8, 0), 53), ((7, 11, 2, 5), 43), ((0, 4, 7), 48)], start=(72, 67, 63, 48))}
+    sp = seq({n: play(chords_events(v, beats=2.0)) for n, v in pic.items()})
     return {"chords": out, "names": {"iv": ["I", "iv", "I"], "flat6": ["I", "♭VI", "♭VII", "I"], "flat3": ["I", "♭III", "IV", "V7", "I"]},
             "times": times, "starts": {n: float(s.events[n]) for n in out},
-            "clips": {"three": save("mixture.three", s, level=None, detail="three borrowings from C minor in C major: iv; flat VI and flat VII; flat III: Part 7's piano")}}
+            "bach": dict(hits), "bach_beats": beats, "final": dict(final),
+            "picardy": {n: rows(v) for n, v in pic.items()}, "picardy_starts": {n: float(sp.events[n]) for n in pic},
+            "picardy_times": {n: [float(sp.events[f"{n}.t{k}"]) for k in range(4)] for n in pic},
+            "clips": {"three": save("mixture.three", s, level=None, detail="three borrowings from C minor in C major: iv; flat VI and flat VII; flat III: Part 7's piano"),
+                      "picardy": save("mixture.picardy", sp, level=None, detail="a cadence in C minor ending minor, then ending on a major chord (a Picardy third): Part 7's piano")}}
 
 
 def compute_neapolitan() -> dict:
@@ -227,7 +250,7 @@ def compute_sixths() -> dict:
 
 def compute_dim7() -> dict:
     d = X.dim7(11)                                        # B D F A♭
-    targets = [((0, "minor"), 48), ((3, "minor"), 51), ((6, "minor"), 42), ((9, "minor"), 45)]
+    targets = [((0, "minor"), 48), ((3, "minor"), 51), ((6, "minor"), 54), ((9, "minor"), 45)]
     clips, out = {}, []
     for (tonic, mode), bass in targets:
         lead_pc = (tonic + 11) % 12

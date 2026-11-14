@@ -25,7 +25,8 @@ plucked string over Part 7's soundboard. Published findings are the ones listed 
 * **4. The same step, again.** The descending-fifths sequence in C major, heard (F to B the one diminished fifth);
   runs of falling fifths in the chorales: 770 of three chords, 205 of four, 68 of five, 21 of six or seven.
 * **5. When chords change.** A new chord on beat 1 of a bar of four 78 times in a hundred, beat 3 79, beats 2 and
-  4 65 and 60: harmonic rhythm follows the metre of Part 11.
+  4 65 and 60, against about 77 on every beat when each chorale's chords are shuffled: the weak beats hold the
+  chord, and harmonic rhythm follows the metre of Part 11.
 * **6. Naples and the partimento.** Campion's rule of the octave (1716); Durante, Leo, Fenaroli; Pergolesi,
   Paisiello, Cimarosa; Gjerdingen (2007) and Sanguinetti (2012); the rule up and down, heard: plain triads only on
   the first and fifth degrees, and different chords rising and falling.

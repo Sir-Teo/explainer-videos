@@ -878,4 +878,102 @@
       note: "I-IV-V-I costs little: each step is one Bach takes often. Swap the middle chords (I-V-IV-I) and the third chord jumps in surprise: dominant back to subdominant is the rarest move of the film's triangle. Try vi-ii-V-I, falling fifths all the way, and then V-vi at the end, the deceptive cadence, about four bits. The model knows only pairs, so it cannot tell a cadence in the middle of a phrase from one at its end."
     });
   };
+
+  // ---- Part 19: a pathfinder between keys ----------------------------------------------------------------------
+  var NM19 = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
+  var KEYS19 = [];
+  (function () { for (var m = 0; m < 2; m++) for (var t = 0; t < 12; t++) KEYS19.push([t, m ? "minor" : "major"]); })();
+  var NMm19 = ["C", "C\u266f", "D", "E\u266d", "E", "F", "F\u266f", "G", "G\u266f", "A", "B\u266d", "B"];
+  function kname19(k) { return k[1] === "major" ? NM19[k[0]] + " major" : NMm19[k[0]] + " minor"; }
+  function triads19(k) {
+    var sc = (k[1] === "major" ? [0, 2, 4, 5, 7, 9, 11] : [0, 2, 3, 5, 7, 8, 11]).map(function (x) { return (x + k[0]) % 12; }), out = [], d;
+    for (d = 0; d < 7; d++) {
+      var t = [sc[d], sc[(d + 2) % 7], sc[(d + 4) % 7]];
+      if (k[1] === "minor" && d === 2) t = [sc[d], (sc[d] + 4) % 12, (sc[d] + 7) % 12];
+      out.push(t);
+    }
+    return out;
+  }
+  function tkey19(t) { return t.slice().sort(function (a, b) { return a - b; }).join(","); }
+  function shared19(a, b) {
+    var ta = {}; triads19(a).forEach(function (t) { ta[tkey19(t)] = 1; });
+    return triads19(b).filter(function (t) { return ta[tkey19(t)]; });
+  }
+  function same19(a, b) { return a[0] === b[0] && a[1] === b[1]; }
+  function edges19(k, doors) {   // [[key, how, door chord pcs]], in the same order as chromatic.edges
+    var out = [], seen = {};
+    function add(j, how, ch) { var id = j[0] + j[1]; if (same19(j, k) || seen[id]) return; seen[id] = 1; out.push([j, how, ch]); }
+    KEYS19.forEach(function (j) { var p = shared19(k, j); if (p.length) add(j, "a shared triad", p[0]); });
+    if (doors) {
+      var lt = (k[0] + 11) % 12, dim = [0, 3, 6, 9].map(function (x) { return (lt + x) % 12; });
+      dim.forEach(function (c) { ["major", "minor"].forEach(function (m) { add([(c + 1) % 12, m], "a diminished seventh, respelled", dim); }); });
+      var up = (k[0] + 1) % 12, ger = [(k[0] + 8) % 12, k[0] % 12, (k[0] + 3) % 12, (k[0] + 6) % 12];
+      add([up, "major"], "a German sixth heard as a dominant seventh", ger);
+      add([up, "minor"], "a German sixth heard as a dominant seventh", ger);
+      var nea = [up, (up + 4) % 12, (up + 7) % 12];
+      [[(up + 7) % 12, "major"], [(up + 5) % 12, "major"], [up, "major"]].forEach(function (j) { add(j, "the Neapolitan heard as a chord of the new key", nea); });
+    }
+    return out;
+  }
+  function bfs19(start, doors) {
+    var dist = {}, prev = {}, q = [start], id = function (k) { return k[0] + k[1]; };
+    dist[id(start)] = 0; prev[id(start)] = null;
+    while (q.length) {
+      var k = q.shift();
+      edges19(k, doors).forEach(function (e) {
+        if (dist[id(e[0])] === undefined) { dist[id(e[0])] = dist[id(k)] + 1; prev[id(e[0])] = [k, e[1], e[2]]; q.push(e[0]); }
+      });
+    }
+    return { dist: dist, route: function (t) { var r = [], cur = t; while (prev[id(cur)]) { var p = prev[id(cur)]; r.unshift([p[0], cur, p[1], p[2]]); cur = p[0]; } return r; }, id: id };
+  }
+  W.chromatic = function (el) {
+    var fmtKey = function (i) { return kname19(KEYS19[i]); };
+    QB.widget(el, {
+      title: "The shortest way to any key",
+      sub: "Choose a starting key and a destination. The page searches outward from the start, breadth first, joining two keys when one chord can belong to both: a triad they share (Part 15's pivot chords), or, with the doors open, a diminished seventh respelled, a German sixth heard as a dominant seventh, or the Neapolitan heard as a chord of the new key. The circle colours every key by its distance from the start; the route is drawn in gold.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "s", label: "Start", min: 0, max: 23, step: 1, value: 0, fmt: fmtKey },
+        { k: "t", label: "Destination", min: 0, max: 23, step: 1, value: 6, fmt: fmtKey },
+        { k: "d", label: "Doors (0 closed, 1 open)", min: 0, max: 1, step: 1, value: 1 },
+      ],
+      buttons: [{ label: "Play the route", act: function (s) { s.sound = progSound18(s.chords); } }],
+      init: function (s) { s.sound = null; s.chords = []; },
+      draw: function (g, v, s) {
+        var start = KEYS19[v.s], target = KEYS19[v.t], doors = v.d === 1, r = bfs19(start, doors);
+        s.route = r.route(target); s.dist = r.dist[r.id(target)];
+        var cols = { 0: C.idea, 1: "#7DD3FC", 2: "#F472B6", 3: C.loss };
+        var a = g[0].axes({ x: [-1.35, 1.35], y: [-1.25, 1.25], title: "Steps from " + kname19(start), xticks: [], yticks: [] });
+        var pos = function (k) { var i = (((k[0] + (k[1] === "minor" ? 3 : 0)) % 12) * 7) % 12, rr = k[1] === "major" ? 1.0 : 0.62; return [rr * Math.sin(2 * Math.PI * i / 12), rr * Math.cos(2 * Math.PI * i / 12)]; };
+        s.route.forEach(function (st) { var p = pos(st[0]), q = pos(st[1]); a.line([p[0], q[0]], [p[1], q[1]], { color: C.idea, width: 3 }); });
+        KEYS19.forEach(function (k) {
+          var p = pos(k), dd = r.dist[r.id(k)];
+          a.dots([p[0]], [p[1]], { color: cols[Math.min(dd, 3)], r: same19(k, target) ? 9 : 6 });
+          var f = k[1] === "major" ? 1.16 : 0.74, rr0 = Math.sqrt(p[0] * p[0] + p[1] * p[1]);
+          a.text(p[0] * f / rr0 * (k[1] === "major" ? 1.0 : 0.62), p[1] * f / rr0 * (k[1] === "major" ? 1.0 : 0.62), k[1] === "major" ? NM19[k[0]] : NMm19[k[0]].toLowerCase(), { align: "center", size: 10.5, color: C.ink });
+        });
+        a.legend([["home", C.idea], ["1 step", "#7DD3FC"], ["2 steps", "#F472B6"]], { pos: "tl" });
+        var cnt = [0, 0, 0, 0], cntP = [0, 0, 0, 0], rp = doors ? bfs19(start, false) : r;
+        KEYS19.forEach(function (k) { cnt[Math.min(r.dist[r.id(k)], 3)]++; cntP[Math.min(rp.dist[rp.id(k)], 3)]++; });
+        s.cnt = cnt; s.cntP = cntP;
+        var b = g[1].axes({ x: [0.3, 3.7], y: [0, 24], title: "Keys by distance: pivots (grey) and with doors (gold)", xticks: [1, 2, 3], ylabel: "keys" });
+        b.bars([0.8, 1.8, 2.8], cntP.slice(1), 0.35, { color: "#888" });
+        b.bars([1.2, 2.2, 3.2], cnt.slice(1), 0.35, { color: doors ? C.idea : "#888" });
+        // the route's chords: the start's tonic; for each step the door chord, the new key's V7 and tonic
+        var tri = function (k) { return [k[0], (k[0] + (k[1] === "major" ? 4 : 3)) % 12, (k[0] + 7) % 12]; };
+        var seq = [tri(start)], prev = null, chords = [];
+        s.route.forEach(function (st) { seq.push(st[3]); seq.push([(st[1][0] + 7) % 12, (st[1][0] + 11) % 12, (st[1][0] + 2) % 12, (st[1][0] + 5) % 12]); seq.push(tri(st[1])); });
+        seq.forEach(function (pcs) { var bass = 40 + ((pcs[0] + 8) % 12), ch = voice18(prev, pcs, bass) || [72, 67, 64, bass]; chords.push(ch); prev = ch; });
+        s.chords = chords;
+      },
+      readout: function (v, s) {
+        var rows = [["steps", s.dist === undefined ? "unreachable" : String(s.dist)]];
+        s.route.forEach(function (st, i) { rows.push(["step " + (i + 1), kname19(st[0]) + " to " + kname19(st[1]) + ", by " + st[2] + " (" + st[3].map(function (x) { return NM19[x]; }).join(" ") + ")"]); });
+        rows.push(["keys 1 and 2 steps away", "pivots " + s.cntP[1] + " and " + s.cntP[2] + "; " + (v.d === 1 ? "with doors " + s.cnt[1] + " and " + s.cnt[2] : "doors closed")]);
+        rows.push(["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]);
+        return rows;
+      },
+      note: "From C, close the doors and F sharp major takes two steps, through E minor; open them and the diminished seventh of C, respelled, reaches it in one, the film's chapter 9. Try C major to D flat major: one step through the German sixth. The doors work only on an equally tempered keyboard, where F sharp and G flat are one key (chapter 7)."
+    });
+  };
 })();
