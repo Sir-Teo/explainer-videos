@@ -87,20 +87,31 @@ class Riffs(SoundScene):
     def power(self):
         d = load("power")
         c = clip("power.two")
-        cells = VGroup(VGroup(label(r"C major triad", font_size=24, color=EAR), label(r"C E G C E", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.15),
-                       VGroup(label(r"C power chord \ (C5)", font_size=24, color=TUNE), label(r"C G C", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.15)).arrange(RIGHT, buff=1.6).move_to(UP * 0.4)
-        cap = label(r"distortion adds sum and difference tones between every pair of notes: \ the third's clash with the fifth turns to mud", font_size=19, color=GREY_A).to_edge(DOWN, buff=1.0)
+        card = listen_card(r"Two chords through the same distorted amplifier: \ one is a full major triad, \ "
+                           r"one only root, \ fifth and octave. \ Which is the full triad, \ the first or the second?", width=10.4)
         with self.voiceover(
-            "Hear why. A full C major chord through the model amplifier, then a C power chord, root, fifth and octave. The "
-            "curve does not only add harmonics to each note: it mixes the notes, adding tones at their sums and differences. "
-            "For a fifth these line up with the harmonic series; for a third they do not, and the chord turns to mud."
+            "A question for your ears. Two chords strummed through the same model amplifier, turned up. One is a full major "
+            "triad; the other has only a root, a fifth and an octave. Which is the full triad, the first or the second?"
         ):
-            self.play(FadeIn(cells), FadeIn(cap))
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        boxes = VGroup(*[VGroup(RoundedRectangle(width=3.2, height=1.4, corner_radius=0.15, stroke_color=GREY_B), label(t, font_size=24, color=WHITE)).arrange(DOWN, buff=-0.9)
+                         for t in (r"first", r"second")]).arrange(RIGHT, buff=1.5).move_to(UP * 0.3)
+        self.play(FadeOut(card), FadeIn(boxes))
         with self.listen(c) as snd:
-            window(snd, r"triad, \ then power chord", detail=r"plucked string, \ model amplifier", corner=DL, tag_corner=DR)
-            pulse(snd, cells[0], d["starts"]["triad"], d["starts"]["power"] - 0.3, buff=0.1)
-            pulse(snd, cells[1], d["starts"]["power"], c.duration, buff=0.1)
-        self.wait(0.3)
+            window(snd, r"first, \ then second", detail=r"plucked string, \ model amplifier", corner=DL, tag_corner=DR)
+            pulse(snd, boxes[0], d["starts"]["triad"], d["starts"]["power"] - 0.3, buff=0.08)
+            pulse(snd, boxes[1], d["starts"]["power"], c.duration, buff=0.08)
+        cells = VGroup(VGroup(label(r"first: \ C major triad", font_size=22, color=EAR), label(r"C E G C E", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.12),
+                       VGroup(label(r"second: \ C power chord \ (C5)", font_size=22, color=TUNE), label(r"C G C", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.12)).arrange(RIGHT, buff=1.6).to_edge(DOWN, buff=1.4)
+        cap = label(r"distortion adds sum and difference tones between every pair of notes: \ the third's clash turns the triad to mud", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.6)
+        with self.voiceover(
+            "The first is the full triad, the muddier of the two. The curve does not only add harmonics to each note: it "
+            "mixes the notes, adding tones at their sums and differences. For a fifth these line up with the harmonic "
+            "series; for a third they do not, and the chord turns to mud. That is why distorted guitars play power chords."
+        ):
+            self.play(FadeIn(cells), FadeIn(cap), boxes[0][0].animate.set_stroke(EAR, 4))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------

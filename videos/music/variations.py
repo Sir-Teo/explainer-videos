@@ -83,6 +83,8 @@ LEDGER = [
      "measure": r"blues thirds 35 cents below E; in the rag 18 of 44 right-hand onsets syncopated; the riff swung 2.7 to 1"},
     {"part": 39, "title": r"as a bebop head, with an improvised chorus, then through three keys a major third apart", "seconds": 47.2,
      "measure": r"the program's chorus: 86\% of beats on chord tones, guide tones at 96\% of changes"},
+    {"part": 40, "title": r"as a pop single, then as a beat that samples Variation 7", "seconds": 65.9,
+     "measure": r"the voice enters after 4.6 s; the beat: 16 slices of Variation 7, 4 rests"},
 ]
 
 

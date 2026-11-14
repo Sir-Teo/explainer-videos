@@ -168,4 +168,85 @@
       note: "With the plain mode the run keeps chord tones on the beats for about an octave and then slips. The bebop scale's extra note makes the cycle eight long, so the alternation never breaks, from any chord tone, in either direction."
     });
   };
+  // ---- Part 40: a step sequencer with drum-machine voices --------------------------------------------------------------
+  var PAT40 = {
+    rock: { kick: [0, 8, 10], snare: [4, 12], hat: [0, 2, 4, 6, 8, 10, 12, 14], open: [] },
+    funk: { kick: [0, 3, 10], snare: [4, 7, 12, 15], hat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], open: [] },
+    disco: { kick: [0, 4, 8, 12], snare: [4, 12], hat: [0, 4, 8, 12], open: [2, 6, 10, 14] },
+    house: { kick: [0, 4, 8, 12], snare: [4, 12], hat: [], open: [2, 6, 10, 14] },
+    trap: { kick: [0, 7, 10], snare: [8], hat: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], open: [] }
+  };
+  var STYLES40 = ["rock", "funk", "disco", "house", "trap"];
+  var HAT40 = [205.3, 304.4, 369.6, 522.7, 540, 800];
+  function kick40(out, i0, rate, decay, gain) {
+    var ph = 0;
+    for (var j = 0; j < 5 * decay * rate && i0 + j < out.length; j++) {
+      var t = j / rate, f = 52 * (1 + 0.6 * Math.exp(-t / 0.02));
+      ph += 2 * Math.PI * f / rate;
+      out[i0 + j] += gain * Math.sin(ph) * Math.exp(-t / decay) * Math.min(1, t / 0.0005);
+    }
+  }
+  function noise40(out, i0, rate, dur, decay, gain, hp) {
+    var prev = 0, prevy = 0, a = Math.exp(-2 * Math.PI * hp / rate);
+    for (var j = 0; j < dur * rate && i0 + j < out.length; j++) {
+      var x = Math.random() * 2 - 1, y = a * (prevy + x - prev);
+      prev = x; prevy = y;
+      out[i0 + j] += gain * y * Math.exp(-j / rate / decay);
+    }
+  }
+  function hat40(out, i0, rate, open, gain) {
+    var dur = open ? 0.5 : 0.08, decay = open ? 0.18 : 0.022, prev = 0, prevy = 0, a = Math.exp(-2 * Math.PI * 7000 / rate);
+    for (var j = 0; j < dur * rate && i0 + j < out.length; j++) {
+      var t = j / rate, x = 0;
+      for (var k = 0; k < 6; k++) x += Math.sin(2 * Math.PI * HAT40[k] * t + 0.7 * k) > 0 ? 1 : -1;
+      var y = a * (prevy + x - prev); prev = x; prevy = y;
+      out[i0 + j] += gain * 0.25 * y * Math.exp(-t / decay);
+    }
+  }
+  W.steps = function (el) {
+    QB.widget(el, {
+      title: "A step sequencer with drum-machine voices",
+      sub: "Five beats on the sixteen-step grid of a drum machine, played by voices built the way the 808's circuits work: a struck resonator for the kick, noise for the clap, six square waves for the hats. Choose a style, the tempo, the swing and the kick's decay; then play two bars.",
+      panels: 1, height: 220,
+      controls: [
+        { k: "style", label: "Style", min: 0, max: 4, step: 1, value: 0, fmt: function (x) { return STYLES40[x]; } },
+        { k: "bpm", label: "Tempo", min: 70, max: 160, step: 2, value: 112, fmt: function (x) { return x + " a minute"; } },
+        { k: "swing", label: "Swing", min: 50, max: 70, step: 1, value: 50, fmt: function (x) { return x + "%"; } },
+        { k: "decay", label: "Kick decay", min: 0.1, max: 1.5, step: 0.05, value: 0.45, fmt: function (x) { return x.toFixed(2) + " s"; } }
+      ],
+      buttons: [{ label: "Play two bars", act: function (s) {
+        var v = s.v, p = PAT40[STYLES40[v.style]], rate = 44100, step = 60 / v.bpm / 4;
+        var n = Math.floor((32 * step + 1.5) * rate), out = new Float32Array(n);
+        function at(st, bar) { return Math.floor((bar * 16 * step + (2 * Math.floor(st / 2) + (st % 2 ? 2 * v.swing / 100 : 0)) * step) * rate); }
+        for (var bar = 0; bar < 2; bar++) {
+          p.kick.forEach(function (st) { kick40(out, at(st, bar), rate, v.decay, 0.5); });
+          p.snare.forEach(function (st) { noise40(out, at(st, bar), rate, 0.25, 0.06, 0.35, 900); });
+          p.hat.forEach(function (st) { hat40(out, at(st, bar), rate, false, 0.15); });
+          p.open.forEach(function (st) { hat40(out, at(st, bar), rate, true, 0.12); });
+        }
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var p = PAT40[STYLES40[v.style]];
+        var a = g[0].axes({ x: [-0.5, 15.5], y: [-0.5, 3.5], title: STYLES40[v.style] + ": kick, snare / clap, hat, open hat (dots: hits; grey lines: beats)", xlabel: "step" });
+        for (var b = 0; b <= 4; b++) a.line([4 * b - 0.5, 4 * b - 0.5], [-0.5, 3.5], { color: "#3A4250", width: 1 });
+        var rows = [["kick", 3, C.idea], ["snare", 2, "#F472B6"], ["hat", 1, "#8A93A0"], ["open", 0, "#60A5FA"]];
+        rows.forEach(function (r) {
+          var xs = p[r[0]].map(function (st) { return st + (st % 2 ? 2 * (v.swing - 50) / 100 : 0); });
+          a.dots(xs, xs.map(function () { return r[1]; }), { r: 7, color: r[2] });
+        });
+      },
+      readout: function (v, s) {
+        var p = PAT40[STYLES40[v.style]];
+        var back = p.snare.filter(function (x) { return x === 4 || x === 12; }).length / p.snare.length;
+        return [["backbeat", Math.round(100 * back) + "% of snare hits on beats 2 and 4"],
+                ["kick", "52 Hz, falling 60 dB in " + (v.decay * Math.log(1000)).toFixed(2) + " s"],
+                ["swing", v.swing + "%: the off sixteenths fall " + (v.swing - 50) * 2 + "% of a sixteenth late"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Disco and house put the kick on every beat; trap moves the snare to beat three, so the beat feels half as fast as its hats. Try funk at 58% swing, and the kick's decay long enough to become a bass note."
+    });
+  };
 })();

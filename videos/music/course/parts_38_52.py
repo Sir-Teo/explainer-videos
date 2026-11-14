@@ -91,4 +91,45 @@ PARTS = [
         I=(4, 9),
         also=(("Monochord's changes: bebop scales, chord scales, third cycles, reharmonisation, a phrase-grammar improviser and its judge", "explainer/music/monochord/changes.py"),),
     ),
+    Part(
+        n=40, level="U", widget="steps", prereq=(11, 14, 21, 37, 38, 39),
+        question="How has the popular song's form been shaped by the technologies that sold it, from sheet music to streaming?",
+        story="The hit single's introduction shrank from over twenty seconds in the mid-1980s to about five by the mid-2010s "
+              "(Léveillé Gauvin, 2018), and on streaming services a play pays only after about thirty seconds. The part "
+              "follows the song from Tin Pan Alley's thirty-two-bar AABA to verse and chorus and the song factories; from "
+              "progressions to loops (I-V-vi-IV, bVII-IV-I, the aeolian loop), where melody and harmony part company (4 of "
+              "the 12 on-beat notes of our hook lie outside the chord); riffs, and why distortion forces power chords; the "
+              "backbeat, funk's one, disco's four on the floor, house and half-time trap, with drum-machine swing on the "
+              "sixteenths; hooks, titles and prosody, measured as the share of syllables whose stress matches the beat; "
+              "the 808 from first principles, a struck resonator sagging from 81 to 52 Hz and six square waves for the "
+              "hats, tuned into a bass line; the break, the sampler and the law; flow, a verse of ours placed on the beat and "
+              "in threes, measured after Ohriner; and the build, the drop and the sidechain. Corpus studies (Mauch and "
+              "colleagues; Serrà and colleagues) frame what sixty years of charts show, and what they leave out. The Tune "
+              "becomes a pop single and then a beat that samples Variation 7.",
+        handoff="Composing as search in Part 42; dynamics and the compressor in Part 50; synthesis in Parts 51 and 52; the "
+                "workstation in Part 53; mastering and loudness in Part 57; the business of music in Part 60.",
+        outside="Part 11 for meter; Part 14 for melody; Part 21 for form; Part 37 for timelines and interlocking; Part 38 for "
+                "swing and the blues; Part 39 for standards. Oscillators and resonators, compressors, corpus statistics.",
+        objectives={
+            "U": ["Hear AABA and verse-chorus forms, loops and riffs, and name them.",
+                  "Hear the backbeat, four on the floor and a half-time beat, and drum-machine swing.",
+                  "Hear a sidechain pump and a power chord stay clear through distortion."],
+            "M": ["Build drum-machine voices from their circuits' principles: a struck resonator and six square waves.",
+                  "Measure prosody and flow on a sixteenth-note grid.",
+                  "Compute a sidechain's ducking and recovery, and chop and re-sequence a recording."],
+            "D": ["Design a study of whether new platforms change how songs are written or only which win."],
+            "I": ["Program a beat, tune an 808 and sidechain a pad, as producers do; clear samples or replay them."],
+        },
+        results=[
+            ("Intros", r"20 \text{ s (mid-1980s)} \to 5 \text{ s (mid-2010s)}"),
+            ("The 808 kick", r"y = \sin\!\big(\textstyle\int 2\pi f(t)\,dt\big) e^{-t/\tau}, \ f: 81 \to 52 \text{ Hz}"),
+            ("The 808 hats", r"205.3,\ 304.4,\ 369.6,\ 522.7,\ 540,\ 800 \text{ Hz squares}"),
+            ("Sidechain", r"\text{back within 1 dB after } \tau \ln D"),
+            ("Flow", r"\text{accents every } 3 \text{ sixteenths against the beat}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 9),
+        D=(10,),
+        I=(6, 7, 8),
+        also=(("Monochord's song studio: drum-machine voices, patterns, sidechain, chopping, prosody and flow", "explainer/music/monochord/song.py"),),
+    ),
 ]

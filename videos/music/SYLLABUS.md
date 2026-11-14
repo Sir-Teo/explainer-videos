@@ -1592,18 +1592,36 @@ carried through C, A♭ and E over third-cycle changes.
 *Rights:* well-known tunes by their chord progressions only (§2.4); every line is ours or the program's.
 *Reading:* Owens, *Bebop*; Berliner, *Thinking in Jazz*; Levine; the Weimar Jazz Database papers.
 
-### Part 40 · The Song (~55)
+### Part 40 · The Song (~35)
 *Story:* The average introduction of a hit single shrank from about twenty seconds in the 1980s to about five by
 the 2010s. A stream that is skipped before thirty seconds pays nothing. The part follows the popular song from
 the thirty-two-bar standard to the loop and the drop, and finds its form shaped by each technology that sold it.
+1. Hook: an ear question (when does the voice enter?); the thirty-second rule; the plan.
+2. From AABA to verse and chorus: Tin Pan Alley; an AABA song heard; verse, pre-chorus and chorus heard; why the change; song factories.
+3. Loops and rock harmony: three loops; the three heard; the melodic-harmonic divorce counted; rock's scales; progressions and loops.
+4. Riffs: the riff; a rock riff heard; distortion as a curve; an ear question (triad or power chord?); a funk riff heard; a lineage.
+5. The backbeat and groove: the backbeat; five beats on the grid; the five heard; the one; sixteenth swing heard; disco to house.
+6. Hooks and prosody: hooks; prosody measured; setting words; the title; earworms.
+7. The drum machine: the 808; the kick as a struck resonator; three decays heard; the kick as a bass heard; six-square hats; the kit heard; after the 808.
+8. The break and the sampler: Kool Herc; a break chopped and re-sequenced heard; samplers; the law.
+9. Flow: rap and flow; a verse placed two ways; both heard; measured; rhyme; the writers.
+10. The build, the drop and the sidechain: the drop; a build and drop heard; the sidechain; an ear question (which pumps?); the producer's song.
+11. Frontier: Mauch and colleagues; Serrà and colleagues; platforms; what the charts leave out; the research problem.
+12. Variation 40: the Tune as a pop single, then a beat that samples Variation 7. Outro: problems, payoffs.
+
 *Covers:* AABA and verse-chorus; loops and rock harmony; riffs; the backbeat and groove; hooks and prosody;
 funk; disco to house; the breakbeat, sampling and the drum machine; flow; the drop and the sidechain; corpus
 studies of sixty years of charts.
-*Built and computed:* chart statistics from open annotations **(verify licence)**; an 808 from first
-principles; a flow analyzer on an original verse.
-*Variation 40:* the Tune as a pop single, and as a beat that samples Variation 7.
-*Frontier:* corpus studies; how short-video platforms are changing form **(verify)**.
-*Rights:* statistics, skeletons and original songs (§2.4).
+*Built and computed:* `monochord/song.py`: drum-machine voices from their circuits' principles (a struck-resonator
+kick sagging from 81 to 52 Hz; six square waves at 205.3–800 Hz for the hats; noise claps); step patterns and
+sixteenth-note swing; a sidechain (back within 1 dB after τ ln D); chopping and re-sequencing; prosody (the share of
+syllables whose stress matches the beat) and a flow analyzer on an original verse (after Ohriner). Chart statistics
+are quoted from the published studies rather than recomputed: the licences of the open chart annotations were not
+cleared for redistribution.
+*Variation 40:* the Tune as a pop single (the voice entering after 4.6 s), and as a beat that samples Variation 7
+(sixteen slices, four rests).
+*Frontier:* corpus studies; how short-video platforms may be changing form (open).
+*Rights:* statistics quoted, skeletons, and original songs (§2.4); the only sample is the series' own.
 *Reading:* Temperley, *The Musical Language of Rock*; Ohriner, *Flow*; Serrà et al. (2012); Mauch et al. (2015).
 
 ## Act VII · The Craft
