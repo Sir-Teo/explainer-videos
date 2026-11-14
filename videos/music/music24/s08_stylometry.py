@@ -52,13 +52,13 @@ class Stylometry(SoundScene):
             ys = [y for x, y, l in pts if l == lab]
             cen.add(VGroup(Cross(stroke_color=WHITE, stroke_width=4).scale(0.13).move_to(ax.c2p(np.mean(xs), np.mean(ys))),
                            label(lab, font_size=20, color=col).next_to(ax.c2p(np.mean(xs), np.mean(ys)), UR, buff=0.1)))
-        side = VGroup(*[label(t, font_size=21, color=c_) for t, c_ in (
+        side = VGroup(*[label(t, font_size=24, color=c_) for t, c_ in (
             (r"each dot: \ one piece, \ two of its twelve numbers", WHITE),
             (r"crosses: \ the centroids", WHITE),
             (r"in twelve dimensions the same idea: \ the nearest cross wins", TUNE),
             (r"each number first rescaled \ (mean 0, \ spread 1), \ so no one feature dominates", GREY_A))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 4.6))
-        side.move_to(RIGHT * 4.3 + DOWN * 0.2)
+        side.scale_to_fit_width(min(side.width, 5.2))
+        side.move_to(RIGHT * 4.1 + DOWN * 0.2)
         with self.voiceover(
             "Two of the twelve numbers can be drawn. <bookmark mark='a'/> Each dot is one piece: across, its share of "
             "free dissonance; up, its share of suspensions. Palestrina's movements, in gold, sit in a tight cloud at the "
@@ -93,11 +93,11 @@ class Stylometry(SoundScene):
                            label(rf"{conf[who]['Monteverdi']}", font_size=24, color=WHITE)))
         for i, row in enumerate(tab):
             for k, cell in enumerate(row):
-                cell.move_to([[-5.0, -2.4, 0.3][k], 1.4 - 0.6 * i, 0])
-        acc = label(rf"right on {100 * s['accuracy']:.0f} in 100 of {s['n']} hidden pieces", font_size=24, color=TUNE).move_to([-2.6, -0.6, 0])
+                cell.move_to([[-5.6, -3.5, -1.4][k], 1.4 - 0.6 * i, 0])
+        acc = label(rf"right on {100 * s['accuracy']:.0f} in 100 of {s['n']} hidden pieces", font_size=24, color=TUNE).move_to([-3.4, -0.6, 0])
         side = VGroup(label(r"what separates them most \ (Monteverdi minus Palestrina)", font_size=19, color=GREY_A),
                       *[label(rf"{FEAT_NAME[k]}: \ {'$+$' if v > 0 else '$-$'}{abs(v):.1f}", font_size=21, color=WHITE) for k, v in w]).arrange(DOWN, buff=0.22, aligned_edge=LEFT)
-        side.move_to(RIGHT * 3.6 + UP * 0.2)
+        side.move_to(RIGHT * 3.9 + UP * 0.2)
         cap = label(r"but these are Masses against madrigals, \ two encodings, \ two genres: \ the test may be hearing the genre", font_size=21, color=EAR).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             f"First, Palestrina against Monteverdi: {say(s['n'] // 2)} of Palestrina's movements chosen at random, and all "
