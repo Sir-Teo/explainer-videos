@@ -75,6 +75,8 @@ LEDGER = [
      "measure": r"alap of 9 notes; a gat of 16 beats; tihai 3 + 2 + 3 + 2 + 3 beats from beat 5, its last stroke on sam"},
     {"part": 35, "title": r"in Rast, Bayati and Hijaz, after a taqsim", "seconds": 26.2,
      "measure": r"of 14 notes, 2 move off the piano's keys in Rast, 6 change in Bayati, 4 in Hijaz"},
+    {"part": 36, "title": r"in qin harmonics, then as balungan with interlocking parts", "seconds": 18.8,
+     "measure": r"14 notes as harmonics, the worst 8 cents from equal temperament; a 16-beat balungan, 4 pulses a beat"},
 ]
 
 
