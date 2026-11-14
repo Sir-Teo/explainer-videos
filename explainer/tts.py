@@ -153,6 +153,9 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bLocrian\b", "[Locrian](/lˈOkɹiən/)"),
     (r"\bIonian\b", "[Ionian](/IˈOniən/)"),
     (r"\bIDyOM\b", "[IDyOM](/ˈɪdiəm/)"),
+    # Part 16: counterpoint (Fux is "fooks", not the English word it would otherwise be read as)
+    (r"\bFux['’]s\b", "[Fux's](/fˈʊksᵻz/)"),
+    (r"(?<!\[)\bFux\b(?!['’]s)", "[Fux](/fˈʊks/)"),
     (r"\bAh,? vous dirai-je,? maman\b", "[Ah vous](/ɑ vˈu/) [dirai-je](/diɹˈA ʒə/) [maman](/mɑmˈɑn/)"),
     (r"\bFrère Jacques\b", "[Frère](/fɹˈɛɹ/) [Jacques](/ʒˈɑk/)"),
     (r"\bOlivier Messiaen\b", "[Olivier](/ɔlˈɪviˌA/) [Messiaen](/mˈɛsiˌɑn/)"),

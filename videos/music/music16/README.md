@@ -89,7 +89,7 @@ Published findings are the ones listed under Sources.
 Monochord's counterpoint is held against brute force in `tests/music/test_counterpoint.py`; this part's claims and
 clips in `tests/music/test_music16.py`.
 
-**Sounds.** Twenty clips: the counterpoint on Part 7's piano (`physical model`), organum, the fusion and onset
+**Sounds.** Sixteen clips: the counterpoint on Part 7's piano (`physical model`), organum, the fusion and onset
 questions on organ tones (`synthesized`), all in twelve-tone equal temperament. There are no recordings.
 
 **What the models are, and are not.** *The twelve rules* are Fux's first species as modern textbooks state it

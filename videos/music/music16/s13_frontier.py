@@ -43,6 +43,7 @@ class Frontier(SoundScene):
                       label(r"Huron: \ in polyphonic music, \ fused intervals are approached apart in time more than chance allows", font_size=24, color=GREY_A),
                       label(r"and in music meant as one voice, \ in harmony, \ the rules relax", font_size=24, color=GREY_A),
                       label(r"the test: \ shuffle the music, \ count again: \ the method of Part 14", font_size=28, color=TUNE)).arrange(DOWN, buff=0.35).move_to(UP * 0.2)
+        head = label(r"can music test the rules?", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
             "The perceptual account also makes predictions that can be checked against music. "
             "<bookmark mark='a'/> If the rules come from hearing, then composers who never read Fux "
@@ -53,6 +54,7 @@ class Frontier(SoundScene):
             "in parallel, the rules relax. <bookmark mark='d'/> The method is the one Part 14 used for "
             "the leap rule: shuffle the music, count again, and see what is left over."
         ) as vo:
+            self.play(FadeIn(head))
             for mark, r in zip("abcd", rows):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
@@ -73,6 +75,6 @@ class Frontier(SoundScene):
             "model can rank good lines as a good teacher does, and from what it would have to learn, "
             "is not settled."
         ):
-            self.play(LaggedStart(*[FadeIn(x) for x in star], lag_ratio=0.5), run_time=4.0)
+            self.play(LaggedStart(*[FadeIn(x) for x in star], lag_ratio=0.5), run_time=2.0)
         self.wait(0.4)
         self.clear_scene()

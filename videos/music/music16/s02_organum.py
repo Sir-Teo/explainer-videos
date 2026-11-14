@@ -88,6 +88,7 @@ class Organum(SoundScene):
             t.next_to(g, UP, buff=0.12).align_to(g, LEFT)
             m.next_to(g, RIGHT, buff=0.5)
             rows.add(row)
+        head = label(r"three stages of organum, \ on the whole Tune", font_size=28, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Hear how the second voice won its freedom, on the whole Tune. <bookmark mark='a'/> First, "
             "parallel organum at the fifth, as in the handbook. <bookmark mark='b'/> Then the kind the "
@@ -98,6 +99,7 @@ class Organum(SoundScene):
             "every interval is still an octave, fifth, fourth or unison, as most were then, but the "
             "organal voice moves against the chant wherever it can. Monochord chose that voice by dynamic programming, rewarding contrary motion."
         ) as vo:
+            self.play(FadeIn(head))
             for mark, row in zip("abc", rows):
                 vo.wait_until(mark)
                 self.play(FadeIn(row[0]), FadeIn(row[1]))
@@ -129,6 +131,7 @@ class Organum(SoundScene):
                        label(r"about 1200: \ Notre-Dame: \ a fast new voice over long notes of chant \ (Part 23)", font_size=26, color=WHITE),
                        label(r"by 1500: \ parallel fifths and octaves avoided", font_size=26, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(UP * 0.2)
         cap = label(r"the change was in what the music wanted", font_size=30, color=GREY_A).to_edge(DOWN, buff=0.6)
+        head = label(r"five centuries of a second voice", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
             "So over the next five centuries the goal changed. <bookmark mark='a'/> Around 1026 Guido "
             "of Arezzo, whom Part 10 met inventing the staff, wanted the voices to come back together at "
@@ -139,6 +142,7 @@ class Organum(SoundScene):
             "composers were avoiding exactly what organum had been built on. The ear had not changed. "
             "What the music wanted had: two voices, heard as two."
         ) as vo:
+            self.play(FadeIn(head))
             for mark, s in zip("abcd", steps):
                 vo.wait_until(mark)
                 self.play(FadeIn(s))
