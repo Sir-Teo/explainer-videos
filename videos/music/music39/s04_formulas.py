@@ -78,9 +78,9 @@ class Formulas(SoundScene):
             self.play(FadeIn(gs))
         with self.listen(c) as snd:
             window(snd, r"plain, \ enclosed, \ double", kind="synthesized", detail=r"an additive saxophone over piano, \ string and cymbal", corner=DL, tag_corner=DR)
-            for g, k in zip(gs, ("plain", "enclosed", "double")):
+            for g, k, col in zip(gs, ("plain", "enclosed", "double"), (GREY_A, TUNE, EAR)):
                 L = d["ways"][k]
-                flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], d["bpm"]) + d["starts"][k]), hot=WHITE, base=GREY_D)
+                flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], d["bpm"]) + d["starts"][k]), hot=WHITE, base=col)
         self.wait(0.3)
         self.clear_scene()
 
@@ -122,8 +122,8 @@ class Formulas(SoundScene):
             self.play(FadeIn(head), FadeIn(rows_))
         with self.listen(c) as snd:
             window(snd, r"a figure in three keys", kind="synthesized", detail=r"an additive saxophone over piano, \ string and cymbal", corner=DL, tag_corner=DR)
-            for g, name in zip(rows_, d["keys"]):
-                flash(snd, g[1].roll.notes, list(BL.swing_times([e for _, e in d["formula"]], d["bpm"]) + d["starts"][name]), hot=WHITE, base=GREY_D)
+            for g, name, col in zip(rows_, d["keys"], (TUNE, BLUE, EAR)):
+                flash(snd, g[1].roll.notes, list(BL.swing_times([e for _, e in d["formula"]], d["bpm"]) + d["starts"][name]), hot=WHITE, base=col)
         self.wait(0.3)
         self.clear_scene()
 

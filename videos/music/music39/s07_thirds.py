@@ -144,9 +144,9 @@ class Thirds(SoundScene):
             self.play(FadeIn(gp), FadeIn(gc))
         with self.listen(c) as snd:
             window(snd, r"plain, \ then Coltrane's cycle", detail=r"piano, \ string and cymbal models", corner=DL, tag_corner=DR)
-            for g, k in ((gp, "plain"), (gc, "coltrane")):
+            for g, k, col in ((gp, "plain", GREY_A), (gc, "coltrane", TUNE)):
                 L = d["lines"][k]
-                flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], d["bpm"]) + d["starts"][k]), hot=WHITE, base=GREY_D)
+                flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], d["bpm"]) + d["starts"][k]), hot=WHITE, base=col)
         self.wait(0.3)
         self.clear_scene()
 

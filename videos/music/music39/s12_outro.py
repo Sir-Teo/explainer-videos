@@ -43,9 +43,9 @@ class Outro(SoundScene):
         bpm = d["bpm"]
         with self.listen(c) as snd:
             window(snd, r"Variation 39", kind="synthesized", detail=r"an additive saxophone, \ piano, \ string and cymbal", corner=DL, tag_corner=DR)
-            for g, key, k in ((g1, "head", "head"), (g2, "solo", "solo"), (g3, "cycle_line", "thirds")):
+            for g, key, k, col in ((g1, "head", "head", TUNE), (g2, "solo", "solo", BLUE), (g3, "cycle_line", "thirds", EAR)):
                 L = d[key]
-                flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], bpm) + st[k]), hot=WHITE, base=GREY_D)
+                flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], bpm) + st[k]), hot=WHITE, base=col)
         self.play(FadeOut(panels))
         rws = (rows_before(PART) + [{"part": v["part"], "title": v["title"], "seconds": v["seconds"], "measure": v["measure"]}])[-6:]
         led = variations_ledger(rws, highlight=(len(rws) - 1,)).to_edge(DOWN, buff=0.25)

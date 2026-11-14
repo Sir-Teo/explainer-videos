@@ -95,8 +95,8 @@ class Scale(SoundScene):
             window(snd, r"mixolydian, \ then bebop", detail=r"piano, \ string and cymbal models", corner=DL, tag_corner=DR)
             ta = BL.swing_times(es, d["bpm"]) + d["starts"]["plain"]
             tb = BL.swing_times(es, d["bpm"]) + d["starts"]["bebop"]
-            flash(snd, [x[0] for x in a], list(ta), hot=WHITE, base=GREY_D)
-            flash(snd, [x[0] for x in b], list(tb), hot=WHITE, base=GREY_D)
+            flash(snd, [x[1] for x in a], list(ta), hot=EAR, base=WHITE)
+            flash(snd, [x[1] for x in b], list(tb), hot=EAR, base=WHITE)
         self.wait(0.3)
         self.clear_scene()
 
