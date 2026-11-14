@@ -1161,15 +1161,30 @@ against Bach's keys; a fundamental bass under a chorale.
 *Reading:* Bukofzer; Taruskin vol. 2; Donington.
 
 ### Part 26 · The Classical Style (~50)
-*Story:* In Vienna in the early 1780s Mozart wrote twelve variations on our Tune. The part reads them as data,
-variation by variation, and uses them to explain a style built on shared expectations so strong that Haydn could
-end a quartet with a joke about where the ending is.
+*Story:* In Vienna in the early 1780s Mozart wrote twelve variations on our Tune. The style he wrote in was built on
+shared expectations, so strong that Haydn could end a quartet with a joke about where the ending is; the part measures
+those expectations in thirty-three quartet movements by Haydn, Mozart and Beethoven, and asks whether a program can
+tell who is speaking.
+1. Hook: Mozart in Vienna; the Tune over plain Classical chords heard; the plan.
+2. A style of shared expectations: galant to Classical; the sensitive style; the schemata; K. 265; Haydn's joke; a public for music.
+3. Periodic phrasing: an ear question (which phrase is finished?); the period and the sentence heard; cadence gaps in the corpus.
+4. Sonata form on stage: Op. 74 No. 1's keys; its development heard; the second-key census; an ear question (exposition or recapitulation?); the rounded binary; the concerto; a drama of keys.
+5. The string quartet: the genre; the 'Hunt' heard, with who leads; first-violin shares; a minuet heard; Op. 33.
+6. The accompaniment: three figures heard; figures counted; storm and stress; the learned style.
+7. Haydn, Mozart, Beethoven: careers; measured; London; Beethoven's motive; the wrong-key finale heard; an ear question (which is Beethoven?); Figaro; Gluck.
+8. Who wrote this, fairly: the attribution test; two features plotted; the permutation null; why it is hard.
+9. The fortepiano and the metronome: a crescendo heard; Mannheim; the metronome; two pianos; period instruments; the marks debated.
+10. Frontier: style as probability; beyond the canon; the research problem.
+11. Variation 26: the Tune as a Classical set. Outro: problems, payoffs.
+
 *Covers:* schemata in use; periodic phrasing; sonata form on stage; the quartet, symphony and concerto; Haydn's
 economy; Mozart's ensembles; Beethoven's motives and expansions; the fortepiano; the metronome and Beethoven's
 puzzling marks.
-*Built and computed:* K. 265 measured (density, register, harmony, figuration); a phrase-structure parser; the
-tempo study recomputed from published data.
-*Variation 26:* our own Classical set (Alberti bass, minore, adagio, finale) beside Mozart's.
+*Built and computed:* `monochord/classical.py`: authentic cadences and phrase gaps, who leads each bar, accompaniment
+figures, eight style features, windowed tonal plans and second keys, on the music21 corpus's quartet movements; Part
+24's leave-one-out attribution test with a permutation null. K. 265 is not in the corpus, and the tempo study's data
+could not be obtained, so both are described rather than recomputed (the study is the research problem).
+*Variation 26:* our own Classical set (Alberti bass, minore, adagio, finale).
 *Frontier:* style as learned statistics; the Beethoven tempo debate.
 *Reading:* Rosen, *The Classical Style*; Caplin; Gjerdingen.
 

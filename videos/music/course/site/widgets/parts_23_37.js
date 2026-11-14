@@ -264,4 +264,68 @@
       note: "Even five chords allow thousands of correct realizations; the smoothest path is only one of them, and a continuo player would choose by the music above, which the bass alone does not know. That is why the film's realization of Corelli's bass held most of his notes but almost none of his melody."
     });
   };
+
+  // ---- Part 26: a Classical phrase: chords, an accompaniment figure, and the cadence it ends on --------------------
+  var CH26 = [["I", [0, 4, 7]], ["ii", [2, 5, 9]], ["IV", [5, 9, 0]], ["V", [7, 11, 2]], ["V7", [7, 11, 2, 5]], ["vi", [9, 0, 4]]];
+  var FIG26 = ["block chords", "Alberti bass", "repeated chords", "broken octaves"];
+  var TUNE26 = [[72, 0, 1], [72, 1, 1], [79, 2, 1], [79, 3, 1], [81, 4, 1], [81, 5, 1], [79, 6, 2], [77, 8, 1], [77, 9, 1], [76, 10, 1], [76, 11, 1]];
+  function voice26(pcs, lo) {   // the chord's tones placed from ``lo`` upward, root lowest
+    var out = [], base = lo + ((pcs[0] - lo) % 12 + 12) % 12;
+    pcs.forEach(function (pc, i) { var m = base + ((pc - pcs[0]) % 12 + 12) % 12; out.push(m); });
+    return out.sort(function (a, b) { return a - b; });
+  }
+  function cadence26(a, b) {
+    var x = CH26[a][0], y = CH26[b][0];
+    if ((x === "V" || x === "V7") && y === "I") return ["authentic cadence", "an answer: the phrase is finished"];
+    if (y === "V" || y === "V7") return ["half cadence", "a question: it asks for another phrase"];
+    if ((x === "V" || x === "V7") && y === "vi") return ["deceptive cadence", "the expected I swerves to vi: go on"];
+    if (x === "IV" && y === "I") return ["plagal cadence", "the 'amen': a softer close"];
+    return ["no cadence", "the phrase stops without a formula"];
+  }
+  W.galantphrase = function (el) {
+    var defs = [0, 2, 0, 3, 4, 0, 4, 3];
+    var ctl = [];
+    for (var q = 0; q < 8; q++) ctl.push({ k: "c" + q, label: "Bar " + (Math.floor(q / 2) + 1) + ", half " + (q % 2 + 1), min: 0, max: CH26.length - 1, step: 1, value: defs[q], fmt: function (i) { return CH26[i][0]; } });
+    ctl.push({ k: "fig", label: "Accompaniment", min: 0, max: FIG26.length - 1, step: 1, value: 1, fmt: function (i) { return FIG26[i]; } });
+    QB.widget(el, {
+      title: "Build a four-bar Classical phrase",
+      sub: "The Tune's opening over eight half-bar chords that you choose, with an accompaniment figure. The page names the cadence the last two chords make (V to I authentic, ending on V a half cadence, V to vi deceptive, IV to I plagal) and counts the harmonic rhythm: how often the chord changes. The film's quartets change their sounding pitch classes on about 85 beats in 100; the galant harmony underneath changes far more slowly.",
+      panels: 2, height: 290,
+      controls: ctl,
+      buttons: [{ label: "Play", act: function (s) { s.sound = play(notesSound(s.notes, 0.36), 44100); } }],
+      init: function (s) { s.sound = null; s.notes = []; },
+      draw: function (g, v, s) {
+        var cs = [], q, notes = TUNE26.map(function (n) { return n.slice(); });
+        for (q = 0; q < 8; q++) cs.push(v["c" + q]);
+        var last = cs[7], prev = cs[6];
+        notes.push([CH26[last][0] === "I" ? 72 : (CH26[last][0] === "vi" ? 72 : 74), 12, 4]);
+        var acc = [];
+        cs.forEach(function (c, h) {
+          var t0 = 2 * h, pcs = CH26[c][1], ch = voice26(pcs, 48), bass = ch[0];
+          if (v.fig === 0) ch.forEach(function (m) { acc.push([m, t0, 2]); });
+          else if (v.fig === 1) [bass, ch[2] || ch[1], ch[1], ch[2] || ch[1]].forEach(function (m, i) { acc.push([m, t0 + 0.5 * i, 0.5]); });
+          else if (v.fig === 2) { acc.push([bass - 12, t0, 2]); for (var r = 0; r < 4; r++) ch.slice(1).forEach(function (m) { acc.push([m, t0 + 0.5 * r, 0.45]); }); }
+          else for (var r2 = 0; r2 < 4; r2++) acc.push([bass + (r2 % 2 ? 12 : 0) - 12, t0 + 0.5 * r2, 0.5]);
+        });
+        s.notes = notes.concat(acc);
+        var changes = 0;
+        for (q = 1; q < 8; q++) if (cs[q] !== cs[q - 1]) changes++;
+        s.changes = changes; s.cad = cadence26(prev, last); s.cs = cs;
+        var a = g[0].axes({ x: [0, 16], y: [30, 86], title: "The phrase", xlabel: "beats", ylabel: "key number", xticks: [0, 4, 8, 12, 16] });
+        acc.forEach(function (n) { a.line([n[1] + 0.03, n[1] + n[2] - 0.03], [n[0], n[0]], { color: "#8A93A0", width: 5 }); });
+        notes.forEach(function (n) { a.line([n[1] + 0.04, n[1] + n[2] - 0.04], [n[0], n[0]], { color: C.idea, width: 7 }); });
+        cs.forEach(function (c, h) { a.text(2 * h + 1, 33, CH26[c][0], { align: "center", size: 11, color: C.muted }); });
+        var b = g[1].axes({ x: [-0.6, 1.6], y: [0, 100], title: "Chord changes per 100 half-bars", xticks: [], ylabel: "in 100" });
+        b.bars([0, 1], [100 * changes / 7, 85], 0.5, { color: function (i) { return i ? "#8A93A0" : C.idea; } });
+        b.text(0, 0, "your phrase", { align: "center", base: "top", dy: 7, size: 10, color: C.muted });
+        b.text(1, 0, "quartets: pitch classes per beat", { align: "center", base: "top", dy: 7, size: 10, color: C.muted });
+      },
+      readout: function (v, s) {
+        return [["cadence", s.cad[0] + ": " + s.cad[1]], ["chord changes", s.changes + " of 7 half-bar boundaries"],
+                ["chords", s.cs.map(function (c) { return CH26[c][0]; }).join(" ")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "End on V and the phrase asks a question; follow it with the same opening ending V to I and you have a period, the film's basic unit. Change the figure and the energy changes while the harmony stays: the accompaniment is the style's motor."
+    });
+  };
 })();

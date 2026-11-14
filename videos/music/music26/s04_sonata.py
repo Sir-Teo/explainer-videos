@@ -12,10 +12,10 @@ class Sonata(SoundScene):
     def construct(self):
         chapter(self, 3, r"Sonata form on stage", r"What does a key-finder see in a sonata?", extra=((1793, r"Haydn's Op. 74"),))
         self.plan()
-        self.census()
-        self.binary()
         self.develop()
+        self.census()
         self.quiz()
+        self.binary()
         self.concerto()
         self.drama()
 

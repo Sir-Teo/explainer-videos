@@ -148,4 +148,47 @@ PARTS = [
         I=(6,),
         also=(("Monochord's Baroque toolkit: Galilei's strings, figures from upper parts, ritornello finder, key colours, ornaments", "explainer/music/monochord/baroque.py"),),
     ),
+    Part(
+        n=26, level="U", widget="galantphrase", prereq=(7, 15, 21, 22, 24, 25),
+        question="What made the Classical style a shared language, and can a program hear who is speaking it?",
+        story="In the early 1780s Mozart wrote twelve variations on a French song whose tune is the series' Tune. The "
+              "style he wrote in ran on shared expectations, strong enough that Haydn could make a joke of an ending. "
+              "Its phrases lean on four and eight bars, a question and its answer, though in the thirty-three quartet "
+              "movements of the corpus most of 146 authentic cadences fall elsewhere. A key tracker that knows no "
+              "themes reads sonata form in Haydn's Op. 74 No. 1, home, the dominant, a development through distant "
+              "keys, home again, and 14 of 18 major-key movements whose readings it trusts go first to the dominant. "
+              "The quartet is a conversation the first violin leads in 55 to 62 bars in 100, kept moving by "
+              "accompaniment figures in a quarter of all bars. Beethoven made the language longer and wider and made a "
+              "home key something to be won. A fair attribution test, one genre, one city, one generation, scores 55 "
+              "in 100: better than shuffled names (33), worse than always saying Mozart (45). The fortepiano and the "
+              "metronome changed what a score could ask for. The Tune becomes a Classical set: theme with Alberti "
+              "bass, minore, adagio, finale.",
+        handoff="The Romantic century in Part 27; the song and its accompaniment in Part 40; orchestration in Part 41; "
+                "performance and tempo in Part 43; style by statistics in Parts 62 and 65.",
+        outside="Part 7 for the bowed string and the piano; Part 15 for keys; Part 18 for n-grams; Part 21 for the period, "
+                "the sentence and sonata theory; Part 22 for topics; Part 24 for the attribution test; Part 25 for binary "
+                "form and the ritornello. Leave-one-out classification; permutation tests.",
+        objectives={
+            "U": ["Hear a half cadence and an authentic cadence, and a period built from them.",
+                  "Follow a sonata-form movement's keys: exposition, development, recapitulation.",
+                  "Hear block chords, an Alberti bass and repeated chords under one melody."],
+            "M": ["Detect authentic cadences and measure phrase lengths in a corpus of quartets.",
+                  "Trace a movement's tonal plan with a windowed key tracker and find its second key.",
+                  "Run a leave-one-out attribution test with a permutation null, and say what it can and cannot show."],
+            "D": ["Design a style model that locates where two composers' styles differ within a movement.",
+                  "Weigh the evidence on Beethoven's metronome marks."],
+            "I": ["Build a fair comparison for a classifier: hold genre, place and time fixed, and report the null."],
+        },
+        results=[
+            ("Cadence gaps", r"146 \text{ cadences}; \ \text{exactly 4 or 8 bars: Mozart } 30\%, \ \text{Haydn } 11\%"),
+            ("The second key", r"14 \text{ of } 18 \text{ major-key movements} \to \text{V}; \ 2 \text{ of } 2 \text{ minor} \to \text{III}"),
+            ("Who leads", r"\text{first violin: Haydn } 62\%, \ \text{Mozart } 59\%, \ \text{Beethoven } 55\%"),
+            ("Attribution", r"55\% \ \text{vs shuffled names } 33\% \ (p \approx 0.03), \ \text{always Mozart } 45\%"),
+            ("Beethoven's range", r"\text{span } 35.2 \text{ semitones vs } 26.6 \text{ (Haydn)}, \ 25.8 \text{ (Mozart)}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 8),
+        D=(9,),
+        I=(7,),
+        also=(("Monochord's Classical toolkit: cadences, phrase gaps, who leads, accompaniment figures, tonal plans, second keys", "explainer/music/monochord/classical.py"),),
+    ),
 ]

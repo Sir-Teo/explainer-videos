@@ -55,6 +55,8 @@ LEDGER = [
      "measure": r"four entries four beats apart; after the last entry 12 of 12 beats consonant above the bass"},
     {"part": 25, "title": r"as a French overture and as a chaconne with an ornamented reprise", "seconds": 21.44,
      "measure": r"a ground of 8 bass notes heard twice; the reprise adds 26 ornament notes to 14"},
+    {"part": 26, "title": r"as a Classical set: theme with Alberti bass, minore, adagio, finale", "seconds": 31.59,
+     "measure": r"melody notes: theme 14, minore 14, adagio 28, finale 26"},
 ]
 
 
