@@ -18,7 +18,7 @@ class Sensitivity(VoiceoverScene):
         self.lesson()
 
     def card(self):
-        card = chapter_card(12, r"Sensitivity analysis", r"How wrong could we be?", lit=(1959, 2017, 2020), part=PART)
+        card = chapter_card(12, r"Sensitivity analysis", r"How wrong could we be?", lit={1959: r"Cornfield's inequality", 2017: r"E-values", 2020: r"robustness values"}, part=PART)
         with self.voiceover("Chapter twelve. Sensitivity analysis."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))
