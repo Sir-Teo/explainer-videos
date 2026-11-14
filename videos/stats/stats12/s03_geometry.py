@@ -27,7 +27,7 @@ class Geometry(VoiceoverScene):
         X = np.column_stack([np.ones(3), x])
         b = np.linalg.lstsq(X, y, rcond=None)[0]
         yh = X @ b
-        ns = NSpace(scale=0.48, center=[-2.6, 0.0, 0], angle=-0.65, tilt=0.35, axis_len=6.5,
+        ns = NSpace(scale=0.48, center=[-2.6, -0.5, 0], angle=-0.65, tilt=0.35, axis_len=6.5,
                     axis_labels=[r"obs 1", r"obs 2", r"obs 3"])
         u1 = np.ones(3) / np.sqrt(3)
         xc = x - x.mean()
