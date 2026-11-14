@@ -43,8 +43,10 @@ class Mbira(SoundScene):
         for k, b in enumerate(shapes):
             y = (np.cosh(b * x) - np.cos(b * x)) - ((np.cosh(b) + np.cos(b)) / (np.sinh(b) + np.sin(b))) * (np.sinh(b * x) - np.sin(b * x))
             y = y / np.abs(y).max()
-            pts = [np.array([-4.75 + 3.4 * xx, 2.5 - 1.25 * k + 0.4 * yy, 0]) for xx, yy in zip(x, y)]
+            pts = [np.array([-4.75 + 3.4 * xx, 2.5 - 1.25 * k + 0.45 * yy, 0]) for xx, yy in zip(x, y)]
             curve = VMobject(color=[TUNE, BLUE, EAR][k], stroke_width=3).set_points_smoothly(pts)
+            rest = DashedLine([-4.75, 2.5 - 1.25 * k, 0], [-1.35, 2.5 - 1.25 * k, 0], color=GREY_D, stroke_width=1.2)
+            curve = VGroup(rest, curve)
             lab = label(rf"{d['ratios'][k]:.2f} \ $\times$ \ f", font_size=18, color=[TUNE, BLUE, EAR][k]).next_to(pts[-1], RIGHT, buff=0.3)
             clamp = Rectangle(width=0.25, height=0.6, stroke_width=0, fill_color=GREY_C, fill_opacity=1).move_to([-4.85, 2.5 - 1.25 * k, 0])
             rows_.add(VGroup(clamp, curve, lab))

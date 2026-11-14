@@ -136,8 +136,9 @@ class ThreeTwo(SoundScene):
         parts = [(r"bell", bell), (r"kidi", kidi), (r"sogo", sogo)]
         jones = staff(parts, [[0, 12], [2, 14], [4, 10, 16, 22]], r"bar lines where each part begins \ (after Jones)", EAR)
         agawu = staff(parts, [[0, 12], [0, 12], [0, 12]], r"one bar line for all, \ from the dance \ (after Agawu)", TUNE)
-        g = VGroup(jones, agawu).arrange(DOWN, buff=0.6).move_to(DOWN * 0.1)
-        g.scale_to_fit_height(min(g.height, 6.4))
+        g = VGroup(jones, agawu).arrange(DOWN, buff=0.6).move_to(DOWN * 0.3)
+        g.scale_to_fit_height(min(g.height, 6.0))
+        head = label(r"the same notes, \ written two ways", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Here is the difference in a picture, with three of our parts over two cycles. <bookmark mark='a'/> In the "
             "manner of Jones, each part is barred where its own figure begins, and the bar lines do not line up: three "
@@ -145,6 +146,7 @@ class ThreeTwo(SoundScene):
             "and each part is heard as off or on its beats. The notes are identical; what differs is the claim about what "
             "the players feel. Agawu's point is that this is an empirical question, about people, not about notation."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(jones))
             vo.wait_until("b")

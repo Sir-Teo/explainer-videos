@@ -164,8 +164,8 @@ class Metrics(SoundScene):
             row[2].next_to(row[1], RIGHT, buff=0.15)
         pair = VGroup(pat_row(TT.TIMELINES["son clave (16)"], cell=0.32, name=r"son", size=17),
                       pat_row(TT.TIMELINES["rumba clave (16)"], cell=0.32, color=BLUE, name=r"rumba", size=17)).arrange(DOWN, buff=0.15, aligned_edge=RIGHT)
-        pair.to_edge(DOWN, buff=0.9)
-        pl = label(r"swap distance 1: \ one stroke moves one pulse", font_size=18, color=GREY_A).next_to(pair, RIGHT, buff=0.4)
+        pair.to_edge(DOWN, buff=1.0)
+        pl = label(r"swap distance 1: \ one stroke moves one pulse", font_size=18, color=GREY_A).next_to(pair, DOWN, buff=0.2)
         head = label(r"total swap distance to the other five", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Now centrality. Toussaint asked why son clave, of all the five-stroke patterns, spread around the world. "

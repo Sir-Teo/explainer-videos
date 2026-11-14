@@ -46,7 +46,7 @@ class Ewe(SoundScene):
     def grid(self, d, cell=0.38):
         rows_ = VGroup()
         for name in d["order"]:
-            ons = cells_for(name, d)
+            ons = cells_for(name, d) if name != "lead" else []          # the lead's phrase changes: lit as it plays
             pat = ["x" if i in ons else "." for i in range(12)]
             nm, col = ROLE[name]
             rows_.add(pat_row(pat, cell=cell, color=col, name=nm, size=18))
@@ -61,7 +61,7 @@ class Ewe(SoundScene):
                        label(r"a high drum: \ pairs between the beats", font_size=17, color=BLUE),
                        label(r"open and muted strokes, \ in conversation", font_size=17, color="#A3E635"),
                        label(r"a lower drum, \ answering", font_size=17, color=EAR),
-                       label(r"the lead: \ calls, \ changes, \ cues for dancers", font_size=17, color=WHITE))
+                       label(r"the lead: \ a different phrase each cycle", font_size=17, color=WHITE))
         for n, r in zip(notes, rows_):
             n.next_to(r, RIGHT, buff=0.4)
         head = label(r"six parts in twelve pulses \ (ours)", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
@@ -71,8 +71,8 @@ class Ewe(SoundScene):
             "net of beads, strikes down on the thigh on the four beats and up against the hand with the bell. "
             "<bookmark mark='c'/> Kagan, the smallest drum, plays muted pairs between the beats. <bookmark mark='d'/> Kidi "
             "mixes open tones and muted presses, and sogo, a bigger drum, answers it. <bookmark mark='e'/> Over them the lead "
-            "drum, atsimevu, the tallest, plays phrases that change, call to the other drums, and cue the dancers. The lead "
-            "drum's row shows every pulse it uses over four cycles; its phrase is different each time round."
+            "drum, atsimevu, the tallest, plays phrases that change, call to the other drums, and cue the dancers. Its row is "
+            "left empty here, because its phrase is different each time round; it will light as it plays."
         ) as vo:
             self.play(FadeIn(head))
             for mark, idx in zip("abcde", ((0,), (1,), (2,), (3, 4), (5,))):
