@@ -12,8 +12,8 @@ class Frontier(SoundScene):
         self.vl()
         self.spaces()
         self.machines()
-        self.problem()
         self.audit()
+        self.problem()
 
     # ------------------------------------------------------------------
     def listeners(self):
@@ -83,13 +83,12 @@ class Frontier(SoundScene):
                             color=TUNE if not r["triad"].endswith("m") else BLUE) for r in d["rows"]])
         xl = label(r"P, \ L, \ R steps from C major", font_size=19, color=GREY_A).next_to(ax, DOWN, buff=0.25)
         yl = label(r"semitones of voice leading", font_size=19, color=GREY_A).next_to(ax.y_axis, UP, buff=0.15).shift(RIGHT * 1.0)
-        side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
+        side = VGroup(*[label(s, font_size=20, color=c_) for s, c_ in (
             (rf"correlation: \ {d['r']:.2f}", TUNE),
-            (r"close in moves usually means close in voice leading", WHITE),
-            (rf"but not always: \ the farthest by voice leading, \ {d['max_vl']} semitones, \ are D, \ F$\sharp$ and B$\flat$ major", EAR),
-            (r"two measures of distance: \ which does the ear use?", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 5.0))
-        side.move_to(RIGHT * 4.0 + DOWN * 0.2)
+            (r"close in moves: \ usually close \\ in voice leading", WHITE),
+            (rf"but not always: \ {d['max_vl']} semitones \\ for D, \ F$\sharp$ and B$\flat$ major", EAR),
+            (r"two distances: \\ which does the ear use?", GREY_A))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
+        side.move_to(RIGHT * 4.2 + DOWN * 0.2)
         with self.voiceover(
             "The film can at least compare two measures of distance. For each of the twenty-three other triads, its distance "
             "from C major in P, L and R steps, and the fewest semitones the three voices must move to reach it. "

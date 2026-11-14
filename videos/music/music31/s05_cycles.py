@@ -131,7 +131,7 @@ class Cycles(SoundScene):
         for i, n in enumerate(d["region"]):
             ang = PI / 2 - i * TAU / 6
             cells.add(label(tex_triad(n), font_size=32, color=TUNE if not n.endswith("m") else BLUE).move_to(aug.get_center() + 2.6 * np.array([np.cos(ang) * 1.5, np.sin(ang), 0])))
-        lines = VGroup(*[Line(aug.get_center(), cl.get_center(), color=GREY_B, stroke_width=1.5, buff=0.6) for cl in cells])
+        lines = VGroup(*[Line(aug.get_center(), cl.get_center(), color=GREY_B, stroke_width=1.5, buff=1.05) for cl in cells])
         head = label(r"Weitzmann \ (1853): \ one chord, \ six resolutions", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Each hexatonic family has a hidden centre. Carl Friedrich Weitzmann noticed it in 1853. The augmented triad, "
@@ -153,7 +153,11 @@ class Cycles(SoundScene):
             "three minor triads from the next. Either way, an augmented chord sits one semitone from six triads, which is "
             "why it sounds as if it could go anywhere."
         ):
-            self.wait(0.5)
+            note = VGroup(label(r"Cohn's family of C major: \ C, \ E, \ G$\sharp$ \ + \ B, \ E$\flat$, \ G", font_size=21, color=TUNE),
+                          label(r"Weitzmann's region: \ majors from one family, \ minors from the next", font_size=21, color=BLUE)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.3)
+            self.play(FadeIn(note[0]))
+            self.wait(6.0)
+            self.play(FadeIn(note[1]))
         self.wait(0.4)
         self.clear_scene()
 

@@ -46,7 +46,7 @@ class Tonnetz(SoundScene):
         p = triangle(g, [(0, 0), (1, 0), (1, -1)], BLUE) if (1, -1) in g.pos else triangle(g, [(1, 0), (0, 1), (1, 1)], BLUE)
         lt = triangle(g, [(1, 0), (0, 1), (1, 1)], EAR)
         r = triangle(g, [(0, 0), (0, 1), (-1, 1)], GREY_A) if (-1, 1) in g.pos else None
-        g2 = tonnetz(origin=(-3.2, -1.6))
+        g2 = tonnetz()
         c = triangle(g2, [(1, 1), (2, 1), (1, 2)], TUNE)
         L_ = triangle(g2, [(2, 1), (1, 2), (2, 2)], EAR)
         P_ = triangle(g2, [(1, 1), (2, 1), (2, 0)], BLUE)

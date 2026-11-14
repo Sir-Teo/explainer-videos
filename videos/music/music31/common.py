@@ -112,7 +112,7 @@ def tex_triad(n: str) -> str:
     return t[0].lower() + t[1:] if minor else t
 
 
-def tonnetz(radius=0.42, cols=9, rows_=5, origin=(-4.4, -1.6)):
+def tonnetz(radius=0.42, cols=8, rows_=5, origin=(-5.9, -1.6)):
     """A patch of the Tonnetz: pitch classes on a triangular lattice (fifths to the right, major thirds up-right),
     with ``.pos[(i, j)]`` and ``.pc[(i, j)]``."""
     g = VGroup()
