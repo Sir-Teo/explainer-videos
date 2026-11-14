@@ -150,13 +150,15 @@ class Outro(SoundScene):
     def next_part(self):
         q = label(r"what if all twelve notes were equal?", font_size=30, color=EAR).move_to(UP * 0.4)
         top = label(r"Act V: \ after tonality", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
+        lead = label(r"Paris loosened the key with symmetric scales and new rhythms.", font_size=24, color=WHITE).move_to(UP * 1.7)
+        lead.scale_to_fit_width(min(lead.width, 12.5))
         nxt = VGroup(label(r"Part 29", font_size=32, color=GREY_B), label(r"Twelve Tones", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "Paris loosened the key with symmetric scales and new rhythms. <bookmark mark='a'/> Vienna asked a more radical "
             "question: what if all twelve notes were equal, and none of them home? <bookmark mark='b'/> Next time. Part 29: "
             "Twelve Tones."
         ) as vo:
-            self.play(FadeIn(top))
+            self.play(FadeIn(top), FadeIn(lead))
             vo.wait_until("a")
             self.play(FadeIn(q))
             vo.wait_until("b")

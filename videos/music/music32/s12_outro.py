@@ -151,12 +151,14 @@ class Outro(SoundScene):
     def next_part(self):
         q = label(r"what if the same mathematics described rhythms, \ and scales, \ at once?", font_size=30, color=EAR).move_to(UP * 0.4)
         top = label(r"Act V: \ after tonality", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
+        lead = label(r"Nearly even sets of notes made the scales.", font_size=24, color=WHITE).move_to(UP * 1.7)
+        lead.scale_to_fit_width(min(lead.width, 12.5))
         nxt = VGroup(label(r"Part 33", font_size=32, color=GREY_B), label(r"The Mathematics of Rhythm and Scale", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "Nearly even sets of notes made the scales. <bookmark mark='a'/> What if the same mathematics describes rhythms "
             "too, nearly even sets of beats? <bookmark mark='b'/> Next time. Part 33: The Mathematics of Rhythm and Scale."
         ) as vo:
-            self.play(FadeIn(top))
+            self.play(FadeIn(top), FadeIn(lead))
             vo.wait_until("a")
             self.play(FadeIn(q))
             vo.wait_until("b")

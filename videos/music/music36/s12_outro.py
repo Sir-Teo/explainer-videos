@@ -143,13 +143,15 @@ class Outro(SoundScene):
     def next_part(self):
         q = label(r"what if the cycle itself were the music: \ a pattern struck on a bell, \ over and over?", font_size=30, color=EAR).move_to(UP * 0.4)
         top = label(r"Act VI: \ many musics", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
+        lead = label(r"The gamelan keeps time with gongs.", font_size=24, color=WHITE).move_to(UP * 1.7)
+        lead.scale_to_fit_width(min(lead.width, 12.5))
         nxt = VGroup(label(r"Part 37", font_size=32, color=GREY_B), label(r"Timelines", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "The gamelan keeps time with gongs. <bookmark mark='a'/> What if the cycle itself were the music, a pattern struck "
             "on a bell, over and over, while everything else moves around it? <bookmark mark='b'/> Next time. Part 37: "
             "Timelines."
         ) as vo:
-            self.play(FadeIn(top))
+            self.play(FadeIn(top), FadeIn(lead))
             vo.wait_until("a")
             self.play(FadeIn(q))
             vo.wait_until("b")

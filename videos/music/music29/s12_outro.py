@@ -147,13 +147,15 @@ class Outro(SoundScene):
     def next_part(self):
         q = label(r"what if music were made of sound, \ not notes?", font_size=30, color=EAR).move_to(UP * 0.4)
         top = label(r"Act V: \ after tonality", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
+        lead = label(r"The row ordered pitch; total serialism ordered everything else, and the critics said the result was a cloud.", font_size=24, color=WHITE).move_to(UP * 1.7)
+        lead.scale_to_fit_width(min(lead.width, 12.5))
         nxt = VGroup(label(r"Part 30", font_size=32, color=GREY_B), label(r"Sound Itself", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "The row ordered pitch; total serialism ordered everything else, and the critics said the result was a cloud. "
             "<bookmark mark='a'/> The next step was to compose the cloud: music made of sound itself, noise, texture and "
             "electronics. <bookmark mark='b'/> Next time. Part 30: Sound Itself."
         ) as vo:
-            self.play(FadeIn(top))
+            self.play(FadeIn(top), FadeIn(lead))
             vo.wait_until("a")
             self.play(FadeIn(q))
             vo.wait_until("b")

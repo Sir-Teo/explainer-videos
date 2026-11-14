@@ -59,6 +59,7 @@ class Hook(SoundScene):
             window(snd, r"a gamelan texture \ (ours)", detail=r"Part 9's bars and gongs", corner=DL, tag_corner=DR)
             flash_voices(snd, g, [d["elab"], d["balungan"], d["gongs"]], 0.0, d["beat"], colors=[GREY_A, TUNE, EAR])
             cursor(snd, g, 0.0, d["beat"])
+            pulse(snd, g, 0.0, c.duration, buff=0.12, color=GREY_B)
         self.wait(0.3)
         self.clear_scene()
 
