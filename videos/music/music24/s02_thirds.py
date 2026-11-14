@@ -90,8 +90,10 @@ class Thirds(SoundScene):
             "in a hundred of Palestrina's movements. A century and a half turned the third from a passing colour into "
             "the sound of the music itself, and finally into a place to end."
         ) as vo:
-            self.play(FadeIn(key), FadeIn(cap))
-            for mark, gg in zip("abc", groups):
+            self.play(FadeIn(key), FadeIn(cap), FadeIn(groups[0]))
+            vo.wait_until("a")
+            self.play(Indicate(groups[0][1], color=WHITE, scale_factor=1.05))
+            for mark, gg in zip("bc", groups[1:]):
                 vo.wait_until(mark)
                 self.play(FadeIn(gg))
         self.wait(0.4)
