@@ -301,4 +301,64 @@ PARTS = [
               ("Its tests", "tests/psychology/test_genes.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=10, level="U", widget="vigilance",
+        question="Why is the same mind so different at four in the afternoon and at four in the morning?",
+        story="In 1938 two men live for a month in a cave on a day of twenty-eight hours. One man's temperature "
+              "rhythm follows the schedule; the other's keeps to twenty-four hours, with no sun to copy. The body "
+              "has a clock. Left alone it runs at 24.18 hours, which the same 28-hour trick showed sixty years "
+              "later; it sits above the crossing of the optic nerves, each of its cells a loop of genes that "
+              "switch themselves off; and a model of it locks to days of 23 to 25 hours and no others. Light "
+              "sets it through cells in the eye that make no pictures: later if it falls before the "
+              "temperature's low point, earlier if after, so a flight leaves the clock behind for days. In the "
+              "laboratory sleep turns out to have stages in ninety-minute cycles, one of them with darting eyes "
+              "and dreams. Two processes time it: a pressure that rises over eighteen hours awake and falls over "
+              "four asleep, and thresholds the clock moves. Together they give an eight-hour night, a recovery "
+              "sleep only half an hour longer after forty hours awake, and a second wind the next afternoon. "
+              "The viewer works out a chronotype. Two weeks on six hours a night impair attention as much as two "
+              "nights awake, and the sleepers do not know it. Cueing a memory in deep sleep strengthens it a "
+              "little; what dreams are for is open. Hormones are a broadcast: the stress loop's product shuts "
+              "off its own source, unless the brake is worn. A drug mimics a transmitter, blocks its receptor, "
+              "keeps it in the gap or turns the receptor up; occupancy follows one formula, which also explains "
+              "why caffeine has a half-life and alcohol does not. And the body answers back: an opposing "
+              "process that grows with use is tolerance while the drug is there and withdrawal when it is gone, "
+              "and part of it is learned, so the same dose in a new room kills twice as many rats.",
+        handoff="The retina and its cells are Part 13; conditioning, and the room that switches on tolerance, is "
+                "Part 16; reward and what drugs take over is Part 17; consolidation is Part 20; arousal and the "
+                "opponent process come back in Part 28; adolescence and the late clock in Part 31; depression, "
+                "the stress loop and addiction in Parts 40 and 41; whether drugs and therapies work in Part 42.",
+        outside="Part 2's random assignment, Part 4's effect sizes and shrinking effects, Part 6's synapse and "
+                "Part 7's double dissociation and hippocampus. The clock is two differential equations used as "
+                "a tool; exponentials and logarithmic axes are assumed.",
+        objectives={
+            "U": ["Say what shows that the body keeps time by itself, where the clock is, and how light sets it.",
+                  "Describe the stages of a night's sleep and what the two-process model adds to them.",
+                  "Name four ways a drug can change a synapse, and what tolerance and withdrawal have in common."],
+            "M": ["Compute a clock's daily drift, a chronotype and a social jetlag.",
+                  "Work the two-process model by hand: the pressure after a time awake, and the sleep that "
+                  "removes it.",
+                  "Use the occupancy formula with and without a blocker, and do half-life arithmetic for "
+                  "repeated doses."],
+            "D": ["Explain from the phase response curve why evening light delays the clock and morning light "
+                  "advances it, and what that implies for a traveller or a shift worker.",
+                  "Explain why a feedback loop whose product inhibits its source returns to rest, and what "
+                  "changes when the inhibition weakens."],
+            "I": ["Read a claim about sleep and health and say whether sleep was assigned or only observed.",
+                  "Plan the timing of light, sleep and caffeine for a given schedule, and say what the models "
+                  "do not cover."],
+        },
+        results=[
+            ("The clock's drift", r"\tau-24\ \text{h}=0.18\ \text{h}\approx 11\ \text{min a day}"),
+            ("Sleep pressure", r"S_{\text{awake}}(t)=1-(1-S_{0})\,e^{-t/18.2},\qquad S_{\text{asleep}}(t)=S_{0}\,e^{-t/4.2}"),
+            ("Chronotype and social jetlag", r"\text{midsleep}=\text{onset}+\tfrac12\,\text{duration},\qquad "
+                                             r"\text{jetlag}=\lvert\text{midsleep}_{\text{free}}-\text{midsleep}_{\text{work}}\rvert"),
+            ("Receptor occupancy", r"p=\frac{D}{D+K},\qquad p=\frac{D}{D+K\,(1+B/K_{B})}\ \text{with a blocker}"),
+            ("Half-life", r"C(t)=C_{0}\,2^{-t/t_{1/2}}"),
+            ("What is felt", r"\text{effect}=a(t)-b(t)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's body module", "explainer/psychology/psyche/body.py"),
+              ("Its tests", "tests/psychology/test_body.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

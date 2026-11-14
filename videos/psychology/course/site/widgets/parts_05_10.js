@@ -588,4 +588,84 @@
       note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The clouds are generated here, each with exactly the correlation shown, from shares fixed for the trial. The shares are Falconer's: identical twins share all of their genes and their home, fraternal twins half of the genes that differ between people and their home. On the plot, a trait on the upper line owes everything to the home and one on the lower line everything to genes; the dashed line between them is where the two are equal. The arithmetic assumes what the film's chapter 4 tests: equal environments, random mating, genes that add.",
     });
   };
+  // ---- Part 10: a vigilance task, set beside how alert you said you were -----------------------------------------
+  W.vigilance = function (el) {
+    var w = null, LAPSE = 500, ROWS = 4, COLS = ["#7ec8f5", "#f2c14e", "#f28fb8", "#5bd18b"], LAMP = "#ef6f6c";
+    var block = 0, said = {}, last = "";
+    function name(k) { return "block " + k; }
+    var run = T.timed(el, {
+      keys: { " ": 0, f: 0, j: 1 },
+      trials: function () { return w.v.n; },
+      seed: function () { return 31 + block; },
+      stimulus: function () { return 1; },
+      render: function () { if (w) w.render(); },
+      foreperiod: [1500, 5200], timeout: 2000,
+      words: { early: "Too early: wait for the light.", timeout: "Missed: no response in two seconds." },
+    });
+    function summary(cond) {
+      var all = run.log.filter(function (r) { return r.condition === cond; }), rts = run.rts(cond).slice().sort(function (a, b) { return a - b; });
+      var lapses = 0, i;
+      for (i = 0; i < rts.length; i++) if (rts[i] > LAPSE) lapses++;
+      return { n: all.length, rts: rts, missed: all.length - rts.length, lapses: lapses,
+        median: rts.length ? (rts.length % 2 ? rts[(rts.length - 1) / 2] : (rts[rts.length / 2 - 1] + rts[rts.length / 2]) / 2) : NaN };
+    }
+
+    w = QB.widget(el, {
+      title: "Watch for the light: your attention, and your opinion of it",
+      sub: "First say how alert you feel. Then start a block: watch the dark panel, and the moment the red light comes on, press the space bar (or F or J), or tap the panel. The waits are uneven on purpose. A response slower than half a second counts as a lapse. Run a block now and another at a different hour, and set your times beside your ratings.",
+      panels: 2, height: 320,
+      controls: [
+        { k: "alert", label: "How alert do you feel right now?", min: 1, max: 7, step: 1, value: 4, fmt: function (x) { return x.toFixed(0) + " of 7"; } },
+        { k: "n", label: "Trials in a block", min: 6, max: 20, step: 1, value: 10, fmt: function (x) { return x.toFixed(0); } },
+      ],
+      buttons: [
+        { label: "Start a block", act: function () { block++; last = name((block - 1) % ROWS + 1); said[last] = w.v.alert; run.start(last); } },
+        { label: "Clear my data", act: function () { run.reset(); block = 0; said = {}; last = ""; } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, run.task), r = Math.min(b.w, b.h) * 0.15, k, i;
+        if (run.phase === "wait" || run.phase === "go") {
+          ctx.save();
+          ctx.textAlign = "center"; ctx.textBaseline = "middle";
+          ctx.font = "12px system-ui, sans-serif"; ctx.fillStyle = C.muted;
+          ctx.fillText("trial " + run.trial + " of " + v.n, b.cx, b.y + 24);
+          ctx.fillStyle = run.phase === "go" ? LAMP : "#262c38";
+          ctx.beginPath(); ctx.arc(b.cx, b.cy, r, 0, 2 * Math.PI); ctx.fill();
+          ctx.restore();
+        } else if (run.phase === "feedback") {
+          T.message(ctx, b, run.msg);
+        } else if (run.phase === "done") {
+          var s = summary(last);
+          T.message(ctx, b, "Block finished.", "Median " + (isNaN(s.median) ? "–" : Math.round(s.median) + " ms") + "; " + s.lapses +
+            " slower than half a second; " + s.missed + " missed. You had said " + said[last] + " of 7. Come back at another hour and compare.");
+        } else {
+          T.message(ctx, b, "On you", "Set the first slider to how alert you feel, then press Start a block. Respond with the space bar, F or J, or by tapping this panel.");
+        }
+
+        var top = 700;
+        for (i = 0; i < run.log.length; i++) if (run.log[i].correct) top = Math.max(top, run.log[i].rt + 80);
+        top = Math.min(2000, Math.ceil(top / 100) * 100);
+        var a = g[1].axes({ x: [100, top], y: [0, ROWS + 0.6], title: "Each response, block by block", xlabel: "reaction time as recorded (ms)", noY: true });
+        a.vline(LAPSE, { color: C.muted });
+        a.text(LAPSE, ROWS + 0.38, "lapse", { color: C.muted, dx: 5, size: 11 });
+        for (k = 1; k <= ROWS; k++) {
+          var cond = name(k), y = ROWS + 0.5 - k, col = COLS[k - 1], sm = summary(cond), ys = [], jr = QB.rng(17 + k);
+          if (said[cond] === undefined) continue;
+          for (i = 0; i < sm.rts.length; i++) ys.push(y + 0.3 * (jr() - 0.5));
+          a.text(a.xr[0], y + 0.42, cond + ": you said " + said[cond] + " of 7", { color: col, dx: 6, bold: true, size: 11 });
+          if (sm.rts.length) {
+            a.dots(sm.rts, ys, { color: col, r: 3.2, alpha: 0.85 });
+            a.line([sm.median, sm.median], [y - 0.34, y + 0.34], { color: col, width: 2.5 });
+          }
+        }
+      },
+      readout: function () {
+        var s = last ? summary(last) : null, ms = function (x) { return x === undefined || isNaN(x) ? "–" : Math.round(x) + " ms"; };
+        return [["this block", last || "–"], ["median", ms(s ? s.median : undefined)],
+          ["slowest", ms(s && s.rts.length ? s.rts[s.rts.length - 1] : undefined)],
+          ["lapses", s ? String(s.lapses) : "–"], ["missed", s ? String(s.missed) : "–"], ["too early", String(run.early)]];
+      },
+      note: "Nothing you do here is stored or sent: it lives in this page and is gone when you close it, so a comparison across hours needs the page left open, or a note on paper. A browser adds a delay of its own to every time, so the half-second line is a guide and not the laboratory's. The task is a short cousin of the one in the film's chapter 6, where people kept on six hours' sleep had more and more lapses while their ratings of their own sleepiness levelled off. One short block from one person proves nothing either way; the point is to hold a measurement of your attention beside your opinion of it.",
+    });
+  };
 })();

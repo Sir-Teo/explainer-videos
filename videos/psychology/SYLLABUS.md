@@ -189,6 +189,7 @@ Modules, with the part that introduces each:
 | `brain` | 7 | a lesionable box-and-arrow architecture; patients under one resource and two; cortical magnification; lesion-symptom mapping |
 | `imaging` | 8 | a tuned cell; a lead-field toy for EEG; ERP averaging; the haemodynamic response and the GLM; a synthetic brain under each threshold; circular selection; reverse inference |
 | `genes` | 9 | many loci; twin, adoption and family simulators with each assumption switchable; Falconer and ACE fits; a genome-wide scan and polygenic scores; the sibling design; embryo selection |
+| `body` | 10 | a light-driven clock (free running, entrainment, phase response, jet lag); the two-process model of sleep and an alertness curve; lapses under short sleep; a hormone loop with feedback; receptor occupancy, blockers and half-lives; an opponent process; tolerance tied to a place; chronotype |
 | `body` | 10 | a circadian oscillator; the two-process model; an HPA feedback loop; receptor occupancy and tolerance |
 | `psychophysics` | 11 | psychometric functions; constant stimuli, limits and adjustment; staircases and QUEST; ML fits with intervals |
 | `sdt` | 12 | equal- and unequal-variance observers; yes–no, rating and 2AFC; ROC and d′; ideal observers |
@@ -847,39 +848,69 @@ et al. 2012; Border et al. 2019; Rietveld et al. 2013; Lee et al. 2018; Okbay et
 et al. 2022; Yengo et al. 2022; Martin et al. 2019; Karavani et al. 2019; Buss 1989; Gould & Lewontin 1979;
 Heijmans et al. 2008; Weir et al. 2002.
 
-### Part 10 · Chemistry and Clocks (~50)
-*Question:* why does the same mind differ at four in the afternoon and four in the morning?
+### Part 10 · Chemistry and Clocks (~60)
+*Question:* why is the same mind so different at four in the afternoon and at four in the morning?
 *Story:* in 1938 Nathaniel Kleitman and a student live for a month in Mammoth Cave on a twenty-eight-hour day to
-see whether the body would follow. One of them adapts; the body's clock is real and stubborn. The mind sits in a
-body with rhythms, hormones and drugs, and each of these is a control loop that can be written down.
-1. Hook: the cave. Free-running rhythms; Aschoff's bunker; a period slightly longer than a day.
-2. The clock: a molecular feedback loop as a limit-cycle oscillator; entrainment by light; phase-response curves;
-   jet lag computed.
-3. Sleep discovered in the laboratory: Aserinsky and Kleitman find REM (1953); the stages and the hypnogram.
-4. The two-process model (Borbély 1982): a homeostatic pressure and a circadian threshold. The model, its
-   predictions for deprivation and naps, and its fit.
-5. What sleep is for: deprivation studies, memory consolidation (a preview of Part 21), synaptic homeostasis.
-   What is solid and what was oversold.
-6. Dreams: activation–synthesis against continuity theories; what can be measured.
-7. Hormones as slow signals: the stress axis as a negative-feedback loop (Selye; the cortisol curve computed);
-   allostasis. Stress and performance (the Yerkes–Dodson curve and its thin original basis, Part 28).
-8. Sex hormones and behaviour: organizational and activational effects; what the human evidence supports.
-9. Drugs: dose–response, receptor occupancy and the Hill equation; agonists, antagonists, half-lives.
-10. Tolerance and withdrawal as opponent processes (Solomon and Corbit 1974; Siegel's conditioned tolerance).
-    Returns in Part 41.
-11. Caffeine, alcohol, nicotine, cannabis, in the same four numbers each.
+see whether the body would follow. The student's temperature rhythm stretches; Kleitman's keeps to twenty-four
+hours with no sun to copy. The brain lives in a body with a clock, a pressure to sleep, hormones and drugs, and
+each of these is a small model that can be written down and checked.
+0. Hook: the cave (Kleitman 1939); two temperature rhythms, drawn; four things in the body that change the mind.
+1. A clock inside: 24.18 hours in 24 people on a 28-hour day (Czeisler et al. 1999), and why earlier estimates
+   said 25; Psyche's clock (a light-driven van der Pol oscillator) runs at 24.15; the suprachiasmatic nucleus and
+   the loop of genes in each cell; on a 24-hour day the model locks, with its low point at 4:20; it follows days
+   of 23 to 25 hours and not 22 or 26 to 28, so on the cave's day it does what Kleitman did.
+2. Light sets the clock: the retina's third kind of light cell and melatonin; a phase response curve, computed
+   (delays of up to 1.2 hours before the low point, advances of up to 0.8 after); a flight of six time zones
+   takes 4 to 7 days to make up, with a caution that the model's direction is not the travellers'.
+3. Sleep, found in the laboratory: 20 dream reports in 27 awakenings (Aserinsky and Kleitman 1953); four stages,
+   drawn; a night's architecture in ninety-minute cycles.
+4. Two processes (Borbély 1982): a pressure rising over 18.2 hours and falling over 4.2; thresholds moved by the
+   clock; an eight-hour night; after 40 hours awake a recovery sleep of 8.6 hours, not sixteen; alertness lowest
+   at 5:22 and higher the next afternoon without any sleep.
+5. On you: chronotype as the midpoint of sleep on free days, and social jetlag; three example sleepers (45
+   minutes, 1 h 30, 3 h 15); chronotype latest at about twenty (Roenneberg et al. 2004).
+6. What sleep loss does: 8, 6 or 4 hours in bed for two weeks, by lot (Van Dongen et al. 2003); lapses add up
+   with every hour awake beyond 15.84; ratings of sleepiness level off while lapses climb.
+7. What sleep is for: an odour in slow-wave sleep and its four controls (Rasch et al. 2007); 91 experiments, g =
+   0.29 (Hu et al. 2020); dreams: activation-synthesis (1977) against Solms (2000), a double dissociation.
+8. The stress loop: a synapse against a hormone; hypothalamus, pituitary, adrenal and the brake; cortisol's day;
+   a one-hour stressor is gone in 3.4 hours, and with the brake at 30% it is larger, slower, and the daily
+   level 19% higher; organizing against activating (Phoenix et al. 1959); the Yerkes-Dodson curve's thin
+   beginning (Teigen 1994; Part 28).
+9. Four ways to change a synapse: mimic, block, hold, amplify (nicotine, caffeine, the reuptake blockers,
+   alcohol); caffeine covers the gauge of sleep pressure; where a drug starts is not where it ends.
+10. Dose and response: occupancy D/(D + K) from mass action; a blocker shifts the curve tenfold; three sites
+    steepen it (4.3-fold against 81-fold); half-lives against alcohol's constant rate, from the same formula;
+    three coffees leave 0.84 of a cup at 23:00.
+11. Tolerance and withdrawal: the opponent process (Solomon and Corbit 1974); ten doses (the effect felt falls
+    from 0.84 to 0.24, the low afterwards deepens to 1.07); the same dose in a different room (Siegel et al.
+    1982: 32%, 64%, 96%).
+12. The Ledger. 13. In practice: schedules, schools and insomnia. 14. Frontier: why do we sleep?
 
-*Psyche:* `body`: a van der Pol-style circadian oscillator with light input; the two-process model fitted to
-published sleep-timing data; an HPA loop; occupancy and opponent-process tolerance.
-*On you:* your chronotype from two questions, placed on the model's phase axis; predict your own afternoon dip.
-*Ledger:* REM and the stages (`replicated`); sleep deprivation impairs vigilance (`replicated`); sleep and
-declarative memory consolidation (`replicated, smaller` **(verify)**); specific popular claims about sleep loss and
-mortality (`contested`).
-*In practice:* shift scheduling, aviation duty limits, school start times, CBT for insomnia (Part 57).
-*Frontier:* why we sleep is still open; the glymphatic hypothesis and its disputes; individual differences in
-vulnerability to sleep loss.
-*Reading:* Kleitman, *Sleep and Wakefulness*; Borbély 1982; Daan, Beersma & Borbély 1984; Sapolsky, *Why Zebras
-Don't Get Ulcers*; Solomon & Corbit 1974; Siegel 1975; Julien, *A Primer of Drug Action*.
+*Psyche:* `body` (`explainer/psychology/psyche/body.py`): the clock (free running, entrained, a phase response
+curve, re-entrainment after a shift); the two-process model with forced waking and an alertness curve; lapses
+under short sleep; a three-stage hormone loop with feedback; receptor occupancy with a blocker and a Hill
+coefficient; first- and zero-order elimination and repeated dosing; an opponent process; tolerance tied to a
+place; midsleep and social jetlag. The clock and the two-process model use published constants and are not
+fitted here; the model makes no claim about an afternoon dip or about the direction of jet lag.
+*On you:* four sleep times give a chronotype and a social jetlag, in the film. The interactive is a vigilance
+task (watch for a light, respond, lapses counted) set beside the reader's own rating of how alert they feel,
+block by block.
+*Ledger:* REM sleep and dreaming (`replicated`); sleep loss and sustained attention (`replicated`); cueing a
+memory in slow-wave sleep (`replicated, smaller`); short sleep and an early death (`contested`). Shown without
+rows, with reasons: the cave, the clock's period, the two-process model, the two accounts of dreaming (due in
+Part 27), chronotype across life (Part 31), the guinea pigs, the Yerkes-Dodson history (Part 28), the opponent
+process (Part 41), Siegel's rats (Part 16), the Seattle schools, the insomnia trials (Part 42) and the two mouse
+studies of clearance.
+*In practice:* Seattle's later school start (34 minutes more sleep; a before-and-after comparison); behavioural
+therapy for insomnia read as the two processes plus conditioning (20 trials: asleep 19 minutes sooner, 26 minutes
+less awake); rosters built on descendants of the two-process model; caffeine arithmetic.
+*Frontier:* why animals sleep at all (memory, synaptic downscaling, clearance, energy); does sleep wash the brain
+(Xie et al. 2013 against Miao et al. 2024); who is hit hardest by sleep loss; what the pressure is made of;
+whether REM sleep is for anything.
+*Reading:* Kleitman, *Sleep and Wakefulness*; Miller, *Mapping the Darkness*; Roenneberg, *Internal Time*;
+Borbély 1982; Daan, Beersma & Borbély 1984; Van Dongen et al. 2003; Solomon & Corbit 1974; Siegel et al. 1982;
+Meyer & Quenzer, *Psychopharmacology*.
 
 ---
 
@@ -3146,3 +3177,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 7 | built, English and Chinese: 14 chapters, hook and outro; Psyche's brain (`psyche/brain.py`, ten tests), four Ledger rows, seventeen Archive datasets; course entry, lab and interactive (the reader's own blind spot, measured with outward and inward sweeps) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 63 min |
 | 8 | built, English and Chinese: 14 chapters, hook and outro; Psyche's imaging (`psyche/imaging.py`, thirteen tests), three Ledger rows, seventeen Archive datasets; course entry, lab and interactive (which reported correlation is impossible, given the two reliabilities) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 60 min |
 | 9 | built, English and Chinese: 14 chapters, hook and outro; Psyche's genes (`psyche/genes.py`, sixteen tests), three Ledger rows, twenty-three Archive datasets; course entry, lab and interactive (genes or the shared home, read from two twin correlations) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 60 min |
+| 10 | built, English and Chinese: 14 chapters, hook and outro; Psyche's body (`psyche/body.py`, fourteen tests), four Ledger rows, sixteen Archive datasets; course entry, lab and interactive (a vigilance task beside the reader's own rating of alertness) checked; narration table and on-screen text translated and dry-run. Act II is complete. Open checks in its README | 59 min |

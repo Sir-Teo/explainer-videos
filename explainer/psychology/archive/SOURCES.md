@@ -105,6 +105,22 @@ and summarized, not stored. Dates are the day the check was made.
 | `buss_1989` | Mate preferences in 37 cultures | Buss, *Behav. Brain Sci.* 12 (1989) 1–49 | facts only | 2026-11-14: summaries of the paper |
 | `heijmans_2008` | IGF2 methylation after the Dutch Hunger Winter; maternal care in rats | Heijmans et al., *PNAS* 105 (2008) 17046–17049; Weaver et al., *Nat. Neurosci.* 7 (2004) 847–854 | facts only | 2026-11-14: both abstracts |
 | `weir_2002` | A crow bends a wire into a hook; the 2016 field study | Weir, Chappell and Kacelnik, *Science* 297 (2002) 981 | facts only | 2026-11-14: accounts of both studies; the 2016 reference from memory |
+| `kleitman_1938` | Thirty-two days in Mammoth Cave on a 28-hour day | Kleitman, *Sleep and Wakefulness* (1939); *Time*, 18 July 1938 | facts only | 2026-11-14: the 1938 report and later accounts; the cave's depth is not given |
+| `czeisler_1999` | The human circadian period averages 24.18 hours | Czeisler et al., *Science* 284 (1999) 2177–2181 | facts only | 2026-11-14: the abstract |
+| `aserinsky_1953` | Rapid eye movements in sleep; 20 of 27 awakenings gave dreams | Aserinsky and Kleitman, *Science* 118 (1953) 273–274 | facts only | 2026-11-14: a reprint of the text |
+| `borbely_1982` | The two-process model; time constants 18.18 h and 4.2 h | Borbély, *Hum. Neurobiol.* 1 (1982) 195–204; Daan, Beersma and Borbély, *Am. J. Physiol.* 246 (1984) R161–R178 | facts only | 2026-11-14: the 2016 reappraisal's figure legend |
+| `van_dongen_2003` | Two weeks at 6 or 4 hours in bed: cumulative lapses | Van Dongen et al., *Sleep* 26 (2003) 117–126 | facts only | 2026-11-14: the abstract |
+| `rasch_2007` | Odour cues in slow-wave sleep; the pooled effect of cueing (g = 0.29) | Rasch et al., *Science* 315 (2007) 1426–1429; Hu et al., *Psychol. Bull.* 146 (2020) 218–244 | facts only | 2026-11-14: both abstracts |
+| `hobson_1977` | Activation-synthesis, and dreaming without REM | Hobson and McCarley, *Am. J. Psychiatry* 134 (1977) 1335–1348; Solms, *Behav. Brain Sci.* 23 (2000) 843–850 | facts only | 2026-11-14: reference lists and summaries |
+| `cappuccio_2010` | Sleep duration and mortality: RR 1.12 short, 1.30 long, 1.38 million people | Cappuccio et al., *Sleep* 33 (2010) 585–592 | facts only | 2026-11-14: the abstract |
+| `siegel_1982` | Heroin in a familiar and an unfamiliar place: 32%, 64%, 96% of rats died | Siegel et al., *Science* 216 (1982) 436–437 | facts only | 2026-11-14: the paper's table as quoted |
+| `solomon_corbit_1974` | The opponent-process theory | Solomon and Corbit, *Psychol. Rev.* 81 (1974) 119–145 | facts only | 2026-11-14: the PubMed record and summaries |
+| `dunster_2018` | Seattle's later school start: 34 minutes more sleep | Dunster et al., *Sci. Adv.* 4 (2018) eaau6200 | facts only | 2026-11-14: the university's summary |
+| `trauer_2015` | CBT for chronic insomnia: 20 trials | Trauer et al., *Ann. Intern. Med.* 163 (2015) 191–204 | facts only | 2026-11-14: the abstract |
+| `xie_2013` | Sleep and clearance from the brain: a finding in mice and its dispute | Xie et al., *Science* 342 (2013) 373–377; Miao et al., *Nat. Neurosci.* 27 (2024) 1046–1050 | facts only | 2026-11-14: both abstracts and commentary |
+| `phoenix_1959` | Organizing and activating effects of sex hormones | Phoenix et al., *Endocrinology* 65 (1959) 369–382 | facts only | 2026-11-14: reviews |
+| `teigen_1994` | The Yerkes-Dodson law's thin beginning | Yerkes and Dodson (1908); Teigen, *Theory Psychol.* 4 (1994) 525–547 | facts only | 2026-11-14: summaries of both |
+| `roenneberg_2004` | Chronotype through life: latest at about twenty | Roenneberg et al., *Curr. Biol.* 14 (2004) R1038–R1039; Wittmann et al., *Chronobiol. Int.* 23 (2006) 497–509 | facts only | 2026-11-14: summaries of the survey; the PubMed record of the second paper |
 
 ## Looked for and not used
 

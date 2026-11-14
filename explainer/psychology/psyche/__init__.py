@@ -32,5 +32,9 @@ Modules so far, with the part that introduces each:
                          model, with each assumption switchable; Falconer and a maximum-likelihood ACE fit;
                          a genome-wide association study and polygenic scores; within- and between-family
                          effects; stratification; the gain from choosing among embryos
+``body``            10   a light-driven circadian oscillator (entrainment, phase response, jet lag); the
+                         two-process model of sleep and an alertness curve; lapses under sleep restriction;
+                         the stress axis as a feedback loop; the Hill equation, antagonists and elimination;
+                         the opponent process and conditioned tolerance; chronotype
 =================  ====  ===============================================================================
 """

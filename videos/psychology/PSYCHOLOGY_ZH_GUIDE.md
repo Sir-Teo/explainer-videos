@@ -409,6 +409,49 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Mendel's lottery | 孟德尔的彩票 |
 | siblings; within families, between families | 兄弟姐妹；家庭内部，家庭之间 |
 
+## Part 10: chemistry and clocks
+
+| English | 中文 |
+|---|---|
+| the body's clock; daily rhythm; period | 身体里的钟（生物钟）；一天的节律；周期 |
+| to set the clock; to lock on (entrain) | 给钟对表；锁上（同步） |
+| the low point (of body temperature) | 最低点 |
+| suprachiasmatic nucleus; optic nerves; the crossing | 视交叉上核；视神经；交叉 |
+| clock genes; pineal gland; melatonin | 钟基因；松果体；褪黑素 |
+| rods and cones; light-sensitive cell; pigment | 视杆和视锥；感光细胞；色素 |
+| phase response curve; moves later, earlier | 相位响应曲线；往后拨，往前拨 |
+| time zone; jet lag; night shift | 时区；时差；夜班 |
+| stages of sleep; light sleep; deep (slow-wave) sleep | 睡眠阶段；浅睡眠；深睡眠（慢波睡眠） |
+| REM sleep (rapid eye movement); paradoxical sleep | REM睡眠（快速眼动睡眠）；异相睡眠 |
+| spindle; slow wave; cycle | 纺锤波；慢波；周期 |
+| the two-process model; process S, process C | 双过程模型；过程S，过程C |
+| sleep pressure; threshold; the gate | 睡眠压力；阈值；门 |
+| recovery sleep; the second wind; alertness | 恢复性睡眠；第二股劲；清醒程度 |
+| chronotype; midpoint of sleep; social jetlag | 时型；睡眠中点；社会时差 |
+| work days; free days | 工作日；休息日 |
+| lapse (of attention); vigilance task | 失误；警觉任务 |
+| to consolidate (a memory); to cue; replay | 巩固；提示；重放 |
+| activation-synthesis; forebrain; brainstem | 激活—合成假说；前脑；脑干 |
+| hormone; cortisol; the stress loop; stressor | 激素；皮质醇；应激回路；应激源 |
+| hypothalamus; pituitary; adrenal glands | 下丘脑；垂体；肾上腺 |
+| brake (feedback); a worn brake | 刹车；磨损的刹车 |
+| to organize; to activate (of hormones) | 组织作用；激活作用 |
+| the Yerkes-Dodson law; arousal | 耶基斯—多德森定律；唤醒 |
+| to mimic, block, hold, amplify (a transmitter) | 模仿，阻断，留住，放大 |
+| pump (reuptake); the gap | 泵；缝隙 |
+| nicotine; acetylcholine; morphine; naloxone | 尼古丁；乙酰胆碱；吗啡；纳洛酮 |
+| caffeine; adenosine; cocaine; alcohol | 咖啡因；腺苷；可卡因；酒精 |
+| antidepressant; benzodiazepines; GABA | 抗抑郁药；苯二氮䓬类；GABA |
+| dose; dose and response; occupancy | 剂量；剂量与反应；占有率 |
+| blocker (antagonist); antidote; overdose | 阻断剂；解毒剂；过量 |
+| half-life; a constant fraction, a constant amount | 半衰期；固定的比例，固定的量 |
+| tolerance; withdrawal; the opponent process | 耐受；戒断；对立过程 |
+| heroin; the usual room, a new room | 海洛因；平常的房间，新房间 |
+| insomnia; behavioural therapy; sleep efficiency | 失眠；行为治疗；睡眠效率 |
+| roster; fatigue risk | 排班；疲劳风险 |
+| clearance (of waste); anaesthesia | 清除；麻醉 |
+| a drawing, not a recording / not the data | 示意图，不是记录／不是数据 |
+
 ## Names
 
 | English | 中文 |
@@ -504,6 +547,13 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Jim, Linda, Betty, James Alan, Toy (the dog) | 吉姆，琳达，贝蒂，詹姆斯·艾伦，托伊 |
 | Ohio, Minnesota, Dunedin, Iceland, Kentucky | 俄亥俄，明尼苏达，达尼丁，冰岛，肯塔基 |
 | *Hereditary Genius* | 《遗传的天才》 |
+| Nathaniel Kleitman, Bruce Richardson | 纳撒尼尔·克莱特曼，布鲁斯·理查森 |
+| Charles Czeisler, Eugene Aserinsky | 查尔斯·蔡斯勒，尤金·阿瑟林斯基 |
+| Alexander Borbély; Hans Van Dongen, David Dinges | 亚历山大·博尔贝伊；汉斯·范东恩，戴维·丁格斯 |
+| Björn Rasch, Jan Born; Allan Hobson, Robert McCarley, Mark Solms | 比约恩·拉施，扬·博恩；艾伦·霍布森，罗伯特·麦卡利，马克·索姆斯 |
+| Richard Solomon, John Corbit; Shepard Siegel | 理查德·所罗门，约翰·科比特；谢泼德·西格尔 |
+| Yerkes, Dodson; Gustav Fechner | 耶基斯，多德森；古斯塔夫·费希纳 |
+| Mammoth Cave; Seattle, Rochester, Philadelphia, Kansas, Leipzig | 猛犸洞；西雅图，罗切斯特，费城，堪萨斯，莱比锡 |
 
 ## Titles
 

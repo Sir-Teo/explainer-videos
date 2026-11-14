@@ -32,7 +32,10 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "BOUCHARD_1990", "GALTON_1875", "FISHER_1918", "BOUCHARD_MCGUE_1981", "POLDERMAN_2015", "TURKHEIMER_2000",
            "TURKHEIMER_2003", "HAWORTH_2010", "NCD_RISC_2016", "HERITABILITY_TABLE", "CASPI_2003", "BORDER_2019",
            "CHABRIS_2012", "RIETVELD_2013", "LEE_2018", "KONG_2018", "HOWE_2022", "YENGO_2022", "MARTIN_2019",
-           "KARAVANI_2019", "BUSS_1989", "HEIJMANS_2008", "WEIR_2002"]
+           "KARAVANI_2019", "BUSS_1989", "HEIJMANS_2008", "WEIR_2002",
+           "KLEITMAN_1938", "CZEISLER_1999", "ASERINSKY_1953", "BORBELY_1982", "VAN_DONGEN_2003", "RASCH_2007",
+           "HOBSON_1977", "CAPPUCCIO_2010", "SIEGEL_1982", "SOLOMON_CORBIT_1974", "DUNSTER_2018", "TRAUER_2015",
+           "XIE_2013", "PHOENIX_1959", "TEIGEN_1994", "ROENNEBERG_2004"]
 
 
 @dataclass(frozen=True)
@@ -1616,6 +1619,202 @@ WEIR_2002 = Dataset(
 )
 
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 10: chemistry and clocks
+# ---------------------------------------------------------------------------------------------------------------
+_P10 = "through a web search, 2026-11-14; the paper was not read"
+
+KLEITMAN_1938 = Dataset(
+    key="kleitman_1938",
+    title="Thirty-two days in Mammoth Cave on a 28-hour day",
+    source="N. Kleitman, Sleep and Wakefulness (1939; revised 1963); contemporary report: Science: Cave Men, Time, "
+           "18 July 1938; K. Miller, Mapping the Darkness (2023)",
+    cite=r"Kleitman (1939)",
+    checked="the 1938 magazine report, a National Park Service account and a book excerpt " + _P10 + ". Sources "
+            "differ on the cave's depth, which is not given",
+    licence="facts only",
+    data={"year": 1938, "days": 32, "day_hours": 28, "student": "Bruce Richardson", "student_age": 25,
+          "kleitman_age": 43, "adapted": "the student's temperature rhythm stretched toward 28 hours",
+          "did_not": "Kleitman's kept its 24-hour course, and he grew sleepy at about ten each evening"},
+)
+
+CZEISLER_1999 = Dataset(
+    key="czeisler_1999",
+    title="The human clock's own period is close to 24 hours",
+    source="C. A. Czeisler et al., Stability, precision, and near-24-hour period of the human circadian pacemaker, "
+           "Science 284 (1999) 2177-2181",
+    cite=r"Czeisler et al.\ (1999)",
+    checked="the PubMed abstract and the university's report " + _P10,
+    licence="facts only",
+    data={"period_h": 24.18, "people": 24, "young": 11, "older": 13, "day_hours": 28, "days": (29, 38)},
+)
+
+ASERINSKY_1953 = Dataset(
+    key="aserinsky_1953",
+    title="Periods of rapid eye movement in sleep, and the dreams reported from them",
+    source="E. Aserinsky and N. Kleitman, Regularly occurring periods of eye motility, and concomitant phenomena, "
+           "during sleep, Science 118 (1953) 273-274",
+    cite=r"Aserinsky \& Kleitman (1953)",
+    checked="a reprint of the paper's text " + _P10 + ". Sources differ on the number of sleepers, which is not "
+            "given",
+    licence="facts only",
+    data={"awakenings_rem": 27, "dreams_rem": 20},
+)
+
+BORBELY_1982 = Dataset(
+    key="borbely_1982",
+    title="The two-process model of sleep regulation",
+    source="A. A. Borbely, A two process model of sleep regulation, Human Neurobiology 1 (1982) 195-204; S. Daan, "
+           "D. G. M. Beersma and A. A. Borbely, Timing of human sleep: recovery process gated by a circadian "
+           "pacemaker, American Journal of Physiology 246 (1984) R161-R178",
+    cite=r"Borb\'ely (1982)",
+    checked="the figure legend of the model's 2016 reappraisal (Journal of Sleep Research 25, 131-143) " + _P10,
+    licence="facts only",
+    data={"tau_rise_h": 18.18, "tau_fall_h": 4.2},
+)
+
+VAN_DONGEN_2003 = Dataset(
+    key="van_dongen_2003",
+    title="Two weeks of six hours' sleep impair attention as much as two nights without any",
+    source="H. P. A. Van Dongen, G. Maislin, J. M. Mullington and D. F. Dinges, The cumulative cost of additional "
+           "wakefulness, Sleep 26 (2003) 117-126",
+    cite=r"Van Dongen et al.\ (2003)",
+    checked="the abstract " + _P10,
+    licence="facts only",
+    data={"hours_in_bed": (8, 6, 4), "days": 14, "total_deprivation_days": 3, "threshold_awake_h": 15.84,
+          "equivalent_nights": 2, "noticed": "sleepiness ratings levelled off while performance kept falling"},
+)
+
+RASCH_2007 = Dataset(
+    key="rasch_2007",
+    title="Cueing a memory during slow-wave sleep, and the pooled effect since",
+    source="B. Rasch, C. Buchel, S. Gais and J. Born, Odor cues during slow-wave sleep prompt declarative memory "
+           "consolidation, Science 315 (2007) 1426-1429; X. Hu, L. Y. Cheng, M. H. Chiu and K. A. Paller, Promoting "
+           "memory consolidation during sleep: a meta-analysis of targeted memory reactivation, Psychological "
+           "Bulletin 146 (2020) 218-244",
+    cite=r"Rasch et al.\ (2007)",
+    checked="both abstracts " + _P10,
+    licence="facts only",
+    data={"experiments": 91, "effects": 212, "people": 2_004, "g": 0.29, "g_lo": 0.21, "g_hi": 0.38},
+)
+
+HOBSON_1977 = Dataset(
+    key="hobson_1977",
+    title="Two accounts of dreaming",
+    source="J. A. Hobson and R. W. McCarley, The brain as a dream state generator: an activation-synthesis hypothesis "
+           "of the dream process, American Journal of Psychiatry 134 (1977) 1335-1348; M. Solms, Dreaming and REM "
+           "sleep are controlled by different brain mechanisms, Behavioral and Brain Sciences 23 (2000) 843-850",
+    cite=r"Hobson \& McCarley (1977)",
+    checked="reference lists and summaries " + _P10,
+    licence="facts only",
+    data={},
+)
+
+CAPPUCCIO_2010 = Dataset(
+    key="cappuccio_2010",
+    title="Sleep duration and death in 1.4 million people",
+    source="F. P. Cappuccio, L. D'Elia, P. Strazzullo and M. A. Miller, Sleep duration and all-cause mortality: a "
+           "systematic review and meta-analysis of prospective studies, Sleep 33 (2010) 585-592",
+    cite=r"Cappuccio et al.\ (2010)",
+    checked="the abstract and full-text summary " + _P10,
+    licence="facts only",
+    data={"studies": 16, "people": 1_382_999, "deaths": 112_566, "rr_short": 1.12, "rr_long": 1.30},
+)
+
+SIEGEL_1982 = Dataset(
+    key="siegel_1982",
+    title="A dose of heroin kills more rats in an unfamiliar place",
+    source="S. Siegel, R. E. Hinson, M. D. Krank and J. McCully, Heroin 'overdose' death: contribution of "
+           "drug-associated environmental cues, Science 216 (1982) 436-437",
+    cite=r"Siegel et al.\ (1982)",
+    checked="the paper's table as quoted " + _P10,
+    licence="facts only",
+    data={"dose_mg_kg": 15, "usual_place": 0.324, "new_place": 0.643, "no_history": 0.964, "n": (37, 42, 28)},
+)
+
+SOLOMON_CORBIT_1974 = Dataset(
+    key="solomon_corbit_1974",
+    title="The opponent-process theory",
+    source="R. L. Solomon and J. D. Corbit, An opponent-process theory of motivation: I. Temporal dynamics of "
+           "affect, Psychological Review 81 (1974) 119-145",
+    cite=r"Solomon \& Corbit (1974)",
+    checked="the PubMed record and summaries " + _P10,
+    licence="facts only",
+    data={},
+)
+
+DUNSTER_2018 = Dataset(
+    key="dunster_2018",
+    title="Seattle moves its high schools' start 55 minutes later",
+    source="G. P. Dunster et al., Sleepmore in Seattle: later school start times are associated with more sleep and "
+           "better performance in high school students, Science Advances 4 (2018) eaau6200",
+    cite=r"Dunster et al.\ (2018)",
+    checked="the university's summary and news reports " + _P10 + ". A before-and-after comparison, not a "
+            "randomized trial",
+    licence="facts only",
+    data={"shift_min": 55, "from": "7:50", "to": "8:45", "more_sleep_min": 34, "grades_pct": 4.5},
+)
+
+TRAUER_2015 = Dataset(
+    key="trauer_2015",
+    title="Cognitive behavioural therapy for chronic insomnia: twenty trials",
+    source="J. M. Trauer et al., Cognitive behavioral therapy for chronic insomnia: a systematic review and "
+           "meta-analysis, Annals of Internal Medicine 163 (2015) 191-204",
+    cite=r"Trauer et al.\ (2015)",
+    checked="the abstract " + _P10,
+    licence="facts only",
+    data={"trials": 20, "people": 1_162, "onset_min": 19, "awake_min": 26, "efficiency_points": 9.9},
+)
+
+XIE_2013 = Dataset(
+    key="xie_2013",
+    title="Does sleep wash the brain? A finding and its dispute",
+    source="L. Xie et al., Sleep drives metabolite clearance from the adult brain, Science 342 (2013) 373-377; A. "
+           "Miao et al., Brain clearance is reduced during sleep and anesthesia, Nature Neuroscience 27 (2024) "
+           "1046-1050",
+    cite=r"Xie et al.\ (2013)",
+    checked="both abstracts and commentary on the dispute " + _P10 + "; mice in both",
+    licence="facts only",
+    data={"space_increase": 0.60},
+)
+
+PHOENIX_1959 = Dataset(
+    key="phoenix_1959",
+    title="Hormones before birth organize; hormones in adulthood activate",
+    source="C. H. Phoenix, R. W. Goy, A. A. Gerall and W. C. Young, Organizing action of prenatally administered "
+           "testosterone propionate on the tissues mediating mating behavior in the female guinea pig, Endocrinology "
+           "65 (1959) 369-382",
+    cite=r"Phoenix et al.\ (1959)",
+    checked="reviews " + _P10,
+    licence="facts only",
+    data={},
+)
+
+TEIGEN_1994 = Dataset(
+    key="teigen_1994",
+    title="The Yerkes-Dodson law and its thin beginning",
+    source="R. M. Yerkes and J. D. Dodson, The relation of strength of stimulus to rapidity of habit-formation, "
+           "Journal of Comparative Neurology and Psychology 18 (1908) 459-482; K. H. Teigen, Yerkes-Dodson: a law "
+           "for all seasons, Theory & Psychology 4 (1994) 525-547",
+    cite=r"Teigen (1994)",
+    checked="summaries of both " + _P10,
+    licence="facts only",
+    data={},
+)
+
+ROENNEBERG_2004 = Dataset(
+    key="roenneberg_2004",
+    title="Chronotype through life: latest at about twenty",
+    source="T. Roenneberg et al., A marker for the end of adolescence, Current Biology 14 (2004) R1038-R1039; M. "
+           "Wittmann, J. Dinich, M. Merrow and T. Roenneberg, Social jetlag: misalignment of biological and social "
+           "time, Chronobiology International 23 (2006) 497-509",
+    cite=r"Roenneberg et al.\ (2004)",
+    checked="summaries of the survey, and the PubMed record of the second paper, " + _P10,
+    licence="facts only",
+    data={"latest_women": 19.5, "latest_men": 21.0},
+)
+
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -1635,4 +1834,7 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           BOUCHARD_1990, GALTON_1875, FISHER_1918, BOUCHARD_MCGUE_1981, POLDERMAN_2015,
                           TURKHEIMER_2000, TURKHEIMER_2003, HAWORTH_2010, NCD_RISC_2016, HERITABILITY_TABLE,
                           CASPI_2003, BORDER_2019, CHABRIS_2012, RIETVELD_2013, LEE_2018, KONG_2018, HOWE_2022,
-                          YENGO_2022, MARTIN_2019, KARAVANI_2019, BUSS_1989, HEIJMANS_2008, WEIR_2002)}
+                          YENGO_2022, MARTIN_2019, KARAVANI_2019, BUSS_1989, HEIJMANS_2008, WEIR_2002,
+                          KLEITMAN_1938, CZEISLER_1999, ASERINSKY_1953, BORBELY_1982, VAN_DONGEN_2003, RASCH_2007,
+                          HOBSON_1977, CAPPUCCIO_2010, SIEGEL_1982, SOLOMON_CORBIT_1974, DUNSTER_2018, TRAUER_2015,
+                          XIE_2013, PHOENIX_1959, TEIGEN_1994, ROENNEBERG_2004)}

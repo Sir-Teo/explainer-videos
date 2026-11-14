@@ -954,3 +954,95 @@ shown(9, "KARAVANI_2019", "a simulation study, set beside the series' own formul
 shown(9, "BUSS_1989", "the example of a cross-cultural test; its claim is entered with mate preferences", row_in=37)
 shown(9, "HEIJMANS_2008", "physiology, told with its limits")
 shown(9, "WEIR_2002", "comparative cognition, told with its later qualification")
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 10: chemistry and clocks
+# ---------------------------------------------------------------------------------------------------------------
+add(Finding(
+    key="rem_sleep", part=10, title=r"REM sleep and dreaming",
+    claim="Sleep contains recurring periods of rapid eye movement, and people woken from them usually report a "
+          "dream.",
+    original=Study("Aserinsky and Kleitman", 1953, n="27 awakenings during eye movements",
+                   design="sleepers woken during eye movements and during ocular quiet",
+                   found="20 of 27 awakenings during eye movements gave detailed dream reports"),
+    status="replicated",
+    record=(Study("Sleep laboratories since", 1957, n="thousands of recorded nights",
+                  design="all-night recordings of the EEG, eye movements and muscle tone",
+                  found="the same stages, in cycles of about ninety minutes, in every laboratory"),),
+    note="The stages are among the most repeated observations in psychology. That dreaming happens only in REM "
+         "did not hold: dreams are also reported from other stages, less often and less vividly.",
+    sources=("E. Aserinsky and N. Kleitman, Regularly occurring periods of eye motility, and concomitant phenomena, "
+             "during sleep, Science 118 (1953) 273-274",
+             "W. Dement and N. Kleitman, Cyclic variations in EEG during sleep and their relation to eye movements, "
+             "body motility, and dreaming, Electroencephalography and Clinical Neurophysiology 9 (1957) 673-690"),
+    checked="2026-11-14",
+    data=("ASERINSKY_1953",),
+))
+
+add(Finding(
+    key="sleep_loss_vigilance", part=10, title=r"Sleep loss and attention",
+    claim="Too little sleep, night after night, impairs sustained attention, and the impairment accumulates.",
+    original=Study("Van Dongen and colleagues", 2003, n="adults kept in a laboratory for two weeks",
+                   design="8, 6 or 4 hours in bed for 14 days, or none for 3, assigned at random",
+                   found="lapses grew day by day; 6 hours for two weeks matched up to two nights without sleep"),
+    status="replicated",
+    record=(Study("Belenky and colleagues", 2003, n="66 adults", design="3, 5, 7 or 9 hours in bed for a week",
+                  found="a graded decline in a vigilance task; on 5 and 7 hours it levelled off at a lower level"),),
+    note="People rated themselves only slightly sleepy while their performance kept falling: the loss is not "
+         "noticed by the person who has it.",
+    sources=("H. P. A. Van Dongen, G. Maislin, J. M. Mullington and D. F. Dinges, The cumulative cost of additional "
+             "wakefulness, Sleep 26 (2003) 117-126",
+             "G. Belenky et al., Patterns of performance degradation and restoration during sleep restriction and "
+             "subsequent recovery, Journal of Sleep Research 12 (2003) 1-12"),
+    checked="2026-11-14",
+    data=("VAN_DONGEN_2003",),
+))
+
+add(Finding(
+    key="sleep_memory", part=10, title=r"Sleep and the consolidation of memory",
+    claim="Reactivating a memory during slow-wave sleep strengthens it.",
+    original=Study("Rasch and colleagues", 2007, n="a few dozen volunteers",
+                   design="an odour present while learning card locations, given again in slow-wave sleep",
+                   found="better memory the next morning; not when given in REM sleep or while awake"),
+    status="replicated, smaller",
+    record=(Study("Hu and colleagues", 2020, n="91 experiments, 2,004 people", design="a meta-analysis of cueing in sleep",
+                  found="a small effect in non-REM sleep (g = 0.29); none in REM sleep or waking"),),
+    note="The effect is there and small. For a neighbouring method, sounds timed to slow waves, reported effects "
+         "have shrunk year by year.",
+    sources=("B. Rasch, C. Buchel, S. Gais and J. Born, Odor cues during slow-wave sleep prompt declarative memory "
+             "consolidation, Science 315 (2007) 1426-1429",
+             "X. Hu, L. Y. Cheng, M. H. Chiu and K. A. Paller, Promoting memory consolidation during sleep: a "
+             "meta-analysis of targeted memory reactivation, Psychological Bulletin 146 (2020) 218-244"),
+    checked="2026-11-14",
+    data=("RASCH_2007",),
+))
+
+add(Finding(
+    key="short_sleep_mortality", part=10, title=r"Short sleep and an early death",
+    claim="Sleeping too little shortens your life.",
+    original=Study("Cappuccio and colleagues", 2010, n="16 studies, 1.4 million people",
+                   design="a meta-analysis of cohorts who reported their usual sleep and were followed for years",
+                   found="short sleepers 12% more likely to die in the follow-up; long sleepers 30% more likely"),
+    status="contested",
+    record=(),
+    note="The association is real and the causal reading is not established. Sleep was self-reported, illness "
+         "changes sleep before it kills, and long sleep predicts death more strongly than short sleep, which a "
+         "simple story about sleep loss does not expect.",
+    sources=("F. P. Cappuccio, L. D'Elia, P. Strazzullo and M. A. Miller, Sleep duration and all-cause mortality: a "
+             "systematic review and meta-analysis of prospective studies, Sleep 33 (2010) 585-592",),
+    checked="2026-11-14",
+    data=("CAPPUCCIO_2010",),
+))
+
+shown(10, "KLEITMAN_1938", "an experiment on two people, told as history; the clock's period is the next entry")
+shown(10, "CZEISLER_1999", "physiology: a property of the body's clock, not a claim about the mind")
+shown(10, "BORBELY_1982", "a model, tested here against its own predictions")
+shown(10, "HOBSON_1977", "two theories of dreaming, presented as an open dispute", row_in=27)
+shown(10, "SIEGEL_1982", "an animal experiment on tolerance; conditioning is entered in Part 16", row_in=16)
+shown(10, "SOLOMON_CORBIT_1974", "a theory, shown as a model", row_in=41)
+shown(10, "DUNSTER_2018", "a before-and-after comparison in two schools, described as that")
+shown(10, "TRAUER_2015", "a meta-analysis of a treatment; therapies are entered in Part 42", row_in=42)
+shown(10, "XIE_2013", "a finding in mice and its dispute, at the frontier")
+shown(10, "PHOENIX_1959", "animal physiology; the human evidence is indirect and is said to be")
+shown(10, "TEIGEN_1994", "a history of a textbook law; the law itself is examined in Part 28", row_in=28)
+shown(10, "ROENNEBERG_2004", "a description from a survey of sleep times; the lifespan is Part 31", row_in=31)
