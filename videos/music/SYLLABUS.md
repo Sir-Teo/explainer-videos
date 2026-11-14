@@ -1070,12 +1070,34 @@ the plan is, for now, the chorales and Part 14's tunes); the Tune's reduction pl
 ### Part 23 · Chant to Polyphony (~50)
 *Story:* Paris, about 1200. Under the unfinished vault of Notre Dame, Pérotin stretches one syllable of chant for
 a minute beneath three dancing upper voices. To keep four singers together he needs something no one has had:
-a way to write rhythm.
+a way to write rhythm. The part goes back to the chant, follows the voices as they multiply, and counts a century of
+the result.
+1. Hook: an organum on one held note in the manner of the quadrupla, heard; the problem of coordination; the plan.
+2. Chant and the eight modes: Ut queant laxis; finals, ranges, reciting tones; psalmody; an ear question (mode 1 or 2?); the theorists' rule as a classifier.
+3. Guido's hexachords: the letter to Michael; the gamut; mutation heard; solmization as a shortest path; the staff.
+4. Parallel organum: Musica enchiriadis; an ear question (which organum has the tritone?); the boundary rule and the occursus.
+5. Free and florid organum: Winchester, Micrologus, Ad organum faciendum; florid organum heard; discant and organum purum.
+6. The rhythmic modes: six patterns heard; perfections; the mode read from ligatures.
+7. Notre Dame: Anonymous IV, Léonin, Pérotin; a clausula heard; consonance on the beat; voice exchange.
+8. The motet: words under a clausula; a three-voice motet heard; Franco's shapes; Petrus de Cruce and the hocket.
+9. The Ars nova and mensuration: the quarrel; four mensurations heard; imperfection and alteration as a program.
+10. Isorhythm: color against talea heard; talea scans of de Vitry's motets; Vos qui admiramini sung from the edition.
+11. Machaut and the cadence: Machaut; an ear question (the double leading tone); sixth-to-octave cadences counted.
+12. A century, counted: 89 pieces; intervals on the beat; parallels and final chords against Bach; the Landini cadence heard and counted.
+13. The Ars subtilior: proportions heard; Cordier's heart and circle.
+14. Frontier: musica ficta counted; chant rhythm; computational chant studies.
+15. Variation 23: the Tune as chant, organum and isorhythmic motet. Outro: problems, payoffs.
+
 *Covers:* chant and the eight modes; Guido's hexachord; parallel, free and florid organum; the rhythmic modes;
 the motet; the Ars Nova and mensuration; isorhythm; Machaut; the Ars subtilior.
-*Built and computed:* an isorhythm engine (talea against color, their periods and realignment); a mode classifier.
+*Built and computed:* `monochord/medieval.py`: the modes and a classifier by final and range, psalm tones, the gamut
+and solmization by fewest mutations, parallel organum and the Enchiriadis rule, florid organum, the rhythmic modes and
+a ligature parser, Notre Dame organum on a held tenor, the mensurations and Franco's rules, an isorhythm engine (talea
+against color, their periods and realignment) and a talea scan, a census of intervals, parallels, cadences and finals;
+`monochord/trecento.py`: 89 fourteenth-century pieces from the music21 corpus's encodings of *Polyphonic Music of the
+Fourteenth Century*; everything heard sung by Part 17's choir.
 *Variation 23:* the Tune as chant, organum and an isorhythmic motet.
-*Frontier:* computational chant studies; what the notation does not settle.
+*Frontier:* computational chant studies; what the notation does not settle (musica ficta counted in the edition).
 *Reading:* Hoppin, *Medieval Music*; Taruskin vol. 1; Kelly, *Capturing Music*.
 
 ### Part 24 · The Renaissance (~50)
