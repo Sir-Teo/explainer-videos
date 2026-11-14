@@ -45,7 +45,7 @@ class Row(SoundScene):
             for c_ in range(12):
                 v = m[r][c_]
                 sq = Square(side_length=size, stroke_width=0.6, stroke_color=GREY_B, fill_color=TUNE if r == 0 else (BLUE if c_ == 0 else BLACK), fill_opacity=0.35 if (r == 0 or c_ == 0) else 0.0)
-                sq.move_to([-2.0 + size * c_, 2.0 - size * r, 0])
+                sq.move_to([-5.6 + size * c_, 1.9 - size * r, 0])
                 cells.add(VGroup(sq, label(str(v), font_size=12, color=WHITE if (r == 0 or c_ == 0) else GREY_A).move_to(sq)))
         side = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
             (r"across the top: \ the row, \ $P_0$", TUNE),
@@ -53,8 +53,8 @@ class Row(SoundScene):
             (r"each row of the grid: \ a transposition; \ each column: \ an inverted one", WHITE),
             (r"read right to left: \ retrogrades", WHITE),
             (rf"12 $\times$ 4 = 48 forms, \ all different for this row: \ {d['distinct']}", EAR))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 5.0))
-        side.move_to(RIGHT * 4.3 + DOWN * 0.1)
+        side.scale_to_fit_width(min(side.width, 6.4))
+        side.move_to(RIGHT * 3.0 + DOWN * 0.1)
         head = label(r"a row of our own, \ and its matrix \ (C = 0)", font_size=24, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Composers lay out a row's forms in a twelve by twelve grid. <bookmark mark='a'/> Across the top, the row itself, "
@@ -166,7 +166,7 @@ class Row(SoundScene):
             braces.add(VGroup(Line([a + 0.05, -1.2, 0], [b - 0.05, -1.2, 0], color=EAR, stroke_width=3),
                               label(names[k], font_size=18, color=EAR).move_to([(a + b) / 2, -1.6, 0])))
         head = label(r"Schoenberg's Piano Suite, \ Op. 25: \ its row", font_size=26, color=GREY_A).to_edge(UP, buff=0.45)
-        cap = label(r"E to B$\flat$: \ the row begins and ends a tritone apart, \ and falls into three four-note groups", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.5)
+        cap = label(r"E to B$\flat$: \ the row begins and ends a tritone apart, \ and falls into three four-note groups", font_size=21, color=GREY_A).to_edge(DOWN, buff=1.1)
         with self.voiceover(
             "Here is the row of the Piano Suite, Opus 25, once up the keyboard: E, F, G, C sharp, F sharp, E flat, A flat, "
             "D, B, C, A, B flat. Schoenberg used it in groups of four notes: the second group is the all-interval tetrachord "
