@@ -702,12 +702,27 @@ performance rules, a toy page reader), and the series' engraver (`explainer/musi
 *Story:* Play identical clicks and listeners hear them in twos: tick, tock. Meter is something the listener adds.
 The part builds rhythm from a pulse, and ends by speeding a 3:2 polyrhythm up until it turns into a perfect
 fifth, the rhythm of Part 1's ratio.
+1. Hook: sixteen identical strokes, heard in pairs (an ear question) and measured; Bolton; the plan.
+2. A pulse: tempo; clicks from slow to fifty a second; the window of the beat; two tempos (an ear question).
+3. Meter: nested pulses and their weights; three-four and six-eight; a pulse finder taps the Tune.
+4. Accent: louder, longer, higher; which sound begins a pair (an ear question); Woodrow.
+5. Dividing the beat: twos, threes and fours; milliseconds (a predict-pause); simple and compound meters.
+6. Syncopation: Longuet-Higgins and Lee's index, worked; four rhythms; two to compare (an ear question); the arch.
+7. Three against two: hemiola; polyrhythm on a circle; four against three.
+8. Long beats and short: seven three ways; counting the meters of twos and threes; four dances.
+9. Swing: three ratios; the short note of 100 ms; what the page does not say.
+10. Where rhythm becomes pitch: three against two, sped up into a fifth (an ear question); intervals as polyrhythms.
+11. Frontier: the telephone game on rhythms, simulated; what fifteen countries showed; what is not known.
+12. Variation 11: the Tune in four, as a waltz, in five, in seven, swung, with a hemiola. Outro: problems, payoffs.
+
 *Covers:* pulse, tempo and its limits; meter as nested periodicities; note values and tuplets; accent;
 syncopation and how to measure it; hemiola; polyrhythm and polymeter; additive meters; swing; the rhythm–pitch
 continuum.
-*Built and computed:* the rhythm engine; metric salience; a syncopation index.
+*Built and computed:* the rhythm engine (`monochord/rhythm.py`: metric weights, a syncopation index, a pulse
+finder, polyrhythms, compositions into twos and threes, swing, click trains, the telephone game); a kit of struck
+things (`instruments/drumkit.py`); the pictures of rhythm (`explainer/music/rhythmviz.py`).
 *Variation 11:* the Tune as a waltz, in five, in seven, swung, and with hemiola.
-*Frontier:* rhythm priors across cultures **(verify the 2024 study)**; microtiming and groove.
+*Frontier:* rhythm priors across cultures (Jacoby and others, 2024); microtiming and groove.
 *Reading:* London, *Hearing in Time*; Lerdahl & Jackendoff ch. 4; Sethares, *Rhythm and Transforms*.
 
 ### Part 12 · Scales and Modes (~50)
@@ -1533,6 +1548,7 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-13 | **Part 8, *Pipes, Reeds and Voices***: 12 chapters, 40.6 min narrated of which 1.6 min listening in 15 windows; 6 pause-and-listen questions, 6 demonstrations to listen for, 4 worked examples with predict-pauses; Variation 8 (a flute, a clarinet, a saxophone, a trumpet and a voice, each tuned by being built, blown and trimmed); Lab 8 and the vowel interactive (a two-tube mouth, its formants computed in the page); Monochord's winds (`instruments/winds.py`: bores by transfer matrices with wall losses and radiation, reflection functions, a reed valve, a lip valve, a jet, a source-filter voice, formants of tubes; `tests/music/test_winds.py`); every gate clean, narration listen-tested. |
 | 2026-11-13 | **Part 9, *Drums, Bars and Bells***: 12 chapters, 34.1 min narrated of which 1.8 min listening in 16 windows; 5 pause-and-listen questions, 7 demonstrations to listen for, 3 worked examples with predict-pauses; Variation 9 (marimba, bells, steelpan and kettledrums); Lab 9 and the drum interactive (where a skin is struck, bare, as a kettledrum and as a tabla); Monochord's percussion (`instruments/percussion.py`: Bessel modes, a finite-element membrane for any polygon with the isospectral drums of 1992 computed and checked against Driscoll's values, a loaded membrane, a beam solver for carved bars, bells from published partials, Chladni figures, gliding gongs, modal synthesis; `tests/music/test_percussion.py`); every gate clean, narration listen-tested. **Act I is complete.** The engraver pilot for Part 10 could not be run in this session: installing Verovio's wheel was refused by the session's permission policy, so the choice of engraver (§9, item 5) is still the owner's to make. |
 | 2026-11-14 | **Part 10, *Writing It Down***: 12 chapters, 37.7 min narrated of which 3.4 min listening in 12 windows; 4 pause-and-listen questions, 5 demonstrations to listen for, 1 predict-pause; Variation 10 (the Tune read from ten notations, two to a phrase, and a sixth phrase played by four rules of performance); Lab 10 and the notation interactive (every melody that fits a row of neumes, on a staff, as a piano roll and in numbers); Monochord's score (`monochord/score/`: spelled pitches and exact durations, MusicXML, MEI, MIDI, ABC, LilyPond and jianpu writers, MusicXML and MIDI readers, contour counts, tablature by dynamic programming, figured-bass realizations, Franco's rules, performance rules, a toy page reader; `tests/music/test_score.py`, `test_notations.py`); every gate clean, narration listen-tested. **The engraver:** with Verovio not installable in this session, the series now has its own (`explainer/music/staff.py`, tested in `tests/music/test_staff.py`): one voice to a staff, clefs, key and time signatures, beams, dots, ties, accidentals, ledger lines, rests and words, drawn from the installed FreeSerif music symbols, with a time-to-page map for cursors. It needs no new dependency; it has no chords, slurs or second voices yet, and can be replaced behind the same `Staff` interface if the owner prefers Verovio (§9, item 5). Part 9's closing line about Guido was corrected (a year or two in place of ten) and its film rebuilt. |
+| 2026-11-14 | **Part 11, *Rhythm and Meter***: 12 chapters, 31.6 min narrated of which 4.8 min listening in 19 windows; 5 pause-and-listen questions, 7 demonstrations to listen for, 1 predict-pause, 1 worked example; Variation 11 (the Tune in four, as a waltz, in five, in seven, swung and with a hemiola); Lab 11 and the rhythm interactive (a rhythm slid against the metre's grid, with its syncopation index at every position); Monochord's rhythm engine (`monochord/rhythm.py`: metric weights, Longuet-Higgins and Lee's index, a pulse finder, polyrhythms, compositions into twos and threes, swing, click trains, the telephone game on rhythms; `tests/music/test_rhythm.py`), a kit of struck things (`instruments/drumkit.py`) and the pictures of rhythm (`explainer/music/rhythmviz.py`: dot grids, necklaces, tick rows, stick notation); every gate clean, narration listen-tested. The first cut ran 27.9 min; five passages were added (taps ahead of the click, off-beats that become beats, a rhythm against itself, rhythm into timbre, animals that keep a beat). |
 
 **Still open from §6:** chords, slurs and a second voice on a staff in the series' engraver (needed from Parts 13
 and 16), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for

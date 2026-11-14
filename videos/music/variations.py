@@ -25,6 +25,8 @@ LEDGER = [
      "measure": r"its marimba's bars have overtones at 4.00 and 10.0 times their notes"},
     {"part": 10, "title": r"in ten notations, and then as none of them says", "seconds": 28.45,
      "measure": r"its page is 168 bits; its sound, \ 127{,}000 times as many"},
+    {"part": 11, "title": r"straight, as a waltz, in five, in seven, swung, and with a hemiola", "seconds": 32.01,
+     "measure": r"its bars are counted in 4, 3, 5 and 7, and in six two ways"},
 ]
 
 

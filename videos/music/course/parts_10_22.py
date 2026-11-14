@@ -59,4 +59,59 @@ PARTS = [
         also=(("Monochord's score: spelled pitches, exact durations, readers and writers, and what notations keep, counted", "explainer/music/monochord/score/__init__.py"),
               ("The engraver and the other notations, drawn", "explainer/music/staff.py")),
     ),
+    Part(
+        n=11, level="U", widget="rhythm",
+        question="Where do beat and metre come from, how are rhythms counted and measured, and what is a rhythm "
+                 "when it is played too fast to count?",
+        story="Play sixteen identical strokes and listeners hear them in pairs, tick and tock: Bolton found it in "
+              "1894, and a century later the brain's response was seen to differ on the ticks. Metre is something "
+              "a listener adds. The part starts from a pulse and finds the window in which a beat can be felt, "
+              "from about a quarter of a second to two seconds, steadiest near two beats a second. A metre is "
+              "pulses nested in pulses, drawn as Lerdahl and Jackendoff's grid of dots; a toy pulse finder taps "
+              "the Tune at the tempo it was played. Accents tell the listener which beats are strong: louder "
+              "sounds begin groups and longer ones end them. The beat is cut in twos and threes. Syncopation is "
+              "a note on a weak pulse before a silent strong one, and Longuet-Higgins and Lee's index measures "
+              "it: 0 for a rhythm on the beats, 4 for the son clave, 7 for the off-beats; listeners want most to "
+              "move in between. Six eighth notes are two threes or three twos, and music that changes between "
+              "them, or plays both at once, is hemiola and polyrhythm. Seven pulses make three unequal beats, "
+              "three ways, and the count of such metres obeys a(n) = a(n-2) + a(n-3). Swing is not a ratio: on "
+              "records the short note stays near 100 ms, so the ratio is two to one at one tempo only. Then "
+              "three against two is sped up until, near twenty clicks a second, it stops being a rhythm and "
+              "becomes two notes a perfect fifth apart: an interval is a polyrhythm too fast to count. The "
+              "frontier is the telephone game on rhythms, which reads a listener's expectations, and what it "
+              "found in fifteen countries. The Tune is played in four, as a waltz, in five, in seven, swung, "
+              "and with a hemiola.",
+        handoff="Part 12 turns from when to which: the notes a piece chooses from. Rhythm returns inside melody "
+                "(Part 14) and harmonic rhythm (Part 18); its mathematics, necklaces and evenness, in Part 33; "
+                "tala and the timelines of West Africa in Parts 34 and 37; swing in Part 38; the listener's "
+                "expectations in Part 46; and machines that find the beat in Part 62.",
+        outside="Part 1 for the ratio 3:2; Part 4 for the lowest pitch the ear hears; Part 9 for the drums; "
+                "Part 10 for note values, dots and bar lines. Fractions and logarithms; nothing else.",
+        objectives={
+            "U": ["Turn a tempo into the time between beats, and read a time signature as a nesting of pulses.",
+                  "Say what makes a beat strong, and how loudness and length group sounds.",
+                  "Clap three against two, and count a bar of seven three ways."],
+            "M": ["Compute a metre's weights and a rhythm's syncopation index.",
+                  "Count the metres made of twos and threes, and prove the recurrence.",
+                  "Derive the swing ratio from a short note of fixed length, and the interval that a polyrhythm becomes."],
+            "D": ["Describe the telephone game on rhythms and what it has and has not shown.",
+                  "Say what is known and disputed about syncopation, microtiming and the urge to move."],
+            "I": ["Choose a tempo and a level of the metre to beat or to click.",
+                  "Programme a swung or an uneven metre knowing its values in milliseconds.",
+                  "Make a new rhythm by sliding an old one against the grid."],
+        },
+        results=[
+            ("Tempo", r"T = \frac{60}{\text{beats per minute}}\ \text{s};\qquad 0.25\ \text{s} \lesssim T \lesssim 2\ \text{s}"),
+            ("A metre's weights", r"\tfrac44 \text{ in sixteenths}: \; 5\,1\,2\,1\,3\,1\,2\,1\,4\,1\,2\,1\,3\,1\,2\,1"),
+            ("Syncopation", r"S = \sum_{\text{notes } n} \max\big(0,\ \max_{\text{rests before the next note}} w_r - w_n\big)"),
+            ("Twos and threes", r"a(n) = a(n-2) + a(n-3):\quad a(7) = 3,\ a(12) = 12"),
+            ("Swing", r"\text{ratio} = \frac{T - 0.1\ \text{s}}{0.1\ \text{s}} \;\Rightarrow\; 2:1 \text{ at } 200 \text{ to the minute}"),
+            ("Rhythm into pitch", r"3 : 2 \ \text{at } 100 \text{ cycles a second} \;=\; 300\ \text{Hz} : 200\ \text{Hz} \;=\; 702 \text{ cents}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 9),
+        D=(10,),
+        I=(7, 8),
+        also=(("Monochord's rhythm engine: metres, syncopation, the pulse, polyrhythm, swing, the telephone game", "explainer/music/monochord/rhythm.py"),
+              ("A kit of struck things for marking time", "explainer/music/monochord/instruments/drumkit.py")),
+    ),
 ]

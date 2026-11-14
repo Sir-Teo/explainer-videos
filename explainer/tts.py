@@ -141,8 +141,13 @@ LEXICON: list[tuple[str, str]] = [
     (r"\bSancte\b", "[Sancte](/sˈɑŋktA/)"),
     (r"\bSMuFL\b", "[SMuFL](/smˈʌfəl/)"),
     (r"\bMaelzel['’]s\b", "[Maelzel's](/mˈɛltsəlz/)"),
+    (r"\bMaelzel\b", "[Maelzel](/mˈɛltsəl/)"),
     (r"\bWelte\b", "[Welte](/vˈɛltə/)"),
     (r"\but\b", "[ut](/ˈut/)"),
+    # Part 11: rhythm
+    (r"\bclaves\b", "[claves](/klˈɑvAz/)"),
+    (r"\bclave\b", "[clave](/klˈɑvA/)"),
+    (r"\bLonguet-Higgins\b", "[Longuet](/lˈɔŋɡɪt/) Higgins"),
     (r"\bsul ponticello\b", "sool ponticello"),
     (r"\bsul tasto\b", "sool [tasto](/tˈɑstO/)"),
     (r"Navier[–—-]Stokes", "[Navier](/nævjˈeɪ/) Stokes"),

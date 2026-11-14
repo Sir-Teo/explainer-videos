@@ -130,4 +130,78 @@
       note: "Signs that say only up, down or the same fit many melodies: 85 on six notes, 322 on eight. They remind a singer of a tune already known; they cannot teach one. Change the key: on the staff every note moves, and on the piano roll every key number changes, but the line of numbers stays as it was, because numbered notation writes a note's place in its scale. Each notation keeps something different."
     });
   };
+
+  // ---- Part 11: a rhythm against the grid -------------------------------------------------------------------
+  var WEIGHTS = [5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1];
+  var RHYTHMS = [["every beat", "x...x...x...x..."], ["son clave", "x..x..x...x.x..."], ["rumba clave", "x..x...x..x.x..."], ["bossa nova", "x..x..x...x..x.."],
+                 ["tresillo, twice", "x..x..x.x..x..x."], ["every off-beat", "..x...x...x...x."]];
+  function rotated(p, k) { k = ((k % 16) + 16) % 16; return p.slice(16 - k) + p.slice(0, 16 - k); }   // every note k pulses later
+  // Longuet-Higgins and Lee: a note on a weak pulse, then silence on a stronger one before the next note
+  function syncopation(p) {
+    var notes = [], i, k, total = 0;
+    for (i = 0; i < 16; i++) if (p.charAt(i) === "x") notes.push(i);
+    for (k = 0; k < notes.length; k++) {
+      var a = notes[k], b = notes[(k + 1) % notes.length], span = ((b - a) % 16 + 16) % 16 || 16, strongest = 0;
+      for (i = 1; i < span; i++) strongest = Math.max(strongest, WEIGHTS[(a + i) % 16]);
+      if (strongest > WEIGHTS[a]) total += strongest - WEIGHTS[a];
+    }
+    return total;
+  }
+  function rhythmSound(p, bpm) {
+    var rate = 44100, pulse = 60 / bpm / 4, out = new Float32Array(Math.floor((32 * pulse + 0.4) * rate)), bar, i, n;
+    function add(t0, hz, decay, gain, drop) {
+      var start = Math.floor(t0 * rate), len = Math.floor(0.25 * rate);
+      for (n = 0; n < len && start + n < out.length; n++) {
+        var t = n / rate, f = hz * (1 + drop * Math.exp(-t / 0.03));
+        out[start + n] += gain * Math.sin(2 * Math.PI * f * t) * Math.exp(-t * decay) * Math.min(1, t / 0.001);
+      }
+    }
+    for (bar = 0; bar < 2; bar++) for (i = 0; i < 16; i++) {
+      var t0 = (bar * 16 + i) * pulse;
+      if (i % 4 === 0) add(t0, 70, 14, 0.5, 0.5);                       // a low drum on the four beats: the grid
+      if (p.charAt(i) === "x") add(t0, 2350, 38, 0.4, 0);               // a clave on the rhythm
+    }
+    return play(out, rate);
+  }
+
+  W.rhythm = function (el) {
+    QB.widget(el, {
+      title: "A rhythm against the grid",
+      sub: "Left: one bar of four-four in sixteenths. The grey bars are the metre's weights (how many levels of the metre each pulse belongs to); the dots are the notes of a rhythm. Slide the rhythm later, one pulse at a time, and watch its syncopation index change. Right: the index for all sixteen positions.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "which", label: "The rhythm", min: 0, max: RHYTHMS.length - 1, step: 1, value: 1, fmt: function (k) { return RHYTHMS[k][0]; } },
+        { k: "shift", label: "Start it this many sixteenths later", min: 0, max: 15, step: 1, value: 0 },
+        { k: "bpm", label: "Tempo (beats to the minute)", min: 70, max: 170, step: 5, value: 120 },
+      ],
+      buttons: [
+        { label: "Play two bars", act: function (s, v) { s.sound = rhythmSound(rotated(RHYTHMS[v.which][1], v.shift), v.bpm); } },
+      ],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var p = rotated(RHYTHMS[v.which][1], v.shift), idx = [], xs = [], ys = [], all = [], i;
+        for (i = 0; i < 16; i++) { idx.push(i + 1); if (p.charAt(i) === "x") { xs.push(i + 1); ys.push(WEIGHTS[i] + 0.45); } }
+        for (i = 0; i < 16; i++) all.push(syncopation(rotated(RHYTHMS[v.which][1], i)));
+        s.p = p; s.index = all[v.shift]; s.all = all;
+        var a = g[0].axes({ x: [0.3, 16.7], y: [0, 6.2], title: "The metre's weights, and where the notes fall", xlabel: "sixteenths of the bar", xticks: [1, 5, 9, 13], yticks: [1, 2, 3, 4, 5] });
+        a.bars(idx, WEIGHTS, 0.7, { color: C.muted });
+        a.dots(xs, ys, { color: C.idea, r: 6 });
+        var top = Math.max.apply(null, all) + 1;
+        var b = g[1].axes({ x: [-0.7, 15.7], y: [0, top], title: "Syncopation index at every starting point", xlabel: "sixteenths later", xticks: [0, 4, 8, 12], ylabel: "index" });
+        b.bars(idx.map(function (k) { return k - 1; }), all, 0.7, { color: function (k) { return k === v.shift ? C.idea : C.muted; } });
+      },
+      readout: function (v, s) {
+        var on = 0, n = 0, i;
+        for (i = 0; i < 16; i++) if (s.p.charAt(i) === "x") { n++; if (i % 4 === 0) on++; }
+        var least = Math.min.apply(null, s.all), most = Math.max.apply(null, s.all);
+        return [["the rhythm, as placed", s.p],
+                ["notes that fall on a beat", on + " of " + n],
+                ["syncopation index", String(s.index)],
+                ["over all sixteen positions", "from " + least + " to " + most],
+                ["beat", fmt(60000 / v.bpm, 0) + " ms; a sixteenth " + fmt(15000 / v.bpm, 0) + " ms"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "The index adds up, for every note that is followed by a silent pulse stronger than itself, the difference of the two weights (Longuet-Higgins and Lee, 1984). The same five strokes can confirm the metre or fight it, depending only on where they start: sliding a rhythm is the cheapest way there is to make a new one. Push the tempo up and note the sixteenth's length; near 100 ms the pulses stop being countable."
+    });
+  };
 })();
