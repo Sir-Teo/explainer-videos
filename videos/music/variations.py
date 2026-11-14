@@ -45,6 +45,8 @@ LEDGER = [
      "measure": r"24 chords, 13 of them outside C major; one chord carries the Tune four keys away; 0 parallels"},
     {"part": 20, "title": r"as a canon at the fourth below, a crab canon, and a three-voice fugue exposition", "seconds": 38.92,
      "measure": r"the whole Tune against itself two beats later: 2 dissonant beats in 46"},
+    {"part": 21, "title": r"as a miniature sonata whose second theme is its own first phrase, inverted", "seconds": 47.48,
+     "measure": r"its 11 section boundaries found from the sound alone: 9 within two beats"},
 ]
 
 

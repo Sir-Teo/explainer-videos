@@ -1058,4 +1058,99 @@
       note: "Try Frère Jacques entering after 8 beats at 0: a round, and almost every beat agrees. Then the Tune after 2 beats at -5: the film's Variation 20, two dissonant beats in 46. The royal theme resists every setting: its chromatic slide clashes with itself almost everywhere. Turn a melody backwards and start both voices together (a delay of 0): that is a crab canon, and few melodies survive it."
     });
   };
+
+  // ---- Part 21: form as a picture ---------------------------------------------------------------------------------
+  var CH21 = { A: [[60, 64, 67], [65, 69, 72], [67, 71, 74], [60, 64, 67]], B: [[67, 71, 74], [62, 66, 69], [67, 71, 74], [62, 66, 69]],
+               C: [[57, 60, 64], [62, 65, 69], [64, 68, 71], [57, 60, 64]], D: [[65, 69, 72], [70, 74, 77], [60, 64, 67], [65, 69, 72]] };
+  var PLANS21 = [["binary", "A A B B"], ["ternary", "A B A"], ["rounded binary", "A A B A"], ["rondo", "A B A C A"],
+                 ["verse and chorus", "A B A B C B"], ["seven-part rondo", "A B A C A B A"], ["through-composed", "A B C D"]];
+  function plan21(plan) {
+    var secs = plan.split(" "), ev = [], t = 0, starts = [];
+    secs.forEach(function (x) { starts.push(t); CH21[x].forEach(function (ch) { ch.forEach(function (p) { ev.push([p, t, 2]); }); t += 2; }); });
+    return { ev: ev, starts: starts, total: t, secs: secs };
+  }
+  function ssm21(ev, T) {
+    var C = [], i, j, k;
+    for (i = 0; i < T; i++) { C.push([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]); }
+    ev.forEach(function (e) { for (var b = e[1]; b < e[1] + e[2] && b < T; b++) C[b][e[0] % 12] += 1; });
+    var N = C.map(function (c) { var n = Math.sqrt(c.reduce(function (a, x) { return a + x * x; }, 0)) || 1; return c.map(function (x) { return x / n; }); });
+    var S = [];
+    for (i = 0; i < T; i++) { S.push([]); for (j = 0; j < T; j++) { var d = 0; for (k = 0; k < 12; k++) d += N[i][k] * N[j][k]; S[i].push(d); } }
+    return S;
+  }
+  function novelty21(S, L) {
+    var n = S.length, out = [], i, a, b, mx = 0;
+    for (i = 0; i < n; i++) {
+      var tot = 0;
+      for (a = -L; a < L; a++) for (b = -L; b < L; b++) {
+        var r = i + a, c = i + b;
+        if (r < 0 || c < 0 || r >= n || c >= n) continue;
+        var sgn = ((a < 0) === (b < 0)) ? 1 : -1, ga = Math.exp(-0.5 * Math.pow((a + 0.5) / (0.4 * L), 2)), gb = Math.exp(-0.5 * Math.pow((b + 0.5) / (0.4 * L), 2));
+        tot += sgn * ga * gb * S[r][c];
+      }
+      out.push(Math.max(tot, 0)); mx = Math.max(mx, tot);
+    }
+    return out.map(function (x) { return x / (mx || 1); });
+  }
+  function peaks21(x, gap, th) {
+    var cand = [], i, out = [];
+    for (i = 2; i < x.length - 2; i++) if (x[i] >= x[i - 1] && x[i] > x[i + 1] && x[i] >= th) cand.push(i);
+    cand.sort(function (a, b) { return x[b] - x[a]; });
+    cand.forEach(function (i) { if (out.every(function (j) { return Math.abs(i - j) >= gap; })) out.push(i); });
+    return out.sort(function (a, b) { return a - b; });
+  }
+  function planSound21(ev, beat) {
+    var rate = 44100, T = 0, n, h;
+    ev.forEach(function (e) { T = Math.max(T, e[1] + e[2]); });
+    var out = new Float32Array(Math.floor((T * beat + 1.0) * rate));
+    ev.forEach(function (e) {
+      var hz = 440 * Math.pow(2, (e[0] - 69) / 12), start = Math.floor(e[1] * beat * rate), len = Math.floor((e[2] * beat + 0.3) * rate);
+      for (n = 0; n < len && start + n < out.length; n++) {
+        var t = n / rate, y = 0;
+        for (h = 1; h <= 5; h++) y += Math.sin(2 * Math.PI * hz * h * t) * Math.pow(0.5, h - 1) * Math.exp(-t * (1.6 + h));
+        out[start + n] += 0.05 * y * Math.min(1, t / 0.004);
+      }
+    });
+    return play(out, rate);
+  }
+  W.form = function (el) {
+    QB.widget(el, {
+      title: "Form as a picture",
+      sub: "Choose a plan of sections (A is C-F-G-C, B is G-D-G-D in the dominant, C is A minor, D is F-B flat-C-F) and the width of the checkerboard. Left: the self-similarity picture, every beat compared with every other, gold where alike. Right: the novelty curve that slides the checkerboard down the diagonal, the true changes of section (grey) and the peaks it picks (pink).",
+      panels: 2, height: 300,
+      controls: [
+        { k: "p", label: "Plan", min: 0, max: PLANS21.length - 1, step: 1, value: 3, fmt: function (i) { return PLANS21[i][0] + ": " + PLANS21[i][1]; } },
+        { k: "L", label: "Checkerboard half-width (beats)", min: 1, max: 12, step: 1, value: 4 },
+      ],
+      buttons: [{ label: "Play the plan", act: function (s) { s.sound = planSound21(s.ev, 0.22); } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var P = plan21(PLANS21[v.p][1]), S = ssm21(P.ev, P.total), nov = novelty21(S, v.L), found = peaks21(nov, Math.max(2, v.L), 0.2), n = P.total;
+        var truth = [];
+        for (var k = 1; k < P.secs.length; k++) if (P.secs[k] !== P.secs[k - 1]) truth.push(P.starts[k]);
+        var hits = 0, used = {};
+        found.forEach(function (f) { truth.forEach(function (t, j) { if (!used[j] && Math.abs(f - t) <= 2 && !used["f" + f]) { used[j] = 1; used["f" + f] = 1; hits++; } }); });
+        s.ev = P.ev; s.res = { truth: truth, found: found, hits: hits, plan: PLANS21[v.p][1] };
+        var a = g[0].axes({ x: [0, n], y: [n, 0], title: "Self-similarity", xticks: [], yticks: [] });
+        a.clip(function (c) {
+          for (var i = 0; i < n; i++) for (var j = 0; j < n; j++) {
+            var x = Math.pow(Math.max(0, Math.min(1, S[i][j])), 2);
+            c.fillStyle = "rgb(" + Math.round(14 + 231 * x) + "," + Math.round(17 + 180 * x) + "," + Math.round(23 + 43 * x) + ")";
+            var x0 = a.px(j), x1 = a.px(j + 1), y0 = a.py(i), y1 = a.py(i + 1);
+            c.fillRect(Math.min(x0, x1), Math.min(y0, y1), Math.abs(x1 - x0) + 0.5, Math.abs(y1 - y0) + 0.5);
+          }
+        });
+        var b = g[1].axes({ x: [0, n], y: [0, 1.1], title: "Novelty", xlabel: "beat" });
+        truth.forEach(function (t) { b.vline(t, { color: "#888" }); });
+        b.line(nov.map(function (_, i) { return i; }), nov, { color: C.idea, width: 2 });
+        b.dots(found, found.map(function (i) { return nov[i]; }), { color: "#F472B6", r: 5 });
+      },
+      readout: function (v, s) {
+        var r = s.res;
+        return [["plan", r.plan], ["where the material changes", r.truth.join(", ") || "nowhere"], ["peaks picked", r.found.join(", ") || "none"],
+                ["found within two beats", r.hits + " of " + r.truth.length], ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Binary, A A B B, has a seam between its two A's that no novelty curve can find: the music there does not change, it repeats. Narrow checkerboards report every change of chord; wide ones only the changes of section, and on short sections they blur two seams into one. The film's segmenter scored best on its sonata, whose sections change key."
+    });
+  };
 })();

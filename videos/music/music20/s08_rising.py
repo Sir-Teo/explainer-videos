@@ -60,7 +60,7 @@ class Rising(SoundScene):
         ):
             self.play(FadeIn(g), FadeIn(t), Create(ring), FadeIn(labs), FadeIn(key_lab), FadeIn(laps))
         with self.listen(c) as snd:
-            window(snd, r"the canon, \ a tone higher each lap, \ in Shepard tones", detail=r"synthesized", corner=DL, tag_corner=DR)
+            window(snd, r"the canon, \ a tone higher each lap, \ in Shepard tones", kind="synthesized", detail=r"Shepard tones", corner=DL, tag_corner=DR)
             lap_s = d["lap_beats"] * d["beat"]
             for L in range(7):
                 sing_voices(snd, g, [d["leader"], d["follower"]], start=L * lap_s, beat=d["beat"])

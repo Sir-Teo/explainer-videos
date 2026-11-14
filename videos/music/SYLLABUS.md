@@ -1008,12 +1008,29 @@ offline, so the stretto search runs on the Tune, the corpus and the royal theme 
 *Story:* Loop a spoken phrase a few times and it turns into song (Deutsch's illusion). Music repeats far more than
 any other art, and form is the plan of what returns. The part teaches the forms and then finds them from the audio
 alone.
+1. Hook: a spoken phrase looped ten times, heard; Deutsch; form as the plan of what returns; the plan.
+2. Phrase, period, sentence: Caplin; an ear question (which theme is the period?).
+3. Binary and ternary: the suite, rounded binary, the da capo aria, the minuet and trio; their pictures.
+4. Seeing repetition: the self-similarity matrix of the Tune, from notes and from sound, heard.
+5. Finding the seams: Foote's novelty curve on the Tune, heard; the kernel's width as the scale of form.
+6. Rondo and variation: an ear question (count the returns); rondo and variation pictures; Mozart's variations.
+7. Sonata: a drama of keys: a miniature sonata's plan and key path; sonata theory.
+8. Song forms: strophic, AABA, verse and chorus; the twelve-bar blues, heard.
+9. Form from sound: the segmenter on the sonata, heard; scores on every piece; what novelty cannot see.
+10. Why so much repetition: repeated figures in the tunes against shuffled ones; mere exposure; Margulis.
+11. The golden section, tested: the base rate of a hit; the sonata; the tunes' climaxes.
+12. Must the ending be home: an ear question (which piece ends where it began?); Cook; Karno and Konečni.
+13. Frontier: local and global structure in perception; SALAMI; long-range structure in generated music.
+14. Variation 21: the Tune as a miniature sonata. Outro: problems, payoffs.
+
 *Covers:* motive, phrase, period and sentence; binary and ternary; rondo; variation; sonata form as a drama of
 keys; song forms from strophic to verse-chorus and the twelve-bar blues; repetition; self-similarity; the
 golden-section claims, tested.
-*Built and computed:* self-similarity matrices from scores and from audio; a novelty-based segmenter; repetition
-rates across the Library.
-*Variation 21:* the Tune as a miniature sonata whose second theme is its own inversion.
+*Built and computed:* `monochord/form.py`: chroma from notes and from sound, self-similarity matrices, Foote's
+checkerboard novelty and peak picking, boundary scores, section labels, repetition of figures with shuffled controls,
+the golden-section base rate; pieces composed on the Tune in every form of the part and rendered on Part 7's piano;
+the segmenter scored on all of them. The "Library" of the plan is, for now, Part 14's corpus of tunes.
+*Variation 21:* the Tune as a miniature sonata whose second theme is its own first phrase, inverted.
 *Frontier:* do listeners hear large-scale tonal form? The experiments and the arguments.
 *Reading:* Caplin, *Classical Form*; Hepokoski & Darcy; Margulis, *On Repeat*.
 

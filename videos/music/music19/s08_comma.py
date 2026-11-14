@@ -32,7 +32,7 @@ class Comma(SoundScene):
         bars = self.ladder_rows()
         self.play(FadeIn(bars.frame), FadeIn(bars.heads))
         with self.listen(c) as snd:
-            window(snd, r"pure, \ then equal", detail=r"organ tones", corner=DL, tag_corner=DR)
+            window(snd, r"pure, \ then equal", kind="synthesized", detail=r"organ tones", corner=DL, tag_corner=DR)
             flash(snd, list(bars.pure), [ev[f"n{k}"] for k in range(1, 5)], hot=WHITE, base=TUNE)
             pulse(snd, bars.gap, ev["both"], ev["equal"] - 0.3, buff=0.1)
             flash(snd, list(bars.equal), [ev["equal"] + 0.8 * k for k in range(1, 5)], hot=WHITE, base=GREY_B)

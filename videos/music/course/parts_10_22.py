@@ -596,4 +596,47 @@ PARTS = [
         I=(9,),
         also=(("Monochord's canon tools: forms, a judge, canon and crab counters, answers, strettos, a free voice", "explainer/music/monochord/canon.py"),),
     ),
+    Part(
+        n=21, level="U", widget="form", prereq=(14, 15, 18, 20),
+        question="What holds a long piece of music together, and can a program find it from the sound?",
+        story="Loop a spoken phrase and it turns into song: repetition is the strongest signal that sound is music, and "
+              "form is the plan of what comes back. Themes are built as periods, a question answered, or sentences, an "
+              "idea repeated and broken up. Whole pieces are binary, ternary, rondo, variation, sonata or song, each a "
+              "different plan of return or transformation; a miniature sonata on the Tune, its second theme the opening "
+              "inverted, travels from C to G, through A minor, F and D minor, and home. A self-similarity matrix "
+              "compares every moment with every other, so that repeats show as stripes and sections as blocks, and "
+              "Foote's novelty curve finds the seams: from sound alone it finds 9 of the sonata's 11 boundaries, but "
+              "hardly any between variations, which keep their harmony, and it can never see the seam between a passage "
+              "and its own repeat. Part 14's tunes repeat a four-note figure on 32 notes in a hundred, against 1 when "
+              "shuffled. A golden-section division turns up by chance one time in six, and the sonata itself divides at "
+              "0.625. Listeners hear local structure at once but large-scale tonal closure only in short pieces "
+              "(Cook 1987). The Tune is heard as a miniature sonata.",
+        handoff="Analysis and grammars in Part 22; the classical sonata in Part 26; Romantic forms in Part 27; song forms in "
+                "Part 40; long-range planning in composing in Part 42; structure analysis by machine in Part 62.",
+        outside="Part 14 for the tunes and repetition; Part 15 for keys and the key finder; Part 18 for cadences; Part 20 for "
+                "fugue. Cosine similarity, convolution, precision and recall.",
+        objectives={
+            "U": ["Recognize a period and a sentence, and the plans of binary, ternary, rondo, variation, sonata and song forms.",
+                  "Read a self-similarity matrix: stripes for returns, blocks for sections.",
+                  "Hear whether a short piece ends in the key it began in."],
+            "M": ["Compute chroma from notes and from sound, a self-similarity matrix and Foote's novelty curve.",
+                  "Score boundaries by precision, recall and F within a tolerance, and explain what novelty cannot find.",
+                  "Measure repetition against a shuffled control, and the base rate of a 'golden' proportion."],
+            "D": ["Compare the evidence on whether listeners hear large-scale form, and design an experiment that separates memory for themes from memory for keys.",
+                  "Describe annotated corpora of musical structure and why annotators disagree."],
+            "I": ["Find the sections of a track for editing, remixing or looping, and choose the analysis scale to suit.",
+                  "Plan the returns of a song so that the listener wants them when they come."],
+        },
+        results=[
+            ("Segmenting the sonata from sound", r"9 \text{ of } 11 \text{ boundaries within two beats}; \ F = 0.82"),
+            ("Variations", r"F \approx 0.14: \ \text{same harmony, hardly a seam}"),
+            ("Repetition", r"32\% \text{ of notes in a repeated four-note figure} \ (\text{shuffled } 1\%)"),
+            ("The golden section by chance", r"P(|r - 0.618| \le 0.02) = 0.04 / 0.25 = 0.16"),
+            ("Novelty", r"N(t) = \sum_{i,j} K(i, j) \, S(t + i, t + j), \ K = \text{checkerboard} \times \text{Gaussian}"),
+        ],
+        U=(0, 1, 2, 5, 6, 7, 9, 11),
+        D=(12,),
+        I=(8,),
+        also=(("Monochord's form tools: chroma, self-similarity, novelty, boundary scores, repetition, the golden base rate", "explainer/music/monochord/form.py"),),
+    ),
 ]
