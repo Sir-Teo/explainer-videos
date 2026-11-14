@@ -448,7 +448,7 @@ def compute_variation() -> dict:
     t = load("tune")
     j = t["judge_solo"]
     return {"part": 39, "title": "as a bebop head, with an improvised chorus, then through three keys a major third apart", "seconds": round(t["seconds"], 1),
-            "measure": f"the program's chorus: {round(100 * j['on_beat_chord_tones'])}% of beats on chord tones, guide tones at {round(100 * j['guide_at_changes'])}% of changes",
+            "measure": f"the program's chorus: {round(100 * j['on_beat_chord_tones'])}\\% of beats on chord tones, guide tones at {round(100 * j['guide_at_changes'])}\\% of changes",
             "clip": "tune.variation39"}
 
 

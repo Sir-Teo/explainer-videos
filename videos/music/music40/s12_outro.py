@@ -100,7 +100,7 @@ class Outro(SoundScene):
     def problems(self):
         ps = problem_set([
             r"For the kick model, \ how long until it falls 60 dB at a decay setting of 0.45 s?",
-            r"Prove that a sidechain ducking D dB with release time $\tau$ is back within 1 dB after $\tau \ln D$ seconds.",
+            r"Prove that a sidechain ducking D dB with release time $\tau$ is back within 1 dB after $\tau\ln{D}$ seconds.",
             r"\textbf{Ear.} \ The lab plays pads under a kick, \ some sidechained; \ say which, \ and how deep.",
             r"\textbf{Build.} \ Write a verse of your own on the sixteenth grid and measure its flow.",
             r"$\bigstar$ \ Do new platforms change how songs are written, \ or only which songs win?",

@@ -82,7 +82,7 @@ LEDGER = [
     {"part": 38, "title": r"as a twelve-bar blues, a rag and a riff chart", "seconds": 64.4,
      "measure": r"blues thirds 35 cents below E; in the rag 18 of 44 right-hand onsets syncopated; the riff swung 2.7 to 1"},
     {"part": 39, "title": r"as a bebop head, with an improvised chorus, then through three keys a major third apart", "seconds": 47.2,
-     "measure": r"the program's chorus: 86% of beats on chord tones, guide tones at 96% of changes"},
+     "measure": r"the program's chorus: 86\% of beats on chord tones, guide tones at 96\% of changes"},
 ]
 
 
