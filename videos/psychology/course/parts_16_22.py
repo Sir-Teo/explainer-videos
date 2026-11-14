@@ -48,4 +48,47 @@ PARTS = [
               ("Its tests", "tests/psychology/test_conditioning.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=17, level="U", widget="bandit",
+        question="How does a brain learn what to do when the reward comes later?",
+        story="A monkey's dopamine neurons fire at unannounced juice; after training they fire at the cue instead, and "
+              "fall silent when promised juice is withheld. In 1997 those recordings were matched to the "
+              "temporal-difference error of reinforcement learning, derived here from the Bellman equation: learn "
+              "each prediction from the next one. On a delay line the error moves from reward to cue, and an "
+              "artificial dopamine error, made with light, teaches as a real one does. The same error drives action: "
+              "actor and critic, Q-learning, and the basal ganglia's Go and NoGo, tested in patients with "
+              "Parkinson's disease. A bandit's learning rate can be read from choices, if parameter recovery says it "
+              "can; directed exploration beats greedy choice. Tolman's rats learned maps without reward, and the "
+              "brain has place and grid cells. Habits and plans are told apart by devaluation, the two-step task "
+              "and revaluation, with the successor representation between them and replay offline. Dopamine also "
+              "ramps, signals movement and encodes a distribution; a drug can fake its error; and the same "
+              "mathematics runs recommender systems and the side effects of a medicine.",
+        handoff="Attention is Part 18, memory and replay Part 21, decisions and risk Part 26, motivation Part 28, "
+                "addiction Part 41, products built around habits Part 52, and the predictive brain Part 58.",
+        outside="Part 16's Rescorla-Wagner rule and Part 11's maximum likelihood. Expected values, geometric sums "
+                "and a little linear algebra.",
+        objectives={
+            "U": ["Describe Schultz's three dopamine recordings and what a reward prediction error is.",
+                  "Explain the explore-exploit dilemma, latent learning, and the difference between habits and plans.",
+                  "Explain why a drug that raises dopamine directly could hijack learning."],
+            "M": ["Derive the TD error from the Bellman equation and run TD learning on a conditioning task.",
+                  "Fit a Q-learning model to choices by maximum likelihood, and check it by parameter recovery.",
+                  "Compute a successor matrix and predict reward and transition revaluation."],
+            "D": ["Weigh the evidence that dopamine signals prediction errors against ramps and salience accounts.",
+                  "Assess what the two-step task's mixture weight measures."],
+            "I": ["Explain how bandit algorithms run recommendations and A/B tests.",
+                  "Explain why dopamine agonists can cause impulse-control disorders."],
+        },
+        results=[
+            ("Value", r"V(s_t) = \mathbb{E}\big[\textstyle\sum_k \gamma^k r_{t+k}\big]"),
+            ("The TD error", r"\delta_t = r_t + \gamma V(s_{t+1}) - V(s_t)"),
+            ("Q-learning", r"Q(s,a) \leftarrow Q(s,a) + \alpha\,[r + \gamma \max_{a'} Q(s',a') - Q(s,a)]"),
+            ("Softmax choice", r"P(a) \propto e^{\beta Q(a)}"),
+            ("Successor representation", r"M = (I - \gamma T)^{-1},\ V = M r"),
+        ],
+        U=(0, 1, 3, 4, 5, 6, 7, 8, 11, 12), D=(2, 9, 10, 14), I=(13,),
+        also=(("Psyche's rl module", "explainer/psychology/psyche/rl.py"),
+              ("Its tests", "tests/psychology/test_rl.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

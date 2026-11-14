@@ -600,6 +600,27 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | taste aversion; preparedness; instinctive drift; observational learning | 味觉厌恶；准备性；本能漂移；观察学习 |
 | exposure therapy; contingency management; token economy; clicker; loot box | 暴露疗法；权变管理；代币制；响片；战利品箱 |
 | conditioned tolerance; reconsolidation; latent cause; propositional learning | 条件性耐受；再巩固；潜在原因；命题学习 |
+
+## Part 17: reward and prediction
+
+| English | 中文 |
+|---|---|
+| reward (the part's title: reward and prediction) | 奖励（本部分标题：奖赏与预测） |
+| reinforcement learning; credit assignment; value; discount (γ) | 强化学习；功劳分配；价值；折扣（γ） |
+| temporal-difference (TD) learning; TD error; the Bellman equation | 时间差分学习；时间差分误差；贝尔曼方程 |
+| reward prediction error; burst; dip; ramp | 奖励预测误差；爆发；下陷；斜坡 |
+| tapped delay line; complete serial compound; second-order conditioning | 抽头延迟线；完全序列复合刺激；二级条件作用 |
+| optogenetics; unblocking | 光遗传学；解除阻断 |
+| actor-critic; Q-learning; softmax; inverse temperature (β); learning rate (α) | 演员-评论家；Q学习；软最大化；逆温度（β）；学习率（α） |
+| basal ganglia; striatum (ventral, dorsal); direct and indirect pathways; Go, NoGo | 基底神经节；纹状体（腹侧、背侧）；直接与间接通路；“去”，“不去” |
+| levodopa; dopamine agonist; impulse-control disorder | 左旋多巴；多巴胺激动剂；冲动控制障碍 |
+| bandit (multi-armed, contextual); win-stay, lose-shift; parameter recovery | 老虎机（多臂、情境）；赢则留，输则换；参数恢复 |
+| explore, exploit; regret; ε-greedy; UCB; Thompson sampling; directed and random exploration | 探索，利用；遗憾值；ε贪心；置信上界；汤普森抽样；定向探索与随机探索 |
+| latent learning; cognitive map; place cell; grid cell; entorhinal cortex | 潜伏学习；认知地图；位置细胞；网格细胞；内嗅皮层 |
+| model-free, model-based; habit, goal-directed action; devaluation; the two-step task | 无模型，基于模型；习惯，目标导向行动；贬值；两步任务 |
+| successor representation; reward and transition revaluation; replay (forward, backward) | 后继表征；奖励与转移再评估；重放（正向、反向） |
+| distributional reinforcement learning; expectile; salience | 分布式强化学习；期望分位数；显著性 |
+| learning sets; meta-learning; recommender system; A/B test | 学习定势；元学习；推荐系统；A/B测试 |
 ## Names
 
 | English | 中文 |
@@ -753,6 +774,12 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Richard Herrnstein, William Baum, Drazen Prelec; John Garcia, Robert Koelling; Keller and Marian Breland | 理查德·赫恩斯坦，威廉·鲍姆，德拉赞·普雷莱茨；约翰·加西亚，罗伯特·克林；凯勒和玛丽安·布里兰 |
 | Martin Seligman; Albert Bandura, Dorothea Ross, Sheila Ross; Tom Beckers; David Zendle, Paul Cairns | 马丁·塞利格曼；阿尔伯特·班杜拉，多萝西娅·罗斯，希拉·罗斯；汤姆·贝克斯；戴维·曾德尔，保罗·凯恩斯 |
 | Chris Mitchell, Jan De Houwer, Peter Lovibond; Sam Gershman, David Blei, Yael Niv; Daniela Schiller | 克里斯·米切尔，扬·德豪尔，彼得·洛维邦德；萨姆·格什曼，戴维·布莱，亚埃尔·尼夫；达妮埃拉·席勒 |
+| Wolfram Schultz, Peter Dayan, Read Montague; Richard Bellman, Richard Sutton, Andrew Barto; Arthur Samuel | 沃尔夫拉姆·舒尔茨，彼得·达扬，里德·蒙塔古；理查德·贝尔曼，理查德·萨顿，安德鲁·巴托；亚瑟·塞缪尔 |
+| Elizabeth Steinberg, Patricia Janak; Chris Watkins; Michael Frank, Lauren Seeberger, Randall O'Reilly | 伊丽莎白·斯坦伯格，帕特里夏·贾纳克；克里斯·沃特金斯；迈克尔·弗兰克，劳伦·西伯格，兰德尔·奥赖利 |
+| Herbert Robbins; William Thompson; Robert Wilson; Charles Honzik; John O'Keefe; May-Britt and Edvard Moser | 赫伯特·罗宾斯；威廉·汤普森；罗伯特·威尔逊；查尔斯·洪齐克；约翰·奥基夫；梅-布里特和爱德华·莫泽 |
+| Christopher Adams, Tony Dickinson; Nathaniel Daw; Carolina Feher da Silva, Todd Hare; Ida Momennejad | 克里斯托弗·亚当斯，托尼·迪金森；纳撒尼尔·道；卡罗琳娜·费赫尔·达席尔瓦，托德·黑尔；伊达·莫梅内贾德 |
+| Matthew Wilson, Bruce McNaughton; Mark Howe, Ann Graybiel; Will Dabney; David Redish; Lihong Li; Daniel Weintraub | 马修·威尔逊，布鲁斯·麦克诺顿；马克·豪，安·格雷比尔；威尔·达布尼；戴维·雷迪什；李力鸿；丹尼尔·温特劳布 |
+| Harry Harlow; Jane Wang | 哈里·哈洛；简·王 |
 
 ## Titles
 

@@ -761,7 +761,7 @@ shown(7, "WERNICKE_1874", "a diagram and the syndrome it predicted: told as the 
       "it organizes is the row on Broca's area")
 shown(7, "LASHLEY_1929", "a famous negative result, told as history with its critics; memory's location is argued "
       "in Part 20", row_in=20)
-shown(17, "FRANK_2004", "one study of learning from reward and punishment, described; disorders are Part 39")
+shown(17, "FRANK_2004", "one study of learning from reward and punishment, described with Psyche's learner beside it; disorders are Part 39")
 shown(17, "WILSON_2014", "a study of exploration, described without figures")
 shown(17, "TOLMAN_1948", "a theoretical paper, told as history")
 shown(17, "ADAMS_DICKINSON_1981", "the devaluation test, described; motivation is entered with Part 28", row_in=28)

@@ -153,4 +153,142 @@
       note: "Nothing you answer is stored or sent. Each batch has exactly ten fertilized and ten unfertilized plants, and the number of each that bloom is fixed (eight of ten, or three of ten), so the true contingency ΔP = P(bloom | fertilizer) − P(bloom | none) is exact; only the order is random. Your learned contingency is the same difference computed from your predictions in the last ten plants of the batch, after you have had time to learn. Rescorla and Wagner's rule, with the garden as a cue present on every trial, predicts that this difference settles at the true ΔP, and that early on, when blooms are common, it runs high: the outcome-density effect.",
     });
   };
+  // ---- Part 17: two slot machines.  Play eighty pulls; your learning rate and inverse temperature are fitted --------
+  W.bandit = function (el) {
+    var w = null, N = 80, SWAP = 40, A = "#7ec8f5", B = "#f2a65a", OK = "#5bd18b", BAD = "#ef6f6c", YOU = "#f2c14e";
+    var S = { phase: "idle", seed: 0, t: 0, ch: [], rw: [], plan: [], last: null, fit: null };
+    // each machine's payouts are dealt from a fixed deck: in each block of ten pulls of the good machine, eight pay
+    function deal(u) {
+      var out = [], k, i, j, tmp, blk;
+      for (k = 0; k < N; k += 10) {
+        blk = [];
+        for (i = 0; i < 10; i++) blk.push(i < 8);
+        for (i = 9; i > 0; i--) { j = Math.floor(u() * (i + 1)); tmp = blk[i]; blk[i] = blk[j]; blk[j] = tmp; }
+        out = out.concat(blk);
+      }
+      return out;
+    }
+    function start() {
+      task.clear(); S.seed++; S.t = 0; S.ch = []; S.rw = []; S.last = null; S.fit = null;
+      var u = QB.rng(6151 * S.seed + 29);
+      S.good = deal(u); S.bad = deal(u).map(function (x) { return !x; });  // the poor machine pays 20%
+      S.first = u() < 0.5 ? 0 : 1;  // which machine starts good
+      S.phase = "play"; w.render();
+    }
+    function better(t) { return t < SWAP ? S.first : 1 - S.first; }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "play"; }, respond: pull });
+    function pull(k) {
+      if (S.phase !== "play" || !w) return;
+      task.count++;
+      var r = k === better(S.t) ? S.good[S.t] : S.bad[S.t];
+      S.ch.push(k); S.rw.push(r ? 1 : 0); S.last = { k: k, r: r }; S.t++;
+      S.phase = "shown"; w.render();
+      task.later(function () {
+        if (S.t >= N) { S.fit = fit(); S.phase = "done"; } else S.phase = "play";
+        w.render();
+      }, 450);
+    }
+    function loglik(al, be) {
+      var q = [0.5, 0.5], ll = 0, t, d, p;
+      for (t = 0; t < S.ch.length; t++) {
+        d = be * (q[1] - q[0]);
+        p = 1 / (1 + Math.exp(-d));
+        ll += Math.log(Math.max(1e-12, S.ch[t] === 1 ? p : 1 - p));
+        q[S.ch[t]] += al * (S.rw[t] - q[S.ch[t]]);
+      }
+      return ll;
+    }
+    function fit() {  // maximum likelihood on a grid, alpha 0.02 ... 1, beta 0.25 ... 20
+      var best = { ll: -Infinity }, i, j, al, be, ll;
+      for (i = 1; i <= 50; i++) for (j = 1; j <= 80; j++) {
+        al = i / 50; be = j / 4; ll = loglik(al, be);
+        if (ll > best.ll) best = { ll: ll, a: al, b: be };
+      }
+      var q = [0.5, 0.5], Q = [[], []];
+      for (var t = 0; t < S.ch.length; t++) { Q[0].push(q[0]); Q[1].push(q[1]); q[S.ch[t]] += best.a * (S.rw[t] - q[S.ch[t]]); }
+      best.Q = Q;
+      return best;
+    }
+    function wsls() {
+      var ws = 0, nw = 0, ls = 0, nl = 0, t;
+      for (t = 1; t < S.ch.length; t++) {
+        if (S.rw[t - 1]) { nw++; if (S.ch[t] === S.ch[t - 1]) ws++; } else { nl++; if (S.ch[t] !== S.ch[t - 1]) ls++; }
+      }
+      return [nw ? ws / nw : NaN, nl ? ls / nl : NaN];
+    }
+    function machine(c, x, y, s, col, name, lit, paid) {
+      c.save();
+      c.fillStyle = "#11161d"; c.strokeStyle = col; c.lineWidth = lit ? 4 : 2;
+      c.beginPath(); c.rect(x - 0.42 * s, y - 0.6 * s, 0.84 * s, 1.1 * s); c.fill(); c.stroke();
+      c.fillStyle = col; c.font = "600 " + Math.round(0.2 * s) + "px system-ui, sans-serif";
+      c.textAlign = "center"; c.textBaseline = "middle"; c.fillText(name, x, y - 0.4 * s);
+      c.fillStyle = "#05070b"; c.fillRect(x - 0.3 * s, y - 0.22 * s, 0.6 * s, 0.38 * s);
+      if (lit) {
+        c.fillStyle = paid ? YOU : C.muted; c.font = "600 " + Math.round(0.17 * s) + "px system-ui, sans-serif";
+        c.fillText(paid ? "+1" : "0", x, y - 0.03 * s);
+      }
+      c.restore();
+    }
+
+    w = QB.widget(el, {
+      title: "Two slot machines: what is your learning rate?",
+      sub: "Eighty pulls. One machine pays out more often than the other; which one may change, without warning. Pull the left machine with F (or tap the left half) and the right one with J (or the right half). At the end, a Q-learner is fitted to your choices by maximum likelihood, as in chapter five: your learning rate α and your inverse temperature β.",
+      panels: 2, height: 320, weights: [1, 1.1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.t = 0; S.ch = []; S.rw = []; S.fit = null; S.last = null; } },
+      ],
+      draw: function (g) {
+        var c = g.ctx, b = T.stage(g, 0, task);
+        c.save(); c.textAlign = "center"; c.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(c, b, "On you", "Press Start. Eighty pulls, about two minutes. Win as much as you can.");
+        } else if (S.phase === "done") {
+          var tot = S.rw.reduce(function (n, x) { return n + x; }, 0);
+          T.message(c, b, "Finished: " + tot + " of 80.", "On the right: your choices, what paid, and the two values of the Q-learner fitted to you. The machines swapped after pull 40. A high α means you followed the latest outcomes; a low β means your choices were noisy, or that you explored.");
+        } else {
+          var s = Math.min(b.h * 0.5, 110), lit = S.phase === "shown" && S.last;
+          machine(c, b.cx - 0.6 * s, b.cy + 0.08 * s, s, A, "left", lit && S.last.k === 0, lit && S.last.r);
+          machine(c, b.cx + 0.6 * s, b.cy + 0.08 * s, s, B, "right", lit && S.last.k === 1, lit && S.last.r);
+          c.fillStyle = C.muted; c.font = "12px system-ui, sans-serif";
+          c.fillText("pull " + Math.min(S.t + (S.phase === "play" ? 1 : 0), N) + " of " + N + ",  won so far " +
+            S.rw.reduce(function (n, x) { return n + x; }, 0), b.cx, b.y + 16);
+          c.font = "12.5px system-ui, sans-serif";
+          c.fillText(b.w < 420 ? "F / left        J / right" : "F, or tap the left half: left        J, or tap the right half: right", b.cx, b.y + b.h - 16);
+        }
+        c.restore();
+
+        var a = g[1].axes({ x: [0, N], y: [-0.15, 1.15], xticks: [0, 20, 40, 60, 80], yticks: [0, 0.5, 1],
+          title: S.fit ? "Your choices and your fitted values" : "Your choices (values when you finish)", xlabel: "pull", ylabel: "value" });
+        a.line([SWAP, SWAP], [-0.15, 1.15], { color: C.muted, width: 1, dash: [4, 4] });
+        if (S.fit) {
+          var xs = []; for (var t = 0; t < S.ch.length; t++) xs.push(t + 1);
+          a.line(xs, S.fit.Q[0], { color: A, width: 2.5 });
+          a.line(xs, S.fit.Q[1], { color: B, width: 2.5 });
+        }
+        if (S.phase === "done") {
+          var x0 = [], y0 = [], x1 = [], y1 = [];
+          for (var k = 0; k < S.ch.length; k++) {
+            if (S.rw[k]) { x1.push(k + 1); y1.push(S.ch[k] === 0 ? 1.08 : -0.08); } else { x0.push(k + 1); y0.push(S.ch[k] === 0 ? 1.08 : -0.08); }
+          }
+          a.dots(x0, y0, { color: C.muted, r: 2.2 });
+          a.dots(x1, y1, { color: YOU, r: 3.2 });
+          a.text(1, 1.08, "left", { color: A, dx: -2, dy: -10, size: 11 });
+          a.text(1, -0.08, "right", { color: B, dx: -2, dy: 14, size: 11 });
+        }
+      },
+      readout: function () {
+        var rows = [["pulls", String(S.ch.length)], ["won", String(S.rw.reduce(function (n, x) { return n + x; }, 0))]];
+        if (S.phase !== "done") { rows.push(["your α and β", S.ch.length ? "when you finish" : "–"]); return rows; }
+        var v = wsls();
+        rows.push(["win-stay", isNaN(v[0]) ? "–" : Math.round(100 * v[0]) + "%"]);
+        rows.push(["lose-shift", isNaN(v[1]) ? "–" : Math.round(100 * v[1]) + "%"]);
+        rows.push(["fitted learning rate α", S.fit.a.toFixed(2) + (S.fit.a <= 0.02 || S.fit.a >= 1 ? " (at the grid's edge)" : "")]);
+        rows.push(["fitted inverse temperature β", S.fit.b.toFixed(2) + (S.fit.b >= 20 || S.fit.b <= 0.25 ? " (at the grid's edge)" : "")]);
+        return rows;
+      },
+      note: "Nothing you do is stored or sent. The good machine pays on eight of every ten pulls and the poor one on two, dealt from fixed decks so the rates are exact; they swap after pull 40. The fit is the one in the film: a Q-learner starting both values at 0.5, moving the chosen one by α times the prediction error, and choosing by a softmax with β, with α and β searched on a grid for the largest log-likelihood of your eighty choices. Eighty choices pin α only loosely, and α and β trade off: chapter five's parameter recovery is the check to run before reading much into one person's numbers.",
+    });
+  };
 })();

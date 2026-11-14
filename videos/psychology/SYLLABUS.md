@@ -1260,34 +1260,50 @@ and variable rewards (Part 52).
 *Question:* how does a brain learn what to do when the reward comes later?
 *Story:* a monkey gets juice and its dopamine neurons fire. After training they fire at the cue instead, and when
 promised juice is withheld they fall silent at the moment it was due. In 1997 that recording is laid beside an
-equation from computer science and they match. Then the cracks: rats that know a maze they were never rewarded
-in, and people who plan.
-1. Hook: Schultz's three recordings (unpredicted reward, predicted reward, omitted reward).
-2. The problem Rescorla–Wagner cannot solve: credit over time. Second-order conditioning.
-3. Temporal-difference learning: value as expected discounted future reward; the TD error δ = r + γV′ − V;
-   derived from the Bellman equation (link to *AI, Built* Part 26, where the same algorithm plays games).
-4. TD on Pavlov's task: the error moves from reward to cue, and dips at omission (computed). Schultz, Dayan and
-   Montague (1997).
-5. From prediction to action: actor–critic and the basal ganglia; Q-learning; the direct and indirect pathways as
-   Go and NoGo; Parkinson's patients on and off medication (Frank et al. 2004).
-6. On you: a two-armed bandit. Win-stay, lose-shift; your learning rate, fitted on the site.
-7. Explore or exploit: softmax, uncertainty bonuses, Thompson sampling; what people do.
-8. Tolman's rats (1930, 1948): latent learning and cognitive maps. Place cells (O'Keefe 1971) and grid cells
-   (the Mosers, 2005).
-9. Two controllers: model-free habits and model-based plans; devaluation experiments; the two-step task (Daw et
-   al. 2011) and what its stay probabilities show.
-10. Between the two: the successor representation; replay and planning in the hippocampus.
-11. Is dopamine a prediction error? Ramps, movement signals, salience, and distributional codes (Dabney et al.
-    2020).
-12. When the signal is hijacked: a first model of addiction (Redish 2004), continued in Part 41.
+equation from computer science and they match; in 2013 light on dopamine neurons teaches a blocked cue. The same error
+chooses actions, and can be read back from a person's choices. Then the cracks: rats that know a maze they were never
+rewarded in, habits that ignore a devalued goal, people who plan, and dopamine that ramps, moves and encodes a whole
+distribution.
+0. Hook: Schultz's three recordings drawn on Psyche's TD learner (rasters and rates, not his figures); the 1997
+   equation; the questions; objectives.
+1. Credit over time: the problem Rescorla–Wagner cannot solve; Samuel's checkers; second-order conditioning on Psyche.
+2. Temporal-difference learning: value as discounted future reward; the Bellman equation; the TD error derived (Sutton
+   1988); TD-Gammon and *AI, Built* Part 26; a tapped delay line.
+3. The error moves to the cue: the migration over 120 trials, computed; the error within one trial (first, trained,
+   omitted) beside each case of the equation; probability and size scaling; Steinberg et al. (2013) as four bars from
+   Rescorla–Wagner with the light added to the error.
+4. From prediction to action: actor and critic; Q-learning and the softmax (Watkins 1989; DQN 2015); Go and NoGo;
+   Frank, Seeberger and O'Reilly (2004), with Psyche's opponent learner, which reproduces the avoid-B side only.
+5. A bandit, and your learning rate: a reversal bandit; α and β read back by likelihood (α 0.50 against a true 0.3);
+   parameter recovery over 40 players (r = 0.90 for α, 0.70 for β).
+6. Explore or exploit: five policies over 5,000 plays (Thompson 40, ε-greedy 83, UCB1 162, greedy 308); directed and
+   random exploration with the horizon (Wilson et al. 2014), as a hand-set choice model.
+7. Tolman's maps: latent learning on Psyche's planner against a learner without a map; cognitive maps and a shortcut;
+   place cells (O'Keefe 1971) and grid cells (Hafting et al. 2005).
+8. Habits and plans: devaluation after moderate and extensive training (Adams and Dickinson 1981); the two-step task
+   (Daw et al. 2011) with three agents' stay probabilities; what the mixture weight means (Feher da Silva and Hare
+   2020).
+9. Between habit and plan: the successor representation, M = (I − γT)⁻¹; reward and transition revaluation for three
+   learners (Momennejad et al. 2017); replay, forward and backward.
+10. Is dopamine only an error? Ramps (Howe et al. 2013), movement and salience; a distributional code of expectile
+    learners (Dabney et al. 2020).
+11. When the signal is hijacked: Redish (2004), a drug that cannot be predicted away; continued in Part 41.
+12. The Ledger. 13. In practice: contextual bandits (Li et al. 2010) and a bandit test against an even split;
+    impulse-control disorders on dopamine agonists (Weintraub et al. 2010: 13.6%, 17.1% against 6.9%); habits by
+    design. 14. Frontier: what is solid and argued; Harlow's learning sets and meta-reinforcement learning (Wang et al.
+    2018); open questions.
 
-*Psyche:* `rl`: TD(λ) with a simulated dopamine trace; actor–critic; Q-learning; a model-based planner; the
-two-step task; the successor representation; bandit policies fitted to open data.
-*On you:* Battery task 8.
-*Ledger:* dopamine reward-prediction errors (`replicated`; scope `contested`); the two-step model-based signature
-(`replicated`; interpretation `contested`); latent learning (`replicated`); grid cells (`replicated`).
-*In practice:* recommender systems and bandit optimization are this mathematics; medication effects in
-Parkinson's; behavioural addictions.
+*Psyche:* `rl`: TD(0) with a complete serial compound and second-order conditioning; Q-learning bandits, their
+likelihood and fit; five exploration policies with regret; a maze with a planner and a model-free learner; the two-step
+task with model-free, model-based and hybrid agents; the successor matrix and both revaluations; distributional TD;
+Redish's model.
+*On you:* two slot machines: eighty pulls, a swap after forty, and your α and β fitted on the page.
+*Ledger:* dopamine reward-prediction errors (`replicated`; scope argued); the two-step model-based signature
+(`replicated`; the weight's meaning contested); latent learning (`replicated`); grid cells (`replicated`). Shown
+without rows, with reasons: Frank et al., Wilson et al., Tolman (1948), Adams and Dickinson (row due in Part 28),
+Momennejad et al., Howe et al., Dabney et al., Redish (row due in Part 41), Li et al., Weintraub et al., Wang et al.
+*In practice:* recommender systems and bandit tests are this mathematics; impulse-control disorders on agonists;
+habits, made and broken.
 *Frontier:* what dopamine ramps mean; whether humans are ever purely model-free; meta-reinforcement learning in
 prefrontal cortex (Part 58).
 *Reading:* Schultz, Dayan & Montague 1997; Sutton & Barto, *Reinforcement Learning* (ch. 14–15 on psychology and
@@ -3297,3 +3313,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 14 | built, English and Chinese: 14 chapters, hook and outro; Psyche's inference (`psyche/infer.py`, six tests, with a one-layer convolutional network in numpy), four Ledger rows, fifteen Archive datasets; course entry, lab and interactive (the reader's own Müller-Lyer illusion, by two staircases) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 64 min |
 | 15 | built, English and Chinese: 15 chapters, hook and outro, with demonstrations played in the film; Psyche's hearing (`psyche/hearing.py`, ten tests) and `VoiceoverScene.sound`, six Ledger rows (one deferred from Part 7), fourteen Archive datasets; course entry, lab and interactive (which way a missing fundamental moves, in Web Audio) checked; narration table and on-screen text translated and dry-run. Act III is complete. Open checks in its README | 55 min |
 | 16 | built, English and Chinese: 15 chapters, hook and outro; Psyche's conditioning (`psyche/conditioning.py`, twelve tests), six Ledger rows (one deferred from Part 10), twenty-three Archive datasets; course entry, lab and interactive (the gardener's game: predictions that reveal the contingency learned) checked; narration table and on-screen text translated and dry-run. Act IV begins. Open checks in its README | 54 min |
+| 17 | built, English and Chinese: 14 chapters, hook and outro; Psyche's reinforcement learning (`psyche/rl.py`, seven tests) with the part's own simulations of Steinberg's and Frank's designs and a bandit test, four Ledger rows, seventeen Archive datasets; course entry, lab and interactive (two slot machines: eighty pulls, the reader's α and β fitted on the page) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 42 min |
