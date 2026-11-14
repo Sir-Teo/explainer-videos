@@ -62,7 +62,7 @@ class Who(SoundScene):
         ax = Axes(x_range=[18, 42, 4], y_range=[0, 16, 4], x_length=7.6, y_length=4.4, tips=False,
                   axis_config={"color": GREY_B, "include_numbers": True, "font_size": 18}).move_to(LEFT * 2.0 + DOWN * 0.4)
         xl = label(r"register span \ (semitones, \ lowest to highest note)", font_size=18, color=GREY_A).next_to(ax, DOWN, buff=0.25)
-        yl = label(r"cadences \ per 100 bars", font_size=18, color=GREY_A).next_to(ax, LEFT, buff=0.2).shift(UP * 1.2)
+        yl = label(r"cadences per 100 bars", font_size=18, color=GREY_A).next_to(ax.y_axis, UP, buff=0.2).shift(RIGHT * 0.8)
         col = {"haydn": BLUE, "mozart": TUNE, "beethoven": EAR}
         dots = {c: VGroup() for c in col}
         for x, y_, c in zip(xs, ys, d["y"]):
@@ -95,11 +95,11 @@ class Who(SoundScene):
         bars.move_to(LEFT * 1.8 + DOWN * 0.3)
         t = label(r"movements attributed correctly, \ out of 33: \ 2000 shuffles of the composers' names", font_size=19, color=GREY_A).next_to(bars, UP, buff=0.35)
         side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
-            (rf"shuffled names: \ about {np.mean(d['null']) * n:.0f} right, \ by luck", GREY_A),
-            (rf"the real names: \ {real} right", TUNE),
-            (rf"as many by luck: \ {100 * d['p_perm']:.0f} shuffles in 100", WHITE),
-            (r"the features do carry something of the composer, \ just not much", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 4.6))
+            (rf"shuffled: \ about {np.mean(d['null']) * n:.0f} right", GREY_A),
+            (rf"real names: \ {real} right", TUNE),
+            (rf"as good by luck: \ {100 * d['p_perm']:.0f} in 100", WHITE),
+            (r"real information, \ but not much", EAR))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 4.2))
         side.move_to(RIGHT * 4.6 + DOWN * 0.2)
         with self.voiceover(
             "Is the test then learning nothing? The standard way to ask is to shuffle the names. Give the thirty-three "

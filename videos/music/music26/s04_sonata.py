@@ -69,11 +69,11 @@ class Sonata(SoundScene):
         bars.move_to(LEFT * 2.9 + DOWN * 0.5)
         head = label(rf"the first new key that holds, \ in {d['agree']} movements", font_size=22, color=GREY_A).next_to(bars, UP, buff=0.4)
         side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
-            (rf"{t.get('major|V', 0)} of the {d['major']} in major keys: \ up a fifth, \ to V", BLUE),
-            (rf"both of the {d['minor']} in minor keys: \ to the relative major, \ III", WHITE),
-            (r"the rest: \ slow movements and finales, \ freer plans", WHITE),
-            (rf"{33 - d['agree']} movements left out: \ the tracker reads a different key \ at the start and at the end", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 5.2))
+            (rf"major keys: \ {t.get('major|V', 0)} of {d['major']} go to V", BLUE),
+            (rf"minor keys: \ {d['minor']} of {d['minor']} go to III", WHITE),
+            (r"the rest: \ freer plans", WHITE),
+            (rf"{33 - d['agree']} left out: \ start and end disagree", GREY_A))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 5.0))
         side.move_to(RIGHT * 3.9 + DOWN * 0.3)
         with self.voiceover(
             "Is that one movement typical? The same tracker reads every movement in the corpus and records the first new "
@@ -107,7 +107,7 @@ class Sonata(SoundScene):
         ):
             self.play(FadeIn(head), FadeIn(g), FadeIn(cap))
         with self.listen(c) as snd:
-            window(snd, r"the development", detail=r"from the encoding, \ Part 7's bowed string", corner=UL, tag_corner=UR)
+            window(snd, r"the development", detail=r"from the encoding, \ Part 7's bowed string", corner=DL, tag_corner=DR)
             flash_voices(snd, g, vs, 0.0, d["unit"], colors=[TUNE, BLUE, EAR, GREY_A])
             cursor(snd, g, 0.0, d["unit"])
         self.wait(0.3)

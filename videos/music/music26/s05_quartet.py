@@ -121,7 +121,7 @@ class Quartet(SoundScene):
         ):
             self.play(FadeIn(head), FadeIn(g), FadeIn(ticks), FadeIn(cap))
         with self.listen(c) as snd:
-            window(snd, r"a minuet", detail=r"from the encoding, \ Part 7's bowed string", corner=UL, tag_corner=UR)
+            window(snd, r"a minuet", detail=r"from the encoding, \ Part 7's bowed string", corner=DL, tag_corner=DR)
             flash_voices(snd, g, vs, 0.0, d["unit"], colors=[TUNE, BLUE, EAR, GREY_A])
             cursor(snd, g, 0.0, d["unit"])
         self.wait(0.3)

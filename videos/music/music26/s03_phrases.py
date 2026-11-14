@@ -93,17 +93,17 @@ class Phrases(SoundScene):
         d = load("phrases")
         g = {int(k): v for k, v in d["gaps"].items()}
         ks = list(range(2, 17))
-        bars = columns([g.get(k, 0) for k in ks], [str(k) for k in ks], width=8.6, height=2.6, color=TUNE, fmt="{:.0f}", font_size=17)
-        bars.move_to(LEFT * 1.6 + DOWN * 0.4)
+        bars = columns([g.get(k, 0) for k in ks], [str(k) for k in ks], width=7.8, height=2.6, color=TUNE, fmt="{:.0f}", font_size=17)
+        bars.move_to(LEFT * 2.4 + DOWN * 0.4)
         t = label(rf"bars between authentic cadences, \ {d['cadences']} cadences in 33 quartet movements", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.35)
         per = d["periodic"]
-        side = VGroup(*[label(s, font_size=23, color=c_) for s, c_ in (
+        side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
             (r"the peaks: \ 4 and 8 bars", TUNE),
-            (rf"gaps of exactly 4 or 8: \ Haydn {100 * per['haydn']:.0f}, \ Mozart {100 * per['mozart']:.0f}, \ Beethoven {100 * per['beethoven']:.0f} in 100", WHITE),
-            (r"most cadences are not where the textbook puts them", EAR),
-            (r"the detector is strict: \ bass falling a fifth to a downbeat", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
-        side.scale_to_fit_width(min(side.width, 4.6))
-        side.move_to(RIGHT * 4.6 + DOWN * 0.2)
+            (rf"exactly 4 or 8, \ in 100: \ Haydn {100 * per['haydn']:.0f}, \ Mozart {100 * per['mozart']:.0f}, \ Beethoven {100 * per['beethoven']:.0f}", WHITE),
+            (r"most gaps are elsewhere", EAR),
+            (r"a strict detector: \ bass down a fifth", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 4.2))
+        side.move_to(RIGHT * 4.5 + DOWN * 0.2)
         with self.voiceover(
             "How periodic is the real music? A program finds every authentic cadence in the thirty-three quartet "
             f"movements, {say(d['cadences'])} of them, where the bass falls a fifth onto a downbeat and the top voice "

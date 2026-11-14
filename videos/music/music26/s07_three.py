@@ -89,7 +89,8 @@ class Three(SoundScene):
             strip.add(r)
         key_l = VGroup(label(r"C major", font_size=20, color=TUNE), label(r"E minor", font_size=20, color=EAR)).arrange(RIGHT, buff=0.6).next_to(strip, DOWN, buff=0.3)
         head = label(r"Beethoven, \ Op. 59 No. 2, \ finale: \ a movement in E minor", font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
-        cap = label(r"the tracker, \ four bars at a time", font_size=19, color=GREY_A).next_to(strip, LEFT, buff=0.25)
+        cap = label(r"the tracker, \ four bars at a time:", font_size=19, color=GREY_A)
+        VGroup(cap, *key_l).arrange(RIGHT, buff=0.5).next_to(strip, DOWN, buff=0.3)
         with self.voiceover(
             "Here is that joke. The finale of Beethoven's second Razumovsky quartet is in E minor. But its theme begins "
             "firmly in C major, and only swerves to E minor at its cadence; then it starts again in C. Below the score, "
@@ -97,7 +98,7 @@ class Three(SoundScene):
         ):
             self.play(FadeIn(head), FadeIn(g), FadeIn(strip), FadeIn(key_l), FadeIn(cap))
         with self.listen(c) as snd:
-            window(snd, r"C major, \ or E minor?", detail=r"from the encoding, \ Part 7's bowed string", corner=UL, tag_corner=UR)
+            window(snd, r"C major, \ or E minor?", detail=r"from the encoding, \ Part 7's bowed string", corner=DL, tag_corner=DR)
             flash_voices(snd, g, vs, 0.0, d["unit"], colors=[TUNE, BLUE, EAR, GREY_A])
             cursor(snd, g, 0.0, d["unit"])
         with self.voiceover(
