@@ -71,9 +71,9 @@ class Tuning(SoundScene):
                 end = d["starts"][ORDER[i + 1]] - 0.5 if i + 1 < len(ORDER) else c.duration
                 pulse(snd, rows_[i][0], st, end, buff=0.08)
         with self.voiceover(
-            "The first, Pythagorean, beats fastest: its third is the wide one, and the two notes of the third go in and "
-            "out of step several times a second. The just and thirty-one-step chords are almost indistinguishable, less "
-            "than a cent apart; most listeners hear both as still."
+            "The first, Pythagorean, beats fastest: its third is the wide one, and the upper partials of C and E beat "
+            "against each other about sixteen times a second, a roughness rather than a pulse. The just and "
+            "thirty-one-step chords are less than a cent apart, and sound alike: smooth."
         ):
             self.play(FadeIn(cap))
         self.wait(0.3)
