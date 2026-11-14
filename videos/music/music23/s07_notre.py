@@ -76,7 +76,7 @@ class Notre(SoundScene):
                     blocks.add(Rectangle(width=w, height=g.frame.height + 0.2, stroke_color=GREY_B, stroke_width=1.2, fill_opacity=0.04).move_to([x0 + w / 2, g.frame.get_center()[1], 0]))
         rows_ = VGroup(*[label(t, font_size=22, color=c_) for t, c_ in (
             (rf"perfection starts: \ {100 * cons_on:.0f} in 100 a unison, \ fifth or octave with the held note", WHITE),
-            (rf"the short notes in between: \ {100 * diss_off:.0f} in 100 dissonant", WHITE),
+            (rf"the short notes in between \ (ours: \ always a step away): \ {100 * diss_off:.0f} in 100 dissonant", WHITE),
             (r"\textit{Stimmtausch}: \ two voices swap their phrases, \ the same sounds, \ redistributed", TUNE),
             (r"Pérotin's quadrupla last ten minutes or more on a few notes of chant", GREY_A))]).arrange(DOWN, buff=0.22, aligned_edge=LEFT).to_edge(DOWN, buff=0.4)
         rows_.scale_to_fit_width(min(rows_.width, 12.4))
@@ -84,8 +84,8 @@ class Notre(SoundScene):
             "Back to the four-voice organum of the opening, to see how it holds together. <bookmark mark='a'/> At the "
             f"start of every perfection, every upper voice is a unison, fifth or octave from the held note: {say(round(100 * cons_on))} "
             "times in a hundred, by construction, as in Pérotin. <bookmark mark='b'/> The short notes in between are free, "
-            f"and {say(round(100 * diss_off))} in a hundred are dissonant: consonance is a rule about where the beat falls, "
-            "not about every note. <bookmark mark='c'/> And Pérotin's voices trade phrases, a device called voice exchange: "
+            f"and in this version {say(round(100 * diss_off))} in a hundred are dissonant, more than Pérotin wrote, since our "
+            "short notes are always a step away. Consonance is a rule about where the beat falls, not about every note. <bookmark mark='c'/> And Pérotin's voices trade phrases, a device called voice exchange: "
             "one voice sings what another just sang, so the same sounds return, rearranged. It is how a long piece on one "
             "held note stays coherent. <bookmark mark='d'/> His quadrupla run ten minutes or more on a handful of chant "
             "notes, built from exactly these three things: the menu of rhythms, consonance on the beat, and exchange."
