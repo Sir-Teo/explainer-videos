@@ -639,4 +639,51 @@ PARTS = [
         I=(8,),
         also=(("Monochord's form tools: chroma, self-similarity, novelty, boundary scores, repetition, the golden base rate", "explainer/music/monochord/form.py"),),
     ),
+    Part(
+        n=22, level="U", widget="grammar", prereq=(14, 17, 18, 19, 21),
+        question="What is an analysis of a piece of music, and can it be written as a grammar and tested?",
+        story="Strip the Tune of its decorations, level by level, and one line remains: tonic, dominant, tonic. Schenker "
+              "claimed every tonal masterpiece elaborates a stepwise descent to the tonic over a bass that arpeggiates "
+              "I-V-I; 22 of Part 14's 51 major tunes do end on such a descent, against about 3.4 when their notes are "
+              "shuffled. Lerdahl and Jackendoff wrote the hearing down as rules: three grouping rules put the Tune's five "
+              "strongest boundaries exactly on its phrase ends, and a sum of preferences picks the head of every span. "
+              "Rohrmeier wrote harmony as a context-free grammar of tonic, dominant and subdominant regions; the CYK "
+              "algorithm parses with it, repeated cadences have Catalan numbers of trees (2, 14, 132, 1,430), and I IV I "
+              "V I has none until a plagal rule is added. Trained on 934 of Bach's chorale phrases and scored on 231 "
+              "held out, the six-rule grammar predicts no better than counting chords (3.90 bits a chord against 3.93), "
+              "and worse than chord pairs (3.33); run forwards, a grammar of elaboration regrows the Tune's skeleton into "
+              "melodies that obey the harmony and never repeat a motive. Other traditions analyse expectation, topics, "
+              "transformations or the levels of a work; the argument over Schenker's views of 2019 and 2020 is set out "
+              "with its sources. Bach's phrases parse as chains almost as deep as they are long, and whether listeners "
+              "hear nesting is a question for experiments. Variation 22 regrows the Tune from its skeleton.",
+        handoff="Chant and the first polyphony in Part 23; Schenkerian readings of the classical sonata in Part 26; jazz "
+                "harmony and its grammars in Parts 38 and 39; expectation and emotion in Part 46; structure analysis by "
+                "machine in Part 62; machines that compose in Part 65.",
+        outside="Part 14 for the tunes; Part 17 for the chorales and Roman numerals; Part 18 for n-gram models; Part 19 for "
+                "Lerdahl's tension; Part 21 for form and Cook's experiment. Context-free grammars, dynamic programming, "
+                "the EM algorithm, cross-entropy.",
+        objectives={
+            "U": ["Recognize passing, neighbour, arpeggiation and repetition, and say which note each one prolongs.",
+                  "Reduce a short melody to a skeleton, and hear which of two skeletons fits.",
+                  "Read a tree of tonic, dominant and subdominant regions over a progression."],
+            "M": ["Implement a time-span reduction by a sum of preferences, and grouping preference rules.",
+                  "Parse a progression with the CYK algorithm, count its trees, and prove the Catalan counts.",
+                  "Train a probabilistic grammar by inside-outside and compare it with n-grams in bits per chord on held-out data."],
+            "D": ["Weigh the evidence on whether listeners hear nested harmony, and design an experiment that measures a listener's reduction.",
+                  "Explain why a grammar of melody needs a copy rule, and what that does to its place in Chomsky's hierarchy."],
+            "I": ["Generate melodies from a skeleton under a harmony, and say what a generator without repetition lacks.",
+                  "Choose between a grammar and an n-gram model for a product that must explain, or must predict."],
+        },
+        results=[
+            ("The Urlinie in the folk tunes", r"22 \text{ of } 51 \text{ major tunes end } \hat 3 \hat 2 \hat 1 \text{ or } \hat 5 \ldots \hat 1; \ \text{shuffled } 3.4"),
+            ("Grouping rules on the Tune", r"\text{five strongest boundaries} = \text{five phrase ends}"),
+            ("Trees for I (IV V I)^m", r"C_{2m}: \ 2, 14, 132, 1430"),
+            ("Bits per chord, held-out chorale phrases", r"\text{unigram } 3.93, \ \text{bigram } 3.33, \ \text{six-rule grammar } 3.90, \ \text{12 latent symbols } 3.46"),
+            ("Coverage", r"\text{the six rules parse about } 21\% \text{ of held-out phrases}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 9, 10),
+        D=(11, 12),
+        I=(8,),
+        also=(("Monochord's reductions and grammars: time-span reduction, grouping, PCFG with CYK and inside-outside, latent grammars, n-grams", "explainer/music/monochord/grammar.py"),),
+    ),
 ]

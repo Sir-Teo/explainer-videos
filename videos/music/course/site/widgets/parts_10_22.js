@@ -1153,4 +1153,87 @@
       note: "Binary, A A B B, has a seam between its two A's that no novelty curve can find: the music there does not change, it repeats. Narrow checkerboards report every change of chord; wide ones only the changes of section, and on short sections they blur two seams into one. The film's segmenter scored best on its sonata, whose sections change key."
     });
   };
+  // ---- Part 22: a grammar of harmony, parsed --------------------------------------------------------------------
+  var CH22 = ["—", "I", "ii", "iii", "IV", "V", "vi", "vii°", "V7"];
+  var FN22 = { "I": "TR", "vi": "TR", "iii": "TR", "V": "DR", "V7": "DR", "vii°": "DR", "IV": "SR", "ii": "SR" };
+  var NT22 = ["TR", "DR", "SR"], COL22 = { TR: "#F5C542", DR: "#F472B6", SR: "#A3E635" };
+  function rules22(plagal) {
+    var r = [["TR", "TR", "TR"], ["TR", "DR", "TR"], ["DR", "SR", "DR"], ["DR", "DR", "DR"], ["SR", "SR", "SR"], ["TR", "TR", "DR"]];
+    if (plagal) r.push(["TR", "SR", "TR"]);
+    return r;
+  }
+  function parse22(seq, plagal) {   // tree counts (CYK) and the most probable tree under hand-set probabilities
+    var R = rules22(plagal), n = seq.length, split = { TR: 0.5, DR: 0.4, SR: 0.2 }, nrule = {}, i, j, k, len;
+    R.forEach(function (r) { nrule[r[0]] = (nrule[r[0]] || 0) + 1; });
+    var emitN = { TR: 3, DR: 3, SR: 2 }, cnt = [], best = [], back = [];
+    for (i = 0; i < n; i++) { cnt.push([]); best.push([]); back.push([]); for (j = 0; j < n; j++) { cnt[i].push({ TR: 0, DR: 0, SR: 0 }); best[i].push({ TR: 0, DR: 0, SR: 0 }); back[i].push({}); } }
+    for (i = 0; i < n; i++) { var f = FN22[seq[i]]; cnt[i][i][f] = 1; best[i][i][f] = (1 - split[f]) / emitN[f]; }
+    for (len = 2; len <= n; len++) for (i = 0; i + len - 1 < n; i++) {
+      j = i + len - 1;
+      R.forEach(function (r) {
+        for (k = i; k < j; k++) {
+          cnt[i][j][r[0]] += cnt[i][k][r[1]] * cnt[k + 1][j][r[2]];
+          var p = split[r[0]] / nrule[r[0]] * best[i][k][r[1]] * best[k + 1][j][r[2]];
+          if (p > best[i][j][r[0]]) { best[i][j][r[0]] = p; back[i][j][r[0]] = [k, r[1], r[2]]; }
+        }
+      });
+    }
+    function build(i, j, a) { if (i === j) return { a: a, leaf: seq[i], i: i }; var b = back[i][j][a]; return { a: a, l: build(i, b[0], b[1]), r: build(b[0] + 1, j, b[2]) }; }
+    var top = best[0][n - 1].TR >= best[0][n - 1].DR ? "TR" : "DR", tree = best[0][n - 1][top] > 0 ? build(0, n - 1, top) : null;
+    return { trees: cnt[0][n - 1].TR + cnt[0][n - 1].DR, tree: tree };
+  }
+  function depth22(t) { return t.leaf ? 1 : 1 + Math.max(depth22(t.l), depth22(t.r)); }
+  W.grammar = function (el) {
+    var ctl = [];
+    for (var q = 1; q <= 7; q++) ctl.push({ k: "c" + q, label: "Chord " + q, min: 0, max: CH22.length - 1, step: 1, value: [1, 6, 4, 2, 5, 1, 0][q - 1], fmt: function (i) { return CH22[i]; } });
+    ctl.push({ k: "pl", label: "The plagal rule TR → SR TR", min: 0, max: 1, step: 1, value: 0, fmt: function (i) { return i ? "on" : "off"; } });
+    QB.widget(el, {
+      title: "A grammar of harmony, parsed",
+      sub: "Choose up to seven chords in C major (— leaves a slot empty). The grammar has six rules over three regions: a tonic region (gold) may be two tonic regions, a dominant region then a tonic one, or a tonic then a dominant; a dominant region (pink) may be a subdominant then a dominant region, or two dominants; a subdominant region (green) may be two subdominants. Left: the most probable tree, found by the CYK algorithm. Right: how many trees the grammar allows for I followed by m repeated cadences IV V I, the Catalan numbers.",
+      panels: 2, height: 320,
+      controls: ctl,
+      buttons: [{ label: "Play the progression", act: function (s) { s.sound = progSound18(s.chords); } }],
+      init: function (s) { s.sound = null; s.chords = []; },
+      draw: function (g, v, s) {
+        var seq = [];
+        for (var q = 1; q <= 7; q++) if (v["c" + q] > 0) seq.push(CH22[v["c" + q]]);
+        s.seq = seq;
+        var P = seq.length ? parse22(seq, v.pl) : { trees: 0, tree: null }, chords = [], prev = null;
+        seq.forEach(function (nm) { var root = PG18.roots[nm], ch = voice18(prev, PG18.pcs[nm], 40 + ((root + 8) % 12)) || [72, 67, 64, 40 + ((root + 8) % 12)]; chords.push(ch); prev = ch; });
+        s.chords = chords; s.P = P;
+        var n = Math.max(seq.length, 1), D = P.tree ? depth22(P.tree) : 1;
+        var a = g[0].axes({ x: [0, n], y: [-0.8, D + 0.2], title: P.tree ? "The most probable tree" : "No tree: the grammar calls this ungrammatical", xticks: [], yticks: [] });
+        function draw(t, lev) {
+          var y = D - lev, x;
+          if (t.leaf) {
+            x = t.i + 0.5;
+            a.line([x, x], [y - 0.15, 0.25], { color: "#3A4250", width: 1 });
+            a.text(x, y, t.a, { align: "center", size: 10, color: COL22[t.a] });
+            a.text(x, -0.3, t.leaf, { align: "center", size: 13, color: C.ink });
+            return [x, y];
+          }
+          var L = draw(t.l, lev + 1), Rr = draw(t.r, lev + 1);
+          x = (L[0] + Rr[0]) / 2;
+          a.line([x, L[0]], [y - 0.12, L[1] + 0.15], { color: "#8A93A0", width: 1.4 });
+          a.line([x, Rr[0]], [y - 0.12, Rr[1] + 0.15], { color: "#8A93A0", width: 1.4 });
+          a.text(x, y, t.a, { align: "center", size: 11, color: COL22[t.a] });
+          return [x, y];
+        }
+        if (P.tree) draw(P.tree, 0); else seq.forEach(function (nm, i) { a.text(i + 0.5, -0.3, nm, { align: "center", size: 13, color: C.loss }); });
+        var ms = [1, 2, 3, 4, 5], counts = ms.map(function (m) { var sq = ["I"]; for (var k = 0; k < m; k++) sq.push("IV", "V", "I"); return parse22(sq, v.pl).trees; });
+        s.counts = counts;
+        var b = g[1].axes({ x: [0.3, 5.7], y: [0, 6], title: "Trees for I (IV V I) × m, log scale", xlabel: "m", ylabel: "log10 trees", xticks: ms });
+        b.bars(ms, counts.map(function (c) { return Math.log10(c); }), 0.6, { color: C.idea });
+        ms.forEach(function (m, i) { b.text(m, Math.log10(counts[i]), String(counts[i]), { align: "center", base: "bottom", dy: -4, size: 10, color: C.muted }); });
+      },
+      readout: function (v, s) {
+        var P = s.P;
+        return [["the progression", s.seq.join(" ") || "empty"], ["regions", s.seq.map(function (c) { return FN22[c]; }).join(" ")],
+                ["trees the grammar allows", String(P.trees)], ["depth of the most probable tree", P.tree ? String(depth22(P.tree)) : "no tree"],
+                ["I (IV V I) × m, m = 1 … 5", s.counts.join(", ") + (v.pl ? " (the plagal rule adds trees)" : " (Catalan numbers C2, C4, C6, C8, C10)")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "I vi IV ii V I parses with vi prolonging I and IV ii V as one long dominant region. Now try I IV I V I: with six rules it has no tree, because a subdominant region may only lead to a dominant one; turn the plagal rule on and it parses. A tree's depth is about its length: Bach's phrases parse as chains, each chord leaning on the next. And the number of trees for repeated cadences grows about sixteenfold with every cadence added: a grammar is useful only with probabilities to choose among them."
+    });
+  };
 })();

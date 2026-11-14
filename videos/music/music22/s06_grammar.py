@@ -64,14 +64,13 @@ class Grammar(SoundScene):
             vo.wait_until("c")
         pr = load("progressions")
         c = clip("grammar.two")
-        s1 = chord_strip(pr["seqs"]["cadence"], font_size=26, buff=0.7).next_to(t1, DOWN, buff=0.35)
-        s2 = chord_strip(pr["seqs"]["longer"], font_size=26, buff=0.6).next_to(t2, DOWN, buff=0.35)
-        with self.voiceover("Hear them, the tree's leaves lighting as they sound."):
-            self.play(FadeIn(s1), FadeIn(s2))
+        s1, s2 = t1.leaves, t2.leaves
+        with self.voiceover("Hear them, each tree's chords lighting as they sound."):
+            self.play(Indicate(VGroup(*s1, *s2), color=WHITE, scale_factor=1.1))
         with self.listen(c) as snd:
             window(snd, r"I IV V I, \ then I vi ii V I", detail=r"Part 7's piano", corner=UL, tag_corner=UR)
-            flash(snd, list(s1), chord_times(pr["two_starts"]["cadence"], pr["seqs"]["cadence"], pr["beat"]), hot=WHITE, base=GREY_A)
-            flash(snd, list(s2), chord_times(pr["two_starts"]["longer"], pr["seqs"]["longer"], pr["beat"]), hot=WHITE, base=GREY_A)
+            flash(snd, list(s1), chord_times(pr["two_starts"]["cadence"], pr["seqs"]["cadence"], pr["beat"]), hot=TUNE, base=WHITE)
+            flash(snd, list(s2), chord_times(pr["two_starts"]["longer"], pr["seqs"]["longer"], pr["beat"]), hot=TUNE, base=WHITE)
             pulse(snd, c1, pr["two_starts"]["cadence"], pr["two_starts"]["longer"] - 0.5, buff=0.08)
             pulse(snd, c2, pr["two_starts"]["longer"], c.duration, buff=0.08)
         self.wait(0.4)

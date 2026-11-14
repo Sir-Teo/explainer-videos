@@ -13,32 +13,33 @@ heard is played on Part 7's piano. Published findings are the ones listed under 
 
 * **One line, walking down.** The Tune and its time-span reduction at spans of 2, 4, 8 and 16 beats, heard (C G A G F E
   D C …; C C G G C C; C G C); Schenker's *Der freie Satz* (1935); the plan.
-* **1. Reduction and prolongation.** Passing, neighbour, arpeggiation, repetition; an ear question (the first strain and
+* **1. Reduction and prolongation.** Passing, neighbour, arpeggiation, repetition, each heard; an ear question (the first strain and
   two skeletons, C G E C against C A F C: which fits?); prolongation at every scale.
 * **2. The *Ursatz*.** The fundamental line and the bass arpeggiation; an ear question (F F E E D D C over a tonic pedal
   and over IV I V I: which closes?); 22 of Part 14's 51 major tunes end on a stepwise descent to the tonic (6 from the
   fifth, 16 from the third), against about 3.4 when their notes are shuffled; what the claim explains and costs.
 * **3. Grouping and metre.** *A Generative Theory of Tonal Music* (1983): well-formedness and preference rules; three
-  grouping rules put the five strongest boundaries of the Tune exactly on its five phrase ends; the metrical grid;
+  grouping rules put the five strongest boundaries of the Tune exactly on its five phrase ends (heard); the metrical grid;
   computational GTTM (Hamanaka, Hirata and Tojo).
 * **4. A time-span reduction.** The head of each span by a sum of preferences (chord tone, stable degree, metrical
   strength); the Tune's levels read as letters; I–V–I at the top; prolongational reduction and Part 19's tension.
 * **5. Harmony as a grammar.** Rohrmeier (2011): six rules over tonic, dominant and subdominant regions; trees for
-  I IV V I and I vi ii V I; recursion.
+  I IV V I and I vi ii V I, heard; recursion.
 * **6. Parsing and ambiguity.** The CYK algorithm; 5 trees for I vi ii V I; for I followed by repeated IV V I, 2, 14,
-  132 and 1,430 trees at 4, 7, 10 and 13 chords (Catalan numbers); I IV I V I has no tree without a plagal rule.
+  132 and 1,430 trees at 4, 7, 10 and 13 chords (Catalan numbers); I IV I V I, heard, has no tree without a plagal rule.
 * **7. A grammar learned from Bach.** 934 training phrases and 231 held out, 42 chord symbols, inside-outside training;
   bits per chord on held-out phrases: no context 3.93, chord pairs 3.33, triples 3.57, the six-rule grammar 3.90, a
   grammar with 12 invented symbols 3.46; what the six-rule grammar learned (its subdominant symbol drifted to emitting I);
   prediction against explanation.
 * **8. Growing a melody.** The elaboration grammar from the Tune's skeleton; an ear question (which melody is the
-  grammar's?); the missing copy rule and Chomsky's hierarchy; three derivations.
+  grammar's?); the missing copy rule and Chomsky's hierarchy; three derivations, heard.
 * **9. Other ways to analyse.** Meyer, Narmour and Huron (expectation); Ratner's topics; Lewin's transformations;
   Nattiez's three levels.
 * **10. A theory and its author.** Schenker's life and views; Ewell's 2019 plenary talk and 2020 article; the *Journal of
   Schenkerian Studies* volume of 2020 and its aftermath; the positions, and what testing can add.
 * **11. Is harmony recursive?** Depth of the best trees of held-out phrases (about as deep as they are long, where the
-  six rules parse them: about a fifth); Hauser, Chomsky and Fitch (2002); Koelsch and colleagues' nested chorales (2013);
+  six rules parse them: about a fifth); nested dominants heard (one level, then E7 A7 D7 G C); Hauser, Chomsky and Fitch
+  (2002); Koelsch and colleagues' nested chorales (2013);
   Part 21's limits.
 * **12. Frontier: grammars from data.** Induced grammars and their drifting categories; jazz parsing and Rohrmeier's
   syntax of jazz harmony (2020). ★ research problem: measuring a listener's reduction directly.
@@ -53,13 +54,15 @@ heard is played on Part 7's piano. Published findings are the ones listed under 
 | Item | What it computes | Checked against |
 |---|---|---|
 | `hook` | the Tune's time-span reduction, every level, and four of them heard | — |
+| `kinds` | passing, neighbour, arpeggiation and repetition, heard | — |
+| `progressions` | the chord progressions of chapters 5, 6 and 11, voiced the shortest way and heard | — |
 | `skeleton` | the first strain and two candidate skeletons | — |
 | `cadence` | the second phrase over a tonic pedal and over IV I V I | — |
 | `urlinie` | stepwise descents to the tonic at the ends of the major tunes | shuffled tunes |
-| `grouping` | grouping preference strengths on the Tune | its phrase ends |
+| `grouping` | grouping preference strengths on the Tune; its melody heard | its phrase ends |
 | `parses` | Viterbi trees and parse counts under the six-rule grammar | Catalan numbers |
 | `learned` | grammars trained by inside-outside; n-grams; bits per chord on held-out phrases; tree depths | brute-force parse counts (tests) |
-| `growth` | three derivations from the skeleton; a quiz | — |
+| `growth` | three derivations from the skeleton, heard; a quiz | — |
 | `tune` | Variation 22 | — |
 
 Monochord's grammars are held in `tests/music/test_grammar.py`; this part's claims and clips in

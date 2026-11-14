@@ -65,6 +65,7 @@ def tree_mob(tree, width: float = 8.0, level_h: float = 0.75, font_size: int = 2
 
     D = depth(tree)
     g = VGroup()
+    g.leaves = []
     counter = [0]
 
     def draw(t, lev):
@@ -78,6 +79,7 @@ def tree_mob(tree, width: float = 8.0, level_h: float = 0.75, font_size: int = 2
             lf = label(tex(t[1]), font_size=font_size, color=WHITE).move_to([x, leaf_y - 0.1, 0])
             ln = Line([x, y - 0.18, 0], [x, leaf_y + 0.15, 0], color=DIM, stroke_width=1.5)
             g.add(ln, nl, lf)
+            g.leaves.append(lf)
             return x, y
         pts = [draw(c, lev + 1) for c in t[1:]]
         x = sum(p[0] for p in pts) / len(pts)
