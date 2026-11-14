@@ -4,17 +4,18 @@ A score here is what a page of music is: spelled pitches (C sharp is not D flat)
 whole note, never seconds), voices, a key, a metre and a tempo.  It knows nothing about sound; ``performed`` turns
 it into the times and frequencies that the rest of Monochord plays.
 
-    Pitch, Note, Rest, Voice, Score         the model
+    Pitch, Note, Chord, Rest, Voice, Score  the model (a Chord is several pitches struck together, Part 13)
     tune_score()                            the Tune, as a score
     write.musicxml / mei / midi / abc / lilypond / jianpu      what each notation keeps
     read.musicxml / midi                    and what comes back
 
-No manim.  Checked in ``tests/music/test_score.py`` (round trips; what MIDI forgets).
+No manim.  Checked in ``tests/music/test_score.py`` (round trips; what MIDI forgets).  The writers and readers
+are for single lines: of a chord they write the lowest note.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from fractions import Fraction
 
 from .. import tune as _tune
@@ -98,6 +99,34 @@ class Note:
 
 
 @dataclass(frozen=True)
+class Chord:
+    """Several pitches struck together, for one duration.  Kept from the lowest up."""
+    pitches: tuple
+    dur: Fraction
+    tie: bool = False
+    lyric: str | None = None
+
+    def __post_init__(self):
+        object.__setattr__(self, "pitches", tuple(sorted(self.pitches, key=lambda p: (p.midi, p.diatonic))))
+
+    @property
+    def is_rest(self) -> bool:
+        return False
+
+    @property
+    def pitch(self) -> Pitch:
+        """The lowest note: the bass."""
+        return self.pitches[0]
+
+
+def pitches_of(e) -> tuple:
+    """An event's pitches: one for a note, several for a chord, none for a rest."""
+    if e.is_rest:
+        return ()
+    return tuple(getattr(e, "pitches", None) or (e.pitch,))
+
+
+@dataclass(frozen=True)
 class Rest:
     dur: Fraction
 
@@ -165,7 +194,7 @@ class Score:
                 if e.is_rest:
                     cur.append(Rest(take))
                 else:
-                    cur.append(Note(e.pitch, take, tie=(e.tie if last else True), lyric=e.lyric if left == e.dur else None))
+                    cur.append(replace(e, dur=take, tie=(e.tie if last else True), lyric=e.lyric if left == e.dur else None))
                 left -= take
                 room -= take
                 if room == 0:
@@ -180,19 +209,24 @@ class Score:
 
     def performed(self, voice: int = 0, hz=None) -> list[dict]:
         """What a player does with the page: for every sounding note its start and length in seconds and its
-        frequency (``hz(pitch)``; equal temperament by default).  Tied notes are joined."""
-        out = []
+        frequency (``hz(pitch)``; equal temperament by default).  Tied notes are joined; a chord gives one entry
+        for each of its notes."""
+        out, open_ties = [], {}
         for t, e in self.voices[voice].onsets():
             if e.is_rest:
+                open_ties = {}
                 continue
-            if out and out[-1].get("_tie") and out[-1]["pitch"] == e.pitch:
-                out[-1]["dur"] += self.seconds(e.dur)
-                out[-1]["_tie"] = e.tie
-                continue
-            out.append({"t": self.seconds(t), "dur": self.seconds(e.dur), "pitch": e.pitch, "midi": e.pitch.midi,
-                        "hz": (hz or Pitch.hz)(e.pitch), "_tie": e.tie})
-        for n in out:
-            n.pop("_tie")
+            still = {}
+            for p in pitches_of(e):
+                if p in open_ties:
+                    k = open_ties[p]
+                    out[k]["dur"] += self.seconds(e.dur)
+                else:
+                    k = len(out)
+                    out.append({"t": self.seconds(t), "dur": self.seconds(e.dur), "pitch": p, "midi": p.midi, "hz": (hz or Pitch.hz)(p)})
+                if e.tie:
+                    still[p] = k
+            open_ties = still
         return out
 
 
@@ -208,6 +242,26 @@ def key_of(tonic: Pitch) -> int:
     """The key signature of the major key on a tonic: its place on the line of fifths (C is 0, G is 1, F is -1)."""
     line = {"F": -1, "C": 0, "G": 1, "D": 2, "A": 3, "E": 4, "B": 5}
     return line[tonic.step] + 7 * tonic.alter
+
+
+def quick(items, dur: Fraction = W, clef: str = "treble", key: int = 0, time: tuple | None = None, tempo: float = 109.0) -> Score:
+    """A one-voice score from names: ``"C4"`` is a note, ``["C4", "E4", "G4"]`` a chord, ``None`` a rest, and
+    ``(item, dur)`` gives one its own length.  With no ``time`` the whole row is one bar."""
+    events = []
+    for it in items:
+        d = dur
+        if isinstance(it, tuple) and len(it) == 2 and isinstance(it[1], Fraction):
+            it, d = it
+        if it is None:
+            events.append(Rest(d))
+        elif isinstance(it, (list, tuple)):
+            events.append(Chord(tuple(Pitch.parse(n) if isinstance(n, str) else n for n in it), d))
+        else:
+            events.append(Note(Pitch.parse(it) if isinstance(it, str) else it, d))
+    total = sum((e.dur for e in events), Fraction(0))
+    if time is None:
+        time = (int(total * 4), 4) if (total * 4).denominator == 1 else (int(total * 8), 8)
+    return Score([Voice(events, clef=clef)], key=key, time=time, tempo=tempo)
 
 
 def tune_score(tonic: str = "C4", unit: Fraction = Q, time: tuple = (4, 4), tempo: float = 109.0, words: bool = False) -> Score:

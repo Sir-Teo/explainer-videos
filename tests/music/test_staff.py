@@ -65,3 +65,38 @@ def test_time_maps_to_the_page():
     fn = st.follow()
     fn(cur, sc.seconds(F(1, 2)))
     assert cur.get_center()[0] == pytest.approx(st.notes[2].head.get_center()[0])
+
+
+def test_chords_on_a_staff():
+    from explainer.music.staff import GrandStaff
+
+    row = S.quick([["C4", "E4", "G4"], ["C4", "D4", "G4"], ["Db4", "F4", "Ab4"], ["A5", "B5"], ["C#4", "E4", "G4", "Bb4"]], dur=F(1, 4), time=(5, 4))
+    st = Staff(row, width=9.0, carry=False)
+    c, second, flats, high, dim = st.notes
+    assert len(c.heads) == 3 and [h.get_center()[1] for h in c.heads] == sorted(h.get_center()[1] for h in c.heads)
+    assert len({round(h.get_center()[0], 6) for h in c.heads}) == 1                   # thirds stack in one column
+    assert c.up and c.stem.get_end()[1] > c.heads[-1].get_center()[1]                 # one stem, past the top head
+    # a second: the upper note goes to the right of an upward stem; the lower to the left of a downward one
+    assert second.heads[1].get_center()[0] > second.heads[0].get_center()[0] + 0.5 * st.space
+    assert second.heads[2].get_center()[0] == pytest.approx(second.heads[0].get_center()[0])
+    assert not high.up and high.heads[0].get_center()[0] < high.heads[1].get_center()[0] - 0.5 * st.space
+    assert high.head is high.heads[1]                                                 # the stem starts at the head that was not moved
+    # two flats a fifth apart take two columns; a sharp and a flat a seventh apart share one
+    xs = sorted(round(a.get_center()[0], 4) for a in flats.accidentals)
+    assert len(flats.accidentals) == 2 and xs[1] - xs[0] > 0.5 * st.space
+    xd = [round(a.get_center()[0], 4) for a in dim.accidentals]
+    assert len(dim.accidentals) == 2 and abs(xd[0] - xd[1]) < 0.3 * st.space
+    c.heads[1].set_color("#FF0000")                                                   # one note of a chord can be coloured
+    assert c.heads[1].get_fill_color() != c.heads[0].get_fill_color()
+    # a chord sounds every one of its notes, and a tie joins the ones that stay
+    sc = S.Score([S.Voice([S.Chord((P("C4"), P("E4"), P("G4")), F(1, 2), tie=True), S.Chord((P("C4"), P("F4"), P("A4")), F(1, 2))])])
+    played = sc.performed()
+    assert sorted((n["pitch"].name, round(n["dur"] / sc.seconds(F(1, 2)))) for n in played) == [("A4", 1), ("C4", 2), ("E4", 1), ("F4", 1), ("G4", 1)]
+    assert len(sc.measures()[0]) == 2 and sc.measures()[0][0].pitches[2].name == "G4"
+    # a grand staff: the same moment at the same place across the page
+    up = [S.Note(P(n), F(1, 4)) for n in ("C5", "C5", "G5", "G5", "A5", "A5")] + [S.Note(P("G5"), F(1, 2))]
+    lo = [S.Chord(tuple(P(x) for x in ch), F(1, 2)) for ch in (("C3", "E3", "G3"), ("C3", "E3", "G3"), ("C3", "F3", "A3"), ("C3", "E3", "G3"))]
+    gs = GrandStaff(S.Score([S.Voice(up), S.Voice(lo, clef="bass")], time=(4, 4)), width=9.0, space=0.15)
+    for k, j in ((0, 0), (2, 1), (4, 2), (6, 3)):
+        assert gs.upper.notes[k].x == pytest.approx(gs.lower.notes[j].x, abs=1e-6)
+    assert gs.upper.get_center()[1] > gs.lower.get_center()[1] and len(gs.joins) == 3

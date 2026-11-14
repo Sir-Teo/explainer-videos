@@ -7,9 +7,13 @@
 
 It draws one voice to a staff: clefs (treble, bass, alto), key and time signatures, notes from a whole to a
 sixteenth with dots, stems, flags and beams, accidentals by the usual rules, ledger lines, rests, ties, barlines
-and words.  Noteheads, stems, beams and flags are drawn; clefs, accidentals, the shorter rests and the digits come
-from a font that has the Unicode musical symbols (FreeSerif on this machine).  It is not a full engraver (no
-chords, no second voice on a staff, no slurs), and where the series needs those it will grow.
+and words.  Since Part 13 a voice's event can be a chord: its heads share a stem, a second puts one head on the
+other side of it, and accidentals take columns so that none touches another (``note.heads``, low to high, can be
+coloured one by one).  ``GrandStaff`` sets two voices on a treble and a bass staff, joined by a brace, with the
+same moment at the same place across the page.  Noteheads, stems, beams and flags are drawn; clefs, accidentals,
+the shorter rests and the digits come from a font that has the Unicode musical symbols (FreeSerif on this
+machine).  It is not a full engraver (no second voice on a staff, no slurs), and where the series needs those it
+will grow.
 """
 
 from __future__ import annotations
@@ -19,10 +23,10 @@ from fractions import Fraction
 from functools import lru_cache
 
 import numpy as np
-from manim import (DOWN, LEFT, RIGHT, UP, WHITE, ArcBetweenPoints, CubicBezier, Dot, Ellipse, Line, Polygon, Rectangle, Text, VGroup,
+from manim import (DOWN, LEFT, RIGHT, UP, WHITE, ArcBetweenPoints, Brace, CubicBezier, Dot, Ellipse, Line, Polygon, Rectangle, Text, VGroup,
                    VMobject)
 
-from explainer.music.monochord.score import Score, value
+from explainer.music.monochord.score import Score, pitches_of, value
 
 
 def _base(dur: Fraction) -> Fraction:
@@ -67,8 +71,10 @@ class Staff(VGroup):
 
     def __init__(self, score: Score, voice: int = 0, width: float = 11.5, space: float = 0.2, systems: int = 1, color=WHITE, line_color=None,
                  show_clef: bool = True, show_key: bool = True, show_time: bool = True, lyrics: bool = True, system_gap: float = 10.5,
-                 bars=None, final_bar: bool = True, lyric_size: int = 22, proportional: bool = False, lead: float | None = None, **kw):
+                 bars=None, final_bar: bool = True, lyric_size: int = 22, proportional: bool = False, lead: float | None = None,
+                 carry: bool = True, **kw):
         super().__init__(**kw)
+        self.carry = carry                                     # False: every event is spelled afresh from the key (a row of separate chords)
         self.proportional, self.lead = proportional, lead      # for staves that must line up: room in proportion to time, notes from a fixed x
         self.score, self.voice_index, self.space, self.color = score, voice, space, color
         self.line_color = line_color or color
@@ -134,6 +140,8 @@ class Staff(VGroup):
             alters = dict(state_key)
             group_notes = []
             for e in bar:
+                if not self.carry:
+                    alters = dict(state_key)
                 w = room(e.dur) * k
                 cx = x + 0.9 * s * k + 0.6 * s
                 if e.is_rest:
@@ -249,12 +257,18 @@ class Staff(VGroup):
         return h
 
     def _note(self, e, cx: float, alters: dict) -> VGroup:
+        pitches = pitches_of(e)
+        if len(pitches) > 1:
+            return self._chord(e, pitches, cx, alters)
         s, col = self.space, self.color
         pos = e.pitch.staff_position(self.clef_name)
         at = np.array([cx, self._y(pos), 0.0])
         n = VGroup()
         head = self._head(e.dur, at)
         n.head, n.pos, n.x = head, pos, cx
+        n.pos_lo = n.pos_hi = pos
+        n.heads = [head]
+        n.pitches = pitches
         n.ink = head[0]                                    # the part of the head that takes a colour (a hollow head has a hole)
         # ledger lines
         ledgers = VGroup()
@@ -286,14 +300,92 @@ class Staff(VGroup):
         n.beamed = False
         return n
 
-    def _stem(self, n, length: float) -> Line:
+    def _chord(self, e, pitches, cx: float, alters: dict) -> VGroup:
+        """Several heads on one stem.  ``n.heads`` are the parts that take a colour, from the lowest note up."""
+        s, col = self.space, self.color
+        poss = [p.staff_position(self.clef_name) for p in pitches]
+        lo, hi = poss[0], poss[-1]
+        base = _base(e.dur)
+        n = VGroup()
+        n.up = (4 - lo) > (hi - 4)                          # the note farthest from the middle line decides
+        wide = (1.62 if base >= 1 else 1.2) * s
+        # a second cannot sit in one column: the upper note goes right of the stem, the lower one left of it
+        side = [0] * len(poss)
+        order = range(len(poss)) if n.up else range(len(poss) - 1, -1, -1)
+        prev = None
+        for i in order:
+            if prev is not None and abs(poss[i] - poss[prev]) == 1 and side[prev] == 0:
+                side[i] = 1 if n.up else -1
+            prev = i
+        ledgers = VGroup()
+        left = cx - 1.05 * s - (wide if -1 in side else 0.0)
+        right = cx + 1.05 * s + (wide if 1 in side else 0.0)
+        for pl in list(range(-2, lo - 1, -2)) + list(range(10, hi + 1, 2)):
+            ledgers.add(Line([left, self._y(pl), 0], [right, self._y(pl), 0], color=self.line_color, stroke_width=1.6))
+        n.add(ledgers)
+        n.ledgers = ledgers
+        inks, holes = VGroup(), VGroup()
+        for pos, sd in zip(poss, side):
+            h = self._head(e.dur, np.array([cx + sd * wide, self._y(pos), 0.0]))
+            h[0].base = base
+            inks.add(h[0])
+            if len(h) > 1:
+                holes.add(h[1])
+        n.add(inks, holes)
+        n.ink, n.heads, n.holes = inks, list(inks), holes
+        anchor = 0 if n.up else len(poss) - 1               # where the stem begins; never a displaced head
+        n.head = inks[anchor]
+        n.pos, n.pos_lo, n.pos_hi, n.x, n.pitches = (hi if n.up else lo), lo, hi, cx, pitches
+        n.stem = None
+        if base < 1:
+            n.stem = self._stem(n, 3.5 * s)
+            n.add(n.stem)
+        # accidentals, from the top note down, each in the nearest column where it touches no other
+        n.accidentals, columns = VGroup(), []
+        n.accidental = None
+        x0 = cx - 1.25 * s - (wide if -1 in side else 0.0)
+        for i in range(len(pitches) - 1, -1, -1):
+            pch = pitches[i]
+            if alters.get(pch.step, 0) == pch.alter:
+                continue
+            alters[pch.step] = pch.alter
+            c = 0
+            while c < len(columns) and any(abs(poss[i] - q) < 6 for q in columns[c]):
+                c += 1
+            if c == len(columns):
+                columns.append([])
+            columns[c].append(poss[i])
+            acc = self._accidental(pch.alter)
+            acc.shift([x0 - 1.0 * s * c - acc.get_center()[0], self._y(poss[i]), 0])
+            n.accidentals.add(acc)
+        n.add(n.accidentals)
+        if len(n.accidentals):
+            n.accidental = n.accidentals
+        dots = 0 if base == e.dur else (1 if e.dur / base == Fraction(3, 2) else 2)
+        used = set()
+        for pos in poss:
+            dp = pos if pos % 2 else (pos + 1 if pos + 1 not in used else pos - 1)
+            if dp in used:
+                continue
+            used.add(dp)
+            for d in range(dots):
+                n.add(Dot([cx + (1.15 + 0.55 * d) * s + (wide if 1 in side else 0.0), self._y(dp), 0], radius=0.16 * s, color=col))
+        n.flags = VGroup()
+        n.add(n.flags)
+        n.beamed = False
+        return n
+
+    def _stem_start(self, n, up: bool) -> np.ndarray:
+        """Where a note's stem leaves its heads: beside the lowest head for a stem up, the highest for a stem down."""
         s = self.space
-        c = n.head.get_center()
-        if n.up:
-            a = c + RIGHT * 0.61 * s + UP * 0.12 * s
-            return Line(a, a + UP * length, color=self.color, stroke_width=1.8)
-        a = c + LEFT * 0.61 * s + DOWN * 0.12 * s
-        return Line(a, a + DOWN * length, color=self.color, stroke_width=1.8)
+        c = np.array([n.x, self._y(n.pos_lo if up else n.pos_hi), 0.0])
+        return c + (RIGHT * 0.61 * s + UP * 0.12 * s if up else LEFT * 0.61 * s + DOWN * 0.12 * s)
+
+    def _stem(self, n, length: float) -> Line:
+        a = self._stem_start(n, n.up)
+        far = self._y(n.pos_hi if n.up else n.pos_lo) + (0.12 * self.space if n.up else -0.12 * self.space)
+        end = np.array([a[0], far + (length if n.up else -length), 0.0])
+        return Line(a, end, color=self.color, stroke_width=1.8)
 
     def _flag(self, n, count: int) -> None:
         s = self.space
@@ -324,19 +416,19 @@ class Staff(VGroup):
             if len(grp) == 1:
                 self._flag(grp[0], 1 if grp[0].head.base == Fraction(1, 8) else 2)
                 continue
-            up = float(np.mean([n.pos for n in grp])) < 4
+            up = float(np.mean([(n.pos_lo + n.pos_hi) / 2 for n in grp])) < 4
             ys = []
             for n in grp:                                  # all stems one way, long enough to reach a common beam
                 n.up = up
             first, lastn = grp[0], grp[-1]
-            slope = float(np.clip((lastn.pos - first.pos) * s / 2 / max(lastn.x - first.x, 1e-6), -0.25, 0.25))
-            ext = (max(n.pos for n in grp) if up else min(n.pos for n in grp))
+            far = (lambda n: n.pos_hi) if up else (lambda n: n.pos_lo)                                          # noqa: E731
+            slope = float(np.clip((far(lastn) - far(first)) * s / 2 / max(lastn.x - first.x, 1e-6), -0.25, 0.25))
+            ext = (max(far(n) for n in grp) if up else min(far(n) for n in grp))
             y_ref = self._y(ext) + (3.4 * s if up else -3.4 * s)
-            x_ref = max(grp, key=lambda n: n.pos).x if up else min(grp, key=lambda n: n.pos).x
+            x_ref = max(grp, key=far).x if up else min(grp, key=far).x
             for n in grp:
                 n.remove(n.stem)
-                c = n.head.get_center()
-                a = c + (RIGHT * 0.61 * s + UP * 0.12 * s if up else LEFT * 0.61 * s + DOWN * 0.12 * s)
+                a = self._stem_start(n, up)
                 yb = y_ref + slope * (a[0] - x_ref)
                 n.stem = Line(a, np.array([a[0], yb, 0.0]), color=self.color, stroke_width=1.8)
                 n.add(n.stem)
@@ -379,10 +471,14 @@ class Staff(VGroup):
         s = self.space
         mine = [n for n in self.notes if n in g.submobjects]
         for a, b in zip(mine, mine[1:]):
-            if a.event.tie and a.event.pitch == b.event.pitch:
-                below = a.pos < 4
+            if not a.event.tie:
+                continue
+            shared = [pch for pch in a.pitches if pch in b.pitches]
+            for j, pch in enumerate(shared):
+                ha, hb = a.heads[a.pitches.index(pch)], b.heads[b.pitches.index(pch)]
+                below = (a.pos < 4) if len(shared) == 1 else (j < (len(shared) + 1) // 2)       # in a chord: lower ties curve down, upper up
                 off = (DOWN if below else UP) * 0.75 * s
-                p, q = a.head.get_center() + off + RIGHT * 0.5 * s, b.head.get_center() + off + LEFT * 0.5 * s
+                p, q = ha.get_center() + off + RIGHT * 0.5 * s, hb.get_center() + off + LEFT * 0.5 * s
                 g.add(ArcBetweenPoints(p, q, angle=(0.9 if below else -0.9), color=self.color, stroke_width=2.2))
 
     # ------------------------------------------------------------------ time on the page
@@ -438,3 +534,53 @@ class Staff(VGroup):
             if float(n.time) <= float(when) < float(n.time + n.dur):
                 return k
         return -1
+
+
+class GrandStaff(VGroup):
+    """Two voices of a score on a treble and a bass staff, joined by a brace: a keyboard's page.  Both staves give
+    time the same room, so the same moment is at the same place across the page.  ``upper`` and ``lower`` are the
+    two :class:`Staff` objects; ``notes_at(k)`` gives the k-th event of each."""
+
+    def __init__(self, score: Score, voices=(0, 1), width: float = 11.5, space: float = 0.2, gap: float = 9.0, lead: float | None = None,
+                 color=WHITE, line_color=None, brace: bool = True, **kw):
+        super().__init__()
+        lead = (4.6 + 1.05 * abs(score.key) + (2.6 if kw.get("show_time", True) else 0.0)) * space if lead is None else lead
+        self.space = space
+        self.upper = Staff(score, voices[0], width=width, space=space, proportional=True, lead=lead, color=color, line_color=line_color, **kw)
+        self.lower = Staff(score, voices[1], width=width, space=space, proportional=True, lead=lead, color=color, line_color=line_color, **kw)
+        self.lower.shift(self.upper.systems[0].lines.get_center() - self.lower.systems[0].lines.get_center() + DOWN * gap * space)
+        self.add(self.upper, self.lower)
+        lc = line_color or color
+        top, bot = self.upper.systems[0].lines, self.lower.systems[0].lines
+        x = top.get_left()[0]
+        self.joins = VGroup(Line([x, top.get_top()[1], 0], [x, bot.get_bottom()[1], 0], color=lc, stroke_width=1.8))
+        for bu, bl in zip(self.upper.barlines, self.lower.barlines):                 # barlines run through both staves
+            self.joins.add(Line([bu.get_right()[0], top.get_bottom()[1], 0], [bl.get_right()[0], bot.get_top()[1], 0], color=lc, stroke_width=1.8))
+        self.add(self.joins)
+        if brace:
+            self.brace = Brace(Line([x, bot.get_bottom()[1], 0], [x, top.get_top()[1], 0]), direction=LEFT, buff=0.06, color=color)
+            self.add(self.brace)
+
+    def notes_at(self, k: int) -> tuple:
+        return self.upper.notes[k], self.lower.notes[k]
+
+    def point_at(self, when) -> np.ndarray:
+        p, q = self.upper.point_at(when), self.lower.point_at(when)
+        return (p + q) / 2
+
+    def cursor(self, color="#F5C542", stroke_width: float = 3.0) -> Line:
+        top, bot = self.upper.systems[0].lines, self.lower.systems[0].lines
+        h = (top.get_top()[1] - bot.get_bottom()[1]) / 2 + 1.2 * self.space
+        c = Line(DOWN * h, UP * h, color=color, stroke_width=stroke_width)
+        c.move_to(self.point_at(float(self.upper._track[0][0])))
+        return c
+
+    def follow(self, tempo: float | None = None, t0: float = 0.0):
+        qpm = tempo or self.upper.score.tempo
+        start = float(self.upper._track[0][0])
+
+        def fn(m, t):
+            when = start + max(t - t0, 0.0) * qpm / 240.0
+            return m.move_to(self.point_at(min(when, float(self.upper.end_time))))
+
+        return fn
