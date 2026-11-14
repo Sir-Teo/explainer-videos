@@ -11,6 +11,7 @@ class Book(SoundScene):
         self.history()
         self.numbers()
         self.two()
+        self.whole()
 
     # ------------------------------------------------------------------
     def history(self):
@@ -97,3 +98,23 @@ class Book(SoundScene):
             self.wait(0.5)
         self.wait(0.4)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def whole(self):
+        m = load("more")
+        c = clip("more.whole")
+        g = choir_roll(m["voices"], width=12.0, height=3.6, lo=38, hi=80, thick=0.09).move_to(DOWN * 0.4)
+        head = label(r"`Wenn ich einmal soll scheiden': \ the whole chorale", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
+        names = VGroup(*[label(VOICE_NAMES[j], font_size=20, color=VOICE_C[j]) for j in range(4)]).arrange(RIGHT, buff=0.6).next_to(g, DOWN, buff=0.35)
+        with self.voiceover(
+            "Before taking it apart, hear one whole. This is the setting from the end of the Passion, the "
+            "last time the tune is sung, complete: six phrases, each ending at a pause, the four voices "
+            "in their colours."
+        ):
+            self.play(FadeIn(head), FadeIn(g), FadeIn(names))
+        with self.listen(c) as snd:
+            window(snd, r"the whole chorale", kind="synthesized", detail=r"a model choir", corner=DL, tag_corner=DR)
+            sing_roll(snd, g, m["times"])
+        self.wait(0.3)
+        self.clear_scene()
+

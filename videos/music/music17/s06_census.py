@@ -48,6 +48,7 @@ class Census(SoundScene):
         ch = columns(vals, [k.replace("–", "--") for k in order], width=7.0, height=2.6, color=WEAK, hot=(1,), hot_color=RED, fmt="{:.0f}", font_size=24).move_to(LEFT * 2.4 + DOWN * 0.7)
         t = label(r"Bach's parallels, \ by pair of voices", font_size=24, color=GREY_A).next_to(ch, UP, buff=0.35)
         off = len(d["all"]) - d["on_beat"]
+        head = label(r"where Bach's parallels fall", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         side = VGroup(label(rf"{off} of {len(d['all'])}", font_size=40, color=TUNE), label(r"fall between the beats: \\ one of the notes is a passing note", font_size=24, color=WHITE)).arrange(DOWN, buff=0.25).move_to(RIGHT * 4.2 + DOWN * 0.2)
         with self.voiceover(
             "Where do they fall? <bookmark mark='a'/> Between every pair of voices, the most often between "
@@ -56,6 +57,7 @@ class Census(SoundScene):
             "voices is moving through a passing note, a quick note that is not part of either chord. "
             "Most of Bach's parallels are fleeting: an eighth note long, in an inner voice."
         ) as vo:
+            self.play(FadeIn(head))
             vo.wait_until("a")
             self.play(FadeIn(ch), FadeIn(t))
             vo.wait_until("b")

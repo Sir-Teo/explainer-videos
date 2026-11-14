@@ -20,17 +20,17 @@ class Ranges(SoundScene):
         curves, brackets = VGroup(), VGroup()
         for j in range(4):
             h = np.array(d["hist"][j], dtype=float)
+            h = np.convolve(h, np.array([1.0, 2.0, 3.0, 2.0, 1.0]) / 9.0, mode="same")          # smoothed over neighbouring keys
             h = h / h.max()
             xs = np.arange(len(h)) + lo0
             pts = [g.ax.c2p(x, y) for x, y in zip(xs, h)]
             poly = VMobject(stroke_color=VOICE_C[j], stroke_width=3).set_points_as_corners(pts)
             curves.add(poly)
             lo, hi = d["textbook"][j]
-            y = 1.0 + 0.0
-            br = VGroup(Line(g.ax.c2p(lo, 1.0 - 0.0) + UP * (0.25 + 0.17 * j), g.ax.c2p(hi, 1.0) + UP * (0.25 + 0.17 * j), color=VOICE_C[j], stroke_width=4))
+            br = VGroup(Line(g.ax.c2p(lo, 1.0) + UP * (0.55 + 0.17 * j), g.ax.c2p(hi, 1.0) + UP * (0.55 + 0.17 * j), color=VOICE_C[j], stroke_width=4))
             brackets.add(br)
-        names = VGroup(*[label(VOICE_NAMES[j], font_size=24, color=VOICE_C[j]).move_to(g.ax.c2p(d["ranges"][j][4], 0.55)) for j in range(4)])
-        key = label(r"bars above: \ the ranges a textbook gives \ (C4--A5, \ G3--D5, \ C3--A4, \ E2--D4)", font_size=20, color=GREY_B).next_to(g, UP, buff=1.05)
+        names = VGroup(*[label(VOICE_NAMES[j], font_size=26, color=VOICE_C[j]).move_to(g.ax.c2p(d["ranges"][j][4], 1.0) + UP * 0.25) for j in range(4)])
+        key = label(r"bars above: \ the ranges a textbook gives \ (C4--A5, \ G3--D5, \ C3--A4, \ E2--D4)", font_size=20, color=GREY_B).next_to(g, UP, buff=1.35)
         out = d["outside"]
         with self.voiceover(
             "First, where each voice sings. Here is how often each key is used by each of the four "
@@ -52,7 +52,7 @@ class Ranges(SoundScene):
         d = load("ranges")
         gm, go = d["gap_mean"], d["gap_over_octave"]
         ch = (72, 67, 64, 48)
-        chord = VGroup(*[Dot([0, 0.25 * (p - 60), 0], radius=0.11, color=VOICE_C[j]) for j, p in enumerate(ch)]).move_to(LEFT * 4.2 + DOWN * 0.2)
+        chord = VGroup(*[Dot([0, 0.13 * (p - 60), 0], radius=0.11, color=VOICE_C[j]) for j, p in enumerate(ch)]).move_to(LEFT * 5.6 + DOWN * 0.2)
         gaps = VGroup()
         for k, (a, b) in enumerate(((0, 1), (1, 2), (2, 3))):
             br = BraceBetweenPoints(chord[a].get_center() + RIGHT * 0.3, chord[b].get_center() + RIGHT * 0.3, direction=RIGHT, color=GREY_B)
@@ -61,7 +61,9 @@ class Ranges(SoundScene):
             (rf"soprano to alto: \ {gm['S-A']:.1f} semitones on average; \ more than an octave {100 * go['S-A']:.1f} times in a hundred", WHITE),
             (rf"alto to tenor: \ {gm['A-T']:.1f}; \ more than an octave {100 * go['A-T']:.1f} times in a hundred", WHITE),
             (rf"tenor to bass: \ {gm['T-B']:.1f}; \ more than an octave {100 * go['T-B']:.0f} times in a hundred", WHITE),
-            (r"the rule: \ the upper three close together, \ the bass free", TUNE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 1.6 + DOWN * 0.1)
+            (r"the rule: \ the upper three close together, \ the bass free", TUNE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 1.0 + DOWN * 0.1)
+        rows_.scale_to_fit_width(min(rows_.width, 9.6))
+        rows_.move_to(RIGHT * 1.3 + DOWN * 0.1)
         head = label(r"spacing: \ the gaps between neighbouring voices", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
             "Next, the gaps between neighbouring voices. <bookmark mark='a'/> On average the soprano is "

@@ -881,12 +881,12 @@ the exercise book of every harmony class and, three centuries later, the first b
 machines. The part learns the craft from 364 of them as data, counts how often Bach breaks the rules, and builds a
 harmonizer to be judged against him on tunes it has never seen.
 1. Hook: the Passion Chorale alone, as Bach set it, and as a chord-chooser sets it; the plan.
-2. A book of chorales: C. P. E. Bach's edition; the data; one tune, two settings.
+2. A book of chorales: C. P. E. Bach's edition; the data; one tune, two settings; one whole chorale.
 3. Four ranges: where each voice sings; spacing; which note is doubled.
 4. Every voice a line: steps and leaps by voice; the alto alone; the shortest way, measured.
 5. The rules for four: parallels between six pairs, the leading note, the seventh, spacing (each heard wrong and right).
 6. How often Bach breaks them: parallels counted, by pair and by beat; two heard; the other licences.
-7. Chords on the beat: labels; the commonest chords in major and minor; what follows what.
+7. Chords on the beat: labels; figured bass; the commonest chords in major and minor; what follows what.
 8. Where phrases end: cadences at the fermatas; three heard; the Picardy third.
 9. Between the beats: passing and neighbouring notes by voice; with and without them (an ear question).
 10. Harmonizing as search: the lattice; the Viterbi algorithm; the costs; the hook harmonized.
@@ -901,7 +901,7 @@ over chords and voicings.
 corpus encodings); `monochord/fourpart.py`: the rules for six pairs of voices, chord labels on the beat, a chord
 model learned from Bach, a harmonizer (chords and voicings chosen together by the Viterbi algorithm), evaluation
 against Bach on held-out tunes; rule violations in the chorales counted; a four-part choir from Part 8's voice
-(`instruments/choir.py`). Figured bass is left to Part 18's partimenti.
+(`instruments/choir.py`); figured bass read off Bach's chords.
 *Variation 17:* the Tune as a chorale, ours and the corrected one, with the corrections shown.
 *Frontier:* DeepBach and Coconet; how to evaluate style.
 *Reading:* Aldwell & Schachter; Kostka & Payne; Allan & Williams (2005).

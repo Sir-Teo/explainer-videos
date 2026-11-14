@@ -66,16 +66,16 @@ class Motion(SoundScene):
         s = load("motion")["shortest"]
         a = (72, 67, 64, 48)
         b = (71, 67, 62, 43)
-        da = VGroup(*[Dot([-4.6, 0.22 * (p - 64), 0], radius=0.1, color=VOICE_C[j]) for j, p in enumerate(a)])
-        db = VGroup(*[Dot([-2.6, 0.22 * (p - 64), 0], radius=0.1, color=VOICE_C[j]) for j, p in enumerate(b)])
+        da = VGroup(*[Dot([-5.8, 0.11 * (p - 58), 0], radius=0.1, color=VOICE_C[j]) for j, p in enumerate(a)])
+        db = VGroup(*[Dot([-4.3, 0.11 * (p - 58), 0], radius=0.1, color=VOICE_C[j]) for j, p in enumerate(b)])
         arrows = VGroup(*[Line(x.get_center(), y.get_center(), buff=0.12, color=VOICE_C[j], stroke_width=3) for j, (x, y) in enumerate(zip(da, db))])
         tag = VGroup(label(r"C major", font_size=22, color=GREY_A).next_to(da, DOWN, buff=0.3), label(r"G major", font_size=22, color=GREY_A).next_to(db, DOWN, buff=0.3))
         txt = VGroup(label(r"keep the common note; \ move the others to the nearest note of the next chord", font_size=26, color=WHITE),
                      label(r"`the law of the shortest way' \ (Bruckner's teaching, \ after Sechter)", font_size=22, color=GREY_B),
                      label(rf"Bach's alto and tenor: \ {s['actual']:.1f} semitones a beat; \ the least possible: \ {s['least']:.1f}", font_size=26, color=WHITE),
                      label(rf"the least possible exactly, \ {100 * s['same']:.0f} times in a hundred; \ within two semitones of it, \ {100 * s['within2']:.0f}", font_size=26, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 2.0 + DOWN * 0.1)
-        txt.scale_to_fit_width(min(txt.width, 8.4))
-        txt.move_to(RIGHT * 2.2 + DOWN * 0.1)
+        txt.scale_to_fit_width(min(txt.width, 8.6))
+        txt.move_to(RIGHT * 1.85 + DOWN * 0.1)
         with self.voiceover(
             "How do the inner voices choose their notes? The old rule is to keep a note the two chords "
             "share, and move every other voice to the nearest note of the next chord. From C major to G "

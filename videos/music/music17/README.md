@@ -16,10 +16,11 @@ Published findings are the ones listed under Sources.
   hardly move; the plan.
 * **1. A book of chorales.** C. P. E. Bach's edition (Breitkopf, 1784–87, 371 chorales); the data: 364 chorales,
   185 in major and 178 in minor, 84,737 notes, 230 different tunes, 59 set more than once, the Passion Chorale
-  eleven times; its first phrase the first and the last time it is sung in the Passion, heard.
+  eleven times; its first phrase the first and the last time it is sung in the Passion, heard; the whole of its
+  last setting, heard.
 * **2. Four ranges.** Where each voice sings, against the textbook ranges (C4–A5, G3–D5, C3–A4, E2–D4): outside
   them, five soprano notes in a hundred thousand and 0.76 bass notes in a hundred; spacing: soprano to alto 5.3
-  semitones on average, alto to tenor 5.8, tenor to bass 8.7, more than an octave 0.3, 0.9 and 19 times in a
+  semitones on average, alto to tenor 5.8, tenor to bass 8.6, more than an octave 0.3, 0.9 and 19 times in a
   hundred; doubling: in root position the root 87 times in a hundred, with the third in the bass root, third and
   fifth about a third each.
 * **3. Every voice a line.** Mean moves 1.9, 1.7, 2.0 and 3.1 semitones (soprano to bass); steps 85, 84, 81 and 66
@@ -32,7 +33,9 @@ Published findings are the ones listed under Sources.
   about once in five chorales; by pair (soprano and tenor the most); 51 of 75 between the beats, through a passing
   note; two on the beat, heard; contrary fifths and octaves 85, hidden 157, overlaps 1,735 (one move in 17),
   crossings 2.5 chords in a hundred: rules obeyed between 94 and 99.7 times in a hundred.
-* **6. Chords on the beat.** Labels as Roman numerals (nine beats in a hundred carry no chord); in major I, V, vi,
+* **6. Chords on the beat.** Labels as Roman numerals (nine beats in a hundred carry no chord); figured bass: the
+  hook's bass with its figures, and the figures on all the chorales' beats (5/3 45 in a hundred, 6 16, 5/4 and 5/2
+  six each: suspensions and passing notes); in major I, V, vi,
   IV, ii, then II (the dominant's dominant); in minor i, then III, iv, V; what follows what; the same chord on the
   next beat 23 times in a hundred.
 * **7. Where phrases end.** At 1,216 fermatas in major: V–I 246, II–V 114, V7–I 80; in minor V–i 107, VII–III 98
@@ -46,11 +49,11 @@ Published findings are the ones listed under Sources.
   hook harmonized: the same chord as Bach on 8 of 16 beats, no parallels, and a major chord at a phrase's end where
   Bach stays minor.
 * **10. Ours against Bach.** A split by tune (280 chorales to learn from, 83 to test, 4,438 beats, no test tune in
-  training in any setting); the same chord as Bach 42 times in a hundred (the chord-chooser 41), the same bass 40
-  (24); parallel fifths and octaves: the chord-chooser 769, Bach 77, the search 0; inner-voice motion 1.7
+  training in any setting); the same chord as Bach 41 times in a hundred (the chord-chooser 41 too), the same bass
+  35 (24); parallel fifths and octaves: the chord-chooser 769, Bach 77, the search 0; inner-voice motion 1.8
   semitones a beat against Bach's 3.5; an ear question (ours or Bach's).
 * **11. Where we lose.** What the search does not know (a plan, the end of a piece, notes between beats, lines,
-  words); passing notes added by rule, heard; notes a beat in the lower voices: 0.69, 0.74 with the rule, Bach
+  words); passing notes added by rule, heard; notes a beat in the lower voices: 0.69, 0.76 with the rule, Bach
   1.13.
 * **12. Frontier: machines that write chorales.** CHORAL (Ebcioğlu 1988), Allan and Williams's hidden Markov model
   (2005), BachBot (2016), DeepBach and Coconet (2017), the Bach Doodle (2019); four ways to judge a style, each
@@ -78,6 +81,7 @@ Published findings are the ones listed under Sources.
 | `evaluation` | the search and the chord-chooser on 83 held-out chorales | split by tune (`chorales.split`) |
 | `improve` | passing notes added by rule | — |
 | `tune` | Variation 17 | no parallels after correction |
+| `more` | the hook's chorale complete; figured bass; Phrygian half cadences | `chords.figure_name` |
 
 Monochord's chorales, rules, harmonizer and choir are held in `tests/music/test_fourpart.py`; this part's claims
 and clips in `tests/music/test_music17.py`.
@@ -117,9 +121,9 @@ python -m videos.music.labs 17                                  # the lab (write
    many choices of chords are there, before voicing?
 
    *Solution.* C lies in I and IV (C E G, F A C); G in I and V (C E G, G B D); A only in IV. So the choices are
-   2 × 2 × 2 × 2 × 1 × 1 × 2 = 32. A sensible one, I I I I IV IV I (or V at the last G), avoids repeating the
-   same chord across the A–A–G and ends the phrase on a chord that holds the G; the plain and full harmonizers
-   of Variation 17 both choose I I I I IV IV I.
+   2 × 2 × 2 × 2 × 1 × 1 × 2 = 32. A sensible one, I I I I IV IV I, keeps the A–A under IV and ends the phrase on
+   a chord that holds the G; the plain and full harmonizers
+   of Variation 17 choose I I I I IV IV I and I I V I IV IV I.
 
 2. **Prove.** Show that if every voice moves to the nearest note of the next chord, two voices can still make
    parallel fifths. Give the smallest example, and the rule that prevents it.

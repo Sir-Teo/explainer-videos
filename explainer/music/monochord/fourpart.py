@@ -297,8 +297,8 @@ def voicings_under(soprano: int, members, tonic: int, leading: int | None = None
 
 
 DEFAULT_WEIGHTS = {"chord": 1.0, "melody": 1.0, "motion": 0.05, "bass": 0.02, "parallel": 6.0, "hidden": 1.5, "overlap": 1.0, "leap": 0.6,
-                   "inversion": 0.4, "leading": 3.0, "seventh": 3.0, "end": 2.0, "doubling": 0.6, "repeat": 1.0, "start": 1.0}
-RULE_WEIGHTS = ("parallel", "hidden", "overlap", "leap", "leading", "seventh", "inversion", "doubling")
+                   "inversion": 0.4, "leading": 3.0, "seventh": 3.0, "end": 2.0, "doubling": 0.6, "repeat": 1.0, "start": 1.0, "unison": 1.0}
+RULE_WEIGHTS = ("parallel", "hidden", "overlap", "leap", "leading", "seventh", "inversion", "doubling", "unison")
 
 
 def pair_costs(P, C, sp, sc, model, w, tonic) -> np.ndarray:
@@ -339,7 +339,7 @@ def harmonize(soprano, tonic: int, model: ChordModel, fermatas=(), weights=None,
     The cost of a path adds, beat by beat: minus the log-probability of the chord after the last one and of the
     soprano's degree in it; the motion of the inner voices and of the bass; the rule penalties (parallel and
     hidden fifths and octaves, overlaps, inner-voice leaps, an unresolved leading note or seventh, a chord in
-    inversion, a doubled major third); a chord repeated with the same bass; at a fermata, how often Bach ends a
+    inversion, a doubled major third, two voices in unison); a chord repeated with the same bass; at a fermata, how often Bach ends a
     phrase on that chord.  ``plain`` keeps only the chord model and the motion of the voices (no rules), for
     comparison."""
     w = dict(DEFAULT_WEIGHTS, **(weights or {}))
@@ -369,6 +369,7 @@ def harmonize(soprano, tonic: int, model: ChordModel, fermatas=(), weights=None,
             u += w["inversion"] * (ch[3] % 12 != root)
             if st[1] == "major" and doubled(ch, ((tonic + st[0]) % 12, "major", 0)) == "third":
                 u += w["doubling"]
+            u += w["unison"] * sum(ch[i] == ch[i + 1] for i in range(3))     # two voices on one key: three voices, not four
             if k in fer or k == n - 1:
                 u -= w["end"] * model.F[si]
             if k == 0:

@@ -48,7 +48,7 @@ def choir_roll(voices, width: float = 11.0, height: float = 3.2, lo: float | Non
     def y(p):
         return frame.get_bottom()[1] + height * (float(p) - lo) / (hi - lo)
 
-    g.x, g.y, g.frame, g.base = x, y, frame, base
+    g.x, g.y, g.frame, g.base, g.which = x, y, frame, base, tuple(which)
     if bars:
         g.add(*[Line([x(b), y(lo), 0], [x(b), y(hi), 0], color=DIM, stroke_width=1) for b in bars if base < b < base + total])
     g.notes = []
@@ -72,7 +72,7 @@ def sing_roll(snd, g, times, start: float = 0.0, hot=WHITE, hold: float = 0.2, f
     """Light each voice's notes as they sound; ``times`` are the clip's start times per voice, ``start`` the clip's
     offset in the sound."""
     for j, nts in enumerate(g.notes):
-        flash(snd, nts, [start + t for t in times[j]], hot=hot, base=VOICE_C[j if len(g.notes) == 4 else j], fade=fade, hold=hold)
+        flash(snd, nts, [start + t for t in times[j]], hot=hot, base=VOICE_C[g.which[j]], fade=fade, hold=hold)
 
 
 def block_staff(chords, width: float = 6.0, space: float = 0.15, key: int = 0, beats: int = 2) -> GrandStaff:

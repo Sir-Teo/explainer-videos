@@ -23,6 +23,7 @@ Items:
     improve     ours with passing notes added by rule
     tune        Variation 17: the Tune as a chorale, first by the chord-chooser, then corrected
     variation   the Variations ledger, row 17
+    more        the hook's chorale complete; figured bass; the Phrygian half cadence
 """
 
 from __future__ import annotations
@@ -649,9 +650,43 @@ def compute_variation() -> dict:
             "clip": "tune.variation17"}
 
 
+def compute_more() -> dict:
+    """The hook's chorale complete; figured bass on its beats and across the chorales; the Phrygian half cadence."""
+    from explainer.music.monochord import chords as CH
+    from explainer.music.monochord.score import Pitch
+    c = chorale(HOOK)
+    whole, tw = sing(c.voices)
+    seq = concat([whole], gap=0.0, names=["whole"])
+    beats = [x for x in c.beats() if x[0] < phrase_end(c, 2)]
+    figs = [CH.figure_name([Pitch.from_midi(int(p)) for p in ch]) for _, ch, _ in beats]
+    allfig = Counter()
+    for x in book():
+        for _, ch, _ in x.beats():
+            allfig[CH.figure_name([Pitch.from_midi(int(p)) for p in ch])] += 1
+    phry, examples = 0, []
+    minor_fermatas = 0
+    for x in book():
+        if x.mode != "minor":
+            continue
+        labs = F.beat_labels(x)
+        for k, y in enumerate(labs):
+            if not y["fermata"] or k == 0:
+                continue
+            minor_fermatas += 1
+            a, z = labs[k - 1]["label"], y["label"]
+            if a and z and z[:2] == (7, "major") and a[:2] == (5, "minor") and a[2] == 1:
+                phry += 1
+                examples.append([x.name, int(labs[k - 1]["tick"]), list(labs[k - 1]["chord"]), list(y["chord"])])
+    tot = sum(allfig.values())
+    return {"voices": rows(c.voices), "times": tw, "seconds": whole.duration, "figures": figs, "bass": [int(ch[3]) for _, ch, _ in beats],
+            "figure_shares": [[k, v / tot] for k, v in allfig.most_common(8)], "phrygian": phry, "phrygian_examples": examples[:5],
+            "minor_fermatas": minor_fermatas,
+            "clips": {"whole": save("more.whole", seq, level=None, detail="Bach's last setting of the Passion Chorale (St Matthew Passion, 1727), complete: a model choir")}}
+
+
 ITEMS = {"hook": compute_hook, "book": compute_book, "ranges": compute_ranges, "motion": compute_motion, "rules": compute_rules, "census": compute_census,
          "vocab": compute_vocab, "cadences": compute_cadences, "decoration": compute_decoration, "harmonizer": compute_harmonizer,
-         "evaluation": compute_evaluation, "improve": compute_improve, "tune": compute_tune, "variation": compute_variation}
+         "evaluation": compute_evaluation, "improve": compute_improve, "tune": compute_tune, "variation": compute_variation, "more": compute_more}
 
 
 if __name__ == "__main__":

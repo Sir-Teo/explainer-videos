@@ -49,12 +49,14 @@ class Harmonizer(SoundScene):
         cols = VGroup()
         rng = np.random.default_rng(1)
         picks = []
+        pos = 0.5
         for k, s_ in enumerate(states):
             m = int(np.ceil(s_ / 25))
             ys = np.linspace(-1.9, 1.9, m)
             col = VGroup(*[Dot([xs[k], y, 0], radius=0.035, color=GREY_B) for y in ys])
             cols.add(col)
-            picks.append(int(rng.integers(0, m)))
+            pos = float(np.clip(pos + rng.normal(0, 0.12), 0.1, 0.9))                       # an example path: one dot a column
+            picks.append(int(round(pos * (m - 1))))
         path = VMobject(stroke_color=TUNE, stroke_width=4).set_points_as_corners([cols[k][picks[k]].get_center() for k in range(n)])
         counts = VGroup(*[label(str(s_), font_size=16, color=GREY_B).move_to([xs[k], -2.3, 0]) for k, s_ in enumerate(states)])
         tl = label(r"each dot: \ about 25 (chord, \ voicing) pairs under that beat's note", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.45)
@@ -125,8 +127,8 @@ class Harmonizer(SoundScene):
         ours, bach = d["full_roman"], d["bach_roman"]
         n = len(ours)
         xs = np.linspace(-5.8, 5.8, n)
-        r1 = VGroup(*[label(t, font_size=20, color=TUNE if t == b else WHITE) for t, b in zip(ours, bach)])
-        r2 = VGroup(*[label(t, font_size=20, color=TUNE if t == a else GREY_A) for t, a in zip(bach, ours)])
+        r1 = VGroup(*[label(t, font_size=26, color=TUNE if t == b else WHITE) for t, b in zip(ours, bach)])
+        r2 = VGroup(*[label(t, font_size=26, color=TUNE if t == a else GREY_A) for t, a in zip(bach, ours)])
         for k in range(n):
             r1[k].move_to([xs[k], 0.5, 0])
             r2[k].move_to([xs[k], -0.6, 0])

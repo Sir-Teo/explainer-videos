@@ -398,4 +398,58 @@ PARTS = [
         I=(4,),
         also=(("Monochord's counterpoint: Fux's rules, exact counts, the five species, independence", "explainer/music/monochord/counterpoint.py"),),
     ),
+    Part(
+        n=17, level="U", widget="fourpart", prereq=(13, 14, 15, 16),
+        question="How do four voices move from chord to chord, and can a machine learn to do it from Bach?",
+        story="In 1727 the St Matthew Passion set one hymn tune five times, each harmonized anew; Bach left some 370 "
+              "such four-part chorales, printed by his son in 1784-87, and they became the exercise book of "
+              "harmony. Taken as data (364 chorales, 84,737 notes, 230 tunes), they show where each voice sings "
+              "(inside the textbook ranges almost always), how far apart (the upper three close, the bass free), "
+              "which note is doubled (the root, 87 times in a hundred in root position), and how each voice "
+              "moves (by step; the inner voices nearly the shortest way). The rules of four-part writing are "
+              "Part 16's for six pairs of voices, plus rules for leaning notes and for keeping the chord one "
+              "sound; Bach writes parallel fifths or octaves once in 391 changes of chord, mostly between the "
+              "beats, so the rules are a style's strong preferences rather than laws. On the beat, his chords "
+              "follow habits (V to I, the dominant's dominant to V), his phrases end in a few cadences, his "
+              "minor chorales usually end on a major chord, and more than half his beats have a passing or "
+              "neighbouring note inside them. A harmonizer chooses chords and voicings together: a lattice of "
+              "about 10^40 paths searched by the Viterbi algorithm, its costs the chord model learned from "
+              "Bach plus the rules as penalties. On 83 chorales whose tunes it never saw, it finds Bach's chord "
+              "41 times in a hundred and his bass 35, writes no parallels where a chord-chooser writes 769, and "
+              "moves its inner voices half as much as Bach: correct, and without lines. Rules can add passing "
+              "notes; planning lines is what the neural harmonizers since 2016 learn. Judging a style is open. "
+              "The Tune becomes a chorale, chosen chord by chord and then corrected.",
+        handoff="Where the table of progressions comes from in Part 18; chromatic chords in Part 19; canon and fugue "
+                "in Part 20; the Renaissance in Parts 23 and 24; machines that compose, and judging them, in "
+                "Parts 42 and 65.",
+        outside="Part 13 for chords and Roman numerals; Part 14 for steps and the leading note; Part 15 for keys and "
+                "cadences; Part 16 for the rules between two voices. Dynamic programming; conditional "
+                "probability.",
+        objectives={
+            "U": ["Write four voices under a chorale tune in range, spaced, with the root doubled.",
+                  "Find and correct parallel fifths and octaves between any pair of voices.",
+                  "Resolve the leading note and a chord's seventh, and name a chorale's cadences by ear."],
+            "M": ["Label the chords on the beats of a chorale and count how often each follows each.",
+                  "Harmonize a tune by the Viterbi algorithm over chords and voicings, with rules as costs.",
+                  "Evaluate a harmonizer against Bach on held-out tunes, split by tune."],
+            "D": ["Say what agreement with Bach, likelihood, rule counts and listening tests each measure, and how each misleads.",
+                  "Design a fair listening test for machine-written chorales."],
+            "I": ["Harmonize a hymn at sight: cadence chords first, then the shortest way between.",
+                  "Balance a choir's inner voices, and keep an arrangement's upper parts close over a free bass."],
+        },
+        results=[
+            ("Bach's parallels", r"52 \text{ fifths} + 23 \text{ octaves in } 29{,}326 \text{ chord changes} \approx 1 \text{ in } 391"),
+            ("Doubling", r"\text{root position: root doubled } 87\%; \ \text{first inversion: root, third, fifth } 32, 39, 30\%"),
+            ("The shortest way", r"\text{alto} + \text{tenor}: \ 3.6 \text{ semitones a beat (least possible } 2.4\text{); exactly least } 68\%"),
+            ("The harmonizer", r"\hat{c}_{1:n} = \arg\min \sum_k \big[ -\log P(c_k \mid c_{k-1}) - \log P(s_k \mid c_k) + \lambda \cdot \text{rules}(v_{k-1}, v_k) \big]"),
+            ("Held out", r"\text{same chord } 41\%, \ \text{same bass } 35\%, \ \text{parallels } 0 \ (\text{chord-chooser } 769, \text{ Bach } 77)"),
+            ("The Picardy third", r"104 \text{ of } 176 \text{ minor chorales end on a major chord; } 11 \text{ on the minor}"),
+        ],
+        U=(0, 1, 2, 3, 4, 8),
+        D=(12,),
+        I=(7,),
+        also=(("Monochord's chorales: 364 of Bach's, as data", "explainer/music/monochord/chorales.py"),
+              ("Monochord's four-part writing: rules, labels, a chord model, the harmonizer", "explainer/music/monochord/fourpart.py"),
+              ("A four-part choir from Part 8's voice", "explainer/music/monochord/instruments/choir.py")),
+    ),
 ]

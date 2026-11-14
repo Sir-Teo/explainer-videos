@@ -27,7 +27,8 @@ class Cadences(SoundScene):
             return g
         mj = tab(d["major"]["pairs"], -3.3, rf"major: \ {d['major']['total']} phrase endings", d["major"]["total"])
         mn = tab(d["minor"]["pairs"], 3.3, rf"minor: \ {d['minor']['total']} phrase endings", d["minor"]["total"])
-        foot = label(r"the chord before the fermata, \ and the chord under it; \ -- \ is a beat with no chord", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.5)
+        foot = VGroup(label(r"the chords at the pauses", font_size=30, color=GREY_A).to_edge(UP, buff=0.3),
+                      label(r"the chord before the fermata, \ and the chord under it; \ -- \ is a beat with no chord", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.5))
         pj = {(a, z): n for a, z, n in d["major"]["pairs"]}
         auth = pj.get(("V", "I"), 0) + pj.get(("V7", "I"), 0)
         half = sum(n for a, z, n in d["major"]["pairs"] if z == "V")
@@ -41,8 +42,9 @@ class Cadences(SoundScene):
             "an authentic cadence in the relative major. A minor chorale's middle phrases often end in "
             "the major key next door, and come home only at the end."
         ) as vo:
+            self.play(FadeIn(foot))
             vo.wait_until("a")
-            self.play(FadeIn(mj), FadeIn(foot))
+            self.play(FadeIn(mj))
             vo.wait_until("b")
             self.play(FadeIn(mn))
         self.wait(0.4)
@@ -54,24 +56,37 @@ class Cadences(SoundScene):
         c = clip("cadences.three")
         names = ("authentic", "half", "picardy")
         titles = {"authentic": r"authentic: \ V $\to$ I", "half": r"half: \ $\to$ V", "picardy": r"a minor chorale's last chord"}
+        card = listen_card(r"Three phrase endings from the chorales. \ One comes home, \ one stops on a question, \ one ends a minor chorale. \ Which is which: \ A, \ B, \ C?", width=10.4)
+        with self.voiceover(
+            "Now three endings from the chorales themselves. One comes home, an authentic cadence; one "
+            "stops on a question, a half cadence; and one is the end of a whole chorale in a minor key. "
+            "Which is which? A, B and C."
+        ):
+            self.play(FadeIn(card))
+        self.wait(0.8)
         gs = VGroup()
         for k, nm in enumerate(names):
             h = d["heard"][nm]
             g = choir_roll(h["voices"], width=3.6, height=2.8, lo=40, hi=80, thick=0.12).move_to(RIGHT * 4.2 * (k - 1) + DOWN * 0.3)
-            t = label(titles[nm], font_size=22, color=GREY_A).next_to(g, UP, buff=0.3)
+            t = label("ABC"[k], font_size=40, color=GREY_A).next_to(g, UP, buff=0.3)
             src = label(h["chorale"].replace("bwv", "BWV "), font_size=18, color=GREY_B).next_to(g, DOWN, buff=0.25)
             gs.add(VGroup(g, t, src))
-        with self.voiceover(
-            "Here are three of them, from the chorales themselves: an authentic cadence, a half cadence, "
-            "and the last bars of a chorale in a minor key."
-        ):
-            self.play(LaggedStart(*[FadeIn(x) for x in gs], lag_ratio=0.3))
+        self.play(FadeOut(card), LaggedStart(*[FadeIn(x) for x in gs], lag_ratio=0.3))
         with self.listen(c) as snd:
-            window(snd, r"authentic, \ half, \ a minor ending", kind="synthesized", detail=r"a model choir", corner=DL, tag_corner=DR)
+            window(snd, r"A, \ B, \ C", kind="synthesized", detail=r"a model choir", corner=DL, tag_corner=DR)
             for k, nm in enumerate(names):
                 sing_roll(snd, gs[k][0], d["heard"][nm]["times"], start=d["starts"][nm])
                 end = d["starts"][names[k + 1]] - 0.4 if k < 2 else c.duration
                 pulse(snd, gs[k][1], d["starts"][nm], end, buff=0.1)
+        answers = VGroup(*[label(titles[nm], font_size=22, color=TUNE).move_to(gs[k][1]) for k, nm in enumerate(names)])
+        with self.voiceover(
+            "A came home: five to one. B stopped on five, a question waiting for the next line. And C was "
+            "the end of a chorale in a minor key."
+        ):
+            self.play(*[ReplacementTransform(gs[k][1], answers[k]) for k in range(3)])
+        for k in range(3):
+            gs[k].remove(gs[k][1])
+            gs[k].add(answers[k])
         self.gs = gs
 
     # ------------------------------------------------------------------
