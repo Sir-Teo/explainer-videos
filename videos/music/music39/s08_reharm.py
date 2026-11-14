@@ -50,7 +50,7 @@ class Reharm(SoundScene):
         for n_, row_el in zip(names, cols[0]):
             n_.next_to(row_el, LEFT, buff=0.6).set_x(cols.get_left()[0] - 1.6)
         head = label(r"a phrase of ours, \ harmonised three ways", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
-        cap = label(r"orange: \ chords the second and third schemes changed", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.7)
+        cap = label(r"pink: \ chords the second and third schemes changed", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.7)
         with self.voiceover(
             "Here is a seven-note phrase of ours in C, harmonised three ways. <bookmark mark='a'/> Diatonically, each note "
             "gets the strongest chord of the key that contains it. <bookmark mark='b'/> With secondary dominants, chords "

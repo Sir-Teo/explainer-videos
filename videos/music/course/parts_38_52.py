@@ -46,4 +46,49 @@ PARTS = [
         I=(7, 8),
         also=(("Monochord's blues and swing: forms, the swing model, walking bass, guide tones, tritone substitutes, syncopation", "explainer/music/monochord/blues.py"),),
     ),
+    Part(
+        n=39, level="U", widget="bebop", prereq=(12, 18, 31, 32, 37, 38),
+        question="How do jazz players improvise through changes, and why were Coltrane's Giant Steps so hard?",
+        story="On 5 May 1959 John Coltrane recorded Giant Steps: twenty-six chords in sixteen bars, coming home to three "
+              "keys a major third apart, at nearly 290 beats a minute. The part starts from bebop, whose players wrote "
+              "contrafacts, new melodies on the shared changes of standards. The bebop scale adds one chromatic passing "
+              "tone to a chord's mode so that its four chord tones alternate with four others: a run from any chord "
+              "tone keeps chord tones on every beat, proved and checked for every dominant and sixth chord, where the "
+              "plain mode manages about two beats in three. Lines aim at targets, usually guide tones, and enclose them; "
+              "players learn formulas in every key; chord-scale theory names safe notes and avoid notes, from George "
+              "Russell's 1953 Lydian Chromatic Concept to the Berklee school. Kind of Blue slowed the changes to two chords "
+              "in thirty-two bars and voiced them in fourths. Coltrane's third cycles put three tonic triads in a line up "
+              "the Tonnetz's major-third axis, joining keys that share only three notes. Reharmonisation adds secondary "
+              "dominants and tritone substitutes under a fixed melody. A page-long improviser, a phrase grammar of runs, "
+              "arpeggios and enclosures aimed at guide tones, beats random scale notes by the series' measures (chord "
+              "tones on 90 per cent of beats against 57) and cannot listen; free jazz, Pressing's model and the brain "
+              "scanner frame what it lacks. The Tune becomes a bebop head with an improvised chorus, then travels "
+              "through C, A flat and E.",
+        handoff="The song and its riffs in Part 40; composing as search in Part 42; performing together in Part 43; pattern "
+                "search in Part 63; machines that compose and improvise in Part 65.",
+        outside="Part 12 for modes; Part 18 for progressions; Part 31 for the Tonnetz; Part 32 for voice leading; Part 37 for "
+                "call and response; Part 38 for swing, guide tones and tritone substitution. Generative grammars, "
+                "baselines and evaluation.",
+        objectives={
+            "U": ["Hear bebop lines land on chord tones, and hear an enclosure arrive.",
+                  "Hear modal jazz's static harmony and quartal voicings, and Coltrane's third cycle.",
+                  "Tell an improviser's line from a random one by ear."],
+            "M": ["Prove that the bebop scale keeps chord tones on every beat, and check it by program.",
+                  "Compute chord scales, avoid notes, key centres and the notes two keys share.",
+                  "Build and evaluate a phrase-grammar improviser against baselines."],
+            "D": ["Design a study separating recalled patterns from local choices in improvised solos."],
+            "I": ["Practise formulas through the keys and reharmonise a standard, as players and arrangers do."],
+        },
+        results=[
+            ("The bebop scale", r"C\,B\,B\flat\,A\,G\,F\,E\,D: \ \text{chord tones at positions } 0, 2, 4, 6"),
+            ("Giant Steps", r"26 \text{ chords in } 16 \text{ bars; tonics } B, G, E\flat \ (4 \text{ semitones apart})"),
+            ("Shared notes", r"\text{keys a fifth apart share } 6 \text{ of } 7; \text{ a major third apart, } 3"),
+            ("Avoid notes", r"\text{a scale tone a semitone above a chord tone: } F \text{ over } C^{maj7}"),
+            ("The improviser", r"\text{chord tones on } 90\% \text{ of beats vs } 57\% \text{ (random in scale)}"),
+        ],
+        U=(0, 1, 2, 3, 5, 6, 7, 8),
+        D=(10,),
+        I=(4, 9),
+        also=(("Monochord's changes: bebop scales, chord scales, third cycles, reharmonisation, a phrase-grammar improviser and its judge", "explainer/music/monochord/changes.py"),),
+    ),
 ]

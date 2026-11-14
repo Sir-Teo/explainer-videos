@@ -45,7 +45,7 @@ class Frontier(SoundScene):
             bars_.add(Rectangle(width=0.35, height=max(abs(h), 0.02), stroke_width=0, fill_color=EAR if v > 0 else BLUE, fill_opacity=0.85)
                       .move_to([-W / 2 + W * (k + 0.5) / 15, -1.2 + h / 2, 0]))
         base = Line([-W / 2, -1.2, 0], [W / 2, -1.2, 0], color=GREY_B)
-        lab = label(r"each note's random shift, \ first 15 notes: \ orange late, \ blue early", font_size=18, color=GREY_A).next_to(base, DOWN, buff=0.9)
+        lab = label(r"each note's random shift, \ first 15 notes: \ pink late, \ blue early", font_size=18, color=GREY_A).next_to(base, DOWN, buff=0.9)
         stage = VGroup(label(r"first: \ exactly on the model's grid", font_size=21, color=WHITE), label(rf"second: \ each note shifted at random \ (sd {d['sd_ms']:.0f} ms, \ largest {d['max_ms']:.0f} ms)", font_size=21, color=WHITE)).arrange(DOWN, buff=0.3).move_to(UP * 1.5)
         head = label(r"random deviations, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(

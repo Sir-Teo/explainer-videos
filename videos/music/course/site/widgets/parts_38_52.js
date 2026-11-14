@@ -99,4 +99,73 @@
       note: "Past about 160 beats a minute the model's short note hardly changes, near a tenth of a second: as the tempo rises, the long note shrinks instead. Try a fixed 2:1 (the textbook triplet) at 260 and hear it lurch."
     });
   };
+  // ---- Part 39: the bebop scale --------------------------------------------------------------------------------------
+  var NN39 = ["C", "Db", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+  var Q39 = [["dominant seventh", [0, 4, 7, 10], [0, 2, 4, 5, 7, 9, 10], 11], ["sixth", [0, 4, 7, 9], [0, 2, 4, 5, 7, 9, 11], 8],
+             ["minor seventh", [0, 3, 7, 10], [0, 2, 3, 5, 7, 9, 10], 11]];
+  function run39(scale, start, dir, n) {
+    var out = [start], m = start;
+    for (var i = 1; i < n; i++) {
+      m += dir;
+      while (scale.indexOf(((m % 12) + 12) % 12) < 0) m += dir;
+      out.push(m);
+    }
+    return out;
+  }
+  W.bebop = function (el) {
+    QB.widget(el, {
+      title: "The bebop scale: chord tones on every beat",
+      sub: "Pick a chord and run its scale in eighth notes from one of its chord tones on a beat. The plain mode has seven notes, and after an octave the beats slip onto non-chord tones; add the bebop scale's chromatic passing tone and the four chord tones alternate with four others for ever. Try the minor seventh to see where the trick needs a different passing tone.",
+      panels: 1, height: 230,
+      controls: [
+        { k: "root", label: "Root", min: 0, max: 11, step: 1, value: 0, fmt: function (x) { return NN39[x]; } },
+        { k: "kind", label: "Chord", min: 0, max: 2, step: 1, value: 0, fmt: function (x) { return Q39[x][0]; } },
+        { k: "from", label: "Start on chord tone", min: 0, max: 3, step: 1, value: 3, fmt: function (x) { return ["root", "third", "fifth", "seventh / sixth"][x]; } },
+        { k: "dir", label: "Direction", min: 0, max: 1, step: 1, value: 0, fmt: function (x) { return x ? "up" : "down"; } },
+        { k: "bebop", label: "Scale", min: 0, max: 1, step: 1, value: 1, fmt: function (x) { return x ? "bebop (8 notes)" : "plain (7 notes)"; } }
+      ],
+      buttons: [{ label: "Play the run", act: function (s) {
+        var rate = 44100, e = 0.2, n = Math.floor((s.line.length * e + 1.5) * rate), out = new Float32Array(n), i, j;
+        s.chord.forEach(function (p) {
+          var f = hz(48 + p), i0 = 0;
+          for (j = 0; j < n; j++) { var t = j / rate; out[j] += 0.05 * Math.exp(-0.6 * t) * Math.sin(2 * Math.PI * f * t); }
+        });
+        s.line.forEach(function (m, k) {
+          var f = hz(m), i0 = Math.floor(k * e * rate);
+          for (j = 0; j < 0.25 * rate && i0 + j < n; j++) {
+            var t = j / rate, env = Math.exp(-6 * t) * Math.min(1, t / 0.004);
+            out[i0 + j] += 0.18 * env * (Math.sin(2 * Math.PI * f * t) + 0.3 * Math.sin(4 * Math.PI * f * t));
+          }
+        });
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var q = Q39[v.kind], r = v.root;
+        var chord = q[1].map(function (i) { return (r + i) % 12; });
+        var scale = q[2].map(function (i) { return (r + i) % 12; });
+        if (v.bebop) scale = scale.concat([(r + q[3]) % 12]);
+        var startPc = chord[v.from], start = 60 + ((startPc - 60) % 12 + 12) % 12 + (v.dir ? 0 : 12);
+        var line = run39(scale, start, v.dir ? 1 : -1, 16);
+        s.line = line; s.chord = chord;
+        var a = g[0].axes({ x: [-0.5, 15.5], y: [Math.min.apply(null, line) - 2, Math.max.apply(null, line) + 2], title: "Sixteen eighth notes: beats are the even positions (big dots); gold = chord tone on a beat, pink = not", xlabel: "eighth note" });
+        var bx = [], by = [], gx = [], gy = [], ox = [], oy = [];
+        line.forEach(function (m, k) {
+          if (k % 2 === 0) { if (chord.indexOf(m % 12) >= 0) { gx.push(k); gy.push(m); } else { bx.push(k); by.push(m); } }
+          else { ox.push(k); oy.push(m); }
+        });
+        a.line(line.map(function (_, k) { return k; }), line, { color: "#3A4250", width: 1.5 });
+        a.dots(ox, oy, { r: 3, color: "#8A93A0" });
+        a.dots(gx, gy, { r: 7, color: C.idea });
+        a.dots(bx, by, { r: 7, color: "#F472B6" });
+        s.hits = gx.length;
+      },
+      readout: function (v, s) {
+        return [["notes", s.line.map(function (m) { return NN39[m % 12]; }).join(" ")],
+                ["beats on chord tones", s.hits + " of 8"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "With the plain mode the run keeps chord tones on the beats for about an octave and then slips. The bebop scale's extra note makes the cycle eight long, so the alternation never breaks, from any chord tone, in either direction."
+    });
+  };
 })();

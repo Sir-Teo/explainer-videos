@@ -48,7 +48,7 @@ class Walking(SoundScene):
         for i in [f - 1 for f in firsts if f > 0]:
             roll.notes[i].set_color(EAR)
         rules = VGroup(label(r"gold: \ the root, \ on the chord's first beat", font_size=18, color=TUNE),
-                       label(r"orange: \ a semitone from the next root, \ just before it", font_size=18, color=EAR),
+                       label(r"pink: \ a semitone from the next root, \ just before it", font_size=18, color=EAR),
                        label(r"blue: \ chord tones, \ or scale tones; \ no leap bigger than a fifth", font_size=18, color=BLUE),
                        label(r"among all lines that obey, \ the one with the least total motion \ (dynamic programming)", font_size=18, color=WHITE)).arrange(DOWN, buff=0.12, aligned_edge=LEFT).to_edge(DOWN, buff=0.25)
         with self.voiceover(

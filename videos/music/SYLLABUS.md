@@ -1561,17 +1561,35 @@ later standards only by name (§2.4).
 *Reading:* Kubik, *Africa and the Blues*; Berlin, *Ragtime*; Schuller, *The Swing Era*; Berliner, *Thinking in
 Jazz*; Friberg & Sundström (2002); Benadon (2006).
 
-### Part 39 · Changes (~55)
+### Part 39 · Changes (~35)
 *Story:* 5 May 1959. A pianist is handed a tune with twenty-six chords in sixteen bars, moving through three keys
 a major third apart at nearly three hundred beats a minute, and the tape rolls. The part explains why those
-changes are hard, shows them as a triangle on the Tonnetz of Part 31, and builds an improviser.
+changes are hard, shows them on the Tonnetz of Part 31, and builds an improviser.
+1. Hook: an ear question (how many keys?); the changes at the original tempo with the improviser; 5 May 1959; the plan.
+2. Bebop and the contrafact: the founders; contrafacts and rhythm changes; rhythm changes with the program's lines heard; the players; a shared language.
+3. The bebop scale: the problem; sixteen eighths over C7 both ways; both heard; the proof and the check; a general trick; teaching it.
+4. Enclosures and formulas: targets; three approaches drawn and heard; Owens and Norgaard; a figure in three keys heard; vocabulary.
+5. Chord scales: the idea; five chords with scales and avoid notes; the five heard; an ear question (which held note clashes?); Russell and Berklee; a critique.
+6. Modal jazz and quartal voicings: Kind of Blue; So What's form; a voicing in fourths; a modal vamp heard; after Kind of Blue.
+7. Third cycles: the tonics on the circle; the tonic triads on the Tonnetz; shared notes; Coltrane's substitute; both heard; a cycle with a history.
+8. Reharmonisation: the rule; a phrase three ways; the three heard; the art of it.
+9. An improviser: a phrase grammar; an ear question (improviser or random?); judged over fifty choruses; what it lacks.
+10. Free jazz, and what improvisers do: Ornette Coleman; after 1959; a toy duo that answers heard; Pressing; Johnson-Laird; conversation.
+11. Frontier: pattern mining; machine improvisers; the scanner; the research problem.
+12. Variation 39: the Tune as a bebop head, an improvised chorus, its opening through three keys a third apart. Outro: problems, payoffs.
+
 *Covers:* bebop and the contrafact; the bebop scale and why it lands chord tones on the beat; enclosures and
 formulas; chord-scale theory; modal jazz; third-related cycles; reharmonization; quartal voicings; free jazz;
 what improvisers are doing, cognitively.
-*Built and computed:* an improviser (a phrase grammar constrained by chord scales and guide tones), judged by
-the series' own analyzers; the bebop-scale claim proved and checked.
-*Variation 39:* the Tune as a bebop head with an improvised chorus, then over third-cycle changes.
+*Built and computed:* `monochord/changes.py`: the bebop-scale claim proved and checked for every dominant and sixth
+chord (8 of 8 beats on chord tones; the plain mode 64% on average); chord scales and avoid notes; key centres
+(Giant Steps' B, G, E♭) and shared notes (a fifth apart 6 of 7, a major third apart 3); Coltrane's substitute;
+three reharmonisation schemes; an improviser (a phrase grammar constrained by chord scales and guide tones), judged
+by the series' own measures against random lines (chord tones on 90% of beats against 57% and 34%).
+*Variation 39:* the Tune as a bebop head with an improvised chorus (86% of beats on chord tones), then its opening
+carried through C, A♭ and E over third-cycle changes.
 *Frontier:* pattern mining in solo corpora; machine improvisers; improvisation in the scanner.
+*Rights:* well-known tunes by their chord progressions only (§2.4); every line is ours or the program's.
 *Reading:* Owens, *Bebop*; Berliner, *Thinking in Jazz*; Levine; the Weimar Jazz Database papers.
 
 ### Part 40 · The Song (~55)

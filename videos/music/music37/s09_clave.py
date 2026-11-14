@@ -116,7 +116,7 @@ class Clave(SoundScene):
             marks.add(label(nxt, font_size=16, color=EAR).next_to(dd, DOWN, buff=0.1))
         cl = pat_row(["x" if i in d["clave"] else "." for i in range(16)] * 4, cell=0.175, name=r"clave", size=16).next_to(bars, DOWN, buff=0.9)
         side = VGroup(label(r"blue: \ the bass on the `and' of beat 2", font_size=19, color=BLUE),
-                      label(r"orange: \ on beat 4, \ already the \textit{next} chord's root, \ held over the bar line", font_size=19, color=EAR),
+                      label(r"pink: \ on beat 4, \ already the \textit{next} chord's root, \ held over the bar line", font_size=19, color=EAR),
                       label(r"no bass note on beat 1: \ the \textit{bajo anticipado}", font_size=19, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
         head = label(r"the anticipated bass \ (tumbao)", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
