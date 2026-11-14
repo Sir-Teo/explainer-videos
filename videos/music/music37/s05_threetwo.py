@@ -146,7 +146,7 @@ class ThreeTwo(SoundScene):
             "and each part is heard as off or on its beats. The notes are identical; what differs is the claim about what "
             "the players feel. Agawu's point is that this is an empirical question, about people, not about notation."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(g.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")
             self.play(FadeIn(jones))
             vo.wait_until("b")

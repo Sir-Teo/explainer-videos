@@ -96,7 +96,7 @@ class Free(SoundScene):
             "next event, hears it, and decides whether to continue or change. Our program has a referent and a tiny "
             "vocabulary, and chooses by dice; it does not hear itself."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(boxes.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             for mark, b in zip("abc", boxes):
                 vo.wait_until(mark)
                 self.play(FadeIn(b))

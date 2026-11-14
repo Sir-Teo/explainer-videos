@@ -52,7 +52,7 @@ class Band(SoundScene):
             "<bookmark mark='b'/> The horn sections play as units, in block chords, while the rhythm section keeps four even "
             "beats to the bar, and the sections answer one another: call and response again, now between groups of players."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(saxes, trb, tpt, rhythm).copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")
             self.play(LaggedStart(FadeIn(saxes), FadeIn(trb), FadeIn(tpt), FadeIn(rhythm), lag_ratio=0.3))
             vo.wait_until("b")

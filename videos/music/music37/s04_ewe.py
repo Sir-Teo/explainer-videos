@@ -74,7 +74,7 @@ class Ewe(SoundScene):
             "drum, atsimevu, the tallest, plays phrases that change, call to the other drums, and cue the dancers. Its row is "
             "left empty here, because its phrase is different each time round; it will light as it plays."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             for mark, idx in zip("abcde", ((0,), (1,), (2,), (3, 4), (5,))):
                 vo.wait_until(mark)
                 self.play(*[FadeIn(rows_[i]) for i in idx], *[FadeIn(notes[i]) for i in idx])

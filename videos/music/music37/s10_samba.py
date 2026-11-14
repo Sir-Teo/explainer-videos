@@ -64,7 +64,7 @@ class Samba(SoundScene):
             "bell, plays a two-tone pattern. Real baterias have more, the repinique that leads and the cuíca that sings, but "
             "these will do."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             for mark, idx in zip("abcd", ((0, 1), (2, 3), (4,), (5, 6))):
                 vo.wait_until(mark)
                 self.play(*[FadeIn(rows_[i]) for i in idx], *[FadeIn(notes[i]) for i in idx])

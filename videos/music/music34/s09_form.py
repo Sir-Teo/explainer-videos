@@ -41,7 +41,7 @@ class Form(SoundScene):
             "melody notes. <bookmark mark='d'/> And finally the gat: a composition in a tala, with tabla, and improvisation "
             "around it, ending in tihais. The order is the point: first the raga, then time."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(bars.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             for mark, b in zip("abcd", bars):
                 vo.wait_until(mark)
                 self.play(FadeIn(b))

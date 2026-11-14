@@ -103,7 +103,7 @@ class Thirds(SoundScene):
             "three. E flat and B, three. <bookmark mark='b'/> In Giant Steps every few beats the scale under the soloist "
             "loses more than half its notes. The fingers' habits, built on neighbouring keys, stop working."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in rows_], lag_ratio=0.3), run_time=3.0)
             vo.wait_until("b")

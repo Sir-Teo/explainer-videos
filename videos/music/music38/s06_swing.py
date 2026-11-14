@@ -57,7 +57,7 @@ class Swing(SoundScene):
             "second, whatever the tempo. Friberg and Sundström reported the same: at medium and fast tempos the short note "
             "keeps a roughly constant length, as if it were a unit of its own."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(ax, curve).copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")
             self.play(FadeIn(ax), FadeIn(xl), FadeIn(tl), Create(curve))
             vo.wait_until("b")

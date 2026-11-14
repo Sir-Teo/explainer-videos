@@ -33,7 +33,7 @@ class Improviser(SoundScene):
             "<bookmark mark='d'/> Keep within a saxophone's comfortable range, and after a rest start again near the middle. "
             "<bookmark mark='e'/> And swing it with Part 38's model. That is all: a page of code, and a seed for the dice."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(steps.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             for mark, s in zip("abcde", steps):
                 vo.wait_until(mark)
                 self.play(FadeIn(s))

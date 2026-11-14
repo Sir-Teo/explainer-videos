@@ -36,7 +36,7 @@ class Moves(SoundScene):
             "major into A minor: C and E stay, and G moves up a whole tone to A. <bookmark mark='d'/> Each move undoes "
             "itself: do it twice and you are back where you started."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             for mark, r in zip("abc", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

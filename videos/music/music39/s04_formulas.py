@@ -54,7 +54,7 @@ class Formulas(SoundScene):
             "<bookmark mark='c'/> And by a double chromatic enclosure: F sharp and F above, then D and E flat below, closing in "
             "on the target from both sides."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             for mark, r in zip("abc", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

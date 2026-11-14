@@ -176,7 +176,7 @@ class Metrics(SoundScene):
             "which the others are fewest steps away. Toussaint called it the rhythm that conquered the world, and his "
             "suggestion is that a central rhythm is the easiest to vary."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(pair.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")
             self.play(FadeIn(pair), FadeIn(pl))
             vo.wait_until("b")

@@ -31,7 +31,7 @@ class AAB(SoundScene):
             "<bookmark mark='b'/> Then a third line answers it, and rhymes. A, A, B. <bookmark mark='c'/> Each line fills "
             "only the first half of its four bars; the second half is left open, for an answer."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(lines.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")
             self.play(FadeIn(lines[0]), FadeIn(tags[0]), FadeIn(lines[1]), FadeIn(tags[1]))
             vo.wait_until("b")

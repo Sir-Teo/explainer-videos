@@ -54,7 +54,7 @@ class Modal(SoundScene):
             "later: twenty-six chords in sixteen bars. Here the soloist has eight bars at a time on one mode, and must find "
             "the shape somewhere other than in the changes."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(blocks.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b) for b in blocks], lag_ratio=0.2), FadeIn(notes[0]))
             vo.wait_until("b")
@@ -92,7 +92,7 @@ class Modal(SoundScene):
             "third, so they float over the mode instead of pinning it to a chord. McCoy Tyner, Coltrane's pianist from 1960, "
             "built a whole style on them."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(keys.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(k) for k in keys], lag_ratio=0.2), FadeIn(ints), FadeIn(cap[0]))
             vo.wait_until("b")
