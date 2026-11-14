@@ -90,7 +90,7 @@ class Piano(SoundScene):
         ):
             self.play(FadeIn(head), FadeIn(kb), FadeIn(lab_old), FadeIn(lab_new))
         with self.listen(c) as snd:
-            window(snd, r"every C, \ then the new ones", detail=r"Part 7's piano", corner=UL, tag_corner=UR)
+            window(snd, r"every C, \ then the new ones", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
             snd.show(old[0])
             flash(snd, old, [d["starts"]["old"] + 1.25 * i for i in range(len(old))], hot=WHITE, base=TUNE)
             flash(snd, new, [d["starts"]["new"] + 1.75 * i for i in range(len(new))], hot=WHITE, base=BLUE)

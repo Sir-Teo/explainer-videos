@@ -1192,10 +1192,26 @@ could not be obtained, so both are described rather than recomputed (the study i
 *Story:* Between 1800 and 1870 the piano gained an iron frame, two octaves and several times the loudness, and
 the orchestra doubled. The music grew to fit, harmony was stretched until the key could barely hold, and the
 concert became a museum. The part measures the stretching.
+1. Hook: Schubert in 1827; Der Lindenbaum's prelude and first phrase heard; the plan.
+2. The piano grows: the double escapement, the iron frame, felt; documented compasses; every C heard, then the new ones; the Library's keyboard ranges; the parlour.
+3. The song and its piano: the Lied; Der Lindenbaum's keys; the piano's share of the notes; an ear question (major or minor?); song cycles.
+4. Small pieces, large feelings: the character piece; an ear question (which mazurka dances?); mazurka timing; Chopin and Poland.
+5. Stolen time: Mozart's letter; the phrase arch; strict, arched and stolen heard; performances measured.
+6. Music that tells a story: Berlioz's programme; the idée fixe in five guises heard; the winds counted; the treatise; Liszt and Hanslick.
+7. Wagner: Verdi and bel canto; the music drama; the Tristan chord heard; why it asks; the leitmotif; the century ends large; after Tristan.
+8. The stretching, measured: the measures; the Library by year; the trend with its interval; songs against instruments; an ear question (which is later?); caveats.
+9. Nations and their songs: national styles; Lift Every Voice and Sing and the Maple Leaf Rag heard; new worlds; whose music.
+10. The concert becomes a museum: the virtuoso, the conductor, the canon, who was heard, the first recordings.
+11. Frontier: symbolic and audio corpora; early recordings; the research problem.
+12. Variation 27: a nocturne, a Lied, a leitmotif. Outro: problems, payoffs.
+
 *Covers:* the Lied; the character piece; programme music and the idée fixe; the leitmotif as a network; chromatic
 expansion; nationalism and folk modes; virtuosity; the conductor; rubato; canon formation; the first recordings.
-*Built and computed:* a chromaticism index and tonal-clarity measure across the Library from 1700 to 1900;
-orchestra sizes over time from published rosters.
+*Built and computed:* `monochord/romantic.py`: whole-score readers for MusicXML (chords, ties, transposing instruments)
+and Humdrum (split spines), the Library (every dated piece in the music21 corpus from 1765 to 1924, beside the
+collections of Parts 17 and 23 to 26: 827 pieces), chromaticism and tonal clarity window by window, the 1680–1900 trend
+with a bootstrap interval and by genre, thematic transformation, Todd's phrase arch, the mazurka's beats; documented
+keyboard compasses and the winds five symphonies call for (from the scores, in place of published rosters).
 *Variation 27:* the Tune as a nocturne, as a Lied accompaniment, and as a transformed leitmotif.
 *Frontier:* corpus studies of nineteenth-century harmony; performance style read from early recordings.
 *Reading:* Taruskin vol. 3; Rosen, *The Romantic Generation*; Dahlhaus.

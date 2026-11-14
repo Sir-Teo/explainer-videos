@@ -152,12 +152,12 @@ def compute_keyboards() -> dict:
              for r in lib if r["kind"] == "keyboard"]
     cs_old = [36, 48, 60, 72, 84]
     cs_new = [24, 96, 108]
-    a = concat([piano(m, 1.1, 1.0).at_level(LEVEL) for m in cs_old], gap=0.15)
-    b = concat([piano(m, 1.4, 1.0).at_level(LEVEL) for m in cs_new], gap=0.35)
-    s_ = concat([a, b], gap=1.0, names=["old", "new"])
+    a = Clip(mix([(piano(m, 1.8, 0.8), 1.25 * i, 0.0) for i, m in enumerate(cs_old)], duration=1.25 * len(cs_old) + 1.0).y, SR)
+    b = Clip(mix([(piano(m, 2.0, 0.8), 1.75 * i, 0.0) for i, m in enumerate(cs_new)], duration=1.75 * len(cs_new) + 1.0).y, SR)
+    s_ = concat([a.at_level(LEVEL), b.at_level(LEVEL)], gap=1.0, names=["old", "new"])
     return {"keyboards": [{"year": y, "name": n, "low": lo, "high": hi, "keys": hi - lo + 1} for y, n, lo, hi in R.KEYBOARDS],
             "spans": spans, "cs_old": cs_old, "cs_new": cs_new, "starts": {k: float(s_.events[k]) for k in ("old", "new")},
-            "clips": {"cs": save("keyboards.cs", s_, level=None, detail="every C on a 1780s fortepiano's five octaves (C2 to C6), then the Cs added by 1880 (C1, C7, C8), Part 7's piano")}}
+            "clips": {"cs": save("keyboards.cs", s_, detail="every C on a 1780s fortepiano's five octaves (C2 to C6), then the Cs added by 1880 (C1, C7, C8), Part 7's piano")}}
 
 
 def compute_lied() -> dict:

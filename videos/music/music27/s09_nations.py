@@ -40,7 +40,7 @@ class Nations(SoundScene):
         lL = label(r"J. Rosamond Johnson, \ 1900: \ \textit{Lift Every Voice and Sing}", font_size=19, color=GREY_A).next_to(gL, UP, buff=0.3)
         lR = label(r"Scott Joplin, \ 1899: \ \textit{Maple Leaf Rag}", font_size=19, color=GREY_A).next_to(gR, UP, buff=0.3)
         cap = label(rf"in the rag, \ {100 * d['rh_onbeat'] / d['rh_notes']:.0f} in 100 of the right hand's notes fall on a beat; \ "
-                    rf"{100 * d['lh_onbeat'] / d['lh_notes']:.0f} of the left hand's", font_size=19, color=GREY_A).to_edge(DOWN, buff=0.5)
+                    rf"{100 * d['lh_onbeat'] / d['lh_notes']:.0f} of the left hand's", font_size=19, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
             "Two pieces from the Library, both from Black America at the century's turn. First the hymn written in 1900 by "
             "the brothers James Weldon and J. Rosamond Johnson for schoolchildren in Jacksonville, Florida, later adopted as "
@@ -50,7 +50,7 @@ class Nations(SoundScene):
         ):
             self.play(FadeIn(gL), FadeIn(gR), FadeIn(lL), FadeIn(lR), FadeIn(cap))
         with self.listen(c) as snd:
-            window(snd, r"a hymn, \ then a rag", kind="synthesized", detail=r"choir; \ then piano", corner=UL, tag_corner=UR)
+            window(snd, r"a hymn, \ then a rag", kind="synthesized", detail=r"choir; \ then piano", corner=DL, tag_corner=DR)
             flash_voices(snd, gL, d["lift"], d["starts"]["lift"], d["units"]["lift"], colors=[TUNE, BLUE, EAR, GREY_A])
             flash_voices(snd, gR, d["rag"], d["starts"]["rag"], d["units"]["rag"], colors=[TUNE, GREY_A])
             pulse(snd, lL, d["starts"]["lift"], d["starts"]["rag"] - 0.5, buff=0.08)

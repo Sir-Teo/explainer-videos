@@ -328,4 +328,57 @@
       note: "End on V and the phrase asks a question; follow it with the same opening ending V to I and you have a period, the film's basic unit. Change the figure and the energy changes while the harmony stays: the accompaniment is the style's motor."
     });
   };
+
+  // ---- Part 27: rubato, two ways ----------------------------------------------------------------------------------
+  var TUNE27 = [[72, 0, 1], [72, 1, 1], [79, 2, 1], [79, 3, 1], [81, 4, 1], [81, 5, 1], [79, 6, 2], [77, 8, 1], [77, 9, 1], [76, 10, 1], [76, 11, 1], [74, 12, 1], [74, 13, 1], [72, 14, 2]];
+  var BASS27 = [[48, 0, 2], [48, 2, 2], [53, 4, 2], [48, 6, 2], [43, 8, 2], [48, 10, 2], [43, 12, 2], [48, 14, 2]];
+  function arch27(b, depth, power) {   // performance time of score beat b under Todd's phrase arch, phrases of 8 beats
+    var n = Math.max(1, Math.round(b * 48)), t = 0, i;
+    for (i = 0; i < n; i++) {
+      var x = (i + 0.5) / 48, u = (x % 8) / 8;
+      var tempo = 1 + depth * (1 - Math.pow(Math.abs(2 * u - 1), power)) - depth * (1 - 1 / (power + 1));
+      t += (1 / 48) / tempo;
+    }
+    return t * b * 48 / n;
+  }
+  function stolen27(b, amount) { var bar = Math.floor(b / 2) * 2, u = (b - bar) / 2; return bar + 2 * (u + amount * Math.sin(Math.PI * u)); }
+  W.rubato = function (el) {
+    QB.widget(el, {
+      title: "Bend the time",
+      sub: "The Tune's first two phrases over a bass. Arch the tempo of the whole texture, as Todd's model does (slower at a phrase's ends, faster in its middle), or steal time in the melody alone while the bass keeps strict time, as Mozart described in 1777. Left: when each melody note sounds, against strict time. Right: the tempo the listener hears.",
+      panels: 2, height: 280,
+      controls: [
+        { k: "depth", label: "Phrase arch depth", min: 0, max: 0.5, step: 0.02, value: 0.24, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "power", label: "Arch shape (2 = parabola)", min: 1, max: 4, step: 0.5, value: 2, fmt: function (x) { return x.toFixed(1); } },
+        { k: "steal", label: "Stolen time in the melody", min: 0, max: 0.3, step: 0.02, value: 0, fmt: function (x) { return Math.round(100 * x) + "% of a bar"; } }
+      ],
+      buttons: [{ label: "Play", act: function (s) { s.sound = play(notesSound(s.notes, 0.45), 44100); } }],
+      init: function (s) { s.sound = null; s.notes = []; },
+      draw: function (g, v, s) {
+        var tm = function (b) { return stolen27(arch27(b, v.depth, v.power), v.steal); };
+        var tb = function (b) { return arch27(b, v.depth, v.power); };
+        s.notes = TUNE27.map(function (n) { var a = tm(n[1]); return [n[0], a, Math.max(0.2, tm(n[1] + n[2]) - a)]; })
+          .concat(BASS27.map(function (n) { var a = tb(n[1]); return [n[0], a, tb(n[1] + n[2]) - a]; }));
+        var a = g[0].axes({ x: [0, 16], y: [-0.8, 0.8], title: "Melody: performed minus written (beats)", xlabel: "written beat", ylabel: "early - / late +", xticks: [0, 4, 8, 12, 16] });
+        a.line([0, 16], [0, 0], { color: "#8A93A0", width: 2 });
+        var xs = TUNE27.map(function (n) { return n[1]; }), dev = xs.map(function (x) { return tm(x) - x; });
+        a.line(xs, dev, { color: C.idea, width: 2 });
+        a.dots(xs, dev, { color: C.idea, r: 4 });
+        var bx = BASS27.map(function (n) { return n[1]; });
+        a.dots(bx, bx.map(function (x) { return tb(x) - x; }), { color: "#8A93A0", r: 4 });
+        var grid = [], tempo = [], i;
+        for (i = 0; i <= 160; i++) { var x = i / 10; grid.push(x); tempo.push(0.1 / Math.max(1e-6, arch27(x + 0.05, v.depth, v.power) - arch27(Math.max(0, x - 0.05), v.depth, v.power)) * (x > 0.05 ? 1 : 0.5)); }
+        var b = g[1].axes({ x: [0, 16], y: [0.5, 1.5], title: "Tempo of the texture (1 = strict)", xlabel: "written beat", xticks: [0, 4, 8, 12, 16] });
+        b.line([0, 16], [1, 1], { color: "#8A93A0", width: 2 });
+        b.line(grid.slice(1), tempo.slice(1), { color: C.idea, width: 3 });
+        s.total = tm(16);
+      },
+      readout: function (v, s) {
+        return [["length of the two phrases", s.total.toFixed(2) + " beats (strict: 16)"],
+                ["kind of rubato", v.steal > 0 && v.depth > 0 ? "both: an arch, and stolen time on top" : v.steal > 0 ? "stolen: the bass keeps time" : v.depth > 0 ? "an arch: everything bends" : "none: strict"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "A phrase arch keeps each phrase about its written length while moving time from its ends to its middle; stolen time keeps the bar lines exactly where they were. Recorded pianists do both, in proportions that changed over the twentieth century."
+    });
+  };
 })();

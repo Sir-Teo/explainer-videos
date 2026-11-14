@@ -57,6 +57,8 @@ LEDGER = [
      "measure": r"a ground of 8 bass notes heard twice; the reprise adds 26 ornament notes to 14"},
     {"part": 26, "title": r"as a Classical set: theme with Alberti bass, minore, adagio, finale", "seconds": 31.59,
      "measure": r"melody notes: theme 14, minore 14, adagio 28, finale 26"},
+    {"part": 27, "title": r"as a nocturne, as a Lied, and as a leitmotif transformed", "seconds": 32.7,
+     "measure": r"nocturne: 20 melody notes over 48 in the left hand; the motif augmented to 8 long notes"},
 ]
 
 

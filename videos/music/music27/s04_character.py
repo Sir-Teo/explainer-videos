@@ -46,26 +46,37 @@ class Character(SoundScene):
                     k = int(n[1])
                     sh = warp[min(k, len(warp) - 1)] + (n[1] - k) * 0.0
                     b.shift(RIGHT * g.frame.width * sh / g.total)
-        l1 = label(r"strict: \ three equal beats", font_size=22, color=GREY_A).next_to(g1, UP, buff=0.3)
-        l2 = label(r"a mazurka: \ beat 1 short, \ beat 2 long", font_size=22, color=TUNE).next_to(g2, UP, buff=0.3)
+        l1 = label(r"A", font_size=40, color=GREY_A).next_to(g1, UP, buff=0.3)
+        l2 = label(r"B", font_size=40, color=GREY_A).next_to(g2, UP, buff=0.3)
         head = label(r"Chopin, \ Mazurka in C$\sharp$ minor, \ Op. 6 No. 2: \ bars 9 to 16", font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
+        card = listen_card(r"Chopin's Mazurka Op. 6 No. 2, \ its theme, \ twice. \ In one the three beats of each bar are equal; \ "
+                           r"in the other they are not. \ Which one dances, \ A or B?", width=10.4)
         with self.voiceover(
             "Here is Chopin's Mazurka in C sharp minor, Opus 6 Number 2, published in 1832, its theme read from the "
-            "encoding. First in strict time, three equal beats to the bar, as the score's notation says. Then the same "
-            "notes with a mazurka's limp: the first beat a little short, the second a little long, the third in between. "
-            "Listen for the moment the dance appears."
+            "encoding and played twice. In one performance the three beats of every bar are exactly equal, as the "
+            "notation says. In the other they are not. Which one dances, A or B?"
         ):
-            self.play(FadeIn(head), FadeIn(g1), FadeIn(g2), FadeIn(l1), FadeIn(l2))
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        self.play(FadeOut(card), FadeIn(head), FadeIn(g1), FadeIn(g2), FadeIn(l1), FadeIn(l2))
         with self.listen(c) as snd:
-            window(snd, r"strict, \ then a mazurka", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
+            window(snd, r"A, \ then B", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
             flash_voices(snd, g1, parts[::-1], d["starts"]["strict"], unit, colors=[TUNE, GREY_A])
-            pulse(snd, l1, d["starts"]["strict"], d["starts"]["mazurka"] - 0.5, buff=0.08)
-            pulse(snd, l2, d["starts"]["mazurka"], c.duration, buff=0.08)
+            pulse(snd, l1, d["starts"]["strict"], d["starts"]["mazurka"] - 0.5, buff=0.1)
+            pulse(snd, l2, d["starts"]["mazurka"], c.duration, buff=0.1)
             for part, v, col in zip(g2.parts, parts[::-1], (TUNE, GREY_A)):
                 if part.notes:
                     times = [d["starts"]["mazurka"] + unit * (n[1] + warp[min(int(n[1]), len(warp) - 1)]) for n in v]
                     flash(snd, part.notes, times, hot=WHITE, base=col)
-        self.wait(0.3)
+        ans = VGroup(label(r"A: \ three equal beats, \ as written", font_size=21, color=GREY_A).next_to(g1, DOWN, buff=0.35),
+                     label(r"B: \ beat 1 short, \ beat 2 long: \ the mazurka", font_size=21, color=TUNE).next_to(g2, DOWN, buff=0.35))
+        with self.voiceover(
+            "B is the mazurka. The notes are identical; only their timing differs. The first beat is a little short, the "
+            "second a little long, and the bar begins to limp the way the dance does, the accent falling on the second "
+            "or third beat rather than the first."
+        ):
+            self.play(FadeIn(ans))
+        self.wait(0.4)
         self.clear_scene()
 
     # ------------------------------------------------------------------

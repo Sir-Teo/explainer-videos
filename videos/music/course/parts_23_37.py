@@ -191,4 +191,47 @@ PARTS = [
         I=(7,),
         also=(("Monochord's Classical toolkit: cadences, phrase gaps, who leads, accompaniment figures, tonal plans, second keys", "explainer/music/monochord/classical.py"),),
     ),
+    Part(
+        n=27, level="U", widget="rubato", prereq=(7, 15, 17, 21, 25, 26),
+        question="How did the nineteenth century stretch music, and can the stretching be measured?",
+        story="Between 1800 and 1870 the piano gained an iron frame, felt hammers and two more octaves, and the scores "
+              "climbed with it: Clara Wieck's polonaises of 1831 reach E7, high above Mozart's F6. Schubert's Lieder made "
+              "the piano a character; a key-finder hears Der Lindenbaum turn its stanza from E major to E minor, one "
+              "semitone in the tune, while the piano plays seven notes for every one sung. The mazurka's uneven beat and "
+              "the two kinds of rubato, a phrase arch and Mozart's stolen time, are modelled and heard. Berlioz made a "
+              "theme a character and asked for 27 wind, brass and timpani players; Wagner made a chord a question that "
+              "five keys can hold. Measured across a Library of 827 pieces from 1370 to 1924, instrumental music grew "
+              "more chromatic by about 5.6 notes in a hundred per century from 1680 to 1900 (95% interval 2.4 to 8.2), "
+              "while songs stayed plain; then Schoenberg and Webern jump to 25 to 30. The century also built national "
+              "styles, the solo recital, the conductor, the canon and the first recordings. The Tune becomes a nocturne, "
+              "a Lied and a transformed leitmotif.",
+        handoff="What is left when the key goes in Parts 28 and 29; the song in Part 40; orchestration in Part 41; "
+                "performing and the evidence of recordings in Part 43; music that tells a story in Part 44; style and "
+                "history as data in Parts 62 and 67.",
+        outside="Part 7 for the piano and the bowed string; Part 15 for key profiles; Part 17 for the synthetic voice; Part 21 "
+                "for chroma and form; Parts 23 to 26 for the earlier collections. Linear regression and the bootstrap; "
+                "time warping.",
+        objectives={
+            "U": ["Hear a Lied's piano as part of the meaning, and a stanza turned from major to minor.",
+                  "Hear a mazurka's uneven beat, a phrase arch and stolen time.",
+                  "Hear a theme transformed in character, and the Tristan chord's unresolved question."],
+            "M": ["Read MusicXML and Humdrum scores whole, with chords, ties, transposing instruments and split spines.",
+                  "Measure chromaticism and tonal clarity window by window with key profiles.",
+                  "Fit a trend across a corpus with a bootstrap interval, and separate genre from date."],
+            "D": ["Design a corpus study of nineteenth-century harmony with composers as random effects.",
+                  "Use early recordings as evidence for performance style, and say what they cannot show."],
+            "I": ["Turn a familiar historical claim into a measured trend with an interval, and report what the data cannot support."],
+        },
+        results=[
+            ("The keyboard", r"54 \to 88 \text{ keys}, \ 1720\text{--}1880; \ \text{Clara Wieck's polonaises reach E7}"),
+            ("Der Lindenbaum", r"\text{E major} \to \text{E minor}: \ \text{G}\sharp \to \text{G}; \ 1443 \text{ piano notes to } 205 \text{ sung}"),
+            ("The orchestra", r"5, \ 9, \ 18, \ 27, \ 19 \text{ wind, brass, timpani} \ (1759\text{--}1876)"),
+            ("Instrumental chromaticism", r"+5.6 \text{ per century, } 1680\text{--}1900 \ [2.4, \ 8.2]; \ \text{all pieces } [-0.8, \ 4.9]"),
+            ("After 1900", r"\text{Schoenberg, Webern: } 25\text{--}30\% \text{ outside the key, clarity } < 0.56"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 8, 9),
+        D=(10,),
+        I=(7,),
+        also=(("Monochord's Romantic toolkit: whole-score readers, chromaticism and clarity, transformations, the phrase arch, the mazurka's beats", "explainer/music/monochord/romantic.py"),),
+    ),
 ]
