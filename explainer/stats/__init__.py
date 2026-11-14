@@ -290,6 +290,17 @@ TIMELINE = [
 T0, T1 = 1650, 2030
 
 
+def _short_event(name: str, limit: int = 52) -> str:
+    """A year's event list, cut after the last whole topic that fits ``limit`` characters (at least one topic),
+    so that two lit years on one strip stay readable and apart."""
+    keep = []
+    for topic in name.split("; "):
+        if keep and len("; ".join(keep + [topic])) > limit:
+            break
+        keep.append(topic)
+    return "; ".join(keep)
+
+
 def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
     """The strip from 1650 to 2030; years in ``lit`` glow and get their names (kept apart and inside the frame,
     a faint leader tying each displaced label to its year)."""
@@ -312,6 +323,8 @@ def timeline(lit=(), width=12.0, show_labels=True, font_size=18) -> VGroup:
             # the full course associates with that year.
             if isinstance(lit, dict):
                 name = lit[yr]
+            else:
+                name = _short_event(name)
             t = label(rf"{yr}\; {name}", font_size=font_size, color=S.ACCENT)
             t.next_to(d, UP if side > 0 else DOWN, buff=0.14 if side > 0 else 0.4)
             side = -side
