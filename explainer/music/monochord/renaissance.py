@@ -84,6 +84,7 @@ def parse_kern(text: str, name: str) -> Piece | None:
     voices = [[] for _ in range(n)]
     t = [0] * n
     meter = None
+    mode, keysig = "", ""
     bar = 0
     for ln in data[1:]:
         cells = ln.split("\t")
@@ -96,6 +97,11 @@ def parse_kern(text: str, name: str) -> Piece | None:
                 mm = re.match(r"\*M(\d+)/(\d+)", c)
                 if mm and meter is None:
                     meter = (int(mm.group(1)), int(mm.group(2)))
+                mk = re.match(r"\*([A-Ga-g][#-]?):([a-z]+)$", c)
+                if mk and not mode:
+                    mode = f"{mk.group(1)}:{mk.group(2)}"
+                if c.startswith("*k[") and not keysig:
+                    keysig = c[3:-1]
             continue
         if cells[0].startswith("="):
             continue
@@ -127,6 +133,8 @@ def parse_kern(text: str, name: str) -> Piece | None:
     title = ref.get("OTL", name)
     pc = Piece(name, title, "Giovanni Pierluigi da Palestrina" if "Palestrina" in ref.get("COM", "") else ref.get("COM", ""), meter, bar, voices)
     pc.work = ref.get("OPR", "")
+    pc.mode = mode
+    pc.keysig = keysig
     return pc
 
 
@@ -138,6 +146,8 @@ def load(path: Path = DATA) -> list[Piece]:
         pc = Piece(r["name"], r["title"], r["composer"], tuple(r["time"]), r["bar"], [[tuple(n) for n in v] for v in r["voices"]])
         pc.work = r.get("work", "")
         pc.book = r.get("book", 0)
+        pc.mode = r.get("mode", "")
+        pc.keysig = r.get("keysig", "")
         out.append(pc)
     return out
 
@@ -152,7 +162,7 @@ def extract(wheel: str | Path, out: Path = DATA) -> dict:
             if pc is None:
                 skipped += 1
                 continue
-            rows.append({"name": pc.name, "title": pc.title, "composer": pc.composer, "work": pc.work, "book": 0,
+            rows.append({"name": pc.name, "title": pc.title, "composer": pc.composer, "work": pc.work, "book": 0, "mode": pc.mode, "keysig": pc.keysig,
                          "time": list(pc.time), "bar": pc.bar, "voices": [[list(x) for x in v] for v in pc.voices]})
         elif nm.startswith("music21/corpus/monteverdi/") and nm.endswith(".mxl") and "_old" not in nm:
             inner = zipfile.ZipFile(io.BytesIO(z.read(nm)))
