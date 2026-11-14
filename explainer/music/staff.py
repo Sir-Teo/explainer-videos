@@ -67,8 +67,9 @@ class Staff(VGroup):
 
     def __init__(self, score: Score, voice: int = 0, width: float = 11.5, space: float = 0.2, systems: int = 1, color=WHITE, line_color=None,
                  show_clef: bool = True, show_key: bool = True, show_time: bool = True, lyrics: bool = True, system_gap: float = 10.5,
-                 bars=None, final_bar: bool = True, lyric_size: int = 22, **kw):
+                 bars=None, final_bar: bool = True, lyric_size: int = 22, proportional: bool = False, lead: float | None = None, **kw):
         super().__init__(**kw)
+        self.proportional, self.lead = proportional, lead      # for staves that must line up: room in proportion to time, notes from a fixed x
         self.score, self.voice_index, self.space, self.color = score, voice, space, color
         self.line_color = line_color or color
         self.clef_name = score.voices[voice].clef
@@ -120,8 +121,10 @@ class Staff(VGroup):
             g.add(ts)
             x = ts.get_right()[0] + 1.0 * s
         x += 0.8 * s
+        if self.lead is not None:
+            x = left + self.lead
         # spacing: every event gets room that grows with its length, but more slowly
-        room = lambda d: 2.6 * s * (float(d) / 0.25) ** 0.55 + 1.3 * s          # noqa: E731
+        room = (lambda d: 3.6 * s * float(d) / 0.25) if self.proportional else (lambda d: 2.6 * s * (float(d) / 0.25) ** 0.55 + 1.3 * s)          # noqa: E731
         natural = sum(room(e.dur) for bar in bars for e in bar) + len(bars) * 1.6 * s
         avail = left + width - x - (0.6 * s if last else 0.2 * s)
         k = avail / natural
@@ -252,6 +255,7 @@ class Staff(VGroup):
         n = VGroup()
         head = self._head(e.dur, at)
         n.head, n.pos, n.x = head, pos, cx
+        n.ink = head[0]                                    # the part of the head that takes a colour (a hollow head has a hole)
         # ledger lines
         ledgers = VGroup()
         for p in list(range(-2, pos - 1, -2)) + list(range(10, pos + 1, 2)):
