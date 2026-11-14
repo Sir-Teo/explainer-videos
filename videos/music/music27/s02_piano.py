@@ -62,8 +62,8 @@ class Piano(SoundScene):
             "and by the 1880s Steinway had settled on eighty-eight keys, from A zero to C eight, where the piano has "
             "stayed."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(axis))
-            for mark, sl in zip("abc", (slice(0, 2), slice(2, 4), slice(4, 6))):
+            self.play(FadeIn(head), FadeIn(axis), FadeIn(rows_[0]))
+            for mark, sl in zip("abc", (slice(1, 2), slice(2, 4), slice(4, 6))):
                 vo.wait_until(mark)
                 self.play(LaggedStart(*[FadeIn(r) for r in rows_[sl]], lag_ratio=0.3), run_time=1.2)
         self.wait(0.4)

@@ -41,7 +41,7 @@ class Polytonal(SoundScene):
                    "clear? <bookmark mark='c'/> Darius Milhaud, back in Paris from Brazil, wrote piano dances in 1920 with "
                    "each hand in its own key. <bookmark mark='d'/> In America, Charles Ives had already written music that "
                    "remembers two marching bands passing each other in a parade. <bookmark mark='e'/> Is that really two "
-                   "keys, or one strange one? Part 15's key-finder can be asked.", marks="cdef")
+                   "keys, or one strange one? Part 15's key-finder can be asked.", marks="bcde")
 
     # ------------------------------------------------------------------
     def hear(self):

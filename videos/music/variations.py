@@ -61,6 +61,8 @@ LEDGER = [
      "measure": r"nocturne: 20 melody notes over 48 in the left hand; the motif augmented to 8 long notes"},
     {"part": 28, "title": r"in whole-tone planing, then over an octatonic ostinato with moving accents", "seconds": 16.2,
      "measure": r"14 augmented triads planed; 9 accents placed at random on 32 ostinato notes"},
+    {"part": 29, "title": r"as a twelve-tone row grown from its own intervals, then scattered in points", "seconds": 21.5,
+     "measure": r"row 0 7 9 11 1 2 4 6 8 10 3 5; 36 notes from three of its 48 forms"},
 ]
 
 

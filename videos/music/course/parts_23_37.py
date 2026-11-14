@@ -276,4 +276,46 @@ PARTS = [
         I=(6,),
         also=(("Monochord's modern toolkit: symmetry census, chance fits, additive and palindromic rhythms, the golden-section null", "explainer/music/monochord/modern.py"),),
     ),
+    Part(
+        n=29, level="U", widget="setclass", prereq=(12, 15, 27, 28),
+        question="What replaced the key when Schoenberg gave it up, and what mathematics lies under the twelve-tone method?",
+        story="In 1908 a soprano in Schoenberg's Second String Quartet sang of the air of another planet, and the key "
+              "dissolved. His Piano Pieces Op. 19 (1911), played here from the encoding, keep a centre made of an "
+              "interval, G and B, while all twelve notes are used. Set theory names such music: transposition and "
+              "inversion make 224 set classes, counted by brute force and by Burnside's lemma, as in Forte's table; 23 "
+              "pairs share an interval vector without being the same chord; and every hexachord has its complement's "
+              "interval vector, checked on all 924 and proved by counting pairs. The twelve-tone row has 48 forms; "
+              "Webern's canon Dormi Jesu inverts every one of its 45 intervals exactly. Of all rows starting on C, "
+              "3,856 use every interval once, and in each the first and last notes are a tritone apart, because "
+              "1 + 2 + ... + 11 = 66. Six hexachords are all-combinatorial. Total serialism followed, and the critics said "
+              "it sounded like a cloud of points; listening experiments find that people follow contour and texture far "
+              "better than rows. The Tune becomes a row grown from its own intervals, then a pointillist variation.",
+        handoff="Sound itself in Part 30; transformations in Part 31; the geometry of chords in Part 32; Fourier views of "
+                "sets and rhythms in Part 33; expectation in Part 46; machines that compose in Part 65.",
+        outside="Part 3 for the Fourier transform; Part 12 for Burnside's lemma; Part 15 for keys; Part 22 for hierarchy; "
+                "Part 27 for chromaticism; Part 28 for symmetric sets. The dihedral group, Burnside's lemma, "
+                "permutations, depth-first search, double counting.",
+        objectives={
+            "U": ["Hear free atonal music and say what holds it together.",
+                  "Find a chord's prime form and interval vector, and the forms of a row.",
+                  "Hear an inversion and a retrograde, and judge whether a line is a form of a row."],
+            "M": ["Count set classes by brute force and by Burnside's lemma, and enumerate Z-relations.",
+                  "Prove the hexachord theorem by double counting, and the tritone property of all-interval rows.",
+                  "Enumerate all-interval rows by search and test hexachords for combinatoriality."],
+            "D": ["Relate homometric sets in crystallography to Z-related sets via the discrete Fourier transform.",
+                  "Design a perception study separating interval content from surface features."],
+            "I": ["Verify an exhaustive claim by enumeration, then prove it, and say what each establishes."],
+        },
+        results=[
+            ("Set classes", r"224 = (4096 + \cdots)/24; \ \text{sizes } 12, 29, 38, 50, 38, 29, 12 \ (\text{Forte})"),
+            ("Z-relations", r"23 \text{ pairs}; \ 15 \text{ among hexachords}; \ \text{hexachord theorem: } 924 / 924"),
+            ("Webern's canon", r"45 \text{ of } 45 \text{ intervals inverted}, \ 46 \text{ of } 46 \text{ durations equal}"),
+            ("All-interval rows", r"3{,}856; \ \text{ends a tritone apart: } 1 + \cdots + 11 = 66 \equiv 6"),
+            ("A shared hexachord", r"\text{by chance } 1/924 \text{ of random rows}"),
+        ],
+        U=(0, 1, 2, 4, 5, 6, 7, 8, 9),
+        D=(10,),
+        I=(3,),
+        also=(("Monochord's atonal toolkit: prime forms, interval vectors, set classes, Z-pairs, rows, all-interval and combinatorial searches", "explainer/music/monochord/atonal.py"),),
+    ),
 ]

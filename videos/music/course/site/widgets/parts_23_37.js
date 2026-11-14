@@ -439,4 +439,62 @@
       note: "Every symmetric set repeats a pattern every 1, 2, 3, 4 or 6 semitones. And a set that fits a scale is evidence only when a random set of its size would rarely fit: with four or five notes, it often would."
     });
   };
+
+  // ---- Part 29: a set's class, vector and complement -------------------------------------------------------------
+  function iv29(pcs) { var v = [0, 0, 0, 0, 0, 0]; for (var i = 0; i < pcs.length; i++) for (var j = i + 1; j < pcs.length; j++) { var d = ((pcs[j] - pcs[i]) % 12 + 12) % 12; v[Math.min(d, 12 - d) - 1]++; } return v; }
+  function prime29(pcs) {
+    if (!pcs.length) return [];
+    function packed(s) {
+      s = s.slice().sort(function (a, b) { return a - b; });
+      var best = null;
+      for (var r = 0; r < s.length; r++) {
+        var rot = s.slice(r).concat(s.slice(0, r).map(function (x) { return x + 12; }));
+        var norm = rot.map(function (x) { return x - rot[0]; });
+        var key = norm.slice().reverse();
+        if (!best || cmp29(key, best.key) < 0) best = { key: key, norm: norm };
+      }
+      return best;
+    }
+    var a = packed(pcs), b = packed(pcs.map(function (x) { return (12 - x) % 12; }));
+    return (cmp29(a.key, b.key) <= 0 ? a : b).norm;
+  }
+  function cmp29(x, y) { for (var i = 0; i < x.length; i++) if (x[i] !== y[i]) return x[i] - y[i]; return 0; }
+  W.setclass = function (el) {
+    var ctl = [], init = [1, 1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0];
+    for (var i = 0; i < 12; i++) ctl.push({ k: "p" + i, label: NAMES28[i], min: 0, max: 1, step: 1, value: init[i], fmt: function (x) { return x ? "in" : "out"; } });
+    QB.widget(el, {
+      title: "Name a chord the way set theory does",
+      sub: "Switch pitch classes in and out. The page finds the set's prime form (its name up to transposition and inversion) and its interval vector (how many pairs lie 1 to 6 semitones apart), and compares the vector with that of the notes left out. For six notes the two vectors are always equal: Babbitt's hexachord theorem, which the film checked on all 924 hexachords and proved.",
+      panels: 2, height: 300,
+      controls: ctl,
+      buttons: [{ label: "Play", act: function (s) { s.sound = s.notes.length ? play(notesSound(s.notes, 0.5), 44100) : false; } }],
+      init: function (s) { s.sound = null; s.notes = []; },
+      draw: function (g, v, s) {
+        var pcs = [], comp = [], i;
+        for (i = 0; i < 12; i++) (v["p" + i] ? pcs : comp).push(i);
+        s.pcs = pcs; s.comp = comp; s.pf = prime29(pcs); s.iv = iv29(pcs); s.ivc = iv29(comp);
+        s.notes = pcs.map(function (p) { return [60 + p, 0, 2]; }).concat(pcs.map(function (p, j) { return [60 + p, 2.2 + 0.5 * j, 0.5]; }));
+        var a = g[0].axes({ x: [-1.5, 1.5], y: [-1.5, 1.5], title: "The set (gold) and its complement (grey)", xticks: [], yticks: [] });
+        var cx = [], cy = [];
+        for (i = 0; i <= 60; i++) { cx.push(Math.cos(2 * Math.PI * i / 60)); cy.push(Math.sin(2 * Math.PI * i / 60)); }
+        a.line(cx, cy, { color: "#8A93A0", width: 1 });
+        var px = pcs.map(function (p) { return Math.sin(2 * Math.PI * p / 12); }), py = pcs.map(function (p) { return Math.cos(2 * Math.PI * p / 12); });
+        if (pcs.length > 1) a.line(px.concat([px[0]]), py.concat([py[0]]), { color: C.idea, width: 2 });
+        a.dots(px, py, { color: C.idea, r: 6 });
+        a.dots(comp.map(function (p) { return Math.sin(2 * Math.PI * p / 12); }), comp.map(function (p) { return Math.cos(2 * Math.PI * p / 12); }), { color: "#8A93A0", r: 4 });
+        for (i = 0; i < 12; i++) a.text(1.3 * Math.sin(2 * Math.PI * i / 12), 1.3 * Math.cos(2 * Math.PI * i / 12), NAMES28[i], { align: "center", size: 11, color: v["p" + i] ? C.ink : C.muted });
+        var top = Math.max(1, Math.max.apply(null, s.iv.concat(s.ivc)));
+        var b = g[1].axes({ x: [0.3, 6.7], y: [0, top + 1], title: "Interval vectors: set (gold), complement (grey)", xticks: [1, 2, 3, 4, 5, 6], xlabel: "interval class" });
+        b.bars([0.85, 1.85, 2.85, 3.85, 4.85, 5.85], s.iv, 0.3, { color: C.idea });
+        b.bars([1.15, 2.15, 3.15, 4.15, 5.15, 6.15], s.ivc, 0.3, { color: "#8A93A0" });
+      },
+      readout: function (v, s) {
+        var diff = s.ivc.map(function (x, i) { return x - s.iv[i]; });
+        return [["prime form", "(" + s.pf.join(" ") + ")"], ["interval vector", "[" + s.iv.join("") + "]"],
+                ["complement's vector minus the set's", "[" + diff.join(", ") + "]" + (s.pcs.length === 6 ? ": zero, as the theorem says" : " = (12 - 2k) times (1,1,1,1,1,1/2)")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Try {0, 1, 4, 6} and {0, 1, 3, 7}: different prime forms, the same vector [111111]. Then any six notes: the complement's vector always matches."
+    });
+  };
 })();

@@ -1252,11 +1252,27 @@ numbers) and palindromes counted; the golden section against a null model with l
 dissolves. Schoenberg then spent a decade looking for a law to replace it. The part builds the mathematics that
 theorists later found underneath: sets, symmetries, and a theorem about hexachords that turns out to be a fact
 of crystallography.
+1. Hook: Vienna 1908; Schoenberg's Op. 19 No. 6 heard whole; the plan.
+2. Atonality, free: the emancipation of the dissonance; Op. 19 No. 2 heard; its pitch classes counted; the bell chords; Vienna's expressionism.
+3. Pitch-class sets: T and I on the clock; an ear question (transposition or inversion?); prime forms; operations as objects; the interval vector.
+4. Counting the chords: 224 by brute force; the twelve trichords heard; Burnside's lemma; Forte's names.
+5. Same intervals, different sets: the Z-related tetrachords heard; Z-pairs counted; the hexachord theorem; a hexachord and its complement heard; the proof.
+6. The row: the method; Schoenberg; the Op. 25 row heard; the matrix; an ear question (which is the inversion?); Webern's canon in inversion analysed; Webern; the canon heard.
+7. All-interval rows: Berg's row heard; rows and machines; 3,856 counted; the tritone theorem; Berg.
+8. Combinatoriality: the idea; a row and its partner heard; the six hexachords; Webern's symmetries; Babbitt.
+9. Total serialism: serialize everything; twelve points heard; the reaction; the old masters turn serial; the cloud of points.
+10. Can anyone hear it?: an ear question (which line is a form?); what experiments found; Lerdahl's argument; rows on screen; evidence for the eye and the ear.
+11. Frontier: crystallography and homometry; others in the room; the Fourier view; the research problem.
+12. Variation 29: a row from the Tune's intervals, scattered in points. Outro: problems, payoffs.
+
 *Covers:* free atonality; pitch-class sets under transposition and inversion; prime form; the interval vector;
 Z-related sets; the hexachord theorem; rows and their forty-eight forms; invariance and combinatoriality; total
 serialism; whether listeners can hear any of it.
-*Built and computed:* the set classes derived by Burnside's lemma and checked against the published table; the
-all-interval rows enumerated; the hexachord theorem verified exhaustively and proved on screen.
+*Built and computed:* `monochord/atonal.py`: prime forms and interval vectors; the 224 set classes by brute force and by
+Burnside's lemma, checked against Forte's table; the 23 Z-pairs; the hexachord theorem checked on all 924 hexachords
+and proved on screen; rows, their 48 forms and matrices; the 3,856 all-interval rows by search, with the tritone theorem;
+the six all-combinatorial hexachords; Webern's Op. 16 No. 2 and Schoenberg's Op. 19 Nos. 2 and 6 read from the
+music21 corpus (both now in the public domain) and heard.
 *Variation 29:* the Tune's intervals as the source of a row; a pointillist variation.
 *Frontier:* homometric sets; perception studies of serial music.
 *Reading:* Straus, *Introduction to Post-Tonal Theory*; Forte (1973); Babbitt's essays.
