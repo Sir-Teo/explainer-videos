@@ -178,4 +178,90 @@
       note: "The opening setting is a 7-6 suspension: C over A is a third, the bass moves to D under the held C (a seventh), and C falls to B. Strike the C again instead of holding it and the same seventh becomes free, as in Monteverdi's madrigals. Try C B A over a held A for a passing note, C D C for a neighbour, and C B G A over A then G for a cambiata."
     });
   };
+  // ---- Part 25: a figured-bass realizer ---------------------------------------------------------------------------
+  var FIGS25 = [["", [3, 5]], ["6", [3, 6]], ["6/4", [4, 6]], ["7", [3, 5, 7]], ["6/5", [3, 5, 6]], ["4/3", [3, 4, 6]], ["4/2", [2, 4, 6]]];
+  var CMAJ25 = [0, 2, 4, 5, 7, 9, 11];
+  function wkey25(i) { return 12 * Math.floor(i / 7) + CMAJ25[((i % 7) + 7) % 7] + 36; }   // white-key index from C2
+  function above25(bi, step) { return wkey25(bi + step - 1) % 12; }
+  function options25(bi, fig) {
+    var need = FIGS25[fig][1].map(function (st) { return above25(bi, st); }), bass = wkey25(bi), out = [];
+    var allowed = need.concat([bass % 12]);
+    var keys = [];
+    for (var m = Math.max(55, bass + 1); m <= 79; m++) if (allowed.indexOf(m % 12) >= 0) keys.push(m);
+    for (var a = 0; a < keys.length; a++) for (var b = a + 1; b < keys.length; b++) for (var c = b + 1; c < keys.length; c++) {
+      var ch = [keys[a], keys[b], keys[c]];
+      if (ch[2] - ch[0] > 12) continue;
+      var pcs = ch.map(function (x) { return x % 12; });
+      if (need.every(function (n) { return pcs.indexOf(n) >= 0; })) out.push(ch);
+    }
+    return out;
+  }
+  function cost25(a, b, ba, bb) {
+    var c = 0, i, j, va = [ba].concat(a), vb = [bb].concat(b);
+    for (i = 0; i < 3; i++) c += Math.abs(a[i] - b[i]);
+    for (i = 0; i < 4; i++) for (j = i + 1; j < 4; j++) {
+      var ia = ((va[j] - va[i]) % 12 + 12) % 12, ib = ((vb[j] - vb[i]) % 12 + 12) % 12;
+      if (ia === ib && (ia === 0 || ia === 7) && va[i] !== vb[i]) c += 50;
+    }
+    return c;
+  }
+  function realize25(bis, figs, top) {
+    var opts = bis.map(function (b, k) { return options25(b, figs[k]); });
+    if (opts.some(function (o) { return !o.length; })) return null;
+    var best = [opts[0].map(function (o) { return 4 * Math.abs(o[2] - top); })], back = [];
+    for (var k = 1; k < opts.length; k++) {
+      var row = [], bk = [];
+      opts[k].forEach(function (b) {
+        var m = 1e18, arg = 0;
+        opts[k - 1].forEach(function (a, i) { var c = best[k - 1][i] + cost25(a, b, wkey25(bis[k - 1]), wkey25(bis[k])); if (c < m) { m = c; arg = i; } });
+        row.push(m); bk.push(arg);
+      });
+      best.push(row); back.push(bk);
+    }
+    var last = best[best.length - 1], j = last.indexOf(Math.min.apply(null, last)), path = [j];
+    for (k = back.length - 1; k >= 0; k--) { j = back[k][j]; path.unshift(j); }
+    return { chords: path.map(function (j2, k2) { return opts[k2][j2]; }), cost: Math.min.apply(null, last), counts: opts.map(function (o) { return o.length; }) };
+  }
+  W.figuredbass = function (el) {
+    var ctl = [];
+    var defB = [7, 10, 12, 11, 7], defF = [0, 1, 0, 3, 0];
+    for (var q = 0; q < 5; q++) {
+      ctl.push({ k: "b" + q, label: "Bass " + (q + 1), min: 3, max: 13, step: 1, value: defB[q], fmt: function (i) { return ["C", "D", "E", "F", "G", "A", "B"][((i % 7) + 7) % 7] + (Math.floor(i / 7) + 2); } });
+      ctl.push({ k: "f" + q, label: "Figure " + (q + 1), min: 0, max: FIGS25.length - 1, step: 1, value: defF[q], fmt: function (i) { return FIGS25[i][0] || "5/3"; } });
+    }
+    ctl.push({ k: "top", label: "Start the top voice near", min: 67, max: 79, step: 1, value: 72, fmt: function (m) { return ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"][m % 12] + (Math.floor(m / 12) - 1); } });
+    QB.widget(el, {
+      title: "Realize a figured bass",
+      sub: "Five bass notes in C major and a figure under each (5/3 means a plain triad; 6, a third and a sixth; 7, add the seventh...). The page finds every three-voice chord the figure allows above each bass note, then the path through them whose upper voices move least, with no parallel fifths or octaves, as the film's realizer did for Corelli's bass. Move the starting top note to get another, equally correct, realization.",
+      panels: 2, height: 280,
+      controls: ctl,
+      buttons: [{ label: "Play", act: function (s) { s.sound = s.notes.length ? play(notesSound(s.notes, 0.6), 44100) : false; } }],
+      init: function (s) { s.sound = null; s.notes = []; },
+      draw: function (g, v, s) {
+        var bis = [], figs = [], q;
+        for (q = 0; q < 5; q++) { bis.push(v["b" + q]); figs.push(v["f" + q]); }
+        var R = realize25(bis, figs, v.top);
+        s.R = R; s.notes = [];
+        var a = g[0].axes({ x: [0, 5], y: [34, 82], title: R ? "The realization" : "No chord fits a figure in this range", xlabel: "chord", ylabel: "key number", xticks: [0, 1, 2, 3, 4, 5] });
+        bis.forEach(function (b, k) {
+          a.line([k + 0.05, k + 0.95], [wkey25(b), wkey25(b)], { color: "#8A93A0", width: 6 });
+          a.text(k + 0.5, wkey25(b) - 3.2, FIGS25[figs[k]][0] || "5/3", { align: "center", size: 11, color: C.muted });
+          s.notes.push([wkey25(b), k, 1]);
+        });
+        if (R) R.chords.forEach(function (ch, k) { ch.forEach(function (m, i) { a.line([k + 0.05, k + 0.95], [m, m], { color: i === 2 ? C.idea : "#7DD3FC", width: 6 }); s.notes.push([m, k, 1]); }); });
+        var b2 = g[1].axes({ x: [-0.5, 4.5], y: [0, 40], title: "Chords the figure allows, per bass note", xticks: [], ylabel: "count" });
+        if (R) {
+          b2.bars([0, 1, 2, 3, 4], R.counts, 0.6, { color: C.idea });
+          R.counts.forEach(function (c, i) { b2.text(i, c, String(c), { align: "center", base: "bottom", dy: -4, size: 10, color: C.muted }); });
+        }
+      },
+      readout: function (v, s) {
+        var R = s.R, total = R ? R.counts.reduce(function (p, c) { return p * c; }, 1) : 0;
+        return [["realizations possible", R ? total.toLocaleString() : "none"], ["chosen path's motion (semitones, upper voices)", R ? String(R.cost) : "-"],
+                ["top voice", R ? R.chords.map(function (ch) { return ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "G#", "A", "Bb", "B"][ch[2] % 12]; }).join(" ") : "-"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Even five chords allow thousands of correct realizations; the smoothest path is only one of them, and a continuo player would choose by the music above, which the bass alone does not know. That is why the film's realization of Corelli's bass held most of his notes but almost none of his melody."
+    });
+  };
 })();

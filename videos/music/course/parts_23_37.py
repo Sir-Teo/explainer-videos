@@ -104,4 +104,48 @@ PARTS = [
         also=(("Monochord's sixteenth-century toolkit: dissonance treatment, melody, sonority, imitation, stylometry, tuning", "explainer/music/monochord/palestrina.py"),
               ("The sixteenth-century corpus: Palestrina's Masses and Monteverdi's madrigals", "explainer/music/monochord/renaissance.py")),
     ),
+    Part(
+        n=25, level="U", widget="figuredbass", prereq=(6, 10, 15, 17, 18, 24),
+        question="How did the music of 1600 to 1750 come to rest on a bass line, a figured bass and two keys?",
+        story="In 1589 Vincenzo Galilei hung weights on strings to test a legend two thousand years old and found that "
+              "an octave needs four times the weight, not twice: the numbers belong to the strings, and music need not "
+              "obey them. His circle in Florence wanted song that served the words, and monody, recitative and aria, and "
+              "opera followed. The figured bass made every piece a top and a bottom: figuring the bass of Corelli's "
+              "Grave from his violins and realizing it again recovers 80 in 100 of his notes and his first violin only "
+              "28 times in 100. Ornament and affect were the player's; the dances of the suite became characters; the "
+              "concerto was built from a ritornello's returns, which a program matching intervals finds in any key but "
+              "misses when the mode changes. Werckmeister's temperament gave keys colours, C's third 3.9 cents wide and "
+              "F sharp's 21.5, and eight modes became two keys: Ionian and Aeolian label 35 in 100 of Palestrina's "
+              "movements and all of Bach's chorales, 185 major and 178 minor. Bach, Handel and Rameau gathered the "
+              "century up, and what the scores do not say, pitch and tempo, is still argued. The Tune becomes a French "
+              "overture and a chaconne with an ornamented reprise.",
+        handoff="The Classical style in Part 26; equal temperament's victory in Part 27; the song and opera in Part 40; "
+                "orchestration in Part 41; performance practice in Part 43.",
+        outside="Part 6 for temperaments; Part 10 for figures and the realizer; Part 15 for keys; Part 17 for the chorales; "
+                "Part 18 for the rule of the octave; Part 21 for binary form; Part 24 for the second practice. "
+                "Mersenne's law; dynamic programming; interval matching.",
+        objectives={
+            "U": ["Hear recitative and aria, a ground bass, and the four dances of the suite.",
+                  "Read a figured bass and name the chord each figure asks for.",
+                  "Hear the difference between a smooth and a rough key in a well temperament."],
+            "M": ["Figure a bass from upper parts and realize it by dynamic programming; measure what the realization keeps.",
+                  "Find a theme's returns at any transposition by matching intervals, and explain what that misses.",
+                  "Compute every key's third and fifth in meantone, Werckmeister III and equal temperament."],
+            "D": ["Weigh the evidence for historical pitch and tempo, and state an estimate with its uncertainty.",
+                  "Explain how the leading tone and musica ficta made the modes converge on major and minor."],
+            "I": ["Realize a figured bass at the keyboard, choosing a top line.",
+                  "Choose a pitch standard and a temperament for a Baroque performance, and justify them."],
+        },
+        results=[
+            ("Galilei's weights", r"f \propto \sqrt{T}: \ \text{octave} = 4{:}1, \ \text{the legend's } 2{:}1 \text{ gives } 600 \text{ cents}"),
+            ("Corelli realized", r"80\% \text{ of his notes kept}; \ \text{top voice} = \text{first violin } 28\%"),
+            ("Werckmeister III", r"\text{third: C } +3.9, \ \text{F}\sharp \ +21.5 \text{ cents}"),
+            ("Modes to keys", r"\text{Palestrina: Ionian + Aeolian } 35\%; \ \text{Bach: } 185 \text{ major}, \ 178 \text{ minor}"),
+            ("The meantone wolf", r"737.6 \text{ cents} \ (\text{good fifths } 696.6)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, 9),
+        D=(10,),
+        I=(6,),
+        also=(("Monochord's Baroque toolkit: Galilei's strings, figures from upper parts, ritornello finder, key colours, ornaments", "explainer/music/monochord/baroque.py"),),
+    ),
 ]

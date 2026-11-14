@@ -1137,9 +1137,25 @@ was available offline), and the film says why the first comparison is the wrong 
 answered that the words required it. At the same time Vincenzo Galilei, the astronomer's father, was hanging
 weights on strings to argue for a new kind of song. Out of the quarrel came opera, the figured bass, and the
 major-minor system.
+1. Hook: Galilei's weights; an ear question (2:1 or 4:1?); Mersenne's law; the plan.
+2. A new kind of song: the Camerata; recitative and aria heard; the singer's graces; a top and a bottom.
+3. Opera: Euridice, Orfeo; a lament on a ground heard; Venice and the da capo aria.
+4. The figured bass: figures; three realizations heard; an ear question (Corelli or the realizer?); what the realization keeps; the partimento.
+5. Affect and ornament: the affections; ornaments and inequality heard; French and Italian taste; the tables.
+6. The suite: four dances; the Tune in four dance rhythms heard; the binary plan.
+7. Ritornello and concerto: Corelli, Vivaldi; a concerto movement heard; the ritornello finder; The Four Seasons.
+8. Temperament and the colour of keys: thirds of every key in three temperaments; the wolf heard; an ear question (C or F sharp?); equal temperament early; key characters; the Well-Tempered Clavier.
+9. From modes to keys: Palestrina's modes against Bach's keys; Heinichen's circle; Rameau; a fundamental bass heard.
+10. Bach, Handel, Rameau: three careers; Lascia ch'io pianga heard; others.
+11. Frontier: historical pitch heard; the instruments; tempo.
+12. Variation 25: the Tune as a French overture and a chaconne. Outro: problems, payoffs.
+
 *Covers:* the two practices; monody, recitative and aria; basso continuo; the ritornello; the suite; affect;
 ornament; the trio sonata and concerto; temperament and key character; Bach, Handel, Rameau.
-*Built and computed:* a figured-bass realizer; a ritornello finder.
+*Built and computed:* `monochord/baroque.py`: Galilei's strings and Mersenne's law, figures worked out from upper parts
+and re-realized by Part 10's realizer (on Corelli's Op. 3 No. 1 Grave, from the music21 corpus), a ritornello finder by
+interval matching, key colours in any temperament, ornaments, inequality and overdotting; Palestrina's mode labels
+against Bach's keys; a fundamental bass under a chorale.
 *Variation 25:* the Tune as a French overture and as a chaconne with ornamented reprise.
 *Frontier:* historical pitch and tempo: the evidence from instruments and treatises.
 *Reading:* Bukofzer; Taruskin vol. 2; Donington.
