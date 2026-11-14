@@ -101,7 +101,7 @@ class Jazz(SoundScene):
         c = clip("sevenths.four")
 
         def nm(s):
-            s = s.replace("o7", r"$^{\varnothing 7}$").replace("7", r"$^7$")
+            s = s.replace("o7", r"$^{\emptyset 7}$").replace("7", r"$^7$")
             return s.replace("Eb", r"E$\flat$").replace("Db", r"D$\flat$").replace("Bb", r"B$\flat$").replace("F#", r"F$\sharp$")
         nb = VGroup(*[label(nm(r["chord"]), font_size=24, color=TUNE if r["chord"].endswith("7") and not r["chord"].endswith("o7") else BLUE) for r in d["rows"]])
         nb.arrange_in_grid(rows=2, buff=(0.6, 0.35))
@@ -109,7 +109,7 @@ class Jazz(SoundScene):
         left = VGroup(src, label(rf"{d['n']} seventh chords within two semitones:", font_size=20, color=GREY_A), nb).arrange(DOWN, buff=0.35)
         left.move_to(UP * 0.9)
         cells = VGroup()
-        tags = [r"tritone away: \ the jazz `tritone substitution'", r"a minor third down", r"a minor third up", r"F$^{\varnothing 7}$ to E$^7$: \ the move inside \textit{Tristan}'s first chords"]
+        tags = [r"tritone away: \ the jazz `tritone substitution'", r"a minor third down", r"a minor third up", r"F$^{\emptyset 7}$ to E$^7$: \ the move inside \textit{Tristan}'s first chords"]
         for p_, t in zip(d["pairs"], tags):
             cells.add(VGroup(label(rf"{nm(p_['a'])} to {nm(p_['b'])}", font_size=24, color=WHITE), label(t, font_size=17, color=GREY_A)).arrange(DOWN, buff=0.15))
         cells.arrange(RIGHT, buff=0.55).to_edge(DOWN, buff=1.4)
