@@ -31,6 +31,8 @@ LEDGER = [
      "measure": r"from Lydian to Locrian, 6 notes fall a semitone, one at a time"},
     {"part": 13, "title": r"over block triads, then re-voiced, spread, and with sevenths", "seconds": 30.4,
      "measure": r"re-voiced, the chords' three voices travel 60 semitones over the Tune instead of 372"},
+    {"part": 14, "title": r"decorated, upside down, backwards, and continued as a model expects and as it expects least", "seconds": 30.84,
+     "measure": r"the expected continuation costs 1.1 bits a note; the least expected, 7.8"},
 ]
 
 

@@ -360,4 +360,90 @@
       note: "A major triad close together on middle C has a roughness of about 1.1; two octaves lower the same three notes score about 3.9, and spread as a fifth and a tenth they come back to about 2.6. The root model gives C eighteen votes for C, E, G and a four-way tie for a diminished triad, one of the four being a note that is not in the chord. Try the minor seventh: the model prefers the note a minor third above the root you chose, because the same four notes are a major chord with an added sixth."
     });
   };
+  // ---- Part 14: notes from an urn, and the leap rule ---------------------------------------------------------
+  var MAJOR14 = [0, 2, 4, 5, 7, 9, 11];
+  function rng14(seed) { var s = seed >>> 0; return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+  // n notes on the steps 0..span of a scale: each drawn with a preference for the middle (crowd) and for the last note (near)
+  function draw14(n, span, crowd, near, rnd) {
+    var out = [], mid = span / 2, k, i;
+    for (i = 0; i < n; i++) {
+      var w = [], total = 0;
+      for (k = 0; k <= span; k++) {
+        var z = (k - mid) / (span / 2), v = Math.exp(-2 * crowd * z * z);
+        if (i > 0) v *= Math.exp(-near * Math.abs(k - out[i - 1]));
+        w.push(v); total += v;
+      }
+      var u = rnd() * total;
+      for (k = 0; k <= span; k++) { u -= w[k]; if (u <= 0) break; }
+      out.push(Math.min(k, span));
+    }
+    return out;
+  }
+  // after each leap (two scale steps or more): did the next move turn back?  Sorted by where the leap landed.
+  function leaps14(notes, span) {
+    var mid = span / 2, r = { away: [0, 0], across: [0, 0], toward: [0, 0], all: [0, 0] }, i;
+    for (i = 0; i + 2 < notes.length; i++) {
+      var a = notes[i], b = notes[i + 1], c = notes[i + 2];
+      if (Math.abs(b - a) < 2 || c === b) continue;
+      var kind = (a - mid) * (b - mid) < 0 ? "across" : (Math.abs(b - mid) > Math.abs(a - mid) ? "away" : "toward");
+      var back = (c - b) * (b - a) < 0 ? 1 : 0;
+      r[kind][0] += back; r[kind][1] += 1; r.all[0] += back; r.all[1] += 1;
+    }
+    return r;
+  }
+  function melodySound(steps) {
+    var rate = 44100, step = 0.26, out = new Float32Array(Math.floor((steps.length * step + 0.9) * rate)), i, n, h;
+    for (i = 0; i < steps.length; i++) {
+      var semis = 12 * Math.floor(steps[i] / 7) + MAJOR14[steps[i] % 7], hz = 261.63 * Math.pow(2, semis / 12), start = Math.floor(i * step * rate), len = Math.floor(0.7 * rate);
+      for (n = 0; n < len && start + n < out.length; n++) {
+        var t = n / rate, y = 0;
+        for (h = 1; h <= 6; h++) y += Math.sin(2 * Math.PI * hz * h * t) / (h * h) * Math.exp(-t * (2.5 + 0.9 * h));
+        out[start + n] += 0.3 * y * Math.min(1, t / 0.004);
+      }
+    }
+    return play(out, rate);
+  }
+
+  W.melody = function (el) {
+    QB.widget(el, {
+      title: "Notes from an urn, and the leap rule",
+      sub: "A melody made by chance on the white keys. Choose how wide its range is, how much its notes crowd the middle, and how much each note likes to stay near the last one. Left: twenty-four of its notes. Right: after a leap, how often the next move turns back, sorted by where the leap landed (counted over six thousand notes). No setting makes a leap toward the middle turn back as often as a leap away from it.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "span", label: "The range, in steps of the scale (7 is an octave)", min: 4, max: 14, step: 1, value: 8 },
+        { k: "crowd", label: "How much the notes crowd the middle of the range (0: every note as likely as another)", min: 0, max: 2, step: 0.1, value: 1 },
+        { k: "near", label: "How much each note likes to be near the last one (0: no memory at all)", min: 0, max: 1.5, step: 0.1, value: 0 },
+        { k: "seed", label: "Another draw", min: 1, max: 40, step: 1, value: 1 },
+      ],
+      buttons: [
+        { label: "Play the melody", act: function (s) { s.sound = melodySound(s.notes); } },
+      ],
+      init: function (s) { s.sound = null; s.notes = []; },
+      draw: function (g, v, s) {
+        var notes = draw14(24, v.span, v.crowd, v.near, rng14(v.seed * 7919)), xs = [], i;
+        var st = leaps14(draw14(6000, v.span, v.crowd, v.near, rng14(v.seed * 104729 + 1)), v.span);
+        s.notes = notes; s.stats = st;
+        for (i = 0; i < notes.length; i++) xs.push(i + 1);
+        var a = g[0].axes({ x: [0, 25], y: [-0.5, v.span + 0.5], title: "Twenty-four notes", xlabel: "note", ylabel: "step of the scale", xticks: [1, 8, 16, 24] });
+        a.line([0, 25], [v.span / 2, v.span / 2], { color: C.muted, width: 1 });
+        a.line(xs, notes, { color: C.idea, width: 1.5 });
+        a.dots(xs, notes, { color: C.idea, r: 4 });
+        var kinds = ["away", "across", "toward"], vals = [];
+        for (i = 0; i < 3; i++) vals.push(st[kinds[i]][1] ? 100 * st[kinds[i]][0] / st[kinds[i]][1] : 0);
+        s.vals = vals;
+        var b = g[1].axes({ x: [0.3, 3.7], y: [0, 100], title: "Leaps that turn back, in a hundred", xlabel: "away from the middle      across it      toward it", xticks: [], ylabel: "in a hundred" });
+        b.bars([1, 2, 3], vals, 0.6, { color: function (k) { return k === 2 ? C.implied : C.idea; } });
+      },
+      readout: function (v, s) {
+        var all = s.stats.all;
+        return [["all leaps that turn back", all[1] ? fmt(100 * all[0] / all[1], 0) + " in a hundred" : "-"],
+                ["leaps away from the middle", fmt(s.vals[0], 0) + " in a hundred"],
+                ["leaps across the middle", fmt(s.vals[1], 0) + " in a hundred"],
+                ["leaps toward the middle", fmt(s.vals[2], 0) + " in a hundred"],
+                ["leaps counted", String(all[1])],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "With no memory and notes that crowd the middle, about eight leaps in ten turn back, though nothing in the urn knows what a leap is. Set the crowding to zero: the notes are now equally likely, and still most leaps turn back, because a leap away from the middle lands near an edge. Give the notes a liking for their neighbours and the melody begins to sound like a tune; the three bars keep their order. In the fifty-four tunes of the film the figures are 75, 78 and 20."
+    });
+  };
 })();

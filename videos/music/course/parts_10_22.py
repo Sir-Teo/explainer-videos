@@ -228,4 +228,62 @@ PARTS = [
               ("Pictures of chords: Euler's lattice, bars for the twelve notes, rows of partials", "explainer/music/chordviz.py"),
               ("The engraver, now with chords and a grand staff", "explainer/music/staff.py")),
     ),
+    Part(
+        n=14, level="U", widget="melody",
+        question="What do melodies do, which of those things would any string of notes in a small range do anyway, "
+                 "and can a machine learn to expect the next note?",
+        story="Textbooks have said for four hundred years that a leap should be followed by a step back. The part "
+              "tests that on fifty-four tunes that half the world can sing, and then on the same tunes with their "
+              "notes shuffled: the shuffled ones obey the rule more often. A melody is first a contour, which "
+              "listeners keep before the intervals; it is the same tune in any key, and eight moves of up, down "
+              "and repeat tell all fifty-four apart. Half of all moves are steps, a quarter repeats and a quarter "
+              "leaps; steps mostly fall and fourths mostly rise; the ear splits a line that leaps too far into "
+              "two streams. A tune fits in an octave and lives near its middle. Phrases are arches about a breath "
+              "long that end lower than they began. Then the leap rule is explained: a leap away from the middle "
+              "of a small range lands near its edge, and the next note is probably back toward the middle, as it "
+              "is for a die; real tunes and shuffled ones both turn back after leaps away from the middle and "
+              "carry on after leaps toward it (von Hippel and Huron, 2000). What chance does not explain is the "
+              "rest: gap-fill in part, momentum after a step, leaps that land on the notes of the home chord, "
+              "tendency tones (7 to 1, 4 to 3, 6 to 5), repetition and sequence, and phrases that end as "
+              "questions until the last one answers on the first degree. A note carries 4.3 bits if nothing is "
+              "known, 3.2 given which notes are common and 2.6 given the note before; patterns of moves follow "
+              "Zipf's law. A model that only counts what followed what is surprised by the Tune exactly once, at "
+              "its leap of a fifth, and finds a minor-key tune from another tradition hardest of all. Speech has "
+              "its own melody, which a song must respect. The frontier is predicting what a listener expects, "
+              "and what makes a tune stick. The Tune's first phrase is played eight ways.",
+        handoff="Part 15 turns tendency tones and the note that phrases end on into a key. Two melodies at once are "
+                "Parts 16 and 20; motive and sequence grow into form in Part 21; melody is the whole art in Parts "
+                "34 and 35; expectation becomes a theory of emotion in Part 46; and the counting model is the "
+                "ancestor of the composing machines of Part 65.",
+        outside="Part 4 for streaming and pitch; Part 10 for contour codes; Part 11 for rhythm and stress; Part 12 "
+                "for scale degrees; Part 13 for the home chord and the tritone. Probability: conditional "
+                "probability, regression to the mean, entropy in bits.",
+        objectives={
+            "U": ["Describe a melody by its contour, moves, range and phrase shapes.",
+                  "Name the tendency tones of a major scale and say where each goes.",
+                  "Mark a tune's phrases, its repeats and its sequences, and write its plan in letters."],
+            "M": ["Test a claimed regularity of melody against shuffled notes and against a random walk in the same range.",
+                  "Compute the chance that a die turns back after a rise, and explain the leap rule by regression to the mean.",
+                  "Train a variable-order Markov model on a corpus and read a tune's information content in bits."],
+            "D": ["Separate what follows from range and step size from what needs a composer.",
+                  "Say why a model's surprise depends on the music it was trained on."],
+            "I": ["Write a singable tune: within an octave, mostly steps, with a peak and a repeated motive.",
+                  "Set words so that stress, or tone, agrees with the melody.",
+                  "Use a contour code to find a tune from a hummed fragment."],
+        },
+        results=[
+            ("Moves in 54 tunes", r"\text{steps } 50\%,\ \text{repeats } 25\%,\ \text{leaps } 25\%;\quad \overline{|\Delta|} = 2.0 \text{ semitones}"),
+            ("After a leap, turning back", r"\text{tunes } 63\%,\quad \text{shuffled } 79\%;\qquad \text{away from the middle } 75\%,\ \text{toward it } 20\%"),
+            ("A die", r"P(X_3 < X_2 \mid X_2 - X_1 \ge 2,\ X_3 \ne X_2) = \tfrac{4}{5}"),
+            ("Information in a note", r"\log_2 20 = 4.3 \ \to\ H_0 = 3.2 \ \to\ H_1 = 2.6 \text{ bits}"),
+            ("Surprise", r"h(x_t) = -\log_2 p(x_t \mid x_{t-n}, \dots, x_{t-1})"),
+            ("Zipf's law for pairs of moves", r"f(r) \propto r^{-1.3}"),
+        ],
+        U=(0, 1, 2, 3, 4, 7, 8),
+        D=(5, 12),
+        I=(11,),
+        also=(("Monochord's melodies: counts, chance baselines, a variable-order model of the next note", "explainer/music/monochord/melody.py"),
+              ("The corpus: fifty-four traditional tunes in scale degrees", "explainer/music/monochord/tunes.py"),
+              ("Pictures of melodies: a tune as bars in time and pitch, bar charts, a tune against itself", "explainer/music/melodyviz.py")),
+    ),
 ]
