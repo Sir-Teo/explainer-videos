@@ -526,4 +526,43 @@ PARTS = [
         I=(9,),
         also=(("Monochord's raga and tala: a jawari string, tabla strokes, thaats, melakartas, a tihai solver, gamaka contours", "explainer/music/monochord/raga.py"),),
     ),
+    Part(
+        n=35, level="U", widget="maqam", prereq=(5, 6, 12, 33, 34),
+        question="How does a system whose notes lie between the piano's keys organise its modes, and who decides where those notes are?",
+        story="Over C an oud plays three thirds: 300, 400 and 350 cents; the last, neither major nor minor, is the third of "
+              "maqam Rast. Arabic theory builds its modes from ajnas, groups of three or four notes with steps of 100, 150, "
+              "200 and 300 cents, and joins two into a maqam with a path of its own: Rast, Bayati, Hijaz, and Saba, which "
+              "never reaches its octave. The half-flat is old: al-Farabi recorded Zalzal's fret at 27/22, 355 cents, and "
+              "Safi al-Din built seventeen notes from a chain of fourths. Twenty-four equal steps fit the neutral intervals "
+              "within five cents; fifty-three, the Turkish grid, fit the just ones within two. In Cairo in 1932 a congress "
+              "set out to fix the scale and could not agree; musicians place the same written note differently from maqam "
+              "to maqam. Turkish Rast puts its third at 17 of 53 commas, 385 cents, close to a pure major third; the Persian "
+              "dastgah is a repertory of melodies more than a scale. Rhythmic cycles of 8, 9 and 10 beats, the taqsim, and "
+              "instruments built to play between the keys complete the picture. The Tune is heard in Rast, Bayati and Hijaz.",
+        handoff="Gamelan's tunings in Part 36; timelines in Part 37; improvisation in Part 42; universals in Part 47; pitch "
+                "tracking in Part 61.",
+        outside="Part 5 for roughness; Part 6 for commas and temperaments; Part 12 for scales; Part 33 for temperaments as "
+                "maps; Part 34 for raga and the drone. Ratios and cents, equal divisions, approximation errors.",
+        objectives={
+            "U": ["Hear a three-quarter tone and a neutral third, and recognise jins Rast, Bayati and Hijaz.",
+                  "Explain how a maqam is built from ajnas and why it is more than a scale.",
+                  "Tell an 8-, 9- and 10-beat cycle apart."],
+            "M": ["Compute maqamat in cents and their errors on 24 and 53 equal steps.",
+                  "Build Safi al-Din's 17-tone gamut and Turkish Rast in commas.",
+                  "Evaluate a tuning grid against medieval ratios and measured practice."],
+            "D": ["Design a study of where musicians place neutral notes, and on what that depends."],
+            "I": ["Retune instruments and software for maqam, and choose a grid knowingly."],
+        },
+        results=[
+            ("Rast", r"0, 200, 350, 500, 700, 900, 1050, 1200 \text{ cents}"),
+            ("Zalzal's third", r"27/22 = 355 \text{ cents}: \ 24\text{-EDO } {-4.5}, \ 53\text{-EDO } {+7.7}"),
+            ("Turkish segah", r"17/53 \text{ octave} = 385 \text{ cents}"),
+            ("Safi al-Din", r"17 \text{ notes: limma, limma, comma per tone}"),
+            ("Cycles", r"\text{maqsum } 8, \ \text{aksak } 9, \ \text{samai thaqil } 10"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7, 8, 9),
+        D=(10,),
+        I=(5,),
+        also=(("Monochord's maqam engine: ajnas, maqamat, medieval ratios, equal divisions, Turkish commas, an oud and a darbuka", "explainer/music/monochord/maqam.py"),),
+    ),
 ]

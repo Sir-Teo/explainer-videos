@@ -18,7 +18,7 @@ class Gamaka(SoundScene):
     # ------------------------------------------------------------------
     def kinds(self):
         items = [
-            (r"\textit{m\=ı\d{n}\d{d}} \ (meend): \ a slow glide from one note to another", WHITE),
+            (r"\textit{m\=\i\d{n}\d{d}} \ (meend): \ a slow glide from one note to another", WHITE),
             (r"\textit{\=andolan}: \ a slow swing around a note, \ in some ragas only on some notes", WHITE),
             (r"\textit{ka\d{n}}: \ a grace note touched on the way in", WHITE),
             (r"\textit{gamak}: \ a fast, \ heavy oscillation between notes", TUNE),

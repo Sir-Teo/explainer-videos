@@ -129,7 +129,7 @@ class Outro(SoundScene):
              r"H. H. Touma, \ \textit{The Music of the Arabs} \ (1996)",
              r"H. Farhat, \ \textit{The Dastgah Concept in Persian Music} \ (1990)",
              r"K. Signell, \ \textit{Makam: \ Modal Practice in Turkish Art Music} \ (1977)"],
-            [r"B. Bozkurt, \ O. Yarman, \ M. K. Karao\u{g}lu, \ C. Akkoç, \ `Weighing diverse theoretical models on Turkish maqam music' \ (2009)",
+            [r"B. Bozkurt, \ O. Yarman, \ M. K. Karaosmano\u{g}lu, \ C. Akko\c{c}, \ `Weighing diverse theoretical models on Turkish maqam music' \ (2009)",
              r"A. J. Racy, \ \textit{Making Music in the Arab World} \ (2003)",
              r"J. Farraj, \ S. Abu Shumays, \ \textit{Inside Arabic Music} \ (2019)",
              r"al-F\=ar\=ab\=\i, \ \textit{Kit\=ab al-M\=us\=\i q\=\i\ al-Kab\=\i r} \ (10th century)"],

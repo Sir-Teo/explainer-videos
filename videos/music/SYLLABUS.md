@@ -1440,13 +1440,29 @@ traditions are described with their own terms and sources.
 *Story:* Cairo, 1932: a congress meets to fix the Arab scale in equal quarter tones, and the measurements show
 that the best musicians play nothing of the kind. A thousand years earlier al-Fārābī had written the most
 advanced treatise on tuning in the world. The part learns a system whose notes lie between the piano's keys.
+1. Hook: an ear question (which third lies between?); the Cairo congress; where maqam lives; the plan.
+2. Ajnas: the jins and its Greek roots; eight ajnas heard; step sizes; one jins on three tonics heard; names.
+3. Maqamat and their paths: four maqamat heard; Rast's descent heard; Saba's missing octave heard; sayr; modulation; families.
+4. Neutral intervals: Zalzal's fret; the Greek inheritance; Ṣafī al-Dīn's 17; 24 and 53 against the old ratios; three neutral thirds heard; the West; why.
+5. Cairo, 1932: Mushāqa's grid; the congress; European ears; what musicians do (an illustration heard); the orchestra; after.
+6. Turkish makam in commas: Arel–Ezgi–Uzdilek; an ear question (Arabic or Turkish third?); Ottoman music; accidentals; theory and practice.
+7. The Persian dastgah: system; radif; koron and sori; a koron phrase heard; song and poetry.
+8. Rhythmic cycles: dum and tek; an ear question (which has ten beats?); maqsum and baladi heard; dance; spoken cycles; long cycles.
+9. Taqsim and modulation: the taqsim; Bayati to Saba heard; learning to improvise; Hijaz heard; tarab.
+10. The instruments: the oud; its tuning; the qanun's levers heard; the ney and ensemble; a ney-like tone heard.
+11. Frontier: measuring makam; standards; machines; fair study; the research problem.
+12. Variation 35: the Tune in Rast, Bayati and Hijaz after a taqsim. Outro: problems, payoffs.
+
 *Covers:* al-Fārābī and Ṣafī al-Dīn's seventeen tones; the ajnas; the maqam families and their paths; neutral
 intervals; modulation and the taqsim; Turkish theory in commas; the Persian dastgah; rhythmic cycles; the
 instruments.
-*Built and computed:* a maqam engine in cents; theory against published measurements; 24 and 53 equal divisions
-as approximations, with their errors.
+*Built and computed:* `monochord/maqam.py`: ajnas and maqamat in cents; medieval ratios against 24 and 53 equal
+divisions (24 within five cents of the neutral ones, 53 within two of the just ones); Ṣafī al-Dīn's gamut by a chain
+of fourths; Turkish Rast in commas (segah 385 cents); an oud tuned within a fraction of a cent; darbuka cycles.
 *Variation 35:* a study: the Tune in Rast, Bayati and Hijaz with a taqsim opening.
-*Frontier:* computational makam analysis; standardization and its critics.
+*Frontier:* computational makam analysis; standardization and its critics; where musicians place neutral notes.
+*Rights:* every sound is the film's own model (§2.4); the phrases are ours; the one illustration of placement uses
+values of ours and says so.
 *Reading:* Marcus; Touma; Farhat; Signell; Bozkurt et al.
 
 ### Part 36 · Bronze and Silk (~55)

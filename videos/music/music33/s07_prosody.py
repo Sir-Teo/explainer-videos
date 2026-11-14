@@ -78,7 +78,7 @@ class Prosody(SoundScene):
     # ------------------------------------------------------------------
     def yamata(self):
         d = load("prosody")
-        syl = VGroup(*[VGroup(label(s, font_size=24, color=TUNE if b else BLUE), label("H" if b else "L", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.12)
+        syl = VGroup(*[VGroup(label(s.replace("ā", r"\=a"), font_size=24, color=TUNE if b else BLUE), label("H" if b else "L", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.12)
                        for s, b in zip(d["syllables"], d["bits"])]).arrange(RIGHT, buff=0.35).move_to(UP * 1.3)
         wins = VGroup(*[label(w, font_size=20, color=WHITE) for w in d["windows"]]).arrange(RIGHT, buff=0.45).move_to(DOWN * 0.3)
         names = label(r"the eight three-syllable feet, \ each once: \ ya-gana, \ ma-gana, \ ta-gana ...", font_size=21, color=GREY_A).next_to(wins, DOWN, buff=0.45)

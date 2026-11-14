@@ -867,4 +867,49 @@
       note: "In Teentaal, start on beat 5 with p = 3, g = 2 (the film's hook), or on beat 3 with p = 5, g = 0. In Jhaptaal try starting on beat 6. Change one number by one and the landing misses."
     });
   };
+  // -------------------------------------------------------------------------------------------- Part 35: the maqam ruler
+  var AJNAS35 = { "Rast": [0, 200, 350, 500], "Bayati": [0, 150, 300, 500], "Hijaz": [0, 100, 400, 500], "Saba": [0, 150, 300, 400],
+                  "Nahawand": [0, 200, 300, 500], "Kurd": [0, 100, 300, 500], "Ajam": [0, 200, 400, 500] };
+  var JN35 = ["Rast", "Bayati", "Hijaz", "Saba", "Nahawand", "Kurd", "Ajam"];
+  W.maqam = function (el) {
+    QB.widget(el, {
+      title: "Build a maqam from two ajnas",
+      sub: "Choose a lower jins on the tonic and an upper jins on the ghammaz, and a grid of equal steps to compare against. The ruler shows the notes in cents with the piano's twelve keys underneath; the readout gives each note's nearest grid step and its error. Rast is Rast on 0 with Rast on 700; Bayati, Bayati with Nahawand on 500.",
+      panels: 1, height: 260,
+      controls: [
+        { k: "lo", label: "Lower jins", min: 0, max: 6, step: 1, value: 1, fmt: function (x) { return JN35[x]; } },
+        { k: "hi", label: "Upper jins", min: 0, max: 6, step: 1, value: 4, fmt: function (x) { return JN35[x]; } },
+        { k: "g", label: "Ghammaz (cents)", min: 300, max: 700, step: 50, value: 500 },
+        { k: "n", label: "Equal steps to compare", min: 12, max: 72, step: 1, value: 24 }
+      ],
+      buttons: [{ label: "Play up and down", act: function (s) {
+        var seq = s.notes.concat(s.notes.slice(0, -1).reverse()), notes = [];
+        seq.forEach(function (c, i) { notes.push([62 + c / 100, i, 0.95]); });
+        s.sound = play(notesSound(notes, 0.32), 44100);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        var lo = AJNAS35[JN35[v.lo]], hi = AJNAS35[JN35[v.hi]], set = {};
+        lo.forEach(function (c) { set[c] = 1; });
+        hi.forEach(function (c) { set[c + v.g] = 1; });
+        var notes = Object.keys(set).map(Number).filter(function (c) { return c <= 1200; }).sort(function (a, b) { return a - b; });
+        if (notes[notes.length - 1] < 1200 && JN35[v.lo] !== "Saba") notes.push(1200);
+        s.notes = notes;
+        var a = g[0].axes({ x: [-20, 1220], y: [-1, 2], title: "Notes in cents above the tonic (grey: the piano's keys; blue: the " + v.n + "-step grid)", noY: true, xlabel: "cents" });
+        var k;
+        for (k = 0; k <= 12; k++) a.line([k * 100, k * 100], [-0.6, 0.6], { color: "#6b7280", width: 1 });
+        for (k = 0; k <= v.n; k++) a.line([k * 1200 / v.n, k * 1200 / v.n], [0.9, 1.3], { color: "#60A5FA", width: 1 });
+        notes.forEach(function (c) { a.line([c, c], [-0.8, 0.8], { color: C.idea, width: 4 }); });
+        a.text(v.g, 1.7, "ghammaz", { align: "center", color: C.muted, size: 11 });
+      },
+      readout: function (v, s) {
+        var errs = s.notes.map(function (c) { var k = Math.round(c * v.n / 1200); return (k * 1200 / v.n - c); });
+        var worst = Math.max.apply(null, errs.map(Math.abs));
+        return [["notes (cents)", s.notes.join(", ")],
+                ["errors on the " + v.n + "-step grid", errs.map(function (e) { return (e >= 0 ? "+" : "") + e.toFixed(1); }).join(", ") + "  (worst " + worst.toFixed(1) + ")"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Try 24 steps, then 53: the neutral steps of Rast and Bayati fit 24 exactly, by construction, and miss 53 by about eight cents, while Hijaz and Nahawand fit both. The written grid is a convention; chapter four of the film asks where musicians actually put these notes."
+    });
+  };
 })();
