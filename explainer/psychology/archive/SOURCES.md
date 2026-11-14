@@ -149,6 +149,17 @@ and summarized, not stored. Dates are the day the check was made.
 | `swets_1961` | Decision processes in perception | Swets, Tanner and Birdsall, *Psychol. Rev.* 68 (1961) 301–340 | facts only | 2026-11-14: later reviews |
 | `maniscalco_lau_2012` | Meta-d' | Maniscalco and Lau, *Conscious. Cogn.* 21 (2012) 422–430 | facts only | 2026-11-14: the abstract |
 | `mickes_2012` | ROC analysis of line-ups | Mickes, Flowe and Wixted, *J. Exp. Psychol. Appl.* 18 (2012) 361–376 | facts only | 2026-11-14: the posted copy's summary |
+| `hecht_1942` | How few quanta a dark-adapted eye can see | Hecht, Shlaer and Pirenne, *J. Gen. Physiol.* 25 (1942) 819–840 | facts only | 2026-11-14: the abstract |
+| `baylor_1979` | Single rods respond to single photons | Baylor, Lamb and Yau, *J. Physiol.* 288 (1979) 613–634 | facts only | 2026-11-14: the abstract |
+| `tinsley_2016` | Direct detection of a single photon by humans | Tinsley et al., *Nat. Commun.* 7 (2016) 12172 | CC BY (facts only used) | 2026-11-14: the article's numbers as quoted |
+| `kuffler_1953` | Centre and surround in the cat's retina | Kuffler, *J. Neurophysiol.* 16 (1953) 37–68 | facts only | 2026-11-14: citation and summaries |
+| `campbell_robson_1968` | Fourier analysis and the visibility of gratings | Campbell and Robson, *J. Physiol.* 197 (1968) 551–566 | facts only | 2026-11-14: secondary accounts |
+| `blakemore_campbell_1969` | Adaptation to gratings: channels | Blakemore and Campbell, *J. Physiol.* 203 (1969) 237–260 | facts only | 2026-11-14: the abstract |
+| `lafer_sousa_2015` | The dress | Lafer-Sousa, Hermann and Conway, *Curr. Biol.* 25 (2015) R545–R546 | facts only; the photograph is not reproduced | 2026-11-14: the university's release |
+| `milner_1991` | Patient D.F. and the slot | Milner et al., *Brain* 114 (1991) 405–428; Goodale et al., *Nature* 349 (1991) 154–156 | facts only | 2026-11-14: reviews' accounts |
+| `jordan_2010` | A tetrachromat among 24 carriers | Jordan, Deeb, Bosten and Mollon, *J. Vis.* 10(8) (2010) 12 | facts only | 2026-11-14: the abstract |
+| `colour_tables` | Colour-matching functions and cone fundamentals (5 nm) | CIE 1931 2°; Stiles and Burch (1955) 2° pilot; Stockman and Sharpe (2000) 2°; CIE 1951 scotopic; all from [cvrl.org](http://www.cvrl.org/) | published standard tables | 2026-11-14: downloaded and transcribed by script into `_colour_tables.py`; peaks checked |
+| `okabe_ito` | A palette for colour-blind readers | Okabe and Ito, *Color Universal Design* (2002; 2008) | facts only | 2026-11-14: hex values from memory |
 
 ## Looked for and not used
 

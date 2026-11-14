@@ -665,7 +665,7 @@ add(Finding(
 ))
 
 shown(5, "ADRIAN_1926", "the rate code of a single sensory fibre: told here as the discovery it was, with schematic "
-      "trains; entered with sensory coding", row_in=13)
+      "trains; its row (rate_code) is entered in Part 13")
 shown(5, "GOLGI_CAJAL_1906", "the neuron doctrine: a settled piece of anatomy, told as history")
 shown(5, "GIDON_2020", "one laboratory's report of graded dendritic spikes in human cortex, shown at the frontier "
       "and not yet repeated elsewhere")
@@ -846,8 +846,8 @@ add(Finding(
 ))
 
 shown(8, "BENNETT_2009", "a demonstration of a statistical error, not a claim about the mind")
-shown(8, "HUBEL_WIESEL_1959", "told as the history of a method; orientation selectivity is entered with vision",
-      row_in=13)
+shown(8, "HUBEL_WIESEL_1959", "told as the history of a method; orientation selectivity's row (orientation_cells) is "
+      "entered in Part 13")
 shown(8, "BERGER_1929", "the history of an instrument")
 shown(8, "OGAWA_1990", "the physics of a measurement")
 shown(8, "LOGOTHETIS_2001", "what a measurement follows; physiology, not a claim about the mind")
@@ -1094,8 +1094,8 @@ shown(11, "WATSON_PELLI_1983", "a method, run on Psyche")
 shown(11, "WICHMANN_HILL_2001", "a method, applied to simulated data")
 shown(11, "HALBERDA_2008", "Weber's law for number, a preview; number sense is entered in Part 30", row_in=30)
 shown(11, "GIBBON_1977", "Weber's law for time, shown as a pattern; the series does not study interval timing")
-shown(11, "LESMES_2010", "a method at the frontier; vision is entered in Part 13", row_in=13)
-shown(11, "DEVRIES_ROSE", "a theory of the threshold, run on Psyche; the eye's thresholds are entered in Part 13", row_in=13)
+shown(11, "LESMES_2010", "a method at the frontier; its row (csf_channels) is entered in Part 13")
+shown(11, "DEVRIES_ROSE", "a theory of the threshold, run on Psyche; its row (few_quanta) is entered in Part 13")
 shown(11, "BERNOULLI_1738", "a theory of value, a preview; choices under risk are entered in Part 26", row_in=26)
 shown(11, "PLATEAU_1872", "a historical proposal; the power law's row is Stevens's")
 shown(11, "THURSTONE_1927", "a method, run on simulated judges; scaling judgments is entered in Part 46", row_in=46)
@@ -1174,3 +1174,134 @@ shown(12, "GIGERENZER_HOFFRAGE_1995", "base-rate reasoning, a preview; judgment 
 shown(12, "MANISCALCO_LAU_2012", "a method at the frontier; confidence is entered in Part 25", row_in=25)
 shown(12, "SWETS_2000", "a review of applications, not a finding")
 shown(12, "MICKES_2012", "line-ups, a preview of a live dispute; eyewitness memory is entered in Part 21", row_in=21)
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 13: The Eye and the Code
+# ---------------------------------------------------------------------------------------------------------------
+add(Finding(
+    key="few_quanta", part=13, title=r"A handful of quanta",
+    claim="A fully dark-adapted eye sees a dim flash when only a handful of quanta, roughly five to fourteen, are "
+          "absorbed by its rods, spread so thinly that a rod must respond to a single quantum.",
+    original=Study("Hecht, Shlaer and Pirenne", 1942, n="a few trained observers, mostly the authors",
+                   design="frequency of seeing for brief flashes of 510 nm light after 40 minutes in the dark",
+                   found="54 to 148 quanta at the cornea, 5 to 14 absorbed; the curves' slopes gave 5 to 8"),
+    status="replicated",
+    record=(Study("Baylor, Lamb and Yau", 1979, n="toad rods", design="suction-electrode recordings from single rods",
+                  found="one absorbed photon gives a current of about 1 pA, 5% of the dark current"),
+            Study("Tinsley et al.", 2016, n="a few observers, 30,767 trials", design="single photons from a quantum "
+                  "source; two-interval forced choice with confidence",
+                  found="51.6% correct on single-photon trials (P = 0.0545); 60% on high-confidence trials")),
+    note="That a few absorbed quanta suffice, and that a rod responds to one, is settled physiology and has been "
+         "repeated many times. Whether a person can report a single photon rests on one study whose overall result "
+         "was at the edge of significance; it has not been directly repeated.",
+    sources=("S. Hecht, S. Shlaer and M. H. Pirenne, Energy, quanta, and vision, Journal of General Physiology 25 "
+             "(1942) 819-840",
+             "D. A. Baylor, T. D. Lamb and K.-W. Yau, Responses of retinal rods to single photons, Journal of "
+             "Physiology 288 (1979) 613-634",
+             "J. N. Tinsley et al., Direct detection of a single photon by humans, Nature Communications 7 (2016) "
+             "12172"),
+    checked="2026-11-14",
+    data=("HECHT_1942", "BAYLOR_1979", "TINSLEY_2016", "DEVRIES_ROSE"),
+))
+
+add(Finding(
+    key="rate_code", part=13, title=r"Intensity as a rate",
+    claim="A single sensory fibre signals the strength of a stimulus by how often it fires, not by the size of its "
+          "impulses, and its rate falls during a steady stimulus.",
+    original=Study("Adrian and Zotterman", 1926, n="frog muscle preparations", design="one stretch receptor isolated "
+                   "by cutting the muscle down; weights hung from it",
+                   found="impulses of fixed size whose frequency rose with the load and fell as the load stayed on"),
+    status="replicated",
+    record=(Study("Hartline and Graham", 1932, n="Limulus", design="a single optic nerve fibre from one ommatidium",
+                  found="brighter light, a faster rate; the size of the impulses unchanged"),),
+    note="Rate coding and adaptation have been found in every sense since. Rate is not the only code: the timing of "
+         "the first spike and the pattern across many fibres carry information too.",
+    sources=("E. D. Adrian and Y. Zotterman, The impulses produced by sensory nerve-endings. Part II. The response of "
+             "a single end-organ, Journal of Physiology 61 (1926) 151-171",
+             "H. K. Hartline and C. H. Graham, Nerve impulses from single receptors in the eye, Journal of Cellular "
+             "and Comparative Physiology 1 (1932) 277-295"),
+    checked="2026-11-14",
+    data=("ADRIAN_1926",),
+))
+
+add(Finding(
+    key="orientation_cells", part=13, title=r"Cells tuned to orientation",
+    claim="Neurons in primary visual cortex respond best to an edge or bar at one orientation, and simple cells' "
+          "fields are built from aligned centre-surround inputs.",
+    original=Study("Hubel and Wiesel", 1959, n="cats", design="single cells in striate cortex, stimulated with spots "
+                   "and slits of light", found="cells driven only by a line at a particular orientation and position"),
+    status="replicated",
+    record=(Study("Hubel and Wiesel", 1968, n="monkeys", design="single cells in striate cortex",
+                  found="orientation tuning, simple and complex cells, as in the cat"),
+            Study("Reid and Alonso", 1995, n="cats", design="paired recordings from thalamus and cortex",
+                  found="thalamic cells connect to simple cells whose subregions they overlap, of the same sign")),
+    note="Orientation tuning has been confirmed in every mammal with a visual cortex that has been studied. The "
+         "hierarchy (centre-surround, simple, complex) holds as a first approximation; much of what these cells do "
+         "with natural scenes is not yet explained by it.",
+    sources=("D. H. Hubel and T. N. Wiesel, Receptive fields of single neurones in the cat's striate cortex, Journal "
+             "of Physiology 148 (1959) 574-591",
+             "D. H. Hubel and T. N. Wiesel, Receptive fields and functional architecture of monkey striate cortex, "
+             "Journal of Physiology 195 (1968) 215-243",
+             "S. W. Kuffler, Discharge patterns and functional organization of mammalian retina, Journal of "
+             "Neurophysiology 16 (1953) 37-68",
+             "R. C. Reid and J.-M. Alonso, Specificity of monosynaptic connections from thalamus to visual cortex, "
+             "Nature 378 (1995) 281-284"),
+    checked="2026-11-14",
+    data=("HUBEL_WIESEL_1959", "KUFFLER_1953"),
+))
+
+add(Finding(
+    key="csf_channels", part=13, title=r"The CSF and its channels",
+    claim="Sensitivity to contrast is band-pass, peaking at a few cycles per degree, and adapting to one grating "
+          "lowers sensitivity mainly near its own frequency and orientation.",
+    original=Study("Campbell and Robson", 1968, n="a few observers", design="contrast thresholds for sine and square "
+                   "gratings", found="a band-pass contrast sensitivity function; thresholds predicted from Fourier "
+                   "components"),
+    status="replicated",
+    record=(Study("Blakemore and Campbell", 1969, n="2 observers", design="thresholds after adapting to a "
+                  "high-contrast grating", found="up to a fivefold rise in threshold near the adapting frequency"),
+            Study("Lesmes et al.", 2010, n="observers and simulations", design="a four-parameter CSF estimated "
+                  "adaptively", found="the band-pass shape recovered in about fifty trials")),
+    note="The shape is one of the best-replicated curves in vision and is used to test eyes in clinics. Whether the "
+         "'channels' are separate mechanisms or a convenient description of a continuum is still discussed.",
+    sources=("F. W. Campbell and J. G. Robson, Application of Fourier analysis to the visibility of gratings, Journal "
+             "of Physiology 197 (1968) 551-566",
+             "C. Blakemore and F. W. Campbell, On the existence of neurones in the human visual system selectively "
+             "sensitive to the orientation and size of retinal images, Journal of Physiology 203 (1969) 237-260",
+             "L. A. Lesmes, Z.-L. Lu, J. Baek and T. D. Albright, Bayesian adaptive estimation of the contrast "
+             "sensitivity function: the quick CSF method, Journal of Vision 10(3) (2010) 17"),
+    checked="2026-11-14",
+    data=("CAMPBELL_ROBSON_1968", "BLAKEMORE_CAMPBELL_1969", "LESMES_2010"),
+))
+
+add(Finding(
+    key="dress_illuminant", part=13, title=r"The dress",
+    claim="People who see the dress as white and gold, rather than blue and black, are assuming that it is lit by "
+          "bluish light, and discount it.",
+    original=Study("Lafer-Sousa, Hermann and Conway", 2015, n="about 1,400 online", design="a survey with colour "
+                   "matching; the image shown at several sizes",
+                   found="57% blue-black, 30% white-gold, 11% blue-brown; reports followed assumed illumination"),
+    status="replicated",
+    record=(Study("Wallisch", 2017, n="8,084 and 5,333 online", design="two surveys asking what people saw and "
+                  "how they thought the dress was lit", found="those who assumed shade saw white and gold more often"),
+            Study("Witzel, Racey and O'Regan", 2017, n="online and laboratory samples", design="colour reports "
+                  "against assumed illumination", found="perceived colour moved opposite to the assumed light along "
+                  "the daylight axis")),
+    note="Three groups, using different methods, tie the split to assumptions about the light. Why people differ "
+         "in those assumptions (age, time spent in daylight) is less settled, and the effects found are modest.",
+    sources=("R. Lafer-Sousa, K. L. Hermann and B. R. Conway, Striking individual differences in color perception "
+             "uncovered by 'the dress' photograph, Current Biology 25 (2015) R545-R546",
+             "P. Wallisch, Illumination assumptions account for individual differences in the perceptual "
+             "interpretation of a profoundly ambiguous stimulus in the color domain: 'The dress', Journal of Vision "
+             "17(4) (2017) 5",
+             "C. Witzel, C. Racey and J. K. O'Regan, The most reasonable explanation of 'the dress': implicit "
+             "assumptions about illumination, Journal of Vision 17(2) (2017) 1"),
+    checked="2026-11-14",
+    data=("LAFER_SOUSA_2015",),
+))
+
+shown(13, "JORDAN_2010", "one exceptional observer, shown at the frontier as a possibility, not a general finding")
+shown(13, "MILNER_1991", "a single patient, told as the case that founded a theory; vision without awareness, with "
+      "blindsight, is entered in Part 27", row_in=27)
+shown(13, "COLOUR_TABLES", "standard tables, the measurements on which colour science is built, not a finding")
+shown(13, "OKABE_ITO", "a design recommendation, not a finding")

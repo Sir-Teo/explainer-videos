@@ -45,5 +45,10 @@ Modules so far, with the part that introduces each:
                          area; rating ROCs fitted by maximum likelihood; the ideal observer under base rates
                          and payoffs; forced choice; high-threshold and dual-process rivals; natural
                          frequencies; the prevalence effect
+``vision``          13   frequency of seeing as a Poisson tail and its fit; diffraction, blur, Nyquist and
+                         aliasing; gain control and Weber's law; differences of Gaussians and Mach bands;
+                         Gabor fields, simple and complex cells; normalization; the CSF and its fit; cone
+                         fundamentals, colour matching, metamers, chromaticity; opponent channels, dichromacy
+                         and von Kries constancy
 =================  ====  ===============================================================================
 """

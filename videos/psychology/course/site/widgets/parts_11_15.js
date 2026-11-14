@@ -235,4 +235,113 @@
       note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. Each boundary between ratings is a criterion: count only 'sure old' as old and you get the strictest point, then 'sure or probably old', and so on (chapter 3). The green point is the old/new boundary, where d' and c are computed with the log-linear correction (k + 0.5)/(n + 1) (chapter 4). The area is the trapezoid under your points. Sixteen words of each kind make a small test: one standard error of d' is about 0.5. The blue curve is an equal-variance observer with d' = 1.2 for comparison; real recognition curves are usually lopsided, with a zROC slope near 0.8 (chapter 6).",
     });
   };
+  // ---- Part 13: which patch has stripes?  Four staircases, one per bar width, and your own CSF -------------------
+  W.contrast = function (el) {
+    var w = null, NPER = 16, OK = "#5bd18b", BAD = "#ef6f6c", YOU = "#f2c14e";
+    var CYC = [1.5, 4, 10, 24];  // cycles across a patch
+    var S = { phase: "idle", trial: 0, seed: 0, order: [], k: 0, side: 0, last: null, st: [] };
+    function fresh() {
+      S.st = CYC.map(function () { return { c: 0.3, run: 0, dir: 0, rev: [], n: 0 }; });
+    }
+    fresh();
+    function estimate(st) { // the geometric mean of the last reversals, or the current level
+      var r = st.rev.slice(-4), s = 0, i;
+      if (!r.length) return st.n ? st.c : NaN;
+      for (i = 0; i < r.length; i++) s += Math.log(r[i]);
+      return Math.exp(s / r.length);
+    }
+    function next() {
+      var u = QB.rng(7919 * S.seed + 41 * S.trial + 5);
+      S.k = S.order[S.trial]; S.side = u() < 0.5 ? 0 : 1; S.trial++;
+      S.phase = "show"; w.render();
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "show"; }, respond: answer });
+    function answer(side) {
+      if (S.phase !== "show" || !w) return;
+      var st = S.st[S.k], ok = side === S.side;
+      st.n++; task.count++; S.last = ok;
+      if (ok) { st.run++; if (st.run === 2) { st.run = 0; if (st.dir === 1) st.rev.push(st.c); st.dir = -1; st.c = Math.max(0.004, st.c / 1.4); } }
+      else { st.run = 0; if (st.dir === -1) st.rev.push(st.c); st.dir = 1; st.c = Math.min(1, st.c * 1.4); }
+      S.phase = "feedback"; w.render();
+      task.later(function () { if (S.trial >= S.order.length) { S.phase = "done"; w.render(); } else next(); }, 420);
+    }
+    function start() {
+      task.clear(); S.seed++; S.trial = 0; fresh();
+      var u = QB.rng(104729 * S.seed + 17), order = [], i, j, t;
+      for (i = 0; i < NPER; i++) for (j = 0; j < CYC.length; j++) order.push(j);
+      for (i = order.length - 1; i > 0; i--) { j = Math.floor(u() * (i + 1)); t = order[i]; order[i] = order[j]; order[j] = t; }
+      S.order = order; next();
+    }
+    function patch(ctx, x, y, size, cycles, contrast, striped) {
+      // drawn at the screen's own pixel density on a canvas of its own, then placed (the page canvas is scaled)
+      var dpr = Math.min(window.devicePixelRatio || 1, 2), n = Math.round(size * dpr);
+      var off = document.createElement("canvas"); off.width = n; off.height = n;
+      var oc = off.getContext("2d"), img = oc.createImageData(n, n), d = img.data, i, j, v;
+      for (j = 0; j < n; j++) for (i = 0; i < n; i++) {
+        var r = Math.sqrt(Math.pow(i - n / 2, 2) + Math.pow(j - n / 2, 2)) / (n / 2);
+        var win = r < 0.7 ? 1 : (r < 1 ? 0.5 * (1 + Math.cos(Math.PI * (r - 0.7) / 0.3)) : 0);
+        var s = striped ? contrast * win * Math.sin(2 * Math.PI * cycles * i / n) : 0;
+        v = Math.round(128 * (1 + s) + (Math.random() - 0.5)); // a little dither below one grey level
+        var k = 4 * (j * n + i); d[k] = d[k + 1] = d[k + 2] = Math.max(0, Math.min(255, v)); d[k + 3] = 255;
+      }
+      oc.putImageData(img, 0, 0);
+      ctx.save(); ctx.imageSmoothingEnabled = false; ctx.drawImage(off, x, y, size, size); ctx.restore();
+    }
+
+    w = QB.widget(el, {
+      title: "Which patch has stripes? Your contrast sensitivity",
+      sub: "Two grey patches; one holds faint vertical stripes. F, or tap the left half: the left one has stripes. J, or tap the right half: the right one. Guess when you are not sure. Four widths of stripe are mixed at random, each with its own staircase: two right in a row makes its stripes fainter, one wrong makes them stronger. After 64 trials the page draws your contrast sensitivity at the four widths.",
+      panels: 2, height: 340, weights: [1.1, 1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.trial = 0; fresh(); S.last = null; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(ctx, b, "On you", "Press Start. Sixty-four trials, about three minutes. Sit at arm's length and keep your screen's brightness and the room lighting steady.");
+        } else if (S.phase === "done") {
+          var best = 0, bi = 0, i;
+          for (i = 0; i < CYC.length; i++) { var e = estimate(S.st[i]); if (1 / e > best) { best = 1 / e; bi = i; } }
+          T.message(ctx, b, "Finished.", "You were most sensitive to the " + ["widest", "wide", "narrow", "narrowest"][bi] + " stripes, seen at about " + (100 / best).toFixed(1) + "% contrast. Screens differ: compare your own runs, and try again from twice as far away.");
+        } else {
+          var size = Math.floor(Math.max(60, Math.min(b.h - 80, (b.w - 70) / 2, 180))), gap = Math.max(16, Math.min(60, b.w - 2 * size - 30));
+          var x0 = Math.round(b.x + (b.w - 2 * size - gap) / 2), y0 = Math.round(b.y + (b.h - size) / 2 - 6), st = S.st[S.k];
+          ctx.fillStyle = "rgb(128,128,128)"; ctx.fillRect(x0 - 8, y0 - 8, 2 * size + gap + 16, size + 16);
+          patch(ctx, x0, y0, size, CYC[S.k], st.c, S.side === 0);
+          patch(ctx, x0 + size + gap, y0, size, CYC[S.k], st.c, S.side === 1);
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("trial " + S.trial + " of " + S.order.length, b.cx, b.y + 16);
+          if (S.phase === "feedback") {
+            ctx.fillStyle = S.last ? OK : BAD; ctx.font = "600 13px system-ui, sans-serif";
+            ctx.fillText(S.last ? "Right" : "Wrong", b.cx, b.y + b.h - 16);
+          } else {
+            ctx.fillStyle = C.muted; ctx.font = "12.5px system-ui, sans-serif";
+            ctx.fillText(b.w < 420 ? "F / left        J / right" : "F, or tap the left half: left        J, or tap the right half: right", b.cx, b.y + b.h - 16);
+          }
+        }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [1, 32], y: [1, 300], logx: true, logy: true, xticks: CYC, xfmt: function (v) { return String(v); },
+          title: "Your sensitivity, 1 / threshold", xlabel: "cycles across a patch" });
+        var xs = [], ys = [], i;
+        for (i = 0; i < CYC.length; i++) { var e2 = estimate(S.st[i]); if (!isNaN(e2)) { xs.push(CYC[i]); ys.push(Math.min(300, 1 / e2)); } }
+        if (xs.length) {
+          if (xs.length > 1) a.line(xs, ys, { color: S.phase === "done" ? YOU : C.muted, width: 2 });
+          a.dots(xs, ys, { color: YOU, r: 4 });
+        }
+      },
+      readout: function () {
+        var out = [["trials", String(S.trial)]], i;
+        for (i = 0; i < CYC.length; i++) {
+          var e = estimate(S.st[i] || { rev: [], n: 0 });
+          out.push([CYC[i] + " cycles", isNaN(e) ? "–" : (100 * e).toFixed(1) + "%"]);
+        }
+        return out;
+      },
+      note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The stripes are sine gratings in a soft round window, drawn in the grey levels your screen is asked to show, with a little random dither so contrasts below one grey level (about 0.8%) are not simply lost. Cycles across a patch become cycles per degree only once you fix the patch's size on your screen and your distance: at arm's length a 4 cm patch spans about 4 degrees, so the four widths are roughly 0.4, 1, 2.5 and 6 cycles per degree. Each width has its own two-down one-up staircase (chapter 7 of Part 11), and the threshold is the geometric mean of its last four turning points. Most people are most sensitive to the middle widths and need much more contrast for the finest: the band-pass shape of chapter 6.",
+    });
+  };
 })();

@@ -105,4 +105,51 @@ PARTS = [
               ("Its tests", "tests/psychology/test_sdt.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=13, level="U", widget="contrast",
+        question="What does the eye tell the brain?",
+        story="In 1942, in a dark room at Columbia, Hecht, Shlaer and Pirenne found that a flash is seen when only "
+              "five to fourteen quanta are absorbed, spread over about five hundred rods, so a rod must answer a "
+              "single quantum. The steepness of a frequency-of-seeing curve gives the same number without knowing "
+              "the eye's losses, because arrivals are Poisson. Optics and the cone mosaic stop detail near sixty "
+              "cycles per degree; gain control spans ten log units of light and gives Weber's law. Adrian found that "
+              "a fibre codes strength as a rate, Kuffler that a ganglion cell weighs a centre against a surround: a "
+              "difference of Gaussians, a band-pass filter, Mach bands, and a cure for redundancy. Hubel and Wiesel's "
+              "cells want edges at one orientation, modelled as Gabor fields, simple and complex. The viewer reads "
+              "a Campbell-Robson chart and sees a hybrid image change with distance; adaptation reveals channels, "
+              "and divisive normalization saturates and masks. Colour is three numbers: matching is a 3-by-3 solve "
+              "that reproduces Stiles and Burch's 1955 data, metamers are the null space, and the 1931 diagram is "
+              "built on it. Opponent channels explain why nothing looks reddish green; colour blindness is a lost "
+              "dimension. Constancy discounts the light, and the dress shows two bets on one image. D.F. posts a card "
+              "into a slot whose angle she cannot report.",
+        handoff="Seeing as inference is Part 14, the other senses Part 15, attention as gain Part 18, seeing "
+                "without knowing Part 27, displays and design Parts 51 and 52, and efficient coding Part 58.",
+        outside="Part 11's thresholds and Weber's law, Part 12's forced choice, and Part 6's lateral inhibition. "
+                "Matrix inversion and null spaces from linear algebra; Fourier frequency in the loose sense.",
+        objectives={
+            "U": ["Explain how the frequency-of-seeing curve's steepness reveals the number of quanta needed.",
+                  "Describe a centre-surround receptive field and why it acts as a band-pass filter.",
+                  "Explain why three numbers describe a colour, and what a metamer is."],
+            "M": ["Derive the Nyquist limit of a mosaic and the alias of a finer grating.",
+                  "Compute colour-matching functions for any three primaries from the cone fundamentals.",
+                  "Show how gain control turns a saturating receptor into Weber's law."],
+            "D": ["Weigh the evidence for single-photon detection by people against the evidence for rods.",
+                  "Assess how far the edge-detector hierarchy explains V1, and the two-streams account."],
+            "I": ["Explain chroma subsampling and gamut limits from the CSF and the chromaticity diagram.",
+                  "Choose and check a palette that colour-blind readers can use."],
+        },
+        results=[
+            ("Seeing a flash", r"P(\text{seen}) = P(N \ge k),\ N \sim \mathrm{Poisson}(a q)"),
+            ("A mosaic's limit", r"f_{\max} = \frac{1}{2\,\Delta}"),
+            ("Gain control", r"R = \frac{I^n}{I^n + \sigma^n},\ \sigma \propto I_{\text{background}}"),
+            ("A ganglion cell", r"w(x) = G_{\sigma_c}(x) - G_{\sigma_s}(x)"),
+            ("Normalization", r"R_i = \frac{d_i^{\,n}}{\sigma^n + \sum_j d_j^{\,n}}"),
+            ("Colour matching", r"\mathbf{w} = P^{-1}\,\mathbf{c}_{\text{test}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 13), D=(12, 15), I=(14,),
+        also=(("Psyche's vision module", "explainer/psychology/psyche/vision.py"),
+              ("Its tests", "tests/psychology/test_vision.py"),
+              ("The colour tables", "explainer/psychology/archive/_colour_tables.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

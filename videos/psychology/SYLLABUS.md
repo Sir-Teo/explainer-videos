@@ -1022,42 +1022,60 @@ Hoffrage 1995; Wolfe et al. 2005; Mickes et al. 2012.
 
 ### Part 13 · The Eye and the Code (~55)
 *Question:* what does the eye tell the brain?
-*Story:* in 1942 three researchers sit in a dark room and find that a flash delivering five to seven photons to
-the retina can be seen: the eye is as sensitive as physics allows. But the eye does not send pictures. It sends
-differences, across space, time and wavelength, and each stage can be written as a filter. Colour turns out to be
-linear algebra.
-1. Hook: Hecht, Shlaer and Pirenne (1942). Counting quanta; the Poisson argument from the frequency-of-seeing
-   curve.
-2. Optics: the eye's point spread function and why acuity stops near sixty cycles per degree; the cone mosaic.
-3. Rods, cones and adaptation: nine orders of magnitude of light on a limited response range; gain control.
-4. Ganglion cells: Kuffler's centre–surround (1953) as a difference of Gaussians; why code differences (a first
-   look at redundancy, Part 58).
-5. To cortex: Hubel and Wiesel's bar (1959); orientation tuning; simple and complex cells; the Gabor model.
-6. Vision as Fourier analysis: gratings, the contrast sensitivity function (Campbell and Robson 1968), channels
-   and adaptation; an image filtered by your own CSF.
-7. Contrast normalization: responses divided by the neighbourhood (a canonical computation, Part 58).
-8. Colour I: Newton's prism; Young and Helmholtz; three cone types. A light is a spectrum, a sensation is three
-   numbers.
-9. Colour matching as linear algebra: metamers are the null space; the 1931 standard observer; why three
-   primaries suffice.
-10. Colour II: Hering's opponent colours; Hurvich and Jameson's cancellation; cone-opponent cells. Colour
-    deficiency as a lost dimension (about 8% of men).
-11. Colour constancy and the dress (2015): one image, two assumed illuminants.
-12. Two streams (Ungerleider and Mishkin; Milner and Goodale), and patient D.F.
+*Story:* in 1942 Hecht, Shlaer and Pirenne sit in a dark room at Columbia and find that a flash is seen when five
+to fourteen quanta are absorbed, spread over about 500 rods: a rod must answer a single quantum. But the eye does
+not send pictures. It sends differences, across space, time and wavelength, and each stage can be written as a
+filter. Colour turns out to be linear algebra. For Kant's first objection this is the strongest reply so far.
+0. Hook: the dark room; from the cornea to the rods (54 to 148 quanta, 4% reflected, half absorbed, at most a fifth
+   caught: 5 to 14); the eye sends differences; objectives.
+1. Counting quanta: Poisson arrivals; the curve's steepness depends on k alone (0.80, 2.20, 2.71 for k = 1, 6, 9),
+   and a loss only slides it; Psyche in the dark room (k = 6 recovered; within one of the truth 80% of the time);
+   Baylor, Lamb & Yau's single rods (1 pA); Tinsley et al. (2016: 51.6%, P = 0.0545); photon noise and the
+   square-root law.
+2. Optics and the mosaic: the MTF and the diffraction limit (94 c/deg at 3 mm); cones 0.5 arcmin apart, Nyquist at
+   60, an 80 c/deg grating aliased to 40; 20/20 as 30 c/deg.
+3. Ten billion to one: the range of light; the Naka-Rushton curve that slides; gain control gives a Weber fraction
+   of 4.1% over ten log units, a fixed gain saturates.
+4. The retina sends differences: Adrian and Zotterman's rate code (the Ledger row deferred from Part 5); Kuffler's
+   centre and surround; Rodieck's difference of Gaussians and its band-pass response; Mach bands computed; a 1/f
+   texture's correlation two pixels apart, 0.60 before the filter and 0.11 after.
+5. Edges in the cortex: Hubel and Wiesel's bar; the Gabor field (half-width 22°); simple and complex cells and the
+   energy model; Reid and Alonso's paired recordings.
+6. On you: the Campbell-Robson chart; the CSF and its four numbers (acuity 56 c/deg in the model); a hybrid image
+   that reads E up close and A from across a room.
+7. Channels and normalization: a bank of one-octave channels; Blakemore and Campbell's adaptation (up to fivefold);
+   Heeger's divisive normalization, saturation and cross-orientation masking.
+8. Three numbers for a spectrum: Newton, Young, Maxwell and Helmholtz; Stockman and Sharpe's cone fundamentals (570,
+   545, 445 nm; rods 505); univariance; 79 numbers projected to three.
+9. Colour matching as linear algebra: the 3-by-3 solve and negative weights; derived matching functions against
+   Stiles and Burch's 1955 matches (r ≥ 0.9994); a null-space metamer that breaks under a warm lamp; the 1931
+   diagram and a screen's gamut.
+10. Opponent colours and colour blindness: Hering's puzzle; L − M, S − (L + M); colour deficiency (8% of men) as a
+    lost dimension; a rainbow palette collapses (ΔE 39 to 7), Okabe and Ito's does not.
+11. Constancy and the dress: von Kries; a stand-in swatch read under a warm and a cool light; Lafer-Sousa, Hermann &
+    Conway (57%, 30%, 11%) and Wallisch (2017).
+12. Two streams: Ungerleider and Mishkin; Goodale and Milner; D.F.'s slot task (schematic).
+13. The Ledger. 14. In practice: screens, cameras and codecs on the standard observer; chroma subsampling (half the
+    data); colour-blind-safe design. 15. Frontier: what is solid and argued; how close we are to understanding V1
+    (Olshausen & Field 2005); twenty retinal output types; a tetrachromat (Jordan et al. 2010).
 
-*Psyche:* `vision`: a point-spread and sampling model; cone fundamentals and colour matching (metamers
-constructed); difference-of-Gaussians and Gabor banks applied to images; a CSF fit; divisive normalization.
-*On you:* the dress, then a metameric match; Mach bands return, now computed from the filter.
-*Ledger:* single-photon sensitivity (`replicated`; rods respond to single photons, and people can report them
-above chance, Tinsley et al. 2016 **(verify)**); the Hubel–Wiesel hierarchy (`replicated`, as a first
-approximation); the dress's illuminant account (`replicated`); the rate code of a single sensory fibre (Adrian and
-Zotterman 1926, deferred from Part 5).
-*In practice:* every display, camera, image codec and colour standard is built on the standard observer and the
-CSF; colour-blind-safe design.
-*Frontier:* what V1 does with natural scenes (models explain a minority of the variance); the functions of the
-many retinal ganglion cell types; tetrachromacy.
-*Reading:* Hecht, Shlaer & Pirenne 1942; Kuffler 1953; Hubel & Wiesel 1959, 1962; Campbell & Robson 1968; Wandell,
-*Foundations of Vision*; Rodieck, *The First Steps in Seeing*; Hubel, *Eye, Brain, and Vision*.
+*Psyche:* `vision` (`explainer/psychology/psyche/vision.py`, twelve tests): frequency of seeing and its fit; the
+diffraction MTF, blur, Nyquist and aliasing; Naka-Rushton gain control; differences of Gaussians, Mach bands and a 2-D
+DoG; gratings, Gabor fields, simple and complex cells, orientation tuning; normalization; a truncated log-parabola
+CSF, its fit, the Campbell-Robson chart and CSF filtering; the CIE 1931, Stiles-Burch and Stockman-Sharpe tables
+(`archive/_colour_tables.py`, from cvrl.org); cone excitations, matching, matching functions for any primaries,
+null-space metamers, chromaticity, sRGB; opponent channels, dichromacy, Planck spectra and von Kries.
+*On you:* the Campbell-Robson chart and the hybrid image in the film; the course's interactive measures the reader's
+contrast sensitivity at four stripe widths by interleaved staircases and draws the curve.
+*Ledger:* a handful of quanta (`replicated`, with the single photon noted as resting on one study at P = 0.0545); the
+rate code of a single fibre (`replicated`; deferred from Part 5); orientation-tuned cells (`replicated`); the CSF and
+its channels (`replicated`); the dress's illuminant account (`replicated`). Shown without rows, with reasons: D.F.
+(Part 27), the tetrachromat, the colour tables and Okabe and Ito's palette.
+*In practice:* displays, cameras and sRGB; codecs and chroma subsampling; colour-blind-safe design.
+*Frontier:* what V1 does with natural scenes; the retina's many output types; tetrachromacy.
+*Reading:* Hecht, Shlaer & Pirenne 1942; Baylor, Lamb & Yau 1979; Kuffler 1953; Hubel & Wiesel 1959, 1962;
+Campbell & Robson 1968; Blakemore & Campbell 1969; Heeger 1992; Stockman & Sharpe 2000; Lafer-Sousa et al. 2015;
+Wandell, *Foundations of Vision*; Rodieck, *The First Steps in Seeing*; Hubel, *Eye, Brain, and Vision*.
 
 ### Part 14 · Seeing as Inference (~55)
 *Question:* why does a grey square look white, and how can a flat image yield a solid world?
@@ -3216,3 +3234,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 10 | built, English and Chinese: 14 chapters, hook and outro; Psyche's body (`psyche/body.py`, fourteen tests), four Ledger rows, sixteen Archive datasets; course entry, lab and interactive (a vigilance task beside the reader's own rating of alertness) checked; narration table and on-screen text translated and dry-run. Act II is complete. Open checks in its README | 59 min |
 | 11 | built, English and Chinese: 14 chapters, hook and outro; Psyche's psychophysics (`psyche/psychophysics.py`, twenty-four tests) and Battery task 2, two Ledger rows, fifteen Archive datasets; course entry, lab and interactive (the reader's own threshold, by staircase, with a fitted curve) checked; narration table and on-screen text translated and dry-run. Act III begins. Open checks in its README | 48 min |
 | 12 | built, English and Chinese: 14 chapters, hook and outro; Psyche's sdt (`psyche/sdt.py`, eleven tests), three Ledger rows, thirteen Archive datasets; course entry, lab and interactive (a recognition test with confidence that draws the reader's ROC) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 44 min |
+| 13 | built, English and Chinese: 15 chapters, hook and outro; Psyche's vision (`psyche/vision.py`, twelve tests) and the colour tables, five Ledger rows (one deferred from Part 5), eleven Archive datasets; course entry, lab and interactive (the reader's contrast sensitivity at four stripe widths) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 52 min |

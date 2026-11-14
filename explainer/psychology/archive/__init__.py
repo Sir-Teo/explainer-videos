@@ -39,7 +39,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "WEBER_1834", "FECHNER_1860", "STEVENS_1957", "POULTON_1968", "LEVITT_1971", "WATSON_PELLI_1983",
            "WICHMANN_HILL_2001", "MCGILL_GOLDBERG_1968", "HALBERDA_2008", "GIBBON_1977", "LESMES_2010",
            "DEVRIES_ROSE", "BERNOULLI_1738", "PLATEAU_1872", "THURSTONE_1927",
-           "MACKWORTH_1948", "PETERSON_1954", "TANNER_SWETS_1954", "WOLFE_2005", "FLECK_MITROFF_2007", "GIGERENZER_HOFFRAGE_1995", "RATCLIFF_1992", "YONELINAS_1994", "SEE_1995", "SWETS_2000", "SWETS_1961", "MANISCALCO_LAU_2012", "MICKES_2012"]
+           "MACKWORTH_1948", "PETERSON_1954", "TANNER_SWETS_1954", "WOLFE_2005", "FLECK_MITROFF_2007", "GIGERENZER_HOFFRAGE_1995", "RATCLIFF_1992", "YONELINAS_1994", "SEE_1995", "SWETS_2000", "SWETS_1961", "MANISCALCO_LAU_2012", "MICKES_2012",
+           "HECHT_1942", "BAYLOR_1979", "TINSLEY_2016", "KUFFLER_1953", "CAMPBELL_ROBSON_1968", "BLAKEMORE_CAMPBELL_1969", "LAFER_SOUSA_2015", "MILNER_1991", "JORDAN_2010", "COLOUR_TABLES", "OKABE_ITO"]
 
 
 @dataclass(frozen=True)
@@ -2148,6 +2149,142 @@ MICKES_2012 = Dataset(
 )
 
 
+# ---------------------------------------------------------------------------
+# Part 13
+# ---------------------------------------------------------------------------
+_P13 = "through a web search, 2026-11-14"
+
+HECHT_1942 = Dataset(
+    key="hecht_1942",
+    title="Energy, quanta and vision: how few quanta a dark-adapted eye can see",
+    source="S. Hecht, S. Shlaer and M. H. Pirenne, Energy, quanta, and vision, Journal of General Physiology 25 (1942) "
+           "819-840 (Laboratory of Biophysics, Columbia University)",
+    cite=r"Hecht, Shlaer \& Pirenne (1942)",
+    checked="the abstract (PMC2142545) as quoted, " + _P13 + ": 2.1-5.7 x 10^-10 erg, 54-148 quanta at "
+            "the cornea, the three corrections, 5-14 absorbed, about 500 rods, 5-8 from the statistics",
+    licence="facts from a published article",
+    data={"wavelength_nm": 510, "erg": (2.1e-10, 5.7e-10), "cornea": (54, 148), "reflection": 0.04, "media": 0.50,
+          "retina_absorbed": 0.20, "absorbed": (5, 14), "rods": 500, "statistical": (5, 8), "dark_minutes": 40},
+)
+
+BAYLOR_1979 = Dataset(
+    key="baylor_1979",
+    title="Single rods respond to single photons",
+    source="D. A. Baylor, T. D. Lamb and K.-W. Yau, Responses of retinal rods to single photons, Journal of Physiology "
+           "288 (1979) 613-634",
+    cite=r"Baylor, Lamb \& Yau (1979)",
+    checked="the abstract, " + _P13,
+    licence="facts from a published article",
+    data={"species": "toad", "event_pA": 1.0, "event_sd_pA": 0.2, "dark_current_share": 0.05, "quantum_efficiency": 0.5},
+)
+
+TINSLEY_2016 = Dataset(
+    key="tinsley_2016",
+    title="Direct detection of a single photon by humans",
+    source="J. N. Tinsley, M. I. Molodtsov, R. Prevedel, D. Wartmann, J. Espigule-Pons, M. Lauwers and A. Vaziri, "
+           "Direct detection of a single photon by humans, Nature Communications 7 (2016) 12172",
+    cite=r"Tinsley et al.\ (2016)",
+    checked="the open-access article's numbers as quoted in summaries and in van der Reep et al. (2022), " + _P13,
+    licence="facts from an open-access article (CC BY)",
+    data={"trials": 30767, "single_photon_events": 2420, "p_correct": 0.516, "se": 0.010, "p_value": 0.0545,
+          "high_confidence": 0.60},
+)
+
+KUFFLER_1953 = Dataset(
+    key="kuffler_1953",
+    title="Centre and surround in the cat's retinal ganglion cells",
+    source="S. W. Kuffler, Discharge patterns and functional organization of mammalian retina, Journal of "
+           "Neurophysiology 16 (1953) 37-68",
+    cite=r"Kuffler (1953)",
+    checked="the citation and later summaries, " + _P13,
+    licence="facts only",
+    data={"species": "cat", "types": ("on-centre", "off-centre")},
+)
+
+CAMPBELL_ROBSON_1968 = Dataset(
+    key="campbell_robson_1968",
+    title="Fourier analysis and the visibility of gratings",
+    source="F. W. Campbell and J. G. Robson, Application of Fourier analysis to the visibility of gratings, Journal of "
+           "Physiology 197 (1968) 551-566",
+    cite=r"Campbell \& Robson (1968)",
+    checked="secondary accounts of the band-pass CSF peaking near 3-5 cycles per degree, " + _P13,
+    licence="facts only",
+    data={"peak_cpd": (3.0, 5.0)},
+)
+
+BLAKEMORE_CAMPBELL_1969 = Dataset(
+    key="blakemore_campbell_1969",
+    title="Adapting to a grating raises the threshold for similar gratings",
+    source="C. Blakemore and F. W. Campbell, On the existence of neurones in the human visual system selectively "
+           "sensitive to the orientation and size of retinal images, Journal of Physiology 203 (1969) 237-260",
+    cite=r"Blakemore \& Campbell (1969)",
+    checked="the abstract (PMC1351526), " + _P13,
+    licence="facts only",
+    data={"max_elevation": 5.0},
+)
+
+LAFER_SOUSA_2015 = Dataset(
+    key="lafer_sousa_2015",
+    title="The dress: one photograph, different colours",
+    source="R. Lafer-Sousa, K. L. Hermann and B. R. Conway, Striking individual differences in color perception "
+           "uncovered by 'the dress' photograph, Current Biology 25 (2015) R545-R546",
+    cite=r"Lafer-Sousa, Hermann \& Conway (2015)",
+    checked="the authors' university's release and later summaries, " + _P13,
+    licence="facts only (the photograph itself is not reproduced)",
+    data={"n": 1400, "naive": 300, "blue_black": 0.57, "white_gold": 0.30, "blue_brown": 0.11, "other": 0.02},
+)
+
+MILNER_1991 = Dataset(
+    key="milner_1991",
+    title="Patient D.F.: posting without perceiving",
+    source="A. D. Milner, D. I. Perrett, R. S. Johnston, P. J. Benson, T. R. Jordan, D. W. Heeley, D. Bettucci, "
+           "F. Mortara, R. Mutani, E. Terazzi and D. L. W. Davidson, Perception and action in 'visual form agnosia', "
+           "Brain 114 (1991) 405-428; M. A. Goodale, A. D. Milner, L. S. Jakobson and D. P. Carey, A neurological "
+           "dissociation between perceiving objects and grasping them, Nature 349 (1991) 154-156",
+    cite=r"Milner et al.\ (1991); \ Goodale et al.\ (1991)",
+    checked="reviews' accounts of the slot task, " + _P13 + "; author lists from memory",
+    licence="facts only",
+    data={"cause": "carbon monoxide poisoning"},
+)
+
+JORDAN_2010 = Dataset(
+    key="jordan_2010",
+    title="A tetrachromat among carriers of anomalous trichromacy",
+    source="G. Jordan, S. S. Deeb, J. M. Bosten and J. D. Mollon, The dimensionality of color vision in carriers of "
+           "anomalous trichromacy, Journal of Vision 10(8) (2010) 12",
+    cite=r"Jordan et al.\ (2010)",
+    checked="the abstract and methods, " + _P13,
+    licence="facts only",
+    data={"carriers": 24, "tetrachromats": 1, "separation_nm": 12},
+)
+
+COLOUR_TABLES = Dataset(
+    key="colour_tables",
+    title="Colour-matching functions and cone fundamentals",
+    source="CIE 1931 2-degree colour-matching functions; W. S. Stiles and J. M. Burch, Interim report to the CIE "
+           "(1955) 2-degree pilot colour-matching functions (10 observers); A. Stockman and L. T. Sharpe, The spectral "
+           "sensitivities of the middle- and long-wavelength-sensitive cones, Vision Research 40 (2000) 1711-1737 "
+           "(2-degree fundamentals); CIE 1951 scotopic luminous efficiency.  All as tabulated by the Colour & Vision "
+           "Research Laboratory, cvrl.org",
+    cite=r"CIE (1931); \ Stiles \& Burch (1955); \ Stockman \& Sharpe (2000); \ via cvrl.org",
+    checked="downloaded from cvrl.org at 5 nm and transcribed by script into archive/_colour_tables.py, 2026-11-14; "
+            "peaks checked (L 570, M 545, S 445 nm; rods 505 nm)",
+    licence="published standard tables, freely distributed by CVRL",
+    data={"primaries_nm": (645.2, 526.3, 444.4), "observers": 10},
+)
+
+OKABE_ITO = Dataset(
+    key="okabe_ito",
+    title="A palette for colour-blind readers",
+    source="M. Okabe and K. Ito, Color Universal Design (CUD): how to make figures and presentations that are friendly "
+           "to colorblind people (J*Fly, 2002; revised 2008)",
+    cite=r"Okabe \& Ito (2008)",
+    checked="hex values as widely reproduced; from memory, 2026-11-14",
+    licence="facts only",
+    data={"hex": ("#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7", "#000000")},
+)
+
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -2174,4 +2311,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           WEBER_1834, FECHNER_1860, STEVENS_1957, POULTON_1968, LEVITT_1971, WATSON_PELLI_1983,
                           WICHMANN_HILL_2001, MCGILL_GOLDBERG_1968, HALBERDA_2008, GIBBON_1977, LESMES_2010,
                           DEVRIES_ROSE, BERNOULLI_1738, PLATEAU_1872, THURSTONE_1927,
-                          MACKWORTH_1948, PETERSON_1954, TANNER_SWETS_1954, WOLFE_2005, FLECK_MITROFF_2007, GIGERENZER_HOFFRAGE_1995, RATCLIFF_1992, YONELINAS_1994, SEE_1995, SWETS_2000, SWETS_1961, MANISCALCO_LAU_2012, MICKES_2012)}
+                          MACKWORTH_1948, PETERSON_1954, TANNER_SWETS_1954, WOLFE_2005, FLECK_MITROFF_2007, GIGERENZER_HOFFRAGE_1995, RATCLIFF_1992, YONELINAS_1994, SEE_1995, SWETS_2000, SWETS_1961, MANISCALCO_LAU_2012, MICKES_2012,
+                          HECHT_1942, BAYLOR_1979, TINSLEY_2016, KUFFLER_1953, CAMPBELL_ROBSON_1968, BLAKEMORE_CAMPBELL_1969, LAFER_SOUSA_2015, MILNER_1991, JORDAN_2010, COLOUR_TABLES, OKABE_ITO)}

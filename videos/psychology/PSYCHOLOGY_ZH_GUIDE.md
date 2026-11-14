@@ -506,6 +506,31 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | precision; recall | 精确率；召回率 |
 | metacognition; type 2 ROC; meta-d′ | 元认知；第二类ROC；元d′ |
 
+## Part 13: the eye and the code
+
+| English | 中文 |
+|---|---|
+| quantum (of light); photon; frequency of seeing | 光量子；光子；看见频率 |
+| rod; cone (L, M, S); photoreceptor; dark adaptation | 视杆细胞；视锥细胞（长波、中波、短波）；光感受器；暗适应 |
+| Poisson distribution; quantum efficiency | 泊松分布；量子效率 |
+| modulation transfer function (MTF); diffraction; aberration; pupil | 调制传递函数（MTF）；衍射；像差；瞳孔 |
+| cone mosaic; Nyquist limit; aliasing; cycles per degree | 视锥镶嵌；奈奎斯特极限；混叠；每度周数 |
+| gain control; Naka-Rushton function; log unit | 增益控制；纳卡-拉什顿函数；对数单位 |
+| ganglion cell; receptive field; on-centre, off-centre; surround | 神经节细胞；感受野；给光中心、撤光中心；周边 |
+| difference of Gaussians (DoG); band-pass filter; Mach bands | 高斯差（DoG）；带通滤波器；马赫带 |
+| redundancy; efficient coding | 冗余；高效编码 |
+| orientation tuning; simple cell; complex cell; Gabor function; energy model | 朝向调谐；简单细胞；复杂细胞；加博函数；能量模型 |
+| contrast sensitivity function (CSF); grating; acuity; Campbell-Robson chart | 对比敏感度函数（CSF）；光栅；视敏度；坎贝尔-罗布森图 |
+| channels; adaptation; divisive normalization; cross-orientation masking | 通道；适应；除法归一化；交叉朝向掩蔽 |
+| spectrum; cone fundamentals; univariance | 光谱；视锥基本函数；单变量原理 |
+| colour matching; primaries; colour-matching functions; standard observer | 颜色匹配；原色；颜色匹配函数；标准观察者 |
+| metamer; null space; chromaticity diagram; gamut | 同色异谱；零空间；色度图；色域 |
+| opponent colours; unique yellow; hue cancellation | 拮抗色；纯黄（单一黄）；色调抵消 |
+| colour vision deficiency; dichromat; tetrachromat | 色觉缺陷（色盲）；二色视者；四色视者 |
+| colour constancy; illuminant; von Kries scaling | 颜色恒常性；光源；冯·克里斯缩放 |
+| ventral stream (what); dorsal stream (where, how); visual form agnosia | 腹侧通路（是什么）；背侧通路（在哪里、怎么做）；视觉形状失认 |
+| chroma subsampling (4:2:0) | 色度二次采样（4:2:0） |
+
 ## Names
 
 | English | 中文 |
@@ -618,6 +643,16 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Jeremy Wolfe, Todd Horowitz, Naomi Kenner; Fleck, Mitroff; See, Howe, Warm, Dember | 杰里米·沃尔夫，托德·霍罗威茨，娜奥米·肯纳；弗莱克，米特罗夫；西，豪，沃姆，登伯 |
 | Robyn Dawes, John Monahan; Laura Mickes, Heather Flowe, John Wixted | 罗宾·道斯，约翰·莫纳汉；劳拉·米克斯，希瑟·弗洛，约翰·维克斯特德 |
 | Brian Maniscalco, Hakwan Lau; Macmillan and Creelman | 布赖恩·马尼斯卡尔科，刘克顽；麦克米伦和克里尔曼 |
+| Selig Hecht, Simon Shlaer, Maurice Pirenne; Hessel de Vries, Albert Rose | 塞利格·赫克特，西蒙·施拉尔，莫里斯·皮雷纳；赫塞尔·德弗里斯，阿尔伯特·罗斯 |
+| Denis Baylor, Trevor Lamb, King-Wai Yau; Alipasha Vaziri (Tinsley et al.) | 丹尼斯·贝勒，特雷弗·兰姆，游景威；瓦齐里（廷斯利等） |
+| Stephen Kuffler, Robert Rodieck, Ernst Mach; Clay Reid, José-Manuel Alonso | 斯蒂芬·库夫勒，罗伯特·罗迪克，恩斯特·马赫；克莱·里德，何塞-曼努埃尔·阿隆索 |
+| Dennis Gabor; Fergus Campbell, John Robson, Colin Blakemore; David Heeger, Matteo Carandini | 丹尼斯·加博；弗格斯·坎贝尔，约翰·罗布森，科林·布莱克莫尔；大卫·黑格，马泰奥·卡兰迪尼 |
+| Isaac Newton, Thomas Young, James Clerk Maxwell; Andrew Stockman, Lindsay Sharpe | 艾萨克·牛顿，托马斯·杨，詹姆斯·克拉克·麦克斯韦；安德鲁·斯托克曼，琳赛·夏普 |
+| W. S. Stiles, J. M. Burch; William Wright, John Guild | 斯泰尔斯，伯奇；威廉·赖特，约翰·吉尔德 |
+| Ewald Hering; Leo Hurvich, Dorothea Jameson; John Dalton; Masataka Okabe, Kei Ito | 埃瓦尔德·赫林；利奥·赫维奇，多萝西娅·詹姆森；约翰·道尔顿；冈部正隆，伊藤启 |
+| Johannes von Kries; Rosa Lafer-Sousa, Katherine Hermann, Bevil Conway; Pascal Wallisch; Witzel, Racey, O'Regan | 约翰内斯·冯·克里斯；罗莎·拉弗-索萨，凯瑟琳·赫尔曼，贝维尔·康韦；帕斯卡·瓦利施；维策尔，雷西，奥里根 |
+| Leslie Ungerleider, Mortimer Mishkin; Melvyn Goodale, David Milner; D.F. | 莱斯莉·昂格莱德，莫蒂默·米什金；梅尔文·古德尔，大卫·米尔纳；D.F. |
+| Bruno Olshausen, David Field; Gabriele Jordan; Brian Wandell | 布鲁诺·奥尔斯豪森，大卫·菲尔德；加布里埃莱·乔丹；布赖恩·万德尔 |
 
 ## Titles
 
