@@ -41,11 +41,11 @@ class Practice(VoiceoverScene):
                       max_tip_length_to_length_ratio=0.2)
         arrow_l = label(r"$\times 10$", font_size=26, color=INH).next_to(arrow, DOWN, buff=0.06)
         side = VGroup(
-            MathTex(r"\text{occupied} \;=\; \frac{[D]}{[D] + K_d}", font_size=40, color=EXC),
+            label(r"occupied $\;=\; \dfrac{[D]}{[D] + K_d}$", font_size=34, color=EXC),
             wrapped_label(r"$K_d$: \ the concentration that fills half the receptors. \ Smaller means tighter.", 4.8,
                           27, WHITE),
             wrapped_label(r"add a competing antagonist: \ the same curve, moved to the right", 4.8, 27, INH),
-            MathTex(r"\text{shift} \;=\; 1 + \frac{[B]}{K_B}", font_size=36, color=INH),
+            label(r"shift $\;=\; 1 + \dfrac{[B]}{K_B}$", font_size=31, color=INH),
             wrapped_label(r"thousands of compounds are screened this way before one reaches an animal", 4.8, 26,
                           P.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.26).move_to([4.2, -0.4, 0])

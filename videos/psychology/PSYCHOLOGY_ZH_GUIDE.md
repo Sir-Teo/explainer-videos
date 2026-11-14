@@ -239,6 +239,48 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | cochlear implant; local anaesthetic; deep-brain stimulator; neuromorphic chip | 人工耳蜗；局部麻醉药；脑深部电刺激器；神经形态芯片 |
 | perceptron | 感知机 |
 
+## Part 6: synapses and circuits
+
+| English | 中文 |
+|---|---|
+| synapse; chemical, electrical | 突触；化学突触，电突触 |
+| the sparks; the soups | 火花派；汤派 |
+| cleft; vesicle; release site | （突触）间隙；囊泡；释放位点 |
+| transmitter; neuromodulator (modulator) | 递质；神经调质（调质） |
+| packet (quantum) | 一包（量子） |
+| receptor; agonist; antagonist | 受体；激动剂；拮抗剂 |
+| pump (transporter); enzyme | 泵；酶 |
+| glutamate; GABA; acetylcholine | 谷氨酸；GABA；乙酰胆碱 |
+| dopamine; serotonin; noradrenaline; the opioids | 多巴胺；血清素；去甲肾上腺素；阿片类 |
+| curare; naloxone; botulinum toxin; L-DOPA | 箭毒；纳洛酮；肉毒毒素；左旋多巴 |
+| caffeine; adenosine; nicotine; morphine; cocaine | 咖啡因；腺苷；尼古丁；吗啡；可卡因 |
+| benzodiazepines; SSRIs; stimulants; antipsychotics; nerve agent | 苯二氮䓬类；SSRI；兴奋剂；抗精神病药；神经毒剂 |
+| excitation; inhibition; EPSP; IPSP | 兴奋；抑制；兴奋性突触后电位（EPSP）；抑制性突触后电位（IPSP） |
+| summation in time, in space | 时间上的总和，空间上的总和 |
+| shunting inhibition; a shunt | 分流抑制；分流 |
+| depolarized | 去极化 |
+| Hebb's rule; local (rule); weight; learning rate | 赫布规则；局部的；权重；学习率 |
+| Oja's rule; first principal component | 奥亚规则；第一主成分 |
+| long-term potentiation (LTP) | 长时程增强（LTP） |
+| hippocampus; dentate gyrus; perforant path | 海马；齿状回；穿通通路 |
+| AMPA receptor; NMDA receptor; magnesium plug | AMPA受体；NMDA受体；镁塞子 |
+| spike timing | 锋电位时序 |
+| sliding threshold (BCM); selective | 滑动的阈值；有选择性 |
+| lateral inhibition; receptor unit; compound eye; horseshoe crab | 侧抑制；感受单元；复眼；鲎 |
+| Mach bands; ramp; foot, top (of a ramp) | 马赫带；斜坡；坡脚，坡顶 |
+| Hermann grid; street; crossing; grey spot | 赫尔曼栅格；街道；交叉口；灰点 |
+| receptive field; centre-surround; filter | 感受野；中心-周边；滤波器 |
+| winner-take-all; self-excitation; rival | 胜者全得；自兴奋；对手 |
+| half-centre; central pattern generator; fatigue | 半中枢；中枢模式发生器；疲劳 |
+| flexor; extensor; spinal cord | 屈肌；伸肌；脊髓 |
+| population; drive; saturation; to oscillate | 群体；驱动；饱和；振荡 |
+| EEG (electroencephalogram) | 脑电图（EEG） |
+| gain; three-factor rule | 增益；三因子规则 |
+| motif (of a circuit) | 基本样式 |
+| dissociation constant; occupancy | 解离常数；占据率 |
+| tolerance; dependence; placebo; regulator | 耐受；依赖；安慰剂；监管机构 |
+| engram; to tag (cells); optical fibre; to freeze | 记忆痕迹；标记；光纤；僵住 |
+
 ## Names
 
 | English | 中文 |
@@ -294,6 +336,21 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Richard FitzHugh, Jinichi Nagumo, Louis Lapicque | 理查德·菲茨休，南云仁一，路易·拉皮克 |
 | Edgar Adrian, Yngve Zotterman | 埃德加·阿德里安，英韦·佐特曼 |
 | Otto Loewi | 奥托·勒维 |
+| Henry Dale, John Eccles | 亨利·戴尔，约翰·埃克尔斯 |
+| Donald Hebb, Erkki Oja | 唐纳德·赫布，奥亚 |
+| Terje Lømo, Tim Bliss | 泰耶·勒莫，蒂姆·布利斯 |
+| Guo-qiang Bi, Mu-ming Poo | 毕国强，蒲慕明 |
+| Bienenstock, Cooper, Munro | 比嫩施托克，库珀，芒罗 |
+| Keffer Hartline, Floyd Ratliff | 凯弗·哈特兰，弗洛伊德·拉特利夫 |
+| Ernst Mach, Ludimar Hermann | 恩斯特·马赫，卢迪马尔·赫尔曼 |
+| Günter Baumgartner, János Geier | 京特·鲍姆加特纳，亚诺什·盖尔 |
+| Charles Sherrington, Thomas Graham Brown | 查尔斯·谢灵顿，托马斯·格雷厄姆·布朗 |
+| Hans Berger | 汉斯·贝格尔 |
+| Hugh Wilson, Jack Cowan | 休·威尔逊，杰克·考恩 |
+| Xu Liu, Steve Ramirez | 刘旭，史蒂夫·拉米雷斯 |
+| Erick Turner | 埃里克·特纳 |
+| Phineas Gage | 菲尼亚斯·盖奇 |
+| Graz, Oslo, Jena, Vermont | 格拉茨，奥斯陆，耶拿，佛蒙特 |
 | Bologna, Plymouth | 博洛尼亚，普利茅斯 |
 | Königsberg, Leipzig, Utrecht, Würzburg, Cornell | 柯尼斯堡，莱比锡，乌得勒支，维尔茨堡，康奈尔 |
 
@@ -322,6 +379,7 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | "Feeling the Future" | 《预感未来》 |
 | "False-Positive Psychology" | 《假阳性心理学》 |
 | *Science*, *Nature* | 《科学》，《自然》 |
+| *The Organization of Behavior* | 《行为的组织》 |
 
 ## The parts
 
