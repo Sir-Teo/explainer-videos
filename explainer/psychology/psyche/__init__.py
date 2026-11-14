@@ -19,5 +19,7 @@ Modules so far, with the part that introduces each:
 ``cueing``          2    an observer who reads a questioner: Clever Hans as a psychometric function
 ``neuron``          5    Nernst and Goldman, the membrane as a circuit, Hodgkin and Huxley with the voltage
                          clamp and the cable, FitzHugh-Nagumo, integrate-and-fire, spike trains, dendrites
+``circuits``        6    conductance synapses and shunting; Hebb, Oja, BCM and STDP; lateral inhibition and
+                         a centre-surround filter; winner-take-all; a half-centre oscillator; Wilson-Cowan
 =================  ====  ===============================================================================
 """
