@@ -42,7 +42,7 @@ class Metropolis(VoiceoverScene):
             "computer. Arianna Rosenbluth wrote the program. <bookmark mark='b'/> Seventeen years later Keith "
             "Hastings generalized it. <bookmark mark='c'/> It samples from a density known only up to a constant, "
             "which is exactly the situation of Bayesian statistics, where the posterior's normalizing constant is an "
-            "an integral that may be difficult to compute."
+            "integral that may be difficult to compute."
         ) as vo:
             self.play(FadeIn(intro))
             vo.wait_until("a")
