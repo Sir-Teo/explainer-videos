@@ -34,6 +34,11 @@ def pct(x: float, digits: int = 0) -> str:
     return rf"{100 * x:.{digits}f}\%"
 
 
+def num(n) -> str:
+    """An integer with thousands separators that TeX sets without a gap."""
+    return f"{int(n):,}".replace(",", "{,}")
+
+
 def keep_in_frame(mob, margin: float = 0.25):
     half = config.frame_width / 2 - margin
     if mob.get_left()[0] < -half:

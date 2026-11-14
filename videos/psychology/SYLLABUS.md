@@ -188,7 +188,7 @@ Modules, with the part that introduces each:
 | `circuits` | 6 | conductance synapses; Hebbian, BCM and STDP rules; lateral inhibition; winner-take-all; half-centre oscillators; Wilson–Cowan |
 | `brain` | 7 | a lesionable box-and-arrow architecture; patients under one resource and two; cortical magnification; lesion-symptom mapping |
 | `imaging` | 8 | a tuned cell; a lead-field toy for EEG; ERP averaging; the haemodynamic response and the GLM; a synthetic brain under each threshold; circular selection; reverse inference |
-| `genes` | 9 | the Pool's additive genomes; twin, adoption and family simulators; ACE fits; GWAS and polygenic scores |
+| `genes` | 9 | many loci; twin, adoption and family simulators with each assumption switchable; Falconer and ACE fits; a genome-wide scan and polygenic scores; the sibling design; embryo selection |
 | `body` | 10 | a circadian oscillator; the two-process model; an HPA feedback loop; receptor occupancy and tolerance |
 | `psychophysics` | 11 | psychometric functions; constant stimuli, limits and adjustment; staircases and QUEST; ML fits with intervals |
 | `sdt` | 12 | equal- and unequal-variance observers; yes–no, rating and 2AFC; ROC and d′; ideal observers |
@@ -781,45 +781,71 @@ al. 2009; Kriegeskorte et al. 2009; Poldrack 2006; Barker et al. 1985; Owen et a
 Elliott et al. 2020; Marek et al. 2022; Tang et al. 2023; Luck, *An Introduction to the Event-Related Potential
 Technique*; Poldrack, Mumford & Nichols; Huettel, Song & McCarthy; Poldrack, *The New Mind Readers*.
 
-### Part 9 · Genes and Evolution (~55)
+### Part 9 · Genes and Evolution (~60)
 *Question:* how much of who you are did you inherit, and what does that question mean?
-*Story:* twins separated in infancy meet at thirty-nine and find the same habits. The anecdote is worth nothing;
-the design behind it is one of psychology's most replicated. This part derives what a twin study estimates, shows
-on the Pool when it is right and wrong, and follows the search for the genes themselves, including a decade of
-findings that were not there.
-1. Hook: the "Jim twins" and the Minnesota study (1979–). Anecdote against design.
-2. Galton's "nature and nurture" (1869–75), and where his programme led: eugenics, named here and told in Part
-   32.
-3. Mendel to Fisher (1918): many small genes make a continuous trait; variance components.
-4. Twin logic: identical and fraternal correlations; Falconer's formula derived; the ACE model as a path diagram
-   (the first one in the series; returns in Part 44).
-5. On the Pool: the design recovers the planted heritability, and then fails as the equal-environments assumption,
-   assortative mating or gene–environment correlation are switched on (computed).
-6. What heritability is not: not fixedness, not about an individual, not about group differences, not constant
-   across environments (the height-in-two-fields picture; Turkheimer et al. 2003 on socioeconomic status).
-7. The three laws of behaviour genetics (Turkheimer 2000) and the large twin meta-analysis (Polderman et al.
-   2015). The puzzle of the shared environment.
-8. Finding the genes: candidate-gene studies and their collapse (5-HTTLPR and depression; Border et al. 2019).
-   Why: small effects, small samples, flexible analysis. Part 4 again.
-9. GWAS: a million tests, the 5 × 10⁻⁸ line, Manhattan plots; polygenic scores, what they predict within and
-   between families, and missing heritability.
-10. Gene–environment interplay; epigenetics in two careful minutes.
-11. Evolutionary psychology: adaptation as a hypothesis generator; the cheater-detection claim (Part 24), mate
-    preferences (Part 37); the just-so-story critique and what a testable version looks like.
-12. Comparative cognition in brief: what crows, apes and octopuses tell us about which solutions are forced.
+*Story:* identical twins separated as babies meet at thirty-nine and find the same habits. The anecdote is worth
+nothing; the design behind it is one of psychology's most replicated. This part derives what a twin study
+estimates, shows on the Pool when it is right and wrong, lists what heritability is not, and follows the search
+for the genes themselves, including a decade of findings that were not there.
+0. Hook: the "Jim twins" (1979) and the Minnesota study. Two strangers compared on 200 things share about ten;
+   anecdote against design; about 70% of IQ variance in twins reared apart (Bouchard et al. 1990).
+1. Nature and nurture: Galton's families (1869) and the confound; two simulated worlds with the same
+   parent-child correlation, told apart only by adoption; eugenics named, and deferred to Part 32.
+2. From peas to bell curves: Mendel against the bell curve; 1, 2, 5 and 50 loci (Fisher 1918); a score as A + C +
+   E and heritability as a share of variance; regression to the mean, whose slope is the heritability.
+3. The logic of twins: two kinds of twins; Falconer's formula in four lines (0.50, 0.20, 0.30 recovered on the
+   registry); the ACE model as a path diagram (the first in the series; returns in Part 44); 111 studies of
+   test scores (Bouchard and McGue 1981).
+4. On the Pool: 2,000 studies at each of four sizes (50 pairs: 95% of estimates between −0.05 and 1.07); one
+   study fitted by maximum likelihood with bootstrap intervals; four assumptions switched off (equal
+   environments 0.75, assortative mating 0.48, dominance 0.80 with a negative home, gene-environment
+   correlation a home of 0.35); adoptive siblings, parent and child apart, and twins apart as checks.
+5. On you: six traits, guessed and then revealed (language 0, schooling .40, personality .47, cognitive ability
+   at seventeen .66, ADHD .74, schizophrenia .81; 49% across 17,804 traits).
+6. What heritability is not: not fixed (height rose 20 cm in a century), not about groups (seed from one sack
+   in two fields), not about a person (the rectangle), not a constant (the spread of environments; Turkheimer et
+   al. 2003; Haworth et al. 2010).
+7. Three laws and a puzzle: Turkheimer (2000) and Polderman et al. (2015); the shared home that counts for
+   little; what is in the remainder; two cautions.
+8. The candidate-gene decade: the serotonin transporter (Caspi et al. 2003); a variant explaining 0.02% needs
+   39,237 people and a thousand give a 7% chance; a null gene analysed 18 ways is "significant" 38% of the time;
+   the tests of 2009, 2012 and 2019 (Border et al.).
+9. A million tests: the line at 5 × 10⁻⁸; a miniature genome at 2,000, 6,000 and 20,000 people (4, 57 and 179
+   hits of 500, none false; the first hits 1.5 times too large); schooling: 3 positions, then 1,271, then 3,952.
+10. What a polygenic score can say: built and tested out of sample (39%, against a formula's 38%); a score
+    predicting 14% puts 76% of its top tenth above the median; smaller between siblings (0.30 against 0.50) and
+    genetic nurture (Kong et al. 2018); missing heritability; epigenetics in two careful minutes.
+11. Evolution as a source of hypotheses: the second "why"; 37 cultures (Buss 1989); just-so stories and what a
+    testable claim needs; Betty the crow and her later qualification.
+12. The Ledger. 13. In practice: what a genetic test can deliver. 14. Frontier: inside the family.
 
-*Psyche:* `genes`: additive genomes for the Pool; twin, adoption and sibling designs with ACE fits by maximum
-likelihood; a GWAS on a simulated trait; polygenic prediction within and between families.
-*On you:* guess the heritability of ten traits, then see the meta-analytic values.
-*Ledger:* the heritability of psychological traits (`replicated`); 5-HTTLPR × stress (`failed`); candidate genes
-for cognition generally (`failed`); educational-attainment polygenic scores (`replicated`; within-family effects
-about half as large **(verify)**).
-*In practice:* genetic counselling; direct-to-consumer "behavioural" genetics and embryo screening claims, with
-the arithmetic of what a polygenic score can deliver.
-*Frontier:* within-family GWAS and genetic nurture; ancestry and portability of scores; rare variants; what a
-causal account from variant to behaviour would need.
-*Reading:* Plomin et al., *Behavioral Genetics*; Falconer & Mackay; Turkheimer 2000; Polderman et al. 2015; Border
-et al. 2019; Visscher et al. 2017; Harden, *The Genetic Lottery*; Kevles, *In the Name of Eugenics*.
+*Psyche:* `genes` (`explainer/psychology/psyche/genes.py`): the sum of L loci; families under the infinitesimal
+model with switches for unequal environments, assortative mating, dominance and gene-environment correlation;
+Falconer's estimates and a maximum-likelihood ACE fit; adoption and parent-offspring designs; two fields; power
+for one variant and a flexibly analysed null gene; a genome-wide scan and polygenic scores; the sibling design
+with genetic nurture and stratification; the gain from choosing among embryos.
+*On you:* guess the heritability of six traits, in the film. The interactive shows the same trait in forty
+identical and forty fraternal pairs; the reader decides from the two correlations whether genes or the shared
+home account for more, and the page plots each trait against the lines "all genes" and "all home".
+*Ledger:* twins and the heritability of psychological traits (`replicated`); candidate genes for behaviour
+(`failed`); a polygenic score for years of schooling (`replicated`, about 40% smaller within families). Shown
+without rows, with reasons: the Jim twins, Galton, Fisher, the three laws, the heritability that depends on wealth
+and on age (due in Part 32), a century of height, the table of heritabilities, genetic nurture, the within-sibship
+scan, height's variants, portability, the embryo simulation, mate preferences (due in Part 37), the famine and
+methylation, and the crow.
+*In practice:* genetic counselling for single-gene conditions against polygenic scores; a consumer score that
+predicts 10% leaves a 67% chance of being above average for its top tenth and ±28 IQ points; choosing the best of
+ten embryos gains about 3 points (2.5 in Karavani et al. 2019) and of a hundred about 5; six questions for any
+claim about genes and behaviour.
+*Frontier:* stratification (the chopsticks gene, simulated); within-sibship genome-wide studies (Howe et al.
+2022); whose genomes (Martin et al. 2019); the missing heritability, how genetic nurture works, the path from a
+variant to a behaviour, and what a score should be used for.
+*Reading:* Knopik et al., *Behavioral Genetics*; Falconer & Mackay; Harden, *The Genetic Lottery*; Kevles, *In
+the Name of Eugenics*; Galton 1875; Fisher 1918; Bouchard et al. 1990; Bouchard & McGue 1981; Polderman et al.
+2015; Turkheimer 2000; Turkheimer et al. 2003; Haworth et al. 2010; Caspi et al. 2003; Risch et al. 2009; Chabris
+et al. 2012; Border et al. 2019; Rietveld et al. 2013; Lee et al. 2018; Okbay et al. 2022; Kong et al. 2018; Howe
+et al. 2022; Yengo et al. 2022; Martin et al. 2019; Karavani et al. 2019; Buss 1989; Gould & Lewontin 1979;
+Heijmans et al. 2008; Weir et al. 2002.
 
 ### Part 10 · Chemistry and Clocks (~50)
 *Question:* why does the same mind differ at four in the afternoon and four in the morning?
@@ -3119,3 +3145,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 6 | built, English and Chinese: 14 chapters, hook and outro; Psyche's circuits (`psyche/circuits.py`, eleven tests), three Ledger rows, nine Archive datasets; course entry, lab and interactive (the Hermann grid with straight and wavy streets) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 62 min |
 | 7 | built, English and Chinese: 14 chapters, hook and outro; Psyche's brain (`psyche/brain.py`, ten tests), four Ledger rows, seventeen Archive datasets; course entry, lab and interactive (the reader's own blind spot, measured with outward and inward sweeps) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 63 min |
 | 8 | built, English and Chinese: 14 chapters, hook and outro; Psyche's imaging (`psyche/imaging.py`, thirteen tests), three Ledger rows, seventeen Archive datasets; course entry, lab and interactive (which reported correlation is impossible, given the two reliabilities) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 60 min |
+| 9 | built, English and Chinese: 14 chapters, hook and outro; Psyche's genes (`psyche/genes.py`, sixteen tests), three Ledger rows, twenty-three Archive datasets; course entry, lab and interactive (genes or the shared home, read from two twin correlations) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 60 min |

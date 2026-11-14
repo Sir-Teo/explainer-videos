@@ -154,12 +154,12 @@ class Candidate(VoiceoverScene):
         head = heading(r"Then the tests arrived")
         items = [
             (r"2009", rf"the serotonin gene and depression, \ pooled: \ {c['risch_studies']} studies, \ more than "
-                      rf"{c['risch_people']:,} people".replace(",", "{,}"), r"no association, \ with stress or without", BAD),
+                      rf"{num(c['risch_people'])} people", r"no association, \ with stress or without", BAD),
             (r"2012", rf"{ch['variants']} published variants for intelligence, \ retested in three large samples",
              rf"{ch['significant']} of {ch['tests']} tests significant; \ {ch['expected'][0]} to {ch['expected'][1]} expected "
              r"if the effects were real", BAD),
             (r"2019", rf"the {b['genes']} most-studied genes for depression, \ a plan registered in advance, \ up to "
-                      rf"{b['n_max']:,} people".replace(",", "{,}"), r"none held up; \ no better than genes picked at random",
+                      rf"{num(b['n_max'])} people", r"none held up; \ no better than genes picked at random",
              BAD),
         ]
         rows = VGroup()

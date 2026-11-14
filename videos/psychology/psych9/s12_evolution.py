@@ -68,7 +68,7 @@ class Evolution(VoiceoverScene):
         dl = wrapped_label(rf"{b['cultures']} samples: \ in {b['financial_prospects']}, women rated a partner's financial "
                            r"prospects higher than men did", 5.0, 29, MODEL).next_to(dots, DOWN, buff=0.3)
         rows = rows_of([
-            (rf"{b['people']:,} people, \ {b['countries']} countries".replace(",", "{,}"), DATA),
+            (rf"{num(b['people'])} people, \ {b['countries']} countries", DATA),
             (rf"in all {b['younger_mates']}, \ men preferred partners younger than themselves", MODEL),
             (r"his own caveats: \ mostly urban, educated samples; \ stated preferences, not choices", GREY_A),
             (r"a rival account: \ the same pattern follows where women have less access to money. \ Tested since; \ "

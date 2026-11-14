@@ -94,7 +94,7 @@ class Frontier(VoiceoverScene):
                            r"ancestry", 4.6, 28, WHITE).move_to([-4.4, -1.75, 0])
         keep_in_frame(kl)
         rows = rows_of([
-            (rf"2022: \ a genome-wide study \emph{{within}} families, \ {h['siblings']:,} siblings".replace(",", "{,}"), DATA),
+            (rf"2022: \ a genome-wide study \emph{{within}} families, \ {num(h['siblings'])} siblings", DATA),
             (r"smaller effects within families for: \ schooling, \ test scores, \ height, \ depressive symptoms, \ smoking", HOME),
             (r"about the same for bodily measures such as cholesterol", GENE),
             (rf"our simulation with two strata: \ ${d['population']:.2f}$ between strangers, \ ${d['within']:.2f}$ between "

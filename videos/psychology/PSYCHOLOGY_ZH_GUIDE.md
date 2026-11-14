@@ -370,6 +370,45 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | brain-wide association; sample size | 全脑关联；样本量 |
 | brain privacy | 大脑隐私 |
 
+## Part 9: genes and evolution
+
+| English | 中文 |
+|---|---|
+| gene; version (allele); copy; position (variant) | 基因；版本；份（拷贝）；位置（变异） |
+| to inherit; heritable; heritability | 遗传；可遗传的；遗传率 |
+| nature and nurture | 天性与教养 |
+| identical twins; fraternal twins | 同卵双胞胎；异卵双胞胎 |
+| twins raised apart; raised together | 分开抚养的双胞胎；一起长大 |
+| adoption; adoptive brothers and sisters; birth parents; adoptive parents | 收养；收养家庭里的兄弟姐妹；生父母；养父母 |
+| the home a family shares (C); everything else (E) | 共同的家庭；其余的一切 |
+| share (of the variance) | 份额 |
+| the Pool's twin registry; planted (shares) | 样本池的双胞胎登记册；埋进去的 |
+| Falconer's formula; "on a napkin" | 福尔克纳公式；在一张餐巾纸上 |
+| path diagram; square, circle, arrow, curved line | 路径图；方框，圆圈，箭头，弯线 |
+| maximum likelihood; interval | 最大似然法；区间 |
+| equal environments; random mating; like marries like | 环境相等；随机婚配；相似的人结婚 |
+| genes that simply add (additive); in combination | 简单相加（加性）；组合起来 |
+| regression (to the mean); slope | 回归；斜率 |
+| eugenics; forced sterilization | 优生学；强制绝育 |
+| seed, field, rich soil, poor soil | 种子，田，肥田，瘦田 |
+| phenylketonuria | 苯丙酮尿症 |
+| the three laws of behaviour genetics | 行为遗传学的三条定律 |
+| candidate gene; serotonin transporter; short and long version | 候选基因；血清素转运体；短版本和长版本 |
+| interaction (gene by environment) | 交互作用 |
+| genome; genome-wide association; genome-wide significance | 基因组；全基因组关联；全基因组显著 |
+| chip; hit | 芯片；命中 |
+| polygenic score; discovery study | 多基因分数；用来发现的研究 |
+| genetic nurture; transmitted, not transmitted | 遗传养育；传下去的，没有传下去的 |
+| missing heritability; rare variants | 缺失的遗传率；罕见变异 |
+| epigenetics; chemical tag | 表观遗传学；化学标记 |
+| natural selection; adaptive; just-so story | 自然选择；适应性的；“原来如此的故事” |
+| mate preferences; financial prospects | 择偶偏好；经济前景 |
+| genetic counselling; Huntington's disease, cystic fibrosis, Down syndrome | 遗传咨询；亨廷顿病，囊性纤维化，唐氏综合征 |
+| embryo selection; IVF | 胚胎选择；试管婴儿 |
+| ancestry; stratification (two strata) | 祖源（血统）；群体分层（两层人群） |
+| Mendel's lottery | 孟德尔的彩票 |
+| siblings; within families, between families | 兄弟姐妹；家庭内部，家庭之间 |
+
 ## Names
 
 | English | 中文 |
@@ -457,6 +496,14 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Anders Eklund, Edward Vul, Russell Poldrack | 安德斯·埃克伦德，爱德华·武尔，拉塞尔·波尔德拉克 |
 | Anthony Barker, Adrian Owen | 安东尼·巴克，阿德里安·欧文 |
 | Jaeggi, Kozel, Ganis (in the Ledger) | 耶吉，科泽尔，加尼斯 |
+| Charles Darwin, Gregor Mendel | 查尔斯·达尔文，格雷戈尔·孟德尔 |
+| Thomas Bouchard, Matt McGue | 托马斯·布沙尔，麦格 |
+| Eric Turkheimer, Richard Lewontin, Stephen Jay Gould | 埃里克·特克海默，理查德·列万廷，斯蒂芬·杰伊·古尔德 |
+| Falconer; David Buss | 福尔克纳；戴维·巴斯 |
+| Caspi, Risch, Chabris, Border, Rietveld, Lee, Okbay, Polderman (in the Ledger) | 卡斯皮，里施，查布里斯，博德，里特费尔德，李，奥克贝，波尔德曼 |
+| Jim, Linda, Betty, James Alan, Toy (the dog) | 吉姆，琳达，贝蒂，詹姆斯·艾伦，托伊 |
+| Ohio, Minnesota, Dunedin, Iceland, Kentucky | 俄亥俄，明尼苏达，达尼丁，冰岛，肯塔基 |
+| *Hereditary Genius* | 《遗传的天才》 |
 
 ## Titles
 

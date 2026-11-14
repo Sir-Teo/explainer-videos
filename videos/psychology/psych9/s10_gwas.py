@@ -88,6 +88,8 @@ class Gwas(VoiceoverScene):
             lab.next_to(A.ax.c2p(m, top / 2), RIGHT, buff=0.3)
             panels.add(VGroup(A, line, dots, lab))
         n0, n2 = int(d["sizes"][0]), int(d["sizes"][2])
+        h0, h1, h2 = (d[f"hits_{int(n)}"] for n in d["sizes"])
+        infl = d[f"inflation_{n0}"]
         rows = rows_of([
             (r"height of a dot: \ how surprising that position's association is", GREY_A),
             (rf"no false alarms at any size: \ what it finds is real", MODEL),
@@ -104,13 +106,13 @@ class Gwas(VoiceoverScene):
             "affect a trait, each a little, and together they carry half of its variation. "
             f"<bookmark mark='a'/> Study {n0:,} people. Each dot is a position, and its height says how "
             "surprising its association with the trait is. The dashed line is the corrected threshold. "
-            f"{d[f'hits_{n0}']} positions clear it. <bookmark mark='b'/> Six thousand people: "
-            f"{d[f'hits_{int(d['sizes'][1])}']}. <bookmark mark='c'/> Twenty thousand: "
-            f"{d[f'hits_{n2}']}, and not one of them a false alarm. The method is strict, and what it "
+            f"{h0} positions clear it. <bookmark mark='b'/> Six thousand people: "
+            f"{h1}. <bookmark mark='c'/> Twenty thousand: "
+            f"{h2}, and not one of them a false alarm. The method is strict, and what it "
             f"finds is real. <bookmark mark='d'/> But look at what it misses. {d['causal']} positions "
-            f"matter, and with twenty thousand people we've found {d[f'hits_{n2}']}. The rest are real "
+            f"matter, and with twenty thousand people we've found {h2}. The rest are real "
             "and invisible. And the first hits to appear are exaggerated. At two thousand people, the "
-            f"estimated effects of the hits are {d[f'inflation_{n0}']:.1f} times their true size. That's "
+            f"estimated effects of the hits are {infl:.1f} times their true size. That's "
             "Part 4's winner's curse: to clear a high bar with a small sample, an estimate has to be "
             "lucky as well as real."
         ) as vo:
