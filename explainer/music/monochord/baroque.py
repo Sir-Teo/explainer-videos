@@ -126,6 +126,57 @@ def extract(wheel, out: Path = DATA) -> int:
     return len(rows)
 
 
+QUARTET_DATA = Path(__file__).with_name("data") / "quartets.json.gz"
+
+
+def _read_xml(z, path):
+    raw = z.read(path)
+    if path.endswith(".mxl"):
+        inner = zipfile.ZipFile(io.BytesIO(raw))
+        xml = [m for m in inner.namelist() if m.endswith(".xml") and not m.startswith("META-INF")][0]
+        raw = inner.read(xml)
+    enc = "utf-16" if raw[:2] in (b"\xff\xfe", b"\xfe\xff") else "utf-8"
+    text = re.sub(r"<\?xml[^>]*\?>", "", raw.decode(enc, "ignore"))
+    return re.sub(r"<!DOCTYPE[^>]*>", "", text)
+
+
+def extract_quartets(wheel, out: Path = QUARTET_DATA) -> dict:
+    """The string quartet movements of Haydn, Mozart and Beethoven in the music21 corpus (MusicXML only), each as four
+    lines plus its time signature: what Part 26 counts."""
+    z = zipfile.ZipFile(Path(wheel))
+    rows, skipped = [], []
+    for nm in sorted(z.namelist()):
+        m = re.match(r"music21/corpus/(haydn|mozart|beethoven)/(.+)\.mxl$", nm)
+        if not m:
+            continue
+        try:
+            text = _read_xml(z, nm)
+            root = ET.fromstring(text)
+            lines = parse_lines(text)
+        except Exception:
+            skipped.append(nm)
+            continue
+        if len(lines) != 4:
+            skipped.append(nm)
+            continue
+        beats = root.find(".//time/beats")
+        btype = root.find(".//time/beat-type")
+        rows.append({"composer": m.group(1), "name": m.group(2), "time": [int(beats.text) if beats is not None else 4, int(btype.text) if btype is not None else 4],
+                     "lines": {k: [list(n) for n in v] for k, v in lines.items()}})
+    with gzip.open(out, "wt", encoding="utf-8") as f:
+        json.dump(rows, f, separators=(",", ":"))
+    return {"movements": len(rows), "skipped": skipped}
+
+
+def load_quartets(path: Path = QUARTET_DATA) -> list[dict]:
+    with gzip.open(path, "rt", encoding="utf-8") as f:
+        raw = json.load(f)
+    for r in raw:
+        r["voices"] = sorted(([tuple(n) for n in v] for v in r.pop("lines").values()), key=lambda v: -np.mean([p for p, _, _ in v]) if v else 0)
+        r["time"] = tuple(r["time"])
+    return raw
+
+
 def load(path: Path = DATA) -> dict:
     with gzip.open(path, "rt", encoding="utf-8") as f:
         raw = json.load(f)
