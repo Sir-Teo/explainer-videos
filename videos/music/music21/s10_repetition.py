@@ -58,11 +58,11 @@ class Repetition(SoundScene):
             "contradiction: a round repeats in its other voices, not within itself. Its line keeps moving so that, sung "
             "against itself, it sounds full; the repetition is in the form, not in the tune."
         ) as vo:
-            self.play(FadeIn(left[0]))
+            self.play(FadeIn(left[0]), FadeIn(right[0]))
             vo.wait_until("a")
             self.play(FadeIn(left[1:]))
             vo.wait_until("b")
-            self.play(FadeIn(right))
+            self.play(FadeIn(right[1:]))
         self.wait(0.4)
         self.clear_scene()
 

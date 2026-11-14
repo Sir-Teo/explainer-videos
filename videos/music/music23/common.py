@@ -62,7 +62,8 @@ def voices_roll(voices, width=11.0, height=3.0, colors=None, total=None, lo=None
 def flash_voices(snd, g, voices, start, unit, hot=WHITE, colors=None):
     colors = colors or VOICE_C
     for j, v in enumerate(voices):
-        flash(snd, g.parts[j].notes, [start + n[1] * unit for n in v], hot=hot, base=colors[j % len(colors)])
+        if v and g.parts[j].notes:
+            flash(snd, g.parts[j].notes, [start + n[1] * unit for n in v], hot=hot, base=colors[j % len(colors)])
 
 
 def cursor(snd, g, start, unit, color=WHITE):
