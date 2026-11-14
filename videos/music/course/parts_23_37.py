@@ -565,4 +565,45 @@ PARTS = [
         I=(5,),
         also=(("Monochord's maqam engine: ajnas, maqamat, medieval ratios, equal divisions, Turkish commas, an oud and a darbuka", "explainer/music/monochord/maqam.py"),),
     ),
+    Part(
+        n=36, level="U", widget="ombak", prereq=(5, 6, 9, 11, 12, 33),
+        question="What did China's bronze bells and the gamelan's tunings make of pitch, and why would an orchestra tune out of unison on purpose?",
+        story="In 1978 the tomb of Marquis Yi of Zeng, sealed in 433 BCE, gave up 65 bronze bells, each sounding two notes: "
+              "an almond-shaped section splits the modes into two families, struck at the centre or the side, a minor or "
+              "major third apart. Chinese theory generated its pitches by cutting a pipe of length 81 by thirds: five give "
+              "the pentatonic, twelve the lü, and the circle misses closing by the Pythagorean comma. Jing Fang carried the "
+              "chain to sixty and found 53 fifths within 3.6 cents of 31 octaves; Zhu Zaiyu computed equal temperament in "
+              "1584. Five notes make five modes; the guqin's thirteen hui are harmonic nodes. Heterophony plays one melody "
+              "several ways at once, in Chinese ensembles and in gagaku. Gamelan has slendro and pelog with no standard, "
+              "and a free bar's inharmonic spectrum moves the dissonance minima away from the just intervals and the "
+              "octave. Balinese pairs are tuned to beat at a fixed rate, the gong cycle marks time, and kotekan splits a "
+              "figure between two players who each leave every other pulse empty. The Tune is played in qin harmonics and "
+              "as a balungan with interlocking parts.",
+        handoff="Timelines in Part 37; scales and universals in Part 47; synthesis for any tuning in Part 52; ensembles in "
+                "rooms in Part 55; acoustics and archaeology as research in Part 67.",
+        outside="Part 1 for harmonics; Part 5 for beats and dissonance curves; Part 6 for commas; Part 9 for bars, bells and "
+                "gongs; Part 12 for pentatonic scales; Part 33 for continued fractions and tilings. Modal analysis, "
+                "continued fractions, roughness models.",
+        objectives={
+            "U": ["Hear a two-tone bell and explain why its shape gives two notes.",
+                  "Hear the five pentatonic modes, qin harmonics, and slendro and pelog.",
+                  "Hear ombak and interlocking parts, and explain how they are designed."],
+            "M": ["Generate the lü by the rule of three and find the chains of fifths that nearly close.",
+                  "Compute dissonance curves for harmonic and inharmonic spectra.",
+                  "Design a paired tuning by beat rate and render a colotomic cycle."],
+            "D": ["Design a test of whether gamelan tunings fit their instruments' measured spectra."],
+            "I": ["Tune paired instruments to a chosen beat rate, as gamelan makers do."],
+        },
+        results=[
+            ("The two-tone bell", r"\text{centre and side: } 300 \text{ or } 400 \text{ cents apart}"),
+            ("The rule of three", r"81 \to 54 \to 72 \to 48 \to 64: \ \text{the pentatonic}"),
+            ("Jing Fang", r"53 \text{ fifths} - 31 \text{ octaves} = 3.6 \text{ cents}"),
+            ("A free bar", r"\text{partials } 1 : 2.76 : 5.40; \ \text{no dissonance minimum at the octave}"),
+            ("Ombak", r"6 \text{ Hz beat: } 101, 26, 6.5 \text{ cents at } 100, 400, 1600 \text{ Hz}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 9),
+        D=(10,),
+        I=(8,),
+        also=(("Monochord's bronze and silk: a two-tone bell, the lü, Jing Fang's chain, the qin's hui, bar spectra, paired tuning, colotomy, interlocking", "explainer/music/monochord/bronze.py"),),
+    ),
 ]

@@ -1470,13 +1470,30 @@ values of ours and says so.
 depending on where it is struck, and their inscriptions are a tuning treatise older than Aristoxenus. The part
 goes from those bells to the gamelan, an orchestra whose two halves are tuned apart on purpose so that the whole
 shimmers.
+1. Hook: an ear question (one bell, two notes?); the tomb; listening across traditions; the plan.
+2. The bells of Marquis Yi: why an almond section gives two notes; minor- and major-third bells heard; the set; a bell melody heard; inscriptions; two kinds of bell.
+3. Twelve pitches from a pipe: the rule of three; the pentatonic heard; the twelve lü and the comma; the lü heard; the yellow bell; the calendar.
+4. Jing Fang's sixty: closeness of chains of fifths; 12 and 53 heard; fifty-three elsewhere; after Jing Fang; Pythagorean against equal heard; Zhu Zaiyu's method.
+5. Five notes, five modes: the modes heard; a melody with and without bian tones heard; seven from five; opera; melody without semitones.
+6. The guqin: the instrument; the hui; harmonics heard; open strings heard; one pitch three ways heard; repertory; jianzipu.
+7. Heterophony and gagaku: heterophony heard; gagaku; sho-like clusters heard; Korea.
+8. Slendro and pelog: gamelan; scales heard; pelog subsets heard; the Tune in both heard; no standard; how a gamelan is tuned; spectrum and scale heard.
+9. Tuned apart on purpose: ombak; an ear question (which pair shimmers?); slow and fast heard; a beat by design; the West.
+10. The gong cycle and interlocking parts: colotomy; a lancaran heard; an ear question (one player or two?); irama heard; layers; a kebyar burst heard; worldwide.
+11. Frontier: bells as data; tunings as data; heritage; the research problem.
+12. Variation 36: the Tune in qin harmonics, then as balungan with interlocking parts. Outro: problems, payoffs.
+
 *Covers:* the two-tone bell; generating the twelve lü; Jing Fang's sixty and the near-closing fifty-third; the
 five modes; the guqin, its harmonics and its tablature; heterophony; gagaku; gamelan: slendro and pelog without a
 standard, bronze spectra and their scales, paired tuning and beating, the gong cycle, interlocking parts.
-*Built and computed:* a two-tone bell; Jing Fang's computation repeated; a bronze ensemble with designed beats;
-a gong-cycle renderer and an interlocking splitter.
-*Variation 36:* a study: the Tune for qin harmonics, then as balungan with interlocking elaboration.
-*Frontier:* the acoustics and archaeology of the bells; measured gamelan tunings.
+*Built and computed:* `monochord/bronze.py`: a two-tone bell (designed mode families a third apart); the rule of
+three and the lü; chains of fifths up to 60 (53 within 3.6 cents); the five modes; the hui as harmonic nodes; bar
+spectra and dissonance curves (a uniform bar has no octave minimum); paired tuning by beat rate; a lancaran
+renderer; an interlocking splitter.
+*Variation 36:* a study: the Tune for qin harmonics (the worst 8 cents from equal temperament), then as balungan
+with interlocking elaboration.
+*Frontier:* the acoustics and archaeology of the bells; measured gamelan tunings; whether tunings fit spectra.
+*Rights:* every sound is the film's own model (§2.4); melodies are ours; gamelan tunings are illustrative and say so.
 *Reading:* von Falkenhausen, *Suspended Music*; Tenzer, *Gamelan Gong Kebyar*; Sumarsam; Sethares ch. 10.
 
 ### Part 37 · Timelines (~50)

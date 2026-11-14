@@ -912,4 +912,40 @@
       note: "Try 24 steps, then 53: the neutral steps of Rast and Bayati fit 24 exactly, by construction, and miss 53 by about eight cents, while Hijaz and Nahawand fit both. The written grid is a convention; chapter four of the film asks where musicians actually put these notes."
     });
   };
+  // ------------------------------------------------------------------------------------------- Part 36: ombak, designed
+  function bar36(f, t) { var r = [1, 2.757, 5.404], a = [1, 0.45, 0.25], d = [1.0, 2.5, 5.0], v = 0;
+    for (var k = 0; k < 3; k++) v += a[k] * Math.exp(-d[k] * t) * Math.sin(2 * Math.PI * f * r[k] * t); return v; }
+  W.ombak = function (el) {
+    QB.widget(el, {
+      title: "Tuned apart on purpose: designing a gamelan's shimmer",
+      sub: "Balinese instruments come in pairs tuned slightly apart so that every note beats. Choose the beat rate and a note: the page shows how many cents the partner must be detuned at each octave to keep the same beat, and plays the pair on a model metallophone (a free bar's partials, 1 : 2.76 : 5.40).",
+      panels: 1, height: 250,
+      controls: [
+        { k: "beat", label: "Beat rate (Hz)", min: 0, max: 10, step: 0.5, value: 6, fmt: function (x) { return x.toFixed(1) + " Hz"; } },
+        { k: "f", label: "Note (Hz)", min: 100, max: 1600, step: 10, value: 300, fmt: function (x) { return x + " Hz"; } }
+      ],
+      buttons: [{ label: "Play the pair", act: function (s) {
+        var rate = 44100, n = Math.floor(2.5 * rate), out = new Float32Array(n);
+        for (var i = 0; i < n; i++) { var t = i / rate; out[i] = 0.18 * (bar36(s.f, t) + bar36(s.f + s.beat, t)); }
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.f = v.f; s.beat = v.beat;
+        var xs = [], ys = [], f;
+        for (f = 100; f <= 1600; f += 20) { xs.push(f); ys.push(1200 * Math.log2((f + v.beat) / f)); }
+        var top = Math.max(10, 1200 * Math.log2((100 + v.beat) / 100) * 1.1);
+        var a = g[0].axes({ x: [100, 1600], y: [0, top], title: "Cents apart needed for a constant " + v.beat + " Hz beat", xlabel: "note (Hz)" });
+        a.line(xs, ys, { color: C.idea, width: 2.5 });
+        a.dots([v.f], [1200 * Math.log2((v.f + v.beat) / v.f)], { r: 6, color: "#F472B6" });
+      },
+      readout: function (v, s) {
+        var c = 1200 * Math.log2((v.f + v.beat) / v.f);
+        return [["the pair", v.f + " Hz and " + (v.f + v.beat).toFixed(1) + " Hz: " + c.toFixed(1) + " cents apart"],
+                ["at 100 / 400 / 1600 Hz", [100, 400, 1600].map(function (f) { return (1200 * Math.log2((f + v.beat) / f)).toFixed(1); }).join(" / ") + " cents"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "At 0 Hz the pair is in unison and the shimmer disappears. Keeping the beat rate constant means the detuning in cents shrinks as the pitch rises: Balinese tuners tune the beat, not the interval."
+    });
+  };
 })();
