@@ -49,6 +49,7 @@ def run(seed=0):
     mel = K.sample_canon(N, DELAY, STEPS, rng=rng)
     lead, fol = K.line(mel), K.shift(K.line([K.diatonic(p, STEPS) for p in mel]), DELAY)
     f = K.faults([lead, fol], start=DELAY, stop=N)
+    assert f["dissonant"] == 0 and f["parallels"] == 0, "the solver's canon must not clash"
     lab.row(f"a canon at the {K.STEP_NAMES[abs(STEPS)]}", " ".join(str(p) for p in mel) + f"   (dissonant beats {f['dissonant']}, parallels {f['parallels']})")
 
     # 2. crab canons
@@ -58,7 +59,8 @@ def run(seed=0):
     lab.row("one crab canon", " ".join(str(p) for p in crab) + f"   (against its retrograde: {K.crab_ok(crab)['dissonant']} dissonant beats)")
 
     # 3. the four forms, and inversion at the octave
-    lab.row("the four forms' table closes on a real line", str(K.check_table_on([60, 64, 67, 65, 62, 71])))
+    assert K.check_table_on([60, 64, 67, 65, 62, 71])
+    lab.row("the four forms' table closes on a real line", "True")
     lab.row("inversion at the octave: unison, third, fifth, sixth, octave become",
             ", ".join(K.STEP_NAMES[r["becomes"]] if r["becomes"] < 9 else str(r["becomes"]) for s, r in K.invertible(7).items() if s in (0, 2, 4, 5, 7)))
 
