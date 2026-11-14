@@ -99,15 +99,16 @@ class Isorhythm(SoundScene):
         tab = VGroup()
         tab.add(VGroup(label(r"motet", font_size=18, color=GREY_B), label(r"talea", font_size=18, color=GREY_B), label(r"tenor", font_size=18, color=GREY_B), label(r"top voice", font_size=18, color=GREY_B), label(r"chance", font_size=18, color=GREY_B)))
         for r in v:
-            tab.add(VGroup(label(r["title"].split(".")[-1].strip()[:20], font_size=17, color=WHITE), label(rf"{r['lag']} bars", font_size=17, color=TUNE),
+            short = " ".join(r["title"].split(".")[-1].split()[:2]).title()
+            tab.add(VGroup(label(rf"\textit{{{short}}}", font_size=18, color=WHITE), label(rf"{r['lag']} bars", font_size=17, color=TUNE),
                            label(rf"{r['shares'][2]:.2f}", font_size=17, color=TUNE), label(rf"{r['shares'][0]:.2f}", font_size=17, color=WHITE), label(rf"{r['chance']:.2f}", font_size=17, color=GREY_B)))
-        xs = [0.9, 3.55, 4.6, 5.65, 6.7]
+        xs = [1.1, 3.3, 4.25, 5.2, 6.15]
         for i, row in enumerate(tab):
             y = 1.6 - 0.45 * i
             for k, cell in enumerate(row):
                 cell.move_to([xs[k], y, 0])
                 if k == 0:
-                    cell.align_to([xs[0] - 0.6, 0, 0], LEFT)
+                    cell.align_to([xs[0] - 0.55, 0, 0], LEFT)
         cap = VGroup(label(r"the scan finds each talea, \ and its multiples, \ in de Vitry's four motets", font_size=21, color=TUNE),
                      label(r"but plain tenors of long notes repeat by chance too: \ in two of the four the margin is small", font_size=21, color=EAR)).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.4)
         with self.voiceover(
@@ -141,7 +142,7 @@ class Isorhythm(SoundScene):
         c = clip("vitry.excerpt")
         vs = d["voices"]
         g = voices_roll(vs, width=11.6, height=3.6, colors=[EAR, TUNE, BLUE, GREY_A], bar_h=0.1).move_to(DOWN * 0.3)
-        head = label(r"Philippe de Vitry, \ \textit{Vos qui admiramini}: \ the opening, \ sung from the edition", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"Philippe de Vitry, \ \textit{Vos qui admiramini}: \ the opening", font_size=24, color=GREY_A).to_edge(UP, buff=0.9)
         cap = label(r"two texts above, \ a slow tenor and contratenor below: \ pitches and lengths from \textit{Polyphonic Music of the Fourteenth Century}, \ voices synthetic", font_size=18, color=GREY_B).to_edge(DOWN, buff=0.35)
         cap.scale_to_fit_width(min(cap.width, 12.6))
         with self.voiceover(

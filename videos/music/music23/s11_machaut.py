@@ -76,7 +76,7 @@ class Machaut(SoundScene):
         d = load("census")
         cd = d["cadences"]
         bars = columns([cd["sixth_octave"], cd["leading_tone"], cd["double"]], [r"sixth to octave", r"upper voice by a semitone", r"and a second by a semitone"],
-                       width=7.0, height=2.8, color=TUNE, fmt="{:.0f}", font_size=17)
+                       width=7.0, height=2.8, color=TUNE, fmt="{:.0f}", font_size=20)
         bars.move_to(LEFT * 2.4 + DOWN * 0.3)
         t = label(rf"in {d['pieces']} pieces of the fourteenth century", font_size=21, color=GREY_A).next_to(bars, UP, buff=0.35)
         side = VGroup(label(rf"{100 * cd['leading_tone'] / cd['sixth_octave']:.0f} in 100 sixth-to-octave cadences rise by a semitone", font_size=21, color=WHITE),

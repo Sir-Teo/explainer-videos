@@ -84,7 +84,7 @@ class ArsNova(SoundScene):
         ):
             self.play(FadeIn(tl), FadeIn(top), FadeIn(rows_), FadeIn(cap))
         with self.listen(c) as snd:
-            window(snd, r"the same shapes in four mensurations", detail=r"one synthetic voice", kind="synthesized", corner=DR, tag_corner=UR)
+            window(snd, r"the same shapes in four mensurations", detail=r"one synthetic voice", kind="synthesized", corner=UR, tag_corner=UL)
             for k, sign in enumerate(SIGNS):
                 st = d["starts"][sign]
                 flash(snd, rolls[k].notes, [st + n[1] * d["unit"] for n in d["readings"][sign]["notes"]], hot=WHITE, base=TUNE)
