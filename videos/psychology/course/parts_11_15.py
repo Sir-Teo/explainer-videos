@@ -201,4 +201,49 @@ Part(
               ("Its tests", "tests/psychology/test_infer.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+Part(
+        n=15, level="U", widget="pitchdir",
+        question="How do pressure waves become a voice, and why does pain not follow the injury?",
+        story="A sound with no energy at 200 Hz is heard at 200 Hz: the missing fundamental. Sound is pressure, and the "
+              "decibel is Fechner's logarithm made into a unit. Von Bekesy watched a travelling wave peak at one place "
+              "for each frequency; Greenwood's map, the outer hair cells' amplifier and Kemp's echoes followed, and "
+              "Psyche's cochlea is a bank of gammatone filters. Fletcher's band-widening measured the filters, and "
+              "masking runs downhill from low to high. Pitch comes from timing as well as place: summary "
+              "autocorrelation finds the missing fundamental. Two ears compare arrival times to about ten microseconds; "
+              "Jeffress's coincidence circuit fits the owl, while mammals use timed inhibition. Scenes are parsed by "
+              "harmonicity, onset and streaming. Speech has no invariant cues; categorical perception holds at the "
+              "boundary but not within categories; the McGurk effect is cue combination, with wide individual "
+              "differences. Roughness is universal, the taste for consonance learned. Touch has four channels and a "
+              "rubber hand can be adopted, perhaps partly by expectation; pain passes through a gate and the brain's "
+              "control of it. Smell is a code of hundreds of receptor types; the tongue map and the trillion smells "
+              "were corrected.",
+        handoff="Conditioning is Part 16, prediction errors Part 17, attention Part 18, language Part 23, human "
+                "factors Part 51, pain and placebo in the clinic Part 57, and the predictive brain Part 58.",
+        outside="Part 11's Fechner and Stevens, Part 12's detection theory, Part 13's filters and channels, and Part "
+                "14's cue combination. Logarithms, sine waves and the idea of a filter.",
+        objectives={
+            "U": ["Explain what the decibel measures and why it is logarithmic.",
+                  "Describe the cochlea as a frequency analyser, and what masking reveals about it.",
+                  "Explain the missing fundamental, the McGurk effect and the gate control of pain."],
+            "M": ["Compute interaural time differences and the direction a given delay implies.",
+                  "Show why a summary autocorrelation peaks at the period of a missing fundamental.",
+                  "Derive the label model of ABX discrimination and the McGurk prediction from cue weights."],
+            "D": ["Weigh place against timing theories of pitch, and maps against channel codes for direction.",
+                  "Assess the rubber-hand illusion and the trillion-odour claim against their critiques."],
+            "I": ["Explain why hearing aids compress and what a cochlear implant can and cannot restore.",
+                  "Explain how a perceptual audio codec uses masking to discard data."],
+        },
+        results=[
+            ("The decibel", r"L = 20\log_{10}(p / p_0),\ p_0 = 20\ \mu\text{Pa}"),
+            ("Auditory filter width", r"\mathrm{ERB}(f) = 24.7\,(4.37 f/1000 + 1)"),
+            ("Place map", r"f = 165.4\,(10^{2.1x} - 0.88)"),
+            ("Interaural delay", r"\Delta t = \frac{r}{c}(\theta + \sin\theta)"),
+            ("Labels predict discrimination", r"P_{ABX} = \tfrac12\left[1 + (p_A - p_B)^2\right]"),
+            ("The gate", r"T = \frac{w_L L + w_S S}{1 + g\,\max(L - kS, 0)}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 13), D=(8, 12, 15), I=(14,),
+        also=(("Psyche's hearing module", "explainer/psychology/psyche/hearing.py"),
+              ("Its tests", "tests/psychology/test_hearing.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

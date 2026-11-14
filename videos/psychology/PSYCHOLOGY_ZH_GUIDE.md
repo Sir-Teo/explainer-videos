@@ -556,6 +556,30 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | disruptive colouring; countershading | 破坏性斑纹；反荫蔽 |
 | Molyneux's question; affordance; optic array | 莫利纽克斯问题；可供性；光学阵列 |
 
+## Part 15: the other senses
+
+| English | 中文 |
+|---|---|
+| decibel (dB SPL); sound pressure; threshold in quiet; audiogram | 分贝（声压级）；声压；静息阈；听力图 |
+| harmonic; fundamental; missing fundamental; residue pitch | 谐波；基频；缺失基频；残余音高 |
+| cochlea; basilar membrane; travelling wave; base, apex | 耳蜗；基底膜；行波；底部、顶部 |
+| inner, outer hair cells; cochlear amplifier; otoacoustic emission | 内、外毛细胞；耳蜗放大器；耳声发射 |
+| tonotopy; place map (Greenwood) | 音调拓扑；位置图谱（格林伍德） |
+| gammatone filter; ERB; critical band; masking; upward spread | 伽马通滤波器；等效矩形带宽（ERB）；临界带；掩蔽；向上扩散 |
+| resolved, unresolved harmonics; phase locking; summary autocorrelation | 可分辨、不可分辨的谐波；锁相；汇总自相关 |
+| interaural time, level difference (ITD, ILD); duplex theory; coincidence detector | 两耳时间差、强度差（ITD、ILD）；双重理论；重合检测器 |
+| auditory scene analysis; streaming; cocktail party problem; harmonicity; common onset | 听觉场景分析；流分离；鸡尾酒会问题；谐和性；共同起始 |
+| formant; lack of invariance; categorical perception; ABX; the McGurk effect; causal inference | 共振峰；缺乏不变性；范畴知觉；ABX；麦格克效应；因果推断 |
+| roughness; consonance, dissonance; fifth; tritone | 粗糙感；协和、不协和；纯五度；三全音 |
+| Meissner, Merkel, Pacinian, Ruffini endings; two-point threshold; proprioception | 迈斯纳小体、默克尔盘、帕西尼小体、鲁菲尼小体；两点阈；本体感觉 |
+| the rubber hand illusion; phenomenological control | 橡胶手错觉；现象控制 |
+| gate control; large, small fibres; dorsal horn; substantia gelatinosa; TENS | 闸门控制；大、小纤维；背角；胶状质；经皮神经电刺激 |
+| phantom limb; mirror box; naloxone; placebo analgesia | 幻肢；镜盒；纳洛酮；安慰剂镇痛 |
+| odorant receptor; combinatorial code; flavour; umami; the tongue map | 气味受体；组合编码；风味；鲜味；舌头地图 |
+| semicircular canals; otolith organs; vestibulo-ocular reflex; sensory conflict | 半规管；耳石器官；前庭眼反射；感觉冲突 |
+| hearing aid; compression; cochlear implant; perceptual coding; codec | 助听器；压缩；人工耳蜗；感知编码；编解码器 |
+| hidden hearing loss; synaptopathy; sensitization; mismatch negativity | 隐性听力损失；突触病变；敏化；失匹配负波 |
+
 ## Names
 
 | English | 中文 |
@@ -691,6 +715,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | David Hoffman, Martin Banks; Innes Cuthill; Karla Evans; Trafton Drew, Melissa Võ, Jeremy Wolfe; Kevin Eykholt | 戴维·霍夫曼，马丁·班克斯；因尼斯·卡思希尔；卡拉·埃文斯；特拉夫顿·德鲁，梅丽莎·沃，杰里米·沃尔夫；凯文·艾克霍尔特 |
 | William Molyneux, John Locke; Richard Held, Pawan Sinha; Wai Keen Vong, Brenden Lake; James Gibson | 威廉·莫利纽克斯，约翰·洛克；理查德·赫尔德，帕万·辛哈；Wai Keen Vong，布伦登·莱克；詹姆斯·吉布森 |
 | Alan Stocker; Jeffrey Bowers, Colin Davis | 艾伦·斯托克；杰弗里·鲍尔斯，科林·戴维斯 |
+| Georg von Békésy; Donald Greenwood; David Kemp; William Brownell; Harvey Fletcher; Eberhard Terhardt | 格奥尔格·冯·贝凯西；唐纳德·格林伍德；戴维·肯普；威廉·布朗内尔；哈维·弗莱彻；埃伯哈德·特哈特 |
+| August Seebeck; Georg Ohm; Jan Schouten; J. C. R. Licklider; Ray Meddis, Michael Hewitt | 奥古斯特·泽贝克；格奥尔格·欧姆；扬·斯豪滕；J. C. R. 利克莱德；雷·梅迪斯，迈克尔·休伊特 |
+| Lord Rayleigh; Lloyd Jeffress; Antje Brand, Benedikt Grothe; Colin Cherry; Albert Bregman; Leon van Noorden | 瑞利勋爵；劳埃德·杰弗里斯；安特耶·布兰德，贝内迪克特·格罗特；科林·彻里；阿尔伯特·布雷格曼；莱昂·范诺登 |
+| Alvin Liberman; Bob McMurray, Michael Tanenhaus, Richard Aslin; Harry McGurk, John MacDonald | 阿尔文·利伯曼；鲍勃·麦克默里，迈克尔·塔南豪斯，理查德·阿斯林；哈里·麦格克，约翰·麦克唐纳 |
+| Debshila Mallick, John Magnotti, Michael Beauchamp; Reinier Plomp, Willem Levelt; Josh McDermott | 德布希拉·马利克，约翰·马格诺蒂，迈克尔·比彻姆；赖尼尔·普隆普，威廉·莱韦尔特；乔希·麦克德莫特 |
+| Roland Johansson, Åke Vallbo; Guy Goodwin, Ian McCloskey, Peter Matthews; Matthew Botvinick, Jonathan Cohen; Peter Lush | 罗兰·约翰松，奥克·瓦尔博；盖伊·古德温，伊恩·麦克洛斯基，彼得·马修斯；马修·博特维尼克，乔纳森·科恩；彼得·拉什 |
+| René Descartes; Henry Beecher; Ronald Melzack, Patrick Wall; Jon Levine, Newton Gordon, Howard Fields | 勒内·笛卡尔；亨利·比彻；罗纳德·梅尔扎克，帕特里克·沃尔；乔恩·莱文，牛顿·戈登，霍华德·菲尔兹 |
+| Linda Buck, Richard Axel; David Hänig; Edwin Boring; Virginia Collings | 琳达·巴克，理查德·阿克塞尔；戴维·黑尼希；埃德温·波林；弗吉尼亚·柯林斯 |
+| Caroline Bushdid; Richard Gerkin, Jason Castro; Markus Meister; James Reason, Joseph Brand | 卡罗琳·布什迪德；理查德·格金，贾森·卡斯特罗；马库斯·迈斯特；詹姆斯·里森，约瑟夫·布兰德 |
+| Sharon Kujawa, Charles Liberman; Risto Näätänen; Brian Moore | 莎伦·库亚瓦，查尔斯·利伯曼；里斯托·纳塔宁；布赖恩·穆尔 |
+| François-Emmanuel Roux; Evan Gordon | 弗朗索瓦-埃马纽埃尔·鲁；埃文·戈登 |
 
 ## Titles
 

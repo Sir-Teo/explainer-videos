@@ -55,5 +55,12 @@ Modules so far, with the part that introduces each:
                          the MAP velocity; a checkerboard in shadow and retinex; disparity and random-dot
                          stereograms; textured shapes and a one-layer convolutional network with its texture
                          bias
+``hearing``         15   decibels and the threshold in quiet; harmonic complexes; the ERB scale, Greenwood's
+                         map and a gammatone filter bank; masking; pitch by summary autocorrelation;
+                         interaural delays and a Jeffress array; the label model of categorical perception;
+                         the McGurk effect as cue combination; the gate control of pain; odour mixtures
+``conditioning``    16   Rescorla-Wagner for any design and its exact asymptote (ΔP); Mackintosh and
+                         Pearce-Hall attention; extinction bound to context (renewal, spontaneous recovery);
+                         Thorndike's box; shaping; the four schedules; melioration and matching; timing
 =================  ====  ===============================================================================
 """

@@ -761,8 +761,23 @@ shown(7, "WERNICKE_1874", "a diagram and the syndrome it predicted: told as the 
       "it organizes is the row on Broca's area")
 shown(7, "LASHLEY_1929", "a famous negative result, told as history with its critics; memory's location is argued "
       "in Part 20", row_in=20)
-shown(7, "PENFIELD_BOLDREY_1937", "the body's map on the cortex: settled anatomy, told as history; entered with "
-      "the senses", row_in=15)
+shown(16, "PAVLOV_1927", "the method and its vocabulary, told as history; the curves shown are Psyche's")
+shown(16, "FERSTER_SKINNER_1957", "schedules of reinforcement, whose signatures are drawn on Psyche, not from their records")
+shown(16, "WASSERMAN_1993", "human contingency judgment, cited for its main result; judgment is entered with Part 26")
+shown(16, "RESCORLA_1968", "a design reproduced on Psyche with the paper's schedule; the paper's figures are not drawn")
+shown(16, "RESCORLA_WAGNER_1972", "a model, derived and run, not a finding")
+shown(16, "LUBOW_MOORE_1959", "latent inhibition, described and modelled", row_in=18)
+shown(16, "MACKINTOSH_PEARCE_HALL", "models of attention, run on one history")
+shown(16, "GALLISTEL_GIBBON_2000", "a theory, and a summary of acquisition data shown with its exceptions")
+shown(16, "BRELAND_1961", "trainers' observations, told as the anecdotes they were")
+shown(16, "BANDURA_1961", "the Bobo doll, described without figures and with the doubt about what it measures")
+shown(16, "PRENDERGAST_2006", "a meta-analysis quoted for its effect sizes", row_in=42)
+shown(16, "ZENDLE_CAIRNS_2018", "a survey, quoted with its limits; product design is Part 52")
+shown(16, "MITCHELL_2009", "a theoretical review at the frontier")
+shown(16, "GERSHMAN_2010", "a model at the frontier")
+shown(16, "SCHILLER_2010", "reconsolidation update, at the frontier", row_in=21)
+shown(7, "PENFIELD_BOLDREY_1937", "the body's map on the cortex: settled anatomy, told as history; its row is "
+      "entered with the senses, in Part 15")
 shown(7, "HORTON_HOYT_1991", "a measured map used as a formula; the part computes with it")
 shown(7, "SCOVILLE_MILNER_1957", "one patient, told as the case it was; what it shows about memory is argued in "
       "Part 20", row_in=20)
@@ -1039,7 +1054,7 @@ shown(10, "KLEITMAN_1938", "an experiment on two people, told as history; the cl
 shown(10, "CZEISLER_1999", "physiology: a property of the body's clock, not a claim about the mind")
 shown(10, "BORBELY_1982", "a model, tested here against its own predictions")
 shown(10, "HOBSON_1977", "two theories of dreaming, presented as an open dispute", row_in=27)
-shown(10, "SIEGEL_1982", "an animal experiment on tolerance; conditioning is entered in Part 16", row_in=16)
+shown(10, "SIEGEL_1982", "an animal experiment on tolerance; its row is entered with conditioning, in Part 16")
 shown(10, "SOLOMON_CORBIT_1974", "a theory, shown as a model", row_in=41)
 shown(10, "DUNSTER_2018", "a before-and-after comparison in two schools, described as that")
 shown(10, "TRAUER_2015", "a meta-analysis of a treatment; therapies are entered in Part 42", row_in=42)
@@ -1404,3 +1419,261 @@ shown(14, "GEIRHOS_2019", "a property of artificial networks, reproduced on a sm
 shown(14, "VONG_2024", "a modelling result at the frontier; learning from an infant's experience is entered in "
       "Part 30", row_in=30)
 shown(14, "WHEATSTONE_1838", "the history of an instrument and a stimulus")
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 15: the other senses
+# ---------------------------------------------------------------------------------------------------------------
+add(Finding(
+    key="mcgurk", part=15, title=r"The McGurk effect",
+    claim="A voice saying one syllable, dubbed onto lips saying another, is often heard as a third syllable.",
+    original=Study("McGurk and MacDonald", 1976, n="children and adults", design="a voice saying ba dubbed onto lips "
+                   "saying ga", found="98% of adults reported hearing da or a blend"),
+    status="replicated",
+    record=(Study("Mallick, Magnotti and Beauchamp", 2015, n="hundreds of participants, many stimuli",
+                  design="rates of the illusion across people, stimuli and a one-year retest",
+                  found="from 0% to 100% across people, stable within a person"),),
+    note="The illusion is easily reproduced, but its strength depends heavily on the person, the recording and the "
+         "language: some people never experience it, and rates far below the original 98% are common.",
+    sources=("H. McGurk and J. MacDonald, Hearing lips and seeing voices, Nature 264 (1976) 746-748",
+             "D. B. Mallick, J. F. Magnotti and M. S. Beauchamp, Variability and stability in the McGurk effect, "
+             "Psychonomic Bulletin & Review 22 (2015) 1299-1307"),
+    checked="2026-11-14",
+    data=("MCGURK_1976", "MALLICK_2015"),
+))
+
+add(Finding(
+    key="categorical_speech", part=15, title=r"Categorical perception of speech",
+    claim="Along a continuum of speech sounds, listeners discriminate pairs much better across a phoneme boundary than "
+          "within a category.",
+    original=Study("Liberman, Harris, Hoffman and Griffith", 1957, n="a few listeners", design="synthetic syllables from "
+                   "b through d to g, identified and discriminated (ABX)", found="discrimination peaks at the "
+                   "boundaries and is near chance within categories"),
+    status="story and record",
+    record=(Study("McMurray, Tanenhaus and Aslin", 2002, n="listeners' eye movements", design="a voice-onset-time "
+                  "continuum and pictures of words", found="graded sensitivity to differences within a category"),),
+    note="The peak at the boundary is robust. The textbook story, that listeners cannot hear differences within a "
+         "category, is not: with sensitive measures, within-category differences are heard and used.",
+    sources=("A. M. Liberman, K. S. Harris, H. S. Hoffman and B. C. Griffith, The discrimination of speech sounds within "
+             "and across phoneme boundaries, Journal of Experimental Psychology 54 (1957) 358-368",
+             "B. McMurray, M. K. Tanenhaus and R. N. Aslin, Gradient effects of within-category phonetic variation on "
+             "lexical access, Cognition 86 (2002) B33-B42"),
+    checked="2026-11-14",
+    data=("LIBERMAN_1957", "MCMURRAY_2002"),
+))
+
+add(Finding(
+    key="rubber_hand", part=15, title=r"The rubber hand illusion",
+    claim="When a visible rubber hand and a person's hidden hand are stroked in synchrony, people feel the touch on the "
+          "rubber hand and report that it feels like their own.",
+    original=Study("Botvinick and Cohen", 1998, n="a small group", design="synchronous and asynchronous stroking of a "
+                   "rubber hand and the hidden real hand", found="touch felt on the rubber hand; felt position drifts "
+                   "toward it"),
+    status="contested",
+    record=(Study("Lush and colleagues", 2020, n="353 people", design="hypnotic suggestibility and illusion reports",
+                  found="reports track a person's response to suggestion, raising the role of expectations"),),
+    note="Synchronous stroking reliably produces higher ratings than asynchronous. Whether the ratings reflect a change "
+         "in bodily experience, or partly what participants expect the experiment to produce, is now disputed.",
+    sources=("M. Botvinick and J. Cohen, Rubber hands 'feel' touch that eyes see, Nature 391 (1998) 756",
+             "P. Lush et al., Trait phenomenological control predicts experience of mirror synaesthesia and the rubber "
+             "hand illusion, Nature Communications 11 (2020) 4853"),
+    checked="2026-11-14",
+    data=("BOTVINICK_COHEN_1998", "LUSH_2020"),
+))
+
+add(Finding(
+    key="homunculus", part=15, title=r"The cortical homunculus",
+    claim="The body is mapped in order along the strips of cortex either side of the central sulcus, with the hands, "
+          "lips and tongue given far more cortex than the trunk.",
+    original=Study("Penfield and Boldrey", 1937, n="126 patients", design="the exposed cortex stimulated with a weak "
+                   "current in awake patients during surgery, 1928 to 1936",
+                   found="tingling and movements in an orderly sequence of body parts; a distorted map"),
+    status="replicated",
+    record=(Study("Roux, Djidjeli and Durand", 2018, n="50 patients", design="stimulation of the postcentral gyrus during "
+                  "surgery, sites placed in standard coordinates",
+                  found="the medial-to-lateral order confirmed; some of Penfield's details, such as felt movement, not found"),
+            Study("Gordon and colleagues", 2023, n="precision fMRI in several people, with large datasets",
+                  design="the motor strip's functional connectivity",
+                  found="the effector regions confirmed, interleaved with regions for whole-body action")),
+    note="The ordered map and its magnification of the hands and face have held for ninety years, in stimulation and in "
+         "imaging. The famous drawing is a summary, not a measurement, and finer studies keep revising its details.",
+    sources=("W. Penfield and E. Boldrey, Somatic motor and sensory representation in the cerebral cortex of man as "
+             "studied by electrical stimulation, Brain 60 (1937) 389-443",
+             "F.-E. Roux, I. Djidjeli and J.-B. Durand, Functional architecture of the somatosensory homunculus detected "
+             "by electrostimulation, Journal of Physiology 596 (2018) 941-956",
+             "E. M. Gordon et al., A somato-cognitive action network alternates with effector regions in motor cortex, "
+             "Nature 617 (2023) 351-359"),
+    checked="2026-11-14",
+    data=("PENFIELD_BOLDREY_1937",),
+))
+
+add(Finding(
+    key="tongue_map", part=15, title=r"The tongue map",
+    claim="Different parts of the tongue are sensitive to different tastes: sweet at the tip, bitter at the back.",
+    original=Study("Hänig", 1901, n="a few observers", design="thresholds for tastes at points around the tongue's edge",
+                   found="small differences in sensitivity from place to place"),
+    status="story and record",
+    record=(Study("Collings", 1974, n="a few observers", design="thresholds at loci on the tongue and soft palate",
+                  found="real but small differences; every region with taste buds detects every taste"),),
+    note="Hänig's small differences were redrawn in a 1942 history as a map, and textbooks turned the map into zones. "
+         "Every part of the tongue with taste buds detects every basic taste.",
+    sources=("D. P. Hänig, Zur Psychophysik des Geschmackssinnes, Philosophische Studien 17 (1901) 576-623",
+             "V. B. Collings, Human taste response as a function of locus of stimulation on the tongue and soft palate, "
+             "Perception & Psychophysics 16 (1974) 169-174"),
+    checked="2026-11-14",
+    data=("HANIG_1901",),
+))
+
+add(Finding(
+    key="trillion_odours", part=15, title=r"A trillion odours",
+    claim="People can discriminate more than a trillion different smells.",
+    original=Study("Bushdid, Magnasco, Vosshall and Keller", 2014, n="26 people", design="telling apart mixtures of 10, 20 "
+                   "or 30 odorants from 128", found="an extrapolated lower bound of 1.72 trillion"),
+    status="contested",
+    record=(Study("Gerkin and Castro", 2015, n="a reanalysis", design="the original data and estimator",
+                  found="the estimate is fragile and could have given almost any number"),
+            Study("Meister", 2015, n="an analysis", design="the same method applied to models and to colour",
+                  found="the data fit ten discriminable odours as well as a trillion")),
+    note="The experiments themselves are not in question. The number is: the extrapolation from pairs of mixtures to a "
+         "count of all smells rests on assumptions that the reanalyses reject, and the true count is unknown.",
+    sources=("C. Bushdid, M. O. Magnasco, L. B. Vosshall and A. Keller, Humans can discriminate more than 1 trillion "
+             "olfactory stimuli, Science 343 (2014) 1370-1372",
+             "R. C. Gerkin and J. B. Castro, The number of olfactory stimuli that humans can discriminate is still "
+             "unknown, eLife 4 (2015) e08127",
+             "M. Meister, On the dimensionality of odor space, eLife 4 (2015) e07865"),
+    checked="2026-11-14",
+    data=("BUSHDID_2014",),
+))
+
+add(Finding(
+    key="blocking", part=16, title=r"Blocking",
+    claim="A cue paired with an outcome that another cue already predicts acquires little or no association.",
+    original=Study("Kamin", 1969, n="groups of rats", design="noise paired with shock, then noise and light together "
+                   "paired with shock; fear of the light tested alone",
+                   found="little fear of the light, against strong fear in rats without the noise training"),
+    status="replicated, smaller",
+    record=(Study("Maes and colleagues", 2016, n="15 experiments, in people and in rodents",
+                  design="procedures similar or identical to published demonstrations",
+                  found="no blocking in any of the fifteen"),),
+    note="Blocking has been shown in many species and procedures and is built into most theories of learning, but "
+         "it is weaker and less reliable than textbooks imply: careful standard procedures can fail to produce it, "
+         "and its size depends on details such as whether the two cues share a sense.",
+    sources=("L. J. Kamin, Predictability, surprise, attention, and conditioning, in B. A. Campbell and R. M. Church "
+             "(eds), Punishment and Aversive Behavior (1969) 279-296",
+             "T. Maes et al., The elusive nature of the blocking effect: 15 failures to replicate, Journal of "
+             "Experimental Psychology: General 145 (2016) e49-e71"),
+    checked="2026-11-14",
+    data=("KAMIN_1969", "MAES_2016"),
+))
+
+add(Finding(
+    key="taste_aversion", part=16, title=r"Taste aversion",
+    claim="Rats readily learn to avoid a taste followed by illness, even hours later, and a light or sound followed "
+          "by shock, but not the reverse pairings.",
+    original=Study("Garcia and Koelling", 1966, n="groups of rats", design="water that was bright, noisy and tasty; "
+                   "then shock, or illness from X-rays or lithium",
+                   found="taste avoided after illness, lights and sounds after shock"),
+    status="replicated",
+    record=(Study("Domjan and Wilson", 1972, n="groups of rats", design="saccharin or a buzzer, then shock or illness",
+                  found="the same selectivity, with the cues delivered in the same way"),),
+    note="One-trial taste aversions across long delays are among the most robust findings in learning, in animals "
+         "and in people after chemotherapy or food poisoning. They ended the idea that any cue can be linked to any "
+         "outcome equally well.",
+    sources=("J. Garcia and R. A. Koelling, Relation of cue to consequence in avoidance learning, Psychonomic Science 4 "
+             "(1966) 123-124",
+             "M. Domjan and N. E. Wilson, Specificity of cue to consequence in aversion learning in the rat, "
+             "Psychonomic Science 26 (1972) 143-145"),
+    checked="2026-11-14",
+    data=("GARCIA_KOELLING_1966",),
+))
+
+add(Finding(
+    key="conditioned_tolerance", part=16, title=r"Conditioned tolerance",
+    claim="Tolerance to a drug is partly a conditioned response to the cues that usually come with it, so the same "
+          "dose is more dangerous in an unfamiliar place.",
+    original=Study("Siegel, Hinson, Krank and McCully", 1982, n="rats in three groups (37, 42, 28)",
+                   design="heroin in a familiar room, then a large dose in the usual room or a new one",
+                   found="32% died in the usual room, 64% in a new one, 96% with no history of the drug"),
+    status="replicated",
+    record=(Study("Siegel and Ramos", 2002, n="a review", design="animal experiments and human reports",
+                  found="tolerance tied to drug cues across many drugs and species; overdoses often in unusual settings"),),
+    note="The animal result has been repeated with many drugs. In people the evidence is from reports by overdose "
+         "survivors and from cue-reactivity studies: consistent, but observational.",
+    sources=("S. Siegel, R. E. Hinson, M. D. Krank and J. McCully, Heroin 'overdose' death: contribution of "
+             "drug-associated environmental cues, Science 216 (1982) 436-437",
+             "S. Siegel and B. M. C. Ramos, Applying laboratory research: drug anticipation and the treatment of drug "
+             "addiction, Experimental and Clinical Psychopharmacology 10 (2002) 162-183"),
+    checked="2026-11-14",
+    data=("SIEGEL_1982",),
+))
+
+add(Finding(
+    key="little_albert", part=16, title=r"Little Albert",
+    claim="An infant was conditioned to fear a white rat, the fear spread to furry things, and it showed how phobias "
+          "are learned.",
+    original=Study("Watson and Rayner", 1920, n="1 infant", design="seven pairings of a white rat with a loud noise; "
+                   "tests over the next month",
+                   found="fear of the rat, and of a rabbit, a dog, a fur coat and a Santa Claus mask"),
+    status="story and record",
+    record=(Study("Harris", 1979, n="a review of the retellings", design="the paper against later textbooks",
+                  found="the result grew in the retelling, and the fear was never removed"),
+            Study("Powell, Digdon, Harris and Smithson", 2014, n="a historical search",
+                  design="hospital records and census data",
+                  found="who Albert was is disputed; the case cannot be followed up")),
+    note="One infant, few trials, records kept as notes and a film, and no attempt to remove the fear before he left "
+         "the hospital. It is a demonstration, and an ethical lesson, not evidence for a theory of phobias.",
+    sources=("J. B. Watson and R. Rayner, Conditioned emotional reactions, Journal of Experimental Psychology 3 (1920) "
+             "1-14",
+             "B. Harris, Whatever happened to Little Albert?, American Psychologist 34 (1979) 151-160",
+             "R. A. Powell, N. Digdon, B. Harris and C. Smithson, Correcting the record on Watson, Rayner, and Little "
+             "Albert, American Psychologist 69 (2014) 600-611"),
+    checked="2026-11-14",
+    data=("WATSON_RAYNER_1920", "HARRIS_1979"),
+))
+
+add(Finding(
+    key="matching_law", part=16, title=r"The matching law",
+    claim="Given two sources of reward, animals divide their responses in proportion to the rewards each provides.",
+    original=Study("Herrnstein", 1961, n="pigeons", design="two keys on concurrent variable-interval schedules",
+                   found="the share of pecks on a key matched its share of reinforcers"),
+    status="replicated",
+    record=(Study("Baum", 1979, n="103 data sets from 23 studies", design="the generalized matching law fitted",
+                  found="matching on average, with undermatching common"),),
+    note="The relation holds across species, including people, and reinforcers. Fitted exactly, sensitivity is often "
+         "a little below one (undermatching), and the law describes choice under concurrent interval schedules "
+         "rather than every choice.",
+    sources=("R. J. Herrnstein, Relative and absolute strength of response as a function of frequency of "
+             "reinforcement, Journal of the Experimental Analysis of Behavior 4 (1961) 267-272",
+             "W. M. Baum, Matching, undermatching, and overmatching in studies of choice, Journal of the Experimental "
+             "Analysis of Behavior 32 (1979) 269-281"),
+    checked="2026-11-14",
+    data=("HERRNSTEIN_1961",),
+))
+
+add(Finding(
+    key="renewal", part=16, title=r"Renewal after extinction",
+    claim="A fear extinguished in one context returns when the cue is met in the context where the fear was learned.",
+    original=Study("Bouton and Bolles", 1979, n="groups of rats", design="fear conditioned in one box, extinguished in "
+                   "another, tested in the first",
+                   found="fear back at the level of rats never extinguished"),
+    status="replicated",
+    record=(Study("Vervliet, Craske and Hermans", 2013, n="a review", design="renewal and relapse in animals and people",
+                  found="renewal found across species, including in human fear conditioning and after exposure therapy"),),
+    note="Extinction does not erase the first learning; it adds new learning tied to its context. The return of fear "
+         "is why relapse after therapy is common, and why therapists vary the settings of exposure.",
+    sources=("M. E. Bouton and R. C. Bolles, Contextual control of the extinction of conditioned fear, Learning and "
+             "Motivation 10 (1979) 445-466",
+             "B. Vervliet, M. G. Craske and D. Hermans, Fear extinction and relapse: state of the art, Annual Review of "
+             "Clinical Psychology 9 (2013) 215-248"),
+    checked="2026-11-14",
+    data=("BOUTON_BOLLES_1979",),
+))
+
+shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
+      "dispute")
+shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
+shown(15, "MELZACK_WALL_1965", "a theory told as history and modelled; its circuit is revised in detail")
+shown(15, "LEVINE_1978", "a single experiment at the start of a literature; placebo analgesia is entered in Part 57",
+      row_in=57)
+shown(15, "MCDERMOTT_2016", "a single cross-cultural study at the frontier of music perception, described with its "
+      "limits")
+shown(15, "KUJAWA_LIBERMAN_2009", "an animal result at the frontier; its human counterpart is unsettled")

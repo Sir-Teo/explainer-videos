@@ -41,7 +41,9 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "DEVRIES_ROSE", "BERNOULLI_1738", "PLATEAU_1872", "THURSTONE_1927",
            "MACKWORTH_1948", "PETERSON_1954", "TANNER_SWETS_1954", "WOLFE_2005", "FLECK_MITROFF_2007", "GIGERENZER_HOFFRAGE_1995", "RATCLIFF_1992", "YONELINAS_1994", "SEE_1995", "SWETS_2000", "SWETS_1961", "MANISCALCO_LAU_2012", "MICKES_2012",
            "HECHT_1942", "BAYLOR_1979", "TINSLEY_2016", "KUFFLER_1953", "CAMPBELL_ROBSON_1968", "BLAKEMORE_CAMPBELL_1969", "LAFER_SOUSA_2015", "MILNER_1991", "JORDAN_2010", "COLOUR_TABLES", "OKABE_ITO",
-           "ADELSON_1995", "ERNST_BANKS_2002", "ALAIS_BURR_2004", "RAHNEV_DENISON_2018", "WEISS_2002", "THOMPSON_1982", "ADAMS_2004", "SEGALL_1966", "AMIR_FIRESTONE_2025", "GAUTHIER_1999", "YIN_1969", "YAMINS_2014", "GEIRHOS_2019", "VONG_2024", "WHEATSTONE_1838"]
+           "ADELSON_1995", "ERNST_BANKS_2002", "ALAIS_BURR_2004", "RAHNEV_DENISON_2018", "WEISS_2002", "THOMPSON_1982", "ADAMS_2004", "SEGALL_1966", "AMIR_FIRESTONE_2025", "GAUTHIER_1999", "YIN_1969", "YAMINS_2014", "GEIRHOS_2019", "VONG_2024", "WHEATSTONE_1838",
+           "BEKESY_1960", "KEMP_1978", "LIBERMAN_1957", "MCMURRAY_2002", "MCGURK_1976", "MALLICK_2015", "BOTVINICK_COHEN_1998", "LUSH_2020", "MELZACK_WALL_1965", "LEVINE_1978", "HANIG_1901", "BUSHDID_2014", "MCDERMOTT_2016", "KUJAWA_LIBERMAN_2009",
+           "PAVLOV_1927", "THORNDIKE_1898", "WATSON_RAYNER_1920", "HARRIS_1979", "FERSTER_SKINNER_1957", "RESCORLA_1968", "WASSERMAN_1993", "KAMIN_1969", "MAES_2016", "RESCORLA_WAGNER_1972", "LUBOW_MOORE_1959", "BOUTON_BOLLES_1979", "MACKINTOSH_PEARCE_HALL", "GALLISTEL_GIBBON_2000", "HERRNSTEIN_1961", "GARCIA_KOELLING_1966", "BRELAND_1961", "BANDURA_1961", "PRENDERGAST_2006", "ZENDLE_CAIRNS_2018", "GERSHMAN_2010", "MITCHELL_2009", "SCHILLER_2010"]
 
 
 @dataclass(frozen=True)
@@ -2459,6 +2461,401 @@ WHEATSTONE_1838 = Dataset(
 )
 
 
+# ---------------------------------------------------------------------------
+# Part 15
+# ---------------------------------------------------------------------------
+_P15 = "through a web search, 2026-11-14"
+
+BEKESY_1960 = Dataset(
+    key="bekesy_1960",
+    title="The travelling wave on the basilar membrane",
+    source="G. von Békésy, Experiments in Hearing (McGraw-Hill, 1960); Nobel Prize in Physiology or Medicine, 1961",
+    cite=r"von Békésy (1960)",
+    checked="reviews and the Nobel record, " + _P15 + "; cadaver cochleae, stroboscopic light, silver particles",
+    licence="facts only",
+    data={"preparation": "human temporal bones from cadavers", "finding": "a wave from base to apex, peaking at a "
+          "place that depends on frequency"},
+)
+
+KEMP_1978 = Dataset(
+    key="kemp_1978",
+    title="Sound emitted by the ear",
+    source="D. T. Kemp, Stimulated acoustic emissions from within the human auditory system, Journal of the "
+           "Acoustical Society of America 64 (1978) 1386-1391",
+    cite=r"Kemp (1978)",
+    checked="reference lists and reviews, " + _P15,
+    licence="facts only",
+    data={"finding": "the cochlea emits sound: evidence for an active amplifier"},
+)
+
+LIBERMAN_1957 = Dataset(
+    key="liberman_1957",
+    title="Discrimination peaks at the phoneme boundary",
+    source="A. M. Liberman, K. S. Harris, H. S. Hoffman and B. C. Griffith, The discrimination of speech sounds within "
+           "and across phoneme boundaries, Journal of Experimental Psychology 54 (1957) 358-368",
+    cite=r"Liberman et al.\ (1957)",
+    checked="bibliographic records and later accounts, " + _P15,
+    licence="facts only",
+    data={"continuum": "synthetic syllables from /b/ through /d/ to /g/", "method": "identification and ABX"},
+)
+
+MCMURRAY_2002 = Dataset(
+    key="mcmurray_2002",
+    title="Gradient sensitivity within phoneme categories",
+    source="B. McMurray, M. K. Tanenhaus and R. N. Aslin, Gradient effects of within-category phonetic variation on "
+           "lexical access, Cognition 86 (2002) B33-B42",
+    cite=r"McMurray et al.\ (2002)",
+    checked="the abstract, " + _P15,
+    licence="facts only",
+    data={"continuum": "voice onset time, 0 to 40 ms", "measure": "fixations to pictures"},
+)
+
+MCGURK_1976 = Dataset(
+    key="mcgurk_1976",
+    title="Hearing lips and seeing voices",
+    source="H. McGurk and J. MacDonald, Hearing lips and seeing voices, Nature 264 (1976) 746-748",
+    cite=r"McGurk \& MacDonald (1976)",
+    checked="later accounts, " + _P15 + "; the 98% for adults as widely reported",
+    licence="facts only",
+    data={"stimulus": "a voice saying ba dubbed onto lips saying ga", "adults_fused": 0.98},
+)
+
+MALLICK_2015 = Dataset(
+    key="mallick_2015",
+    title="Individual differences in the McGurk effect",
+    source="D. B. Mallick, J. F. Magnotti and M. S. Beauchamp, Variability and stability in the McGurk effect: "
+           "contributions of participants, stimuli, time, and response type, Psychonomic Bulletin & Review 22 (2015) "
+           "1299-1307",
+    cite=r"Mallick et al.\ (2015)",
+    checked="the abstract and full text summary, " + _P15,
+    licence="facts only",
+    data={"range": "0% to 100% across people", "retest_r": 0.91},
+)
+
+BOTVINICK_COHEN_1998 = Dataset(
+    key="botvinick_cohen_1998",
+    title="The rubber hand illusion",
+    source="M. Botvinick and J. Cohen, Rubber hands 'feel' touch that eyes see, Nature 391 (1998) 756",
+    cite=r"Botvinick \& Cohen (1998)",
+    checked="later accounts, " + _P15,
+    licence="facts only",
+    data={"procedure": "a hidden real hand and a visible rubber hand stroked together"},
+)
+
+LUSH_2020 = Dataset(
+    key="lush_2020",
+    title="Phenomenological control and the rubber hand",
+    source="P. Lush, V. Botan, R. B. Scott, A. K. Seth, J. Ward and Z. Dienes, Trait phenomenological control predicts "
+           "experience of mirror synaesthesia and the rubber hand illusion, Nature Communications 11 (2020) 4853",
+    cite=r"Lush et al.\ (2020)",
+    checked="the abstract and the authors' summaries, " + _P15,
+    licence="facts only",
+    data={"n": 353},
+)
+
+MELZACK_WALL_1965 = Dataset(
+    key="melzack_wall_1965",
+    title="The gate control theory of pain",
+    source="R. Melzack and P. D. Wall, Pain mechanisms: a new theory, Science 150 (1965) 971-979",
+    cite=r"Melzack \& Wall (1965)",
+    checked="later accounts, " + _P15,
+    licence="facts only",
+    data={},
+)
+
+LEVINE_1978 = Dataset(
+    key="levine_1978",
+    title="Naloxone and placebo analgesia",
+    source="J. D. Levine, N. C. Gordon and H. L. Fields, The mechanism of placebo analgesia, Lancet 2 (1978) 654-657",
+    cite=r"Levine, Gordon \& Fields (1978)",
+    checked="the abstract, " + _P15,
+    licence="facts only",
+    data={"setting": "after extraction of impacted wisdom teeth", "finding": "naloxone raised pain in placebo responders"},
+)
+
+HANIG_1901 = Dataset(
+    key="hanig_1901",
+    title="Taste sensitivity across the tongue, and the map it became",
+    source="D. P. Hänig, Zur Psychophysik des Geschmackssinnes, Philosophische Studien 17 (1901) 576-623; E. G. "
+           "Boring, Sensation and Perception in the History of Experimental Psychology (1942); V. B. Collings, Human "
+           "taste response as a function of locus of stimulation on the tongue and soft palate, Perception & "
+           "Psychophysics 16 (1974) 169-174",
+    cite=r"Hänig (1901); \ Collings (1974)",
+    checked="later accounts, " + _P15 + "; journal pages from memory",
+    licence="facts only",
+    data={},
+)
+
+BUSHDID_2014 = Dataset(
+    key="bushdid_2014",
+    title="A trillion odours, and the reanalyses",
+    source="C. Bushdid, M. O. Magnasco, L. B. Vosshall and A. Keller, Humans can discriminate more than 1 trillion "
+           "olfactory stimuli, Science 343 (2014) 1370-1372; R. C. Gerkin and J. B. Castro, The number of olfactory "
+           "stimuli that humans can discriminate is still unknown, eLife 4 (2015) e08127; M. Meister, On the "
+           "dimensionality of odor space, eLife 4 (2015) e07865",
+    cite=r"Bushdid et al.\ (2014); \ Gerkin \& Castro (2015); \ Meister (2015)",
+    checked="the abstracts, " + _P15,
+    licence="facts only",
+    data={"mixtures": "of 10, 20 or 30 from 128 odorants", "claim": 1.72e12},
+)
+
+MCDERMOTT_2016 = Dataset(
+    key="mcdermott_2016",
+    title="Indifference to dissonance among the Tsimane'",
+    source="J. H. McDermott, A. F. Schultz, E. A. Undurraga and R. A. Godoy, Indifference to dissonance in native "
+           "Amazonians reveals cultural variation in music perception, Nature 535 (2016) 547-550",
+    cite=r"McDermott et al.\ (2016)",
+    checked="the abstract and press accounts, " + _P15,
+    licence="facts only",
+    data={"finding": "consonant and dissonant chords rated equally pleasant; roughness still disliked"},
+)
+
+KUJAWA_LIBERMAN_2009 = Dataset(
+    key="kujawa_liberman_2009",
+    title="Hidden hearing loss in mice",
+    source="S. G. Kujawa and M. C. Liberman, Adding insult to injury: cochlear nerve degeneration after 'temporary' "
+           "noise-induced hearing loss, Journal of Neuroscience 29 (2009) 14077-14085",
+    cite=r"Kujawa \& Liberman (2009)",
+    checked="reviews by the authors, " + _P15,
+    licence="facts only",
+    data={"exposure": "2 h of 8-16 kHz noise at 100 dB SPL", "finding": "thresholds recover; synapses do not"},
+)
+
+_P16 = "through a web search, 2026-11-14"
+
+PAVLOV_1927 = Dataset(
+    key="pavlov_1927",
+    title="Conditioned reflexes in Pavlov's laboratory",
+    source='I. P. Pavlov, Conditioned Reflexes: An Investigation of the Physiological Activity of the Cerebral Cortex, trans. G. V. Anrep (Oxford University Press, 1927); D. P. Todes, Ivan Pavlov: A Russian Life in Science (Oxford University Press, 2014)',
+    cite=r"Pavlov (1927)",
+    checked="Todes's biography as summarized by its publisher and reviewers, " + _P16,
+    licence="public domain (Pavlov's text); facts only",
+    data={"nobel": 1904, "stimuli": "metronomes, buzzers, harmoniums, lights, touches; a bell rarely", "measure": "drops of saliva through a fistula"},
+)
+
+THORNDIKE_1898 = Dataset(
+    key="thorndike_1898",
+    title='Cats in puzzle boxes and the law of effect',
+    source='E. L. Thorndike, Animal intelligence: an experimental study of the associative processes in animals, Psychological Review Monograph Supplements 2(4) (1898)',
+    cite=r"Thorndike (1898)",
+    checked='historical accounts, ' + _P16,
+    licence='public domain',
+    data={"animals": "cats, dogs and chicks", "measure": "seconds to escape, trial by trial"},
+)
+
+WATSON_RAYNER_1920 = Dataset(
+    key="watson_rayner_1920",
+    title='Little Albert',
+    source='J. B. Watson and R. Rayner, Conditioned emotional reactions, Journal of Experimental Psychology 3 (1920) 1-14',
+    cite=r"Watson \& Rayner (1920)",
+    checked='the full text at Classics in the History of Psychology (York University), read 2026-11-14; ' + _P16,
+    licence='public domain',
+    data={"baseline": "about nine months (loud sound tested at 8 months 26 days)", "first_pairings": "11 months 3 days: two", "total_pairings": 7, "transfer_test": "11 months 15 days: rabbit, dog, seal fur coat, cotton wool, Santa Claus mask", "last_test": "1 year 21 days", "deconditioning": "none: Albert was taken from the hospital the day of the last tests"},
+)
+
+HARRIS_1979 = Dataset(
+    key="harris_1979",
+    title='How Little Albert was retold',
+    source="B. Harris, Whatever happened to Little Albert?, American Psychologist 34 (1979) 151-160; R. A. Powell, N. Digdon, B. Harris and C. Smithson, Correcting the record on Watson, Rayner, and Little Albert: Albert Barger as 'psychology's lost boy', American Psychologist 69 (2014) 600-611",
+    cite=r"Harris (1979); \ Powell et al.\ (2014)",
+    checked='bibliographic records and summaries, ' + _P16,
+    licence='facts only',
+    data={"identity": "Douglas Merritte (Beck et al. 2009) or Albert Barger (Powell et al. 2014): disputed"},
+)
+
+FERSTER_SKINNER_1957 = Dataset(
+    key="ferster_skinner_1957",
+    title='Schedules of reinforcement',
+    source='B. F. Skinner, The Behavior of Organisms (Appleton-Century, 1938); C. B. Ferster and B. F. Skinner, Schedules of Reinforcement (Appleton-Century-Crofts, 1957)',
+    cite=r"Skinner (1938); \ Ferster \& Skinner (1957)",
+    checked='from memory and textbook accounts, ' + _P16,
+    licence='facts only',
+    data={"schedules": "FR, VR, FI, VI"},
+)
+
+RESCORLA_1968 = Dataset(
+    key="rescorla_1968",
+    title='Contingency, not pairing',
+    source='R. A. Rescorla, Probability of shock in the presence and absence of CS in fear conditioning, Journal of Comparative and Physiological Psychology 66 (1968) 1-5',
+    cite=r"Rescorla (1968)",
+    checked='the full text (a course copy), read 2026-11-14; ' + _P16,
+    licence='facts only',
+    data={"exp1_rats": 24, "exp2_rats": 80, "exp2_groups": 10, "tones_per_session": 12, "tone_s": 120, "mean_gap_min": 8, "sessions": 5, "shock": "0.5 s, 0.9 mA", "groups": [[0.4,0.4],[0.2,0.2],[0.1,0.1],[0.0,0.0],[0.4,0.2],[0.4,0.1],[0.4,0.0],[0.2,0.1],[0.2,0.0],[0.1,0.0]], "measure": "suppression ratio A/(A+B)"},
+)
+
+WASSERMAN_1993 = Dataset(
+    key="wasserman_1993",
+    title='Ratings of causal relations follow the contingency',
+    source='E. A. Wasserman, S. M. Elek, D. L. Chatlosh and A. G. Baker, Rating causal relations: role of probability in judgments of response-outcome contingency, Journal of Experimental Psychology: Learning, Memory, and Cognition 19 (1993) 174-188',
+    cite=r"Wasserman et al.\ (1993)",
+    checked='the abstract, ' + _P16,
+    licence='facts only',
+    data={"people": 150, "experiments": 3, "task": "tapping a telegraph key, a light that may flash"},
+)
+
+KAMIN_1969 = Dataset(
+    key="kamin_1969",
+    title='Blocking',
+    source='L. J. Kamin, Predictability, surprise, attention, and conditioning, in B. A. Campbell and R. M. Church (eds), Punishment and Aversive Behavior (Appleton-Century-Crofts, 1969) 279-296',
+    cite=r"Kamin (1969)",
+    checked='later accounts of the design, ' + _P16,
+    licence='facts only',
+    data={"design": "noise+shock, then noise-and-light+shock; test the light", "measure": "suppression ratio"},
+)
+
+MAES_2016 = Dataset(
+    key="maes_2016",
+    title='Fifteen failures to find blocking',
+    source="T. Maes, Y. Boddez, J. M. Alfei, A.-M. Krypotos, R. D'Hooge, J. De Houwer and T. Beckers, The elusive nature of the blocking effect: 15 failures to replicate, Journal of Experimental Psychology: General 145 (2016) e49-e71",
+    cite=r"Maes et al.\ (2016)",
+    checked='the abstract, the comment by Soto and the reply, ' + _P16,
+    licence='facts only',
+    data={"experiments": 15},
+)
+
+RESCORLA_WAGNER_1972 = Dataset(
+    key="rescorla_wagner_1972",
+    title='The Rescorla-Wagner model',
+    source='R. A. Rescorla and A. R. Wagner, A theory of Pavlovian conditioning: variations in the effectiveness of reinforcement and nonreinforcement, in A. H. Black and W. F. Prokasy (eds), Classical Conditioning II (Appleton-Century-Crofts, 1972) 64-99',
+    cite=r"Rescorla \& Wagner (1972)",
+    checked='from memory and textbook accounts, ' + _P16,
+    licence='facts only',
+    data={"rule": "dV = alpha beta (lambda - sum V)"},
+)
+
+LUBOW_MOORE_1959 = Dataset(
+    key="lubow_moore_1959",
+    title='Latent inhibition',
+    source='R. E. Lubow and A. U. Moore, Latent inhibition: the effect of nonreinforced pre-exposure to the conditional stimulus, Journal of Comparative and Physiological Psychology 52 (1959) 415-419',
+    cite=r"Lubow \& Moore (1959)",
+    checked="a review's account of the design, " + _P16,
+    licence='facts only',
+    data={"animals": "sheep and goats", "response": "leg flexion"},
+)
+
+BOUTON_BOLLES_1979 = Dataset(
+    key="bouton_bolles_1979",
+    title='Renewal: extinction is bound to its context',
+    source='M. E. Bouton and R. C. Bolles, Contextual control of the extinction of conditioned fear, Learning and Motivation 10 (1979) 445-466; B. Vervliet, M. G. Craske and D. Hermans, Fear extinction and relapse: state of the art, Annual Review of Clinical Psychology 9 (2013) 215-248',
+    cite=r"Bouton \& Bolles (1979)",
+    checked='the abstract and later reviews, ' + _P16,
+    licence='facts only',
+    data={"design": "conditioning in A, extinction in B, test in A"},
+)
+
+MACKINTOSH_PEARCE_HALL = Dataset(
+    key="mackintosh_pearce_hall",
+    title='Two theories of attention in learning',
+    source='N. J. Mackintosh, A theory of attention: variations in the associability of stimuli with reinforcement, Psychological Review 82 (1975) 276-298; J. M. Pearce and G. Hall, A model for Pavlovian learning: variations in the effectiveness of conditioned but not of unconditioned stimuli, Psychological Review 87 (1980) 532-552; M. E. Le Pelley, The role of associative history in models of associative learning, Quarterly Journal of Experimental Psychology 57B (2004) 193-243',
+    cite=r"Mackintosh (1975); \ Pearce \& Hall (1980)",
+    checked='from memory and textbook accounts, ' + _P16,
+    licence='facts only',
+    data={},
+)
+
+GALLISTEL_GIBBON_2000 = Dataset(
+    key="gallistel_gibbon_2000",
+    title='Time, rate and conditioning',
+    source='C. R. Gallistel and J. Gibbon, Time, rate, and conditioning, Psychological Review 107 (2000) 289-344; J. Gibbon and P. Balsam, Spreading associations in time, in C. M. Locurto, H. S. Terrace and J. Gibbon (eds), Autoshaping and Conditioning Theory (Academic Press, 1981)',
+    cite=r"Gallistel \& Gibbon (2000)",
+    checked='accounts of the result by Kakade and Dayan and later papers, ' + _P16,
+    licence='facts only',
+    data={"rule": "reinforcements to acquisition about 300 (I/T)^-1"},
+)
+
+HERRNSTEIN_1961 = Dataset(
+    key="herrnstein_1961",
+    title='The matching law',
+    source='R. J. Herrnstein, Relative and absolute strength of response as a function of frequency of reinforcement, Journal of the Experimental Analysis of Behavior 4 (1961) 267-272; W. M. Baum, Matching, undermatching, and overmatching in studies of choice, Journal of the Experimental Analysis of Behavior 32 (1979) 269-281; R. J. Herrnstein and D. Prelec, Melioration: a theory of distributed choice, Journal of Economic Perspectives 5 (1991) 137-156',
+    cite=r"Herrnstein (1961); \ Baum (1979)",
+    checked='bibliographic records and later reviews, ' + _P16,
+    licence='facts only',
+    data={"baum_datasets": 103, "baum_studies": 23},
+)
+
+GARCIA_KOELLING_1966 = Dataset(
+    key="garcia_koelling_1966",
+    title='Taste aversion: cue to consequence, and long delays',
+    source='J. Garcia and R. A. Koelling, Relation of cue to consequence in avoidance learning, Psychonomic Science 4 (1966) 123-124; J. Garcia, F. R. Ervin and R. A. Koelling, Learning with prolonged delay of reinforcement, Psychonomic Science 5 (1966) 121-122; M. Domjan and N. E. Wilson, Specificity of cue to consequence in aversion learning in the rat, Psychonomic Science 26 (1972) 143-145',
+    cite=r"Garcia \& Koelling (1966)",
+    checked="the publisher's record and later accounts, " + _P16,
+    licence='facts only',
+    data={"design": "bright-noisy-tasty water; shock or illness (X-rays, lithium chloride)"},
+)
+
+BRELAND_1961 = Dataset(
+    key="breland_1961",
+    title='The misbehavior of organisms',
+    source='K. Breland and M. Breland, The misbehavior of organisms, American Psychologist 16 (1961) 681-684',
+    cite=r"Breland \& Breland (1961)",
+    checked='later accounts and excerpts, ' + _P16,
+    licence='facts only',
+    data={"cases": "a raccoon rubbing coins, pigs rooting tokens"},
+)
+
+BANDURA_1961 = Dataset(
+    key="bandura_1961",
+    title='Learning by watching: the Bobo doll',
+    source='A. Bandura, D. Ross and S. A. Ross, Transmission of aggression through imitation of aggressive models, Journal of Abnormal and Social Psychology 63 (1961) 575-582',
+    cite=r"Bandura, Ross \& Ross (1961)",
+    checked="the paper's first page and later accounts, " + _P16,
+    licence='facts only',
+    data={"children": 72, "boys": 36, "girls": 36, "school": "Stanford University nursery school"},
+)
+
+PRENDERGAST_2006 = Dataset(
+    key="prendergast_2006",
+    title='Contingency management for drug use',
+    source='M. Prendergast, D. Podus, J. Finney, L. Greenwell and J. Roll, Contingency management for treatment of substance use disorders: a meta-analysis, Addiction 101 (2006) 1546-1560; L. A. Benishek et al., Prize-based contingency management for the treatment of substance abusers: a meta-analysis, Addiction 109 (2014) 1426-1436',
+    cite=r"Prendergast et al.\ (2006)",
+    checked='the abstracts, ' + _P16,
+    licence='facts only',
+    data={"comparisons": 47, "d": 0.42, "d_opiates": 0.65, "d_cocaine": 0.66, "prize_end": 0.46, "prize_3mo": 0.33},
+)
+
+ZENDLE_CAIRNS_2018 = Dataset(
+    key="zendle_cairns_2018",
+    title='Loot boxes and problem gambling',
+    source='D. Zendle and P. Cairns, Video game loot boxes are linked to problem gambling: results of a large-scale survey, PLoS ONE 13 (2018) e0206767; D. Zendle and P. Cairns, Loot boxes are again linked to problem gambling, PLoS ONE 14 (2019) e0213194',
+    cite=r"Zendle \& Cairns (2018)",
+    checked="the abstract and the university's release, " + _P16,
+    licence='facts only (CC BY article)',
+    data={"gamers": 7422, "eta2_loot": 0.054, "eta2_other": 0.004},
+)
+
+GERSHMAN_2010 = Dataset(
+    key="gershman_2010",
+    title='Latent causes and extinction',
+    source='S. J. Gershman, D. M. Blei and Y. Niv, Context, learning, and extinction, Psychological Review 117 (2010) 197-209; C. J. Mitchell, J. De Houwer and P. F. Lovibond, The propositional nature of human associative learning, Behavioral and Brain Sciences 32 (2009) 183-198',
+    cite=r"Gershman, Blei \& Niv (2010)",
+    checked='the abstracts, ' + _P16,
+    licence='facts only',
+    data={},
+)
+
+MITCHELL_2009 = Dataset(
+    key="mitchell_2009",
+    title="Human associative learning as propositional reasoning",
+    source="C. J. Mitchell, J. De Houwer and P. F. Lovibond, The propositional nature of human associative learning, "
+           "Behavioral and Brain Sciences 32 (2009) 183-198",
+    cite=r"Mitchell, \ De Houwer \& Lovibond (2009)",
+    checked="the abstract and commentaries, " + _P16,
+    licence="facts only",
+    data={},
+)
+
+SCHILLER_2010 = Dataset(
+    key="schiller_2010",
+    title="Extinction during reconsolidation",
+    source="D. Schiller, M.-H. Monfils, C. M. Raio, D. C. Johnson, J. E. LeDoux and E. A. Phelps, Preventing the return "
+           "of fear in humans using reconsolidation update mechanisms, Nature 463 (2010) 49-53",
+    cite=r"Schiller et al.\ (2010)",
+    checked="from memory and later reviews, " + _P16,
+    licence="facts only",
+    data={"follow_up": "about a year, in a subset"},
+)
+
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -2487,4 +2884,6 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           DEVRIES_ROSE, BERNOULLI_1738, PLATEAU_1872, THURSTONE_1927,
                           MACKWORTH_1948, PETERSON_1954, TANNER_SWETS_1954, WOLFE_2005, FLECK_MITROFF_2007, GIGERENZER_HOFFRAGE_1995, RATCLIFF_1992, YONELINAS_1994, SEE_1995, SWETS_2000, SWETS_1961, MANISCALCO_LAU_2012, MICKES_2012,
                           HECHT_1942, BAYLOR_1979, TINSLEY_2016, KUFFLER_1953, CAMPBELL_ROBSON_1968, BLAKEMORE_CAMPBELL_1969, LAFER_SOUSA_2015, MILNER_1991, JORDAN_2010, COLOUR_TABLES, OKABE_ITO,
-                          ADELSON_1995, ERNST_BANKS_2002, ALAIS_BURR_2004, RAHNEV_DENISON_2018, WEISS_2002, THOMPSON_1982, ADAMS_2004, SEGALL_1966, AMIR_FIRESTONE_2025, GAUTHIER_1999, YIN_1969, YAMINS_2014, GEIRHOS_2019, VONG_2024, WHEATSTONE_1838)}
+                          ADELSON_1995, ERNST_BANKS_2002, ALAIS_BURR_2004, RAHNEV_DENISON_2018, WEISS_2002, THOMPSON_1982, ADAMS_2004, SEGALL_1966, AMIR_FIRESTONE_2025, GAUTHIER_1999, YIN_1969, YAMINS_2014, GEIRHOS_2019, VONG_2024, WHEATSTONE_1838,
+                          BEKESY_1960, KEMP_1978, LIBERMAN_1957, MCMURRAY_2002, MCGURK_1976, MALLICK_2015, BOTVINICK_COHEN_1998, LUSH_2020, MELZACK_WALL_1965, LEVINE_1978, HANIG_1901, BUSHDID_2014, MCDERMOTT_2016, KUJAWA_LIBERMAN_2009,
+                          PAVLOV_1927, THORNDIKE_1898, WATSON_RAYNER_1920, HARRIS_1979, FERSTER_SKINNER_1957, RESCORLA_1968, WASSERMAN_1993, KAMIN_1969, MAES_2016, RESCORLA_WAGNER_1972, LUBOW_MOORE_1959, BOUTON_BOLLES_1979, MACKINTOSH_PEARCE_HALL, GALLISTEL_GIBBON_2000, HERRNSTEIN_1961, GARCIA_KOELLING_1966, BRELAND_1961, BANDURA_1961, PRENDERGAST_2006, ZENDLE_CAIRNS_2018, GERSHMAN_2010, MITCHELL_2009, SCHILLER_2010)}

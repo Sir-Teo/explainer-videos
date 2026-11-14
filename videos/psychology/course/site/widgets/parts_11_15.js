@@ -448,4 +448,122 @@
       note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. Each staircase lengthens the right shaft after you call the left one longer and shortens it after you call the right one longer, by 7% at first and 2.5% after its second turning point, so it hovers where you answer each way half the time: the point of subjective equality (Part 11, chapter 7). Each staircase's estimate is the geometric mean of its last four turning points, and the two are averaged; starting one long and one short guards against a bias toward the first answer. The shafts are shifted up and down at random so that their ends are not compared along one line. Chapter 4 gives Gregory's account of the illusion, and why its link to rectangular buildings is now contested.",
     });
   };
+  // ---- Part 15: up or down?  Do you hear the fundamental, or the spectrum? ----------------------------------------
+  W.pitchdir = function (el) {
+    var w = null, NCON = 24, NAGREE = 8, YOU = "#f2c14e", F0C = "#5bd18b", SPC = "#7ec8f5";
+    var S = { phase: "idle", trial: 0, seed: 0, order: [], cur: null, last: null, res: [] };
+    var ctx = null;
+    function audio() {
+      if (!ctx) {
+        var A = window.AudioContext || window.webkitAudioContext;
+        if (!A) return null;
+        try { ctx = new A(); } catch (e) { return null; }
+      }
+      if (ctx.state === "suspended" && ctx.resume) ctx.resume();
+      return ctx;
+    }
+    function complexTone(ac, t0, f0, harmonics, dur) {
+      var g = ac.createGain();
+      g.gain.setValueAtTime(0, t0);
+      g.gain.linearRampToValueAtTime(0.18 / harmonics.length, t0 + 0.02);
+      g.gain.setValueAtTime(0.18 / harmonics.length, t0 + dur - 0.03);
+      g.gain.linearRampToValueAtTime(0, t0 + dur);
+      g.connect(ac.destination);
+      harmonics.forEach(function (h) {
+        var o = ac.createOscillator();
+        o.type = "sine"; o.frequency.value = f0 * h;
+        o.connect(g); o.start(t0); o.stop(t0 + dur + 0.02);
+      });
+    }
+    // a trial: two tones; conflict trials move the fundamental one way and the harmonics' spectrum the other
+    function makeTrial(u, conflict) {
+      var f1 = 180 + 60 * u(), up = u() < 0.5, ratio = 1.26;  // about four semitones
+      var f2 = up ? f1 * ratio : f1 / ratio;
+      var lowH = [2, 3, 4], highH = [5, 6, 7];
+      var h1, h2;
+      if (conflict) { h1 = up ? highH : lowH; h2 = up ? lowH : highH; }  // f0 up, components down (or the reverse)
+      else { h1 = [1, 2, 3, 4]; h2 = [1, 2, 3, 4]; }
+      return { f1: f1, f2: f2, h1: h1, h2: h2, up: up, conflict: conflict };
+    }
+    function play(tr) {
+      var ac = audio();
+      if (!ac) return 0;
+      var t0 = ac.currentTime + 0.05;
+      complexTone(ac, t0, tr.f1, tr.h1, 0.45);
+      complexTone(ac, t0 + 0.7, tr.f2, tr.h2, 0.45);
+      return 1250;
+    }
+    function next() {
+      var u = QB.rng(7919 * S.seed + 41 * S.trial + 7);
+      S.cur = makeTrial(u, S.order[S.trial]); S.trial++;
+      S.phase = "listen"; w.render();
+      var wait = play(S.cur);
+      task.later(function () { S.phase = "show"; w.render(); }, wait || 300);
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "show"; }, respond: answer });
+    function answer(side) {  // 0: down (lower), 1: up (higher)
+      if (S.phase !== "show" || !w) return;
+      var saidUp = side === 1, tr = S.cur;
+      task.count++;
+      S.res.push({ conflict: tr.conflict, f0: saidUp === tr.up });
+      S.last = saidUp;
+      S.phase = "feedback"; w.render();
+      task.later(function () { if (S.trial >= S.order.length) { S.phase = "done"; w.render(); } else next(); }, 450);
+    }
+    function start() {
+      task.clear(); S.seed++; S.trial = 0; S.res = []; audio();
+      var u = QB.rng(104729 * S.seed + 31), order = [], i, j, t;
+      for (i = 0; i < NCON; i++) order.push(true);
+      for (i = 0; i < NAGREE; i++) order.push(false);
+      for (i = order.length - 1; i > 0; i--) { j = Math.floor(u() * (i + 1)); t = order[i]; order[i] = order[j]; order[j] = t; }
+      S.order = order; next();
+    }
+    function share(conflict) {
+      var n = 0, k = 0;
+      S.res.forEach(function (r) { if (r.conflict === conflict) { n++; if (r.f0) k++; } });
+      return n ? k / n : NaN;
+    }
+
+    w = QB.widget(el, {
+      title: "Up or down? The pitch that is not in the sound",
+      sub: "Each trial plays two short tones. Did the pitch go up or down? F, or tap the left half: down. J, or tap the right half: up. Use headphones or good speakers at a comfortable level. In most trials the two tones disagree: the fundamental, which neither tone contains, moves one way, and the harmonics you actually hear move the other. There is no right answer to learn; the page counts which one you follow.",
+      panels: 2, height: 320, weights: [1.1, 1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Play again", act: function () { if (S.cur && (S.phase === "show" || S.phase === "listen")) play(S.cur); } },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.trial = 0; S.res = []; S.cur = null; } },
+      ],
+      draw: function (g) {
+        var c = g.ctx, b = T.stage(g, 0, task);
+        c.save(); c.textAlign = "center"; c.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(c, b, "On you", "Press Start. Thirty-two pairs of tones, about two minutes, with sound on. Turn the volume down before you begin, then up to comfortable.");
+        } else if (S.phase === "done") {
+          var p = share(true), q = share(false);
+          T.message(c, b, "Finished.", "On the disagreeing pairs you followed the missing fundamental " + Math.round(100 * p) + "% of the time, and the harmonics " + Math.round(100 * (1 - p)) + "%. On the agreeing pairs you were right " + Math.round(100 * q) + "% of the time. People differ widely on this test, and many sit near one end.");
+        } else {
+          c.fillStyle = C.muted; c.font = "12px system-ui, sans-serif";
+          c.fillText("pair " + S.trial + " of " + S.order.length, b.cx, b.y + 16);
+          c.font = "600 22px system-ui, sans-serif"; c.fillStyle = S.phase === "listen" ? YOU : C.ink;
+          c.fillText(S.phase === "listen" ? "Listen" : (S.phase === "feedback" ? "Noted" : "Up or down?"), b.cx, b.cy);
+          c.font = "12.5px system-ui, sans-serif"; c.fillStyle = C.muted;
+          c.fillText(b.w < 420 ? "F / down        J / up" : "F, or tap the left half: down        J, or tap the right half: up", b.cx, b.y + b.h - 16);
+        }
+        c.restore();
+
+        var a = g[1].axes({ x: [0, 3], y: [0, 1], xticks: [1, 2], xfmt: function (v) { return v === 1 ? "disagreeing" : "agreeing"; },
+          title: "Answers that followed the fundamental", xlabel: "pairs" });
+        a.line([0, 3], [0.5, 0.5], { color: C.muted, width: 1 });
+        var p1 = share(true), p2 = share(false);
+        if (!isNaN(p1)) { a.line([1, 1], [0, p1], { color: F0C, width: 16 }); }
+        if (!isNaN(p2)) { a.line([2, 2], [0, p2], { color: SPC, width: 16 }); }
+      },
+      readout: function () {
+        var p = share(true), q = share(false), f = function (v) { return isNaN(v) ? "–" : Math.round(100 * v) + "%"; };
+        return [["pairs", String(S.trial)], ["disagreeing: followed the fundamental", f(p)], ["agreeing: right", f(q)]];
+      },
+      note: "Nothing you answer is stored or sent, and no sound is recorded: the tones are made in your browser. Each tone is a few harmonics of a fundamental between about 180 and 300 Hz, and the fundamental itself is never played in the disagreeing pairs. In those pairs the fundamental moves by about four semitones while the harmonics jump the other way (from the 2nd to 4th harmonics to the 5th to 7th, or back), so a listener who hears the missing fundamental (chapter 4's autocorrelation) and a listener who hears the spectrum's edge answer oppositely. The agreeing pairs include the fundamental and check that you can hear the direction at all. Cheap speakers that cannot play low notes do not matter here: the fundamental is missing on purpose.",
+    });
+  };
 })();

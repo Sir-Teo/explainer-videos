@@ -1141,42 +1141,61 @@ Chun 1997; Yamins et al. 2014; Geirhos et al. 2019.
 
 ### Part 15 · The Other Senses (~55)
 *Question:* how do pressure waves become a voice, and why does pain not follow the injury?
-*Story:* Békésy opens the cochleas of cadavers and watches a wave travel along the membrane, peaking in a
-different place for each pitch: the ear is a frequency analyser. Then the surprises begin. You hear a pitch that
-is not in the sound, your eyes change what you hear, a rubber hand becomes yours, and pain turns out to be a
-decision the nervous system makes.
-1. Hook and On you: the missing fundamental. The pitch you hear is absent from the spectrum.
-2. Sound: pressure, frequency, the decibel as Fechner's law in engineering (Part 11); the audiogram; equal-
-   loudness contours.
-3. The cochlea: Békésy's travelling wave (Nobel 1961), tonotopy, hair cells, the active amplifier; critical
-   bands and masking.
-4. Pitch: place against timing; the autocorrelation model explains the missing fundamental (computed).
-5. Where is it? Interaural time and level differences (the duplex theory); Jeffress's coincidence detectors
-   (1948), and what owls and mammals actually do.
-6. Scene analysis: the cocktail party as grouping (Bregman); streaming demonstrations.
-7. Speech: no invariant acoustic cue for a phoneme; categorical perception (Liberman et al. 1957); the McGurk
-   effect (1976) as cue combination (Part 14's rule again).
-8. Music: consonance and roughness, octave equivalence, expectation and surprise (links to *Philosophy, Built*
-   Part 40).
-9. Touch and the body: receptors, two-point thresholds and cortical magnification; proprioception; the rubber
-   hand (Botvinick and Cohen 1998).
-10. Pain: specificity against pattern; gate control (Melzack and Wall 1965) as a circuit; phantom limbs; placebo
-    analgesia and its opioid mechanism (returns in Part 57).
-11. Smell and taste: a combinatorial code; flavour is mostly smell; the tongue-map myth.
-12. The vestibular sense, and how the senses are weighted when they disagree.
+*Story:* a sound with no energy at 200 Hz is heard at 200 Hz, and the film plays it. Békésy watched a wave travel
+along the membrane, peaking in a different place for each pitch: the ear is a frequency analyser. Then the surprises:
+a pitch that is not in the sound, a face that changes what a voice says, a rubber hand that becomes yours, and pain
+that is a decision the nervous system makes. Act III ends here.
+0. Hook and On you: six harmonics of 200 Hz, then harmonics 3 to 6, then a pure 200 Hz tone, all played; the
+   telephone's missing fundamental; objectives.
+1. Sound, and the decibel: a pressure wave; the decibel as Fechner's law in engineering (130 dB is 3.2 million times
+   the pressure); Terhardt's threshold in quiet (most sensitive near 3.3 kHz; 40 dB more at 50 Hz); the audiogram.
+2. The cochlea: the middle ear's pressure gain; von Békésy's travelling wave (Nobel 1961), with the caution that dead
+   cochleas tune broadly; Greenwood's map; Kemp's emissions (1978), outer hair cells and the cochlear amplifier;
+   Psyche's 48 gammatone filters, resolved and unresolved harmonics.
+3. Filters and masking: Fletcher's band-widening (1940) and the critical band (241 Hz at 2 kHz); upward spread; what
+   masking is for.
+4. Pitch: Seebeck, Ohm and Schouten's residue; phase locking; Licklider's summary autocorrelation, run in Psyche (200
+   Hz for harmonics 1–6, 3–6 and 5–8; Meddis and Hewitt 1991); place and time together; individual differences.
+5. Where is it?: Rayleigh's duplex theory; Woodworth's delays (up to 656 µs; thresholds near 10 µs); Jeffress's
+   coincidence circuit (1948) and Psyche's array (275 µs for a true 261 µs); owls and gerbils (Brand et al. 2002);
+   the outer ear's filtering.
+6. Auditory scene analysis: Cherry's cocktail party; Bregman; streaming played (500/560 Hz, then 500/1000 Hz; van
+   Noorden 1975); harmonicity, onset, similarity and location as priors.
+7. Speech: no acoustic invariant (the /d/ of "di" and "du"); categorical perception (Liberman et al. 1957; ABX from
+   labels peaks at 0.69), corrected by McMurray et al. (2002); the McGurk effect (98% in 1976) as cue combination
+   (88% /d/ in Psyche); individual differences from 0% to 100% (Mallick et al. 2015) and causal inference.
+8. Music: roughness within a filter (Plomp & Levelt 1965); dips at the simple ratios for harmonic tones; a fifth and a
+   tritone played; the Tsimane' (McDermott et al. 2016).
+9. Touch and the body: four mechanoreceptor channels; two-point thresholds (2–3 mm on a fingertip, about 39 mm on the
+   back); proprioception and tendon vibration (1972); the rubber hand (1998) and phenomenological control (Lush et
+   al. 2020).
+10. Pain: Descartes's bell rope; Beecher's soldiers; Melzack and Wall's gate (1965) as Psyche's circuit (rubbing cuts T
+    from 1.00 to 0.44); TENS; phantom limbs and the mirror box; naloxone and placebo (Levine et al. 1978).
+11. Smell and taste: Buck and Axel's receptor family; a combinatorial code; flavour is mostly smell; the tongue map
+    (Hänig 1901, Boring 1942, Collings 1974); a trillion smells (Bushdid et al. 2014) and the reanalyses; a count of
+    mixtures that moves from 62 to 2.4 × 10^14 with one threshold.
+12. Balance, and the senses together: canals and otoliths; the vestibulo-ocular reflex; sensory conflict and motion
+    sickness (Reason & Brand 1975).
+13. The Ledger. 14. In practice: hearing aids that compress; cochlear implants (about 737,000 by 2019); perceptual
+    coding; haptics and pain clinics. 15. Frontier: what is solid and argued; hidden hearing loss (Kujawa & Liberman
+    2009); chronic pain as learning; the mismatch negativity.
 
-*Psyche:* `hearing`: a gammatone filter bank; autocorrelation pitch; a Jeffress array; a gate-control circuit;
-audio-visual fusion by reliability weighting.
-*On you:* the missing fundamental, streaming, the McGurk effect (with the warning that some viewers do not get
-it, and the rates).
-*Ledger:* the McGurk effect (`replicated`; large individual and cross-language variation); categorical perception
-(`replicated, refined`); the rubber-hand illusion (`replicated`; demand effects `contested`); the tongue map
-(`failed`; a mistranslation); gate control (`replicated` in outline, revised in detail).
-*In practice:* hearing aids and cochlear implants, audio codecs (MP3 is a masking model), haptics, pain clinics.
-*Frontier:* hidden hearing loss; predictive models of auditory cortex; chronic pain as learning.
+*Psyche:* `hearing` (`explainer/psychology/psyche/hearing.py`, ten tests): decibels and the threshold in quiet;
+harmonic complexes; the ERB scale, Greenwood's map, gammatone filters, excitation patterns, a schematic travelling
+wave; summary autocorrelation and pitch; the power-spectrum model of masking; Woodworth's delay, phase-locked spikes and
+a Jeffress array; identification and the label model of ABX; the McGurk effect as cue combination; the gate as a
+circuit; a combinatorial count of odour mixtures. `VoiceoverScene.sound` lets the film play its demonstrations.
+*On you:* the missing fundamental, streaming and two intervals, played in the film; two-point thresholds with a friend.
+The course's interactive plays pairs of tones whose fundamental and harmonics move in opposite directions and reports
+which the reader follows.
+*Ledger:* the McGurk effect (`replicated`, with wide individual differences); categorical perception (`story and
+record`); the rubber hand (`contested`); the tongue map (`story and record`); a trillion smells (`contested`). Shown
+without rows, with reasons: von Békésy, Kemp, Melzack and Wall, Levine et al. (Part 57), McDermott et al., and Kujawa
+and Liberman.
+*In practice:* hearing aids and cochlear implants, perceptual audio coding, haptics, pain clinics.
+*Frontier:* hidden hearing loss; chronic pain as learning; predictive models of auditory cortex.
 *Reading:* von Békésy 1960; Moore, *An Introduction to the Psychology of Hearing*; Bregman, *Auditory Scene
-Analysis*; Liberman et al. 1957, 1967; McGurk & MacDonald 1976; Melzack & Wall 1965; Wolfe et al., *Sensation &
-Perception*.
+Analysis*; Liberman et al. 1957; McGurk & MacDonald 1976; Melzack & Wall 1965; Wolfe et al., *Sensation & Perception*.
 
 ---
 
@@ -3259,3 +3278,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 12 | built, English and Chinese: 14 chapters, hook and outro; Psyche's sdt (`psyche/sdt.py`, eleven tests), three Ledger rows, thirteen Archive datasets; course entry, lab and interactive (a recognition test with confidence that draws the reader's ROC) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 44 min |
 | 13 | built, English and Chinese: 15 chapters, hook and outro; Psyche's vision (`psyche/vision.py`, twelve tests) and the colour tables, five Ledger rows (one deferred from Part 5), eleven Archive datasets; course entry, lab and interactive (the reader's contrast sensitivity at four stripe widths) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 52 min |
 | 14 | built, English and Chinese: 14 chapters, hook and outro; Psyche's inference (`psyche/infer.py`, six tests, with a one-layer convolutional network in numpy), four Ledger rows, fifteen Archive datasets; course entry, lab and interactive (the reader's own Müller-Lyer illusion, by two staircases) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 64 min |
+| 15 | built, English and Chinese: 15 chapters, hook and outro, with demonstrations played in the film; Psyche's hearing (`psyche/hearing.py`, ten tests) and `VoiceoverScene.sound`, six Ledger rows (one deferred from Part 7), fourteen Archive datasets; course entry, lab and interactive (which way a missing fundamental moves, in Web Audio) checked; narration table and on-screen text translated and dry-run. Act III is complete. Open checks in its README | 55 min |

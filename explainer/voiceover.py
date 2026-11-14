@@ -149,6 +149,11 @@ class VoiceoverScene(Scene):
             return
         self.renderer.file_writer.add_sound(path, self.renderer.time, gain)
 
+    def sound(self, path: str, gain: float | None = None) -> None:
+        """Play a sound file (a demonstration the viewer should hear) from the current moment, mixed with the
+        narration track. Call it between voiceover blocks and follow it with a wait as long as the sound."""
+        self._add_narration(str(path), gain)
+
     def clear_scene(self, *keep, extra=(), run_time: float = 1.0):
         """Fade out everything except ``keep`` (plus run any ``extra`` animations).
 
