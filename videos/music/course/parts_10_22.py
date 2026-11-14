@@ -168,4 +168,64 @@ PARTS = [
         also=(("Monochord's scales: stacks, modes, evenness, interval vectors, necklaces, parent scales", "explainer/music/monochord/scales.py"),
               ("Pictures of scales: a keyboard, the octave as a circle, steps as a bar", "explainer/music/scaleviz.py")),
     ),
+    Part(
+        n=13, level="U", widget="chord",
+        question="Why are C-E-G and E-G-C the same chord, why are chords built in thirds, and why is the same chord "
+                 "clear in the middle of the piano and muddy at the bottom?",
+        story="In 1722 Rameau claimed that a chord is the same chord whichever of its notes is lowest, and the part "
+              "works up to that claim and tests it. An interval has a number, counted in letters, and a quality, "
+              "and the quality turns out to be a direction on the line of fifths: sharpward is major, flatward "
+              "minor. Inversion sends each interval to its partner (the numbers add to nine), leaving six interval "
+              "classes. Three notes with no two of them a tone or less apart are exactly the four triads, so a "
+              "stack of thirds is what is left when neighbours are forbidden; a major scale holds three major "
+              "triads, three minor and one diminished, and the three major ones hold every note. A chord has a "
+              "root in any inversion, and the reason is the missing fundamental of Part 4: a major triad is "
+              "harmonics 4, 5 and 6 of a note two octaves below its root. Parncutt's model counts each note's "
+              "votes for the roots it could be a harmonic of; the major triad is clear, the minor a little less, "
+              "the diminished triad ties with a note that is not in it, and A-C-E-G splits between A and C. A "
+              "fourth note gives the seventh chords; the dominant seventh carries the scale's one tritone, which "
+              "resolves by two semitones in contrary motion, and in harmonics 4:5:6:7 it fuses. Thirds stacked to "
+              "the thirteenth are the whole scale. Voicing matters as much as naming: a major third is one and a "
+              "half critical bands wide high up and a third of one at the bottom of the piano, so chords are "
+              "spaced wide below and close above, as the harmonic series is; the root is the note to double, the "
+              "fifth can be left out, the third cannot, and a distorting amplifier leaves only root and fifth. "
+              "Chords are written as figured bass, Roman numerals, lead-sheet symbols and Nashville numbers, and "
+              "laid out on Euler's lattice of fifths and thirds, where neighbouring triads share two notes. The "
+              "frontier is what makes a chord sound as it does, and why naming chords from sound is hard. The "
+              "Tune is played over one set of chords in six voicings.",
+        handoff="Part 14 asks which notes of a melody are chord notes; Part 15 gives the chords their jobs in a "
+                "key; Parts 16 and 17 are voice leading; Part 18, progressions. Euler's lattice returns as "
+                "geometry in Part 32, shells and chord scales in Part 39, distortion in Part 50, and machines "
+                "that name chords in Part 62.",
+        outside="Part 1 for the harmonic series; Part 4 for critical bands and the missing fundamental; Part 5 for "
+                "roughness; Part 6 for pure intervals and commas; Part 10 for figured bass and spelling; Part 12 "
+                "for the scale, the line of fifths and the nineteen shapes of three notes.",
+        objectives={
+            "U": ["Name any written interval and its inversion, and place it on the line of fifths.",
+                  "Build the four triads and the five common seventh chords on any note, and find them in a major scale.",
+                  "Find a chord's root and inversion, and write it as figures, a Roman numeral and a lead-sheet symbol."],
+            "M": ["Show that three notes with no two adjacent form one of the four triads.",
+                  "Run Parncutt's root model on a chord and report its root and its ambiguity.",
+                  "Compute a voicing's roughness, and the lowest register at which an interval stays clear."],
+            "D": ["Explain the root as a missing fundamental, and say where that explanation strains (the minor triad).",
+                  "Set out why roughness and harmonicity together still misplace the augmented triad."],
+            "I": ["Space a chord for a given register, and choose what to double and what to leave out.",
+                  "Read and write a chart in lead-sheet symbols and in numbers, and transpose it.",
+                  "Move between chords by the smallest motion, using inversions."],
+        },
+        results=[
+            ("Quality from the line of fifths", r"|d| \le 1 \text{ perfect};\quad 2 \le |d| \le 5 \text{ major } (d>0) \text{ or minor } (d<0);\quad |d| \ge 6 \text{ augmented or diminished}"),
+            ("Inversion", r"n + n' = 9,\qquad s + s' = 12"),
+            ("Triads", r"a + b + c = 12,\ a, b, c \ge 3 \ \Rightarrow\ \{3,3,6\},\ \{3,4,5\},\ \{3,5,4\},\ \{4,4,4\}"),
+            ("The major triad", r"4 : 5 : 6 \quad \text{(the minor: } 10 : 12 : 15)"),
+            ("Root salience (Parncutt)", r"S(r) = \sum_{p \in \text{chord}} w\big((p - r) \bmod 12\big),\quad w(0, 7, 4, 10, 2) = 10, 5, 3, 2, 1"),
+            ("The harmonic seventh", r"1200 \log_2 \tfrac{7}{4} = 968.8 \text{ cents}"),
+        ],
+        U=(0, 1, 2, 3, 4, 6),
+        D=(5, 11),
+        I=(7, 8, 9),
+        also=(("Monochord's chords: intervals, spelling, inversion, roots, voicings, the Tonnetz, a chord listener", "explainer/music/monochord/chords.py"),
+              ("Pictures of chords: Euler's lattice, bars for the twelve notes, rows of partials", "explainer/music/chordviz.py"),
+              ("The engraver, now with chords and a grand staff", "explainer/music/staff.py")),
+    ),
 ]

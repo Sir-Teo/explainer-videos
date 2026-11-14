@@ -274,4 +274,90 @@
       note: "With a pure fifth, two sizes of step occur at 2, 3, 5, 7, 12, 17, 29, 41 and 53 notes: the denominators that come out of the continued fraction for the fifth's size. Five, seven and twelve are the pentatonic, diatonic and chromatic scales. Narrow the generator to 697 cents (meantone) and the list becomes 5, 7, 12, 19, 31; widen it and 17 and 22 appear. The three-gap theorem says that no setting will ever show four sizes."
     });
   };
+  // ---- Part 13: one chord, moved and spread ----------------------------------------------------------------
+  var KINDS13 = [["major", [0, 4, 7]], ["minor", [0, 3, 7]], ["diminished", [0, 3, 6]], ["augmented", [0, 4, 8]], ["dominant seventh", [0, 4, 7, 10]], ["major seventh", [0, 4, 7, 11]], ["minor seventh", [0, 3, 7, 10]]];
+  var SPREADS13 = ["close", "open", "as the harmonic series"];
+  var NAMES13 = ["C", "D♭", "D", "E♭", "E", "F", "F♯", "G", "A♭", "A", "B♭", "B"];
+  var SUPPORT13 = { 0: 10, 7: 5, 4: 3, 10: 2, 2: 1 };
+  function hz13(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+  function voicing13(bass, offs, spread) {
+    var out = [], i;
+    if (spread === 0) for (i = 0; i < offs.length; i++) out.push(bass + offs[i]);
+    else if (spread === 1) { out = [bass, bass + offs[2], bass + 12 + offs[1]]; if (offs.length > 3) out.push(bass + 12 + offs[3]); }
+    else { out = [bass, bass + 12, bass + 12 + offs[2], bass + 24 + offs[1]]; if (offs.length > 3) out.push(bass + 24 + offs[3]); }
+    return out;
+  }
+  // Part 5's roughness (Plomp and Levelt's curve as fitted by Sethares), over every pair of partials of every note
+  function rough13(notes) {
+    var f = [], a = [], i, j, k, total = 0;
+    for (i = 0; i < notes.length; i++) for (k = 1; k <= 7; k++) { f.push(hz13(notes[i]) * k); a.push(Math.pow(0.88, k - 1)); }
+    for (i = 0; i < f.length; i++) for (j = i + 1; j < f.length; j++) {
+      var lo = Math.min(f[i], f[j]), sc = 0.24 / (0.0207 * lo + 18.96), d = Math.abs(f[i] - f[j]);
+      total += Math.min(a[i], a[j]) * (Math.exp(-3.5 * sc * d) - Math.exp(-5.75 * sc * d));
+    }
+    return total;
+  }
+  function saliences13(notes) {
+    var out = [], r, i, seen = {};
+    for (r = 0; r < 12; r++) out.push(0);
+    for (i = 0; i < notes.length; i++) {
+      var pc = ((notes[i] % 12) + 12) % 12;
+      if (seen[pc]) continue;
+      seen[pc] = true;
+      for (r = 0; r < 12; r++) out[r] += SUPPORT13[(pc - r + 12) % 12] || 0;
+    }
+    return out;
+  }
+  function chordSound(notes) {
+    var rate = 44100, len = Math.floor(2.2 * rate), out = new Float32Array(len), i, n, h;
+    for (i = 0; i < notes.length; i++) {
+      var f = hz13(notes[i]), start = Math.floor(0.015 * i * rate);
+      for (n = 0; start + n < len; n++) {
+        var t = n / rate, y = 0;
+        for (h = 1; h <= 7; h++) y += Math.sin(2 * Math.PI * f * h * t) * Math.pow(0.88, h - 1) / h * Math.exp(-t * (0.9 + 0.35 * h));
+        out[start + n] += 0.16 * y * Math.min(1, t / 0.004);
+      }
+    }
+    return play(out, rate);
+  }
+
+  W.chord = function (el) {
+    QB.widget(el, {
+      title: "One chord, moved and spread",
+      sub: "Choose a kind of chord, how low its bottom note is, and how its notes are spaced. Left: the roughness of that spacing with its bottom note on every key (Part 5's model); the dot is where you are. Right: the root model's votes for each of the twelve notes. Slide the chord down and hear the mud arrive; spread it and hear it clear.",
+      panels: 2, height: 300,
+      controls: [
+        { k: "kind", label: "The kind of chord (0 major, 1 minor, 2 diminished, 3 augmented, 4 dominant seventh, 5 major seventh, 6 minor seventh)", min: 0, max: 6, step: 1, value: 0 },
+        { k: "bass", label: "The bottom note (36 is the C two octaves below middle C; 60 is middle C)", min: 24, max: 72, step: 1, value: 48 },
+        { k: "spread", label: "The spacing (0 close, 1 open, 2 as the harmonic series)", min: 0, max: 2, step: 1, value: 0 },
+      ],
+      buttons: [
+        { label: "Play the chord", act: function (s) { s.sound = chordSound(s.notes); } },
+      ],
+      init: function (s) { s.sound = null; s.notes = [48, 52, 55]; },
+      draw: function (g, v, s) {
+        var offs = KINDS13[v.kind][1], notes = voicing13(v.bass, offs, v.spread), xs = [], ys = [], m, top = 0;
+        s.notes = notes; s.rough = rough13(notes); s.sal = saliences13(notes);
+        for (m = 24; m <= 72; m++) { xs.push(m); ys.push(rough13(voicing13(m, offs, v.spread))); top = Math.max(top, ys[ys.length - 1]); }
+        var a = g[0].axes({ x: [24, 72], y: [0, top * 1.08], title: "Roughness of this spacing, by where it is put", xlabel: "the bottom note (key number)", ylabel: "roughness", xticks: [24, 36, 48, 60, 72] });
+        a.line(xs, ys, { color: C.idea, width: 2 });
+        a.dots([v.bass], [s.rough], { color: C.loss, r: 6 });
+        var idx = [], best = Math.max.apply(null, s.sal), r;
+        for (r = 0; r < 12; r++) idx.push(r + 1);
+        var b = g[1].axes({ x: [0.3, 12.7], y: [0, Math.max(best, 20) * 1.1], title: "Votes for each note as the root", xlabel: "C  D♭  D  E♭  E  F  F♯  G  A♭  A  B♭  B", xticks: [], ylabel: "votes" });
+        b.bars(idx, s.sal, 0.7, { color: function (k) { return s.sal[k] === best ? C.idea : C.muted; } });
+      },
+      readout: function (v, s) {
+        var best = Math.max.apply(null, s.sal), roots = [], sum = 0, r;
+        for (r = 0; r < 12; r++) { sum += s.sal[r]; if (s.sal[r] === best) roots.push(NAMES13[r]); }
+        return [["chord", NAMES13[((v.bass % 12) + 12) % 12] + " " + KINDS13[v.kind][0] + ", " + SPREADS13[v.spread]],
+                ["notes", s.notes.map(function (m) { return NAMES13[((m % 12) + 12) % 12] + (Math.floor(m / 12) - 1); }).join("  ")],
+                ["roughness", fmt(s.rough, 2)],
+                ["the model's root", roots.length > 2 ? "a tie of " + roots.length : roots.join(" or ")],
+                ["root ambiguity", fmt(Math.sqrt(sum / best), 2)],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "A major triad close together on middle C has a roughness of about 1.1; two octaves lower the same three notes score about 3.9, and spread as a fifth and a tenth they come back to about 2.6. The root model gives C eighteen votes for C, E, G and a four-way tie for a diminished triad, one of the four being a note that is not in the chord. Try the minor seventh: the model prefers the note a minor third above the root you chose, because the same four notes are a major chord with an added sixth."
+    });
+  };
 })();

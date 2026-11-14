@@ -29,6 +29,8 @@ LEDGER = [
      "measure": r"its bars are counted in 4, 3, 5 and 7, and in six two ways"},
     {"part": 12, "title": r"in the seven modes, brightest to darkest, then pentatonic, whole-tone and octatonic", "seconds": 41.2,
      "measure": r"from Lydian to Locrian, 6 notes fall a semitone, one at a time"},
+    {"part": 13, "title": r"over block triads, then re-voiced, spread, and with sevenths", "seconds": 30.4,
+     "measure": r"re-voiced, the chords' three voices travel 60 semitones over the Tune instead of 372"},
 ]
 
 
