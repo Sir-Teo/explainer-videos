@@ -184,4 +184,62 @@ PARTS = [
               ("Its tests", "tests/psychology/test_brain.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=8, level="U", widget="impossible",
+        question="What can a brain scan tell you about a mind?",
+        story="In 2009 a dead salmon is put in a scanner, shown photographs of people, and found to have "
+              "'active' voxels: a test in every voxel, at one in a thousand, always finds something. A scan is "
+              "the end of a chain, and the part walks it. One neuron has a tuning curve, the real signal "
+              "through a keyhole. A scalp electrode hears only cells that are aligned and active together, so "
+              "the EEG gives timing to the millisecond and no unique answer about place. Averaging pulls a "
+              "five-microvolt wave out of twenty microvolts of noise at a rate of the square root of the number "
+              "of trials, and one such wave, the N400, follows the meaning of a word. Magnetic resonance lines "
+              "up protons, tips them, and reads an image from its Fourier transform; the functional scan "
+              "measures oxygen in the blood, an echo that peaks five seconds after the neurons and follows "
+              "their input more than their output. An experiment becomes a map by a regression in every voxel, "
+              "of one task minus another. Then three ways a map misleads: the threshold (and the 2016 finding "
+              "that cluster inference let through far more than 5%), choosing voxels by the correlation that "
+              "is then reported, and reading the map backwards from region to mental state. Watching is not "
+              "intervening: to know a region is needed you disturb it. The part ends with what scanning has "
+              "settled, what is sold on its name, and how many people a brain study needs.",
+        handoff="Rhythms of the EEG in sleep are Part 10; tuning curves and receptive fields are Part 13; the "
+                "face area is argued in Part 14; attention on the scalp is Part 18; the N400 returns with "
+                "language in Part 23; evidence accumulating before a choice is Part 25; scans and awareness "
+                "are Part 27. Why findings fail to repeat is Part 43, and the statistics of brain data in "
+                "full are Part 49.",
+        outside="Part 3's reliability and attenuation, Part 4's regression, t test, Bayes' rule and forking "
+                "paths, Part 2's permutation test, Part 5's impulse and Part 6's synaptic currents. The Fourier "
+                "transform is used as a fact in chapter 4 and done properly in Analysis, Built.",
+        objectives={
+            "U": ["Say what each instrument measures, how far that is from an impulse, and what it gives up: "
+                  "a single unit, the EEG, structural and functional MRI.",
+                  "Explain why averaging finds an event-related potential, and what the N400 is.",
+                  "State three ways a brain map misleads, and the remedy for each."],
+            "M": ["Compute the noise left after averaging n trials, and the trials needed for a given "
+                  "precision.",
+                  "Convolve events with a haemodynamic response, build a design matrix, and fit a voxel by "
+                  "least squares.",
+                  "Compute the chance of a false alarm among N tests, a Bonferroni threshold, the ceiling on a "
+                  "correlation from two reliabilities, and a reverse inference by Bayes' rule."],
+            "D": ["Explain why selecting voxels by a correlation and then reporting it measures nothing, and "
+                  "simulate it.",
+                  "Say what sample a brain-behaviour association of a given size needs, and what small studies "
+                  "of small effects report."],
+            "I": ["Tell an established use of a brain measure (epilepsy, sleep, presurgical mapping) from a "
+                  "product sold on the word 'brain'.",
+                  "Ask six questions of any claim that arrives with a picture of a brain."],
+        },
+        results=[
+            ("Averaging", r"\sigma_{\bar x}=\frac{\sigma}{\sqrt{n}}"),
+            ("The linear model of a voxel", r"y(t)=\beta\,(s*h)(t)+c+\varepsilon(t)"),
+            ("Many tests", r"P(\text{any false alarm})=1-(1-\alpha)^{N},\qquad \alpha_{\text{Bonf}}=\frac{0.05}{N}"),
+            ("The ceiling on a correlation", r"r_{\max}=\sqrt{R_x\,R_y}"),
+            ("Reverse inference", r"P(M\mid A)=\frac{P(A\mid M)\,P(M)}{P(A\mid M)\,P(M)+P(A\mid\neg M)\,P(\neg M)}"),
+            ("People needed to detect r", r"n\approx\left(\frac{z_{\alpha/2}+z_{\beta}}{\operatorname{artanh} r}\right)^{2}+3"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's imaging module", "explainer/psychology/psyche/imaging.py"),
+              ("Its tests", "tests/psychology/test_imaging.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

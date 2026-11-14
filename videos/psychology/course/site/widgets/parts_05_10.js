@@ -358,4 +358,116 @@
       note: "Nothing you press is stored or sent: it lives in this page and is gone when you close it. The page cannot know how far you sit from the screen, so it reports what does not depend on that: the hole's width as a share of its distance from where you look. To turn that into degrees it assumes the middle of your blind spot is 15 degrees out, which is typical, and eyes differ. You react a little late, which moves both edges outward on an outward sweep and inward on an inward one; averaging the two directions cancels it. The green bar is a textbook value, not a measurement of you.",
     });
   };
+  // Part 8: a reported correlation between a brain measure and a questionnaire, with the reliability of each.
+  // Could it be true?  Two measures cannot correlate more than the square root of the product of their
+  // reliabilities, whatever the brain is doing.
+  W.impossible = function (el) {
+    var w = null;
+    var BLOCK = 12, N = 16, YOU = "#f2c14e", OK = "#5bd18b", BAD = "#ef6f6c", DOT = "#f28fb8";
+    var RX = [0.3, 0.4, 0.5, 0.6, 0.7, 0.8], RY = [0.6, 0.7, 0.8, 0.9], DELTA = [-0.25, -0.15, -0.07, 0.07, 0.15, 0.25];
+    var S = { phase: "idle", trial: 0, seed: 0, cur: null, log: [], last: null };
+
+    function sample(u, r) {
+      // N points whose sample correlation is exactly r
+      var x = [], y = [], i, mx = 0, my = 0, sx = 0, sy = 0, sxy = 0;
+      function g() { var a = 0, k; for (k = 0; k < 6; k++) a += u(); return (a - 3) * 1.414; }
+      for (i = 0; i < N; i++) { x.push(g()); y.push(g()); mx += x[i] / N; my += y[i] / N; }
+      for (i = 0; i < N; i++) { x[i] -= mx; y[i] -= my; sx += x[i] * x[i]; }
+      sx = Math.sqrt(sx / N);
+      for (i = 0; i < N; i++) { x[i] /= sx; sxy += x[i] * y[i] / N; }
+      for (i = 0; i < N; i++) { y[i] -= sxy * x[i]; sy += y[i] * y[i]; }
+      sy = Math.sqrt(sy / N);
+      for (i = 0; i < N; i++) y[i] = r * x[i] + Math.sqrt(1 - r * r) * y[i] / sy;
+      return { x: x, y: y };
+    }
+    function next() {
+      S.trial++;
+      var u = QB.rng(8101 * S.seed + 37 * S.trial + 5);
+      var rx = RX[Math.floor(u() * RX.length)], ry = RY[Math.floor(u() * RY.length)];
+      var ceil = Math.sqrt(rx * ry), d = DELTA[(S.trial + S.seed) % DELTA.length];
+      var r = Math.max(0.1, Math.min(0.97, Math.round((ceil + d) * 100) / 100));
+      if (Math.abs(r - ceil) < 0.03) r = Math.round((ceil + (d > 0 ? 0.06 : -0.06)) * 100) / 100;
+      S.cur = { rx: rx, ry: ry, ceil: ceil, r: r, pts: sample(u, r), impossible: r > ceil };
+      S.phase = "show"; w.render();
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "show"; }, respond: answer });
+    function answer(side) {
+      if (S.phase !== "show" || !w) return;
+      var said = side === 1, right = said === S.cur.impossible;
+      S.last = { right: right, ceil: S.cur.ceil, impossible: S.cur.impossible };
+      S.log.push({ r: S.cur.r, ceil: S.cur.ceil, said: said, right: right }); task.count++;
+      S.phase = "feedback"; w.render();
+      task.later(function () { if (S.trial >= BLOCK) { S.phase = "done"; w.render(); } else next(); }, 1400);
+    }
+    function score() { var k = 0, i; for (i = 0; i < S.log.length; i++) if (S.log[i].right) k++; return { n: S.log.length, k: k }; }
+
+    w = QB.widget(el, {
+      title: "Possible, or impossible?",
+      sub: "Each plot is a result of the kind brain-imaging papers report: sixteen people, a questionnaire score across and a brain measure up. You are told the correlation and how reliable each measure is. Press F if the result could be true, J if it cannot be.",
+      panels: 2, height: 360, weights: [1.35, 1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: function () { task.clear(); S.seed++; S.trial = 0; next(); } },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.trial = 0; S.log = []; S.cur = null; S.last = null; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), i, sc = score();
+        ctx.save();
+        ctx.textBaseline = "middle"; ctx.textAlign = "center";
+        if (S.phase === "idle") {
+          T.message(ctx, b, "On you", "Press Start. Twelve results. For each, decide from the two reliabilities whether the reported correlation is possible.");
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "Block finished.", "You judged " + sc.k + " of " + sc.n + " correctly. The rule: a correlation cannot exceed the square root of the product of the two reliabilities. Press Start for another block.");
+        } else {
+          var c = S.cur, side = Math.max(70, Math.min(b.h - 110, b.w * 0.42)), x0 = b.x + 28, y0 = b.y + 44;
+          ctx.strokeStyle = "#2a3242"; ctx.lineWidth = 1; ctx.strokeRect(x0, y0, side, side);
+          ctx.fillStyle = DOT;
+          for (i = 0; i < N; i++) {
+            ctx.beginPath();
+            ctx.arc(x0 + side / 2 + c.pts.x[i] * side / 5.6, y0 + side / 2 - c.pts.y[i] * side / 5.6, 3.5, 0, 6.2832); ctx.fill();
+          }
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("result " + S.trial + " of " + BLOCK, b.cx, b.y + 22);
+          var tx = x0 + side + 18, ty = y0 + 14; ctx.textAlign = "left";
+          ctx.fillStyle = C.ink; ctx.font = "600 17px system-ui, sans-serif"; ctx.fillText("r = " + c.r.toFixed(2), tx, ty);
+          ctx.fillStyle = C.muted; ctx.font = "12.5px system-ui, sans-serif";
+          ctx.fillText("reliability of the", tx, ty + 34); ctx.fillText("brain measure: " + c.rx.toFixed(1), tx, ty + 51);
+          ctx.fillText("reliability of the", tx, ty + 80); ctx.fillText("questionnaire: " + c.ry.toFixed(1), tx, ty + 97);
+          ctx.textAlign = "center";
+          if (S.phase === "feedback" && S.last) {
+            ctx.fillStyle = S.last.right ? OK : BAD; ctx.font = "600 13px system-ui, sans-serif";
+            ctx.fillText((S.last.right ? "Right. " : "No. ") + "The ceiling is " + S.last.ceil.toFixed(2) + ": " + (S.last.impossible ? "impossible." : "it could be true."),
+              b.cx, b.y + b.h - 24);
+          } else {
+            ctx.fillText(b.w < 420 ? "F / left: possible      J / right: impossible" : "F, or tap the left half: could be true        J, or tap the right half: impossible",
+              b.cx, b.y + b.h - 24);
+          }
+        }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [0.3, 1.0], y: [0, 1.05], title: "Each result against its ceiling", xlabel: "the ceiling: square root of (reliability x reliability)" });
+        a.line([0.3, 1.0], [0.3, 1.0], { color: C.muted, width: 1.5 });
+        a.text(0.32, 0.88, "above the line: impossible", { color: C.muted, size: 11 });
+        if (S.log.length) {
+          var xs = [], ys = [], cols = [];
+          for (i = 0; i < S.log.length; i++) { xs.push(S.log[i].ceil); ys.push(S.log[i].r); cols.push(S.log[i].right ? OK : BAD); }
+          a.dots(xs, ys, { color: function (k) { return cols[k]; }, r: 5, alpha: 0.95 });
+          a.text(0.32, 0.98, "green: you were right", { color: OK, size: 11.5, bold: true });
+        } else {
+          a.text(0.32, 0.98, "Your answers appear here.", { color: C.muted, size: 11.5 });
+        }
+        a.text(0.32, 0.06, "reported correlation, upward", { color: C.muted, size: 10.5 });
+      },
+      readout: function () {
+        var sc = score();
+        return [
+          ["results judged", String(sc.n)],
+          ["judged correctly", sc.n ? sc.k + " of " + sc.n : "–"],
+          ["ceiling for reliabilities 0.5 and 0.8", "0.63"],
+          ["ceiling with task fMRI's typical 0.4", "0.57"],
+        ];
+      },
+      note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The plots are generated here, each with exactly the correlation shown. The rule is Part 3's: if two measures have reliabilities Rx and Ry, the correlation between them cannot exceed the square root of Rx times Ry, even when what they measure is perfectly related. A published correlation above that line was selected, or is a lucky small sample.",
+    });
+  };
 })();

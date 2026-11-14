@@ -24,7 +24,11 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "ADRIAN_1926", "GOLGI_CAJAL_1906", "GIDON_2020", "LOEWI_1921", "HEBB_1949", "BLISS_LOMO_1973", "BI_POO_1998",
            "HARTLINE_RATLIFF_1957", "GEIER_2008", "DEL_CASTILLO_KATZ_1954", "LIU_2012", "TURNER_2008",
            "HARLOW_1868", "BROCA_1861", "DRONKERS_2007", "WERNICKE_1874", "LASHLEY_1929", "PENFIELD_BOLDREY_1937", "HORTON_HOYT_1991",
-           "SCOVILLE_MILNER_1957", "NIELSEN_2013", "MAGUIRE_2000", "AZEVEDO_2009", "RAICHLE_2002", "WEISKRANTZ_1974", "MAH_2014", "WIESEL_HUBEL_1963", "MERZENICH_1984", "GAZZANIGA_1978"]
+           "SCOVILLE_MILNER_1957", "NIELSEN_2013", "MAGUIRE_2000", "AZEVEDO_2009", "RAICHLE_2002", "WEISKRANTZ_1974", "MAH_2014", "WIESEL_HUBEL_1963", "MERZENICH_1984", "GAZZANIGA_1978",
+           "BENNETT_2009", "HUBEL_WIESEL_1959", "BERGER_1929", "KUTAS_HILLYARD_1980", "OGAWA_1990",
+           "LOGOTHETIS_2001", "BOYNTON_1996", "EKLUND_2016", "VUL_2009", "POLDRACK_2006",
+           "MAREK_2022", "ELLIOTT_2020", "TANG_2023", "OWEN_2010", "KANWISHER_1997",
+           "GANIS_2011", "BARKER_1985"]
 
 
 @dataclass(frozen=True)
@@ -1073,6 +1077,240 @@ GAZZANIGA_1978 = Dataset(
                          "the left hand's choice of a shovel by the chicken"},
 )
 
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 8: reading the brain
+# ---------------------------------------------------------------------------------------------------------------
+
+BENNETT_2009 = Dataset(
+    key="bennett_2009",
+    title="A dead salmon in a scanner: uncorrected thresholds find activity where there is none",
+    source="C. M. Bennett, A. A. Baird, M. B. Miller and G. L. Wolford, Neural correlates of interspecies perspective "
+           "taking in the post-mortem Atlantic salmon: an argument for multiple comparisons correction, poster, "
+           "Human Brain Mapping 2009; Journal of Serendipitous and Unexpected Results 1 (2010) 1-5",
+    cite=r"Bennett et al.\ (2009)",
+    checked="the design and result from the authors' own commentary and several summaries through a web search, "
+            "2026-11-14; the poster was not read, so no voxel count is quoted",
+    licence="facts only",
+    data={"task": "photographs of people in social situations; the salmon was asked what each person was feeling",
+          "threshold": "p < 0.001 at each voxel, uncorrected",
+          "finding": "a cluster of active voxels in the brain cavity and the spinal column; none after correction "
+                     "for the number of tests",
+          "prize": "Ig Nobel, 2012"},
+)
+
+HUBEL_WIESEL_1959 = Dataset(
+    key="hubel_wiesel_1959",
+    title="Cells of the cat's visual cortex respond to a line at one orientation",
+    source="D. H. Hubel and T. N. Wiesel, Receptive fields of single neurones in the cat's striate cortex, Journal of "
+           "Physiology 148 (1959) 574-591",
+    cite=r"Hubel \& Wiesel (1959)",
+    checked="the abstract and later accounts through a web search, 2026-11-14; the paper was not read. The story of "
+            "the slide's edge is from Wiesel's and Hubel's later recollections, not from the paper",
+    licence="facts only",
+    data={"finding": "to drive a cell, a stimulus had to have a particular form, size, position and orientation"},
+)
+
+BERGER_1929 = Dataset(
+    key="berger_1929",
+    title="The first recordings of the human brain's electrical rhythm through the skull",
+    source="H. Berger, Ueber das Elektrenkephalogramm des Menschen, Archiv fuer Psychiatrie und Nervenkrankheiten 87 "
+           "(1929) 527-570",
+    cite=r"Berger (1929)",
+    checked="the reference and the history from encyclopedia entries and centenary articles through a web search, "
+            "2026-11-14; the paper was not read",
+    licence="facts only",
+    data={"first_recording": 1924, "published": 1929, "alpha_hz": "about 8 to 12",
+          "confirmed": "by Adrian and Matthews in 1934"},
+)
+
+KUTAS_HILLYARD_1980 = Dataset(
+    key="kutas_hillyard_1980",
+    title="A word that does not fit its sentence: a negative potential near 400 ms",
+    source="M. Kutas and S. A. Hillyard, Reading senseless sentences: brain potentials reflect semantic incongruity, "
+           "Science 207 (1980) 203-205; M. Kutas and K. D. Federmeier, Thirty years and counting: finding meaning in "
+           "the N400 component of the event-related brain potential, Annual Review of Psychology 62 (2011) 621-647",
+    cite=r"Kutas \& Hillyard (1980)",
+    checked="the reference, the example sentence and the latency from lecture notes and reviews through a web "
+            "search, 2026-11-14; neither paper was read",
+    licence="facts only",
+    data={"sentence": "He spread the warm bread with socks.", "latency_ms": 400,
+          "note": "they had expected the positive wave that follows a surprising stimulus"},
+)
+
+OGAWA_1990 = Dataset(
+    key="ogawa_1990",
+    title="A magnetic resonance signal that depends on the oxygen in the blood",
+    source="S. Ogawa, T. M. Lee, A. R. Kay and D. W. Tank, Brain magnetic resonance imaging with contrast dependent "
+           "on blood oxygenation, PNAS 87 (1990) 9868-9872; K. K. Kwong et al., Dynamic magnetic resonance imaging "
+           "of human brain activity during primary sensory stimulation, PNAS 89 (1992) 5675-5679",
+    cite=r"Ogawa et al.\ (1990)",
+    checked="the references and the history from textbooks' accounts through a web search, 2026-11-14; neither "
+            "paper was read",
+    licence="facts only",
+    data={"finding": "blood without oxygen lowers the signal around it; in 1992 two groups used the effect to watch "
+                     "the human brain respond"},
+)
+
+LOGOTHETIS_2001 = Dataset(
+    key="logothetis_2001",
+    title="What the BOLD signal follows: the cortex's input and local processing more than its spikes",
+    source="N. K. Logothetis, J. Pauls, M. Augath, T. Trinath and A. Oeltermann, Neurophysiological investigation of "
+           "the basis of the fMRI signal, Nature 412 (2001) 150-157",
+    cite=r"Logothetis et al.\ (2001)",
+    checked="the abstract through a web search, 2026-11-14; the paper was not read",
+    licence="facts only",
+    data={"finding": "in the monkey's visual cortex, local field potentials predicted the BOLD response better than "
+                     "the firing of the cells did"},
+)
+
+BOYNTON_1996 = Dataset(
+    key="boynton_1996",
+    title="The fMRI response is close to a linear, time-invariant transform of neural activity",
+    source="G. M. Boynton, S. A. Engel, G. H. Glover and D. J. Heeger, Linear systems analysis of functional magnetic "
+           "resonance imaging in human V1, Journal of Neuroscience 16 (1996) 4207-4221",
+    cite=r"Boynton et al.\ (1996)",
+    checked="the abstract and the first author's later review through a web search, 2026-11-14; the paper was not "
+            "read. The peak near 5 s is the textbook's canonical response, not a figure from this paper",
+    licence="facts only",
+    data={"finding": "the response to a long stimulus is predicted by adding shifted copies of the response to a "
+                     "short one; very brief stimuli give somewhat more than the rule predicts"},
+)
+
+EKLUND_2016 = Dataset(
+    key="eklund_2016",
+    title="Cluster inference with common settings gave far more false positives than the nominal 5%",
+    source="A. Eklund, T. E. Nichols and H. Knutsson, Cluster failure: why fMRI inferences for spatial extent have "
+           "inflated false-positive rates, PNAS 113 (2016) 7900-7905",
+    cite=r"Eklund et al.\ (2016)",
+    checked="the abstract and the discussion that followed through a web search, 2026-11-14; the paper was not "
+            "read. The authors withdrew the paper's estimate of how many published studies were affected",
+    licence="facts only",
+    data={"controls": 499, "analyses": 3_000_000, "worst": 0.70, "nominal": 0.05,
+          "cause": "the noise's spatial autocorrelation is not Gaussian: it has a long tail",
+          "meaning": "the share of null analyses with at least one false cluster, not the share of findings that "
+                     "are false"},
+)
+
+VUL_2009 = Dataset(
+    key="vul_2009",
+    title="Correlations between brain activity and personality that are too high to be true",
+    source="E. Vul, C. Harris, P. Winkielman and H. Pashler, Puzzlingly high correlations in fMRI studies of emotion, "
+           "personality, and social cognition, Perspectives on Psychological Science 4 (2009) 274-290; N. "
+           "Kriegeskorte, W. K. Simmons, P. S. F. Bellgowan and C. I. Baker, Circular analysis in systems "
+           "neuroscience: the dangers of double dipping, Nature Neuroscience 12 (2009) 535-540",
+    cite=r"Vul et al.\ (2009)",
+    checked="the abstracts and news reports through a web search, 2026-11-14; neither paper was read",
+    licence="facts only",
+    data={"share_vul": "more than half of the studies surveyed", "papers": 134, "circular": 57, "share": 0.42,
+          "finding": "voxels were selected by the correlation that was then reported"},
+)
+
+POLDRACK_2006 = Dataset(
+    key="poldrack_2006",
+    title="Reverse inference: how much an activation says about a mental process",
+    source="R. A. Poldrack, Can cognitive processes be inferred from neuroimaging data?, Trends in Cognitive Sciences "
+           "10 (2006) 59-63; R. A. Poldrack, Inferring mental states from neuroimaging data: from reverse inference "
+           "to large-scale decoding, Neuron 72 (2011) 692-697",
+    cite=r"Poldrack (2006)",
+    checked="the abstract of the first and the author's own summary of its numbers in the second, through a web "
+            "search, 2026-11-14; neither was read in full",
+    licence="facts only",
+    data={"prior": 0.5, "posterior": 0.69, "bayes_factor": 2.3, "region": "Broca's area", "process": "language"},
+)
+
+MAREK_2022 = Dataset(
+    key="marek_2022",
+    title="Associations between brain measures and behaviour are small, and need thousands of people",
+    source="S. Marek et al., Reproducible brain-wide association studies require thousands of individuals, Nature 603 "
+           "(2022) 654-660",
+    cite=r"Marek et al.\ (2022)",
+    checked="the abstract and the university's summary through a web search, 2026-11-14; the paper was not read. A "
+            "reply (Spisak et al. 2023) argues that cross-validated multivariate models need fewer people",
+    licence="facts only",
+    data={"people": 50_000, "median_n": 25, "median_r": 0.01},
+)
+
+ELLIOTT_2020 = Dataset(
+    key="elliott_2020",
+    title="The test-retest reliability of common task-fMRI measures is poor",
+    source="M. L. Elliott et al., What is the test-retest reliability of common task-functional MRI measures? New "
+           "empirical evidence and a meta-analysis, Psychological Science 31 (2020) 792-806",
+    cite=r"Elliott et al.\ (2020)",
+    checked="the abstract through a web search, 2026-11-14; the paper was not read",
+    licence="facts only",
+    data={"experiments": 90, "n": 1008, "icc": 0.397, "own_low": 0.067, "own_high": 0.485},
+)
+
+TANG_2023 = Dataset(
+    key="tang_2023",
+    title="The gist of continuous language decoded from fMRI",
+    source="J. Tang, A. LeBel, S. Jain and A. G. Huth, Semantic reconstruction of continuous language from "
+           "non-invasive brain recordings, Nature Neuroscience 26 (2023) 858-866",
+    cite=r"Tang et al.\ (2023)",
+    checked="the abstract and the funder's summary through a web search, 2026-11-14; the paper was not read. Three "
+            "participants and about sixteen hours of listening each are from a newspaper report",
+    licence="facts only",
+    data={"participants": 3, "hours": 16,
+          "finding": "the decoder recovers the meaning of what was heard or imagined, not the words, and only with "
+                     "the person's cooperation"},
+)
+
+OWEN_2010 = Dataset(
+    key="owen_2010",
+    title="Brain training in 11,430 people: better at the trained tasks, no transfer",
+    source="A. M. Owen et al., Putting brain training to the test, Nature 465 (2010) 775-778; D. J. Simons et al., Do "
+           "'brain-training' programs work?, Psychological Science in the Public Interest 17 (2016) 103-186; S. M. "
+           "Jaeggi, M. Buschkuehl, J. Jonides and W. J. Perrig, Improving fluid intelligence with training on "
+           "working memory, PNAS 105 (2008) 6829-6833",
+    cite=r"Owen et al.\ (2010)",
+    checked="the abstract of Owen et al. from PubMed Central and the press summary of Simons et al. through a web "
+            "search, 2026-11-14; none was read, and the reference to Jaeggi et al. is from memory",
+    licence="facts only",
+    data={"registered": 52_617, "completed": 11_430, "weeks": 6, "sessions": 24, "reviewed": 132,
+          "settlement_usd": 2_000_000, "settlement_year": 2016},
+)
+
+KANWISHER_1997 = Dataset(
+    key="kanwisher_1997",
+    title="A region of the fusiform gyrus that responds more to faces than to other things",
+    source="N. Kanwisher, J. McDermott and M. M. Chun, The fusiform face area: a module in human extrastriate cortex "
+           "specialized for face perception, Journal of Neuroscience 17 (1997) 4302-4311",
+    cite=r"Kanwisher et al.\ (1997)",
+    checked="reviews by both sides of the dispute through a web search, 2026-11-14; the paper was not read",
+    licence="facts only",
+    data={"finding": "found in most people in the same place; whether it is for faces or for anything one is expert "
+                     "at is still argued"},
+)
+
+GANIS_2011 = Dataset(
+    key="ganis_2011",
+    title="fMRI lie detection: perfect in the laboratory, a third with a covert countermeasure",
+    source="G. Ganis, J. P. Rosenfeld, J. Meixner, R. A. Kievit and H. E. Schendan, Lying in the scanner: covert "
+           "countermeasures disrupt deception detection by functional magnetic resonance imaging, NeuroImage 55 "
+           "(2011) 312-319; United States v. Semrau, 693 F.3d 510 (6th Cir. 2012); F. A. Kozel et al., Detecting "
+           "deception using functional magnetic resonance imaging, Biological Psychiatry 58 (2005) 605-613",
+    cite=r"Ganis et al.\ (2011)",
+    checked="the abstract and case summaries through a web search, 2026-11-14; none was read, and the reference to "
+            "Kozel et al. is from memory",
+    licence="facts only",
+    data={"participants": 26, "without": 1.00, "with": 0.33,
+          "court": "a United States court excluded an fMRI lie-detection report in 2010; the appeal court agreed "
+                   "in 2012"},
+)
+
+BARKER_1985 = Dataset(
+    key="barker_1985",
+    title="A magnetic pulse through the scalp makes the opposite hand twitch",
+    source="A. T. Barker, R. Jalinous and I. L. Freeston, Non-invasive magnetic stimulation of human motor cortex, "
+           "Lancet 325 (1985) 1106-1107",
+    cite=r"Barker et al.\ (1985)",
+    checked="the PubMed record and an encyclopedia entry through a web search, 2026-11-14",
+    licence="facts only",
+    data={"finding": "the first transcranial magnetic stimulation of the human motor cortex"},
+)
+
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -1084,4 +1322,8 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           HARLOW_1868, BROCA_1861, DRONKERS_2007, WERNICKE_1874, LASHLEY_1929, PENFIELD_BOLDREY_1937,
                           HORTON_HOYT_1991, SCOVILLE_MILNER_1957, NIELSEN_2013, MAGUIRE_2000, AZEVEDO_2009,
                           RAICHLE_2002, WEISKRANTZ_1974, MAH_2014,
-                          WIESEL_HUBEL_1963, MERZENICH_1984, GAZZANIGA_1978)}
+                          WIESEL_HUBEL_1963, MERZENICH_1984, GAZZANIGA_1978,
+                          BENNETT_2009, HUBEL_WIESEL_1959, BERGER_1929, KUTAS_HILLYARD_1980, OGAWA_1990,
+                          LOGOTHETIS_2001, BOYNTON_1996, EKLUND_2016, VUL_2009, POLDRACK_2006,
+                          MAREK_2022, ELLIOTT_2020, TANG_2023, OWEN_2010, KANWISHER_1997,
+                          GANIS_2011, BARKER_1985)}

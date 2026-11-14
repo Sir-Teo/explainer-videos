@@ -24,5 +24,9 @@ Modules so far, with the part that introduces each:
 ``brain``           7    box-and-arrow architectures that can be lesioned; dissociations with noisy tests;
                          one patient against a small control sample; cortical magnification and the blind
                          spot; lesion-symptom mapping on a sheet fed by one artery
+``imaging``         8    the measurement chain: a tuning curve; dipole sums and a toy lead field; averaging
+                         and event-related potentials; the Fourier pair behind an MR image; the haemodynamic
+                         response and the linear model; a synthetic brain under four thresholds; circular
+                         selection; reverse inference, the reliability ceiling, small studies of small effects
 =================  ====  ===============================================================================
 """

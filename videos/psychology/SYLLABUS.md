@@ -186,7 +186,8 @@ Modules, with the part that introduces each:
 | `chronometry` | 1 | additive stage models of reaction time; Donders' subtraction; Sternberg's additive factors |
 | `neuron` | 5 | Nernst and GHK; the passive membrane; Hodgkin–Huxley; FitzHugh–Nagumo; LIF and adaptive LIF; the cable equation |
 | `circuits` | 6 | conductance synapses; Hebbian, BCM and STDP rules; lateral inhibition; winner-take-all; half-centre oscillators; Wilson–Cowan |
-| `brain` | 7, 8 | a lesionable box-and-arrow architecture; neural mass to BOLD (the haemodynamic response); a lead-field toy for EEG |
+| `brain` | 7 | a lesionable box-and-arrow architecture; patients under one resource and two; cortical magnification; lesion-symptom mapping |
+| `imaging` | 8 | a tuned cell; a lead-field toy for EEG; ERP averaging; the haemodynamic response and the GLM; a synthetic brain under each threshold; circular selection; reverse inference |
 | `genes` | 9 | the Pool's additive genomes; twin, adoption and family simulators; ACE fits; GWAS and polygenic scores |
 | `body` | 10 | a circadian oscillator; the two-process model; an HPA feedback loop; receptor occupancy and tolerance |
 | `psychophysics` | 11 | psychometric functions; constant stimuli, limits and adjustment; staircases and QUEST; ML fits with intervals |
@@ -720,44 +721,65 @@ Lichtheim 1885; Lashley 1929; Penfield & Boldrey 1937; Horton & Hoyt 1991; Scovi
 1963; Merzenich et al. 1984; Maguire et al. 2000; Woollett & Maguire 2011; Crawford & Howell 1998; Mah et al.
 2014; Shallice, *From Neuropsychology to Mental Structure*; Kolb & Whishaw.
 
-### Part 8 · Reading the Brain (~55)
+### Part 8 · Reading the Brain (~60)
 *Question:* what can a brain scan tell you about a mind?
 *Story:* in 2009 a team puts a dead Atlantic salmon in an MRI scanner, shows it photographs of people, and finds
-"activity". The fish is a statistics lesson. This part builds the measurement chain from a neuron to a coloured
-blob, so that each link's assumptions are visible, and then lists what the blobs have and have not delivered.
-1. Hook: the salmon (Bennett et al. 2009). An uncorrected threshold across 130,000 voxels.
-2. Recording from neurons: single units, Hubel and Wiesel's method, what a tuning curve is.
-3. EEG: Berger's recordings (1920s); why scalp potentials are summed postsynaptic currents from aligned pyramidal
-   cells; volume conduction; the inverse problem has no unique solution (drawn).
-4. Event-related potentials: averaging pulls a signal out of noise at a rate of root n (computed); the P300, the
-   N400 (Kutas and Hillyard 1980), mismatch negativity.
-5. MRI in five minutes: spins, relaxation, gradients, k-space as a Fourier transform (link to *Analysis, Built*).
-6. BOLD: neurovascular coupling, the haemodynamic response, and the linear model: a response is the events
-   convolved with a kernel (derived, computed).
-7. The general linear model of an experiment: design matrix, contrasts, a t-map. Subtraction logic returns from
-   Part 1 with its pure-insertion problem.
-8. A hundred thousand tests: family-wise error, random fields, false discovery rate, cluster inference, and the
-   2016 finding that common cluster settings gave far too many false positives.
-9. Circular analysis: "voodoo correlations" (Vul et al. 2009). Selecting voxels by the correlation you then
-   report (simulated on a synthetic brain: r = 0.8 from nothing).
-10. Reverse inference (Poldrack 2006): from activation to mental state by Bayes' rule, with real base rates.
-11. Causal tools: lesions, TMS, direct stimulation, optogenetics in animals. What "necessary" and "sufficient"
-    mean here.
-12. What imaging settled and what it did not: a short, honest list.
+"activity". The fish is a statistics lesson. This part walks the chain from a neuron to a coloured map, so that
+each link's assumption is visible, shows the three ways a map misleads (the threshold, choosing voxels by the
+answer, reading it backwards), and then lists what the maps have and have not delivered.
+0. Hook: the salmon (Bennett et al. 2009). A test at one in a thousand, a thousand times: a 63% chance of at
+   least one false alarm. The chain from a neuron to a statement about a mind.
+1. Listening to one neuron: Hubel and Wiesel's line (1959); a model cell's tuning curve (40, 14 and 2 impulses
+   a second); the standard every other instrument is measured against, and its cost.
+2. Voltages on the scalp: Berger (recorded 1924, published 1929); why only aligned, synchronous cells add (N
+   against root N: about 1,100 times at a million sources); the inverse problem on a toy head, two source
+   patterns with identical scalp readings.
+3. Averaging out the noise: a 5 microvolt wave in 20 of noise; the noise left falls as one over root n (400
+   trials for 1 microvolt); the N400 (Kutas and Hillyard 1980).
+4. MRI in five minutes: protons in a field, two relaxations and contrast, gradients and k-space as a Fourier
+   transform (link to *Analysis, Built*), an image rebuilt from part of its transform.
+5. Blood, and a slow echo: Ogawa (1990); the haemodynamic response (peak at 5 s); the working assumption that
+   responses add, a convolution (Boynton et al. 1996); what the signal follows (Logothetis et al. 2001).
+6. The linear model of an experiment: a regressor, a weight and a t in one voxel (0.21, t = 5.3, against none);
+   a map as 1,600 separate regressions; subtraction and pure insertion return from Part 1; rest is not nothing.
+7. A hundred thousand tests: empty brains show something 44% of the time uncorrected, and 2.9%, 3.9% and 6.5%
+   under Bonferroni, the false discovery rate and clusters; what each rule finds of 78 true voxels (61 to 77);
+   the cluster rule against long-tailed noise (5.7% against 15.9%) and Eklund et al. (2016).
+8. Choosing voxels by the answer: Vul et al. (2009); 16 people, 10,000 voxels of noise, r = .74 in the chosen
+   voxels and zero in fresh data; the same .74 whether or not anything is there; Kriegeskorte et al.'s count.
+9. On you: three reported correlations, two reliabilities; the ceiling, root of 0.5 times 0.8, is .63.
+10. Reading a mind backwards: reverse inference as Bayes' rule (Poldrack 2006: 0.5 becomes 0.69; 0.2 becomes
+    0.37); the honest version, a model tested on new data.
+11. From watching to intervening: damage, the magnetic pulse (Barker et al. 1985), stimulation in surgery,
+    light in animals; necessary and sufficient; what thirty years of scanning settled and what it did not.
+12. The Ledger. 13. In practice: what is sold, and what works. 14. Frontier: how many people does a brain study
+    need?
 
-*Psyche:* `brain`: a forward model from simulated neural events to BOLD and to scalp EEG; a synthetic brain with
-known active regions analysed with each threshold method; ERP averaging.
-*On you:* three scatter plots from brain-imaging papers: which one is impossible given the measures'
-reliabilities?
-*Ledger:* the N400 (`replicated`); the fusiform face area (`replicated`, interpretation `contested`, in Part
-14); brain-training transfer and "neuromarketing" claims (`failed` or `not directly tested`).
-*In practice:* clinical EEG and presurgical mapping are established uses; lie detection and consumer "neuro"
-products are not.
-*Frontier:* brain-wide association studies need thousands of people (Marek et al. 2022); test–retest reliability
-of task fMRI; decoding continuous language from fMRI (Tang et al. 2023 **(verify)**). Analysis methods at depth
-are Part 49.
-*Reading:* Bennett et al. 2009; Vul et al. 2009; Kriegeskorte et al. 2009; Poldrack 2006; Eklund, Nichols &
-Knutsson 2016; Logothetis 2008; Luck 2014; Poldrack, Mumford & Nichols 2011; Huettel, Song & McCarthy.
+*Psyche:* `imaging` (`explainer/psychology/psyche/imaging.py`): a tuned cell and its spike counts; dipole sums;
+a lead-field toy head with a silent source; ERP trials and averaging; relaxation curves and k-space; the
+haemodynamic response, convolution and the general linear model; a synthetic brain of smooth noise with known
+active patches, thresholded by each rule, with family-wise rates over a thousand null brains; cluster
+calibration under two kinds of noise; circular selection; reverse inference; the reliability ceiling; the
+small-study simulator and sample sizes.
+*On you:* three scatter plots of the kind imaging papers report, in the film. The interactive deals reported
+correlations with the two measures' reliabilities; the reader judges each as possible or impossible, and the
+page plots the answers against the ceiling.
+*Ledger:* the N400 (`replicated`); brain-training transfer (`failed`); lie detection by fMRI (`not directly
+tested`). Shown without rows, with reasons: the salmon, Hubel and Wiesel (due in Part 13), Berger, Ogawa,
+Logothetis, Boynton, Eklund, Vul, Poldrack, the face area (due in Part 14), Barker, Marek, Elliott and Tang.
+*In practice:* where the instruments are everyday tools (epilepsy, sleep, mapping before surgery, structural
+scans) and what those uses share; a lie detector that is right nine times in ten flags as many truthful people
+as liars at a base rate of one in ten, and a rehearsed toe movement took detection from 100% to 33% (Ganis et
+al. 2011); brain training on 11,430 adults (Owen et al. 2010); six questions for any claim with a brain picture.
+*Frontier:* brain-wide association studies (Marek et al. 2022): at 25 people and a true r of 0.06, 6% of
+studies are significant and those report .47; 194, about 2,200 and about 78,000 people for r of 0.2, 0.06 and
+0.01; the test-retest reliability of task fMRI (Elliott et al. 2020); the reply from multivariate models;
+decoding the gist of a story (Tang et al. 2023) and its limits. Analysis methods at depth are Part 49.
+*Reading:* Bennett et al. 2009; Hubel & Wiesel 1959; Berger 1929; Kutas & Hillyard 1980; Kutas & Federmeier
+2011; Ogawa et al. 1990; Boynton et al. 1996; Logothetis et al. 2001; Eklund, Nichols & Knutsson 2016; Vul et
+al. 2009; Kriegeskorte et al. 2009; Poldrack 2006; Barker et al. 1985; Owen et al. 2010; Ganis et al. 2011;
+Elliott et al. 2020; Marek et al. 2022; Tang et al. 2023; Luck, *An Introduction to the Event-Related Potential
+Technique*; Poldrack, Mumford & Nichols; Huettel, Song & McCarthy; Poldrack, *The New Mind Readers*.
 
 ### Part 9 · Genes and Evolution (~55)
 *Question:* how much of who you are did you inherit, and what does that question mean?
@@ -3096,3 +3118,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 5 | built, English and Chinese: 14 chapters, hook and outro; Psyche's neuron (`psyche/neuron.py`, eleven tests, the 1952 conduction speed recomputed), one Ledger row, five Archive datasets; course entry for Act II, lab and interactive (reading a spike train) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 58 min |
 | 6 | built, English and Chinese: 14 chapters, hook and outro; Psyche's circuits (`psyche/circuits.py`, eleven tests), three Ledger rows, nine Archive datasets; course entry, lab and interactive (the Hermann grid with straight and wavy streets) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 62 min |
 | 7 | built, English and Chinese: 14 chapters, hook and outro; Psyche's brain (`psyche/brain.py`, ten tests), four Ledger rows, seventeen Archive datasets; course entry, lab and interactive (the reader's own blind spot, measured with outward and inward sweeps) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 63 min |
+| 8 | built, English and Chinese: 14 chapters, hook and outro; Psyche's imaging (`psyche/imaging.py`, thirteen tests), three Ledger rows, seventeen Archive datasets; course entry, lab and interactive (which reported correlation is impossible, given the two reliabilities) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 60 min |

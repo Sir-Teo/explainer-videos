@@ -776,3 +776,87 @@ shown(7, "WIESEL_HUBEL_1963", "the critical period for one eye's hold on the cor
 shown(7, "MERZENICH_1984", "remapping after the loss of a finger: told as history, without figures")
 shown(7, "GAZZANIGA_1978", "the split-brain experiments: told as the cases they were; what they show about "
       "awareness is entered in Part 27", row_in=27)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 8: reading the brain
+# ---------------------------------------------------------------------------------------------------------------
+
+add(Finding(
+    key="n400", part=8, title=r"The N400",
+    claim="A word that does not fit the meaning of its sentence is followed, about 400 ms later, by a negative "
+          "brain potential.",
+    original=Study("Kutas and Hillyard", 1980, n="a few readers, many sentences", design="potentials averaged over "
+                                                                                      "the last words of sentences",
+                   found="a negative wave near 400 ms to 'socks', none to 'butter'"),
+    status="replicated",
+    record=(Study("Kutas and Federmeier", 2011, n="thirty years of studies", design="a review",
+                  found="found in reading, listening, signing and pictures; graded by how expected the word is"),),
+    note="One of the most repeated effects in the field. What it measures (surprise, or the work of fitting a "
+         "meaning in) is still argued.",
+    sources=("M. Kutas and S. A. Hillyard, Reading senseless sentences: brain potentials reflect semantic "
+             "incongruity, Science 207 (1980) 203-205",
+             "M. Kutas and K. D. Federmeier, Thirty years and counting, Annual Review of Psychology 62 (2011) "
+             "621-647"),
+    checked="2026-11-14",
+    data=("KUTAS_HILLYARD_1980",),
+))
+
+add(Finding(
+    key="brain_training", part=8, title=r"Brain training",
+    claim="Practising brain-training games improves abilities that were not practised.",
+    original=Study("Jaeggi and colleagues", 2008, n="a few dozen students", design="training on one memory task, "
+                                                                                   "tested on a reasoning test",
+                   found="gains on the reasoning test that grew with the amount of training"),
+    status="failed",
+    record=(Study("Owen and colleagues", 2010, n="11,430 adults", design="six weeks of online training, randomized",
+                  found="better at every trained task; no transfer to untrained ones"),
+            Study("Simons and colleagues", 2016, n="132 cited articles", design="a review of the evidence the "
+                                                                                "companies cite",
+                  found="little evidence of broad transfer; weak controls and small samples")),
+    note="People get better at what they practise. The claim that fails is that this carries over to memory, "
+         "attention or intelligence in general.",
+    sources=("S. M. Jaeggi et al., Improving fluid intelligence with training on working memory, PNAS 105 (2008) "
+             "6829-6833",
+             "A. M. Owen et al., Putting brain training to the test, Nature 465 (2010) 775-778",
+             "D. J. Simons et al., Do 'brain-training' programs work?, Psychological Science in the Public "
+             "Interest 17 (2016) 103-186"),
+    checked="2026-11-14",
+    data=("OWEN_2010",),
+))
+
+add(Finding(
+    key="fmri_lie_detection", part=8, title=r"Lie detection by brain scan",
+    claim="A brain scan can tell whether a particular person is lying.",
+    original=Study("Kozel and colleagues", 2005, n="volunteers told to lie about a mock theft",
+                   design="each person classified from their own scan",
+                   found="most volunteers classified correctly, in the laboratory"),
+    status="not directly tested",
+    record=(Study("Ganis and colleagues", 2011, n="26 volunteers", design="the same kind of test, with and without "
+                                                                          "a covert countermeasure",
+                  found="100% detected without the countermeasure, 33% with it"),),
+    note="Never tested where it would be used: on people with something at stake who do not want to be read. A "
+         "United States court excluded it in 2010, and the appeal court agreed in 2012.",
+    sources=("F. A. Kozel et al., Detecting deception using functional magnetic resonance imaging, Biological "
+             "Psychiatry 58 (2005) 605-613",
+             "G. Ganis et al., Lying in the scanner, NeuroImage 55 (2011) 312-319",
+             "United States v. Semrau, 693 F.3d 510 (6th Cir. 2012)"),
+    checked="2026-11-14",
+    data=("GANIS_2011",),
+))
+
+shown(8, "BENNETT_2009", "a demonstration of a statistical error, not a claim about the mind")
+shown(8, "HUBEL_WIESEL_1959", "told as the history of a method; orientation selectivity is entered with vision",
+      row_in=13)
+shown(8, "BERGER_1929", "the history of an instrument")
+shown(8, "OGAWA_1990", "the physics of a measurement")
+shown(8, "LOGOTHETIS_2001", "what a measurement follows; physiology, not a claim about the mind")
+shown(8, "BOYNTON_1996", "a property of the measurement, used as a model")
+shown(8, "EKLUND_2016", "a result about a statistical method")
+shown(8, "VUL_2009", "a result about a method of analysis; the simulation beside it is the series' own")
+shown(8, "POLDRACK_2006", "an argument about inference, with its own numbers shown")
+shown(8, "KANWISHER_1997", "shown as the example of a robust activation with a disputed reading", row_in=14)
+shown(8, "BARKER_1985", "the history of an instrument")
+shown(8, "MAREK_2022", "a methods result at the frontier, disputed in its details", row_in=43)
+shown(8, "ELLIOTT_2020", "a methods result at the frontier")
+shown(8, "TANG_2023", "one laboratory's result at the frontier, described without figures")

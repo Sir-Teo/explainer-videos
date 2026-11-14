@@ -20,6 +20,7 @@
 from __future__ import annotations
 
 import math
+import re
 
 import numpy as np
 
@@ -315,10 +316,15 @@ def study_card(title: str, who: str, rows, status: str | None = None, width: flo
     return g
 
 
+def _tex(text: str) -> str:
+    """Ledger rows are plain prose (they also go to the README and the site): escape what LaTeX would misread."""
+    return re.sub(r"(?<!\\)([%&#])", r"\\\1", text)
+
+
 def _study_line(s, filled: bool, color, width, font_size) -> VGroup:
     mk = _marker(filled, color)
-    who = label(rf"{s.who} ({s.year})", font_size=font_size, color=color)
-    what = wrapped_label(s.found or s.design, width - 0.6, font_size - 1, GREY_A)
+    who = label(rf"{_tex(s.who)} ({s.year})", font_size=font_size, color=color)
+    what = wrapped_label(_tex(s.found or s.design), width - 0.6, font_size - 1, GREY_A)
     txt = VGroup(who, what).arrange(DOWN, aligned_edge=LEFT, buff=0.05)
     row = VGroup(mk, txt).arrange(RIGHT, buff=0.2, aligned_edge=UP)
     mk.align_to(who, UP).shift(DOWN * 0.04)
@@ -334,7 +340,7 @@ def ledger_card(f, width: float = 9.6, font_size=22, max_record: int | None = No
     tag = label(r"The Ledger", font_size=font_size - 5, color=P.ACCENT)
     chip = status_chip(f.status, font_size - 3)
     top = VGroup(tag, chip).arrange(RIGHT, buff=0.3)
-    claim = wrapped_label(f.claim, width - 0.7, font_size + 1, WHITE)
+    claim = wrapped_label(_tex(f.claim), width - 0.7, font_size + 1, WHITE)
     orig = _study_line(f.original, False, P.ARCHIVE, width - 0.7, font_size - 2)
     rec = VGroup(*[_study_line(s, True, color, width - 0.7, font_size - 2)
                    for s in f.record[: max_record if max_record is not None else len(f.record)]])
@@ -344,7 +350,7 @@ def ledger_card(f, width: float = 9.6, font_size=22, max_record: int | None = No
         parts.append(rec)
     nt = None
     if f.note:
-        nt = wrapped_label(f.note, width - 0.7, font_size - 3, GREY_B)
+        nt = wrapped_label(_tex(f.note), width - 0.7, font_size - 3, GREY_B)
         parts.append(nt)
     inner = VGroup(*parts).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
     box = RoundedRectangle(width=width, height=inner.height + 0.6, corner_radius=0.14, stroke_color=color,

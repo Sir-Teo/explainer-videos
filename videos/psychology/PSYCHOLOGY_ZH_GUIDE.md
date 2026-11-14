@@ -324,6 +324,52 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | disconnection | 断连 |
 | the tamping iron; stagecoach | 铁棍；驿站马车 |
 
+## Part 8: reading the brain
+
+| English | 中文 |
+|---|---|
+| to read the brain; brain scan; scanner | 读脑；脑扫描；扫描仪 |
+| salmon | 三文鱼 |
+| voxel; map (of activity); slice | 体素；图；切片 |
+| active, activation; to light up | 激活；亮起来 |
+| single cell recording; fine wire (electrode) | 单细胞记录；细金属丝 |
+| tuning curve; preferred angle; firing rate | 调谐曲线；最喜欢的角度；发放率 |
+| electroencephalogram (EEG); electrode; scalp | 脑电图（EEG）；电极；头皮 |
+| brain wave; rhythm | 脑电波；节律 |
+| source; aligned, in step | 源；对齐，同步 |
+| forward problem; inverse problem | 正问题；逆问题 |
+| trial; to average; locked to (the word) | 试次；平均；锁定在……上 |
+| event-related potential; N400; P300 | 事件相关电位；N400；P300 |
+| microvolt | 微伏 |
+| magnetic resonance imaging (MRI); functional MRI | 磁共振成像；功能磁共振成像 |
+| proton; magnetic field; tesla; to wobble (precess) | 质子；磁场；特斯拉；摆动 |
+| radio pulse; to recover (relax); out of step | 无线电脉冲；摆回原位；错开步调 |
+| contrast (of an image) | 对比度 |
+| gradient; stripe pattern; Fourier transform | 梯度；条纹图案；傅里叶变换 |
+| blood-oxygen-level-dependent signal (BOLD) | 血氧水平依赖信号（BOLD） |
+| the echo (haemodynamic response) | 回声 |
+| convolution; regressor; weight; t statistic | 卷积；回归量；权重；t统计量 |
+| least squares; the linear model | 最小二乘法；线性模型 |
+| contrast (task minus control); control task; rest | 差；对照任务；休息 |
+| pure insertion; subtraction | 纯插入；减法 |
+| threshold; to pass; correction (for the number of tests) | 阈值；通过；校正 |
+| false alarm; miss | 误报；漏报 |
+| Bonferroni; false discovery rate; cluster | 邦费罗尼；错误发现率；簇 |
+| empty (null) brain; smooth noise; long tail | 空的大脑；平滑的噪声；长尾巴 |
+| permutation test; to shuffle the labels | 置换检验；打乱标签 |
+| circular analysis; "voodoo correlations" | 循环分析；“巫毒相关” |
+| reliability; the ceiling (on a correlation) | 信度；上限 |
+| reverse inference; forward, backward | 逆向推断；正着走，倒着走 |
+| odds; base rate; Bayes' rule | 赔率；基础率；贝叶斯法则 |
+| decoding; decoder; the gist | 解码；解码器；大意 |
+| to intervene; necessary; sufficient | 干预；必要的；充分的 |
+| magnetic pulse (TMS); coil | 磁脉冲；线圈 |
+| light-sensitive cells (optogenetics) | 对光敏感的细胞 |
+| lie detection; countermeasure | 测谎；小动作（反制手段） |
+| brain training; transfer | 大脑训练；迁移 |
+| brain-wide association; sample size | 全脑关联；样本量 |
+| brain privacy | 大脑隐私 |
+
 ## Names
 
 | English | 中文 |
@@ -406,6 +452,11 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Graz, Oslo, Jena, Vermont | 格拉茨，奥斯陆，耶拿，佛蒙特 |
 | Bologna, Plymouth | 博洛尼亚，普利茅斯 |
 | Königsberg, Leipzig, Utrecht, Würzburg, Cornell | 柯尼斯堡，莱比锡，乌得勒支，维尔茨堡，康奈尔 |
+| Marta Kutas, Steven Hillyard, Kara Federmeier | 玛尔塔·库塔斯，史蒂文·希利亚德，费德迈尔 |
+| Seiji Ogawa, Nikos Logothetis | 小川诚二，尼科斯·洛戈塞蒂斯 |
+| Anders Eklund, Edward Vul, Russell Poldrack | 安德斯·埃克伦德，爱德华·武尔，拉塞尔·波尔德拉克 |
+| Anthony Barker, Adrian Owen | 安东尼·巴克，阿德里安·欧文 |
+| Jaeggi, Kozel, Ganis (in the Ledger) | 耶吉，科泽尔，加尼斯 |
 
 ## Titles
 

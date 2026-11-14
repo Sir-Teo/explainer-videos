@@ -65,6 +65,23 @@ and summarized, not stored. Dates are the day the check was made.
 | `wiesel_hubel_1963` | One eye closed in kittens: cortical cells stop answering to it; not so in adults | Wiesel and Hubel, *J. Neurophysiol.* 26 (1963) 1003–1017; Hubel and Wiesel, *J. Physiol.* 206 (1970) | facts only | 2026-11-14: references from PubMed Central, the outline from a history; neither read |
 | `merzenich_1984` | After a finger is lost its cortex answers to the neighbours; referred sensations in amputees | Merzenich et al., *J. Comp. Neurol.* 224 (1984) 591–605; Ramachandran et al., *Science* 258 (1992) | facts only | 2026-11-14: the abstracts as summarized |
 | `gazzaniga_1978` | Split-brain patients: one hemisphere speaks; the interpreter | Gazzaniga (1967, 2005); Gazzaniga and LeDoux (1978) | facts only | 2026-11-14: from secondary accounts; references and the quoted sentence from memory |
+| `bennett_2009` | A dead salmon "responds" at an uncorrected threshold; nothing after correction | Bennett et al., poster, HBM 2009; *J. Serendipitous and Unexpected Results* 1 (2010) 1–5 | facts only | 2026-11-14: from the authors' commentary and summaries; no voxel count quoted |
+| `hubel_wiesel_1959` | Cortical cells that need a line at one orientation | Hubel and Wiesel, *J. Physiol.* 148 (1959) 574–591 | facts only | 2026-11-14: the abstract; the slide-edge story is from later recollections |
+| `berger_1929` | The first human EEG (recorded 1924, published 1929) | Berger, *Archiv für Psychiatrie* 87 (1929) 527–570 | facts only | 2026-11-14: from histories |
+| `kutas_hillyard_1980` | The N400 to a word that does not fit | Kutas and Hillyard, *Science* 207 (1980) 203–205; Kutas and Federmeier, *Annu. Rev. Psychol.* 62 (2011) | facts only | 2026-11-14: from lecture notes and reviews |
+| `ogawa_1990` | BOLD contrast; first human use in 1992 | Ogawa et al., *PNAS* 87 (1990) 9868–9872; Kwong et al., *PNAS* 89 (1992) | facts only | 2026-11-14: from textbook histories |
+| `logothetis_2001` | BOLD follows local field potentials better than spikes | Logothetis et al., *Nature* 412 (2001) 150–157 | facts only | 2026-11-14: the abstract |
+| `boynton_1996` | The fMRI response is nearly linear in time | Boynton et al., *J. Neurosci.* 16 (1996) 4207–4221 | facts only | 2026-11-14: the abstract and a later review |
+| `eklund_2016` | Cluster inference: familywise error up to 70% against 5% | Eklund, Nichols and Knutsson, *PNAS* 113 (2016) 7900–7905 | facts only | 2026-11-14: the abstract and the debate; the count of affected studies was withdrawn |
+| `vul_2009` | Circular selection of voxels inflates correlations; 57 of 134 papers | Vul et al., *Perspect. Psychol. Sci.* 4 (2009) 274–290; Kriegeskorte et al., *Nat. Neurosci.* 12 (2009) 535–540 | facts only | 2026-11-14: the abstracts and news reports |
+| `poldrack_2006` | Reverse inference by Bayes' rule: 0.5 to 0.69 for Broca's area and language | Poldrack, *TiCS* 10 (2006) 59–63; *Neuron* 72 (2011) | facts only | 2026-11-14: the numbers from the author's 2011 summary |
+| `marek_2022` | Brain-behaviour associations: median r of 0.01 in about 50,000 people | Marek et al., *Nature* 603 (2022) 654–660 | facts only | 2026-11-14: the abstract and a press summary |
+| `elliott_2020` | Task-fMRI test-retest reliability: mean ICC .397 over 90 experiments | Elliott et al., *Psychol. Sci.* 31 (2020) 792–806 | facts only | 2026-11-14: the abstract |
+| `tang_2023` | The gist of heard or imagined speech decoded from fMRI | Tang et al., *Nat. Neurosci.* 26 (2023) 858–866 | facts only | 2026-11-14: the abstract and summaries |
+| `owen_2010` | Brain training: 11,430 people, no transfer; the 2016 review; the 2016 settlement | Owen et al., *Nature* 465 (2010) 775–778; Simons et al., *PSPI* 17 (2016) | facts only | 2026-11-14: the abstract and press summaries |
+| `kanwisher_1997` | The fusiform face area | Kanwisher, McDermott and Chun, *J. Neurosci.* 17 (1997) 4302–4311 | facts only | 2026-11-14: from reviews |
+| `ganis_2011` | fMRI lie detection defeated by a covert countermeasure; excluded by a court | Ganis et al., *NeuroImage* 55 (2011) 312–319; *United States v. Semrau* (2012) | facts only | 2026-11-14: the abstract and case summaries |
+| `barker_1985` | The first transcranial magnetic stimulation | Barker, Jalinous and Freeston, *Lancet* 325 (1985) 1106–1107 | facts only | 2026-11-14: the PubMed record |
 
 ## Looked for and not used
 
