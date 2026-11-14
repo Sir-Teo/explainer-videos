@@ -57,7 +57,7 @@ is that draw's own.
 | Voltage-dependent sodium and potassium conductances account for the action potential and its speed | Hodgkin and Huxley 1952 | replicated |
 
 Shown without a row, with the reason recorded in `explainer/psychology/ledger.py`: the rate code of Adrian and
-Zotterman (its row is due with the senses, Part 11), the neuron doctrine (a settled piece of anatomy, told as
+Zotterman (its row is due with sensory coding, Part 13), the neuron doctrine (a settled piece of anatomy, told as
 history), and the graded dendritic spikes of 2020 (one laboratory's report, shown at the frontier). Cole and
 Curtis's measurement rests under the row above, and Helmholtz's speed has had its row since Part 1.
 

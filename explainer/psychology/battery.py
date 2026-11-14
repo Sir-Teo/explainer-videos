@@ -10,6 +10,9 @@ A task is added to :data:`RUNNERS` by the part that first uses it.  So far:
 
 * Task 1, reaction time (Part 1): Donders' methods a (simple), c (go/no-go) and b (choice among ``n``),
   ``run("rt_simple" | "rt_gonogo" | "rt_choice", model, n_trials, seed)``.
+* Task 2, the two-alternative threshold (Part 11): which of two patches is brighter, by the method of constant
+  stimuli, ``run("threshold", observer, n_trials, seed)`` with a :class:`explainer.psychology.psyche.psychophysics.
+  Observer`; the increments are in ``extra["delta"]`` (a standard of 100, increments of 1 to 24).
 
 Nothing here imports manim.
 """
@@ -106,7 +109,24 @@ def _rt_task(condition: str):
     return runner
 
 
-RUNNERS = {"rt_simple": _rt_task("a"), "rt_gonogo": _rt_task("c"), "rt_choice": _rt_task("b")}
+THRESHOLD_STANDARD = 100.0
+THRESHOLD_DELTAS = (1.0, 2.0, 4.0, 6.0, 8.0, 12.0, 16.0, 24.0)
+
+
+def _threshold(model, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
+    """Two-alternative forced choice at fixed increments over a standard of 100, in random order; ``n_trials`` is
+    rounded down to a multiple of the number of increments.  No response times are modelled (NaN)."""
+    from explainer.psychology.psyche.psychophysics import two_afc
+
+    rng = np.random.default_rng(seed)
+    per = max(1, n_trials // len(THRESHOLD_DELTAS))
+    t = two_afc(THRESHOLD_STANDARD, THRESHOLD_DELTAS, model, per, rng)
+    n = len(t["delta"])
+    return Trials("threshold", np.full(n, subject), np.full(n, "2afc"), np.full(n, np.nan), t["correct"],
+                  extra={"delta": t["delta"], "standard": np.full(n, THRESHOLD_STANDARD)})
+
+
+RUNNERS = {"rt_simple": _rt_task("a"), "rt_gonogo": _rt_task("c"), "rt_choice": _rt_task("b"), "threshold": _threshold}
 
 
 def run(name: str, model, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:

@@ -191,7 +191,7 @@ Modules, with the part that introduces each:
 | `genes` | 9 | many loci; twin, adoption and family simulators with each assumption switchable; Falconer and ACE fits; a genome-wide scan and polygenic scores; the sibling design; embryo selection |
 | `body` | 10 | a light-driven clock (free running, entrainment, phase response, jet lag); the two-process model of sleep and an alertness curve; lapses under short sleep; a hormone loop with feedback; receptor occupancy, blockers and half-lives; an opponent process; tolerance tied to a place; chronotype |
 | `body` | 10 | a circadian oscillator; the two-process model; an HPA feedback loop; receptor occupancy and tolerance |
-| `psychophysics` | 11 | psychometric functions; constant stimuli, limits and adjustment; staircases and QUEST; ML fits with intervals |
+| `psychophysics` | 11 | an observer with floor, Weber and photon noise; psychometric functions; constant stimuli, limits and adjustment; staircases and QUEST; ML fits with bootstrap intervals and goodness of fit; Fechner's count; Stevens's power law and cross-modality matching; the triangle test; Thurstone's Case V |
 | `sdt` | 12 | equal- and unequal-variance observers; yes–no, rating and 2AFC; ROC and d′; ideal observers |
 | `vision` | 13 | an optical point spread; cone fundamentals and colour matching; centre–surround and Gabor banks; contrast normalization |
 | `infer` | 14 | Bayesian observers; cue combination; the motion prior; a small recognition network with a behavioural readout |
@@ -253,7 +253,7 @@ Twelve tasks and one questionnaire, implemented once (`explainer.psychology.batt
 | # | Task | First used | Signature a model must reproduce |
 |---|---|---|---|
 | 1 | Simple and choice reaction time | 1 | the right-skewed RT distribution; Hick's logarithm |
-| 2 | Two-alternative threshold (contrast or length) | 11 | a psychometric function; Weber's fraction |
+| 2 | Two-alternative threshold (a brightness increment over a standard of 100; built in Part 11) | 11 | a psychometric function; Weber's fraction |
 | 3 | Stroop colour naming | 18 | interference larger than facilitation; the delta plot |
 | 4 | Visual search | 18 | flat and sloped set-size functions; target-absent slopes about twice target-present |
 | 5 | Change detection | 19 | capacity near three to four items; precision falling with load |
@@ -918,39 +918,62 @@ Meyer & Quenzer, *Psychopharmacology*.
 
 ### Part 11 · The Threshold (~50)
 *Question:* what is the smallest difference you can notice, and is there a law to it?
-*Story:* Weber lifts weights and finds that the noticeable difference is a constant fraction. Fechner turns the
-fraction into a scale of sensation, and the first quantitative law of the mind is a logarithm. A century later
-Stevens asks people for numbers directly and gets a power law. The quarrel is about what a threshold is, and the
-answer, a curve and not a point, sets up signal detection theory.
-1. Hook and On you: two patches, which is brighter? A hundred trials in ninety seconds of screen time.
-2. Weber (1834): ΔI = kI. Weber fractions for weight, brightness, loudness, line length.
-3. Fechner's step: integrate the fraction. S = k log I derived, with its assumption that every JND is one equal
-   unit.
-4. The three classical methods (limits, adjustment, constant stimuli), each drawn as its trial strip.
-5. The threshold is not a step: the psychometric function. Cumulative Gaussian, logistic and Weibull forms;
-   threshold, slope, guess and lapse rates.
-6. Fitting it: the binomial likelihood, maximum likelihood, bootstrap intervals (your data from chapter 1,
-   fitted).
-7. Efficient measurement: staircases and what they converge to (the 70.7% rule derived), and QUEST's Bayesian
-   placement of the next trial (Watson and Pelli 1983).
-8. Stevens's direct scaling (1957): magnitude estimation, the power law, exponents from 0.33 (brightness) to 3.5
-   (electric shock); cross-modality matching as a check.
-9. Fechner against Stevens: what each assumes; why both can describe their data.
-10. Where Weber's law comes from: noise that grows with the signal, or a compressive code. A preview of Parts 12
-    and 58.
-11. Weber's law elsewhere: number sense (Part 30), time, prices (Part 26).
+*Story:* on the morning of 22 October 1850 Fechner, in bed in Leipzig, sees how to measure the mind: count the
+just noticeable steps between two stimuli. Weber had found that the step is a constant fraction; Fechner turns the
+fraction into a logarithm, the first quantitative law of the mind. A century later Stevens asks people for numbers
+and gets a power law. The quarrel is about what a step is worth, and the answer to what a threshold is, a curve
+and not a point, sets up signal detection.
+0. Hook: Fechner's morning (Fechner 1860, as told by Boring 1961); Kant's first objection, unanswered after ten
+   parts; two pairs of grey patches, 24% and 2%.
+1. Weber's fraction (1834): ΔI = kI, illustrated without a historical number; on Psyche (noise with a floor and a
+   proportional part) a fraction of 0.076 over the middle, 0.48 near the floor; the near miss (McGill and
+   Goldberg 1968).
+2. Fechner's step: 90 just noticeable steps from 1 to 1,000, 30 a decade; the logarithm in four lines; the one
+   assumption it rests on.
+3. Three classical methods on Psyche: limits (14.1; descending 23.8, ascending 4.4), adjustment (PSE 102.2, a JND
+   of 7.6 from the settings' spread), constant stimuli (8 × 40 trials); three willingnesses to say yes give 10.4,
+   14.9 and 19.8 with the same eyes.
+4. The threshold is a curve: four numbers (guess, threshold, spread, lapse); Gaussian, logistic and Weibull.
+5. On you: eight pairs of patches, answered against an observer with a 7.6% JND.
+6. Fitting: the binomial likelihood and its surface; a 75% threshold of 8.6 [6.3, 11.4] against a truth of 8.2
+   (Wichmann and Hill 2001); goodness of fit by the bootstrap's deviance, which an observer whose threshold drifts
+   between blocks passes as often as a steady one; one slip without a lapse rate moves the threshold from 8.1 to
+   10.1.
+7. Staircases and QUEST: p^k = 1/2 derived (Levitt 1971; a three-down median of 9.75 against 10.01); coarse steps
+   sit low; QUEST (Watson and Pelli 1983); errors after 32 trials of 0.92, 0.75 and 0.36 log units.
+8. Stevens (1957): magnitude estimation, straight lines on log-log axes, six exponents from 0.33 to 3.5,
+   cross-modality matching (a predicted slope of 0.49).
+9. Fechner against Stevens: one Weber's law and two assumptions (Ekman's form); hard to tell apart; Plateau's
+   painters and the middle grey (1872: 44%, 27% or 18%; CIE lightness puts it at 18%); the range effect (1.34, 0.84,
+   0.67 from one observer; Poulton 1968).
+10. Where Weber's law comes from: growing noise or a compressed code, thresholds within 4%; the slope of threshold
+    against background (0, 1/2, 1: dark light, the de Vries-Rose law, Weber).
+11. Weber's law elsewhere: number (adults about 0.11; 3:4 at three, 5:6 at six; Halberda et al. 2008), time
+    (scalar timing, Gibbon 1977), money (Bernoulli's logarithm of 1738; ten ducats worth 70 times more at ten
+    than at a thousand).
+12. The Ledger. 13. In practice: the audiometer's staircase (Hughson-Westlake), the eye chart, codecs, and the
+    triangle test (15 of 30 to find a difference; 40 tasters for 80% power when 30% can taste it, 325 when 10%
+    can). 14. Frontier: what the numbers measure; Thurstone's scale with no ruler (1927); the quick CSF (Lesmes et
+    al. 2010).
 
-*Psyche:* `psychophysics`: the observer, the three methods, staircases and QUEST, ML fits with intervals; Weber
-fractions recovered from simulated and open data.
-*On you:* Battery task 2. Your psychometric function, fitted on the site.
-*Ledger:* Weber's law (`replicated`, with the known failures at the extremes); Stevens's exponents
-(`replicated`).
-*In practice:* audiometry and optometry are psychophysics; display and codec engineering (JND-based compression,
-the decibel) rest on it; "just noticeable" price and design changes.
-*Frontier:* why near-miss to Weber's law; adaptive methods for many-parameter functions; what magnitude estimates
-measure.
+*Psyche:* `psychophysics` (`explainer/psychology/psyche/psychophysics.py`): an observer with a noise floor, Weber
+noise, photon noise, a lapse rate and a near miss; exact two-interval probabilities; psychometric functions in
+three forms with guess and lapse rates; maximum-likelihood fits with a bounded lapse rate, the parametric
+bootstrap and its goodness of fit; the three classical methods (limits with a criterion); k-down staircases and
+their targets; a QUEST-style placement; Fechner's count; Stevens's power law, magnitude estimates and
+cross-modality matching; the triangle test's critical counts and power; paired comparisons and Thurstone's Case V.
+*On you:* eight pairs of patches in the film. The interactive is Battery task 2 on the reader's own screen: a
+two-interval brightness task run by a 2-down 1-up staircase over 50 trials, with the reader's psychometric curve
+fitted at the end.
+*Ledger:* Weber's law (`replicated`, with its failures at the edges); Stevens's power law (`replicated`, for the
+power form; the exponents move with the experiment). Shown without rows, with reasons: Levitt, QUEST and Wichmann
+and Hill (methods), number sense (due in Part 30), scalar timing, the quick CSF and the square-root law (Part 13),
+Bernoulli (Part 26), Plateau, and Thurstone (Part 46).
+*In practice:* audiometry, eye charts, codecs measured in JNDs, the triangle test and its power.
+*Frontier:* what is solid and what is argued in measuring sensation; scaling without a physical stimulus; adaptive
+methods for whole curves; why the near miss; what the exponents measure.
 *Reading:* Fechner 1860; Stevens 1957, 1975; Gescheider, *Psychophysics*; Kingdom & Prins, *Psychophysics: A
-Practical Introduction*; Wichmann & Hill 2001; Watson & Pelli 1983.
+Practical Introduction*; Levitt 1971; Watson & Pelli 1983; Wichmann & Hill 2001; Poulton 1968; Thurstone 1927.
 
 ### Part 12 · Signal and Noise (~50)
 *Question:* when you say "yes, I saw it", how much of that is seeing and how much is willingness to say yes?
@@ -1015,7 +1038,8 @@ constructed); difference-of-Gaussians and Gabor banks applied to images; a CSF f
 *On you:* the dress, then a metameric match; Mach bands return, now computed from the filter.
 *Ledger:* single-photon sensitivity (`replicated`; rods respond to single photons, and people can report them
 above chance, Tinsley et al. 2016 **(verify)**); the Hubel–Wiesel hierarchy (`replicated`, as a first
-approximation); the dress's illuminant account (`replicated`).
+approximation); the dress's illuminant account (`replicated`); the rate code of a single sensory fibre (Adrian and
+Zotterman 1926, deferred from Part 5).
 *In practice:* every display, camera, image codec and colour standard is built on the standard observer and the
 CSF; colour-blind-safe design.
 *Frontier:* what V1 does with natural scenes (models explain a minority of the variance); the functions of the
@@ -3178,3 +3202,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 8 | built, English and Chinese: 14 chapters, hook and outro; Psyche's imaging (`psyche/imaging.py`, thirteen tests), three Ledger rows, seventeen Archive datasets; course entry, lab and interactive (which reported correlation is impossible, given the two reliabilities) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 60 min |
 | 9 | built, English and Chinese: 14 chapters, hook and outro; Psyche's genes (`psyche/genes.py`, sixteen tests), three Ledger rows, twenty-three Archive datasets; course entry, lab and interactive (genes or the shared home, read from two twin correlations) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 60 min |
 | 10 | built, English and Chinese: 14 chapters, hook and outro; Psyche's body (`psyche/body.py`, fourteen tests), four Ledger rows, sixteen Archive datasets; course entry, lab and interactive (a vigilance task beside the reader's own rating of alertness) checked; narration table and on-screen text translated and dry-run. Act II is complete. Open checks in its README | 59 min |
+| 11 | built, English and Chinese: 14 chapters, hook and outro; Psyche's psychophysics (`psyche/psychophysics.py`, twenty-four tests) and Battery task 2, two Ledger rows, fifteen Archive datasets; course entry, lab and interactive (the reader's own threshold, by staircase, with a fitted curve) checked; narration table and on-screen text translated and dry-run. Act III begins. Open checks in its README | 48 min |

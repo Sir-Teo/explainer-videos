@@ -36,5 +36,9 @@ Modules so far, with the part that introduces each:
                          two-process model of sleep and an alertness curve; lapses under sleep restriction;
                          the stress axis as a feedback loop; the Hill equation, antagonists and elimination;
                          the opponent process and conditioned tolerance; chronotype
+``psychophysics``   11   an observer whose noise grows with the signal (Weber's law and its failure near the
+                         floor); the psychometric function and its maximum-likelihood fit with a bootstrap;
+                         Fechner's three methods; staircases and a Bayesian placement rule; Fechner's and
+                         Stevens's scales; magnitude estimation and cross-modality matching
 =================  ====  ===============================================================================
 """

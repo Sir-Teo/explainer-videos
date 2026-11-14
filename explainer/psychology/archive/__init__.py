@@ -35,7 +35,10 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "KARAVANI_2019", "BUSS_1989", "HEIJMANS_2008", "WEIR_2002",
            "KLEITMAN_1938", "CZEISLER_1999", "ASERINSKY_1953", "BORBELY_1982", "VAN_DONGEN_2003", "RASCH_2007",
            "HOBSON_1977", "CAPPUCCIO_2010", "SIEGEL_1982", "SOLOMON_CORBIT_1974", "DUNSTER_2018", "TRAUER_2015",
-           "XIE_2013", "PHOENIX_1959", "TEIGEN_1994", "ROENNEBERG_2004"]
+           "XIE_2013", "PHOENIX_1959", "TEIGEN_1994", "ROENNEBERG_2004",
+           "WEBER_1834", "FECHNER_1860", "STEVENS_1957", "POULTON_1968", "LEVITT_1971", "WATSON_PELLI_1983",
+           "WICHMANN_HILL_2001", "MCGILL_GOLDBERG_1968", "HALBERDA_2008", "GIBBON_1977", "LESMES_2010",
+           "DEVRIES_ROSE", "BERNOULLI_1738", "PLATEAU_1872", "THURSTONE_1927"]
 
 
 @dataclass(frozen=True)
@@ -1814,6 +1817,188 @@ ROENNEBERG_2004 = Dataset(
     data={"latest_women": 19.5, "latest_men": 21.0},
 )
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 11: the threshold
+# ---------------------------------------------------------------------------------------------------------------
+_P11 = "through a web search, 2026-11-14; the original was not read"
+
+WEBER_1834 = Dataset(
+    key="weber_1834",
+    title="Weber's lifted weights and the constant fraction",
+    source="E. H. Weber, De Pulsu, Resorptione, Auditu et Tactu: Annotationes Anatomicae et Physiologicae (1834); "
+           "Der Tastsinn und das Gemeingefuehl (1846)",
+    cite=r"Weber (1834)",
+    checked="encyclopaedia entries and textbook accounts " + _P11 + ". The Latin title differs between sources and "
+            "so does the fraction for weights (1/30 and 1/40 are both quoted): the films give no single figure",
+    licence="facts only",
+    data={"year": 1834, "german": 1846},
+)
+
+FECHNER_1860 = Dataset(
+    key="fechner_1860",
+    title="Fechner's Elements of Psychophysics",
+    source="G. T. Fechner, Elemente der Psychophysik, 2 vols (Leipzig, 1860); E. G. Boring, Fechner: inadvertent "
+           "founder of psychophysics, Psychometrika 26 (1961) 3-8",
+    cite=r"Fechner (1860)",
+    checked="Wozniak's introduction to the Classics in the History of Psychology edition, encyclopaedia entries and "
+            "Boring (1961) " + _P11 + ". The number of judgments he made is not given",
+    licence="facts only",
+    data={"year": 1860, "volumes": 2, "insight": "22 October 1850",
+          "methods": ("just noticeable differences", "right and wrong cases", "average error")},
+)
+
+STEVENS_1957 = Dataset(
+    key="stevens_1957",
+    title="Stevens's power law and his table of exponents",
+    source="S. S. Stevens, On the psychophysical law, Psychological Review 64 (1957) 153-181; S. S. Stevens, "
+           "Psychophysics (1975)",
+    cite=r"Stevens (1957)",
+    checked="the citation and the table of exponents as reproduced in textbooks " + _P11,
+    licence="facts only",
+    data={"exponents": (("brightness", 0.33), ("loudness", 0.67), ("vibration", 0.95), ("visual length", 1.0),
+                        ("heaviness", 1.45), ("electric shock", 3.5))},
+)
+
+POULTON_1968 = Dataset(
+    key="poulton_1968",
+    title="Range and sequence effects in magnitude estimation",
+    source="E. C. Poulton, The new psychophysics: six models for magnitude estimation, Psychological Bulletin 69 "
+           "(1968) 1-19; R. Teghtsoonian, On the exponents in Stevens's law and the constant in Ekman's law, "
+           "Psychological Review 78 (1971) 71-80",
+    cite=r"Poulton (1968)",
+    checked="citations and later reviews of the dispute " + _P11,
+    licence="facts only",
+    data={},
+)
+
+LEVITT_1971 = Dataset(
+    key="levitt_1971",
+    title="Transformed up-down staircases",
+    source="H. Levitt, Transformed up-down methods in psychoacoustics, Journal of the Acoustical Society of America "
+           "49 (1971) 467-477",
+    cite=r"Levitt (1971)",
+    checked="the paper's equilibrium points as tabulated by later papers " + _P11,
+    licence="facts only",
+    data={"targets": ((1, 0.5), (2, 0.7071), (3, 0.7937), (4, 0.8409))},
+)
+
+WATSON_PELLI_1983 = Dataset(
+    key="watson_pelli_1983",
+    title="QUEST: a Bayesian adaptive psychometric method",
+    source="A. B. Watson and D. G. Pelli, QUEST: a Bayesian adaptive psychometric method, Perception & "
+           "Psychophysics 33 (1983) 113-120",
+    cite=r"Watson \& Pelli (1983)",
+    checked="descriptions in later papers " + _P11 + "; the page numbers are from memory",
+    licence="facts only",
+    data={},
+)
+
+WICHMANN_HILL_2001 = Dataset(
+    key="wichmann_hill_2001",
+    title="Fitting the psychometric function, and bootstrap intervals",
+    source="F. A. Wichmann and N. J. Hill, The psychometric function: I. Fitting, sampling, and goodness of fit; II. "
+           "Bootstrap-based confidence intervals and sampling, Perception & Psychophysics 63 (2001) 1293-1313, "
+           "1314-1329",
+    cite=r"Wichmann \& Hill (2001)",
+    checked="the citations and summaries " + _P11,
+    licence="facts only",
+    data={},
+)
+
+MCGILL_GOLDBERG_1968 = Dataset(
+    key="mcgill_goldberg_1968",
+    title="The near miss to Weber's law for the intensity of tones",
+    source="W. J. McGill and J. P. Goldberg, A study of the near-miss involving Weber's law and pure-tone intensity "
+           "discrimination, Perception & Psychophysics 4 (1968) 105-109",
+    cite=r"McGill \& Goldberg (1968)",
+    checked="the citation and later papers' summaries (a slope of about 0.9 instead of 1) " + _P11,
+    licence="facts only",
+    data={"slope": 0.9},
+)
+
+HALBERDA_2008 = Dataset(
+    key="halberda_2008",
+    title="Weber's law for number",
+    source="J. Halberda, M. M. M. Mazzocco and L. Feigenson, Individual differences in non-verbal number acuity "
+           "correlate with maths achievement, Nature 455 (2008) 665-668; J. Halberda and L. Feigenson, Developmental "
+           "change in the acuity of the number sense, Developmental Psychology 44 (2008) 1457-1465",
+    cite=r"Halberda et al.\ (2008)",
+    checked="the papers' summaries " + _P11,
+    licence="facts only",
+    data={"adult_w": 0.11, "age3_ratio": "3:4", "age6_ratio": "5:6"},
+)
+
+GIBBON_1977 = Dataset(
+    key="gibbon_1977",
+    title="Weber's law for time: scalar timing",
+    source="J. Gibbon, Scalar expectancy theory and Weber's law in animal timing, Psychological Review 84 (1977) "
+           "279-325",
+    cite=r"Gibbon (1977)",
+    checked="the paper's opening pages and later reviews " + _P11,
+    licence="facts only",
+    data={},
+)
+
+LESMES_2010 = Dataset(
+    key="lesmes_2010",
+    title="The quick CSF: four parameters in fifty trials",
+    source="L. A. Lesmes, Z.-L. Lu, J. Baek and T. D. Albright, Bayesian adaptive estimation of the contrast "
+           "sensitivity function: the quick CSF method, Journal of Vision 10(3):17 (2010) 1-21",
+    cite=r"Lesmes et al.\ (2010)",
+    checked="the abstract and later papers' descriptions " + _P11,
+    licence="facts only",
+    data={"parameters": 4, "trials": 50},
+)
+
+DEVRIES_ROSE = Dataset(
+    key="devries_rose",
+    title="The square-root law: photon noise sets the threshold in dim light",
+    source="Hl. de Vries, The quantum character of light and its bearing upon threshold of vision, the differential "
+           "sensitivity and visual acuity of the eye, Physica 10 (1943) 553-564; A. Rose, The sensitivity performance "
+           "of the human eye on an absolute scale, Journal of the Optical Society of America 38 (1948) 196-208",
+    cite=r"de Vries (1943); \ Rose (1948)",
+    checked="encyclopaedia entries and later papers' accounts " + _P11 + "; the page numbers are from memory",
+    licence="facts only",
+    data={"slopes": (("dark light", 0.0), ("square root", 0.5), ("Weber", 1.0))},
+)
+
+BERNOULLI_1738 = Dataset(
+    key="bernoulli_1738",
+    title="Bernoulli's measure of risk: the value of a gain falls in proportion to wealth",
+    source="D. Bernoulli, Specimen theoriae novae de mensura sortis, Commentarii Academiae Scientiarum Imperialis "
+           "Petropolitanae 5 (1738) 175-192; translated by L. Sommer as Exposition of a new theory on the measurement "
+           "of risk, Econometrica 22 (1954) 23-36",
+    cite=r"Bernoulli (1738)",
+    checked="the 1954 translation's section 10 as quoted in later accounts " + _P11 + "; the volume and pages of the "
+            "1738 original are from memory",
+    licence="public domain",
+    data={"year": 1738, "rule": "the utility of a small gain is inversely proportional to the wealth already held"},
+)
+
+PLATEAU_1872 = Dataset(
+    key="plateau_1872",
+    title="Plateau's painters: a grey midway between black and white, and the first power law",
+    source="J. Plateau, Sur la mesure des sensations physiques, et sur la loi qui lie l'intensite de ces sensations a "
+           "l'intensite de la cause excitante, Bulletins de l'Academie Royale de Belgique 33 (1872) 376-388",
+    cite=r"Plateau (1872)",
+    checked="later papers' accounts of the bisection experiment and of Delboeuf's replication " + _P11 + "; the "
+            "number of painters and Plateau's own figures are not given; the volume and pages are from memory",
+    licence="public domain",
+    data={"year": 1872},
+)
+
+THURSTONE_1927 = Dataset(
+    key="thurstone_1927",
+    title="Thurstone's law of comparative judgment, and a scale of the seriousness of crimes",
+    source="L. L. Thurstone, A law of comparative judgment, Psychological Review 34 (1927) 273-286; L. L. Thurstone, "
+           "The method of paired comparisons for social values, Journal of Abnormal and Social Psychology 21 (1927) "
+           "384-400",
+    cite=r"Thurstone (1927)",
+    checked="the citations, an encyclopaedia entry and a replication's account (19 offences) " + _P11,
+    licence="facts only",
+    data={"offences": 19},
+)
+
 
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
@@ -1837,4 +2022,7 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           YENGO_2022, MARTIN_2019, KARAVANI_2019, BUSS_1989, HEIJMANS_2008, WEIR_2002,
                           KLEITMAN_1938, CZEISLER_1999, ASERINSKY_1953, BORBELY_1982, VAN_DONGEN_2003, RASCH_2007,
                           HOBSON_1977, CAPPUCCIO_2010, SIEGEL_1982, SOLOMON_CORBIT_1974, DUNSTER_2018, TRAUER_2015,
-                          XIE_2013, PHOENIX_1959, TEIGEN_1994, ROENNEBERG_2004)}
+                          XIE_2013, PHOENIX_1959, TEIGEN_1994, ROENNEBERG_2004,
+                          WEBER_1834, FECHNER_1860, STEVENS_1957, POULTON_1968, LEVITT_1971, WATSON_PELLI_1983,
+                          WICHMANN_HILL_2001, MCGILL_GOLDBERG_1968, HALBERDA_2008, GIBBON_1977, LESMES_2010,
+                          DEVRIES_ROSE, BERNOULLI_1738, PLATEAU_1872, THURSTONE_1927)}

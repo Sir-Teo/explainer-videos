@@ -452,6 +452,36 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | clearance (of waste); anaesthesia | 清除；麻醉 |
 | a drawing, not a recording / not the data | 示意图，不是记录／不是数据 |
 
+## Part 11: the threshold
+
+| English | 中文 |
+|---|---|
+| threshold (of sensation); absolute threshold | 阈限；绝对阈限 |
+| just noticeable difference (JND); standard; comparison; increment | 最小可觉差；标准刺激；比较刺激；增量 |
+| Weber's fraction; Weber's law; the near miss (to Weber's law) | 韦伯分数；韦伯定律；（韦伯定律的）“近失” |
+| Fechner's law; Fechner's step; psychophysics | 费希纳定律；费希纳的一步；心理物理学 |
+| method of limits; method of adjustment (of average error); method of constant stimuli (of right and wrong cases) | 极限法；调整法（平均误差法）；恒定刺激法（正误法） |
+| ascending, descending series; changeover | 上升序列，下降序列；转折点 |
+| point of subjective equality | 主观相等点 |
+| two-interval forced choice; yes-no | 二间隔迫选；是否（判断） |
+| psychometric function; guess rate; lapse rate; spread; slope | 心理测量函数；猜测率；失误率；离散度；斜率 |
+| cumulative Gaussian, logistic, Weibull | 累积高斯，逻辑斯谛，韦布尔 |
+| binomial count; likelihood; log-likelihood; deviance | 二项计数；似然；对数似然；偏差 |
+| parametric bootstrap; goodness of fit; drift | 参数自助法；拟合优度；漂移 |
+| staircase; 2-down 1-up; reversal (turning point); step size | 阶梯法；二下一上；转折点；步长 |
+| QUEST; belief (posterior); placement | QUEST；信念（后验）；放置 |
+| magnitude estimation; power law; exponent; continuum | 量值估计；幂律；指数；维度 |
+| cross-modality matching; range effect | 跨通道匹配；范围效应 |
+| bisection; middle grey; lightness; grey card | 二等分；中灰；明度；灰卡 |
+| photon noise; dark light; the square-root law (de Vries-Rose) | 光子噪声；暗光；平方根定律（德弗里斯-罗斯定律） |
+| compressed code; growing noise | 被压缩的编码；增长的噪声 |
+| number sense; scalar timing (the scalar property) | 数感；标量计时（标量性质） |
+| utility; the St Petersburg paradox; ducat | 效用；圣彼得堡悖论；金币（达克特） |
+| audiometer; decibel; eye chart; codec | 听力计；分贝；视力表；编码器 |
+| triangle test; taster; power | 三角检验；品尝者；检验力 |
+| paired comparison; law of comparative judgment; Case V | 配对比较；比较判断律；情形V |
+| contrast sensitivity function (CSF); the quick CSF | 对比敏感度函数（CSF）；快速CSF |
+
 ## Names
 
 | English | 中文 |
@@ -554,6 +584,10 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Richard Solomon, John Corbit; Shepard Siegel | 理查德·所罗门，约翰·科比特；谢泼德·西格尔 |
 | Yerkes, Dodson; Gustav Fechner | 耶基斯，多德森；古斯塔夫·费希纳 |
 | Mammoth Cave; Seattle, Rochester, Philadelphia, Kansas, Leipzig | 猛犸洞；西雅图，罗切斯特，费城，堪萨斯，莱比锡 |
+| Hessel de Vries, Albert Rose; Joseph Plateau, Joseph Delboeuf | 赫塞尔·德弗里斯，阿尔伯特·罗斯；约瑟夫·普拉托，约瑟夫·德尔伯夫 |
+| S. S. Stevens, Gösta Ekman, E. C. Poulton | 史蒂文斯，约斯塔·埃克曼，普尔顿 |
+| Harry Levitt; Andrew Watson, Denis Pelli; Felix Wichmann, Jeremy Hill | 哈里·莱维特；安德鲁·沃森，丹尼斯·佩利；费利克斯·维希曼，杰里米·希尔 |
+| Daniel Bernoulli; Louis Thurstone; John Gibbon; Kingdom and Prins | 丹尼尔·伯努利；路易斯·瑟斯顿；约翰·吉本；金登和普林斯 |
 
 ## Titles
 

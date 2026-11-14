@@ -121,6 +121,21 @@ and summarized, not stored. Dates are the day the check was made.
 | `phoenix_1959` | Organizing and activating effects of sex hormones | Phoenix et al., *Endocrinology* 65 (1959) 369–382 | facts only | 2026-11-14: reviews |
 | `teigen_1994` | The Yerkes-Dodson law's thin beginning | Yerkes and Dodson (1908); Teigen, *Theory Psychol.* 4 (1994) 525–547 | facts only | 2026-11-14: summaries of both |
 | `roenneberg_2004` | Chronotype through life: latest at about twenty | Roenneberg et al., *Curr. Biol.* 14 (2004) R1038–R1039; Wittmann et al., *Chronobiol. Int.* 23 (2006) 497–509 | facts only | 2026-11-14: summaries of the survey; the PubMed record of the second paper |
+| `weber_1834` | Weber's lifted weights and the constant fraction | Weber (1834); *Der Tastsinn und das Gemeingefühl* (1846) | facts only | 2026-11-14: encyclopaedia and textbook accounts; no single fraction for weights |
+| `fechner_1860` | Fechner's *Elements of Psychophysics* | Fechner (1860), 2 vols; Boring, *Psychometrika* 26 (1961) 3–8 | facts only | 2026-11-14: Wozniak's introduction, encyclopaedia entries |
+| `stevens_1957` | Stevens's power law and his table of exponents | Stevens, *Psychol. Rev.* 64 (1957) 153–181; *Psychophysics* (1975) | facts only | 2026-11-14: the citation and the exponent table as reproduced |
+| `poulton_1968` | Range and sequence effects in magnitude estimation | Poulton, *Psychol. Bull.* 69 (1968) 1–19; Teghtsoonian, *Psychol. Rev.* 78 (1971) 71–80 | facts only | 2026-11-14: citations and reviews of the dispute |
+| `levitt_1971` | Transformed up-down staircases | Levitt, *J. Acoust. Soc. Am.* 49 (1971) 467–477 | facts only | 2026-11-14: equilibrium points as tabulated by later papers |
+| `watson_pelli_1983` | QUEST | Watson and Pelli, *Percept. Psychophys.* 33 (1983) 113–120 | facts only | 2026-11-14: later descriptions; page numbers from memory |
+| `wichmann_hill_2001` | Fitting the psychometric function; bootstrap intervals | Wichmann and Hill, *Percept. Psychophys.* 63 (2001) 1293–1313, 1314–1329 | facts only | 2026-11-14: citations and summaries |
+| `mcgill_goldberg_1968` | The near miss to Weber's law | McGill and Goldberg, *Percept. Psychophys.* 4 (1968) 105–109 | facts only | 2026-11-14: later summaries |
+| `halberda_2008` | Weber's law for number | Halberda, Mazzocco and Feigenson, *Nature* 455 (2008); Halberda and Feigenson, *Dev. Psychol.* 44 (2008) | facts only | 2026-11-14: summaries |
+| `gibbon_1977` | Weber's law for time | Gibbon, *Psychol. Rev.* 84 (1977) 279–325 | facts only | 2026-11-14: the paper's opening pages and reviews |
+| `lesmes_2010` | The quick CSF | Lesmes, Lu, Baek and Albright, *J. Vis.* 10(3):17 (2010) | facts only | 2026-11-14: the abstract and later descriptions |
+| `devries_rose` | The square-root law in dim light | de Vries, *Physica* 10 (1943); Rose, *J. Opt. Soc. Am.* 38 (1948) | facts only | 2026-11-14: encyclopaedia entries and later accounts |
+| `bernoulli_1738` | The value of a gain falls with wealth | Bernoulli, *Comment. Acad. Sci. Imp. Petrop.* 5 (1738); Sommer's translation, *Econometrica* 22 (1954) 23–36 | public domain | 2026-11-14: the translation's section 10 as quoted |
+| `plateau_1872` | Painters' middle grey and the first power law | Plateau, *Bull. Acad. R. Belg.* 33 (1872) | public domain | 2026-11-14: later papers' accounts |
+| `thurstone_1927` | The law of comparative judgment | Thurstone, *Psychol. Rev.* 34 (1927) 273–286; *J. Abnorm. Soc. Psychol.* 21 (1927) 384–400 | facts only | 2026-11-14: citations and a replication's account |
 
 ## Looked for and not used
 

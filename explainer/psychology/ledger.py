@@ -665,7 +665,7 @@ add(Finding(
 ))
 
 shown(5, "ADRIAN_1926", "the rate code of a single sensory fibre: told here as the discovery it was, with schematic "
-      "trains; entered with the senses", row_in=11)
+      "trains; entered with sensory coding", row_in=13)
 shown(5, "GOLGI_CAJAL_1906", "the neuron doctrine: a settled piece of anatomy, told as history")
 shown(5, "GIDON_2020", "one laboratory's report of graded dendritic spikes in human cortex, shown at the frontier "
       "and not yet repeated elsewhere")
@@ -1046,3 +1046,56 @@ shown(10, "XIE_2013", "a finding in mice and its dispute, at the frontier")
 shown(10, "PHOENIX_1959", "animal physiology; the human evidence is indirect and is said to be")
 shown(10, "TEIGEN_1994", "a history of a textbook law; the law itself is examined in Part 28", row_in=28)
 shown(10, "ROENNEBERG_2004", "a description from a survey of sleep times; the lifespan is Part 31", row_in=31)
+
+
+# ---------------------------------------------------------------------------------------------------------------
+# Part 11: the threshold
+# ---------------------------------------------------------------------------------------------------------------
+add(Finding(
+    key="weber_law", part=11, title=r"Weber's law",
+    claim="The smallest noticeable change in a stimulus is a constant fraction of its size.",
+    original=Study("Weber", 1834, n="Weber and a few colleagues", design="lifted weights, touch and line length, "
+                   "compared in pairs", found="the noticeable difference grew in proportion to the standard"),
+    status="replicated",
+    record=(Study("Fechner", 1860, n="years of his own judgments", design="lifted weights, brightness and distances, "
+                  "by three methods", found="a roughly constant fraction over the middle of each range"),
+            Study("McGill and Goldberg", 1968, n="a few listeners", design="intensity discrimination of pure tones",
+                  found="a near miss: the fraction falls slowly as the tone gets louder")),
+    note="It holds over the middle of most ranges and fails at the edges: near the absolute threshold the fraction "
+         "grows, and for loud tones it shrinks a little. The fraction differs from sense to sense.",
+    sources=("E. H. Weber, De Pulsu, Resorptione, Auditu et Tactu (1834); Der Tastsinn und das Gemeingefuehl (1846)",
+             "G. T. Fechner, Elemente der Psychophysik (1860)",
+             "W. J. McGill and J. P. Goldberg, A study of the near-miss involving Weber's law and pure-tone intensity "
+             "discrimination, Perception & Psychophysics 4 (1968) 105-109"),
+    checked="2026-11-14",
+    data=("WEBER_1834", "FECHNER_1860", "MCGILL_GOLDBERG_1968"),
+))
+
+add(Finding(
+    key="stevens_power_law", part=11, title=r"Stevens's power law",
+    claim="Judged magnitude grows as a power of stimulus intensity.",
+    original=Study("Stevens", 1957, n="many small groups of observers", design="magnitude estimation: say a number "
+                   "for each stimulus", found="straight lines on log-log axes, exponents from 0.33 to 3.5"),
+    status="replicated",
+    record=(Study("Poulton", 1968, n="a review of magnitude-estimation studies", design="the same continua under "
+                  "different ranges, standards and orders", found="the power form repeats; the exponent moves with "
+                  "the range and the order of the stimuli"),),
+    note="The power form is among the most repeated results in psychophysics. The exponents are not constants of "
+         "the senses: they shift with the range presented, the first stimulus and the numbers people like to use.",
+    sources=("S. S. Stevens, On the psychophysical law, Psychological Review 64 (1957) 153-181",
+             "E. C. Poulton, The new psychophysics: six models for magnitude estimation, Psychological Bulletin 69 "
+             "(1968) 1-19"),
+    checked="2026-11-14",
+    data=("STEVENS_1957", "POULTON_1968"),
+))
+
+shown(11, "LEVITT_1971", "a method, derived and checked on Psyche")
+shown(11, "WATSON_PELLI_1983", "a method, run on Psyche")
+shown(11, "WICHMANN_HILL_2001", "a method, applied to simulated data")
+shown(11, "HALBERDA_2008", "Weber's law for number, a preview; number sense is entered in Part 30", row_in=30)
+shown(11, "GIBBON_1977", "Weber's law for time, shown as a pattern; the series does not study interval timing")
+shown(11, "LESMES_2010", "a method at the frontier; vision is entered in Part 13", row_in=13)
+shown(11, "DEVRIES_ROSE", "a theory of the threshold, run on Psyche; the eye's thresholds are entered in Part 13", row_in=13)
+shown(11, "BERNOULLI_1738", "a theory of value, a preview; choices under risk are entered in Part 26", row_in=26)
+shown(11, "PLATEAU_1872", "a historical proposal; the power law's row is Stevens's")
+shown(11, "THURSTONE_1927", "a method, run on simulated judges; scaling judgments is entered in Part 46", row_in=46)
