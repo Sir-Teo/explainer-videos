@@ -72,9 +72,9 @@ class Outro(VoiceoverScene):
             "excitation and inhibition are in balance, while the modulators set the gain and the learning "
             "rate."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows[0], shift=RIGHT * 0.2))
             vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows], lag_ratio=0.9), run_time=42.0)
+            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.2) for r in rows[1:]], lag_ratio=0.9), run_time=40.0)
         self.clear_scene()
 
     def score(self):
@@ -137,8 +137,8 @@ class Outro(VoiceoverScene):
             "uses Psyche's circuits to see what sets the size of Mach's bands. And the last, with the star, "
             "is the frontier's problem. Pause here if you'd like to try them."
         ) as vo:
-            self.play(FadeIn(ps.head))
-            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in ps.rows], lag_ratio=0.3), run_time=6.0)
+            self.play(FadeIn(ps.head), FadeIn(ps.rows[0]), run_time=0.8)
+            self.play(LaggedStart(*[FadeIn(r, shift=UP * 0.1) for r in ps.rows[1:]], lag_ratio=0.3), run_time=5.0)
         self.wait(4.0)
         self.clear_scene()
 

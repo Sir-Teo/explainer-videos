@@ -254,7 +254,7 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | dopamine; serotonin; noradrenaline; the opioids | 多巴胺；血清素；去甲肾上腺素；阿片类 |
 | curare; naloxone; botulinum toxin; L-DOPA | 箭毒；纳洛酮；肉毒毒素；左旋多巴 |
 | caffeine; adenosine; nicotine; morphine; cocaine | 咖啡因；腺苷；尼古丁；吗啡；可卡因 |
-| benzodiazepines; SSRIs; stimulants; antipsychotics; nerve agent | 苯二氮䓬类；SSRI；兴奋剂；抗精神病药；神经毒剂 |
+| benzodiazepines; SSRIs; stimulants; antipsychotics; nerve agent | 苯二氮卓类；SSRI；兴奋剂；抗精神病药；神经毒剂 |
 | excitation; inhibition; EPSP; IPSP | 兴奋；抑制；兴奋性突触后电位（EPSP）；抑制性突触后电位（IPSP） |
 | summation in time, in space | 时间上的总和，空间上的总和 |
 | shunting inhibition; a shunt | 分流抑制；分流 |
