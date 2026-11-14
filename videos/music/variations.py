@@ -69,6 +69,8 @@ LEDGER = [
      "measure": r"8 chords: C C Am C F C G C; moves = R R RL LR LR RL"},
     {"part": 32, "title": r"harmonized by the shortest paths, then rerouted through chromatic chords", "seconds": 17.8,
      "measure": r"C C A C Fm C Gm C; 16 then 18 semitones of voice leading"},
+    {"part": 33, "title": r"as a Vuza canon, rung in plain hunt, and in Bohlen–Pierce", "seconds": 26.6,
+     "measure": r"72 pulses, 12 voices, each pulse struck once; 8 changes on 4 bells; 14 notes in 13 steps to the tritave"},
 ]
 
 
