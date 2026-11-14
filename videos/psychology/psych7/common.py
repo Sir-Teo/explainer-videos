@@ -96,6 +96,41 @@ def at(brain, x: float, y: float) -> np.ndarray:
     return c + np.array([x * brain.k, y * brain.k, 0.0])
 
 
+def brain_medial(width: float = 6.2, center=ORIGIN) -> VGroup:
+    """One hemisphere cut down the middle, front to the left: the outline, the corpus callosum, the thalamus,
+    the hypothalamus, the basal ganglia (dashed: deeper than the cut), the hippocampus and the amygdala.
+    The pieces are attributes; ``.at(x, y)`` gives a point in the same coordinates as :func:`brain_side`."""
+    k = width / 2.0
+    c0 = np.asarray(center, float)
+
+    def at_(x, y):
+        return c0 + np.array([x * k, y * k, 0.0])
+
+    outline = [(-1.0, -0.05), (-0.95, 0.25), (-0.75, 0.5), (-0.45, 0.66), (-0.12, 0.72), (0.2, 0.72), (0.5, 0.62),
+               (0.68, 0.45), (0.85, 0.25), (0.92, 0.0), (0.85, -0.2), (0.68, -0.3), (0.45, -0.33), (0.2, -0.42),
+               (-0.1, -0.45), (-0.4, -0.4), (-0.58, -0.28), (-0.8, -0.18)]
+    g = VGroup()
+    g.hemi = Polygon(*[at_(x, y) for x, y in outline], color=GREY_B, stroke_width=3, fill_color="#1A2130",
+                     fill_opacity=1).round_corners(0.04 * k)
+    g.stem = Polygon(at_(0.1, -0.2), at_(0.2, -0.86), at_(0.36, -0.86), at_(0.3, -0.2), color=STEM, stroke_width=3,
+                     fill_color=STEM, fill_opacity=0.45).round_corners(0.025 * k)
+    g.cb = Ellipse(width=0.62 * k, height=0.36 * k, color=CEREBELLUM, stroke_width=3, fill_color=CEREBELLUM,
+                   fill_opacity=0.35).move_to(at_(0.6, -0.5))
+    g.callosum = ArcBetweenPoints(at_(-0.45, 0.2), at_(0.4, 0.2), angle=-PI * 0.55, color=VOLT, stroke_width=12)
+    g.thalamus = Ellipse(width=0.34 * k, height=0.2 * k, color=DEEP, stroke_width=3, fill_color=DEEP,
+                         fill_opacity=0.6).move_to(at_(0.05, 0.08))
+    g.hypothalamus = Dot(at_(-0.14, -0.06), radius=0.04 * k, color=LESION)
+    g.basal = DashedVMobject(Ellipse(width=0.42 * k, height=0.26 * k, color=FRONTAL, stroke_width=3).move_to(
+        at_(-0.25, 0.14)), num_dashes=28)
+    g.hippocampus = ArcBetweenPoints(at_(-0.12, -0.24), at_(0.34, -0.16), angle=PI * 0.35, color=TEMPORAL,
+                                     stroke_width=11)
+    g.amygdala = Dot(at_(-0.22, -0.24), radius=0.042 * k, color=DATA)
+    g.shell = VGroup(g.stem, g.cb, g.hemi)
+    g.add(g.shell)
+    g.at = at_
+    return g
+
+
 def lesion_mark(center, radius: float = 0.28, color=LESION) -> VGroup:
     """A lesion: a dark red blot with a ragged edge."""
     g = np.random.default_rng(int(abs(center[0] * 100) + abs(center[1] * 10)))

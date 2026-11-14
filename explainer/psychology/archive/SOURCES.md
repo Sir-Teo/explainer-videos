@@ -62,6 +62,9 @@ and summarized, not stored. Dates are the day the check was made.
 | `raichle_2002` | The brain: about 2% of body weight, about 20% of its energy | Raichle and Gusnard, *PNAS* 99 (2002) 10237–10239 | facts only | 2026-11-14: the opening lines |
 | `weiskrantz_1974` | Blindsight in patient D.B. | Weiskrantz et al., *Brain* 97 (1974) 709–728 | facts only | 2026-11-14: from reviews; no figures quoted |
 | `mah_2014` | Lesion-deficit maps in 581 stroke patients are displaced along arterial territories | Mah et al., *Brain* 137 (2014) 2522–2531 | facts only | 2026-11-14: the abstract and a later summary; no millimetres quoted |
+| `wiesel_hubel_1963` | One eye closed in kittens: cortical cells stop answering to it; not so in adults | Wiesel and Hubel, *J. Neurophysiol.* 26 (1963) 1003–1017; Hubel and Wiesel, *J. Physiol.* 206 (1970) | facts only | 2026-11-14: references from PubMed Central, the outline from a history; neither read |
+| `merzenich_1984` | After a finger is lost its cortex answers to the neighbours; referred sensations in amputees | Merzenich et al., *J. Comp. Neurol.* 224 (1984) 591–605; Ramachandran et al., *Science* 258 (1992) | facts only | 2026-11-14: the abstracts as summarized |
+| `gazzaniga_1978` | Split-brain patients: one hemisphere speaks; the interpreter | Gazzaniga (1967, 2005); Gazzaniga and LeDoux (1978) | facts only | 2026-11-14: from secondary accounts; references and the quoted sentence from memory |
 
 ## Looked for and not used
 

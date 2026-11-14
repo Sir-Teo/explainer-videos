@@ -126,4 +126,62 @@ PARTS = [
               ("Their tests", "tests/psychology/test_circuits.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=7, level="U", widget="blindspot",
+        question="Is the mind in one place or everywhere?",
+        story="In 1848 an iron rod passes through Phineas Gage's head and he lives; what the record says about "
+              "the change in him is a few sentences, and the rest is retelling. Damage is psychology's oldest "
+              "experiment, and this part is about how to read it. A tour names the parts. Gall asks the right "
+              "question with a method that cannot fail; Flourens and Lashley answer 'everywhere', and a model "
+              "cortex in which every job has its own place reproduces Lashley's result when the task can be done "
+              "six ways. Broca's patient loses speech and keeps understanding, Wernicke's does the reverse, and "
+              "a diagram of boxes and arrows predicts a third aphasia before it is seen. The logic is made "
+              "exact: one resource gives a single dissociation, a double one rules it out, and noisy tests with "
+              "a large screen of patients fake a double one about half the time. Penfield maps the body on "
+              "awake patients; the visual cortex spends nearly half its area on the ten degrees around the "
+              "centre of gaze, and the viewer finds the hole in each eye's view that the brain fills in. H.M. "
+              "loses the making of new memories and learns a skill all the same. In the split brain one half "
+              "knows what the other cannot say, and the talking half explains what it did not choose; the idea "
+              "of left-brained and right-brained people fails on 1,011 scans. Maps rewire with use, and the "
+              "answer to the old question is a network of specialized parts.",
+        handoff="What a recording or a scan of an intact brain measures is Part 8. The visual map and "
+                "receptive fields are Part 13, filling in is Part 14, and the body's map is Part 15. Neglect "
+                "returns with attention (Part 18), H.M. with the kinds of memory (Part 20), aphasia with "
+                "language (Part 23), blindsight and the interpreter with consciousness (Part 27), and critical "
+                "periods with development (Part 30). Maps of brain data as statistics are Part 49.",
+        outside="Part 2's difference between an experiment and a comparison of groups that formed themselves, "
+                "Part 3's reliability, and Part 4's file drawer and t test. Chapter 5 integrates 1/(E + c) and "
+                "uses a tangent; both are explained there.",
+        objectives={
+            "U": ["Name the lobes and the main structures under the cortex, with one line on what each is "
+                  "needed for and why that line is too simple.",
+                  "Tell the stories of Gage, Broca's and Wernicke's patients, H.M. and the split brain, "
+                  "separating what the record shows from what was added.",
+                  "Say what a single and a double dissociation each allow you to conclude."],
+            "M": ["Lesion a box-and-arrow model and predict which tasks fail; compute the chance that a screen "
+                  "of patients from a one-resource world contains both patterns.",
+                  "Integrate the cortical magnification function, find the share of the map near the centre of "
+                  "gaze, and place the blind spot on a screen.",
+                  "Compare one patient with a small control sample by z and by the single-case t test."],
+            "D": ["Explain why a lesion study is an observational study, and how the blood supply displaces a "
+                  "lesion-symptom map.",
+                  "Design a study that separates damage to a region from damage to a connection beneath it."],
+            "I": ["Read a neuropsychological report: the comparison group, its size, the number of tests given "
+                  "and the base rate of low scores in healthy people.",
+                  "Recognize a claim about 'what a brain region is for' that rests on a single dissociation."],
+        },
+        results=[
+            ("A lesioned route", r"\text{score}=\prod_{m\,\in\,\text{route}}(1-\ell_m)"),
+            ("A screen that finds both patterns",
+             r"1-(1-p_A)^N-(1-p_B)^N+(1-p_A-p_B)^N"),
+            ("Cortical magnification", r"M(E)=\frac{17.3}{E+0.75}\ \text{mm per degree}"),
+            ("Distance along the cortex", r"D(E)=17.3\,\ln\!\left(1+\frac{E}{0.75}\right)\ \text{mm}"),
+            ("One patient, n controls", r"t=\frac{x-\bar c}{s\,\sqrt{(n+1)/n}},\qquad \text{df}=n-1"),
+            ("Low scores in a healthy person", r"P(\text{at least one of }k)=1-0.95^{\,k}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's brain", "explainer/psychology/psyche/brain.py"),
+              ("Its tests", "tests/psychology/test_brain.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

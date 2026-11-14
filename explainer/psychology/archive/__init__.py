@@ -24,7 +24,7 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "ADRIAN_1926", "GOLGI_CAJAL_1906", "GIDON_2020", "LOEWI_1921", "HEBB_1949", "BLISS_LOMO_1973", "BI_POO_1998",
            "HARTLINE_RATLIFF_1957", "GEIER_2008", "DEL_CASTILLO_KATZ_1954", "LIU_2012", "TURNER_2008",
            "HARLOW_1868", "BROCA_1861", "DRONKERS_2007", "WERNICKE_1874", "LASHLEY_1929", "PENFIELD_BOLDREY_1937", "HORTON_HOYT_1991",
-           "SCOVILLE_MILNER_1957", "NIELSEN_2013", "MAGUIRE_2000", "AZEVEDO_2009", "RAICHLE_2002", "WEISKRANTZ_1974", "MAH_2014"]
+           "SCOVILLE_MILNER_1957", "NIELSEN_2013", "MAGUIRE_2000", "AZEVEDO_2009", "RAICHLE_2002", "WEISKRANTZ_1974", "MAH_2014", "WIESEL_HUBEL_1963", "MERZENICH_1984", "GAZZANIGA_1978"]
 
 
 @dataclass(frozen=True)
@@ -1024,6 +1024,55 @@ MAH_2014 = Dataset(
                                       "follows the territories of the arteries"},
 )
 
+WIESEL_HUBEL_1963 = Dataset(
+    key="wiesel_hubel_1963",
+    title="An eye closed early in life loses its hold on the visual cortex",
+    source="T. N. Wiesel and D. H. Hubel, Single-cell responses in striate cortex of kittens deprived of vision in "
+           "one eye, Journal of Neurophysiology 26 (1963) 1003-1017; D. H. Hubel and T. N. Wiesel, The period of "
+           "susceptibility to the physiological effects of unilateral eye closure in kittens, Journal of Physiology "
+           "206 (1970) 419-436",
+    cite=r"Wiesel \& Hubel (1963)",
+    checked="the references from PubMed Central and the outline from a history of the work through a web search, "
+            "2026-11-14; neither paper was read; that the same closure in an adult cat has little effect is from "
+            "the secondary account",
+    licence="facts only",
+    data={"finding": "in kittens with one eye closed from soon after birth, cortical cells came to respond to "
+                     "the open eye only",
+          "adults": "the same closure in adult cats, even for a year, gave a very different result"},
+)
+
+MERZENICH_1984 = Dataset(
+    key="merzenich_1984",
+    title="The map of the hand on the cortex is redrawn after a finger is lost",
+    source="M. M. Merzenich et al., Somatosensory cortical map changes following digit amputation in adult monkeys, "
+           "Journal of Comparative Neurology 224 (1984) 591-605; V. S. Ramachandran, D. Rogers-Ramachandran and "
+           "M. Stewart, Perceptual correlates of massive cortical reorganization, Science 258 (1992) 1159-1160",
+    cite=r"Merzenich et al.\ (1984)",
+    checked="the abstracts as summarized by a web search, 2026-11-14; neither paper was read",
+    licence="facts only",
+    data={"animals": "adult owl monkeys", "months": "2 to 8",
+          "finding": "the cortex that had served the lost finger came to respond to the neighbouring fingers and "
+                     "the palm",
+          "people": "in people who have lost an arm, touching the face can be felt in the missing hand"},
+)
+
+GAZZANIGA_1978 = Dataset(
+    key="gazzaniga_1978",
+    title="The split brain: what each hemisphere can report, and the interpreter",
+    source="M. S. Gazzaniga, The split brain in man, Scientific American 217(2) (1967) 24-29; M. S. Gazzaniga and "
+           "J. E. LeDoux, The Integrated Mind (Plenum, 1978); M. S. Gazzaniga, Forty-five years of split-brain "
+           "research and still going strong, Nature Reviews Neuroscience 6 (2005) 653-659",
+    cite=r"Gazzaniga \& LeDoux (1978)",
+    checked="the experiments from secondary accounts through a web search, 2026-11-14; none of the three was "
+            "read, and the references and the patient's sentence are from memory",
+    licence="facts only",
+    data={"where": "the California Institute of Technology, in Roger Sperry's laboratory, from the 1960s",
+          "finding": "a word shown to the right hemisphere cannot be named, and the left hand can still pick out "
+                     "the object",
+          "interpreter": "shown a chicken's claw (left hemisphere) and a snow scene (right), the patient explains "
+                         "the left hand's choice of a shovel by the chicken"},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -1034,4 +1083,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           DEL_CASTILLO_KATZ_1954, LIU_2012, TURNER_2008,
                           HARLOW_1868, BROCA_1861, DRONKERS_2007, WERNICKE_1874, LASHLEY_1929, PENFIELD_BOLDREY_1937,
                           HORTON_HOYT_1991, SCOVILLE_MILNER_1957, NIELSEN_2013, MAGUIRE_2000, AZEVEDO_2009,
-                          RAICHLE_2002, WEISKRANTZ_1974, MAH_2014)}
+                          RAICHLE_2002, WEISKRANTZ_1974, MAH_2014,
+                          WIESEL_HUBEL_1963, MERZENICH_1984, GAZZANIGA_1978)}

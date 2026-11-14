@@ -47,14 +47,22 @@ class Logic(VoiceoverScene):
                          label(r"this patient", font_size=22, color=THRESH).next_to(ax.c2p(r0, 1.05), UP, buff=0.05))
         side = VGroup(
             wrapped_label(r"the tempting reading: \ A and B are done by different parts, \ and the part for A "
-                          r"is damaged", 4.8, 27, WHITE),
-            wrapped_label(r"another reading: \ one part does both, \ and A needs more of it", 4.8, 27, P.ACCENT),
-            wrapped_label(rf"here the patient scores {r2(ia)} on A and {r2(ib)} on B, \ with one resource", 4.8, 27,
+                          r"is damaged", 5.6, 30, WHITE),
+            wrapped_label(r"another reading: \ one part does both, \ and A needs more of it", 5.6, 30, P.ACCENT),
+            wrapped_label(rf"here the patient scores {r2(ia)} on A and {r2(ib)} on B, \ with one resource", 5.6, 30,
                           THRESH),
-            wrapped_label(r"A single dissociation cannot tell the two readings apart.", 4.8, 28, LESION),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.2, -0.3, 0])
+            wrapped_label(r"A single dissociation cannot tell the two readings apart.", 5.6, 31, LESION),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.34).move_to([3.95, -0.3, 0])
         keep_in_frame(side)
         tag = psyche_tag()
+        # the case, before any theory: two tasks and one patient's scores
+        case = VGroup()
+        for name, v, col, word in ((r"task A: \ recognizing faces", 0.2, A_COL, r"impaired"),
+                                   (r"task B: \ recognizing objects", 0.8, B_COL, r"normal")):
+            case.add(VGroup(label(name, font_size=32, color=col), score_bar(v, col, 3.6, 0.45),
+                            label(word, font_size=28, color=LESION if v < 0.5 else SPARED)).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.14))
+        case.arrange(DOWN, aligned_edge=LEFT, buff=0.6).move_to([-3.6, -0.3, 0])
         with self.voiceover(
             "Let's make the reasoning exact. A patient with brain damage does badly on task A and normally on "
             "task B. Say A is recognizing faces, and B is recognizing objects. <bookmark mark='a'/> The "
@@ -69,10 +77,12 @@ class Logic(VoiceoverScene):
             "region is for rest on exactly this pattern."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
+            self.play(LaggedStart(*[FadeIn(c_, shift=RIGHT * 0.15) for c_ in case], lag_ratio=0.8), run_time=4.0)
             vo.wait_until("a")
             self.play(FadeIn(side[0]))
             vo.wait_until("b")
-            self.play(FadeIn(side[1]), FadeIn(A))
+            self.play(FadeOut(case), FadeIn(side[1]))
+            self.play(FadeIn(A))
             self.play(Create(cb), FadeIn(lb), Create(ca), FadeIn(la), run_time=3.0)
             vo.wait_until("c")
             self.play(FadeIn(patient), FadeIn(side[2]))
@@ -87,22 +97,22 @@ class Logic(VoiceoverScene):
         band = Rectangle(width=np.linalg.norm(ax.c2p(1, 0) - ax.c2p(0, 0)), height=0.5, stroke_width=0,
                          fill_color=LESION, fill_opacity=0.0)
         table = VGroup()
-        colx = [2.2, 4.6, 6.0]
+        colx = [1.6, 3.9, 5.9]
         for j, h in enumerate([r"", r"task A", r"task B"]):
-            table.add(label(h, font_size=26, color=[WHITE, A_COL, B_COL][j]).move_to([colx[j], 1.5, 0]))
+            table.add(label(h, font_size=31, color=[WHITE, A_COL, B_COL][j]).move_to([colx[j], 1.6, 0]))
         for i, (name, cells) in enumerate(((r"patient 1", (False, True)), (r"patient 2", (True, False)))):
-            y = 0.75 - 0.8 * i
-            table.add(label(name, font_size=28, color=WHITE).move_to([colx[0], y, 0]))
+            y = 0.85 - 0.8 * i
+            table.add(label(name, font_size=32, color=WHITE).move_to([colx[0], y, 0]))
             for j, ok in enumerate(cells):
-                table.add(label(r"normal" if ok else r"impaired", font_size=27, color=SPARED if ok else LESION).move_to(
+                table.add(label(r"normal" if ok else r"impaired", font_size=32, color=SPARED if ok else LESION).move_to(
                     [colx[j + 1], y, 0]))
         keep_in_frame(table)
         notes = VGroup(
-            wrapped_label(r"On these curves B is never below A. \ No amount of one resource gives patient 2.", 5.2,
-                          27, P.ACCENT),
+            wrapped_label(r"On these curves B is never below A. \ No amount of one resource gives patient 2.", 5.8,
+                          30, P.ACCENT),
             wrapped_label(r"So there are at least two resources, \ and each can be damaged without the other: \ a "
-                          r"double dissociation.", 5.2, 28, WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.1, -1.6, 0])
+                          r"double dissociation.", 5.8, 30, WHITE),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([3.95, -1.75, 0])
         keep_in_frame(notes)
         tag = psyche_tag()
         with self.voiceover(
@@ -129,9 +139,9 @@ class Logic(VoiceoverScene):
         d = load("dissociation")
         k = int(np.argmin(np.abs(d["noises"] - 0.05)))
         head = heading(r"Now make the tests as noisy as real tests are")
-        A = axes([0, 1.15], [0, 1.15], x_length=4.4, y_length=4.4, xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],
+        A = axes([0, 1.15], [0, 1.15], x_length=4.7, y_length=4.7, xticks=[0, 0.5, 1], yticks=[0, 0.5, 1],
                  xfmt=lambda v: f"{v:.1f}", yfmt=lambda v: f"{v:.1f}", xlabel=r"score on task A",
-                 ylabel=r"score on task B", center=[-4.4, -0.7, 0])
+                 ylabel=r"score on task B", center=[-4.25, -0.6, 0])
         ax = A.ax
         pts = d["cloud_one"]
         kinds = d["cloud_one_kind"]
@@ -139,26 +149,29 @@ class Logic(VoiceoverScene):
                             color=KIND[int(kk)], fill_opacity=0.8) for (a, b), kk in zip(pts, kinds)])
         cuts = VGroup(DashedLine(ax.c2p(d["cut_a"], 0), ax.c2p(d["cut_a"], 1.15), color=A_COL, stroke_width=2),
                       DashedLine(ax.c2p(0, d["cut_b"]), ax.c2p(1.15, d["cut_b"]), color=B_COL, stroke_width=2))
-        corner = label(r"B impaired, A normal", font_size=20, color=THRESH).move_to(ax.c2p(1.0, 0.35))
-        B = axes([0, 200], [0, 1.05], x_length=4.6, y_length=3.7, xticks=[0, 50, 100, 150, 200], yticks=[0, 0.5, 1.0],
+        corner = label(r"B impaired, A normal", font_size=22, color=THRESH).move_to(ax.c2p(0.98, 0.4))
+        B = axes([0, 200], [0, 1.05], x_length=5.6, y_length=2.5, xticks=[0, 50, 100, 150, 200], yticks=[0, 0.5, 1.0],
                  yfmt=lambda v: f"{v:.1f}", xlabel=r"patients screened", ylabel=r"chance of finding both patterns",
-                 center=[1.0, -0.8, 0])
+                 center=[2.9, -0.2, 0])
         bx = B.ax
         n = d["screened"]
         c_quiet = curve(bx, n, d["chance_quiet"], GREY_B, stroke_width=3)
         c_typ = curve(bx, n, d["chance_typical"], THRESH, stroke_width=4)
         c_noisy = curve(bx, n, d["chance_noisy"], LESION, stroke_width=3)
-        lg = legend([(GREY_B, r"perfect tests"), (THRESH, r"tests as noisy as controls vary"),
-                     (LESION, r"twice as noisy")], font_size=20)
-        lg.next_to(B, UP, buff=0.1).align_to(B, LEFT)
+        lg = legend([(LESION, r"tests twice as noisy"), (THRESH, r"tests as noisy as controls vary"),
+                     (GREY_B, r"perfect tests")], font_size=21)
+        lg.next_to(bx.c2p(200, 0.04), UL, buff=0.08)
         at100 = float(d["chance_typical"][99])
         side = VGroup(
             wrapped_label(rf"one resource, 300 patients: \ {pct(d['one_a_only'][k])} fail only A; \ "
-                          rf"{pct(d['one_b_only'][k], 1)} fail only B", 3.4, 25, WHITE),
+                          rf"{pct(d['one_b_only'][k], 1)} fail only B", 6.6, 28, WHITE),
             wrapped_label(rf"screen 100 patients: \ a {pct(at100)} chance of a ``double dissociation'' that is "
-                          r"not there", 3.4, 25, THRESH),
-            wrapped_label(r"and it is the striking case that gets written up", 3.4, 25, P.ACCENT),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([5.25, -0.7, 0])
+                          r"not there", 6.6, 27, THRESH),
+            wrapped_label(r"and it is the striking case that gets written up", 6.6, 27, P.ACCENT),
+        )
+        side[0].move_to([3.1, 2.35, 0])
+        side[1].move_to([3.1, -2.5, 0])
+        side[2].next_to(side[1], DOWN, buff=0.15).align_to(side[1], LEFT)
         keep_in_frame(side)
         tag = psyche_tag(r"simulated patients: Psyche")
         with self.voiceover(
@@ -192,21 +205,21 @@ class Logic(VoiceoverScene):
     def licence(self):
         head = heading(r"What each pattern lets you say")
         rows = VGroup(
-            VGroup(label(r"a single dissociation", font_size=32, color=A_COL),
-                   wrapped_label(r"one task may only be harder. \ Nothing yet about separate parts.", 11.5, 28,
+            VGroup(label(r"a single dissociation", font_size=36, color=A_COL),
+                   wrapped_label(r"one task may only be harder. \ Nothing yet about separate parts.", 12.4, 31,
                                  WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
-            VGroup(label(r"a double dissociation", font_size=32, color=B_COL),
+            VGroup(label(r"a double dissociation", font_size=36, color=B_COL),
                    wrapped_label(r"at least two resources, \ if the tests are reliable, the difference is large, "
-                                 r"and the reverse case has been found more than once", 11.5, 28, WHITE)).arrange(
+                                 r"and the reverse case has been found more than once", 12.4, 31, WHITE)).arrange(
                 DOWN, aligned_edge=LEFT, buff=0.08),
-            VGroup(label(r"a lesion and a loss", font_size=32, color=LESION),
+            VGroup(label(r"a lesion and a loss", font_size=36, color=LESION),
                    wrapped_label(r"the damaged tissue was \emph{needed} for the task. \ It does not follow that the "
-                                 r"task is done there, or only there.", 11.5, 28, WHITE)).arrange(
+                                 r"task is done there, or only there.", 12.4, 31, WHITE)).arrange(
                 DOWN, aligned_edge=LEFT, buff=0.08),
-            VGroup(label(r"and always", font_size=32, color=P.ACCENT),
+            VGroup(label(r"and always", font_size=36, color=P.ACCENT),
                    wrapped_label(r"the answer depends on the task you chose. \ Lashley's maze and Broca's patient "
-                                 r"were both real.", 11.5, 28, WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to([0, -0.35, 0])
+                                 r"were both real.", 12.4, 31, WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.08),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.45).move_to([0, -0.35, 0])
         with self.voiceover(
             "So here are the rules, and we'll use them for the rest of this part. <bookmark mark='a'/> A "
             "single dissociation. One task may simply be harder. It tells you nothing yet about separate "

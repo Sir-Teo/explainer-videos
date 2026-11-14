@@ -55,8 +55,7 @@ class Tour(VoiceoverScene):
     def outside(self):
         head = heading(r"From the side: \ four lobes, and two things underneath")
         brain = brain_side(6.2, fill=0.18).move_to([-3.5, 0.0, 0])
-        front = label(r"front", font_size=22, color=GREY_B).next_to(brain, LEFT, buff=0.1).shift(UP * 0.3)
-        keep_in_frame(front)
+        front = label(r"front", font_size=22, color=GREY_B).move_to(at(brain, -0.95, 0.6))
         entries = [
             ("occipital", r"occipital lobe", OCCIPITAL, r"seeing"),
             ("temporal", r"temporal lobe", TEMPORAL, r"hearing, recognizing, and, on its inner side, memory"),
@@ -99,30 +98,10 @@ class Tour(VoiceoverScene):
 
     def inside(self):
         head = heading(r"Cut down the middle: \ what the cortex wraps around")
-        k = 3.1
-        c0 = np.array([-3.6, 0.1, 0])
-
-        def P_(x, y):
-            return c0 + np.array([x * k, y * k, 0])
-
-        outline = [(-1.0, -0.05), (-0.95, 0.25), (-0.75, 0.5), (-0.45, 0.66), (-0.12, 0.72), (0.2, 0.72), (0.5, 0.62),
-                   (0.68, 0.45), (0.85, 0.25), (0.92, 0.0), (0.85, -0.2), (0.68, -0.3), (0.45, -0.33), (0.2, -0.42),
-                   (-0.1, -0.45), (-0.4, -0.4), (-0.58, -0.28), (-0.8, -0.18)]
-        hemi = Polygon(*[P_(x, y) for x, y in outline], color=GREY_B, stroke_width=3, fill_color="#1A2130",
-                       fill_opacity=1).round_corners(0.12)
-        stem = Polygon(P_(0.1, -0.2), P_(0.2, -0.86), P_(0.36, -0.86), P_(0.3, -0.2), color=STEM, stroke_width=3,
-                       fill_color=STEM, fill_opacity=0.45).round_corners(0.08)
-        cb = Ellipse(width=0.62 * k, height=0.36 * k, color=CEREBELLUM, stroke_width=3, fill_color=CEREBELLUM,
-                     fill_opacity=0.35).move_to(P_(0.6, -0.5))
-        callosum = ArcBetweenPoints(P_(-0.45, 0.2), P_(0.4, 0.2), angle=-PI * 0.55, color=VOLT, stroke_width=12)
-        thalamus = Ellipse(width=0.34 * k, height=0.2 * k, color=DEEP, stroke_width=3, fill_color=DEEP,
-                           fill_opacity=0.6).move_to(P_(0.05, 0.08))
-        hypo = Dot(P_(-0.14, -0.06), radius=0.12, color=LESION)
-        basal = Ellipse(width=0.42 * k, height=0.26 * k, color=FRONTAL, stroke_width=3).move_to(P_(-0.25, 0.14))
-        basal = DashedVMobject(basal, num_dashes=28)
-        hippo = ArcBetweenPoints(P_(-0.12, -0.24), P_(0.34, -0.16), angle=PI * 0.35, color=TEMPORAL, stroke_width=11)
-        amyg = Dot(P_(-0.22, -0.24), radius=0.13, color=DATA)
-        drawing = VGroup(stem, cb, hemi)
+        b = brain_medial(6.2, [-3.6, 0.1, 0])
+        callosum, thalamus, basal, hippo, amyg, hypo = (b.callosum, b.thalamus, b.basal, b.hippocampus, b.amygdala,
+                                                        b.hypothalamus)
+        drawing = b.shell
         parts = [
             (callosum, r"corpus callosum", VOLT, r"the cable between the two halves"),
             (thalamus, r"thalamus", DEEP, r"the relay: \ nearly every sense passes through it to the cortex"),

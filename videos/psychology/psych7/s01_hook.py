@@ -18,7 +18,7 @@ class Hook(VoiceoverScene):
         hd = head_outline(5.4).move_to([-3.6, -0.4, 0])
         c = hd.get_center()
         # the rod: in under the left cheekbone, out through the top of the head, toward the front
-        a, b = c + np.array([0.75, -1.75, 0]), c + np.array([0.55, 3.0, 0])
+        a, b = c + np.array([1.15, -1.45, 0]), c + np.array([0.3, 3.0, 0])
         rod = Line(a, a, color=THRESH, stroke_width=9)
         rod_l = label(r"the tamping iron", font_size=24, color=THRESH).next_to(b, RIGHT, buff=0.15)
         facts = VGroup(
@@ -59,17 +59,19 @@ class Hook(VoiceoverScene):
         story = VGroup(
             label(r"the story", font_size=36, color=LESION),
             wrapped_label(r"A sober, careful foreman becomes a foul-mouthed drifter who can never hold a job "
-                          r"again.", 5.6, 28, WHITE),
-            wrapped_label(r"So the frontal lobes hold a person's character.", 5.6, 28, WHITE),
+                          r"again.", 6.0, 30, WHITE),
+            wrapped_label(r"So the frontal lobes hold a person's character.", 6.0, 30, WHITE),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
         record = VGroup(
             label(r"the record", font_size=36, color=SPARED),
-            wrapped_label(r"1848: \ his doctor's short report of the injury and the recovery", 5.6, 28, WHITE),
+            wrapped_label(r"1848: \ his doctor's short report of the injury and the recovery", 6.0, 30, WHITE),
             wrapped_label(r"1868: \ a second report, twenty years on, with a few sentences on his character: \ "
-                          r"to his friends he was ``no longer Gage''", 5.6, 28, WHITE),
-            wrapped_label(r"and in between: \ years driving a stagecoach in Chile", 5.6, 28, P.ACCENT),
+                          r"to his friends he was ``no longer Gage''", 6.0, 30, WHITE),
+            wrapped_label(r"and in between: \ years driving a stagecoach in Chile", 6.0, 30, P.ACCENT),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
-        cols = VGroup(story, record).arrange(RIGHT, buff=0.9, aligned_edge=UP).move_to([0, 0.1, 0])
+        cols = VGroup(story, record).arrange(RIGHT, buff=0.7, aligned_edge=UP).move_to([0, 0.2, 0])
+        if cols.width > 13.4:
+            cols.width = 13.4
         end = wrapped_label(r"He survived, and something changed. \ How much, and for how long, the record does "
                             r"not say.", 12.6, 30, GREY_A).to_edge(DOWN, buff=0.7)
         src = historical_tag(archive.HARLOW_1868.cite)

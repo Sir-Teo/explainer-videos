@@ -78,18 +78,18 @@ class Speech(VoiceoverScene):
         table = VGroup()
         heads = [r"", r"speaks", r"understands"]
         data = [(r"damage at the front", LESION, (False, True)), (r"damage further back", DATA, (True, False))]
-        colx = [2.0, 4.3, 5.9]
+        colx = [1.9, 4.5, 6.0]
         for j, h in enumerate(heads):
-            table.add(label(h, font_size=26, color=GREY_A).move_to([colx[j], 1.3, 0]))
+            table.add(label(h, font_size=30, color=GREY_A).move_to([colx[j], 1.3, 0]))
         for i, (name, col, cells) in enumerate(data):
             y = 0.5 - 0.9 * i
-            table.add(label(name, font_size=27, color=col).move_to([colx[0], y, 0]))
+            table.add(label(name, font_size=30, color=col).move_to([colx[0], y, 0]))
             for j, ok in enumerate(cells):
-                table.add(label(r"yes" if ok else r"no", font_size=34, color=SPARED if ok else LESION).move_to(
+                table.add(label(r"yes" if ok else r"no", font_size=40, color=SPARED if ok else LESION).move_to(
                     [colx[j + 1], y, 0]))
         keep_in_frame(table)
         end = wrapped_label(r"Each patient can do what the other cannot. \ Hold that pattern: \ the next chapter "
-                            r"is about what it proves.", 12.6, 29, P.ACCENT).to_edge(DOWN, buff=0.55)
+                            r"is about what it proves.", 12.6, 29, P.ACCENT).to_edge(DOWN, buff=0.95)
         src = historical_tag(archive.WERNICKE_1874.cite)
         tag = note(r"schematic").to_corner(DR, buff=0.2)
         with self.voiceover(
@@ -116,15 +116,15 @@ class Speech(VoiceoverScene):
     def _diagram(self, origin, cut=None):
         """Wernicke and Lichtheim's diagram.  ``cut`` names a module to draw as destroyed."""
         o = np.asarray(origin, float)
-        pos = {"hearing": (-2.6, -1.7), "word sounds": (-2.6, 0.0), "concepts": (0.0, 1.6),
-               "word movements": (2.6, 0.0), "articulation": (2.6, -1.7)}
+        pos = {"hearing": (-1.95, -1.7), "word sounds": (-1.95, 0.0), "concepts": (0.0, 1.6),
+               "word movements": (1.95, 0.0), "articulation": (1.95, -1.7)}
         text = {"hearing": r"hearing", "word sounds": r"sounds of words", "concepts": r"concepts",
                 "word movements": r"movements of words", "articulation": r"mouth and tongue"}
         boxes = {}
         for name, (x, y) in pos.items():
             col = LESION if name == cut else (TEMPORAL if name in ("hearing", "word sounds") else
                                               FRONTAL if name in ("word movements", "articulation") else VOLT)
-            boxes[name] = module_box(text[name], col, width=2.5, height=0.75, font_size=24).move_to(
+            boxes[name] = module_box(text[name], col, width=2.35, height=0.75, font_size=24).move_to(
                 o + np.array([x, y, 0]))
         arrows = {
             "in": link(boxes["hearing"].get_top(), boxes["word sounds"].get_bottom()),
@@ -145,22 +145,22 @@ class Speech(VoiceoverScene):
     def diagram(self):
         a = load("aphasia")
         head = heading(r"The first diagram of a function: \ boxes, arrows, and a prediction")
-        d = self._diagram([-3.4, -0.4, 0])
+        d = self._diagram([-3.75, -0.4, 0])
         tasks = a["tasks"]
         short = {"understand speech": r"understand", "speak": r"speak", "repeat": r"repeat"}
-        colx = [1.3, 4.1, 5.3, 6.5]
+        colx = [1.0, 4.0, 5.35, 6.5]
         table = VGroup()
         for j, t in enumerate(tasks):
-            table.add(label(short[t], font_size=23, color=GREY_A).move_to([colx[j + 1], 1.55, 0]))
+            table.add(label(short[t], font_size=26, color=GREY_A).move_to([colx[j + 1], 1.55, 0]))
         names = [r"cut the front box", r"cut the back box", r"cut the pathway"]
         cols = [FRONTAL, TEMPORAL, THRESH]
         rows = VGroup()
         for i in range(3):
             y = 0.8 - 0.85 * i
-            row = VGroup(label(names[i], font_size=25, color=cols[i]).move_to([colx[0] + 0.9, y, 0]))
+            row = VGroup(label(names[i], font_size=28, color=cols[i]).move_to([colx[0] + 0.9, y, 0]))
             for j in range(len(tasks)):
                 ok = a["full"][i][j] > 0.5
-                row.add(label(r"yes" if ok else r"no", font_size=30, color=SPARED if ok else LESION).move_to(
+                row.add(label(r"yes" if ok else r"no", font_size=36, color=SPARED if ok else LESION).move_to(
                     [colx[j + 1], y, 0]))
             rows.add(row)
         VGroup(table, rows).shift(RIGHT * 0.1)

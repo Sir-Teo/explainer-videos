@@ -23,25 +23,26 @@ class Bumps(VoiceoverScene):
 
     def gall(self):
         head = heading(r"Around 1800: \ a good idea and a bad method")
-        hd = head_outline(5.0).move_to([-4.0, -0.3, 0])
-        c = hd.get_center() + np.array([-0.3, 0.9, 0])
-        names = [r"caution", r"wit", r"pride", r"love of children", r"tune", r"number", r"secretiveness"]
-        g = np.random.default_rng(18)
+        hd = head_outline(5.6).move_to([-3.9, -0.4, 0])
+        c = hd.get_center() + np.array([-0.35, 0.95, 0])
+        # five of Gall's organs: three on an outer ring under the skull, two on an inner one
+        spots = [(r"caution", 0.15, 1.0), (r"wit", 0.33, 0.6), (r"pride", 0.5, 1.0), (r"tune", 0.67, 0.6),
+                 (r"number", 0.85, 1.0)]
         patches = VGroup()
-        for i, n in enumerate(names):
-            a = PI * (0.1 + 0.8 * i / (len(names) - 1))
-            p = c + np.array([1.55 * np.cos(a), 1.05 * np.sin(a) - 0.1 * (i % 2), 0])
-            patches.add(VGroup(Ellipse(width=0.9, height=0.5, color=THRESH, stroke_width=2).move_to(p),
-                               label(n, font_size=15, color=THRESH).move_to(p)))
-        good = VGroup(label(r"the good idea", font_size=32, color=SPARED),
+        for n, a, ring in spots:
+            p = c + np.array([1.75 * ring * np.cos(PI * a), 1.2 * ring * np.sin(PI * a), 0])
+            patches.add(VGroup(Ellipse(width=1.05, height=0.5, color=THRESH, stroke_width=2).move_to(p),
+                               label(n, font_size=20, color=THRESH).move_to(p)))
+        good = VGroup(label(r"the good idea", font_size=36, color=SPARED),
                       wrapped_label(r"The brain is the organ of the mind, \ and it has parts with different "
-                                    r"jobs.", 5.8, 28, WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        bad = VGroup(label(r"the bad method", font_size=32, color=LESION),
+                                    r"jobs.", 6.2, 31, WHITE)).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
+        bad = VGroup(label(r"the bad method", font_size=36, color=LESION),
                      wrapped_label(r"A strong faculty swells its organ; \ the organ raises a bump on the skull; "
-                                   r"\ so read the bumps.", 5.8, 28, WHITE),
+                                   r"\ so read the bumps.", 6.2, 31, WHITE),
                      wrapped_label(r"Evidence: \ striking cases that fit. \ Cases that did not fit were explained "
-                                   r"away.", 5.8, 28, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
-        side = VGroup(good, bad).arrange(DOWN, aligned_edge=LEFT, buff=0.5).move_to([3.4, -0.2, 0])
+                                   r"away.", 6.2, 31, GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.18)
+        side = VGroup(good, bad).arrange(DOWN, aligned_edge=LEFT, buff=0.55).move_to([3.4, -0.3, 0])
+        keep_in_frame(side)
         tag = note(r"schematic").to_corner(DR, buff=0.2)
         with self.voiceover(
             "Around 1800 the Viennese physician Franz Joseph Gall proposed something that scandalized his "
@@ -140,6 +141,38 @@ class Bumps(VoiceoverScene):
                               r"gone, hardly on where. \ ``Mass action.''", 12.6, 28, WHITE).move_to([0, 2.35, 0])
         src = historical_tag(archive.LASHLEY_1929.cite)
         tag = psyche_tag(r"computed: two model brains")
+        # while the story is told: a maze, six rats each missing a different piece, and four ways to run a maze
+        u = 0.62
+        walls = [((0, 0), (5, 0)), ((5, 0), (5, 4)), ((5, 5), (0, 5)), ((0, 5), (0, 1)), ((1, 0), (1, 3)),
+                 ((1, 4), (3, 4)), ((2, 1), (2, 3)), ((2, 1), (4, 1)), ((3, 2), (3, 4)), ((4, 1), (4, 4)),
+                 ((3, 2), (4, 2)), ((4, 5), (4, 4))]
+        maze = VGroup(*[Line([a[0] * u, a[1] * u, 0], [b[0] * u, b[1] * u, 0], color=GREY_B, stroke_width=4)
+                        for a, b in walls])
+        route = VMobject(color=THRESH, stroke_width=4).set_points_as_corners(
+            [np.array([x * u, y * u, 0]) for x, y in ((-0.4, 0.5), (0.5, 0.5), (0.5, 3.5), (1.5, 3.5), (1.5, 0.5),
+                                                       (4.5, 0.5), (4.5, 4.5), (5.4, 4.5))])
+        maze_g = VGroup(maze, route).move_to([-4.6, -0.6, 0])
+        maze_l = VGroup(label(r"start", font_size=22, color=GREY_A).next_to(route.get_start(), DOWN, buff=0.12),
+                        label(r"food", font_size=22, color=THRESH).next_to(route.get_end(), UP, buff=0.12))
+        g = np.random.default_rng(29)
+        rats = VGroup()
+        for k in range(6):
+            cortex = VGroup(Ellipse(width=0.62, height=1.25, color=GREY_B, stroke_width=2.5).shift(LEFT * 0.34),
+                            Ellipse(width=0.62, height=1.25, color=GREY_B, stroke_width=2.5).shift(RIGHT * 0.34))
+            r = 0.12 + 0.05 * k
+            blob = VGroup(*[Ellipse(width=2 * r * 0.8, height=2 * r, stroke_width=0, fill_color=LESION,
+                                    fill_opacity=0.85).move_to([s * 0.34, g.uniform(-0.3, 0.3), 0]) for s in (-1, 1)])
+            rats.add(VGroup(cortex, blob))
+        rats.arrange_in_grid(2, 3, buff=(0.45, 0.35)).move_to([-0.7, -0.45, 0])
+        rats_l = wrapped_label(r"different pieces of cortex, \ in different rats", 5.4, 25, LESION).next_to(
+            rats, DOWN, buff=0.2)
+        ways = VGroup(label(r"four ways through a maze", font_size=28, color=P.ACCENT),
+                      *[label(t, font_size=28, color=WHITE) for t in (r"by sight", r"by smell",
+                                                                      r"by the feel of the walls",
+                                                                      r"by remembering its own turns")]).arrange(
+            DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.5, -0.5, 0])
+        keep_in_frame(ways)
+        opening = VGroup(maze_g, maze_l, rats, rats_l, ways)
         with self.voiceover(
             "A century later the American psychologist Karl Lashley ran the same kind of experiment on a "
             "question we met in Part 6: where is a memory? <bookmark mark='a'/> He trained rats in mazes, "
@@ -159,9 +192,15 @@ class Bumps(VoiceoverScene):
             "in every chapter."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src), FadeIn(tag))
+            self.play(FadeIn(maze), FadeIn(maze_l))
+            self.play(Create(route), run_time=3.0)
             vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(r_) for r_ in rats], lag_ratio=0.4), FadeIn(rats_l), run_time=4.0)
             self.play(FadeIn(story))
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(w, shift=RIGHT * 0.15) for w in ways], lag_ratio=0.9), run_time=14.0)
             vo.wait_until("c")
+            self.play(FadeOut(opening))
             self.play(FadeIn(panels[0][0]), FadeIn(panels[0][3]))
             self.play(FadeIn(panels[0][1], lag_ratio=0.01), run_time=2.0)
             self.play(Create(panels[0][2]), FadeIn(side[0]))

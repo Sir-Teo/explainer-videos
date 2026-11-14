@@ -771,3 +771,8 @@ shown(7, "RAICHLE_2002", "a measurement of energy use, used as a number")
 shown(7, "WEISKRANTZ_1974", "one patient, described without figures; blindsight is entered with awareness",
       row_in=27)
 shown(7, "MAH_2014", "a methods finding shown at the frontier, beside the series' own simulation")
+shown(7, "WIESEL_HUBEL_1963", "the critical period for one eye's hold on the cortex: told as history; entered with "
+      "development", row_in=30)
+shown(7, "MERZENICH_1984", "remapping after the loss of a finger: told as history, without figures")
+shown(7, "GAZZANIGA_1978", "the split-brain experiments: told as the cases they were; what they show about "
+      "awareness is entered in Part 27", row_in=27)

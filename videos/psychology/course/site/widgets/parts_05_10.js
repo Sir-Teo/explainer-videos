@@ -250,4 +250,112 @@
       note: "Nothing you answer is stored or sent: it lives in this page and is gone when you close it. The green line is not data. It is the textbook explanation, computed: a centre-surround filter makes a crossing dimmer than a street because more of its surround is lit, and the line shows how much dimmer, relative to the straight grid. On that account the spots should fade gradually as the streets bend, and should still be there at moderate waviness. Geier and his colleagues reported in 2008 that for most observers a slight curve is enough to abolish them. If your dots fall to zero while the line is still high, you have repeated the observation that put the explanation in doubt. There is no right answer on any trial: the experiment is asking what you see. The effect depends on the size of the grid on your screen and on where you look, so try it at arm's length without fixing on one crossing.",
     });
   };
+  // Part 7: find the blind spot of your right eye, and measure it.  A dot crosses the panel while you look at a
+  // cross; you press when it vanishes and again when it returns.  Sweeps run outward and inward by turns, so the
+  // time you take to react shifts the two edges in opposite directions and cancels in the average.
+  W.blindspot = function (el) {
+    var w = null, raf = 0;
+    var BLOCK = 4, DUR = 9000, X0 = 0.07, FROM = 0.18, TO = 0.95, YOU = "#f2c14e", TYP = "#5bd18b";
+    var CENTRE = 15, NEAR = 12.25, FAR = 17.75, RAD = Math.PI / 180;   // a typical eye, in degrees from fixation
+    var S = { phase: "idle", sweep: 0, t0: 0, presses: [], log: [], missed: 0 };
+
+    function frac() { return Math.min(1, (T.now() - S.t0) / DUR); }
+    function outward() { return S.sweep % 2 === 1; }
+    // the dot's distance from the cross, as a share of the panel's width
+    function offset() { var f = frac(), u = outward() ? f : 1 - f; return FROM + (TO - FROM) * u - X0; }
+    function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+    function tick() {
+      raf = 0;
+      if (S.phase !== "sweep" || !w) return;
+      if (frac() >= 1) { finish(); return; }
+      w.render();
+      raf = requestAnimationFrame(tick);
+    }
+    function begin() {
+      S.sweep++; S.presses = []; S.t0 = T.now(); S.phase = "sweep";
+      w.render(); stop(); raf = requestAnimationFrame(tick);
+    }
+    function finish() {
+      stop();
+      if (S.presses.length === 2) {
+        S.log.push({ near: Math.min(S.presses[0], S.presses[1]), far: Math.max(S.presses[0], S.presses[1]), out: outward() });
+      } else S.missed++;
+      S.phase = "gap"; w.render();
+      task.later(function () { if (S.sweep >= BLOCK) { S.phase = "done"; w.render(); } else begin(); }, 700);
+    }
+    var task = T.create(el, { keys: { " ": 0 }, accepting: function () { return S.phase === "sweep" && S.presses.length < 2; }, respond: press });
+    function press() {
+      if (S.phase !== "sweep" || S.presses.length >= 2 || !w) return;
+      S.presses.push(offset()); task.count++;
+      if (S.presses.length === 2) finish(); else w.render();
+    }
+    function mean() {
+      var n = S.log.length, a = 0, b = 0, i;
+      for (i = 0; i < n; i++) { a += S.log[i].near; b += S.log[i].far; }
+      return n ? { n: n, near: a / n, far: b / n, centre: (a + b) / (2 * n) } : { n: 0 };
+    }
+    // If the middle of your blind spot is CENTRE degrees out, your eye is centre / tan(CENTRE) from the screen
+    // (in panel widths), and an offset x on the screen is atan(x / distance) degrees out.
+    function degrees(x, m) { var d = m.centre / Math.tan(CENTRE * RAD); return Math.atan(x / d) / RAD; }
+
+    w = QB.widget(el, {
+      title: "Find your blind spot, and measure it",
+      sub: "Close your left eye and look at the cross with your right. Sit about one and a half times the black panel's width from the screen. A dot crosses the panel: press the space bar (or tap the panel) the moment it vanishes, and again the moment it comes back. Keep looking at the cross.",
+      panels: 2, height: 340, weights: [1.7, 1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: function () { task.clear(); stop(); S.sweep = 0; begin(); } },
+        { label: "Clear", act: function () { task.clear(); stop(); S.phase = "idle"; S.sweep = 0; S.presses = []; S.log = []; S.missed = 0; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), m = mean(), i;
+        var cx = b.x + X0 * b.w, cy = b.cy - 8;
+        ctx.save();
+        ctx.textBaseline = "middle"; ctx.textAlign = "center";
+        if (S.phase === "idle") {
+          T.message(ctx, b, "On you", "Press Start. Four sweeps: the dot goes out, comes back, goes out, comes back. If it never vanishes, move a little closer to the screen or further from it and start again.");
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "Block finished.", m.n
+            ? "Your blind spot begins " + QB.pct(m.near, 0) + " of the panel's width from the cross and ends at " + QB.pct(m.far, 0) + ". Press Start for four more sweeps; they are averaged with these."
+            : "No sweep had both presses. If the dot never vanished, change your distance from the screen and press Start.");
+        } else {
+          ctx.strokeStyle = C.ink; ctx.lineWidth = 2.5; ctx.beginPath();
+          ctx.moveTo(cx - 8, cy); ctx.lineTo(cx + 8, cy); ctx.moveTo(cx, cy - 8); ctx.lineTo(cx, cy + 8); ctx.stroke();
+          if (S.phase === "sweep") {
+            ctx.fillStyle = YOU; ctx.beginPath(); ctx.arc(cx + offset() * b.w, cy, Math.max(4, b.w / 110), 0, 6.2832); ctx.fill();
+          }
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("sweep " + S.sweep + " of " + BLOCK + (outward() ? ": outward" : ": inward"), b.cx, b.y + 22);
+          ctx.fillText(S.presses.length === 0 ? "space, or tap: it has vanished" : S.presses.length === 1 ? "space, or tap: it is back" : "",
+            b.cx, b.y + b.h - 24);
+        }
+        ctx.restore();
+
+        var a = g[1].axes({ x: [8, 22], y: [0, 6.2], title: "The hole, if its middle is 15 degrees out", xlabel: "degrees from where you are looking" });
+        a.line([NEAR, FAR], [5.3, 5.3], { color: TYP, width: 7 });
+        a.text(NEAR, 5.85, "a typical eye: 5.5 degrees wide", { color: TYP, size: 11 });
+        if (m.n) {
+          var shown = S.log.slice(-4);
+          for (i = 0; i < shown.length; i++) {
+            a.line([degrees(shown[i].near, m), degrees(shown[i].far, m)], [3.6 - 0.75 * i, 3.6 - 0.75 * i], { color: YOU, width: 3 });
+            a.text(21.8, 3.6 - 0.75 * i, shown[i].out ? "out" : "in", { color: C.muted, align: "right", size: 10.5 });
+          }
+          a.line([degrees(m.near, m), degrees(m.far, m)], [4.45, 4.45], { color: YOU, width: 7 });
+          a.text(8.2, 4.45, "you", { color: YOU, size: 11.5, bold: true });
+        } else {
+          a.text(8.2, 3.4, "Your sweeps appear here.", { color: C.muted, size: 11.5 });
+        }
+      },
+      readout: function () {
+        var m = mean();
+        return [
+          ["sweeps with both presses", String(m.n) + (S.missed ? " (" + S.missed + " without)" : "")],
+          ["width of the hole, over its distance out", m.n ? ((m.far - m.near) / m.centre).toFixed(2) + " (typical: 0.38)" : "–"],
+          ["its width, if centred 15 degrees out", m.n ? (degrees(m.far, m) - degrees(m.near, m)).toFixed(1) + " degrees" : "–"],
+          ["your eye's distance from the screen", m.n ? (m.centre / Math.tan(CENTRE * RAD)).toFixed(1) + " panel widths" : "–"],
+        ];
+      },
+      note: "Nothing you press is stored or sent: it lives in this page and is gone when you close it. The page cannot know how far you sit from the screen, so it reports what does not depend on that: the hole's width as a share of its distance from where you look. To turn that into degrees it assumes the middle of your blind spot is 15 degrees out, which is typical, and eyes differ. You react a little late, which moves both edges outward on an outward sweep and inward on an inward one; averaging the two directions cancels it. The green bar is a textbook value, not a measurement of you.",
+    });
+  };
 })();
