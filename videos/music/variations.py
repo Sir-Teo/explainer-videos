@@ -73,6 +73,8 @@ LEDGER = [
      "measure": r"72 pulses, 12 voices, each pulse struck once; 8 changes on 4 bells; 14 notes in 13 steps to the tritave"},
     {"part": 34, "title": r"as Bilawal: an alap over the drone, then a gat in Teentaal with a tihai", "seconds": 27.3,
      "measure": r"alap of 9 notes; a gat of 16 beats; tihai 3 + 2 + 3 + 2 + 3 beats from beat 5, its last stroke on sam"},
+    {"part": 35, "title": r"in Rast, Bayati and Hijaz, after a taqsim", "seconds": 26.2,
+     "measure": r"of 14 notes, 2 move off the piano's keys in Rast, 6 change in Bayati, 4 in Hijaz"},
 ]
 
 
