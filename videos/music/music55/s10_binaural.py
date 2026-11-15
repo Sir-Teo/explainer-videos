@@ -17,7 +17,7 @@ class Binaural(SoundScene):
         chapter(self, 9, r"Binaural rendering", r"Can two headphone channels put a sound anywhere round you?")
         self.ears()
         self.hrtf()
-        self.render()
+        self.renderer()
         self.circle()
         self.outside()
         self.tracking()
@@ -61,7 +61,7 @@ class Binaural(SoundScene):
                    "sound alike.", marks="bcdef")
 
     # ------------------------------------------------------------------
-    def render(self):
+    def renderer(self):
         src = block(r"a dry sound $x$", TUNE, w=2.4).move_to(LEFT * 5.0)
         dirb = block(r"its direction $\theta(t)$", EAR, w=2.8).move_to(LEFT * 5.0 + DOWN * 1.6)
         hl = block(r"$h_L(\theta)$", WHITE, w=1.9).move_to(LEFT * 0.8 + UP * 1.0)
