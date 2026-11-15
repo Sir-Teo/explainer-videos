@@ -3470,8 +3470,9 @@ add(Finding(
                   design="corrections for small-study bias", found="corrected estimates near zero"),
             Study("Hagger, Chatzisarantis et al. (registered, multisite)", 2016, n="23 laboratories, 2,141 people",
                   effect=0.04, unit="d", lo=-0.07, hi=0.15, found="d = 0.04, 95% CI -0.07 to 0.15"),
-            Study("Vohs et al. (registered, multisite)", 2021, n="dozens of laboratories",
-                  design="tasks chosen with the theory's proponents", found="an effect close to zero")),
+            Study("Vohs et al. (registered, multisite)", 2021, n="36 laboratories, 3,531 people", effect=0.06,
+                  unit="d", design="tasks chosen with the theory's proponents",
+                  found="d = 0.06, not significant; the data favoured no effect")),
     note="Failed in its sequential-task form in two registered multisite tests; fatigue after effort is real, a "
          "limited resource is not supported.",
     sources=("R. F. Baumeister, E. Bratslavsky, M. Muraven and D. M. Tice, Ego depletion: is the active self a "

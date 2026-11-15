@@ -206,21 +206,21 @@ licence stated, fetched and never redistributed.
 
 ## Open checks
 
-This part was written in a session whose web-search allowance was used up, so the following are quoted from the
-literature as widely reported and should be rechecked against the articles before the final cut:
+Checked against the articles or their abstracts (2026-11-15): the radish eaters' persistence (less than half the
+time of the other groups); Hagger et al.'s 198 tests and d = 0.62; Vohs et al.'s 36 laboratories, 3,531 people and
+d = 0.06; Watts, Duncan and Quan's 918 children; Kidd, Palmeri and Aslin's waits of about 12 and 3 minutes (four
+times as long); Gneezy and Rustichini's ten Haifa day-care centres, six fined, with late arrivals rising and not
+falling after the fine was removed; Lally et al.'s median of 66 days to a modelled plateau, for the 39 participants
+whose curves could be fitted.
 
-* Baumeister et al. (1998): the radish eaters' persistence ("less than half the time" of the other groups).
-* Lepper, Greene and Nisbett (1973): the expected-award group drew "about half as much"; the follow-up interval of one
-  to two weeks.
-* Hagger et al. (2010): 198 tests and d about 0.6; Deci, Koestner and Ryan (1999): 128 experiments.
-* Vohs et al. (2021): the number of laboratories and the estimate ("close to zero"), and that Baumeister was among
-  the designers.
-* Watts, Duncan and Quan (2018): about 900 children, the association about half the original and two-thirds smaller
-  again with controls; Kidd, Palmeri and Aslin (2013): "about four times as long".
-* Gneezy and Rustichini (2000): ten centres, six with fines, and late arrivals staying high after removal.
-* Lally et al. (2010): automaticity levelling off "after a couple of months" on average.
-* Sisk et al. (2018): correlations "around a tenth"; Yeager et al. (2019): the effect concentrated in lower-achieving
-  students.
+Still to recheck against the full texts before the final cut:
+
+* Lepper, Greene and Nisbett (1973): "about half as much" drawing in the expected-award group (secondary sources
+  agree; the article's own percentages were not read).
+* Watts, Duncan and Quan (2018): "about half the original association" and "about two-thirds smaller again" with
+  controls.
+* Deci, Koestner and Ryan (1999): 128 experiments; Sisk et al. (2018): correlations "around a tenth"; Yeager et al.
+  (2019): the effect concentrated in lower-achieving students.
 * Routtenberg and Lindy (1965), Olds (1958) rates of "thousands an hour", the hedonic hotspots' size, and the
   1940s–50s hypothalamic lesion results are described qualitatively.
 * The defended-set-point coefficients (hunger 60, thrift 25 kcal a day per kg) are illustrative; the settling-point
