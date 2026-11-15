@@ -1890,13 +1890,31 @@ listeners notice).
 *Story:* In 1947 an engineer put a loudspeaker and a microphone in the studio's tiled bathroom and sold the echo
 as art. In 1962 Schroeder at Bell Labs built a room out of arithmetic: four comb filters and two all-passes.
 Everything an effect rack does is delay and addition.
+1. Hook: an ear question (a simulated room or Schroeder's arithmetic?); Putnam's bathroom; the plan.
+2. Impulse responses and convolution: one click says everything; convolution by hand; an echo heard; the FFT; FIR and IIR.
+3. Poles and zeros: the one-pole low-pass; the z-plane; a ringing pole heard; the biquad; stability.
+4. Equalizers: five biquads; an ear question (which filter was which?); analogue prototypes; the parametric equalizer; practice.
+5. Phase: timing by frequency; an ear question (which snare was all-passed?); group delay; linear and minimum phase.
+6. Combs, flangers, choruses and phasers: notches and peaks; a pitch from noise heard; three moving delays heard; history; combs by accident.
+7. The room's response: image sources; a tiled room's response; precedence; heard; Schroeder integration; modes; Sabine and Eyring.
+8. Measuring a room: a click or a sweep; the sweep heard; the room recovered; distortion arrives early; why this sweep.
+9. Schroeder's reverberator: imitate the ear; the diagram; echo density; snares heard; Moorer.
+10. Feedback delay networks: the idea; the Hadamard matrix; two responses; octave bands; a cathedral heard; practice.
+11. Plates and springs: EMT's 140; finite differences; dispersion; the plate heard; a spring heard; practice.
+12. Frontier: virtual analog; differentiable effects; rooms from the wave equation; the research problem.
+13. Variation 49: the Tune in five spaces. Outro: problems, payoffs.
+
 *Covers:* impulse responses and convolution; poles and zeros; equalizers; phase; analog prototypes; combs,
 flangers, choruses and phasers; the room's response; Schroeder's reverberator; feedback delay networks; plates
 and springs; convolution reverb and sweep measurement.
-*Built and computed:* the filter and reverb modules; a plate by finite differences; a room response measured by
-sweep in our own simulated room and compared with Sabine.
-*Variation 49:* the Tune dry, then in a bathroom, a plate, a spring and a cathedral.
-*Frontier:* virtual analog; differentiable effects.
+*Built and computed:* `monochord/effects.py`: cookbook biquads (a Butterworth by bilinear transform matching SciPy's);
+all-pass chains and group delay; combs (a 220 Hz pitch from noise), flanger, chorus and phaser; a tiled room by image
+sources, RT60 1.22 s by Schroeder integration against Eyring's 1.24 and Sabine's 1.28, octave bands, Schroeder frequency
+about 600 Hz; Farina's sweep recovering the room (error 19 dB down) and separating harmonics; Schroeder's reverberator
+(echo density about 0.2) and an eight-line feedback delay network; a steel plate by finite differences (246 by 123
+points; 2.6 s at 125 Hz, 1.0 s at 4 kHz); a dispersive spring loop.
+*Variation 49:* the Tune dry, then in a bathroom (1.2 s), a plate (1.9 s), a spring (1.3 s) and a cathedral (4.2 s).
+*Frontier:* virtual analog; differentiable effects; wave-based rooms (open: how small a network can pass for a room).
 *Reading:* Smith, *Introduction to Digital Filters* and *Physical Audio Signal Processing*; Zölzer, *DAFX*;
 Välimäki et al. (2012).
 

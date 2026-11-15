@@ -465,4 +465,45 @@ PARTS = [
         I=(5, 6, 7, 8, 9),
         also=(("Monochord's converters: sampling, reconstruction, quantization, dither, shaping, delta-sigma, jitter", "explainer/music/monochord/digital.py"),),
     ),
+    Part(
+        n=49, level="U", widget="biquad", prereq=(3, 7, 30, 45, 48),
+        question="How do delay and addition make every filter, echo and reverberation in a studio?",
+        story="In 1947 Bill Putnam sold his studio bathroom's echo as art; in 1962 Schroeder built a room out of four combs "
+              "and two all-passes, and an ear question sets it beside a simulated tiled room. The part builds convolution "
+              "sample by sample and hears an echo; feedback places poles (a one-pole low-pass, the z-plane, a band-pass at "
+              "Q 50 ringing a quarter of a second); the cookbook biquads draw five equalizers, matched by ear in an ear "
+              "question, and a Butterworth built by the bilinear transform matches SciPy to rounding. Sixty all-passes "
+              "leave every level unchanged and turn a snare into a chirp (an ear question). Combs make notches, peaks and "
+              "a 220 Hz pitch from noise; a flanger, a chorus and a phaser move them. A tiled room by Allen and Berkley's "
+              "image sources rings 1.22 s by Schroeder's backward integration, within 2 per cent of Eyring's 1.24; Farina's "
+              "sweep recovers its response (error 19 dB down) and parts a distorting loudspeaker's harmonics. Schroeder's "
+              "reverberator stays sparse (echo density 0.2) where an eight-line feedback delay network fills in; octave "
+              "bands separate stone from steel; a steel plate by finite differences (246 by 123 points) starts bright and "
+              "rings 2.6 s in the bass, 1.0 s at 4 kHz; a spring is a loop of 80 all-passes.",
+        handoff="Nonlinear effects in Part 50; resonant filters in Part 51; delay-line physical models in Part 52; real halls "
+                "in Part 55; equalizers and reverbs in a mix in Part 56.",
+        outside="Part 3 for spectra; Part 7 for Karplus-Strong; Part 30 for sound as numbers; Part 45 for the auditory scene; "
+                "Part 48 for sampling. Convolution, the z-transform, linear algebra (orthogonal matrices), finite differences.",
+        objectives={
+            "U": ["Match a groove to a low-pass, a high-pass and a peak by ear, and hear a ringing pole.",
+                  "Hear an all-pass smear a snare, combs make a pitch, and a flanger, chorus and phaser move.",
+                  "Tell Schroeder's reverberator from a simulated room, and hear a plate, a spring and a cathedral."],
+            "M": ["Convolve by hand and by FFT; design biquads from the cookbook and read them from poles and zeros.",
+                  "Simulate a room by image sources and measure RT60 by Schroeder integration against Sabine and Eyring.",
+                  "Measure an impulse response with an exponential sweep; build a feedback delay network and a plate."],
+            "D": ["Find the smallest feedback delay network that passes, blind, for a measured room."],
+            "I": ["Equalize, delay and reverberate in a mix; measure a room by sweep and predict it by Sabine."],
+        },
+        results=[
+            ("Convolution", r"y[n] = \textstyle\sum_k h[k]\,x[n-k]"),
+            ("Stability", r"|p_i| < 1 \text{ for every pole}"),
+            ("Sabine", r"T_{60} = 0.161\,V / (S\alpha)"),
+            ("Schroeder integration", r"E(t) = \int_t^\infty h^2(\tau)\,d\tau"),
+            ("Comb decay", r"g = 10^{-3D/(f_s T_{60})}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5),
+        D=(11,),
+        I=(6, 7, 8, 9, 10),
+        also=(("Monochord's effects rack: biquads, combs, image-source rooms, sweeps, Schroeder, FDN, plate, spring", "explainer/music/monochord/effects.py"),),
+    ),
 ]

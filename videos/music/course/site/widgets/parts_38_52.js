@@ -692,4 +692,55 @@
       note: "Turn the level down until the sine is only a step or two high. Without dither it becomes a buzzing square wave, or silence; with triangular dither it stays a sine, in steady noise. That is why every reduction of word length should be dithered."
     });
   };
+
+  W.biquad = function (el) {
+    var KINDS = ["low-pass", "high-pass", "peak", "low shelf", "high shelf"];
+    function coeffs(kind, f0, q, g, sr) {
+      var A = Math.pow(10, g / 40), w = 2 * Math.PI * f0 / sr, cw = Math.cos(w), sw = Math.sin(w), al = sw / (2 * q), b, a, sq = 2 * Math.sqrt(A) * al;
+      if (kind === 0) { b = [(1 - cw) / 2, 1 - cw, (1 - cw) / 2]; a = [1 + al, -2 * cw, 1 - al]; }
+      else if (kind === 1) { b = [(1 + cw) / 2, -(1 + cw), (1 + cw) / 2]; a = [1 + al, -2 * cw, 1 - al]; }
+      else if (kind === 2) { b = [1 + al * A, -2 * cw, 1 - al * A]; a = [1 + al / A, -2 * cw, 1 - al / A]; }
+      else { var s = kind === 3 ? 1 : -1;
+        b = [A * ((A + 1) - s * (A - 1) * cw + sq), s * 2 * A * ((A - 1) - s * (A + 1) * cw), A * ((A + 1) - s * (A - 1) * cw - sq)];
+        a = [(A + 1) + s * (A - 1) * cw + sq, -s * 2 * ((A - 1) + s * (A + 1) * cw), (A + 1) + s * (A - 1) * cw - sq]; }
+      return { b: b.map(function (x) { return x / a[0]; }), a: a.map(function (x) { return x / a[0]; }) };
+    }
+    function gain(c, f, sr) {
+      var w = 2 * Math.PI * f / sr, re1 = Math.cos(w), im1 = -Math.sin(w), re2 = Math.cos(2 * w), im2 = -Math.sin(2 * w);
+      var nr = c.b[0] + c.b[1] * re1 + c.b[2] * re2, ni = c.b[1] * im1 + c.b[2] * im2, dr = 1 + c.a[1] * re1 + c.a[2] * re2, di = c.a[1] * im1 + c.a[2] * im2;
+      return 10 * Math.log10((nr * nr + ni * ni) / (dr * dr + di * di));
+    }
+    QB.widget(el, {
+      title: "Design a biquad",
+      sub: "Choose a filter from the cookbook and set its frequency, width (Q) and gain. The plot shows its gain at every frequency; the readout gives its poles' radius, which says how long it rings. Play two seconds of noise through it.",
+      panels: 1, height: 240,
+      controls: [{ k: "kind", label: "Filter", min: 0, max: 4, step: 1, value: 2, fmt: function (x) { return KINDS[x]; } },
+                 { k: "lf", label: "Frequency", min: Math.log10(40), max: Math.log10(16000), step: 0.01, value: 3, fmt: function (x) { return Math.round(Math.pow(10, x)) + " Hz"; } },
+                 { k: "q", label: "Q", min: 0.3, max: 20, step: 0.1, value: 1.0, fmt: function (x) { return x.toFixed(1); } },
+                 { k: "g", label: "Gain (peak and shelves)", min: -18, max: 18, step: 1, value: 9, fmt: function (x) { return x + " dB"; } }],
+      buttons: [{ label: "Play filtered noise", act: function (s) {
+        var rate = 44100, c = coeffs(s.v.kind, Math.pow(10, s.v.lf), s.v.q, s.v.g, rate), n = 2 * rate, out = new Float32Array(n), x1 = 0, x2 = 0, y1 = 0, y2 = 0, seed = 7;
+        for (var i = 0; i < n; i++) { seed = (seed * 1103515245 + 12345) & 0x7fffffff; var x = (seed / 0x7fffffff - 0.5) * 0.3;
+          var y = c.b[0] * x + c.b[1] * x1 + c.b[2] * x2 - c.a[1] * y1 - c.a[2] * y2; x2 = x1; x1 = x; y2 = y1; y1 = y;
+          out[i] = Math.max(-0.9, Math.min(0.9, y)) * Math.min(1, i / 400, (n - i) / 400); }
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var sr = 44100, c = coeffs(v.kind, Math.pow(10, v.lf), v.q, v.g, sr), xs = [], ys = [];
+        for (var k = 0; k <= 200; k++) { var lf = Math.log10(20) + (Math.log10(20000) - Math.log10(20)) * k / 200; xs.push(lf); ys.push(Math.max(-40, Math.min(24, gain(c, Math.pow(10, lf), sr)))); }
+        var a = g[0].axes({ x: [Math.log10(20), Math.log10(20000)], y: [-40, 24], title: "Gain against frequency (20 Hz to 20 kHz, logarithmic)", xlabel: "log10 of frequency" });
+        a.line(xs, ys, { color: C.idea, width: 2.5 });
+        a.line([Math.log10(20), Math.log10(20000)], [0, 0], { color: "#3A4250", width: 1 });
+        s.r = Math.sqrt(Math.abs(c.a[2]));
+      },
+      readout: function (v, s) {
+        var ring = -1 / (44100 * Math.log(Math.max(s.r, 1e-9)));
+        return [["poles' radius", s.r.toFixed(4)], ["the ringing falls by 1/e every", (1000 * ring).toFixed(1) + " ms"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Raise Q on the peak and watch the poles' radius approach 1: the filter rings longer and the noise starts to whistle at the chosen frequency. A resonance is a pole close to the circle."
+    });
+  };
 })();

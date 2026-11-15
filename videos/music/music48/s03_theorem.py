@@ -80,7 +80,7 @@ class Theorem(SoundScene):
             return g
         a = spec(1.0, TUNE, [0.0], r"the signal's spectrum: \ nothing above $B$")
         b = spec(-1.2, BLUE, [-4.0, 0.0, 4.0], r"the samples' spectrum: \ copies every $f_s$, \ separate when $f_s > 2B$")
-        box = Rectangle(width=4.0, height=1.3, stroke_color=WHITE, stroke_width=3).move_to([0, -0.7, 0])
+        box = Rectangle(width=4.0, height=1.0, stroke_color=WHITE, stroke_width=3).move_to([0, -0.78, 0])
         lp = label(r"keep only the middle copy: \ an ideal low-pass, \ whose impulse response is the sinc", font_size=18, color=WHITE).to_edge(DOWN, buff=0.4)
         ticks = VGroup(*[label(t, font_size=15, color=GREY_A).move_to([v, -1.5, 0]) for t, v in ((r"$-f_s$", -4.0), (r"$0$", 0.0), (r"$f_s$", 4.0))])
         head = label(r"why it works", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
