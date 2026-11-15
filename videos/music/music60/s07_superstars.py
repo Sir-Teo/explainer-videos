@@ -66,7 +66,7 @@ class Superstars(SoundScene):
             return VGroup(ax, bars, t)
         panels.add(panel(ind, r"independent", TUNE, -4.6, 0.3))
         for k in range(4):
-            panels.add(panel(soc[k], rf"social world {k + 1}", BLUE, -1.6 + 2.9 * (k % 2), 1.35 - 2.5 * (k // 2)))
+            panels.add(panel(soc[k], rf"social world {k + 1}", BLUE, 0.2 + 3.4 * (k % 2), 1.35 - 2.5 * (k // 2)))
         g1 = label(rf"Gini: \ independent {d['gini_independent']:.2f}, \ social {d['gini_social']:.2f}", font_size=17, color=WHITE).move_to([-4.6, -1.6, 0])
         g2 = label(rf"unpredictability: \ {d['U_independent']:.4f} \ against {d['U_social']:.4f}", font_size=17, color=WHITE).move_to([-4.6, -2.15, 0])
         g3 = label(rf"winners' quality ranks in the 8 worlds: \ {', '.join(str(r) for r in d['winner_quality_rank'])}", font_size=17, color=EAR).to_edge(DOWN, buff=0.25)
