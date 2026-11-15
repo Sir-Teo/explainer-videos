@@ -986,4 +986,58 @@
       note: "With small studies and a file drawer, the published literature overstates a small effect, and its first significant result most of all. Publish the non-significant studies too, or run bigger ones, and the published estimate comes back to the truth. Set the true effect to zero: a literature can find an effect that is not there."
     });
   };
+  // Part 68: ordering the suite ---------------------------------------------------------------------------------
+  var SUITE_XY = [[0.247,0.039],[-1.0,0.359],[-0.385,0.637],[-0.453,0.948],[-0.088,0.236],[0.237,0.19],[0.199,0.129],[-0.1,0.558],[-0.387,0.443],[0.078,0.09],[0.108,-0.052],[0.489,0.031],[0.395,0.04],[0.135,-0.008],[0.568,-0.089],[0.251,0.121],[0.516,0.152],[0.542,-0.119],[0.48,-0.028],[0.117,0.046],[0.567,-0.068],[0.543,-0.011],[-0.942,0.175],[0.381,0.243],[-0.796,-0.232],[-0.743,-0.46],[0.64,-0.093],[-0.951,-0.197],[-1.0,-0.266],[0.483,-0.001],[-0.361,-0.43],[-0.364,-0.409],[0.487,-0.093],[0.363,0.024],[-0.619,-0.205],[-0.809,-0.133],[0.292,0.077],[0.506,0.086],[0.6,-0.117],[0.642,-0.204],[-0.654,0.152],[-0.313,-0.201],[0.411,0.017],[0.567,0.021],[-0.421,-0.37],[-0.414,0.006],[0.429,0.393],[-0.282,-0.557],[-0.718,-0.131],[-0.384,0.193],[-0.48,-0.262],[-0.236,0.454],[-0.38,-0.353],[0.015,-0.211],[-0.348,-0.028],[0.688,-0.283],[-0.49,0.424],[-0.043,-0.576],[0.716,-0.296],[0.678,-0.208],[0.248,-0.111],[0.559,0.116],[-0.13,-0.593],[0.447,0.447],[-0.402,0.566],[-0.041,-0.131],[0.11,0.115]];
+  var SUITE_ACT = [0,0,0,0,0,0,0,0,0,1,1,1,1,1,1,2,2,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,6,6,6,6,7,7,7,8,8,8,8,8,8,9,9,9,9,9,9,9,10,10,10,10,10,10,11];
+  var ACT_COL = ["#F5C542", "#9DD6F0", "#FFB070", "#B39DDB", "#7DD3FC", "#A3E635", "#F472B6", "#FB7185", "#94A3B8", "#5EEAD4", "#FDE68A", "#E5E7EB"];
+  function suiteDist(i, j) { return Math.hypot(SUITE_XY[i][0] - SUITE_XY[j][0], SUITE_XY[i][1] - SUITE_XY[j][1]); }
+  function suiteLen(order) { var s = 0; for (var i = 1; i < order.length; i++) s += suiteDist(order[i - 1], order[i]); return s; }
+  function suiteShuffle(seed, start) {
+    var s = seed * 7919 + 17, rnd = function () { s = (s * 16807) % 2147483647; return s / 2147483647; };
+    var rest = []; for (var i = 0; i < SUITE_XY.length; i++) if (i !== start) rest.push(i);
+    for (var k = rest.length - 1; k > 0; k--) { var j = Math.floor(rnd() * (k + 1)), t = rest[k]; rest[k] = rest[j]; rest[j] = t; }
+    return [start].concat(rest);
+  }
+  function suiteOrder(v) {
+    var n = SUITE_XY.length, start = Math.round(v.start) - 1, rule = Math.round(v.rule);
+    if (rule === 0) { var o = []; for (var i = 0; i < n; i++) o.push(i); return o; }
+    if (rule === 2) return suiteShuffle(Math.round(v.seed), start);
+    var left = {}, out = [start];
+    for (var i2 = 0; i2 < n; i2++) if (i2 !== start) left[i2] = true;
+    while (Object.keys(left).length) {
+      var cur = out[out.length - 1], best = -1, bd = 1e9;
+      Object.keys(left).forEach(function (k) { var d = suiteDist(cur, +k); if (d < bd) { bd = d; best = +k; } });
+      out.push(best); delete left[best];
+    }
+    return out;
+  }
+  W.suite = function (el) {
+    var RULES = ["as they were made", "nearest next", "at random"];
+    QB.widget(el, {
+      title: "Ordering sixty-seven Variations",
+      sub: "Each dot is one Variation's excerpt, placed by how it sounds (Part 63's features, flattened to two dimensions by classical scaling) and coloured by act. Choose a rule for the order; the line is the path the suite takes, and its length is how far, in sound, the suite travels.",
+      panels: 1, height: 320,
+      controls: [{ k: "rule", label: "Order", min: 0, max: 2, step: 1, value: 0, fmt: function (x) { return RULES[Math.round(x)]; } },
+                 { k: "start", label: "Start at Variation", min: 1, max: 67, step: 1, value: 1, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "seed", label: "Random draw", min: 1, max: 50, step: 1, value: 1, fmt: function (x) { return x.toFixed(0); } }],
+      draw: function (gr, v) {
+        var o = suiteOrder(v);
+        var a = gr[0].axes({ x: [-1.15, 1.15], y: [-1.15, 1.15], title: "the excerpts, and the path through them" });
+        a.line(o.map(function (i) { return SUITE_XY[i][0]; }), o.map(function (i) { return SUITE_XY[i][1]; }), { color: "#FFFFFF", width: 1 });
+        for (var k = 0; k < 12; k++) {
+          var idx = []; for (var i = 0; i < SUITE_XY.length; i++) if (SUITE_ACT[i] === k) idx.push(i);
+          if (idx.length) a.dots(idx.map(function (i) { return SUITE_XY[i][0]; }), idx.map(function (i) { return SUITE_XY[i][1]; }), { r: 4, color: ACT_COL[k] });
+        }
+        a.dots([SUITE_XY[o[0]][0]], [SUITE_XY[o[0]][1]], { r: 7, color: C.idea });
+      },
+      readout: function (v) {
+        var o = suiteOrder(v), L = suiteLen(o), made = suiteLen(suiteOrder({ rule: 0, start: 1, seed: 1 })), below = 0;
+        for (var s = 1; s <= 300; s++) if (suiteLen(suiteShuffle(s + 1000, 0)) <= L) below++;
+        return [["path length on this map", L.toFixed(1)], ["the order as made", made.toFixed(1)],
+                ["random orders as short or shorter", (100 * below / 300).toFixed(1) + " % of 300"],
+                ["the first ten", o.slice(0, 10).map(function (i) { return i + 1; }).join(", ")]];
+      },
+      note: "Nearest-next makes the shortest, smoothest path, and scatters the series' history; a random order is neither smooth nor a story. The order as made is a history, and on the full features of Part 68 it is already shorter than all but a few random orders: consecutive parts share their instruments. On this flattened map the numbers differ a little from the film's, which measures in all the features."
+    });
+  };
 })();

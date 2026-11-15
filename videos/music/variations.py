@@ -139,6 +139,8 @@ LEDGER = [
      "measure": r"DDSP 6.0 dB from the string it learnt; 5.3 s of piano continued for 5 s"},
     {"part": 67, "title": r"a critical edition: the Tune, a corrupt copy, and the original rebuilt", "seconds": 65.1,
      "measure": r"19 witnesses; the worst 9 notes wrong; rebuilt with 2 wrong"},
+    {"part": 68, "title": r"the suite: every Variation, in the order they were made", "seconds": 607.9,
+     "measure": r"the Tune down the whole chain and back: 6 of 42 keys wrong as written, 14 after the master, 12 at 16 kbit/s"},
 ]
 
 

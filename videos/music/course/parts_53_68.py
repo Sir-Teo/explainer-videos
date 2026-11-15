@@ -476,4 +476,34 @@ PARTS = [
         I=(9, 10),
         also=(("Monochord's research methods: manuscript traditions, neighbour joining, reconstruction, ABX power, the series' star problems", "explainer/music/monochord/research.py"),),
     ),
+    Part(
+        n=68, level="U", widget="suite", prereq=(1, 10, 43, 55, 57, 58, 61, 63, 67),
+        question="What survives when a tune travels the whole chain, from a score to a listener and back to a score, and what did the series build?",
+        story="An ear question: Variation 1 exactly as Part 1 made it; the Goldberg Variations and their aria da capo; the plan. The Chain with every link lit, which act built which link, and the experiment: the whole Tune performed on Part 38's piano, in a room, through a microphone, a master and Part 58's coder, and back by onsets, pitch, a drifting tempo, a key and a fingerprint. Down the chain, heard at five stages, each measured by what it changes; spectrograms; an ear question at 16 kbit/s; the coder rate by rate, and its fallback band at 16 kbit/s, which starves the melody's band (37 of 42 keys wrong), heard. Back up the chain: settings chosen on four other tunes (YIN 34 per cent of keys wrong, the onset reading 23, with SuperFlux 20); the Tune's wrong keys by stage (6 as written, 14 mastered, 12 at 16 kbit/s); every change of key found as written, repeated notes the weak spot; the key misled by the rhythm; an ear question on three recovered scores. What survives: the sound filled by the room and emptied by the coder while the melody's moves hold; fingerprints, tempo and key; the room alone, heard; why notation kept pitch and time. Ordering a suite: the excerpts mapped, path lengths (as made shorter than 99.8 per cent of random orders), an ear question on the longest and shortest steps, the nearest-next order heard. The suite in three movements, every Variation for 8.5 seconds. Monochord counted; the ledger; what is still unknown, with an ear question on two fifths. Variation 68 and Variation 1 again.",
+        handoff="The end of the series: the open problems of Part 67 and this part's research question.",
+        outside="Part 1 for the string and its question; Part 10 for what notation keeps; Part 43 for performance; Parts 54 to 58 "
+                "for the studio chain; Part 61 for transcription; Part 63 for features and fingerprints; Part 67 for listening "
+                "tests. Edit distance, onset detection, classical scaling, nearest-neighbour heuristics.",
+        objectives={
+            "U": ["Hear the Tune at each stage of the chain and say what each stage changed; hear a recovered score.",
+                  "Hear the suite and place each Variation in the series' story.",
+                  "Explain why a score survives transmission better than a sound does."],
+            "M": ["Measure a chain stage by stage (timing, reverberation, noise, crest factor, noise against the mask).",
+                  "Transcribe a line by onsets and pitch, quantize it, and score it against the written score by edit distance.",
+                  "Choose settings on held-out material, and order a set of pieces by a feature-space path."],
+            "D": ["Design the experiment that separates the ear's part from the culture's in consonance."],
+            "I": ["Check a chain's settings at every rate, listen at the end of the chain, and keep a score with every recording."],
+        },
+        results=[
+            ("Edit distance", r"D_{i,j} = \min(D_{i-1,j} + 1,\ D_{i,j-1} + 1,\ D_{i-1,j-1} + [a_i \ne b_j])"),
+            ("SuperFlux", r"\mathrm{SF}(n) = \textstyle\sum_k \max\big(0,\ L(n,k) - \max_{1 \le \mu \le \lambda,\ |j - k| \le w} L(n - \mu, j)\big)"),
+            ("Crest factor", r"C = 20 \log_{10} \big( \max |x| \,/\, \sqrt{\overline{x^2}} \big)"),
+            ("Classical scaling", r"B = -\tfrac12 J D^{(2)} J,\ \ X = V_2 \Lambda_2^{1/2}"),
+            ("Beats of a mistuned fifth", r"f_{\mathrm{beat}} = |3 f_1 - 2 f_2|"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8),
+        D=(11,),
+        I=(9, 10),
+        also=(("Monochord's round trip: the line transcriber (onsets and SuperFlux, YIN or the onset's harmonics), edit distance, stage measures, the suite's helpers", "explainer/music/monochord/roundtrip.py"),),
+    ),
 ]

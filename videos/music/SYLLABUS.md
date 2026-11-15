@@ -2491,17 +2491,39 @@ pooled 0.27); ABX power (a 60 % listener needs 158 trials); a leak (3.22 against
 *Reading:* Clarke & Cook (eds.), *Empirical Musicology*; Nettl, *The Study of Ethnomusicology*; Sturm (2014);
 Pietschnig et al. (2010).
 
-### Part 68 · The Variations (~60; the finale)
+### Part 68 · The Variations (~39; the finale)
 *Story:* Bach's *Goldberg Variations* end by playing the opening aria again, the same notes, and it does not
 sound the same. The series runs its whole chain once, from a score to a listener and back to a score, measures
-what survives the journey, and then plays the suite. It ends on one string.
-*Covers:* ordering sixty-seven variations into a piece; the chain end to end: score, performer, instruments,
-room, microphones, mix, master, codec; then the return: transcription, beat and chords, identification; what the
-chain preserves (pitch and time) and what it loses (timbre and space), and why notation chose as it did; what was
+what survives the journey, orders the sixty-seven Variations into a suite and plays it, and ends on one string.
+1. Hook: an ear question (Variation 1, as Part 1 made it); the *Goldberg Variations* and the aria *da capo*; the plan.
+2. The chain, once more: every link lit; which act built which link; the experiment; what is measured.
+3. Down the chain: five stages heard and measured; spectrograms; an ear question (16 kbit/s); the coder rate by rate; its fallback band, heard.
+4. Back up the chain: how the machine listens; settings chosen on other tunes; wrong keys by stage; which notes; a network beside it; the score recovered; an ear question (three recovered scores).
+5. What survives: the sound's quiet part against the melody's moves; fingerprint, tempo and key; the room alone, heard; why notation kept pitch and time; what the experiment does not show.
+6. Ordering a suite: the excerpt rule; the map; path lengths; an ear question (the longest and shortest steps); nearest-next, heard; the order chosen.
+7–9. The suite in three movements: Acts I–III, IV–VII, VIII–XII.
+10. What was built: Monochord counted; its layers; how it was checked; what you can now do.
+11. The ledger: all sixty-eight rows.
+12. Frontier: Part 1's question; an ear question (two fifths); what is answered; what is open; the last research problem.
+13. Variation 68, recap, problems, from here, references; Variation 1 again; the end.
+
+*Covers:* the chain end to end (performance, instrument, room, microphone, master, codec) and back
+(onsets, pitch, quantization, key, identification); what the chain preserves (pitch and time) and what it
+remakes (space, noise, peaks, band), and why notation chose as it did; ordering pieces into a suite; what was
 built; what is still unknown about the question of Part 1.
-*Built and computed:* a suite assembler; the round-trip error from score to sound to score at each bitrate; the
-final ledger; Monochord's layers, tests and references in one table.
-*Heard and seen:* the suite, ten to twelve minutes, every instrument of §4 running; then Variation 1 again.
+*Built and computed:* `monochord/roundtrip.py`: a line transcriber (onsets by spectral flux or SuperFlux; pitch
+by YIN or by the harmonics gained at the onset), edit distance, stage measures, the suite's helpers. Settings
+chosen on four other tunes (34 % of keys wrong with YIN, 23 % reading
+the onset, 20 % with SuperFlux); the Tune's wrong keys 6 as written,
+14 after the master, 12 at 16 kbit/s, with every change of key found as written and
+repeated notes the weak spot; Part 58's coder at 16 kbit/s with its fallback band (37 wrong); the suite's
+order as made shorter than 99.8 % of random orders; Monochord counted (95 modules,
+866 tests, 4.3 hours of sound).
+*Heard and seen:* the suite, ten minutes, every Variation for 8.5 seconds; then Variation 1 again.
+*Variation 68:* the suite itself.
+*Frontier:* why simple ratios sound good: separating the ear's part from the culture's.
+*Reading:* Bach, *Goldberg Variations*; Müller, *Fundamentals of Music Processing*; Böck & Widmer (2013);
+McDermott et al. (2016).
 
 ## 6. What must exist before Part 1
 
@@ -2566,6 +2588,49 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | 2026-11-15 | **Part 24, *The Renaissance***: 14 chapters, 35.0 min narrated of which 3.2 min listening in 13 windows; 3 pause-and-listen questions; Variation 24 (the Tune as a four-voice point of imitation: four entries four beats apart, and after the last entry 12 of 12 beats consonant above the bass); Lab 24 and its interactive; Monochord's Renaissance tools (`monochord/palestrina.py`: a dissonance classifier, melodic and sonority censuses, an imitation detector, twelve stylometric features with a nearest-centroid leave-one-out test; `monochord/renaissance.py`: a Humdrum reader and Palestrina's 1,318 Mass movements and Monteverdi's 48 madrigals from the music21 corpus); sound and picture gates clean. The attribution test runs on secure works, not on Josquin (no corpus was available offline), and the film says why. |
 | 2026-11-15 | **Part 25, *The Baroque***: 12 chapters, 34.8 min narrated of which 4.0 min listening in 14 windows; 3 pause-and-listen questions; Variation 25 (the Tune as a French overture and as a chaconne: a ground of 8 bass notes heard twice, the reprise adding 26 ornament notes to 14); Lab 25 and its interactive; `monochord/baroque.py` (Galilei's strings and Mersenne's law, figures recovered from upper parts and re-realized on Corelli's Op. 3 No. 1, a ritornello finder, key colours in any temperament, ornaments, inequality and overdotting, a fundamental bass under a chorale); sound and picture gates clean. |
 | 2026-11-15 | **Part 26, *The Classical Style***: 11 chapters, 35.0 min narrated of which 2.7 min listening in 12 windows; 3 pause-and-listen questions; Variation 26 (our own Classical set: theme with Alberti bass, minore, adagio and finale, with 14, 14, 28 and 26 melody notes); Lab 26 and its interactive; `monochord/classical.py` (authentic cadences and phrase gaps, who leads each bar, accompaniment figures, eight style features, windowed tonal plans, Part 24's attribution test with a permutation null, on the music21 corpus's quartet movements); sound and picture gates clean. K. 265 and the tempo study's data were not available, so both are described rather than recomputed. |
+| by 2026-11-15 | *Parts 27 to 68, recorded together at the end: lengths are `tools/lecture_length.py` estimates (listening included), not narrated cuts; previews at 480p were queued as each part landed.* |
+| by 2026-11-15 | **Part 27, *The Romantic Century***: 12 chapters, 32.7 min estimated of which 3.5 min listening; 3 pause-and-listen questions; Variation 27 (as a nocturne, as a Lied, and as a leitmotif transformed); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 28, *New Scales, New Rhythms***: 12 chapters, 31.8 min estimated of which 2.9 min listening; 3 pause-and-listen questions; Variation 28 (in whole-tone planing, then over an octatonic ostinato with moving accents); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 29, *Twelve Tones***: 12 chapters, 31.5 min estimated of which 3.7 min listening; 3 pause-and-listen questions; Variation 29 (as a twelve-tone row grown from its own intervals, then scattered in points); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 30, *Sound Itself***: 11 chapters, 31.1 min estimated of which 3.8 min listening; 3 pause-and-listen questions; Variation 30 (phased against itself, as a cloud of glissandi, and on the harmonics of a string); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 31, *Transformations***: 10 chapters, 31.3 min estimated of which 3.5 min listening; 3 pause-and-listen questions; Variation 31 (harmonized by a walk on the Tonnetz); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 32, *The Geometry of Chords***: 12 chapters, 31.5 min estimated of which 2.6 min listening; 4 pause-and-listen questions; Variation 32 (harmonized by the shortest paths, then rerouted through chromatic chords); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 33, *The Mathematics of Rhythm and Scale***: 12 chapters, 34.8 min estimated of which 3.4 min listening; 3 pause-and-listen questions; Variation 33 (as a Vuza canon, rung in plain hunt, and in Bohlen–Pierce); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 34, *Raga and Tala***: 12 chapters, 31.1 min estimated of which 3.9 min listening; 3 pause-and-listen questions; Variation 34 (as Bilawal: an alap over the drone, then a gat in Teentaal with a tihai); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 35, *Maqam***: 12 chapters, 31.1 min estimated of which 4.1 min listening; 3 pause-and-listen questions; Variation 35 (in Rast, Bayati and Hijaz, after a taqsim); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 36, *Bronze and Silk***: 12 chapters, 31.0 min estimated of which 4.4 min listening; 3 pause-and-listen questions; Variation 36 (in qin harmonics, then as balungan with interlocking parts); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 37, *Timelines***: 12 chapters, 42.1 min estimated of which 7.1 min listening; 3 pause-and-listen questions; Variation 37 (as an inherent pattern of two interlocking parts, then over the standard pattern); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 38, *Blues and Swing***: 12 chapters, 33.9 min estimated of which 7.6 min listening; 3 pause-and-listen questions; Variation 38 (as a twelve-bar blues, a rag and a riff chart); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 39, *Changes***: 12 chapters, 31.6 min estimated of which 5.5 min listening; 3 pause-and-listen questions; Variation 39 (as a bebop head, with an improvised chorus, then through three keys a major third apart); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 40, *The Song***: 12 chapters, 33.7 min estimated of which 6.4 min listening; 3 pause-and-listen questions; Variation 40 (as a pop single, then as a beat that samples Variation 7); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 41, *Orchestration***: 12 chapters, 31.3 min estimated of which 4.0 min listening; 3 pause-and-listen questions; Variation 41 (in eight orchestrations, the last matched to a vowel); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 42, *Composing***: 12 chapters, 35.5 min estimated of which 5.3 min listening; 3 pause-and-listen questions; Variation 42 (composed by the searcher from its first four notes, with what it threw away); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 43, *Performing***: 12 chapters, 34.4 min estimated of which 5.7 min listening; 3 pause-and-listen questions; Variation 43 (as written and as performed: the same notes, the differences drawn); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 44, *Music for Picture and Play***: 12 chapters, 31.6 min estimated of which 4.9 min listening; 3 pause-and-listen questions; Variation 44 (as a cue on a hit point, as a leitmotif in three moods, as an adaptive loop); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 45, *The Scene***: 12 chapters, 34.5 min estimated of which 3.4 min listening; 3 pause-and-listen questions; Variation 45 (hidden in another line, then released by timbre and by register); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 46, *Expectation and Emotion***: 12 chapters, 30.9 min estimated of which 5.0 min listening; 3 pause-and-listen questions; Variation 46 (with three endings: expected, delayed, denied); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 47, *Origins and Universals***: 14 chapters, 45.2 min estimated of which 3.5 min listening; 5 pause-and-listen questions; Variation 47 (through thirty simulated singers); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 48, *Digital Audio***: 13 chapters, 34.2 min estimated of which 2.8 min listening; 4 pause-and-listen questions; Variation 48 (at 16, 8, 4 and 1 bit, with and without dither); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 49, *Filters, Delay and Reverb***: 13 chapters, 31.1 min estimated of which 2.4 min listening; 3 pause-and-listen questions; Variation 49 (dry, then in a tiled room, on a plate, on a spring and in a cathedral); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 50, *Dynamics, Distortion and Pitch***: 13 chapters, 31.1 min estimated of which 3.4 min listening; 3 pause-and-listen questions; Variation 50 (sung, hard-tuned, vocoded and stretched eightfold); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 51, *Synthesis I: Oscillators and Filters***: 13 chapters, 40.3 min estimated of which 2.8 min listening; 3 pause-and-listen questions; Variation 51 (switched on: four monophonic tracks, one patch each); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 52, *Synthesis II: FM, Grains and Physical Models***: 13 chapters, 34.0 min estimated of which 2.5 min listening; 3 pause-and-listen questions; Variation 52 (on FM keys and bells, dissolved into grains and back); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 53, *MIDI, Sequencers and the DAW***: 13 chapters, 31.7 min estimated of which 2.1 min listening; 3 pause-and-listen questions; Variation 53 (as a tracker module and a tempo canon at 3 : 4 : 5 : 6); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 54, *Microphones and Loudspeakers***: 13 chapters, 32.1 min estimated of which 2.2 min listening; 3 pause-and-listen questions; Variation 54 (through three microphone patterns and three loudspeakers); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 55, *Rooms and Space***: 13 chapters, 47.1 min estimated of which 2.6 min listening; 3 pause-and-listen questions; Variation 55 (walked through four spaces, then circling the listener); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 56, *Recording and Mixing***: 13 chapters, 37.3 min estimated of which 4.6 min listening; 3 pause-and-listen questions; Variation 56 (the session mixed three ways); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 57, *Mastering and Loudness***: 13 chapters, 31.9 min estimated of which 4.8 min listening; 3 pause-and-listen questions; Variation 57 (an album side, and one war-mastered beside itself); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 58, *Compression for the Ear***: 13 chapters, 32.5 min estimated of which 3.7 min listening; 4 pause-and-listen questions; Variation 58 (at five bit rates, and the residue alone); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 59, *Live Sound***: 13 chapters, 31.5 min estimated of which 3.2 min listening; 4 pause-and-listen questions; Variation 59 (at an arena: front of house, the back row, the car park); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 60, *The Business of Music***: 13 chapters, 33.3 min estimated of which 4.5 min listening; 3 pause-and-listen questions; Variation 60 (the Tune's family of copyrights: a recording, a cover, a remix); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 61, *Pitch, Onsets and Transcription***: 13 chapters, 31.3 min estimated of which 3.9 min listening; 4 pause-and-listen questions; Variation 61 (performed, transcribed and re-rendered, five times round); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 62, *Beat, Chords and Structure***: 13 chapters, 30.3 min estimated of which 3.8 min listening; 3 pause-and-listen questions; Variation 62 (sung freely, and accompanied live by a machine that listens); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 63, *Finding Music***: 13 chapters, 31.4 min estimated of which 3.2 min listening; 5 pause-and-listen questions; Variation 63 (three earlier Variations, five noisy seconds each, named); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 64, *Source Separation***: 13 chapters, 31.9 min estimated of which 7.0 min listening; 4 pause-and-listen questions; Variation 64 (a cappella and karaoke, separated, beside the true stems); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 65, *Machines that Compose***: 13 chapters, 32.6 min estimated of which 7.7 min listening; 3 pause-and-listen questions; Variation 65 (the Tune's first phrase continued at five temperatures, uncurated); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 66, *Generative Audio***: 13 chapters, 31.4 min estimated of which 3.8 min listening; 3 pause-and-listen questions; Variation 66 (sung, re-rendered as a DDSP string, and continued by a token model); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 67, *Doing Research in Music***: 13 chapters, 33.3 min estimated of which 4.5 min listening; 3 pause-and-listen questions; Variation 67 (a critical edition: the Tune, a corrupt copy, and the original rebuilt); its lab, interactive and problems. |
+| by 2026-11-15 | **Part 68, *The Variations***: 13 chapters, 39.1 min estimated of which 14.2 min listening; 5 pause-and-listen questions; Variation 68 (the suite: every Variation, in the order they were made); the series is complete in script and computation; its lab, interactive and problems. |
 
 **Still open from §6:** slurs and a second voice on a staff in the series' engraver (needed from Parts 14
 and 16; chords and the grand staff landed with Part 13), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for
