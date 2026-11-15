@@ -27,15 +27,15 @@ class Shape(SoundScene):
         notes = VGroup(label(r"Kac, \ 1966: \ suppose you knew every overtone", font_size=26, color=GREY_A),
                        MathTex(r"N \approx \frac{\text{area}}{4\pi}\,\lambda - \frac{\text{rim}}{4\pi}\sqrt{\lambda}", font_size=34, color=TUNE),
                        label(r"so the overtones tell you \\ the drum's area, \ and the length of its rim", font_size=26, color=GOOD),
-                       label(r"Kac added: \ and how many holes it has", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(LEFT * 3.5 + DOWN * 0.2)
+                       label(r"smooth boundaries: \ heat-trace terms reveal holes", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(LEFT * 3.5 + DOWN * 0.2)
         with self.voiceover(
             "Now back to Mark Kac. His drum is an ideal skin of any outline, and you are told every one of "
             "its overtones, to any accuracy. What can you work out? <bookmark mark='a'/> Quite a lot. Count "
             "how many modes lie below each frequency. Hermann Weyl proved in 1911 that the count grows in "
             "proportion to the area of the skin, with a correction in proportion to the length of its rim, "
-            "and nothing else about the shape comes into it. Here is the count for one drum, and Weyl's "
+            "these are the leading asymptotic terms, not the whole exact count. Here is the count for one drum, and Weyl's "
             "formula laid over it. <bookmark mark='b'/> So from the overtones alone you can hear how big a "
-            "drum is, and how long its edge. Kac showed you can also hear how many holes it has. With that "
+            "drum is, and how long its edge. For sufficiently smooth planar boundaries, heat-trace terms also reveal the number of holes; corners require additional care. With that "
             "much decided by the sound, it seemed a fair guess that the whole shape was."
         ) as vo:
             self.play(FadeIn(notes[0]), FadeIn(g))
@@ -51,25 +51,25 @@ class Shape(SoundScene):
     # ------------------------------------------------------------------
     def count(self):
         title = label(r"A worked example: \ hearing how big a drum is", font_size=36).to_edge(UP, buff=0.4)
-        ask = pause_card(r"The count of modes grows as the drum's area \\ times the frequency squared. \\ One drum has its hundredth mode at 1000 Hz. \\ A second, \ of the same skin and tension, \ has twice the area. \\ Where is its hundredth mode?", width=7.6, font_size=28).move_to(UP * 0.3)
+        ask = pause_card(r"The count of modes grows as the drum's area \\ times the frequency squared. \\ One drum has its hundredth mode at 1000 Hz. \\ A second, \ of the same skin and tension, \ has twice the area. \\ Approximately where, \ using the leading area term?", width=7.6, font_size=28).move_to(UP * 0.3)
         work = VGroup(MathTex(r"N \propto \text{area} \times f^2", font_size=40),
                       MathTex(r"2 \times f^2 = 1000^2 \quad\Rightarrow\quad f = \frac{1000}{\sqrt2} = 707\ \text{Hz}", font_size=38, color=TUNE),
-                      label(r"twice the area: \ every count is reached half an octave sooner", font_size=28, color=GREY_A),
+                      label(r"twice the area: \ the leading estimate is half an octave lower", font_size=28, color=GREY_A),
                       label(r"a big drum is not just lower: \ its overtones are packed closer", font_size=28, color=GOOD)).arrange(DOWN, buff=0.3).move_to(DOWN * 0.6)
         with self.voiceover(
             "A worked example of hearing size. The count of modes grows as the area of the drum times the "
             "square of the frequency. Suppose one drum has its hundredth mode at a thousand hertz. A second "
-            "drum, of the same skin at the same tension, has twice the area. Where is its hundredth mode? "
+            "drum, of the same skin at the same tension, has twice the area. Approximately where, using the leading area term? "
             "Pause, and work it out."
         ):
             self.play(FadeIn(title), FadeIn(ask, shift=UP * 0.2))
         self.wait(1.5)
         with self.voiceover(
             "Twice the area, so the frequency squared must halve to keep the count at a hundred. A thousand "
-            "over the square root of two: seven hundred and seven hertz. <bookmark mark='a'/> Every count is "
+            "over the square root of two: seven hundred and seven hertz. <bookmark mark='a'/> In the leading asymptotic estimate, the count is "
             "reached half an octave sooner. So a big drum is not only lower than a small one. Its overtones "
             "are packed more closely, and that crowding is something you hear, as the difference between a "
-            "bass drum's rumble and a bongo's pop, whatever the shapes."
+            "bass drum's rumble and a bongo's pop, with shape and boundary corrections at finite mode number."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(work[0]), FadeIn(work[1]))
             vo.wait_until("a")
@@ -137,7 +137,7 @@ class Shape(SoundScene):
             r[0].move_to(LEFT * 0.6 + UP * (0.85 - 0.46 * k))
             r[1].move_to(RIGHT * 1.2 + UP * (0.85 - 0.46 * k))
             r[2].move_to(RIGHT * 3.6 + UP * (0.85 - 0.46 * k))
-        th = VGroup(label(r"mode", font_size=22, color=GREY_B).move_to(LEFT * 0.6 + UP * 1.35), label(r"the upper drum", font_size=22, color=SKIN).move_to(RIGHT * 1.2 + UP * 1.35), label(r"the lower drum", font_size=22, color=AIR).move_to(RIGHT * 3.6 + UP * 1.35))
+        th = VGroup(label(r"mode", font_size=22, color=GREY_B).move_to(LEFT * 0.6 + UP * 1.35), label(r"upper $f^2$", font_size=22, color=SKIN).move_to(RIGHT * 1.2 + UP * 1.35), label(r"lower $f^2$", font_size=22, color=AIR).move_to(RIGHT * 3.6 + UP * 1.35))
         ours, pub = d["ours"], d["driscoll"]
         check = VGroup(label(rf"largest difference between the columns: \ {d['largest_gap']:.0e}", font_size=24, color=GOOD),
                        label(rf"the first, \ rescaled: \ {ours[0]:.4f}. \ Published (Driscoll, \ 1997): \ {pub[0]:.4f}", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12, aligned_edge=LEFT).move_to(RIGHT * 2.0 + DOWN * 2.6)
@@ -147,8 +147,8 @@ class Shape(SoundScene):
             "different edges. They have the same area and the same length of rim, as Weyl says they must. "
             "They are plainly not the same shape: no turning or flipping lays one on the other. "
             "<bookmark mark='b'/> Monochord stretches a skin over each, and solves for its modes. Here are "
-            "the six lowest of each drum. <bookmark mark='c'/> They are the same. Not close: the same, to "
-            "thirteen decimal places, which is as many as the computer keeps. The lowest, rescaled to the "
+            "the six lowest of each drum. <bookmark mark='c'/> The computed scaled squared frequencies agree to "
+            "approximately thirteen decimal places in this discretization; floating-point arithmetic itself keeps about sixteen significant digits. The lowest, rescaled to the "
             "size used in the mathematical literature, comes out at "
             f"{say(ours[0], 4)}, against a published value of {say(pub[0], 4)}; the small difference is our "
             "grid. <bookmark mark='d'/> The modes themselves look quite different on the two drums. Here is "
@@ -191,9 +191,8 @@ class Shape(SoundScene):
         sq = Square(side_length=d["side"] * sc, color=BAD, stroke_width=3, fill_color=BAD, fill_opacity=0.12).next_to(bx[1], DOWN, buff=0.4)
         sb = polygon_shape(d["drum2"], sc, color=AIR).next_to(bx[2], DOWN, buff=0.4)
         with self.voiceover(
-            "B, the middle one. It was a square drum of the same area: you can hear that it is the same "
-            "size, and you can hear that it is a different shape. A and C were the two drums of 1992. Not "
-            "even a perfect ear could tell which of them it was listening to."
+            "B, the middle one. It was a square drum of the same area: its spectrum is consistent with that "
+            "size, and you can hear that it is a different shape. A and C were the two drums of 1992. Here we matched mode weights and decays deliberately. Real isospectral drums can differ in strike-dependent amplitudes, damping and radiation; equal frequencies alone do not imply identical sounds."
         ):
             self.play(FadeOut(q), FadeIn(sa), FadeIn(sq), FadeIn(sb))
         self.wait(0.3)
@@ -205,8 +204,8 @@ class Shape(SoundScene):
         rows = rows_card([
             (r"not always", r"two different drums can have every overtone in common. \\ The proof cuts a mode of one into seven triangles and reassembles it on the other."),
             (r"it has been tried", r"1994: \ two metal boxes in these shapes, \ filled with microwaves. \\ Their resonances agreed, \ line for line."),
-            (r"but often", r"a triangle can be heard; \ so can a drum with a smooth, \ symmetric outline. \\ The known exceptions all have corners."),
-            (r"and always", r"its area, \ the length of its rim, \ and the number of its holes."),
+            (r"but often", r"a triangle can be heard; \ certain restricted smooth \\ symmetric classes also have uniqueness theorems. \\ The known exceptions all have corners."),
+            (r"and always", r"known wave speed: \ area and rim; \\ smooth-boundary heat invariants also reveal holes."),
         ], left=-6.5, text_left=-3.6, top=1.9, step=1.42, name_size=28, text_size=23, color=SKIN)
         self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
@@ -216,9 +215,9 @@ class Shape(SoundScene):
             "mode of the other drum at the same frequency. <bookmark mark='b'/> In 1994 two physicists built "
             "the shapes as flat copper boxes and filled them with microwaves, which obey the same equation "
             "as a drumhead. The resonances of the two boxes agreed, line for line. <bookmark mark='c'/> But "
-            "the answer is often yes. A triangle is known by its overtones. So is a drum with a smooth, "
-            "symmetric outline. Every pair of sound-alike drums found so far has corners. <bookmark mark='d'/> "
-            "And always, whatever the shape, you can hear its area, the length of its rim, and the number "
+            "the answer is often yes. A triangle is known by its overtones. There are also uniqueness theorems for restricted smooth, "
+            "symmetric classes, with extra analytic and dynamical assumptions. Every pair of sound-alike drums found so far has corners. <bookmark mark='d'/> "
+            "With wave speed known, area and rim are spectral invariants. Under smooth-boundary assumptions, so is the number "
             "of holes in it. Which is a good deal more than Kac's audience expected."
         ) as vo:
             for mark, r in zip("abcd", rows):

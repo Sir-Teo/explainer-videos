@@ -16,26 +16,26 @@ class Frontier(SoundScene):
     def hearing(self):
         head = label(r"Hearing what a thing is", font_size=38, color=EAR).to_edge(UP, buff=0.4)
         rows = rows_card([
-            (r"what it is made of", r"wood, \ metal and glass are told apart less by their overtones \\ than by how fast each overtone dies: \ the material's own damping."),
+            (r"what it is made of", r"decay rates help distinguish wood, \ metal and glass. \\ Material loss, \ geometry, \ radiation and supports all contribute."),
             (r"how big it is", r"listeners judge the length of a dropped bar quite well, \\ and the shape of a struck plate only a little better than chance."),
             (r"which shapes \\ can be heard", r"Kac's question is still open for most outlines. \\ Nobody knows whether every smooth, \ convex drum has its own spectrum."),
-            (r"a cymbal's crash", r"the cascade of energy through hundreds of modes can now be computed \\ from the plate's equations, \ slowly; \ nobody can yet play one."),
+            (r"a cymbal's crash", r"plate equations can model a cascade through many modes. \\ Detailed computation is expensive; \\ real-time approximations trade detail for speed."),
         ], left=-6.5, text_left=-2.9, top=1.9, step=1.42, name_size=26, text_size=23, color=EAR)
         self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
             "Kac asked what a mathematician could deduce from a spectrum. A different question is what an "
             "ordinary ear does deduce, and it is being worked on now. <bookmark mark='a'/> Tap a table, a "
             "glass, a saucepan. You know at once what each is made of. Experiments show that listeners rely "
-            "less on where the overtones are than on how quickly each one dies away, because that is a "
-            "property of the material and not of the shape. <bookmark mark='b'/> Size comes through too: "
+            "less on where the overtones are than on how quickly each one dies away, because it reflects a "
+            "mix of material loss, geometry, radiation and support conditions. <bookmark mark='b'/> Size comes through too: "
             "people can judge the length of a dropped bar. Shape hardly does. Asked whether a struck plate "
             "is a circle, a square or a triangle, listeners do only a little better than guessing. "
             "<bookmark mark='c'/> The mathematics is unfinished as well. For most outlines nobody knows "
             "whether a drum's overtones pin down its shape. It is not even known whether every smooth, "
             "convex drum, an egg shape, say, has a spectrum all its own. <bookmark mark='d'/> And the "
             "cymbal of chapter seven. The flow of energy through its hundreds of modes can now be computed "
-            "from the equations of a thin plate, at great cost, a few seconds of sound in hours. A cymbal "
-            "you could play from a model in real time does not exist yet."
+            "from the equations of a thin plate, at great cost, a few seconds of sound in hours. A fully resolved cymbal "
+            "model remains expensive, while simplified and reduced models can already run in real time."
         ) as vo:
             for mark, r in zip("abcd", rows):
                 vo.wait_until(mark)

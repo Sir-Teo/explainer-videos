@@ -23,18 +23,18 @@ class Plates(SoundScene):
         notes = VGroup(label(r"a metal plate, \\ held at its middle, \\ bowed on its edge", font_size=26, color=GREY_A),
                        label(r"sand is thrown off \\ the parts that move", font_size=26, color=SKIN),
                        label(r"and settles on \\ the lines that stay still", font_size=26, color=SKIN),
-                       label(r"under each: \ its pitch, \\ in units of the lowest", font_size=22, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(LEFT * 5.0 + DOWN * 0.2)
+                       label(r"under each: \ schematic index \\ $m^2+n^2$, \ not a measured pitch", font_size=22, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(LEFT * 5.0 + DOWN * 0.2)
         with self.voiceover(
             "A bar is stiff in one direction. Widen it into a plate and it is stiff in two, with a still "
             "richer crowd of modes. How would you ever find out what they look like? In 1787 a lawyer and "
-            "amateur musician in Wittenberg, Ernst Chladni, found a way that needs no instruments at all. "
+            "amateur musician in Wittenberg, Ernst Chladni, found a way that needs only simple equipment. "
             "<bookmark mark='a'/> Hold a metal plate at its middle. Scatter fine sand on it. Draw a violin "
             "bow down its edge until it sings. <bookmark mark='b'/> Wherever the plate is moving, the sand "
             "is thrown into the air. It comes to rest only on the lines where the plate stands still. "
             "<bookmark mark='c'/> And so the sand draws the mode. Touch the edge with a finger in a "
             "different place, bow again, and another figure appears, with another pitch. Chladni filled "
-            "books with them. These are computed, by a formula that Walther Ritz worked out in 1909, and "
-            "under each is its pitch: the more lines, the higher the note. Chladni toured Europe with his "
+            "books with them. These are idealized computed plate patterns, following the approximate trial-shape approach associated with Ritz, and "
+            "under each is the simple index m squared plus n squared used to order these sketches, not a measured pitch or a rigorously solved free-plate eigenvalue. Chladni toured Europe with his "
             "plates, and audiences paid to watch sound become visible."
         ) as vo:
             rng = np.random.default_rng(3)
@@ -58,7 +58,7 @@ class Plates(SoundScene):
             (r"1809", r"Chladni's plates are shown to Napoleon, \ who puts up a prize \\ for whoever can explain them."),
             (r"1816", r"Sophie Germain wins it, \ at her third attempt, \\ with the first equation for a vibrating plate."),
             (r"1850, \ 1909", r"Kirchhoff corrects the conditions at the edge; \ Ritz computes the figures, \\ and invents a method engineers still use every day."),
-            (r"today", r"violin makers sprinkle glitter on a free top plate over a loudspeaker, \\ and carve until two of its figures appear at the right pitches."),
+            (r"today", r"some violin makers sprinkle glitter on a free top plate over a loudspeaker, \\ and carve until two of its figures appear at the right pitches."),
         ], left=-6.4, text_left=-3.9, top=1.9, step=1.42, name_size=28, text_size=23, color=HIST)
         self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
@@ -71,7 +71,7 @@ class Plates(SoundScene):
             "the figures themselves, by a method of trial shapes that is now the foundation of how "
             "engineers compute anything that bends. <bookmark mark='d'/> And the sand is still in use. A "
             "violin maker lays a half-carved top plate over a loudspeaker, sprinkles it with glitter, and "
-            "carves until two particular figures, a cross and a ring, appear at the right pitches. It is "
+            "monitors particular figures, such as a cross and a ring, and their frequencies. Those targets alone do not guarantee the finished violin's quality. It is "
             "Part 7's tap tone, made visible."
         ) as vo:
             for mark, r in zip("abcd", rows):

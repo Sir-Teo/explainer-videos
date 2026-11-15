@@ -33,7 +33,7 @@ class Outro(SoundScene):
         cells.arrange(RIGHT, buff=0.35).move_to(DOWN * 1.7)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it has built. This part built "
-            "instruments that nature tunes badly and people retuned. <bookmark mark='a'/> So here is the "
+            "instruments whose partials makers reshape towards chosen targets. <bookmark mark='a'/> So here is the "
             "Tune on four of them: a marimba, bells, a steelpan and a pair of kettledrums. Each alone, "
             "then in pairs, and then together."
         ) as vo:
@@ -75,19 +75,19 @@ class Outro(SoundScene):
         t, b, bl, s = load("tabla"), load("bars"), load("bells"), load("shape")
         m = b["marimba"]
         card = objectives_card([
-            r"a round skin's overtones are 1, \ 1.59, \ 2.14, \ 2.30: \ Bessel's numbers, \ and no series",
+            r"a round skin's overtones are 1, \ 1.59, \ 2.14, \ 2.30: \ Bessel's numbers, \ not integer harmonics",
             r"air loads a kettledrum's skin towards 1 : 1.5 : 2 : 2.5; \ paste gives a tabla 1 to 5",
             rf"a bar's overtones, \ 1 : 2.76 : 5.40, \ are carved to 1 : {m['ratios'][1]:.0f} : {m['ratios'][2]:.0f} by an arch",
-            rf"a bell's strike note is a missing fundamental ({bl['heard_upper_only']:.0f} Hz from 2 : 3 : 4); \ its third is minor",
+            rf"a bell's strike note is a missing fundamental ({bl['heard_upper_only']:.0f} Hz from 2 : 3 : 4); \ Western minor-third type",
             r"sand finds a plate's still lines; \ a gong's pitch follows its loudness",
             r"a spectrum gives a drum's area and rim, \ but not always its shape",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A round skin's overtones follow Bessel's numbers, and form no series. "
+            "What did we find? A round skin's overtones follow Bessel's numbers, rather than an integer harmonic series. "
             "<bookmark mark='a'/> Two cultures gave a skin a note: one by letting air load it, one with a "
             "patch of paste. <bookmark mark='b'/> A bar's overtones are just as unhelpful, until an arch "
             "cut underneath moves them to two octaves and beyond. <bookmark mark='c'/> A bell's strike "
-            "note is a missing fundamental, supplied by the ear, and every traditional bell carries a "
+            "note is a missing fundamental, supplied by the ear, and a Western tuned minor-third bell carries a "
             "minor third. <bookmark mark='d'/> Sand shows where a plate stands still, and a gong's pitch "
             "is a record of its loudness. <bookmark mark='e'/> And a drum's overtones give away its area "
             "and the length of its rim, but two different shapes can share them all."
@@ -145,13 +145,13 @@ class Outro(SoundScene):
             (r"timpanists", r"tune with the ear close to the head, \ and clear the skin so that every lug gives the same note"),
             (r"marimba makers", r"carve the arch in stages, \ checking the note and both overtones against a tuner after each pass"),
             (r"bell founders", r"cast a little thick, \ then turn the inside on a lathe, \ partial by partial; \ there is no putting metal back"),
-            (r"sound designers", r"build every knock, \ clink and footstep in a game from a few dozen dying partials"),
+            (r"sound designers", r"can build knocks, \ clinks and footsteps in games from a few dozen dying partials"),
         ], font_size=26)
         with self.voiceover(
             "And in practice. A timpanist tunes with an ear close to the skin, and adjusts each lug until "
             "the head gives one note all the way round. A marimba maker carves the arch in stages, checking "
             "three frequencies after each pass. A bell founder casts thick and turns metal away, knowing "
-            "that none can be put back. And every knock and clink in a video game is a few dozen dying "
+            "that none can be put back. And some game sound systems synthesize knocks and clinks from dying "
             "partials, computed as the objects collide."
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
@@ -180,15 +180,14 @@ class Outro(SoundScene):
         act = VGroup(label(r"Act I, \ Sound", font_size=40, color=TUNE),
                      label(r"a string \ $\cdot$ \ waves in air \ $\cdot$ \ the spectrum \ $\cdot$ \ the ear \ $\cdot$ \ consonance \ $\cdot$ \ tuning", font_size=26, color=GREY_A),
                      label(r"strings, \ hammers and bows \ $\cdot$ \ pipes, \ reeds and voices \ $\cdot$ \ drums, \ bars and bells", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.25).move_to(UP * 1.6)
-        q = VGroup(label(r"we can make any sound. \ How do we tell someone else which ones, \ and when?", font_size=30, color=EAR)).move_to(DOWN * 0.5)
+        q = VGroup(label(r"we can model many instrumental sounds. \\ How do we tell someone else which ones, \ and when?", font_size=30, color=EAR)).move_to(DOWN * 0.5)
         nxt = VGroup(label(r"Act II, \ Notes \ $\cdot$ \ Part 10", font_size=32, color=GREY_B), label(r"Writing It Down", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "That is the end of the first act of this series. In nine parts we have gone from one string "
-            "to every way an instrument makes a sound: what a vibration is, how it travels, what the ear "
+            "through several major ways instruments make sound: what a vibration is, how it travels, what the ear "
             "does with it, why some sounds agree, and how strings, pipes, skins and metal are persuaded to "
             "make them. <bookmark mark='a'/> What we have not done is play anything but one small tune. To "
-            "go further, music has to be remembered, and handed to someone else. Around the year 1025 a "
-            "monk named Guido drew four lines across a page and boasted that a singer could now learn in a "
+            "go further, music has to be remembered, and handed to someone else. Around the year 1025, Guido of Arezzo helped develop staff-based pitch teaching and reported that a singer could now learn in a "
             "year or two what used to take ten. <bookmark mark='b'/> That is where Act Two begins. Part 10: "
             "Writing It Down."
         ) as vo:

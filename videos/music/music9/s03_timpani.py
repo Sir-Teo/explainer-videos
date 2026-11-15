@@ -41,8 +41,8 @@ class Timpani(SoundScene):
             f"{say(d['estimate'][3], 2)}. Every mode has moved towards its line. <bookmark mark='c'/> And here "
             "is a real kettledrum, measured by Thomas Rossing in 1982: one, one point five, one point nine "
             "eight, two point four four. The rest of the way is the air shut inside the kettle and the "
-            "stiffness of the head. So the kettle is not a resonator, as people supposed. It is a weight. "
-            "It tunes the drum by loading it with air."
+            "stiffness of the head. The kettle and its enclosed air participate in a coupled acoustic system. Air loading is central here. "
+            "It helps move the ringing modes towards a harmonic pattern."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(targets))
             vo.wait_until("a")
@@ -91,7 +91,7 @@ class Timpani(SoundScene):
         head = label(r"Which note, \ though?", font_size=38, color=GREY_A).to_edge(UP, buff=0.4)
         rows = rows_card([
             (r"the overtones", rf"1, \ 1.5, \ 2, \ 2.5 \ are \ 2, \ 3, \ 4, \ 5 \ halves: \\ harmonics two to five of a note an octave \emph{{below}} the lowest."),
-            (r"Part 4's model of the ear", rf"hears exactly that missing note, \ at {d['kettle_pitch']:.0f} Hz, \ and is sure of it \\ ({d['kettle_salience']:.2f}, \ against {d['bare_salience']:.2f} for the bare skin)."),
+            (r"Part 4's model of the ear", rf"hears exactly that missing note, \ at {d['kettle_pitch']:.0f} Hz, \ with model salience \\ ({d['kettle_salience']:.2f}, \ against {d['bare_salience']:.2f} for the bare skin)."),
             (r"timpanists, \ and audiences", rf"name the note of the lowest ringing mode itself: \ {d['hz']:.0f} Hz. \\ Nobody tunes a kettledrum an octave away from where it sounds."),
             (r"so", r"a harmonic series fuses into one note; \ which octave the ear files it under \\ is a finer question, \ and not a settled one."),
         ], left=-6.5, text_left=-2.3, top=1.9, step=1.42, name_size=26, text_size=23, color=SKIN)
@@ -101,9 +101,9 @@ class Timpani(SoundScene):
             "half, two, two and a half. Double them: two, three, four, five. Those are harmonics two to five "
             "of a note an octave below the drum's lowest ringing mode, with the fundamental missing. "
             "<bookmark mark='b'/> Part 4's model of the ear, given the kettledrum's sound, reports exactly "
-            f"that missing note, at {say(d['kettle_pitch'])} hertz, and with more confidence than it has "
+            f"that missing note, at {say(d['kettle_pitch'])} hertz, and with greater model salience than it has "
             "about anything in the bare skin's sound. <bookmark mark='c'/> But ask a timpanist, or an audience, and they name the "
-            f"note of the lowest ringing mode itself, at {say(d['hz'])} hertz. Nobody hears a kettledrum an "
+            f"note of the lowest ringing mode itself, at {say(d['hz'])} hertz. The usual musical pitch label is not an "
             "octave below where it is written. <bookmark mark='d'/> So the model has the important thing "
             "right: these partials fuse into one clear note. Which octave the ear files that note under, "
             "when the lowest partial is itself strong, is a finer question, and the textbooks do not agree "

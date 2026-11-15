@@ -21,12 +21,12 @@ class Gongs(SoundScene):
         cu = curve_from(g, np.asarray(d["t"])[:240], np.asarray(d["up"])[:240], AIR)
         ld = label(rf"a large gong: \ falls {d['down_cents']:.0f} cents", font_size=24, color=BRONZE).next_to(g.ax.c2p(1.5, 225), UP, buff=0.15)
         lu = label(rf"a small one: \ rises {abs(d['up_cents']):.0f}", font_size=24, color=AIR).next_to(g.ax.c2p(1.6, 350), DOWN, buff=0.2)
-        notes = VGroup(label(r"so far, \ pitch has not \\ depended on loudness", font_size=26, color=GREY_A),
+        notes = VGroup(label(r"the linear models: \\ pitch independent of amplitude", font_size=26, color=GREY_A),
                        label(r"a thin plate, \ struck hard, \\ stretches as it bends: \\ stiffer while it is loud", font_size=26, color=BRONZE),
                        label(r"a shallow dome can \\ do the opposite", font_size=26, color=AIR)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(LEFT * 4.3 + DOWN * 0.4)
         note = listen_note(r"Two gongs. \ Follow the pitch of each as it dies away.", width=7.6, font_size=24).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Everything so far has obeyed one quiet rule: the pitch of a thing does not depend on how hard "
+            "Our linear models of struck objects obey one rule: the pitch of a thing does not depend on how hard "
             "you hit it. A loud note and a soft one are the same note. Part 1 mentioned that a string "
             "stretched far enough breaks the rule slightly. <bookmark mark='a'/> A thin metal plate breaks "
             "it thoroughly. When a plate bends a long way, it also has to stretch, and stretching makes it "
@@ -84,12 +84,12 @@ class Gongs(SoundScene):
         f = np.sort(rng.uniform(d["cymbal_lo"], d["cymbal_hi"], d["cymbal_modes"]))
         g = axes([0, 13000], [0, 1], x_length=11.0, y_length=1.6, xlabel=r"frequency (Hz)", ylabel="", xticks=[0, 2000, 4000, 6000, 8000, 10000, 12000], yticks=[], font_size=20).move_to(UP * 0.6)
         ticks = VGroup(*[Line(g.ax.c2p(v, 0), g.ax.c2p(v, 0.75), color=STEEL, stroke_width=1.2) for v in f])
-        head = label(rf"A cymbal: \ {d['cymbal_modes']} partials, \ and no pattern", font_size=34, color=GREY_A).to_edge(UP, buff=0.45)
+        head = label(rf"A cymbal: \ {d['cymbal_modes']} schematic partials, \ no harmonic series", font_size=34, color=GREY_A).to_edge(UP, buff=0.45)
         note = listen_note(r"A sketch of a crash. \ Listen for the brightness arriving a moment after the blow.", width=9.4, font_size=24).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "A cymbal goes further. It is so thin, and struck so hard, that its modes do not merely shift. "
             "They trade energy with each other. <bookmark mark='a'/> A cymbal has hundreds of modes within "
-            "the range of hearing, crowded together with no pattern at all. The stick sets the low ones "
+            "the range of hearing, crowded together without an integer harmonic series. The stick directly excites a range of modes, and nonlinear coupling can set further ones "
             "going. Within a few hundredths of a second, energy has spilled from them into the modes above, "
             "and from those into the ones above them, in a cascade, the way a large eddy in a stream breaks "
             "into smaller ones. That is the crash: not a note, but a shimmer that brightens just after the "

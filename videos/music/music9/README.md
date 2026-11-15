@@ -1,9 +1,8 @@
 # Music, Built: Part 9, Drums, Bars and Bells
 
 Part 9 of a sixty-eight-part course in music (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), and the last part of Act I. Strings and columns of air are long and thin, and
-their overtones are nearly whole multiples of the fundamental. Skins, bars, plates and bells are not so obliging:
-nature tunes them badly, and for three thousand years makers have been retuning them, with air, paste, a knife, a
+[the syllabus](../SYLLABUS.md)), and the last part of Act I. Ideal tensioned strings and uniform air columns have simple harmonic resonance patterns.
+Skins, bending bars, plates and bells have different patterns; makers reshape them towards chosen targets, with air, paste, a knife, a
 lathe and a hammer. The part computes what nature gives and what the makers did about it, and ends on the
 opposite question, Kac's: if you knew every overtone of a drum, would you know its shape? The instruments are
 Monochord's (`explainer/music/monochord/instruments/percussion.py`); every sound is computed in `compute.py`.
@@ -12,7 +11,7 @@ Dates and attributions are the published ones, listed under Sources.
 * **Can one hear the shape of a drum?** A string and a drum on the same lowest frequency; their overtones (1, 2,
   3, 4 against 1, 1.59, 2.14, 2.30); Kac's question (1966) and the two drums of 1992; the plan.
 * **1. A skin.** The modes of a round skin: still diameters and still circles; a worked example (the zeros of two
-  Bessel functions, 3.832/2.405 = 1.593: 806 cents, not an interval); an ear question (struck at the centre, or
+  Bessel functions, 3.832/2.405 = 1.593: 806 cents, between a fifth and a just minor sixth); an ear question (struck at the centre, or
   off it?); why the modes with no diameter die fast, and where a timpanist strikes.
 * **2. A drum with a note.** The ringing modes of an ideal skin (1, 1.34, 1.66, 1.98, 2.29); an estimate of the
   air's load (1, 1.42, 1.83, 2.24, 2.64); a kettledrum as measured (1, 1.50, 1.98, 2.44, 2.91); an ear question
@@ -26,16 +25,16 @@ Dates and attributions are the published ones, listed under Sources.
   stopped tube under each bar; a soft mallet and a hard one (1.6 and 0.25 ms on the bar).
 * **5. Bells.** The partials of a tuned bell (hum, prime, tierce, quint, nominal ...); the Hemonys and van Eyck
   (1644); five partials heard one at a time, and then the bell; the strike note as a missing fundamental (the ear model, given the partials at 2, 3 and 4, returns the
-  prime's 262 Hz); the minor third in every bell; an ear question (the old kind and the new); the major-third
+  prime's 262 Hz); the tierce of a Western minor-third bell; an ear question (the old kind and the new); the major-third
   bell of the 1980s; a major chord on each kind.
 * **6. Plates and sand.** Chladni's figures (1787), in Ritz's approximation; Napoleon's prize, Sophie Germain
   (1816), Kirchhoff, Ritz; a violin maker's glitter.
 * **7. Gongs and cymbals.** When pitch depends on loudness: a gong that falls a whole tone as it fades and one
-  that rises; a cymbal as 420 partials with no pattern, and the cascade that makes a crash (a sketch).
+  that rises; a cymbal as 420 schematic partials without an integer harmonic series, and the cascade that makes a crash (a sketch).
 * **8. The steelpan.** Trinidad, the 1930s and 1940s; a note as a small dome; tuning the dome's first three modes
   to 1 : 2 : 3 with a hammer; the note before tuning and built up.
 * **9. Hearing a shape.** Weyl's law: the overtones give the area and the rim; a worked example (twice the area:
-  the hundredth mode falls from 1000 to 707 Hz); Gordon, Webb and Wolpert's two drums (1992), computed: six
+  the leading area term estimates a fall from 1000 to 707 Hz); Gordon, Webb and Wolpert's two drums (1992), computed: six
   eigenvalues of each, equal to thirteen decimal places, and within 0.1% of Driscoll's published values; why they
   agree (a mode of one, cut into seven triangles, reassembles on the other); an ear question (two of three drums have the same notes); the answer to Kac.
 * **10. Frontier: what the ear knows about things.** Hearing material, size and shape; which outlines can be
@@ -77,11 +76,18 @@ right way and about half far enough, and the film shows the measured values besi
 with a step in its density; a real syahi is also stiff and graded. *The bar* is an Euler-Bernoulli beam; real
 bars are thick enough for shear to matter in the higher modes, and makers cut in more than one place. *The bell*
 is not computed: its partials are the published ratios of a tuned bell, and the major-third bell differs only in
-its tierce. *Chladni's figures* use Ritz's first approximation. *The gongs* are single modes with an
+its tierce. *Chladni's figures* are approximate trial patterns; the displayed m²+n² indices order these sketches and are not measured pitches or rigorously solved free-plate eigenvalues. *The gongs* are single modes with an
 amplitude-dependent frequency, the simplest thing that glides; *the cymbal* is a sketch in which the late arrival
 of the high partials was written in by hand, and the film says so. *The steelpan* is a list of partials. The
 ear model is Part 4's; it is used for two statements (the bell's strike note from three partials, and the
-kettledrum's sub-octave), and the second is reported as a disagreement with what listeners say.
+kettledrum's sub-octave), and the second is reported as a disagreement with the usual musical pitch label.
+
+Equal eigenfrequencies do not imply identical struck sounds: the shape comparison deliberately matches modal
+weights and decays. Real excitation, damping and radiation can differ. Area and perimeter follow from an
+ideal membrane spectrum when wave speed is known. Hole counts require appropriate boundary regularity;
+uniqueness theorems for smooth symmetric domains have additional restrictive hypotheses. Fixed-order
+Bessel zeros approach equal spacing asymptotically, although the full circular-membrane spectrum is not an
+integer harmonic series. Slender-beam width cancellation is likewise an ideal-model result.
 
 ## Build
 
@@ -103,7 +109,7 @@ python -m videos.music.labs 9                                  # the lab (writes
    speed of waves on the skin.
 
    *Solution.* The frequencies are in proportion to the zeros: 80 × 3.832/2.405 = 127.5 Hz and 80 × 5.136/2.405 =
-   170.8 Hz. In cents, 1200 log₂(1.593) = 806 and 1200 log₂(2.136) = 1314: a narrow minor sixth, and an octave and a
+   170.8 Hz. In cents, 1200 log₂(1.593) = 806 and 1200 log₂(2.136) = 1314: slightly below a just minor sixth, and an octave and a
    wide semitone. A mode's frequency is f = c z/(2πa), so c = 2π × 0.30 × 80/2.405 = 62.7 m/s, a fifth of the
    speed of sound in air. (The lab computes all of these.)
 

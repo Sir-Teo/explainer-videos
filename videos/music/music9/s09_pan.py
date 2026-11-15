@@ -20,14 +20,14 @@ class Pan(SoundScene):
             ang = PI / 2 - k * TAU / 12
             c = rim.get_center() + 1.35 * np.array([np.cos(ang), np.sin(ang), 0])
             notes.add(VGroup(Ellipse(width=0.62, height=0.5, color=STEEL, stroke_width=2, fill_color=STEEL, fill_opacity=0.15).rotate(ang - PI / 2).move_to(c), label(n, font_size=22, color=GREY_A).move_to(c)))
-        cap = label(r"neighbours are a fifth apart", font_size=24, color=TUNE).next_to(rim, DOWN, buff=0.25)
+        cap = label(r"a schematic circle-of-fifths layout", font_size=24, color=TUNE).next_to(rim, DOWN, buff=0.25)
         rows = VGroup(label(r"Trinidad, \ the 1930s: \ carnival bands beat on tins, \\ pans and the brake drums of cars", font_size=24, color=GREY_A),
                       label(r"a dent in a tin has a pitch, \\ and a deeper dent a different one", font_size=24, color=GREY_A),
                       label(r"1946: \ a whole oil drum, \ its top sunk into a bowl, \\ with a note hammered up for every pitch", font_size=24, color=STEEL),
                       label(r"each note is a small dome of steel: \\ a shell, \ not a skin", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(LEFT * 3.2 + DOWN * 0.1)
         with self.voiceover(
-            "The newest instrument in this part is younger than the saxophone and was not designed by "
-            "anybody. <bookmark mark='a'/> In Trinidad in the nineteen thirties, carnival bands, forbidden "
+            "The newest instrument in this part is younger than the saxophone and grew through the work of many makers rather than "
+            "one inventor. <bookmark mark='a'/> In Trinidad in the nineteen thirties, carnival bands, forbidden "
             "skin drums and then forbidden bamboo, were beating out their rhythms on biscuit tins, paint "
             "pans and the brake drums of cars. <bookmark mark='b'/> Somebody noticed that a dent in the "
             "bottom of a tin rings at a pitch, and that the pitch depends on the dent. A few dents made a "
@@ -35,7 +35,7 @@ class Pan(SoundScene):
             "the wartime naval base, with the top sunk into a smooth bowl by a sledgehammer and a note "
             "hammered back up out of the bowl for every pitch in the scale. <bookmark mark='d'/> Each note "
             "is a shallow dome of steel a few centimetres across. It is a curved shell, like a tiny bell, "
-            "and on the lead pan the notes run round the rim in fifths, so that a note's neighbours are "
+            "and in a common lead-pan layout the notes run round the rim in fifths, so that a note's neighbours are "
             "the ones that sound best with it."
         ) as vo:
             self.play(FadeIn(rim))
@@ -81,7 +81,7 @@ class Pan(SoundScene):
             "A clank; a dull thud; and then, with two more partials in tune, that bright, singing, "
             "slightly swelling sound. A good tuner spends days on one pan, and every hammer blow moves all "
             "the notes around it. Kettledrums were tuned by air, tablas by paste, marimbas by the knife, "
-            "bells on the lathe. The steelpan was tuned by people who had none of that history, with a "
+            "bells on the lathe. The steelpan was tuned by Trinidadian makers drawing on local musical and craft traditions, with a "
             "hammer, in about twenty years."
         ):
             self.play(FadeOut(note))

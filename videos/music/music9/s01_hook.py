@@ -29,13 +29,12 @@ class Hook(SoundScene):
         r2 = tick_row(g, d["drum"], 0.55, SKIN)
         with self.voiceover(
             "A string, and a drum. Their lowest frequencies are the same. The string plays a note you could "
-            "sing back to me. The drum says thump. <bookmark mark='a'/> For eight parts, everything we have "
-            "built has been long and thin: strings, and columns of air. And long thin things have overtones "
-            "at two, three, four, five times their lowest frequency. Consonance, tuning, the ear's sense of "
+            "sing back to me. The drum says thump. <bookmark mark='a'/> Much of the first eight parts has "
+            "used tensioned strings and air columns. Their simplest uniform models have regularly spaced resonances: integer multiples, or an odd-multiple series for a stopped cylinder. Consonance, tuning, the ear's sense of "
             "pitch: Parts 4, 5 and 6 were all built on that. <bookmark mark='b'/> A drumhead is a string's "
             "nearest relation, a thing under tension, held at its edge. Its overtones are at one point five "
-            "nine, two point one four, two point three, two point six five times the lowest. There is no "
-            "pattern there that the ear can use. Nature tunes a drum badly, and a bar and a bell worse."
+            "nine, two point one four, two point three, two point six five times the lowest. There is no harmonic "
+            "series here for the ear to fuse as readily. Bars and bells have different patterns again."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(g), FadeIn(r1))
@@ -53,7 +52,7 @@ class Hook(SoundScene):
         q = label(r"?", font_size=80, color=EAR).move_to(DOWN * 1.0)
         cap = label(r"1992: \ two drums", font_size=28, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "And yet those ugly numbers hold a great deal of information. In 1966 the mathematician Mark Kac "
+            "And yet those irregular numbers hold a great deal of information. In 1966 the mathematician Mark Kac "
             "asked a question in the title of a lecture: can one hear the shape of a drum? If you knew every "
             "overtone of a drum, exactly, could you work out what shape it must be? <bookmark mark='a'/> For "
             "twenty-six years nobody knew. Then, in 1992, three mathematicians drew these two shapes. By the "
@@ -67,12 +66,12 @@ class Hook(SoundScene):
 
     # ------------------------------------------------------------------
     def plan(self):
-        idea = VGroup(label(r"nature tunes these things badly.", font_size=32, color=BAD), label(r"Makers learned to retune them.", font_size=32, color=GOOD)).arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.45)
+        idea = VGroup(label(r"inharmonic modes.", font_size=32, color=BAD), label(r"Makers learned to retune them.", font_size=32, color=GOOD)).arrange(RIGHT, buff=0.5).to_edge(UP, buff=0.45)
         card = objectives_card([
             r"the modes of a skin, \ and why a drum goes thump",
             r"the kettledrum and the tabla: \ two ways to give a skin a note",
             r"bars: \ a knife under a marimba",
-            r"bells, \ and the minor third inside every one of them",
+            r"Western tuned bells, \ and their minor-third partial",
             r"plates, \ gongs and cymbals; \ a steel drum from an oil barrel",
             r"and Kac's question: \ what a spectrum says about a shape",
         ], title=r"Part 9: \ Drums, \ Bars and Bells", font_size=26).move_to(DOWN * 0.5)
@@ -82,7 +81,7 @@ class Hook(SoundScene):
             "that its overtones are the ones I want? <bookmark mark='a'/> So this part goes through the "
             "things that are struck. A skin, and why it goes thump. <bookmark mark='b'/> Two drums that "
             "were taught to sing, by quite different means. <bookmark mark='c'/> A wooden bar, tuned with a "
-            "knife. <bookmark mark='d'/> A bell, which has had a minor chord inside it for four hundred "
+            "knife. <bookmark mark='d'/> A Western tuned bell, with its characteristic minor-third partial for four hundred "
             "years. <bookmark mark='e'/> Plates, gongs and cymbals, and an instrument beaten out of an oil "
             "barrel. <bookmark mark='f'/> And at the end, the two drums of 1992."
         ) as vo:

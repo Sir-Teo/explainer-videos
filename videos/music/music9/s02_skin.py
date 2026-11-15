@@ -65,7 +65,7 @@ class Skin(SoundScene):
         ratio = z1 / z0
         cts = 1200 * np.log2(ratio)
         work = VGroup(MathTex(rf"\frac{{{z1:.3f}}}{{{z0:.3f}}} = {ratio:.3f}", font_size=40), label(rf"{cts:.0f} cents: \ wider than a fifth (702),", font_size=26, color=GREY_A),
-                      label(rf"{abs(d['minor_sixth_cents']):.0f} cents short of a minor sixth", font_size=26, color=GREY_A), label(r"not an octave, \ not a fifth, \ not anything", font_size=28, color=BAD)).arrange(DOWN, buff=0.2).move_to(RIGHT * 3.6 + DOWN * 0.3)
+                      label(rf"{abs(d['minor_sixth_cents']):.0f} cents short of a minor sixth", font_size=26, color=GREY_A), label(r"neither an octave nor a fifth", font_size=28, color=BAD)).arrange(DOWN, buff=0.2).move_to(RIGHT * 3.6 + DOWN * 0.3)
         with self.voiceover(
             "A worked example, to see where one of those numbers comes from. Along a radius, the height of "
             "the skin in its lowest mode follows the blue curve, and in its next mode the gold one. The rim "
@@ -78,8 +78,8 @@ class Skin(SoundScene):
         with self.voiceover(
             f"Three point eight three two over two point four oh five is {say(ratio, 3)}. <bookmark mark='a'/> In "
             f"cents, {say(cts)}: wider than a fifth, and a little short of a minor sixth. The first overtone of "
-            "a string is an octave above its fundamental. The first overtone of a drum is nowhere. And the "
-            "zeros of these curves never settle into even spacing, so neither do the overtones above."
+            "a string is an octave above its fundamental. The ideal drum's next mode falls between familiar intervals. The "
+            "complete membrane spectrum does not form an integer harmonic series. Zeros of each fixed-order Bessel function do approach even spacing at high order, but that is a different statement."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(work[0]))
             vo.wait_until("a")
@@ -96,7 +96,7 @@ class Skin(SoundScene):
         q = listen_card(r"One drum, \ struck twice: \ once at the very centre, \ once between the centre and the rim. \\ Which blow was at the centre?", width=9.6, font_size=26).to_edge(UP, buff=0.35)
         bx = boxes(buff=2.6, width=3.0, height=1.3).move_to(UP * 0.4)
         with self.voiceover(
-            "A drummer cannot change these numbers. But a drummer can choose which of them to sound, and the "
+            "For a fixed ideal head, tension and boundary, these ratios are fixed. But a drummer can choose which of them to sound, and the "
             "choice is made with the stick. Here is one drum, struck twice: once at the very centre, once "
             "about halfway out. Which blow was at the centre?"
         ):
@@ -115,16 +115,16 @@ class Skin(SoundScene):
             return g
 
         b_off, b_c = bars(d["off"], SKIN).next_to(bx[0], DOWN, buff=0.55), bars(d["centre"], BAD).next_to(bx[1], DOWN, buff=0.55)
-        la = label(r"off centre: \ every mode joins in", font_size=24, color=SKIN).next_to(b_off, DOWN, buff=0.2)
+        la = label(r"off centre: \ more modes can join in", font_size=24, color=SKIN).next_to(b_off, DOWN, buff=0.2)
         lb = label(r"dead centre: \ only the circles", font_size=24, color=BAD).next_to(b_c, DOWN, buff=0.2)
         with self.voiceover(
             "B was the centre: short and dead. <bookmark mark='a'/> A blow at the centre can only start the "
             "modes that move at the centre, and those are the ones with no still diameter: the whole skin "
             "going up and down, with or without circles. Those modes push the air above the drum in and out "
-            "as a whole. They are good at making sound, so they give their energy away in a fraction of a "
+            "as a whole. At low frequencies they radiate efficiently compared with diameter modes, so they can lose their energy in a fraction of a "
             "second, and the drum goes thud. <bookmark mark='b'/> Strike off centre and the modes with "
             "diameters join in. Half the skin pushes air while the other half pulls, so they radiate poorly "
-            "and ring on. That ring is the drum's tone. A timpanist strikes about a quarter of the way in "
+            "and can ring longer. The model includes that radiation contrast; real decay also depends on the head, shell and damping. A timpanist strikes about a quarter of the way in "
             "from the rim, and now you know why."
         ) as vo:
             self.play(FadeOut(q))

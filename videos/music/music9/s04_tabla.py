@@ -14,7 +14,7 @@ class Tabla(SoundScene):
 
     # ------------------------------------------------------------------
     def raman(self):
-        card = history_card(1920, r"C. V. Raman, \ Calcutta", r"``Musical drums with harmonic overtones'': the tabla and the mridangam sound a fundamental and four true harmonics.", width=5.6, font_size=20).to_corner(UL, buff=0.4)
+        card = history_card(1920, r"C. V. Raman, \ Calcutta", r"``Musical drums with harmonic overtones'': the tabla and the mridangam sound a fundamental and four approximately harmonic partials.", width=5.6, font_size=20).to_corner(UL, buff=0.4)
         head = VGroup(Circle(radius=1.5, color=SKIN, stroke_width=4, fill_color=SKIN, fill_opacity=0.15), Circle(radius=0.6, stroke_width=0, fill_color=BLACK, fill_opacity=1).set_stroke(GREY_B, 2))
         head.move_to(RIGHT * 3.4 + UP * 0.6)
         tags = VGroup(label(r"goatskin", font_size=24, color=SKIN).next_to(head, DOWN, buff=0.2), label(r"the black patch: \ flour paste and iron dust, \\ rubbed on in dozens of thin layers", font_size=24, color=GREY_A).next_to(head, DOWN, buff=0.7))
@@ -22,13 +22,13 @@ class Tabla(SoundScene):
                        label(r"its overtones: \ 1, \ 2, \ 3, \ 4, \ 5", font_size=32, color=TUNE)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to(LEFT * 3.4 + DOWN * 1.3)
         with self.voiceover(
             "The kettledrum's tuning was a lucky accident, improved by trial. In India, drum makers did "
-            "something deliberate, and they did it centuries earlier. <bookmark mark='a'/> The tabla is a "
+            "something deliberate, and they did it centuries earlier. <bookmark mark='a'/> The tabla's right-hand dayan is a "
             "small hand drum, and the player tunes it, with a hammer on the rim, to the note the singer has "
             "chosen. In the middle of its goatskin head is a black disc: a paste of flour and iron dust, "
             "rubbed on in dozens of thin layers and polished with a stone. <bookmark mark='b'/> In 1920 the "
             "physicist C. V. Raman, ten years before his Nobel prize for the scattering of light, studied "
             "these drums with sand and a careful ear. He reported that the tabla sounds a fundamental and "
-            "four true harmonics above it: one, two, three, four, five. From a drum."
+            "four approximately harmonic partials above it: one, two, three, four, five. From a drum."
         ) as vo:
             self.play(FadeIn(head[0]))
             vo.wait_until("a")
@@ -50,22 +50,22 @@ class Tabla(SoundScene):
         g2 = axes([1, 16], [0, 600], x_length=5.4, y_length=2.2, xlabel=r"how many times heavier the patch is", ylabel=r"worst miss (cents)", xticks=[1, 4, 8, 12, 16], yticks=[0, 200, 400, 600], font_size=18)
         g2.move_to(LEFT * 3.4 + DOWN * 2.1)
         mc = curve_from(g2, d["densities"], d["misfit"], TUNE)
-        why = VGroup(label(r"a heavy centre slows the simple modes most:", font_size=24, color=GREY_A), label(r"they are the ones that move the centre", font_size=24, color=GREY_A),
+        why = VGroup(label(r"central loading shifts modes differently:", font_size=24, color=GREY_A), label(r"it depends on motion within the patch", font_size=24, color=GREY_A),
                      label(rf"miss: \ {d['bare_misfit']:.0f} cents bare, \ {d['loaded_misfit']:.0f} cents loaded", font_size=26, color=TUNE)).arrange(DOWN, buff=0.14, aligned_edge=LEFT).move_to(RIGHT * 3.4 + DOWN * 2.1)
         rows = d["rows"]
         with self.voiceover(
-            "Monochord can check that. Take the round skin of chapter one, with its hopeless overtones. "
+            "Monochord can check that. Take the round skin of chapter one, with its inharmonic modes. "
             "<bookmark mark='a'/> Now make the middle of it heavy: a disc reaching four tenths of the way to "
             "the rim, about ten times as heavy as the skin around it. And solve for the modes again. "
             f"<bookmark mark='b'/> One. {say(rows[1]['ratio'], 2)}. {say(rows[2]['ratio'], 2)} and "
             f"{say(rows[3]['ratio'], 2)}. {say(rows[4]['ratio'], 2)} and {say(rows[5]['ratio'], 2)}. Then three "
             "more, all near five. Nine modes, gathered into five groups, and the groups stand at one, two, "
-            "three, four, five. That is just what Raman heard: several modes sharing each harmonic. "
-            "<bookmark mark='c'/> Why does it work? The simple modes are the ones that move the centre of "
-            "the skin, so a weight at the centre slows them most, and stretches the whole ladder out from "
+            "three, four, five. This illustrates the grouping Raman described, rather than a full calculation of a real layered drumhead. "
+            "<bookmark mark='c'/> Why does it work? Modes differ in how much they move the central region of "
+            "the skin, so a central load shifts them by different amounts and stretches the ladder from "
             "the bottom. Here is how far the worst mode misses a whole number, as the patch gets heavier. "
             f"From {say(d['bare_misfit'])} cents with no patch, to {say(d['loaded_misfit'])} at ten times, "
-            "and little better after that. The makers stopped adding layers in the right place."
+            "and little better after that. This optimum belongs to our chosen patch radius and simplified density model."
         ) as vo:
             self.play(FadeIn(g), FadeIn(targets), FadeIn(r1), FadeIn(l1))
             vo.wait_until("a")
@@ -85,9 +85,9 @@ class Tabla(SoundScene):
         loaded = VGroup(mode_diagram(0, 1, radius=1.0, up=SKIN, down=SKIN), Circle(radius=0.4, stroke_width=0, fill_color=BLACK, fill_opacity=1).set_stroke(GREY_B, 2)).move_to(RIGHT * 3.0 + UP * 0.8)
         la = label(r"bare", font_size=28, color=GREY_B).next_to(bare, DOWN, buff=0.25)
         lb = label(r"loaded", font_size=28, color=TUNE).next_to(loaded, DOWN, buff=0.25)
-        note = listen_note(r"The same nine modes, \ equally loud, \ on both skins. \\ Only their frequencies differ.", width=7.6, font_size=24).to_edge(DOWN, buff=0.6)
+        note = listen_note(r"Nine modes, \ the same relative weights and decays; \\ the clips are level matched. \\ Only their frequencies differ.", width=7.6, font_size=24).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Hear the two skins. The same nine modes are sounding on each, equally loud. Only their "
+            "Hear the two skins. Nine modes sound on each with the same relative weights and decay rates, then the clips are level matched. Their "
             "frequencies are different."
         ):
             self.play(FadeIn(bare), FadeIn(loaded), FadeIn(la), FadeIn(lb), FadeIn(note))
@@ -97,7 +97,7 @@ class Tabla(SoundScene):
             pulse(snd, lb, snd.time_of("loaded"), snd.time_of("loaded") + 1.8, buff=0.12)
         with self.voiceover(
             "A clang, and a note. So there are two quite different ways to make a skin sing. Europe loaded "
-            "it with air, and found a harmonic series with its fundamental missing. India loaded it with "
+            "it with air, and found a harmonic series with its fundamental missing. Indian makers loaded it with "
             "paste, and got the whole series. Neither knew a Bessel function."
         ):
             self.play(FadeOut(note))

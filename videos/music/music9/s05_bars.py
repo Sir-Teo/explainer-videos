@@ -23,12 +23,12 @@ class Bars(SoundScene):
         rows = VGroup(MathTex(r"f \propto \frac{\text{thickness}}{\text{length}^2}", font_size=40),
                       label(r"half the length: \ four times the frequency, \ two octaves", font_size=30, color=TUNE),
                       label(r"half the thickness: \ half the frequency, \ an octave down", font_size=28, color=GREY_A),
-                      label(r"the width does not matter at all", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.25).move_to(DOWN * 1.1)
+                      label(r"width cancels in this slender-beam model", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.25).move_to(DOWN * 1.1)
         with self.voiceover(
             "Now take away the tension altogether. A wooden bar, lying on two supports, is held straight by "
             "nothing but its own stiffness: bend it, and it springs back. Part 1 met stiffness as a small "
             "nuisance in piano strings. In a bar it is everything. A worked example. A string cut to half "
-            "its length sounds an octave higher. A bar's frequency goes as its thickness, divided by the "
+            "its length sounds an octave higher. For a uniform slender rectangular beam, with matching support conditions, frequency goes as thickness divided by the "
             "square of its length. Cut a bar in half: how much higher does it sound? Pause, and say."
         ):
             self.play(FadeIn(title), FadeIn(bar), FadeIn(half), FadeIn(ask, shift=UP * 0.2))
@@ -38,7 +38,7 @@ class Bars(SoundScene):
             "<bookmark mark='a'/> So the bars of a marimba do not halve in length for each octave, as a "
             "harp's strings nearly do. They shrink much more slowly. <bookmark mark='b'/> And there are two "
             "more handles a string does not have. Make the bar thinner and it gets lower, because it is "
-            "less stiff. Make it wider, and nothing happens to its pitch at all."
+            "less stiff. Width cancels from that ideal bending formula; wide plates, anisotropic wood and real supports need more care."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(rows[0]), FadeIn(rows[1]))
             vo.wait_until("a")
@@ -113,9 +113,9 @@ class Bars(SoundScene):
             "them open out. <bookmark mark='b'/> Monochord carves until the first overtone is exactly four "
             f"times the note. That takes an arch {say(100 * m['depth'])} percent of the way through the wood, "
             f"and the second overtone lands at {say(m['ratios'][2], 1)}. One, four, ten: two octaves above "
-            "the note, and three octaves and a major third. Those are the tunings stamped on every concert "
-            "marimba. <bookmark mark='c'/> A shallower cut puts the first overtone at three times the note, "
-            "a twelfth above, and the second near six. That is a xylophone, and the reason it sounds "
+            "the note, and three octaves and a major third. These are common targets for low concert "
+            "marimba bars; actual tuning varies with register and maker. <bookmark mark='c'/> A shallower cut puts the first overtone at three times the note, "
+            "a twelfth above, and the second near six. That is a common xylophone target, contributing to a sound that is "
             "brighter and drier than a marimba. <bookmark mark='d'/> The same knife does a second job. The "
             f"marimba's arch lowers the bar's own note by {say(m['octaves_down'], 1)} octaves. Without it, "
             "the bass bars of a marimba would be as long as the instrument is wide."
@@ -152,10 +152,10 @@ class Bars(SoundScene):
                       label(r"Part 8's stopped pipe answers at 1, \ 3, \ 5 \ldots \ and so not at the bar's 4 or 10", font_size=24, color=AIR)).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "B. The plain bar clinks; the carved one sings. <bookmark mark='a'/> One more piece of tuning "
-            "hangs under every marimba bar: a tube, closed at the bottom, as long as a quarter of the "
+            "hangs under many marimba bars: a tube, closed at the bottom, as long as a quarter of the "
             "note's wavelength. You met it in Part 8. A stopped pipe answers at one, three and five times "
-            "its lowest note, and the bar's overtones are at four and ten. So the tube strengthens the "
-            "note, and only the note."
+            "its lowest note, and the bar's overtones are at four and ten. So the ideal tube preferentially strengthens the "
+            "fundamental; real resonances have finite bandwidth and affect radiation too."
         ) as vo:
             self.play(FadeOut(q), FadeIn(ans))
             vo.wait_until("a")
@@ -180,9 +180,9 @@ class Bars(SoundScene):
         with self.voiceover(
             "The maker fixes where a bar's overtones are. The player decides how much of each to have, with "
             "the choice of mallet. <bookmark mark='a'/> It is Part 7's piano hammer again. A soft mallet, "
-            "wound with yarn, stays on the bar for a millisecond or two, and a blow that slow cannot start "
-            "an overtone that vibrates a thousand times a second: you get the note and little else. "
-            "<bookmark mark='b'/> A hard mallet bounces off in a quarter of a millisecond, and every "
+            "wound with yarn, stays on the bar for a millisecond or two, and a blow that slow weakly excites "
+            "high modes whose cycles are short compared with the contact: the example emphasizes the fundamental. "
+            "<bookmark mark='b'/> A hard mallet bounces off in a quarter of a millisecond, and much more of each "
             "overtone the maker tuned is there. Listen: the same bar, the two mallets."
         ) as vo:
             self.play(FadeIn(head))
@@ -195,7 +195,7 @@ class Bars(SoundScene):
             pulse(snd, a[1], snd.time_of("soft"), snd.time_of("soft") + 1.6, buff=0.12)
             pulse(snd, b[1], snd.time_of("hard"), snd.time_of("hard") + 1.6, buff=0.12)
         with self.voiceover(
-            "Warm, and then bright. A marimba player carries a dozen pairs of mallets, and choosing among "
+            "Warm, and then bright. A marimba player may carry many pairs of mallets, and choosing among "
             "them is choosing a filter."
         ):
             self.play(FadeOut(note))

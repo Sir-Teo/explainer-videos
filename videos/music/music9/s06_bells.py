@@ -29,10 +29,10 @@ class Bells(SoundScene):
         bell = VGroup(ArcBetweenPoints(LEFT * 1.3 + DOWN * 0.9, UP * 1.0 + LEFT * 0.45, angle=-0.9, color=BRONZE, stroke_width=6),
                       ArcBetweenPoints(UP * 1.0 + RIGHT * 0.45, RIGHT * 1.3 + DOWN * 0.9, angle=-0.9, color=BRONZE, stroke_width=6),
                       Line(UP * 1.0 + LEFT * 0.45, UP * 1.0 + RIGHT * 0.45, color=BRONZE, stroke_width=6), Line(LEFT * 1.3 + DOWN * 0.9, RIGHT * 1.3 + DOWN * 0.9, color=BRONZE, stroke_width=3)).scale(0.8).move_to(LEFT * 4.6 + UP * 2.1)
-        card = history_card(1644, r"Frans and Pieter Hemony, \ with Jacob van Eyck", r"in Zutphen they turn each bell on a lathe until five of its partials are in tune: the first true carillon.", width=5.8, font_size=20).move_to(RIGHT * 2.6 + UP * 2.3)
+        card = history_card(1644, r"Frans and Pieter Hemony, \ with Jacob van Eyck", r"in Zutphen they turn each bell on a lathe until five of its partials are in tune: a landmark in tuned carillon founding.", width=5.8, font_size=20).move_to(RIGHT * 2.6 + UP * 2.3)
         with self.voiceover(
-            "A bell is a thick, curved shell of bronze, and its modes are the hardest of all to compute. So "
-            "I will not pretend: these partials are measurements of real bells, not Monochord's own. Here "
+            "A bell is a thick, curved shell of bronze, and computing its modes requires a shell model. So "
+            "I will not pretend: these are representative published tuning ratios, synthesized here rather than measured from one specific bell. Here "
             "they are, for a well-made church bell, each with the name founders give it. <bookmark mark='a'/> "
             "The lowest is the hum. An octave above it, the prime. Then the tierce, the quint, and the "
             "nominal, an octave above the prime. Higher still, a twelfth and a double octave. "
@@ -40,7 +40,7 @@ class Bells(SoundScene):
             "mould happened to put them. In 1644, in the Dutch town of Zutphen, the brothers Frans and "
             "Pieter Hemony, advised by a blind musician with a famous ear, Jacob van Eyck, began turning "
             "each bell on a lathe: shaving metal from rings inside it, each ring lowering some partials "
-            "more than others, until five of them stood in these ratios. Every bell in a tuned carillon has "
+            "more than others, until five of them stood in these ratios. Many modern tuned carillon bells have "
             "been through that."
         ) as vo:
             self.play(FadeIn(bell), FadeIn(g))
@@ -65,7 +65,7 @@ class Bells(SoundScene):
         ):
             self.play(FadeIn(g), FadeIn(marks), FadeIn(note))
         with self.listen(c) as snd:
-            window(snd, r"five partials, \ then the bell", kind="synthesized", detail=r"measured partials", corner=UL, tag_corner=UR)
+            window(snd, r"five partials, \ then the bell", kind="synthesized", detail=r"representative tuning ratios", corner=UL, tag_corner=UR)
             for n in ("hum", "prime", "tierce", "quint", "nominal"):
                 t0 = snd.time_of(n)
                 pulse(snd, marks[names.index(n)], t0, t0 + 1.0, buff=0.12)
@@ -99,7 +99,7 @@ class Bells(SoundScene):
             vo.wait_until("a")
             self.play(Indicate(three, color=WHITE, scale_factor=1.1), FadeIn(note))
         with self.listen(c) as snd:
-            window(snd, r"a bell, \ then three of its partials", kind="synthesized", detail=r"measured partials", corner=UL, tag_corner=UR)
+            window(snd, r"a bell, \ then three of its partials", kind="synthesized", detail=r"representative tuning ratios", corner=UL, tag_corner=UR)
             pulse(snd, marks, snd.time_of("whole"), snd.time_of("whole") + 2.6, buff=0.15)
             pulse(snd, three, snd.time_of("three"), snd.time_of("three") + 2.6, buff=0.12)
         res = VGroup(label(rf"Part 4's model of the ear, \ given the three: \ {d['heard_upper_only']:.0f} Hz", font_size=28, color=EAR),
@@ -123,7 +123,7 @@ class Bells(SoundScene):
         bx = boxes(buff=2.6, width=3.0, height=1.3).move_to(DOWN * 0.2)
         with self.voiceover(
             "Now look at the third partial, the tierce. It stands at one point two times the note: six to "
-            "five, a minor third. Every traditional bell has one. Hum, prime, tierce and quint spell out a "
+            "five, a minor third. It is characteristic of the Western minor-third bell, not of all bell traditions. Hum, prime, tierce and quint spell out a "
             "minor chord, and the bell sounds it all by itself. Two bells, on the same note. One is the kind "
             "that has been cast for four centuries. In the other, one partial has been moved. Which is the "
             "old kind?"
@@ -138,7 +138,7 @@ class Bells(SoundScene):
                      VGroup(label(r"the old kind", font_size=28, color=BRONZE), label(rf"tierce at 1.2: \ a minor third, \ {d['tierce_cents']:.0f} cents", font_size=22, color=GREY_A)).arrange(DOWN, buff=0.08).next_to(bx[1], DOWN, buff=0.25))
         with self.voiceover(
             "B is the old kind: darker, with that slightly mournful colour that says bell. It is why a "
-            "carillon playing a cheerful tune in a major key always sounds a little wistful: every note of "
+            "carillon playing a cheerful tune in a major key can sound a little wistful: every note of "
             "the major chord brings its own minor third along. <bookmark mark='a'/> For centuries founders "
             "tried to cast a bell with a major third and failed. It was done in the nineteen eighties, in the "
             "Netherlands, and not on a lathe: engineers at Eindhoven let a computer reshape the bell's profile, "
@@ -160,7 +160,7 @@ class Bells(SoundScene):
         with self.voiceover(
             "The first chord argues with itself, major thirds between the bells against the minor third "
             "inside each one. The second is at peace. Some carillons have been built from the new bells. "
-            "Most listeners, it turns out, miss the argument."
+            "Which colour listeners prefer depends on context and familiarity; this model comparison does not establish a population preference."
         ):
             self.play(Indicate(ans[1], color=WHITE, scale_factor=1.05))
         self.wait(0.3)
