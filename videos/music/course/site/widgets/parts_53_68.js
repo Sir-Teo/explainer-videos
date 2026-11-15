@@ -73,4 +73,62 @@
       return out;
     }
   };
+  // ---- Part 54: a loudspeaker in a box ----------------------------------------------------------------------------
+  function boxResponse(f, v) {
+    // the closed forms: sealed, a second-order high-pass at fc = fs sqrt(1 + a) with Q = Qts sqrt(1 + a);
+    // vented, the fourth-order polynomial of Thiele (lossless), with h = fb / fs
+    var a = v.Vas / v.Vb, s = f / v.fs;
+    if (v.vent < 0.5) {
+      var fc = v.fs * Math.sqrt(1 + a), Q = v.Qts * Math.sqrt(1 + a), x = f / fc;
+      var re = 1 - x * x, im = x / Q;
+      return 20 * Math.log10(x * x / Math.sqrt(re * re + im * im));
+    }
+    var h = v.fb / v.fs, Q = v.Qts;
+    // H(s) = s^4 / (s^4 + a1 s^3 + a2 s^2 + a3 s + a4) in units of fs (Thiele, lossless)
+    var a1 = 1 / Q, a2 = (a + 1 + h * h), a3 = h * h / Q, a4 = h * h;
+    var w = s, r = Math.pow(w, 4) - a2 * w * w + a4, i = -a1 * Math.pow(w, 3) + a3 * w;
+    return 20 * Math.log10(Math.pow(w, 4) / Math.sqrt(r * r + i * i));
+  }
+  W.box = function (el) {
+    QB.widget(el, {
+      title: "A loudspeaker in a box",
+      sub: "Set the driver's Thiele-Small parameters and the box. The plot is the bass response (dB) from the closed forms of Small (sealed) and Thiele (vented). Play a slow bass sweep through it.",
+      panels: 1, height: 260,
+      controls: [{ k: "fs", label: "Driver resonance fs", min: 20, max: 120, step: 1, value: 40, fmt: function (x) { return x.toFixed(0) + " Hz"; } },
+                 { k: "Qts", label: "Qts", min: 0.2, max: 1.0, step: 0.01, value: 0.38, fmt: function (x) { return x.toFixed(2); } },
+                 { k: "Vas", label: "Vas", min: 5, max: 200, step: 1, value: 50, fmt: function (x) { return x.toFixed(0) + " L"; } },
+                 { k: "Vb", label: "Box volume", min: 5, max: 200, step: 1, value: 35, fmt: function (x) { return x.toFixed(0) + " L"; } },
+                 { k: "vent", label: "Vented (0 no, 1 yes)", min: 0, max: 1, step: 1, value: 1, fmt: function (x) { return x ? "vented" : "sealed"; } },
+                 { k: "fb", label: "Port tuning fb", min: 15, max: 100, step: 1, value: 40, fmt: function (x) { return x.toFixed(0) + " Hz"; } }],
+      buttons: [{ label: "Play a bass sweep through it", act: function (s) {
+        var rate = 44100, n = 5 * rate, out = new Float32Array(n), ph = 0;
+        for (var i = 0; i < n; i++) {
+          var t = i / rate, f = 25 * Math.pow(8, t / 5);
+          ph += f / rate;
+          var g = Math.pow(10, Math.min(6, boxResponse(f, s.v)) / 20);
+          out[i] = 0.4 * g * Math.sin(2 * Math.PI * ph) * Math.min(1, t / 0.05) * Math.min(1, (5 - t) / 0.1);
+        }
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var xs = [], ys = [];
+        for (var e = Math.log10(10); e <= Math.log10(1000); e += 0.01) { xs.push(e); ys.push(Math.max(-40, Math.min(10, boxResponse(Math.pow(10, e), v)))); }
+        var a = gr[0].axes({ x: [1, 3], y: [-40, 10], title: "Response (dB) against log10 of frequency (Hz)", xlabel: "log10 Hz" });
+        a.line([1, 3], [0, 0], { color: "#3A4250", width: 1.5 });
+        a.line([1, 3], [-3, -3], { color: "#3A4250", width: 1 });
+        a.line(xs, ys, { color: C.idea, width: 2.5 });
+      },
+      readout: function (v, s) {
+        var f3 = null;
+        for (var e = 1; e <= 3; e += 0.001) { if (boxResponse(Math.pow(10, e), v) >= -3) { f3 = Math.pow(10, e); break; } }
+        var a = v.Vas / v.Vb;
+        return [["-3 dB point", f3 ? f3.toFixed(1) + " Hz" : "below 10 Hz"],
+                ["sealed: fc and Qtc", (v.fs * Math.sqrt(1 + a)).toFixed(1) + " Hz, " + (v.Qts * Math.sqrt(1 + a)).toFixed(2)],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Thiele's B4 alignment: Qts = 0.383, Vb = Vas / 1.414, fb = fs, gives a maximally flat response down to fs. Shrink the box and the bass bulges, or rolls off sooner; the iron law trades box size, bass and efficiency."
+    });
+  };
 })();

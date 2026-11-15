@@ -2049,13 +2049,30 @@ tempo canons.
 *Story:* Plug headphones into a microphone socket and speak into them: they work. A loudspeaker is a microphone
 run backwards. When microphones became electrical in 1925, singers no longer had to fill a hall, and the
 intimate voice of the crooner was invented. A transducer changed what a voice could be.
+1. Hook: an ear question (which was the headphones?); the headphone's response; electrical recording and the crooner; the plan.
+2. Transducers: four kinds; one number both ways; the condenser; three kinds of circuit; which for which job.
+3. Polar patterns: pressure and gradient; the family; a walk round a cardioid, heard; directivity; high frequencies; an ear question (which heard least piano?); choosing.
+4. The proximity effect: the gradient of a spherical wave; the rise by distance; taming it; three distances heard; playing it.
+5. Noise and balanced lines: thermal noise; a noise budget; phantom power; the balanced line; hum heard; levels.
+6. The loudspeaker as a filter: anatomy; Thiele-Small parameters; damping; impedance; efficiency and the iron law.
+7. Sealed and vented boxes: the back of the cone; sealed boxes; the simulation checked; the vented box; the port; impedance.
+8. Three loudspeakers: simulated; measuring a loudspeaker; a groove through each, heard; bass you cannot hear.
+9. Horns: an acoustic transformer; throat against piston; waveguides; horns at work.
+10. Crossovers and amplifiers: two drivers; the sums; a hole heard; crossovers in software; amplifier classes.
+11. Headphones and noise cancelling: on the ear; sound against sound; filtered-x LMS; by band; schemes; a cabin heard.
+12. Frontier: an array's pattern; an ear question (one microphone or an array?); MEMS; linearization; the research problem.
+13. Variation 54: the Tune through three microphones and three loudspeakers. Outro: problems, payoffs.
+
 *Covers:* the transduction principles; electrical, mechanical and acoustical circuits; polar patterns; the
 proximity effect; noise; balanced lines; the loudspeaker as a filter; Thiele–Small parameters; sealed and ported
 boxes (Part 2's resonator again); horns; crossovers; amplifiers; headphones and noise cancelling.
-*Built and computed:* a lumped-element simulator checked against closed-form alignments; polar patterns and
-proximity derived and drawn; an adaptive canceller.
-*Variation 54:* the Tune through three microphone patterns and three loudspeakers.
-*Frontier:* arrays and beamforming; loudspeaker linearization.
+*Built and computed:* `monochord/transducer.py`: the first-order patterns with directivity and nulls; the proximity
+effect (+20.8 dB at 100 Hz at 5 cm); thermal noise and a noise budget; balanced lines (40 dB at 1 % imbalance); a
+lumped-element loudspeaker simulator checked against Small's sealed-box and Thiele's B4 closed forms (within 0.1 Hz);
+horn loading; crossovers (Linkwitz–Riley flat); a filtered-x LMS canceller (−25 to −33 dB below 1 kHz); a
+delay-and-sum array.
+*Variation 54:* the Tune through three microphone patterns and three loudspeakers (cardioid 30 dB; phone 844 Hz).
+*Frontier:* arrays and beamforming; loudspeaker linearization (open: how far can control alone enlarge a small speaker?).
 *Reading:* Eargle, *The Microphone Book*; Small's papers; Beranek & Mellow.
 
 ### Part 55 · Rooms and Space (~55)

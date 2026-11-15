@@ -20,6 +20,7 @@ class Patterns(SoundScene):
         chapter(self, 2, r"Polar patterns", r"Why does a microphone hear some directions and not others?")
         self.two()
         self.family()
+        self.walk()
         self.table()
         self.highs()
         self.quiz()
@@ -167,3 +168,27 @@ class Patterns(SoundScene):
         ]
         rows_scene(self, r"patterns at high frequencies", items,
                    "Real patterns change with frequency. <bookmark mark='b'/> The first-order family assumes the microphone is small next to the wavelength. <bookmark mark='c'/> A twenty-five millimetre diaphragm is a quarter of a wavelength at about three point four kilohertz, <bookmark mark='d'/> and above that even an omni narrows towards the front, so sound from the side loses its treble. <bookmark mark='e'/> Off-axis sound is duller: a pattern is really a family of patterns, one per frequency. <bookmark mark='f'/> Small-diaphragm microphones keep their pattern higher; large ones colour the room.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def walk(self):
+        d = load("patterns")
+        c = clip("rotate.one")
+        p = polar(np.array(d["cardioid"]["r"]), np.array(d["cardioid"]["sign"]), R=1.8, color=TUNE).move_to(DOWN * 0.3)
+        mic = Dot(p.get_center(), radius=0.08, color=WHITE)
+        singer = Dot(p.get_center() + UP * 2.4, radius=0.14, color=EAR)
+        cap = label(r"a singer walking once round a cardioid, \ starting in front", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.5)
+        head = label(r"round the cardioid, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        with self.voiceover("Hear a cardioid's pattern directly: a singer walking once round it, starting in front."):
+            self.play(FadeIn(head), FadeIn(p), FadeIn(mic), FadeIn(singer), FadeIn(cap))
+        secs = load("rotate")["seconds"]
+        centre = p.get_center()
+        with self.listen(c) as snd:
+            window(snd, r"a walk round the microphone", kind="physical model", detail=r"Part 8's voice", corner=DL, tag_corner=DR)
+            snd.drive(singer, lambda m, t: m.move_to(centre + 2.4 * np.array([np.sin(2 * np.pi * t / secs), np.cos(2 * np.pi * t / secs), 0])))
+        with self.voiceover(
+            "The voice fades as the singer passes the side, all but vanishes behind, at the null, and returns as the singer "
+            "comes round to the front: the heart shape, heard."
+        ):
+            self.play(Indicate(p, color=TUNE, scale_factor=1.02))
+        self.wait(0.4)
+        self.clear_scene()

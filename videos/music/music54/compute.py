@@ -11,6 +11,7 @@ Items:
     hook        an ear question: the Tune sung into a measurement microphone and into a pair of headphones used backwards
     patterns    the first-order family drawn, with directivity, rear rejection and nulls
     capture     a voice in front, a piano behind, a room around: picked up by an omni, a cardioid and a figure-8
+    rotate      a singer walking once round a cardioid
     proximity   a figure-8 at 1 m, 15 cm and 5 cm from a singer: the bass rise, drawn and heard
     noise       thermal noise, a preamplifier's floor, a dynamic microphone's equivalent noise
     hum         a line picking up mains hum: unbalanced, then balanced with 1 per cent imbalance
@@ -19,6 +20,7 @@ Items:
     speakers    a groove through a phone's speaker, a sealed bookshelf and a vented floor-stander
     horn        an exponential horn's throat resistance against a bare cone's
     crossover   Butterworth sections summed in phase and inverted, and Linkwitz-Riley
+    xover       music through Butterworth sections in phase, then Linkwitz-Riley
     anc         an aircraft-cabin drone at the ear, without and with an adaptive canceller (filtered-x LMS)
     beam        two singers, one microphone and an eight-microphone array steered at one of them
     tune54      Variation 54: the Tune through three microphone patterns and three loudspeakers
@@ -158,6 +160,19 @@ def compute_capture() -> dict:
             "clips": {"three": save("capture.three", c, detail="Part 8's voice singing in front of the microphone, Part 7's piano behind it, in a lively room: an omnidirectional, a cardioid and a figure-8 microphone (simulated)")}}
 
 
+def compute_rotate() -> dict:
+    """A singer walking once round a cardioid microphone in six seconds: the level follows the pattern."""
+    v = tenor(phrases=(0, 1), beat=0.42)
+    n = len(v)
+    t = np.arange(n) / SR
+    secs = n / SR
+    ang = 2 * np.pi * t / secs
+    g = TD.pattern(0.5, ang)
+    y = v * g
+    c = concat([C(fade(0.5 * y / np.max(np.abs(y))))], names=["walk"])
+    return {"seconds": secs, "clips": {"one": save("rotate.one", c, detail="Part 8's voice singing while walking once round a cardioid microphone, starting in front (simulated)")}}
+
+
 def compute_proximity() -> dict:
     f = np.geomspace(20, 20000, 200)
     curves = {}
@@ -293,6 +308,22 @@ def compute_crossover() -> dict:
     return out
 
 
+def compute_xover() -> dict:
+    """Music through a two-way crossover at 2 kHz with ideal drivers: second-order Butterworth sections in phase (a hole
+    at the crossover), then Linkwitz-Riley (flat)."""
+    v = tenor()
+    n = len(v)
+    pno = piano_chords(n / SR)[:n]
+    x = v + 0.6 * pno
+    rng = np.random.default_rng(4)
+    x = x + 0.02 * sosfilt(butter(2, 1500, btype="high", fs=SR, output="sos"), rng.standard_normal(n))
+    a = TD.apply_response(x, lambda f: TD.crossover(f, "bw2", 2000.0)[2])
+    b = TD.apply_response(x, lambda f: TD.crossover(f, "lr4", 2000.0)[2])
+    c = concat([C(norm_rms(fade(a))), C(norm_rms(fade(b)))], gap=0.8, names=["hole", "flat"])
+    return {"starts": {"hole": float(c.events["hole"]), "flat": float(c.events["flat"])},
+            "clips": {"two": save_synth("xover.two", c, detail="a voice and piano through a two-way crossover at 2 kHz: Butterworth sections in phase, then Linkwitz-Riley")}}
+
+
 def compute_anc() -> dict:
     rng = np.random.default_rng(1)
     secs = 8.0
@@ -390,7 +421,7 @@ def compute_variation() -> dict:
 
 ITEMS = {"hook": compute_hook, "patterns": compute_patterns, "capture": compute_capture, "proximity": compute_proximity, "noise": compute_noise,
          "hum": compute_hum, "driver": compute_driver, "speakers": compute_speakers, "horn": compute_horn, "crossover": compute_crossover,
-         "anc": compute_anc, "beam": compute_beam, "tune54": compute_tune54, "variation": compute_variation}
+         "rotate": compute_rotate, "xover": compute_xover, "anc": compute_anc, "beam": compute_beam, "tune54": compute_tune54, "variation": compute_variation}
 
 
 if __name__ == "__main__":

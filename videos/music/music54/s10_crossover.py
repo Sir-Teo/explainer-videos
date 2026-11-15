@@ -10,6 +10,7 @@ class Crossover(SoundScene):
         chapter(self, 9, r"Crossovers and amplifiers", r"How do two drivers become one loudspeaker?")
         self.why()
         self.sums()
+        self.heard()
         self.digital()
         self.amps()
 
@@ -88,3 +89,27 @@ class Crossover(SoundScene):
         ]
         rows_scene(self, r"crossovers in software", items,
                    "Crossovers moved into software. <bookmark mark='b'/> A passive crossover is coils and capacitors between the amplifier and the drivers; an active one comes before separate amplifiers for each. <bookmark mark='c'/> In software a crossover can be any filter at all, even linear-phase, so that the sections add in time as well as in level. <bookmark mark='d'/> The same processor corrects each driver's own response, and the room's, which is Part 55. <bookmark mark='e'/> The price of linear phase is latency, like Part 53's look-ahead. <bookmark mark='f'/> Loudspeakers have become computers with cones.", marks="bcdef")
+
+
+    # ------------------------------------------------------------------
+    def heard(self):
+        d = load("xover")
+        c = clip("xover.two")
+        cells = choice_boxes([r"Butterworth, \ in phase", r"Linkwitz--Riley"], width=4.0, buff=1.0, colors=[EAR, TUNE]).move_to(UP * 0.4)
+        cap = label(r"a voice and piano, \ with a little hiss, \ through a crossover at 2 kHz", font_size=17, color=GREY_A).to_edge(DOWN, buff=1.0)
+        head = label(r"a hole at the crossover, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        with self.voiceover("Hear the hole: a voice and piano through the in-phase Butterworth pair, then through Linkwitz-Riley."):
+            self.play(FadeIn(head), FadeIn(cells), FadeIn(cap))
+        st = d["starts"]
+        with self.listen(c) as snd:
+            window(snd, r"a hole, \ then flat", kind="synthesized", detail=r"two crossovers", corner=DL, tag_corner=DR)
+            pulse(snd, cells[0], st["hole"], st["flat"] - 0.3, buff=0.08)
+            pulse(snd, cells[1], st["flat"], c.duration, buff=0.08)
+        with self.voiceover(
+            "The difference is subtle: a narrow notch at two kilohertz takes a little presence out of the voice and a "
+            "little bite out of the hiss, a hollowness more felt than heard. Over a whole loudspeaker, and off axis, such "
+            "errors add up."
+        ):
+            self.play(Indicate(cells[1], color=TUNE, scale_factor=1.03))
+        self.wait(0.4)
+        self.clear_scene()

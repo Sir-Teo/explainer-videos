@@ -111,6 +111,8 @@ LEDGER = [
      "measure": r"FM's lines within 0.000002 of Bessel's; 2,793 grains in ten seconds"},
     {"part": 53, "title": r"as a tracker module and a tempo canon at 3 : 4 : 5 : 6", "seconds": 40.7,
      "measure": r"32 tracker rows; four voices meeting on the last note after 30.7 s; block and offline renders identical"},
+    {"part": 54, "title": r"through three microphone patterns and three loudspeakers", "seconds": 29.4,
+     "measure": r"a cardioid takes the piano behind it 30 dB down; the phone's speaker reaches down to 844 Hz, the floor-stander to 39"},
 ]
 
 
