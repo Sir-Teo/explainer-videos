@@ -71,7 +71,7 @@ class Frontier(SoundScene):
             "The second. Its hi-hat is far too loud, and its bass is thin: the rules gave every track the same loudness, and a "
             "hi-hat as loud as a voice is not what anyone wants."
         ):
-            self.play(boxes[1][0].animate.set_stroke(TUNE, width=4))
+            self.play(boxes[1][0].animate.set_stroke(TUNE, width=4), FadeIn(label(r"the second: \ every track at one loudness, \ the hi-hat as loud as the voice", font_size=19, color=TUNE).move_to(DOWN * 1.4)))
         self.wait(0.4)
         self.clear_scene()
 
