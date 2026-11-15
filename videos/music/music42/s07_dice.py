@@ -85,10 +85,20 @@ class Dice(SoundScene):
         beat = 0.4
         with self.listen(c) as snd:
             window(snd, r"two dice minuets", detail=r"Part 7's piano, \ a plucked bass", corner=DL, tag_corner=DR)
+            lit = {}
             for k, (key, col) in enumerate((("one", TUNE), ("two", BLUE))):
                 for b in range(16):
                     t0 = st[key] + 3 * b * beat
                     pulse(snd, g.cell(b, rolls[k][b]), t0, t0 + 3 * beat, buff=0.03, color=col)
+                    lit.setdefault((b, rolls[k][b]), []).append((t0, col))
+            for (b, sm), evs in lit.items():
+                def upd(m, now, evs=evs):
+                    col = None
+                    for t0, c_ in evs:
+                        if now >= t0:
+                            col = c_
+                    m.set_fill(col if col else DIM, 0.75 if col else 0.4)
+                snd.drive(g.cell(b, sm), upd)
         self.wait(0.3)
         self.clear_scene()
 

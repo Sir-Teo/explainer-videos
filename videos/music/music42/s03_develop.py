@@ -19,7 +19,7 @@ class Develop(SoundScene):
     # ------------------------------------------------------------------
     def sentence_form(self):
         blocks = VGroup()
-        spec = [(r"basic idea", 2, TUNE), (r"repetition", 2, TUNE), (r"continuation: \ fragments", 2, BLUE), (r"faster", 1, BLUE), (r"cadence", 1, EAR)]
+        spec = [(r"idea", 1, TUNE), (r"repeated", 1, TUNE), (r"continuation: \ fragments", 2, BLUE), (r"faster still", 2, BLUE), (r"cadence", 2, EAR)]
         x = -5.5
         for txt, w, col in spec:
             r = Rectangle(width=1.375 * w, height=0.9, stroke_color=col, stroke_width=2, fill_color=col, fill_opacity=0.18)
@@ -32,10 +32,11 @@ class Develop(SoundScene):
                       label(r"Beethoven's piano sonatas open this way again and again", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.8)
         head = label(r"a plan for eight bars: \ the sentence", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "How does a phrase grow from a motive? Schoenberg described a plan for eight bars that he called the sentence. "
-            "<bookmark mark='a'/> A basic idea of two bars, then its repetition, often on another degree. "
-            "<bookmark mark='b'/> Then a continuation that breaks the idea into fragments and speeds up, liquidating it, "
-            "until only the cadence is left. Beethoven's piano sonatas open this way again and again."
+            "How does a phrase grow from a motive? Schoenberg described a plan he called the sentence. "
+            "<bookmark mark='a'/> A basic idea, then its repetition, often on another degree; in his eight-bar model each "
+            "takes two bars, and since our motive is short, here each takes one. <bookmark mark='b'/> Then a continuation "
+            "that breaks the idea into fragments and speeds up, liquidating it, until only the cadence is left. Beethoven's "
+            "piano sonatas open this way again and again."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

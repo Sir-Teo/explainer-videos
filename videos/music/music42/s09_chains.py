@@ -119,7 +119,7 @@ class Chains(SoundScene):
     def evolve(self):
         d = load("evolve")
         b, m = d["best_curve"], d["mean_curve"]
-        x0, y0, W, H = -5.0, -1.8, 6.4, 3.4
+        x0, y0, W, H = -5.8, -1.8, 5.8, 3.4
         def pts(v):
             return [[x0 + W * i / (len(v) - 1), y0 + H * y, 0] for i, y in enumerate(v)]
         ax = VGroup(Line([x0, y0, 0], [x0 + W, y0, 0], color=GREY_B), Line([x0, y0, 0], [x0, y0 + H, 0], color=GREY_B))

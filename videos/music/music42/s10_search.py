@@ -41,11 +41,12 @@ class Search(SoundScene):
             "back; unity and variety, from chapter two; how well the tension follows the plan, from chapter four; chord "
             "tones, and flow."
         ) as vo:
-            self.play(FadeIn(head))
+            ghost = g.copy().set_opacity(0.2)
+            self.play(FadeIn(head), FadeIn(ghost))
             vo.wait_until("a")
             self.play(FadeIn(hard))
             vo.wait_until("b")
-            self.play(FadeIn(soft))
+            self.play(FadeIn(soft), FadeOut(ghost))
         self.wait(0.4)
         self.clear_scene()
 
