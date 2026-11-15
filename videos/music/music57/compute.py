@@ -110,7 +110,7 @@ def compute_hook() -> dict:
     return {"answer": "second", "gentle": {"lufs": gentle["lufs"], "tp": gentle["true_peak"], "plr": MS.plr(gentle["y"]), "gr_max": float(-gentle["gain_db"].min())},
             "war": {"lufs": war["lufs"], "tp": war["true_peak"], "plr": MS.plr(war["y"]), "gr_max": float(-war["gain_db"].min())},
             "starts": {"first": float(c.events["first"]), "second": float(c.events["second"])},
-            "clips": {"two": save("hook.two", c, detail="Part 56's session mixed close and dry, then mastered twice by Monochord's chain: gently, to -14 LUFS, and for the loudness war, to -7 LUFS; both then played at the same loudness")}}
+            "clips": {"two": save("hook.two", c, detail="Part 56's session mixed close and dry, then mastered twice by Monochord's chain: gently, to -14 LUFS, and for the loudness war, to -7 LUFS; both then played at the same loudness", needs="headphones")}}
 
 
 def ffmpeg_measure(y) -> dict:
@@ -210,7 +210,7 @@ def compute_war() -> dict:
     segs = [C(fade(mastered(tg)["y"])) for tg in (-20.0, -14.0, -8.0)]
     c = concat(segs, gap=0.8, names=["m20", "m14", "m8"])
     return {"rows": rows, "env": env, "mix_lra": MS.loudness_range(the_mix()), "starts": {k: float(c.events[k]) for k in ("m20", "m14", "m8")},
-            "clips": {"three": save("war.three", c, detail="Part 56's mix mastered to -20, -14 and -8 LUFS integrated, played as mastered (each louder than the last)")}}
+            "clips": {"three": save("war.three", c, detail="Part 56's mix mastered to -20, -14 and -8 LUFS integrated, played as mastered (each louder than the last)", needs="headphones")}}
 
 
 def compute_norm() -> dict:
