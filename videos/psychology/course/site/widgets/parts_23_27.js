@@ -252,4 +252,134 @@
     });
     function task() { return run.task; }
   };
+
+  // ---- Part 25: moving dots, careful and then fast.  Your accuracy, your times, and your two bounds by EZ --------
+  W.dots = function (el) {
+    var w = null, raf = 0, CAREFUL = "#4dd0e1", FAST = "#ff9f43", REF = "#9aa4b2", DOT = "#e8edf3";
+    var COH = [0.1, 0.2, 0.4], N = 70, SPEED = 0.35;   // dots, and their step in aperture radii per second
+    // Wagenmakers et al. (2008), 17 people: median accuracy and mean time in each kind of block (the film's data)
+    var REF17 = { careful: [0.77, 0.95], fast: [0.54, 0.85] };
+    var dots = [], last = 0;
+    var run = T.timed(el, {
+      keys: { f: 0, j: 1 },
+      trials: function () { return w.v.n; },
+      seed: function () { return w.state.seed; },
+      stimulus: function (rand) { return { dir: rand() < 0.5 ? 0 : 1, coh: COH[Math.floor(rand() * 3)] }; },
+      correct: function (stim, side) { return side === stim.dir; },
+      render: function () {
+        if (w) w.render();
+        if (run && run.phase === "go") { seedDots(); if (!raf) raf = requestAnimationFrame(tick); }
+      },
+      foreperiod: [500, 1000], timeout: 3000, pause: { scored: 500, early: 800, timeout: 800 },
+      words: { early: "Too early: wait for the dots.", timeout: "No answer in three seconds.",
+        wrong: function () { return "Wrong."; } },
+    });
+    function seedDots() {
+      if (dots.length) return;
+      var r = QB.rng(run.trial * 7919 + 13), i;
+      for (i = 0; i < N; i++) {
+        var a = 2 * Math.PI * r(), d = Math.sqrt(r());
+        dots.push({ x: d * Math.cos(a), y: d * Math.sin(a) });
+      }
+      last = T.now();
+    }
+    function step(dt) {
+      var i, st = run.stim, dir = st.dir === 1 ? 1 : -1;
+      for (i = 0; i < dots.length; i++) {
+        var p = dots[i], ang = Math.random() < st.coh ? (dir > 0 ? 0 : Math.PI) : 2 * Math.PI * Math.random();
+        p.x += SPEED * dt * Math.cos(ang); p.y += SPEED * dt * Math.sin(ang);
+        if (p.x * p.x + p.y * p.y > 1) { var a = 2 * Math.PI * Math.random(), d = Math.sqrt(Math.random()); p.x = d * Math.cos(a); p.y = d * Math.sin(a); }
+      }
+    }
+    function tick() {
+      raf = 0;
+      if (!w || run.phase !== "go") { dots = []; return; }
+      var t = T.now(); step(Math.min(0.05, (t - last) / 1000)); last = t;
+      w.render();
+      raf = requestAnimationFrame(tick);
+    }
+
+    // EZ diffusion (Wagenmakers, van der Maas and Grasman 2007), noise scale 1, times in seconds
+    function ez(pc, vrt, mrt, n) {
+      pc = Math.min(Math.max(pc, 0.5 + 0.5 / n), 1 - 0.5 / n);
+      if (!(vrt > 0)) return null;
+      var L = Math.log(pc / (1 - pc));
+      var x = L * (L * pc * pc - L * pc + pc - 0.5) / vrt;
+      if (!(x > 0)) return null;
+      var v = Math.pow(x, 0.25), a = L / v, y = -v * a;
+      var mdt = (a / (2 * v)) * (1 - Math.exp(y)) / (1 + Math.exp(y));
+      return { v: v, a: a, t0: mrt - mdt };
+    }
+    function block(cond) {
+      var L = run.log.filter(function (r) { return r.condition === cond && !isNaN(r.rt); }), i, c = [];
+      if (L.length < 4) return null;
+      var right = 0;
+      for (i = 0; i < L.length; i++) if (L[i].correct) { right++; c.push(L[i].rt / 1000); }
+      var all = L.map(function (r) { return r.rt / 1000; });
+      var out = { n: L.length, pc: right / L.length, mrt: QB.mean(all), fit: null };
+      if (c.length >= 3) {
+        var m = QB.mean(c), v = 0;
+        for (i = 0; i < c.length; i++) v += (c[i] - m) * (c[i] - m);
+        out.fit = ez(out.pc, v / (c.length - 1), m, L.length);
+      }
+      return out;
+    }
+
+    w = QB.widget(el, {
+      title: "Moving dots, careful and then fast",
+      sub: "Most dots move at random; some drift left or right. F (or tap left) for left, J (or tap right) for right. Run a careful block first: be sure before you answer. Then a fast block: answer the moment you have a guess. Your two blocks become two points, and two bounds.",
+      panels: 2, height: 320, weights: [1.1, 1],
+      controls: [{ k: "n", label: "Trials per block", min: 12, max: 48, step: 4, value: 20, fmt: function (x) { return x.toFixed(0); } }],
+      buttons: [
+        { label: "Careful block", act: function () { dots = []; run.start("careful"); } },
+        { label: "Fast block", act: function () { dots = []; run.start("fast"); } },
+        { label: "Clear", act: function () { dots = []; run.reset(); } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, run.task), R = Math.min(b.w, b.h) * 0.33, i;
+        var col = run.cond === "fast" ? FAST : CAREFUL;
+        if (run.phase === "go") {
+          ctx.save();
+          ctx.strokeStyle = "#2a3140"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(b.cx, b.cy, R + 6, 0, 2 * Math.PI); ctx.stroke();
+          ctx.fillStyle = DOT;
+          for (i = 0; i < dots.length; i++) { ctx.beginPath(); ctx.arc(b.cx + dots[i].x * R, b.cy + dots[i].y * R, 2.2, 0, 2 * Math.PI); ctx.fill(); }
+          ctx.textAlign = "center"; ctx.font = "12px system-ui, sans-serif"; ctx.fillStyle = col;
+          ctx.fillText((run.cond === "fast" ? "FAST: " : "CAREFUL: ") + "trial " + run.trial + " of " + v.n, b.cx, b.y + 22);
+          ctx.fillStyle = C.muted; ctx.fillText("left: F        right: J", b.cx, b.y + b.h - 18);
+          ctx.restore();
+        } else if (run.phase === "wait") {
+          ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 3; ctx.beginPath();
+          ctx.moveTo(b.cx - 10, b.cy); ctx.lineTo(b.cx + 10, b.cy); ctx.moveTo(b.cx, b.cy - 10); ctx.lineTo(b.cx, b.cy + 10);
+          ctx.stroke(); ctx.restore();
+        } else if (run.phase === "feedback") {
+          T.message(ctx, b, run.msg);
+        } else if (run.phase === "done") {
+          T.message(ctx, b, run.cond === "fast" ? "Fast block finished." : "Careful block finished.",
+            run.cond === "fast" ? "On the right: your two blocks beside the 17 people of the film." : "Now press Fast block: answer the moment you have a guess.");
+        } else {
+          T.message(ctx, b, "On you", "Press Careful block. Each trial: a cross, then a cloud of dots for up to three seconds. Which way are some of them drifting?");
+        }
+        var a = g[1].axes({ x: [0.2, 1.6], y: [0.5, 1.0], xticks: [0.4, 0.8, 1.2, 1.6], yticks: [0.5, 0.75, 1.0],
+          title: "Accuracy against time", xlabel: "mean time (s)", ylabel: "proportion right" });
+        a.line([REF17.fast[0], REF17.careful[0]], [REF17.fast[1], REF17.careful[1]], { color: REF, width: 2, dash: [5, 4] });
+        a.dots([REF17.fast[0]], [REF17.fast[1]], { color: FAST, r: 3, alpha: 0.6 });
+        a.dots([REF17.careful[0]], [REF17.careful[1]], { color: CAREFUL, r: 3, alpha: 0.6 });
+        a.text(REF17.careful[0], REF17.careful[1] - 0.05, "17 people (2008)", { color: REF, align: "center", size: 11 });
+        var bf = block("fast"), bc = block("careful");
+        if (bf && bc) a.line([Math.min(1.6, bf.mrt), Math.min(1.6, bc.mrt)], [bf.pc, bc.pc], { color: C.ink, width: 2 });
+        if (bf) a.dots([Math.min(1.6, bf.mrt)], [Math.max(0.5, bf.pc)], { color: FAST, r: 6 });
+        if (bc) a.dots([Math.min(1.6, bc.mrt)], [Math.max(0.5, bc.pc)], { color: CAREFUL, r: 6 });
+      },
+      readout: function () {
+        var bc = block("careful"), bf = block("fast");
+        function show(bl) { return bl ? Math.round(100 * bl.pc) + "% in " + bl.mrt.toFixed(2) + " s" : "–"; }
+        function bound(bl) { return bl && bl.fit ? bl.fit.a.toFixed(2) : "–"; }
+        var ratio = bc && bf && bc.fit && bf.fit ? (bf.fit.a / bc.fit.a).toFixed(2) : "–";
+        return [["answers", String(run.task.count)], ["careful", show(bc)], ["fast", show(bf)],
+          ["your bounds (EZ), careful / fast", bound(bc) + " / " + bound(bf)], ["fast over careful", ratio],
+          ["17 people (EZ), median", "0.59"]];
+      },
+      note: "Nothing you do is stored or sent. EZ diffusion (Wagenmakers, van der Maas and Grasman, 2007) turns a block's accuracy, and the mean and variance of its correct times, into a drift, a bound and a non-decision time. Asked to hurry, the 17 people of the film lowered their EZ bound to a median 59% of their careful one. With twenty trials a block your numbers are rough, and a browser adds its own delay to every time; the ratio of your two bounds is the steadiest thing here.",
+    });
+  };
 })();

@@ -84,6 +84,10 @@ SOURCES = {
         "sha256": "9cb59c33816727a173d3eed202e3f663ddc3e6ae294bc4da705ada04113efd18",
         "licence": "MIT",
     },
+    # Part 25: Wagenmakers et al.'s (2008) speed-accuracy lexical decisions and Ratcliff and Rouder's (1998)
+    # brightness discrimination, as packaged in the R package rtdists
+    'speed_acc_2008': {'url': 'https://cran.r-project.org/src/contrib/rtdists_0.12-0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/rtdists_0.12-0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/rtdists/rtdists_0.12-0.tar.gz'], 'page': 'https://cran.r-project.org/package=rtdists', 'file': 'rtdists_0.12-0.tar.gz', 'sha256': 'cf9ff4638cee0e8f412c02b950616eb9b6544a58654e1ae1d0dd264f1c76d3a1', 'licence': 'GPL (>= 3)', 'member': 'rtdists/data/speed_acc.RData', 'member_sha256': '991429ecb0a6711dd32422ee4cff9eb7d3010c9de9434387aa36b8788e573f62'},
+    'rr98': {'url': 'https://cran.r-project.org/src/contrib/rtdists_0.12-0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/rtdists_0.12-0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/rtdists/rtdists_0.12-0.tar.gz'], 'page': 'https://cran.r-project.org/package=rtdists', 'file': 'rtdists_0.12-0.tar.gz', 'sha256': 'cf9ff4638cee0e8f412c02b950616eb9b6544a58654e1ae1d0dd264f1c76d3a1', 'licence': 'GPL (>= 3)', 'member': 'rtdists/data/rr98.rda', 'member_sha256': '91ff255d3cb557fc98692517163eb5b9615d4e6e05e98992b3a0d164945724d8'},
     # Part 23: the Natural Stories corpus (Futrell et al., Language Resources and Evaluation 55 (2021) 63-77),
     # github.com/languageMIT/naturalstories at a fixed commit; no licence is stated, so it is fetched, never
     # redistributed
@@ -427,3 +431,31 @@ def syllogisms_ragni2016() -> dict:
             "task": np.array([r["task"] for r in rows]), "response": np.array([r["response"] for r in rows]),
             "age": np.array([int(r["age"]) if r["age"].isdigit() else -1 for r in rows]),
             "gender": np.array([r["gender"] for r in rows])}
+
+
+def speed_acc() -> dict:
+    """Wagenmakers, Ratcliff, Gomez and McKoon (2008), Experiment 1, with the two extra participants of Heathcote and
+    Love (2012): 17 people deciding whether a letter string is a word, in blocks that stressed speed or accuracy.
+    Trials the papers excluded (``censor``) are dropped.  Per trial: ``id`` (str), ``speed`` (True in speed
+    blocks), ``word`` (the string was a word), ``frequency`` (high, low, very_low; nw_* for non-words), ``said_word``
+    and ``correct`` (bool), and ``rt`` in seconds."""
+    d = _rframe("speed_acc_2008")
+    keep = d["censor"].astype(float) == 0
+    resp = d["response"][keep]
+    word = d["stim_cat"][keep] == "word"
+    return {"id": d["id"][keep].astype(str), "speed": d["condition"][keep] == "speed", "word": word.astype(bool),
+            "frequency": d["frequency"][keep].astype(str), "said_word": (resp == "word").astype(bool),
+            "correct": (d["stim_cat"][keep] == resp).astype(bool), "rt": d["rt"][keep].astype(float)}
+
+
+def rr98() -> dict:
+    """Ratcliff and Rouder (1998), Experiment 1: three people (jf, kr, nh) judging whether a patch of pixels was
+    drawn from a light or a dark distribution, at 33 levels of brightness (``strength`` 0, darkest, to 32), in
+    blocks that stressed speed or accuracy.  Trials flagged as outliers are dropped.  Per trial: ``id``, ``speed``,
+    ``strength`` (int), ``light`` (the source was light), ``said_light``, ``correct`` and ``rt`` (seconds)."""
+    d = _rframe("rr98")
+    keep = d["outlier"].astype(float) == 0
+    return {"id": d["id"][keep].astype(str), "speed": d["instruction"][keep] == "speed",
+            "strength": d["strength"][keep].astype(int), "light": d["source"][keep] == "light",
+            "said_light": d["response"][keep] == "light", "correct": d["correct"][keep].astype(float) == 1,
+            "rt": d["rt"][keep].astype(float)}

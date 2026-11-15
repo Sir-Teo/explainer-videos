@@ -91,4 +91,46 @@ PARTS = [
               ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=25, level="M", widget="dots",
+        question="Why does a decision take the time it takes?",
+        story="In 1943 the Navy asks whether a firing test can stop as soon as the answer is clear, and Abraham Wald "
+              "answers: add up the evidence until it crosses a line, which needs about half the shots of a fixed "
+              "test and, as he and Wolfowitz prove, no fewer are possible. Hick's and Fitts's laws put a constant "
+              "price on each bit; seventeen people told to be careful are all slower and more accurate; and response "
+              "times are skewed, so the mean misleads. Ratcliff's diffusion model gives accuracy and mean time in "
+              "closed form and whole distributions by series, and its parameters mostly mean what they claim: speed "
+              "instructions lower the bound in sixteen of seventeen people, though not only the bound. Variability "
+              "explains fast and slow errors; neurons in LIP climb to a level, though single neurons may step; and "
+              "races, stopping and confidence read the same accumulator three ways.",
+        handoff="Judgement and choice is Part 26, the readiness potential Part 27, model fitting Part 48, interface "
+                "design Part 52, individual differences Part 59, and machines that decide when to stop Part 60.",
+        outside="Part 1's ex-Gaussian and Hick's law, Part 12's signal detection and meta-d', and Part 17's "
+                "dopamine. Random walks, the normal distribution, logarithms and maximum likelihood.",
+        objectives={
+            "U": ["Describe Hick's and Fitts's laws and the speed-accuracy trade-off.",
+                  "Explain why mean response times mislead, and what a response-time distribution looks like.",
+                  "Describe accumulation in LIP and the stop-signal task."],
+            "M": ["Run Wald's test and compute its average sample number against a fixed test.",
+                  "Fit the diffusion model to speed and accuracy blocks, and compare models by AIC.",
+                  "Estimate a stop-signal reaction time by the integration method."],
+            "D": ["Derive the diffusion model's accuracy and mean decision time.",
+                  "Derive Fitts's law from iterative corrections, and explain fast and slow errors by variability."],
+            "I": ["Price an interface's targets and menus with Fitts and Hick.",
+                  "Decide whether a slower group is less able or more careful."],
+        },
+        results=[
+            ("Wald's bounds", r"A = \log\frac{1-\beta}{\alpha}, \quad B = \log\frac{\beta}{1-\alpha}"),
+            ("Hick's law", r"\text{RT} = a + b \log_2 n"),
+            ("Fitts's law", r"MT = a + b \log_2 \frac{2D}{W}"),
+            ("Accuracy", r"P(\text{upper}) = \frac{1 - e^{-2vz/s^2}}{1 - e^{-2va/s^2}}"),
+            ("Mean decision time", r"\mathbb{E}[T] = \frac{a\,P(\text{upper}) - z}{v}"),
+            ("Stop-signal race", r"\text{SSRT} = F_{\text{go}}^{-1}\big(P(\text{respond})\big) - \text{SSD}"),
+        ],
+        U=(0, 1, 2, 3, 8, 10, 11, 12), D=(4, 5, 6, 7, 9, 14), I=(13,),
+        also=(("Psyche's decision module", "explainer/psychology/psyche/decide.py"),
+              ("Its tests", "tests/psychology/test_decide.py"),
+              ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

@@ -781,6 +781,26 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Newell, Shaw, Simon; Anderson, Douglass; Ericsson; Duncker; Adamson; Metcalfe, Wiebe | 纽厄尔，肖，西蒙；安德森，道格拉斯；埃里克森；东克尔；亚当森；梅特卡夫，维布 |
 | de Groot; Chase; Gobet; Macnamara; Gick; Gentner; Shepard, Metzler; Ganis, Kievit | 德格罗特；蔡斯；戈贝；麦克纳马拉；吉克；根特纳；谢泼德，梅茨勒；加尼斯，基维特 |
 | Kosslyn; Pylyshyn; Zeman; Waldmann, Hagmayer; Griffiths, Tenenbaum; Mozer; Chollet; Webb | 科斯林；派利夏恩；泽曼；瓦尔德曼，哈格迈尔；格里菲斯，特南鲍姆；莫泽；肖莱；韦布 |
+## Part 25: deciding in time
+
+| English | 中文 |
+|---|---|
+| random-dot motion; coherence; speed-accuracy trade-off; speed and accuracy instructions | 随机点运动；一致性；速度–准确性权衡；速度指令与准确指令 |
+| Hick's law; Fitts's law; index of difficulty; submovement; bits | 希克定律；菲茨定律；难度指数；子动作；比特 |
+| response-time distribution; quantile; ex-Gaussian; skew; tail | 反应时间分布；分位数；离散高斯；偏度；尾巴 |
+| sequential probability ratio test; log-likelihood ratio; operating characteristic; average sample number; overshoot | 序贯概率比检验；对数似然比；操作特征；平均样本数；冲过界线 |
+| diffusion model; drift rate; bound; starting point; non-decision time; first-passage time | 扩散模型；漂移率；界线；起点；非决策时间；首次通过时间 |
+| selective influence; EZ diffusion; across-trial variability; fast errors; slow errors | 选择性影响；EZ 扩散；试验间变异；快的错误；慢的错误 |
+| accumulator; ramp; step; lateral intraparietal area (LIP) | 累积器；渐升；跳变；外侧顶内区（LIP） |
+| linear ballistic accumulator; leaky competing accumulator; inhibition; leak; urgency; collapsing bound | 线性弹道累积器；泄漏竞争累积器；抑制；泄漏；紧迫；塌缩的界线 |
+| stop-signal task; stop-signal delay; stop-signal reaction time (SSRT); inhibition function; integration method | 停止信号任务；停止信号延迟；停止信号反应时（SSRT）；抑制函数；积分法 |
+| confidence; balance of evidence; folded X; attentional drift diffusion model | 信心；证据之差；折叠的 X；注意漂移扩散模型 |
+| Wald, Wolfowitz; Stone; Laming; Ratcliff; McKoon; Rouder; Tuerlinckx; Navarro, Fuss | 瓦尔德，沃尔福威茨；斯通；拉明；拉特克利夫；麦昆；劳德；图尔林克斯；纳瓦罗，富斯 |
+| Wagenmakers; Gomez; Voss; Rae; Heathcote; Brown; Dutilh; Usher; McClelland; Bogacz | 瓦根马克斯；戈麦斯；福斯；雷伊；希思科特；布朗；迪蒂伊；乌舍尔；麦克莱兰；博加奇 |
+| Shadlen; Newsome; Roitman; Latimer; Pillow; Steinemann; Logan, Cowan; Verbruggen; Bissett | 沙德伦；纽瑟姆；罗伊特曼；拉蒂默；皮洛；施泰内曼；洛根，考恩；弗吕格根；比塞特 |
+| Vickers; Kiani; Pleskac, Busemeyer; Sanders; Cisek; Drugowitsch; Hawkins; Krajbich, Armel, Rangel | 维克斯；基亚尼；普莱斯卡克，布斯迈耶；桑德斯；西塞克；德鲁戈维奇；霍金斯；克拉伊比赫，阿梅尔，兰热尔 |
+| Hyman; Fitts; Crossman, Goodeve; Pachella; Wickelgren; Hedge; Lerche; Green; Thapar | 海曼；菲茨；克罗斯曼，古德伊夫；帕切拉；维克尔格伦；赫奇；勒尔歇；格林；塔帕尔 |
+
 ## Names
 
 | English | 中文 |

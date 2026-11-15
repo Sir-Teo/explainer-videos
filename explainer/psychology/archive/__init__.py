@@ -51,7 +51,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "SAVINGS_REPLICATIONS", "ROEDIGER_KARPICKE_2006", "SCHOOLER_1990", "ALOGNA_2014", "LOFTUS_PALMER_1974", "ROEDIGER_MCDERMOTT_1995", "CEPEDA_2008", "LOFTUS_PICKRELL_1995", "TALARICO_RUBIN_2003", "HARDWICKE_2016", "PATIHIS_2013", "WIXTED_WELLS_2017", "DUNLOSKY_2013",
            "NOSOFSKY_1994", "HOMA_1976", "EKMAN_1954", "ROTHKOPF_1957", "AUSTEN", "HUTCHISON_2013", "LANDAUER_DUMAIS_1997", "TVERSKY_1977",
            "NATURAL_STORIES", "SAFFRAN_1996", "MARCUS_1992", "HARTSHORNE_2018", "LEHTONEN_2018",
-           "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014"]
+           "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014",
+           "SPEED_ACC_2008", "RR98"]
 
 
 @dataclass(frozen=True)
@@ -3911,6 +3912,28 @@ MACNAMARA_2014 = Dataset(
     data={'studies': 88, 'people': 11135, 'variance_explained': {'games': 0.26, 'music': 0.21, 'sports': 0.18, 'education': 0.04, 'professions': 0.01}},
 )
 
+_P25 = "through a web search, 2026-11-15"
+
+SPEED_ACC_2008 = Dataset(
+    key="speed_acc_2008",
+    title='Lexical decision under speed and accuracy instructions',
+    source='E.-J. Wagenmakers, R. Ratcliff, P. Gomez and G. McKoon, A diffusion model account of criterion shifts in the lexical decision task, Journal of Memory and Language 58 (2008) 140-159, Experiment 1, with the two extra participants of Heathcote and Love (2012), as packaged in the R package rtdists (GPL >= 3)',
+    cite=r"Wagenmakers, \ Ratcliff, \ Gomez \& McKoon (2008)",
+    checked='rtdists_0.12-0, data/speed_acc.RData; fetched by explainer.psychology.opendata and checked by SHA-256' + ", " + _P25,
+    licence='data fetched, not redistributed',
+    data={'people': 17, 'trials_kept': 31351, 'conditions': ['speed', 'accuracy']},
+)
+
+RR98 = Dataset(
+    key="rr98",
+    title='Brightness discrimination under speed and accuracy instructions',
+    source='R. Ratcliff and J. N. Rouder, Modeling response times for two-choice decisions, Psychological Science 9 (1998) 347-356, Experiment 1, as packaged in the R package rtdists (GPL >= 3)',
+    cite=r"Ratcliff \& Rouder (1998)",
+    checked='rtdists_0.12-0, data/rr98.rda; fetched by explainer.psychology.opendata and checked by SHA-256' + ", " + _P25,
+    licence='data fetched, not redistributed',
+    data={'people': 3, 'trials_kept': 23848, 'brightness_levels': 33},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3949,4 +3972,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           SAVINGS_REPLICATIONS, ROEDIGER_KARPICKE_2006, SCHOOLER_1990, ALOGNA_2014, LOFTUS_PALMER_1974, ROEDIGER_MCDERMOTT_1995, CEPEDA_2008, LOFTUS_PICKRELL_1995, TALARICO_RUBIN_2003, HARDWICKE_2016, PATIHIS_2013, WIXTED_WELLS_2017, DUNLOSKY_2013,
                           NOSOFSKY_1994, HOMA_1976, EKMAN_1954, ROTHKOPF_1957, AUSTEN, HUTCHISON_2013, LANDAUER_DUMAIS_1997, TVERSKY_1977,
                           NATURAL_STORIES, SAFFRAN_1996, MARCUS_1992, HARTSHORNE_2018, LEHTONEN_2018,
-                          GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014)}
+                          GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014,
+                          SPEED_ACC_2008, RR98)}

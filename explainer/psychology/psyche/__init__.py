@@ -94,5 +94,9 @@ Modules so far, with the part that introduces each:
                          selection; the Tower of Hanoi's state graph, a goal-stack production system and a
                          hill-climber; the nine dots; structure mapping; rotation fits; causal power; everyday
                          predictions by posterior medians
+``decide``          25   Wald's sequential test and its operating characteristic; the diffusion model's closed
+                         forms, first-passage densities (Navarro and Fuss) and fits by maximum likelihood and EZ;
+                         the linear ballistic accumulator; Hick's race; the stop-signal race and SSRT;
+                         balance-of-evidence confidence; urgency; the attentional drift diffusion model
 =================  ====  ===============================================================================
 """

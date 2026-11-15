@@ -1,11 +1,11 @@
 # Psychology, Built (心理学，从零搭建)
 
-**Status (2026-11-15): the plan is accepted, the shared code is in place, and Parts 1 to 24 are built in English
+**Status (2026-11-15): the plan is accepted, the shared code is in place, and Parts 1 to 25 are built in English
 and Chinese.** Act I (Parts 1 to 4) is the method; Act II (Parts 5 to 10) is the biology, from *The Neuron* to
 *Chemistry and Clocks*; Act III (Parts 11 to 15) is the senses, from *The Threshold* to *The Other Senses*; Act IV
 (Parts 16 and 17) is learning, *Conditioning* and *Reward and Prediction*; and Act V, thinking, has begun with
 *Attention*, *Working Memory*, *Memory I: Storing and Finding*, *Memory II: Forgetting and Inventing*, *Concepts
-and Categories*, *Language* and *Reasoning and Problem Solving* (Parts 18 to 24). This file is the plan;
+and Categories*, *Language*, *Reasoning and Problem Solving* and *Deciding in Time* (Parts 18 to 25). This file is the plan;
 the standard every part meets, the devices and all sixty-two parts chapter by chapter are in
 [`SYLLABUS.md`](SYLLABUS.md), with the progress table in its §9.
 

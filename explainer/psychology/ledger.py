@@ -1295,7 +1295,8 @@ shown(12, "SEE_1995", "a meta-analysis shown for its conclusion about the watch;
       row_in=51)
 shown(12, "GIGERENZER_HOFFRAGE_1995", "base-rate reasoning, a preview; judgment under uncertainty is entered in "
       "Part 26", row_in=26)
-shown(12, "MANISCALCO_LAU_2012", "a method at the frontier; confidence is entered in Part 25", row_in=25)
+shown(12, "MANISCALCO_LAU_2012", "a method at the frontier, a measure rather than a finding; Part 25 uses it to "
+      "frame confidence")
 shown(12, "SWETS_2000", "a review of applications, not a finding")
 shown(12, "MICKES_2012", "line-ups, a preview of a live dispute; eyewitness memory is entered in Part 56", row_in=56)
 
@@ -2977,6 +2978,130 @@ add(Finding(
     checked="2026-11-15",
 ))
 
+add(Finding(
+    key="fitts_law", part=25, title=r"Fitts's law",
+    claim="The time of an aimed movement grows linearly with the logarithm of twice the distance over the width of "
+          "the target.",
+    original=Study("Fitts", 1954, n="16 men", design="tapping between two plates, distances and widths varied",
+                   found="movement time linear in log2(2D/W)"),
+    status="replicated",
+    record=(Study("Fitts and Peterson", 1964, n="adults", design="single, discrete aimed movements",
+                  found="the same law"),
+            Study("MacKenzie (review)", 1992, n="pointing studies", design="mice, styluses, joysticks, fingers",
+                  found="the law holds across devices and limbs"),
+            Study("Soukoreff and MacKenzie", 2004, n="studies under ISO 9241-9", design="a standard method for "
+                  "testing pointing devices", found="the law as a measurement standard"),),
+    note="Among the most reliable laws in psychology, and a standard for evaluating pointing devices.",
+    sources=("P. M. Fitts, The information capacity of the human motor system in controlling the amplitude of "
+             "movement, Journal of Experimental Psychology 47 (1954) 381-391",
+             "P. M. Fitts and J. R. Peterson, Information capacity of discrete motor responses, Journal of "
+             "Experimental Psychology 67 (1964) 103-112",
+             "I. S. MacKenzie, Fitts' law as a research and design tool in human-computer interaction, "
+             "Human-Computer Interaction 7 (1992) 91-139",
+             "R. W. Soukoreff and I. S. MacKenzie, Towards a standard for pointing device evaluation, International "
+             "Journal of Human-Computer Studies 61 (2004) 751-789"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="speed_bound", part=25, title=r"Speed instructions move the bound",
+    claim="Instructions to be fast or accurate act on the diffusion model's boundary separation.",
+    original=Study("Ratcliff and Rouder", 1998, n="3 practised observers", design="brightness judgements in speed "
+                   "and accuracy blocks", found="the bound about twice as wide when accuracy is stressed"),
+    status="replicated",
+    record=(Study("Voss, Rothermund and Voss", 2004, n="students", design="four manipulations, one per parameter",
+                  found="each manipulation moved mainly its own parameter"),
+            Study("Wagenmakers, Ratcliff, Gomez and McKoon", 2008, n="17 adults (with Heathcote and Love 2012)",
+                  design="lexical decision in speed and accuracy blocks; refitted in Part 25",
+                  found="a lower bound under speed for 16 of 17; t0, and for some drift, changed too"),
+            Study("Rae, Heathcote, Donkin, Averell and Brown", 2014, n="adults", design="speed emphasis",
+                  found="the drift falls under speed emphasis as well as the bound"),),
+    note="The bound moves every time; it is not the only thing that moves.",
+    sources=("R. Ratcliff and J. N. Rouder, Modeling response times for two-choice decisions, Psychological Science "
+             "9 (1998) 347-356",
+             "A. Voss, K. Rothermund and J. Voss, Interpreting the parameters of the diffusion model: an empirical "
+             "validation, Memory & Cognition 32 (2004) 1206-1220",
+             "E.-J. Wagenmakers, R. Ratcliff, P. Gomez and G. McKoon, A diffusion model account of criterion shifts "
+             "in the lexical decision task, Journal of Memory and Language 58 (2008) 140-159",
+             "B. Rae, A. Heathcote, C. Donkin, L. Averell and S. Brown, The hare and the tortoise: emphasizing speed "
+             "can change the evidence used to make decisions, Journal of Experimental Psychology: Learning, Memory, "
+             "and Cognition 40 (2014) 1226-1243",
+             "G. Dutilh and colleagues, The quality of response time data inference: a blinded, collaborative "
+             "assessment of the validity of cognitive models, Psychonomic Bulletin & Review 26 (2019) 1051-1069"),
+    checked="2026-11-15",
+    data=("SPEED_ACC_2008", "RR98"),
+))
+
+add(Finding(
+    key="fast_slow_errors", part=25, title=r"Fast errors under speed, slow errors under accuracy",
+    claim="Errors are faster than correct responses when speed is stressed, and slower when accuracy is stressed.",
+    original=Study("Ratcliff and Rouder", 1998, n="3 practised observers", design="brightness judgements in speed "
+                   "and accuracy blocks", found="fast errors under speed, slow errors under accuracy, fitted by "
+                   "variability in start and in drift"),
+    status="replicated",
+    record=(Study("Wagenmakers, Ratcliff, Gomez and McKoon", 2008, n="17 adults (with Heathcote and Love 2012)",
+                  design="lexical decision in speed and accuracy blocks; refitted in Part 25",
+                  found="median errors faster for 13 of 17 under speed, slower for 14 of 17 under accuracy"),
+            Study("Ratcliff and McKoon (review)", 2008, n="studies of two-choice tasks", design="a review",
+                  found="the pattern is common, and the full diffusion model fits it"),),
+    note="A regular pattern that the four-parameter model cannot produce and the full model can.",
+    sources=("R. Ratcliff and J. N. Rouder, Modeling response times for two-choice decisions, Psychological Science "
+             "9 (1998) 347-356",
+             "E.-J. Wagenmakers, R. Ratcliff, P. Gomez and G. McKoon, A diffusion model account of criterion shifts "
+             "in the lexical decision task, Journal of Memory and Language 58 (2008) 140-159",
+             "R. Ratcliff and G. McKoon, The diffusion decision model: theory and data for two-choice decision "
+             "tasks, Neural Computation 20 (2008) 873-922"),
+    checked="2026-11-15",
+    data=("SPEED_ACC_2008", "RR98"),
+))
+
+add(Finding(
+    key="lip_ramping", part=25, title=r"LIP neurons ramp to a bound",
+    claim="Single neurons in the lateral intraparietal area accumulate evidence for a choice, ramping to a bound.",
+    original=Study("Roitman and Shadlen", 2002, n="2 monkeys", design="random-dot motion, reaction-time "
+                   "version", found="rises steeper for stronger motion; answers at a common level"),
+    status="contested",
+    record=(Study("Latimer, Yates, Meister, Huk and Pillow", 2015, n="2 monkeys", design="single-trial models of "
+                  "LIP spike trains", found="about three quarters of neurons better described as stepping"),
+            Study("Shadlen and colleagues (comment)", 2016, n="the same data and others", design="a reanalysis",
+                  found="the data do not show one-time steps"),
+            Study("Steinemann and colleagues", 2024, n="up to 203 neurons at once", design="population recordings "
+                  "in LIP", found="a population signal that drifts and diffuses within single decisions"),),
+    note="The population looks like diffusion; whether single neurons ramp or step is unsettled.",
+    sources=("J. D. Roitman and M. N. Shadlen, Response of neurons in the lateral intraparietal area during a "
+             "combined visual discrimination reaction time task, Journal of Neuroscience 22 (2002) 9475-9489",
+             "K. W. Latimer, J. L. Yates, M. L. R. Meister, A. C. Huk and J. W. Pillow, Single-trial spike trains in "
+             "parietal cortex reveal discrete steps during decision-making, Science 349 (2015) 184-187",
+             "M. N. Shadlen, R. Kiani, W. T. Newsome and colleagues, Comment on single-trial spike trains in "
+             "parietal cortex reveal discrete steps during decision-making, Science 351 (2016) 1406",
+             "N. A. Steinemann, G. M. Stine, E. M. Trautmann, A. Zylberberg, D. M. Wolpert and M. N. Shadlen, "
+             "Direct observation of the neural computations underlying a single decision, eLife 12 (2024) RP90859"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="stop_race", part=25, title=r"The stop-signal race",
+    claim="Stopping is a race between independent go and stop processes, from which the stop-signal reaction time "
+          "can be estimated.",
+    original=Study("Logan and Cowan", 1984, n="a model with experiments", design="stop signals at varied delays",
+                   found="the inhibition function and the stop time follow from an independent race"),
+    status="contested",
+    record=(Study("Verbruggen and colleagues (consensus)", 2019, n="many laboratories", design="a consensus guide "
+                  "to running and analysing the task", found="estimates depend on design choices; recommended "
+                  "practice"),
+            Study("Bissett, Jones, Poldrack and Logan", 2021, n="several large datasets", design="tests of "
+                  "independence", found="severe violations at short delays, across tasks and responses"),),
+    note="The race predicts the inhibition function well; its independence assumption fails at short delays, "
+         "which biases estimates that rely on them.",
+    sources=("G. D. Logan and W. B. Cowan, On the ability to inhibit thought and action: a theory of an act of "
+             "control, Psychological Review 91 (1984) 295-327",
+             "F. Verbruggen and colleagues, A consensus guide to capturing the ability to inhibit actions and "
+             "impulsive behaviors in the stop-signal task, eLife 8 (2019) e46323",
+             "P. G. Bissett, H. M. Jones, R. A. Poldrack and G. D. Logan, Severe violations of independence in "
+             "response inhibition tasks, Science Advances 7 (2021) eabf4355"),
+    checked="2026-11-15",
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -3071,3 +3196,17 @@ shown(24, r"Ellis et al. (2021); \ Chollet (2019); \ LeGris et al. (2024)", "pro
       "frontier; Part 60's", row_in=60)
 shown(24, r"Webb, \ Holyoak \& Lu (2023), \ \emph{Nature Human Behaviour}", "machine analogy at the frontier; "
       "Part 60's", row_in=60)
+
+shown(25, r"Wallis (1980); \ Wald (1945, \ 1947); \ Ratcliff (1978); \ Roitman \& Shadlen (2002)", "the history "
+      "the part tells; LIP ramping has its row")
+shown(25, r"Stone (1960); \ Laming (1968); \ Ratcliff (1978)", "the sequential-sampling tradition, described")
+shown(25, r"Ratcliff (1978); \ Voss, \ Rothermund \& Voss (2004)", "the model's claims; selective influence has its "
+      "row (speed_bound), with Voss et al. in its record")
+shown(25, r"Shadlen \& Newsome (1996, \ 2001); \ Roitman \& Shadlen (2002)", "the recordings behind the LIP row "
+      "(lip_ramping)")
+shown(25, r"Usher \& McClelland (2001); \ Bogacz et al. (2006)", "models, described")
+shown(25, r"Vickers (1979); \ Kiani \& Shadlen (2009); \ Pleskac \& Busemeyer (2010)", "accounts of confidence, "
+      "described; metacognition's measures were Part 12's")
+shown(25, r"Green (2000); \ AASHTO stopping sight distance", "applied figures, described")
+shown(25, r"Ratcliff, \ Thapar \& McKoon (2001)", "ageing studies, described; individual differences are Part 59's",
+      row_in=59)
