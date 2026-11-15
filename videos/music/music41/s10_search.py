@@ -95,21 +95,39 @@ class Search(SoundScene):
 
     # ------------------------------------------------------------------
     def hear(self):
+        from explainer.music.monochord import orchestra as O
         d = load("match")
         c = clip("match.four")
-        cells = VGroup(*[label(t, font_size=21, color=col) for t, col in ((r"the sung vowel", BLUE), (r"one instrument", GREY_A), (r"two", GREY_A), (r"four", TUNE))]).arrange(RIGHT, buff=1.0).move_to(UP * 0.3)
+        tb = self.bands(d["target_bands"], BLUE, h=2.6, w=10.0).move_to(DOWN * 0.2)
+        overlays = {}
+        for k in ("1", "2", "4"):
+            ch = d["results"][k]["chosen"]
+            pw = sum(O.band_power(O.partials(x["instrument"], x["key"], float(np.sqrt(max(x["gain"], 0.0))))) for x in ch)
+            g = self.bands(pw, EAR, h=2.6, w=10.0)
+            g.align_to(tb, DL)
+            for r in g[1:]:
+                r.set_fill(EAR, 0.55).stretch(0.45, 0)
+            overlays[k] = g
+        cells = VGroup(*[label(t, font_size=21, color=col) for t, col in ((r"the sung vowel", BLUE), (r"one instrument", EAR), (r"two", EAR), (r"four", EAR))]).arrange(RIGHT, buff=1.0).to_edge(UP, buff=0.9)
+        key = label(r"blue: \ the vowel's band spectrum; \ pink, \ narrow: \ the match being heard", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.9)
         with self.voiceover(
             "Hear the target, sung by Part 17's model bass voice, and then the solver's matches with one, two and four "
-            "instruments. The match will not sound like a voice, because a voice also moves, breathes and articulates; but "
-            "listen for the vowel colour arriving as instruments are added."
+            "instruments, their spectra laid over the vowel's. The match will not sound like a voice, because a voice also "
+            "moves, breathes and articulates; but listen for the vowel colour arriving as instruments are added."
         ):
-            self.play(FadeIn(cells))
+            self.play(FadeIn(tb), FadeIn(cells), FadeIn(key))
         st = d["starts"]
         ks = ["voice", "1", "2", "4"]
+        for k, g in overlays.items():
+            g.set_opacity(0)
+            self.add(g)
         with self.listen(c) as snd:
             window(snd, r"a vowel and its matches", kind="synthesized", detail=r"a model voice, \ additive instruments", corner=DL, tag_corner=DR)
             for i, k in enumerate(ks):
+                end = st[ks[i + 1]] - 0.2 if i + 1 < len(ks) else c.duration
                 pulse(snd, cells[i], st[k], st[k] + 2.3, buff=0.1)
+                if k in overlays:
+                    snd.drive(overlays[k], lambda m, t, a=st[k], b=end: m.set_opacity(1.0 if a <= t < b else 0.0))
         self.wait(0.3)
         self.clear_scene()
 

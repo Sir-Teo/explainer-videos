@@ -24,6 +24,7 @@ class Hook(SoundScene):
             self.play(FadeIn(card))
         self.wait(0.8)
         mel = d["melody"]
+        BOLERO_PARTS = d["parts"]
         roll = mroll(mel, width=10.0, height=1.6, lo=58, hi=72, color=TUNE, total=8, bar_h=0.16).move_to(UP * 0.6)
         stage = VGroup(label(r"first", font_size=22, color=GREY_A), label(r"second", font_size=22, color=GREY_A)).arrange(RIGHT, buff=2.0).to_edge(DOWN, buff=1.4)
         self.play(FadeOut(card), FadeIn(roll), FadeIn(stage))
@@ -36,13 +37,22 @@ class Hook(SoundScene):
             pulse(snd, stage[1], d["starts"]["four"], c.duration, buff=0.08)
         parts = VGroup(*[label(t, font_size=19, color=col) for t, col in ((r"horn: \ the melody", TUNE), (r"celesta: \ two octaves up \ (4th harmonic)", BLUE),
                                                                           (r"piccolo: \ a twelfth up \ (3rd harmonic)", EAR), (r"piccolo: \ two octaves and a third up \ (5th harmonic)", "#A3E635"))]).arrange(DOWN, buff=0.18, aligned_edge=LEFT).to_edge(DOWN, buff=0.35)
+        cols4 = [TUNE, BLUE, EAR, "#A3E635"]
+        voices = [[[m + sh, a, dd] for m, a, dd in mel] for _, sh, _ in BOLERO_PARTS]
+        stack = voices_roll(voices, width=10.0, height=3.1, colors=cols4, total=8, lo=58, hi=102, bar_h=0.13).move_to(UP * 1.0)
         with self.voiceover(
-            "Four: a horn, a celesta two octaves up, and two piccolos, one a twelfth up and one two octaves and a major "
-            "third up, all moving together. Most listeners hear one new instrument, an organ-like colour no single player "
-            "owns, because each added instrument sits on a harmonic of the horn's notes: the fourth, the third and the "
-            "fifth. The instruments fuse into one sound."
-        ):
-            self.play(FadeOut(stage), FadeIn(parts))
+            "Four: a horn, <bookmark mark='a'/> a celesta two octaves up, <bookmark mark='b'/> and two piccolos, one a "
+            "twelfth up <bookmark mark='c'/> and one two octaves and a major third up, all moving together. "
+            "<bookmark mark='d'/> Most listeners hear one new instrument, an organ-like colour no single player owns, "
+            "because each added instrument sits on a harmonic of the horn's notes: the fourth, the third and the fifth. "
+            "The instruments fuse into one sound."
+        ) as vo:
+            self.play(FadeOut(stage), FadeOut(roll), FadeIn(stack.parts[0]), FadeIn(parts[0]))
+            for mark, k in zip("abc", (1, 2, 3)):
+                vo.wait_until(mark)
+                self.play(FadeIn(stack.parts[k]), FadeIn(parts[k]))
+            vo.wait_until("d")
+            self.play(*[p_.animate.set_opacity(0.55) for p_ in stack.parts[1:]], run_time=1.5)
         self.wait(0.4)
         self.clear_scene()
 

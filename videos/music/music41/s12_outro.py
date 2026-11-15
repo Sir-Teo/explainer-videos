@@ -21,7 +21,9 @@ class Outro(SoundScene):
         c = clip("tune.variation41")
         head = VGroup(label(r"Variation 41", font_size=48, color=TUNE), label(r"the Tune, \ eight ways", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.5, aligned_edge=DOWN).to_edge(UP, buff=0.3)
         titles = d["titles"]
-        cells = VGroup(*[label(rf"{k + 1}. \ " + t.replace("'", "'"), font_size=18, color=TUNE if k == 7 else WHITE) for k, t in enumerate(titles)]).arrange_in_grid(rows=4, cols=2, buff=(0.8, 0.35), col_alignments="ll").move_to(DOWN * 0.3)
+        cells = VGroup(*[label(rf"{k + 1}. \ " + t.replace("'", "'"), font_size=18, color=TUNE if k == 7 else WHITE) for k, t in enumerate(titles)]).arrange_in_grid(rows=4, cols=2, buff=(0.8, 0.35), col_alignments="ll").move_to(DOWN * 1.2)
+        mel = d["melody"]
+        roll = mroll(mel, width=6.0, height=1.2, lo=58, hi=72, color=TUNE, total=8, bar_h=0.14).move_to(UP * 1.25)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here, its first phrase in "
             "eight orchestrations: strings; woodwinds; brass; flute and clarinet in unison; Ravel's horn, celesta and "
@@ -30,13 +32,14 @@ class Outro(SoundScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            self.play(FadeIn(cells))
+            self.play(FadeIn(cells), FadeIn(roll))
         beat = d["beat"]
         with self.listen(c) as snd:
             window(snd, r"Variation 41", kind="synthesized", detail=r"additive instruments from measured spectra", corner=DL, tag_corner=DR)
             for k, t0 in enumerate(d["starts"]):
                 pulse(snd, cells[k], t0, t0 + 8 * beat, buff=0.08)
-        self.play(FadeOut(cells))
+                flash(snd, roll.notes, [t0 + a * beat for _, a, _ in mel], hot=WHITE, base=TUNE)
+        self.play(FadeOut(cells), FadeOut(roll))
         rws = (rows_before(PART) + [{"part": v["part"], "title": v["title"], "seconds": v["seconds"], "measure": v["measure"]}])[-6:]
         led = variations_ledger(rws, highlight=(len(rws) - 1,)).to_edge(DOWN, buff=0.25)
         with self.voiceover(
@@ -52,7 +55,7 @@ class Outro(SoundScene):
         card = objectives_card([
             r"an orchestra resynthesised from the series' physical models",
             r"ranges, \ registers, \ transposing instruments",
-            r"louder is brighter; \ eight players are 9 dB, \ not 18, \ louder",
+            r"louder is brighter; \ eight players are about 10 dB, \ not 18, \ louder",
             r"doubling makes new timbres; \ balance is a separate question",
             r"spacing follows the harmonic series; \ low thirds are rough",
             r"instruments on harmonics fuse; \ a solver can spell a vowel",
@@ -60,7 +63,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "What did we find? An orchestra can be resynthesised from the series' physical models. <bookmark mark='a'/> "
             "Instruments have ranges, registers, and sometimes transposed parts. <bookmark mark='b'/> Louder is brighter, and "
-            "eight players are about nine decibels louder than one, not eighteen. <bookmark mark='c'/> Doubling makes new "
+            "eight players are about ten decibels louder than one, not eighteen. <bookmark mark='c'/> Doubling makes new "
             "timbres, and balance is a separate question. <bookmark mark='d'/> Spacing follows the harmonic series, because "
             "low thirds are rough. <bookmark mark='e'/> And instruments placed on harmonics fuse into one sound, so a solver "
             "can spell a vowel with an orchestra."

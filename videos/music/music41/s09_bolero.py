@@ -17,8 +17,7 @@ class Bolero(SoundScene):
         self.cresc()
 
     # ------------------------------------------------------------------
-    def series(self):
-        d = load("hook")
+    def ladder(self):
         f0 = 261.63
         x0, W = -5.5, 11.0
         fmax = 1700.0
@@ -29,11 +28,16 @@ class Bolero(SoundScene):
             harms.add(VGroup(DashedLine([x, -1.4, 0], [x, 2.0, 0], color=GREY_D, stroke_width=1), label(rf"{k}", font_size=16, color=GREY_A).move_to([x, -1.7, 0])))
         players = VGroup()
         for name, shift, k, col in (("horn", 0, 1, TUNE), ("celesta", 24, 4, BLUE), ("piccolo", 19, 3, EAR), ("piccolo", 28, 5, "#A3E635")):
-            f = 261.63 * 2 ** (shift / 12)
+            f = f0 * 2 ** (shift / 12)
             x = x0 + W * f / fmax
             players.add(VGroup(Arrow([x, 2.4, 0], [x, 0.4, 0], color=col, buff=0, stroke_width=4), label(name, font_size=17, color=col).move_to([x, 2.65, 0])))
-        cap = label(r"the horn plays C4; \ each other instrument sits on one of its harmonics", font_size=19, color=GREY_A).to_edge(DOWN, buff=0.6)
         xl = label(r"harmonics of the horn's C", font_size=16, color=GREY_A).move_to([x0 + 1.5, -2.1, 0])
+        return ax, harms, players, xl
+
+    def series(self):
+        d = load("hook")
+        ax, harms, players, xl = self.ladder()
+        cap = label(r"the horn plays C4; \ each other instrument sits on one of its harmonics", font_size=19, color=GREY_A).to_edge(DOWN, buff=0.6)
         head = label(r"four instruments on one harmonic series", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Here is Ravel's trick, drawn. <bookmark mark='a'/> The horn's C and its first six harmonics. <bookmark mark='b'/> "
@@ -53,19 +57,25 @@ class Bolero(SoundScene):
     def build(self):
         d = load("build")
         c = clip("build.four")
-        steps = VGroup(*[label(t, font_size=20, color=col) for t, col in ((r"horn", TUNE), (r"+ celesta", BLUE), (r"+ piccolo \ (3rd)", EAR), (r"+ piccolo \ (5th)", "#A3E635"))]).arrange(RIGHT, buff=0.9).move_to(UP * 0.3)
-        cap = label(r"one instrument added each time: \ listen for the moment the sum stops sounding like a chord", font_size=19, color=GREY_A).to_edge(DOWN, buff=1.0)
+        ax, harms, players, xl = self.ladder()
+        steps = VGroup(*[label(t, font_size=20, color=col) for t, col in ((r"horn", TUNE), (r"+ celesta", BLUE), (r"+ piccolo \ (3rd)", EAR), (r"+ piccolo \ (5th)", "#A3E635"))]).arrange(RIGHT, buff=0.9).to_edge(DOWN, buff=1.05)
+        cap = label(r"one instrument added each time: \ listen for the moment the sum stops sounding like a chord", font_size=18, color=GREY_A).next_to(steps, DOWN, buff=0.2)
+        for p_ in players[1:]:
+            p_.set_opacity(0.15)
         with self.voiceover(
             "Hear it assembled one instrument at a time: the horn alone; with the celesta; with the first piccolo; with the "
             "second. Listen for the point at which the sum stops sounding like several instruments and starts sounding like "
             "one."
         ):
-            self.play(FadeIn(steps), FadeIn(cap))
+            self.play(FadeIn(ax), FadeIn(harms), FadeIn(players), FadeIn(xl), FadeIn(steps), FadeIn(cap))
         beat = d["beat"]
+        st = d["starts"]
         with self.listen(c) as snd:
             window(snd, r"built up", kind="synthesized", detail=r"additive instruments", corner=DL, tag_corner=DR)
-            for k, t0 in enumerate(d["starts"]):
+            for k, t0 in enumerate(st):
                 pulse(snd, steps[k], t0, t0 + 8 * beat, buff=0.1)
+                if k:
+                    snd.drive(players[k], lambda m, t, t0=t0: m.set_opacity(1.0 if t >= t0 else 0.15))
         self.wait(0.3)
         self.clear_scene()
 

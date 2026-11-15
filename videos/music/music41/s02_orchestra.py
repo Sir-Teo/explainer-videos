@@ -75,20 +75,34 @@ class Orchestra(SoundScene):
     def tour(self):
         d = load("tour")
         c = clip("tour.eight")
-        names = [n for n, _ in d["tour"]]
-        cells = VGroup(*[label(n.replace(" p", ""), font_size=20, color=WHITE) for n in names]).arrange_in_grid(rows=2, cols=4, buff=(0.8, 0.5)).move_to(UP * 0.3)
-        cap = label(r"each plays the same phrase in a comfortable part of its range: \ additive, \ from the measured spectra", font_size=19, color=GREY_A).to_edge(DOWN, buff=1.0)
+        beat = d["beat"]
+        lo_k, hi_k = 24, 108
+        x0, W = -3.6, 9.4
+        def X(m):
+            return x0 + W * (m - lo_k) / (hi_k - lo_k)
+        rows_ = VGroup()
+        for i, (name, shift) in enumerate(d["tour"]):
+            y = 2.0 - 0.52 * i
+            base = name.split()[0]
+            rg = d["ranges"].get(name) or d["ranges"].get(base)
+            nm = label(name.replace(" p", ""), font_size=18, color=WHITE).move_to([x0 - 0.3, y, 0], aligned_edge=RIGHT)
+            rng_bar = Rectangle(width=X(rg[1]) - X(rg[0]), height=0.22, stroke_width=0, fill_color=GREY_D, fill_opacity=0.9).move_to([(X(rg[0]) + X(rg[1])) / 2, y, 0])
+            ph = Rectangle(width=X(69 + shift) - X(60 + shift) + 0.06, height=0.3, stroke_width=0, fill_color=TUNE, fill_opacity=0.95).move_to([(X(60 + shift) + X(69 + shift)) / 2, y, 0])
+            rows_.add(VGroup(nm, rng_bar, ph))
+        ticks = VGroup(*[label(rf"C{o}", font_size=14, color=GREY_A).move_to([X(12 * (o + 1)), 2.0 - 0.52 * 8 + 0.05, 0]) for o in range(1, 8)])
+        grid_ = VGroup(*[Line([X(12 * (o + 1)), 2.3, 0], [X(12 * (o + 1)), 2.0 - 0.52 * 7.6, 0], color=DIM, stroke_width=1) for o in range(1, 8)])
+        cap = label(r"grey: \ each instrument's sounding range; \ gold: \ where the phrase sits in it", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "With those spectra, any instrument can play any note, by adding up its harmonics with an attack and, for the "
             "strings and flutes, a vibrato. Here is a tour: the same phrase on piccolo, flute, clarinet, saxophone, trumpet, "
-            "horn, violin and cello, each in a comfortable part of its range."
+            "horn, violin and cello. The grey bars are the instruments' ranges; the gold marks show where the phrase sits, "
+            "in a comfortable part of each."
         ):
-            self.play(FadeIn(cells), FadeIn(cap))
-        beat = d["beat"]
+            self.play(FadeIn(grid_), FadeIn(ticks), LaggedStart(*[FadeIn(r) for r in rows_], lag_ratio=0.12), FadeIn(cap))
         with self.listen(c) as snd:
             window(snd, r"eight instruments", kind="synthesized", detail=r"additive, \ from measured spectra", corner=DL, tag_corner=DR)
             for k, t0 in enumerate(d["starts"]):
-                pulse(snd, cells[k], t0, t0 + 8 * beat, buff=0.1)
+                pulse(snd, rows_[k], t0, t0 + 8 * beat, buff=0.06)
         self.wait(0.3)
         self.clear_scene()
 
@@ -123,14 +137,27 @@ class Orchestra(SoundScene):
 
     # ------------------------------------------------------------------
     def same(self):
+        from explainer.music.monochord import orchestra as O
         d = load("same")
         c = clip("same.eight")
         names = d["names"]
-        cells = VGroup(*[label(n.replace(" p", ""), font_size=20, color=WHITE) for n in names]).arrange_in_grid(rows=2, cols=4, buff=(0.9, 0.5)).move_to(UP * 0.3)
-        cap = label(r"same pitch, \ same level, \ same length: \ only the spectrum and the attack differ", font_size=19, color=GREY_A).to_edge(DOWN, buff=1.0)
+        cells = VGroup()
+        for n in names:
+            g = VGroup(Line([0, 0, 0], [2.0, 0, 0], color=GREY_D))
+            if n == "celesta":
+                parts = [(r, db) for r, db in O.CELESTA]
+            else:
+                parts = [(k + 1, float(v)) for k, v in enumerate(O.PROFILES[n][:12])]
+            for r, db in parts:
+                h = 1.0 * max(0.0, 1 + db / 50.0)
+                g.add(Rectangle(width=0.1, height=max(h, 0.02), stroke_width=0, fill_color=TUNE, fill_opacity=0.9).move_to([2.0 * (r - 0.5) / 12, h / 2, 0]))
+            cells.add(VGroup(label(n.replace(" p", ""), font_size=19, color=WHITE), g).arrange(DOWN, buff=0.15))
+        cells.arrange_in_grid(rows=2, cols=4, buff=(0.7, 0.55)).move_to(UP * 0.35)
+        cap = label(r"same pitch, \ same level, \ same length: \ only the spectrum \ (bars: \ harmonics 1 to 12) \ and the attack differ", font_size=18, color=GREY_A).to_edge(DOWN, buff=1.0)
         with self.voiceover(
             "Hear the definition of timbre at work: one note, middle C, at the same level and length, on eight of our "
-            "instruments in turn. Only the spectrum and the attack differ, and each is unmistakable."
+            "instruments in turn. Only the spectrum and the attack differ, and each is unmistakable. The celesta's bars "
+            "sit between the harmonics: a struck bar's partials are not a harmonic series."
         ):
             self.play(FadeIn(cells), FadeIn(cap))
         with self.listen(c) as snd:
@@ -169,7 +196,7 @@ class Orchestra(SoundScene):
             return g
         specs = VGroup(*[VGroup(bars(d["levels"][n], EAR if n == "clarinet" else GREY_A), label(n, font_size=18, color=EAR if n == "clarinet" else GREY_A)).arrange(DOWN, buff=0.12)
                          .next_to(boxes[k], DOWN, buff=0.35) for k, n in enumerate(names)])
-        cap = label(r"the first six harmonics of each: \ the clarinet's 2nd and 4th are nearly missing", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.6)
+        cap = label(r"the first six harmonics of each: \ the clarinet's odd ones strong, \ its even ones weak", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "The second. The violin came first, and the flute last. The clarinet gives itself away by its hollow sound: its "
             "bore, closed at the reed, favours the odd harmonics, so the third and fifth are strong while the second and "

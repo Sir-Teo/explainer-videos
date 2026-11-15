@@ -139,7 +139,11 @@ class Section(SoundScene):
     def solo(self):
         d = load("solo")
         c = clip("solo.two")
-        cells = VGroup(label(r"one violin", font_size=22, color=TUNE), label(r"twelve violins and six cellos, \ an octave lower", font_size=22, color=BLUE)).arrange(RIGHT, buff=1.5).move_to(UP * 0.3)
+        one = VGroup(Circle(radius=0.32, color=TUNE, fill_color=TUNE, fill_opacity=0.5), label(r"one violin", font_size=20, color=TUNE)).arrange(DOWN, buff=0.2)
+        vls = VGroup(*[Circle(radius=0.2, color=BLUE, fill_color=BLUE, fill_opacity=0.5) for _ in range(12)]).arrange_in_grid(rows=2, cols=6, buff=0.12)
+        vcs = VGroup(*[Circle(radius=0.26, color="#A3E635", fill_color="#A3E635", fill_opacity=0.5) for _ in range(6)]).arrange(RIGHT, buff=0.12)
+        tutti = VGroup(VGroup(vls, vcs).arrange(DOWN, buff=0.25), label(r"twelve violins and six cellos, \ an octave lower", font_size=20, color=BLUE)).arrange(DOWN, buff=0.2)
+        cells = VGroup(one, tutti).arrange(RIGHT, buff=2.0).move_to(UP * 0.3)
         with self.voiceover(
             "The contrast of one against many is a resource in itself, the basis of the concerto. Hear a phrase on one "
             "violin, answered an octave lower by twelve violins and six cellos: the soloist's line is clear and personal, "
