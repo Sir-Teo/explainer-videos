@@ -13,6 +13,7 @@ class Pv(SoundScene):
         self.hear()
         self.limits()
         self.extreme()
+        self.uses()
 
     # ------------------------------------------------------------------
     def ola(self):
@@ -114,3 +115,19 @@ class Pv(SoundScene):
                    "<bookmark mark='c'/> A pop song slowed eight hundred per cent became an ambient piece that spread online in "
                    "2010. <bookmark mark='d'/> Variation 50 stretches one second of the Tune to eight. <bookmark mark='e'/> At that "
                    "scale the phase vocoder is less an effect than a microscope.", marks="bcde")
+
+    # ------------------------------------------------------------------
+    def uses(self):
+        items = [
+            (r"DJ software matches the tempo of two tracks without changing their key", WHITE),
+            (r"film editors fit a cue to a cut a few per cent longer or shorter \ (Part 44's hit points)", WHITE),
+            (r"language learners and transcribers slow speech and music down, \ keeping the pitch", WHITE),
+            (r"producers move a sampled loop to a new tempo, \ or a new key, \ independently", TUNE),
+            (r"each is a careful use of the same machinery: \ analyse, \ move, \ rebuild", GREY_A),
+        ]
+        rows_scene(self, r"stretching at work", items,
+                   "Stretching is everywhere at work. <bookmark mark='b'/> DJ software matches the tempo of two tracks without "
+                   "changing their key. <bookmark mark='c'/> Film editors fit a cue to a cut a few per cent longer or shorter, the "
+                   "hit points of Part 44. <bookmark mark='d'/> Language learners and transcribers slow speech and music down, keeping "
+                   "the pitch. <bookmark mark='e'/> Producers move a sampled loop to a new tempo, or a new key, independently. "
+                   "<bookmark mark='f'/> Each is a careful use of the same machinery: analyse, move, rebuild.", marks="bcdef")
