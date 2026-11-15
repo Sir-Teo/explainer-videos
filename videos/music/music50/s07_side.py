@@ -44,7 +44,7 @@ class Side(SoundScene):
         diag = VGroup(RoundedRectangle(width=2.2, height=0.7, corner_radius=0.1, stroke_color=EAR), label(r"kick", font_size=18, color=EAR)).arrange(ORIGIN).move_to(UP * 1.6 + LEFT * 3.5)
         comp = VGroup(RoundedRectangle(width=3.4, height=0.7, corner_radius=0.1, stroke_color=TUNE), label(r"compressor on the pad", font_size=18, color=TUNE)).arrange(ORIGIN).move_to(UP * 1.6 + RIGHT * 1.5)
         arrow = Arrow(diag.get_right(), comp.get_left(), buff=0.1, color=GREY_A, stroke_width=3)
-        sc = label(r"sidechain: \ the kick drives the detector", font_size=16, color=GREY_A).next_to(arrow, UP, buff=0.1)
+        sc = label(r"sidechain: \ the kick drives the detector", font_size=16, color=GREY_A).next_to(VGroup(diag, comp), UP, buff=0.2)
         head = label(r"a sidechain", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "A compressor's detector can listen to a different signal from the one it turns down: a sidechain. Here the kick "

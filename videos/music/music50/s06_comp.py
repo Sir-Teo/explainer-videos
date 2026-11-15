@@ -85,7 +85,7 @@ class Comp(SoundScene):
             f"over about {say(d['release_ms'])} milliseconds: the release. A fast attack catches every peak; a slow release "
             "avoids pumping the level up and down with every beat."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(ghost(VGroup(a1, c1, a2, c2), 0.25)))
             vo.wait_until("a")
             self.play(FadeIn(a1), FadeIn(l1), Create(c1))
             vo.wait_until("b")

@@ -60,7 +60,7 @@ class Hook(SoundScene):
             f"<bookmark mark='b'/> Corrected, each note snaps onto the line, to within {say(d['after_cents'], 1)} cents, "
             "and jumps between notes without gliding. That instant snap is the sound of a genre."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax), FadeIn(grid), FadeIn(names))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(grid), FadeIn(names), FadeIn(ghost(VGroup(a, b), 0.25)))
             vo.wait_until("a")
             self.play(FadeIn(a), FadeIn(key[0]))
             vo.wait_until("b")

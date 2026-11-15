@@ -76,7 +76,7 @@ class Shape(SoundScene):
             f"{say(q[6])}, its upper harmonics falling slowest of the three. And all three add only odd harmonics: the second, "
             "fourth and sixth are missing entirely."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cap))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(ghost(VGroup(*groups), 0.25)))
             for mark, g in zip("abc", groups):
                 vo.wait_until(mark)
                 self.play(FadeIn(g))
