@@ -115,6 +115,8 @@ LEDGER = [
      "measure": r"a cardioid takes the piano behind it 30 dB down; the phone's speaker reaches down to 844 Hz, the floor-stander to 39"},
     {"part": 55, "title": r"walked through four spaces, then circling the listener", "seconds": 35.6,
      "measure": r"reverberation 0, 0.45, 1.9 and 5.0 s; one circle of the head in 7.6 s"},
+    {"part": 56, "title": r"the session mixed three ways", "seconds": 51.8,
+     "measure": r"one session, three mixes: crest factor 18 dB dry, 11 in the wall; the dub's echo every 0.45 s"},
 ]
 
 

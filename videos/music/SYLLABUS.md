@@ -2111,13 +2111,31 @@ Zotter & Frank.
 ### Part 56 · Recording and Mixing (~55)
 *Story:* Take one multitrack recording and mix it three times: close and dry, a wall of sound, a dub. It is three
 different pieces of music. Since the 1960s the studio has been an instrument, and the part learns to play it.
+1. Hook: an ear question (which was the dub?); what each mix did; Les Paul, Spector, King Tubby, Eno; the session; the plan.
+2. From the horn to the workstation: tracks against years; tape and the razor blade; bouncing; the workstation.
+3. Stereo microphone pairs: five pairs; their level and time differences; images and recording angles; one stage through three pairs, heard; choosing.
+4. Phase between microphones: one source, two microphones; the comb; the 3 : 1 rule; a snare from both sides; an ear question (which snare was left as recorded?); putting it right.
+5. Gain staging: from the air to the converter; three gains in dBFS; heard; 24 bits and floating point; reference levels.
+6. Editing: takes and comps; why a cut clicks; a splice and a crossfade, heard; crossfade laws; time and pitch.
+7. Balance and panning: the channel strip; faders; four pan laws; stereo against mono; our faders.
+8. Masking between tracks: one track hides another; the masking map; rough and carved; the carving; heard; lessons.
+9. Dynamics and buses: a vocal compressor; parallel compression; heard; buses and side-chains; automation.
+10. Depth and width: depth cues; three distances; heard; mid-side and the Haas trick; width in mono, heard.
+11. Monitoring: the room; listening level; a phone; one mix, two playbacks, heard; checking a mix.
+12. Frontier: machines that mix; Monochord's rules; an ear question (which was the machine?); the settings compared; differentiable consoles; the research problem.
+13. Variation 56: the session mixed three ways. Outro: problems, payoffs.
+
 *Covers:* the history from the horn to the workstation; stereo microphone arrays and their arithmetic; phase
 between microphones; gain staging; editing; balance; panning; masking between tracks; dynamics and buses; depth
 and width; monitoring; automatic mixing.
-*Built and computed:* the mixer, with pan laws checked; localization curves of the stereo arrays; a masking map;
-an automatic mix against ours.
-*Variation 56:* the session: our instruments recorded with virtual microphones and mixed three ways.
-*Frontier:* intelligent music production; differentiable consoles.
+*Built and computed:* `monochord/studio.py`: stereo pairs' cues, image positions and recording angles (Blumlein 70°,
+AB 78°, ORTF 109°, XY beyond 180°); combs and the 3 : 1 rule; a gain chain to a 16-bit converter; crossfade laws;
+a console with strips, sends, buses and four pan laws checked in stereo and mono; a masking map, rough and carved;
+parallel compression; mid-side and Haas width with its mono comb; a rule-based automatic mixer against ours.
+*Variation 56:* the session: our instruments recorded with virtual microphones and mixed three ways (crest factor
+18 dB dry, 11 in the wall; the dub's echo every 0.45 s).
+*Frontier:* intelligent music production; differentiable consoles (open: what objective predicts which mix
+listeners prefer?).
 *Reading:* Izhaki, *Mixing Audio*; Senior; Milner, *Perfecting Sound Forever*; De Man, Stables & Reiss.
 
 ### Part 57 · Mastering and Loudness (~50)

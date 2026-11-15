@@ -97,4 +97,35 @@ PARTS = [
         I=(3, 5, 8, 10),
         also=(("Monochord's spaces: modes, Sabine, diffusers, image sources, the head, panning, Ambisonics, a binaural renderer", "explainer/music/monochord/space.py"),),
     ),
+    Part(
+        n=56, level="U", widget="comb", prereq=(4, 49, 50, 54, 55),
+        question="How does one multitrack recording become three different pieces of music, and what does a mix engineer actually control?",
+        story="Take one multitrack and mix it three ways: an ear question hears close and dry, a wall of sound (crest factor 11 dB against 18) and a dub; Les Paul, Spector, King Tubby and Eno made the studio an instrument. Our session band: Part 8's voice, Part 38's piano, guitar and bass, Part 40's drums, nine tracks. From the horn to the workstation: tracks against years, tape and the razor blade, bouncing, the DAW. Stereo pairs computed: XY, Blumlein, ORTF, NOS and AB turn direction into level and time differences; a trading rule (15 dB or 1.1 ms) gives image positions and recording angles (Blumlein 70 degrees, AB 78, ORTF 109, XY beyond 180); three pairs on one stage heard. Two microphones comb (5.8 ms: notches from 86 Hz); the 3 : 1 rule (+2.5, -3.5 dB); an ear question on a snare's microphones out of polarity (its body 6 dB down). Gain staging from the air to the converter (too low: 54 dB of range; right: 73; too hot: 8 dB past full scale), heard; 24 bits and floating point; reference levels. Editing: comps, a butt splice's click against a crossfade (heard), crossfade laws for related and unrelated takes, timing and pitch. The console: the channel strip, faders, four pan laws in stereo and mono (the -3 dB law's centre +3 dB in mono), our faders. Masking mapped band by band in the manner of an ideal binary mask, carved (the guitar from 49 to 35 per cent masked), heard. A vocal compressor (13 dB of wander to 5), parallel compression (heard), buses and automation. Depth by level, treble, reverberation and pre-delay (heard); mid-side and the Haas trick, wide and then combing in mono (heard). Monitoring: the room, listening level, a phone (the bass's fundamentals 40 dB down, its harmonics carry it, heard), references. Frontier: automatic mixing from Dugan to differentiable consoles; an ear question pits our mix against Monochord's rule-based mixer, whose hi-hat is 8 dB too loud though its masking numbers look fine. The session's first three phrases mixed three ways.",
+        handoff="The stereo bus, meters and the loudness war in Part 57; the console on stage in Part 59; unmixing with masks "
+                "in Part 64; learned effects and mixes in Part 66; listening tests and their statistics in Part 67.",
+        outside="Part 4 for masking, loudness and the missing fundamental; Part 43 for expressive timing; Part 49 for "
+                "filters, combs and reverberators; Part 50 for compressors; Part 54 for microphones and the phone's "
+                "loudspeaker; Part 55 for stereo and depth. Decibels, sums of delayed signals, a little statistics.",
+        objectives={
+            "U": ["Hear one session mixed as close and dry, as a wall of sound and as a dub, and three stereo pairs on one stage.",
+                  "Hear a snare's microphones in and out of polarity, three gain settings, a splice and a crossfade.",
+                  "Hear a rough and a carved mix, parallel compression, three depths, width in mono, and a mix on a phone."],
+            "M": ["Compute a stereo pair's level and time differences, its image positions and its recording angle.",
+                  "Derive the comb filter of two microphones, the 3 : 1 rule, the four pan laws in stereo and mono, and fades.",
+                  "Build a console with sends and buses, a masking map, width measures and a rule-based automatic mixer."],
+            "D": ["Find an objective, other than imitating a mix, that predicts which mix listeners prefer."],
+            "I": ["Record with pairs and close microphones, stage gain, edit, balance, carve, compress and check a mix."],
+        },
+        results=[
+            ("Image rule", r"\text{image} \approx \Delta L/15\,\text{dB} + \Delta t/1.1\,\text{ms}"),
+            ("Comb", r"|1 + g\,e^{-j2\pi f\tau}|, \quad \text{notches at } (2k+1)/2\tau"),
+            ("3 : 1 rule", r"20\log_{10}(1 \pm \tfrac{1}{3}) = +2.5,\ -3.5\ \text{dB}"),
+            ("Pan laws", r"g_L = \cos\frac{\pi(p+1)}{4}, \ g_R = \sin\frac{\pi(p+1)}{4} \ (-3\ \text{dB})"),
+            ("Mid-side", r"M = \tfrac{L+R}{2}, \ S = \tfrac{L-R}{2}"),
+        ],
+        U=(0, 2, 3, 4, 7, 9, 10),
+        D=(11,),
+        I=(1, 5, 6, 8),
+        also=(("Monochord's studio: stereo pairs, combs, gain staging, crossfades, the console, the masking map, width, an automatic mixer", "explainer/music/monochord/studio.py"),),
+    ),
 ]

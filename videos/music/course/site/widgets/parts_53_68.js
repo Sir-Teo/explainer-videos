@@ -188,4 +188,52 @@
       note: "A living room is modal through the whole bass; a hall's Schroeder frequency is near 20 Hz. Make the walls deader and Sabine's time parts from Eyring's: Sabine never reaches zero, even when every wall is an open window."
     });
   };
+
+  // ---- Part 56: two microphones on one source ---------------------------------------------------------------------
+  function combDb(f, v) {
+    var tau = Math.max(v.far - v.near, 0) / 343, g = (v.near / v.far) * (v.flip ? -1 : 1);
+    var re = 1 + g * Math.cos(2 * Math.PI * f * tau), im = -g * Math.sin(2 * Math.PI * f * tau);
+    return 20 * Math.log10(Math.sqrt(re * re + im * im) + 1e-9);
+  }
+
+  W.comb = function (el) {
+    QB.widget(el, {
+      title: "Two microphones on one source",
+      sub: "A close microphone and a farther one hear the same guitar; summed, they make a comb filter. Set the distances, flip the far microphone's polarity, and hear a strummed noise burst through the sum.",
+      panels: 1, height: 240,
+      controls: [{ k: "near", label: "Close microphone", min: 0.1, max: 2, step: 0.05, value: 0.5, fmt: function (x) { return x.toFixed(2) + " m"; } },
+                 { k: "far", label: "Far microphone", min: 0.2, max: 8, step: 0.05, value: 1.5, fmt: function (x) { return x.toFixed(2) + " m"; } },
+                 { k: "flip", label: "Far microphone's polarity (0 as is, 1 flipped)", min: 0, max: 1, step: 1, value: 0, fmt: function (x) { return x ? "flipped" : "as is"; } }],
+      buttons: [{ label: "Play bursts through the sum", act: function (s) {
+        var rate = 44100, n = 3 * rate, out = new Float32Array(n), v = s.v;
+        var d = Math.round(Math.max(v.far - v.near, 0) / 343 * rate), g = (v.near / v.far) * (v.flip ? -1 : 1), src = new Float32Array(n), lp = 0;
+        for (var i = 0; i < n; i++) {
+          var t = (i / rate) % 0.5;
+          lp += 0.3 * ((Math.random() * 2 - 1) - lp);
+          src[i] = lp * Math.exp(-t * 9);
+        }
+        var peak = 0;
+        for (i = 0; i < n; i++) { out[i] = src[i] + (i >= d ? g * src[i - d] : 0); peak = Math.max(peak, Math.abs(out[i])); }
+        for (i = 0; i < n; i++) out[i] *= 0.4 / peak;
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var xs = [], ys = [];
+        for (var e = Math.log10(20); e <= Math.log10(20000); e += 0.002) { xs.push(e); ys.push(Math.max(-30, combDb(Math.pow(10, e), v))); }
+        var a = gr[0].axes({ x: [Math.log10(20), Math.log10(20000)], y: [-30, 8], title: "The sum's response (dB) against log10 of frequency (Hz)", xlabel: "log10 Hz" });
+        a.line([Math.log10(20), Math.log10(20000)], [0, 0], { color: "#3A4250", width: 1.5 });
+        a.line(xs, ys, { color: C.idea, width: 2 });
+      },
+      readout: function (v, s) {
+        var tau = Math.max(v.far - v.near, 0) / 343, g = v.near / v.far;
+        return [["delay", (1000 * tau).toFixed(2) + " ms"],
+                ["first notch", tau > 0 ? (v.flip ? "0 Hz (and every " + (1 / tau).toFixed(0) + " Hz)" : (1 / (2 * tau)).toFixed(0) + " Hz") : "none"],
+                ["peaks and dips", "+" + (20 * Math.log10(1 + g)).toFixed(1) + " / " + (20 * Math.log10(Math.max(1 - g, 1e-6))).toFixed(1) + " dB"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "The 3 : 1 rule: with the far microphone three times as far away, it hears the source 9.5 dB quieter and the comb stays within +2.5 and -3.5 dB. Flip the polarity and the notches move to where the peaks were, starting with the bass."
+    });
+  };
 })();
