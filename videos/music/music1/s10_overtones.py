@@ -106,7 +106,8 @@ class Overtones(SoundScene):
         with self.voiceover(
             f"Read the names. {d['open_note'][0]}, an octave above it, then a G, then another C. "
             "<bookmark mark='a'/> Partials four, five and six are C, E and G: a major chord, the most familiar chord "
-            "in Western music, and it is sitting inside every string that has ever been plucked. "
+            "in Western music, and our pluck contains all three. A different plucking point can remove one of "
+            "them, as we just saw. "
             f"<bookmark mark='b'/> The fit to the piano's notes is close but not exact. The E is "
             f"{say(abs(e5['cents']))} cents flat of the piano's E, and the seventh partial falls "
             f"{say(abs(b5['cents']))} cents below B flat, in a crack between the keys. Part 6 is about that crack."
@@ -136,7 +137,7 @@ class Overtones(SoundScene):
         ):
             self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(sp))
         with self.listen(c) as snd:
-            window(snd, r"partial 3, \ then the pluck")
+            window(snd, r"partial 3, \ then the pluck", tag_corner=DR)
             snd.show(band)
             snd.wait_until("pluck")
             sp.playhead.set_opacity(1)
@@ -162,7 +163,7 @@ class Overtones(SoundScene):
             VGroup(label(r"\textbf{partial}", font_size=30, color=FREQ),
                    label(r"any one frequency in a sound", font_size=26, color=GREY_A)),
             VGroup(label(r"\textbf{fundamental}", font_size=30, color=harmonic_color(1)),
-                   label(r"the lowest partial: \ the note we name", font_size=26, color=GREY_A)),
+                   label(r"here, \ the lowest partial: \ the note we name", font_size=26, color=GREY_A)),
             VGroup(label(r"\textbf{harmonic}", font_size=30, color=GOOD),
                    label(r"a partial at a whole multiple of the fundamental", font_size=26, color=GREY_A)),
             VGroup(label(r"\textbf{overtone}", font_size=30, color=HIST),
@@ -184,7 +185,7 @@ class Overtones(SoundScene):
                      color=GREY_B).next_to(life, UP, buff=0.15)
         with self.voiceover(
             "Some words. Any single frequency in a sound is a partial. <bookmark mark='a'/> The lowest is the "
-            "fundamental. <bookmark mark='b'/> Partials at whole multiples of it are harmonics. "
+            "fundamental for this string. <bookmark mark='b'/> Partials at whole multiples of it are harmonics. "
             "<bookmark mark='c'/> An overtone is a partial above the fundamental, so the first overtone is the "
             "second harmonic. <bookmark mark='d'/> And timbre is what tells two sounds apart when their pitch and "
             "loudness are the same."

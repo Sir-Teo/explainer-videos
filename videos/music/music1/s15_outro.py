@@ -92,15 +92,15 @@ class Outro(SoundScene):
     # ------------------------------------------------------------------
     def recap(self):
         card = objectives_card([
-            r"a string's pitch is the rate at which a wave makes the round trip: \ $f = \frac{1}{2L}\sqrt{T/\mu}$",
+            r"an ideal string's lowest frequency follows the round-trip time: \ $f_1 = \frac{1}{2L}\sqrt{T/\mu}$",
             r"Newton's law for one small piece of string is the wave equation: \ acceleration $= c^2 \times$ curvature",
             r"one motion, two pictures: \ two travelling shapes (d'Alembert), \ or a sum of standing modes (Bernoulli)",
-            r"a pluck at the fraction $\beta$ has $\sin(n\pi\beta)/n^2$ of mode $n$: \ one string is already a chord",
+            r"a pluck at $\beta$ excites mode $n$ in proportion to $\sin(n\pi\beta)/n^2$: \ one string is already a chord",
             r"strings in simple ratios share partials, \ and shared partials do not beat: \ a first answer",
             r"real strings fade, \ are stiff, \ and stretch: \ three corrections, \ each heard later in the series",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A string has a pitch because a wave on it keeps making the same round trip, and "
+            "What did we find? An ideal string's lowest frequency follows from a wave's round-trip time, and "
             "counting the trips gives Mersenne's law. <bookmark mark='a'/> Newton's law for one small piece of "
             "string is the wave equation: a string accelerates where it is curved. <bookmark mark='b'/> Its motion "
             "can be told two ways, as travelling shapes or as standing modes, and the two are the same. "

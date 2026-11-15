@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import numpy as np
-
 from explainer.music import *  # noqa: F403
 from explainer.music import CHAIN, DETOUR
 from videos.music.music1.common import EAR, GOOD, HIST, PART, RATIO, STR, TUNE, load
@@ -38,8 +36,8 @@ class Series(SoundScene):
                    (r"2016", r"McDermott and colleagues", r"partly because we learn to think so", r"anthropology")]
         rows = VGroup()
         for yr, who, what, field in answers:
-            rows.add(VGroup(label(yr, font_size=26, color=HIST), label(who, font_size=26),
-                            label(what, font_size=26, color=GREY_A), label(field, font_size=24, color=TUNE)))
+            rows.add(VGroup(label(yr, font_size=26, color=HIST), wrapped_label(who, 3.15, 26),
+                            wrapped_label(what, 5.5, 26, GREY_A), label(field, font_size=24, color=TUNE)))
         xs = [-6.7, -4.5, -1.0, 5.0]
         for i, r in enumerate(rows):
             for cell, x in zip(r, xs):
@@ -98,16 +96,19 @@ class Series(SoundScene):
             "way today's beads were checked against d'Alembert's formula."
         ) as vo:
             one = StringView(width=9.0, scale=0.55).move_to(UP * 0.7)
-            xs = np.linspace(0, 1, 121)
-            shape = np.minimum(xs / 0.2, (1 - xs) / 0.8)
+            motion = load("dalembert")
+            slow = 1.6 / motion["period"]
+            draw = one.film(motion["b20"], motion["dt"], slow=slow, loop=True)
+            draw(one, 0.0)
             clock = {"t": 0.0}
 
             def ring(m, dt):
                 clock["t"] += dt
-                m.set_shape(shape * np.cos(2 * PI * 0.9 * clock["t"]) * np.exp(-0.12 * clock["t"]))
+                draw(m, clock["t"])
 
             one.add_updater(ring)
-            today = label(r"today: \ one simulated string, \ slowed so that you can see it", font_size=26, color=GREY_B)
+            today = label(rf"today: \ one simulated string; \ motion slowed {slow:.0f} times",
+                          font_size=26, color=GREY_B)
             today.next_to(one, DOWN, buff=0.75)
             self.play(FadeIn(title), FadeIn(stack[-1]), FadeIn(one), FadeIn(today))
             vo.wait_until("a")
@@ -126,8 +127,9 @@ class Series(SoundScene):
         inner = [ch.link[k] for k, _ in CHAIN]
         outer = [ch.link[k] for k, _ in DETOUR]
         tune = VGroup(label(r"\textbf{the Tune}", font_size=32, color=TUNE),
-                      label(r"one melody through all sixty-eight parts: \ each part writes a variation with what it "
-                            r"has just built", font_size=26, color=GREY_A)).arrange(RIGHT, buff=0.4).move_to(UP * 0.3)
+                      wrapped_label(r"one melody through all sixty-eight parts: \ each part writes a variation with "
+                                    r"what it has just built", 10.5, 26, GREY_A)
+                      ).arrange(RIGHT, buff=0.4).move_to(UP * 0.3)
         rules = VGroup(
             label(r"Everything you hear, you see.", font_size=32, color=WHITE),
             label(r"Every sound is computed by the series' own code.", font_size=32, color=WHITE),

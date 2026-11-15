@@ -64,6 +64,16 @@ def test_fourier_sum_and_the_pluck():
         assert row["worst_db"] < 1.0
 
 
+def test_near_bridge_pluck_keeps_its_tenth_partial_notch():
+    """The low partials flatten near the bridge, but the node at beta=1/10 still removes mode ten."""
+    row = load("pluck")["rows"]["b10"]
+    assert row["beta"] == pytest.approx(0.1)
+    assert min(row["measured_db"][:3]) > -1.5
+    assert row["measured_db"][8] < -18
+    assert row["measured_db"][9] < -60
+    assert row["force_db"][9] < -100
+
+
 def test_partials_of_the_open_string():
     t = load("overtones")["table"]
     assert [r["note"] for r in t[:6]] == ["C3", "C4", "G4", "C5", "E5", "G5"]
@@ -116,6 +126,9 @@ def test_the_ear_thread():
 def test_real_strings_and_the_frontier():
     r = load("real")
     assert r["decay_worst_rel"] < 0.02
+    # kappa=sqrt(EI/mu): multiplying it by six means 36 times the rigidity at fixed mass.
+    assert r["B_stiff"] == pytest.approx(36 * r["B"])
+    assert r["rows"][0]["sharp_cents_stiff"] == pytest.approx(600 * np.log2(1 + r["B_stiff"]))
     n = load("nonlinear")
     hard = n["runs"]["hard"]
     assert hard["tension_start"] == pytest.approx(hard["static_formula"], rel=5e-3)

@@ -115,24 +115,30 @@ class Frontier(SoundScene):
         d = load("nonlinear")
         drift = d["energy_drift"]
         expo = int(np.floor(np.log10(drift)))
-        H = MathTex(r"E", r"=", r"\sum_i \; \tfrac{1}{2}\,\mu h\, \dot u_i^{\,2}", r"\;+\;",
-                    r"\tfrac{1}{2}\,\frac{T}{h}\,(u_{i+1} - u_i)^2", font_size=44).move_to(UP * 1.9)
+        H = MathTex(r"E^{n+1/2}", r"=", r"\sum_i \frac{\mu h}{2}\,(v_i^{n+1/2})^2", r"\;+\;",
+                    r"\sum_i \frac{T}{2h}\,d_i^{n+1}d_i^n", font_size=38).move_to(UP * 1.9)
         H[2].set_color(TIME), H[4].set_color(FORCE)
+        definitions = MathTex(r"v_i^{n+1/2}=\frac{u_i^{n+1}-u_i^n}{k},\qquad d_i^n=u_{i+1}^n-u_i^n",
+                              font_size=28).move_to(UP * 0.55)
+        scope = label(r"ideal string; \ time step $k$, \ spacing $h$; \ stable grid $ck/h\leq 1$",
+                      font_size=24, color=GREY_B).to_edge(UP, buff=0.45)
         tags = VGroup(label(r"motion", font_size=24, color=TIME).next_to(H[2], DOWN, buff=0.2),
                       label(r"stretch", font_size=24, color=FORCE).next_to(H[4], DOWN, buff=0.2))
         res = VGroup(label(rf"over {d['steps']:,} steps of the ideal string, \ the energy changes by at most".replace(",", "{,}"),
                            font_size=28, color=GREY_A),
                      MathTex(rf"{drift / 10 ** expo:.0f} \times 10^{{{expo}}}", font_size=54, color=GOOD),
                      label(r"of itself", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.2).move_to(DOWN * 0.7)
-        why_ = label(r"a scheme that keeps a positive energy exactly \ cannot blow up", font_size=30, color=TUNE)
+        why_ = label(r"a conserved positive energy bounds the motion on a stable grid", font_size=30, color=TUNE)
         why_.move_to(DOWN * 2.6)
         with self.voiceover(
             "There is a second frontier, in the computer. How do you know a simulation of a violent, nonlinear "
-            "string will not simply explode? <bookmark mark='a'/> The modern answer is energy. Our bead scheme has "
-            "a quantity, the energy of motion plus the energy of stretch, that it conserves exactly. "
+            "string will not simply explode? The modern answer is energy. <bookmark mark='a'/> Start with our "
+            "ideal, linear string. Its bead scheme conserves a discrete energy: motion between two time steps, "
+            "plus stretch measured across those steps. It approaches the physical energy as the steps shrink. "
             f"<bookmark mark='b'/> Over {say(d['steps'])} steps it wanders by a few parts in ten to the "
-            f"{abs(expo)}: rounding error. <bookmark mark='c'/> A scheme that keeps a positive energy exactly cannot "
-            "blow up, and physical models of instruments are now designed that way: energy first, then the scheme."
+            f"{abs(expo)}: rounding error. <bookmark mark='c'/> On a grid satisfying the wave-speed stability limit, "
+            "this energy is positive and bounds the motion. That is the idea to carry into nonlinear instrument "
+            "models, which need their own energy balance. This check is for the ideal string."
         ) as vo:
             beads = StringView(width=9.0, scale=0.7, stroke_width=2).move_to(DOWN * 0.6)
             shape_ = pluck_shape(np.linspace(0, 1, 25), 1.0, 0.3, 1.0)
@@ -140,9 +146,9 @@ class Frontier(SoundScene):
             dots = VGroup(*[Dot(beads.p(i / 24, shape_[i]), radius=0.06, color=STR) for i in range(1, 24)])
             self.play(FadeIn(beads), FadeIn(dots), run_time=0.6)
             vo.wait_until("a")
-            self.play(Write(H), FadeIn(tags), run_time=1.6)
+            self.play(Write(H), FadeIn(tags), FadeIn(scope), run_time=1.6)
             vo.wait_until("b")
-            self.play(FadeOut(beads), FadeOut(dots), run_time=0.4)
+            self.play(FadeOut(beads), FadeOut(dots), FadeIn(definitions), run_time=0.4)
             self.play(FadeIn(res))
             vo.wait_until("c")
             self.play(FadeIn(why_))

@@ -55,9 +55,10 @@ class Wave(SoundScene):
         ghost.curve.set_stroke(opacity=0.75)
         gtr = film(ghost, -frames[:, ::-1])
         glabel = label(r"an imaginary rope, \ and an upside-down bump", font_size=26, color=LEFT_C)
-        glabel.next_to(ghost, UP, buff=1.1)
+        # Reserve the whole swept pulse height, rather than the initially flat trace.
+        glabel.next_to(ghost, UP, buff=2.0)
         still = Dot(rope.p(1.0), radius=0.09, color=GOOD)
-        stag = label(r"this point never moves", font_size=24, color=GOOD).next_to(still, DOWN, buff=1.0)
+        stag = label(r"this point never moves", font_size=24, color=GOOD).next_to(still, DOWN, buff=2.0)
         with self.voiceover(
             "Why upside down? Here is a way to see it. Imagine the rope does not stop at the wall but carries on, "
             "<bookmark mark='a'/> and that on the imaginary half an upside-down copy of the bump is coming the other "

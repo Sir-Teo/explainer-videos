@@ -175,7 +175,7 @@ class Pluck(SoundScene):
             self.play(FadeIn(leg))
         for (key, frac, where), panel in zip(keys, panels):
             with self.listen(clip(f"pluck.{key}")) as snd:
-                window(snd, rf"plucked at {where}")
+                window(snd, rf"plucked at {where}", tag_corner=DR)
                 frame = SurroundingRectangle(panel, color=TUNE, buff=0.12, corner_radius=0.1, stroke_width=2)
                 lens = Lens(panel.view.p(0), panel.view.p(1), amp=0.12, color=TUNE)
                 snd.show(frame, lens)
@@ -184,7 +184,8 @@ class Pluck(SoundScene):
             "In the middle, every even partial is missing, and the sound is hollow. Hold on to that sound: a "
             "clarinet has the same gap, for a different reason, and we will meet it in Part 8. "
             "<bookmark mark='a'/> At a third, partials three, six and nine are gone. <bookmark mark='b'/> And near "
-            "the end, the first ten partials are nearly equal: bright, thin and nasal."
+            "the end, the first few partials are closer in level: bright, thin and nasal. At a tenth of the "
+            "length, the tenth partial is still missing: it has a node at the plucking point."
         ) as vo:
             self.play(Indicate(panels[0].bars, color=TUNE, scale_factor=1.05))
             vo.wait_until("a")

@@ -133,17 +133,19 @@ class RealStrings(SoundScene):
         eq = MathTex(r"\frac{\partial^2 u}{\partial t^2}", r"=", r"c^2 \frac{\partial^2 u}{\partial x^2}",
                      r"\;-\; \kappa^2 \frac{\partial^4 u}{\partial x^4}", font_size=40).move_to(LEFT * 3.6 + UP * 2.8)
         eq[3].set_color(BAD)
-        res = MathTex(r"f_n", r"=", r"n f_1", r"\sqrt{1 + B n^2}", font_size=44).move_to(RIGHT * 3.4 + UP * 2.8)
+        res = MathTex(r"f_n", r"=", r"n f_{\rm flex}", r"\sqrt{1 + B n^2}", font_size=42).move_to(RIGHT * 3.4 + UP * 2.8)
         res[3].set_color(BAD)
+        reference = MathTex(r"f_{\rm flex}=\frac{c}{2L},\qquad B=\left(\frac{\kappa\pi}{cL}\right)^2",
+                            font_size=25).move_to(RIGHT * 3.4 + UP * 1.9)
         ymax = rows[11]["sharp_cents_stiff"] * 1.1
         g = axes([0.5, 12.5], [0, ymax], x_length=6.6, y_length=3.3, xlabel=r"partial", font_size=20,
-                 ylabel=r"how sharp it is of a true harmonic (cents)", xticks=[1, 4, 8, 12], yticks=[0, 100, 200])
+                 ylabel=r"above the flexible-string harmonic (cents)", xticks=[1, 4, 8, 12], yticks=[0, 100, 200])
         g.move_to(LEFT * 2.9 + DOWN * 1.2)
         thin = curve(g.ax, [r["n"] for r in rows], [r["sharp_cents"] for r in rows], TUNE, stroke_width=3)
         thick = curve(g.ax, [r["n"] for r in rows], [r["sharp_cents_stiff"] for r in rows], BAD, stroke_width=3)
         leg = VGroup(
             label(rf"our wire, {d['wire_mm']} mm: \ partial 12 is {rows[11]['sharp_cents']:.0f} cents sharp", font_size=24, color=TUNE),
-            label(rf"a wire six times as stiff: \ {rows[11]['sharp_cents_stiff']:.0f} cents", font_size=24, color=BAD),
+            label(rf"$\kappa\times6$, \ rigidity $\times36$: \ {rows[11]['sharp_cents_stiff']:.0f} cents", font_size=24, color=BAD),
             label(r"(100 cents is a semitone)", font_size=22, color=GREY_B),
         ).arrange(DOWN, buff=0.15, aligned_edge=LEFT).move_to(RIGHT * 3.9 + DOWN * 0.6)
         with self.voiceover(
@@ -151,7 +153,8 @@ class RealStrings(SoundScene):
             "like a very thin ruler. <bookmark mark='a'/> That adds a restoring force of its own, a term with four "
             "derivatives, which hardly matters for a gentle curve and matters a great deal for a tight one. "
             "<bookmark mark='b'/> The effect is that the upper modes come out sharp. The partials are no longer "
-            "exactly one, two, three times the fundamental. They are stretched."
+            "exactly one, two, three times the fundamental. They are stretched. In this formula, f flex is "
+            "Mersenne's frequency before stiffness is added. Even the first partial shifts above it."
         ) as vo:
             from explainer.music.monochord.physics import pluck_shape
             xs = np.linspace(0, 1, 161)
@@ -168,11 +171,12 @@ class RealStrings(SoundScene):
             vo.wait_until("a")
             self.play(FadeIn(eq[3]))
             vo.wait_until("b")
-            self.play(Write(res))
+            self.play(Write(res), FadeIn(reference))
         self.play(FadeOut(va), FadeOut(vb), FadeOut(la), FadeOut(lb), run_time=0.4)
         with self.voiceover(
             f"On our half-millimetre wire the stretch is small: by the twelfth partial, {say(rows[11]['sharp_cents'])} "
-            "cents. <bookmark mark='a'/> Make the wire six times stiffer, as if it were a thin rod, and the twelfth "
+            "cents above the flexible-string harmonic. <bookmark mark='a'/> Multiply the parameter kappa by six. "
+            "At fixed mass, that means thirty-six times the bending rigidity. The twelfth "
             f"partial is {say(rows[11]['sharp_cents_stiff'])} cents sharp: more than two semitones. Listen to what "
             "that does to a pluck."
         ) as vo:
@@ -180,7 +184,7 @@ class RealStrings(SoundScene):
             vo.wait_until("a")
             self.play(Create(thick), FadeIn(leg[1]))
         with self.listen(c) as snd:
-            window(snd, r"a wire six times as stiff")
+            window(snd, r"greater rigidity: \ $\kappa\times6$")
             head = Line(g.ax.c2p(0.5, 0), g.ax.c2p(0.5, ymax), color=WHITE, stroke_width=1.5)
             snd.show(head)
             snd.drive(head, lambda m, t: m.set_x(g.ax.c2p(0.5 + 12 * min(t / c.duration, 1.0), 0)[0]))

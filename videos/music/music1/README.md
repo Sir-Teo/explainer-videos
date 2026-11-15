@@ -49,9 +49,12 @@ and attributions are the published ones, listed under Sources.
   the lower; at 3 : 2 and 4 : 3 fewer; at the tritone none, and near misses; beats (a fifth mistuned by 12 cents);
   a first answer to Pythagoras after Helmholtz (1863), and the three things it leaves out.
 * **11. Real strings.** The ideal string never stops; where the energy goes; two loss terms, and each partial's
-  decay rate, simulated against the model; stiffness, fₙ = n f₁ √(1 + Bn²), and what a stiffer wire sounds like.
+  decay rate, simulated against the model; stiffness, fₙ = n f_flex √(1 + Bn²), where f_flex = c/(2L) is the
+  flexible-string reference rather than the stiff string's actual first partial; what greater bending rigidity
+  sounds like (κ × 6 means rigidity × 36 at fixed mass).
 * **12. Frontier: when the string stretches.** The tension is not constant (Kirchhoff, 1883; Carrier, 1945): a hard
-  pluck starts sharp and glides down, simulated and heard; a scheme that conserves its energy exactly; what the
+  pluck starts sharp and glides down, simulated and heard; the ideal linear scheme's conserved discrete energy,
+  positive on a stable grid (a separate check from the nonlinear glide); what the
   model cannot do (Legge and Fletcher's missing modes that return), and what is open: strings that hit things.
 * **13. What we will build.** Six answers to "why do simple ratios sound good?" in twenty-five centuries; Monochord
   and its layers; the Chain; the Tune and the Variations; the series' three rules.

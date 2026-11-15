@@ -66,7 +66,8 @@ class Quarrel(SoundScene):
             "D'Alembert published his travelling waves in 1747, and he was strict about what counted as a shape: "
             "it had to be given by one formula. <bookmark mark='a'/> The next year Leonhard Euler disagreed. A string "
             "can be pulled into any curve a hand can draw, corners included. A plucked string is two straight "
-            "lines, and no single formula gives you that. <bookmark mark='b'/> Then, in 1753, Daniel Bernoulli made "
+            "lines, which did not fit their requirement of one analytic formula. <bookmark mark='b'/> Then, in "
+            "1753, Daniel Bernoulli made "
             "a bolder claim. Every motion of a string is a sum of the standing sine waves. He had no proof. He had "
             "his ears: a musician hears those tones sounding together."
         ) as vo:
@@ -98,6 +99,8 @@ class Quarrel(SoundScene):
         x = d["x"]
         s = StringView(width=10.4, scale=2.2).move_to(UP * 0.7)
         target = StringView(width=10.4, scale=2.2, color=GREY_C, stroke_width=2, supports=False).move_to(UP * 0.7)
+        # Supports change a group's bounding box: align physical axes before comparing errors.
+        target.shift(s.axis.get_center() - target.axis.get_center())
         target.set_shape(d["target"])
         s.set_shape(np.zeros(len(x)))
         bars = partial_bars(np.abs(d["a"]), width=9.6, height=1.3, db=False, numbers=False)
@@ -139,14 +142,14 @@ class Quarrel(SoundScene):
             self.add(count)
         e100 = float(d["error"][99])
         verdict = VGroup(label(r"Bernoulli was right: \ the pluck is a sum of modes", font_size=30, color=GOOD),
-                         label(r"Euler was right: \ the shape has a corner, \ and no one formula", font_size=30, color=GOOD)
+                         label(r"Euler was right: \ the shape has a corner", font_size=30, color=GOOD)
                          ).arrange(DOWN, buff=0.2).move_to(DOWN * 2.5)
         with self.voiceover(
             "With one mode it is a hum and a smooth arch. With thirty, the corner is nearly there and the sound has "
             f"its bite. With a hundred terms the sum is within {say(100 * e100, 1)} percent of the pluck everywhere, "
             f"and the gap goes on shrinking like one over the number of terms. <bookmark mark='a'/> No finite sum "
             "has a corner. The infinite sum does. So Bernoulli was right, <bookmark mark='b'/> and so was Euler. The "
-            "plucked shape is not smooth, it is not one formula, and it is a sum of sines."
+            "plucked shape is not smooth, and it is a sum of sines."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeOut(bars), FadeOut(blab), FadeIn(verdict[0]))

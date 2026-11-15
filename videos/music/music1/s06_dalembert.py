@@ -109,10 +109,12 @@ class DAlembert(SoundScene):
             self.play(FadeIn(mid), FadeIn(bot), FadeIn(tags[1:]), FadeIn(plus), FadeIn(plus2))
             vo.wait_until("b")
             self.play(tr.animate.set_value(0.14 * n), run_time=max(vo.remaining(), 3.0), rate_func=linear)
-        flat = label(r"between the two corners: \ flat", font_size=26, color=TUNE).next_to(top, UP, buff=0.35)
+        flat = label(r"between the two corners: \ straight, \ zero curvature", font_size=26,
+                     color=TUNE).next_to(top, UP, buff=0.35)
         with self.voiceover(
             "Look at the string itself. The corner you made with your finger has split into two corners, running "
-            "apart, <bookmark mark='a'/> and between them the string is flat. When a corner reaches an end, it "
+            "apart, <bookmark mark='a'/> and between them the string is straight, though it can be tilted. When a "
+            "corner reaches an end, it "
             "reflects, upside down, exactly like the bump on the rope. <bookmark mark='b'/> So a plucked string never "
             "looks like the smooth wobble people draw. It is three straight lines at most, with two corners chasing "
             "each other round and round."
@@ -133,7 +135,9 @@ class DAlembert(SoundScene):
         n = d["frames"]
         frames = d["b20"]
         s = StringView(width=10.4, scale=1.7).move_to(UP * 1.0)
-        tr = film(s, frames, step=1, loop=True)
+        # The line is the independently evaluated travelling-wave solution; the dots below are the beads.
+        exact = np.asarray(d["b20_right"]) + np.asarray(d["b20_left"])
+        tr = film(s, exact, step=1, loop=True)
         idx = np.arange(8, frames.shape[1] - 1, 8)
         dots = VGroup(*[Dot(radius=0.055, color=TUNE) for _ in idx])
 
@@ -199,11 +203,13 @@ class DAlembert(SoundScene):
             self.play(FadeIn(eq), tr.animate.set_value(1.0 * n), run_time=vo.until("b"), rate_func=linear)
             self.play(Write(law), run_time=1.5)
             self.play(FadeIn(tick), tr.animate.set_value(1.6 * n), run_time=max(vo.remaining(), 2.0), rate_func=linear)
-        note_ = label(r"the period did not depend on the shape", font_size=32, color=TUNE).move_to(DOWN * 0.5)
+        note_ = label(r"the round-trip time does not depend on the plucking point", font_size=30,
+                      color=TUNE).move_to(DOWN * 0.5)
         with self.voiceover(
-            "Notice what we never used: the shape. <bookmark mark='a'/> Pluck the string in the middle or near the "
-            "end, softly or hard, with a finger or a feather. The shape differs, and it comes back after exactly the "
-            "same time. That is why a string has a pitch: one pitch, however you play it."
+            "Notice what we never used: the plucking point. <bookmark mark='a'/> In this ideal model, pluck the "
+            "string gently in the middle or near the end. The shape differs, but the motion returns after the "
+            "same round trip. Special shapes can repeat sooner: those are the standing modes we will see next. "
+            "The round trip sets the lowest mode's frequency."
         ) as vo:
             self.play(FadeOut(eq), tr.animate.set_value(1.9 * n), run_time=vo.until("a"), rate_func=linear)
             self.play(FadeIn(note_), tr.animate.set_value(3.2 * n), run_time=max(vo.remaining(), 3.0),

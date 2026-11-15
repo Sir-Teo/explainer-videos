@@ -67,7 +67,7 @@ class Hook(SoundScene):
         who = label(r"Pythagoras, \ at a blacksmith's door", font_size=30, color=GREY_A).next_to(yr, RIGHT, buff=0.4)
         anv = anvil_shape(2.4).move_to(LEFT * 4.6 + DOWN * 1.9)
         hams = VGroup(*[hammer(w) for w in d["weights"]]).arrange(RIGHT, buff=0.5, aligned_edge=DOWN)
-        hams.move_to(LEFT * 4.3 + UP * 0.2)
+        hams.move_to(LEFT * 4.0 + UP * 0.2)
         rows = VGroup()
         for (a, b), (p, q), name in (((12, 6), (2, 1), r"the octave"), ((12, 8), (3, 2), r"the fifth"),
                                      ((12, 9), (4, 3), r"the fourth")):
@@ -94,7 +94,7 @@ class Hook(SoundScene):
                 self.play(FadeIn(row, shift=LEFT * 0.2), Indicate(hams[pair[0]].head, color=TUNE),
                           Indicate(hams[pair[1]].head, color=TUNE), run_time=0.9)
         strings = VGroup(*[hung_string(w, width=2.4).scale(0.5) for w in d["weights"]])
-        strings.arrange(RIGHT, buff=0.3).move_to(LEFT * 3.6 + DOWN * 1.5)
+        strings.arrange(RIGHT, buff=0.3).move_to(LEFT * 3.2 + DOWN * 1.5)
         src = history_card(r"c.\ 100 \textsc{ce}", r"Nicomachus, \ then Boethius (c.\ 510)",
                            r"the story as we have it, written six centuries after the event and copied into "
                            r"every music textbook for a thousand years", width=5.6).to_corner(DR, buff=0.4)

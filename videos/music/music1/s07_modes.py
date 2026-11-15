@@ -102,7 +102,8 @@ class Modes(SoundScene):
         views = []
         for row in d["table"]:
             n = row["n"]
-            v = StringView(width=3.9, scale=0.3, stroke_width=3)
+            # Leave a left gutter for the adjacent-mode ratio braces and their words.
+            v = StringView(width=3.1, scale=0.3, stroke_width=3)
             swing(v, n, rate=0.22)
             nd = nodes(v, n)
             num = MathTex(rf"{n}", font_size=40, color=harmonic_color(n))
@@ -117,18 +118,21 @@ class Modes(SoundScene):
             views.append(v)
         left = VGroup(*cells[:4]).arrange(DOWN, buff=0.55, aligned_edge=LEFT)
         right = VGroup(*cells[4:]).arrange(DOWN, buff=0.55, aligned_edge=LEFT)
-        VGroup(left, right).arrange(RIGHT, buff=0.9, aligned_edge=UP).move_to(DOWN * 1.05 + RIGHT * 0.35)
+        VGroup(left, right).arrange(RIGHT, buff=0.9, aligned_edge=UP).to_edge(RIGHT, buff=0.45).set_y(-1.05)
         defn = VGroup(label(r"\textbf{mode}: \ one of the string's own ways of swinging", font_size=26, color=STR),
                       label(r"\textbf{node}: \ a point that stays still", font_size=26, color=NODE),
                       label(r"\textbf{harmonics}: \ the frequencies $f_1, 2f_1, 3f_1, \dots$", font_size=26, color=FREQ)
                       ).arrange(DOWN, buff=0.14, aligned_edge=LEFT).to_edge(UP, buff=0.3)
+        slow_note = label(r"motion slowed; \ tones at full speed; \ displacement exaggerated",
+                          font_size=22, color=GREY_B).next_to(defn, DOWN, buff=0.18)
         with self.voiceover(
             "These are the first eight. Each one is called a mode of the string. <bookmark mark='a'/> The second "
             "mode has one point in the middle that never moves: a node. The third has two nodes, the fourth three. "
             "<bookmark mark='b'/> The frequencies, one, two, three, four times the lowest, are called harmonics. "
             "Listen to them in order. Each is a single pure tone, at the frequency of that mode."
         ) as vo:
-            self.play(LaggedStart(*[FadeIn(cl) for cl in cells], lag_ratio=0.1), FadeIn(defn[0]), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(cl) for cl in cells], lag_ratio=0.1), FadeIn(defn[0]),
+                      FadeIn(slow_note), run_time=2.0)
             vo.wait_until("a")
             self.play(FadeIn(defn[1]), Indicate(cells[1][1][1], color=NODE, scale_factor=2.0))
             vo.wait_until("b")
