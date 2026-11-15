@@ -87,6 +87,8 @@ LEDGER = [
      "measure": r"the voice enters after 4.6 s; the beat: 16 slices of Variation 7, 4 rests"},
     {"part": 41, "title": r"in eight orchestrations, the last matched to a vowel", "seconds": 34.8,
      "measure": r"the vowel matched within 7.1 dB a band by four instruments, 18.3 dB by one"},
+    {"part": 42, "title": r"composed by the searcher from its first four notes, with what it threw away", "seconds": 19.8,
+     "measure": r"draft 1554 of 3000 kept; 2829 rejected by the critics, 171 scored"},
 ]
 
 

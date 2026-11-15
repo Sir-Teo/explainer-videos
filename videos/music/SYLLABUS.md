@@ -1661,13 +1661,32 @@ the score).
 1757 Kirnberger published a way to compose minuets with dice; in 1957 a computer in Illinois wrote a string
 quartet by generating notes and rejecting those that broke the rules. Composing is search under constraints, and
 the part builds a searcher.
+1. Hook: an ear question (which draft was kept?); Beethoven's search; the Ode to Joy's first two phrases heard and counted; the plan.
+2. The motive and its operations: a definition; eight operations heard; an ear question (upside down or backwards?); diatonic operations; motives that carry pieces.
+3. Developing variation: the sentence; a sentence of ours heard; what it is made of; Brahms the Progressive; unity and variety measured.
+4. Kinds of variation: theme and variations; the Tune varied four ways, heard; what each keeps; grounds.
+5. Planning tension: what makes tension; one motive, two plans; both heard; where the peak goes.
+6. Constraints as engines: the funnel counted; how; Stravinsky; constraints that made music.
+7. Dice games: Kirnberger and after; our table; two minuets heard; the count; what the dice favour; what the game is.
+8. Generate and test: Hiller and Isaacson; our rules; one run draw by draw; the line heard; 200 runs; the four experiments.
+9. Chains, grammars and evolution: Markov chains; an ear question (which remembers four?); copying measured; grammars; evolution; its best heard.
+10. A searcher with critics: the critics; the loop; 2,000 drafts and their rejections; rejected drafts heard; the climb; the kept draft heard; Cope.
+11. Frontier: Boden's three kinds; our programs in her terms; evaluation; co-creative tools; the research problem.
+12. Variation 42: composed by the searcher from the Tune's first four notes, shown with what it threw away. Outro: problems, payoffs.
+
 *Covers:* the operations on a motive; developing variation; kinds of variation; planning tension and pacing;
 constraints as engines; dice games; the *Illiac Suite*; grammars, automata and evolution; Cope's experiments;
 what creativity might mean.
-*Built and computed:* a dice-game engine with its count of distinct pieces; a generate-and-test composer that
-uses Act III's checkers as critics, with its rejected drafts kept.
-*Variation 42:* a variation composed by the searcher, shown with what it threw away.
-*Frontier:* evaluating computational creativity; co-creative tools.
+*Built and computed:* `monochord/composer.py`: diatonic operations and the shortest chain between two figures; exact
+counts of melodies under growing rules (2,562,890,625 to 9,252 for eight notes, checked by brute force); a dice game of
+ours (176 bars, about 1.6 × 10^13 distinct minuets, 41.0 bits); generate and test with backtracking (277 draws a
+twelve-note line); Markov chains that copy more as they remember more (6.1 against 11.7 notes); a genetic algorithm;
+a generate-and-test composer whose critics are Act III's rules, with its rejected drafts kept (2,000 drafts, 164
+scored, draft 1,205 kept).
+*Variation 42:* eight bars on the Tune's first four notes, composed by the searcher (draft 1,554 of 3,000), shown with
+four of the 2,829 drafts it threw away.
+*Frontier:* evaluating computational creativity (Boden, Ritchie, Jordanous, Pearce and Wiggins); co-creative tools
+(open: measuring novelty and value separately).
 *Reading:* Schoenberg, *Fundamentals of Musical Composition*; Hiller & Isaacson (1959); Boden.
 
 ### Part 43 · Performing (~55)

@@ -316,4 +316,84 @@
       note: "Ravel put a celesta on the 4th harmonic and piccolos on the 3rd and 5th. Try harmonic 5: the tempered major third is 13.7 cents sharp of the true harmonic, and still fuses; now detune by 50 cents and hear two instruments again. Harmonic 7, a flat seventh, lies 31 cents from the nearest tempered note, and does not fuse."
     });
   };
+  // ---------------------------------------------------------------- Part 42: operations on a motive
+  var MAJ42 = [0, 2, 4, 5, 7, 9, 11];
+  function deg42(m) { var pc = ((m % 12) + 12) % 12, o = Math.floor(m / 12), i = 0; for (var k = 0; k < 7; k++) if (MAJ42[k] <= pc) i = k; return 7 * o + i; }
+  function key42(d) { var o = Math.floor(d / 7), r = ((d % 7) + 7) % 7; return 12 * o + MAJ42[r]; }
+  function step42(m, k) { return key42(deg42(m) + k); }
+  var MOT42 = [[64, 0, 0.5], [62, 0.5, 0.5], [60, 1, 1], [67, 2, 2]];
+  var OPS42 = {
+    "none": function (m) { return m; },
+    "invert": function (m) { var ax = deg42(m[0][0]); return m.map(function (n) { return [key42(2 * ax - deg42(n[0])), n[1], n[2]]; }); },
+    "retrograde": function (m) { var end = Math.max.apply(null, m.map(function (n) { return n[1] + n[2]; })); return m.map(function (n) { return [n[0], end - n[1] - n[2], n[2]]; }).sort(function (a, b) { return a[1] - b[1]; }); },
+    "augment": function (m) { var a0 = m[0][1]; return m.map(function (n) { return [n[0], a0 + 2 * (n[1] - a0), 2 * n[2]]; }); },
+    "diminish": function (m) { var a0 = m[0][1]; return m.map(function (n) { return [n[0], a0 + (n[1] - a0) / 2, n[2] / 2]; }); },
+    "fragment": function (m) { return m.slice(0, 2); },
+    "expand an interval": function (m) {
+      var iv = [], i, best = 0; for (i = 1; i < m.length; i++) iv.push(deg42(m[i][0]) - deg42(m[i - 1][0]));
+      for (i = 1; i < iv.length; i++) if (Math.abs(iv[i]) > Math.abs(iv[best])) best = i;
+      var s = iv[best] >= 0 ? 1 : -1; return m.map(function (n, j) { return [j > best ? step42(n[0], s) : n[0], n[1], n[2]]; }); },
+    "new rhythm": function (m) { var a0 = m[0][1], span = Math.max.apply(null, m.map(function (n) { return n[1] + n[2]; })) - a0; return m.map(function (n, j) { return [n[0], a0 + span * j / m.length, span / m.length]; }); },
+    "embellish": function (m) {
+      var out = []; m.forEach(function (n, j) {
+        if (j + 1 < m.length && Math.abs(deg42(m[j + 1][0]) - deg42(n[0])) >= 2) {
+          var k = deg42(m[j + 1][0]) - deg42(n[0]), s = k > 0 ? 1 : -1, len = Math.abs(k);
+          for (var i = 0; i < len; i++) out.push([step42(n[0], s * i), n[1] + n[2] * i / len, n[2] / len]);
+        } else out.push(n);
+      }); return out; }
+  };
+  var ON42 = Object.keys(OPS42);
+  var NN42 = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+  function apply42(v) {
+    var m = OPS42[ON42[v.op2]](OPS42[ON42[v.op1]](MOT42.map(function (n) { return n.slice(); })));
+    return m.map(function (n) { return [step42(n[0], v.k), n[1], n[2]]; });
+  }
+  function tone42(out, i0, rate, f, dur, g) {
+    var n = Math.floor((dur + 0.4) * rate);
+    for (var i = 0; i < n && i0 + i < out.length; i++) {
+      var t = i / rate, e = Math.min(1, t / 0.005) * Math.exp(-t * 2.2) * (t < dur ? 1 : Math.exp(-(t - dur) * 12));
+      out[i0 + i] += g * e * (Math.sin(2 * Math.PI * f * t) + 0.35 * Math.sin(4 * Math.PI * f * t) + 0.12 * Math.sin(6 * Math.PI * f * t));
+    }
+  }
+  W.motive = function (el) {
+    QB.widget(el, {
+      title: "Operations on a motive",
+      sub: "Our four-note motive (E D C, then up a fifth to G) under up to two of the classical operations, then moved along the C major scale. Every operation is diatonic: steps are counted on the scale, so the result stays in the key. Play the motive and then the result.",
+      panels: 1, height: 230,
+      controls: [
+        { k: "op1", label: "First operation", min: 0, max: ON42.length - 1, step: 1, value: 1, fmt: function (x) { return ON42[x]; } },
+        { k: "op2", label: "Second operation", min: 0, max: ON42.length - 1, step: 1, value: 0, fmt: function (x) { return ON42[x]; } },
+        { k: "k", label: "Move along the scale", min: -7, max: 7, step: 1, value: 0, fmt: function (x) { return (x > 0 ? "+" : "") + x + " steps"; } }
+      ],
+      buttons: [{ label: "Play: motive, then result", act: function (s) {
+        var rate = 44100, beat = 0.4, r = apply42(s.v);
+        var endR = Math.max.apply(null, r.map(function (n) { return n[1] + n[2]; })), gap = 4 * beat + 0.6;
+        var out = new Float32Array(Math.floor((gap + endR * beat + 1.2) * rate));
+        MOT42.forEach(function (n) { tone42(out, Math.floor(n[1] * beat * rate), rate, 440 * Math.pow(2, (n[0] - 69) / 12), n[2] * beat, 0.25); });
+        r.forEach(function (n) { tone42(out, Math.floor((gap + n[1] * beat) * rate), rate, 440 * Math.pow(2, (n[0] - 69) / 12), n[2] * beat, 0.25); });
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var r = apply42(v), all = MOT42.concat(r).map(function (n) { return n[0]; });
+        var lo = Math.min.apply(null, all) - 2, hi = Math.max.apply(null, all) + 2;
+        var endR = Math.max.apply(null, r.map(function (n) { return n[1] + n[2]; }));
+        var a = g[0].axes({ x: [-0.2, 4.6 + Math.max(4, endR)], y: [lo, hi], title: "The motive (grey) and the result (gold), key numbers against beats", xlabel: "beats" });
+        MOT42.forEach(function (n) { a.line([n[1], n[1] + n[2] * 0.92], [n[0], n[0]], { color: "#8A93A0", width: 7 }); });
+        a.line([4.3, 4.3], [lo, hi], { color: "#3A4250", width: 1 });
+        r.forEach(function (n) { a.line([4.6 + n[1], 4.6 + n[1] + n[2] * 0.92], [n[0], n[0]], { color: C.idea, width: 7 }); });
+      },
+      readout: function (v, s) {
+        var r = apply42(v);
+        var names = r.map(function (n) { return NN42[n[0] % 12]; }).join(" ");
+        var iv = []; for (var i = 1; i < r.length; i++) iv.push(r[i][0] - r[i - 1][0]);
+        return [["result", names],
+                ["intervals", iv.map(function (x) { return (x > 0 ? "+" : "") + x; }).join(", ") + " semitones"],
+                ["length", Math.max.apply(null, r.map(function (n) { return n[1] + n[2]; })) - r[0][1] + " beats"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Inversion then retrograde gives the motive's retrograde inversion, the fourth form of a twelve-tone row (Part 29). Move the inverted motive along the scale and listen to its intervals change by a semitone here and there while it stays recognisable: that is what diatonic means."
+    });
+  };
 })();

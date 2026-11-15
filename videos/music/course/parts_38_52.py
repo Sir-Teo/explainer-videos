@@ -173,4 +173,46 @@ PARTS = [
         I=(9,),
         also=(("Monochord's orchestra: measured spectra, sections, fusion, spacing roughness and the matching solver", "explainer/music/monochord/orchestra.py"),),
     ),
+    Part(
+        n=42, level="U", widget="motive", prereq=(14, 16, 17, 18, 20, 21, 22),
+        question="Is composing search under constraints, and what would a program need in order to judge its own drafts?",
+        story="Beethoven's sketchbooks of 1822 to 1824 show the Ode to Joy approached in draft after draft; what the search "
+              "found has 30 notes in its first two phrases and not one leap. The part treats composing as search under "
+              "constraints. It starts with the motive and the classical operations on it (inversion, retrograde, "
+              "augmentation, diminution, fragmentation, interval change, new rhythm, embellishment), all diatonic and all "
+              "functions from melodies to melodies; grows Schoenberg's sentence from four notes; varies the Tune four "
+              "ways; plans tension bar by bar and measures it against the plan. It counts what rules do, exactly: of "
+              "2,562,890,625 eight-note melodies on fifteen white keys, five rules leave 9,252. It builds a dice game of "
+              "its own in the format of Kirnberger's (1757), 176 bars with about 1.6 x 10^13 distinct minuets and 41 bits "
+              "of entropy; reruns Hiller and Isaacson's generate-and-test (277 draws for a twelve-note line, most rejected "
+              "at the cadence); shows a Markov chain copying more as it remembers more; evolves melodies; and builds a "
+              "searcher whose critics are the series' own rules, which keeps draft 1,205 of 2,000 and shows what it threw "
+              "away. The Tune's first four notes become Variation 42.",
+        handoff="Performing in Part 43; expectation and emotion in Part 46; sequencers in Part 53; machines that compose in "
+                "Part 65; generative audio in Part 66.",
+        outside="Part 14 for melody and its statistics; Part 16 for counterpoint's rules and counting; Part 18 for "
+                "progressions; Part 20 for canon; Part 21 for form; Part 22 for grammars. Dynamic programming, Markov "
+                "chains, entropy, search.",
+        objectives={
+            "U": ["Hear a motive's inversion, retrograde, augmentation and fragments, and the motive inside a phrase.",
+                  "Hear ornamental, rhythmic, harmonic and character variations of one theme.",
+                  "Hear a late climax and an early one, and a chain that copies against one that wanders."],
+            "M": ["Implement diatonic operations on a motive and find the shortest chain of operations between two figures.",
+                  "Count melodies under rules exactly by dynamic programming, and a dice game's distinct pieces and entropy.",
+                  "Build a generate-and-test searcher with hard and soft critics, and a genetic algorithm with the same critics."],
+            "D": ["Design a study that measures novelty and value separately for human and machine composers."],
+            "I": ["Sketch many drafts and judge them later; write fragments and rules that a game engine recombines."],
+        },
+        results=[
+            ("The funnel", r"15^8 = 2{,}562{,}890{,}625 \to 9{,}252 \text{ under five rules}"),
+            ("Two dice", r"H = -\textstyle\sum_s p_s \log_2 p_s \approx 3.27 \text{ bits}"),
+            ("Our dice game", r"\approx 1.6 \times 10^{13} \text{ minuets}, \ 41 \text{ bits}"),
+            ("Generate and test", r"277 \text{ draws for 12 notes}"),
+            ("The searcher", r"2{,}000 \text{ drafts}: \ 164 \text{ scored}, \ \text{draft } 1{,}205 \text{ kept}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7),
+        D=(10,),
+        I=(8, 9),
+        also=(("Monochord's composer: motive operations, the funnel, the dice game, generate and test, chains, critics and the searcher", "explainer/music/monochord/composer.py"),),
+    ),
 ]
