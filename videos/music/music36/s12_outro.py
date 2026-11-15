@@ -37,6 +37,7 @@ class Outro(SoundScene):
             self.play(FadeIn(g))
         with self.listen(c) as snd:
             window(snd, r"Variation 36", detail=r"plucked string, \ bars, \ gong", corner=DL, tag_corner=DR)
+            pulse(snd, g, 0.0, c.duration, rate=5.0, color=GREY_B, buff=0.25)
             for i, (p, a, du) in enumerate(d["melody"]):
                 pulse(snd, qin[i], d["starts"]["qin"] + a * d["unit"], d["starts"]["qin"] + (a + du) * d["unit"] - 0.03, buff=0.04)
             for i in range(len(d["balungan"])):

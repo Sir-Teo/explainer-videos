@@ -57,6 +57,7 @@ class Cycle(SoundScene):
             self.play(FadeIn(head), FadeIn(grid), FadeIn(cap))
         with self.listen(c) as snd:
             window(snd, r"lancaran", detail=r"Part 9's bars and gongs", corner=DL, tag_corner=DR)
+            pulse(snd, grid, 0.0, c.duration, rate=5.0, color=GREY_B, buff=0.3)
             b = d["beat"]
             for i in range(32):
                 pulse(snd, grid[i % 16][0], i * b, (i + 1) * b - 0.03, buff=0.03)

@@ -34,6 +34,7 @@ class Hook(SoundScene):
         self.play(FadeOut(card), FadeIn(shapes))
         with self.listen(c) as snd:
             window(snd, r"three bells, \ centre then side", detail=r"a two-tone bell model", corner=DL, tag_corner=DR)
+            pulse(snd, shapes, 0.0, c.duration, rate=5.0, color=GREY_B, buff=0.35)
             for k, t0 in enumerate(d["times"]):
                 pulse(snd, shapes[k // 2][1 + k % 2], t0, t0 + 1.4, buff=0.06)
         ans = label(r"two notes from every bell: \ the side strike sounds a minor third above the centre", font_size=22, color=TUNE).to_edge(DOWN, buff=1.0)
