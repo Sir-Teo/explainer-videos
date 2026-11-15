@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import numpy as np
+
 from videos.music.music63.common import *  # noqa: F403
 
 
@@ -7,6 +9,7 @@ class Listeners(SoundScene):
     def construct(self):
         chapter(self, 7, r"Learning from listening", r"Can what other people play tell you what you will like?")
         self.idea()
+        self.matrix()
         self.als()
         self.compare()
         self.heard()
@@ -104,4 +107,30 @@ class Listeners(SoundScene):
                 end = st[ks[i + 1]] - 0.3 if i + 1 < len(ks) else c.duration
                 pulse(snd, boxes[i], st[k], end, buff=0.08)
         self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def matrix(self):
+        d = load("matrix")
+        R = np.array(d["R"])
+        S_ = np.array(d["S"])
+        a = heat_image(R, 0, np.log1p(8), width=5.4, height=3.6, smooth=False).move_to(LEFT * 3.2 + DOWN * 0.4)
+        b = heat_image(S_, np.percentile(S_, 5), np.percentile(S_, 99.5), width=5.4, height=3.6).move_to(RIGHT * 3.2 + DOWN * 0.4)
+        la = label(rf"plays: \ {d['users']} listeners down, \ {d['items']} clips across", font_size=16, color=GREY_A).next_to(a, UP, buff=0.15)
+        lb = label(r"what eight factors per listener and per clip reconstruct", font_size=16, color=GREY_A).next_to(b, UP, buff=0.15)
+        note = label(rf"only {100 * d['nonzero']:.0f}\% of the cells have any plays; \ both pictures sorted by total plays", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.4)
+        head = label(r"the matrix of listening", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "Here is what a recommender actually has. <bookmark mark='a'/> A matrix: one row per listener, one column per "
+            f"clip, bright where a listener played a clip, sorted by how much each plays and is played. Only "
+            f"{say(round(100 * d['nonzero']))} per cent of its cells are lit: most listeners never meet most music. "
+            "<bookmark mark='b'/> Factorize it, eight numbers for each listener and each clip, and the product fills in every "
+            "cell, including the dark ones. Those filled-in guesses are the recommendations."
+        ) as vo:
+            self.play(FadeIn(head))
+            vo.wait_until("a")
+            self.play(FadeIn(a), FadeIn(la), FadeIn(note))
+            vo.wait_until("b")
+            self.play(FadeIn(b), FadeIn(lb))
+        self.wait(0.8)
         self.clear_scene()

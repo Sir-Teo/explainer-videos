@@ -9,6 +9,7 @@ class Horse(SoundScene):
         self.hans()
         self.quiz()
         self.result()
+        self.weights()
         self.tests()
 
     # ------------------------------------------------------------------
@@ -60,7 +61,7 @@ class Horse(SoundScene):
         for r in rows_:
             r[1].next_to(r[0], RIGHT, buff=0.3).align_to(rows_, LEFT).shift(RIGHT * 4.6)
             r[2].next_to(r[1], RIGHT, buff=0.2)
-        task = label(r"the task: \ was this Variation made in Parts 1 to 30, \ or 31 to 60? \ \ (chance: \ 50\%)", font_size=18, color=GREY_A).to_edge(UP, buff=1.0)
+        task = label(rf"the task: \ was this Variation made in Parts 1 to 30, \ or 31 to 60? \ \ (always guessing the commoner half: \ {100 * d['majority']:.0f}\%)", font_size=18, color=GREY_A).to_edge(UP, buff=1.0)
         note = label(rf"its strongest features: \ {', '.join(d['top_features'])} \ (the lowest bands hold the hum)", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
         head = label(r"a horse", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
@@ -68,8 +69,10 @@ class Horse(SoundScene):
             "recording from the later parts carries that faint hum. <bookmark mark='a'/> A classifier on Monochord's embedding "
             f"scores {say(100 * d['acc_hum'])} percent. Impressive. <bookmark mark='b'/> Remove the hum, change nothing about the "
             f"music, and the same classifier falls to {say(100 * d['acc_clean'])} percent. It had learnt the hum. "
-            f"<bookmark mark='c'/> Trained honestly, without any hum, it reaches {say(100 * d['acc_fair'])} percent: what the "
-            "music itself tells it."
+            f"<bookmark mark='c'/> Trained honestly, without any hum, and tested on clips it never saw, it scores "
+            f"{say(100 * d['acc_fair'])} percent, no better than always guessing the commoner half, {say(100 * d['majority'])}. "
+            "In these sixty-two numbers the music says nothing about which half of the series it came from. Every point of "
+            "that impressive score was hum."
         ) as vo:
             self.play(FadeIn(head), FadeIn(task))
             for mark, r in zip("abc", rows_):
@@ -94,3 +97,35 @@ class Horse(SoundScene):
                    "re-encode, everything that should not matter. <bookmark mark='d'/> Look at what the model uses: its weights, "
                    "its saliency, its errors. <bookmark mark='e'/> Test on music made elsewhere: another studio, decade or culture. "
                    "<bookmark mark='f'/> A high score is a hypothesis about what was learnt, not a proof.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def weights(self):
+        d = load("horse")
+        lb = d["lowest_three_bands"]
+        blocks = ("band energies", "band spreads", "chroma", "flux")
+        def bars(share, col, x):
+            g = VGroup()
+            for i, b in enumerate(blocks):
+                g.add(Rectangle(width=0.55, height=3.2 * share[b], stroke_width=0, fill_color=col, fill_opacity=0.85).move_to([x + 2.0 * i, -1.6 + 1.6 * share[b], 0]))
+            return g
+        a = bars(d["share_hum"], EAR, -3.3)
+        b = bars(d["share_fair"], TUNE, -2.65)
+        names = VGroup(*[label(t, font_size=15, color=GREY_A).move_to([-3.0 + 2.0 * i, -1.95, 0]) for i, t in enumerate(blocks)])
+        key = VGroup(label(r"trained with the hum", font_size=16, color=EAR), label(r"trained without", font_size=16, color=TUNE)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_corner(UR, buff=0.5)
+        res = label(rf"the three lowest bands, \ where 50, \ 100 and 150 Hz fall: \ {100 * lb['hum']:.0f}\% of the weight with the hum, \ {100 * lb['fair']:.0f}\% without", font_size=18, color=EAR).to_edge(DOWN, buff=0.45)
+        head = label(r"where the weight goes", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        with self.voiceover(
+            "Could we have caught it without removing the hum? Look at what the model uses. <bookmark mark='a'/> Here is how "
+            "the size of its weights divides among the embedding's four kinds of number, for the classifier trained with the "
+            "hum and for the one trained without. The blocks look alike. <bookmark mark='b'/> But zoom in on the three lowest "
+            f"bands, where fifty, a hundred and a hundred and fifty hertz fall: they carry {say(round(100 * lb['hum']))} per "
+            f"cent of the hum classifier's weight, against {say(round(100 * lb['fair']))} for the other: three bands out of "
+            "sixty-two, doing a large share of the work. A sign to go and listen to the bass."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(names), FadeIn(key))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in [*a, *b]], lag_ratio=0.1), run_time=1.6)
+            vo.wait_until("b")
+            self.play(FadeIn(res))
+        self.wait(0.6)
+        self.clear_scene()

@@ -7,6 +7,7 @@ class Uses(SoundScene):
     def construct(self):
         chapter(self, 10, r"What separation is for", r"Who needs a mix un-mixed?")
         self.uses()
+        self.remix()
         self.rights()
         self.listeners()
 
@@ -56,3 +57,33 @@ class Uses(SoundScene):
                    "as Albert Bregman's auditory scene analysis of 1990 described. <bookmark mark='d'/> Their cues: a common onset, "
                    "harmonicity, a common location, continuity. <bookmark mark='e'/> The methods of this part borrow each cue: "
                    "panning, harmonic templates, continuity in time.", marks="bcde")
+
+    # ------------------------------------------------------------------
+    def remix(self):
+        d = load("remix")
+        c = clip("remix.three")
+        card = listen_card(r"The session as mixed, \ then two remixes: \ vocals 6 dB up, \ drums 6 dB down. \ One was made from separated stems, \ one from the true stems. \ Which was separated?", width=9.6)
+        with self.voiceover("Your turn. A remix needs less than you might think. Hear the session as mixed, then two remixes with the vocals six decibels up and the drums six down. One was made from the network's vocals and the median filter's drums; the other from the true stems. Which was separated?"):
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        boxes = choice_boxes([r"as mixed", r"first remix", r"second remix"], width=3.6, height=0.9, buff=0.35, size=17).move_to(UP * 0.6)
+        self.play(FadeOut(card), FadeIn(boxes))
+        res = label(rf"the first: \ {d['sdr_remix']:.1f} dB from the true remix; \ the original mix, \ {d['sdr_mix']:.1f} dB",
+                    font_size=18, color=TUNE).next_to(boxes, DOWN, buff=0.6)
+        why = label(r"in a remix the stems are added back, \ so most of each stem's errors cancel", font_size=16, color=GREY_A).next_to(res, DOWN, buff=0.3)
+        st = d["starts"]
+        ks = ["mix", "separated", "true"]
+        with self.listen(c) as snd:
+            window(snd, r"a remix, \ two ways", kind="physical model", detail=r"Part 56's session", corner=DL, tag_corner=DR)
+            for i, k in enumerate(ks):
+                end = st[ks[i + 1]] - 0.3 if i + 1 < len(ks) else c.duration
+                pulse(snd, boxes[i], st[k], end, buff=0.06)
+        with self.voiceover(
+            f"The first remix was the separated one. The two are close: {say(d['sdr_remix'], 1)} decibels apart by SDR, much closer than either is to the "
+            "original mix. A remix adds the stems back together, so whatever one stem wrongly took from another is mostly "
+            "returned. Turning a voice up or down is far easier than lifting it out alone: a separator can be good enough for "
+            "a remix long before it is good enough for an a cappella."
+        ):
+            self.play(boxes[1][0].animate.set_stroke(TUNE, width=4), FadeIn(res), FadeIn(why))
+        self.wait(0.4)
+        self.clear_scene()

@@ -10,6 +10,7 @@ class Loop(SoundScene):
         chapter(self, 9, r"Popularity feeding on itself", r"What happens when a recommender learns from its own recommendations?")
         self.setup()
         self.curve()
+        self.lorenz()
         self.meaning()
 
     # ------------------------------------------------------------------
@@ -80,3 +81,35 @@ class Loop(SoundScene):
                    "because the logs show only what was recommended. <bookmark mark='e'/> The remedies are randomized exploration, "
                    "and reweighting each logged play by how likely its recommendation was. <bookmark mark='f'/> What people play is "
                    "partly what they were shown.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def lorenz(self):
+        d = load("lorenz")
+        ax = frame_axes(width=4.6, height=4.6, xlo=0, xhi=1, ylo=0, yhi=1, center=DOWN * 0.3 + LEFT * 2.6)
+        diag = DashedLine(ax.to(0, 0), ax.to(1, 1), color=GREY_D, stroke_width=1.5)
+        def lc(v, col):
+            v = np.array(v)
+            return curve(np.linspace(0, 1, len(v)), v, ax.to, color=col, width=3)
+        cs = VGroup(lc(d["own"], GREY_B), lc(d["explore"], BLUE), lc(d["rec"], EAR))
+        t = d["top10"]
+        key = VGroup(label(r"the most-played tenth of the clips gets:", font_size=17, color=GREY_A),
+                     label(rf"listeners on their own: \ {100 * t['own']:.0f}\% of plays", font_size=18, color=GREY_B),
+                     label(rf"popularity, \ exploring 30\%: \ {100 * t['explore']:.0f}\%", font_size=18, color=BLUE),
+                     label(rf"popularity alone: \ {100 * t['rec']:.0f}\%", font_size=18, color=EAR)).arrange(DOWN, buff=0.28, aligned_edge=LEFT).move_to(RIGHT * 3.2 + DOWN * 0.2)
+        xl = label(r"clips, \ least played first", font_size=14, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        yl = label(r"share of all plays", font_size=14, color=GREY_A).next_to(ax, UP, buff=0.15)
+        head = label(r"who gets the plays", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "Another view of the same thirty rounds: a Lorenz curve, the clips lined up from least to most played, and the "
+            "share of plays they hold together. Equal shares would be the diagonal. <bookmark mark='a'/> On their own, "
+            f"listeners give the most-played tenth of the clips {say(round(100 * t['own']))} per cent of plays. "
+            f"<bookmark mark='b'/> With the recommender exploring, {say(round(100 * t['explore']))} per cent. "
+            f"<bookmark mark='c'/> With popularity alone, {say(round(100 * t['rec']))} per cent: nearly everything, and the "
+            "curve hugs the floor until the very last clips."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(diag), FadeIn(xl), FadeIn(yl), FadeIn(key[0]))
+            for mark, cv_, k in zip("abc", cs, key[1:]):
+                vo.wait_until(mark)
+                self.play(Create(cv_), FadeIn(k), run_time=1.0)
+        self.wait(0.6)
+        self.clear_scene()

@@ -8,6 +8,7 @@
     listeners, implicit_als, recall_at_k simulated listeners with known tastes; Hu, Koren and Volinsky's implicit ALS (2008)
     feedback_loop                        recommending what is already played: popularity's runaway
     playlist                             an order through a set of songs in which neighbours sound alike
+    contour, melody_distance             query by humming: a pitch contour, matched by dynamic time warping
 
 No manim.  Checked in ``tests/music/test_finder.py``.
 """
@@ -123,6 +124,21 @@ class Index:
                 best[k] = (v, off)
         ranked = sorted(best.items(), key=lambda kv: -kv[1][0])[:top]
         return [{"track": self.names[k], "votes": v, "offset_s": off * 256 / SR_FP} for k, (v, off) in ranked]
+
+    def matches(self, y, sr: int, track: str, shifts: int = 4) -> np.ndarray:
+        """Every hash of the query that is also in ``track``, pooled over the same sub-frame starts as ``query``:
+        (query frame, track frame) pairs.  For the true track most fall on one diagonal line, the offset; for any other
+        they scatter."""
+        k = self.names.index(track)
+        y8 = to_8k(y, sr)
+        out = []
+        for s in range(shifts):
+            off = int(round(s * 256 / shifts))
+            for h, t in hashes(peaks(spectrogram(y8[off:]))):
+                for kk, tt in self.table.get(h, ()):
+                    if kk == k:
+                        out.append((t, tt))
+        return np.array(out, float).reshape(-1, 2)
 
     @property
     def size(self) -> int:
@@ -319,3 +335,28 @@ def playlist(X, start: int = 0) -> list:
 def path_length(X, order) -> float:
     X = np.asarray(X, float)
     return float(sum(np.linalg.norm(X[a] - X[b]) for a, b in zip(order, order[1:])))
+
+
+# --------------------------------------------------------------------------------------------- query by humming
+def contour(f0, voiced, every: int = 4) -> np.ndarray:
+    """A pitch track as semitones, voiced frames only, kept one in ``every``: the shape a hummed query searches with."""
+    f = np.asarray(f0, float)[np.asarray(voiced, bool)]
+    return 12 * np.log2(f[::every] / 440.0) + 69
+
+
+def melody_distance(q, r) -> float:
+    """Dynamic time warping between two pitch contours, each centred on its median so that the key does not matter,
+    with |difference| in semitones as the local cost; normalized by the lengths.  Small for the same tune at any tempo."""
+    q = np.asarray(q, float) - np.median(q)
+    r = np.asarray(r, float) - np.median(r)
+    n, m = len(q), len(r)
+    C = np.minimum(np.abs(q[:, None] - r[None, :]), 3.0)        # a wrong note costs at most three semitones
+    D = np.full((n + 1, m + 1), np.inf)
+    D[0, 0] = 0.0
+    for i in range(1, n + 1):
+        row = D[i - 1]
+        cur = D[i]
+        ci = C[i - 1]
+        for j in range(1, m + 1):
+            cur[j] = ci[j - 1] + min(row[j - 1], row[j], cur[j - 1])
+    return float(D[n, m] / (n + m))

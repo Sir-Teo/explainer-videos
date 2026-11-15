@@ -8,6 +8,7 @@ class Frontier(SoundScene):
         chapter(self, 11, r"Frontier: \ foundation models and creators", r"What changes when one model listens to everything?")
         self.models()
         self.creators()
+        self.evidence()
         self.problem()
 
     # ------------------------------------------------------------------
@@ -66,3 +67,21 @@ class Frontier(SoundScene):
                 self.play(FadeIn(r))
         self.wait(0.4)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def evidence(self):
+        items = [
+            (r"a stream is paid once it passes thirty seconds \ (Part 60): \ the first seconds carry the money", WHITE),
+            (r"Léveillé Gauvin \ (2018): \ in US top-ten hits, \ instrumental introductions shrank from about twenty seconds in the mid-1980s to about five by the mid-2010s", WHITE),
+            (r"the voice and the title arrive sooner; \ songs also grew shorter in the streaming years", WHITE),
+            (r"but radio, \ video, \ changing taste and attention all overlap those years: \ a trend is not a cause", WHITE),
+            (r"what a system rewards, \ people make more of: \ Chapter 9's loop, \ with musicians inside it", TUNE),
+        ]
+        rows_scene(self, r"the evidence so far", items,
+                   "What evidence is there? <bookmark mark='b'/> A stream is paid once it passes thirty seconds, as Part 60 showed, "
+                   "so the first seconds carry the money. <bookmark mark='c'/> Hubert Léveillé Gauvin measured the top-ten hits in "
+                   "the United States: their instrumental introductions shrank from about twenty seconds in the mid-1980s to about "
+                   "five by the mid-2010s. <bookmark mark='d'/> The voice and the title arrive sooner, and songs grew shorter in "
+                   "the streaming years. <bookmark mark='e'/> But radio, music video, changing taste and attention all overlap "
+                   "those years; a trend is not a cause. <bookmark mark='f'/> The principle is older than streaming: what a system "
+                   "rewards, people make more of. Chapter 9's loop, with musicians inside it.", marks="bcdef")

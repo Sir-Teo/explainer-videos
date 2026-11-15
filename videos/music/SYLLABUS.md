@@ -2316,26 +2316,63 @@ key-invariant cover matching.
 *Story:* In 2002 a Londoner could dial four digits, hold a phone up in a noisy bar, and receive the song's name
 by text. Matching ten bad seconds against millions of tracks was done with spectrogram peaks and a hash table.
 The part builds it, then the systems that decide what a billion people hear next.
-*Covers:* fingerprinting and its false-match arithmetic; tagging and embeddings; the benchmark that turned out
-to be flawed, and classifiers that were right for the wrong reasons; collaborative filtering and implicit
-feedback; cold start; exploration; popularity feedback; fairness; metadata.
-*Built and computed:* a fingerprinter over every sound in the series, with recognition against noise and
-bitrate; a recommender on simulated listeners whose tastes are known; a feedback-loop simulation.
-*Variation 63:* any five noisy seconds named; all the Variations ordered into one smooth playlist.
+1. Hook: five seconds of a Variation in a noisy bar, named with its offset; how the search began; the plan.
+2. A constellation of peaks: why not waveforms; a Variation's peaks; the peaks alone, heard.
+3. Hashes and votes: pairs of peaks as hashes; the table; voting for a clip and an offset; what a match looks like.
+4. Noise, codecs and chance: one query in three bars, heard; noise curves; how long a query must be, heard; a codec ear question; chance; a hundred million tracks.
+5. Recordings, not songs: a fresh recording of the Tune; an ear question on a query played 4 % fast; samples under other tracks, heard; a hummed query found by its melody.
+6. Tags and embeddings: tags; Monochord's embedding; the series on its principal components; an ear question on neighbours; GTZAN's faults.
+7. Right for the wrong reasons: Clever Hans; an ear question (the hum); the horse's scores; where its weight goes; how to catch a horse.
+8. Learning from listening: collaborative filtering; the play matrix and its factors; implicit ALS; recall at 10; one listener's recommendations, heard.
+9. Cold start and exploring: unplayed clips scored from content; a cold clip and its neighbour, heard; exploring.
+10. Popularity feeding on itself: the feedback loop; inequality over rounds; Lorenz curves; what it means.
+11. Playlists, fairness and metadata: an ear question (random or ordered?); nearest neighbour and 2-opt; the path on the map; who gets heard; metadata.
+12. Frontier: foundation models; effects on creators; the evidence so far; the research problem.
+13. Variation 63: three earlier Variations, five noisy seconds each, named. Outro: problems, payoffs.
+
+*Covers:* fingerprinting and its false-match arithmetic; robustness to noise, codecs, length, speed and samples;
+query by humming; tagging and embeddings; the benchmark that turned out to be flawed, and classifiers that were
+right for the wrong reasons; collaborative filtering and implicit feedback; cold start; exploration; popularity
+feedback; fairness; metadata.
+*Built and computed:* `monochord/mir/finder.py`: a fingerprinter over every sound of Parts 1 to 60 (908 clips,
+1.15 million hashes): bar noise at 0 dB 61 % named, 8 s queries 81 %, 2 % fast 25 %, a sample 12 dB down 47 %; the
+Poisson false-match tail (six chance hits in one place below 10⁻¹⁶ at a hundred million tracks); a hummed query
+found first of 30 melodies by its contour; a hum classifier at 83 % that falls to chance; implicit ALS on
+simulated listeners (recall at 10: 0.127 against 0.077 for popularity); content for the cold start (0.28 against
+0.17); a feedback loop (Gini 0.97, 0.71 exploring, 0.13 without); playlists by nearest neighbour and 2-opt.
+*Variation 63:* three earlier Variations, five noisy seconds each, named (3 of 3).
 *Frontier:* music foundation models **(verify)**; creator-side effects of recommendation.
-*Reading:* Wang (2003); Hu, Koren & Volinsky (2008); Sturm (2013); Schedl et al. (2018).
+*Reading:* Wang (2003); Hu, Koren & Volinsky (2008); Sturm (2013, 2014); Salganik, Dodds & Watts (2006).
 
 ### Part 64 · Source Separation (~55)
 *Story:* In 2023 a voice was lifted off a 1970s home cassette, away from the piano recorded on the same
-track, and a finished song was built around it **(verify details)**. Separation is the un-baking of a cake. We
-own the ingredients, so the part can say exactly how well it was done.
+track, and a finished song was built around it. Separation is the un-baking of a cake. We own the
+ingredients, so the part can say exactly how well it was done.
+1. Hook: an ear question (which voice was separated?); the cassette; the plan.
+2. The mixing model: a mix as a sum; why separation needs assumptions; the test set; the four stems, heard.
+3. Where things are panned: centre cancellation, heard; a panning index per bin; the session's energy by index.
+4. Independent components: blind separation; what ICA sees; the session as a cloud; kurtosis by direction; dry and in a room, heard.
+5. Harmonic and percussive: lines and stripes; the mask; the split, heard; the filter's length; short and long, heard.
+6. Factorization, again: templates for sources; what they learnt; the stems scored; how many templates; the vocals, heard.
+7. Masks and their bounds: oracle masks; the masks as pictures; the ceilings; the oracles, heard.
+8. The phase problem: the mixture's phase; Griffin-Lim, heard; consistent is not correct; an ear question on the phase gap; waveform separators.
+9. Networks that separate: Monochord's separator; training; heard; every method compared; what a leak is worth.
+10. Measuring separation: SDR, SI-SDR, BSS Eval; an ear question (same SDR, different faults); a perfect estimate changed, heard; what the numbers miss.
+11. What separation is for: uses; an ear question on a remix; rights; listeners.
+12. Frontier: generative and query-based separation; metrics; the research problem.
+13. Variation 64: the Tune a cappella and as karaoke, separated and true. Outro: problems, payoffs.
+
 *Covers:* the mixing model; panning and centre cancellation; independent components; harmonic against
 percussive; factorization; masks, the Wiener filter and oracle bounds; the phase problem; networks on
 spectrograms and on waveforms; metrics and their faults; what it is used for.
-*Built and computed:* oracle bounds on our multitracks; median-filter, factorization and a small network
-(named exception: up to 6 h, resumable) placed against them.
-*Variation 64:* a mashup from separated stems of four earlier Variations, beside the same from true stems.
-*Frontier:* generative and query-based separation; metrics that track perception.
+*Built and computed:* `monochord/mir/separate.py` on Part 56's session: left minus right 11 dB down; ICA perfect
+dry (0.99999) and lost in a room (0.12); median filtering (tonal 7.8 dB, 10.1 with long filters); supervised NMF
+(vocals 7.7 dB) against the oracles (binary 8.3, ratio 9.3, ratio with true phase 12.7); Griffin-Lim consistent
+but −3 dB; a vocal-mask network at 6.9 dB honest and 8.5 leaked; SDR's blind spots (a millisecond late −0.6 dB,
+low-passed at 2 kHz 36.6); a remix from separated stems 13.7 dB from the true remix.
+*Variation 64:* the session's Tune a cappella and as karaoke, from the network's stems and from the true ones
+(the voice 6.9 dB, the karaoke 10.0).
+*Frontier:* generative and query-based separation; metrics that track perception **(verify)**.
 *Reading:* Vincent, Virtanen & Gannot (eds.); Rafii et al. (2018); Le Roux et al. (2019); Défossez et al.
 
 ### Part 65 · Machines that Compose (~55)

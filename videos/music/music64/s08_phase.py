@@ -11,6 +11,7 @@ class Phase(SoundScene):
         self.problem()
         self.heard()
         self.convergence()
+        self.gap()
         self.waveform()
 
     # ------------------------------------------------------------------
@@ -97,4 +98,31 @@ class Phase(SoundScene):
             vo.wait_until("b")
             self.play(Create(c2), FadeIn(k2), run_time=1.4)
         self.wait(0.6)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def gap(self):
+        d = load("truephase")
+        c = clip("truephase.two")
+        card = listen_card(r"The vocals through the ideal ratio mask, \ twice: \ once with the mixture's phase, \ once with the voice's own. \ Which had the voice's own?", width=9.4)
+        with self.voiceover("Your turn. How much does phase matter to the ear? Here are the vocals through the ideal ratio mask twice, once with the mixture's phase and once with the voice's own. Which had the voice's own?"):
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        boxes = choice_boxes([r"first", r"second"], width=3.2, height=0.9, buff=1.2, size=19).move_to(UP * 0.5)
+        self.play(FadeOut(card), FadeIn(boxes))
+        res = label(rf"{d['sdr_mix']:.1f} dB, \ then {d['sdr_true']:.1f} dB: \ the gap that better magnitudes alone cannot close", font_size=18, color=TUNE).next_to(boxes, DOWN, buff=0.6)
+        head = label(r"the phase gap, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        self.play(FadeIn(head))
+        st = d["starts"]
+        with self.listen(c) as snd:
+            window(snd, r"two phases", kind="physical model", detail=r"Part 56's session", corner=DL, tag_corner=DR)
+            pulse(snd, boxes[0], st["mixphase"], st["truephase"] - 0.4, buff=0.08)
+            pulse(snd, boxes[1], st["truephase"], c.duration, buff=0.08)
+        with self.voiceover(
+            f"The second had the voice's own phase. By SDR, {say(d['sdr_mix'], 1)} decibels, then {say(d['sdr_true'], 1)}. Listen again where the band and the voice "
+            "share a harmonic: that is where the two differ. Whether three decibels of SDR sound like much is a question for "
+            "the ear, not the formula, and Chapter 9 takes it up."
+        ):
+            self.play(boxes[1][0].animate.set_stroke(TUNE, width=4), FadeIn(res))
+        self.wait(0.4)
         self.clear_scene()

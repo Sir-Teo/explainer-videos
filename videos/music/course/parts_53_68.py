@@ -289,4 +289,67 @@ PARTS = [
         I=(6, 8),
         also=(("Monochord's rhythm listeners: novelty, tempo, beat tracking, chroma, chord HMMs, DTW and online following, self-similarity and repetition", "explainer/music/monochord/mir/rhythm.py"),),
     ),
+    Part(
+        n=63, level="U", widget="loop", prereq=(2, 4, 58, 60, 61),
+        question="How does a phone name a song from five noisy seconds, and how does a service choose what you hear next?",
+        story="Five seconds of Variation 40 in a simulated bar, the music no louder than the noise, named with its offset among every sound of Parts 1 to 60 (908 clips, 3.7 hours, 1.15 million hashes); Shazam's phone number in 2002. A constellation of spectrogram peaks, about twenty a second, heard alone. Pairs of peaks as 24-bit hashes; votes for a clip and an offset; a match drawn as dots on one diagonal, the Tune's repeats on shorter ones. Noise: one query in three bars, heard; white noise is easier than bar noise (61 per cent named at 0 dB, 25 at -5); query length (9 per cent at one second, 81 at eight), heard; an ear question on a 16 kbit/s codec; the Poisson arithmetic of chance, and a hundred million tracks. Recordings, not songs: the Tune rendered afresh gets a tenth of a true excerpt's votes; an ear question on a Variation 4 per cent fast (lost: 59 per cent at 1 per cent, 25 at 2); a sample 12 dB under another track found 47 per cent of the time; a hummed query, slower, higher and out of tune, missed by the fingerprint and found first of 30 melodies by its pitch contour and time warping. Tags and embeddings: all 908 clips on two principal components, the acts overlapping (it knows sound, not subject); an ear question on nearest and farthest neighbours; GTZAN's faults. A horse: a classifier scores 83 per cent from a faint mains hum, 43 without it, and 48 trained honestly and split by clip, no better than guessing; its weight on the lowest bands. Collaborative filtering on simulated listeners: the play matrix and its factors; implicit ALS (recall at 10: 0.127 against 0.077 for popularity and 0.038 at random); the cold start from content (0.28 against 0.17). Popularity feeding on itself: Gini 0.97 after thirty rounds, 0.71 exploring, 0.13 without a recommender; Lorenz curves. Playlists by nearest neighbour and 2-opt (226 against 439), an ear question, the path on the map; fairness and metadata. Frontier: foundation models; effects on creators and the shrinking introduction; a research problem on what recommenders caused. Variation 63: three earlier Variations named through a bar's noise.",
+        handoff="Separated stems searched and remixed in Part 64; machines that compose trained on what services collect in Part 65; "
+                "generated audio, watermarks and fingerprints in Part 66; evaluation, leakage and listening tests in Part 67; "
+                "the concert's programme ordered in Part 68.",
+        outside="Part 2 for spectra; Part 4 for hearing in noise; Part 58 for codecs; Part 60 for streaming's money; Part 61 "
+                "for pitch tracking. Hash tables, the Poisson distribution, principal components, logistic regression, "
+                "alternating least squares, dynamic time warping, the travelling-salesman heuristic 2-opt.",
+        objectives={
+            "U": ["Hear a query in a noisy bar named, a codec, a query played fast, a sample buried in another track and a hummed tune.",
+                  "Hear neighbours and the farthest clip by content, a mains hum a classifier learnt, and a random against an ordered playlist.",
+                  "Explain why a fingerprint names a recording and not a song, and why popularity feeds on itself."],
+            "M": ["Fingerprint audio by spectrogram peaks and hashes, index it, and name queries by aligned votes.",
+                  "Compute the chance of a false match from the Poisson tail, for any library size.",
+                  "Factorize implicit feedback by ALS, score recall at k, and handle the cold start from content."],
+            "D": ["Design a simulation of listeners, artists and a recommender, fitted to observable trends, to ask what recommenders caused."],
+            "I": ["Split data by recording and source, test with interventions, and check what a model's weights rely on before trusting a score."],
+        },
+        results=[
+            ("Hash", r"h = (f_1, f_2, \Delta t) \mapsto 24\ \text{bits}"),
+            ("Votes", r"\text{offset} = t_{\text{clip}} - t_{\text{query}}"),
+            ("Chance", r"\lambda = \frac{n_q\, n_{db}\, 2^{-24}}{\text{tracks} \times \text{offsets}},\ \ P(\ge m) \le N\,\frac{\lambda^m}{m!}e^{-\lambda}(1 + \dots)"),
+            ("Implicit ALS", r"x_u = (Y^\top C_u Y + \lambda I)^{-1} Y^\top C_u\, p_u"),
+            ("Gini", r"G = \frac{\sum_i \sum_j |x_i - x_j|}{2 n^2 \bar x}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 8, 10),
+        D=(11,),
+        I=(7, 9),
+        also=(("Monochord's finders: fingerprints, the hash index, false matches, the embedding, implicit ALS, the feedback loop, playlists, query by humming", "explainer/music/monochord/mir/finder.py"),),
+    ),
+    Part(
+        n=64, level="U", widget="mask", prereq=(2, 45, 54, 56, 61),
+        question="How can a machine pull one instrument out of a finished mix, and how do we know how well it did?",
+        story="An ear question: a voice and a piano on one track, then the voice twice; the first was separated, 12 dB from the truth; a home cassette lifted apart decades later. The mixing model and the assumptions separation needs; Part 56's session as the test set, its four stems heard alone and mixed. Stereo: left minus right, 11 dB quieter, the centred voice, bass and drums gone, heard; a panning index per bin picks out the piano roughly (2.7 dB); the session's energy by index. ICA: the session as a cloud of samples squared up; the voice is the most non-Gaussian direction (kurtosis 1.61 against the microphones' 1.34 and 0.82); perfect dry, lost in a room, heard. Median filtering: lines and stripes, the harmonic mask, the split heard (tonal 7.8 dB, drums 1.0), long filters better (10.1 and 3.4), heard. Supervised NMF: the voice's combs and the drums' smears; stems from 5.2 to 8.5 dB; templates per source (gains flatten after six). Oracle masks as pictures and as ceilings (vocals: NMF 7.7, binary 8.3, ratio 9.3, with true phase 12.7; for drums the binary mask wins), heard. Phase: Griffin-Lim heard, its inconsistency falling to -20 dB while its SDR stays near -3; an ear question on the phase gap; waveform separators. A small vocal-mask network trained on the middle phrases transposed: 6.9 dB, below NMF; trained on stretches that repeat the test, 8.5: what a leak is worth. Measuring: SDR, SI-SDR, BSS Eval; an ear question on two estimates at exactly 8.0 dB, one leaking and one gargling; a perfect estimate half as loud, upside down, dull and a millisecond late (-0.6 dB), heard. Uses, an ear question on a remix from separated stems (13.7 dB from the true remix), rights. Frontier: generative and query-based separation, better metrics. Variation 64: the Tune a cappella and as karaoke, separated and true.",
+        handoff="Stems as training material for machines that compose in Part 65; separation by generation, voices and rights "
+                "in Part 66; listening tests and leakage in Part 67; the Variations as stems in Part 68's concert.",
+        outside="Part 2 for spectra; Part 45 for the auditory scene; Part 54 for panning; Part 56 for the session; Part 61 for "
+                "NMF. The short-time Fourier transform, whitening and kurtosis, median filters, multiplicative updates, "
+                "least squares, gradient descent.",
+        objectives={
+            "U": ["Hear stems alone and mixed, centre cancellation, ICA dry and in a room, and the harmonic and percussive halves.",
+                  "Hear separated voices against the oracles, the phase gap, and two estimates with equal SDR and different faults.",
+                  "Explain why one channel needs assumptions, and why a mask's ceiling is set by phase."],
+            "M": ["Separate by panning, FastICA, median filtering, supervised NMF and a mask network; score each by SDR and SI-SDR.",
+                  "Compute the ideal binary and ratio masks and the true-phase bound for a mixture whose stems are known.",
+                  "Recover a phase from a magnitude by Griffin-Lim, and measure its consistency and its error."],
+            "D": ["Test which measures predict listeners' ratings of separations, including generative ones that invent."],
+            "I": ["Keep test material out of training, report SDR with the oracle bounds beside it, and listen as well as measure."],
+        },
+        results=[
+            ("Mask", r"\hat S_j(t, f) = M_j(t, f)\, X(t, f)"),
+            ("Ratio mask", r"M_j = |S_j| \big/ \textstyle\sum_k |S_k|"),
+            ("SDR", r"10\log_{10} \|s\|^2 / \|s - \hat s\|^2"),
+            ("SI-SDR", r"\alpha = \hat s^\top s / \|s\|^2,\ \ 10\log_{10} \|\alpha s\|^2 / \|\hat s - \alpha s\|^2"),
+            ("Griffin-Lim", r"X_{k+1} = |S|\, e^{i\angle \mathrm{STFT}(\mathrm{ISTFT}(X_k))}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 9),
+        D=(11,),
+        I=(8, 10),
+        also=(("Monochord's separators: the STFT, SDR and SI-SDR, panning, FastICA, HPSS, supervised NMF, oracle masks, Griffin-Lim, the mask network", "explainer/music/monochord/mir/separate.py"),),
+    ),
 ]

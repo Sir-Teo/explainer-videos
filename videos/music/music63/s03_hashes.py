@@ -11,6 +11,7 @@ class Hashes(SoundScene):
         self.pairs()
         self.table()
         self.votes()
+        self.scatter()
 
     # ------------------------------------------------------------------
     def pairs(self):
@@ -86,4 +87,42 @@ class Hashes(SoundScene):
                 vo.wait_until(mark)
                 self.play(FadeIn(ln))
         self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def scatter(self):
+        d = load("matches")
+        T = np.array(d["true"])
+        W = np.array(d["wrong"])
+        top = d["track_seconds"]
+        def panel(P, col, center, title):
+            ax = frame_axes(width=4.4, height=3.6, xlo=0, xhi=5, ylo=0, yhi=top, center=center)
+            dots = VGroup(*[Dot(ax.to(p[0], p[1]), radius=0.04, color=col, fill_opacity=0.8) for p in P])
+            xl = label(r"time in the query \ (s)", font_size=13, color=GREY_A).next_to(ax, DOWN, buff=0.12)
+            yl = label(r"time in the clip", font_size=13, color=GREY_A).next_to(ax, LEFT, buff=0.1).rotate(PI / 2)
+            tl = label(title, font_size=16, color=col).next_to(ax, UP, buff=0.15)
+            return ax, dots, VGroup(xl, yl, tl)
+        a_ax, a_d, a_l = panel(T, TUNE, LEFT * 3.3 + DOWN * 0.5, rf"the right clip: \ {len(T)} shared hashes")
+        b_ax, b_d, b_l = panel(W, EAR, RIGHT * 3.3 + DOWN * 0.5, rf"the runner-up: \ {len(W)}")
+        off = d["offset_s"]
+        line = DashedLine(a_ax.to(0, off), a_ax.to(5, off + 5), color=WHITE, stroke_width=2)
+        diffs = np.round(np.array(d["diff_true"]), 1)
+        on = int(np.sum(np.abs(diffs - off) < 0.1))
+        head = label(r"what a match looks like", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
+        with self.voiceover(
+            "Here is what the votes look like, for five seconds of a Variation with the music level with a bar's noise. Each dot is one hash the query shares with a clip: "
+            "its time in the query across, its time in the clip up. <bookmark mark='a'/> For the right clip, "
+            f"{say(on)} of the {say(len(T))} dots fall on one diagonal line, <bookmark mark='b'/> starting "
+            f"{say(off, 0)} seconds into the clip: that line is the offset, and the excerpt's place in the recording. The "
+            "shorter lines above it are the Tune repeating later in the same Variation. <bookmark mark='c'/> For the "
+            f"runner-up, {say(len(W))} dots scatter with no line to speak of. Counting dots on the best line is the whole search."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(a_ax), FadeIn(a_l), FadeIn(b_ax), FadeIn(b_l))
+            vo.wait_until("a")
+            self.play(FadeIn(a_d), run_time=1.0)
+            vo.wait_until("b")
+            self.play(Create(line))
+            vo.wait_until("c")
+            self.play(FadeIn(b_d), run_time=1.0)
+        self.wait(0.6)
         self.clear_scene()

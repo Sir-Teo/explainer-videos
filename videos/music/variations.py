@@ -129,6 +129,8 @@ LEDGER = [
      "measure": r"the follower's chords land a median 96 ms from the voice's beats"},
     {"part": 63, "title": r"three earlier Variations, five noisy seconds each, named", "seconds": 16.6,
      "measure": r"3 of 3 named, against every clip of Parts 1 to 60"},
+    {"part": 64, "title": r"a cappella and karaoke, separated, beside the true stems", "seconds": 47.2,
+     "measure": r"the separated voice 6.9 dB SDR, the karaoke 10.0 dB"},
 ]
 
 

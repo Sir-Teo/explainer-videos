@@ -26,7 +26,12 @@ Items:
     nmfrank     NMF's templates for voice and drums; vocal SDR against the number of templates
     maskimg     the vocals' ideal binary, ideal ratio and network masks as pictures
     glcurve     Griffin-Lim's inconsistency and SDR, iteration by iteration
-    gain        SDR and SI-SDR for a perfect estimate made quieter, louder, inverted, dull or late
+    gain        SDR and SI-SDR for a perfect estimate made quieter, inverted, dull or late (three of them heard)
+    netleak     the same network trained on stretches that repeat or include the test phrases: what a leak is worth
+    meet        the test set heard: each stem alone, then the mixture
+    remix       vocals up 6 dB and drums down 6 dB, from separated stems and from the true ones
+    hpssknob    the percussive half with short and with long median filters, heard
+    truephase   the ideal ratio mask with the mixture's phase and with the vocals' own, heard
 """
 
 from __future__ import annotations
@@ -107,7 +112,7 @@ def compute_hook() -> dict:
     est = S.nmf_separate(x, {"voice": train["vocals"], "piano": tr_piano}, rank=16)
     sep = est["voice"]
     c = concat([C(fade(x)), C(fade(sep / np.max(np.abs(sep)) * 0.9)), C(fade(voice / np.max(np.abs(voice)) * 0.9))], gap=0.8, names=["mix", "first", "second"])
-    return {"sdr": S.sdr(voice, sep), "answer": "second", "starts": {k: float(c.events[k]) for k in ("mix", "first", "second")},
+    return {"sdr": S.sdr(voice, sep), "answer": "first", "starts": {k: float(c.events[k]) for k in ("mix", "first", "second")},
             "clips": {"three": save("hook.three", c, detail="Part 8's voice and Part 38's piano on one track; then the voice separated from it by NMF; then the voice as recorded alone")}}
 
 
@@ -213,11 +218,17 @@ def network():
     if path.exists():
         _N["net"] = torch.load(path, weights_only=False)
         return _N["net"]
+    # the middle phrases only: the Tune's last two phrases repeat its first two, which are the test, so training on
+    # them would be training on the test.  Five transpositions (by resampling, tempo with pitch) give some variety.
     mixes, targets = [], []
-    for ph in ((2, 3), (4, 5), (1, 2), (3, 4)):
-        st = stems(ph)
-        mixes.append(mix(st))
-        targets.append(st["vocals"])
+    st = stems((2, 3))
+    for semis in (-2, -1, 0, 1, 2):
+        f = 2 ** (semis / 12)
+        n = len(st["vocals"])
+        grid = np.arange(0, n - 1, f)
+        sh = {k: np.interp(grid, np.arange(n), v) for k, v in st.items()}
+        mixes.append(mix(sh))
+        targets.append(sh["vocals"])
     _N["net"] = S.mask_net_train(mixes, targets, epochs=20)
     torch.save(_N["net"], path)
     return _N["net"]
@@ -412,11 +423,76 @@ def compute_gain() -> dict:
             "starts": {k: float(c.events[k]) for k in ("true", "dull", "late")},
             "clips": {"three": save("gain.three", c, detail="the session's vocals as recorded; low-passed at 2 kHz; and a millisecond late")}}
 
+def compute_netleak() -> dict:
+    """The same network trained the wrong way: on stretches that include the Tune's last two phrases, which repeat the
+    first two (the test), and one that includes the second test phrase itself.  What a leak is worth."""
+    mixes, targets = [], []
+    for ph in ((2, 3), (4, 5), (1, 2), (3, 4)):
+        st = stems(ph)
+        mixes.append(mix(st))
+        targets.append(st["vocals"])
+    fit = S.mask_net_train(mixes, targets, epochs=20)
+    st = stems((0, 1))
+    v = S.mask_net_apply(fit, mix(st))
+    return {"sdr": S.sdr(st["vocals"], v), "honest": load("net")["sdr"]}
+
+
+def compute_meet() -> dict:
+    """The test set heard: each stem of the session's first two phrases alone, then the mixture."""
+    st = stems((0, 1))
+    n = int(4.0 * SR)
+    segs = [C(fade(st[k][:n] / np.max(np.abs(st[k][:n])) * 0.9)) for k in STEMS] + [C(fade(mix(st)[:n] / np.max(np.abs(mix(st)[:n])) * 0.9))]
+    c = concat(segs, gap=0.5, names=list(STEMS) + ["mix"])
+    share = {k: float(np.sum(st[k] ** 2) / np.sum(mix(st) ** 2)) for k in STEMS}
+    return {"starts": {k: float(c.events[k]) for k in list(STEMS) + ["mix"]}, "energy_share": share,
+            "clips": {"five": save("meet.five", c, detail="Part 56's session, four seconds of each stem alone (vocals, bass, drums, other), then all four mixed")}}
+
+
+def compute_remix() -> dict:
+    """A remix from separated stems: the vocals turned up 6 dB and the drums down 6 dB, from the network's vocal and the
+    median filter's drums, against the same remix from the true stems."""
+    st = stems((0, 1))
+    x = mix(st)
+    v = S.mask_net_apply(network(), x)
+    r = S.hpss(x - v, harm=63, perc=63)
+    up, down = 10 ** (6 / 20), 10 ** (-6 / 20)
+    est = x + (up - 1) * v + (down - 1) * r["percussive"]
+    true = x + (up - 1) * st["vocals"] + (down - 1) * st["drums"]
+    g = 0.9 / max(np.max(np.abs(est)), np.max(np.abs(true)))
+    c = concat([C(fade(x * 0.9 / np.max(np.abs(x)))), C(fade(est * g)), C(fade(true * g))], gap=0.8, names=["mix", "separated", "true"])
+    return {"sdr_remix": S.sdr(true, est), "sdr_mix": S.sdr(true, x), "starts": {k: float(c.events[k]) for k in ("mix", "separated", "true")},
+            "clips": {"three": save("remix.three", c, detail="the session as mixed; then remixed with the vocals 6 dB up and the drums 6 dB down from separated stems; then the same remix from the true stems")}}
+
+
+def compute_hpssknob() -> dict:
+    """The percussive half with short and with long median filters, heard."""
+    st = stems((0, 1))
+    x = mix(st)
+    a, b = S.hpss(x, harm=5, perc=5), S.hpss(x, harm=63, perc=63)
+    n = lambda y: y / np.max(np.abs(y)) * 0.9
+    c = concat([C(fade(n(a["percussive"]))), C(fade(n(b["percussive"])))], gap=0.8, names=["short", "long"])
+    return {"sdr_short": S.sdr(st["drums"], a["percussive"]), "sdr_long": S.sdr(st["drums"], b["percussive"]),
+            "starts": {k: float(c.events[k]) for k in ("short", "long")},
+            "clips": {"two": save("hpssknob.two", c, detail="the session's percussive half by median filtering with 5-point filters, then with 63-point filters")}}
+
+
+def compute_truephase() -> dict:
+    """The vocals' ideal ratio mask with the mixture's phase, then with the vocals' own: the phase gap, heard."""
+    st = stems((0, 1))
+    o = S.oracle_masks(st)
+    n = lambda y: y / np.max(np.abs(y)) * 0.9
+    c = concat([C(fade(n(o["irm"]["vocals"]))), C(fade(n(o["true_phase"]["vocals"])))], gap=0.8, names=["mixphase", "truephase"])
+    return {"sdr_mix": S.sdr(st["vocals"], o["irm"]["vocals"]), "sdr_true": S.sdr(st["vocals"], o["true_phase"]["vocals"]),
+            "starts": {k: float(c.events[k]) for k in ("mixphase", "truephase")},
+            "clips": {"two": save("truephase.two", c, detail="the session's vocals through the ideal ratio mask with the mixture's phase, then with the vocals' own phase")}}
+
+
 
 ITEMS = {"hook": compute_hook, "pan": compute_pan, "ica": compute_ica, "hpss": compute_hpss, "nmf": compute_nmf, "oracle": compute_oracle,
          "phase": compute_phase, "net": compute_net, "metrics": compute_metrics, "tune64": compute_tune64, "variation": compute_variation,
          "panmap": compute_panmap, "icascatter": compute_icascatter, "hpsssweep": compute_hpsssweep, "nmfrank": compute_nmfrank,
-         "maskimg": compute_maskimg, "glcurve": compute_glcurve, "gain": compute_gain}
+         "maskimg": compute_maskimg, "glcurve": compute_glcurve, "gain": compute_gain, "netleak": compute_netleak,
+         "meet": compute_meet, "remix": compute_remix, "hpssknob": compute_hpssknob, "truephase": compute_truephase}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

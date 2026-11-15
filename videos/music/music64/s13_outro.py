@@ -65,14 +65,15 @@ class Outro(SoundScene):
             r"median filters split harmonic from percussive; \ NMF uses each source's templates",
             r"masks have ceilings: \ the ideal binary and ratio masks",
             r"the mixture's phase is the error no mask removes",
-            r"a small network beats NMF; \ SDR cannot tell leakage from artifacts",
+            r"a network needs data, \ and a leaked test flatters it; \ SDR is not the ear",
         ], title=r"What we found", font_size=20).move_to(DOWN * 0.1)
         with self.voiceover(
             "What did we find? With one channel and many sources, separation needs assumptions. <bookmark mark='a'/> Panning "
             "and centre cancellation work in stereo; ICA is perfect on a dry mix and lost in a room. <bookmark mark='b'/> Median "
             "filters split harmonic from percussive, and NMF uses each source's own templates. <bookmark mark='c'/> Masks have "
             "ceilings, the ideal binary and ratio masks. <bookmark mark='d'/> The mixture's phase is the error no mask removes. "
-            "<bookmark mark='e'/> And a small network does better than NMF, while SDR cannot tell leakage from artifacts."
+            "<bookmark mark='e'/> A network is only as good as its data, and a test that shares the training data flatters it. And "
+            "SDR is not the ear: it cannot tell leakage from artifacts."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

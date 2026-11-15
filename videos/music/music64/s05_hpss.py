@@ -12,6 +12,7 @@ class Hpss(SoundScene):
         self.mask()
         self.heard()
         self.sweep()
+        self.knob()
 
     # ------------------------------------------------------------------
     def idea(self):
@@ -96,4 +97,27 @@ class Hpss(SoundScene):
             vo.wait_until("b")
             self.play(Create(lines_[2]), Create(lines_[3]), run_time=1.2)
         self.wait(0.6)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def knob(self):
+        d = load("hpssknob")
+        c = clip("hpssknob.two")
+        boxes = choice_boxes([r"5-point filters", r"63-point filters"], width=3.6, height=0.9, buff=1.0, size=19).move_to(UP * 0.5)
+        res = label(rf"the drums: \ {d['sdr_short']:.1f} dB with short filters, \ {d['sdr_long']:.1f} dB with long ones", font_size=18, color=TUNE).next_to(boxes, DOWN, buff=0.6)
+        head = label(r"the knob, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        with self.voiceover("Hear the percussive half with the shortest filters, then the longest."):
+            self.play(FadeIn(head), FadeIn(boxes))
+        st = d["starts"]
+        with self.listen(c) as snd:
+            window(snd, r"short, \ then long", kind="physical model", detail=r"Part 56's session", corner=DL, tag_corner=DR)
+            pulse(snd, boxes[0], st["short"], st["long"] - 0.4, buff=0.08)
+            pulse(snd, boxes[1], st["long"], c.duration, buff=0.08)
+        with self.voiceover(
+            "With short filters, the voice and the piano bleed into the drums: a five-frame median cannot tell a note from a "
+            "hit. With long ones, the drums are drier and the tones mostly gone, though the hi-hat's hiss and the piano's "
+            "attacks remain."
+        ):
+            self.play(FadeIn(res))
+        self.wait(0.4)
         self.clear_scene()

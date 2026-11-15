@@ -266,6 +266,8 @@ def mix(placed, sr: int = SR, duration: float | None = None) -> Clip:
                 y = np.stack([c.mono * 10 ** (g / 20) * np.cos(th), c.mono * 10 ** (g / 20) * np.sin(th)], axis=1)
             elif c.channels == 1:
                 y = np.repeat(y[:, None], 2, axis=1) * np.sqrt(0.5)
+        if a < 0:                                     # a start before zero: drop what falls before the clip
+            y, a = y[-a:], 0
         b = min(a + len(y), n)
         if b > a:
             out[a:b] += y[: b - a]

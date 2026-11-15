@@ -724,4 +724,70 @@
       note: "With no exploration the first songs to be played are shown to everyone, played more, and shown again: a few songs take almost everything, whatever listeners' tastes. Explore a little and other songs get the chance to be found."
     });
   };
+
+  // Part 64: masks on a spectrogram -------------------------------------------------------------------------------
+  function maskWorld(v) {
+    // a voice (a comb of harmonics gliding over a few notes) and drums (broadband hits), as magnitudes on a
+    // 48-frame by 40-bin grid, each bin with its own random phase; the mixture is their complex sum
+    var T = 48, F = 40, seed = 7, rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    var notes = [6, 6, 8, 9, 8, 6, 5, 6], A = [], B = [], X = [];
+    for (var t = 0; t < T; t++) {
+      var f0 = notes[Math.floor(t / 6)], hit = (t % 6 === 0) ? 1 : (t % 6 === 1 ? 0.45 : 0.06);
+      for (var f = 0; f < F; f++) {
+        var a = 0;
+        for (var h = 1; h * f0 < F + 2; h++) a += Math.exp(-Math.pow(f - h * f0, 2) / 0.5) * Math.pow(0.8, h - 1);
+        var b = v.drums * hit * (0.6 + 0.4 * rnd()) * Math.exp(-f / 30);
+        var pa = 2 * Math.PI * rnd(), pb = 2 * Math.PI * rnd();
+        A.push([a * Math.cos(pa), a * Math.sin(pa)]); B.push([b * Math.cos(pb), b * Math.sin(pb)]);
+        X.push([A[A.length - 1][0] + B[B.length - 1][0], A[A.length - 1][1] + B[B.length - 1][1]]);
+      }
+    }
+    var mag = function (z) { return Math.sqrt(z[0] * z[0] + z[1] * z[1]); };
+    var M = [], num = 0, den = 0, den0 = 0;
+    for (var i = 0; i < X.length; i++) {
+      var ma = Math.pow(mag(A[i]), v.power), mb = Math.pow(mag(B[i]), v.power);
+      var m = ma / (ma + mb + 1e-12);
+      m = Math.min(1, Math.max(0, m + v.noise * (rnd() - 0.5) * 2));
+      M.push(m);
+      var e = [A[i][0] - m * X[i][0], A[i][1] - m * X[i][1]];
+      num += mag(A[i]) * mag(A[i]); den += e[0] * e[0] + e[1] * e[1];
+      var e0 = [A[i][0] - X[i][0], A[i][1] - X[i][1]]; den0 += e0[0] * e0[0] + e0[1] * e0[1];
+    }
+    return { T: T, F: F, X: X.map(mag), M: M, sdr: 10 * Math.log10(num / den), sdr0: 10 * Math.log10(num / den0) };
+  }
+  function heat(a, vals, T, F, lo, hi, gold) {
+    a.clip(function (c) {
+      var w = a.w / T, h = a.h / F;
+      for (var t = 0; t < T; t++) for (var f = 0; f < F; f++) {
+        var z = Math.max(0, Math.min(1, (vals[t * F + f] - lo) / (hi - lo)));
+        c.fillStyle = gold ? "rgba(214,170,60," + z.toFixed(3) + ")" : "rgba(235,235,240," + z.toFixed(3) + ")";
+        c.fillRect(a.x0 + t * w, a.y0 + a.h - (f + 1) * h, w + 0.5, h + 0.5);
+      }
+    });
+  }
+  W.mask = function (el) {
+    QB.widget(el, {
+      title: "Masks on a spectrogram",
+      sub: "A voice (a comb of harmonics over eight notes) and drum hits, as magnitudes in time-frequency bins, each bin with its own phase. The mask shares every bin of the mixture between them: power 1 shares in proportion to the true magnitudes, higher powers decide more sharply, and very high powers give the ideal binary mask. Add mask error to see what an imperfect separator does. The score is the voice's SDR, computed bin by bin.",
+      panels: 2, height: 230,
+      controls: [{ k: "power", label: "Mask power", min: 0.5, max: 12, step: 0.5, value: 1, fmt: function (x) { return x.toFixed(1); } },
+                 { k: "noise", label: "Mask error", min: 0, max: 0.6, step: 0.02, value: 0, fmt: function (x) { return "± " + x.toFixed(2); } },
+                 { k: "drums", label: "Drums level", min: 0.2, max: 3, step: 0.1, value: 1, fmt: function (x) { return x.toFixed(1) + "×"; } }],
+      draw: function (gr, v) {
+        var r = maskWorld(v), mx = 0;
+        r.X.forEach(function (x) { mx = Math.max(mx, x); });
+        var lg = r.X.map(function (x) { return Math.log10(x + 1e-3); });
+        var a = gr[0].axes({ x: [0, r.T], y: [0, r.F], title: "the mixture's magnitudes", xlabel: "frame" });
+        heat(a, lg, r.T, r.F, Math.log10(mx) - 2.5, Math.log10(mx), false);
+        var b = gr[1].axes({ x: [0, r.T], y: [0, r.F], title: "the voice's mask (gold = 1)", xlabel: "frame" });
+        heat(b, r.M, r.T, r.F, 0, 1, true);
+      },
+      readout: function (v) {
+        var r = maskWorld(v);
+        return [["the voice's SDR with this mask", r.sdr.toFixed(1) + " dB"],
+                ["doing nothing (the mixture itself)", r.sdr0.toFixed(1) + " dB"]];
+      },
+      note: "Even a perfect mask cannot reach infinity: where voice and drums share a bin, the mixture's phase is neither's, and scaling it cannot undo that. Here power 2, which shares each bin by energy (the Wiener mask), scores best; power 1 is close behind, and very sharp masks, near the binary mask, lose a decibel or more. Which wins depends on the music: when one source dominates its bins, as drum hits do, sharp masks lose little."
+    });
+  };
 })();

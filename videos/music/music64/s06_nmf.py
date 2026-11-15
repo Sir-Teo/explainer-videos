@@ -116,16 +116,16 @@ class Nmf(SoundScene):
         yl = label(r"SDR \ (dB)", font_size=14, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         key = VGroup(label(r"vocals", font_size=16, color=TUNE), label(r"piano and guitar", font_size=16, color=GREY_B)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_edge(RIGHT, buff=0.6)
         head = label(r"how many templates?", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
-        i = int(np.argmax(v))
         with self.voiceover(
             "How many templates should each source get? <bookmark mark='a'/> With one, each source is a single fixed "
-            f"spectrum, and the vocals score {say(v[0], 1)} decibels. More templates describe more of a source, "
-            f"up to {say(v[i], 1)} decibels at {int(r[i])}. <bookmark mark='b'/> But templates that describe everything also "
-            "describe the other sources: a voice's templates start to explain the guitar. The best number is a compromise, "
-            "found on examples."
+            f"spectrum, and the vocals score {say(v[0], 1)} decibels. Three templates give {say(v[1], 1)}, six "
+            f"{say(v[2], 1)}. <bookmark mark='b'/> Then the curve flattens: from six to twenty-four, four times the work, the "
+            f"vocals gain only {say(v[-1] - v[2], 1)} of a decibel. Pushed further, a source's templates start to describe the "
+            "other sources too. The number is a compromise, tuned on examples."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(ticks), FadeIn(xl), FadeIn(yl), FadeIn(key))
             vo.wait_until("a")
             self.play(Create(cv), run_time=1.6)
+            vo.wait_until("b")
         self.wait(0.6)
         self.clear_scene()
