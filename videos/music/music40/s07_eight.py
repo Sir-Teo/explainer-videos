@@ -36,7 +36,7 @@ class Eight(SoundScene):
     # ------------------------------------------------------------------
     def kick(self):
         d = load("eight")
-        x0, W = -5.6, 5.6
+        x0, W = -6.4, 6.0
         t = np.linspace(0, 0.5, 400)
         f0 = 52.0
         freq = f0 * (1 + 0.6 * np.exp(-t / 0.02))
@@ -47,12 +47,13 @@ class Eight(SoundScene):
         fl = VMobject(color=EAR, stroke_width=3).set_points_as_corners([[x0 + W * tt / 0.5, -2.0 + 0.012 * (fr - 40), 0] for tt, fr in zip(t, freq)])
         fax = Line([x0, -2.0, 0], [x0 + W, -2.0, 0], color=GREY_D)
         labs = VGroup(label(r"the kick: \ a damped sine", font_size=18, color=TUNE).move_to([x0 + 1.4, 2.2, 0]),
-                      label(r"its frequency: \ 81 Hz at the strike, \ 52 Hz within 20 ms", font_size=18, color=EAR).move_to([x0 + 2.2, -0.6, 0]),
+                      label(r"its frequency: \ 81 Hz at the strike, \ 52 Hz within 20 ms", font_size=18, color=EAR).move_to([x0 + 2.6, -1.05, 0]),
                       label(r"0.5 s", font_size=15, color=GREY_A).move_to([x0 + W, 0.3, 0]))
         side = VGroup(label(r"the 808's bass drum: \ a resonant network \ (bridged-T) \ struck by a pulse", font_size=19, color=WHITE),
                       label(r"a struck resonator rings at its own frequency and dies away: \ Part 1's string, \ one mode", font_size=19, color=WHITE),
                       label(r"the strike briefly detunes it: \ a fast downward sweep, \ heard as punch", font_size=19, color=TUNE),
-                      label(rf"model: \ {d['pitch']:.1f} Hz measured, \ a decay knob, \ a 1 ms click", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 3.4)
+                      label(rf"model: \ {d['pitch']:.1f} Hz measured, \ a decay knob, \ a 1 ms click", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
+        side.scale_to_fit_width(min(side.width, 6.3)).move_to(RIGHT * 3.45)
         head = label(r"a kick from first principles", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "The 808's bass drum is a resonant network, a bridged-T filter, struck by an electrical pulse. "
@@ -120,15 +121,15 @@ class Eight(SoundScene):
         x0, W = -5.8, 11.0
         fmax = 4000.0
         ax = Line([x0, -1.5, 0], [x0 + W, -1.5, 0], color=GREY_B)
-        bars = VGroup()
+        bars, funds = VGroup(), VGroup()
         for f in hz:
             for k in (1, 3, 5):
                 fk = f * k
                 if fk > fmax:
                     continue
                 h = 2.2 / k
-                bars.add(Line([x0 + W * fk / fmax, -1.5, 0], [x0 + W * fk / fmax, -1.5 + h, 0], color=TUNE if k == 1 else BLUE, stroke_width=4 if k == 1 else 2))
-        labs = VGroup(*[label(f"{f:g}", font_size=14, color=TUNE).move_to([x0 + W * f / fmax, -1.8, 0]) for f in hz])
+                (funds if k == 1 else bars).add(Line([x0 + W * fk / fmax, -1.5, 0], [x0 + W * fk / fmax, -1.5 + h, 0], color=TUNE if k == 1 else BLUE, stroke_width=4 if k == 1 else 2))
+        labs = VGroup(*[label(f"{f:g} Hz", font_size=14, color=TUNE).move_to([x0 + W * f / fmax + 0.35, 0.95 + 0.3 * (i % 3), 0], aligned_edge=LEFT) for i, f in enumerate(hz)])
         tick = VGroup(*[label(f"{f} Hz", font_size=14, color=GREY_A).move_to([x0 + W * f / fmax, -2.2, 0]) for f in (1000, 2000, 3000, 4000)])
         side = label(r"six square waves at fixed, \ unrelated frequencies: \ their odd harmonics crowd into a metallic cluster; \ a high-pass filter keeps the top", font_size=19, color=WHITE).to_edge(UP, buff=1.0)
         head = label(r"the 808's hi-hat: \ six oscillators", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
@@ -140,7 +141,7 @@ class Eight(SoundScene):
             "inharmonic cluster, like Part 9's cymbal; a high-pass filter keeps only the top, and an envelope makes it a "
             "closed hat or an open one."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax), FadeIn(tick), FadeIn(labs))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(tick), FadeIn(funds), FadeIn(labs))
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(b) for b in bars], lag_ratio=0.05), FadeIn(side))
         self.wait(0.4)
