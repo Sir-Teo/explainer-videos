@@ -101,7 +101,8 @@ class Beats(SoundScene):
             pulse(snd, VGroup(ax, bars), 0.0, c.duration, rate=5.0, color=GREY_B, buff=0.1)
         best = max(r["rows"], key=lambda z: z["f"])
         with self.voiceover(
-            "With one period for the whole piece, the tracker drifts against the performer. <bookmark mark='a'/> A strict "
+            f"The tracker even misjudges the tempo, {say(r['bpm'])} a minute against a true average of {say(60 / np.mean(ibi))}, "
+            "and with one period for the whole piece it drifts against the performer. <bookmark mark='a'/> A strict "
             "period loses the held notes; a loose one wanders after every ornament. The best setting here reaches an F-measure "
             f"of {say(best['f'], 2)}. Expressive timing is where beat trackers still fail, and why accompaniment systems follow "
             "the score instead, as Chapter 8 does."

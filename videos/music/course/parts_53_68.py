@@ -257,4 +257,36 @@ PARTS = [
         I=(2, 4, 5),
         also=(("Monochord's business module: waterfalls, recoupment, pro-rata and user-centric pools, a social-influence market, the cost disease, ticket pricing, melody collisions", "explainer/music/monochord/business.py"),),
     ),
+    Part(
+        n=62, level="U", widget="tempo", prereq=(9, 18, 21, 43, 61),
+        question="How does a machine find the beat, the chords and the form of a song, and follow a singer live?",
+        story="An ear question hears the session with a click track 80 ms late and one on the beat. People entrain and predict, and prefer tempos near 120; the listeners these methods power. Novelty: spectral flux with its local mean removed, the drums alone against the band, other novelty functions and kinds of accent, and an autocorrelation tempogram bright at 100, 200 and 50 beats a minute. Tempo: the autocorrelation times a prior near 120 finds 100 on the session; a slow piece written at 50 is read at 100 with the prior and 50 without, heard with both click tracks; tempo in real performances. Beats: forty years of trackers; Ellis's dynamic programme, F 0.94 on the session; on a rubato piano performance the tracker misjudges the tempo (125 against 106) and reaches only 0.58; scoring at several levels. Downbeats: an ear question on where bar lines fall; the low band marks beats one and three but cannot say which is first; other meters. Chroma: folding octaves, the Tune's chroma heard, its relatives and uses, chord templates. Chords: templates frame by frame 44 per cent, an HMM 51, an HMM with Bach's transitions 76; the confusions run a fifth up (C as G, G as D), from each note's third partial. Time warping: a strict and a rubato performance heard and aligned (median 13 ms offline and online), the path read as a tempo curve, its origins in speech. Following: computer accompaniment since 1984; Monochord's follower tracking a freely sung Tune, its chords a median 96 ms from the voice; what human accompanists do. Structure: the whole Tune's self-similarity heard; Foote's novelty misses the sections because nothing in the texture changes; repetition finds a b c c a b, A B A, where mean chroma cannot; song forms. Covers: an ear question (which is not the Tune?), key-invariant DTW finding the transposition of five semitones; covers in the wild; how far annotators agree. Frontier: whose meter, joint models, listening live; a research problem on predictive accompaniment. Variation 62: the Tune sung freely and accompanied twice, deaf and listening.",
+        handoff="Beat-matched playlists and fingerprints in Part 63; beats and chords guiding separation in Part 64; "
+                "bars, chords and form as structure for machines that compose in Part 65; annotators and their "
+                "disagreements in Part 67; an accompanist that listens, in the concert of Part 68.",
+        outside="Part 9 for meter and the grid; Part 15 for keys; Part 18 for the chorales' chord transitions; Part 21 for "
+                "form and self-similarity; Part 43 for expressive timing; Part 61 for spectral flux. Autocorrelation, "
+                "dynamic programming, hidden Markov models and the Viterbi algorithm, cosine similarity.",
+        objectives={
+            "U": ["Hear a click track 80 ms late against one on the beat, and the drums alone against the whole band.",
+                  "Hear a tracker's clicks on a steady band and on rubato, a slow piece at two tempos, and where bar lines fall.",
+                  "Hear a strict and a rubato performance aligned, a cover in another key, and a singer accompanied live."],
+            "M": ["Compute novelty, the autocorrelation tempogram and a prior-weighted tempo; track beats by dynamic programming.",
+                  "Recognize chords from chroma by templates and by an HMM with a transition prior, decoded by Viterbi.",
+                  "Align performances by offline and online DTW, and find form from novelty and from repetition."],
+            "D": ["Build a predictive follower and measure how close to a human accompanist it can play, and where it fails."],
+            "I": ["Report tempo with its octave in doubt, score beats at the right and at any sensible level, fit a prior to the music."],
+        },
+        results=[
+            ("Ellis's DP", r"C(t) = O(t) + \max_\tau\big[C(\tau) - \alpha\log^2\tfrac{t - \tau}{P}\big]"),
+            ("Tempo prior", r"\hat T = \arg\max_T\ \mathrm{AC}(T)\,\exp\!\big(-\tfrac12 (\log_2 T/120)^2/\sigma^2\big)"),
+            ("Viterbi", r"\delta_t(j) = \max_i \delta_{t-1}(i)\,A_{ij}\,b_j(x_t)"),
+            ("DTW", r"D(i, j) = c(i, j) + \min\{D(i{-}1, j{-}1), D(i{-}1, j), D(i, j{-}1)\}"),
+            ("Foote", r"N(t) = \sum_{a,b} K(a, b)\,S(t + a, t + b)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, 9, 10),
+        D=(11,),
+        I=(6, 8),
+        also=(("Monochord's rhythm listeners: novelty, tempo, beat tracking, chroma, chord HMMs, DTW and online following, self-similarity and repetition", "explainer/music/monochord/mir/rhythm.py"),),
+    ),
 ]

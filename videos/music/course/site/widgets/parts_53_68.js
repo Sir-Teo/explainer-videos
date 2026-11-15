@@ -579,4 +579,76 @@
       note: "Remove the fundamental: the dip stays where it was, because the wave still repeats at the same period, and you still hear the same pitch. Lower the signal to noise below about 0 dB and the dips fill in; when none falls under the threshold, YIN takes the deepest one, often at twice the period: an octave error."
     });
   };
+
+  // ---- Part 62: tempo and its octave --------------------------------------------------------------------------------
+  function tempoPattern(v) {
+    // onsets (seconds, strength) of a drum pattern: beats, and off-beats of adjustable strength and swing
+    var beat = 60 / v.bpm, out = [];
+    for (var k = 0; k * beat < 8; k++) {
+      out.push([k * beat, k % 2 === 0 ? 1.0 : 0.8]);
+      if (v.off > 0.01) out.push([(k + v.swing) * beat, v.off]);
+    }
+    return out;
+  }
+  function tempoCurve(v) {
+    // the autocorrelation of an impulse train with those strengths, at lags from 0.2 to 2 s, times a log-Gaussian prior
+    var ons = tempoPattern(v), lags = [], ac = [], w = [], best = 0, bestBpm = 0, top = 0;
+    for (var bpm = 30; bpm <= 300; bpm += 1) {
+      var lag = 60 / bpm, a = 0;
+      for (var i = 0; i < ons.length; i++) for (var j = 0; j < ons.length; j++) {
+        var d = ons[j][0] - ons[i][0] - lag;
+        a += ons[i][1] * ons[j][1] * Math.exp(-0.5 * (d / 0.012) * (d / 0.012));
+      }
+      var pr = Math.exp(-0.5 * Math.pow(Math.log(bpm / v.prior) / Math.LN2 / v.width, 2));
+      lags.push(Math.log(bpm) / Math.LN2); ac.push(a); w.push(a * pr);
+      top = Math.max(top, a);
+      if (a * pr > best) { best = a * pr; bestBpm = bpm; }
+    }
+    return { x: lags, ac: ac, w: w, top: top, bpm: bestBpm };
+  }
+  function tempoSound(v, found) {
+    var sr = 44100, n = Math.round(8 * sr), y = new Float32Array(n), s = 3;
+    function rnd() { s = (s * 16807) % 2147483647; return s / 2147483647 * 2 - 1; }
+    tempoPattern(v).forEach(function (o) {
+      var i0 = Math.round(o[0] * sr), len = Math.round(0.05 * sr);
+      for (var i = 0; i < len && i0 + i < n; i++) y[i0 + i] += 0.45 * o[1] * rnd() * Math.exp(-i / (0.012 * sr));
+    });
+    for (var t = 0; t < 8; t += 60 / found) {
+      var k0 = Math.round(t * sr), m = Math.round(0.02 * sr);
+      for (var q = 0; q < m && k0 + q < n; q++) y[k0 + q] += 0.3 * Math.sin(2 * Math.PI * 2000 * q / sr) * Math.exp(-q / (0.004 * sr));
+    }
+    return y;
+  }
+
+  W.tempo = function (el) {
+    QB.widget(el, {
+      title: "Tempo, and its octave",
+      sub: "A drum pattern: a hit on every beat and, if you like, off-beats between them. The grey curve is how strongly the pattern repeats at each tempo (its autocorrelation); the gold curve is that times a prior, centred where you choose, which is how a tracker picks one tempo out of the hierarchy. Play the pattern with clicks at the tempo found.",
+      panels: 1, height: 230,
+      controls: [{ k: "bpm", label: "The beat", min: 50, max: 180, step: 1, value: 96, fmt: function (x) { return x.toFixed(0) + " a minute"; } },
+                 { k: "off", label: "Off-beats", min: 0, max: 1, step: 0.05, value: 0.4, fmt: function (x) { return x.toFixed(2); } },
+                 { k: "swing", label: "Where the off-beat falls", min: 0.5, max: 0.75, step: 0.01, value: 0.5, fmt: function (x) { return (100 * x).toFixed(0) + " % of the beat"; } },
+                 { k: "prior", label: "The prior's centre", min: 60, max: 200, step: 1, value: 120, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "width", label: "The prior's width", min: 0.2, max: 3, step: 0.05, value: 1, fmt: function (x) { return x.toFixed(2) + " octaves"; } }],
+      buttons: [{ label: "Play with the tracker's clicks", act: function (s) { s.sound = play(tempoSound(s.v, tempoCurve(s.v).bpm), 44100); } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var r = tempoCurve(v), wtop = 0;
+        for (var i = 0; i < r.w.length; i++) wtop = Math.max(wtop, r.w[i]);
+        var a = gr[0].axes({ x: [Math.log(30) / Math.LN2, Math.log(300) / Math.LN2], y: [0, 1.05], title: "Repetition at each tempo (grey), weighted by the prior (gold)", xlabel: "log2 of beats a minute" });
+        a.line(r.x, r.ac.map(function (z) { return z / r.top; }), { color: "#8A93A0", width: 1.5 });
+        a.line(r.x, r.w.map(function (z) { return z / wtop; }), { color: C.idea, width: 2.5 });
+        var xb = Math.log(r.bpm) / Math.LN2;
+        a.line([xb, xb], [0, 1.05], { color: "#6FA8DC", width: 1.5 });
+      },
+      readout: function (v, s) {
+        var r = tempoCurve(v), ratio = r.bpm / v.bpm;
+        var what = Math.abs(ratio - 1) < 0.04 ? "the beat" : (Math.abs(ratio - 2) < 0.08 ? "double time" : (Math.abs(ratio - 0.5) < 0.04 ? "half time" : "another level"));
+        return [["tempo found", r.bpm.toFixed(0) + " a minute"], ["relative to the beat", what],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Strengthen the off-beats and the pattern repeats as strongly at twice the tempo; then the prior decides, and near 120 it often chooses double time for a slow beat. Move the off-beat late (swing) and double time stops fitting, because the off-beats are no longer halfway."
+    });
+  };
 })();

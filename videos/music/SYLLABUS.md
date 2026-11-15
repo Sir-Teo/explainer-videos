@@ -2286,13 +2286,30 @@ renders, scored on a timbre they never heard.
 *Story:* A child can clap along; a program could not do it reliably for decades, and still taps at half or
 double speed. The part builds the listeners that make DJ software, practice apps and accompaniment systems work,
 ending with an accompanist that follows a soloist's rubato.
+1. Hook: an ear question (which click track is on the beat?); how people hear the beat; clapping along; what these listeners run; the plan.
+2. Where the beats might be: what to listen for; the novelty curve; drums and band, heard; other novelty curves; accents; a tempogram.
+3. Tempo, and its octave: choosing one tempo with a prior; a slow piece at two tempos, heard; tempo in real performances; which level.
+4. Tracking the beat: Ellis's dynamic programme; forty years of trackers; the session and a rubato performance tracked, heard; scoring.
+5. Bars and downbeats: an ear question (where do the bars start?); a clue in the bass; other meters; cues.
+6. Chroma: folding octaves; relatives; the Tune's chroma, heard; templates; uses.
+7. Recognizing chords: an HMM and Viterbi; three recognizers compared; confusions a fifth up; what a prior does.
+8. Time warping: one score, two timings, heard; DTW offline and online; a tempo curve from the path; origins; uses.
+9. Following a soloist: computer accompaniment; Monochord's accompanist; the follower following; human accompanists; asynchrony.
+10. Structure: self-similarity, heard; Foote's novelty; repetition (A B A); forms; structure in practice.
+11. Covers, and how far people agree: an ear question (which is not the Tune?); key-invariant matching; covers in the wild; annotator agreement.
+12. Frontier: whose meter; joint models; listening live; the research problem.
+13. Variation 62: the Tune sung freely and accompanied, deaf and listening. Outro: problems, payoffs.
+
 *Covers:* novelty curves and tempograms; beat tracking by dynamic programming; downbeats; time warping and score
 following; chroma; chord recognition with a hidden Markov model (Part 18's matrix as the prior); structure by
-spectral clustering; cover-song detection; annotator disagreement as a ceiling.
-*Built and computed:* a beat tracker scored on performances with known beats; an aligner's error in
-milliseconds; chord recognition with and without the prior; structure boundaries on Variation 21.
-*Variation 62:* Variation 40 heard by the machine, then Variation 43 accompanied live.
-*Frontier:* expressive and non-Western meter; joint models **(verify)**.
+self-similarity and repetition; cover-song detection; annotator disagreement as a ceiling.
+*Built and computed:* `monochord/mir/rhythm.py`: tempo with a prior (100 found on the session; a slow piece at 50
+read at 100); Ellis's beat tracker (F 0.94 on the session, 0.58 at best on rubato); chords by templates, an HMM and
+an HMM with Bach's transitions (44, 51 and 76 % of frames); DTW alignment (median 13 ms offline and online) and a
+live accompanist (a median 96 ms behind the voice); structure from repetition (A B A) where novelty fails;
+key-invariant cover matching.
+*Variation 62:* the Tune sung freely, accompanied by a piano that ignores the singer, then by one that listens.
+*Frontier:* expressive and non-Western meter; joint models; live, on-device listening **(verify)**.
 *Reading:* Müller; Ellis (2007); McFee & Ellis (2014); Dannenberg & Raphael (2006).
 
 ### Part 63 · Finding Music (~55)

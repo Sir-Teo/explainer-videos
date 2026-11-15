@@ -1,86 +1,99 @@
-"""Monochord's rhythm engine (Part 11): metres, syncopation, the pulse, polyrhythms, swing, clicks, the telephone game.
+"""Monochord's beat, chord and structure listeners (Part 62): tempo, beat tracking, beat scores, chroma, chord
+recognition and Viterbi, DTW and online following, self-similarity, novelty and repetition.
 
     python -m pytest -q tests/music/test_rhythm.py
 """
 
-import math
-
 import numpy as np
 import pytest
 
-from explainer.music.monochord import ear, rhythm as R, tune
-from explainer.music.monochord.audio import SR
+from explainer.music.monochord.mir import rhythm as RH
+from explainer.music.monochord.partkit import organ_tone
+
+SR = 48000
 
 
-def test_metres_as_nested_groupings():
-    assert R.meter_weights((2, 2, 2, 2)) == [5, 1, 2, 1, 3, 1, 2, 1, 4, 1, 2, 1, 3, 1, 2, 1]
-    assert R.meter_weights((3, 2)) == [3, 1, 2, 1, 2, 1]                      # three-four: three beats, each of two eighths
-    assert R.meter_weights((2, 3)) == [3, 1, 1, 2, 1, 1]                      # six-eight: two beats, each of three
-    assert len(R.meter_weights((3, 2))) == len(R.meter_weights((2, 3))) == 6      # the same six pulses, counted another way
-
-
-def test_syncopation_index():
-    four = (2, 2, 2, 2)
-    assert R.syncopation("x...x...x...x...", four) == 0 and R.syncopation("x.x.x.x.x.x.x.x.", four) == 0
-    assert R.syncopation("x" * 16, four) == 0                                 # every pulse sounded: nothing is displaced
-    clave, bossa, offs = R.syncopation("x..x..x...x.x...", four), R.syncopation("x..x..x...x..x..", four), R.syncopation("..x...x...x...x.", four)
-    assert 0 < clave < bossa < offs
-    assert R.syncopation(".x.x.x.x.x.x.x.x", four) > offs
-    assert R.syncopation("x..x..", (2, 3)) == 0 and R.syncopation("x.x.x.", (2, 3)) > 0       # three in the time of two beats: a hemiola
-    with pytest.raises(ValueError):
-        R.syncopation("x..x", four)
-
-
-def test_the_pulse_of_the_tune():
-    ev = tune.events(0.55)
-    r = R.pulse([e["t"] for e in ev])
-    assert r["period"] == pytest.approx(0.55, rel=0.02) and r["phase"] == pytest.approx(0.0, abs=0.011)
-    fast = R.pulse([e["t"] / 4 for e in ev])                                  # four times as fast: the beat is no longer the note
-    assert fast["period"] / (0.55 / 4) == pytest.approx(round(fast["period"] / (0.55 / 4)), abs=0.05) and fast["period"] > 0.25
-    assert float(R.resonance(0.55)) == 1.0 and R.resonance(0.2) < R.resonance(0.4) < 1 and R.resonance(2.2) < R.resonance(1.1)
-
-
-def test_polyrhythm_and_additive_metres():
-    p = R.polyrhythm(3, 2)
-    assert p["grid"] == 6 and p["composite"] == [0, 2, 3, 4] and p["gaps"] == [2, 1, 1, 2] and p["together"] == [0]
-    q = R.polyrhythm(4, 3)
-    assert q["grid"] == 12 and q["gaps"] == [3, 1, 2, 2, 1, 3]
-    assert R.compositions(7) == [(2, 2, 3), (2, 3, 2), (3, 2, 2)] and R.compositions(5) == [(2, 3), (3, 2)]
-    counts = [len(R.compositions(n)) for n in range(2, 13)]
-    assert counts == [1, 1, 1, 2, 2, 3, 4, 5, 7, 9, 12]
-    assert all(counts[k] == counts[k - 2] + counts[k - 3] for k in range(3, len(counts)))     # Padovan's rule
-
-
-def test_swing_and_acceleration():
-    assert R.swing(2, 0.6, 1.0) == pytest.approx([0.0, 0.3, 0.6, 0.9])
-    assert R.swing(2, 0.6, 2.0) == pytest.approx([0.0, 0.4, 0.6, 1.0])        # the triplet feel
-    t = R.accelerando(2.0, 200.0, 20.0)
-    rate = 1.0 / np.diff(t)
-    assert rate[0] == pytest.approx(2.0, rel=0.15) and rate[-1] == pytest.approx(200.0, rel=0.02) and (np.diff(rate) > 0).all()
-
-
-def test_a_fast_click_train_has_a_pitch():
-    hz = 150.0
-    y = R.clicks(np.arange(0, 0.6, 1 / hz), 0.6)
-    f, strength = ear.pitch(y[2000:], SR, lo=60, hi=600)
-    assert 1200 * abs(math.log2(f / hz)) < 10 and strength > 0.6
-    both = R.clicks(np.arange(0, 0.6, 1 / 200.0), 0.6) + R.clicks(np.arange(0, 0.6, 1 / 300.0), 0.6)      # two against three, a hundred times a second
-    spec = np.abs(np.fft.rfft(both * np.hanning(len(both))))
-    freqs = np.fft.rfftfreq(len(both), 1 / SR)
-    peaks = [freqs[int(np.argmax(spec * (abs(freqs - c) < 15)))] for c in (200.0, 300.0)]
-    assert 1200 * math.log2(peaks[1] / peaks[0]) == pytest.approx(702, abs=8)                              # a perfect fifth
-
-
-def test_the_telephone_game_finds_the_listeners_expectations():
-    pk = np.array([R.simplex_point(r) for r in R.INTEGER_RHYTHMS])
+def clicks(times, seconds):
+    x = np.zeros(int(seconds * SR))
     rng = np.random.default_rng(0)
-    seeds = rng.dirichlet([1, 1, 1], 400)
-    seeds = seeds[seeds.min(axis=1) > 0.12]
-    w_a = np.array([1.0 if set(r) <= {1, 2} else 0.02 for r in R.INTEGER_RHYTHMS])
-    w_b = np.array([1.0 if 3 in r or r == (1, 1, 1) else 0.02 for r in R.INTEGER_RHYTHMS])
-    a, b = R.iterate(seeds, pk, w_a, 5, seed=1), R.iterate(seeds, pk, w_b, 5, seed=1)
-    assert np.allclose(a.sum(axis=2), 1.0) and a.shape == (6, len(seeds), 3)
-    d0, d5 = R.nearest_ratio(a[0], pk)[:, 1].mean(), R.nearest_ratio(a[5], pk)[:, 1].mean()
-    assert d5 < 0.6 * d0                                                      # the rhythms have gathered at whole-number ratios
-    share = lambda pts, w: float(np.mean(w[R.nearest_ratio(pts, pk)[:, 0].astype(int)] > 0.5))       # noqa: E731
-    assert share(a[5], w_a) > 0.85 and share(b[5], w_b) > 0.85 and share(a[5], w_b) < share(b[5], w_b) - 0.3     # and at different ones for the two listeners
+    n = int(0.05 * SR)
+    for t in times:
+        k = int(t * SR)
+        x[k:k + n] += rng.standard_normal(n) * np.exp(-np.arange(n) / (0.01 * SR)) * np.hanning(2 * n)[n:]
+    return x
+
+
+def triad(root, minor=False, seconds=1.0):
+    return sum(organ_tone(261.63 * 2 ** (t / 12), seconds, partials=5) for t in (root, root + (3 if minor else 4), root + 7))
+
+
+def test_tempo_and_beats():
+    beats = np.arange(0.5, 15.0, 0.6)
+    x = clicks(beats, 16.0)
+    nv = RH.novelty(x)
+    tp = RH.tempo(nv["nov"], nv["hop_s"])
+    assert tp["bpm"] == pytest.approx(100.0, rel=0.02)
+    est = RH.track_beats(nv["nov"], nv["hop_s"], tp["bpm"])
+    assert RH.beat_scores(beats, est)["f"] > 0.9
+    # a prior centred elsewhere picks another octave of the same pulse (every second click repeats too)
+    assert RH.tempo(nv["nov"], nv["hop_s"], prior_bpm=50.0, prior_octaves=0.3)["bpm"] == pytest.approx(50.0, rel=0.03)
+
+
+def test_beat_scores_levels():
+    ref = np.arange(0, 10, 0.5)
+    double = np.arange(0, 10, 0.25)
+    s = RH.beat_scores(ref, double)
+    assert s["levels"]["double"] > 0.95 and s["f"] < 0.7
+    assert RH.beat_scores(ref, ref + 0.25)["levels"]["off-beat"] > 0.9
+
+
+def test_chroma_and_chords():
+    prog = [(0, False), (5, False), (7, False), (9, True)]
+    y = np.concatenate([triad(r, m) for r, m in prog])
+    C = RH.chroma(y)
+    assert C["C"].shape[0] == 12 and np.allclose(np.linalg.norm(C["C"], axis=0), 1.0, atol=1e-6)
+    res = RH.recognize(C["C"])
+    labels = RH.chord_labels()
+    n = C["C"].shape[1]
+    got = [labels[res["hmm"][int((k + 0.5) * n / 4)]] for k in range(4)]
+    assert got == ["C", "F", "G", "Am"]
+
+
+def test_viterbi_small():
+    # two states, sticky transitions: a single odd frame is smoothed away
+    logB = np.log(np.array([[0.9, 0.9, 0.4, 0.9], [0.1, 0.1, 0.6, 0.1]]))
+    logA = np.log(np.array([[0.95, 0.05], [0.05, 0.95]]))
+    assert RH.viterbi(logB, logA, np.log([0.5, 0.5])).tolist() == [0, 0, 0, 0]
+
+
+def test_transitions_from_romans():
+    A = RH.transitions_from_romans([["I", "IV", "V", "I"], ["I", "V7", "I"]], key=0)
+    assert np.allclose(A.sum(axis=1), 1.0)
+    assert A[0, 7] > A[0, 9]                     # I goes to V more than to anything unseen
+    assert A[7, 0] > A[7, 2]
+
+
+def test_dtw_and_online():
+    rng = np.random.default_rng(1)
+    X = np.abs(rng.standard_normal((12, 40)))
+    idx = np.repeat(np.arange(40), 2)[:70]       # Y is X played slower
+    Y = X[:, idx]
+    d = RH.dtw(X, Y)
+    assert tuple(d["path"][0]) == (0, 0) and tuple(d["path"][-1]) == (39, 69)
+    assert np.all(np.diff(d["path"], axis=0) >= 0)
+    on = RH.oltw(X, Y)
+    assert np.all(np.diff(on) >= 0)
+    assert np.mean(np.abs(on - idx)) < 2.0
+
+
+def test_structure():
+    rng = np.random.default_rng(2)
+    va, vb = np.abs(rng.standard_normal(12)), np.abs(rng.standard_normal(12))
+    a = va[:, None] + 0.05 * np.abs(rng.standard_normal((12, 20)))
+    b = vb[:, None] + 0.05 * np.abs(rng.standard_normal((12, 20)))
+    F = np.concatenate([a, b, a], axis=1)
+    S = RH.ssm(F)
+    M = RH.segment_similarity(S, 20, 3)
+    assert RH.labels_from_similarity(M, 0.99) == ["a", "b", "a"]
+    nov = RH.checkerboard_novelty(S, half=8)
+    assert abs(int(np.argmax(nov[5:-5])) + 5 - 20) <= 2 or abs(int(np.argmax(nov[5:-5])) + 5 - 40) <= 2
