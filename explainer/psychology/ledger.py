@@ -1170,7 +1170,8 @@ shown(10, "TRAUER_2015", "a meta-analysis of a treatment; therapies are entered 
 shown(10, "XIE_2013", "a finding in mice and its dispute, at the frontier")
 shown(10, "PHOENIX_1959", "animal physiology; the human evidence is indirect and is said to be")
 shown(10, "TEIGEN_1994", "a history of a textbook law, told again in Part 28: a history, not a finding")
-shown(10, "ROENNEBERG_2004", "a description from a survey of sleep times; the lifespan is Part 31", row_in=31)
+shown(10, "ROENNEBERG_2004", "a description from a survey of sleep times; its row, on the curve "
+      "through life, is entered with the lifespan in Part 31")
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -3890,6 +3891,196 @@ add(Finding(
     data=("MANYBABIES_2020",),
 ))
 
+add(Finding(
+    key="deprivation_foster_care", part=31, title=r"Early deprivation, and early placement",
+    claim="Early institutional deprivation harms development, and placement in a family early in life helps.",
+    original=Study("Nelson, Zeanah, Fox and colleagues (randomized)", 2007, n="136 children in Bucharest's "
+                   "institutions, aged 6 to 31 months", design="a lottery assigned foster care or care as usual",
+                   found="foster care raised IQ, most for the children placed youngest"),
+    status="replicated",
+    record=(Study("Sonuga-Barke and colleagues (English and Romanian Adoptees)", 2017, n="Romanian adoptees in "
+                  "British families, followed to ages 22 to 25", found="more than six months of deprivation: "
+                  "problems persisting into adulthood; IQ recovered"),
+            Study("Humphreys and colleagues (the randomized trial at 18)", 2022, n="135 participants", effect=9.0,
+                  unit="IQ points", found="about 9 IQ points (0.6 SD) higher with foster care, partly through "
+                  "caregiving and attachment"),),
+    note="A randomized trial and a natural experiment agree; the trial is one city, and its IQ effect at 18 sits near "
+         "the edge of significance.",
+    sources=("C. A. Nelson, C. H. Zeanah, N. A. Fox, P. J. Marshall, A. T. Smyke and D. Guthrie, Cognitive recovery "
+             "in socially deprived young children: the Bucharest Early Intervention Project, Science 318 (2007) "
+             "1937-1940",
+             "E. J. S. Sonuga-Barke et al., Child-to-adult neurodevelopmental and mental health trajectories after "
+             "early life deprivation: the young adult follow-up of the longitudinal English and Romanian Adoptees "
+             "study, Lancet 389 (2017) 1539-1548",
+             "K. L. Humphreys et al., Foster care leads to sustained cognitive gains following severe early "
+             "deprivation, PNAS 119 (2022)"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="perry_long_run", part=31, title=r"Preschool's effects in adulthood",
+    claim="A preschool programme for poor three- and four-year-olds improved their lives as adults, decades later.",
+    original=Study("Schweinhart and colleagues (Perry Preschool, age 40)", 2005, n="123 children, 58 in the "
+                   "programme", design="assignment by a near-random procedure, 1962 to 1967",
+                   found="at 40: more employed (76% against 62%), higher earnings, fewer arrests"),
+    status="replicated, smaller",
+    record=(Study("Anderson (reanalysis for many outcomes)", 2008, n="Perry, Abecedarian and Early Training",
+                  found="substantial gains for girls; no significant long-term benefits for boys"),
+            Study("Heckman and colleagues (reanalysis)", 2010, n="the Perry sample", design="the compromised "
+                  "assignment modelled", found="a social rate of return of about 7 to 10% a year"),
+            Study("Campbell and colleagues (Abecedarian, randomized)", 2014, n="the participants in their "
+                  "mid-thirties", found="better cardiovascular and metabolic health in treated men"),),
+    note="Long-run effects survive reanalysis, smaller and narrower than first claimed; each trial is small.",
+    sources=("L. J. Schweinhart, J. Montie, Z. Xiang, W. S. Barnett, C. R. Belfield and M. Nores, Lifetime Effects: "
+             "The High/Scope Perry Preschool Study Through Age 40 (High/Scope Press, 2005)",
+             "M. L. Anderson, Multiple inference and gender differences in the effects of early intervention, "
+             "Journal of the American Statistical Association 103 (2008) 1481-1495",
+             "J. J. Heckman, S. H. Moon, R. Pinto, P. A. Savelyev and A. Yavitz, The rate of return to the HighScope "
+             "Perry Preschool Program, Journal of Public Economics 94 (2010) 114-128",
+             "F. Campbell et al., Early childhood investments substantially boost adult health, Science 343 (2014) "
+             "1478-1485"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="word_gap", part=31, title=r"The thirty-million-word gap",
+    claim="By age four, children in poor families have heard about 30 million fewer words than children in "
+          "professional families.",
+    original=Study("Hart and Risley", 1995, n="42 Kansas families", design="one hour recorded each month",
+                   found="a projected gap of about 30 million words by age four"),
+    status="contested",
+    record=(Study("Gilkerson and colleagues", 2017, n="3,213 day-long automated recordings",
+                  found="fewer adult words in lower-income homes, with wide variation in every group"),
+            Study("Sperry, Sperry and Miller", 2019, n="42 children in five communities",
+                  found="counting overheard speech too, no gap by income"),),
+    note="Children who hear more talk directed at them learn more words; the size, the cause and the measurement "
+         "of the gap are disputed.",
+    sources=("B. Hart and T. R. Risley, Meaningful Differences in the Everyday Experience of Young American Children "
+             "(Brookes, 1995)",
+             "J. Gilkerson et al., Mapping the early language environment using all-day recordings and automated "
+             "analysis, American Journal of Speech-Language Pathology 26 (2017) 248-265",
+             "D. E. Sperry, L. L. Sperry and P. J. Miller, Reexamining the verbal environments of children from "
+             "different socioeconomic backgrounds, Child Development 90 (2019) 1303-1318"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="adult_neurogenesis", part=31, title=r"New neurons in the adult human brain",
+    claim="The adult human hippocampus keeps making new neurons into old age.",
+    original=Study("Eriksson, Gage and colleagues", 1998, n="5 cancer patients given a marker of dividing cells",
+                   found="new neurons in the hippocampus after death"),
+    status="contested",
+    record=(Study("Sorrells and colleagues", 2018, n="post-mortem and surgical tissue",
+                  found="new neurons fell steeply through childhood; none detectable in adults"),
+            Study("Boldrini and colleagues", 2018, n="post-mortem brains, ages 14 to 79",
+                  found="immature neurons throughout adulthood"),
+            Study("Moreno-Jimenez and colleagues", 2019, n="post-mortem brains, with tightly controlled fixation",
+                  found="immature neurons into old age, fewer in Alzheimer's disease"),),
+    note="The disagreement is largely about tissue handling and markers; neither side's result is settled.",
+    sources=("P. S. Eriksson et al., Neurogenesis in the adult human hippocampus, Nature Medicine 4 (1998) 1313-1317",
+             "S. F. Sorrells et al., Human hippocampal neurogenesis drops sharply in children to undetectable levels "
+             "in adults, Nature 555 (2018) 377-381",
+             "M. Boldrini et al., Human hippocampal neurogenesis persists throughout aging, Cell Stem Cell 22 (2018) "
+             "589-599",
+             "E. P. Moreno-Jimenez et al., Adult hippocampal neurogenesis is abundant in neurologically healthy "
+             "subjects and drops sharply in patients with Alzheimer's disease, Nature Medicine 25 (2019) 554-560"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="birth_order_personality", part=31, title=r"Birth order and personality",
+    claim="Birth order shapes personality: firstborns are more conscientious, later-borns more open.",
+    original=Study("Sulloway", 1996, n="historical figures and published studies", design="a book-length synthesis",
+                   found="later-borns more open to new ideas, firstborns more dominant and conscientious"),
+    status="failed",
+    record=(Study("Rohrer, Egloff and Schmukle (within and between families)", 2015, n="more than 20,000 adults in "
+                  "three national panels", found="no birth-order effects on the Big Five"),
+            Study("Damian and Roberts", 2015, n="377,000 American high-school students", effect=0.02, unit="r",
+                  found="an average correlation of 0.02 with personality traits"),),
+    note="Large samples, compared within families, find nothing of practical size.",
+    sources=("F. J. Sulloway, Born to Rebel: Birth Order, Family Dynamics, and Creative Lives (Pantheon, 1996)",
+             "J. M. Rohrer, B. Egloff and S. C. Schmukle, Examining the effects of birth order on personality, PNAS "
+             "112 (2015) 14224-14229",
+             "R. I. Damian and B. W. Roberts, The associations of birth order with personality and intelligence in a "
+             "representative sample of U.S. high school students, Journal of Research in Personality 58 (2015)"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="birth_order_iq", part=31, title=r"Birth order and IQ",
+    claim="Firstborns score slightly higher on intelligence tests than their younger siblings.",
+    original=Study("Belmont and Marolla", 1973, n="nearly 400,000 Dutch 19-year-old men",
+                   design="Raven's matrices at military induction",
+                   found="scores fell with each later birth and with family size"),
+    status="replicated",
+    record=(Study("Kristensen and Bjerkedal", 2007, n="241,310 Norwegian conscripts",
+                  found="eldest sons about 2 points higher; second sons raised as eldest scored like firstborns"),
+            Study("Rohrer, Egloff and Schmukle (within families)", 2015, n="more than 20,000 adults",
+                  found="a small decline with birth order"),
+            Study("Damian and Roberts", 2015, n="377,000 students", effect=0.04, unit="r",
+                  found="about one IQ point"),),
+    note="Small, one to three points, and about the rank in which a child is raised; it predicts little about any "
+         "one family.",
+    sources=("L. Belmont and F. A. Marolla, Birth order, family size, and intelligence, Science 182 (1973) 1096-1101",
+             "P. Kristensen and T. Bjerkedal, Explaining the relation between birth order and intelligence, Science "
+             "316 (2007) 1717",
+             "J. M. Rohrer, B. Egloff and S. C. Schmukle, Examining the effects of birth order on personality, PNAS "
+             "112 (2015) 14224-14229"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="chronotype_age", part=31, title=r"The latest sleepers are about twenty",
+    claim="Chronotype grows later through adolescence, is latest at about age twenty, and grows earlier after.",
+    original=Study("Roenneberg and colleagues", 2004, n="about 25,000 people aged 8 to 90",
+                   design="the Munich Chronotype Questionnaire", found="latest at about 19.5 in women and 21 in men"),
+    status="replicated",
+    record=(Study("Fischer, Lombardi, Marucci-Wellman and Roenneberg", 2017, n="twelve years of the American Time "
+                  "Use Survey", found="latest at about 19; men later than women before 40"),),
+    note="The curve replicates; whether its turning point marks the biological end of adolescence is a proposal.",
+    sources=("T. Roenneberg et al., A marker for the end of adolescence, Current Biology 14 (2004) R1038-R1039",
+             "D. Fischer, D. A. Lombardi, H. Marucci-Wellman and T. Roenneberg, Chronotypes in the US: influence of "
+             "age and sex, PLoS ONE 12 (2017) e0178782"),
+    checked="2026-11-15",
+    data=("ROENNEBERG_2004",),
+))
+
+add(Finding(
+    key="moral_stage_sex", part=31, title=r"Kohlberg's scale and women",
+    claim="Kohlberg's stages score women's moral reasoning lower than men's.",
+    original=Study("Gilligan", 1982, n="interview studies, including women deciding about abortion",
+                   design="a critique of the scale", found="an ethic of care, heard more in women, scored as lower"),
+    status="failed",
+    record=(Study("Walker (review)", 1984, n="108 studies", found="sex differences in stage were rare"),
+            Study("Jaffee and Hyde (meta-analysis)", 2000, n="published studies of moral orientation", effect=0.28, unit="d",
+                  found="care reasoning slightly more in women (d = 0.28), justice in men (d = 0.19)"),),
+    note="Stage scores show few sex differences; the orientations differ slightly, and more by dilemma than by sex.",
+    sources=("C. Gilligan, In a Different Voice (Harvard University Press, 1982)",
+             "L. J. Walker, Sex differences in the development of moral reasoning: a critical review, Child "
+             "Development 55 (1984) 677-691",
+             "S. Jaffee and J. S. Hyde, Gender differences in moral orientation: a meta-analysis, Psychological "
+             "Bulletin 126 (2000) 703-726"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="positivity_effect", part=31, title=r"The positivity effect in later life",
+    claim="Compared with younger adults, older adults attend to and remember positive material more than negative.",
+    original=Study("Charles, Mather and Carstensen", 2003, n="144 people aged 18 to 80",
+                   design="recall and recognition of positive, negative and neutral pictures",
+                   found="the oldest recalled fewer negative pictures; the bias grew with age"),
+    status="replicated",
+    record=(Study("Reed, Chan and Mikels (meta-analysis)", 2014, n="100 studies, 7,129 people",
+                  found="reliable; larger when processing is unconstrained and the age gap wider"),),
+    note="Reliable on average and moderated by method; whether it reflects goals, as the theory says, or reduced "
+         "processing of negative material is argued.",
+    sources=("S. T. Charles, M. Mather and L. L. Carstensen, Aging and emotional memory: the forgettable nature of "
+             "negative images for older adults, Journal of Experimental Psychology: General 132 (2003) 310-324",
+             "A. E. Reed, L. Chan and J. A. Mikels, Meta-analysis of the age-related positivity effect: age "
+             "differences in preferences for positive over negative information, Psychology and Aging 29 (2014) 1-15"),
+    checked="2026-11-15",
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -4159,3 +4350,24 @@ shown(30, r"DeLoache et al.\ (2010)", "a single trial of a product, described as
 shown(30, r"Vong et al.\ (2024)", "a modelling result at the frontier, described")
 shown(30, r"Piloto et al.\ (2022)", "a machine-learning model at the frontier, described; machines are Part 60's",
       row_in=60)
+
+shown(31, r"Wiesel \& Hubel (1963); \ Hubel \& Wiesel (1970)", "the sensitive period in vision, told as history "
+      "(Part 7); textbook physiology")
+shown(31, r"Schaie (2005); \ Salthouse (2009)", "a methodological debate between two research programmes, "
+      "described and simulated; no single finding to enter")
+shown(31, r"Gardner \& Steinberg (2005)", "a single laboratory study of peer influence, described with a failed "
+      "attempt to repeat it; its row waits for a registered replication")
+shown(31, r"Steinberg et al.\ (2018)", "a descriptive cross-national survey of two age curves")
+shown(31, r"Harris (1998); \ Humphreys et al.\ (2022)", "a book's argument, described; the trial has its row")
+shown(31, r"Colby et al.\ (1983)", "the longitudinal study of Kohlberg's stages, described")
+shown(31, r"Salthouse (1996)", "a theory of cognitive ageing, described with its limits")
+shown(31, r"Livingston et al.\ (2024)", "a commission's estimate from attributable fractions, explained with its "
+      "causal assumption")
+shown(31, r"Ngandu et al.\ (2015)", "a single randomized trial, described with its small effect")
+shown(31, r"Pietschnig \& Voracek (2015)", "the Flynn effect, described as a cohort effect; its row is entered with "
+      "intelligence in Part 32", row_in=32)
+shown(31, r"Bratsberg \& Rogeberg (2018)", "the reversal of the Flynn effect, described; entered with intelligence "
+      "in Part 32", row_in=32)
+shown(31, r"Layton et al.\ (2018)", "a single large natural experiment, described as an application; relative age and "
+      "diagnosis are taken up with development that goes differently in Part 41", row_in=41)
+shown(31, r"Casey et al.\ (2018)", "the design of a cohort study at the frontier, described")

@@ -924,6 +924,37 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Thomas, Chess; Vygotsky; Csibra, Gergely; Horner, Whiten | 托马斯，切斯；维果茨基；乔布劳，盖尔盖伊；霍纳，怀滕 |
 | DeLoache; Durkin; Vong, Lake, Orhan; Piloto, Weinstein, Battaglia, Botvinick | 德洛克；德金；Wai Keen Vong（保留原名），莱克，奥尔汉；皮洛托，温斯坦，巴塔利亚，博特维尼克 |
 
+## Part 31: the lifespan
+
+| English | 中文 |
+|---|---|
+| the lifespan; lifespan development; age, period, cohort; the APC identity; the Lexis diagram | 一生；毕生发展；年龄、时期、队列；年龄—时期—队列恒等式；莱克西斯图 |
+| cross-sectional; longitudinal; cohort-sequential; practice (retest) effect; attrition, drop-out | 横断；纵向；队列序列；练习（重测）效应；样本流失、退出 |
+| growth curve; linear mixed model; random intercept; random slope; BLUP; shrinkage; EM | 成长曲线；线性混合模型；随机截距；随机斜率；最佳线性无偏预测（BLUP）；收缩；EM |
+| sensitive period; critical period; experience-expectant; experience-dependent; amblyopia (lazy eye) | 敏感期；关键期；经验预期型；经验依赖型；弱视 |
+| the Bucharest Early Intervention Project; foster care; care as usual; institutional deprivation | 布加勒斯特早期干预项目；寄养；常规照料；机构剥夺 |
+| the English and Romanian Adoptees study | 英国和罗马尼亚被收养者研究 |
+| the dual-systems model; sensation seeking; self-regulation; chronotype; mid-sleep | 双系统模型；感觉寻求；自我调节；时型；睡眠中点 |
+| shared environment; non-shared environment; ACE model; adoptive siblings; birth order | 共享环境；非共享环境；ACE模型；收养的兄弟姐妹；出生顺序 |
+| the nurture assumption | 教养的迷思 |
+| Perry Preschool; Abecedarian; Early Training Project; Head Start; fade-out; rate of return | 佩里学前项目；初学者项目；早期训练项目；开端计划；效应消退；回报率 |
+| familywise error; multiplicity; the word gap | 族错误率；多重比较；词汇差距 |
+| preconventional, conventional, postconventional; the Heinz dilemma; ethic of care; ethic of justice | 前习俗、习俗、后习俗；海因茨困境；关怀伦理；正义伦理 |
+| Erikson's stages; identity | 埃里克森的阶段；身份认同 |
+| fluid and crystallized intelligence; processing speed; socioemotional selectivity; the positivity effect | 流体智力与晶体智力；加工速度；社会情绪选择；积极效应 |
+| dementia; mild cognitive impairment; cognitive reserve; population attributable fraction; relative risk | 痴呆；轻度认知障碍；认知储备；人群归因分数；相对风险 |
+| adult neurogenesis; the Flynn effect; norms; ageing clocks; target trial emulation | 成年神经发生；弗林效应；常模；衰老时钟；目标试验模拟 |
+| Charles Nelson, Nathan Fox, Charles Zeanah; Humphreys; Sonuga-Barke | 查尔斯·纳尔逊，内森·福克斯，查尔斯·泽阿纳；汉弗莱斯；索努加-巴克 |
+| Wilhelm Lexis; Norman Ryder; Warner Schaie; Timothy Salthouse | 威廉·莱克西斯；诺曼·赖德；沃纳·沙伊；蒂莫西·索尔特豪斯 |
+| Johnson, Newport; Hakuta; Hartshorne, Tenenbaum, Pinker; William Greenough | 约翰逊，纽波特；白田；哈茨霍恩，特南鲍姆，平克；威廉·格里诺 |
+| Gardner; Laurence Steinberg; Till Roenneberg; Fischer | 加德纳；劳伦斯·斯坦伯格；蒂尔·伦内贝格；菲舍尔 |
+| Plomin, Daniels; Judith Rich Harris; Belmont, Marolla; Kristensen, Bjerkedal; Rohrer, Egloff, Schmukle; Damian, Roberts; Sulloway | 普洛明，丹尼尔斯；朱迪思·里奇·哈里斯；贝尔蒙特，马罗拉；克里斯滕森，比耶克达尔；罗勒，埃格洛夫，施穆克勒；达米安，罗伯茨；萨洛韦 |
+| Schweinhart; James Heckman; Michael Anderson; Frances Campbell; Hart, Risley; Sperry; Peggy Miller; Gilkerson | 施魏因哈特；詹姆斯·赫克曼；迈克尔·安德森；弗朗西丝·坎贝尔；哈特，里斯利；斯佩里；佩吉·米勒；吉尔克森 |
+| Kohlberg; Heinz; Anne Colby; Carol Gilligan; Lawrence Walker; Jaffee, Hyde; Erik Erikson | 科尔伯格；海因茨；安妮·科尔比；卡罗尔·吉利根；劳伦斯·沃克；贾菲，海德；埃里克·埃里克森 |
+| Cattell, Horn; Carstensen; Susan Charles, Mara Mather; Reed, Chan, Mikels | 卡特尔，霍恩；卡斯滕森；苏珊·查尔斯，马拉·马瑟；里德，陈，米克尔斯 |
+| Yaakov Stern; Livingston; Ngandu, Kivipelto; Eriksson, Fred Gage; Sorrells; Boldrini; Moreno-Jiménez | 雅科夫·斯特恩；利文斯顿；恩甘杜，基维佩尔托；埃里克松，弗雷德·盖奇；索雷尔斯；博尔德里尼；莫雷诺-希门尼斯 |
+| James Flynn; Pietschnig, Voracek; Bratsberg, Rogeberg; Timothy Layton; Steve Horvath; Paul Baltes; Spearman; Binet | 詹姆斯·弗林；皮奇尼希，沃拉切克；布拉茨贝格，罗格贝格；蒂莫西·莱顿；史蒂夫·霍瓦特；保罗·巴尔特斯；斯皮尔曼；比奈 |
+
 ## Names
 
 | English | 中文 |

@@ -49,4 +49,53 @@ PARTS = [
               ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=31, level="U", widget="clocks",
+        question="What, in a life, is set early, and what stays open?",
+        story="In 2000, with too few foster homes for the children in Bucharest's institutions, a lottery decided "
+              "which of 136 children would be placed in foster families. Foster care raised IQ, most for the "
+              "children placed youngest, and nine points remained at eighteen. Most questions about development "
+              "cannot be randomized, so the part turns to designs. Age, period and cohort are tied by an identity, "
+              "and any linear trend can be moved between them; Psyche builds a world with a known ageing curve and a "
+              "cohort drift and shows a cross-section inventing decline from the twenties, a panel hiding it under "
+              "practice and drop-out, and a cohort-sequential design recovering both under its assumption. Growth "
+              "curves become a mixed model fitted by EM, with each child's line shrunk toward the fan. Then "
+              "windows in vision, grammar and care; adolescence, peers and the late body clock; parents, adoptive "
+              "siblings and birth order; Perry, Abecedarian, many outcomes and the word gap; Kohlberg and "
+              "Gilligan's critique; speed, knowledge and the positivity effect; reserve, attributable fractions "
+              "and FINGER; and the Flynn effect, old norms and the reversal within families.",
+        handoff="Intelligence and the Flynn effect are Part 32; personality across life is Part 33; development that "
+                "goes differently is Part 41; growth curves and people over time are Part 47; early programmes and "
+                "schools are Part 54; ages in law are Part 56.",
+        outside="Part 2's experiments, Part 3's reliability and validity, Part 4's multiplicity, Part 9's twins "
+                "and adoptees. Linear algebra, regression, mixed models and the EM algorithm.",
+        objectives={
+            "U": ["Explain the age-period-cohort problem and what cross-sectional and longitudinal designs each "
+                  "get wrong.",
+                  "Describe sensitive periods, adolescent risk taking, parental and birth-order effects, and the "
+                  "ageing of speed, knowledge and emotion, with their replication records.",
+                  "Explain what early-intervention trials show, and why their many outcomes matter."],
+            "M": ["Prove the APC identity and simulate three designs against a known truth.",
+                  "Fit a growth-curve mixed model by EM and explain shrinkage of individual slopes.",
+                  "Derive ACE estimates from twin and adoption correlations, and population attributable "
+                  "fractions."],
+            "D": ["Design a study that separates age, period and cohort for a stated question, and defend its "
+                  "assumption.",
+                  "Judge causal claims from cohort data: within-family designs, natural experiments, target "
+                  "trials."],
+            "I": ["Evaluate an age-based rule (school entry, juvenile sentencing, retirement, driving) against the "
+                  "evidence on development."],
+        },
+        results=[
+            ("The APC identity", r"a\,A + p\,P + c\,C = (a - c)\,A + (p + c)\,P, \quad C = P - A"),
+            ("A growth-curve mixed model",
+             r"y_{ij} = (\beta_0 + u_{0i}) + (\beta_1 + u_{1i})\,t_j + \varepsilon_{ij}"),
+            ("ACE from twins", r"h^2 = 2(r_{MZ} - r_{DZ}), \quad c^2 = 2r_{DZ} - r_{MZ}"),
+            ("Population attributable fraction", r"\mathrm{PAF} = \frac{p(\mathrm{RR} - 1)}{1 + p(\mathrm{RR} - 1)}"),
+        ],
+        U=(0, 1, 3, 5, 6, 7, 9, 10, 12, 13), D=(2, 15), I=(14,),
+        also=(("Psyche's lifespan module", "explainer/psychology/psyche/lifespan.py"),
+              ("Its tests", "tests/psychology/test_lifespan.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

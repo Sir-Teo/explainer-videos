@@ -115,5 +115,8 @@ Modules so far, with the part that introduces each:
 ``develop``         30   habituation; an ideal learner's surprisal and a Goldilocks observer; number by
                          ratio; the infant statistician; a dynamic neural field for A-not-B, run for
                          many infants at once; random-effects meta-regression
+``lifespan``        31   the age-period-cohort identity and Lexis tables; a population with a true
+                         ageing curve and cohort drift under three designs; a growth-curve mixed model
+                         by EM with BLUPs; ACE correlations; cognitive reserve; attributable fractions
 =================  ====  ===============================================================================
 """
