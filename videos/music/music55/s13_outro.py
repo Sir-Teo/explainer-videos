@@ -37,7 +37,7 @@ class Outro(SoundScene):
             self.play(FadeIn(cells), FadeIn(note))
         keys = [k for k, _, _ in CELLS]
         with self.listen(c) as snd:
-            window(snd, r"Variation 55", kind="rendered", detail=r"Part 8's voice, \ four spaces, \ headphones", corner=DL, tag_corner=DR)
+            window(snd, r"Variation 55", kind="physical model", detail=r"Part 8's voice, \ four spaces, \ headphones", corner=DL, tag_corner=DR)
             for i, k in enumerate(keys):
                 end = st[keys[i + 1]] - 0.3 if i + 1 < len(keys) else c.duration
                 pulse(snd, cells[i], st[k], end, buff=0.08)

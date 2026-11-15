@@ -90,7 +90,7 @@ class Sabine(SoundScene):
             self.play(Create(cv), FadeIn(dots[1:]), FadeIn(tags[1:]), run_time=1.5)
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"none, \ 300, \ 1,500 cushions", kind="rendered", detail=r"Part 8's voice, \ a simulated room", corner=DL, tag_corner=DR)
+            window(snd, r"none, \ 300, \ 1,500 cushions", kind="physical model", detail=r"Part 8's voice, \ a simulated room", corner=DL, tag_corner=DR)
             pulse(snd, dots[0], st["c0"], st["c300"] - 0.3, buff=0.06)
             pulse(snd, dots[1], st["c300"], st["c1500"] - 0.3, buff=0.06)
             pulse(snd, dots[2], st["c1500"], c.duration, buff=0.06)
@@ -151,7 +151,8 @@ class Sabine(SoundScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(r) for r in rows[1:5]], lag_ratio=0.2), run_time=1.6)
             vo.wait_until("b")
-            self.play(FadeIn(rows[5]), FadeIn(rows[6]), Indicate(rows[5], color=TUNE, scale_factor=1.03))
+            self.play(FadeIn(rows[5]), FadeIn(rows[6]))
+            self.play(Indicate(rows[5], color=TUNE, scale_factor=1.03))
         self.wait(0.4)
         self.clear_scene()
 

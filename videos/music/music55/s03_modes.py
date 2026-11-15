@@ -164,7 +164,7 @@ class Modes(SoundScene):
             self.play(Create(cm), FadeIn(key[1]), run_time=1.5)
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"a corner, \ then the middle", kind="rendered", detail=r"Part 38's bass, \ a simulated room", corner=DL, tag_corner=DR)
+            window(snd, r"a corner, \ then the middle", kind="physical model", detail=r"Part 38's bass, \ a simulated room", corner=DL, tag_corner=DR)
             pulse(snd, VGroup(cc, key[0]), st["corner"], st["middle"] - 0.3, buff=0.06)
             pulse(snd, VGroup(cm, key[1]), st["middle"], c.duration, buff=0.06)
         with self.voiceover(

@@ -112,7 +112,7 @@ class Binaural(SoundScene):
         secs = d["seconds"]
         turns = d["turns"]
         with self.listen(c) as snd:
-            window(snd, r"a shaker, \ circling", kind="rendered", detail=r"a spherical head, \ headphones", corner=DL, tag_corner=DR)
+            window(snd, r"a shaker, \ circling", kind="physical model", detail=r"a spherical head, \ headphones", corner=DL, tag_corner=DR)
             snd.drive(dot, lambda m, t: m.move_to(cen + R * np.array([math.sin(2 * math.pi * turns * t / secs), math.cos(2 * math.pi * turns * t / secs), 0])))
         self.remove(trail)
         with self.voiceover(

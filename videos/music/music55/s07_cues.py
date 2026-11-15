@@ -121,7 +121,7 @@ class Cues(SoundScene):
             self.play(FadeIn(head), FadeIn(hd), FadeIn(src), FadeIn(sl), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"three ways to the right", kind="rendered", detail=r"noise, \ a spherical head", corner=UL, tag_corner=UR)
+            window(snd, r"three ways to the right", kind="physical model", detail=r"noise, \ a spherical head", corner=UL, tag_corner=UR)
             pulse(snd, boxes[0], st["time"], st["level"] - 0.3, buff=0.06)
             pulse(snd, boxes[1], st["level"], st["both"] - 0.3, buff=0.06)
             pulse(snd, boxes[2], st["both"], c.duration, buff=0.06)
@@ -191,7 +191,7 @@ class Cues(SoundScene):
         self.play(FadeOut(card), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"front or back?", kind="rendered", detail=r"Part 8's voice, \ a spherical head", corner=DL, tag_corner=DR)
+            window(snd, r"front or back?", kind="physical model", detail=r"Part 8's voice, \ a spherical head", corner=DL, tag_corner=DR)
             pulse(snd, boxes[0], st["first"], st["second"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
             pulse(snd, boxes[2], 0, c.duration, rate=5.0, color=GREY_B, buff=0.08)

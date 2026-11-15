@@ -48,7 +48,7 @@ CACHE = Cache("music55")
 CLIPS = ClipStore("music55")
 load = CACHE.load
 LEVEL = EXAMPLE_LEVEL - 2.5
-save = saver(CLIPS, LEVEL, kind="rendered")
+save = saver(CLIPS, LEVEL, kind="physical model")
 MAJOR = {1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11}
 
 

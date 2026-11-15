@@ -143,7 +143,7 @@ class Halls(SoundScene):
         self.play(FadeOut(card), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"two halls", kind="rendered", detail=r"Part 8's voice, \ simulated halls, \ headphones", corner=DL, tag_corner=DR)
+            window(snd, r"two halls", kind="physical model", detail=r"Part 8's voice, \ simulated halls, \ headphones", corner=DL, tag_corner=DR)
             pulse(snd, boxes[0], st["narrow"], st["wide"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["wide"], c.duration, buff=0.08)
         res = label(rf"the first: \ lateral fraction {d['lf_pair']['narrow']:.2f} against {d['lf_pair']['wide']:.2f}; \ the voice sounds wider, \ the hall closer round you",

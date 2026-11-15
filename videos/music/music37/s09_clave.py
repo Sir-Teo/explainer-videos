@@ -91,6 +91,7 @@ class Clave(SoundScene):
             self.play(FadeIn(two3), FadeIn(halves[1]), FadeIn(cap))
         with self.listen(c) as snd:
             window(snd, r"three-two, \ then two-three", detail=r"bar and membrane models", corner=DL, tag_corner=DR)
+            pulse(snd, VGroup(three2, two3), 0, c.duration, rate=5.0, color=GREY_B, buff=0.15)
             flash_cells(snd, three2.cells, d["three_two"], d["sides"]["three-two"], d["pulse"], 3, 16)
             flash_cells(snd, two3.cells, d["two_three"], d["sides"]["two-three"], d["pulse"], 3, 16, color=BLUE)
         self.wait(0.3)

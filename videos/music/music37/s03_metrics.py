@@ -140,6 +140,7 @@ class Metrics(SoundScene):
             self.play(FadeIn(head), FadeIn(rows_))
         with self.listen(c) as snd:
             window(snd, r"four timelines", detail=r"bar and membrane models", corner=DL, tag_corner=DR)
+            pulse(snd, VGroup(*rows_), 0, c.duration, rate=5.0, color=GREY_B, buff=0.15)
             for i, n in enumerate(names):
                 flash_cells(snd, rows_[i].cells, TT.onsets(TT.TIMELINES[n]), d["starts"][n], d["pulse"], 2, 16, color=VOICE_C[i])
         self.wait(0.3)

@@ -67,7 +67,7 @@ class Diffusion(SoundScene):
             self.play(FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"two claps, \ twice", kind="rendered", detail=r"two simulated walls", corner=UL, tag_corner=UR)
+            window(snd, r"two claps, \ twice", kind="physical model", detail=r"two simulated walls", corner=UL, tag_corner=UR)
             pulse(snd, boxes[0], st["bare"], st["diffused"] - 0.3, buff=0.06)
             pulse(snd, boxes[1], st["diffused"], c.duration, buff=0.06)
             pulse(snd, tr, 0, c.duration, rate=5.0, color=GREY_B, buff=0.04)

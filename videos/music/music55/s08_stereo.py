@@ -148,7 +148,7 @@ class Stereo(SoundScene):
             m.move_to(L0 + R * 0.85 * np.array([math.sin(a), math.cos(a), 0]))
 
         with self.listen(c) as snd:
-            window(snd, r"left to right, \ twice", kind="rendered", detail=r"Part 8's voice, \ two loudspeakers, \ a spherical head", corner=DL, tag_corner=DR)
+            window(snd, r"left to right, \ twice", kind="physical model", detail=r"Part 8's voice, \ two loudspeakers, \ a spherical head", corner=DL, tag_corner=DR)
             pulse(snd, boxes[0], st["linear"], st["power"] - 0.3, buff=0.06)
             pulse(snd, boxes[1], st["power"], c.duration, buff=0.06)
             snd.drive(img, place)

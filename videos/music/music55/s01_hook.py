@@ -29,7 +29,7 @@ class Hook(SoundScene):
         self.play(FadeOut(card), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"one voice, \ one room, \ twice", kind="rendered", detail=r"Part 8's voice, \ a simulated room", corner=DL, tag_corner=DR)
+            window(snd, r"one voice, \ one room, \ twice", kind="physical model", detail=r"Part 8's voice, \ a simulated room", corner=DL, tag_corner=DR)
             pulse(snd, boxes[0], st["first"], st["second"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
         self.wait(0.3)
