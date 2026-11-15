@@ -256,4 +256,45 @@ PARTS = [
         I=(8, 9),
         also=(("Monochord's performer: rules of expression, the kinematic ritardando, vibrato, phase correction and the identity test", "explainer/music/monochord/perform.py"),),
     ),
+    Part(
+        n=44, level="U", widget="hits", prereq=(4, 11, 19, 27, 31, 40, 42, 43),
+        question="What does music do to a picture, and how is music written for a scene of unknown length?",
+        story="One animated scene of ours, three scores, three different films; then the same comic score cut to the picture "
+              "and 0.6 s late, where every hit misses. The part covers what film music does (Boltz's experiment, Cohen's "
+              "model), leitmotifs (a motive in three moods), spotting and hit points, and the tolerance of sync (sound may lag "
+              "a picture by about 125 ms but lead it by only 45). It works the click track's arithmetic (frames per beat = "
+              "1440 / tempo) and finds, by scanning every tempo, the only two between 70 and 160 that put three hits within a "
+              "frame of a beat: 88.28 (beats 4, 11 and 16) and 153.69; the nearest written click, 16-2, drifts 1.6 frames by "
+              "the landing, and a variable click lands every hit exactly. It hears Hollywood harmony (chromatic mediants, the "
+              "Lydian sound, the minor iv), ducks music under a model voice (6 dB more room in the speech band), and builds "
+              "an adaptive score as a state machine driven by a simulated game, whose transitions wait half a boundary on "
+              "average (0.25 s for a beat, 1 s for a bar, 2 s for a phrase). A sound chip of ours shows duty cycles, LFSR "
+              "noise and the one-channel arpeggio chord. The Tune becomes a cue on a hit point, a leitmotif and an adaptive "
+              "loop.",
+        handoff="The auditory scene in Part 45; expectation and emotion in Part 46; oscillators in Part 51; FM in Part 52; the "
+                "workstation in Part 53; loudness in Part 57; machines that compose in Part 65.",
+        outside="Part 4 for masking; Part 11 for meter; Part 19 for mixture; Part 27 for Wagner; Part 31 for transformations; "
+                "Part 40 for the sidechain; Part 42 for motives and dice games; Part 43 for timing. Frame rates, state machines.",
+        objectives={
+            "U": ["Hear one scene read three ways by three scores, and music that misses its picture.",
+                  "Hear a leitmotif change mood, and sound early, in sync and late against a picture.",
+                  "Hear film harmony's chromatic mediants and minor iv, and music ducked under a voice."],
+            "M": ["Convert between tempo, frames per beat and click notation, and find tempos that hit a set of hit points.",
+                  "Build an adaptive score as a state machine and compute its transition delays.",
+                  "Compute a pulse wave's harmonics from its duty cycle, and build a chip's channels."],
+            "D": ["Design a player study comparing transition rules for responsiveness and musical coherence."],
+            "I": ["Spot a scene and set its tempos; write segments, layers and stingers for middleware; mix under dialogue."],
+        },
+        results=[
+            ("Frames per beat", r"f = 24 \times 60 / \text{tempo}"),
+            ("A hit", r"\text{beat} = (t - t_0) \times \text{tempo} / 60"),
+            ("The scene", r"88.28 \text{ bpm: beats } 4, 11, 16"),
+            ("Waiting for a boundary", r"E[\text{delay}] = u / 2"),
+            ("A pulse of duty d", r"a_k \propto |\sin(\pi k d)| / k"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6),
+        D=(10,),
+        I=(7, 8, 9),
+        also=(("Monochord's music for picture and play: click arithmetic, the tempo finder, the chip, the adaptive score and ducking", "explainer/music/monochord/screen.py"),),
+    ),
 ]

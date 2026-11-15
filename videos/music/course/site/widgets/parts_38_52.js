@@ -460,4 +460,60 @@
       note: "With equal corrections of 0.25 and a 2% tempo difference the duo holds, with a steady lag. Set both to zero and the lag grows by 10 ms every beat. Let one player correct by 1.5 and the other by 0.6: the total passes 2 and every correction overshoots."
     });
   };
+  // ---------------------------------------------------------------- Part 44: a tempo that hits three actions
+  function scan44(v) {
+    var hits = [v.h1, v.h2, v.h3], out = [], sols = [], prevOk = false, best = null;
+    for (var b = 60; b <= 180.0001; b += 0.05) {
+      var per = 60 / b / v.sub, worst = 0;
+      hits.forEach(function (h) { var n = (h - v.start) / per; worst = Math.max(worst, Math.abs(n - Math.round(n)) * per * 24); });
+      out.push([b, worst]);
+      var ok = worst <= v.tol;
+      if (ok && (!best || worst < best[1])) best = [b, worst];
+      if (!ok && prevOk) { sols.push(best); best = null; }
+      prevOk = ok;
+    }
+    if (prevOk && best) sols.push(best);
+    return { curve: out, sols: sols };
+  }
+  W.hits = function (el) {
+    QB.widget(el, {
+      title: "Find a tempo that hits three actions",
+      sub: "Three hit points in a scene, in seconds, and the cue's first downbeat. For every tempo from 60 to 180 beats a minute, the curve shows how far (in film frames, 1/24 s) the worst hit falls from its nearest beat. Dips below the gold line are tempos that hit all three. Play the best one: a click on every beat and a thump at each hit.",
+      panels: 1, height: 240,
+      controls: [
+        { k: "start", label: "Cue downbeat", min: 0, max: 2, step: 0.05, value: 0.5, fmt: function (x) { return x.toFixed(2) + " s"; } },
+        { k: "h1", label: "Hit 1", min: 1, max: 6, step: 0.05, value: 3.2, fmt: function (x) { return x.toFixed(2) + " s (frame " + Math.round(24 * x) + ")"; } },
+        { k: "h2", label: "Hit 2", min: 4, max: 10, step: 0.05, value: 7.95, fmt: function (x) { return x.toFixed(2) + " s (frame " + Math.round(24 * x) + ")"; } },
+        { k: "h3", label: "Hit 3", min: 8, max: 15, step: 0.05, value: 11.4, fmt: function (x) { return x.toFixed(2) + " s (frame " + Math.round(24 * x) + ")"; } },
+        { k: "tol", label: "Tolerance", min: 0.25, max: 3, step: 0.25, value: 1, fmt: function (x) { return x + " frames"; } },
+        { k: "sub", label: "Hit on", min: 1, max: 2, step: 1, value: 1, fmt: function (x) { return x === 1 ? "beats" : "beats and half-beats"; } }
+      ],
+      buttons: [{ label: "Play the best tempo", act: function (s) {
+        var r = scan44(s.v); if (!r.sols.length) { s.sound = false; return; }
+        var b = r.sols.reduce(function (a, c) { return c[1] < a[1] ? c : a; })[0], rate = 44100, per = 60 / b;
+        var end = s.v.h3 + 1.5, out = new Float32Array(Math.floor(end * rate));
+        function tick(t, f, g, dec) { var i0 = Math.floor(t * rate); for (var q = 0; q < 0.3 * rate && i0 + q < out.length; q++) { var tt = q / rate; out[i0 + q] += g * Math.exp(-tt * dec) * Math.sin(2 * Math.PI * f * tt); } }
+        for (var t = s.v.start; t < end - 0.3; t += per) tick(t, 1760, 0.15, 60);
+        [s.v.h1, s.v.h2, s.v.h3].forEach(function (h) { tick(h, 70, 0.6, 8); tick(h, 140, 0.3, 10); });
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var r = scan44(v);
+        var a = g[0].axes({ x: [60, 180], y: [0, 12], title: "Worst miss in frames, for every tempo (gold: the tolerance)", xlabel: "beats a minute" });
+        a.line(r.curve.map(function (p) { return p[0]; }), r.curve.map(function (p) { return Math.min(p[1], 12); }), { color: "#60A5FA", width: 1 });
+        a.line([60, 180], [v.tol, v.tol], { color: C.idea, width: 1.5 });
+        a.dots(r.sols.map(function (p) { return p[0]; }), r.sols.map(function (p) { return p[1]; }), { r: 5, color: C.idea });
+      },
+      readout: function (v, s) {
+        var r = scan44(v);
+        var list = r.sols.slice(0, 5).map(function (p) { var f = 1440 / p[0]; return p[0].toFixed(2) + " (" + Math.floor(f) + "-" + Math.round((f - Math.floor(f)) * 8) + ")"; }).join(", ");
+        return [["tempos that hit all three", r.sols.length ? r.sols.length + ": " + list + (r.sols.length > 5 ? " ..." : "") : "none: loosen the tolerance or allow half-beats"],
+                ["one frame", (1000 / 24).toFixed(1) + " ms"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "no tempo to play")]];
+      },
+      note: "With the default scene only two tempos between 70 and 160 hit within a frame. Allow half-beats and the count jumps. Move one hit by a frame or two (0.05 s) and watch the solutions appear and vanish: that is why editors and composers negotiate over single frames."
+    });
+  };
 })();

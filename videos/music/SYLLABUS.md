@@ -1725,13 +1725,30 @@ drawn.
 *Story:* One animated scene, three scores, three different films. Then a problem film composers never had: in a
 game nobody knows how long the scene will last. The part works the arithmetic of hitting a cut on the beat and
 builds a score that rearranges itself.
+1. Hook: an ear-and-eye question (cut to picture, or 0.6 s late?); a short history; music for picture and play; the plan.
+2. What music does to an image: Boltz; one scene, three scores, heard; what film music does; Mickey-Mousing; source and score.
+3. Leitmotifs: Wagner to Hollywood; a motive in three moods, heard; what transformations keep; motives in games; motives on screen.
+4. Spotting and hit points: spotting; a cue sheet; an ear-and-eye question (early, in sync, late?); the tolerance of sync; click arithmetic.
+5. A tempo that hits three actions: the problem; the worst miss for every tempo; the beats heard under the scene; the rounding trap; other ways; a variable click heard; the temp track.
+6. Harmony on screen: Hollywood harmony; four progressions heard; why they work; genre codes.
+7. Music under dialogue: the voice first; ducking heard; the duck drawn; loudness standards; writing for the mix.
+8. Music for play: loops to systems; the techniques; a state machine; one change heard two ways; what makes it work.
+9. An adaptive score, played: a game and its score heard; what waiting costs; playtesting; responsive or musical.
+10. Music under hardware limits: chips; duty cycles heard; the noise channel heard; an ear question (one channel or three?); the Tune on the chip; after the chips; limits as a style.
+11. Frontier: generative and adaptive scoring; cognition; the research problem.
+12. Variation 44: the Tune as a cue, a leitmotif in three moods, and an adaptive loop. Outro: problems, payoffs.
+
 *Covers:* what music does to an image; leitmotifs; spotting and hit points; click-track arithmetic; harmony and
 affect on screen; mixing against dialogue; game music: resequencing, layering, transitions, stingers; chiptune
 under three-channel limits; middleware.
-*Built and computed:* a tempo finder that hits three sync points; an adaptive score as a state machine driven by
-a simulated game; a three-channel chip synthesizer.
-*Variation 44:* the Tune as a cue, as a leitmotif in three moods, and as an adaptive loop.
-*Frontier:* generative and adaptive scoring; the cognition of film music.
+*Built and computed:* `monochord/screen.py`: click arithmetic; a tempo finder over every tempo (two tempos between 70
+and 160 hit our three hit points within a frame, 88.28 on beats 4, 11 and 16; the rounded 16-2 click drifts 1.6
+frames; a variable click lands them exactly); ducking with the speech-band ratio (+6 dB for the voice); a simulated game
+driving an adaptive score as a state machine, with transition delays of half a boundary on average over 200 games; a
+sound chip of ours (pulse duty cycles and their missing harmonics, a 4-bit triangle, LFSR noise, arpeggio chords).
+*Variation 44:* the Tune as a cue whose 14 beats land on a 9.0 s hit (98.8 bpm, a 14-5 click), as a leitmotif in
+three moods, and as an adaptive loop.
+*Frontier:* generative and adaptive scoring; the cognition of film music (open: transition rules and players).
 *Reading:* Karlin & Wright, *On the Track*; Lehman, *Hollywood Harmony*; Collins, *Game Sound*.
 
 ## Act VIII · The Mind

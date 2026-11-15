@@ -91,6 +91,8 @@ LEDGER = [
      "measure": r"draft 1554 of 3000 kept; 2829 rejected by the critics, 171 scored"},
     {"part": 43, "title": r"as written and as performed: the same notes, the differences drawn", "seconds": 64.6,
      "measure": r"phrase ends up to 26\% longer, the last note 11\%; 28.8 s as written, 32.0 s performed"},
+    {"part": 44, "title": r"as a cue on a hit point, as a leitmotif in three moods, as an adaptive loop", "seconds": 46.8,
+     "measure": r"the cue's 14 beats at 98.8 bpm (a 14-5 click) land its last note on the 9.0 s hit; the loop adds a layer each pass"},
 ]
 
 
