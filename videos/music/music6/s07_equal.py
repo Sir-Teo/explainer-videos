@@ -33,7 +33,7 @@ class Equal(SoundScene):
             "twelve steps must make exactly two. So that number is the twelfth root of two. This is what Zhu "
             "Zaiyu computed in 1584, by taking square roots and cube roots on his abacus. <bookmark mark='c'/> In "
             "Europe the Flemish engineer Simon Stevin worked out the same scheme within a few years, less "
-            "accurately, and never published it. Note what kind of number this is. Every earlier tuning was "
+            "accurately, and never published it. Note what kind of number this is. The Pythagorean and just tunings we examined were "
             "built from ratios of whole numbers. This one has no whole-number ratios in it at all, except the "
             "octave."
         ) as vo:
@@ -55,7 +55,9 @@ class Equal(SoundScene):
         title = label(r"A worked example: \ a twelfth root on an abacus, \ and a guitar", font_size=36).to_edge(UP, buff=0.4)
         roots = VGroup(MathTex(rf"\sqrt{{2}} = {r['sqrt2']:.5f}", font_size=34), MathTex(rf"\sqrt{{{r['sqrt2']:.5f}}} = {r['sqrt_sqrt2']:.5f}", font_size=34),
                        MathTex(rf"\sqrt[3]{{{r['sqrt_sqrt2']:.5f}}} = {r['cbrt']:.5f}", font_size=34, color=TUNE),
-                       label(r"a square root, \ a square root, \ a cube root: \ $2 \times 2 \times 3 = 12$", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to(LEFT * 3.6 + UP * 1.2)
+                       label(r"a square root, \ a square root, \ a cube root: \ $2 \times 2 \times 3 = 12$", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to(LEFT * 3.2 + UP * 1.2)
+        if roots.width > 6.2:
+            roots.scale_to_fit_width(6.2)
         neck = Rectangle(width=9.6, height=0.7, stroke_color=GREY_B, stroke_width=2, fill_color="#3B2A1A", fill_opacity=0.6).move_to(DOWN * 1.9)
         left = neck.get_left()
         frets = VGroup(*[Line(left + RIGHT * 9.6 * (f["from_nut_mm"] / (d["scale_mm"] / 2)) * 0.5 * 2 * 0.5 + UP * 0.35, left + RIGHT * 9.6 * (f["from_nut_mm"] / (d["scale_mm"] / 2)) * 0.5 + DOWN * 0.35,
@@ -90,8 +92,8 @@ class Equal(SoundScene):
             f"{say(d['first_fret_mm'], 1)} millimetres from the nut. <bookmark mark='a'/> The second fret takes "
             "the same fraction of what is left, and so on, each fret a little closer than the last, until the "
             "twelfth lands exactly on the middle of the string. Instrument makers call it the rule of eighteen, "
-            f"because each fret takes off about one part in {say(d['rule'], 1)}. Every guitar in the world is a "
-            "ruler marked in twelfth roots of two."
+            f"because each fret takes off about one part in {say(d['rule'], 1)}. An ideal straight-fret, equal-tempered guitar is a "
+            "ruler marked in twelfth roots of two, before practical compensation."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(ans[0]), Create(frets[0]))
             vo.wait_until("a")
@@ -107,8 +109,8 @@ class Equal(SoundScene):
         bx = boxes(buff=1.8, width=3.0, height=1.4).move_to(DOWN * 0.2)
         with self.voiceover(
             "What does it cost? Two cents on every fifth is almost nothing: a beat every second or so. The cost "
-            "is in the thirds. Here are two major thirds on middle C. One is pure. The other is the third of "
-            "every piano you have ever heard. Which is which?"
+            "is in the thirds. Here are two major thirds on middle C. One is pure. The other is an ideal equal-tempered third, rather than the exact tuning of "
+            "every real piano. Which is which?"
         ):
             self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(bx))
         with self.listen(c) as snd:
@@ -122,13 +124,15 @@ class Equal(SoundScene):
         table = VGroup(label(rf"every fifth: \ {abs(d['fifth_error']):.1f} cents narrow", font_size=28, color=NARROW),
                        label(rf"every major third: \ {d['third_error']:.1f} cents wide", font_size=28, color=BAD),
                        label(r"every key: \ exactly the same", font_size=28, color=GOOD)).arrange(RIGHT, buff=0.7).to_edge(DOWN, buff=0.45)
+        if table.width > 12.4:
+            table.scale_to_fit_width(12.4)
         with self.voiceover(
             "A was pure. B is equal-tempered, and it shimmers: its partials beat about ten times a second. "
             f"<bookmark mark='a'/> Every major third in equal temperament is {say(d['third_error'], 1)} cents "
             "wide, two thirds of a comma, in every key. If you have never noticed, it is because you have never "
-            "heard anything else from a piano. It is a real loss, and many musicians of the eighteenth century "
+            "often heard approximations to this interval from keyboards. It is a real loss, and many musicians of the eighteenth century "
             "refused to accept it. <bookmark mark='b'/> What you buy with it is complete freedom. Any piece can "
-            "be played in any key, and sounds the same in all of them."
+            "be played in any key, and keeps its frequency ratios in all of them. Register and instrumental timbre can still change its sound."
         ) as vo:
             self.play(FadeOut(q), FadeIn(ans))
             vo.wait_until("a")

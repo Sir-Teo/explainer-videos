@@ -76,7 +76,7 @@ class Outro(SoundScene):
         e, m = load("equal"), load("meantone")
         card = objectives_card([
             r"twelve pure fifths overshoot seven octaves by 23.5 cents; \ no stack of fifths ever closes",
-            r"four pure fifths overshoot a pure third by 21.5 cents; \ pure chords with held notes drift",
+            r"four pure fifths overshoot a pure third by 21.5 cents; \ our pure-chord progression with held notes drifts",
             rf"meantone: \ fifths {m['narrow_by']:.1f} cents narrow, \ eight pure thirds, \ one wolf",
             r"well temperaments: \ the error graded round the circle; \ every key usable, \ each different",
             rf"equal temperament: \ every fifth {abs(e['fifth_error']):.0f} cents narrow, \ every third {e['third_error']:.0f} cents wide; \ tuned by counting beats",
@@ -85,7 +85,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "What did we find? Twelve pure fifths overshoot seven octaves, and no stack of fifths can ever close, "
             "because no power of three is a power of two. <bookmark mark='a'/> Four pure fifths overshoot a "
-            "pure third, and so pure chords with held notes drift. <bookmark mark='b'/> Meantone makes the "
+            "pure third, and so our pure-chord progression with held notes drifts. <bookmark mark='b'/> Meantone makes the "
             "thirds pure for eight keys, and pays with a wolf. <bookmark mark='c'/> The well temperaments grade "
             "the error round the circle, so that every key can be used and each has a character. "
             "<bookmark mark='d'/> Equal temperament makes every key the same, at the price of thirds fourteen "
@@ -136,7 +136,7 @@ class Outro(SoundScene):
             "Where does this come back? The stretched octave returns in Part 7, when we build the piano's "
             "string. The twelve notes that this part has justified become scales and keys. The grid of fifths "
             "and thirds returns as a map of chords. Commas and continued fractions return when we treat scales "
-            "as mathematics. Other divisions of the octave are the daily material of Indian, Arabic and "
+            "as mathematics. Other tuning traditions are central to Indian, Arabic and "
             "Indonesian music. And every synthesizer carries a tuning table."
         ):
             self.play(FadeIn(pay.head), LaggedStart(*[FadeIn(r) for r in pay.rows], lag_ratio=0.3), run_time=3.0)
@@ -145,13 +145,13 @@ class Outro(SoundScene):
         prac = practice_card([
             (r"piano technicians", r"set a temperament octave by beat rates, \ then stretch octaves to suit each piano's strings"),
             (r"harpsichordists and organists", r"choose a temperament for the repertoire: \ meantone for 1600, \ a well temperament for Bach"),
-            (r"choir directors and string coaches", r"tune held thirds low and fifths wide, \ and rehearse the places where the pitch sags"),
+            (r"choir directors and string coaches", r"adjust held major thirds towards pure, \ and rehearse the places where the pitch sags"),
             (r"producers and synth programmers", r"retune samples and oscillators with tuning tables; \ detune pairs by a few cents for warmth"),
         ], font_size=26)
         with self.voiceover(
             "And in practice. A piano technician sets one octave by beat rates and stretches the rest to suit "
             "the strings. A harpsichordist chooses a temperament to match the music: meantone for 1600, a well "
-            "temperament for Bach. A choir director tunes held thirds low, and rehearses the bars where the "
+            "temperament for Bach. A choir director may lower held major thirds towards pure, and rehearses the bars where the "
             "pitch is known to sag. And a producer detunes two oscillators by a few cents, on purpose, because "
             "slow beats are warm."
         ):
@@ -178,7 +178,7 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        c = clip("next.pluck")
+        c = clip("nextpart.pluck")
         s = StringView(width=9.0).move_to(UP * 1.2)
         lens = Lens(s.p(0.0), s.p(1.0), amp=0.3, color=TUNE)
         ways = VGroup(label(r"plucked", font_size=34, color=TUNE), label(r"struck", font_size=34, color=GREY_B), label(r"bowed", font_size=34, color=GREY_B)).arrange(RIGHT, buff=1.6).move_to(DOWN * 0.6)

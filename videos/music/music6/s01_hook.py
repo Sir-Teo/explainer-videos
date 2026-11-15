@@ -52,8 +52,8 @@ class Hook(SoundScene):
                     self.play(Indicate(cells[min(k, len(cells) - 1)], color=WHITE, scale_factor=1.08), run_time=0.5)
         with self.voiceover(
             "Four chords, played four times round, and every chord in it was perfectly in tune: pure thirds, pure "
-            "fifths, nothing beating. Any note that two neighbouring chords had in common was held at exactly the "
-            "same pitch from one to the next, as good singers do. <bookmark mark='a'/> And the music sank. Each "
+            "fifths, with matching partials aligned. Any note that two neighbouring chords had in common was held at exactly the "
+            "same pitch from one to the next. This is an idealized rule, not a rule that all good singers follow. <bookmark mark='a'/> And the music sank. Each "
             f"time round, the home chord came back about a fifth of a semitone lower. After four rounds it is "
             f"{say(abs(d['total']))} cents flat: most of a semitone. Listen to the first chord, and then the last."
         ) as vo:
@@ -84,8 +84,8 @@ class Hook(SoundScene):
         num = MathTex(r"\sqrt[12]{2} \;=\; " + d["root"][:14] + r"\,", d["root"][14:], font_size=40).move_to(DOWN * 0.4)
         num[1].set_color(GREY_B)
         why = VGroup(label(r"multiply a string's frequency by this number twelve times, \ and it has exactly doubled", font_size=28, color=GREY_A),
-                     label(r"twelve equal steps to the octave: \ every interval slightly wrong, \ and none of them bad", font_size=28, color=TUNE),
-                     label(r"it is the tuning of every piano, \ guitar and synthesizer today", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.22).move_to(DOWN * 2.2)
+                     label(r"twelve equal steps to the octave: \ equal semitones; \ familiar intervals approximate pure ratios", font_size=28, color=TUNE),
+                     label(r"the standard basis for many keyboards and fretted instruments", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.22).move_to(DOWN * 2.2)
         with self.voiceover(
             "In 1584 Zhu Zaiyu, a prince of the Ming dynasty who had given up his title for the study of music "
             "and the calendar, sat down with an abacus of eighty-one rods and computed a single number to "
@@ -93,8 +93,8 @@ class Hook(SoundScene):
             "frequency by it twelve times over, and the frequency has exactly doubled. <bookmark mark='b'/> It is "
             "one answer to the problem you have just heard: twelve equal steps to the octave, in which every "
             "interval but the octave is slightly wrong and none of them is bad. <bookmark mark='c'/> Today it is "
-            "the tuning of every piano, every guitar and every synthesizer. But it took three centuries to win, "
-            "and it was neither the first answer nor, for most music, the best-sounding one."
+            "the standard basis for many keyboards and fretted instruments, though pianos stretch their octaves and instruments can use other tunings. But it took three centuries to win, "
+            "and it was not the first answer. Which tuning sounds best depends on the music and listener."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -126,8 +126,8 @@ class Hook(SoundScene):
             "keys and pays for it with a wolf in the others. <bookmark mark='d'/> The well temperaments, in which "
             "every key is usable and no two sound alike. <bookmark mark='e'/> And equal temperament: what it "
             "costs, how a tuner sets it by counting beats, and why the number is twelve. <bookmark mark='f'/> "
-            "Last, what pianos, singers and string players really do, which is none of the above. Every tuning "
-            "in this part is computed by Monochord in exact fractions, and checked against the published tables."
+            "Last, what pianos, singers and string players really do, which is none of the above. Each tuning "
+            "in this part is computed by Monochord, using exact fractions where possible and numerical roots for temperaments, and checked against published tables."
         ) as vo:
             self.play(FadeIn(card.head))
             for mark, r in zip("abcdef", card.rows):

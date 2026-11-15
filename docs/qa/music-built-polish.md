@@ -10,8 +10,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 3 — The Spectrum | Complete; [repair and verification record](music/part03.md) | Open |
 | 4 — The Ear | Complete; [repair and verification record](music/part04.md) | Open |
 | 5 — Consonance | Complete; [repair and verification record](music/part05.md) | Open |
-| 6 — Tuning | In progress | Open |
-| 7–68 | Queued | Open |
+| 6 — Tuning | Complete; [repair and verification record](music/part06.md) | Open |
+| 7 — Strings, Hammers and Bows | In progress | Open |
+| 8–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -33,7 +34,11 @@ refresh was rescanned. Local identities: `renders/qa/music4/source-receipt.json`
 Part 5: twelve chapter previews reviewed; 30 tests, the lab, 12 sound-gate cases and 16 listening-window
 motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music5/source-receipt.json`.
 
-**Current: Part 6.** Its source repairs and preview gates are in progress; Part 7 source review has started while renders run. Automated endpoint preflight is also running
+Part 6: twelve chapter previews reviewed; 28 tests, the lab, 12 sound-gate cases and 16 listening-window
+motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music6/source-receipt.json`.
+
+**Current: Part 7.** Source repairs, native stills and the first six full-preview reviews are complete;
+remaining chapter renders and gates are in progress. Automated endpoint preflight is also running
 through the remaining episodes; its warnings require review and do not constitute episode approval. Keep numerical correctness, sampled visual review,
 motion detection, native-resolution checks and final listening/playback coverage distinct.
 

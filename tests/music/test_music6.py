@@ -90,3 +90,9 @@ def test_the_part_keeps_the_series_rules():
     check_scenes_and_clips(compute, SCENES)
     check_windows(compute, SCENES)
     check_ear_thread(compute, SCENES)
+
+
+def test_clip_prefixes_resolve_to_compute_items():
+    # Cold rendering computes clips by the prefix, before any cache exists.
+    assert all(p.stem.split(".")[0] in compute.ITEMS
+               for p in compute.CLIPS.dir.glob("*.json"))

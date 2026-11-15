@@ -46,7 +46,7 @@ class Piano(SoundScene):
                 pulse(snd, b, t0, t0 + 2.4)
         with self.voiceover(
             f"The exact octave beats, about {say(d['beat_exact'])} times a second on these exaggerated strings. "
-            "The stretched one is still. On an instrument whose partials are stretched, the in-tune octave is a "
+            "The stretched one aligns that selected partial pair; other pairs can still beat. On an instrument whose partials are stretched, a useful octave match can require a "
             "stretched octave. It is the lesson of the bent timbre, in an instrument found in every concert hall."
         ):
             self.play(Indicate(bx[1][0], color=GOOD))
@@ -65,11 +65,11 @@ class Piano(SoundScene):
         card = history_card(1938, r"O. L. Railsback", r"measures how pianos are actually tuned: flat in the bass, sharp in the treble, by tens of cents.", width=4.6, font_size=20).move_to(g.ax.c2p(29, 21))
         ends = VGroup(label(rf"{d['bottom']:.0f} cents", font_size=26, color=NARROW).next_to(g.ax.c2p(1, d["bottom"]), UP, buff=0.6).shift(RIGHT * 1.0),
                       label(rf"{d['top']:+.0f} cents", font_size=26, color=WIDE).next_to(g.ax.c2p(88, d["top"]), LEFT, buff=0.3))
-        tag = label(r"Monochord's model: \ every octave beatless, \ on strings of typical stiffness; \ the A above middle C left where it is", font_size=20, color=GREY_C).to_edge(DOWN, buff=0.3)
+        tag = label(r"Monochord's model: \ selected octave partials matched, \ on model stiff strings; \ the A above middle C left where it is", font_size=20, color=GREY_C).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Do that across a whole keyboard and you get a curve. <bookmark mark='a'/> A tuner sets the middle "
-            "of the keyboard to equal temperament, and then tunes octaves outward from it, each one beatless. "
-            "Because every string is a little stiff, every octave comes out a little wide, and the widening "
+            "of the keyboard to equal temperament, and then tunes outward, balancing beats between several partial pairs and intervals. "
+            "In this model, matching selected octave partials makes octaves wider than two to one, and the widening "
             "adds up. <bookmark mark='b'/> This is Monochord's model, with strings of typical stiffness. By the "
             f"top of the keyboard the notes are about {say(d['top'])} cents sharp of where equal temperament puts "
             f"them, and at the bottom about {say(abs(d['bottom']))} cents flat. <bookmark mark='c'/> In 1938 "
@@ -77,7 +77,7 @@ class Piano(SoundScene):
             "instrument that stands for equal temperament is not in equal temperament. No formula on paper says "
             "how a piano should be tuned. Its own strings do. And every piano is different. A short string has "
             "to be thicker for its pitch, so it is stiffer, and its partials are further out of line. That is "
-            "one reason a small upright never sounds like a concert grand, however well it is tuned: its "
+            "one reason smaller pianos can differ from concert grands, even when well tuned: its "
             "octaves have to be stretched more, and its bass notes hardly agree with themselves."
         ) as vo:
             self.play(FadeIn(g), FadeIn(zero))

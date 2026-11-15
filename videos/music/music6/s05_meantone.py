@@ -19,7 +19,7 @@ class Meantone(SoundScene):
         d = load("meantone")
         title = label(r"A worked example: \ how much must a fifth give up?", font_size=36).to_edge(UP, buff=0.4)
         card = history_card(1523, r"Pietro Aron, \ Venice",
-                            r"describes how to tune a keyboard so that the major thirds are pure, by making every fifth a little flat.", width=5.2, font_size=20).to_corner(UL, buff=0.4).shift(DOWN * 0.8)
+                            r"describes how to tune a keyboard so that the major thirds are pure, by narrowing the fifths in the usable chain.", width=5.2, font_size=20).to_corner(UL, buff=0.4).shift(DOWN * 0.8)
         ask = pause_card(r"Four pure fifths overshoot a pure third by one comma, \ 21.5 cents. \\ If all four fifths are to share the correction equally, \ how much narrower must each one be?",
                          width=7.6, font_size=26).move_to(RIGHT * 2.7 + UP * 0.9)
         steps = VGroup(MathTex(r"\tfrac{21.5}{4} = 5.4\ \text{cents each}", font_size=36),
@@ -46,7 +46,7 @@ class Meantone(SoundScene):
             "this is called quarter-comma meantone. The name meantone comes from its whole tone, which is "
             f"exactly half of the pure third. <bookmark mark='d'/> A fifth this narrow "
             f"beats about {say(d['fifth_beat'], 1)} times a second on middle C. It is a slow waver, and "
-            "listeners accepted it gladly, because in return every third was perfectly still."
+            "listeners accepted it gladly, because in return eight major thirds were pure."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(steps[0]))
             vo.wait_until("a")
@@ -106,8 +106,8 @@ class Meantone(SoundScene):
             f"comes out much too wide: by {say(d['wolf_wide_by'])} cents. <bookmark mark='b'/> This wolf is worse "
             "than the Pythagorean one. <bookmark mark='c'/> And look at the thirds. Eight of them are pure: the "
             "ones on C, G, D, A, E, and on F, B flat and E flat. The other four, the ones that have to cross the "
-            f"wolf, are {say(d['bad_third_wide_by'])} cents too wide. They are not thirds at all, and no ear will "
-            "take them for thirds."
+            f"wolf, are {say(d['bad_third_wide_by'])} cents too wide. They are far from pure major thirds and can sound very rough. A player cannot freely "
+            "substitute them for the good thirds."
         ) as vo:
             self.play(FadeIn(head), FadeIn(circ))
             vo.wait_until("a")
@@ -137,15 +137,15 @@ class Meantone(SoundScene):
                 pulse(snd, b, t0, t0 + 2.4)
         ans = VGroup(VGroup(label(r"third: \ pure", font_size=26, color=GOOD), label(rf"fifth: \ {d['narrow_by']:.0f} cents narrow", font_size=26, color=NARROW)).arrange(DOWN, buff=0.1).next_to(bx[0], DOWN, buff=0.25),
                      VGroup(label(rf"third: \ {d['bad_third_wide_by']:.0f} cents wide", font_size=26, color=BAD), label(rf"fifth: \ the wolf, \ {d['wolf_wide_by']:.0f} cents wide", font_size=26, color=BAD)).arrange(DOWN, buff=0.1).next_to(bx[1], DOWN, buff=0.25))
-        hist = VGroup(label(r"the standard keyboard tuning of Europe for some two hundred years", font_size=26, color=GREY_A),
+        hist = VGroup(label(r"widely used in European keyboards for about two centuries", font_size=26, color=GREY_A),
                       label(r"composers stayed in the good keys; \ some organs had split black keys, \ with a separate G$\sharp$ and A$\flat$", font_size=24, color=GREY_A)
                       ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The first is the sweetest major chord a keyboard has ever made. The second is unusable. "
+            "The first has a pure major third and a slightly narrowed fifth. The second is unusable. "
             "<bookmark mark='a'/> Its third is forty-one cents wide and its fifth is the wolf. The trouble is "
             "that a meantone keyboard has a G sharp but no A flat: the two are different notes, forty-one cents "
             "apart, and there is only one key for both. <bookmark mark='b'/> For some two hundred years this was "
-            "the normal keyboard tuning of Europe. Composers simply stayed in the good keys, which is one reason "
+            "a widely used family of keyboard tunings in Europe. Composers simply stayed in the good keys, which is one reason "
             "so much early music is written with few sharps or flats. Some organ builders went further, and "
             "split the black keys in two: the front half for G sharp, the back half for A flat."
         ) as vo:

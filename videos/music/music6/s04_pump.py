@@ -103,18 +103,18 @@ class Pump(SoundScene):
     # ------------------------------------------------------------------
     def moral(self):
         rows = VGroup(
-            label(r"pure fifths, \ all the way round", font_size=30, color=AIR), label(r"$\Rightarrow$ \ a wolf fifth, \ and restless thirds \quad (Pythagorean)", font_size=28, color=GREY_A),
+            label(r"eleven pure fifths, \ on a twelve-note keyboard", font_size=30, color=AIR), label(r"$\Rightarrow$ \ a wolf fifth, \ and restless thirds \quad (Pythagorean)", font_size=28, color=GREY_A),
             label(r"pure fifths and pure thirds", font_size=30, color=GOOD), label(r"$\Rightarrow$ \ two versions of some notes, \ and a pitch that will not stay put \quad (just)", font_size=28, color=GREY_A),
             label(r"so: \ which intervals shall we spoil, \ and by how much?", font_size=36, color=TUNE),
         ).arrange(DOWN, buff=0.3)
         rows[4].shift(DOWN * 0.4)
         with self.voiceover(
-            "So here is where we stand. <bookmark mark='a'/> Keep every fifth pure, and you get a wolf, and "
+            "So here is where we stand. <bookmark mark='a'/> Keep eleven fifths pure on a twelve-note keyboard, and you get a wolf, and "
             "thirds that will not sit still. <bookmark mark='b'/> Keep the fifths and the thirds both pure, and "
             "you need two versions of some notes, and the pitch will not stay put. For voices and violins, which "
             "can bend, that is a nuisance. For anything with fixed notes, an organ, a harpsichord, a fretted "
             "lute, it is fatal. <bookmark mark='c'/> A fixed instrument has to make some intervals deliberately "
-            "impure, so that the commas are spread out and disappear. That is called tempering, and the only "
+            "impure, so that the comma discrepancy is distributed rather than concentrated in one interval. That is called tempering, and the only "
             "questions are which intervals to spoil, and by how much. History gave three answers."
         ) as vo:
             head = label(r"Where we stand", font_size=38, color=GREY_A).to_edge(UP, buff=0.5)

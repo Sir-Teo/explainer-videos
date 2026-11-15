@@ -16,7 +16,7 @@ class WhyTwelve(SoundScene):
     def scan(self):
         d = load("why12")
         n, fifth, third = d["n"], d["fifth"], d["third"]
-        g = axes([1, 61], [0, 42], x_length=11.0, y_length=3.6, xlabel=r"equal steps to the octave", ylabel=r"cents from pure", xticks=[5, 7, 12, 19, 31, 41, 53], yticks=[0, 10, 20, 30, 40], font_size=20)
+        g = axes([1, 61], [0, 42], x_length=11.0, y_length=3.6, xlabel=r"equal steps to the octave", ylabel=r"absolute cents from pure (capped at 42)", xticks=[5, 7, 12, 19, 31, 41, 53], yticks=[0, 10, 20, 30, 40], font_size=20)
         g.move_to(DOWN * 0.5)
         keep = n >= 4
         n, fifth, third = n[keep], fifth[keep], third[keep]
@@ -28,7 +28,7 @@ class WhyTwelve(SoundScene):
                        for k in d["record_fifths"] if k >= 5])
         with self.voiceover(
             "Why twelve? If the octave is going to be cut into equal steps, it could be cut into any number. "
-            "So try them all. <bookmark mark='a'/> For each number of steps from two to sixty, the blue line is "
+            "So try them all. <bookmark mark='a'/> For each number of steps from four to sixty, the blue line is "
             "how far its best fifth is from pure. Most are hopeless. <bookmark mark='b'/> But a few numbers "
             "stand out, each with a better fifth than any smaller number: five, seven, twelve, twenty-nine, "
             "forty-one and fifty-three. Twelve has a fifth only two cents out, and nothing does better until "
@@ -54,7 +54,7 @@ class WhyTwelve(SoundScene):
                       label(r"with $n$ equal steps, \ the fifth must be a whole number $m$ of them: \ $\tfrac{m}{n} \approx 0.58496$", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.2).move_to(UP * 2.0)
         ask = pause_card(r"Which fraction with a small denominator is closest to 0.58496? \\ Try $\tfrac12$, \ $\tfrac35$, \ $\tfrac47$, \ $\tfrac7{12}$.", width=7.6).move_to(DOWN * 0.6)
         vals = VGroup(*[MathTex(rf"\tfrac{{{m}}}{{{n}}} = {m / n:.4f}", font_size=34, color=GOOD if n == 12 else WHITE) for m, n in ((1, 2), (3, 5), (4, 7), (7, 12))]).arrange(RIGHT, buff=0.7).move_to(UP * 0.4)
-        cf = MathTex(r"0.58496 = \cfrac{1}{1 + \cfrac{1}{1 + \cfrac{1}{2 + \cfrac{1}{2 + \cfrac{1}{3 + \cdots}}}}}", font_size=30).move_to(LEFT * 3.4 + DOWN * 1.9)
+        cf = MathTex(r"\log_2(3/2) = \cfrac{1}{1 + \cfrac{1}{1 + \cfrac{1}{2 + \cfrac{1}{2 + \cfrac{1}{3 + \cdots}}}}}", font_size=30).move_to(LEFT * 3.4 + DOWN * 1.9)
         conv = VGroup(label(r"cut it off after each term:", font_size=24, color=GREY_B),
                       MathTex(r"\tfrac11,\ \ \tfrac12,\ \ \tfrac35,\ \ \tfrac7{12},\ \ \tfrac{24}{41},\ \ \tfrac{31}{53},\ \ \tfrac{179}{306}", font_size=36, color=TUNE),
                       label(r"the best fraction for its size, \ every time", font_size=24, color=GREY_B)).arrange(DOWN, buff=0.2).move_to(RIGHT * 2.9 + DOWN * 1.9)
@@ -79,9 +79,9 @@ class WhyTwelve(SoundScene):
             "Thirty-one fifty-thirds. The denominators are the scales: five notes, twelve notes, forty-one, "
             "fifty-three. Twelve is the first division of the octave with a good fifth that a hand can still "
             "play. And look at the two before it. Five and seven. A keyboard has seven white keys and five black "
-            "ones in every octave. The seven-note scale and the five-note scale, which between them carry most "
-            "of the world's melodies, are the two earlier answers to the same question, and the twelve-note "
-            "keyboard contains them both."
+            "ones in every octave. These familiar seven-note and five-note collections are not seven- and five-step equal temperaments. Many "
+            "melodies use unequal steps derived from chains of fifths. The twelve-note "
+            "keyboard contains approximations to both collections."
         ) as vo:
             self.play(FadeOut(ask), LaggedStart(*[FadeIn(v) for v in vals], lag_ratio=0.5), run_time=5.0)
             vo.wait_until("a")
@@ -122,9 +122,9 @@ class WhyTwelve(SoundScene):
             "almost closed. <bookmark mark='b'/> Thirty-one was worked out by Christiaan Huygens, who saw that "
             "it is quarter-comma meantone with the wolf removed; an organ with thirty-one notes to the octave "
             "was built in the Netherlands in 1950. <bookmark mark='c'/> Nineteen was tried by experimenters in "
-            "the sixteenth century. Each of them is better in tune than twelve. And each needs a keyboard that "
-            "nobody wants to learn. Twelve is not the best division of the octave. It is the smallest one that "
-            "is good enough."
+            "the sixteenth century. Each improves some important intervals over twelve, while changing others. Each also needs an unfamiliar keyboard or playing method that "
+            "some musicians have chosen to learn. Twelve is not the best division of the octave. It is a compact compromise that "
+            "became widely established."
         ) as vo:
             self.play(FadeOut(note))
             for mark, r in zip("abc", hist):

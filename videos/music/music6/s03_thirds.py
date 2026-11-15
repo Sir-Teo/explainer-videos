@@ -34,7 +34,7 @@ class Thirds(SoundScene):
             "valley of Part 5's curve, is five to four, which is eighty to sixty-four. <bookmark mark='c'/> The "
             f"E reached by fifths is too high, by the ratio eighty-one to eighty: {say(d['comma_cents'], 1)} "
             "cents. This is the syntonic comma. It is nearly the same size as the Pythagorean comma, and it has "
-            "nothing to do with it: this one is the disagreement between the number three and the number five. "
+            "a different definition: this one is the disagreement between the number three and the number five. "
             "Here are the two thirds, in an order I will not tell you. Which is which?"
         ) as vo:
             self.play(LaggedStart(*[FadeIn(x) for x in chain], lag_ratio=0.3), LaggedStart(*[FadeIn(x) for x in arrows], lag_ratio=0.3), run_time=3.0)
@@ -138,7 +138,7 @@ class Thirds(SoundScene):
             "right is a pure fifth. One step up is a pure third. Every note is then a ratio of small powers of "
             "two, three and five. <bookmark mark='b'/> This is just intonation, and the seven notes of the C "
             "major scale sit in it as a compact patch. <bookmark mark='c'/> Any three notes at the corners of one "
-            "of these triangles form a chord that is pure in every interval: no beats at all. The major scale "
+            "of these triangles form a chord that is pure in every interval, with matching partials aligned. The major scale "
             "contains three of them, on C, on F and on G. Renaissance theorists thought they had found the true "
             "scale of nature."
         ) as vo:
@@ -158,11 +158,11 @@ class Thirds(SoundScene):
         bad = DashedLine(nodes["D"][0].get_center(), nodes["A"][0].get_center(), color=BAD, stroke_width=5, dash_length=0.12).set_z_index(-0.4)
         p, q = d["d_a_ratio"]
         bl = VGroup(label(rf"D to A: \ ${p}:{q}$", font_size=26, color=BAD), label(rf"{d['d_a_cents']:.0f} cents: \ a comma short of a fifth", font_size=24, color=BAD)
-                    ).arrange(DOWN, buff=0.1).scale(0.9).move_to(RIGHT * 5.0 + DOWN * 1.3)
+                    ).arrange(DOWN, buff=0.1).scale(0.9).move_to(RIGHT * 4.4 + DOWN * 1.3)
         with self.voiceover(
             "They had not, and you can see why on the grid. D is two steps to the right of C. A is one step to "
             "the left and one up. <bookmark mark='a'/> They are not neighbours. The fifth from D up to A, which "
-            f"every piece in C major uses, comes out as {p} to {q}: a whole comma short of a pure fifth. It is "
+            f"many pieces in C major use, comes out as {p} to {q}: a whole comma short of a pure fifth. It is "
             "just intonation's own wolf, and it is in the middle of the scale. Here is the fifth from C to G, "
             "and then the fifth from D to A."
         ) as vo:

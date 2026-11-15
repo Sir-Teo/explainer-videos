@@ -48,18 +48,30 @@ class Well(SoundScene):
     def compare(self):
         d = load("well")
         order = d["order"]
-        head = label(r"the major third in every key: \ how many cents wider than pure", font_size=30, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"the major third in every key: \ cents above or below pure", font_size=30, color=GREY_A).to_edge(UP, buff=0.35)
         panels = VGroup()
         for name, col in (("Pythagorean", None), ("meantone", None), ("Werckmeister III", None), ("equal", None)):
             vals = [v for _, v in d["table"][name]["thirds"]]
             kb = key_bars(vals, order, width=5.6, height=1.35, top=45.0, font_size=15)
+            guides = VGroup()
+            for cents in (20, 40):
+                y = cents / 45.0 * 1.35
+                guide = DashedLine(kb.base.get_start() + UP * y, kb.base.get_end() + UP * y,
+                                   color=GREY_D, stroke_width=1, dash_length=0.06)
+                guides.add(guide, label(str(cents), font_size=15, color=GREY_B).next_to(guide, LEFT, buff=0.08))
+            kb.add(guides)
+            kb.base = VGroup(kb.base, guides)
             tag = label({"Pythagorean": r"Pythagorean", "meantone": r"quarter-comma meantone", "Werckmeister III": r"Werckmeister III", "equal": r"twelve equal steps"}[name],
                         font_size=24, color=TUNE).next_to(kb, UP, buff=0.18).align_to(kb, LEFT)
             panels.add(VGroup(kb, tag))
-        panels.arrange_in_grid(2, 2, buff=(0.9, 0.75)).move_to(DOWN * 0.4)
+        for k, panel in enumerate(panels):
+            x, y = (-3.25 if k % 2 == 0 else 3.25), (0.6 if k < 2 else -2.2)
+            # Align the actual zero lines, not bounding boxes of unequal-height bars.
+            panel.shift(RIGHT * x + UP * y - panel[0].base[0].get_center())
+            panel[1].move_to(RIGHT * (x - 2.8) + UP * (y + 1.65), aligned_edge=LEFT)
         with self.voiceover(
             "What did it cost? Here is one picture for all four tunings so far: the major third in each of the "
-            "twelve keys, as cents wider than pure. <bookmark mark='a'/> Pythagorean: eight thirds a comma wide, "
+            "twelve keys, as signed cents above or below pure. <bookmark mark='a'/> Pythagorean: eight thirds a comma wide, "
             "and four that happen to be nearly pure, by accident, in the keys nobody used. <bookmark mark='b'/> "
             "Meantone: eight pure thirds, and four impossible ones. <bookmark mark='c'/> Werckmeister: no third "
             "is pure, and no third is impossible. The thirds are best around C, four cents wide, and get "
@@ -84,7 +96,7 @@ class Well(SoundScene):
         vals = VGroup(*[label(rf"third: \ {d['wide'][k]:.0f} cents wide", font_size=26, color=error_color(d["wide"][k])).next_to(b, DOWN, buff=0.2) for k, b in zip(keys, bx)])
         with self.voiceover(
             "And that grading can be heard. Here is the major chord on C, then on E, then on F sharp, in "
-            "Werckmeister's tuning. On a piano these would be the same chord at three heights. Are they here? "
+            "Werckmeister's tuning. In ideal equal temperament these have the same frequency ratios at three heights, though timbre and register still differ. Are they here? "
             "Which is the calmest?"
         ):
             self.play(FadeIn(note, shift=DOWN * 0.2), FadeIn(bx))
@@ -109,8 +121,8 @@ class Well(SoundScene):
             "<bookmark mark='a'/> Tunings of this family are called well "
             "temperaments, and they are what the title of Bach's Well-Tempered Clavier refers to, in 1722: a "
             "prelude and a fugue in each of the twenty-four keys, to show that on a well-tempered keyboard all "
-            "of them can be played. Well tempered does not mean equally tempered. On Bach's keyboard, C major "
-            "and F sharp major were different places."
+            "of them can be played. Well tempered does not mean equally tempered. In an unequal well temperament, C major "
+            "and F sharp major have different interval structures. Bach's exact preferred temperament remains debated."
         ) as vo:
             self.play(FadeOut(note), FadeIn(vals))
             self.wait(8.0)

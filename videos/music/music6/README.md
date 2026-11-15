@@ -1,7 +1,7 @@
 # Music, Built: Part 6, Tuning
 
 Part 6 of a sixty-eight-part course in music (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)). Part 5 found that the smoothest intervals are the ones at which partials line up:
+[the syllabus](../SYLLABUS.md)). Part 5 modeled low roughness for harmonic tones where strong partials line up:
 2:1, 3:2, 5:4. This part asks whether an instrument can have them all at once. It cannot, for a reason that lies in
 the integers, and every tuning system is a decision about where to put the error. The systems are Monochord's
 (`explainer/music/monochord/tuning.py`), exact where they can be and checked against Barbour's tables; every sound
@@ -33,11 +33,11 @@ is computed in `compute.py`. Dates and attributions are the published ones, list
   continued fraction of log₂(3/2): 1/2, 3/5, 7/12, 24/41, 31/53); five and seven as the black and the white keys;
   the major chord in 12, 19, 31 and 53 steps; Jing Fang, Huygens, and an organ with 31 notes to the octave.
 * **8. The piano's stretched octaves.** Stiff strings have sharp partials (Part 1), so the smooth octave is a wide
-  one (Part 5); an exact and a stretched octave on very stiff strings; a model of Railsback's curve (1938), from 20
+  one (Part 5); an exact and a stretched octave on very stiff strings; a model with the shape of Railsback's curve (1938), from 20
   cents flat at the bottom to 26 sharp at the top.
 * **9. What players do.** Fixed and free instruments; four habits of good intonation; the open strings of a
   quartet, and the comma between the cello's C and the violin's E; do choirs drift? (Howard, 2007; D'Amario and
-  colleagues, 2020); the pitch of A, from about 415 to 440 Hz.
+  colleagues, 2020); selected pitch references, distinguishing the modern A=415 Baroque convention from varied historical pitches.
 * **10. Frontier: tuning that moves.** Adaptive tuning; Lehman's reading of the loops on Bach's title page (2005)
   and the replies; what is not known. ★ research problem.
 * **Variation 6, recap and problems.** The Tune with chords, a phrase at a time, in Pythagorean tuning, meantone in
@@ -112,7 +112,7 @@ python -m videos.music.labs 6                                  # the lab (writes
 3. **Ear.** The lab (`python -m videos.music.labs 6`) plays the major chord on C in four tunings, in a random
    order. Rank them from stillest to busiest, and name the equal-tempered one.
 
-   *Solution.* The four are just intonation (no beats), quarter-comma meantone (a pure third, and a fifth 5.4 cents
+   *Solution.* The four are just intonation (matching partials coincide), quarter-comma meantone (a pure third, and a fifth 5.4 cents
    narrow that wavers about 2.4 times a second), twelve equal steps (a third 13.7 cents wide, beating about ten
    times a second) and Pythagorean (a third 21.5 cents wide, beating about sixteen times a second). The lab prints
    the order it played, and each chord's root-mean-square error in cents: 0.0, 3.8, 9.8 and 15.2.
@@ -133,9 +133,10 @@ python -m videos.music.labs 6                                  # the lab (writes
 
    *Pointers.* This is the problem of Sethares's adaptive tuning (1994) and of commercial schemes such as Hermode
    tuning; see also Stange, Wick and Hinrichsen, "Playing music in just intonation: a dynamically adaptive tuning
-   scheme" (*Computer Music Journal*, 2018), who model the notes as joined by springs. With no penalty the tuner
-   reproduces the pump and sinks a comma a round; with a large one it stays in equal temperament. In between it
-   must distribute the comma, and the open questions are perceptual: how fast may a held note glide before the
+   scheme" (*Computer Music Journal*, 2018), who model the notes as joined by springs. Roughness alone does not fix absolute pitch: transposing the whole chord can leave the objective unchanged.
+   Reproducing the pump additionally requires a rule for preserving common tones. A large motion penalty
+   preserves held pitches, but does not by itself impose equal temperament or anchor the tonic. Add an explicit
+   pitch reference and specify how new notes enter. The optimization must then distribute the comma, and the open questions are perceptual: how fast may a held note glide before the
    glide is heard, and do listeners prefer the result?
 
 ## Sources

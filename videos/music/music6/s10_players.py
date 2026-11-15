@@ -19,21 +19,21 @@ class Players(SoundScene):
         free = VGroup(label(r"free", font_size=34, color=GOOD), label(r"voices, \ violins, \ trombones; \\ and, \ within limits, \ every wind player's lips", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.25)
         VGroup(fixed, free).arrange(RIGHT, buff=1.6, aligned_edge=UP).move_to(UP * 1.6)
         habits = VGroup(
-            label(r"a held chord: \ thirds drawn down towards pure", font_size=28, color=GOOD),
+            label(r"a held chord: \ major thirds often lowered towards pure", font_size=28, color=GOOD),
             label(r"a melody: \ leading notes pushed up, \ towards the Pythagorean", font_size=28, color=AIR),
             label(r"a barbershop seventh: \ tuned to 7 : 4, \ far below the piano's", font_size=28, color=TUNE),
-            label(r"with a piano: \ everybody follows the piano", font_size=28, color=GREY_A),
+            label(r"with a piano: \ players usually accommodate the piano", font_size=28, color=GREY_A),
         ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to(DOWN * 1.4)
         with self.voiceover(
-            "Everything so far has been about instruments with fixed notes. Most music is not made on them. "
-            "<bookmark mark='a'/> A voice, a violin, a trombone can produce any pitch at all, and wind players "
-            "bend every note with their lips. For them tuning is not a table. It is a decision made afresh on "
+            "Everything so far has been about instruments with fixed notes. Many instruments can also vary their pitches continuously. "
+            "<bookmark mark='a'/> A voice, a violin, a trombone can vary pitch continuously within its range, and wind players "
+            "adjust pitch with breath, embouchure and fingering. For them tuning is not a table. It is a decision made afresh on "
             "every note. And good players make different decisions in different places. <bookmark mark='b'/> On "
-            "a held chord, they draw the third down towards pure, because a beating third in a slow chord "
+            "a held major chord, they often draw the major third down towards pure, because a beating third in a slow chord "
             "sounds sour. <bookmark mark='c'/> In a melody, they often do the opposite, and push a leading note "
             "up towards the note it is heading for: higher even than the piano's, close to the Pythagorean "
             "version. <bookmark mark='d'/> A barbershop quartet tunes its sevenths to seven to four, the "
-            "nameless valley of Part 5, nearly a third of a semitone below the piano's seventh, and prizes the "
+            "harmonic-seventh valley of Part 5, nearly a third of a semitone below the piano's seventh, and prizes the "
             "ring it makes. <bookmark mark='e'/> And when there is a piano in the room, everybody follows the "
             "piano."
         ) as vo:
@@ -112,17 +112,18 @@ class Players(SoundScene):
     def pitch(self):
         g = axes([1700, 2000], [380, 460], x_length=9.6, y_length=3.0, xlabel=r"year", ylabel=r"the A above middle C (Hz)", xticks=[1700, 1750, 1800, 1850, 1900, 1950, 2000], yticks=[380, 400, 420, 440, 460], font_size=20)
         g.move_to(DOWN * 0.6)
-        marks = [(1740, 415, r"Baroque pitch, \ about 415"), (1810, 423, r"about 423"), (1859, 435, r"France, \ by law: \ 435"), (1939, 440, r"London, \ 1939: \ 440")]
+        marks = [(1810, 423, r"about 423"), (1859, 435, r"France, \ by law: \ 435"), (1939, 440, r"London, \ 1939: \ 440")]
+        modern = label(r"modern Baroque reference: $A=415$ Hz; not a universal eighteenth-century pitch", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.8)
         dots = VGroup(*[VGroup(Dot(g.ax.c2p(y, f), radius=0.08, color=HIST), label(t, font_size=22, color=GREY_A).next_to(g.ax.c2p(y, f), UP, buff=0.15)) for y, f, t in marks])
         line = Line(g.ax.c2p(1939, 440), g.ax.c2p(2000, 440), color=HIST, stroke_width=3)
         head = label(r"one more decision: \ where the whole system sits", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
-        tag = label(r"typical values; \ pitch varied from town to town", font_size=18, color=GREY_C).to_edge(DOWN, buff=0.3)
+        tag = label(r"selected references, not a universal trend; \ historical pitch varied widely", font_size=18, color=GREY_C).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "There is one more decision, and it is separate from all the others: where the whole system sits. A "
             "tuning fixes the ratios between notes. It does not say how many hertz any of them is. "
             "<bookmark mark='a'/> For most of history that was a local matter. An organ in one town could be a "
-            "semitone away from an organ in the next. In the eighteenth century the A above middle C was "
-            "typically somewhere near four hundred and fifteen hertz, and it crept upwards as orchestras "
+            "semitone away from an organ in the next. In the eighteenth century pitch standards varied widely. A modern historical-performance convention uses A near "
+            "four hundred and fifteen hertz for much Baroque repertoire. In some places pitch rose as orchestras "
             "looked for a more brilliant sound. <bookmark mark='b'/> France fixed it by law at four hundred and "
             "thirty-five in 1859. <bookmark mark='c'/> And in 1939 an international conference in London settled "
             "on four hundred and forty, which is what your tuner app assumes. It is a convention, not a fact of "
@@ -130,10 +131,10 @@ class Players(SoundScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(tag))
             vo.wait_until("a")
-            self.play(FadeIn(dots[0]), FadeIn(dots[1]))
+            self.play(FadeIn(dots[0]), FadeIn(modern))
             vo.wait_until("b")
-            self.play(FadeIn(dots[2]))
+            self.play(FadeIn(dots[1]))
             vo.wait_until("c")
-            self.play(FadeIn(dots[3]), Create(line))
+            self.play(FadeIn(dots[2]), Create(line))
         self.wait(0.3)
         self.clear_scene()

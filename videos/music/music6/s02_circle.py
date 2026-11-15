@@ -20,7 +20,7 @@ class Comma(SoundScene):
         circ = FifthsCircle(radius=2.0, names=tuple(s["name"] for s in steps[:12])).move_to(LEFT * 3.6 + DOWN * 0.2)
         g = axes([0, 1260], [0, 1], x_length=6.2, y_length=0.6, xlabel=r"cents above C", ylabel="", xticks=[0, 200, 400, 600, 800, 1000, 1200], yticks=[], font_size=18)
         g.move_to(RIGHT * 3.3 + DOWN * 1.6)
-        table = VGroup(label(r"each step: \ $\times\,\tfrac32$, \ then halve until it fits in the octave", font_size=26, color=GREY_A),
+        table = VGroup(label(r"each step: \ $\times\,\tfrac32$, \\ then halve until it fits in the octave", font_size=26, color=GREY_A),
                        MathTex(r"\left(\tfrac32\right)^{12} = \frac{531441}{4096} = 129.746\ldots", font_size=32),
                        MathTex(r"2^{7} = 128", font_size=32)).arrange(DOWN, buff=0.25).move_to(RIGHT * 3.3 + UP * 1.6)
         with self.voiceover(
@@ -75,7 +75,7 @@ class Comma(SoundScene):
         title = label(r"A worked example: \ could any number of fifths close the circle?", font_size=34).to_edge(UP, buff=0.45)
         ask = pause_card(r"For the circle to close, \ some number of fifths must equal some number of octaves: \\ $\left(\tfrac32\right)^m = 2^n$. \quad Can that ever happen?", width=10.0).move_to(UP * 1.2)
         steps = VGroup(MathTex(r"\left(\tfrac32\right)^m = 2^n \quad\Longleftrightarrow\quad 3^m = 2^{\,m+n}", font_size=38),
-                       label(r"every power of 3 is odd; \quad every power of 2 is even", font_size=32, color=GREY_A),
+                       label(r"for positive exponents: \ powers of 3 are odd; powers of 2 are even", font_size=32, color=GREY_A),
                        label(r"never.", font_size=44, color=BAD)).arrange(DOWN, buff=0.35).move_to(UP * 0.9)
         moral = VGroup(label(r"no stack of pure fifths ever returns to its starting note", font_size=30, color=EAR),
                        label(r"every tuning is a decision about where to put the error", font_size=32, color=TUNE)).arrange(DOWN, buff=0.25).move_to(DOWN * 2.0)
@@ -88,7 +88,7 @@ class Comma(SoundScene):
         with self.voiceover(
             "For m fifths to equal n octaves, three halves to the power m must equal two to the power n. Multiply "
             "out the halves, and that says a power of three equals a power of two. <bookmark mark='a'/> But every "
-            "power of three is odd, and every power of two is even. <bookmark mark='b'/> It can never happen. Not "
+            "power of three is odd, and every positive power of two is even. <bookmark mark='b'/> It can never happen. Not "
             "with twelve fifths, not with fifty-three, not with a million. <bookmark mark='c'/> So the trouble is "
             "not in our instruments or our ears. It is in the integers. No stack of pure fifths ever returns to "
             "its starting note, and the same goes for pure thirds, which need a five. Every tuning system ever "
@@ -119,7 +119,7 @@ class Comma(SoundScene):
         bx = boxes((r"C to G", r"G$\sharp$ to E$\flat$"), buff=0.5, width=2.7, height=1.1, font_size=28).move_to(RIGHT * 3.2 + DOWN * 0.7)
         with self.voiceover(
             "The oldest answer is the bluntest. Tune eleven fifths pure, in a chain from E flat up to G sharp, and "
-            "let the twelfth be whatever is left. <bookmark mark='a'/> That is Pythagorean tuning, the tuning of "
+            "let the twelfth be whatever is left. <bookmark mark='a'/> That is Pythagorean tuning, a tuning principle used in "
             "medieval Europe and of classical China. Eleven of its fifths are perfect. <bookmark mark='b'/> The "
             f"twelfth, from G sharp to E flat, has to absorb the whole comma. It is {say(d['wolf_cents'], 1)} "
             "cents instead of seven hundred and two, and it howls. Musicians called it the wolf. Here is a pure "
@@ -135,13 +135,13 @@ class Comma(SoundScene):
             for ev, b in zip(("pure", "wolf"), bx):
                 t0 = snd.time_of(ev)
                 pulse(snd, b, t0, t0 + 2.2)
-        cost = VGroup(label(r"the price is paid elsewhere too:", font_size=24, color=GREY_A), label(r"every major third is $\tfrac{81}{64}$,", font_size=24, color=GREY_A),
+        cost = VGroup(label(r"the price is paid elsewhere too:", font_size=24, color=GREY_A), label(r"eight major thirds are $\tfrac{81}{64}$,", font_size=24, color=GREY_A),
                       label(r"the restless third of Part 5", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.1).move_to(RIGHT * 3.2 + DOWN * 2.4)
         with self.voiceover(
             "As long as music stayed away from that one fifth, the wolf did no harm. But Pythagorean tuning has "
-            "a second cost, and it is in every key. Its major thirds are all made of four pure fifths. That is "
-            "the restless third of eighty-one to sixty-four that we met in Part 5, and it is the reason this "
-            "tuning was abandoned."
+            "a second cost, and it is in every key. Eight of its major thirds are made of four pure fifths; four crossing the wolf differ. That is "
+            "the restless third of eighty-one to sixty-four that we met in Part 5, and it helped motivate alternatives to this "
+            "tuning."
         ):
             self.play(FadeIn(cost))
         self.wait(0.3)

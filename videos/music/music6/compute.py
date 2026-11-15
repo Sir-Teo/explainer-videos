@@ -311,7 +311,7 @@ def compute_variation() -> dict:
 
 def compute_nextpart() -> dict:
     c = string_note(0.5, 2.6)
-    return {"clips": {"pluck": save("next.pluck", c, kind="physical model", detail="Part 1's string, plucked")}}
+    return {"clips": {"pluck": save("nextpart.pluck", c, kind="physical model", detail="Part 1's string, plucked")}}
 
 
 ITEMS = {"pump": compute_pump, "circle": compute_circle, "syntonic": compute_syntonic, "meantone": compute_meantone, "well": compute_well,
