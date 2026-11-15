@@ -66,7 +66,7 @@ class Circuit(SoundScene):
     def convergence(self):
         d = load("ladder")
         cv = d["conv"]
-        order = [("forward", r"forward steps", EAR), ("corrected", r"half-sample correction", GOLD), ("trapezoid", r"trapezoid and Newton", TUNE)]
+        order = [("forward", r"forward steps", EAR), ("corrected", r"half-sample correction", BLUE), ("trapezoid", r"trapezoid and Newton", TUNE)]
         lp = line_plot([cv[k] for k, _, _ in order], width=6.4, height=3.8, ylo=-80, yhi=0, colors=[c for _, _, c in order],
                        yticks=(0, -20, -40, -60, -80), ylabel=r"error against the reference, \ dB", size=16).move_to(LEFT * 2.0 + DOWN * 0.2)
         xt = VGroup(*[label(f"{r}x", font_size=15, color=GREY_A).next_to(lp.to(i, -80), DOWN, buff=0.12) for i, r in enumerate(d["rates"])])
@@ -130,8 +130,8 @@ class Circuit(SoundScene):
         tl = label(r"equations without tanh", font_size=18, color=GREY_A).next_to(hl, UP, buff=0.3)
         tn = label(r"the circuit", font_size=18, color=TUNE).next_to(hn, UP, buff=0.3)
         res = SurroundingRectangle(hl[3], color=EAR, buff=0.08)
-        rl = label(rf"the 4th harmonic, \ near the cutoff: \ ${d['h_lin'][3]:+.1f}$ dB", font_size=16, color=EAR).next_to(res, RIGHT, buff=0.15)
-        nl = label(rf"in the circuit: \ ${d['h_nl'][3]:.1f}$ dB", font_size=16, color=TUNE).next_to(hn[3], RIGHT, buff=0.15).shift(UP * 0.4)
+        rl = label(rf"the 4th harmonic, \ near the cutoff: \ ${d['h_lin'][3]:+.1f}$ dB", font_size=16, color=EAR).next_to(hl, DOWN, buff=0.4)
+        nl = label(rf"in the circuit: \ ${d['h_nl'][3]:.1f}$ dB", font_size=16, color=TUNE).next_to(hn, DOWN, buff=0.4)
         cap = label(r"a 220 Hz sawtooth, \ three times full level, \ into the ladder at 900 Hz with $k = 3.2$: \ harmonics in dB re the first", font_size=15, color=GREY_A).to_edge(DOWN, buff=0.35)
         head = label(r"what saturation did", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(

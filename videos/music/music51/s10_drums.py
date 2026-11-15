@@ -82,13 +82,13 @@ class Drums(SoundScene):
         tt = np.arange(len(env)) * 0.001
         ax = frame_axes(width=4.2, height=1.6, xlo=0, xhi=tt[-1], ylo=0, yhi=1.05)
         cl = VGroup(ax, curve(tt, env / env.max(), ax.to, color=GOLD, width=2.5))
+        def lines(*ts):
+            return VGroup(*[label(t, font_size=16, color=GREY_A) for t in ts]).arrange(DOWN, buff=0.12)
         cells = VGroup(
-            VGroup(label(r"snare", font_size=22, color=TUNE), label(r"two resonators, \ 180 and 330 Hz, \ low $Q$: \ the shell", font_size=16, color=GREY_A),
-                   label(r"plus high-passed noise with its own envelope: \ the wires, \ the `snappy' knob", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.2),
-            VGroup(label(r"clap", font_size=22, color=GOLD), cl, label(r"three bursts of noise 10 ms apart, \ then a tail: \ several hands, \ not quite together", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.2),
-            VGroup(label(r"hats", font_size=22, color=BLUE), label(r"six square waves at unrelated pitches \ (Part 40), \ band-passed high", font_size=16, color=GREY_A),
-                   label(r"a short decay for closed, \ a long one for open", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.2),
-        ).arrange(RIGHT, buff=0.6).move_to(DOWN * 0.1)
+            VGroup(label(r"snare", font_size=22, color=TUNE), lines(r"two resonators, \ 180 and 330 Hz, \ low $Q$:", r"the shell", r"plus high-passed noise,", r"its own envelope:", r"the wires \ (`snappy')")).arrange(DOWN, buff=0.25),
+            VGroup(label(r"clap", font_size=22, color=GOLD), cl, lines(r"three bursts of noise 10 ms apart,", r"then a tail:", r"hands not quite together")).arrange(DOWN, buff=0.2),
+            VGroup(label(r"hats", font_size=22, color=BLUE), lines(r"six square waves", r"at unrelated pitches \ (Part 40),", r"band-passed high;", r"short for closed, \ long for open")).arrange(DOWN, buff=0.25),
+        ).arrange(RIGHT, buff=0.8, aligned_edge=UP).move_to(DOWN * 0.1)
         head = label(r"the rest of the kit", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The rest of the kit is built the same way. <bookmark mark='a'/> The snare: two resonators, at a hundred and eighty "

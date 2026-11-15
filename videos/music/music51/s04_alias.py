@@ -71,7 +71,7 @@ class Alias(SoundScene):
         d = load("alias")
         cv = d["curves"]
         order = [("naive", r"naive", EAR), ("polyblep", r"PolyBLEP", TUNE), ("polyblep2", r"PolyBLEP, \ twice the rate", BLUE),
-                 ("blit", r"BLIT", GOLD)]
+                 ("blit", r"BLIT", "#A3E635")]
         lp = line_plot([cv[k] for k, _, _ in order], width=7.0, height=3.6, ylo=-70, yhi=0, colors=[c for _, _, c in order],
                        yticks=(0, -20, -40, -60), ylabel=r"aliased energy, \ dB re the note", size=16).move_to(LEFT * 1.6 + DOWN * 0.2)
         xt = VGroup(*[label(f"{f:g}", font_size=14, color=GREY_A).next_to(lp.to(i, -70), DOWN, buff=0.12) for i, f in enumerate(d["freqs"])])
