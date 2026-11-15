@@ -144,7 +144,7 @@ class Grains(SoundScene):
             "line. <bookmark mark='b'/> Scattered by more than half a second, and coloured by pitch, they make a band instead of "
             "a line: the melody is still there, smeared, which is why the cloud still sounds faintly like the Tune."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax), FadeIn(xl), FadeIn(yl), FadeIn(diag))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(xl), FadeIn(yl), FadeIn(diag), FadeIn(ghost(dots, 0.2)))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(dt) for dt in dots], lag_ratio=0.004), run_time=2.0)
             vo.wait_until("b")

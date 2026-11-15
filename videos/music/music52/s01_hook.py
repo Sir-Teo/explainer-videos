@@ -55,7 +55,7 @@ class Hook(SoundScene):
             "Out come lines at the carrier plus and minus every multiple of the modulator, none of them in a harmonic series: "
             "a bell, from two oscillators, and as the push dies away the lines fade from the top down, as a struck bell's do."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax), FadeIn(bx), FadeIn(xt))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(bx), FadeIn(xt), FadeIn(ghost(VGroup(a, b), 0.25)))
             vo.wait_until("a")
             self.play(FadeIn(a), FadeIn(ta))
             vo.wait_until("b")

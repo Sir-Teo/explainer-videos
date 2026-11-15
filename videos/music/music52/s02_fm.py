@@ -168,6 +168,9 @@ class Fm(SoundScene):
                 lvl = float(kk)
                 snd.drive(g, lambda m, t, lvl=lvl: m.set_opacity(1.0 if lvl <= 8.0 * t / d["sweep_s"] < lvl * 2 or (lvl == 8.0 and 8.0 * t / d["sweep_s"] >= 8.0) else 0.0))
             snd.drive(sets["0.0"], lambda m, t: m.set_opacity(1.0 if 8.0 * t / d["sweep_s"] < 1.0 else 0.0))
+        for kk in keys:
+            sets[kk].set_opacity(0.0)
+        sets["8.0"].set_opacity(1.0)
         with self.voiceover(
             "From a pure sine, the tone grows brighter and brassier as more sidebands arrive, the lines spreading out across "
             "the harmonics of two hundred and twenty: one knob, the index, does what a filter's cutoff did in Part 51, and with "

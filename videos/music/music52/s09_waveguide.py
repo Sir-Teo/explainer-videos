@@ -64,7 +64,7 @@ class Waveguide(SoundScene):
             "scheme is exact for the ideal string, and so is the waveguide; they are the same mathematics. But the waveguide "
             "does it with two moving rails, which a computer does by moving a pointer, not the data."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(ghost(a, 0.25)))
             vo.wait_until("a")
             self.play(Create(a), FadeIn(key[0]), run_time=1.5)
             vo.wait_until("b")
