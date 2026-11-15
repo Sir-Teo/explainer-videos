@@ -4,10 +4,10 @@ import numpy as np
 
 from videos.music.music55.common import *  # noqa: F403
 
-W, H = 2.2, 1.5
+W, H = 2.6, 1.7
 O = np.array([-W / 2, -H / 2 - 0.3, 0])
-SRC = np.array([0.55, 0.45])
-LIS = np.array([1.6, 1.05])
+SRC = np.array([0.65, 0.5])
+LIS = np.array([1.9, 1.2])
 
 
 def pt(x, y):
@@ -88,12 +88,14 @@ class Simulation(SoundScene):
         bars = VGroup()
         for i, (k, v) in enumerate(zip(ks, vals)):
             h = 3.0 * v / top
-            b = Rectangle(width=0.7, height=max(h, 0.03), stroke_width=0, fill_color=TUNE, fill_opacity=0.8).move_to([-4.6 + 1.0 * i, -2.2 + h / 2, 0])
-            bars.add(VGroup(b, label(f"{v}", font_size=15, color=WHITE).next_to(b, UP, buff=0.08), label(f"{k}", font_size=15, color=GREY_A).next_to([-4.6 + 1.0 * i, -2.2, 0], DOWN, buff=0.1)))
-        xl = label(r"images up to this order \ (a 20 by 15 by 10 m room)", font_size=16, color=GREY_A).move_to([-1.1, -3.05, 0])
+            b = Rectangle(width=0.7, height=max(h, 0.03), stroke_width=0, fill_color=TUNE, fill_opacity=0.8).move_to([-5.6 + 0.95 * i, -2.2 + h / 2, 0])
+            bars.add(VGroup(b, label(f"{v}", font_size=15, color=WHITE).next_to(b, UP, buff=0.08), label(f"{k}", font_size=15, color=GREY_A).next_to([-5.6 + 0.95 * i, -2.2, 0], DOWN, buff=0.1)))
+        xl = label(r"images up to this order \ (a 20 by 15 by 10 m room)", font_size=16, color=GREY_A).move_to([-2.3, -3.05, 0])
         eq = VGroup(MathTex(r"\frac{dN}{dt} = \frac{4\pi c^3 t^2}{V}", font_size=36, color=EAR),
-                    label(rf"after one second, \ {d['reflections_per_s']:,.0f} reflections a second", font_size=17, color=EAR)).arrange(DOWN, buff=0.25).move_to([4.4, 1.2, 0])
-        note = label(r"the cube again: \ $(4k^3 + 6k^2 + 8k + 3)/3$ images up to order $k$", font_size=17, color=WHITE).move_to([4.2, -0.6, 0])
+                    label(rf"after one second, \ {d['reflections_per_s']:,.0f} reflections a second", font_size=17, color=EAR)).arrange(DOWN, buff=0.25).move_to([4.3, 1.2, 0])
+        note = label(r"the cube again: \ $(4k^3 + 6k^2 + 8k + 3)/3$ \ images up to order $k$", font_size=17, color=WHITE).move_to([4.3, -0.6, 0])
+        note.scale_to_fit_width(min(note.width, 3.6))
+        eq.scale_to_fit_width(min(eq.width, 4.2))
         head = label(r"how many reflections?", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "How many images are there? <bookmark mark='a'/> In a box, seven up to the first order, the source and its six "

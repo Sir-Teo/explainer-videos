@@ -4,7 +4,7 @@ import numpy as np
 
 from videos.music.music55.common import *  # noqa: F403
 
-FCOL = {"500": GREY_A, "1000": TUNE, "2000": EAR}
+FCOL = {"500": BLUE, "1000": TUNE, "2000": EAR}
 
 
 class Diffusion(SoundScene):
@@ -109,7 +109,7 @@ class Diffusion(SoundScene):
         mod = label(rf"the remainders after dividing by {N}", font_size=17, color=GREY_A).next_to(cells, DOWN, buff=0.2)
         W = 0.75
         scale = 0.11
-        base_y = -2.4
+        base_y = -1.9
         top_y = base_y + scale * 22
         wells = VGroup()
         for i, dep in enumerate(d["depths_cm"]):
@@ -120,8 +120,8 @@ class Diffusion(SoundScene):
         fins = VGroup(*[Line([(i - N / 2) * W, top_y, 0], [(i - N / 2) * W, top_y - scale * 22, 0], color=GREY_A, stroke_width=2) for i in range(N + 1)])
         dl = VGroup(*[label(f"{dep:.1f}", font_size=14, color=TUNE).next_to([(i - (N - 1) / 2) * W, top_y, 0], UP, buff=0.1) for i, dep in enumerate(d["depths_cm"])])
         cap = label(rf"depths in cm for {d['f0']:.0f} Hz: \ $d_n = \frac{{n^2 \bmod N}}{{N}}\,\frac{{\lambda_0}}{{2}}$; \ wells {d['width_cm']:.0f} cm wide, \ one period {N * d['width_cm']:.0f} cm",
-                    font_size=17, color=GREY_A).next_to(block, RIGHT, buff=0.3).shift(UP * 0.2)
-        cap.scale_to_fit_width(min(cap.width, 3.4))
+                    font_size=18, color=GREY_A).next_to(block, DOWN, buff=0.3)
+        cap.scale_to_fit_width(min(cap.width, 12.0))
         head = label(r"a quadratic-residue diffuser", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             f"Take N equals {say(N)}. <bookmark mark='a'/> Square nought to six and keep the remainders after dividing by "
