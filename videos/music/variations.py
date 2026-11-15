@@ -105,6 +105,8 @@ LEDGER = [
      "measure": r"reverberation time 1.2 s in the room, 1.9 s on the plate, 1.3 s on the spring, 4.2 s in the cathedral"},
     {"part": 50, "title": r"sung, hard-tuned, vocoded and stretched eightfold", "seconds": 23.0,
      "measure": r"median pitch error 28 cents sung, 0.6 after correction; one second stretched to 7.7"},
+    {"part": 51, "title": r"switched on: four monophonic tracks, one patch each", "seconds": 24.0,
+     "measure": r"354 notes on four tracks; the lead's aliasing 34 dB below its harmonics, 18 if naive"},
 ]
 
 

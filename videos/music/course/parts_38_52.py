@@ -546,4 +546,35 @@ PARTS = [
         I=(5, 6, 9, 10),
         also=(("Monochord's dynamics: shapers, Chebyshev, ADAA, compressor, gate, OLA, phase vocoder, YIN, PSOLA, vocoder", "explainer/music/monochord/dynamics.py"),),
     ),
+    Part(
+        n=51, level="U", widget="ladder", prereq=(3, 8, 48, 49, 50),
+        question="How does a synthesizer make a sound from nothing, and how is its analogue circuit run inside a computer?",
+        story="The first synthesizer weighed nearly two hundred tons: Cahill's Telharmonium (1906) summed dynamos' near-sines and sent them down telephone lines; Moog's modules (1964) and Switched-On Bach (1968) did the job by subtraction. An ear question hears forty hand-set sines against a two-oscillator patch a search fitted to them (3.0 dB away, missing a bump a low-pass cannot make). A sawtooth is built from sines; the Hammond's nine drawbars borrow tempered wheels (fifths 2.0 cents flat, the third 13.7 sharp); four sources and a filter sweep follow. A naive digital sawtooth aliases (25.6 dB at 110 Hz to 10.3 at 3.5 kHz, 3 dB worse an octave); PolyBLEP cuts it by 14 to 16 dB (an ear question), BLIT sits near 64. The ladder is four poles and a loop, 1/((1+s)^4+k), ringing at k = 4 and losing bass as 1/(1+k); run against its circuit equations, forward steps converge at 6 dB per doubling and the trapezoid with Newton at 12 (37.2 dB at 48 kHz); an ear question hears the saturating circuit against its linear equations, and past k = 4 the filter sings the Tune. Envelopes, LFOs, pulse width, hard sync and unison move one note; wavetables scan eight cycles (aliasing 18 dB naive, 56 band-limited); struck resonators make an 808-style kit (decay 0.454 s against 0.453 predicted); a grid search fits patches, recovers a hidden one, and fails on an organ (27 dB).",
+        handoff="FM, granular and physical-model synthesis in Part 52; MIDI and the sequencer in Part 53; synthesizers in a mix in "
+                "Part 56; transcription, the inverse problem for recordings, in Part 61; differentiable synthesizers in Part 66.",
+        outside="Part 3 for Fourier series; Part 6 for equal temperament; Part 8 for source and filter; Part 40 for the 808; "
+                "Part 48 for aliasing; Part 49 for poles and filters. Laplace transforms, ordinary differential equations, "
+                "Newton's method, Runge-Kutta.",
+        objectives={
+            "U": ["Hear a fitted patch against its target, three Hammond registrations, and a filter sweep with and without resonance.",
+                  "Hear a naive sawtooth alias against PolyBLEP, the ladder at three resonances, and its circuit against its equations.",
+                  "Hear three envelopes on one patch, vibrato, tremolo and a wobble, pulse-width modulation, hard sync and unison."],
+            "M": ["Build naive, PolyBLEP, BLIT and additive sawtooths, and measure each one's aliasing against pitch.",
+                  "Derive the ladder's response and its k = 4 edge; step its circuit forward and by the trapezoid with Newton.",
+                  "Build envelopes, wavetables, struck-resonator drums, and a grid search that fits a patch to harmonic levels."],
+            "D": ["Decide whether gradient descent through a differentiable ladder fits real notes as reliably as a search."],
+            "I": ["Choose an oscillator algorithm, a filter solver and a sample rate for a plug-in, and a patch for a sound."],
+        },
+        results=[
+            ("Sawtooth", r"\tfrac{2}{\pi}\sum_k (-1)^{k+1} \sin(2\pi k f t)/k"),
+            ("Ladder", r"H(s) = 1/\big((1 + s/\omega_c)^4 + k\big)"),
+            ("Edge", r"(1 + j)^4 = -4 \Rightarrow k = 4"),
+            ("Pulse", r"|a_k| \propto |\sin(\pi k w)|/k"),
+            ("Resonator", r"\tau = 2Q/(2\pi f)"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7),
+        D=(11,),
+        I=(5, 8, 9, 10),
+        also=(("Monochord's synthesizer: oscillators, the ladder and its solvers, envelopes, wavetables, drums, patch fitting", "explainer/music/monochord/synth.py"),),
+    ),
 ]

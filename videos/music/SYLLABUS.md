@@ -1952,12 +1952,30 @@ YIN; PSOLA; a pitch corrector for Part 8's voice (28 cents to 0.6); a 16-band vo
 *Story:* The first synthesizer weighed two hundred tons. Cahill's Telharmonium (1906) made tones with dynamos and
 sent them down telephone lines to subscribers, and it failed. Sixty years later a module the size of a book did
 the same job, and *Switched-On Bach* sold a million copies.
+1. Hook: an ear question (forty sines or a fitted patch: which is the original?); the two compared; the Telharmonium; Moog and Carlos; the plan.
+2. Additive synthesis: a sawtooth from sines; Fourier's list; the Hammond; three registrations heard; tempered drawbars; the cost.
+3. Subtractive synthesis: take away; four sources; the chain and voltage control; a filter sweep heard; from cords to keyboards.
+4. Why digital sawtooths alias: the drop; one note's spectrum; aliasing against pitch; PolyBLEP drawn; an ear question (which aliases?); the cures.
+5. The ladder filter: four poles and a loop; the algebra; five responses; the edge at k = 4; resonance costs bass; three resonances heard.
+6. Running the circuit: the equations; three solvers; convergence; an ear question (circuit or equations without tanh?); harmonics; past the edge; the filter sings.
+7. Envelopes and modulation: ADSR; three envelopes; one patch three ways heard; LFOs; three modulations heard; routing.
+8. Pulse width, sync and unison: width as a knob; hard sync; PWM and sync heard; unison; a supersaw heard; drift.
+9. Wavetables: a wave from memory; the table; a scan heard; three spectra; mipmaps; wavetables now.
+10. Drum circuits: struck resonators; the kick from the circuit; snare, clap, hats; a kit heard; the ladder struck as toms; circuits and samples.
+11. Fitting a patch: the inverse problem; a distance; the search checked; the landscape; the hook's target; an organ out of reach, heard; why fitting is hard.
+12. Frontier: learning the inverse; differentiable synthesizers; where gradients go wrong; the research problem.
+13. Variation 51: the Tune switched on, four tracks layered. Outro: problems, payoffs.
+
 *Covers:* additive synthesis from organ to Hammond; subtractive synthesis; why digital sawtooths alias and how
 to stop it; the ladder filter; envelopes; modulation; sync and pulse width; unison; wavetables; drum circuits.
-*Built and computed:* an analog-modelled voice with alias levels measured; the ladder against its circuit
-equations; fitting a patch to a target spectrum.
-*Variation 51:* the Tune as a multitracked "switched-on" arrangement.
-*Frontier:* sound matching by learning; differentiable synthesizers.
+*Built and computed:* `monochord/synth.py`: naive, PolyBLEP, BLIT and additive sawtooths with aliasing measured
+(naive 25.6 dB down at 110 Hz to 10.3 at 3.5 kHz; PolyBLEP 14 to 16 dB better); pulses, hard sync, unison, tempered
+drawbars; the ladder by forward steps, Huovilainen's correction and the trapezoid with Newton, against Runge–Kutta
+(6 and 12 dB a doubling; −37.2 dB at 48 kHz); self-oscillation within 20 cents; ADSR, wavetables with band-limited
+copies; struck-resonator drums (decay 0.454 s against 0.453); a patch fitted to harmonic levels (a hidden patch found
+within 0.7 dB; the hook's target 3.0 dB; an organ 27).
+*Variation 51:* the Tune switched on: four monophonic tracks, one patch each (354 notes; aliasing 34 dB down, 18 if naive).
+*Frontier:* sound matching by learning; differentiable synthesizers (open: can descent fit a patch as reliably as a search?).
 *Reading:* Roads, *The Computer Music Tutorial*; Pirkle; Välimäki & Huovilainen (2006); Pinch & Trocco, *Analog
 Days*.
 

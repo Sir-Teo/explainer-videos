@@ -789,4 +789,57 @@
       note: "The bursts alternate loud and quiet. Compressed and made up, the quiet ones come up toward the loud: the swing between them shrinks by about the ratio, above the threshold."
     });
   };
+  W.ladder = function (el) {
+    function resp(f, fc, k) {
+      // |1 / ((1 + j f/fc)^4 + k)| in dB
+      var re = 1, im = f / fc, r2 = re * re - im * im, i2 = 2 * re * im;
+      var r4 = r2 * r2 - i2 * i2, i4 = 2 * r2 * i2;
+      return -10 * Math.log10((r4 + k) * (r4 + k) + i4 * i4);
+    }
+    QB.widget(el, {
+      title: "The ladder filter",
+      sub: "Set the cutoff and the feedback k. The plot is the linear ladder's response, 1/((1 + s/wc)^4 + k): watch the peak grow at the cutoff and the bass fall as 1/(1 + k). At k = 4 the filter oscillates by itself. Play a sawtooth through the nonlinear model (four tanh stages, run at twice the rate).",
+      panels: 1, height: 260,
+      controls: [{ k: "fc", label: "Cutoff", min: 100, max: 8000, step: 10, value: 1000, fmt: function (x) { return x.toFixed(0) + " Hz"; } },
+                 { k: "k", label: "Feedback k", min: 0, max: 4.5, step: 0.05, value: 2, fmt: function (x) { return x.toFixed(2); } },
+                 { k: "drive", label: "Drive", min: 0.1, max: 3, step: 0.1, value: 0.5, fmt: function (x) { return x.toFixed(1); } }],
+      buttons: [{ label: "Play a 110 Hz sawtooth through it", act: function (s) {
+        var rate = 44100, n = 3 * rate, os = 2, out = new Float32Array(n), ph = 0, f0 = 110, s0 = 0, s1 = 0, s2 = 0, s3 = 0, prev = 0;
+        var g = 1 - Math.exp(-2 * Math.PI * s.v.fc / (rate * os)), k = s.v.k, peak = 1e-9;
+        for (var i = 0; i < n; i++) {
+          ph += f0 / rate; if (ph >= 1) ph -= 1;
+          var dt = f0 / rate, x = 2 * ph - 1, u;
+          if (ph < dt) { u = ph / dt; x -= 2 * u - u * u - 1; } else if (ph > 1 - dt) { u = (ph - 1) / dt; x -= u * u + 2 * u + 1; }
+          x *= s.v.drive;
+          for (var o = 0; o < os; o++) {
+            var fb = 0.5 * (s3 + prev); prev = s3;
+            var t0 = Math.tanh(x - k * fb);
+            s0 += g * (t0 - Math.tanh(s0)); s1 += g * (Math.tanh(s0) - Math.tanh(s1));
+            s2 += g * (Math.tanh(s1) - Math.tanh(s2)); s3 += g * (Math.tanh(s2) - Math.tanh(s3));
+          }
+          var env = Math.min(1, i / (0.01 * rate)) * Math.min(1, (n - i) / (0.1 * rate));
+          out[i] = s3 * env; peak = Math.max(peak, Math.abs(out[i]));
+        }
+        for (var j = 0; j < n; j++) out[j] = 0.5 * out[j] / peak;
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var xs = [], ys = [];
+        for (var e = Math.log10(20); e <= Math.log10(20000); e += 0.01) { xs.push(e); ys.push(Math.max(-60, Math.min(30, resp(Math.pow(10, e), v.fc, v.k)))); }
+        var a = gr[0].axes({ x: [Math.log10(20), Math.log10(20000)], y: [-60, 30], title: "Response (dB) against log10 of frequency (Hz)", xlabel: "log10 Hz" });
+        a.line([Math.log10(20), Math.log10(20000)], [0, 0], { color: "#3A4250", width: 1.5 });
+        a.line(xs, ys, { color: C.idea, width: 2.5 });
+        a.dots([Math.log10(v.fc)], [Math.max(-60, Math.min(30, resp(v.fc, v.fc, v.k)))], { r: 5, color: "#F472B6" });
+      },
+      readout: function (v, s) {
+        var atc = v.k >= 4 ? "oscillates (k >= 4)" : (-20 * Math.log10(4 - v.k)).toFixed(1) + " dB";
+        return [["gain at the cutoff, 1/|k - 4|", atc],
+                ["bass gain, 1/(1 + k)", (-20 * Math.log10(1 + v.k)).toFixed(1) + " dB"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Each rung lags 45 degrees at the cutoff, so four lag 180: the subtracted feedback turns into added feedback, and at k = 4 the loop gain is one. Turn the drive up near k = 4 and hear the tanh stages hold the resonance down."
+    });
+  };
 })();
