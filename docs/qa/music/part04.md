@@ -66,3 +66,11 @@ The silent-narration previews total 60.10 minutes, not a final narrated runtime.
 
 Regenerate changed narration, inspect pronunciation and continuous listening/playback, measure final-film
 alignment, and check complete-episode joins, native motion and mastering. No publication was performed.
+
+## Clean-cache follow-up
+
+A later series preflight exposed a clip prefix that differs from its computation item.
+The shared loader now accepts explicit aliases; this part maps `next` to `nextpart`, so its closing clip
+can be computed on first use. Three isolated loader regression cases pass (cold lookup, cache reuse and
+an actionable missing-clip error). This changes lookup only; cached clip content and picture timing are
+unchanged. The local source receipt was refreshed for the alias declaration; preview media were retained.

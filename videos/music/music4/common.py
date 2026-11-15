@@ -9,7 +9,7 @@ from explainer.music.kit import *  # noqa: F403
 from .compute import CACHE, CLIPS, load  # noqa: F401
 
 PART = 4
-clip = clip_loader(CACHE, CLIPS)
+clip = clip_loader(CACHE, CLIPS, item_aliases={"next": "nextpart"})
 BONE = "#E8DCC2"      # the ear's solid parts
 FLUID = "#5B8DEF"     # the fluid of the inner ear
 

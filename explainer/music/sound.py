@@ -38,17 +38,22 @@ from explainer.voiceover import VoiceoverScene
 PEAK_CEILING_DB = -1.5  # dBTP: nothing in a master may exceed it (checked, never limited)
 
 
-def clip_loader(cache, store):
+def clip_loader(cache, store, *, item_aliases=None):
     """``clip(name)`` for a part's scenes: the clip ``<item>.<sub>`` from the part's store, computing the item that
-    makes it on first use (as ``Cache.load`` does for numbers)."""
+    makes it on first use (as ``Cache.load`` does for numbers). ``item_aliases`` maps
+    clip prefixes to differently named computation items."""
+
+    aliases = dict(item_aliases or {})
 
     def clip(name: str) -> Clip:
+        prefix = name.split(".")[0]
+        item = aliases.get(prefix, prefix)
         if not store.has(name):
-            cache.load(name.split(".")[0])
+            cache.load(item)
             if not store.has(name):
                 raise FileNotFoundError(
                     f"clip {name!r} is missing although its item is cached: rerun the part's compute with --force "
-                    f"{name.split('.')[0]}")
+                    f"{item}")
         return store.load(name)
 
     return clip
