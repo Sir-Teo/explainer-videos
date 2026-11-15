@@ -1983,13 +1983,31 @@ Days*.
 *Story:* In 1967 John Chowning turned a vibrato up until it was faster than the note itself and heard bells. The
 mathematics is a Bessel function per sideband, the patent made Stanford a fortune, and the DX7 (1983) put the
 sound on every record of its decade. The part builds FM, then two other ways out of the oscillator.
+1. Hook: an ear question (a measured bell or two oscillators?); the two spectra; Chowning, the patent, the DX7; the plan.
+2. Frequency modulation: a vibrato speeding up, heard; the formula; predicted and measured lines; Bessel's functions; the index swept, heard; Carson's rule.
+3. Ratios, indices and Chowning's instruments: four ratios; sidebands below zero; three ratios heard; brass, bell and drum; the three heard; FM against the filter.
+4. Operators and algorithms: operators; four algorithms; feedback's sawtooth; three patches heard; the sound of a decade.
+5. Granular synthesis: Gabor's quanta; three grains; the engine; a voice four ways heard; the cloud; grains at work.
+6. Spectral models: sines and the rest; a piano note's partials; its stretched partials; the note in pieces heard; uses.
+7. Samplers: recordings as instruments; one recording over four octaves heard; why not enough; multisampling; the cost.
+8. Karplus-Strong, tuned: the loop; tuning note by note; the all-pass; in and out of tune heard; more from one loop.
+9. Digital waveguides: two rails; equal to the finite-difference string; a clarinet; its threshold; a crescendo and the Tune heard; at work.
+10. Modal synthesis: modes; the stiff string as modes; the grid's dispersion; an ear question (modes or beads?); at work.
+11. Costs and controls: one second timed; what a player turns; which method for which job.
+12. Frontier: methods that learn; black, grey and white boxes; the research problem.
+13. Variation 52: the Tune on FM keys and bells, dissolved into grains and back. Outro: problems, payoffs.
+
 *Covers:* frequency modulation and its sidebands; ratios and inharmonicity; operators and algorithms; granular
 synthesis from Gabor to Roads; spectral models; samplers; Karplus–Strong; digital waveguides (d'Alembert again);
 modal synthesis; what each method costs and controls.
-*Built and computed:* an FM engine with sidebands checked against Bessel functions; a granular engine; waveguide
-and modal instruments compared with Part 7's finite-difference string as the reference.
-*Variation 52:* the Tune on FM keys and bells, dissolved into grains and back.
-*Frontier:* neural and differentiable physical models.
+*Built and computed:* `monochord/synth2.py`: FM with lines matching Bessel's functions to 2.5 millionths; a DX-style
+operator engine with feedback (a sawtooth's harmonics within 3 dB); Gabor grains (length times width about 0.85) and a
+granular engine; partial tracking with inharmonicity (B = 3.8 × 10⁻⁴ on Part 7's piano) and residual splitting;
+Karplus–Strong tuned by an all-pass (33 cents to 0.6); a digital waveguide equal to the finite-difference string to
+3 × 10⁻¹⁴; a waveguide clarinet with a threshold and odd harmonics; modal strings exact where the grid runs 16 cents
+flat by the 24th partial.
+*Variation 52:* the Tune on FM keys and bells, dissolved into grains and back (2,793 grains in ten seconds).
+*Frontier:* neural and differentiable physical models (open: how few parameters match an instrument's whole range?).
 *Reading:* Chowning (1973); Karplus & Strong (1983); Smith, *Physical Audio Signal Processing*; Roads,
 *Microsound*.
 

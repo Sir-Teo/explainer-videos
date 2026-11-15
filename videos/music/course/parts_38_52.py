@@ -577,4 +577,35 @@ PARTS = [
         I=(5, 8, 9, 10),
         also=(("Monochord's synthesizer: oscillators, the ladder and its solvers, envelopes, wavetables, drums, patch fitting", "explainer/music/monochord/synth.py"),),
     ),
+    Part(
+        n=52, level="U", widget="fm", prereq=(1, 3, 7, 8, 9, 51),
+        question="What other ways are there to make a sound, and what does each cost and let a player control?",
+        story="Chowning turned a vibrato up until it was faster than the note and heard bells (1967); Stanford's patent made the DX7 (1983). An ear question hears Part 9's eight-partial bell against two sine oscillators in the ratio 1 : 1.4. FM's lines at fc + k fm match Bessel's J_k(I) to 2.5e-06; the index brightens (Carson's 2(I + 1) fm), the ratio picks the series (1 : 2 odd, 5 : 7 a bell), negative sidebands fold with a sign; Chowning's brass, bell and drum; operators and algorithms, feedback that makes a sawtooth, an electric piano, bass and bell. Gabor's grains trade time for frequency (length times width about 0.85); a granular engine freezes, stretches, shifts and scatters Part 8's voice. A spectral model splits Part 7's piano into 24 tracked partials (B = 3.8e-4, the 24th 171 cents sharp) and a residual (-10 dB in the first 80 ms); a sampler stretched over four octaves fails as it must (4.1 GB for a multisampled piano). Karplus-Strong rounded is up to 33 cents out, tuned by an all-pass within 0.6; a digital waveguide equals the finite-difference string to 3e-14; a waveguide clarinet has a threshold and odd harmonics; modes are exact where the grid's partials run flat (-16 cents at partial 24, an ear question); costs and controls compared.",
+        handoff="MIDI and the sequencer in Part 53; instruments in a session in Part 56; sines and noise in codecs in Part 58; "
+                "separation in Part 64; neural and differentiable synthesizers in Part 66.",
+        outside="Part 1 for d'Alembert and the finite-difference string; Part 3 for Gabor's limit; Part 7 for the piano and "
+                "Karplus-Strong; Part 8 for the reed; Part 9 for modes and bells; Part 50 for resampling. Bessel functions, "
+                "the short-time Fourier transform, delay lines.",
+        objectives={
+            "U": ["Hear FM bells against measured ones, an index sweep, three ratios, Chowning's instruments and three DX patches.",
+                  "Hear a voice frozen, stretched, shifted and scattered by grains, and a piano note split into sines and residual.",
+                  "Hear a sampler stretched too far, a string in and out of tune, a waveguide clarinet's threshold, and modes."],
+            "M": ["Expand FM by Bessel functions and check the lines; build operators, algorithms and feedback.",
+                  "Build a granular engine and Gabor grains; track a note's partials, fit its inharmonicity and split its residual.",
+                  "Tune Karplus-Strong by an all-pass; equate a waveguide with the finite-difference string; build a clarinet."],
+            "D": ["Find how few parameters can match an instrument across its range, including playing it never heard."],
+            "I": ["Choose a synthesis method for a job by its cost, its exactness and what it lets a player control."],
+        },
+        results=[
+            ("FM", r"\sin(\omega_c t + I\sin\omega_m t) = \sum_k J_k(I)\sin((\omega_c + k\omega_m)t)"),
+            ("Carson", r"B \approx 2(I + 1) f_m"),
+            ("Gabor", r"\Delta t\,\Delta f \approx \text{const}"),
+            ("Tuned loop", r"c = (1 - \Delta)/(1 + \Delta)"),
+            ("d'Alembert", r"u = r(x - ct) + l(x + ct)"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7),
+        D=(11,),
+        I=(5, 8, 9, 10),
+        also=(("Monochord's second synthesizer: FM, operators, grains, spectral models, Karplus-Strong, waveguides, a clarinet, modes", "explainer/music/monochord/synth2.py"),),
+    ),
 ]

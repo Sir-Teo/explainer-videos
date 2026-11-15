@@ -842,4 +842,60 @@
       note: "Each rung lags 45 degrees at the cutoff, so four lag 180: the subtracted feedback turns into added feedback, and at k = 4 the loop gain is one. Turn the drive up near k = 4 and hear the tanh stages hold the resonance down."
     });
   };
+  W.fm = function (el) {
+    function J(n, x) {
+      // Bessel's integral: (1/pi) * integral over 0..pi of cos(n t - x sin t)
+      var N = 400, s = 0;
+      for (var i = 0; i <= N; i++) { var t = Math.PI * i / N, w = (i === 0 || i === N) ? 0.5 : 1; s += w * Math.cos(n * t - x * Math.sin(t)); }
+      return s / N;
+    }
+    function lines(fc, fm, I) {
+      var out = {};
+      for (var k = -20; k <= 20; k++) {
+        var f = fc + k * fm, a = J(k, I);
+        if (f < 0) { f = -f; a = -a; }
+        var key = f.toFixed(3);
+        out[key] = (out[key] || 0) + a;
+      }
+      return out;
+    }
+    QB.widget(el, {
+      title: "Frequency modulation",
+      sub: "Set the carrier's note, the ratio of modulator to carrier, and the index. The plot shows the predicted lines, fc + k fm, with sizes |J_k(I)|; lines from below zero fold back with their sign flipped. Play it with the index dying over the note, as in Chowning's bell, or held.",
+      panels: 1, height: 260,
+      controls: [{ k: "fc", label: "Carrier", min: 110, max: 880, step: 1, value: 220, fmt: function (x) { return x.toFixed(0) + " Hz"; } },
+                 { k: "r", label: "Ratio fm / fc", min: 0.25, max: 4, step: 0.05, value: 1.4, fmt: function (x) { return x.toFixed(2); } },
+                 { k: "I", label: "Index", min: 0, max: 12, step: 0.1, value: 3, fmt: function (x) { return x.toFixed(1); } }],
+      buttons: [{ label: "Play, the index dying", act: function (s) { s.sound = play(render(s.v, true), 44100); } },
+                { label: "Play, the index held", act: function (s) { s.sound = play(render(s.v, false), 44100); } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var L = lines(v.fc, v.r * v.fc, v.I), xs = [], ys = [];
+        var a = gr[0].axes({ x: [0, 4000], y: [0, 1], title: "Line sizes |J_k(I)| against frequency (Hz)", xlabel: "Hz" });
+        Object.keys(L).forEach(function (key) {
+          var f = parseFloat(key);
+          if (f > 0 && f < 4000) { a.line([f, f], [0, Math.abs(L[key])], { color: C.idea, width: 2 }); xs.push(f); ys.push(Math.abs(L[key])); }
+        });
+        a.dots(xs, ys, { r: 3, color: C.idea });
+      },
+      readout: function (v, s) {
+        var g = function (a, b) { while (b > 1e-6) { var t = a % b; a = b; b = t; } return a; };
+        var fm = v.r * v.fc, f0 = g(Math.round(v.fc * 20), Math.round(fm * 20)) / 20;
+        return [["Carson's bandwidth, 2 (I + 1) fm", (2 * (v.I + 1) * fm).toFixed(0) + " Hz"],
+                ["the series' fundamental (common divisor of fc and fm)", f0.toFixed(1) + " Hz" + (f0 < 60 ? " (heard as inharmonic)" : "")],
+                ["the carrier's own line, |J_0(I)|", Math.abs(J(0, v.I)).toFixed(3)],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "At ratio 1 every harmonic is reachable; at 2, only the odd ones; at 1.4 (5 : 7) the lines are harmonics of a fundamental so low that no pitch is heard: a bell. At index 2.405 the carrier's own line vanishes."
+    });
+    function render(v, dying) {
+      var rate = 44100, n = 3 * rate, out = new Float32Array(n), fm = v.r * v.fc;
+      for (var i = 0; i < n; i++) {
+        var t = i / rate, e = dying ? Math.exp(-t / 0.8) : Math.min(1, t / 0.02) * Math.min(1, (n - i) / (0.1 * rate));
+        out[i] = 0.4 * e * Math.min(1, t / 0.003) * Math.sin(2 * Math.PI * v.fc * t + v.I * (dying ? e : 1) * Math.sin(2 * Math.PI * fm * t));
+      }
+      return out;
+    }
+  };
 })();

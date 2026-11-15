@@ -107,6 +107,8 @@ LEDGER = [
      "measure": r"median pitch error 28 cents sung, 0.6 after correction; one second stretched to 7.7"},
     {"part": 51, "title": r"switched on: four monophonic tracks, one patch each", "seconds": 24.0,
      "measure": r"354 notes on four tracks; the lead's aliasing 34 dB below its harmonics, 18 if naive"},
+    {"part": 52, "title": r"on FM keys and bells, dissolved into grains and back", "seconds": 27.9,
+     "measure": r"FM's lines within 0.000002 of Bessel's; 2,793 grains in ten seconds"},
 ]
 
 
