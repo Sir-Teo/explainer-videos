@@ -4,8 +4,9 @@
 Chinese) were reviewed and accepted, and Acts I and II are complete (Parts 1 to 10): Act II is *The Neuron*,
 *Synapses and Circuits*, *The Brain*, *Reading the Brain*, *Genes and Evolution* and *Chemistry and Clocks*. Act III,
 the senses, has begun with Part 11, *The Threshold*, Part 12, *Signal and Noise*, Part 13, *The Eye and the
-Code*, Part 14, *Seeing as Inference*, and Part 15, *The Other Senses*, which completes Act III; Act IV, learning, has
-begun with Part 16, *Conditioning*, and Part 17, *Reward and Prediction*** (all in English and Chinese). This file is the plan;
+Code*, Part 14, *Seeing as Inference*, and Part 15, *The Other Senses*, which completes Act III; Act IV, learning, is
+Part 16, *Conditioning*, and Part 17, *Reward and Prediction*; Act V, thinking, has begun with Part 18, *Attention*** (all
+in English and Chinese). This file is the plan;
 the standard every part meets, the devices and all sixty-two parts chapter by chapter are in
 [`SYLLABUS.md`](SYLLABUS.md), with the progress table in its §9.
 
@@ -182,7 +183,7 @@ The series draws in the manner of 3Blue1Brown with the instruments of `explainer
 | 16 | Conditioning | Pavlov's dogs; Kamin's blocked rats | classical and operant conditioning, contingency, blocking, Rescorla–Wagner derived, attention models, schedules, the matching law, extinction and its return, preparedness | an associative learner, an operant chamber and a meliorating chooser | the gardener's game: predict the plants, reveal your ΔP |
 | 17 | Reward and Prediction | Schultz's monkeys, 1997 | temporal-difference learning derived, the error's migration and Steinberg's unblocking, actor–critic, Q-learning and Go/NoGo, a bandit fitted and parameter recovery, exploration policies, latent learning, place and grid cells, devaluation and the two-step task, the successor representation and replay, ramps and a distributional code, Redish's drug | a TD learner, Q-learning bandits, a maze planner, two-step agents and a successor learner | two slot machines: your α and β fitted |
 | **V** | **Thinking** | | | | |
-| 18 | Attention | the gorilla nobody saw | filters early and late, spatial cueing, feature integration and guided search, the attentional blink, load, biased competition, the normalization model | a saliency map; guided search | visual search; the Stroop task |
+| 18 | Attention | the gorilla nobody saw | filters, attenuation and load, spatial cueing and inhibition of return, feature integration, guided search, saliency and selection history, change and inattentional blindness, the blink and the PRP bottleneck, Stroop and conflict monitoring, the normalization model derived, Bundesen's race, vigilance and prevalence, phones and media | an attenuator, guided search, a saliency map, a Stroop diffusion and the normalization model | visual search: your set-size functions |
 | 19 | Working Memory | the magical number seven | sensory stores, span, the multicomponent model, capacity limits, slots against resources, the mixture model, persistent activity and ring attractors, brain training | a limited store; a ring attractor | change detection; digit span |
 | 20 | Memory I: Storing and Finding | Ebbinghaus alone with his syllables, 1885 | encoding, serial position, levels of processing, context and encoding specificity, SAM and temporal context models, Hopfield networks, memory systems and H.M. | a memory search | free recall, and your recall curve |
 | 21 | Memory II: Forgetting and Inventing | "smashed" or "hit"? | the forgetting curve's form, interference, consolidation and complementary learning systems, the testing and spacing effects, schemas, false memories, eyewitness memory | forgetting, consolidation and a false memory | the DRM lists |

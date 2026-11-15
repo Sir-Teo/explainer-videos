@@ -772,12 +772,30 @@ shown(17, "REDISH_2004", "a model, run on Psyche; addiction is entered in Part 4
 shown(17, "LI_2010", "an engineering result, cited as an application")
 shown(17, "WEINTRAUB_2010", "a cross-sectional survey quoted for its rates")
 shown(17, "WANG_2018", "a model at the frontier")
+shown(18, "ANDERSON_2011", "value-driven capture, described")
+shown(18, "RENSINK_1997", "change blindness, described and fitted by Psyche; the effect is robust and its row is the inattentional-blindness row's companion")
+shown(18, "CHERRY_1953", "the origin of the shadowing method, told as history")
+shown(18, "BROADBENT_1958", "a theory, told as history")
+shown(18, "MORAY_1959", "the own-name effect, described with its 1995 replication")
+shown(18, "TREISMAN_1960", "theories of selection, told as history and run on Psyche")
+shown(18, "LAVIE_1995", "load theory, described with its critics")
+shown(18, "TREISMAN_GELADE_1980", "feature integration theory, described with its slopes")
+shown(18, "WOLFE_2021", "a model, run on Psyche")
+shown(18, "ITTI_KOCH_1998", "a model, run on Psyche")
+shown(18, "PASHLER_1994", "a review and a model, run on Psyche")
+shown(18, "BOTVINICK_2001", "a model, run on Psyche")
+shown(18, "ROGERS_MONSELL_1995", "task switching, described as a pattern with Psyche's numbers")
+shown(18, "MORAN_DESIMONE_1985", "a single-unit study, described schematically")
+shown(18, "REYNOLDS_HEEGER_2009", "a model, derived and run on Psyche")
+shown(18, "BUNDESEN_1990", "a theory, run on Psyche")
+shown(18, "MACKWORTH_1948", "the vigilance decrement, revisited from Part 12", row_in=51)
+shown(18, "STRAYER_2001", "a simulator study, read in full and described; driving returns in Part 51")
+shown(16, "LUBOW_MOORE_1959", "latent inhibition, described and modelled; its row is in Part 18")
 shown(16, "PAVLOV_1927", "the method and its vocabulary, told as history; the curves shown are Psyche's")
 shown(16, "FERSTER_SKINNER_1957", "schedules of reinforcement, whose signatures are drawn on Psyche, not from their records")
 shown(16, "WASSERMAN_1993", "human contingency judgment, cited for its main result; judgment is entered with Part 26")
 shown(16, "RESCORLA_1968", "a design reproduced on Psyche with the paper's schedule; the paper's figures are not drawn")
 shown(16, "RESCORLA_WAGNER_1972", "a model, derived and run, not a finding")
-shown(16, "LUBOW_MOORE_1959", "latent inhibition, described and modelled", row_in=18)
 shown(16, "MACKINTOSH_PEARCE_HALL", "models of attention, run on one history")
 shown(16, "GALLISTEL_GIBBON_2000", "a theory, and a summary of acquisition data shown with its exceptions")
 shown(16, "BRELAND_1961", "trainers' observations, told as the anecdotes they were")
@@ -1756,6 +1774,129 @@ add(Finding(
              "(2010) 657-661"),
     checked="2026-11-14",
     data=("HAFTING_2005",),
+))
+
+add(Finding(
+    key="latent_inhibition", part=18, title=r"Latent inhibition",
+    claim="A stimulus that has been presented many times without consequence is later learned about more slowly.",
+    original=Study("Lubow and Moore", 1959, n="sheep and goats",
+                   design="pre-exposure to a conditional stimulus, then conditioning of leg flexion",
+                   found="pre-exposed stimuli conditioned more slowly than novel ones"),
+    status="replicated",
+    record=(Study("Lubow (review)", 1989, n="decades of studies in many species",
+                  design="pre-exposure with many procedures, in animals, children and adults",
+                  found="robust in animals and young children; in adults usually only with a masking task"),),
+    note="Robust across mammals. In adults it appears mostly when a masking task keeps them from noticing the "
+         "pre-exposed stimulus, and whether it lowers attention to the cue or only its expression is argued.",
+    sources=("R. E. Lubow and A. U. Moore, Latent inhibition, Journal of Comparative and Physiological Psychology 52 "
+             "(1959) 415-419",
+             "R. E. Lubow, Latent Inhibition and Conditioned Attention Theory, Cambridge University Press (1989)"),
+    checked="2026-11-14",
+    data=("LUBOW_MOORE_1959",),
+))
+
+add(Finding(
+    key="stroop", part=18, title=r"The Stroop effect",
+    claim="Naming the ink colour of a colour word is slower when the word names a different colour; reading the word "
+          "is barely affected by the ink.",
+    original=Study("Stroop", 1935, n="college students; cards of 100 items",
+                   design="naming the inks of incongruent colour words against coloured squares; reading words",
+                   found="about 47 s longer per card, 74% more time; reading barely slowed"),
+    status="replicated",
+    record=(Study("MacLeod (review)", 1991, n="over 700 studies",
+                  design="half a century of variants",
+                  found="interference in every variant; asymmetric; larger than facilitation"),),
+    note="Among the most reliable effects in psychology, used as a check that an online sample is paying attention. "
+         "What it measures, automatic reading or a failure of control, is the argued part.",
+    sources=("J. R. Stroop, Studies of interference in serial verbal reactions, Journal of Experimental Psychology 18 "
+             "(1935) 643-662",
+             "C. M. MacLeod, Half a century of research on the Stroop effect, Psychological Bulletin 109 (1991) "
+             "163-203"),
+    checked="2026-11-14",
+    data=("STROOP_1935",),
+))
+
+add(Finding(
+    key="inattentional_blindness", part=18, title=r"Inattentional blindness",
+    claim="People engaged in a demanding task often fail to notice an unexpected, clearly visible object.",
+    original=Study("Simons and Chabris", 1999, n="192 observers",
+                   design="counting passes in a video while a gorilla or a woman with an umbrella walks through",
+                   found="46% did not notice; fewer noticed under a harder task"),
+    status="replicated",
+    record=(Study("Most and colleagues", 2001, n="students in several experiments",
+                  design="unexpected shapes of varied colour against the attended set",
+                  found="noticing rises with similarity to the attended items"),
+            Study("Drew, V\\~o and Wolfe", 2013, n="24 radiologists",
+                  design="a gorilla 48 times a nodule's size inserted in a lung CT",
+                  found="20 of 24 did not report it; most looked at it")),
+    note="The basic effect replicates widely and in experts. How large it is depends on the task's load, the "
+         "object's similarity to what is attended, and what observers are asked to report.",
+    sources=("D. J. Simons and C. F. Chabris, Gorillas in our midst, Perception 28 (1999) 1059-1074",
+             "S. B. Most et al., How not to be seen, Psychological Science 12 (2001) 9-17",
+             "T. Drew, M. L.-H. Vo and J. M. Wolfe, The invisible gorilla strikes again, Psychological Science 24 "
+             "(2013) 1848-1853"),
+    checked="2026-11-14",
+    data=("SIMONS_CHABRIS_1999", "DREW_2013"),
+))
+
+add(Finding(
+    key="posner_cueing", part=18, title=r"Spatial cueing",
+    claim="A cue to a location speeds responses to targets there and slows them elsewhere, without eye movements; "
+          "an uninformative flash is later followed by inhibition of return.",
+    original=Study("Posner", 1980, n="small groups of trained observers",
+                   design="central arrows, 80% valid, with fixation checked",
+                   found="benefits at the cued place and costs elsewhere"),
+    status="replicated",
+    record=(Study("Posner and Cohen", 1984, n="small groups",
+                  design="uninformative peripheral flashes at several intervals",
+                  found="facilitation early, inhibition of return after about 300 ms"),),
+    note="Reproduced in essentially every laboratory that has run it; the effects are tens of milliseconds and very "
+         "reliable within people.",
+    sources=("M. I. Posner, Orienting of attention, Quarterly Journal of Experimental Psychology 32 (1980) 3-25",
+             "M. I. Posner and Y. Cohen, Components of visual orienting, Attention and Performance X (1984) 531-556"),
+    checked="2026-11-14",
+    data=("POSNER_1980",),
+))
+
+add(Finding(
+    key="attentional_blink", part=18, title=r"The attentional blink",
+    claim="When two targets appear in a rapid stream, the second is often missed if it comes 200 to 500 ms after the "
+          "first, but not if it comes immediately after.",
+    original=Study("Raymond, Shapiro and Arnell", 1992, n="small groups",
+                   design="a rapid letter stream with a coloured target and a later probe X",
+                   found="probe detection impaired from about 180 to 450 ms after the target"),
+    status="replicated",
+    record=(Study("Dux and Marois (review)", 2009, n="hundreds of studies",
+                  design="variants with letters, digits, words, faces and sounds",
+                  found="the blink and lag-1 sparing in nearly all"),),
+    note="The effect is robust; its explanation, a capacity limit or a lapse of control, is still argued. "
+         "Individual differences are large, and a few people show almost no blink.",
+    sources=("J. E. Raymond, K. L. Shapiro and K. M. Arnell, Temporary suppression of visual processing in an RSVP "
+             "task, Journal of Experimental Psychology: Human Perception and Performance 18 (1992) 849-860",
+             "P. E. Dux and R. Marois, The attentional blink: a review of data and theory, Attention, Perception, & "
+             "Psychophysics 71 (2009) 1683-1700"),
+    checked="2026-11-14",
+    data=("RAYMOND_1992",),
+))
+
+add(Finding(
+    key="media_multitasking", part=18, title=r"Media multitasking and attention",
+    claim="People who multitask heavily with media are worse at filtering out distraction.",
+    original=Study("Ophir, Nass and Wagner", 2009, n="heavy and light media multitaskers among students",
+                   design="filtering, task-switching and memory tasks",
+                   found="heavy multitaskers worse at ignoring distractors"),
+    status="contested",
+    record=(Study("Wiradhany and Nieuwenstein", 2017, n="two replications; a meta-analysis of 12 studies",
+                  design="the original tasks with adequate power; pooled tests",
+                  found="5 of 14 tests in the predicted direction; d = 0.17, near zero after bias correction"),),
+    note="A small original study with a large effect; later work finds at most a small association, and a "
+         "correlation cannot show that multitasking causes the deficit.",
+    sources=("E. Ophir, C. Nass and A. D. Wagner, Cognitive control in media multitaskers, PNAS 106 (2009) "
+             "15583-15587",
+             "R. Wiradhany and M. R. Nieuwenstein, Cognitive control in media multitaskers: two replication studies "
+             "and a meta-analysis, Attention, Perception, & Psychophysics 79 (2017) 2620-2641"),
+    checked="2026-11-14",
+    data=("OPHIR_2009",),
 ))
 
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "

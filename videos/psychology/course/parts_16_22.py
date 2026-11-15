@@ -91,4 +91,47 @@ PARTS = [
               ("Its tests", "tests/psychology/test_rl.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=18, level="U", widget="search",
+        question="Why do you miss a gorilla, and what were you doing instead?",
+        story="Half of the observers counting basketball passes never see a gorilla walk through, and a large change "
+              "in a flickering photograph can take ten seconds to find. Cherry's listeners repeat one ear and miss the "
+              "other; Broadbent draws the first box-and-arrow diagram of a mind, with a filter. Your own name gets "
+              "through, so Treisman turns the filter into an attenuator, others move selection late, and Lavie makes "
+              "it depend on load. Posner's cue moves a spotlight without the eyes. A red item pops out and a red "
+              "vertical one does not: feature integration, then guided search, a saliency map and selection history. "
+              "What we attend decides what else we see, for radiologists too. In time there is a blink and a "
+              "bottleneck; in the Stroop task, a word fights the ink and control fights back. Inside a neuron, "
+              "attention is one multiplication before a division, which explains both contrast gain and response "
+              "gain. Capacity is a race; vigilance decays; rare targets are missed; phones and media compete for the "
+              "same channel.",
+        handoff="Working memory is Part 19, perceptual decisions as evidence accumulation Part 25, self-control Part "
+                "28, attention across the lifespan Part 31, human factors Part 51, design for and against attention "
+                "Part 52, and attention in brains and machines Part 60.",
+        outside="Part 1's stage models, Part 12's signal detection and Part 16's learned attention. Logistic and "
+                "normal curves; a little algebra with fractions.",
+        objectives={
+            "U": ["Describe the gorilla, change blindness, Posner cueing, pop-out and the Stroop effect.",
+                  "Explain early and late selection, attenuation and load theory.",
+                  "Explain why a feature search is flat and a conjunction search is not."],
+            "M": ["Derive the two-to-one slope ratio of serial search and the slope of minus one under a bottleneck.",
+                  "Run guided search, the attentional blink and a Stroop diffusion, and read their signatures.",
+                  "Derive contrast gain and response gain from the normalization model of attention."],
+            "D": ["Weigh capacity-limit against strategic accounts of the blink and of load.",
+                  "Assess the replication record of media multitasking and conflict adaptation."],
+            "I": ["Explain prevalence effects and satisfaction of search in screening.",
+                  "Explain why hands-free phones do not remove the driving cost, and what alarm fatigue is."],
+        },
+        results=[
+            ("Serial search slopes", r"\text{present} = \tfrac{t}{2},\quad \text{absent} = t"),
+            ("The PRP bottleneck", r"RT_2 = \max(\text{SOA} + A_2,\ A_1 + B_1) + B_2 + C_2 - \text{SOA}"),
+            ("Normalization with attention", r"R = \frac{A\,E}{\text{pool}(A\,E) + \sigma}"),
+            ("Bundesen's rate", r"v(x, i) = \eta(x, i)\,\beta_i\,\frac{w_x}{\sum_z w_z}"),
+            ("Diffusion time", r"\mathbb{E}[T] = \frac{a}{v}\tanh(av)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 11, 12, 13), D=(9, 10, 15), I=(14,),
+        also=(("Psyche's attention module", "explainer/psychology/psyche/attention.py"),
+              ("Its tests", "tests/psychology/test_attention.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

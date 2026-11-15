@@ -291,4 +291,144 @@
       note: "Nothing you do is stored or sent. The good machine pays on eight of every ten pulls and the poor one on two, dealt from fixed decks so the rates are exact; they swap after pull 40. The fit is the one in the film: a Q-learner starting both values at 0.5, moving the chosen one by α times the prediction error, and choosing by a softmax with β, with α and β searched on a grid for the largest log-likelihood of your eighty choices. Eighty choices pin α only loosely, and α and β trade off: chapter five's parameter recovery is the check to run before reading much into one person's numbers.",
     });
   };
+  // ---- Part 18: visual search.  Find the red bar, or the red vertical bar; your set-size functions and slopes ----
+  W.search = function (el) {
+    var w = null, SIZES = [4, 8, 16, 32], REPS = 4, RED = "#ef6f6c", GREEN = "#5bd18b", OK = "#5bd18b", BAD = "#ef6f6c";
+    var FEAT = "#f2c14e", CONJ = "#7ec8f5";
+    var S = { phase: "idle", seed: 0, k: 0, plan: [], cur: null, t0: 0, res: [], last: null };
+    function shuffle(u, a) {
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(u() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function display(u, kind, n, present) {
+      // items: {x, y (0..1), red, vertical}; positions on a jittered grid
+      var side = Math.ceil(Math.sqrt(n * 2)), cells = [], items = [], i;
+      for (i = 0; i < side * side; i++) cells.push(i);
+      shuffle(u, cells);
+      for (i = 0; i < n; i++) {
+        var c = cells[i], red, vert;
+        if (kind === "feature") { red = false; vert = true; } else { red = i % 2 === 0; vert = !red; }
+        items.push({ x: (c % side + 0.5 + (u() - 0.5) * 0.3) / side, y: (Math.floor(c / side) + 0.5 + (u() - 0.5) * 0.3) / side,
+                     red: red, vert: vert });
+      }
+      if (present) { var t = Math.floor(u() * n); items[t].red = true; items[t].vert = true; }
+      return items;
+    }
+    function start() {
+      task.clear(); S.seed++; S.k = 0; S.res = []; S.last = null;
+      var u = QB.rng(48611 * S.seed + 7), plan = [];
+      ["feature", "conjunction"].forEach(function (kind) {
+        SIZES.forEach(function (n) { for (var r = 0; r < REPS; r++) { plan.push([kind, n, true]); plan.push([kind, n, false]); } });
+      });
+      S.plan = shuffle(u, plan); S.u = u;
+      S.phase = "ready"; w.render();
+      task.later(next, 900);
+    }
+    function next() {
+      if (S.k >= S.plan.length) { S.phase = "done"; w.render(); return; }
+      var p = S.plan[S.k];
+      S.cur = { kind: p[0], n: p[1], present: p[2], items: display(S.u, p[0], p[1], p[2]) };
+      S.phase = "fix"; w.render();
+      task.later(function () { S.phase = "show"; w.render(); S.t0 = performance.now(); }, 500);
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "show"; }, respond: answer });
+    function answer(side) {  // 0: absent, 1: present
+      if (S.phase !== "show" || !w) return;
+      task.count++;
+      var rt = performance.now() - S.t0, said = side === 1;
+      S.res.push({ kind: S.cur.kind, n: S.cur.n, present: S.cur.present, rt: rt, ok: said === S.cur.present });
+      S.last = S.res[S.res.length - 1]; S.k++;
+      S.phase = "feedback"; w.render();
+      task.later(next, 450);
+    }
+    function means(kind, present) {
+      return SIZES.map(function (n) {
+        var r = S.res.filter(function (x) { return x.kind === kind && x.present === present && x.n === n && x.ok; });
+        if (!r.length) return NaN;
+        var v = r.map(function (x) { return x.rt; }).sort(function (a, b) { return a - b; });
+        return v[Math.floor((v.length - 1) / 2)];  // the median, robust to a slow trial
+      });
+    }
+    function slope(ys) {
+      var xs = [], yy = [];
+      SIZES.forEach(function (n, i) { if (!isNaN(ys[i])) { xs.push(n); yy.push(ys[i]); } });
+      if (xs.length < 2) return NaN;
+      var mx = xs.reduce(function (a, b) { return a + b; }, 0) / xs.length, my = yy.reduce(function (a, b) { return a + b; }, 0) / yy.length;
+      var num = 0, den = 0;
+      for (var i = 0; i < xs.length; i++) { num += (xs[i] - mx) * (yy[i] - my); den += (xs[i] - mx) * (xs[i] - mx); }
+      return num / den;
+    }
+
+    w = QB.widget(el, {
+      title: "Visual search: find the target",
+      sub: "Sixty-four displays. In some the target is a red bar among green bars; in others it is a red vertical bar among red horizontals and green verticals. Press J (or tap the right half) if the target is there, F (or the left half) if it is not, as fast as you can without mistakes. Your set-size functions appear as you go.",
+      panels: 2, height: 330, weights: [1, 1.1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.k = 0; S.res = []; S.cur = null; S.last = null; } },
+      ],
+      draw: function (g) {
+        var c = g.ctx, b = T.stage(g, 0, task);
+        c.save(); c.textAlign = "center"; c.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(c, b, "On you", "Press Start. About three minutes. J: the target is there; F: it is not.");
+        } else if (S.phase === "ready") {
+          T.message(c, b, "Get ready", "Red bar, or red vertical bar: the kind changes from display to display.");
+        } else if (S.phase === "done") {
+          T.message(c, b, "Finished.", "On the right: your median correct RT against the number of items. Feature search should be nearly flat; conjunction search should climb, faster when the target is absent.");
+        } else {
+          c.fillStyle = C.muted; c.font = "12px system-ui, sans-serif";
+          c.fillText("display " + (S.k + (S.phase === "feedback" ? 0 : 1)) + " of " + S.plan.length + ":  find the " +
+            (S.cur.kind === "feature" ? "red bar" : "red vertical bar"), b.cx, b.y + 16);
+          if (S.phase === "fix") {
+            c.strokeStyle = C.ink; c.lineWidth = 2;
+            c.beginPath(); c.moveTo(b.cx - 8, b.cy); c.lineTo(b.cx + 8, b.cy); c.moveTo(b.cx, b.cy - 8); c.lineTo(b.cx, b.cy + 8); c.stroke();
+          } else if (S.phase === "show") {
+            var side = Math.min(b.w, b.h) - 60, x0 = b.cx - side / 2, y0 = b.cy - side / 2 + 6, L = Math.max(10, side / 18);
+            S.cur.items.forEach(function (it) {
+              c.fillStyle = it.red ? RED : GREEN;
+              var px = x0 + it.x * side, py = y0 + it.y * side;
+              if (it.vert) c.fillRect(px - L * 0.15, py - L / 2, L * 0.3, L); else c.fillRect(px - L / 2, py - L * 0.15, L, L * 0.3);
+            });
+            c.fillStyle = C.muted; c.font = "12.5px system-ui, sans-serif";
+            c.fillText(b.w < 420 ? "F / absent        J / present" : "F, or tap the left half: absent        J, or tap the right half: present", b.cx, b.y + b.h - 14);
+          } else if (S.phase === "feedback" && S.last) {
+            c.font = "600 18px system-ui, sans-serif"; c.fillStyle = S.last.ok ? OK : BAD;
+            c.fillText(S.last.ok ? Math.round(S.last.rt) + " ms" : "not right: the target was " + (S.last.present ? "there" : "not there"), b.cx, b.cy);
+          }
+        }
+        c.restore();
+
+        var top = 1500;
+        S.res.forEach(function (x) { if (x.ok) top = Math.max(top, Math.min(x.rt, 4000)); });
+        top = Math.ceil(top / 500) * 500;
+        var yt = []; for (var q = 500; q <= top; q += (top > 2500 ? 1000 : 500)) yt.push(q);
+        var a = g[1].axes({ x: [0, 34], y: [0, top], xticks: [4, 8, 16, 32], yticks: yt,
+          title: "Your set-size functions (dashed: target absent)", xlabel: "items in the display", ylabel: "median RT, ms" });
+        [["feature", FEAT], ["conjunction", CONJ]].forEach(function (kc) {
+          [true, false].forEach(function (pr) {
+            var ys = means(kc[0], pr), xs = [], yy = [];
+            SIZES.forEach(function (n, i) { if (!isNaN(ys[i])) { xs.push(n); yy.push(Math.min(ys[i], top)); } });
+            if (xs.length > 1) a.line(xs, yy, { color: kc[1], width: pr ? 2.5 : 1.5, dash: pr ? null : [5, 4] });
+            if (xs.length) a.dots(xs, yy, { color: kc[1], r: pr ? 4 : 3 });
+          });
+        });
+        a.text(5, top * 0.95, "feature", { color: FEAT, size: 11.5, bold: true });
+        a.text(5, top * 0.87, "conjunction", { color: CONJ, size: 11.5, bold: true });
+      },
+      readout: function () {
+        var f = function (v) { return isNaN(v) ? "–" : v.toFixed(0) + " ms an item"; };
+        var rows = [["displays", String(S.res.length)],
+                    ["errors", S.res.length ? Math.round(100 * S.res.filter(function (x) { return !x.ok; }).length / S.res.length) + "%" : "–"]];
+        if (S.phase !== "done") { rows.push(["your slopes", S.res.length ? "when you finish" : "–"]); return rows; }
+        rows.push(["feature, present", f(slope(means("feature", true)))]);
+        rows.push(["feature, absent", f(slope(means("feature", false)))]);
+        rows.push(["conjunction, present", f(slope(means("conjunction", true)))]);
+        rows.push(["conjunction, absent", f(slope(means("conjunction", false)))]);
+        return rows;
+      },
+      note: "Nothing you do is stored or sent. Each kind of search has four target-present and four target-absent displays at each of four set sizes, shuffled. Each point is the median of your correct responses, which a single slow trial cannot drag up. In the film, Psyche's guided search gives slopes near 0 for feature search and about 12 (present) and 35 (absent) ms an item for conjunctions; Treisman and Gelade's observers in 1980 were slower, about 29 and 67. Four trials a point is few, so expect noisy lines: the shape matters more than the numbers.",
+    });
+  };
 })();

@@ -13,6 +13,12 @@ A task is added to :data:`RUNNERS` by the part that first uses it.  So far:
 * Task 2, the two-alternative threshold (Part 11): which of two patches is brighter, by the method of constant
   stimuli, ``run("threshold", observer, n_trials, seed)`` with a :class:`explainer.psychology.psyche.psychophysics.
   Observer`; the increments are in ``extra["delta"]`` (a standard of 100, increments of 1 to 24).
+* Task 3, Stroop colour naming (Part 18): congruent, neutral and incongruent trials in equal numbers, in random
+  order, ``run("stroop", params, n_trials, seed)`` with ``params`` a dict of :func:`explainer.psychology.psyche.
+  attention.stroop` keyword arguments (``{}`` for Psyche's defaults).
+* Task 4, visual search (Part 18): feature and conjunction searches at set sizes 4, 8, 16 and 32, target present on
+  half the trials, ``run("search", params, n_trials, seed)`` with ``params`` keyword arguments of
+  :func:`explainer.psychology.psyche.attention.guided_search`; the set size and presence are in ``extra``.
 
 Nothing here imports manim.
 """
@@ -126,7 +132,43 @@ def _threshold(model, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
                   extra={"delta": t["delta"], "standard": np.full(n, THRESHOLD_STANDARD)})
 
 
-RUNNERS = {"rt_simple": _rt_task("a"), "rt_gonogo": _rt_task("c"), "rt_choice": _rt_task("b"), "threshold": _threshold}
+STROOP_CONDITIONS = ("congruent", "neutral", "incongruent")
+
+
+def _stroop(params, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
+    """Colour naming on Psyche's two-pathway diffusion; conditions in equal numbers, shuffled."""
+    from explainer.psychology.psyche.attention import stroop
+
+    rng = np.random.default_rng(seed)
+    cond = rng.permutation(np.resize(np.array(STROOP_CONDITIONS), n_trials))
+    rt, ok = np.empty(n_trials), np.empty(n_trials, dtype=bool)
+    for c in STROOP_CONDITIONS:
+        m = cond == c
+        r, k = stroop(c, "colour", n=int(m.sum()), rng=rng, **(params or {}))
+        rt[m], ok[m] = r, k
+    return Trials("stroop", np.full(n_trials, subject), cond, rt, ok)
+
+
+SEARCH_SET_SIZES = (4, 8, 16, 32)
+
+
+def _search(params, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
+    """Feature and conjunction search on Psyche's guided search: kind, set size and presence balanced and shuffled;
+    the condition is ``"feature"`` or ``"conjunction"``."""
+    from explainer.psychology.psyche.attention import guided_search, make_display
+
+    rng = np.random.default_rng(seed)
+    cells = [(k, s, p) for k in ("feature", "conjunction") for s in SEARCH_SET_SIZES for p in (True, False)]
+    plan = [cells[i] for i in rng.permutation(np.resize(np.arange(len(cells)), n_trials))]
+    rt, ok = np.empty(n_trials), np.empty(n_trials, dtype=bool)
+    for i, (k, s, p) in enumerate(plan):
+        rt[i], ok[i] = guided_search(make_display(s, k, p, rng), k, rng, **(params or {}))
+    return Trials("search", np.full(n_trials, subject), np.array([c[0] for c in plan]), rt, ok,
+                  extra={"set_size": np.array([c[1] for c in plan]), "present": np.array([c[2] for c in plan])})
+
+
+RUNNERS = {"rt_simple": _rt_task("a"), "rt_gonogo": _rt_task("c"), "rt_choice": _rt_task("b"), "threshold": _threshold,
+           "stroop": _stroop, "search": _search}
 
 
 def run(name: str, model, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:

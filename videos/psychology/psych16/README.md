@@ -86,7 +86,7 @@ loot boxes; the frontier is propositional learning, latent causes, and reconsoli
 Shown without a row, with the reason recorded in `explainer/psychology/ledger.py`: Pavlov (the method, told as
 history), Ferster and Skinner (schedules whose signatures are drawn on Psyche), Wasserman et al. (human contingency
 judgment, entered with judgment in Part 26), Rescorla (1968; a design reproduced on Psyche, the paper's figures not
-drawn), Rescorla and Wagner (a model), Lubow and Moore (latent inhibition, described and modelled; its row is due in Part 18), Mackintosh and
+drawn), Rescorla and Wagner (a model), Lubow and Moore (latent inhibition, described and modelled; its row is in Part 18), Mackintosh and
 Pearce and Hall (models), Gallistel and Gibbon (a theory and a summary of data, with its exceptions), the Brelands
 (trainers' observations), Bandura, Ross and Ross (described without figures), Prendergast et al. (treatment
 evidence, entered in Part 42), Zendle and Cairns (a survey, with its limits), Mitchell et al. and Gershman et al.

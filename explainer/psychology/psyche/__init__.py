@@ -66,5 +66,9 @@ Modules so far, with the part that introduces each:
                          conditioning; Q-learning bandits fitted by likelihood; exploration policies; a maze
                          with latent learning; the two-step task; the successor representation; a
                          distributional code; Redish's drug that cannot be predicted away
+``attention``       18   the dichotic attenuator and load; cueing and inhibition of return; guided search,
+                         saliency maps and scan paths; prevalence; the flicker paradigm; the attentional blink
+                         and the PRP bottleneck; Stroop as a diffusion with conflict monitoring; the
+                         normalization model of attention; Bundesen's race; vigilance
 =================  ====  ===============================================================================
 """

@@ -44,7 +44,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "ADELSON_1995", "ERNST_BANKS_2002", "ALAIS_BURR_2004", "RAHNEV_DENISON_2018", "WEISS_2002", "THOMPSON_1982", "ADAMS_2004", "SEGALL_1966", "AMIR_FIRESTONE_2025", "GAUTHIER_1999", "YIN_1969", "YAMINS_2014", "GEIRHOS_2019", "VONG_2024", "WHEATSTONE_1838",
            "BEKESY_1960", "KEMP_1978", "LIBERMAN_1957", "MCMURRAY_2002", "MCGURK_1976", "MALLICK_2015", "BOTVINICK_COHEN_1998", "LUSH_2020", "MELZACK_WALL_1965", "LEVINE_1978", "HANIG_1901", "BUSHDID_2014", "MCDERMOTT_2016", "KUJAWA_LIBERMAN_2009",
            "PAVLOV_1927", "THORNDIKE_1898", "WATSON_RAYNER_1920", "HARRIS_1979", "FERSTER_SKINNER_1957", "RESCORLA_1968", "WASSERMAN_1993", "KAMIN_1969", "MAES_2016", "RESCORLA_WAGNER_1972", "LUBOW_MOORE_1959", "BOUTON_BOLLES_1979", "MACKINTOSH_PEARCE_HALL", "GALLISTEL_GIBBON_2000", "HERRNSTEIN_1961", "GARCIA_KOELLING_1966", "BRELAND_1961", "BANDURA_1961", "PRENDERGAST_2006", "ZENDLE_CAIRNS_2018", "GERSHMAN_2010", "MITCHELL_2009", "SCHILLER_2010",
-           "SCHULTZ_1997", "STEINBERG_2013", "FRANK_2004", "WILSON_2014", "TOLMAN_HONZIK_1930", "TOLMAN_1948", "HAFTING_2005", "ADAMS_DICKINSON_1981", "DAW_2011", "FEHER_DA_SILVA_2020", "MOMENNEJAD_2017", "HOWE_2013", "DABNEY_2020", "REDISH_2004", "LI_2010", "WEINTRAUB_2010", "WANG_2018"]
+           "SCHULTZ_1997", "STEINBERG_2013", "FRANK_2004", "WILSON_2014", "TOLMAN_HONZIK_1930", "TOLMAN_1948", "HAFTING_2005", "ADAMS_DICKINSON_1981", "DAW_2011", "FEHER_DA_SILVA_2020", "MOMENNEJAD_2017", "HOWE_2013", "DABNEY_2020", "REDISH_2004", "LI_2010", "WEINTRAUB_2010", "WANG_2018",
+           "SIMONS_CHABRIS_1999", "RENSINK_1997", "CHERRY_1953", "BROADBENT_1958", "MORAY_1959", "TREISMAN_1960", "LAVIE_1995", "POSNER_1980", "TREISMAN_GELADE_1980", "WOLFE_2021", "ITTI_KOCH_1998", "DREW_2013", "RAYMOND_1992", "PASHLER_1994", "STROOP_1935", "ERIKSEN_1974", "BOTVINICK_2001", "ROGERS_MONSELL_1995", "MORAN_DESIMONE_1985", "REYNOLDS_HEEGER_2009", "BUNDESEN_1990", "STRAYER_2001", "OPHIR_2009", "ANDERSON_2011", "AWH_2012"]
 
 
 @dataclass(frozen=True)
@@ -3029,6 +3030,258 @@ WANG_2018 = Dataset(
 )
 
 
+_P18 = "through a web search, 2026-11-14"
+
+SIMONS_CHABRIS_1999 = Dataset(
+    key="simons_chabris_1999",
+    title='Gorillas in our midst',
+    source='D. J. Simons and C. F. Chabris, Gorillas in our midst: sustained inattentional blindness for dynamic events, Perception 28 (1999) 1059-1074',
+    cite=r"Simons \& Chabris (1999)",
+    checked='secondary summaries' + ", " + _P18,
+    licence="facts only",
+    data={'observers': 192, 'missed': 0.46},
+)
+
+RENSINK_1997 = Dataset(
+    key="rensink_1997",
+    title='Change blindness in the flicker paradigm',
+    source="R. A. Rensink, J. K. O'Regan and J. J. Clark, To see or not to see: the need for attention to perceive changes in scenes, Psychological Science 8 (1997) 368-373",
+    cite=r"Rensink, O'Regan \& Clark (1997)",
+    checked='the paper read in full' + ", " + _P18,
+    licence="facts only",
+    data={'observers': 10, 'scenes': 48, 'image_ms': 240, 'blank_ms': 80, 'mi_alternations': 17.1, 'mi_seconds': 10.9, 'ci_alternations': 7.3, 'ci_seconds': 4.7, 'no_blank_alternations': 1.4, 'no_blank_seconds': 0.9},
+)
+
+CHERRY_1953 = Dataset(
+    key="cherry_1953",
+    title='The cocktail party problem',
+    source='E. C. Cherry, Some experiments on the recognition of speech, with one and with two ears, Journal of the Acoustical Society of America 25 (1953) 975-979',
+    cite=r"Cherry (1953)",
+    checked='from memory and reviews' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+BROADBENT_1958 = Dataset(
+    key="broadbent_1958",
+    title='The filter',
+    source='D. E. Broadbent, Perception and Communication, Pergamon Press (1958)',
+    cite=r"Broadbent (1958)",
+    checked='from memory and reviews' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+MORAY_1959 = Dataset(
+    key="moray_1959",
+    title="One's own name in the unattended ear",
+    source='N. Moray, Attention in dichotic listening: affective cues and the influence of instructions, Quarterly Journal of Experimental Psychology 11 (1959) 56-60; N. L. Wood and N. Cowan, The cocktail party phenomenon revisited, Journal of Experimental Psychology: Learning, Memory, and Cognition 21 (1995) 255-260',
+    cite=r"Moray (1959)",
+    checked='secondary summaries' + ", " + _P18,
+    licence="facts only",
+    data={'own_name_share': 0.33},
+)
+
+TREISMAN_1960 = Dataset(
+    key="treisman_1960",
+    title='Attenuation, and late selection',
+    source='A. M. Treisman, Contextual cues in selective listening, Quarterly Journal of Experimental Psychology 12 (1960) 242-248; J. A. Deutsch and D. Deutsch, Attention: some theoretical considerations, Psychological Review 70 (1963) 80-90',
+    cite=r"Treisman (1960); \ Deutsch \& Deutsch (1963)",
+    checked='from memory and reviews' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+LAVIE_1995 = Dataset(
+    key="lavie_1995",
+    title='Perceptual load',
+    source='N. Lavie, Perceptual load as a necessary condition for selective attention, Journal of Experimental Psychology: Human Perception and Performance 21 (1995) 451-468',
+    cite=r"Lavie (1995)",
+    checked='secondary summaries' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+POSNER_1980 = Dataset(
+    key="posner_1980",
+    title='Orienting of attention',
+    source='M. I. Posner, Orienting of attention, Quarterly Journal of Experimental Psychology 32 (1980) 3-25; M. I. Posner and Y. Cohen, Components of visual orienting, in Attention and Performance X (1984) 531-556',
+    cite=r"Posner (1980)",
+    checked='secondary summaries' + ", " + _P18,
+    licence="facts only",
+    data={'valid_share': 0.8},
+)
+
+TREISMAN_GELADE_1980 = Dataset(
+    key="treisman_gelade_1980",
+    title='Feature integration theory',
+    source='A. M. Treisman and G. Gelade, A feature-integration theory of attention, Cognitive Psychology 12 (1980) 97-136; H. Pashler, Detecting conjunctions of color and form, Perception & Psychophysics 41 (1987) 191-201',
+    cite=r"Treisman \& Gelade (1980)",
+    checked="a lecture reproduction of Experiment 1's slopes" + ", " + _P18,
+    licence="facts only",
+    data={'conjunction_present_ms_per_item': 29, 'conjunction_absent_ms_per_item': 67},
+)
+
+WOLFE_2021 = Dataset(
+    key="wolfe_2021",
+    title='Guided search',
+    source='J. M. Wolfe, K. R. Cave and S. L. Franzel, Guided search, Journal of Experimental Psychology: Human Perception and Performance 15 (1989) 419-433; J. M. Wolfe, Guided Search 6.0, Psychonomic Bulletin & Review 28 (2021) 1060-1092',
+    cite=r"Wolfe (1989, 2021)",
+    checked='from memory and reviews' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+ITTI_KOCH_1998 = Dataset(
+    key="itti_koch_1998",
+    title='A saliency map',
+    source='L. Itti, C. Koch and E. Niebur, A model of saliency-based visual attention for rapid scene analysis, IEEE Transactions on Pattern Analysis and Machine Intelligence 20 (1998) 1254-1259',
+    cite=r"Itti, Koch \& Niebur (1998)",
+    checked='from memory' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+DREW_2013 = Dataset(
+    key="drew_2013",
+    title='Radiologists and the gorilla',
+    source='T. Drew, M. L.-H. Vo and J. M. Wolfe, The invisible gorilla strikes again: sustained inattentional blindness in expert observers, Psychological Science 24 (2013) 1848-1853',
+    cite=r"Drew, V\~o \& Wolfe (2013)",
+    checked='press coverage and the abstract' + ", " + _P18,
+    licence="facts only",
+    data={'radiologists': 24, 'missed': 20, 'size_vs_nodule': 48},
+)
+
+RAYMOND_1992 = Dataset(
+    key="raymond_1992",
+    title='The attentional blink',
+    source='J. E. Raymond, K. L. Shapiro and K. M. Arnell, Temporary suppression of visual processing in an RSVP task: an attentional blink?, Journal of Experimental Psychology: Human Perception and Performance 18 (1992) 849-860',
+    cite=r"Raymond, Shapiro \& Arnell (1992)",
+    checked='the abstract and secondary summaries' + ", " + _P18,
+    licence="facts only",
+    data={'window_start_ms': 180, 'window_end_ms': 450},
+)
+
+PASHLER_1994 = Dataset(
+    key="pashler_1994",
+    title='The psychological refractory period',
+    source='H. Pashler, Dual-task interference in simple tasks: data and theory, Psychological Bulletin 116 (1994) 220-244',
+    cite=r"Pashler (1994)",
+    checked='secondary summaries' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+STROOP_1935 = Dataset(
+    key="stroop_1935",
+    title='The Stroop effect',
+    source='J. R. Stroop, Studies of interference in serial verbal reactions, Journal of Experimental Psychology 18 (1935) 643-662; C. M. MacLeod, Half a century of research on the Stroop effect: an integrative review, Psychological Bulletin 109 (1991) 163-203',
+    cite=r"Stroop (1935)",
+    checked="secondary summaries and MacLeod's review" + ", " + _P18,
+    licence="facts only",
+    data={'items': 100, 'extra_seconds': 47.0, 'extra_percent': 74.3},
+)
+
+ERIKSEN_1974 = Dataset(
+    key="eriksen_1974",
+    title='The flanker task',
+    source='B. A. Eriksen and C. W. Eriksen, Effects of noise letters upon the identification of a target letter in a nonsearch task, Perception & Psychophysics 16 (1974) 143-149',
+    cite=r"Eriksen \& Eriksen (1974)",
+    checked='from memory' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+BOTVINICK_2001 = Dataset(
+    key="botvinick_2001",
+    title='Conflict monitoring',
+    source='M. M. Botvinick, T. S. Braver, D. M. Barch, C. S. Carter and J. D. Cohen, Conflict monitoring and cognitive control, Psychological Review 108 (2001) 624-652; G. Gratton, M. G. H. Coles and E. Donchin, Optimizing the use of information, Journal of Experimental Psychology: General 121 (1992) 480-506',
+    cite=r"Botvinick et al.\ (2001)",
+    checked='from memory' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+ROGERS_MONSELL_1995 = Dataset(
+    key="rogers_monsell_1995",
+    title='Task switching',
+    source='R. D. Rogers and S. Monsell, Costs of a predictable switch between simple cognitive tasks, Journal of Experimental Psychology: General 124 (1995) 207-231',
+    cite=r"Rogers \& Monsell (1995)",
+    checked='secondary summaries' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+MORAN_DESIMONE_1985 = Dataset(
+    key="moran_desimone_1985",
+    title='Attention gates V4',
+    source='J. Moran and R. Desimone, Selective attention gates visual processing in the extrastriate cortex, Science 229 (1985) 782-784; R. Desimone and J. Duncan, Neural mechanisms of selective visual attention, Annual Review of Neuroscience 18 (1995) 193-222',
+    cite=r"Moran \& Desimone (1985)",
+    checked='secondary summaries' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+REYNOLDS_HEEGER_2009 = Dataset(
+    key="reynolds_heeger_2009",
+    title='The normalization model of attention',
+    source='J. H. Reynolds and D. J. Heeger, The normalization model of attention, Neuron 61 (2009) 168-185; K. Herrmann, L. Montaser-Kouhsari, M. Carrasco and D. J. Heeger, When size matters: attention affects performance by contrast or response gain, Nature Neuroscience 13 (2010) 1554-1559',
+    cite=r"Reynolds \& Heeger (2009)",
+    checked="the model from the paper's equations; the test from its abstract" + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+BUNDESEN_1990 = Dataset(
+    key="bundesen_1990",
+    title='A theory of visual attention',
+    source='C. Bundesen, A theory of visual attention, Psychological Review 97 (1990) 523-547',
+    cite=r"Bundesen (1990)",
+    checked='from memory' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+STRAYER_2001 = Dataset(
+    key="strayer_2001",
+    title='Driving and talking on a phone',
+    source='D. L. Strayer and W. A. Johnston, Driven to distraction: dual-task studies of simulated driving and conversing on a cellular telephone, Psychological Science 12 (2001) 462-466',
+    cite=r"Strayer \& Johnston (2001)",
+    checked='the paper read in full' + ", " + _P18,
+    licence="facts only",
+    data={'participants': 48},
+)
+
+OPHIR_2009 = Dataset(
+    key="ophir_2009",
+    title='Media multitasking',
+    source='E. Ophir, C. Nass and A. D. Wagner, Cognitive control in media multitaskers, PNAS 106 (2009) 15583-15587; R. Wiradhany and M. R. Nieuwenstein, Cognitive control in media multitaskers: two replication studies and a meta-analysis, Attention, Perception, & Psychophysics 79 (2017) 2620-2641',
+    cite=r"Ophir, Nass \& Wagner (2009)",
+    checked="the replication's abstract and secondary summaries" + ", " + _P18,
+    licence="facts only",
+    data={'replication_tests': 14, 'replication_significant': 5, 'meta_tests': 39, 'meta_studies': 12, 'meta_d': 0.17},
+)
+
+ANDERSON_2011 = Dataset(
+    key="anderson_2011",
+    title='Value-driven attentional capture',
+    source='B. A. Anderson, P. A. Laurent and S. Yantis, Value-driven attentional capture, PNAS 108 (2011) 10367-10371',
+    cite=r"Anderson, Laurent \& Yantis (2011)",
+    checked='the abstract and the record' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
+AWH_2012 = Dataset(
+    key="awh_2012",
+    title='Selection history',
+    source='E. Awh, A. V. Belopolsky and J. Theeuwes, Top-down versus bottom-up attentional control: a failed theoretical dichotomy, Trends in Cognitive Sciences 16 (2012) 437-443',
+    cite=r"Awh, Belopolsky \& Theeuwes (2012)",
+    checked='from memory' + ", " + _P18,
+    licence="facts only",
+    data={},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3060,4 +3313,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           ADELSON_1995, ERNST_BANKS_2002, ALAIS_BURR_2004, RAHNEV_DENISON_2018, WEISS_2002, THOMPSON_1982, ADAMS_2004, SEGALL_1966, AMIR_FIRESTONE_2025, GAUTHIER_1999, YIN_1969, YAMINS_2014, GEIRHOS_2019, VONG_2024, WHEATSTONE_1838,
                           BEKESY_1960, KEMP_1978, LIBERMAN_1957, MCMURRAY_2002, MCGURK_1976, MALLICK_2015, BOTVINICK_COHEN_1998, LUSH_2020, MELZACK_WALL_1965, LEVINE_1978, HANIG_1901, BUSHDID_2014, MCDERMOTT_2016, KUJAWA_LIBERMAN_2009,
                           PAVLOV_1927, THORNDIKE_1898, WATSON_RAYNER_1920, HARRIS_1979, FERSTER_SKINNER_1957, RESCORLA_1968, WASSERMAN_1993, KAMIN_1969, MAES_2016, RESCORLA_WAGNER_1972, LUBOW_MOORE_1959, BOUTON_BOLLES_1979, MACKINTOSH_PEARCE_HALL, GALLISTEL_GIBBON_2000, HERRNSTEIN_1961, GARCIA_KOELLING_1966, BRELAND_1961, BANDURA_1961, PRENDERGAST_2006, ZENDLE_CAIRNS_2018, GERSHMAN_2010, MITCHELL_2009, SCHILLER_2010,
-                          SCHULTZ_1997, STEINBERG_2013, FRANK_2004, WILSON_2014, TOLMAN_HONZIK_1930, TOLMAN_1948, HAFTING_2005, ADAMS_DICKINSON_1981, DAW_2011, FEHER_DA_SILVA_2020, MOMENNEJAD_2017, HOWE_2013, DABNEY_2020, REDISH_2004, LI_2010, WEINTRAUB_2010, WANG_2018)}
+                          SCHULTZ_1997, STEINBERG_2013, FRANK_2004, WILSON_2014, TOLMAN_HONZIK_1930, TOLMAN_1948, HAFTING_2005, ADAMS_DICKINSON_1981, DAW_2011, FEHER_DA_SILVA_2020, MOMENNEJAD_2017, HOWE_2013, DABNEY_2020, REDISH_2004, LI_2010, WEINTRAUB_2010, WANG_2018,
+                          SIMONS_CHABRIS_1999, RENSINK_1997, CHERRY_1953, BROADBENT_1958, MORAY_1959, TREISMAN_1960, LAVIE_1995, POSNER_1980, TREISMAN_GELADE_1980, WOLFE_2021, ITTI_KOCH_1998, DREW_2013, RAYMOND_1992, PASHLER_1994, STROOP_1935, ERIKSEN_1974, BOTVINICK_2001, ROGERS_MONSELL_1995, MORAN_DESIMONE_1985, REYNOLDS_HEEGER_2009, BUNDESEN_1990, STRAYER_2001, OPHIR_2009, ANDERSON_2011, AWH_2012)}

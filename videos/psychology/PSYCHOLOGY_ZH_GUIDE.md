@@ -621,6 +621,23 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | successor representation; reward and transition revaluation; replay (forward, backward) | 后继表征；奖励与转移再评估；重放（正向、反向） |
 | distributional reinforcement learning; expectile; salience | 分布式强化学习；期望分位数；显著性 |
 | learning sets; meta-learning; recommender system; A/B test | 学习定势；元学习；推荐系统；A/B测试 |
+
+## Part 18: attention
+
+| English | 中文 |
+|---|---|
+| selective attention; dichotic listening; shadowing; the cocktail party effect | 选择性注意；双耳分听；追随；鸡尾酒会效应 |
+| filter; attenuation; early and late selection; perceptual load; flanker | 过滤器；衰减；早期与晚期选择；知觉负荷；侧翼刺激 |
+| spatial cueing; valid, invalid, neutral; benefit, cost; endogenous, exogenous; inhibition of return | 空间提示；有效、无效、中性；收益、代价；内源性、外源性；返回抑制 |
+| visual search; feature search, conjunction search; set-size function; pop-out | 视觉搜索；特征搜索、联合搜索；集合大小函数；跳出 |
+| feature integration theory; binding; illusory conjunction; guided search; priority map; quitting threshold | 特征整合理论；捆绑；错觉性结合；引导搜索；优先级图；退出阈限 |
+| saliency map; centre-surround; winner-take-all; scan path; selection history; value-driven capture | 显著性图；中心-周边；赢者通吃；扫视路径；选择历史；价值驱动的捕获 |
+| change blindness; the flicker paradigm; inattentional blindness; attentional set | 变化盲视；闪烁范式；非注意盲视；注意定势 |
+| attentional blink; lag-1 sparing; RSVP; psychological refractory period; central bottleneck; SOA | 注意瞬脱；滞后一豁免；快速序列视觉呈现；心理不应期；中央瓶颈；刺激起始间隔 |
+| Stroop effect; interference, facilitation; delta plot; conflict monitoring; congruency sequence effect; task switching; switch cost | 斯特鲁普效应；干扰、促进；差值图；冲突监测；一致性序列效应；任务切换；切换代价 |
+| biased competition; normalization; attention field; contrast gain; response gain | 偏向竞争；归一化；注意场；对比度增益；反应增益 |
+| theory of visual attention (TVA); whole report; capacity; vigilance decrement; prevalence effect; satisfaction of search | 视觉注意理论；全部报告；容量；警觉衰减；流行率效应；搜索满足 |
+| alarm fatigue; viewability; media multitasking; rhythmic sampling | 警报疲劳；可见度；媒体多任务；节律采样 |
 ## Names
 
 | English | 中文 |
@@ -780,6 +797,16 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Christopher Adams, Tony Dickinson; Nathaniel Daw; Carolina Feher da Silva, Todd Hare; Ida Momennejad | 克里斯托弗·亚当斯，托尼·迪金森；纳撒尼尔·道；卡罗琳娜·费赫尔·达席尔瓦，托德·黑尔；伊达·莫梅内贾德 |
 | Matthew Wilson, Bruce McNaughton; Mark Howe, Ann Graybiel; Will Dabney; David Redish; Lihong Li; Daniel Weintraub | 马修·威尔逊，布鲁斯·麦克诺顿；马克·豪，安·格雷比尔；威尔·达布尼；戴维·雷迪什；李力鸿；丹尼尔·温特劳布 |
 | Harry Harlow; Jane Wang | 哈里·哈洛；简·王 |
+| Daniel Simons, Christopher Chabris; Ronald Rensink, Kevin O'Regan, James Clark; Colin Cherry; Donald Broadbent | 丹尼尔·西蒙斯，克里斯托弗·查布里斯；罗纳德·伦辛克，凯文·奥里根，詹姆斯·克拉克；科林·彻里；唐纳德·布罗德本特 |
+| Neville Moray; Noelle Wood, Nelson Cowan; Anne Treisman, Garry Gelade, Hilary Schmidt; J. Anthony Deutsch, Diana Deutsch | 内维尔·莫雷；诺埃尔·伍德，纳尔逊·考恩；安妮·特瑞斯曼，加里·格拉德，希拉里·施密特；J. 安东尼·多伊奇，戴安娜·多伊奇 |
+| Nilli Lavie; Michael Posner, Yoav Cohen; Jeremy Wolfe; Laurent Itti, Christof Koch, Ernst Niebur | 尼丽·拉维；迈克尔·波斯纳，约阿夫·科恩；杰里米·沃尔夫；劳伦特·伊蒂，克里斯托夫·科赫，恩斯特·尼布尔 |
+| Brian Anderson, Patryk Laurent, Steven Yantis; Edward Awh, Artem Belopolsky, Jan Theeuwes; Steven Most | 布赖恩·安德森，帕特里克·洛朗，史蒂文·扬蒂斯；爱德华·奥，阿尔乔姆·别洛波利斯基，扬·西韦斯；史蒂文·莫斯特 |
+| Trafton Drew, Melissa Võ; Jane Raymond, Kimron Shapiro, Karen Arnell; Harold Pashler; John Ridley Stroop, Colin MacLeod | 特拉夫顿·德鲁，梅利莎·沃；简·雷蒙德，金伦·夏皮罗，卡伦·阿内尔；哈罗德·帕什勒；约翰·里德利·斯特鲁普，科林·麦克劳德 |
+| Barbara and Charles Eriksen; Matthew Botvinick, Jonathan Cohen; Gabriele Gratton; Robert Rogers, Stephen Monsell | 芭芭拉·埃里克森和查尔斯·埃里克森；马修·博特维尼克，乔纳森·科恩；加布里埃莱·格拉顿；罗伯特·罗杰斯，斯蒂芬·蒙塞尔 |
+| Jeffrey Moran, Robert Desimone, John Duncan; David Heeger, John Reynolds; Katrin Herrmann, Marisa Carrasco | 杰弗里·莫兰，罗伯特·德西蒙，约翰·邓肯；大卫·希格，约翰·雷诺兹；卡特琳·赫尔曼，玛丽莎·卡拉斯科 |
+| Claus Bundesen; George Sperling; Norman Mackworth; Mathias Fleck, Stephen Mitroff; David Strayer, William Johnston | 克劳斯·邦德森；乔治·斯珀林；诺曼·麦克沃思；马蒂亚斯·弗莱克，斯蒂芬·米特罗夫；戴维·斯特雷耶，威廉·约翰斯顿 |
+| Eyal Ophir, Clifford Nass, Anthony Wagner; Reza Wiradhany, Mark Nieuwenstein; Robert Lubow; Paul Dux, René Marois | 埃亚勒·奥菲尔，克利福德·纳斯，安东尼·瓦格纳；雷扎·维拉德哈尼，马克·纽文斯坦；罗伯特·卢博；保罗·达克斯，勒内·马鲁瓦 |
+| Ayelet Landau, Pascal Fries; Ashish Vaswani | 阿耶莱特·兰道，帕斯卡尔·弗里斯；阿希什·瓦斯瓦尼 |
 
 ## Titles
 

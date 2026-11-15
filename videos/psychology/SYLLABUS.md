@@ -1315,41 +1315,59 @@ neuroscience); Tolman 1948; Daw et al. 2011; Niv 2009; Dabney et al. 2020; Dayan
 
 ### Part 18 · Attention (~55)
 *Question:* why do you miss a gorilla, and what is the thing you were doing instead?
-*Story:* half of viewers counting basketball passes fail to see a person in a gorilla suit walk through. Attention
-was psychology's first reason to draw a box inside the head (Broadbent's filter, 1958). Sixty years of
-experiments moved the filter, split it and finally replaced it with something a circuit can do: competition, and
-a gain that multiplies.
-1. Hook: Simons and Chabris (1999). Change blindness in a flicker display.
-2. Cherry's cocktail party (1953) and dichotic listening; Broadbent's filter: the first information-flow diagram
-   in psychology.
-3. Your own name gets through (Moray): attenuation (Treisman) against late selection (Deutsch and Deutsch); load
-   theory as the reconciliation (Lavie).
-4. Attention in space without moving the eyes: Posner's cueing (1980). Benefits, costs, inhibition of return.
-5. On you: visual search. A red target pops out; a conjunction does not.
-6. Feature integration theory (Treisman and Gelade 1980): maps, a spotlight, illusory conjunctions. Guided search
-   (Wolfe) and saliency maps (Itti and Koch) as its computational descendants.
-7. Attention in time: the attentional blink; the psychological refractory period and the central bottleneck
-   (computed with Part 1's stage model).
-8. Control and conflict: the Stroop effect (1935), the flanker task, conflict monitoring; task switching and its
-   cost.
-9. What attention does to neurons: gain, biased competition (Desimone and Duncan 1995), and the normalization
-   model (Reynolds and Heeger 2009), which reconciles the recordings (derived, computed).
-10. Capacity as a race: Bundesen's theory of visual attention in outline.
-11. Vigilance: Mackworth's clock (1948) and the decrement (returns in Part 51).
-12. Multitasking: what the driving and media data show.
+*Story:* half of the observers counting basketball passes fail to see a person in a gorilla suit walk through, and a
+large change in a flickering photograph takes seconds to find. Attention was psychology's first reason to draw a box
+inside the head (Broadbent's filter, 1958). Sixty years of experiments moved the filter, split it and finally replaced
+it with something a circuit can do: competition, and a gain that multiplies before a division. Act V begins here.
+0. Hook: Simons and Chabris (1999; 46% of 192 missed the visitor); Rensink, O'Regan and Clark's flicker (1997: 0.9 s
+   without blanks, 4.7 s and 10.9 s with them); the questions; objectives.
+1. Cherry's cocktail party (1953) and shadowing; Broadbent's split span; the filter as the first information-flow
+   diagram.
+2. Your own name gets through (Moray 1959; Wood and Cowan 1995); Treisman's attenuator (1960) run on Psyche as signal
+   and noise against word thresholds; late selection (Deutsch and Deutsch 1963); Lavie's load (1995) and its critics.
+3. Posner's cueing (1980): benefits and costs on Psyche; endogenous against exogenous cues; inhibition of return
+   (Posner and Cohen 1984).
+4. On you: a feature and a conjunction display; set-size functions; Treisman and Gelade's slopes (about 29 and 67 ms).
+5. Feature integration theory and illusory conjunctions; guided search on Psyche (slopes 0/3, 12/35 and 23/47 ms an
+   item for feature, conjunction and T-among-L searches); a computed saliency map with a scan path (Itti, Koch and
+   Niebur 1998); selection history (latent inhibition from Part 16; Anderson, Laurent and Yantis 2011; Awh et al.
+   2012).
+6. Change blindness fitted on Psyche to Rensink's means; attentional set (Most et al. 2001); radiologists and the
+   gorilla (Drew, Võ and Wolfe 2013: 20 of 24).
+7. The attentional blink (Raymond, Shapiro and Arnell 1992) as a two-stage model; the psychological refractory period
+   and its slope of −1 under a central bottleneck (Pashler 1994), with Part 1's stages.
+8. Stroop (1935; 74% more time) on you and as a two-pathway diffusion with its asymmetry and delta plot; flankers
+   (Eriksen and Eriksen 1974), conflict monitoring and the sequence effect (Botvinick et al. 2001; Gratton et al.
+   1992); task switching (Rogers and Monsell 1995).
+9. Moran and Desimone's V4 (1985) and biased competition; the normalization model of attention (Reynolds and Heeger
+   2009) derived, with contrast gain and response gain from the sizes of stimulus and attention field (Herrmann et al.
+   2010).
+10. Bundesen's theory of visual attention (1990) and whole report.
+11. Mackworth's clock revisited as attention; the prevalence effect refitted to Wolfe et al.'s three points (d′ 2.48,
+    a criterion moved 69% of the ideal way); Fleck and Mitroff's correctable search.
+12. Phones and driving (Strayer and Johnston 2001: misses more than doubled, hands-free no better); media multitasking
+    (Ophir et al. 2009) and its replications (Wiradhany and Nieuwenstein 2017).
+13. The Ledger. 14. In practice: professional search, satisfaction of search and test-image insertion; alarm fatigue;
+    driving law and in-car screens; ad viewability. 15. Frontier: what is solid and argued; rhythmic sampling
+    (Landau and Fries 2012, contested); attention in transformers (Part 60).
 
-*Psyche:* `attention`: a saliency map on search displays; guided search reproducing flat and steep slopes; the
-normalization model reproducing contrast-gain and response-gain effects; a Stroop conflict model.
-*On you:* Battery tasks 3 and 4; the flicker paradigm.
-*Ledger:* the Stroop effect (`replicated`; among the largest effects in psychology); inattentional blindness
-(`replicated`); Posner cueing (`replicated`); the attentional blink (`replicated`); media multitasking harms
-attention (`contested`).
-*In practice:* interface and alarm design, distracted driving law, radiological search, attention metrics in
+*Psyche:* `attention`: the dichotic attenuator and load; cue effects with inhibition of return; guided search with a
+quitting threshold; a centre-surround saliency map and scan path; prevalence as a criterion shift; the flicker
+paradigm; the attentional blink; the PRP; a diffusion simulator, the Stroop task as two pathways and conflict
+monitoring; the normalization model of attention; Bundesen's whole report; a vigilance watch.
+*On you:* Battery tasks 3 (Stroop) and 4 (visual search) run on Psyche; the interactive is visual search, with the
+reader's set-size functions and slopes.
+*Ledger:* latent inhibition (`replicated`, deferred from Part 16); the Stroop effect (`replicated`); inattentional
+blindness (`replicated`); Posner cueing (`replicated`); the attentional blink (`replicated`); media multitasking harms
+attention (`contested`). Shown without rows, with reasons: Rensink et al., Cherry, Broadbent, Moray, Treisman, Lavie,
+Treisman and Gelade, Wolfe, Itti and Koch, Anderson et al., Pashler, Botvinick et al., Rogers and Monsell, Moran and
+Desimone, Reynolds and Heeger, Bundesen, Mackworth (row due in Part 51), Strayer and Johnston.
+*In practice:* professional search and screening, alarm design, distracted-driving law, attention metrics in
 advertising.
-*Frontier:* is attention one thing? Rhythmic sampling; attention in networks against attention in brains (the
-shared word, Part 60).
+*Frontier:* is attention one thing? Rhythmic sampling; attention in networks against attention in brains (the shared
+word, Part 60).
 *Reading:* Broadbent 1958; Treisman & Gelade 1980; Posner 1980; Stroop 1935; Desimone & Duncan 1995; Reynolds &
-Heeger 2009; Wolfe 2021 (Guided Search 6.0); Carrasco 2011; Simons & Chabris 1999.
+Heeger 2009; Wolfe 2021 (Guided Search 6.0); Carrasco 2011; Simons & Chabris 1999; Pashler 1998.
 
 ### Part 19 · Working Memory (~50)
 *Question:* how much can you hold in mind at once, and what is the limit made of?
@@ -3314,3 +3332,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 15 | built, English and Chinese: 15 chapters, hook and outro, with demonstrations played in the film; Psyche's hearing (`psyche/hearing.py`, ten tests) and `VoiceoverScene.sound`, six Ledger rows (one deferred from Part 7), fourteen Archive datasets; course entry, lab and interactive (which way a missing fundamental moves, in Web Audio) checked; narration table and on-screen text translated and dry-run. Act III is complete. Open checks in its README | 55 min |
 | 16 | built, English and Chinese: 15 chapters, hook and outro; Psyche's conditioning (`psyche/conditioning.py`, twelve tests), six Ledger rows (one deferred from Part 10), twenty-three Archive datasets; course entry, lab and interactive (the gardener's game: predictions that reveal the contingency learned) checked; narration table and on-screen text translated and dry-run. Act IV begins. Open checks in its README | 54 min |
 | 17 | built, English and Chinese: 14 chapters, hook and outro; Psyche's reinforcement learning (`psyche/rl.py`, seven tests) with the part's own simulations of Steinberg's and Frank's designs and a bandit test, four Ledger rows, seventeen Archive datasets; course entry, lab and interactive (two slot machines: eighty pulls, the reader's α and β fitted on the page) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 42 min |
+| 18 | built, English and Chinese: 15 chapters, hook and outro; Psyche's attention (`psyche/attention.py`, seventeen tests) with Battery tasks 3 and 4 (Stroop, visual search), six Ledger rows (one deferred from Part 16), twenty-five Archive datasets; course entry, lab and interactive (feature and conjunction search, the reader's slopes measured on the page) checked; narration table and on-screen text translated and dry-run. Act V begins. Open checks in its README | 51 min |
