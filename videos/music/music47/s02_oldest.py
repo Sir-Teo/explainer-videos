@@ -16,12 +16,12 @@ class Oldest(SoundScene):
     # ------------------------------------------------------------------
     def timeline(self):
         ev = [
-            (55000, r"Divje Babe: \ a bear bone with holes \ (disputed)", GREY_B),
-            (42500, r"Gei{\ss}enkl\"osterle: \ swan bone and mammoth ivory", TUNE),
-            (37000, r"Hohle Fels: \ the vulture flute", TUNE),
-            (8500, r"Jiahu, \ China: \ crane-bone flutes", BLUE),
-            (4500, r"Ur: \ lyres in royal graves", EAR),
-            (3400, r"Ugarit: \ a hymn written in notation", GOLD),
+            (55000, r"Divje Babe: \ a bear bone with holes \ (disputed)", GREY_B, 2, "right"),
+            (42500, r"Gei{\ss}enkl\"osterle: \ swan bone and mammoth ivory", TUNE, -1),
+            (37000, r"Hohle Fels: \ the vulture flute", TUNE, 1, "right"),
+            (8500, r"Jiahu, \ China: \ crane-bone flutes", BLUE, -1),
+            (4500, r"Ur: \ lyres in royal graves", EAR, 1, "left"),
+            (3400, r"Ugarit: \ a hymn written in notation", GOLD, -2, "left"),
         ]
         tl = log_timeline(ev, width=11.0, lo=2000, hi=100000, y=-0.2, size=17)
         head = label(r"instruments that survive, \ on a logarithmic scale of years", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
@@ -37,7 +37,7 @@ class Oldest(SoundScene):
             "ago. <bookmark mark='f'/> And at Ugarit, about thirty-four hundred years ago, a hymn written on clay in a "
             "notation scholars still argue over."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tl[:-1]), FadeIn(cap), FadeIn(tl.marks.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(tl[:-1]), FadeIn(cap), FadeIn(ghost(tl.marks, 0.15)))
             for mark, m in zip("abcdef", tl.marks):
                 vo.wait_until(mark)
                 self.play(FadeIn(m))
@@ -63,7 +63,7 @@ class Oldest(SoundScene):
             f"{say(f['0.34'])} hertz, the top of a soprano's range. The physics fixes the region; the lost end and the "
             "player's breath decide the rest."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(eq), FadeIn(g.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(eq), FadeIn(ghost(g, 0.15)))
             vo.wait_until("a")
             self.play(FadeIn(g[0]))
             vo.wait_until("b")

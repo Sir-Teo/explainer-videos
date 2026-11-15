@@ -66,7 +66,7 @@ class Language(SoundScene):
             f"three-to-one ratio, scores {say(ex['dotted'])}. In speech, English, where stressed syllables are long and "
             "unstressed ones squeezed, scores high; French, whose syllables are more even, scores lower."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(eq), FadeIn(rows_.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(eq), FadeIn(ghost(rows_, 0.15)))
             for mark, r in zip("abc", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
@@ -159,7 +159,7 @@ class Language(SoundScene):
             f"{say(t['p'], 2)}. With only five French tunes the bootstrap is overconfident, and the honest answer is that "
             "we cannot tell."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(axis), FadeIn(VGroup(*[r[0] for r in rows_]).copy().set_opacity(0.3)))
+            self.play(FadeIn(head), FadeIn(axis), FadeIn(ghost(VGroup(*[r[0] for r in rows_]))))
             for mark, r in zip("abc", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

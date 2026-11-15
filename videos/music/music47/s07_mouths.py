@@ -45,10 +45,12 @@ class Mouths(SoundScene):
             mel = ex[str(g)]
             tot = sum(b for _, b in mel)
             r = mroll(mel_notes(mel, base=60), width=7.6 * min(tot / 26.0, 1.4), height=0.62, lo=60 + min(allp) - 1, hi=60 + max(allp) + 1, color=TUNE if g else GREY_A, bar_h=0.085)
-            rows_.add(VGroup(label(rf"singer {g}" if g else r"the start", font_size=17, color=GREY_A).set_width(1.3), r).arrange(RIGHT, buff=0.35, aligned_edge=DOWN))
-        for r in rows_:
-            r[0].set_width(min(r[0].width, 1.3))
+            tag = label(rf"singer {g}" if g else r"the start", font_size=18, color=GREY_A)
+            rows_.add(VGroup(tag, r))
         rows_.arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to(DOWN * 0.15)
+        for r in rows_:
+            r[1].move_to([-4.2, r[1].get_y(), 0], aligned_edge=LEFT)
+            r[0].move_to([-4.5, r[1].get_y(), 0], aligned_edge=RIGHT)
         head = label(r"one random melody, \ after 0, \ 1, \ 5, \ 10, \ 20 and 40 singers", font_size=24, color=GREY_A).to_edge(UP, buff=0.3)
         cap = label(r"height: \ pitch, \ on one scale for all rows; \ length: \ duration", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -135,7 +137,7 @@ class Mouths(SoundScene):
             f"{say(er[-1], 2)} per note: the melodies became easier to learn. That is the signature of cultural evolution "
             "in the lab: structure appears, and with it, learnability."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(grid.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(ghost(grid, 0.15)))
             for mark, p in zip("abcd", (p1, p2, p3, p4)):
                 vo.wait_until(mark)
                 self.play(FadeIn(p))

@@ -42,7 +42,7 @@ class Hook(SoundScene):
             "across, played by Part 8's flute model, with five holes cut evenly, two centimetres apart. Nobody knows where "
             "the real holes put its notes; listen for what even spacing gives."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cells.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(ghost(cells, 0.15)))
             vo.wait_until("a")
             self.play(FadeIn(fl), FadeIn(ruler))
             vo.wait_until("b")

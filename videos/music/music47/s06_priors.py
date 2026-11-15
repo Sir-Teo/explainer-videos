@@ -170,7 +170,7 @@ class Priors(SoundScene):
             f"{say(100 * b['prior_share']['2-2-3'] / sum(b['prior_share'].values()))}. The same random starts came out as "
             "two different musics."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(key), FadeIn(g.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(key), FadeIn(ghost(g, 0.15)))
             vo.wait_until("a")
             self.play(FadeIn(pa))
             vo.wait_until("b")

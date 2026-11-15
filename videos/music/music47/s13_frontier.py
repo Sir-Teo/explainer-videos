@@ -84,7 +84,7 @@ class Frontier(SoundScene):
             "which biases, and are those biases themselves universal? <bookmark mark='e'/> An answer would separate what the "
             "mind supplies from what history adds."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(ghost(rows_, 0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

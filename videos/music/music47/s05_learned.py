@@ -80,7 +80,7 @@ class Learned(SoundScene):
             "musicians. The more Western music a group had heard, the more it preferred consonance. The bars here sketch "
             "that order; they are not the study's measured sizes."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cap), FadeIn(VGroup(*[b[0] for b in bars]).copy().set_opacity(0.3)))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(ghost(VGroup(*[b[0] for b in bars]), 0.3)))
             for mark, b in zip("abcde", bars):
                 vo.wait_until(mark)
                 self.play(FadeIn(b))

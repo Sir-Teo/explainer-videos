@@ -62,7 +62,7 @@ class Universals(SoundScene):
             "<bookmark mark='e'/> A beat: every tune, but only because written music assumes one; Savage's coders had to "
             f"listen for it. <bookmark mark='f'/> And motifs that come back: {say(100 * share[f[5]])} per cent."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cap), FadeIn(VGroup(*[VGroup(b[0], b[1]) for b in bars]).copy().set_opacity(0.3)))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(ghost(VGroup(*[VGroup(b[0], b[1]) for b in bars]), 0.3)))
             for mark, b in zip("abcdef", bars):
                 vo.wait_until(mark)
                 self.play(FadeIn(b))

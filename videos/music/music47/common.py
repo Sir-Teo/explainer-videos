@@ -675,11 +675,18 @@ def log_timeline(events, width=11.5, lo=1000, hi=100000, y=0.0, size=17):
                   label(f"{v:,}", font_size=size - 3, color=GREY_A).move_to([x(v), y - 0.32, 0]))
     g.add(label(r"years ago", font_size=size - 2, color=GREY_A).next_to(ax, RIGHT, buff=0.15))
     g.marks = VGroup()
-    for k, (v, text, col) in enumerate(events):
-        up = k % 2 == 0
+    for k, ev in enumerate(events):
+        v, text, col = ev[:3]
+        lev = ev[3] if len(ev) > 3 else (1 if k % 2 == 0 else -1)          # +1, +2 above the axis; -1, -2 below
+        up = lev > 0
         tip = Dot([x(v), y, 0], radius=0.07, color=col)
-        stem = Line([x(v), y, 0], [x(v), y + (0.75 if up else -0.75), 0], color=col, stroke_width=1.5)
+        stem = Line([x(v), y, 0], [x(v), y + 0.75 * lev, 0], color=col, stroke_width=1.5)
         tag = label(text, font_size=size, color=col).next_to(stem, UP if up else DOWN, buff=0.08)
+        side = ev[4] if len(ev) > 4 else None                  # 'left': the label ends at the stem; 'right': starts there
+        if side == "left":
+            tag.shift(RIGHT * (x(v) + 0.15 - tag.get_right()[0]))
+        elif side == "right":
+            tag.shift(RIGHT * (x(v) - 0.15 - tag.get_left()[0]))
         g.marks.add(VGroup(tip, stem, tag))
     g.add(g.marks)
     return g
@@ -692,3 +699,13 @@ def note_of(f: float) -> str:
     c = int(round(100 * (m - k)))
     name = LETTER[k % 12] + str(k // 12 - 1)
     return name + (r" \ $+$" + str(c) if c > 0 else r" \ $-$" + str(-c) if c < 0 else "")
+
+
+def ghost(m, k=0.15):
+    """A faint copy of ``m`` to hold the screen before it is drawn: every stroke and fill scaled by ``k`` (so that open
+    curves, which have no fill, do not grow one, as ``set_opacity`` would give them)."""
+    c = m.copy()
+    for s in c.family_members_with_points():
+        s.set_stroke(opacity=s.get_stroke_opacity() * k)
+        s.set_fill(opacity=s.get_fill_opacity() * k)
+    return c

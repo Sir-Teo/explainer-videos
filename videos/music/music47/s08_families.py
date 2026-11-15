@@ -80,17 +80,19 @@ class Families(SoundScene):
         names_ = ["C", "C$\\sharp$", "D", "E$\\flat$", "E", "F", "F$\\sharp$", "G", "A$\\flat$", "A", "B$\\flat$", "B"]
         cols = VGroup()
         for i, j in r["pairs"]:
-            top = label(names_[int(a[i][0]) % 12] if i is not None else r"--", font_size=17, color=TUNE if i is not None else GREY_B)
-            bot = label(names_[int(b[j][0]) % 12] if j is not None else r"--", font_size=17, color=EAR if j is not None else GREY_B)
+            top = label(names_[int(a[i][0]) % 12] if i is not None else r"--", font_size=26, color=TUNE if i is not None else GREY_B)
+            bot = label(names_[int(b[j][0]) % 12] if j is not None else r"--", font_size=26, color=EAR if j is not None else GREY_B)
             same = i is not None and j is not None and abs(a[i][0] - b[j][0]) < 0.5 and abs(np.log(a[i][1] / b[j][1])) < 0.1
             sub = i is not None and j is not None and not same
-            mark = label(r"=" if same else (r"$\sim$" if sub else r"gap"), font_size=14, color=GREY_A if same else GOLD if sub else RED)
-            cols.add(VGroup(top, mark, bot).arrange(DOWN, buff=0.12))
-        cols.arrange(RIGHT, buff=0.18).move_to(UP * 0.3)
+            mark = label(r"=" if same else (r"$\sim$" if sub else r"gap"), font_size=18, color=GREY_A if same else GOLD if sub else RED)
+            cols.add(VGroup(top, mark, bot).arrange(DOWN, buff=0.18))
+        cols.arrange(RIGHT, buff=0.32).move_to(UP * 0.5)
         if cols.width > 13:
             cols.set_width(13)
-        rl = VGroup(label(r"the Tune", font_size=17, color=TUNE).next_to(cols[0][0], LEFT, buff=0.25),
-                    label(r"Baa, \ Baa", font_size=17, color=EAR).next_to(cols[0][2], LEFT, buff=0.25))
+        if cols.width > 11.0:
+            cols.set_width(11.0).move_to(UP * 0.5 + RIGHT * 0.8)
+        rl = VGroup(label(r"the Tune", font_size=20, color=TUNE).next_to(cols[0][0], LEFT, buff=0.3),
+                    label(r"Baa, \ Baa", font_size=20, color=EAR).next_to(cols[0][2], LEFT, buff=0.3))
         rows_ = text_rows([
             (r"line the notes up so the total cost is least: \ a match costs nothing, \ a gap costs 1", WHITE),
             (r"a substitution costs by size: \ a whole tone \ 0.5, \ a doubled length \ 0.5 \ (at most 1.5)", WHITE),
@@ -106,7 +108,7 @@ class Families(SoundScene):
             f"Tune's first two phrases against Baa, Baa's, it costs {say(r['cost'], 1)}, or {say(r['per_note'], 2)} a note: "
             "the four quick notes on have you any meet the Tune's two A's as two halved lengths and two gaps."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cols), FadeIn(rl), FadeIn(rows_.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(cols), FadeIn(rl), FadeIn(ghost(rows_, 0.15)))
             for mark, rr in zip("abc", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(rr))
