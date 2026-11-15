@@ -35,7 +35,7 @@ class Objects(SoundScene):
         self.three()
         self.atmos()
         self.vbap()
-        self.renderer()
+        self.playback()
         self.music()
 
     # ------------------------------------------------------------------
@@ -120,7 +120,7 @@ class Objects(SoundScene):
         self.clear_scene()
 
     # ------------------------------------------------------------------
-    def renderer(self):
+    def playback(self):
         items = [
             (r"on headphones, \ the renderer is Chapter 9's: \ each object through the head-related filters for its direction", WHITE),
             (r"on a soundbar, \ crosstalk cancellation and beams bounced off the walls and ceiling", WHITE),
