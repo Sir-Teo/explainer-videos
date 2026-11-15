@@ -96,6 +96,19 @@ def test_quantize():
     assert 60 * q["bps"] == pytest.approx(120, rel=0.05)
 
 
+def test_quantize_tracking_follows_rubato():
+    beats = [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12]
+    t, notes = 0.0, []
+    for k in range(len(beats)):
+        notes.append((60, t, t + 0.3))
+        if k + 1 < len(beats):
+            t += (beats[k + 1] - beats[k]) * 0.5 * (1 + 0.15 * np.sin(2 * np.pi * k / len(beats)))   # rubato of 15 %
+    assert TR.quantize(notes, divisions=2)["beats"] != pytest.approx(beats)                          # one tempo cannot fit
+    q = TR.quantize_tracking(notes)
+    assert q["beats"] == pytest.approx(beats)
+    assert max(q["tempo"]) > 1.1 * min(q["tempo"])                                                   # and the tempo moved
+
+
 def test_network_learns_a_toy_task():
     pytest.importorskip("torch")
     from explainer.music.monochord.mir import neural as NN

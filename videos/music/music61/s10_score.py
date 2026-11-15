@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import numpy as np
+
 from videos.music.music61.common import *  # noqa: F403
 
 
@@ -30,37 +32,60 @@ class Score(SoundScene):
     # ------------------------------------------------------------------
     def quantize(self):
         d = load("score")
-        est = d["est"]
-        q = d["beats"]
+        perf = d["perf"]
         tb = d["true_beats"]
-        n = min(len(est), len(q))
-        top = max(n_[1] for n_ in est) + 0.6
-        ax1 = frame_axes(width=11.0, height=0.6, xlo=0, xhi=top, ylo=0, yhi=1, center=UP * 1.3)
-        ax2 = frame_axes(width=11.0, height=0.6, xlo=0, xhi=max(q) + 2, ylo=0, yhi=1, center=DOWN * 0.9)
-        d1 = VGroup(*[Dot(ax1.to(e[1], 0.5), radius=0.07, color=BLUE) for e in est])
-        d2 = VGroup(*[Dot(ax2.to(b, 0.5), radius=0.07, color=TUNE if i < len(tb) and abs(b - tb[i]) < 1e-6 else EAR) for i, b in enumerate(q[:n])])
-        links = VGroup(*[Line(ax1.to(est[i][1], 0.5), ax2.to(q[i], 0.5), stroke_width=1, color=GREY_D) for i in range(n)])
-        grid = VGroup(*[Line(ax2.to(b, 0), ax2.to(b, 1), stroke_width=1, color=GREY_D) for b in range(int(max(q)) + 2)])
-        l1 = label(r"onsets as performed \ (seconds)", font_size=16, color=BLUE).next_to(ax1, UP, buff=0.1).align_to(ax1, LEFT)
-        l2 = label(r"onsets as written \ (beats)", font_size=16, color=TUNE).next_to(ax2, UP, buff=0.1).align_to(ax2, LEFT)
-        ok = sum(1 for i in range(min(n, len(tb))) if abs(q[i] - tb[i]) < 1e-6)
-        note = label(rf"tempo found: \ {60 * d['bps']:.0f} beats a minute; \ {ok} of {len(tb)} onsets on the beat the Tune is written on", font_size=17, color=WHITE).to_edge(DOWN, buff=0.4)
-        head = label(r"quantization", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        fx, tr = d["fixed"], d["track"]
+        top = max(p[1] for p in perf) + 0.6
+        ax0 = frame_axes(width=11.0, height=0.5, xlo=0, xhi=top, ylo=0, yhi=1, center=UP * 1.9)
+        d0 = VGroup(*[Dot(ax0.to(p[1], 0.5), radius=0.07, color=BLUE) for p in perf])
+        l0 = label(r"onsets as performed \ (seconds)", font_size=15, color=BLUE).next_to(ax0, UP, buff=0.08).align_to(ax0, LEFT)
+
+        def row(q, center, title):
+            ax = frame_axes(width=11.0, height=0.5, xlo=0, xhi=max(max(q), max(tb)) + 1, ylo=0, yhi=1, center=center)
+            grid = VGroup(*[Line(ax.to(b_, 0), ax.to(b_, 1), stroke_width=1, color=GREY_D) for b_ in range(int(max(max(q), max(tb))) + 2)])
+            dots = VGroup(*[Dot(ax.to(b_, 0.5), radius=0.07, color=TUNE if i < len(tb) and abs(b_ - tb[i]) < 1e-6 else EAR) for i, b_ in enumerate(q)])
+            lab = label(title, font_size=15, color=GREY_A).next_to(ax, UP, buff=0.08).align_to(ax, LEFT)
+            return VGroup(ax, grid, dots, lab)
+        r1 = row(fx["beats"], UP * 0.3, rf"one fixed tempo \ ({60 * fx['bps']:.0f} a minute): \ {fx['ok']} of {len(tb)} onsets on the written beat")
+        r2 = row(tr["beats"], DOWN * 1.3, rf"a tempo that may drift: \ {tr['ok']} of {len(tb)}")
+        note = label(r"gold: \ on the beat the Tune is written on; \ red: \ not", font_size=15, color=GREY_A).to_edge(DOWN, buff=0.35)
+        head = label(r"quantization", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Here is the Tune's opening played with rubato, transcribed by the network. <bookmark mark='a'/> Its onsets, in "
-            "seconds, drift: a slower start, a held phrase end. <bookmark mark='b'/> Monochord's quantizer tries every tempo and "
-            "phase, snaps each onset to the nearest half beat, and keeps the tempo with the smallest error. "
-            f"<bookmark mark='c'/> It finds {say(60 * d['bps'])} beats a minute, and {say(ok)} of the {say(len(tb))} onsets land "
-            "on the beat where the Tune is written."
+            "Here is the Tune's opening played with rubato: a slower middle, a held phrase end. To study quantization alone, "
+            "give the quantizer its onsets exactly, as a perfect transcriber would. <bookmark mark='a'/> In seconds, they "
+            "drift. <bookmark mark='b'/> The simplest quantizer tries every fixed tempo and phase and snaps each onset to "
+            f"the nearest half beat. It settles on {say(round(60 * fx['bps']))} beats a minute, and only {say(fx['ok'])} of the "
+            f"{say(len(tb))} onsets land where the Tune is written: one tempo cannot fit a performance whose tempo moves. "
+            "<bookmark mark='c'/> So let the tempo drift, a little from note to note, and prefer simple note values; find "
+            f"the likeliest values and tempos together by dynamic programming. Now {say(tr['ok'])} of {say(len(tb))} land "
+            "on their beats."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(note))
             vo.wait_until("a")
-            self.play(FadeIn(ax1), FadeIn(d1), FadeIn(l1))
+            self.play(FadeIn(ax0), FadeIn(d0), FadeIn(l0))
             vo.wait_until("b")
-            self.play(FadeIn(ax2), FadeIn(grid), FadeIn(l2), Create(links), FadeIn(d2), run_time=1.5)
+            self.play(FadeIn(r1), run_time=1.2)
             vo.wait_until("c")
-            self.play(FadeIn(note))
+            self.play(FadeIn(r2), run_time=1.2)
         self.wait(0.4)
+        self.clear_scene()
+        tempo = np.array(tr["tempo"]) * 60
+        ax = frame_axes(width=9.0, height=3.0, xlo=0, xhi=len(tempo) - 1, ylo=90, yhi=150, center=DOWN * 0.3)
+        cv = curve(np.arange(len(tempo)), tempo, ax.to, color=TUNE, width=3)
+        dots = VGroup(*[Dot(ax.to(i, v), radius=0.06, color=TUNE) for i, v in enumerate(tempo)])
+        ref = DashedLine(ax.to(0, 120), ax.to(len(tempo) - 1, 120), color=GREY_B, stroke_width=1.5)
+        ticks = VGroup(*[label(f"{v}", font_size=14, color=GREY_A).next_to(ax.to(0, v), LEFT, buff=0.12) for v in (90, 120, 150)])
+        xl = label(r"note", font_size=14, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        yl = label(r"tempo found \ (beats a minute)", font_size=14, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
+        head = label(r"the rubato, \ recovered", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        with self.voiceover(
+            f"And the tempos it chose are the rubato itself: slowing to {say(round(tempo.min()))} beats a minute through the "
+            f"first phrase and pressing on to {say(round(tempo.max()))} in the second, around the 120 at which the Tune is "
+            "written. A score and a tempo curve together describe the performance; the score alone is the plan. Cemgil and "
+            "Kappen built quantizers like this in 2003; Part 62's beat tracker does the same job from audio."
+        ):
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(ref), FadeIn(ticks), FadeIn(xl), FadeIn(yl), Create(cv), FadeIn(dots), run_time=1.6)
+        self.wait(0.6)
         self.clear_scene()
 
     # ------------------------------------------------------------------
@@ -70,7 +95,7 @@ class Score(SoundScene):
         boxes = choice_boxes([r"the performance", r"the quantized score, \ played"], width=3.8, height=0.9, buff=1.0, size=20).move_to(UP * 0.5)
         note = label(r"the score keeps the notes and the beats, \ and loses the rubato: \ a score is a plan, \ not a performance", font_size=18, color=GREY_A).next_to(boxes, DOWN, buff=0.6)
         head = label(r"performance and score", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
-        with self.voiceover("Hear the performance, then the quantized score played strictly."):
+        with self.voiceover("Hear the performance, then the score the drifting-tempo quantizer wrote, played strictly at 120."):
             self.play(FadeIn(head), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:

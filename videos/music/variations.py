@@ -125,6 +125,8 @@ LEDGER = [
      "measure": r"the back row 7 dB down, the car park 29 dB down and mostly bass"},
     {"part": 60, "title": r"the Tune's family of copyrights: a recording, a cover, a remix", "seconds": 33.6,
      "measure": r"a million streams each: 4,655 dollars to rights holders; the remix pays us half; the unknown composer of 1761, nothing"},
+    {"part": 61, "title": r"performed, transcribed and re-rendered, five times round", "seconds": 39.2,
+     "measure": r"note F against the original: 0.53 after one round, 0.10 after five"},
     {"part": 62, "title": r"sung freely, and accompanied live by a machine that listens", "seconds": 21.9,
      "measure": r"the follower's chords land a median 96 ms from the voice's beats"},
     {"part": 63, "title": r"three earlier Variations, five noisy seconds each, named", "seconds": 16.6,

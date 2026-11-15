@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import numpy as np
+
 from videos.music.music61.common import *  # noqa: F403
 
 
@@ -8,6 +10,7 @@ class Evaluation(SoundScene):
         chapter(self, 8, r"Keeping score", r"When is a transcribed note right?")
         self.metrics()
         self.example()
+        self.quiz()
         self.frames()
         self.keys()
 
@@ -119,3 +122,31 @@ class Evaluation(SoundScene):
                    "disagree; a Disklavier, or Monochord, does not. <bookmark mark='e'/> And a transcription that scores nine tenths "
                    "can still be unreadable, while one that scores seven tenths can be useful. Readability is Chapter 9's subject.",
                    marks="bcde")
+
+    # ------------------------------------------------------------------
+    def quiz(self):
+        d = load("scoreheard")
+        c = clip("scoreheard.two")
+        card = listen_card(r"Two transcriptions of the Tune with its chords, \ re-played. \ They score almost the same. \ One is missing notes; \ one has notes in the wrong octave. \ Which is which?", width=9.6)
+        with self.voiceover("Your turn. Two transcriptions of the Tune with its chords, played back. They score almost the same. One is missing notes; the other has some notes in the wrong octave. Which is which?"):
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        boxes = choice_boxes([r"first", r"second"]).move_to(UP * 0.6)
+        self.play(FadeOut(card), FadeIn(boxes))
+        st = d["starts"]
+        with self.listen(c) as snd:
+            window(snd, r"two transcriptions", kind="physical model", detail=r"Part 38's piano", corner=DL, tag_corner=DR)
+            pulse(snd, boxes[0], st["first"], st["second"] - 0.4, buff=0.08)
+            pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
+        a, b = d["a"], d["b"]
+        res = VGroup(label(rf"the first is missing {d['dropped']} of {d['n']} notes: \ precision {a['precision']:.2f}, \ recall {a['recall']:.2f}, \ F {a['f']:.2f}", font_size=17, color=TUNE),
+                     label(rf"the second has {d['moved']} notes an octave out: \ precision {b['precision']:.2f}, \ recall {b['recall']:.2f}, \ F {b['f']:.2f}", font_size=17, color=EAR)).arrange(DOWN, buff=0.25).move_to(DOWN * 1.4)
+        with self.voiceover(
+            f"The first is missing {say(d['dropped'])} of the {say(d['n'])} notes; the second has {say(d['moved'])} notes an "
+            f"octave out. Their F-measures are {say(a['f'], 2)} and {say(b['f'], 2)}. To a listener, a missing note leaves a "
+            "gap that the harmony often covers, while a note in the wrong octave can break the melody's line. Which is worse "
+            "depends on what the transcription is for, and one number cannot say."
+        ):
+            self.play(FadeIn(res))
+        self.wait(0.4)
+        self.clear_scene()

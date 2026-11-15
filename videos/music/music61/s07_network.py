@@ -13,6 +13,7 @@ class Network(SoundScene):
         self.result()
         self.inside()
         self.heard()
+        self.polyphony()
 
     # ------------------------------------------------------------------
     def design(self):
@@ -159,4 +160,30 @@ class Network(SoundScene):
             vo.wait_until("b")
             self.play(Indicate(pics, color=TUNE, scale_factor=1.02))
         self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def polyphony(self):
+        d = load("polyphony")
+        v = np.array(d["voices"], float)
+        a, b = np.array(d["nmf"]), np.array(d["net"])
+        ax = frame_axes(width=8.0, height=3.0, xlo=0.5, xhi=6.5, ylo=0, yhi=1, center=DOWN * 0.5 + LEFT * 0.8)
+        cv = VGroup(curve(v, a, ax.to, color=GREY_B, width=3), curve(v, b, ax.to, color=TUNE, width=3))
+        dots = VGroup(*[Dot(ax.to(x, y), radius=0.06, color=GREY_B) for x, y in zip(v, a)], *[Dot(ax.to(x, y), radius=0.06, color=TUNE) for x, y in zip(v, b)])
+        ticks = VGroup(*[label(f"{int(x)}", font_size=14, color=GREY_A).move_to(ax.to(x, 0) + DOWN * 0.25) for x in v])
+        xl = label(r"notes that may sound at once", font_size=14, color=GREY_A).next_to(ticks, DOWN, buff=0.15)
+        yl = label(r"note F-measure \ (new piano pieces)", font_size=14, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
+        key = VGroup(label(r"the network", font_size=16, color=TUNE), label(r"NMF", font_size=16, color=GREY_B)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_edge(RIGHT, buff=0.6)
+        head = label(r"how many notes at once?", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        with self.voiceover(
+            "How does each transcriber cope as the music thickens? On new piano pieces allowing one note at a time, then two, "
+            f"three, four and six: <bookmark mark='a'/> the network scores {say(b[0], 2)} on single lines and falls to "
+            f"{say(b[-1], 2)} with six voices; NMF falls from {say(a[0], 2)} to {say(a[-1], 2)}. Every added voice puts more "
+            "partials on top of each other, and more of each note's evidence is shared with another's. The gap between the two "
+            "is what learning from examples buys, on the instrument it learnt."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(ticks), FadeIn(xl), FadeIn(yl), FadeIn(key))
+            vo.wait_until("a")
+            self.play(Create(cv), FadeIn(dots), run_time=1.6)
+        self.wait(0.6)
         self.clear_scene()

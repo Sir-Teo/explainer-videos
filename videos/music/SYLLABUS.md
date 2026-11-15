@@ -2274,11 +2274,29 @@ calibrated probabilities that a shared phrase arose by chance.
 *Story:* The fourteen-year-old Mozart is said to have written out a guarded nine-voice choral work after one
 hearing. Making a machine do that has been called the holy grail of music computing. Monochord gives us what the
 field lacks: unlimited audio with a perfect answer key.
+1. Hook: an ear question (performance or transcription?); Mozart and the Miserere; answer keys; the plan.
+2. One voice's pitch: the difference function; the missing fundamental; YIN's steps; the track as a sine, heard; uses.
+3. Pitch in noise: the sung Tune in three noises, tracked and heard; gross errors against noise; lessons.
+4. Many notes at once: why chords are hard; an ear question (the added octave); salience; cancellation; the hidden octave.
+5. Where notes begin: spectral flux; piano and strings, heard; precision against recall; what makes onsets hard.
+6. Factorizing the spectrogram: NMF and its updates; blind components; note templates; a piece factorized and re-played, heard; limits.
+7. A network that listens: design; training; results; inside; heard; how many notes at once.
+8. Timbres never heard: four instruments, heard; the scores; an ear question (the organ); why.
+9. Keeping score: precision, recall, F; an example; an ear question (missing notes or octave errors); frame scores; what keys contain.
+10. From notes to a score: seconds and beats; fixed-tempo and drifting-tempo quantization; the tempo curve; heard; key and spelling.
+11. Fifty years of transcription: early systems; data and benchmarks; the ear.
+12. Frontier: many instruments; audio to score; the research problem.
+13. Variation 61: the Tune performed, transcribed and re-rendered, five times round. Outro: problems, payoffs.
+
 *Covers:* representations for pitch; autocorrelation and YIN; salience; onset detection; non-negative matrix
 factorization and its updates; neural transcription; from notes to a readable score; evaluation.
-*Built and computed:* YIN with accuracy against noise; onset detection; NMF and a small network on Monochord
-renders, scored on a timbre they never heard.
-*Variation 61:* the Tune performed, transcribed and re-rendered, five times round.
+*Built and computed:* `monochord/mir/transcribe.py` and `neural.py`: YIN (missing fundamental found at 220.0 Hz;
+gross errors 9 % at 0 dB and 60 % at −5, where autocorrelation keeps 10 %); spectral-flux onsets (F 0.90 piano,
+0.74 strings); NMF with piano templates (note F 0.49) and a small network (0.67), both scored on a harp, an organ
+and strings they never heard (the network 0.24 on the harp); F against polyphony (0.91 to 0.54); quantization of
+rubato with one tempo (1 of 14 onsets right) and with a drifting tempo (14 of 14); Part 15's key finder on the result.
+*Variation 61:* the Tune performed, transcribed and re-rendered, five times round (note F 0.53 after one round,
+0.10 after five).
 *Frontier:* multi-instrument transcription **(verify current results)**; score-level output.
 *Reading:* Müller; de Cheveigné & Kawahara (2002); Smaragdis & Brown (2003); Benetos et al. (2019).
 

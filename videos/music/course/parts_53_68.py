@@ -258,6 +258,38 @@ PARTS = [
         also=(("Monochord's business module: waterfalls, recoupment, pro-rata and user-centric pools, a social-influence market, the cost disease, ticket pricing, melody collisions", "explainer/music/monochord/business.py"),),
     ),
     Part(
+        n=61, level="U", widget="yin", prereq=(2, 3, 15, 38, 48),
+        question="How does a machine hear music and write down its notes, and how do we know when it is right?",
+        story="An ear question: the Tune with chords twice on one piano, a performance and a small network's transcription played back (the second was the original; the copy found 21 of 30 notes and added 43). Mozart and the Miserere in 1770; why a listening machine needs an answer key, which Monochord's renders give exactly (160 training pieces, 12 test). One voice: the difference function, the missing fundamental found at 220.0 Hz, YIN's steps (a bias of 0.02 cents against autocorrelation's 1.8), the track played as a sine beside the voice. In noise: the sung Tune tracked through three noises, heard; YIN's gross errors 9 per cent at 0 dB and 60 at -5, where plain autocorrelation keeps 10. Chords: an ear question on an added octave; salience peaking on C3, an octave below the lowest note; cancellation; the hidden octave. Onsets by spectral flux, piano against bowed strings (F 0.90 and 0.74), heard; precision against recall. NMF: multiplicative updates, blind components, note templates, a test piece factorized and played back (9 of 10 notes, 17 added, mostly at the range's edges). A network on five frames: note F 0.67 on piano against NMF's 0.49; inside it; how many notes at once (0.91 on single lines, 0.54 with six). Timbres never heard: harp, organ and strings, heard (the network 0.24 on the harp); an ear question on the organ. Keeping score: precision, recall and F; an ear question on two transcriptions at F 0.82 and 0.83, one missing notes and one with octave errors. Notes to a score: a rubato performance's exact onsets, one fixed tempo putting 1 of 14 on the written beat and a drifting tempo all 14, its tempo curve from 108 to 135; key and spelling. Fifty years of transcription; frontier: many instruments, audio to score, a research problem on calibration. Variation 61: the Tune transcribed and re-rendered five times round, F 0.53 after one round and 0.10 after five.",
+        handoff="Beats, chords and form from the same spectral flux and templates in Part 62; pitch contours for query by "
+                "humming in Part 63; NMF again, for sources, in Part 64; transcriptions as training data for machines that "
+                "compose in Part 65; the evaluation questions of Part 67.",
+        outside="Part 2 for spectra and partials; Part 3 for the missing fundamental; Part 15 for keys; Part 38 for the piano; "
+                "Part 48 for sampling. Autocorrelation, peak picking, non-negative least squares and the KL divergence, "
+                "multiplicative updates, small neural networks and cross-entropy, precision and recall, dynamic programming.",
+        objectives={
+            "U": ["Hear a pitch track as a sine beside the voice, the voice through noise, and an added octave in a chord.",
+                  "Hear transcriptions played back: NMF's busy copy, the network's on an unseen organ, two at the same F.",
+                  "Explain why polyphony and unseen timbres are hard, and why a score is not a performance."],
+            "M": ["Track pitch by YIN and by autocorrelation and measure gross and fine errors against noise.",
+                  "Transcribe by NMF with fixed templates and by a small network; score notes and frames by precision, recall and F.",
+                  "Quantize performed onsets with a fixed and with a drifting tempo, and find the key."],
+            "D": ["Measure and improve a transcriber's calibration on timbres it never heard."],
+            "I": ["Keep answer keys exact, report note and frame scores with their tolerances, and listen to the playback."],
+        },
+        results=[
+            ("Difference", r"d(\tau) = \sum_{j} (x_j - x_{j+\tau})^2"),
+            ("YIN", r"d'(\tau) = d(\tau) \Big/ \tfrac{1}{\tau}\sum_{k=1}^{\tau} d(k)"),
+            ("Flux", r"\mathrm{SF}(t) = \sum_f \max(0,\ |X(t, f)| - |X(t-1, f)|)"),
+            ("NMF update", r"H \leftarrow H \odot \frac{W^\top (V / WH)}{W^\top \mathbf 1}"),
+            ("F-measure", r"F = \frac{2PR}{P + R}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8),
+        D=(11,),
+        I=(9, 10),
+        also=(("Monochord's first listeners: YIN, salience, onsets, NMF, a transcribing network, scores and quantization", "explainer/music/monochord/mir/transcribe.py"),),
+    ),
+    Part(
         n=62, level="U", widget="tempo", prereq=(9, 18, 21, 43, 61),
         question="How does a machine find the beat, the chords and the form of a song, and follow a singer live?",
         story="An ear question hears the session with a click track 80 ms late and one on the beat. People entrain and predict, and prefer tempos near 120; the listeners these methods power. Novelty: spectral flux with its local mean removed, the drums alone against the band, other novelty functions and kinds of accent, and an autocorrelation tempogram bright at 100, 200 and 50 beats a minute. Tempo: the autocorrelation times a prior near 120 finds 100 on the session; a slow piece written at 50 is read at 100 with the prior and 50 without, heard with both click tracks; tempo in real performances. Beats: forty years of trackers; Ellis's dynamic programme, F 0.94 on the session; on a rubato piano performance the tracker misjudges the tempo (125 against 106) and reaches only 0.58; scoring at several levels. Downbeats: an ear question on where bar lines fall; the low band marks beats one and three but cannot say which is first; other meters. Chroma: folding octaves, the Tune's chroma heard, its relatives and uses, chord templates. Chords: templates frame by frame 44 per cent, an HMM 51, an HMM with Bach's transitions 76; the confusions run a fifth up (C as G, G as D), from each note's third partial. Time warping: a strict and a rubato performance heard and aligned (median 13 ms offline and online), the path read as a tempo curve, its origins in speech. Following: computer accompaniment since 1984; Monochord's follower tracking a freely sung Tune, its chords a median 96 ms from the voice; what human accompanists do. Structure: the whole Tune's self-similarity heard; Foote's novelty misses the sections because nothing in the texture changes; repetition finds a b c c a b, A B A, where mean chroma cannot; song forms. Covers: an ear question (which is not the Tune?), key-invariant DTW finding the transposition of five semitones; covers in the wild; how far annotators agree. Frontier: whose meter, joint models, listening live; a research problem on predictive accompaniment. Variation 62: the Tune sung freely and accompanied twice, deaf and listening.",

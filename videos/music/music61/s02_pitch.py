@@ -12,6 +12,7 @@ class Pitch(SoundScene):
         self.difference()
         self.missing()
         self.yin_steps()
+        self.heard()
         self.uses()
 
     # ------------------------------------------------------------------
@@ -123,3 +124,31 @@ class Pitch(SoundScene):
                    "<bookmark mark='d'/> In query by humming, in singing lessons that score intonation, in karaoke. "
                    "<bookmark mark='e'/> In speech, for intonation and stress, and in biology, for bird song and whale song. "
                    "<bookmark mark='f'/> And in every analysis of a sung performance in this series.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def heard(self):
+        d = load("pitchheard")
+        c = clip("pitchheard.three")
+        boxes = choice_boxes([r"the voice", r"YIN's pitch, \ as a sine", r"both together"], width=3.6, height=0.9, buff=0.4, size=18).move_to(UP * 0.6)
+        note = label(rf"voiced in {100 * d['voiced_share']:.0f}\% of frames; \ where the sine and the voice agree, \ they fuse into one sound", font_size=17, color=GREY_A).next_to(boxes, DOWN, buff=0.6)
+        head = label(r"checking a pitch track by ear", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        with self.voiceover(
+            "A pitch tracker can be checked by ear. Hear the sung Tune; then YIN's pitch track, played as a pure tone that "
+            "follows it; then the two together."
+        ):
+            self.play(FadeIn(head), FadeIn(boxes))
+        st = d["starts"]
+        ks = ["voice", "track", "both"]
+        with self.listen(c) as snd:
+            window(snd, r"voice, \ track, \ both", kind="synthesized", detail=r"Part 8's voice; \ a sine", corner=DL, tag_corner=DR)
+            for i, k in enumerate(ks):
+                end = st[ks[i + 1]] - 0.3 if i + 1 < len(ks) else c.duration
+                pulse(snd, boxes[i], st[k], end, buff=0.06)
+        with self.voiceover(
+            "Where the tracker is right, the tone and the voice fuse into one sound; an octave error or a wrong note would "
+            "stand out at once as a second line. Researchers listen to their pitch tracks this way, because a wrong frame "
+            "is easier to hear than to find in a table."
+        ):
+            self.play(FadeIn(note))
+        self.wait(0.4)
+        self.clear_scene()

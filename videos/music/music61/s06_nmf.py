@@ -13,6 +13,7 @@ class Nmf(SoundScene):
         self.blind()
         self.templates()
         self.heard()
+        self.replayed()
         self.limits()
 
     # ------------------------------------------------------------------
@@ -183,3 +184,29 @@ class Nmf(SoundScene):
                    "refinements: sparsity, continuity in time, templates that change over a note, harmonic constraints. "
                    "<bookmark mark='f'/> NMF's virtue is that every part of it can be read; its vice is that it knows nothing it "
                    "was not told.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def replayed(self):
+        d = load("nmfheard")
+        c = clip("nmfheard.two")
+        sc = d["scores"]
+        boxes = choice_boxes([r"played", r"NMF's transcription, \ re-played"], width=4.0, height=0.9, buff=0.9, size=18).move_to(UP * 0.6)
+        res = label(rf"{d['n_true']} notes played; \ {d['n_est']} reported, \ {sc['hits']} of them right: \ precision {sc['precision']:.2f}, \ recall {sc['recall']:.2f}", font_size=18, color=TUNE).next_to(boxes, DOWN, buff=0.6)
+        why = label(r"most extras sit at the edges of the range, \ C3 and C6, \ or re-strike a note still sounding", font_size=16, color=GREY_A).next_to(res, DOWN, buff=0.3)
+        head = label(r"the transcription, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        with self.voiceover("Transcriptions are easiest to judge by playing them back. Hear the test piece, then NMF's transcription of it on the same piano."):
+            self.play(FadeIn(head), FadeIn(boxes))
+        st = d["starts"]
+        with self.listen(c) as snd:
+            window(snd, r"played, \ then re-played", kind="physical model", detail=r"Part 38's piano", corner=DL, tag_corner=DR)
+            pulse(snd, boxes[0], st["played"], st["transcribed"] - 0.4, buff=0.08)
+            pulse(snd, boxes[1], st["transcribed"], c.duration, buff=0.08)
+        with self.voiceover(
+            f"It found {say(sc['hits'])} of the {say(d['n_true'])} notes, and added {say(d['n_est'] - sc['hits'])} that were "
+            "never played. The playback sounds busier. Most of the extras sit at the very edges of the range, on the lowest "
+            "and highest templates, which soak up whatever energy no other template explains, a thump or a hiss; the rest "
+            "strike again a note that is still sounding, as its decay drifts away from the template's shape."
+        ):
+            self.play(FadeIn(res), FadeIn(why))
+        self.wait(0.4)
+        self.clear_scene()

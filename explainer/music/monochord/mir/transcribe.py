@@ -341,3 +341,48 @@ def quantize(notes, divisions: int = 2, tempos=None) -> dict:
     last = sorted(notes, key=lambda z: z[1])[-1]
     durs = np.r_[np.diff(grid), max(1.0 / divisions, round((last[2] - last[1]) * bps * divisions) / divisions)]
     return {"beats": grid.tolist(), "durations": durs.tolist(), "bps": float(bps), "error": err}
+
+
+def quantize_tracking(notes, values=(0.5, 1.0, 1.5, 2.0, 3.0, 4.0), prior=(0.15, 0.45, 0.05, 0.2, 0.05, 0.1),
+                      tempos=None, sigma: float = 0.08, tau: float = 0.06) -> dict:
+    """Quantization with a tempo that may drift (after Cemgil and Kappen, 2003): each gap between onsets is a note
+    value (in beats) times the current beat length, the beat length changes a little from note to note, and simple
+    values are likelier.  The most likely values and tempos are found by dynamic programming (Viterbi) over a grid of
+    tempos.  Returns beats, durations, the tempo at each note (beats a second) and the cost."""
+    on = np.array(sorted(n[1] for n in notes), float)
+    gaps = np.diff(on)
+    if tempos is None:
+        tempos = np.geomspace(1.0, 4.0, 81)                                 # 60 to 240 beats a minute
+    lt = np.log(tempos)
+    vals, lp = np.asarray(values, float), -np.log(np.asarray(prior, float))
+    # cost of each gap under each tempo: the best value for it, with its prior
+    def emit(g):
+        pred = np.log(vals)[None, :] - lt[:, None]                          # log seconds of each value at each tempo
+        c = (np.log(g) - pred) ** 2 / (2 * sigma ** 2) + lp[None, :]
+        return c.min(axis=1), c.argmin(axis=1)
+    trans = (lt[:, None] - lt[None, :]) ** 2 / (2 * tau ** 2)
+    start = 0.5 * (np.log(tempos / 2.0) / 0.5) ** 2                          # a mild prior near 120 at the start
+    D = np.zeros((len(gaps), len(tempos)))
+    B = np.zeros((len(gaps), len(tempos)), int)
+    V = np.zeros((len(gaps), len(tempos)), int)
+    for k, g in enumerate(gaps):
+        e, v = emit(g)
+        if k == 0:
+            D[k] = start + e
+        else:
+            tot = D[k - 1][:, None] + trans
+            B[k] = tot.argmin(axis=0)
+            D[k] = tot.min(axis=0) + e
+        V[k] = v
+    j = int(D[-1].argmin()) if len(gaps) else 0
+    path = []
+    for k in range(len(gaps) - 1, -1, -1):
+        path.append(j)
+        j = B[k, j] if k > 0 else j
+    path = path[::-1]
+    durs = [float(vals[V[k, path[k]]]) for k in range(len(gaps))]
+    last = sorted(notes, key=lambda z: z[1])[-1]
+    T_last = tempos[path[-1]] if path else 2.0
+    durs.append(float(max(0.5, round((last[2] - last[1]) * T_last * 2) / 2)))
+    beats = np.r_[0.0, np.cumsum(durs[:-1])].tolist()
+    return {"beats": beats, "durations": durs, "tempo": [float(tempos[j]) for j in path], "cost": float(D[-1].min()) if len(gaps) else 0.0}

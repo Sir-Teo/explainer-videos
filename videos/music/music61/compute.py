@@ -17,9 +17,13 @@ Items:
     net         a small network trained on piano renders; its transcriptions of every test piece
     timbres     one test piece on four instruments
     hook        an ear question: the Tune with chords on the piano, and the network's transcription of it, re-played
-    score       a performance with rubato, quantized to a score, and re-played
+    score       a performance with rubato, quantized with a fixed and a drifting tempo, and re-played
     tune61      Variation 61: the Tune performed, transcribed and re-rendered, five times round
     variation   the Variations ledger, row 61
+    pitchheard  the sung Tune, YIN's pitch track as a sine, and the two together
+    nmfheard    a test piece and NMF's transcription of it, re-played
+    scoreheard  two transcriptions at the same F-measure: notes dropped, notes an octave out (an ear question)
+    polyphony   note F against how many notes may sound at once, for NMF and the network
 """
 
 from __future__ import annotations
@@ -407,6 +411,8 @@ def compute_hook() -> dict:
 
 
 def compute_score() -> dict:
+    """The Tune's opening played with rubato; its exact onsets (a perfect transcription) quantized by one fixed tempo and
+    by a tempo that may drift; the tracked score re-played strictly, and its key."""
     ev = T.events(0.5, [0, 1])
     rng = np.random.default_rng(5)
     t, perf, beats = 0.0, [], []
@@ -417,23 +423,21 @@ def compute_score() -> dict:
         beats.append(e["dur"] / 0.5)
         t += d
     y = render(perf, "piano", t + 1.0)
-    est, _, _ = net_notes(y)
-    mel = sorted([n for n in est if n[0] >= 69], key=lambda z: z[1])
-    q = TR.quantize(mel, divisions=2)
-    on_q = q["beats"]
-    re = []
-    for (m, _, _), b, d in zip(mel, on_q, q["durations"]):
-        re.append((m, b * 0.5, b * 0.5 + d * 0.5 * 0.92))
-    yq = render(re, "piano", re[-1][2] + 1.0) if re else np.zeros(SR)
     true_on = np.r_[0, np.cumsum(beats)[:-1]].tolist()
+    fixed = TR.quantize(perf, divisions=2)
+    track = TR.quantize_tracking(perf)
+    re = [(m, b * 0.5, b * 0.5 + d * 0.5 * 0.92) for (m, _, _), b, d in zip(perf, track["beats"], track["durations"])]
+    yq = render(re, "piano", re[-1][2] + 1.0)
     from explainer.music.monochord import key as K
-    dist = K.distribution([n[0] for n in mel], q["durations"][:len(mel)])
+    dist = K.distribution([n[0] for n in perf], track["durations"])
     ranking = K.ranking(dist)[:3]
+    ok = lambda q: int(sum(1 for a_, b_ in zip(q, true_on) if abs(a_ - b_) < 1e-6))
     c = concat([C(fade(y)), C(fade(yq))], gap=1.0, names=["performance", "score"])
-    return {"key": [K.key_name(k) for k, _ in ranking], "key_r": [float(r) for _, r in ranking], "perf": perf, "est": mel, "beats": on_q, "durations": q["durations"], "bps": q["bps"], "true_beats": true_on,
-            "true_durations": beats, "pitches_ok": [n[0] for n in mel] == [p[0] for p in perf],
+    return {"key": [K.key_name(k) for k, _ in ranking], "key_r": [float(r) for _, r in ranking], "perf": perf, "true_beats": true_on,
+            "true_durations": beats, "fixed": {"beats": fixed["beats"], "bps": fixed["bps"], "ok": ok(fixed["beats"])},
+            "track": {"beats": track["beats"], "durations": track["durations"], "tempo": track["tempo"], "ok": ok(track["beats"])},
             "starts": {"performance": float(c.events["performance"]), "score": float(c.events["score"])},
-            "clips": {"two": save("score.two", c, detail="the Tune's first two phrases played with rubato on Part 38's piano, then the score quantized from its transcription, played strictly")}}
+            "clips": {"two": save("score.two", c, detail="the Tune's first two phrases played with rubato on Part 38's piano, then the score quantized from its onsets with a drifting tempo, played strictly")}}
 
 
 def compute_tune61() -> dict:
@@ -461,9 +465,83 @@ def compute_variation() -> dict:
             "clip": "tune.variation61"}
 
 
+def compute_pitchheard() -> dict:
+    """The sung Tune, then YIN's pitch track played as a sine where it is voiced, then the two together: an ear check
+    of the tracker."""
+    ev = T.events(0.5, [0, 1])
+    notes = [(57 + MAJOR[e["degree"]], e["t"], e["dur"]) for e in ev]
+    v = CH.sing(notes, "soprano", "a", seed=1)
+    v = v / np.max(np.abs(v))
+    p = TR.yin(v, SR, fmin=80, fmax=1000)
+    t = np.arange(len(v)) / SR
+    f = np.interp(t, p["t"], np.nan_to_num(p["f0"], nan=0.0))
+    voiced = np.interp(t, p["t"], (np.asarray(p["aperiodicity"]) < 0.2).astype(float)) > 0.5
+    f = np.where(voiced, f, 0.0)
+    phase = 2 * np.pi * np.cumsum(f) / SR
+    g = np.convolve(voiced.astype(float), np.ones(480) / 480, mode="same")
+    sine = 0.5 * np.sin(phase) * g
+    both = 0.8 * v + 0.35 * sine
+    n = lambda y: y / np.max(np.abs(y)) * 0.9
+    c = concat([C(fade(n(v))), C(fade(n(sine))), C(fade(n(both)))], gap=0.8, names=["voice", "track", "both"])
+    ok = np.isfinite(p["f0"]) & (np.asarray(p["aperiodicity"]) < 0.2)
+    return {"voiced_share": float(np.mean(ok)), "starts": {k: float(c.events[k]) for k in ("voice", "track", "both")},
+            "clips": {"three": save("pitchheard.three", c, kind="synthesized", detail="Part 8's voice singing the Tune; then YIN's pitch track played as a sine; then the two together")}}
+
+
+def compute_nmfheard() -> dict:
+    """The test piece of Chapter 5, then NMF's transcription of it re-rendered on the same piano."""
+    _, test = dataset()
+    nt = test[0]
+    y = render(nt, "piano", 6.0, gains_for(nt, 500))
+    est, _, _ = nmf_notes(y)
+    re = render(est, "piano", 6.0) if est else np.zeros_like(y)
+    sc = TR.note_scores(nt, est)
+    c = concat([C(fade(y)), C(fade(re))], gap=0.8, names=["played", "transcribed"])
+    return {"scores": sc, "n_est": len(est), "n_true": len(nt), "starts": {k: float(c.events[k]) for k in ("played", "transcribed")},
+            "clips": {"two": save("nmfheard.two", c, detail="a test piece of random polyphony on Part 38's piano, then NMF's transcription of it played back on the same piano")}}
+
+
+def compute_scoreheard() -> dict:
+    """Two transcriptions of the Tune with chords with the same note F-measure: one that drops notes, one that puts
+    some notes an octave out."""
+    ref = tune_notes((0, 1))
+    rng = np.random.default_rng(12)
+    n = len(ref)
+    k_drop = int(round(0.3 * n))
+    drop = set(rng.choice(n, k_drop, replace=False).tolist())
+    a = [z for i, z in enumerate(ref) if i not in drop]
+    # octave errors: each moved note is one miss and one false alarm; P = R = 1 - k/n.  Choose k to match F.
+    fa = TR.note_scores(ref, a)["f"]
+    k_oct = int(round((1 - fa) * n))
+    move = set(rng.choice(n, k_oct, replace=False).tolist())
+    b = [((m + 12 if m + 12 <= HI else m - 12), t0, t1) if i in move else (m, t0, t1) for i, (m, t0, t1) in enumerate(ref)]
+    sa, sb = TR.note_scores(ref, a), TR.note_scores(ref, b)
+    end = ref[-1][2] + 1.2
+    c = concat([C(fade(render(a, "piano", end))), C(fade(render(b, "piano", end)))], gap=1.0, names=["first", "second"])
+    return {"a": sa, "b": sb, "dropped": k_drop, "moved": k_oct, "n": n, "starts": {k: float(c.events[k]) for k in ("first", "second")},
+            "clips": {"two": save("scoreheard.two", c, detail="two transcriptions of the Tune with chords, re-played on Part 38's piano: one missing 30 per cent of its notes, one with some notes an octave out, at the same F-measure")}}
+
+
+def compute_polyphony() -> dict:
+    """Note F-measure against how many notes may sound at once, for NMF and the network, on new piano pieces."""
+    voices = [1, 2, 3, 4, 6]
+    out = {"nmf": [], "net": []}
+    for v in voices:
+        fn, fw = [], []
+        for s in range(4):
+            nt = random_piece(20_000 + 100 * v + s, max_voices=v, rate=1.0 + 0.8 * v)
+            y = render(nt, "piano", 6.0, gains_for(nt, 900 + s))
+            fn.append(TR.note_scores(nt, nmf_notes(y)[0])["f"])
+            fw.append(TR.note_scores(nt, net_notes(y)[0])["f"])
+        out["nmf"].append(float(np.mean(fn)))
+        out["net"].append(float(np.mean(fw)))
+    return {"voices": voices, **out}
+
+
 ITEMS = {"data": compute_data, "pitch": compute_pitch, "chords": compute_chords, "onsets": compute_onsets, "nmf": compute_nmf,
          "net": compute_net, "timbres": compute_timbres, "hook": compute_hook, "score": compute_score, "tune61": compute_tune61,
-         "variation": compute_variation}
+         "variation": compute_variation, "pitchheard": compute_pitchheard, "nmfheard": compute_nmfheard, "scoreheard": compute_scoreheard,
+         "polyphony": compute_polyphony}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

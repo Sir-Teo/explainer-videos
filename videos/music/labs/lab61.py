@@ -66,18 +66,23 @@ def run(seed=0):
         y = x + rng.standard_normal(len(x)) * np.std(x) * 10 ** (-snr / 20)
         a, b = TR.yin(y, SR), TR.acf_f0(y, SR)
         truth = np.full(len(a["f0"]), 196.0)
-        lab.row(f"G3 tone at {snr:+d} dB: YIN and autocorrelation gross errors", f"{100 * TR.gross_error(a['f0'], truth):.0f}%, {100 * TR.gross_error(b['f0'], truth[:len(b['f0'])]):.0f}%")
+        ga = TR.gross_error(a["f0"], truth)
+        lab.row(f"G3 tone at {snr:+d} dB: YIN and autocorrelation gross errors", f"{100 * ga:.0f}%, {100 * TR.gross_error(b['f0'], truth[:len(b['f0'])]):.0f}%")
+        if snr == max(SNRS):
+            assert ga < 0.05                                       # clean enough, YIN finds the period
     mel = [(60 + p, 0.4 * i, 0.4 * i + 0.35) for i, p in enumerate([0, 0, 7, 7, 9, 9, 7])]
     yh = render(mel, "harp", 3.4)
     o = TR.onset_strength(yh, SR)
     est = TR.pick_onsets(o["odf"], o["hop_s"], delta=DELTA)
     s = TR.onset_scores([n[1] for n in mel], est.tolist())
     lab.row(f"harp onsets (threshold {DELTA}): precision, recall", f"{s['precision']:.2f}, {s['recall']:.2f}")
+    assert s["recall"] > 0.5                                       # a plucked string's attacks are easy to find
     spectra = {}
     for m in range(LO, HI + 1):
         S = TR.logfreq(note(TRAIN, m, 0.8), SR)["S"]
         spectra[m] = S[:, 1:30]
     W, keys = TR.note_templates(spectra)
+    fs = {}
     for inst in ("organ", "harp"):
         f = []
         for k in range(4):
@@ -87,6 +92,9 @@ def run(seed=0):
             est = TR.activations_to_notes(H, keys, S["hop_s"], on=0.12, rel=True)
             f.append(TR.note_scores(nt, est)["f"])
         lab.row(f"NMF with {TRAIN} templates on the {inst}: note F", f"{np.mean(f):.2f}")
+        fs[inst] = float(np.mean(f))
+    if TRAIN == "organ":
+        assert fs["organ"] > fs["harp"]                             # templates fit the instrument they came from
     # the ear problem: chords with and without an added octave
     chords = []
     order = list(rng.permutation(4))
