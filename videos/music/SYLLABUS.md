@@ -2630,7 +2630,7 @@ Production is sequential: one agent, one part at a time, in order, with no paral
 | by 2026-11-15 | **Part 65, *Machines that Compose***: 13 chapters, 32.6 min estimated of which 7.7 min listening; 3 pause-and-listen questions; Variation 65 (the Tune's first phrase continued at five temperatures, uncurated); its lab, interactive and problems. |
 | by 2026-11-15 | **Part 66, *Generative Audio***: 13 chapters, 31.4 min estimated of which 3.8 min listening; 3 pause-and-listen questions; Variation 66 (sung, re-rendered as a DDSP string, and continued by a token model); its lab, interactive and problems. |
 | by 2026-11-15 | **Part 67, *Doing Research in Music***: 13 chapters, 33.3 min estimated of which 4.5 min listening; 3 pause-and-listen questions; Variation 67 (a critical edition: the Tune, a corrupt copy, and the original rebuilt); its lab, interactive and problems. |
-| by 2026-11-15 | **Part 68, *The Variations***: 13 chapters, 39.1 min estimated of which 14.2 min listening; 5 pause-and-listen questions; Variation 68 (the suite: every Variation, in the order they were made); the series is complete in script and computation; its lab, interactive and problems. |
+| by 2026-11-15 | **Part 68, *The Variations***: 13 chapters, 43.0 min estimated of which 14.6 min listening; 5 pause-and-listen questions; Variation 68 (the suite: every Variation, in the order they were made); the series is complete in script and computation; its lab, interactive and problems. |
 
 **Still open from §6:** slurs and a second voice on a staff in the series' engraver (needed from Parts 14
 and 16; chords and the grand staff landed with Part 13), `tools/make.py` registration, the optional `music-qa` extra. **Not yet done for
