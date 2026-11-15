@@ -651,4 +651,77 @@
       note: "Strengthen the off-beats and the pattern repeats as strongly at twice the tempo; then the prior decides, and near 120 it often chooses double time for a slow beat. Move the off-beat late (swing) and double time stops fitting, because the off-beats are no longer halfway."
     });
   };
+
+  // ---- Part 63: popularity feeding on itself ------------------------------------------------------------------------
+  function loopSim(v) {
+    // listeners with tastes (two latent factors) and songs; each round every listener is shown the five most played
+    // songs, each replaced with probability explore by a random song, and plays those that suit them
+    var nu = 150, ni = 60, s = 11;
+    function rnd() { s = (s * 16807) % 2147483647; return s / 2147483647; }
+    function gauss() { var a = Math.max(rnd(), 1e-9), b = rnd(); return Math.sqrt(-2 * Math.log(a)) * Math.cos(2 * Math.PI * b); }
+    var U = [], V = [], i, j;
+    for (i = 0; i < nu; i++) U.push([gauss(), gauss()]);
+    for (j = 0; j < ni; j++) V.push([gauss(), gauss()]);
+    var like = [];
+    for (i = 0; i < nu; i++) { like.push([]); for (j = 0; j < ni; j++) like[i].push(1 / (1 + Math.exp(-(U[i][0] * V[j][0] + U[i][1] * V[j][1])))); }
+    var plays = [], own = [], g = [], go = [];
+    for (j = 0; j < ni; j++) { plays.push(1); own.push(1); }
+    function gini(x) {
+      var a = x.slice().sort(function (p, q) { return p - q; }), n = a.length, num = 0, tot = 0;
+      for (var k = 0; k < n; k++) { num += (2 * (k + 1) - n - 1) * a[k]; tot += a[k]; }
+      return num / (n * tot);
+    }
+    for (var r = 0; r < v.rounds; r++) {
+      var order = plays.map(function (p, k) { return [p, k]; }).sort(function (a, b) { return b[0] - a[0]; }).slice(0, 5).map(function (z) { return z[1]; });
+      for (i = 0; i < nu; i++) {
+        for (var q = 0; q < 5; q++) {
+          var item = rnd() < v.explore ? Math.floor(rnd() * ni) : order[q];
+          if (rnd() < like[i][item]) plays[item] += 1;
+        }
+        var b = Math.floor(rnd() * ni);
+        if (rnd() < like[i][b]) own[b] += 1;
+      }
+      g.push(gini(plays)); go.push(gini(own));
+    }
+    return { gini: g, own: go, plays: plays };
+  }
+  function loopChord(plays) {
+    var sr = 44100, n = Math.round(2.0 * sr), y = new Float32Array(n);
+    var top = plays.map(function (p, k) { return [p, k]; }).sort(function (a, b) { return b[0] - a[0]; }).slice(0, 8);
+    var tot = 0; top.forEach(function (z) { tot += z[0]; });
+    var scale = [0, 2, 4, 7, 9, 12, 14, 16];
+    top.forEach(function (z, k) {
+      var f = 261.63 * Math.pow(2, scale[k] / 12), a = 0.6 * z[0] / tot;
+      for (var i = 0; i < n; i++) y[i] += a * Math.sin(2 * Math.PI * f * i / sr) * Math.min(1, i / 400, (n - i) / 4000);
+    });
+    return y;
+  }
+
+  W.loop = function (el) {
+    QB.widget(el, {
+      title: "Popularity feeding on itself",
+      sub: "150 simulated listeners with tastes, 60 songs. Each round a recommender shows every listener the five most played songs, each replaced, with the probability you set, by a random song; listeners play what suits them. Gold: the inequality of plays (Gini) round by round; grey: a world without a recommender, where listeners browse at random. Play the eight most played songs as a chord, each note as loud as its share.",
+      panels: 1, height: 220,
+      controls: [{ k: "explore", label: "Exploration", min: 0, max: 1, step: 0.05, value: 0, fmt: function (x) { return (100 * x).toFixed(0) + " %"; } },
+                 { k: "rounds", label: "Rounds", min: 5, max: 60, step: 1, value: 30, fmt: function (x) { return x.toFixed(0); } }],
+      buttons: [{ label: "Play the top eight", act: function (s) { s.sound = play(loopChord(loopSim(s.v).plays), 44100); } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var r = loopSim(v), xs = [];
+        for (var k = 0; k < r.gini.length; k++) xs.push(k + 1);
+        var a = gr[0].axes({ x: [1, Math.max(2, r.gini.length)], y: [0, 1], title: "Gini of plays, round by round", xlabel: "round" });
+        a.line(xs, r.own, { color: "#8A93A0", width: 2 });
+        a.line(xs, r.gini, { color: C.idea, width: 2.5 });
+      },
+      readout: function (v, s) {
+        var r = loopSim(v), sorted = r.plays.slice().sort(function (a, b) { return b - a; }), tot = 0;
+        sorted.forEach(function (p) { tot += p; });
+        return [["Gini after the last round", r.gini[r.gini.length - 1].toFixed(2) + " (without a recommender " + r.own[r.own.length - 1].toFixed(2) + ")"],
+                ["the most played song's share", (100 * sorted[0] / tot).toFixed(0) + " %"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "With no exploration the first songs to be played are shown to everyone, played more, and shown again: a few songs take almost everything, whatever listeners' tastes. Explore a little and other songs get the chance to be found."
+    });
+  };
 })();

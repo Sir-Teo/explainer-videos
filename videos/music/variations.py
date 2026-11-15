@@ -127,6 +127,8 @@ LEDGER = [
      "measure": r"a million streams each: 4,655 dollars to rights holders; the remix pays us half; the unknown composer of 1761, nothing"},
     {"part": 62, "title": r"sung freely, and accompanied live by a machine that listens", "seconds": 21.9,
      "measure": r"the follower's chords land a median 96 ms from the voice's beats"},
+    {"part": 63, "title": r"three earlier Variations, five noisy seconds each, named", "seconds": 16.6,
+     "measure": r"3 of 3 named, against every clip of Parts 1 to 60"},
 ]
 
 
