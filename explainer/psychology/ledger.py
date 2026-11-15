@@ -894,8 +894,8 @@ shown(7, "RAICHLE_2002", "a measurement of energy use, used as a number")
 shown(7, "WEISKRANTZ_1974", "one patient, described without figures; blindsight's own row is in Part 27, with "
       "awareness")
 shown(7, "MAH_2014", "a methods finding shown at the frontier, beside the series' own simulation")
-shown(7, "WIESEL_HUBEL_1963", "the critical period for one eye's hold on the cortex: told as history; entered with "
-      "development", row_in=30)
+shown(7, "WIESEL_HUBEL_1963", "the critical period for one eye's hold on the cortex: told as history of "
+      "physiology, in animals")
 shown(7, "MERZENICH_1984", "remapping after the loss of a finger: told as history, without figures")
 shown(7, "GAZZANIGA_1978", "the split-brain experiments: told as the cases they were, a handful of patients "
       "studied in depth; Part 27 discusses awareness without them")
@@ -1217,7 +1217,8 @@ add(Finding(
 shown(11, "LEVITT_1971", "a method, derived and checked on Psyche")
 shown(11, "WATSON_PELLI_1983", "a method, run on Psyche")
 shown(11, "WICHMANN_HILL_2001", "a method, applied to simulated data")
-shown(11, "HALBERDA_2008", "Weber's law for number, a preview; number sense is entered in Part 30", row_in=30)
+shown(11, "HALBERDA_2008", "Weber's law for number, a preview; number sense and mathematics has its row in "
+      "Part 30")
 shown(11, "GIBBON_1977", "Weber's law for time, shown as a pattern; the series does not study interval timing")
 shown(11, "LESMES_2010", "a method at the frontier; its row (csf_channels) is entered in Part 13")
 shown(11, "DEVRIES_ROSE", "a theory of the threshold, run on Psyche; its row (few_quanta) is entered in Part 13")
@@ -1527,8 +1528,7 @@ shown(14, "ADAMS_2004", "a single experiment showing that a prior can be retrain
 shown(14, "YIN_1969", "a classic demonstration of the face inversion effect, told as history; faces are entered with the face area")
 shown(14, "YAMINS_2014", "a modelling result at the frontier; deep networks as models are entered in Part 60", row_in=60)
 shown(14, "GEIRHOS_2019", "a property of artificial networks, reproduced on a small one; not a finding about minds")
-shown(14, "VONG_2024", "a modelling result at the frontier; learning from an infant's experience is entered in "
-      "Part 30", row_in=30)
+shown(14, "VONG_2024", "a modelling result at the frontier, described again in Part 30's frontier")
 shown(14, "WHEATSTONE_1838", "the history of an instrument and a stimulus")
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -3714,6 +3714,182 @@ add(Finding(
     checked="2026-11-15",
 ))
 
+# ---------------------------------------------------------------------------
+# Part 30 · The Infant Mind
+# ---------------------------------------------------------------------------
+add(Finding(
+    key="a_not_b", part=30, title=r"The A-not-B error",
+    claim="Infants of about eight to twelve months, having found a toy at A, search at A after seeing it hidden at B.",
+    original=Study("Piaget", 1937, n="his own three children", design="hiding games, observed and described",
+                   found="search returned to the place of earlier success"),
+    status="replicated",
+    record=(Study("Diamond", 1985, n="infants followed monthly", design="A-not-B with delays",
+                  found="the delay needed to produce the error grew with age"),
+            Study("Wellman, Cross and Bartsch (meta-analysis)", 1987, n="the published studies",
+                  design="A-not-B studies pooled", found="the error is reliable and depends on delay and number of "
+                  "locations"),
+            Study("Smith, Thelen, Titzer and McLin", 1999, n="infants", design="manipulations of the task and posture",
+                  found="the error appears without any hidden toy and disappears when posture changes")),
+    note="One of the most reliable findings in infancy; what it shows, a missing concept or the dynamics of reaching "
+         "and memory, is argued.",
+    sources=("J. Piaget, La construction du reel chez l'enfant (1937); The Construction of Reality in the Child (1954)",
+             "A. Diamond, Development of the ability to use recall to guide action, as indicated by infants' "
+             "performance on AB, Child Development 56 (1985) 868-883",
+             "H. M. Wellman, D. Cross and K. Bartsch, Infant search and object permanence: a meta-analysis of the "
+             "A-not-B error, Monographs of the Society for Research in Child Development 51 (1987)",
+             "L. B. Smith, E. Thelen, R. Titzer and D. McLin, Knowing in the context of acting: the task dynamics of "
+             "the A-not-B error, Psychological Review 106 (1999) 235-260"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="infant_object_permanence", part=30, title=r"Object permanence by looking",
+    claim="Infants of three to five months know that a hidden object still exists and cannot be passed through.",
+    original=Study("Baillargeon, Spelke and Wasserman", 1985, n="5-month-olds",
+                   design="a screen rotating like a drawbridge toward a hidden box",
+                   found="longer looks at the screen rotating through the box's space"),
+    status="contested",
+    record=(Study("Baillargeon", 1987, n="3.5- and 4.5-month-olds", design="the same design with controls",
+                  found="4.5-month-olds, and fast-habituating 3.5-month-olds, looked longer at the impossible event"),
+            Study("Bogartz, Shinskey and Schilling", 2000, n="5.5-month-olds",
+                  design="familiarization varied", found="preferences followed familiarization; the authors concluded "
+                  "the design does not show object permanence")),
+    note="The looking pattern replicates in its laboratory; reading it as knowledge of hidden objects, rather than "
+         "familiarity and motion, is contested.",
+    sources=("R. Baillargeon, E. S. Spelke and S. Wasserman, Object permanence in five-month-old infants, Cognition 20 "
+             "(1985) 191-208",
+             "R. Baillargeon, Object permanence in 3 1/2- and 4 1/2-month-old infants, Developmental Psychology 23 "
+             "(1987) 655-664",
+             "R. S. Bogartz, J. L. Shinskey and T. H. Schilling, Object permanence in five-and-a-half-month-old "
+             "infants?, Infancy 1 (2000) 403-428"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="infant_arithmetic", part=30, title=r"Infant arithmetic",
+    claim="Five-month-olds expect one object plus one object to make two.",
+    original=Study("Wynn", 1992, n="5-month-olds", design="dolls added or removed behind a screen",
+                   found="longer looks at impossible outcomes"),
+    status="contested",
+    record=(Study("Wakeley, Rivera and Langer", 2000, n="5-month-olds", design="a careful repetition",
+                  found="no reliable effect"),
+            Study("Christodoulou, Lac and Moore (meta-analysis)", 2017, n="12 studies, 26 samples, 550 infants",
+                  effect=0.34, unit="d", found="d = 0.34; publication bias suggested by some tests and not others")),
+    note="The looking pattern is probably real and smaller than first reported; whether it reflects arithmetic, "
+         "rather than familiarity, is contested.",
+    sources=("K. Wynn, Addition and subtraction by human infants, Nature 358 (1992) 749-750",
+             "Wakeley, S. Rivera and J. Langer, Can young infants add and subtract?, Child Development 71 (2000) "
+             "1525-1534",
+             "J. Christodoulou, A. Lac and D. S. Moore, Babies and math: a meta-analysis of infants' simple arithmetic "
+             "competence, Developmental Psychology 53 (2017) 1405-1417"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="ans_math", part=30, title=r"Number sense and mathematics",
+    claim="The acuity of the approximate number system predicts mathematics achievement.",
+    original=Study("Halberda, Mazzocco and Feigenson", 2008, n="14-year-olds",
+                   design="dot-array comparison against past mathematics scores",
+                   found="acuity correlated with mathematics scores back to kindergarten"),
+    status="replicated, smaller",
+    record=(Study("Chen and Li (meta-analysis)", 2014, n="the published studies", effect=0.20, unit="r",
+                  found="a small positive correlation, about 0.2"),
+            Study("Schneider et al. (meta-analysis)", 2017, n="45 articles, 284 effects",
+                  found="non-symbolic relations present but weak, especially beyond age six")),
+    note="A real, small correlation, partly shared with general ability; training the system has not reliably "
+         "improved mathematics.",
+    sources=("J. Halberda, M. M. M. Mazzocco and L. Feigenson, Individual differences in non-verbal number acuity "
+             "correlate with maths achievement, Nature 455 (2008) 665-668",
+             "Q. Chen and J. Li, Association between individual differences in non-symbolic number acuity and math "
+             "performance: a meta-analysis, Acta Psychologica 148 (2014) 163-172",
+             "M. Schneider et al., Associations of non-symbolic and symbolic numerical magnitude processing with "
+             "mathematical competence: a meta-analysis, Developmental Science 20 (2017) e12372"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="false_belief_explicit", part=30, title=r"False belief at four",
+    claim="Children begin to pass explicit false-belief tasks at about four years.",
+    original=Study("Wimmer and Perner", 1983, n="children aged 3 to 9", design="Maxi and the chocolate",
+                   found="most younger children answered where the chocolate was; older children, where Maxi left it"),
+    status="replicated",
+    record=(Study("Baron-Cohen, Leslie and Frith", 1985, n="typical, Down syndrome and autistic children",
+                  design="the Sally-Anne task", found="most typical 4-year-olds passed"),
+            Study("Wellman, Cross and Watson (meta-analysis)", 2001, n="178 studies",
+                  design="false-belief tasks pooled", found="a consistent shift with age across countries and "
+                  "task versions")),
+    note="One of developmental psychology's most robust findings; its interpretation as a new concept, against new "
+         "processing abilities, is argued.",
+    sources=("H. Wimmer and J. Perner, Beliefs about beliefs, Cognition 13 (1983) 103-128",
+             "S. Baron-Cohen, A. M. Leslie and U. Frith, Does the autistic child have a 'theory of mind'?, Cognition "
+             "21 (1985) 37-46",
+             "H. M. Wellman, D. Cross and J. Watson, Meta-analysis of theory-of-mind development: the truth about "
+             "false belief, Child Development 72 (2001) 655-684"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="false_belief_implicit", part=30, title=r"False belief in infants",
+    claim="Infants of about fifteen months expect people to act on false beliefs, shown by looking.",
+    original=Study("Onishi and Baillargeon", 2005, n="15-month-olds", design="violation of expectation",
+                   found="longer looks when the actor searched where the toy really was"),
+    status="contested",
+    record=(Study("Kulke, von Duhn, Schneider and Rakoczy (preregistered)", 2018, n="four anticipatory-looking tasks",
+                  design="systematic replication", found="one task replicated, and not once confounds were removed"),
+            Study("Powell, Hobbs, Bardis, Carey and Saxe", 2018, n="infants", design="looking-time and helping "
+                  "tasks", found="the looking-time tasks failed to replicate")),
+    note="Several preregistered replications of implicit tasks failed; multi-laboratory tests are under way.",
+    sources=("K. H. Onishi and R. Baillargeon, Do 15-month-old infants understand false beliefs?, Science 308 (2005) "
+             "255-258",
+             "L. Kulke, B. von Duhn, D. Schneider and H. Rakoczy, Is implicit theory of mind a real and robust "
+             "phenomenon? Results from a systematic replication study, Psychological Science 29 (2018)",
+             "L. J. Powell, K. Hobbs, A. Bardis, S. Carey and R. Saxe, Replications of implicit theory of mind tasks "
+             "with varying representational demands, Cognitive Development 46 (2018) 40-50"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="neonatal_imitation", part=30, title=r"Newborn imitation",
+    claim="Newborns imitate facial gestures such as tongue protrusion.",
+    original=Study("Meltzoff and Moore", 1977, n="infants 12 to 21 days old",
+                   design="an adult models tongue protrusion, mouth opening and lip protrusion",
+                   found="infants produced the modelled gesture more often"),
+    status="contested",
+    record=(Study("Oostenbroek et al. (longitudinal)", 2016, n="106 infants at 1, 3, 6 and 9 weeks",
+                  design="eleven gestures, matching against control models",
+                  found="gestures as frequent after control models as after matching ones"),
+            Study("Meltzoff et al. (reanalysis)", 2018, n="the 2016 data", design="tongue protrusion alone",
+                  found="tongue protrusion matched")),
+    note="The largest longitudinal study found no imitation; tongue protrusion, the one disputed gesture, is also "
+         "a general response to arousal.",
+    sources=("A. N. Meltzoff and M. K. Moore, Imitation of facial and manual gestures by human neonates, Science 198 "
+             "(1977) 75-78",
+             "J. Oostenbroek et al., Comprehensive longitudinal study challenges the existence of neonatal imitation "
+             "in humans, Current Biology 26 (2016) 1334-1338",
+             "A. N. Meltzoff et al., Re-examination of Oostenbroek et al. (2016): evidence for neonatal imitation of "
+             "tongue protrusion, Developmental Science 21 (2018) e12609"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="ids_preference", part=30, title=r"Infant-directed speech",
+    claim="Infants prefer to listen to infant-directed speech over adult-directed speech.",
+    original=Study("Fernald", 1985, n="4-month-olds", design="head turns produced recordings of either kind",
+                   found="infants turned more often to produce infant-directed speech"),
+    status="replicated",
+    record=(Study("ManyBabies Consortium (registered, multi-laboratory)", 2020, n="65 laboratories, 2,179 infants in "
+                  "the shared table", effect=0.35, unit="d", lo=0.29, hi=0.42,
+                  found="d = 0.35, larger with age, with head-turn preference, and with native-language stimuli"),),
+    note="Replicated at scale, smaller than earlier estimates, and dependent on method, age and language.",
+    sources=("A. Fernald, Four-month-old infants prefer to listen to motherese, Infant Behavior and Development 8 "
+             "(1985) 181-195",
+             "ManyBabies Consortium, Quantifying sources of variability in infancy research using the "
+             "infant-directed-speech preference, Advances in Methods and Practices in Psychological Science 3 (2020) "
+             "24-52"),
+    checked="2026-11-15",
+    data=("MANYBABIES_2020",),
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -3728,7 +3904,7 @@ shown(22, r"Kruschke (1992)", "a model, fitted here to the open data; the orderi
 shown(22, r"Rips (1989); \ Barsalou (1983); \ Murphy \& Medin (1985)", "three single studies and a theoretical "
       "paper, told as the case for theories; described without effect sizes")
 shown(22, r"Keil (1989); \ Gelman \& Markman (1986); \ Medin \& Ortony (1989)", "developmental studies described "
-      "qualitatively; essentialism in children is entered with the infant mind in Part 30", row_in=30)
+      "qualitatively, as background to theories of concepts")
 shown(22, r"Xu \& Tenenbaum (2007); \ Tenenbaum \& Griffiths (2001)", "a model and a word-learning study that tests "
       "it, described qualitatively; Bayesian word learning returns with language")
 shown(22, r"Harris (1954); \ Firth (1957); \ the \emph{tezg\"{u}ino} example: \ Nida (1975), \ Lin (1998)", "the "
@@ -3959,3 +4135,27 @@ shown(29, r"Seth (2013); \ Barrett \& Simmons (2015); \ Zamariola et al.\ (2018)
 shown(29, r"Panksepp \& Burgdorf (2003); \ Anderson \& Adolphs (2014); \ Gibson et al.\ (2015)", "frontier work "
       "on emotional states in animals, described")
 shown(29, r"Picard (1997)", "a book that founded a field, described")
+
+shown(30, r"Piaget (1936, \ 1937)", "Piaget's theory and observations, told as history; the A-not-B error has its row")
+shown(30, r"Piaget \& Szeminska (1941)", "the conservation task, described; it replicates easily and its meaning is "
+      "discussed qualitatively")
+shown(30, r"Fantz (1961)", "the looking-preference method, told as history")
+shown(30, r"Spelke \& Kinzler (2007)", "a theory of core knowledge, described")
+shown(30, r"Xu \& Garcia (2008)", "a single study described as the case for infant statistics; not entered as a finding")
+shown(30, r"Spelke \& Kinzler (2007); \ Xu \& Kushnir (2012)", "three theoretical positions, described")
+shown(30, r"Diamond (1985); \ Thelen et al.\ (2001)", "the delay finding, entered in the A-not-B row, and a model, "
+      "simulated by Psyche")
+shown(30, r"Harlow (1958)", "animal experiments told as history, with their ethics")
+shown(30, r"Ainsworth et al.\ (1978); \ van IJzendoorn \& Kroonenberg (1988)", "a method of assessment and a "
+      "descriptive cross-cultural pooling, not a test of a claim")
+shown(30, r"Fearon et al.\ (2010)", "a meta-analysis quoted for the size of an association, described as modest")
+shown(30, r"Thomas \& Chess (1977)", "a descriptive longitudinal study of temperament")
+shown(30, r"Vygotsky (1934); \ Csibra \& Gergely (2009)", "theories of learning from others, described")
+shown(30, r"Horner \& Whiten (2005); \ Lyons, \ Young \& Keil (2007)", "overimitation, described from its first "
+      "studies; its replication across cultures is taken up with culture in Part 38", row_in=38)
+shown(30, r"Schweinhart et al.\ (2005); \ Puma et al.\ (2012); \ Durkin et al.\ (2022)", "evaluations of programmes, "
+      "described as applications; early intervention is taken up with education in Part 54", row_in=54)
+shown(30, r"DeLoache et al.\ (2010)", "a single trial of a product, described as an application")
+shown(30, r"Vong et al.\ (2024)", "a modelling result at the frontier, described")
+shown(30, r"Piloto et al.\ (2022)", "a machine-learning model at the frontier, described; machines are Part 60's",
+      row_in=60)

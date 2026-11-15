@@ -54,7 +54,7 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014",
            "SPEED_ACC_2008", "RR98", "CHOICES13K",
            "EGO_DEPLETION_RRR",
-           "FACES_1962", "COLES_2019"]
+           "FACES_1962", "COLES_2019", "MANYBABIES_2020"]
 
 
 @dataclass(frozen=True)
@@ -3998,6 +3998,25 @@ COLES_2019 = Dataset(
     data={"effects": 286, "studies": 138},
 )
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 30: the infant mind
+_P30 = "2026-11-15"
+
+MANYBABIES_2020 = Dataset(
+    key="manybabies_2020",
+    title="ManyBabies 1: the infant-directed speech preference in 65 laboratories",
+    source="ManyBabies Consortium, Quantifying sources of variability in infancy research using the "
+           "infant-directed-speech preference, Advances in Methods and Practices in Psychological Science 3 (2020) "
+           "24-52; data github.com/manybabies/mb1-analysis-public, as manybabies2020 in the R package psymetadata "
+           "1.0.1 (GPL >= 2)",
+    cite=r"ManyBabies Consortium (2020)",
+    checked="manybabies2020.rda inside psymetadata_1.0.1.tar.gz, fetched by explainer.psychology.opendata and "
+            "checked by SHA-256; read as data by rdata.py; 108 lab-by-age effects from 65 laboratories (2,179 "
+            "infants); the random-effects estimate d = 0.35 matches the published one, " + _P30,
+    licence="GPL (>= 2) (the R package); data",
+    data={"effects": 108, "labs": 65, "infants": 2179},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -4039,4 +4058,4 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014,
                           SPEED_ACC_2008, RR98, CHOICES13K,
                           EGO_DEPLETION_RRR,
-                          FACES_1962, COLES_2019)}
+                          FACES_1962, COLES_2019, MANYBABIES_2020)}

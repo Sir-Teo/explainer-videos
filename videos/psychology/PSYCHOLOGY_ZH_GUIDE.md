@@ -897,6 +897,33 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Fredrickson, Losada; Lorenz; Brown, Sokal, Friedman | 弗雷德里克森，洛萨达；洛伦茨；布朗，索卡尔，弗里德曼 |
 | Seth; Simmons; Schandry; Zamariola; Panksepp, Burgdorf; Anderson; Gibson; Picard | 塞思；西蒙斯；尚德里；扎马里奥拉；潘克塞普，伯格多夫；安德森；吉布森；皮卡德 |
 
+## Part 30: the infant mind
+
+| English | 中文 |
+|---|---|
+| the A-not-B error; object permanence; scheme; assimilation; accommodation; conservation; reversibility | A非B错误；客体永存；图式；同化；顺应；守恒；可逆性 |
+| sensorimotor, preoperational, concrete operational, formal operational | 感知运动、前运算、具体运算、形式运算 |
+| looking time; preferential looking; habituation; dishabituation; violation of expectation | 注视时间；偏好注视；习惯化；去习惯化；违反预期 |
+| the Goldilocks effect; surprisal; ideal learner | 金发姑娘效应；意外度；理想学习者 |
+| ManyBabies; infant-directed speech; adult-directed speech; head-turn preference; central fixation | “众多婴儿”项目；婴儿导向言语；成人导向言语；转头偏好；中央注视 |
+| meta-regression; moderator | 元回归；调节变量 |
+| core knowledge; cohesion, continuity, contact; constructivism; rational constructivism | 核心知识；内聚性、连续性、接触性；建构论；理性建构论 |
+| approximate number system; Weber fraction; intuitive statistics | 近似数系统；韦伯分数；直觉统计 |
+| dynamic neural field; resting level; memory trace; perseveration | 动态神经场；静息水平；记忆痕迹；持续性错误 |
+| theory of mind; false belief; anticipatory looking; neonatal imitation | 心理理论；错误信念；预期性注视；新生儿模仿 |
+| attachment; secure base; the Strange Situation; secure, avoidant, resistant, disorganized | 依恋；安全基地；陌生情境；安全型、回避型、抗拒型、混乱型 |
+| temperament; easy, difficult, slow to warm up; goodness of fit | 气质；容易型、困难型、慢热型；契合度 |
+| zone of proximal development; natural pedagogy; overimitation | 最近发展区；自然教学法；过度模仿 |
+| developmental screening; early childhood programme; fade-out | 发育筛查；早期儿童项目；效应消退 |
+| Piaget; Szeminska; Fantz; Kidd, Piantadosi, Aslin; Fernald | 皮亚杰；舍明斯卡；范茨；基德，皮安塔多西，阿斯林；费尔纳尔德 |
+| Baillargeon, Spelke, Wasserman; Bogartz, Shinskey, Schilling; Kinzler | 巴亚尔容，斯佩尔克，沃瑟曼；博加茨，申斯基，席林；金兹勒 |
+| Wynn; Wakeley, Rivera, Langer; Christodoulou, Lac, Moore; Fei Xu; Lipton; Garcia; Halberda, Mazzocco, Feigenson | 温；韦克利，里维拉，兰格；克里斯托杜卢，拉克，穆尔；Fei Xu（保留原名）；利普顿；加西亚；哈尔伯达，马佐科，费根森 |
+| Gopnik; Diamond; Thelen, Schöner, Scheier, Smith | 高普尼克；戴蒙德；西伦，舍纳，沙伊尔，史密斯 |
+| Wimmer, Perner; Wellman, Cross, Watson; Onishi; Kulke, Rakoczy; Meltzoff, Moore; Oostenbroek | 维默，佩尔纳；韦尔曼，克罗斯，沃森；奥尼西；库尔克，拉科奇；梅尔佐夫，穆尔；奥斯滕布鲁克 |
+| Harlow; Bowlby; Ainsworth; Main, Solomon; van IJzendoorn, Kroonenberg; Fearon | 哈洛；鲍尔比；安斯沃思；梅因，所罗门；范艾曾多恩，克鲁嫩贝格；费伦 |
+| Thomas, Chess; Vygotsky; Csibra, Gergely; Horner, Whiten | 托马斯，切斯；维果茨基；乔布劳，盖尔盖伊；霍纳，怀滕 |
+| DeLoache; Durkin; Vong, Lake, Orhan; Piloto, Weinstein, Battaglia, Botvinick | 德洛克；德金；Wai Keen Vong（保留原名），莱克，奥尔汉；皮洛托，温斯坦，巴塔利亚，博特维尼克 |
+
 ## Names
 
 | English | 中文 |

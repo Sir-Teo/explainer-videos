@@ -129,6 +129,8 @@ SOURCES = {
         "file": "ego_depletion_rrr_RTV.csv",
         "sha256": "fcdb1a36e15e8e52956fb4997ca10ac7c0e9ae6053e1b32d8b5c7291fdae47b1",
     },
+    # Part 30: ManyBabies 1's lab-by-age effect sizes for the infant-directed speech preference (psymetadata)
+    'manybabies2020': {'url': 'https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psymetadata/psymetadata_1.0.1.tar.gz'], 'page': 'https://cran.r-project.org/package=psymetadata', 'file': 'psymetadata_1.0.1.tar.gz', 'sha256': '9b5f0cb8ab98e64fb7807483bb74fdaf16c18b010c081f0f93308c1da10b2bd4', 'licence': 'GPL (>= 2)', 'member': 'psymetadata/data/manybabies2020.rda', 'member_sha256': '1db921862cbc8e1701fb314d8e8262dbb84b7920b60172358b8221c53048dd22'},
     # Part 29: Abelson and Sermat's facial expressions (smacof), and Coles, Larsen and Lench's facial-feedback
     # meta-analysis table (psymetadata)
     'faceexp': {'url': 'https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/smacof/smacof_2.1-7.tar.gz'], 'page': 'https://cran.r-project.org/package=smacof', 'file': 'smacof_2.1-7.tar.gz', 'sha256': '7a965a4e06a2ef1e01e37ae7ce6a55f2e745d4aaf99eb1c592b3d835bac9493a', 'licence': 'GPL-3', 'member': 'smacof/data/FaceExp.rda', 'member_sha256': 'b104ed979ec2e0910ba1a562f784e0054aaa35ac99cc816694c5adef0b488372'},
@@ -565,6 +567,32 @@ def faces_1962() -> dict:
     scales = {nm: np.array(col["value"], float) for nm, col in zip(names, sc["value"])}
     labels = sc["attrs"]["row.names"]["value"]
     return {"D": D, "labels": list(labels), **scales}
+
+
+def manybabies_2020() -> dict:
+    """ManyBabies 1 (ManyBabies Consortium 2020): one row per laboratory and age group, with Cohen's d for the
+    preference for infant-directed over adult-directed speech (``yi``), its variance ``vi``, the number of infants
+    ``ni``, the ``lab``, the ``method`` (central fixation, eye tracking, head-turn preference), whether the stimuli
+    were in the infants' native North American English ``nae``, and mean age in months ``age_mo``.  From
+    psymetadata's ``manybabies2020``."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("manybabies2020"))[0][1]
+    cols = {nm: col for nm, col in zip(obj["attrs"]["names"]["value"], obj["value"])}
+    out = {}
+    for k, col in cols.items():
+        v = col["value"]
+        levels = (col.get("attrs") or {}).get("levels")
+        if levels:
+            names = levels["value"]
+            out[k] = [None if x is None else names[x - 1] for x in v]
+        elif k in ("yi", "vi", "age_mo", "age_mo_centered"):
+            out[k] = np.array([np.nan if x is None else x for x in v], float)
+        elif k in ("es_id", "ni", "nae"):
+            out[k] = np.array([-1 if x is None else x for x in v], int)
+        else:
+            out[k] = list(v)
+    return out
 
 
 def coles_2019() -> dict:

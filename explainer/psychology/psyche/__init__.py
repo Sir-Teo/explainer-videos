@@ -112,5 +112,8 @@ Modules so far, with the part that introduces each:
 ``emotion``         29   classical scaling, scale fitting and Procrustes; schematic faces and a
                          same-or-different observer; arousal attribution; an appraisal model; LeDoux's two
                          roads; hedonic adaptation and a forecaster; a hidden income plateau; Lorenz by RK4
+``develop``         30   habituation; an ideal learner's surprisal and a Goldilocks observer; number by
+                         ratio; the infant statistician; a dynamic neural field for A-not-B, run for
+                         many infants at once; random-effects meta-regression
 =================  ====  ===============================================================================
 """
