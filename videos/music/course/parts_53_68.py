@@ -384,4 +384,35 @@ PARTS = [
         I=(8, 10),
         also=(("Monochord's separators: the STFT, SDR and SI-SDR, panning, FastICA, HPSS, supervised NMF, oracle masks, Griffin-Lim, the mask network", "explainer/music/monochord/mir/separate.py"),),
     ),
+    Part(
+        n=65, level="U", widget="chain", prereq=(14, 17, 42, 61, 63),
+        question="How do machines learn to compose from music, and how much of what they write is copied?",
+        story="An ear question: three pairs of harmonized chorale phrases, one Bach's (BWV 166.6, unseen by the machines) and two by machines; Hofstadter's 1997 concert, where an audience took Cope's EMI for Bach. Composing machines from the dice minuet to the Music Transformer; rules, chance and statistics. The corpus: 163 of Bach's major chorale tunes transposed to C, only 114 different hymn tunes, so split by tune. Markov chains of orders 0 to 8: bits per note on unseen tunes (3.40 at order 2, the best; 3.83 at order 8); surprise at phrase boundaries; orders heard. Copying: order 8 copies runs of 26 notes and 91 per cent of what it writes, against 11 per cent for Bach's own tunes; a 40-note copy heard beside its source; the trade between prediction and copying. Constraints sampled exactly by backward messages (0.66 per cent of free draws end legally). Cope's recombinancy: four chorales in one tune, 79 per cent copied. Tokens three ways. A pocket transformer on the tunes alone and in twelve keys, stopped where the tunes set aside say (3.76 and 3.49 bits); trained too long it recites 40 notes of BWV 322. Temperature: an ear question; intervals closest to Bach at 1.0, notes outside the key rising from 6 to 19 per cent. DeepBach; a machine's chorale harmonized by Part 17 with no parallels; Bach's harmony beside Part 17's. An ear question on copying; every machine before the same judges, where only copying separates them; pitfalls and listening tests. Frontier: form, control and attribution. Variation 65: the Tune's first phrase continued at five temperatures, uncurated.",
+        handoff="The same next-token idea on sound itself in Part 66; evaluation, leakage and listening tests in Part 67; "
+                "machine-made Variations, labelled, in the concert of Part 68.",
+        outside="Part 14 for the next-note model; Part 17 for chorales, chord models and voice leading; Part 42 for composing "
+                "as search; Part 61 for networks; Part 63 for evaluation and leakage. Markov chains, perplexity, dynamic "
+                "programming, attention and next-token training, data augmentation, early stopping.",
+        objectives={
+            "U": ["Hear Markov tunes of several orders, a copied stretch beside its source, and constrained and recombined tunes.",
+                  "Hear a transformer's tunes, the same opening at three temperatures, and a machine's chorale beside Bach's.",
+                  "Explain why a model that copies less coheres less, and why copying must be measured rather than heard."],
+            "M": ["Fit variable-order Markov chains, score bits per note on unseen music, and measure copying by exact runs.",
+                  "Sample a chain exactly under constraints with backward messages; recombine phrases where they connect.",
+                  "Train a small transformer on tokens with augmentation and early stopping; sample with temperature."],
+            "D": ["Map the frontier of novelty against quality for generators of many sizes, with blind listening tests."],
+            "I": ["Split by work, report uncurated output, likelihood and copying together, and know whose music trained a model."],
+        },
+        results=[
+            ("Order-k chain", r"P(x_t \mid x_{t-k..t-1}) \approx \#(x_{t-k..t}) / \#(x_{t-k..t-1})"),
+            ("Bits per note", r"-\tfrac{1}{N}\sum_t \log_2 P(x_t \mid x_{<t})"),
+            ("Constraints", r"\beta_k(s) = \sum_{x\ \text{allowed}} P(x \mid s)\, \beta_{k-1}(s')"),
+            ("Temperature", r"p_i \propto p_i^{1/T}"),
+            ("Copied share", r"\tfrac{1}{N}\,\#\{t : x_t \text{ inside a run of } 8 \text{ copied}\}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, 8, 9),
+        D=(11,),
+        I=(6, 10),
+        also=(("Monochord's machines that compose: the chorale-tune corpus, Markov chains, copy measures, constraints, recombination, tokens, the transformer", "explainer/music/monochord/machines.py"),),
+    ),
 ]

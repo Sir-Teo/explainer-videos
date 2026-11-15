@@ -2397,15 +2397,32 @@ low-passed at 2 kHz 36.6); a remix from separated stems 13.7 dB from the true re
 *Story:* In 1997 an audience heard three pieces: one by Bach, one by a music professor in Bach's style, one by a
 program. They took the program's for Bach. The part builds generators from a Markov chain to a transformer and
 measures the trade nobody escapes: a model that copies less also coheres less.
-*Covers:* n-gram models and the novelty-plagiarism curve; constraints; grammars; recombination; recurrent
-networks; token representations; DeepBach's sampling; the Music Transformer's relative attention; infilling;
-control; evaluation and its pitfalls; memorization.
-*Built and computed:* Markov models of orders 1–8 on the chorales; a small transformer (on *AI, Built*'s pocket
-language model) on public-domain tunes; samples judged by Acts II–III's analyzers; the longest copied passage.
+1. Hook: an ear question (which is Bach's?); Hofstadter's concert; the plan.
+2. Dice, rules and chance: composing machines from 1792 to 2018; three kinds; the corpus split by hymn tune, heard.
+3. Counting what comes next: Markov chains; bits per note by order; where a tune surprises; three orders, heard.
+4. Novelty and copying: copying by order against Bach's own; an order-8 copy beside its source, heard; the trade.
+5. Constraints: why a chain cannot plan; backward messages; free and constrained, heard.
+6. Recombination: Cope's recombinancy; four chorales in one tune, heard; is it composing?
+7. Music as tokens: three representations; what the choice trades.
+8. A transformer: design; training curves; bits against counting; a network that recites, heard; its tunes, heard.
+9. Temperature: reshaping the odds; an ear question (three temperatures); the measures; other ways to draw.
+10. Four parts: DeepBach; Monochord's pipeline; a machine's chorale, heard; Bach beside Part 17, heard.
+11. Judging machines: an ear question (which is copied?); every machine, the same judges; pitfalls; listening tests.
+12. Frontier: long-range form; control; attribution; the research problem.
+13. Variation 65: the Tune's first phrase continued at five temperatures, uncurated. Outro: problems, payoffs.
+
+*Covers:* n-gram models and the novelty-plagiarism curve; constraints; recombination; token representations;
+DeepBach's sampling; the Music Transformer's relative attention; temperature and its kin; control; evaluation and its
+pitfalls; memorization.
+*Built and computed:* `monochord/machines.py` on Bach's major chorale tunes (163, 114 hymn tunes, split by tune):
+Markov orders 0–8 (3.40 bits a note at order 2, the best); copying by order (order 8: runs of 26 notes, 91 % copied;
+Bach's own tunes 11 %); exact constrained sampling (0.66 % of free draws end legally); recombination; *AI, Built*'s
+pocket transformer, with and without transposed copies (3.76 and 3.49 bits; trained too long, it recites 40 notes);
+temperature (intervals closest to Bach at 1.0); harmonized by Part 17 with no parallels.
 *Variation 65:* the Tune's first phrase continued at five temperatures, uncurated and labelled.
 *Frontier:* long-range form; control; attribution.
-*Reading:* Hiller & Isaacson; Cope; Hadjeres et al. (2017); Huang et al. (2018); Briot et al., *Deep Learning
-Techniques for Music Generation*.
+*Reading:* Hiller & Isaacson; Cope; Pachet & Roy (2011); Hadjeres et al. (2017); Huang et al. (2018); Briot et al.,
+*Deep Learning Techniques for Music Generation*.
 
 ### Part 66 · Generative Audio (~60)
 *Story:* In 2016 a network generated sound one sample at a time, sixteen thousand decisions a second, and its

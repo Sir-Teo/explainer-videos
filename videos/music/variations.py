@@ -133,6 +133,8 @@ LEDGER = [
      "measure": r"3 of 3 named, against every clip of Parts 1 to 60"},
     {"part": 64, "title": r"a cappella and karaoke, separated, beside the true stems", "seconds": 47.2,
      "measure": r"the separated voice 6.9 dB SDR, the karaoke 10.0 dB"},
+    {"part": 65, "title": r"the Tune's first phrase continued at five temperatures, uncurated", "seconds": 63.6,
+     "measure": r"temperatures 0.25, 0.5, 0.8, 1, 1.5; longest copied run 4 notes"},
 ]
 
 
