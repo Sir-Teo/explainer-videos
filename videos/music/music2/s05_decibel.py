@@ -40,9 +40,9 @@ class Decibel(SoundScene):
                 g.shift(LEFT * (g.get_right()[0] - 6.8))
             marks.add(VGroup(dot, t, w))
         card = definition_card(
-            r"Sound level, \ in decibels",
-            MathTex(r"L \;=\; 10 \log_{10}\frac{I}{I_0} \;=\; 20 \log_{10}\frac{p}{p_0}", r"\qquad I_0 = 10^{-12}\ \text{W/m}^2,\quad "
-                    r"p_0 = 20\ \mu\text{Pa}", font_size=34), width=11.6).to_edge(DOWN, buff=0.45)
+            r"Sound level: \ progressive plane wave in air; \ $p$ is rms",
+            MathTex(r"L \;=\; 10 \log_{10}\frac{I}{I_0} \;\approx\; 20 \log_{10}\frac{p}{p_0}", r"\qquad I_0 = 10^{-12}\ \text{W/m}^2,\quad "
+                    r"p_0 = 20\ \mu\text{Pa}", font_size=32), width=11.6).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "The honest measure of a sound's strength is its intensity: the power it carries through each square "
             "metre. <bookmark mark='a'/> The trouble is the range. The faintest sound a young ear can detect carries "
@@ -50,7 +50,7 @@ class Decibel(SoundScene):
             "thirteen powers of ten, and the ear takes them all in its stride. <bookmark mark='b'/> So we count the "
             "powers of ten instead. Ten times the intensity is one bel, named for Alexander Graham Bell by "
             "telephone engineers in the nineteen twenties. A tenth of that is the decibel. <bookmark mark='c'/> "
-            "Zero decibels is the threshold of hearing. Because intensity goes as pressure squared, the same number "
+            "Zero decibels uses a reference near the threshold of a young ear at its most sensitive frequencies. For a progressive plane wave in air, intensity goes as rms pressure squared, so approximately the same level "
             "is twenty times the logarithm of the pressure."
         ) as vo:
             self.play(Create(line), FadeIn(ticks), FadeIn(unit), FadeIn(marks[0]))

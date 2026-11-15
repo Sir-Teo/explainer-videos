@@ -88,7 +88,7 @@ class Vacuum(SoundScene):
             self.play(LaggedStart(*[FadeIn(r) for r in rows], lag_ratio=0.3), run_time=2.0)
         with self.listen(c) as snd:
             window(snd, r"all the air, \ a tenth, \ a hundredth, \ a thousandth", detail=r"level by the computed law",
-                   corner=DL, tag_corner=UL)
+                   corner=DL, tag_corner=DR)
             for i, r in enumerate(d["rows"]):
                 snd.wait_until(f"p{i}")
                 rows.set_color(GREY_C)
@@ -144,10 +144,11 @@ class Vacuum(SoundScene):
             "long before the sound arrives through the air. <bookmark mark='e'/> Space, with nothing in it to "
             "squeeze, is silent, whatever the films say."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(law))
+            names = VGroup(*[r[0] for r in rows]).set_color(GREY_B)
+            self.play(FadeIn(head), FadeIn(law), FadeIn(names))
             for mark, r in zip("abcd", rows):
                 vo.wait_until(mark)
-                self.play(FadeIn(r[0]), GrowFromEdge(r[1], LEFT), FadeIn(r[2]), FadeIn(r[3]), run_time=0.9)
+                self.play(r[0].animate.set_color(WHITE), GrowFromEdge(r[1], LEFT), FadeIn(r[2]), FadeIn(r[3]), run_time=0.9)
             vo.wait_until("e")
             self.play(Indicate(head, color=TUNE, scale_factor=1.04))
         self.wait(0.3)

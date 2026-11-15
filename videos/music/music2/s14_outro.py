@@ -76,8 +76,8 @@ class Outro(SoundScene):
     def recap(self):
         card = objectives_card([
             r"sound is a push handed from parcel to parcel: \ the air stays, \ the pressure pattern travels",
-            r"its speed comes from the gas law: \ $c = \sqrt{\gamma P / \rho}$, \ set by temperature alone",
-            r"level in decibels: \ $+3$ dB is twice the power, \ $+6$ dB twice the pressure, \ $-6$ dB per doubling of distance",
+            r"its speed comes from the gas law: \ $c = \sqrt{\gamma P / \rho}$, \ at fixed gas composition, \ set by temperature",
+            r"level in decibels: \ $+3$ dB is twice the power, \ $+6$ dB twice the pressure, \ $-6$ dB per distance doubling for a point source in the open",
             r"wavelength decides what a wall does: \ long waves bend round it, \ short ones are shadowed; \ two sources stripe the room",
             r"a pipe has the notes $n\,c/2L$ (open) or $(2n-1)\,c/4L$ (stopped); \ a bottle is a mass on a spring",
             r"sound is handed on where impedances match; \ a moving source shifts its pitch; \ a loud wave steepens",
@@ -85,8 +85,8 @@ class Outro(SoundScene):
         with self.voiceover(
             "What did we find? Sound is a push, handed from each parcel of air to the next. The air stays; the "
             "pattern travels. <bookmark mark='a'/> Its speed comes out of the gas law and depends on temperature "
-            "alone. <bookmark mark='b'/> Level is counted in decibels: three for twice the power, six for twice the "
-            "pressure, and six lost for every doubling of distance. <bookmark mark='c'/> Wavelength decides what an "
+            "at fixed gas composition. <bookmark mark='b'/> Level is counted in decibels: three for twice the power, six for twice the "
+            "pressure, and six lost for every doubling of distance from a point source in the open. <bookmark mark='c'/> Wavelength decides what an "
             "obstacle does, and two sources stripe a room with loud and quiet. <bookmark mark='d'/> A pipe has a "
             "ladder of notes, complete if it is open, odd-numbered if it is stopped, and a bottle is a mass on a "
             "spring. <bookmark mark='e'/> Sound passes where impedances match, shifts in pitch when the source "

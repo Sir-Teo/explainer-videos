@@ -64,6 +64,7 @@ class Bottle(SoundScene):
             vo.wait_until("b")
             self.play(FadeIn(spring))
             vo.wait_until("c")
+            self.play(FadeOut(mass), FadeOut(spring), run_time=0.3)
             step(0)
             vo.wait_until("d")
             step(1)
@@ -93,7 +94,8 @@ class Bottle(SoundScene):
         res.arrange(DOWN, buff=0.3, aligned_edge=LEFT).next_to(spec, DOWN, buff=0.6).align_to(spec, LEFT)
         for r in res:
             r[1].set_x(res.get_right()[0] - 0.4)
-        note_ = label(rf"the note {flat_name(d['note'])}, \ and it rings for about {d['q']:.0f} swings", font_size=26, color=TUNE)
+        note_ = label(rf"$Q\approx {d['q']:.0f}$: \ amplitude falls to $1/e$ in about {d['q'] / PI:.0f} cycles",
+                      font_size=24, color=TUNE)
         note_.next_to(res, DOWN, buff=0.4).align_to(res, LEFT)
         with self.voiceover(
             f"Our bottle holds a third of a litre. <bookmark mark='a'/> Helmholtz's formula says "

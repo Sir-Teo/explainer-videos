@@ -28,22 +28,25 @@ class Impedance(SoundScene):
         tr_ = Trace([x0, y, 0], [x1, y, 0], scale=0.55 / float(np.abs(d["step_frames"]).max()), color=FORCE)
         tr = film(tr_, d["step_frames"])
         zdef = definition_card(r"Impedance",
-                               r"how hard the air must be pushed to make it move: \ pressure divided by flow. \ "
-                               r"In open air it is $\rho c \approx %.0f$ in SI units; \ in a pipe, \ $\rho c$ divided by "
-                               r"the pipe's area." % d["z_air"], width=11.0, font_size=26).to_edge(DOWN, buff=0.35)
+                               r"a progressive plane wave: \ $z=p/u=\rho c\approx %.0f$ Pa s/m. \ "
+                               r"For volume flow $U=Su$ in a pipe: \ $Z=p/U=\rho c/S$ Pa s/m$^3$." % d["z_air"],
+                               width=11.0, font_size=26).to_edge(DOWN, buff=0.35)
         res = VGroup(label(r"comes back: \ $\dfrac{S_1 - S_2}{S_1 + S_2} = %.2f$" % d["r_formula"], font_size=28, color=GREY_A),
                      label(r"in the simulation: \ $%.2f$" % d["r_sim"], font_size=28, color=TUNE)).arrange(RIGHT, buff=0.9)
         res.move_to(DOWN * 0.75)
         with self.voiceover(
             "Part 1 ended on a puzzle: a string on its own is almost silent. The reason is the same reason a pulse "
             "came back from the open end of a pipe. <bookmark mark='a'/> Watch a pulse of pressure travel down a "
-            "narrow pipe that suddenly becomes four times as wide. <bookmark mark='b'/> Part goes on. Part comes "
+            "narrow pipe whose cross-sectional area suddenly becomes four times larger. <bookmark mark='b'/> Part goes on. Part comes "
             "back, upside down. Nothing was in the way. The pulse met a change in how hard the air is to push, and "
             f"that is enough. <bookmark mark='c'/> The quantity that changed is called impedance: the pressure it "
-            "takes to produce a given flow. Wherever the impedance changes, some of the wave is turned back, "
+            "takes to produce a given volume flow. For a travelling plane wave, pressure divided by particle "
+            "velocity is rho c. Divide by the pipe's area to get pressure divided by volume flow. A change can "
+            "turn some of the wave back, "
             "<bookmark mark='d'/> and how much is a simple formula, which the simulation confirms."
         ) as vo:
-            head = label(r"a pulse of pressure in a pipe that suddenly becomes four times as wide", font_size=28, color=GREY_A).to_edge(UP, buff=0.5)
+            head = label(r"pipe cross-section: \ area $S_2=4S_1$; \ diameter doubled",
+                         font_size=28, color=GREY_A).to_edge(UP, buff=0.5)
             bare = StringView(width=3.0, scale=0.4, stroke_width=3).move_to(DOWN * 1.6)
             lens = Lens(bare.p(0), bare.p(1), amp=0.16, color=TUNE)
             btag = label(r"Part 1's puzzle: \ a string on its own is almost silent", font_size=26, color=GREY_B).next_to(bare, DOWN, buff=0.4)
@@ -65,17 +68,18 @@ class Impedance(SoundScene):
         za = VGroup(label(r"air", font_size=34, color=AIR), MathTex(r"\rho c = %.0f" % d["z_air"], font_size=38)).arrange(RIGHT, buff=0.4).move_to(LEFT * 4.0 + UP * 0.2)
         zw = VGroup(label(r"water", font_size=34, color="#7FB3FF"), MathTex(r"\rho c = %s" % f"{d['z_water']:,.0f}".replace(",", "{,}"), font_size=38)
                     ).arrange(RIGHT, buff=0.4).move_to(LEFT * 3.6 + DOWN * 2.2)
-        a_in = Arrow(RIGHT * 1.0 + UP * 2.4, RIGHT * 2.4 + DOWN * 1.0, color=FORCE, stroke_width=6, buff=0)
-        a_back = Arrow(RIGHT * 2.6 + DOWN * 1.0, RIGHT * 4.0 + UP * 2.4, color=FORCE, stroke_width=6, buff=0)
-        a_thru = Arrow(RIGHT * 2.5 + DOWN * 1.2, RIGHT * 3.0 + DOWN * 2.6, color=FORCE, stroke_width=1.5, buff=0, max_tip_length_to_length_ratio=0.12)
+        a_in = Arrow(RIGHT * 1.4 + UP * 2.4, RIGHT * 1.4 + DOWN * 1.0, color=FORCE, stroke_width=6, buff=0)
+        a_back = Arrow(RIGHT * 2.6 + DOWN * 1.0, RIGHT * 2.6 + UP * 2.4, color=FORCE, stroke_width=6, buff=0)
+        a_thru = Arrow(RIGHT * 1.4 + DOWN * 1.2, RIGHT * 1.4 + DOWN * 2.6, color=FORCE, stroke_width=1.5, buff=0, max_tip_length_to_length_ratio=0.12)
         t_back = label(rf"{100 * (1 - d['through_water']):.1f}\% comes back", font_size=28, color=GREY_A).next_to(a_back, RIGHT, buff=0.1)
         t_thru = label(rf"{100 * d['through_water']:.2f}\% goes in: \ ${d['through_water_db']:.0f}$ dB", font_size=28, color=TUNE).next_to(a_thru, RIGHT, buff=0.3)
-        head = label(r"sound in air, \ meeting water", font_size=32, color=GREY_A).to_edge(UP, buff=0.5)
+        head = label(r"air to water, \ normal incidence; \ fractions of incident power",
+                     font_size=28, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "Now the extreme case. Sound in air arrives at the surface of water. Water is eight hundred times as "
+            "Now the extreme case. Sound in air arrives normally at the surface of water. Water is eight hundred times as "
             "dense and far stiffer: its impedance is three and a half thousand times that of air. "
             f"<bookmark mark='a'/> Only about a thousandth of the energy gets in. The rest bounces off. That is why "
-            "you cannot hear the poolside from under water, and it is a problem your own ear has to solve, because "
+            "poolside voices can be hard to hear from under water. Your own ear has an impedance problem to solve, because "
             "the inner ear is full of fluid. <bookmark mark='b'/> A string has the same problem the other way round. "
             "It is thin, dense and stiff; the air is light and soft. The string swings, and the air just slips "
             "round it."
@@ -123,14 +127,14 @@ class Impedance(SoundScene):
         t2.add_updater(upd(t2, d["frames_horn"]))
         tags = VGroup(label(r"a sudden opening", font_size=26, color=GREY_A).next_to(w1, UP, buff=0.1).align_to(w1, LEFT),
                       label(r"the same opening, \ through a flare one metre long", font_size=26, color=GREY_A).next_to(w2, UP, buff=0.1).align_to(w2, LEFT))
-        res = VGroup(label(rf"{100 * d['sudden']:.0f}\% of the energy gets out \ (formula: {100 * d['sudden_formula']:.0f}\%)", font_size=26, color=BAD
+        res = VGroup(label(rf"{100 * d['sudden']:.0f}\% of the energy enters the wider tube \ (formula: {100 * d['sudden_formula']:.0f}\%)", font_size=26, color=BAD
                            ).next_to(w1, DOWN, buff=0.12).align_to(w1, RIGHT),
-                     label(rf"{100 * d['horn']:.0f}\% gets out: \ ${d['gain_db']:+.1f}$ dB", font_size=26, color=GOOD).next_to(w2, DOWN, buff=0.12).align_to(w2, RIGHT))
+                     label(rf"{100 * d['horn']:.0f}\% enters the wider tube: \ ${d['gain_db']:+.1f}$ dB", font_size=26, color=GOOD).next_to(w2, DOWN, buff=0.12).align_to(w2, RIGHT))
         with self.voiceover(
             "The cure is to make the change gradual. Here is a narrow pipe opening into one sixteen times its "
             "area: on top suddenly, below through a flare a metre long. The same pulse goes down both. "
-            f"<bookmark mark='a'/> From the sudden opening, {say(100 * d['sudden'])} percent of the energy gets out. "
-            f"Through the flare, {say(100 * d['horn'])} percent. <bookmark mark='b'/> That is what the bell of a "
+            f"<bookmark mark='a'/> From the sudden opening, {say(100 * d['sudden'])} percent of the energy enters the wider tube. "
+            f"Through the flare, {say(100 * d['horn'])} percent. These are transmitted pulse energies in this pipe model, not measured radiation efficiencies of a trumpet. <bookmark mark='b'/> That is what the bell of a "
             "trumpet is for, and a megaphone, and the horn of an old gramophone. And it is what the box of the "
             "monochord does for the string: a wide wooden plate, driven through the bridge, is a far better match to "
             "the air than a wire is. A musical instrument is two things. Something that vibrates, and something "

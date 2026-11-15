@@ -38,6 +38,25 @@ def test_decibels():
     assert p["pa"] == pytest.approx(0.02) and 8 < p["nm_1khz"] < 14
 
 
+def test_rms_pressure_and_peak_particle_motion_are_distinct():
+    d = load("parcels")
+    talking = d["sizes"][1]
+    rms_velocity = talking["pa"] / (d["rho"] * d["c"])
+    assert talking["mm_s"] == pytest.approx(math.sqrt(2) * rms_velocity * 1000)
+    assert talking["nm_1khz"] == pytest.approx(math.sqrt(2) * rms_velocity / (2 * math.pi * 1000) * 1e9)
+    assert talking["nm_1khz"] == pytest.approx(10.89, abs=0.02)
+
+
+def test_one_way_push_leaves_a_small_parcel_displacement():
+    """The Gaussian piston-velocity pulse is not a complete back-and-forth cycle."""
+    d = load("parcels")
+    displacement = np.asarray(d["pulse"])
+    piston_travel = 6.0 * 0.22e-3 * math.sqrt(math.pi)
+    assert displacement[0, 30] == 0
+    assert displacement[-1, 30] == pytest.approx(piston_travel, rel=1e-3)
+    assert displacement[-1, 30] < 0.003  # millimetres, while the disturbance crosses a three-metre tube
+
+
 def test_spreading_diffraction_and_interference():
     s = load("spread")
     assert s["space_exponent"] == pytest.approx(-1.0, abs=0.01) and s["per_doubling_db"] == pytest.approx(6.02, abs=0.05)

@@ -109,7 +109,8 @@ python -m videos.music.labs 2                                  # the lab (writes
    adiabatically its pressure rises by γP Aₙ x / V = ρc² Aₙ x / V. The force back on the plug is that pressure
    times Aₙ, so the spring constant is k = ρc² Aₙ² / V and ω² = k/m = c² Aₙ / (V Lₙ): f = (c/2π) √(Aₙ / (V Lₙ)).
    For the two-tube model, the body (closed at the bottom) presents the impedance −i (ρc/A_b) cot(k L_b) to the
-   neck, and the neck, open at the top, needs i (ρc/Aₙ) tan(k Lₙ) at its lower end; equating them gives
+   neck. With volume flow defined away from the junction into each branch, the open neck presents
+   i (ρc/Aₙ) tan(k Lₙ). The two outward flows sum to zero, so these branch impedances sum to zero, giving
    tan(kLₙ) tan(k L_b) = Aₙ / A_b. When both lengths are much shorter than a wavelength, tan θ ≈ θ and
    k² Lₙ L_b = Aₙ / A_b, that is k² = Aₙ / (Lₙ V) with V = A_b L_b: Helmholtz's formula. The next term of the
    tangent makes the true root lower, which is why the formula runs sharp (56 cents for the film's bottle).

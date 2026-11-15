@@ -117,13 +117,16 @@ class Speed(SoundScene):
     def temperature(self):
         d = load("speed")
         c = clip("speed.pipe")
-        g = axes([-12, 40], [320, 356], x_length=5.4, y_length=3.4, xlabel=r"temperature ($^\circ$C)", ylabel=r"speed of sound (m/s)",
-                 xticks=[-10, 0, 10, 20, 30], yticks=[325, 335, 345, 355], font_size=20)
-        g.move_to(LEFT * 3.7 + UP * 0.5)
-        ts = np.linspace(-12, 40, 60)
-        line = curve(g.ax, ts, [331.3 * np.sqrt(1 + t / 273.15) for t in ts], AIR)
+        g = axes([-40, 40], [300, 360], x_length=5.4, y_length=3.4, xlabel=r"temperature ($^\circ$C)", ylabel=r"speed of sound (m/s)",
+                 xticks=[-30, -10, 10, 30], yticks=[300, 320, 340, 360], font_size=20)
+        g.move_to(LEFT * 3.7 + UP * 0.1)
+        ts = np.linspace(-40, 40, 80)
+        room = next(r for r in d["temps"] if r["c"] == 20)
+        line = curve(g.ax, ts, room["speed"] * np.sqrt((ts + 273.15) / 293.15), AIR)
         dots = VGroup(*[Dot(g.ax.c2p(r["c"], r["speed"]), radius=0.06, color=TUNE) for r in d["temps"]])
-        law = MathTex(r"c = \sqrt{\gamma R\, T}", font_size=40, color=AIR).next_to(g, UP, buff=0.25)
+        law = MathTex(r"c = \sqrt{\gamma R_{\rm air}\, T}", font_size=36, color=AIR).move_to(LEFT * 3.5 + UP * 3.15)
+        units = label(r"$T$ in kelvin; \ $R_{\rm air}\approx287$ J/(kg K)", font_size=20,
+                      color=GREY_B).move_to(LEFT * 3.5 + UP * 2.6)
         pipe = TubeView(width=5.4, bore=0.7).move_to(RIGHT * 3.4 + UP * 1.6)
         pipe.curve.set_stroke(opacity=0)
         ptag = label(rf"an open pipe, \ {100 * d['pipe_len']:.1f} cm", font_size=24, color=GREY_A).next_to(pipe, UP, buff=0.3)
@@ -133,12 +136,13 @@ class Speed(SoundScene):
                       ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).next_to(pipe, DOWN, buff=0.7)
         with self.voiceover(
             "Notice what is not in Laplace's formula once you use the gas law: the pressure. Only the temperature "
-            "is left. <bookmark mark='a'/> Sound goes about six tenths of a metre a second faster for every degree. "
+            "is left. Here T is in kelvin and R air is the specific gas constant for air, about 287 joules per "
+            "kilogram per kelvin. <bookmark mark='a'/> Sound goes about six tenths of a metre a second faster for every degree. "
             "<bookmark mark='b'/> That matters to anyone who plays a wind instrument, because, as we will see in "
             "chapter eight, the note of a pipe is set by the time sound takes to run along it. Here is one pipe, "
             f"cold and then warm."
         ) as vo:
-            self.play(FadeIn(g), FadeIn(law))
+            self.play(FadeIn(g), FadeIn(law), FadeIn(units))
             vo.wait_until("a")
             self.play(Create(line), LaggedStart(*[FadeIn(p) for p in dots], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("b")
@@ -159,12 +163,17 @@ class Speed(SoundScene):
             f"<bookmark mark='a'/> About {say(d['per_degree'])} cents for every degree. This is why an orchestra "
             "tunes after the players have warmed their instruments, and why an organ and a piano that agree in "
             "winter can disagree in summer. <bookmark mark='b'/> It also settles a detail of Krakatoa. The pulse went "
-            "round the world at about 313 metres a second: the speed of sound in air at thirty below zero. It filled "
-            "the whole depth of the atmosphere, and most of the atmosphere is cold."
+            "round the world at about 313 metres a second. In uniform air that corresponds to roughly thirty "
+            "degrees below zero. This is an equivalent temperature, not a measurement of one atmospheric layer: "
+            "the real pulse travels through a stratified, moving atmosphere."
         ) as vo:
             self.play(FadeIn(read[2]))
             vo.wait_until("b")
-            cold = Dot(g.ax.c2p(-12, 323), radius=0.09, color=BAD)
-            self.play(FadeIn(cold), Flash(cold, color=BAD))
+            observed = load("krakatoa")["speed_obs"]
+            equivalent = 293.15 * (observed / room["speed"]) ** 2 - 273.15
+            cold = Dot(g.ax.c2p(equivalent, observed), radius=0.09, color=BAD)
+            cold_note = wrapped_label(rf"{observed:.0f} m/s: \ {equivalent:.0f}$^\circ$C uniform-air equivalent",
+                                      5.4, 22, GREY_B).next_to(g, DOWN, buff=0.15)
+            self.play(FadeIn(cold), Flash(cold, color=BAD), FadeIn(cold_note))
         self.wait(0.3)
         self.clear_scene()

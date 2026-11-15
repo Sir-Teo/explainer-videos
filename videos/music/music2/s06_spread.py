@@ -142,7 +142,7 @@ class Spread(SoundScene):
             self.play(FadeIn(given[1]), FadeIn(ask, shift=UP * 0.2))
         self.wait(1.5)
         with self.voiceover(
-            "Thirty-two is two, doubled five times. Five doublings at six decibels each is thirty. "
+            "Thirty-two is one, doubled five times. Five doublings at six decibels each is thirty. "
             f"<bookmark mark='a'/> So {say(b['level'])} decibels: the level of someone talking beside you."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(work[0]))

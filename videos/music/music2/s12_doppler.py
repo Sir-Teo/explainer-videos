@@ -83,7 +83,7 @@ class Doppler(SoundScene):
         hi = label(r"coming: \ higher", font_size=26, color=RATIO).move_to([1.2, 1.7, 0])
         lo = label(r"going: \ lower", font_size=26, color=AIR).move_to([5.2, 1.7, 0])
         drawing = VGroup(track, wagon, ear, hi, lo)
-        facts = VGroup(label(rf"a semitone up and a semitone down needs {tr['kmh']:.0f} km/h", font_size=28, color=TUNE),
+        facts = VGroup(label(rf"a two-semitone approach-to-retreat change: \ {tr['kmh']:.0f} km/h", font_size=27, color=TUNE),
                        label(rf"coming: \ {tr['up']:.0f} Hz \quad going: \ {tr['down']:.0f} Hz \quad true: \ {d['hz']:.0f} Hz", font_size=26, color=GREY_A)
                        ).arrange(DOWN, buff=0.2).move_to(DOWN * 1.2 + RIGHT * 0.8)
         head = Line(g.ax.c2p(-3, 350), g.ax.c2p(-3, 432), color=WHITE, stroke_width=2)

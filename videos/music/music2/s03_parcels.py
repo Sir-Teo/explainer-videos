@@ -26,7 +26,7 @@ class Parcels(SoundScene):
         caps = VGroup(label(r"each dot: \ a parcel of air", font_size=26, color=AIR),
                       label(r"one parcel, \ marked", font_size=26, color=TUNE)).arrange(RIGHT, buff=1.2).move_to(DOWN * 0.6)
         facts = VGroup(label(r"the push travels the length of the row", font_size=30),
-                       label(r"every parcel ends where it began", font_size=30, color=TUNE)).arrange(DOWN, buff=0.25).move_to(DOWN * 2.1)
+                       label(r"each parcel moves only a little", font_size=30, color=TUNE)).arrange(DOWN, buff=0.25).move_to(DOWN * 2.1)
         with self.voiceover(
             "Picture the air in a long tube as a row of small parcels, each one touching the next. "
             "<bookmark mark='a'/> Push the first one. It crowds its neighbour. The crowded air pushes back, and "
@@ -37,7 +37,12 @@ class Parcels(SoundScene):
         ) as vo:
             self.play(FadeIn(row), FadeIn(piston), FadeIn(caps))
             vo.wait_until("a")
-            self.play(tr.animate.set_value(len(d["pulse"]) - 1), run_time=max(vo.until("c") - 0.2, 6.0), rate_func=linear)
+            duration = max(vo.until("c") - 0.2, 6.0)
+            slow = duration / ((len(d["pulse"]) - 1) * d["pulse_dt"])
+            scale_note = label(rf"motion slowed {slow:.0f} times; \ displacement exaggerated",
+                               font_size=22, color=GREY_B).to_edge(DOWN, buff=0.35)
+            self.add(scale_note)
+            self.play(tr.animate.set_value(len(d["pulse"]) - 1), run_time=duration, rate_func=linear)
             self.play(FadeIn(facts[0]), FadeIn(facts[1]))
         piston.clear_updaters()
         self.wait(0.3)
@@ -97,37 +102,48 @@ class Parcels(SoundScene):
             MathTex(r"\rho\,\frac{\partial u}{\partial t}", r"=", r"-\,\frac{\partial p}{\partial x}", font_size=42),
             MathTex(r"\frac{\partial}{\partial t}", r"=", r"-\,c\,\frac{\partial}{\partial x}", font_size=42),
             MathTex(r"p", r"=", r"\rho\, c\; u", font_size=52),
-            MathTex(r"I", r"=", r"p\,u \;=\; \frac{p^2}{\rho c}", font_size=46),
+            MathTex(r"\langle I\rangle", r"=", r"\langle p\,u\rangle \;=\; \frac{p_{\rm rms}^2}{\rho c}", font_size=42),
         ]
         whys = [why(r"Newton's law for one parcel: \ it is pushed by the difference in pressure across it"),
-                why(r"a pattern that slides along at speed $c$"),
+                why(r"a plane wave travelling right at speed $c$"),
                 why(r"pressure and velocity rise and fall together"),
-                why(r"power through a square metre: \ force times speed")]
+                why(r"mean power per square metre; \ rms pressure")]
         rows[2][0].set_color(FORCE), rows[2][2].set_color(AIR), rows[3][0].set_color(LEVEL)
         step = ladder(self, rows, whys, keep=4, top=1.7, buff=0.55, x=-2.4)
-        num = label(rf"in air $\rho c \approx {d['z']:.0f}$: \ one pascal moves the air at {d['one_pa']['mm_s']:.1f} mm/s", font_size=28, color=TUNE)
-        num.to_edge(DOWN, buff=0.6)
+        num = label(rf"$1$ Pa rms: \ {d['one_pa']['mm_s']:.1f} mm/s rms \quad ($\rho c\approx {d['z']:.0f}$)",
+                    font_size=28, color=TUNE)
+        num.move_to(UP * 2.65)
+        symbols = label(r"$p$: \ pressure change; \ $u$: \ particle velocity", font_size=23,
+                        color=GREY_B).move_to(UP * 2.65)
+        parcel = Rectangle(width=1.2, height=1.0, color=AIR, fill_opacity=0.12)
+        left_push = Arrow(LEFT * 3.0, LEFT * 0.65, color=FORCE, buff=0, stroke_width=6)
+        right_push = Arrow(RIGHT * 2.0, RIGHT * 0.65, color=FORCE, buff=0, stroke_width=3)
+        intro = VGroup(parcel, left_push, right_push,
+                       label(r"higher pressure", font_size=25, color=FORCE).next_to(left_push, UP, buff=0.25),
+                       label(r"lower pressure", font_size=25, color=GREY_A).next_to(right_push, UP, buff=0.25),
+                       label(r"one parcel", font_size=25, color=AIR).next_to(parcel, DOWN, buff=0.3))
         with self.voiceover(
             "There is one relation between the push and the motion that we will need again and again. A parcel "
             "speeds up when the pressure behind it is higher than the pressure in front: <bookmark mark='a'/> that "
-            "is Newton's law. <bookmark mark='b'/> In a travelling wave the whole pattern slides along at the speed "
+            "is Newton's law. <bookmark mark='b'/> In a plane wave travelling in one direction, the pattern slides at the speed "
             "of sound, so a change in time is the same as a change in place. <bookmark mark='c'/> Put the two "
             "together and the pressure is simply the density, times the speed of sound, times the speed of the "
             f"air. In a room that product is about {say(d['z'])}, <bookmark mark='d'/> so a pressure swing of one "
-            f"pascal moves the air at {say(d['one_pa']['mm_s'], 1)} millimetres a second. <bookmark mark='e'/> And "
-            "the power a wave carries through each square metre is the pressure times that speed: pressure "
-            "squared, over rho c. Remember this one. It is the reason loudness will be measured in pressure, "
-            "squared."
+            f"pascal rms gives a particle velocity of {say(d['one_pa']['mm_s'], 1)} millimetres a second rms. "
+            "<bookmark mark='e'/> Instantaneous intensity is pressure times particle velocity. Average it in time "
+            "and you get rms pressure squared, over rho c. That is the relation for this progressive plane wave; "
+            "reflections can change it. It is why sound level will use rms pressure, squared."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(symbols), FadeIn(intro))
             vo.wait_until("a")
+            self.play(FadeOut(intro), run_time=0.3)
             step(0)
             vo.wait_until("b")
             step(1)
             vo.wait_until("c")
             step(2)
             vo.wait_until("d")
-            self.play(FadeIn(num))
+            self.play(FadeOut(symbols), FadeIn(num))
             vo.wait_until("e")
             step(3)
         self.wait(0.3)
@@ -137,7 +153,7 @@ class Parcels(SoundScene):
     def sizes(self):
         d = load("parcels")
         head = VGroup(*[label(t, font_size=24, color=GREY_B) for t in
-                        (r"", r"level", r"pressure swing", r"of one atmosphere", r"a parcel moves (at 1 kHz)")])
+                        (r"", r"level", r"pressure (rms)", r"of one atmosphere", r"peak motion (1 kHz tone)")])
         xs = [-6.5, -3.5, -2.1, 0.1, 3.5]
         rows = VGroup()
         for i, r in enumerate(d["sizes"]):
@@ -158,10 +174,11 @@ class Parcels(SoundScene):
         talk = d["sizes"][1]
         with self.voiceover(
             "How big is this motion? Astonishingly small. <bookmark mark='a'/> Ordinary speech changes the pressure "
-            f"of the air by about two hundredths of a pascal: one part in {say(1 / talk['atm'] / 1e6)} million of the "
-            f"atmosphere's own pressure. The parcels of air move about {say(talk['nm_1khz'])} nanometres: "
-            "<bookmark mark='b'/> a few dozen atoms' width. <bookmark mark='c'/> A full orchestra, heard from a good "
-            "seat, moves the air about a thousandth of a millimetre. And a sound loud enough to hurt is still less "
+            f"of the air by about two hundredths of a pascal rms: one part in {say(1 / talk['atm'] / 1e6)} million of the "
+            f"atmosphere's own pressure. A one-kilohertz tone at that level has a peak parcel displacement of about "
+            f"{say(talk['nm_1khz'])} nanometres: <bookmark mark='b'/> around a hundred atoms' width. "
+            "<bookmark mark='c'/> At an orchestra's hundred-decibel level, the same tone would move the air about "
+            "a thousandth of a millimetre. And a sound loud enough to hurt is still less "
             "than a thousandth of an atmosphere. <bookmark mark='d'/> So for music, the disturbance is tiny compared "
             "with the air it rides on. That is why sounds pass through each other untouched, and why the simple "
             "wave equation of Part 1 works so well. In the last chapter we will see what happens when it is not tiny."

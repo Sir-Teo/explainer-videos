@@ -146,7 +146,14 @@ class Interfere(SoundScene):
         cb = load("interfere")["comb"]
         title = label(r"A worked example: \ two loudspeakers, one seat", font_size=36).to_edge(UP, buff=0.45)
         spk = VGroup(*[Square(0.5, color=TUNE, fill_opacity=0.3) for _ in range(2)]).arrange(RIGHT, buff=4.0).move_to(UP * 1.9)
-        seat = Dot(DOWN * 0.6 + RIGHT * 0.9, radius=0.12, color=EAR)
+        # One scene unit is one metre: put the seat on the actual stated path-difference hyperbola.
+        half_gap = (spk[1].get_x() - spk[0].get_x()) / 2
+        height = spk[0].get_bottom()[1] + 0.6
+        half_difference = cb["extra"] / 2
+        seat_x = half_difference * np.sqrt(1 + height ** 2 / (half_gap ** 2 - half_difference ** 2))
+        seat = Dot(DOWN * 0.6 + RIGHT * seat_x, radius=0.12, color=EAR)
+        assumptions = label(r"sources in phase; \ equal amplitudes at the seat; \ sketch in metres",
+                            font_size=22, color=GREY_B).move_to(UP * 2.75)
         rays = VGroup(Line(spk[0].get_bottom(), seat.get_center(), color=GREY_B, stroke_width=2), Line(spk[1].get_bottom(), seat.get_center(), color=GREY_B, stroke_width=2))
         tag = label(rf"this seat is {100 * cb['extra']:.0f} cm nearer the right-hand speaker", font_size=26, color=RATIO).next_to(seat, DOWN, buff=0.3)
         ask = pause_card(r"Both speakers play the same music. \\ Which frequency is cancelled at this seat?", width=8.6).move_to(DOWN * 2.4)
@@ -156,10 +163,11 @@ class Interfere(SoundScene):
         ans[0][2].set_color(TUNE)
         with self.voiceover(
             "A worked example. Two loudspeakers play the same music, and your seat is thirty-four centimetres "
-            "nearer to one of them than to the other. <bookmark mark='a'/> Which frequency is cancelled where you "
+            "nearer to one of them than to the other. Assume the sources are in phase, with equal amplitudes at "
+            "your seat. <bookmark mark='a'/> Which frequency is cancelled where you "
             "sit? Pause, and work it out."
         ) as vo:
-            self.play(FadeIn(title), FadeIn(spk), FadeIn(seat), Create(rays), FadeIn(tag))
+            self.play(FadeIn(title), FadeIn(assumptions), FadeIn(spk), FadeIn(seat), Create(rays), FadeIn(tag))
             vo.wait_until("a")
             self.play(FadeIn(ask, shift=UP * 0.2))
         self.wait(1.5)
@@ -168,8 +176,8 @@ class Interfere(SoundScene):
             "above middle C. <bookmark mark='a'/> And every odd multiple of it as well. The music reaches you with a "
             "row of notches cut out of it, like the teeth of a comb, and the notches fall somewhere else in the next "
             "seat. That is why the same recording sounds different from every seat when it comes from two "
-            "loudspeakers, a problem Part 59 has to deal with. It is also how noise-cancelling headphones work: they "
-            "are a second source, placed so that your ear is always in a dark band."
+            "loudspeakers, a problem Part 59 has to deal with. Noise-cancelling headphones use the same principle "
+            "by timing a second wave to oppose the unwanted sound at your ear."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(ans[0]))
             vo.wait_until("a")
