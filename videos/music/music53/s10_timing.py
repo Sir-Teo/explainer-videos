@@ -41,22 +41,27 @@ class Timing(SoundScene):
     def heard(self):
         d = load("timing")
         c = clip("timing.two")
-        cells = choice_boxes([r"snapped to blocks", r"placed to the sample"], width=4.0, buff=1.0, colors=[EAR, TUNE]).move_to(UP * 0.4)
-        cap = label(r"sixteenth-note hi-hats over a kick, \ 120 beats a minute", font_size=17, color=GREY_A).to_edge(DOWN, buff=1.0)
-        head = label(r"block timing, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
-        with self.voiceover("Hear the difference: the hi-hats snapped to blocks, then placed to the sample."):
-            self.play(FadeIn(head), FadeIn(cells), FadeIn(cap))
+        card = listen_card(r"Sixteenth-note hi-hats over a kick, \ twice. \ Once every hit is placed to the sample; \ once every hit is moved "
+                           r"to the start of its block. \ Which was moved?", width=9.8)
+        with self.voiceover(
+            "Your turn. Sixteenth-note hi-hats over a kick, twice. Once every hit is placed to the sample; once every hit is "
+            "moved to the start of its block. Which was moved?"
+        ):
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        boxes = choice_boxes([r"first", r"second"]).move_to(UP * 0.6)
+        self.play(FadeOut(card), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"snapped, \ then exact", kind="synthesized", detail=r"hats and kick", corner=DL, tag_corner=DR)
-            pulse(snd, cells[0], st["snapped"], st["exact"] - 0.3, buff=0.08)
-            pulse(snd, cells[1], st["exact"], c.duration, buff=0.08)
+            window(snd, r"one groove, \ twice", kind="synthesized", detail=r"hats and kick", corner=DL, tag_corner=DR)
+            pulse(snd, boxes[0], st["exact"], st["snapped"] - 0.4, buff=0.08)
+            pulse(snd, boxes[1], st["snapped"], c.duration, buff=0.08)
         with self.voiceover(
-            "Snapped, the hats limp: some pairs too close, some too far, a groove that stumbles. Placed to the sample they are "
-            "even. Part 43 found that ensemble players align within a few tens of milliseconds and hear much less than that "
-            "in a steady pulse; an engine has no excuse to add its own."
+            "The second. Snapped to blocks, the hats limp: some pairs too close, some too far, a groove that stumbles. Placed to "
+            "the sample they are even. Ensemble players align within a few tens of milliseconds and hear far less than that in a "
+            "steady pulse; an engine has no excuse to add its own."
         ):
-            self.play(Indicate(cells[1], color=TUNE, scale_factor=1.03))
+            self.play(boxes[1][0].animate.set_stroke(EAR, width=4))
         self.wait(0.4)
         self.clear_scene()
 

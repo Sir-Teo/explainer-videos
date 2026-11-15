@@ -44,22 +44,28 @@ class Limits(SoundScene):
     def zipper(self):
         d = load("zipper")
         c = clip("zipper.two")
-        cells = choice_boxes([r"7-bit controller", r"smooth"], width=3.8, buff=1.0, colors=[EAR, TUNE]).move_to(UP * 0.4)
-        cap = label(r"a resonant ladder \ (Part 51), \ $k = 3.6$, \ swept over four seconds", font_size=17, color=GREY_A).to_edge(DOWN, buff=1.0)
-        head = label(r"zipper noise, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
-        with self.voiceover("Hear it with Part 51's resonant ladder: the stepped sweep, then the smooth one."):
-            self.play(FadeIn(head), FadeIn(cells), FadeIn(cap))
+        card = listen_card(r"A resonant filter swept from 200 Hz to 2 kHz, \ twice. \ Once its cutoff follows a MIDI controller, \ 128 values; \ "
+                           r"once it moves smoothly. \ Which was the controller?", width=9.8)
+        with self.voiceover(
+            "Your turn. A resonant filter, Part 51's ladder, swept from two hundred hertz to two kilohertz, twice. Once its "
+            "cutoff follows a MIDI controller, a hundred and twenty-eight values; once it moves smoothly. Which was the "
+            "controller?"
+        ):
+            self.play(FadeIn(card))
+        self.wait(0.8)
+        boxes = choice_boxes([r"first", r"second"]).move_to(UP * 0.6)
+        self.play(FadeOut(card), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:
-            window(snd, r"stepped, \ then smooth", kind="synthesized", detail=r"sawtooth and ladder", corner=DL, tag_corner=DR)
-            pulse(snd, cells[0], st["stepped"], st["smooth"] - 0.3, buff=0.08)
-            pulse(snd, cells[1], st["smooth"], c.duration, buff=0.08)
+            window(snd, r"one sweep, \ twice", kind="synthesized", detail=r"sawtooth and ladder", corner=DL, tag_corner=DR)
+            pulse(snd, boxes[0], st["stepped"], st["smooth"] - 0.4, buff=0.08)
+            pulse(snd, boxes[1], st["smooth"], c.duration, buff=0.08)
         with self.voiceover(
-            "The stepped sweep clicks its way up: the resonant whistle jumps from step to step, a sound engineers call zipper "
-            "noise. Synthesizers learned to smooth incoming controllers; MIDI 1.0 had in fact allowed fourteen-bit "
-            "controllers from the start, two paired together, but few devices used them."
+            "The first. It clicks its way up: the resonant whistle jumps from step to step, a sound engineers call zipper noise. "
+            "Synthesizers learned to smooth incoming controllers; MIDI 1.0 had in fact allowed fourteen-bit controllers from the "
+            "start, two paired together, but few devices used them."
         ):
-            self.play(Indicate(cells[0], color=EAR, scale_factor=1.03))
+            self.play(boxes[0][0].animate.set_stroke(EAR, width=4))
         self.wait(0.4)
         self.clear_scene()
 

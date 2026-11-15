@@ -105,7 +105,7 @@ class Outro(SoundScene):
     def problems(self):
         ps = problem_set([
             r"With running status, \ how long does a 10-note chord take to arrive, \ and how long without?",
-            r"Prove that a variable-length quantity of $n$ bytes holds every number below $2^{7n}$, \ and no code with fewer bytes for some of them is lost.",
+            r"Prove that a variable-length quantity of $n$ bytes holds every number below $2^{7n}$, \ and that no code is the start of another.",
             r"\textbf{Ear.} \ The lab plays a groove with notes snapped to blocks or placed exactly, \ at random; \ say which.",
             r"\textbf{Build.} \ Add a tempo change to the MIDI writer \ (a second tempo event) \ and make the reader honour it.",
             r"$\bigstar$ \ What is the best-sounding neural effect guaranteed never to miss a deadline?",

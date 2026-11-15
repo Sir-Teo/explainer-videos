@@ -109,6 +109,8 @@ LEDGER = [
      "measure": r"354 notes on four tracks; the lead's aliasing 34 dB below its harmonics, 18 if naive"},
     {"part": 52, "title": r"on FM keys and bells, dissolved into grains and back", "seconds": 27.9,
      "measure": r"FM's lines within 0.000002 of Bessel's; 2,793 grains in ten seconds"},
+    {"part": 53, "title": r"as a tracker module and a tempo canon at 3 : 4 : 5 : 6", "seconds": 40.7,
+     "measure": r"32 tracker rows; four voices meeting on the last note after 30.7 s; block and offline renders identical"},
 ]
 
 

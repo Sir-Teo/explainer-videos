@@ -2016,13 +2016,31 @@ flat by the 24th partial.
 a key pressed on one sounds the other. The specification fitted on a few pages and has run the industry for forty
 years. The part reads it byte by byte, then builds what sits on top: the sequencer and the audio engine with its
 hard real-time deadline.
+1. Hook: an ear question (a chord down the cable or all at once?); the arrivals; Smith, Kakehashi and 1983; the plan.
+2. Machines that play: cylinders and the music box, heard; rolls; forty notes a second, heard; Nancarrow; a tempo canon's arithmetic.
+3. MUSIC N and unit generators: Mathews; an orchestra and a score; the score heard; descendants; real time arrives.
+4. MIDI byte by byte: the wire; one note; inside a keyboard; running status; a chord's smear; the other messages.
+5. MIDI's limits: seven bits; an ear question (which sweep was the controller?); one bend per channel; MPE; MIDI 2.0; what MIDI got right.
+6. MIDI files: chunks; variable-length times; ticks to seconds; the Tune in 423 bytes; files at work.
+7. Sequencers: a sixteen-step line, heard; the piano roll; the tracker; the workstation.
+8. A pattern language: five rules; two lines expanded; the parse tree; the lines heard; live coding.
+9. The audio callback: the deadline; identical in every block size; cost per block; dropouts heard; the rules; a lock-free queue.
+10. Timing inside a block: snapped to blocks; an ear question (which was snapped?); the latency budget; sample-accurate scheduling.
+11. The graph and delay compensation: the graph; plug-ins; two paths, one late; compensation heard; the comb; freezing.
+12. Frontier: learning in the audio thread; networked performance; the browser as a studio; the research problem.
+13. Variation 53: the Tune as a tracker module and a tempo canon. Outro: problems, payoffs.
+
 *Covers:* automata, music boxes and player pianos; Nancarrow; MUSIC N and unit generators; the MIDI protocol and
-its limits; MPE and MIDI 2.0 **(verify)**; step sequencers, piano rolls and trackers; the audio callback;
+its limits; MPE (2018) and MIDI 2.0 (2020); step sequencers, piano rolls and trackers; the audio callback;
 latency; the processing graph and delay compensation; plug-ins; dataflow and live-coding languages.
-*Built and computed:* a sequencer and audio graph, identical offline and in blocks, with its per-block cost
-`measured on this machine`; a MIDI file reader and writer; a small pattern language.
-*Variation 53:* the Tune as a tracker module and as a tempo canon no human could play.
-*Frontier:* learning in the audio thread; networked performance.
+*Built and computed:* `monochord/daw.py`: MIDI 1.0 with running status, its timing at 31,250 baud (a twelve-note chord
+spread over 7.0 ms); variable-length quantities and Standard MIDI Files written and read (the Tune in 423 bytes); an
+engine of stateful voices, limiters and delays that renders bit-identically in blocks of 32 to 2048 samples, with its
+per-block cost measured on this machine; sample-accurate and block-snapped scheduling (up to 21 ms early at 1024);
+delay compensation (a 5 ms path combing at 100 Hz and every 200 Hz above); a small pattern language; tracker events;
+tempo canons.
+*Variation 53:* the Tune as a tracker module and as a tempo canon at 3 : 4 : 5 : 6 meeting on the last note.
+*Frontier:* learning in the audio thread; networked performance (open: the best model that never misses a deadline).
 *Reading:* the MIDI 1.0 specification; Mathews, *The Technology of Computer Music*; Puckette; McCartney (2002).
 
 ## Act X · The Studio and the Stage

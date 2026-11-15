@@ -213,7 +213,7 @@ def compute_zipper() -> dict:
     b = S1.ladder(x, smooth, 3.6)
     c = concat([C(fade(norm_rms(a))), C(fade(norm_rms(b)))], gap=0.8, names=["stepped", "smooth"])
     step_cents = 1200 * np.log2(hi / lo) / 127
-    return {"step_cents": float(step_cents), "lo": lo, "hi": hi, "steps": 128,
+    return {"answer": "first", "step_cents": float(step_cents), "lo": lo, "hi": hi, "steps": 128,
             "curve_t": t[::480].tolist(), "stepped": stepped[::480].tolist(), "smooth": smooth[::480].tolist(),
             "starts": {"stepped": float(c.events["stepped"]), "smooth": float(c.events["smooth"])},
             "clips": {"two": save("zipper.two", c, detail="a resonant ladder filter swept from 200 Hz to 2 kHz over four seconds, first by a MIDI controller (128 values, sent every 10 ms), then smoothly")}}
@@ -383,10 +383,10 @@ def compute_timing() -> dict:
         return mix(parts, duration=32 * step + 0.6).y
     a = render(snapped)
     b = render(hits)
-    c = concat([C(norm_rms(a)), C(norm_rms(b))], gap=0.8, names=["snapped", "exact"])
-    return {"block": B, "block_ms": 1000 * B / SR, "err_ms": err, "max_ms": float(max(err)), "sd_ms": float(np.std(err)),
+    c = concat([C(norm_rms(b)), C(norm_rms(a))], gap=0.8, names=["exact", "snapped"])
+    return {"answer": "second", "block": B, "block_ms": 1000 * B / SR, "err_ms": err, "max_ms": float(max(err)), "sd_ms": float(np.std(err)),
             "starts": {"snapped": float(c.events["snapped"]), "exact": float(c.events["exact"])},
-            "clips": {"two": save("timing.two", c, detail="sixteenth-note hi-hats over a kick at 120 beats a minute: every hit moved to the start of its 1024-sample block, then every hit placed to the sample")}}
+            "clips": {"two": save("timing.two", c, detail="sixteenth-note hi-hats over a kick at 120 beats a minute: every hit placed to the sample, then every hit moved to the start of its 1024-sample block")}}
 
 
 def drum_loop(bars=2, bpm=100):
