@@ -823,6 +823,27 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Frederick; Stanovich, West; Evans; Keren, Schul; Kruglanski; Stewart, Chater, Brown; Parducci; Walasek | 弗雷德里克；斯坦诺维奇，韦斯特；埃文斯；克伦，舒尔；克鲁格兰斯基；斯图尔特，查特，布朗；帕尔杜奇；瓦拉塞克 |
 | Johnson; Levin, Gaeth; Thaler, Benartzi; Peterson; Lieder; Frey; Kuhberger; Ruggeri; Huck; Mellers | 约翰逊；莱文，盖斯；塞勒，贝纳茨；彼得森；利德；弗赖；屈贝格尔；鲁杰里；胡克；梅勒斯 |
 
+## Part 27: consciousness
+
+| English | 中文 |
+|---|---|
+| consciousness; awareness; experience; report; the contrastive method; neural correlates of consciousness | 意识；觉知；体验；报告；对比法；意识的神经相关物 |
+| blindsight; hemianopia; forced choice; scattered light; post-decision wagering; degraded conscious vision | 盲视；偏盲；迫选；散射光；决策后下注；退化的有意识视觉 |
+| masking; target–mask interval; prime; masked priming; the criterion problem; objective and subjective measures | 掩蔽；目标–掩蔽间隔；启动刺激；掩蔽启动；标准问题；客观测量与主观测量 |
+| Perceptual Awareness Scale; metacognition; inattentional blindness; neglect; extinction | 知觉觉知量表；元认知；非注意盲；忽视；消退 |
+| the easy problems; the hard problem; access consciousness; phenomenal consciousness | 简单问题；困难问题；通达意识；现象意识 |
+| binocular rivalry; dominance duration; adaptation; mutual inhibition; no-report paradigm | 双眼竞争；优势时长；适应；相互抑制；无报告范式 |
+| global workspace; ignition; bifurcation; P3b; attentional blink; long-distance synchrony | 全局工作空间；点燃；分岔；P3b；注意瞬脱；远距离同步 |
+| integrated information; Φ; effective information; minimum information bipartition; posterior hot zone | 整合信息；Φ；有效信息；最小信息二分；后部热区 |
+| recurrent processing; feed-forward sweep; higher-order theory; adversarial collaboration | 递归加工；前馈扫描；高阶理论；对抗性合作 |
+| readiness potential; Libet's clock; the urge (W); leaky stochastic accumulator; free will | 准备电位；利贝特时钟；冲动时刻（W）；泄漏随机累积器；自由意志 |
+| vegetative state (unresponsive wakefulness); minimally conscious state; cognitive–motor dissociation | 植物状态（无反应觉醒）；最小意识状态；认知–运动分离 |
+| perturbational complexity index; Lempel–Ziv complexity; anaesthesia awareness; isolated forearm technique | 扰动复杂性指数；莱姆佩尔–齐夫复杂度；麻醉中知晓；孤立前臂技术 |
+| Weiskrantz, Warrington; D.B.; G.Y.; Campion, Latto; Cowey, Stoerig; Persaud; Overgaard; Schmid | 韦斯克兰茨，沃灵顿；D.B.；G.Y.；坎皮恩，拉托；考伊，施托里希；佩尔索德；奥弗高；施密德 |
+| Baars; Crick, Koch; Chalmers; Nagel; Block; Simons, Chabris; Dehaene; Changeux; Sergent; Del Cul | 巴尔斯；克里克，科赫；查默斯；内格尔；布洛克；西蒙斯，查布里斯；迪昂；尚热；塞尔让；德尔屈尔 |
+| Tononi; Aaronson; Lamme; Rosenthal; Lau; Passingham; Seth, Bayne; Melloni; Leopold, Logothetis; Tong; Frässle; Tsuchiya | 托诺尼；阿伦森；拉梅；罗森塔尔；刘；帕辛厄姆；塞思，贝恩；梅洛尼；利奥波德，洛戈塞蒂斯；汤；弗雷斯勒；土谷 |
+| Libet; Kornhuber, Deecke; Schurger, Sitt; Soon, Haynes; Trevena, Miller; Owen; Monti; Bodien; Massimini, Casali; Casarotto | 利贝特；科恩胡伯，德克；舒尔格，西特；孙，海恩斯；特雷维纳，米勒；欧文；蒙蒂；博迪恩；马西米尼，卡萨利；卡萨罗托 |
+
 ## Names
 
 | English | 中文 |

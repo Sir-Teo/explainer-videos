@@ -176,4 +176,47 @@ PARTS = [
               ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=27, level="M", widget="masked",
+        question="What is the difference between information the brain uses and information you experience?",
+        story="A man with a damaged visual cortex insists he sees nothing in half his visual field, and when forced "
+              "to guess, points to objects there almost perfectly. The contrastive method makes the question "
+              "experimental: hold the stimulus fixed and vary awareness. A model of masking shows the trap in it, "
+              "since a strict criterion for saying 'seen' manufactures unconscious perception from one "
+              "representation. Rivalry alternates by inhibition and adaptation; no-report designs strip away activity "
+              "that belongs to reporting; the workspace ignites all or none; integrated information can be computed "
+              "for small networks; and the two theories, tested on terms their authors agreed in advance, each lost "
+              "something. Libet's readiness potential can be accumulated noise, and some unresponsive patients "
+              "follow commands with their brains.",
+        handoff="Motivation begins Act VI in Part 28; awareness before language is Part 30; experience as the "
+                "brain's best guess is Part 58; and machine consciousness is Part 60.",
+        outside="Part 12's signal detection and meta-d', Part 18's attention, and Part 25's accumulators. "
+                "Probability, mutual information and simple differential equations.",
+        objectives={
+            "U": ["Describe the contrastive method, blindsight and inattentional blindness.",
+                  "Explain the global workspace and integrated information theories and one prediction of each.",
+                  "Describe Libet's experiment and the accumulator reading of it."],
+            "M": ["Compute accuracy on unseen trials in a signal-detection model of masking, and its dependence on "
+                  "the criterion.",
+                  "Simulate binocular rivalry and an ignition network, and read off their signatures.",
+                  "Compute effective information and phi for a small Boolean network."],
+            "D": ["Explain why above-chance guessing on unseen trials does not by itself show unconscious perception.",
+                  "Design a no-report test that separates the theories' predictions."],
+            "I": ["Explain what anaesthesia monitors and brain-based tests in disorders of consciousness can and "
+                  "cannot show."],
+        },
+        results=[
+            ("Unseen accuracy", r"P(\text{correct} \mid |x| < c) = \frac{\Phi(c - \mu) - \Phi(-\mu)}"
+                                r"{\Phi(c - \mu) - \Phi(-c - \mu)}"),
+            ("Effective information", r"\mathrm{EI}(A \to B) = I\big(A^{H_{\max}}_t ; B_{t+1}\big)"),
+            ("Integrated information", r"\Phi = \mathrm{EI}(A \to B) + \mathrm{EI}(B \to A) \ \text{at the "
+                                       r"minimum information bipartition}"),
+            ("Leaky accumulator", r"dx = (I - kx)\,dt + c\,dW"),
+            ("Complexity index", r"\mathrm{PCI} = \frac{c_{LZ}(S)\,\log_2 L}{L\,H(p)}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 11, 12, 13), D=(7, 8, 9, 10, 15), I=(14,),
+        also=(("Psyche's workspace module", "explainer/psychology/psyche/workspace.py"),
+              ("Its tests", "tests/psychology/test_workspace.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

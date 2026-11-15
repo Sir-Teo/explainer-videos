@@ -102,5 +102,8 @@ Modules so far, with the part that introduces each:
                          theory, certainty equivalents and the fourfold pattern; choice models fitted and
                          cross-validated; natural frequencies; take-the-best; the hot-hand bias; discounting;
                          choices from samples; decision by sampling
+``workspace``       27   masking as one signal read twice (the criterion problem); a rivalry oscillator; a
+                         two-stage ignition network; effective information and Φ (Tononi 2004); Schurger's
+                         accumulator; Lempel–Ziv complexity and the perturbational complexity index
 =================  ====  ===============================================================================
 """

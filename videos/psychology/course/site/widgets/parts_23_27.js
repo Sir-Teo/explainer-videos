@@ -511,4 +511,125 @@
       note: "Nothing you choose is stored or sent. The ladder halves the range four times for each gamble, so your sure amounts are good to within about 3 dollars. Prospect theory's curves use Tversky and Kahneman's 1992 values: for gains (green), a 5% chance of 100 is worth about 10, more than its expected 5; for losses (red, by size), the pattern flips. Seeking risk for unlikely gains and likely losses, avoiding it for likely gains and unlikely losses, is the fourfold pattern.",
     });
   };
+  // ---- Part 27: masking on you.  An arrow for a few frames, a mask, a guess, and whether you saw it --------------
+  W.masked = function (el) {
+    var w = null, SEEN = "#7ec8f5", UNSEEN = "#9aa4b2", GOLD = "#f2c14e";
+    var FRAMES = [1, 2, 3, 5, 8];           // target durations, in display frames (about 17 ms each at 60 Hz)
+    var st = { phase: "idle", plan: [], k: 0, log: [], dir: 0, frames: 0, guess: -1, raf: 0 };
+    function start(seed, n) {
+      var r = QB.rng(seed * 104729 + 27), i, plan = [];
+      for (i = 0; i < n; i++) plan.push({ frames: FRAMES[i % FRAMES.length], dir: r() < 0.5 ? 0 : 1 });
+      for (i = plan.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), t = plan[i]; plan[i] = plan[j]; plan[j] = t; }
+      st.plan = plan; st.k = 0; st.log = []; next();
+    }
+    function next() {
+      if (st.k >= st.plan.length) { st.phase = "done"; if (w) w.render(); return; }
+      var tr = st.plan[st.k]; st.dir = tr.dir; st.frames = tr.frames; st.guess = -1;
+      st.phase = "fix"; if (w) w.render();
+      task.later(function () {
+        st.phase = "target"; var left = st.frames;
+        function tick() {
+          if (st.phase !== "target") return;
+          if (w) w.render();
+          left -= 1;
+          if (left <= 0) {
+            st.raf = requestAnimationFrame(function () {
+              st.phase = "mask"; if (w) w.render();
+              task.later(function () { st.phase = "dir"; if (w) w.render(); }, 250);
+            });
+          } else st.raf = requestAnimationFrame(tick);
+        }
+        st.raf = requestAnimationFrame(tick);
+      }, 600);
+    }
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return st.phase === "dir" || st.phase === "vis"; },
+      respond: function (side) {
+        if (st.phase === "dir") { st.guess = side; task.count++; st.phase = "vis"; if (w) w.render(); return; }
+        if (st.phase === "vis") {
+          st.log.push({ frames: st.frames, correct: st.guess === st.dir, seen: side === 1 });
+          task.count++; st.k++; st.phase = "pause"; if (w) w.render();
+          task.later(next, 300);
+        }
+      },
+    });
+    function summary() {
+      var by = FRAMES.map(function (f) {
+        var L = st.log.filter(function (r) { return r.frames === f; });
+        var seen = L.filter(function (r) { return r.seen; }).length, right = L.filter(function (r) { return r.correct; }).length;
+        return { f: f, n: L.length, pSeen: L.length ? seen / L.length : NaN, acc: L.length ? right / L.length : NaN };
+      });
+      var un = st.log.filter(function (r) { return !r.seen; }), unRight = un.filter(function (r) { return r.correct; }).length;
+      return { by: by, nUnseen: un.length, accUnseen: un.length ? unRight / un.length : NaN };
+    }
+    function arrow(ctx, b, dir, col) {
+      ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 7; ctx.lineCap = "round";
+      var s = dir === 1 ? 1 : -1, L = 36;
+      ctx.beginPath(); ctx.moveTo(b.cx - s * L, b.cy); ctx.lineTo(b.cx + s * L, b.cy);
+      ctx.moveTo(b.cx + s * L, b.cy); ctx.lineTo(b.cx + s * (L - 20), b.cy - 18);
+      ctx.moveTo(b.cx + s * L, b.cy); ctx.lineTo(b.cx + s * (L - 20), b.cy + 18); ctx.stroke(); ctx.restore();
+    }
+    function mask(ctx, b) {
+      var r = QB.rng(st.k * 31 + 7), i;
+      ctx.save(); ctx.strokeStyle = "#e8edf3"; ctx.lineWidth = 6; ctx.lineCap = "round";
+      for (i = 0; i < 22; i++) {
+        var x = b.cx + (r() - 0.5) * 110, y = b.cy + (r() - 0.5) * 70;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + (r() - 0.5) * 70, y + (r() - 0.5) * 50); ctx.stroke();
+      }
+      ctx.restore();
+    }
+    w = QB.widget(el, {
+      title: "Masking: did you see it?",
+      sub: "An arrow flashes for a few frames, then a jumble of lines covers it. First guess its direction: F (or tap left) for left, J (or tap right) for right. Then say whether you saw it at all: F for no, J for yes. Guess even when you saw nothing.",
+      panels: 2, height: 320, weights: [1.1, 1],
+      controls: [{ k: "n", label: "Trials", min: 20, max: 60, step: 10, value: 30, fmt: function (x) { return x.toFixed(0); } }],
+      buttons: [
+        { label: "Start", act: function (state, v) { start(state.seed, v.n); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); cancelAnimationFrame(st.raf); st.phase = "idle"; st.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (st.phase === "fix") {
+          ctx.save(); ctx.strokeStyle = GOLD; ctx.lineWidth = 3; ctx.beginPath();
+          ctx.moveTo(b.cx - 10, b.cy); ctx.lineTo(b.cx + 10, b.cy); ctx.moveTo(b.cx, b.cy - 10); ctx.lineTo(b.cx, b.cy + 10);
+          ctx.stroke(); ctx.restore();
+        } else if (st.phase === "target") {
+          arrow(ctx, b, st.dir, "#e8edf3");
+        } else if (st.phase === "mask") {
+          mask(ctx, b);
+        } else if (st.phase === "dir") {
+          T.message(ctx, b, "Which way did it point?", "F (or left half) for left, J (or right half) for right. Guess if you saw nothing.");
+        } else if (st.phase === "vis") {
+          T.message(ctx, b, "Did you see the arrow at all?", "F (or left half): no, nothing.   J (or right half): yes, at least a glimpse.");
+        } else if (st.phase === "done") {
+          T.message(ctx, b, "Done.", "On the right: how often you saw it, and how often you were right when you said you did not.");
+        } else if (st.phase === "pause") {
+          T.message(ctx, b, "");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Look at the cross; the arrow appears in the middle.");
+        }
+        var a = g[1].axes({ x: [0, 9], y: [0, 1], xticks: [1, 2, 3, 5, 8], yticks: [0, 0.5, 1],
+          title: "Seen, and right when unseen", xlabel: "arrow duration (frames)", ylabel: "proportion" });
+        a.hline(0.5, { color: C.muted, dash: [4, 4] });
+        var s = summary(), xs = [], ps = [], xa = [], pa = [];
+        s.by.forEach(function (r) { if (r.n) { xs.push(r.f); ps.push(r.pSeen); xa.push(r.f); pa.push(r.acc); } });
+        if (xs.length) { a.line(xs, ps, { color: SEEN, width: 2 }); a.dots(xs, ps, { color: SEEN, r: 5 }); }
+        if (xa.length) { a.line(xa, pa, { color: GOLD, width: 2 }); a.dots(xa, pa, { color: GOLD, r: 4 }); }
+        if (!isNaN(s.accUnseen)) a.hline(s.accUnseen, { color: UNSEEN, width: 2, dash: [2, 3] });
+        a.legend([["said seen", SEEN], ["right (all trials)", GOLD], ["right when unseen", UNSEEN]], { pos: "br" });
+      },
+      readout: function () {
+        var s = summary(), out = [["trials done", String(st.log.length)]];
+        if (st.log.length) {
+          var seen = st.log.filter(function (r) { return r.seen; }).length;
+          out.push(["said seen", Math.round(100 * seen / st.log.length) + "%"]);
+          out.push(["unseen trials", String(s.nUnseen)]);
+          if (s.nUnseen) out.push(["right when unseen", Math.round(100 * s.accUnseen) + "% (chance 50%)"]);
+        }
+        return out;
+      },
+      note: "Nothing you do is stored or sent. A display frame is about 17 ms on a 60 Hz screen, but browsers and screens differ, so the durations are approximate. If you were right well above half the time on trials you called unseen, that is the effect this part is about; but remember the criterion problem: the stricter your standard for saying yes, the more of your ordinary seeing ends up counted as unseen.",
+    });
+  };
 })();

@@ -891,14 +891,14 @@ shown(7, "SCOVILLE_MILNER_1957", "one patient, told as the case it was; what it 
       "Part 20, where it is again a single case")
 shown(7, "AZEVEDO_2009", "a count, used as a number")
 shown(7, "RAICHLE_2002", "a measurement of energy use, used as a number")
-shown(7, "WEISKRANTZ_1974", "one patient, described without figures; blindsight is entered with awareness",
-      row_in=27)
+shown(7, "WEISKRANTZ_1974", "one patient, described without figures; blindsight's own row is in Part 27, with "
+      "awareness")
 shown(7, "MAH_2014", "a methods finding shown at the frontier, beside the series' own simulation")
 shown(7, "WIESEL_HUBEL_1963", "the critical period for one eye's hold on the cortex: told as history; entered with "
       "development", row_in=30)
 shown(7, "MERZENICH_1984", "remapping after the loss of a finger: told as history, without figures")
-shown(7, "GAZZANIGA_1978", "the split-brain experiments: told as the cases they were; what they show about "
-      "awareness is entered in Part 27", row_in=27)
+shown(7, "GAZZANIGA_1978", "the split-brain experiments: told as the cases they were, a handful of patients "
+      "studied in depth; Part 27 discusses awareness without them")
 
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -1161,7 +1161,8 @@ add(Finding(
 shown(10, "KLEITMAN_1938", "an experiment on two people, told as history; the clock's period is the next entry")
 shown(10, "CZEISLER_1999", "physiology: a property of the body's clock, not a claim about the mind")
 shown(10, "BORBELY_1982", "a model, tested here against its own predictions")
-shown(10, "HOBSON_1977", "two theories of dreaming, presented as an open dispute", row_in=27)
+shown(10, "HOBSON_1977", "two theories of dreaming, presented as an open dispute between theories, not as a "
+      "finding to replicate")
 shown(10, "SIEGEL_1982", "an animal experiment on tolerance; its row is entered with conditioning, in Part 16")
 shown(10, "SOLOMON_CORBIT_1974", "a theory, shown as a model", row_in=41)
 shown(10, "DUNSTER_2018", "a before-and-after comparison in two schools, described as that")
@@ -1427,8 +1428,8 @@ add(Finding(
 ))
 
 shown(13, "JORDAN_2010", "one exceptional observer, shown at the frontier as a possibility, not a general finding")
-shown(13, "MILNER_1991", "a single patient, told as the case that founded a theory; vision without awareness, with "
-      "blindsight, is entered in Part 27", row_in=27)
+shown(13, "MILNER_1991", "a single patient, told as the case that founded a theory; vision without awareness has "
+      "its row in Part 27, as blindsight")
 shown(13, "COLOUR_TABLES", "standard tables, the measurements on which colour science is built, not a finding")
 shown(13, "OKABE_ITO", "a design recommendation, not a finding")
 
@@ -3257,6 +3258,112 @@ add(Finding(
     checked="2026-11-15",
 ))
 
+add(Finding(
+    key="blindsight", part=27, title=r"Blindsight",
+    claim="After damage to primary visual cortex, people can locate and discriminate stimuli in the blind field "
+          "that they say they do not see.",
+    original=Study("Weiskrantz, Warrington, Sanders and Marshall", 1974, n="1 patient (D.B.)",
+                   design="forced-choice localization and discrimination in the blind half-field",
+                   found="far above chance, with no reported seeing"),
+    status="replicated",
+    record=(Study("Campion, Latto and Smith", 1983, n="a review", design="scattered light and spared cortex as "
+                  "explanations", found="some results explicable by light scattered into the seeing field"),
+            Study("Cowey and Stoerig", 1995, n="monkeys with V1 lesions", design="forced choice against detection",
+                  found="targets located but classified as blank"),
+            Study("Persaud, McLeod and Cowey", 2007, n="1 patient (G.Y.)", design="post-decision wagering",
+                  found="accurate guesses, wagers that did not follow them"),
+            Study("Overgaard, Fehl, Mouridsen, Bergholt and Cleeremans", 2008, n="1 patient",
+                  design="a graded awareness scale", found="faint glimpses reported on trials a yes or no called "
+                  "unseen"),
+            Study("Schmid et al.", 2010, n="monkeys with V1 lesions", design="the LGN silenced",
+                  found="blindsight abolished")),
+    note="The effect replicates in patients and monkeys; whether it is degraded conscious vision rather than none "
+         "is contested.",
+    sources=("L. Weiskrantz, E. K. Warrington, M. D. Sanders and J. Marshall, Visual capacity in the hemianopic "
+             "field following a restricted occipital ablation, Brain 97 (1974) 709-728",
+             "J. Campion, R. Latto and Y. M. Smith, Is blindsight an effect of scattered light, spared cortex, and "
+             "near-threshold vision?, Behavioral and Brain Sciences 6 (1983) 423-448",
+             "A. Cowey and P. Stoerig, Blindsight in monkeys, Nature 373 (1995) 247-249",
+             "N. Persaud, P. McLeod and A. Cowey, Post-decision wagering objectively measures awareness, Nature "
+             "Neuroscience 10 (2007) 257-261",
+             "M. Overgaard, K. Fehl, K. Mouridsen, B. Bergholt and A. Cleeremans, Seeing without seeing? Degraded "
+             "conscious vision in a blindsight patient, PLoS ONE 3 (2008) e3028",
+             "M. C. Schmid et al., Blindsight depends on the lateral geniculate nucleus, Nature 466 (2010) 373-377"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="masked_semantic_priming", part=27, title=r"Unconscious semantic priming",
+    claim="A masked word or number that cannot be reported still speeds responses to a related target.",
+    original=Study("Dehaene et al.", 1998, n="volunteers, with fMRI and ERPs", design="masked number primes, 43 ms",
+                   found="congruent primes speed responses and prepare a motor response"),
+    status="replicated, smaller",
+    record=(Study("Van den Bussche, Van den Noortgate and Reynvoet (meta-analysis)", 2009, n="many studies",
+                  design="masked priming of words and numbers", found="a reliable effect, smaller than early "
+                  "reports"),
+            Study("Vadillo, Konstantinidis and Shanks", 2016, n="a review", design="the awareness tests used",
+                  found="often too weak to show that primes were unseen")),
+    note="Priming by masked stimuli is real; how large it is, and how sure we are that the primes were unseen, is "
+         "smaller than first claimed.",
+    sources=("S. Dehaene et al., Imaging unconscious semantic priming, Nature 395 (1998) 597-600",
+             "E. Van den Bussche, W. Van den Noortgate and B. Reynvoet, Mechanisms of masked priming: a "
+             "meta-analysis, Psychological Bulletin 135 (2009) 452-477",
+             "M. A. Vadillo, E. Konstantinidis and D. R. Shanks, Underpowered samples, false negatives, and "
+             "unconscious learning, Psychonomic Bulletin & Review 23 (2016) 87-102"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="libet_timing", part=27, title=r"Libet's timing",
+    claim="The readiness potential begins several hundred milliseconds before people report the urge to move.",
+    original=Study("Libet, Gleason, Wright and Pearl", 1983, n="volunteers", design="spontaneous wrist flexions "
+                   "timed on a clock", found="urge reported about 200 ms before movement; potential from about "
+                   "550 ms"),
+    status="replicated",
+    record=(Study("Haggard and Eimer", 1999, n="volunteers", design="the lateralized readiness potential",
+                  found="the timing found again, with a closer link to the lateralized potential"),
+            Study("Soon, Brass, Heinze and Haynes", 2008, n="volunteers, fMRI", design="free choice of hand",
+                  found="the choice decoded seconds early, at about 60% accuracy"),
+            Study("Trevena and Miller", 2010, n="volunteers", design="cued decisions to move or not",
+                  found="a similar potential before deciding not to move"),
+            Study("Schurger, Sitt and Dehaene", 2012, n="a model and volunteers", design="accumulated noise to a "
+                  "threshold", found="the ramp arises from averaging; interruptions answered faster at high "
+                  "activity")),
+    note="The timing replicates; that it shows an unconscious decision is contested, and the accumulator account "
+         "explains the ramp without one.",
+    sources=("B. Libet, C. A. Gleason, E. W. Wright and D. K. Pearl, Time of conscious intention to act in relation "
+             "to onset of cerebral activity (readiness-potential), Brain 106 (1983) 623-642",
+             "P. Haggard and M. Eimer, On the relation between brain potentials and the awareness of voluntary "
+             "movements, Experimental Brain Research 126 (1999) 128-133",
+             "C. S. Soon, M. Brass, H.-J. Heinze and J.-D. Haynes, Unconscious determinants of free decisions in the "
+             "human brain, Nature Neuroscience 11 (2008) 543-545",
+             "J. Trevena and J. Miller, Brain preparation before a voluntary action: evidence against unconscious "
+             "movement initiation, Consciousness and Cognition 19 (2010) 447-456",
+             "A. Schurger, J. D. Sitt and S. Dehaene, An accumulator model for spontaneous neural activity prior to "
+             "self-initiated movement, PNAS 109 (2012) E2904-E2913"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="covert_awareness", part=27, title=r"Covert awareness",
+    claim="Some patients who show no sign of awareness at the bedside follow commands by modulating their brain "
+          "activity.",
+    original=Study("Owen et al.", 2006, n="1 patient in a vegetative state", design="imagining tennis and moving "
+                   "through a house, in fMRI", found="the same areas as healthy volunteers"),
+    status="replicated",
+    record=(Study("Monti et al.", 2010, n="54 patients", design="the same imagery tasks",
+                  found="5 could modulate activity; one answered yes-or-no questions"),
+            Study("Bodien et al.", 2024, n="353 patients in several countries", design="fMRI and EEG command "
+                  "following", found="about a quarter of those without bedside command following did so")),
+    note="Found again in larger and multicentre samples; how often, and with which method, still varies.",
+    sources=("A. M. Owen et al., Detecting awareness in the vegetative state, Science 313 (2006) 1402",
+             "M. M. Monti et al., Willful modulation of brain activity in disorders of consciousness, New England "
+             "Journal of Medicine 362 (2010) 579-589",
+             "Y. G. Bodien et al., Cognitive motor dissociation in disorders of consciousness, New England Journal "
+             "of Medicine 391 (2024)"),
+    checked="2026-11-15",
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -3393,3 +3500,42 @@ shown(26, r"Peterson et al.\ (2021); \ Erev et al.\ (2017)", "methods for findin
       "choices13k data are fitted in the film")
 shown(26, r"Frey et al.\ (2017)", "the measurement of risk preference, described; traits are Part 33's",
       row_in=33)
+shown(27, r"Baars (1988); \ Crick \& Koch (1990)", "the founding programmes of the field, described")
+shown(27, r"Baars (1988); \ Dehaene, \ Kerszberg \& Changeux (1998)", "the global workspace theory, described; its "
+      "predictions are modelled by Psyche")
+shown(27, r"Dehaene \& Changeux (2011)", "a review of the workspace's signatures, described with their challenges")
+shown(27, r"Eriksen (1960); \ Ramsøy \& Overgaard (2004); \ Del Cul, \ Baillet \& Dehaene (2007)", "methods for "
+      "measuring awareness, described; the criterion problem is computed by Psyche")
+shown(27, r"Fleming, \ Weil, \ Nagy, \ Dolan \& Rees (2010); \ Fleming \& Dolan (2012)", "metacognition's neural "
+      "correlates, described; its measurement was Part 12's")
+shown(27, r"Frässle et al.\ (2014); \ Tsuchiya et al.\ (2015)", "the no-report method, described")
+shown(27, r"Koch \& Tsuchiya (2007)", "an argument from dissociations, described; attention was Part 18's")
+shown(27, r"Kornhuber \& Deecke (1965); \ Libet, \ Gleason, \ Wright \& Pearl (1983)", "the readiness potential's "
+      "discovery; Libet's timing has its row")
+shown(27, r"Lamme (2006)", "a theory, described")
+shown(27, r"Lau \& Passingham (2006); \ Lau \& Rosenthal (2011); \ Brown, \ Lau \& LeDoux (2019)", "higher-order "
+      "theories and one study in their support, described")
+shown(27, r"Laureys (2005)", "a clinical framework, described")
+shown(27, r"Leopold \& Logothetis (1996); \ Tong et al.\ (1998)", "rivalry's neural correlates, described "
+      "schematically; the rivalry model is Psyche's")
+shown(27, r"Melloni et al.\ (2021); \ Cogitate Consortium (2025)", "a single preregistered adversarial study, too "
+      "recent to have a record of its own")
+shown(27, r"Cogitate Consortium (2025)", "a single preregistered adversarial study, too recent to have a record of "
+      "its own")
+shown(27, r"Seth \& Bayne (2022)", "a review of theories")
+shown(27, r"Seth \& Bayne (2022); \ Cogitate Consortium (2025)", "a review, and the adversarial study above; the "
+      "scorecard is a judgement, marked as such")
+shown(27, r"Myles et al.\ (2004); \ Avidan et al.\ (2008); \ Pandit et al.\ (2014)", "clinical trials and an "
+      "audit in anaesthesia, described as applications")
+shown(27, r"Schnakers et al.\ (2009); \ Giacino et al.\ (2018); \ Kondziella et al.\ (2020)", "clinical diagnosis "
+      "and guidelines, described as applications")
+shown(27, r"Butlin, \ Long et al.\ (2023)", "a proposal for assessing machines, described; machines are Part 60's",
+      row_in=60)
+shown(27, r"Nagel (1974); \ Chalmers (1995); \ Block (1995)", "philosophical distinctions, not findings")
+shown(27, r"the Koch--Chalmers wager (1998, \ settled 2023)", "a wager, told as history")
+shown(27, r"Tononi (2004); \ Oizumi, \ Albantakis \& Tononi (2014); \ Tononi et al.\ (2016)", "integrated "
+      "information theory, described; its 2004 measure is computed by Psyche")
+shown(27, r"Tononi et al.\ (2016); \ Aaronson (2014); \ Fleming et al.\ (2023)", "the theory's predictions and its "
+      "critics, described")
+shown(27, r"Weiskrantz, \ Warrington, \ Sanders \& Marshall (1974); \ Weiskrantz (1986)", "the history of the "
+      "case; blindsight has its row")
