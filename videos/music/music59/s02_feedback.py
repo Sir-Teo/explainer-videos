@@ -115,7 +115,7 @@ class Feedback(SoundScene):
             pulse(snd, boxes[0], st["first"], st["second"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["second"], st["third"] - 0.4, buff=0.08)
             pulse(snd, boxes[2], st["third"], c.duration, buff=0.08)
-        res = label(rf"the second: \ 0.5 dB from the edge; \ it rings on at {d['howl_hz']:.0f} Hz \ (then 2 dB, \ then 6 dB)", font_size=19, color=TUNE).move_to(DOWN * 1.4)
+        res = label(rf"the second: \ 0.5 dB from the edge; \ it rings on at {d['howl_hz']:.0f} Hz \ (the first was 6 dB down, \ the third 2)", font_size=19, color=TUNE).move_to(DOWN * 1.4)
         with self.voiceover(
             f"The second, half a decibel from the edge: after the clap it rings on, a tone at {say(d['howl_hz'])} hertz that "
             "dies only slowly. Engineers call it a system ready to feed back. Six decibels down, the clap simply stops."

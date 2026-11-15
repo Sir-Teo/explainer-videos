@@ -121,6 +121,8 @@ LEDGER = [
      "measure": r"four Variations at -16 LUFS; the war master's peak-to-loudness ratio 6.6 dB against 13.0"},
     {"part": 58, "title": r"at five bit rates, and the residue alone", "seconds": 39.5,
      "measure": r"128 to 16 kbit/s: noise 19 dB under the mask at 128, 18 dB over it at 16"},
+    {"part": 59, "title": r"at an arena: front of house, the back row, the car park", "seconds": 49.6,
+     "measure": r"the back row 7 dB down, the car park 29 dB down and mostly bass"},
 ]
 
 

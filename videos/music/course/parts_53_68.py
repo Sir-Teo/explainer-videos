@@ -192,4 +192,37 @@ PARTS = [
         I=(1, 3, 4, 10),
         also=(("Monochord's codecs: a lossless coder, the MDCT, a masking model, a perceptual coder, ABX statistics, residual vector quantization", "explainer/music/monochord/codec.py"),),
     ),
+    Part(
+        n=59, level="U", widget="howl", prereq=(4, 49, 54, 55, 56),
+        question="Why does a microphone howl, why are loudspeakers hung in curves, and how is a stadium made to hear a band?",
+        story="In August 1965 the Beatles played Shea Stadium through the baseball announcement system and nobody, the band included, could hear them; an ear question hears our session from the stands over a crowd through a 1965-style horn system (6 dB under the crowd) and a modern one (8 dB over). Why a microphone howls: the loop, Nyquist's criterion (the real part of G H reaching one, not its magnitude), and a simulated hall in which Monochord predicts the gain before feedback (-17.9 dB) and the howl note (358 Hz), then hears it build at 358; an ear question hears a clap at 6, 0.5 and 2 dB below the edge. Ringing out with six narrow notches (+3.3 dB), heard; placement, nulls and in-ear monitors; Davis's PAG and NAG (24.5 against 26.0 dB). Point and line sources: 6 dB per doubling against about 3 near a line (2.7 at 1 kHz), and the transition distance growing with frequency (26, 103, 411 m at 250 Hz, 1 kHz, 4 kHz for an 8.4 m line). Three fields of an arena at 1 kHz: a point, a straight line and a J-shaped array (splays 0.3 to 4.2 degrees); the array heard at 10, 40 and 80 m (6.4 and 7.3 dB down). Steering. Subwoofers: a cardioid pair (0.9 m, 2.6 ms, inverted) that cancels behind at every frequency, heard from the stage; end-fire and arc delays. A delay tower (90 and 30 m: 184.7 ms), an ear question on alignment; the speed of sound and temperature (3 ms drift over 10 degrees), refraction and wind; ISO 9613-1's air absorption (0.5, 3, 11 and 36 dB over 100 m at 1, 4, 8, 16 kHz), heard. Dual-channel measurement with the music: transfer function, coherence and the delay found exactly; pitfalls and system tuning. Wireless: third-order intermodulation, an even 24-carrier grid with every carrier hit against Monochord's planner's 20 clean carriers around three TV channels; in-ear monitors; Dante, AES67, PTP and the latency budget. Speech: Houtgast and Steeneken's modulation transfer and the STI over reverberation and noise (0.74 dry and clean to 0.23 at 6 s); an ear question hears one announcement in a studio (0.64), a hall (0.37) and a station (0.15); remedies. Hearing health: hair cells, hidden hearing loss, the equal-energy rule, a night's doses (2016 per cent at the barrier, 16 with earplugs mid-arena), the EU directive and the WHO's 2022 venue standard. Frontier: immersive object-based live systems, sound zones and off-site noise. Variation 59: the Tune at the mixing desk, the back row and the car park.",
+        handoff="Ticket prices and the cost disease of live performance in Part 60; machines that follow a score on "
+                "stage in Part 62; one voice pulled out of a room in Part 64; measuring what audiences hear in Part 67; "
+                "the concert that closes the series in Part 68.",
+        outside="Part 4 for the cochlea, loudness and hearing damage; Part 49 for impulse responses, the image method and "
+                "measurement by sweeps; Part 50 for intermodulation; Part 54 for microphone patterns and arrays; Part 55 for "
+                "rooms, precedence and wave fields; Part 56 for the mix. Complex numbers and phase, decibels, the FFT, "
+                "interference of waves.",
+        objectives={
+            "U": ["Hear a 1965 stadium system against a modern one, a clap at three margins below feedback, and a howl building.",
+                  "Hear a voice before and after ringing out, a line array at three distances, and subwoofers from behind the stage.",
+                  "Hear a delay tower aligned and not, the air over 10 and 100 m, and one announcement in three rooms."],
+            "M": ["Derive the gain before feedback by Nyquist's criterion, and the potential and needed acoustic gain.",
+                  "Compute point and line sources' fields, a cardioid subwoofer pair, delay-tower times and air absorption.",
+                  "Measure a transfer function with music, plan carriers free of third-order products, and compute STI and dose."],
+            "D": ["Find array settings that hold a festival's off-site noise limit with 95 per cent confidence over the weather."],
+            "I": ["Design, align and tune a system: gain before feedback, coverage, delays, a frequency plan, intelligibility, safe levels."],
+        },
+        results=[
+            ("Nyquist", r"\text{howl where } G\,\mathrm{Re}\,H(f) = 1: \ G_{\max} = 1/\max_f \mathrm{Re}\,H(f)"),
+            ("PAG", r"\mathrm{PAG} = 20\log_{10}\frac{D_0 D_1}{D_s D_2} - 10\log_{10}\mathrm{NOM} - 6\ \text{dB}"),
+            ("Delay tower", r"\tau = (d_{\text{main}} - d_{\text{tower}})/c + 10\ \text{ms}, \ c = 331.3 + 0.606\,T"),
+            ("STI", r"m(F) = \bigl[1 + (2\pi F T/13.8)^2\bigr]^{-1/2}\,\bigl(1 + 10^{-\mathrm{SNR}/10}\bigr)^{-1}"),
+            ("Dose", r"t_{\text{allowed}} = 8\ \text{h} \times 2^{-(L - 85)/3}"),
+        ],
+        U=(0, 1, 2, 4, 5, 6, 9),
+        D=(11,),
+        I=(3, 7, 8, 10),
+        also=(("Monochord's live sound: feedback by Nyquist, ringing out, PAG/NAG, fields of sources and arrays, cardioid subwoofers, delay towers, ISO 9613-1 air absorption, dual-channel measurement, intermodulation planning, STI, noise dose", "explainer/music/monochord/live.py"),),
+    ),
 ]

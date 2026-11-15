@@ -265,7 +265,7 @@ def plan_channels(lo: float, hi: float, n: int, step: float = 0.025, spacing: fl
     grid = np.arange(lo, hi + 1e-9, step)
     chosen: list = []
     for f in grid:
-        if any(a <= f <= b for a, b in exclude):
+        if any(a - 1e-6 <= f <= b + 1e-6 for a, b in exclude):
             continue
         if any(abs(f - c) < spacing for c in chosen):
             continue

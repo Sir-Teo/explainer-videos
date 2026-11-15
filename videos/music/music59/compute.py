@@ -154,7 +154,7 @@ def compute_feedback() -> dict:
     # the loop run in time: a clap, at three margins below the edge, and one just above
     rng = np.random.default_rng(1)
     clap = np.zeros(int(2.4 * SR))
-    clap[:240] = rng.standard_normal(240) * np.hanning(240) * 0.3
+    clap[:2880] = rng.standard_normal(2880) * np.hanning(2880) * 0.3             # 60 ms: a clap with some body
     rings = {}
     for name, margin in (("m6", -6.0), ("m2", -2.0), ("m05", -0.5)):
         y = LV.closed_loop(clap, ir, fb["max_gain_db"] + margin, 2.4)

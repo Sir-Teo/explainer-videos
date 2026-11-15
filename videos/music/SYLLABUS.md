@@ -2203,14 +2203,35 @@ ABX test (12 of 16; a 70 % listener passes 45 % of the time); five generations; 
 *Story:* August 1965: fifty-five thousand people fill a baseball stadium and nobody, including the band, can hear
 the band. The modern concert system was built to solve that night. The part works out why a microphone howls,
 why speakers are hung in curved lines, and how loud is too loud.
+1. Hook: an ear question (which was 1965?); Shea Stadium; after Shea; the plan.
+2. Why a microphone howls: the loop; Nyquist's criterion; the loop's response in a hall; an ear question (which clap was nearest the edge?); over the edge.
+3. Ringing out, and monitors: six notches; heard; the cheaper decibels; potential and needed acoustic gain; monitors.
+4. Point and line sources: spheres and cylinders; level against distance; the transition distance; a line or a row of points.
+5. Arrays and curvature: three fields; the J; three seats heard; steering.
+6. Subwoofer arrays: bass goes everywhere; a cardioid pair; heard behind the stage; more ways to aim bass.
+7. Delay towers, air and weather: a tower; an ear question (which was aligned?); weather; what the air takes; heard.
+8. Measuring a system: dual-channel measurement; measured with the Tune; what can go wrong; tuning a system.
+9. Wireless and networks: intermodulation; a frequency plan; in-ear monitors; networks and clocks.
+10. Speech in big rooms: the STI; STI over reverberation and noise; an ear question (three rooms); what helps.
+11. Hearing health: what loud sound does; the equal-energy rule; one night's doses; rules and remedies.
+12. Frontier: immersive live sound; quiet neighbours; the research problem.
+13. Variation 59: the Tune at the mixing desk, the back row and the car park. Outro: problems, payoffs.
+
 *Covers:* gain before feedback and the stability criterion; ringing out; monitors; point and line sources;
 arrays, lobes and curvature; subwoofer arrays; delay towers; wind and temperature; measurement with transfer
 functions; wireless planning; networks and clocks; intelligibility; noise dose and protecting hearing.
-*Built and computed:* field maps of arrays; a feedback loop that predicts its howl; an intermodulation-free
-channel planner; a dose calculator.
-*Variation 59:* the Tune at an arena: front of house, the back row, the car park.
-*Frontier:* steered arrays; immersive live systems; festival noise control.
-*Reading:* McCarthy, *Sound Systems: Design and Optimization*; Davis & Patronis; Ballou.
+*Built and computed:* `monochord/live.py`: the gain before feedback by Nyquist's criterion in a simulated hall
+(−17.9 dB, the howl at 358 Hz, found at 358 in the closed loop run in time); ringing out (+3.3 dB in six notches);
+PAG and NAG; fields of a point, a straight and a J-shaped line (2.7 dB per doubling near the line at 1 kHz, transition
+at 26/103/411 m); a cardioid subwoofer pair cancelling exactly behind; delay towers (184.7 ms, 3 ms drift over 10 °C);
+ISO 9613-1 air absorption; dual-channel measurement with music (the delay found to the sample); an
+intermodulation-free channel planner (20 clean carriers against an even grid's 24 hits); the STI (0.64/0.37/0.15 in
+three rooms); a dose calculator (2016 % at the barrier).
+*Variation 59:* the Tune at an arena: front of house, the back row (7 dB down), the car park (29 dB down, mostly bass).
+*Frontier:* immersive live systems; sound zones and festival noise control; a research problem on weather-robust
+array settings.
+*Reading:* McCarthy, *Sound Systems: Design and Optimization*; Davis & Patronis; Ballou; Houtgast and Steeneken;
+IEC 60268-16; ISO 9613-1.
 
 ### Part 60 · The Business of Music (~55)
 *Story:* Follow one stream's fraction of a cent from a phone to a songwriter. On the way it passes two

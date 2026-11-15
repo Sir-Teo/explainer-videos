@@ -371,4 +371,73 @@
       note: "A failed short test does not show that a difference is inaudible: a listener right 70 % of the time passes a 16-trial test less than half the time. Make B's noise quieter until you cannot tell, then count how often you were right."
     });
   };
+
+  // ---- Part 59: why a microphone howls ----------------------------------------------------------------------------
+  function loopH(f, v) {
+    // the acoustic path from loudspeaker to microphone: the direct sound and one reflection, through a one-pole
+    // roll-off (the loudspeaker and microphone); returns [re, im] of H(f) before the amplifier's gain
+    var c = 343, d1 = v.dist, d2 = v.dist + v.extra, w = 2 * Math.PI * f;
+    var a1 = 1 / d1, a2 = v.refl / d2, t1 = d1 / c, t2 = d2 / c;
+    var re = a1 * Math.cos(w * t1) + a2 * Math.cos(w * t2), im = -a1 * Math.sin(w * t1) - a2 * Math.sin(w * t2);
+    var x = f / 3000, lr = 1 / (1 + x * x), li = -x / (1 + x * x);              // 1 / (1 + i f/fc)
+    var hp = f / 120, hr = hp * hp / (1 + hp * hp), hi = hp / (1 + hp * hp);    // i (f/fh) / (1 + i f/fh)
+    var r1 = re * lr - im * li, i1 = re * li + im * lr;
+    return [r1 * hr - i1 * hi, r1 * hi + i1 * hr];
+  }
+  function edge(v) {
+    var best = -1e9, at = 0;
+    for (var e = 2; e <= Math.log10(8000); e += 0.0005) {
+      var f = Math.pow(10, e), h = loopH(f, v);
+      if (h[0] > best) { best = h[0]; at = f; }
+    }
+    return { gain: -20 * Math.log10(best), f: at };
+  }
+  function howlSound(v, g_db) {
+    var sr = 44100, n = Math.round(2.2 * sr), y = new Float32Array(n), c = 343;
+    var d1 = Math.round(v.dist / c * sr), d2 = Math.round((v.dist + v.extra) / c * sr);
+    var g = Math.pow(10, g_db / 20), a1 = g / v.dist, a2 = g * v.refl / (v.dist + v.extra);
+    var al = 1 - Math.exp(-2 * Math.PI * 3000 / sr), ah = Math.exp(-2 * Math.PI * 120 / sr), lp = 0, hpY = 0, hpX = 0, burst = Math.round(0.06 * sr);
+    for (var i = 0; i < n; i++) {
+      var x = i < burst ? (Math.random() * 2 - 1) * 0.3 * Math.sin(Math.PI * i / burst) : 0;
+      var u = (i >= d1 ? a1 * y[i - d1] : 0) + (i >= d2 ? a2 * y[i - d2] : 0);
+      lp += al * (u - lp);
+      hpY = ah * (hpY + lp - hpX); hpX = lp;
+      y[i] = Math.tanh(x + hpY);                                    // the amplifier clips instead of exploding
+    }
+    for (var j = 0; j < n; j++) y[j] *= 0.5 * Math.min(1, (n - j) / 2000);
+    return y;
+  }
+
+  W.howl = function (el) {
+    QB.widget(el, {
+      title: "Why a microphone howls",
+      sub: "A microphone hears its loudspeaker twice: directly and by one reflection. The plot is the real part of the loop's response (the loudspeaker-to-microphone path) on a log frequency axis, with the amplifier's gain added; where a peak reaches the line at 0 dB, the loop howls at that frequency (Nyquist's criterion). Play a clap into the loop at the gain you set.",
+      panels: 1, height: 240,
+      controls: [{ k: "dist", label: "Microphone to loudspeaker", min: 1, max: 15, step: 0.1, value: 4, fmt: function (x) { return x.toFixed(1) + " m"; } },
+                 { k: "extra", label: "Reflection's extra path", min: 0.5, max: 20, step: 0.1, value: 6, fmt: function (x) { return x.toFixed(1) + " m"; } },
+                 { k: "refl", label: "Reflection's strength", min: 0, max: 0.95, step: 0.01, value: 0.6, fmt: function (x) { return x.toFixed(2); } },
+                 { k: "margin", label: "Gain against the edge", min: -12, max: 2, step: 0.1, value: -3, fmt: function (x) { return (x > 0 ? "+" : "") + x.toFixed(1) + " dB"; } }],
+      buttons: [{ label: "Play a clap", act: function (s) { var e = edge(s.v); s.sound = play(howlSound(s.v, e.gain + s.v.margin), 44100); } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var e = edge(v), g = e.gain + v.margin, xs = [], ys = [];
+        for (var q = 2; q <= Math.log10(8000); q += 0.001) {
+          var h = loopH(Math.pow(10, q), v);
+          xs.push(q); ys.push(h[0] > 0 ? Math.max(-40, 20 * Math.log10(h[0]) + g) : -40);
+        }
+        var a = gr[0].axes({ x: [2, Math.log10(8000)], y: [-40, 6], title: "Re of the loop (dB, gain included) against log10 of frequency (Hz)", xlabel: "log10 Hz" });
+        a.line([2, Math.log10(8000)], [0, 0], { color: "#C0504D", width: 1.5 });
+        a.line(xs, ys, { color: C.idea, width: 2 });
+        a.line([Math.log10(e.f), Math.log10(e.f)], [-40, 6], { color: "#3A4250", width: 1.5 });
+      },
+      readout: function (v, s) {
+        var e = edge(v);
+        return [["it will howl at", e.f.toFixed(0) + " Hz"], ["the largest stable gain", e.gain.toFixed(1) + " dB"],
+                ["now", v.margin < 0 ? (-v.margin).toFixed(1) + " dB under the edge: it rings, then stops" : "past the edge: it howls"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Move the microphone further from the loudspeaker and the edge rises by 6 dB per doubling of distance, while the howl note jumps between the peaks of the comb that the direct sound and the reflection make. Set the gain 0.5 dB under the edge and the clap rings on at the howl note; set it 6 dB under and it simply stops."
+    });
+  };
 })();

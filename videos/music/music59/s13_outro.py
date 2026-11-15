@@ -20,15 +20,15 @@ class Outro(SoundScene):
         st = d["starts"]
         keys = d["names"]
         lv = d["levels_db"]
-        names = {"foh": (r"front of house, \ 30 m", TUNE), "back": (r"the back row, \ 80 m", BLUE), "carpark": (r"the car park, \ outside", EAR)}
+        names = {"foh": (r"the mixing desk", TUNE), "back": (r"the back row, \ 100 m", BLUE), "carpark": (r"the car park, \ outside", EAR)}
         head = VGroup(label(r"Variation 59", font_size=48, color=TUNE), label(r"one show, \ three places", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.5, aligned_edge=DOWN).to_edge(UP, buff=0.3)
         cells = VGroup(*[VGroup(RoundedRectangle(width=3.4, height=1.3, corner_radius=0.12, stroke_color=names[k][1]),
                                 VGroup(label(names[k][0], font_size=17, color=names[k][1]), label(rf"{lv[k]:+.0f} dB", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.12)).arrange(ORIGIN) for k in keys]).arrange(RIGHT, buff=0.35).move_to(DOWN * 0.2)
         note = label(r"our session playing the Tune through a simulated arena system: \ levels as heard; \ headphones or real bass help", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here our session plays it "
-            "through a simulated arena system, and you hear it from three places: the mixing desk, thirty metres out; the back "
-            "row, at eighty; and the car park outside, through the wall. Levels are as heard."
+            "through a simulated arena system, and you hear it from three places: the mixing desk; the back row, a hundred "
+            "metres from the stage; and the car park outside, through a concrete wall. Levels are as heard."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -51,7 +51,7 @@ class Outro(SoundScene):
         head = label(r"the Variations ledger", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             f"Row fifty-nine of the ledger. The back row hears the show only {say(-lv['back'])} decibels down from the desk, "
-            f"with the treble a little dulled by the air; the car park hears it {say(-lv['carpark'])} decibels down, and mostly "
+            f"as Chapter 4's line array promised, with the treble a little dulled by the air; the car park hears it {say(-lv['carpark'])} decibels down, and mostly "
             "bass, the part no wall stops and the neighbours complain about."
         ):
             self.play(FadeIn(head), FadeIn(led, shift=UP * 0.2))
