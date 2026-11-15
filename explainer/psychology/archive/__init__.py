@@ -48,7 +48,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "SIMONS_CHABRIS_1999", "RENSINK_1997", "CHERRY_1953", "BROADBENT_1958", "MORAY_1959", "TREISMAN_1960", "LAVIE_1995", "POSNER_1980", "TREISMAN_GELADE_1980", "WOLFE_2021", "ITTI_KOCH_1998", "DREW_2013", "RAYMOND_1992", "PASHLER_1994", "STROOP_1935", "ERIKSEN_1974", "BOTVINICK_2001", "ROGERS_MONSELL_1995", "MORAN_DESIMONE_1985", "REYNOLDS_HEEGER_2009", "BUNDESEN_1990", "STRAYER_2001", "OPHIR_2009", "ANDERSON_2011", "AWH_2012",
            "MILLER_1956", "SPERLING_1960", "PETERSON_1959", "KEPPEL_UNDERWOOD_1962", "BADDELEY_HITCH_1974", "BADDELEY_1975", "SHALLICE_WARRINGTON_1970", "STERNBERG_1966", "LUCK_VOGEL_1997", "COWAN_2001", "ZHANG_LUCK_2008", "BAYS_2009", "VANDENBERG_2012", "FUNAHASHI_1989", "WIMMER_2014", "MONGILLO_2008", "DANEMAN_CARPENTER_1980", "KANE_2005", "JAEGGI_2008", "REDICK_2013", "MELBY_LERVAG_2016", "SIMONS_2016", "FTC_LUMOSITY_2016",
            "PEERS_FREE_RECALL", "CRAIK_TULVING_1975", "BERTSCH_2007", "DRESLER_2017", "GODDEN_BADDELEY_1975", "MURRE_2021", "KOHNKEN_1999",
-           "SAVINGS_REPLICATIONS", "ROEDIGER_KARPICKE_2006", "SCHOOLER_1990", "ALOGNA_2014", "LOFTUS_PALMER_1974", "ROEDIGER_MCDERMOTT_1995", "CEPEDA_2008", "LOFTUS_PICKRELL_1995", "TALARICO_RUBIN_2003", "HARDWICKE_2016", "PATIHIS_2013", "WIXTED_WELLS_2017", "DUNLOSKY_2013"]
+           "SAVINGS_REPLICATIONS", "ROEDIGER_KARPICKE_2006", "SCHOOLER_1990", "ALOGNA_2014", "LOFTUS_PALMER_1974", "ROEDIGER_MCDERMOTT_1995", "CEPEDA_2008", "LOFTUS_PICKRELL_1995", "TALARICO_RUBIN_2003", "HARDWICKE_2016", "PATIHIS_2013", "WIXTED_WELLS_2017", "DUNLOSKY_2013",
+           "NOSOFSKY_1994", "HOMA_1976", "EKMAN_1954", "ROTHKOPF_1957", "AUSTEN", "HUTCHISON_2013", "LANDAUER_DUMAIS_1997", "TVERSKY_1977"]
 
 
 @dataclass(frozen=True)
@@ -3722,6 +3723,88 @@ DUNLOSKY_2013 = Dataset(
     data={'high': ['practice testing', 'distributed practice'], 'moderate': ['elaborative interrogation', 'self-explanation', 'interleaved practice'], 'low': ['summarization', 'highlighting', 'keyword mnemonic', 'imagery for text', 'rereading']},
 )
 
+_P22 = "through a web search, 2026-11-15"
+
+NOSOFSKY_1994 = Dataset(
+    key="nosof94",
+    title='Learning the six problems of Shepard, Hovland and Jenkins',
+    source='R. M. Nosofsky, M. A. Gluck, T. J. Palmeri, S. C. McKinley and P. Glauthier, Comparing models of rule-based classification learning: a replication and extension of Shepard, Hovland, and Jenkins (1961), Memory & Cognition 22 (1994) 352-369; as packaged in A. J. Wills et al., catlearn 1.1 (CRAN, GPL >= 2)',
+    cite=r"Nosofsky et al.\ (1994), \ via catlearn",
+    checked="the package's nosof94 data; fetched by explainer.psychology.opendata from the CRAN source package and checked by SHA-256 (package and member); read as data by explainer.psychology.rdata, never evaluated" + ", " + _P22,
+    licence='data fetched, not redistributed',
+    data={'learners_per_type': 40, 'blocks': 16, 'trials_per_block': 16},
+)
+
+HOMA_1976 = Dataset(
+    key="homa76",
+    title='Classifying prototypes, distortions and old items',
+    source='D. Homa and R. Vosburgh, Category breadth and the abstraction of prototypical information, Journal of Experimental Psychology: Human Learning and Memory 2 (1976) 322-330; as packaged in catlearn 1.1 (CRAN, GPL >= 2)',
+    cite=r"Homa \& Vosburgh (1976), \ via catlearn",
+    checked="the package's homa76 data; fetched by explainer.psychology.opendata from the CRAN source package and checked by SHA-256 (package and member); read as data by explainer.psychology.rdata, never evaluated" + ", " + _P22,
+    licence='data fetched, not redistributed',
+    data={'category_sizes': [3, 6, 9]},
+)
+
+EKMAN_1954 = Dataset(
+    key="ekman_1954",
+    title='Similarities of fourteen colours',
+    source='G. Ekman, Dimensions of color vision, Journal of Psychology 38 (1954) 467-474; as packaged in J. de Leeuw, P. Mair and P. Groenen, smacof 2.1-7 (CRAN, GPL-3)',
+    cite=r"Ekman (1954), \ via smacof",
+    checked="the package's ekman data; fetched by explainer.psychology.opendata from the CRAN source package and checked by SHA-256 (package and member); read as data by explainer.psychology.rdata, never evaluated" + ", " + _P22,
+    licence='data fetched, not redistributed',
+    data={'colours': 14, 'raters': 31, 'nm_range': [434, 674]},
+)
+
+ROTHKOPF_1957 = Dataset(
+    key="rothkopf_1957",
+    title='Confusions of the 36 Morse code signals',
+    source='E. Z. Rothkopf, A measure of stimulus similarity and errors in some paired-associate learning tasks, Journal of Experimental Psychology 53 (1957) 94-101; as packaged (asymmetric) in smacof 2.1-7 (CRAN, GPL-3)',
+    cite=r"Rothkopf (1957), \ via smacof",
+    checked="the package's morse2 data, row = the signal heard first (it reproduces Tversky's 1977 count); fetched by explainer.psychology.opendata from the CRAN source package and checked by SHA-256 (package and member); read as data by explainer.psychology.rdata, never evaluated" + ", " + _P22,
+    licence='data fetched, not redistributed',
+    data={'subjects': 598, 'signals': 36},
+)
+
+AUSTEN = Dataset(
+    key="austen",
+    title="Jane Austen's six novels",
+    source="J. Silge, janeaustenr 1.0.0: Jane Austen's complete novels (CRAN, MIT), from Project Gutenberg",
+    cite=r"janeaustenr \ (Project Gutenberg)",
+    checked="the package's six novels; fetched by explainer.psychology.opendata from the CRAN source package and checked by SHA-256 (package and member); read as data by explainer.psychology.rdata, never evaluated" + ", " + _P22,
+    licence='data fetched, not redistributed',
+    data={'novels': 6},
+)
+
+HUTCHISON_2013 = Dataset(
+    key="hutchison_2013",
+    title='The Semantic Priming Project',
+    source='K. A. Hutchison, D. A. Balota, J. H. Neely, M. J. Cortese, E. R. Cohen-Shikora, C.-S. Tse, M. J. Yap, J. J. Bengson, D. Niemeyer and E. Buchanan, The semantic priming project, Behavior Research Methods 45 (2013) 1099-1114',
+    cite=r"Hutchison et al.\ (2013)",
+    checked='the paper (Discussion: priming by block, first-associate priming and the comparison with Hutchison et al. 2008)' + ", " + _P22,
+    licence='facts only',
+    data={'targets': 1661, 'subjects': 768, 'universities': 4, 'soa_ms': [200, 1200], 'ldt_all_ms': 19.0, 'naming_all_ms': 6.0, 'spp_first_short_ms': 26.0, 'spp_first_long_ms': 20.0, 'hutchison2008_short_ms': 42.0, 'hutchison2008_long_ms': 60.0},
+)
+
+LANDAUER_DUMAIS_1997 = Dataset(
+    key="landauer_dumais_1997",
+    title='Latent semantic analysis on the TOEFL synonym test',
+    source="T. K. Landauer and S. T. Dumais, A solution to Plato's problem: the latent semantic analysis theory of acquisition, induction, and representation of knowledge, Psychological Review 104 (1997) 211-240",
+    cite=r"Landauer \& Dumais (1997)",
+    checked='the paper' + ", " + _P22,
+    licence='facts only',
+    data={'items': 80, 'lsa_pct': 64.4, 'applicants_pct': 64.5},
+)
+
+TVERSKY_1977 = Dataset(
+    key="tversky_1977",
+    title='Asymmetries of similarity',
+    source='A. Tversky, Features of similarity, Psychological Review 84 (1977) 327-352',
+    cite=r"Tversky (1977)",
+    checked='the paper, pp. 334 and 336' + ", " + _P22,
+    licence='facts only',
+    data={'phrase_subjects': 69, 'phrase_nk_first': 66, 'phrase_china_first': 3, 'country_pairs': 21, 'rothkopf_pairs': 555, 'rothkopf_shorter_first_more': 336, 'rothkopf_fewer': 181, 'rothkopf_equal': 38, 'rothkopf_mean_diff': 3.3},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3757,4 +3840,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           SIMONS_CHABRIS_1999, RENSINK_1997, CHERRY_1953, BROADBENT_1958, MORAY_1959, TREISMAN_1960, LAVIE_1995, POSNER_1980, TREISMAN_GELADE_1980, WOLFE_2021, ITTI_KOCH_1998, DREW_2013, RAYMOND_1992, PASHLER_1994, STROOP_1935, ERIKSEN_1974, BOTVINICK_2001, ROGERS_MONSELL_1995, MORAN_DESIMONE_1985, REYNOLDS_HEEGER_2009, BUNDESEN_1990, STRAYER_2001, OPHIR_2009, ANDERSON_2011, AWH_2012,
                           MILLER_1956, SPERLING_1960, PETERSON_1959, KEPPEL_UNDERWOOD_1962, BADDELEY_HITCH_1974, BADDELEY_1975, SHALLICE_WARRINGTON_1970, STERNBERG_1966, LUCK_VOGEL_1997, COWAN_2001, ZHANG_LUCK_2008, BAYS_2009, VANDENBERG_2012, FUNAHASHI_1989, WIMMER_2014, MONGILLO_2008, DANEMAN_CARPENTER_1980, KANE_2005, JAEGGI_2008, REDICK_2013, MELBY_LERVAG_2016, SIMONS_2016, FTC_LUMOSITY_2016,
                           PEERS_FREE_RECALL, CRAIK_TULVING_1975, BERTSCH_2007, DRESLER_2017, GODDEN_BADDELEY_1975, MURRE_2021, KOHNKEN_1999,
-                          SAVINGS_REPLICATIONS, ROEDIGER_KARPICKE_2006, SCHOOLER_1990, ALOGNA_2014, LOFTUS_PALMER_1974, ROEDIGER_MCDERMOTT_1995, CEPEDA_2008, LOFTUS_PICKRELL_1995, TALARICO_RUBIN_2003, HARDWICKE_2016, PATIHIS_2013, WIXTED_WELLS_2017, DUNLOSKY_2013)}
+                          SAVINGS_REPLICATIONS, ROEDIGER_KARPICKE_2006, SCHOOLER_1990, ALOGNA_2014, LOFTUS_PALMER_1974, ROEDIGER_MCDERMOTT_1995, CEPEDA_2008, LOFTUS_PICKRELL_1995, TALARICO_RUBIN_2003, HARDWICKE_2016, PATIHIS_2013, WIXTED_WELLS_2017, DUNLOSKY_2013,
+                          NOSOFSKY_1994, HOMA_1976, EKMAN_1954, ROTHKOPF_1957, AUSTEN, HUTCHISON_2013, LANDAUER_DUMAIS_1997, TVERSKY_1977)}

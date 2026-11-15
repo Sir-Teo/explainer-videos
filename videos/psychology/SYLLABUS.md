@@ -1567,42 +1567,72 @@ access; continual learning and unlearning in machines.
 O'Reilly 1995; Cepeda et al. 2008; Roediger & Karpicke 2006; Bartlett 1932; Roediger & McDermott 1995; Alogna et al.
 2014; Wixted & Wells 2017; Schacter, *The Seven Sins of Memory*; Brown, Roediger & McDaniel, *Make It Stick*.
 
-### Part 22 · Concepts and Categories (~50)
+### Part 22 · Concepts and Categories (~60)
 *Question:* what do you know when you know what a bird is?
 *Story:* Aristotle said a concept is a definition. Wittgenstein asked for the definition of "game", and Eleanor
 Rosch showed that people agree a robin is a better bird than a penguin. If concepts are not definitions, are they
-averages or remembered examples? The two answers become two equations, and Roger Shepard finds a law of
-generalization he argues should hold for any mind anywhere.
-1. Hook: is a penguin a bird, is a tomato a fruit, how fast do you say yes? Typicality in reaction times.
-2. The classical view and its failure: no definitions, graded membership, unclear cases (Rosch 1975; family
-   resemblance).
-3. Prototypes: a category as a central tendency; the prototype is "recognized" though never seen (Posner and
-   Keele 1968).
-4. Exemplars: the context model (Medin and Schaffer 1978) and Nosofsky's generalized context model (1986):
-   similarity, attention weights, choice. Derived.
-5. On you: learn a two-dimensional category in forty trials. Prototype and exemplar models fitted to your
-   responses.
-6. Shepard, Hovland and Jenkins's six problems (1961): the difficulty order that models must reproduce; ALCOVE as
-   exemplars plus error-driven attention (Parts 16 and 18 meeting).
-7. Psychological space: multidimensional scaling turns a table of confusions into a map (derived; link to
-   `statkit.multi`).
-8. Shepard's universal law (1987): generalization falls exponentially with distance in that space; his argument
-   from consequential regions.
-9. Similarity is not distance: Tversky's contrast model (1977) and the asymmetries.
-10. Knowledge in a network: Collins and Quillian's hierarchy (1969), spreading activation, semantic priming.
-11. Concepts as theories: essentialism in children, causal knowledge; Bayesian concept learning and the number
-    game (Tenenbaum).
-12. Meaning from co-occurrence: latent semantic analysis (1997) to word embeddings as models of semantic memory.
+averages or remembered examples? The two answers become two equations, six small problems show that attention has
+to learn, and Roger Shepard finds a law of generalization he argues should hold for any mind anywhere. Then
+similarity itself is questioned: by Tversky's asymmetries, by networks of knowledge, by theories that override
+resemblance, by a learner that needs three examples, and by meaning read from the company words keep.
+0. Hook: true or false, as fast as you can (a robin, a penguin, a bat is a bird); Rosch's typicality ratings as a
+   ladder; McCloskey and Glucksberg's borderline items; the questions; objectives.
+1. No definition: the classical view; Wittgenstein's games; family resemblance computed on Psyche's bird table
+   (Rosch and Mervis 1975); fuzzy boundaries (McCloskey and Glucksberg 1978; Hampton 1998, as a schematic).
+2. The average member: Posner and Keele's dot patterns (1968, 1970); Homa and Vosburgh (1976) from catlearn's open
+   data (prototypes .92 to .99, rising with category size); the prototype model as four equations.
+3. Every member remembered: the context model (Medin and Schaffer 1978); the generalized context model derived
+   (Nosofsky 1986); the 5-4 structure, where A2 beats A1 for exemplars and loses for the prototype; the debate
+   (Medin and Schwanenflugel 1981; Smith and Minda 2000; mimicry, Part 48).
+4. Six problems, and attention that learns: Shepard, Hovland and Jenkins (1961) as cubes; Nosofsky et al. (1994)
+   from the open data; a delta-rule network that cannot learn II and VI and an equal-attention exemplar model that
+   orders II wrongly; ALCOVE derived (Kruschke 1992) and fitted (SSE .209 against .335 without attention learning),
+   with VI still too easy at the fitted values, said so.
+5. A map of similarity: classical scaling derived (Torgerson's double centring) and non-metric scaling (Shepard,
+   Kruskal); Ekman's 14 colours close into Newton's circle (stress .029); Rothkopf's 36 Morse signals map by length
+   and rhythm (stress .19).
+6. A universal law: Shepard (1987); his bias-free measure from confusions (1957, after Luce); the law tested on the
+   Morse map (exponential R² .71 in log g, a Gaussian −.12); consequential regions derived (an Erlang prior gives
+   exactly e^−d; a nearly known size gives a shoulder).
+7. Similarity is not distance: the metric axioms and three failures (Rothkopf's diagonal 97% for E, 83% for P; 66 of
+   69 for "North Korea is similar to Red China"; Jamaica, Cuba, Russia); the contrast model derived; Tversky's count
+   of Morse asymmetries rerun on the open table (336, 182, 37 against his 336, 181, 38).
+8. Knowledge as a network: Collins and Quillian (1969); its failures (typicality; levels reversed; Conrad 1972);
+   spreading activation with a fan (Collins and Loftus 1975; Anderson 1974); semantic priming (Meyer and
+   Schvaneveldt 1971) and the Semantic Priming Project (Hutchison et al. 2013: about 19 ms; first associates 26 and
+   20 ms against 42 and 60 earlier).
+9. Concepts as theories: the basic level (Rosch et al. 1976; Tanaka and Taylor 1991); category utility derived
+   (Corter and Gluck 1992), with the basic level winning only while superordinates are loose; Rips's pizza (1989),
+   Barsalou's goals (1983), Murphy and Medin (1985); Keil's raccoon (1989), Gelman and Markman's blackbird (1986),
+   psychological essentialism.
+10. Learning from a few examples: the number game and the size principle derived (Tenenbaum 1999); the model after
+    one and four examples (powers of 4 at 28%; powers of 2; a range); Xu and Tenenbaum's feps (2007); Shepard's law
+    as Bayesian inference (Tenenbaum and Griffiths 2001).
+11. Meaning from company: Harris (1954), Firth (1957), the tezgüino example; PPMI and the SVD derived; Jane Austen's
+    six novels (729,322 words) with neighbours, a map in which *unhappy* sits among the happy words, analogies (one
+    right, one wrong); LSA on the TOEFL (64.4% against 64.5%); Caliskan et al.'s biases; grounding (Harnad 1990).
+12. The Ledger. 13. In practice: 227 symptom sets for one DSM-5 diagnosis, and Fried and Nesse's 1,030 profiles;
+    HiTOP; a card sort of twelve groceries by 40 simulated people, clustered; recommendation, search and ImageNet's
+    person categories. 14. Frontier: RSA on Ekman's colours (hue angle .83, wavelength .77, cones .65);
+    language models' similarity ratings (Marjieh et al. 2024: colour .89 from hex codes); one-shot learning (Lake et
+    al. 2015), reweighted network features (Peterson et al. 2018), compositional learning (Lake and Baroni 2023);
+    semantic maps (Huth et al. 2016) and open questions.
 
-*Psyche:* `concepts`: prototype, GCM and ALCOVE fitted to the six problems and to open category-learning data; MDS
-on a classic confusion matrix; the number game's hypothesis averaging.
-*On you:* the category-learning task; the number game.
-*Ledger:* typicality effects (`replicated`); the six-problem ordering (`replicated`, with a known exception for
-Type II); the universal law (`replicated` across species and modalities); the hierarchical network's strict
-predictions (`failed`, superseded).
-*In practice:* taxonomy and navigation design, diagnosis by resemblance, recommendation by similarity, embeddings.
-*Frontier:* prototypes against exemplars is a question about representation that behaviour may not settle (model
-mimicry, Part 48); few-shot concept learning; whether embeddings have human-like geometry (Part 60).
+*Psyche:* `concepts`: the GCM and the prototype model; ALCOVE with attention learning fitted to the six problems and
+a delta-rule network; classical and non-metric MDS; Shepard's measure, law and consequential regions; the contrast
+model and the asymmetry count; category utility; spreading activation; the number game; PPMI word vectors and
+analogies; RSA and hue angles; the polythetic count and a card sort. `rdata`: a data-only reader for R's XDR files.
+`opendata`: catlearn, smacof and janeaustenr from CRAN, one member read from each tarball, checked by SHA-256.
+*On you:* true or false at speed in the film; the interactive is the number game (three rounds, the reader's
+judgements against the model's).
+*Ledger:* typicality (`replicated`); the basic level (`replicated`); the prototype effect (`replicated`, with its
+interpretation contested); the six-problem ordering (`replicated`, Type II's place depending on the task); Shepard's
+law (`replicated`); asymmetric similarity (`replicated, smaller`); the hierarchical network (`failed`); semantic
+priming (`replicated, smaller`).
+*In practice:* diagnosis by polythetic criteria, card sorting for navigation, recommendation by similarity, search
+by vectors, the categories in dataset labels.
+*Frontier:* representational similarity analysis; what language models know about perception; one-shot and
+compositional learning; where concepts are in the brain; grounding.
 *Reading:* Rosch 1975; Medin & Schaffer 1978; Nosofsky 1986; Shepard 1987; Tversky 1977; Kruschke 1992; Murphy,
 *The Big Book of Concepts*; Tenenbaum & Griffiths 2001; Landauer & Dumais 1997.
 
@@ -1610,41 +1640,65 @@ mimicry, Part 48); few-shot concept learning; whether embeddings have human-like
 *Question:* how does a child who hears a finite number of sentences come to understand an infinite number?
 *Story:* in 1959 a thirty-year-old linguist reviews B. F. Skinner's book on verbal behaviour and argues that no
 theory of reinforcement can explain a sentence never heard before. The review helps start cognitive science. The
-argument it began, how much is built in and how much is learned from statistics, has now run for seventy years,
-and machines that learn language from text alone have joined it.
-1. Hook: Chomsky's review. "Colorless green ideas sleep furiously."
-2. The levels: phonemes, morphemes, words, syntax, meaning, use. Productivity at each (the wug test, Berko 1958).
-3. The mental lexicon: frequency, neighbourhoods, lexical decision. Zipf's law.
-4. Recognizing a word: the word-superiority effect; the interactive activation model (McClelland and Rumelhart
-   1981): letters, words, feedback (computed); spoken words in time (the cohort model and TRACE).
-5. Sentences in real time: ambiguity and the garden path; eye movements in reading.
-6. Surprisal: processing difficulty is the negative log probability of the word in context (Hale 2001; Levy
-   2008); reading time is close to linear in it. Computed with the language model of *AI, Built*.
-7. On you: sixty seconds of an alien language. You will find the words (Saffran, Aslin and Newport 1996).
-8. Acquisition: babbling to grammar; the poverty-of-the-stimulus argument stated as a learnability claim (link to
-   *Philosophy, Built* Part 15); word learning as inference.
-9. The past-tense debate: a network that learns "goed" and then "went" (Rumelhart and McClelland 1986) against
-   words and rules (Pinker and Prince 1988).
-10. A critical period? Genie; late signers; Johnson and Newport (1989); two-thirds of a million learners
-    (Hartshorne, Tenenbaum and Pinker 2018).
-11. Language in the brain: Broca, Wernicke, and the modern network; the N400 and P600; aphasia.
-12. Language and thought: Whorf's claim, strong and weak; colour terms; Russian blues (Winawer et al. 2007);
-    numbers without number words.
+argument it began, how much is built in and how much is learned from statistics, has now run for seventy years, and
+it now has numbers: reading times, a model's probabilities, two minutes of a made-up language, a network that says
+*goed*, and two-thirds of a million grammar quizzes. Machines that learn language from text alone have joined it.
+0. Hook: Skinner (1957) and Chomsky's review (1959); "Colorless green ideas sleep furiously" and its reverse; a
+   syllable stream on you, with the question held until Chapter 6; the questions; objectives.
+1. Levels and productivity: sounds, words, sentences, meaning and use, productive at each level; the wug test (Berko
+   1958); Zipf's law on thirty novels (exponent 1.20, R² .994) and on Miller's typing monkey (1.20, a staircase), a
+   warning about what a law shows.
+2. The mental lexicon: frequency and length against reading time in the Natural Stories corpus (Futrell et al.
+   2021; 369 to 327 ms across eighths of frequency); a spoken word's cohort as it arrives (Marslen-Wilson 1987;
+   *trespass*: 1,547, 346, 54, 4, 2).
+3. Recognizing a word: Reicher's paradigm (1969); the interactive activation model derived (McClelland and Rumelhart
+   1981) with a fourteen-segment font, and run: K after WORK .534 against K alone .418, an effect smaller than
+   people's, said so.
+4. Sentences in real time: garden paths (Bever 1970); eye movements at the breaking word (Frazier and Rayner 1982,
+   as a schematic); a trigram model's surprisal word by word, *fell* at 13 bits with and without *that was*: two
+   words of context cannot see the syntax (Hale 2001 can).
+5. The cost of a surprising word: surprisal derived as a change of belief (Levy 2008); a story word by word; the fit
+   to 10,256 words (a Kneser-Ney trigram of the novels, perplexity 405): 324 to 361 ms across tenths, 1.18 ms per bit
+   on the next word and none on the word itself, with length and frequency held fixed (Smith and Levy 2013).
+6. Finding the words: Saffran, Aslin and Newport (1996); transitional probabilities derived (1 inside words, 1/3
+   across); segmentation by dips, perfect after 20 words; golabu against labubi answered; Black and Bergmann's
+   meta-analysis (2017).
+7. How children learn a language: milestones; the poverty of the stimulus as a learnability claim, Gold's theorem
+   (1967) and its answers (Horning 1969; Chater and Vitányi 2007); fast mapping (Carey and Bartlett 1978), Part
+   22's size principle, and the input (Hart and Risley 1995, with its dispute).
+8. Rules or associations? The U-shaped curve and Marcus et al.'s 4.2% (1992); a past-tense network (Rumelhart and
+   McClelland 1986) run on Psyche's 65 irregulars and 125 regulars (.94, dip to .83, .92; over-regularization peaking
+   at .12) and the vocabulary flood behind it; Pinker and Prince (1988); words and rules.
+9. A critical period? Genie (Curtiss 1977) and late first languages (Mayberry, Lock and Kazmi 2002); Johnson and
+   Newport (1989); Hakuta, Bialystok and Wiley (2003); Hartshorne, Tenenbaum and Pinker (2018): 669,498 people,
+   ability near its peak until about 17.4.
+10. Language in the brain: Broca (1861) and Wernicke (1874); the language network, localized in each person
+    (Fedorenko, Behr and Kanwisher 2011); the N400 (Kutas and Hillyard 1980) and the P600 (Osterhout and Holcomb
+    1992).
+11. Language and thought: Whorf; Berlin and Kay (1969); Russian blues (Winawer et al. 2007) and their contested
+    record; Pirahã numbers (Frank et al. 2008); the bilingual advantage and its meta-analysis (Lehtonen et al.
+    2018).
+12. The Ledger. 13. In practice: Flesch's formula computed (about 75 for two stories and a chapter of *The Maltese
+    Falcon*) and why surprisal is better; the National Reading Panel (2000) and phonics; intensive aphasia therapy
+    (Breitenstein et al. 2017); second languages. 14. Frontier: language models' input against a child's
+    (BLiMP, Warstadt et al. 2020; BabyLM); one child's 61 hours (Vong et al. 2024); larger models' surprisal fitting
+    readers worse (Oh and Schuler 2023).
 
-*Psyche:* `language`: interactive activation reproducing the word-superiority effect; a segmenter driven by
-transitional probabilities; a past-tense network with its U-shaped curve; surprisal from the series' own language
-model regressed on open reading-time data.
-*On you:* statistical segmentation; a garden path; Battery task 11.
-*Ledger:* infant statistical learning (`replicated`); surprisal and reading time (`replicated`); a sharp critical
-period (`contested`); linguistic relativity for colour discrimination (`replicated, smaller`); a bilingual
-advantage in executive control (`contested`, leaning `failed`).
-*In practice:* speech recognition and reading instruction (Part 54), aphasia therapy, readability, second-
-language teaching.
-*Frontier:* what language models' success shows about learnability; child-scale input (training on one child's
-recordings **(verify)**); whether surprisal from larger models fits reading times worse.
+*Psyche:* `language`: Zipf's law and the typing monkey; cohorts and Flesch; the interactive activation model with a
+fourteen-segment font; Saffran streams, transitional probabilities and segmentation; a past-tense learner whose
+vocabulary grows; an interpolated Kneser-Ney trigram and its surprisal; the reading-time regression with spillover.
+`opendata`: Natural Stories' per-word reading times, pinned to a commit and checked by SHA-256.
+*On you:* a syllable stream in the film; the interactive is a made-up language (watch the stream, then pick its
+words out of eight pairs; you against chance and Psyche).
+*Ledger:* word superiority (`replicated`); infant statistical segmentation (`replicated, smaller`); surprisal and
+reading time (`replicated`); a sharp critical period (`contested`); linguistic relativity for colour
+discrimination (`contested`); a bilingual advantage in executive control (`failed`).
+*In practice:* readability, reading instruction (Part 54), aphasia therapy, second-language teaching.
+*Frontier:* what language models' success shows about learnability; child-scale input; whether surprisal from
+larger models fits reading times worse.
 *Reading:* Chomsky 1959; Saffran, Aslin & Newport 1996; McClelland & Rumelhart 1981; Levy 2008; Pinker, *The
 Language Instinct* and *Words and Rules*; Rumelhart & McClelland 1986; Hartshorne et al. 2018; Traxler,
-*Introduction to Psycholinguistics*.
+*Introduction to Psycholinguistics*; Christiansen & Chater, *The Language Game*.
 
 ### Part 24 · Reasoning and Problem Solving (~55)
 *Question:* are people logical, and if not, what are they instead?
@@ -1652,39 +1706,60 @@ Language Instinct* and *Words and Rules*; Rumelhart & McClelland 1986; Hartshorn
 ages and nearly everyone is right. Reasoning is not the application of logic to content; content is the engine.
 Meanwhile Newell and Simon write a program that solves problems as people do, by searching, and the expert turns
 out to be someone who no longer needs to.
-1. Hook and On you: Wason's selection task (1966), abstract, then as a drinking-age rule.
-2. Deduction: syllogisms, belief bias (Evans et al. 1983); mental rules against mental models (Johnson-Laird).
-3. Why content helps: pragmatic schemas, cheater detection (Cosmides 1989), and the probabilistic account
-   (Oaksford and Chater 1994): the "wrong" cards are the informative ones.
-4. Problem solving as search: Newell and Simon; states, operators, means–ends analysis; the Tower of Hanoi's
-   state space drawn, and human move sequences on it.
-5. Protocols and production systems: thinking aloud as data; rules that fire; ACT-R in outline.
-6. Insight: Duncker's candle, the nine dots, functional fixedness; is insight special? (Metcalfe's warmth
-   ratings.)
-7. Expertise: de Groot and Chase and Simon (1973), chess positions real and random; chunks; deliberate practice
-   (Ericsson 1993) and how much it explains (Macnamara et al. 2014).
-8. Analogy: Gick and Holyoak's radiation problem (1980); structure mapping (Gentner).
-9. Imagery: mental rotation, reaction time linear in angle (Shepard and Metzler 1971); the imagery debate
-   (Kosslyn against Pylyshyn); aphantasia.
-10. Causal reasoning: from ΔP (Part 16) to causal power (Cheng 1997) and interventions on causal graphs (link to
-    *Statistics, Built* Part 36).
-11. Everyday prediction as Bayesian inference (Griffiths and Tenenbaum 2006): people's guesses about life spans
-    and movie grosses match the right priors.
-12. Rational, irrational, or bounded: Simon's satisficing, and the argument Part 26 continues.
+0. Hook and On you: Wason's selection task (1966, 1968), abstract, then as a drinking-age rule (Griggs and Cox
+   1982: about three in four right); the questions; objectives.
+1. Deduction: the 64 syllogisms and nine answers; validity by brute force over the 256 models of three sets (27
+   valid with existential presupposition, 22 without); 139 people's answers to all 64 (Ragni 2016, open data via
+   CCOBRA: 41% right, "no valid conclusion" 28% of answers; EA1 right 4%); belief bias (Evans, Barston and Pollard
+   1983: 89, 56, 71, 10).
+2. Rules, models and shortcuts: mental models and the search for counterexamples (Johnson-Laird 1983); atmosphere,
+   matching, the probability heuristics; all four scored on the data (atmosphere best where a conclusion follows,
+   only logic where none does); Khemlani and Johnson-Laird's meta-analysis (2012).
+3. Why content helps: pragmatic schemas (Cheng and Holyoak 1985), cheater detection (Cosmides 1989); optimal data
+   selection derived (Oaksford and Chater 1994) and computed (p .61, q .15, not-q .05, not-p .01 bits) against their
+   Table 2 (13 studies, 845 people: 89, 62, 25, 16%).
+4. Problem solving as search: Newell, Shaw and Simon; states, operators, means-ends analysis; the Tower of Hanoi's
+   27 states drawn as a Sierpinski triangle; the 7-move path against a hill-climber (median 14 of 101 runs).
+5. Production systems: three rules for the tower; ACT-R in outline; a goal stack's pauses before moves 1, 9, 5 and
+   13 (Anderson and Douglass 2001); thinking aloud as data (Ericsson and Simon 1980, 1993).
+6. Insight: Duncker's candle (1945), functional fixedness (Adamson 1952); the nine dots by brute force (no drawing
+   inside the square, 16 outside); Weisberg and Alba's hint (1981); warmth ratings (Metcalfe and Wiebe 1987) and
+   progress monitoring (MacGregor, Ormerod and Chronicle 2001).
+7. Expertise: de Groot (1946); Chase and Simon (1973), game and random positions, Gobet and Simon (1996); chunks;
+   deliberate practice (Ericsson et al. 1993), the 10,000-hour story, Macnamara et al. (2014: 26, 21, 18, 4, <1%) and
+   the 2019 replication.
+8. Analogy: the radiation problem and the fortress (Gick and Holyoak 1980: about 10, 30, 75%); structure mapping
+   (Gentner 1983) computed: army to rays, fortress to tumour, general to doctor.
+9. Mental imagery: Shepard and Metzler (1971); Ganis and Kievit's open data (2015: 54 people; 1.56 to 3.34 s from 0
+   to 150 degrees; 53 of 54 slopes rising; median 93 degrees a second) and a constant-rate model that fits the trend
+   but not the bend; Kosslyn against Pylyshyn; aphantasia (Zeman et al. 2015).
+10. Reasoning about causes: delta P (Part 16) to causal power derived (Cheng 1997); seeing against doing (Waldmann
+    and Hagmayer 2005; *Statistics, Built* Part 36).
+11. Everyday predictions and bounded rationality: the posterior median derived (Griffiths and Tenenbaum 2006);
+    power-law, Erlang and normal priors give multiplicative, additive and regressive rules; Mozer, Pashler and
+    Homaei's critique (2008); Simon's satisficing (1955), and the argument Part 26 continues.
+12. The Ledger. 13. In practice: interview puzzles against validated selection methods (Schmidt and Hunter 1998;
+    Sackett et al. 2022); worked examples (Sweller and Cooper 1985); usability testing as protocol analysis,
+    Nielsen and Landauer's curve computed (five users, 84%). 14. Frontier: ARC (Chollet 2019; H-ARC, LeGris et al.
+    2024: 64%), program induction (DreamCoder, Ellis et al. 2021), large reasoning models; analogy in language
+    models (Webb, Holyoak and Lu 2023) and counterfactual critiques (Lewis and Mitchell 2024).
 
-*Psyche:* `reason`: a small production system solving the Tower of Hanoi with human-like move latencies; mental-
-model enumeration for syllogisms against difficulty data; a rotation model; causal power.
-*On you:* the selection task; Battery task 10; the candle problem.
-*Ledger:* the selection task's content effect (`replicated`); mental rotation (`replicated`); belief bias
+*Psyche:* `reason`: syllogisms over set models and four accounts scored; optimal data selection; the Tower of
+Hanoi's graph, layout, shortest path, goal stack and hill-climber; the nine dots by exhaustive search; structure
+mapping; rotation fits and a rotation model; delta P and causal power; posterior-median predictions.
+`opendata`: Ganis and Kievit's workbooks (figshare, CC BY 4.0) and Ragni's syllogisms (CCOBRA, MIT), both checked
+by SHA-256.
+*On you:* the selection task in the film; the interactive is mental rotation (same or mirror; your slope and rate
+against the 54 people).
+*Ledger:* the selection task's content effect (`replicated`); belief bias (`replicated`); mental rotation
 (`replicated`); chess chunking (`replicated`); the 10,000-hour rule (`story and record`); optimal everyday
-predictions (`replicated`; individual-level interpretation `contested`).
-*In practice:* interview puzzles and what they do not measure, training design, decision support, protocol
-analysis in UX.
+predictions (`replicated`, individual-level interpretation contested).
+*In practice:* interview puzzles and what they do not measure, training design, protocol analysis in UX.
 *Frontier:* program induction as a model of thinking; whether language models reason by analogy (Part 60);
 cognitive architectures against end-to-end learning.
 *Reading:* Wason 1966; Newell & Simon 1972; Chase & Simon 1973; Shepard & Metzler 1971; Gick & Holyoak 1980;
-Johnson-Laird 1983; Oaksford & Chater 2007; Anderson 2007; Holyoak & Morrison (eds.), *The Oxford Handbook of
-Thinking and Reasoning*.
+Johnson-Laird 1983 and *How We Reason*; Oaksford & Chater 1994; Anderson 1993; Holyoak & Morrison (eds.), *The Oxford
+Handbook of Thinking and Reasoning*.
 
 ### Part 25 · Deciding in Time (~55)
 *Question:* why do decisions take the time they take?
@@ -3418,4 +3493,5 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 18 | built, English and Chinese: 15 chapters, hook and outro; Psyche's attention (`psyche/attention.py`, seventeen tests) with Battery tasks 3 and 4 (Stroop, visual search), six Ledger rows (one deferred from Part 16), twenty-five Archive datasets; course entry, lab and interactive (feature and conjunction search, the reader's slopes measured on the page) checked; narration table and on-screen text translated and dry-run. Act V begins. Open checks in its README | 51 min |
 | 19 | built, English and Chinese: 13 chapters, hook and outro, with digit span played in the film; Psyche's working memory (`psyche/wm.py`, sixteen tests) with Battery task 5 (change detection) and the series' first open trial-level data (`opendata.py`: Bays, Catalao and Husain 2009, fetched and checked by SHA-256, four process models fitted to every observer), six Ledger rows, twenty-three Archive datasets; course entry, lab and interactive (change detection: the reader's K at four set sizes) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 52 min |
 | 20 | built, English and Chinese: 15 chapters, hook and outro, with free recall played in the film; Psyche's memory (`psyche/memory.py`, fourteen tests) with the context model fitted by maximum likelihood to open free-recall data (PEERS) and checked on held-out lists, and Murre's divers from his open data (`opendata.py`), six Ledger rows, seven Archive datasets; course entry, lab and interactive (free recall: the reader's serial-position and lag-CRP curves) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 62 min |
-| 21 | built, English and Chinese: 14 chapters, hook and outro, with the DRM illusion played in the film; Psyche's memory module gains forgetting and inventing (`psyche/memory.py`, thirteen more tests in `test_forget.py`): four forgetting laws, a two-store consolidation model, the penguin in a semantic network, the spacing and bifurcation models, category adjustment, global matching, line-ups by signal detection and half-life regression; the verbal-overshadowing Registered Replication Report from its open data (`opendata.py`), eight Ledger rows, thirteen Archive datasets; course entry, lab and interactive (the DRM lists with remember, know or new) checked; narration table and on-screen text translated and dry-run. Open checks in its README | LEN |
+| 21 | built, English and Chinese: 14 chapters, hook and outro, with the DRM illusion played in the film; Psyche's memory module gains forgetting and inventing (`psyche/memory.py`, thirteen more tests in `test_forget.py`): four forgetting laws, a two-store consolidation model, the penguin in a semantic network, the spacing and bifurcation models, category adjustment, global matching, line-ups by signal detection and half-life regression; the verbal-overshadowing Registered Replication Report from its open data (`opendata.py`), eight Ledger rows, thirteen Archive datasets; course entry, lab and interactive (the DRM lists with remember, know or new) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 66 min |
+| 22 | built, English and Chinese: 14 chapters, hook and outro, with typicality at speed played in the film; Psyche's concepts module (`psyche/concepts.py`, seventeen tests): the GCM, the prototype model and ALCOVE fitted to the six problems, classical and non-metric scaling, Shepard's law and consequential regions, the contrast model, category utility, the number game, word vectors and RSA; three CRAN packages' data read without R (`rdata.py`, `opendata.py`), eight Ledger rows, eight Archive datasets; course entry, lab and interactive (the number game) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 59 min |

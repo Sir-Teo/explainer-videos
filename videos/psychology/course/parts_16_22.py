@@ -275,4 +275,51 @@ PARTS = [
               ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=22, level="U", widget="numbers",
+        question="What do you know when you know what a bird is?",
+        story="Is a penguin a bird? Everyone says yes, and everyone is slower to say it than for a robin. Aristotle's "
+              "definitions fail for birds and games alike; membership is graded and its edges unstable. Two "
+              "equations replace definitions: a prototype, recognised though never seen, and a memory of every "
+              "member, whose summed similarity wins the 5-4 structure. Shepard, Hovland and Jenkins's six problems, "
+              "refitted on the 1994 open data, need an attention that learns. Scaling turns Ekman's colour ratings "
+              "into Newton's colour circle and Rothkopf's Morse confusions into a map, and in that map Shepard's "
+              "law holds: generalization falls exponentially, as it must for a mind unsure how far a consequence "
+              "extends. Tversky shows similarity is not distance, and his count of asymmetries is rerun on the open "
+              "table. Knowledge is a network, not a tree; priming through it is real and small. Concepts are "
+              "theories, as the pizza and the raccoon show; three examples can teach one by the size principle; and "
+              "Jane Austen's words, placed by the company they keep, find their meanings and their opposites.",
+        handoff="Language is Part 23, essences in the infant mind Part 30, categories against dimensions in "
+                "diagnosis Part 39, scaling Part 46, model mimicry Part 48, design for minds Part 52, and the "
+                "geometry of machine embeddings Part 60.",
+        outside="Part 11's psychophysical scales, Part 13's opponent channels, Part 16's delta rule, Part 18's "
+                "attention weights and Part 21's semantic network. Distances, eigenvectors, the SVD, Bayes' rule and "
+                "a little integration.",
+        objectives={
+            "U": ["Explain why few everyday concepts have definitions, and what typicality and family resemblance are.",
+                  "Contrast prototype and exemplar accounts, and describe the basic level.",
+                  "Describe semantic networks, spreading activation and semantic priming."],
+            "M": ["Derive the generalized context model and fit exemplar, prototype and ALCOVE models to data.",
+                  "Derive classical multidimensional scaling and run its non-metric version.",
+                  "Derive Shepard's exponential law from consequential regions and Tversky's contrast asymmetry."],
+            "D": ["Compute a Bayesian concept learner's posterior with the size principle.",
+                  "Build word vectors from co-occurrence by PPMI and the SVD, and compare spaces by RSA."],
+            "I": ["Run and analyse a card sort to design a navigation scheme.",
+                  "Explain why a polythetic diagnosis admits hundreds of symptom profiles."],
+        },
+        results=[
+            ("The generalized context model", r"P(A \mid x) = \frac{\beta_A \sum_{a \in A} e^{-c\, d(x, a)}}"
+                                              r"{\sum_K \beta_K \sum_{k \in K} e^{-c\, d(x, k)}}"),
+            ("Classical scaling", r"B = -\tfrac{1}{2} J D^{(2)} J = X X^\top"),
+            ("Shepard's law", r"g(d) = \int_0^\infty s e^{-s} \max(0, 1 - d/s)\, ds = e^{-d}"),
+            ("The contrast model", r"S(a, b) = \theta f(A \cap B) - \alpha f(A - B) - \beta f(B - A)"),
+            ("The size principle", r"p(X \mid h) = |h|^{-n} \ \text{for } X \subset h"),
+            ("Category utility", r"\mathrm{CU}(c) = P(c) \sum_k \big[P(f_k \mid c)^2 - P(f_k)^2\big]"),
+        ],
+        U=(0, 1, 2, 3, 8, 12), D=(4, 5, 6, 7, 9, 10, 11, 14), I=(13,),
+        also=(("Psyche's concepts module", "explainer/psychology/psyche/concepts.py"),
+              ("Its tests", "tests/psychology/test_concepts.py"),
+              ("The R data reader", "explainer/psychology/rdata.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

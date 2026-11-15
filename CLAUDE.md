@@ -48,11 +48,11 @@ Manim videos with local neural narration. See README.md for layout and build com
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
 - *Psychology, Built* (`videos/psychology/`): sixty-two parts planned in thirteen acts (`psych1` … `psych62`: a degree,
-  the graduate methods sequence, industry practice and a research tier); Parts 1 to 21 are built (Acts I to IV, and Act V has begun). The folders are `psychN` while
+  the graduate methods sequence, industry practice and a research tier); Parts 1 to 22 are built (Acts I to IV, and Act V has begun). The folders are `psychN` while
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
   plan is `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the progress table are
   `videos/psychology/SYLLABUS.md`. Shared code in `explainer/psychology/` (tested in `tests/psychology/`): the model
-  subject Psyche (`psyche/`, one module per faculty; so far `chronometry`, `cueing`, `neuron`, `circuits`, `brain`, `imaging`, `genes`, `body`, `psychophysics`, `sdt`, `vision`, `infer`, `hearing`, `conditioning`, `rl`, `attention`, `wm` and `memory`), the laboratory (`lab.py`:
+  subject Psyche (`psyche/`, one module per faculty; so far `chronometry`, `cueing`, `neuron`, `circuits`, `brain`, `imaging`, `genes`, `body`, `psychophysics`, `sdt`, `vision`, `infer`, `hearing`, `conditioning`, `rl`, `attention`, `wm`, `memory` and `concepts`), the laboratory (`lab.py`:
   designs run on the Pool with the truth known; a part that shows a study picks it by rule, the median of many, never
   by its result), the measurement library (`measure.py`: scale types, reliability, attenuation, alpha, kappa, the
   multitrait-multimethod matrix), the false-positive lab (`evidence.py`: power, forking paths, a filtered literature and
@@ -60,7 +60,8 @@ Manim videos with local neural narration. See README.md for layout and build com
   people, always tagged simulated), the Battery (`battery.py`, tasks behind one `run`), the Replication Ledger
   (`ledger.py`; every finding a part presents gets a row with sources and the date checked, and `tools/check_ledger.py psychN` fails a part that shows a study with neither a row nor a `ledger.shown` reason), the Archive (`archive/`,
   every dataset registered in `archive/SOURCES.md`; open trial-level data is fetched on first use and checked by
-  SHA-256 by `opendata.py`, never committed), and the cards, maps and instruments in `__init__.py` and `viz.py`.
+  SHA-256 by `opendata.py`, never committed; R data files inside CRAN packages are read by `rdata.py`, which never
+  evaluates anything), and the cards, maps and instruments in `__init__.py` and `viz.py`.
   A part's interactive is an experiment the reader takes part in, built on the task kit
   (`course/site/widgets/00_tasks.js`, `QB.task`); it stores and sends nothing, and `tools/check_course.py` plays a
   scripted participant against it.

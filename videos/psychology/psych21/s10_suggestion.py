@@ -99,15 +99,14 @@ class Suggestion(VoiceoverScene):
         m = archive.LOFTUS_PICKRELL_1995.data
         head = heading(r"Lost in the mall: \ implanting a whole event")
         bars_ = VGroup()
-        specs = ((rf"Loftus and Pickrell, \ 1995", m["original_n"], m["original_rate"]),
-                 (rf"Scoboria and colleagues, \ 2017: \ eight studies pooled", m["mega_n"], m["mega_rate"]),
-                 (rf"Murphy and colleagues, \ 2023: \ preregistered replication", m["replication_n"],
-                  m["replication_rate"]))
-        A = axes([0, 3], [0, 0.5], x_length=5.4, y_length=3.0, xticks=[], yticks=[0, 0.25, 0.5],
+        specs = ((rf"the original, \ 1995", m["original_n"], m["original_rate"]),
+                 (rf"eight studies pooled, \ 2017", m["mega_n"], m["mega_rate"]),
+                 (rf"preregistered replication, \ 2023", m["replication_n"], m["replication_rate"]))
+        A = axes([0, 3], [0, 0.5], x_length=5.8, y_length=3.0, xticks=[], yticks=[0, 0.25, 0.5],
                  yfmt=lambda v: f"{100 * v:.0f}\\%", ylabel=r"came to remember the false event",
                  center=[-3.3, 0.3, 0], font_size=18)
         bb = bars(A.ax, np.arange(3) + 0.5, [s_[2] for s_ in specs], FALSE, width=0.55)
-        names = VGroup(*[wrapped_label(s_[0] + rf" \ (N = {s_[1]})", 1.9, 16, GREY_A)
+        names = VGroup(*[wrapped_label(s_[0] + rf" \ (N = {s_[1]})", 1.7, 16, GREY_A)
                          .next_to(A.ax.c2p(i + 0.5, 0), DOWN, buff=0.12) for i, s_ in enumerate(specs)])
         vals = VGroup(*[label(pct(s_[2]), font_size=20, color=GREY_A).next_to(b_, UP, buff=0.06)
                         for b_, s_ in zip(bb, specs)])
@@ -223,7 +222,7 @@ class Suggestion(VoiceoverScene):
              rf"{100 * d['s1_pooled']:.0f} points", FALSE),
             (r"real, \ smaller than first reported, \ and sensitive to timing: \ the replication found something "
              r"the original did not know", WHITE),
-        ], 4.8, 20, 0.3).move_to([4.6, -0.1, 0])
+        ], 4.4, 20, 0.3).move_to([4.6, -0.1, 0])
         ptag = psyche_tag(r"open data: \ Alogna et al.\ \ (2014), \ osf.io/ybeur")
         with self.voiceover(
             "Here are the data, from the open files. <bookmark mark='a'/> Each line is one lab: the difference "

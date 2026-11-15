@@ -153,7 +153,7 @@ class Confidence(VoiceoverScene):
         d = load("lineup")
         head = heading(r"The confidence-accuracy characteristic")
         lv = d["levels"]
-        A = axes([0.5, 5.5], [0.4, 1.0], x_length=6.4, y_length=3.8, xticks=list(lv), yticks=[0.4, 0.6, 0.8, 1.0],
+        A = axes([0.5, 5.5], [0.3, 1.0], x_length=6.4, y_length=3.8, xticks=list(lv), yticks=[0.4, 0.6, 0.8, 1.0],
                  xfmt=lambda v: f"{int(v)}", yfmt=lambda v: f"{100 * v:.0f}\\%",
                  xlabel=r"the witness's confidence \ (1 = lowest)", ylabel=r"suspect IDs that are of the culprit",
                  center=[-2.6, 0.0, 0], font_size=18)

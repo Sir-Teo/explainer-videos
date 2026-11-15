@@ -58,12 +58,12 @@ class Practice(VoiceoverScene):
 
     def apps(self):
         head = heading(r"Spacing by machine")
-        boxes = VGroup(*[VGroup(Rectangle(width=1.5, height=1.0, color=c), label(t, font_size=20, color=c))
+        boxes = VGroup(*[VGroup(Rectangle(width=2.4, height=1.0, color=c), label(t, font_size=19, color=c))
                          for t, c in ((r"box 1: \ daily", LOST), (r"box 2: \ every 2 days", CUE),
                                       (r"box 3: \ every 4 days", CTX), (r"box 4: \ every 8 days", TRACE))])
         for b in boxes:
             b[1].move_to(b[0])
-        boxes.arrange(RIGHT, buff=0.5).move_to([0, 1.7, 0])
+        boxes.arrange(RIGHT, buff=0.45).move_to([0, 1.5, 0])
         fwd = VGroup(*[CurvedArrow(a.get_top(), b.get_top(), angle=-0.8, color=GOOD, stroke_width=2)
                        for a, b in zip(boxes[:-1], boxes[1:])])
         back = CurvedArrow(boxes[-1].get_bottom(), boxes[0].get_bottom(), angle=-0.5, color=LOST, stroke_width=2)
@@ -104,12 +104,13 @@ class Practice(VoiceoverScene):
             MathTex(r"\min_{\boldsymbol\theta} \sum (y - p)^2 + \lambda \|\boldsymbol\theta\|^2", font_size=34,
                     color=CUE),
         ).arrange(DOWN, buff=0.32).move_to([-3.8, 0.4, 0])
-        A = axes([0, 14], [0, 1], x_length=5.4, y_length=3.0, xticks=[0, 7, 14], yticks=[0, 0.5, 1],
+        A = axes([0, 14], [0, 1], x_length=5.4, y_length=2.6, xticks=[0, 7, 14], yticks=[0, 0.5, 1],
                  yfmt=lambda v: f"{100 * v:.0f}\\%", xlabel=r"days since the last practice $\Delta$",
-                 ylabel=r"predicted recall", center=[3.4, 0.9, 0], font_size=18)
+                 ylabel=r"predicted recall", center=[3.4, 1.25, 0], font_size=18)
         cs = VGroup(*[curve(A.ax, d["gaps"], d[f"curve_right{r}"], GAP_COL[i], 4) for i, r in enumerate((0, 2, 6))])
         key = legend([(GAP_COL[i], rf"right {r} times before") for i, r in enumerate((0, 2, 6))],
-                     font_size=19).move_to([4.9, 1.6, 0])
+                     font_size=18)
+        key.move_to(A.ax.c2p(3.6, 0.22))
         rows = rows_of([
             (r"recall halves every $h$ days: \ a forgetting curve with one number", TRACE),
             (rf"each right answer lengthens the half-life, \ each wrong one shortens it: \ fitted "
@@ -117,7 +118,7 @@ class Practice(VoiceoverScene):
             (rf"on {num(d['rows'])} simulated practice events \ (the true $\theta$ was "
              rf"$({d['true_theta'][0]:.1f},\ {d['true_theta'][1]:.1f},\ {d['true_theta'][2]:.1f})$, \ plus a "
              r"difficulty for each word)", GREY_A),
-        ], 6.0, 20, 0.25).move_to([3.4, -1.75, 0])
+        ], 6.0, 20, 0.25).move_to([3.4, -2.25, 0])
         ptag = psyche_tag(r"\texttt{memory.fit\_hlr}, \ on simulated learners")
         with self.voiceover(
             "Here's the model. <bookmark mark='a'/> The chance of recalling a word falls by half every h days: p "
@@ -156,7 +157,7 @@ class Practice(VoiceoverScene):
         pts = scatter(A.ax, d["cal_pred"][ok], d["cal_obs"][ok], MODEL, 0.09, 1.0)
         line = curve(A.ax, d["cal_pred"][ok], d["cal_obs"][ok], MODEL, 3)
         B = axes([0, 3], [0, 0.4], x_length=4.0, y_length=3.0, xticks=[], yticks=[0, 0.2, 0.4],
-                 yfmt=lambda v: f"{v:.1f}", ylabel=r"mean absolute error", center=[1.2, 0.1, 0], font_size=18)
+                 yfmt=lambda v: f"{v:.1f}", ylabel=r"mean absolute error", center=[0.8, 0.1, 0], font_size=18)
         mae = [d["mae_const"], d["mae_leitner"], d["mae_hlr"]]
         bb = bars(B.ax, np.arange(3) + 0.5, mae, GREY_B, width=0.55)
         bb[2].set_fill(MODEL)
@@ -170,7 +171,7 @@ class Practice(VoiceoverScene):
             (r"Settles and Meeder, \ on 13 million real practice traces: \ error cut by 45\% or more against the "
              r"baselines, \ and 12\% more daily engagement in a live test", DATA),
             (r"the same object as Ebbinghaus's curve, \ now estimated for every learner and word", TRACE),
-        ], 4.0, 20, 0.3).move_to([5.1, -0.1, 0])
+        ], 3.7, 20, 0.3).move_to([5.25, -0.1, 0])
         with self.voiceover(
             "The test of a model like this is prediction, on practice it never saw. <bookmark mark='a'/> We held "
             "out every fifth practice event. Group them by the predicted chance of recall: when the model says "

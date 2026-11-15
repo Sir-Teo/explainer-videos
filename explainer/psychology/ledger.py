@@ -2500,6 +2500,213 @@ add(Finding(
     data=("SCHOOLER_1990", "ALOGNA_2014"),
 ))
 
+add(Finding(
+    key="typicality", part=22, title=r"Typicality",
+    claim="Members of a category differ reliably in how typical they are, and typical members are classified faster.",
+    original=Study("Rips, Shoben and Smith", 1973, n="students", design="true-false verification of sentences like "
+                   "'a robin is a bird'", found="typical members verified faster; rated distance predicted the times"),
+    status="replicated",
+    record=(Study("Rosch", 1975, n="about 200 students", design="goodness-of-example ratings for about 50 members of "
+                  "each of 10 categories", found="strong agreement on which members are typical"),
+            Study("McCloskey and Glucksberg", 1978, n="students, tested twice", design="membership and typicality "
+                  "judgements, weeks apart", found="typicality agreed on; membership of borderline items unstable"),),
+    note="One of the most robust regularities in cognition; what explains it, prototypes or exemplars, is the "
+         "argument of chapters two and three.",
+    sources=("L. J. Rips, E. J. Shoben and E. E. Smith, Semantic distance and the verification of semantic relations, "
+             "Journal of Verbal Learning and Verbal Behavior 12 (1973) 1-20",
+             "E. Rosch, Cognitive representations of semantic categories, Journal of Experimental Psychology: General "
+             "104 (1975) 192-233",
+             "M. E. McCloskey and S. Glucksberg, Natural categories: well defined or fuzzy sets?, Memory & Cognition 6 "
+             "(1978) 462-472",
+             "J. A. Hampton, Similarity-based categorization and fuzziness of natural categories, Cognition 65 (1998) "
+             "137-165",
+             "L. Wittgenstein, Philosophical Investigations (1953), sections 66-67"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="basic_level", part=22, title=r"The basic level",
+    claim="Objects are named, verified and first learned at a middle level of abstraction, the basic level.",
+    original=Study("Rosch, Mervis, Gray, Johnson and Boyes-Braem", 1976, n="a series of experiments",
+                   design="attribute listing, shape averaging, naming and verification at three levels",
+                   found="the middle level carries most attributes and is fastest"),
+    status="replicated",
+    record=(Study("Murphy and Smith", 1982, n="students", design="artificial tool categories at three levels",
+                  found="a basic-level advantage in categorization speed"),
+            Study("Tanaka and Taylor", 1991, n="dog and bird experts", design="naming and verification in and out "
+                  "of the domain of expertise", found="in their domain, experts as fast at the subordinate level"),),
+    note="Robust, and it moves with expertise.",
+    sources=("E. Rosch, C. B. Mervis, W. D. Gray, D. M. Johnson and P. Boyes-Braem, Basic objects in natural "
+             "categories, Cognitive Psychology 8 (1976) 382-439",
+             "G. L. Murphy and E. E. Smith, Basic-level superiority in picture categorization, Journal of Verbal "
+             "Learning and Verbal Behavior 21 (1982) 1-20",
+             "J. W. Tanaka and M. Taylor, Object categories and expertise: is the basic level in the eye of the "
+             "beholder?, Cognitive Psychology 23 (1991) 457-482",
+             "J. E. Corter and M. A. Gluck, Explaining basic categories: feature predictability and information, "
+             "Psychological Bulletin 111 (1992) 291-303"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="prototype_effect", part=22, title=r"The prototype effect",
+    claim="After learning distortions of a prototype, people classify the never-seen prototype as well as or better "
+          "than the items they studied.",
+    original=Study("Posner and Keele", 1968, n="students", design="dot patterns distorted from three prototypes",
+                   found="the unseen prototype classified well, and forgotten more slowly"),
+    status="replicated",
+    record=(Study("Homa and Vosburgh", 1976, n="students", design="categories of 3, 6 or 9 distortions",
+                  found="prototype classification rises with category size"),
+            Study("Medin and Schaffer", 1978, n="students", design="the 5-4 structure, where the models disagree",
+                  found="an exemplar model fits; a prototype model does not"),
+            Study("Medin and Schwanenflugel", 1981, n="students", design="linearly separable and non-separable "
+                  "categories", found="separable categories not easier, against prototypes"),),
+    note="The effect is solid. That it shows an abstracted prototype is not: exemplar models predict it too.",
+    sources=("M. I. Posner and S. W. Keele, On the genesis of abstract ideas, Journal of Experimental Psychology 77 "
+             "(1968) 353-363",
+             "M. I. Posner and S. W. Keele, Retention of abstract ideas, Journal of Experimental Psychology 83 (1970) "
+             "304-308",
+             "D. Homa and R. Vosburgh, Category breadth and the abstraction of prototypical information, Journal of "
+             "Experimental Psychology: Human Learning and Memory 2 (1976) 322-330",
+             "D. L. Medin and M. M. Schaffer, Context theory of classification learning, Psychological Review 85 "
+             "(1978) 207-238",
+             "D. L. Medin and P. J. Schwanenflugel, Linear separability in classification learning, Journal of "
+             "Experimental Psychology: Human Learning and Memory 7 (1981) 355-368",
+             "R. M. Nosofsky, Attention, similarity, and the identification-categorization relationship, Journal of "
+             "Experimental Psychology: General 115 (1986) 39-57",
+             "J. D. Smith and J. P. Minda, Thirty categorization results in search of a model, Journal of "
+             "Experimental Psychology: Learning, Memory, and Cognition 26 (2000) 3-27"),
+    checked="2026-11-15",
+    data=("HOMA_1976",),
+))
+
+add(Finding(
+    key="shj_ordering", part=22, title=r"The six problems' ordering",
+    claim="Of the six ways to split eight three-feature objects four and four, Type I is learned fastest, then II, "
+          "then III, IV and V, and VI slowest.",
+    original=Study("Shepard, Hovland and Jenkins", 1961, n="students", design="the six problems, learned by trial "
+                   "and error", found="fewest errors on I, then II, then III, IV and V, most on VI"),
+    status="replicated",
+    record=(Study("Nosofsky, Gluck, Palmeri, McKinley and Glauthier", 1994, n="40 learners per problem",
+                  design="the six problems, 16 blocks of 16 trials", found="the same ordering"),
+            Study("Kurtz, Levering, Stanton, Romero and Morris", 2013, n="several experiments",
+                  design="varied instructions and stimuli", found="Type II's advantage over IV not always found"),),
+    note="I first and VI last is robust; Type II's place depends on the instructions and the stimuli.",
+    sources=("R. N. Shepard, C. I. Hovland and H. M. Jenkins, Learning and memorization of classifications, "
+             "Psychological Monographs 75 (1961) no. 13",
+             "R. M. Nosofsky, M. A. Gluck, T. J. Palmeri, S. C. McKinley and P. Glauthier, Comparing models of "
+             "rule-based classification learning: a replication and extension of Shepard, Hovland, and Jenkins "
+             "(1961), Memory & Cognition 22 (1994) 352-369",
+             "K. J. Kurtz, K. R. Levering, R. D. Stanton, J. Romero and S. N. Morris, Human learning of elemental "
+             "category structures, Journal of Experimental Psychology: Learning, Memory, and Cognition 39 (2013)",
+             "J. K. Kruschke, ALCOVE: an exemplar-based connectionist model of category learning, Psychological "
+             "Review 99 (1992) 22-44"),
+    checked="2026-11-15",
+    data=("NOSOFSKY_1994",),
+))
+
+add(Finding(
+    key="shepard_law", part=22, title=r"Shepard's law of generalization",
+    claim="Generalization falls off exponentially with distance in psychological space.",
+    original=Study("Shepard", 1957, n="confusion data", design="a stochastic model relating generalization to "
+                   "distance", found="an exponential gradient"),
+    status="replicated",
+    record=(Study("Nosofsky", 1986, n="well-practised observers", design="identification and categorization of "
+                  "semicircles", found="Gaussian gradients fitted better for practised identification"),
+            Study("Shepard", 1987, n="12 data sets, people and pigeons", design="generalization against "
+                  "scaled distance", found="exponential in every case"),
+            Study("Sims", 2018, n="published data sets", design="a derivation from efficient coding",
+                  found="the exponential law follows; deviations predicted"),
+            Study("this part, on Rothkopf's table", 2026, n="630 pairs of Morse signals",
+                  design="non-metric scaling, then generalization against distance",
+                  found="exponential explains 71% of log generalization; a Gaussian less than none"),),
+    note="Exponential across many data sets, with Gaussian exceptions that the theory accounts for.",
+    sources=("R. N. Shepard, Stimulus and response generalization: a stochastic model relating generalization to "
+             "distance in psychological space, Psychometrika 22 (1957) 325-345",
+             "R. N. Shepard, Toward a universal law of generalization for psychological science, Science 237 (1987) "
+             "1317-1323",
+             "R. D. Luce, Detection and recognition, in Handbook of Mathematical Psychology 1 (1963) 103-189",
+             "C. R. Sims, Efficient coding explains the universal law of generalization in human perception, Science "
+             "360 (2018) 652-656",
+             "E. Z. Rothkopf, A measure of stimulus similarity and errors in some paired-associate learning tasks, "
+             "Journal of Experimental Psychology 53 (1957) 94-101",
+             "J. B. Tenenbaum and T. L. Griffiths, Generalization, similarity, and Bayesian inference, Behavioral and "
+             "Brain Sciences 24 (2001) 629-640"),
+    checked="2026-11-15",
+    data=("ROTHKOPF_1957",),
+))
+
+add(Finding(
+    key="similarity_asymmetry", part=22, title=r"Asymmetric similarity",
+    claim="Similarity judgements are asymmetric: a less prominent thing is judged more similar to a prominent one than "
+          "the reverse.",
+    original=Study("Tversky", 1977, n="69 and 2 x 77 students", design="choice of phrase and ratings for 21 pairs "
+                   "of countries; Rothkopf's Morse confusions", found="66 of 69 chose 'North Korea is similar to Red "
+                   "China'; 336 of 555 Morse pairs asymmetric the predicted way"),
+    status="replicated, smaller",
+    record=(Study("Tversky and Gati", 1978, n="students", design="countries, figures and other stimuli",
+                  found="asymmetries in the predicted direction"),
+            Study("Aguilar and Medin", 1999, n="several experiments", design="the direction and framing of "
+                  "comparisons", found="no reliable asymmetry in rated similarity at first; asymmetries only under circumscribed conditions"),
+            Study("this part, on Rothkopf's open table", 2026, n="555 pairs of unequal length",
+                  design="Tversky's sign count", found="336, 182 and 37; Tversky's 336, 181 and 38"),),
+    note="Preferences for one phrasing are strong. Asymmetries in rated similarity are small and appear only under "
+         "some conditions; the Morse asymmetry is reliable but about 3 points.",
+    sources=("A. Tversky, Features of similarity, Psychological Review 84 (1977) 327-352",
+             "A. Tversky and I. Gati, Studies of similarity, in E. Rosch and B. B. Lloyd (eds), Cognition and "
+             "Categorization (1978) 79-98",
+             "C. M. Aguilar and D. L. Medin, Asymmetries of comparison, Psychonomic Bulletin & Review 6 (1999) 328-337",
+             "E. Z. Rothkopf, A measure of stimulus similarity and errors in some paired-associate learning tasks, "
+             "Journal of Experimental Psychology 53 (1957) 94-101"),
+    checked="2026-11-15",
+    data=("TVERSKY_1977",),
+))
+
+add(Finding(
+    key="hierarchical_network", part=22, title=r"The hierarchical network",
+    claim="Knowledge is stored in a hierarchy of concepts with each property stored once, so checking a fact takes "
+          "longer the more links it crosses.",
+    original=Study("Collins and Quillian", 1969, n="a few subjects", design="true-false sentences needing 0, 1 or 2 "
+                   "links", found="times rose with the number of links"),
+    status="failed",
+    record=(Study("Conrad", 1972, n="students", design="properties controlled for how often people name them",
+                  found="times followed familiarity, not level"),
+            Study("Rips, Shoben and Smith", 1973, n="students", design="verification across levels",
+                  found="typicality effects; 'a bear is an animal' faster than 'a bear is a mammal'"),),
+    note="The strict hierarchy and cognitive economy did not survive; networks with spreading activation did.",
+    sources=("A. M. Collins and M. R. Quillian, Retrieval time from semantic memory, Journal of Verbal Learning and "
+             "Verbal Behavior 8 (1969) 240-247",
+             "M. R. Quillian, Semantic memory, in M. Minsky (ed.), Semantic Information Processing (1968) 227-270",
+             "C. Conrad, Cognitive economy in semantic memory, Journal of Experimental Psychology 92 (1972) 149-154",
+             "L. J. Rips, E. J. Shoben and E. E. Smith, Semantic distance and the verification of semantic relations, "
+             "Journal of Verbal Learning and Verbal Behavior 12 (1973) 1-20",
+             "A. M. Collins and E. F. Loftus, A spreading-activation theory of semantic processing, Psychological "
+             "Review 82 (1975) 407-428"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="semantic_priming", part=22, title=r"Semantic priming",
+    claim="A word is recognized faster after a related word than after an unrelated one.",
+    original=Study("Meyer and Schvaneveldt", 1971, n="students", design="lexical decisions on pairs like "
+                   "bread-butter", found="related pairs faster"),
+    status="replicated, smaller",
+    record=(Study("Lucas (meta-analysis)", 2000, n="dozens of experiments", design="priming by meaning without "
+                  "word association", found="a reliable effect, smaller than with associated pairs"),
+            Study("Hutchison and colleagues (the Semantic Priming Project)", 2013, n="768 people, 1,661 targets",
+                  design="lexical decision and naming, 200 and 1,200 ms", found="about 19 ms in lexical decision, 6 "
+                  "in naming; 26 and 20 for first associates against 42 and 60 earlier", effect=19.0, unit="ms"),),
+    note="Real and very reliable, but smaller than the hand-picked pairs of earlier studies suggested.",
+    sources=("D. E. Meyer and R. W. Schvaneveldt, Facilitation in recognizing pairs of words: evidence of a "
+             "dependence between retrieval operations, Journal of Experimental Psychology 90 (1971) 227-234",
+             "M. Lucas, Semantic priming without association: a meta-analytic review, Psychonomic Bulletin & Review 7 "
+             "(2000) 618-630",
+             "K. A. Hutchison et al., The semantic priming project, Behavior Research Methods 45 (2013) 1099-1114",
+             "J. R. Anderson, Retrieval of propositional information from long-term memory, Cognitive Psychology 6 "
+             "(1974) 451-474"),
+    checked="2026-11-15",
+    data=("HUTCHISON_2013",),
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -2509,3 +2716,26 @@ shown(15, "LEVINE_1978", "a single experiment at the start of a literature; plac
 shown(15, "MCDERMOTT_2016", "a single cross-cultural study at the frontier of music perception, described with its "
       "limits")
 shown(15, "KUJAWA_LIBERMAN_2009", "an animal result at the frontier; its human counterpart is unsettled")
+
+shown(22, r"Kruschke (1992)", "a model, fitted here to the open data; the ordering row is its test")
+shown(22, r"Rips (1989); \ Barsalou (1983); \ Murphy \& Medin (1985)", "three single studies and a theoretical "
+      "paper, told as the case for theories; described without effect sizes")
+shown(22, r"Keil (1989); \ Gelman \& Markman (1986); \ Medin \& Ortony (1989)", "developmental studies described "
+      "qualitatively; essentialism in children is entered with the infant mind in Part 30", row_in=30)
+shown(22, r"Xu \& Tenenbaum (2007); \ Tenenbaum \& Griffiths (2001)", "a model and a word-learning study that tests "
+      "it, described qualitatively; Bayesian word learning returns with language")
+shown(22, r"Harris (1954); \ Firth (1957); \ the \emph{tezg\"{u}ino} example: \ Nida (1975), \ Lin (1998)", "the "
+      "history of an idea")
+shown(22, r"Landauer \& Dumais (1997); \ Caliskan et al. (2017); \ Harnad (1990)", "a model's benchmark, a "
+      "measurement of text and a philosophical argument; not psychological findings to replicate")
+shown(22, "LANDAUER_DUMAIS_1997", "a model's score on a test, not a finding about people")
+shown(22, r"Fried \& Nesse (2015); \ Kotov et al. (2017); \ APA, \ DSM-5 (2013)", "a count of symptom profiles, a "
+      "classification proposal and a manual's criteria; diagnosis as a category is entered in Part 39", row_in=39)
+shown(22, r"Yang et al. (2020), \ the ImageNet person subtree", "a dataset's audit, described; not a finding about "
+      "people")
+shown(22, r"Marjieh, \ Sucholutsky, \ van Rijn, \ Jacoby \& Griffiths (2024)", "a study of language models at the "
+      "frontier, with its numbers; machine representations are Part 60's", row_in=60)
+shown(22, r"Lake et al. (2015); \ Peterson et al. (2018); \ Lake \& Baroni (2023)", "models at the frontier, "
+      "described with their benchmarks; Part 60's")
+shown(22, r"Huth, \ de Heer, \ Griffiths, \ Theunissen \& Gallant (2016)", "a mapping study at the frontier, "
+      "described; semantic maps return with Part 49's encoding models")

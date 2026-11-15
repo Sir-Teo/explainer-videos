@@ -861,4 +861,143 @@
       note: "Nothing you do is stored or sent. Each list holds associates of one word that is never shown, after the lists of Deese (1959) and Roediger and McDermott (1995). In their first experiment students called the missing word old 84% of the time, against 86% for words they had studied. Four lists give you only four missing words, so your own rate is a rough one; but most people call at least one of them old, and many say they remember it.",
     });
   };
+  W.numbers = function (el) {
+    var w = null, GOLD = "#f2c14e", BLUE = "#7ec8f5", GREEN = "#5bd18b", GREY = "#9aa4b2";
+    // Tenenbaum's number game: the same hypotheses as concepts.number_game_hypotheses
+    var N = 100, H = [], NAMES = [], PRIOR = [];
+    (function build() {
+      function add(name, test) {
+        var m = []; for (var y = 1; y <= N; y++) m.push(test(y) ? 1 : 0);
+        if (m.indexOf(1) >= 0) { H.push(m); NAMES.push(name); }
+      }
+      function isPrime(p) { if (p < 2) return false; for (var q = 2; q * q <= p; q++) if (p % q === 0) return false; return true; }
+      function powersOf(b) { var s = {}; for (var e = 1, v = b; v <= N && e < 8; e++, v *= b) s[v] = 1; return s; }
+      add("even", function (y) { return y % 2 === 0; });
+      add("odd", function (y) { return y % 2 === 1; });
+      add("squares", function (y) { var r = Math.round(Math.sqrt(y)); return r * r === y && r <= 10; });
+      add("cubes", function (y) { var r = Math.round(Math.cbrt(y)); return r * r * r === y && r <= 4; });
+      add("primes", isPrime);
+      for (var k = 3; k <= 12; k++) (function (k) { add("multiples of " + k, function (y) { return y % k === 0; }); })(k);
+      for (var b = 2; b <= 10; b++) (function (s, b) { add("powers of " + b, function (y) { return !!s[y]; }); })(powersOf(b), b);
+      for (var d = 0; d <= 9; d++) (function (d) { add("ending in " + d, function (y) { return y % 10 === d; }); })(d);
+      var nMath = H.length, er = [], tot = 0;
+      for (var a = 1; a <= N; a++) for (var bb = a; bb <= N; bb++) {
+        var m = []; for (var y = 1; y <= N; y++) m.push(y >= a && y <= bb ? 1 : 0);
+        H.push(m); NAMES.push(a + " to " + bb);
+        var size = bb - a + 1, e = (size / 100) * Math.exp(-size / 10); er.push(e); tot += e;
+      }
+      for (var i = 0; i < nMath; i++) PRIOR.push(0.5 / nMath);
+      er.forEach(function (e) { PRIOR.push(0.5 * e / tot); });
+    })();
+    function model(examples) {
+      var post = [], z = 0;
+      for (var h = 0; h < H.length; h++) {
+        var size = 0, ok = true;
+        for (var y = 0; y < N; y++) size += H[h][y];
+        for (var i = 0; i < examples.length; i++) if (!H[h][examples[i] - 1]) { ok = false; break; }
+        var p = ok ? PRIOR[h] * Math.pow(size, -examples.length) : 0;
+        post.push(p); z += p;
+      }
+      var gen = []; for (var y2 = 0; y2 < N; y2++) gen.push(0);
+      var best = 0;
+      for (var h2 = 0; h2 < H.length; h2++) {
+        post[h2] /= z; if (post[h2] > post[best]) best = h2;
+        if (post[h2] > 0) for (var y3 = 0; y3 < N; y3++) gen[y3] += post[h2] * H[h2][y3];
+      }
+      return { gen: gen, best: NAMES[best], bestP: post[best] };
+    }
+    var SETS = [[16], [16, 8, 2, 64], [16, 23, 19, 20]], COLS = [GOLD, BLUE, GREEN];
+    var PROBES = [4, 10, 17, 20, 25, 32, 64, 87];
+    var MODELS = SETS.map(model);
+    var KEYS = { f: 0, j: 1 };
+    var S = { phase: "idle", seed: 0, set: 0, k: 0, order: [], answers: [[], [], []], shown: 0 };
+    function shuffle(u, a) {
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(u() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function begin() {
+      var u = QB.rng(104729 * S.seed + 17 * S.set + 5);
+      S.order = shuffle(u, PROBES.slice()); S.k = 0; S.phase = "probe"; S.shown = S.set; w.render();
+    }
+    function start() { task.clear(); S.seed++; S.set = 0; S.answers = [[], [], []]; begin(); }
+    var task = T.create(el, { keys: KEYS, accepting: function () { return S.phase === "probe"; }, respond: answer });
+    function answer(side) {
+      if (S.phase !== "probe") return;
+      task.count++;
+      S.answers[S.set].push({ y: S.order[S.k], yes: side === 1 });
+      S.k++;
+      if (S.k >= S.order.length) {
+        S.set++;
+        if (S.set >= SETS.length) { S.phase = "done"; w.render(); return; }
+        S.phase = "between"; w.render();
+        task.later(begin, 900);
+        return;
+      }
+      w.render();
+    }
+    function agreement(i) {
+      var a = S.answers[i]; if (!a.length) return NaN;
+      var g = MODELS[i].gen, n = 0;
+      a.forEach(function (r) { if ((g[r.y - 1] > 0.5) === r.yes) n++; });
+      return n / a.length;
+    }
+
+    w = QB.widget(el, {
+      title: "The number game",
+      sub: "A concept picks out some of the numbers from 1 to 100. You are shown a few that are in it. For each number asked about, say whether you think it is in the concept too: J (or tap right) for yes, F (or tap left) for no. Three rounds of eight.",
+      panels: 2, height: 330, weights: [1, 1.3],
+      controls: [{ k: "round", label: "Round shown when finished", min: 1, max: 3, step: 1, value: 3,
+                   fmt: function (x) { return String(Math.round(x)); } }],
+      onChange: function (v) { S.view = Math.round(v.round) - 1; },
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.answers = [[], [], []]; S.set = 0; S.shown = 0; } },
+      ],
+      draw: function (g, v) {
+        if (v && v.round) S.view = Math.round(v.round) - 1;
+        var c = g.ctx, b = T.stage(g, 0, task);
+        c.save(); c.textAlign = "center"; c.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(c, b, "On you", "Press Start. You will see some numbers that belong to a concept. Then say, for eight other numbers, whether you think they belong too. There are no wrong answers.");
+        } else if (S.phase === "between") {
+          T.message(c, b, "Next round", "A new concept, new examples.");
+        } else if (S.phase === "done") {
+          T.message(c, b, "Finished.", "On the right: the model's probability that each number is in the concept, with your answers: white for yes, red for no. Move the slider to see each round.");
+        } else if (S.phase === "probe") {
+          c.fillStyle = C.muted; c.font = "12px system-ui, sans-serif";
+          c.fillText("round " + (S.set + 1) + " of 3: these are in the concept", b.cx, b.y + 20);
+          c.fillStyle = COLS[S.set]; c.font = "600 22px system-ui, sans-serif";
+          c.fillText(SETS[S.set].join(",  "), b.cx, b.y + 50);
+          c.fillStyle = C.muted; c.font = "12px system-ui, sans-serif";
+          c.fillText("question " + (S.k + 1) + " of 8: is this one in it too?", b.cx, b.cy - 6);
+          c.fillStyle = C.ink; c.font = "600 34px system-ui, sans-serif";
+          c.fillText(String(S.order[S.k]), b.cx, b.cy + 30);
+          c.font = "13px system-ui, sans-serif"; c.fillStyle = GREY;
+          c.fillText("F: no", b.x + b.w * 0.25, b.y + b.h - 22);
+          c.fillText("J: yes", b.x + b.w * 0.75, b.y + b.h - 22);
+        }
+        c.restore();
+
+        var i = S.phase === "done" && S.view !== undefined ? S.view : Math.min(S.shown, SETS.length - 1), m = MODELS[i];
+        var a = g[1].axes({ x: [0, 101], y: [0, 1.05], xticks: [1, 16, 32, 50, 64, 100], yticks: [0, 0.5, 1],
+          title: "Round " + (i + 1) + ", examples " + SETS[i].join(", ") + ": the model", xlabel: "number", ylabel: "P(in the concept)" });
+        var xs = [], hs = [];
+        for (var y = 1; y <= N; y++) { xs.push(y); hs.push(m.gen[y - 1]); }
+        a.bars(xs, hs, 0.8, { color: COLS[i], alpha: 0.55 });
+        S.answers[i].forEach(function (r) {
+          a.dots([r.y], [r.yes ? 1.0 : 0.02], { color: r.yes ? C.ink : "#ef6f6c", r: 4 });
+        });
+        a.text(40, 0.86, "best: " + m.best + " (" + Math.round(100 * m.bestP) + "%)", { color: C.muted, size: 10.5, bg: true });
+      },
+      readout: function () {
+        var f = function (x) { return isNaN(x) ? "–" : Math.round(100 * x) + "%"; };
+        return [["rounds", Math.min(S.set, 3) + " of 3"],
+                ["agreement with the model, round 1", f(agreement(0))],
+                ["round 2", f(agreement(1))],
+                ["round 3", f(agreement(2))],
+                ["the model's best guess, round 2", MODELS[1].best]];
+      },
+      note: "Nothing you do is stored or sent. The model is Tenenbaum's (1999): 34 mathematical concepts and every range from a to b, a prior split between them, and the size principle, under which examples drawn from a small concept are likelier than the same examples drawn from a big one. It is the model computed in the film (concepts.number_game). In Tenenbaum's experiments people's answers followed the same pattern: spread out after one example, a rule after four powers of two, a range after four numbers near twenty.",
+    });
+  };
 })();

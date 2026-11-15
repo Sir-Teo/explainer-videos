@@ -82,5 +82,10 @@ Modules so far, with the part that introduces each:
                          interference; two-store consolidation; the penguin in Rumelhart's network; Pavlik and
                          Anderson's spacing; the bifurcation model; category adjustment; DRM by global matching;
                          line-up confidence by signal detection; half-life regression
+``concepts``        22   the generalized context model and the prototype model; the six problems with ALCOVE
+                         and a delta-rule network; classical and non-metric scaling; Shepard's generalization
+                         measure, law and consequential regions; Tversky's contrast model and asymmetry count;
+                         category utility; spreading activation; the number game; PPMI word vectors; card sorts;
+                         RSA
 =================  ====  ===============================================================================
 """

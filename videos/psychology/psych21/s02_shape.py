@@ -11,6 +11,7 @@ LAW_TEX = {
     "wickelgren": (r"S = \lambda (1 + \beta t)^{-\psi}", r"Wickelgren's"),
 }
 LAW_COL = {"power": MODEL, "exponential": LOST, "log": CUE, "wickelgren": CTX}
+SHORT = {"power": "pow.", "exponential": "exp.", "log": "log", "wickelgren": "Wick."}
 TICKS = {np.log10(20): r"20\,\text{min}", np.log10(60): r"1\,\text{h}", np.log10(526): r"9\,\text{h}",
          np.log10(1440): r"1\,\text{d}", np.log10(8640): r"6\,\text{d}", np.log10(44640): r"31\,\text{d}"}
 
@@ -101,7 +102,7 @@ class Shape(VoiceoverScene):
                        for n in names]).arrange(DOWN, aligned_edge=LEFT, buff=0.22).move_to([4.2, 1.0, 0])
         # AIC table: rows = people, columns = laws, the best in each row marked
         hdr = VGroup(label(r"AIC", font_size=20, color=GREY_B),
-                     *[label(n[:4], font_size=20, color=LAW_COL[n]) for n in names])
+                     *[label(SHORT[n], font_size=20, color=LAW_COL[n]) for n in names])
         table = VGroup(hdr)
         best = []
         for who, name, col in WHO:

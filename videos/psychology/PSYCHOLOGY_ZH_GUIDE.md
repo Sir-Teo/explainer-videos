@@ -702,6 +702,63 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | highly superior autobiographical memory (HSAM); mnemonist | 高度超常自传记忆（HSAM）；记忆术家 |
 | Leitner boxes; spaced repetition; half-life regression | 莱特纳盒子；间隔重复；半衰期回归 |
 | elastic weight consolidation; Fisher information; machine unlearning; silent engram | 弹性权重巩固；费希尔信息；机器遗忘学习；沉默记忆痕迹 |
+
+## Part 22: concepts and categories
+
+| English | 中文 |
+|---|---|
+| concept; category; classical view; necessary and sufficient features | 概念；类别；经典观点；必要且充分的特征 |
+| typicality; family resemblance; graded membership; fuzzy boundary | 典型性；家族相似性；有程度的成员资格；模糊边界 |
+| prototype; exemplar; context model; generalized context model (GCM) | 原型；范例；情境模型；广义情境模型（GCM） |
+| attention weight; Luce's choice rule; the 5-4 structure; linear separability | 注意权重；卢斯选择法则；五四结构；线性可分 |
+| the six problems (Types I to VI); ALCOVE; delta rule | 六个问题（第一型至第六型）；ALCOVE；德尔塔法则 |
+| multidimensional scaling (classical, non-metric); double centring; stress | 多维尺度法（经典、非度量）；双重中心化；应力 |
+| psychological space; generalization gradient; universal law of generalization; consequential region | 心理空间；泛化梯度；泛化的普遍定律；后果区域 |
+| metric axioms: minimality, symmetry, triangle inequality | 度量公理：极小性、对称性、三角不等式 |
+| contrast model; prominence; focusing; subject and referent | 对比模型；突出性；聚焦；主语与参照 |
+| semantic network; cognitive economy; spreading activation; fan effect | 语义网络；认知经济性；扩散激活；扇效应 |
+| semantic priming; lexical decision; naming; associate | 语义启动；词汇判断；命名；联想词 |
+| basic level; superordinate; subordinate; category utility | 基本水平；上位水平；下位水平；类别效用 |
+| theory theory; ad hoc category; psychological essentialism; natural kind; artefact | 理论观；临时类别；心理本质主义；自然种类；人造物 |
+| number game; hypothesis space; size principle; suspicious coincidence | 数字游戏；假设空间；规模原则；可疑的巧合 |
+| distributional hypothesis; co-occurrence; PPMI; singular value decomposition; word vector; cosine | 分布假说；共现；正点互信息；奇异值分解；词向量；余弦 |
+| latent semantic analysis (LSA); analogy; symbol grounding | 潜在语义分析（LSA）；类比；符号接地 |
+| polythetic category; HiTOP; card sorting; taxonomy | 多元类别；HiTOP；卡片分类；分类体系 |
+| representational similarity analysis (RSA); hue angle | 表征相似性分析（RSA）；色调角 |
+| Rosch, Mervis; McCloskey, Glucksberg; Wittgenstein | 罗施，默维斯；麦克洛斯基，格吕克斯伯格；维特根斯坦 |
+| Posner, Keele; Homa, Vosburgh; Medin, Schaffer; Nosofsky; Kruschke | 波斯纳，基尔；霍马，沃斯堡；梅丁，谢弗；诺索夫斯基；克鲁施克 |
+| Shepard, Hovland, Jenkins; Torgerson; Kruskal; Ekman (Gösta); Rothkopf | 谢泼德，霍夫兰，詹金斯；托格森；克鲁斯卡尔；埃克曼（约斯塔）；罗特科普夫 |
+| Tversky, Gati; Collins, Quillian, Loftus; Meyer, Schvaneveldt; Hutchison | 特沃斯基，加蒂；柯林斯，奎利恩，洛夫特斯；迈耶，施瓦内维尔特；哈奇森 |
+| Corter, Gluck; Tanaka, Taylor; Rips; Barsalou; Murphy; Keil; Gelman, Markman | 科特，格鲁克；田中，泰勒；里普斯；巴萨卢；墨菲；凯尔；格尔曼，马克曼 |
+| Tenenbaum, Griffiths; Fei Xu; Harris; Firth; Landauer, Dumais; Harnad | 特南鲍姆，格里菲斯；Fei Xu（保留原名）；哈里斯；弗斯；兰道尔，杜迈斯；哈纳德 |
+
+## Part 23: language
+
+| English | 中文 |
+|---|---|
+| productivity; phoneme; morpheme; syntax; semantics; pragmatics | 能产性；音位；语素；句法；语义；语用 |
+| the wug test; over-regularization; the U-shaped curve; words and rules | wug 测验；过度规则化；U 形曲线；词与规则 |
+| Zipf's law; rank; power law; the typing monkey | 齐普夫定律；名次；幂律；敲打字机的猴子 |
+| mental lexicon; lexical decision; word frequency; cohort; uniqueness point; TRACE | 心理词典；词汇判断；词频；同类群；唯一性点；TRACE |
+| word superiority effect; interactive activation model; feature, letter and word levels; mask | 词优效应；交互激活模型；特征层、字母层与词层；掩蔽 |
+| garden-path sentence; reanalysis; fixation; regression (of the eyes); eye tracker | 花园路径句；重新分析；注视；（眼动的）回视；眼动仪 |
+| surprisal; bits; trigram model; Kneser-Ney smoothing; perplexity; spillover | 意外度；比特；三元语法模型；Kneser-Ney 平滑；困惑度；溢出效应 |
+| self-paced reading; the Natural Stories corpus | 自定步速阅读；自然故事语料库 |
+| statistical learning; transitional probability; word segmentation; part-word | 统计学习；转移概率；词切分；部分词 |
+| poverty of the stimulus; identification in the limit; negative evidence; universal grammar; fast mapping | 刺激贫乏；极限识别；负面证据；普遍语法；快速映射 |
+| critical period; age of arrival; age of starting; late first-language learners | 关键期；到达年龄；开始年龄；晚学第一语言者 |
+| Broca's area; Wernicke's area; aphasia; the language network; N400; P600 | 布洛卡区；韦尼克区；失语症；语言网络；N400；P600 |
+| linguistic relativity; basic colour terms; cognitive technology; executive control; bilingual advantage | 语言相对论；基本颜色词；认知技术；执行控制；双语优势 |
+| readability; Flesch reading ease; phonics; minimal pairs; BabyLM | 可读性；弗莱施易读度；自然拼读法；最小对立句对；BabyLM |
+| Skinner; Chomsky; Berko; Zipf; Miller (George A.) | 斯金纳；乔姆斯基；让·伯科；齐普夫；乔治·米勒 |
+| Marslen-Wilson; Reicher; Wheeler; McClelland; Rumelhart | 马斯伦-威尔逊；赖歇尔；惠勒；麦克莱兰；鲁梅尔哈特 |
+| Bever; Frazier; Rayner; Hale; Levy; Smith (Nathaniel) | 贝弗；弗雷泽；雷纳；黑尔；利维；纳撒尼尔·史密斯 |
+| Saffran, Aslin, Newport; Black, Bergmann; Gold; Carey, Bartlett; Hart, Risley | 萨弗兰，阿斯林，纽波特；布莱克，伯格曼；戈尔德；凯里，巴特利特；哈特，里斯利 |
+| Marcus; Pinker, Prince; Genie; Mayberry; Johnson; Hartshorne | 马库斯；平克，普林斯；吉妮；梅伯里；约翰逊；哈茨霍恩 |
+| Broca; Wernicke; Fedorenko; Kutas, Hillyard; Osterhout, Holcomb | 布洛卡；韦尼克；费多连科；库塔斯，希利亚德；奥斯特豪特，霍尔科姆 |
+| Whorf; Berlin, Kay; Winawer; Frank (Michael); the Pirahã | 沃尔夫；柏林，凯；威纳沃；迈克尔·弗兰克；皮拉罕人 |
+| Bialystok; Paap, Greenberg; Lehtonen; Flesch; Breitenstein | 比亚韦斯托克；帕普，格林伯格；莱赫托宁；弗莱施；布赖滕施泰因 |
+| Wai Keen Vong; Byung-Doh Oh; Schuler; Christiansen; Chater | Wai Keen Vong（保留原名）；Byung-Doh Oh（保留原名）；舒勒；克里斯蒂安森；查特 |
 ## Names
 
 | English | 中文 |

@@ -86,16 +86,24 @@ class Exceptional(VoiceoverScene):
     def why_forget(self):
         head = heading(r"Why a good memory forgets")
         rng = np.random.default_rng(21)
-        x = np.sort(rng.uniform(0, 1, 10))
-        y = np.sin(2 * np.pi * x * 0.8) + rng.normal(0, 0.25, 10)
-        xx = np.linspace(0, 1, 200)
-        every = np.polyval(np.polyfit(x, y, 9), xx)
-        gist = np.polyval(np.polyfit(x, y, 3), xx)
+        f = lambda v: np.sin(2 * np.pi * v * 0.8)  # noqa: E731
+        x = np.sort(rng.uniform(0, 1, 16))
+        y = f(x) + rng.normal(0, 0.35, 16)
+        xx = np.linspace(0, 1, 300)
+        coef = np.polyfit(x, y, 3)
+        every = np.interp(xx, x, y)
+        gist = np.polyval(coef, xx)
+        xt = rng.uniform(0, 1, 20000)
+        yt = f(xt) + rng.normal(0, 0.35, 20000)
+        err_every = float(np.mean((np.interp(xt, x, y) - yt) ** 2))
+        err_gist = float(np.mean((np.polyval(coef, xt) - yt) ** 2))
         A = axes([0, 1], [-2, 2], x_length=5.4, y_length=3.2, xticks=[], yticks=[], center=[-3.5, 0.2, 0],
-                 font_size=18, xlabel=r"an illustration: \ ten noisy experiences")
+                 font_size=18, xlabel=r"an illustration: \ sixteen noisy experiences of one regularity")
         pts = scatter(A.ax, x, y, TRACE, 0.08, 1.0)
-        c_every = curve_in(A.ax, xx, np.clip(every, -2, 2), LOST, 3)
+        c_every = curve(A.ax, xx, every, LOST, 3)
         c_gist = curve(A.ax, xx, gist, MODEL, 4)
+        errs = label(rf"error on new experiences: \ every detail {err_every:.2f}, \ the gist {err_gist:.2f}",
+                     font_size=19, color=GREY_A).next_to(A, DOWN, buff=0.45)
         key = legend([(LOST, r"keep every detail"), (MODEL, r"keep the gist")], font_size=20)
         key.arrange(RIGHT, buff=0.5).next_to(A, UP, buff=0.15)
         rows = rows_of([
@@ -113,8 +121,9 @@ class Exceptional(VoiceoverScene):
             "but to help you make good decisions. <bookmark mark='b'/> In a world that changes, old details "
             "mislead: where you parked last month, a colleague's old phone number. Forgetting them lets the new "
             "ones count. <bookmark mark='c'/> And a memory that keeps every detail fits the noise in its "
-            "experiences. Here are ten noisy experiences of one regularity. A memory that keeps every particular "
-            "passes through each point and gets the next one wrong; a memory that keeps the gist predicts better. "
+            "experiences. Here are sixteen noisy experiences of one regularity. A memory that keeps every particular "
+            "joins up every point, noise and all; a memory that keeps only the gist smooths them. On new experiences "
+            "of the same regularity, the gist makes the smaller error. "
             "<bookmark mark='d'/> Machine learning calls this regularisation. Ebbinghaus's power law, read through "
             "Anderson and Schooler, calls it the odds of need. Both say that a good memory forgets, and forgets "
             "the right things."
@@ -125,6 +134,7 @@ class Exceptional(VoiceoverScene):
             vo.wait_until("c")
             self.play(FadeIn(A), FadeIn(pts), FadeIn(key), FadeIn(rows[2]))
             self.play(Create(c_every), Create(c_gist))
+            self.play(FadeIn(errs))
             vo.wait_until("d")
             self.play(FadeIn(rows[3]))
         self.clear_scene()

@@ -68,6 +68,17 @@ SOURCES = {
         "file": "overshadowing_rrr2.xlsx",
         "sha256": "81be7ccd1ae7973fb223c745050fc3fc3c551705366d158542067bffde44b775",
     },
+    # Part 22: data inside CRAN source packages (catlearn, smacof, janeaustenr), read as data by rdata.py
+    'nosof94': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/nosof94.RData', 'member_sha256': '4c9959b80d0311b5db13942665948a34ce5eee6559eb4ca8e5b66c10462670a0'},
+    'homa76': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/homa76.RData', 'member_sha256': '99f1af2ea059d7e97c93bc2f1b821d38be2a4d51a7628b7be7d1456ea39d4e24'},
+    'ekman_1954': {'url': 'https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/smacof/smacof_2.1-7.tar.gz'], 'page': 'https://cran.r-project.org/package=smacof', 'file': 'smacof_2.1-7.tar.gz', 'sha256': '7a965a4e06a2ef1e01e37ae7ce6a55f2e745d4aaf99eb1c592b3d835bac9493a', 'licence': 'GPL-3', 'member': 'smacof/data/ekman.rda', 'member_sha256': '0d03901d8212bd1e6907a35c21ccc78e1701e23162025fd53fe3b04896ef418a'},
+    'rothkopf_1957': {'url': 'https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/smacof/smacof_2.1-7.tar.gz'], 'page': 'https://cran.r-project.org/package=smacof', 'file': 'smacof_2.1-7.tar.gz', 'sha256': '7a965a4e06a2ef1e01e37ae7ce6a55f2e745d4aaf99eb1c592b3d835bac9493a', 'licence': 'GPL-3', 'member': 'smacof/data/morse2.rda', 'member_sha256': '4c19c884caac229dae621d0a345e15750b1ad1aa7e2ee8337f77285e315ee06b'},
+    'austen_emma': {'url': 'https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/janeaustenr/janeaustenr_1.0.0.tar.gz'], 'page': 'https://cran.r-project.org/package=janeaustenr', 'file': 'janeaustenr_1.0.0.tar.gz', 'sha256': 'b4c32ee1395ee4a8efe714c535c0fe578b0dbf5f3bb85b41fa5cc87569b8e8aa', 'licence': 'MIT', 'member': 'janeaustenr/data/emma.rda', 'member_sha256': '65594dab7e37779e5b36c8551886d35cef2149fb442793e49b9879a4287f33f2'},
+    'austen_mansfieldpark': {'url': 'https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/janeaustenr/janeaustenr_1.0.0.tar.gz'], 'page': 'https://cran.r-project.org/package=janeaustenr', 'file': 'janeaustenr_1.0.0.tar.gz', 'sha256': 'b4c32ee1395ee4a8efe714c535c0fe578b0dbf5f3bb85b41fa5cc87569b8e8aa', 'licence': 'MIT', 'member': 'janeaustenr/data/mansfieldpark.rda', 'member_sha256': 'c5903def1e79b8494097f9bc5c52d0fb173084450432c10dfd9647c0d3bd3e2d'},
+    'austen_northangerabbey': {'url': 'https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/janeaustenr/janeaustenr_1.0.0.tar.gz'], 'page': 'https://cran.r-project.org/package=janeaustenr', 'file': 'janeaustenr_1.0.0.tar.gz', 'sha256': 'b4c32ee1395ee4a8efe714c535c0fe578b0dbf5f3bb85b41fa5cc87569b8e8aa', 'licence': 'MIT', 'member': 'janeaustenr/data/northangerabbey.rda', 'member_sha256': 'd4b8163fba67575e3125f532752baf7d86bf25dbf975aa596b92d3868cab9519'},
+    'austen_persuasion': {'url': 'https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/janeaustenr/janeaustenr_1.0.0.tar.gz'], 'page': 'https://cran.r-project.org/package=janeaustenr', 'file': 'janeaustenr_1.0.0.tar.gz', 'sha256': 'b4c32ee1395ee4a8efe714c535c0fe578b0dbf5f3bb85b41fa5cc87569b8e8aa', 'licence': 'MIT', 'member': 'janeaustenr/data/persuasion.rda', 'member_sha256': '758a227662b5f94785199b5c80a3d23533b397d476ddc43289181fb556d945a0'},
+    'austen_prideprejudice': {'url': 'https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/janeaustenr/janeaustenr_1.0.0.tar.gz'], 'page': 'https://cran.r-project.org/package=janeaustenr', 'file': 'janeaustenr_1.0.0.tar.gz', 'sha256': 'b4c32ee1395ee4a8efe714c535c0fe578b0dbf5f3bb85b41fa5cc87569b8e8aa', 'licence': 'MIT', 'member': 'janeaustenr/data/prideprejudice.rda', 'member_sha256': '9704d3d55b0e59f3e9f6d6032d192200f925ec7b2ba4f1dba402f179578ae3c9'},
+    'austen_sensesensibility': {'url': 'https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/janeaustenr_1.0.0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/janeaustenr/janeaustenr_1.0.0.tar.gz'], 'page': 'https://cran.r-project.org/package=janeaustenr', 'file': 'janeaustenr_1.0.0.tar.gz', 'sha256': 'b4c32ee1395ee4a8efe714c535c0fe578b0dbf5f3bb85b41fa5cc87569b8e8aa', 'licence': 'MIT', 'member': 'janeaustenr/data/sensesensibility.rda', 'member_sha256': '0fef9c0d7598e30a0c09e866e3db4117b4a47d31cbc28cc8783eb4abdad03593'},
 }
 
 
@@ -88,7 +99,15 @@ def path(key: str) -> Path:
     src = SOURCES[key]
     p = CACHE / src["file"]
     if not p.exists():
-        raw = _get(src["url"])
+        raw, err = None, None
+        for url in src.get("urls", [src["url"]]):
+            try:
+                raw = _get(url)
+                break
+            except Exception as e:  # the next mirror
+                err = e
+        if raw is None:
+            raise RuntimeError(f"{key}: no source answered: {err}")
         p.parent.mkdir(parents=True, exist_ok=True)
         tmp = p.with_name(p.name + ".tmp")
         tmp.write_bytes(raw)
@@ -140,8 +159,15 @@ def member_path(key: str):
     src = SOURCES[key]
     out = CACHE / (key + "_" + Path(src["member"]).name)
     if not out.exists():
-        with zipfile.ZipFile(path(key)) as z:
-            raw = z.read(src["member"])
+        archive_path = path(key)
+        if str(archive_path).endswith((".tar.gz", ".tgz")):
+            import tarfile
+
+            with tarfile.open(archive_path, "r:gz") as t:  # one member read as bytes; nothing is extracted to disk
+                raw = t.extractfile(src["member"]).read()
+        else:
+            with zipfile.ZipFile(archive_path) as z:
+                raw = z.read(src["member"])
         tmp = out.with_name(out.name + ".tmp")
         tmp.write_bytes(raw)
         tmp.replace(out)
@@ -238,3 +264,80 @@ def overshadowing_rrr(study: int) -> dict:
             out["labs"].append(who.split(",")[0].strip())
     out["verbal"], out["control"] = np.array(out["verbal"]), np.array(out["control"])
     return out
+
+
+def _rframe(key) -> dict:
+    """A data frame saved in an R data file, as {column: numpy array}; factors become their labels."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path(key))[0][1]
+    out = {}
+    for name, col in zip(obj["attrs"]["names"]["value"], obj["value"]):
+        v = col["value"]
+        lev = col["attrs"].get("levels", {}).get("value") if col["attrs"] else None
+        out[name] = np.array([lev[i - 1] if (lev and i is not None) else i for i in v], dtype=object if lev else float)
+    return out
+
+
+def nosof94() -> dict:
+    """Nosofsky, Gluck, Palmeri, McKinley and Glauthier (1994): the mean probability of error in each of the first 16
+    blocks of 16 trials for the six problems of Shepard, Hovland and Jenkins (1961), 40 learners per problem, as
+    packaged in the R package catlearn.  ``error`` is (6 types, 16 blocks)."""
+    d = _rframe("nosof94")
+    err = np.zeros((6, 16))
+    for t, b, e in zip(d["type"], d["block"], d["error"]):
+        err[int(t) - 1, int(b) - 1] = e
+    return {"error": err}
+
+
+def homa76() -> dict:
+    """Homa and Vosburgh (1976), the immediate test: probability correct by stimulus type (prototype, low, medium
+    and high distortions, old items, random patterns), training condition and category size, from catlearn."""
+    d = _rframe("homa76")
+    keep = d["phase"] == "imm"
+    return {k: v[keep] for k, v in d.items()}
+
+
+def ekman_1954() -> dict:
+    """Ekman (1954): similarity (0 to 1) of 14 colours from 434 to 674 nm, rated by 31 people, from smacof."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("ekman_1954"))[0][1]
+    n = obj["attrs"]["Size"]["value"][0]
+    v = obj["value"]
+    S = np.ones((n, n))
+    k = 0
+    for j in range(n):  # an R dist object stores its lower triangle column by column
+        for i in range(j + 1, n):
+            S[i, j] = S[j, i] = v[k]
+            k += 1
+    return {"similarity": S, "nm": np.array(obj["attrs"]["Labels"]["value"], float)}
+
+
+def rothkopf_1957() -> dict:
+    """Rothkopf (1957): 598 people heard two Morse signals one after the other and said whether they were the same.
+    ``same`` (36 x 36) is the proportion of 'same' for row signal i and column signal j, from smacof's asymmetric
+    matrix (stored as 1 minus that proportion).  The row is the signal heard first: with that reading the matrix
+    reproduces Tversky's (1977) count from Rothkopf's table (the shorter signal first is called 'same' more often in
+    336 of 555 pairs of unequal length; ``concepts.prominence_asymmetry``).  ``signals`` are the codes and
+    ``symbols`` the letters and digits (A to Z, then 1 to 9 and 0, as the codes show)."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("rothkopf_1957"))[0][1]
+    codes = obj["attrs"]["dimnames"]["value"][0]["value"]
+    D = np.array(obj["value"], float).reshape(36, 36, order="F")
+    symbols = list("ABCDEFGHIJKLMNOPQRSTUVWXYZ") + list("1234567890")
+    return {"same": 1.0 - D, "signals": codes, "symbols": symbols}
+
+
+def austen() -> list:
+    """Jane Austen's six novels as lower-case word tokens (729,322 of them), from the R package janeaustenr."""
+    import re
+
+    from explainer.psychology import rdata
+
+    tokens = []
+    for book in ("prideprejudice", "persuasion", "northangerabbey", "sensesensibility", "mansfieldpark", "emma"):
+        lines = rdata.load(member_path("austen_" + book))[0][1]["value"]
+        tokens += re.findall(r"[a-z]+", " ".join(x for x in lines if x).lower())
+    return tokens

@@ -56,8 +56,8 @@ class Hook(VoiceoverScene):
             vo.wait_until("b")
             words = VGroup(*[label(v, font_size=30, color=FALSE) for v in lp["verbs"]])
             for w in words:
-                w.move_to(q[1])
-            self.play(FadeIn(words[3]))
+                w.next_to(q[1].get_bottom(), UP, buff=0.08)  # on the line, not through it
+            self.play(FadeOut(q[1]), FadeIn(words[3]))  # the verb takes the blank's place
             prev = 3
             for i in (0, 1, 2, 4):
                 self.play(FadeOut(words[prev]), FadeIn(words[i]), run_time=0.45)
