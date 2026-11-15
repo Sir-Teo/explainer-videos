@@ -2173,13 +2173,30 @@ everything is normalized, and where?).
 *Story:* The engineer tuning the first MP3 encoder tested it on an unaccompanied voice, Suzanne Vega's "Tom's
 Diner", because it sounded dreadful. Twelve years of research into what the ear cannot hear produced a file a
 tenth the size, and a few years later that file broke the record industry's business.
+1. Hook: an ear question (which was the original?); sizes and margins; Tom's Diner and the MP3; two kinds of compression; the plan.
+2. Entropy and lossless coding: entropy; prediction; how much it saves; Rice codes; a bit-exact round trip; better predictors.
+3. What the ear cannot hear: a masking model; spreading; one frame's mask; an ear question (white or shaped noise?); masking in time.
+4. The MDCT: why; the transform; one frame's aliases; the aliases cancel; aliases heard; a bank of filters.
+5. A perceptual coder: the coder; bit allocation by step size; rate control; five rates; five rates heard.
+6. Window switching and pre-echo: time against frequency; 30 ms before a hit; an ear question (which had a swish?); switching.
+7. Stereo coding: mid and side; the same bits two ways; heard; intensity and parametric stereo.
+8. MP3, AAC and Opus: five codecs; MP3; AAC; Opus; the file that broke a business.
+9. Listening tests: an ABX trial (an ear question); counting right answers; the power of a test; BS.1116 and MUSHRA.
+10. Generations: transcoding; five generations; heard; in practice.
+11. Vectors and residuals: vector quantization; residual stages; stage by stage; heard; neural codecs.
+12. Frontier: what neural codecs change; learned metrics; the research problem.
+13. Variation 58: the Tune at five bit rates, and the residue alone. Outro: problems, payoffs.
+
 *Covers:* entropy and lossless coding by prediction; masking thresholds; the MDCT and why its aliases cancel;
 window switching and pre-echo; bit allocation; stereo coding; MP3, AAC and Opus; listening tests and their
 statistics; transcoding; neural codecs and residual vector quantization.
-*Built and computed:* a lossless coder with bit-exact round trip; a perceptual codec on Part 4's masking model;
-the cancellation verified to machine precision; the power of an ABX test.
+*Built and computed:* `monochord/codec.py`: a lossless coder (fixed predictors, Rice codes) with a bit-exact round
+trip (voice 23 %, mix 55 %); the MDCT with its cancellation verified to 1e-13; a masking model (Bark bands,
+Schroeder's spreading, Johnston's tonality, the threshold in quiet) and a perceptual coder with rate control (the mix
+19 dB under the mask at 128 kbit/s, 18 over at 16); pre-echo at equal noise-to-mask; mid-side coding; the power of an
+ABX test (12 of 16; a 70 % listener passes 45 % of the time); five generations; residual vector quantization.
 *Variation 58:* the Tune at five bitrates, and the residue the codec discards, played alone.
-*Frontier:* neural codecs; learned perceptual metrics.
+*Frontier:* neural codecs; learned perceptual metrics (open: can a learned metric judge a kind of codec it never saw?).
 *Reading:* Bosi & Goldberg; Brandenburg (1999); Valin et al. on Opus; Sterne, *MP3: The Meaning of a Format*.
 
 ### Part 59 · Live Sound (~50)

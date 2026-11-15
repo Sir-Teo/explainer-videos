@@ -312,4 +312,63 @@
       note: "Past the point where the limiter starts working, every decibel of drive adds less than a decibel of loudness and takes almost a decibel of peak-to-loudness ratio. The service hands the loudness back; the flattened peaks stay flattened."
     });
   };
+
+  // ---- Part 58: an ABX test ------------------------------------------------------------------------------------------
+  function binomPmf(n, p) {
+    var out = [], lc = 0;
+    for (var k = 0; k <= n; k++) {
+      if (k > 0) lc += Math.log(n - k + 1) - Math.log(k);
+      out.push(Math.exp(lc + k * Math.log(Math.max(p, 1e-12)) + (n - k) * Math.log(Math.max(1 - p, 1e-12))));
+    }
+    return out;
+  }
+  function abxThreshold(n, alpha) {
+    var pm = binomPmf(n, 0.5), tail = 0;
+    for (var c = n; c >= 0; c--) { tail += pm[c]; if (tail >= alpha) return c + 1; }
+    return 0;
+  }
+  function abxSound(noiseDb, which) {
+    var rate = 44100, n = Math.floor(1.6 * rate), y = new Float32Array(n), seed = 11;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647 * 2 - 1; }
+    var g = Math.pow(10, noiseDb / 20);
+    for (var i = 0; i < n; i++) {
+      var t = i / rate, env = Math.min(1, t / 0.02) * Math.min(1, (1.6 - t) / 0.1), v = 0;
+      [220, 330, 440, 550, 660].forEach(function (f, j) { v += Math.sin(2 * Math.PI * f * t) / (j + 1); });
+      y[i] = 0.12 * env * (v + (which === "B" ? g * 4 * rnd() : 0));
+    }
+    return y;
+  }
+
+  W.abx = function (el) {
+    QB.widget(el, {
+      title: "An ABX test",
+      sub: "A is a chord; B is the same chord with a little noise added. Play A, B and X (one of the two, chosen at random), then reveal. The plot is how many right answers a guesser gets in a test of that many trials (grey) against a listener who is right with the probability you set (gold); the line is the score needed to pass at 5 per cent.",
+      panels: 1, height: 220,
+      controls: [{ k: "n", label: "Trials", min: 4, max: 100, step: 1, value: 16, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "p", label: "The listener is right", min: 0.5, max: 1, step: 0.01, value: 0.7, fmt: function (x) { return (100 * x).toFixed(0) + " %"; } },
+                 { k: "noise", label: "B's noise", min: -50, max: -10, step: 1, value: -30, fmt: function (x) { return x.toFixed(0) + " dB"; } }],
+      buttons: [{ label: "Play A", act: function (s) { s.sound = play(abxSound(s.v.noise, "A"), 44100); } },
+                { label: "Play B", act: function (s) { s.sound = play(abxSound(s.v.noise, "B"), 44100); } },
+                { label: "Play X", act: function (s) { if (!s.x) s.x = Math.random() < 0.5 ? "A" : "B"; s.revealed = false; s.sound = play(abxSound(s.v.noise, s.x), 44100); } },
+                { label: "Reveal X (and draw a new one)", act: function (s) { s.revealed = s.x || "play X first"; s.x = null; } }],
+      init: function (s) { s.sound = null; s.x = null; s.revealed = false; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var n = Math.round(v.n), g = binomPmf(n, 0.5), l = binomPmf(n, v.p), c = abxThreshold(n, 0.05), ks = [], top = 0;
+        for (var k = 0; k <= n; k++) { ks.push(k); top = Math.max(top, g[k], l[k]); }
+        var a = gr[0].axes({ x: [0, n], y: [0, top * 1.1], title: "Right answers out of " + n, xlabel: "right answers" });
+        a.line(ks, g, { color: "#8A93A0", width: 2 });
+        a.line(ks, l, { color: C.idea, width: 2.5 });
+        a.line([c - 0.5, c - 0.5], [0, top * 1.1], { color: "#C0504D", width: 1.5 });
+      },
+      readout: function (v, s) {
+        var n = Math.round(v.n), c = abxThreshold(n, 0.05), l = binomPmf(n, v.p), pw = 0;
+        for (var k = c; k <= n; k++) pw += l[k];
+        return [["right answers needed to pass", c + " of " + n], ["chance this listener passes (power)", (100 * pw).toFixed(0) + " %"],
+                ["X was", s.revealed ? s.revealed : "play A, B and X, then reveal"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "A failed short test does not show that a difference is inaudible: a listener right 70 % of the time passes a 16-trial test less than half the time. Make B's noise quieter until you cannot tell, then count how often you were right."
+    });
+  };
 })();

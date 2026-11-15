@@ -160,4 +160,36 @@ PARTS = [
         I=(1, 3, 4, 5),
         also=(("Monochord's mastering bench: meters, gating, true peak, a look-ahead limiter, normalization, dither, RIAA", "explainer/music/monochord/master.py"),),
     ),
+    Part(
+        n=58, level="U", widget="abx", prereq=(4, 48, 49, 55, 57),
+        question="How can a file a tenth the size of a recording sound the same, and how would anyone prove it does?",
+        story="Brandenburg tuned the first MP3 coder on Suzanne Vega's voice alone; an ear question hears the Tune sung alone as recorded and through Monochord's own perceptual coder at 64 kbit/s (a twelfth the size, its noise 16 dB under the mask) and 16 (18 dB over). Two kinds of compression. Entropy, prediction (the voice from 13 to 3.5 bits a sample), Rice codes, and a lossless coder that rebuilds every bit (voice 23 per cent, mix 55). Masking: Schroeder's spreading, Johnston's tonality offsets, the threshold in quiet; one frame's mask; an ear question hears white and mask-shaped noise at the same power (the shaped noise only 10 dB under the music, hidden). The MDCT, one frame's aliases and their cancellation to 1e-13, heard by dropping alternate frames. A perceptual coder: step sizes from the mask, a margin found by bisection, Rice-coded bands; the voice and the mix at five rates (the mix 19 dB under the mask at 128 kbit/s, 18 over at 16), heard. Pre-echo: at equal noise-to-mask, long blocks leave 5.5 dB more noise before each hit and short ones cost three times the bits (an ear question); window switching. Mid-side coding about 4 dB better at the same bits, heard. MP3, AAC, Vorbis, HE-AAC and Opus; the business. Listening tests: an ABX trial, binomial thresholds (12 of 16), the power (a 70 per cent listener passes 16 trials 45 per cent of the time), BS.1116 and MUSHRA. Five generations of transcoding (SNR 8.5 to about 2 dB), heard. Residual vector quantization in stages (5 dB each), heard; neural codecs; learned metrics. The Tune at five rates, and the residue alone.",
+        handoff="Low-delay codecs on stage in Part 59; the files that changed the business in Part 60; fingerprints "
+                "that survive a codec in Part 63; codec tokens as generative audio's alphabet in Part 66; listening tests "
+                "and their statistics in Part 67.",
+        outside="Part 4 for masking, critical bands and the threshold in quiet; Part 48 for sampling and quantization; "
+                "Part 49 for filters and the FFT; Part 55 for stereo cues; Part 57 for true peaks and level-matched "
+                "comparison. Entropy, the binomial distribution, linear algebra of a transform, k-means.",
+        objectives={
+            "U": ["Hear a lone voice at 64 and 16 kbit/s against the original, and the voice at five rates.",
+                  "Hear white and mask-shaped noise of equal power, pre-echo with long and short blocks, and an ABX trial.",
+                  "Hear left-right against mid-side coding, five generations of transcoding, and vector quantization in stages."],
+            "M": ["Compute entropy and code prediction residuals with Rice codes, and decode them bit for bit.",
+                  "Prove the MDCT's alias cancellation and build a masking model with spreading, tonality and quiet.",
+                  "Allocate bits by step sizes under rate control, and compute an ABX test's threshold and power."],
+            "D": ["Find whether a learned metric can predict ratings for a kind of codec it never saw in training."],
+            "I": ["Choose codecs and rates for delivery, keep lossless masters, avoid transcoding, and run fair listening tests."],
+        },
+        results=[
+            ("Entropy", r"H = -\textstyle\sum_i p_i \log_2 p_i"),
+            ("MDCT", r"X_k = \textstyle\sum_{n=0}^{2N-1} w_n x_n \cos[\tfrac{\pi}{N}(n + \tfrac12 + \tfrac N2)(k + \tfrac12)], \ w_n^2 + w_{n+N}^2 = 1"),
+            ("Step size", r"\Delta_b = \sqrt{12 M_b / n_b}\,10^{-m/20}"),
+            ("ABX", r"P(\ge c \mid n, \tfrac12) < 0.05: \ c = 12 \text{ of } 16"),
+            ("Spreading", r"S(\Delta z) = 15.81 + 7.5(\Delta z + 0.474) - 17.5\sqrt{1 + (\Delta z + 0.474)^2}"),
+        ],
+        U=(0, 2, 5, 6, 7, 8, 9),
+        D=(11,),
+        I=(1, 3, 4, 10),
+        also=(("Monochord's codecs: a lossless coder, the MDCT, a masking model, a perceptual coder, ABX statistics, residual vector quantization", "explainer/music/monochord/codec.py"),),
+    ),
 ]

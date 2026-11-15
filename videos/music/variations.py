@@ -119,6 +119,8 @@ LEDGER = [
      "measure": r"one session, three mixes: crest factor 18 dB dry, 11 in the wall; the dub's echo every 0.45 s"},
     {"part": 57, "title": r"an album side, and one war-mastered beside itself", "seconds": 49.5,
      "measure": r"four Variations at -16 LUFS; the war master's peak-to-loudness ratio 6.6 dB against 13.0"},
+    {"part": 58, "title": r"at five bit rates, and the residue alone", "seconds": 39.5,
+     "measure": r"128 to 16 kbit/s: noise 19 dB under the mask at 128, 18 dB over it at 16"},
 ]
 
 
