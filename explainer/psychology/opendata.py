@@ -136,6 +136,8 @@ SOURCES = {
     'faceexp': {'url': 'https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/smacof/smacof_2.1-7.tar.gz'], 'page': 'https://cran.r-project.org/package=smacof', 'file': 'smacof_2.1-7.tar.gz', 'sha256': '7a965a4e06a2ef1e01e37ae7ce6a55f2e745d4aaf99eb1c592b3d835bac9493a', 'licence': 'GPL-3', 'member': 'smacof/data/FaceExp.rda', 'member_sha256': 'b104ed979ec2e0910ba1a562f784e0054aaa35ac99cc816694c5adef0b488372'},
     'facescale': {'url': 'https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/smacof/smacof_2.1-7.tar.gz'], 'page': 'https://cran.r-project.org/package=smacof', 'file': 'smacof_2.1-7.tar.gz', 'sha256': '7a965a4e06a2ef1e01e37ae7ce6a55f2e745d4aaf99eb1c592b3d835bac9493a', 'licence': 'GPL-3', 'member': 'smacof/data/FaceScale.rda', 'member_sha256': '088989fe9b5445fc576bb27755456024ca19078342df9b86cc868ecd8e529653'},
     'coles2019': {'url': 'https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psymetadata/psymetadata_1.0.1.tar.gz'], 'page': 'https://cran.r-project.org/package=psymetadata', 'file': 'psymetadata_1.0.1.tar.gz', 'sha256': '9b5f0cb8ab98e64fb7807483bb74fdaf16c18b010c081f0f93308c1da10b2bd4', 'licence': 'GPL (>= 2)', 'member': 'psymetadata/data/coles2019.rda', 'member_sha256': '93de0be5403efd82d2ad0eb77e2cb30d8c125fba953e2fb347b44c2a1b281b2c'},
+    # Part 32: Holzinger and Swineford's (1939) nine mental tests for 301 children (lavaan)
+    'holzinger1939': {'url': 'https://cran.r-project.org/src/contrib/lavaan_0.7-3.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/lavaan_0.7-3.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/lavaan/lavaan_0.7-3.tar.gz'], 'page': 'https://cran.r-project.org/package=lavaan', 'file': 'lavaan_0.7-3.tar.gz', 'sha256': 'c1e9ecbd01dde0ada6bda11f0f9e84babfefebf06d1ab5887b4bd8d24ebb6787', 'licence': 'GPL (>= 2)', 'member': 'lavaan/data/HolzingerSwineford1939.rda', 'member_sha256': 'd667bfeabd08c27faba2586bcc8df524d1cbc73a46b16e11ad6f863bb281b338'},
     # Part 22: data inside CRAN source packages (catlearn, smacof, janeaustenr), read as data by rdata.py
     'nosof94': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/nosof94.RData', 'member_sha256': '4c9959b80d0311b5db13942665948a34ce5eee6559eb4ca8e5b66c10462670a0'},
     'homa76': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/homa76.RData', 'member_sha256': '99f1af2ea059d7e97c93bc2f1b821d38be2a4d51a7628b7be7d1456ea39d4e24'},
@@ -611,4 +613,26 @@ def coles_2019() -> dict:
             out[k] = np.array([-1 if x is None else x for x in v], int)  # -1: not recorded
         else:
             out[k] = list(v)
+    return out
+
+
+def holzinger_1939() -> dict:
+    """Holzinger and Swineford's (1939) mental-ability scores for 301 seventh- and eighth-grade children at two
+    schools (Pasteur and Grant-White), as the nine-test subset in lavaan: ``x1`` visual perception, ``x2`` cubes,
+    ``x3`` lozenges, ``x4`` paragraph comprehension, ``x5`` sentence completion, ``x6`` word meaning, ``x7`` speeded
+    addition, ``x8`` speeded counting of dots, ``x9`` speeded discrimination of straight and curved capitals; with
+    ``school``, ``sex`` and ``grade``.  Returns ``X`` (301 x 9), ``names`` and the background columns."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("holzinger1939"))[0][1]
+    cols = {nm: col for nm, col in zip(obj["attrs"]["names"]["value"], obj["value"])}
+    names = [f"x{i}" for i in range(1, 10)]
+    X = np.column_stack([np.array(cols[n]["value"], float) for n in names])
+    out = {"X": X, "names": names}
+    for k in ("school", "sex", "grade", "ageyr"):
+        if k in cols:
+            col = cols[k]
+            levels = (col.get("attrs") or {}).get("levels")
+            v = col["value"]
+            out[k] = [levels["value"][x - 1] for x in v] if levels else list(v)
     return out

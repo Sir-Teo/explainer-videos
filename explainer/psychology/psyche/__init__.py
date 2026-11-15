@@ -118,5 +118,9 @@ Modules so far, with the part that introduces each:
 ``lifespan``        31   the age-period-cohort identity and Lexis tables; a population with a true
                          ageing curve and cohort drift under three designs; a growth-curve mixed model
                          by EM with BLUPs; ACE correlations; cognitive reserve; attributable fractions
+``traits``          32   tetrads and one-factor fits; a common cause, Thomson's sampling and mutualism,
+                         and training one ability in each; ratio and deviation IQs, SEM, Thorndike's
+                         correction; rule-built matrix items and a capacity-limited solver; overlap and
+                         invariance; cutoffs, Kelley's estimate, Brogden's gain, the four-fifths ratio
 =================  ====  ===============================================================================
 """

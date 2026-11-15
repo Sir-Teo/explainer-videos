@@ -1,11 +1,11 @@
 # Psychology, Built (心理学，从零搭建)
 
-**Status (2026-11-15): the plan is accepted, the shared code is in place, and Parts 1 to 31 are built in English
+**Status (2026-11-15): the plan is accepted, the shared code is in place, and Parts 1 to 32 are built in English
 and Chinese.** Act I (Parts 1 to 4) is the method; Act II (Parts 5 to 10) is the biology, from *The Neuron* to
 *Chemistry and Clocks*; Act III (Parts 11 to 15) is the senses, from *The Threshold* to *The Other Senses*; Act IV
 (Parts 16 and 17) is learning, *Conditioning* and *Reward and Prediction*; and Act V, thinking, is complete:
 *Attention*, *Working Memory*, *Memory I: Storing and Finding*, *Memory II: Forgetting and Inventing*, *Concepts
-and Categories*, *Language*, *Reasoning and Problem Solving*, *Deciding in Time*, *Judgment and Choice* and *Consciousness* (Parts 18 to 27); and Act VI, feeling and wanting, is complete: *Motivation* and *Emotion* (Parts 28 and 29); and Act VII, growing, is complete: *The Infant Mind* and *The Lifespan* (Parts 30 and 31). This file is the plan;
+and Categories*, *Language*, *Reasoning and Problem Solving*, *Deciding in Time*, *Judgment and Choice* and *Consciousness* (Parts 18 to 27); and Act VI, feeling and wanting, is complete: *Motivation* and *Emotion* (Parts 28 and 29); and Act VII, growing, is complete: *The Infant Mind* and *The Lifespan* (Parts 30 and 31); and Act VIII, how people differ, has begun with *Intelligence* (Part 32). This file is the plan;
 the standard every part meets, the devices and all sixty-two parts chapter by chapter are in
 [`SYLLABUS.md`](SYLLABUS.md), with the progress table in its §9.
 

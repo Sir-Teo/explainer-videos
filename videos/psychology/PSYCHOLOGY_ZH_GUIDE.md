@@ -955,6 +955,32 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Yaakov Stern; Livingston; Ngandu, Kivipelto; Eriksson, Fred Gage; Sorrells; Boldrini; Moreno-Jiménez | 雅科夫·斯特恩；利文斯顿；恩甘杜，基维佩尔托；埃里克松，弗雷德·盖奇；索雷尔斯；博尔德里尼；莫雷诺-希门尼斯 |
 | James Flynn; Pietschnig, Voracek; Bratsberg, Rogeberg; Timothy Layton; Steve Horvath; Paul Baltes; Spearman; Binet | 詹姆斯·弗林；皮奇尼希，沃拉切克；布拉茨贝格，罗格贝格；蒂莫西·莱顿；史蒂夫·霍瓦特；保罗·巴尔特斯；斯皮尔曼；比奈 |
 
+## Part 32: intelligence
+
+| English | 中文 |
+|---|---|
+| intelligence; general intelligence, g; the positive manifold; a hierarchy | 智力；一般智力，g；正向流形；层级 |
+| factor analysis; loading; uniqueness; tetrad difference; maximum likelihood; varimax; residual correlation | 因素分析；载荷；独特性；四分差；最大似然；方差最大旋转；残差相关 |
+| primary mental abilities; strata; the Cattell-Horn-Carroll model; fluid and crystallized abilities | 基本心理能力；层；卡特尔-霍恩-卡罗尔模型；流体能力和晶体能力 |
+| common cause; Thomson's sampling (bonds); mutualism; network model | 共同原因；汤姆森的抽样（联结）；互利共生；网络模型 |
+| mental age; ratio IQ; deviation IQ; norming sample; standard error of measurement | 心理年龄；比率智商；离差智商；常模样本；测量标准误 |
+| validity; range restriction; Thorndike's correction; cognitive epidemiology | 效度；全距限制；桑代克校正；认知流行病学 |
+| matrix item; Raven's Progressive Matrices; rule; capacity | 矩阵题；瑞文推理测验；规则；容量 |
+| measurement invariance; loadings and intercepts; overlap; stereotype threat | 测量不变性；载荷和截距；重叠；刻板印象威胁 |
+| feeble-minded; the Army Alpha and Beta; the Immigration Act of 1924; *Buck v. Bell*; sterilization | 低能；陆军甲种和乙种测验；1924年移民法；巴克诉贝尔案；绝育 |
+| multiple intelligences; emotional intelligence; the Mozart effect | 多元智力；情绪智力；莫扎特效应 |
+| intellectual disability; adaptive functioning; Kelley's true-score estimate; selection gain; adverse impact; the four-fifths rule | 智力障碍；适应功能；凯利真分数估计；甄选增益；不利影响；五分之四规则 |
+| polygenic score; within-family; the Abstraction and Reasoning Corpus | 多基因分数；家庭内部；抽象与推理语料库 |
+| Charles Spearman; Alfred Binet; Théodore Simon; William Stern; Lewis Terman; David Wechsler | 查尔斯·斯皮尔曼；阿尔弗雷德·比奈；泰奥多尔·西蒙；威廉·斯特恩；刘易斯·推孟；大卫·韦克斯勒 |
+| Karl Holzinger, Frances Swineford; Louis Thurstone; John Carroll; Godfrey Thomson; Han van der Maas | 卡尔·霍尔津格，弗朗西丝·斯温福德；路易斯·瑟斯顿；约翰·卡罗尔；戈弗雷·汤姆森；汉·范德马斯 |
+| Lawley, Jöreskog; Ian Deary; Tarmo Strenze; Paul Sackett; Schmidt, Hunter; Catherine Calvin | 劳利，约雷斯科格；伊恩·迪尔里；塔尔莫·斯特伦泽；保罗·萨基特；施密特，亨特；凯瑟琳·卡尔文 |
+| Patricia Carpenter, Marcel Just, Peter Shell; Claire Haworth; Stuart Ritchie, Elliot Tucker-Drob; Stephen Ceci | 帕特里夏·卡彭特，马塞尔·贾斯特，彼得·谢尔；克莱尔·霍沃思；斯图尔特·里奇，埃利奥特·塔克-德罗布；斯蒂芬·塞西 |
+| Jelte Wicherts; Paulette Flore, Mulder; Henry Goddard; Robert Yerkes; Mark Snyderman, Richard Herrnstein | 耶尔特·维歇茨；波莱特·弗洛雷，穆尔德；亨利·戈达德；罗伯特·耶基斯；马克·斯奈德曼，理查德·赫恩斯坦 |
+| Oliver Wendell Holmes; Carrie Buck; Cyril Burt; Leon Kamin; Leslie Hearnshaw; Samuel Morton; Jason Lewis | 奥利弗·温德尔·霍姆斯；凯丽·巴克；西里尔·伯特；莱昂·卡明；莱斯利·赫恩肖；塞缪尔·莫顿；贾森·刘易斯 |
+| Howard Gardner; Beth Visser, Michael Ashton, Philip Vernon; Frances Rauscher, Gordon Shaw, Katherine Ky | 霍华德·加德纳；贝丝·维瑟，迈克尔·阿什顿，菲利普·弗农；弗朗西丝·劳舍尔，戈登·肖，凯瑟琳·基 |
+| Jakob Pietschnig, Martin Voracek, Anton Formann; Truman Kelley; Hubert Brogden; Kan, Levine; McFarland; Lee; Howe | 雅各布·皮奇尼希，马丁·沃拉切克，安东·福尔曼；杜鲁门·凯利；休伯特·布罗格登；坎，莱文；麦克法兰；李；豪 |
+| François Chollet; Gordon Allport, Henry Odbert | 弗朗索瓦·肖莱；戈登·奥尔波特，亨利·奥德伯特 |
+
 ## Names
 
 | English | 中文 |

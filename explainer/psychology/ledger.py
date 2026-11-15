@@ -1065,9 +1065,10 @@ shown(9, "BOUCHARD_1990", "an anecdote and the study it began; its figure is quo
 shown(9, "GALTON_1875", "the history of a question")
 shown(9, "FISHER_1918", "theory, checked here by simulation")
 shown(9, "TURKHEIMER_2000", "a summary of a literature; the evidence is the row on twin heritability")
-shown(9, "TURKHEIMER_2003", "one study with mixed replications, shown as the example of a heritability that depends "
-                            "on the environment", row_in=32)
-shown(9, "HAWORTH_2010", "a description of how an estimate changes with age", row_in=32)
+shown(9, "TURKHEIMER_2003", "one study shown as the example of a heritability that depends on the environment; its "
+                            "row, with its record, is entered with intelligence in Part 32")
+shown(9, "HAWORTH_2010", "a description of how an estimate changes with age; its row is entered with intelligence in "
+                         "Part 32")
 shown(9, "NCD_RISC_2016", "a description of populations")
 shown(9, "HERITABILITY_TABLE", "meta-analytic values; the evidence is the row on twin heritability")
 shown(9, "KONG_2018", "a methods result at the frontier")
@@ -4081,6 +4082,165 @@ add(Finding(
     checked="2026-11-15",
 ))
 
+add(Finding(
+    key="positive_manifold", part=32, title=r"The positive manifold",
+    claim="Scores on different kinds of mental test correlate positively with one another.",
+    original=Study("Spearman", 1904, n="boys at a preparatory school", design="examination marks, pitch "
+                   "discrimination and musical talent", found="every correlation positive, in a hierarchy"),
+    status="replicated",
+    record=(Study("Holzinger and Swineford (recomputed here)", 1939, n="301 children, nine tests",
+                  found="35 of 36 correlations positive, mean 0.26; one factor too few, three adequate"),
+            Study("Carroll (reanalysis)", 1993, n="more than 460 data sets",
+                  found="a general factor at the top of a hierarchy of broad and narrow abilities"),
+            Study("Visser, Ashton and Vernon", 2006, n="tests of Gardner's eight domains",
+                  found="a positive manifold and a large general factor even here"),),
+    note="Among the most replicated findings in psychology; what causes it, one ability or many interacting ones, is "
+         "a separate and open question.",
+    sources=("C. Spearman, \"General intelligence,\" objectively determined and measured, American Journal of "
+             "Psychology 15 (1904) 201-292",
+             "K. J. Holzinger and F. Swineford, A study in factor analysis: the stability of a bi-factor solution, "
+             "Supplementary Educational Monographs 48 (University of Chicago, 1939)",
+             "J. B. Carroll, Human Cognitive Abilities: A Survey of Factor-Analytic Studies (Cambridge University "
+             "Press, 1993)",
+             "B. A. Visser, M. C. Ashton and P. A. Vernon, Beyond g: putting multiple intelligences theory to the "
+             "test, Intelligence 34 (2006) 487-502"),
+    checked="2026-11-15",
+    data=("SPEARMAN_1904", "HOLZINGER_1939"),
+))
+
+add(Finding(
+    key="gma_job_validity", part=32, title=r"Intelligence and job performance",
+    claim="General mental ability predicts job performance with a validity of about .5, better than any other "
+          "single selection method.",
+    original=Study("Schmidt and Hunter (meta-analysis)", 1998, n="85 years of studies of 19 selection methods",
+                   found="general mental ability the strongest single predictor"),
+    status="replicated, smaller",
+    record=(Study("Sackett, Zhang, Berry and Lievens (reanalysis)", 2022, n="the same literatures, corrections "
+                  "for range restriction revisited", effect=0.31, unit="r",
+                  found="about .31; no longer the clear best single predictor"),),
+    note="A real and useful predictor; the classic figure rested on corrections for range restriction that were "
+         "too large.",
+    sources=("F. L. Schmidt and J. E. Hunter, The validity and utility of selection methods in personnel psychology, "
+             "Psychological Bulletin 124 (1998) 262-274",
+             "P. R. Sackett, C. Zhang, C. M. Berry and F. Lievens, Revisiting meta-analytic estimates of validity in "
+             "personnel selection: addressing systematic overcorrection for restriction of range, Journal of Applied "
+             "Psychology 107 (2022) 2040-2068"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="flynn_effect", part=32, title=r"The Flynn effect",
+    claim="Average scores on intelligence tests rose by about three points a decade through the twentieth century.",
+    original=Study("Flynn", 1984, n="American norming samples, 1932 to 1978",
+                   found="13.8 points in 46 years"),
+    status="replicated",
+    record=(Study("Flynn", 1987, n="14 nations", found="5 to 25 points in a generation, largest on reasoning tests"),
+            Study("Wicherts and colleagues", 2004, n="several test batteries across cohorts",
+                  found="the gains are not measurement-invariant"),
+            Study("Pietschnig and Voracek (meta-analysis)", 2015, n="271 samples, about 4 million people, 31 "
+                  "countries", found="about 2.8 points a decade"),
+            Study("Bratsberg and Rogeberg (within families)", 2018, n="736,808 Norwegian conscripts",
+                  found="a reversal for men born from the mid-1970s, within families"),),
+    note="The rise is real and large; what it is a rise in is unclear, since the tests are not invariant across "
+         "cohorts, and in several countries it has reversed.",
+    sources=("J. R. Flynn, The mean IQ of Americans: massive gains 1932 to 1978, Psychological Bulletin 95 (1984) "
+             "29-51",
+             "J. R. Flynn, Massive IQ gains in 14 nations, Psychological Bulletin 101 (1987) 171-191",
+             "J. M. Wicherts et al., Are intelligence tests measurement invariant over time? Investigating the "
+             "nature of the Flynn effect, Intelligence 32 (2004) 509-537",
+             "J. Pietschnig and M. Voracek, One century of global IQ gains, Perspectives on Psychological Science 10 "
+             "(2015) 282-306",
+             "B. Bratsberg and O. Rogeberg, Flynn effect and its reversal are both environmentally caused, PNAS 115 "
+             "(2018) 6674-6678"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="schooling_iq", part=32, title=r"Schooling raises scores",
+    claim="An additional year of schooling raises scores on intelligence tests.",
+    original=Study("Ceci (review)", 1991, n="many studies of schooling and test scores",
+                   found="schooling raises IQ scores"),
+    status="replicated",
+    record=(Study("Ritchie and Tucker-Drob (meta-analysis)", 2018, n="142 effects, 42 data sets, more than 600,000 "
+                  "people", found="about 1 to 5 points a year, 3.4 on average, lasting into later life"),),
+    note="Robust across three quasi-experimental designs; whether schooling raises g or the skills tests sample is "
+         "open.",
+    sources=("S. J. Ceci, How much does schooling influence general intelligence and its cognitive components? A "
+             "reassessment of the evidence, Developmental Psychology 27 (1991) 703-722",
+             "S. J. Ritchie and E. M. Tucker-Drob, How much does education improve intelligence? A meta-analysis, "
+             "Psychological Science 29 (2018) 1358-1369"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="heritability_age", part=32, title=r"Heritability of intelligence rises with age",
+    claim="The heritability of general cognitive ability rises from childhood to young adulthood.",
+    original=Study("Haworth and colleagues", 2010, n="about 11,000 twin pairs, six studies, four countries",
+                   found="41% at 9, 55% at 12, 66% at 17"),
+    status="replicated",
+    record=(Study("Briley and Tucker-Drob (meta-analysis)", 2013, n="11,500 twin and sibling pairs, longitudinal",
+                  found="heritability rises after about age 8, mostly by amplification of earlier genetic "
+                        "influences"),),
+    note="A robust developmental pattern; one reading is that children increasingly select environments that suit "
+         "them (Part 9's gene-environment correlation).",
+    sources=("C. M. A. Haworth et al., Molecular Psychiatry 15 (2010) 1112-1120",
+             "D. A. Briley and E. M. Tucker-Drob, Explaining the increasing heritability of cognitive ability across "
+             "development, Psychological Science 24 (2013) 1704-1713"),
+    checked="2026-11-15",
+    data=("HAWORTH_2010",),
+))
+
+add(Finding(
+    key="ses_heritability", part=32, title=r"Poverty and the heritability of IQ",
+    claim="Among children raised in poverty, the heritability of IQ is close to zero.",
+    original=Study("Turkheimer, Haley, Waldron, D'Onofrio and Gottesman", 2003, n="319 twin pairs aged 7",
+                   found="in poor families shared environment large and heritability near zero; the reverse in "
+                         "affluent families"),
+    status="contested",
+    record=(Study("Tucker-Drob and Bates (meta-analysis)", 2016, n="24,926 twin and sibling pairs, six countries",
+                  found="the interaction in US samples; none in Western Europe or Australia"),),
+    note="A heritability that depends on the environment, as Part 9 argued it can; whether it does depends on the "
+         "country.",
+    sources=("E. Turkheimer et al., Socioeconomic status modifies heritability of IQ in young children, Psychological "
+             "Science 14 (2003) 623-628",
+             "E. M. Tucker-Drob and T. C. Bates, Large cross-national differences in gene x socioeconomic status "
+             "interaction on intelligence, Psychological Science 27 (2016) 138-149"),
+    checked="2026-11-15",
+    data=("TURKHEIMER_2003",),
+))
+
+add(Finding(
+    key="mozart_effect", part=32, title=r"The Mozart effect",
+    claim="Listening to Mozart improves spatial reasoning.",
+    original=Study("Rauscher, Shaw and Ky", 1993, n="college students", design="a Mozart sonata, relaxation "
+                   "instructions or silence, then spatial tasks", found="better spatial reasoning for a short time"),
+    status="failed",
+    record=(Study("Pietschnig, Voracek and Formann (meta-analysis)", 2010, n="about 40 studies, more than 3,000 "
+                  "people", effect=0.37, unit="d", lo=0.23, hi=0.52,
+                  found="a small effect against no stimulus, varying by laboratory; nothing specific to Mozart"),),
+    note="A small arousal or mood effect of music in general, if anything; the specific Mozart effect was not "
+         "confirmed, and general intelligence was never claimed by the authors.",
+    sources=("F. H. Rauscher, G. L. Shaw and K. N. Ky, Music and spatial task performance, Nature 365 (1993) 611",
+             "J. Pietschnig, M. Voracek and A. K. Formann, Mozart effect-Shmozart effect: a meta-analysis, "
+             "Intelligence 38 (2010) 314-323"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="multiple_intelligences", part=32, title=r"Multiple intelligences",
+    claim="Human abilities form several independent intelligences rather than one general factor.",
+    original=Study("Gardner", 1983, n="a synthesis of neuropsychology, development and special talents",
+                   design="Frames of Mind", found="seven intelligences, later eight"),
+    status="failed",
+    record=(Study("Visser, Ashton and Vernon", 2006, n="tests of the eight domains",
+                  found="a positive manifold and a large general factor; cognitive domains loaded most"),),
+    note="A useful list of talents; the claim of independence is contradicted by the domains' own correlations.",
+    sources=("H. Gardner, Frames of Mind: The Theory of Multiple Intelligences (Basic Books, 1983)",
+             "B. A. Visser, M. C. Ashton and P. A. Vernon, Beyond g: putting multiple intelligences theory to the "
+             "test, Intelligence 34 (2006) 487-502"),
+    checked="2026-11-15",
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -4365,9 +4525,29 @@ shown(31, r"Livingston et al.\ (2024)", "a commission's estimate from attributab
       "causal assumption")
 shown(31, r"Ngandu et al.\ (2015)", "a single randomized trial, described with its small effect")
 shown(31, r"Pietschnig \& Voracek (2015)", "the Flynn effect, described as a cohort effect; its row is entered with "
-      "intelligence in Part 32", row_in=32)
+      "intelligence in Part 32")
 shown(31, r"Bratsberg \& Rogeberg (2018)", "the reversal of the Flynn effect, described; entered with intelligence "
-      "in Part 32", row_in=32)
+      "in Part 32")
 shown(31, r"Layton et al.\ (2018)", "a single large natural experiment, described as an application; relative age and "
       "diagnosis are taken up with development that goes differently in Part 41", row_in=41)
 shown(31, r"Casey et al.\ (2018)", "the design of a cohort study at the frontier, described")
+
+shown(32, r"Spearman (1904); \ Binet \& Simon (1905)", "two founding studies told as history; the positive manifold has "
+      "its row")
+shown(32, r"\emph{Buck v. Bell} (1927)", "a court decision, told as history")
+shown(32, r"Thurstone (1938)", "a factor-analytic study told as history; the hierarchy is in the positive-manifold row")
+shown(32, r"Deary et al.\ (2007); \ Strenze (2007); \ Sackett et al.\ (2022)", "effect sizes quoted from a cohort "
+      "study and meta-analyses; the job-performance figure has its row")
+shown(32, r"Calvin et al.\ (2011)", "a meta-analysis quoted for the size of an association, with its confounding")
+shown(32, r"Carpenter, \ Just \& Shell (1990)", "a process model of one test, described and rebuilt by Psyche")
+shown(32, r"Flore \& Wicherts (2015); \ Flore et al.\ (2018)", "stereotype threat's record, previewed; its row is "
+      "entered with prejudice in Part 36", row_in=36)
+shown(32, r"Snyderman \& Herrnstein (1983)", "a historical dispute, described")
+shown(32, r"Kamin (1974); \ Hearnshaw (1979)", "a case of fraud, told as history")
+shown(32, r"Gould (1981); \ Lewis et al.\ (2011)", "a historical critique and its re-examination, described")
+shown(32, r"Binet \& Simon (1905); \ Stern (1912)", "the history of the IQ scale, described")
+shown(32, r"Wechsler (1939)", "the deviation IQ's history, described")
+shown(32, r"Kan et al.\ (2019); \ McFarland (2020)", "a methodological dispute at the frontier, described as open")
+shown(32, r"Lee et al.\ (2018); \ Howe et al.\ (2022)", "genome-wide estimates quoted at the frontier; heritability is "
+      "Part 9's")
+shown(32, r"Chollet (2019)", "a proposal for measuring machine intelligence, described")

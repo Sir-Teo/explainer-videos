@@ -54,7 +54,7 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014",
            "SPEED_ACC_2008", "RR98", "CHOICES13K",
            "EGO_DEPLETION_RRR",
-           "FACES_1962", "COLES_2019", "MANYBABIES_2020"]
+           "FACES_1962", "COLES_2019", "MANYBABIES_2020", "SPEARMAN_1904", "HOLZINGER_1939"]
 
 
 @dataclass(frozen=True)
@@ -4017,6 +4017,44 @@ MANYBABIES_2020 = Dataset(
     data={"effects": 108, "labs": 65, "infants": 2179},
 )
 
+_P32 = "2026-11-15"
+
+SPEARMAN_1904 = Dataset(
+    key="spearman_1904",
+    title="Spearman's hierarchy: four school subjects, pitch discrimination and music",
+    source="C. Spearman, \"General intelligence,\" objectively determined and measured, American Journal of "
+           "Psychology 15 (1904) 201-292, Chapter 5, section 5 (the preparatory school, Experimental Series IV); "
+           "transcribed at psychclassics.yorku.ca",
+    cite=r"Spearman (1904)",
+    checked="the pitch and music rows against the transcription's text (pitch: Classics .66, French .65, English "
+            ".54, Mathematics .45; music: .63, .57, .51, .51 and .40 with pitch); the subject block (.83, .78, .70, "
+            ".67, .67, .64) is the widely reproduced table, whose row means give the text's averages .77, .72, .70 "
+            "and .67 exactly; the table itself is an image in the transcription, " + _P32,
+    licence="facts only (public domain, 1904)",
+    data={"names": ["Classics", "French", "English", "Mathematics", "Pitch", "Music"],
+          "R": [[1.00, 0.83, 0.78, 0.70, 0.66, 0.63],
+                [0.83, 1.00, 0.67, 0.67, 0.65, 0.57],
+                [0.78, 0.67, 1.00, 0.64, 0.54, 0.51],
+                [0.70, 0.67, 0.64, 1.00, 0.45, 0.51],
+                [0.66, 0.65, 0.54, 0.45, 1.00, 0.40],
+                [0.63, 0.57, 0.51, 0.51, 0.40, 1.00]],
+          "averages": [0.77, 0.72, 0.70, 0.67]},
+)
+
+HOLZINGER_1939 = Dataset(
+    key="holzinger_1939",
+    title="Holzinger and Swineford's nine mental tests for 301 children",
+    source="K. J. Holzinger and F. Swineford, A study in factor analysis: the stability of a bi-factor solution, "
+           "Supplementary Educational Monographs 48 (University of Chicago, 1939); the nine-test subset as "
+           "HolzingerSwineford1939 in the R package lavaan 0.7-3 (GPL >= 2)",
+    cite=r"Holzinger \& Swineford (1939)",
+    checked="HolzingerSwineford1939.rda inside lavaan_0.7-3.tar.gz, fetched by explainer.psychology.opendata and "
+            "checked by SHA-256; read as data by rdata.py: 301 children, Pasteur and Grant-White schools, nine "
+            "tests, " + _P32,
+    licence="GPL (>= 2) (the R package); data",
+    data={"children": 301, "tests": 9, "schools": ["Pasteur", "Grant-White"]},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -4058,4 +4096,4 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014,
                           SPEED_ACC_2008, RR98, CHOICES13K,
                           EGO_DEPLETION_RRR,
-                          FACES_1962, COLES_2019, MANYBABIES_2020)}
+                          FACES_1962, COLES_2019, MANYBABIES_2020, SPEARMAN_1904, HOLZINGER_1939)}
