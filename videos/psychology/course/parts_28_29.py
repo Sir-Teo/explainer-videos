@@ -49,4 +49,56 @@ PARTS = [
               ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=29, level="U", widget="faces",
+        question="Do we run because we are afraid, or are we afraid because we run, and what is an emotion made of?",
+        story="In 1884 William James says the second: the feeling is the body's reaction, perceived. Cannon objects "
+              "that the body is too slow and too much alike across emotions, and Schachter and Singer's adrenaline "
+              "adds a label, here written as Bayesian attribution of unexplained arousal; a swaying bridge in North "
+              "Vancouver becomes the famous case. Then faces: Ekman's six basic emotions in New Guinea, strong with a "
+              "list to choose from and weaker without one, and a map of feelings recovered by classical scaling from "
+              "judgments of faces made in 1962, then from the viewer's own. Constructed emotion argues the categories "
+              "are built. A pen held in the teeth made cartoons funnier in 1988; seventeen laboratories found almost "
+              "nothing; the meta-analysis of 286 effects, recomputed here, finds a small effect. Appraisal is "
+              "computed, LeDoux's two roads to the amygdala are simulated, and patient S.M. fears nothing outside "
+              "her body. Regulation, forecasting and money and happiness follow, the last reconciled by an "
+              "adversarial collaboration, and the part ends with a ratio from fluid dynamics that a graduate student "
+              "and a physicist took apart.",
+        handoff="Act VII begins with the infant mind in Part 30; fear and sadness as disorders are Part 40; "
+                "reappraisal as therapy is tested in Part 42; scaling returns in Part 46; emotion as prediction of "
+                "the body in Part 58; machines that read feelings in Part 60.",
+        outside="Part 3's measurement, Part 4's meta-analysis, Part 10's hormone loops, Part 14's inference and Part "
+                "16's fear conditioning. Eigenvectors, the singular value decomposition, Bayes's rule and "
+                "exponential decay.",
+        objectives={
+            "U": ["Compare the James-Lange, Cannon-Bard, two-factor, basic-emotion, appraisal and constructionist "
+                  "accounts of emotion.",
+                  "Describe the facial-feedback, bridge and universal-recognition findings and their replication "
+                  "records.",
+                  "Explain the impact bias, and how a plateau in emotional well-being can hold for some people "
+                  "only."],
+            "M": ["Derive classical scaling from a table of distances, and align two maps by Procrustes.",
+                  "Recompute a random-effects meta-analysis from its open table, with groups and the "
+                  "precision-effect test.",
+                  "Write unexplained arousal as a Bayesian attribution, and compute an appraisal model's labels."],
+            "D": ["Design a study that the basic-emotion and constructed-emotion accounts predict differently.",
+                  "Judge when a mathematical model in a psychology paper is fitted to data and when it is only "
+                  "borrowed."],
+            "I": ["Evaluate an emotion-recognition product or a well-being survey against what the evidence "
+                  "supports."],
+        },
+        results=[
+            ("Classical scaling", r"B = -\tfrac12 J D^{(2)} J = X X^\top"),
+            ("Orthogonal Procrustes", r"X^\top Y = U \Sigma V^\top \ \Rightarrow \ R^* = U V^\top"),
+            ("Attribution of arousal",
+             r"s \mid a \sim N\!\left(a - c - \sigma^2/m,\ \sigma^2\right) \text{ on } s \ge 0"),
+            ("Random effects", r"\hat\mu = \frac{\sum_i w_i y_i}{\sum_i w_i}, \quad w_i = \frac{1}{v_i + \hat\tau^2}"),
+            ("Hedonic adaptation", r"h(t) = h_0 + I\, e^{-t/\tau}"),
+        ],
+        U=(0, 1, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13), D=(2, 4, 15), I=(14,),
+        also=(("Psyche's emotion module", "explainer/psychology/psyche/emotion.py"),
+              ("Its tests", "tests/psychology/test_emotion.py"),
+              ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

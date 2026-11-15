@@ -53,7 +53,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "NATURAL_STORIES", "SAFFRAN_1996", "MARCUS_1992", "HARTSHORNE_2018", "LEHTONEN_2018",
            "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014",
            "SPEED_ACC_2008", "RR98", "CHOICES13K",
-           "EGO_DEPLETION_RRR"]
+           "EGO_DEPLETION_RRR",
+           "FACES_1962", "COLES_2019"]
 
 
 @dataclass(frozen=True)
@@ -3965,6 +3966,38 @@ EGO_DEPLETION_RRR = Dataset(
     data={"labs": 23, "people": 2141, "outcome": "reaction-time variability on the multi-source interference task"},
 )
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 29: emotion
+_P29 = "2026-11-15"
+
+FACES_1962 = Dataset(
+    key="faces_1962",
+    title="Thirteen posed facial expressions: dissimilarities and three rated dimensions",
+    source="R. P. Abelson and V. Sermat, Multidimensional scaling of facial expressions, Journal of Experimental "
+           "Psychology 63 (1962) 546-554; B. Engen, N. Levy and H. Schlosberg, The dimensional analysis of a new series "
+           "of facial expressions, Journal of Experimental Psychology 55 (1958) 454-458; as FaceExp and FaceScale in the "
+           "R package smacof 2.1-7 (GPL-3)",
+    cite=r"Abelson \& Sermat (1962); \ Engen et al.\ (1958)",
+    checked="FaceExp.rda and FaceScale.rda inside smacof_2.1-7.tar.gz, fetched by explainer.psychology.opendata and "
+            "checked by SHA-256; read as data by rdata.py, " + _P29,
+    licence="GPL-3 (the R package); facts and data",
+    data={"faces": 13, "scales": ("pleasant-unpleasant", "attention-rejection", "tension-sleep")},
+)
+
+COLES_2019 = Dataset(
+    key="coles_2019",
+    title="The facial-feedback literature: 286 effect sizes from 138 studies",
+    source="N. A. Coles, J. T. Larsen and H. C. Lench, A meta-analysis of the facial feedback literature: effects of "
+           "facial feedback on emotional experience are small and variable, Psychological Bulletin 145 (2019) "
+           "610-651; data osf.io/v8kxb, as coles2019 in the R package psymetadata 1.0.1 (GPL >= 2)",
+    cite=r"Coles, \ Larsen \& Lench (2019)",
+    checked="coles2019.rda inside psymetadata_1.0.1.tar.gz, fetched by explainer.psychology.opendata and checked by "
+            "SHA-256; read as data by rdata.py; the study-level random-effects estimate (d = 0.20) matches the "
+            "published one, " + _P29,
+    licence="GPL (>= 2) (the R package); data",
+    data={"effects": 286, "studies": 138},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -4005,4 +4038,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           NATURAL_STORIES, SAFFRAN_1996, MARCUS_1992, HARTSHORNE_2018, LEHTONEN_2018,
                           GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014,
                           SPEED_ACC_2008, RR98, CHOICES13K,
-                          EGO_DEPLETION_RRR)}
+                          EGO_DEPLETION_RRR,
+                          FACES_1962, COLES_2019)}

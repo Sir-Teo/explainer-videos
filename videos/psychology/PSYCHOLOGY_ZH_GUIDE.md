@@ -869,6 +869,34 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Mischel; Shoda; Watts, Duncan, Quan; Kidd; McGuire, Kable; Duckworth; Credé; Dweck; Sisk; Yeager | 米歇尔；正田；沃茨，邓肯，全浩南；基德；麦圭尔，卡布尔；达克沃思；克雷代；德韦克；西斯克；耶格尔 |
 | Kool; Westbrook; Braver; Shenhav; Botvinick; Brehm; Inzlicht; Gneezy, Rustichini; Lally; Agrawal; Daw | 库尔；韦斯特布鲁克；布雷弗；舍纳夫；博特维尼克；布雷姆；因兹利希特；格尼兹，鲁斯蒂奇尼；拉利；阿格拉瓦尔；道 |
 
+## Part 29: emotion
+
+| English | 中文 |
+|---|---|
+| emotion; feeling; affect; core affect; valence; arousal; the circumplex | 情绪；感受；情感；核心情感；效价；唤醒；环形模型 |
+| the James–Lange theory; the Cannon–Bard theory; the two-factor theory; misattribution of arousal | 詹姆斯—朗格理论；坎农—巴德理论；双因素理论；唤醒的错误归因 |
+| interoception; the insula; somatic markers; heartbeat counting | 内感受；脑岛；躯体标记；心跳计数 |
+| basic emotions; forced choice; free sorting; reliability, specificity, generalizability, validity | 基本情绪；迫选；自由分类；可靠性、特异性、可推广性、效度 |
+| classical (Torgerson) scaling; double-centring; Procrustes rotation | 经典（托格森）标度法；双重中心化；普罗克鲁斯忒斯旋转 |
+| constructed emotion; emotion concepts; population of instances; fingerprints | 建构的情绪；情绪概念；实例群体；指纹 |
+| facial feedback; the pen-in-mouth task; Registered Replication Report; Many Smiles Collaboration | 面部反馈；咬笔任务；注册重复报告；“许多微笑”合作项目 |
+| appraisal; prototype; softmax over distances | 评价；原型；距离上的软最大化 |
+| the amygdala; the low road and the high road; survival circuits; Urbach–Wiethe disease | 杏仁核；低路与高路；生存回路；乌尔巴赫-维特病 |
+| stress; cortisol; coping; emotion regulation; reappraisal; suppression; the process model | 压力；皮质醇；应对；情绪调节；重新评价；抑制；过程模型 |
+| affective forecasting; the impact bias; immune neglect; focalism; hedonic adaptation | 情感预测；影响偏差；免疫忽视；聚焦错觉；享乐适应 |
+| life evaluation; experienced well-being; experience sampling; adversarial collaboration | 生活评价；体验幸福感；经验取样；对抗性合作 |
+| the critical positivity ratio; the Lorenz equations; chaos | 临界积极比率；洛伦茨方程；混沌 |
+| emotion recognition; affective computing; personal well-being questions | 情绪识别；情感计算；个人幸福感问题 |
+| James; Lange; Cannon; Bard; Marañón; Sherrington; Craig; Damasio | 詹姆斯；朗格；坎农；巴德；马拉尼翁；谢灵顿；克雷格；达马西奥 |
+| Schachter, Singer; Marshall, Zimbardo; Maslach; Reisenzein; Dutton, Aron; Foster | 沙赫特，辛格；马歇尔，津巴多；马斯拉克；赖森泽因；达顿，阿伦；福斯特 |
+| Darwin; Ekman, Friesen; Russell; Gendron; Barrett, Adolphs, Marsella, Martinez, Pollak | 达尔文；埃克曼，弗里森；拉塞尔；让德龙；巴雷特，阿道夫斯，马尔塞拉，马丁内斯，波拉克 |
+| Engen, Levy, Schlosberg; Abelson, Sermat; Torgerson; Siegel; Lindquist | 恩根，利维，施洛斯伯格；埃布尔森，塞尔马特；托格森；西格尔；林德奎斯特 |
+| Strack, Martin, Stepper; Wagenmakers; Noah, Schul, Mayo; Coles, Larsen, Lench | 斯特拉克，马丁，施特佩尔；瓦根马克斯；诺亚，舒尔，马约；科尔斯，拉森，伦奇 |
+| Arnold; Lazarus; Smith, Ellsworth; Scherer; LeDoux; Feinstein; Tranel; Selye; Folkman; Gross; John | 阿诺德；拉扎勒斯；史密斯，埃尔斯沃思；谢雷尔；勒杜；范斯坦；特拉内尔；塞利；福克曼；格罗斯；约翰 |
+| Gilbert, Wilson; Brickman, Coates, Janoff-Bulman; Lucas; Kahneman, Deaton; Killingsworth; Mellers | 吉尔伯特，威尔逊；布里克曼，科茨，亚诺夫-布尔曼；卢卡斯；卡尼曼，迪顿；基林斯沃思；梅勒斯 |
+| Fredrickson, Losada; Lorenz; Brown, Sokal, Friedman | 弗雷德里克森，洛萨达；洛伦茨；布朗，索卡尔，弗里德曼 |
+| Seth; Simmons; Schandry; Zamariola; Panksepp, Burgdorf; Anderson; Gibson; Picard | 塞思；西蒙斯；尚德里；扎马里奥拉；潘克塞普，伯格多夫；安德森；吉布森；皮卡德 |
+
 ## Names
 
 | English | 中文 |

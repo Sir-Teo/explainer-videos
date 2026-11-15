@@ -21,6 +21,9 @@ here, so a changed file is noticed rather than silently fitted.  Each dataset al
 * :func:`ego_depletion_rrr`: the ego-depletion Registered Replication Report's table of 23 laboratories and
   the original study (Hagger et al. 2016), from osf.io/jymhe.  Part 28.
 
+* :func:`faces_1962` and :func:`coles_2019`: Abelson and Sermat's facial expressions with Engen's scales, and
+  the facial-feedback meta-analysis table (Coles, Larsen and Lench 2019).  Part 29.
+
 Nothing here imports manim.
 """
 
@@ -126,6 +129,11 @@ SOURCES = {
         "file": "ego_depletion_rrr_RTV.csv",
         "sha256": "fcdb1a36e15e8e52956fb4997ca10ac7c0e9ae6053e1b32d8b5c7291fdae47b1",
     },
+    # Part 29: Abelson and Sermat's facial expressions (smacof), and Coles, Larsen and Lench's facial-feedback
+    # meta-analysis table (psymetadata)
+    'faceexp': {'url': 'https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/smacof/smacof_2.1-7.tar.gz'], 'page': 'https://cran.r-project.org/package=smacof', 'file': 'smacof_2.1-7.tar.gz', 'sha256': '7a965a4e06a2ef1e01e37ae7ce6a55f2e745d4aaf99eb1c592b3d835bac9493a', 'licence': 'GPL-3', 'member': 'smacof/data/FaceExp.rda', 'member_sha256': 'b104ed979ec2e0910ba1a562f784e0054aaa35ac99cc816694c5adef0b488372'},
+    'facescale': {'url': 'https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/smacof_2.1-7.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/smacof/smacof_2.1-7.tar.gz'], 'page': 'https://cran.r-project.org/package=smacof', 'file': 'smacof_2.1-7.tar.gz', 'sha256': '7a965a4e06a2ef1e01e37ae7ce6a55f2e745d4aaf99eb1c592b3d835bac9493a', 'licence': 'GPL-3', 'member': 'smacof/data/FaceScale.rda', 'member_sha256': '088989fe9b5445fc576bb27755456024ca19078342df9b86cc868ecd8e529653'},
+    'coles2019': {'url': 'https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psymetadata/psymetadata_1.0.1.tar.gz'], 'page': 'https://cran.r-project.org/package=psymetadata', 'file': 'psymetadata_1.0.1.tar.gz', 'sha256': '9b5f0cb8ab98e64fb7807483bb74fdaf16c18b010c081f0f93308c1da10b2bd4', 'licence': 'GPL (>= 2)', 'member': 'psymetadata/data/coles2019.rda', 'member_sha256': '93de0be5403efd82d2ad0eb77e2cb30d8c125fba953e2fb347b44c2a1b281b2c'},
     # Part 22: data inside CRAN source packages (catlearn, smacof, janeaustenr), read as data by rdata.py
     'nosof94': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/nosof94.RData', 'member_sha256': '4c9959b80d0311b5db13942665948a34ce5eee6559eb4ca8e5b66c10462670a0'},
     'homa76': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/homa76.RData', 'member_sha256': '99f1af2ea059d7e97c93bc2f1b821d38be2a4d51a7628b7be7d1456ea39d4e24'},
@@ -534,3 +542,45 @@ def ego_depletion_rrr() -> dict:
             out[k].append(float(r[i]))
         out["original"].append(r[0].strip() == "0")
     return {k: np.array(v) for k, v in out.items()}
+
+
+def faces_1962() -> dict:
+    """Abelson and Sermat (1962): dissimilarities of 13 posed facial expressions (Engen, Levy and Schlosberg's
+    Lightfoot series), with each face's mean rating on Engen et al.'s (1958) three scales: pleasant-unpleasant
+    (``PU``), attention-rejection (``AR``) and tension-sleep (``TS``).  From smacof's ``FaceExp`` and
+    ``FaceScale``."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("faceexp"))[0][1]
+    n = obj["attrs"]["Size"]["value"][0]
+    v = obj["value"]
+    D = np.zeros((n, n))
+    k = 0
+    for j in range(n):  # an R dist object stores its lower triangle column by column
+        for i in range(j + 1, n):
+            D[i, j] = D[j, i] = v[k]
+            k += 1
+    sc = rdata.load(member_path("facescale"))[0][1]
+    names = sc["attrs"]["names"]["value"]
+    scales = {nm: np.array(col["value"], float) for nm, col in zip(names, sc["value"])}
+    labels = sc["attrs"]["row.names"]["value"]
+    return {"D": D, "labels": list(labels), **scales}
+
+
+def coles_2019() -> dict:
+    """Coles, Larsen and Lench's (2019) facial-feedback meta-analysis: one row per effect size (Cohen's d ``yi``
+    and its variance ``vi``), with ``study_id``, ``year``, publication status ``file_drawer``, the manipulation
+    ``proc``, the stimuli ``stim`` and ``proc_aware``.  From psymetadata's ``coles2019``."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("coles2019"))[0][1]
+    cols = {nm: col["value"] for nm, col in zip(obj["attrs"]["names"]["value"], obj["value"])}
+    out = {}
+    for k, v in cols.items():
+        if k in ("yi", "vi", "prop_women"):
+            out[k] = np.array([np.nan if x is None else x for x in v], float)
+        elif k in ("study_id", "es_id", "year"):
+            out[k] = np.array([-1 if x is None else x for x in v], int)  # -1: not recorded
+        else:
+            out[k] = list(v)
+    return out

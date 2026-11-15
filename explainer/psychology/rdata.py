@@ -4,7 +4,9 @@
 janeaustenr; see ``opendata.py``).  This reader turns such a file into plain Python values and nothing else: logical,
 integer, double and character vectors, generic vectors (lists), pairlists and attributes.  A function call stored
 in a file (a LANGSXP) is read as a list of its parts and **never evaluated**; any other type (closures,
-environments, external pointers, bytecode) raises.  No R code, and no pickled Python, is ever run.
+environments, external pointers, bytecode) raises.  No R code, and no pickled Python, is ever run.  R's compact
+("ALTREP") vectors are expanded for the data-only classes R writes for ordinary data: integer and real sequences,
+wrapped vectors, and deferred strings; any other ALTREP class raises.
 
     load(path)  ->  [(name, object), ...]     # an .RData/.rda file: its named objects
 
@@ -22,7 +24,7 @@ import sys
 
 NILVALUE, SYMSXP, LISTSXP, LANGSXP, CHARSXP = 254, 1, 2, 6, 9
 LGLSXP, INTSXP, REALSXP, STRSXP, VECSXP = 10, 13, 14, 16, 19
-REFSXP = 255
+REFSXP, ALTREPSXP = 255, 238
 NA_INT = -2147483648
 
 
@@ -50,6 +52,8 @@ class Reader:
             return None
         if t == REFSXP:
             return self.refs[(flags >> 8) - 1]
+        if t == ALTREPSXP:
+            return self.altrep()
         if t == SYMSXP:
             name = self.item()
             self.refs.append(("sym", name))
@@ -78,6 +82,38 @@ class Reader:
         else:
             raise ValueError(f"unsupported R object type {t}: this reader takes data only")
         attrs = dict(self.item()) if has_attr else {}
+        return {"type": t, "value": v, "attrs": attrs}
+
+    def altrep(self):
+        """A compact vector: its class (info), its state and its attributes, expanded to an ordinary vector."""
+        info = self.item()
+        state = self.item()
+        attr = self.item()
+        cls = info[0][1][1] if info and isinstance(info[0][1], tuple) else None
+        attrs = dict(attr) if isinstance(attr, list) else {}
+        if cls in ("compact_intseq", "compact_realseq"):
+            n, start, step = state["value"][:3]
+            n = int(n)
+            if cls == "compact_intseq":
+                v = [int(start) + i * int(step) for i in range(n)]
+                t = INTSXP
+            else:
+                v = [start + i * step for i in range(n)]
+                t = REALSXP
+        elif cls in ("wrap_integer", "wrap_real", "wrap_logical", "wrap_string", "wrap_list", "wrap_complex",
+                     "wrap_raw"):
+            inner = state["value"][0]
+            if not isinstance(inner, dict):
+                raise ValueError(f"unexpected wrapped ALTREP payload for {cls}")
+            t, v = inner["type"], inner["value"]
+            attrs = {**inner.get("attrs", {}), **attrs}
+        elif cls == "deferred_string":
+            payload = state[0][1] if isinstance(state, list) else state
+            nums = payload["value"]
+            t = STRSXP
+            v = [None if x is None else (str(int(x)) if float(x).is_integer() else repr(float(x))) for x in nums]
+        else:
+            raise ValueError(f"unsupported ALTREP class {cls!r}: this reader takes data only")
         return {"type": t, "value": v, "attrs": attrs}
 
 

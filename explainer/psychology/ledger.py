@@ -3554,6 +3554,166 @@ add(Finding(
     data=("CREDE_2017",),
 ))
 
+# ---------------------------------------------------------------------------
+# Part 29 · Emotion
+# ---------------------------------------------------------------------------
+add(Finding(
+    key="schachter_singer", part=29, title=r"Arousal plus a label",
+    claim="Unexplained physiological arousal is felt as whatever emotion the situation suggests.",
+    original=Study("Schachter and Singer", 1962, n="185 men", design="adrenaline or placebo, informed or not about "
+                   "its effects, with a euphoric or an angry confederate",
+                   found="uninformed participants tended to take on the confederate's mood; the effects were weak and "
+                   "mixed"),
+    status="contested",
+    record=(Study("Marshall and Zimbardo", 1979, n="students", design="the euphoria conditions repeated",
+                  found="adrenaline did not make people more euphoric"),
+            Study("Maslach", 1979, n="students", design="arousal by hypnotic suggestion, left unexplained",
+                  found="unexplained arousal was felt as negative, whatever the confederate did"),
+            Study("Reisenzein (review)", 1983, n="a review", design="the two-factor literature",
+                  found="little evidence that arousal is necessary for emotion; misattribution of arousal occurs, "
+                  "within limits")),
+    note="Arousal can be misattributed, but the strong claim, that emotion is arousal plus a label, did not survive.",
+    sources=("S. Schachter and J. E. Singer, Cognitive, social, and physiological determinants of emotional state, "
+             "Psychological Review 69 (1962) 379-399",
+             "G. D. Marshall and P. G. Zimbardo, Affective consequences of inadequately explained physiological "
+             "arousal, Journal of Personality and Social Psychology 37 (1979) 970-988",
+             "C. Maslach, Negative emotional biasing of unexplained arousal, Journal of Personality and Social "
+             "Psychology 37 (1979) 953-969",
+             "R. Reisenzein, The Schachter theory of emotion: two decades later, Psychological Bulletin 94 (1983) "
+             "239-264"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="bridge_misattribution", part=29, title=r"The fear bridge",
+    claim="Men who met a woman on a frightening bridge were more attracted to her, mistaking fear for attraction.",
+    original=Study("Dutton and Aron", 1974, n="men crossing two bridges in North Vancouver",
+                   design="an interviewer on a swaying suspension bridge or a low, solid one; who later phoned her",
+                   found="more men called from the high bridge (9 of 18 who took her number, against 2 of 16)"),
+    status="not directly tested",
+    record=(Study("Foster, Witcher, Campbell and Green (meta-analysis)", 1998, n="the laboratory experiments",
+                  design="arousal and attraction in the laboratory",
+                  found="arousal increased attraction, though not only through misattribution"),),
+    note="The bridge itself has not been directly replicated at scale; arousal-attraction effects in the "
+         "laboratory are real, and their mechanism is argued.",
+    sources=("D. G. Dutton and A. P. Aron, Some evidence for heightened sexual attraction under conditions of high "
+             "anxiety, Journal of Personality and Social Psychology 30 (1974) 510-517",
+             "C. A. Foster, B. S. Witcher, W. K. Campbell and J. D. Green, Arousal and attraction: evidence for "
+             "automatic and controlled processes, Journal of Personality and Social Psychology 74 (1998) 86-101"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="universal_expressions", part=29, title=r"Six universally recognized expressions",
+    claim="People in every culture recognize the same six emotions from the same facial expressions.",
+    original=Study("Ekman and Friesen", 1971, n="Fore villagers in New Guinea",
+                   design="a short story and three photographs; choose the face that fits",
+                   found="matching far above chance for most emotions; fear and surprise were confused"),
+    status="contested",
+    record=(Study("Russell (review)", 1994, n="a review", design="the cross-cultural method",
+                  found="forced choice among a few labels inflates agreement; agreement falls without it"),
+            Study("Gendron, Roberson, van der Vyver and Barrett", 2014, n="Himba and US participants",
+                  design="free sorting of 36 faces, with and without emotion words",
+                  found="Himba sorted without the six piles; closer with words supplied"),
+            Study("Barrett, Adolphs, Marsella, Martinez and Pollak (review)", 2019, n="a review",
+                  design="reliability, specificity, generalizability and validity",
+                  found="the faces are neither reliable nor specific signals; people scowl in anger about a quarter "
+                  "of the time")),
+    note="With forced choice the classic pattern replicates widely; with free responses and in small-scale "
+         "societies it weakens, and what faces signal is contested.",
+    sources=("P. Ekman and W. V. Friesen, Constants across cultures in the face and emotion, Journal of "
+             "Personality and Social Psychology 17 (1971) 124-129",
+             "J. A. Russell, Is there universal recognition of emotion from facial expression? A review of the "
+             "cross-cultural studies, Psychological Bulletin 115 (1994) 102-141",
+             "M. Gendron, D. Roberson, J. M. van der Vyver and L. F. Barrett, Perceptions of emotion from facial "
+             "expressions are not culturally universal: evidence from a remote culture, Emotion 14 (2014) 251-262",
+             "L. F. Barrett, R. Adolphs, S. Marsella, A. M. Martinez and S. D. Pollak, Emotional expressions "
+             "reconsidered: challenges to inferring emotion from human facial movements, Psychological Science in "
+             "the Public Interest 20 (2019) 1-68"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="facial_feedback", part=29, title=r"Facial feedback",
+    claim="Moving the face into an expression changes the emotion felt.",
+    original=Study("Strack, Martin and Stepper", 1988, n="undergraduates",
+                   design="a pen held in the teeth (a smile) or the lips (a pout) while rating cartoons",
+                   effect=0.82, unit="points on a 10-point scale", found="cartoons rated 0.82 points funnier with "
+                   "the pen in the teeth"),
+    status="replicated, smaller",
+    record=(Study("Wagenmakers et al. (registered, 17 laboratories)", 2016, n="17 laboratories", effect=0.03,
+                  unit="points on a 10-point scale", lo=-0.11, hi=0.16, found="0.03 points, 95% CI -0.11 to 0.16"),
+            Study("Noah, Schul and Mayo", 2018, n="students", design="with and without a camera",
+                  found="the effect appeared without a camera and vanished when participants were filmed"),
+            Study("Coles, Larsen and Lench (meta-analysis)", 2019, n="286 effects from 138 studies",
+                  effect=0.20, unit="d", found="small and variable, about d = 0.2"),
+            Study("Coles et al. (Many Smiles Collaboration)", 2022, n="3,878 people in 19 countries",
+                  design="mimicry, voluntary posing and the pen, preregistered",
+                  found="posed and mimicked smiles raised happiness; the pen gave inconclusive results")),
+    note="Deliberate expressions change feelings a little; the unobtrusive pen manipulation is unreliable, and the "
+         "effect depends on the task.",
+    sources=("F. Strack, L. L. Martin and S. Stepper, Inhibiting and facilitating conditions of the human smile: a "
+             "nonobtrusive test of the facial feedback hypothesis, Journal of Personality and Social Psychology 54 "
+             "(1988) 768-777",
+             "E.-J. Wagenmakers et al., Registered Replication Report: Strack, Martin, & Stepper (1988), "
+             "Perspectives on Psychological Science 11 (2016) 917-928",
+             "T. Noah, Y. Schul and R. Mayo, When both the original study and its failed replication are correct: "
+             "feeling observed eliminates the facial-feedback effect, Journal of Personality and Social Psychology "
+             "114 (2018) 657-664",
+             "N. A. Coles, J. T. Larsen and H. C. Lench, A meta-analysis of the facial feedback literature, "
+             "Psychological Bulletin 145 (2019) 610-651",
+             "N. A. Coles et al., A multi-lab test of the facial feedback hypothesis by the Many Smiles "
+             "Collaboration, Nature Human Behaviour 6 (2022) 1731-1742"),
+    checked="2026-11-15",
+    data=("COLES_2019",),
+))
+
+add(Finding(
+    key="money_wellbeing", part=29, title=r"Money and well-being",
+    claim="Emotional well-being rises with income, but stops rising above a moderate income.",
+    original=Study("Kahneman and Deaton", 2010, n="about 450,000 Gallup responses",
+                   design="yesterday's emotions and life evaluation against household income",
+                   found="emotional well-being levelled off above about 75,000 dollars a year; life evaluation kept rising"),
+    status="replicated",
+    record=(Study("Killingsworth", 2021, n="1,725,994 reports from 33,391 employed US adults",
+                  design="experience sampling by smartphone",
+                  found="experienced well-being rose with log income, with no plateau above 75,000 dollars"),
+            Study("Killingsworth, Kahneman and Mellers (adversarial collaboration)", 2023, n="the 2021 data",
+                  design="happiness percentiles against income",
+                  found="a plateau above about 100,000 dollars only for the least happy fifth; for others it kept rising")),
+    note="Well-being rises with log income for most people; the 2010 plateau described the unhappiest, and an "
+         "adversarial collaboration reconciled the two findings.",
+    sources=("D. Kahneman and A. Deaton, High income improves evaluation of life but not emotional well-being, "
+             "Proceedings of the National Academy of Sciences 107 (2010) 16489-16493",
+             "M. A. Killingsworth, Experienced well-being rises with income, even above $75,000 per year, "
+             "Proceedings of the National Academy of Sciences 118 (2021) e2016976118",
+             "M. A. Killingsworth, D. Kahneman and B. Mellers, Income and emotional well-being: a conflict "
+             "resolved, Proceedings of the National Academy of Sciences 120 (2023) e2208661120"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="positivity_ratio", part=29, title=r"The critical positivity ratio",
+    claim="People flourish when their ratio of positive to negative emotions exceeds 2.9013.",
+    original=Study("Fredrickson and Losada", 2005, n="188 people",
+                   design="emotion diaries, with a ratio derived from Losada's Lorenz-equation model of teams",
+                   found="flourishers above 2.9, others below"),
+    status="retracted",
+    record=(Study("Brown, Sokal and Friedman", 2013, n="a reanalysis", design="the model's mathematics",
+                  found="the equations' use was unfounded; the 2.9013 threshold has no basis"),
+            Study("American Psychologist (correction)", 2013, n="the journal",
+                  design="formal withdrawal", found="the modelling and its predictions withdrawn; the rest of the "
+                  "paper stands")),
+    note="The number was withdrawn; that more positive emotion goes with better mental health, within limits, was "
+         "not.",
+    sources=("B. L. Fredrickson and M. F. Losada, Positive affect and the complex dynamics of human flourishing, "
+             "American Psychologist 60 (2005) 678-686",
+             "N. J. L. Brown, A. D. Sokal and H. L. Friedman, The complex dynamics of wishful thinking: the critical "
+             "positivity ratio, American Psychologist 68 (2013) 801-813",
+             "B. L. Fredrickson, Updated thinking on positivity ratios, American Psychologist 68 (2013) 814-822"),
+    checked="2026-11-15",
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -3766,3 +3926,36 @@ shown(28, r"Lally, \ van Jaarsveld, \ Potts \& Wardle (2010)", "a study of habit
 shown(28, r"Kurzban et al.\ (2013); \ Agrawal et al.\ (2022)", "theories at the frontier, described")
 shown(28, r"Schmidhuber (1991); \ Pathak et al.\ (2017)", "machine-learning methods, described; machines are Part "
       "60's", row_in=60)
+
+shown(29, r"James (1884)", "the James-Lange theory, told as history; its tests are Cannon's objections and the "
+      "two-factor row")
+shown(29, r"Cannon (1927); \ Bard (1928)", "Cannon's objections and the Cannon-Bard theory, told as history")
+shown(29, r"Cannon (1927); \ Mara\~n\'on (1924)", "adrenaline injections that produced 'as if' emotions, told as "
+      "history of the two-factor idea, whose row is Schachter and Singer")
+shown(29, r"Craig (2009); \ Damasio (1994)", "theories of interoception and the body in feeling, described")
+shown(29, r"Darwin (1872); \ Ekman (1992)", "the history and theory of basic emotions; universal recognition has "
+      "its row")
+shown(29, "FACES_1962", "the 1962 face-similarity data, rescaled on screen as a method demonstration; the map is a "
+      "description of these judgments, not a finding about emotion")
+shown(29, r"Russell (2003); \ Barrett (2017)", "theories of core affect and constructed emotion, described")
+shown(29, r"Siegel et al.\ (2018); \ Lindquist et al.\ (2012)", "two meta-analyses describing variability within "
+      "emotion categories, shown as the evidence for construction; not entered as single findings")
+shown(29, r"Lazarus (1966); \ Smith \& Ellsworth (1985)", "appraisal theory, described; the model computed is "
+      "Psyche's")
+shown(29, r"LeDoux (1996)", "the two routes to the amygdala in rat fear conditioning, described as anatomy")
+shown(29, r"Feinstein et al.\ (2011); \ Feinstein et al.\ (2013)", "a single patient, described as a case study")
+shown(29, r"LeDoux (2015)", "a theoretical argument about circuits and feelings")
+shown(29, r"Selye (1956); \ Lazarus \& Folkman (1984)", "theories of stress and coping, described")
+shown(29, r"Gross (1998)", "the process model of regulation and one experiment, described; regulation's clinical "
+      "use is tested in Part 42")
+shown(29, r"Gross (1998); \ Gross \& John (2003)", "one experiment and a correlational study of habitual "
+      "regulation, described")
+shown(29, r"Gilbert et al.\ (1998); \ Wilson \& Gilbert (2005)", "the impact bias, described with one of its "
+      "studies and a review")
+shown(29, r"Brickman, \ Coates \& Janoff-Bulman (1978); \ Lucas (2007)", "a small 1978 study, shown with its "
+      "limits stated, and a review of panel studies that qualifies it")
+shown(29, r"Seth (2013); \ Barrett \& Simmons (2015); \ Zamariola et al.\ (2018)", "frontier theories of "
+      "interoceptive inference and a dispute about the heartbeat counting measure")
+shown(29, r"Panksepp \& Burgdorf (2003); \ Anderson \& Adolphs (2014); \ Gibson et al.\ (2015)", "frontier work "
+      "on emotional states in animals, described")
+shown(29, r"Picard (1997)", "a book that founded a field, described")
