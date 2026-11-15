@@ -19,6 +19,10 @@ A task is added to :data:`RUNNERS` by the part that first uses it.  So far:
 * Task 4, visual search (Part 18): feature and conjunction searches at set sizes 4, 8, 16 and 32, target present on
   half the trials, ``run("search", params, n_trials, seed)`` with ``params`` keyword arguments of
   :func:`explainer.psychology.psyche.attention.guided_search`; the set size and presence are in ``extra``.
+* Task 5, change detection (Part 19): coloured squares at set sizes 2, 4, 6 and 8, one probed item changed on half
+  the trials, ``run("change", params, n_trials, seed)`` with ``params`` keyword arguments of a slot observer
+  (``K``, ``guess``); the set size and whether the probe changed are in ``extra``, and ``correct`` is whether the
+  answer (same or different) was right.
 
 Nothing here imports manim.
 """
@@ -167,8 +171,32 @@ def _search(params, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
                   extra={"set_size": np.array([c[1] for c in plan]), "present": np.array([c[2] for c in plan])})
 
 
+CHANGE_SET_SIZES = (2, 4, 6, 8)
+
+
+def _change(params, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
+    """Single-probe change detection by a slot observer: set size and change balanced and shuffled.  An observer
+    stores ``min(K, N)`` items (a fractional K stores floor or ceiling); a stored probe is judged correctly, an
+    unstored one is called "different" with probability ``guess``.  No RTs: ``rt`` is NaN."""
+    p = {"K": 3.5, "guess": 0.45, **(params or {})}
+    rng = np.random.default_rng(seed)
+    cells = [(s, c) for s in CHANGE_SET_SIZES for c in (True, False)]
+    plan = [cells[i] for i in rng.permutation(np.resize(np.arange(len(cells)), n_trials))]
+    ok = np.empty(n_trials, dtype=bool)
+    for i, (n, changed) in enumerate(plan):
+        lo = np.floor(p["K"])
+        stored = min(lo + (rng.random() < p["K"] - lo), n)
+        if rng.random() < stored / n:
+            ok[i] = True
+        else:
+            said_change = rng.random() < p["guess"]
+            ok[i] = said_change == changed
+    return Trials("change", np.full(n_trials, subject), np.array(["change"] * n_trials), np.full(n_trials, np.nan),
+                  ok, extra={"set_size": np.array([c[0] for c in plan]), "changed": np.array([c[1] for c in plan])})
+
+
 RUNNERS = {"rt_simple": _rt_task("a"), "rt_gonogo": _rt_task("c"), "rt_choice": _rt_task("b"), "threshold": _threshold,
-           "stroop": _stroop, "search": _search}
+           "stroop": _stroop, "search": _search, "change": _change}
 
 
 def run(name: str, model, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:

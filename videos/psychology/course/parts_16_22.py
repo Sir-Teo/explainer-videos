@@ -134,4 +134,47 @@ PARTS = [
               ("Its tests", "tests/psychology/test_attention.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=19, level="U", widget="change",
+        question="How much can you hold in mind at once, and what is the limit made of?",
+        story="George Miller was persecuted by an integer, seven, and showed that span counts chunks, not bits: "
+              "recoded in threes, eighteen binary digits fit in six. Sperling's tone reveals a large visual store that "
+              "fades in a second. Three consonants are forgotten in eighteen seconds, but not on the first trial: "
+              "the cause is crowding by earlier memories, as a log-time model shows. Working memory becomes a system "
+              "with a phonological loop that holds two seconds of speech. Sternberg's scanning is linear, and a "
+              "parallel search with shared capacity draws the same line. Without rehearsal people hold about four "
+              "items, counted by a formula that assumes slots; then continuous report shows precision falling "
+              "smoothly with load, and four models fitted to seven thousand open trials pick variable precision. A "
+              "ring of neurons holds a bump that diffuses. Working memory tracks reasoning, and an industry promised "
+              "to raise both; against a placebo control, the far transfer is not there.",
+        handoff="Long-term memory is Parts 20 and 21, the lifespan and ADHD Parts 31 and 41, intelligence Part 32, "
+                "model recovery Part 48, read-backs and cognitive load Parts 51 and 54, the limit as an efficient code "
+                "Part 58, and small workspaces against large contexts Part 60.",
+        outside="Part 1's reaction-time stages, Part 3's reliability and attenuation, Part 12's hits and false alarms "
+                "and Part 18's attention. Exponentials, logarithms, and maximum likelihood as in Part 16.",
+        objectives={
+            "U": ["Explain span, chunks and recoding, and why span overestimates capacity.",
+                  "Describe partial report, the Brown-Peterson task and the multicomponent model.",
+                  "Explain the word-length effect and articulatory suppression."],
+            "M": ["Derive Cowan's and Pashler's K from a slot model with guessing.",
+                  "Show that limited-capacity parallel search mimics serial exhaustive search.",
+                  "Fit mixture, swap and process models to continuous-report data and compare them by AIC."],
+            "D": ["Weigh slots against variable precision, and persistent against silent codes.",
+                  "Explain why a mixture model's guess rate need not measure guessing."],
+            "I": ["Design forms, codes and read-backs around a four-chunk limit.",
+                  "Evaluate a brain-training claim: the control group, near and far transfer."],
+        },
+        results=[
+            ("Cowan's K", r"K = N\,(H - F)"),
+            ("Precision of a von Mises", r"J = \kappa\,\frac{I_1(\kappa)}{I_0(\kappa)}"),
+            ("SIMPLE's discriminability", r"D_i = \Big(\sum_j e^{-c\,|\log T_i - \log T_j|}\Big)^{-1}"),
+            ("Variable precision", r"J \sim \text{Gamma}\big(\text{mean } J_1 N^{-\alpha},\ \text{scale } \tau\big)"),
+            ("A shared information budget", r"\sigma_N = \sigma_1\,2^{\,R - R/N}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 9, 10, 11), D=(7, 8, 13), I=(12,),
+        also=(("Psyche's working-memory module", "explainer/psychology/psyche/wm.py"),
+              ("Its tests", "tests/psychology/test_wm.py"),
+              ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

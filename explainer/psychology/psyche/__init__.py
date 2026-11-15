@@ -70,5 +70,9 @@ Modules so far, with the part that introduces each:
                          saliency maps and scan paths; prevalence; the flicker paradigm; the attentional blink
                          and the PRP bottleneck; Stroop as a diffusion with conflict monitoring; the
                          normalization model of attention; Bundesen's race; vigilance
+``wm``              19   absolute judgment as a channel; the phonological loop; partial report; SIMPLE's
+                         temporal distinctiveness; memory scanning, serial and parallel; slots and the K
+                         formulas; von Mises precision, mixture, swap and four process models fitted by
+                         maximum likelihood; a ring attractor; training trials; a shared information budget
 =================  ====  ===============================================================================
 """

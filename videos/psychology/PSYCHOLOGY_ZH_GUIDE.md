@@ -638,6 +638,28 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | biased competition; normalization; attention field; contrast gain; response gain | 偏向竞争；归一化；注意场；对比度增益；反应增益 |
 | theory of visual attention (TVA); whole report; capacity; vigilance decrement; prevalence effect; satisfaction of search | 视觉注意理论；全部报告；容量；警觉衰减；流行率效应；搜索满足 |
 | alarm fatigue; viewability; media multitasking; rhythmic sampling | 警报疲劳；可见度；媒体多任务；节律采样 |
+
+## Part 19: working memory
+
+| English | 中文 |
+|---|---|
+| working memory; short-term memory; memory span; digit span; chunk; recoding | 工作记忆；短时记忆；记忆广度；数字广度；组块；重新编码 |
+| absolute judgment; channel capacity; bits; mutual information | 绝对判断；通道容量；比特；互信息 |
+| iconic memory; whole report; partial report; masking | 图像记忆；全部报告；部分报告；掩蔽 |
+| the Brown-Peterson task; decay; interference; proactive interference; release from proactive interference | 布朗-彼得森任务；衰退；干扰；前摄干扰；前摄干扰的释放 |
+| temporal distinctiveness; SIMPLE; Luce's choice rule | 时间独特性；SIMPLE 模型；卢斯选择规则 |
+| the modal model; rehearsal; double dissociation | 多重存储模型；复述；双重分离 |
+| the multicomponent model; central executive; phonological loop; visuospatial sketchpad; episodic buffer | 多成分模型；中央执行系统；语音环路；视觉空间画板；情景缓冲器 |
+| word-length effect; phonological similarity effect; articulatory suppression; dual-task | 词长效应；语音相似性效应；发音抑制；双任务 |
+| memory scanning; serial exhaustive search; self-terminating search; limited-capacity parallel model; mimicry | 记忆扫描；系列穷尽搜索；自我终止搜索；有限容量平行模型；模仿 |
+| change detection; capacity K; hits, false alarms; Cowan's K; Pashler's K; subitizing | 变化检测；容量 K；击中、虚报；考恩 K；帕什勒 K；感数 |
+| continuous report; delayed estimation; colour wheel; von Mises distribution; concentration; precision; Fisher information | 连续报告；延迟估计；色轮；冯·米塞斯分布；集中度；精度；费希尔信息 |
+| mixture model; guess rate; swap errors; misbinding | 混合模型；猜测率；交换错误；错误捆绑 |
+| slots; slots plus averaging; resources; equal precision; variable precision; AIC | 槽位；槽位加平均；资源；等精度；变精度；赤池信息准则 |
+| delay activity; memory field; ring attractor; bump; diffusion; activity-silent; short-term facilitation | 延迟期活动；记忆野；环形吸引子；活动峰；扩散；静默活动；短时易化 |
+| complex span; reading span; operation span; fluid intelligence; latent correlation | 复杂广度；阅读广度；运算广度；流体智力；潜变量相关 |
+| dual n-back; near transfer; far transfer; active control; no-contact control | 双重 n-back；近迁移；远迁移；主动控制组；无接触控制组 |
+| read-back; hear-back; cognitive load; rate-distortion; resource-rational | 复诵；听复核；认知负荷；率失真；资源理性 |
 ## Names
 
 | English | 中文 |

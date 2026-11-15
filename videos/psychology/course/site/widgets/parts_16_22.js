@@ -431,4 +431,143 @@
       note: "Nothing you do is stored or sent. Each kind of search has four target-present and four target-absent displays at each of four set sizes, shuffled. Each point is the median of your correct responses, which a single slow trial cannot drag up. In the film, Psyche's guided search gives slopes near 0 for feature search and about 12 (present) and 35 (absent) ms an item for conjunctions; Treisman and Gelade's observers in 1980 were slower, about 29 and 67. Four trials a point is few, so expect noisy lines: the shape matters more than the numbers.",
     });
   };
+
+  W.change = function (el) {
+    var w = null, SIZES = [2, 4, 6, 8], REPS = 6, OK = "#5bd18b", BAD = "#ef6f6c", MEM = "#f2c14e", PSY = "#5bd18b";
+    var HUES = ["#e6194b", "#3cb44b", "#ffe119", "#4363d8", "#f58231", "#911eb4", "#42d4f4", "#f032e6", "#ffffff"];
+    var S = { phase: "idle", seed: 0, k: 0, plan: [], cur: null, res: [], last: null };
+    function shuffle(u, a) {
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(u() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function display(u, n, change) {
+      // n squares at distinct cells of a jittered 4 x 3 grid, distinct colours; one is probed
+      var cells = [], i;
+      for (i = 0; i < 12; i++) cells.push(i);
+      shuffle(u, cells);
+      var cols = shuffle(u, HUES.slice()), items = [];
+      for (i = 0; i < n; i++) {
+        var c = cells[i];
+        items.push({ x: (c % 4 + 0.5 + (u() - 0.5) * 0.35) / 4, y: (Math.floor(c / 4) + 0.5 + (u() - 0.5) * 0.35) / 3,
+                     col: cols[i] });
+      }
+      var probe = Math.floor(u() * n), test = items[probe].col;
+      if (change) test = cols[n + Math.floor(u() * (cols.length - n))];  // a colour not in the display
+      return { items: items, probe: probe, test: test };
+    }
+    function start() {
+      task.clear(); S.seed++; S.k = 0; S.res = []; S.last = null;
+      var u = QB.rng(70919 * S.seed + 3), plan = [];
+      SIZES.forEach(function (n) { for (var r = 0; r < REPS; r++) { plan.push([n, true]); plan.push([n, false]); } });
+      S.plan = shuffle(u, plan); S.u = u;
+      S.phase = "ready"; w.render();
+      task.later(next, 900);
+    }
+    function next() {
+      if (S.k >= S.plan.length) { S.phase = "done"; w.render(); return; }
+      var p = S.plan[S.k];
+      S.cur = { n: p[0], change: p[1], d: display(S.u, p[0], p[1]) };
+      S.phase = "fix"; w.render();
+      task.later(function () {
+        S.phase = "sample"; w.render();
+        task.later(function () {
+          S.phase = "blank"; w.render();
+          task.later(function () { S.phase = "test"; w.render(); }, 900);
+        }, 150);
+      }, 500);
+    }
+    var task = T.create(el, { keys: { f: 0, j: 1 }, accepting: function () { return S.phase === "test"; }, respond: answer });
+    function answer(side) {  // 0: same, 1: different
+      if (S.phase !== "test" || !w) return;
+      task.count++;
+      var said = side === 1;
+      S.res.push({ n: S.cur.n, change: S.cur.change, said: said, ok: said === S.cur.change });
+      S.last = S.res[S.res.length - 1]; S.k++;
+      S.phase = "feedback"; w.render();
+      task.later(next, 500);
+    }
+    function rates(n) {
+      var ch = S.res.filter(function (x) { return x.n === n && x.change; }),
+          sa = S.res.filter(function (x) { return x.n === n && !x.change; });
+      if (!ch.length || !sa.length) return null;
+      var H = ch.filter(function (x) { return x.said; }).length / ch.length,
+          F = sa.filter(function (x) { return x.said; }).length / sa.length;
+      return { H: H, F: F, K: n * (H - F), acc: (ch.filter(function (x) { return x.ok; }).length + sa.filter(function (x) { return x.ok; }).length) / (ch.length + sa.length) };
+    }
+    function capacity() {
+      var ks = [];
+      [4, 6, 8].forEach(function (n) { var r = rates(n); if (r) ks.push(r.K); });
+      if (!ks.length) return NaN;
+      return ks.reduce(function (a, b) { return a + b; }, 0) / ks.length;
+    }
+
+    w = QB.widget(el, {
+      title: "Change detection: how many can you hold?",
+      sub: "Forty-eight trials. Coloured squares flash for 150 ms; after a blank of 0.9 s one square comes back, outlined. Press J (or tap the right half) if its colour changed, F (or the left half) if it is the same. Don't name the colours: just look. Your K appears as you go.",
+      panels: 2, height: 330, weights: [1, 1.1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.k = 0; S.res = []; S.cur = null; S.last = null; } },
+      ],
+      draw: function (g) {
+        var c = g.ctx, b = T.stage(g, 0, task);
+        c.save(); c.textAlign = "center"; c.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(c, b, "On you", "Press Start. About three minutes. J: the colour changed; F: it is the same.");
+        } else if (S.phase === "ready") {
+          T.message(c, b, "Get ready", "Two, four, six or eight squares, mixed. Keep your eyes on the centre.");
+        } else if (S.phase === "done") {
+          T.message(c, b, "Finished.", "On the right: your K at each set size, from your hits and false alarms. It should rise, then level off near your capacity.");
+        } else {
+          c.fillStyle = C.muted; c.font = "12px system-ui, sans-serif";
+          c.fillText("trial " + (S.k + (S.phase === "feedback" ? 0 : 1)) + " of " + S.plan.length, b.cx, b.y + 16);
+          var W_ = Math.min(b.w - 40, (b.h - 70) * 4 / 3), H_ = W_ * 3 / 4, x0 = b.cx - W_ / 2, y0 = b.cy - H_ / 2 + 4,
+              side = Math.max(14, W_ / 11);
+          if (S.phase === "fix" || S.phase === "blank" || S.phase === "sample" || S.phase === "test") {
+            c.strokeStyle = C.ink; c.lineWidth = 2;
+            c.beginPath(); c.moveTo(b.cx - 6, b.cy); c.lineTo(b.cx + 6, b.cy); c.moveTo(b.cx, b.cy - 6); c.lineTo(b.cx, b.cy + 6); c.stroke();
+          }
+          if (S.phase === "sample") {
+            S.cur.d.items.forEach(function (it) {
+              c.fillStyle = it.col; c.fillRect(x0 + it.x * W_ - side / 2, y0 + it.y * H_ - side / 2, side, side);
+            });
+          } else if (S.phase === "test") {
+            var it = S.cur.d.items[S.cur.d.probe], px = x0 + it.x * W_, py = y0 + it.y * H_;
+            c.fillStyle = S.cur.d.test; c.fillRect(px - side / 2, py - side / 2, side, side);
+            c.strokeStyle = C.ink; c.lineWidth = 2; c.strokeRect(px - side / 2 - 5, py - side / 2 - 5, side + 10, side + 10);
+            c.fillStyle = C.muted; c.font = "12.5px system-ui, sans-serif";
+            c.fillText(b.w < 420 ? "F / same        J / changed" : "F, or tap the left half: same        J, or tap the right half: changed", b.cx, b.y + b.h - 14);
+          } else if (S.phase === "feedback" && S.last) {
+            c.font = "600 18px system-ui, sans-serif"; c.fillStyle = S.last.ok ? OK : BAD;
+            c.fillText(S.last.ok ? "right" : "not right: it " + (S.last.change ? "changed" : "was the same"), b.cx, b.cy);
+          }
+        }
+        c.restore();
+
+        var a = g[1].axes({ x: [0, 9], y: [-1, 8], xticks: SIZES, yticks: [0, 2, 4, 6, 8],
+          title: "Your capacity: K = N (hits − false alarms)", xlabel: "squares in the display", ylabel: "K" });
+        a.line([0, 8.5], [0, 8.5], { color: C.muted, width: 1, dash: [3, 4] });
+        a.text(6.6, 7.6, "K = N", { color: C.muted, size: 11 });
+        a.line([2, 3.5, 8], [2, 3.5, 3.5], { color: PSY, width: 1.5, dash: [5, 4] });
+        a.text(5.6, 3.05, "Psyche: 3.5 slots", { color: PSY, size: 11 });
+        var xs = [], ys = [];
+        SIZES.forEach(function (n) { var r = rates(n); if (r) { xs.push(n); ys.push(Math.max(-1, r.K)); } });
+        if (xs.length > 1) a.line(xs, ys, { color: MEM, width: 2.5 });
+        if (xs.length) a.dots(xs, ys, { color: MEM, r: 4 });
+      },
+      readout: function () {
+        var rows = [["trials", String(S.res.length)],
+                    ["correct", S.res.length ? Math.round(100 * S.res.filter(function (x) { return x.ok; }).length / S.res.length) + "%" : "–"]];
+        SIZES.forEach(function (n) {
+          var r = rates(n);
+          rows.push([n + " squares: hits, false alarms", r ? Math.round(100 * r.H) + "%, " + Math.round(100 * r.F) + "%" : "–"]);
+        });
+        var k = capacity();
+        rows.push(["your K (mean over 4, 6, 8)", S.phase === "done" && !isNaN(k) ? k.toFixed(1) : (S.res.length ? "when you finish" : "–")]);
+        return rows;
+      },
+      note: "Nothing you do is stored or sent. Six change and six no-change trials at each of four set sizes, shuffled. K comes from the slot model derived in the film: if K of the N squares are stored and the rest guessed, hits minus false alarms is K/N. Luck and Vogel's observers, and Cowan's review, put K at about three to four. Twelve trials a set size is few, so your K is a rough estimate, good to about one item; the next chapter of the film explains why K may not count slots at all.",
+    });
+  };
 })();

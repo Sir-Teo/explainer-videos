@@ -45,7 +45,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "BEKESY_1960", "KEMP_1978", "LIBERMAN_1957", "MCMURRAY_2002", "MCGURK_1976", "MALLICK_2015", "BOTVINICK_COHEN_1998", "LUSH_2020", "MELZACK_WALL_1965", "LEVINE_1978", "HANIG_1901", "BUSHDID_2014", "MCDERMOTT_2016", "KUJAWA_LIBERMAN_2009",
            "PAVLOV_1927", "THORNDIKE_1898", "WATSON_RAYNER_1920", "HARRIS_1979", "FERSTER_SKINNER_1957", "RESCORLA_1968", "WASSERMAN_1993", "KAMIN_1969", "MAES_2016", "RESCORLA_WAGNER_1972", "LUBOW_MOORE_1959", "BOUTON_BOLLES_1979", "MACKINTOSH_PEARCE_HALL", "GALLISTEL_GIBBON_2000", "HERRNSTEIN_1961", "GARCIA_KOELLING_1966", "BRELAND_1961", "BANDURA_1961", "PRENDERGAST_2006", "ZENDLE_CAIRNS_2018", "GERSHMAN_2010", "MITCHELL_2009", "SCHILLER_2010",
            "SCHULTZ_1997", "STEINBERG_2013", "FRANK_2004", "WILSON_2014", "TOLMAN_HONZIK_1930", "TOLMAN_1948", "HAFTING_2005", "ADAMS_DICKINSON_1981", "DAW_2011", "FEHER_DA_SILVA_2020", "MOMENNEJAD_2017", "HOWE_2013", "DABNEY_2020", "REDISH_2004", "LI_2010", "WEINTRAUB_2010", "WANG_2018",
-           "SIMONS_CHABRIS_1999", "RENSINK_1997", "CHERRY_1953", "BROADBENT_1958", "MORAY_1959", "TREISMAN_1960", "LAVIE_1995", "POSNER_1980", "TREISMAN_GELADE_1980", "WOLFE_2021", "ITTI_KOCH_1998", "DREW_2013", "RAYMOND_1992", "PASHLER_1994", "STROOP_1935", "ERIKSEN_1974", "BOTVINICK_2001", "ROGERS_MONSELL_1995", "MORAN_DESIMONE_1985", "REYNOLDS_HEEGER_2009", "BUNDESEN_1990", "STRAYER_2001", "OPHIR_2009", "ANDERSON_2011", "AWH_2012"]
+           "SIMONS_CHABRIS_1999", "RENSINK_1997", "CHERRY_1953", "BROADBENT_1958", "MORAY_1959", "TREISMAN_1960", "LAVIE_1995", "POSNER_1980", "TREISMAN_GELADE_1980", "WOLFE_2021", "ITTI_KOCH_1998", "DREW_2013", "RAYMOND_1992", "PASHLER_1994", "STROOP_1935", "ERIKSEN_1974", "BOTVINICK_2001", "ROGERS_MONSELL_1995", "MORAN_DESIMONE_1985", "REYNOLDS_HEEGER_2009", "BUNDESEN_1990", "STRAYER_2001", "OPHIR_2009", "ANDERSON_2011", "AWH_2012",
+           "MILLER_1956", "SPERLING_1960", "PETERSON_1959", "KEPPEL_UNDERWOOD_1962", "BADDELEY_HITCH_1974", "BADDELEY_1975", "SHALLICE_WARRINGTON_1970", "STERNBERG_1966", "LUCK_VOGEL_1997", "COWAN_2001", "ZHANG_LUCK_2008", "BAYS_2009", "VANDENBERG_2012", "FUNAHASHI_1989", "WIMMER_2014", "MONGILLO_2008", "DANEMAN_CARPENTER_1980", "KANE_2005", "JAEGGI_2008", "REDICK_2013", "MELBY_LERVAG_2016", "SIMONS_2016", "FTC_LUMOSITY_2016"]
 
 
 @dataclass(frozen=True)
@@ -3282,6 +3283,238 @@ AWH_2012 = Dataset(
     data={},
 )
 
+_P19 = "through a web search, 2026-11-15"
+
+MILLER_1956 = Dataset(
+    key="miller_1956",
+    title='The magical number seven',
+    source='G. A. Miller, The magical number seven, plus or minus two: some limits on our capacity for processing information, Psychological Review 63 (1956) 81-97',
+    cite=r"Miller (1956)",
+    checked='secondary summaries and quotations of the paper' + ", " + _P19,
+    licence='facts only',
+    data={'binary_span': 9, 'word_span': 5, 'smith_binary_recoded': 40, 'absolute_judgment_bits': 2.6},
+)
+
+SPERLING_1960 = Dataset(
+    key="sperling_1960",
+    title='Partial report',
+    source='G. Sperling, The information available in brief visual presentations, Psychological Monographs 74 (1960) no. 11, whole no. 498',
+    cite=r"Sperling (1960)",
+    checked="secondary summaries (the monograph's tables not read: about 9 of 12 is the commonly quoted figure)" + ", " + _P19,
+    licence='facts only',
+    data={'letters': 12, 'whole_report': 4.5, 'partial_available_immediate': 9.0},
+)
+
+PETERSON_1959 = Dataset(
+    key="peterson_1959",
+    title='Short-term forgetting in eighteen seconds',
+    source='L. R. Peterson and M. J. Peterson, Short-term retention of individual verbal items, Journal of Experimental Psychology 58 (1959) 193-198; J. Brown, Some tests of the decay theory of immediate memory, Quarterly Journal of Experimental Psychology 10 (1958) 12-21',
+    cite=r"Peterson \& Peterson (1959)",
+    checked='secondary summaries (about 80% at 3 s and about 10% at 18 s)' + ", " + _P19,
+    licence='facts only',
+    data={'delays_s': [3, 6, 9, 12, 15, 18], 'recall_3s': 0.8, 'recall_18s': 0.1},
+)
+
+KEPPEL_UNDERWOOD_1962 = Dataset(
+    key="keppel_underwood_1962",
+    title='Proactive interference in short-term retention',
+    source='G. Keppel and B. J. Underwood, Proactive inhibition in short-term retention of single items, Journal of Verbal Learning and Verbal Behavior 1 (1962) 153-161',
+    cite=r"Keppel \& Underwood (1962)",
+    checked='from memory and reviews' + ", " + _P19,
+    licence='facts only',
+    data={},
+)
+
+BADDELEY_HITCH_1974 = Dataset(
+    key="baddeley_hitch_1974",
+    title='Working memory',
+    source='A. D. Baddeley and G. Hitch, Working memory, in G. H. Bower (ed.), The Psychology of Learning and Motivation 8 (1974) 47-89; R. C. Atkinson and R. M. Shiffrin, Human memory: a proposed system and its control processes, ibid. 2 (1968) 89-195',
+    cite=r"Baddeley \& Hitch (1974)",
+    checked='from memory and reviews' + ", " + _P19,
+    licence='facts only',
+    data={},
+)
+
+BADDELEY_1975 = Dataset(
+    key="baddeley_1975",
+    title='The word-length effect',
+    source='A. D. Baddeley, N. Thomson and M. Buchanan, Word length and the structure of short-term memory, Journal of Verbal Learning and Verbal Behavior 14 (1975) 575-589',
+    cite=r"Baddeley, Thomson \& Buchanan (1975)",
+    checked='secondary summaries (span is about what can be said in two seconds)' + ", " + _P19,
+    licence='facts only',
+    data={'seconds_of_speech': 2.0},
+)
+
+SHALLICE_WARRINGTON_1970 = Dataset(
+    key="shallice_warrington_1970",
+    title='Patient K.F.',
+    source='E. K. Warrington and T. Shallice, The selective impairment of auditory verbal short-term memory, Brain 92 (1969) 885-896; T. Shallice and E. K. Warrington, Independent functioning of verbal memory stores: a neuropsychological study, Quarterly Journal of Experimental Psychology 22 (1970) 261-273',
+    cite=r"Warrington \& Shallice (1969); \ Shallice \& Warrington (1970)",
+    checked='secondary summaries' + ", " + _P19,
+    licence='facts only',
+    data={'kf_digit_span': 2},
+)
+
+STERNBERG_1966 = Dataset(
+    key="sternberg_1966",
+    title='High-speed scanning in human memory',
+    source='S. Sternberg, High-speed scanning in human memory, Science 153 (1966) 652-654',
+    cite=r"Sternberg (1966)",
+    checked='a hosted copy of the paper' + ", " + _P19,
+    licence='facts only',
+    data={'slope_ms': 37.9, 'intercept_ms': 397.2, 'r2': 0.994},
+)
+
+LUCK_VOGEL_1997 = Dataset(
+    key="luck_vogel_1997",
+    title='Four objects',
+    source='S. J. Luck and E. K. Vogel, The capacity of visual working memory for features and conjunctions, Nature 390 (1997) 279-281',
+    cite=r"Luck \& Vogel (1997)",
+    checked='the abstract' + ", " + _P19,
+    licence='facts only',
+    data={'capacity': 4},
+)
+
+COWAN_2001 = Dataset(
+    key="cowan_2001",
+    title='Four, plus or minus one',
+    source='N. Cowan, The magical number 4 in short-term memory: a reconsideration of mental storage capacity, Behavioral and Brain Sciences 24 (2001) 87-185; H. Pashler, Familiarity and visual change detection, Perception & Psychophysics 44 (1988) 369-378',
+    cite=r"Cowan (2001)",
+    checked='from memory and reviews' + ", " + _P19,
+    licence='facts only',
+    data={'capacity': 4},
+)
+
+ZHANG_LUCK_2008 = Dataset(
+    key="zhang_luck_2008",
+    title='Discrete fixed-resolution representations',
+    source='W. Zhang and S. J. Luck, Discrete fixed-resolution representations in visual working memory, Nature 453 (2008) 233-235',
+    cite=r"Zhang \& Luck (2008)",
+    checked='the abstract and summaries' + ", " + _P19,
+    licence='facts only',
+    data={},
+)
+
+BAYS_2009 = Dataset(
+    key="bays_2009",
+    title='Continuous report of colour, trial by trial (open data)',
+    source='P. M. Bays, R. F. G. Catalao and M. Husain, The precision of visual working memory is set by allocation of a shared resource, Journal of Vision 9(10):7 (2009); data shared by P. M. Bays at osf.io/c2yx5 (Exp_data.mat)',
+    cite=r"Bays, Catalao \& Husain (2009)",
+    checked='the data file itself, fetched by explainer.psychology.opendata and checked by SHA-256' + ", " + _P19,
+    licence='data fetched, not redistributed',
+    data={'trials': 7271, 'observers': 12, 'set_sizes': [1, 2, 4, 6], 'durations_ms': [100, 500, 2000]},
+)
+
+VANDENBERG_2012 = Dataset(
+    key="vandenberg_2012",
+    title='Variable precision',
+    source='R. van den Berg, H. Shin, W.-C. Chou, R. George and W. J. Ma, Variability in encoding precision accounts for visual short-term memory limitations, PNAS 109 (2012) 8780-8785; R. van den Berg, E. Awh and W. J. Ma, Factorial comparison of working memory models, Psychological Review 121 (2014) 124-149',
+    cite=r"van den Berg et al.\ (2012)",
+    checked='the abstracts' + ", " + _P19,
+    licence='facts only',
+    data={},
+)
+
+FUNAHASHI_1989 = Dataset(
+    key="funahashi_1989",
+    title='Delay activity in prefrontal cortex',
+    source="S. Funahashi, C. J. Bruce and P. S. Goldman-Rakic, Mnemonic coding of visual space in the monkey's dorsolateral prefrontal cortex, Journal of Neurophysiology 61 (1989) 331-349",
+    cite=r"Funahashi, Bruce \& Goldman-Rakic (1989)",
+    checked='secondary summaries' + ", " + _P19,
+    licence='facts only',
+    data={},
+)
+
+WIMMER_2014 = Dataset(
+    key="wimmer_2014",
+    title='A diffusing bump',
+    source='K. Wimmer, D. Q. Nykamp, C. Constantinidis and A. Compte, Bump attractor dynamics in prefrontal cortex explains behavioral precision in spatial working memory, Nature Neuroscience 17 (2014) 431-439',
+    cite=r"Wimmer et al.\ (2014)",
+    checked='the abstract' + ", " + _P19,
+    licence='facts only',
+    data={},
+)
+
+MONGILLO_2008 = Dataset(
+    key="mongillo_2008",
+    title='Activity-silent working memory',
+    source='G. Mongillo, O. Barak and M. Tsodyks, Synaptic theory of working memory, Science 319 (2008) 1543-1546; N. S. Rose et al., Reactivation of latent working memories with transcranial magnetic stimulation, Science 354 (2016) 1136-1139',
+    cite=r"Mongillo, Barak \& Tsodyks (2008)",
+    checked='from memory and reviews' + ", " + _P19,
+    licence='facts only',
+    data={},
+)
+
+DANEMAN_CARPENTER_1980 = Dataset(
+    key="daneman_carpenter_1980",
+    title='Complex span',
+    source='M. Daneman and P. A. Carpenter, Individual differences in working memory and reading, Journal of Verbal Learning and Verbal Behavior 19 (1980) 450-466; M. Daneman and P. M. Merikle, Working memory and language comprehension: a meta-analysis, Psychonomic Bulletin & Review 3 (1996) 422-433',
+    cite=r"Daneman \& Carpenter (1980)",
+    checked='secondary summaries' + ", " + _P19,
+    licence='facts only',
+    data={'meta_r_reading_span_comprehension': 0.41},
+)
+
+KANE_2005 = Dataset(
+    key="kane_2005",
+    title='Working memory and fluid intelligence',
+    source='M. J. Kane, D. Z. Hambrick and A. R. A. Conway, Working memory capacity and fluid intelligence are strongly related constructs, Psychological Bulletin 131 (2005) 66-71; P. L. Ackerman, M. E. Beier and M. O. Boyle, ibid. 30-60',
+    cite=r"Kane, Hambrick \& Conway (2005)",
+    checked='a later review quoting both' + ", " + _P19,
+    licence='facts only',
+    data={'latent_r': 0.72, 'task_r': 0.45},
+)
+
+JAEGGI_2008 = Dataset(
+    key="jaeggi_2008",
+    title='Dual n-back training',
+    source='S. M. Jaeggi, M. Buschkuehl, J. Jonides and W. J. Perrig, Improving fluid intelligence with training on working memory, PNAS 105 (2008) 6829-6833',
+    cite=r"Jaeggi et al.\ (2008)",
+    checked="the paper's design and secondary summaries" + ", " + _P19,
+    licence='facts only',
+    data={'training_days': [8, 12, 17, 19]},
+)
+
+REDICK_2013 = Dataset(
+    key="redick_2013",
+    title='An active control',
+    source='T. S. Redick et al., No evidence of intelligence improvement after working memory training: a randomized, placebo-controlled study, Journal of Experimental Psychology: General 142 (2013) 359-379',
+    cite=r"Redick et al.\ (2013)",
+    checked='the abstract' + ", " + _P19,
+    licence='facts only',
+    data={'sessions': 20},
+)
+
+MELBY_LERVAG_2016 = Dataset(
+    key="melby_lervag_2016",
+    title='Working memory training, meta-analysed',
+    source='M. Melby-Lervag, T. S. Redick and C. Hulme, Working memory training does not improve performance on measures of intelligence or other measures of far transfer, Perspectives on Psychological Science 11 (2016) 512-534',
+    cite=r"Melby-Lerv\aa{}g, Redick \& Hulme (2016)",
+    checked='the abstract' + ", " + _P19,
+    licence='facts only',
+    data={'publications': 87, 'comparisons': 145},
+)
+
+SIMONS_2016 = Dataset(
+    key="simons_2016",
+    title='Do brain-training programs work?',
+    source='D. J. Simons et al., Do "brain-training" programs work?, Psychological Science in the Public Interest 17 (2016) 103-186; Stanford Center on Longevity and Max Planck Institute for Human Development, A consensus on the brain training industry from the scientific community (2014)',
+    cite=r"Simons et al.\ (2016)",
+    checked="the abstract and the consensus statement's page" + ", " + _P19,
+    licence='facts only',
+    data={'consensus_signatories': 70},
+)
+
+FTC_LUMOSITY_2016 = Dataset(
+    key="ftc_lumosity_2016",
+    title='The FTC and Lumosity',
+    source='Federal Trade Commission, Lumosity to pay $2 million to settle FTC deceptive advertising charges for its brain training program, press release, 5 January 2016',
+    cite=r"FTC (2016)",
+    checked="the FTC's press release and press coverage" + ", " + _P19,
+    licence='facts only',
+    data={'redress_usd': 2000000, 'judgment_usd': 50000000},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3314,4 +3547,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           BEKESY_1960, KEMP_1978, LIBERMAN_1957, MCMURRAY_2002, MCGURK_1976, MALLICK_2015, BOTVINICK_COHEN_1998, LUSH_2020, MELZACK_WALL_1965, LEVINE_1978, HANIG_1901, BUSHDID_2014, MCDERMOTT_2016, KUJAWA_LIBERMAN_2009,
                           PAVLOV_1927, THORNDIKE_1898, WATSON_RAYNER_1920, HARRIS_1979, FERSTER_SKINNER_1957, RESCORLA_1968, WASSERMAN_1993, KAMIN_1969, MAES_2016, RESCORLA_WAGNER_1972, LUBOW_MOORE_1959, BOUTON_BOLLES_1979, MACKINTOSH_PEARCE_HALL, GALLISTEL_GIBBON_2000, HERRNSTEIN_1961, GARCIA_KOELLING_1966, BRELAND_1961, BANDURA_1961, PRENDERGAST_2006, ZENDLE_CAIRNS_2018, GERSHMAN_2010, MITCHELL_2009, SCHILLER_2010,
                           SCHULTZ_1997, STEINBERG_2013, FRANK_2004, WILSON_2014, TOLMAN_HONZIK_1930, TOLMAN_1948, HAFTING_2005, ADAMS_DICKINSON_1981, DAW_2011, FEHER_DA_SILVA_2020, MOMENNEJAD_2017, HOWE_2013, DABNEY_2020, REDISH_2004, LI_2010, WEINTRAUB_2010, WANG_2018,
-                          SIMONS_CHABRIS_1999, RENSINK_1997, CHERRY_1953, BROADBENT_1958, MORAY_1959, TREISMAN_1960, LAVIE_1995, POSNER_1980, TREISMAN_GELADE_1980, WOLFE_2021, ITTI_KOCH_1998, DREW_2013, RAYMOND_1992, PASHLER_1994, STROOP_1935, ERIKSEN_1974, BOTVINICK_2001, ROGERS_MONSELL_1995, MORAN_DESIMONE_1985, REYNOLDS_HEEGER_2009, BUNDESEN_1990, STRAYER_2001, OPHIR_2009, ANDERSON_2011, AWH_2012)}
+                          SIMONS_CHABRIS_1999, RENSINK_1997, CHERRY_1953, BROADBENT_1958, MORAY_1959, TREISMAN_1960, LAVIE_1995, POSNER_1980, TREISMAN_GELADE_1980, WOLFE_2021, ITTI_KOCH_1998, DREW_2013, RAYMOND_1992, PASHLER_1994, STROOP_1935, ERIKSEN_1974, BOTVINICK_2001, ROGERS_MONSELL_1995, MORAN_DESIMONE_1985, REYNOLDS_HEEGER_2009, BUNDESEN_1990, STRAYER_2001, OPHIR_2009, ANDERSON_2011, AWH_2012,
+                          MILLER_1956, SPERLING_1960, PETERSON_1959, KEPPEL_UNDERWOOD_1962, BADDELEY_HITCH_1974, BADDELEY_1975, SHALLICE_WARRINGTON_1970, STERNBERG_1966, LUCK_VOGEL_1997, COWAN_2001, ZHANG_LUCK_2008, BAYS_2009, VANDENBERG_2012, FUNAHASHI_1989, WIMMER_2014, MONGILLO_2008, DANEMAN_CARPENTER_1980, KANE_2005, JAEGGI_2008, REDICK_2013, MELBY_LERVAG_2016, SIMONS_2016, FTC_LUMOSITY_2016)}

@@ -247,6 +247,7 @@ add(Finding(
 ))
 
 
+
 shown(1, "KANT_1786", "an argument, quoted from its source; not an empirical finding")
 shown(1, "EBBINGHAUS_1885", "the first forgetting curve, shown as a historical first; the curve and its "
       "replication are entered with memory", row_in=20)
@@ -790,6 +791,18 @@ shown(18, "REYNOLDS_HEEGER_2009", "a model, derived and run on Psyche")
 shown(18, "BUNDESEN_1990", "a theory, run on Psyche")
 shown(18, "MACKWORTH_1948", "the vigilance decrement, revisited from Part 12", row_in=51)
 shown(18, "STRAYER_2001", "a simulator study, read in full and described; driving returns in Part 51")
+shown(19, "MILLER_1956", "history and arithmetic: the spans and the recoding are described, not tested anew")
+shown(19, "SHALLICE_WARRINGTON_1970", "a single case, described as the evidence against the modal model's gateway")
+shown(19, "BADDELEY_HITCH_1974", "a model, the multicomponent framework; its word-length prediction has a row")
+shown(19, "ZHANG_LUCK_2008", "a descriptive model fitted here to open data; the capacity it estimates has a row")
+shown(19, "BAYS_2009", "open trial-level data, fitted on screen by four models; the capacity row cites the comparison")
+shown(19, "FUNAHASHI_1989", "delay activity, described with a schematic; a neural finding, not a behavioural claim")
+shown(19, "WIMMER_2014", "a model fitted to monkey recordings, described alongside Psyche's ring attractor")
+shown(19, "MONGILLO_2008", "a model of activity-silent memory, described at the frontier")
+shown(19, "DANEMAN_CARPENTER_1980", "a correlation across people, described; intelligence returns in Part 32")
+shown(19, "KANE_2005", "a meta-analytic correlation, described; intelligence returns in Part 32")
+shown(19, "SIMONS_2016", "a review of the training evidence; the training row rests on the trials it reviews")
+shown(19, "FTC_LUMOSITY_2016", "a regulatory settlement, reported as a fact; not a psychological finding")
 shown(16, "LUBOW_MOORE_1959", "latent inhibition, described and modelled; its row is in Part 18")
 shown(16, "PAVLOV_1927", "the method and its vocabulary, told as history; the curves shown are Psyche's")
 shown(16, "FERSTER_SKINNER_1957", "schedules of reinforcement, whose signatures are drawn on Psyche, not from their records")
@@ -1897,6 +1910,140 @@ add(Finding(
              "and a meta-analysis, Attention, Perception, & Psychophysics 79 (2017) 2620-2641"),
     checked="2026-11-14",
     data=("OPHIR_2009",),
+))
+
+add(Finding(
+    key="partial_report", part=19, title=r"Partial-report superiority",
+    claim="Immediately after a brief display, a cued part of it can be reported far better than whole report implies; "
+          "the advantage fades within about a second.",
+    original=Study("Sperling", 1960, n="a few observers, thousands of trials",
+                   design="3 x 4 letter arrays for 50 ms; whole report against a tone cueing one row",
+                   found="about 9 of 12 letters available at once, against about 4.5 by whole report"),
+    status="replicated",
+    record=(Study("Coltheart (review)", 1980, n="two decades of studies",
+                  design="partial report with many cues, displays and masks",
+                  found="a large, brief, maskable store; the advantage is for location cues, not category cues"),),
+    note="One of the most reproducible results in cognitive psychology. What the store contains, a picture or "
+         "already-recognized items, and how much of it reaches awareness, is argued.",
+    sources=("G. Sperling, The information available in brief visual presentations, Psychological Monographs 74 "
+             "(1960) no. 11",
+             "M. Coltheart, Iconic memory and visible persistence, Perception & Psychophysics 27 (1980) 183-228"),
+    checked="2026-11-15",
+    data=("SPERLING_1960",),
+))
+
+add(Finding(
+    key="brown_peterson", part=19, title=r"Forgetting in eighteen seconds",
+    claim="Without rehearsal, three consonants are mostly forgotten within eighteen seconds, because their trace "
+          "decays with time.",
+    original=Study("Peterson and Peterson", 1959, n="24 students",
+                   design="a consonant trigram, then counting backwards by threes for 3 to 18 s",
+                   found="about 80% recalled after 3 s, about 10% after 18 s"),
+    status="story and record",
+    record=(Study("Keppel and Underwood", 1962, n="students, trial by trial",
+                  design="the same task, analysed by position in the session",
+                  found="almost no forgetting on the first trial; forgetting grows over the next few"),),
+    note="The forgetting is real and reproduces. The textbook cause, decay with time, does not survive the first "
+         "trial: the loss comes mostly from proactive interference by the earlier trials' items.",
+    sources=("L. R. Peterson and M. J. Peterson, Short-term retention of individual verbal items, Journal of "
+             "Experimental Psychology 58 (1959) 193-198",
+             "G. Keppel and B. J. Underwood, Proactive inhibition in short-term retention of single items, Journal "
+             "of Verbal Learning and Verbal Behavior 1 (1962) 153-161"),
+    checked="2026-11-15",
+    data=("PETERSON_1959", "KEPPEL_UNDERWOOD_1962"),
+))
+
+add(Finding(
+    key="word_length", part=19, title=r"The word-length effect",
+    claim="Memory span is shorter for words that take longer to say, and articulatory suppression removes the "
+          "difference.",
+    original=Study("Baddeley, Thomson and Buchanan", 1975, n="students in several experiments",
+                   design="serial recall of short and long words, some matched for syllables",
+                   found="fewer long words recalled; span about what can be said in two seconds"),
+    status="replicated",
+    record=(Study("Lovatt, Avons and Masterson", 2000, n="students",
+                  design="disyllables differing only in spoken duration, with other word sets",
+                  found="no reliable duration effect for some sets: the classic sets confounded other properties"),),
+    note="The effect of word length on span reproduces readily. Whether spoken duration itself is the cause, as the "
+         "phonological loop says, or a correlated property of the words, is argued.",
+    sources=("A. D. Baddeley, N. Thomson and M. Buchanan, Word length and the structure of short-term memory, Journal "
+             "of Verbal Learning and Verbal Behavior 14 (1975) 575-589",
+             "P. Lovatt, S. E. Avons and J. Masterson, The word-length effect and disyllabic words, Quarterly Journal "
+             "of Experimental Psychology 53A (2000) 1-22"),
+    checked="2026-11-15",
+    data=("BADDELEY_1975",),
+))
+
+add(Finding(
+    key="sternberg", part=19, title=r"Memory scanning is linear",
+    claim="The time to decide whether a probe is in a short memorized list rises linearly with the list's length, "
+          "with the same slope for yes and no.",
+    original=Study("Sternberg", 1966, n="students",
+                   design="memory sets of 1 to 6 digits, then a probe; yes or no",
+                   found="about 38 ms per item from about 397 ms; equal slopes for yes and no"),
+    status="replicated",
+    record=(Study("Sternberg (review)", 1975, n="many replications",
+                  design="digits, letters, words, faces; many laboratories",
+                  found="linear set-size functions throughout; slopes vary with the material"),),
+    note="The linear function reproduces. Its interpretation as serial exhaustive search does not follow: limited-"
+         "capacity parallel models make the same predictions (Townsend 1972), and serial-position effects in the "
+         "RTs trouble the simple serial model.",
+    sources=("S. Sternberg, High-speed scanning in human memory, Science 153 (1966) 652-654",
+             "S. Sternberg, Memory scanning: new findings and current controversies, Quarterly Journal of "
+             "Experimental Psychology 27 (1975) 1-32"),
+    checked="2026-11-15",
+    data=("STERNBERG_1966",),
+))
+
+add(Finding(
+    key="capacity_four", part=19, title=r"Capacity near four",
+    claim="Without rehearsal or chunking, people hold about three to four items in working memory.",
+    original=Study("Luck and Vogel", 1997, n="students",
+                   design="change detection with coloured squares and with four-feature objects",
+                   found="accuracy falls beyond 3 to 4 items; objects held as well as single features"),
+    status="replicated",
+    record=(Study("Cowan (review)", 2001, n="many tasks and laboratories",
+                  design="change detection, running span, recency, enumeration",
+                  found="estimates cluster at 3 to 5 chunks"),
+            Study("van den Berg, Awh and Ma", 2014, n="10 datasets, 6 laboratories",
+                  design="32 models of continuous report",
+                  found="precision falls continuously with load; fixed slots alone fit worse"),),
+    note="The number reproduces in every laboratory that blocks rehearsal. Whether it counts slots, or is a summary "
+         "of a resource that is spread thinner, is the open question; the objects-not-features claim held only in "
+         "part.",
+    sources=("S. J. Luck and E. K. Vogel, The capacity of visual working memory for features and conjunctions, "
+             "Nature 390 (1997) 279-281",
+             "N. Cowan, The magical number 4 in short-term memory, Behavioral and Brain Sciences 24 (2001) 87-185",
+             "R. van den Berg, E. Awh and W. J. Ma, Factorial comparison of working memory models, Psychological "
+             "Review 121 (2014) 124-149"),
+    checked="2026-11-15",
+    data=("LUCK_VOGEL_1997", "COWAN_2001", "VANDENBERG_2012"),
+))
+
+add(Finding(
+    key="wm_training", part=19, title=r"Working-memory training raises intelligence",
+    claim="Training on working-memory tasks such as dual n-back improves fluid intelligence.",
+    original=Study("Jaeggi, Buschkuehl, Jonides and Perrig", 2008, n="young adults in small groups",
+                   design="8 to 19 days of dual n-back against a no-contact control",
+                   found="gains on fluid reasoning that grew with days of training"),
+    status="failed",
+    record=(Study("Redick and colleagues", 2013, n="young adults, three groups",
+                  design="20 sessions of dual n-back against adaptive visual search and no contact",
+                  found="practice gains; no transfer to reasoning, memory capacity or speed"),
+            Study("Melby-Lervag, Redick and Hulme (meta-analysis)", 2016, n="87 publications, 145 comparisons",
+                  design="working-memory training against treated and untreated controls",
+                  found="near transfer only; no reliable far transfer against active controls"),),
+    note="Practice improves the practised task and its close relatives. Against placebo training, the far transfer "
+         "that would matter, to reasoning and everyday cognition, is not found.",
+    sources=("S. M. Jaeggi et al., Improving fluid intelligence with training on working memory, PNAS 105 (2008) "
+             "6829-6833",
+             "T. S. Redick et al., No evidence of intelligence improvement after working memory training, Journal of "
+             "Experimental Psychology: General 142 (2013) 359-379",
+             "M. Melby-Lervag, T. S. Redick and C. Hulme, Working memory training does not improve performance on "
+             "measures of intelligence or other measures of far transfer, Perspectives on Psychological Science 11 "
+             "(2016) 512-534"),
+    checked="2026-11-15",
+    data=("JAEGGI_2008", "REDICK_2013", "MELBY_LERVAG_2016"),
 ))
 
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "

@@ -1373,37 +1373,62 @@ Heeger 2009; Wolfe 2021 (Guided Search 6.0); Carrasco 2011; Simons & Chabris 199
 *Question:* how much can you hold in mind at once, and what is the limit made of?
 *Story:* George Miller is "persecuted by an integer". Seven turns out to be closer to four, then turns out not to
 be an integer at all: is the limit a number of slots or a resource that is spread thinner? The argument is
-settled, as far as it is, by fitting models to the errors people make. Then an industry promises to raise the
-limit.
-1. Hook and On you: digit span, live.
-2. Miller's "magical number" (1956): span, chunks, recoding (the binary-to-octal trick, performed).
-3. Sperling (1960): partial report shows a large, fast-fading sensory store.
-4. Brown, and Peterson and Peterson (1959): forgetting in eighteen seconds. Decay or interference? (Keppel and
-   Underwood 1962.)
-5. The modal model (Atkinson and Shiffrin 1968) and its trouble; Baddeley and Hitch (1974): a phonological loop
-   (word-length and similarity effects), a sketchpad, an executive. Dual-task logic.
-6. Sternberg's memory scanning (1966): reaction time linear in set size, same slope for yes and no; serial
-   exhaustive search, and the parallel models that mimic it.
-7. Four, not seven: change detection (Luck and Vogel 1997), Cowan's review (2001), the K formula derived.
-8. Slots or resources: continuous report; the mixture model (Zhang and Luck 2008) against variable precision
-   (Bays and Husain 2008; van den Berg et al. 2012). The fits, and what each predicts.
-9. How neurons hold a thought: delay activity (Funahashi et al. 1989); the ring attractor (computed; the bump
-   drifts, and drift predicts the errors); activity-silent alternatives.
-10. Working memory and intelligence: complex span, the correlation with fluid reasoning (Part 32).
-11. Can you train it? Jaeggi et al. (2008), the replications and meta-analyses, the 2016 consensus review, and
-    the FTC's settlement with Lumosity.
+settled, as far as it is, by fitting models to the errors people make, here to an open dataset of 7,271 trials.
+Then an industry promises to raise the limit.
+0. Hook: digit span on you (5, 7 and 9 digits); Miller's confession; the questions; objectives.
+1. Absolute judgment as a channel, computed (a noisy percept labelled by the nearest category levels off near 2.7
+   bits, about six categories); span counts chunks, not bits (about 9 binary digits, 7 decimal, 5 words); recoding
+   performed (eighteen binary digits as six octal ones; Smith's 40); chess and chunks.
+2. Sperling (1960): whole report about 4.5 letters, partial report about 9 of 12; the icon fading on Psyche (i =
+   0.62, τ = 250 ms); Neisser's iconic memory.
+3. Brown, and Peterson and Peterson (1959): about 80% at 3 s, 10% at 18 s; Keppel and Underwood (1962): no forgetting
+   on the first trial; release from proactive interference (Wickens); SIMPLE's temporal distinctiveness derived
+   (Brown, Neath and Chater 2007) and run trial by trial.
+4. The modal model (Atkinson and Shiffrin 1968) and patient K.F. (a span of about two, normal learning); Baddeley and
+   Hitch (1974): dual-task logic, the loop, the sketchpad, the executive, the episodic buffer (2000); the word-length
+   effect (Baddeley, Thomson and Buchanan 1975) and articulatory suppression on Psyche's loop (spans 6.2 and 3.0,
+   2.4 under suppression); span against speech rate, and digit spans across languages.
+5. Sternberg's memory scanning (1966: 37.9 ms per item from 397 ms); exhaustive against self-terminating search; an
+   unlimited parallel search curves, and a limited-capacity parallel search reproduces the serial line and its
+   distribution exactly (Townsend 1972), derived.
+6. Four, not seven: change detection (Luck and Vogel 1997); Cowan's and Pashler's K derived and recovered on Psyche
+   (K = 3.5); Cowan (2001), 4 ± 1; subitizing.
+7. Slots or resources on Bays, Catalao and Husain's open data (2009; 12 observers, set sizes 1 to 6): error spreads
+   of 16 to 63 degrees; the mixture model (Zhang and Luck 2008: g from 0.01 to 0.44, s.d. 14 to 22 degrees, levelling
+   off); swap errors (27% at six squares); slots, slots plus averaging, equal and variable precision fitted to every
+   observer (variable precision best for 11 of 12; van den Berg et al. 2012, 2014); a variable-precision observer who
+   never guesses yields g = 0.49 and K ≈ 3.05 from the mixture.
+8. Delay activity (Funahashi, Bruce and Goldman-Rakic 1989); a ring attractor computed: a bump that holds and diffuses,
+   s.d. 5 to 14 degrees over 0.5 to 4 s, variance linear in delay (Wimmer et al. 2014); activity-silent memory
+   (Mongillo, Barak and Tsodyks 2008; Rose et al. 2016).
+9. Complex span (Daneman and Carpenter 1980; r about 0.41 with comprehension); working memory and fluid intelligence
+   (about 0.72 latent, about 0.45 between tasks; Kane et al. 2005), with Part 3's attenuation.
+10. Dual n-back (Jaeggi et al. 2008); an active control (Redick et al. 2013); the meta-analysis (Melby-Lervåg et al.
+    2016: 87 publications, 145 comparisons); Psyche's 400 trials against two controls; the 2014 consensus and reply;
+    Simons et al. (2016); the FTC and Lumosity ($2 million, $50 million suspended).
+11. The Ledger. 12. In practice: chunked codes, forms and interruptions; read-backs and checklists; span as a clinical
+    measure. 13. Frontier: settled and open; a shared information budget fitted to the open data (2.3 bits; Sims et al.
+    2012; van den Berg and Ma 2018; Part 58); the focus of attention, Oberauer's benchmarks, small workspaces and large
+    contexts (Part 60).
 
-*Psyche:* `wm`: slot, resource and mixture models with ML fits to open continuous-report data; a ring attractor
-whose diffusion predicts precision against delay; an interference model of span.
-*On you:* Battery task 5; digit span forwards and with articulatory suppression.
-*Ledger:* capacity near four chunks (`replicated`); Sternberg's linear scanning (`replicated`); far transfer from
-working-memory training (`failed`); the word-length effect (`replicated, refined`).
-*In practice:* interface and form design, checklists and read-backs, cognitive assessment; the brain-training
-market as a case study in evidence.
+*Psyche:* `wm`: absolute judgment as a channel; the phonological loop with suppression; partial report; SIMPLE;
+memory scanning, serial and parallel; slots and the K formulas; von Mises precision, the mixture and swap models and
+four process models fitted by maximum likelihood; a ring attractor; brain-training trials; a shared information
+budget. `opendata`: Bays et al. (2009), fetched on first use and checked by SHA-256.
+*On you:* digit span in the film; Battery task 5 (change detection) runs on Psyche; the interactive is change
+detection, with the reader's K at four set sizes.
+*Ledger:* partial-report superiority (`replicated`); forgetting in eighteen seconds by decay (`story and record`);
+the word-length effect (`replicated`); linear memory scanning (`replicated`); capacity near four (`replicated`);
+working-memory training raises intelligence (`failed`). Shown without rows, with reasons: Miller, Shallice and
+Warrington, Baddeley and Hitch, Zhang and Luck, Bays et al., Funahashi et al., Wimmer et al., Mongillo et al., Daneman
+and Carpenter, Kane et al., Simons et al., the FTC.
+*In practice:* chunked codes and forms, interruptions, read-backs and checklists, cognitive assessment; the
+brain-training market as a case study in evidence.
 *Frontier:* slots against resources is not closed; persistent against silent codes; whether capacity limits are a
 bug or an optimal trade (Part 58).
 *Reading:* Miller 1956; Sperling 1960; Baddeley & Hitch 1974; Cowan 2001; Luck & Vogel 1997; Zhang & Luck 2008;
-Ma, Husain & Bays 2014; Oberauer et al. 2018 (benchmarks); Simons et al. 2016.
+Bays, Catalao & Husain 2009; van den Berg et al. 2012; Ma, Husain & Bays 2014; Oberauer et al. 2018 (benchmarks);
+Simons et al. 2016.
 
 ### Part 20 · Memory I: Storing and Finding (~55)
 *Question:* when you remember, what is being searched, and with what?
@@ -3333,3 +3358,4 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 16 | built, English and Chinese: 15 chapters, hook and outro; Psyche's conditioning (`psyche/conditioning.py`, twelve tests), six Ledger rows (one deferred from Part 10), twenty-three Archive datasets; course entry, lab and interactive (the gardener's game: predictions that reveal the contingency learned) checked; narration table and on-screen text translated and dry-run. Act IV begins. Open checks in its README | 54 min |
 | 17 | built, English and Chinese: 14 chapters, hook and outro; Psyche's reinforcement learning (`psyche/rl.py`, seven tests) with the part's own simulations of Steinberg's and Frank's designs and a bandit test, four Ledger rows, seventeen Archive datasets; course entry, lab and interactive (two slot machines: eighty pulls, the reader's α and β fitted on the page) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 42 min |
 | 18 | built, English and Chinese: 15 chapters, hook and outro; Psyche's attention (`psyche/attention.py`, seventeen tests) with Battery tasks 3 and 4 (Stroop, visual search), six Ledger rows (one deferred from Part 16), twenty-five Archive datasets; course entry, lab and interactive (feature and conjunction search, the reader's slopes measured on the page) checked; narration table and on-screen text translated and dry-run. Act V begins. Open checks in its README | 51 min |
+| 19 | built, English and Chinese: 13 chapters, hook and outro, with digit span played in the film; Psyche's working memory (`psyche/wm.py`, sixteen tests) with Battery task 5 (change detection) and the series' first open trial-level data (`opendata.py`: Bays, Catalao and Husain 2009, fetched and checked by SHA-256, four process models fitted to every observer), six Ledger rows, twenty-three Archive datasets; course entry, lab and interactive (change detection: the reader's K at four set sizes) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 52 min |
