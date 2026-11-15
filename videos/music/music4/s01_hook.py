@@ -17,7 +17,7 @@ class Hook(SoundScene):
         d = load("two")
         c = clip("two.tones")
         scope = Scope(width=6.0, height=2.6, color=TUNE).move_to(LEFT * 3.4 + UP * 0.5)
-        scap = label(r"the wave, \ slowed down", font_size=22, color=GREY_B).next_to(scope, DOWN, buff=0.15)
+        scap = label(r"waveform: \ a 16 ms window", font_size=22, color=GREY_B).next_to(scope, DOWN, buff=0.15)
         g = axes([0, 2000], [0, 1.15], x_length=5.2, y_length=2.6, xlabel=r"frequency (Hz)", ylabel=r"what is in the sound",
                  xticks=[0, 800, 1000, 1200, 2000], yticks=[], font_size=20)
         g.move_to(RIGHT * 3.6 + UP * 0.45)
@@ -32,16 +32,14 @@ class Hook(SoundScene):
                 snd.drive(b, lambda m, t, k=k: m.set_stroke(opacity=0.75 + 0.25 * np.sin(14 * t + 2.0 * k)))
         scope.set_wave(c.mono[4800:4800 + 768].astype(float), 0.95 / float(np.abs(c.mono).max()))
         with self.voiceover(
-            "Two pure tones, a thousand hertz and twelve hundred, and nothing else. The spectrum of what left your "
-            "loudspeaker has exactly two lines. <bookmark mark='a'/> And yet many listeners hear a third tone "
+            "Two pure tones, a thousand hertz and twelve hundred, and nothing else. The synthesized signal contains only these two tones. <bookmark mark='a'/> And yet many listeners hear a third tone "
             "underneath the two: lower, and faint, at eight hundred hertz. If you did not hear it, do not worry. "
-            "Before this part is over we will help you find it. <bookmark mark='b'/> If you did hear it: it was "
-            "not in the air. Your ear made it."
+            "Before this part is over we will help you find it. <bookmark mark='b'/> Your inner ear can generate such combination tones. Playback equipment can also distort, so this demonstration alone cannot prove where a tone you hear was made."
         ) as vo:
             vo.wait_until("a")
             self.play(Create(ghost), FadeIn(q))
             vo.wait_until("b")
-            note = label(rf"in the recording, \ at 800 Hz: \ {abs(d['in_the_clip_db']):.0f} dB below the two tones", font_size=26, color=EAR)
+            note = label(rf"in the computed clip, \ at 800 Hz: \ {abs(d['in_the_clip_db']):.0f} dB below the two tones", font_size=26, color=EAR)
             note.to_edge(DOWN, buff=0.7)
             self.play(FadeIn(note), Indicate(q, color=WHITE))
         self.wait(0.3)
@@ -64,16 +62,16 @@ class Hook(SoundScene):
         l1 = label(r"the click", font_size=22, color=GREY_A).move_to(g.ax.c2p(3.0, 0.95))
         l2 = label(r"an answer, \ from the ear", font_size=24, color=EAR).move_to(g.ax.c2p(11.5, 0.62))
         tag = label(r"schematic, \ after Kemp (1978)", font_size=18, color=GREY_C).next_to(g, DOWN, buff=0.75).align_to(g, RIGHT)
-        facts = VGroup(label(r"too late to be a reflection:", font_size=24, color=GREY_A),
-                       label(r"sound crosses the whole ear in \ 0.1 ms", font_size=24, color=GREY_A),
-                       label(r"and absent in ears that cannot hear", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.1, aligned_edge=LEFT)
+        facts = VGroup(label(r"a delayed cochlear response:", font_size=24, color=GREY_A),
+                       label(r"not a simple ear-canal echo", font_size=24, color=GREY_A),
+                       wrapped_label(r"often reduced with outer-hair-cell damage", 5.4, 24, GREY_A)).arrange(DOWN, buff=0.1, aligned_edge=LEFT)
         facts.next_to(card, DOWN, buff=0.4).align_to(card, LEFT)
         with self.voiceover(
             "In 1978, in London, David Kemp sealed a miniature loudspeaker and a microphone into a volunteer's ear "
             "canal, played a click, and recorded what came back. <bookmark mark='a'/> First the click itself, "
             "ringing for a millisecond or two. Then, five to fifteen milliseconds later, <bookmark mark='b'/> a "
-            "faint answer. It comes far too late to be a reflection: sound crosses the whole ear in a tenth of a "
-            "millisecond. <bookmark mark='c'/> And it is missing in ears that cannot hear. The ear was not only "
+            "faint answer. It comes far a delayed cochlear response: sound crosses the whole ear in a tenth of a "
+            "millisecond. <bookmark mark='c'/> Such emissions are often reduced or absent when outer hair cells are damaged. They do not test every cause of hearing loss. The ear was not only "
             "receiving sound. It was sending some back."
         ) as vo:
             self.play(FadeIn(card), FadeIn(g))
@@ -97,24 +95,35 @@ class Hook(SoundScene):
         c3 = history_card(1978, r"David Kemp",
                           r"living ears send sound back out. Some whistle all by themselves.", width=4.2)
         row = VGroup(c1, c2, c3).arrange(RIGHT, buff=0.3, aligned_edge=UP).move_to(UP * 0.7)
+        membrane = RoundedRectangle(width=2.4, height=0.9, corner_radius=0.1,
+                                    color=AIR).move_to(LEFT * 2.4 + DOWN * 1.8)
+        cells = membrane.copy().set_color(EAR).move_to(RIGHT * 2.4 + DOWN * 1.8)
+        feedback = VGroup(membrane, cells,
+                          label(r"cochlear \\ motion", font_size=22, color=AIR).move_to(membrane),
+                          label(r"outer hair \\ cell force", font_size=22, color=EAR).move_to(cells),
+                          Arrow([-1.15, -1.45, 0], [1.15, -1.45, 0], buff=0, color=AIR),
+                          Arrow([1.15, -2.1, 0], [-1.15, -2.1, 0], buff=0, color=EAR),
+                          label(r"motion", font_size=20, color=AIR).move_to(UP * -1.05),
+                          label(r"force supplies energy", font_size=20, color=EAR).move_to(DOWN * 2.55),
+                          label(r"schematic active feedback", font_size=18, color=GREY_B).move_to(DOWN * 3.1))
         line = label(r"a dead ear is passive. \quad A living ear is not.", font_size=38, color=EAR).to_edge(DOWN, buff=0.9)
         with self.voiceover(
             "One man had predicted it thirty years before. In 1948 Thomas Gold, twenty-eight years old and later a "
             "famous astrophysicist, argued that the inner ear cannot be a passive instrument. It is full of fluid, "
             "and friction in a fluid would smother any resonance in it. The ear, he said, must contain an "
             "amplifier that puts energy back in, and an amplifier like that might sometimes whistle by itself. "
-            "<bookmark mark='a'/> Nobody believed him, for a good reason. Georg von Békésy had spent twenty years "
+            "<bookmark mark='a'/> His proposal met with skepticism. Georg von Békésy had spent twenty years "
             "watching waves move inside real inner ears, and what he saw was broad, sluggish and passive. In 1961 "
             "it won him the Nobel Prize. But the ears on Békésy's bench came from cadavers. <bookmark mark='b'/> "
             "Kemp's microphone settled it. <bookmark mark='c'/> A dead ear is passive. A living ear is not."
         ) as vo:
-            self.play(FadeIn(c1))
+            self.play(FadeIn(c1), FadeIn(feedback))
             vo.wait_until("a")
             self.play(FadeIn(c2))
             vo.wait_until("b")
             self.play(FadeIn(c3))
             vo.wait_until("c")
-            self.play(FadeIn(line, shift=UP * 0.2))
+            self.play(FadeOut(feedback), FadeIn(line, shift=UP * 0.2))
         self.wait(0.4)
         self.clear_scene()
 

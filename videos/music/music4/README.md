@@ -8,12 +8,11 @@ spectrum describes the air; this part opens the instrument that listens to it. E
 ears; every sound is computed in `compute.py`. Dates and attributions are the published ones, listed under Sources.
 
 * **The ear that sings.** Two pure tones, 1000 and 1200 Hz, and the third tone at 800 Hz that many listeners hear
-  beneath them, which is not in the recording (183 dB down); Kemp's microphone in an ear canal (1978); Gold's
+  beneath them, which is absent from the synthesized clip (playback equipment can also distort) (183 dB down); Kemp's microphone in an ear canal (1978); Gold's
   amplifier (1948) against Békésy's passive wave (Nobel Prize, 1961; his cochleas came from cadavers); the plan.
 * **1. From air to water.** The path of a sound; the mismatch between air and the cochlea's fluid (1.1% of the
   power would get in); a worked example, the middle ear as a transformer (area ratio 17, lever 1.3: pressure × 22,
-  27 dB; 1% → 27%); the ear canal as Part 2's stopped pipe (2.5 cm: about 3,500 Hz), and the threshold of hearing,
-  lowest where the canal resonates.
+  27 dB; 1% → 27% in the simplified resistive-load model); the ear canal as Part 2's stopped pipe (2.5 cm: about 3,500 Hz), and the threshold approximation, lowest near the canal resonance.
 * **2. A wave that sorts.** The cochlea unrolled; Helmholtz's harp and what Békésy saw (from 1928); the travelling
   wave in Monochord's cochlea, and why it stops; seven tones an octave apart, each peak 4.6 mm from the last;
   a worked example (where does 3000 Hz peak?); the model's map against Greenwood's; inner and outer hair cells.
@@ -21,16 +20,14 @@ ears; every sound is computed in `compute.py`. Dates and attributions are the pu
   run on the model (a band of 133 Hz at 1 kHz); the ERB formula; a worked example (133 Hz at 1 kHz is 2.3
   semitones; 3.6 at 250 Hz); an ear question (beats, roughness, two tones); the Tune's opening as a cochleagram;
   resolved and unresolved partials (the first eight).
-* **4. How loud is loud?** A tone sliding from 100 Hz to 10 kHz at constant pressure; the threshold of hearing;
-  an ear question (three tones of one pressure); phons (Fletcher and Munson, 1933) and the A weighting; sones
-  (Stevens, 1936): ten times the power is twice as loud, so ten violins are twice as loud as one; a worked
-  example (sixteen first violins: 12 dB, 2.3 times as loud); 120 dB heard as twelve doublings.
+* **4. How loud is loud?** A tone sliding from 100 Hz to 10 kHz at constant digital rms (playback pressure is not calibrated); the threshold of hearing;
+  an ear question (three tones of one pressure); phons (Fletcher and Munson, 1933) and the A weighting; sones (Stevens, 1936): for similar spectra at moderate and higher levels, ten times the power is roughly twice as loud, so ten violins are twice as loud as one; a worked
+  example (sixteen first violins: 12 dB, 2.3 times as loud); the 40-to-80-phon range as four modeled doublings (1 to 16 sones), without extrapolating to threshold.
 * **5. What a loud sound hides.** The power-spectrum model of masking; what a 1 kHz tone at 70 dB hides (a worked
   example, read off the graph); an ear question (a pulsing tone alone, beside the loud tone, far above it); why
   masking spreads upwards; codecs, mixing, orchestration, hearing loss.
 * **6. A second clock.** Hair cells pass on half of each cycle; ten fibres mark every crest between them (the
-  volley idea; Wever and Bray, 1930); where in the cycle the spikes fall at 250, 1000 and 4000 Hz; the clock fades
-  above about 1 kHz and stops by about 5 kHz; an ear question (up or down: 17 cents, then 5); the ear resolves 2 Hz
+  volley idea; Wever and Bray, 1930); where in the cycle the spikes fall at 250, 1000 and 4000 Hz; the animal-inspired model's timing fidelity falls with frequency; the human upper limit remains debated; an ear question (up or down: 17 cents, then 5); the ear resolves 2 Hz
   through a filter 133 Hz wide.
 * **7. The pitch that is not there.** An ear question: one note with all its partials, without the lowest three,
   the same over low noise, and its fundamental alone; Helmholtz's distortion explanation and Licklider's masking
@@ -42,8 +39,7 @@ ears; every sound is computed in `compute.py`. Dates and attributions are the pu
 * **9. Two kinds of high.** Shepard's tones (1964): twenty-four steps up that end where they began (the waveforms
   are identical); how they are made; chroma and height; why the octave.
 * **10. The only pair you get.** No sound. Hair cells do not grow back; the notch at 4 kHz; the NIOSH rule (85 dBA
-  for 8 hours, halved for every 3 dB); a worked example (100 dBA: 15 minutes; 20 dB earplugs: a hundred times as
-  long); four habits.
+  for 8 hours, halved for every 3 dB); a worked example (100 dBA: 15 minutes; 20 dB of actual fitted attenuation: about a hundredfold equal-dose factor; not a guaranteed safe duration); four habits.
 * **11. Frontier: the ear is alive.** Friction cut to a quarter makes the model's peak 13 dB taller and twice as
   sharp; Rhode (1971), Brownell (1985), prestin (2000); an oscillator at the edge of oscillation responds as the
   cube root of the force (100 dB in, 33 dB out); the third tone again, with a guide (2f₁ − f₂; Tartini, 1754; the
@@ -68,7 +64,7 @@ ears; every sound is computed in `compute.py`. Dates and attributions are the pu
 | `pitch` | the summary autocorrelation of a pure tone, a full tone and one without partials 1 to 3; Schouten's shift | the same pitch within a cent; 205.3 Hz for the shifted complex (first pitch shift: 205) |
 | `limit` | the Tune's opening in pure tones near 500 Hz and above 5 kHz | (heard) |
 | `shepard` | twenty-five Shepard tones | step 12 equals step 0 exactly |
-| `dose` | permitted hours against level | NIOSH (1998): 85 dBA, 8 h, 3 dB exchange |
+| `dose` | daily criterion durations against level | NIOSH (1998): 85 dBA, 8 h, 3 dB exchange |
 | `active` | the response of a Hopf oscillator against force | slope 1/3 on a log-log plot |
 | `tune` | Variation 4; the pitch model on each of its notes | every missing fundamental within 0.2 cents |
 | `nextpart` | two strings at 2:3 and at 32:45 | (heard) |
@@ -109,12 +105,11 @@ python -m videos.music.labs 4                                  # the lab (writes
 
 ## Problems, with solutions
 
-1. **A concert.** A concert measures 103 dBA where you stand. For how long is it safe? You put in earplugs that
-   take off 15 dB: how long now, and by what factor did the time grow?
+1. **A concert.** A concert measures 103 dBA where you stand. What duration reaches the NIOSH daily exposure criterion? You put in earplugs with actual fitted attenuation of 15 dB: how long now, and by what factor did the time grow?
 
    *Solution.* 103 is 18 dB above 85, which is six steps of 3 dB, so the eight hours are halved six times:
    8 h / 64 = 7.5 minutes. With the plugs the level at the ear is 88 dBA, one step above 85: 4 hours. The factor
-   is 2^(15/3) = 32. (The lab computes both.)
+   is 2^(15/3) = 32. (The lab computes both.) These are equal-dose calculations under the NIOSH recommendation, not guarantees of safety.
 
 2. **The edge.** An amplifier's response is proportional to the cube root of the force. Show that 100 dB of input
    becomes 33 dB of output, and that its gain rises by 20 dB for every 30 dB that the sound falls.

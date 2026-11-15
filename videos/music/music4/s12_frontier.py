@@ -21,9 +21,11 @@ class Frontier(SoundScene):
         co = Cochlea(width=9.6, scale=1.0).move_to(UP * 0.75 + LEFT * 0.9)
         dead = co.lens(d["passive"], color=GREY_B, opacity=0.5)
         live = co.lens(d["active"], color=EAR, opacity=0.35)
-        tags = VGroup(label(r"friction as in a dead ear", font_size=24, color=GREY_B), label(r"friction cut to a quarter", font_size=24, color=EAR),
+        tags = VGroup(label(r"larger damping: \ passive model", font_size=24, color=GREY_B), label(r"damping cut to a quarter: \ active-like surrogate", font_size=24, color=EAR),
                       label(rf"the peak: \ {d['gain_db']:.0f} dB taller, \ twice as sharp", font_size=24, color=GOOD)).arrange(DOWN, buff=0.14, aligned_edge=LEFT)
-        tags.move_to(RIGHT * 4.2 + UP * 3.0)
+        if tags.width > 5.0:
+            tags.scale_to_fit_width(5.0)
+        tags.move_to(RIGHT * 4.1 + UP * 3.0)
         cards = VGroup(
             history_card(1971, r"William Rhode", r"measures the membrane in living squirrel monkeys: sharply tuned, and not proportional to the sound. After death: B\'ek\'esy's wave.", width=4.2, font_size=20),
             history_card(1985, r"William Brownell", r"an outer hair cell changes its length when its voltage changes. It is a motor.", width=4.2, font_size=20),
@@ -32,10 +34,8 @@ class Frontier(SoundScene):
         with self.voiceover(
             "We left two mysteries open. Twelve thousand outer hair cells that tell the brain almost nothing. "
             "And Gold's argument that a passive ear cannot be as sharp as ours. They are the same mystery. "
-            "<bookmark mark='a'/> Here is our model's wave for a tone of two thousand hertz, with the friction "
-            "you would find in a dead cochlea: low and broad. <bookmark mark='b'/> Cut the friction to a quarter, "
-            f"and the same tone gives a peak {say(d['gain_db'])} decibels taller and twice as sharp. That is what "
-            "living ears look like. <bookmark mark='c'/> In 1971 William Rhode measured the membrane in living "
+            "<bookmark mark='a'/> Here is our model's wave for a tone of two thousand hertz, with larger damping as a passive surrogate: low and broad. <bookmark mark='b'/> Cut the friction to a quarter, "
+            f"and the same tone gives a peak {say(d['gain_db'])} decibels taller and twice as sharp. This illustrates active-like sharpening; it is not a complete living-ear model. <bookmark mark='c'/> In 1971 William Rhode measured the membrane in living "
             "squirrel monkeys and found it sharply tuned, and, strangely, not proportional to the sound: double "
             "the pressure, and the motion less than doubled. When the animal died, the response turned into "
             "Békésy's. <bookmark mark='d'/> Something alive was cancelling the friction. In 1985 William Brownell "
@@ -57,33 +57,32 @@ class Frontier(SoundScene):
     # ------------------------------------------------------------------
     def edge(self):
         d = load("active")
-        g = axes([0, 100], [-100, 5], x_length=6.0, y_length=4.4, xlabel=r"sound going in (dB)", ylabel=r"motion coming out (dB)",
+        g = axes([0, 100], [-100, 5], x_length=6.0, y_length=4.4, xlabel=r"input level (dB above minimum)", ylabel=r"motion level (dB relative to maximum)",
                  xticks=[0, 20, 40, 60, 80, 100], yticks=[-100, -80, -60, -40, -20, 0], font_size=20)
         g.move_to(RIGHT * 3.0 + DOWN * 0.2)
         pas = curve(g.ax, d["in_db"], d["passive_db"], GREY_B)
         act = curve(g.ax, d["in_db"], d["active_db"], EAR)
-        pl = label(r"passive: \ 100 dB in, \ 100 dB out", font_size=22, color=GREY_B).move_to(g.ax.c2p(62, -72))
-        al = label(rf"at the edge: \ 100 dB in, \ {d['range_out']:.0f} dB out", font_size=22, color=EAR).move_to(g.ax.c2p(32, -5))
+        pl = label(r"passive range: \ 100 dB in, \ 100 dB out", font_size=22, color=GREY_B).move_to(g.ax.c2p(62, -72))
+        al = label(rf"Hopf-model range: \ 100 dB in, \ {d['range_out']:.0f} dB out", font_size=22, color=EAR).move_to(g.ax.c2p(32, -5))
         notes = VGroup(
             label(r"an amplifier that exactly cancels friction \\ is on the edge of oscillating by itself", font_size=26, color=GREY_A),
             MathTex(r"\text{response} \;\propto\; \text{force}^{1/3}", font_size=38, color=EAR),
             label(r"faint sounds: \ amplified enormously", font_size=26, color=GOOD),
             label(r"loud sounds: \ hardly at all", font_size=26, color=GOOD),
-            label(r"the compressor of chapter 4", font_size=28, color=LEVEL),
+            label(r"one model of cochlear compression", font_size=28, color=LEVEL),
         ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(LEFT * 3.6 + UP * 0.1)
         src = label(r"Camalet, Duke, J\"ulicher and Prost; \ Egu\'iluz and colleagues \ (2000)", font_size=18, color=GREY_C).to_edge(DOWN, buff=0.3).align_to(notes, LEFT)
         with self.voiceover(
             "How much should an amplifier like that amplify? Think of a microphone held near its own loudspeaker. "
             "Turn up the gain, and just before the howl begins the system becomes extraordinarily sensitive. "
             "<bookmark mark='a'/> An amplifier that exactly cancels friction sits on that edge, and in the year "
-            "2000 two groups of physicists pointed out that anything poised there obeys a universal law. "
+            "2000 two groups of physicists pointed out that a resonantly driven supercritical Hopf model with cubic saturation has a characteristic scaling law. "
             "<bookmark mark='b'/> At its own frequency, its response grows not in proportion to the force, but as "
             "the cube root of it. <bookmark mark='c'/> Here is what that means. A passive membrane turns a hundred "
             f"decibels of input into a hundred decibels of motion. An oscillator at the edge turns it into "
             f"{say(d['range_out'])}. <bookmark mark='d'/> Faint sounds are amplified enormously, loud ones hardly "
             "at all. <bookmark mark='e'/> This is the machine we were looking for in chapter four: the one that "
-            "squeezes a million million into a few thousand. The ear's compression is not done in the brain. It "
-            "is done by motors on the membrane, before the sound has even been detected."
+            "compresses a large input range mechanically. This is one contribution to the ear's wide operating range; neural processing also shapes perceived loudness."
         ) as vo:
             mic = VGroup(Circle(radius=0.28, stroke_color=GREY_A, stroke_width=3, fill_color=GREY_D, fill_opacity=0.6),
                          Line(DOWN * 0.28, DOWN * 0.9, color=GREY_A, stroke_width=4)).move_to(LEFT * 1.6)
@@ -135,16 +134,16 @@ class Frontier(SoundScene):
         guide.set_stroke(opacity=1)
         pair.set_stroke(opacity=1)
         eq = MathTex(r"2f_1 - f_2 \;=\; 2\times 1000 - 1200 \;=\; 800\ \text{Hz}", font_size=36, color=EAR).move_to(UP * 2.4)
-        facts = VGroup(label(rf"in the recording: \ {abs(d['in_the_clip_db']):.0f} dB down. \ Not there.", font_size=26, color=GREY_A),
-                       label(rf"in Monochord's oscillator at the edge: \ {abs(d['ear_third_db']):.0f} dB below the two tones. \ Audible.", font_size=26, color=EAR)
+        facts = VGroup(label(rf"in the computed clip: \ {abs(d['in_the_clip_db']):.0f} dB down. \ Not there.", font_size=26, color=GREY_A),
+                       label(rf"in Monochord's oscillator at the edge: \ {abs(d['ear_third_db']):.0f} dB below the two tones in this model.", font_size=26, color=EAR)
                        ).arrange(DOWN, buff=0.15).move_to(UP * 1.35)
         card = history_card(1754, r"Giuseppe Tartini", r"the violinist publishes his ``third sound'': a low tone heard under two notes played together, which he used to tune them", width=5.4, font_size=20)
         card.to_corner(DL, buff=0.35)
-        baby = label(r"today: \ the same tone, \ measured in the ear canal, \\ is how a newborn's hearing is tested", font_size=24, color=GOOD).to_corner(DR, buff=0.5)
+        baby = label(r"today: \ the same tone, \ measured in the ear canal, \\ is one screen of outer-hair-cell function in newborns", font_size=24, color=GOOD).to_corner(DR, buff=0.5)
         with self.voiceover(
-            "With the guide in your ear, most people find it: a faint tone at the guide's pitch, under the two. "
+            "With the guide, some listeners find it: a faint tone at the guide's pitch, under the two. "
             "<bookmark mark='a'/> Twice the lower frequency, minus the upper one, is eight hundred hertz. That "
-            f"tone is {say(abs(d['in_the_clip_db']))} decibels down in the recording, which is to say it is not "
+            f"tone is {say(abs(d['in_the_clip_db']))} decibels down in the computed clip, which is to say it is not "
             "there. <bookmark mark='b'/> But give the same two tones to an oscillator poised at the edge, tuned "
             f"to eight hundred hertz, and it produces that tone only {say(abs(d['ear_third_db']))} decibels below "
             "them. The ear makes it, on the membrane, as a real vibration. <bookmark mark='c'/> The violinist "
@@ -152,7 +151,7 @@ class Frontier(SoundScene):
             "listen for it when tuning two strings together. <bookmark mark='d'/> And because it is a real "
             "vibration, it travels back out through the middle ear and can be picked up with a microphone in "
             "the ear canal. That is now how the hearing of newborn babies is tested, a day or two after birth: "
-            "two tones in, and if the third comes back, the amplifier is working."
+            "two tones in, and if the third comes back, outer-hair-cell function is supported. Such a screen does not exclude every kind of hearing loss."
         ) as vo:
             self.play(FadeOut(q))
             vo.wait_until("a")

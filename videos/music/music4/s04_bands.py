@@ -30,15 +30,13 @@ class Bands(SoundScene):
         lb = co.pin(18.7, r"1000 Hz", color=TUNE, up=1.55)
         lc = co.pin(18.7 - shift, r"1100 Hz", color=BAD, up=2.05)
         t1 = label(r"an octave apart: \ two separate stretches of membrane", font_size=28, color=GREY_A).move_to(DOWN * 2.3)
-        t2 = label(r"a tenth apart: \ the same stretch, \ the same hair cells", font_size=28, color=BAD).move_to(DOWN * 2.3)
+        t2 = label(r"10\% apart in frequency: \ the same stretch, \ the same hair cells", font_size=28, color=BAD).move_to(DOWN * 2.3)
         with self.voiceover(
             "The cochlea sorts frequencies by place. But look again at the wave from the last chapter. A single "
             "pure tone does not move a point on the membrane. It moves a stretch of it, several millimetres long. "
             "<bookmark mark='a'/> Two tones an octave apart move two separate stretches, and different hair cells "
-            "report each one. <bookmark mark='b'/> But bring the second tone down to within a tenth of the "
-            "first, and the two stretches lie on top of each other. The same hair cells feel both. So there must "
-            "be a limit to how finely the ear can separate, and Part 3 told us that it matters: it is the limit "
-            "below which the ear starts to hear phase. How wide is it?"
+            "report each one. <bookmark mark='b'/> But bring the second tone down to within ten percent of the first, and the two stretches lie on top of each other. The same hair cells feel both. So there must "
+            "be a limit to how finely the ear can separate, and Part 3 told us that it matters: overlapping partials in one auditory filter can make relative phase audible. How wide is it?"
         ) as vo:
             self.play(FadeIn(co), FadeIn(b), FadeIn(lb))
             vo.wait_until("a")

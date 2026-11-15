@@ -56,7 +56,7 @@ class Shepard(SoundScene):
         res = VGroup(label(r"step 12 and step 24 are not like step 0. \ They \emph{are} step 0:", font_size=28, color=GREY_A),
                      label(rf"largest difference between the waveforms: \ {d['same_as_start']:.1f}", font_size=30, color=GOOD)).arrange(DOWN, buff=0.18).to_edge(UP, buff=0.6)
         with self.voiceover(
-            "Every step went up. There is no doubt about that; you heard twenty-four rises in a row. And yet the "
+            "Many listeners hear a rise at each step: an apparently endless ascent. And yet the "
             "last tone is not higher than the first. It is the first: the same waveform, sample for sample. So "
             "is the thirteenth. The scale climbed two octaves and arrived exactly where it started, twice."
         ):

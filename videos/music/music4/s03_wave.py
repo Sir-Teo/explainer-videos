@@ -75,6 +75,8 @@ class Wave(SoundScene):
         zones[0].move_to(co.p(6.5) + DOWN * 2.2)
         zones[1].move_to(co.p(19.5) + DOWN * 3.25)
         zones[2].move_to(co.p(30.5) + DOWN * 2.2)
+        scale_note = label(rf"steady-state model; \ normalized displacement; \ motion slowed {1000 * (len(d['frames']) - 1) / 7:.0f} times",
+                           font_size=18, color=GREY_B).to_edge(DOWN, buff=0.2)
         run(counter, 7.0)
         with self.voiceover(
             "Here is that wave in Monochord's own cochlea. The model is simple: two thousand slices of membrane, "
@@ -83,7 +85,7 @@ class Wave(SoundScene):
             "<bookmark mark='a'/> The wave enters at the left and runs along the membrane, quickly at first. Then "
             "it slows, its ripples crowd together, and it grows, to a peak "
             f"{say(row['peak_mm'], 1)} millimetres from the base. <bookmark mark='b'/> And then, within a couple "
-            "of millimetres, it is gone. Nothing reaches the apex at all. <bookmark mark='c'/> Why does it stop? "
+            "of millimetres, it is gone. The motion toward the apex becomes negligible. <bookmark mark='c'/> Why does it stop? "
             "Each slice has a note of its own, high at the base and low at the apex. Near the base the slices are "
             "tuned far above a thousand hertz. They are stiff and quick, they follow the push easily and hand the "
             "wave on. <bookmark mark='d'/> Further along, the wave reaches slices whose own note is close to a "
@@ -92,7 +94,7 @@ class Wave(SoundScene):
             "thousand hertz at all, so there is nothing to carry the wave further. Helmholtz and Békésy were "
             "both right. There is a wave, and it ends at a resonance."
         ) as vo:
-            self.play(FadeIn(co), FadeIn(tr), FadeIn(head), FadeIn(how))
+            self.play(FadeIn(co), FadeIn(tr), FadeIn(head), FadeIn(how), FadeIn(scale_note))
             vo.wait_until("a")
             self.play(FadeIn(lens), run_time=1.0)
             self.wait(max(vo.until("b") - 2.5, 0.1))
@@ -141,10 +143,10 @@ class Wave(SoundScene):
         for a, b in zip(pins[:-1], pins[1:]):
             x0, x1 = b[0].get_start()[0], a[0].get_start()[0]
             br.add(Line([x0 + 0.04, 0, 0], [x1 - 0.04, 0, 0], color=RATIO, stroke_width=3).set_y(co.p(0)[1] - 0.55))
-        bl = label(rf"each octave: \ the same {step:.1f} mm", font_size=28, color=RATIO).move_to(co.p(18)[0] * RIGHT + (co.p(0)[1] - 2.25) * UP)
+        bl = label(rf"each model octave: \ the same {step:.1f} mm", font_size=28, color=RATIO).move_to(co.p(18)[0] * RIGHT + (co.p(0)[1] - 2.25) * UP)
         with self.voiceover(
-            "High tones stop near the base. Low tones travel all the way to the apex. And notice the spacing. "
-            f"<bookmark mark='a'/> Every octave moved the peak by the same distance, {say(step, 1)} millimetres. "
+            "High tones stop near the base. Low tones travel farther toward the apex. And notice the spacing. "
+            f"<bookmark mark='a'/> In this model every octave moved the peak by the same distance, {say(step, 1)} millimetres. "
             "Equal ratios of frequency are equal distances along the membrane. The cochlea is a keyboard, rolled "
             "up, and it measures frequency the way music does: by ratio."
         ) as vo:

@@ -28,9 +28,9 @@ class Mask(SoundScene):
     # ------------------------------------------------------------------
     def pattern(self):
         d, g, quiet, masked, masker, near, far = self.graph()
-        ql = label(r"heard in quiet above this line", font_size=20, color=GREY_B).move_to(g.at(5200, 14))
+        ql = label(r"model threshold in quiet", font_size=20, color=GREY_B).move_to(g.at(5200, 14))
         ml = label(r"a loud tone: \ 1000 Hz, \ 70 dB", font_size=22, color=TUNE).next_to(masker, UP, buff=0.1)
-        hl = label(r"beside it, \ nothing below \\ this line is heard", font_size=22, color=BAD).move_to(g.at(2300, 58))
+        hl = label(r"model threshold \\ beside the masker", font_size=22, color=BAD).move_to(g.at(2300, 58))
         ask = pause_card(rf"A second tone at {d['near_hz']:.0f} Hz, \ at {d['probe_db']:.0f} dB: \\ is it heard? \ And one at {d['far_hz']:.0f} Hz?", width=4.3, font_size=24)
         ask.to_corner(UR, buff=0.4).shift(DOWN * 0.9)
         ans = VGroup(label(rf"{d['near_hz']:.0f} Hz: \ needs {d['near_threshold']:.0f} dB.", font_size=24, color=BAD),
@@ -61,8 +61,7 @@ class Mask(SoundScene):
         with self.voiceover(
             f"At eleven fifty the red line stands at {say(d['near_threshold'])} decibels. Our tone is at {say(d['probe_db'])}. It "
             f"is hidden, with {say(d['near_threshold'] - d['probe_db'])} decibels to spare. At three thousand the "
-            f"line has fallen to {say(d['far_threshold'])}, and the tone is heard easily. The loud tone has not "
-            "made you deaf. It has made you deaf near itself."
+            f"line has fallen to {say(d['far_threshold'])}, and the tone is heard easily. The masker raises detection thresholds near its frequency; this temporary masking is not the same as hearing damage."
         ):
             self.play(LaggedStart(*[FadeIn(a) for a in ans], lag_ratio=0.6), near.animate.set_color(BAD), far.animate.set_color(GOOD), run_time=4.0)
         self.wait(0.3)
@@ -97,7 +96,7 @@ class Mask(SoundScene):
             m.set_opacity(1)
         masker.set_stroke(opacity=1)
         masked.set_stroke(opacity=1)
-        co = Cochlea(width=4.3, scale=0.9, ticks=(), names=False).move_to(LEFT * 4.5 + DOWN * 0.6)
+        co = Cochlea(width=4.3, scale=0.9, ticks=(), names=False).move_to(LEFT * 4.2 + DOWN * 0.6)
         co.remove(co.axis, co.unit)
         env = co.lens(load("wave")["env_1000"], color=TUNE, opacity=0.35)
         tail = Arrow(co.p(2) + UP * 1.0, co.p(11) + UP * 0.3, color=BAD, stroke_width=3, buff=0.05, max_tip_length_to_length_ratio=0.12)
@@ -106,7 +105,7 @@ class Mask(SoundScene):
         ends = VGroup(label(r"base: \ high", font_size=18, color=GREY_B).next_to(co.p(0), DOWN, buff=0.4),
                       label(r"apex: \ low", font_size=18, color=GREY_B).next_to(co.p(35), DOWN, buff=0.4))
         with self.voiceover(
-            "Alone, it is perfectly clear. Beside the loud tone it vanishes, although in the recording it is "
+            "Alone, it is perfectly clear. Beside the loud tone it vanishes, although in the computed clip it is "
             "exactly as strong as before. Far above the loud tone, it is back. <bookmark mark='a'/> One correction "
             "to our model, from real ears. Its red curve is nearly the same on both sides. Measured masking is "
             "lopsided: a loud tone hides more above itself than below, and more so the louder it gets. "
@@ -126,20 +125,19 @@ class Mask(SoundScene):
     def uses(self):
         rows = VGroup(
             VGroup(label(r"audio coding", font_size=30, color=TUNE),
-                   label(r"an MP3 or AAC encoder computes this curve many times a second, \\ and spends no bits on anything beneath it", font_size=26, color=GREY_A),
+                   wrapped_label(r"an MP3 or AAC encoder computes this curve many times a second, \\ and allocates quantization noise against an estimated masking threshold", 8.0, 24, GREY_A),
                    label(r"$\rightarrow$ Part 58", font_size=24, color=GREY_B)),
             VGroup(label(r"mixing", font_size=30, color=TUNE),
-                   label(r"a bass guitar hides a kick drum; \ engineers cut a notch in one \\ to make room for the other", font_size=26, color=GREY_A),
+                   wrapped_label(r"a bass guitar hides a kick drum; \ engineers cut a notch in one \\ to make room for the other", 8.0, 24, GREY_A),
                    label(r"$\rightarrow$ Part 56", font_size=24, color=GREY_B)),
             VGroup(label(r"orchestration", font_size=30, color=TUNE),
-                   label(r"a flute in its low register disappears under the horns; \\ an octave higher it sails over them", font_size=26, color=GREY_A),
+                   wrapped_label(r"a flute in its low register disappears under the horns; \\ an octave higher it sails over them", 8.0, 24, GREY_A),
                    label(r"$\rightarrow$ Part 41", font_size=24, color=GREY_B)),
             VGroup(label(r"hearing loss", font_size=30, color=TUNE),
-                   label(r"damaged ears have wider filters, \ so everything masks everything: \\ ``I can hear you, \ but not in a restaurant''", font_size=26, color=GREY_A),
+                   wrapped_label(r"cochlear damage can broaden filters, \ reducing clarity in noise: \\ ``I can hear you, \ but not in a restaurant''", 8.0, 24, GREY_A),
                    label(r"$\rightarrow$ chapter 10", font_size=24, color=GREY_B)),
         )
         for r in rows:
-            r[1].scale(0.88)
             r[0].move_to(LEFT * 6.3, aligned_edge=LEFT)
             r[1].move_to(LEFT * 3.8, aligned_edge=LEFT)
             r[2].move_to(RIGHT * 4.6, aligned_edge=LEFT)

@@ -22,17 +22,17 @@ class Loud(SoundScene):
         g.move_to(DOWN * 0.7)
         lo, hi, secs = d["sweep_lo"], d["sweep_hi"], d["sweep_seconds"]
         flat = Line(g.at(lo, 60), g.at(hi, 60), color=FORCE, stroke_width=3)
-        fl = label(r"the tone: \ the same pressure throughout", font_size=24, color=FORCE).next_to(flat, UP, buff=0.15)
+        fl = label(r"constant digital rms; \ 60 dB is a model reference", font_size=24, color=FORCE).next_to(flat, UP, buff=0.15)
         dot = Dot(g.at(lo, 60), radius=0.12, color=TUNE)
-        q = listen_note(r"One tone slides from 100 Hz up to 10,000 Hz, \ at constant pressure. \\ Does it stay equally loud?", width=9.4).to_edge(UP, buff=0.35)
+        q = listen_note(r"One tone slides from 100 Hz up to 10,000 Hz, \ at constant digital rms. \\ Does it stay equally loud?", width=9.4).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Now a different question about the same instrument. Part 2 measured the strength of a sound by its "
             "pressure, in decibels. Is that what you hear? Here is a tone that slides from a hundred hertz to ten "
-            "thousand, with exactly the same pressure throughout. Listen to whether it stays equally loud."
+            "thousand, with constant digital rms. The pressure at your ear also depends on your playback system. Listen to whether it stays equally loud."
         ):
             self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(g), FadeIn(flat), FadeIn(fl), FadeIn(dot))
         with self.listen(c) as snd:
-            window(snd, r"100 Hz to 10,000 Hz, \ constant pressure", kind="synthesized", detail=r"needs bass at the start", corner=DR, tag_corner=DL)
+            window(snd, r"100 Hz to 10,000 Hz, \ constant digital rms", kind="synthesized", detail=r"needs bass at the start", corner=DR, tag_corner=DL)
             snd.drive(dot, lambda m, t: m.move_to(g.at(lo * (hi / lo) ** float(np.clip(t / secs, 0, 1)), 60)))
         thr = fcurve(g, d["f"], np.minimum(d["threshold"], 88), EAR)
         tl = label(r"the quietest sound a young ear can hear", font_size=24, color=EAR).move_to(g.at(900, 34))
@@ -47,8 +47,7 @@ class Loud(SoundScene):
             f"At a thousand hertz it is about {say(r[1000]['threshold'])} decibels. Near three and a half "
             f"thousand, at the ear canal's resonance, it dips to {say(r[3500]['threshold'])}. But at a hundred "
             f"hertz it is {say(r[100]['threshold'])} decibels: a bass tone needs ten times the pressure of a "
-            "mid-range tone merely to be heard at all. And below twenty hertz, and above fifteen or twenty "
-            "thousand, no pressure is enough. Your pressure meter and your ear disagree, by a great deal."
+            "mid-range tone merely to be heard at all. And below twenty hertz, and above fifteen or twenty thousand, sensitivity falls greatly and varies between listeners; those are not absolute frequency cutoffs. Your pressure meter and your ear disagree, by a great deal."
         ) as vo:
             self.play(FadeOut(q))
             vo.wait_until("a")
@@ -62,20 +61,20 @@ class Loud(SoundScene):
     def three(self):
         d = load("loud")
         c = clip("loud.three")
-        q = listen_card(r"Three tones with exactly the same pressure: \ 100 Hz, \ 1000 Hz, \ 3500 Hz. \\ Which is the softest? \ Which is the loudest?",
+        q = listen_card(r"Three tones with equal digital rms: \ 100 Hz, \ 1000 Hz, \ 3500 Hz. \\ Which is the softest? \ Which is the loudest?",
                         width=9.6).to_edge(UP, buff=0.45)
         bx = boxes((r"100 Hz", r"1000 Hz", r"3500 Hz"), buff=0.8, width=2.9, height=1.3, font_size=34).move_to(UP * 0.2)
         meters = VGroup(*[Meter(width=0.45, height=1.5, color=FORCE).next_to(b, DOWN, buff=0.3) for b in bx])
         for m in meters:
             m.set_level(0.7)
-        ml = label(r"pressure: \ equal", font_size=22, color=FORCE).next_to(meters, RIGHT, buff=0.4)
+        ml = label(r"digital rms: \ equal", font_size=22, color=FORCE).next_to(meters, RIGHT, buff=0.4)
         with self.voiceover(
             "Test it on steady tones. Three tones, a hundred hertz, a thousand, and thirty-five hundred, each "
-            "with exactly the same pressure. Which is the softest, and which the loudest?"
+            "with equal digital rms. Playback response also affects the pressure at your ear. Which is the softest, and which the loudest?"
         ):
             self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(bx), FadeIn(meters), FadeIn(ml))
         with self.listen(c) as snd:
-            window(snd, r"three tones, \ equal pressure", kind="synthesized", detail=r"needs bass for the first", corner=DL, tag_corner=DR)
+            window(snd, r"three tones, \ equal digital rms", kind="synthesized", detail=r"needs bass for the first", corner=DL, tag_corner=DR)
             for ev, b in zip(("low", "mid", "high"), bx):
                 t0 = snd.time_of(ev)
                 pulse(snd, b, t0, t0 + 1.4)
@@ -127,25 +126,25 @@ class Loud(SoundScene):
             for ev, b in zip(("one", "ten"), bx):
                 t0 = snd.time_of(ev)
                 pulse(snd, b, t0, t0 + 1.6)
-        g = axes([20, 100], [-2, 6], x_length=5.4, y_length=3.0, xlabel=r"loudness level (phons)", ylabel=r"loudness (sones)",
-                 xticks=[20, 40, 60, 80, 100], yticks=[-2, 0, 2, 4, 6], yfmt=lambda v: f"{2 ** v:g}", font_size=20)
+        g = axes([40, 100], [0, 6], x_length=5.4, y_length=3.0, xlabel=r"loudness level (phons)", ylabel=r"loudness (sones)",
+                 xticks=[40, 60, 80, 100], yticks=[0, 2, 4, 6], yfmt=lambda v: f"{2 ** v:g}", font_size=20)
         g.move_to(RIGHT * 3.2 + DOWN * 1.3)
-        line = curve(g.ax, d["phons"], np.log2(d["sones"]), LEVEL)
-        dots = VGroup(*[Dot(g.ax.c2p(p, np.log2(s)), radius=0.06, color=LEVEL) for p, s in zip(d["phons"], d["sones"])])
+        keep = d["phons"] >= 40
+        line = curve(g.ax, d["phons"][keep], np.log2(d["sones"][keep]), LEVEL)
+        dots = VGroup(*[Dot(g.ax.c2p(p, np.log2(s)), radius=0.06, color=LEVEL) for p, s in zip(d["phons"], d["sones"]) if p >= 40])
         rule = VGroup(label(r"$+10$ dB \ = \ 10 times the power", font_size=28, color=FORCE),
-                      label(r"= \ twice as loud", font_size=34, color=LEVEL),
+                      label(r"= \ roughly twice as loud", font_size=34, color=LEVEL),
                       label(r"loudness \ $\propto$ \ power$^{\,0.3}$", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.2, aligned_edge=LEFT)
         rule.next_to(card, DOWN, buff=0.5).align_to(card, LEFT)
         back = label(r"Part 2: \ ten violins are $+10$ dB over one. \ Now we know: \ twice as loud.", font_size=26, color=GOOD).to_edge(DOWN, buff=0.3)
         g.shift(UP * 0.35)
         VGroup(line, dots).shift(UP * 0.35)
         with self.voiceover(
-            "Most people say: about twice as loud. Not ten times. <bookmark mark='a'/> That is Stevens's law. Ten "
-            "times the power is heard as twice the loudness, and his unit, the sone, doubles with every ten "
+            "Most people say: about twice as loud. Not ten times. <bookmark mark='a'/> That is Stevens's law. For similar spectra at moderate and higher levels, ten times the power is heard as roughly twice the loudness, and his unit, the sone, doubles with every ten "
             "phons. Loudness grows as roughly the zero point three power of the sound's power. "
             "<bookmark mark='b'/> And it settles something from Part 2. We found there that ten violins playing "
             "together are ten decibels stronger than one. Now we can say what that sounds like: twice as loud. To "
-            "double the loudness of a section, you do not hire a second player. You hire nine more."
+            "roughly double the loudness in this equal-player, incoherent-power approximation takes about ten players. Real ensembles and rooms vary."
         ) as vo:
             self.play(FadeOut(bx))
             vo.wait_until("a")
@@ -160,12 +159,12 @@ class Loud(SoundScene):
         d = load("loud")
         title = label(r"A worked example: \ why sixteen first violins?", font_size=36).to_edge(UP, buff=0.45)
         fiddles = VGroup(*[Dot(radius=0.13, color=STR) for _ in range(16)]).arrange_in_grid(2, 8, buff=0.3).move_to(UP * 1.7)
-        ask = pause_card(r"An orchestra seats sixteen first violins. \\ How much louder are they than one of them alone?", width=8.2).move_to(DOWN * 0.3)
+        ask = pause_card(r"Sixteen equal players; \ add their powers incoherently. \\ Estimate the loudness relative to one player.", width=8.2).move_to(DOWN * 0.3)
         steps = VGroup(MathTex(rf"10\log_{{10}} 16 = {d['sixteen_db']:.0f}\ \text{{dB}}", font_size=36),
                        MathTex(rf"2^{{\,{d['sixteen_db']:.0f}/10}} = {d['sixteen_times']:.1f}\ \text{{times as loud}}", font_size=36, color=GOOD)
                        ).arrange(RIGHT, buff=1.0).move_to(DOWN * 0.1)
-        rng = VGroup(label(r"the whole range of hearing: \ 120 dB \ = \ a million million in power", font_size=28, color=FORCE),
-                     label(r"heard as twelve doublings: \ about 4000 in loudness", font_size=28, color=LEVEL)).arrange(DOWN, buff=0.2).move_to(DOWN * 2.2)
+        rng = VGroup(label(r"at 1 kHz: \ 40 to 80 phons is a 40 dB increase", font_size=28, color=FORCE),
+                     label(r"1 to 16 sones: \ four doublings in this model", font_size=28, color=LEVEL)).arrange(DOWN, buff=0.2).move_to(DOWN * 2.2)
         with self.voiceover(
             "A worked example. A full orchestra seats sixteen first violins. How much louder are sixteen than "
             "one? Pause and work it out, in decibels and then in loudness."
@@ -175,12 +174,10 @@ class Loud(SoundScene):
         with self.voiceover(
             f"Sixteen times the power is {say(d['sixteen_db'])} decibels, and at a doubling for every ten "
             f"decibels that is about {say(d['sixteen_times'], 1)} times as loud. Sixteen players, for a little "
-            "more than twice the loudness. So composers do not double an instrument to make it louder. They "
-            "double it to change its colour, and it is why one solo violin can still be heard against all "
-            "sixteen. <bookmark mark='a'/> The same compression runs through the whole of hearing. From the "
-            "quietest sound to the threshold of pain is a hundred and twenty decibels, a factor of a million "
-            "million in power. The ear hears it as twelve doublings. Somewhere in there is a machine that "
-            "squeezes a range of a million million into a few thousand, and we will find it in the last chapter."
+            "more than twice the loudness in this approximation. Doubling also changes colour and blend, while a soloist can remain audible through differences in timbre, register and orchestration. <bookmark mark='a'/> Keep the range of this rule in mind. At a thousand hertz, forty "
+            "phons defines one sone. Eighty phons corresponds to sixteen sones: four doublings. We must not "
+            "extrapolate that simple rule all the way to the threshold of hearing. The active compression behind "
+            "this wide operating range is the subject of our last chapter."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(steps))
             vo.wait_until("a")

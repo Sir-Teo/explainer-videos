@@ -28,7 +28,7 @@ class Outer(SoundScene):
         f = MathTex(r"\text{fraction of the power that gets in} \;=\; \frac{4\,Z_1 Z_2}{(Z_1+Z_2)^2}", font_size=34).move_to(DOWN * 1.35)
         num = label(rf"air: \ $Z_1 = {m['z_air']:.0f}$ \qquad the cochlea's entrance: \ $Z_2 \approx {ratio:.0f}\,Z_1$ \qquad"
                     rf"$\Rightarrow$ \ {100 * m['without']:.1f}\%", font_size=28, color=GREY_A).move_to(DOWN * 2.35)
-        pool = label(r"(why you cannot hear the poolside from under water)", font_size=22, color=GREY_B).move_to(DOWN * 3.1)
+        pool = label(r"(why poolside voices are attenuated under water)", font_size=22, color=GREY_B).move_to(DOWN * 3.1)
         with self.voiceover(
             "Follow a sound in. <bookmark mark='a'/> It enters the ear canal, a tube about two and a half "
             "centimetres long, and at the end of it pushes on the eardrum. <bookmark mark='b'/> Behind the eardrum "
@@ -36,11 +36,9 @@ class Outer(SoundScene):
             "And the stirrup pushes on a window into the cochlea: a coiled tube, the size of a pea, filled with "
             "fluid. That is where hearing happens, and the fluid is a problem. <bookmark mark='d'/> In Part 2 we "
             "found that when a wave meets a medium that pushes back harder, most of it bounces off, and we had a "
-            "formula for the part that gets through. <bookmark mark='e'/> The fluid at the cochlea's entrance "
-            f"pushes back about {say(ratio)} times harder than air does. Put that in the formula, and only "
+            f"formula for the part that gets through. <bookmark mark='e'/> In this simplified real-load model, the effective cochlear entrance impedance, not the bulk fluid impedance, pushes back about {say(ratio)} times harder than air does. Put that in the formula, and only "
             f"{say(100 * m['without'], 1)} percent of the sound's power gets in. Ninety-nine percent would bounce "
-            "off the side of your head. It is the reason you cannot hear people at the poolside when you are "
-            "under the water."
+            "off the side of your head. The air-water mismatch similarly helps explain why poolside voices can be hard to hear from under water."
         ) as vo:
             self.play(FadeIn(ear.pinna))
             vo.wait_until("a")
@@ -101,7 +99,7 @@ class Outer(SoundScene):
         with self.voiceover(
             f"Twenty times the logarithm of {say(m['pressure_gain'])} is {say(m['gain_db'])} decibels. The middle "
             "ear does for sound what a low gear does on a bicycle: it trades a large, easy motion for a small, "
-            f"forceful one. In our model the share of the power that reaches the fluid rises from "
+            f"forceful one. This trades motion for pressure rather than creating power. In our simplified model, ignoring frequency dependence, the share of the power that reaches the fluid rises from "
             f"{say(100 * m['without'])} percent to {say(100 * m['with'])}. And it tells you what happens when the "
             "middle ear is blocked, by fluid behind the eardrum in a child with a cold, or by bones that have "
             "stiffened with age: a loss of twenty or thirty decibels, which is exactly what doctors measure."
@@ -124,6 +122,7 @@ class Outer(SoundScene):
         dip = Dot(g.at(d["best_hz"], float(np.min(d["threshold"]))), radius=0.09, color=GOOD)
         dl = label(rf"most sensitive near {round(d['best_hz'], -2):,.0f} Hz".replace(",", "{,}"), font_size=22, color=GOOD).next_to(dip, UP, buff=1.0).shift(LEFT * 1.0)
         lens = tube.lens(np.cos(np.linspace(0, np.pi / 2, 40)), amp=0.3, color=AIR)
+        motion_caption = label(r"idealized particle-motion envelope", font_size=20, color=GREY_B).next_to(tube, DOWN, buff=0.2)
         with self.voiceover(
             "One more piece of acoustics before we go inside, and you can do it yourself. The ear canal is a pipe "
             "two and a half centimetres long, open at the outside and closed at the far end by the eardrum. "
@@ -135,14 +134,13 @@ class Outer(SoundScene):
         self.wait(1.5)
         with self.voiceover(
             "A pipe closed at one end holds a quarter of a wave, so its lowest resonance is the speed of sound "
-            f"divided by four times its length: about {say(hz)} hertz. <bookmark mark='a'/> Now look at a "
-            "measurement: the quietest sound a young listener can hear, at each frequency. The lower the curve, the "
+            f"divided by four times its length: about {say(hz)} hertz. <bookmark mark='a'/> Now look at a standard threshold approximation, based on measurements of young listeners. The lower the curve, the "
             f"better the ear. <bookmark mark='b'/> Its best point is near {say(round(d['best_hz'], -2))} hertz, "
             "where the canal resonates. Your ear is most sensitive where its own front door rings, and that "
             "happens to be the region of a baby's cry and of the consonants of speech. We will come back to "
             "this curve in chapter four."
         ) as vo:
-            self.play(FadeOut(ask), FadeIn(ans), FadeIn(lens))
+            self.play(FadeOut(ask), FadeIn(ans), FadeIn(lens), FadeIn(motion_caption))
             vo.wait_until("a")
             self.play(FadeIn(g), Create(thr), run_time=1.8)
             vo.wait_until("b")

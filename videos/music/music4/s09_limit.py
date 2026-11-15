@@ -45,11 +45,10 @@ class Limit(SoundScene):
         card = history_card(1971, r"Fred Attneave and Richard Olson",
                             r"ask listeners to transpose a familiar jingle. Below about 5000 Hz they do it easily. "
                             r"Above, the melody falls apart.", width=6.0).move_to(DOWN * 2.6 + LEFT * 2.9)
-        ans = label(r"above 5 kHz: \ higher and lower, \\ but no intervals, \ no tune", font_size=28, color=BAD).move_to(DOWN * 2.6 + RIGHT * 3.6)
+        ans = label(r"above about 5 kHz: \\ musical interval judgments often weaken", font_size=28, color=BAD).move_to(DOWN * 2.6 + RIGHT * 3.6)
         with self.voiceover(
             "For most people it is not. You can tell that the high tones move, and roughly whether they go up "
-            "or down. But the intervals are gone. It no longer sounds like notes; it sounds like the squeaks of "
-            "a hinge. <bookmark mark='a'/> In 1971 Fred Attneave and Richard Olson measured this. They asked "
+            "or down. But musical interval judgments often become much less reliable, with substantial listener and task differences. Some listeners hear squeaks rather than a clear melody. <bookmark mark='a'/> In 1971 Fred Attneave and Richard Olson measured this. They asked "
             "listeners to transpose a jingle they knew well. Up to about five thousand hertz, people did it "
             "easily. Above that, their answers scattered. The sense of musical pitch, the thing that makes an "
             "octave an octave, has an upper edge."
@@ -75,9 +74,9 @@ class Limit(SoundScene):
         pl = label(r"the piano's 88 fundamentals", font_size=22, color=STR).next_to(piano, DOWN, buff=0.12)
         hear = Rectangle(width=g.at(20000, 0)[0] - g.at(20, 0)[0], height=0.32, stroke_width=0, fill_color=AIR, fill_opacity=0.35)
         hear.move_to((g.at(20, 0) + g.at(20000, 0)) / 2 + DOWN * 2.15)
-        hl = label(r"what you can hear", font_size=22, color=AIR).next_to(hear, DOWN, buff=0.12)
+        hl = label(r"approximate young-ear audible range", font_size=22, color=AIR).next_to(hear, DOWN, buff=0.12)
         top = DashedLine(g.at(d["piano_top_hz"], 1.05), g.at(d["piano_top_hz"], 0) + DOWN * 2.3, color=GREY_B, stroke_width=1.5)
-        only = label(r"partials only: \\ brightness, \ not notes", font_size=22, color=GREY_A).move_to(g.at(9500, 0.62))
+        only = label(r"upper partials add brightness; \\ temporal pitch cues weaken", font_size=22, color=GREY_A).move_to(g.at(9500, 0.62))
         r = {int(x["hz"]): x["salience"] for x in rows}
         with self.voiceover(
             "Monochord's timing model agrees. Give it pure tones and ask how strongly it hears a pitch. "
@@ -85,11 +84,11 @@ class Limit(SoundScene):
             f"{say(r[1000], 2)}. At four thousand, {say(r[4000], 2)}: almost nothing. <bookmark mark='b'/> Now "
             "lay the piano underneath. Its lowest note is twenty-seven and a half hertz. Its highest, the top C, "
             f"is {say(d['piano_top_hz'])}. <bookmark mark='c'/> Instrument makers had never heard of nerve "
-            "fibres. They stopped where notes stop. The piccolo ends in the same place, and so does every other "
-            "instrument that plays melodies. <bookmark mark='d'/> But hearing runs on for more than two octaves "
-            "beyond that. What lives up there is not notes. It is the upper partials of notes: the brightness "
-            "of a cymbal, the breath on a flute, the consonants in a voice. The place code still works there, "
-            "so you can hear that the sound is high. Only the clock can tell you what note it is."
+            "fibres. The piano illustrates a common melodic register, but its historical range is not proof of "
+            "a neural cutoff, and instruments can produce higher fundamentals. <bookmark mark='d'/> Hearing "
+            "continues above that range, where upper partials add brightness, breath and consonants. Place cues "
+            "still support high-frequency discrimination. The falling curve is this timing model's limitation, "
+            "not a universal boundary between notes and noise."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")

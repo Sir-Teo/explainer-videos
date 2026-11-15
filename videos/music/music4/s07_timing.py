@@ -44,8 +44,7 @@ class Timing(SoundScene):
             "moving up and down two hundred and fifty times a second. A hair cell is not a symmetrical device. "
             "Its hairs open their channels when they are bent one way, and close them when bent the other. "
             "<bookmark mark='b'/> So the cell passes on only half of each cycle: a pulse for every crest of the "
-            "wave, and nothing for the troughs. <bookmark mark='c'/> Now the nerve fibres. A single fibre cannot "
-            "fire two hundred and fifty times a second for long, and it does not try. It fires on some cycles and "
+            "wave, and nothing for the troughs. <bookmark mark='c'/> Now the nerve fibres. A single fibre does not usually mark every cycle reliably. It fires on some cycles and "
             "skips others. But when it does fire, it fires near the crest. <bookmark mark='d'/> Look down any of "
             "these lines. No one fibre marks every cycle, but ten fibres together mark every one of them. The "
             "wave's period is written in the timing of the spikes. In 1930 Ernest Wever and Charles Bray put a "
@@ -149,8 +148,7 @@ class Timing(SoundScene):
             "do that. It could compare how strongly neighbouring places respond: a tiny shift of a broad hump is "
             "still a shift. Or it could read the timing of the spikes, where a thousand hertz and a thousand and "
             "two differ by two millionths of a second in every cycle. The evidence says it does both, and that "
-            "timing matters most. Because above four or five thousand hertz, exactly where the clock stops, our "
-            "ability to tell frequencies apart gets suddenly worse. And something else goes with it, as you will "
+            "timing matters most. For many tasks frequency discrimination worsens in the high-frequency region where temporal fine-structure cues weaken; this does not establish a single exact neural cutoff. And something else goes with it, as you will "
             "hear in chapter eight."
         ) as vo:
             self.play(FadeOut(q), bx.animate.shift(UP * 1.9))

@@ -101,8 +101,8 @@ class Outro(SoundScene):
             rf"the middle ear matches air to fluid: \ pressure $\times\,{m['pressure_gain']:.0f}$, \ {m['gain_db']:.0f} dB",
             rf"a travelling wave sorts frequency by place: \ equal ratios, \ equal distances ({w['mm_per_octave']:.1f} mm an octave in our model)",
             r"the ear's filters are a little over a whole tone wide, \ wider in the bass; \ a loud sound hides its neighbours",
-            r"loudness is compressed: \ ten times the power is twice as loud",
-            r"pitch is a period, \ read from the timing of the nerve up to 4 or 5 kHz; \ so a note survives without its fundamental",
+            r"loudness is compressed: \ similar spectra at moderate levels: \ ten times the power is roughly twice as loud",
+            r"pitch uses place and timing cues; \ a harmonic complex can keep its pitch without its fundamental",
             r"the living cochlea amplifies: \ sharp, \ compressive, \ and it makes tones of its own",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
@@ -110,9 +110,7 @@ class Outro(SoundScene):
             "the cochlea a travelling wave sorts frequency by place, and equal ratios of frequency are equal "
             "distances. <bookmark mark='b'/> The ear's filters are a little over a whole tone wide, wider in the "
             "bass, and a loud sound hides its neighbours. <bookmark mark='c'/> Loudness is compressed: ten times "
-            "the power is twice as loud. <bookmark mark='d'/> Pitch is a period, read from the timing of the "
-            "nerve, up to four or five thousand hertz. That is why a note survives the loss of its fundamental, "
-            "and why notes stop where the piano stops. <bookmark mark='e'/> And the living cochlea is an "
+            "the power is roughly twice as loud for similar spectra at moderate and higher levels. <bookmark mark='d'/> Pitch uses both place and timing information. A harmonic complex can keep its pitch without the fundamental, while musical interval judgments often weaken at high frequencies. <bookmark mark='e'/> And the living cochlea is an "
             "amplifier: sharp, compressive, and noisy enough to make tones of its own."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
@@ -125,7 +123,7 @@ class Outro(SoundScene):
     # ------------------------------------------------------------------
     def problems(self):
         ps = problem_set([
-            r"A concert measures 103 dBA where you stand. \ For how long is it safe? \ You put in earplugs that take off 15 dB: "
+            r"A concert measures 103 dBA where you stand. \ What duration reaches the NIOSH daily criterion? \ You put in earplugs that take off 15 dB: "
             r"how long now, \ and by what factor did the time grow?",
             r"An amplifier's response is proportional to the cube root of the force. \ Show that 100 dB of input becomes 33 dB of output, \ "
             r"and that its gain rises by 20 dB for every 30 dB that the sound falls.",
