@@ -21,12 +21,14 @@ class Hook(SoundScene):
     def cold_open(self):
         c = clip("hammers.opening")
         mono = MonochordView(width=10.6).shift(UP * 1.0)
+        scale_note = label(r"vibration envelope; \ displacement exaggerated", font_size=24, color=GREY_B)
+        scale_note.next_to(mono, UP, buff=0.45)
         slots = VGroup()
         for n, word in zip(c.notes, tune.WORDS):
             slots.add(VGroup(label(n["name"], font_size=44, color=GREY_C), label(word, font_size=26, color=GREY_D))
                       .arrange(DOWN, buff=0.14))
         slots.arrange(RIGHT, buff=0.62, aligned_edge=UP).next_to(mono, DOWN, buff=0.9)
-        self.play(FadeIn(mono), FadeIn(slots), run_time=0.6)
+        self.play(FadeIn(mono), FadeIn(slots), FadeIn(scale_note), run_time=0.6)
         prev = None
         with self.listen(c) as snd:
             window(snd, r"the Tune, \ on one string")

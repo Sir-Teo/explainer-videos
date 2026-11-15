@@ -188,7 +188,7 @@ class Monochord(SoundScene):
     def quiz(self):
         d = load("ratios")
         q = listen_card(r"Two pairs of notes, \ A and B. \ Each starts on the open string. \\ "
-                        r"Which pair is the fifth?", width=9.2).to_edge(UP, buff=0.6)
+                        r"Which pair is the fifth?", width=9.2).to_edge(UP, buff=1.0)
         boxes = VGroup(*[VGroup(RoundedRectangle(width=2.6, height=1.6, corner_radius=0.15, stroke_color=GREY_C,
                                                  stroke_width=2), label(t, font_size=60, color=GREY_A))
                          for t in ("A", "B")]).arrange(RIGHT, buff=1.4).shift(DOWN * 0.8)
