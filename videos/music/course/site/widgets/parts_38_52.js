@@ -249,4 +249,71 @@
       note: "Disco and house put the kick on every beat; trap moves the snare to beat three, so the beat feels half as fast as its hats. Try funk at 58% swing, and the kick's decay long enough to become a bass note."
     });
   };
+  // ---------------------------------------------------------------- Part 41: orchestration as additive synthesis
+  var PROF41 = {"flute": [0.0, -20.8, -11.5, -21.5, -17.5, -23.6, -24.5, -26.1, -29.3, -27.5, -35.9, -30.9, -31.9, -32.9, -33.9, -34.9], "clarinet": [0.0, -20.1, -1.9, -18.2, -4.3, -18.4, -7.0, -19.7, -9.9, -21.5, -13.0, -23.7, -28.3, -32.9, -37.5, -42.1], "saxophone": [0.0, -4.5, -11.8, -21.7, -18.0, -22.1, -31.2, -34.2, -36.6, -40.5, -35.4, -32.0, -33.0, -34.0, -35.0, -36.0], "trumpet (soft)": [0.0, -18.9, -33.6, -48.5, -60.3, -65.3, -70.7, -69.0, -66.9, -68.9, -70.1, -65.6, -66.6, -67.6, -68.6, -69.6], "trumpet (loud)": [0.0, -2.0, -5.9, -13.2, -13.6, -15.7, -20.8, -22.5, -25.0, -33.7, -41.2, -43.2, -49.3, -55.3, -61.4, -67.5], "horn": [0.0, -12.9, -27.6, -42.5, -54.3, -59.3, -64.7, -63.0, -60.9, -62.9, -64.1, -59.6, -60.6, -61.6, -62.6, -63.6], "violin": [0.0, -5.5, -10.4, -12.2, -13.4, -13.3, -13.3, -13.9, -14.1, -39.1, -18.4, -22.8, -25.7, -28.6, -31.5, -34.4]};
+  var NAMES41 = Object.keys(PROF41);
+  var STEPS41 = [0, 12, 19, 24, 28, 31, 34, 36];     // semitones above the melody note to harmonics 1..8 (tempered)
+  function parts41(v) {
+    var f0 = 261.63, out = [];
+    PROF41[NAMES41[v.a]].forEach(function (db, k) { out.push([f0 * (k + 1), Math.pow(10, db / 20), 0]); });
+    var f1 = f0 * Math.pow(2, (STEPS41[v.h - 1] + v.off / 100) / 12), g = Math.pow(10, v.g / 20);
+    PROF41[NAMES41[v.b]].forEach(function (db, k) { out.push([f1 * (k + 1), g * Math.pow(10, db / 20), 1]); });
+    return out;
+  }
+  W.orchestra = function (el) {
+    QB.widget(el, {
+      title: "Ravel's trick: one instrument on another's harmonic",
+      sub: "A melody instrument on middle C, with its sixteen harmonics measured from the series' physical models, and a second instrument placed on one of its harmonics, quieter. When every partial of the second lands on the first's harmonic series, the two fuse into one new colour, as Boléro's horn, celesta and piccolos do. Detune the second and they come apart.",
+      panels: 1, height: 240,
+      controls: [
+        { k: "a", label: "Melody", min: 0, max: NAMES41.length - 1, step: 1, value: 5, fmt: function (x) { return NAMES41[x]; } },
+        { k: "b", label: "Added", min: 0, max: NAMES41.length - 1, step: 1, value: 0, fmt: function (x) { return NAMES41[x]; } },
+        { k: "h", label: "On harmonic", min: 1, max: 8, step: 1, value: 3, fmt: function (x) { return x + " (+" + STEPS41[x - 1] + " semitones)"; } },
+        { k: "g", label: "Its level", min: -30, max: 0, step: 1, value: -11, fmt: function (x) { return x + " dB"; } },
+        { k: "off", label: "Detune", min: -100, max: 100, step: 5, value: 0, fmt: function (x) { return x + " cents"; } }
+      ],
+      buttons: [{ label: "Play: melody alone, then with the added part", act: function (s) {
+        var rate = 44100, d = 1.6, n = Math.floor((2 * d + 0.5) * rate), out = new Float32Array(n), ps = parts41(s.v);
+        for (var half = 0; half < 2; half++) {
+          var i0 = Math.floor(half * (d + 0.4) * rate);
+          ps.forEach(function (p, j) {
+            if (p[2] === 1 && half === 0) return;
+            if (p[0] > 18000) return;
+            var ph = (j * 2.39996) % 6.283;
+            for (var i = 0; i < d * rate; i++) {
+              var t = i / rate, env = Math.min(1, t / 0.06) * Math.min(1, (d - t) / 0.1);
+              out[i0 + i] += 0.08 * p[1] * env * Math.sin(2 * Math.PI * p[0] * t + ph);
+            }
+          });
+        }
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var ps = parts41(v), f0 = 261.63;
+        var a = g[0].axes({ x: [0, 17], y: [-60, 3], title: "Partials in harmonics of C4 (gold: melody, blue: added part; grey lines: the series)", xlabel: "frequency / 261.6 Hz" });
+        for (var k = 1; k <= 16; k++) a.line([k, k], [-60, 3], { color: "#3A4250", width: 1 });
+        [0, 1].forEach(function (w) {
+          var q = ps.filter(function (p) { return p[2] === w && p[0] / f0 < 17; });
+          a.bars(q.map(function (p) { return p[0] / f0; }), q.map(function (p) { return Math.max(-60, 20 * Math.log10(p[1])); }), 0.18, { color: w ? "#60A5FA" : C.idea, base: -60 });
+        });
+      },
+      readout: function (v, s) {
+        var ps = parts41(v), f0 = 261.63, tot = 0, on = 0, num = 0;
+        ps.forEach(function (p) {
+          var pw = p[1] * p[1], k = Math.max(1, Math.round(p[0] / f0));
+          tot += pw; num += pw * p[0];
+          if (Math.abs(1200 * Math.log2(p[0] / (k * f0))) <= 20) on += pw;
+        });
+        var alone = 0, an = 0;
+        ps.filter(function (p) { return p[2] === 0; }).forEach(function (p) { alone += p[1] * p[1]; an += p[1] * p[1] * p[0]; });
+        return [["fusion", Math.round(100 * on / tot) + "% of the power within 20 cents of C4's harmonic series"],
+                ["brightness", "spectral centroid " + Math.round(an / alone) + " Hz alone, " + Math.round(num / tot) + " Hz together"],
+                ["harmonic " + v.h, "a tempered note is " + (1200 * (STEPS41[v.h - 1] / 12) - 1200 * Math.log2(v.h)).toFixed(1) + " cents from the true harmonic"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Ravel put a celesta on the 4th harmonic and piccolos on the 3rd and 5th. Try harmonic 5: the tempered major third is 13.7 cents sharp of the true harmonic, and still fuses; now detune by 50 cents and hear two instruments again. Harmonic 7, a flat seventh, lies 31 cents from the nearest tempered note, and does not fuse."
+    });
+  };
 })();

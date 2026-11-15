@@ -77,7 +77,7 @@ class Outro(SoundScene):
         ps = problem_set([
             r"How many violins does it take to be 6 dB louder than four violins?",
             r"Prove that n incoherent equal sources are 10 log$_{10}$n dB louder than one, \ and coherent ones 20 log$_{10}$n.",
-            r"\textbf{Ear.} \ The lab plays combinations of instruments; \ say how many are playing.",
+            r"\textbf{Ear.} \ The lab plays one held note on sections of different sizes; \ say how many players each time.",
             r"\textbf{Build.} \ Give the solver a target of your own \ (another vowel, \ a bell) \ and compare budgets.",
             r"$\bigstar$ \ Can blend and layering be predicted from the score alone?",
         ], font_size=22)

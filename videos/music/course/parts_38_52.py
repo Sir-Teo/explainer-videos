@@ -132,4 +132,45 @@ PARTS = [
         I=(6, 7, 8),
         also=(("Monochord's song studio: drum-machine voices, patterns, sidechain, chopping, prosody and flow", "explainer/music/monochord/song.py"),),
     ),
+    Part(
+        n=41, level="U", widget="orchestra", prereq=(3, 5, 7, 8, 9, 17, 20),
+        question="What does an orchestrator control, and can a computer orchestrate a sound?",
+        story="Ravel called Boléro (1928) a piece for orchestra without music: one tune in two halves, stated eighteen "
+              "times over one snare-drum rhythm, with only the instruments changing. In one statement a horn, a celesta "
+              "and two piccolos sit on the tune's harmonics and fuse into a colour no single player owns: additive "
+              "synthesis with players. The part builds an orchestra from the series' own physical models, measuring "
+              "sixteen harmonics on each and resynthesising them, and asks what an orchestrator controls: ranges, "
+              "registers and transposition; loudness and brightness (a trumpet blown hard is brighter, not just louder, "
+              "its centroid nearly doubling); sections, where eight violins are 10.6 dB above one, between the "
+              "incoherent 9 and coherent 18; doubling, blend and balance; spacing, where the same C major chord is three "
+              "times rougher close and low than open; textures and the melody of timbres. Then it turns Ravel around: a "
+              "solver fits non-negative loudnesses to 42 candidates and keeps the best four, spelling a sung vowel within "
+              "7.1 dB a band but a bell only within 31.5, because a bell's partials are not harmonics. The Tune is heard "
+              "in eight orchestrations, the last matched to a vowel.",
+        handoff="Composing as search in Part 42; performing together in Part 43; music for picture in Part 44; the auditory "
+                "scene and timbre space in Part 45; synthesis from physical models in Part 52; the hall in Part 55.",
+        outside="Part 3 for spectra and additive synthesis; Part 5 for roughness; Parts 7-9 for the instrument models; "
+                "Part 17 for voicing and the voice; Part 20 for counterpoint. Least squares, decibels.",
+        objectives={
+            "U": ["Hear instrument families and registers, and tell a clarinet from a flute on one note.",
+                  "Hear brightness rise with effort, and a section's chorus against one player.",
+                  "Hear a doubling fuse, and a chord muddy in a low close voicing."],
+            "M": ["Measure an instrument's harmonics on a physical model and resynthesise it additively.",
+                  "Compute the level of n coherent and incoherent players, and a combination's fusion on a harmonic series.",
+                  "Orchestrate a target spectrum by non-negative least squares and subset search."],
+            "D": ["Design a study that predicts blend and layering from the score and the instruments' spectra."],
+            "I": ["Voice and double for balance and clarity, and mock up an orchestration before rehearsal."],
+        },
+        results=[
+            ("Players", r"n \text{ incoherent: } 10\log_{10} n \text{ dB}; \ \text{coherent: } 20\log_{10} n"),
+            ("Eight violins", r"+10.6 \text{ dB measured}"),
+            ("Ravel's harmonics", r"0,\ -2.0,\ +13.7 \text{ cents from the series}"),
+            ("Spacing", r"\text{roughness } 1.33,\ 0.96,\ 0.19"),
+            ("The solver", r"\min_{w \ge 0} \lVert A w - b \rVert: \ 18.3 \to 7.1 \text{ dB a band}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8),
+        D=(10,),
+        I=(9,),
+        also=(("Monochord's orchestra: measured spectra, sections, fusion, spacing roughness and the matching solver", "explainer/music/monochord/orchestra.py"),),
+    ),
 ]

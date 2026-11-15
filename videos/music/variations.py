@@ -85,6 +85,8 @@ LEDGER = [
      "measure": r"the program's chorus: 86\% of beats on chord tones, guide tones at 96\% of changes"},
     {"part": 40, "title": r"as a pop single, then as a beat that samples Variation 7", "seconds": 65.9,
      "measure": r"the voice enters after 4.6 s; the beat: 16 slices of Variation 7, 4 rests"},
+    {"part": 41, "title": r"in eight orchestrations, the last matched to a vowel", "seconds": 34.8,
+     "measure": r"the vowel matched within 7.1 dB a band by four instruments, 18.3 dB by one"},
 ]
 
 

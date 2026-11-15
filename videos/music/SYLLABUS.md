@@ -1630,13 +1630,31 @@ cleared for redistribution.
 *Story:* Ravel called *Boléro* (1928) a piece for orchestra without music: one melody, eighteen times, only the
 instruments change. In one pass a horn, a celesta and two piccolos in different keys fuse into a single timbre
 that no instrument has. Ravel is doing additive synthesis with players.
+1. Hook: an ear question (one, two or four instruments?); Ravel's experiment; the plan.
+2. An orchestra from physical models: history; sixteen measured harmonics each; one C on eight instruments; an ear question (which is the clarinet?); the tour; the players; what is left out.
+3. Ranges, registers and transposition: the chart; registers; the clarinet model's two registers heard; transposing instruments; why.
+4. Loudness and brightness: an ear question (same level, which was blown hard?); why louder is brighter; a swell heard; dynamic range; balance.
+5. Sections and the chorus effect: the arithmetic of n players; one against eight heard; solo and tutti; the chorus effect; 1 to 16 violins heard; seating; sizes.
+6. Doubling, blend and balance: four doublings heard; power shares measured; masking; the octave heard; blend studies.
+7. Spacing: the harmonic series as a guide; three voicings heard; their roughness; registral layers; rules.
+8. Textures and the melody of timbres: four textures heard; the kinds; an orchestrator's order of work; a melody of timbres heard; Schoenberg and Webern.
+9. Ravel's harmonics: the series drawn; the combination built up, heard; tempered errors; mixture stops; Boléro's plan; its crescendo in miniature.
+10. Orchestration as search: the problem; non-negative least squares and subsets; the vowel target; errors by budget; a bell; the matches heard; IRCAM's tools.
+11. Frontier: timbre space; our orchestra mapped; timbre as identity; the treatises tested; machines; the research problem.
+12. Variation 41: the Tune in eight orchestrations, the last matched to a vowel. Outro: problems, payoffs.
+
 *Covers:* ranges, registers and transposition; loudness and brightness; blend, doubling and balance; why a
 section is not one loud player; spacing; textures; melody of timbres; orchestration as a search problem.
-*Built and computed:* the chorus effect of a section; a blend measure; a solver that matches a target spectrum
-with combinations of our instruments.
-*Variation 41:* the Tune in eight orchestrations, the last matched to a vowel.
-*Frontier:* timbre research and computer-aided orchestration.
-*Reading:* Adler; Rimsky-Korsakov; Berlioz; McAdams's work on blend.
+*Built and computed:* `monochord/orchestra.py`: spectra measured once on Parts 7–8's models (flute, clarinet,
+saxophone, trumpet soft and loud, bowed string) and resynthesised additively; sections with detuning and onset
+scatter (eight violins +10.6 dB, between the incoherent 9.0 and coherent 18.1); a fusion measure (Ravel's
+combination: all its power within 20 cents of one series; tempered errors 0, −2.0, +13.7 cents); spacing roughness
+(1.33, 0.96, 0.19); a solver (NNLS over 42 candidates, then subsets) matching a sung "ah" within 18.3, 10.7, 8.2 and
+7.1 dB a band with one to four instruments, and a bell only within 31.5.
+*Variation 41:* the Tune in eight orchestrations, the last matched to a vowel (7.1 dB a band with four instruments).
+*Frontier:* timbre space and blend research; computer-aided orchestration (open: predicting blend and layering from
+the score).
+*Reading:* Adler; Rimsky-Korsakov; Berlioz; Grey (1977); McAdams et al. (1995); Sandell (1995); Lembke and McAdams.
 
 ### Part 42 · Composing (~50)
 *Story:* Beethoven's sketchbooks show the "Ode to Joy" being found over years, draft after rejected draft. In
