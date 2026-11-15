@@ -31,6 +31,7 @@ class Survive(SoundScene):
             f"microphone, {say(min(moves[k] for k in STAGES[4:]))} to {say(max(moves[k] for k in STAGES[4:]))} after the "
             "master. The sound swings from full to empty while the melody's moves hardly change."
         ) as vo:
+            self.play(FadeIn(VGroup(t1, b1, t2, b2).copy().set_opacity(0.15)))   # a ghost of what is coming
             vo.wait_until("a")
             self.play(FadeIn(t1), FadeIn(b1))
             vo.wait_until("b")

@@ -130,6 +130,7 @@ class Back(SoundScene):
             "kinds: most of the loss arrives there, and the coders add little to it. The two lowest rates add something else: {say(ex[0])} and "
             f"{say(ex[1])} onsets where there was no note, the coder's own."
         ) as vo:
+            self.play(FadeIn(VGroup(t1, b1, t2, b2).copy().set_opacity(0.15)))   # a ghost of what is coming
             vo.wait_until("a")
             self.play(FadeIn(t1), FadeIn(b1))
             vo.wait_until("b")
