@@ -98,7 +98,7 @@ class SDID(VoiceoverScene):
             if ws > 0:
                 bs.add(Rectangle(width=0.32 * 0.8, height=max(1e-3, ax.c2p(0, ws)[1] - ax.c2p(0, 0)[1]), stroke_width=0,
                                  fill_color=Y0C, fill_opacity=0.85).move_to(ax.c2p(x + 0.18, 0), aligned_edge=DOWN))
-            names.add(label(n, font_size=16, color=GREY_A).rotate(PI / 5).next_to(ax.c2p(x, 0), DOWN, buff=0.35))
+            names.add(label(n, font_size=16, color=GREY_A).rotate(PI / 5).next_to(ax.c2p(x, 0) + RIGHT * 0.12, DOWN, buff=0.12, aligned_edge=RIGHT))
         lam = d["lam"]
         lrows = VGroup(label(r"SDID time weights:", font_size=22, color=TAUC),
                        *[label(rf"{y}: \ {v:.2f}", font_size=22, color=GREY_A) for y, v in lam],

@@ -88,7 +88,8 @@ class PCA(VoiceoverScene):
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.05, color=PCC) for a, b in Sc[:, :2]])
         show = ["California", "Nevada", "Florida", "North Dakota", "Vermont", "Mississippi", "Hawaii", "Rhode Island",
                 "North Carolina", "Maine"]
-        names = VGroup(*[label(s, font_size=15, color=GREY_A).next_to(dots[st.index(s)], UR, buff=0.04) for s in show])
+        names = place_labels([dots[st.index(s)] for s in show], show, all_dots=list(dots),
+                             inside=(ax.c2p(-3.5, -3.0), ax.c2p(3.5, 2.2)))
         arrows = VGroup()
         for j, nm in enumerate(d["names"]):
             tip = ax.c2p(2.6 * L[j, 0], 2.6 * L[j, 1])

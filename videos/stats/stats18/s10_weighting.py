@@ -100,6 +100,8 @@ class Weighting(VoiceoverScene):
                  yticks=[0, 0.25, 0.5, 0.75], center=[-3.4, 0.6, 0], font_size=18)
         B = axes([-0.6, 3.6], [0, 0.75], x_length=5.6, y_length=3.4, xlabel=r"age band", ylabel=r"share",
                  yticks=[0, 0.25, 0.5, 0.75], center=[3.2, 0.6, 0], font_size=18)
+        A.xlabel.shift(DOWN * 0.38)  # the band names are drawn by hand below the axis: clear them
+        B.xlabel.shift(DOWN * 0.38)
         ti_b = self.bars(A.ax, ti, 0.18, GREY_C)
         ta_b = self.bars(B.ax, ta, 0.18, GREY_C)
         si = self.bars(A.ax, steps[0][0], -0.18, WEIGHT)

@@ -13,7 +13,7 @@ class TimeVarying(VoiceoverScene):
         self.target()
 
     def card(self):
-        card = chapter_card(14, r"Time-varying treatments", r"When the confounder is also a result", lit=(1986, 2000, 2016), part=PART)
+        card = chapter_card(14, r"Time-varying treatments", r"When the confounder is also a result", lit={1986: r"the g-formula", 2000: r"marginal structural models", 2016: r"target trials"}, part=PART)
         with self.voiceover("Chapter fourteen. Treatments that vary over time."):
             self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]))
         self.play(FadeOut(card))

@@ -160,12 +160,14 @@ class Pivots(VoiceoverScene):
         b = st.chi2.ppf(st.chi2.cdf(a, df) + 0.95, df)
         ae, be = st.chi2.ppf(0.025, df), st.chi2.ppf(0.975, df)
         xs = np.linspace(0.05, 30, 300)
-        A = axes([0, 30], [0, 0.11], x_length=7.2, y_length=3.6, xlabel=r"$(n-1)s^2/\sigma^2 \sim \chi^2_9$", xticks=[0, ae, a, b, be, 30],
+        A = axes([0, 30], [0, 0.11], x_length=7.2, y_length=3.6, xlabel=r"$(n-1)s^2/\sigma^2 \sim \chi^2_9$", xticks=[0, ae, be, b, 30],
                  xfmt=lambda v: f"{v:.1f}", center=[-2.4, 0.6, 0], font_size=18)
         ax = A.ax
         cv = curve(ax, xs, st.chi2.pdf(xs, df), GREY_A, 3)
         eq = VGroup(DashedLine(ax.c2p(ae, 0), ax.c2p(ae, 0.11), color=S.LIK), DashedLine(ax.c2p(be, 0), ax.c2p(be, 0.11), color=S.LIK))
         sh = VGroup(DashedLine(ax.c2p(a, 0), ax.c2p(a, 0.11), color=OBS), DashedLine(ax.c2p(b, 0), ax.c2p(b, 0.11), color=OBS))
+        # a sits 0.6 from the equal-tail quantile: its label drops a row so the two ticks stay legible
+        sh.add(MathTex(f"{a:.1f}", font_size=18, color=OBS).move_to(ax.c2p(a, 0) + DOWN * 0.5))
         rows = fit_rows(VGroup(
             label(r"any two quantiles 95\% apart make a 95\% interval", font_size=24),
             MathTex(rf"\text{{equal tails: }}\ \sigma^2 \in \Big[\tfrac{{ss}}{{{be:.2f}}},\ \tfrac{{ss}}{{{ae:.2f}}}\Big]", font_size=26, color=S.LIK),

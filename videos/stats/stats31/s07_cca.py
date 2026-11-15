@@ -106,8 +106,9 @@ class CCA(VoiceoverScene):
         ax = A.ax
         dots = VGroup(*[Dot(ax.c2p(a, b), radius=0.06, color=CCC) for a, b in zip(u[:, 0], v[:, 0])])
         order = np.argsort(u[:, 0] + v[:, 0])
-        pick = list(order[:3]) + list(order[-4:])
-        names = VGroup(*[label(cs[i], font_size=15, color=GREY_A).next_to(dots[i], UR, buff=0.04) for i in pick])
+        pick = list(order[:2]) + list(order[-4:])  # two names at the crowded low end, not three
+        names = place_labels([dots[i] for i in pick], [cs[i].replace("Guatamala", "Guatemala") for i in pick], all_dots=list(dots),
+                             inside=(ax.c2p(-1.6, -1.6), ax.c2p(2.8, 2.8)))  # the source data's spelling is 'Guatamala'
         rows = fit_rows(VGroup(
             label(rf"first canonical correlation $r_1 = {d['r'][0]:.2f}$", font_size=22, color=CCC),
             label(r"$U_1$: \ older populations to the right", font_size=22),

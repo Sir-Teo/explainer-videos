@@ -148,7 +148,7 @@ class Tails(VoiceoverScene, TreeMixin):
         ls_line = Line(ax.c2p(0, icpt), ax.c2p(3, icpt + 3 * slope), color=LS, stroke_width=3)
         tl = label(rf"one sample of {d['n']}, \ density $\propto x^{{-\alpha}}$, \ $\alpha = {d['alpha']}$", font_size=22, color=GREY_B).next_to(A, UP, buff=0.1)
         B = axes([1.6, 3.0], [0, 7], x_length=5.6, y_length=3.0, xlabel=r"estimated $\alpha$ \ (400 samples)",
-                 xticks=[1.8, 2.2, 2.5, 2.8], center=[3.6, -1.8, 0])
+                 xticks=[1.8, 2.2, 2.5, 2.8], center=[3.6, -1.35, 0])
         B.ax.y_axis.set_opacity(0)
         ed = np.linspace(1.6, 3.0, 57)
         hls = hist_bars(B.ax, ed, np.histogram(np.asarray(d["ls"]), ed)[0] / (400 * np.diff(ed)), color=LS, opacity=0.7)

@@ -105,8 +105,8 @@ class Correlation(VoiceoverScene):
                     axis_labels=[r"obs.\ 1", r"obs.\ 2", r"obs.\ 3"])
         vx = ns.vector(xc, color=S.EST)
         vy = ns.vector(yc, color=MEDIAN)
-        lx = ns.point_label(MathTex(r"\mathbf x - \bar x\mathbf 1", font_size=28, color=S.EST), xc, offset=(0.5, -0.15))
-        ly = ns.point_label(MathTex(r"\mathbf y - \bar y\mathbf 1", font_size=28, color=MEDIAN), yc, offset=(-0.3, 0.45))
+        lx = ns.point_label(MathTex(r"\mathbf x - \bar x\mathbf 1", font_size=28, color=S.EST), xc, offset=(-0.75, 0.0))
+        ly = ns.point_label(MathTex(r"\mathbf y - \bar y\mathbf 1", font_size=28, color=MEDIAN), yc, offset=(1.0, 0.1))
 
         def arc():
             u, w = xc / np.linalg.norm(xc), yc / np.linalg.norm(yc)

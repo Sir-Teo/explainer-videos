@@ -113,7 +113,7 @@ class Hajek(VoiceoverScene):
         d = load("hajek")
         h = np.asarray(d["h"])
         A = axes([-12, 12], [0, 40], x_length=7.4, y_length=4.4, xlabel=r"local parameter $h$", ylabel=r"$n\,E(T_n - h/\sqrt n)^2$",
-                 xticks=[-10, -5, 0, 5, 10], yticks=[0, 1, 10, 20, 30, 40], center=[-2.5, 0.2, 0])
+                 xticks=[-10, -5, 0, 5, 10], yticks=[0, 10, 20, 30, 40], center=[-2.5, 0.2, 0])
         rb = RiskBump(A.ax)
         bd = rb.bound(1.0, MLEC)
         cols = {"100": ALTC, "10000": S.ACCENT, "1000000": HODC, "100000000": S.PRIOR}
