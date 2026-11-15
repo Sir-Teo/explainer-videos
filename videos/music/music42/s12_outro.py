@@ -26,7 +26,9 @@ class Outro(SoundScene):
             txt = r"cadence" if k == len(d["derivations"]) - 1 else (r"the four notes" if der == [] else (r"bent" if der is None else r" + ".join(x.replace("first three notes", "3 notes") for x in der)))
             x = g.frame.get_left()[0] + 11.4 * (k + 0.5) / g.nb
             ders.add(label(txt, font_size=12, color=BLUE if der else (GREY_A if der is None else TUNE)).move_to([x, g.frame.get_bottom()[1] - 0.3 - 0.28 * (k % 2), 0]))
-        thrown = VGroup(*[scored(s["melody"], None, width=2.6, height=0.8, lo=50, hi=86, color=GREY_B).set_opacity(0.5) for s in d["shown"]]).arrange(RIGHT, buff=0.35).to_edge(DOWN, buff=1.05)
+        thrown = VGroup(*[scored(s["melody"], None, width=2.6, height=0.8, lo=50, hi=86, color=GREY_B) for s in d["shown"]]).arrange(RIGHT, buff=0.35).to_edge(DOWN, buff=1.05)
+        for t_ in thrown:
+            VGroup(*t_.roll.notes).set_opacity(0.5)
         tl_ = label(rf"thrown away: \ {sum(d['rejected'].values()):,} of {d['drafts']:,} drafts, \ four of them here", font_size=16, color=GREY_A).next_to(thrown, UP, buff=0.12)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here the searcher takes "

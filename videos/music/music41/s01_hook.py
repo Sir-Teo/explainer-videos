@@ -52,7 +52,7 @@ class Hook(SoundScene):
                 vo.wait_until(mark)
                 self.play(FadeIn(stack.parts[k]), FadeIn(parts[k]))
             vo.wait_until("d")
-            self.play(*[p_.animate.set_opacity(0.55) for p_ in stack.parts[1:]], run_time=1.5)
+            self.play(*[VGroup(*p_.notes).animate.set_opacity(0.55) for p_ in stack.parts[1:]], run_time=1.5)
         self.wait(0.4)
         self.clear_scene()
 

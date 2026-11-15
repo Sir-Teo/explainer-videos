@@ -78,7 +78,7 @@ class Motive(SoundScene):
             "change the speed. A fragment keeps a piece, small enough to repeat and sequence. And the last three change one "
             "feature while keeping the rest recognisable."
         ):
-            self.play(cells[0].animate.set_opacity(1.0))
+            self.play(Create(SurroundingRectangle(cells[0], color=TUNE, buff=0.12, stroke_width=3)))
         self.wait(0.4)
         self.clear_scene()
 
@@ -96,7 +96,7 @@ class Motive(SoundScene):
         self.wait(0.8)
         a = scored(d["motive"], None, width=3.6, height=1.3, lo=56, hi=72)
         b = scored(d["changed"], None, width=3.6, height=1.3, lo=56, hi=72)
-        b.roll.set_opacity(0)
+        hidden = VGroup(*b.roll.notes).set_opacity(0)
         pair = VGroup(VGroup(a, label(r"the motive", font_size=20, color=GREY_A)).arrange(DOWN, buff=0.25),
                       VGroup(b, label(r"?", font_size=26, color=EAR)).arrange(DOWN, buff=0.25)).arrange(RIGHT, buff=1.4).move_to(UP * 0.5)
         self.play(FadeOut(card), FadeIn(pair))
@@ -113,7 +113,7 @@ class Motive(SoundScene):
             "the harder of the two to hear, because a motive's identity lives mostly in its rhythm and its beginning, and "
             "retrograde changes both."
         ):
-            self.play(b.roll.animate.set_opacity(1), FadeIn(upg))
+            self.play(hidden.animate.set_opacity(1), FadeIn(upg))
         self.wait(0.4)
         self.clear_scene()
 
