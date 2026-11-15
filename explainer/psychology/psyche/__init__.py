@@ -125,5 +125,10 @@ Modules so far, with the part that introduces each:
 ``personality``     33   scoring with reverse keys; parallel analysis; a world of people and situations
                          (aggregation, variance components); type agreement and the median split;
                          Mahalanobis D by number of traits; BESD; simulated likes; faking in selection
+``social``          34   Granovetter's thresholds; DeGroot and bounded-confidence opinions; simple and
+                         complex contagion on rewired rings; the diversity prediction identity and rounds
+                         of influence; a cumulative-advantage market; bystanders, social impact, drive,
+                         information sampling; and, for Part 35, an inverse planner, Kelley's cube and
+                         Dunning-Kruger from noise
 =================  ====  ===============================================================================
 """

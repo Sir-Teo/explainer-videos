@@ -52,7 +52,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
   plan is `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the progress table are
   `videos/psychology/SYLLABUS.md`. Shared code in `explainer/psychology/` (tested in `tests/psychology/`): the model
-  subject Psyche (`psyche/`, one module per faculty; so far `chronometry`, `cueing`, `neuron`, `circuits`, `brain`, `imaging`, `genes`, `body`, `psychophysics`, `sdt`, `vision`, `infer`, `hearing`, `conditioning`, `rl`, `attention`, `wm`, `memory`, `concepts`, `language`, `reason`, `decide`, `choice`, `workspace`, `drive`, `emotion`, `develop`, `lifespan`, `traits` and `personality`), the laboratory (`lab.py`:
+  subject Psyche (`psyche/`, one module per faculty; so far `chronometry`, `cueing`, `neuron`, `circuits`, `brain`, `imaging`, `genes`, `body`, `psychophysics`, `sdt`, `vision`, `infer`, `hearing`, `conditioning`, `rl`, `attention`, `wm`, `memory`, `concepts`, `language`, `reason`, `decide`, `choice`, `workspace`, `drive`, `emotion`, `develop`, `lifespan`, `traits`, `personality` and `social`, the last written ahead of Parts 34 and 35), the laboratory (`lab.py`:
   designs run on the Pool with the truth known; a part that shows a study picks it by rule, the median of many, never
   by its result), the measurement library (`measure.py`: scale types, reliability, attenuation, alpha, kappa, the
   multitrait-multimethod matrix), the false-positive lab (`evidence.py`: power, forking paths, a filtered literature and

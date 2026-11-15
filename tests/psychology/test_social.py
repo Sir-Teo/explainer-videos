@@ -1,0 +1,89 @@
+"""Psyche's social module (Part 34)."""
+
+import numpy as np
+
+from explainer.psychology.psyche import social as S
+
+
+def test_granovetter_one_person_changes_the_crowd():
+    t = np.arange(100)
+    assert S.cascade_size(t) == 100
+    t[1] = 2
+    assert S.cascade_size(t) == 1
+    c = S.cascade_curve(sds=[2, 20])
+    assert c["size"][0] == 0 and c["size"][1] == 100
+
+
+def test_degroot_consensus_is_the_left_eigenvector_average():
+    rng = np.random.default_rng(3)
+    W = rng.random((6, 6)) + np.eye(6)
+    W /= W.sum(axis=1, keepdims=True)
+    x0 = rng.normal(size=6)
+    end = S.degroot(W, x0, steps=300)[-1]
+    assert np.allclose(end, end[0]) and np.isclose(end[0], S.influence_weights(W) @ x0)
+
+
+def test_bounded_confidence_leaves_more_clusters_when_eps_is_small():
+    x0 = np.linspace(0, 1, 101)
+    wide = S.clusters(S.bounded_confidence(x0, 0.3, 60)[-1], 1e-2)
+    narrow = S.clusters(S.bounded_confidence(x0, 0.05, 60)[-1], 1e-2)
+    assert wide == 1 and 6 <= narrow <= 12
+
+
+def test_complex_contagion_needs_clustering():
+    L = S.ring_lattice(400, 2)
+    R = S.rewire(L, 1.0, seed=1)
+    assert sorted(len(a) for a in R) == sorted(len(a) for a in L)
+    seeds = [0, 1, 2, 3]
+    assert S.contagion(L, seeds, need=2)[-1] == 400
+    assert S.contagion(R, seeds, need=2)[-1] < 40
+    assert len(S.contagion(R, seeds, need=1)) < len(S.contagion(L, seeds, need=1))
+
+
+def test_diversity_prediction_identity_and_influence():
+    rng = np.random.default_rng(0)
+    x = rng.normal(3, 2, 500)
+    c = S.crowd(x, 2.0)
+    assert np.isclose(c["collective"], c["individual"] - c["diversity"])
+    r = S.influence_rounds(rounds=6)
+    assert np.allclose(r["collective"], r["collective"][0])
+    assert r["diversity"][-1] < 0.05 * r["diversity"][0]
+    assert r["truth_in_range"][0] and not r["truth_in_range"][-1]
+
+
+def test_social_influence_makes_markets_unequal_and_unpredictable():
+    soc = S.music_market(listeners=1500, worlds=4, social=0.8, seed=2)
+    ind = S.music_market(listeners=1500, worlds=4, social=0.0, seed=2)
+    assert soc["gini"].mean() > ind["gini"].mean() and soc["unpredictability"] > ind["unpredictability"]
+    assert np.isclose(S.gini(np.ones(10)), 0) and S.gini([0, 0, 0, 1]) > 0.7
+
+
+def test_bystanders_drive_and_mentions():
+    b = S.bystanders([1, 2, 5, 10], p1=0.85, beta=1.0)
+    assert np.isclose(b["any"][0], 0.85) and b["any"][-1] > 0.55
+    assert np.all(np.diff(S.bystanders([1, 2, 5, 10], beta=1.5)["any"]) < 0)
+    assert S.drive(1, 0, 2) > S.drive(1, 0, 1) and S.drive(0, 1, 2) < S.drive(0, 1, 1)
+    assert np.all(np.diff(S.mentions(0.3, [1, 2, 3])) > 0)
+    assert np.allclose(S.social_impact([1, 4, 9]), [1, 2, 3])
+
+
+def test_inverse_planning_infers_the_goal():
+    shape, walls, goals = (7, 9), [(r, 4) for r in range(1, 6)], [(0, 8), (6, 8), (3, 0)]
+    up = S.goal_posterior([(3, 3), (2, 3), (1, 3), (0, 3), (0, 4)], shape, walls, goals)
+    down = S.goal_posterior([(3, 3), (4, 3), (5, 3), (6, 3), (6, 4)], shape, walls, goals)
+    assert np.allclose(up[0], 1 / 3) and np.allclose(up.sum(axis=1), 1)
+    assert up[-1].argmax() == 0 and down[-1].argmax() == 1 and up[-1, 0] > 0.9
+    assert np.all(np.diff(up[:, 0]) > 0)
+    D = S.grid_distances(shape, walls, goals[1])
+    assert D[3, 3] == 8 and np.isinf(D[3, 4])
+
+
+def test_kelley_cube_and_dunning_kruger_from_noise():
+    T = np.zeros((5, 5, 4))
+    T[:, 0, :] = 1  # everyone, only with entity 0, every time: the entity
+    k = S.kelley(T)
+    assert np.isclose(k["shares"]["entity"], 1) and k["consensus"] == 1 and k["consistency"] == 1
+    dk = S.dunning_kruger(rho=0.3, shift=15, seed=1)
+    assert dk["perceived"][0] > dk["actual"][0] + 30 and dk["perceived"][3] < dk["actual"][3]
+    flat = S.dunning_kruger(rho=1.0, shift=0, seed=1)
+    assert np.allclose(flat["perceived"], flat["actual"], atol=2)
