@@ -379,4 +379,48 @@ PARTS = [
         I=(3, 4, 7),
         also=(("Monochord's listener: PPM, surprise and uncertainty, syncopation and statistical learning", "explainer/music/monochord/listener.py"),),
     ),
+    Part(
+        n=47, level="U", widget="prior", prereq=(1, 8, 11, 12, 14, 43, 46),
+        question="What is shared by all the world's music, what is learned, and how much can transmission alone explain?",
+        story="A vulture's wing bone with five holes lay in Hohle Fels cave for at least 35,000 years; a pipe its size, by "
+              "Part 8's flute model, sounds about 766 Hz, and evenly spaced holes give uneven steps. Every society studied "
+              "sings (Mehr's 315 ethnographies); lullabies and dance songs are recognized across cultures (an ear question "
+              "in one melody sung both ways). Savage's statistical universals are checked on the series' 54 tunes, and the "
+              "check's limits stated; the Tsimane' are indifferent to dissonance, so that taste is learned. Iterated "
+              "reproduction reveals priors: 400 random three-interval rhythms tapped back by a simulated Bayesian listener "
+              "go from 28 to 68 per cent near small-integer ratios, in its prior's proportions, and a 7/8 listener's chains "
+              "end on 2:2:3. Twenty random melodies passed through forty simulated singers lose half their pitch levels, "
+              "halve their steps and settle on simple lengths, and copying error falls from 0.31 to 0.08 a note; samplers "
+              "forget the Tune, likeliest-value singers keep it. Tune families are drawn by Needleman-Wunsch alignment and "
+              "UPGMA (the Tune, the Alphabet Song and Baa, Baa cluster apart; a simulated family's branching recovered 4.8 "
+              "of 6 times on average). It covers birds, whales and Snowball with Rayleigh's test, infants, nPVI by language "
+              "(French folk tunes 24.7, English 35.8, permutation p = 0.16), amusia, the Mozart effect and publication bias, "
+              "transfer and therapy, the theories of origin, and the genetics of rhythm.",
+        handoff="Digital audio in Part 48; melodic similarity at scale in Part 63; machines that compose in Part 65; research "
+                "practice in Part 67; the Tune's whole family in Part 68.",
+        outside="Part 1 and Part 8 for pipes; Part 5 for roughness; Part 11 for meter; Part 12 for scales; Part 14 for the "
+                "corpus; Part 43 for phase correction; Part 46 for statistical learning. Bayesian inference, Markov chains, "
+                "sequence alignment, hierarchical clustering, circular statistics, meta-analysis.",
+        objectives={
+            "U": ["Tell a lullaby from a dance song, and a consonant chord from a dissonant one, and say which preference is learned.",
+                  "Hear a random rhythm become a simple one under iterated reproduction, and a random melody become singable.",
+                  "Judge which of two dancers is on the beat, and hear a one-note change in the style of the Montreal battery."],
+            "M": ["Simulate iterated reproduction with a Bayesian listener and show the chains converge to its prior.",
+                  "Build a transmission chain of singers and measure pitch levels, step size, simple lengths and copying error.",
+                  "Align and cluster melodies into a family tree; compute nPVI by group with a permutation test; apply Rayleigh's test."],
+            "D": ["Design chains with each bias switched off, to find which universals need which biases."],
+            "I": ["Read claims about music and the mind by sample, control, effect size and replication."],
+        },
+        results=[
+            ("Iterated learning", r"x_{t+1} \sim p(\theta \mid d(x_t)) \ \Rightarrow\ x_\infty \sim p(\theta)"),
+            ("Rhythm chains", r"28\% \to 68\% \text{ near small-integer ratios in 5 rounds}"),
+            ("Transmission", r"\text{levels } 11.7 \to 5.6,\ \text{step } 5.6 \to 2.7 \text{ semitones}"),
+            ("nPVI", r"\tfrac{100}{m-1}\textstyle\sum_k \left|\frac{d_k - d_{k+1}}{(d_k+d_{k+1})/2}\right|"),
+            ("Rayleigh", r"R = \big|\tfrac1n\textstyle\sum_k e^{i\theta_k}\big|,\ p \approx e^{-nR^2}"),
+        ],
+        U=(0, 1, 2, 3, 4, 8, 11),
+        D=(12,),
+        I=(5, 6, 7, 9, 10),
+        also=(("Monochord's origins: transmission, rhythm priors, alignment and trees, nPVI, Rayleigh's test", "explainer/music/monochord/origins.py"),),
+    ),
 ]

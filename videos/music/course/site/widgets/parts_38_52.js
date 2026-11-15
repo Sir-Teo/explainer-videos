@@ -590,4 +590,57 @@
       note: "C, the real ending, costs about one bit. The notes outside the key cost about eleven: the model had never seen them end such a phrase. D and E cost little because folk tunes often end a phrase on them; they sound unfinished, which is a different thing from surprising."
     });
   };
+
+  W.prior = function (el) {
+    function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+    function gauss(r) { var u = 1 - r(), v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+    function perms(p) { var out = {}, a = p[0], b = p[1], c = p[2]; [[a, b, c], [a, c, b], [b, a, c], [b, c, a], [c, a, b], [c, b, a]].forEach(function (q) { out[q.join(",")] = q; }); return Object.keys(out).map(function (k) { return out[k]; }); }
+    function prior(mix) {
+      var w = [[[1, 1, 2], 2 * (1 - mix) + 0.5 * mix], [[1, 1, 1], 1 * (1 - mix) + 0.6 * mix], [[1, 2, 2], 0.6 * (1 - mix) + 0.4 * mix], [[1, 2, 3], 0.3 * (1 - mix)], [[2, 2, 3], 2 * mix]];
+      var pts = [], ws = [], tot = 0;
+      w.forEach(function (e) { if (e[1] <= 0) return; var ps = perms(e[0]); ps.forEach(function (q) { var s = q[0] + q[1] + q[2]; pts.push([q[0] / s, q[1] / s]); ws.push(e[1] / ps.length); tot += e[1] / ps.length; }); });
+      return { pts: pts, ws: ws.map(function (x) { return 0.96 * x / tot; }) };
+    }
+    function step(x, P, noise, r) {
+      var h = [x[0] + noise * gauss(r), x[1] + noise * gauss(r)], s2 = noise * noise, w2 = 0.0004, tot = s2 + w2, post = [], z = 0.08;
+      P.pts.forEach(function (p, i) { var d2 = (p[0] - h[0]) * (p[0] - h[0]) + (p[1] - h[1]) * (p[1] - h[1]); var v = P.ws[i] * Math.exp(-d2 / (2 * tot)) / (2 * Math.PI * tot); post.push(v); z += v; });
+      var u = r() * z, m = h, v = s2;
+      if (u >= 0.08) { u -= 0.08; for (var i = 0; i < post.length; i++) { if (u < post[i]) { m = [(P.pts[i][0] * s2 + h[0] * w2) / tot, (P.pts[i][1] * s2 + h[1] * w2) / tot]; v = s2 * w2 / tot; break; } u -= post[i]; } }
+      for (var k = 0; k < 50; k++) { var y = [m[0] + Math.sqrt(v) * gauss(r) + 0.015 * gauss(r), m[1] + Math.sqrt(v) * gauss(r) + 0.015 * gauss(r)]; if (y[0] > 0.03 && y[1] > 0.03 && y[0] + y[1] < 0.97) return y; }
+      return x;
+    }
+    function xy(p) { var a = p[0], b = p[1], c = 1 - a - b; return [b + c / 2, c * Math.sqrt(3) / 2]; }
+    QB.widget(el, {
+      title: "Tap it back: a prior revealed",
+      sub: "Each point is a rhythm of three intervals (the corners are rhythms whose whole cycle is one interval). Three hundred random rhythms are heard by a simulated listener, with timing noise, and tapped back as a draw from its posterior; then the tapping is heard again. Rings mark rhythms of small whole-number ratios.",
+      panels: 1, height: 300,
+      controls: [{ k: "mix", label: "Listener raised on", min: 0, max: 1, step: 0.1, value: 0, fmt: function (x) { return x < 0.05 ? "4/4" : (x > 0.95 ? "7/8 (2+2+3)" : Math.round(100 * (1 - x)) + "% 4/4"); } },
+                 { k: "noise", label: "Timing noise", min: 0.02, max: 0.1, step: 0.01, value: 0.05, fmt: function (x) { return Math.round(100 * x) + "% of the cycle"; } },
+                 { k: "rounds", label: "Rounds", min: 0, max: 6, step: 1, value: 3, fmt: function (x) { return String(x); } }],
+      init: function (s) {},
+      draw: function (g, v, s) {
+        var P = prior(v.mix), r = rng(47), xs = [], ys = [], near = 0;
+        for (var c = 0; c < 300; c++) {
+          var x;
+          do { var e = [-Math.log(1 - r()), -Math.log(1 - r()), -Math.log(1 - r())], t = e[0] + e[1] + e[2]; x = [e[0] / t, e[1] / t]; } while (Math.min(x[0], x[1], 1 - x[0] - x[1]) < 0.1);
+          for (var k = 0; k < v.rounds; k++) x = step(x, P, v.noise, r);
+          var q = xy(x); xs.push(q[0]); ys.push(q[1]);
+          var dmin = 9; P.pts.forEach(function (p) { dmin = Math.min(dmin, Math.hypot(p[0] - x[0], p[1] - x[1])); });
+          if (dmin < 0.04) near++;
+        }
+        s.near = near / 300;
+        var a = g[0].axes({ x: [-0.05, 1.05], y: [-0.05, 0.92], title: "300 rhythms after " + v.rounds + " round" + (v.rounds === 1 ? "" : "s"), xlabel: "" });
+        a.line([0, 1, 0.5, 0], [0, 0, Math.sqrt(3) / 2, 0], { color: "#8A93A0", width: 1.5 });
+        var rx = [], ry = [];
+        P.pts.forEach(function (p) { var q = xy(p); rx.push(q[0]); ry.push(q[1]); });
+        a.dots(rx, ry, { r: 7, color: "#F472B6" });
+        a.dots(xs, ys, { r: 2.5, color: "#FFFFFF" });
+      },
+      readout: function (v, s) {
+        return [["near a small-integer ratio", Math.round(100 * s.near) + "% of rhythms"],
+                ["what to try", v.rounds === 0 ? "add rounds and watch the cloud gather" : "slide the listener toward 7/8 and watch where it gathers"]];
+      },
+      note: "After a few rounds the rhythms no longer remember where they started: they gather where the listener's prior puts them (Griffiths and Kalish 2007). That is how Jacoby and McDermott read people's rhythm priors, and why different cultures' chains end on different ratios."
+    });
+  };
 })();

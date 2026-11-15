@@ -1817,16 +1817,38 @@ predict).
 *Reading:* Meyer (1956); Huron (2006); Salimpoor et al. (2011); Cheung et al. (2019); Witek et al. (2014).
 
 ### Part 47 · Origins and Universals (~55)
-*Story:* A flute carved from a vulture's wing bone lay in a German cave for some 40,000 years. Every known
+*Story:* A flute carved from a vulture's wing bone lay in a German cave for at least 35,000 years. Every known
 society makes music, and no one agrees why. The part sorts what is shared (discrete pitches, a beat, small-integer
 rhythms, the lullaby) from what is not (a taste for consonance), and watches a tune evolve in simulated mouths.
+1. Hook: the Hohle Fels flute; a pipe its size with five even holes, heard (uneven steps); the questions; the plan.
+2. The oldest instruments: a logarithmic timeline; what a pipe's length says; what the bones say; older than any flute.
+3. Every society sings: the Natural History of Song; an ear question (dance song or lullaby?); form and function; contexts.
+4. Statistical universals: Savage's 304 recordings; six features checked on the corpus; what that cannot show; clusters.
+5. What is learned: the Tsimane'; four chords heard; the gradient with exposure; the octave; infants tuned by exposure.
+6. Priors revealed by iteration: the method; an ear question (before and after five tap-backs); 400 chains; two priors; the theorem.
+7. A tune in simulated mouths: one singer; a melody over forty singers; an ear question; the measures; two kinds of learner; the lab.
+8. Tune families: Bayard; three relatives heard; alignment; eleven tunes clustered; a simulated family rebuilt; Savage 2022.
+9. Birds, whales and a cockatoo: zebra finches; humpbacks; Snowball; an ear question (which dancer?); Rayleigh's test; vocal learning.
+10. Music and language: two sound systems; the nPVI; two tunes heard; Patel and Daniele; the corpus by language; the Library by kind; song and speech.
+11. Amusia, Mozart and transfer: amusia; an ear question (which pair differed?); the Mozart effect; publication bias simulated; transfer; therapy.
+12. Why music? Darwin, Spencer, Mithen; Pinker; bonding and signalling; predictions; what the chains add.
+13. Frontier: datasets of the world's music; the genetics of rhythm; open questions; the research problem.
+14. Variation 47: the Tune through thirty singers. Outro: problems, payoffs.
+
 *Covers:* the cross-cultural evidence; theories of origin; birdsong, whales and a dancing cockatoo; infants and
 enculturation; music and language; amusia; the Mozart effect and what transfer studies show; therapy evidence;
 cultural evolution and tune families.
-*Built and computed:* an iterated-learning simulation; rhythmic variability of themes by composers' language,
-recomputed on the Library; a family tree of the Tune's relatives by edit distance.
-*Variation 47:* the Tune after thirty generations of imperfect transmission.
-*Frontier:* large cross-cultural datasets; the genetics of rhythm **(verify)**; the origins debate.
+*Built and computed:* `monochord/origins.py`: iterated reproduction by simulated Bayesian listeners (400 random
+rhythms, 28 per cent near small-integer ratios at the start, about 70 after three rounds, in the prior's proportions); a
+transmission chain of simulated singers (twenty random melodies over forty singers: pitch levels 11.7 to 5.6, steps 5.6
+to 2.7 semitones, copying error 0.31 to 0.08 a note; samplers forget the Tune, likeliest-value singers keep it);
+Needleman–Wunsch alignment under the best transposition, UPGMA and Robinson–Foulds (the Tune's relatives cluster; a
+simulated family's branchings recovered 4.8 of 6 on average); six statistical universals on the corpus; nPVI by
+language on the corpus (French 24.7, English 35.8, permutation p = 0.16) and by kind on the Library (songs 47.9,
+keyboard 29.2); Rayleigh's test for simulated dancers; a publication-bias simulation (a zero effect published at 0.14).
+*Variation 47:* the Tune after thirty simulated singers: 42 notes in, 41 out, 29 kept exactly, 0.28 a note.
+*Frontier:* large cross-cultural datasets; the genetics of beat synchronization (Niarchou et al. 2022: 69 loci, SNP
+heritability 13–16 per cent); the origins debate (open: which universals need which biases).
 *Reading:* Patel, *Music, Language, and the Brain*; Savage et al. (2015); Mehr et al. (2019); Honing (ed.), *The
 Origins of Musicality*.
 
