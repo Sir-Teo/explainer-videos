@@ -2427,15 +2427,32 @@ temperature (intervals closest to Bach at 1.0); harmonized by Part 17 with no pa
 ### Part 66 · Generative Audio (~60)
 *Story:* In 2016 a network generated sound one sample at a time, sixteen thousand decisions a second, and its
 piano noodled nowhere. Eight years later a line of text returned a finished song with a singer, and the record
-labels went to court **(verify, dated)**. The part explains the three ideas that closed the gap and builds the
-smallest honest version of each.
+labels went to court. The part explains the ideas that closed the gap and builds the smallest honest version of
+each.
+1. Hook: an ear question (the string or its DDSP copy?); from WaveNet to the lawsuits; the plan.
+2. Why raw audio is hard: a second magnified; the numbers; mu-law, heard.
+3. One sample at a time: WaveNet; a sample-level network that memorized; a continuation, heard; the lesson.
+4. Spectrograms and vocoders: a mel spectrogram; rebuilt, heard; how many bands, heard; vocoders.
+5. Tokens from a codec: vector quantization; residual stages; an ear question (how many tokens?); bits against fidelity.
+6. Language models over sound: AudioLM, MusicLM, MusicGen; the delay pattern; tokens as a picture; training; a continuation, heard; copying.
+7. Diffusion: adding and removing noise; a profile drawn; measured and drawn tones, heard; the profiles; latent diffusion.
+8. Differentiable DSP: the idea; training; a phrase it never heard, heard; its controls; new controls, heard; timbre transfer.
+9. Singing and cloned voices: singing synthesis; one performance in three voices, heard; cloning; the law (dated).
+10. Judging generated sound: the Fréchet distance; the table; what it misses; listening tests.
+11. Watermarks and detection: spread spectrum; an ear question (which is marked?); what the mark survives; detection.
+12. Frontier: data; the courts (dated); musicians; the unsolved; the smallest honest versions; the research problem.
+13. Variation 66: sung, re-rendered by DDSP, continued by the token model. Outro: problems, payoffs.
+
 *Covers:* why raw audio is hard; autoregression on samples; spectrograms and vocoders; discrete tokens and
 neural codecs; language models over tokens; diffusion and flow models in a latent space; differentiable DSP;
 singing synthesis and voice cloning; evaluation; watermarking and detection; data, consent and what is unsolved.
-*Built and computed:* a DDSP instrument trained on our own bowed-string model; a token model on a
-Monochord-rendered corpus (named exception: up to 8 h, resumable); a Fréchet-style distance; a memorization test.
-Quality is reported as it is.
-*Variation 66:* the Tune sung, re-rendered as a violin by the DDSP model, and continued by the token model.
+*Built and computed:* `monochord/genaudio.py`: mu-law (37 dB against 18 for equal steps on a quiet phrase); a
+sample-level network (8.4 bits a sample on new audio: it memorized); mel and Griffin-Lim (15.4 dB at 64 bands, 8.3
+at 256); a residual VQ codec (one to four tokens a frame within 0.2 dB, the phase floor 3.7); a pocket transformer
+over codec tokens of 41 minutes of piano (longest copy one second); a diffusion model of harmonic profiles; DDSP on
+the string model (6.0 dB away on a phrase it never heard, 24,249 weights); Fréchet distances (the training notes
+replayed score best); a spread-spectrum watermark (31 at −35 dB, 25.6 through a coder, lost in a room).
+*Variation 66:* the Tune sung, re-rendered as a string by the DDSP model, and continued by the token model.
 *Frontier:* the frontier is the subject: swept at the writing date.
 *Reading:* van den Oord et al. (2016); Engel et al. (2020); Zeghidour et al. (2021); Agostinelli et al. (2023);
 Copet et al. (2023).

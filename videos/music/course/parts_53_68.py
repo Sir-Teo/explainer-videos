@@ -415,4 +415,35 @@ PARTS = [
         I=(6, 10),
         also=(("Monochord's machines that compose: the chorale-tune corpus, Markov chains, copy measures, constraints, recombination, tokens, the transformer", "explainer/music/monochord/machines.py"),),
     ),
+    Part(
+        n=66, level="U", widget="diffuse", prereq=(3, 48, 58, 61, 65),
+        question="How do machines make sound itself, and how do we judge and label what they make?",
+        story="An ear question: Part 9's bowed string and a DDSP network's copy from its pitch and loudness (the first was the network, 6.7 dB away by spectrum); from WaveNet's sixteen thousand decisions a second in 2016 to text-to-song services and the lawsuits of 2024. Raw audio: a second magnified, the numbers, mu-law against equal steps heard (37 against 18 dB). A sample-level network over the last 256 samples memorizes its training notes (8.4 bits a sample on new audio) and takes 278 s to write one second; split structure from detail. Spectrograms: 64 mel bands rebuilt by Griffin-Lim, heard (15.4 dB; 16 and 256 bands, 20.6 and 8.3); vocoders. Codec tokens: residual vector quantization of log spectra; an ear question on one, two and four tokens a frame (within 0.2 dB); bits against fidelity. Language models over tokens: AudioLM, MusicLM, MusicGen's delay pattern; a pocket transformer on 41 minutes of piano tokens continues a tune it never heard, heard; its longest copy, one second. Diffusion: a profile of 24 harmonics drawn from noise; drawn and measured tones heard; latent diffusion and flow matching. DDSP: 24,249 weights set 40 harmonics and 16 noise bands; a phrase it never heard resynthesized (6.0 dB), heard; its controls; a vibrato and a glide it never saw, heard; timbre transfer. Voices: singing synthesis, one performance in three voices heard, cloning and the law (dated). Judging: Fréchet distances, where the training notes replayed score best; listening tests. Watermarks: an ear question on a mark 35 dB down; it survives a coder, not a room; detectors and provenance. Frontier: data, the courts, musicians, attribution. Variation 66: the Tune sung, re-rendered by DDSP, continued by the token model.",
+        handoff="Evaluation, listening tests, leakage and data examined as research in Part 67; the generated Variations, "
+                "labelled, in the concert of Part 68.",
+        outside="Part 3 for spectra; Part 48 for sampling and quantization; Part 58 for codecs and listening tests; Part 61 for "
+                "pitch tracking; Part 65 for next-token models and copying. Companding, the STFT, k-means, transformers, "
+                "denoising diffusion, automatic differentiation, the Fréchet distance between Gaussians, correlation detection.",
+        objectives={
+            "U": ["Hear mu-law against equal steps, a sample-level continuation, and mel spectrograms rebuilt with different band counts.",
+                  "Hear a codec at several stages, a token-model continuation, diffusion-drawn tones and a DDSP string.",
+                  "Explain why generators split structure from detail, and why copying and consent are measured, not assumed."],
+            "M": ["Quantize audio by mu-law and by residual vector quantization, and measure bits against spectral distance.",
+                  "Train a DDSP synthesizer by a multi-resolution spectral loss, and a diffusion model over vectors.",
+                  "Compute a Fréchet distance between embedding sets; embed and detect a spread-spectrum watermark."],
+            "D": ["Design a test of training-data attribution for generated audio on a corpus whose every recording is known."],
+            "I": ["Know and disclose training data, get consent for voices, label outputs, and judge by distance, listeners and copying."],
+        },
+        results=[
+            ("Mu-law", r"c = \operatorname{sign}(x)\,\ln(1 + \mu|x|)/\ln(1 + \mu)"),
+            ("RVQ", r"x \approx \textstyle\sum_s c^{(s)}_{k_s},\ \ k_s = \arg\min_k \|r_{s-1} - c^{(s)}_k\|"),
+            ("Diffusion", r"x_t = \sqrt{\bar\alpha_t}\,x_0 + \sqrt{1 - \bar\alpha_t}\,\varepsilon"),
+            ("FAD", r"\|\mu_r - \mu_g\|^2 + \operatorname{tr}(\Sigma_r + \Sigma_g - 2(\Sigma_r\Sigma_g)^{1/2})"),
+            ("Detection", r"z = \textstyle\sum_n \operatorname{sign}(y_n)\,p_n \big/ \sqrt{\sum_n p_n^2}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8),
+        D=(11,),
+        I=(9, 10),
+        also=(("Monochord's generative audio: mu-law, a sample-level network, mel and Griffin-Lim, residual VQ, the harmonic synthesizer, DDSP, diffusion, the Fréchet distance, watermarks", "explainer/music/monochord/genaudio.py"),),
+    ),
 ]

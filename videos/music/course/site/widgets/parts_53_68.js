@@ -871,4 +871,74 @@
       note: "Orders 0 and 1 wander and copy little; by order 4 or 5 most of the tune is a stretch of one of Bach's, because with so few tunes most long contexts were seen only once. The temperature trades safety for surprise, but cannot make a long-memory chain original."
     });
   };
+  // Part 66: diffusion, exactly, on points in a plane -------------------------------------------------------------
+  function diffuseRun(v) {
+    var seed = Math.round(v.seed) * 104729 + 7, rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    var gauss = function () { var u = Math.max(rnd(), 1e-12), w = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * w); };
+    // the data: points on two rings, as a stand-in for the sounds a model learnt from
+    var data = [];
+    for (var i = 0; i < 120; i++) {
+      var r = i < 60 ? 1.0 : 2.0, a = 2 * Math.PI * i / 60;
+      data.push([r * Math.cos(a), r * Math.sin(a)]);
+    }
+    var T = Math.round(v.steps), beta = [], abar = [], acc = 1;
+    for (var t = 0; t < T; t++) { var b = 1e-4 + (v.bmax - 1e-4) * t / Math.max(T - 1, 1); beta.push(b); acc *= (1 - b); abar.push(acc); }
+    // the best possible denoiser for this data: the posterior mean of x0 given x_t, over the data points
+    function eps(x, t) {
+      var ab = abar[t], w = [], tot = 0, m = [0, 0];
+      for (var j = 0; j < data.length; j++) {
+        var dx = x[0] - Math.sqrt(ab) * data[j][0], dy = x[1] - Math.sqrt(ab) * data[j][1];
+        w.push(-(dx * dx + dy * dy) / (2 * (1 - ab)));
+      }
+      var mx = Math.max.apply(null, w);
+      for (j = 0; j < data.length; j++) { w[j] = Math.exp(w[j] - mx); tot += w[j]; }
+      for (j = 0; j < data.length; j++) { m[0] += w[j] * data[j][0] / tot; m[1] += w[j] * data[j][1] / tot; }
+      return [(x[0] - Math.sqrt(ab) * m[0]) / Math.sqrt(1 - ab), (x[1] - Math.sqrt(ab) * m[1]) / Math.sqrt(1 - ab)];
+    }
+    var pts = [];
+    for (i = 0; i < Math.round(v.n); i++) pts.push([gauss() * 2, gauss() * 2]);
+    var stopAt = Math.round((1 - v.shown) * T);
+    for (t = T - 1; t >= stopAt; t--) {
+      pts = pts.map(function (x) {
+        var e = eps(x, t), b = beta[t], ab = abar[t];
+        var y = [(x[0] - b / Math.sqrt(1 - ab) * e[0]) / Math.sqrt(1 - b), (x[1] - b / Math.sqrt(1 - ab) * e[1]) / Math.sqrt(1 - b)];
+        if (t > 0) { y[0] += Math.sqrt(b) * gauss(); y[1] += Math.sqrt(b) * gauss(); }
+        return y;
+      });
+    }
+    // how many samples sit within 0.15 of a data point, and how many are within 0.02 of one (copies)
+    var near = 0, copies = 0;
+    pts.forEach(function (x) {
+      var dmin = 1e9;
+      data.forEach(function (p) { dmin = Math.min(dmin, Math.hypot(x[0] - p[0], x[1] - p[1])); });
+      if (dmin < 0.15) near++;
+      if (dmin < 0.02) copies++;
+    });
+    return { data: data, pts: pts, near: near, copies: copies, final_abar: abar[T - 1] };
+  }
+  W.diffuse = function (el) {
+    QB.widget(el, {
+      title: "Drawing by removing noise",
+      sub: "Grey: the training data, points on two rings. Gold: samples, which start as pure noise and are denoised step by step by the best possible denoiser for this data. Slide 'Shown' to watch the reverse process from noise (0) to the end (1); change the number of steps and how much noise the forward process adds.",
+      panels: 1, height: 300,
+      controls: [{ k: "shown", label: "Shown", min: 0, max: 1, step: 0.05, value: 1, fmt: function (x) { return (100 * x).toFixed(0) + " % of the steps"; } },
+                 { k: "steps", label: "Steps", min: 5, max: 200, step: 5, value: 100, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "bmax", label: "Noise at the last step", min: 0.01, max: 0.2, step: 0.01, value: 0.05, fmt: function (x) { return x.toFixed(2); } },
+                 { k: "n", label: "Samples", min: 20, max: 300, step: 10, value: 150, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "seed", label: "Draw", min: 1, max: 20, step: 1, value: 1, fmt: function (x) { return x.toFixed(0); } }],
+      draw: function (gr, v) {
+        var r = diffuseRun(v);
+        var a = gr[0].axes({ x: [-4, 4], y: [-3, 3], title: "data (grey) and samples (gold)" });
+        a.dots(r.data.map(function (p) { return p[0]; }), r.data.map(function (p) { return p[1]; }), { r: 2, color: "#8A93A0" });
+        a.dots(r.pts.map(function (p) { return p[0]; }), r.pts.map(function (p) { return p[1]; }), { r: 3, color: C.idea });
+      },
+      readout: function (v) {
+        var r = diffuseRun(v);
+        return [["samples near the data (within 0.15)", r.near + " of " + r.pts.length],
+                ["samples that are copies of a data point (within 0.02)", String(r.copies)],
+                ["signal left after all the forward noise", (100 * Math.sqrt(r.final_abar)).toFixed(1) + " %"]];
+      },
+      note: "With enough steps and enough noise, every sample ends on the rings. But this denoiser is perfect for the training points, and a perfect denoiser reproduces them: nearly every sample lands on a training point. A real network, which cannot memorize every example, generalizes between them; that gap is the copying question of Parts 65 and 66."
+    });
+  };
 })();

@@ -135,6 +135,8 @@ LEDGER = [
      "measure": r"the separated voice 6.9 dB SDR, the karaoke 10.0 dB"},
     {"part": 65, "title": r"the Tune's first phrase continued at five temperatures, uncurated", "seconds": 63.6,
      "measure": r"temperatures 0.25, 0.5, 0.8, 1, 1.5; longest copied run 4 notes"},
+    {"part": 66, "title": r"sung, re-rendered as a DDSP string, and continued by a token model", "seconds": 28.7,
+     "measure": r"DDSP 6.0 dB from the string it learnt; 5.3 s of piano continued for 5 s"},
 ]
 
 
