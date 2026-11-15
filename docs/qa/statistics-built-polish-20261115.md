@@ -10,7 +10,7 @@ narrated masters remain the separate gates listed in `statistics-built-progress.
 |---|---|---|
 | `tests/test_stats*.py` and `tests/test_series_site.py` | 141 files | 1122 passed, 5 subtests (before and after the repairs below) |
 | `tools/check_course.py stats` (entry, lab, interactive, built page at desktop and phone width, every slider and button) | 65 parts | all OK |
-| `tools/qa_series.py statsN` (narration-beat frames, text-overlap and runtime preflight) | 65 parts, 888 chapters | every chapter renders; no text-overlap warning remains (see "Known false positives") |
+| `tools/qa_series.py statsN` (narration-beat frames, text-overlap and runtime preflight) | 65 parts, 888 chapters | 879 chapters render with no text-overlap warning (see "Known false positives"); 9 were not rendered (see "Not yet checked") |
 | Narration lint (doubled words, unbalanced brackets and quotes, spacing, stray TeX) over every `voiceover` string | 65 parts | one real defect (Part 7) |
 | Cross-references ("Part N") in narration: 1,194 mentions checked for topic and direction | 65 parts | no wrong reference |
 | README run times against the narration estimate (`tools/lecture_length.py`) | 65 parts | consistent |
@@ -49,6 +49,15 @@ they pass. Running them under `pytest -n` races on `media/Tex`; run them seriall
 * Coverage Board scenes need each part's `board` compute item. Scene rendering does not run it, so on a fresh checkout
   run `python -m videos.stats.statsN.compute board` first. The heavy ones are Parts 27 (about 7 min), 34 (the
   forests' `ij` and `ij_sub` items, about 27 min, then the board), 37 (15 min), 39, 41 (57 min) and 59.
+
+## Not yet checked
+
+Nine chapters need data that had not finished computing when this pass ended: Coverage Board rows (the `board` item
+took over two hours and was still running for Parts 34 and 39) and, for Part 34's Forests, the forest simulations.
+They are Part 34's CV, Forests, Jackknife, PPI, Shift and Split; Part 39's Honest; and Part 65's FullBoard and
+TranscriptComplete, which need the boards of Parts 34 and 39. Run `python -m videos.stats.stats34.compute board` and
+`python -m videos.stats.stats39.compute board`, then
+`python tools/qa_series.py stats34 stats39 stats65`.
 
 ## Method limits
 
