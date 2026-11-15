@@ -44,19 +44,20 @@ class Stream(SoundScene):
         cols = {"the service": GREY_B, "the label": BLUE, "the artist (credited, against the advance)": BLUE, "the producer": BLUE,
                 "collecting societies and administrators": TUNE, "the publisher": TUNE}
         x0, w = -6.0, 12.0
-        y = 0.6
+        y = 1.3
         segs, tags = VGroup(), VGroup()
         acc = 0.0
         for k, r in enumerate(rows_):
             ww = w * r["amount"] / total
             col = cols.get(r["who"], TUNE)
-            seg = Rectangle(width=ww, height=0.8, stroke_color=BLACK, stroke_width=1.5, fill_color=col, fill_opacity=0.35 + 0.1 * (k % 3)).move_to([x0 + w * acc / total + ww / 2, y, 0])
+            seg = Rectangle(width=ww, height=0.8, stroke_color=BLACK, stroke_width=1.5, fill_color=col, fill_opacity=0.35 + 0.15 * (k % 3)).move_to([x0 + w * acc / total + ww / 2, y, 0])
             acc += r["amount"]
-            name = r["who"].replace(" (credited, against the advance)", r" \ (credited)").replace("collecting societies and administrators", r"societies")
-            t = VGroup(label(name, font_size=14, color=col), label(rf"\${r['amount']:.2f}", font_size=15, color=WHITE)).arrange(DOWN, buff=0.08)
-            t.next_to(seg, DOWN if k % 2 == 0 else UP, buff=0.2 + (0.0 if k % 2 == 0 else 0.0))
+            name = r["who"].replace(" (credited, against the advance)", r" \ (credited, \ against the advance)").replace("collecting societies and administrators", r"societies and administrators")
+            sw = Square(side_length=0.22, stroke_width=0, fill_color=col, fill_opacity=0.35 + 0.15 * (k % 3))
+            t = VGroup(sw, label(name, font_size=16, color=col), label(rf"\${r['amount']:.2f}", font_size=16, color=WHITE)).arrange(RIGHT, buff=0.18)
             segs.add(seg)
             tags.add(t)
+        tags.arrange_in_grid(rows=4, cols=2, buff=(1.0, 0.28), col_alignments="ll", flow_order="dr").move_to(DOWN * 0.75)
         each = [r for r in d["month"] if r.get("part")][0]
         note = label(rf"one subscriber's month, \ \${total:.2f}: \ the service keeps 30\%; \ the recording takes 55\%, \ the composition 15\%; \ each of three songwriters, \ \${each['amount']:.2f}",
                      font_size=17, color=GREY_A).to_edge(DOWN, buff=0.45)
