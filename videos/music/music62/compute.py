@@ -11,6 +11,7 @@ played with rubato, Part 8's voice sung freely.
 Items:
     hook        an ear question: two click tracks over the session, one on the beat and one 80 ms late
     tempo       novelty, tempogram and the tempo estimate on the session; a slow piece and its double-time reading
+    drums       the drums alone against the whole band: two novelty curves
     beats       Ellis's dynamic programme on the session and on a rubato piano performance; scores
     downbeat    which beat starts the bar, from the low band (an ear question)
     halfdouble  the slow piece with clicks at the tempo written and at the tempo found
@@ -178,6 +179,20 @@ def compute_tempo() -> dict:
             "slow_true": 50.0, "slow_found": ts["bpm"], "slow_flat": ts_flat["bpm"]}
 
 
+def compute_drums() -> dict:
+    s = P56.session((0, 1))
+    tr = s["tracks"]
+    drums = tr["kick"] + tr["snare"] + tr["hat"]
+    drums = drums / np.max(np.abs(drums)) * 0.9
+    full = session_mix((0, 1))
+    nd, nf = RH.novelty(drums), RH.novelty(full)
+    td, tf = RH.tempo(nd["nov"], nd["hop_s"]), RH.tempo(nf["nov"], nf["hop_s"])
+    c = concat([C(fade(drums)), C(fade(full))], gap=1.0, names=["drums", "full"])
+    return {"nov_drums": nd["nov"][::2].tolist(), "nov_full": nf["nov"][::2].tolist(), "hop_s": 2 * nd["hop_s"],
+            "bpm_drums": td["bpm"], "bpm_full": tf["bpm"], "starts": {"drums": float(c.events["drums"]), "full": float(c.events["full"])},
+            "clips": {"two": save("drums.two", c, detail="Part 56's session: the drums alone, then the whole band")}}
+
+
 def compute_beats() -> dict:
     out = {}
     y = session_mix((0, 1, 2, 3))
@@ -300,7 +315,13 @@ def compute_chords() -> dict:
     acc = lambda p: float(np.mean(p[: len(truth)] == truth))
     k = int(8 * 2 * BEAT / ch["hop_s"])
     c = C(fade(y[: int(16 * BEAT * SR)]))
-    return {"labels": labels, "truth": truth.tolist(), "frame": plain["frame"].tolist(), "hmm": plain["hmm"].tolist(), "bach": prior["hmm"].tolist(),
+    conf = {}
+    for t_, f_ in zip(truth, plain["frame"][: len(truth)]):
+        if t_ != f_ and t_ != 24:
+            key = f"{labels[t_]}>{labels[f_]}"
+            conf[key] = conf.get(key, 0) + 1
+    top_conf = sorted(conf.items(), key=lambda kv: -kv[1])[:6]
+    return {"confusions": top_conf, "labels": labels, "truth": truth.tolist(), "frame": plain["frame"].tolist(), "hmm": plain["hmm"].tolist(), "bach": prior["hmm"].tolist(),
             "acc": {"frame": acc(plain["frame"]), "hmm": acc(plain["hmm"]), "bach": acc(prior["hmm"])},
             "chroma": ch["C"][:, :k].tolist(), "hop_s": ch["hop_s"], "syms": syms,
             "clips": {"tune": save("chords.tune", c, detail="Part 56's session playing the Tune's first two phrases, the voice loud and the chords quiet")}}
@@ -327,8 +348,14 @@ def compute_align() -> dict:
         hits = np.where(on >= fa)[0]
         if len(hits):
             on_errs.append(abs(hits[0] * hop - bt[k]))
+    # the path read as a tempo curve: the performance time of each strict beat, from the full path
+    pt = path.astype(float) * hop
+    when = np.array([pt[np.abs(pt[:, 0] - b) <= hop / 2 + 1e-9, 1].mean() for b in deadpan])
+    ratio = np.diff(when) / 0.5
+    smooth = np.convolve(np.r_[ratio[0], ratio, ratio[-1]], np.ones(3) / 3, mode="valid")
+    true_ratio = np.diff(bt[:17]) / 0.5
     c = concat([C(fade(ya)), C(fade(yb))], gap=1.0, names=["deadpan", "rubato"])
-    return {"path": path[::2].tolist(), "cost": d["cost"][::2, ::2].tolist(), "hop_s": hop, "deadpan": deadpan.tolist(), "rubato": bt.tolist(),
+    return {"ratio": ratio.tolist(), "ratio_smooth": smooth.tolist(), "true_ratio": true_ratio.tolist(), "path": path[::2].tolist(), "cost": d["cost"][::2, ::2].tolist(), "hop_s": hop, "deadpan": deadpan.tolist(), "rubato": bt.tolist(),
             "err_ms": float(1000 * np.median(errs)), "err_max_ms": float(1000 * np.max(errs)), "online_ms": float(1000 * np.median(on_errs)),
             "online_max_ms": float(1000 * np.max(on_errs)),
             "starts": {"deadpan": float(c.events["deadpan"]), "rubato": float(c.events["rubato"])},
@@ -337,16 +364,21 @@ def compute_align() -> dict:
 
 def compute_structure() -> dict:
     y = session_mix((0, 1, 2, 3, 4, 5))
-    ch = RH.chroma(y, hop=4800)
+    ch = RH.chroma(y, hop=2400)
     S = RH.ssm(ch["C"])
-    nov = RH.checkerboard_novelty(S, half=16)
-    b = RH.boundaries(nov, ch["hop_s"], min_gap=3.0, delta=0.15)
-    frames = [int(round(x / ch["hop_s"])) for x in b if 1.0 < x < len(y) / SR - 2.0]
-    labels = RH.segment_labels(ch["C"], frames, threshold=0.95)
+    nov = RH.checkerboard_novelty(S, half=48)
+    b = RH.boundaries(nov, ch["hop_s"], min_gap=6.0, delta=0.1)
+    nov_bounds = [float(x) for x in b if 1.0 < x < len(y) / SR - 2.0]
+    P = int(round(8 * BEAT / ch["hop_s"]))                 # a phrase: eight beats, as the beat tracker finds them
+    M = RH.segment_similarity(S, P, 6)
+    phr = RH.labels_from_similarity(M, threshold=0.95)
+    means = [ch["C"][:, k * P:(k + 1) * P].mean(axis=1) for k in range(6)]
+    means = [m / np.linalg.norm(m) for m in means]
+    mean_sim = [[float(a_ @ b_) for b_ in means] for a_ in means]
     true_b = [2 * 8 * BEAT, 4 * 8 * BEAT]
     c = C(fade(y))
-    return {"S": S[::2, ::2].tolist(), "nov": nov.tolist(), "hop_s": ch["hop_s"], "bounds": [f * ch["hop_s"] for f in frames], "labels": labels,
-            "true_bounds": true_b, "seconds": c.duration,
+    return {"S": S[::4, ::4].tolist(), "nov": nov[::2].tolist(), "hop_s": ch["hop_s"], "novelty_bounds": nov_bounds, "phrase_sim": M.tolist(),
+            "phrase_labels": phr, "mean_sim": mean_sim, "true_bounds": true_b, "phrase_s": 8 * BEAT, "seconds": c.duration,
             "clips": {"tune": save("structure.tune", c, detail="the whole Tune by Part 56's session: A, B, A")}}
 
 
@@ -383,7 +415,11 @@ def compute_follow() -> dict:
             dead[k:k + len(z)] += np.asarray(z)[: max(0, n - k)]
     stiff = np.r_[voice, np.zeros(n - len(voice))] + 0.6 * dead / (np.max(np.abs(dead)) + 1e-9)
     c = concat([C(fade(stiff / np.max(np.abs(stiff)) * 0.9)), C(fade(both / np.max(np.abs(both)) * 0.9))], gap=1.0, names=["stiff", "follow"])
-    return {"asynchrony_ms": [1000 * a for a in asyn], "median_ms": float(1000 * np.median(np.abs(asyn))), "seconds": c.duration,
+    sc_t = np.arange(len(pos)) * hop                                  # live time
+    score_beats = pos * hop / 0.5                                      # where the follower thinks the singer is, in beats
+    true_beats = np.interp(sc_t, bt, np.arange(len(bt)))               # where the singer really is
+    return {"pos_t": sc_t[::2].tolist(), "pos_beats": score_beats[::2].tolist(), "true_beats": true_beats[::2].tolist(),
+            "asynchrony_ms": [1000 * a for a in asyn], "median_ms": float(1000 * np.median(np.abs(asyn))), "seconds": c.duration,
             "names": ["stiff", "follow"], "starts": {"stiff": float(c.events["stiff"]), "follow": float(c.events["follow"])},
             "clips": {"variation62": save("tune.variation62", c, detail="Variation 62: Part 8's voice singing the Tune freely, with piano chords played strictly on the written beats, then placed by a score follower listening to the voice")}}
 
@@ -395,7 +431,7 @@ def compute_variation() -> dict:
             "clip": "tune.variation62"}
 
 
-ITEMS = {"hook": compute_hook, "tempo": compute_tempo, "beats": compute_beats, "downbeat": compute_downbeat, "halfdouble": compute_halfdouble,
+ITEMS = {"hook": compute_hook, "tempo": compute_tempo, "drums": compute_drums, "beats": compute_beats, "downbeat": compute_downbeat, "halfdouble": compute_halfdouble,
          "chords": compute_chords, "cover": compute_cover,
          "align": compute_align, "structure": compute_structure, "follow": compute_follow, "variation": compute_variation}
 

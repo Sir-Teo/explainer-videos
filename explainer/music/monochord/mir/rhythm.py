@@ -9,6 +9,7 @@
     dtw, oltw                                 dynamic time warping between two feature sequences, offline and online
     ssm, checkerboard_novelty, boundaries     self-similarity, Foote's novelty (2000) and peak-picked section boundaries
     segment_labels                            sections clustered by their mean chroma
+    segment_similarity, labels_from_similarity  repetition: phrases compared moment by moment, and labelled
 
 No manim.  Checked in ``tests/music/test_rhythm.py``.
 """
@@ -284,4 +285,27 @@ def segment_labels(F, bounds_frames, threshold: float = 0.9) -> list:
         else:
             labels.append("ABCDEFGHIJ"[len(set(labels))])
         means.append(m)
+    return labels
+
+
+def segment_similarity(S, length: int, count: int, start: int = 0) -> np.ndarray:
+    """Repetition: for ``count`` segments of ``length`` frames (phrases, from the beats), the mean similarity along
+    the diagonal of the self-similarity matrix between each pair, i.e. how alike they are moment by moment, in order."""
+    out = np.zeros((count, count))
+    for a in range(count):
+        for b in range(count):
+            out[a, b] = float(np.mean([S[start + a * length + k, start + b * length + k] for k in range(length)]))
+    return out
+
+
+def labels_from_similarity(M, threshold: float = 0.95) -> list:
+    """Each segment takes the label of the first earlier segment it resembles above ``threshold``, else a new one."""
+    labels = []
+    for i in range(len(M)):
+        for j in range(i):
+            if M[i, j] >= threshold:
+                labels.append(labels[j])
+                break
+        else:
+            labels.append("abcdefghij"[len(set(labels))])
     return labels

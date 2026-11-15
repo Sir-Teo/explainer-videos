@@ -10,6 +10,9 @@ class Novelty(SoundScene):
         chapter(self, 1, r"Where the beats might be", r"What does a machine listen to when it looks for the beat?")
         self.what()
         self.curve()
+        self.drums()
+        self.others()
+        self.accents()
         self.periodic()
 
     # ------------------------------------------------------------------
@@ -51,6 +54,70 @@ class Novelty(SoundScene):
             self.play(FadeIn(beats), FadeIn(bars), FadeIn(note))
         self.wait(0.4)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def others(self):
+        items = [
+            (r"energy: \\ the simplest, \\ good for drums, \\ deaf to a change of chord at the same loudness", WHITE),
+            (r"spectral flux: \\ Part 61's, \\ hears a new note even under a sustained one", WHITE),
+            (r"phase deviation: \\ a steady note's phase advances predictably; \\ a new note breaks the pattern", WHITE),
+            (r"band by band: \\ the low band for kick and bass, \\ the high for hi-hats; \\ each says something about the meter", WHITE),
+            (r"networks now learn their own novelty from annotated beats", TUNE),
+        ]
+        rows_scene(self, r"other novelty curves", items,
+                   "Spectral flux is one choice among several. <bookmark mark='b'/> Energy is the simplest: good for drums, deaf to a "
+                   "change of chord at the same loudness. <bookmark mark='c'/> Spectral flux, Part 61's, hears a new note even under "
+                   "a sustained one. <bookmark mark='d'/> Phase deviation listens to the phase: a steady note's phase advances "
+                   "predictably, and a new note breaks the pattern. <bookmark mark='e'/> Band by band, the low band hears kick and "
+                   "bass, the high band the hi-hats, and each says something different about the meter. <bookmark mark='f'/> And "
+                   "networks now learn their own novelty from annotated beats.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def drums(self):
+        d = load("drums")
+        c = clip("drums.two")
+        nd, nf = np.array(d["nov_drums"]), np.array(d["nov_full"])
+        t = np.arange(len(nd)) * d["hop_s"]
+        a1 = frame_axes(width=11.0, height=1.3, xlo=0, xhi=t[-1], ylo=0, yhi=1.05, center=UP * 0.9)
+        a2 = frame_axes(width=11.0, height=1.3, xlo=0, xhi=t[-1], ylo=0, yhi=1.05, center=DOWN * 1.1)
+        c1 = curve(t, nd, a1.to, color=EAR, width=2)
+        c2 = curve(np.arange(len(nf)) * d["hop_s"], nf, a2.to, color=TUNE, width=2)
+        l1 = label(r"the drums alone", font_size=16, color=EAR).next_to(a1, UP, buff=0.08).align_to(a1, LEFT)
+        l2 = label(r"the whole band", font_size=16, color=TUNE).next_to(a2, UP, buff=0.08).align_to(a2, LEFT)
+        head = label(r"drums, \ and everything else", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
+        with self.voiceover("Hear the drums alone, then the whole band, and compare their novelty curves."):
+            self.play(FadeIn(head), FadeIn(a1), FadeIn(a2), FadeIn(l1), FadeIn(l2))
+        st = d["starts"]
+        with self.listen(c) as snd:
+            window(snd, r"drums, \ then band", kind="physical model", detail=r"Part 56's session", corner=DL, tag_corner=DR)
+            snd.show(c1, c2)
+            snd.drive(c1, lambda m, tt: m.set_opacity(1.0 if tt >= st["drums"] else 0.0))
+            snd.drive(c2, lambda m, tt: m.set_opacity(1.0 if tt >= st["full"] else 0.0))
+        self.add(c1, c2)
+        with self.voiceover(
+            "The drums give a clean, regular comb; the band adds peaks for every sung note and chord, between the beats as well "
+            f"as on them. Here both give the same tempo, {say(d['bpm_full'])} a minute, but in music without drums, a string "
+            "quartet or a solo voice, the clean comb is gone, and that is where trackers struggle."
+        ):
+            self.wait(0.5)
+        self.wait(0.4)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def accents(self):
+        items = [
+            (r"a dynamic accent: \ louder", WHITE),
+            (r"an agogic accent: \ longer; \ a long note after short ones feels like a beat", WHITE),
+            (r"a harmonic accent: \ where the chord changes", WHITE),
+            (r"a melodic accent: \ the top or bottom of a contour, \ a leap", WHITE),
+            (r"novelty curves see the first well, \ the others barely: \ part of why music without drums is hard", TUNE),
+        ]
+        rows_scene(self, r"what makes a beat strong", items,
+                   "What makes a beat feel strong? Music theorists name several kinds of accent. <bookmark mark='b'/> A dynamic "
+                   "accent: louder. <bookmark mark='c'/> An agogic accent: longer; a long note after short ones feels like a beat. "
+                   "<bookmark mark='d'/> A harmonic accent, where the chord changes. <bookmark mark='e'/> A melodic accent, at the "
+                   "top or bottom of a contour, or after a leap. <bookmark mark='f'/> Novelty curves see the first kind well and the "
+                   "others barely, which is part of why music without drums is hard to track.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def periodic(self):
