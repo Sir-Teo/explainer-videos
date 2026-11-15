@@ -225,4 +225,36 @@ PARTS = [
         I=(3, 7, 8, 10),
         also=(("Monochord's live sound: feedback by Nyquist, ringing out, PAG/NAG, fields of sources and arrays, cardioid subwoofers, delay towers, ISO 9613-1 air absorption, dual-channel measurement, intermodulation planning, STI, noise dose", "explainer/music/monochord/live.py"),),
     ),
+    Part(
+        n=60, level="U", widget="pool", prereq=(14, 56, 57, 58, 59),
+        question="Where does a stream's money go, why are hits so unequal, and how often do two melodies coincide by chance?",
+        story="An ear question hears two melodies with the same eight-note opening and asks whether one copied the other: neither did; both were drawn independently from Part 14's model, and the 396th draw repeated an opening. The plan, with everything dated, mostly American, illustrative and not legal or financial advice. Two copyrights (the composition and the recording, their terms and history, from the Statute of Anne and Bach v. Longman to the Music Modernization Act); one composition in two recordings, heard; the Tune's own rights; Happy Birthday; each machine that broke the arrangement. Four licences; SACEM's café and ASCAP; the flow of a stream's money; US radio's gap, unmatched royalties and the MLC. One stream, heard past its 30 seconds; a month's subscription divided (11.99 dollars: 30 per cent to the service, 55 to the recording, 15 to the composition; 40 cents to each of three songwriters); a million streams at the simulated rate of 0.47 cents (4,655 dollars to rights holders; the artist credited 658 dollars on a label deal, 3,016 self-released; 224 to each songwriter). A record deal: a 150,000-dollar account recouped only after 228 million streams while the label breaks even at 50 million; 360 and distribution deals; how musicians are paid. A simulated service's month divided pro rata and user by user (niche artists +108 per cent, the stars -25, a bot farm taking 7.8 times what it paid in pro rata and only its own fees user by user); reforms of 2021 to 2024. Rosen's superstars, Krueger's concert shares, and Salganik, Dodds and Watts's MusicLab simulated (Gini 0.43 independent against 0.61 social; unpredictability 1.7 times higher; winners ranked 1st to 11th in quality), two worlds' hits heard. Charts from 1958 to streaming; a long and a short introduction heard (Lamere's skips, Léveillé Gauvin's shrinking intros); the attention economy. Baumol's cost disease with a quartet heard (x3.3 since 1966); one tour date's tickets sold at face value, one price and dynamic prices; the ticket market. How many melodies: exact collision probabilities from Part 14's model (52,206 effective eight-note openings against 2.6e10), a 5.2 per cent chance that two 60-note songs share an eight-note window, the birthday problem among 100 million songs; the Tune transposed (no note shared, every interval) against re-contoured, heard; US cases from My Sweet Lord to Thinking Out Loud. Sampling: an ear question (sample or replay?), the cases from Grand Upright to Pelham; an ear question on a model's melody against a folk song (1.9 against 2.7 bits a note); training-data lawsuits and settlements, human authorship, voices. Frontier: payout reform; licensing, attribution, memorization and detection; a research problem on calibrated probabilities of chance. Variation 60: the Tune's family of copyrights (our recording, a quartet's cover, a remix) and their statements after a million streams each.",
+        handoff="Recommendation as a social-influence world in Part 63; memorization and plagiarism tests for "
+                "machines that compose in Part 65; voices, training data and rights in Part 66; measuring fairness and "
+                "listening in Part 67; the series' own Variations performed in Part 68.",
+        outside="Part 14 for the n-gram model of melody; Part 56 for the session and the recording; Parts 57 to 59 for "
+                "mastering, codecs and live sound. Fractions and percentages, expected values, the birthday problem, "
+                "Gini coefficients, exponential growth, simple simulation. Nothing here is legal or financial advice.",
+        objectives={
+            "U": ["Hear two independently drawn melodies share an opening, one composition in two recordings, and a stream's 30 seconds.",
+                  "Hear two worlds' hits, a long and a short introduction, a quartet, and the Tune transposed and re-contoured.",
+                  "Hear a sample against an interpolation, a model's melody against a folk song, and the Tune's family of copyrights."],
+            "M": ["Divide a subscription and a million streams among their claimants, and find the streams that repay an advance.",
+                  "Divide a simulated month pro rata and user by user, and show why fraud pays only in a pool.",
+                  "Compute a melody model's collision probabilities exactly, and the birthday odds of a shared phrase."],
+            "D": ["Give courts a calibrated probability that a shared phrase arose by chance, from dated melody models."],
+            "I": ["Register, read and clear: complete credits, recoupment and reversion terms, both licences for every sample."],
+        },
+        results=[
+            ("Waterfall", r"\text{rights holders} = 70\%: \ \text{recording } 55,\ \text{composition } 15 \ (\text{illustrative})"),
+            ("Recoupment", r"n^\ast = \frac{\text{advance} + \text{costs}}{r_{\text{label}}\,\rho}"),
+            ("Pro rata", r"\text{pay}_a = \Big(\textstyle\sum_u f_u\Big)\,\frac{\sum_u s_{ua}}{\sum_{u,b} s_{ub}}, \quad \text{user-centric: } \textstyle\sum_u f_u\,\frac{s_{ua}}{\sum_b s_{ub}}"),
+            ("Collisions", r"q_k = \textstyle\sum_s P(s)^2, \ N_k = 1/q_k, \ P(\text{shared window}) \approx 1 - e^{-W^2 q_k}"),
+            ("Cost disease", r"\frac{p_{\text{performance}}}{p_{\text{goods}}} \propto e^{g(t - t_0)}"),
+        ],
+        U=(0, 1, 3, 6, 7, 8, 9, 10),
+        D=(11,),
+        I=(2, 4, 5),
+        also=(("Monochord's business module: waterfalls, recoupment, pro-rata and user-centric pools, a social-influence market, the cost disease, ticket pricing, melody collisions", "explainer/music/monochord/business.py"),),
+    ),
 ]

@@ -440,4 +440,66 @@
       note: "Move the microphone further from the loudspeaker and the edge rises by 6 dB per doubling of distance, while the howl note jumps between the peaks of the comb that the direct sound and the reflection make. Set the gain 0.5 dB under the edge and the clap rings on at the howl note; set it 6 dB under and it simply stops."
     });
   };
+
+  // ---- Part 60: dividing the pool ---------------------------------------------------------------------------------
+  function pools(v) {
+    // 1,000 paying users at the same fee; light users play few streams, mostly niche artists; heavy users play many,
+    // mostly the charts; bot accounts pay the fee and stream one fake artist all month
+    var fee = 11.99 * 0.7, n = 1000, nl = Math.round(n * v.light), nh = n - nl, bots = Math.round(v.bots);
+    var sl = v.lightStreams, sh = v.heavyStreams, sb = 14000;
+    var nicheL = 0.85, nicheH = 0.15;
+    var streams = { chart: nl * sl * (1 - nicheL) + nh * sh * (1 - nicheH), niche: nl * sl * nicheL + nh * sh * nicheH, fraud: bots * sb };
+    var total = streams.chart + streams.niche + streams.fraud, pool = (n + bots) * fee;
+    var pr = { chart: pool * streams.chart / total, niche: pool * streams.niche / total, fraud: pool * streams.fraud / total };
+    var uc = { chart: nl * fee * (1 - nicheL) + nh * fee * (1 - nicheH), niche: nl * fee * nicheL + nh * fee * nicheH, fraud: bots * fee };
+    return { pr: pr, uc: uc, pool: pool, rate: pool / total, botFees: bots * fee };
+  }
+  function poolChord(shares) {
+    var sr = 44100, n = Math.round(1.6 * sr), y = new Float32Array(n), f = [261.63, 329.63, 392.0], k = ["chart", "niche", "fraud"];
+    var tot = shares.chart + shares.niche + shares.fraud;
+    for (var j = 0; j < 3; j++) {
+      var a = 0.5 * shares[k[j]] / tot;
+      for (var i = 0; i < n; i++) {
+        var env = Math.min(1, i / 400) * Math.min(1, (n - i) / 4000);
+        y[i] += a * env * (Math.sin(2 * Math.PI * f[j] * i / sr) + 0.3 * Math.sin(4 * Math.PI * f[j] * i / sr));
+      }
+    }
+    return y;
+  }
+
+  W.pool = function (el) {
+    QB.widget(el, {
+      title: "Dividing a streaming pool",
+      sub: "A thousand subscribers each pay the same fee. Light listeners play few streams, mostly niche artists; heavy listeners play many, mostly the charts; bot accounts pay the fee and stream one fake artist all month. Bars: what each kind of artist is paid pro rata (one pool, by share of all streams; pale) and user by user (each fee divided by that user's own listening; solid). Play the two divisions as chords: C for the charts, E for the niche, G for the fake artist, each as loud as its share.",
+      panels: 1, height: 230,
+      controls: [{ k: "light", label: "Light listeners", min: 0, max: 1, step: 0.01, value: 0.45, fmt: function (x) { return (100 * x).toFixed(0) + " %"; } },
+                 { k: "lightStreams", label: "Their streams a month", min: 20, max: 800, step: 10, value: 300, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "heavyStreams", label: "Heavy listeners' streams", min: 200, max: 4000, step: 50, value: 1800, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "bots", label: "Bot accounts", min: 0, max: 50, step: 1, value: 20, fmt: function (x) { return x.toFixed(0); } }],
+      buttons: [{ label: "Play pro rata", act: function (s) { s.sound = play(poolChord(pools(s.v).pr), 44100); } },
+                { label: "Play user by user", act: function (s) { s.sound = play(poolChord(pools(s.v).uc), 44100); } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var r = pools(v), k = ["chart", "niche", "fraud"], top = 0;
+        for (var j = 0; j < 3; j++) top = Math.max(top, r.pr[k[j]], r.uc[k[j]]);
+        var a = gr[0].axes({ x: [0, 9], y: [0, top * 1.1], title: "Paid to the chart stars, the niche artists and the fake artist (dollars a month)", xlabel: "charts | niche | fake" });
+        var cols = [C.idea || "#E8B04B", "#6FA8DC", "#C0504D"];
+        for (var j2 = 0; j2 < 3; j2++) {
+          var x0 = 3 * j2 + 0.5;
+          a.line([x0 + 0.5, x0 + 0.5], [0, r.pr[k[j2]]], { color: "#8A93A0", width: 14 });
+          a.line([x0 + 1.5, x0 + 1.5], [0, r.uc[k[j2]]], { color: cols[j2], width: 14 });
+        }
+      },
+      readout: function (v, s) {
+        var r = pools(v);
+        function pc(a, b) { return (b === 0 ? 0 : 100 * (a / b - 1)).toFixed(0) + " %"; }
+        return [["pool, and the average per stream", "$" + r.pool.toFixed(0) + ", " + (100 * r.rate).toFixed(3) + " cents"],
+                ["niche artists, user by user against pro rata", pc(r.uc.niche, r.pr.niche)],
+                ["the bots pay in, and take out pro rata", "$" + r.botFees.toFixed(0) + ", $" + r.pr.fraud.toFixed(0)],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Set the light and heavy listeners to the same number of streams and the two divisions agree: the difference comes only from how much the kinds of listener play. Add bots, and pro rata pays them a share of everyone's fees; user by user they get back only their own."
+    });
+  };
 })();

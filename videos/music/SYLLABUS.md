@@ -2237,18 +2237,36 @@ IEC 60268-16; ISO 9613-1.
 *Story:* Follow one stream's fraction of a cent from a phone to a songwriter. On the way it passes two
 copyrights, four kinds of licence and half a dozen intermediaries, each created when a new machine (the player
 piano, radio, the sampler, the file, the model) broke the old arrangement.
+1. Hook: an ear question (did one copy the other?); chance; the business of music; the plan.
+2. Two copyrights: one song, two works; one composition in two recordings, heard; how long and where; the Tune's own rights; each machine broke the last arrangement.
+3. Licences and collecting societies: four licences; collecting societies; where a stream's money flows; gaps.
+4. Where a stream's money goes: one stream, heard; one month divided; a million streams; is that a lot?
+5. Deals and recoupment: a record deal; recoupment stream by stream; other deals; how musicians are paid.
+6. Dividing the pool: a simulated service; pro rata against user-centric; why fraud pays; reforms.
+7. Superstars and cumulative advantage: Rosen and Krueger; MusicLab; the experiment simulated; two worlds' hits, heard; what it means.
+8. Charts and attention: how the charts count; a long and a short introduction, heard; the attention economy.
+9. Live music: a quartet, heard; the cost disease; one night's tickets three ways; the ticket market.
+10. How many melodies are there?: counting melodies; effective numbers; the birthday problem; what makes two melodies the same, heard; in court.
+11. Sampling and machines: an ear question (sample or replay?); sampling in court; an ear question (folk song or model?); models and rights; voices and styles.
+12. Frontier: payout reform; training data; the research problem.
+13. Variation 60: the Tune's family of copyrights and their statements. Outro: problems, payoffs.
+
 *Covers:* the two copyrights and their rights; collecting societies; deals, advances and recoupment; the
 streaming pool and how to divide it; superstars and power laws; social influence and unpredictability; charts;
 the cost disease of live performance; ticket pricing; similarity lawsuits and how many melodies there are;
 sampling; AI and rights; the map of careers. Everything dated, with jurisdiction, and labelled as not legal
 advice.
-*Built and computed:* a royalty waterfall on illustrative terms; pro-rata against user-centric division on a
-simulated population; a cumulative-advantage market; the chance that two independent melodies coincide, from
-Part 14's model.
-*Variation 60:* the Tune's own family of copyrights, and a variation's statement after a million simulated
-streams.
-*Frontier:* payout reform; training-data litigation and licensing **(verify, dated)**.
-*Reading:* Passman; Krueger, *Rockonomics*; Salganik, Dodds & Watts (2006); Baumol & Bowen (1966).
+*Built and computed:* `monochord/business.py`: a royalty waterfall on illustrative terms (a million streams at 0.47
+cents: 4,655 dollars to rights holders, 224 to each of three songwriters); recoupment (228 million streams for a
+150,000-dollar account, the label even at 50 million); pro-rata against user-centric division on a simulated
+population (niche artists +108 %, a bot farm paid 7.8 times its fees pro rata); a cumulative-advantage market (Gini
+0.43 to 0.61); Baumol's cost disease; three ways to sell a night's tickets; exact collision probabilities of Part 14's
+model (52,206 effective eight-note openings against 2.6 × 10¹⁰) and the birthday odds of a shared phrase.
+*Variation 60:* the Tune's own family of copyrights (our recording, a quartet's cover, a remix that samples it), and
+each version's statement after a million simulated streams.
+*Frontier:* payout reform; training-data litigation and licensing **(verify, dated)**; a research problem on
+calibrated probabilities that a shared phrase arose by chance.
+*Reading:* Passman; Krueger, *Rockonomics*; Salganik, Dodds & Watts (2006); Baumol & Bowen (1966); Rosen (1981).
 
 ## Act XI · Listening Machines
 
