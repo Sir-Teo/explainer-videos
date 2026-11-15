@@ -67,7 +67,7 @@ class Outro(SoundScene):
         rows = {r["name"]: r for r in h["rows"]}
         card = objectives_card([
             r"a string moves almost no air; \ a body takes its energy, \ radiates it and filters it",
-            rf"a guitar's box is a plate on a bottle: \ {t['helmholtz']:.0f} and {t['plate']:.0f} Hz alone, \ {t['lower']:.0f} and {t['upper']:.0f} Hz together",
+            rf"our coupled guitar model: \ {t['helmholtz']:.0f} and {t['plate']:.0f} Hz alone, \ {t['lower']:.0f} and {t['upper']:.0f} Hz together",
             r"a delay and an average make a plucked string; \ the loop's length is the pitch",
             rf"felt stiffens as it is squeezed: \ a harder blow is shorter and brighter ({rows['soft']['centroid']:.0f} to {rows['hard']['centroid']:.0f} Hz)",
             rf"stiff strings stretch their partials; \ unisons a cent apart decay in two stages",
@@ -172,8 +172,8 @@ class Outro(SoundScene):
     def next_part(self):
         loop = VGroup(
             label(r"a steady push", font_size=30, color=GREY_A),
-            label(r"something that grips, \ and lets go", font_size=30, color=BOWED),
-            label(r"a resonator that says when", font_size=30, color=STR),
+            label(r"something that grips, \\ and lets go", font_size=30, color=BOWED),
+            label(r"a resonator \\ that sets the timing", font_size=30, color=STR),
         ).arrange(RIGHT, buff=1.1).move_to(UP * 1.6)
         arrows = VGroup(*[Arrow(loop[i].get_right(), loop[i + 1].get_left(), color=GREY_C, buff=0.12, stroke_width=3) for i in range(2)],
                         CurvedArrow(loop[2].get_bottom() + DOWN * 0.1, loop[1].get_bottom() + DOWN * 0.1, angle=-0.9, color=GREY_C, stroke_width=3))

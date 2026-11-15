@@ -9,7 +9,7 @@ from videos.music.music7.common import *  # noqa: F403
 
 class Schelleng(SoundScene):
     def construct(self):
-        chapter(self, 8, r"How hard to press", r"Why is a violin so much harder to play than a piano?", lit=(1863,), extra=((1973, r"Schelleng's diagram"),))
+        chapter(self, 8, r"How hard to press", r"What limits a steady bowed note?", lit=(1863,), extra=((1973, r"Schelleng's diagram"),))
         self.quiz()
         self.diagram()
         self.example()
@@ -29,7 +29,7 @@ class Schelleng(SoundScene):
                         Arrow(bow.get_center() + RIGHT * 1.1, bow.get_center() + RIGHT * 0.1, color=BOWED, buff=0.0, stroke_width=3),
                         DoubleArrow(a + DOWN * 0.95, bow.get_bottom() + DOWN * 0.25, color=WOOD, buff=0.0, stroke_width=3, tip_length=0.15))
         with self.voiceover(
-            "A pianist chooses one number for each note: the hammer's speed. A violinist's bow arm chooses "
+            "For an isolated piano strike, a central variable is the hammer's speed. A violinist's bow arm chooses "
             "three, and goes on choosing them for as long as the note lasts. <bookmark mark='a'/> How fast to "
             "draw the bow. <bookmark mark='b'/> How hard to press it into the string. <bookmark mark='c'/> And "
             "where on the string to put it: how far from the bridge. The Helmholtz motion of the last chapter "
@@ -142,7 +142,7 @@ class Schelleng(SoundScene):
             VGroup(label(r"largest force", font_size=28, color=BAD), MathTex(r"\propto \tfrac{1}{\text{distance}}", font_size=30), label(r"doubles", font_size=28, color=BAD)),
             VGroup(label(r"smallest force", font_size=28, color=AIR), MathTex(r"\propto \tfrac{1}{\text{distance}^2}", font_size=30), label(r"four times as large", font_size=28, color=AIR)),
             VGroup(label(r"the room between", font_size=28, color=GOOD), MathTex(r"F_{\max} / F_{\min}", font_size=30), label(r"halves", font_size=28, color=GOOD)),
-            VGroup(label(r"the force on the bridge", font_size=28, color=TUNE), MathTex(r"\propto \tfrac{\text{speed}}{\text{distance}}", font_size=30), label(r"doubles: \ 6 dB louder, \ and brighter", font_size=28, color=TUNE)),
+            VGroup(label(r"the force on the bridge", font_size=28, color=TUNE), MathTex(r"\propto \tfrac{\text{speed}}{\text{distance}}", font_size=30), label(r"doubles: \\ +6 dB in bridge-force amplitude", font_size=28, color=TUNE)),
         )
         for r in tab:
             r[0].move_to(LEFT * 5.9, aligned_edge=LEFT)
@@ -162,8 +162,8 @@ class Schelleng(SoundScene):
             "as one over the distance squared: four times as large. <bookmark mark='b'/> So the whole window "
             "moves up, and the room inside it halves. The player must press harder, and more exactly. "
             "<bookmark mark='c'/> What is the reward? The sawtooth on the bridge is proportional to bow speed "
-            "over distance, so it doubles too: six decibels louder, with a sharper corner and so more high "
-            "partials. That is how string players make a loud, brilliant sound: near the bridge, with weight. "
+            "over distance, so its amplitude doubles too: six decibels more bridge-force level in this idealization. Real near-bridge playing can also strengthen high "
+            "partials through changes in the rounded corner and contact dynamics. That is how string players make a loud, brilliant sound: near the bridge, with weight. "
             "And a soft, veiled one: out over the fingerboard, with almost none. Composers write both into "
             "the score, in Italian: sul ponticello, on the bridge, and sul tasto, on the fingerboard."
         ) as vo:
@@ -184,7 +184,7 @@ class Schelleng(SoundScene):
             (r"the map is for a note \\ already sounding", r"started from rest with a small steady force, \ Monochord's string never finds \\ the Helmholtz motion. \ It slips several times a period, \ and stays that way."),
             (r"so players bite", r"pressed firmly at first and then eased, \ the same string settles into one slip a period, \\ and keeps it at forces where it could never have begun."),
             (r"the attack has \\ its own map", r"Knut Guettler, \ 2002: \ for the first slips to come on time, \ the bow's force and \\ its acceleration must sit inside a narrow triangle."),
-            (r"a piano key cannot \\ be pressed wrongly", r"a bow can, \ in three ways at once, \ on every note. \\ That is the price of a sound that can swell, \ fade and change colour while it lasts."),
+            (r"the controls differ \\ between instruments", r"a bow can, \ in three ways at once, \ on every note. \\ That is the price of a sound that can swell, \ fade and change colour while it lasts."),
         ], left=-6.5, text_left=-2.7, top=1.9, step=1.4, name_size=26, text_size=23, color=BOWED)
         self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
@@ -196,8 +196,8 @@ class Schelleng(SoundScene):
             "it, even at forces where it could never have started. Violinists call it the bite at the start "
             "of the stroke. <bookmark mark='c'/> The attack has a map of its own, drawn by Knut Guettler in "
             "2002: bow force against bow acceleration, with a narrow triangle inside which the first few slips "
-            "arrive on time. <bookmark mark='d'/> So this is why a violin is hard and a piano is not. A piano "
-            "key cannot be pressed wrongly. A bow can, in three ways at once, on every note. That is the "
+            "arrive on time. <bookmark mark='d'/> These coupled controls make bowing demanding. A piano "
+            "also requires precise control; the bow additionally sustains the oscillation through continuous speed, force and position choices. That is the "
             "price of a sound that can swell, fade and change its colour for as long as it lasts."
         ) as vo:
             for mark, r in zip("abcd", rows):

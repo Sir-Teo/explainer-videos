@@ -34,10 +34,10 @@ class Violin(SoundScene):
         t_hill = tag(m["hill"], r"a broad hill: \ the bridge \\ and the wood under it", GOOD)
         strings = VGroup(*[VGroup(Line(g.at(f, -38), g.at(f, -34.5), color=STR, stroke_width=3), label(n, font_size=20, color=STR).next_to(g.at(f, -34.5), UP, buff=0.06)) for n, f in d["strings"].items()])
         sl = label(r"the four open strings", font_size=20, color=STR).next_to(strings, RIGHT, buff=0.3)
-        head = label(r"A violin's body, \ driven at the bridge", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
+        head = label(r"A schematic violin body, \ driven at the bridge", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Back to the box. In chapter two a guitar's body turned out to be a filter with two strong "
-            "resonances. A violin's body is the same kind of thing with more going on, and this is its "
+            "resonances. A violin's body is the same kind of thing with more going on, and this is our model's "
             "response: how strongly it answers when the bridge is pushed at each frequency. "
             "<bookmark mark='a'/> Lowest, near two hundred and seventy-five hertz, is the air in the box, "
             "moving in and out through the f-holes: the bottle again. <bookmark mark='b'/> Next, between four "
@@ -48,7 +48,7 @@ class Violin(SoundScene):
             "bridge and the wood beneath it. Part 4 showed that the ear is at its most sensitive just there. "
             "That hill is the violin's brilliance, its ability to be heard over an orchestra. "
             "<bookmark mark='d'/> Now look where the strings are. The lowest note of the violin, the open G, is "
-            "below every resonance of the body. The box hardly radiates its fundamental at all. You hear a "
+            "below the strongest modeled resonances. The box radiates its fundamental less efficiently. You hear a "
             "low G anyway, for the reason Part 4 gave: the ear rebuilds a missing fundamental from the "
             "partials above it."
         ) as vo:
@@ -125,7 +125,7 @@ class Violin(SoundScene):
             snd.drive(bars, wob)
         set_bars(bars, 0.0)
         with self.voiceover(
-            "The first note is in tune and lifeless. The second shimmers, and what shimmers is not the pitch: "
+            "The first note holds a steady pitch and colour. The second shimmers, and what changes is both pitch and "
             "it is the tone colour, changing six times a second. In 1973 Max Mathews, the father of computer "
             "music, built an electronic violin whose body was a bank of electrical resonances, and found that "
             "without sharp peaks like these it did not sound like a violin, however good the string. The "
@@ -140,7 +140,7 @@ class Violin(SoundScene):
         head = label(r"The box talks back", font_size=38, color=GREY_A).to_edge(UP, buff=0.4)
         rows = rows_card([
             (r"the bargain", r"chapter 1: \ a body must take energy from the string to make sound, \\ but not so fast that the string cannot keep its motion."),
-            (r"the wolf note", r"play the note of the strongest body resonance: \ the box drains the string \\ faster than the bow can feed it. \ The note stutters and howls, \ several times a second."),
+            (r"the wolf note", r"near a strong body resonance, coupling can disrupt \\ steady Helmholtz motion; the note can stutter and howl."),
             (r"where it lives", r"on most cellos, \ near F or F sharp on the G string. \\ The cure is a small weight on the string, \ behind the bridge."),
             (r"the maker's craft", r"plates carved and tapped until the signature modes sit where they should, \\ strong enough to sing, \ not strong enough to howl."),
         ], left=-6.5, text_left=-3.3, top=1.9, step=1.4, name_size=28, text_size=23, color=WOOD)
@@ -150,10 +150,10 @@ class Violin(SoundScene):
             "bargain from the first chapter. A body has to take energy from the string, or there is no sound. "
             "But the bowed string's motion depends on waves coming back from the bridge almost undiminished. "
             "<bookmark mark='b'/> Play the very note of the body's strongest resonance, and the bridge moves so "
-            "much that the box drains the string faster than the bow can feed it. The Helmholtz motion "
-            "collapses, the body's motion dies down, the string recovers, and round it goes, several times a "
-            "second: a stuttering howl called the wolf. In Schelleng's diagram, the minimum force has risen to "
-            "meet the maximum. <bookmark mark='c'/> Most cellos have one, near F or F sharp, and cellists tame "
+            "much that the usual nearly fixed-bridge approximation fails. Coupling can destabilize the Helmholtz motion: it "
+            "can switch between regimes as string and body exchange energy, several times a "
+            "second: a stuttering howl called the wolf. One simplified account is that the usable force window narrows; it is not always an exact meeting of "
+            "Schelleng's two limits. <bookmark mark='c'/> Most cellos have one, near F or F sharp, and cellists tame "
             "it with a small weight clamped to the string behind the bridge. <bookmark mark='d'/> So a violin "
             "maker, carving and tapping the plates, is steering between two failures: resonances too weak to "
             "sing, and resonances strong enough to howl."

@@ -65,13 +65,13 @@ class Stiff(SoundScene):
     def quiz(self):
         d = load("stiff")
         c = clip("stiff.pair")
-        q = listen_card(r"One piano note, \ twice. \ In one, \ the partials sit where a stiff string puts them. \\ In the other they have been moved onto exact whole multiples. \ Which is the real string?",
+        q = listen_card(r"One piano note, \ twice. \ In one, \ the partials sit where a stiff string puts them. \\ In the other they have been moved onto exact whole multiples. \ Which is the stiff-string model?",
                         width=10.4, font_size=26).to_edge(UP, buff=0.35)
         bx = boxes(buff=2.6, width=3.0, height=1.4).move_to(DOWN * 0.5)
         with self.voiceover(
             "Can you hear it? Here is our middle C twice. In one version the partials are where the stiff "
             "string puts them. In the other, the same partials, with the same strengths and the same decays, "
-            "have been moved onto exact whole multiples. Which is the real string?"
+            "have been moved onto exact whole multiples. Which is the stiff-string model?"
         ):
             self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(bx))
         with self.listen(c) as snd:
@@ -80,10 +80,10 @@ class Stiff(SoundScene):
                 t0 = snd.time_of(ev)
                 pulse(snd, b, t0, t0 + 2.4)
         ans = VGroup(label(r"straightened: \\ smooth, \ a little like an organ", font_size=26, color=AIR).next_to(bx[0], DOWN, buff=0.25),
-                     label(r"the real string: \\ a slight shimmer and bite", font_size=26, color=STR).next_to(bx[1], DOWN, buff=0.25))
+                     label(r"the stiff-string model: \\ a slight shimmer and bite", font_size=26, color=STR).next_to(bx[1], DOWN, buff=0.25))
         with self.voiceover(
-            "B was the real one. The difference is small on a single note in the middle of the keyboard: the "
-            "real string has a faint shimmer, a liveliness, where the straightened one is smooth and a little "
+            "B was the stiff-string model. The difference is small on a single note in the middle of the keyboard: the "
+            "stiff-string model has a faint shimmer, a liveliness, where the straightened one is smooth and a little "
             "dead, like an electric organ. Listeners asked to choose prefer some stretch: it is part of what "
             "says piano. In the bass, where the strings are thickest, it is far from small."
         ):
@@ -94,7 +94,7 @@ class Stiff(SoundScene):
     # ------------------------------------------------------------------
     def cures(self):
         rows = rows_card([
-            (r"the bass strings", r"a plain steel string for the lowest note would be seven metres long. \\ So a thin core is wrapped in copper: \ a thick string's mass, \ a thin one's stiffness."),
+            (r"the bass strings", r"winding adds mass with less bending stiffness than a solid wire of equal mass. \\ Length also depends on tension and core diameter."),
             (r"the size of the piano", r"a longer string can be thinner for the same note, \ so it is less stiff. \\ A concert grand is nearly three metres long for the sake of its bass strings."),
             (r"the tuning", r"octaves are tuned to the partials the strings really have: \\ the stretched octaves and Railsback's curve of Part 6."),
             (r"the scale itself", r"Part 5: \ a timbre with stretched partials has stretched consonances. \\ A piano is, \ very slightly, \ in a tuning of its own."),
@@ -102,12 +102,12 @@ class Stiff(SoundScene):
         head = label(r"Living with stiffness", font_size=38, color=GREY_A).to_edge(UP, buff=0.35)
         self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
-            "Stiffness shapes the whole instrument. <bookmark mark='a'/> A plain steel string for the lowest "
-            "note of a piano would have to be about seven metres long. So the bass strings are a thin steel "
-            "core wrapped in copper wire: the wrapping adds mass, which lowers the pitch, without adding "
-            "stiffness. <bookmark mark='b'/> It is why pianos are big. A longer string can be thinner for the "
+            "Stiffness shapes the whole instrument. <bookmark mark='a'/> To reduce inharmonicity at practical tension, a plain steel string for the lowest "
+            "note of a piano could need several metres; seven metres is an illustrative design estimate. So the bass strings are a thin steel "
+            "core wrapped in copper wire: the wrapping adds mass, which lowers the pitch, with much less added "
+            "bending stiffness than a solid wire of the same mass. <bookmark mark='b'/> It is why pianos are big. A longer string can be thinner for the "
             "same note, and so less stiff. A concert grand is nearly three metres long for the sake of its "
-            "bass, and a small upright, with its short fat strings, can never sound like one. "
+            "bass, and a small upright's shorter bass strings give it different inharmonicity and radiation properties. "
             "<bookmark mark='c'/> It decides the tuning: the stretched octaves of Part 6 are these partials, "
             "followed by a tuner's ear. <bookmark mark='d'/> And by Part 5, an instrument with stretched "
             "partials has stretched consonances. A piano is, very slightly, in a tuning of its own."

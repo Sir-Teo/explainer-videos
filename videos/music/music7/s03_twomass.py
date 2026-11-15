@@ -28,7 +28,7 @@ class TwoMass(SoundScene):
     def model(self):
         d = load("twomass")
         g = self.guitar()
-        names = VGroup(label(r"the top plate: \ a mass on its own spring", font_size=24, color=TUNE).next_to(g.box, UP, buff=0.3).align_to(g.box, LEFT).shift(LEFT * 1.3),
+        names = VGroup(label(r"the top plate: \ a mass on its own spring", font_size=24, color=TUNE).next_to(g.box, UP, buff=0.3).align_to(g.box, LEFT),
                        label(r"the air in the hole: \ a second mass", font_size=24, color=AIR).next_to(g.box.get_corner(UR), UP, buff=1.0).shift(RIGHT * 0.3),
                        label(r"the air in the box: \ the spring between them", font_size=24, color=GREY_A).next_to(g.box, DOWN, buff=0.25))
         ptr = Line(names[1].get_corner(DL) + RIGHT * 0.3, g.hole.get_top() + UP * 0.08, color=AIR, stroke_width=1.5)
@@ -75,7 +75,7 @@ class TwoMass(SoundScene):
             "The coupling obeys a rule that is simple enough to use at a workbench. <bookmark mark='a'/> The "
             "squares of the two resonances you get add up to the squares of the two you started with. So here "
             f"is a test. A guitar's lower resonance measures {say(d['lower'])} hertz. Cover the hole with a piece "
-            f"of card, and the plate alone rings at {say(d['plate'])}. The box, treated as a bottle, should be at "
+            f"of card, and the plate with trapped air rings at {say(d['plate'])}. The box, treated as a bottle, should be at "
             f"{say(d['helmholtz'])}. Where is the upper resonance? Pause, and work it out."
         ) as vo:
             self.play(FadeIn(title))
@@ -84,7 +84,7 @@ class TwoMass(SoundScene):
         self.wait(1.5)
         with self.voiceover(
             f"{say(d['helmholtz'])} squared plus {say(d['plate'])} squared, less {say(d['lower'])} squared, and "
-            f"take the square root: {say(d['upper'])} hertz. On real guitars the rule holds to a few hertz, and "
+            f"take the square root: {say(d['upper'])} hertz. This identity is exact for the two-mode model. More body modes, damping and leaks can shift real measurements; "
             "makers use it to find out what a plate is doing inside an instrument they cannot open."
         ):
             self.play(FadeOut(ask), FadeIn(work))
@@ -110,7 +110,7 @@ class TwoMass(SoundScene):
             "response. There the hole's air moves against the plate so exactly that the two cancel: it is the "
             "bottle's own note, the one frequency at which the guitar is nearly dumb. <bookmark mark='c'/> Now "
             "look where the guitar's lowest note is: the open sixth string, eighty-two hertz. It is below the "
-            "lowest peak. The body hardly answers at that frequency at all. So the fundamental of a guitar's "
+            "lowest peak. The model body responds less strongly there than near its resonances. So the fundamental of a guitar's "
             "bottom notes is weak, and what you hear as their pitch is, in good part, supplied by your ear from "
             "the partials above: the missing fundamental of Part 4. A guitar is too small for its own lowest "
             "notes, and gets away with it."

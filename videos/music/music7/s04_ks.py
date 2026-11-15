@@ -16,7 +16,7 @@ class Karplus(SoundScene):
     def idea(self):
         d = load("ks")
         card = history_card(1983, r"Kevin Karplus and Alex Strong, \ Stanford",
-                            r"two students with a home computer too slow for any known way of making a plucked sound.", width=5.4, font_size=20).to_corner(UL, buff=0.4)
+                            r"publish an efficient plucked-string synthesis algorithm based on a delay loop and averaging.", width=5.4, font_size=20).to_corner(UL, buff=0.4)
         code = code_block([f"line = noise({d['delay']})     # one period",
                            "repeat:",
                            "    out  = line[0]",
@@ -33,8 +33,8 @@ class Karplus(SoundScene):
                        label(r"3. \ put it back in at the start, \ averaged with its neighbour", font_size=26)).arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to(RIGHT * 3.0 + DOWN * 1.4)
         with self.voiceover(
             "Before we go on to hammers and bows, a detour into a computer, because it shows how little a "
-            "plucked string really is. In 1983 two Stanford students, Kevin Karplus and Alex Strong, wanted a "
-            "plucked-string sound from a home computer that was far too slow for anything like the simulations "
+            "plucked string really is. In 1983 Kevin Karplus and Alex Strong published an efficient way to make a "
+            "plucked-string sound without the expense of the detailed simulations "
             "of Part 1. What they found takes three lines. <bookmark mark='a'/> Take a strip of memory as long "
             "as one period of the note you want, and fill it with random numbers. <bookmark mark='b'/> Play the "
             "number at the end. <bookmark mark='c'/> Then put it back in at the beginning, averaged with its "
@@ -81,7 +81,7 @@ class Karplus(SoundScene):
             tt = snd.time_of("tune")
             snd.wait_until(0.9)
             self.remove(count)
-            count = label(r"lap 170: \ smoother", font_size=30, color=GREY_A).move_to(count)
+            count = label(rf"stored lap {nums[int(np.searchsorted(nums, 0.9 * hz, side='right') - 1)]}: \ smoother", font_size=30, color=GREY_A).move_to(count)
             self.add(count)
             snd.wait_until(tt)
             self.remove(count)
@@ -91,7 +91,7 @@ class Karplus(SoundScene):
         with self.voiceover(
             "It starts as a burst of noise, bright and sharp, and within a few dozen laps the jagged line has "
             "been smoothed into something close to a sine wave: the brightness fades and a clear pitch is left. "
-            "Which is just what a plucked string does. It was the sound of every plucked instrument in the "
+            "Which is just what a plucked string does. It became an influential method for plucked sounds in "
             "computer music and the video games of the nineteen eighties."
         ):
             self.play(Indicate(tr, color=WHITE, scale_factor=1.02))
@@ -103,7 +103,7 @@ class Karplus(SoundScene):
         d = load("ks")
         rows = VGroup(
             VGroup(label(r"the strip of memory", font_size=30, color=TUNE), label(r"is d'Alembert's travelling wave (Part 1): \ a shape going round the string and back", font_size=25, color=GREY_A)),
-            VGroup(label(r"the noise", font_size=30, color=TUNE), label(r"is the pluck: \ energy in every partial at once", font_size=25, color=GREY_A)),
+            VGroup(label(r"the noise", font_size=30, color=TUNE), label(r"is a simplified excitation: \ broadband initial energy", font_size=25, color=GREY_A)),
             VGroup(label(r"the average", font_size=30, color=TUNE), label(r"is the loss at the bridge: \ it takes most from the highest partials, \ every lap", font_size=25, color=GREY_A)),
         )
         for k, r in enumerate(rows):
@@ -115,7 +115,7 @@ class Karplus(SoundScene):
         with self.voiceover(
             "Why does it work? Because each line of it is a piece of physics we already know. "
             "<bookmark mark='a'/> The strip of memory is d'Alembert's travelling wave from Part 1: a shape going "
-            "down the string and back, once in each period. <bookmark mark='b'/> The noise is the pluck, which "
+            "down the string and back, once in each period. <bookmark mark='b'/> The noise is a simplified excitation, which "
             "puts energy into every partial at once. <bookmark mark='c'/> And the average is the loss at the "
             "bridge, which takes a little from every partial on every lap, and most from the highest. "
             f"<bookmark mark='d'/> It has a flaw. The strip is a whole number of samples long, so most pitches "
@@ -124,7 +124,7 @@ class Karplus(SoundScene):
             "delays by a fraction of a sample. <bookmark mark='e'/> With that, with a better loss filter and "
             "with a second strip for the wave going the other way, the toy becomes a serious method: the "
             "digital waveguide, worked out by Julius Smith in the same building. Its strength is that you can "
-            "put something in the middle of the string. A finger. A hammer. A bow. That is how the rest of "
+            "put something in the middle of the string. A finger. A hammer. A bow. Related numerical methods are used for the rest of "
             "this part's instruments are made."
         ) as vo:
             head = label(r"Why three lines are enough", font_size=36, color=GREY_A).to_edge(UP, buff=0.35)

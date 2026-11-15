@@ -55,7 +55,7 @@ class Hook(SoundScene):
         t2 = tally(6, 4, RIGHT * 3.6 + DOWN * 0.3)
         l2 = label(r"6 chose new, \ 4 chose a Stradivari", font_size=26).next_to(t2, DOWN, buff=0.2)
         guess = VGroup(label(r"asked which were old and which new,", font_size=28, color=GREY_A),
-                       label(r"the players did no better than chance", font_size=32, color=EAR)).arrange(DOWN, buff=0.12).move_to(RIGHT * 3.4 + DOWN * 2.4)
+                       label(r"old/new guesses: \\ not reliably above chance", font_size=30, color=EAR)).arrange(DOWN, buff=0.12).move_to(RIGHT * 3.4 + DOWN * 2.4)
         with self.voiceover(
             "Start with the most famous of them. In 2010, in a hotel room in Indianapolis with the lights turned "
             "down, twenty-one experienced violinists put on welder's goggles and tried six violins. Three were "
@@ -67,7 +67,7 @@ class Hook(SoundScene):
             "Curtin, did it again near Paris, with ten international soloists, six new violins and six old "
             "Italian ones, in a rehearsal room and then in a concert hall. <bookmark mark='c'/> Six of the ten "
             "chose a new violin. <bookmark mark='d'/> And when the players were asked to say which instruments "
-            "were old and which were new, they did no better than chance."
+            "were old and which were new, their old/new judgments were not reliably above chance in these tests. These selected instruments and settings do not establish that every old and new violin is equivalent."
         ) as vo:
             self.play(FadeIn(c1))
             vo.wait_until("a")
@@ -100,7 +100,7 @@ class Hook(SoundScene):
             "needs a box at all, and what the box does. <bookmark mark='c'/> Then the guitar's box, which turns "
             "out to be the bottle of Part 2 with a flexible lid. <bookmark mark='d'/> A way of plucking a string "
             "in a computer that takes three lines of code. <bookmark mark='e'/> The piano: a felt hammer, a "
-            "string so thick that it is partly a bar, and three strings for every note. <bookmark mark='f'/> And "
+            "string so thick that it is partly a bar, and one, two or three strings per note, depending on register. <bookmark mark='f'/> And "
             "the violin, where a bow holds the string, lets it go and catches it again, hundreds of times a "
             "second. <bookmark mark='g'/> At the end we will come back to that hotel room."
         ) as vo:

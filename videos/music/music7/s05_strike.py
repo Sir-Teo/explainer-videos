@@ -23,19 +23,19 @@ class Strike(SoundScene):
                       Line(DOWN * 0.35, DOWN * 0.35 + DL * 1.6, color=WOOD, stroke_width=6))
         head.move_to(RIGHT * 0.9 + DOWN * 0.4)
         path = ArcBetweenPoints(head[0].get_top(), string.get_start() + RIGHT * 1.0 + DOWN * 0.05, angle=-0.4, color=GREY_C, stroke_width=1.5)
-        notes = VGroup(label(r"a harpsichord plucks: \ every note the same loudness", font_size=26, color=GREY_A),
+        notes = VGroup(label(r"a harpsichord plucks: \ limited direct dynamic control by key speed", font_size=26, color=GREY_A),
                        label(r"a hammer is \emph{thrown}: \ it hits the string and bounces off", font_size=26, color=FELT),
-                       label(r"how fast it is thrown is all the player controls", font_size=28, color=TUNE)).arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to(RIGHT * 2.4 + DOWN * 2.3)
+                       label(r"hammer speed strongly shapes a single strike", font_size=28, color=TUNE)).arrange(DOWN, buff=0.22, aligned_edge=LEFT).move_to(RIGHT * 2.4 + DOWN * 2.3)
         with self.voiceover(
-            "Now the piano. A harpsichord plucks its strings with a quill, and every note comes out equally "
-            "loud whatever the player does. <bookmark mark='a'/> Around 1700, in Florence, Bartolomeo "
+            "Now the piano. A harpsichord plucks its strings with a quill. Key speed gives much less direct control of "
+            "loudness than on a piano; articulation, timing and registration still matter. <bookmark mark='a'/> Around 1700, in Florence, Bartolomeo "
             "Cristofori, who looked after the Medici's instruments, built a harpsichord that could play soft "
-            "and loud. Instead of a quill, each key threw a small hammer at the string. <bookmark mark='b'/> "
+            "and loud. Instead of a quill, each key threw a small leather-covered hammer at the string. Modern pianos use felt. <bookmark mark='b'/> "
             "Thrown is the word. The hammer is not pushed against the string: the mechanism lets go of "
             "it just before it arrives, so that it flies the last few millimetres freely, strikes, and bounces "
-            "off. <bookmark mark='c'/> So the only thing a pianist controls about a note, once the key is "
-            "going down, is how fast the hammer is travelling when it leaves. Everything else that a pianist "
-            "does with touch has to come out of that one number. Let us see how much is in it."
+            "off. <bookmark mark='c'/> For an isolated strike with fixed action and pedal settings, the main variable as the key goes "
+            "down is how fast the hammer is travelling when it leaves. Many audible changes in "
+            "attack timbre follow from that speed; pedals, timing and string state also matter. Let us see how much is in it."
         ) as vo:
             self.play(FadeIn(notes[0]))
             vo.wait_until("a")
@@ -59,7 +59,7 @@ class Strike(SoundScene):
         tags = VGroup(*[label(rf"{rows[k]['velocity']:g} m/s: \ {rows[k]['contact_ms']:.1f} ms, \ {rows[k]['peak_force']:.0f} N", font_size=24, color=cols[k]) for k in cols]).arrange(DOWN, buff=0.14, aligned_edge=LEFT)
         tags.move_to(LEFT * 3.7 + DOWN * 1.2)
         model = VGroup(label(r"Monochord's middle C:", font_size=26, color=GREY_A),
-                       label(rf"{100 * d['string']['L']:.0f} cm of steel at {d['string']['T'] / 9.81:.0f} kg of tension", font_size=24),
+                       label(rf"{100 * d['string']['L']:.0f} cm of steel; tension \\ {d['string']['T']:.0f} N ({d['string']['T'] / 9.81:.0f} kgf)", font_size=24),
                        label(rf"a hammer of {d['hammer']['mass_g']:.0f} grams of wood and felt", font_size=24),
                        MathTex(rf"\text{{felt: \ force}} = K \cdot \text{{squeeze}}^{{\,{d['hammer']['p']}}}", font_size=30, color=FELT)).arrange(DOWN, buff=0.16, aligned_edge=LEFT).move_to(LEFT * 3.7 + UP * 1.6)
         with self.voiceover(
@@ -115,7 +115,7 @@ class Strike(SoundScene):
             f"partials, has gone from {say(rows[0]['centroid'])} hertz to {say(rows[2]['centroid'])}. On a piano, "
             "loud means bright. That is not a choice the pianist makes; it is built into the felt. It is why "
             "a recording of a quiet piano, played back loud, does not sound like a loud piano, and why piano "
-            "technicians spend hours pricking hammer felt with needles to soften it: they are adjusting that "
+            "technicians spend hours pricking hammer felt with needles to soften it: they are altering contact properties, approximated here by that "
             "power of two and a half."
         ):
             self.play(Indicate(groups[2][0], color=WHITE, scale_factor=1.03))
@@ -125,15 +125,15 @@ class Strike(SoundScene):
     # ------------------------------------------------------------------
     def quiz(self):
         c = clip("hammer.quiz")
-        q = listen_card(r"Two notes, \ brought to the same loudness. \\ One was struck hard and turned down. \ One was struck softly and turned up. \ Which is which?", width=10.0, font_size=26).to_edge(UP, buff=0.4)
+        q = listen_card(r"Two notes, \ brought to the same modeled loudness. \\ One was struck hard and turned down. \ One was struck softly and turned up. \ Which is which?", width=10.0, font_size=26).to_edge(UP, buff=0.4)
         bx = boxes(buff=1.8, width=3.0, height=1.4).move_to(DOWN * 0.4)
         with self.voiceover(
-            "Test your ear on that. Two notes, adjusted to the same loudness. One was struck hard and then "
+            "Test your ear on that. Two notes, adjusted to the same modeled loudness. One was struck hard and then "
             "turned down. The other was struck softly and turned up. Which is which?"
         ):
             self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(bx))
         with self.listen(c) as snd:
-            window(snd, r"note A, \ then note B", detail=r"equal loudness", corner=DL, tag_corner=DR)
+            window(snd, r"note A, \ then note B", detail=r"matched modeled loudness", corner=DL, tag_corner=DR)
             for ev, b in zip("AB", bx):
                 t0 = snd.time_of(ev)
                 pulse(snd, b, t0, t0 + 1.8)
@@ -180,8 +180,8 @@ class Strike(SoundScene):
             "finished note this sits on top of what the felt does, which you have just heard: a gentle blow "
             "puts very little above the seventh partial anyway. Pianos have been struck between a seventh "
             "and a ninth of the way along for two centuries. Helmholtz's explanation was this one: it holds "
-            "back the seventh and ninth partials, the ones that Part 5 found had no place among the "
-            "consonances."
+            "back the seventh and ninth partials, which affect timbre. Part 5's harmonic-seventh valley also shows that a seventh partial is not inherently outside musical "
+            "consonance."
         ) as vo:
             self.play(FadeOut(ask), Create(mode))
             vo.wait_until("a")

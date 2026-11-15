@@ -16,7 +16,7 @@ class Stick(SoundScene):
     # ------------------------------------------------------------------
     def rosin(self):
         d = load("bow")
-        g = axes([0, 1.0], [0, 0.9], x_length=5.4, y_length=3.0, xlabel=r"how fast the string slides past the hair (m/s)", ylabel=r"friction, \ as a fraction of the bow's force", xticks=[0, 0.25, 0.5, 0.75, 1.0], yticks=[0, 0.3, 0.8], font_size=18)
+        g = axes([0, 1.0], [0, 0.9], x_length=5.4, y_length=3.0, xlabel=r"how fast the string slides past the hair (m/s)", ylabel=r"model friction / normal bow force", xticks=[0, 0.25, 0.5, 0.75, 1.0], yticks=[0, 0.3, 0.8], font_size=18)
         g.move_to(RIGHT * 3.5 + DOWN * 0.9)
         v = np.linspace(0, 1, 200)
         mu = d["mu_d"] + (d["mu_s"] - d["mu_d"]) * 0.05 / (0.05 + v)
@@ -34,9 +34,9 @@ class Stick(SoundScene):
             "How does a steady pull make a vibration? <bookmark mark='a'/> The secret is in the rosin. A bow is "
             "a ribbon of horsehair rubbed with dried pine resin, and rosin has a peculiar kind of friction. "
             "<bookmark mark='b'/> As long as the string is not sliding against the hair, rosin grips it hard: "
-            "the friction can be anything up to about eight tenths of the force pressing them together. But "
+            "in this simplified friction law, friction can rise to eight tenths of the force pressing them together. But "
             "once the string starts to slide, the grip collapses, to about three tenths. It is sticky when "
-            "still and slippery when moving. Every squeaking door hinge and squealing brake works the same way."
+            "still and slippery when moving. Related friction instabilities can make hinges squeak and brakes squeal; real rosin also depends on temperature and contact history."
         ) as vo:
             self.play(FadeIn(notes[0]))
             vo.wait_until("a")
@@ -88,6 +88,7 @@ class Stick(SoundScene):
         d = load("bow")
         card = history_card(1863, r"Hermann von Helmholtz", r"watches a grain of starch on a bowed string through a microscope whose lens vibrates: it traces a zigzag, not a sine.", width=5.4, font_size=20).to_corner(UL, buff=0.35)
         a, b = LEFT * 5.2 + DOWN * 0.5, RIGHT * 5.2 + DOWN * 0.5
+        slow = label(r"ideal shape; schematic slow motion", font_size=21, color=GREY_B).to_corner(UR, buff=0.4)
         tau = ValueTracker(0.08)
         string = always_redraw(lambda: VMobject(stroke_color=STR, stroke_width=4).set_points_as_corners(helmholtz_points(a, b, tau.get_value(), 1.2)))
         env = VGroup(*[VMobject(stroke_color=GREY_D, stroke_width=1.5).set_points_smoothly([a + (b - a) * x + UP * s * 4.8 * x * (1 - x) for x in np.linspace(0, 1, 30)]) for s in (1, -1)])
@@ -103,17 +104,17 @@ class Stick(SoundScene):
             "What is the whole string doing meanwhile? Helmholtz found out in the eighteen sixties, by "
             "sticking a grain of starch to a bowed string and watching it through a microscope whose lens "
             "vibrated in time with the note. He expected something like the smooth curves of Part 1. "
-            "<bookmark mark='a'/> What he saw was this. The string is never curved at all. At every moment it "
-            "is two straight lines, meeting at a corner, and the corner races round the string, out along one "
+            "<bookmark mark='a'/> What he saw was this. In this idealized Helmholtz motion, the string "
+            "forms two straight segments meeting at a corner, and the corner races round the string, out along one "
             "side and back along the other, once in every period. <bookmark mark='b'/> Watch the point under "
             "the bow. While the corner makes its long journey to the far end and back, that point moves "
             "steadily one way: it is stuck to the hair. When the corner passes it, heading for the bridge, "
             "the string snaps free; and when the corner comes back from the bridge it is caught again. The "
             "slip lasts exactly as long as the corner takes to visit the bridge and return. Hence the tenth "
-            "of the period. This is called the Helmholtz motion, and it is what every violinist, violist and "
-            "cellist is trying to produce, on every note."
+            "of the period. Real stiffness and losses round that corner. This ideal Helmholtz motion is a central regime for violinists, violists and "
+            "cellists, alongside other bowing regimes."
         ) as vo:
-            self.play(FadeIn(card), FadeIn(env), FadeIn(string), FadeIn(ends), FadeIn(bow))
+            self.play(FadeIn(card), FadeIn(env), FadeIn(string), FadeIn(ends), FadeIn(bow), FadeIn(slow))
             vo.wait_until("a")
             self.play(FadeIn(notes[0]))
             vo.wait_until("b")
@@ -144,9 +145,10 @@ class Stick(SoundScene):
             "decibel, with one exception. The tenth partial is missing. The bow is at a tenth of the length, "
             "a node of that partial, just as with the pluck and the hammer. A sawtooth with its tenth, "
             "twentieth and thirtieth partials taken out is a staircase of ten steps. <bookmark mark='c'/> "
-            "Compare the three ways of playing. A plucked string's partials fall as one over n squared. A "
-            "struck string's depend on the felt. A bowed string's fall only as one over n, and they never die "
-            "away. It is the richest signal of the three, and by itself it is harsh. Listen to the bare force, "
+            "Compare the quantities carefully. For an ideal triangular pluck, displacement partials have a "
+            "one over n squared envelope. Bridge force depends on the string's slope and adds a factor of n. "
+            "Here the bowed bridge-force amplitudes fall approximately as one over n. The sustained bow keeps "
+            "supplying energy, while a plucked or struck note decays. Listen to this bare bridge force, "
             "and then to the same force through a violin's body."
         ) as vo:
             self.play(FadeIn(g))

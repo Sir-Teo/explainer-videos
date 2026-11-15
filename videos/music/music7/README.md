@@ -3,15 +3,14 @@
 Part 7 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)). For six parts the series has had one instrument, a plucked string, heard directly.
 This part builds real instruments round it: a guitar, a piano and a violin. A string can be set going in three
-ways, by plucking, striking and bowing, and each way is a different piece of physics; and no string can be heard
-until it is fastened to a box. The instruments are Monochord's (`explainer/music/monochord/instruments/strings.py`);
+ways, by plucking, striking and bowing, and each way is a different piece of physics; and a bare string radiates weakly, while a body or membrane can couple it more effectively to air. The instruments are Monochord's (`explainer/music/monochord/instruments/strings.py`);
 every sound is computed in `compute.py`, and no instrument was recorded. Dates and attributions are the published
 ones, listed under Sources.
 
 * **Which is the Stradivari?** Four notes three times: plucked, struck, bowed, all from one string; the blind
   tests of Indianapolis (2010: thirteen of twenty-one players would take a new violin home) and Paris (2012: six
   of ten soloists); the plan.
-* **1. A string cannot be heard.** A string is too thin to move air; a body takes its energy and radiates it; an
+* **1. Why a string needs a radiator.** A string is too thin to move air; a body takes its energy and radiates it; an
   ear question (the force on the bridge, bare and through a guitar's body: what did the body do?); the body as a
   filter with peaks; a knuckle on the bridge; the bargain a body makes (loud or long).
 * **2. A plate, a hole and a box of air.** A guitar's two lowest resonances: Part 2's bottle with a flexible lid;
@@ -28,15 +27,15 @@ ones, listed under Sources.
   worked example (B = 0.00038: the tenth partial is 32 cents sharp); an ear question (the real string, or its
   partials straightened?); wound bass strings, why pianos are long, the stretched octaves of Part 6.
 * **6. Three strings for one note.** Loud or long; an ear question (one string; two in perfect unison; two a cent
-  apart); Weinreich (1977): strings that move together are heard and die, strings that move oppositely are silent
-  and last; the two-stage decay (31 dB a second, then 3); the tuner's imperfect unison; the soft pedal.
+  apart); Weinreich (1977): strings that move together are heard and die, strings that move oppositely radiate weakly
+  and last in the simplified symmetric model; the two-stage decay (31 dB a second, then 3); the tuner's imperfect unison; the soft pedal.
 * **7. Stick and slip.** Rosin: sticky when still, slippery when sliding; the string's speed under the bow (stuck
   for nine tenths of the period, flying back for one tenth, 8.6 times as fast); Helmholtz's corner (1863); the
   force on the bridge is a sawtooth (partials as 1/n, to 0.2 dB), in ten steps because the bow sits at a tenth
   of the length; the bare force and the same force through a violin's body.
 * **8. How hard to press.** Speed, force and place; an ear question (too much, right, too little); Schelleng's
   diagram (1973), with Monochord's own limits beside his formulas; a worked example (twice as near the bridge: the
-  largest force doubles, the smallest quadruples, the sound is 6 dB louder and brighter); sul ponticello and sul
+  largest force doubles, the smallest quadruples, ideal bridge-force amplitude rises by 6 dB; real brightness changes involve the contact dynamics); sul ponticello and sul
   tasto; the note has to be started (the bite; Guettler's diagram, 2002).
 * **9. The violin's box.** The body's response: the air (275 Hz), the two body modes (460 and 540 Hz), the hill
   between 2 and 3 kHz; the open G below every resonance; vibrato moves each partial along the curve, so the
@@ -127,7 +126,7 @@ python -m videos.music.labs 7                                  # the lab (writes
 
    *Solution.* The lab prints the order and the regime of each. Too little force gives a thin, whistling tone an
    octave or more above the note mixed with it (several slips a period); too much gives a growl at a lower,
-   unsteady pitch. Within the wedge the pitch is steady and the notes differ only in brightness: more force, a
+   unsteady pitch. Within the wedge the pitch is steady and the model notes can differ in spectral balance: more force, a
    sharper corner, more high partials. Two of the lab's five are outside, one on each side.
 
 4. **Build.** Add a second polarisation to `strings.pair`: each string can also move parallel to the soundboard,
@@ -149,8 +148,7 @@ python -m videos.music.labs 7                                  # the lab (writes
    into a bowed-string simulation; it is more ready to settle into the Helmholtz motion, as real strings are.
    Galluzzo and Woodhouse (2014) measured both Schelleng's and Guettler's diagrams with a bowing machine and
    compared them with the two models: each gets some features right and neither gets them all. A model of the
-   contact that predicts both diagrams for a real string, with a finite width of hair and with torsion, has not
-   been written.
+   contact that predicts both diagrams for a real string, with a finite width of hair and with torsion, remains an active modeling problem; the cited models do not capture all those effects.
 
 ## Sources
 

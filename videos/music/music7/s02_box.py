@@ -7,7 +7,7 @@ from videos.music.music7.common import *  # noqa: F403
 
 class Box(SoundScene):
     def construct(self):
-        chapter(self, 1, r"A string cannot be heard", r"Why does a string need a box?", lit=(1877,), extra=((1877, r"Rayleigh's \textit{Theory of Sound}"),))
+        chapter(self, 1, r"Why a string needs a radiator", r"Why does a string need a box?", lit=(1877,), extra=((1877, r"Rayleigh's \textit{Theory of Sound}"),))
         self.thin()
         self.pair()
         self.tap()
@@ -27,9 +27,9 @@ class Box(SoundScene):
             "Here is something we have been ignoring for six parts. A string by itself is almost silent. It is "
             "a millimetre wide. When it moves, the air in front of it simply slips round to the back, and "
             "hardly any sound is launched. Stretch a guitar string between two nails in a brick wall, pluck it, "
-            "and you will barely hear it. <bookmark mark='a'/> So every string instrument does the same thing. "
-            "The string passes over a bridge, the bridge stands on a wide thin plate of wood, and the plate, "
-            "which is big enough to push on the air properly, does the talking. What the plate feels is the "
+            "and you will barely hear it. <bookmark mark='a'/> Many acoustic string instruments use a similar solution. "
+            "The string passes over a bridge, the bridge drives a soundboard or membrane, and the plate, "
+            "which is broad enough to push on the air properly, does the talking. What the plate feels is the "
             "force of the string on the bridge. That force is what Monochord has been computing all along. "
             "<bookmark mark='b'/> And there is a bargain to be struck, the one from Part 2. A plate that takes "
             "the string's energy quickly makes a loud sound that is over soon: that is a banjo. A solid plank "
@@ -50,7 +50,7 @@ class Box(SoundScene):
         c = clip("body.pair")
         q = listen_card(r"One plucked note, \ twice. \ A is the force on the bridge, \ as we have always played it. \\ B is the same force through a guitar's body. \ What has the body done?",
                         width=10.4, font_size=26).to_edge(UP, buff=0.35)
-        g = axes([0, 3000], [-70, 5], x_length=9.6, y_length=3.0, xlabel=r"frequency (Hz)", ylabel=r"level (dB)", xticks=[0, 500, 1000, 1500, 2000, 2500, 3000], yticks=[-60, -40, -20, 0], font_size=20)
+        g = axes([0, 3000], [-70, 5], x_length=9.6, y_length=3.0, xlabel=r"frequency (Hz)", ylabel=r"level relative to each spectrum peak (dB)", xticks=[0, 500, 1000, 1500, 2000, 2500, 3000], yticks=[-60, -40, -20, 0], font_size=20)
         g.move_to(DOWN * 1.2)
         bare = curve_from(g, d["spec_f"], np.maximum(d["spec_bare"] - d["spec_bare"].max(), -70), GREY_B, stroke_width=2.5)
         body = curve_from(g, d["spec_f"], np.maximum(d["spec_body"] - d["spec_body"].max(), -70), WOOD, stroke_width=2.5)
@@ -113,7 +113,7 @@ class Box(SoundScene):
         with self.voiceover(
             "A soft thud, with a pitch you could almost sing: somewhere near the G at the bottom of a man's "
             "voice. That pitch belongs to the two lowest peaks of this curve, near a hundred and near two "
-            "hundred hertz. Every guitar has that pair. Guitar makers and violin makers have always tapped "
+            "hundred hertz. Many guitars show this characteristic pair, at frequencies that vary between instruments. Guitar makers and violin makers have always tapped "
             "their plates and listened as they carve; this curve is what they are tuning by ear. So where does "
             "that pair of peaks come from? From something we have already built."
         ):

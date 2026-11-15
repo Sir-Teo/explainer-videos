@@ -88,7 +88,7 @@ class Unison(SoundScene):
             "tuned a cent apart does something neither of the others does. It drops just as fast at first, dips, "
             f"and then comes back and settles into a slow decay: about {say(abs(d['late_db_s']))} decibels a "
             f"second instead of {say(abs(d['early_db_s']))}. After five seconds it is by far the loudest of the "
-            "three. That is the piano's two-stage decay, from nothing but a hundredth of a semitone."
+            "three. This simplified coupled-string model produces a two-stage decay from a hundredth of a semitone. Real pianos also have reactive bridge motion and two string polarizations."
         ) as vo:
             self.play(FadeOut(q))
             vo.wait_until("a")
@@ -113,7 +113,7 @@ class Unison(SoundScene):
         lb = VGroup(label(r"moving oppositely:", font_size=26, color=AIR), label(r"their pushes cancel; \ the bridge stays still.", font_size=24, color=GREY_A),
                     label(r"Quiet, \ and it rings on.", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.08, aligned_edge=LEFT).next_to(b, RIGHT, buff=0.4)
         end = VGroup(label(r"the hammer starts them together; \ a cent of mistuning lets them drift apart", font_size=26, color=GOOD),
-                     label(r"a tuner's unison is never quite perfect, \ on purpose", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.35)
+                     label(r"small unison differences can shape the decay; \ tuning practice varies", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.14).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Weinreich's explanation is one idea. The strings of a note are not independent. They share a "
             "bridge, and the bridge moves a little. <bookmark mark='a'/> If two strings move together, up and "
@@ -124,10 +124,10 @@ class Unison(SoundScene):
             "<bookmark mark='c'/> The hammer starts the strings moving together: that is the loud, fast "
             "beginning. If they are perfectly in tune they stay together, and the note simply dies. But tune "
             "them a hair apart, and they slowly slide out of step into the opposite motion, the one that "
-            "lasts. That is the singing tail. A piano tuner leaves a unison very slightly imperfect, and "
+            "lasts. That is the singing tail. A piano tuner can shape tiny unison differences, and "
             "chooses how imperfect by listening to how the note dies. And the soft pedal on a grand shifts the "
             "hammers sideways to strike two strings instead of three: the third string, left unstruck, is "
-            "pulled into the opposite motion at once, and the note is not just quieter. It sings longer."
+            "pulled into the opposite motion at once, and the note is not just quieter. Its decay and timbre can also change."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

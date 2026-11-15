@@ -4,7 +4,7 @@ TITLE = "Music, Built: Part 7, Strings, Hammers and Bows"
 
 SCENES = [
     ("s01_hook", "Hook", "Which is the Stradivari?"),
-    ("s02_box", "Box", "1. A string cannot be heard"),
+    ("s02_box", "Box", "1. Why a string needs a radiator"),
     ("s03_twomass", "TwoMass", "2. A plate, a hole and a box of air"),
     ("s04_ks", "Karplus", "3. A pluck in three lines"),
     ("s05_strike", "Strike", "4. The hammer"),
