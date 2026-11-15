@@ -123,6 +123,8 @@ LEDGER = [
      "measure": r"128 to 16 kbit/s: noise 19 dB under the mask at 128, 18 dB over it at 16"},
     {"part": 59, "title": r"at an arena: front of house, the back row, the car park", "seconds": 49.6,
      "measure": r"the back row 7 dB down, the car park 29 dB down and mostly bass"},
+    {"part": 60, "title": r"the Tune's family of copyrights: a recording, a cover, a remix", "seconds": 33.6,
+     "measure": r"a million streams each: 4,655 dollars to rights holders; the remix pays us half; the unknown composer of 1761, nothing"},
 ]
 
 
