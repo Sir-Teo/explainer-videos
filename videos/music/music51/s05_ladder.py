@@ -148,7 +148,7 @@ class Ladder(SoundScene):
             h = 3.0 * (-v) / 16
             bars.add(Rectangle(width=0.6, height=max(h, 0.03), stroke_width=0, fill_color=EAR, fill_opacity=0.8).move_to(ax.to(i, 0) + DOWN * max(h, 0.03) / 2))
         bl = VGroup(*[label(rf"$k={k}$", font_size=16, color=GREY_A).next_to(ax.to(i, 0), UP, buff=0.12) for i, k in enumerate(ks)])
-        vl = VGroup(*[label(f"{v:.1f}", font_size=15, color=WHITE).next_to(b, DOWN, buff=0.08) for b, v in zip(bars, vals)])
+        vl = VGroup(*[label(f"{v:.1f}" if v < -0.05 else "0", font_size=15, color=WHITE).next_to(b, DOWN, buff=0.08) for b, v in zip(bars, vals)])
         eq = MathTex(r"H(0) = \frac{1}{1 + k}", font_size=40).move_to(RIGHT * 3.6 + UP * 0.8)
         txt = VGroup(label(r"the bass level, \ dB", font_size=18, color=GREY_A),
                      label(r"at $k = 3$, \ the bass is a quarter of its amplitude", font_size=17, color=WHITE),
