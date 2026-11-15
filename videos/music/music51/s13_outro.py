@@ -32,7 +32,7 @@ class Outro(SoundScene):
             hi = max(n[0] for n in v) + 1
             r = mroll(v, width=9.6, height=0.9, lo=lo, hi=hi, color=col, total=48 * d["beat"], bar_h=0.07)
             rolls.append(r)
-            lanes.add(VGroup(label(t, font_size=14, color=col).set(width=None), r).arrange(RIGHT, buff=0.3))
+            lanes.add(VGroup(label(t, font_size=14, color=col), r).arrange(RIGHT, buff=0.3))
         for ln in lanes:
             ln[0].set_x(-6.9 + ln[0].width / 2)
             ln[1].set_x(1.6)

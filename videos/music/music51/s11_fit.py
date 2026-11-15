@@ -76,7 +76,7 @@ class Fit(SoundScene):
     def check(self):
         d = load("fit")
         kn, rc = d["known"], d["recovered"]
-        rows = VGroup(VGroup(label(r"", font_size=20), label(r"cutoff", font_size=20, color=GREY_A), label(r"feedback $k$", font_size=20, color=GREY_A), label(r"mix", font_size=20, color=GREY_A)),
+        rows = VGroup(VGroup(label(r"patch", font_size=20, color=GREY_A), label(r"cutoff", font_size=20, color=GREY_A), label(r"feedback $k$", font_size=20, color=GREY_A), label(r"mix", font_size=20, color=GREY_A)),
                       VGroup(label(r"hidden", font_size=20, color=GREY_A), label(rf"{kn['cutoff']:.0f} Hz", font_size=22, color=WHITE), label(rf"{kn['res']:.1f}", font_size=22, color=WHITE), label(rf"{kn['mix']:.2f}", font_size=22, color=WHITE)),
                       VGroup(label(r"found", font_size=20, color=TUNE), label(rf"{rc['cutoff']:.0f} Hz", font_size=22, color=TUNE), label(rf"{rc['res']:.1f}", font_size=22, color=TUNE), label(rf"{rc['mix']:.2f}", font_size=22, color=TUNE))).arrange(DOWN, buff=0.45)
         for r in rows:

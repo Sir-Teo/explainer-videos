@@ -37,7 +37,7 @@ class Outro(SoundScene):
             bars.add(b)
         rng = np.random.default_rng(2)
         g0, g1 = st["grains"], st["back"] - 0.3
-        specks = VGroup(*[Dot([X(g0 + (g1 - g0) * u), -1.6 + 0.12 * (60 + 24 * v - 2), 0], radius=0.025, color=interpolate_color(BLUE, EAR, v)) for u, v in zip(rng.random(260), rng.random(260))])
+        specks = VGroup(*[Dot([X(g0 + (g1 - g0) * u), -1.6 + 0.12 * (60 + 24 * v - 2), 0], radius=0.025, color=interpolate_color(ManimColor(BLUE), ManimColor(EAR), v)) for u, v in zip(rng.random(260), rng.random(260))])
         back = Rectangle(width=W * 1.6 / total, height=0.09, stroke_width=0, fill_color=TUNE, fill_opacity=1.0).move_to([X(st["back"]) + W * 0.8 / total, -1.6 + 0.12 * 2, 0])
         labs = VGroup(label(r"FM keys", font_size=17, color=TUNE).move_to([X(st["keys"] + 1.5), 1.6, 0]), label(r"FM bells", font_size=17, color=EAR).move_to([X(st["bells"] + 1.5), 1.6, 0]),
                       label(r"grains", font_size=17, color=BLUE).move_to([X((g0 + g1) / 2), 1.6, 0]), label(r"back", font_size=17, color=TUNE).move_to([X(st["back"]) + 0.3, 1.6, 0]))

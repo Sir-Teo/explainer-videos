@@ -10,7 +10,7 @@ def table_stack(tables, width=4.6, height=0.9, dx=0.32, dy=0.36, color=TUNE):
     g = VGroup()
     n = len(tables)
     for j in reversed(range(n)):
-        w = wave_path(np.array(tables[j]), width=width, height=height, color=interpolate_color(BLUE, color, j / max(n - 1, 1)), stroke=2.2)
+        w = wave_path(np.array(tables[j]), width=width, height=height, color=interpolate_color(ManimColor(BLUE), ManimColor(color), j / max(n - 1, 1)), stroke=2.2)
         w.shift(np.array([dx * j, dy * j, 0]))
         g.add(w)
     g.cycles = list(reversed(list(g)))
@@ -104,7 +104,7 @@ class Table(SoundScene):
     def spectra(self):
         d = load("table")
         cells = VGroup()
-        for p, t, col in (("0.0", r"position 0", BLUE), ("0.5", r"position 0.5", interpolate_color(BLUE, TUNE, 0.5)), ("1.0", r"position 1", TUNE)):
+        for p, t, col in (("0.0", r"position 0", BLUE), ("0.5", r"position 0.5", interpolate_color(ManimColor(BLUE), ManimColor(TUNE), 0.5)), ("1.0", r"position 1", TUNE)):
             bars = harm_bars(d["levels"][p], width=0.14, gap=0.22, floor=-50.0, height=2.0, color=col, labels=False)
             cells.add(VGroup(label(t, font_size=19, color=col), bars).arrange(DOWN, buff=0.3))
         cells.arrange(RIGHT, buff=0.9).move_to(UP * 0.1)

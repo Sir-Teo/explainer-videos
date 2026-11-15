@@ -132,7 +132,7 @@ class Grains(SoundScene):
         d = load("grains")
         g = np.array(d["cloud"])
         ax = frame_axes(width=9.0, height=3.6, xlo=0, xhi=4.0, ylo=-0.7, yhi=d["source_s"] + 0.2, center=DOWN * 0.3)
-        dots = VGroup(*[Dot(ax.to(t, p), radius=0.03, color=interpolate_color(BLUE, EAR, (np.log2(r) * 12 + 7) / 14)) for t, p, r in g])
+        dots = VGroup(*[Dot(ax.to(t, p), radius=0.03, color=interpolate_color(ManimColor(BLUE), ManimColor(EAR), (np.log2(r) * 12 + 7) / 14)) for t, p, r in g])
         diag = DashedLine(ax.to(0, 0), ax.to(4.0, 3.5), color=WHITE, stroke_width=1.5, stroke_opacity=0.6)
         xl = label(r"when the grain plays, \ s", font_size=15, color=GREY_A).next_to(ax, DOWN, buff=0.2)
         yl = label(r"where it was read, \ s", font_size=15, color=GREY_A).next_to(ax, LEFT, buff=0.2).rotate(PI / 2)
