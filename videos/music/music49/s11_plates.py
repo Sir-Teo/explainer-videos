@@ -103,13 +103,13 @@ class Plates(SoundScene):
     def spring(self):
         d = load("spring")
         c = clip("spring.hit")
-        sg = sgram(d["spec"], width=6.0, height=2.4).move_to(UP * 0.2)
+        sg = sgram(d["spec"], width=6.0, height=2.0).move_to(UP * 0.9)
         lb = label(r"the spring model's first 250 ms: \ every trip round the coil comes back smeared into a chirp", font_size=17, color=GREY_A).next_to(sg, UP, buff=0.15)
         rows_ = text_rows([
             (r"springs: \ invented for Hammond organs, \ built into guitar amplifiers from the 1960s", WHITE),
             (r"a coil is very dispersive: \ each echo returns smeared into a chirp, \ the `drip' of surf guitar", WHITE),
             (r"here modelled as a loop of 80 all-passes and a 35 ms delay: \ a stand-in for the coil's physics", TUNE),
-        ], font_size=19).to_edge(DOWN, buff=0.4)
+        ], font_size=19).to_edge(DOWN, buff=1.1)
         head = label(rf"a spring \ (RT60 {d['rt60']:.1f} s)", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Springs were cheaper still. <bookmark mark='a'/> Invented for Hammond organs, they went into guitar amplifiers "

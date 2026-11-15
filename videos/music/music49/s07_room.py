@@ -69,7 +69,7 @@ class Room(SoundScene):
         ticks = VGroup(*[label(f"{v} ms", font_size=15, color=GREY_A).next_to(ax.to(v, -1), DOWN, buff=0.1) for v in (0, 50, 100, 150, 200, 250)])
         direct = VGroup(Arrow(ax.to(d["direct_ms"] + 15, 1.2), ax.to(d["direct_ms"], 0.85), buff=0, color=WHITE, stroke_width=3),
                         label(rf"the direct sound, \ {d['direct_ms']:.1f} ms", font_size=16, color=WHITE).next_to(ax.to(d["direct_ms"] + 15, 1.2), RIGHT, buff=0.1))
-        early = label(r"early reflections: \ separate, \ countable", font_size=16, color=EAR).move_to(ax.to(40, 1.25))
+        early = label(r"early reflections: \ separate, \ countable", font_size=16, color=EAR).move_to(ax.to(95, 1.3))
         late = label(r"the late tail: \ dense as noise, \ dying away", font_size=16, color=BLUE).move_to(ax.to(170, 0.8))
         head = label(rf"a tiled room, \ {d['dims'][0]} by {d['dims'][1]} by {d['dims'][2]} m, \ its walls absorbing {100 * d['alpha']:.0f}\%", font_size=24, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
