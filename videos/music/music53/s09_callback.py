@@ -51,11 +51,11 @@ class Callback(SoundScene):
             r[0].set_x(-1.6)
             r[1].set_x(1.0)
         hdr = VGroup(label(r"block size", font_size=17, color=GREY_A).move_to([-1.6, 0, 0]), label(r"against one block of four seconds", font_size=17, color=GREY_A).move_to([1.0, 0, 0]))
-        tbl = VGroup(hdr, rows).arrange(DOWN, buff=0.35).move_to(LEFT * 1.5 + DOWN * 0.2)
+        tbl = VGroup(hdr, rows).arrange(DOWN, buff=0.35).move_to(LEFT * 3.4 + DOWN * 0.2)
         side = VGroup(label(rf"{d['voices']} notes on three tracks, \ one through a look-ahead limiter", font_size=17, color=WHITE),
                       label(r"compared sample by sample: \ equal to the last bit", font_size=17, color=TUNE),
                       label(r"because every voice, \ filter and delay keeps its state between blocks, \ and every note starts on its own sample", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(RIGHT, buff=0.4)
-        side.set_width(min(side.width, 5.5))
+        side.set_width(min(side.width, 5.0)).to_edge(RIGHT, buff=0.4)
         head = label(r"blocks must not change the music", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The first rule of an engine: the block size must not change the music. <bookmark mark='a'/> Our engine plays "

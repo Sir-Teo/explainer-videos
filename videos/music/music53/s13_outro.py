@@ -53,7 +53,9 @@ class Outro(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"Variation 53", kind="synthesized", detail=r"tracker, \ then canon", corner=DL, tag_corner=DR)
             pulse(snd, trk, st["tracker"], st["canon"] - 0.3, buff=0.12)
-            flash(snd, list(bars), times, hot=WHITE, base=GREY_D)
+            for vv in range(4):
+                idx = [i for i, row in enumerate(canon) if row[0] == vv]
+                flash(snd, [bars[i] for i in idx], [times[i] for i in idx], hot=WHITE, base=VC[vv])
             ln = Line([x0, -2.4, 0], [x0, 1.4, 0], color=WHITE, stroke_width=2, stroke_opacity=0.6)
             snd.show(ln)
             snd.drive(ln, lambda m, t: m.move_to([x0 + W_ * min(max(t - st["canon"], 0), span) / span, -0.5, 0]))
