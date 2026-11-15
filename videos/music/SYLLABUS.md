@@ -1858,12 +1858,32 @@ Origins of Musicality*.
 *Story:* Why 44,100 samples a second? Because the first digital recorders stored audio on video cassettes: three
 samples a line, 245 lines, 60 fields. Behind the accident is a theorem that sounds impossible: a smooth wave can
 be recovered exactly from its samples. The part proves it and then listens to one-bit audio.
+1. Hook: an ear question (16 bits or one bit at 3 MHz?); the errors measured; the questions; the plan.
+2. Why 44,100? Audio on videotape; the arithmetic; the compact disc; why that high and no higher.
+3. The sampling theorem: the statement; one sinc per sample; why it works; finite filters; many fathers.
+4. Aliasing: a fast wave through slow samples; folding; three tones heard; an ear question (a sweep turns round); the anti-aliasing filter.
+5. The stair-step myth: the advertisement and the curve; where the stairs go; images and droop; the stairs heard; real converters.
+6. Quantization: rounding; six decibels a bit; the rule measured; where the floor sits; an ear question (4 bits, dithered or not?).
+7. Dither: noise as a cure; the error's moments under three dithers; a sub-step tone heard; a fading note's errors heard; the theory.
+8. Noise shaping: error feedback; three spectra; the errors heard; shaping to the ear.
+9. One bit: the modulator; a bitstream drawn; one bit measured; three speeds heard; one bit in practice.
+10. Jitter and clocks: a late sample; the formula checked; periodic jitter's sidebands; jitter in practice.
+11. Resampling and the high-resolution debate: changing the rate; an ear question (16 or 48 kHz?); the studies; testing properly; conclusions.
+12. Frontier: converter limits; sampling below Nyquist; the research problem.
+13. Variation 48: the Tune at 16, 8, 4 and 1 bit. Outro: problems, payoffs.
+
 *Covers:* the sampling theorem; aliasing; reconstruction and the stair-step myth; quantization noise and the six
 decibels per bit; dither; noise shaping; delta-sigma conversion; jitter; resampling; the high-resolution debate.
-*Built and computed:* converters simulated; error spectra with and without dither; a delta-sigma modulator's
-noise shaping measured.
-*Variation 48:* the Tune at 16, 8, 4 and 1 bit, with and without dither (shown as residues; §3).
-*Frontier:* converter limits; sampling beyond Nyquist.
+*Built and computed:* `monochord/digital.py`: Whittaker–Shannon reconstruction with its truncation error (0.25 with 4
+samples per point, 0.00004 with 128); folding; the zero-order hold's images (33 dB down near 44 kHz) and droop (3.2 dB
+at 20 kHz); quantization measured against 6.02 N + 1.76 dB (within 0.1 dB from 5 bits); the error's mean and variance
+under no, RPDF and TPDF dither; error-feedback noise shaping (below 4 kHz −26 to −44 dB); one-bit delta-sigma
+modulators (9 and 15 dB per octave of oversampling; 75 dB at 64 times); jitter (−20 log₁₀ 2πfσ, to 0.1 dB) and its
+sidebands; band-limited resampling.
+*Variation 48:* the Tune at 16, 8, 4 and 1 bit, with and without dither (shown as residues; §3): 77, 29 and 5 dB; one
+bit at 64 times the rate, 62 dB.
+*Frontier:* converter limits; sampling beyond Nyquist (open: how far below Nyquist music can be sampled before
+listeners notice).
 *Reading:* Pohlmann; Lipshitz, Wannamaker & Vanderkooy (1992); Smith, *Mathematics of the DFT*.
 
 ### Part 49 · Filters, Delay and Reverb (~55)

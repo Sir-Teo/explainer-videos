@@ -643,4 +643,53 @@
       note: "After a few rounds the rhythms no longer remember where they started: they gather where the listener's prior puts them (Griffiths and Kalish 2007). That is how Jacoby and McDermott read people's rhythm priors, and why different cultures' chains end on different ratios."
     });
   };
+
+  W.dither = function (el) {
+    function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+    var KINDS = ["none", "rectangular (1 step)", "triangular (2 steps)"];
+    function render(v, n, rate, seed) {
+      var r = rng(seed), step = 2 / Math.pow(2, v.bits), amp = Math.pow(10, v.level / 20), x = new Float32Array(n), q = new Float32Array(n), es = 0, ss = 0;
+      for (var i = 0; i < n; i++) {
+        var t = i / rate, s = amp * Math.sin(2 * Math.PI * 441 * t), d = 0;
+        if (v.kind >= 1) d += (r() - 0.5) * step;
+        if (v.kind >= 2) d += (r() - 0.5) * step;
+        var y = step * Math.round((s + d) / step);
+        y = Math.max(-1, Math.min(1 - step, y));
+        x[i] = s; q[i] = y; es += (y - s) * (y - s); ss += s * s;
+      }
+      return { x: x, q: q, snr: 10 * Math.log10(ss / Math.max(es, 1e-30)) };
+    }
+    QB.widget(el, {
+      title: "Quantize a tone, with and without dither",
+      sub: "A 441 Hz sine at the level you choose is rounded to a word of the length you choose, with or without random dither added first. The plot shows two cycles: grey the sine, gold the samples that are stored. Play it to hear distortion turn into hiss.",
+      panels: 1, height: 240,
+      controls: [{ k: "bits", label: "Bits", min: 1, max: 16, step: 1, value: 4, fmt: function (x) { return x + " (" + Math.pow(2, x) + " levels)"; } },
+                 { k: "level", label: "Level", min: -60, max: 0, step: 1, value: -12, fmt: function (x) { return x + " dB below full scale"; } },
+                 { k: "kind", label: "Dither", min: 0, max: 2, step: 1, value: 0, fmt: function (x) { return KINDS[x]; } }],
+      buttons: [{ label: "Play 2 seconds", act: function (s) {
+        var rate = 44100, out = render(s.v, 2 * rate, rate, 7).q, buf = new Float32Array(out.length);
+        for (var i = 0; i < out.length; i++) buf[i] = 0.5 * out[i] * Math.min(1, i / 400, (out.length - i) / 400);
+        s.sound = play(buf, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var rate = 44100, n = 200, res = render(v, n, rate, 3), xs = [], a = [], b = [];
+        for (var i = 0; i < n; i++) { xs.push(i); a.push(res.x[i]); b.push(res.q[i]); }
+        var lim = Math.max(Math.pow(10, v.level / 20) * 1.3, 2 / Math.pow(2, v.bits) * 2);
+        var ax = g[0].axes({ x: [0, n], y: [-lim, lim], title: "Two cycles: grey the sine, gold the stored samples", xlabel: "sample (44.1 kHz)" });
+        ax.line(xs, a, { color: "#8A93A0", width: 1.5 });
+        ax.dots(xs, b, { r: 2.2, color: C.idea });
+        var full = render(v, 44100, 44100, 5);
+        s.snr = full.snr;
+      },
+      readout: function (v, s) {
+        var rule = 6.02 * v.bits + 1.76 + v.level;
+        return [["signal to error", s.snr.toFixed(1) + " dB"],
+                ["the 6 dB rule, at this level", rule.toFixed(1) + " dB" + (v.kind === 2 ? " (triangular dither costs about 4.8 dB more)" : "")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Turn the level down until the sine is only a step or two high. Without dither it becomes a buzzing square wave, or silence; with triangular dither it stays a sine, in steady noise. That is why every reduction of word length should be dithered."
+    });
+  };
 })();

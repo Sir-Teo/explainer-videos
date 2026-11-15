@@ -99,6 +99,8 @@ LEDGER = [
      "measure": r"the turn to the ending costs 1.2, 6.3 and 10.9 bits; the last note 1.2, 0.9, 10.9"},
     {"part": 47, "title": r"through thirty simulated singers", "seconds": 53.5,
      "measure": r"42 notes in, 41 out; 29 kept exactly; alignment cost 0.28 a note"},
+    {"part": 48, "title": r"at 16, 8, 4 and 1 bit, with and without dither", "seconds": 36.6,
+     "measure": r"signal to error 77 dB at 16 bits, 29 at 8, 5 at 4; one bit at 64 times the rate 62 dB"},
 ]
 
 

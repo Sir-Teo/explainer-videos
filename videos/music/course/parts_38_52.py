@@ -423,4 +423,46 @@ PARTS = [
         I=(5, 6, 7, 9, 10),
         also=(("Monochord's origins: transmission, rhythm priors, alignment and trees, nPVI, Rayleigh's test", "explainer/music/monochord/origins.py"),),
     ),
+    Part(
+        n=48, level="U", widget="dither", prereq=(2, 3, 4, 30, 47),
+        question="How can a list of numbers hold a sound exactly, and how many numbers, how precise, are enough?",
+        story="44,100 samples a second came from video: three samples a line, 245 lines, 60 fields (or 294 and 50). Behind "
+              "the accident is the sampling theorem, built here as a sum of sincs through a signal's samples (the error "
+              "falls from 0.25 with 4 samples per point to 4 in 100,000 with 128) and proved by spectral copies. Aliasing "
+              "folds 5 and 7 kHz to 3 and 1 kHz at 8 kHz sampling, and an ear question turns a sweep round; the stair-step "
+              "is a picture of a hold whose images (33 dB down near 44 kHz) a filter removes, and the steps are heard "
+              "before it does. Quantization measures 6.02 N + 1.76 dB within 0.1 dB from 5 bits up; an ear question hears "
+              "4 bits with and without dither. Dither's moments are measured: none (error tied to the input), RPDF (mean "
+              "freed), TPDF (mean and variance freed, a quarter of a step squared); a sine 0.4 of a step high vanishes "
+              "without dither and survives with it. Noise shaping cuts the error below 4 kHz from -26 to -44 dB while the "
+              "total rises; a one-bit delta-sigma modulator gains 9 and 15 dB per octave of oversampling for first and "
+              "second order (75 dB at 64 times). Jitter costs -20 log10(2 pi f sigma), measured to 0.1 dB, and periodic "
+              "jitter makes sidebands at -70 dB. Resampling, an ear question at 16 kHz, and the high-resolution debate "
+              "(Meyer and Moran; Reiss) close it.",
+        handoff="Filters, delay and reverb in Part 49; aliasing from distortion in Part 50; alias-free oscillators in Part 51; "
+                "dither and true peaks in Part 57; perceptual coding in Part 58.",
+        outside="Part 2 for waves; Part 3 for spectra and the Fourier transform; Part 4 for hearing's range and threshold; "
+                "Part 30 for sound as numbers; Part 47 for blind testing. Fourier series, convolution, probability.",
+        objectives={
+            "U": ["Hear aliasing turn a sweep round, and hear the stair-step's images before a reconstruction filter.",
+                  "Tell a 4-bit Tune with dither from one without, and a 16 kHz rate from 48 kHz.",
+                  "Hear one bit at three speeds, and flat and shaped noise as residues."],
+            "M": ["Reconstruct a band-limited signal from its samples by sinc interpolation and measure the truncation error.",
+                  "Measure SNR against 6.02 N + 1.76 dB, and the error's mean and variance under no, RPDF and TPDF dither.",
+                  "Build error-feedback noise shaping and a delta-sigma modulator, and measure their in-band SNR."],
+            "D": ["Find how far below Nyquist music can be sampled, by sparsity and l1 recovery, before listeners notice."],
+            "I": ["Choose word lengths, dither and shaping for recording, mastering and delivery; test formats blind and level-matched."],
+        },
+        results=[
+            ("Sampling theorem", r"x(t) = \textstyle\sum_n x[n]\,\mathrm{sinc}(f_s t - n), \quad f_s > 2B"),
+            ("Aliasing", r"f \mapsto |f - f_s \,\mathrm{round}(f/f_s)|"),
+            ("Quantization", r"\mathrm{SNR} = 6.02\,N + 1.76 \text{ dB}"),
+            ("TPDF dither", r"\mathrm{E}[e \mid x] = 0,\ \mathrm{Var}[e \mid x] = \Delta^2/4"),
+            ("Jitter", r"\mathrm{SNR} = -20\log_{10}(2\pi f \sigma_t)"),
+        ],
+        U=(0, 1, 2, 3, 4, 10),
+        D=(11,),
+        I=(5, 6, 7, 8, 9),
+        also=(("Monochord's converters: sampling, reconstruction, quantization, dither, shaping, delta-sigma, jitter", "explainer/music/monochord/digital.py"),),
+    ),
 ]
