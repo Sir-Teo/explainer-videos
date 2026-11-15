@@ -46,7 +46,9 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "PAVLOV_1927", "THORNDIKE_1898", "WATSON_RAYNER_1920", "HARRIS_1979", "FERSTER_SKINNER_1957", "RESCORLA_1968", "WASSERMAN_1993", "KAMIN_1969", "MAES_2016", "RESCORLA_WAGNER_1972", "LUBOW_MOORE_1959", "BOUTON_BOLLES_1979", "MACKINTOSH_PEARCE_HALL", "GALLISTEL_GIBBON_2000", "HERRNSTEIN_1961", "GARCIA_KOELLING_1966", "BRELAND_1961", "BANDURA_1961", "PRENDERGAST_2006", "ZENDLE_CAIRNS_2018", "GERSHMAN_2010", "MITCHELL_2009", "SCHILLER_2010",
            "SCHULTZ_1997", "STEINBERG_2013", "FRANK_2004", "WILSON_2014", "TOLMAN_HONZIK_1930", "TOLMAN_1948", "HAFTING_2005", "ADAMS_DICKINSON_1981", "DAW_2011", "FEHER_DA_SILVA_2020", "MOMENNEJAD_2017", "HOWE_2013", "DABNEY_2020", "REDISH_2004", "LI_2010", "WEINTRAUB_2010", "WANG_2018",
            "SIMONS_CHABRIS_1999", "RENSINK_1997", "CHERRY_1953", "BROADBENT_1958", "MORAY_1959", "TREISMAN_1960", "LAVIE_1995", "POSNER_1980", "TREISMAN_GELADE_1980", "WOLFE_2021", "ITTI_KOCH_1998", "DREW_2013", "RAYMOND_1992", "PASHLER_1994", "STROOP_1935", "ERIKSEN_1974", "BOTVINICK_2001", "ROGERS_MONSELL_1995", "MORAN_DESIMONE_1985", "REYNOLDS_HEEGER_2009", "BUNDESEN_1990", "STRAYER_2001", "OPHIR_2009", "ANDERSON_2011", "AWH_2012",
-           "MILLER_1956", "SPERLING_1960", "PETERSON_1959", "KEPPEL_UNDERWOOD_1962", "BADDELEY_HITCH_1974", "BADDELEY_1975", "SHALLICE_WARRINGTON_1970", "STERNBERG_1966", "LUCK_VOGEL_1997", "COWAN_2001", "ZHANG_LUCK_2008", "BAYS_2009", "VANDENBERG_2012", "FUNAHASHI_1989", "WIMMER_2014", "MONGILLO_2008", "DANEMAN_CARPENTER_1980", "KANE_2005", "JAEGGI_2008", "REDICK_2013", "MELBY_LERVAG_2016", "SIMONS_2016", "FTC_LUMOSITY_2016"]
+           "MILLER_1956", "SPERLING_1960", "PETERSON_1959", "KEPPEL_UNDERWOOD_1962", "BADDELEY_HITCH_1974", "BADDELEY_1975", "SHALLICE_WARRINGTON_1970", "STERNBERG_1966", "LUCK_VOGEL_1997", "COWAN_2001", "ZHANG_LUCK_2008", "BAYS_2009", "VANDENBERG_2012", "FUNAHASHI_1989", "WIMMER_2014", "MONGILLO_2008", "DANEMAN_CARPENTER_1980", "KANE_2005", "JAEGGI_2008", "REDICK_2013", "MELBY_LERVAG_2016", "SIMONS_2016", "FTC_LUMOSITY_2016",
+           "PEERS_FREE_RECALL", "CRAIK_TULVING_1975", "BERTSCH_2007", "DRESLER_2017", "GODDEN_BADDELEY_1975", "MURRE_2021", "KOHNKEN_1999",
+           "SAVINGS_REPLICATIONS", "ROEDIGER_KARPICKE_2006", "SCHOOLER_1990", "ALOGNA_2014", "LOFTUS_PALMER_1974", "ROEDIGER_MCDERMOTT_1995", "CEPEDA_2008", "LOFTUS_PICKRELL_1995", "TALARICO_RUBIN_2003", "HARDWICKE_2016", "PATIHIS_2013", "WIXTED_WELLS_2017", "DUNLOSKY_2013"]
 
 
 @dataclass(frozen=True)
@@ -3515,6 +3517,211 @@ FTC_LUMOSITY_2016 = Dataset(
     data={'redress_usd': 2000000, 'judgment_usd': 50000000},
 )
 
+_P20 = "through a web search, 2026-11-15"
+
+PEERS_FREE_RECALL = Dataset(
+    key="peers_free_recall",
+    title='Immediate free recall of 16-word lists (open data)',
+    source='Penn Electrophysiology of Encoding and Retrieval Study (PEERS), Kahana Computational Memory Lab, University of Pennsylvania; the immediate free-recall lists without an encoding task as packaged with psifr 0.10.1 (N. W. Morton, Psifr: analysis and visualization of free recall data, Journal of Open Source Software (2020)); M. K. Healey and M. J. Kahana, Is memory search governed by universal principles or idiosyncratic strategies?, Journal of Experimental Psychology: General 143 (2014) 575-596',
+    cite=r"PEERS (Kahana lab), \ via psifr",
+    checked='the data file itself, fetched from PyPI by explainer.psychology.opendata and checked by SHA-256 (the wheel and the CSV inside it); the 2014 abstract from PubMed' + ", " + _P20,
+    licence='data fetched, not redistributed',
+    data={'subjects': 126, 'lists': 3528, 'list_length': 16},
+)
+
+CRAIK_TULVING_1975 = Dataset(
+    key="craik_tulving_1975",
+    title='Depth of processing and recognition',
+    source='F. I. M. Craik and E. Tulving, Depth of processing and the retention of words in episodic memory, Journal of Experimental Psychology: General 104 (1975) 268-294; F. I. M. Craik and R. S. Lockhart, Levels of processing: a framework for memory research, Journal of Verbal Learning and Verbal Behavior 11 (1972) 671-684',
+    cite=r"Craik \& Tulving (1975)",
+    checked='the proportions recognised (Experiment 2, incidental; Experiment 9, intentional) as quoted in a review' + ", " + _P20,
+    licence='facts only',
+    data={'questions': ['case', 'rhyme', 'category'], 'incidental': [0.15, 0.48, 0.81], 'intentional': [0.23, 0.59, 0.81]},
+)
+
+BERTSCH_2007 = Dataset(
+    key="bertsch_2007",
+    title='The generation effect, meta-analysed',
+    source='S. Bertsch, B. J. Pesta, R. Wiscott and M. A. McDaniel, The generation effect: a meta-analytic review, Memory & Cognition 35 (2007) 201-210; N. J. Slamecka and P. Graf, The generation effect: delineation of a phenomenon, Journal of Experimental Psychology: Human Learning and Memory 4 (1978) 592-604',
+    cite=r"Bertsch et al.\ (2007)",
+    checked='the abstract from PubMed' + ", " + _P20,
+    licence='facts only',
+    data={'studies': 86, 'effects': 445, 'd': 0.4},
+)
+
+DRESLER_2017 = Dataset(
+    key="dresler_2017",
+    title='Memory athletes, and novices trained in the method of loci',
+    source='M. Dresler, W. R. Shirer, B. N. Konrad, N. C. J. Muller, I. C. Wagner, G. Fernandez, M. Czisch and M. D. Greicius, Mnemonic training reshapes brain networks to support superior memory, Neuron 93 (2017) 1227-1235',
+    cite=r"Dresler et al.\ (2017)",
+    checked="the paper's text at PubMed Central" + ", " + _P20,
+    licence='facts only',
+    data={'athletes_n': 23, 'athletes': 70.8, 'controls': 39.9, 'words': 72, 'trained_n': 51, 'sessions': 40, 'minutes': 30},
+)
+
+GODDEN_BADDELEY_1975 = Dataset(
+    key="godden_baddeley_1975",
+    title='Divers on land and under water',
+    source='D. R. Godden and A. D. Baddeley, Context-dependent memory in two natural environments: on land and underwater, British Journal of Psychology 66 (1975) 325-331',
+    cite=r"Godden \& Baddeley (1975)",
+    checked="the four means as transcribed by J. M. J. Murre in the data workbook of his 2021 replication (sheet 'Godden and Baddeley (1975)'), and the procedure as his paper describes it; the 1975 paper was not read" + ", " + _P20,
+    licence='facts only',
+    data={'conditions': ['DD', 'DW', 'WD', 'WW'], 'means': [13.5, 8.4, 8.6, 11.4], 'words': 36, 'delay_min': 4, 'depth_m': 7},
+)
+
+MURRE_2021 = Dataset(
+    key="murre_2021",
+    title='The divers again: a direct replication (open data)',
+    source='J. M. J. Murre, The Godden and Baddeley (1975) experiment on context-dependent memory on land and underwater: a replication, Royal Society Open Science 8 (2021) 200724; data at osf.io/q2vjk; S. M. Smith and E. Vela, Environmental context-dependent memory: a review and meta-analysis, Psychonomic Bulletin & Review 8 (2001) 203-220',
+    cite=r"Murre (2021)",
+    checked='the paper at PubMed Central, and the data workbook itself, fetched by explainer.psychology.opendata and checked by SHA-256' + ", " + _P20,
+    licence='data fetched, not redistributed',
+    data={'divers': 16, 'words': 36, 'delay_min': 4, 'pool_depth_m': 1.8, 'interaction_F': 2.0, 'interaction_p': 0.163},
+)
+
+KOHNKEN_1999 = Dataset(
+    key="kohnken_1999",
+    title='The cognitive interview, meta-analysed',
+    source='G. Kohnken, R. Milne, A. Memon and R. Bull, The cognitive interview: a meta-analysis, Psychology, Crime & Law 5 (1999) 3-27; R. P. Fisher and R. E. Geiselman, Memory-Enhancing Techniques for Investigative Interviewing: The Cognitive Interview (1992)',
+    cite=r"K\"ohnken et al.\ (1999)",
+    checked='the abstract and summaries' + ", " + _P20,
+    licence='facts only',
+    data={'studies': 42, 'comparisons': 55, 'people': 2500, 'd_correct': 0.87, 'd_incorrect': 0.24, 'accuracy_ci': 85, 'accuracy_si': 82},
+)
+
+_P21 = "through a web search, 2026-11-15"
+
+SAVINGS_REPLICATIONS = Dataset(
+    key="savings_replications",
+    title="Ebbinghaus's savings curve and three replications",
+    source="J. M. J. Murre and J. Dros, Replication and analysis of Ebbinghaus' forgetting curve, PLoS ONE 10 (2015) e0120644 (Table 3: savings of Ebbinghaus, of Mack and Seitz, and of Dros); O. Heller, W. Mack and J. Seitz, Replikation der Ebbinghaus'schen Vergessenskurve mit der Ersparnismethode, Zeitschrift fur Psychologie 199 (1991) 3-18; H. Ebbinghaus, Uber das Gedachtnis (1885)",
+    cite=r"Murre \& Dros (2015)",
+    checked="the paper at PLoS ONE (CC BY): its Table 3, the replication's procedure, and its fits of a jump at 24 hours" + ", " + _P21,
+    licence='facts only',
+    data={'intervals': ['20 min', '1 h', '9 h', '1 d', '2 d', '6 d', '31 d'], 'minutes': [20, 64, 526, 1440, 2880, 8640, 44640], 'ebbinghaus': [0.582, 0.442, 0.358, 0.337, 0.278, 0.254, 0.211], 'mack': [0.544, 0.432, 0.285, 0.316, 0.365, 0.309, 0.258], 'seitz': [0.442, 0.325, 0.27, 0.27, 0.286, 0.205, 0.201], 'dros': [0.472, 0.373, 0.276, 0.317, 0.23, 0.168, 0.041], 'dros_hours': 70},
+)
+
+ROEDIGER_KARPICKE_2006 = Dataset(
+    key="roediger_karpicke_2006",
+    title='Test-enhanced learning',
+    source='H. L. Roediger III and J. D. Karpicke, Test-enhanced learning: taking memory tests improves long-term retention, Psychological Science 17 (2006) 249-255',
+    cite=r"Roediger \& Karpicke (2006)",
+    checked='the paper' + ", " + _P21,
+    licence='facts only',
+    data={'exp1_n': 120, 'exp1_delays_days': [0.003472222222222222, 2.0, 7.0], 'exp1_restudy': [0.81, 0.54, 0.42], 'exp1_test': [0.75, 0.68, 0.56], 'exp2_n': 180, 'exp2_conditions': ['SSSS', 'SSST', 'STTT'], 'exp2_5min': [0.83, 0.78, 0.71], 'exp2_week': [0.4, 0.56, 0.61], 'exp2_predicted': [4.8, 4.2, 4.0], 'exp2_reads': [14.2, 10.3, 3.4]},
+)
+
+SCHOOLER_1990 = Dataset(
+    key="schooler_1990",
+    title='Verbal overshadowing of faces',
+    source='J. W. Schooler and T. Y. Engstler-Schooler, Verbal overshadowing of visual memories: some things are better left unsaid, Cognitive Psychology 22 (1990) 36-71',
+    cite=r"Schooler \& Engstler-Schooler (1990)",
+    checked="the counts of Studies 1 and 4 as tabulated in the Registered Replication Report's data workbooks (Alogna et al. 2014)" + ", " + _P21,
+    licence='facts only',
+    data={'study1_verbal': [17, 44], 'study1_control': [28, 44], 'study4_verbal': [18, 37], 'study4_control': [27, 38]},
+)
+
+ALOGNA_2014 = Dataset(
+    key="overshadowing_rrr",
+    title='The verbal-overshadowing Registered Replication Report (open data)',
+    source='V. K. Alogna, M. K. Attaya, P. Aucoin, S. Bahnik, S. Birch, A. R. Birt, ... and R. A. Zwaan, Registered replication report: Schooler and Engstler-Schooler (1990), Perspectives on Psychological Science 9 (2014) 556-578; data at osf.io/ybeur',
+    cite=r"Alogna et al.\ (2014)",
+    checked='the two data workbooks (Table1_updated, Table2_updated), fetched by explainer.psychology.opendata and checked by SHA-256' + ", " + _P21,
+    licence='data fetched, not redistributed',
+    data={'rrr1_labs': 31, 'rrr2_labs': 22, 'rrr1_diff': -0.04, 'rrr2_diff': -0.16},
+)
+
+LOFTUS_PALMER_1974 = Dataset(
+    key="loftus_palmer_1974",
+    title='Smashed or hit: the wording of a question',
+    source='E. F. Loftus and J. C. Palmer, Reconstruction of automobile destruction: an example of the interaction between language and memory, Journal of Verbal Learning and Verbal Behavior 13 (1974) 585-589',
+    cite=r"Loftus \& Palmer (1974)",
+    checked="summaries of the paper's two experiments" + ", " + _P21,
+    licence='facts only',
+    data={'verbs': ['smashed', 'collided', 'bumped', 'hit', 'contacted'], 'mph': [40.8, 39.3, 38.1, 34.0, 31.8], 'exp1_n': 45, 'exp2_n': 150, 'glass_yes': {'smashed': 16, 'hit': 7, 'control': 6}, 'per_group': 50},
+)
+
+ROEDIGER_MCDERMOTT_1995 = Dataset(
+    key="roediger_mcdermott_1995",
+    title='False memories for words not presented (DRM)',
+    source='H. L. Roediger III and K. B. McDermott, Creating false memories: remembering words not presented in lists, Journal of Experimental Psychology: Learning, Memory, and Cognition 21 (1995) 803-814; J. Deese, On the prediction of occurrence of particular verbal intrusions in immediate recall, Journal of Experimental Psychology 58 (1959) 17-22',
+    cite=r"Roediger \& McDermott (1995)",
+    checked='the paper' + ", " + _P21,
+    licence='facts only',
+    data={'exp1_n': 36, 'exp1_lists': 6, 'exp1_length': 12, 'exp1_studied_recall': 0.65, 'exp1_lure_recall': 0.4, 'exp1_hits': 0.86, 'exp1_lure_fa': 0.84, 'exp2_n': 30, 'exp2_lists': 24, 'exp2_length': 15, 'exp2_studied_recall': 0.62, 'exp2_lure_recall': 0.55, 'exp2_lure_remember': 0.72},
+)
+
+CEPEDA_2008 = Dataset(
+    key="cepeda_2008",
+    title='Spacing over a year: the temporal ridgeline',
+    source='N. J. Cepeda, E. Vul, D. Rohrer, J. T. Wixted and H. Pashler, Spacing effects in learning: a temporal ridgeline of optimal retention, Psychological Science 19 (2008) 1095-1102',
+    cite=r"Cepeda et al.\ (2008)",
+    checked='the paper' + ", " + _P21,
+    licence='facts only',
+    data={'n': 1354, 'facts': 32, 'retention_days': [7, 35, 70, 350], 'gaps_days_max': 105, 'optimal_ratio_week': [0.2, 0.4], 'optimal_ratio_year': [0.05, 0.1],
+          'optimal_gap_days': [3, 8, 12, 27], 'recall_gain': [0.10, 0.59, 1.11, 0.77]},  # interpolated optima; gain over a zero gap
+)
+
+LOFTUS_PICKRELL_1995 = Dataset(
+    key="loftus_pickrell_1995",
+    title='Lost in the mall: implanted childhood memories',
+    source='E. F. Loftus and J. E. Pickrell, The formation of false memories, Psychiatric Annals 25 (1995) 720-725; A. Scoboria, K. A. Wade, D. S. Lindsay, T. Azad, D. Strange, J. Ost and I. E. Hyman, A mega-analysis of memory reports from eight peer-reviewed false memory implantation studies, Memory 25 (2017) 146-163; G. Murphy, C. A. Dawson, C. Huston, L. Ballantyne, E. Barrett, C. S. Cowman, C. Fitzsimons, J. Maher, K. M. Ryan and C. M. Greene, Lost in the mall again: a preregistered replication and extension of Loftus & Pickrell (1995), Memory 31 (2023) 711-724',
+    cite=r"Loftus \& Pickrell (1995)",
+    checked='the abstracts and summaries of the three papers' + ", " + _P21,
+    licence='facts only',
+    data={'original_n': 24, 'original_rate': 0.25, 'mega_studies': 8, 'mega_n': 423, 'mega_rate': 0.304, 'replication_n': 123, 'replication_rate': 0.35},
+)
+
+TALARICO_RUBIN_2003 = Dataset(
+    key="talarico_rubin_2003",
+    title='Flashbulb memories of September 11',
+    source='J. M. Talarico and D. C. Rubin, Confidence, not consistency, characterizes flashbulb memories, Psychological Science 14 (2003) 455-461; U. Neisser and N. Harsch, Phantom flashbulbs: false recollections of hearing the news about Challenger, in E. Winograd and U. Neisser (eds), Affect and Accuracy in Recall (1992) 9-31',
+    cite=r"Talarico \& Rubin (2003)",
+    checked='the abstract' + ", " + _P21,
+    licence='facts only',
+    data={'n': 54, 'first_day': '2001-09-12', 'retest_weeks': [1, 6, 32]},
+)
+
+HARDWICKE_2016 = Dataset(
+    key="hardwicke_2016",
+    title='Reconsolidation of motor memory in people, tested again',
+    source='T. E. Hardwicke, M. Taqi and D. R. Shanks, Postretrieval new learning does not reliably induce human memory updating via reconsolidation, Proceedings of the National Academy of Sciences 113 (2016) 5206-5211; K. Nader, G. E. Schafe and J. E. LeDoux, Fear memories require protein synthesis in the amygdala for reconsolidation after retrieval, Nature 406 (2000) 722-726; M. P. Walker, T. Brakefield, J. A. Hobson and R. Stickgold, Dissociable stages of human memory consolidation and reconsolidation, Nature 425 (2003) 616-620',
+    cite=r"Hardwicke, \ Taqi \& Shanks (2016)",
+    checked='the abstract' + ", " + _P21,
+    licence='facts only',
+    data={'experiments': 7, 'direct': 4},
+)
+
+PATIHIS_2013 = Dataset(
+    key="patihis_2013",
+    title='Superior autobiographical memory and false memory',
+    source='L. Patihis, S. Y. Frenda, A. K. R. LePort, N. Petersen, R. M. Nichols, C. E. L. Stark, J. L. McGaugh and E. F. Loftus, False memories in highly superior autobiographical memory individuals, Proceedings of the National Academy of Sciences 110 (2013) 20947-20952; E. S. Parker, L. Cahill and J. L. McGaugh, A case of unusual autobiographical remembering, Neurocase 12 (2006) 35-49',
+    cite=r"Patihis et al.\ (2013)",
+    checked='the abstract' + ", " + _P21,
+    licence='facts only',
+    data={'hsam': 20, 'controls': 38},
+)
+
+WIXTED_WELLS_2017 = Dataset(
+    key="wixted_wells_2017",
+    title='Eyewitness confidence and accuracy',
+    source='J. T. Wixted and G. L. Wells, The relationship between eyewitness confidence and identification accuracy: a new synthesis, Psychological Science in the Public Interest 18 (2017) 10-65; J. T. Wixted and L. Mickes, A signal-detection-based diagnostic-feature-detection model of eyewitness identification, Psychological Review 121 (2014) 262-276; L. Mickes, Receiver operating characteristic analysis and confidence-accuracy characteristic analysis in investigations of system variables and estimator variables that affect eyewitness memory, Journal of Applied Research in Memory and Cognition 4 (2015) 93-102; G. L. Wells et al., Policy and procedure recommendations for the collection and preservation of eyewitness identification evidence, Law and Human Behavior 44 (2020) 3-36',
+    cite=r"Wixted \& Wells (2017)",
+    checked='the abstracts' + ", " + _P21,
+    licence='facts only',
+    data={'procedures': ['one suspect per line-up', 'the suspect does not stand out', 'a warning that the culprit may be absent', 'double-blind administration', 'confidence recorded at once']},
+)
+
+DUNLOSKY_2013 = Dataset(
+    key="dunlosky_2013",
+    title='Ten study techniques, rated',
+    source="J. Dunlosky, K. A. Rawson, E. J. Marsh, M. J. Nathan and D. T. Willingham, Improving students' learning with effective learning techniques, Psychological Science in the Public Interest 14 (2013) 4-58",
+    cite=r"Dunlosky et al.\ (2013)",
+    checked="the abstract and the paper's summary table" + ", " + _P21,
+    licence='facts only',
+    data={'high': ['practice testing', 'distributed practice'], 'moderate': ['elaborative interrogation', 'self-explanation', 'interleaved practice'], 'low': ['summarization', 'highlighting', 'keyword mnemonic', 'imagery for text', 'rereading']},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3548,4 +3755,6 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           PAVLOV_1927, THORNDIKE_1898, WATSON_RAYNER_1920, HARRIS_1979, FERSTER_SKINNER_1957, RESCORLA_1968, WASSERMAN_1993, KAMIN_1969, MAES_2016, RESCORLA_WAGNER_1972, LUBOW_MOORE_1959, BOUTON_BOLLES_1979, MACKINTOSH_PEARCE_HALL, GALLISTEL_GIBBON_2000, HERRNSTEIN_1961, GARCIA_KOELLING_1966, BRELAND_1961, BANDURA_1961, PRENDERGAST_2006, ZENDLE_CAIRNS_2018, GERSHMAN_2010, MITCHELL_2009, SCHILLER_2010,
                           SCHULTZ_1997, STEINBERG_2013, FRANK_2004, WILSON_2014, TOLMAN_HONZIK_1930, TOLMAN_1948, HAFTING_2005, ADAMS_DICKINSON_1981, DAW_2011, FEHER_DA_SILVA_2020, MOMENNEJAD_2017, HOWE_2013, DABNEY_2020, REDISH_2004, LI_2010, WEINTRAUB_2010, WANG_2018,
                           SIMONS_CHABRIS_1999, RENSINK_1997, CHERRY_1953, BROADBENT_1958, MORAY_1959, TREISMAN_1960, LAVIE_1995, POSNER_1980, TREISMAN_GELADE_1980, WOLFE_2021, ITTI_KOCH_1998, DREW_2013, RAYMOND_1992, PASHLER_1994, STROOP_1935, ERIKSEN_1974, BOTVINICK_2001, ROGERS_MONSELL_1995, MORAN_DESIMONE_1985, REYNOLDS_HEEGER_2009, BUNDESEN_1990, STRAYER_2001, OPHIR_2009, ANDERSON_2011, AWH_2012,
-                          MILLER_1956, SPERLING_1960, PETERSON_1959, KEPPEL_UNDERWOOD_1962, BADDELEY_HITCH_1974, BADDELEY_1975, SHALLICE_WARRINGTON_1970, STERNBERG_1966, LUCK_VOGEL_1997, COWAN_2001, ZHANG_LUCK_2008, BAYS_2009, VANDENBERG_2012, FUNAHASHI_1989, WIMMER_2014, MONGILLO_2008, DANEMAN_CARPENTER_1980, KANE_2005, JAEGGI_2008, REDICK_2013, MELBY_LERVAG_2016, SIMONS_2016, FTC_LUMOSITY_2016)}
+                          MILLER_1956, SPERLING_1960, PETERSON_1959, KEPPEL_UNDERWOOD_1962, BADDELEY_HITCH_1974, BADDELEY_1975, SHALLICE_WARRINGTON_1970, STERNBERG_1966, LUCK_VOGEL_1997, COWAN_2001, ZHANG_LUCK_2008, BAYS_2009, VANDENBERG_2012, FUNAHASHI_1989, WIMMER_2014, MONGILLO_2008, DANEMAN_CARPENTER_1980, KANE_2005, JAEGGI_2008, REDICK_2013, MELBY_LERVAG_2016, SIMONS_2016, FTC_LUMOSITY_2016,
+                          PEERS_FREE_RECALL, CRAIK_TULVING_1975, BERTSCH_2007, DRESLER_2017, GODDEN_BADDELEY_1975, MURRE_2021, KOHNKEN_1999,
+                          SAVINGS_REPLICATIONS, ROEDIGER_KARPICKE_2006, SCHOOLER_1990, ALOGNA_2014, LOFTUS_PALMER_1974, ROEDIGER_MCDERMOTT_1995, CEPEDA_2008, LOFTUS_PICKRELL_1995, TALARICO_RUBIN_2003, HARDWICKE_2016, PATIHIS_2013, WIXTED_WELLS_2017, DUNLOSKY_2013)}

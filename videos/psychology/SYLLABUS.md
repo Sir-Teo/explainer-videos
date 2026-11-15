@@ -1435,79 +1435,137 @@ Simons et al. 2016.
 *Story:* in 1885 Hermann Ebbinghaus publishes the first experiments on memory, with one subject, himself, and
 2,300 invented syllables. The next century finds lawful curves in what people recall and in what order. The best
 account is a search: you remember with a cue, and the most important cue is the slowly drifting context of your
-own mind.
-1. Hook: Ebbinghaus's method. Savings; the first forgetting curve.
-2. On you: free recall of a fifteen-word list.
-3. The serial position curve (Murdock 1962): primacy and recency; what a delay and a distractor do to each.
-4. The order of recall: contiguity. After recalling a word you recall its neighbour, forward more than backward
-   (Kahana 1996). The lag-CRP curve of your own recall.
-5. Encoding: levels of processing (Craik and Lockhart 1972); the generation effect; imagery and the method of
-   loci.
-6. Cues: encoding specificity (Tulving and Thomson 1973); context-dependent memory under water (Godden and
-   Baddeley 1975) and its replication record; state dependence.
-7. Search of associative memory (Raaijmakers and Shiffrin 1981): sampling by cue strength, recovery, stopping.
-   The model run on the list.
-8. Context that drifts: the temporal context model (Howard and Kahana 2002). Recency and contiguity from one
-   mechanism (derived, computed).
-9. Memories as attractors: the Hopfield network (1982). Storage by Hebb's rule, recall by settling, capacity near
-   0.14 N (computed; link to *AI, Built* Part 20).
-10. Memory systems: H.M. again; episodic and semantic (Tulving); declarative and procedural; priming. One system
-    or several, and what dissociations can show (Part 7).
-11. Recognition against recall: familiarity and recollection, and the SDT account (Part 12).
-12. The hippocampus as index: pattern separation and completion; time cells.
+own mind. Fitted to 3,528 open lists, that account predicts each next word far better than position alone, and
+fails one test that shows what it lacks.
+0. Hook: Ebbinghaus's method and savings; free recall of a sixteen-word list on you; the questions; objectives.
+1. Ebbinghaus's seven savings with three laws fitted (his formula k = 1.82, c = 1.21; a power law; an exponential
+   that cannot bend both ways); ACT-R's base-level activation (one, three and ten uses); Anderson and Schooler
+   (1991): forgetting tracks the odds of need.
+2. Scoring your sheet; serial position and first recall on PEERS (126 people, 3,528 lists: 82%, about 57%, 92%; 45%
+   of recalls start at the last word); Murdock (1962); Glanzer and Cunitz (1966) and Rundus (1971): two stores.
+3. The lag-CRP derived with its denominators (a worked sequence); contiguity on PEERS (+1 0.45, −1 0.26); person by
+   person (89% lean forward, 98% show recency; Healey and Kahana 2014); long-term recency (Bjork and Whitten 1974;
+   Baddeley and Hitch's rugby players; Howard and Kahana 1999).
+4. Levels of processing (Craik and Lockhart 1972; Craik and Tulving 1975: about 15, 48 and 81% recognised); transfer-
+   appropriate processing (Morris, Bransford and Franks 1977); the generation effect (Slamecka and Graf 1978;
+   Bertsch et al. 2007, d = 0.40); the method of loci (Dresler et al. 2017).
+5. Encoding specificity (Tulving and Thomson 1973); the divers (Godden and Baddeley 1975: 13.5, 8.4, 8.6, 11.4) and
+   Murre's replication from his open data (2021: per-diver effect −1.25 words, exact sign-flip p = 0.055; a warm
+   pool, one session); Smith and Vela (2001); state dependence (Goodwin et al. 1969; Eich 1980).
+6. SAM (Raaijmakers and Shiffrin 1981): the rehearsal buffer, sampling, recovery, stopping, simulated; symmetric
+   contiguity and no long-term recency.
+7. The temporal context model derived (Howard and Kahana 2002; CMR, Polyn, Norman and Kahana 2009): the drift and
+   ρ = √(1 − β²); context similarity ρ^|i−j|; recency from a choice rule and the ratio argument; contiguity's forward
+   lean from reinstated context.
+8. CMR fitted by maximum likelihood to every other PEERS list (nine parameters; ρ = 0.31, γ = 0.10); checked on the
+   other half (2.67 bits per recall against 3.23 for serial position alone and 3.30 for chance); tested on two other
+   designs: it reproduces Glanzer and Cunitz and fails Bjork and Whitten (Sederberg, Howard and Kahana 2008 pass).
+9. Memories as attractors: the Hopfield network (1982), its energy argument, a ring recovered from a corrupted cue,
+   capacity derived from crosstalk and computed (0.138 N; Amit, Gutfreund and Sompolinsky 1985); modern Hopfield
+   networks and attention (*AI, Built*).
+10. Memory systems: H.M. again (Scoville and Milner 1957; Milner 1962); episodic and semantic (Tulving 1972); Squire's
+    taxonomy; priming in amnesia (Warrington and Weiskrantz 1970; Graf, Squire and Mandler 1984); what dissociations
+    can show (Part 7).
+11. Recognition: the butcher on the bus (Mandler 1980), remember and know (Tulving 1985); dual-process and unequal-
+    variance ROCs and z-ROCs (Yonelinas 1994; Part 12); where the two processes are (Yonelinas et al. 2002; Wixted
+    2007; Squire et al. 2007).
+12. The hippocampus as an index (Marr 1971; Teyler and DiScenna 1986); pattern separation computed (inputs sharing
+    80% give codes sharing 38%; Leutgeb et al. 2007); time cells (MacDonald et al. 2011), context reinstatement in
+    the brain (Manning et al. 2011), engrams (Part 5).
+13. The Ledger. 14. In practice: the cognitive interview (Köhnken et al. 1999: d = 0.87, 85% against 82% accurate);
+    telescoping and landmarks in surveys (Loftus and Marburger 1983); word-list tests in the clinic. 15. Frontier: one
+    system or many (Berry, Shanks and Henson 2008); from lists to lives (Uitvlugt and Healey 2019); induction heads
+    that behave like CMR (Ji-An et al. 2024).
 
-*Psyche:* `memory`: SAM and a temporal-context model fitted to open free-recall data (serial position and lag-CRP
-together); a Hopfield network with its capacity curve; ACT-R's activation equation.
-*On you:* Battery task 6: your serial-position and contiguity curves.
-*Ledger:* serial position and contiguity (`replicated`); levels of processing (`replicated`); the testing effect
-(preview, `replicated`); underwater context dependence (`contested`: a 2021 replication did not find it
-**(verify)**).
-*In practice:* mnemonic techniques, interview and survey design (what cues recall), memory assessment in the
-clinic.
-*Frontier:* one memory system or many; whether context models scale from lists to lives; the engram and the
-model's "context".
+*Psyche:* `memory`: forgetting laws; the serial-position curve, first recall and the lag-CRP; SAM; CMR with distractor
+drift, its exact likelihood and a maximum-likelihood fit, against a serial-position baseline; a Hopfield network and
+its capacity; ACT-R's activation; dual-process and unequal-variance ROCs; pattern separation. `opendata`: PEERS free
+recall (from the psifr wheel) and Murre's divers (from his OSF workbook), fetched on first use and checked by SHA-256.
+*On you:* free recall of a sixteen-word list in the film; the interactive is free recall (three lists of ten), with
+the reader's serial-position and lag-CRP curves.
+*Ledger:* serial position (`replicated`); contiguity (`replicated`); levels of processing (`replicated`); the
+generation effect (`replicated`); encoding specificity (`replicated`); underwater context dependence (`contested`).
+Shown without rows, with reasons: Ebbinghaus (Part 21), Anderson and Schooler, SAM and Hopfield (models), H.M., the
+systems taxonomy and priming dissociations, recognition's two processes, indexing theory, time cells and the engram,
+Dresler et al. (Part 54), Köhnken et al. (Part 56), Loftus and Marburger, Berry et al., Ji-An et al.
+*In practice:* the cognitive interview, survey recall and landmarks, memory assessment in the clinic.
+*Frontier:* one memory system or many; whether context models scale from lists to lives; context models inside
+language models.
 *Reading:* Ebbinghaus 1885; Murdock 1962; Tulving & Thomson 1973; Raaijmakers & Shiffrin 1981; Howard & Kahana
-2002; Hopfield 1982; Kahana, *Foundations of Human Memory*; Baddeley, Eysenck & Anderson, *Memory*.
+2002; Polyn, Norman & Kahana 2009; Hopfield 1982; Kahana, *Foundations of Human Memory*; Baddeley, Eysenck &
+Anderson, *Memory*.
 
 ### Part 21 · Memory II: Forgetting and Inventing (~55)
 *Question:* why do we forget, and why do we remember things that never happened?
 *Story:* Elizabeth Loftus shows people a film of a car crash and changes one word in the question. A week later
-those asked about cars that "smashed" remember broken glass. There was none. Memory is reconstruction, which
-explains its efficiency and its errors, and the same mechanisms tell you how to study and how not to run a
-police interview.
-1. Hook: Loftus and Palmer (1974).
-2. The shape of forgetting: exponential or power? Jost's law; Wixted's analysis; Ebbinghaus's curve replicated in
-   2015.
-3. Why: decay against interference (Jenkins and Dallenbach's sleepers, 1924); proactive and retroactive
-   interference; retrieval-induced forgetting.
-4. Consolidation: retrograde amnesia's gradient; sleep and replay; reconsolidation (Nader et al. 2000) and its
-   limits in people.
-5. Complementary learning systems (McClelland, McNaughton and O'Reilly 1995): why a fast and a slow learner;
-   catastrophic interference shown in a small network, and interleaving as the cure (link to *AI, Built*).
-6. Spacing: Ebbinghaus onward; the optimal gap grows with the retention interval (Cepeda et al. 2008).
-7. Testing: retrieval practice beats restudy after a delay, and students predict the opposite (Roediger and
-   Karpicke 2006). Returns in Part 54.
-8. Bartlett's "War of the Ghosts" (1932): schemas and reconstruction.
-9. On you: the DRM lists (Roediger and McDermott 1995). You will remember a word that was not there.
-10. Misinformation and implantation: "lost in the mall" (1995), its replication, and how implantation rates
-    depend on scoring.
-11. Confidence, flashbulb memories (vivid, confident, and no more accurate), and eyewitnesses (taken to court in
-    Part 56).
-12. Exceptional memories: mnemonists, highly superior autobiographical memory, and what they do not show.
+those asked about cars that "smashed" remember broken glass. There was none. Memory loses what it had and gains what
+it never had, and both come from one design: a memory that keeps the gist, rewrites itself when used, and has to
+infer where its contents came from. The same mechanisms say how to study, and how not to run a line-up.
+0. Hook: Loftus and Palmer (1974: speeds of 40.8 to 31.8 mph by the verb; broken glass 16, 7 and 6 of 50); the DRM
+   SLEEP list and a remember/know test on you; the questions; objectives.
+1. The shape of forgetting: savings for Ebbinghaus, Mack and Seitz (Heller et al. 1991) and Dros (Murre and Dros
+   2015) with a possible jump at a day; four laws compared by AIC (the power law best for three of four, the
+   logarithm for Dros, the exponential never); Jost's law from the power law's hazard b/t; the averaging artefact
+   derived (a gamma mixture of exponentials is (1 + θt)^−k; Anderson and Tweney 1997).
+2. Why: decay or interference (Jenkins and Dallenbach 1924); proactive interference (Underwood 1957: about 75% to
+   25%); retroactive interference in a linear associator against cue overlap; retrieval-induced forgetting (Anderson,
+   Bjork and Bjork 1994; Murayama et al. 2014).
+3. Consolidation: Müller and Pilzecker (1900), Ribot's gradient, H.M.; a two-store model solved in closed form
+   (after Alvarez and Squire 1994); replay in sleep (Wilson and McNaughton 1994) and targeted memory reactivation
+   (Rasch et al. 2007); reconsolidation (Nader, Schafe and LeDoux 2000) and its record in people (Hardwicke, Taqi and
+   Shanks 2016).
+4. Two ways to learn: catastrophic interference (McCloskey and Cohen 1989); Rumelhart's semantic network taught the
+   penguin, focused (a robin now flies 0.36 and swims 0.35) or interleaved (it still flies 0.84); complementary
+   learning systems (McClelland, McNaughton and O'Reilly 1995) and replay buffers.
+5. Spacing: Ebbinghaus's 38 against 68 repetitions; Cepeda et al. (2006, 2008: 1,354 people, 26 gap-by-interval
+   cells, optimal gaps of about 3, 8, 12 and 27 days); Pavlik and Anderson's activation-dependent decay derived and
+   run: the model's best gaps (48, 18, 12 and 6% of the interval) match the timing, and its gains are far too small.
+6. Testing: Roediger and Karpicke (2006: restudy wins at 5 minutes, testing by 14 points at 2 days and a week;
+   SSSS against STTT, 40 against 61% a week later, with the opposite predictions); the bifurcation model (Kornell,
+   Bjork and Garcia 2011) derived and fitted (a recall adds 1.3 times what a re-reading adds; 75% predicted on the
+   first test, about 70% observed).
+7. Remembering as rebuilding: Bartlett's War of the Ghosts (1932) and its replication (Bergman and Roediger 1999);
+   Huttenlocher, Hedges and Duncan's dots (1991); the category adjustment model derived as a posterior mean, and
+   computed (bias toward the prototype; error 15.4° instead of 19.9° for the noisiest trace).
+8. Words that were never there: the viewer's test scored; Roediger and McDermott (1995: lure recall .40 and .55,
+   recognised .84 against .86, 72% "remembered"); global matching derived (after Arndt and Hirshman 1998) and
+   computed; activation-monitoring and fuzzy-trace accounts.
+9. Suggestion: misinformation (Loftus, Miller and Burns 1978); source monitoring (Johnson, Hashtroudi and Lindsay
+   1993); lost in the mall (Loftus and Pickrell 1995; Scoboria et al. 2017: 30% of 423; Murphy et al. 2023: 35%) and
+   what it does not show; verbal overshadowing (Schooler and Engstler-Schooler 1990: −25 points) and the first
+   Registered Replication Report from its open data (Alogna et al. 2014: −16 points in 22 labs, −4 in 31).
+10. Confidence and accuracy: flashbulb memories (Brown and Kulik 1977; Neisser and Harsch; Talarico and Rubin 2003);
+    Jennifer Thompson and Ronald Cotton; Wixted and Wells (2017); a line-up by signal detection with the max rule
+    and the confidence-accuracy characteristic computed (Wixted and Mickes 2014).
+11. Remembering too much: S. (Luria 1968); highly superior autobiographical memory (Parker, Cahill and McGaugh 2006)
+    and its false memories (Patihis et al. 2013); why a good memory forgets (Richards and Frankland 2017).
+12. The Ledger. 13. In practice: Dunlosky et al.'s ten techniques (2013); Leitner's boxes, SuperMemo and half-life
+    regression (Settles and Meeder 2016) fitted to simulated learners and checked on held-out practice; line-up
+    procedures (Wells et al. 2020), interviews, imagination inflation in therapy (Garry et al. 1996). 14. Frontier:
+    weakening fear by reconsolidation (Kindt, Soeter and Vervliet 2009; Brunet et al. 2018); silent engrams (Ryan et
+    al. 2015); elastic weight consolidation, replay and unlearning in machines (Kirkpatrick et al. 2017).
 
-*Psyche:* `memory`: forgetting functions fitted to Ebbinghaus's and modern data; a complementary-learning-systems
-pair of networks; a spacing model that reproduces the optimal-gap ridge; a schema model that produces the DRM
-lure.
-*On you:* the DRM lists; a retention-interval prediction.
-*Ledger:* the misinformation effect (`replicated`); DRM false recall (`replicated`); the testing effect
-(`replicated`); the spacing effect (`replicated`); reconsolidation-based erasure in humans (`contested`);
-repressed and recovered memories (`contested`; told in Part 56).
-*In practice:* study methods, spaced-repetition software (Part 54), cognitive interviewing, the courtroom.
-*Frontier:* what sleep replay does in humans; whether forgetting is adaptive (rational analysis, Part 58);
-editing memories.
-*Reading:* Loftus & Palmer 1974; Bartlett 1932; McClelland, McNaughton & O'Reilly 1995; Roediger & Karpicke 2006;
-Roediger & McDermott 1995; Cepeda et al. 2008; Wixted 2004; Schacter, *The Seven Sins of Memory*; Murre & Dros
-2015.
+*Psyche:* `memory` (Part 21's half): four forgetting laws with AIC, Jost's law and the gamma mixture; associator
+interference; a two-store consolidation model; Rumelhart's semantic network and the penguin; Pavlik and Anderson's
+spacing model and ridge; the bifurcation model and its fit; category adjustment; DRM by global matching; line-ups
+by signal detection with the CAC; half-life regression. `opendata`: the two verbal-overshadowing workbooks
+(osf.io/ybeur), fetched on first use and checked by SHA-256.
+*On you:* the DRM list and a remember/know test in the film; the interactive is a DRM experiment (four lists, each
+built around a word it leaves out, with remember, know or new).
+*Ledger:* the forgetting curve (`replicated`; Part 20's deferred row); the spacing effect (`replicated`); the
+testing effect (`replicated`); DRM false memory (`replicated`); the misinformation effect (`replicated`); implanted
+memories (`replicated`); reconsolidation updating in people (`contested`); verbal overshadowing (`replicated,
+smaller`). Shown without rows, with reasons: the interference and consolidation history, retrieval-induced
+forgetting, the models (Pavlik and Anderson, Kornell et al., Huttenlocher et al., McClelland et al., Wixted and
+Mickes), Bartlett, source monitoring, Luria's S., flashbulb memories and eyewitness confidence (Part 56), the
+study-techniques review (Part 54), and the frontier.
+*In practice:* study techniques, spaced-repetition software with half-life regression, line-ups, interviews and
+therapy.
+*Frontier:* weakening memories by reconsolidation; silent engrams and whether forgetting is lost storage or lost
+access; continual learning and unlearning in machines.
+*Reading:* Loftus & Palmer 1974; Murre & Dros 2015; Wixted & Ebbesen 1991; Underwood 1957; McClelland, McNaughton &
+O'Reilly 1995; Cepeda et al. 2008; Roediger & Karpicke 2006; Bartlett 1932; Roediger & McDermott 1995; Alogna et al.
+2014; Wixted & Wells 2017; Schacter, *The Seven Sins of Memory*; Brown, Roediger & McDaniel, *Make It Stick*.
 
 ### Part 22 · Concepts and Categories (~50)
 *Question:* what do you know when you know what a bird is?
@@ -3359,3 +3417,5 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 17 | built, English and Chinese: 14 chapters, hook and outro; Psyche's reinforcement learning (`psyche/rl.py`, seven tests) with the part's own simulations of Steinberg's and Frank's designs and a bandit test, four Ledger rows, seventeen Archive datasets; course entry, lab and interactive (two slot machines: eighty pulls, the reader's α and β fitted on the page) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 42 min |
 | 18 | built, English and Chinese: 15 chapters, hook and outro; Psyche's attention (`psyche/attention.py`, seventeen tests) with Battery tasks 3 and 4 (Stroop, visual search), six Ledger rows (one deferred from Part 16), twenty-five Archive datasets; course entry, lab and interactive (feature and conjunction search, the reader's slopes measured on the page) checked; narration table and on-screen text translated and dry-run. Act V begins. Open checks in its README | 51 min |
 | 19 | built, English and Chinese: 13 chapters, hook and outro, with digit span played in the film; Psyche's working memory (`psyche/wm.py`, sixteen tests) with Battery task 5 (change detection) and the series' first open trial-level data (`opendata.py`: Bays, Catalao and Husain 2009, fetched and checked by SHA-256, four process models fitted to every observer), six Ledger rows, twenty-three Archive datasets; course entry, lab and interactive (change detection: the reader's K at four set sizes) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 52 min |
+| 20 | built, English and Chinese: 15 chapters, hook and outro, with free recall played in the film; Psyche's memory (`psyche/memory.py`, fourteen tests) with the context model fitted by maximum likelihood to open free-recall data (PEERS) and checked on held-out lists, and Murre's divers from his open data (`opendata.py`), six Ledger rows, seven Archive datasets; course entry, lab and interactive (free recall: the reader's serial-position and lag-CRP curves) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 62 min |
+| 21 | built, English and Chinese: 14 chapters, hook and outro, with the DRM illusion played in the film; Psyche's memory module gains forgetting and inventing (`psyche/memory.py`, thirteen more tests in `test_forget.py`): four forgetting laws, a two-store consolidation model, the penguin in a semantic network, the spacing and bifurcation models, category adjustment, global matching, line-ups by signal detection and half-life regression; the verbal-overshadowing Registered Replication Report from its open data (`opendata.py`), eight Ledger rows, thirteen Archive datasets; course entry, lab and interactive (the DRM lists with remember, know or new) checked; narration table and on-screen text translated and dry-run. Open checks in its README | LEN |

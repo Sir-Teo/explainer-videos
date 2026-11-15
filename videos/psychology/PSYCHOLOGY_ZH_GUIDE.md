@@ -660,6 +660,48 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | complex span; reading span; operation span; fluid intelligence; latent correlation | 复杂广度；阅读广度；运算广度；流体智力；潜变量相关 |
 | dual n-back; near transfer; far transfer; active control; no-contact control | 双重 n-back；近迁移；远迁移；主动控制组；无接触控制组 |
 | read-back; hear-back; cognitive load; rate-distortion; resource-rational | 复诵；听复核；认知负荷；率失真；资源理性 |
+
+## Part 20: memory, storing and finding
+
+| English | 中文 |
+|---|---|
+| savings; relearning; nonsense syllable; forgetting curve; power law; exponential | 节省量；重学；无意义音节；遗忘曲线；幂律；指数函数 |
+| base-level activation (ACT-R); rational analysis; need probability | 基础激活（ACT-R）；理性分析；需要概率 |
+| free recall; serial-position curve; primacy; recency; probability of first recall | 自由回忆；系列位置曲线；首因；近因；首次回忆概率 |
+| lag; lag-conditional response probability (lag-CRP); temporal contiguity; forward asymmetry | 滞后；滞后条件反应概率（滞后CRP）；时间邻近效应；向前不对称 |
+| continual-distractor free recall; long-term recency; the ratio rule | 持续干扰自由回忆；长时近因；比例规则 |
+| levels of processing; transfer-appropriate processing; generation effect; method of loci | 加工水平；迁移适当加工；生成效应；位置记忆法 |
+| encoding specificity; recognition failure; context-dependent memory; state-dependent memory | 编码特异性；再认失败；情境依存记忆；状态依存记忆 |
+| search of associative memory (SAM); rehearsal buffer; sampling; recovery | 联想记忆搜索（SAM）；复述缓冲区；抽取；恢复 |
+| temporal context model (TCM); context maintenance and retrieval (CMR); drift; context reinstatement | 时间情境模型（TCM）；情境维持与提取模型（CMR）；漂移；情境恢复 |
+| likelihood; held out; bits per recall; serial-position baseline | 似然；留出；每次回忆的比特数；系列位置基线 |
+| Hopfield network; energy; attractor; content-addressable memory; crosstalk; capacity | 霍普菲尔德网络；能量；吸引子；按内容寻址的记忆；串扰；容量 |
+| declarative; non-declarative; episodic; semantic; priming; stem completion | 陈述性；非陈述性；情景；语义；启动；词干补全 |
+| familiarity; recollection; remember/know; dual-process model; unequal-variance model | 熟悉感；回想；记得/知道；双加工模型；不等方差模型 |
+| hippocampal indexing theory; pattern separation; pattern completion; dentate gyrus; CA3; time cells | 海马索引理论；模式分离；模式补全；齿状回；CA3；时间细胞 |
+| cognitive interview; telescoping; landmark; word-list learning test | 认知访谈；伸缩效应；地标；词表学习测验 |
+| induction head | 归纳头 |
+
+## Part 21: memory, forgetting and inventing
+
+| English | 中文 |
+|---|---|
+| decay; interference; proactive interference; retroactive interference; retrieval-induced forgetting | 衰退；干扰；前摄干扰；倒摄干扰；提取诱发遗忘 |
+| Jost's law; hazard; averaging artefact; Wickelgren's law; AIC | 约斯特定律；风险率；平均伪影；威克尔格伦定律；赤池信息准则 |
+| linear associator; A-B, A-C design | 线性联想器；A-B、A-C设计 |
+| consolidation; systems consolidation; Ribot's gradient; retrograde amnesia; multiple trace theory | 巩固；系统巩固；里博梯度；逆行性遗忘；多重痕迹理论 |
+| replay; slow-wave sleep; targeted memory reactivation; reconsolidation | 重放；慢波睡眠；目标记忆再激活；再巩固 |
+| catastrophic interference (forgetting); complementary learning systems; interleaved learning | 灾难性干扰（遗忘）；互补学习系统；交错学习 |
+| spacing effect; massed and distributed practice; retention interval; temporal ridgeline | 间隔效应；集中与分散练习；保持间隔；时间脊线 |
+| testing effect; retrieval practice; bifurcation model; metacognitive illusion; fluency | 测验效应；提取练习；分岔模型；元认知错觉；流畅性 |
+| schema; reconstruction; category adjustment model; prototype | 图式；重建；类别调整模型；原型 |
+| DRM paradigm; critical lure; global matching; activation-monitoring; fuzzy-trace theory; gist; verbatim | DRM范式；关键诱饵词；整体匹配；激活-监控；模糊痕迹理论；要义；逐字 |
+| misinformation effect; source monitoring; implanted memory; imagination inflation | 误导信息效应；来源监控；植入记忆；想象膨胀 |
+| verbal overshadowing; Registered Replication Report | 言语遮蔽；注册重复报告 |
+| flashbulb memory; line-up; confidence-accuracy characteristic (CAC); double-blind administration | 闪光灯记忆；列队辨认；信心-准确性特征（CAC）；双盲施测 |
+| highly superior autobiographical memory (HSAM); mnemonist | 高度超常自传记忆（HSAM）；记忆术家 |
+| Leitner boxes; spaced repetition; half-life regression | 莱特纳盒子；间隔重复；半衰期回归 |
+| elastic weight consolidation; Fisher information; machine unlearning; silent engram | 弹性权重巩固；费希尔信息；机器遗忘学习；沉默记忆痕迹 |
 ## Names
 
 | English | 中文 |

@@ -23,6 +23,10 @@ A task is added to :data:`RUNNERS` by the part that first uses it.  So far:
   the trials, ``run("change", params, n_trials, seed)`` with ``params`` keyword arguments of a slot observer
   (``K``, ``guess``); the set size and whether the probe changed are in ``extra``, and ``correct`` is whether the
   answer (same or different) was right.
+* Task 6, free recall (Part 20): lists of sixteen words recalled at once by Psyche's context model,
+  ``run("recall", params, n_lists, seed)`` with ``params`` overriding :data:`explainer.psychology.psyche.memory.
+  CMR_DEFAULT`` (say, the values Part 20 fitted to PEERS); one trial is one list, with its recalls (serial positions
+  in output order) in ``extra["recalls"]``.
 
 Nothing here imports manim.
 """
@@ -195,8 +199,23 @@ def _change(params, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
                   ok, extra={"set_size": np.array([c[0] for c in plan]), "changed": np.array([c[1] for c in plan])})
 
 
+RECALL_LIST_LENGTH = 16
+
+
+def _recall(params, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
+    """Immediate free recall of ``n_trials`` lists of sixteen words by Psyche's context model
+    (:func:`explainer.psychology.psyche.memory.cmr_simulate`, ``params`` overriding its defaults).  One trial is one
+    list: ``extra["recalls"]`` holds its recalls in output order as serial positions 1..16 (0 pads), ``correct`` is
+    whether anything was recalled, and ``rt`` is NaN."""
+    from explainer.psychology.psyche import memory
+
+    R = memory.cmr_simulate(RECALL_LIST_LENGTH, n_trials, params or {}, np.random.default_rng(seed))
+    return Trials("recall", np.full(n_trials, subject), np.array(["immediate"] * n_trials),
+                  np.full(n_trials, np.nan), (R > 0).any(1), extra={"recalls": R})
+
+
 RUNNERS = {"rt_simple": _rt_task("a"), "rt_gonogo": _rt_task("c"), "rt_choice": _rt_task("b"), "threshold": _threshold,
-           "stroop": _stroop, "search": _search, "change": _change}
+           "stroop": _stroop, "search": _search, "change": _change, "recall": _recall}
 
 
 def run(name: str, model, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:

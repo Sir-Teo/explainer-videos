@@ -250,7 +250,7 @@ add(Finding(
 
 shown(1, "KANT_1786", "an argument, quoted from its source; not an empirical finding")
 shown(1, "EBBINGHAUS_1885", "the first forgetting curve, shown as a historical first; the curve and its "
-      "replication are entered with memory", row_in=20)
+      "replication are Part 21's row (forgetting_curve)")
 
 # ---------------------------------------------------------------------------
 # Part 2 · The Experiment
@@ -678,7 +678,8 @@ shown(6, "HEBB_1949", "a postulate, quoted; it is a hypothesis about a rule, and
 shown(6, "DEL_CASTILLO_KATZ_1954", "release in packets: settled physiology, told as history; the histogram on "
       "screen is a model synapse's and is tagged as computed")
 shown(6, "LIU_2012", "one laboratory's reactivation of a tagged memory in mice, shown at the frontier; whether "
-      "strengthened synapses are the memory is argued with the evidence in Part 20", row_in=20)
+      "strengthened synapses are the memory is argued with the evidence in Part 20, which reports it as a "
+      "neuroscience finding, not a behavioural effect")
 shown(6, "TURNER_2008", "the registered and the published record of one class of drug trials, shown as a case of "
       "Part 4's file drawer in an industry; entered with the evidence on treatments", row_in=42)
 
@@ -761,7 +762,7 @@ add(Finding(
 shown(7, "WERNICKE_1874", "a diagram and the syndrome it predicted: told as the history of a model; the finding "
       "it organizes is the row on Broca's area")
 shown(7, "LASHLEY_1929", "a famous negative result, told as history with its critics; memory's location is argued "
-      "in Part 20", row_in=20)
+      "in Part 20, with the hippocampus as an index")
 shown(17, "FRANK_2004", "one study of learning from reward and punishment, described with Psyche's learner beside it; disorders are Part 39")
 shown(17, "WILSON_2014", "a study of exploration, described without figures")
 shown(17, "TOLMAN_1948", "a theoretical paper, told as history")
@@ -803,6 +804,70 @@ shown(19, "DANEMAN_CARPENTER_1980", "a correlation across people, described; int
 shown(19, "KANE_2005", "a meta-analytic correlation, described; intelligence returns in Part 32")
 shown(19, "SIMONS_2016", "a review of the training evidence; the training row rests on the trials it reviews")
 shown(19, "FTC_LUMOSITY_2016", "a regulatory settlement, reported as a fact; not a psychological finding")
+shown(20, "EBBINGHAUS_1885", "the first forgetting curve, refitted here; its shape and its replication are Part 21's "
+      "row (forgetting_curve)")
+shown(20, "DRESLER_2017", "a single training study, shown as an example of the method of loci; mnemonic training's record "
+      "is reviewed in Part 54", row_in=54)
+shown(20, "KOHNKEN_1999", "a meta-analysis of an interview method; eyewitness memory and the interview are entered in Part "
+      "56", row_in=56)
+shown(20, "LIU_2012", "the engram experiment, recalled from Part 5; a neuroscience finding reported, not a behavioural "
+      "effect")
+shown(20, "SCOVILLE_MILNER_1957", "a single case, recalled from Part 7; its lessons are argued, not replicated")
+shown(20, r"Anderson \& Schooler (1991)", "an analysis of the statistics of the environment, not an experiment on "
+      "people")
+shown(20, r"Berry, \ Shanks \& Henson (2008)", "a model at the frontier; the dissociations it addresses are described "
+      "with their caveats")
+shown(20, r"Hopfield (1982); \ Hebb (1949)", "a model and a postulate, derived and computed here")
+shown(20, r"Ji-An et al.\ (2024)", "a study of language models at the frontier")
+shown(20, r"Loftus \& Marburger (1983)", "a survey method, described; telescoping and landmarks are a measurement "
+      "practice")
+shown(20, r"MacDonald et al.\ (2011); \ Manning et al.\ (2011)", "neuroscience findings reported as evidence for a "
+      "model's claim; the contiguity row cites the second")
+shown(20, r"Mandler (1980); \ Tulving (1985)", "an example and a method; the recognition ROC's row is Part 12's")
+shown(20, r"Marr (1971); \ Teyler \& DiScenna (1986)", "theories of the hippocampus, described")
+shown(20, r"Milner (1962)", "a single case, recalled from Part 7")
+shown(20, r"Raaijmakers \& Shiffrin (1981)", "a model, simulated here")
+shown(20, r"Tulving (1972); \ Squire (1992, \ 2004)", "a taxonomy, not a finding")
+shown(20, r"Warrington \& Weiskrantz (1970); \ Graf, \ Squire \& Mandler (1984)", "dissociations in amnesia, described "
+      "with the warning about single dissociations; the lifespan and clinical record is Part 31's and Part 57's")
+shown(20, r"Yonelinas et al.\ (2002); \ Wixted (2007); \ Squire et al.\ (2007)", "an open argument about brain "
+      "localisation, described from both sides")
+shown(21, "TALARICO_RUBIN_2003", "flashbulb memories, shown as one study with a schematic of its pattern; eyewitness "
+      "memory and confidence are entered in Part 56", row_in=56)
+shown(21, "WIXTED_WELLS_2017", "a review of eyewitness confidence, with a model computed here; the eyewitness rows are "
+      "Part 56's", row_in=56)
+shown(21, "DUNLOSKY_2013", "a review rating study techniques; the spacing and testing rows are this part's, and the "
+      "classroom record is Part 54's", row_in=54)
+shown(21, r"Anderson, \ Bjork \& Bjork (1994); \ Murayama et al.\ (2014)", "retrieval-induced forgetting, described "
+      "with its meta-analysis; the mechanism (inhibition or blocking) is the open question, not the effect")
+shown(21, r"Bartlett (1932); \ Bergman \& Roediger (1999)", "a classic informal method and its replication, described "
+      "with a caution about how far it generalises")
+shown(21, r"Ebbinghaus (1885); \ Cepeda et al.\ (2006)", "the spacing effect's history and review; its row is this "
+      "part's")
+shown(21, r"Huttenlocher, \ Hedges \& Duncan (1991)", "a model of reconstruction, derived and computed here")
+shown(21, r"Jenkins \& Dallenbach (1924)", "a historical experiment in the decay-or-interference debate; none of its "
+      "numbers is shown")
+shown(21, r"Johnson, \ Hashtroudi \& Lindsay (1993)", "a framework, not a finding")
+shown(21, r"Kindt, \ Soeter \& Vervliet (2009); \ Brunet et al.\ (2018)", "frontier attempts to weaken fear memories, "
+      "described as open; treatment is Part 40's")
+shown(21, r"Kirkpatrick et al.\ (2017)", "a machine-learning method at the frontier")
+shown(21, r"Kornell, \ Bjork \& Garcia (2011)", "a model, fitted here")
+shown(21, r"Luria (1968), \ \emph{The Mind of a Mnemonist}", "a single case study, told as such")
+shown(21, r"McCloskey \& Cohen (1989)", "a simulation result about networks, reproduced here in a small network")
+shown(21, r"McClelland, \ McNaughton \& O'Reilly (1995)", "a theory, with its model reproduced here")
+shown(21, r"M\"uller \& Pilzecker (1900); \ Ribot (1882)", "the history of consolidation and of the temporal gradient "
+      "of amnesia; the clinical record is Part 57's")
+shown(21, r"Pavlik \& Anderson (2005)", "a model, simulated here")
+shown(21, r"Richards \& Frankland (2017)", "a theoretical argument")
+shown(21, r"Ryan et al.\ (2015)", "an animal neuroscience finding at the frontier")
+shown(21, r"Underwood (1957)", "a review of old experiments, shown as a schematic of its summary")
+shown(21, r"Wells et al.\ (2020); \ Garry et al.\ (1996)", "procedural recommendations and a finding about imagination; "
+      "the courtroom and therapy are Part 56's", row_in=56)
+shown(21, r"Wilson \& McNaughton (1994); \ Rasch et al.\ (2007)", "neuroscience of replay, and a targeted-reactivation "
+      "experiment, reported as evidence for consolidation in sleep")
+shown(21, r"Wixted \& Mickes (2014)", "a model of line-ups, computed here")
+shown(21, r"Nader, \ Schafe \& LeDoux (2000)", "the animal reconsolidation experiment; the human claim is this part's "
+      "reconsolidation row")
 shown(16, "LUBOW_MOORE_1959", "latent inhibition, described and modelled; its row is in Part 18")
 shown(16, "PAVLOV_1927", "the method and its vocabulary, told as history; the curves shown are Psyche's")
 shown(16, "FERSTER_SKINNER_1957", "schedules of reinforcement, whose signatures are drawn on Psyche, not from their records")
@@ -817,12 +882,13 @@ shown(16, "PRENDERGAST_2006", "a meta-analysis quoted for its effect sizes", row
 shown(16, "ZENDLE_CAIRNS_2018", "a survey, quoted with its limits; product design is Part 52")
 shown(16, "MITCHELL_2009", "a theoretical review at the frontier")
 shown(16, "GERSHMAN_2010", "a model at the frontier")
-shown(16, "SCHILLER_2010", "reconsolidation update, at the frontier", row_in=21)
+shown(16, "SCHILLER_2010", "reconsolidation update, at the frontier; it is in the record of Part 21's row on "
+      "reconsolidation in people")
 shown(7, "PENFIELD_BOLDREY_1937", "the body's map on the cortex: settled anatomy, told as history; its row is "
       "entered with the senses, in Part 15")
 shown(7, "HORTON_HOYT_1991", "a measured map used as a formula; the part computes with it")
 shown(7, "SCOVILLE_MILNER_1957", "one patient, told as the case it was; what it shows about memory is argued in "
-      "Part 20", row_in=20)
+      "Part 20, where it is again a single case")
 shown(7, "AZEVEDO_2009", "a count, used as a number")
 shown(7, "RAICHLE_2002", "a measurement of energy use, used as a number")
 shown(7, "WEISKRANTZ_1974", "one patient, described without figures; blindsight is entered with awareness",
@@ -1231,7 +1297,7 @@ shown(12, "GIGERENZER_HOFFRAGE_1995", "base-rate reasoning, a preview; judgment 
       "Part 26", row_in=26)
 shown(12, "MANISCALCO_LAU_2012", "a method at the frontier; confidence is entered in Part 25", row_in=25)
 shown(12, "SWETS_2000", "a review of applications, not a finding")
-shown(12, "MICKES_2012", "line-ups, a preview of a live dispute; eyewitness memory is entered in Part 21", row_in=21)
+shown(12, "MICKES_2012", "line-ups, a preview of a live dispute; eyewitness memory is entered in Part 56", row_in=56)
 
 # ---------------------------------------------------------------------------------------------------------------
 # Part 13: The Eye and the Code
@@ -2044,6 +2110,394 @@ add(Finding(
              "(2016) 512-534"),
     checked="2026-11-15",
     data=("JAEGGI_2008", "REDICK_2013", "MELBY_LERVAG_2016"),
+))
+
+add(Finding(
+    key="serial_position", part=20, title=r"Primacy and recency in free recall",
+    claim="In free recall the first and the last few items of a list are recalled best, and recall usually starts "
+          "with the last items.",
+    original=Study("Murdock", 1962, n="students, six list conditions", design="free recall of lists of 10 to 40 "
+                   "words at one or two seconds a word", found="a U-shaped serial-position curve; recency spans the "
+                   "last seven or eight words whatever the length of the list"),
+    status="replicated",
+    record=(Study("Glanzer and Cunitz", 1966, n="students", design="30 s of counting before recall; slower "
+                  "presentation", found="the delay removes recency and spares primacy; slower presentation helps "
+                  "the early and middle words"),
+            Study("Bjork and Whitten", 1974, n="students", design="a distractor after every word, the last "
+                  "included", found="recency returns: long-term recency"),
+            Study("Healey and Kahana (PEERS)", 2014, n="over a hundred people, thousands of lists",
+                  design="immediate free recall of 16-word lists, analysed person by person",
+                  found="the serial-position curve appears in almost every person; how recall starts varies"),),
+    note="The shape is one of the most reproducible results in psychology. Its explanation is what changed: from a "
+         "short-term buffer and rehearsal to a drifting context, because recency survives distraction.",
+    sources=("B. B. Murdock, The serial position effect of free recall, Journal of Experimental Psychology 64 (1962) "
+             "482-488",
+             "M. Glanzer and A. R. Cunitz, Two storage mechanisms in free recall, Journal of Verbal Learning and Verbal "
+             "Behavior 5 (1966) 351-360",
+             "D. Rundus, Analysis of rehearsal processes in free recall, Journal of Experimental Psychology 89 (1971) "
+             "63-77",
+             "R. A. Bjork and W. B. Whitten, Recency-sensitive retrieval processes in long-term free recall, Cognitive "
+             "Psychology 6 (1974) 173-189",
+             "A. D. Baddeley and G. Hitch, Recency reexamined, in S. Dornic (ed.), Attention and Performance VI "
+             "(1977) 647-667",
+             "M. K. Healey and M. J. Kahana, Is memory search governed by universal principles or idiosyncratic "
+             "strategies?, Journal of Experimental Psychology: General 143 (2014) 575-596"),
+    checked="2026-11-15",
+    data=("PEERS_FREE_RECALL",),
+))
+
+add(Finding(
+    key="contiguity", part=20, title=r"Temporal contiguity in recall",
+    claim="After recalling one item, people tend to recall next an item studied close to it in time, more often the "
+          "one after it than the one before.",
+    original=Study("Kahana", 1996, n="several free-recall datasets", design="the lag-conditional response "
+                   "probability", found="a peak at lags of plus and minus one, higher in the forward direction"),
+    status="replicated",
+    record=(Study("Howard and Kahana", 1999, n="students", design="continual-distractor free recall",
+                  found="contiguity persists when every word is followed by arithmetic"),
+            Study("Healey and Kahana (PEERS)", 2014, n="over a hundred people", design="the lag-CRP person by person",
+                  found="a recognisable contiguity curve in almost every person"),
+            Study("Healey, Long and Kahana (review)", 2019, n="many datasets, new and archival",
+                  design="benchmarks of contiguity across tasks, materials and time scales",
+                  found="contiguity across designs and time scales, roughly scale-invariant"),),
+    note="It is weaker in some people and some designs, and present almost everywhere. Models differ in how they "
+         "produce it; the forward lean is what rules out symmetric associations alone.",
+    sources=("M. J. Kahana, Associative retrieval processes in free recall, Memory & Cognition 24 (1996) 103-109",
+             "M. W. Howard and M. J. Kahana, Contextual variability and serial position effects in free recall, "
+             "Journal of Experimental Psychology: Learning, Memory, and Cognition 25 (1999) 923-941",
+             "M. W. Howard and M. J. Kahana, A distributed representation of temporal context, Journal of "
+             "Mathematical Psychology 46 (2002) 269-299",
+             "S. M. Polyn, K. A. Norman and M. J. Kahana, A context maintenance and retrieval model of organizational "
+             "processes in free recall, Psychological Review 116 (2009) 129-156",
+             "M. K. Healey, N. M. Long and M. J. Kahana, Contiguity in episodic memory, Psychonomic Bulletin & Review "
+             "26 (2019) 699-720",
+             "M. G. Uitvlugt and M. K. Healey, Temporal proximity links unrelated news events in memory, "
+             "Psychological Science 30 (2019)",
+             "J. R. Manning, S. M. Polyn, G. H. Baltuch, B. Litt and M. J. Kahana, Oscillatory patterns in temporal "
+             "lobe reveal context reinstatement during memory search, PNAS 108 (2011)"),
+    checked="2026-11-15",
+    data=("PEERS_FREE_RECALL",),
+))
+
+add(Finding(
+    key="levels_of_processing", part=20, title=r"Levels of processing",
+    claim="Words judged for their meaning at study are remembered better than words judged for their sound or "
+          "their appearance, whether or not a test is expected.",
+    original=Study("Craik and Tulving", 1975, n="ten experiments", design="case, rhyme or sentence questions about "
+                   "each word, then a surprise or an expected test", found="recognition of about 15, 48 and 81 per "
+                   "cent after case, rhyme and meaning questions"),
+    status="replicated",
+    record=(Study("Morris, Bransford and Franks", 1977, n="students", design="a rhyme recognition test after "
+                  "rhyme or meaning study", found="rhyme study wins on a rhyme test: transfer-appropriate "
+                  "processing"),),
+    note="The effect is among the most robust in memory research. Depth as a theory was criticised for lacking an "
+         "independent measure of depth; the match between study and test qualifies it.",
+    sources=("F. I. M. Craik and R. S. Lockhart, Levels of processing: a framework for memory research, Journal of "
+             "Verbal Learning and Verbal Behavior 11 (1972) 671-684",
+             "F. I. M. Craik and E. Tulving, Depth of processing and the retention of words in episodic memory, "
+             "Journal of Experimental Psychology: General 104 (1975) 268-294",
+             "C. D. Morris, J. D. Bransford and J. J. Franks, Levels of processing versus transfer appropriate "
+             "processing, Journal of Verbal Learning and Verbal Behavior 16 (1977) 519-533"),
+    checked="2026-11-15",
+    data=("CRAIK_TULVING_1975",),
+))
+
+add(Finding(
+    key="generation_effect", part=20, title=r"The generation effect",
+    claim="Words that people generate from a cue are remembered better than the same words read.",
+    original=Study("Slamecka and Graf", 1978, n="five experiments", design="generate a word from a rule and a cue, "
+                   "or read it", found="better recognition, cued and free recall for generated words"),
+    status="replicated",
+    record=(Study("Bertsch, Pesta, Wiscott and McDaniel (meta-analysis)", 2007, n="86 studies, 445 effect sizes",
+                  design="generate against read", found="a mean effect of d = 0.40"),
+            Study("McCurdy and colleagues (meta-analysis)", 2020, n="126 articles, 310 experiments",
+                  design="generate against read, with generation constraint as a moderator",
+                  found="a reliable effect, smallest in free recall"),),
+    note="About half a standard deviation on average, varying a good deal with design; in free recall of mixed "
+         "lists it can shrink or vanish.",
+    sources=("N. J. Slamecka and P. Graf, The generation effect: delineation of a phenomenon, Journal of "
+             "Experimental Psychology: Human Learning and Memory 4 (1978) 592-604",
+             "S. Bertsch, B. J. Pesta, R. Wiscott and M. A. McDaniel, The generation effect: a meta-analytic review, "
+             "Memory & Cognition 35 (2007) 201-210",
+             "M. McCurdy and colleagues, Theories of the generation effect and the impact of generation "
+             "constraint: a meta-analytic review, Psychonomic Bulletin & Review 27 (2020)"),
+    checked="2026-11-15",
+    data=("BERTSCH_2007",),
+))
+
+add(Finding(
+    key="encoding_specificity", part=20, title=r"Encoding specificity",
+    claim="A retrieval cue helps when it was part of what was encoded, so that a word can fail to be recognised and "
+          "yet be recalled to a weak cue studied with it.",
+    original=Study("Tulving and Thomson", 1973, n="several experiments", design="targets studied with weak "
+                   "associates, then tested with strong associates and with the studied cues",
+                   found="recognition failure of words recalled to their study cues"),
+    status="replicated",
+    record=(Study("Tulving and Wiseman", 1975, n="many published experiments", design="recognition of recallable "
+                  "words across studies", found="recognition failure follows a lawful function of recognition"),),
+    note="The phenomenon is robust. How general the principle is, and whether it can be tested without "
+         "circularity, has been argued since.",
+    sources=("E. Tulving and D. M. Thomson, Encoding specificity and retrieval processes in episodic memory, "
+             "Psychological Review 80 (1973) 352-373",
+             "E. Tulving and S. Wiseman, Relation between recognition and recognition failure of recallable words, "
+             "Bulletin of the Psychonomic Society 6 (1975)",
+             "D. W. Goodwin, B. Powell, D. Bremer, H. Hoine and J. Stern, Alcohol and recall: state-dependent "
+             "effects in man, Science 163 (1969) 1358-1360",
+             "J. E. Eich, The cue-dependent nature of state-dependent retrieval, Memory & Cognition 8 (1980) 157-173"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="underwater_context", part=20, title=r"Divers remember best where they learnt",
+    claim="Divers recall words better in the environment where they learnt them, on land or under water.",
+    original=Study("Godden and Baddeley", 1975, n="student divers", design="36 words learnt on a beach or about 7 m "
+                   "under the sea, recalled 4 minutes later in the same or the other place", found="about 46 per "
+                   "cent more recalled when the places matched"),
+    status="contested",
+    record=(Study("Smith and Vela (meta-analysis)", 2001, n="dozens of studies", design="incidental environmental "
+                  "context and memory", found="a reliable, small effect (around d = 0.25), reduced by other cues and "
+                  "by imagining the original context"),
+            Study("Murre (direct replication)", 2021, n="16 divers", design="the same design in a heated pool 1.8 m "
+                  "deep, all four conditions in one session", found="no context effect; if anything the reverse",
+                  effect=-1.25, unit="words"),),
+    note="Environmental context effects in general are real and small. The large underwater effect was not found "
+         "again, in a replication that differed in setting and schedule; one replication cannot settle it either "
+         "way.",
+    sources=("D. R. Godden and A. D. Baddeley, Context-dependent memory in two natural environments: on land and "
+             "underwater, British Journal of Psychology 66 (1975) 325-331",
+             "S. M. Smith and E. Vela, Environmental context-dependent memory: a review and meta-analysis, "
+             "Psychonomic Bulletin & Review 8 (2001) 203-220",
+             "J. M. J. Murre, The Godden and Baddeley (1975) experiment on context-dependent memory on land and "
+             "underwater: a replication, Royal Society Open Science 8 (2021) 200724"),
+    checked="2026-11-15",
+    data=("GODDEN_BADDELEY_1975", "MURRE_2021"),
+))
+
+add(Finding(
+    key="forgetting_curve", part=21, title=r"The forgetting curve",
+    claim="Memory, measured by savings in relearning, falls fast at first and then ever more slowly, roughly as a "
+          "power of the time since learning.",
+    original=Study("Ebbinghaus", 1885, n="1 (Ebbinghaus himself)", design="lists of 13 nonsense syllables learnt to "
+                   "one errorless recitation and relearnt after 20 minutes to 31 days", found="savings of 58 per cent "
+                   "after 20 minutes, 34 after a day, 21 after a month"),
+    status="replicated",
+    record=(Study("Heller, Mack and Seitz", 1991, n="2", design="Ebbinghaus's method and intervals",
+                  found="the same shape at similar levels"),
+            Study("Wixted and Ebbesen", 1991, n="students, several measures", design="recall and recognition over "
+                  "intervals from seconds to weeks", found="forgetting well described by power functions"),
+            Study("Murre and Dros", 2015, n="1 (about 70 hours)", design="a direct replication of the method and the "
+                  "seven intervals", found="the same curve, with a likely jump upwards at one day"),),
+    note="The shape replicates in every attempt. Which law describes a single memory is another matter: a power law "
+         "in averaged data can arise from exponentials with different rates, and seven points do not separate the "
+         "candidates.",
+    sources=("H. Ebbinghaus, Uber das Gedachtnis (1885); transl. H. A. Ruger and C. E. Bussenius, Memory (1913)",
+             "O. Heller, W. Mack and J. Seitz, Replikation der Ebbinghaus'schen Vergessenskurve mit der "
+             "Ersparnismethode, Zeitschrift fur Psychologie 199 (1991) 3-18",
+             "J. T. Wixted and E. B. Ebbesen, On the form of forgetting, Psychological Science 2 (1991) 409-415",
+             "J. M. J. Murre and J. Dros, Replication and analysis of Ebbinghaus' forgetting curve, PLoS ONE 10 "
+             "(2015) e0120644",
+             "R. B. Anderson and R. D. Tweney, Artifactual power curves in forgetting, Memory & Cognition 25 (1997) "
+             "724-730"),
+    checked="2026-11-15",
+    data=("EBBINGHAUS_1885", "SAVINGS_REPLICATIONS"),
+))
+
+add(Finding(
+    key="spacing_effect", part=21, title=r"The spacing effect",
+    claim="Study spread out over time is remembered better than the same amount of study massed together, and the "
+          "best gap grows with how long the memory must last.",
+    original=Study("Ebbinghaus", 1885, n="1", design="a list relearnt with massed or distributed repetitions",
+                   found="38 repetitions over three days did as well as 68 in one"),
+    status="replicated",
+    record=(Study("Cepeda, Pashler, Vul, Wixted and Rohrer (meta-analysis)", 2006, n="hundreds of experiments",
+                  design="verbal recall tasks with spaced and massed study", found="spacing beat massing almost "
+                  "everywhere; the best gap depends on the retention interval"),
+            Study("Cepeda, Vul, Rohrer, Wixted and Pashler", 2008, n="1,354 people online",
+                  design="32 facts; gaps up to 105 days; retention intervals of 7 to 350 days",
+                  found="an optimal gap for each interval, about 20 to 40 per cent of a week and 5 to 10 per cent "
+                        "of a year"),),
+    note="One of the most general effects in experimental psychology, for materials, ages and settings. Its "
+         "mechanisms are argued; its use in schools is rare.",
+    sources=("H. Ebbinghaus, Uber das Gedachtnis (1885)",
+             "N. J. Cepeda, H. Pashler, E. Vul, J. T. Wixted and D. Rohrer, Distributed practice in verbal recall "
+             "tasks: a review and quantitative synthesis, Psychological Bulletin 132 (2006) 354-380",
+             "N. J. Cepeda, E. Vul, D. Rohrer, J. T. Wixted and H. Pashler, Spacing effects in learning: a temporal "
+             "ridgeline of optimal retention, Psychological Science 19 (2008) 1095-1102",
+             "P. I. Pavlik and J. R. Anderson, Practice and forgetting effects on vocabulary memory: an "
+             "activation-based model of the spacing effect, Cognitive Science 29 (2005) 559-586"),
+    checked="2026-11-15",
+    data=("CEPEDA_2008",),
+))
+
+add(Finding(
+    key="testing_effect", part=21, title=r"The testing effect",
+    claim="Retrieving material from memory improves long-term retention more than studying it again for the same "
+          "time.",
+    original=Study("Roediger and Karpicke", 2006, n="120 students (Experiment 1)", design="a prose passage re-read "
+                   "or recalled once without feedback; final test after 5 minutes, 2 days or a week",
+                   found="re-reading better at 5 minutes; testing better by 14 points at 2 days and a week"),
+    status="replicated",
+    record=(Study("Rowland (meta-analysis)", 2014, n="many experiments", design="testing against restudy",
+                  found="a reliable advantage for testing, about half a standard deviation, larger when the "
+                        "practice test asks for recall rather than recognition"),
+            Study("Adesope, Trevisan and Sundararajan (meta-analysis)", 2017, n="many studies, classroom and lab",
+                  design="practice tests against other conditions", found="a reliable benefit in classrooms as "
+                                                                           "well as the laboratory"),),
+    note="Robust, and largest after a delay. How far it extends to complex material that must be understood "
+         "rather than recalled is argued.",
+    sources=("H. L. Roediger III and J. D. Karpicke, Test-enhanced learning: taking memory tests improves long-term "
+             "retention, Psychological Science 17 (2006) 249-255",
+             "A. I. Gates, Recitation as a factor in memorizing, Archives of Psychology 40 (1917)",
+             "C. A. Rowland, The effect of testing versus restudy on retention: a meta-analytic review of the testing "
+             "effect, Psychological Bulletin 140 (2014) 1432-1463",
+             "O. O. Adesope, D. A. Trevisan and N. Sundararajan, Rethinking the use of tests: a meta-analysis of "
+             "practice testing, Review of Educational Research 87 (2017) 659-701",
+             "N. Kornell, R. A. Bjork and M. A. Garcia, Why tests appear to prevent forgetting: a distribution-based "
+             "bifurcation model, Journal of Memory and Language 65 (2011) 85-97"),
+    checked="2026-11-15",
+    data=("ROEDIGER_KARPICKE_2006",),
+))
+
+add(Finding(
+    key="drm_false_memory", part=21, title=r"False memories for unpresented words",
+    claim="After studying a list of associates of a word that is not presented, people often recall and recognise "
+          "that word, and report remembering it.",
+    original=Study("Roediger and McDermott", 1995, n="36 and 30 students", design="lists of 12 or 15 associates of a "
+                   "missing word (after Deese, 1959); recall, recognition, remember/know",
+                   found="the missing word recalled on 40 and 55 per cent of lists, recognised as often as studied "
+                         "words, and often judged remembered"),
+    status="replicated",
+    record=(Study("Gallo (review)", 2010, n="hundreds of studies", design="15 years of the DRM illusion",
+                  found="robust across materials, tests and populations; reduced but not removed by warnings"),
+            Study("Patihis and colleagues", 2013, n="20 people with superior autobiographical memory, 38 controls",
+                  design="DRM lists and misinformation", found="as susceptible as ordinary memories"),),
+    note="One of the most reproducible results in memory research. Its accounts (global matching, activation and "
+         "monitoring, fuzzy traces) differ, and how far it speaks to memories of real events is argued.",
+    sources=("H. L. Roediger III and K. B. McDermott, Creating false memories: remembering words not presented in "
+             "lists, Journal of Experimental Psychology: Learning, Memory, and Cognition 21 (1995) 803-814",
+             "J. Deese, On the prediction of occurrence of particular verbal intrusions in immediate recall, Journal "
+             "of Experimental Psychology 58 (1959) 17-22",
+             "D. A. Gallo, False memories and fantastic beliefs: 15 years of the DRM illusion, Memory & Cognition "
+             "38 (2010) 833-848",
+             "L. Patihis et al., False memories in highly superior autobiographical memory individuals, Proceedings "
+             "of the National Academy of Sciences 110 (2013) 20947-20952",
+             "J. Arndt and E. Hirshman, True and false recognition in MINERVA2: explanations from a global matching "
+             "perspective, Journal of Memory and Language 39 (1998) 371-391"),
+    checked="2026-11-15",
+    data=("ROEDIGER_MCDERMOTT_1995", "PATIHIS_2013"),
+))
+
+add(Finding(
+    key="misinformation_effect", part=21, title=r"The misinformation effect",
+    claim="Misleading information given after an event is often incorporated into people's reports of the event "
+          "itself.",
+    original=Study("Loftus and Palmer", 1974, n="150 students (Experiment 2)", design="a verb in a speed question; a "
+                   "week later, 'did you see broken glass?'", found="16 of 50 after 'smashed', 7 after 'hit', 6 not "
+                                                                     "asked; there was none"),
+    status="replicated",
+    record=(Study("Loftus, Miller and Burns", 1978, n="students", design="slides of an accident at a stop sign; a "
+                  "question presupposing a yield sign; a forced choice between the two slides",
+                  found="misled people more often chose the slide they had not seen"),
+            Study("Loftus (review)", 2005, n="hundreds of studies", design="thirty years of the paradigm",
+                  found="robust; larger when the suggestion is plausible, comes later, and goes unnoticed"),),
+    note="The effect on reports is robust. Whether the original detail is overwritten or merely outcompeted at test "
+         "is argued; warnings after the misinformation reduce it.",
+    sources=("E. F. Loftus and J. C. Palmer, Reconstruction of automobile destruction: an example of the interaction "
+             "between language and memory, Journal of Verbal Learning and Verbal Behavior 13 (1974) 585-589",
+             "E. F. Loftus, D. G. Miller and H. J. Burns, Semantic integration of verbal information into a visual "
+             "memory, Journal of Experimental Psychology: Human Learning and Memory 4 (1978) 19-31",
+             "E. F. Loftus, Planting misinformation in the human mind: a 30-year investigation of the malleability "
+             "of memory, Learning & Memory 12 (2005) 361-366",
+             "M. K. Johnson, S. Hashtroudi and D. S. Lindsay, Source monitoring, Psychological Bulletin 114 (1993) "
+             "3-28"),
+    checked="2026-11-15",
+    data=("LOFTUS_PALMER_1974",),
+))
+
+add(Finding(
+    key="implanted_memories", part=21, title=r"Implanted memories of childhood events",
+    claim="Repeatedly suggesting a false childhood event, said to come from a relative, leads a substantial "
+          "minority of people to report remembering it.",
+    original=Study("Loftus and Pickrell", 1995, n="24", design="three true events and one false one (lost in a "
+                   "mall), written about and discussed in two interviews", found="about a quarter came to remember "
+                                                                                    "the false event", effect=0.25,
+                   unit="share"),
+    status="replicated",
+    record=(Study("Scoboria and colleagues (mega-analysis)", 2017, n="423 people in eight studies",
+                  design="the reports recoded on one scheme", found="about 30 per cent false memories; more "
+                                                                     "accepted the event to some degree", effect=0.304,
+                  unit="share"),
+            Study("Murphy and colleagues (preregistered replication)", 2023, n="123", design="the lost-in-the-mall "
+                  "procedure, online and in interviews", found="about 35 per cent coded as false memories",
+                  effect=0.35, unit="share"),),
+    note="The rate depends on the procedure and on how a report is coded as a memory rather than a belief. It shows "
+         "that detailed false memories can be created; it does not show that any particular memory is false.",
+    sources=("E. F. Loftus and J. E. Pickrell, The formation of false memories, Psychiatric Annals 25 (1995) 720-725",
+             "A. Scoboria, K. A. Wade, D. S. Lindsay, T. Azad, D. Strange, J. Ost and I. E. Hyman, A mega-analysis of "
+             "memory reports from eight peer-reviewed false memory implantation studies, Memory 25 (2017) 146-163",
+             "G. Murphy et al., Lost in the mall again: a preregistered replication and extension of Loftus & "
+             "Pickrell (1995), Memory 31 (2023) 711-724"),
+    checked="2026-11-15",
+    data=("LOFTUS_PICKRELL_1995",),
+))
+
+add(Finding(
+    key="reconsolidation_humans", part=21, title=r"Updating a human memory by reconsolidation",
+    claim="Reactivating a consolidated memory in people makes it labile, so that new learning soon after a reminder "
+          "changes it.",
+    original=Study("Walker, Brakefield, Hobson and Stickgold", 2003, n="students", design="a finger-tapping "
+                   "sequence, reactivated before a second sequence was learnt", found="the first sequence was "
+                   "impaired only when it had been reactivated"),
+    status="contested",
+    record=(Study("Schiller, Monfils, Raio, Johnson, LeDoux and Phelps", 2010, n="students",
+                  design="extinction within minutes of a reminder of a conditioned fear", found="the fear did not "
+                  "return, in a subset followed for about a year"),
+            Study("Kindt and Soeter", 2013, n="students", design="the same retrieval-then-extinction procedure, with "
+                  "several measures of fear", found="no prevention of the return of fear"),
+            Study("Hardwicke, Taqi and Shanks", 2016, n="seven experiments, four of them direct replications",
+                  design="the motor-sequence procedure, and variants", found="no reconsolidation effect"),),
+    note="Reconsolidation in animals, after Nader, Schafe and LeDoux (2000), is robust. The behavioural version in "
+         "people has proved hard to reproduce, and the boundary conditions are argued.",
+    sources=("M. P. Walker, T. Brakefield, J. A. Hobson and R. Stickgold, Dissociable stages of human memory "
+             "consolidation and reconsolidation, Nature 425 (2003) 616-620",
+             "D. Schiller, M.-H. Monfils, C. M. Raio, D. C. Johnson, J. E. LeDoux and E. A. Phelps, Preventing the "
+             "return of fear in humans using reconsolidation update mechanisms, Nature 463 (2010) 49-53",
+             "M. Kindt and M. Soeter, Reconsolidation in a human fear conditioning study: a test of extinction as "
+             "updating mechanism, Biological Psychology 92 (2013) 43-50",
+             "T. E. Hardwicke, M. Taqi and D. R. Shanks, Postretrieval new learning does not reliably induce human "
+             "memory updating via reconsolidation, Proceedings of the National Academy of Sciences 113 (2016) "
+             "5206-5211",
+             "K. Nader, G. E. Schafe and J. E. LeDoux, Fear memories require protein synthesis in the amygdala for "
+             "reconsolidation after retrieval, Nature 406 (2000) 722-726"),
+    checked="2026-11-15",
+    data=("HARDWICKE_2016", "SCHILLER_2010"),
+))
+
+add(Finding(
+    key="verbal_overshadowing", part=21, title=r"Verbal overshadowing of faces",
+    claim="Describing a face in words after seeing it makes people less accurate at picking it from a line-up.",
+    original=Study("Schooler and Engstler-Schooler", 1990, n="88 (Study 1)", design="a robbery video; a 20-minute "
+                   "filler; 5 minutes describing the robber or naming states; a line-up",
+                   found="correct identifications 39 against 64 per cent", effect=-0.25, unit="share"),
+    status="replicated, smaller",
+    record=(Study("Meissner and Brigham (meta-analysis)", 2001, n="dozens of studies",
+                  design="description and identification", found="a small overshadowing effect, dependent on the "
+                                                                  "procedure"),
+            Study("Alogna and colleagues (RRR 2)", 2014, n="22 labs, about 2,000 people", design="the original order: "
+                  "filler, then description", found="16 points fewer correct identifications", effect=-0.16,
+                  unit="share"),
+            Study("Alogna and colleagues (RRR 1)", 2014, n="31 labs, about 3,700 people", design="the description "
+                  "straight after the video", found="4 points fewer", effect=-0.04, unit="share"),),
+    note="Real, smaller than first reported, and sensitive to the timing of the description. The first Registered "
+         "Replication Report; its per-lab data are open.",
+    sources=("J. W. Schooler and T. Y. Engstler-Schooler, Verbal overshadowing of visual memories: some things are "
+             "better left unsaid, Cognitive Psychology 22 (1990) 36-71",
+             "C. A. Meissner and J. C. Brigham, A meta-analysis of the verbal overshadowing effect in face "
+             "identification, Applied Cognitive Psychology 15 (2001) 603-616",
+             "V. K. Alogna et al., Registered replication report: Schooler and Engstler-Schooler (1990), Perspectives "
+             "on Psychological Science 9 (2014) 556-578"),
+    checked="2026-11-15",
+    data=("SCHOOLER_1990", "ALOGNA_2014"),
 ))
 
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "

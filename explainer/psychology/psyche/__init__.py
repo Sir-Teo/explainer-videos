@@ -74,5 +74,13 @@ Modules so far, with the part that introduces each:
                          temporal distinctiveness; memory scanning, serial and parallel; slots and the K
                          formulas; von Mises precision, mixture, swap and four process models fitted by
                          maximum likelihood; a ring attractor; training trials; a shared information budget
+``memory``          20   forgetting laws fitted to Ebbinghaus; serial position, first recall and the lag-CRP;
+                         SAM's buffer and search; the context maintenance and retrieval model, its exact
+                         likelihood and a maximum-likelihood fit; a Hopfield network and its capacity; ACT-R's
+                         activation; dual-process and unequal-variance ROCs; pattern separation
+``memory``          21   four forgetting laws and AIC; Jost's law; the averaging artefact; associator
+                         interference; two-store consolidation; the penguin in Rumelhart's network; Pavlik and
+                         Anderson's spacing; the bifurcation model; category adjustment; DRM by global matching;
+                         line-up confidence by signal detection; half-life regression
 =================  ====  ===============================================================================
 """

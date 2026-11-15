@@ -177,4 +177,102 @@ PARTS = [
               ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=20, level="U", widget="recall",
+        question="When you remember, what is being searched, and with what?",
+        story="In 1885 Hermann Ebbinghaus, his own only subject, learns invented syllables and measures what remains "
+              "by the time saved relearning them; three laws fitted to his seven numbers show forgetting fast and "
+              "then ever slower, like the odds that a memory will be needed. Free recall of 3,528 open lists shows "
+              "primacy, recency, a start at the end, and contiguity that leans forward, in almost every person. What "
+              "is done at study and the match at test decide what comes back; the famous underwater context effect "
+              "did not replicate in sixteen divers whose data are open. SAM's rehearsal buffer gives both ends of the "
+              "curve but symmetric contiguity; a slowly drifting context, derived step by step and fitted by maximum "
+              "likelihood, gives recency, contiguity and its forward lean, predicts each next word far better than "
+              "position alone, explains why a delay ends recency, and fails the continual-distractor test that shows "
+              "what it lacks. A Hopfield network completes a memory from a fragment, up to about 0.14 memories per "
+              "unit. Amnesia separates systems of memory, recognition splits into familiarity and recollection, and "
+              "the hippocampus indexes and separates.",
+        handoff="Forgetting, consolidation and false memories are Part 21, semantic memory Part 22, the lifespan Part "
+                "31, model fitting and comparison Part 48, spacing and testing Part 54, witnesses and interviews Part "
+                "56, and memory in machines Part 60.",
+        outside="Part 12's ROCs and z-ROCs, Part 19's SIMPLE and choice rule, and Part 5's Hebbian learning. Vectors "
+                "and dot products, logarithms, and maximum likelihood as in Parts 16 and 19.",
+        objectives={
+            "U": ["Describe savings, the serial-position curve, contiguity, levels of processing and encoding "
+                  "specificity.",
+                  "Explain what Glanzer and Cunitz's and Bjork and Whitten's experiments show about recency.",
+                  "Describe H.M., the memory-systems taxonomy, and recognition by familiarity and recollection."],
+            "M": ["Compute a lag-CRP with its denominators, and the serial-position and first-recall curves.",
+                  "Derive the drift of context and the similarity of contexts at lag k.",
+                  "Fit the context model by maximum likelihood and compare it with a baseline on held-out data."],
+            "D": ["Weigh buffer models against context models, and one memory system against many.",
+                  "Derive a Hopfield network's energy argument and the crosstalk that limits its capacity."],
+            "I": ["Design a recall question or an interview around cues, context and landmarks.",
+                  "Read a word-list test's learning curve, delayed recall and recognition in the clinic."],
+        },
+        results=[
+            ("Savings", r"\text{savings} = \frac{T_{\text{first}} - T_{\text{again}}}{T_{\text{first}}}"),
+            ("Lag-CRP", r"\text{CRP}(\ell) = \frac{\#\,\text{transitions of lag } \ell}{\#\,\text{times lag } "
+                        r"\ell \text{ was possible}}"),
+            ("The drift of context", r"\mathbf{c}_i = \rho_i\,\mathbf{c}_{i-1} + \beta\,\mathbf{c}^{\text{IN}}_i"),
+            ("Context similarity", r"\mathbf{c}_i \cdot \mathbf{c}_j \approx \rho^{\,|i-j|}, \quad "
+                                   r"\rho = \sqrt{1 - \beta^2}"),
+            ("ACT-R's activation", r"B = \ln \sum_j t_j^{-d}"),
+            ("Hopfield's rule and energy", r"W = \tfrac{1}{N}\sum_\mu \xi^\mu \xi^{\mu\top}, \quad "
+                                           r"E = -\tfrac{1}{2}\,\mathbf{s}^\top W \mathbf{s}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 10, 11, 13), D=(6, 7, 8, 9, 12, 15), I=(14,),
+        also=(("Psyche's memory module", "explainer/psychology/psyche/memory.py"),
+              ("Its tests", "tests/psychology/test_memory.py"),
+              ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
+    Part(
+        n=21, level="U", widget="drm",
+        question="Why do we forget, and why do we remember things that never happened?",
+        story="In 1974 one word in a question, smashed or hit, changes how fast people say two cars were going, and "
+              "a week later those who heard smashed remember broken glass that was never there. Ebbinghaus's curve, "
+              "repeated by three people up to 2015, is fast and then slow; a power law fits it best, with a warning "
+              "that averaged exponentials make power laws too. Much forgetting is interference, from earlier lists, "
+              "later lists, and even from remembering. Memories consolidate from hippocampus to cortex, helped by "
+              "sleep's replay, and reopen when recalled; a fast learner and a slow one joined by replay can learn the "
+              "penguin without losing the robin. Spacing and testing are the two best ways to remember more, each "
+              "with a model fitted to a landmark study. Recall blends a trace with a schema, biased and more "
+              "accurate on average; a memory that sums similar experiences recognises a word that was never shown; "
+              "suggestion implants whole events in a minority; verbal overshadowing, replicated by 53 sets of labs, "
+              "is real and smaller than first reported. A witness's first confidence, under good procedures, is "
+              "strong evidence; their later confidence is not.",
+        handoff="Concepts and categories, and the penguin again, are Part 22, the lifespan Part 31, fear and trauma "
+                "Part 40, model comparison Part 48, the science of learning Part 54, line-ups and the courtroom Part "
+                "56, and forgetting in machines Part 60.",
+        outside="Part 12's signal detection, Part 14's cue combination, Part 17's replay and Part 20's ACT-R, "
+                "Hopfield network and context model. Logarithms and power laws, least squares, and a little "
+                "probability (the gamma distribution, the normal).",
+        objectives={
+            "U": ["Describe the forgetting curve, decay and interference, consolidation and reconsolidation.",
+                  "Explain the spacing and testing effects and why students prefer re-reading.",
+                  "Describe Bartlett's schemas, the DRM illusion, misinformation and implanted memories."],
+            "M": ["Fit four forgetting laws and compare them by AIC; derive Jost's law from the hazard.",
+                  "Show that a gamma mixture of exponentials is a power function.",
+                  "Fit the bifurcation model to the testing effect, and derive the category adjustment model's weight."],
+            "D": ["Explain catastrophic interference and the complementary-learning-systems answer to it.",
+                  "Derive the confidence-accuracy characteristic of a line-up from signal detection."],
+            "I": ["Design a study schedule from the spacing ridgeline, and fit half-life regression to practice data.",
+                  "Specify a line-up and interview procedure that keeps memory evidence uncontaminated."],
+        },
+        results=[
+            ("The power law's hazard", r"S = a\,t^{-b} \;\Rightarrow\; -\frac{d \ln S}{dt} = \frac{b}{t}"),
+            ("Averaged exponentials", r"E_{\lambda \sim \Gamma(k, \theta)}\, e^{-\lambda t} = (1 + \theta t)^{-k}"),
+            ("Two stores", r"c(t) = \frac{k}{a - b}\big(e^{-bt} - e^{-at}\big)"),
+            ("Pavlik and Anderson's decay", r"d_j = c\, e^{m(t_j)} + a"),
+            ("Category adjustment", r"\hat{x} = \lambda y + (1 - \lambda)\rho, \quad "
+                                    r"\lambda = \frac{\sigma_c^2}{\sigma_c^2 + \sigma_y^2}"),
+            ("Half-life regression", r"p = 2^{-\Delta/h}, \quad h = 2^{\boldsymbol\theta \cdot \mathbf{x}}"),
+        ],
+        U=(0, 2, 3, 6, 8, 9, 11, 12), D=(1, 4, 5, 7, 10, 14), I=(13,),
+        also=(("Psyche's memory module", "explainer/psychology/psyche/memory.py"),
+              ("Its tests", "tests/psychology/test_forget.py"),
+              ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

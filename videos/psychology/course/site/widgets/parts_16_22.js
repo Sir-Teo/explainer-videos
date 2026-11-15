@@ -570,4 +570,295 @@
       note: "Nothing you do is stored or sent. Six change and six no-change trials at each of four set sizes, shuffled. K comes from the slot model derived in the film: if K of the N squares are stored and the rest guessed, hits minus false alarms is K/N. Luck and Vogel's observers, and Cowan's review, put K at about three to four. Twelve trials a set size is few, so your K is a rough estimate, good to about one item; the next chapter of the film explains why K may not count slots at all.",
     });
   };
+  W.recall = function (el) {
+    var w = null, LISTS = 3, LEN = 10, GOLD = "#f2c14e", BLUE = "#7ec8f5", RED = "#ef6f6c", GREEN = "#5bd18b";
+    var POOLS = [
+      ["APPLE", "BRIDGE", "CAMEL", "DRUM", "FEATHER", "GLOVE", "HAMMER", "ISLAND", "KETTLE", "LEMON",
+       "ANCHOR", "BELL", "CLOUD", "DESK", "ENGINE", "FORK", "GRAPE", "HELMET", "IGLOO", "JUG"],
+      ["MAGNET", "NEEDLE", "ORANGE", "PARROT", "QUILT", "ROCKET", "SADDLE", "TOWEL", "VIOLIN", "WAGON",
+       "MIRROR", "NAPKIN", "OWL", "PIANO", "RABBIT", "SHOVEL", "TRAIN", "UMBRELLA", "VASE", "WHEEL"],
+      ["BANANA", "CANOE", "DONKEY", "ENVELOPE", "FLUTE", "GIRAFFE", "HARBOR", "JELLY", "KITE", "LANTERN",
+       "BUTTON", "CARPET", "DOLPHIN", "EAGLE", "FENCE", "GUITAR", "HONEY", "JEWEL", "KNIFE", "LIZARD"],
+    ];
+    var LETTERS = "abcdefghijklmnopqrst", KEYS = {}, i;
+    for (i = 0; i < 20; i++) KEYS[LETTERS[i]] = i;
+    var S = { phase: "idle", seed: 0, list: 0, k: 0, study: [], grid: [], said: [], lists: [], xy: null, msg: "" };
+    function shuffle(u, a) {
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(u() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function begin() {
+      var u = QB.rng(48611 * S.seed + 97 * S.list + 5), pool = shuffle(u, POOLS[S.list].slice());
+      S.study = pool.slice(0, LEN); S.grid = shuffle(u, pool.slice()); S.said = []; S.k = 0;
+      S.phase = "ready"; w.render();
+      task.later(show, 400);
+    }
+    function show() {
+      if (S.k >= LEN) { S.phase = "recall"; w.render(); return; }
+      S.phase = "word"; w.render();
+      task.later(function () { S.phase = "gap"; w.render(); task.later(function () { S.k++; show(); }, 50); },
+                 Math.round(1000 * S.secs) - 50);
+    }
+    function start() {
+      task.clear(); S.seed++; S.list = 0; S.lists = []; S.msg = ""; S.secs = S.speed || 0.7;
+      begin();
+    }
+    function done() {
+      if (S.phase !== "recall") return;
+      S.lists.push({ study: S.study.slice(), said: S.said.slice() });
+      S.list++;
+      if (S.list >= LISTS) { S.phase = "done"; w.render(); return; }
+      S.phase = "between"; w.render();
+      task.later(begin, 1200);
+    }
+    // where the pointer went down, for the kit's tap (which only says left or right half)
+    el.addEventListener("pointerdown", function (e) {
+      if (!e.target || e.target.tagName !== "CANVAS") return;
+      var r = e.target.getBoundingClientRect();
+      S.xy = [e.clientX - r.left, e.clientY - r.top];
+    });
+    var task = T.create(el, { keys: KEYS, accepting: function () { return S.phase === "recall"; }, respond: pick });
+    function cellAt(x, y) {
+      var g = S.geo;
+      if (!g || x < g.x0 || x > g.x0 + 5 * g.cw || y < g.y0 || y > g.y0 + 4 * g.ch) return -1;
+      return Math.min(3, Math.floor((y - g.y0) / g.ch)) * 5 + Math.min(4, Math.floor((x - g.x0) / g.cw));
+    }
+    function pick(side, how) {
+      if (S.phase !== "recall") return;
+      var idx = how === "key" ? side : (S.xy ? cellAt(S.xy[0], S.xy[1]) : -1);
+      if (idx < 0) return;
+      task.count++;
+      S.said.push(S.grid[idx]);  // a repeat is kept as a response, and left out of the curves
+      w.render();
+    }
+    function positions(L) {  // serial positions (1..LEN) of a list's recalls, 0 for a word not studied
+      return L.said.map(function (wd) { return L.study.indexOf(wd) + 1; });
+    }
+    function curves() {
+      var spc = [], n = S.lists.length, crpA = {}, crpP = {}, intr = 0, reps = 0, firsts = [];
+      for (i = 0; i < LEN; i++) spc.push(0);
+      for (var l = -3; l <= 3; l++) { crpA[l] = 0; crpP[l] = 0; }
+      S.lists.forEach(function (L) {
+        var seen = {}, prev = 0;
+        positions(L).forEach(function (p) {
+          if (p === 0) { intr++; prev = 0; return; }
+          if (seen[p]) { reps++; return; }
+          if (!Object.keys(seen).length) firsts.push(p);
+          if (prev) {
+            for (var q = 1; q <= LEN; q++) if (!seen[q] && Math.abs(q - prev) <= 3) crpP[q - prev]++;
+            if (Math.abs(p - prev) <= 3) crpA[p - prev]++;
+          }
+          seen[p] = true; spc[p - 1] += 1; prev = p;
+        });
+      });
+      return { n: n, spc: spc.map(function (x) { return n ? x / n : 0; }), intr: intr, reps: reps, firsts: firsts,
+               crp: [-3, -2, -1, 1, 2, 3].map(function (l) { return crpP[l] ? crpA[l] / crpP[l] : NaN; }) };
+    }
+
+    w = QB.widget(el, {
+      title: "Free recall: your serial-position and lag-CRP curves",
+      sub: "Three lists of ten words, one word at a time. Then twenty words appear, the ten you saw and ten you did not. Click (or type the letter of) each word you remember, in the order the words come back to you, before you read the rest; then press Done. Try to recall first and look second.",
+      panels: 3, height: 340, weights: [1.35, 1, 1],
+      controls: [{ k: "secs", label: "Seconds per word", min: 0.7, max: 2, step: 0.1, value: 0.7,
+                   fmt: function (x) { return x.toFixed(1) + " s"; } }],
+      onChange: function (v) { S.speed = v.secs; },
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Done", act: done },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.lists = []; S.said = []; S.list = 0; } },
+      ],
+      draw: function (g, v) {
+        if (v && v.secs) S.speed = v.secs;
+        var c = g.ctx, b = T.stage(g, 0, task);
+        c.save(); c.textAlign = "center"; c.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(c, b, "On you", "Press Start. Watch ten words; then click the ones you remember, in the order they come to you, and press Done. Three lists, about three minutes.");
+        } else if (S.phase === "ready") {
+          T.message(c, b, "List " + (S.list + 1) + " of " + LISTS, "Just watch the words.");
+        } else if (S.phase === "word") {
+          c.fillStyle = C.ink; c.font = "600 30px system-ui, sans-serif";
+          c.fillText(S.study[S.k], b.cx, b.cy);
+        } else if (S.phase === "between") {
+          T.message(c, b, "Next list", "Words recalled: " + S.lists[S.lists.length - 1].said.length + ".");
+        } else if (S.phase === "done") {
+          T.message(c, b, "Finished.", "On the right: how often you recalled each position, and where your next recall went after each one. Most people's curves rise at the end, and peak at +1.");
+        } else if (S.phase === "recall") {
+          var x0 = b.x + 16, y0 = b.y + 34, cw = (b.w - 32) / 5, ch = (b.h - 74) / 4;
+          S.geo = { x0: x0, y0: y0, cw: cw, ch: ch };
+          c.fillStyle = C.muted; c.font = "12px system-ui, sans-serif";
+          c.fillText("click each word as it comes back, then Done (recalled so far: " + S.said.length + ")", b.cx, b.y + 18);
+          S.grid.forEach(function (wd, j) {
+            var cx = x0 + (j % 5 + 0.5) * cw, cy = y0 + (Math.floor(j / 5) + 0.5) * ch, n = S.said.indexOf(wd);
+            c.fillStyle = n >= 0 ? "#2a3445" : "#101722"; c.fillRect(cx - cw / 2 + 3, cy - ch / 2 + 3, cw - 6, ch - 6);
+            c.fillStyle = n >= 0 ? GOLD : C.ink; c.font = (cw < 70 ? "10.5px" : "12.5px") + " system-ui, sans-serif";
+            c.fillText(wd, cx, cy - 4);
+            c.fillStyle = C.muted; c.font = "10px system-ui, sans-serif";
+            c.fillText(n >= 0 ? String(n + 1) : LETTERS[j], cx, cy + 11);
+          });
+        }
+        c.restore();
+
+        var r = curves(), xs = [], k;
+        for (k = 1; k <= LEN; k++) xs.push(k);
+        var a = g[1].axes({ x: [0.5, LEN + 0.5], y: [0, 1], xticks: [1, 4, 7, 10], yticks: [0, 0.5, 1],
+          title: "Recalled, by position", xlabel: "position in the list", ylabel: "share of lists" });
+        if (r.n) { a.line(xs, r.spc, { color: GOLD, width: 2.5 }); a.dots(xs, r.spc, { color: GOLD, r: 3.5 }); }
+        var bb = g[2].axes({ x: [-3.5, 3.5], y: [0, 1], xticks: [-3, -2, -1, 1, 2, 3], yticks: [0, 0.5, 1],
+          title: "Where the next recall went", xlabel: "lag", ylabel: "CRP" });
+        var neg = [[-3, r.crp[0]], [-2, r.crp[1]], [-1, r.crp[2]]].filter(function (p) { return !isNaN(p[1]); }),
+            pos = [[1, r.crp[3]], [2, r.crp[4]], [3, r.crp[5]]].filter(function (p) { return !isNaN(p[1]); });
+        [[neg, BLUE], [pos, GOLD]].forEach(function (q) {
+          if (q[0].length > 1) bb.line(q[0].map(function (p) { return p[0]; }), q[0].map(function (p) { return p[1]; }), { color: q[1], width: 2.5 });
+          if (q[0].length) bb.dots(q[0].map(function (p) { return p[0]; }), q[0].map(function (p) { return p[1]; }), { color: q[1], r: 3.5 });
+        });
+        bb.text(-3.3, 0.93, "open data, 16-word lists: +1 0.45, -1 0.26", { color: C.muted, size: 10.5 });
+      },
+      readout: function () {
+        var r = curves(), mean = function (a) { return a.reduce(function (x, y) { return x + y; }, 0) / a.length; };
+        return [["lists", r.n + " of " + LISTS],
+                ["words recalled per list", r.n ? (r.spc.reduce(function (x, y) { return x + y; }, 0)).toFixed(1) : "–"],
+                ["position of your first recall", r.firsts.length ? mean(r.firsts).toFixed(1) + " (10 = last)" : "–"],
+                ["CRP at +1 and -1", isNaN(r.crp[3]) || isNaN(r.crp[2]) ? "–" : r.crp[3].toFixed(2) + ", " + r.crp[2].toFixed(2)],
+                ["words chosen that were not shown", String(r.intr)],
+                ["repeats", String(r.reps)]];
+      },
+      note: "Nothing you do is stored or sent. The curves are computed as in the film: the share of lists in which each position was recalled, and the lag-conditional response probability, which divides the transitions you made at each lag by the transitions that were possible (to a word you had not yet recalled). Choosing from a grid makes this partly a recognition test, so your order is the order you found the words; recall first, then look. Three short lists give noisy curves: the open data behind the film's average 3,528 lists.",
+    });
+  };
+
+  W.drm = function (el) {
+    var w = null, GOLD = "#f2c14e", PINK = "#f28fb8", GREY = "#9aa4b2", PURPLE = "#b39ddb";
+    // four lists of associates built around a word they leave out (after Roediger and McDermott's lists)
+    var LISTS = [
+      { lure: "CHAIR", words: ["TABLE", "SIT", "LEGS", "SEAT", "COUCH", "DESK", "RECLINER", "SOFA", "WOOD", "CUSHION"] },
+      { lure: "MOUNTAIN", words: ["HILL", "VALLEY", "CLIMB", "SUMMIT", "TOP", "MOLEHILL", "PEAK", "PLAIN", "GLACIER", "GOAT"] },
+      { lure: "NEEDLE", words: ["THREAD", "PIN", "EYE", "SEWING", "SHARP", "POINT", "PRICK", "THIMBLE", "HAYSTACK", "THORN"] },
+      { lure: "SWEET", words: ["SOUR", "CANDY", "SUGAR", "BITTER", "GOOD", "TASTE", "TOOTH", "NICE", "HONEY", "SODA"] },
+    ];
+    var UNRELATED = ["LADDER", "PENCIL", "RIVER", "JACKET", "ONION", "TRUMPET", "BOTTLE", "CASTLE"];
+    var KEYS = { r: 0, k: 1, n: 2 }, NAMES = ["remember", "know", "new"];
+    var S = { phase: "idle", seed: 0, list: 0, k: 0, study: [], test: [], t: 0, answers: [], xy: null };
+    function shuffle(u, a) {
+      for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(u() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function begin() {
+      var u = QB.rng(7919 * S.seed + 31 * S.list + 3), L = LISTS[S.list];
+      S.study = L.words.slice(); S.k = 0;
+      // the test: two studied words (one early, one late), the missing word, and an unrelated word
+      S.test = shuffle(u, [{ w: L.words[1], kind: "studied" }, { w: L.words[7], kind: "studied" },
+                           { w: L.lure, kind: "lure" }, { w: UNRELATED[(2 * S.list + S.seed) % UNRELATED.length], kind: "unrelated" }]);
+      S.t = 0; S.phase = "ready"; w.render();
+      task.later(show, 400);
+    }
+    function show() {
+      if (S.k >= S.study.length) { S.phase = "test"; w.render(); return; }
+      S.phase = "word"; w.render();
+      task.later(function () { S.phase = "gap"; w.render(); task.later(function () { S.k++; show(); }, 60); },
+                 Math.round(1000 * S.secs) - 60);
+    }
+    function start() {
+      task.clear(); S.seed++; S.list = 0; S.answers = []; S.secs = S.speed || 0.6;
+      begin();
+    }
+    el.addEventListener("pointerdown", function (e) {
+      if (!e.target || e.target.tagName !== "CANVAS") return;
+      var r = e.target.getBoundingClientRect();
+      S.xy = [e.clientX - r.left, e.clientY - r.top];
+    });
+    var task = T.create(el, { keys: KEYS, accepting: function () { return S.phase === "test"; }, respond: answer });
+    function answer(side, how) {
+      if (S.phase !== "test") return;
+      var choice = side;
+      if (how === "tap") {
+        var b = S.box;
+        if (!b || !S.xy) return;
+        choice = Math.max(0, Math.min(2, Math.floor(3 * (S.xy[0] - b.x) / b.w)));
+      }
+      task.count++;
+      var item = S.test[S.t];
+      S.answers.push({ kind: item.kind, choice: choice });
+      S.t++;
+      if (S.t >= S.test.length) {
+        S.list++;
+        if (S.list >= LISTS.length) { S.phase = "done"; w.render(); return; }
+        S.phase = "between"; w.render();
+        task.later(begin, 900);
+        return;
+      }
+      w.render();
+    }
+    function rates() {
+      var out = {};
+      ["studied", "lure", "unrelated"].forEach(function (k) {
+        var a = S.answers.filter(function (x) { return x.kind === k; });
+        out[k] = { n: a.length,
+                   old: a.length ? a.filter(function (x) { return x.choice < 2; }).length / a.length : NaN,
+                   rem: a.length ? a.filter(function (x) { return x.choice === 0; }).length / a.length : NaN };
+      });
+      return out;
+    }
+
+    w = QB.widget(el, {
+      title: "Words that were never there: a DRM experiment",
+      sub: "Four short lists, one word at a time. After each list, four words: for each, say whether you remember it being shown (R), just know it was there (K), or it is new (N). Press the key, or tap the left, middle or right of the box.",
+      panels: 2, height: 330, weights: [1.4, 1],
+      controls: [{ k: "secs", label: "Seconds per word", min: 0.6, max: 1.5, step: 0.1, value: 0.6,
+                   fmt: function (x) { return x.toFixed(1) + " s"; } }],
+      onChange: function (v) { S.speed = v.secs; },
+      buttons: [
+        { label: "Start", act: start },
+        { label: "Clear", act: function () { task.clear(); S.phase = "idle"; S.answers = []; S.list = 0; } },
+      ],
+      draw: function (g, v) {
+        if (v && v.secs) S.speed = v.secs;
+        var c = g.ctx, b = T.stage(g, 0, task);
+        S.box = b;
+        c.save(); c.textAlign = "center"; c.textBaseline = "middle";
+        if (S.phase === "idle") {
+          T.message(c, b, "On you", "Press Start. Watch ten words; then judge four words: R if you remember seeing it, K if you just know it was there, N if it is new. Four lists, about two minutes.");
+        } else if (S.phase === "ready") {
+          T.message(c, b, "List " + (S.list + 1) + " of " + LISTS.length, "Just watch the words, and try to remember them.");
+        } else if (S.phase === "word") {
+          c.fillStyle = C.ink; c.font = "600 30px system-ui, sans-serif";
+          c.fillText(S.study[S.k], b.cx, b.cy);
+        } else if (S.phase === "between") {
+          T.message(c, b, "Next list", "");
+        } else if (S.phase === "done") {
+          T.message(c, b, "Finished.", "Each list was built around a word that was not shown: CHAIR, MOUNTAIN, NEEDLE, SWEET. On the right: how often you called each kind of word old, and how often you said you remembered it.");
+        } else if (S.phase === "test") {
+          var item = S.test[S.t];
+          c.fillStyle = C.muted; c.font = "12px system-ui, sans-serif";
+          c.fillText("word " + (S.t + 1) + " of " + S.test.length + ": was it in the list you just saw?", b.cx, b.y + 18);
+          c.fillStyle = C.ink; c.font = "600 30px system-ui, sans-serif";
+          c.fillText(item.w, b.cx, b.cy - 18);
+          [["R: remember", GOLD], ["K: know", PURPLE], ["N: new", GREY]].forEach(function (q, j) {
+            var x = b.x + (j + 0.5) * b.w / 3, y = b.y + b.h - 34;
+            c.strokeStyle = q[1]; c.lineWidth = 1.5; c.strokeRect(x - b.w / 7, y - 15, 2 * b.w / 7, 30);
+            c.fillStyle = q[1]; c.font = "13px system-ui, sans-serif"; c.fillText(q[0], x, y);
+          });
+        }
+        c.restore();
+
+        var r = rates(), kinds = ["studied", "lure", "unrelated"], cols = [GOLD, PINK, GREY];
+        var a = g[1].axes({ x: [0, 3], y: [0, 1], xticks: [], yticks: [0, 0.5, 1],
+          title: "Called old (dark: remembered)", xlabel: "studied     the missing word     unrelated", ylabel: "share" });
+        kinds.forEach(function (k, j) {
+          if (!r[k].n) return;
+          a.bars([j + 0.5], [r[k].old], 0.55, { color: cols[j], alpha: 0.4 });
+          a.bars([j + 0.5], [r[k].rem], 0.55, { color: cols[j], alpha: 1 });
+        });
+        a.text(0.1, 0.95, "1995: studied 86%, missing word 84%", { color: C.muted, size: 10.5 });
+      },
+      readout: function () {
+        var r = rates(), f = function (x) { return isNaN(x) ? "–" : Math.round(100 * x) + "%"; };
+        return [["lists", Math.min(S.list, LISTS.length) + " of " + LISTS.length],
+                ["studied words called old", f(r.studied.old)],
+                ["missing words called old", f(r.lure.old)],
+                ["unrelated words called old", f(r.unrelated.old)],
+                ["missing words you said you remembered", f(r.lure.rem)]];
+      },
+      note: "Nothing you do is stored or sent. Each list holds associates of one word that is never shown, after the lists of Deese (1959) and Roediger and McDermott (1995). In their first experiment students called the missing word old 84% of the time, against 86% for words they had studied. Four lists give you only four missing words, so your own rate is a rough one; but most people call at least one of them old, and many say they remember it.",
+    });
+  };
 })();
