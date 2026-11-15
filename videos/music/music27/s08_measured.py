@@ -103,12 +103,12 @@ class Measured(SoundScene):
         VGroup(t_all, t_ins).arrange(DOWN, buff=0.18, aligned_edge=LEFT).to_corner(UL, buff=0.45).shift(RIGHT * 1.2)
         with self.voiceover(
             "Is there a trend between 1680 and 1900? Fit a straight line to those points. <bookmark mark='a'/> "
-            f"Over all {say(d['n_trend'])} of them, chromaticism rises by about {say(round(100 * d['slope_c'], 1))} points a "
+            f"Over all {say(d['n_trend'])} of them, chromaticism rises by about {say(100 * d['slope_c'], 1)} points a "
             "century, but a bootstrap, which refits the line on resampled points four thousand times, gives an interval "
-            f"from {say(round(100 * d['ci_c'][0], 1))} to {say(round(100 * d['ci_c'][1], 1))}: it includes no change at all. "
+            f"from {say(100 * d['ci_c'][0], 1)} to {say(100 * d['ci_c'][1], 1)}: it includes no change at all. "
             f"<bookmark mark='b'/> Keep only the instrumental pieces, {say(d['n_i'])} of them, and the rise is "
-            f"{say(round(100 * d['slope_i'], 1))} points a century, with an interval from {say(round(100 * d['ci_i'][0], 1))} "
-            f"to {say(round(100 * d['ci_i'][1], 1))}, clear of zero. The stretching is real in instrumental music, and "
+            f"{say(100 * d['slope_i'], 1)} points a century, with an interval from {say(100 * d['ci_i'][0], 1)} "
+            f"to {say(100 * d['ci_i'][1], 1)}, clear of zero. The stretching is real in instrumental music, and "
             "gradual: a few notes in a hundred per century."
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(dots), FadeIn(others))

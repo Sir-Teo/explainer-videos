@@ -130,7 +130,7 @@ class Bartok(SoundScene):
         with self.voiceover(
             "Suppose events fall at random bars in an eighty-eight-bar movement. How often does one of them land within a "
             "bar of a golden point, at 0.382 or 0.618 of the way through? <bookmark mark='a'/> For a single, pre-chosen "
-            f"landmark, about {say(round(100 * d['p1'], 1))} times in a hundred: rare. <bookmark mark='b'/> But an analyst "
+            f"landmark, about {say(100 * d['p1'], 1)} times in a hundred: rare. <bookmark mark='b'/> But an analyst "
             "can choose among many landmarks, climaxes, entries, changes of texture. With five to choose from, the chance is "
             f"{say(round(100 * d['p5']))} in a hundred. <bookmark mark='c'/> Allow two bars either way and ten landmarks, and "
             f"it is {say(round(100 * d['p10_2']))} in a hundred: more likely than not. <bookmark mark='d'/> A golden-section "

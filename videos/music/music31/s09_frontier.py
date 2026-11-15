@@ -92,7 +92,7 @@ class Frontier(SoundScene):
         with self.voiceover(
             "The film can at least compare two measures of distance. For each of the twenty-three other triads, its distance "
             "from C major in P, L and R steps, and the fewest semitones the three voices must move to reach it. "
-            f"<bookmark mark='a'/> The two agree fairly well, a correlation of {say(round(d['r'], 2))}. <bookmark mark='b'/> "
+            f"<bookmark mark='a'/> The two agree fairly well, a correlation of {say(d['r'], 2)}. <bookmark mark='b'/> "
             "Close in moves usually means close in voice leading. <bookmark mark='c'/> But not always: the triads that need "
             "the most voice leading, six semitones, are D, F sharp and B flat major, and none of them is the farthest in "
             "moves: that is B flat minor. <bookmark mark='d'/> Which distance the ear uses is exactly the frontier's question."

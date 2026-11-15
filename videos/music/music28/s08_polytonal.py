@@ -78,10 +78,10 @@ class Polytonal(SoundScene):
         side.move_to(RIGHT * 3.6 + DOWN * 0.2)
         with self.voiceover(
             "Ask the key-finder. <bookmark mark='a'/> The tune alone: C major, with a correlation of "
-            f"{say(round(f['melody']['r'], 2))}, about as clear as a key gets. <bookmark mark='b'/> The chords alone: F sharp "
-            f"major, {say(round(f['chords']['r'], 2))}. <bookmark mark='c'/> Both together: the best single key it can find "
+            f"{say(f['melody']['r'], 2)}, about as clear as a key gets. <bookmark mark='b'/> The chords alone: F sharp "
+            f"major, {say(f['chords']['r'], 2)}. <bookmark mark='c'/> Both together: the best single key it can find "
             f"is {kspeak(f['both']['key'])}, which is neither, "
-            f"and it fits only {say(round(f['both']['r'], 2))}. <bookmark mark='d'/> Two clear keys add up to one unclear "
+            f"and it fits only {say(f['both']['r'], 2)}. <bookmark mark='d'/> Two clear keys add up to one unclear "
             "one. Whether a listener hears two keys or one strange one depends on keeping the layers apart, by register, "
             "by instrument and by rhythm, which is what Part 45's auditory scene is about."
         ) as vo:

@@ -79,7 +79,7 @@ class Mos(SoundScene):
         cap = label(rf"the fifth is {d['fifth_log']:.5f} of an octave: \ its continued fraction's convergents give 12 \ ($\tfrac{{7}}{{12}}$), \ 41 and 53", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.7)
         head = label(r"continued fractions of the fifth", font_size=28, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            f"Which sizes, and why? A pure fifth is {say(round(d['fifth_log'], 4))} of an octave, an irrational number. "
+            f"Which sizes, and why? A pure fifth is {say(d['fifth_log'], 4)} of an octave, an irrational number. "
             "<bookmark mark='a'/> Its continued fraction gives the best approximations by fractions: one half, three fifths, "
             "seven twelfths, twenty-four forty-firsts, thirty-one fifty-thirds. <bookmark mark='b'/> The denominators, "
             "together with sums of neighbouring ones, are exactly the sizes with two step sizes: two, three, five, seven, "

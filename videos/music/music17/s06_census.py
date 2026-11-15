@@ -121,7 +121,7 @@ class Census(SoundScene):
             f"some textbooks also forbid: {say(d['contrary'].get('fifths', 0) + d['contrary'].get('octaves', 0))} times. "
             f"Hidden fifths and octaves between soprano and bass: {say(d['hidden'])}. A voice moving past "
             f"where its neighbour just was: about one move in seventeen, the most common licence. Voices "
-            f"crossed: {say(round(100 * d['crossing'] / ch, 1))} chords in a hundred. Upper voices spread "
+            f"crossed: {say(100 * d['crossing'] / ch, 1)} chords in a hundred. Upper voices spread "
             f"wider than an octave, or notes outside the textbook ranges: about one chord in a hundred. "
             "<bookmark mark='a'/> Every rule is obeyed nearly always and broken sometimes. That is the "
             "signature of a style, not a law: a strong preference, set aside when something else matters "

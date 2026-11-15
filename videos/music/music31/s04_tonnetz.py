@@ -191,7 +191,7 @@ class Tonnetz(SoundScene):
             "Hear the comma that keeps Euler's map open. Go up a major third from C on the lattice, and the E is a pure "
             f"third, five to four, {say(round(d['just_cents']))} cents above C. Go four fifths to the right instead, pure "
             f"fifths, and come down two octaves: that E is {say(round(d['fifths_cents']))} cents up. The two Es differ by "
-            f"{say(round(d['comma_cents'], 1))} cents, the syntonic comma. First C with each E; then the two Es alone, "
+            f"{say(d['comma_cents'], 1)} cents, the syntonic comma. First C with each E; then the two Es alone, "
             "alternating."
         ):
             self.play(FadeIn(head), FadeIn(rows_[0]), FadeIn(rows_[1]), FadeIn(rows_[2]))
