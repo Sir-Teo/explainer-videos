@@ -151,6 +151,7 @@ def compute_feedback() -> dict:
     ff = np.fft.rfftfreq(n, 1 / SR)
     sel = (ff >= 100) & (ff <= 8000)
     re_db = 20 * np.log10(np.clip(H[sel].real, 1e-6, None))
+    zs = (ff >= 250) & (ff <= 500)                                   # the band around the howl, at full resolution
     # the loop run in time: a clap, at three margins below the edge, and one just above
     rng = np.random.default_rng(1)
     clap = np.zeros(int(2.4 * SR))
@@ -184,6 +185,8 @@ def compute_feedback() -> dict:
     pag = LV.pag_nag(d0=20.0, d1=6.0, ds=0.3, d2=12.0)
     return {"max_gain_db": fb["max_gain_db"], "howl_hz": fb["howl_hz"], "peak_hz": fb["peak_hz"], "peak_gain_db": fb["peak_gain_db"], "found_hz": found,
             "f": ff[sel][::step].tolist(), "mag_db": (20 * np.log10(np.abs(H[sel]) + 1e-12))[::step].tolist(), "re_db": re_db[::step].tolist(),
+            "zoom_f": ff[zs].tolist(), "zoom_mag": (20 * np.log10(np.abs(H[zs]) + 1e-12)).tolist(),
+            "zoom_re": (20 * np.log10(np.clip(H[zs].real, 1e-6, None))).tolist(),
             "ringout": ro, "tail_db": tail, "answer": "second", "order": order, "pag": pag,
             "starts": {k_: float(c.events[k_]) for k_ in ("first", "second", "third")},
             "starts_ro": {"before": float(c3.events["before"]), "after": float(c3.events["after"])},

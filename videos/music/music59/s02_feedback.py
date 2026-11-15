@@ -69,11 +69,12 @@ class Feedback(SoundScene):
     # ------------------------------------------------------------------
     def response(self):
         d = load("feedback")
-        f = np.array(d["f"])
-        mag = np.array(d["mag_db"])
-        re = np.array(d["re_db"])
-        top = max(mag)
-        ax = logf_axes(width=10.0, height=3.2, flo=100, fhi=8000, ylo=-40, yhi=2, center=DOWN * 0.4, ticks=(100, 1000))
+        f = np.array(d["zoom_f"])
+        mag = np.array(d["zoom_mag"])
+        re = np.array(d["zoom_re"])
+        top = max(np.array(d["mag_db"]))
+        ax = frame_axes(width=10.0, height=3.2, xlo=250, xhi=500, ylo=-40, yhi=2, center=DOWN * 0.4)
+        xt = VGroup(*[label(f"{v} Hz", font_size=14, color=GREY_A).next_to(ax.to(v, -40), DOWN, buff=0.1) for v in (250, 300, 350, 400, 450, 500)])
         cm = VMobject(stroke_color=GREY_B, stroke_width=1.2).set_points_as_corners([ax.to(x, max(v - top, -40)) for x, v in zip(f, mag)])
         cr = VMobject(stroke_color=TUNE, stroke_width=1.5).set_points_as_corners([ax.to(x, max(v - top, -40)) for x, v in zip(f, re)])
         hz = d["howl_hz"]
@@ -84,11 +85,12 @@ class Feedback(SoundScene):
         with self.voiceover(
             "Here is a real-sized case: a hall twenty by fourteen by eight metres, simulated by Part 49's image method, with "
             "the loudspeaker five metres from the microphone. <bookmark mark='a'/> The hall's response from "
-            "loudspeaker to microphone is a forest of peaks, thousands of them, from all the reflections. "
+            "loudspeaker to microphone, shown here between two hundred and fifty and five hundred hertz, is a forest of peaks, "
+            "one every few hertz, from all the reflections; across the whole range there are thousands. "
             "<bookmark mark='b'/> Its real part picks out where the phase comes round. <bookmark mark='c'/> The highest point "
             f"of the real part is at {say(hz)} hertz: that is the note this system will howl at, first, as the gain is raised."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax), FadeIn(note), FadeIn(ghost(VGroup(cm, cr), 0.25)))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(note), FadeIn(ghost(VGroup(cm, cr), 0.25)))
             vo.wait_until("a")
             self.play(Create(cm), FadeIn(key[0]), run_time=1.5)
             vo.wait_until("b")

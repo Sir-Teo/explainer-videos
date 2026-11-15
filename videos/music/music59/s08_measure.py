@@ -47,10 +47,17 @@ class Measure(SoundScene):
         ref = np.max(true)
         a1 = logf_axes(width=10.0, height=2.2, flo=30, fhi=16000, ylo=-40, yhi=5, center=UP * 0.7, ticks=(100, 1000, 10000))
         a2 = logf_axes(width=10.0, height=1.2, flo=30, fhi=16000, ylo=0, yhi=1, center=DOWN * 1.9, ticks=(100, 1000, 10000))
-        tr = curve(f, np.clip(true - ref, -40, 5), a1.to, color=GREY_B, width=4)
-        me = curve(f, np.clip(mag - ref, -40, 5), a1.to, color=TUNE, width=1.5)
-        co = curve(f, d["coherence"], a2.to, color=BLUE, width=2)
-        l1 = label(r"the transfer function: \ measured with music \ (gold) \ over the true one \ (grey)", font_size=15, color=GREY_A).next_to(a1, UP, buff=0.05).align_to(a1, LEFT)
+        def smooth(v, db=True, k=6):
+            """About a sixth of an octave, averaged (the points are log-spaced, some 37 an octave), in power for dB."""
+            v = np.asarray(v, float)
+            x = 10 ** (v / 10) if db else v
+            y = np.convolve(np.r_[np.full(k // 2, x[0]), x, np.full(k // 2, x[-1])], np.ones(k) / k, mode="valid")
+            return 10 * np.log10(y) if db else y
+        ref = np.max(smooth(true))
+        tr = curve(f, np.clip(smooth(true) - ref, -40, 5), a1.to, color=GREY_B, width=5)
+        me = curve(f, np.clip(smooth(mag) - ref, -40, 5), a1.to, color=TUNE, width=2.5)
+        co = curve(f, smooth(d["coherence"], db=False), a2.to, color=BLUE, width=2.5)
+        l1 = label(r"the transfer function, \ smoothed to a sixth of an octave: \ measured with music \ (gold) \ over the true one \ (grey)", font_size=15, color=GREY_A).next_to(a1, UP, buff=0.05).align_to(a1, LEFT)
         l2 = label(r"coherence", font_size=15, color=BLUE).next_to(a2, UP, buff=0.05).align_to(a2, LEFT)
         note = label(rf"delay found: \ {d['delay_ms']:.1f} ms \ (true: \ {d['true_delay_ms']:.1f} ms)", font_size=17, color=TUNE).to_edge(DOWN, buff=0.15)
         head = label(r"measured with the Tune", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
