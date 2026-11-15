@@ -2840,6 +2840,143 @@ add(Finding(
     data=("LEHTONEN_2018",),
 ))
 
+add(Finding(
+    key="selection_content", part=24, title=r"Content effects in the selection task",
+    claim="The selection task is solved far more often when the rule is a familiar permission, such as a drinking "
+          "age, than when it is abstract.",
+    original=Study("Griggs and Cox", 1982, n="students", design="the abstract task and the drinking-age version",
+                   found="about three in four right on the drinking-age version, very few on the abstract one"),
+    status="replicated",
+    record=(Study("Cheng and Holyoak", 1985, n="students", design="permission rules with arbitrary content",
+                  found="permission rules help without familiar content"),
+            Study("Cosmides", 1989, n="students", design="unfamiliar rules framed as social contracts or "
+                  "descriptions", found="social contracts solved, descriptions not"),),
+    note="The effect is robust; whether it reflects permission schemas, cheater detection or information gain is "
+         "argued.",
+    sources=("P. C. Wason, Reasoning about a rule, Quarterly Journal of Experimental Psychology 20 (1968) 273-281",
+             "R. A. Griggs and J. R. Cox, The elusive thematic-materials effect in Wason's selection task, British "
+             "Journal of Psychology 73 (1982) 407-420",
+             "P. W. Cheng and K. J. Holyoak, Pragmatic reasoning schemas, Cognitive Psychology 17 (1985) 391-416",
+             "L. Cosmides, The logic of social exchange, Cognition 31 (1989) 187-276"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="belief_bias", part=24, title=r"Belief bias in syllogistic reasoning",
+    claim="People accept believable conclusions more often than unbelievable ones with the same logical form, most "
+          "of all when the conclusions do not follow.",
+    original=Study("Evans, Barston and Pollard", 1983, n="students", design="valid and invalid syllogisms with "
+                   "believable and unbelievable conclusions", found="acceptance 89, 56, 71 and 10 percent"),
+    status="replicated",
+    record=(Study("Klauer, Musch and Naumer", 2000, n="eight experiments", design="a multinomial model of the "
+                  "effect", found="the effect, larger for invalid syllogisms"),
+            Study("Dube, Rotello and Heit", 2010, n="experiments and reanalyses", design="receiver operating "
+                  "characteristics", found="the effect, read as a shift in response bias"),),
+    note="The effect is one of the most reliable in reasoning; whether belief changes reasoning or only the "
+         "threshold for saying yes is argued.",
+    sources=("J. St B. T. Evans, J. L. Barston and P. Pollard, On the conflict between logic and belief in "
+             "syllogistic reasoning, Memory & Cognition 11 (1983) 295-306",
+             "K. C. Klauer, J. Musch and B. Naumer, On belief bias in syllogistic reasoning, Psychological Review "
+             "107 (2000) 852-884",
+             "C. Dube, C. M. Rotello and E. Heit, Assessing the belief bias effect with ROCs: it's a response bias "
+             "effect, Psychological Review 117 (2010) 831-863"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="mental_rotation", part=24, title=r"Mental rotation",
+    claim="The time to judge whether two figures are the same object grows linearly with the angle between them.",
+    original=Study("Shepard and Metzler", 1971, n="8 adults", design="pairs of block figures, 0 to 180 degrees "
+                   "apart", found="about one second per 60 degrees, linear"),
+    status="replicated",
+    record=(Study("Cooper and Shepard", 1973, n="adults", design="rotated letters, normal or mirrored",
+                  found="the same linear growth"),
+            Study("Ganis and Kievit", 2015, n="54 adults", design="new 3-D figures at 0, 50, 100 and 150 degrees, "
+                  "open data", found="times rising with angle; about 93 degrees a second for the median person"),),
+    note="One of the most reliable effects in cognition; a constant rate fits the trend, not every detail.",
+    sources=("R. N. Shepard and J. Metzler, Mental rotation of three-dimensional objects, Science 171 (1971) "
+             "701-703",
+             "L. A. Cooper and R. N. Shepard, Chronometric studies of the rotation of mental images, in Visual "
+             "Information Processing (1973)",
+             "G. Ganis and R. Kievit, A new set of three-dimensional shapes for investigating mental rotation "
+             "processes: validation data and stimulus set, Journal of Open Psychology Data 3 (2015) e3"),
+    checked="2026-11-15",
+    data=("GANIS_KIEVIT_2015",),
+))
+
+add(Finding(
+    key="chess_chunking", part=24, title=r"Chess experts' memory for positions",
+    claim="Chess experts recall briefly seen positions from real games far better than novices, but not random "
+          "ones.",
+    original=Study("Chase and Simon", 1973, n="a master, a class A player and a beginner", design="positions "
+                   "seen for five seconds, from games or random", found="recall rose with skill for games, not for "
+                   "random positions"),
+    status="replicated",
+    record=(Study("Gobet and Simon", 1996, n="players of many strengths", design="random positions, brief "
+                  "exposure", found="a small skill advantage on random positions too"),
+            Study("Sala and Gobet (meta-analysis)", 2017, n="studies of chess, music, sport and other fields",
+                  design="experts against novices on random material", found="a small but reliable expert edge, "
+                  "as chunks that occur by chance predict"),),
+    note="De Groot's earlier exposures (1946, in English 1965) found near-perfect recall by masters. "
+         "Replicated many times; the small edge on random boards fits chunks that occur by chance.",
+    sources=("W. G. Chase and H. A. Simon, Perception in chess, Cognitive Psychology 4 (1973) 55-81",
+             "A. D. de Groot, Thought and Choice in Chess (1965; Dutch original 1946)",
+             "F. Gobet and H. A. Simon, Recall of rapidly presented random chess positions is a function of skill, "
+             "Psychonomic Bulletin & Review 3 (1996) 159-163",
+             "G. Sala and F. Gobet, Experts' memory superiority for domain-specific random material generalizes "
+             "across fields of expertise: a meta-analysis, Memory & Cognition 45 (2017) 183-193",
+             "H. A. Simon and K. Gilmartin, A simulation of memory for chess positions, Cognitive Psychology 5 "
+             "(1973) 29-46"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="ten_thousand_hours", part=24, title=r"The 10,000-hour rule",
+    claim="Expert performance is mainly the product of about 10,000 hours of deliberate practice.",
+    original=Study("Ericsson, Krampe and Tesch-Romer", 1993, n="violinists and pianists in Berlin",
+                   design="retrospective estimates of practice", found="the best violinists had practised most, "
+                   "an estimated 10,000 hours by twenty"),
+    status="story and record",
+    record=(Study("Macnamara, Hambrick and Oswald (meta-analysis)", 2014, n="88 studies, 11,135 people",
+                  design="practice and performance across domains", found="practice explains 26% of differences "
+                  "in games, 21% in music, 18% in sports, 4% in education, under 1% in professions"),
+            Study("Macnamara and Maitra", 2019, n="violinists", design="a replication of the 1993 study",
+                  found="the best and the good had practised about equally"),),
+    note="Practice matters; the rule, popularized by Gladwell in 2008, is not what the study found and not what "
+         "the record supports.",
+    sources=("K. A. Ericsson, R. T. Krampe and C. Tesch-Romer, The role of deliberate practice in the acquisition "
+             "of expert performance, Psychological Review 100 (1993) 363-406",
+             "B. N. Macnamara, D. Z. Hambrick and F. L. Oswald, Deliberate practice and performance in music, "
+             "games, sports, education, and professions: a meta-analysis, Psychological Science 25 (2014) "
+             "1608-1618",
+             "B. N. Macnamara and M. Maitra, The role of deliberate practice in expert performance: revisiting "
+             "Ericsson, Krampe & Tesch-Romer (1993), Royal Society Open Science 6 (2019) 190327",
+             "M. Gladwell, Outliers: The Story of Success, Little, Brown, New York (2008)"),
+    checked="2026-11-15",
+    data=("MACNAMARA_2014",),
+))
+
+add(Finding(
+    key="everyday_prediction", part=24, title=r"Optimal predictions in everyday cognition",
+    claim="People's predictions about everyday quantities match the Bayesian predictions under each domain's real "
+          "distribution.",
+    original=Study("Griffiths and Tenenbaum", 2006, n="students", design="predicting totals from one "
+                   "observation, in several domains", found="median predictions close to the optimal curves"),
+    status="replicated",
+    record=(Study("Mozer, Pashler and Homaei", 2008, n="simulations and data", design="a model in which each person "
+                  "recalls a few examples", found="group medians as good from very little individual knowledge"),
+            Study("Lewandowsky, Griffiths and Kalish", 2009, n="individuals in chains", design="iterated learning",
+                  found="individuals' predictions converge on good priors"),),
+    note="The group-level match is robust; how much of the distribution each person holds is contested.",
+    sources=("T. L. Griffiths and J. B. Tenenbaum, Optimal predictions in everyday cognition, Psychological "
+             "Science 17 (2006) 767-773",
+             "M. C. Mozer, H. Pashler and H. Homaei, Optimal predictions in everyday cognition: the wisdom of "
+             "individuals or crowds?, Cognitive Science 32 (2008) 1133-1147",
+             "S. Lewandowsky, T. L. Griffiths and M. L. Kalish, The wisdom of individuals: exploring people's "
+             "knowledge about everyday events using iterated learning, Cognitive Science 33 (2009) 969-998"),
+    checked="2026-11-15",
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -2905,3 +3042,32 @@ shown(23, r"Vong, \ Wang, \ Orhan \& Lake (2024), \ \emph{Science}", "a model tr
       "the frontier; Part 60's")
 shown(23, r"Oh \& Schuler (2023), \ \emph{TACL}", "a model-comparison result at the frontier; in the surprisal "
       "row's background")
+
+shown(24, r"Wason (1966, \ 1968)", "the selection task's history; its content effect is this part's row")
+shown(24, r"Johnson-Laird (1983); \ Johnson-Laird \& Bara (1984)", "a theory, described with a worked example")
+shown(24, r"Cheng \& Holyoak (1985); \ Cosmides (1989)", "in the content-effect row's record")
+shown(24, r"Oaksford \& Chater (1994), \ \emph{Psychological Review}", "a model, computed; its meta-analysis is "
+      "quoted from its table")
+shown(24, r"Newell, \ Shaw \& Simon (1958); \ Newell \& Simon (1972)", "the history of problem solving as "
+      "search")
+shown(24, r"Newell \& Simon (1972); \ Anderson (1993)", "theories of the mind as production systems")
+shown(24, r"Ericsson \& Simon (1980, \ 1993)", "a method, described")
+shown(24, r"Duncker (1945); \ Adamson (1952)", "classic demonstrations of functional fixedness, described")
+shown(24, r"Metcalfe \& Wiebe (1987); \ MacGregor, \ Ormerod \& Chronicle (2001)", "a study and a model of "
+      "insight, described with a schematic")
+shown(24, r"Duncker (1945); \ Gick \& Holyoak (1980)", "a problem and a study of analogical transfer; its "
+      "numbers are summaries, given as rough shares")
+shown(24, r"Kosslyn, \ Ball \& Reiser (1978); \ Pylyshyn (1981); \ Zeman et al. (2015)", "the imagery debate "
+      "and a recent finding, described")
+shown(24, r"Waldmann \& Hagmayer (2005); \ Pearl (2000)", "causal reasoning, described; the mathematics is "
+      "Statistics, Built Part 36")
+shown(24, r"Evans, \ Barston \& Pollard (1983), \ as tabulated by Evans et al. (2001)", "the original "
+      "study's table, as reprinted; the finding has its row, belief_bias")
+shown(24, r"Simon (1955, \ 1956)", "a theory: bounded rationality")
+shown(24, r"Schmidt \& Hunter (1998); \ Sackett et al. (2022); \ Sweller \& Cooper (1985)", "selection and "
+      "instruction research, described; personnel selection is Part 53's",
+      row_in=53)
+shown(24, r"Ellis et al. (2021); \ Chollet (2019); \ LeGris et al. (2024)", "programs and benchmarks at the "
+      "frontier; Part 60's", row_in=60)
+shown(24, r"Webb, \ Holyoak \& Lu (2023), \ \emph{Nature Human Behaviour}", "machine analogy at the frontier; "
+      "Part 60's", row_in=60)

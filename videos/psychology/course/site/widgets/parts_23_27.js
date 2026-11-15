@@ -140,4 +140,116 @@
       note: "Nothing you do is stored or sent. Each run makes a new language of four three-syllable words, as in Saffran, Aslin and Newport (1996), whose eight-month-olds heard two minutes of such a stream. Inside a word the next syllable is certain; across a boundary it is one of three. Psyche's learner (language.transitional_probabilities) uses nothing else. With eight pairs your own score is rough: 6 or more right is better than chance would usually give.",
     });
   };
+
+  // ---- Part 24: mental rotation on you.  Same shape, or its mirror image? --------------------------------------
+  W.rotation = function (el) {
+    var w = null, SAME = "#5bd18b", MIRROR = "#ef6f6c", SHAPE = "#7ec8f5", REF = "#9aa4b2";
+    var ANGLES = [0, 60, 120, 180];
+    // the F-pentomino: it has no mirror symmetry, so a turned copy and a mirrored copy can always be told apart
+    var CELLS = [[1, 0], [2, 0], [0, 1], [1, 1], [1, 2]];
+    // Ganis and Kievit (2015): mean of 54 people's times on correct "same" trials, at 0, 50, 100 and 150 degrees
+    var GK = { x: [0, 50, 100, 150], y: [1563, 2461, 3053, 3341] };
+    var run = T.timed(el, {
+      keys: { f: 0, j: 1 },
+      trials: function () { return w.v.n; },
+      seed: function () { return w.state.seed; },
+      stimulus: function (rand) {
+        return { angle: ANGLES[Math.floor(rand() * 4)], mirror: rand() < 0.5, spin: rand() * 360 };
+      },
+      correct: function (stim, side) { return (side === 1) === stim.mirror; },
+      render: function () {  // keep each trial's stimulus with its row, so the fit can tell same from mirror trials
+        var L = run ? run.log : [];
+        if (L.length && !L[L.length - 1].stim) L[L.length - 1].stim = run.stim;
+        if (w) w.render();
+      },
+      foreperiod: [600, 1200], timeout: 7000, pause: { scored: 600, early: 800, timeout: 800 },
+      words: { early: "Too early: wait for the shapes.", timeout: "No answer in seven seconds.",
+        wrong: function () { return "Wrong (not counted)."; } },
+    });
+
+    function drawShape(ctx, cx, cy, size, angle, mirror, color) {
+      var mx = 0, my = 0, i;
+      for (i = 0; i < CELLS.length; i++) { mx += CELLS[i][0] + 0.5; my += CELLS[i][1] + 0.5; }
+      mx /= CELLS.length; my /= CELLS.length;
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.rotate(angle * Math.PI / 180);
+      if (mirror) ctx.scale(-1, 1);
+      ctx.fillStyle = color; ctx.strokeStyle = "#e8edf3"; ctx.lineWidth = 1.5;
+      for (i = 0; i < CELLS.length; i++) {
+        var x = (CELLS[i][0] - mx) * size, y = (CELLS[i][1] - my) * size;
+        ctx.fillRect(x, y, size, size); ctx.strokeRect(x, y, size, size);
+      }
+      ctx.restore();
+    }
+
+    function fit() {  // least squares of time on angle, over the correct "same" trials
+      var xs = [], ys = [], i, r;
+      for (i = 0; i < run.log.length; i++) {
+        r = run.log[i];
+        if (r.correct && r.stim && !r.stim.mirror) { xs.push(r.stim.angle); ys.push(r.rt); }
+      }
+      if (xs.length < 3) return null;
+      var mx = QB.mean(xs), my = QB.mean(ys), sxy = 0, sxx = 0;
+      for (i = 0; i < xs.length; i++) { sxy += (xs[i] - mx) * (ys[i] - my); sxx += (xs[i] - mx) * (xs[i] - mx); }
+      if (sxx === 0) return null;
+      var b = sxy / sxx;
+      return { slope: b, icpt: my - b * mx, xs: xs, ys: ys };
+    }
+
+    w = QB.widget(el, {
+      title: "Mental rotation, on you",
+      sub: "Two shapes: is the right one the left one turned, or its mirror image? F (or tap left) for the same shape, J (or tap right) for a mirror image. Answer as fast as you can while staying right. Then see how your time grows with the angle, and how fast you turn.",
+      panels: 2, height: 320, weights: [1.1, 1],
+      controls: [{ k: "n", label: "Trials", min: 12, max: 48, step: 4, value: 24, fmt: function (x) { return x.toFixed(0); } }],
+      buttons: [
+        { label: "Start", act: function () { run.reset(); run.start("rotation"); } },
+        { label: "Clear", act: function () { run.reset(); } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, run.task), size = Math.min(b.w, b.h) * 0.085;
+        if (run.phase === "go") {
+          drawShape(ctx, b.x + b.w * 0.3, b.cy, size, run.stim.spin, false, SHAPE);
+          drawShape(ctx, b.x + b.w * 0.7, b.cy, size, run.stim.spin + run.stim.angle, run.stim.mirror, SHAPE);
+          ctx.save(); ctx.textAlign = "center"; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillStyle = SAME; ctx.fillText("same: F", b.x + b.w * 0.25, b.y + b.h - 20);
+          ctx.fillStyle = MIRROR; ctx.fillText("mirror: J", b.x + b.w * 0.75, b.y + b.h - 20);
+          ctx.fillStyle = C.muted; ctx.fillText("trial " + run.trial + " of " + v.n, b.cx, b.y + 22);
+          ctx.restore();
+        } else if (run.phase === "wait") {
+          ctx.save(); ctx.strokeStyle = C.muted; ctx.lineWidth = 3; ctx.beginPath();
+          ctx.moveTo(b.cx - 12, b.cy); ctx.lineTo(b.cx + 12, b.cy); ctx.moveTo(b.cx, b.cy - 12); ctx.lineTo(b.cx, b.cy + 12);
+          ctx.stroke(); ctx.restore();
+        } else if (run.phase === "feedback") {
+          T.message(ctx, b, run.msg);
+        } else if (run.phase === "done") {
+          T.message(ctx, b, "Finished.", "On the right: your time to say 'same' at each angle, the line through it, and the 54 people of Ganis and Kievit (2015).");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Each trial shows two shapes, the right one turned by 0, 60, 120 or 180 degrees, and mirrored half the time.");
+        }
+        var f = fit(), top = 4000, i;
+        if (f) for (i = 0; i < f.ys.length; i++) top = Math.max(top, f.ys[i] + 300);
+        top = Math.min(9000, Math.ceil(top / 1000) * 1000);
+        var a = g[1].axes({ x: [-10, 190], y: [0, top], xticks: [0, 60, 120, 180], yticks: [0, top / 2, top],
+          title: "Time to say 'same', by angle", xlabel: "angle (degrees)", ylabel: "ms" });
+        a.line(GK.x, GK.y, { color: REF, width: 2, dash: [5, 4] });
+        a.dots(GK.x, GK.y, { color: REF, r: 3 });
+        a.text(150, GK.y[3] + 0.06 * top, "54 people (2015)", { color: REF, align: "center", size: 11 });
+        if (f) {
+          a.dots(f.xs, f.ys, { color: SHAPE, r: 3, alpha: 0.75 });
+          a.line([0, 180], [f.icpt, f.icpt + 180 * f.slope], { color: SAME, width: 2.5 });
+        }
+      },
+      readout: function () {
+        var f = fit(), n = run.log.length, right = 0, i;
+        for (i = 0; i < n; i++) if (run.log[i].correct) right++;
+        var rate = f && f.slope > 0 ? Math.round(1000 / f.slope) + " degrees a second" : "–";
+        return [["answers", String(task().count)], ["right", n ? Math.round(100 * right / n) + "%" : "–"],
+          ["your slope", f ? f.slope.toFixed(1) + " ms per degree" : "–"], ["your rotation speed", rate],
+          ["54 people, median", "about 93 degrees a second"]];
+      },
+      note: "Nothing you do is stored or sent. Shepard and Metzler (1971) found the time to say 'same' grows in a straight line with the angle, as if a picture were turned at a steady speed; Ganis and Kievit's open data, fitted in the film, put the median person at about 93 degrees a second for 3-D figures. Flat shapes like these are usually turned faster. A browser adds its own delay to every time, which moves your whole line up but leaves its slope alone.",
+    });
+    function task() { return run.task; }
+  };
 })();

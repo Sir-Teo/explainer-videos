@@ -90,5 +90,9 @@ Modules so far, with the part that introduces each:
 ``language``        23   Zipf's law and the typing monkey; cohorts; the interactive activation model with a
                          14-segment font; transitional probabilities and segmentation; a past-tense learner;
                          a Kneser-Ney trigram and surprisal; the reading-time regression; Flesch's formula
+``reason``          24   syllogisms by brute force over set models and four accounts scored; optimal data
+                         selection; the Tower of Hanoi's state graph, a goal-stack production system and a
+                         hill-climber; the nine dots; structure mapping; rotation fits; causal power; everyday
+                         predictions by posterior medians
 =================  ====  ===============================================================================
 """

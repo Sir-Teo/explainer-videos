@@ -50,7 +50,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "PEERS_FREE_RECALL", "CRAIK_TULVING_1975", "BERTSCH_2007", "DRESLER_2017", "GODDEN_BADDELEY_1975", "MURRE_2021", "KOHNKEN_1999",
            "SAVINGS_REPLICATIONS", "ROEDIGER_KARPICKE_2006", "SCHOOLER_1990", "ALOGNA_2014", "LOFTUS_PALMER_1974", "ROEDIGER_MCDERMOTT_1995", "CEPEDA_2008", "LOFTUS_PICKRELL_1995", "TALARICO_RUBIN_2003", "HARDWICKE_2016", "PATIHIS_2013", "WIXTED_WELLS_2017", "DUNLOSKY_2013",
            "NOSOFSKY_1994", "HOMA_1976", "EKMAN_1954", "ROTHKOPF_1957", "AUSTEN", "HUTCHISON_2013", "LANDAUER_DUMAIS_1997", "TVERSKY_1977",
-           "NATURAL_STORIES", "SAFFRAN_1996", "MARCUS_1992", "HARTSHORNE_2018", "LEHTONEN_2018"]
+           "NATURAL_STORIES", "SAFFRAN_1996", "MARCUS_1992", "HARTSHORNE_2018", "LEHTONEN_2018",
+           "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014"]
 
 
 @dataclass(frozen=True)
@@ -3858,6 +3859,58 @@ LEHTONEN_2018 = Dataset(
     data={'effect_sizes': 891, 'studies': 152},
 )
 
+_P24 = "through a web search, 2026-11-15"
+
+GANIS_KIEVIT_2015 = Dataset(
+    key="ganis_kievit_2015",
+    title='Mental rotation: validation data for new 3-D shapes',
+    source='G. Ganis and R. Kievit, A new set of three-dimensional shapes for investigating mental rotation processes: validation data and stimulus set, Journal of Open Psychology Data 3 (2015) e3; figshare 10.6084/m9.figshare.1045385 (CC BY 4.0)',
+    cite=r"Ganis \& Kievit (2015)",
+    checked='Behavioural_data.zip (figshare file 3702010); fetched by explainer.psychology.opendata and checked by SHA-256' + ", " + _P24,
+    licence='data fetched, not redistributed',
+    data={'people': 54, 'trials_each': 96, 'angles': [0, 50, 100, 150]},
+)
+
+RAGNI_2016 = Dataset(
+    key="ragni_2016",
+    title='Syllogistic reasoning: 139 people, all 64 syllogisms',
+    source='M. Ragni and colleagues, syllogism data collected at the University of Freiburg (2016), as packaged in the CCOBRA benchmark (github.com/CognitiveComputationLab/ccobra, MIT licence)',
+    cite=r"Ragni (2016)",
+    checked='benchmarks/syllogistic/data/Ragni2016.csv at commit fa6e8aa8; fetched by explainer.psychology.opendata and checked by SHA-256' + ", " + _P24,
+    licence='data fetched, not redistributed',
+    data={'people': 139, 'syllogisms': 64, 'responses': 9},
+)
+
+OAKSFORD_CHATER_1994 = Dataset(
+    key="oaksford_chater_1994",
+    title='Card selections in the abstract selection task',
+    source='M. Oaksford and N. Chater, A rational analysis of the selection task as optimal data selection, Psychological Review 101 (1994) 608-631, Table 2',
+    cite=r"Oaksford \& Chater (1994)",
+    checked='Table 2, read from the paper' + ", " + _P24,
+    licence='facts only',
+    data={'studies': 13, 'tasks': 34, 'people': 845, 'p': 0.89, 'q': 0.62, 'not_q': 0.25, 'not_p': 0.16},
+)
+
+EVANS_1983 = Dataset(
+    key="evans_1983",
+    title='Belief bias in syllogisms',
+    source='J. St B. T. Evans, J. L. Barston and P. Pollard, On the conflict between logic and belief in syllogistic reasoning, Memory & Cognition 11 (1983) 295-306',
+    cite=r"Evans, \ Barston \& Pollard (1983)",
+    checked='acceptance rates as tabulated by Evans, Handley and Harper (2001)' + ", " + _P24,
+    licence='facts only',
+    data={'valid_believable': 0.89, 'valid_unbelievable': 0.56, 'invalid_believable': 0.71, 'invalid_unbelievable': 0.1},
+)
+
+MACNAMARA_2014 = Dataset(
+    key="macnamara_2014",
+    title='Deliberate practice and performance: a meta-analysis',
+    source='B. N. Macnamara, D. Z. Hambrick and F. L. Oswald, Deliberate practice and performance in music, games, sports, education, and professions: a meta-analysis, Psychological Science 25 (2014) 1608-1618',
+    cite=r"Macnamara et al.\ (2014)",
+    checked='the abstract and results' + ", " + _P24,
+    licence='facts only',
+    data={'studies': 88, 'people': 11135, 'variance_explained': {'games': 0.26, 'music': 0.21, 'sports': 0.18, 'education': 0.04, 'professions': 0.01}},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3895,4 +3948,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           PEERS_FREE_RECALL, CRAIK_TULVING_1975, BERTSCH_2007, DRESLER_2017, GODDEN_BADDELEY_1975, MURRE_2021, KOHNKEN_1999,
                           SAVINGS_REPLICATIONS, ROEDIGER_KARPICKE_2006, SCHOOLER_1990, ALOGNA_2014, LOFTUS_PALMER_1974, ROEDIGER_MCDERMOTT_1995, CEPEDA_2008, LOFTUS_PICKRELL_1995, TALARICO_RUBIN_2003, HARDWICKE_2016, PATIHIS_2013, WIXTED_WELLS_2017, DUNLOSKY_2013,
                           NOSOFSKY_1994, HOMA_1976, EKMAN_1954, ROTHKOPF_1957, AUSTEN, HUTCHISON_2013, LANDAUER_DUMAIS_1997, TVERSKY_1977,
-                          NATURAL_STORIES, SAFFRAN_1996, MARCUS_1992, HARTSHORNE_2018, LEHTONEN_2018)}
+                          NATURAL_STORIES, SAFFRAN_1996, MARCUS_1992, HARTSHORNE_2018, LEHTONEN_2018,
+                          GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014)}

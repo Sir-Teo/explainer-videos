@@ -68,6 +68,22 @@ SOURCES = {
         "file": "overshadowing_rrr2.xlsx",
         "sha256": "81be7ccd1ae7973fb223c745050fc3fc3c551705366d158542067bffde44b775",
     },
+    # Part 24: Ganis and Kievit's mental rotation validation data (figshare 1045385, CC BY 4.0), and Ragni's 2016
+    # syllogism data as packaged in the CCOBRA benchmark (MIT licence) at a fixed commit
+    "ganis_kievit_2015": {
+        "url": "https://ndownloader.figshare.com/files/3702010",
+        "page": "https://doi.org/10.6084/m9.figshare.1045385",
+        "file": "ganis_kievit_2015_behavioural_data.zip",
+        "sha256": "3b56dde3defc36d54c85b671f83ade2f7ded685b326be973583ad115bb994e03",
+        "licence": "CC BY 4.0",
+    },
+    "ragni_2016": {
+        "url": "https://raw.githubusercontent.com/CognitiveComputationLab/ccobra/fa6e8aa8d0b8cde486b0c6f108d87d7c3e64a40b/benchmarks/syllogistic/data/Ragni2016.csv",
+        "page": "https://github.com/CognitiveComputationLab/ccobra",
+        "file": "ccobra_ragni2016.csv",
+        "sha256": "9cb59c33816727a173d3eed202e3f663ddc3e6ae294bc4da705ada04113efd18",
+        "licence": "MIT",
+    },
     # Part 23: the Natural Stories corpus (Futrell et al., Language Resources and Evaluation 55 (2021) 63-77),
     # github.com/languageMIT/naturalstories at a fixed commit; no licence is stated, so it is fetched, never
     # redistributed
@@ -365,3 +381,49 @@ def natural_stories() -> dict:
     return {"word": np.array([r["word"] for r in rows]), "story": np.array([int(r["item"]) for r in rows]),
             "zone": np.array([int(r["zone"]) for r in rows]), "n": np.array([int(r["nItem"]) for r in rows]),
             "rt": np.array([float(r["meanItemRT"]) for r in rows])}
+
+
+def mental_rotation() -> dict:
+    """Ganis and Kievit's (2015) mental rotation validation study: 54 people, 96 trials each, judging whether two
+    Shepard-Metzler objects at 0, 50, 100 or 150 degrees apart are the same object or mirror images.  Per trial:
+    ``subject``, ``trial``, ``rt`` (ms; NaN when no response came in time), ``same`` (the right answer was
+    'same'), ``angle`` (degrees) and ``correct`` (a time-out counts as an error), read from each person's
+    workbook in the published zip."""
+    import io
+    import re
+    import zipfile
+
+    cols = {k: [] for k in ("subject", "trial", "rt", "same", "angle", "correct")}
+    with zipfile.ZipFile(path("ganis_kievit_2015")) as z:
+        names = sorted((n for n in z.namelist() if re.fullmatch(r"Behavioural_data/sub\d+\.xlsx", n)),
+                       key=lambda n: int(re.search(r"sub(\d+)", n).group(1)))
+        for name in names:
+            sid = int(re.search(r"sub(\d+)", name).group(1))
+            cells = _xlsx_cells(io.BytesIO(z.read(name)), 1)
+            r = 5
+            while f"A{r}" in cells and cells.get(f"B{r}"):
+                rt = cells.get(f"C{r}")
+                cols["subject"].append(sid)
+                cols["trial"].append(int(float(cells[f"A{r}"])))
+                cols["rt"].append(float(rt) if rt not in (None, "", "N/A") else np.nan)
+                cols["same"].append(cells.get(f"D{r}") == "[b]")
+                cols["angle"].append(float(cells[f"F{r}"]))
+                cols["correct"].append(cells.get(f"G{r}") in ("1", "1.0"))
+                r += 1
+    out = {k: np.array(v) for k, v in cols.items()}
+    out["correct"] &= np.isfinite(out["rt"])
+    return out
+
+
+def syllogisms_ragni2016() -> dict:
+    """Ragni's 2016 syllogism data from the CCOBRA benchmark: 139 people, each answering all 64 syllogisms with one
+    of nine responses.  Per answer: ``id`` (person), ``sequence`` (position), ``task`` (premises, e.g.
+    'Some;models;managers/All;models;clerks'), ``response`` ('Some;managers;clerks' or 'NVC'), ``age``, ``gender``."""
+    import csv
+
+    with open(path("ragni_2016"), newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    return {"id": np.array([int(r["id"]) for r in rows]), "sequence": np.array([int(r["sequence"]) for r in rows]),
+            "task": np.array([r["task"] for r in rows]), "response": np.array([r["response"] for r in rows]),
+            "age": np.array([int(r["age"]) if r["age"].isdigit() else -1 for r in rows]),
+            "gender": np.array([r["gender"] for r in rows])}

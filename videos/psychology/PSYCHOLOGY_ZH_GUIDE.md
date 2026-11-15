@@ -759,6 +759,28 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Whorf; Berlin, Kay; Winawer; Frank (Michael); the Pirahã | 沃尔夫；柏林，凯；威纳沃；迈克尔·弗兰克；皮拉罕人 |
 | Bialystok; Paap, Greenberg; Lehtonen; Flesch; Breitenstein | 比亚韦斯托克；帕普，格林伯格；莱赫托宁；弗莱施；布赖滕施泰因 |
 | Wai Keen Vong; Byung-Doh Oh; Schuler; Christiansen; Chater | Wai Keen Vong（保留原名）；Byung-Doh Oh（保留原名）；舒勒；克里斯蒂安森；查特 |
+
+## Part 24: reasoning and problem solving
+
+| English | 中文 |
+|---|---|
+| selection task; permission; social contract; cheater detection; pragmatic reasoning schema | 选择任务；许可；社会契约；骗子识别；实用推理图式 |
+| syllogism; premise; mood; figure; valid; no valid conclusion; existential import | 三段论；前提；语气；格；有效；没有有效结论；存在含义 |
+| mental model; counterexample; atmosphere effect; matching; probability heuristics | 心理模型；反例；气氛效应；匹配说；概率启发式 |
+| belief bias; optimal data selection; rarity; expected information gain | 信念偏差；最优数据选择；稀有性；期望信息增益 |
+| problem space; state; operator; means-ends analysis; hill climbing; subgoal; goal stack | 问题空间；状态；算子；手段-目的分析；爬山法；子目标；目标栈 |
+| production system; working memory; ACT-R; think-aloud protocol | 产生式系统；工作记忆；ACT-R；口语报告 |
+| insight; functional fixedness; the nine-dot problem; feeling of warmth | 顿悟；功能固着；九点问题；温暖感 |
+| expertise; chunk; deliberate practice; the 10,000-hour rule | 专长；组块；刻意练习；一万小时定律 |
+| analogy; structure mapping; systematicity; the radiation problem | 类比；结构映射；系统性；射线问题 |
+| mental imagery; mental rotation; depictive; descriptive; tacit knowledge; aphantasia | 心理表象；心理旋转；图画式；描述式；默会知识；心盲症 |
+| contingency; delta P; causal power; noisy-OR; intervention | 相倚性；delta P；因果力；噪声或模型；干预 |
+| bounded rationality; satisficing; posterior median; power law; Erlang prior | 有限理性；满意即止；后验中位数；幂律；埃尔朗先验 |
+| Wason; Griggs, Cox; Cheng, Holyoak; Cosmides; Johnson-Laird; Khemlani; Ragni | 沃森；格里格斯，考克斯；程，霍利约克；科斯米德斯；约翰逊-莱尔德；赫姆拉尼；拉格尼 |
+| Evans, Barston, Pollard; Oaksford, Chater; Woodworth, Sells; Wetherick, Gilhooly | 埃文斯，巴斯顿，波拉德；奥克斯福德，查特；伍德沃思，塞尔斯；韦瑟里克，吉尔胡利 |
+| Newell, Shaw, Simon; Anderson, Douglass; Ericsson; Duncker; Adamson; Metcalfe, Wiebe | 纽厄尔，肖，西蒙；安德森，道格拉斯；埃里克森；东克尔；亚当森；梅特卡夫，维布 |
+| de Groot; Chase; Gobet; Macnamara; Gick; Gentner; Shepard, Metzler; Ganis, Kievit | 德格罗特；蔡斯；戈贝；麦克纳马拉；吉克；根特纳；谢泼德，梅茨勒；加尼斯，基维特 |
+| Kosslyn; Pylyshyn; Zeman; Waldmann, Hagmayer; Griffiths, Tenenbaum; Mozer; Chollet; Webb | 科斯林；派利夏恩；泽曼；瓦尔德曼，哈格迈尔；格里菲斯，特南鲍姆；莫泽；肖莱；韦布 |
 ## Names
 
 | English | 中文 |
