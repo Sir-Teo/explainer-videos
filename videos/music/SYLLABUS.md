@@ -2142,13 +2142,31 @@ listeners prefer?).
 *Story:* In 2008 fans of a rock band found that the version of its new album inside a video game sounded better
 than the CD, which had been mastered so loud that the peaks were shaved flat. The loudness war had a casualty
 with waveforms to prove it. Then streaming services began turning loud records down, and the incentive vanished.
+1. Hook: an ear question (which master was made for loudness?); the waveforms; Death Magnetic; how the war ended; the plan.
+2. What mastering is for: between the mix and the listener; the chain, stage by stage, heard; an album, not a track.
+3. Meters: three old meters; one drum hit; K-weighting; two tones at one voltage, heard; one number.
+4. LUFS and gating: BS.1770 in four lines; the gates at work; checked against ffmpeg; time scales and LRA; targets.
+5. Inter-sample peaks: a peak between the samples; measuring it; overs in a real master; why it matters; inside the converter.
+6. Limiters and clippers: a look-ahead limiter; close up; clipped against limited, heard; clippers on purpose.
+7. The loudness war in numbers: an arms race; one mix, six masters; what loudness costs; the sausage; three masters heard.
+8. Normalization: one gain per track; three masters normalized; an ear question (which was mastered loudest?); albums.
+9. Comparing at equal loudness: an ear question (which sounds better?); the loudness bias; the method; this series' rule.
+10. Dither: cutting the word length; rounding with and without dither; where the error goes; a fade heard; when to dither.
+11. Vinyl, files and this series: the groove; the RIAA curve; a record without it, heard; one master per medium; our levels.
+12. Frontier: what experiments found; after the war; machines that master; the research problem.
+13. Variation 57: an album side, and one war-mastered beside itself. Outro: problems, payoffs.
+
 *Covers:* what mastering is for; the chain; inter-sample peaks; meters; BS.1770, LUFS and gating; normalization;
 the war in numbers; level-matched comparison as method; dither to delivery; vinyl's equalization and geometry;
 delivery formats; this series' own mastering chain, explained and measured.
-*Built and computed:* a gated loudness meter and a true-peak meter agreeing with ffmpeg; a limiter; one mix
-mastered at six loudness levels, then normalized.
-*Variation 57:* an album side of Variations, and one of them "war-mastered" beside itself, level-matched.
-*Frontier:* loudness and listener preference: what experiments found.
+*Built and computed:* `monochord/master.py`: K-weighting, gated blocks, short-term loudness and LRA, VU and PPM, a
+true-peak meter (the series' meter agreeing with ffmpeg's within 0.05 LU and 0.1 dB); a look-ahead true-peak limiter; a
+mastering chain; one mix mastered at six loudness levels (PLR 15.2 to 6.7 dB), then normalized; TPDF dither and noise
+shaping; the RIAA curve and groove excursions.
+*Variation 57:* an album side of Variations, and one of them "war-mastered" beside itself, level-matched (PLR 6.6 dB
+against 13.0).
+*Frontier:* loudness and listener preference: what experiments found (open: what PLR do listeners prefer once
+everything is normalized, and where?).
 *Reading:* Katz, *Mastering Audio*; ITU-R BS.1770; EBU R 128; Deruty & Tardieu (2014).
 
 ### Part 58 · Compression for the Ear (~55)

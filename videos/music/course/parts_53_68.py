@@ -128,4 +128,36 @@ PARTS = [
         I=(1, 5, 6, 8),
         also=(("Monochord's studio: stereo pairs, combs, gain staging, crossfades, the console, the masking map, width, an automatic mixer", "explainer/music/monochord/studio.py"),),
     ),
+    Part(
+        n=57, level="U", widget="loud", prereq=(4, 48, 50, 54, 56),
+        question="What does mastering do to a mix, how is loudness measured, and why did making records louder stop paying?",
+        story="In 2008 Death Magnetic's CD was mastered so loud that its peaks were clipped, while the Guitar Hero versions were not; an ear question hears Part 56's mix mastered gently (-14 LUFS, PLR 13 dB) and for loudness (-7.7 LUFS, PLR 6.7 dB, limited by up to 23 dB) at the same loudness. What mastering is for, and Monochord's chain (tilt EQ, glue, a look-ahead limiter, dither) stage by stage, heard. Meters: sample peak, VU and PPM on a snare hit; K-weighting; a 60 Hz and a 2 kHz tone at one voltage, 6 LU apart, heard. BS.1770 in four lines, the gates at work on a quiet start (-21.9 LUFS against -23.6 ungated), and the series' meter against ffmpeg's (within 0.05 LU and 0.1 dB); LRA and the targets of R 128 and the services. Inter-sample peaks: a sine 3 dB above its samples; a clipped master +2.5 dBTP; why converters and codecs care. The look-ahead limiter, close up, against a clipper, heard. The loudness war in numbers: six masters, the PLR falling from 15 to 6.7 dB while the loudness range hardly moves (as Deruty and Tardieu found), the limiter topping out near -7.7 LUFS; the sausage; three masters heard as mastered. Normalization to -14 LUFS (the loud master turned down 6 dB, its peaks now the lowest) and an ear question on which was mastered loudest. The loudness bias (an ear question: the same master 1 dB louder), level-matched blind comparison, and the series' own rule. Dither: rounding's staircase, error spectra, a fading note at 8 bits rounded, dithered and shaped, heard. Vinyl's groove and the RIAA curve (+19.3, -19.6 dB), a record without it heard; one master per medium; how this series is mastered. Frontier: what preference experiments found, after the war, machines that master. An album side of Variations, and one war-mastered beside itself.",
+        handoff="Codecs, their overshoots and their listening tests in Part 58; loudness limits and safety in Part 59; "
+                "formats and streaming's rules in Part 60; blind tests and their statistics in Part 67; every Variation, "
+                "sequenced and matched, in Part 68.",
+        outside="Part 4 for loudness, equal-loudness curves and the ear's safety; Part 48 for sampling, quantization and "
+                "the word length; Part 50 for compressors and saturation; Part 54 for the phone; Part 56 for the mix. "
+                "Decibels, means and percentiles, interpolation.",
+        objectives={
+            "U": ["Hear one mix mastered gently and for loudness at the same loudness, and three masters as mastered and normalized.",
+                  "Hear a low and a high tone at one voltage, clipping against limiting, and one master made 1 dB louder.",
+                  "Hear a fading note rounded, dithered and noise-shaped, and a record played without its RIAA curve."],
+            "M": ["Derive BS.1770's integrated loudness with K-weighting and both gates, and the loudness range of Tech 3342.",
+                  "Show why samples miss true peaks, measure them by oversampling, and hold them with a look-ahead limiter.",
+                  "Compute normalization gains, the cost of loudness in PLR, quantization with and without dither, and RIAA."],
+            "D": ["Find what peak-to-loudness ratio listeners prefer once everything is normalized, and where they listen."],
+            "I": ["Meter, master and deliver for each medium: a loudness target, a true-peak ceiling, dither, comparisons at equal loudness."],
+        },
+        results=[
+            ("BS.1770", r"L_K = -0.691 + 10\log_{10}\textstyle\sum_c G_c z_c, \ \text{gates at } -70 \text{ LUFS and } -10 \text{ LU}"),
+            ("True peak", r"\text{sine at } f_s/4,\ 45^\circ: \ +3.01\ \text{dB above its samples}"),
+            ("Normalization", r"g = \min(0,\ \text{target} - L), \text{ or up to } -1\ \text{dBTP}"),
+            ("Word length", r"\text{SNR} \approx 6.02\,N + 1.76\ \text{dB}"),
+            ("RIAA", r"H = \frac{1 + s\,318\,\mu s}{(1 + s\,3180\,\mu s)(1 + s\,75\,\mu s)}"),
+        ],
+        U=(0, 2, 6, 7, 8, 9, 10),
+        D=(11,),
+        I=(1, 3, 4, 5),
+        also=(("Monochord's mastering bench: meters, gating, true peak, a look-ahead limiter, normalization, dither, RIAA", "explainer/music/monochord/master.py"),),
+    ),
 ]

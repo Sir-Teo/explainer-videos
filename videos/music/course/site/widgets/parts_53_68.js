@@ -236,4 +236,80 @@
       note: "The 3 : 1 rule: with the far microphone three times as far away, it hears the source 9.5 dB quieter and the comb stays within +2.5 and -3.5 dB. Flip the polarity and the notches move to where the peaks were, starting with the bass."
     });
   };
+
+  // ---- Part 57: a limiter and a streaming service ------------------------------------------------------------------
+  var LOOP = null;
+  function loopGroove() {
+    if (LOOP) return LOOP;
+    var rate = 48000, n = 4 * rate, y = new Float32Array(n), seed = 7;
+    function rnd() { seed = (seed * 16807) % 2147483647; return seed / 2147483647 * 2 - 1; }
+    for (var k = 0; k < 16; k++) {
+      var i0 = Math.floor(k * 0.25 * rate), L = Math.floor(0.2 * rate);
+      for (var j = 0; j < L && i0 + j < n; j++) {
+        var t = j / rate;
+        y[i0 + j] += (k % 2 === 0) ? Math.sin(2 * Math.PI * (60 + 80 * Math.exp(-t * 30)) * t) * Math.exp(-t * 12) : 0.6 * rnd() * Math.exp(-t * 25);
+      }
+    }
+    for (var i = 0; i < n; i++) { var tt = i / rate; y[i] = 0.1 * (y[i] + 0.15 * Math.sin(2 * Math.PI * 110 * tt) * (1 + 0.5 * Math.sin(Math.PI * tt))); }
+    LOOP = y;
+    return y;
+  }
+  function kLoudness(y) {
+    var b1 = [1.53512485958697, -2.69169618940638, 1.19839281085285], a1 = [1, -1.69065929318241, 0.73248077421585];
+    var b2 = [1, -2, 1], a2 = [1, -1.99004745483398, 0.99007225036621];
+    function filt(x, b, a) { var o = new Float32Array(x.length), x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+      for (var i = 0; i < x.length; i++) { var v = b[0] * x[i] + b[1] * x1 + b[2] * x2 - a[1] * y1 - a[2] * y2; x2 = x1; x1 = x[i]; y2 = y1; y1 = v; o[i] = v; } return o; }
+    var z = filt(filt(y, b1, a1), b2, a2), ms = 0;
+    for (var i = 0; i < z.length; i++) ms += z[i] * z[i];
+    return -0.691 + 10 * Math.log10(2 * ms / z.length + 1e-20);      // the same signal in two channels
+  }
+  function limitTo(y, driveDb) {
+    var g = Math.pow(10, driveDb / 20), c = Math.pow(10, -1 / 20), n = y.length, L = 72, need = new Float32Array(n), out = new Float32Array(n);
+    for (var i = 0; i < n; i++) need[i] = Math.min(1, c / Math.max(Math.abs(y[i] * g), 1e-9));
+    var e = 1, rel = Math.exp(-1 / (0.08 * 48000)), peak = 0;
+    for (i = 0; i < n; i++) {
+      var m = 1;
+      for (var j = i; j < Math.min(n, i + L); j++) if (need[j] < m) m = need[j];
+      e = m < e ? m : rel * e + (1 - rel) * m;
+      out[i] = Math.max(-c, Math.min(c, y[i] * g * e));
+      peak = Math.max(peak, Math.abs(out[i]));
+    }
+    return { y: out, peak: 20 * Math.log10(peak + 1e-12) };
+  }
+
+  W.loud = function (el) {
+    QB.widget(el, {
+      title: "A limiter and a streaming service",
+      sub: "Drive a short groove into a look-ahead limiter with its ceiling at -1 dBFS. The plot is the master's waveform; the readout its loudness, its peak-to-loudness ratio, and the gain a streaming service at its target would give it. Hear it as mastered, then as the service plays it.",
+      panels: 1, height: 220,
+      controls: [{ k: "drive", label: "Drive into the limiter", min: 0, max: 36, step: 0.5, value: 16, fmt: function (x) { return "+" + x.toFixed(1) + " dB"; } },
+                 { k: "svc", label: "The service's target", min: -24, max: -10, step: 1, value: -14, fmt: function (x) { return x.toFixed(0) + " LUFS"; } }],
+      buttons: [{ label: "Play as mastered", act: function (s) { s.sound = play(s.m.y, 48000); } },
+                { label: "Play as the service plays it", act: function (s) {
+                  var g = Math.pow(10, Math.min(0, s.v.svc - s.L) / 20), y = new Float32Array(s.m.y.length);
+                  for (var i = 0; i < y.length; i++) y[i] = s.m.y[i] * g;
+                  s.sound = play(y, 48000);
+                } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        s.m = limitTo(loopGroove(), v.drive);
+        s.L = kLoudness(s.m.y);
+        var a = gr[0].axes({ x: [0, 4], y: [-1, 1], title: "The master's waveform (ceiling at -1 dBFS)", xlabel: "seconds" });
+        var xs = [], hi = [], lo = [], step = 480;
+        for (var i = 0; i < s.m.y.length; i += step) { var mx = 0; for (var j = i; j < i + step; j++) mx = Math.max(mx, Math.abs(s.m.y[j])); xs.push(i / 48000); hi.push(mx); lo.push(-mx); }
+        a.line([0, 4], [0.891, 0.891], { color: "#C0504D", width: 1 });
+        a.line([0, 4], [-0.891, -0.891], { color: "#C0504D", width: 1 });
+        a.line(xs, hi, { color: C.idea, width: 1.5 });
+        a.line(xs, lo, { color: C.idea, width: 1.5 });
+      },
+      readout: function (v, s) {
+        var g = Math.min(0, v.svc - s.L);
+        return [["loudness (K-weighted, ungated)", s.L.toFixed(1) + " LUFS"], ["peak-to-loudness ratio", (s.m.peak - s.L).toFixed(1) + " dB"],
+                ["the service's gain", g.toFixed(1) + " dB (it never turns this one up)"], ["peaks as played", (s.m.peak + g).toFixed(1) + " dBFS"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Past the point where the limiter starts working, every decibel of drive adds less than a decibel of loudness and takes almost a decibel of peak-to-loudness ratio. The service hands the loudness back; the flattened peaks stay flattened."
+    });
+  };
 })();
