@@ -543,3 +543,152 @@ def bits_plot(values, width=11.0, height=1.6, top=8.0, color=EAR, x0=None, y0=0.
         h = height * min(v, top) / top
         g.add(Rectangle(width=width / n * 0.7, height=max(h, 0.01), stroke_width=0, fill_color=color, fill_opacity=0.85).move_to([x0 + width * (i + 0.5) / n, y0 + h / 2, 0]))
     return g
+
+
+# ------------------------------------------------------------------------------------------------ Part 47's drawings
+def mel_notes(mel, base=60.0, centre=None):
+    """A melody of [pitch, beats] as roll notes [key, onset, beats] (``centre``: put the median pitch there)."""
+    off = 0.0 if centre is None else centre - float(np.median([x[0] for x in mel])) - base
+    out, t = [], 0.0
+    for p, b in mel:
+        out.append([base + p + off, t, b])
+        t += b
+    return out
+
+
+def simplex(side=4.4, color=GREY_B):
+    """The triangle of three-interval rhythms: a rhythm (a, b, c), proportions of the cycle, sits at a*A + b*B + c*C,
+    so each corner is the rhythm whose whole cycle is one interval."""
+    h = side * np.sqrt(3) / 2
+    tri = Polygon([-side / 2, -h / 3, 0], [side / 2, -h / 3, 0], [0, 2 * h / 3, 0], stroke_color=color, stroke_width=2)
+    g = VGroup(tri)
+    g.tri = tri
+
+    def at(x):
+        A, B, C = tri.get_vertices()
+        x = np.asarray(x, float)
+        if len(x) == 2:
+            x = np.array([x[0], x[1], 1 - x[0] - x[1]])
+        return x[0] * A + x[1] * B + x[2] * C
+
+    g.at = at
+    return g
+
+
+def ratio_tex(pat) -> str:
+    return r"\,:\,".join(str(int(v)) for v in pat)
+
+
+def line_plot(series, width=5.2, height=2.6, ylo=0.0, yhi=1.0, xmax=None, colors=None, bands=None, xlabel="", ylabel="",
+              yticks=(), xticks=(), size=16, stroke=3):
+    """Lines ``series[k] = ys`` against 0, 1, 2, ...; ``bands[k] = (lo, hi)`` shaded behind.  ``.to(x, y)`` maps data
+    to the screen; ``.lines`` are the curves."""
+    colors = colors or [TUNE, BLUE, EAR, GOLD]
+    xmax = xmax or max(len(s) for s in series) - 1
+    fr = VGroup(Line([0, 0, 0], [width, 0, 0], color=GREY_B, stroke_width=1.5), Line([0, 0, 0], [0, height, 0], color=GREY_B, stroke_width=1.5))
+    g = VGroup(fr)
+
+    def to(x, y):
+        return fr[0].get_start() + RIGHT * width * x / xmax + UP * height * (y - ylo) / (yhi - ylo)
+
+    g.to = to
+    if bands:
+        for k, (lo, hi) in enumerate(bands):
+            pts = [to(i, v) for i, v in enumerate(hi)] + [to(i, v) for i, v in reversed(list(enumerate(lo)))]
+            g.add(Polygon(*pts, stroke_width=0, fill_color=colors[k % len(colors)], fill_opacity=0.18))
+    g.lines = VGroup()
+    for k, ys in enumerate(series):
+        ln = VMobject(stroke_color=colors[k % len(colors)], stroke_width=stroke).set_points_as_corners([to(i, v) for i, v in enumerate(ys)])
+        g.lines.add(ln)
+    g.add(g.lines)
+    for v in yticks:
+        g.add(label(f"{v:g}", font_size=size - 2, color=GREY_A).next_to(to(0, v), LEFT, buff=0.12))
+    for v in xticks:
+        g.add(label(f"{v:g}", font_size=size - 2, color=GREY_A).next_to(to(v, ylo), DOWN, buff=0.12))
+    if xlabel:
+        g.add(label(xlabel, font_size=size, color=GREY_A).next_to(fr[0], DOWN, buff=0.45))
+    if ylabel:
+        g.add(label(ylabel, font_size=size, color=WHITE).next_to(fr[1], UP, buff=0.15).align_to(fr[1], LEFT))
+    return g
+
+
+def phase_circle(phases, R, mean, radius=1.25, color=TUNE, dot=0.07):
+    """Angles round a circle, 0 at the top (on the beat), clockwise; the mean resultant as an arrow of length R."""
+    c = Circle(radius=radius, stroke_color=GREY_B, stroke_width=2)
+    top = Dot(c.get_top(), radius=0.05, color=WHITE)
+    dots = VGroup(*[Dot([radius * np.sin(t), radius * np.cos(t), 0], radius=dot, color=color, fill_opacity=0.85) for t in phases])
+    end = np.array([R * radius * np.sin(mean), R * radius * np.cos(mean), 0])
+    arr_ = Arrow(ORIGIN, end if R > 0.05 else end + 0.001, buff=0, color=WHITE, stroke_width=5, max_tip_length_to_length_ratio=0.25) if R > 0.08 else Dot(ORIGIN, radius=0.06, color=WHITE)
+    g = VGroup(c, top, dots, arr_)
+    g.dots, g.arrow = dots, arr_
+    return g
+
+
+def tree_depth(t):
+    return 0 if not isinstance(t, (list, tuple)) else 1 + max(tree_depth(t[0]), tree_depth(t[1]))
+
+
+def tree_leaves(t):
+    return [t] if not isinstance(t, (list, tuple)) else tree_leaves(t[0]) + tree_leaves(t[1])
+
+
+def dendro(tree, width=8.0, height=3.0, color=GREY_A, size=18, labels=None, leaf_colors=None, stroke=3):
+    """A cladogram of nested pairs: leaves along the bottom in the tree's order, each join drawn at the height of its
+    deepest branch.  ``.clades[frozenset(leaves)]`` is the join's drawing; ``.tags[leaf]`` its label."""
+    lv = tree_leaves(tree)
+    D = max(tree_depth(tree), 1)
+    xs = {n: -width / 2 + width * i / max(len(lv) - 1, 1) for i, n in enumerate(lv)}
+    g = VGroup()
+    g.clades, g.tags = {}, {}
+
+    def draw(t):
+        if not isinstance(t, (list, tuple)):
+            return np.array([xs[t], -height / 2, 0])
+        a, b = draw(t[0]), draw(t[1])
+        y = -height / 2 + height * tree_depth(t) / D
+        j = VGroup(Line(a, [a[0], y, 0], color=color, stroke_width=stroke), Line(b, [b[0], y, 0], color=color, stroke_width=stroke),
+                   Line([a[0], y, 0], [b[0], y, 0], color=color, stroke_width=stroke))
+        g.add(j)
+        g.clades[frozenset(tree_leaves(t))] = j
+        return np.array([(a[0] + b[0]) / 2, y, 0])
+
+    draw(tree)
+    for n in lv:
+        t = label((labels or {}).get(n, n), font_size=size, color=(leaf_colors or {}).get(n, WHITE))
+        t.next_to([xs[n], -height / 2, 0], DOWN, buff=0.15)
+        g.tags[n] = t
+        g.add(t)
+    return g
+
+
+def log_timeline(events, width=11.5, lo=1000, hi=100000, y=0.0, size=17):
+    """Events (years ago, text, colour) above or below a logarithmic axis of years ago (older to the left)."""
+    def x(v):
+        return width / 2 - width * (np.log10(v) - np.log10(lo)) / (np.log10(hi) - np.log10(lo))
+
+    ax = Line([-width / 2, y, 0], [width / 2, y, 0], color=GREY_B, stroke_width=2)
+    g = VGroup(ax)
+    g.x = x
+    for v in (1000, 3000, 10000, 30000, 100000):
+        if lo <= v <= hi:
+            g.add(Line([x(v), y - 0.08, 0], [x(v), y + 0.08, 0], color=GREY_B, stroke_width=2),
+                  label(f"{v:,}", font_size=size - 3, color=GREY_A).move_to([x(v), y - 0.32, 0]))
+    g.add(label(r"years ago", font_size=size - 2, color=GREY_A).next_to(ax, RIGHT, buff=0.15))
+    g.marks = VGroup()
+    for k, (v, text, col) in enumerate(events):
+        up = k % 2 == 0
+        tip = Dot([x(v), y, 0], radius=0.07, color=col)
+        stem = Line([x(v), y, 0], [x(v), y + (0.75 if up else -0.75), 0], color=col, stroke_width=1.5)
+        tag = label(text, font_size=size, color=col).next_to(stem, UP if up else DOWN, buff=0.08)
+        g.marks.add(VGroup(tip, stem, tag))
+    g.add(g.marks)
+    return g
+
+
+def note_of(f: float) -> str:
+    """The nearest note to a frequency, and how far off it is in cents (for Tex): ``G5 $-$40``."""
+    m = 69 + 12 * np.log2(f / 440.0)
+    k = int(round(m))
+    c = int(round(100 * (m - k)))
+    name = LETTER[k % 12] + str(k // 12 - 1)
+    return name + (r" \ $+$" + str(c) if c > 0 else r" \ $-$" + str(-c) if c < 0 else "")

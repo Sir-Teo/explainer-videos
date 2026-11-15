@@ -97,6 +97,8 @@ LEDGER = [
      "measure": r"14 notes of the Tune interleaved with 14 others; the two lines cross 13 times"},
     {"part": 46, "title": r"with three endings: expected, delayed, denied", "seconds": 33.2,
      "measure": r"the turn to the ending costs 1.2, 6.3 and 10.9 bits; the last note 1.2, 0.9, 10.9"},
+    {"part": 47, "title": r"through thirty simulated singers", "seconds": 53.5,
+     "measure": r"42 notes in, 41 out; 29 kept exactly; alignment cost 0.28 a note"},
 ]
 
 

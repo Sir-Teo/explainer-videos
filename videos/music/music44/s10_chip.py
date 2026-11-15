@@ -116,15 +116,44 @@ class Chip(SoundScene):
                          for n, w, col in ((r"pulse 1, \ 50\%", r"the melody", TUNE), (r"pulse 2, \ 25\%", r"the chords, \ as arpeggios", BLUE),
                                            (r"triangle", r"the bass", "#A3E635"), (r"noise", r"a short hit every other note", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(UP * 0.4)
         head = label(r"the Tune on the chip", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
+        from explainer.music.monochord import tune as TT
+        ev = TT.events(0.3, [0, 1])
+        major = {1: 0, 2: 2, 3: 4, 4: 5, 5: 7, 6: 9, 7: 11}
+        roots = {1: 0, 3: 0, 5: 0, 4: 5, 6: 5, 2: 7, 7: 7}
+        chords = {0: (0, 4, 7), 5: (5, 9, 12), 7: (7, 11, 14)}
+        total = ev[-1]["t"] + ev[-1]["dur"]
+        W, x0 = 8.4, -1.6
+        def X(t):
+            return x0 + W * t / total
+        lanes = VGroup()
+        ys = [1.3, 0.35, -0.6, -1.4]
+        mel = VGroup(*[Rectangle(width=W * e["dur"] * 0.85 / total, height=0.09, stroke_width=0, fill_color=TUNE, fill_opacity=1.0)
+                       .move_to([X(e["t"]) + W * e["dur"] * 0.85 / total / 2, ys[0] - 0.3 + 0.06 * major[e["degree"]], 0]) for e in ev])
+        arp = VGroup()
+        for e in ev:
+            ch = chords[roots[e["degree"]]]
+            k = int(e["dur"] / 0.05)
+            arp.add(VGroup(*[Rectangle(width=W * 0.045 / total, height=0.06, stroke_width=0, fill_color=BLUE, fill_opacity=1.0)
+                             .move_to([X(e["t"] + 0.05 * j) + W * 0.0225 / total, ys[1] - 0.3 + 0.04 * ch[j % 3], 0]) for j in range(k)]))
+        bas = VGroup(*[Rectangle(width=W * e["dur"] * 0.9 / total, height=0.1, stroke_width=0, fill_color="#A3E635", fill_opacity=1.0)
+                       .move_to([X(e["t"]) + W * e["dur"] * 0.9 / total / 2, ys[2] - 0.15 + 0.03 * roots[e["degree"]], 0]) for e in ev])
+        noi = VGroup(*[Rectangle(width=0.08, height=0.25, stroke_width=0, fill_color=EAR, fill_opacity=1.0).move_to([X(e["t"]) + 0.04, ys[3], 0])
+                       for e in ev if e["i"] % 2 == 0])
+        lanes = VGroup(mel, arp, bas, noi)
+        for r, y in zip(rows_, ys):
+            r.arrange(DOWN, buff=0.08, aligned_edge=LEFT).move_to([x0 - 0.4, y, 0], aligned_edge=RIGHT)
         with self.voiceover(
             "Here is the Tune's first two phrases on the chip, with every channel used: the melody on one pulse, the chords "
             "as arpeggios on the other, the bass on the triangle, and a short noise hit as a drum."
         ):
-            self.play(FadeIn(head), FadeIn(rows_))
+            self.play(FadeIn(head), FadeIn(rows_), FadeIn(lanes))
+        noise_t = [e["t"] for e in ev if e["i"] % 2 == 0]
         with self.listen(c) as snd:
             window(snd, r"the Tune, \ chip", kind="synthesized", detail=r"our chip", corner=DL, tag_corner=DR)
-            for i in range(4):
-                pulse(snd, rows_[i], 0.0, c.duration, buff=0.06, rate=8.0 + 3 * i)
+            flash(snd, list(mel), [e["t"] for e in ev], hot=WHITE, base=TUNE)
+            flash(snd, list(arp), [e["t"] for e in ev], hot=WHITE, base=BLUE)
+            flash(snd, list(bas), [e["t"] for e in ev], hot=WHITE, base="#A3E635")
+            flash(snd, list(noi), noise_t, hot=WHITE, base=EAR)
         self.wait(0.3)
         self.clear_scene()
 

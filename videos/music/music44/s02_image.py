@@ -66,6 +66,7 @@ class Picture(SoundScene):
             (r"suspense: \ low drones, \ a heartbeat, \ stabs at the hits; \ a figure in danger, \ or a dangerous one", EAR),
             (r"heroic: \ a horn motive, \ full chords; \ a brave figure, \ and a triumphant landing", BLUE),
         ], font_size=22)
+        hd = label(r"one picture, \ three films", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         self.play(FadeOut(st), FadeOut(sp))
         with self.voiceover(
             "Three different films. <bookmark mark='a'/> The comic score mirrors every footstep and action, and the "
@@ -73,6 +74,7 @@ class Picture(SoundScene):
             "stabs at the hits, makes it a figure in danger, or a dangerous one. <bookmark mark='c'/> The heroic score gives "
             "it a horn motive and full chords, and the fall becomes a triumphant landing."
         ) as vo:
+            self.play(FadeIn(hd), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abc", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

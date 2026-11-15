@@ -387,13 +387,7 @@ def note_cost(a, b) -> float:
     return min(dp + dd, 1.5)
 
 
-def align(a, b, gap: float = 1.0) -> dict:
-    """Needleman-Wunsch alignment of two melodies (lists of [pitch, duration]); pitches compared relative to each
-    melody's median.  Returns the cost, the cost per note of the longer melody, and the aligned pairs."""
-    ma = np.median([x[0] for x in a])
-    mb = np.median([x[0] for x in b])
-    A = [(x[0] - ma, x[1]) for x in a]
-    B = [(x[0] - mb, x[1]) for x in b]
+def _align(A, B, gap):
     n, m = len(A), len(B)
     D = np.zeros((n + 1, m + 1))
     D[:, 0] = gap * np.arange(n + 1)
@@ -401,6 +395,25 @@ def align(a, b, gap: float = 1.0) -> dict:
     for i in range(1, n + 1):
         for j in range(1, m + 1):
             D[i, j] = min(D[i - 1, j - 1] + note_cost(A[i - 1], B[j - 1]), D[i - 1, j] + gap, D[i, j - 1] + gap)
+    return D
+
+
+def align(a, b, gap: float = 1.0) -> dict:
+    """Needleman-Wunsch alignment of two melodies (lists of [pitch, duration]) under their best transposition: ``b`` is
+    tried moved by the difference of the two medians and by whole semitones near it, and the cheapest is kept.
+    Returns the cost, the cost per note of the longer melody, the shift, and the aligned pairs."""
+    ma = float(np.median([x[0] for x in a]))
+    mb = float(np.median([x[0] for x in b]))
+    A = [(x[0], x[1]) for x in a]
+    k0 = round(ma - mb)
+    best = None
+    for sh in sorted({ma - mb} | {float(k0 + k) for k in range(-2, 3)}):
+        B = [(x[0] + sh, x[1]) for x in b]
+        D = _align(A, B, gap)
+        if best is None or D[-1, -1] < best[0][-1, -1] - 1e-12:
+            best = (D, B, sh)
+    D, B, sh = best
+    n, m = len(A), len(B)
     pairs, i, j = [], n, m
     while i > 0 or j > 0:
         if i > 0 and j > 0 and abs(D[i, j] - D[i - 1, j - 1] - note_cost(A[i - 1], B[j - 1])) < 1e-9:
@@ -413,7 +426,7 @@ def align(a, b, gap: float = 1.0) -> dict:
             pairs.append((None, j - 1))
             j -= 1
     pairs.reverse()
-    return {"cost": float(D[n, m]), "per_note": float(D[n, m] / max(n, m)), "pairs": pairs}
+    return {"cost": float(D[n, m]), "per_note": float(D[n, m] / max(n, m)), "shift": float(sh), "pairs": pairs}
 
 
 def distances(mels) -> np.ndarray:

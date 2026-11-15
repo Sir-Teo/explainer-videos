@@ -6,11 +6,11 @@
 Numbers are cached in ``.cache/music47/<name>.json``, sounds in ``.cache/music47/audio/``.  The tools are Monochord's
 (``explainer/music/monochord/origins.py``).  Every transmission, listener and dancer here is simulated, and says so;
 published findings (Conard, Mehr, Savage, Jacoby and McDermott, Patel, Pietschnig, Sala and Gobet) are quoted, not
-reproduced.  Sounds: Part 9's flute (a jet against an edge), Part 16's singing voice, Part 7's piano, Part 40's drums,
+reproduced.  Sounds: Part 8's flute (a jet against an edge), Part 8's singing voice, Part 7's piano, Part 40's drums,
 a struck-wood tap (a sum of decaying partials).
 
 Items:
-    hook        a pipe the size of the Hohle Fels flute, with five holes, by Part 9's flute model
+    hook        a pipe the size of the Hohle Fels flute, with five holes, by Part 8's flute model
     lullaby     an ear question: one melody as a dance song and as a lullaby
     universals  six of Savage's statistical universals, checked on the series' corpus of tunes
     rhythm      iterated reproduction of three-interval rhythms by two simulated listeners with different priors
@@ -23,6 +23,8 @@ Items:
     beat        an ear question: two simulated dancers; which is on the beat? and Rayleigh's test
     amusia      an ear question in the style of the Montreal battery: which pair of melodies differed?
     mozart      many small studies of a small effect, and what the published ones say
+    chords      consonant and dissonant chords of the kind McDermott's listeners rated
+    rhythms     two tunes of the corpus at the ends of the nPVI scale
     variation   the Variations ledger, row 47
 """
 
@@ -62,7 +64,7 @@ def as_mel(m) -> list:
 
 
 def voice_clip(mel, beat=0.42, base=64, part="soprano", vowel="u", tail=0.8, legato=0.96, seed=0, centre=True):
-    """A melody ([pitch, beats]) sung by Part 16's voice, its median pitch placed on key ``base``."""
+    """A melody ([pitch, beats]) sung by Part 8's voice, its median pitch placed on key ``base``."""
     mid = float(np.median([x[0] for x in mel])) if centre else 0.0
     notes, t = [], 0.0
     for p, b in mel:
@@ -84,11 +86,10 @@ def tap(seconds=0.25, f=1150.0):
     return Clip(modal([f, 2.71 * f, 4.9 * f], [1.0, 0.45, 0.2], [38.0, 70.0, 120.0], seconds), SR)
 
 
-def names(mel, ref_median=None):
-    """Note names of a melody whose pitches are semitones above C (moved so that its median matches ``ref_median``)."""
+def names(mel, shift=0.0):
+    """Note names of a melody whose pitches are semitones above C, after moving it by ``shift`` semitones."""
     letters = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
-    off = 0.0 if ref_median is None else float(np.median([x[0] for x in mel])) - ref_median
-    return [letters[int(round(x[0] - off)) % 12] for x in mel]
+    return [letters[int(round(x[0] + shift)) % 12] for x in mel]
 
 
 # ---------------------------------------------------------------------------------------------------------- items
@@ -114,7 +115,7 @@ def compute_hook() -> dict:
     return {"length": L, "bore": bore, "holes": HOLES, "hz": hz, "cents": cents,
             "fundamental": {"0.218": O.pipe_hz(0.218, bore), "0.34": O.pipe_hz(0.34, bore)},
             "steps": [cents[i + 1] - cents[i] for i in range(len(cents) - 1)], "seq": seq, "tune": [list(x) for x in tune],
-            "clips": {"flute": save("hook.flute", c, detail="a pipe 21.8 cm long and 8 mm across with five evenly spaced holes, opened one by one and then played as a little tune; Part 9's flute model, not a reconstruction of any real flute's tuning")}}
+            "clips": {"flute": save("hook.flute", c, detail="a pipe 21.8 cm long and 8 mm across with five evenly spaced holes, opened one by one and then played as a little tune; Part 8's flute model, not a reconstruction of any real flute's tuning")}}
 
 
 AU_CLAIR = [(0, 1), (0, 1), (0, 1), (2, 1), (4, 2), (2, 2), (0, 1), (4, 1), (2, 1), (2, 1), (0, 4)]
@@ -139,7 +140,7 @@ def compute_lullaby() -> dict:
     return {"order": ["dance", "lullaby"], "answer": "second", "features": feats, "bpm": {"dance": dan_bpm, "lullaby": lul_bpm},
             "notes": [list(x) for x in AU_CLAIR],
             "starts": {"first": float(c.events["first"]), "second": float(c.events["second"])},
-            "clips": {"two": save_synth("lullaby.two", c, detail="the opening of Au clair de la lune sung fast and short over drums, then slow, smooth and soft; Part 16's voice and Part 40's drums")}}
+            "clips": {"two": save_synth("lullaby.two", c, detail="the opening of Au clair de la lune sung fast and short over drums, then slow, smooth and soft; Part 8's voice and Part 40's drums")}}
 
 
 def compute_universals() -> dict:
@@ -177,7 +178,10 @@ def compute_rhythm() -> dict:
     first = ch[0, 0]
     last = ch[0, -1]
     c = concat([rhythm_clip(first), rhythm_clip(last)], gap=1.2, names=["start", "end"])
-    out["example"] = {"start": first.tolist(), "end": last.tolist()}
+    from itertools import permutations
+    orders = [o for pat in PRIOR_A for o in sorted(set(permutations(pat)))]
+    near = min(orders, key=lambda o: np.sum((np.array(o) / sum(o) - last) ** 2))
+    out["example"] = {"start": first.tolist(), "end": last.tolist(), "near": [int(v) for v in near]}
     out["starts"] = {"start": float(c.events["start"]), "end": float(c.events["end"])}
     out["clips"] = {"two": save_synth("rhythm.two", c, detail="a random three-interval rhythm looped four times, then what one simulated listener tapped after five rounds of hearing its own tapping; struck-wood taps")}
     return out
@@ -214,7 +218,7 @@ def compute_chains() -> dict:
             "example": {str(g): ex[g] for g in show}, "show": show, "generations": GENS, "chains": len(chains),
             "lengths": [len(ch[-1]) for ch in chains],
             "starts": {"first": float(c.events["first"]), "last": float(c.events["last"])},
-            "clips": {"two": save_synth("chains.two", c, detail="a random melody, then what it became after forty simulated singers; Part 16's voice")}}
+            "clips": {"two": save_synth("chains.two", c, detail="a random melody, then what it became after forty simulated singers; Part 8's voice")}}
 
 
 def compute_sampling() -> dict:
@@ -244,14 +248,14 @@ def compute_tune47() -> dict:
     ch = O.transmission_chain(TUNE_MEL, 30, rng)
     dist = [O.align(TUNE_MEL, m)["per_note"] for m in ch]
     show = [0, 10, 20, 30]
-    ref = float(np.median(THE.pitches))
     c = concat([voice_clip(ch[g], beat=0.36, base=64 + 0, seed=g, tail=0.6) for g in (0, 15, 30)], gap=1.0, names=["g0", "g15", "g30"])
     last = ch[30]
     return {"melodies": {str(g): ch[g] for g in show}, "show": show, "distance": dist, "notes_in": len(TUNE_MEL), "notes_out": len(last),
-            "kept": kept_notes(TUNE_MEL, last), "names": {str(g): names(ch[g], ref) for g in show},
+            "kept": kept_notes(TUNE_MEL, last), "names": {str(g): names(ch[g], O.align(TUNE_MEL, ch[g])["shift"]) for g in show},
+            "shift": {str(g): O.align(TUNE_MEL, ch[g])["shift"] for g in show},
             "steps": {str(g): O.structure(ch[g])["step"] for g in show}, "seconds": c.duration,
             "starts": {"g0": float(c.events["g0"]), "g15": float(c.events["g15"]), "g30": float(c.events["g30"])},
-            "clips": {"variation47": save_synth("tune.variation47", c, detail="the Tune sung by Part 16's voice, then as the fifteenth and the thirtieth simulated singer sang it")}}
+            "clips": {"variation47": save_synth("tune.variation47", c, detail="the Tune sung by Part 8's voice, then as the fifteenth and the thirtieth simulated singer sang it")}}
 
 
 def compute_family() -> dict:
@@ -390,10 +394,39 @@ def compute_variation() -> dict:
             "clip": "tune.variation47"}
 
 
+CHORDS = {"major triad": [60, 64, 67], "fifth": [55, 62, 67], "cluster": [60, 61, 62], "tritone and minor ninth": [55, 61, 68]}
+
+
+def compute_chords() -> dict:
+    def chord(keys):
+        return Clip(mix([(arr(piano(k, 1.6, 0.7)), 0.0, 0.0) for k in keys], duration=2.0).y, SR)
+    order = ["major triad", "cluster", "fifth", "tritone and minor ninth"]
+    c = concat([chord(CHORDS[k]) for k in order], gap=0.5, names=[f"c{i}" for i in range(4)])
+    return {"order": order, "keys": {k: CHORDS[k] for k in order}, "consonant": ["major triad", "fifth"],
+            "starts": [float(c.events[f"c{i}"]) for i in range(4)],
+            "clips": {"four": save("chords.four", c, detail="a major triad, a three-note semitone cluster, an open fifth with its octave, and a chord of a tritone and a minor ninth; Part 7's piano")}}
+
+
+RHYTHM_TUNES = ["Sur le pont d'Avignon", "Oh My Darling, Clementine"]
+
+
+def compute_rhythms() -> dict:
+    out, clips = {}, []
+    for name in RHYTHM_TUNES:
+        t = [x for x in TUNES if x.name == name][0]
+        k = t.phrase_ends[1] if len(t.phrase_ends) > 1 else len(t.pitches)
+        mel = as_mel(t)[:k]
+        out[name] = {"melody": mel, "npvi": O.npvi(t.beats[:-1]), "origin": t.origin}
+        clips.append(piano_line(mel, beat=0.36))
+    c = concat(clips, gap=1.0, names=["first", "second"])
+    return {"tunes": out, "order": RHYTHM_TUNES, "starts": {"first": float(c.events["first"]), "second": float(c.events["second"])},
+            "beat": 0.36, "clips": {"two": save("rhythms.two", c, detail="the first two phrases of Sur le pont d'Avignon and of Oh My Darling, Clementine; Part 7's piano")}}
+
+
 ITEMS = {"hook": compute_hook, "lullaby": compute_lullaby, "universals": compute_universals, "rhythm": compute_rhythm,
          "chains": compute_chains, "sampling": compute_sampling, "tune47": compute_tune47, "family": compute_family,
          "relatives": compute_relatives, "npvi": compute_npvi, "beat": compute_beat, "amusia": compute_amusia,
-         "mozart": compute_mozart, "variation": compute_variation}
+         "mozart": compute_mozart, "chords": compute_chords, "rhythms": compute_rhythms, "variation": compute_variation}
 
 
 if __name__ == "__main__":
