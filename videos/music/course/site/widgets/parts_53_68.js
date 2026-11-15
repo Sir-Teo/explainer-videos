@@ -502,4 +502,81 @@
       note: "Set the light and heavy listeners to the same number of streams and the two divisions agree: the difference comes only from how much the kinds of listener play. Add bots, and pro rata pays them a share of everyone's fees; user by user they get back only their own."
     });
   };
+
+  // ---- Part 61: YIN -------------------------------------------------------------------------------------------------
+  function yinTone(v, n, seed) {
+    var sr = 44100, y = new Float32Array(n), s = seed || 1;
+    function rnd() { s = (s * 16807) % 2147483647; return s / 2147483647; }
+    for (var i = 0; i < n; i++) {
+      var t = i / sr, x = 0;
+      for (var k = (v.missing > 0.5 ? 2 : 1); k <= v.partials; k++) x += Math.sin(2 * Math.PI * v.f0 * k * t + k) / k;
+      y[i] = x;
+    }
+    var p = 0;
+    for (var j = 0; j < n; j++) p += y[j] * y[j];
+    var sd = Math.sqrt(p / n) * Math.pow(10, -v.snr / 20);
+    for (var q = 0; q < n; q += 2) {                       // Gaussian noise by Box-Muller
+      var u1 = Math.max(rnd(), 1e-9), u2 = rnd(), r = Math.sqrt(-2 * Math.log(u1));
+      y[q] += sd * r * Math.cos(2 * Math.PI * u2);
+      if (q + 1 < n) y[q + 1] += sd * r * Math.sin(2 * Math.PI * u2);
+    }
+    return y;
+  }
+  function yinCurve(x, W, L) {
+    var d = new Float64Array(L), dn = new Float64Array(L), run = 0;
+    for (var tau = 1; tau < L; tau++) {
+      var s = 0;
+      for (var j = 0; j < W; j++) { var e = x[j] - x[j + tau]; s += e * e; }
+      d[tau] = s; run += s; dn[tau] = s * tau / Math.max(run, 1e-12);
+    }
+    dn[0] = 1;
+    return dn;
+  }
+  function yinPick(dn, tmin, thr) {
+    var L = dn.length, t = -1;
+    for (var k = tmin; k < L - 1; k++) if (dn[k] < thr) { t = k; while (t + 1 < L - 1 && dn[t + 1] < dn[t]) t++; break; }
+    if (t < 0) { var g = 1e9; for (var k2 = tmin; k2 < L - 1; k2++) if (dn[k2] < g) { g = dn[k2]; t = k2; } }
+    var a = dn[t - 1], b = dn[t], c = dn[t + 1], den = a - 2 * b + c;
+    return t + (Math.abs(den) > 1e-12 ? 0.5 * (a - c) / den : 0);
+  }
+
+  W.yin = function (el) {
+    QB.widget(el, {
+      title: "YIN: one voice's pitch",
+      sub: "A tone of a few partials, perhaps without its fundamental, in white noise. The plot is YIN's normalized difference function d'(τ) against the lag τ (in milliseconds): how badly the wave matches itself shifted by τ. The first dip under the threshold (red) is taken as the period. Play the tone to hear what the estimate should be.",
+      panels: 1, height: 230,
+      controls: [{ k: "f0", label: "Fundamental", min: 80, max: 600, step: 1, value: 220, fmt: function (x) { return x.toFixed(0) + " Hz"; } },
+                 { k: "partials", label: "Partials", min: 1, max: 12, step: 1, value: 5, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "missing", label: "Remove the fundamental", min: 0, max: 1, step: 1, value: 0, fmt: function (x) { return x > 0.5 ? "yes" : "no"; } },
+                 { k: "snr", label: "Signal to noise", min: -10, max: 40, step: 1, value: 20, fmt: function (x) { return x.toFixed(0) + " dB"; } },
+                 { k: "thr", label: "Threshold", min: 0.02, max: 0.5, step: 0.01, value: 0.1, fmt: function (x) { return x.toFixed(2); } }],
+      buttons: [{ label: "Play the tone", act: function (s) {
+        var y = yinTone(s.v, 44100 * 1.5, 7), pk = 0;
+        for (var i = 0; i < y.length; i++) pk = Math.max(pk, Math.abs(y[i]));
+        for (var j = 0; j < y.length; j++) y[j] *= 0.4 / pk * Math.min(1, j / 500, (y.length - j) / 2000);
+        s.sound = play(y, 44100);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var sr = 44100, L = Math.ceil(sr / 60) + 2, W = 2 * L, x = yinTone(v, W + L + 4, 3);
+        var dn = yinCurve(x, W, L), xs = [], ys = [];
+        for (var k = 1; k < L; k++) { xs.push(1000 * k / sr); ys.push(Math.min(dn[k], 2)); }
+        var t = yinPick(dn, Math.floor(sr / 1000), v.thr);
+        s.est = sr / t;
+        var a = gr[0].axes({ x: [0, 1000 * L / sr], y: [0, 2], title: "d'(τ), the normalized difference", xlabel: "lag τ (ms)" });
+        a.line([0, 1000 * L / sr], [v.thr, v.thr], { color: "#C0504D", width: 1.5 });
+        a.line(xs, ys, { color: C.idea, width: 2 });
+        a.line([1000 * t / sr, 1000 * t / sr], [0, 2], { color: "#6FA8DC", width: 1.5 });
+        a.line([1000 / v.f0, 1000 / v.f0], [0, 0.15], { color: "#8A93A0", width: 4 });
+      },
+      readout: function (v, s) {
+        var e = s.est || 0, err = 1200 * Math.log(e / v.f0) / Math.log(2);
+        return [["YIN's estimate", e.toFixed(1) + " Hz"], ["against the true fundamental", (err >= 0 ? "+" : "") + err.toFixed(0) + " cents" + (Math.abs(err) > 300 ? " (a gross error)" : "")],
+                ["the period (grey tick)", (1000 / v.f0).toFixed(2) + " ms"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Remove the fundamental: the dip stays where it was, because the wave still repeats at the same period, and you still hear the same pitch. Lower the signal to noise below about 0 dB and the dips fill in; when none falls under the threshold, YIN takes the deepest one, often at twice the period: an octave error."
+    });
+  };
 })();

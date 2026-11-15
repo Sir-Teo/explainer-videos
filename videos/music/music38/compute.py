@@ -76,8 +76,11 @@ def piano(m, seconds, velocity=1.0):
 
     def make():
         f = hz(m)
-        y = BOARD.play(STR.struck(String.tuned(f, L=0.62 * (C4 / f) ** 0.8, mu=6.34e-3, kappa=1.25, sigma0=0.6, sigma1=3.3e-4),
-                                  velocity=vel, seconds=seconds + 0.3))
+        force = np.asarray(STR.struck(String.tuned(f, L=0.62 * (C4 / f) ** 0.8, mu=6.34e-3, kappa=1.25, sigma0=0.6, sigma1=3.3e-4),
+                                      velocity=vel, seconds=seconds + 0.3), float)
+        r = int(0.08 * SR)                               # the damper: the string's force dies away over 80 ms, not in a click
+        force[-r:] *= np.linspace(1.0, 0.0, r) ** 2
+        y = BOARD.play(force)
         return Clip(np.asarray(y, float)).fade(0.001, 0.15).y
     return cached(("piano", m, seconds, vel), make)
 
