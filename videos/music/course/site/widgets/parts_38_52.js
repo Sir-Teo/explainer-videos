@@ -743,4 +743,50 @@
       note: "Raise Q on the peak and watch the poles' radius approach 1: the filter rings longer and the noise starts to whistle at the chosen frequency. A resonance is a pole close to the circle."
     });
   };
+
+  W.compressor = function (el) {
+    function curve(x, T, R, W) {
+      if (x < T - W / 2) return x;
+      if (x > T + W / 2) return T + (x - T) / R;
+      return x + (1 / R - 1) * Math.pow(x - T + W / 2, 2) / (2 * W);
+    }
+    QB.widget(el, {
+      title: "A compressor's static curve",
+      sub: "Set the threshold, ratio and knee. The plot shows level out against level in, in decibels; the grey diagonal is no compression. Play a drum-like burst pattern through it, with make-up gain so both versions peak alike.",
+      panels: 1, height: 260,
+      controls: [{ k: "T", label: "Threshold", min: -50, max: 0, step: 1, value: -20, fmt: function (x) { return x + " dB"; } },
+                 { k: "R", label: "Ratio", min: 1, max: 20, step: 0.5, value: 4, fmt: function (x) { return x + " : 1"; } },
+                 { k: "W", label: "Knee", min: 0.1, max: 18, step: 0.5, value: 6, fmt: function (x) { return x.toFixed(1) + " dB"; } }],
+      buttons: [{ label: "Play bursts, plain then compressed", act: function (s) {
+        var rate = 44100, n = 4 * rate, out = new Float32Array(2 * n + rate), seed = 3, g = 0, a = Math.exp(-1 / (0.003 * rate)), r = Math.exp(-1 / (0.1 * rate));
+        var mk = 0 - curve(0, s.v.T, s.v.R, s.v.W);
+        for (var i = 0; i < n; i++) {
+          seed = (seed * 1103515245 + 12345) & 0x7fffffff;
+          var t = (i % (rate / 2)) / rate, loud = (Math.floor(i / (rate / 2)) % 2) ? 0.15 : 0.9;
+          var x = loud * Math.exp(-t * 12) * (seed / 0x7fffffff - 0.5) * 1.6 + 0.05 * Math.sin(2 * Math.PI * 110 * i / rate);
+          out[i] = 0.5 * x;
+          var lvl = 20 * Math.log10(Math.abs(x) + 1e-6), red = lvl - curve(lvl, s.v.T, s.v.R, s.v.W);
+          g = red > g ? a * g + (1 - a) * red : r * g + (1 - r) * red;
+          out[n + rate + i] = Math.max(-0.95, Math.min(0.95, 0.5 * x * Math.pow(10, (mk - g) / 20)));
+        }
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var xs = [], ys = [];
+        for (var x = -60; x <= 0; x += 0.5) { xs.push(x); ys.push(curve(x, v.T, v.R, v.W)); }
+        var a = gr[0].axes({ x: [-60, 0], y: [-60, 0], title: "Level out against level in (dB)", xlabel: "level in, dB" });
+        a.line([-60, 0], [-60, 0], { color: "#3A4250", width: 1.5 });
+        a.line(xs, ys, { color: C.idea, width: 2.5 });
+        a.dots([v.T], [curve(v.T, v.T, v.R, v.W)], { r: 5, color: "#F472B6" });
+      },
+      readout: function (v, s) {
+        return [["0 dB in comes out at", curve(0, v.T, v.R, v.W).toFixed(1) + " dB"],
+                ["make-up gain to restore the peak", (-curve(0, v.T, v.R, v.W)).toFixed(1) + " dB"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "The bursts alternate loud and quiet. Compressed and made up, the quiet ones come up toward the loud: the swing between them shrinks by about the ratio, above the threshold."
+    });
+  };
 })();

@@ -1922,13 +1922,30 @@ Välimäki et al. (2012).
 *Story:* Two accidents made two genres. A damaged amplifier in 1951 gave rock its fuzz. In 1998 a pitch corrector,
 invented by a geophysicist who had used autocorrelation to find oil, was set to act instantly, and the sound of a
 voice snapping between notes became a style.
+1. Hook: an ear question (which was hard-tuned?); the pitch tracks; Rocket 88 and Believe; the plan.
+2. Nonlinearity: new frequencies; three bends; their harmonics; three bends heard; a riff driven; odd harmonics; devices.
+3. Chebyshev: the identity; a shaper built from its spectrum; three input levels heard; waveshaping synthesis.
+4. Intermodulation: two tones in; a fifth and a third measured; the power chord heard; the difference tone.
+5. Aliasing in nonlinear effects: harmonics that fold; an ear question (a clipped sweep); three ways to compute; everywhere.
+6. Compressors: the idea; static curves; attack and release; pumping heard; an ear question (which was compressed?); punch; detectors.
+7. Limiters, gates and sidechains: the family; a gate heard; a sidechain heard; uses; look-ahead.
+8. Time and pitch: tied; resampling and PSOLA heard; PSOLA; history; formants.
+9. Overlap-add and the phase vocoder: OLA; the phase vocoder; two stretches heard; limits; extreme stretching; uses.
+10. Pitch correction: detection; YIN; the target at three speeds; three speeds heard; repair to style; editing by hand.
+11. Vocoders and ring modulation: Dudley; the bands; four sounds heard; the talk box; in music; ring modulation.
+12. Frontier: neural amplifier models; grey boxes; antialiasing; the research problem.
+13. Variation 50: the Tune sung, hard-tuned, vocoded and stretched. Outro: problems, payoffs.
+
 *Covers:* nonlinearity and new frequencies; Chebyshev waveshaping; intermodulation and the power chord; aliasing
 in nonlinear effects; compressors, limiters and gates; sidechains; time and pitch: resampling, overlap-add, the
 phase vocoder, PSOLA; formants; pitch correction; vocoders and ring modulation.
-*Built and computed:* a compressor with measured curves; a shaper with exact harmonics; a phase vocoder; a pitch
-corrector for Part 8's voice.
-*Variation 50:* the Tune sung, hard-tuned, vocoded and stretched eightfold.
-*Frontier:* neural models of analog gear; antialiasing nonlinearities.
+*Built and computed:* `monochord/dynamics.py`: shapers and their harmonics; a Chebyshev shaper with exact harmonics
+(−6.02 and −12.04 dB as asked); intermodulation (products on 110 Hz for a fifth, 55 for a third); aliasing measured
+(−26.8 dB plain, −32.5 with ADAA, −47.3 oversampled); a feedforward compressor with measured curves (12 ms attack;
+a groove's loudness spread 9.1 to 4.9 dB); a gate and a sidechain; overlap-add and a phase vocoder with phase locking;
+YIN; PSOLA; a pitch corrector for Part 8's voice (28 cents to 0.6); a 16-band vocoder; ring modulation.
+*Variation 50:* the Tune sung, hard-tuned, vocoded and stretched eightfold (one second to 7.7).
+*Frontier:* neural models of analog gear; antialiasing nonlinearities (open: the smallest alias-free model that passes).
 *Reading:* Zölzer; Giannoulis, Massberg & Reiss (2012); Laroche & Dolson (1999).
 
 ### Part 51 · Synthesis I: Oscillators and Filters (~50)

@@ -103,6 +103,8 @@ LEDGER = [
      "measure": r"signal to error 77 dB at 16 bits, 29 at 8, 5 at 4; one bit at 64 times the rate 62 dB"},
     {"part": 49, "title": r"dry, then in a tiled room, on a plate, on a spring and in a cathedral", "seconds": 30.7,
      "measure": r"reverberation time 1.2 s in the room, 1.9 s on the plate, 1.3 s on the spring, 4.2 s in the cathedral"},
+    {"part": 50, "title": r"sung, hard-tuned, vocoded and stretched eightfold", "seconds": 23.0,
+     "measure": r"median pitch error 28 cents sung, 0.6 after correction; one second stretched to 7.7"},
 ]
 
 

@@ -506,4 +506,44 @@ PARTS = [
         I=(6, 7, 8, 9, 10),
         also=(("Monochord's effects rack: biquads, combs, image-source rooms, sweeps, Schroeder, FDN, plate, spring", "explainer/music/monochord/effects.py"),),
     ),
+    Part(
+        n=50, level="U", widget="compressor", prereq=(4, 8, 40, 48, 49),
+        question="What do effects that are not linear, or that change with the signal, do to sound, and how are they built?",
+        story="Two accidents made two genres: a damaged amplifier on Rocket 88 (1951), and Auto-Tune set to act instantly on "
+              "Believe (1998); an ear question hears Part 8's voice sung 28 cents off and hard-tuned to 0.6. Shapers make "
+              "harmonics (odd only, for odd shapers: a hard clip's third at -11 dB, fifth at -18.5), Chebyshev polynomials "
+              "deliver any harmonics exactly at full size (third -6.02 dB, fifth -12.04) and differently when quiet; two "
+              "tones intermodulate (a fifth's products fall on multiples of 110 Hz, a third's on 55: the power chord); a "
+              "clipped sweep aliases (an ear question), and the alias energy falls from -26.8 dB to -32.5 by antiderivative "
+              "antialiasing and -47.3 by 8x oversampling. A compressor after Giannoulis, Massberg and Reiss draws its static "
+              "curves, attacks in 12 ms, halves a groove's loudness spread (an ear question) while its attack keeps the punch "
+              "(crest factor up); limiters, gates and a kick-keyed sidechain follow. Resampling ties pitch to time; PSOLA "
+              "and the phase vocoder untie them; YIN and a corrector at three speeds tune a voice; a 16-band vocoder and ring "
+              "modulation close it.",
+        handoff="Waveshaping and alias-free oscillators in Part 51; nonlinear physical models in Part 52; compressors in a mix in "
+                "Part 56; limiters in Part 57; pitch tracking in Part 61.",
+        outside="Part 4 for difference tones; Part 8 for the voice's source and filter; Part 40 for the guitar; Part 48 for "
+                "aliasing; Part 49 for filters. Polynomials, Fourier series, autocorrelation, the short-time Fourier transform.",
+        objectives={
+            "U": ["Hear hard-tuned from natural, three shapers on one note, and a power chord against a major chord distorted.",
+                  "Hear aliasing in a clipped sweep, a compressed groove at matched loudness, pumping, and a sidechain duck.",
+                  "Hear pitch shifted by resampling and by PSOLA, a stretch by overlap-add and by the phase vocoder, and a vocoder."],
+            "M": ["Design a Chebyshev shaper by its harmonics; measure intermodulation and aliasing, with ADAA and oversampling.",
+                  "Build a feedforward compressor with a soft knee, attack and release; measure its curves and a groove's spread.",
+                  "Track pitch by YIN, correct it with PSOLA at a chosen speed, stretch by the phase vocoder, and vocode."],
+            "D": ["Find the smallest neural amplifier model indistinguishable at every knob setting and free of aliasing."],
+            "I": ["Choose fifths under distortion, compressor timing for punch, sidechains for space, and correction speed for style."],
+        },
+        results=[
+            ("Chebyshev", r"T_n(\cos\theta) = \cos n\theta"),
+            ("Intermodulation", r"m f_1 \pm n f_2"),
+            ("Static curve", r"y = T + (x - T)/R \quad (x > T + W/2)"),
+            ("Ring modulation", r"\sin a \sin b = \tfrac12[\cos(a-b) - \cos(a+b)]"),
+            ("Phase vocoder", r"\omega_k + \Delta\phi_k / H_a \Rightarrow \phi \mathrel{+}= \hat\omega_k H_s"),
+        ],
+        U=(0, 1, 2, 3, 4, 7, 8),
+        D=(11,),
+        I=(5, 6, 9, 10),
+        also=(("Monochord's dynamics: shapers, Chebyshev, ADAA, compressor, gate, OLA, phase vocoder, YIN, PSOLA, vocoder", "explainer/music/monochord/dynamics.py"),),
+    ),
 ]
