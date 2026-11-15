@@ -2080,13 +2080,31 @@ delay-and-sum array.
 Wallace Sabine, spent his nights there with a stopwatch, an organ pipe and the seat cushions of a nearby theatre,
 found the law of reverberation, and used it to design Boston's Symphony Hall. Sixty years on, a hall designed
 with far more science had to be gutted. The part explains both.
+1. Hook: an ear question (which was the room as built?); the decay; Sabine's nights and Symphony Hall; Philharmonic Hall; the plan.
+2. Sabine's law: a sound that dies away; the law derived; the cushions, simulated and heard; Eyring; absorption by band; targets.
+3. Modes: a pipe in three directions; a living room's modes; counting them against Weyl; the Schroeder frequency; a corner and the middle, heard; taming them.
+4. Absorption and diffusion: three absorbers; a flutter echo heard; scattering; the residue diffuser; Gauss's sum; scattering computed; at work.
+5. Early reflections and hall shapes: the first 80 ms; one seat's reflections; the lateral fraction; width; an ear question (which hall was narrow?); shapes.
+6. Simulating a room: the image method; how many reflections; the simulator checked; rays; waves; auralization.
+7. How we hear direction: the duplex theory; ITD; ILD; the cues heard; the cone of confusion; an ear question (which was in front?); breaking the cone.
+8. Stereo and panning: two channels; the triangle and the tangent law; pan laws; a pan heard; the sweet spot; microphone pairs.
+9. Ambisonics and wave-field synthesis: after quadraphony; encoding; decoding to a ring; Gerzon's vectors; higher orders; WFS.
+10. Binaural rendering: two signals; HRTFs; a renderer; a shaker circling the head, heard; inside the head; head tracking; crosstalk cancellation.
+11. Object audio: channels, scenes and objects; Atmos; VBAP; one mix, every playback; space as music.
+12. Frontier: personal HRTFs; the cost of waves; real-time waves; programmable rooms; the research problem.
+13. Variation 55: the Tune in four spaces, then circling the listener. Outro: problems, payoffs.
+
 *Covers:* modes; the diffuse field; Sabine and Eyring; absorption and diffusion (and the number theory in a
 diffuser); early reflections and spaciousness; hall shapes; simulation by images and rays; localization cues;
 stereo; panning laws; Ambisonics; wave-field synthesis; binaural rendering; object audio.
-*Built and computed:* an image-source room against Sabine and the exact modes; a diffuser's scattering; panning
-and Ambisonic decoders; a binaural renderer.
-*Variation 55:* the Tune walked through four spaces, then circling the listener (`headphones`).
-*Frontier:* personalized HRTFs; real-time wave simulation.
+*Built and computed:* `monochord/space.py`: a room's modes against Weyl (18 below 120 Hz against 20.2); Sabine's
+cushions (5.6 to 1.1 s); an image-source room against Sabine and Eyring (a smooth box rings 14 % long) and the exact
+modes (within 0.4 Hz); a residue diffuser's scattering (diffusion 0.39 against 0.07 at 1 kHz); lateral fractions
+by hall width (0.20 to 0.11); Woodworth's ITD and Brown and Duda's head shadow; pan laws and the tangent law;
+first-order Ambisonic decoders with Gerzon's vectors (2/3 and 0.707); a block binaural renderer.
+*Variation 55:* the Tune walked through four spaces, then circling the listener (`headphones`; 0, 0.45, 1.9 and 5.0 s).
+*Frontier:* personalized HRTFs; real-time wave simulation (open: how little must a renderer know about a
+listener's ears?).
 *Reading:* Kuttruff, *Room Acoustics*; Beranek, *Concert Halls and Opera Houses*; Blauert, *Spatial Hearing*;
 Zotter & Frank.
 

@@ -65,4 +65,36 @@ PARTS = [
         I=(5, 6, 8, 9),
         also=(("Monochord's transducers: patterns, proximity, noise, lines, the loudspeaker simulator, crossovers, a canceller, arrays", "explainer/music/monochord/transducer.py"),),
     ),
+    Part(
+        n=55, level="U", widget="room", prereq=(2, 4, 49, 54),
+        question="Why does one room make music sound glorious and another make speech a blur, and how can space be built back for two ears?",
+        story="In 1895 Harvard opened a lecture room nobody could understand; Wallace Sabine timed an organ pipe's decay by night, carried in Sanders Theatre's cushions, found the law, and designed Boston's Symphony Hall (1900). An ear question hears the room as built (5.6 s) and cured (1.1 s); Philharmonic Hall (1962) shows one number is not enough. Sabine's law derived from a diffuse field (T60 = 0.161 V/A), 300 and 1,500 cushions heard, Eyring's correction, absorption by band, targets by use. A living room's 18 modes below 120 Hz against Weyl's 20.2, the Schroeder frequency (305 Hz in the room, 20 in a hall), a bass line in a corner and in the middle (heard), and what can be done. Porous, panel and Helmholtz absorbers; a flutter echo (35 ms) scattered (heard); Schroeder's quadratic-residue diffuser (n^2 mod 7), Gauss's sum and computed scattering (diffusion 0.39 against a flat panel's 0.07 at 1 kHz). Early reflections, the precedence effect and clarity; the lateral fraction (Barron and Marshall) falling from 0.20 to 0.11 as a hall widens; an ear question on two halls; shoebox, fan, vineyard and surround halls. Simulation: image sources (833 to the eighth order), checked against Sabine and Eyring (a smooth box rings 14 per cent long: it is not diffuse) and against the exact modes (within 0.4 Hz); rays, waves and auralization. Hearing direction: the duplex theory, Woodworth's ITD (656 microseconds), Brown and Duda's head shadow, the cues heard apart and together, and the cone of confusion (an ear question with no answer: front and back identical round a sphere). Stereo from Ader and Blumlein, the tangent law (13.4 degrees for a half pan), linear and constant-power laws heard, the sweet spot, microphone pairs. Ambisonics: B-format, a ring decoder, Gerzon's rV and rE (2/3 basic, 0.707 max-rE), higher orders; wave-field synthesis. Binaural rendering: HRTFs, a block renderer, a shaker circling the head (heard), externalization, head tracking, crosstalk cancellation. Object audio and VBAP; personal HRTFs and real-time waves. The Tune in four spaces, then circling the listener.",
+        handoff="Stereo pairs, panning, depth and width in Part 56; the listener's room in Part 57; halls, feedback and "
+                "arrays in Part 59; spatial cues in source separation in Part 64; learned rooms in Part 66.",
+        outside="Part 2 for standing waves and the finite-difference simulator; Part 4 for the ear; Part 49 for "
+                "convolution, image sources and reverberators; Part 54 for patterns and arrays. Exponential decay, "
+                "Fourier series, a little number theory, two-by-two matrices.",
+        objectives={
+            "U": ["Hear a lecture room before and after its cure, a bass line in a corner and in the middle, and a flutter echo diffused.",
+                  "Hear two halls that differ only in width, and noise placed by time differences, level differences and both.",
+                  "Hear a voice at 30 degrees and at 150 degrees round a sphere, two pan laws, and a shaker circling the head."],
+            "M": ["Derive Sabine's law from a diffuse field, add Eyring's correction, and check an image-source room against both.",
+                  "Count a room's modes against Weyl's formula, find the Schroeder frequency, and prove a residue diffuser's Gauss sum.",
+                  "Compute interaural cues, the tangent law, Ambisonic decoders with Gerzon's vectors, and a binaural renderer."],
+            "D": ["Find the least a renderer must know about a listener's ears to render space as well as their own HRTF."],
+            "I": ["Choose reverberation for a use, treat modes and reflections, and pan, decode and render space for any playback."],
+        },
+        results=[
+            ("Sabine and Eyring", r"T_{60} = 0.161\,\frac{V}{A}, \quad T_{60} = \frac{0.161\,V}{-S\ln(1 - \bar\alpha)}"),
+            ("Modes", r"f = \frac{c}{2}\sqrt{(n_x/L_x)^2 + (n_y/L_y)^2 + (n_z/L_z)^2}, \quad N(f) \approx \frac{4\pi V f^3}{3c^3}"),
+            ("Schroeder frequency", r"f_S = 2000\sqrt{T_{60}/V}"),
+            ("Gauss's sum", r"\Bigl|\sum_{n=0}^{N-1} e^{2\pi i (n^2 + kn)/N}\Bigr| = \sqrt{N}"),
+            ("Woodworth", r"\Delta t = \frac{a}{c}(\theta + \sin\theta)"),
+            ("Tangent law", r"\frac{\tan\varphi}{\tan\varphi_0} = \frac{g_R - g_L}{g_R + g_L}"),
+        ],
+        U=(0, 1, 2, 4, 6, 7, 9),
+        D=(11,),
+        I=(3, 5, 8, 10),
+        also=(("Monochord's spaces: modes, Sabine, diffusers, image sources, the head, panning, Ambisonics, a binaural renderer", "explainer/music/monochord/space.py"),),
+    ),
 ]

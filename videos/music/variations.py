@@ -113,6 +113,8 @@ LEDGER = [
      "measure": r"32 tracker rows; four voices meeting on the last note after 30.7 s; block and offline renders identical"},
     {"part": 54, "title": r"through three microphone patterns and three loudspeakers", "seconds": 29.4,
      "measure": r"a cardioid takes the piano behind it 30 dB down; the phone's speaker reaches down to 844 Hz, the floor-stander to 39"},
+    {"part": 55, "title": r"walked through four spaces, then circling the listener", "seconds": 35.6,
+     "measure": r"reverberation 0, 0.45, 1.9 and 5.0 s; one circle of the head in 7.6 s"},
 ]
 
 

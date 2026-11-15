@@ -80,7 +80,7 @@ def sabine_bands(surfaces, V: float, extra=None) -> np.ndarray:
 
 
 def qrd_depths(N: int, f0: float):
-    """Schroeder's quadratic-residue diffuser (1975): well n has depth (n^2 mod N) / N times half a wavelength at f0."""
+    """Schroeder's quadratic-residue diffuser (1979): well n has depth (n^2 mod N) / N times half a wavelength at f0."""
     lam0 = C / f0
     return np.array([(n * n % N) * lam0 / (2 * N) for n in range(N)])
 

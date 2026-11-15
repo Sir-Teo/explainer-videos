@@ -131,4 +131,61 @@
       note: "Thiele's B4 alignment: Qts = 0.383, Vb = Vas / 1.414, fb = fs, gives a maximally flat response down to fs. Shrink the box and the bass bulges, or rolls off sooner; the iron law trades box size, bass and efficiency."
     });
   };
+
+  // ---- Part 55: a room's reverberation and modes -----------------------------------------------------------------
+  function roomModes(L, fmax) {
+    var out = [], c = 343, n = [0, 1, 2].map(function (i) { return Math.floor(2 * fmax * L[i] / c) + 1; });
+    for (var a = 0; a <= n[0]; a++) for (var b = 0; b <= n[1]; b++) for (var d = 0; d <= n[2]; d++) {
+      if (a + b + d === 0) continue;
+      var f = c / 2 * Math.sqrt(Math.pow(a / L[0], 2) + Math.pow(b / L[1], 2) + Math.pow(d / L[2], 2));
+      if (f <= fmax) out.push([f, (a > 0) + (b > 0) + (d > 0)]);
+    }
+    return out.sort(function (p, q) { return p[0] - q[0]; });
+  }
+  function roomNumbers(v) {
+    var V = v.Lx * v.Ly * v.Lz, S = 2 * (v.Lx * v.Ly + v.Ly * v.Lz + v.Lx * v.Lz);
+    var sab = 0.161 * V / (v.alpha * S), eyr = 0.161 * V / (-S * Math.log(1 - v.alpha));
+    return { V: V, S: S, sab: sab, eyr: eyr, fs: 2000 * Math.sqrt(eyr / V) };
+  }
+
+  W.room = function (el) {
+    QB.widget(el, {
+      title: "A room's reverberation and modes",
+      sub: "Set a rectangular room's size and the absorption of its walls. The plot is every mode below 200 Hz (tallest: axial, then tangential, then oblique) and the Schroeder frequency above which they overlap. Play a clap in the room, decaying at Eyring's rate.",
+      panels: 1, height: 240,
+      controls: [{ k: "Lx", label: "Length", min: 2, max: 40, step: 0.1, value: 5, fmt: function (x) { return x.toFixed(1) + " m"; } },
+                 { k: "Ly", label: "Width", min: 2, max: 30, step: 0.1, value: 4, fmt: function (x) { return x.toFixed(1) + " m"; } },
+                 { k: "Lz", label: "Height", min: 2, max: 20, step: 0.1, value: 2.7, fmt: function (x) { return x.toFixed(1) + " m"; } },
+                 { k: "alpha", label: "Average absorption", min: 0.02, max: 0.9, step: 0.01, value: 0.15, fmt: function (x) { return x.toFixed(2); } }],
+      buttons: [{ label: "Play a clap in this room", act: function (s) {
+        var rate = 44100, T = Math.min(8, roomNumbers(s.v).eyr), n = Math.floor((T + 0.6) * rate), out = new Float32Array(n), lp = 0, peak = 0;
+        for (var i = 0; i < n; i++) {
+          var t = i / rate, w = Math.random() * 2 - 1;
+          lp += 0.25 * (w - lp);
+          var mixw = Math.min(1, t / T);
+          out[i] = ((1 - mixw) * w + mixw * lp) * Math.exp(-6.91 * t / T) * Math.min(1, t / 0.002);
+          peak = Math.max(peak, Math.abs(out[i]));
+        }
+        for (i = 0; i < n; i++) out[i] *= 0.4 / peak;
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (gr, v, s) {
+        s.v = v;
+        var m = roomModes([v.Lx, v.Ly, v.Lz], 200), r = roomNumbers(v);
+        var a = gr[0].axes({ x: [0, 200], y: [0, 1.1], title: "Modes below 200 Hz", xlabel: "Hz" });
+        var hs = { 1: 1.0, 2: 0.7, 3: 0.45 }, cols = { 1: C.idea, 2: C.implied, 3: C.loss };
+        for (var i = 0; i < m.length && i < 600; i++) a.line([m[i][0], m[i][0]], [0, hs[m[i][1]]], { color: cols[m[i][1]], width: 1.5 });
+        if (r.fs < 200) a.line([r.fs, r.fs], [0, 1.1], { color: C.muted, width: 2 });
+      },
+      readout: function (v, s) {
+        var r = roomNumbers(v), m = roomModes([v.Lx, v.Ly, v.Lz], 200);
+        return [["T60, Sabine / Eyring", r.sab.toFixed(2) + " s / " + r.eyr.toFixed(2) + " s"],
+                ["Schroeder frequency", r.fs.toFixed(0) + " Hz"],
+                ["modes below 200 Hz", String(m.length) + (m.length ? " (first at " + m[0][0].toFixed(1) + " Hz)" : "")],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "A living room is modal through the whole bass; a hall's Schroeder frequency is near 20 Hz. Make the walls deader and Sabine's time parts from Eyring's: Sabine never reaches zero, even when every wall is an open window."
+    });
+  };
 })();
