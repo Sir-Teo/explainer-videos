@@ -87,5 +87,8 @@ Modules so far, with the part that introduces each:
                          measure, law and consequential regions; Tversky's contrast model and asymmetry count;
                          category utility; spreading activation; the number game; PPMI word vectors; card sorts;
                          RSA
+``language``        23   Zipf's law and the typing monkey; cohorts; the interactive activation model with a
+                         14-segment font; transitional probabilities and segmentation; a past-tense learner;
+                         a Kneser-Ney trigram and surprisal; the reading-time regression; Flesch's formula
 =================  ====  ===============================================================================
 """

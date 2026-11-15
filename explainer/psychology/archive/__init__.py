@@ -49,7 +49,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "MILLER_1956", "SPERLING_1960", "PETERSON_1959", "KEPPEL_UNDERWOOD_1962", "BADDELEY_HITCH_1974", "BADDELEY_1975", "SHALLICE_WARRINGTON_1970", "STERNBERG_1966", "LUCK_VOGEL_1997", "COWAN_2001", "ZHANG_LUCK_2008", "BAYS_2009", "VANDENBERG_2012", "FUNAHASHI_1989", "WIMMER_2014", "MONGILLO_2008", "DANEMAN_CARPENTER_1980", "KANE_2005", "JAEGGI_2008", "REDICK_2013", "MELBY_LERVAG_2016", "SIMONS_2016", "FTC_LUMOSITY_2016",
            "PEERS_FREE_RECALL", "CRAIK_TULVING_1975", "BERTSCH_2007", "DRESLER_2017", "GODDEN_BADDELEY_1975", "MURRE_2021", "KOHNKEN_1999",
            "SAVINGS_REPLICATIONS", "ROEDIGER_KARPICKE_2006", "SCHOOLER_1990", "ALOGNA_2014", "LOFTUS_PALMER_1974", "ROEDIGER_MCDERMOTT_1995", "CEPEDA_2008", "LOFTUS_PICKRELL_1995", "TALARICO_RUBIN_2003", "HARDWICKE_2016", "PATIHIS_2013", "WIXTED_WELLS_2017", "DUNLOSKY_2013",
-           "NOSOFSKY_1994", "HOMA_1976", "EKMAN_1954", "ROTHKOPF_1957", "AUSTEN", "HUTCHISON_2013", "LANDAUER_DUMAIS_1997", "TVERSKY_1977"]
+           "NOSOFSKY_1994", "HOMA_1976", "EKMAN_1954", "ROTHKOPF_1957", "AUSTEN", "HUTCHISON_2013", "LANDAUER_DUMAIS_1997", "TVERSKY_1977",
+           "NATURAL_STORIES", "SAFFRAN_1996", "MARCUS_1992", "HARTSHORNE_2018", "LEHTONEN_2018"]
 
 
 @dataclass(frozen=True)
@@ -3805,6 +3806,58 @@ TVERSKY_1977 = Dataset(
     data={'phrase_subjects': 69, 'phrase_nk_first': 66, 'phrase_china_first': 3, 'country_pairs': 21, 'rothkopf_pairs': 555, 'rothkopf_shorter_first_more': 336, 'rothkopf_fewer': 181, 'rothkopf_equal': 38, 'rothkopf_mean_diff': 3.3},
 )
 
+_P23 = "through a web search, 2026-11-15"
+
+NATURAL_STORIES = Dataset(
+    key="naturalstories_words",
+    title='Self-paced reading times for ten stories',
+    source='R. Futrell, E. Gibson, H. J. Tily, I. Blank, A. Vishnevetsky, S. T. Piantadosi and E. Fedorenko, The Natural Stories corpus: a reading-time corpus of English texts containing rare syntactic constructions, Language Resources and Evaluation 55 (2021) 63-77; github.com/languageMIT/naturalstories (no licence stated)',
+    cite=r"Futrell et al.\ (2021)",
+    checked='processed_wordinfo.tsv at commit 4700daad (realigned in 2025); fetched by explainer.psychology.opendata at a fixed commit and checked by SHA-256' + ", " + _P23,
+    licence='data fetched, not redistributed',
+    data={'stories': 10, 'words': 10256},
+)
+
+SAFFRAN_1996 = Dataset(
+    key="saffran_1996",
+    title='Statistical learning by eight-month-olds',
+    source='J. R. Saffran, R. N. Aslin and E. L. Newport, Statistical learning by 8-month-old infants, Science 274 (1996) 1926-1928',
+    cite=r"Saffran, \ Aslin \& Newport (1996)",
+    checked='the abstract and summaries' + ", " + _P23,
+    licence='facts only',
+    data={'infants': 24, 'minutes': 2, 'words': ['tupiro', 'golabu', 'bidaku', 'padoti']},
+)
+
+MARCUS_1992 = Dataset(
+    key="marcus_1992",
+    title="Over-regularization in children's speech",
+    source='G. F. Marcus, S. Pinker, M. Ullman, M. Hollander, T. J. Rosen and F. Xu, Overregularization in language acquisition, Monographs of the Society for Research in Child Development 57 (1992) no. 4',
+    cite=r"Marcus et al.\ (1992)",
+    checked='summaries of the monograph' + ", " + _P23,
+    licence='facts only',
+    data={'children': 25, 'mean_rate': 0.042},
+)
+
+HARTSHORNE_2018 = Dataset(
+    key="hartshorne_2018",
+    title='A critical period from two-thirds of a million people',
+    source='J. K. Hartshorne, J. B. Tenenbaum and S. Pinker, A critical period for second language acquisition: evidence from 2/3 million English speakers, Cognition 177 (2018) 263-277',
+    cite=r"Hartshorne et al.\ (2018)",
+    checked='the abstract and summaries' + ", " + _P23,
+    licence='facts only',
+    data={'people': 669498, 'offset_years': 17.4},
+)
+
+LEHTONEN_2018 = Dataset(
+    key="lehtonen_2018",
+    title='Bilingualism and executive functions: a meta-analysis',
+    source='M. Lehtonen, A. Soveri, A. Laine, J. Jarvenpaa, A. de Bruin and J. Antfolk, Is bilingualism associated with enhanced executive functioning in adults? A meta-analytic review, Psychological Bulletin 144 (2018) 394-425',
+    cite=r"Lehtonen et al.\ (2018)",
+    checked='the abstract' + ", " + _P23,
+    licence='facts only',
+    data={'effect_sizes': 891, 'studies': 152},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3841,4 +3894,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           MILLER_1956, SPERLING_1960, PETERSON_1959, KEPPEL_UNDERWOOD_1962, BADDELEY_HITCH_1974, BADDELEY_1975, SHALLICE_WARRINGTON_1970, STERNBERG_1966, LUCK_VOGEL_1997, COWAN_2001, ZHANG_LUCK_2008, BAYS_2009, VANDENBERG_2012, FUNAHASHI_1989, WIMMER_2014, MONGILLO_2008, DANEMAN_CARPENTER_1980, KANE_2005, JAEGGI_2008, REDICK_2013, MELBY_LERVAG_2016, SIMONS_2016, FTC_LUMOSITY_2016,
                           PEERS_FREE_RECALL, CRAIK_TULVING_1975, BERTSCH_2007, DRESLER_2017, GODDEN_BADDELEY_1975, MURRE_2021, KOHNKEN_1999,
                           SAVINGS_REPLICATIONS, ROEDIGER_KARPICKE_2006, SCHOOLER_1990, ALOGNA_2014, LOFTUS_PALMER_1974, ROEDIGER_MCDERMOTT_1995, CEPEDA_2008, LOFTUS_PICKRELL_1995, TALARICO_RUBIN_2003, HARDWICKE_2016, PATIHIS_2013, WIXTED_WELLS_2017, DUNLOSKY_2013,
-                          NOSOFSKY_1994, HOMA_1976, EKMAN_1954, ROTHKOPF_1957, AUSTEN, HUTCHISON_2013, LANDAUER_DUMAIS_1997, TVERSKY_1977)}
+                          NOSOFSKY_1994, HOMA_1976, EKMAN_1954, ROTHKOPF_1957, AUSTEN, HUTCHISON_2013, LANDAUER_DUMAIS_1997, TVERSKY_1977,
+                          NATURAL_STORIES, SAFFRAN_1996, MARCUS_1992, HARTSHORNE_2018, LEHTONEN_2018)}

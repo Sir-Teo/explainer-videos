@@ -2707,6 +2707,139 @@ add(Finding(
     data=("HUTCHISON_2013",),
 ))
 
+add(Finding(
+    key="word_superiority", part=23, title=r"The word superiority effect",
+    claim="A letter in a briefly shown, masked word is reported more accurately than the same letter shown alone.",
+    original=Study("Reicher", 1969, n="students", design="a brief display, a mask, then a choice between two "
+                   "letters that both make a word", found="letters in words reported more accurately"),
+    status="replicated",
+    record=(Study("Wheeler", 1970, n="students", design="the same paradigm, with controls for guessing",
+                  found="the same advantage"),
+            Study("Baron and Thurston", 1973, n="students", design="pronounceable non-words",
+                  found="an advantage for pronounceable non-words too"),),
+    note="Robust, and the founding data of interactive models of reading.",
+    sources=("G. M. Reicher, Perceptual recognition as a function of meaningfulness of stimulus material, Journal of "
+             "Experimental Psychology 81 (1969) 275-280",
+             "D. D. Wheeler, Processes in word recognition, Cognitive Psychology 1 (1970) 59-85",
+             "J. Baron and I. Thurston, An analysis of the word-superiority effect, Cognitive Psychology 4 (1973) "
+             "207-228",
+             "J. L. McClelland and D. E. Rumelhart, An interactive activation model of context effects in letter "
+             "perception: Part 1, Psychological Review 88 (1981) 375-407"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="statistical_segmentation", part=23, title=r"Statistical word segmentation by infants",
+    claim="Infants can find the words of a continuous syllable stream from the transitional probabilities between "
+          "syllables alone.",
+    original=Study("Saffran, Aslin and Newport", 1996, n="24 eight-month-olds", design="two minutes of a "
+                   "monotone stream of four three-syllable words; test on words and part-words",
+                   found="longer listening to part-words"),
+    status="replicated, smaller",
+    record=(Study("Black and Bergmann (meta-analysis)", 2017, n="infant studies from 4 to 11 months",
+                  design="conceptual replications and other transitional-probability designs",
+                  found="a small, reliable effect in close replications; none reliable across all designs"),),
+    note="Real but small in infants, and moderated by the stimuli; the computation itself is easy for a learner.",
+    sources=("J. R. Saffran, R. N. Aslin and E. L. Newport, Statistical learning by 8-month-old infants, Science 274 "
+             "(1996) 1926-1928",
+             "A. Black and C. Bergmann, Quantifying infants' statistical word segmentation: a meta-analysis, "
+             "Proceedings of the 39th Annual Conference of the Cognitive Science Society (2017) 124-129"),
+    checked="2026-11-15",
+    data=("SAFFRAN_1996",),
+))
+
+add(Finding(
+    key="surprisal_reading", part=23, title=r"Surprisal and reading time",
+    claim="The time a reader spends on a word grows linearly with the word's surprisal.",
+    original=Study("Smith and Levy", 2013, n="eye-tracking and self-paced reading corpora", design="reading times "
+                   "against n-gram surprisal", found="a linear relation over six orders of magnitude of "
+                   "probability"),
+    status="replicated",
+    record=(Study("Goodkind and Bicknell", 2018, n="reading-time corpora", design="many language models",
+                  found="the better the model, the better its surprisal predicts reading times"),
+            Study("this part, on the Natural Stories corpus", 2026, n="10,256 words, about 84 readers each",
+                  design="a trigram model of thirty novels; length and frequency controlled",
+                  found="about 1.2 ms per bit, on the following word", effect=1.2, unit="ms"),),
+    note="Steady across corpora and methods; which language model best matches readers is open.",
+    sources=("N. J. Smith and R. Levy, The effect of word predictability on reading time is logarithmic, Cognition "
+             "128 (2013) 302-319",
+             "J. Hale, A probabilistic Earley parser as a psycholinguistic model, Proceedings of NAACL (2001) 159-166",
+             "R. Levy, Expectation-based syntactic comprehension, Cognition 106 (2008) 1126-1177",
+             "A. Goodkind and K. Bicknell, Predictive power of word surprisal for reading times is a linear function "
+             "of language model quality, Proceedings of CMCL (2018) 10-18",
+             "R. Futrell et al., The Natural Stories corpus, Language Resources and Evaluation 55 (2021) 63-77"),
+    checked="2026-11-15",
+    data=("NATURAL_STORIES",),
+))
+
+add(Finding(
+    key="critical_period", part=23, title=r"A sharp critical period for second-language grammar",
+    claim="There is a sharp age after which a second language's grammar cannot be fully learned.",
+    original=Study("Johnson and Newport", 1989, n="46 Chinese and Korean speakers", design="grammaticality "
+                   "judgements by age of arrival, 3 to 39", found="scores fell with age of arrival"),
+    status="contested",
+    record=(Study("Hakuta, Bialystok and Wiley", 2003, n="census data, millions of immigrants",
+                  design="self-rated English by age of arrival", found="a steady decline, no break at puberty"),
+            Study("Hartshorne, Tenenbaum and Pinker", 2018, n="669,498 people", design="an online grammar quiz; "
+                  "age, age of starting and experience separated", found="ability near its peak until about 17.4, "
+                  "then declining"),),
+    note="A decline with the age of starting is well supported; whether it is a sharp period, when, and why, is not.",
+    sources=("J. S. Johnson and E. L. Newport, Critical period effects in second language learning, Cognitive "
+             "Psychology 21 (1989) 60-99",
+             "K. Hakuta, E. Bialystok and E. Wiley, Critical evidence: a test of the critical-period hypothesis for "
+             "second-language acquisition, Psychological Science 14 (2003) 31-38",
+             "J. K. Hartshorne, J. B. Tenenbaum and S. Pinker, A critical period for second language acquisition, "
+             "Cognition 177 (2018) 263-277",
+             "R. I. Mayberry, E. Lock and H. Kazmi, Linguistic ability and early language exposure, Nature 417 (2002) "
+             "38"),
+    checked="2026-11-15",
+    data=("HARTSHORNE_2018",),
+))
+
+add(Finding(
+    key="color_relativity", part=23, title=r"Colour words and colour discrimination",
+    claim="Speakers discriminate colours faster across a boundary their language names than within it.",
+    original=Study("Winawer and colleagues", 2007, n="Russian and English speakers", design="speeded matching of "
+                   "blues, with verbal or spatial interference", found="a Russian category advantage, removed by "
+                   "verbal interference"),
+    status="contested",
+    record=(Study("Witzel and Gegenfurtner", 2011, n="observers", design="category effects in colour "
+                  "discrimination", found="no reliable lateralized category effect"),
+            Study("Martinovic, Paramei and MacInnes", 2020, n="Russian speakers", design="speeded discrimination "
+                  "across blue boundaries", found="mixed: sharper boundaries, shaped by stimulus biases"),),
+    note="Effects appear under some conditions and stimuli and not others.",
+    sources=("J. Winawer, N. Witthoft, M. C. Frank, L. Wu, A. R. Wade and L. Boroditsky, Russian blues reveal "
+             "effects of language on color discrimination, PNAS 104 (2007) 7780-7785",
+             "C. Witzel and K. R. Gegenfurtner, Is there a lateralized category effect for color?, Journal of Vision "
+             "11 (2011) 16",
+             "J. Martinovic, G. V. Paramei and W. J. MacInnes, Russian blues reveal the limits of language influencing "
+             "colour discrimination, Cognition 201 (2020) 104281",
+             "B. Berlin and P. Kay, Basic Color Terms (1969)"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="bilingual_advantage", part=23, title=r"The bilingual advantage in executive control",
+    claim="Speaking two languages improves executive control.",
+    original=Study("Bialystok, Craik, Klein and Viswanathan", 2004, n="bilingual and monolingual adults",
+                   design="the Simon task", found="bilinguals faster, especially older ones"),
+    status="failed",
+    record=(Study("Paap and Greenberg", 2013, n="three studies, about 100 to 200 each", design="many executive "
+                  "tasks", found="no bilingual advantage"),
+            Study("Lehtonen and colleagues (meta-analysis)", 2018, n="891 effect sizes from 152 studies",
+                  design="six executive domains", found="a very small advantage before correcting for publication "
+                  "bias; none after"),),
+    note="No advantage once small samples and selective publication are accounted for.",
+    sources=("E. Bialystok, F. I. M. Craik, R. Klein and M. Viswanathan, Bilingualism, aging, and cognitive control: "
+             "evidence from the Simon task, Psychology and Aging 19 (2004) 290-303",
+             "K. R. Paap and Z. I. Greenberg, There is no coherent evidence for a bilingual advantage in executive "
+             "processing, Cognitive Psychology 66 (2013) 232-258",
+             "M. Lehtonen et al., Is bilingualism associated with enhanced executive functioning in adults? A "
+             "meta-analytic review, Psychological Bulletin 144 (2018) 394-425"),
+    checked="2026-11-15",
+    data=("LEHTONEN_2018",),
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -2739,3 +2872,36 @@ shown(22, r"Lake et al. (2015); \ Peterson et al. (2018); \ Lake \& Baroni (2023
       "described with their benchmarks; Part 60's")
 shown(22, r"Huth, \ de Heer, \ Griffiths, \ Theunissen \& Gallant (2016)", "a mapping study at the frontier, "
       "described; semantic maps return with Part 49's encoding models")
+
+shown(23, r"Skinner (1957); \ Chomsky (1959), \ \emph{Language} 35", "the history of a debate, told as the part's "
+      "opening")
+shown(23, r"Chomsky (1957), \ \emph{Syntactic Structures}", "a linguist's example sentence, not a finding")
+shown(23, r"Berko (1958), \ \emph{Word} 14", "a classic demonstration of productivity, described; its generality "
+      "is not in dispute")
+shown(23, r"Bever (1970)", "garden-path sentences as a demonstration; the cost of reanalysis is measured in the "
+      "surprisal row")
+shown(23, r"Frazier \& Rayner (1982)", "an eye-tracking study described with a schematic; reanalysis costs are "
+      "textbook")
+shown(23, r"Gold (1967); \ Horning (1969); \ Chater \& Vit\'anyi (2007)", "theorems about learnability, not "
+      "experiments")
+shown(23, r"Carey \& Bartlett (1978); \ Hart \& Risley (1995)", "a word-learning study and a disputed estimate of "
+      "input; the input gap is entered with the science of learning", row_in=54)
+shown(23, r"Marcus et al. (1992)", "a corpus count reported as the size of an effect; the rules-or-associations "
+      "dispute is about mechanism")
+shown(23, r"Rumelhart \& McClelland (1986); \ Pinker \& Prince (1988)", "models and a critique of a model")
+shown(23, r"Curtiss (1977); \ Mayberry, \ Lock \& Kazmi (2002)", "a single case and a study of first-language "
+      "deprivation, described with their limits; the second-language row is this part's")
+shown(23, r"Broca (1861); \ Wernicke (1874)", "the history of localization")
+shown(23, r"Fedorenko, \ Behr \& Kanwisher (2011), \ \emph{PNAS}", "the language network, described; encoding "
+      "models of language are Part 49's", row_in=49)
+shown(23, r"Kutas \& Hillyard (1980); \ Osterhout \& Holcomb (1992)", "ERP components described with schematics; "
+      "their use as measures is Part 49's", row_in=49)
+shown(23, r"Whorf (1956, \ collected); \ Berlin \& Kay (1969)", "the history of the relativity question")
+shown(23, r"Frank, \ Everett, \ Fedorenko \& Gibson (2008)", "one field study, described with its design")
+shown(23, r"National Reading Panel (2000); \ Breitenstein et al. (2017), \ \emph{Lancet}", "a review and a trial "
+      "in practice; reading instruction is entered in Part 54", row_in=54)
+shown(23, r"Warstadt et al. (2020); \ Brown et al. (2020)", "machine benchmarks at the frontier; Part 60's")
+shown(23, r"Vong, \ Wang, \ Orhan \& Lake (2024), \ \emph{Science}", "a model trained on one child's input, at "
+      "the frontier; Part 60's")
+shown(23, r"Oh \& Schuler (2023), \ \emph{TACL}", "a model-comparison result at the frontier; in the surprisal "
+      "row's background")

@@ -68,6 +68,15 @@ SOURCES = {
         "file": "overshadowing_rrr2.xlsx",
         "sha256": "81be7ccd1ae7973fb223c745050fc3fc3c551705366d158542067bffde44b775",
     },
+    # Part 23: the Natural Stories corpus (Futrell et al., Language Resources and Evaluation 55 (2021) 63-77),
+    # github.com/languageMIT/naturalstories at a fixed commit; no licence is stated, so it is fetched, never
+    # redistributed
+    "naturalstories_words": {
+        "url": "https://raw.githubusercontent.com/languageMIT/naturalstories/4700daad696e942f5aba23c957a7423d0de66612/naturalstories_RTS/processed_wordinfo.tsv",
+        "page": "https://github.com/languageMIT/naturalstories",
+        "file": "naturalstories_processed_wordinfo.tsv",
+        "sha256": "047d2a0b84eff99d90535d1517f7fa7d466b81fbd60e990f2f08caac04d8aa56",
+    },
     # Part 22: data inside CRAN source packages (catlearn, smacof, janeaustenr), read as data by rdata.py
     'nosof94': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/nosof94.RData', 'member_sha256': '4c9959b80d0311b5db13942665948a34ce5eee6559eb4ca8e5b66c10462670a0'},
     'homa76': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/homa76.RData', 'member_sha256': '99f1af2ea059d7e97c93bc2f1b821d38be2a4d51a7628b7be7d1456ea39d4e24'},
@@ -341,3 +350,18 @@ def austen() -> list:
         lines = rdata.load(member_path("austen_" + book))[0][1]["value"]
         tokens += re.findall(r"[a-z]+", " ".join(x for x in lines if x).lower())
     return tokens
+
+
+def natural_stories() -> dict:
+    """The Natural Stories corpus's self-paced reading times, one entry per word of its ten stories in reading
+    order: ``word`` (as shown, with punctuation), ``story`` (1-10), ``zone`` (position in the story), ``n`` (readers
+    after exclusions) and ``rt`` (their mean reading time, ms), from ``processed_wordinfo.tsv`` (realigned in
+    2025)."""
+    import csv
+
+    with open(path("naturalstories_words"), newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f, delimiter="\t"))
+    rows.sort(key=lambda r: (int(r["item"]), int(r["zone"])))
+    return {"word": np.array([r["word"] for r in rows]), "story": np.array([int(r["item"]) for r in rows]),
+            "zone": np.array([int(r["zone"]) for r in rows]), "n": np.array([int(r["nItem"]) for r in rows]),
+            "rt": np.array([float(r["meanItemRT"]) for r in rows])}
