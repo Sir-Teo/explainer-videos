@@ -16,7 +16,7 @@ class Lips(SoundScene):
     # ------------------------------------------------------------------
     def valve(self):
         rows = rows_card([
-            (r"a reed", r"breath pushes it \emph{shut}. \ It is stiff and light, \ and follows the pipe: \\ the pipe chooses the note."),
+            (r"our reed model", r"breath pushes it shut; reed inertia is neglected. \\ The pipe strongly guides the oscillation."),
             (r"a pair of lips", r"breath pushes them \emph{open}. \ They are heavy and soft, \ with a frequency of their own \\ that the player sets by tightening them."),
             (r"so, \ on a brass instrument", r"the lips buzz near the frequency the player chooses, \\ and the tube answers if it has a resonance close by."),
         ], left=-6.5, text_left=-2.3, top=0.6, step=1.45, name_size=28, text_size=24, color=BRASS)
@@ -26,12 +26,12 @@ class Lips(SoundScene):
         buzz = Dot(horn.get_left() + LEFT * 0.2, radius=0.12, color=EAR)
         self.play(FadeIn(head), FadeIn(horn), FadeIn(buzz), run_time=0.6)
         with self.voiceover(
-            "A trumpet, a horn, a trombone, a tuba. No reed, and until two hundred years ago no holes or "
-            "valves either: one length of tube. The valve is the player's own lips, pressed into a small cup "
+            "A trumpet, a horn, a trombone, a tuba. Many natural brass instruments use one fixed tube without finger holes. Trombones have used slides for centuries; modern valves appeared about two centuries ago. No reed is needed: "
+            "the valve is the player's own lips, pressed into a small cup "
             "at the end of the tube and blown through until they buzz. <bookmark mark='a'/> Lips are a "
-            "different kind of valve. A reed is pushed shut by the breath. It is light and stiff, far "
-            "quicker than the pipe, and so it simply follows what the pipe tells it. <bookmark mark='b'/> "
-            "Lips are pushed open by the breath. And they are heavy and soft: they have a frequency of "
+            "different kind of valve. A reed is pushed shut by the breath. Our reed model neglects its inertia, so the pipe strongly guides the note; "
+            "real reed inertia and embouchure can also matter. <bookmark mark='b'/> "
+            "Lips are pushed open by the breath. Their mass and elasticity give them a frequency of "
             "their own, low when they are slack and high when they are tight. <bookmark mark='c'/> So on a "
             "brass instrument the choice of note is shared. The player sets the lips to buzz near a "
             "frequency, and the tube joins in if it has a resonance close by. If it has not, the note "
@@ -65,8 +65,8 @@ class Lips(SoundScene):
             "And at first sight the resonances are in the wrong places. A brass tube is closed at the lips "
             f"and open at the far end, like a clarinet. <bookmark mark='a'/> A plain tube as long as a trumpet's "
             f"has its resonances at {say(pp[0])}, {say(pp[1])}, {say(pp[2])}, {say(pp[3])} hertz: one, three, "
-            "five, seven. The notes of a bugle call are not in there. <bookmark mark='b'/> Now put a real "
-            "trumpet's shape on it: a cup and a narrow throat at one end, and at the other a bell that "
+            "five, seven. The notes of a bugle call are not in there. <bookmark mark='b'/> Now put a schematic "
+            "trumpet-like profile on it: a cup and a narrow throat at one end, and at the other a bell that "
             f"flares. Monochord computes the resonances again: {say(pk[1])}, {say(pk[2])}, {say(pk[3])}, "
             f"{say(pk[4])}, {say(pk[5])}. <bookmark mark='c'/> Those are very nearly two, three, four, five "
             f"and six times {say(f0)} hertz, which is the B flat that a trumpet is named after. The shape "
@@ -109,7 +109,7 @@ class Lips(SoundScene):
             "another. <bookmark mark='a'/> The note that sounds does not follow the lips smoothly. It climbs "
             "a staircase. Each step is one of the tube's resonances, shown as a dashed line, and the note "
             "sits a little above the frequency of the lips themselves. Tighten the lips gradually and the "
-            "horn jumps from one resonance to the next. That is all a bugler does. Listen to eight notes on "
+            "horn jumps from one resonance to the next. Real buglers also coordinate airflow, tongue and embouchure. Listen to eight notes on "
             "one length of tube."
         ) as vo:
             self.play(FadeIn(g), FadeIn(lines))
@@ -122,15 +122,15 @@ class Lips(SoundScene):
                 pulse(snd, b, t0, t0 + dur - 0.03, buff=0.05)
         ped = [s for s in d["stairs"] if s["amp"] > 0.3 and s["hz"] < 150]
         extra = VGroup(label(rf"the notes it played: \\ {d['heard'][0]:.0f}, \ {d['heard'][1]:.0f}, \ {d['heard'][2]:.0f}, \ {d['heard'][7]:.0f} Hz", font_size=24, color=BRASS),
-                       label(rf"and twice, \ unasked: \ {ped[0]['hz']:.0f} Hz, \\ where the tube has no resonance", font_size=24, color=EAR)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to(RIGHT * 3.7 + DOWN * 2.0)
+                       label(rf"and twice, \ unasked: \ {ped[0]['hz']:.0f} Hz, \\ without a nearby strong bore resonance", font_size=24, color=EAR)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to(RIGHT * 3.7 + DOWN * 2.0)
         with self.voiceover(
-            "Three, four, five, six times the B flat: the notes of every bugle call there is. "
+            "Three, four, five, six times the B flat: members of the harmonic family used in familiar bugle calls. "
             "<bookmark mark='a'/> And look at the two stray points at the bottom of the staircase. Twice, "
-            f"while climbing, the model dropped to {say(ped[0]['hz'])} hertz, where this tube has no resonance "
-            "at all. That is the note brass players call the pedal. Nothing at that frequency holds it up. "
+            f"while climbing, the model dropped to {say(ped[0]['hz'])} hertz, where this model has no nearby strong bore resonance "
+            "at all. That is the note brass players call the pedal. The low-frequency bore response is not literally zero, but the stronger upper resonances help organize this regime. "
             "But its second harmonic sits on one resonance, its third on the next, its fourth on the next, "
             "and between them they hold the lips to a rhythm whose fundamental the tube does not support. "
-            "It is Part 4's missing fundamental, happening inside a trumpet, and nobody told the model to "
+            "This is a nonlinear oscillation supported by upper resonances, related to Part 4's common-period idea but distinct from the ear's missing-fundamental percept, and nobody told the model to "
             "do it."
         ) as vo:
             self.play(FadeOut(note), FadeIn(extra[0]))
@@ -166,10 +166,10 @@ class Lips(SoundScene):
         with self.voiceover(
             f"The two loops add {say(100 * v['have_13'], 1)} percent. <bookmark mark='a'/> Five semitones need "
             f"{say(100 * v['need_13'], 1)}. Percentages multiply; loops of tube only add. <bookmark mark='b'/> "
-            f"The horn is too short, by about {say(v['extra_cm'])} centimetres on a real trumpet, and the "
+            f"The horn is too short, by about {say(v['extra_cm'])} centimetres in this example trumpet, and the "
             f"note is {say(v['sharp_cents'])} cents sharp: a third of a semitone, far too much to leave. "
-            "<bookmark mark='c'/> So every trumpet has a ring for the left hand's third finger, which pushes "
-            "the third valve's slide out for exactly those notes. A trombone has no such trouble. Its slide "
+            "<bookmark mark='c'/> Many piston trumpets use a finger ring or trigger to move "
+            "the third-valve slide for those combinations. Adjustment mechanisms differ among instruments. A trombone has no such trouble. Its slide "
             "is the whole instrument."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(work[0]))

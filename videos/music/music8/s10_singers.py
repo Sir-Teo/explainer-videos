@@ -16,12 +16,12 @@ class Singers(SoundScene):
     def ring(self):
         d = load("singers")
         c = clip("singers.formant")
-        q = listen_card(r"One sung note, \ twice, \ at the same loudness. \\ Which voice would you hear over an orchestra?", width=8.6, font_size=26).to_edge(UP, buff=0.35)
+        q = listen_card(r"One sung note, \ twice, \ at matched modeled loudness. \\ Which has more high-frequency ring?", width=8.6, font_size=26).to_edge(UP, buff=0.35)
         bx = boxes(buff=2.4, width=3.0, height=1.3).move_to(DOWN * 0.4)
         with self.voiceover(
             "An opera singer stands in front of eighty instruments, with no microphone, and is heard at the "
-            "back of the hall. How? Here is one sung note twice, at the same loudness. Which of these two "
-            "voices would you hear over an orchestra?"
+            "back of the hall. How? Here is one sung note twice, at matched modeled loudness. Which of these two "
+            "voices has more high-frequency ring, which may help projection?"
         ):
             self.play(FadeIn(q, shift=DOWN * 0.2), FadeIn(bx))
         with self.listen(c) as snd:
@@ -30,7 +30,7 @@ class Singers(SoundScene):
                 t0 = snd.time_of(ev)
                 pulse(snd, b, t0, t0 + 2.2)
         self.clear_scene()
-        g = axes([0, 5000], [-48, 30], x_length=10.4, y_length=3.8, xlabel=r"frequency (Hz)", ylabel=r"dB", xticks=[0, 1000, 2000, 3000, 4000, 5000], yticks=[-40, -20, 0, 20], font_size=20)
+        g = axes([0, 5000], [-48, 30], x_length=10.4, y_length=3.8, xlabel=r"frequency (Hz)", ylabel=r"illustrative dB (separate references)", xticks=[0, 1000, 2000, 3000, 4000, 5000], yticks=[-40, -20, 0, 20], font_size=20)
         g.move_to(DOWN * 0.9)
         f = np.asarray(d["f"])
         c1 = curve_from(g, f, np.maximum(d["plain_db"], -48), GREY_B, stroke_width=2.5)
@@ -38,20 +38,20 @@ class Singers(SoundScene):
         orch = curve_from(g, f, np.asarray(d["orchestra_db"]) + 12, BRASS, stroke_width=2)
         band = Rectangle(width=g.ax.c2p(3500, 0)[0] - g.ax.c2p(2500, 0)[0], height=3.8, stroke_width=0, fill_color=VOICE, fill_opacity=0.1).move_to(g.ax.c2p(3000, -9))
         key = VGroup(label(r"A: \ a speaking voice's tube", font_size=22, color=GREY_B), label(r"B: \ a trained singer's", font_size=22, color=VOICE),
-                     label(r"an orchestra's average spectrum (schematic, \ after Sundberg)", font_size=22, color=BRASS)).arrange(DOWN, buff=0.06, aligned_edge=LEFT).to_corner(UL, buff=0.4)
+                     label(r"orchestra: schematic shape, \ arbitrary vertical offset", font_size=22, color=BRASS)).arrange(DOWN, buff=0.06, aligned_edge=LEFT).to_corner(UL, buff=0.4)
         bl = label(rf"$+{d['boost_db']:.0f}$ dB", font_size=28, color=VOICE).next_to(band, UP, buff=0.1)
         with self.voiceover(
             "B, the one with the edge on it. Singers call it ring. <bookmark mark='a'/> Here are the two "
-            "filters. A is the tube of an ordinary speaking voice. B is the tube of a trained singer on the "
+            "filters. A is the tube of an ordinary speaking voice. B is a model of a trained classical singer's tract on the "
             "same vowel. The first two formants, which make the vowel, are nearly the same. The difference "
             "is higher up: the singer has drawn the third, fourth and fifth resonances together into one "
             f"cluster near three thousand hertz, and the filter is {say(d['boost_db'])} decibels stronger "
-            "there. Johan Sundberg traced it in 1974 to the larynx, which trained singers lower, opening a "
-            "small extra chamber just above the folds. <bookmark mark='b'/> Now put an orchestra on the same "
+            "there. Johan Sundberg traced it in 1974 to the epilaryngeal region: a relatively narrow tube below a wider pharynx can create a "
+            "cluster of higher resonances. Lowering the larynx can help this configuration; the effect varies with voice and technique. <bookmark mark='b'/> Now put an orchestra on the same "
             "axes. Its average spectrum is strongest near five hundred hertz and falls away steadily above. "
             "At three thousand it has little left. And three thousand hertz, Part 4 found, is where the ear "
             "is most sensitive. The singer does not sing louder than the orchestra. The singer puts energy "
-            "where the orchestra has none and the ear is listening hardest."
+            "where the orchestra's average energy is often lower and the ear is listening hardest."
         ) as vo:
             self.play(FadeIn(g), Create(c1), Create(c2), FadeIn(key[0]), FadeIn(key[1]), run_time=2.5)
             vo.wait_until("a")
@@ -70,7 +70,7 @@ class Singers(SoundScene):
         f = np.linspace(100, 4000, 400)
         e1 = W.spectrum_envelope((s["f1_speech"], 2790.0, 3310.0), f)
         e2 = W.spectrum_envelope((s["note"], 2790.0, 3310.0), f)
-        g = axes([0, 4000], [-40, 34], x_length=10.0, y_length=3.4, xlabel=r"frequency (Hz)", ylabel=r"dB", xticks=[0, 1000, 2000, 3000, 4000], yticks=[-20, 0, 20], font_size=20)
+        g = axes([0, 4000], [-40, 34], x_length=10.0, y_length=3.4, xlabel=r"frequency (Hz)", ylabel=r"illustrative dB (separate references)", xticks=[0, 1000, 2000, 3000, 4000], yticks=[-20, 0, 20], font_size=20)
         g.move_to(DOWN * 1.1)
         c1 = curve_from(g, f, e1, GREY_B, stroke_width=2.5)
         c2 = curve_from(g, f, e2, VOICE)
@@ -86,12 +86,12 @@ class Singers(SoundScene):
             f"{say(s['f1_speech'])} hertz. There is no harmonic down there for the formant to help. Her "
             "strongest partial, the note itself, sits in the valley beyond it. <bookmark mark='b'/> So she "
             "drops her jaw, which raises the first formant, until it sits on the note. In this simple "
-            f"model that gains {say(s['gain_db'])} decibels; real mouths, which are lossier, gain less, but "
-            "it is still the difference between filling a hall and not. In 2004 this was measured directly, "
+            f"model that gains {say(s['gain_db'])} decibels; real gains depend on losses and vocal configuration, and "
+            "the number is not a measured gain or a guarantee of projection in a real hall. In 2004 this was measured directly, "
             "in eight sopranos: above about five hundred hertz, the first resonance of the mouth follows "
             "the note as it climbs. <bookmark mark='c'/> The price is the words. Moving the first formant "
-            "is changing the vowel. At the top of a soprano's range ee, ah and oo all become the same open "
-            "sound, and that is why you cannot make out the text, however good the singer."
+            "is changing the vowel. At high pitches several vowels may move towards more open configurations and become harder to distinguish. They do not necessarily become identical; "
+            "consonants, context and technique still contribute to intelligibility."
         ) as vo:
             self.play(FadeIn(g), FadeIn(harm), FadeIn(hl))
             vo.wait_until("a")
@@ -130,11 +130,11 @@ class Singers(SoundScene):
             f"harmonic of the drone. In Monochord's version that harmonic stands {say(d['prominence_db'])} "
             "decibels above its neighbours. A magnetic resonance scanner watched a Tuvan singer do exactly "
             "this in 2020. <bookmark mark='b'/> The ear, which normally fuses harmonics into one sound, "
-            "cannot fuse one that sticks out that far, and hears it as a second note. And the notes on "
+            "can hear a sufficiently prominent harmonic as a separate pitch alongside the drone. And the notes on "
             "offer are the harmonics themselves: the eighth, ninth and tenth make C, D, E; the twelfth is G. "
             f"The eleventh falls between F and F sharp, {say(off['4'])} cents above the F of Part 1's scale, "
             f"and the thirteenth is an A {say(abs(off['6']))} cents flat. Here is the Tune's first phrase, "
-            "sung in the only scale a single throat has."
+            "sung using selected harmonics of this fixed drone."
         ) as vo:
             self.play(FadeIn(head[0]))
             vo.wait_until("a")
@@ -165,7 +165,7 @@ class Singers(SoundScene):
             snd.drive(bars, lit)
         show(bars, hs[-1])
         with self.voiceover(
-            "Twinkle, twinkle, little star, with a flat last note that no amount of practice will fix, "
+            "Twinkle, twinkle, little star, with a last note flat of our equal-tempered reference when the drone is fixed, "
             "because it is the thirteenth harmonic and that is where the thirteenth harmonic is. So the two "
             "puzzles this part began with have one answer. A flute and a clarinet differ in which "
             "resonances their column of air has. A singer in Tuva is choosing, with the tongue, where the "

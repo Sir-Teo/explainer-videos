@@ -26,7 +26,7 @@ class Reed(SoundScene):
         names = VGroup(label(r"the reed: \ a springy blade of cane", font_size=24, color=REED).next_to(m, DOWN, buff=0.3),
                        label(r"the player's mouth", font_size=24, color=GREY_A).next_to(m, UP, buff=0.2).align_to(m, LEFT),
                        label(r"to the pipe", font_size=24, color=AIR).next_to(m, UP, buff=0.2).align_to(m, RIGHT))
-        g = axes([-0.1, 1.2], [-0.02, 0.16], x_length=5.4, y_length=3.4, xlabel=r"pressure across the reed, \ as a fraction of the pressure that shuts it", ylabel=r"flow through the gap", xticks=[0, 0.33, 0.67, 1.0],
+        g = axes([-0.1, 1.2], [-0.02, 0.16], x_length=5.4, y_length=3.4, xlabel=r"pressure across the reed, \ as a fraction of the pressure that shuts it", ylabel=r"normalized flow through the gap", xticks=[0, 0.33, 0.67, 1.0],
                  yticks=[], xfmt=lambda v: {0: "0", 0.33: r"\tfrac13", 0.67: r"\tfrac23", 1.0: "1"}[round(v, 2)], font_size=20)
         g.move_to(RIGHT * 3.5 + DOWN * 0.4)
         mask = np.asarray(d["dp"]) >= 0
@@ -44,7 +44,7 @@ class Reed(SoundScene):
             "flow of air against the pressure difference across the reed. At first, more pressure means more "
             "flow, as through any hole. <bookmark mark='c'/> But the gap is closing all the while, and beyond a "
             "certain point the narrowing wins: more pressure means less flow. Push hard enough and the reed "
-            "is flat against the mouthpiece, and nothing gets through. The top of the curve is at exactly one "
+            "is flat against the mouthpiece, and nothing gets through. In this quasi-static linear-reed and Bernoulli-flow model, the top is at one "
             "third of the pressure that shuts the reed. Remember that number. <bookmark mark='d'/> And "
             "remember where you have seen this shape: it is the rosin of Part 7, whose grip fell as the "
             "string began to slide. A valve that passes less when pushed harder is what turns a steady push "
@@ -66,13 +66,13 @@ class Reed(SoundScene):
     # ------------------------------------------------------------------
     def loop(self):
         d = load("reed")
-        g = axes([0, 3], [-0.6, 0.6], x_length=6.4, y_length=2.6, xlabel=r"time, \ in periods of the note", ylabel=r"pressure in the mouthpiece", xticks=[0, 1, 2, 3], yticks=[0], font_size=20)
+        g = axes([0, 3], [-0.6, 0.6], x_length=6.4, y_length=2.6, xlabel=r"time, \ in periods of the note", ylabel=r"normalized mouthpiece pressure", xticks=[0, 1, 2, 3], yticks=[0], font_size=20)
         g.move_to(LEFT * 3.2 + UP * 0.9)
         cu = curve_from(g, d["t"], d["p"], CLAR)
         hb = harmonic_bars(d["harmonics_db"], color=CLAR, width=5.2, height=2.3, floor_db=-40.0, font_size=18).move_to(RIGHT * 3.6 + UP * 0.8)
         hl = label(r"its harmonics (dB)", font_size=22, color=GREY_B).next_to(hb, UP, buff=0.15)
         notes = VGroup(label(r"a puff of pressure runs down the pipe, \ comes back upside down from the open end,", font_size=26, color=GREY_A),
-                       label(r"and arrives as suction: \ the reed opens, \ the flow changes, \ and the suction is sent down in its turn", font_size=26, color=GREY_A),
+                       label(r"and arrives as suction: the reed closes further; \\ flow changes, and suction is sent down in turn", font_size=26, color=GREY_A),
                        label(rf"four trips of the pipe make one period: \ {d['hz']:.0f} Hz", font_size=30, color=TUNE)).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Put that valve on the end of the pipe, and follow one puff. A little extra pressure in the "
@@ -83,7 +83,7 @@ class Reed(SoundScene):
             f"one full cycle. <bookmark mark='b'/> Here is Monochord's reed on the sixty-centimetre pipe. The "
             "pressure in the mouthpiece flips between high and low: very nearly a square wave, at "
             f"{say(d['hz'])} hertz. <bookmark mark='c'/> And a square wave, Part 3 showed, is made of odd "
-            "harmonics only. Inside the mouthpiece, the even ones are more than fifty decibels down. So the "
+            "harmonics only. Inside this model mouthpiece, the even ones are more than fifty decibels down; a real radiated spectrum also depends on register, holes and radiation. So the "
             "clarinet's hollow sound is not something added to it. It is the shape of a wave that spends "
             "half its time high and half its time low."
         ) as vo:
@@ -116,7 +116,7 @@ class Reed(SoundScene):
         line = Line(g.ax.c2p(0, lo), g.ax.c2p(5, hi), color=GREY_B, stroke_width=2)
         dot = Dot(g.ax.c2p(0, lo), radius=0.1, color=CLAR)
         with self.voiceover(
-            "What does the player control? Mostly one thing: how hard to blow. So listen to Monochord's "
+            "What does the player control? In this demonstration we vary one thing: blowing pressure. Real players also control embouchure, tonguing and vocal-tract shape. So listen to Monochord's "
             "clarinet being blown steadily harder for five seconds, from almost nothing. When does the sound "
             "begin? And once it has begun, what changes, besides the loudness?"
         ):
@@ -131,7 +131,7 @@ class Reed(SoundScene):
         soft, loud = d["soft"], d["loud"]
         with self.voiceover(
             "For the first second and a half there is breath and no note. Then, quite suddenly, the clarinet "
-            "speaks. There is a threshold, and below it no amount of patience will make a sound. "
+            "speaks. For this start-up condition there is a threshold, below which small disturbances decay. "
             "<bookmark mark='a'/> And after it speaks, the note does not only get louder. It starts as "
             "something close to a pure tone and grows an edge. Just above the threshold the fifth harmonic "
             f"is {say(abs(soft['fifth_db']))} decibels below the first; at full breath it is "

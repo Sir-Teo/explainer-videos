@@ -13,6 +13,6 @@ SCENES = [
     ("s08_voice", "Voice", "7. The voice: a source and a filter"),
     ("s09_vowels", "Vowels", "8. Vowels"),
     ("s10_singers", "Singers", "9. What singers do"),
-    ("s11_frontier", "Frontier", "10. Frontier: the parts we cannot yet compute"),
+    ("s11_frontier", "Frontier", "10. Frontier: what these models leave out"),
     ("s12_outro", "Outro", "Variation 8, recap and problems"),
 ]

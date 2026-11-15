@@ -12,8 +12,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 5 — Consonance | Complete; [repair and verification record](music/part05.md) | Open |
 | 6 — Tuning | Complete; [repair and verification record](music/part06.md) | Open |
 | 7 — Strings, Hammers and Bows | Complete; [repair and verification record](music/part07.md) | Open |
-| 8 — Pipes, Reeds and Voices | In progress | Open |
-| 9–68 | Queued | Open |
+| 8 — Pipes, Reeds and Voices | Complete; [repair and verification record](music/part08.md) | Open |
+| 9 — Drums, Bars and Bells | In progress | Open |
+| 10–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -41,7 +42,11 @@ motion checks pass. Three native 1080p stills inspected. Local identities: `rend
 Part 7: twelve chapter previews reviewed; 28 tests, the lab, 12 sound-gate cases and 12 listening-window
 motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music7/source-receipt.json`.
 
-**Current: Part 8.** Numerical items generated; source review and repairs are in progress. Automated endpoint preflight is also running
+Part 8: twelve chapter previews reviewed; 29 tests, the lab, 12 sound-gate cases and 15 listening-window
+motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music8/source-receipt.json`.
+
+**Current: Part 9.** Source repairs complete; preview review and final gates are in progress. Part 10 source
+review and repairs are prepared while rendering continues. Automated endpoint preflight is also running
 through the remaining episodes; its warnings require review and do not constitute episode approval. Keep numerical correctness, sampled visual review,
 motion detection, native-resolution checks and final listening/playback coverage distinct.
 

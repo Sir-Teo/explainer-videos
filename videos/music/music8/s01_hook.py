@@ -39,7 +39,7 @@ class Hook(SoundScene):
         with self.voiceover(
             f"An octave. The first pipe sounds at {say(d['flute_hz'])} hertz; the second at {say(d['clarinet_hz'])}, "
             "half as fast, from the same length of air. And they differ in colour too. The lower one has "
-            "that hollow, woody sound, and if you measure it, every second harmonic is almost missing. The "
+            "that hollow, woody sound, and if you measure it, even harmonics are weak in this low-register model; real clarinets vary with pitch and dynamics. The "
             "first pipe is a flute, more or less. The second is a clarinet. Why should a reed lower a pipe by "
             "an octave and hollow out its tone?"
         ):
@@ -57,7 +57,7 @@ class Hook(SoundScene):
         dx = 0.8
         bars = VGroup(*[Rectangle(width=0.42, height=0.5, stroke_width=0, fill_color=GREY_C, fill_opacity=0.7).move_to(base + RIGHT * dx * k, aligned_edge=DOWN) for k in range(n)])
         nums = VGroup(*[label(str(k + 1), font_size=20, color=GREY_B).next_to(bars[k], DOWN, buff=0.1) for k in range(n)])
-        cap = label(rf"the harmonics of one sung note, \ {drone:.0f} Hz", font_size=24, color=GREY_B).next_to(nums, DOWN, buff=0.2)
+        cap = label(rf"schematic harmonics of one sung note, \ {drone:.0f} Hz", font_size=24, color=GREY_B).next_to(nums, DOWN, buff=0.2)
         heights = [max(2.2 * (1 - 0.35 * np.log2(k + 1) / 2), 0.25) for k in range(n)]
         for k, b in enumerate(bars):
             b.stretch_to_fit_height(heights[k]).move_to(base + RIGHT * dx * k, aligned_edge=DOWN)
@@ -103,7 +103,7 @@ class Hook(SoundScene):
     # ------------------------------------------------------------------
     def plan(self):
         idea = VGroup(label(r"a column of air that resonates", font_size=32, color=AIR), label(r"$+$", font_size=36),
-                      label(r"a valve that lets breath through in time with it", font_size=32, color=REED)).arrange(RIGHT, buff=0.35).to_edge(UP, buff=0.45)
+                      label(r"a steady airflow shaped into sound", font_size=32, color=REED)).arrange(RIGHT, buff=0.35).to_edge(UP, buff=0.45)
         card = objectives_card([
             r"why the same pipe has two notes, \ and what a reed does",
             r"holes, \ registers, \ and why a clarinet's fingering is the odd one out",
@@ -113,15 +113,15 @@ class Hook(SoundScene):
             r"the voice: \ vowels, \ singers, \ and two notes from one throat",
         ], title=r"Part 8: \ Pipes, Reeds and Voices", font_size=26).move_to(DOWN * 0.5)
         with self.voiceover(
-            "Here is that idea. Every wind instrument, and every voice, is two things joined in a loop. A "
-            "column of air, which has resonances. And a valve, which lets the player's breath through in "
-            "puffs, in time with the column. Part 7 ended on the bow, which grips and lets go in time with a "
+            "Here is that idea. These instruments couple a vibrating source to resonating air. A "
+            "column of air has resonances. Reeds, lips and jets turn a player's steady breath into "
+            "oscillating flow. Vocal folds usually set their own pitch while the vocal tract shapes the sound. Part 7 ended on the bow, which grips and lets go in time with a "
             "string. This part is that loop again, with air. <bookmark mark='a'/> We will find out why one "
             "pipe has two notes, and what a reed is doing. <bookmark mark='b'/> How holes turn one pipe into "
             "a scale. <bookmark mark='c'/> What changes when the pipe is a cone. <bookmark mark='d'/> How a "
             "brass player gets a tune from a tube with no holes. <bookmark mark='e'/> How a flute works with "
             "no valve at all. <bookmark mark='f'/> And then the oldest instrument, the one you are listening "
-            "to me with: the voice."
+            "now: the voice."
         ) as vo:
             self.play(FadeIn(idea))
             self.play(FadeIn(card.head))

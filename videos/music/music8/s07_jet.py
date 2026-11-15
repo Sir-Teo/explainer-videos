@@ -7,7 +7,7 @@ from videos.music.music8.common import *  # noqa: F403
 
 class Jet(SoundScene):
     def construct(self):
-        chapter(self, 6, r"A jet and an edge", r"What plays a flute, when nothing in it moves?", lit=(1863,), extra=((1968, r"Coltman times the flute's jet"),))
+        chapter(self, 6, r"A jet and an edge", r"What plays a flute without a flexible reed?", lit=(1863,), extra=((1968, r"Coltman times the flute's jet"),))
         self.jet()
         self.overblow()
         self.quiz()
@@ -36,7 +36,7 @@ class Jet(SoundScene):
                       label(r"the push rides along the ribbon, \ and flips it: \ into the pipe, \ out, \ in, \ out", font_size=26, color=GREY_A),
                       label(r"it works when the ride takes about half a period of the note", font_size=28, color=TUNE)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to(DOWN * 2.2)
         with self.voiceover(
-            "And then there is the flute, which is the strangest of all, because nothing in it moves. No "
+            "And then there is the flute, which is the strangest of all, because it has no flexible oscillator inside it. No "
             "reed, no lips inside the instrument. <bookmark mark='a'/> The player's lips make a thin ribbon "
             "of air, a jet, and aim it across the mouth hole at the hole's far edge. <bookmark mark='b'/> "
             "When the pipe is sounding, air sloshes in and out of that hole, and the sloshing pushes the jet "
@@ -45,8 +45,8 @@ class Jet(SoundScene):
             "one way or the other: into the pipe, or out over the top. Into the pipe, out, in, out. The jet "
             "is the valve, and it is made of the same air as the breath. <bookmark mark='d'/> For the puffs "
             "to arrive at the right moment, the ride along the jet has to take about half a period of the "
-            "note. John Coltman measured that in the nineteen sixties, and it is the fact that everything "
-            "about playing the flute follows from."
+            "note. John Coltman's measurements in the nineteen sixties helped establish this timing "
+            "in this regime. It is an approximate phase guide, not a complete rule for every register."
         ) as vo:
             self.play(FadeIn(pipe))
             vo.wait_until("a")
@@ -95,9 +95,9 @@ class Jet(SoundScene):
             f"The note creeps sharp, by {say(sharp)} cents, as the jet gets ahead of the pipe. Flute players "
             "know that well: blowing harder raises the pitch, and they correct it by rolling the flute. "
             "<bookmark mark='a'/> Then it breaks, and lands on the octave. The jet has become too quick for "
-            "the pipe's first resonance, whose half period is long, and exactly right for the second, whose "
+            "the pipe's first resonance, whose half period is long, and closer to the phase condition for the second, whose "
             "half period is half as long. Blow harder still and it will find the third. A flautist plays "
-            "the second octave with the fingerings of the first, a faster and shorter jet, and nothing else."
+            "the second octave with many similar fingerings, while adjusting jet speed, angle, embouchure and, for some notes, the fingering."
         ) as vo:
             self.play(FadeOut(note), FadeIn(lab[0]))
             vo.wait_until("a")
@@ -149,15 +149,15 @@ class Jet(SoundScene):
         cap = label(r"harmonic \\ number", font_size=20, color=TUNE).next_to(pipes[4][1], RIGHT, buff=0.5)
         note = listen_note(r"One key held down; \\ five stops drawn, \ one at a time. \\ Five pipes, \\ or one sound changing colour?", width=5.0, font_size=26).move_to(RIGHT * 4.0 + DOWN * 1.6)
         with self.voiceover(
-            "One last instrument that works by a jet: the organ. An organ pipe is a flute with its lips "
+            "One last family using jets: an organ's flue pipes. Organs also have reed pipes. An organ pipe is a flute with its lips "
             "built in, and since it cannot be fingered, an organ has one pipe for every note. And then, "
             "since the fifteenth century, more than one. <bookmark mark='a'/> Each stop on an organ switches "
-            "on another whole rank of pipes. The basic rank is called eight foot, after the length of its "
-            "lowest pipe. A four foot rank has pipes half as long and sounds an octave higher: the second "
+            "on another whole rank of pipes. An eight-foot rank has normal pitch; the name refers approximately to an open rank's "
+            "lowest pipe length. Stopped ranks can be physically shorter for the same pitch. A four foot rank has pipes half as long and sounds an octave higher: the second "
             "harmonic. Two and two thirds feet: the third harmonic. Two feet, the fourth. One and three "
-            "fifths, the fifth. <bookmark mark='b'/> An organist who draws those stops is not adding notes. "
-            "She is adding partials, one pipe for each, and building a tone colour by hand. It is the "
-            "additive synthesis of Part 3, four hundred years before the computer. Hold down one key, and "
+            "fifths, the fifth. <bookmark mark='b'/> The separate pipes from these stops can fuse into one complex tone. "
+            "The organist is adding harmonically related components, one pipe for each, and building a tone colour by hand. It is the "
+            "additive synthesis of Part 3, centuries before the computer. Hold down one key, and "
             "draw the stops one at a time."
         ) as vo:
             self.play(FadeIn(knobs))

@@ -14,7 +14,7 @@ class Column(SoundScene):
 
     # ------------------------------------------------------------------
     def ends(self):
-        rule = VGroup(label(r"at an open end the air inside meets the room: \ the pressure cannot build up there", font_size=26, color=AIR),
+        rule = VGroup(label(r"ideal open end: \ acoustic pressure is near zero", font_size=26, color=AIR),
                       label(r"at a closed end the air has nowhere to go: \ the pressure swings most there", font_size=26, color=REED)).arrange(DOWN, buff=0.15).to_edge(UP, buff=0.4)
         left = VGroup(*[pipe_mode(n, False, color=FLUTE) for n in (1, 2, 3)]).arrange(DOWN, buff=0.45).move_to(LEFT * 3.5 + DOWN * 0.7)
         right = VGroup(*[pipe_mode(n, True, color=CLAR) for n in (1, 2, 3)]).arrange(DOWN, buff=0.45).move_to(RIGHT * 3.5 + DOWN * 0.7)
@@ -26,7 +26,7 @@ class Column(SoundScene):
         with self.voiceover(
             "In Part 2 we blew across a bottle and found that air in a container has notes of its own. A pipe "
             "has a whole family of them, and which family depends on its ends. <bookmark mark='a'/> At an open "
-            "end, the air inside meets the air of the room, so the pressure there cannot build up: it stays "
+            "end, the air inside meets the air of the room, so the acoustic pressure there is small: in the ideal boundary model it stays "
             "at the pressure outside. At a closed end the air has nowhere to go, and the pressure swings "
             "most. <bookmark mark='b'/> Open the pipe at both ends. The pressure must be quiet at each end and "
             "can swell in the middle: half a wave fits. So do two halves, and three. The pipe's notes are a "
@@ -35,7 +35,7 @@ class Column(SoundScene):
             "twice as long, so a note an octave lower. The next shape that fits is three quarters, then five. "
             "Only the odd multiples. <bookmark mark='d'/> And that is the clarinet. A reed leaves only a "
             "hair's breadth of opening, so as far as the air column can tell, its end of the pipe is shut. "
-            "An octave lower, and every second harmonic missing."
+            "For an ideal cylindrical low-register model, an octave lower with odd resonances. Even harmonics in actual clarinet sound need not vanish."
         ) as vo:
             first = TubeView(width=8.0, bore=0.8, left="open", right="open", color=AIR).move_to(UP * 0.3)
             blur = first.lens(standing(1, False), amp=0.3)
@@ -56,7 +56,7 @@ class Column(SoundScene):
     # ------------------------------------------------------------------
     def measured(self):
         d = load("column")
-        g = faxes(60, 2000, [-34, 34], x_length=10.6, y_length=3.9, ylabel=r"how hard the air column pushes back (dB)", yticks=[-20, 0, 20], fticks=(100, 200, 500, 1000, 2000), font_size=20)
+        g = faxes(60, 2000, [-34, 34], x_length=10.6, y_length=3.9, ylabel=r"normalized input impedance (dB)", yticks=[-20, 0, 20], fticks=(100, 200, 500, 1000, 2000), font_size=20)
         g.move_to(DOWN * 0.8)
         cu = fcurve(g, d["f"], d["z_stopped_db"], CLAR)
         peaks = VGroup(*[label(rf"{f:.0f}", font_size=22, color=CLAR).next_to(g.at(f, float(np.interp(f, d['f'], d['z_stopped_db']))), UP, buff=0.08) for f in d["stopped"][:4]])
@@ -100,8 +100,8 @@ class Column(SoundScene):
         l_open = 100 * d["c"] / (2 * w["middle_c"])
         l_closed = 100 * w["clarinet_length"]
         rows = VGroup(
-            VGroup(label(r"open at both ends", font_size=28, color=FLUTE), MathTex(rf"L = \frac{{c}}{{2f}} = \frac{{343}}{{2 \times 262}} = {l_open:.1f}\ \text{{cm}}", font_size=34), label(r"a flute is 66 cm long", font_size=24, color=GREY_A)),
-            VGroup(label(r"closed at one end", font_size=28, color=CLAR), MathTex(rf"L = \frac{{c}}{{4f}} = \frac{{343}}{{4 \times 147}} = {l_closed:.1f}\ \text{{cm}}", font_size=34), label(r"a clarinet: \ about 60, \ plus a mouthpiece", font_size=24, color=GREY_A)),
+            VGroup(label(r"open at both ends", font_size=28, color=FLUTE), MathTex(rf"L = \frac{{c}}{{2f}} = \frac{{343}}{{2 \times 262}} \approx {l_open:.1f}\ \text{{cm}}", font_size=34), label(r"ideal acoustic length, before end corrections", font_size=24, color=GREY_A)),
+            VGroup(label(r"closed at one end", font_size=28, color=CLAR), MathTex(rf"L = \frac{{c}}{{4f}} = \frac{{343}}{{4 \times 147}} \approx {l_closed:.1f}\ \text{{cm}}", font_size=34), label(r"B-flat clarinet: \ ideal acoustic length", font_size=24, color=GREY_A)),
         )
         for k, r in enumerate(rows):
             r[0].move_to(LEFT * 6.5 + UP * (0.6 - 1.6 * k), aligned_edge=LEFT)
@@ -118,10 +118,10 @@ class Column(SoundScene):
         self.wait(1.5)
         with self.voiceover(
             f"Half a wave of middle C has to fit: the speed over twice the frequency, {say(l_open, 1)} "
-            "centimetres. A concert flute, whose lowest note is middle C, is sixty-six centimetres long. "
+            "centimetres. This is the ideal acoustic length before end corrections; a C-foot concert flute reaches middle C, while B-foot instruments extend lower. "
             f"<bookmark mark='a'/> For the closed pipe, a quarter of a wave: the speed over four times the "
-            f"frequency, {say(l_closed, 1)} centimetres. A clarinet, whose lowest note is that D, is about "
-            "sixty centimetres, and a mouthpiece. <bookmark mark='b'/> So the three small woodwinds of the "
+            f"frequency, {say(l_closed, 1)} centimetres. A standard B-flat clarinet reaches concert D at its written low E. Its ideal quarter-wave length is about "
+            "sixty centimetres; bore, mouthpiece and end corrections affect the physical dimensions. <bookmark mark='b'/> So the three small woodwinds of the "
             "orchestra are nearly the same length, and one of them goes most of an octave lower than the "
             "others. Now you know which, and why."
         ) as vo:

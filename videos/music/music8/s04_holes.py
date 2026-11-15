@@ -42,7 +42,7 @@ class Holes(SoundScene):
             "instead of sawing, open a hole at that point, as wide as the pipe itself. To the air column, a "
             "hole that wide is very nearly the end of the pipe: the pressure escapes there, and the wood "
             f"beyond it hardly matters. Monochord gets {say(rows[0]['hz'])} hertz. <bookmark mark='d'/> But "
-            "fingers cannot cover a hole fifteen millimetres across. Make the hole smaller, and it lets the "
+            "large holes can be difficult to cover and reach directly; keys and pads help. Make the hole smaller, and it lets the "
             f"pressure out less completely. At eight millimetres the note is {say(rows[1]['cents_below_cut'])} "
             f"cents flat of the sawn pipe; at four millimetres, {say(rows[2]['cents_below_cut'])} cents, nearly "
             "a whole tone. A small hole behaves like a big hole further down. So a maker has two things to "
@@ -87,7 +87,7 @@ class Holes(SoundScene):
             "frequency: half the length. And the notes between follow: eight ninths for a tone, four fifths "
             "for a third, three quarters for a fourth. <bookmark mark='b'/> You have seen these fractions "
             "before. They are where the bridge of the monochord stood in Part 1. A flute is a monochord made "
-            "of air; the six finger holes of a tin whistle are Pythagoras's ratios, drilled. Real "
+            "of air; these are ideal just-intonation ratios expressed as effective lengths, not a literal construction plan for every tin whistle. Real "
             "flutes then cheat, hole by hole, in the way you have just seen, to bring the holes within reach."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(marks[3]))
@@ -103,7 +103,7 @@ class Holes(SoundScene):
     def register(self):
         d = load("holes")
         c = clip("holes.register")
-        g = faxes(80, 1000, [-22, 36], x_length=6.4, y_length=3.0, ylabel=r"how hard the air column pushes back (dB)", yticks=[-20, 0, 20], fticks=(100, 200, 500, 1000), font_size=20)
+        g = faxes(80, 1000, [-22, 36], x_length=6.4, y_length=3.0, ylabel=r"normalized input impedance (dB)", yticks=[-20, 0, 20], fticks=(100, 200, 500, 1000), font_size=20)
         g.move_to(LEFT * 3.0 + DOWN * 1.0)
         plain = fcurve(g, d["f"], d["z_plain_db"], GREY_B)
         reg = fcurve(g, d["f"], d["z_register_db"], CLAR)
@@ -113,13 +113,13 @@ class Holes(SoundScene):
         with self.voiceover(
             "Seven or eight finger holes give a scale of seven or eight notes. To go on upwards, every "
             "woodwind does the same thing: it jumps to the pipe's next resonance and uses the same holes "
-            "again. A flute's next resonance is twice the first, so its second octave repeats the fingering "
+            "again. A flute's next resonance is twice the first, so many second-octave fingerings resemble those "
             "of the first. <bookmark mark='a'/> But a clarinet's next resonance is three times the first: an "
             "octave and a fifth above, nineteen semitones. To get there, a clarinet has a register key, "
             "which opens a pinhole about a quarter of the way down the pipe. <bookmark mark='b'/> Here is "
             f"what the pinhole does to the pipe. The lowest resonance moves from {say(pp[0])} hertz to "
             f"{say(pr[0])}, where its harmonics no longer line up with anything. The second resonance barely "
-            f"moves: {say(pp[1])} to {say(pr[1])}. Nothing has been taken away. The lowest resonance has "
+            f"moves: {say(pp[1])} to {say(pr[1])}. The lowest resonance persists but is shifted and weakened. It has "
             "been put out of tune with its helpers, and the reed, which needs a whole family of resonances "
             "behind it, gives up on it and takes the next. Listen."
         ) as vo:

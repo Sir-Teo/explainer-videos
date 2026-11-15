@@ -18,7 +18,7 @@ class Cone(SoundScene):
         cyl = bore_shape([0, 0.6], [0.0075, 0.0075], width=4.4, height=0.5, color=CLAR).move_to(LEFT * 4.2 + UP * 2.5)
         con = bore_shape([0, 0.6], [0.002, 0.03], width=4.4, height=1.1, color=SAX).move_to(LEFT * 4.2 + UP * 1.2)
         nm = VGroup(label(r"a cylinder: \ clarinet", font_size=24, color=CLAR).next_to(cyl, RIGHT, buff=0.3), label(r"a cone: \ oboe, \ bassoon, \ saxophone", font_size=24, color=SAX).next_to(con, RIGHT, buff=0.3))
-        g = faxes(80, 2000, [-22, 36], x_length=10.4, y_length=2.9, ylabel=r"how hard the air column pushes back (dB)", yticks=[-20, 0, 20], fticks=(100, 200, 500, 1000, 2000), font_size=20)
+        g = faxes(80, 2000, [-22, 36], x_length=10.4, y_length=2.9, ylabel=r"normalized input impedance (dB)", yticks=[-20, 0, 20], fticks=(100, 200, 500, 1000, 2000), font_size=20)
         g.move_to(DOWN * 1.6)
         c1 = fcurve(g, d["f"], d["z_cyl_db"], CLAR, stroke_width=2.5)
         c2 = fcurve(g, d["f"], d["z_cone_db"], SAX)
@@ -27,8 +27,8 @@ class Cone(SoundScene):
         t2 = VGroup(*[label(rf"{f:.0f}", font_size=20, color=SAX).next_to(g.at(f, float(np.interp(f, d['f'], d['z_cone_db']))), UP, buff=0.06) for f in ps[:4]])
         with self.voiceover(
             "An oboe has a reed, like a clarinet, and is about as long. It sounds nothing like one, it plays "
-            "most of an octave higher, and when it overblows it jumps an octave, not a twelfth. A saxophone and "
-            "a bassoon are the same. What they share is the shape of the pipe. <bookmark mark='a'/> A "
+            "most of an octave higher, and when it overblows it jumps an octave, not a twelfth. Saxophones and "
+            "bassoons also overblow approximately an octave. What they share is the shape of the pipe. <bookmark mark='a'/> A "
             "clarinet's bore is a cylinder: the same width all the way down. These are cones: narrow at the "
             "reed, widening steadily to the bell. <bookmark mark='b'/> Here is the cylinder's response again, "
             f"sixty centimetres long, with its peaks at {say(pc[0])}, {say(pc[1])} and {say(pc[2])} hertz: "
@@ -38,8 +38,8 @@ class Cone(SoundScene):
             "cylinder is, and yet it has the notes of a pipe open at both ends. <bookmark mark='d'/> The "
             "reason is the spreading. In a cone a wave is a piece of a sphere, and as it runs towards the "
             "narrow end it is squeezed into less and less room. The arithmetic of that squeezing happens to "
-            "put the pipe's notes exactly where an open pipe's would be. A cone behaves as though its point "
-            "were an open end."
+            "gives an ideal complete cone a harmonic frequency series, like an open cylindrical pipe. This does not make the cone's apex a pressure-release boundary. Its point "
+            "is not literally an open end."
         ) as vo:
             fam = VGroup(*[label(t, font_size=34, color=SAX) for t in (r"oboe", r"bassoon", r"saxophone")]).arrange(RIGHT, buff=1.0).move_to(DOWN * 0.4)
             fl = label(r"reeds, \ like the clarinet; \ an octave between registers, \ like the flute", font_size=26, color=GREY_A).next_to(fam, DOWN, buff=0.4)
@@ -80,8 +80,8 @@ class Cone(SoundScene):
             f"{say(rb[1], 2)}, {say(rb[2], 2)}, {say(rb[3], 2)}: each one a little sharper than the last. "
             "That matters, because of what we saw with the register hole: a reed needs resonances that line "
             "up with the harmonics of its note. <bookmark mark='b'/> The cure is two centuries old. Replace "
-            "the missing tip with a mouthpiece, a small chamber of any shape, whose volume is the same as "
-            f"the volume of the cone that was cut away. The ratios come back: one, {say(rc[1], 2)}, "
+            "the missing tip with a mouthpiece, a chamber whose low-frequency acoustic compliance approximately replaces "
+            f"the missing conical volume. Its shape, reed compliance and higher-frequency behavior still matter. The ratios come back: one, {say(rc[1], 2)}, "
             f"{say(rc[2], 2)}, {say(rc[3], 2)}. A saxophone's mouthpiece is sized by this rule, and so is "
             "the space inside an oboe's double reed."
         ) as vo:

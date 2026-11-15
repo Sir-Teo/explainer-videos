@@ -2,8 +2,8 @@
 
 Part 8 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)). Part 7 ended on the bow, which turns a steady pull into a vibration by gripping
-and letting go in time with a string. This part is the same loop with air: a column of air that resonates, and a
-valve that lets breath through in time with it. The flute, the clarinet, the oboe and saxophone, the trumpet, the
+and letting go in time with a string. This part follows resonating air coupled to reeds, lips or jets, then the approximate
+source–filter separation of the voice. The flute, the clarinet, the oboe and saxophone, the trumpet, the
 organ and the voice differ in the shape of the column and in the kind of valve. The instruments are Monochord's
 (`explainer/music/monochord/instruments/winds.py`); every sound is computed in `compute.py`, and nothing was
 recorded. Dates and attributions are the published ones, listed under Sources.
@@ -13,14 +13,14 @@ recorded. Dates and attributions are the published ones, listed under Sources.
 * **1. A column of air.** Open ends and closed ends; a pipe open at both ends (every multiple) and closed at one
   (an octave lower, the odd multiples); a reed closes its end; Monochord's input impedance of the pipe (peaks at
   139, 421, 703 Hz for a reed; valleys at 280, 562, 844 Hz for a flute); the end correction; a worked example (a
-  flute for middle C is 65.6 cm long; a clarinet for the D below, 58.4 cm).
+  ideal acoustic length for middle C is 65.6 cm; a B-flat clarinet for concert D below, 58.4 cm).
 * **2. A valve that pressure closes.** The reed's flow against the pressure across it: it rises, tops out at a
   third of the closing pressure and falls; one puff followed four times along the pipe; the mouthpiece pressure,
   nearly a square wave, with odd harmonics; an ear question (blown steadily harder: silence, then a note that
   brightens); why a third (below it the valve fights the wave, above it the valve feeds it); 0.37 with losses.
 * **3. Holes.** A hole as wide as the pipe is nearly a saw cut; smaller holes act like holes further down (32, 81
-  and 184 cents flat of the cut); a worked example (where the holes go: 8/9, 4/5, 3/4, 2/3, 3/5, 1/2: a flute is a
-  monochord made of air); the register hole, which puts the lowest resonance out of tune so that the reed takes
+  and 184 cents flat of the cut); an ideal just-intonation worked example (where the holes go: 8/9, 4/5, 3/4, 2/3, 3/5, 1/2: a flute is a
+  monochord made of air); the register hole, which weakens and shifts the lowest resonance so that the reed takes
   the next (140 to 433 Hz: a twelfth); the clarinet's nineteen semitones and the break.
 * **4. Cones.** A cone closed at the reed has the notes of an open pipe (231, 463, 701 Hz against the cylinder's
   139, 421, 703); the missing tip and the mouthpiece that replaces its volume (1 : 2.06 : 3.16 becomes
@@ -30,20 +30,19 @@ recorded. Dates and attributions are the published ones, listed under Sources.
   the lips set to one frequency after another climb a staircase of resonances; a call of eight notes on one
   length of tube; the pedal note, which the model found unasked; a worked example (valves 1 and 3 together add
   31.2% where 33.5% is needed: 30 cents sharp).
-* **6. A jet and an edge.** The flute's valve is a ribbon of air; its travel time must be about half a period
+* **6. A jet and an edge.** The flute's valve is a ribbon of air; its travel time is about half a period in the illustrated regime
   (Coltman); blown harder, the note creeps sharp and then breaks to the octave; an ear question (which
   overblows an octave, which a twelfth?); the organ: five stops at 8, 4, 2⅔, 2 and 1⅗ feet are harmonics 1 to 5.
 * **7. The voice: a source and a filter.** The vocal folds; the glottal pulse and its spectrum (falling 13 dB an
   octave); why the folds, unlike a reed, choose their own pitch; formants; the vowel ah as source times filter;
   the pulses alone and through three filters.
-* **8. Vowels.** A worked example (a mouth at rest is a tube 17.5 cm long: 490, 1470, 2450 Hz, the vowel of
-  "the"); two-tube shapes for ah and ee against Peterson and Barney's measurements; the map of two formants;
+* **8. Vowels.** A worked example (an ideal uniform 17.5 cm tract: 490, 1470, 2450 Hz, the vowel approximating schwa in unstressed "about" and often "the"); two-tube shapes for ah and ee against Peterson and Barney's measurements; the map of two formants;
   an ear question (who'd, hod, heed on one note); one vowel on three notes.
 * **9. What singers do.** An ear question (which voice carries?); the singer's formant: the third, fourth and
-  fifth resonances drawn together near 3 kHz (+17 dB), where an orchestra is weak and the ear acute; a
+  fifth resonances drawn together near 3 kHz (+17 dB), where average orchestral energy is often lower and the ear acute; a
   soprano's high A and the first formant raised onto it; overtone singing: two resonances merged onto one
   harmonic, and the Tune's first phrase on harmonics 8, 12 and 13.
-* **10. Frontier: the parts we cannot yet compute.** The folds themselves; the player's own vocal tract; shock
+* **10. Frontier: what these models leave out.** The folds themselves; the player's own vocal tract; shock
   waves in loud brass; the jet; instruments designed by running the calculation backwards. ★ research problem.
 * **Variation 8, recap and problems.** The Tune for a flute, a clarinet, a saxophone, a trumpet and a voice, a
   phrase each and then together; the ledger; what we found; five problems; where it comes back; in practice;
@@ -86,12 +85,12 @@ to correct that. *The saxophone* is a cone with a mouthpiece of the missing tip'
 mass on a spring, blown open, which is the simplest model that plays; real lips also move along the flow. The
 pedal note appears in the model at two lip frequencies without being asked for. *The flute* is schematic: a loop
 of delay for the pipe and a second, shorter delay with smoothing and a saturating curve for the jet. It
-reproduces what matters here (the half-period condition, the sharpening with blowing pressure, the breaks to the
-octave and the twelfth, hysteresis) and is labelled as a model of a jet, not a calculation of one. *The voice*
-is a source and a filter and nothing else: Rosenberg's pulse with a little jitter, shimmer and breath, through a
-cascade of resonators at Peterson and Barney's formants; the two-tube mouths are Fant's cartoons. The soprano's
-gain from tuning her first formant (36 dB here) is larger than in a real mouth, which is lossier, and the film
-says so. The orchestra's spectrum in chapter 9 is a schematic slope after Sundberg, and is labelled as one.
+illustrates a restricted operating regime (the approximate half-period condition, the sharpening with blowing pressure, the breaks to the
+octave and the twelfth, hysteresis) using a reduced delay-loop calculation rather than a resolved fluid simulation. *The voice*
+uses an approximate source–filter separation: Rosenberg's pulse with a little jitter, shimmer and breath, through a
+cascade of resonators at Peterson and Barney's formants; the two-tube mouths are Fant's cartoons. The soprano example's
+36 dB filter gain is a model result, not a measured hall gain; real gains depend on tract shape, losses and
+source interaction. The film states that distinction. The orchestra's spectrum in chapter 9 is a schematic slope after Sundberg, and is labelled as one.
 
 ## Build
 
@@ -119,7 +118,7 @@ python -m videos.music.labs 8                                  # the lab (writes
    wall losses, which are a few hertz lower still.)
 
 2. **A third.** The flow through a reed is u = ζ(1 − Δ)√Δ, where Δ is the pressure across it as a fraction of the
-   closing pressure. Show that u is greatest at Δ = 1/3, and explain why a clarinet cannot speak below it.
+   closing pressure. Show that u is greatest at Δ = 1/3, and explain the one-third small-signal threshold in this ideal quasi-static reed model.
 
    *Solution.* du/dΔ = ζ[(1 − Δ)/(2√Δ) − √Δ] = ζ(1 − 3Δ)/(2√Δ), which is zero at Δ = 1/3, positive below and
    negative above. With the player blowing at a steady pressure, Δ is that pressure less the pressure in the
