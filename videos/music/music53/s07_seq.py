@@ -35,7 +35,7 @@ class Seq(SoundScene):
             on = s in line
             k, a, sl = line.get(s, (None, 0, 0))
             box = Square(side_length=0.62, stroke_color=GREY_B, stroke_width=1.5, fill_color=EAR if a else TUNE, fill_opacity=0.75 if on else 0.0)
-            txt = label(NAMES[k % 12].replace("-", "") if on else "", font_size=14, color=WHITE) if on else VGroup()
+            txt = label(NAMES[k % 12].replace("-", "").replace("#", r"$\sharp$") if on else "", font_size=14, color=WHITE) if on else VGroup()
             sl_m = label(r"slide", font_size=11, color=BLUE).next_to(box, DOWN, buff=0.08) if sl else VGroup()
             cells.add(VGroup(box, txt.move_to(box) if on else txt, sl_m))
         cells.arrange(RIGHT, buff=0.08).move_to(UP * 0.6)
