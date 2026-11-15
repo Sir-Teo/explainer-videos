@@ -33,7 +33,7 @@ class Spectrogram(Spectrogram_):
         x0, x1, yw = sp.frame.get_left()[0], sp.frame.get_right()[0], 2.6       # the wave sits exactly above its picture
         wave = VGroup(*[Line([x0 + (x1 - x0) * i / n, yw - 0.6 * v, 0], [x0 + (x1 - x0) * i / n, yw + 0.6 * v, 0], color=AIR, stroke_width=1.2)
                         for i, v in enumerate(env)])
-        wt = label(r"the Tune's opening: \ pressure against time", font_size=24, color=GREY_A).next_to(wave, UP, buff=0.1)
+        wt = label(r"the Tune's opening: \ pressure envelope against time", font_size=24, color=GREY_A).next_to(wave, UP, buff=0.1)
         cover = Rectangle(width=x1 - x0 + 0.06, height=3.26, stroke_width=0, fill_color="#0E1117", fill_opacity=1).move_to(sp.frame)
         win = Rectangle(width=0.5, height=1.45, stroke_color=TUNE, stroke_width=2.5, fill_color=TUNE, fill_opacity=0.15).move_to([x0 + 0.25, yw, 0])
         tr = ValueTracker(0.0)
@@ -45,9 +45,9 @@ class Spectrogram(Spectrogram_):
             m.set_x(x1 + 0.03 - w / 2)
 
         cover.add_updater(uncover)
-        facts = label(rf"each stretch: \ {d['window_ms']:.0f} ms, \ faded in and out; \ a new one every {d['hop_ms']:.0f} ms", font_size=24, color=GREY_B).to_edge(DOWN, buff=0.3)
+        facts = label(rf"each stretch: \ {d['window_ms']:.0f} ms; \ hop {d['hop_ms']:.0f} ms; \ window widened in sketch", font_size=24, color=GREY_B).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            "A spectrum of the whole Tune would tell you which notes are in it, and nothing about their order. "
+            "A magnitude spectrum of the whole Tune would tell you which notes are in it, and nothing about their order. "
             "Music is change, and we want to see the recipe changing. <bookmark mark='a'/> So take a short stretch "
             "of the sound, a few hundredths of a second, and find its spectrum. Stand that spectrum up as a column: "
             "frequency upward, brightness for strength. <bookmark mark='b'/> Slide the stretch along a little and "

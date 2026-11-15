@@ -41,7 +41,7 @@ class Timbre(SoundScene):
         with self.voiceover(
             "Now the second half of Helmholtz's claim: that the recipe of partials is the quality of a sound. Here "
             "is the test promised at the start. <bookmark mark='a'/> Take the plucked string of Part 1: a sudden "
-            "start, a long fading tail. <bookmark mark='b'/> Now play the very same recording backwards. Running a "
+            "start, a long fading tail. <bookmark mark='b'/> Now play the very same computed sound backwards. Running a "
             "sound backwards cannot change how much of each frequency is in it: a sine wave played backwards is the "
             "same sine wave. <bookmark mark='c'/> We checked: the two spectra agree to sixteen decimal places. If "
             "the recipe were everything, these two would sound alike. <bookmark mark='d'/> And a third version: the "

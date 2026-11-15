@@ -37,18 +37,17 @@ class Phase(SoundScene):
                      font_size=26, color=GOOD).to_edge(DOWN, buff=0.55)
         with self.voiceover(
             "Every sine in Fourier's sum needs two numbers, and so far we have drawn only one. The first is how much "
-            "of it there is. <bookmark mark='a'/> The second is where in its swing it starts: its phase. A spectrum "
-            "shows the amounts and throws the phases away. <bookmark mark='b'/> Does that matter? Here are two waves "
+            "of it there is. <bookmark mark='a'/> The second is where in its swing it starts: its phase. A magnitude spectrum shows the amounts and leaves out the phases. The full complex spectrum keeps both. <bookmark mark='b'/> Does that matter? Here are two waves "
             "built from exactly the same partials in exactly the same amounts. In the first, every partial starts "
             "at its crest, and they pile up into one sharp spike in each cycle. <bookmark mark='c'/> In the second, "
             "each partial starts at a random point, and the wave looks like noise. Their spectra are identical. "
             "<bookmark mark='d'/> Ohm's law says your ear will not care: same amounts, same sound."
         ) as vo:
-            self.play(FadeIn(term), FadeIn(tags[0]))
+            self.play(FadeIn(term), FadeIn(tags[0]), FadeIn(ws[0]), FadeIn(caps[0]))
             vo.wait_until("a")
             self.play(FadeIn(tags[1]))
             vo.wait_until("b")
-            self.play(FadeIn(ws[0]), FadeIn(caps[0]))
+            self.play(Indicate(ws[0], color=TUNE, scale_factor=1.03))
             vo.wait_until("c")
             self.play(FadeIn(ws[1]), FadeIn(caps[1]))
             vo.wait_until("d")
@@ -81,7 +80,7 @@ class Phase(SoundScene):
             self.play(FadeIn(head), FadeIn(ws), FadeIn(caps))
         self.play_pair(c, ws, r"A, \ then B: \ the high note")
         with self.voiceover(
-            "They sound the same, or very nearly. Ohm was right. Two waves that look nothing alike, and the ear "
+            "You may hear little difference here: resolved steady partials are often relatively insensitive to phase. Two waves that look nothing alike, and the ear "
             "reports one sound. This is why a spectrum is such a useful picture: it keeps what you hear and drops "
             "what you mostly do not."
         ):
@@ -131,8 +130,7 @@ class Phase(SoundScene):
             "are far apart. Each of the ear's resonators catches one of them, alone, and one sine wave sounds the "
             "same wherever it starts. <bookmark mark='b'/> On the low note the partials are sixty-five hertz apart, "
             "and the ear's resonators are not that fine. Several partials land in the same one, and it hears how "
-            "they add up inside each cycle: a spike, or a smear. <bookmark mark='c'/> So phase is heard exactly "
-            "where the ear cannot separate the partials. How fine the ear's resonators are is a measurement, and "
+            "they add up inside each cycle: a spike, or a smear. <bookmark mark='c'/> This is one important route to phase sensitivity: partials sharing an auditory filter produce different envelopes. Onsets and other conditions can also matter. How fine the ear's resonators are is a measurement, and "
             "it is the heart of Part 4."
         ) as vo:
             self.play(FadeIn(line), FadeIn(hi), FadeIn(line2), FadeIn(lo), FadeIn(ax))

@@ -16,14 +16,14 @@ class Hook(SoundScene):
     def cold_open(self):
         d = load("square")
         c = clip("square.build")
-        g = axes([0, 2], [-1.45, 1.45], x_length=8.6, y_length=3.4, xlabel=r"", ylabel=r"", xticks=[], yticks=[-1, 0, 1], font_size=20)
-        g.move_to(LEFT * 1.6 + UP * 0.5)
+        g = axes([0, 2], [-1.45, 1.45], x_length=7.8, y_length=3.4, xlabel=r"", ylabel=r"", xticks=[], yticks=[-1, 0, 1], font_size=20)
+        g.move_to(LEFT * 2.0 + UP * 0.5)
         target = curve(g.ax, d["t"], d["target"], GREY_C, stroke_width=1.5)
         wave = curve(g.ax, d["t"], d["sums"][0], TUNE, stroke_width=3)
         count = label(r"1 pure tone", font_size=40, color=TUNE).next_to(g, UP, buff=0.25)
-        n_show = 30
+        n_show = 2 * max(d["counts"]) - 1
         amps = np.array([4 / (np.pi * n) if n % 2 else 0.0 for n in range(1, n_show + 1)])
-        bars = partial_bars(amps / amps.max(), width=4.2, height=2.6, db=False, numbers=False).move_to(RIGHT * 4.9 + UP * 0.4)
+        bars = partial_bars(amps / amps.max(), width=3.6, height=2.6, db=False, numbers=False).move_to(RIGHT * 4.9 + UP * 0.4)
         for b in bars.bars:
             b.set_opacity(0.12)
         blab = label(r"the recipe: \ how much of each", font_size=22, color=GREY_B).next_to(bars, DOWN, buff=0.15)
@@ -40,7 +40,7 @@ class Hook(SoundScene):
                     b.set_opacity(0.95 if (j % 2 == 0 and (j // 2) < k) else 0.12)
                 self.play(Indicate(wave, color=WHITE, scale_factor=1.015), run_time=0.9)
         with self.voiceover(
-            "That was one note, getting brighter. But look at how it was made. Each step added one more pure tone, a "
+            "That was one note, getting brighter. But look at how it was made. Each step added more pure tones, each a "
             "plain sine wave, at three, five, seven times the frequency of the first. And the smooth curves are "
             "closing in on something with corners."
         ):
@@ -90,19 +90,22 @@ class Hook(SoundScene):
                     ).arrange(DOWN, buff=0.55).move_to(UP * 0.9)
         s = StringView(width=5.0, scale=0.5, stroke_width=3).move_to(DOWN * 2.3)
         xs = np.linspace(0, 1, 121)
-        shape = np.minimum(xs / 0.11, (1 - xs) / 0.89)
+        modes = np.arange(1, 61)
+        beta = 0.11
+        coefficients = 2 * np.sin(np.pi * modes * beta) / (np.pi ** 2 * modes ** 2 * beta * (1 - beta))
+        spatial = np.sin(np.pi * xs[:, None] * modes[None, :])
         clock = {"t": 0.0}
-
         def ringing(m, dt):
             clock["t"] += dt
-            m.set_shape(shape * np.cos(2 * PI * 1.1 * clock["t"]) * np.exp(-0.25 * clock["t"]))
-
+            m.set_shape(spatial @ (coefficients * np.cos(2 * PI * 0.55 * modes * clock["t"]))
+                        * np.exp(-0.25 * clock["t"]))
+        scale_note = label(r"ideal modal string; \ motion slowed, \ displacement exaggerated",
+                           font_size=18, color=GREY_B).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "Fourier was right, and this part is about what that means for sound. Three questions. Can every sound "
-            "be taken apart into pure tones? <bookmark mark='a'/> What does the taking apart cost you: what can you "
-            "no longer know once you have done it? <bookmark mark='b'/> And is the list of pure tones the whole "
+            "be taken apart into pure tones? <bookmark mark='a'/> What does the taking apart cost you: what detail does a magnitude picture leave out? <bookmark mark='b'/> And is the list of pure tones the whole "
             "story? If two sounds have exactly the same recipe, must they sound the same? <bookmark mark='c'/> We "
-            "will end by playing one plucked string in a way that keeps its recipe exactly and changes the sound "
+            "will end by playing one plucked string in a way that keeps its magnitude spectrum exactly and changes the sound "
             "completely."
         ) as vo:
             self.play(FadeIn(qs[0]))
@@ -112,7 +115,7 @@ class Hook(SoundScene):
             self.play(FadeIn(qs[2]))
             vo.wait_until("c")
             s.add_updater(ringing)
-            self.play(FadeIn(s))
+            self.play(FadeIn(s), FadeIn(scale_note))
             self.wait(vo.remaining() + 0.1)
         s.clear_updaters()
         self.wait(0.3)

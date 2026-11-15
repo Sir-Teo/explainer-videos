@@ -28,11 +28,10 @@ class Frontier(SoundScene):
             "Gabor's limit is a limit on a picture made by smearing a sound through one window. It is not a limit "
             "on what can be known, if you are willing to assume something. <bookmark mark='a'/> Each cell of a "
             "spectrogram holds the energy of a patch of time and frequency, and credits it to the centre of the "
-            "patch. But two more transforms, costing almost nothing, tell you where inside the patch the energy "
+            "patch. But two additional transforms tell you where inside the patch the energy "
             "really sits. Move it there, <bookmark mark='b'/> and the blurred sweep becomes a line, the click a "
             "sharp stroke. The method is called reassignment. <bookmark mark='c'/> On this test sound it packs the "
-            f"same energy into {say(d['ratio'], 1)} times fewer cells. It works whenever each patch holds only one "
-            "thing, and it fails, honestly, when two things overlap."
+            f"same energy into {say(d['ratio'], 1)} times fewer cells. It works best when a patch is dominated by one component; overlapping components can make its estimates ambiguous."
         ) as vo:
             self.play(FadeIn(sig), FadeIn(a), FadeIn(caps[0]))
             vo.wait_until("b")
@@ -55,19 +54,17 @@ class Frontier(SoundScene):
         hyper = curve(g.ax, xs, 1.0 / xs, BAD, stroke_width=3)
         lim = label(r"the limit for any single window", font_size=22, color=BAD).move_to(g.ax.c2p(2.7, 1.0))
         dots = VGroup(*[Dot(g.ax.c2p(x, y), radius=0.07, color=EAR) for x, y in ((0.5, 0.9), (0.4, 0.5), (0.7, 0.35), (0.3, 0.26), (0.9, 0.6), (0.6, 1.2))])
-        tag = label(r"schematic", font_size=18, color=GREY_C).next_to(g, DOWN, buff=0.35)
+        tag = label(r"schematic thresholds; \ not measured energy spreads", font_size=18, color=GREY_C).next_to(g, DOWN, buff=0.35)
         res = VGroup(label(r"most listeners did better than the limit", font_size=28, color=EAR),
                      label(rf"the best, \ by a factor of {d['best']}", font_size=28, color=EAR),
-                     label(r"the limit binds linear analysis: \ the ear is not linear", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.25, aligned_edge=LEFT)
+                     label(r"discrimination thresholds are not Fourier energy spreads", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.25, aligned_edge=LEFT)
         res.move_to(LEFT * 3.3 + DOWN * 1.6)
         with self.voiceover(
             "And there is an older device that does better than a spectrogram. In 2013 two physicists in New York "
             "asked listeners to judge two things at once about a short note: whether it came before or after "
-            "another, and whether it was higher or lower. <bookmark mark='a'/> A spectrogram cannot get both right "
-            "beyond Gabor's limit. <bookmark mark='b'/> Most of the listeners could. The best, a professional "
+            "another, and whether it was higher or lower. <bookmark mark='a'/> The comparison uses the scale set by Fourier uncertainty; perceptual discrimination thresholds are a different quantity from the energy spreads in that theorem. <bookmark mark='b'/> Most of the listeners could. The best, a professional "
             f"musician, beat the limit by a factor of {say(d['best'])}. <bookmark mark='c'/> No law of mathematics "
-            "was broken. The limit holds for analysis that is linear, where the response to two sounds is the sum "
-            "of the responses to each. The ear is not linear, and it has had a very long time to learn what sounds "
+            "was broken. The Fourier spread product still holds for the waveform. It is not a universal bound on estimation or discrimination; the ear uses nonlinear processing, and it has had a very long time to learn what sounds "
             "are like. What it actually does is the subject of the next part."
         ) as vo:
             self.play(FadeIn(card))

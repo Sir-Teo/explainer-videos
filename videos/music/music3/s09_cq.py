@@ -45,7 +45,7 @@ class ConstantQ(SoundScene):
             "octave from the lowest C here to the next is sixty-five hertz wide, and the octave four above it is a "
             "thousand hertz wide. Equal bins give the bottom octave almost nothing and waste hundreds on the top. "
             "<bookmark mark='b'/> The remedy is a ruler marked the way a keyboard is: equal steps in ratio. Make "
-            "each bin a fixed fraction of its own frequency. That fraction is called Q, and a transform built this "
+            "each bin a fixed fraction of its own frequency. Q is the frequency divided by that bin width, and a transform built this "
             "way is a constant-Q transform. <bookmark mark='c'/> It pays for its fine low bins with time, as Gabor "
             f"says it must: the lowest bin here listens for {say(d['window_low_ms'])} milliseconds, the highest for "
             f"{say(d['window_high_ms'])}."
@@ -87,11 +87,13 @@ class ConstantQ(SoundScene):
                        label(r"a note moved in pitch is the same picture, \ shifted: \ what machines that read music rely on (Parts 61, 62)", font_size=24, color=GREY_A),
                        label(r"the ear's own analysis is closer to this ruler than to the other (Part 4)", font_size=24, color=EAR)
                        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
+        if facts.width > 13.0:
+            facts.scale_to_fit_width(13.0)
         with self.voiceover(
             "That shifting is the point. On this ruler a melody moved to another key is the same picture, slid up "
-            "or down, which is why nearly every machine that transcribes or recognises music starts here. "
+            "or down, which is why many music recognition and transcription systems use a logarithmic pitch representation. Others use mel spectra or raw audio. "
             "<bookmark mark='a'/> It was worked out by Judith Brown in 1991, and the wavelets you may have heard of "
-            "are the same idea. <bookmark mark='b'/> There is a much older instrument that uses a ruler like this "
+            "share the idea of scale-dependent resolution. <bookmark mark='b'/> There is a much older instrument that uses a ruler like this "
             "one, and it is inside your head. That is the next part."
         ) as vo:
             self.play(Group(lin, cq, caps).animate.shift(UP * 0.35), FadeIn(facts[0]), FadeIn(facts[1]), run_time=0.6)

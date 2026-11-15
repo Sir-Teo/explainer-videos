@@ -26,6 +26,8 @@ class Gabor(SoundScene):
         sig = label(rf"one sound: \ two clicks {d['clicks_ms']} ms apart, \ then two tones {d['tones_hz']} Hz apart", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         v1 = VGroup(label(r"two clicks: \ yes", font_size=24, color=GOOD), label(r"two tones: \ no, \ one blur", font_size=24, color=BAD)).arrange(DOWN, buff=0.08).next_to(ps, DOWN, buff=0.15)
         v2 = VGroup(label(r"two clicks: \ no, \ one smear", font_size=24, color=BAD), label(r"two tones: \ yes", font_size=24, color=GOOD)).arrange(DOWN, buff=0.08).next_to(pl, DOWN, buff=0.15)
+        axes_note = label(r"same scales: \ time $\rightarrow$; \ frequency $\uparrow$",
+                          font_size=20, color=GREY_B).to_edge(DOWN, buff=0.2)
         with self.voiceover(
             "In chapter two we found that telling two close notes apart takes a long stretch of sound. Here is the "
             "other side of that. One short test sound: two clicks, three hundredths of a second apart, and then "
@@ -42,7 +44,7 @@ class Gabor(SoundScene):
             self.play(FadeIn(sig), FadeIn(raw), FadeIn(rt))
             vo.wait_until("a")
             self.play(FadeOut(raw), FadeOut(rt), run_time=0.3)
-            self.play(FadeIn(ps), FadeIn(caps[0]), FadeIn(v1))
+            self.play(FadeIn(ps), FadeIn(caps[0]), FadeIn(v1), FadeIn(axes_note))
             vo.wait_until("b")
             self.play(FadeIn(pl), FadeIn(caps[1]), FadeIn(v2))
             vo.wait_until("c")
@@ -62,15 +64,14 @@ class Gabor(SoundScene):
         e_t = label(r"after a tenth of a second: \ still nearly in step", font_size=24, color=BAD).next_to(g, DOWN, buff=0.7).align_to(g, LEFT)
         late = SurroundingRectangle(VGroup(Dot(g.ax.c2p(0.9, 1.1)), Dot(g.ax.c2p(1.0, -1.1))), color=GOOD, buff=0.0, stroke_width=2.5)
         l_t = label(r"after a whole second: \ one has made exactly one more cycle", font_size=24, color=GOOD).next_to(e_t, DOWN, buff=0.2).align_to(g, LEFT)
-        rule = MathTex(r"\text{to tell apart tones}\ \Delta f\ \text{hertz apart, \ listen for about}\ \frac{1}{\Delta f}\ \text{seconds}", font_size=34).to_edge(DOWN, buff=0.4)
-        tag = label(r"illustrative: \ slowed two-hundredfold", font_size=18, color=GREY_C).next_to(g, RIGHT, buff=-2.6).shift(DOWN * 1.55)
+        rule = MathTex(r"\text{Fourier resolution scale for gap}\ \Delta f:\quad T\sim \frac{1}{\Delta f}\ \text{seconds}", font_size=34).to_edge(DOWN, buff=0.4)
+        tag = label(r"illustrative frequencies; \ no audio", font_size=18, color=GREY_C).next_to(g, RIGHT, buff=-2.6).shift(DOWN * 1.55)
         with self.voiceover(
             "The reason is almost embarrassingly simple. Here are two tones, one making ten cycles a second and "
-            "one making eleven: slowed down so that we can count. <bookmark mark='a'/> Look at the first tenth of a "
-            "second. They are nearly in step. Nothing you could measure in that time would tell them apart. "
-            "<bookmark mark='b'/> You have to wait until one of them has pulled a whole cycle ahead of the other, "
-            "and that takes a full second. <bookmark mark='c'/> To tell apart two tones one hertz apart, you must "
-            "listen for about one second. Ten hertz apart, a tenth of a second. A frequency is a count of cycles, "
+            "one making eleven, drawn so that we can count. <bookmark mark='a'/> Look at the first tenth of a "
+            "second. They are nearly in step. A short-window spectrum cannot show them as two narrow peaks. "
+            "<bookmark mark='b'/> For a rough Fourier resolution scale, wait until one has pulled a whole cycle ahead of the other, "
+            "and that takes a full second. <bookmark mark='c'/> To tell apart two tones one hertz apart, a Fourier window needs roughly a second. Model-based estimates can do better under suitable assumptions. Ten hertz apart, a tenth of a second. A frequency is a count of cycles, "
             "and counting takes time."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), Create(a), Create(b), FadeIn(leg), FadeIn(tag), run_time=2.0)
@@ -88,7 +89,7 @@ class Gabor(SoundScene):
         d = load("gabor")
         thm = theorem_card(r"The uncertainty of time and frequency",
                            MathTex(r"\Delta t \;\cdot\; \Delta f \;\ge\; \frac{1}{4\pi}", font_size=48),
-                           who=r"Dennis Gabor, 1946: \ the same mathematics as Heisenberg's principle", width=8.6, color=GOOD).to_edge(UP, buff=0.4)
+                           who=r"rms energy spreads of an envelope and its Fourier transform; \ Dennis Gabor, 1946", width=8.6, color=GOOD).to_edge(UP, buff=0.4)
         rows = VGroup(VGroup(*[label(t, font_size=22, color=GREY_B) for t in (r"shape", r"how long", r"how wide", r"times the limit")]))
         for r in d["rows"]:
             wide = rf"{r['times_floor']:.2f}" if r["times_floor"] < 2 else rf"{r['times_floor']:.0f}"
@@ -99,15 +100,14 @@ class Gabor(SoundScene):
         for i, r in enumerate(rows):
             for cell, x in zip(r, xs):
                 cell.move_to([x, -0.2 - 0.62 * i, 0], aligned_edge=LEFT)
-        note_ = label(r"sharp edges are expensive: \ they need a very wide band of frequencies", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.35)
+        note_ = label(r"sharp-edge rows are sampled estimates; \ ideal edges have divergent rms bandwidth", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Dennis Gabor wrote the law down in 1946. Measure how long a sound lasts, and how wide a band of "
-            "frequencies it occupies. Their product can never be smaller than one over four pi. "
+            "Dennis Gabor wrote the law down in 1946. Measure the standard deviations of a normalized energy envelope in time and of its Fourier energy in frequency. Their product can never be smaller than one over four pi. "
             "<bookmark mark='a'/> A sound can be short, or it can be narrow in frequency. It cannot be both. The "
             "mathematics is the same as Heisenberg's uncertainty principle in quantum mechanics, and for the same "
             "reason: both are statements about waves. <bookmark mark='b'/> We measured the product for four "
             "shapes. A smooth bell curve sits exactly on the limit, and nothing can beat it. The Hann window is "
-            "within three percent. <bookmark mark='c'/> Shapes with sharp edges are far worse."
+            "within three percent. <bookmark mark='c'/> Ideal rectangular and abruptly starting envelopes have infinite rms bandwidth. These finite sampled estimates depend on the sample rate."
         ) as vo:
             self.play(FadeIn(thm))
             vo.wait_until("b")
@@ -121,7 +121,7 @@ class Gabor(SoundScene):
     def bursts(self):
         d = load("gabor")
         c = clip("gabor.bursts")
-        head = label(r"one tone, \ 440 Hz, \ shorter and shorter", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        head = label(r"Gaussian-windowed 440 Hz; \ nominal duration $4\sigma_{\rm envelope}$", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         cols = VGroup()
         for b in d["bursts"]:
             sc = Scope(width=2.7, height=1.5, color=TUNE)
@@ -132,9 +132,12 @@ class Gabor(SoundScene):
             txt = VGroup(label(rf"{b['ms']} ms", font_size=28, color=TIME),
                          label(rf"{b['cycles']:.0f} cycles" if b["cycles"] >= 2 else r"barely one cycle", font_size=22, color=GREY_A))
             txt.arrange(DOWN, buff=0.08)
-            spread = label(rf"spread over {b['semitones']:.1f} semitones" if b["semitones"] < 10 else r"spread over an octave", font_size=22, color=FREQ)
+            spread = label(rf"rms band: {b['semitones']:.1f} semitones" if b["semitones"] < 10 else r"spread over an octave", font_size=22, color=FREQ)
             cols.add(VGroup(txt, sc, wide, spread).arrange(DOWN, buff=0.22))
-        cols.arrange(RIGHT, buff=0.45, aligned_edge=UP).move_to(DOWN * 0.3)
+        cols.arrange(RIGHT, buff=0.45, aligned_edge=UP)
+        if cols.width > 12.8:
+            cols.scale_to_fit_width(12.8)
+        cols.move_to(DOWN * 0.3)
         with self.voiceover(
             "You can hear the limit. Take one tone, the A an orchestra tunes to, and make it shorter and shorter. "
             "At a fifth of a second it is plainly a note. <bookmark mark='a'/> At a twentieth it is still a note, "
@@ -189,18 +192,17 @@ class Gabor(SoundScene):
         with self.voiceover(
             f"It was {d['quiz_answer']}, and if you could not tell, that is the limit at work: at five thousandths "
             "of a second each tone is smeared over far more than a semitone. Here is the same question with tones "
-            "twenty times longer."
+            "twenty-four times longer."
         ):
             self.play(boxes[1][0].animate.set_stroke(GOOD, width=4))
         run(e, r"the same pairs, \ 120 ms each")
-        cons = VGroup(label(r"a drum stroke: \ all time, \ no pitch", font_size=28, color=TIME),
-                      label(r"an organ note: \ all pitch, \ no moment", font_size=28, color=FREQ),
-                      label(r"fast low notes blur: \ there is not time for the ear, \ or any machine, \ to tell them apart", font_size=26, color=GREY_A)
+        cons = VGroup(label(r"a short, noisy drum stroke: \ precise onset, \ broad spectrum", font_size=28, color=TIME),
+                      label(r"a held organ note: \ narrow partials; \ its onset is separate", font_size=28, color=FREQ),
+                      label(r"short fixed windows blur close low partials; \ models and adaptive methods can infer more", font_size=26, color=GREY_A)
                       ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Easy. So this limit runs through music. A drum stroke is all moment and no pitch. A held organ note is "
-            "all pitch and no moment. <bookmark mark='a'/> And it is why fast passages low in the bass turn to mud: "
-            "there is not time, for an ear or for any machine, to tell those notes apart."
+            "Easy. So this limit runs through music. A short noisy drum stroke concentrates energy in time. A held organ note has narrow partials, even though its onset can still be clear. <bookmark mark='a'/> And it is why fast passages low in the bass turn to mud: "
+            "a short fixed window spreads their nearby partials together. This spread limit does not forbid model-based frequency estimates or adaptive analyses."
         ) as vo:
             self.play(FadeIn(cons[0]), FadeIn(cons[1]))
             vo.wait_until("a")

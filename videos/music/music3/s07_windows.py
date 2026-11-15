@@ -19,19 +19,19 @@ class Windows(SoundScene):
         g1 = axes([0, 1], [-1.2, 1.2], x_length=5.4, y_length=1.9, xlabel=r"", ylabel=r"", xticks=[], yticks=[0], font_size=18)
         g2 = axes([0, 1], [-1.2, 1.2], x_length=5.4, y_length=1.9, xlabel=r"", ylabel=r"", xticks=[], yticks=[0], font_size=18)
         VGroup(g1, g2).arrange(RIGHT, buff=0.9).move_to(UP * 1.5)
-        w1 = curve(g1.ax, x, np.sin(2 * np.pi * 5 * x), GOOD, stroke_width=2.5)
-        w2 = curve(g2.ax, x, np.sin(2 * np.pi * 5.5 * x), BAD, stroke_width=2.5)
+        w1 = curve(g1.ax, x, np.cos(2 * np.pi * 5 * x), GOOD, stroke_width=2.5)
+        w2 = curve(g2.ax, x, np.cos(2 * np.pi * 5.5 * x), BAD, stroke_width=2.5)
         c1 = label(r"exactly 5 cycles in the stretch", font_size=24, color=GOOD).next_to(g1, UP, buff=0.1)
         c2 = label(r"$5\tfrac{1}{2}$ cycles: \ it does not join up with itself", font_size=24, color=BAD).next_to(g2, UP, buff=0.1)
         n = 64
         k = np.arange(n)
-        s1 = np.abs(np.fft.rfft(np.sin(2 * np.pi * 5 * k / n)))[:16] / (n / 2)
-        s2 = np.abs(np.fft.rfft(np.sin(2 * np.pi * 5.5 * k / n)))[:16] / (n / 2)
+        s1 = np.abs(np.fft.rfft(np.cos(2 * np.pi * 5 * k / n)))[:16] / (n / 2)
+        s2 = np.abs(np.fft.rfft(np.cos(2 * np.pi * 5.5 * k / n)))[:16] / (n / 2)
         b1 = axes([0, 16], [0, 1.1], x_length=5.4, y_length=1.9, xlabel=r"frequency bin", ylabel=r"", xticks=[5, 10, 15], yticks=[], font_size=18)
         b2 = axes([0, 16], [0, 1.1], x_length=5.4, y_length=1.9, xlabel=r"frequency bin", ylabel=r"", xticks=[5, 10, 15], yticks=[], font_size=18)
         VGroup(b1, b2).arrange(RIGHT, buff=0.9).move_to(DOWN * 1.6)
-        bars1 = VGroup(*[Line(b1.ax.c2p(i + 0.5, 0), b1.ax.c2p(i + 0.5, max(v, 0.004)), color=GOOD, stroke_width=7) for i, v in enumerate(s1)])
-        bars2 = VGroup(*[Line(b2.ax.c2p(i + 0.5, 0), b2.ax.c2p(i + 0.5, max(v, 0.004)), color=BAD, stroke_width=7) for i, v in enumerate(s2)])
+        bars1 = VGroup(*[Line(b1.ax.c2p(i, 0), b1.ax.c2p(i, max(v, 0.004)), color=GOOD, stroke_width=7) for i, v in enumerate(s1)])
+        bars2 = VGroup(*[Line(b2.ax.c2p(i, 0), b2.ax.c2p(i, max(v, 0.004)), color=BAD, stroke_width=7) for i, v in enumerate(s2)])
         tag = label(r"leakage: \ one pure tone, \ spilled into every bin", font_size=26, color=BAD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "There is a catch in cutting a stretch out of a sound, and every picture of a spectrum is shaped by it. "
@@ -60,7 +60,7 @@ class Windows(SoundScene):
                  xticks=[0, 2, 4, 6, 8, 10], yticks=[-80, -60, -40, -20, 0], font_size=20)
         g.move_to(LEFT * 2.6 + DOWN * 0.3)
         keep = d["bins"] <= 10
-        curves = {k: curve(g.ax, d["bins"][keep], d[f"curve_{k}"][keep], c, stroke_width=2.5) for k, c in cols.items()}
+        curves = {k: curve(g.ax, d["bins"][keep], np.maximum(d[f"curve_{k}"][keep], -100), c, stroke_width=2.5) for k, c in cols.items()}
         x = np.linspace(0, 1, 100)
         shapes = VGroup()
         for k, fn in (("rect", np.ones_like(x)), ("hann", 0.5 - 0.5 * np.cos(2 * np.pi * x)),
@@ -71,7 +71,10 @@ class Windows(SoundScene):
             shapes.add(VGroup(tr_, VGroup(label(names[k], font_size=24, color=cols[k]),
                                           label(rf"spill ${row['side']:.0f}$ dB, \ peak {row['lobe']:.0f} bins wide", font_size=22, color=GREY_A)
                                           ).arrange(DOWN, buff=0.06, aligned_edge=LEFT)).arrange(RIGHT, buff=0.3))
-        shapes.arrange(DOWN, buff=0.5, aligned_edge=LEFT).move_to(RIGHT * 4.3 + UP * 0.2)
+        shapes.arrange(DOWN, buff=0.5, aligned_edge=LEFT)
+        if shapes.width > 5.0:
+            shapes.scale_to_fit_width(5.0)
+        shapes.move_to(RIGHT * 4.0 + UP * 0.2)
         with self.voiceover(
             "The cure is to fade the stretch in and out, so that there is no jump at its ends. The shape of the "
             "fade is called a window. <bookmark mark='a'/> With no fade at all, the spill is only thirteen decibels "
@@ -109,11 +112,10 @@ class Windows(SoundScene):
                      label(r"Hann window: \ it stands clear", font_size=24, color=TUNE)).arrange(DOWN, buff=0.12, aligned_edge=LEFT)
         leg.move_to(g.ax.c2p(120, -12))
         with self.voiceover(
-            "Here is why it matters. A strong tone, and a second tone seven bins away and two hundred times "
-            "weaker. That is an ordinary situation: the fifth partial of a note is often that much weaker than "
+            "Here is why it matters. A strong tone, and a second tone seven bins away and two hundred times smaller in amplitude. That is an ordinary situation: the fifth partial of a note is often that much weaker than "
             "the first. <bookmark mark='a'/> With no fade, the strong tone's spill is louder than the weak tone, "
             "and the weak one is simply not in the picture. <bookmark mark='b'/> With a Hann window, there it is. "
-            "<bookmark mark='c'/> So there is no such thing as the spectrum of a sound. There is the spectrum "
+            "<bookmark mark='c'/> So a finite-window spectrum is shaped by the analysis. We see the spectrum "
             "through a particular window, and the choice of window decides what you can see. Every spectrum in "
             "this series uses a Hann window unless it says otherwise."
         ) as vo:

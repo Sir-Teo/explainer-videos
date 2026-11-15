@@ -26,47 +26,41 @@ class Noise(SoundScene):
         text = {"white": r"equal power in every hertz", "pink": r"equal power in every octave", "brown": r"a random walk"}
         for r in d["rows"]:
             sc = Scope(width=2.4, height=0.9, color=cols[r["name"]], frame=False)
-            rng = np.random.default_rng(5)
-            w = rng.standard_normal(600)
-            if r["name"] == "pink":
-                w = np.convolve(w, np.ones(6) / 6, mode="same") + 0.5 * w
-            if r["name"] == "brown":
-                w = np.cumsum(w)
-                w -= w.mean()
-            sc.set_wave(w, gain=0.9 / np.abs(w).max())
+            start = int((c.events[r["name"]] + 0.2) * c.sr)
+            w = c.mono[start:start + 600]
+            sc.set_wave(w, gain=0.9 / max(float(np.abs(w).max()), 1e-12))
             rows.add(VGroup(sc, VGroup(label(r["name"], font_size=30, color=cols[r["name"]]), label(text[r["name"]], font_size=22, color=GREY_A),
-                                       label(rf"measured slope: \ ${r['slope']:.1f}$ dB per octave", font_size=22, color=GREY_B)
+                                       label(rf"density slope: \ ${r['slope']:.1f}$ dB per octave", font_size=22, color=GREY_B)
                                        ).arrange(DOWN, buff=0.06, aligned_edge=LEFT)).arrange(RIGHT, buff=0.3))
         rows.arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to(RIGHT * 3.4 + UP * 0.1)
         with self.voiceover(
             "Not every sound has partials. A hiss, a wave on a beach, the breath across the bottle in Part 2: these "
             "have no pitch, and their spectrum is not a row of peaks but a continuous spread. Such sounds are "
             "called noise, and they are named like colours. <bookmark mark='a'/> White noise has equal power in "
-            "every hertz, which means the top octave holds half of everything, and it hisses. "
+            "every hertz, so, within a finite band, its top octave holds roughly half the power, and it hisses. "
             "<bookmark mark='b'/> Pink noise has equal power in every octave: three decibels less per hertz for "
             "each octave you climb. To an ear, which counts in octaves, it sounds even. <bookmark mark='c'/> Brown "
             "noise falls twice as fast. It is a random walk, and it rumbles. Here are all three, set to the same "
             "loudness."
         ) as vo:
-            self.play(FadeIn(g))
+            self.play(FadeIn(g), FadeIn(rows[0]))
             for mark, k, row in zip("abc", ("white", "pink", "brown"), rows):
                 vo.wait_until(mark)
-                self.play(Create(lines[k]), FadeIn(row))
+                self.play(Create(lines[k]), Indicate(row, scale_factor=1.02) if k == "white" else FadeIn(row))
         with self.listen(c) as snd:
             window(snd, r"white, \ pink, \ brown", kind="synthesized", detail=r"equal loudness", corner=DL, tag_corner=UR)
             for k, row in zip(("white", "pink", "brown"), rows):
                 t0 = snd.time_of(k)
                 snd.wait_until(t0)
-                rng = np.random.default_rng(hash(k) % 1000)
-                base = rng.standard_normal(4000)
-                if k == "pink":
-                    base = np.convolve(base, np.ones(6) / 6, mode="same") + 0.5 * base
-                if k == "brown":
-                    base = np.cumsum(base)
-                    base = base - np.convolve(base, np.ones(600) / 600, mode="same")
-                base = base / np.abs(base).max()
-                snd.drive(row[0], lambda m, t, base=base, t0=t0: m.set_wave(base[int((t - t0) * 1500) % 3400: int((t - t0) * 1500) % 3400 + 600], gain=0.9)
-                          if t0 <= t < t0 + 2.0 else None)
+                # Draw the same signal that is heard, rather than an unrelated random proxy.
+                start = int(t0 * c.sr)
+                base = c.mono[start:start + int(2.0 * c.sr)]
+                gain = 0.9 / max(float(np.abs(base).max()), 1e-12)
+                def follow_noise(m, t, base=base, t0=t0, gain=gain):
+                    if t0 <= t < t0 + 2.0:
+                        at = min(max(int((t - t0) * c.sr), 0), len(base) - 600)
+                        m.set_wave(base[at:at + 600], gain=gain)
+                snd.drive(row[0], follow_noise)
                 snd.wait_until(t0 + 2.0)
         self.wait(0.2)
         self.clear_scene()

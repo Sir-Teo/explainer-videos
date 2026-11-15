@@ -129,7 +129,7 @@ class Ohm(SoundScene):
             globes.add(VGroup(body, label(rf"{f:.0f}", font_size=26, color=FREQ).next_to(body, DOWN, buff=0.15)))
         globes.arrange(RIGHT, buff=0.55, aligned_edge=DOWN).move_to(UP * 0.5)
         ask = pause_card(r"Which of the globes sing? \\ (Remember what kind of pipe a clarinet is.)", width=8.0).move_to(DOWN * 1.9)
-        ans = label(r"a stopped pipe has only its odd partials: \ the first, \ third and fifth globes sing", font_size=28, color=GOOD).move_to(DOWN * 1.9)
+        ans = label(r"ideal stopped-pipe model: \ odd partials dominate; \ globes 1, 3 and 5 respond", font_size=28, color=GOOD).move_to(DOWN * 1.9)
         with self.voiceover(
             "A worked example, to connect this with Part 2. A clarinet plays its lowest note, a hundred and "
             "forty-seven hertz. <bookmark mark='a'/> Six of Helmholtz's globes stand ready, tuned to one, two, three, "
@@ -140,7 +140,7 @@ class Ohm(SoundScene):
             self.play(LaggedStart(*[FadeIn(g) for g in globes], lag_ratio=0.15), FadeIn(ask, shift=UP * 0.2), run_time=1.5)
         self.wait(1.5)
         with self.voiceover(
-            "A clarinet behaves as a pipe stopped at one end, and a stopped pipe has only its odd partials. So the "
+            "In the ideal stopped-pipe approximation, odd partials dominate the clarinet's low register. A real clarinet can also have even partials. In our ideal example the "
             "first, third and fifth globes sing, and the second, fourth and sixth stay nearly silent. That silence "
             "is what makes a clarinet's low notes sound hollow, and Helmholtz found it with exactly this apparatus."
         ):

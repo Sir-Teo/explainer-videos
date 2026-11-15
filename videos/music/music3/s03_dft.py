@@ -21,7 +21,7 @@ class Machine(SoundScene):
         x = np.sin(2 * np.pi * 3 * np.arange(n) / n) + 0.5 * np.sin(2 * np.pi * 7 * np.arange(n) / n + 1.0)
         g = axes([0, n], [-1.7, 1.7], x_length=6.0, y_length=2.4, xlabel=r"$N$ samples of a sound", ylabel=r"", xticks=[], yticks=[0], font_size=20)
         g.move_to(LEFT * 3.5 + UP * 1.5)
-        stems = VGroup(*[VGroup(Line(g.ax.c2p(i + 0.5, 0), g.ax.c2p(i + 0.5, v), color=AIR, stroke_width=2), Dot(g.ax.c2p(i + 0.5, v), radius=0.045, color=AIR))
+        stems = VGroup(*[VGroup(Line(g.ax.c2p(i, 0), g.ax.c2p(i, v), color=AIR, stroke_width=2), Dot(g.ax.c2p(i, v), radius=0.045, color=AIR))
                          for i, v in enumerate(x)])
         formula = MathTex(r"X[k]", r"=", r"\sum_{n=0}^{N-1}", r"x[n]", r"\,e^{-2\pi i\, k n / N}", font_size=44).move_to(RIGHT * 3.3 + UP * 1.9)
         formula[0].set_color(TUNE), formula[3].set_color(AIR)
@@ -31,7 +31,7 @@ class Machine(SoundScene):
         mag = np.abs(np.fft.rfft(x)) / (n / 2)
         gb = axes([0, n // 2 + 1], [0, 1.15], x_length=6.0, y_length=2.0, xlabel=r"frequency $k$ \ (cycles in the stretch)", ylabel=r"", xticks=[3, 7, 16], yticks=[], font_size=20)
         gb.move_to(LEFT * 3.5 + DOWN * 1.9)
-        bars = VGroup(*[Line(gb.ax.c2p(k + 0.5, 0), gb.ax.c2p(k + 0.5, max(v, 0.004)), color=TUNE, stroke_width=6) for k, v in enumerate(mag)])
+        bars = VGroup(*[Line(gb.ax.c2p(k, 0), gb.ax.c2p(k, max(v, 0.004)), color=TUNE, stroke_width=6) for k, v in enumerate(mag)])
         cost = VGroup(MathTex(r"N\ \text{frequencies} \times N\ \text{samples}", font_size=36),
                       MathTex(r"= N^2\ \text{multiplications}", font_size=40, color=BAD)).arrange(DOWN, buff=0.2).move_to(RIGHT * 3.4 + DOWN * 1.9)
         with self.voiceover(
@@ -137,7 +137,7 @@ class Machine(SoundScene):
         title = label(r"A worked example: \ how long must you listen?", font_size=36).to_edge(UP, buff=0.45)
         given = VGroup(label(rf"two low notes a semitone apart: \ {w['a2']:.0f} Hz and {w['a2'] + w['gap_hz']:.1f} Hz", font_size=30, color=FREQ),
                        label(r"a stretch of $T$ seconds gives one bin every $1/T$ hertz", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.25).move_to(UP * 1.5)
-        ask = pause_card(r"How long a stretch does the transform need \\ to show these as two peaks?", width=8.4).move_to(DOWN * 0.7)
+        ask = pause_card(r"How long must the stretch be \\ for the bin spacing to be no greater than the gap?", width=8.4).move_to(DOWN * 0.7)
         ans = VGroup(MathTex(rf"\frac{{1}}{{T}} \le {w['gap_hz']:.1f}\ \text{{Hz}}", r"\quad\Longrightarrow\quad", rf"T \ge {w['seconds']:.2f}\ \text{{s}}", font_size=42),
                      label(rf"about {w['samples']:,.0f} samples: \ in practice, {w['pow2']:,}".replace(",", "{,}"), font_size=28, color=GREY_A),
                      label(r"a fast bass line changes notes more quickly than that", font_size=28, color=TUNE)).arrange(DOWN, buff=0.3).move_to(DOWN * 1.2)
@@ -146,16 +146,16 @@ class Machine(SoundScene):
             "One worked example, because it leads straight to this part's deepest point. Two low notes, a semitone "
             f"apart: a hundred and ten hertz and a hundred and sixteen and a half. <bookmark mark='a'/> A stretch "
             "T seconds long gives one number every one over T hertz. How long a stretch do you need for these two "
-            "notes to show as separate peaks? Pause and work it out."
+            "notes to be at least one bin apart? This is a bin-spacing estimate, not a general resolution guarantee. Pause and work it out."
         ) as vo:
             self.play(FadeIn(title), FadeIn(given[0]))
             vo.wait_until("a")
             self.play(FadeIn(given[1]), FadeIn(ask, shift=UP * 0.2))
         self.wait(1.5)
         with self.voiceover(
-            f"The bins must be no wider than the gap, six and a half hertz, so the stretch must be at least "
+            f"For this bin-spacing criterion, the bins must be no wider than the gap, six and a half hertz, so the stretch must be at least "
             f"{say(w['seconds'], 2)} seconds long. <bookmark mark='a'/> And a bass player can change notes faster "
-            "than that. To know the frequency finely, you must listen for a long time, and then you no longer know "
+            "than that. Actual peak resolution also depends on the window, relative levels and noise. A long analysis window blurs "
             "when things happened. Hold on to that. We will come back to it in chapter seven."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(ans[0]), FadeIn(ans[1]))

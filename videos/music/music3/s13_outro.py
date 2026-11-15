@@ -76,20 +76,18 @@ class Outro(SoundScene):
     # ------------------------------------------------------------------
     def recap(self):
         card = objectives_card([
-            r"any wave is a sum of sines; \ the amount of each is an average of the wave times that sine",
+            r"a periodic wave uses harmonic sines and cosines; \ coefficients are projections",
             r"the DFT does it for samples; \ the fast algorithm does it in $N \log N$ steps",
-            r"a row of resonators is a Fourier analyser; \ the ear ignores phase only where it can separate the partials",
+            r"a row of resonators is a Fourier analyser; \ resolved steady partials are often less sensitive to phase",
             r"a spectrogram needs a window, \ and the window decides what you see",
-            r"$\Delta t \cdot \Delta f \ge 1/4\pi$: \ you cannot know exactly when and exactly what pitch",
+            r"$\Delta t \cdot \Delta f \ge 1/4\pi$: \ rms Fourier energy spreads; \ not a bound on every estimator",
             r"timbre is a recipe that changes in time: \ attack, \ brightness, \ and their motion",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Fourier was right: any wave is a sum of sines, and the amount of each is an average. "
+            "What did we find? Fourier was right: periodic waves can be represented by harmonic sines and cosines, with coefficients found by projection. "
             "<bookmark mark='a'/> A computer does it for samples, and since 1965 does it fast. <bookmark mark='b'/> "
-            "A row of resonators does the same job, and the ear behaves like one, ignoring phase wherever it can "
-            "pull the partials apart. <bookmark mark='c'/> To watch a recipe change you need a window, and the "
-            "window shapes what you see. <bookmark mark='d'/> There is a hard limit on knowing when and what pitch "
-            "together. <bookmark mark='e'/> And the recipe is not the whole sound: timbre lives in how the recipe "
+            "A row of resonators does the same job, and the ear behaves like one, often relatively insensitive to phase for resolved steady partials. <bookmark mark='c'/> To watch a recipe change you need a window, and the "
+            "window shapes what you see. <bookmark mark='d'/> There is a hard limit on simultaneous Fourier energy concentration in time and frequency, not on every possible inference. <bookmark mark='e'/> And the recipe is not the whole sound: timbre lives in how the recipe "
             "changes, most of all at the start."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))

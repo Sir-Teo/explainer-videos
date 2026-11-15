@@ -16,8 +16,8 @@ computed in `compute.py`. Dates and attributions are the published ones, listed 
   an ear question (square or sawtooth?).
 * **2. From a recipe to a machine.** The discrete Fourier transform and its N² cost; Cooley and Tukey's fast
   algorithm (1965; Gauss, 1805), written out and timed (four thousand samples: 609 ms against 0.5 ms here), equal
-  to numpy's to 15 places; the spectrum of Part 1's pluck; a worked example (how long must you listen to separate
-  two notes a semitone apart at 110 Hz? 0.15 s).
+  to numpy's to 15 places; the spectrum of Part 1's pluck; a worked example (what duration puts two notes a semitone apart at 110 Hz at least one DFT bin apart? 0.15 s;
+  actual peak resolution also depends on the window, levels and noise).
 * **3. What the ear does with it.** Ohm's law of hearing (1843); Helmholtz's resonators (1863), each a bottle from
   Part 2; ten resonators on our string against the transform (within 0.8 dB on the strong partials); the string
   heard through one resonator; a worked example (a clarinet and six globes); Seebeck's objection.
@@ -28,8 +28,7 @@ computed in `compute.py`. Dates and attributions are the published ones, listed 
   down together.
 * **6. What a window costs.** Leakage; rectangular, Hann and Blackman windows: side lobes of −13, −31 and −58 dB,
   main lobes of 2, 4 and 6 bins (Harris's table); a tone 46 dB down that only a window reveals.
-* **7. The limit.** One sound through a short and a long window; why (count the cycles); Δt·Δf ≥ 1/4π (Gabor,
-  1946), measured for four shapes; a tone of 200, 50, 12 and 3 ms; an ear question (which pair is a semitone
+* **7. The limit.** One sound through a short and a long window; why (count the cycles); Δt·Δf ≥ 1/4π for rms Fourier energy spreads (Gabor, 1946), measured for four shapes; a tone of 200, 50, 12 and 3 ms; an ear question (which pair is a semitone
   apart, at 5 ms and at 120 ms?).
 * **8. A ruler for music.** Equal bins in hertz against equal steps in ratio; the constant-Q transform (Brown,
   1991), Q = 34 at a quarter-tone per bin; the Tune's opening on both rulers.
@@ -74,8 +73,8 @@ the tone bursts, the noises, the Variation, the tone with no fundamental) and Pa
 `physical model`: Part 1's plucked string, whole, through a resonator, backwards and with its attack removed.
 There are no recordings.
 
-**Two things the film simplifies.** "The ear's resonators" in chapter 4 are a picture, made exact in Part 4
-(critical bands). The claim that phase is inaudible for the high note is the standard result for well-separated
+**Two things the film simplifies.** "The ear's resonators" in chapter 3 are a picture, made exact in Part 4
+(critical bands). The claim that phase is often less audible for resolved steady partials in the high note is the standard result for well-separated
 partials (see Hartmann, ch. 6); it is not checked here by a listening test.
 
 ## Build

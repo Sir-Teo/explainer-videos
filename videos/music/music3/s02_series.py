@@ -21,7 +21,7 @@ class Series(SoundScene):
         head = label(r"Why sines, \ of all shapes?", font_size=38, color=TUNE).to_edge(UP, buff=0.45)
         box = RoundedRectangle(width=2.6, height=1.3, corner_radius=0.15, stroke_color=GREY_B, stroke_width=2, fill_color=GREY_D, fill_opacity=0.15)
         boxes = VGroup(box.copy().move_to(UP * 1.1), box.copy().move_to(DOWN * 1.7))
-        btxt = VGroup(*[label(r"anything that rings: \\ a string, \ a pipe, \ a room", font_size=22, color=GREY_A).move_to(b) for b in boxes])
+        btxt = VGroup(*[label(r"linear, time-invariant: \\ a string, \ a pipe, \ a room", font_size=22, color=GREY_A).move_to(b) for b in boxes])
         rows = VGroup()
         for b, kin, kout, col in ((boxes[0], "sin_in", "sin_out", GOOD), (boxes[1], "sq_in", "sq_out", BAD)):
             a = Scope(width=3.6, height=1.3, color=col).next_to(b, LEFT, buff=0.9)
@@ -31,14 +31,14 @@ class Series(SoundScene):
             arr = VGroup(Arrow(a.get_right(), b.get_left(), buff=0.1, color=GREY_B, stroke_width=3), Arrow(b.get_right(), o.get_left(), buff=0.1, color=GREY_B, stroke_width=3))
             rows.add(VGroup(a, o, arr))
         v1 = label(r"a sine goes in, \ a sine comes out: \ only its size and timing change", font_size=26, color=GOOD).next_to(boxes[0], DOWN, buff=0.35)
-        v2 = label(r"any other shape comes out a different shape", font_size=26, color=BAD).next_to(boxes[1], DOWN, buff=0.35)
+        v2 = label(r"a square is reshaped by this resonator", font_size=26, color=BAD).next_to(boxes[1], DOWN, buff=0.35)
         with self.voiceover(
             "Before the recipe, a fair question. Why sines? You could build waves out of triangles, or square "
-            "pulses. What is special about this one shape? <bookmark mark='a'/> Send a sine wave through anything "
+            "pulses. What is special about this one shape? <bookmark mark='a'/> In steady state, send a sine through a linear, time-invariant system, something "
             "that rings: a string, a pipe, a room, an electrical circuit. What comes out is a sine wave of the same "
             "frequency. It may be bigger or smaller, earlier or later, but its shape is untouched. "
-            "<bookmark mark='b'/> Send in any other shape, and it comes out bent. <bookmark mark='c'/> That is the "
-            "reason. Sines are the only shapes that the physics of vibration leaves alone, which is why the modes "
+            "<bookmark mark='b'/> A square wave generally changes shape because its harmonics are filtered differently. <bookmark mark='c'/> That is the "
+            "reason. Sines retain their frequency through any such linear system, which is why the modes "
             "of the string in Part 1 each sang a pure sine in time. Take a sound apart into sines and each piece "
             "goes through the world independently of the others."
         ) as vo:
@@ -65,7 +65,7 @@ class Series(SoundScene):
         panels.arrange(RIGHT, buff=0.45).move_to(UP * 0.5)
         lim = VGroup(label(r"one pulse, \ once: \ the lines have merged into a curve", font_size=28, color=GOOD),
                      label(r"the Fourier \emph{transform}: \ a continuous spectrum", font_size=28, color=GREY_A),
-                     label(r"a single click contains every frequency", font_size=28, color=TUNE)).arrange(DOWN, buff=0.2).move_to(DOWN * 2.2)
+                     label(r"an ideal, infinitely short click has a flat spectrum", font_size=28, color=TUNE)).arrange(DOWN, buff=0.2).move_to(DOWN * 2.2)
         with self.voiceover(
             "All of that was for a wave that repeats. Most sounds do not: a clap, a word, a whole symphony happens "
             "once. <bookmark mark='a'/> Here is the trick. Take a pulse that repeats every four of its own widths. "
@@ -73,9 +73,8 @@ class Series(SoundScene):
             "half as often. The lines move closer together, under the same outline. <bookmark mark='c'/> Repeat it "
             "more rarely still, and they crowd closer. <bookmark mark='d'/> In the limit, a pulse that happens just "
             "once, the lines merge into a smooth curve: a continuous spectrum. This is the Fourier transform. A "
-            "sound that repeats has a spectrum of separate lines, and therefore a pitch. A sound that happens once "
-            "has a continuous one. And the shorter the pulse, the wider its curve: a single click contains every "
-            "frequency there is."
+            "sound that repeats has a spectrum of separate lines; audible repetition can give it a pitch. A sound that happens once "
+            "has a continuous one. And the shorter the pulse, the wider its curve: an ideal infinitely short click has equal strength at every frequency. Real clicks have finite bandwidth."
         ) as vo:
             self.play(FadeIn(head))
             for mark, pn in zip("abc", panels):
@@ -111,7 +110,7 @@ class Series(SoundScene):
                          .arrange(DOWN, buff=0.12) for n in range(1, 8)]).arrange(RIGHT, buff=0.55).move_to(DOWN * 2.95)
         form = MathTex(r"=\ \frac{4}{\pi n}\ (n\ \text{odd})", font_size=32, color=GREY_A).next_to(table, RIGHT, buff=0.4)
         with self.voiceover(
-            "Fourier's claim, for a wave that repeats: it is a sum of sines whose frequencies are one, two, three "
+            "For this odd, zero-mean square wave, only sine terms are needed. A general periodic wave also needs cosines, or phases, and possibly a constant term. The harmonic frequencies are one, two, three "
             "times the frequency of the wave itself. The only question is how much of each. <bookmark mark='a'/> "
             "His recipe is this. To find how much of the third sine is in a square wave, multiply the two together, "
             "point by point, and take the average. Where the square and the sine agree in sign the product is "
@@ -122,9 +121,9 @@ class Series(SoundScene):
             f"{say(d['proj'][2], 3)}, nothing, {say(d['proj'][4], 3)}: four over pi, divided by one, three, five. "
             "Only the odd ones, each weaker than the last."
         ) as vo:
-            self.play(FadeIn(claim))
+            self.play(FadeIn(claim), *[FadeIn(panels[0][j]) for j in (0, 1, 2, 4)])
             vo.wait_until("a")
-            self.play(FadeIn(panels[0]))
+            self.play(FadeIn(panels[0][3]), FadeIn(panels[0][5]))
             vo.wait_until("b")
             self.play(FadeIn(panels[1]))
             vo.wait_until("c")
