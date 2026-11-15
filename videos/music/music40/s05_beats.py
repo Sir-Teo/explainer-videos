@@ -82,6 +82,7 @@ class Beats(SoundScene):
             self.play(FadeIn(gs))
         with self.listen(c) as snd:
             window(snd, r"five beats", detail=r"acoustic kit and drum-machine voices", corner=DL, tag_corner=DR)
+            pulse(snd, gs, 0, c.duration, rate=5.0, color=GREY_B, buff=0.15)
             for i, style in enumerate(styles):
                 t0 = d["starts"][style]
                 step = 60.0 / d["tempo"][style] / 4

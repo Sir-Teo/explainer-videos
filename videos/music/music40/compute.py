@@ -328,7 +328,7 @@ def compute_tuned() -> dict:
         for s in p["snare"]:
             parts.append((arr(cached(("clap", 0), lambda: S.clap808(0))), (bar * 16 + s) * step, -8.0))
     c = bounce(parts, 64 * step + 1.5)
-    return {"bpm": bpm, "line": line, "clips": {"bass": save_synth("tuned.bass", c, detail="a long-decay drum-machine kick tuned to each note of a bass line of ours, with clap and hats")}}
+    return {"bpm": bpm, "line": line, "clips": {"bass": save_synth("tuned.bass", c, detail="a long-decay drum-machine kick tuned to each note of a bass line of ours, with clap and hats", needs="bass")}}
 
 
 def compute_swing16() -> dict:
@@ -386,7 +386,7 @@ def compute_eight() -> dict:
     peaks = [float(f[i]) for i in np.argsort(spec)[-12:]]
     return {"decays": [0.15, 0.45, 1.2], "starts": starts, "pitch": S.measured_pitch(k), "pitch_attack": S.measured_pitch(k, 0.0, 0.01),
             "hat_hz": list(S.HAT_HZ), "hat_peaks": sorted(peaks),
-            "clips": {"kick": save_synth("eight.kick", c1, detail="a drum-machine kick built as a struck resonator, at three decay settings"),
+            "clips": {"kick": save_synth("eight.kick", c1, detail="a drum-machine kick built as a struck resonator, at three decay settings", needs="bass"),
                       "kit": save_synth("eight.kit", c2, detail="the drum-machine voices in a half-time pattern with a sub-bass, four bars")}}
 
 

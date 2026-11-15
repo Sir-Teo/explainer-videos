@@ -245,7 +245,7 @@ def compute_hook() -> dict:
     c = concat([C(headphones(m[k])) for k in order], gap=0.9, names=["first", "second", "third"])
     return {"answer": "second", "order": order, "measures": {k: measures(m[k]) for k in order},
             "starts": {k: float(c.events[k]) for k in ("first", "second", "third")},
-            "clips": {"three": save("hook.three", c, detail="headphones: the Tune's first two phrases played by our session band (Part 8's voice, Part 38's piano, guitar and bass, Part 40's drums) and mixed three ways: a wall of sound, a dub, close and dry")}}
+            "clips": {"three": save("hook.three", c, detail="headphones: the Tune's first two phrases played by our session band (Part 8's voice, Part 38's piano, guitar and bass, Part 40's drums) and mixed three ways: a wall of sound, a dub, close and dry", needs="headphones")}}
 
 
 HISTORY = [(1877, 1, "Edison's tinfoil: one horn, one groove"), (1925, 1, "electrical recording: a microphone and an amplifier"),
@@ -279,7 +279,7 @@ def compute_arrays() -> dict:
     out["stage_pos"] = {k: {name: float(S.image_position(*[float(v) for v in (S.pair_cues(k, a)["dL"], S.pair_cues(k, a)["dt"])])) for name, a in stage.items()} for k in order}
     out["order"] = order
     out["starts"] = {k: float(c.events[k]) for k in order}
-    out["clips"] = {"three": save("arrays.three", c, detail="headphones: our piano 40 degrees left, the voice in the centre and the guitar 40 degrees right, recorded by an XY pair, an ORTF pair and a spaced AB pair (all simulated), played on two loudspeakers rendered round a spherical head")}
+    out["clips"] = {"three": save("arrays.three", c, detail="headphones: our piano 40 degrees left, the voice in the centre and the guitar 40 degrees right, recorded by an XY pair, an ORTF pair and a spaced AB pair (all simulated), played on two loudspeakers rendered round a spherical head", needs="headphones")}
     return out
 
 
@@ -450,8 +450,8 @@ def compute_depth() -> dict:
     c2 = concat([C(fade(headphones(norm_lufs(w, -22.0)))), C(fade(headphones(norm_lufs(np.stack([mono, mono], axis=1), -22.0))))], gap=0.8, names=["wide", "mono"])
     return {"places": {k: {"gain": v[0], "send": v[1], "shelf": v[2], "predelay_ms": v[3]} for k, v in places.items()}, "dr_db": dr, "width": width,
             "starts": {k: float(c.events[k]) for k in places}, "starts_width": {"wide": float(c2.events["wide"]), "mono": float(c2.events["mono"])},
-            "clips": {"three": save("depth.three", c, detail="headphones: our voice placed near, in the middle and far behind the same band, by level, treble, reverberation and pre-delay"),
-                      "width": save("depth.width", c2, detail="headphones: our guitar widened by a 12 ms delay between the channels, then the same summed to mono")}}
+            "clips": {"three": save("depth.three", c, detail="headphones: our voice placed near, in the middle and far behind the same band, by level, treble, reverberation and pre-delay", needs="headphones"),
+                      "width": save("depth.width", c2, detail="headphones: our guitar widened by a 12 ms delay between the channels, then the same summed to mono", needs="headphones")}}
 
 
 def compute_monitor() -> dict:
@@ -467,7 +467,7 @@ def compute_monitor() -> dict:
     ff = np.geomspace(20, 20000, 300)
     return {"f": ff.tolist(), "phone_db": (20 * np.log10(np.abs(H(ff)) + 1e-9)).tolist(), "bass_above_844": above,
             "starts": {"monitors": float(c.events["monitors"]), "phone": float(c.events["phone"])},
-            "clips": {"two": save("monitor.two", c, detail="headphones: our close-and-dry mix on full-range monitors, then on Part 54's simulated phone loudspeaker")}}
+            "clips": {"two": save("monitor.two", c, detail="headphones: our close-and-dry mix on full-range monitors, then on Part 54's simulated phone loudspeaker", needs="headphones")}}
 
 
 def compute_automix() -> dict:
@@ -484,7 +484,7 @@ def compute_automix() -> dict:
     return {"answer": "second", "hand": hand_ch, "machine": machine, "loudness": am["loudness"], "centroid": am["centroid"], "low_share": am["low_share"],
             "masked": {"hand": mh["overall"], "machine": mm["overall"]},
             "starts": {"first": float(c.events["first"]), "second": float(c.events["second"])},
-            "clips": {"two": save("automix.two", c, detail="headphones: our session mixed by hand (close and dry), then by Monochord's rule-based automatic mixer")}}
+            "clips": {"two": save("automix.two", c, detail="headphones: our session mixed by hand (close and dry), then by Monochord's rule-based automatic mixer", needs="headphones")}}
 
 
 def compute_tune56() -> dict:
@@ -493,7 +493,7 @@ def compute_tune56() -> dict:
     c = concat([C(headphones(m[k])) for k in order], gap=0.9, names=order)
     me = {k: measures(m[k]) for k in order}
     return {"order": order, "measures": me, "echo_s": 0.75 * BEAT, "seconds": c.duration, "starts": {k: float(c.events[k]) for k in order},
-            "clips": {"variation56": save("tune.variation56", c, detail="headphones: the Tune's first three phrases by our session band, mixed three ways: close and dry, a wall of sound, a dub")}}
+            "clips": {"variation56": save("tune.variation56", c, detail="headphones: the Tune's first three phrases by our session band, mixed three ways: close and dry, a wall of sound, a dub", needs="headphones")}}
 
 
 def compute_variation() -> dict:

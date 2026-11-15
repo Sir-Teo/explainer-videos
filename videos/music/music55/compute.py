@@ -234,7 +234,7 @@ def compute_halls() -> dict:
     t0 = im[0][0]
     early = [[1000 * (t - t0), g / im[0][1], float(math.degrees(math.atan2(-u[1], -u[0])))] for t, g, u, k in im if (t - t0) < 0.1][:30]
     return {"widths": widths, "lf": lf, "lf_pair": out_irs, "early": early, "starts": {"narrow": float(c.events["narrow"]), "wide": float(c.events["wide"])},
-            "clips": {"two": save("halls.two", c, detail="headphones: Part 8's voice from the stage of a simulated 18 m wide shoebox hall, then a 40 m wide one, both reverberating for 1.9 s; the early reflections rendered from their directions by a spherical-head model")}}
+            "clips": {"two": save("halls.two", c, detail="headphones: Part 8's voice from the stage of a simulated 18 m wide shoebox hall, then a 40 m wide one, both reverberating for 1.9 s; the early reflections rendered from their directions by a spherical-head model", needs="headphones")}}
 
 
 # ---------------------------------------------------------------------------------------------- the head
@@ -270,7 +270,7 @@ def compute_cues() -> dict:
     c = concat(clips, gap=0.8, names=["time", "level", "both"])
     return {"az": np.degrees(az).tolist(), "itd_us": itd, "ild": ild, "itd_max_us": float(1e6 * SP.woodworth_itd(np.pi / 2)),
             "fc_head": SP.C / (2 * np.pi * SP.HEAD_A), "starts": {k: float(c.events[k]) for k in ("time", "level", "both")},
-            "clips": {"three": save("cues.three", c, detail="headphones: noise bursts 60 degrees to the right of a spherical head: the time difference alone, the level difference alone, then both")}}
+            "clips": {"three": save("cues.three", c, detail="headphones: noise bursts 60 degrees to the right of a spherical head: the time difference alone, the level difference alone, then both", needs="headphones")}}
 
 
 def compute_cone() -> dict:
@@ -281,7 +281,7 @@ def compute_cone() -> dict:
     c = concat([Clip(fade(norm_rms(front)), SR), Clip(fade(norm_rms(back)), SR)], gap=1.0, names=["first", "second"])
     return {"answer": "neither", "max_diff": diff, "itd_30_us": float(1e6 * SP.woodworth_itd(math.radians(30))), "itd_150_us": float(1e6 * SP.woodworth_itd(math.radians(150))),
             "starts": {"first": float(c.events["first"]), "second": float(c.events["second"])},
-            "clips": {"two": save("cone.two", c, detail="headphones: Part 8's voice 30 degrees to the right in front of a spherical head, then 150 degrees to the right, behind it")}}
+            "clips": {"two": save("cone.two", c, detail="headphones: Part 8's voice 30 degrees to the right in front of a spherical head, then 150 degrees to the right, behind it", needs="headphones")}}
 
 
 def compute_pan() -> dict:
@@ -304,7 +304,7 @@ def compute_pan() -> dict:
     return {"p": p.tolist(), "lin_power_db": (10 * np.log10(lin[0] ** 2 + lin[1] ** 2)).tolist(), "pw_power_db": (10 * np.log10(pw[0] ** 2 + pw[1] ** 2)).tolist(),
             "lin": [lin[0].tolist(), lin[1].tolist()], "pw": [pw[0].tolist(), pw[1].tolist()], "phantom": phantom.tolist(),
             "starts": {"linear": float(c.events["linear"]), "power": float(c.events["power"])},
-            "clips": {"two": save("pan.two", c, detail="headphones: Part 8's voice panned from the left loudspeaker to the right (both at 30 degrees, rendered round a spherical head), first by the linear law, then by the constant-power law")}}
+            "clips": {"two": save("pan.two", c, detail="headphones: Part 8's voice panned from the left loudspeaker to the right (both at 30 degrees, rendered round a spherical head), first by the linear law, then by the constant-power law", needs="headphones")}}
 
 
 def compute_ambi() -> dict:
@@ -338,7 +338,7 @@ def compute_circle() -> dict:
         x[i:i + L] += (1.0 if k % 2 == 0 else 0.6) * hit[: n - i]
     y = SP.binaural(x, lambda t: 2 * math.pi * 2 * t / secs)
     c = concat([Clip(fade(norm_rms(y)), SR)], names=["circle"])
-    return {"seconds": secs, "turns": 2, "clips": {"one": save("circle.one", c, detail="headphones: a shaker's rhythm circling a spherical head twice in eight seconds, starting in front and moving to the right")}}
+    return {"seconds": secs, "turns": 2, "clips": {"one": save("circle.one", c, detail="headphones: a shaker's rhythm circling a spherical head twice in eight seconds, starting in front and moving to the right", needs="headphones")}}
 
 
 def compute_check() -> dict:
@@ -388,7 +388,7 @@ def compute_tune55() -> dict:
     names.append("circling")
     c = concat([Clip(fade(norm_rms(s_)), SR) for s_ in segs], gap=0.6, names=names)
     return {"names": names, "T": [0.0, 0.45, 1.9, 5.0], "circle_s": secs, "seconds": c.duration, "starts": {k: float(c.events[k]) for k in names},
-            "clips": {"variation55": save("tune.variation55", c, detail="headphones: the Tune's first phrase sung by Part 8's voice with no room, in a small room, in a shoebox hall and in a cathedral (all simulated, rendered round a spherical head); then the first two phrases circling the listener once")}}
+            "clips": {"variation55": save("tune.variation55", c, detail="headphones: the Tune's first phrase sung by Part 8's voice with no room, in a small room, in a shoebox hall and in a cathedral (all simulated, rendered round a spherical head); then the first two phrases circling the listener once", needs="headphones")}}
 
 
 def compute_variation() -> dict:
