@@ -95,9 +95,10 @@ class Tihai(SoundScene):
             window(snd, r"A, \ then B", detail=r"modelled tabla", corner=DL, tag_corner=DR)
             b = d["beat"]
             for gi, key in enumerate("AB"):
-                for i in range(16):
-                    t0 = d["starts"][key] + (16 + i) * b
-                    pulse(snd, grids[gi][1].cells[i][0], t0, t0 + b - 0.03, buff=0.03)
+                for cyc in (0, 1):
+                    for i in range(16):
+                        t0 = d["starts"][key] + (16 * cyc + i) * b
+                        pulse(snd, grids[gi][1].cells[i][0], t0, t0 + b - 0.03, buff=0.03)
         ans = VGroup(label(r"A: \ dha-ti-ta-ti-dha three times from beat 3, \ no gaps: \ bedam", font_size=19, color=GREY_A),
                      label(r"B: \ dha-ti-dha three times from beat 5, \ gaps of two beats: \ dumdar", font_size=19, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=1.0)
         with self.voiceover(
