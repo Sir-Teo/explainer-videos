@@ -137,6 +137,8 @@ LEDGER = [
      "measure": r"temperatures 0.25, 0.5, 0.8, 1, 1.5; longest copied run 4 notes"},
     {"part": 66, "title": r"sung, re-rendered as a DDSP string, and continued by a token model", "seconds": 28.7,
      "measure": r"DDSP 6.0 dB from the string it learnt; 5.3 s of piano continued for 5 s"},
+    {"part": 67, "title": r"a critical edition: the Tune, a corrupt copy, and the original rebuilt", "seconds": 65.1,
+     "measure": r"19 witnesses; the worst 9 notes wrong; rebuilt with 2 wrong"},
 ]
 
 

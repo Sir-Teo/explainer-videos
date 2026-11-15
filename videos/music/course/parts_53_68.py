@@ -446,4 +446,34 @@ PARTS = [
         I=(9, 10),
         also=(("Monochord's generative audio: mu-law, a sample-level network, mel and Griffin-Lim, residual VQ, the harmonic synthesizer, DDSP, diffusion, the Fréchet distance, watermarks", "explainer/music/monochord/genaudio.py"),),
     ),
+    Part(
+        n=67, level="U", widget="funnel", prereq=(14, 26, 58, 63, 65),
+        question="How does each kind of music research know what it claims, and how would it find out it was wrong?",
+        story="An ear question: an ABX trial (X was the coded phrase), and why one trial proves nothing; the Mozart effect from 1993 to the meta-analyses. Six kinds of knowing, one question asked six ways, each kind's failure and check. Sources: the Tune copied by simulated scribes for four generations, 19 copies surviving, heard; neighbour joining on shared errors recovers 7 of 8 groupings; an ear question on the corrupt copy; the original rebuilt (1 or 2 notes wrong); other evidence in sources. Analysis and corpora: steps are 83 per cent of moves in Bach's chorale tunes and 67 in Part 14's tunes, heard. Fieldwork and ethics; transcription; a sung phrase only 29 per cent within 10 cents of a written note. A simulated literature: the funnel with a bite, the first significant study at 0.86 for a true 0.1, Egger and PET; p-hacking from 4 to 61 per cent. Listening tests: 20 ABX trials catch a 60 per cent listener 13 per cent of the time, 158 are needed; an ear question on a harder trial; MUSHRA panel sizes. Leakage measured (3.22 against 3.80 bits), this series' leaks and duplicates, annotator ceilings and two tappers heard. The series audits itself: five verdicts re-run, one weakened (Part 65's best order in 7 of 10 splits), errata. Standards, three pitch standards heard, units, reporting, a number reproduced. Reading papers, the 1993 paper read, practice as research. Frontier: 44 open problems from the parts' notes. Variation 67: the Tune's critical edition.",
+        handoff="Every Variation with its sources and errata in the concert of Part 68.",
+        outside="Part 14 for the tune corpus; Part 26 for Mozart's variations on the Tune; Part 58 for listening tests; Part 63 "
+                "for leakage and fingerprints; Part 65 for chorale tunes and copying. Binomial tests and power, meta-analysis "
+                "and funnel plots, neighbour joining and tree distances, the bootstrap.",
+        objectives={
+            "U": ["Hear an ABX trial and say what one trial can and cannot show; hear a corrupt copy and its reconstruction.",
+                  "Hear two corpora, a sung phrase against its notation, two tappers, and three pitch standards.",
+                  "Explain how selective publication, leakage and single runs mislead, and how each is checked."],
+            "M": ["Recover a manuscript family by neighbour joining and score it by Robinson-Foulds; rebuild an original.",
+                  "Compute exact ABX power and MUSHRA sample sizes; simulate a literature and test its funnel.",
+                  "Re-run a computed verdict across seeds and splits and report its spread."],
+            "D": ["Design an open benchmark of music-research verdicts, re-run each year."],
+            "I": ["State the claim and its refutation, plan power first, split by what repeats, and report the spread."],
+        },
+        results=[
+            ("ABX power", r"\Pr[\mathrm{Bin}(n, p) \ge c],\ \ c = \min\{c : \Pr[\mathrm{Bin}(n, \tfrac12) \ge c] \le \alpha\}"),
+            ("Neighbour joining", r"Q_{ij} = (n-2) d_{ij} - \textstyle\sum_k d_{ik} - \sum_k d_{jk}"),
+            ("Egger", r"\hat\theta_i / s_i = \beta_0 + \beta_1 (1 / s_i) + \varepsilon_i"),
+            ("Winner's curse", r"E[\hat\theta \mid \hat\theta > 1.96 s] = \theta + s\,\lambda(1.96 - \theta/s)"),
+            ("Robinson-Foulds", r"d_{RF} = |S_1 \triangle S_2|"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8),
+        D=(11,),
+        I=(9, 10),
+        also=(("Monochord's research methods: manuscript traditions, neighbour joining, reconstruction, ABX power, the series' star problems", "explainer/music/monochord/research.py"),),
+    ),
 ]

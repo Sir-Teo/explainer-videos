@@ -2461,17 +2461,32 @@ Copet et al. (2023).
 
 ### Part 67 · Doing Research in Music (~50)
 *Story:* In 1993 a study of thirty-six students reported that ten minutes of Mozart raised a spatial score, and
-within five years a governor was sending classical CDs to every newborn in his state. The effect did not
-replicate. In another corner of the field a benchmark dataset used in a hundred papers turned out to contain
-duplicates and mislabels. The part asks how each kind of music research knows what it claims.
+within five years a governor was proposing classical CDs for every newborn in his state. The effect did not
+replicate as claimed. In another corner of the field a benchmark dataset used in a hundred papers turned out to
+contain duplicates and mislabels. The part asks how each kind of music research knows what it claims.
+1. Hook: an ear question (an ABX trial); the Mozart effect's history; the plan.
+2. Kinds of knowing: six ways and where the series used them; one question six ways; failures and checks.
+3. Sources and editions: copies of copies; a simulated tradition, heard; a tree from shared errors; an ear question (which copy is corrupt?); other evidence.
+4. Analysis and the corpus: arguments and counts; two corpora heard; a textbook rule measured on both; corpus studies done well.
+5. Fieldwork and ethics: learning by taking part; consent and repatriation; transcription; what notation discards, measured.
+6. Experiments and their literatures: how a literature misleads; a simulated funnel; what readers would believe; p-hacking; remedies.
+7. Listening tests and their power: the hook's test counted; power by trials; an ear question (a harder ABX); listeners for MUSHRA; panels.
+8. Datasets, leakage and agreement: a leak measured; this series' leaks and duplicates; annotator agreement; two tappers, heard.
+9. The series audits itself: five verdicts re-run; a query heard; the weakened verdict; errata.
+10. Standards and reporting: standards; three pitch standards, heard; units; what to report; a number reproduced.
+11. Reading papers and practice as research: a method; by subfield; the 1993 paper read; practice as research.
+12. Frontier: the series' open problems by act; six at random; grouped; how the series could be wrong; finding a problem.
+13. Variation 67: the critical edition of the Tune. Outro: problems, payoffs.
+
 *Covers:* sources, editions and attribution; analysis as argument and the corpus turn; fieldwork, transcription
 and ethics; experiments, psychophysics and online studies; listening tests; dataset leakage and annotator
 ceilings; measurement standards; practice as research; reading a paper in each subfield; finding a problem.
-*Built and computed:* the series audits itself: every computed verdict of Parts 1–66 re-run across seeds with
-intervals; a listening test's power; corpus results on the canon against the wider Library; a leakage
-demonstration; a manuscript family tree recovered; the Mozart-effect literature as a funnel plot using
-`explainer.stats.kit`.
-*Variation 67:* the critical edition of the Variations: sources, variants, errata.
+*Built and computed:* `monochord/research.py`: a manuscript tradition (19 surviving copies, 7 of 8 groupings
+recovered by neighbour joining, the original rebuilt with 1 or 2 wrong); steps 83 % in Bach's chorale tunes
+against 67 % in Part 14's tunes; a simulated literature (first significant study 0.86 for a true 0.1; published
+pooled 0.27); ABX power (a 60 % listener needs 158 trials); a leak (3.22 against 3.80 bits); the series' audit
+(Part 65's best order holds in 7 of 10 splits; four other verdicts hold); 44 open problems read from the parts.
+*Variation 67:* the critical edition of the Tune: as written, as its worst copy has it, and rebuilt.
 *Frontier:* the map of open problems, built from every part's ★.
 *Reading:* Clarke & Cook (eds.), *Empirical Musicology*; Nettl, *The Study of Ethnomusicology*; Sturm (2014);
 Pietschnig et al. (2010).

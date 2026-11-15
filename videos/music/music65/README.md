@@ -66,7 +66,7 @@ chord model and voice-leading search. Bach's chorales are in the public domain; 
 fermatas (see `explainer/music/monochord/chorales.py`).
 
 **What the models are, and are not.** *The corpus* is small: 6,937 notes of melody, so every model here is data-starved,
-and the transformer's comparison with counting says more about small data than about transformers. *The Markov chains*
+and the transformer's comparison with counting says more about small data than about transformers. *The best order* is a property of the split as well as of the music: Part 67 re-ran it over ten splits by tune, and order 2 was best in 7, order 1 in 3, with order 2's bits per note ranging from 3.40 to 4.16. *The Markov chains*
 blend orders by PPM's escape method, over whole notes. *The transformer* is three layers and 96 dimensions, trained without
 dropout; it is stopped where loss on nine tunes set aside from the training tunes was lowest. *Copying* is measured by
 exact runs; near copies (a note changed, a rhythm altered) are not counted, so these numbers are lower bounds. *Draws

@@ -941,4 +941,49 @@
       note: "With enough steps and enough noise, every sample ends on the rings. But this denoiser is perfect for the training points, and a perfect denoiser reproduces them: nearly every sample lands on a training point. A real network, which cannot memorize every example, generalizes between them; that gap is the copying question of Parts 65 and 66."
     });
   };
+  // Part 67: a literature with selective publication -------------------------------------------------------------
+  function funnelSim(v) {
+    var seed = Math.round(v.seed) * 7907 + 3, rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    var gauss = function () { var u = Math.max(rnd(), 1e-12), w = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * w); };
+    var studies = [];
+    for (var i = 0; i < Math.round(v.k); i++) {
+      var n = Math.round(10 + rnd() * (v.nmax - 10)), se = Math.sqrt(2 / n), est = v.effect + se * gauss();
+      var sig = est / se > 1.96;
+      studies.push({ n: n, se: se, est: est, pub: sig || rnd() < v.pnull });
+    }
+    var pool = function (list) { var a = 0, b = 0; list.forEach(function (s) { a += s.est / (s.se * s.se); b += 1 / (s.se * s.se); }); return b ? a / b : NaN; };
+    var pub = studies.filter(function (s) { return s.pub; });
+    var first = studies.filter(function (s) { return s.est / s.se > 1.96; })[0];
+    return { studies: studies, all: pool(studies), pub: pool(pub), npub: pub.length, first: first };
+  }
+  W.funnel = function (el) {
+    QB.widget(el, {
+      title: "A literature with selective publication",
+      sub: "Each dot is a study of a two-group difference, its estimate across and its precision up (big studies at the top). Significant studies are always published; others only with the chance you set. Gold: published. Grey: in the file drawer. The vertical line is the true effect.",
+      panels: 1, height: 300,
+      controls: [{ k: "effect", label: "True effect", min: 0, max: 0.6, step: 0.02, value: 0.1, fmt: function (x) { return x.toFixed(2) + " sd"; } },
+                 { k: "pnull", label: "Non-significant studies published", min: 0, max: 1, step: 0.05, value: 0.15, fmt: function (x) { return (100 * x).toFixed(0) + " %"; } },
+                 { k: "k", label: "Studies run", min: 20, max: 400, step: 10, value: 120, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "nmax", label: "Largest study (a group)", min: 20, max: 1000, step: 10, value: 120, fmt: function (x) { return x.toFixed(0); } },
+                 { k: "seed", label: "Draw", min: 1, max: 20, step: 1, value: 1, fmt: function (x) { return x.toFixed(0); } }],
+      draw: function (gr, v) {
+        var r = funnelSim(v), prec = r.studies.map(function (s) { return 1 / s.se; }), top = Math.max.apply(null, prec) * 1.05;
+        var a = gr[0].axes({ x: [-1, 1.6], y: [0, top], title: "the funnel", xlabel: "estimated effect (sd)" });
+        var un = r.studies.filter(function (s) { return !s.pub; }), pb = r.studies.filter(function (s) { return s.pub; });
+        a.dots(un.map(function (s) { return s.est; }), un.map(function (s) { return 1 / s.se; }), { r: 2.5, color: "#5A6270" });
+        a.dots(pb.map(function (s) { return s.est; }), pb.map(function (s) { return 1 / s.se; }), { r: 3, color: C.idea });
+        a.vline(v.effect, { color: "#FFFFFF", width: 1.5, dash: [] });
+        var ys = [], xs = [];
+        for (var y = 0.6; y <= top; y += top / 40) { ys.push(y); xs.push(1.96 / y); }
+        a.line(xs, ys, { color: "#E5484D", width: 1.5 });
+      },
+      readout: function (v) {
+        var r = funnelSim(v);
+        return [["published", r.npub + " of " + r.studies.length],
+                ["pooled, all studies", r.all.toFixed(2)], ["pooled, the published", r.pub.toFixed(2)],
+                ["the first significant study", r.first ? r.first.est.toFixed(2) + " (" + r.first.n + " a group)" : "none"]];
+      },
+      note: "With small studies and a file drawer, the published literature overstates a small effect, and its first significant result most of all. Publish the non-significant studies too, or run bigger ones, and the published estimate comes back to the truth. Set the true effect to zero: a literature can find an effect that is not there."
+    });
+  };
 })();
