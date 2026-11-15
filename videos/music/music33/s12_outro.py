@@ -41,6 +41,9 @@ class Outro(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"Variation 33", kind="synthesized", detail=r"piano, \ bells, \ additive tones", corner=DL, tag_corner=DR)
             vp = d["vpulse"]
+            pulse(snd, g, d["starts"]["canon"], d["starts"]["bells"], buff=0.1)
+            pulse(snd, bells, d["starts"]["bells"], d["starts"]["bp"], buff=0.1)
+            pulse(snd, bp, d["starts"]["bp"], c.duration, buff=0.1)
             for j, b in enumerate(cn["B"]):
                 for i, a in enumerate(cn["A"]):
                     t = ((a + b) % cn["n"]) * vp

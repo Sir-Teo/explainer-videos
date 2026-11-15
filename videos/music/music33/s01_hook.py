@@ -34,6 +34,8 @@ class Hook(SoundScene):
             window(snd, r"tresillo, \ cinquillo, \ bell", detail=r"Part 11's clave", corner=DL, tag_corner=DR)
             for r, g in zip(d["rhythms"], neck):
                 cyc = 3 if r["n"] == 8 else 2
+                t_on = d["starts"][r["name"]]
+                pulse(snd, g, t_on, t_on + cyc * r["n"] * d["pulse"] + 0.6, buff=0.12)
                 ons = [i for i, ch in enumerate(r["pattern"]) if ch == "x"]
                 for cc in range(cyc):
                     for j, o in enumerate(ons):
