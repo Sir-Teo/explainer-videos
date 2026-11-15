@@ -90,7 +90,7 @@ class Counter(SoundScene):
             "stop being one texture. <bookmark mark='e'/> And stagger entries, because a voice entering alone is heard as "
             "new."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

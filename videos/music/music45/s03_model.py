@@ -51,7 +51,7 @@ class Model(SoundScene):
             "<bookmark mark='e'/> Work it through and the boundary is a straight line in the repetition time, with a single "
             "constant, w over tau, to fit."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

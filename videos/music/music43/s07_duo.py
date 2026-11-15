@@ -34,7 +34,7 @@ class Duo(SoundScene):
             "the factor one minus the two players' alphas, plus fresh noise. <bookmark mark='e'/> This is Dirk Vorberg and "
             "Alan Wing's linear phase correction model, from 1996."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

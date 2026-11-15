@@ -37,7 +37,7 @@ class Section(SoundScene):
             f"<bookmark mark='c'/> Our section of eight, each with its own small detuning, vibrato and timing, measures "
             f"{d['gain_db']:.1f} decibels louder than one player. Doubling the players adds only three decibels."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(*bars).copy().set_opacity(0.15)))
             for mark, b in zip("abc", bars):
                 vo.wait_until(mark)
                 self.play(FadeIn(b))

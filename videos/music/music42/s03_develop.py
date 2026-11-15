@@ -38,7 +38,7 @@ class Develop(SoundScene):
             "that breaks the idea into fragments and speeds up, liquidating it, until only the cadence is left. Beethoven's "
             "piano sonatas open this way again and again."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(blocks[:2]).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(FadeIn(blocks[:2]), FadeIn(nums), FadeIn(side[0]))
             vo.wait_until("b")
@@ -90,7 +90,7 @@ class Develop(SoundScene):
             "own fifth. <bookmark mark='d'/> The harmony moves twice a bar, chosen so that every strong beat is a chord tone. "
             "<bookmark mark='e'/> We made it by hand. The searcher of chapter nine has to find such plans for itself."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

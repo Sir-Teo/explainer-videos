@@ -107,7 +107,7 @@ class Search(SoundScene):
             "figure moved to fit its chord leaps badly from the bar before. A composer's hand does that join without "
             "thinking; the searcher has to be told."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(bars).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.2), FadeIn(cap))
         self.wait(0.4)

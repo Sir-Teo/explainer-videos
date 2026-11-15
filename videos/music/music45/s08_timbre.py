@@ -91,7 +91,7 @@ class Timbre(SoundScene):
             "time, brightness and how the spectrum changes over time. Our map is built from measurements, not judgements; "
             "testing it against listeners is the obvious next experiment."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(dots).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x) for x in dots], lag_ratio=0.08))
             vo.wait_until("b")

@@ -92,7 +92,7 @@ class Rules(SoundScene):
             "a user set them and hear the result. <bookmark mark='e'/> In chapter eight we give ten model pianists ten sets of "
             "weights, and try to tell them apart."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

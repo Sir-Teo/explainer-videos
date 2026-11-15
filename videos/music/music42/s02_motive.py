@@ -37,7 +37,7 @@ class Motive(SoundScene):
             "short, short, long, longer. <bookmark mark='c'/> Arnold Schoenberg, whose Fundamentals of Musical Composition "
             "is still used to teach this, defined a motive as intervals and rhythm combined to produce a memorable shape."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(g).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(FadeIn(g), FadeIn(names), FadeIn(side[0]))
             vo.wait_until("b")

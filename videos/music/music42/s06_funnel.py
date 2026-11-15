@@ -65,7 +65,7 @@ class Funnel(SoundScene):
             "<bookmark mark='d'/> That is a few thousand states and eight steps, under a second, instead of two and a half "
             "billion melodies. <bookmark mark='e'/> Part 16 counted Fux's counterpoint the same way."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

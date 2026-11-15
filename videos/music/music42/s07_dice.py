@@ -123,7 +123,7 @@ class Dice(SoundScene):
             "<bookmark mark='e'/> The 1792 table attributed to Mozart is usually quoted at about seven hundred and sixty "
             "million million, by the same reasoning."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
@@ -154,7 +154,7 @@ class Dice(SoundScene):
             f"{say(n['uniform_bits'], 1)} if every distinct minuet were equally likely. A bit is one yes-or-no "
             "question; it would take about forty-one, on average, to name the minuet you threw."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(bars).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(FadeIn(bars), FadeIn(side[0]))
             vo.wait_until("b")

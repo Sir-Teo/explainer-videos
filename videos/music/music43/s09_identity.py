@@ -95,7 +95,7 @@ class Identity(SoundScene):
             f"honest take by pianist D scores {say(tk[1], 3)}: a performer repeats a shape closely, but never to four "
             "decimal places. A copy is closer to its source than any performer is to themselves."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(grid).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(FadeIn(grid), FadeIn(names), FadeIn(mt))
             vo.wait_until("b")

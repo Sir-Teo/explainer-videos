@@ -51,7 +51,7 @@ class Frontier(SoundScene):
             "every program here keeps its rules fixed. <bookmark mark='d'/> History's transformations, like tonality "
             "loosened or the sampler turned into an instrument, changed what counted as music."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcd", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

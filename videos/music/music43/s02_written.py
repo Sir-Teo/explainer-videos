@@ -70,7 +70,7 @@ class Written(SoundScene):
             "tempo. <bookmark mark='b'/> Loudness: each phrase swells to its middle and falls away, and the higher notes "
             "stand out. Two phrases, fourteen notes, and the shape is already unmistakably a performer's."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(g[0]).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(FadeIn(g[0]))
             vo.wait_until("b")

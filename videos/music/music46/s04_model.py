@@ -34,7 +34,7 @@ class Model(SoundScene):
             "more certain of the two counts for more. <bookmark mark='e'/> Our corpus is the series' fifty-one major-key "
             "tunes from Part 14, and each tune is heard by a model trained on all the others."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

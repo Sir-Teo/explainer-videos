@@ -71,7 +71,7 @@ class Endings(SoundScene):
             "resolution more certain, and arguably more satisfying: Meyer's point, in numbers. <bookmark mark='c'/> "
             f"Denied: F sharp costs {say(de, 1)} bits, and nothing comes after to repair it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abc", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

@@ -67,7 +67,7 @@ class Emotion(SoundScene):
             "cues signal emotion in speech: a sad voice is slow, low and soft. Music may borrow the code the voice already "
             "uses."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(cells).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(FadeIn(cells))
             vo.wait_until("b")

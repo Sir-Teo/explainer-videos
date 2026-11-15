@@ -123,7 +123,7 @@ class Tempo(SoundScene):
             "<bookmark mark='e'/> Modern scoring software sets tempos to thousandths; older practice changed the click in "
             "the middle of a cue."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))

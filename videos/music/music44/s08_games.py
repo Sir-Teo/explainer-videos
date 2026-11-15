@@ -80,7 +80,7 @@ class Games(SoundScene):
             "bass, drums, and the motive in the brass. At each change a stinger sounds at once, and the new segment starts "
             "at the next bar line."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(VGroup(nodes).copy().set_opacity(0.15)))
             vo.wait_until("a")
             self.play(FadeIn(nodes), LaggedStart(*[FadeIn(a) for a in arrows], lag_ratio=0.2))
             vo.wait_until("b")
