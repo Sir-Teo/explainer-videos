@@ -89,6 +89,8 @@ LEDGER = [
      "measure": r"the vowel matched within 7.1 dB a band by four instruments, 18.3 dB by one"},
     {"part": 42, "title": r"composed by the searcher from its first four notes, with what it threw away", "seconds": 19.8,
      "measure": r"draft 1554 of 3000 kept; 2829 rejected by the critics, 171 scored"},
+    {"part": 43, "title": r"as written and as performed: the same notes, the differences drawn", "seconds": 64.6,
+     "measure": r"phrase ends up to 26\% longer, the last note 11\%; 28.8 s as written, 32.0 s performed"},
 ]
 
 

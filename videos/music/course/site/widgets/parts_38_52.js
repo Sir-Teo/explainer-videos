@@ -396,4 +396,68 @@
       note: "Inversion then retrograde gives the motive's retrograde inversion, the fourth form of a twelve-tone row (Part 29). Move the inverted motive along the scale and listen to its intervals change by a semitone here and there while it stays recognisable: that is what diatonic means."
     });
   };
+  // ---------------------------------------------------------------- Part 43: two players correcting each other
+  function gauss43(rnd) { var u = 0, v = 0; while (u === 0) u = rnd(); v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+  function rng43(seed) { var s = seed >>> 0; return function () { s = (s * 1664525 + 1013904223) >>> 0; return s / 4294967296; }; }
+  function duo43(v, n) {
+    var r = rng43(v.seed * 7919 + 17), on = [[0, 0]], mprev = [0, 0];
+    var P = [0.5, 0.5 * (1 + v.diff / 100)], al = [v.a1, v.a2];
+    for (var k = 1; k < n; k++) {
+      var m = [gauss43(r) * 0.005, gauss43(r) * 0.005], row = [];
+      for (var i = 0; i < 2; i++) {
+        var j = 1 - i, T = P[i] + gauss43(r) * v.noise / 1000;
+        row.push(on[k - 1][i] + T - al[i] * (on[k - 1][i] - on[k - 1][j]) + m[i] - mprev[i]);
+      }
+      mprev = m; on.push(row);
+    }
+    return on;
+  }
+  W.duo = function (el) {
+    QB.widget(el, {
+      title: "Two players keeping time",
+      sub: "Each player has an inner timekeeper and corrects each note by a fraction (alpha) of the last asynchrony with the other. The asynchrony shrinks by 1 - (alpha 1 + alpha 2) each beat: it holds for totals between 0 and 2, drifts at 0, and shakes apart above 2. Give the players different tempos and some noise, and listen.",
+      panels: 1, height: 240,
+      controls: [
+        { k: "a1", label: "Player 1 corrects", min: 0, max: 1.5, step: 0.05, value: 0.25, fmt: function (x) { return x.toFixed(2); } },
+        { k: "a2", label: "Player 2 corrects", min: 0, max: 1.5, step: 0.05, value: 0.25, fmt: function (x) { return x.toFixed(2); } },
+        { k: "diff", label: "Player 2's tempo", min: -5, max: 5, step: 0.5, value: 2, fmt: function (x) { return (x > 0 ? x + "% slower" : (x < 0 ? (-x) + "% faster" : "the same")); } },
+        { k: "noise", label: "Timekeeper noise", min: 0, max: 30, step: 1, value: 12, fmt: function (x) { return x + " ms"; } },
+        { k: "seed", label: "Random seed", min: 1, max: 20, step: 1, value: 1, fmt: function (x) { return "" + x; } }
+      ],
+      buttons: [{ label: "Play 32 beats", act: function (s) {
+        var rate = 44100, on = duo43(s.v, 32), t0 = Math.min(on[0][0], on[0][1]);
+        var end = Math.max.apply(null, on.map(function (r) { return Math.max(r[0], r[1]); })) - t0 + 0.8;
+        if (!(end < 60)) { s.sound = false; return; }
+        var out = new Float32Array(Math.floor(end * rate)), f = [523.25, 329.63];
+        on.forEach(function (r) {
+          for (var i = 0; i < 2; i++) {
+            var i0 = Math.floor((r[i] - t0) * rate);
+            for (var q = 0; q < 0.25 * rate && i0 + q < out.length; q++) { if (i0 + q < 0) continue; var tt = q / rate; out[i0 + q] += 0.2 * Math.exp(-tt * 14) * Math.sin(2 * Math.PI * f[i] * tt); }
+          }
+        });
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var on = duo43(v, 32), asy = on.map(function (r) { return 1000 * (r[1] - r[0]); });
+        var lim = Math.min(400, Math.max(60, Math.max.apply(null, asy.map(Math.abs)) * 1.1));
+        var a = g[0].axes({ x: [0, 31], y: [-lim, lim], title: "Asynchrony, player 2 minus player 1 (ms), beat by beat", xlabel: "beat" });
+        a.hline(0);
+        a.line(asy.map(function (_, i) { return i; }), asy.map(function (x) { return Math.max(-lim, Math.min(lim, x)); }), { color: C.idea, width: 2 });
+        a.dots(asy.map(function (_, i) { return i; }), asy.map(function (x) { return Math.max(-lim, Math.min(lim, x)); }), { r: 3, color: C.idea });
+      },
+      readout: function (v, s) {
+        var tot = v.a1 + v.a2, b = 1 - tot;
+        var state = tot <= 0 ? "no correction: the tempo difference accumulates" : (tot >= 2 ? "over-correction: unstable, it shakes apart" : "stable");
+        var sd = (tot > 0 && tot < 2) ? Math.sqrt(2 * Math.pow(v.noise, 2) / (1 - b * b) + 4 * 25 / (1 + b)).toFixed(1) + " ms" : "infinite";
+        var lag = (tot > 0 && tot < 2) ? (1000 * 0.5 * v.diff / 100 / tot).toFixed(0) + " ms steady lag from the tempo difference" : "none settles";
+        return [["total correction", tot.toFixed(2) + ": " + state],
+                ["spread (equal tempos)", sd],
+                ["lag", lag],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available (or the duo fell apart)")]];
+      },
+      note: "With equal corrections of 0.25 and a 2% tempo difference the duo holds, with a steady lag. Set both to zero and the lag grows by 10 ms every beat. Let one player correct by 1.5 and the other by 0.6: the total passes 2 and every correction overshoots."
+    });
+  };
 })();

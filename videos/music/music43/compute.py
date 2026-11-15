@@ -291,7 +291,7 @@ def compute_tune() -> dict:
 def compute_variation() -> dict:
     t = load("tune")
     return {"part": 43, "title": "as written and as performed: the same notes, the differences drawn", "seconds": round(t["seconds"], 1),
-            "measure": f"phrase ends up to {100 * (t['max_stretch_mid'] - 1):.0f}% longer, the last note {100 * (t['last_stretch'] - 1):.0f}%; "
+            "measure": f"phrase ends up to {100 * (t['max_stretch_mid'] - 1):.0f}\\% longer, the last note {100 * (t['last_stretch'] - 1):.0f}\\%; "
                        f"{t['written_s']:.1f} s as written, {t['performed_s']:.1f} s performed",
             "clip": "tune.variation43"}
 

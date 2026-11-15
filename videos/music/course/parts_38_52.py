@@ -215,4 +215,45 @@ PARTS = [
         I=(8, 9),
         also=(("Monochord's composer: motive operations, the funnel, the dice game, generate and test, chains, critics and the searcher", "explainer/music/monochord/composer.py"),),
     ),
+    Part(
+        n=43, level="U", widget="duo", prereq=(4, 6, 7, 10, 11, 37),
+        question="What does a performer add to the notes, and how do players stay together?",
+        story="In 2007 a critic's CD of Joyce Hatto went into a computer and the track database named another pianist: over a "
+              "hundred recordings under her name were other people's, and timing analysis showed it, because no two pianists "
+              "shape time alike. The part measures what a performer adds to a score. It plays the Tune exactly as written and "
+              "as performed by five rules after the KTH system (phrase arch, duration contrast, high loud, punctuation, final "
+              "ritardando), each heard alone and together at three strengths; derives the final ritardando from a runner "
+              "braking (tempo squared falling linearly, q = 2); hears legato and staccato as held time; hears a 60-cent "
+              "vibrato at its mean pitch; models ensembles by linear phase correction, where a duo's asynchrony shrinks by "
+              "1 - (alpha1 + alpha2) a beat, holds only for totals between 0 and 2 (best near 0.85 for our noise levels), "
+              "drifts 264 ms in 24 beats with nobody listening and shakes apart above 2; compares democratic and autocratic "
+              "quartets after Wing and colleagues; and fingerprints ten model pianists by their tempo curves: a time-stretched "
+              "copy matches its source at 0.9999, a pianist's own second take at 0.988, other pianists at most 0.90. Practice "
+              "(about a fifth of the differences in music, by meta-analysis), anxiety and the body close the part.",
+        handoff="Music for picture in Part 44; expectation and emotion in Part 46; MIDI and the workstation in Part 53; beat "
+                "tracking and transcription in Parts 61 and 62; generative audio in Part 66.",
+        outside="Part 4 for loudness; Part 6 for tuning; Part 7 for the piano; Part 10 for notation; Part 11 for meter; Part "
+                "37 for ensemble timelines. Autoregressive processes, correlation.",
+        objectives={
+            "U": ["Hear a deadpan and an expressive performance of the same notes, and name what changed.",
+                  "Hear legato and staccato, a vibrato's pitch, and three shapes of final ritardando.",
+                  "Hear a duo that holds, one that drifts and one that shakes apart."],
+            "M": ["Implement performance rules and the kinematic ritardando, and measure a performance's deviations.",
+                  "Derive a duo's asynchrony variance under linear phase correction, and its stability bound.",
+                  "Identify a performer, or a copy, by correlating normalised tempo curves."],
+            "D": ["Design a study that separates an interpretation from the common part of expression and from noise."],
+            "I": ["Humanise sequenced parts; decide who leads in chamber music; practise with spacing and interleaving."],
+        },
+        results=[
+            ("Ritardando", r"v(x) = \left[1 + (w^q - 1)\,x\right]^{1/q}"),
+            ("Phase correction", r"A_{k+1} = (1 - \alpha_1 - \alpha_2) A_k + \varepsilon_k"),
+            ("Stability", r"0 < \alpha_1 + \alpha_2 < 2"),
+            ("Variance", r"\tfrac{2\sigma_T^2}{1 - b^2} + \tfrac{4\sigma_M^2}{1 + b}, \ b = 1 - \alpha_1 - \alpha_2"),
+            ("A copy", r"r = 0.9999 \text{ against } 0.988 \text{ for a second take}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7),
+        D=(10,),
+        I=(8, 9),
+        also=(("Monochord's performer: rules of expression, the kinematic ritardando, vibrato, phase correction and the identity test", "explainer/music/monochord/perform.py"),),
+    ),
 ]

@@ -1694,13 +1694,31 @@ four of the 2,829 drafts it threw away.
 pianist. Over a hundred recordings released under Joyce Hatto's name were other people's, and timing analysis
 proved it: no two humans shape time the same way. The part asks what a performer adds to the notes, and
 measures it in milliseconds.
+1. Hook: an ear question (which two recordings are one?); the Hatto affair; the plan.
+2. What a performer adds: Seashore; written and performed, heard; the difference drawn; what a performer controls; Repp's Träumerei.
+3. Rules of expression: the KTH system; five rules alone, heard; how rules combine; three strengths, heard; limits.
+4. Slowing down: runners and ritardandi; the kinematic formula; three ritardandi heard; speech; music as motion.
+5. Loudness and articulation: loudness across the Tune; legato and staccato heard; legato measured; touch.
+6. Vibrato and intonation: an ear question (a vibrato's pitch); three rates heard; vibrato in practice; intonation in practice.
+7. Playing together: phase correction; an ear question (which duo has nobody listening?); the spread and its stability bound; early on purpose; what the model says.
+8. Quartets and conductors: Wing and colleagues; two model quartets, drawn and heard; the conductor; other ways to stay together.
+9. Who is playing?: a timing fingerprint; three tempo curves; the Hatto test on model pianists; performance history; caveats.
+10. Practice and the performer's body: deliberate practice; what practice explains; how to practise; memory and anxiety; the body.
+11. Frontier: performance as data; learned models of expression; machines that play along; the research problem.
+12. Variation 43: the Tune as written and as performed, the differences drawn. Outro: problems, payoffs.
+
 *Covers:* expressive timing and its models; dynamics; articulation; vibrato; intonation in practice; ensemble
 synchronization as phase correction; the conductor; practice and what the evidence says about it; memory and
 anxiety; injury and hearing.
-*Built and computed:* an expressive performer on rule-based and kinematic models; an ensemble simulation with
-its stability bounds; a Hatto-style identity test on tempo curves.
-*Variation 43:* the Tune as written and as performed, same notes, the differences drawn.
-*Frontier:* learned models of expression; ensemble coordination.
+*Built and computed:* `monochord/perform.py`: five rules after the KTH system (phrase arch, duration contrast, high
+loud, punctuation, final ritardando) with strengths and weights; Friberg and Sundberg's kinematic ritardando; a vibrato
+tone heard at its mean pitch; linear phase correction for duos and quartets, with the duo's variance in closed form
+(stable only for 0 < α₁ + α₂ < 2; best near 0.85 for our noise), checked against simulation; model pianists and a
+Hatto-style identity test on tempo curves (a time-stretched copy 0.9999, a second take 0.988, others at most 0.90).
+*Variation 43:* the Tune as written (28.8 s) and as performed (32.0 s), phrase ends up to 26% longer, the differences
+drawn.
+*Frontier:* learned models of expression (MAESTRO, ASAP, VirtuosoNet); machine accompaniment and ensemble coordination
+(open: is an interpretation a measurable object?).
 *Reading:* Gabrielsson's reviews; Friberg, Bresin & Sundberg (2006); Wing et al. (2014); Repp's studies.
 
 ### Part 44 · Music for Picture and Play (~50)
