@@ -165,4 +165,108 @@
       note: "Nothing you choose is stored or sent. The items are generated fresh from rules, like Psyche's in the film; they are not a normed test, and no IQ can be read from them. A real test has many more items, is normed on a large sample of your age group, and reports a band of error around every score.",
     });
   };
+  // ---- Part 33: the 25-item inventory.  The SAPA project's public-domain IPIP items; five positions, not a type. ----
+  W.inventory = function (el) {
+    var w = null, COL = { A: "#5bd18b", C: "#7ec8f5", E: "#f2c14e", N: "#ef6f6c", O: "#b39ddb" };
+    var NAME = { A: "agreeableness", C: "conscientiousness", E: "extraversion", N: "neuroticism", O: "openness" };
+    // SAPA (2010) scale means, SDs and Cronbach's alpha, recomputed in Part 33 from the psychTools bfi data
+    var NORM = { A: [4.65, 0.90, 0.72], C: [4.27, 0.95, 0.74], E: [4.15, 1.06, 0.77], N: [3.16, 1.20, 0.82], O: [4.59, 0.81, 0.61] };
+    var ITEMS = [
+      ["A1", "Am indifferent to the feelings of others.", -1], ["C1", "Am exacting in my work.", 1],
+      ["E1", "Don't talk a lot.", -1], ["N1", "Get angry easily.", 1], ["O1", "Am full of ideas.", 1],
+      ["A2", "Inquire about others' well-being.", 1], ["C2", "Continue until everything is perfect.", 1],
+      ["E2", "Find it difficult to approach others.", -1], ["N2", "Get irritated easily.", 1],
+      ["O2", "Avoid difficult reading material.", -1], ["A3", "Know how to comfort others.", 1],
+      ["C3", "Do things according to a plan.", 1], ["E3", "Know how to captivate people.", 1],
+      ["N3", "Have frequent mood swings.", 1], ["O3", "Carry the conversation to a higher level.", 1],
+      ["A4", "Love children.", 1], ["C4", "Do things in a half-way manner.", -1], ["E4", "Make friends easily.", 1],
+      ["N4", "Often feel blue.", 1], ["O4", "Spend time reflecting on things.", 1], ["A5", "Make people feel at ease.", 1],
+      ["C5", "Waste my time.", -1], ["E5", "Take charge.", 1], ["N5", "Panic easily.", 1],
+      ["O5", "Will not probe deeply into a subject.", -1]];
+    var SCALE = ["very inaccurate", "moderately inaccurate", "slightly inaccurate", "slightly accurate",
+                 "moderately accurate", "very accurate"];
+    var S = { phase: "idle", k: 0, ans: [], last: 0 };
+    function Phi(z) { var t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989423 * Math.exp(-z * z / 2);
+      var p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
+      return z > 0 ? 1 - p : p; }
+    function scores() {
+      var out = {}, t;
+      for (t in NORM) out[t] = { sum: 0, n: 0 };
+      S.ans.forEach(function (a, i) {
+        var it = ITEMS[i], v = it[2] < 0 ? 7 - a : a;
+        out[it[0][0]].sum += v; out[it[0][0]].n += 1;
+      });
+      for (t in out) out[t] = out[t].n ? out[t].sum / out[t].n : NaN;
+      return out;
+    }
+    function answer(v) {
+      S.ans.push(v); S.last = v; task.count++; S.k++;
+      S.phase = S.k >= ITEMS.length ? "done" : "go";
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6 },
+      accepting: function () { return S.phase === "go"; },
+      respond: function (side, how) { answer(how === "tap" ? (side === 0 ? 2 : 5) : side); },
+    });
+    w = QB.widget(el, {
+      title: "Twenty-five items, five positions",
+      sub: "The 25 statements the SAPA project's 2,800 people answered (from the public-domain International Personality Item Pool). Say how accurately each describes you: press 1 (very inaccurate) to 6 (very accurate), or tap the left half for 'moderately inaccurate' and the right half for 'moderately accurate'.",
+      panels: 2, height: 380, weights: [1.15, 1],
+      buttons: [
+        { label: "Start", act: function () { S.phase = "go"; S.k = 0; S.ans = []; } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.ans = []; S.k = 0; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), i;
+        if (S.phase === "go") {
+          var it = ITEMS[S.k];
+          ctx.save(); ctx.textAlign = "center"; ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("Item " + (S.k + 1) + " of " + ITEMS.length + ": how accurately does this describe you?", b.cx, b.y + 34);
+          ctx.fillStyle = C.ink; ctx.font = "600 20px system-ui, sans-serif";
+          T.wrap(ctx, it[1], b.cx, b.cy - 30, b.w - 60, 26);
+          ctx.font = "12px system-ui, sans-serif";
+          for (i = 0; i < 6; i++) {
+            var x = b.x + 30 + (b.w - 60) * (i + 0.5) / 6;
+            ctx.fillStyle = i < 3 ? "#9aa3ad" : "#cfd6de";
+            ctx.fillText(String(i + 1), x, b.y + b.h - 58);
+            T.wrap(ctx, SCALE[i], x, b.y + b.h - 40, (b.w - 60) / 6 - 6, 13);
+          }
+          ctx.restore();
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "Done: your five positions are on the right.", "Each mark is your scale score placed against the SAPA sample, with a band for the error of a five-item scale (Part 3). They are five positions on five continua, not a type, and one sitting is a noisy sample of you (chapter six).");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Twenty-five items take about three minutes. Answer as you usually are, not as you would like to be.");
+        }
+        // the profile
+        var c2 = g[1].box, cx = g.ctx, x0 = c2.x + 120, x1 = c2.x + c2.w - 20, sc = scores(), k = 0, t;
+        cx.save();
+        cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif"; cx.textAlign = "left";
+        cx.fillText("Your position among 2,800 people (percentile)", c2.x + 10, c2.y + 18);
+        cx.fillStyle = C.muted; cx.font = "11px system-ui, sans-serif"; cx.textAlign = "center";
+        [0, 25, 50, 75, 100].forEach(function (p) { cx.fillText(String(p), x0 + (x1 - x0) * p / 100, c2.y + 40); });
+        for (t in NORM) {
+          var y = c2.y + 68 + 50 * k, m = NORM[t][0], sd = NORM[t][1], sem = sd * Math.sqrt(1 - NORM[t][2]) / Math.sqrt(1);
+          cx.strokeStyle = "#2a3039"; cx.lineWidth = 8; cx.beginPath(); cx.moveTo(x0, y); cx.lineTo(x1, y); cx.stroke();
+          cx.fillStyle = COL[t]; cx.textAlign = "right"; cx.font = "12px system-ui, sans-serif";
+          cx.fillText(NAME[t], x0 - 10, y + 4);
+          if (!isNaN(sc[t])) {
+            var p = 100 * Phi((sc[t] - m) / sd), lo = 100 * Phi((sc[t] - sem - m) / sd), hi = 100 * Phi((sc[t] + sem - m) / sd);
+            cx.globalAlpha = 0.35; cx.strokeStyle = COL[t]; cx.lineWidth = 8;
+            cx.beginPath(); cx.moveTo(x0 + (x1 - x0) * lo / 100, y); cx.lineTo(x0 + (x1 - x0) * hi / 100, y); cx.stroke();
+            cx.globalAlpha = 1; cx.fillStyle = COL[t]; cx.beginPath(); cx.arc(x0 + (x1 - x0) * p / 100, y, 7, 0, 2 * Math.PI); cx.fill();
+            cx.textAlign = "left"; cx.fillStyle = C.muted; cx.fillText(Math.round(p) + "", x1 + 2 - 22, y - 10);
+          }
+          k++;
+        }
+        cx.restore();
+      },
+      readout: function () {
+        var sc = scores(), parts = [["answers", String(task.count)]];
+        if (S.phase === "done") ["E", "N"].forEach(function (t) { parts.push([NAME[t], sc[t].toFixed(2)]); });
+        return parts;
+      },
+      note: "Nothing you answer is stored or sent. The items are from Lewis Goldberg's International Personality Item Pool, which is in the public domain; the norms are the 2,800 SAPA participants of 2010, recomputed in Part 33 (a convenience sample of web visitors, not a census). The band is one standard error of measurement for a five-item scale, and the percentile assumes a normal distribution.",
+    });
+  };
 })();

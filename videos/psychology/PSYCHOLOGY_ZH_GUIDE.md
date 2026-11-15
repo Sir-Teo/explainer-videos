@@ -981,6 +981,32 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Jakob Pietschnig, Martin Voracek, Anton Formann; Truman Kelley; Hubert Brogden; Kan, Levine; McFarland; Lee; Howe | 雅各布·皮奇尼希，马丁·沃拉切克，安东·福尔曼；杜鲁门·凯利；休伯特·布罗格登；坎，莱文；麦克法兰；李；豪 |
 | François Chollet; Gordon Allport, Henry Odbert | 弗朗索瓦·肖莱；戈登·奥尔波特，亨利·奥德伯特 |
 
+## Part 33: personality
+
+| English | 中文 |
+|---|---|
+| personality; trait; the lexical hypothesis; the Big Five; HEXACO; honesty-humility | 人格；特质；词汇假设；大五；HEXACO；诚实-谦逊 |
+| extraversion; agreeableness; conscientiousness; neuroticism; openness; emotional stability | 外向性；宜人性；尽责性；神经质；开放性；情绪稳定性 |
+| item; reverse-keyed; inventory; facet; parallel analysis; eigenvalue | 条目；反向计分；问卷；侧面；平行分析；特征值 |
+| type; median split; the arcsine law; the Myers-Briggs Type Indicator | 类型；中位数切分；反正弦定律；迈尔斯-布里格斯类型指标 |
+| the person-situation debate; the personality coefficient; aggregation; if-then signature; density distribution | 人与情境之争；人格系数；聚合；“如果-那么”行为签名；密度分布 |
+| rank-order stability; mean-level change; the maturity principle; volitional change | 等级稳定性；平均水平变化；成熟原则；有意的改变 |
+| behavioural inhibition system; behavioural activation system; psychoticism | 行为抑制系统；行为激活系统；精神质 |
+| the binomial effect-size display; multitrait-multimethod | 二项效应量展示；多特质多方法 |
+| projective test; the Rorschach; the unconscious | 投射测验；罗夏测验；无意识 |
+| the gender similarities hypothesis; Mahalanobis distance | 性别相似性假设；马哈拉诺比斯距离 |
+| digital footprint; psychological targeting; faking | 数字足迹；心理定向投放；作假 |
+| Gordon Allport, Henry Odbert; Raymond Cattell; Ernest Tupes, Raymond Christal; Warren Norman; Lewis Goldberg | 戈登·奥尔波特，亨利·奥德伯特；雷蒙德·卡特尔；欧内斯特·图普斯，雷蒙德·克里斯特尔；沃伦·诺曼；刘易斯·戈德堡 |
+| Paul Costa, Robert McCrae; Michael Ashton, Kibeom Lee; William Revelle; John Horn | 保罗·科斯塔，罗伯特·麦克雷；迈克尔·阿什顿，基贝姆·李；威廉·雷维尔；约翰·霍恩 |
+| Carl Jung; Katharine Cook Briggs, Isabel Briggs Myers; Hugh Hartshorne, Mark May; Walter Mischel | 卡尔·荣格；凯瑟琳·库克·布里格斯，伊莎贝尔·布里格斯·迈尔斯；休·哈茨霍恩，马克·梅；沃尔特·米歇尔 |
+| Seymour Epstein; David Funder, Daniel Ozer; William Fleeson | 西摩·爱泼斯坦；戴维·芬德，丹尼尔·奥泽；威廉·弗利森 |
+| Brent Roberts, Wendy DelVecchio, Kate Walton, Wolfgang Viechtbauer; Nathan Hudson, Chris Fraley; Mirjam Stieger | 布伦特·罗伯茨，温迪·德尔韦基奥，凯特·沃尔顿，沃尔夫冈·维希特鲍尔；内森·赫德森，克里斯·弗雷利；米里娅姆·施蒂格尔 |
+| Vukasović, Bratko; Hans Eysenck; Jeffrey Gray; Nathan Kuncel, Rebecca Shiner, Avshalom Caspi; Christopher Soto | 武卡索维奇，布拉特科；汉斯·艾森克；杰弗里·格雷；内森·孔塞尔，丽贝卡·夏纳，阿夫沙洛姆·卡斯皮；克里斯托弗·索托 |
+| Robert Rosenthal, Donald Rubin; Drew Westen; John Kihlstrom; Hermann Rorschach; Scott Lilienfeld, James Wood, Howard Garb | 罗伯特·罗森塔尔，唐纳德·鲁宾；德鲁·韦斯滕；约翰·基尔斯特伦；赫尔曼·罗夏；斯科特·利林菲尔德，詹姆斯·伍德，霍华德·加布 |
+| Janet Hyde; Antonio Terracciano; David Schmitt; Marco Del Giudice, Tom Booth, Paul Irwing | 珍妮特·海德；安东尼奥·特拉恰诺；戴维·施密特；马尔科·德尔·朱迪切，汤姆·布斯，保罗·欧文 |
+| Michal Kosinski, David Stillwell, Thore Graepel; Danny Azucar; Sandra Matz, Gideon Nave; Dean Eckles | 米哈尔·科辛斯基，戴维·斯蒂尔韦尔，托雷·格雷佩尔；丹尼·阿苏卡尔；桑德拉·马茨，吉迪恩·纳韦；迪安·埃克尔斯 |
+| Murray Barrick, Michael Mount; Birkeland; Angélique Cramer; Heinrich Peters; Gurven; Laajaj | 默里·巴里克，迈克尔·芒特；比克兰；安热莉克·克莱默；海因里希·彼得斯；古尔文；拉亚伊 |
+
 ## Names
 
 | English | 中文 |

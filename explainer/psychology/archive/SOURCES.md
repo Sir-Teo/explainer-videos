@@ -324,6 +324,8 @@ and summarized, not stored. Dates are the day the check was made.
 | `manybabies_2020` | ManyBabies 1: the infant-directed speech preference in 65 laboratories | ManyBabies Consortium (2020), Advances in Methods and Practices in Psychological Science 3, 24-52; github.com/manybabies/mb1-analysis-public; psymetadata 1.0.1 (manybabies2020) | data fetched from CRAN on first use, not redistributed (GPL >= 2 package) | SHA-256 checked; the pooled d = 0.35 recomputed, 2026-11-15 |
 | `spearman_1904` | Spearman's hierarchy: four school subjects, pitch discrimination and music | Spearman (1904), American Journal of Psychology 15, 201-292, ch. 5 §5; psychclassics.yorku.ca | facts only (public domain) | 2026-11-15: pitch and music rows against the transcribed text; subject block from the reproduced table, row means equal to the text's averages |
 | `holzinger_1939` | Holzinger and Swineford's nine mental tests for 301 children | Holzinger and Swineford (1939); lavaan 0.7-3 (HolzingerSwineford1939) | data fetched from CRAN on first use, not redistributed (GPL >= 2 package) | SHA-256 checked; 301 x 9 read, 2026-11-15 |
+| `sapa_bfi_2010` | 25 IPIP personality items answered by 2,800 people | the SAPA project; psychTools 2.6.4 (bfi) | data fetched from CRAN on first use, not redistributed (GPL >= 2 package; IPIP items public domain) | SHA-256 checked; 2800 x 25 read, 2026-11-15 |
+| `epi_bfi` | Eysenck Personality Inventory and BFI scales in 231 people | psychTools 2.6.4 (epi.bfi) | data fetched from CRAN on first use, not redistributed (GPL >= 2 package) | SHA-256 checked; 231 rows read, 2026-11-15 |
 
 ## Looked for and not used
 

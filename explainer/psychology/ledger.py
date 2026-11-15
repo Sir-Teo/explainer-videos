@@ -4241,6 +4241,144 @@ add(Finding(
     checked="2026-11-15",
 ))
 
+add(Finding(
+    key="big_five_structure", part=33, title=r"Five broad factors of personality",
+    claim="Ratings and self-reports of personality are summarized by five broad recurring factors.",
+    original=Study("Tupes and Christal", 1961, n="trait ratings from eight samples (US Air Force report)",
+                   found="the same five factors in each"),
+    status="replicated",
+    record=(Study("Norman", 1963, n="peer ratings", found="the five again"),
+            Study("McCrae and Costa", 1997, n="the NEO-PI-R in six translations",
+                  found="similar five-factor structures in German, Portuguese, Hebrew, Chinese, Korean and Japanese"),
+            Study("SAPA sample (recomputed here)", 2010, n="2,800 people, 25 IPIP items",
+                  found="parallel analysis keeps five; every item loads most on its own factor"),),
+    note="Robust in literate, mostly Western and Asian samples; a lexical sixth factor (honesty-humility) recurs too.",
+    sources=("E. C. Tupes and R. E. Christal, Recurrent personality factors based on trait ratings, USAF ASD Technical "
+             "Report 61-97 (1961)",
+             "W. T. Norman, Toward an adequate taxonomy of personality attributes, Journal of Abnormal and Social "
+             "Psychology 66 (1963)",
+             "R. R. McCrae and P. T. Costa, Personality trait structure as a human universal, American Psychologist 52 "
+             "(1997) 509-516",
+             "M. C. Ashton et al., A six-factor structure of personality-descriptive adjectives, Journal of "
+             "Personality and Social Psychology 86 (2004)"),
+    checked="2026-11-15",
+    data=("SAPA_BFI_2010",),
+))
+
+add(Finding(
+    key="big_five_universal", part=33, title=r"The five factors as a human universal",
+    claim="The same five factors describe personality in every human population.",
+    original=Study("McCrae and Costa", 1997, n="six translations of one inventory",
+                   found="five language families, one structure"),
+    status="contested",
+    record=(Study("Gurven and colleagues", 2013, n="632 Tsimane forager-horticulturalists in Bolivia",
+                  found="no robust five-factor structure; two broad factors instead"),
+            Study("Laajaj and colleagues", 2019, n="94,751 respondents, 23 low- and middle-income countries",
+                  found="face-to-face Big Five surveys of low validity; internet samples from the same countries "
+                        "looked like Western ones"),),
+    note="Whether the five are universal or partly a product of literacy, schooling and questionnaire habits is "
+         "unresolved.",
+    sources=("R. R. McCrae and P. T. Costa, American Psychologist 52 (1997) 509-516",
+             "M. Gurven et al., How universal is the Big Five? Journal of Personality and Social Psychology 104 "
+             "(2013) 354-370",
+             "R. Laajaj et al., Challenges to capture the big five personality traits in non-WEIRD populations, "
+             "Science Advances 5 (2019)"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="trait_outcomes", part=33, title=r"Traits predict life outcomes",
+    claim="Personality traits predict consequential outcomes such as health, relationships and work.",
+    original=Study("Roberts, Kuncel, Shiner, Caspi and Goldberg (review)", 2007, n="prospective studies",
+                   found="mortality, divorce and attainment, about as well as socioeconomic status and cognitive "
+                         "ability"),
+    status="replicated, smaller",
+    record=(Study("Soto (LOOPR)", 2019, n="78 trait-outcome links, median N 1,504, preregistered",
+                  found="87% replicated; effects typically 77% as large"),),
+    note="A strong record by Part 4's standards; the replications were cross-sectional self-report panels.",
+    sources=("B. W. Roberts et al., The power of personality, Perspectives on Psychological Science 2 (2007) 313-345",
+             "C. J. Soto, How replicable are links between personality traits and consequential life outcomes? "
+             "Psychological Science 30 (2019)"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="person_situation", part=33, title=r"Traits barely predict behaviour",
+    claim="Traits predict behaviour only up to about .30, so behaviour is mostly determined by situations.",
+    original=Study("Mischel", 1968, n="a review", design="Personality and Assessment",
+                   found="trait-behaviour and cross-situational correlations rarely above about .30"),
+    status="story and record",
+    record=(Study("Epstein", 1979, n="daily records over weeks", found="aggregated behaviour highly stable"),
+            Study("Funder and Ozer", 1983, n="classic situational experiments",
+                  found="situational effects about .36 to .42 as correlations"),
+            Study("Fleeson", 2001, n="experience sampling over weeks",
+                  found="large within-person variation, highly stable averages"),),
+    note="The .30 was real for single acts; the story that personality does not exist was not: aggregated, traits "
+         "predict well, and situations are no larger.",
+    sources=("W. Mischel, Personality and Assessment (Wiley, 1968)",
+             "S. Epstein, The stability of behavior, Journal of Personality and Social Psychology 37 (1979)",
+             "D. C. Funder and D. J. Ozer, Behavior as a function of the situation, Journal of Personality and Social "
+             "Psychology 44 (1983) 107-112",
+             "W. Fleeson, Toward a structure- and process-integrated view of personality, Journal of Personality and "
+             "Social Psychology 80 (2001) 1011-1027"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="mbti_types", part=33, title=r"Personality types",
+    claim="People fall into distinct personality types that a questionnaire identifies reliably.",
+    original=Study("Myers and Briggs", 1962, n="the indicator's first manual", found="sixteen types"),
+    status="failed",
+    record=(Study("Pittenger (review)", 1993, n="studies of the indicator",
+                  found="weak evidence that the types are distinct; type often changes on retest"),
+            Study("SAPA sample (recomputed here)", 2010, n="2,800 people",
+                  found="extraversion has one hump, not two"),),
+    note="Trait scores are continuous; cutting them at the middle makes types that are unstable near the cut and "
+         "discard information.",
+    sources=("I. B. Myers, The Myers-Briggs Type Indicator manual (Educational Testing Service, 1962)",
+             "D. J. Pittenger, The utility of the Myers-Briggs Type Indicator, Review of Educational Research 63 "
+             "(1993) 467-488"),
+    checked="2026-11-15",
+    data=("SAPA_BFI_2010",),
+))
+
+add(Finding(
+    key="likes_prediction", part=33, title=r"Personality from digital footprints",
+    claim="Personality traits can be estimated from digital records such as likes.",
+    original=Study("Kosinski, Stillwell and Graepel", 2013, n="58,466 US volunteers",
+                   found="openness about as accurate as the test's retest; other traits less"),
+    status="replicated",
+    record=(Study("Youyou, Kosinski and Stillwell", 2015, n="Facebook volunteers",
+                  found="computer .56 against friends .49; beat a spouse with 300 likes"),
+            Study("Azucar, Marengo and Settanni (meta-analysis)", 2018, n="social-media studies",
+                  found="about .3 to .4"),
+            Study("Peters and Matz", 2024, n="1,000 users' status updates",
+                  found="a language model without task-specific training: about .29"),),
+    note="Moderate accuracy, repeatedly; the privacy questions are larger than the effect sizes.",
+    sources=("M. Kosinski, D. Stillwell and T. Graepel, PNAS 110 (2013) 5802-5805",
+             "W. Youyou, M. Kosinski and D. Stillwell, PNAS 112 (2015) 1036-1040",
+             "D. Azucar, D. Marengo and M. Settanni, Personality and Individual Differences 124 (2018) 150-159",
+             "H. Peters and S. C. Matz, Large language models can infer psychological dispositions of social media "
+             "users, PNAS Nexus (2024)"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="psychographic_targeting", part=33, title=r"Persuasion matched to personality",
+    claim="Ads matched to a person's personality are substantially more persuasive.",
+    original=Study("Matz, Kosinski, Nave and Stillwell", 2017, n="field experiments reaching over 3.5 million people",
+                   found="up to 40% more clicks and 50% more purchases"),
+    status="contested",
+    record=(Study("Eckles, Gordon and Johnson (letter)", 2018, n="a critique of the design",
+                  found="no randomization of people to ads; ad delivery could produce the differences"),),
+    note="Unresolved without randomized tests; the Cambridge Analytica story was never shown to rest on measured "
+         "effects.",
+    sources=("S. C. Matz, M. Kosinski, G. Nave and D. J. Stillwell, PNAS 114 (2017) 12714-12719",
+             "D. Eckles, B. R. Gordon and G. A. Johnson, Field studies of psychologically targeted ads face threats "
+             "to internal validity, PNAS 115 (2018)"),
+    checked="2026-11-15",
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -4375,8 +4513,8 @@ shown(26, r"Thaler \& Benartzi (2004)", "an applied programme, described as unco
 shown(26, r"Gigerenzer et al.\ (2007); \ Furedi (1999)", "risk communication, applied and described")
 shown(26, r"Peterson et al.\ (2021); \ Erev et al.\ (2017)", "methods for finding theories, described; the "
       "choices13k data are fitted in the film")
-shown(26, r"Frey et al.\ (2017)", "the measurement of risk preference, described; traits are Part 33's",
-      row_in=33)
+shown(26, r"Frey et al.\ (2017)", "a frontier study of how risk preference is measured, described; Part 33 "
+      "covers the broad traits, not risk preference")
 shown(27, r"Baars (1988); \ Crick \& Koch (1990)", "the founding programmes of the field, described")
 shown(27, r"Baars (1988); \ Dehaene, \ Kerszberg \& Changeux (1998)", "the global workspace theory, described; its "
       "predictions are modelled by Psyche")
@@ -4551,3 +4689,33 @@ shown(32, r"Kan et al.\ (2019); \ McFarland (2020)", "a methodological dispute a
 shown(32, r"Lee et al.\ (2018); \ Howe et al.\ (2022)", "genome-wide estimates quoted at the frontier; heritability is "
       "Part 9's")
 shown(32, r"Chollet (2019)", "a proposal for measuring machine intelligence, described")
+
+shown(33, r"Allport \& Odbert (1936)", "a lexical study told as history; the five factors have their row")
+shown(33, r"Mischel (1968)", "the person-situation debate; its row is person_situation")
+shown(33, r"Allport \& Odbert (1936); \ Tupes \& Christal (1961)", "history of the five; they have their row")
+shown(33, r"Goldberg (1981); \ Costa \& McCrae (1985, \ 1992)", "the naming of the five and the NEO, described")
+shown(33, r"Ashton et al.\ (2004)", "the six-factor lexical result, described in the five-factor row's note")
+shown(33, r"Jung (1921); \ Myers \& Briggs (1962)", "history of the type indicator; types have their row")
+shown(33, r"Hartshorne \& May (1928)", "a historical study of honesty, described")
+shown(33, r"Funder \& Ozer (1983)", "part of the person-situation row's record")
+shown(33, r"Roberts \& DelVecchio (2000)", "a meta-analysis quoted for rank-order stability")
+shown(33, r"Roberts et al.\ (2006); \ data: \ SAPA (2010)", "a meta-analysis of mean-level change, with a "
+      "cross-section recomputed")
+shown(33, r"Hudson \& Fraley (2015); \ Stieger et al.\ (2021)", "studies of volitional change, described; a "
+      "frontier")
+shown(33, r"Vukasovi\'c \& Bratko (2015)", "a pooled heritability estimate, described; heritability is Part 9's")
+shown(33, r"Eysenck; \ Gray (1970)", "biological theories, described")
+shown(33, r"Barrick \& Mount (1991)", "a meta-analysis of personality and job performance, described; work is Part 53's")
+shown(33, r"Cramer et al.\ (2012)", "a theoretical proposal (traits as networks), described; Part 44 tests it")
+shown(33, r"Roberts et al.\ (2007)", "the trait-outcome row's original")
+shown(33, r"Soto (2019)", "the trait-outcome row's record")
+shown(33, r"Westen (1998); \ Kihlstrom", "an evaluation of psychoanalysis and its critique, described")
+shown(33, r"Rorschach (1921); \ Lilienfeld, \ Wood \& Garb (2000)", "projective tests and a review of them, "
+      "described")
+shown(33, r"Hyde (2005); \ Costa et al.\ (2001); \ Schmitt et al.\ (2008)", "reviews and cross-cultural surveys "
+      "of sex differences, described")
+shown(33, r"Del Giudice et al.\ (2012); \ Hyde", "a disputed multivariate estimate, described with its critique")
+shown(33, r"Kosinski et al.\ (2013); \ simulated: \ \texttt{personality.likes\_accuracy}", "the likes row's "
+      "original, with a simulation")
+shown(33, r"Youyou et al.\ (2015); \ Azucar et al.\ (2018)", "the likes row's record")
+shown(33, r"Matz et al.\ (2017); \ Eckles et al.\ (2018)", "the targeting row")

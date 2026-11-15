@@ -54,4 +54,47 @@ PARTS = [
               ("Its tests", "tests/psychology/test_traits.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=33, level="U", widget="inventory",
+        question="Is there a \"you\" that stays the same across situations and years?",
+        story="In 1936 Allport and Odbert read a dictionary for people and found 17,953 words; Cattell's sixteen "
+              "factors, Tupes and Christal's five and the NEO followed, and a sixth, honesty-humility, appeared in "
+              "seven languages. The part recomputes the five in the SAPA project's 2,800 people: parallel analysis "
+              "keeps five and every item finds its factor. Types cut one hump in two and change on retest by the "
+              "arcsine law. Hartshorne and May's children and Mischel's .30 are rebuilt in a world of people and "
+              "situations, and Epstein's aggregation turns .3 into .9 by Spearman-Brown; Funder and Ozer show "
+              "situations are no larger, and Fleeson and Mischel and Shoda make traits distributions and if-then "
+              "signatures. Then stability and change, heritability and Eysenck and Gray, Soto's 78 replications, "
+              "Freud and the inkblots under Part 3's standards, sex differences in one dimension and many, and "
+              "personality read from likes, Cambridge Analytica and psychological targeting.",
+        handoff="Situations that move people are Part 34; disorders as continua are Part 39; latent variables "
+                "against networks are Part 44; item response theory and faking are Part 45; personality at work is "
+                "Part 53; minds and machines are Part 60.",
+        outside="Part 3's reliability, validity and Spearman-Brown, Part 9's heritability and Part 32's factor "
+                "analysis. Correlation, the normal distribution, eigenvalues and regression.",
+        objectives={
+            "U": ["Describe the five-factor model, where it came from, and its six-factor variant.",
+                  "Explain the person-situation debate and how aggregation resolved it.",
+                  "Describe stability and change, heritability, outcomes and sex differences in personality, with "
+                  "their replication records."],
+            "M": ["Score an inventory with reverse keys, choose factors by parallel analysis, and fit and rotate them.",
+                  "Derive the Spearman-Brown aggregation curve, the arcsine law for type agreement and the median "
+                  "split's loss.",
+                  "Compute univariate d and Mahalanobis's D, and explain why D grows with the number of traits."],
+            "D": ["Judge whether traits are latent causes or network summaries, and design a study that could tell.",
+                  "Evaluate claims of universality and of persuasion by psychological targeting."],
+            "I": ["Evaluate a hiring test, a type workshop, a matching product or a targeting campaign against the "
+                  "evidence."],
+        },
+        results=[
+            ("Aggregation", r"r_k = \frac{k\rho}{1 + (k - 1)\rho}"),
+            ("Same type on retest", r"P = \tfrac12 + \frac{\arcsin r}{\pi}"),
+            ("A median split keeps", r"\sqrt{2/\pi} \approx 0.80"),
+            ("Mahalanobis distance", r"D^2 = \Delta\mu^{\top} \Sigma^{-1} \Delta\mu"),
+        ],
+        U=(0, 1, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13), D=(15,), I=(14,),
+        also=(("Psyche's personality module", "explainer/psychology/psyche/personality.py"),
+              ("Its tests", "tests/psychology/test_personality.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

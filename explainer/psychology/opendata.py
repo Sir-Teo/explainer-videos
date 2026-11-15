@@ -138,6 +138,9 @@ SOURCES = {
     'coles2019': {'url': 'https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psymetadata/psymetadata_1.0.1.tar.gz'], 'page': 'https://cran.r-project.org/package=psymetadata', 'file': 'psymetadata_1.0.1.tar.gz', 'sha256': '9b5f0cb8ab98e64fb7807483bb74fdaf16c18b010c081f0f93308c1da10b2bd4', 'licence': 'GPL (>= 2)', 'member': 'psymetadata/data/coles2019.rda', 'member_sha256': '93de0be5403efd82d2ad0eb77e2cb30d8c125fba953e2fb347b44c2a1b281b2c'},
     # Part 32: Holzinger and Swineford's (1939) nine mental tests for 301 children (lavaan)
     'holzinger1939': {'url': 'https://cran.r-project.org/src/contrib/lavaan_0.7-3.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/lavaan_0.7-3.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/lavaan/lavaan_0.7-3.tar.gz'], 'page': 'https://cran.r-project.org/package=lavaan', 'file': 'lavaan_0.7-3.tar.gz', 'sha256': 'c1e9ecbd01dde0ada6bda11f0f9e84babfefebf06d1ab5887b4bd8d24ebb6787', 'licence': 'GPL (>= 2)', 'member': 'lavaan/data/HolzingerSwineford1939.rda', 'member_sha256': 'd667bfeabd08c27faba2586bcc8df524d1cbc73a46b16e11ad6f863bb281b338'},
+    # Part 33: the SAPA sample's 25 IPIP personality items (2,800 people) and the EPI/BFI sample (psychTools)
+    'bfi2010': {'url': 'https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psychTools/psychTools_2.6.4.tar.gz'], 'page': 'https://cran.r-project.org/package=psychTools', 'file': 'psychTools_2.6.4.tar.gz', 'sha256': '0a4bc9fb9efaad3c790d28a44ef065fe1a761131c54c33b384730af995be66f1', 'licence': 'GPL (>= 2)', 'member': 'psychTools/data/bfi.rda', 'member_sha256': '557fe9c67eee933c9c24153bcc1bd2c3b647bb66aaf76d6632f4131d711b7448'},
+    'epibfi': {'url': 'https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psychTools/psychTools_2.6.4.tar.gz'], 'page': 'https://cran.r-project.org/package=psychTools', 'file': 'psychTools_2.6.4.tar.gz', 'sha256': '0a4bc9fb9efaad3c790d28a44ef065fe1a761131c54c33b384730af995be66f1', 'licence': 'GPL (>= 2)', 'member': 'psychTools/data/epi.bfi.rda', 'member_sha256': '4336c97d6ccd1d73347f7050def1dd4f43ba7602384d4787c1fcd5dd6a3c2b36'},
     # Part 22: data inside CRAN source packages (catlearn, smacof, janeaustenr), read as data by rdata.py
     'nosof94': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/nosof94.RData', 'member_sha256': '4c9959b80d0311b5db13942665948a34ce5eee6559eb4ca8e5b66c10462670a0'},
     'homa76': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/homa76.RData', 'member_sha256': '99f1af2ea059d7e97c93bc2f1b821d38be2a4d51a7628b7be7d1456ea39d4e24'},
@@ -636,3 +639,33 @@ def holzinger_1939() -> dict:
             v = col["value"]
             out[k] = [levels["value"][x - 1] for x in v] if levels else list(v)
     return out
+
+
+def _frame(key: str) -> dict:
+    """An R data frame from a registered .rda member, as {column: numpy array}, with R's integer NA as NaN."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path(key))[0][1]
+    out = {}
+    for nm, col in zip(obj["attrs"]["names"]["value"], obj["value"]):
+        v = np.array(col["value"], float)
+        v[v < -2.0e9] = np.nan
+        out[nm] = v
+    return out
+
+
+def bfi() -> dict:
+    """The SAPA project's 25 personality items from the International Personality Item Pool, answered by 2,800 people
+    in 2010 on a six-point scale (1 very inaccurate ... 6 very accurate), as distributed in psychTools: ``X`` (2800 x
+    25, NaN where unanswered), ``items`` (A1 ... O5), and ``gender`` (1 male, 2 female), ``education`` (1-5, NaN
+    for many) and ``age``."""
+    cols = _frame("bfi2010")
+    items = [k for k in cols if len(k) == 2 and k[0] in "ACENO" and k[1].isdigit()]
+    return {"X": np.column_stack([cols[k] for k in items]), "items": items, "gender": cols["gender"],
+            "education": cols["education"], "age": cols["age"]}
+
+
+def epi_bfi() -> dict:
+    """231 people who took the Eysenck Personality Inventory and the BFI scales, with the Beck Depression Inventory and
+    state and trait anxiety (psychTools epi.bfi): {column: array}."""
+    return _frame("epibfi")

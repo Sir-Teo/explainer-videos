@@ -54,7 +54,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014",
            "SPEED_ACC_2008", "RR98", "CHOICES13K",
            "EGO_DEPLETION_RRR",
-           "FACES_1962", "COLES_2019", "MANYBABIES_2020", "SPEARMAN_1904", "HOLZINGER_1939"]
+           "FACES_1962", "COLES_2019", "MANYBABIES_2020", "SPEARMAN_1904", "HOLZINGER_1939",
+           "SAPA_BFI_2010", "EPI_BFI"]
 
 
 @dataclass(frozen=True)
@@ -4055,6 +4056,34 @@ HOLZINGER_1939 = Dataset(
     data={"children": 301, "tests": 9, "schools": ["Pasteur", "Grant-White"]},
 )
 
+_P33 = "2026-11-15"
+
+SAPA_BFI_2010 = Dataset(
+    key="sapa_bfi_2010",
+    title="Twenty-five personality items answered by 2,800 people (the SAPA project, 2010)",
+    source="W. Revelle and colleagues, the SAPA web-based assessment project; 25 items from L. R. Goldberg's "
+           "International Personality Item Pool, six-point scale; the bfi data set in the R package psychTools 2.6.4 "
+           "(GPL >= 2)",
+    cite=r"Revelle et al.\ (SAPA, 2010)",
+    checked="bfi.rda inside psychTools_2.6.4.tar.gz, fetched by explainer.psychology.opendata and checked by "
+            "SHA-256; read as data by rdata.py: 2,800 people, 25 items, gender, education and age; item wording "
+            "from bfi.dictionary (IPIP, public domain), " + _P33,
+    licence="GPL (>= 2) (the R package); items public domain (IPIP)",
+    data={"people": 2800, "items": 25, "scale": "1 very inaccurate ... 6 very accurate",
+          "reversed": ["A1", "C4", "C5", "E1", "E2", "O2", "O5"]},
+)
+
+EPI_BFI = Dataset(
+    key="epi_bfi",
+    title="The Eysenck Personality Inventory and the BFI scales in 231 people",
+    source="W. Revelle's laboratory; the epi.bfi data set in the R package psychTools 2.6.4 (GPL >= 2)",
+    cite=r"psychTools \texttt{epi.bfi}",
+    checked="epi.bfi.rda inside psychTools_2.6.4.tar.gz, SHA-256 checked; 231 rows, EPI extraversion and "
+            "neuroticism, five BFI scales, BDI, trait and state anxiety, " + _P33,
+    licence="GPL (>= 2) (the R package); data",
+    data={"people": 231},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -4096,4 +4125,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014,
                           SPEED_ACC_2008, RR98, CHOICES13K,
                           EGO_DEPLETION_RRR,
-                          FACES_1962, COLES_2019, MANYBABIES_2020, SPEARMAN_1904, HOLZINGER_1939)}
+                          FACES_1962, COLES_2019, MANYBABIES_2020, SPEARMAN_1904, HOLZINGER_1939,
+                          SAPA_BFI_2010, EPI_BFI)}

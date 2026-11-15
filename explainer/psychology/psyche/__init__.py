@@ -122,5 +122,8 @@ Modules so far, with the part that introduces each:
                          and training one ability in each; ratio and deviation IQs, SEM, Thorndike's
                          correction; rule-built matrix items and a capacity-limited solver; overlap and
                          invariance; cutoffs, Kelley's estimate, Brogden's gain, the four-fifths ratio
+``personality``     33   scoring with reverse keys; parallel analysis; a world of people and situations
+                         (aggregation, variance components); type agreement and the median split;
+                         Mahalanobis D by number of traits; BESD; simulated likes; faking in selection
 =================  ====  ===============================================================================
 """
