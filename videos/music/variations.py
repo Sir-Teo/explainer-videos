@@ -93,6 +93,8 @@ LEDGER = [
      "measure": r"phrase ends up to 26\% longer, the last note 11\%; 28.8 s as written, 32.0 s performed"},
     {"part": 44, "title": r"as a cue on a hit point, as a leitmotif in three moods, as an adaptive loop", "seconds": 46.8,
      "measure": r"the cue's 14 beats at 98.8 bpm (a 14-5 click) land its last note on the 9.0 s hit; the loop adds a layer each pass"},
+    {"part": 45, "title": r"hidden in another line, then released by timbre and by register", "seconds": 13.9,
+     "measure": r"14 notes of the Tune interleaved with 14 others; the two lines cross 13 times"},
 ]
 
 

@@ -297,4 +297,45 @@ PARTS = [
         I=(7, 8, 9),
         also=(("Monochord's music for picture and play: click arithmetic, the tempo finder, the chip, the adaptive score and ducking", "explainer/music/monochord/screen.py"),),
     ),
+    Part(
+        n=45, level="U", widget="stream", prereq=(4, 5, 14, 16, 17, 41),
+        question="How does one pressure wave become a scene of separate voices, and why do counterpoint's rules follow?",
+        story="Send an ascending and a descending scale to the two ears, note by note alternately, and listeners hear two "
+              "smooth melodies that neither ear was given (Deutsch's scale illusion, in stereo). The part builds the rules "
+              "of auditory scene analysis and their consequences: ABA- streaming heard at four settings, and a competition "
+              "model of ours (a tone captures the next with a strength falling exponentially in time and on the ERB scale) "
+              "whose one constant fits van Noorden's coherence boundary, read from his figure, within 0.28 semitone, with "
+              "the fission boundary and the ambiguous region between; interleaved melodies (Frère Jacques hidden, crossing "
+              "its distractor 15 times, then released by register) and implied polyphony; simultaneous grouping by "
+              "harmonicity (a mistuned harmonic popping out), common onset, common fate and place; the continuity illusion; "
+              "Huron's derivation of voice-leading rules from these principles, with parallel fifths fusing and crossing "
+              "lines heard as bouncing; a timbre space of the series' own 13 instruments by MDS on five measurements; "
+              "Shepard tones and Risset's glide, the octave-scrambled Tune, the tritone paradox; absolute pitch and "
+              "everyday pitch memory. The Tune is hidden in another line and released by timbre.",
+        handoff="Expectation and emotion in Part 46; origins and universals in Part 47; rooms and space in Part 55; "
+                "transcription in Part 61; source separation in Part 64.",
+        outside="Part 4 for the ear and its ERB scale; Part 5 for roughness and fusion; Part 14 for melody and contour; "
+                "Part 16 for counterpoint; Part 17 for chorales; Part 41 for timbre. Gestalt principles, MDS.",
+        objectives={
+            "U": ["Hear the scale illusion, ABA- streaming and its build-up, and a tune vanish in another and return.",
+                  "Hear a mistuned harmonic, an early harmonic and a vibrating group of harmonics come apart from a tone.",
+                  "Hear the continuity illusion, Shepard tones and the octave-scrambled Tune."],
+            "M": ["Derive the competition model's straight-line boundary and fit it to published points.",
+                  "Measure attack, brightness, odd/even balance, jaggedness and decay, and build a timbre space by MDS.",
+                  "Construct grouping stimuli: interleaved melodies, mistuned complexes, Shepard tones."],
+            "D": ["Design a test of whether networks trained on natural sound reproduce human streaming boundaries."],
+            "I": ["Separate parts by register and timbre; voice-lead for independence or fusion as the texture requires."],
+        },
+        results=[
+            ("Capture", r"e^{-\Delta t / \tau}\, e^{-|\Delta z| / w}"),
+            ("Two streams when", r"\Delta z > (w / \tau)\, T"),
+            ("Fit", r"w / \tau = 32.4 \text{ ERB-numbers/s}, \ \text{rms } 0.28 \text{ st}"),
+            ("ERB-number", r"z = 21.4 \log_{10}(1 + 0.00437 f)"),
+            ("Shepard tone", r"\textstyle\sum_o a(o + c)\, \sin(2\pi f_0 2^{o + c} t)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 8, 9),
+        D=(10,),
+        I=(6, 7),
+        also=(("Monochord's auditory scene: the scale illusion, the streaming model, grouping stimuli, Shepard tones and the timbre space", "explainer/music/monochord/scene.py"),),
+    ),
 ]

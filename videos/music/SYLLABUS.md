@@ -1755,14 +1755,33 @@ three moods, and as an adaptive loop.
 
 ### Part 45 · The Scene (~50)
 *Story:* Send jumping notes to each ear and the listener hears two smooth scales, one on each side, which neither
-ear was given (Deutsch, 1973; `headphones`). The ear receives one pressure wave and the mind returns a scene of
+ear was given (Deutsch, 1975; `headphones`). The ear receives one pressure wave and the mind returns a scene of
 separate voices. The part builds the rules of that separation and shows the rules of Part 16 falling out of them.
+1. Hook: an ear question (the scale illusion, in stereo); each ear alone; one wave, a whole scene; the plan.
+2. Streaming: ABA- at four settings heard; a long ambiguous sequence heard; principles; other animals; build-up.
+3. A model of the boundary: van Noorden's boundaries; below the fission boundary heard; a competition model; the fit; neurons; limits.
+4. Melodies hidden in melodies: an ear question (name the hidden tune); Dowling; implied polyphony heard; Bach; hocket.
+5. Sounds at the same moment: the cues; a mistuned harmonic heard; an early harmonic heard; common fate heard; place heard; fate and place.
+6. What fills a gap: a glide through silence and noise heard; a melody behind noise heard; restoration; old plus new.
+7. Counterpoint as scene analysis: Huron; parallel and contrary duets heard; crossing scales heard; rules and principles; onsets; when rules relax.
+8. A timbre space of our instruments: thirteen heard; five measurements; the space; streaming by timbre heard; beyond the map; grouping.
+9. Pitch and its illusions: height and chroma; the octave-scrambled Tune heard; bells; an ear question (Shepard steps); Risset's glide heard; the tritone paradox.
+10. Absolute pitch and pitch memory: absolute pitch; two memory trials heard; everyday memory; relative pitch; tone languages.
+11. Frontier: networks as models of hearing; machines that separate; when scene analysis fails; the research problem.
+12. Variation 45: the Tune hidden in another line, then released by timbre and register. Outro: problems, payoffs.
+
 *Covers:* sequential and simultaneous grouping; streaming and its boundary; continuity; timbre space; pitch
 models; octave equivalence; absolute and relative pitch; pitch memory; the illusions.
-*Built and computed:* a streaming model against published boundaries; a timbre space of Monochord's own
-instruments.
-*Variation 45:* the Tune interleaved with another melody and inaudible, then released by timbre.
-*Frontier:* deep networks as models of auditory cortex; absolute pitch.
+*Built and computed:* `monochord/scene.py`: the scale illusion; a competition model of streaming (capture falling
+exponentially in time and on the ERB scale, so the boundary is a straight line in the repetition time) fitted to points
+read from van Noorden's coherence boundary with one constant (32.4 ERB-numbers a second, 0.28 semitone rms); interleaved
+melodies and their crossings; mistuned, early, vibrating and displaced harmonics; the continuity illusion; Shepard tones
+and Risset's glide; a timbre space of the series' own 13 instruments by MDS on five measured features (two axes, 37%
+and 31%).
+*Variation 45:* the Tune interleaved with a line crossing it 13 times and inaudible, then released by timbre and by
+register.
+*Frontier:* deep networks as models of auditory cortex; absolute pitch (open: do trained networks reproduce human
+streaming boundaries?).
 *Reading:* Bregman, *Auditory Scene Analysis*; Deutsch (ed.), *The Psychology of Music*; McAdams.
 
 ### Part 46 · Expectation and Emotion (~50)

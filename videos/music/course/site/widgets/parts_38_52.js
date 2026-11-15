@@ -516,4 +516,44 @@
       note: "With the default scene only two tempos between 70 and 160 hit within a frame. Allow half-beats and the count jumps. Move one hit by a frame or two (0.05 s) and watch the solutions appear and vanish: that is why editors and composers negotiate over single frames."
     });
   };
+  // ---------------------------------------------------------------- Part 45: one stream or two?
+  function erb45(f) { return 21.4 * Math.log10(1 + 0.00437 * f); }
+  function bound45(trt, k) { var e = erb45(1000) + k * trt, fb = (Math.pow(10, e / 21.4) - 1) / 0.00437; return 12 * Math.log2(fb / 1000); }
+  W.stream = function (el) {
+    QB.widget(el, {
+      title: "One stream or two?",
+      sub: "ABA- triplets: a tone A at 1 kHz, a tone B some semitones above, A again, a rest. Choose the interval and the time from one onset to the next. The gold line is our competition model's boundary (two streams above it), fitted to van Noorden's temporal coherence boundary; the blue line is his fission boundary (one stream below it). Play it and judge for yourself.",
+      panels: 1, height: 240,
+      controls: [
+        { k: "st", label: "B above A", min: 0, max: 15, step: 0.5, value: 6, fmt: function (x) { return x + " semitones"; } },
+        { k: "trt", label: "Onset to onset", min: 40, max: 200, step: 5, value: 90, fmt: function (x) { return x + " ms"; } },
+        { k: "kk", label: "Model constant (w / tau)", min: 10, max: 60, step: 0.5, value: 32.4, fmt: function (x) { return x.toFixed(1) + " ERB-numbers a second"; } }
+      ],
+      buttons: [{ label: "Play 20 triplets", act: function (s) {
+        var rate = 44100, T = s.v.trt / 1000, n = 20, out = new Float32Array(Math.floor((4 * T * n + 0.3) * rate));
+        var fa = 1000, fb = 1000 * Math.pow(2, s.v.st / 12), dur = Math.min(0.05, T * 0.8);
+        function tone(i0, f) { for (var q = 0; q < dur * rate && i0 + q < out.length; q++) { var t = q / rate; out[i0 + q] += 0.25 * Math.sin(Math.PI * t / dur) * Math.sin(2 * Math.PI * f * t); } }
+        for (var c = 0; c < n; c++) { tone(Math.floor(4 * c * T * rate), fa); tone(Math.floor((4 * c + 1) * T * rate), fb); tone(Math.floor((4 * c + 2) * T * rate), fa); }
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var a = g[0].axes({ x: [40, 200], y: [0, 15], title: "Interval against onset-to-onset time (the dot: your setting)", xlabel: "milliseconds" });
+        var xs = [], ys = [];
+        for (var t = 40; t <= 200; t += 2) { xs.push(t); ys.push(Math.min(bound45(t / 1000, v.kk), 15)); }
+        a.line(xs, ys, { color: C.idea, width: 2.5 });
+        a.line([40, 200], [1.5, 1.5], { color: "#60A5FA", width: 1.5 });
+        a.dots([60, 80, 100, 120, 150], [4, 5.5, 7, 8.5, 11], { r: 4, color: "#F472B6" });
+        a.dots([v.trt], [v.st], { r: 7, color: "#FFFFFF" });
+      },
+      readout: function (v, s) {
+        var b = bound45(v.trt / 1000, v.kk);
+        var verdict = v.st > b ? "two streams (above the coherence boundary)" : (v.st < 1.5 ? "one stream (below the fission boundary)" : "ambiguous: either can be heard");
+        return [["model boundary here", b.toFixed(1) + " semitones"], ["prediction", verdict],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "Pink dots: points read from van Noorden's figure, good to about a semitone. Six semitones at 90 ms sits near the line: listen for the gallop splitting after a few seconds. Halve the speed and it holds together; double the interval and it never gallops."
+    });
+  };
 })();
