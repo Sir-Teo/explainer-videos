@@ -68,8 +68,7 @@ class Fusion(SoundScene):
         low = DashedLine(g.at(d["high"][0] / 4, 0), g.at(d["high"][0] / 4, 0.7), color=EAR, stroke_width=5, dash_length=0.1)
         nums = VGroup(*[MathTex(str(k), font_size=30, color=TUNE).next_to(h, UP, buff=0.1) for k, h in zip((4, 5, 6), high)])
         with self.voiceover(
-            "What could make two notes melt into one? Part 4 has the answer ready. The ear gives a single pitch "
-            "to any set of partials that fits one harmonic series, even when the bottom of the series is "
+            "What could make two notes melt into one? Part 4 has the answer ready. A harmonic complex can evoke a shared residue pitch, even when the bottom of the series is "
             "missing. So try this. Three high pure tones, sounding together. Then a single low tone. Then the "
             "three again. The second time, listen for the low note inside the chord."
         ):
@@ -85,7 +84,7 @@ class Fusion(SoundScene):
         low.set_stroke(opacity=1)
         res = VGroup(label(r"the three tones are partials 4, 5 and 6 of the low one: \ a major triad, \ $4 : 5 : 6$", font_size=26, color=GREY_A),
                      label(rf"Part 4's pitch model, \ given only the three: \ {d['implied_hz']:.1f} Hz, \ middle C", font_size=28, color=EAR),
-                     label(r"Rameau (1722): \ every chord has a \textbf{fundamental bass}, \ the note whose partials it is", font_size=26, color=HIST)
+                     label(r"Rameau (1722): \ a \textbf{fundamental bass} organizes chord roots and inversions", font_size=26, color=HIST)
                      ).arrange(DOWN, buff=0.2).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Most people can, once they know where to listen. It is not in the sound: the chord has no energy "
@@ -94,8 +93,7 @@ class Fusion(SoundScene):
             f"series. <bookmark mark='b'/> Give those three tones to the pitch model of Part 4, and it reports "
             f"{say(d['implied_hz'], 1)} hertz: middle C, two octaves below the chord's own lowest note. "
             "<bookmark mark='c'/> A musician worked this out without any of our machinery. In 1722 Jean-Philippe "
-            "Rameau proposed that every chord has a fundamental bass: a single note, often not played at all, "
-            "of which, he came to argue, the chord's notes are the partials. He built a theory of harmony on it. What he "
+            "Rameau proposed a fundamental bass to organize chord roots and inversions. Our common-series calculation is related, but its mathematical fundamental is not necessarily a chord's musical root. What he "
             "had found was the ear's habit of looking for one source."
         ) as vo:
             self.play(FadeOut(q), FadeIn(nums))
@@ -131,7 +129,7 @@ class Fusion(SoundScene):
         with self.voiceover(
             "So here is a second measure of consonance, quite separate from roughness. Give two notes to the "
             "pitch model, and ask what single pitch it finds, and how strongly. <bookmark mark='a'/> For an "
-            "octave it finds the lower note itself, very strongly: the upper note's partials are all partials of "
+            "octave it finds the lower note itself, very strongly: several strong upper partials coincide with partials of "
             "the lower already. <bookmark mark='b'/> For a fifth it finds a note an octave below the lower one, "
             "less strongly. For a fourth, a note at a third of the frequency, weaker again. For a major third, a "
             "quarter, weaker still. <bookmark mark='c'/> The pattern is exact. The simpler the ratio, the sooner "
@@ -139,7 +137,7 @@ class Fusion(SoundScene):
             "This is Galileo's theory of coinciding pulses, come back as promised. The ear cannot count pulses. "
             "But the auditory nerve can keep time with them, and a brain that is looking for one source will "
             "find one more easily in a fifth than in a tritone. Stumpf's fusion, Rameau's bass and Galileo's "
-            "pulses are one idea. Today it is called harmonicity."
+            "pulses are related ideas, not identical theories. Modern harmonicity models quantify how well a sound fits one harmonic series."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cols))
             vo.wait_until("a")

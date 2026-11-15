@@ -17,7 +17,7 @@ class Rough(SoundScene):
     def experiment(self):
         d = load("plomp")
         card = history_card(1965, r"Reinier Plomp and Willem Levelt, \ Soesterberg",
-                            r"play pairs of pure tones to listeners who are not musicians, and ask one question: how pleasant is this sound?",
+                            r"play pairs of pure tones to listeners who are not musicians, and ask listeners to judge the consonance of pairs of pure tones",
                             width=5.6).to_corner(UL, buff=0.4)
         g = axes([0, 6], [0, 1.1], x_length=6.4, y_length=3.4, xlabel="", ylabel=r"roughness", xticks=None, yticks=[], font_size=20)
         g.move_to(RIGHT * 3.0 + DOWN * 0.1)
@@ -37,7 +37,7 @@ class Rough(SoundScene):
             "For a hundred years Helmholtz's theory was argued about, mostly by musicians judging chords on "
             "pianos and organs. In 1965 two Dutch psychologists, Reinier Plomp and Willem Levelt, did the simple "
             "thing. They took listeners with no musical training, played them pairs of pure tones, and "
-            "asked only: how pleasant is this? <bookmark mark='a'/> This is the shape they found, in the form "
+            "asked listeners to judge consonance. The fitted curve models sensory roughness, not every aspect of liking. <bookmark mark='a'/> This is the shape they found, in the form "
             "that later workers fitted to it. In unison, smooth. Pull the tones apart, and the sound roughens "
             "quickly to a worst point. <bookmark mark='b'/> Then it recovers, and beyond a certain separation the "
             "two tones are entirely smooth again. <bookmark mark='c'/> Now the important part. The worst "
@@ -124,16 +124,16 @@ class Rough(SoundScene):
                 pulse(snd, b, t0, t0 + 2.2)
         vals = VGroup(label(rf"roughness: \ {100 * d['pure_fifth'] / d['peak']:.1f}\% of the worst", font_size=26, color=GOOD).next_to(names[0], DOWN, buff=0.2),
                       label(rf"roughness: \ {100 * d['pure_tritone'] / d['peak']:.1f}\% of the worst", font_size=26, color=GOOD).next_to(names[1], DOWN, buff=0.2))
-        moral = VGroup(label(r"for pure tones, \ every interval wider than a minor third is smooth", font_size=30, color=EAR),
+        moral = VGroup(label(r"near 500 Hz, \ sufficiently separated pure tones have little modeled roughness", font_size=30, color=EAR),
                        label(r"so where do the ratios come from?", font_size=34, color=TUNE)).arrange(DOWN, buff=0.3).move_to(DOWN * 2.0)
         with self.voiceover(
             "Both are smooth. A little strange, perhaps, the second one, but there is no grinding in it. "
             "<bookmark mark='a'/> Monochord's roughness for the two is a fraction of one percent of the worst case, "
             "and two percent. <bookmark mark='b'/> So here is where a careful measurement leaves Helmholtz. "
             "Roughness is real, and it depends on the ear's bands. But for pure tones it knows nothing about "
-            "ratios. Every interval wider than a minor third is as smooth as every other. The fifth is not "
+            "ratios. At this pitch, sufficiently separated pure tones have little modeled roughness; the required separation changes with frequency and level. The fifth is not "
             "special. The octave is not special. <bookmark mark='c'/> So where do the ratios come from? The answer "
-            "is that no musical instrument makes a pure tone."
+            "is that most instrumental tones contain several partials, though nearly pure tones and sine-wave instruments are useful exceptions."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(vals))

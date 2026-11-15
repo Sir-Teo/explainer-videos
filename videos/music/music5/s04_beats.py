@@ -32,13 +32,13 @@ class Beats(SoundScene):
                          ((r"in step", 0.0, GOOD), (r"opposed", 0.25, BAD), (r"in step", 0.5, GOOD), (r"opposed", 0.75, BAD), (r"in step", 1.0, GOOD))])
         eq = MathTex(r"\sin 2\pi f_1 t + \sin 2\pi f_2 t \;=\; 2\,", r"\cos\!\bigl(\pi (f_1 - f_2)\, t\bigr)", r"\;\sin\!\bigl(2\pi\,\tfrac{f_1+f_2}{2}\,t\bigr)", font_size=32).move_to(DOWN * 2.2)
         eq[1].set_color(LEVEL)
-        rule = label(r"one tone at the average frequency, \ swelling and fading $|f_1 - f_2|$ times a second", font_size=28, color=LEVEL).to_edge(DOWN, buff=0.35)
+        rule = label(r"a carrier at the average frequency, \ envelope peaks $|f_1 - f_2|$ times a second", font_size=28, color=LEVEL).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Take two pure tones that are almost the same, and add them. <bookmark mark='a'/> Here one makes "
+            "Take two pure tones that are almost the same, and add them. <bookmark mark='a'/> In this illustrative one-second plot, one makes "
             "twenty cycles while the other makes twenty-two. At the start they move together, and the sum is "
             "twice as big. <bookmark mark='b'/> A quarter of the way along, the faster one has gained half a "
             "cycle. Now one pushes while the other pulls, and they cancel. Then they are back in step, then "
-            "opposed again. <bookmark mark='c'/> The sum is a single tone whose strength rises and falls. Those "
+            "opposed again. <bookmark mark='c'/> The sum has a rapid carrier and a slow amplitude envelope. Its spectrum still contains the two original frequencies. Those "
             "are beats, and one line of trigonometry gives the whole story. <bookmark mark='d'/> The sum of two "
             "sines is a sine at the average frequency, multiplied by a slow cosine at half the difference. The "
             "loudness peaks twice in each turn of that cosine, so the beats come at exactly the difference of "

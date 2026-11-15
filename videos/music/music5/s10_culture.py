@@ -29,8 +29,8 @@ class Culture(SoundScene):
         with self.voiceover(
             "If consonance came entirely from the ear, it would not have a history. It has one. "
             "<bookmark mark='a'/> For the ancient Greeks, and for the theorists of the early Middle Ages who "
-            "followed them, the major third was a dissonance. <bookmark mark='b'/> By 1500 it was the foundation "
-            "of all harmony. <bookmark mark='c'/> By the 1920s a jazz band could end a piece on a chord with a "
+            "followed them, the major third was a dissonance. <bookmark mark='b'/> By the sixteenth century it was central to much European "
+            "harmony. <bookmark mark='c'/> By the 1920s a jazz band could end a piece on a chord with a "
             "seventh in it, which an earlier age would have had to resolve. "
             "<bookmark mark='d'/> And twentieth-century composers and jazz musicians made stable sounds out of "
             "stacked fourths and clusters. Part of that change has a physical cause, and you can hear it. The "
@@ -53,8 +53,8 @@ class Culture(SoundScene):
         with self.voiceover(
             f"The medieval third is {say(py['cents'] - ju['cents'])} cents wider than the pure one, and on these "
             f"notes its partials beat {say(py['beat'])} times a second. It has a restless edge. The theorists who "
-            "called it a dissonance were describing what they heard. When tuning changed, so that thirds came "
-            "out pure, the third became a consonance. That story is Part 6. But tuning cannot explain the rest "
+            "called it a dissonance were describing what they heard. Changes in tuning helped thirds come "
+            "out closer to pure, alongside changes in musical practice and theory. That story is Part 6. But tuning cannot explain the rest "
             "of the timeline. Something else moved: what listeners were used to."
         ):
             self.play(FadeIn(res))
@@ -77,8 +77,8 @@ class Culture(SoundScene):
         but = VGroup(label(r"but the Tsimane' did dislike rough sounds, \ as Westerners do,", font_size=26, color=GREY_A),
                      label(r"and rated laughter and gasps as everyone else does", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.1).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "How much is learned? For a century the question could not be answered, because everyone who could be "
-            "tested had grown up with Western harmony on the radio. <bookmark mark='a'/> In 2016 Josh McDermott "
+            "How much is learned? For a century the evidence was limited, because most listeners who were "
+            "tested had substantial exposure to Western harmony. <bookmark mark='a'/> In 2016 Josh McDermott "
             "and his colleagues went to the Tsimane', a people of the Bolivian Amazon who farm and forage, whose "
             "own music is sung one voice at a time, and who at that time rarely heard anything else. They played "
             "them chords, and asked how pleasant each one was. <bookmark mark='b'/> Listeners in the United "
@@ -87,11 +87,11 @@ class Culture(SoundScene):
             "chords as equally pleasant. <bookmark mark='d'/> It was not that they heard differently, or did not "
             "understand the question. They disliked rough sounds, much as Westerners do, and they rated laughter "
             "and gasps as everyone else does. They "
-            "simply had no preference between a fifth and a tritone. The preference for consonance, it seems, "
-            "has to be learned, by living with music that uses harmony."
+            "simply had no preference between a fifth and a tritone. The Western preference for consonance, in these tests, "
+            "depends strongly on musical exposure. This does not show that every preference is entirely learned."
         ) as vo:
             ask = VGroup(label(r"How much is learned?", font_size=44, color=EAR),
-                         label(r"everyone who could be tested had grown up with Western harmony", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.4)
+                         label(r"most earlier research tested listeners exposed to Western harmony", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.4)
             self.play(FadeIn(ask[0]))
             self.play(FadeIn(ask[1]))
             vo.wait_until("a")
@@ -111,8 +111,8 @@ class Culture(SoundScene):
     # ------------------------------------------------------------------
     def layers(self):
         layers = VGroup()
-        for name, text, col in ((r"the membrane", r"roughness: \ partials inside one band of the ear. \\ The same in everyone; \ depends on timbre.", ROUGH),
-                                (r"the nerve", r"harmonicity: \ partials that fit one series fuse into one pitch. \\ The same machinery in everyone; \ what it is used for can differ.", EAR),
+        for name, text, col in ((r"the membrane", r"roughness: \ partials inside one band of the ear. \\ Broadly shared; \ depends on timbre.", ROUGH),
+                                (r"the nerve", r"harmonicity: \ partials that fit one series fuse into one pitch. \\ Shared auditory machinery; \ what it is used for can differ.", EAR),
                                 (r"the listener", r"familiarity: \ what you have heard is what sounds right. \\ Different in every culture, \ and in every century.", HIST)):
             box = RoundedRectangle(width=12.4, height=1.45, corner_radius=0.15, stroke_color=col, stroke_width=2.5, fill_color=col, fill_opacity=0.06)
             layers.add(VGroup(box, label(name, font_size=32, color=col).move_to(box.get_left() + RIGHT * 1.7), label(text, font_size=24, color=GREY_A).move_to(box.get_center() + RIGHT * 1.6)))
@@ -121,14 +121,14 @@ class Culture(SoundScene):
         self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
             "So the six answers settle into three layers. <bookmark mark='a'/> At the bottom, the membrane. "
-            "Partials that share a band of the ear grind against each other. That is the same in everyone, it "
+            "Partials that share a band of the ear grind against each other. This is a broadly shared auditory response; it "
             "explains why the just ratios are special for instruments with harmonic partials, and it moves "
             "when the timbre moves. <bookmark mark='b'/> Above it, the nerve. Partials that fit one harmonic "
-            "series fuse into one pitch. The machinery is the same in everyone too; it is how we hear voices. "
+            "series fuse into one pitch. This uses shared auditory machinery too; it is how we hear voices. "
             "But whether a fused sound is preferred is not given. <bookmark mark='c'/> And on top, the listener. "
             "What you have heard all your life is what sounds right, and that differs from one culture to the "
             "next and from one century to the next. Pythagoras, Galileo and Euler were describing the first two "
-            "layers by their arithmetic. Helmholtz found the first. Stumpf and Rameau found the second. None of "
+            "layers by their arithmetic. Helmholtz found the first. Stumpf investigated fusion; Rameau organized chord roots. None of "
             "them was wrong. Each had one layer of the answer."
         ) as vo:
             for mark, l in zip("abc", layers):

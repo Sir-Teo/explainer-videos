@@ -60,7 +60,7 @@ class Frontier(SoundScene):
         finds = VGroup(
             label(r"stretch or squeeze the partials, \ and the intervals people prefer move with them", font_size=26, color=GOOD),
             label(r"with the partials of a Javanese gong-chime, \ preferences fall near the steps of a gamelan scale", font_size=26, color=GOOD),
-            label(r"a surprise: \ people like a slightly mistuned interval. \ Slow beats are pleasant.", font_size=26, color=TUNE),
+            label(r"a surprise: \ people like a slightly mistuned interval. \ Slow beats can be pleasant.", font_size=26, color=TUNE),
         ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to(DOWN * 1.9)
         with self.voiceover(
             "And the experiment that this part has been leading to has now been done on people, at a scale no "
@@ -73,7 +73,7 @@ class Frontier(SoundScene):
             "the tones were given the partials of a bonang, a gong-chime of the Javanese gamelan, people who had "
             "never heard a gamelan preferred intervals close to the steps of a gamelan scale. "
             "<bookmark mark='d'/> And there was a surprise. Listeners liked intervals a little better when they "
-            "were slightly out of tune. Slow beats, it seems, are not a flaw. They are pleasant, as every "
+            "were slightly out of tune. Slow beats, it seems, are not a flaw. They can be pleasant, as many "
             "accordion maker and every string section already knew."
         ) as vo:
             self.play(FadeIn(g), Create(a), Create(b), FadeIn(gl), run_time=1.5)
@@ -99,8 +99,8 @@ class Frontier(SoundScene):
             "them, but nothing in this part explains why Western listeners hear one as bright and the other as "
             "dark. That is a question about emotion, and we will take it up much later. <bookmark mark='b'/> The "
             "augmented chord. Listeners rank it below the diminished one. Roughness and harmonicity both say "
-            "the opposite. <bookmark mark='c'/> Infants. If the preference for consonance is learned, babies "
-            "should not have it. Early studies found that they did. Later ones, which controlled for what the "
+            "the opposite. <bookmark mark='c'/> Infants. Infant studies ask how early a consonance preference appears. Babies "
+            "already have prenatal and early listening experience. Early studies reported a preference. Later ones, which controlled for what the "
             "babies had just been listening to, did not. It is still argued over. <bookmark mark='d'/> And "
             "chords in motion. Everything in this part was about a chord standing still. In a piece of music "
             "the same chord can be a place of rest or a point of tension, depending on what came before. That "

@@ -31,12 +31,10 @@ class Hook(SoundScene):
                          label(r"smooth", font_size=40, color=SMOOTH).move_to(bx[1].get_center() + UP * 1.25))
         with self.voiceover(
             "Two notes sounding together, twice. In the first pair, the upper note has exactly twice the frequency "
-            "of the lower: an octave, the simplest interval there is, the one every musical culture treats as the "
-            "same note again. In the second pair the upper note is too high, by most of a semitone. "
+            "of the lower: an octave, the simplest interval there is, widely treated as the same pitch class, though octave equivalence varies across listeners and musical cultures. In the second pair the upper note is too high, by most of a semitone. "
             f"<bookmark mark='a'/> And yet the first pair is the sour one. The exact octave grinds, and the "
-            "mistuned one is smooth. <bookmark mark='b'/> Nothing is wrong with your loudspeakers. One thing "
-            "about these notes was changed, and it was not their pitch. By the end of this part you will know "
-            "what it was, why it turns an octave into a dissonance, and how to do it yourself."
+            "mistuned one is smooth. <bookmark mark='b'/> The labeled ratios of the fundamental frequencies are exact. The surprise comes from the internal partial structure of these tones, and roughness is only one aspect of consonance. By the end of this part you will know "
+            "what it was, why it can make this exact octave rough, and how to do it yourself."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(verdict[0]), FadeIn(verdict[1]))
@@ -85,8 +83,7 @@ class Hook(SoundScene):
             r"what is learned, \ and what is still not understood",
         ], title=r"Part 5: \ Consonance", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is the plan. <bookmark mark='a'/> First the theories of number, and one small test that defeats "
-            "them all. <bookmark mark='b'/> Then beats: what two tones do when they are nearly the same, and how "
+            "Here is the plan. <bookmark mark='a'/> First the theories of number, and a small test of exact integer-complexity measures. <bookmark mark='b'/> Then beats: what two tones do when they are nearly the same, and how "
             "every piano tuner uses them. <bookmark mark='c'/> Then roughness, measured in a laboratory, and how "
             "it follows the bands of the ear that we found in Part 4. <bookmark mark='d'/> From that we will draw "
             "a curve that contains no ratios, and watch Pythagoras's ratios fall out of it. Then we will move "

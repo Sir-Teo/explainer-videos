@@ -142,7 +142,7 @@ class Pulses(SoundScene):
             r[0].move_to(LEFT * 5.6 + UP * (2.2 - 0.6 * k), aligned_edge=LEFT)
             r[1].move_to(LEFT * 2.6 + UP * (2.2 - 0.6 * k))
             r[2].move_to(LEFT * 1.3 + UP * (2.2 - 0.6 * k), aligned_edge=LEFT)
-        bad = VGroup(label(r"the same flaw: \ a fifth 5 cents wide never repeats at all", font_size=28, color=BAD),
+        bad = VGroup(label(r"the same flaw: \ exact 5-cent detuning: \\ no exact common period", font_size=28, color=BAD),
                      label(r"and can the ear follow 300 pulses a second?", font_size=28, color=BAD)).arrange(DOWN, buff=0.18).move_to(DOWN * 1.9)
         keep = label(r"Part 4: \ the nerve does fire in time with the wave. \quad Keep this idea for chapter 7.", font_size=28, color=GOOD).to_edge(DOWN, buff=0.35)
         with self.voiceover(
@@ -151,7 +151,7 @@ class Pulses(SoundScene):
             "every four. The tritone of forty-five to thirty-two repeats only every thirty-two. The shorter the "
             "pattern, the sweeter. It is the same ranking as before, because it is the same arithmetic. "
             "<bookmark mark='b'/> And it has the same flaw. Widen the fifth by five cents and its pattern never "
-            "repeats at all. There was also an objection in Galileo's own century: how could the ear possibly "
+            "repeats exactly in this ideal mathematical model. A rational approximation does repeat, but after a much longer period. There was also an objection in Galileo's own century: how could the ear possibly "
             "follow three hundred pulses a second? <bookmark mark='c'/> To that one, we now have an answer. In "
             "Part 4 we saw that the auditory nerve does fire in time with the wave, up to a few thousand hertz. "
             "The pulses are there, in the nerve. So do not throw this idea away. It will come back in chapter "

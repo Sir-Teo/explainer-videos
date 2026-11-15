@@ -107,8 +107,8 @@ class Outro(SoundScene):
             r"two close tones beat at the difference of their frequencies; \ fast beats are roughness",
             r"roughness is greatest a quarter of a band apart, \ and for pure tones knows no ratios",
             r"add it over all pairs of partials: \ the valleys are the just ratios, \ and they move with the timbre",
-            r"partials that fit one series fuse into one pitch: \ that tells major from minor",
-            r"the preference itself is learned: \ membrane, \ nerve, \ and listener",
+            r"harmonicity and fusion add information beyond roughness; \ neither alone explains major/minor affect",
+            r"musical exposure shapes preference: \ membrane, \ nerve, \ and listener",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
             "What did we find? The theories of number put the intervals in nearly the right order, and are "
@@ -117,9 +117,8 @@ class Outro(SoundScene):
             "<bookmark mark='b'/> Roughness is greatest a quarter of a critical band apart, and for pure tones "
             "it knows nothing about ratios. <bookmark mark='c'/> Add it up over all the partials of two notes, "
             "and the valleys of the curve are the just ratios. Change the partials, and the valleys move. "
-            "<bookmark mark='d'/> Partials that fit one harmonic series fuse into a single pitch, and that is "
-            "what tells a major chord from a minor one. <bookmark mark='e'/> And the preference for consonance "
-            "is learned. Three layers: the membrane, the nerve, and the listener."
+            "<bookmark mark='d'/> Harmonicity and fusion add information beyond roughness. They distinguish some aspects of major and minor without explaining their whole musical character. <bookmark mark='e'/> And the preference for consonance "
+            "depends strongly on musical exposure. Three layers: the membrane, the nerve, and the listener."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, r in zip("abcde", card.rows[1:]):
@@ -137,7 +136,7 @@ class Outro(SoundScene):
             r"partial $n$ of the lower exactly when $m$ is a multiple of $q$ and $n$ the same multiple of $p$. \ What fraction of the upper note's partials coincide?",
             r"\textbf{Ear.} \ The lab plays one interval twice: \ once in an ordinary tone, \ once in a tone whose partials were stretched. \ "
             r"Say which version is smoother, \ and so whether the interval is an octave or a stretched octave.",
-            r"\textbf{Build.} \ Compute the dissonance curve of a tone with partials at 1, \ 2.76, \ 5.40 and 8.93 (a bar struck at its middle), \ "
+            r"\textbf{Build.} \ Compute the dissonance curve of a tone with partials at 1, \ 2.76, \ 5.40 and 8.93 (free-bar bending modes), \ "
             r"and list its valleys. \ Build a five-note scale from them and play the Tune on it.",
             r"$\bigstar$ \ Fit weights for roughness, \ harmonicity and familiarity to published ratings of the twelve intervals, \ "
             r"and predict the rating of every triad. \ Where is the fit worst, \ and what would a fourth term have to measure?",

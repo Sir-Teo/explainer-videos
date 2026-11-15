@@ -31,8 +31,7 @@ class Number(SoundScene):
                        ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 1.6 + DOWN * 1.5)
         with self.voiceover(
             "Part 1 began where the science of music began: with a string and a movable bridge. "
-            "<bookmark mark='a'/> Stop the string at half its length, and the two parts sound an octave apart. At "
-            "two thirds, a fifth. At three quarters, a fourth. Two to one, three to two, four to three. "
+            "<bookmark mark='a'/> Stop the string at half its length, and the stopped portion sounds an octave above the open string. At two thirds of the original length, a fifth above the open string. At three quarters, a fourth. Two to one, three to two, four to three. "
             "<bookmark mark='b'/> The Pythagoreans noticed that these use only the numbers one, two, three and "
             "four, which add up to ten and can be laid out as a triangle. They concluded that consonance simply "
             "is small whole numbers, and that the universe is built on the same plan. <bookmark mark='c'/> Two "
@@ -55,7 +54,7 @@ class Number(SoundScene):
         card = history_card(1739, r"Leonhard Euler, \ St Petersburg",
                             r"\textit{Tentamen novae theoriae musicae}: a number for how sweet an interval is. The lower the number, the sweeter.",
                             width=5.6).to_corner(UL, buff=0.4)
-        rule = VGroup(label(r"take the smallest number that both sides of the ratio divide", font_size=26),
+        rule = VGroup(label(r"reduce the ratio; \\ take the least common multiple", font_size=26),
                       label(r"split it into primes", font_size=26),
                       label(r"add up each prime, \ less one; \ then add one", font_size=26)).arrange(DOWN, buff=0.18, aligned_edge=LEFT).scale(0.92).move_to(RIGHT * 3.1 + UP * 2.3)
         ex = VGroup(MathTex(r"3:2 \;\longrightarrow\; 6 = 2 \times 3", font_size=36),
@@ -66,7 +65,7 @@ class Number(SoundScene):
         with self.voiceover(
             "In 1739 Leonhard Euler, the most productive mathematician who ever lived, tried to make the idea "
             "exact. He wanted a single number for the sweetness of any interval. <bookmark mark='a'/> His recipe: "
-            "take the smallest number that both sides of the ratio divide into. Split it into primes. Add up the "
+            "write the ratio in lowest terms, then take the least common multiple of its two integers. Split it into primes. Add up the "
             "primes, taking one off each, and add one at the end. <bookmark mark='b'/> For the fifth, three to "
             "two, the smallest common multiple is six, which is two times three. One, plus two, plus one: four. "
             "The lower the number, the sweeter the interval. <bookmark mark='c'/> Try it. What is Euler's number "
@@ -83,7 +82,7 @@ class Number(SoundScene):
         self.wait(1.5)
         with self.voiceover(
             "Five and four both divide twenty, which is two times two times five. One, and one, and four, and "
-            "one more: seven. A little less sweet than the fifth, which is what every musician would say."
+            "one more: seven. A little less sweet than the fifth, consistent with the usual ranking in Western tonal music."
         ):
             self.play(FadeOut(ask), FadeIn(ans))
         self.wait(0.3)
@@ -102,7 +101,7 @@ class Number(SoundScene):
             b = Rectangle(width=0.62, height=h, stroke_width=0, fill_color=col[kind[r["name"]]], fill_opacity=0.85).move_to(base + RIGHT * 0.98 * i + UP * h / 2)
             bars.add(VGroup(b, MathTex(rf"{r['p']}{{:}}{r['q']}", font_size=22, color=GREY_A).next_to(b, DOWN, buff=0.12),
                             label(str(r["gradus"]), font_size=24).next_to(b, UP, buff=0.08)))
-        leg = VGroup(label(r"what musicians call them:", font_size=22, color=GREY_B), label(r"perfect consonances", font_size=22, color=GOOD),
+        leg = VGroup(label(r"Western tonal categories:", font_size=22, color=GREY_B), label(r"perfect consonances", font_size=22, color=GOOD),
                      label(r"imperfect consonances", font_size=22, color=TUNE), label(r"dissonances", font_size=22, color=BAD)
                      ).arrange(DOWN, buff=0.1, aligned_edge=LEFT).to_corner(UL, buff=0.5)
         head = label(r"Euler's number for thirteen intervals", font_size=30, color=GREY_A).to_edge(UP, buff=0.45).shift(RIGHT * 1.5)
@@ -114,9 +113,8 @@ class Number(SoundScene):
             "the fourth five. Then come the thirds and sixths, at seven and eight. The dissonances are on the "
             "right, and last of all the tritone, at fourteen. A formula written by a mathematician has put "
             "almost everything in the order that ears had already chosen. <bookmark mark='b'/> Almost. The whole "
-            "tone, nine to eight, scores eight: exactly as sweet as a minor third. No musician would agree. But "
-            "that is a quibble. There is a much deeper problem, and it is the same for every theory built on "
-            "ratios."
+            "tone, nine to eight, scores eight: exactly as sweet as a minor third. That conflicts with the usual Western tonal classification. But "
+            "that is a quibble. There is a much deeper problem, and it is a problem for exact integer-complexity measures without any tolerance for tuning deviations."
         ) as vo:
             self.play(FadeIn(head), FadeIn(leg))
             vo.wait_until("a")
@@ -152,12 +150,10 @@ class Number(SoundScene):
         with self.voiceover(
             "A was the pure one. B is five hundredths of a semitone too wide, and if you listened closely you "
             f"heard it swell and fade, about {say(d['wide_beat'], 1)} times a second. But it is plainly still a "
-            "fifth, and hardly any worse. <bookmark mark='a'/> Now ask the arithmetic. The nearest simple "
-            f"fraction to B's ratio is {p} to {qq}. Euler's number leaps from {d['pure_gradus']} to "
-            f"{d['wide_gradus']}. <bookmark mark='b'/> According to every theory of ratios, B should be one of "
-            "the ugliest sounds imaginable, and a fifth that was off by a millionth of a semitone would be "
-            "uglier still. That cannot be right. A small change in a sound cannot be a huge change in its "
-            "sweetness. And no instrument has ever played an exact ratio anyway. Whatever the ear is doing, it is "
+            f"fifth, and hardly any worse. <bookmark mark='a'/> Now ask the arithmetic. A rational approximation using denominators no larger than four hundred is {p} to {qq}. Euler's number leaps from {d['pure_gradus']} to "
+            f"{d['wide_gradus']}. <bookmark mark='b'/> Under this exact integer-complexity measure, that approximation is ranked among "
+            "the most complex intervals. A different rational approximation can give another large score, so the result depends on how the ratio is represented. That cannot be right. A small change in a sound cannot be a huge change in its "
+            "sweetness. Real instruments drift and are tuned only to finite accuracy. Whatever the ear is doing, it is "
             "not arithmetic on whole numbers. It must be something smooth, something that can be a little bit "
             "off. We need a physical cause."
         ) as vo:

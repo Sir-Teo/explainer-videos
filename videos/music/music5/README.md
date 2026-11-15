@@ -11,17 +11,16 @@ in `compute.py`. Dates and attributions are the published ones, listed under Sou
   that are smooth; six answers in 2,500 years (Pythagoras, Galileo, Rameau, Euler, Helmholtz, Stumpf); the plan.
 * **1. Number.** The monochord's ratios and the tetractys; Zarlino's six; Euler's *gradus suavitatis* (1739), a
   worked example (3:2 scores 4; 5:4 scores 7); his number for thirteen intervals against what musicians call them;
-  an ear question: a fifth of 3:2 and one five cents wide, whose nearest simple ratio is 173:115 and whose Euler
+  an ear question: a fifth of 3:2 and one five cents wide, approximated by 173:115 when the denominator is limited to 400 and whose Euler
   number is 199. A small change in a sound cannot be a huge change in its sweetness.
 * **2. Pulses that coincide.** Galileo (1638); two trains of clicks, three against two, a hundred times faster by
   the end: a rhythm becomes a fifth; the length of the repeating pattern as a measure; the same flaw; and why to
   keep the idea (Part 4: the nerve fires in time with the wave).
-* **3. Beats.** Two close tones add up to one tone that swells and fades at the difference of their frequencies
+* **3. Beats.** Two close tones have a rapid carrier and an envelope that swells at the difference of their frequencies; their spectrum still has two lines
   (the sum-to-product identity); 1, 4 and 12 beats a second; a worked example (220 and 222 Hz: two beats a
   second), and one tone lowered onto another until the beats stop; from flutter to roughness; Helmholtz's theory.
 * **4. Roughness, measured.** Plomp and Levelt (1965): roughest a quarter of a critical band apart, smooth beyond
-  one band; an ear question: two pure tones, one climbing an octave (roughest in the first second, and nothing at
-  all at the tritone, the fifth or the octave); a pure fifth and a pure tritone, both smooth.
+  one band; an ear question: two pure tones, one climbing an octave (roughest in the first second, and little modeled roughness at the tritone, fifth or octave for these pitches); a pure fifth and a pure tritone, both smooth.
 * **5. A curve with no ratios in it.** Seven partials each, ninety-one pairs; a worked example (in a fifth,
   partials 3 and 2, and 6 and 4, coincide; in a tritone they miss by 49 and 57 Hz); the dissonance curve, whose
   valleys are 6:5, 5:4, 4:3, 3:2, 5:3 and 2:1 (and 7:6, 7:5, 7:4) to within a cent; the curve heard as one
@@ -34,8 +33,8 @@ in `compute.py`. Dates and attributions are the published ones, listed under Sou
   pitch for an octave, fifth, fourth and third, weaker as the common period grows: Galileo's pulses, counted by the
   nerve; for headphones, a minor second in both ears and then one tone to each; McDermott, Lehr and Oxenham (2010).
 * **8. Major and minor.** An ear question: two chords of the same three intervals; roughness 0.97 and 0.99; as
-  whole numbers 4:5:6 and 10:12:15, with fundamental basses two and 3.3 octaves down; the diminished and augmented
-  triads, and the warning that listeners rank those two the other way round; a map of every chord of three notes,
+  whole numbers 4:5:6 and 10:12:15, with common-series fundamentals two and 3.3 octaves down (not necessarily musical roots); the diminished and augmented
+  triads, and the warning that listeners rank those two the other way round; a sampled map of three-note chords,
   whose valleys are the major and minor triads, their inversions, and two stacked fourths.
 * **9. What is learned.** A history of what counted as consonant; the major third of the early theorists (81:64)
   beside the pure one (5:4); the Tsimane' (McDermott et al., 2016); three layers.
@@ -61,8 +60,8 @@ in `compute.py`. Dates and attributions are the published ones, listed under Sou
 | `curve` | the dissonance curve of a tone of seven partials; its minima; one note climbing an octave | Sethares's minima: 7:6, 6:5, 5:4, 4:3, 7:5, 3:2, 5:3, 7:4, 2:1 |
 | `worked` | every pair of partials of a fifth and of a tritone that share a band | 3 = 2 × 1.5 and 6 = 4 × 1.5 coincide |
 | `stretched` | the same curve with partials at k^(log₂2.1) | each minimum at its old ratio ^ log₂2.1 (0.0003) |
-| `fusion` | Part 4's pitch model on dyads and on 4:5:6 in pure tones; a minor second, diotic and dichotic | the fundamental bass, within 5 cents |
-| `triads` | roughness and fundamental bass of four triads; roughness of every three-note chord on a grid | major and minor within 1.5% of each other |
+| `fusion` | Part 4's pitch model on dyads and on 4:5:6 in pure tones; a minor second, diotic and dichotic | the common-series fundamental, within 5 cents |
+| `triads` | roughness and common-series fundamental of four triads; roughness of every three-note chord on a grid | major and minor within 1.5% of each other |
 | `culture` | a major third of 81:64 against 5:4 | 21.5 cents; 16 beats a second on middle C |
 | `tune` | Variation 5 and the roughness of its dyads in both timbres | 3.7 times |
 | `nextpart` | middle C and the C twelve pure fifths on | the Pythagorean comma, 23.46 cents |
@@ -104,8 +103,7 @@ python -m videos.music.labs 5                                  # the lab (writes
    *Solution.* lcm(16, 9) = 144 = 2⁴·3², so Γ = 1 + 4·1 + 2·2 = 9. lcm(7, 4) = 28 = 2²·7, so Γ = 1 + 2·1 + 6 = 9.
    Euler's formula cannot choose between them. The roughness curve can: 7:4 (969 cents) is one of its valleys,
    because the seventh partial of the lower note meets the fourth of the upper, while 16:9 (996 cents) lies on the
-   slope beside it. The formula charges a prime its full size however it is used; the ear only asks whether partials
-   meet. (The lab prints both numbers.)
+   slope beside it. The formula charges a prime its full size however it is used; this model rewards coinciding partials. (The lab prints both numbers.)
 
 2. **Which partials meet.** Two notes have harmonic partials and stand in the ratio p:q in lowest terms. Show that
    partial m of the upper coincides with partial n of the lower exactly when m is a multiple of q and n the same
@@ -125,8 +123,7 @@ python -m videos.music.labs 5                                  # the lab (writes
    The lab prints the interval and Monochord's roughness for both versions (0.04 against 0.40, or 0.41 against
    0.02) after you have listened.
 
-4. **Build.** Compute the dissonance curve of a tone with partials at 1, 2.76, 5.40 and 8.93 (a bar struck at its
-   middle), and list its valleys. Build a five-note scale from them and play the Tune on it.
+4. **Build.** Compute the dissonance curve of a tone with partials at 1, 2.76, 5.40 and 8.93 (the first four free-bar bending-mode ratios), and list its valleys. Build a five-note scale from them and play the Tune on it.
 
    *Solution sketch.* The lab does the first half with `PARTIALS = [1, 2.76, 5.40, 8.93]`. Sharp valleys lie
    wherever a partial of one tone meets a partial of the other, at the ratios between the partials: 1.654

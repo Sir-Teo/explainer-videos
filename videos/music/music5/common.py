@@ -9,7 +9,7 @@ from explainer.music.kit import *  # noqa: F403
 from .compute import CACHE, CLIPS, load  # noqa: F401
 
 PART = 5
-clip = clip_loader(CACHE, CLIPS)
+clip = clip_loader(CACHE, CLIPS, item_aliases={"next": "nextpart"})
 SMOOTH, ROUGH = GOOD, BAD
 
 

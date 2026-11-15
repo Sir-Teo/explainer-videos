@@ -19,22 +19,21 @@ class Curve(SoundScene):
         d = load("curve")
         n = d["partials"]
         base = LEFT * 5.6 + DOWN * 0.3
-        unit = 10.6 / 7.6
+        unit = 10.6 / 10.8
         axis = Line(base, base + RIGHT * 10.9, color=GREY_C, stroke_width=2)
         amps = [d["rolloff"] ** k for k in range(n)]
         low = VGroup(*[Line(base + RIGHT * unit * k, base + RIGHT * unit * k + UP * 2.2 * a, color=AIR, stroke_width=6) for k, a in zip(range(1, n + 1), amps)])
         up = VGroup(*[Line(base + RIGHT * unit * 1.5 * k, base + RIGHT * unit * 1.5 * k + UP * 2.2 * a, color=TUNE, stroke_width=6)
-                      for k, a in zip(range(1, n + 1), amps) if 1.5 * k < 7.7])
-        ticks = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(base + RIGHT * unit * k, DOWN, buff=0.12) for k in range(1, 8)])
+                      for k, a in zip(range(1, n + 1), amps) if 1.5 * k < 10.8])
+        ticks = VGroup(*[MathTex(str(k), font_size=22, color=GREY_B).next_to(base + RIGHT * unit * k, DOWN, buff=0.12) for k in range(1, 11)])
         xl = label(r"frequency, \ in multiples of the lower note", font_size=22, color=GREY_B).next_to(axis, DOWN, buff=0.5)
         leg = VGroup(label(r"the lower note: \ seven partials", font_size=26, color=AIR), label(r"a note a fifth above: \ seven more", font_size=26, color=TUNE)
                      ).arrange(DOWN, buff=0.12, aligned_edge=LEFT).to_corner(UR, buff=0.5)
-        count = label(rf"{n} + {n} partials: \ {2 * n * (2 * n - 1) // 2} pairs, \ each with its own roughness. \ Add them up.", font_size=30, color=EAR).to_edge(DOWN, buff=0.5)
+        count = label(rf"{n} + {n} partials: \ {2 * n * (2 * n - 1) // 2} pairs in the roughness model; \ add their contributions.", font_size=30, color=EAR).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "A plucked string, a voice, a pipe: every one of them sounds a fundamental and a whole row of "
-            "partials above it. That was Parts 1 and 3. <bookmark mark='a'/> So when two instruments play two "
-            "notes, the ear does not receive two tones. With seven partials each, it receives fourteen. "
-            "<bookmark mark='b'/> And every one of those fourteen can beat against every other. That is "
+            "Most instrumental tones contain a row of partials, with the fundamental sometimes weak or absent. For this model we give each note seven harmonic partials. That was Parts 1 and 3. <bookmark mark='a'/> So when two instruments play two "
+            "notes, the ear does not receive two tones. With seven partials each, there are fourteen partial contributions, some of which may share a frequency. "
+            "<bookmark mark='b'/> In this pairwise model we consider every pair among the fourteen contributions. That is "
             "ninety-one pairs. For each pair, Plomp and Levelt's curve gives a roughness, which depends on how "
             "far apart the two partials are, measured in bands of the ear. <bookmark mark='c'/> Helmholtz's "
             "proposal, in modern form, is one line long: add them all up."
@@ -51,14 +50,14 @@ class Curve(SoundScene):
     def worked(self):
         d = load("worked")
         title = label(r"A worked example: \ a fifth, \ and a tritone", font_size=36).to_edge(UP, buff=0.4)
-        base, unit = LEFT * 5.9, 11.4 / 7.6
+        base, unit = LEFT * 5.9, 11.4 / 10.8
         rows = VGroup()
         for name, ratio, y in ((r"a fifth, \ 3 : 2", 1.5, 1.2), (r"a tritone, \ 45 : 32", 45 / 32, -1.6)):
             b = base + UP * y
             axis = Line(b, b + RIGHT * 11.6, color=GREY_C, stroke_width=2)
             low = VGroup(*[Line(b + RIGHT * unit * k, b + RIGHT * unit * k + UP * 1.2 * 0.88 ** (k - 1), color=AIR, stroke_width=5) for k in range(1, 8)])
             up = VGroup(*[Line(b + RIGHT * unit * ratio * k, b + RIGHT * unit * ratio * k + UP * 1.2 * 0.88 ** (k - 1), color=TUNE, stroke_width=5)
-                          for k in range(1, 8) if ratio * k < 7.7])
+                          for k in range(1, 8) if ratio * k < 10.8])
             rows.add(VGroup(axis, low, up, label(name, font_size=26, color=GREY_A).next_to(axis, UP, buff=1.35).align_to(axis, LEFT)))
         ask = pause_card(r"Lower note: \ partials 1, 2, 3 \ldots \ Upper note, \ a fifth above: \ 1.5, 3, 4.5 \ldots \\ Which partials of the two notes land in the same place?",
                          width=9.4, font_size=26).move_to(DOWN * 1.9)
@@ -118,11 +117,11 @@ class Curve(SoundScene):
             "<bookmark mark='b'/> Look at where the valleys are. Six to five. Five to four. Four to three. Three "
             "to two. Five to three. Two to one. The minor third, the major third, the fourth, the fifth, the "
             "major sixth, the octave: the consonances of Western music, with the octave and the fifth the "
-            "deepest of all. <bookmark mark='c'/> Nobody put a ratio into this calculation. It contains two "
+            "deepest of all. <bookmark mark='c'/> No preferred musical interval was hard-coded into the roughness rule. The harmonic partial ratios were part of the input timbre. It contains two "
             "things only: a note with harmonic partials, and the width of the ear's filter. The ratios came out. "
             "They are the places where partials of one note fall exactly onto partials of the other. "
             "<bookmark mark='d'/> There are three more valleys, shallower, at ratios with a seven in them. "
-            "Western music has no names for those. Barbershop quartets sing one of them anyway, and we will meet "
+            "They are called the septimal minor third, septimal tritone and harmonic seventh, outside the usual five-limit just-intonation table. Barbershop quartets sing one of them anyway, and we will meet "
             "them in the next part. And notice what has become of chapter one's test. A fifth that is five cents "
             "wide is a point just beside the bottom of a valley: a little rougher, no more. This theory can be a "
             "little bit off."
@@ -168,7 +167,7 @@ class Curve(SoundScene):
             snd.drive(dot, move)
         with self.voiceover(
             "The clearest moments were the fifth, about two thirds of the way through, and the octave at the "
-            "end, where the upper note's partials vanish into the lower note's entirely. You have just heard "
+            "end, where several strong partials coincide and the remaining upper partials are widely separated. You have just heard "
             "Pythagoras's discovery, with the reason attached."
         ):
             self.play(Indicate(g.marks[4], color=GOOD, scale_factor=1.3), Indicate(g.marks[6], color=GOOD, scale_factor=1.3))

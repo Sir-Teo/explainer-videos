@@ -60,13 +60,13 @@ class Timbre(SoundScene):
         leg = VGroup(label(r"the ordinary tone", font_size=24, color=AIR), label(r"the bent tone", font_size=24, color=TUNE)).arrange(RIGHT, buff=0.8).to_edge(UP, buff=0.45)
         last = d["table"][-1]
         arrow = Arrow(g.at(2.0, 0.55), g.at(wide, 0.55), color=GOOD, stroke_width=4, buff=0.0, max_tip_length_to_length_ratio=0.3)
-        al = label(rf"the smoothest interval is no longer 2 : 1. \ It is {wide:g} : 1.", font_size=28, color=GOOD).move_to(g.at(1.45, 0.92))
+        al = label(rf"the octave-region valley moves from 2 : 1 to {wide:g} : 1.", font_size=28, color=GOOD).move_to(g.at(1.45, 0.92))
         res = label(rf"every valley has moved to its old ratio raised to the power $\log_2 {wide:g}$: \ predicted and found agree to {max(d['worst_gap'], 0.0005):.4f}", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Monochord can check that in a second. Here again is the curve for the ordinary tone, with its "
             "valleys on the just ratios. <bookmark mark='a'/> And here is the same calculation for the bent tone. "
             "Nothing has changed except where the partials are. Every valley has moved to the right. "
-            f"<bookmark mark='b'/> The deepest one, which used to be the octave, is now at {wide:g} to one: an "
+            f"<bookmark mark='b'/> The prominent octave-region valley is now at {wide:g} to one: an "
             "interval that an ordinary musician would call a badly out-of-tune octave. And at two to one, where "
             "the true octave is, the curve stands on a peak. <bookmark mark='c'/> The rule is simple. Each valley "
             "has moved to its old ratio, stretched by the same amount as the partials were. Prediction and "
@@ -114,7 +114,7 @@ class Timbre(SoundScene):
             "In the ordinary tone, the exact octave is smooth and the wide one grinds, as you would expect. "
             "<bookmark mark='a'/> In the bent tone it is the other way round. The exact octave is the rough one, "
             f"by a factor of {say(ratio)} in Monochord's sum, and the wide one is smooth. <bookmark mark='b'/> That "
-            "was the sound that opened this part. Its partials had been stretched, so its octave had moved, and "
+            "was the sound that opened this part. Its partials had been stretched, so its low-roughness octave-like spacing had moved, and "
             "a true two to one put fourteen partials in each other's way. An interval is not consonant or "
             "dissonant. An interval on a particular timbre is. Pythagoras's ratios are not a law of number. "
             "They are a fact about strings, pipes and voices: things whose partials are whole multiples."
@@ -123,7 +123,7 @@ class Timbre(SoundScene):
             vo.wait_until("a")
             self.play(FadeIn(vals[2]), FadeIn(vals[3]))
             vo.wait_until("b")
-            law = label(r"consonance belongs to an interval \emph{and} a timbre, \ together", font_size=32, color=EAR).to_edge(UP, buff=0.6)
+            law = label(r"modeled roughness depends on interval \emph{and} timbre", font_size=32, color=EAR).to_edge(UP, buff=0.6)
             self.play(FadeIn(law))
         self.wait(0.3)
         self.clear_scene()

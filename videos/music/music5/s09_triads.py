@@ -53,8 +53,7 @@ class Triads(SoundScene):
             "between them is the most famous difference in Western music. <bookmark mark='a'/> But ask "
             f"Monochord for their roughness, and it answers {say(r['major']['rough'], 2)} and "
             f"{say(r['minor']['rough'], 2)}: the same to within "
-            f"{say(100 * d['same_roughness'], 1)} percent. It has to. The same pairs of notes are present in "
-            "both, so nearly the same pairs of partials are beating. Roughness cannot tell major from minor."
+            f"{say(100 * d['same_roughness'], 1)} percent. That near equality is specific to these parameters: the interval types match, but their absolute frequencies and partial interactions differ. This aggregate roughness score does not explain the major-minor character."
         ) as vo:
             self.play(FadeOut(q), FadeIn(names))
             vo.wait_until("a")
@@ -67,7 +66,7 @@ class Triads(SoundScene):
         d = load("triads")
         c = clip("triads.four")
         cols = {"major": SMOOTH, "minor": AIR, "diminished": ROUGH, "augmented": LIMIT}
-        head = VGroup(*[label(t, font_size=22, color=GREY_B) for t in (r"chord", r"as whole numbers", r"repeats after", r"its fundamental bass lies", r"roughness")])
+        head = VGroup(*[label(t, font_size=22, color=GREY_B) for t in (r"chord", r"as whole numbers", r"repeats after", r"common-series \\ fundamental", r"roughness")])
         xs = (-6.3, -4.2, -1.3, 1.4, 5.4)
         for h, x in zip(head, xs):
             h.move_to(RIGHT * x + UP * 2.3, aligned_edge=LEFT)
@@ -76,12 +75,12 @@ class Triads(SoundScene):
             a, b, c_ = r["as_integers"]
             row = VGroup(label(r["name"], font_size=30, color=cols[r["name"]]), MathTex(rf"{a} : {b} : {c_}", font_size=32),
                          label(rf"{r['repeat']} cycles", font_size=26, color=GREY_A),
-                         label(rf"{r['octaves_below']:.1f} octaves below its lowest note", font_size=24, color=EAR), label(rf"{r['rough']:.2f}", font_size=26))
+                         label(rf"{r['octaves_below']:.1f} octaves below \\ its lowest note", font_size=23, color=EAR), label(rf"{r['rough']:.2f}", font_size=26))
             for cell, x in zip(row, xs):
                 cell.move_to(RIGHT * x + UP * (1.45 - 0.95 * k), aligned_edge=LEFT)
             rows.add(row)
         with self.voiceover(
-            "Harmonicity can. Write each chord as whole numbers. <bookmark mark='a'/> The major triad is four to "
+            "A harmonicity measure can distinguish these examples. The common-series fundamental we calculate is an arithmetic period, not necessarily a chord's musical root or an audible bass note. Write each chord as whole numbers. <bookmark mark='a'/> The major triad is four to "
             "five to six. Its three notes are neighbouring partials of one series, whose fundamental lies "
             "exactly two octaves below the chord's lowest note. That is the note you heard inside it in the last "
             "chapter. The whole chord repeats every four cycles of its lowest note. <bookmark mark='b'/> The "
@@ -133,7 +132,7 @@ class Triads(SoundScene):
                        *[label(str(k), font_size=18, color=GREY_B).next_to(at(steps[0], k), LEFT, buff=0.1) for k in range(1, 7)])
         xl = label(r"lower interval (semitones)", font_size=20, color=GREY_B).next_to(frame, DOWN, buff=0.4)
         yl = label(r"upper interval (semitones)", font_size=20, color=GREY_B).rotate(PI / 2).next_to(frame, LEFT, buff=0.45)
-        head = label(r"every chord of three notes: \ bright is smooth", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"three-note chords on this interval grid: \ bright is low roughness", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
         named = [v for v in d["valleys"] if v["name"]]
         marks = VGroup(*[Circle(radius=0.14, color=WHITE, stroke_width=2.5).move_to(at(v["lower"], v["upper"])) for v in named])
         lst = VGroup(*[label(rf"({v['lower']:.0f}, {v['upper']:.0f}) \quad {v['name']}", font_size=24, color=GREY_A) for v in sorted(named, key=lambda v: (v["name"]))]
@@ -144,11 +143,11 @@ class Triads(SoundScene):
                     ).arrange(DOWN, buff=0.1, aligned_edge=LEFT).next_to(lst, DOWN, buff=0.45).align_to(lst, LEFT)
         with self.voiceover(
             "With a formula for roughness we can do something no theorist before the computer could: lay out "
-            "every possible chord of three notes at once. <bookmark mark='a'/> Across, the interval from the "
+            "a sampled range of three-note chords. <bookmark mark='a'/> Across, the interval from the "
             "bottom note to the middle one. Up, the interval from the middle to the top. Bright is smooth, dark "
             "is rough. The dark bands along the edges are chords containing a semitone or a tone. "
             "<bookmark mark='b'/> And the bright spots, the valleys of this landscape, are chords with names. "
-            "Four and three semitones: the major triad. Three and four: the minor. And around them the same two "
+            "Near four and three semitones: the major triad. Three and four: the minor. And around them the same two "
             "chords with their notes in another order, which musicians call inversions. <bookmark mark='c'/> One "
             "valley has no place in classical harmony: two fourths stacked. Roughness rates it as smooth as a "
             "major triad. But as whole numbers it is nine to twelve to sixteen, and it fuses poorly. Classical "
