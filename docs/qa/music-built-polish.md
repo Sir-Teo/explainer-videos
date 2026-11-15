@@ -14,8 +14,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 7 — Strings, Hammers and Bows | Complete; [repair and verification record](music/part07.md) | Open |
 | 8 — Pipes, Reeds and Voices | Complete; [repair and verification record](music/part08.md) | Open |
 | 9 — Drums, Bars and Bells | Complete; [repair and verification record](music/part09.md) | Open |
-| 10 — Writing It Down | In progress | Open |
-| 11–68 | Queued | Open |
+| 10 — Writing It Down | Complete; [repair and verification record](music/part10.md) | Open |
+| 11 — Rhythm and Meter | In progress | Open |
+| 12–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -49,8 +50,11 @@ motion checks pass. Three native 1080p stills inspected. Local identities: `rend
 Part 9: twelve chapter previews reviewed; 26 tests, the lab, 12 sound-gate cases and 16 listening-window
 motion checks pass. Five native 1080p stills inspected. Local identities: `renders/qa/music9/source-receipt.json`.
 
-**Current: Part 10.** Source repairs complete; preview review and final gates are in progress. Part 11 source
-review and repairs are prepared while rendering continues. Automated endpoint preflight is also running
+Part 10: twelve chapter previews reviewed; 40 tests, the lab, 12 sound-gate cases and 12 listening-window
+motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music10/source-receipt.json`.
+
+**Current: Part 11.** Source repairs complete; preview review and final gates are in progress. Part 12 source
+review is prepared while rendering continues. Automated endpoint preflight is also running
 through the remaining episodes; its warnings require review and do not constitute episode approval. Keep numerical correctness, sampled visual review,
 motion detection, native-resolution checks and final listening/playback coverage distinct.
 

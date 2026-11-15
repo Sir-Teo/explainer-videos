@@ -47,7 +47,7 @@ class Bits(SoundScene):
         d = load("bits")
         s, a = d["sizes"], d["audio"]
         rows = [(r"gongche, \ as text", s["gongche"], TUNE), (r"jianpu, \ as text", s["jianpu"], TUNE), (r"MIDI", s["MIDI"], TUNE), (r"MEI", s["MEI"], TUNE), (r"MusicXML", s["MusicXML"], TUNE),
-                (r"sound: \ Opus", a["Opus"], AIR), (r"sound: \ MP3", a["MP3"], AIR), (r"sound: \ lossless (FLAC)", a["FLAC"], AIR), (r"sound: \ as on a CD", a["WAV"], AIR)]
+                (r"sound: \ Opus", a["Opus"], AIR), (r"sound: \ MP3", a["MP3"], AIR), (r"sound: \ lossless (FLAC)", a["FLAC"], AIR), (r"sound: \ mono PCM16, \ 48 kHz", a["WAV"], AIR)]
         bars = bar_rows(rows).move_to(DOWN * 0.3)
         bars.shift(LEFT * bars.get_center()[0])
         head = label(r"one tune, \ forty-two notes: \ how many bytes?", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
@@ -57,7 +57,7 @@ class Bits(SoundScene):
             f"Written as text, in gongche or in jianpu, about {say(round(s['jianpu'], -1))}. As a MIDI "
             f"file, {say(s['MIDI'])}. As MusicXML, more than five thousand, because XML spells everything "
             f"out. <bookmark mark='b'/> And as sound? The Tune played once on our piano lasts "
-            f"{say(d['seconds'])} seconds. Stored the way a compact disc stores sound, that is "
+            f"{say(d['seconds'])} seconds. Stored as this example's mono sixteen-bit PCM at forty-eight kilohertz, rather than a CD's forty-four point one kilohertz stereo, that is "
             f"{say(a['WAV'] / 1e6, 1)} million bytes. Packed without any loss, {say(round(a['FLAC'] / 1e3, -1))} "
             f"thousand. As an MP3, {say(round(a['MP3'] / 1e3, -1))} thousand. The axis here is logarithmic: "
             "every grid line is ten times the one before it."
@@ -80,19 +80,17 @@ class Bits(SoundScene):
             MathTex(rf"\text{{the sound: }} {d['seconds']:.1f} \text{{ s}} \times 48{{,}}000 \times 16 \text{{ bits}} = {d['audio_bits'] / 1e6:.1f} \text{{ million bits}}", font_size=36, color=AIR),
         ).arrange(DOWN, buff=0.55, aligned_edge=LEFT).move_to(UP * 1.2)
         big = VGroup(label(r"sound : page \ $\approx$", font_size=36, color=GREY_A), label(r"{:,.0f} : 1".format(ratio).replace(",", "{,}"), font_size=56, color=TUNE)).arrange(RIGHT, buff=0.4).move_to(DOWN * 1.7)
-        cmp_ = label(rf"MP3 : CD sound \ $\approx$ \ 1 : {d['audio']['WAV'] / d['audio']['MP3']:.0f}; \ \ Opus \ 1 : {d['audio']['WAV'] / d['audio']['Opus']:.0f}", font_size=28, color=AIR).next_to(big, DOWN, buff=0.45)
+        cmp_ = label(rf"MP3 : PCM sound \ $\approx$ \ 1 : {d['audio']['WAV'] / d['audio']['MP3']:.0f}; \ \ Opus \ 1 : {d['audio']['WAV'] / d['audio']['Opus']:.0f}", font_size=28, color=AIR).next_to(big, DOWN, buff=0.45)
         with self.voiceover(
-            "Those are files, with their overheads. How few bits would do? The Tune uses six different "
+            "Those are files, with their overheads. Here is one compact code, assuming the decoder already knows the pitch vocabulary, duration unit and tempo. The Tune uses six different "
             "pitches, which takes three bits, and two lengths, which takes one. Four bits a note, "
             f"forty-two notes: {say(d['plain_bits'])} bits. Twenty-one bytes. <bookmark mark='a'/> And the "
-            "Tune repeats itself. It has only three different phrases, used in the order A, A, B, B, A, A. "
+            "Tune repeats itself. It has only three distinct phrases, A, A-prime and B, used as A, A-prime, B, B, A, A-prime. "
             f"Describe it that way and {say(d['structured_bits'])} bits are enough. <bookmark mark='b'/> "
             f"The sound, at forty-eight thousand samples a second and sixteen bits a sample, is "
             f"{say(d['audio_bits'] / 1e6, 1)} million bits. <bookmark mark='c'/> So the sound holds about "
-            f"{say(ratio / 1000)} thousand times as many bits as the page. Compare the best that audio "
-            "engineering can do. <bookmark mark='d'/> An MP3 shrinks this sound six times; a modern codec, "
-            "sixteen. A score shrinks it a hundred thousand times. No algorithm does that. The score gets "
-            "away with it because its decoder is a trained musician with an instrument. And that tells "
+            f"{say(ratio / 1000)} thousand times as many bits as the page. Compare our chosen codec settings. <bookmark mark='d'/> An MP3 shrinks this sound six times; a modern codec, "
+            "sixteen. The symbolic code is much smaller, but this is not lossless audio compression. It omits the waveform and assumes a decoder with an instrument or synthesis model; parametric algorithms can use such prior knowledge too. And that tells "
             "you where the other bits are. They are not on the page. The player supplies them."
         ) as vo:
             self.play(FadeIn(lines[0]))
@@ -113,8 +111,8 @@ class Bits(SoundScene):
         c = clip("bits.pair")
         st = Staff(phrase_score(0, 4), width=11.6, space=0.2, show_time=False).move_to(UP * 1.6)
         self.st = st
-        card = listen_card(r"The same fourteen notes, \ twice. \ One is a machine playing the page exactly. \ Which?", width=9.6).move_to(DOWN * 1.2)
-        with self.voiceover("How much does the player supply? Here are the same fourteen notes, twice. One of the two is a machine playing the page exactly as written. Which?"):
+        card = listen_card(r"The same fourteen notes, \ twice. \ One uses mechanically regular timing and levels. \ Which?", width=9.6).move_to(DOWN * 1.2)
+        with self.voiceover("How much does the player supply? Here are the same fourteen notes, twice. Both are synthesized; one uses mechanically regular timing and levels. Which?"):
             self.play(FadeIn(st), FadeIn(card))
         self.wait(1.0)
         bx = boxes(("A", "B"), buff=1.2, width=2.4, height=1.2, font_size=48).move_to(DOWN * 1.3)
@@ -144,18 +142,18 @@ class Bits(SoundScene):
         facts = VGroup(label(rf"up to {d['largest_ms']:.0f} ms off the beat", font_size=24, color=TIME).next_to(base_ms, RIGHT, buff=-3.2).shift(UP * 0.75),
                        label(rf"a range of {d['db_range']:.0f} dB", font_size=24, color=LEVEL).next_to(base_db, RIGHT, buff=-2.4).shift(UP * 0.75))
         with self.voiceover(
-            "B was the machine. A was the same page played by four rules that researchers have measured "
+            "B was the mechanically regular version. A was the same page played by four rules that researchers have measured "
             "in real performances. Each phrase speeds up into its middle and relaxes at its end. The "
             "faster, the louder. The ending slows the way a runner comes to a stop. And a repeated note "
             "is separated from the one before. <bookmark mark='a'/> Here is how far A strayed from the "
             f"page. Against a steady beat its notes come up to {say(d['largest_ms'])} milliseconds early "
             f"or late. <bookmark mark='b'/> Their levels range over {say(d['db_range'])} decibels. And the "
             f"last note is held {say(d['last_ratio'], 1)} times its written length. None of this is on "
-            "the page. <bookmark mark='c'/> To write it down, for every note when exactly, how long "
-            f"exactly, and how loud, takes about nineteen more bits a note: {say(d['perf_bits'])} bits, "
-            "five times what the notes themselves took. That is what a piano roll or a MIDI file of a "
-            f"performance holds. And it is still about {say(round(d['audio_bits'] / (d['perf_bits'] + d['plain_bits']), -3) / 1000)} "
-            "thousand times smaller than the sound. The rest of the bits are the piano and the room, "
+            "the page. <bookmark mark='c'/> To write it down, for every note quantized onset, duration "
+            f"and level, takes about nineteen more bits a note in an illustrative quantized budget, with two-millisecond onset bins, ten-millisecond duration-correction bins, and thirty-two level bins: {say(d['perf_bits'])} bits, "
+            "five times what the notes themselves took. This is a toy budget, not an exact performance record or MIDI file-size prediction. "
+            f" And it is still about {say(round(d['audio_bits'] / (d['perf_bits'] + d['plain_bits']), -3) / 1000)} "
+            "thousand times smaller than the sound. Much of the remaining waveform detail comes from the instrument, rendering and room, "
             "which was Act One."
         ) as vo:
             vo.wait_until("a")

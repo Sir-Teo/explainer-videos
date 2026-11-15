@@ -67,7 +67,7 @@ class Guido(SoundScene):
             "Guido was not modest about it. In the preface to his chant book he claimed that with lines and "
             "letters a singer could be trained in a year, or two at most, where ten had been needed. And in "
             "a letter to a friend he reported that his choirboys could sing, correctly, chants they had "
-            "never heard. Nobody had been able to say that before. A tune could now travel without a singer "
+            "never heard. That is Guido's report of his teaching method, rather than proof that no earlier culture could learn from notation. A tune could now travel without a singer "
             "to carry it."
         ):
             self.play(FadeOut(pairs), FadeIn(card))
@@ -79,13 +79,13 @@ class Guido(SoundScene):
         st = self.st
         ax_t = Arrow(st.lines.get_corner(DL) + DOWN * 1.25, st.lines.get_corner(DR) + DOWN * 1.25, buff=0, color=TIME, stroke_width=4, tip_length=0.2)
         ax_p = Arrow(st.lines.get_corner(DL) + LEFT * 0.75 + DOWN * 0.3, st.lines.get_corner(UL) + LEFT * 0.75 + UP * 0.5, buff=0, color=FREQ, stroke_width=4, tip_length=0.2)
-        lt = label(r"time", font_size=28, color=TIME).next_to(ax_t, DOWN, buff=0.1)
+        lt = label(r"event order", font_size=28, color=TIME).next_to(ax_t, DOWN, buff=0.1)
         lp = label(r"pitch", font_size=28, color=FREQ).rotate(PI / 2).next_to(ax_p, LEFT, buff=0.1)
         path = VMobject(color=INK, stroke_width=3).set_points_as_corners([n.get_center() for n in st.notes])
         note = label(r"Nicole Oresme draws quantities against time: \ the 1350s. \ \ Choirs had been reading this for three hundred years.", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "Now look at what this is. <bookmark mark='a'/> From left to right is time. From bottom to top "
-            "is pitch. <bookmark mark='b'/> It is a graph. Nicole Oresme, who is often given the credit for "
+            "is pitch. <bookmark mark='b'/> It resembles a graph, but horizontal spacing here primarily orders events; it does not measure elapsed time uniformly. Vertical position counts diatonic steps, not hertz. Nicole Oresme, who is often given the credit for "
             "the first graphs of a quantity that changes in time, drew his in the thirteen fifties. By then "
             "choirs all over Europe had been reading one for three hundred years."
         ) as vo:
@@ -171,10 +171,10 @@ class Guido(SoundScene):
         gap = SurroundingRectangle(VGroup(staff.notes[2], staff.notes[3]), color=BAD, buff=0.12, stroke_width=3)
         with self.voiceover(
             "The hymn taught one more thing, and it is the thing the staff does not show. Those six steps "
-            "are not equal. <bookmark mark='a'/> From mi up to fa is half the size of the others: a "
+            "are not equal. <bookmark mark='a'/> From mi up to fa is the smaller interval: a "
             "semitone. Tone, tone, semitone, tone, tone. <bookmark mark='b'/> Now look at the same six "
             "notes on Guido's lines. Line, space, line, space: every step looks the same. "
-            "<bookmark mark='c'/> The staff counts the steps of a scale. It does not measure distance. "
+            "<bookmark mark='c'/> The staff counts diatonic steps, not equal acoustic intervals. In equal temperament a semitone is half a tone in cents; medieval tunings differ in detail. "
             "Which of its steps are the small ones is not written anywhere on the page; the singer has to "
             "know. That is why the staff later needed sharps, flats and key signatures, and we will come to "
             "those in Part 12. For now, notice that even Guido's page is written for someone who already "

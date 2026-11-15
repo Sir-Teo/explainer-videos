@@ -37,12 +37,12 @@ ones, listed under Sources.
   sign; the Tune in numbers and characters, on Part 8's flute; a guqin character assembled from its parts, and
   no rhythm; graphic scores (after Feldman, 1950, and in the manner of Cardew's *Treatise*).
 * **7. Holes and bytes.** The piano roll (the 1890s; Welte's reproducing piano, 1904); MIDI (1983): the first
-  bytes of the Tune's file, decoded (nine bytes a note, 425 for the Tune); what a key number forgets (E♭ G B♭
+  bytes of the Tune's file, decoded (nine bytes for this example note, 425 for the Tune); what a key number forgets (E♭ G B♭
   E♭ comes back as D♯ G A♯ D♯); an ear question (G♯ and A♭ in quarter-comma meantone, 41 cents apart).
-* **8. The page as data.** MIDI, MusicXML (2004) and MEI; the first note of the Tune three ways; round trips
-  (MusicXML returns all 42 notes with spelling, lengths and words; MIDI returns keys and lengths only); the
+* **8. The page as data.** MIDI, MusicXML 1.0 (2004) and MEI; the first note of the Tune three ways; round trips
+  (MusicXML returns all 42 notes with spelling, lengths and words; our MIDI reader returns keys and lengths only); the
   table of what each notation keeps.
-* **9. How many bits?** The Tune in bytes, from 126 (gongche as text) to 2.7 million (sound as on a CD); 42
+* **9. How many bits?** The Tune in bytes, from 126 (gongche as text) to 2.7 million (48 kHz mono PCM16 sound); 42
   notes × 4 bits = 168 bits; 96 with its repeats; 21.3 million bits of sound: 127,000 to 1, against 6 to 1 for
   an MP3; an ear question (the page played exactly, and by four rules of performance); how far the performance
   strays (69 ms, 8 dB, a last note 1.5 times its length), and what it costs to write that down (798 bits).
@@ -51,7 +51,7 @@ ones, listed under Sources.
   question (a speckled scan read back, with four mistakes); where the field and the encoding standards stand.
   ★ research problem.
 * **Variation 10, recap and problems.** The Tune read from ten notations, two to a phrase, and its sixth phrase
-  played as none of them says; the ledger; what we found; five problems; where it comes back; in practice;
+  played with expressive deviations omitted from these particular score examples; the ledger; what we found; five problems; where it comes back; in practice;
   references; Part 11.
 
 ## What is computed, and what is heard
@@ -98,6 +98,24 @@ Sundberg) with constants chosen to be audible; it is one plausible reading, and 
 *The bit counts* are for this tune and these files: 168 bits is a fixed-length code for this tune's six pitches
 and two lengths, not a universal figure. *The page reader* reads only what `raster.page` draws; it is there to
 show why the first step of the classical pipeline is fragile, and it is not a music reader.
+
+The historical notation drawings are teaching schematics. The three-sign contour toy omits real neumes’
+articulatory and rhythmic detail. Guido helped consolidate staff practice; the historical development was
+not a single invention. Horizontal staff spacing orders events rather than uniformly measuring time.
+Seeger’s descriptive/prescriptive distinction does not make all staff writing descriptive: ordinary scores
+and tablatures both prescribe aspects of performance.
+
+The MIDI example distinguishes the 1983 messaging protocol from later Standard MIDI Files. Nine bytes is
+one example event encoding, not a fixed cost per note. MIDI can carry controllers, bends, lyrics and key
+metadata; the round-trip omissions belong to this implementation. The 41-cent enharmonic distinction is
+scoped to quarter-comma meantone, not a universal consequence of spelling.
+
+The 168- and 96-bit codes assume a shared vocabulary, duration unit, tempo and decoder. They are illustrative
+code lengths, not minimum entropy or lossless waveform compression. The waveform here is 48 kHz mono PCM16,
+not CD-format audio. Codec ratios depend on the selected 128 kb/s MP3 and 32 kb/s Opus settings. The extra
+798 bits are a toy quantized budget: per note, seven bits each for onset and duration correction, and five
+for level. The resolutions are 2 ms, 10 ms and 32 level bins, with agreed ranges; these are not exact
+performance records. Both listening examples are synthesized.
 
 ## Build
 

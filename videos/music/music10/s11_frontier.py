@@ -51,15 +51,7 @@ class Frontier(SoundScene):
                       label(r"first programs: \ the 1960s. \\ Still an open problem.", font_size=26, color=GREY_B)).arrange(DOWN, buff=0.5).move_to(RIGHT * 4.0)
         head = label(r"optical music recognition: \ a toy", font_size=30, color=LIMIT).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Everything so far wrote music down. The frontier is the trip back: a machine that reads a "
-            "page of music as a musician does. It is called optical music recognition. The first programs "
-            "were written in the nineteen sixties, and the problem is still open. To see why, here is the "
-            "textbook method, built into Monochord as a toy. <bookmark mark='a'/> This is a page of the "
-            "Tune as a scanner sees it: pixels. Step one: add up the ink in every row. Staff lines run the "
-            "whole width of the page, so each staff shows up as five spikes. <bookmark mark='b'/> Step "
-            "two: erase the lines. <bookmark mark='c'/> Step three: every blob that is left is a note "
-            "head. How high it sits among the lines gives its pitch, and whether it is hollow gives its "
-            "length. <bookmark mark='d'/> On this clean page the toy reads all forty-two notes correctly."
+            "Everything so far wrote music down. The frontier is the trip back: a machine that reads a page of music as a musician does. It is called optical music recognition. The first programs were written in the nineteen sixties, and the problem is still open. To see why, here is the textbook method, built into Monochord as a toy. <bookmark mark='a'/> This is a page of the Tune as a scanner sees it: pixels. Step one: add up the ink in every row. Staff lines run the whole width of the page, so each staff shows up as five spikes. <bookmark mark='b'/> Step two: erase the lines. <bookmark mark='c'/> Step three: in this deliberately restricted raster, candidate blobs can be treated as note heads. How high it sits among the lines gives its pitch, and whether it is hollow distinguishes the two durations used here; general notation also needs stems, beams, flags and context. <bookmark mark='d'/> On this clean page the toy reads all forty-two notes correctly."
         ) as vo:
             self.play(FadeIn(head), FadeIn(img), FadeIn(back))
             vo.wait_until("a")
@@ -80,12 +72,12 @@ class Frontier(SoundScene):
         img = page_image(d["tilted"], 3.6).move_to(LEFT * 4.1 + UP * 1.3)
         prof = profile_curve(d["tilted_profile"], img, width=1.1)
         cap = label(r"turned by one degree: \ no spikes, \ no staff, \ nothing read", font_size=24, color=BAD).next_to(img, DOWN, buff=0.25).shift(RIGHT * 0.5)
-        g = axes([0, 2.05], [0, 1.08], x_length=5.4, y_length=2.6, xlabel=r"tilt of the page, \ degrees", ylabel=r"notes read", xticks=[0, 0.5, 1, 1.5, 2], yticks=[0, 0.5, 1], font_size=20).move_to(RIGHT * 3.4 + UP * 1.5)
+        g = axes([0, 2.05], [0, 1.08], x_length=5.4, y_length=2.6, xlabel=r"tilt of the page, \ degrees", ylabel=r"fraction read correctly", xticks=[0, 0.5, 1, 1.5, 2], yticks=[0, 0.5, 1], font_size=20).move_to(RIGHT * 3.4 + UP * 1.5)
         naive = curve(g.ax, np.asarray(d["angles"], dtype=float), np.asarray(d["naive"], dtype=float), BAD, stroke_width=4)
-        fixed = curve(g.ax, np.asarray(d["angles"], dtype=float), np.asarray(d["deskewed"], dtype=float) - 0.012, GOOD, stroke_width=4)
+        fixed = curve(g.ax, np.asarray(d["angles"], dtype=float), np.asarray(d["deskewed"], dtype=float), GOOD, stroke_width=4)
         ln = label(r"as it is", font_size=22, color=BAD).next_to(g.ax.c2p(0.45, 0.25), RIGHT, buff=0.1)
         lf = label(r"straightened first", font_size=22, color=GOOD).next_to(g.ax.c2p(1.0, 0.86), DOWN, buff=0.1)
-        g2 = axes([0, 0.125], [0, 1.08], x_length=5.4, y_length=1.9, xlabel=r"fraction of pixels flipped by specks", ylabel=r"notes read", xticks=[0, 0.04, 0.08, 0.12], yticks=[0, 0.5, 1], font_size=20).move_to(RIGHT * 3.4 + DOWN * 2.0)
+        g2 = axes([0, 0.125], [0, 1.08], x_length=5.4, y_length=1.9, xlabel=r"fraction of pixels flipped by specks", ylabel=r"fraction read correctly", xticks=[0, 0.04, 0.08, 0.12], yticks=[0, 0.5, 1], font_size=20).move_to(RIGHT * 3.4 + DOWN * 2.0)
         speck = curve(g2.ax, np.asarray(d["speck_levels"], dtype=float), np.asarray(d["speck_accuracy"], dtype=float), LIMIT, stroke_width=4)
         with self.voiceover(
             "Now turn the page by one degree, as any hand-fed scanner will. <bookmark mark='a'/> The staff "
@@ -136,8 +128,7 @@ class Frontier(SoundScene):
         with self.voiceover(
             f"{say(len(wrong)).capitalize()}. <bookmark mark='a'/> One note that is not on the page at all: a "
             f"cluster of specks that looked like a note head. And {say(len(wrong) - 1)} quarter notes read "
-            "as half notes, because specks had fallen inside them and the reader took the filled heads "
-            "for hollow ones, or the other way about. You heard every one of them at once. Your ear "
+            "as half notes, because flipped pixels confused the filled-versus-hollow test. Familiarity with the Tune may help you recognize those errors. Your ear "
             "knows the Tune; the toy knows only blobs."
         ) as vo:
             vo.wait_until("a")
@@ -150,25 +141,13 @@ class Frontier(SoundScene):
         head = label(r"Where it stands", font_size=38, color=LIMIT).to_edge(UP, buff=0.4)
         rows = rows_card([
             (r"what works", r"since about 2018, \ networks trained from end to end read a clean, \\ printed, \ single line of music with very few errors."),
-            (r"what does not, \ yet", r"dense orchestral pages, \ handwriting, \ and the older notations of this part. \\ There is not even an agreed way to count a reader's mistakes."),
-            (r"the encodings", r"MusicXML 4 (2021), \ MEI 5 (2023), \ a successor called MNX in draft; \\ and one standard, \ SMuFL, \ for where every symbol lives in a font."),
+            (r"what remains difficult", r"dense orchestral pages, \ handwriting, \ and the older notations of this part. \\ Metrics differ by task and representation."),
+            (r"the encodings", r"milestones: \ MusicXML 4 (2021), \ MEI 5 (2023); \ MNX development; \\ SMuFL standardizes many glyph names and code points."),
             (r"editions as data", r"not one text chosen by an editor, \ but every source and every variant, \\ encoded, \ so that a reader can ask what each manuscript says."),
         ], left=-6.5, text_left=-2.9, top=1.9, step=1.42, name_size=26, text_size=23, color=LIMIT)
         self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
-            "Real systems are far better than the toy. <bookmark mark='a'/> Since about 2018, neural "
-            "networks trained from end to end have learned to read a clean, printed, single line of music "
-            "with very few errors. <bookmark mark='b'/> What is not solved is everything harder: a dense "
-            "orchestral page, handwriting, and the older notations we met in this part. The field does not "
-            "even agree yet on how to score a reader. What counts as one mistake, on a page where a wrong "
-            "clef makes every note wrong? <bookmark mark='c'/> The encodings are still moving as well. "
-            "MusicXML reached its fourth version in 2021 and MEI its fifth in 2023; a successor to "
-            "MusicXML is being drafted; and a standard called SMuFL now fixes where every musical symbol "
-            "lives in a font. <bookmark mark='d'/> And scholars are using these formats to make a new kind "
-            "of edition: not one text chosen by an editor, but every source and every variant, encoded, so "
-            "that a reader can ask what each manuscript says. The tablet from Ugarit was written for "
-            "people who shared its writer's knowledge. Every one of these standards is an attempt to write "
-            "that knowledge down too, so that a reader three thousand years from now needs only the file."
+            "Real systems are far better than the toy. <bookmark mark='a'/> Since about 2018, neural networks trained from end to end have learned to read a clean, printed, single line of music with very few errors. <bookmark mark='b'/> Accuracy and coverage still vary on harder material: a dense orchestral page, handwriting, and the older notations we met in this part. Different tasks and representations use different metrics; no single score captures every kind of error. What counts as one mistake, on a page where a wrong clef makes every note wrong? <bookmark mark='c'/> The encodings are still moving as well. MusicXML reached its fourth version in 2021 and MEI its fifth in 2023; MNX explores another approach to common notation; and a standard called SMuFL standardizes names and code points for a large repertoire of musical glyphs. <bookmark mark='d'/> And scholars are using these formats to make a new kind of edition: not one text chosen by an editor, but every source and every variant, encoded, so that a reader can ask what each manuscript says. The tablet from Ugarit was written for people who shared its writer's knowledge. Every one of these standards is an attempt to write that knowledge down too, so that future readers have more explicit information, while still needing format documentation and musical conventions."
         ) as vo:
             for mark, r in zip("abcd", rows):
                 vo.wait_until(mark)

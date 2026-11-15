@@ -21,7 +21,10 @@ def tablet(line) -> VGroup:
     words = VGroup()
     for w, n in line:
         words.add(VGroup(Text(w, font_size=30, color=PAGE, slant="ITALIC"), Text(str(n), font_size=34, color=INK, weight="BOLD")).arrange(RIGHT, buff=0.16))
-    words.arrange(RIGHT, buff=0.42).move_to([0, -0.75, 0])
+    words.arrange(RIGHT, buff=0.42)
+    if words.width > 8.6:
+        words.scale(8.6 / words.width)
+    words.move_to([0, -0.75, 0])
     more = VGroup(*[Line([-4.2, -1.35 - 0.3 * k, 0], [4.2 - 1.6 * k, -1.35 - 0.3 * k, 0], color=CLAY, stroke_width=2, stroke_opacity=0.5).set_stroke(opacity=0.45) for k in range(2)])
     g = VGroup(body, wedges, rule, words, more)
     g.words, g.wedges, g.rule = words, wedges, rule
@@ -39,15 +42,9 @@ class Hook(SoundScene):
         d = load("hook")
         c = clip("hook.readings")
         tab = tablet(d["line"]).move_to(UP * 0.9)
-        where = label(r"Ugarit, \ on the coast of Syria \ $\cdot$ \ about 1400 \textsc{bce}", font_size=26, color=GREY_A).next_to(tab, UP, buff=0.2)
+        where = label(r"schematic tablet, \ not a facsimile: \ Ugarit, \ Syria \ $\cdot$ \ about 1400 \textsc{bce}", font_size=26, color=GREY_A).next_to(tab, UP, buff=0.2)
         with self.voiceover(
-            "This is a clay tablet. It was dug up in the nineteen fifties from the ruins of Ugarit, a port on "
-            "the coast of Syria, and it was written about fourteen hundred years before the common era. Above "
-            "the double line are the words of a hymn to Nikkal, the goddess of orchards. <bookmark mark='a'/> "
-            "Below the line is something else: words, each followed by a number. Three. One. Three. One. Ten. "
-            "<bookmark mark='b'/> We know what the words are. Each one is the name of a pair of strings on a "
-            "lyre; another tablet lists them. This is written music, the oldest that survives nearly whole. "
-            "And nobody knows how it goes."
+            "This is a clay tablet. It was dug up in the nineteen fifties from the ruins of Ugarit, a port on the coast of Syria, and it was written about fourteen hundred years before the common era. Above the double line are the words of a hymn to Nikkal, the goddess of orchards. <bookmark mark='a'/> Below the line is something else: words, each followed by a number. Three. One. Three. One. Ten. <bookmark mark='b'/> The technical terms are usually related to named string pairs or intervals, informed by other tablets; their musical interpretation remains debated. This is written music, one of the oldest substantially complete surviving musical notations. And nobody knows how it goes."
         ) as vo:
             self.play(FadeIn(tab[0]), FadeIn(tab.wedges), FadeIn(tab.rule), FadeIn(tab[4]), FadeIn(where), run_time=1.2)
             vo.wait_until("a")
@@ -77,14 +74,9 @@ class Hook(SoundScene):
         for w in tab.words:
             w[0].set_color(PAGE)
         claim = VGroup(label(r"at least five published reconstructions, \ no two alike", font_size=30, color=BAD),
-                       label(r"the scribe left out what every musician in Ugarit already knew", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.4)
+                       label(r"the notation relies on conventions partly lost to us", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.25).next_to(tab, DOWN, buff=0.4)
         with self.voiceover(
-            "The same marks. Neither of those is a claim about what was sung in Ugarit, and that is the "
-            "point. <bookmark mark='a'/> At least five scholars have published reconstructions of this hymn, "
-            "and no two of them sound alike. Is a pair of strings played together, or one after the other? "
-            "Does the number count notes, or beats, or repeats? Which end of the lyre is string one? "
-            "<bookmark mark='b'/> The tablet does not say, because it did not need to. The scribe left out "
-            "what every musician in Ugarit already knew. Then the musicians died."
+            "The same marks. Neither of those is a claim about what was sung in Ugarit, and that is the point. <bookmark mark='a'/> At least five scholars have published reconstructions of this hymn, and no two of them sound alike. Is a pair of strings played together, or one after the other? Does the number count notes, or beats, or repeats? Which end of the lyre is string one? <bookmark mark='b'/> The tablet does not say, because it did not need to. The notation relies on conventions its original users shared, many of which we no longer know. Then the musicians died."
         ) as vo:
             self.play(FadeOut(bx))
             vo.wait_until("a")
@@ -114,17 +106,9 @@ class Hook(SoundScene):
         for a, b in zip(letters, words):
             a.next_to(b, UP, buff=0.2)
         greek = VGroup(words, letters, label(r"a Greek song on a tombstone, \ first or second century: \ letters for the notes, \ above the words", font_size=24, color=GREY_A).next_to(words, DOWN, buff=0.4)).move_to(DOWN * 0.3)
-        mem = label(r"the chants of the church: \ thousands, \ all held in memory. \ Ten years to train a singer.", font_size=28, color=BAD).move_to(DOWN * 2.4)
+        mem = label(r"chant teaching relied heavily on memory; \ training could take years.", font_size=28, color=BAD).move_to(DOWN * 2.4)
         with self.voiceover(
-            "Two thousand years later, around the year 630, Isidore, the bishop of Seville, set out to write "
-            "down everything that was known. On music he wrote this: unless sounds are held in the memory of "
-            "man, they perish, for they cannot be written down. <bookmark mark='a'/> He was wrong. The Greeks "
-            "had written melodies with letters, and a song carved on a tombstone in their notation can still "
-            "be sung. But in Isidore's world nobody could read it any more. Every chant of the church, "
-            "thousands of them, lived in the heads of singers, and it took ten years to train one. "
-            "<bookmark mark='b'/> So what would writing a tune down take? A tune is a list of events: which "
-            "note, when, and for how long. That is a picture with two axes. Four centuries after Isidore, "
-            "somebody drew it."
+            "Two thousand years later, around the year 630, Isidore, the bishop of Seville, set out to write down everything that was known. On music he wrote this: unless sounds are held in the memory of man, they perish, for they cannot be written down. <bookmark mark='a'/> He was wrong. The Greeks had written melodies with letters, and a song carved on a tombstone in their notation can still be sung. Such notation was not the basis of Isidore's chant practice. Singers transmitted a large repertory by memory; later writers describe training that could take years. <bookmark mark='b'/> So what would writing a tune down take? A tune is a list of events: which note, when, and for how long. That is a picture with two axes. Four centuries after Isidore, somebody drew it."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")

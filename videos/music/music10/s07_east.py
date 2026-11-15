@@ -34,13 +34,7 @@ class East(SoundScene):
                       label(r"how long, \ otherwise? \ the singer learned that from a teacher", font_size=30, color=GREY_A)).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(LEFT * 1.6 + DOWN * 1.3)
         self.gong = tune
         with self.voiceover(
-            "A staff is one answer to the question of pitch. China had found a different one at least a "
-            "thousand years ago: give every note of the scale a character. <bookmark mark='a'/> Their "
-            "names are shang, cheh, gong, fahn, lee-oh, woo and ee. They stand for do, re, mi, fa, sol, la "
-            "and ti. The system is named gongche, after two of them. <bookmark mark='b'/> Here are the first two phrases of the Tune. They read "
-            "from the top down, and the columns run from right to left. A small mark beside a character "
-            "shows where the beat is held. <bookmark mark='c'/> Otherwise, how long each note lasts is "
-            "shown only roughly. A singer learned the rhythm from a teacher, with the page as a guide."
+            "A staff is one answer to the question of pitch. China had found a different one at least a thousand years ago: give every note of the scale a character. <bookmark mark='a'/> Their names are shang, cheh, gong, fahn, lee-oh, woo and ee. In the convention illustrated here they correspond to do, re, mi, fa, sol, la and ti; pitch mappings and rhythmic signs vary by tradition. The system is named gongche, after two of them. <bookmark mark='b'/> Here are the first two phrases of the Tune. They read from the top down, and the columns run from right to left. A small mark beside a character shows where the beat is held. <bookmark mark='c'/> Otherwise, how long each note lasts is shown only roughly. A singer learned the rhythm from a teacher, with the page as a guide."
         ) as vo:
             self.play(FadeIn(text[0]))
             vo.wait_until("a")
@@ -67,7 +61,7 @@ class East(SoundScene):
             "Academy was polite, and unconvinced. <bookmark mark='a'/> But French schoolteachers made a "
             "singing method out of it; from France it went to Japan; and from Japan, soon after 1900, to "
             "China. There it is called jianpu, simple notation, and it became the everyday way to write "
-            "music down. <bookmark mark='b'/> One is the keynote. A dash holds a note for another beat. A "
+            "music down. <bookmark mark='b'/> In this major-key example, one is the tonic; other jianpu conventions, including minor pieces based on six, require context. A dash holds a note for another beat. A "
             "line under a number halves it, and a dot above or below moves it by an octave."
         ) as vo:
             self.play(FadeIn(card))
@@ -82,9 +76,9 @@ class East(SoundScene):
         st_f = Staff(in_f, width=5.6, space=0.15, show_time=False, final_bar=False).move_to(RIGHT * 3.3 + DOWN * 2.4)
         arrow = label(r"$\rightarrow$", font_size=44, color=GREY_B).move_to(DOWN * 2.4)
         with self.voiceover(
-            "And it can do something that the staff cannot. To sing the Tune in another key, change one "
+            "And this notation makes a common transposition especially easy. To sing the Tune in another key, change one "
             "sign: one equals F. <bookmark mark='a'/> Nothing else on the page moves. On a staff, every "
-            "note would have to be redrawn four lines and spaces higher, with a flat added. Jianpu "
+            "note would have to be redrawn three diatonic positions higher, an interval of a fourth, with a flat added. Jianpu "
             "does not write where a note is on the keyboard. It writes the note's place in the scale, "
             "which is what a singer needs."
         ) as vo:
@@ -100,6 +94,7 @@ class East(SoundScene):
         d = load("east")
         c = clip("east.flute")
         jp = self.jp
+        jp.key.become(Text("1 = C", font=MONO, font_size=32, color=INK).move_to(jp.key).align_to(jp.key, LEFT))
         tune = gongche(d["gongche"], beats=d["beats"], height=2.6, font_size=32, columns=2).move_to(RIGHT * 4.8 + DOWN * 0.5)
         self.play(jp.animate.scale(0.8).move_to(LEFT * 1.6 + UP * 0.3), FadeIn(tune))
         with self.listen(c) as snd:
@@ -121,16 +116,9 @@ class East(SoundScene):
         rows.arrange(DOWN, buff=0.7, aligned_edge=LEFT).move_to(RIGHT * 2.6 + UP * 0.3)
         arrows = VGroup(*[Arrow(r.get_left() + LEFT * 0.15, p.get_right() + RIGHT * 0.1, buff=0.05, color=GREY_B, stroke_width=2.5, tip_length=0.15) for r, p in zip(rows, (top, hook, num))])
         head = label(r"guqin tablature: \ one sign, \ one gesture", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
-        none = label(r"and not one mark about rhythm", font_size=30, color=BAD).to_edge(DOWN, buff=0.8)
+        none = label(r"precise timing relies heavily on tradition", font_size=30, color=BAD).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "One more, and the most radical. The goo-chin, China's seven-string zither, has had its own "
-            "tablature for more than a thousand years. Each sign is put together from fragments of "
-            "characters. <bookmark mark='a'/> The top says: an open string. <bookmark mark='b'/> The hook "
-            "says: pull inward with the middle finger. <bookmark mark='c'/> And the strokes inside say: "
-            "the third string. A whole gesture in one sign. <bookmark mark='d'/> And nothing at all about "
-            "rhythm. The player works the timing out; two masters' versions of the same old piece can "
-            "differ throughout. It is the tablet from Ugarit again: the page holds the actions, and a "
-            "living tradition holds the rest."
+            "One more, and the most radical. The goo-chin, China's seven-string zither, has had its own tablature for more than a thousand years. Each sign is put together from fragments of characters. <bookmark mark='a'/> The top says: an open string. <bookmark mark='b'/> The hook says: pull inward with the middle finger. <bookmark mark='c'/> And the strokes inside say: the third string. A whole gesture in one sign. <bookmark mark='d'/> Precise durations are largely left to oral teaching and interpretation, although gestures and some signs imply temporal relationships. The player works the timing out; two masters' versions of the same old piece can differ throughout. It is the tablet from Ugarit again: the page holds the actions, and a living tradition holds the rest."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch))
             for mark, r, a, p in zip("abc", rows, arrows, (top, hook, num)):
@@ -161,14 +149,14 @@ class East(SoundScene):
             shapes.add(Circle(radius=r, color=WHITE, stroke_width=float(rng.uniform(2, 5))).move_to([x, y, 0]))
         shapes.add(VMobject(color=WHITE, stroke_width=4).set_points_smoothly([np.array([x, 0.7 * np.sin(1.7 * x) + 0.2 * x, 0]) for x in np.linspace(-2.5, 2.5, 9)]))
         right = shapes.scale(0.9).move_to(RIGHT * 3.6 + UP * 0.6)
-        cap_r = label(r"lines and shapes, \ and no instructions at all. \\ (in the manner of Cardew's \textit{Treatise}, \ 1963--67)", font_size=24, color=GREY_A).next_to(right, DOWN, buff=0.4).align_to(cap_l, UP)
+        cap_r = label(r"lines and shapes, \ with no fixed symbol-to-sound key. \\ (in the manner of Cardew's \textit{Treatise}, \ 1963--67)", font_size=24, color=GREY_A).next_to(right, DOWN, buff=0.4).align_to(cap_l, UP)
         head = label(r"keeping less, \ on purpose", font_size=32, color=TUNE).to_edge(UP, buff=0.5)
         with self.voiceover(
             "Every notation so far kept as much as its makers could manage. In the twentieth century some "
             "composers went the other way, on purpose. <bookmark mark='a'/> In 1950 Morton Feldman wrote "
             "pieces as boxes on a grid: play something high here, something low there, for this long. "
             "Which notes is the player's business. <bookmark mark='b'/> And Cornelius Cardew's Treatise "
-            "is a hundred and ninety-three pages of lines and shapes with no instructions whatever. A "
+            "is a hundred and ninety-three pages of lines and shapes without a fixed symbol-to-sound key attached to the score. A "
             "notation is a contract between the writer and the reader, and these contracts leave nearly "
             "everything to the reader."
         ) as vo:

@@ -35,11 +35,7 @@ class ScoreScene(SoundScene):
         book_b[1].next_to(book_b[0], UP, buff=0.15)
         self.a, self.b = a, b
         with self.voiceover(
-            "Once notes had lengths, voices could be written apart and still fit together. And for three "
-            "hundred years that is how music for several voices was written: each voice by itself, in its "
-            "own book or its own corner of a large one. <bookmark mark='a'/> A singer saw one line, and "
-            "counted. There were no bar lines; nothing on your page told you what anyone else was "
-            "doing. If you lost your place, the page could not help you find it."
+            "Once notes had lengths, voices could be written apart and still fit together. And for long periods, partbooks and separate voice areas were common ways to write polyphony: each voice by itself, in its own book or its own corner of a large one. <bookmark mark='a'/> A singer saw one line, and counted. There were no bar lines; nothing on your page told you what anyone else was doing. If you lost your place, the page could not help you find it."
         ) as vo:
             self.play(FadeIn(book_a), FadeIn(a))
             self.play(FadeIn(book_b), FadeIn(b))
@@ -63,12 +59,7 @@ class ScoreScene(SoundScene):
         b.barlines.set_opacity(0)
         head = label(r"a score", font_size=34, color=TUNE).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "The cure was to stack the voices on one page, so that notes sounded together are written one "
-            "above the other. <bookmark mark='a'/> That is a score. And then to rule lines down through "
-            "all the staves every few beats: bar lines, a ruler for the eye. <bookmark mark='b'/> Organists "
-            "and lute players, who had to play several voices with their own two hands, wrote this way "
-            "first. The first printed scores date from the fifteen seventies, and by 1650 the bar line was "
-            "everywhere. Guido's graph had gained grid lines."
+            "The cure was to stack the voices on one page, so that notes sounded together are written one above the other. <bookmark mark='a'/> That is a score. And then to rule lines down through all the staves every few beats: bar lines, a ruler for the eye. <bookmark mark='b'/> Organists and lute players, who had to play several voices with their own two hands, wrote this way first. Printed scores became more common in the late sixteenth century, with important publications in the fifteen seventies; aligned scores had earlier precedents. Bar lines spread widely during the seventeenth century. Guido's graph had gained grid lines."
         ) as vo:
             self.play(FadeIn(a), FadeIn(b), FadeIn(brace), FadeIn(head))
             vo.wait_until("a")
@@ -136,12 +127,7 @@ class ScoreScene(SoundScene):
             rows.arrange_in_grid(rows=2, cols=2, buff=(0.8, 0.25)).to_edge(DOWN, buff=0.6)
         head = label(r"what the notes still did not say", font_size=32, color=TUNE).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "By 1650, then, the page said which notes and how long. It still did not say how fast, or how "
-            "loud. So composers went on adding. <bookmark mark='a'/> Italian words for the speed. "
-            "<bookmark mark='b'/> Letters for soft and loud. <bookmark mark='c'/> Hairpins, for growing "
-            "louder. <bookmark mark='d'/> And, once Maelzel's metronome was on sale in 1815, a number of "
-            "beats to the minute. Every one of those additions is an admission that something was missing. "
-            "Hold on to that thought; we will count what is still missing at the end."
+            "By 1650, then, the page said which notes and how long. Composers had already begun adding instructions for speed and loudness. Those conventions continued to develop. <bookmark mark='a'/> Italian words for the speed. <bookmark mark='b'/> Letters for soft and loud. <bookmark mark='c'/> Hairpins, for growing louder. <bookmark mark='d'/> And, once Maelzel's metronome was on sale in 1815, a number of beats to the minute. Every one of those additions is an admission that something was missing. Hold on to that thought; we will count what is still missing at the end."
         ) as vo:
             self.play(FadeIn(head), FadeIn(st))
             for mark, (m, _), r in zip("abcd", adds, rows):

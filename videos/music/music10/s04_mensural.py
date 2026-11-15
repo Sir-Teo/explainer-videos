@@ -78,7 +78,7 @@ class Mensural(SoundScene):
         arrows = VGroup(Arrow(cols[2].get_bottom(), whole.get_top(), buff=0.1, color=GREY_B, stroke_width=3, tip_length=0.15),
                         Arrow(cols[3].get_bottom(), half.get_top(), buff=0.1, color=GREY_B, stroke_width=3, tip_length=0.15))
         with self.voiceover(
-            "These are Franco's shapes. A square with a tail is the long. <bookmark mark='a'/> A plain "
+            "Here are shapes from the mensural tradition, with the minim added later. A square with a tail is the long. <bookmark mark='a'/> A plain "
             "square is the breve, which means short. <bookmark mark='b'/> A lozenge is the semibreve, the "
             "half short. <bookmark mark='c'/> And the next century added the minim, the least, because "
             "composers wanted something quicker still. <bookmark mark='d'/> They are with us yet. Round "
@@ -131,7 +131,7 @@ class Mensural(SoundScene):
         note = listen_note(r"the same fourteen marks, \ read in twos and then in threes", width=8.6).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             "Here are the first two phrases of the Tune in Franco's marks: six semibreves and a breve, "
-            "twice. Above, under the broken circle. Below, the very same marks under the whole circle. "
+            "twice. Above, under the broken circle. Below, the very same marks under the later mensuration circle. This teaching reader uses a restricted rule set, not a complete historical notation engine. "
             "Listen to what the sign does."
         ):
             self.play(FadeIn(rows[0][0]), FadeIn(rows[1][0]), FadeIn(note))
@@ -201,10 +201,7 @@ class Mensural(SoundScene):
         l1 = label(r"a dot adds half", font_size=26, color=INK).next_to(ex.notes[0], UP, buff=0.9)
         l2 = label(r"a tie joins two notes", font_size=26, color=INK).next_to(VGroup(ex.notes[2], ex.notes[3]), UP, buff=0.9)
         with self.voiceover(
-            "By about 1600 the threes had gone from the system. Every note is worth two of the next: a "
-            "whole note is two halves, four quarters, eight eighths. <bookmark mark='a'/> What is left of "
-            "perfect time is the dot. A dot after a note adds half its length. <bookmark mark='b'/> And a "
-            "tie, a curved line between two notes of the same pitch, joins them into one."
+            "In modern note values the base hierarchy divides in twos, while triple groupings continue through metre and tuplets: a whole note is two halves, four quarters, eight eighths. <bookmark mark='a'/> A dot is one way to extend those binary base values. A dot after a note adds half its length. <bookmark mark='b'/> And a tie, a curved line between two notes of the same pitch, joins them into one."
         ) as vo:
             self.play(FadeIn(tree), FadeIn(names))
             vo.wait_until("a")
@@ -234,14 +231,9 @@ class Mensural(SoundScene):
         self.wait(0.3)
         rule = MathTex(r"1 + \tfrac12 + \tfrac14 + \cdots + \tfrac{1}{2^n} \;=\; 2 - \tfrac{1}{2^n}", font_size=44).move_to(DOWN * 1.2)
         rule_l = label(r"a note with $n$ dots", font_size=28, color=GREY_A).next_to(rule, UP, buff=0.35)
-        third = label(r"a third of a whole note? \ no sum of halvings reaches it: \ it needs a triplet", font_size=28, color=BAD).next_to(rule, DOWN, buff=0.6)
+        third = label(r"a third of a whole note? \ no finite binary sum reaches it: \ it needs a triplet", font_size=28, color=BAD).next_to(rule, DOWN, buff=0.6)
         with self.voiceover(
-            "In general, each dot adds half of what the dot before it added. So a note with n dots lasts "
-            "one, plus a half, plus a quarter, down to one over two to the n, times its plain length. "
-            "<bookmark mark='a'/> That sum is two, minus one over two to the n. However many dots you "
-            "write, a note never quite doubles. <bookmark mark='b'/> And a third of a note? No sum of "
-            "halvings ever reaches a third. The system's patch for that is the triplet, three notes in "
-            "the time of two, marked with a small figure three. Rhythm has all of Part 11 to itself."
+            "In general, each dot adds half of what the dot before it added. So a note with n dots lasts one, plus a half, plus a quarter, down to one over two to the n, times its plain length. <bookmark mark='a'/> That sum is two, minus one over two to the n. However many dots you write, a note never quite doubles. <bookmark mark='b'/> And a third of a note? No finite sum of those binary fractions equals a third. The system's patch for that is the triplet, three notes in the time of two, marked with a small figure three. Rhythm has all of Part 11 to itself."
         ) as vo:
             self.play(FadeOut(s5), FadeOut(s7), FadeOut(e5), FadeOut(e7), FadeIn(rule_l), FadeIn(rule))
             vo.wait_until("a")

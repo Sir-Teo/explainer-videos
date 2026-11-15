@@ -89,14 +89,13 @@ class Outro(SoundScene):
         db_bars = [Rectangle(width=0.36, height=max(abs(m) * 0.16, 0.03), stroke_width=0, fill_color=LEVEL, fill_opacity=0.9).move_to([x, y_db + m * 0.08, 0]) for x, m in zip(xs, d["db"])]
         l_ms = label(r"late or early", font_size=22, color=TIME).next_to(base_ms, LEFT, buff=0.15)
         l_db = label(r"louder or softer", font_size=22, color=LEVEL).next_to(base_db, LEFT, buff=0.15)
-        none = label(r"what none of them says", font_size=30, color=EAR).next_to(last, UP, buff=0.35)
+        none = label(r"what these score examples leave open", font_size=30, color=EAR).next_to(last, UP, buff=0.35)
         final = VGroup(last, base_ms, base_db, l_ms, l_db, none)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it has built. This part built ways of "
             "writing. <bookmark mark='a'/> So here is the Tune played off the page, exactly as written, "
             "while the page changes: each phrase in two notations, from the neumes of the ninth century to "
-            "the files of this one. Five phrases, ten notations. And then the sixth phrase, played the way "
-            "none of the ten can say."
+            "the files of this one. Five phrases, ten notations. And then the sixth phrase, played with expressive deviations absent from these particular score examples. MIDI and notation formats can encode many of those details when explicitly supplied."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -144,19 +143,19 @@ class Outro(SoundScene):
             r"Guido's staff is a graph of pitch against time, \ counted in steps of a scale",
             r"shapes gave notes their lengths; \ dots and ties write any $k/2^n$; \ bar lines align the voices",
             r"tablature and figured bass write actions: \ $2 \times 10^{19}$ fingerings, \ six million realizations",
-            rf"MIDI keeps the key and forgets the spelling: \ G$\sharp$ and A$\flat$ are {m['diesis_cents']:.0f} cents apart",
+            rf"MIDI keeps the key and forgets the spelling: \ in this meantone model G$\sharp$/A$\flat$: {m['diesis_cents']:.0f} cents apart",
             rf"the page is {b['plain_bits']} bits, \ the sound " + r"{:,.0f}".format(round(b["ratio"], -3)).replace(",", "{,}") + r" times more: \ the player supplies the rest",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Neumes record which way a melody goes, and never how far: dozens of "
+            "What did we find? Our contour toy keeps direction without exact intervals: dozens of "
             "melodies fit the same signs. <bookmark mark='a'/> Guido's staff is a graph of pitch against "
             "time, counted in steps of a scale that the reader must already know. <bookmark mark='b'/> "
             "Shapes gave notes their lengths; dots and ties write any length that halvings can reach; and "
             "bar lines let many people read together. <bookmark mark='c'/> Tablature and figured bass "
             "write actions instead of sounds, and each stands for millions of choices. "
             "<bookmark mark='d'/> A MIDI file keeps the key and the moment, and forgets the spelling, "
-            "which can be a fifth of a tone. <bookmark mark='e'/> And the page of a tune is a few hundred "
-            "bits, against millions for its sound. The player supplies the rest."
+            "which selects pitches a fifth of a tone apart in our meantone example. <bookmark mark='e'/> And the page of a tune is a few hundred "
+            "bits, against millions for its sound. The decoder supplies instrument and performance assumptions; the byte counts are not a lossless audio-compression comparison."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -217,7 +216,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "And in practice. An engraver gives a long note more room than a short one, but much less "
             "than in proportion, because a page spaced by the clock is hard to read. A session player "
-            "reads a chart of chord symbols at sight, which is figured bass under another name. An editor "
+            "reads a chart of chord symbols at sight, which is analogous to figured bass, with different conventions. An editor "
             "compares every source and marks which notes are guesses. And a programmer who writes music "
             "software keeps spelled pitches and exact fractions inside the program, as Monochord does, and "
             "turns them into key numbers and seconds only on the way out."
@@ -256,7 +255,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "We can now write down which note, and for how long. But a length on a page is only a ratio: "
             "this note is twice that one. What makes a row of lengths into a rhythm? <bookmark mark='a'/> "
-            "Play a row of clicks, every one identical, and listeners hear them in pairs: tick, tock, tick, "
+            "Play a row of clicks, every one identical, and many listeners impose a grouping, often in pairs: tick, tock, tick, "
             "tock. Nothing in the sound says so. The grouping is something the listener adds. "
             "<bookmark mark='b'/> Next time: where the beat comes from, how bars and meters organize it, "
             "and what happens when a rhythm is played so fast that it turns into a pitch. Part 11: Rhythm "

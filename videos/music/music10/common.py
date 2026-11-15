@@ -24,7 +24,7 @@ TUNE_SCORE = SC.tune_score()
 WORDS = ["Twin-", "kle,", "twin-", "kle,", "lit-", "tle", "star,"]
 
 # what each notation keeps: 1 yes, 0.5 in part, 0 no
-KEEP_COLS = [r"which note", r"how long", r"its spelling", r"how to play it", r"exactly when, \\ and how loud"]
+KEEP_COLS = [r"which note", r"how long", r"its spelling", r"how to play it", r"performed timing, \\ and level"]
 KEEP_ROWS = [
     (r"neumes", (0.5, 0, 0, 0, 0)),
     (r"Guido's staff", (1, 0, 1, 0, 0)),
@@ -34,7 +34,7 @@ KEEP_ROWS = [
     (r"gongche", (1, 0.5, 0, 0, 0)),
     (r"jianpu", (1, 1, 0, 0, 0)),
     (r"the modern staff", (1, 1, 1, 0.5, 0.5)),
-    (r"a piano roll", (1, 1, 0, 0, 1)),
+    (r"a reproducing roll", (1, 1, 0, 0, 0.5)),
     (r"MIDI", (1, 1, 0, 0, 1)),
     (r"MusicXML, \ MEI", (1, 1, 1, 0.5, 0.5)),
 ]

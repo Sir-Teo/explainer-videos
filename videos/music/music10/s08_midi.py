@@ -31,14 +31,7 @@ class Midi(SoundScene):
         lp = label(r"across it: \ pitch", font_size=26, color=FREQ).rotate(PI / 2).next_to(roll, LEFT, buff=0.25)
         welte = label(r"1904: \ a pianist's performance, \ recorded as holes", font_size=28, color=GREY_A).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "In the eighteen nineties a new kind of reader appeared: the player piano. Its music is a roll "
-            "of paper with holes punched in it. Where there is a hole, air rushes through and a key goes "
-            "down, and the longer the hole, the longer the note. <bookmark mark='a'/> Time runs along the "
-            "paper and pitch runs across it. This is Guido's graph with everything else stripped away: no "
-            "staff, no clef, no shapes. The graph itself has become a machine part. <bookmark mark='b'/> "
-            "In 1904 the Welte company went one step further and recorded pianists straight onto rolls: "
-            "when each key went down, when it came up, and roughly how hard. A roll like that keeps exactly "
-            "what a score leaves out, the timing of one real performance. And it keeps nothing else."
+            "In the eighteen nineties a new kind of reader appeared: the player piano. Its music is a roll of paper with holes punched in it. Where there is a hole, air rushes through and a key goes down, and the longer the hole, the longer the note. <bookmark mark='a'/> Time runs along the paper and pitch runs across it. This is Guido's graph with everything else stripped away: no staff, no clef, no shapes. The graph itself has become a machine part. <bookmark mark='b'/> In 1904 the Welte company went one step further and recorded pianists straight onto rolls: when each key went down, when it came up, and expression controls for a reproducing mechanism. Such rolls preserve aspects of performance and can be edited; they are not exact records of every hammer velocity."
         ) as vo:
             self.play(FadeIn(roll.frame), FadeIn(roll.grid))
             self.play(LaggedStart(*[FadeIn(n, scale=0.6) for n in roll.notes], lag_ratio=0.1), run_time=2.5)
@@ -74,17 +67,17 @@ class Midi(SoundScene):
             r[1].align_to(decode[1][1], LEFT).shift(RIGHT * 0.0)
             r[1].set_x(decode[0][0].get_left()[0] + 2.6, direction=LEFT)
         decode.move_to(DOWN * 1.2)
-        total = label(rf"nine bytes a note; \ the whole Tune: \ {d['size']} bytes", font_size=28, color=TUNE).to_edge(DOWN, buff=0.5)
+        total = label(rf"nine bytes in this example; \ the whole Tune: \ {d['size']} bytes", font_size=28, color=TUNE).to_edge(DOWN, buff=0.5)
         with self.voiceover(
             "In 1983 the makers of synthesizers agreed on a way for one instrument to tell another what "
-            "is being played. They called it MIDI, and it is a piano roll sent down a wire. Here is the "
+            "is being played. They called it MIDI, and its note messages resemble a piano roll sent down a wire. The Standard MIDI File, developed later, stores events with timing metadata. Here is the "
             "start of the Tune as a MIDI file, byte by byte. <bookmark mark='a'/> First a header, and the "
             "tempo, the metre and the key. Then the notes. <bookmark mark='b'/> A zero: wait no time. "
             "<bookmark mark='c'/> Three bytes: note on, key number sixty, which is middle C, struck with a "
             "velocity of eighty. <bookmark mark='d'/> Two bytes: wait four hundred and eighty ticks, which "
             "this file defines as one quarter note. <bookmark mark='e'/> Three bytes: note off, key sixty. "
-            f"<bookmark mark='f'/> Nine bytes for a note, and {say(d['size'])} for the whole Tune. Which "
-            "key, when down, when up, how hard. Nothing more."
+            f"<bookmark mark='f'/> Nine bytes for this note in our file, and {say(d['size'])} for the whole Tune. Which "
+            "key, when down, when up, how hard. MIDI also supports controllers, pedals, programs, pitch bends and more; this example only shows note events."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(t) for t in rows.bytes], lag_ratio=0.02), run_time=3.0)
             vo.wait_until("a")
@@ -118,7 +111,7 @@ class Midi(SoundScene):
             "G, B flat, E flat. <bookmark mark='a'/> The file holds four key numbers. <bookmark mark='b'/> "
             "And when Monochord reads the file back, it gets D sharp, G, A sharp, D sharp. The same four "
             "keys of the piano. Not the same notes on the page. A reader has to guess the spelling, and a "
-            "file of key numbers gives it nothing to go on, any more than a piano keyboard does."
+            "file of key numbers does not encode a per-note enharmonic spelling; key-signature metadata and musical context can nevertheless help, any more than a piano keyboard does."
         ) as vo:
             self.play(FadeIn(a), FadeIn(la))
             vo.wait_until("a")
@@ -157,9 +150,7 @@ class Midi(SoundScene):
             "a tone. <bookmark mark='a'/> X is G sharp: a pure major third above E, with the frequencies "
             "five to four from Part 5. Y is A flat: a pure major third below the C above. With E, the G "
             "sharp is calm. With E, the A flat is the wolf we met in Part 6, when we tuned an organ in "
-            "meantone. <bookmark mark='b'/> The piano's one key sits between the two and is neither. A "
-            "singer or a violinist who reads G sharp on a staff knows which one the composer meant, and "
-            "tunes it. A machine that reads key number sixty-eight does not."
+            "meantone. <bookmark mark='b'/> The piano's one key sits between the two and is neither. These pitches belong to this quarter-comma meantone example; spelling alone does not uniquely fix intonation in every style. Bare key numbers lose the distinction, but bends and tuning messages can represent it."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(g), FadeIn(marks[0]), FadeIn(marks[2]))

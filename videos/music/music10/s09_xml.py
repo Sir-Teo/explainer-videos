@@ -32,7 +32,7 @@ class Xml(SoundScene):
         ], left=-6.2, text_left=-2.6, top=1.6, step=1.5, name_size=32, text_size=26)
         with self.voiceover(
             "MIDI was built for instruments. People who print music, and people who study it, needed the "
-            "opposite: a file that holds the page. Two formats have won. MusicXML, from 2004, lets one "
+            "opposite: a file that holds the page. Two widely used formats are MusicXML and MEI. MusicXML version one, released in 2004 after earlier development, lets one "
             "notation program hand a page to another. MEI, the Music Encoding Initiative, was built by "
             "scholars and librarians, and it can also say the things an editor has to say: this note is "
             "unclear in the manuscript; this source reads differently. <bookmark mark='a'/> Here is the "
@@ -73,13 +73,7 @@ class Xml(SoundScene):
             outs.add(out)
         head = label(r"write it out, \ read it back: \ what survives?", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Monochord can write all of these and read two of them back, so we can test what survives. "
-            "Take the Tune with its words. <bookmark mark='a'/> Out to MusicXML and back again: all "
-            "forty-two notes return identical, with their spellings, their lengths and their syllables. "
-            "<bookmark mark='b'/> Out to MIDI and back: the right keys and the right lengths, and nothing "
-            "else. A conversion between notations is a channel, and some channels lose information that "
-            "no program can restore. Turning a MIDI file, or a recording, back into a readable page means "
-            "guessing what was lost. That guessing is a research field, and we will reach it in Part 61."
+            "Monochord can write all of these and read two of them back, so we can test what survives. Take the Tune with its words. <bookmark mark='a'/> Out to MusicXML and back again: all forty-two notes return identical, with their spellings, their lengths and their syllables. <bookmark mark='b'/> Our restricted MIDI writer and reader return keys and lengths but omit these lyrics and spellings. The MIDI file format can carry lyric and key-signature metadata; that differs from our implementation. A conversion between notations is a channel, and some channels lose information that no program can restore. Turning a MIDI file, or a recording, back into a readable page means guessing what was lost. That guessing is a research field, and we will reach it in Part 61."
         ) as vo:
             self.play(FadeIn(head), FadeIn(src))
             vo.wait_until("a")
@@ -107,8 +101,8 @@ class Xml(SoundScene):
             "and figured bass say what to do, and give up something else for it. <bookmark mark='c'/> "
             "Gongche and jianpu keep the note's place in its scale. <bookmark mark='d'/> The modern staff "
             "keeps the most, with a little about how to play and how loud. <bookmark mark='e'/> The roll "
-            "and the MIDI file keep one performance exactly, and forget the spelling. "
-            "<bookmark mark='f'/> And the page formats keep the page. Now look for a row with every mark "
+            "and the MIDI file keep quantized performance events within the mechanism or message format's limits, and forget the spelling. "
+            "<bookmark mark='f'/> And notation formats preserve structured score content and layout instructions, not necessarily identical rendering in every program. Now look for a row with every mark "
             "filled in. There is not one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tb.head), FadeIn(key))

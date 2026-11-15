@@ -42,17 +42,10 @@ class Tab(SoundScene):
         tb = tablature([tuple(p) for p in d["best"]], width=11.6, space=0.36, names=d["strings"], font_size=30).move_to(DOWN * 0.9)
         for n, s in zip(tb.notes, st.notes):
             n.set_x(s.head.get_x())
-        cap = label(r"six strings; \ a number is a fret; \ 0 is the open string", font_size=26, color=GREY_A).next_to(tb, DOWN, buff=0.35)
+        cap = label(r"six strings; \ a number is a fret; \ 0 is open. \\ Staff at sounding pitch; \ guitar parts are usually written an octave higher.", font_size=26, color=GREY_A).next_to(tb, DOWN, buff=0.35)
         self.st, self.tb = st, tb
         with self.voiceover(
-            "A staff tells you what you will hear. There is another idea entirely: write down what to do. "
-            "This is tablature. <bookmark mark='a'/> There are six lines, but they are not Guido's lines. "
-            "They are the six strings of a guitar, the lowest at the bottom. A number on a line tells you "
-            "which fret to press on that string, and zero is the open string. <bookmark mark='b'/> Lute "
-            "players wrote like this from the fourteen hundreds; the first printed books of lute music, in "
-            "1507, are in tablature; guitarists read it every day. In 1958 Charles Seeger gave the two "
-            "kinds of writing their names. The staff is descriptive: it describes a sound. Tablature is "
-            "prescriptive: it prescribes an action."
+            "A staff tells you what you will hear. There is another idea entirely: write down what to do. This is tablature. <bookmark mark='a'/> There are six lines, but they are not Guido's lines. They are the six strings of a guitar, the lowest at the bottom. A number on a line tells you which fret to press on that string, and zero is the open string. <bookmark mark='b'/> Lute players wrote like this from the fourteen hundreds; the first printed books of lute music, in 1507, are in tablature; guitarists read it every day. In 1958 Charles Seeger gave the two kinds of writing their names. He distinguished writing that prescribes a performance from writing that describes one. Both scores and tablature can be prescriptive; tablature makes the hand action especially explicit."
         ) as vo:
             self.play(FadeIn(st))
             vo.wait_until("a")
@@ -93,20 +86,12 @@ class Tab(SoundScene):
         best = tablature([tuple(p) for p in d["best"]], width=10.4, space=0.26, names=d["strings"], font_size=24)
         one = tablature([tuple(p) for p in d["one_string"]], width=10.4, space=0.26, names=d["strings"], font_size=24)
         g = VGroup(best, one).arrange(DOWN, buff=1.0).move_to(DOWN * 0.9 + RIGHT * 0.3)
-        lb = label(rf"the least movement: \ effort {d['cost_best']:.0f}", font_size=26, color=GOOD).next_to(best, UP, buff=0.15)
-        lo = label(rf"all on one string: \ effort {d['cost_one']:.0f}", font_size=26, color=BAD).next_to(one, UP, buff=0.15)
+        lb = label(rf"the least movement: \ travel cost {d['cost_best']:.0f}", font_size=26, color=GOOD).next_to(best, UP, buff=0.15)
+        lo = label(rf"all on one string: \ travel cost {d['cost_one']:.0f}", font_size=26, color=BAD).next_to(one, UP, buff=0.15)
         count = VGroup(label(r"tablatures of these fourteen notes:", font_size=28, color=GREY_A), label(r"{:,}".format(d["count_phrases"]).replace(",", "{,}"), font_size=40, color=TUNE)).arrange(RIGHT, buff=0.4).to_edge(UP, buff=0.5)
         whole = label(r"of the whole Tune: \ about $2 \times 10^{19}$", font_size=28, color=GREY_A).next_to(count, DOWN, buff=0.2)
         with self.voiceover(
-            "So one page of staff notation stands for many tablatures. For the fourteen notes of these two "
-            "phrases, Monochord counts more than two million. <bookmark mark='a'/> For the whole Tune, "
-            "about twenty billion billion. <bookmark mark='b'/> It picks one by dynamic programming: for "
-            "every note, and every place that note could be played, it keeps only the cheapest way of "
-            "arriving there, where cheap means that the hand travels little along the neck. "
-            "<bookmark mark='c'/> The winner never leaves the first five frets. Playing the same notes "
-            "along one string costs twice the effort. A tablature records that choice, which is why "
-            "players like it. <bookmark mark='d'/> And what does it throw away? The notes. You cannot see "
-            "the shape of the melody in those numbers, and you cannot play them on a flute."
+            "So one page of staff notation stands for many tablatures. For the fourteen notes of these two phrases, Monochord counts more than two million. <bookmark mark='a'/> For the whole Tune, about twenty billion billion. <bookmark mark='b'/> It picks one by dynamic programming: for every note, and every place that note could be played, it keeps only the cheapest way of arriving there, where cheap means that the hand travels little along the neck. <bookmark mark='c'/> The winner never leaves the first five frets. Playing the same notes along one string costs about twice as much under this travel-distance metric, which omits much of real fingering technique. A tablature records that choice, which is why players like it. <bookmark mark='d'/> And what becomes less visible? The melodic contour and spelling. With the tuning known, pitches can be recovered and transferred to a flute, but the action notation is instrument specific."
         ) as vo:
             self.play(FadeIn(count))
             vo.wait_until("a")
@@ -144,13 +129,7 @@ class Tab(SoundScene):
         rules.set_x(0)
         head = label(r"a bass line, \ and a few figures: \ about 1600", font_size=30, color=TUNE).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "Around 1600, in Italy, musicians invented another way of writing what to do, for the player "
-            "who accompanies a singer. Write only the bass line, and under some of its notes a small "
-            "figure. <bookmark mark='a'/> No figure means: play the third and the fifth above this bass "
-            "note. <bookmark mark='b'/> A six means the third and the sixth. <bookmark mark='c'/> A seven "
-            "means the third, the fifth and the seventh. In which octave? How many notes, and which one "
-            "on top? That is left to the player, who decides while playing. It is called figured bass, "
-            "and for a hundred and fifty years nearly every accompaniment in Europe was written this way."
+            "Around 1600, in Italy, musicians invented another way of writing what to do, for the player who accompanies a singer. Write only the bass line, and under some of its notes a small figure. <bookmark mark='a'/> In this elementary context, no figure defaults to a third and fifth above the bass, with accidentals and style supplying further rules. <bookmark mark='b'/> A six means the third and the sixth. <bookmark mark='c'/> A seven means the third, the fifth and the seventh. In which octave? How many notes, and which one on top? That is left to the player, who decides while playing. It is called figured bass, and for a hundred and fifty years it was central to many European Baroque accompaniment practices."
         ) as vo:
             self.play(FadeIn(head), FadeIn(st))
             self.play(LaggedStart(*[FadeIn(f, shift=UP * 0.1) for f in figs], lag_ratio=0.2), run_time=1.5)
@@ -178,9 +157,10 @@ class Tab(SoundScene):
             groups.append([VGroup(*r.notes[4 * k + 1: 4 * k + 4]) for k in range(8)])
         tags = VGroup(*[label(t, font_size=28, color=col).next_to(r, UP, buff=0.12) for t, r, col in zip((r"player A", r"player B"), rolls, (TUNE, FIG_COL))])
         note = listen_note(r"two players read the same bass and the same figures", width=8.4).move_to(UP * 1.0)
+        roll_note = label(r"grey bass drawn one octave higher in these rolls", font_size=18, color=GREY_B).move_to(DOWN * 0.35)
         with self.voiceover("Here is that bass line, played twice. Two players read the same eight notes and the same four figures."):
             self.play(FadeIn(st), FadeIn(figs), FadeIn(note))
-        self.play(FadeOut(note), FadeIn(rolls[0].frame), FadeIn(rolls[1].frame), FadeIn(tags))
+        self.play(FadeOut(note), FadeIn(rolls[0].frame), FadeIn(rolls[1].frame), FadeIn(tags), FadeIn(roll_note))
         with self.listen(c) as snd:
             window(snd, r"one figured bass, \ filled in twice", detail=r"a plucked keyboard, \ modelled", corner=DL, tag_corner=DR)
             pulse(snd, tags[0], snd.time_of("A"), snd.time_of("B") - 0.2)          # whose turn it is: never a still screen
@@ -198,7 +178,7 @@ class Tab(SoundScene):
             "more than six million ways to fill these eight chords within the reach of a hand, and chose "
             "two in which the upper voices move smoothly. The rules for choosing well are the subject of "
             "Parts 16 and 17. And the bargain itself never went away: a jazz musician's lead sheet, a "
-            "melody with chord symbols over it, is figured bass four centuries on."
+            "melody with chord symbols over it, offers an analogous bargain, with different conventions."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeOut(tags), FadeIn(count))

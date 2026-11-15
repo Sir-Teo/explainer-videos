@@ -29,13 +29,13 @@ class Neumes(SoundScene):
     def signs(self):
         d = load("neumes")
         self.nm = nm = neumes(d["steps"], words=WORDS, width=10.0, size=0.6, word_size=34).move_to(UP * 1.5)
-        where = label(r"signs over the words: \ the ninth century", font_size=26, color=GREY_A).to_edge(UP, buff=0.5)
+        where = label(r"a simplified contour toy \ (after early neumes)", font_size=26, color=GREY_A).to_edge(UP, buff=0.5)
         legend = VGroup(*[VGroup(neume_sign(k, 0.6), label(t, font_size=28, color=GREY_A)).arrange(RIGHT, buff=0.3)
                           for k, t in ((1, r"higher than the last note"), (0, r"the same note again"), (-1, r"lower"))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 1.6)
         with self.voiceover(
             "In the ninth century, in monasteries such as Saint Gall, scribes who were copying out the words "
             "of chants began to add small signs above the syllables. They are called neumes. Here is the "
-            "first phrase of our Tune, marked in that way; I have simplified the signs to three. "
+            "first phrase of our Tune, marked in that way; This is a contour toy, not a transcription of Saint Gall notation; real neumes also convey articulation and rhythmic nuances. "
             "<bookmark mark='a'/> A rising stroke says: this note is higher than the last one. "
             "<bookmark mark='b'/> A dash: the same note again. <bookmark mark='c'/> A dot: lower."
         ) as vo:
@@ -78,7 +78,7 @@ class Neumes(SoundScene):
             "All three. <bookmark mark='a'/> Each of them stays, rises, stays, rises, stays, and falls, "
             "exactly as the signs say. The second one is the Tune. The first leaps a fourth where the Tune "
             "leaps a fifth; the third ends by dropping a fourth where the Tune drops a step. The signs say "
-            "which way the melody goes. They never say how far."
+            "which way the melody goes. These simplified contour signs do not say how far."
         ) as vo:
             self.play(FadeOut(bx))
             vo.wait_until("a")
@@ -105,8 +105,7 @@ class Neumes(SoundScene):
             f"eight notes, {say(d['counts']['8'])}. <bookmark mark='b'/> And for the whole Tune, forty-two "
             "notes on the eight notes of an octave, more than three hundred million. <bookmark mark='c'/> "
             f"Measured in bits, the signs for this phrase carry about {say(d['contour_bits'], 1)}; naming "
-            f"its notes would take {say(d['pitch_bits'], 1)}. Half the message is not there. So neumes were "
-            "never a way to learn a tune. They reminded a singer of a tune already learned by ear, from "
+            f"its notes would take {say(d['pitch_bits'], 1)}. These are code budgets under a chosen alphabet, not measurements of historical information. Early unheighted neumes often supported oral learning. They reminded a singer of a tune already learned by ear, from "
             "another singer. The page helped the memory. It could not replace it."
         ) as vo:
             self.play(FadeIn(rows[0]))
@@ -133,12 +132,7 @@ class Neumes(SoundScene):
         lined.shift(DOWN * 1.6)
         fa.shift(DOWN * 1.6)
         with self.voiceover(
-            "Then, around the year 1000, some scribes began to do something that seems obvious now. They "
-            "wrote a sign higher on the page when its note was higher. <bookmark mark='a'/> Then someone "
-            "scratched a line into the parchment to keep the heights honest, and inked it red, and wrote a "
-            "letter beside it: this line is F. <bookmark mark='b'/> Now the height of a sign means "
-            "something. One line fixes one note, and the notes near it can be judged by eye. The next "
-            "idea belongs to one man. He added more lines."
+            "Then, around the year 1000, some scribes began to do something that seems obvious now. They wrote a sign higher on the page when its note was higher. <bookmark mark='a'/> Then someone scratched a line into the parchment to keep the heights honest, and inked it red, and wrote a letter beside it: this line is F. <bookmark mark='b'/> Now the height of a sign means something. One line fixes one note, and the notes near it can be judged by eye. Guido of Arezzo helped systematize the use of staff lines and pitch letters, building on earlier practices."
         ) as vo:
             self.play(*[n.animate.move_to(h) for n, h in zip(nm.notes, high.notes)], FadeIn(year), run_time=2.0)
             vo.wait_until("a")

@@ -377,7 +377,7 @@ def compute_bits() -> dict:
     x, tempo = perform.tempo_curve(two, [(0, PHRASE), (PHRASE, 2 * PHRASE)], 0.2, Fraction(1), 0.5)
     a, b = render(live, piano, 0.5), render(dead, piano, 0.5)
     seq = concat([a.at_level(LEVEL), b.at_level(LEVEL)], gap=1.0, names=["A", "B"])
-    perf_bits = 42 * (7 + 7 + 5)                                        # per note: when (1 ms in ±64), how long, how loud (32 levels)
+    perf_bits = 42 * (7 + 7 + 5)                                        # illustrative per-note budget: onset (2 ms bins across 256 ms), duration correction (10 ms bins across 1.28 s), level (32 bins)
     return {"sizes": sizes, "audio": audio, "seconds": page.duration, "plain_bits": d["plain_bits"], "entropy_bits": d["entropy_bits"], "bits_per_note": d["entropy_bits_per_note"],
             "structured_bits": structured, "distinct_phrases": len(distinct), "audio_bits": audio_bits, "ratio": audio_bits / d["plain_bits"],
             "ratio_mp3": 8 * audio.get("MP3", 0) / d["plain_bits"], "perf_bits": perf_bits,
