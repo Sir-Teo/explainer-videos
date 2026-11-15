@@ -95,6 +95,8 @@ LEDGER = [
      "measure": r"the cue's 14 beats at 98.8 bpm (a 14-5 click) land its last note on the 9.0 s hit; the loop adds a layer each pass"},
     {"part": 45, "title": r"hidden in another line, then released by timbre and by register", "seconds": 13.9,
      "measure": r"14 notes of the Tune interleaved with 14 others; the two lines cross 13 times"},
+    {"part": 46, "title": r"with three endings: expected, delayed, denied", "seconds": 33.2,
+     "measure": r"the turn to the ending costs 1.2, 6.3 and 10.9 bits; the last note 1.2, 0.9, 10.9"},
 ]
 
 

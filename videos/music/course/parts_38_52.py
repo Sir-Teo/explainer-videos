@@ -338,4 +338,45 @@ PARTS = [
         I=(6, 7),
         also=(("Monochord's auditory scene: the scale illusion, the streaming model, grouping stimuli, Shepard tones and the timbre space", "explainer/music/monochord/scene.py"),),
     ),
+    Part(
+        n=46, level="U", widget="ending", prereq=(14, 15, 18, 21, 38, 42, 45),
+        question="Why does music move us, and how much of that can expectation, measured in bits, explain?",
+        story="In 2011 Salimpoor and colleagues caught dopamine released twice, at a musical chill and in the seconds of "
+              "anticipation before it; Meyer had argued in 1956 that musical emotion is expectation delayed and fulfilled. "
+              "The part builds a listener: a variable-order Markov model blended by prediction by partial matching, in the "
+              "manner of Pearce's IDyOM, trained on the series' 51 major-key tunes and listening to each with a short-term "
+              "model that learns the piece. It measures surprise (information content) and uncertainty (entropy) note by "
+              "note: the Tune costs 1.98 bits a note, random scale notes 3.93; Part 42's kept draft 3.1 against a rejected "
+              "draft's 3.8; probe tones rank C, D, F sharp as listeners do. Expectation is learned (a Saffran-style stream "
+              "of tone words, heard and tested); repetition teaches it (a leap costs 4.8 bits, then 2.1); delay makes an "
+              "ending more certain (the deceptive turn costs 6.3 bits and the final C only 0.9, against 1.2 undelayed); "
+              "denial leaves the cost unpaid (F sharp, 10.9 bits, falling to 2.2 when repeated). It covers the ERAN and "
+              "reward, Cheung's interaction of surprise and uncertainty, groove's inverted U and syncopation, the cues of "
+              "expressed emotion (a quiz in four settings), chills, sad music, memory, and what does not replicate.",
+        handoff="Origins and universals in Part 47; mastering and loudness in Part 57; recommendation in Part 63; machines "
+                "that compose in Part 65; replication in Part 67.",
+        outside="Part 14 for melody and the corpus; Part 15 for key and probe tones; Part 18 for cadences; Part 21 for form; "
+                "Part 38 for syncopation; Part 42 for tension and the searcher; Part 45 for grouping. Entropy, Markov models.",
+        objectives={
+            "U": ["Hear expected, delayed and denied endings, a suspension and a Neapolitan, and say what each does.",
+                  "Learn tone 'words' from a stream, and rank probe tones by fit.",
+                  "Hear the cues of four expressed emotions, and four grooves of rising syncopation."],
+            "M": ["Build a PPM listener with long- and short-term models, and compute surprise and uncertainty per note.",
+                  "Compute transitional probabilities in a stream and a syncopation index for a pattern.",
+                  "Compare melodies by mean surprise, and engineer endings by their cost in bits."],
+            "D": ["Design a study measuring how much of moment-to-moment pleasure surprise and uncertainty predict."],
+            "I": ["Build and delay expectations in songs and scores; choose music for its cues with measured effects."],
+        },
+        results=[
+            ("Surprise", r"h(x) = -\log_2 p(x \mid \text{context})"),
+            ("Uncertainty", r"H = -\textstyle\sum_x p(x)\log_2 p(x) \le \log_2 n"),
+            ("The Tune", r"1.98 \text{ bits a note; random notes } 3.93"),
+            ("Delay", r"\text{turn } 6.3 \text{ bits, arrival } 0.9 \ (\text{plain } 1.2)"),
+            ("Statistical learning", r"P(\text{next} \mid \text{inside a word}) = 1, \ \text{across} \approx 1/3"),
+        ],
+        U=(0, 1, 2, 5, 6, 8, 9),
+        D=(10,),
+        I=(3, 4, 7),
+        also=(("Monochord's listener: PPM, surprise and uncertainty, syncopation and statistical learning", "explainer/music/monochord/listener.py"),),
+    ),
 ]

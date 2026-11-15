@@ -556,4 +556,38 @@
       note: "Pink dots: points read from van Noorden's figure, good to about a semitone. Six semitones at 90 ms sits near the line: listen for the gallop splitting after a few seconds. Halve the speed and it holds together; double the interval and it never gallops."
     });
   };
+  // ---------------------------------------------------------------- Part 46: what an ending costs
+  var IC46 = {"-5": 6.09, "-4": 11.02, "-3": 6.31, "-2": 11.02, "-1": 5.33, "0": 1.23, "1": 11.02, "2": 2.43, "3": 11.02, "4": 2.75, "5": 3.73, "6": 10.91, "7": 3.75, "8": 11.02, "9": 5.54, "10": 11.02, "11": 9.8, "12": 9.43};
+  var NAMES46 = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"];
+  W.ending = function (el) {
+    QB.widget(el, {
+      title: "What does an ending cost?",
+      sub: "The Tune's last phrase, F F E E D D, and then a last note of your choice. The bars show how surprising each possible last note is to Part 46's listener model, trained on fifty other tunes: minus log2 of the probability it gave that note, in bits. Choose a note and play the phrase with it.",
+      panels: 1, height: 230,
+      controls: [{ k: "n", label: "Last note", min: -5, max: 12, step: 1, value: 0, fmt: function (x) { return NAMES46[((x % 12) + 12) % 12] + (x < 0 ? " (below)" : (x >= 12 ? " (an octave up)" : "")); } }],
+      buttons: [{ label: "Play the phrase", act: function (s) {
+        var rate = 44100, beat = 0.42, seq = [5, 5, 4, 4, 2, 2, s.v.n], out = new Float32Array(Math.floor((8 * beat + 1.2) * rate));
+        seq.forEach(function (m, i) {
+          var f = 261.63 * Math.pow(2, m / 12), i0 = Math.floor(i * beat * rate), dur = (i === 6 ? 2 : 0.95) * beat;
+          for (var q = 0; q < (dur + 0.3) * rate && i0 + q < out.length; q++) { var t = q / rate; out[i0 + q] += 0.22 * Math.exp(-t * 2.5) * (t < dur ? 1 : Math.exp(-(t - dur) * 15)) * (Math.sin(2 * Math.PI * f * t) + 0.3 * Math.sin(4 * Math.PI * f * t)); }
+        });
+        s.sound = play(out, rate);
+      } }],
+      init: function (s) { s.sound = null; },
+      draw: function (g, v, s) {
+        s.v = v;
+        var xs = [], ys = [];
+        for (var k = -5; k <= 12; k++) { xs.push(k); ys.push(IC46[String(k)]); }
+        var a = g[0].axes({ x: [-5.6, 12.6], y: [0, 12], title: "Surprise of each possible last note, in bits (white: your choice)", xlabel: "semitones above the tonic C" });
+        a.bars(xs, ys, 0.7, { color: function (i) { return xs[i] === v.n ? "#FFFFFF" : (ys[i] < 3 ? C.idea : "#F472B6"); } });
+      },
+      readout: function (v, s) {
+        var b = IC46[String(v.n)];
+        return [["your ending", NAMES46[((v.n % 12) + 12) % 12] + ": " + b.toFixed(2) + " bits, a probability of about 1 in " + Math.round(Math.pow(2, b))],
+                ["the model's uncertainty before it", "2.57 bits"],
+                ["sound", s.sound === null ? "press Play" : (s.sound ? "playing" : "not available in this browser")]];
+      },
+      note: "C, the real ending, costs about one bit. The notes outside the key cost about eleven: the model had never seen them end such a phrase. D and E cost little because folk tunes often end a phrase on them; they sound unfinished, which is a different thing from surprising."
+    });
+  };
 })();

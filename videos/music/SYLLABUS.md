@@ -1788,13 +1788,32 @@ streaming boundaries?).
 *Story:* In 2011 a PET study caught dopamine being released twice: at the moment of a musical chill, and in the
 seconds of anticipation before it. Meyer had argued in 1956 that musical emotion is expectation delayed and
 fulfilled. The part builds a listener model and engineers three endings for the Tune.
+1. Hook: an ear question (three endings: which surprised the listener most?); chills and dopamine; the plan.
+2. Expectation: Hanslick; Meyer; ITPRA; three kinds; dynamic expectation heard; what expectation leaves out.
+3. Statistical learning: Saffran; an ear question (a word or a part-word?); probe tones heard; a lifetime of counting; children.
+4. A listener model: how it works; two numbers per note; viewpoints; the Tune note by note heard; the listener sings; the corpus.
+5. Surprise across melodies: the comparison; Part 42's drafts heard; random and chain heard; evidence; the inverted U.
+6. Three endings: heard; priced in bits; a denial repeated; scale-degree qualia; devices of delay; a suspension heard.
+7. The brain at a wrong chord: the ERAN; a Neapolitan heard; music and language; mismatch negativity; reward.
+8. Surprise and uncertainty together: Cheung; where pleasure lies; the two corners heard; tension; uncertainty engineered.
+9. Groove: syncopation; four patterns heard; the inverted U; microtiming; entrainment.
+10. Expressed emotion: an ear question (four settings); the cues; chills; mechanisms; sad music; memory; what does not replicate.
+11. Frontier: predictive processing; expectation across cultures; models as listeners; the research problem.
+12. Variation 46: the Tune with three endings, priced in bits. Outro: problems, payoffs.
+
 *Covers:* Meyer; statistical learning; surprise and uncertainty and their interplay; brain responses to syntax;
 tension; groove and syncopation; the cues of expressed emotion; the pleasure of sad music; preference and
 complexity; what does not replicate.
-*Built and computed:* a variable-order listener model; surprise and entropy curves across the Variations;
-published data points beside the model's.
-*Variation 46:* the Tune with three endings: expected, delayed, denied.
-*Frontier:* predictive-processing accounts; models as listeners.
+*Built and computed:* `monochord/listener.py`: a variable-order listener (PPM, escape method C, long- and short-term
+models combined by entropy, after IDyOM) trained on the series' 51 major-key tunes; surprise and entropy curves for the
+Tune (1.98 bits a note), the corpus (1,788 notes), Part 42's drafts (kept 3.1, rejected 3.8) and chains, random notes
+(3.9); probe tones; dynamic expectation; a Saffran-style stream (transitional probability 1 inside words, 0.4 across);
+the Longuet-Higgins and Lee syncopation index. Published findings (Salimpoor, Cheung, Witek, Juslin and Laukka) are
+quoted beside the model's numbers, not reproduced.
+*Variation 46:* the Tune with three endings: expected (last C 1.2 bits), delayed (the deceptive turn 6.3, then the C
+0.9), denied (F♯, 10.9).
+*Frontier:* predictive-processing accounts; models as listeners (open: how much of pleasure surprise and uncertainty
+predict).
 *Reading:* Meyer (1956); Huron (2006); Salimpoor et al. (2011); Cheung et al. (2019); Witek et al. (2014).
 
 ### Part 47 · Origins and Universals (~55)
