@@ -436,8 +436,8 @@ add(Finding(
 
 shown(3, "STEVENS_1946", "a committee's disagreement and a classification of scales: an argument, not an empirical "
       "finding")
-shown(3, "CREDE_2017", "shown as the example of two names for nearly one thing; whether grit adds anything to "
-      "conscientiousness is entered with motivation", row_in=28)
+shown(3, "CREDE_2017", "shown as the example of two names for nearly one thing; grit has its own row in Part "
+      "28")
 shown(3, "HEDGE_2018", "the reliability paradox is stated here and paid off with its record later", row_in=59)
 shown(3, "FLAKE_FRIED_2020", "counts of how measures are reported in journals: a description of practice, not a "
       "finding about minds")
@@ -766,7 +766,7 @@ shown(7, "LASHLEY_1929", "a famous negative result, told as history with its cri
 shown(17, "FRANK_2004", "one study of learning from reward and punishment, described with Psyche's learner beside it; disorders are Part 39")
 shown(17, "WILSON_2014", "a study of exploration, described without figures")
 shown(17, "TOLMAN_1948", "a theoretical paper, told as history")
-shown(17, "ADAMS_DICKINSON_1981", "the devaluation test, described; motivation is entered with Part 28", row_in=28)
+shown(17, "ADAMS_DICKINSON_1981", "the devaluation test, described as a method for telling habits from goals")
 shown(17, "MOMENNEJAD_2017", "a test of the successor representation, described with its partial result")
 shown(17, "HOWE_2013", "dopamine ramps, described at the frontier of the dopamine story")
 shown(17, "DABNEY_2020", "a distributional code, described; replicated in a second region since")
@@ -1169,7 +1169,7 @@ shown(10, "DUNSTER_2018", "a before-and-after comparison in two schools, describ
 shown(10, "TRAUER_2015", "a meta-analysis of a treatment; therapies are entered in Part 42", row_in=42)
 shown(10, "XIE_2013", "a finding in mice and its dispute, at the frontier")
 shown(10, "PHOENIX_1959", "animal physiology; the human evidence is indirect and is said to be")
-shown(10, "TEIGEN_1994", "a history of a textbook law; the law itself is examined in Part 28", row_in=28)
+shown(10, "TEIGEN_1994", "a history of a textbook law, told again in Part 28: a history, not a finding")
 shown(10, "ROENNEBERG_2004", "a description from a survey of sleep times; the lifespan is Part 31", row_in=31)
 
 
@@ -3364,6 +3364,195 @@ add(Finding(
     checked="2026-11-15",
 ))
 
+# ---------------------------------------------------------------------------
+# Part 28 · Motivation
+# ---------------------------------------------------------------------------
+add(Finding(
+    key="brain_stimulation_reward", part=28, title=r"Brain-stimulation reward",
+    claim="Animals will work to receive electrical stimulation of certain brain sites, often in preference to food.",
+    original=Study("Olds and Milner", 1954, n="rats", design="electrodes near the septal area; brief current in one "
+                   "corner of a box, then for pressing a lever",
+                   found="rats returned to the place of stimulation and pressed a lever for it again and again"),
+    status="replicated",
+    record=(Study("Olds", 1958, n="rats", design="many electrode sites mapped",
+                  found="high press rates at some sites, none at others: a map of reward"),
+            Study("Routtenberg and Lindy", 1965, n="rats", design="a short daily session with a food lever and a "
+                  "stimulation lever", found="some rats chose stimulation, stopped eating and lost weight"),
+            Study("Carlezon and Chartoff", 2007, n="a protocol", design="intracranial self-stimulation in rodents",
+                  found="a standard laboratory method, used to measure the rewarding effects of drugs")),
+    note="Among the most reproduced findings in behavioural neuroscience; what it reveals, pleasure or wanting, is the "
+         "part that changed.",
+    sources=("J. Olds and P. Milner, Positive reinforcement produced by electrical stimulation of septal area and "
+             "other regions of rat brain, Journal of Comparative and Physiological Psychology 47 (1954) 419-427",
+             "J. Olds, Self-stimulation of the brain, Science 127 (1958) 315-324",
+             "A. Routtenberg and J. Lindy, Effects of the availability of rewarding septal and hypothalamic "
+             "stimulation on bar pressing for food under conditions of deprivation, Journal of Comparative and "
+             "Physiological Psychology 60 (1965) 158-161",
+             "W. A. Carlezon and E. H. Chartoff, Intracranial self-stimulation (ICSS) in rodents to study the "
+             "neurobiology of motivation, Nature Protocols 2 (2007) 2987-2995"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="overjustification", part=28, title=r"Overjustification",
+    claim="An expected, tangible reward for an activity people already enjoy reduces how much they choose to do it "
+          "later.",
+    original=Study("Lepper, Greene and Nisbett", 1973, n="preschool children who liked drawing",
+                   design="an expected award, an unexpected award, or none, for drawing; free play observed one to "
+                   "two weeks later", found="the expected-award group drew about half as much as the others"),
+    status="replicated",
+    record=(Study("Cameron and Pierce (meta-analysis)", 1994, n="many experiments",
+                  found="little overall harm from rewards"),
+            Study("Deci, Koestner and Ryan (meta-analysis)", 1999, n="128 experiments",
+                  found="expected, tangible, task-contingent rewards reduce free-choice interest; praise raises it"),
+            Study("Cerasoli, Nicklin and Ford (meta-analysis)", 2014, n="schools and workplaces",
+                  found="incentives predict the quantity of performance, intrinsic motivation its quality")),
+    note="Reliable in the laboratory under the conditions the meta-analyses specify; how much it matters in schools "
+         "and workplaces is contested.",
+    sources=("M. R. Lepper, D. Greene and R. E. Nisbett, Undermining children's intrinsic interest with extrinsic "
+             "reward: a test of the overjustification hypothesis, Journal of Personality and Social Psychology 28 "
+             "(1973) 129-137",
+             "E. L. Deci, Effects of externally mediated rewards on intrinsic motivation, Journal of Personality and "
+             "Social Psychology 18 (1971) 105-115",
+             "J. Cameron and W. D. Pierce, Reinforcement, reward, and intrinsic motivation: a meta-analysis, Review "
+             "of Educational Research 64 (1994) 363-423",
+             "E. L. Deci, R. Koestner and R. M. Ryan, A meta-analytic review of experiments examining the effects of "
+             "extrinsic rewards on intrinsic motivation, Psychological Bulletin 125 (1999) 627-668",
+             "C. P. Cerasoli, J. M. Nicklin and M. T. Ford, Intrinsic motivation and extrinsic incentives jointly "
+             "predict performance: a 40-year meta-analysis, Psychological Bulletin 140 (2014) 980-1008",
+             "R. M. Ryan and E. L. Deci, Self-determination theory and the facilitation of intrinsic motivation, "
+             "social development, and well-being, American Psychologist 55 (2000) 68-78"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="goal_setting", part=28, title=r"Specific, difficult goals",
+    claim="Specific, difficult goals lead to higher performance than vague goals such as 'do your best'.",
+    original=Study("Locke", 1968, n="laboratory studies", design="specific hard goals against do-your-best",
+                   found="higher performance with specific, difficult goals"),
+    status="replicated",
+    record=(Study("Mento, Steel and Karren (meta-analysis)", 1987, n="studies from 1966 to 1984",
+                  found="a consistent advantage for specific, difficult goals"),
+            Study("Locke and Latham (review)", 2002, n="hundreds of studies, laboratory and field",
+                  found="the effect holds with commitment, feedback and ability; learning goals help on new, "
+                  "complex tasks"),
+            Study("Ordonez, Schweitzer, Galinsky and Bazerman", 2009, n="a review of cases",
+                  found="narrow, hard goals can crowd out other aims and invite cheating"),
+            Study("Gollwitzer and Sheeran (meta-analysis)", 2006, n="many studies of if-then plans",
+                  found="implementation intentions help people reach goals")),
+    note="Robust in laboratory and field; smaller for complex new tasks, and with costs when goals are narrow.",
+    sources=("E. A. Locke, Toward a theory of task motivation and incentives, Organizational Behavior and Human "
+             "Performance 3 (1968) 157-189",
+             "A. J. Mento, R. P. Steel and R. J. Karren, A meta-analytic study of the effects of goal setting on task "
+             "performance: 1966-1984, Organizational Behavior and Human Decision Processes 39 (1987) 52-83",
+             "E. A. Locke and G. P. Latham, Building a practically useful theory of goal setting and task "
+             "motivation: a 35-year odyssey, American Psychologist 57 (2002) 705-717",
+             "L. D. Ordonez, M. E. Schweitzer, A. D. Galinsky and M. H. Bazerman, Goals gone wild: the systematic "
+             "side effects of overprescribing goal setting, Academy of Management Perspectives 23 (2009) 6-16",
+             "P. M. Gollwitzer, Implementation intentions: strong effects of simple plans, American Psychologist 54 "
+             "(1999) 493-503",
+             "P. M. Gollwitzer and P. Sheeran, Implementation intentions and goal achievement: a meta-analysis of "
+             "effects and processes, Advances in Experimental Social Psychology 38 (2006) 69-119"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="ego_depletion", part=28, title=r"Ego depletion",
+    claim="Exerting self-control on one task impairs self-control on the next, as if a limited resource were used "
+          "up.",
+    original=Study("Baumeister, Bratslavsky, Muraven and Tice", 1998, n="undergraduates",
+                   design="resist chocolate cookies and eat radishes, or eat the cookies; then unsolvable puzzles",
+                   found="the radish eaters gave up much sooner"),
+    status="failed",
+    record=(Study("Hagger, Wood, Stiff and Chatzisarantis (meta-analysis)", 2010, n="198 tests", effect=0.62,
+                  unit="d", found="a medium-to-large, consistent average effect"),
+            Study("Carter, Kofler, Forster and McCullough", 2015, n="the published and unpublished literature",
+                  design="corrections for small-study bias", found="corrected estimates near zero"),
+            Study("Hagger, Chatzisarantis et al. (registered, multisite)", 2016, n="23 laboratories, 2,141 people",
+                  effect=0.04, unit="d", lo=-0.07, hi=0.15, found="d = 0.04, 95% CI -0.07 to 0.15"),
+            Study("Vohs et al. (registered, multisite)", 2021, n="dozens of laboratories",
+                  design="tasks chosen with the theory's proponents", found="an effect close to zero")),
+    note="Failed in its sequential-task form in two registered multisite tests; fatigue after effort is real, a "
+         "limited resource is not supported.",
+    sources=("R. F. Baumeister, E. Bratslavsky, M. Muraven and D. M. Tice, Ego depletion: is the active self a "
+             "limited resource?, Journal of Personality and Social Psychology 74 (1998) 1252-1265",
+             "M. T. Gailliot et al., Self-control relies on glucose as a limited energy source: willpower is more "
+             "than a metaphor, Journal of Personality and Social Psychology 92 (2007) 325-336",
+             "R. Kurzban, Does the brain consume additional glucose during self-control tasks?, Evolutionary "
+             "Psychology 8 (2010) 244-259",
+             "M. S. Hagger, C. Wood, C. Stiff and N. L. D. Chatzisarantis, Ego depletion and the strength model of "
+             "self-control: a meta-analysis, Psychological Bulletin 136 (2010) 495-525",
+             "E. C. Carter, L. M. Kofler, D. E. Forster and M. E. McCullough, A series of meta-analytic tests of the "
+             "depletion effect: self-control does not seem to rely on a limited resource, Journal of Experimental "
+             "Psychology: General 144 (2015) 796-815",
+             "C. Sripada, D. Kessler and J. Jonides, Methylphenidate blocks effort-induced depletion of regulatory "
+             "control in healthy volunteers, Psychological Science 25 (2014) 1227-1234",
+             "M. S. Hagger, N. L. D. Chatzisarantis et al., A multilab preregistered replication of the "
+             "ego-depletion effect, Perspectives on Psychological Science 11 (2016) 546-573",
+             "R. F. Baumeister and K. D. Vohs, Misguided effort with elusive implications, Perspectives on "
+             "Psychological Science 11 (2016) 574-575",
+             "K. D. Vohs et al., A multisite preregistered paradigmatic test of the ego-depletion effect, "
+             "Psychological Science 32 (2021) 1566-1581"),
+    checked="2026-11-15",
+    data=("EGO_DEPLETION_RRR",),
+))
+
+add(Finding(
+    key="delay_of_gratification", part=28, title=r"Delay of gratification predicts outcomes",
+    claim="How long a preschooler waits for a larger treat predicts achievement years later.",
+    original=Study("Shoda, Mischel and Peake", 1990, n="a few dozen children from Stanford's nursery school",
+                   design="waiting at four; test scores in adolescence",
+                   found="children who waited longer had higher scores"),
+    status="replicated, smaller",
+    record=(Study("Kidd, Palmeri and Aslin", 2013, n="young children", design="a reliable or an unreliable "
+                  "experimenter before the test", found="children waited far longer after a reliable adult"),
+            Study("McGuire and Kable", 2013, n="adults", design="waiting when the delay's distribution varies",
+                  found="persistence adjusted to the timing statistics, as a rational account predicts"),
+            Study("Watts, Duncan and Quan", 2018, n="about 900 children from many backgrounds",
+                  design="a conceptual replication with controls",
+                  found="about half the original association; about two-thirds smaller again with background "
+                  "controlled")),
+    note="The association exists but is small and largely shared with family background and early ability; "
+         "waiting also reflects how trustworthy the world seems.",
+    sources=("W. Mischel, E. B. Ebbesen and A. R. Zeiss, Cognitive and attentional mechanisms in delay of "
+             "gratification, Journal of Personality and Social Psychology 21 (1972) 204-218",
+             "Y. Shoda, W. Mischel and P. K. Peake, Predicting adolescent cognitive and self-regulatory competencies "
+             "from preschool delay of gratification: identifying diagnostic conditions, Developmental Psychology 26 "
+             "(1990) 978-986",
+             "W. Mischel, Y. Shoda and M. L. Rodriguez, Delay of gratification in children, Science 244 (1989) "
+             "933-938",
+             "C. Kidd, H. Palmeri and R. N. Aslin, Rational snacking: young children's decision-making on the "
+             "marshmallow task is moderated by beliefs about environmental reliability, Cognition 126 (2013) 109-114",
+             "J. T. McGuire and J. W. Kable, Rational temporal predictions can underlie apparent failures to delay "
+             "gratification, Psychological Review 120 (2013) 395-410",
+             "T. W. Watts, G. J. Duncan and H. Quan, Revisiting the marshmallow test: a conceptual replication "
+             "investigating links between early delay of gratification and later outcomes, Psychological Science 29 "
+             "(2018) 1159-1177"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="grit", part=28, title=r"Grit beyond conscientiousness",
+    claim="Grit, perseverance and passion for long-term goals, predicts achievement beyond conscientiousness.",
+    original=Study("Duckworth, Peterson, Matthews and Kelly", 2007, n="several samples, including West Point cadets "
+                   "and spelling-bee finalists", design="a short grit questionnaire",
+                   found="grit predicted retention and progress"),
+    status="contested",
+    record=(Study("Rimfeld, Kovas, Dale and Plomin", 2016, n="a UK twin sample",
+                  found="grit added little to the prediction of exam results beyond the Big Five"),
+            Study("Crede, Tynan and Harms (meta-analysis)", 2017, n="88 samples, 66,807 people",
+                  found="grit and performance rho = .18; grit and conscientiousness rho = .84")),
+    note="Grit predicts modestly and is nearly conscientiousness; whether it adds anything beyond it is contested.",
+    sources=("A. L. Duckworth, C. Peterson, M. D. Matthews and D. R. Kelly, Grit: perseverance and passion for "
+             "long-term goals, Journal of Personality and Social Psychology 92 (2007) 1087-1101",
+             "K. Rimfeld, Y. Kovas, P. S. Dale and R. Plomin, True grit and genetics: predicting academic achievement "
+             "from personality, Journal of Personality and Social Psychology 111 (2016) 780-789",
+             "M. Crede, M. C. Tynan and P. D. Harms, Much ado about grit: a meta-analytic synthesis of the grit "
+             "literature, Journal of Personality and Social Psychology 113 (2017) 492-511"),
+    checked="2026-11-15",
+    data=("CREDE_2017",),
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -3539,3 +3728,40 @@ shown(27, r"Tononi et al.\ (2016); \ Aaronson (2014); \ Fleming et al.\ (2023)",
       "critics, described")
 shown(27, r"Weiskrantz, \ Warrington, \ Sanders \& Marshall (1974); \ Weiskrantz (1986)", "the history of the "
       "case; blindsight has its row")
+
+shown(28, r"Bernard (1865); \ Cannon (1932); \ Hull (1943)", "the history of homeostasis and drive theory")
+shown(28, r"Sheffield \& Roby (1950); \ Olds \& Milner (1954)", "saccharin as a reward, told as history; "
+      "brain-stimulation reward has its row")
+shown(28, r"Hetherington \& Ranson (1940); \ Zhang et al.\ (1994); \ Kojima et al.\ (1999)", "the physiology of "
+      "hunger: lesions, a gene and a hormone, described")
+shown(28, r"Leibel, \ Rosenbaum \& Hirsch (1995); \ Hall et al.\ (2011); \ Fothergill et al.\ (2016)", "physiology "
+      "of weight loss and a model of energy balance, described qualitatively; the loop is Psyche's")
+shown(28, r"Harlow, \ Harlow \& Meyer (1950); \ Butler (1953)", "early animal studies of curiosity, told as history")
+shown(28, r"Yerkes \& Dodson (1908); \ Teigen (1994)", "a 1908 experiment and the history of the law named after "
+      "it: a history, not a finding tested here")
+shown(28, r"Berlyne (1960); \ Loewenstein (1994); \ Kang et al.\ (2009)", "theories of curiosity and one study "
+      "illustrating them")
+shown(28, r"Berridge \& Robinson (1998); \ Pe\~cina et al.\ (2003)", "the wanting and liking dissociation; entered "
+      "with addiction", row_in=41)
+shown(28, r"Pe\~cina \& Berridge (2005); \ Berridge \& Kringelbach (2015)", "hedonic hotspots and a review, "
+      "described; entered with addiction", row_in=41)
+shown(28, r"Robinson \& Berridge (2013)", "one experiment, modelled by Psyche; incentive salience is entered with "
+      "addiction", row_in=41)
+shown(28, r"Kirby, \ Petry \& Bickel (1999); \ Myerson, \ Green \& Warusawitharana (2001)", "discounting's clinical "
+      "correlates are entered with addiction; the area under the curve is a method", row_in=41)
+shown(28, r"Locke \& Latham (2002); \ Ord\'o\~nez et al.\ (2009)", "goal-setting has its row; the review of its "
+      "costs is cited in that row")
+shown(28, r"Duckworth et al.\ (2007); \ Cred\'e, \ Tynan \& Harms (2017)", "grit has its row; this tag names it "
+      "with accents the gate does not read")
+shown(28, r"Dweck (2006); \ Sisk et al.\ (2018); \ Yeager et al.\ (2019)", "growth mindset, summarized from two "
+      "meta-analyses and a national trial; entered with education", row_in=54)
+shown(28, r"Kool et al.\ (2010); \ Westbrook, \ Kester \& Braver (2013)", "effort avoidance and its price, "
+      "described as the starting point of a model")
+shown(28, r"Kurzban et al.\ (2013); \ Inzlicht, \ Shenhav \& Olivola (2018)", "theories of effort, described")
+shown(28, r"Gneezy \& Rustichini (2000)", "a field study told as an application of chapter five's finding")
+shown(28, r"Hall et al.\ (2011)", "a model of energy balance used in practice, described")
+shown(28, r"Lally, \ van Jaarsveld, \ Potts \& Wardle (2010)", "a study of habit formation, described as an "
+      "application")
+shown(28, r"Kurzban et al.\ (2013); \ Agrawal et al.\ (2022)", "theories at the frontier, described")
+shown(28, r"Schmidhuber (1991); \ Pathak et al.\ (2017)", "machine-learning methods, described; machines are Part "
+      "60's", row_in=60)

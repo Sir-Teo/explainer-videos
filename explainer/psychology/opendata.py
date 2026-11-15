@@ -18,6 +18,9 @@ here, so a changed file is noticed rather than silently fitted.  Each dataset al
 * :func:`choices13k`: 13,006 risky choice problems, each answered by about 16 people (Peterson et al., *Science*
   372, 2021), from github.com/jcpeterson/choices13k at a fixed commit.  Part 26.
 
+* :func:`ego_depletion_rrr`: the ego-depletion Registered Replication Report's table of 23 laboratories and
+  the original study (Hagger et al. 2016), from osf.io/jymhe.  Part 28.
+
 Nothing here imports manim.
 """
 
@@ -113,6 +116,15 @@ SOURCES = {
         "page": "https://github.com/jcpeterson/choices13k",
         "file": "choices13k_problems.json",
         "sha256": "c6bdb0ae7e0d0ca127b649b4996a7a49b3d0c4c43e5f9a851677fe4527276632",
+    },
+    # Part 28: the ego-depletion Registered Replication Report (Hagger et al., Perspectives on Psychological Science
+    # 11 (2016) 546-573), its per-laboratory table of reaction-time variability at osf.io/jymhe (component kh85v); no
+    # licence is stated, so it is fetched, never redistributed
+    "ego_depletion_rrr": {
+        "url": "https://osf.io/download/v3rdw/",
+        "page": "https://osf.io/jymhe/",
+        "file": "ego_depletion_rrr_RTV.csv",
+        "sha256": "fcdb1a36e15e8e52956fb4997ca10ac7c0e9ae6053e1b32d8b5c7291fdae47b1",
     },
     # Part 22: data inside CRAN source packages (catlearn, smacof, janeaustenr), read as data by rdata.py
     'nosof94': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/nosof94.RData', 'member_sha256': '4c9959b80d0311b5db13942665948a34ce5eee6559eb4ca8e5b66c10462670a0'},
@@ -501,3 +513,24 @@ def choices13k() -> dict:
             "b_rate": np.array([float(r["bRate"]) for r in rows]),
             "A": [np.array(probs[str(i)]["A"], dtype=float) for i in range(len(rows))],
             "B": [np.array(probs[str(i)]["B"], dtype=float) for i in range(len(rows))]}
+
+
+def ego_depletion_rrr() -> dict:
+    """The ego-depletion Registered Replication Report (Hagger et al. 2016): one row per laboratory, the primary
+    outcome (reaction-time variability on the multi-source interference task) after the depleting or the control
+    version of the letter-crossing task.  Columns: ``lab``, ``language`` ('English' or 'Non-English'), ``m_dep``,
+    ``sd_dep``, ``n_dep``, ``m_ctl``, ``sd_ctl``, ``n_ctl``.  The first row is the study the protocol was based on
+    (Sripada et al.), not a replication; ``original`` marks it.  Read as CSV (Latin-1, as published)."""
+    import csv
+
+    with open(path("ego_depletion_rrr"), newline="", encoding="latin-1") as f:
+        rows = list(csv.reader(f))
+    head, body = rows[0], [r for r in rows[1:] if len(r) > 8 and r[3].strip()]
+    out = {k: [] for k in ("lab", "language", "m_dep", "sd_dep", "n_dep", "m_ctl", "sd_ctl", "n_ctl", "original")}
+    for r in body:
+        out["lab"].append(r[1].strip())
+        out["language"].append(r[2].strip())
+        for k, i in (("m_dep", 3), ("sd_dep", 4), ("n_dep", 5), ("m_ctl", 6), ("sd_ctl", 7), ("n_ctl", 8)):
+            out[k].append(float(r[i]))
+        out["original"].append(r[0].strip() == "0")
+    return {k: np.array(v) for k, v in out.items()}

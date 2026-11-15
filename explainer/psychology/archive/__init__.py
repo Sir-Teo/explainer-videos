@@ -52,7 +52,8 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "NOSOFSKY_1994", "HOMA_1976", "EKMAN_1954", "ROTHKOPF_1957", "AUSTEN", "HUTCHISON_2013", "LANDAUER_DUMAIS_1997", "TVERSKY_1977",
            "NATURAL_STORIES", "SAFFRAN_1996", "MARCUS_1992", "HARTSHORNE_2018", "LEHTONEN_2018",
            "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014",
-           "SPEED_ACC_2008", "RR98", "CHOICES13K"]
+           "SPEED_ACC_2008", "RR98", "CHOICES13K",
+           "EGO_DEPLETION_RRR"]
 
 
 @dataclass(frozen=True)
@@ -3946,6 +3947,24 @@ CHOICES13K = Dataset(
     data={'problems': 13006, 'rows': 14568, 'described_unambiguous_no_feedback': 1928},
 )
 
+# ---------------------------------------------------------------------------------------------------------------
+# Part 28: motivation
+_P28 = "2026-11-15"
+
+EGO_DEPLETION_RRR = Dataset(
+    key="ego_depletion_rrr",
+    title="The ego-depletion Registered Replication Report: 23 laboratories and the original study",
+    source="M. S. Hagger, N. L. D. Chatzisarantis et al., A multilab preregistered replication of the ego-depletion "
+           "effect, Perspectives on Psychological Science 11 (2016) 546-573; the per-laboratory table of "
+           "reaction-time variability at osf.io/jymhe (no licence stated)",
+    cite=r"Hagger et al.\ (2016)",
+    checked="RTV.csv from osf.io/jymhe, fetched by explainer.psychology.opendata and checked by SHA-256; the "
+            "random-effects estimate recomputed from it (d = 0.04, 95% CI -0.07 to 0.15, 23 laboratories, 2,141 "
+            "people) matches the published one, " + _P28,
+    licence="data fetched, not redistributed",
+    data={"labs": 23, "people": 2141, "outcome": "reaction-time variability on the multi-source interference task"},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3985,4 +4004,5 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           NOSOFSKY_1994, HOMA_1976, EKMAN_1954, ROTHKOPF_1957, AUSTEN, HUTCHISON_2013, LANDAUER_DUMAIS_1997, TVERSKY_1977,
                           NATURAL_STORIES, SAFFRAN_1996, MARCUS_1992, HARTSHORNE_2018, LEHTONEN_2018,
                           GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014,
-                          SPEED_ACC_2008, RR98, CHOICES13K)}
+                          SPEED_ACC_2008, RR98, CHOICES13K,
+                          EGO_DEPLETION_RRR)}

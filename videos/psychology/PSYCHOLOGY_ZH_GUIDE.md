@@ -844,6 +844,31 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Tononi; Aaronson; Lamme; Rosenthal; Lau; Passingham; Seth, Bayne; Melloni; Leopold, Logothetis; Tong; Frässle; Tsuchiya | 托诺尼；阿伦森；拉梅；罗森塔尔；刘；帕辛厄姆；塞思，贝恩；梅洛尼；利奥波德，洛戈塞蒂斯；汤；弗雷斯勒；土谷 |
 | Libet; Kornhuber, Deecke; Schurger, Sitt; Soon, Haynes; Trevena, Miller; Owen; Monti; Bodien; Massimini, Casali; Casarotto | 利贝特；科恩胡伯，德克；舒尔格，西特；孙，海恩斯；特雷维纳，米勒；欧文；蒙蒂；博迪恩；马西米尼，卡萨利；卡萨罗托 |
 
+## Part 28: motivation
+
+| English | 中文 |
+|---|---|
+| motivation; drive; drive reduction; homeostasis; allostasis; set point; settling point | 动机；驱力；驱力降低；稳态；应变稳态；设定点；稳定点 |
+| negative feedback; proportional control; integral control; steady error; time constant | 负反馈；比例控制；积分控制；稳态误差；时间常数 |
+| leptin; ghrelin; hypothalamus; energy balance; adaptive thermogenesis | 瘦素；饥饿素；下丘脑；能量平衡；适应性产热 |
+| brain-stimulation reward; intracranial self-stimulation; septal area | 脑刺激奖赏；颅内自我刺激；隔区 |
+| curiosity; information gap; arousal; the Yerkes–Dodson law; inverted U | 好奇；信息缺口；唤醒；耶基斯–多德森定律；倒U形 |
+| wanting; liking; incentive salience; hedonic hotspot; nucleus accumbens shell; ventral pallidum | 想要；喜欢；诱因显著性；享乐热点；伏隔核壳部；腹侧苍白球 |
+| intrinsic and extrinsic motivation; overjustification; undermining; self-perception; discounting principle | 内在动机与外在动机；过度理由效应；削弱效应；自我知觉；折扣原则 |
+| self-determination theory; autonomy, competence, relatedness | 自我决定理论；自主、胜任、关系 |
+| goal setting; implementation intention; expectancy times value | 目标设定；执行意图；期望乘价值 |
+| delay discounting; adjusting-amount procedure; indifference point; area under the curve | 延迟折扣；调整金额法；无差异点；曲线下面积 |
+| self-control; ego depletion; strength model; Registered Replication Report; forest plot; precision-effect test | 自我控制；自我损耗；力量模型；注册重复报告；森林图；精确度效应检验 |
+| delay of gratification; the marshmallow test; grit; conscientiousness; growth mindset | 延迟满足；棉花糖测验；坚毅；尽责性；成长型心态 |
+| effort; expected value of control; opportunity cost; motivational intensity; the effort paradox | 努力；控制的期望价值；机会成本；动机强度；努力悖论 |
+| Olds, Milner; Routtenberg, Lindy; Bernard; Cannon; Hull; Friedman; Hall | 奥尔兹，米尔纳；鲁滕伯格，林迪；贝尔纳；坎农；赫尔；弗里德曼；霍尔 |
+| Harlow; Butler; Yerkes, Dodson; Teigen; Berlyne; Loewenstein; Berridge; Robinson; Zhang | 哈洛；巴特勒；耶基斯，多德森；泰根；伯莱因；勒文斯坦；贝里奇；罗宾逊；张俊 |
+| Lepper, Greene, Nisbett; Deci, Koestner, Ryan; Cameron, Pierce; Cerasoli; Bem; Kelley | 莱珀，格林，尼斯贝特；德西，克斯特纳，瑞安；卡梅伦，皮尔斯；切拉索利；贝姆；凯利 |
+| Atkinson; Locke, Latham; Ordóñez; Gollwitzer, Sheeran; Kirby; Myerson | 阿特金森；洛克，莱瑟姆；奥多涅斯；戈尔维策，希兰；柯比；迈尔森 |
+| Baumeister; Gailliot; Kurzban; Hagger; Carter; Sripada; Vohs | 鲍迈斯特；盖利奥特；库尔茨班；哈格尔；卡特；斯里帕达；沃斯 |
+| Mischel; Shoda; Watts, Duncan, Quan; Kidd; McGuire, Kable; Duckworth; Credé; Dweck; Sisk; Yeager | 米歇尔；正田；沃茨，邓肯，全浩南；基德；麦圭尔，卡布尔；达克沃思；克雷代；德韦克；西斯克；耶格尔 |
+| Kool; Westbrook; Braver; Shenhav; Botvinick; Brehm; Inzlicht; Gneezy, Rustichini; Lally; Agrawal; Daw | 库尔；韦斯特布鲁克；布雷弗；舍纳夫；博特维尼克；布雷姆；因兹利希特；格尼兹，鲁斯蒂奇尼；拉利；阿格拉瓦尔；道 |
+
 ## Names
 
 | English | 中文 |

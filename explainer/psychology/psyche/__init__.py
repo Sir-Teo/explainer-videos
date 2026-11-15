@@ -105,5 +105,9 @@ Modules so far, with the part that introduces each:
 ``workspace``       27   masking as one signal read twice (the criterion problem); a rivalry oscillator; a
                          two-stage ignition network; effective information and Φ (Tononi 2004); Schurger's
                          accumulator; Lempel–Ziv complexity and the perturbational complexity index
+``drive``           28   a thermostat with integral control; energy balance with a settling point and a
+                         defended set point; a learner given a current; incentive value recomputed from
+                         state; self-perception as Bayes; the expected value of control; rational waiting;
+                         random-effects meta-analysis and the precision-effect test; discount titration
 =================  ====  ===============================================================================
 """
