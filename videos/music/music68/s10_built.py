@@ -29,7 +29,7 @@ class Built(SoundScene):
             f"to 67 computed {say(b['clips'])} sounds with it, <bookmark mark='e'/> about {say(b['hours'], 1)} hours of them, "
             f"every one made by the code and none recorded. <bookmark mark='f'/> And there is a lab for every part."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(grid.copy().set_opacity(0.15)))   # a ghost of what is coming
             for m, c in zip("abcdef", grid):
                 vo.wait_until(m)
                 self.play(FadeIn(c, shift=UP * 0.15), run_time=0.5)

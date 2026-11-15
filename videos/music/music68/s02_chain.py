@@ -25,7 +25,8 @@ class Chain(SoundScene):
             "a codec, a stream, a loudspeaker. <bookmark mark='c'/> And Act Eleven added the way back, from sound to a machine "
             "to a score. Every link is now lit."
         ) as vo:
-            self.play(FadeIn(head))
+            ghost = ch.copy().set_opacity(0.15)                    # a ghost of what is coming: never a bare title
+            self.play(FadeIn(head), FadeIn(ghost))
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(ch.link[k]) for k, _ in CHAIN], lag_ratio=0.2), FadeIn(ch[0]), run_time=2.0)
             vo.wait_until("b")
