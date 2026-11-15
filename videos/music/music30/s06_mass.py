@@ -54,6 +54,7 @@ class Mass(SoundScene):
             window(snd, r"a cluster, \ growing", detail=r"Part 7's bowed string", corner=DL, tag_corner=DR)
             for i in range(len(ps)):
                 pulse(snd, bars[i], d["entry"] * i, d["entry"] * i + 0.8, buff=0.04)
+            pulse(snd, bars, d["entry"] * (len(ps) - 1) + 0.8, c.duration, buff=0.15, color=TUNE)
         self.wait(0.3)
         self.clear_scene()
 

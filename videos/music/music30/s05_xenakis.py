@@ -79,6 +79,8 @@ class Xenakis(SoundScene):
             window(snd, r"A, \ then B", detail=r"Part 1's string", corner=DL, tag_corner=DR)
             flash(snd, list(rA), [d["starts"]["A"] + t for t in d["onsets"]], hot=WHITE, base=GREY_A)
             flash(snd, list(rB), [d["starts"]["B"] + t for t in d["even"]], hot=WHITE, base=GREY_A)
+            pulse(snd, VGroup(rA, la), d["starts"]["A"], d["starts"]["B"] - 0.3, buff=0.12)
+            pulse(snd, VGroup(rB, lb), d["starts"]["B"], c.duration, buff=0.12)
         ans = VGroup(label(r"A: \ random \ (a Poisson process): \ clumps and gaps", font_size=21, color=TUNE).next_to(rA, DOWN, buff=0.3),
                      label(r"B: \ evenly spaced: \ a pulse", font_size=21, color=BLUE).next_to(rB, DOWN, buff=0.3))
         with self.voiceover(
