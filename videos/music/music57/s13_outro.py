@@ -24,7 +24,7 @@ class Outro(SoundScene):
         keys = d["side"] + ["gentle", "war"]
         head = VGroup(label(r"Variation 57", font_size=48, color=TUNE), label(r"an album side", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.5, aligned_edge=DOWN).to_edge(UP, buff=0.3)
         cells = VGroup(*[VGroup(RoundedRectangle(width=1.95, height=1.2, corner_radius=0.12, stroke_color=NAMES[k][1]), label(NAMES[k][0], font_size=15, color=NAMES[k][1])).arrange(ORIGIN) for k in keys]).arrange(RIGHT, buff=0.18).move_to(DOWN * 0.2)
-        note = label(rf"four Variations matched at $-16$ LUFS; \ then Variation 56 mastered gently \ (PLR {d['gentle_plr']:.0f} dB) \ and for loudness \ (PLR {d['war_plr']:.0f} dB), \ matched", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.5)
+        note = label(rf"four Variations matched at $-16$ LUFS; \ then Variation 56 mastered gently \ (PLR {d['gentle_plr']:.0f} dB) \ and for loudness \ (PLR {d['war_plr']:.0f} dB), \ matched", font_size=17, color=GREY_A).next_to(cells, DOWN, buff=0.45)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here, an album side: four "
             "recent Variations, eight seconds each, sequenced and matched in loudness; then Variation 56 mastered gently and "

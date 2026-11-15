@@ -25,7 +25,7 @@ class Outro(SoundScene):
         cells = VGroup(*[VGroup(RoundedRectangle(width=3.4, height=1.5, corner_radius=0.15, stroke_color=col),
                                 VGroup(label(t, font_size=22, color=col), label(rf"crest {me[k]['crest_db']:.0f} dB, \ correlation {me[k]['correlation']:.2f}", font_size=14, color=GREY_A)).arrange(DOWN, buff=0.15)).arrange(ORIGIN)
                          for k, t, col in CELLS]).arrange(RIGHT, buff=0.5).move_to(DOWN * 0.2)
-        note = label(r"the Tune's first three phrases, \ nine tracks, \ our band; \ headphones", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.5)
+        note = label(r"the Tune's first three phrases, \ nine tracks, \ our band; \ headphones", font_size=18, color=GREY_A).next_to(cells, DOWN, buff=0.45)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here our band plays its "
             "first three phrases, and the session is mixed three ways: close and dry, a wall of sound, and a dub."

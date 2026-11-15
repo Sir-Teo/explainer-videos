@@ -26,7 +26,7 @@ class Outro(SoundScene):
         cells = VGroup(*[VGroup(RoundedRectangle(width=2.3, height=1.3, corner_radius=0.15, stroke_color=col),
                                 VGroup(label(t, font_size=19, color=col), label(sb if sb else r"anechoic", font_size=15, color=GREY_A)).arrange(DOWN, buff=0.12)).arrange(ORIGIN)
                          for (k, t, col), sb in zip(CELLS, subs)]).arrange(RIGHT, buff=0.3).move_to(DOWN * 0.2)
-        note = label(r"headphones: \ every space simulated, \ rendered round a spherical head", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.5)
+        note = label(r"headphones: \ every space simulated, \ rendered round a spherical head", font_size=18, color=GREY_A).next_to(cells, DOWN, buff=0.45)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here, with headphones, it "
             "is sung with no room at all, then in a small room, a shoebox hall and a cathedral, all simulated; and then its first "

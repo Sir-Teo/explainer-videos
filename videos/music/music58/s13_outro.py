@@ -23,7 +23,7 @@ class Outro(SoundScene):
         head = VGroup(label(r"Variation 58", font_size=48, color=TUNE), label(r"five bit rates, \ and the residue", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.5, aligned_edge=DOWN).to_edge(UP, buff=0.3)
         cells = VGroup(*[VGroup(RoundedRectangle(width=1.95 if k != "residue" else 3.0, height=1.2, corner_radius=0.12, stroke_color=names[k][1]),
                                 label(names[k][0] + (r" \ kbit/s" if k != "residue" else ""), font_size=16, color=names[k][1])).arrange(ORIGIN) for k in keys]).arrange(RIGHT, buff=0.2).move_to(DOWN * 0.2)
-        note = label(rf"our session playing the Tune, \ through Monochord's coder; \ then the difference between the original and the 32 kbit/s version, \ turned up 10 dB", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.5)
+        note = label(rf"our session playing the Tune, \ through Monochord's coder; \ then the difference between the original and the 32 kbit/s version, \ turned up 10 dB", font_size=17, color=GREY_A).next_to(cells, DOWN, buff=0.45)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here our session plays it "
             "through our coder at five bit rates, from a hundred and twenty-eight kilobits down to sixteen; and then you hear "

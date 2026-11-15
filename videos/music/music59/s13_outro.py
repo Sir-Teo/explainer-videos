@@ -24,7 +24,7 @@ class Outro(SoundScene):
         head = VGroup(label(r"Variation 59", font_size=48, color=TUNE), label(r"one show, \ three places", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.5, aligned_edge=DOWN).to_edge(UP, buff=0.3)
         cells = VGroup(*[VGroup(RoundedRectangle(width=3.4, height=1.3, corner_radius=0.12, stroke_color=names[k][1]),
                                 VGroup(label(names[k][0], font_size=17, color=names[k][1]), label(rf"{lv[k]:+.0f} dB", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.12)).arrange(ORIGIN) for k in keys]).arrange(RIGHT, buff=0.35).move_to(DOWN * 0.2)
-        note = label(r"our session playing the Tune through a simulated arena system: \ levels as heard; \ headphones or real bass help", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.5)
+        note = label(r"our session playing the Tune through a simulated arena system: \ levels as heard; \ headphones or real bass help", font_size=17, color=GREY_A).next_to(cells, DOWN, buff=0.45)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> Here our session plays it "
             "through a simulated arena system, and you hear it from three places: the mixing desk; the back row, a hundred "
