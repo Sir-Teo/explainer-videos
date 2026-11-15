@@ -98,5 +98,9 @@ Modules so far, with the part that introduces each:
                          forms, first-passage densities (Navarro and Fuss) and fits by maximum likelihood and EZ;
                          the linear ballistic accumulator; Hick's race; the stop-signal race and SSRT;
                          balance-of-evidence confidence; urgency; the attentional drift diffusion model
+``choice``          26   expected value and utility; St Petersburg; the probability triangle; cumulative prospect
+                         theory, certainty equivalents and the fourfold pattern; choice models fitted and
+                         cross-validated; natural frequencies; take-the-best; the hot-hand bias; discounting;
+                         choices from samples; decision by sampling
 =================  ====  ===============================================================================
 """

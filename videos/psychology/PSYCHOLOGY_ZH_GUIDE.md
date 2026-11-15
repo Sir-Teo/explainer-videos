@@ -801,6 +801,28 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Vickers; Kiani; Pleskac, Busemeyer; Sanders; Cisek; Drugowitsch; Hawkins; Krajbich, Armel, Rangel | 维克斯；基亚尼；普莱斯卡克，布斯迈耶；桑德斯；西塞克；德鲁戈维奇；霍金斯；克拉伊比赫，阿梅尔，兰热尔 |
 | Hyman; Fitts; Crossman, Goodeve; Pachella; Wickelgren; Hedge; Lerche; Green; Thapar | 海曼；菲茨；克罗斯曼，古德伊夫；帕切拉；维克尔格伦；赫奇；勒尔歇；格林；塔帕尔 |
 
+## Part 26: judgment and choice
+
+| English | 中文 |
+|---|---|
+| the disease problem; framing; reference point; reflection effect; certainty effect; common-ratio effect | 疾病问题；框架效应；参照点；反射效应；确定性效应；共同比率效应 |
+| expected value; expected utility; St Petersburg game; ducat; risk premium; certainty equivalent | 期望值；期望效用；圣彼得堡游戏；达克特；风险溢价；确定性等价 |
+| completeness; transitivity; continuity; independence axiom; probability triangle; fanning out | 完备性；传递性；连续性；独立性公理；概率三角形；扇形散开 |
+| prospect theory; value function; loss aversion; diminishing sensitivity; weighting function; decision weight | 前景理论；价值函数；损失厌恶；敏感性递减；加权函数；决策权重 |
+| cumulative prospect theory; rank-dependent utility; dominance; inverse S; fourfold pattern | 累积前景理论；秩依赖效用；占优；反S形；四重模式 |
+| preference reversal; P-bet; dollar-bet; compatibility; procedure invariance | 偏好反转；P赌局；美元赌局；相容性；程序不变性 |
+| heuristic; availability; representativeness; anchoring and adjustment; conjunction fallacy; base-rate neglect | 启发式；可得性；代表性；锚定与调整；合取谬误；基础比率忽视 |
+| natural frequencies; ecological rationality; take-the-best; tallying; fast and frugal; cue validity | 自然频率；生态理性；取最佳；计数法；快速节俭；线索效度 |
+| hot hand; streak; selection effect; exponential and hyperbolic discounting; present bias; beta-delta | 热手；连续命中；选择效应；指数贴现与双曲贴现；现时偏差；贝塔-德尔塔 |
+| description-experience gap; decisions from experience; Cognitive Reflection Test; System 1, System 2 | 描述-经验差距；来自经验的决策；认知反射测验；系统1，系统2 |
+| decision by sampling; range-frequency theory; resource-rational analysis; default; Save More Tomorrow | 抽样决策；范围-频率理论；资源理性分析；默认选项；“明天储蓄更多” |
+| Bernoulli; Allais; Pascal, Fermat; von Neumann, Morgenstern; Savage; Marschak; Machina | 伯努利；阿莱；帕斯卡，费马；冯·诺伊曼，摩根斯特恩；萨维奇；马尔沙克；马基纳 |
+| Kahneman; Tversky; Quiggin; Prelec; Lichtenstein, Slovic; Grether, Plott; Friedman | 卡尼曼；特沃斯基；奎金；普雷莱茨；利希滕斯坦，斯洛维奇；格雷瑟，普洛特；弗里德曼 |
+| Gigerenzer; Hoffrage; Goldstein; Czerlinski; Gilovich, Vallone; Miller, Sanjurjo | 吉仁泽；霍夫拉格；戈尔茨坦；切尔林斯基；季洛维奇，瓦洛内；米勒，桑胡霍 |
+| Ainslie; Mazur; Kirby, Herrnstein; Phelps, Pollak; Laibson; Hertwig; Barron; Erev; Wulff | 安斯利；梅热；柯比，赫恩斯坦；费尔普斯，波拉克；莱布森；赫特维希；巴伦；埃雷夫；沃尔夫 |
+| Frederick; Stanovich, West; Evans; Keren, Schul; Kruglanski; Stewart, Chater, Brown; Parducci; Walasek | 弗雷德里克；斯坦诺维奇，韦斯特；埃文斯；克伦，舒尔；克鲁格兰斯基；斯图尔特，查特，布朗；帕尔杜奇；瓦拉塞克 |
+| Johnson; Levin, Gaeth; Thaler, Benartzi; Peterson; Lieder; Frey; Kuhberger; Ruggeri; Huck; Mellers | 约翰逊；莱文，盖斯；塞勒，贝纳茨；彼得森；利德；弗赖；屈贝格尔；鲁杰里；胡克；梅勒斯 |
+
 ## Names
 
 | English | 中文 |

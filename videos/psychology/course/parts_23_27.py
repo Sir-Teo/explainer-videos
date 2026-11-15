@@ -133,4 +133,47 @@ PARTS = [
               ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
               ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
     ),
+    Part(
+        n=26, level="U", widget="gambles",
+        question="Why do the same people buy insurance and lottery tickets?",
+        story="A disease threatens six hundred people. Described as lives saved, most people choose the sure "
+              "programme; described as deaths, most choose the gamble, though the outcomes are identical. Bernoulli's "
+              "utility explains insurance but not lottery tickets, and Allais's paradox breaks the independence "
+              "axiom. Kahneman and Tversky's prospect theory measures outcomes from a reference point, with a kink at "
+              "zero, and bends probabilities into an inverse S; its two curves compute the fourfold pattern, and on "
+              "1,928 open choice problems it beats expected value out of sample, though loss aversion is near one at "
+              "small stakes. Heuristics err systematically, while frequencies and simple rules often do well; the "
+              "hot-hand fallacy turns out to be in the statistic; hyperbolic discounting reverses plans; experience "
+              "underweights rare events; and values come partly from what we have sampled.",
+        handoff="Consciousness is Part 27, risk preference as a trait Part 33, influence between people Part 34, "
+                "fitting choice models Part 48, defaults and nudges Part 55, and value as efficient code Part 58.",
+        outside="Part 14's illusions, Part 17's reward learning and Part 25's accumulators. Expected values, "
+                "Bayes's rule, logarithms and least squares.",
+        objectives={
+            "U": ["Explain framing, the Allais paradox and the fourfold pattern with prospect theory's two curves.",
+                  "Describe availability, representativeness and anchoring, and solve a base-rate problem with "
+                  "natural frequencies.",
+                  "Explain hyperbolic discounting and why it reverses preferences."],
+            "M": ["Compute certainty equivalents under cumulative prospect theory.",
+                  "Fit and cross-validate choice models on open data.",
+                  "Compute the bias of the hot-hand statistic."],
+            "D": ["Show that expected utility's indifference lines are parallel in the probability triangle.",
+                  "Explain why prospect theory needed its cumulative form, and judge the evidence on loss aversion."],
+            "I": ["Design a default or a framing of choices, and say what would show it worked.",
+                  "Communicate a risk in absolute frequencies."],
+        },
+        results=[
+            ("Expected utility", r"\mathrm{EU} = \sum_i p_i\,u(x_i)"),
+            ("Value function", r"v(x) = x^{\alpha} \ (x \ge 0), \quad -\lambda(-x)^{\beta} \ (x < 0)"),
+            ("Weighting function", r"w(p) = \frac{p^{\gamma}}{(p^{\gamma} + (1-p)^{\gamma})^{1/\gamma}}"),
+            ("Decision weight", r"\pi_i = w\big(P(X \ge x_i)\big) - w\big(P(X > x_i)\big)"),
+            ("Bayes's rule", r"P(H \mid D) = \frac{P(D \mid H)P(H)}{P(D \mid H)P(H) + P(D \mid \neg H)P(\neg H)}"),
+            ("Hyperbolic discounting", r"V = \frac{A}{1 + kD}"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7, 8, 9, 13), D=(5, 10, 11, 12, 15), I=(14,),
+        also=(("Psyche's choice module", "explainer/psychology/psyche/choice.py"),
+              ("Its tests", "tests/psychology/test_choice.py"),
+              ("The open data, fetched and checked", "explainer/psychology/opendata.py"),
+              ("The Archive's sources", "explainer/psychology/archive/SOURCES.md")),
+    ),
 ]

@@ -382,4 +382,133 @@
       note: "Nothing you do is stored or sent. EZ diffusion (Wagenmakers, van der Maas and Grasman, 2007) turns a block's accuracy, and the mean and variance of its correct times, into a drift, a bound and a non-decision time. Asked to hurry, the 17 people of the film lowered their EZ bound to a median 59% of their careful one. With twenty trials a block your numbers are rough, and a browser adds its own delay to every time; the ratio of your two bounds is the steadiest thing here.",
     });
   };
+  // ---- Part 26: the disease problem, then a ladder of sure amounts against gambles: your own fourfold pattern ----
+  W.gambles = function (el) {
+    var w = null, GAIN = "#5bd18b", LOSS = "#ef6f6c", SURE = "#7ec8f5", RISKY = "#f2c14e", REF = "#9aa4b2";
+    // Tversky and Kahneman (1981): share choosing the sure programme; (1992): alpha 0.88, gamma 0.61, delta 0.69
+    var TK81 = { saved: 72, die: 22 }, ALPHA = 0.88, GAM = 0.61, DEL = 0.69;
+    var CELLS = [{ p: 0.05, s: 1, name: "+100 at 5%" }, { p: 0.95, s: 1, name: "+100 at 95%" },
+      { p: 0.05, s: -1, name: "-100 at 5%" }, { p: 0.95, s: -1, name: "-100 at 95%" }];
+    var STEPS = 4;
+    var st = { phase: "idle", items: [], k: 0, frame: "", frameChoice: -1, cells: [], delay: [] };
+    function wtk(p, g) { var a = Math.pow(p, g); return a / Math.pow(a + Math.pow(1 - p, g), 1 / g); }
+    function modelCE(p, s) { return s * 100 * Math.pow(wtk(p, s > 0 ? GAM : DEL), 1 / ALPHA); }
+    function start(seed) {
+      var r = QB.rng(seed * 7919 + 26), i, j;
+      st.frame = r() < 0.5 ? "saved" : "die"; st.frameChoice = -1;
+      st.cells = CELLS.map(function (c) { return { p: c.p, s: c.s, name: c.name, lo: 0, hi: 100, done: 0 }; });
+      st.delay = [-1, -1];
+      st.items = [{ kind: "frame" }];
+      for (j = 0; j < STEPS; j++) for (i = 0; i < CELLS.length; i++) st.items.push({ kind: "cell", c: i });
+      st.items.push({ kind: "delay", d: 0 }, { kind: "delay", d: 1 });
+      st.k = 0; st.phase = "go";
+    }
+    function item() { return st.items[st.k]; }
+    function offer(it) {   // [left: the sure option, right: the gamble], as lines of text
+      if (it.kind === "frame") {
+        return st.frame === "saved"
+          ? [["Programme A", "200 people will be saved."], ["Programme B", "1/3 chance all 600 saved,", "2/3 chance no one saved."]]
+          : [["Programme C", "400 people will die."], ["Programme D", "1/3 chance nobody dies,", "2/3 chance all 600 die."]];
+      }
+      if (it.kind === "delay") {
+        return it.d === 0 ? [["$100 today"], ["$110 in 4 weeks"]] : [["$100 in 26 weeks"], ["$110 in 30 weeks"]];
+      }
+      var c = st.cells[it.c], s = (c.lo + c.hi) / 2, sign = c.s > 0 ? "+" : "-";
+      return [["Sure: " + sign + "$" + s.toFixed(1)], ["Gamble: " + sign + "$100", "with chance " + Math.round(100 * c.p) + "%", "else $0"]];
+    }
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return st.phase === "go"; },
+      respond: function (side) {
+        var it = item();
+        if (it.kind === "frame") st.frameChoice = side;
+        else if (it.kind === "delay") st.delay[it.d] = side;
+        else {
+          var c = st.cells[it.c], s = (c.lo + c.hi) / 2;
+          // gains: choosing the sure s means s is above your certainty equivalent; losses (in sizes): choosing the
+          // sure loss s means s is below the size of your certainty equivalent
+          if (c.s > 0) { if (side === 0) c.hi = s; else c.lo = s; } else { if (side === 0) c.lo = s; else c.hi = s; }
+          c.done++;
+        }
+        task.count++;
+        st.k++;
+        st.phase = "pause";
+        if (w) w.render();
+        task.later(function () { st.phase = st.k >= st.items.length ? "done" : "go"; if (w) w.render(); }, 350);
+      },
+    });
+    function ce(c) { return c.done ? c.s * (c.lo + c.hi) / 2 : null; }
+    function card(ctx, x, y, wd, ht, lines, col) {
+      ctx.save();
+      ctx.fillStyle = "#0b0f16"; ctx.fillRect(x, y, wd, ht);
+      ctx.strokeStyle = col; ctx.lineWidth = 2; ctx.strokeRect(x, y, wd, ht);
+      ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      var i, y0 = y + ht / 2 - (lines.length - 1) * 10;
+      for (i = 0; i < lines.length; i++) {
+        ctx.fillStyle = i === 0 ? col : C.ink; ctx.font = (i === 0 ? "600 14px" : "13px") + " system-ui, sans-serif";
+        ctx.fillText(lines[i], x + wd / 2, y0 + 20 * i);
+      }
+      ctx.restore();
+    }
+    w = QB.widget(el, {
+      title: "Six hundred lives, and your own fourfold pattern",
+      sub: "Nineteen choices, each between two cards. F (or tap left) for the left card, J (or tap right) for the right. First the disease problem, in one of its two frames; then sure amounts against gambles, narrowing in on the sure amount you find just as good; then two choices over time.",
+      panels: 2, height: 330, weights: [1.1, 1],
+      controls: [],
+      buttons: [
+        { label: "Start", act: function (state) { start(state.seed); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); st.phase = "idle"; st.cells = []; st.frameChoice = -1; st.delay = [-1, -1]; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (st.phase === "go") {
+          var it = item(), o = offer(it), cw = (b.w - 60) / 2, ch = Math.min(130, b.h - 120);
+          ctx.save(); ctx.textAlign = "center"; ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          var head = it.kind === "frame" ? "A disease is expected to kill 600 people. Which do you favour?"
+            : it.kind === "delay" ? "Which would you rather have?" : "Which would you rather have?";
+          T.wrap(ctx, head, b.cx, b.y + 30, b.w - 40, 16);
+          ctx.fillText("choice " + (st.k + 1) + " of " + st.items.length, b.cx, b.y + b.h - 18);
+          ctx.restore();
+          card(ctx, b.x + 20, b.cy - ch / 2 + 6, cw, ch, o[0], SURE);
+          card(ctx, b.x + 40 + cw, b.cy - ch / 2 + 6, cw, ch, o[1], RISKY);
+        } else if (st.phase === "pause") {
+          T.message(ctx, b, "...");
+        } else if (st.phase === "done") {
+          T.message(ctx, b, "Done.", "On the right: your certainty equivalents beside prospect theory's. Below: your choices and the published ones.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. There are no right answers, only yours.");
+        }
+        var a = g[1].axes({ x: [0, 1], y: [0, 100], xticks: [0, 0.5, 1], yticks: [0, 50, 100],
+          title: "Sure amount as good as the gamble", xlabel: "chance of the 100", ylabel: "size of sure amount" });
+        a.line([0, 1], [0, 100], { color: REF, width: 1, dash: [5, 4] });
+        var ps = QB.linspace(0.01, 0.99, 50);
+        a.line(ps, ps.map(function (p) { return modelCE(p, 1); }), { color: GAIN, width: 2 });
+        a.line(ps, ps.map(function (p) { return -modelCE(p, -1); }), { color: LOSS, width: 2, dash: [6, 4] });
+        st.cells.forEach(function (c) {
+          var v = ce(c);
+          if (v !== null) a.dots([c.p], [Math.abs(v)], { color: c.s > 0 ? GAIN : LOSS, r: 6 });
+        });
+        a.text(0.3, 92, "above the dashed line: seeks risk for gains, avoids it for losses", { color: C.muted, align: "center", size: 10 });
+        a.legend([["theory, gains", GAIN], ["theory, losses", LOSS], ["dots: yours", C.ink]], { pos: "br" });
+      },
+      readout: function () {
+        var out = [["choices", String(task.count)]];
+        if (st.frameChoice >= 0) {
+          var sure = st.frameChoice === 0;
+          out.push(["disease problem (" + (st.frame === "saved" ? "lives saved" : "deaths") + ")", sure ? "sure programme" : "gamble"]);
+          out.push(["1981: chose the sure programme", st.frame === "saved" ? TK81.saved + "% of 152" : TK81.die + "% of 155"]);
+        }
+        st.cells.forEach(function (c) {
+          var v = ce(c);
+          if (v !== null) out.push([c.name + ": yours / theory", v.toFixed(0) + " / " + modelCE(c.p, c.s).toFixed(0)]);
+        });
+        if (st.delay[0] >= 0 && st.delay[1] >= 0) {
+          var rev = st.delay[0] === 0 && st.delay[1] === 1;
+          out.push(["over time", rev ? "now you take $100, later you would wait: a reversal" : (st.delay[0] === st.delay[1] ? "consistent" : "the other way round")]);
+        }
+        return out;
+      },
+      note: "Nothing you choose is stored or sent. The ladder halves the range four times for each gamble, so your sure amounts are good to within about 3 dollars. Prospect theory's curves use Tversky and Kahneman's 1992 values: for gains (green), a 5% chance of 100 is worth about 10, more than its expected 5; for losses (red, by size), the pattern flips. Seeking risk for unlikely gains and likely losses, avoiding it for likely gains and unlikely losses, is the fourfold pattern.",
+    });
+  };
 })();

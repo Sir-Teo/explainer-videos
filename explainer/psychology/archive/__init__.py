@@ -52,7 +52,7 @@ __all__ = ["Dataset", "ALL", "KANT_1786", "HELMHOLTZ_1850", "DONDERS_1868", "EBB
            "NOSOFSKY_1994", "HOMA_1976", "EKMAN_1954", "ROTHKOPF_1957", "AUSTEN", "HUTCHISON_2013", "LANDAUER_DUMAIS_1997", "TVERSKY_1977",
            "NATURAL_STORIES", "SAFFRAN_1996", "MARCUS_1992", "HARTSHORNE_2018", "LEHTONEN_2018",
            "GANIS_KIEVIT_2015", "RAGNI_2016", "OAKSFORD_CHATER_1994", "EVANS_1983", "MACNAMARA_2014",
-           "SPEED_ACC_2008", "RR98"]
+           "SPEED_ACC_2008", "RR98", "CHOICES13K"]
 
 
 @dataclass(frozen=True)
@@ -3934,6 +3934,18 @@ RR98 = Dataset(
     data={'people': 3, 'trials_kept': 23848, 'brightness_levels': 33},
 )
 
+_P26 = "through a web search, 2026-11-15"
+
+CHOICES13K = Dataset(
+    key="choices13k",
+    title='Choices between pairs of gambles, 13,006 problems',
+    source='J. C. Peterson, D. D. Bourgin, M. Agrawal, D. Reichman and T. L. Griffiths, Using large-scale experiments and machine learning to discover theories of human decision-making, Science 372 (2021) 1209-1214; github.com/jcpeterson/choices13k (no licence stated)',
+    cite=r"Peterson et al.\ (2021)",
+    checked='c13k_selections.csv and c13k_problems.json at commit 821ae7e8; fetched by explainer.psychology.opendata and checked by SHA-256' + ", " + _P26,
+    licence="data fetched, not redistributed",
+    data={'problems': 13006, 'rows': 14568, 'described_unambiguous_no_feedback': 1928},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -3973,4 +3985,4 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           NOSOFSKY_1994, HOMA_1976, EKMAN_1954, ROTHKOPF_1957, AUSTEN, HUTCHISON_2013, LANDAUER_DUMAIS_1997, TVERSKY_1977,
                           NATURAL_STORIES, SAFFRAN_1996, MARCUS_1992, HARTSHORNE_2018, LEHTONEN_2018,
                           GANIS_KIEVIT_2015, RAGNI_2016, OAKSFORD_CHATER_1994, EVANS_1983, MACNAMARA_2014,
-                          SPEED_ACC_2008, RR98)}
+                          SPEED_ACC_2008, RR98, CHOICES13K)}

@@ -1220,7 +1220,8 @@ shown(11, "HALBERDA_2008", "Weber's law for number, a preview; number sense is e
 shown(11, "GIBBON_1977", "Weber's law for time, shown as a pattern; the series does not study interval timing")
 shown(11, "LESMES_2010", "a method at the frontier; its row (csf_channels) is entered in Part 13")
 shown(11, "DEVRIES_ROSE", "a theory of the threshold, run on Psyche; its row (few_quanta) is entered in Part 13")
-shown(11, "BERNOULLI_1738", "a theory of value, a preview; choices under risk are entered in Part 26", row_in=26)
+shown(11, "BERNOULLI_1738", "a theory of value, a preview; choices under risk are entered in Part 26, whose "
+      "rows are the violations of that theory")
 shown(11, "PLATEAU_1872", "a historical proposal; the power law's row is Stevens's")
 shown(11, "THURSTONE_1927", "a method, run on simulated judges; scaling judgments is entered in Part 46", row_in=46)
 
@@ -1293,8 +1294,8 @@ shown(12, "MACKWORTH_1948", "the vigilance decrement, told as the story that sta
       "in Part 51", row_in=51)
 shown(12, "SEE_1995", "a meta-analysis shown for its conclusion about the watch; vigilance is entered in Part 51",
       row_in=51)
-shown(12, "GIGERENZER_HOFFRAGE_1995", "base-rate reasoning, a preview; judgment under uncertainty is entered in "
-      "Part 26", row_in=26)
+shown(12, "GIGERENZER_HOFFRAGE_1995", "base-rate reasoning, a preview; Part 26 shows the frequency-format "
+      "result beside its heuristics rows, as a method rather than a finding")
 shown(12, "MANISCALCO_LAU_2012", "a method at the frontier, a measure rather than a finding; Part 25 uses it to "
       "frame confidence")
 shown(12, "SWETS_2000", "a review of applications, not a finding")
@@ -3102,6 +3103,160 @@ add(Finding(
     checked="2026-11-15",
 ))
 
+add(Finding(
+    key="framing_disease", part=26, title=r"Risky-choice framing",
+    claim="Described as lives saved, most people choose a sure programme; described as deaths, the same outcomes "
+          "lead most to choose the gamble.",
+    original=Study("Tversky and Kahneman", 1981, n="152 and 155 respondents",
+                   design="the disease problem in a lives-saved and a deaths frame",
+                   found="72% chose the sure programme framed as lives saved; 78% chose the gamble framed as deaths"),
+    status="replicated",
+    record=(Study("Kuhberger (meta-analysis)", 1998, n="many studies", design="framing studies of many kinds",
+                  found="risky-choice framing reliable, of moderate size, larger with problems like the original"),
+            Study("Klein et al. (Many Labs 1)", 2014, n="36 samples", design="the disease problem, preregistered",
+                  found="a clear framing effect in the pooled data")),
+    note="One of the most reliable results in the field; its size depends on the wording.",
+    sources=("A. Tversky and D. Kahneman, The framing of decisions and the psychology of choice, Science 211 (1981) "
+             "453-458",
+             "A. Kuhberger, The influence of framing on risky decisions: a meta-analysis, Organizational Behavior and "
+             "Human Decision Processes 75 (1998) 23-55",
+             "R. A. Klein et al., Investigating variation in replicability: a 'Many Labs' replication project, Social "
+             "Psychology 45 (2014) 142-152"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="anchoring", part=26, title=r"Anchoring",
+    claim="An arbitrary number considered before an estimate pulls the estimate toward it.",
+    original=Study("Tversky and Kahneman", 1974, n="students", design="a wheel of fortune stopping at 10 or 65, "
+                   "then the share of African countries in the UN",
+                   found="median estimates of 25% and 45%"),
+    status="replicated",
+    record=(Study("Jacowitz and Kahneman", 1995, n="students", design="anchors set at percentiles of others' "
+                  "estimates", found="large anchoring, stronger for high anchors"),
+            Study("Klein et al. (Many Labs 1)", 2014, n="36 samples", design="four anchoring questions",
+                  found="large effects in the pooled data"),
+            Study("Maniadis, Tufano and List", 2014, n="students", design="anchors from incidental numbers, with "
+                  "real valuations", found="much weaker effects than with a plainly comparative question")),
+    note="Robust when the anchor is posed as a comparison; anchors from incidental numbers are weaker and less "
+         "reliable.",
+    sources=("A. Tversky and D. Kahneman, Judgment under uncertainty: heuristics and biases, Science 185 (1974) "
+             "1124-1131",
+             "K. E. Jacowitz and D. Kahneman, Measures of anchoring in estimation tasks, Personality and Social "
+             "Psychology Bulletin 21 (1995) 1161-1166",
+             "R. A. Klein et al., Investigating variation in replicability: a 'Many Labs' replication project, Social "
+             "Psychology 45 (2014) 142-152",
+             "Z. Maniadis, F. Tufano and J. A. List, One swallow doesn't make a summer: new evidence on anchoring "
+             "effects, American Economic Review 104 (2014) 277-290"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="allais", part=26, title=r"The Allais pattern",
+    claim="People prefer a sure gain to a slightly better risky one, yet reverse the choice when a common chance of "
+          "the sure amount is removed from both options, violating independence.",
+    original=Study("Kahneman and Tversky", 1979, n="72 respondents", design="Allais's common-consequence problems, "
+                   "hypothetical prizes in Israeli pounds",
+                   found="82% chose the sure 2,400; 83% chose the 0.33 chance of 2,500"),
+    status="replicated",
+    record=(Study("Huck and Muller", 2012, n="a large representative Dutch panel",
+                  design="the paradox with hypothetical and real stakes",
+                  found="frequent violations, most with high hypothetical stakes, fewer with small real ones"),
+            Study("Ruggeri et al.", 2020, n="4,098 people in 19 countries", design="the 1979 problems",
+                  found="most of the 1979 patterns found again, the certainty effect among them")),
+    note="Robust with large, hypothetical prizes as in the original; with small real stakes it is weaker and "
+         "depends on the design.",
+    sources=("M. Allais, Le comportement de l'homme rationnel devant le risque, Econometrica 21 (1953) 503-546",
+             "D. Kahneman and A. Tversky, Prospect theory: an analysis of decision under risk, Econometrica 47 "
+             "(1979) 263-291",
+             "S. Huck and W. Muller, Allais for all: revisiting the paradox in a large representative sample, "
+             "Journal of Risk and Uncertainty 44 (2012) 261-293",
+             "K. Ruggeri et al., Replicating patterns of prospect theory for decision under risk, Nature Human "
+             "Behaviour 4 (2020) 622-633"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="conjunction_fallacy", part=26, title=r"The conjunction fallacy",
+    claim="People judge a conjunction, such as feminist bank teller, more probable than one of its parts.",
+    original=Study("Tversky and Kahneman", 1983, n="142 students", design="the Linda problem with two options",
+                   found="85% chose the conjunction"),
+    status="replicated",
+    record=(Study("Fiedler", 1988, n="students", design="the same problems asked as frequencies",
+                  found="far fewer conjunction errors"),
+            Study("Hertwig and Gigerenzer", 1999, n="students", design="what people take 'probable' to mean",
+                  found="many read it as plausible, not as mathematical probability"),
+            Study("Mellers, Hertwig and Kahneman", 2001, n="students", design="an adversarial collaboration on "
+                  "frequency formats", found="frequencies reduced the effect but did not remove it")),
+    note="The error replicates; what it means, a failure of probability or a reasonable reading of the words, is "
+         "still contested.",
+    sources=("A. Tversky and D. Kahneman, Extensional versus intuitive reasoning: the conjunction fallacy in "
+             "probability judgment, Psychological Review 90 (1983) 293-315",
+             "K. Fiedler, The dependence of the conjunction fallacy on subtle linguistic factors, Psychological "
+             "Research 50 (1988) 123-129",
+             "R. Hertwig and G. Gigerenzer, The 'conjunction fallacy' revisited: how intelligent inferences look like "
+             "reasoning errors, Journal of Behavioral Decision Making 12 (1999) 275-305",
+             "B. Mellers, R. Hertwig and D. Kahneman, Do frequency representations eliminate conjunction effects? An "
+             "exercise in adversarial collaboration, Psychological Science 12 (2001) 269-275"),
+    checked="2026-11-15",
+))
+
+add(Finding(
+    key="loss_aversion", part=26, title=r"Loss aversion",
+    claim="Losses weigh more than equal gains, by a factor of about two.",
+    original=Study("Kahneman and Tversky", 1979, n="students", design="mixed gambles and reflected problems",
+                   found="symmetric 50-50 bets are unattractive; losses loom larger than gains"),
+    status="contested",
+    record=(Study("Tversky and Kahneman", 1992, n="graduate students", design="certainty equivalents",
+                  found="a loss-aversion coefficient of 2.25"),
+            Study("Walasek and Stewart", 2015, n="online participants", design="the ranges of gains and losses "
+                  "offered varied", found="loss aversion appeared, vanished or reversed with the ranges"),
+            Study("Gal and Rucker", 2018, n="a review", design="the evidence for loss aversion re-examined",
+                  found="many effects attributed to it have other explanations"),
+            Study("Mrkva, Johnson, Gachter and Herrmann", 2020, n="several large samples",
+                  design="loss aversion and its moderators", found="robust, larger for larger stakes"),
+            Study("This part (choices13k)", 2021, n="1,928 described problems", design="prospect theory fitted",
+                  found="loss aversion of 1.13 at small stakes")),
+    note="Present and robust for larger stakes; at small stakes and in some contexts it is weak, absent or "
+         "reversed.",
+    sources=("D. Kahneman and A. Tversky, Prospect theory: an analysis of decision under risk, Econometrica 47 "
+             "(1979) 263-291",
+             "A. Tversky and D. Kahneman, Advances in prospect theory: cumulative representation of uncertainty, "
+             "Journal of Risk and Uncertainty 5 (1992) 297-323",
+             "L. Walasek and N. Stewart, How to make loss aversion disappear and reverse: tests of the decision by "
+             "sampling origin of loss aversion, Journal of Experimental Psychology: General 144 (2015) 7-11",
+             "D. Gal and D. D. Rucker, The loss of loss aversion: will it loom larger than its gain?, Journal of "
+             "Consumer Psychology 28 (2018) 497-516",
+             "K. Mrkva, E. J. Johnson, S. Gachter and A. Herrmann, Moderating loss aversion: loss aversion has "
+             "moderators, but reports of its death are greatly exaggerated, Journal of Consumer Psychology 30 (2020) "
+             "407-428",
+             "J. C. Peterson, D. D. Bourgin, M. Agrawal, D. Reichman and T. L. Griffiths, Using large-scale "
+             "experiments and machine learning to discover theories of human decision-making, Science 372 (2021) "
+             "1209-1214"),
+    checked="2026-11-15",
+    data=("CHOICES13K",),
+))
+
+add(Finding(
+    key="hot_hand", part=26, title=r"The hot-hand fallacy",
+    claim="Belief in the hot hand in basketball is a cognitive illusion: a player's chance of a hit does not rise "
+          "after a run of hits.",
+    original=Study("Gilovich, Vallone and Tversky", 1985, n="the 76ers, free throws, 26 Cornell players",
+                   design="hit rates after streaks of hits and of misses",
+                   found="no difference; the hot hand called an illusion"),
+    status="story and record",
+    record=(Study("Miller and Sanjurjo", 2018, n="the same Cornell shots, reanalysed",
+                  design="the streak statistic's bias in finite sequences corrected",
+                  found="a hot hand of several percentage points in the original data"),),
+    note="The original test was biased toward finding nothing; corrected, the data show a hot hand. Whether people "
+         "overestimate it is a separate question.",
+    sources=("T. Gilovich, R. Vallone and A. Tversky, The hot hand in basketball: on the misperception of random "
+             "sequences, Cognitive Psychology 17 (1985) 295-314",
+             "J. B. Miller and A. Sanjurjo, Surprised by the hot hand fallacy? A truth in the law of "
+             "small numbers, Econometrica 86 (2018) 2019-2047"),
+    checked="2026-11-15",
+))
+
 shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is textbook physiology, not a finding in "
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
@@ -3210,3 +3365,31 @@ shown(25, r"Vickers (1979); \ Kiani \& Shadlen (2009); \ Pleskac \& Busemeyer (2
 shown(25, r"Green (2000); \ AASHTO stopping sight distance", "applied figures, described")
 shown(25, r"Ratcliff, \ Thapar \& McKoon (2001)", "ageing studies, described; individual differences are Part 59's",
       row_in=59)
+shown(26, r"Bernoulli (1738); \ Allais (1953); \ Kahneman \& Tversky (1979)", "the history of the idea; the "
+      "Allais pattern has its row")
+shown(26, r"Pascal--Fermat letters (1654); \ Huygens (1657)", "the history of probability, described")
+shown(26, r"von Neumann \& Morgenstern (1944, \ 1947); \ Savage (1954)", "axioms and theorems, not findings")
+shown(26, r"Lichtenstein \& Slovic (1971); \ Grether \& Plott (1979); \ Tversky, \ Slovic \& Kahneman (1990)",
+      "preference reversals, described with the replication by Grether and Plott that the film names")
+shown(26, r"Tversky \& Kahneman (1992); \ Quiggin (1982)", "the cumulative form of the theory, derived; its "
+      "parameters are tested on choices13k in the film")
+shown(26, r"Tversky \& Kahneman (1992); \ Friedman \& Savage (1948)", "the fourfold pattern, computed from the "
+      "theory; Friedman and Savage's is a theory, described")
+shown(26, r"Tversky \& Kahneman (1973, \ 1974)", "the heuristics, introduced; anchoring and the conjunction "
+      "fallacy have their rows")
+shown(26, r"Gigerenzer \& Goldstein (1996)", "a decision rule, tested out of sample in Psyche's simulated worlds")
+shown(26, r"Hertwig, \ Barron, \ Weber \& Erev (2004)", "the description-experience gap, described with its "
+      "meta-analysis (Wulff et al. 2018) and checked in choices13k in the film")
+shown(26, r"Stanovich \& West (2000); \ Evans \& Stanovich (2013); \ Kruglanski \& Gigerenzer (2011)", "theories "
+      "of two systems and their critics, described")
+shown(26, r"Parducci (1965); \ Walasek \& Stewart (2015)", "range-frequency theory, described; Walasek and "
+      "Stewart's result is in the loss-aversion row")
+shown(26, r"Johnson \& Goldstein (2003); \ Levin \& Gaeth (1988)", "applications of defaults and framing, "
+      "described; defaults get their row with behaviour change at scale", row_in=55)
+shown(26, r"Thaler \& Benartzi (2004)", "an applied programme, described as uncontrolled; its row is due with "
+      "behaviour change at scale", row_in=55)
+shown(26, r"Gigerenzer et al.\ (2007); \ Furedi (1999)", "risk communication, applied and described")
+shown(26, r"Peterson et al.\ (2021); \ Erev et al.\ (2017)", "methods for finding theories, described; the "
+      "choices13k data are fitted in the film")
+shown(26, r"Frey et al.\ (2017)", "the measurement of risk preference, described; traits are Part 33's",
+      row_in=33)

@@ -15,6 +15,9 @@ here, so a changed file is noticed rather than silently fitted.  Each dataset al
 * :func:`murre_2021`: Murre's direct replication of Godden and Baddeley's divers, sixteen divers' words recalled in
   four conditions, from the workbook he shared on the Open Science Framework (osf.io/q2vjk).  Part 20.
 
+* :func:`choices13k`: 13,006 risky choice problems, each answered by about 16 people (Peterson et al., *Science*
+  372, 2021), from github.com/jcpeterson/choices13k at a fixed commit.  Part 26.
+
 Nothing here imports manim.
 """
 
@@ -96,6 +99,20 @@ SOURCES = {
         "page": "https://github.com/languageMIT/naturalstories",
         "file": "naturalstories_processed_wordinfo.tsv",
         "sha256": "047d2a0b84eff99d90535d1517f7fa7d466b81fbd60e990f2f08caac04d8aa56",
+    },
+    # Part 26: choices13k (Peterson, Bourgin, Agrawal, Reichman and Griffiths, Science 372 (2021) 1209-1214),
+    # github.com/jcpeterson/choices13k at a fixed commit; no licence is stated, so it is fetched, never redistributed
+    "choices13k_selections": {
+        "url": "https://raw.githubusercontent.com/jcpeterson/choices13k/821ae7e88386b508ebb46fae76fac63cb62ec876/c13k_selections.csv",
+        "page": "https://github.com/jcpeterson/choices13k",
+        "file": "choices13k_selections.csv",
+        "sha256": "e21941718b83fd97a5997545489a66ce27bec3b3f62700a0774fb5f997fea5c7",
+    },
+    "choices13k_problems": {
+        "url": "https://raw.githubusercontent.com/jcpeterson/choices13k/821ae7e88386b508ebb46fae76fac63cb62ec876/c13k_problems.json",
+        "page": "https://github.com/jcpeterson/choices13k",
+        "file": "choices13k_problems.json",
+        "sha256": "c6bdb0ae7e0d0ca127b649b4996a7a49b3d0c4c43e5f9a851677fe4527276632",
     },
     # Part 22: data inside CRAN source packages (catlearn, smacof, janeaustenr), read as data by rdata.py
     'nosof94': {'url': 'https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/catlearn_1.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/catlearn/catlearn_1.1.tar.gz'], 'page': 'https://cran.r-project.org/package=catlearn', 'file': 'catlearn_1.1.tar.gz', 'sha256': '6ba6593d615586d3341088f1482d1d0fc3f1eb5f24ebcdb5885cb3f755efdcb6', 'licence': 'GPL (>= 2)', 'member': 'catlearn/data/nosof94.RData', 'member_sha256': '4c9959b80d0311b5db13942665948a34ce5eee6559eb4ca8e5b66c10462670a0'},
@@ -459,3 +476,28 @@ def rr98() -> dict:
             "strength": d["strength"][keep].astype(int), "light": d["source"][keep] == "light",
             "said_light": d["response"][keep] == "light", "correct": d["correct"][keep].astype(float) == 1,
             "rt": d["rt"][keep].astype(float)}
+
+
+def choices13k() -> dict:
+    """choices13k (Peterson et al. 2021): 13,006 choices between two gambles, each problem answered by about 16
+    people on Amazon Mechanical Turk, five trials each.  One entry per row of the published table (a problem in one
+    block): ``problem``, ``feedback`` (whether outcomes were shown after each choice), ``n`` (people), ``block``,
+    ``amb`` (gamble B's probabilities hidden), ``corr``, ``b_rate`` (the mean proportion choosing B) and ``A``,
+    ``B``: the gambles, each a list of (probability, payoff) arrays.  Read as CSV and JSON; nothing is evaluated."""
+    import csv
+    import json
+
+    with open(path("choices13k_selections"), newline="", encoding="utf-8") as f:
+        rows = list(csv.DictReader(f))
+    with open(path("choices13k_problems"), encoding="utf-8") as f:
+        probs = json.load(f)
+    if len(probs) != len(rows):
+        raise RuntimeError("choices13k: the problems and selections tables differ in length")
+    tf = {"True": True, "False": False}
+    return {"problem": np.array([int(r["Problem"]) for r in rows]),
+            "feedback": np.array([tf[r["Feedback"]] for r in rows]),
+            "n": np.array([int(r["n"]) for r in rows]), "block": np.array([int(r["Block"]) for r in rows]),
+            "amb": np.array([tf[r["Amb"]] for r in rows]), "corr": np.array([int(r["Corr"]) for r in rows]),
+            "b_rate": np.array([float(r["bRate"]) for r in rows]),
+            "A": [np.array(probs[str(i)]["A"], dtype=float) for i in range(len(rows))],
+            "B": [np.array(probs[str(i)]["B"], dtype=float) for i in range(len(rows))]}

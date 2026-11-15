@@ -28,6 +28,12 @@ A task is added to :data:`RUNNERS` by the part that first uses it.  So far:
   CMR_DEFAULT`` (say, the values Part 20 fitted to PEERS); one trial is one list, with its recalls (serial positions
   in output order) in ``extra["recalls"]``.
 
+* Task 9, risky and delayed choices (Part 26): sure amounts against "100 with probability p" for gains and
+  losses (the fourfold pattern), the disease problem in both frames, and 100 sooner against 110 four weeks later
+  at front-end delays from now to a year, ``run("gambles", params, n_trials, seed)`` with ``params`` overriding
+  cumulative prospect theory's 1992 values, the choice sensitivities ``tau`` (gambles) and ``tau_t`` (delays) and
+  the hyperbolic rate ``k`` per week; ``correct`` is whether the risky (or later) option was chosen, and the
+  item is in ``extra`` (``p``, ``amount``, ``sure``, ``delay``).
 Nothing here imports manim.
 """
 
@@ -214,8 +220,51 @@ def _recall(params, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
                   np.full(n_trials, np.nan), (R > 0).any(1), extra={"recalls": R})
 
 
+
+GAMBLE_PROBS = (0.05, 0.25, 0.5, 0.75, 0.95)
+GAMBLE_SURE = (5.0, 15.0, 25.0, 35.0, 45.0, 55.0, 65.0, 75.0, 85.0, 95.0)
+GAMBLE_DELAYS = (0.0, 1.0, 4.0, 12.0, 26.0, 52.0)  # weeks before the sooner reward
+
+
+def _gamble_items() -> list:
+    items = []
+    for sign in (1.0, -1.0):
+        for p in GAMBLE_PROBS:
+            for s in GAMBLE_SURE:
+                items.append(("gain" if sign > 0 else "loss", p, 100.0 * sign, s * sign, np.nan))
+    items += [("frame_saved", 1 / 3, 600.0, 200.0, np.nan), ("frame_die", 2 / 3, -600.0, -400.0, np.nan)]
+    items += [("delay", np.nan, 110.0, 100.0, d) for d in GAMBLE_DELAYS]
+    return items
+
+
+def _gambles(params, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
+    """Risky and delayed choices by Psyche's chooser (:mod:`explainer.psychology.psyche.choice`): a logistic rule
+    on cumulative prospect theory's values for gambles, and on hyperbolically discounted amounts for delays.  The
+    item list is cycled and shuffled."""
+    from explainer.psychology.psyche import choice
+
+    q = {**choice.TK92, "tau": 0.15, "tau_t": 0.3, "k": 0.05, **(params or {})}
+    cpt = {k: q[k] for k in choice.TK92}
+    rng = np.random.default_rng(seed)
+    items = _gamble_items()
+    plan = [items[i] for i in rng.permutation(np.resize(np.arange(len(items)), n_trials))]
+    risky = np.empty(n_trials, dtype=bool)
+    for t, (kind, p, amount, sure, delay) in enumerate(plan):
+        if kind == "delay":
+            d = amount * choice.discount(delay + 4.0, k=q["k"]) - sure * choice.discount(delay, k=q["k"])
+            z = q["tau_t"] * d
+        else:
+            g = choice.cpt(choice.lottery((p, amount), (1 - p, 0.0)), **cpt)
+            z = q["tau"] * (g - choice.cpt(choice.lottery((1.0, sure)), **cpt))
+        risky[t] = rng.random() < 1 / (1 + np.exp(-np.clip(z, -60, 60)))
+    return Trials("gambles", np.full(n_trials, subject), np.array([it[0] for it in plan]),
+                  np.full(n_trials, np.nan), risky,
+                  extra={"p": np.array([it[1] for it in plan]), "amount": np.array([it[2] for it in plan]),
+                         "sure": np.array([it[3] for it in plan]), "delay": np.array([it[4] for it in plan])})
+
+
 RUNNERS = {"rt_simple": _rt_task("a"), "rt_gonogo": _rt_task("c"), "rt_choice": _rt_task("b"), "threshold": _threshold,
-           "stroop": _stroop, "search": _search, "change": _change, "recall": _recall}
+           "stroop": _stroop, "search": _search, "change": _change, "recall": _recall, "gambles": _gambles}
 
 
 def run(name: str, model, n_trials: int, seed: int = 0, subject: int = 0) -> Trials:
