@@ -86,6 +86,7 @@ class Samba(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"a batucada, \ building", detail=r"membrane, \ noise and bell models", corner=DL, tag_corner=DR)
             pulse(snd, VGroup(*rows_), 0, c.duration, rate=5.0, color=GREY_B, buff=0.15)
+            sweep(snd, rows_, min(d["entries"].values()), cyc)
             for i, (k, _, col) in enumerate(ROWS):
                 t0 = d["entries"][ENTRY[k]]
                 ncyc = int(round(d["cycles"] - t0 / cyc))

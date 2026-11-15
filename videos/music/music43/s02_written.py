@@ -52,6 +52,8 @@ class Written(SoundScene):
             window(snd, r"written, \ then performed", detail=r"Part 7's piano, \ a plucked bass", corner=DL, tag_corner=DR)
             flash(snd, a.notes, [st["written"] + p["t"] for p in d["deadpan"]], hot=WHITE, base=GREY_B)
             flash(snd, b.notes, [st["performed"] + p["t"] for p in d["performed"]], hot=WHITE, base=TUNE)
+            cursor(snd, a, st["written"], 1.0)
+            cursor(snd, b, st["performed"], 1.0)
         self.wait(0.3)
         self.clear_scene()
 

@@ -78,7 +78,7 @@ def compute_hook() -> dict:
             parts.append((Clip(sine(l, 0.24), SR), t0, 0.0, -1.0))
     c = Clip(mix(parts, duration=16 * ioi + 0.6).y, SR)
     return {**s, "ioi": ioi, "leap_right": SC.leaps(s["right"]), "leap_heard": SC.leaps(s["heard_high"]),
-            "clips": {"stereo": save_synth("hook.stereo", c, detail="Deutsch's scale illusion: the C major scale up and down at once, successive tones alternating between the ears; sine tones, stereo")}}
+            "clips": {"stereo": save_synth("hook.stereo", c, detail="Deutsch's scale illusion: the C major scale up and down at once, successive tones alternating between the ears; sine tones, stereo", needs="headphones")}}
 
 
 ABA = [("3 semitones, slow", 3, 0.15), ("12 semitones, slow", 12, 0.15), ("6 semitones, slow", 6, 0.15), ("6 semitones, fast", 6, 0.06)]
@@ -277,7 +277,7 @@ def compute_each() -> dict:
         out.append(Clip(mix(parts, duration=8 * ioi + 0.4).y, SR))
     c = concat(out, gap=0.8, names=["left", "right"])
     return {"left": s["left"], "right": s["right"], "ioi": ioi, "starts": {k: float(c.events[k]) for k in ("left", "right")},
-            "clips": {"two": save_synth("each.two", c, detail="the scale illusion's left ear alone, then its right ear alone; sine tones, stereo")}}
+            "clips": {"two": save_synth("each.two", c, detail="the scale illusion's left ear alone, then its right ear alone; sine tones, stereo", needs="headphones")}}
 
 
 def compute_fission() -> dict:

@@ -44,6 +44,10 @@ class Outro(SoundScene):
         st = d["starts"]
         with self.listen(c) as snd:
             window(snd, r"Variation 42", detail=r"Part 7's piano, \ a plucked bass", corner=DL, tag_corner=DR)
+            theme = label(r"first, \ the Tune's first phrase", font_size=20, color=EAR).next_to(g, UP, buff=0.15)
+            snd.show(theme)
+            snd.drive(theme, lambda m, t: m.set_opacity(1.0 if t < st["variation"] else 0.0))
+            pulse(snd, theme, 0.0, st["variation"] - 0.1, buff=0.08)
             cursor(snd, g, st["variation"], 0.42)
         self.wait(0.3)
         self.clear_scene()

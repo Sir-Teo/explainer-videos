@@ -141,6 +141,7 @@ class Metrics(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"four timelines", detail=r"bar and membrane models", corner=DL, tag_corner=DR)
             pulse(snd, VGroup(*rows_), 0, c.duration, rate=5.0, color=GREY_B, buff=0.15)
+            sweep(snd, rows_, [d["starts"][n] for n in names], 16 * d["pulse"])
             for i, n in enumerate(names):
                 flash_cells(snd, rows_[i].cells, TT.onsets(TT.TIMELINES[n]), d["starts"][n], d["pulse"], 2, 16, color=VOICE_C[i])
         self.wait(0.3)

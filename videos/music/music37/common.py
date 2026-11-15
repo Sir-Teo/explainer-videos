@@ -328,3 +328,23 @@ def pat_row(pattern, cell=0.42, color=TUNE, name=None, size=18, name_w=None):
     out = VGroup(lab, g).arrange(RIGHT, buff=0.35)
     out.cells = list(g)
     return out
+
+
+def sweep(snd, rows, t0: float, cycle: float, color=WHITE):
+    """A playhead over rows of sixteen cells: it crosses the cells once a cycle from clip time ``t0`` (or from the latest of a list of starts), so the picture
+    keeps moving with the sound between the strokes too."""
+    cells = rows[0].cells
+    x0, x1 = cells[0].get_left()[0], cells[-1].get_right()[0]
+    top, bot = rows.get_top()[1] + 0.12, rows.get_bottom()[1] - 0.12
+    ln = Line([x0, bot, 0], [x0, top, 0], color=color, stroke_width=3, stroke_opacity=0.8)
+
+    starts = sorted(t0) if isinstance(t0, (list, tuple)) else [t0]
+
+    def upd(m, t):
+        s0 = max([a for a in starts if a <= t], default=None)
+        f = ((t - s0) / cycle) % 1.0 if s0 is not None else 0.0
+        m.move_to([x0 + (x1 - x0) * f, (top + bot) / 2, 0])
+
+    snd.show(ln)
+    snd.drive(ln, upd)
+    return ln

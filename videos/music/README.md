@@ -30,18 +30,12 @@ something that runs, and plays what it builds. Two rules hold for every minute:
 The videos are `music1` … `music68`. The standard, the devices, the sound pipeline and the part-by-part plan
 are in [`SYLLABUS.md`](SYLLABUS.md).
 
-**Status (2026-11-13):** production runs on the plan's proposed defaults (the Tune is *Ah! vous dirai-je, maman*;
-the rights rule as written; sixty-eight parts; English first; see [`SYLLABUS.md`](SYLLABUS.md) §9). Phase 0, the sound pipeline, is built and proven on
-a test film (`videos/music/soundcheck/`). **Part 1, *One String*, is built**: fifteen chapters, 47 minutes narrated, with its
-lab, its interactive and its problem set ([`music1/README.md`](music1/README.md)). How a part is made, with the
-lessons of this pilot, is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). **Parts 2 to 9 are built** too, which completes Act I: *Waves in Air* (34 minutes; [`music2/README.md`](music2/README.md)), *The Spectrum* (33 minutes;
-[`music3/README.md`](music3/README.md)), *The Ear* (48 minutes; [`music4/README.md`](music4/README.md)), *Consonance* (39 minutes;
-[`music5/README.md`](music5/README.md)), *Tuning* (37 minutes; [`music6/README.md`](music6/README.md)), *Strings, Hammers and Bows* (39 minutes;
-[`music7/README.md`](music7/README.md)), *Pipes, Reeds and Voices* (41 minutes; [`music8/README.md`](music8/README.md)) and *Drums, Bars and Bells* (34 minutes;
-[`music9/README.md`](music9/README.md)). **Act II is built**: Part 10, *Writing It Down* (38 minutes;
-[`music10/README.md`](music10/README.md)) Part 11, *Rhythm and Meter* (32 minutes; [`music11/README.md`](music11/README.md)), Part 12, *Scales and Modes* (32 minutes;
-[`music12/README.md`](music12/README.md)), Part 13, *Intervals and Chords* (40 minutes; [`music13/README.md`](music13/README.md)), Part 14, *Melody* (33 minutes;
-[`music14/README.md`](music14/README.md)) and Part 15, *Key* (34 minutes; [`music15/README.md`](music15/README.md)), which completes Act II. **Act III is complete**: Part 16, *Two Voices* (35 minutes; [`music16/README.md`](music16/README.md)), Part 17, *Four Voices* (33 minutes; [`music17/README.md`](music17/README.md)), Part 18, *Progressions* (30 minutes; [`music18/README.md`](music18/README.md)), Part 19, *Chromatic Harmony* (32 minutes; [`music19/README.md`](music19/README.md)), Part 20, *Canon and Fugue* (33 minutes; [`music20/README.md`](music20/README.md)) Part 21, *Form* (32 minutes; [`music21/README.md`](music21/README.md)) and Part 22, *Analysis* (35 minutes; [`music22/README.md`](music22/README.md)). Act IV is under way: Part 23, *Chant to Polyphony* (42 minutes; [`music23/README.md`](music23/README.md)), Part 24, *The Renaissance* (35 minutes; [`music24/README.md`](music24/README.md)), Part 25, *The Baroque* (35 minutes; [`music25/README.md`](music25/README.md)) and Part 26, *The Classical Style* (35 minutes; [`music26/README.md`](music26/README.md)). The running record is [`SYLLABUS.md`](SYLLABUS.md) §8.
+**Status (2026-11-15):** all sixty-eight parts are written: scenes, computed sounds and numbers, a lab and an
+interactive for each, and a README with problems and solutions in each part's folder (`music1/` … `music68/`). The
+plan's defaults hold (the Tune is *Ah! vous dirai-je, maman*; the rights rule as written; English first; see
+[`SYLLABUS.md`](SYLLABUS.md) §9). Phase 0, the sound pipeline, is proven on a test film (`videos/music/soundcheck/`); how a
+part is made is [`LECTURE_GUIDE.md`](LECTURE_GUIDE.md). Previews are built at 480p as each part lands; the narrated
+1080p masters are Phase 6. The running record, part by part, is [`SYLLABUS.md`](SYLLABUS.md) §8.
 
 ## The story
 

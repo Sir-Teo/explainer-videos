@@ -88,6 +88,7 @@ class Ritard(SoundScene):
             window(snd, r"three ritardandi", detail=r"Part 7's piano, \ a plucked bass", corner=DL, tag_corner=DR)
             for i, q in enumerate(("1", "2", "3")):
                 flash(snd, rolls[i][1].notes, [st[f"q{q}"] + p["t"] for p in d["perfs"][q]], hot=WHITE, base=QC[q])
+                cursor(snd, rolls[i][1], st[f"q{q}"], 1.0)
         with self.voiceover(
             "In listening tests, ritardandi with q around two or three were preferred to the straight line, which tends "
             "to sound as if it brakes too early. The differences are tens of milliseconds a note, and the ear notices them."
