@@ -139,7 +139,7 @@ class Arrays(SoundScene):
             lines.add(VGroup(ln, spk, nm, ds))
         key = VGroup(label(r"piano, \ 40$^\circ$ left", font_size=16, color=BLUE), label(r"voice, \ centre", font_size=16, color=TUNE),
                      label(r"guitar, \ 40$^\circ$ right", font_size=16, color="#A3E635")).arrange(RIGHT, buff=0.7).to_edge(UP, buff=1.0)
-        note = label(r"each row: \ the loudspeakers, \ and where the rule puts the three instruments", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.5)
+        note = label(r"each row: \ the loudspeakers, \ and where the rule puts the three instruments", font_size=16, color=GREY_A).to_edge(DOWN, buff=1.25)
         head = label(r"one stage, \ three pairs", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Hear it, with headphones. Our piano forty degrees to the left, the voice in the centre, the guitar forty degrees to "
