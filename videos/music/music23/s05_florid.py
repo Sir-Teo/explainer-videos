@@ -68,13 +68,7 @@ class Florid(SoundScene):
                      label(r"two styles, \ and a question: \ how do many voices keep together?", font_size=24, color=EAR)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
         head = label(r"two ways to add a voice", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "So by about 1150 there were two ways to add a voice to chant. <bookmark mark='a'/> In discant, the voices move "
-            "note against note, or a few notes against one, and since both move they must agree on a beat. "
-            "<bookmark mark='b'/> In organum purum, pure organum, the chant holds and only the upper voice moves, so it "
-            "can be as free as it likes. <bookmark mark='c'/> A book of music for the pilgrims at Santiago, the Codex "
-            "Calixtinus, copied around 1160, contains a piece called Congaudeant catholici that is often said to be the "
-            "first written for three voices. <bookmark mark='d'/> Three voices moving at once is discant three times "
-            "over, and it makes the question unavoidable: how do several moving voices keep together?"
+            "So by about 1150 there were two ways to add a voice to chant. <bookmark mark='a'/> In discant, the voices move note against note, or a few notes against one, and since both move they must agree on a beat. <bookmark mark='b'/> In organum purum, pure organum, the chant holds and only the upper voice moves, allowing freer rhythm within stylistic and notational constraints. <bookmark mark='c'/> A book of music for the pilgrims at Santiago, the Codex Calixtinus, copied around 1160, contains a piece called Congaudeant catholici that is often discussed among the earliest three-voice examples, though how its voices were intended to combine is debated. <bookmark mark='d'/> Three voices moving at once is discant three times over, and it makes the question unavoidable: how do several moving voices keep together?"
         ) as vo:
             self.play(FadeIn(head), FadeIn(left[0]), FadeIn(right[0]))
             vo.wait_until("a")

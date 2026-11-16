@@ -75,14 +75,7 @@ class Subtilior(SoundScene):
             (r"after 1420 the style vanished: \ the next generation chose clarity \ (Part 24)", TUNE))]).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(DOWN, buff=0.45)
         rows_.scale_to_fit_width(min(rows_.width, 12.4))
         with self.voiceover(
-            "The most famous pages of the style are by Baude Cordier, copied into the Chantilly Codex around 1400. "
-            "<bookmark mark='a'/> A love song, Belle, bonne, sage, is written on a page shaped like a heart, with red "
-            "notes for the changes of proportion; a canon, Tout par compas, is written in a circle, to be sung round and "
-            "round. <bookmark mark='b'/> The notation is part of the work: a puzzle for the singer and a picture for the "
-            "owner. <bookmark mark='c'/> A caution: the film's corpus contains none of these songs, so the counts of "
-            "the last chapter say nothing about them. <bookmark mark='d'/> And the style did not last. After about 1420 "
-            "the next generation, Dufay among them, turned to smooth lines and full triads, and the subtler art was "
-            "forgotten until scholars rediscovered it in the twentieth century."
+            "The most famous pages of the style are by Baude Cordier, copied into the Chantilly Codex around 1400. <bookmark mark='a'/> A love song, Belle, bonne, sage, is written on a page shaped like a heart, with red notes for the changes of proportion; a canon, Tout par compas, is written in a circle, to be sung round and round. <bookmark mark='b'/> The notation is part of the work: a puzzle for the singer and a picture for the owner. <bookmark mark='c'/> A caution: the film's corpus contains none of these songs, so the counts of the last chapter say nothing about them. <bookmark mark='d'/> And the style did not last. After about 1420 the next generation, Dufay among them, turned to smooth lines and full triads, while later scholarship renewed interest in a repertory with a complicated history of transmission and reception."
         ) as vo:
             self.play(FadeIn(pics), FadeIn(rows_[0]))
             for mark, r in zip("bcd", rows_[1:]):

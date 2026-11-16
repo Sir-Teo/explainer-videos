@@ -89,14 +89,7 @@ class Rhythm(SoundScene):
                      label(r"a reader parses the page: \ the same shapes mean different lengths in different patterns", font_size=21, color=TUNE)).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.45)
         head = label(r"reading the mode from the page", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "How did a singer know which mode to sing? Not from the shape of any one note. <bookmark mark='a'/> Notes "
-            "were written bound together in groups called ligatures, and the pattern of group sizes signalled the mode: "
-            "a group of three followed by twos meant the first mode; twos ending in a three, the second; a single note "
-            "then threes, the third; threes throughout, the fifth; a four then threes, the sixth. <bookmark mark='b'/> "
-            "So reading this music is parsing: the same sign means a long in one context and a short in another, and "
-            "only the pattern decides. The film's program does exactly that, reading a row of ligature sizes and naming "
-            "the mode, or refusing when no pattern fits. It is the first rhythm written in the music of the Western "
-            "church, and it was written as a grammar."
+            "How did a singer know which mode to sing? Not from the shape of any one note. <bookmark mark='a'/> Notes were written bound together in groups called ligatures, and the pattern of group sizes signalled the mode: a group of three followed by twos meant the first mode; twos ending in a three, the second; a single note then threes, the third; threes throughout, the fifth; a four then threes, the sixth. <bookmark mark='b'/> So reading this music is parsing: the same sign means a long in one context and a short in another, and only the pattern decides. The film's program does exactly that, reading a row of ligature sizes and naming the mode, or refusing when no pattern fits. It is an important early system for notating coordinated rhythm in this polyphonic repertory, and it was written as a grammar."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

@@ -119,7 +119,7 @@ class ArsNova(SoundScene):
             "doubled: alteration. Breve, two semibreves, breve reads three, one, two, three. <bookmark mark='c'/> Three "
             "semibreves fill a perfection by themselves; with four, the first imperfects the breve before it. "
             "<bookmark mark='d'/> The program that reads these rows needs to look ahead: the length of a note depends on "
-            "the notes after it. Every reading comes out in whole perfections, which is how the rules were designed, and "
+            "the notes after it. Our selected examples and simplified parser produce whole perfections; that is not a complete test of historical notation, and "
             "how the tests check them."
         ) as vo:
             self.play(FadeIn(tab))

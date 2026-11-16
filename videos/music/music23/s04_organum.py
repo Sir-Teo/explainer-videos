@@ -96,10 +96,7 @@ class Organum(SoundScene):
             flash_voices(snd, g, [ch, en], 0.0, d["unit"], colors=[TUNE, BLUE])
             cursor(snd, g, 0.0, d["unit"])
         with self.voiceover(
-            "That sitting still is the important thing. <bookmark mark='a'/> While the chant moves and the organal voice "
-            "holds, the two lines move differently, oblique motion, <bookmark mark='b'/> and they arrive together at the "
-            "end, like a cadence. <bookmark mark='c'/> A rule invented to avoid one bad interval had, for the first time, "
-            "made two voices into two different lines."
+            "That sitting still is the important thing. <bookmark mark='a'/> While the chant moves and the organal voice holds, the two lines move differently, oblique motion, <bookmark mark='b'/> and they arrive together at the end, like a cadence. <bookmark mark='c'/> A rule invented to avoid one bad interval had, supports distinct voice motion in these early surviving theoretical examples; it does not establish the first historical independent polyphony."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(cap[0]))

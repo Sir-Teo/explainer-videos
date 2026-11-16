@@ -34,7 +34,7 @@ class Isorhythm(SoundScene):
             (r"the word `isorhythm' is modern: \ Friedrich Ludwig, \ 1904", GREY_A))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(DOWN * 1.3)
         rows_.scale_to_fit_width(min(rows_.width, 12.4))
         with self.voiceover(
-            "The tenor of a fourteenth-century motet was built by a procedure. <bookmark mark='a'/> Take a fragment of "
+            "Many fourteenth-century motet tenors use this cyclic procedure. <bookmark mark='a'/> Take a fragment of "
             "chant, its pitches only: the color. Take a rhythm, a sequence of lengths and rests: the talea. Lay the "
             "pitches through the rhythm, one pitch to each note, repeating each as often as needed. "
             f"<bookmark mark='b'/> Here the color has {say(len(color))} pitches and the talea {say(sum(1 for x in talea if x > 0))} "
@@ -123,7 +123,7 @@ class Isorhythm(SoundScene):
             "strictly, a step towards the later practice of making every voice isorhythmic. <bookmark mark='c'/> But "
             "look at the chance column. A tenor of plain long notes repeats its rhythm by accident, so in two of the "
             "four the margin over chance is small. A better detector would also check that the pitches change while the "
-            "rhythm repeats, which is what defines the technique."
+            "rhythm repeats, which would help distinguish independent pitch and rhythm cycles from trivial sustained-note repetition."
         ) as vo:
             self.play(Create(ax), FadeIn(t))
             self.play(Create(curve), Create(chance), FadeIn(cl), run_time=1.5)

@@ -153,3 +153,11 @@ python -m videos.music.labs 23                                  # the lab (write
   classification and natural units in plainchant", *ISMIR* (2020).
 * Part 11 for polyrhythms and least common multiples; Part 16 for organum and the rules of counterpoint; Part 17 for
   the chorales and the choir; Part 20 for the crab canon.
+
+## Historical and measurement scope
+
+Notre Dame’s modal notation is an important development in coordinated polyphonic rhythm, not the first rhythm notation in world history. Pérotin’s quadrupla are among the earliest substantial surviving four-voice works. Independent polyphony need not have originated in the earliest surviving treatises. Guido promoted solmization and staff teaching; the full seven-hexachord gamut system developed through later medieval pedagogy.
+
+The model’s modal ranges and reciting-tone rules are simplified, with historical exceptions and variation. Congaudeant catholici’s intended combination of voices is debated. Franco’s semibreves should not simply be equated with later minim-based prolation. Our parser covers selected imperfection and alteration examples, rather than all historical notation.
+
+The corpus’s editorial bars, accidentals, uneven chronology and selection affect every count. Its accidental encoding alone cannot identify which signs a manuscript supplied or an editor inferred. The Landini-figure detector and rhythm-only talea scan support limited observations, not universal dating or attribution rules. No matched Pérotin consonance census or general ninety-percent chant-classification benchmark is computed here. The generated textures are stylistic teaching models, not reconstructions or claims about universal listener preferences.

@@ -29,7 +29,7 @@ class Chant(SoundScene):
             "Western polyphony grew out of a repertory of single-line song: the chant of the Latin church, called "
             "Gregorian after a pope, Gregory the Great, who almost certainly had nothing to do with it. It took its form in the Frankish kingdoms of the "
             "eighth and ninth centuries, and was first written down in neumes, signs that show the shape of a melody "
-            "but not its exact pitches. One voice, or many in unison; no harmony; no written rhythm. Here is a hymn "
+            "but not its exact pitches. One voice, or many in unison; no independently composed accompanying voices in this monophonic model; early notation leaves many rhythmic details open. Here is a hymn "
             "whose tune will matter in the next chapter, Ut queant laxis, sung by one synthetic voice."
         ):
             self.play(FadeIn(head), FadeIn(g), FadeIn(syl), FadeIn(cap))
@@ -65,10 +65,10 @@ class Chant(SoundScene):
             "the four maneriae, protus, deuterus, tritus and tetrardus. <bookmark mark='b'/> Its range: an authentic "
             "mode runs from the final up an octave; its plagal partner, from a fourth below the final to a fifth or "
             "sixth above. So each final has two modes, odd and even. <bookmark mark='c'/> And its reciting tone, the "
-            "note on which psalm verses are chanted: a fifth above the final in the authentic modes, a third or "
+            "note on which psalm verses are chanted: usually a fifth above the final in the authentic modes, with historical exceptions such as the Phrygian reciting tone, a third or "
             "fourth in the plagal ones, moved up to C wherever it would have fallen on the unstable B. "
             "<bookmark mark='d'/> The Greek names, Dorian, Phrygian and the rest, were borrowed in the Middle Ages and "
-            "attached to the wrong scales; the ancient Greeks meant something else by them."
+            "used differently from ancient Greek theory; the ancient Greeks meant something else by them."
         ) as vo:
             self.play(FadeIn(axis), FadeIn(VGroup(*[r[0] for r in rows_])), FadeIn(VGroup(*[r[2] for r in rows_])))
             vo.wait_until("b")

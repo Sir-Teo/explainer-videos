@@ -96,9 +96,9 @@ class Trecento(SoundScene):
         rows_ = text_rows([
             (rf"parallel fifths and octaves: \ {pt['parallels']:,} in {pt['moves']:,} moves \ ({rt:.1f} in 100)".replace(",", "{,}"), WHITE),
             (rf"in Bach's chorales, \ counted the same way: \ {pb['parallels']} in {pb['moves']:,} \ ({rb:.2f} in 100)".replace(",", "{,}"), WHITE),
-            (rf"about {rt / rb:.0f} times as common: \ the rule existed, \ but was not yet absolute", TUNE),
+            (rf"about {rt / rb:.0f} times as common: \ under this detector; \ encoding and sampling also matter", TUNE),
             (rf"last chords: \ {f.get('open', 0)} of {d['pieces']} bare fifths and octaves; \ Bach: \ all {bf.get('third', 0)} with a third", WHITE),
-            (r"the third, \ imperfect in theory, \ was not allowed to end a piece", GREY_A),
+            (r"the third, \ imperfect in theory, \ was often avoided in final sonorities of this selected repertory", GREY_A),
         ])
         head = label(r"two rules, \ before they were rules", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
@@ -106,10 +106,10 @@ class Trecento(SoundScene):
             f"corpus, {say(pt['parallels'])} among {say(pt['moves'])} moves of pairs of voices, about {rt:.0f} in a hundred. "
             f"<bookmark mark='b'/> Counted the same way, Bach's chorales have {say(pb['parallels'])}. <bookmark mark='c'/> "
             f"The fourteenth century writes them about {say(round(rt / rb))} times as often. Theorists already "
-            "discouraged them; composers had not yet made the rule absolute. <bookmark mark='d'/> And the last chord: "
+            "discouraged them; these counts also depend on editorial encoding, sampling and the simplified detector; no historical rule was literally exceptionless. <bookmark mark='d'/> And the last chord: "
             f"{say(f.get('open', 0))} of the {say(d['pieces'])} pieces end on bare fifths and octaves, while every one of "
             f"Bach's {say(bf.get('third', 0))} chorales ends with a third. <bookmark mark='e'/> In the fourteenth century the "
-            "third was an imperfect consonance, fine in passing and not allowed to end a piece. Part 16's rules are not "
+            "third was an imperfect consonance, fine in passing and often avoided in final sonorities of this selected repertory. Part 16's rules are not "
             "timeless laws of hearing; they changed, and here is the century they were changing in."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
@@ -151,7 +151,7 @@ class Trecento(SoundScene):
             f"pieces have {say(ln)}, about {ln / lp:.1f} a piece; but Ciconia's eighteen have {say(cn)}, about {cn / cp:.1f} a "
             "piece, just as many; and the earlier Italians, Jacopo and Giovanni, hardly use it. <bookmark mark='b'/> The "
             "name was given by later historians. The figure belongs not to one composer but to the later decades of "
-            "the century, and a count of eighty-nine pieces is enough to show it."
+            "the century, and this small, uneven sample supports that association but cannot establish a universal chronology."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(tab))

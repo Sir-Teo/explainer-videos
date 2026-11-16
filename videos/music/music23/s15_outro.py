@@ -52,7 +52,7 @@ class Outro(SoundScene):
             f"Row twenty-three of the ledger. {say(v['seconds'])} seconds. The measurement: a color of "
             f"{say(len(d['color']))} pitches through a talea of {say(sum(1 for x in d['talea'] if x > 0))} notes, which meet "
             f"again after {say(d['meet'])} notes. The Tune, which has always been a melody over chords, sounds here like "
-            "music written before chords existed."
+            "music written before modern root-based chord theory."
         ):
             self.play(FadeIn(led, shift=UP * 0.2))
         self.wait(0.4)
@@ -72,7 +72,7 @@ class Outro(SoundScene):
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
             "What did we find? Chant was organized by mode, and the medieval rule for finding a mode is already an "
-            "algorithm. <bookmark mark='a'/> Guido gave singers syllables, hexachords and the staff, and choosing "
+            "algorithm. <bookmark mark='a'/> Guido promoted solmization and staff teaching; later traditions developed the full hexachord system, and choosing "
             "syllables is a shortest-path problem. <bookmark mark='b'/> Organum went from parallel to free to florid, and "
             "the tritone forced the voices apart. <bookmark mark='c'/> Rhythm was written first as a grammar of "
             "patterns, then note by note, then on two levels of measure. <bookmark mark='d'/> Isorhythm builds a tenor "
@@ -160,7 +160,7 @@ class Outro(SoundScene):
         nxt = VGroup(label(r"Part 24", font_size=32, color=GREY_B), label(r"The Renaissance", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "Act Four has begun its thousand years. <bookmark mark='a'/> By 1430 the tenor was losing its privilege; "
-            "the next century made every voice equal, imitating one another, in full triads. <bookmark mark='b'/> Next "
+            "the next century made increasingly integrated imitative voices and fuller sonorities, with many continuing distinctions of role. <bookmark mark='b'/> Next "
             "time. Part 24: The Renaissance."
         ) as vo:
             self.play(FadeIn(top))

@@ -83,12 +83,12 @@ class Notre(SoundScene):
         with self.voiceover(
             "Back to the four-voice organum of the opening, to see how it holds together. <bookmark mark='a'/> At the "
             f"start of every perfection, every upper voice is a unison, fifth or octave from the held note: {say(round(100 * cons_on))} "
-            "times in a hundred, by construction, as in Pérotin. <bookmark mark='b'/> The short notes in between are free, "
-            f"and in this version {say(round(100 * diss_off))} in a hundred are dissonant, more than Pérotin wrote, since our "
+            "times in a hundred, by construction in our simplified model, inspired by Notre Dame practice. <bookmark mark='b'/> The short notes in between are free, "
+            f"and in this version {say(round(100 * diss_off))} in a hundred are dissonant, without a matched Pérotin count here, since our "
             "short notes are always a step away. Consonance is a rule about where the beat falls, not about every note. <bookmark mark='c'/> And Pérotin's voices trade phrases, a device called voice exchange: "
             "one voice sings what another just sang, so the same sounds return, rearranged. It is how a long piece on one "
             "held note stays coherent. <bookmark mark='d'/> His quadrupla run ten minutes or more on a handful of chant "
-            "notes, built from exactly these three things: the menu of rhythms, consonance on the beat, and exchange."
+            "notes, using these and other melodic, textual and formal resources: the menu of rhythms, consonance on the beat, and exchange."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")

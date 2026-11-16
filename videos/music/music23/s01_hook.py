@@ -28,7 +28,7 @@ class Hook(SoundScene):
             "or four voices. <bookmark mark='b'/> Organum of that kind takes a single syllable of the old chant and "
             "stretches it, one note held for a minute or more, <bookmark mark='c'/> while above it three voices dance "
             "in a pattern of long and short. <bookmark mark='d'/> Two such pieces survive under the name of a singer "
-            "called Pérotin: Viderunt omnes and Sederunt principes, the oldest music in four parts that we can read."
+            "called Pérotin: Viderunt omnes and Sederunt principes, among the earliest substantial surviving four-voice works."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("b")
@@ -74,14 +74,7 @@ class Hook(SoundScene):
         ])
         head = label(r"a problem of coordination", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "There was a problem in this. <bookmark mark='a'/> The chant had never needed written rhythm: one singer, "
-            "or a choir in unison, follows the words, and the notes last as long as the words want. "
-            "<bookmark mark='b'/> Four singers on four different lines must agree, beat by beat, on where every note "
-            "ends, or the fifths and octaves fall apart. <bookmark mark='c'/> So the singers of Notre Dame needed "
-            "something nobody had yet written down: a notation for rhythm. <bookmark mark='d'/> And once rhythm could "
-            "be written, it could be designed. The two centuries after Pérotin did exactly that, until by the end of "
-            "the fourteenth century the rhythms on the page were more intricate than almost anything written again "
-            "before the twentieth century."
+            "There was a problem in this. <bookmark mark='a'/> The chant had never needed written rhythm: one singer, or a choir in unison, follows the words, and the notes last as long as the words want. <bookmark mark='b'/> Four singers on four different lines must agree, beat by beat, on where every note ends, or the fifths and octaves fall apart. <bookmark mark='c'/> So the singers of Notre Dame needed a developing system for coordinating polyphonic rhythm; earlier traditions already had ways of describing or notating duration. <bookmark mark='d'/> And once rhythm could be written, it could be designed. The two centuries after Pérotin did exactly that, until by the end of the fourteenth century the rhythms on the page were strikingly intricate by the standards of many later teaching repertoires."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcd", rows_[1:]):

@@ -27,8 +27,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 20 — Canon and Fugue | Complete | Open |
 | 21 — Form | Complete | Open |
 | 22 — Analysis | Complete | Open |
-| 23 — Chant to Polyphony | In progress | Open |
-| 24–68 | Queued | Open |
+| 23 — Chant to Polyphony | Complete | Open |
+| 24 — The Renaissance | In progress | Open |
+| 25–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -97,7 +98,9 @@ Part 21: fourteen chapter previews reviewed; 23 tests, the lab, 14 sound cases a
 
 Part 22: fourteen chapter previews reviewed; 24 tests, the lab, 14 sound cases and 11 listening-window motion checks pass. Three native stills inspected. Identities: `renders/qa/music22/source-receipt.json`.
 
-**Current: Part 23.** Chapter previews are rendering. Parts 24–51 have source repairs and verification
+Part 23: fifteen chapter previews reviewed; 26 tests, the lab, 15 sound cases and 17 listening-window motion checks pass. Three native stills inspected. Identities: `renders/qa/music23/source-receipt.json`.
+
+**Current: Part 24.** Chapter previews are rendering. Parts 25–55 have source repairs and verification
 underway for sequential previews. Automated endpoint preflight continues; warnings require review and do not
 constitute episode approval.
 

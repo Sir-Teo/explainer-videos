@@ -49,9 +49,10 @@ class Guido(SoundScene):
         d = load("guido")
         gam = d["gamut"]
         x0, W = -4.3, 10.6
-        lo, hi = gam[0], gam[-1]
-        xs = {p: x0 + W * (p - lo) / (hi - lo) for p in gam}
-        names = VGroup(*[label(LETTER[p % 12], font_size=19, color=GREY_A if p % 12 != 10 else EAR).move_to([xs[p], 2.25 - (0.32 if p % 12 == 10 else 0.0), 0]) for p in gam])
+        # One column per diatonic letter; B-flat shares B’s column below it.
+        white = [p for p in gam if p % 12 != 10]
+        xs = {p: x0 + W * white.index(p + 1 if p % 12 == 10 else p) / (len(white) - 1) for p in gam}
+        names = VGroup(*[label(LETTER[p % 12], font_size=16, color=GREY_A if p % 12 != 10 else EAR).move_to([xs[p], 2.25 - (0.32 if p % 12 == 10 else 0.0), 0]) for p in gam])
         bars = VGroup()
         for k, h in enumerate(d["hexachords"]):
             y = 1.35 - 0.5 * k
@@ -59,19 +60,13 @@ class Guido(SoundScene):
             pts = VGroup()
             for s, p in zip(("ut", "re", "mi", "fa", "sol", "la"), h["notes"]):
                 if p in xs:
-                    pts.add(label(s, font_size=18, color=col).move_to([xs[p], y, 0]))
+                    pts.add(label(s, font_size=15, color=col).move_to([xs[p], y, 0]))
             tag = label(rf"{h['kind']} \ on {LETTER[h['start'] % 12]}", font_size=18, color=col).move_to([-5.4, y, 0])
             bars.add(VGroup(tag, pts))
         cap = label(r"mi--fa is always the semitone: \ E--F, \ B--C, \ or A--B$\flat$", font_size=22, color=WHITE).to_edge(DOWN, buff=0.45)
         head = label(rf"the gamut: \ {len(gam)} notes, \ from Gamma-ut to E-la", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            f"The whole range of notes the singers used, the gamut, ran {say(len(gam))} notes, from a low G called "
-            "gamma-ut, the Greek letter gamma, which gave us the word gamut, up to a high E. <bookmark mark='a'/> Six "
-            "syllables cannot name twenty-two notes, so the six-note pattern, tone, tone, semitone, tone, tone, was laid "
-            "over the gamut seven times: <bookmark mark='b'/> starting on G, the hard hexachord, with B natural; "
-            "starting on C, the natural hexachord; and starting on F, the soft hexachord, which needs a B flat. "
-            "<bookmark mark='c'/> In every one of them the semitone is mi to fa. Wherever you are, mi to fa is the "
-            "half step, and a singer who knows which syllable a note is knows where the half steps lie."
+            f"The whole range of notes the singers used, the gamut, ran {say(len(gam))} notes, from a low G called gamma-ut, the Greek letter gamma, which gave us the word gamut, up to a high E. <bookmark mark='a'/> Six syllables cannot name twenty-two notes, so later medieval hexachordal teaching laid the six-note pattern, tone, tone, semitone, tone, tone, over the gamut seven times: <bookmark mark='b'/> starting on G, the hard hexachord, with B natural; starting on C, the natural hexachord; and starting on F, the soft hexachord, which needs a B flat. <bookmark mark='c'/> In every one of them the semitone is mi to fa. Wherever you are, mi to fa is the half step, and a singer who knows which syllable a note is knows where the half steps lie."
         ) as vo:
             self.play(FadeIn(head), FadeIn(names))
             vo.wait_until("a")
@@ -139,7 +134,7 @@ class Guido(SoundScene):
         rows_.move_to(RIGHT * 2.75 + DOWN * 0.1)
         with self.voiceover(
             "Guido's other gift is in front of every musician today. <bookmark mark='a'/> Earlier neumes showed the shape "
-            "of a melody but not its exact steps. Guido drew lines a third apart, so that every note sits on a line or in "
+            "of a melody but not its exact steps. Guido helped systematize and promote staff lines a third apart, building on earlier lined notation, so that every note sits on a line or in "
             "a space, and its pitch can be read without having heard it. <bookmark mark='b'/> He coloured the F line red "
             "and the C line yellow, and wrote the letters at the start; those letters, worn by centuries of copying, are "
             "our F and C clefs. <bookmark mark='c'/> Teachers later mapped the whole gamut onto the joints of the left "

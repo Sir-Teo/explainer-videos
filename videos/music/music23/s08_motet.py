@@ -79,9 +79,9 @@ class Motet(SoundScene):
             "Motets needed a new notation, because a poem with one syllable per note cannot be written in ligatures. "
             "<bookmark mark='a'/> Around 1280 a theorist called Franco of Cologne set out the answer in his Art of "
             "Measurable Song: the shape of each single note gives its length. <bookmark mark='b'/> A long, a breve and "
-            "a semibreve, each worth three of the next smaller, or two. <bookmark mark='c'/> Which of the two depends on "
+            "a semibreve, with context-sensitive long and breve relationships; Franco’s semibreve subdivision should not simply be equated with later minim-based prolation. <bookmark mark='c'/> Which of the two depends on "
             "the neighbouring notes, by rules that the next chapter turns into a program. <bookmark mark='d'/> With "
-            "Franco, rhythm is no longer a choice among six patterns. Any sequence of lengths can be written, note by "
+            "Franco, rhythm is no longer a choice among six patterns. A much wider range of durations can be represented within the system’s rules, note by "
             "note, which is the principle of every Western notation since."
         ) as vo:
             self.play(FadeIn(shapes))

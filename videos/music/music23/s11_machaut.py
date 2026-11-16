@@ -62,10 +62,10 @@ class Machaut(SoundScene):
                      label(r"C$\sharp$ and G$\sharp$: \ two leading tones", font_size=22, color=TUNE).next_to(gB, DOWN, buff=0.35))
         cap = label(r"a major sixth opens to an octave, \ a third to a fifth: \ the double leading-tone cadence", font_size=22, color=WHITE).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "B, for most listeners: two voices each a semitone from their goal. The outer voices move from a major sixth, "
+            "B illustrates the chromatic approach; preferences are not measured here: two voices each a semitone from their goal. The outer voices move from a major sixth, "
             "E and C sharp, out to an octave on D, while the middle voice rises a semitone to the fifth. This is the "
-            "double leading-tone cadence, the standard ending of fourteenth-century music. Its goal is not a chord with "
-            "a third but a bare fifth and octave, and the pull comes entirely from voices moving by the smallest step."
+            "double leading-tone cadence, a characteristic cadential pattern in parts of fourteenth-century polyphony. Its goal is not a chord with "
+            "a third but a bare fifth and octave, and its articulation combines directed voice leading, register, rhythm and context."
         ):
             self.play(FadeIn(ans), FadeIn(cap))
         self.wait(0.4)
