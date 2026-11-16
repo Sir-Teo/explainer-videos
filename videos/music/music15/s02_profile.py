@@ -21,9 +21,9 @@ class Profile(SoundScene):
         card = history_card(1982, r"Carol Krumhansl and Edward Kessler", r"a key-defining passage, \ then one of the twelve notes; \ listeners rate how well it fits", width=9.0, font_size=24).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The method is called the probe-tone experiment. Krumhansl first tried it in 1979 with "
-            "Roger Shepard, and in 1982, with Edward Kessler, she did it properly: a passage that sets "
+            "Roger Shepard, and in 1982, with Edward Kessler, she extended the method: a passage that sets "
             "up a key, then one of the twelve notes, and a rating; over and over, for every note. The "
-            "tones were built with no definite octave, so that only the note's name could matter. "
+            "tones were built with no definite octave, to reduce register cues, without eliminating every acoustic or contextual influence. "
             "<bookmark mark='a'/> Here are the average ratings after music in C major. This picture is "
             "called the key profile, and it is one of the most replicated results in the psychology of "
             "music."
@@ -89,11 +89,7 @@ class Profile(SoundScene):
         yl = label(r"how well each note fits, \ after music in C minor", font_size=22, color=GREY_B).next_to(bars, DOWN, buff=0.15)
         head = label(r"the same experiment, \ in a minor key", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "They ran the same experiment in minor keys. <bookmark mark='a'/> The shape is the same, "
-            "with one change. The tonic is on top; then, almost as high, the minor third, E flat, and "
-            "then the fifth; then the rest of the minor scale; then the notes outside it. One profile "
-            "for major, one for minor, and each can be slid to start on any of the twelve notes. "
-            "Twenty-four keys, from two lists of twelve numbers."
+            "They ran the same experiment in minor keys. <bookmark mark='a'/> The minor profile has a related hierarchy but more than one numerical difference. The tonic is on top; then, almost as high, the minor third, E flat, and then the fifth; then the rest of the minor scale; then the notes outside it. One profile for major, one for minor, and each can be slid to start on any of the twelve notes. Twenty-four keys, from two lists of twelve numbers."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

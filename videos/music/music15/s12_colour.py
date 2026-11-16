@@ -20,7 +20,7 @@ class Colour(SoundScene):
         with self.voiceover(
             "People have long said that keys have characters: D major is bright and martial, F major "
             "pastoral, D minor grave. Is that true? Here is one cadence in C major, and then in D flat "
-            "major, the key furthest from it on the circle."
+            "major, five fifth-steps away on the circle; F sharp is six steps away."
         ):
             self.play(FadeIn(kb), FadeIn(tags))
         with self.listen(c) as snd:
@@ -29,10 +29,10 @@ class Colour(SoundScene):
             pulse(snd, tags[0], d["starts"]["C"], d["starts"]["Db"] - 0.4, buff=0.12)
             pulse(snd, tags[1], d["starts"]["Db"], c.duration, buff=0.12)
         kb.clear()
-        cap = VGroup(label(r"a semitone higher, \ and otherwise the same in every relation", font_size=28, color=WHITE),
-                     label(r"on a piano in equal temperament, \ every key is the same key, \ moved", font_size=28, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
+        cap = VGroup(label(r"a semitone higher: \ the equal-tempered interval pattern is unchanged", font_size=28, color=WHITE),
+                     label(r"register and instrument response can still differ", font_size=28, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The second is a semitone higher. Apart from that, nothing differs: every interval, every "
+            "The second is a semitone higher. The equal-tempered interval pattern is unchanged, though register and instrument response can differ: every interval, every "
             "chord, every leaning note is the same. Played a day apart, very few listeners could say "
             "which was which. Part 14 said it of melody, and it holds for harmony: a key is a pattern "
             "of relations, and in equal temperament the pattern is identical in all twelve places. Yet "
@@ -64,9 +64,9 @@ class Colour(SoundScene):
             "temperament, keyboards were tuned so that the common keys were sweeter than the rare ones. "
             "<bookmark mark='a'/> In Werckmeister's temperament, from Part 6, the major third on C is "
             f"{say(d['thirds']['C'])} cents, nearly pure; <bookmark mark='b'/> the third on F sharp is "
-            f"{say(d['thirds']['F#'])}, as wide as a third can be without sounding out of tune. Every "
+            f"{say(d['thirds']['F#'])}, a wide Pythagorean third, with perceived acceptability depending on timbre and context. Every "
             "key had its own mixture of calm and edge, and a composer of 1720 could choose a key for "
-            "its colour. On a modern piano that choice is gone. What remains is height, and habit."
+            "its colour. Modern equal temperament removes those systematic interval-size differences. Register, instrument resonances, playing technique, absolute-pitch memory and associations can still affect key character."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch), Create(pure), FadeIn(pl))
             vo.wait_until("a")

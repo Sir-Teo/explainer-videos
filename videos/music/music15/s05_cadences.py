@@ -30,13 +30,7 @@ class Cadences(SoundScene):
             rows.add(r)
         rows.arrange(DOWN, buff=0.42, aligned_edge=LEFT).move_to(UP * 1.4)
         with self.voiceover(
-            "The three jobs come to a point at the end of a phrase. The last two chords of a phrase are "
-            "called a cadence, and there are four that matter. <bookmark mark='a'/> Dominant to tonic: "
-            "the authentic cadence, a full stop. <bookmark mark='b'/> A phrase that stops on the "
-            "dominant: a half cadence, a comma, or a question. <bookmark mark='c'/> Four to one: the "
-            "plagal cadence, the Amen at the end of a hymn. <bookmark mark='d'/> And the dominant going "
-            "not to one but to six: the deceptive cadence. Everything promises the tonic, and the bass "
-            "steps up instead of falling home. Listen to the four."
+            "The three jobs come to a point at the end of a phrase. A cadence is a phrase-ending harmonic and melodic event, often summarized by its last two chords. Here are four common types. <bookmark mark='a'/> Dominant to tonic: the authentic cadence, a full stop. <bookmark mark='b'/> A phrase that stops on the dominant: a half cadence, a comma, or a question. <bookmark mark='c'/> Four to one: the plagal cadence, the Amen at the end of a hymn. <bookmark mark='d'/> And the dominant going not to one but to six: the deceptive cadence. Everything promises the tonic, and the bass steps up instead of falling home. Listen to the four."
         ) as vo:
             self.play(FadeIn(kb))
             for mark, r in zip("abcd", rows):
@@ -52,9 +46,7 @@ class Cadences(SoundScene):
                 pulse(snd, rows[i][0], d["starts"][k], d["starts"][keysl[i + 1]] - 0.3 if i < 3 else c.duration, buff=0.1)
         kb.clear()
         with self.voiceover(
-            "These are the punctuation of tonal music. In Part 14, phrases ended as questions until the "
-            "last one answered: now those have names. The question is a half cadence. The answer is an "
-            "authentic one. And the deceptive cadence is how a composer says: not yet."
+            'These are the punctuation of tonal music. In Part 14, phrases ended as questions until the last one answered: now those have names. A half cadence can sound like a question, and an authentic cadence like an answer; melody and phrase context also matter. And the deceptive cadence is how a composer says: not yet.'
         ):
             self.play(Indicate(rows[1][0], color=EAR), Indicate(rows[0][0], color=TUNE))
         self.wait(0.4)

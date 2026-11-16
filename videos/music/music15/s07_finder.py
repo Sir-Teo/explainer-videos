@@ -28,7 +28,7 @@ class Finder(SoundScene):
             "its mistakes are one mistake: it names the key a fifth above, because the ratings give the "
             "fifth degree too much weight. <bookmark mark='b'/> Replace the ratings with profiles "
             "counted from music, as David Temperley did in 2007 from a harmony textbook's examples, and "
-            f"it is right {say(100 * f['counts']['accuracy'])} times in a hundred. Counting beats asking."
+            f"it is right {say(100 * f['counts']['accuracy'])} times in a hundred. The corpus-derived profile performs better on this selected corpus; that does not make listener ratings wrong."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(yl))
             vo.wait_until("a")
@@ -36,12 +36,7 @@ class Finder(SoundScene):
             vo.wait_until("b")
             self.play(FadeIn(VGroup(ch.bars[4], ch.labels[4], ch.values[4])), FadeIn(VGroup(ch.bars[3], ch.labels[3], ch.values[3])))
         with self.voiceover(
-            "Now two methods that need no profile at all. <bookmark mark='a'/> Guess that the key is the "
-            f"tune's first note: right {say(100 * f['first']['accuracy'])} times in a hundred; more of "
-            "these tunes begin on the fifth degree than on the tonic. <bookmark mark='b'/> Guess that "
-            f"it is the last note: {say(100 * f['last']['accuracy'])}. One note, and it beats the "
-            "listeners' ratings. That is Part 14's finding, turned into a key finder: tunes go home to "
-            "end. The catch is that you have to wait for the end."
+            f"Now two methods that need no profile at all. <bookmark mark='a'/> Guess that the key is the tune's first note and that its mode is major: right {say(100 * f['first']['accuracy'])} times in a hundred; more of these tunes begin on the fifth degree than on the tonic. <bookmark mark='b'/> Guess that it is the last note, again guessing major: {say(100 * f['last']['accuracy'])}. This last-note heuristic beats the rating-profile algorithm on this corpus; it is not a comparison with human listeners. That is Part 14's finding, turned into a key finder: tunes go home to end. The catch is that you have to wait for the end."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(VGroup(ch.bars[0], ch.labels[0], ch.values[0])))
@@ -67,7 +62,7 @@ class Finder(SoundScene):
             "tune. <bookmark mark='a'/> With two notes it is guessing. With four it is right three "
             f"times in four. <bookmark mark='b'/> With five notes, {say(100 * d['five'])} times in a "
             "hundred. After that it improves slowly: a tune tells you its key in its first breath and "
-            "then spends the rest of its time confirming it. Human listeners are at least as quick. In "
+            "then spends the rest of its time confirming it. Human listeners can sometimes infer tonal centers quickly, depending on the material and task. In "
             "experiments, a few notes or a single chord are enough for most people to hear which note "
             "would be home."
         ) as vo:
@@ -86,18 +81,10 @@ class Finder(SoundScene):
         rows = VGroup(label(rf"{d['total']} mistakes with the listeners' ratings", font_size=28, color=WHITE),
                       label(rf"{d['dominant']}: \ the key a fifth above", font_size=28, color=EAR),
                       label(rf"{d['mediant']}: \ the minor key on the third degree", font_size=28, color=EAR),
-                      label(r"never a key from the far side of the circle", font_size=28, color=TUNE),
+                      label(r"errors here cluster among nearby profiles", font_size=28, color=TUNE),
                       label(rf"profiles counted from the other 53 tunes: \ right {100 * d['own']:.0f} in a hundred", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.32, aligned_edge=LEFT).move_to(RIGHT * 3.0 + UP * 0.2)
         with self.voiceover(
-            "Look at how it goes wrong, because the mistakes are informative. <bookmark mark='a'/> Of "
-            f"{say(d['total'])} wrong answers, {say(d['dominant'])} name the key a fifth above the true "
-            f"one, and {say(d['mediant'])} name the minor key on its third degree. <bookmark mark='b'/> "
-            "Those are the next-door neighbours: keys that share six of the seven notes. The key finder "
-            "is never wrong by half the circle. Its confusions are a map of which keys are alike, and "
-            "chapter eight will draw that map. <bookmark mark='c'/> One more check: throw away the "
-            "published profiles, and count new ones from fifty-three of our tunes to test on the "
-            f"fifty-fourth. Right {say(100 * d['own'])} times in a hundred. A few dozen nursery tunes "
-            "hold enough of the statistics of a key to find it."
+            f"Look at how it goes wrong, because the mistakes are informative. <bookmark mark='a'/> Of {say(d['total'])} wrong answers, {say(d['dominant'])} name the key a fifth above the true one, and {say(d['mediant'])} name the minor key on its third degree. <bookmark mark='b'/> Those are the next-door neighbours: keys that share six of the seven notes. These recorded errors are mostly nearby alternatives in this selected test set. Its confusions are a map of which keys are alike, and chapter eight will draw that map. <bookmark mark='c'/> One more check: throw away the published profiles, and count new ones from fifty-three of our tunes to test on the fifty-fourth. Right {say(100 * d['own'])} times in a hundred. A few dozen predominantly major, mostly Western tunes support high leave-one-tune-out accuracy here. Twelve transpositions are not twelve independent tunes."
         ) as vo:
             self.play(FadeIn(clock), FadeIn(rows[0]))
             vo.wait_until("a")

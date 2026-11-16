@@ -21,13 +21,7 @@ class KeyMap(SoundScene):
         rows = VGroup(label(r"a fifth away: \ 6 of 7 notes shared", font_size=28, color=WHITE), label(r"two fifths: \ 5 \quad three: \ 4 \quad four: \ 3", font_size=28, color=WHITE),
                       label(rf"the far side, \ F$\sharp$: \ {sh['F♯ major']} shared", font_size=28, color=EAR), label(r"sharps or flats in the signature = steps round the circle", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 3.3 + UP * 0.2)
         with self.voiceover(
-            "There are twelve major keys. Are some closer to each other than others? The oldest answer "
-            "is the circle of fifths, printed by Johann David Heinichen in 1728. <bookmark mark='a'/> "
-            "Put the keys round a circle, each a fifth above the last. Part 12 showed why this is the "
-            "right order: move a major scale up a fifth, and exactly one note changes. So neighbours on "
-            "the circle share six of their seven notes; <bookmark mark='b'/> two steps away, five; and "
-            "the key on the far side shares only two. <bookmark mark='c'/> The number of sharps or flats "
-            "in a key signature is simply how many steps round the circle that key is from C."
+            "There are twelve major keys. Are some closer to each other than others? A familiar answer is the circle of fifths, illustrated by Heinichen in 1728, with earlier precedents. <bookmark mark='a'/> Put the keys round a circle, each a fifth above the last. Part 12 showed why this is the right order: move a major scale up a fifth, and exactly one note changes. So neighbours on the circle share six of their seven notes; <bookmark mark='b'/> two steps away, five; and the key on the far side shares only two. <bookmark mark='c'/> The number of sharps or flats in a key signature is simply how many steps round the circle that key is from C."
         ) as vo:
             self.play(FadeIn(clock), run_time=1.5)
             vo.wait_until("a")
@@ -61,9 +55,7 @@ class KeyMap(SoundScene):
             for i, k in enumerate(order):
                 pulse(snd, tags[i], d["starts"][k], d["starts"][order[i + 1]] - 0.4 if i < 2 else c.duration, buff=0.15)
         with self.voiceover(
-            "The first two are steps into the next room. The third is a different building: for a "
-            "moment after the change, nothing fits, and your sense of home has to be rebuilt from "
-            "nothing. A film composer who wants the floor to drop away moves by that interval."
+            'The first two are steps into the next room. The third is a different building: for a moment after the change, the old profile fits less well and a new tonal context can be established. A film composer who wants the floor to drop away moves by that interval.'
         ):
             self.play(Indicate(tags[2], color=EAR, scale_factor=1.05))
         self.wait(0.4)
@@ -78,8 +70,8 @@ class KeyMap(SoundScene):
         c_, a_, g_, f_, cm = tm.cell[(0, "major")], tm.cell[(9, "minor")], tm.cell[(7, "major")], tm.cell[(5, "major")], tm.cell[(0, "minor")]
         with self.voiceover(
             "Now put all twenty-four keys on one map, so that keys with similar profiles are close "
-            "together. A flat sheet cannot do it, and neither can a circle. Krumhansl and Kessler found "
-            "that it takes a torus, the surface of a ring: here it is cut open and laid flat, so the "
+            "together. No low-dimensional map preserves every profile relationship exactly. Krumhansl and Kessler found "
+            "that a useful toroidal organization captures much of the structure; it is not a unique exact embedding: here it is cut open and laid flat, so the "
             "left edge joins the right and the top joins the bottom. <bookmark mark='a'/> Find C major. "
             "Beside it are its relative minor, A minor, and its parallel minor, C minor; and along one "
             "line run the fifths: F, C, G. <bookmark mark='b'/> Nobody told the computation about "
@@ -118,7 +110,7 @@ class KeyMap(SoundScene):
             "reverse order: B, E, A, D, G, C, F. <bookmark mark='c'/> Both rows are the line of fifths "
             "from Part 13. A signature is not a list to be memorised. It is an address: so many steps, "
             "in one direction or the other, from C. And at the bottom of the circle, six sharps and six "
-            "flats name the same twelve keys of the piano: the circle closes, thanks to the equal "
+            "flats name the same equal-tempered pitch-class collection on the piano: the circle closes, thanks to the equal "
             "temperament of Part 6."
         ) as vo:
             self.play(FadeIn(rows[0][0]))

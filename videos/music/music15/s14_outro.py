@@ -83,19 +83,11 @@ class Outro(SoundScene):
             r"the ranking matches how often notes occur, \ and is learned by listening",
             r"chords have three jobs: \ rest, \ leave, \ pull back; \ four cadences punctuate",
             rf"a key finder that counts is right {100 * f['full']['counts']['accuracy']:.0f} times in a hundred, \ and needs about five notes",
-            r"the rarest interval, \ the tritone, \ is the best clue; \ the Tune has none",
-            r"24 keys lie on a torus; \ music moves on it by pivot chords and new leading notes",
+            r"a tritone sharply narrows candidate major collections; \ the Tune has none",
+            r"24 profile relationships form an approximate torus map; \ music moves on it by pivot chords and new leading notes",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A key is a ranking of all twelve notes: the tonic, then its triad, then "
-            "the scale, then the rest. <bookmark mark='a'/> That ranking matches how often notes occur "
-            "in music, and listeners learn it by listening. <bookmark mark='b'/> In a key, chords have "
-            "three jobs, rest, leave and pull back, and four cadences punctuate the phrases. "
-            "<bookmark mark='c'/> A key finder that simply counts is right "
-            f"{say(100 * f['full']['counts']['accuracy'])} times in a hundred on our tunes, and needs "
-            "about five notes. <bookmark mark='d'/> The rarest interval, the tritone, is the best clue "
-            "to a key; the Tune has none, and gets by on weights. <bookmark mark='e'/> And the "
-            "twenty-four keys lie on a torus, where music travels by pivot chords and new leading notes."
+            f"What did we find? A key is a ranking of all twelve notes: the tonic, then its triad, then the scale, then the rest. <bookmark mark='a'/> That ranking matches how often notes occur in music, and listeners learn it by listening. <bookmark mark='b'/> In a key, chords have three jobs, rest, leave and pull back, and four cadences punctuate the phrases. <bookmark mark='c'/> A key finder that simply counts is right {say(100 * f['full']['counts']['accuracy'])} times in a hundred on our tunes, and needs about five notes. <bookmark mark='d'/> A tritone sharply narrows candidate major collections; context determines tonic and mode; the Tune has none, and gets by on weights. <bookmark mark='e'/> And the twenty-four profile relationships admit a useful approximate torus map, where music travels by pivot chords and new leading notes."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -183,11 +175,7 @@ class Outro(SoundScene):
         q = label(r"two melodies at once. \ When do they stay two, \ and when do they melt into one?", font_size=30, color=EAR).move_to(DOWN * 1.3)
         nxt = VGroup(label(r"Act III, \ Part 16", font_size=32, color=GREY_B), label(r"Two Voices", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "That is the end of Act Two. We have notes, written down; rhythm; scales; chords; melody; "
-            "and a home for all of them. One thing we have not yet done is the thing that most sets "
-            "written music apart: <bookmark mark='a'/> two melodies at the same time, each a good tune, "
-            "and both making sense together. When do two lines stay two, and when do they melt into "
-            "one? <bookmark mark='b'/> Act Three begins there. Part 16: Two Voices."
+            "That is the end of Act Two. We have notes, written down; rhythm; scales; chords; melody; and a home for all of them. One thing we have not yet done is a central practice in the contrapuntal repertoire studied next: <bookmark mark='a'/> two melodies at the same time, each a good tune, and both making sense together. When do two lines stay two, and when do they melt into one? <bookmark mark='b'/> Act Three begins there. Part 16: Two Voices."
         ) as vo:
             self.play(FadeIn(r1))
             vo.wait_until("a")

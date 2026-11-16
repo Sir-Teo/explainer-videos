@@ -21,7 +21,7 @@ class Modulate(SoundScene):
         piv = VGroup(label(r"A, \ C, \ E", font_size=40, color=BLUE), label(r"vi in C major \ = \ ii in G major", font_size=30, color=WHITE)).arrange(RIGHT, buff=0.7).move_to(DOWN * 1.5)
         l2 = label(r"a pivot chord: \ one chord, \ a job in each key", font_size=26, color=BLUE).next_to(piv, DOWN, buff=0.3)
         with self.voiceover(
-            "A piece of music does not have to stay in one key. Getting to another takes one new note. "
+            "A piece of music does not have to stay in one key. A neighboring major collection differs by one pitch class, but a new chromatic note alone does not establish modulation. "
             "G major differs from C major by a single note, F sharp. <bookmark mark='a'/> Play the "
             "dominant seventh of G, which contains that F sharp and the tritone that goes with it, and "
             "the ear is pulled toward G as it was pulled toward C: this is a dominant of the dominant. "
@@ -92,7 +92,7 @@ class Modulate(SoundScene):
         with self.voiceover(
             "Give the key finder a short memory, three chords, and let it follow both phrases. "
             "<bookmark mark='a'/> In A it says C, then G for a moment, then C again. In B it says C, "
-            "then G, and stays there. A key, to the machine and to you, is not a fact about a piece. It "
+            "then G, and stays there. A local key estimate can change, while a piece may also retain a larger-scale home key. It "
             "is a running estimate, held over the last few seconds, and music is written to move it."
         ) as vo:
             self.play(FadeOut(self.kb))
@@ -110,14 +110,7 @@ class Modulate(SoundScene):
                        label(r"with A and beyond: \ none", font_size=28, color=EAR)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 3.9 + UP * 0.2)
         head = label(r"how many pivot chords are there?", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "How many pivots are there? Count the triads two keys have in common. <bookmark mark='a'/> "
-            f"C major and G major, one fifth apart, share {say(d[1]['shared'])} of their seven chords. "
-            f"<bookmark mark='b'/> C and D, two fifths apart, share {say(d[2]['shared'])}. "
-            "<bookmark mark='c'/> Three fifths apart, and beyond: none at all. So moving to a "
-            "neighbouring key is easy, and there are several doors. Moving to a distant key through "
-            "ordinary triads is impossible in one step. Composers who wanted distant keys had to go "
-            "by way of the keys between, or invent new chords to serve as doors, and Part 19, on "
-            "chromatic harmony, is the story of those inventions."
+            f"How many pivots are there? Count the triads two keys have in common. <bookmark mark='a'/> C major and G major, one fifth apart, share {say(d[1]['shared'])} of their seven chords. <bookmark mark='b'/> C and D, two fifths apart, share {say(d[2]['shared'])}. <bookmark mark='c'/> Three fifths apart, and beyond: none at all. So moving to a neighbouring key is easy, and there are several doors. These major collections lack a shared diatonic triad beyond two fifth-steps; direct modulation is still possible without a common chord. Composers who wanted distant keys had to go by way of the keys between, or invent new chords to serve as doors, and Part 19, on chromatic harmony, is the story of those inventions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(VGroup(ch.bars[0], ch.labels[0], ch.values[0])), FadeIn(xl))
             vo.wait_until("a")

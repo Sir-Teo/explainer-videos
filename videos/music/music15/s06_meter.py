@@ -53,7 +53,7 @@ class Meter(SoundScene):
         with self.voiceover(
             "Let the key finder listen to the Tune, one note at a time, and watch how sure it is of "
             "four keys. This version works with probabilities, after David Temperley, so the bars are "
-            "its degrees of belief."
+            "normalized probabilities under this simplified model, not calibrated human confidence."
         ):
             self.play(FadeIn(r), FadeIn(m), FadeIn(ml))
         with self.listen(c) as snd:
@@ -69,7 +69,7 @@ class Meter(SoundScene):
             "It got there. But look at what happened in the middle. <bookmark mark='a'/> When the second "
             f"phrase began, on two long Fs, the machine believed F major, {say(100 * peak['f_major'])} "
             f"chances in a hundred, and it was not sure of C until the {say(d['first_sure'])}th note. "
-            "You were never in doubt. The reason is in the notes of the Tune. It uses C, D, E, F, G "
+            "A familiar listener may have inferred C earlier, though that is not measured by this demonstration. The reason is in the notes of the Tune. It uses C, D, E, F, G "
             "and A: six notes, and never the seventh. Those six belong to C major and to F major "
             "alike. Chapter seven comes back to that."
         ) as vo:

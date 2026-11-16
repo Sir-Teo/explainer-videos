@@ -54,7 +54,7 @@ class Rare(SoundScene):
         vec = d["vector"]
         with self.voiceover(
             "Two: C major and F sharp major. <bookmark mark='a'/> And one more note, any note of either "
-            "scale that is not in the other, settles it. Three notes, and the key is certain. The "
+            "scale that is not in the other, settles it. These three pitch classes uniquely select a major collection under the all-diatonic major-only assumption. They do not exclude minor modes, chromatic notes or a later change of key. The "
             "reason is in Part 12. A major scale contains six perfect fifths and only one tritone; so a "
             "fifth could be anywhere, and a tritone can be in only two places. The rarest interval is "
             "the best clue. Richmond Browne pointed this out in 1981, and it is why the dominant "
@@ -87,9 +87,9 @@ class Rare(SoundScene):
             "leaves six; A, four; F, three; E, two. Its last new note is D, and two keys remain: C major "
             "and F major. <bookmark mark='b'/> The Tune never plays a B, and never a B flat. Judged by "
             "its notes alone, it is in two keys at once, which is why the key finder wavered. And yet "
-            "no listener hears it in F. <bookmark mark='c'/> So a key cannot be a matter of which notes "
+            "many familiar listeners hear C rather than F. <bookmark mark='c'/> So a key cannot be a matter of which notes "
             "are used. It is a matter of which notes matter: which one begins and ends, which are long, "
-            "which are leapt to. That is exactly what a profile holds, and a list of notes does not."
+            "which are leapt to. A duration profile captures some of those weights, though it does not retain beginnings, endings, leaps or event order, and a list of notes does not."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]))
             vo.wait_until("a")

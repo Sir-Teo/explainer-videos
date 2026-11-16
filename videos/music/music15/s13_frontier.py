@@ -17,7 +17,7 @@ class Frontier(SoundScene):
         rows = VGroup(label(r"north India, \ 1984: \ ratings follow the raga's own notes, \ in newcomers too", font_size=26, color=WHITE),
                       label(r"Bali, \ 1984: \ villagers and American students, \ on each other's scales", font_size=26, color=WHITE),
                       label(r"Sami yoiks, \ 2000: \ Western listeners expect by their own habits; \ Sami listeners do not", font_size=26, color=WHITE),
-                      label(r"a hierarchy of notes seems to be everywhere. \ Which hierarchy is learned.", font_size=30, color=TUNE)).arrange(DOWN, buff=0.4).move_to(UP * 0.2)
+                      label(r"hierarchies occur in many studied traditions; \ exposure shapes their details.", font_size=30, color=TUNE)).arrange(DOWN, buff=0.4).move_to(UP * 0.2)
         with self.voiceover(
             "Is the key a fact about music, or about European music? The probe-tone experiment has been "
             "taken round the world. <bookmark mark='a'/> In north Indian music, as we saw, listeners' "
@@ -27,7 +27,7 @@ class Frontier(SoundScene):
             "own. <bookmark mark='c'/> In 2000 Krumhansl and Finnish colleagues tested expectations for "
             "Sami yoiks, a style with large leaps: Western listeners expected by Western habits, and "
             "Sami listeners did not. <bookmark mark='d'/> So the general finding is this. Some notes "
-            "being more central than others seems to be nearly universal. Which notes, and in what "
+            "being more central than others is found in many studied traditions, without establishing a universal rule. Which notes, and in what "
             "order, is learned from what a listener hears."
         ) as vo:
             head = label(r"the probe-tone experiment, \ around the world", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
@@ -52,7 +52,7 @@ class Frontier(SoundScene):
             "between 1400 and 1750, fifty years at a time. <bookmark mark='a'/> The early music is "
             "spread over several modes, each with its own profile. Through the seventeenth century the "
             "profiles gather into two, and by 1700 they are the major and minor profiles of this part. "
-            "Tonality was not invented. It condensed, over about a hundred years, and the listeners' "
+            "The selected score corpus shows a gradual consolidation of major/minor pitch distributions, not one invention date or a complete history of tonality, and the listeners' "
             "ratings of 1982 are a fossil of that process."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), FadeIn(g))

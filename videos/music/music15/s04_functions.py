@@ -43,11 +43,7 @@ class Functions(SoundScene):
             vo.wait_until("c")
             self.play(Indicate(cells[3], color=PRE_C, scale_factor=1.1))
         with self.voiceover(
-            "In 1893 Hugo Riemann gave these three roles names, and they are still used. The tonic is "
-            "rest. <bookmark mark='a'/> The dominant, five, is the pull back to rest; the chord on seven "
-            "does the same job. <bookmark mark='b'/> The predominant, four or two, is the step away that "
-            "prepares the dominant. The other chords borrow a role: six and three stand in for the "
-            "tonic. Seven chords, three jobs; and the usual order is rest, leave, pull, rest."
+            "In 1893 Hugo Riemann systematized tonic, subdominant and dominant functions; the predominant label here follows later functional teaching, and they are still used. The tonic is rest. <bookmark mark='a'/> The dominant, five, is the pull back to rest; the chord on seven does the same job. <bookmark mark='b'/> The predominant, four or two, is the step away that prepares the dominant. Six and three may act as tonic substitutes, but their function is context-dependent. Seven chords, three jobs; and the usual order is rest, leave, pull, rest."
         ) as vo:
             self.play(FadeIn(jobs[0]))
             vo.wait_until("a")

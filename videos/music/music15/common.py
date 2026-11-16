@@ -14,7 +14,7 @@ from explainer.music.scaleviz import BLUE, GOLD, RED, keyboard  # noqa: F401
 from .compute import CACHE, CLIPS, load  # noqa: F401
 
 PART = 15
-clip = clip_loader(CACHE, CLIPS)
+clip = clip_loader(CACHE, CLIPS, item_aliases={"colour": "more"})
 WEAK = "#8A93A0"
 TONIC_C, DOM_C, PRE_C = "#F5C542", "#EF5350", "#7DD3FC"
 FUNC_C = {"tonic": TONIC_C, "dominant": DOM_C, "predominant": PRE_C}

@@ -37,12 +37,7 @@ class Hook(SoundScene):
         rate = VGroup(label(rf"listeners' average: \ {d['ratings']['C']:.1f} out of 7", font_size=26, color=TUNE).next_to(cols[0], DOWN, buff=0.25),
                       label(rf"{d['ratings']['F♯']:.1f} out of 7", font_size=26, color=EAR).next_to(cols[1], DOWN, buff=0.25))
         with self.voiceover(
-            "You did not need to think. The first tone sat down as if a chair had been pulled out for "
-            "it. The second was wrong: not ugly in itself, the same kind of sound, but in the wrong "
-            f"place. <bookmark mark='a'/> When Carol Krumhansl and Edward Kessler ran this experiment "
-            f"in 1982, their listeners gave the first tone {say(d['ratings']['C'], 1)} out of seven "
-            f"and the second {say(d['ratings']['F♯'], 1)}, and people with no musical training at all "
-            "give the same order."
+            f"Your own ratings may vary with experience and attention. The first tone sat down as if a chair had been pulled out for it. The second was wrong: not ugly in itself, the same kind of sound, but in the wrong place. <bookmark mark='a'/> When Carol Krumhansl and Edward Kessler ran this experiment in 1982, their listeners gave the first tone {say(d['ratings']['C'], 1)} out of seven and the second {say(d['ratings']['F♯'], 1)}, Related tonal-hierarchy effects also occur in untrained listeners, though ratings vary by task and musical exposure."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(rate), cols[0][1].animate.set_color(TUNE), cols[1][1].animate.set_color(EAR))
@@ -55,13 +50,7 @@ class Hook(SoundScene):
                     label(r"that expectation is what musicians call a key.", font_size=34, color=TUNE),
                     label(r"where is it? \ In the chords? \ In the scale? \ In you?", font_size=30, color=EAR)).arrange(DOWN, buff=0.4).move_to(UP * 0.3)
         with self.voiceover(
-            "Think about what that means. Four chords, lasting three seconds, and your mind had already "
-            "ranked all twelve notes: this one is home, these belong, those do not. <bookmark mark='a'/> "
-            "That ranking is what musicians call a key. Part 14 kept running into it: tunes ended on "
-            "the same degree ninety-six times in a hundred, and other notes leaned toward it. "
-            "<bookmark mark='b'/> So where is a key? It is not in any one chord, and it is not in the "
-            "scale, because seven keys share any scale's notes with a neighbour. This part will argue "
-            "that it is in the listener, and that it got there by counting."
+            "Think about what that means. Four chords, lasting three seconds, and your mind had already ranked all twelve notes: this one is home, these belong, those do not. <bookmark mark='a'/> That ranking is what musicians call a key. Part 14 kept running into it: about ninety-six percent of the selected Part 14 tunes ended on degree one, and other notes leaned toward it. <bookmark mark='b'/> So where is a key? It is not in any one chord, and it is not in the scale, because the same diatonic collection can support different modal tonics. This part will argue that it is in the listener, and that statistical learning contributes alongside harmonic order and context."
         ) as vo:
             self.play(FadeIn(qs[0]))
             vo.wait_until("a")

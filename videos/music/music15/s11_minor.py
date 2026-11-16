@@ -21,7 +21,7 @@ class Minor(SoundScene):
         with self.voiceover(
             "Every major key has two minor keys close to it, and they are close in different ways. Here "
             "is the Tune's first phrase in C major; then in C minor, the parallel key, with the same "
-            "home note; then in A minor, the relative key, with the same notes."
+            "home note; then in A minor, the relative key, with the same natural-minor pitch collection."
         ):
             self.play(FadeIn(rolls), FadeIn(tags))
         keys3 = ("major", "parallel", "relative")
@@ -56,15 +56,7 @@ class Minor(SoundScene):
         ).arrange(DOWN, buff=0.6, aligned_edge=LEFT).scale(1.2).move_to(UP * 0.6)
         cap = label(r"major and minor are two of the ways a set of notes can have a home", font_size=28, color=TUNE).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "And some tunes are in neither. <bookmark mark='a'/> The sea shanty Drunken Sailor has D for "
-            "its home and the notes of the C major scale: the Dorian mode of Part 12. Ask the key "
-            "finder, which knows only major and minor, and it gives a wrong answer with little "
-            "confidence. The tune has a perfectly clear home; it is just not a home that the machine "
-            "was taught. <bookmark mark='b'/> Pentatonic tunes are the opposite case. Amazing Grace "
-            "uses five notes, with no fourth degree, no seventh, and so no tritone: the best clue is "
-            "missing. Yet the key finder gets it right, from the weights alone. <bookmark mark='c'/> "
-            "Major and minor are not the only keys. They are the two that European music settled on "
-            "between about 1600 and 1700, out of the older modes."
+            "And some tunes are in neither. <bookmark mark='a'/> The sea shanty Drunken Sailor has D for its home and the notes of the C major scale: the Dorian mode of Part 12. Ask the key finder, which knows only major and minor, and it gives a wrong answer with little confidence. The tune has a perfectly clear home; it is just not a home that the machine was taught. <bookmark mark='b'/> Pentatonic tunes are the opposite case. Amazing Grace uses five notes, with no fourth degree, no seventh, and so no tritone: the best clue is missing. Yet the key finder gets it right, from the weights alone. <bookmark mark='c'/> Major and minor are not the only ways to organize a tonal center. They are the two that many European tonal practices increasingly emphasized over a gradual and uneven historical transition, out of the older modes."
         ) as vo:
             head = label(r"tunes that are in neither major nor minor", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
             self.play(FadeIn(head))
@@ -87,7 +79,7 @@ class Minor(SoundScene):
         with self.voiceover(
             "A minor key has a problem that Part 12 met in melody, and here it is in harmony. The "
             "natural minor scale has no leading note: its seventh degree is a whole tone below the "
-            "tonic. So its chord on five is a minor triad, with no tritone in it and no pull. Listen "
+            "tonic. So its chord on five is a minor triad, without the raised leading note; it can still support a modal cadence. Listen "
             "to a cadence in A minor with that chord; and then with its third raised a semitone, so "
             "that the dominant is major."
         ):

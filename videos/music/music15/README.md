@@ -94,6 +94,10 @@ of the variance, not all of it. *The key tracker* of chapter 9 uses a window of 
 is one of many unequal temperaments. The curve in the frontier chapter is a sketch of a published finding, not
 data of ours.
 
+## Additional scope
+
+The major/minor profile model is a useful account of tonal hierarchy, not a universal definition of key. Statistical correlations and cross-cultural adaptation support learning but do not isolate it from acoustics or context. Developmental ages are task-dependent group findings. Riemann’s tonic/subdominant/dominant theory is distinguished from the later predominant terminology used here. A cadence includes phrase context and melodic behavior. Model posteriors are not calibrated listener confidence, and algorithm scores are not human accuracy. The 648 transpositions represent 54 independent tunes at most. The first- and last-note heuristics always guess major, explaining part of their difference from tonic-ending frequency. The profile correlation uses the corpus’s major-mode subset. A unique major collection under a diatonic assumption does not prove tonic or mode. The torus is an approximate organization of profile correlations. Direct modulation does not require shared diatonic triads. Equal temperament preserves interval patterns while register and instrument response still vary; C–D-flat is five fifth-steps apart, not the opposite point of the circle.
+
 ## Build
 
 ```bash
