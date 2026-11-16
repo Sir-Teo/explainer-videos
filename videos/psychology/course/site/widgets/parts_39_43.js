@@ -365,4 +365,92 @@
       note: "Nothing you answer is stored or sent. The studies are illustrations, not descriptions of particular trials.",
     });
   };
+
+  // ---- Part 43: the Stroop task, run as a replication on you. ----
+  W.stroop = function (el) {
+    var w = null;
+    var INKS = [["RED", "#ef6f6c"], ["GREEN", "#5bd18b"], ["BLUE", "#7ec8f5"], ["YELLOW", "#f2c14e"]];
+    var KEYS = { d: 0, f: 1, j: 2, k: 3 };
+    var run = T.timed(el, {
+      keys: KEYS,
+      trials: function () { return w.v.n; },
+      seed: function () { return w.state.seed; },
+      stimulus: function (rand) {
+        var ink = Math.floor(rand() * 4), congruent = rand() < 0.5;
+        var word = congruent ? ink : (ink + 1 + Math.floor(rand() * 3)) % 4;
+        return { ink: ink, word: word, congruent: congruent };
+      },
+      correct: function (stim, side) { return side === stim.ink; },
+      render: function () {
+        var L = run ? run.log : [];
+        if (L.length && L[L.length - 1].stim === undefined) L[L.length - 1].stim = run.stim;
+        if (w) w.render();
+      },
+      foreperiod: [700, 1200], timeout: 2500, pause: { scored: 300, early: 800, timeout: 800 },
+      words: { early: "Too early: wait for the word.", timeout: "No answer in time.",
+        wrong: function () { return "Wrong ink (not counted)."; } },
+    });
+    function split() {
+      var c = [], i = [], k, r;
+      for (k = 0; k < run.log.length; k++) {
+        r = run.log[k];
+        if (!r.correct || !r.stim || r.rt < 200 || r.rt > 2000) continue;
+        (r.stim.congruent ? c : i).push(r.rt);
+      }
+      return { c: c, i: i };
+    }
+    function mean(a) { return a.length ? QB.mean(a) : NaN; }
+    w = QB.widget(el, {
+      title: "The Stroop task, on you",
+      sub: "Name the ink colour, not the word: D for red, F for green, J for blue, K for yellow. Answer as fast as you can while staying right. Then see your own Stroop effect against the plan's smallest effect of interest, 20 ms.",
+      panels: 2, height: 330, weights: [1.1, 1],
+      controls: [{ k: "n", label: "Trials", min: 24, max: 96, step: 8, value: 48, fmt: function (x) { return x.toFixed(0); } }],
+      buttons: [
+        { label: "Start", act: function () { run.reset(); run.start("stroop"); } },
+        { label: "Clear", act: function () { run.reset(); } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, run.task);
+        ctx.save(); ctx.textAlign = "center";
+        if (run.phase === "go") {
+          ctx.fillStyle = INKS[run.stim.ink][1]; ctx.font = "700 40px system-ui, sans-serif";
+          ctx.fillText(INKS[run.stim.word][0], b.cx, b.cy + 14);
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("trial " + run.trial + " of " + v.n + "    D red   F green   J blue   K yellow", b.cx, b.y + 22);
+        } else if (run.phase === "wait") {
+          ctx.strokeStyle = C.muted; ctx.lineWidth = 2; ctx.beginPath();
+          ctx.moveTo(b.cx - 10, b.cy); ctx.lineTo(b.cx + 10, b.cy); ctx.moveTo(b.cx, b.cy - 10); ctx.lineTo(b.cx, b.cy + 10);
+          ctx.stroke();
+        } else if (run.phase === "feedback") {
+          T.message(ctx, b, run.msg);
+        } else if (run.phase === "done") {
+          var s = split(), d = mean(s.i) - mean(s.c);
+          T.message(ctx, b, isFinite(d) ? "Your Stroop effect: " + Math.round(d) + " ms." : "Finished.",
+                    "Incongruent minus congruent, correct trials between 200 and 2,000 ms, the exclusions fixed in advance. Nearly everyone is slower on incongruent trials; the plan's smallest effect of interest is 20 ms.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Nothing you do is kept or sent.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx, sp = split(), mc = mean(sp.c), mi = mean(sp.i);
+        cx.save(); cx.textAlign = "center"; cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif";
+        cx.fillText("Your mean time, by condition", c2.x + c2.w / 2, c2.y + 18);
+        var base = c2.y + c2.h - 40, top = c2.y + 40, hi = 1200, bw = c2.w / 5;
+        [[mc, "congruent", "#5bd18b", 1.5], [mi, "incongruent", "#ef6f6c", 3.5]].forEach(function (q) {
+          var x = c2.x + q[3] * bw - bw / 2;
+          if (isFinite(q[0])) {
+            var h = (base - top) * Math.min(q[0], hi) / hi;
+            cx.fillStyle = q[2]; cx.fillRect(x, base - h, bw, h);
+            cx.fillStyle = C.ink; cx.font = "12px system-ui, sans-serif"; cx.fillText(Math.round(q[0]) + " ms", x + bw / 2, base - h - 6);
+          }
+          cx.fillStyle = C.muted; cx.font = "11px system-ui, sans-serif"; cx.fillText(q[1], x + bw / 2, base + 16);
+        });
+        cx.restore();
+      },
+      readout: function () {
+        var s = split(), d = mean(s.i) - mean(s.c);
+        return [["answers", String(run.task.count)], ["Stroop effect", isFinite(d) ? Math.round(d) + " ms" : "-"]];
+      },
+      note: "Nothing you answer is stored or sent. A single person's effect is noisy; the Stroop effect is large enough that most people see it in 48 trials.",
+    });
+  };
 })();

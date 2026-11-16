@@ -163,4 +163,42 @@ PARTS = [
               ("Its tests", "tests/psychology/test_clinic.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=43, level="U", widget="stroop",
+        question="Can you run a study that deserves to be believed?",
+        story="The degree ends with a project: two classic effects replicated properly, on screen, with every tool the "
+              "series has built. Verbal overshadowing, expected to hold, and ego depletion, in doubt, are re-analysed "
+              "from the open lab-level data of their registered multi-lab replications; the viewer takes part in a "
+              "third study, the Stroop task. The part chooses its targets, defines a direct replication, sets the "
+              "smallest effect of interest, computes power and the small-telescopes benchmark, writes the "
+              "preregistration as code and runs it on simulated labs, builds the experiment, asks for consent, runs "
+              "the confirmatory analyses exactly as planned, applies three registered criteria and a replication "
+              "Bayes factor, explores a labelled multiverse, and writes the report; then it looks back on the "
+              "Ledger and the degree.",
+        handoff="Act XI begins with latent variables in Part 44; people over time are Part 47, the weight of evidence "
+                "Part 50, and the dissertation Part 62.",
+        outside="Parts 2 to 4 (the experiment, measurement and the false-positive lab) and Part 42's meta-analysis; "
+                "the normal and t distributions, and simple numerical root finding.",
+        objectives={
+            "U": ["Choose a replication target and say what makes a replication direct.",
+                  "Justify a sample size from the smallest effect of interest, and compute d33.",
+                  "Run a registered confirmatory analysis and judge it by registered criteria."],
+            "M": ["Write a preregistration as code and test it on simulated data before the real data.",
+                  "Compute a replication Bayes factor and explain when the criteria disagree.",
+                  "Build a small multiverse and label it as exploratory."],
+            "D": ["Argue what a failed replication licenses, and design a test of a proposed hidden moderator."],
+            "I": ["Apply the workflow to a product experiment: metric, smallest effect, sample size and analysis "
+                  "fixed before launch."],
+        },
+        results=[
+            ("Two-group power", r"1 - \beta = P\big(|T_{\nu, \delta}| > t_{1-\alpha/2}\big), \quad \delta = d\sqrt{n_1 n_2/(n_1 + n_2)}"),
+            ("Small telescopes", r"\text{power}(d_{33}; n_1, n_2) = 1/3"),
+            ("Replication Bayes factor", r"\mathrm{BF}_{r0} = \frac{N(\hat d_r; \hat d_o, \mathrm{se}_o^2 + \mathrm{se}_r^2)}{N(\hat d_r; 0, \mathrm{se}_r^2)}"),
+            ("Sample size", r"n \approx \frac{2 (z_{1-\alpha/2} + z_{1-\beta})^2}{d^2}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), D=(15,), I=(14,),
+        also=(("The capstone pipeline", "explainer/psychology/capstone.py"),
+              ("Its tests", "tests/psychology/test_capstone.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

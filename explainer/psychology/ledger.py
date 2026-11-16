@@ -983,7 +983,8 @@ shown(8, "POLDRACK_2006", "an argument about inference, with its own numbers sho
 shown(8, "KANWISHER_1997", "shown as the example of a robust activation with a disputed reading; its row "
       "(face_area) is entered in Part 14")
 shown(8, "BARKER_1985", "the history of an instrument")
-shown(8, "MAREK_2022", "a methods result at the frontier, disputed in its details", row_in=43)
+shown(8, "MAREK_2022", "a methods result at the frontier, disputed in its details; the small-sample brain-behaviour "
+      "row is entered in Part 49, with its own simulation")
 shown(8, "ELLIOTT_2020", "a methods result at the frontier")
 shown(8, "TANG_2023", "one laboratory's result at the frontier, described without figures")
 
@@ -1230,7 +1231,8 @@ shown(11, "DEVRIES_ROSE", "a theory of the threshold, run on Psyche; its row (fe
 shown(11, "BERNOULLI_1738", "a theory of value, a preview; choices under risk are entered in Part 26, whose "
       "rows are the violations of that theory")
 shown(11, "PLATEAU_1872", "a historical proposal; the power law's row is Stevens's")
-shown(11, "THURSTONE_1927", "a method, run on simulated judges; scaling judgments is entered in Part 46", row_in=46)
+shown(11, "THURSTONE_1927", "a method, run on simulated judges; Part 46 fits it to Guilford's data, also as a method "
+      "without a row")
 
 # ------------------------------------------------------------------------------------------- Part 12: signal and noise
 add(Finding(
@@ -4435,10 +4437,10 @@ shown(23, r"Rumelhart \& McClelland (1986); \ Pinker \& Prince (1988)", "models 
 shown(23, r"Curtiss (1977); \ Mayberry, \ Lock \& Kazmi (2002)", "a single case and a study of first-language "
       "deprivation, described with their limits; the second-language row is this part's")
 shown(23, r"Broca (1861); \ Wernicke (1874)", "the history of localization")
-shown(23, r"Fedorenko, \ Behr \& Kanwisher (2011), \ \emph{PNAS}", "the language network, described; encoding "
-      "models of language are Part 49's", row_in=49)
+shown(23, r"Fedorenko, \ Behr \& Kanwisher (2011), \ \emph{PNAS}", "the language network, described; Part 49 "
+      "teaches the encoding models used to map it, as methods")
 shown(23, r"Kutas \& Hillyard (1980); \ Osterhout \& Holcomb (1992)", "ERP components described with schematics; "
-      "their use as measures is Part 49's", row_in=49)
+      "the N400's row is Part 8's, and Part 49 teaches how ERP measures are analysed")
 shown(23, r"Whorf (1956, \ collected); \ Berlin \& Kay (1969)", "the history of the relativity question")
 shown(23, r"Frank, \ Everett, \ Fedorenko \& Gibson (2008)", "one field study, described with its design")
 shown(23, r"National Reading Panel (2000); \ Breitenstein et al. (2017), \ \emph{Lancet}", "a review and a trial "
@@ -6173,3 +6175,54 @@ shown(42, r"Moniz (1936)", "the history of lobotomy, told as history")
 shown(42, r"Cerletti \& Bini (1938)", "the history of ECT, told as history")
 shown(42, r"Howard et al.\ (1986)", "a summary of the dose-response curve, quoted and drawn")
 
+# --- Part 43: The Replication ----------------------------------------------------------------------------------------
+
+add(Finding(
+    key="registered_reports", part=43, title=r"Registered reports and positive results",
+    claim="Studies accepted for publication before their results are known report positive results far less often "
+          "than standard articles do.",
+    original=Study("Allen and Mehler", 2019, design="hypotheses tested in published registered reports",
+                   found="most were not supported, against a large majority supported in the standard literature"),
+    status="replicated",
+    record=(Study("Scheel, Schijen and Lakens", 2021, design="hypothesis tests in psychology's registered reports "
+                  "and a random sample of standard articles", found="44% positive against 96%"),),
+    note="The gap is what publication bias and flexible analysis predict; registered reports may also test riskier "
+         "hypotheses.",
+    sources=("C. Allen and D. M. A. Mehler, Open science challenges, benefits and tips in early career and beyond, "
+             "PLoS Biology 17 (2019) e3000246",
+             "A. M. Scheel, M. R. M. J. Schijen and D. Lakens, An excess of positive results: comparing the standard "
+             "psychology literature with registered reports, Advances in Methods and Practices in Psychological "
+             "Science 4 (2021)",
+             "C. D. Chambers and L. Tzavella, The past, present and future of Registered Reports, Nature Human "
+             "Behaviour 6 (2022) 29-42"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="hidden_moderators", part=43, title=r"Hidden moderators",
+    claim="Replications often fail because of hidden moderators: effects depend strongly on the setting and the "
+          "sample.",
+    original=Study("Van Bavel and colleagues", 2016, design="the Reproducibility Project's 100 studies, rated for "
+                   "how sensitive to context their topics were", found="more context-sensitive effects replicated "
+                   "less often"),
+    status="contested",
+    record=(Study("Klein and colleagues (Many Labs 2)", 2018, n="28 effects, about 15,000 people in 36 countries",
+                  found="little variation across samples and settings for most effects"),
+            Study("Olsson-Collentine, Wicherts and van Assen", 2020, design="heterogeneity across direct "
+                  "replications", found="mostly small, and largest where effects were large")),
+    note="Some effects vary with setting, but for most tested effects variation across labs is small; a failed "
+         "replication is rarely explained by place alone.",
+    sources=("J. J. Van Bavel, P. Mende-Siedlecki, W. J. Brady and D. A. Reinero, Contextual sensitivity in "
+             "scientific reproducibility, Proceedings of the National Academy of Sciences 113 (2016) 6454-6459",
+             "R. A. Klein et al., Many Labs 2: investigating variation in replicability across samples and settings, "
+             "Advances in Methods and Practices in Psychological Science 1 (2018) 443-490",
+             "A. Olsson-Collentine, J. M. Wicherts and M. A. L. M. van Assen, Heterogeneity in direct replications in "
+             "psychology and its association with effect size, Psychological Bulletin 146 (2020) 922-940"),
+    checked="2026-11-16",
+))
+
+shown(43, r"Brandt et al.\ (2014); \ Zwaan et al.\ (2018)", "methods papers on how to replicate, described")
+shown(43, r"Nosek \& Errington (2020); \ Van Bavel et al.\ (2016)", "a definition of replication, and the moderator "
+      "argument whose record is the hidden-moderators row")
+shown(43, r"Simonsohn (2015)", "a method, computed")
+shown(43, r"Verhagen \& Wagenmakers (2014)", "a method, computed")

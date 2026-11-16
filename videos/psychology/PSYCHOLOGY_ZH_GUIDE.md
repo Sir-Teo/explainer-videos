@@ -1172,6 +1172,19 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Marsha Linehan; Steven Hollon; Erick Turner; Ellen Driessen; Pim Cuijpers; Neil Jacobson; Paula Truax; Scott Lilienfeld | 玛莎·莱恩汉；史蒂文·霍伦；埃里克·特纳；埃伦·德里森；皮姆·奎珀斯；尼尔·雅各布森；葆拉·特鲁阿克斯；斯科特·利林费尔德 |
 | Egas Moniz; Walter Freeman; Ugo Cerletti; Lucio Bini; Kenneth Howard; Elliot Valenstein; DerSimonian and Laird | 埃加斯·莫尼斯；沃尔特·弗里曼；乌戈·切莱蒂；卢乔·比尼；肯尼思·霍华德；埃利奥特·瓦伦斯坦；德西蒙尼安与莱尔德 |
 
+## Part 43: the replication
+
+| English | 中文 |
+|---|---|
+| direct replication; conceptual replication; protocol; registered replication report; multi-lab | 直接重复；概念重复；方案；注册重复报告；多实验室 |
+| smallest effect of interest; power; noncentral t; small telescopes; d33; sample size justification | 最小关注效应；统计功效；非中心t分布；小望远镜；d33；样本量论证 |
+| preregistration; dry run; confirmatory analysis; exploratory analysis; multiverse; registered report (stage 1, stage 2) | 预注册；试运行；验证性分析；探索性分析；多重宇宙；注册报告（第一阶段、第二阶段） |
+| replication Bayes factor; consistency; heterogeneity; hidden moderator | 重复贝叶斯因子；一致性；异质性；隐藏的调节变量 |
+| trial strip; counterbalancing; attention check; pilot; consent; debriefing | 试次流程；平衡；注意力检查；预实验；知情同意；事后解释 |
+| verbal overshadowing; line-up; ego depletion; letter crossing; Stroop effect | 言语遮蔽；列队辨认；自我损耗；划字母任务；斯特鲁普效应 |
+| Mark Brandt; Rolf Zwaan; Daniel Lakens; Uri Simonsohn; Josine Verhagen; Eric-Jan Wagenmakers | 马克·勃兰特；罗尔夫·兹万；丹尼尔·拉肯斯；乌里·西蒙森；若西娜·费尔哈根；埃里克-扬·瓦根梅克斯 |
+| Brian Nosek; Timothy Errington; Chris Chambers; Loukia Tzavella; Jay Van Bavel; Allen and Mehler; Anne Scheel | 布赖恩·诺塞克；蒂莫西·埃林顿；克里斯·钱伯斯；洛基娅·察韦拉；杰伊·范巴维尔；艾伦与梅勒；安妮·舍尔 |
+
 ## Names
 
 | English | 中文 |
