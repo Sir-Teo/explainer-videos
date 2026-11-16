@@ -44,8 +44,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 37 — Timelines | Complete | Open |
 | 38 — Blues and Swing | Complete | Open |
 | 39 — Changes | Complete | Open |
-| 40 — The Song | In progress | Open |
-| 41–68 | Queued | Open |
+| 40 — The Song | Complete | Open |
+| 41 — Orchestration | In progress | Open |
+| 42–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -148,7 +149,9 @@ Part 38: all 12 chapter preview sheets reviewed; sound and 18 listening-window m
 
 Part 39: all 12 chapter preview sheets reviewed; sound and 14 listening-window motion checks pass. Local identities: `renders/qa/music39/source-receipt.json`.
 
-**Current: Part 40.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 40: all 12 chapter preview sheets reviewed; sound and 19 listening-window motion checks pass. Local identities: `renders/qa/music40/source-receipt.json`.
+
+**Current: Part 41.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

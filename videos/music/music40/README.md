@@ -23,15 +23,14 @@ listed under Sources.
   sixteenths, heard straight and at 60%; disco to house.
 * **5. Hooks and prosody.** Hooks; prosody measured (“beautiful day” set two ways: 100% and 25% of syllables agreeing with
   the beat); setting words; the title; earworms.
-* **6. The drum machine.** The TR-808; its kick as a struck resonator (81 Hz at the strike, 52 Hz settled); three decays,
+* **6. The drum machine.** The TR-808; its kick as a struck resonator (83 Hz at the strike, 52 Hz settled); three decays,
   heard; the kick tuned as a bass line, heard; the hats from six square-wave oscillators; the whole kit, heard; after the
   808.
 * **7. The break and the sampler.** Kool Herc's breaks; a break of ours, chopped into sixteen, re-sequenced and sped up,
   heard; samplers; the law (*Grand Upright*, *Bridgeport*).
 * **8. Flow.** Rap and flow; a verse of ours placed on the beat and in threes; both heard; measured (40 syllables each,
   2.5 a beat; on the beat 40% against 30%; accents mostly fours and twos against almost all threes); rhyme; the writers.
-* **9. The build, the drop and the sidechain.** The drop; a build and drop of ours, heard; the sidechain (14 dB, back
-  within a fifth of a second); an ear question (which pad pumps?); the producer's song.
+* **9. The build, the drop and the sidechain.** The drop; a build and drop of ours, heard; the sidechain (14 dB, recovering to within 1 dB in about half a second); an ear question (which pad pumps?); the producer's song.
 * **10. Frontier: sixty years of charts.** Mauch and colleagues (about 17,000 Hot 100 songs, three revolutions);
   Serrà and colleagues; platforms; what the charts leave out; ★ research problem: do new platforms change how songs are
   written, or only which songs win?
@@ -126,3 +125,7 @@ python -m videos.music.labs 40                                  # the lab (write
 * J. Seabrook, *The Song Machine* (2015); A. Danielsen, *Presence and Pleasure: The Funk Grooves of James Brown and
   Parliament* (2006).
 * Part 9 for membranes; Part 21 for form; Part 37 for interlocking; Part 38 for swing and the blues.
+
+## Interpretation limits
+
+Chart trends describe the cited US samples, not all popular music or proof that streaming caused shorter intros. A stream-count threshold does not define a universal payment rule. Loops can retain tonic goals, and non-chord tones require contextual analysis. Distortion depends on tuning, register and the transfer curve; full chords remain usable. The 808 voices are simplified models, with exponential time constants rather than fixed settling deadlines. Prosody and flow use chosen grid and stress proxies, not universal judgments. Recording and composition rights differ; sampling exceptions and court holdings vary by jurisdiction. Replaying does not automatically remove composition rights.

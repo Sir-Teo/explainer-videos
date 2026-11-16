@@ -69,11 +69,7 @@ class Riffs(SoundScene):
         head = label(r"distortion: \ an amplifier pushed past its limits", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         cap = label(r"Part 3's harmonics, \ created by a curve: \ the model uses tanh, \ then a speaker's band limit", font_size=19, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The rock guitar's sound is an amplifier pushed past its limits. <bookmark mark='a'/> A clean amplifier is a "
-            "straight line from input to output; driven hard, the line bends over, here modelled by a hyperbolic tangent. "
-            "<bookmark mark='b'/> A sine wave through the bend comes out nearly square, and a square wave is rich in odd "
-            "harmonics, Part 3's spectrum created by a curve. Chords played this way turn to mud, which is why rock "
-            "guitarists play power chords, root and fifth only."
+            "The rock guitar's sound is an amplifier pushed past its limits. <bookmark mark='a'/> A clean amplifier is a straight line from input to output; driven hard, the line bends over, here modelled by a hyperbolic tangent. <bookmark mark='b'/> A sine wave through the bend comes out nearly square, and a square wave is rich in odd harmonics, Part 3's spectrum created by a curve. Distortion can make dense chords less clear, which helps explain the use of power chords; distorted guitar also uses thirds and fuller chords."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(lab), Create(lin))
             vo.wait_until("a")
@@ -106,9 +102,7 @@ class Riffs(SoundScene):
                        VGroup(label(r"second: \ C power chord \ (C5)", font_size=22, color=TUNE), label(r"C G C", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.12)).arrange(RIGHT, buff=1.6).to_edge(DOWN, buff=1.4)
         cap = label(r"distortion adds sum and difference tones between every pair of notes: \ the third's clash turns the triad to mud", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "The first is the full triad, the muddier of the two. The curve does not only add harmonics to each note: it "
-            "mixes the notes, adding tones at their sums and differences. For a fifth these line up with the harmonic "
-            "series; for a third they do not, and the chord turns to mud. That is why distorted guitars play power chords."
+            'The first is the full triad, the muddier of the two. The curve does not only add harmonics to each note: it mixes the notes, adding tones at their sums and differences. Their alignment depends on tuning, register and the distortion curve. In this model the fifth is clearer than the major triad; that does not make all thirds unusable under distortion.'
         ):
             self.play(FadeIn(cells), FadeIn(cap), boxes[0][0].animate.set_stroke(EAR, 4))
         self.wait(0.4)

@@ -65,17 +65,12 @@ class Hook(SoundScene):
         items = [
             (r"Hubert L\'eveill\'e Gauvin \ (2018): \ 303 US top-ten singles, \ 1986--2015", WHITE),
             (r"intros shrank by about four fifths; \ the voice and the title arrived sooner; \ tempos rose", WHITE),
-            (r"on streaming services a play counts, \ and pays, \ only after about thirty seconds", WHITE),
+            (r"some services count streams after thirty seconds; \ payment terms vary", WHITE),
             (r"a listener who skips before then costs the song its income: \ form follows the medium", TUNE),
             (r"this part follows the popular song from the sheet-music standard to the drop", GREY_A),
         ]
         rows_scene(self, r"the thirty-second rule", items,
-                   "The study was Hubert Léveillé Gauvin's, in 2018: three hundred and three American top-ten singles from 1986 "
-                   "to 2015. <bookmark mark='b'/> The intros shrank by about four fifths, the voice and the title arrived sooner, "
-                   "and tempos rose. <bookmark mark='c'/> Why? One reason: on streaming services a play counts, and pays, only "
-                   "after about thirty seconds. <bookmark mark='d'/> A listener who skips before then costs the song its income, "
-                   "and the form follows the medium. <bookmark mark='e'/> This part follows the popular song from the sheet-music "
-                   "standard to the drop, and finds each form shaped by the technology that sold it.", marks="bcde")
+                   "The study was Hubert Léveillé Gauvin's, in 2018: three hundred and three American top-ten singles from 1986 to 2015. <bookmark mark='b'/> The intros shrank by about four fifths, the voice and the title arrived sooner, and tempos rose. <bookmark mark='c'/> Why? One possible incentive: some major streaming services count a stream after thirty seconds, although payment arrangements vary. <bookmark mark='d'/> That threshold may encourage an early hook, but this historical trend does not by itself establish streaming as its cause. <bookmark mark='e'/> This part follows the popular song from the sheet-music standard to the drop, and finds each form shaped by the technology that sold it.", marks="bcde")
 
     # ------------------------------------------------------------------
     def plan(self):

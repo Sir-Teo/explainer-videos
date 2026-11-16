@@ -23,12 +23,7 @@ class Breaks(SoundScene):
             (r"from 1979 hip hop was recorded; \ from the mid-1980s samplers did what the turntables did", GREY_A),
         ]
         rows_scene(self, r"the break", items,
-                   "In the Bronx in 1973, DJ Kool Herc played two copies of the same record and switched between them to loop "
-                   "its drum break. <bookmark mark='b'/> The break is the few bars where the band drops out and the drums play "
-                   "alone. <bookmark mark='c'/> Dancers danced the breaks and MCs talked over them, and hip hop began. "
-                   "<bookmark mark='d'/> A turntable became an instrument, and a beat could be made from a recording. "
-                   "<bookmark mark='e'/> From 1979 hip hop was recorded, and from the mid-1980s samplers did what the turntables "
-                   "had done.", marks="bcde")
+                   "Kool Herc's early Bronx parties, including the celebrated 1973 event, helped establish break-centered DJ practice; the familiar two-copy looping technique developed across early hip-hop DJing. <bookmark mark='b'/> The break is the few bars where the band drops out and the drums play alone. <bookmark mark='c'/> Dancers danced the breaks and MCs talked over them, and hip hop began. <bookmark mark='d'/> A turntable became an instrument, and a beat could be made from a recording. <bookmark mark='e'/> From 1979 hip hop was recorded, and from the mid-1980s samplers did what the turntables had done.", marks="bcde")
 
     # ------------------------------------------------------------------
     def hear(self):
@@ -95,16 +90,10 @@ class Breaks(SoundScene):
     def law(self):
         items = [
             (r"1991: \ \textit{Grand Upright Music v. Warner Bros. Records}: \ an uncleared sample infringed copyright", WHITE),
-            (r"since then, \ samples are licensed, \ from the recording's owner and the song's", WHITE),
-            (r"2005: \ \textit{Bridgeport v. Dimension Films}, \ a US appeals court: \ even a short sample needs a licence", WHITE),
+            (r"recording and composition rights are separate; \ exceptions vary", WHITE),
+            (r"2005: \ \textit{Bridgeport v. Dimension Films}, \ the Sixth Circuit rejected de minimis sampling; \ other courts disagree", WHITE),
             (r"so sampling grew expensive, \ and producers turned to replaying parts, \ or to their own sounds", TUNE),
             (r"this film samples only its own Variation 7 \ (Part 60 returns to the law)", GREY_A),
         ]
         rows_scene(self, r"the law", items,
-                   "Then the law arrived. <bookmark mark='b'/> In 1991, in Grand Upright Music against Warner Brothers Records, an "
-                   "American court held that an uncleared sample infringed copyright. <bookmark mark='c'/> Since then samples "
-                   "are licensed, both from the owner of the recording and from the owner of the song, <bookmark mark='d'/> and in "
-                   "2005, in Bridgeport against Dimension Films, a US appeals court held that even a very short sample needs a "
-                   "licence. <bookmark mark='e'/> So sampling grew expensive, and producers turned to replaying parts, or to "
-                   "sounds of their own. <bookmark mark='f'/> This film samples only its own Variation 7; Part 60 returns to the "
-                   "law.", marks="cdef")
+                   "Then the law arrived. <bookmark mark='b'/> In 1991, in Grand Upright Music against Warner Brothers Records, an American court held that an uncleared sample infringed copyright. <bookmark mark='c'/> Sampling can involve separate rights in the recording and composition, with exceptions and permissions depending on jurisdiction and use, <bookmark mark='d'/> and in 2005, in Bridgeport against Dimension Films, the Sixth Circuit rejected a de minimis defense for sound-recording sampling; other courts have disagreed, so this is not a universal rule for every short sample. <bookmark mark='e'/> So sampling grew expensive, and producers turned to replaying parts, or to sounds of their own. <bookmark mark='f'/> This film samples only its own Variation 7; Part 60 returns to the law.", marks="cdef")

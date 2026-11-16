@@ -74,16 +74,11 @@ class Loops(SoundScene):
             (r"David Temperley \ (2007): \ in rock, \ melody and harmony often go their own ways", WHITE),
             (r"melody notes on strong beats are often not in the chord: \ the `melodic-harmonic divorce'", WHITE),
             (rf"in our chorus hook over I--V--vi--IV: \ {dv['outside']} of its {dv['on_beat']} notes on the beat are outside the chord", WHITE),
-            (r"Part 17's chorales would call those errors; \ here they are the style", TUNE),
+            (r"non-chord tones require contextual analysis in either style", TUNE),
             (r"the melody follows the scale, \ the chords follow the loop", GREY_A),
         ]
         rows_scene(self, r"melody and harmony, \ divorced", items,
-                   "Over a loop, the melody is freer. <bookmark mark='b'/> The theorist David Temperley pointed out in 2007 that "
-                   "in rock, melody notes on strong beats are often not in the chord, a melodic-harmonic divorce. "
-                   f"<bookmark mark='c'/> Monochord counts our own chorus hook over one, five, six, four: {say(dv['outside'])} of "
-                   f"its {say(dv['on_beat'])} notes on the beat lie outside the chord. <bookmark mark='d'/> Part 17's chorales "
-                   "would call those errors; here they are the style. <bookmark mark='e'/> The melody follows the scale, and the "
-                   "chords follow the loop.", marks="bcde")
+                   f"Over a loop, the melody is freer. <bookmark mark='b'/> The theorist David Temperley pointed out in 2007 that in rock, melody notes on strong beats are often not in the chord, a melodic-harmonic divorce. <bookmark mark='c'/> Monochord counts our own chorus hook over one, five, six, four: {say(dv['outside'])} of its {say(dv['on_beat'])} notes on the beat lie outside the chord. <bookmark mark='d'/> A chorale analysis would inspect preparation, duration and resolution before judging such notes; the count alone does not identify errors in either style. <bookmark mark='e'/> The melody follows the scale, and the chords follow the loop.", marks="bcde")
 
     # ------------------------------------------------------------------
     def modes(self):
@@ -91,7 +86,7 @@ class Loops(SoundScene):
             (r"Temperley's rock scales: \ major, \ mixolydian \ (flat seventh), \ aeolian \ (natural minor), \ and the pentatonics", WHITE),
             (r"the flat seventh chord \ (B$\flat$ in C) \ is rock's signature: \ the blues's seventh \ (Part 38) \ made a chord", WHITE),
             (r"melodies often use the minor pentatonic over major chords: \ the blues third again", WHITE),
-            (r"Part 12's modes, \ chosen by sound and attitude rather than by key", TUNE),
+            (r"Part 12's modes, \ used within varied tonal and modal practices", TUNE),
             (r"the harmony serves the riff and the voice", GREY_A),
         ]
         rows_scene(self, r"rock's scales", items,
@@ -99,21 +94,17 @@ class Loops(SoundScene):
                    "its flat seventh, the aeolian or natural minor, and the pentatonics. <bookmark mark='c'/> The flat seventh "
                    "chord, B flat in C, is rock's signature: the blues's seventh from Part 38, made into a chord. "
                    "<bookmark mark='d'/> Melodies often use the minor pentatonic over major chords, the blue third again. "
-                   "<bookmark mark='e'/> These are Part 12's modes, chosen by sound and attitude rather than by key. "
+                   "<bookmark mark='e'/> These are Part 12's modes, used within varied tonal and modal practices. "
                    "<bookmark mark='f'/> The harmony serves the riff and the voice.", marks="cdef")
 
     # ------------------------------------------------------------------
     def circle(self):
         items = [
             (r"a progression \ (Part 18) \ goes somewhere: \ tension, \ then arrival at the tonic", WHITE),
-            (r"a loop goes round: \ no chord is the destination, \ and the song can fade out", WHITE),
+            (r"a loop repeats; \ a tonic or goal may still be heard", WHITE),
             (r"rock prefers the plagal \ (IV--I) \ and the flat seventh to the dominant's pull", WHITE),
             (r"form then comes from the arrangement: \ who plays, \ how loud, \ how dense", TUNE),
             (r"chapter 3: \ the loop at its most physical, \ the riff", GREY_A),
         ]
         rows_scene(self, r"progressions and loops", items,
-                   "There is a difference in kind here. <bookmark mark='b'/> A progression, as in Part 18, goes somewhere: "
-                   "tension, then arrival at the tonic. <bookmark mark='c'/> A loop goes round: no chord is the destination, and "
-                   "the song can simply fade out. <bookmark mark='d'/> Rock prefers the plagal, four to one, and the flat seventh "
-                   "to the dominant's pull. <bookmark mark='e'/> So form comes from the arrangement: who plays, how loud, how "
-                   "dense. <bookmark mark='f'/> Chapter three turns to the loop at its most physical, the riff.", marks="cdef")
+                   "There is a difference in kind here. <bookmark mark='b'/> A progression, as in Part 18, goes somewhere: tension, then arrival at the tonic. <bookmark mark='c'/> A loop repeats, though listeners may still hear a tonic or goal within it; an arrangement can end it or fade it out. <bookmark mark='d'/> Rock prefers the plagal, four to one, and the flat seventh to the dominant's pull. <bookmark mark='e'/> So form comes from the arrangement: who plays, how loud, how dense. <bookmark mark='f'/> Chapter three turns to the loop at its most physical, the riff.", marks="cdef")

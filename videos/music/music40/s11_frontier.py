@@ -51,18 +51,13 @@ class Frontier(SoundScene):
     def platforms(self):
         items = [
             (r"several chart analyses report that hit songs have grown shorter since the 1990s", WHITE),
-            (r"streaming pays per play after thirty seconds; \ short-video platforms circulate fifteen-second excerpts", WHITE),
+            (r"some services count streams after thirty seconds; \ short-video excerpts vary", WHITE),
             (r"songs are now written so that one moment can be cut out and travel on its own", WHITE),
             (r"whether the platforms cause the change, \ or only accelerate it, \ is open", TUNE),
             (r"the medium shapes the form: \ Part 21's lesson, \ for the twenty-first century", GREY_A),
         ]
         rows_scene(self, r"platforms", items,
-                   "The newest change is still under way. <bookmark mark='b'/> Several chart analyses report that hit songs have "
-                   "grown shorter since the 1990s. <bookmark mark='c'/> Streaming pays per play after thirty seconds, and "
-                   "short-video platforms circulate excerpts of fifteen seconds or so, <bookmark mark='d'/> so songs are now "
-                   "written so that one moment can be cut out and travel on its own. <bookmark mark='e'/> Whether the platforms "
-                   "cause the change, or only accelerate it, is open. <bookmark mark='f'/> The medium shapes the form: Part 21's "
-                   "lesson, for the twenty-first century.", marks="cdef")
+                   "The newest change is still under way. <bookmark mark='b'/> Several chart analyses report that hit songs have grown shorter since the 1990s. <bookmark mark='c'/> Some streaming services count plays after thirty seconds, with varied payment arrangements, and short-video platforms circulate excerpts of varying length, <bookmark mark='d'/> which can reward an excerpt that travels independently; establishing a general causal effect on songwriting requires more evidence. <bookmark mark='e'/> Whether the platforms cause the change, or only accelerate it, is open. <bookmark mark='f'/> The medium shapes the form: Part 21's lesson, for the twenty-first century.", marks="cdef")
 
     # ------------------------------------------------------------------
     def missing(self):

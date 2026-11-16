@@ -26,12 +26,7 @@ class Eight(SoundScene):
             (r"every sound is a small analog circuit: \ we build them from the same principles", GREY_A),
         ]
         rows_scene(self, r"the 808", items,
-                   "In 1980 Roland released the TR-808, an analog drum machine with a step sequencer. <bookmark mark='b'/> Its "
-                   "sounds were nothing like real drums, it sold poorly, and second-hand prices fell. <bookmark mark='c'/> Cheap, "
-                   "it reached young producers, and became the sound of electro, hip hop, Miami bass, and much later trap. "
-                   "<bookmark mark='d'/> Marvin Gaye's Sexual Healing, in 1982, made it a sound of the charts. "
-                   "<bookmark mark='e'/> Each of its sounds is a small analog circuit, and we can build them from the same "
-                   "principles.", marks="bcde")
+                   "In 1980 Roland released the TR-808, an analog drum machine with a step sequencer. <bookmark mark='b'/> Its analog sounds differed from sampled acoustic drums; after discontinuation, affordable used units reached new producers. <bookmark mark='c'/> Cheap, it reached young producers, and became the sound of electro, hip hop, Miami bass, and much later trap. <bookmark mark='d'/> Marvin Gaye's Sexual Healing, in 1982, made it a sound of the charts. <bookmark mark='e'/> Each of its sounds is a small analog circuit, and we can build them from the same principles.", marks="bcde")
 
     # ------------------------------------------------------------------
     def kick(self):
@@ -47,7 +42,7 @@ class Eight(SoundScene):
         fl = VMobject(color=EAR, stroke_width=3).set_points_as_corners([[x0 + W * tt / 0.5, -2.0 + 0.012 * (fr - 40), 0] for tt, fr in zip(t, freq)])
         fax = Line([x0, -2.0, 0], [x0 + W, -2.0, 0], color=GREY_D)
         labs = VGroup(label(r"the kick: \ a damped sine", font_size=18, color=TUNE).move_to([x0 + 1.4, 2.2, 0]),
-                      label(r"its frequency: \ 81 Hz at the strike, \ 52 Hz within 20 ms", font_size=18, color=EAR).move_to([x0 + 2.6, -1.05, 0]),
+                      label(r"its frequency: \ 83 Hz at the strike, \ 52 Hz asymptote; 20 ms time constant", font_size=18, color=EAR).move_to([x0 + 2.6, -1.05, 0]),
                       label(r"0.5 s", font_size=15, color=GREY_A).move_to([x0 + W, 0.3, 0]))
         side = VGroup(label(r"the 808's bass drum: \ a resonant network \ (bridged-T) \ struck by a pulse", font_size=19, color=WHITE),
                       label(r"a struck resonator rings at its own frequency and dies away: \ Part 1's string, \ one mode", font_size=19, color=WHITE),
@@ -56,12 +51,7 @@ class Eight(SoundScene):
         side.scale_to_fit_width(min(side.width, 6.3)).move_to(RIGHT * 3.45)
         head = label(r"a kick from first principles", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "The 808's bass drum is a resonant network, a bridged-T filter, struck by an electrical pulse. "
-            "<bookmark mark='a'/> A struck resonator rings at its own frequency and dies away, like Part 1's string reduced "
-            "to a single mode: a damped sine. <bookmark mark='b'/> The strike also detunes it for a moment, so the pitch "
-            "sweeps down from about eighty hertz to fifty-two within twenty milliseconds, which the ear hears as punch. "
-            f"Monochord's model rings at {say(round(d['pitch']))} hertz, measured, with a knob for the decay and a millisecond "
-            "click from the pulse."
+            f"The 808's bass drum is a resonant network, a bridged-T filter, struck by an electrical pulse. <bookmark mark='a'/> A struck resonator rings at its own frequency and dies away, like Part 1's string reduced to a single mode: a damped sine. <bookmark mark='b'/> The strike also detunes it for a moment, so this simplified model's pitch falls from about eighty-three hertz toward fifty-two with a twenty-millisecond time constant, which the ear hears as punch. Monochord's model rings at {say(round(d['pitch']))} hertz, measured, with a knob for the decay and a millisecond click from the pulse."
         ) as vo:
             self.play(FadeIn(head), FadeIn(side[0]), FadeIn(axis), FadeIn(fax))
             vo.wait_until("a")
@@ -177,12 +167,12 @@ class Eight(SoundScene):
             (r"Linn's LM-1 \ (1980) \ played samples of real drums; \ the 909 \ (1983) \ mixed both", WHITE),
             (r"the step sequencer made rhythm a grid of switches: \ Part 33's necklaces, \ as hardware", WHITE),
             (r"today the 808's sounds live as samples and software in every studio", WHITE),
-            (r"a commercial failure that became a musical language", TUNE),
+            (r"a discontinued instrument that became a musical language", TUNE),
             (r"chapter 7: \ beats made from records", GREY_A),
         ]
         rows_scene(self, r"after the 808", items,
                    "Other machines followed. <bookmark mark='b'/> Roger Linn's LM-1, also from 1980, played samples of real drums, and "
                    "the 909 of 1983 mixed both. <bookmark mark='c'/> The step sequencer made rhythm a grid of switches: Part 33's "
                    "necklaces, as hardware. <bookmark mark='d'/> Today the 808's sounds live on as samples and software in every "
-                   "studio: <bookmark mark='e'/> a commercial failure that became a musical language. <bookmark mark='f'/> "
+                   "studio: <bookmark mark='e'/> a discontinued instrument that became a musical language. <bookmark mark='f'/> "
                    "Chapter seven turns to beats made from records.", marks="cdef")

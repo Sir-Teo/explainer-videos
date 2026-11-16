@@ -74,7 +74,7 @@ class Outro(SoundScene):
     # ------------------------------------------------------------------
     def recap(self):
         card = objectives_card([
-            r"AABA gave way to verse--chorus; \ loops replaced progressions",
+            r"AABA gave way to verse--chorus; \ loops became prominent alongside directional progressions",
             r"riffs and the backbeat; \ funk's one; \ four on the floor",
             r"prosody: \ stress on strong positions; \ hooks repeat",
             r"an 808 is a struck resonator and six square waves",
@@ -82,7 +82,7 @@ class Outro(SoundScene):
             r"the drop and the sidechain; \ intros shrank from twenty seconds to five",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? The thirty-two bar song gave way to verse and chorus, and loops replaced progressions. "
+            "What did we find? The thirty-two bar song gave way to verse and chorus, and loops became prominent alongside directional progressions. "
             "<bookmark mark='a'/> Riffs and the backbeat carry the music, from funk's one to four on the floor. "
             "<bookmark mark='b'/> Good prosody puts stresses on strong positions, and hooks repeat. <bookmark mark='c'/> An "
             "808 is a struck resonator and six square waves. <bookmark mark='d'/> Sampling chops and re-sequences, and flow "
@@ -138,7 +138,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "And in practice. Songwriters put the hook early, and test the words by speaking them over the beat. Producers "
             "program drums on a sixteen-step grid and sidechain the pads. Rappers write to the beat, syllable by syllable. "
-            "And labels clear every sample, or have it replayed."
+            "Rights checks distinguish recordings from compositions; replaying avoids using the original recording but does not automatically remove composition rights."
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(0.4)

@@ -30,7 +30,7 @@ class Hooks(SoundScene):
                    "<bookmark mark='b'/> It may be a melody, a rhythm, a sound such as a riff or a vocal effect, or a line of "
                    "words. <bookmark mark='c'/> Repetition is the main tool: the chorus returns, and repeats within itself. "
                    "<bookmark mark='d'/> The melodies are Part 14's again: a small range, mostly steps, and one leap that stands "
-                   "out. <bookmark mark='e'/> And the words must sit on the music the way they are spoken.", marks="bcde")
+                   "out. <bookmark mark='e'/> Speech stress can guide a setting, while deliberate departures are common expressive devices.", marks="bcde")
 
     # ------------------------------------------------------------------
     def prosody(self):
@@ -55,7 +55,7 @@ class Hooks(SoundScene):
             "Prosody is how words sit on music. Spoken, beautiful day stresses BEAU and DAY. <bookmark mark='a'/> Set them "
             "on the strong positions of the bar, the tall bars here from Part 11's metrical grid, and every syllable agrees "
             "with the beat. <bookmark mark='b'/> Set them the other way, stresses on weak positions and weak syllables on "
-            "strong ones, and the line sounds wrong at once, as if spoken with a foreign accent. Monochord's measure is simply "
+            "strong ones, and the setting conflicts with this chosen speech-stress pattern. Dialect, duration and deliberate musical displacement can change the judgment. Monochord's measure is simply "
             "the share of syllables whose stress agrees with the strength of their position."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells), FadeIn(cap))

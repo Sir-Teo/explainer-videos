@@ -74,14 +74,14 @@ class Drop(SoundScene):
         top = DashedLine([x0, 1.1, 0], [x0 + W, 1.1, 0], color=GREY_D)
         kicks = VGroup(*[Triangle(color=EAR, fill_opacity=1).scale(0.12).rotate(PI).move_to([x0 + W * k / 2, 1.5, 0]) for k in (0, 1)])
         labs = VGroup(label(r"kick", font_size=17, color=EAR).next_to(kicks[0], UP, buff=0.1),
-                      label(r"the pad's gain: \ down 14 dB at each kick, \ back within a fifth of a second", font_size=19, color=TUNE).to_edge(DOWN, buff=0.7),
+                      label(r"the pad's gain: \ down 14 dB at each kick, \ within 1 dB after about 0.48 s", font_size=19, color=TUNE).to_edge(DOWN, buff=0.7),
                       label(r"full level", font_size=15, color=GREY_A).next_to(top, RIGHT, buff=0.1).shift(LEFT * 1.2 + UP * 0.2))
-        side = label(r"a compressor whose key input is the kick: \ the louder the kick, \ the more the pad gives way", font_size=19, color=WHITE).to_edge(UP, buff=1.0)
+        side = label(r"this model: kick-triggered ducking by a fixed depth, \\ followed by exponential recovery", font_size=19, color=WHITE).to_edge(UP, buff=1.0)
         head = label(r"the sidechain", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "That pumping is the sidechain. <bookmark mark='a'/> A compressor turns a sound down when something is loud; keyed "
             "from a sidechain input, it listens to a different sound. <bookmark mark='b'/> Key the pad's compressor from the "
-            "kick, and the pad ducks fourteen decibels at every kick and swells back within a fifth of a second. It began "
+            "kick, and the pad ducks fourteen decibels at every kick and recovers exponentially: after about a fifth of a second it is still roughly five decibels down, and reaches within one decibel after about half a second. It began "
             "as a way to make room for the kick in a mix, and became an effect in its own right, the breathing sound of "
             "house and its descendants. Part 50 builds the compressor."
         ) as vo:

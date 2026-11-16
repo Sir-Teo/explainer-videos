@@ -126,7 +126,7 @@ class Beats(SoundScene):
         cap = label(r"a drum machine's swing knob: \ where the second sixteenth of each pair falls", font_size=19, color=GREY_A).to_edge(DOWN, buff=1.0)
         head = label(r"swing on the sixteenths", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Drum machines brought Part 38's swing to the sixteenth note. Roger Linn's machines had a swing setting: how far "
+            "Drum machines offered programmable sixteenth-note swing, building on human timing practices that already existed. Roger Linn's machines had a swing setting: how far "
             "through each pair of sixteenths the second one falls, fifty per cent for straight, more for swung. Hear our funk "
             "beat straight, then at sixty per cent."
         ):

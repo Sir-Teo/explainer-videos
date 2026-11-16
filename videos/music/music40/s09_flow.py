@@ -48,12 +48,7 @@ class Flow(SoundScene):
             (r"a verse of ours, \ placed two ways", GREY_A),
         ]
         rows_scene(self, r"rap and flow", items,
-                   "Rap is rhythmic speech over a beat, from Bronx parties in the 1970s to the best-selling genre in the world. "
-                   "<bookmark mark='b'/> Its rappers speak of flow: how the syllables are placed against the beat, grouped, "
-                   "accented and rhymed. <bookmark mark='c'/> The music theorist Mitchell Ohriner's book Flow, from 2019, measures "
-                   "it by placing every syllable on a sixteenth-note grid. <bookmark mark='d'/> Accented syllables fall into "
-                   "groups of two and three sixteenths, like Part 37's timelines. <bookmark mark='e'/> Here is a verse of ours, "
-                   "placed two ways.", marks="bcde")
+                   "Rap is rhythmic speech over a beat, from Bronx parties in the 1970s to a major global commercial and cultural force. <bookmark mark='b'/> Its rappers speak of flow: how the syllables are placed against the beat, grouped, accented and rhymed. <bookmark mark='c'/> The music theorist Mitchell Ohriner's book Flow, from 2019, analyzes syllable timing and metrical placement; this lesson simplifies timing onto a sixteenth-note grid. <bookmark mark='d'/> Accented syllables fall into groups of two and three sixteenths, like Part 37's timelines. <bookmark mark='e'/> Here is a verse of ours, placed two ways.", marks="bcde")
 
     # ------------------------------------------------------------------
     def verse(self):
