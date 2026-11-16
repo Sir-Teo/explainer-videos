@@ -7598,3 +7598,98 @@ shown(57, r"Clark (2018)", "a national programme, described")
 shown(57, r"Lambert et al.\ (2018)", "a meta-analysis of outcome feedback, described")
 shown(57, r"Chibanda et al.\ (2016)", "a cluster-randomized trial, described")
 shown(57, r"Friedman \& Rosenman (1959)", "the original description; the row cites the 1975 cohort report")
+
+# --- Part 58: The Efficient, Predictive Brain -------------------------------------------------------------------------
+add(Finding(
+    key="sparse_v1", part=58, title=r"Sparse coding grows V1's receptive fields",
+    claim="A code that describes natural image patches with as few active units as possible learns localized, "
+          "oriented, band-pass basis functions like the receptive fields of simple cells in primary visual cortex.",
+    original=Study("Olshausen and Field", 1996, design="sparse coding of whitened patches of natural photographs",
+                   found="localized, oriented, band-pass basis functions"),
+    status="replicated",
+    record=(Study("Bell and Sejnowski", 1997, design="independent component analysis of natural images",
+                  found="edge filters of the same kind"),
+            Study("van Hateren and van der Schaaf", 1998, design="independent component filters compared with "
+                  "measured simple cells", found="similar in many properties"),
+            Study("Ringach", 2002, design="the shapes of macaque simple-cell receptive fields measured",
+                  found="real fields rounder and more varied than the model's")),
+    note="The computational result reproduces with many methods and data sets; the match to measured fields is "
+         "qualitative, and later models (with noise, overcompleteness or nonnegativity) close some of the gaps.",
+    sources=("B. A. Olshausen and D. J. Field, Emergence of simple-cell receptive field properties by learning a "
+             "sparse code for natural images, Nature 381 (1996) 607-609",
+             "A. J. Bell and T. J. Sejnowski, The 'independent components' of natural scenes are edge filters, "
+             "Vision Research 37 (1997) 3327-3338",
+             "J. H. van Hateren and A. van der Schaaf, Independent component filters of natural images compared "
+             "with simple cells in primary visual cortex, Proceedings of the Royal Society B 265 (1998) 359-366",
+             "D. L. Ringach, Spatial structure and symmetry of simple-cell receptive fields in macaque primary "
+             "visual cortex, Journal of Neurophysiology 88 (2002) 455-463"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="efficient_bias", part=58, title=r"Efficient coding predicts perceptual biases",
+    claim="An encoder that spends its precision where stimuli are common, read out by a Bayesian decoder, predicts "
+          "biases away from the common values, and a lawful link between bias and discrimination threshold.",
+    original=Study("Wei and Stocker", 2015, design="an efficient-coding constraint on a Bayesian observer, fitted "
+                   "to published orientation and other data", found="repulsive biases explained"),
+    status="replicated",
+    record=(Study("Wei and Stocker", 2017, design="bias against the slope of squared discrimination thresholds "
+                  "across many published data sets", found="the predicted proportionality held"),),
+    note="Replicated across several perceptual domains in reanalyses; a strong test needs the prior measured "
+         "independently from the environment, which has been done for orientation.",
+    sources=("X.-X. Wei and A. A. Stocker, A Bayesian observer model constrained by efficient coding can explain "
+             "'anti-Bayesian' percepts, Nature Neuroscience 18 (2015) 1509-1517",
+             "X.-X. Wei and A. A. Stocker, Lawful relation between perceptual bias and discriminability, PNAS 114 "
+             "(2017) 10244-10249"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="prediction_error_neurons", part=58, title=r"Prediction-error neurons",
+    claim="Cortex is organized as predictive coding requires: predictions sent down a hierarchy, and distinct "
+          "neurons that signal the error between prediction and input sent up.",
+    original=Study("Rao and Ballard", 1999, design="a hierarchical predictive-coding model of visual cortex",
+                   found="end-stopping and other extra-classical effects explained"),
+    status="contested",
+    record=(Study("Keller, Bonhoeffer and Hubener", 2012, design="mouse V1 during running with visual flow "
+                  "coupled or not", found="neurons responding to mismatches"),
+            Study("Walsh and colleagues", 2020, design="a review of the neurophysiological evidence",
+                  found="suppression of the expected is common; dedicated error units are not established")),
+    note="Responses to the unexpected are robust, but adaptation and attention predict many of them too; the "
+         "distinct error and prediction populations the scheme needs are not established.",
+    sources=("R. P. N. Rao and D. H. Ballard, Predictive coding in the visual cortex: a functional interpretation "
+             "of some extra-classical receptive-field effects, Nature Neuroscience 2 (1999) 79-87",
+             "G. B. Keller, T. Bonhoeffer and M. Hubener, Sensorimotor mismatch signals in primary visual cortex of "
+             "the behaving mouse, Neuron 74 (2012) 809-815",
+             "K. S. Walsh, D. P. McGovern, A. Clark and R. G. O'Connell, Evaluating the neurophysiological evidence "
+             "for predictive processing as a model of perception, Annals of the New York Academy of Sciences 1464 "
+             "(2020) 242-268"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="free_energy", part=58, title=r"The free-energy principle",
+    claim="Everything a brain does, perceiving, learning and acting, minimizes variational free energy, a bound on "
+          "the surprise of its sensory states.",
+    original=Study("Friston", 2010, design="a theoretical review", found="a unified brain theory proposed"),
+    status="not directly tested",
+    record=(Study("Andrews", 2021, design="a philosophical analysis of the principle's status",
+                  found="a mathematical framework rather than an empirical claim; its models are what can be tested"),),
+    note="As a principle it is a modelling framework: with free choice of generative model it fits any behaviour. "
+         "Specific models built with it can fail, and should be judged one by one.",
+    sources=("K. Friston, The free-energy principle: a unified brain theory?, Nature Reviews Neuroscience 11 (2010) "
+             "127-138",
+             "M. Andrews, The math is not the territory: navigating the free energy principle, Biology and "
+             "Philosophy 36 (2021) 30"),
+    checked="2026-11-16",
+))
+shown(58, r"Barlow (1961)", "a hypothesis, described")
+shown(58, r"Laughlin (1981)", "a single measurement of the fly's contrast code; its principle is the efficient_bias "
+                              "row's")
+shown(58, r"Sims (2018)", "a derivation, reproduced here")
+shown(58, r"Carandini \& Heeger (2012)", "a review of normalization, described")
+shown(58, r"Bowers \& Davis (2012)", "a critique, described")
+shown(58, r"Vul et al.\ (2014)", "a model, computed here")
+shown(58, r"Lieder \& Griffiths (2020)", "a theoretical review, described")
+shown(58, r"Lillicrap et al.\ (2020)", "a theoretical review, described")
+shown(58, r"Newell (1973)", "an essay, quoted")

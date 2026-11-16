@@ -1367,6 +1367,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Type A behaviour pattern; hostility; mindset | A型行为模式；敌意；心态 |
 | Sheldon Cohen; Fabrizio Benedetti; Ted Kaptchuk; Tor Wager; Vikram Patel; Meyer Friedman; Ray Rosenman; Alia Crum | 谢尔登·科恩；法布里齐奥·贝内代蒂；泰德·卡普丘克；托尔·瓦格；维克拉姆·帕特尔；迈耶·弗里德曼；雷·罗森曼；阿莉娅·克拉姆 |
 
+## Part 58: the efficient, predictive brain
+
+| English | 中文 |
+|---|---|
+| redundancy reduction; efficient coding; whitening; sparse coding; receptive field | 冗余削减；高效编码；白化；稀疏编码；感受野 |
+| histogram equalization; centre-surround; tilt after-effect; repulsive bias; Fisher information | 直方图均衡化；中心-周边；倾斜后效；排斥性偏差；费希尔信息 |
+| rate-distortion theory; Shepard's universal law of generalization; divisive normalization | 率失真理论；谢泼德的泛化普遍定律；除法归一化 |
+| predictive coding; prediction error; free-energy principle; active inference | 预测编码；预测误差；自由能原理；主动推断 |
+| Bayesian brain; resource rationality; Hebbian learning; backpropagation; unified theory | 贝叶斯脑；资源理性；赫布学习；反向传播；统一理论 |
+| Horace Barlow; Bruno Olshausen; David Field; Simon Laughlin; Xue-Xin Wei; Alan Stocker; Roger Shepard; Rajesh Rao; Dana Ballard; Karl Friston; Falk Lieder; Tom Griffiths | 霍勒斯·巴洛；布鲁诺·奥尔斯豪森；大卫·菲尔德；西蒙·劳克林；魏学昕；艾伦·斯托克；罗杰·谢泼德；拉杰什·拉奥；达娜·巴拉德；卡尔·弗里斯顿；福尔克·利德；汤姆·格里菲斯 |
+
 ## Names
 
 | English | 中文 |
