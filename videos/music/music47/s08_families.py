@@ -131,7 +131,7 @@ class Families(SoundScene):
             "series' corpus. Then cluster: join the two closest, treat them as one, and repeat. "
             f"<bookmark mark='a'/> The Tune's family comes out as a branch of its own: the Alphabet Song "
             f"{say(D[0, 1], 2)} a note from the Tune, Baa, Baa {say(D[0, 2], 2)}; every other tune is at least "
-            f"{say(min(D[0, 3:]), 2)} away. The method knows nothing of their history and finds it anyway."
+            f"{say(min(D[0, 3:]), 2)} away. The clustering recovers known similarity in this selected set, without independently proving ancestry or excluding borrowing and convergence."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tr), FadeIn(cap))
             vo.wait_until("a")

@@ -24,13 +24,7 @@ class Learned(SoundScene):
             (r"roughness is physics \ (Part 5); \ preferring smoothness in chords seems to be learned", GREY_A),
         ]
         rows_scene(self, r"indifference to dissonance", items,
-                   "Take the most famous candidate for a universal of taste: that consonance pleases and dissonance does not. "
-                   "<bookmark mark='b'/> The Tsimane' live in the Bolivian Amazon, and in 2016 many had heard little Western "
-                   "music. Josh McDermott and colleagues played them chords and sung harmonies, consonant and dissonant. "
-                   "<bookmark mark='c'/> They rated the two as equally pleasant. <bookmark mark='d'/> Yet they could hear the "
-                   "difference, they disliked rough sounds, and they preferred laughter to gasps, just as Americans did. "
-                   "<bookmark mark='e'/> Roughness is physics, as Part 5 showed; preferring smoothness in a chord seems to be "
-                   "learned.", marks="bcde")
+                   "Take the most famous candidate for a universal of taste: that consonance pleases and dissonance does not. <bookmark mark='b'/> The Tsimane' live in the Bolivian Amazon, and in 2016 many had heard little Western music. Josh McDermott and colleagues played them chords and sung harmonies, consonant and dissonant. <bookmark mark='c'/> They rated the two as equally pleasant. <bookmark mark='d'/> Yet they could hear the difference, they disliked rough sounds, and they preferred laughter to gasps, just as Americans did. <bookmark mark='e'/> Acoustic beating and auditory filtering contribute to roughness, while pleasantness and harmonic consonance depend on exposure, task and musical context.", marks="bcde")
 
     # ------------------------------------------------------------------
     def chords(self):
@@ -48,9 +42,7 @@ class Learned(SoundScene):
         cap = label(r"bars: \ the notes of each chord, \ a semitone per step up; \ gold consonant, \ pink dissonant", font_size=16, color=GREY_A).to_edge(DOWN, buff=1.0)
         head = label(r"chords of the kind they rated", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Hear chords of the kind they rated: a major triad, a cluster of three neighbouring semitones, an open fifth "
-            "with its octave, and a tritone stacked with a minor ninth. To most of us the second and fourth sound harsh. To "
-            "the Tsimane', on average, none of them did."
+            'Hear chords of the kind they rated: a major triad, a cluster of three neighbouring semitones, an open fifth with its octave, and a tritone stacked with a minor ninth. To most of us the second and fourth sound harsh. The study found no group preference for its consonant over dissonant examples; that does not imply these exact sketches sound equally harsh or that roughness is irrelevant.'
         ):
             self.play(FadeIn(head), FadeIn(cells), FadeIn(cap))
         with self.listen(c) as snd:

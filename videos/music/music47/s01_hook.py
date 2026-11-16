@@ -35,12 +35,7 @@ class Hook(SoundScene):
         caps = VGroup(*[label(t, font_size=15, color=GREY_A).next_to(cells[i], DOWN, buff=0.15) for i, t in enumerate([r"all closed"] + [rf"{k} open" for k in range(1, 6)])])
         head = label(r"a wing bone, \ five holes, \ some 40,000 years", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "In 2008, in a cave called Hohle Fels in south-west Germany, archaeologists pieced together twelve fragments of "
-            "a griffon vulture's wing bone. <bookmark mark='a'/> Someone had cut five finger holes in it, and a notch at one "
-            "end to blow across. It is at least thirty-five thousand years old, and among the oldest instruments anyone has "
-            f"found. <bookmark mark='b'/> Here is a pipe of the same size, {say(100 * L, 1)} centimetres and eight millimetres "
-            "across, played by Part 8's flute model, with five holes cut evenly, two centimetres apart. Nobody knows where "
-            "the real holes put its notes; listen for what even spacing gives."
+            f"In 2008, in a cave called Hohle Fels in south-west Germany, archaeologists pieced together twelve fragments of a griffon vulture's wing bone. <bookmark mark='a'/> Someone had cut five finger holes in it, and a notch at one end to blow across. It is at least thirty-five thousand years old, and among the oldest instruments anyone has found. <bookmark mark='b'/> Here is a pipe of the same size, {say(100 * L, 1)} centimetres and eight millimetres across, played by Part 8's flute model, with five holes cut evenly, two centimetres apart. This demonstration uses evenly spaced holes rather than a reconstruction of the archaeological instrument's fingering and pitches; listen for what even spacing gives."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(cells, 0.15)))
             vo.wait_until("a")
@@ -61,10 +56,7 @@ class Hook(SoundScene):
                 t += b * beat * 1.4
         steps = d["steps"]
         with self.voiceover(
-            f"With every hole closed the pipe sounds about {say(hz[0])} hertz. Opening the holes one by one climbs in steps of "
-            f"{say(steps[0])}, {say(steps[1])}, {say(steps[2])}, {say(steps[3])} and {say(steps[4])} cents: even holes do "
-            "not give even steps, so whoever made a flute like this chose where the notes would be. That choice, of a few "
-            "fixed pitches, is the first thing this part will find everywhere."
+            f'With every hole closed the pipe sounds about {say(hz[0])} hertz. Opening the holes one by one climbs in steps of {say(steps[0])}, {say(steps[1])}, {say(steps[2])}, {say(steps[3])} and {say(steps[4])} cents: even holes do not give even steps, so whoever made a flute like this chose where the notes would be. Discrete pitch categories are widespread, without exhausting the glides and flexible intonation found in many traditions.'
         ):
             self.play(*[Indicate(x, color=TUNE, scale_factor=1.05) for x in cells], run_time=2.0)
         self.wait(0.4)

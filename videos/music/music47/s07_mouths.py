@@ -32,7 +32,7 @@ class Mouths(SoundScene):
                    "Hearing blurs every pitch and every length a little. <bookmark mark='e'/> The singer sorts pitches into "
                    "categories, hears each length as the likeliest simple value, and lands wide leaps a little short. "
                    "<bookmark mark='f'/> Then it sings, with a little motor noise and a pull toward a comfortable register. "
-                   "Nothing here mentions scales, motifs or style.", marks="bcdef")
+                   "The model explicitly includes pitch categories, simple-duration candidates, familiar continuations and a leap penalty; the resulting structure depends on those choices.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def generations(self):
@@ -101,7 +101,7 @@ class Mouths(SoundScene):
                 flash(snd, r.notes, [st[key] + beat * o for o in on], hot=WHITE, base=GREY_A if key == "first" else TUNE)
         s0 = d["stats"]
         with self.voiceover(
-            "Almost certainly the second. Nobody designed it; forty slightly forgetful singers did. It is not a good tune, "
+            "Almost certainly the second. Its forty simulated singers implement biases we designed; this is a demonstration of their consequences, not independent evidence for an origin theory. It is not a good tune, "
             "but it is a singable one: its pitches repeat, its steps are small, and its lengths are simple. Those are three "
             "of the statistical universals of chapter three."
         ):
@@ -154,12 +154,7 @@ class Mouths(SoundScene):
         k = VGroup(label(r"each length heard as the likeliest value", font_size=18, color=TUNE), label(r"each length drawn from the posterior", font_size=18, color=EAR)).arrange(DOWN, buff=0.15, aligned_edge=LEFT).next_to(p, RIGHT, buff=-2.6).shift(UP * 1.5)
         head = label(r"the Tune through thirty singers, \ twelve times, \ two kinds of learner", font_size=24, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "One choice in the singer matters more than any other. Our singers take the likeliest length for each note. "
-            "Chapter five's listener instead drew its answer from its posterior. <bookmark mark='a'/> Pass the Tune itself "
-            f"through thirty singers of each kind, twelve times. The likeliest-value singers keep it: after thirty, it is "
-            f"{say(b['mean'][-1], 2)} per note from the original. <bookmark mark='b'/> The sampling singers lose it faster: "
-            f"{say(s['mean'][-1], 2)}. Griffiths and Kalish's theorem says where such a chain heads: toward the learners' prior, "
-            "with nothing of the Tune left. Traditions last because singers hold on to what they heard."
+            f"One choice in the singer matters more than any other. Our singers take the likeliest length for each note. Chapter five's listener instead drew its answer from its posterior. <bookmark mark='a'/> Pass the Tune itself through thirty singers of each kind, twelve times. The likeliest-value singers keep it: after thirty, it is {say(b['mean'][-1], 2)} per note from the original. <bookmark mark='b'/> The sampling singers lose it faster: {say(s['mean'][-1], 2)}. The theorem motivates a comparison but does not directly prove this richer singer model's limiting distribution; the displayed finite simulations show how quickly its versions diverge. Traditions last because singers hold on to what they heard."
         ) as vo:
             self.play(FadeIn(head), FadeIn(p[0]), FadeIn(p[3:]), FadeIn(k))
             vo.wait_until("a")

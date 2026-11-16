@@ -116,9 +116,4 @@ class Why(SoundScene):
             (r"origins are a question about both: \ what we bring, \ and what passing it on does", GREY_A),
         ]
         rows_scene(self, r"what our chains add", items,
-                   "This part's computations add one caution. <bookmark mark='b'/> Our simulated singers had no musical genes, "
-                   "only noise, memory and a few weak biases. <bookmark mark='c'/> Yet transmission gave their melodies "
-                   "discrete levels, small steps, simple lengths and repetition. <bookmark mark='d'/> So shared features need "
-                   "not mean a shared evolved design. <bookmark mark='e'/> But the biases themselves must come from somewhere: "
-                   "hearing, memory, the body. <bookmark mark='f'/> Origins are a question about both: what we bring, and what "
-                   "passing it on does.", marks="bcdef")
+                   "This part's computations add one caution. <bookmark mark='b'/> Our simulated singers had no musical genes, noise, memory and explicit pitch-category, duration and leap biases. <bookmark mark='c'/> Those assumptions shape the discrete levels, small steps, simple lengths and repetition that emerge in simulation. <bookmark mark='d'/> So shared features need not mean a shared evolved design. <bookmark mark='e'/> But the biases themselves must come from somewhere: hearing, memory, the body. <bookmark mark='f'/> Origins are a question about both: what we bring, and what passing it on does.", marks="bcdef")

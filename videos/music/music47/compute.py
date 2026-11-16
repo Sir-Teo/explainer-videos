@@ -177,12 +177,12 @@ def compute_rhythm() -> dict:
     ch = np.array(out["A"]["paths"])
     first = ch[0, 0]
     last = ch[0, -1]
-    c = concat([rhythm_clip(first), rhythm_clip(last)], gap=1.2, names=["start", "end"])
+    c = concat([rhythm_clip(first), rhythm_clip(last)], gap=1.2, names=["before", "after"])
     from itertools import permutations
     orders = [o for pat in PRIOR_A for o in sorted(set(permutations(pat)))]
     near = min(orders, key=lambda o: np.sum((np.array(o) / sum(o) - last) ** 2))
     out["example"] = {"start": first.tolist(), "end": last.tolist(), "near": [int(v) for v in near]}
-    out["starts"] = {"start": float(c.events["start"]), "end": float(c.events["end"])}
+    out["starts"] = {"start": float(c.events["before"]), "end": float(c.events["after"])}
     out["clips"] = {"two": save_synth("rhythm.two", c, detail="a random three-interval rhythm looped four times, then what one simulated listener tapped after five rounds of hearing its own tapping; struck-wood taps")}
     return out
 

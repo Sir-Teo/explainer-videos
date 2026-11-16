@@ -125,7 +125,7 @@ class Language(SoundScene):
                    "by English and French composers who worked around 1900: <bookmark mark='c'/> Elgar, Holst, Vaughan Williams "
                    "and others against Debussy, Fauré, Ravel and others. <bookmark mark='d'/> The English themes had a higher "
                    "nPVI than the French, as their languages do. <bookmark mark='e'/> And notice the design: one era, one "
-                   "genre, one kind of melody, so that only the language differs.", marks="bcde")
+                   "genre, one kind of melody, reducing some confounds without isolating language as the only difference.", marks="bcde")
 
     # ------------------------------------------------------------------
     def folk(self):

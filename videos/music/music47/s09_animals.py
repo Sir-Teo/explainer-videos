@@ -61,7 +61,7 @@ class Animals(SoundScene):
             (r"the question was statistical: \ is a dancer on the beat more often than chance?", GREY_A),
         ]
         rows_scene(self, r"a cockatoo on the beat", items,
-                   "Keeping a beat is rarer. <bookmark mark='b'/> Most animals cannot move in time to music, but in 2007 a "
+                   "Keeping a beat is rarer. <bookmark mark='b'/> Beat synchronization has been demonstrated in relatively few tested species; lack of a demonstration is not proof of inability, but in 2007 a "
                    "video spread of Snowball, a sulphur-crested cockatoo, bobbing his head to the Backstreet Boys. "
                    "<bookmark mark='c'/> Aniruddh Patel and colleagues played him the song at tempos up to twenty per cent "
                    "faster or slower. <bookmark mark='d'/> In bouts, he adjusted his bobbing to the new tempo, between "
@@ -99,6 +99,14 @@ class Animals(SoundScene):
             window(snd, r"two dancers", detail=r"Part 40's drums, \ a wood tap per bob", corner=DL, tag_corner=DR)
             flash(snd, list(a[2]), [st["first"] + max(t, 0) for t in d["off"]["times"]], hot=WHITE, base=BLUE)
             flash(snd, list(b[2]), [st["second"] + max(t, 0) for t in d["on"]["times"]], hot=WHITE, base=TUNE)
+            for start, lane_ in ((st["first"], a), (st["second"], b)):
+                playhead = VGroup(Line(DOWN * 0.4, UP * 0.6, color=WHITE, stroke_width=3), Dot(radius=0.08, color=WHITE))
+                def sweep(m, now, fr=lane_[0], begin=start):
+                    elapsed = now - begin
+                    m.set_opacity(1.0 if 0.0 <= elapsed < n * P else 0.0)
+                    m.move_to(fr.get_left() + RIGHT * fr.width * min(max(elapsed / (n * P), 0.0), 1.0))
+                snd.show(playhead)
+                snd.drive(playhead, sweep)
         with self.voiceover(
             "The second. The first dancer keeps its own tempo, a little faster than the beat, so it slides through every "
             "phase of the bar: sometimes on, mostly not. The second corrects toward each beat, as Part 43's players did, and "

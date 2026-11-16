@@ -68,6 +68,13 @@ class Priors(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"before, \ and after five rounds", kind="synthesized", detail=r"struck-wood taps", corner=DL, tag_corner=DR)
             for name, strip, x in (("start", a, ex["start"]), ("end", b, ex["end"])):
+                playhead = VGroup(Line(DOWN * 0.4, UP * 0.4, color=WHITE, stroke_width=3), Dot(radius=0.08, color=WHITE))
+                def sweep(m, now, fr=strip[0], start=st[name]):
+                    elapsed = now - start
+                    m.set_opacity(1.0 if 0.0 <= elapsed < 8.0 else 0.0)
+                    m.move_to(fr.get_left() + RIGHT * fr.width * ((elapsed % 2.0) / 2.0))
+                snd.show(playhead)
+                snd.drive(playhead, sweep)
                 on = [0.0, x[0], x[0] + x[1]]
                 for k in range(4):
                     for i, o in enumerate(on):
@@ -79,7 +86,7 @@ class Priors(SoundScene):
             return " to ".join(say(v / m, 1) for v in x)
         with self.voiceover(
             f"The second. The first loop's intervals stood in the ratio {ratio(s)}: no simple pattern. After five rounds the "
-            f"listener tapped {ratio(e)}, close to {spoken_ratio(ex['near'])}. Nobody told it to; the rounds did."
+            f"listener tapped {ratio(e)}, close to {spoken_ratio(ex['near'])}. Our model explicitly supplies a prior favoring simple ratios; the iterations reveal and amplify that assumption."
         ):
             self.play(Indicate(g[1], color=TUNE, scale_factor=1.03))
         self.wait(0.4)
@@ -181,7 +188,7 @@ class Priors(SoundScene):
     # ------------------------------------------------------------------
     def theorem(self):
         items = [
-            (r"Thomas Griffiths and Michael Kalish \ (2007): \ if each learner samples its posterior, \ the chain's long-run distribution is the prior", WHITE),
+            (r"Thomas Griffiths and Michael Kalish \ (2007): \ matched generative and posterior-sampling assumptions: \\ prior is stationary; convergence needs further conditions", WHITE),
             (r"the data wash out; \ what is left is what learners bring", WHITE),
             (r"Jacoby and McDermott: \ Americans' and Tsimane' chains both settled on ratios of small integers, \ but on different ones", WHITE),
             (r"Jacoby and colleagues \ (2024): \ 39 groups in 15 countries; \ every group favoured small-integer ratios, \ in its own proportions", TUNE),
@@ -189,7 +196,7 @@ class Priors(SoundScene):
         ]
         rows_scene(self, r"why the chains find the prior", items,
                    "Why does this work? <bookmark mark='b'/> Thomas Griffiths and Michael Kalish proved in 2007 that if each "
-                   "learner in a chain samples its posterior, the chain's long-run distribution is exactly the prior: "
+                   "learner in a chain samples its posterior, under matched generative and sampling assumptions, the prior is a stationary distribution; convergence and forgetting require additional conditions: "
                    "<bookmark mark='c'/> the data wash out, and what is left is what the learners bring. "
                    "<bookmark mark='d'/> Jacoby and McDermott found that Americans' and Tsimane' chains both settled on ratios of "
                    "small integers, but on different ones. <bookmark mark='e'/> In 2024 Jacoby and colleagues ran thirty-nine "

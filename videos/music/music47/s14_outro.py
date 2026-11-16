@@ -70,18 +70,13 @@ class Outro(SoundScene):
         card = objectives_card([
             r"music is older than the oldest flutes, \ and every society studied makes it",
             r"songs for the same purpose sound alike across cultures",
-            r"there are no absolute universals, \ but many statistical ones",
+            r"no exceptionless feature in the coded sample; \ many statistical regularities",
             r"some tastes, \ like consonance, \ are learned; \ rhythm priors favour simple ratios",
             r"transmission alone turns noise into structure, \ and tunes into families",
             r"careful tests shrink the Mozart effect and transfer to about nothing",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Music is older than the oldest flutes, and every society studied makes it. "
-            "<bookmark mark='a'/> Songs made for the same purpose sound alike across cultures. <bookmark mark='b'/> There are "
-            "no absolute universals, but many statistical ones. <bookmark mark='c'/> Some tastes, like the taste for "
-            "consonance, are learned, and rhythm priors favour simple ratios everywhere. <bookmark mark='d'/> Transmission "
-            "alone turns noise into structure, and tunes into families. <bookmark mark='e'/> And careful tests shrink the "
-            "Mozart effect, and the transfer of music lessons, to about nothing."
+            "What did we find? Music is older than the oldest flutes, and every society studied makes it. <bookmark mark='a'/> Songs made for the same purpose sound alike across cultures. <bookmark mark='b'/> The coded features in the cited recording sample had no exceptionless universal, but many statistical regularities; this is not proof that every possible universal is false. <bookmark mark='c'/> Some tastes, like the taste for consonance, are learned, and rhythm priors favour simple ratios everywhere. <bookmark mark='d'/> Transmission with the chosen biases turns these random sketches into structured melodies, and tunes into families. <bookmark mark='e'/> And careful tests shrink the Mozart effect, and the transfer of music lessons, to about nothing."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

@@ -179,3 +179,9 @@ python -m videos.music.labs 47                                  # the lab (write
 * A. L. C. Wood and others, "The Global Jukebox", *PLOS ONE* (2022); M. Niarchou and others, "Genome-wide association
   study of musical beat synchronization demonstrates high polygenicity", *Nature Human Behaviour* (2022); B. Nettl, *The
   Study of Ethnomusicology* (3rd ed., 2015).
+
+## Interpretation limits
+
+The evenly spaced-hole pipe is not an archaeological fingering reconstruction. Statistical universals describe coded samples, not all possible music. The synthetic transmission model explicitly builds in pitch categories, simple-duration candidates, familiar continuations and a leap penalty; its structure is not independent evidence for those assumptions. Iterated-learning stationarity requires matched generative and sampling conditions and does not establish this richer singer model’s asymptotic distribution. Similarity trees do not prove ancestry. Nominal Rayleigh p-values assume independent phases; correlated bobbing needs a matched null. Matched language/genre samples reduce confounds without proving causation. No informal melody trial diagnoses amusia.
+
+The rhythm before/after comparison uses distinct concatenation event names; its second four-cycle example starts at 9.6 seconds. The global `end` event remains the end of the file.

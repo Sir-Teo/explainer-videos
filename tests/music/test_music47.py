@@ -30,6 +30,9 @@ def test_priors_are_revealed():
         end = r[k]["end_share"]
         assert max((v, p) for p, v in end.items() if p != "none")[1] == top
     assert r["example"]["near"] == [2, 1, 2]
+    # Four two-second cycles, 0.4 seconds of decay, and a 1.2-second gap.
+    assert r["starts"]["start"] == 0.0
+    assert r["starts"]["end"] == pytest.approx(9.6)
 
 
 def test_transmission_builds_structure():

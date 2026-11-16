@@ -52,7 +52,7 @@ class Claims(SoundScene):
             return mroll(mel_notes(m, base=60), width=4.4, height=1.0, lo=59, hi=68, color=color)
         pairs = VGroup()
         for name in (r"first pair", r"second pair"):
-            g = VGroup(r_(mel, GREY_A), r_(mel, GREY_A)).arrange(RIGHT, buff=0.6)
+            g = VGroup(r_(mel, GREY_A), r_(b if name == r"first pair" else mel, GREY_A)).arrange(RIGHT, buff=0.6)
             pairs.add(VGroup(label(name, font_size=20, color=WHITE), g).arrange(DOWN, buff=0.25))
         pairs.arrange(DOWN, buff=0.7).move_to(UP * 0.2)
         self.play(FadeOut(card), FadeIn(pairs))
@@ -65,11 +65,20 @@ class Claims(SoundScene):
                 i = 0 if key == "first" else 1
                 flash(snd, pairs[i][1][0].notes, [st[key] + beat * o for o in on], hot=WHITE, base=GREY_A)
                 flash(snd, pairs[i][1][1].notes, [st[f"{key}_b"] + beat * o for o in on], hot=WHITE, base=GREY_A)
+                for roll, start in ((pairs[i][1][0], st[key]), (pairs[i][1][1], st[f"{key}_b"])):
+                    fr = roll.frame
+                    playhead = VGroup(Line(DOWN * 0.6, UP * 0.6, color=WHITE, stroke_width=3), Dot(radius=0.09, color=WHITE))
+                    def move(m, t, frame=fr, begin=start):
+                        u = (t - begin) / (beat * 9)
+                        m.move_to([frame.get_left()[0] + frame.width * min(max(u, 0), 1), frame.get_center()[1], 0])
+                        m.set_opacity(1 if 0 <= u <= 1 else 0)
+                    snd.show(playhead)
+                    snd.drive(playhead, move)
         k = d["changed"]
         with self.voiceover(
             "The first pair. In its second melody the fourth note, F, became F sharp: one semitone, and out of the key. "
             "Most listeners hear it at once, as a sour note. Many amusics hear nothing; the Montreal battery asks thirty "
-            "such questions, and their scores fall below everyone else's."
+            "such questions, and the battery uses normative cutoffs and several subtests; one informal trial cannot diagnose amusia."
         ):
             self.play(pairs[0][1][1].notes[k].animate.set_fill(EAR, 1.0).scale(1.3))
         self.wait(0.4)
@@ -117,13 +126,7 @@ class Claims(SoundScene):
                      VGroup(Dot(radius=0.065, color=EAR), label(r"published", font_size=16, color=EAR)).arrange(RIGHT, buff=0.12)).arrange(DOWN, buff=0.15, aligned_edge=LEFT).to_corner(UR, buff=0.6).shift(DOWN * 0.6)
         head = label(r"300 small experiments of an effect that is zero", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "How does an effect appear from nothing? Simulate it. Three hundred small experiments, each with ten to sixty "
-            "people per group, of a treatment whose true effect is exactly zero. <bookmark mark='a'/> Each grey dot is one "
-            "study: its estimated effect across, its size up the page. They scatter around zero in a funnel, wide for small "
-            f"studies, narrow for large ones. <bookmark mark='b'/> Now publish every study that found a significant positive "
-            f"effect, and only fifteen per cent of the rest. {say(d['published'])} studies are published, and their average "
-            f"effect is {say(mp, 2)}: an effect, built from nothing but which studies were seen. A funnel with one side "
-            "missing is how meta-analysts spot it."
+            f"How does an effect appear from nothing? Simulate it. Three hundred small experiments, each with ten to sixty people per group, of a treatment whose true effect is exactly zero. <bookmark mark='a'/> Each grey dot is one study: its estimated effect across, its size up the page. They scatter around zero in a funnel, wide for small studies, narrow for large ones. <bookmark mark='b'/> Now publish every study that found a significant positive effect, and only fifteen per cent of the rest. {say(d['published'])} studies are published, and their average effect is {say(mp, 2)}: an effect, built from nothing but which studies were seen. Funnel asymmetry can flag selective reporting, but heterogeneity and other biases can also produce it; it is not proof by itself."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(key))
             vo.wait_until("a")
