@@ -40,7 +40,7 @@ class Rag(SoundScene):
         rh = [[p, o / 24.0, du / 24.0] for p, o, du in d["right"]]
         lh = [[p, o / 24.0, du / 24.0] for p, o, du in d["left"]]
         roll = voices_roll([rh, lh], width=12.0, height=3.6, colors=[TUNE, BLUE], total=16 * bar / 24.0, lo=36, hi=88, bar_h=0.07).move_to(DOWN * 0.1)
-        leg = VGroup(label(r"right hand \ (above C$\sharp$4)", font_size=18, color=TUNE), label(r"left hand", font_size=18, color=BLUE)).arrange(RIGHT, buff=0.8).next_to(roll, UP, buff=0.3)
+        leg = VGroup(label(r"upper-register proxy (above C$\sharp$4)", font_size=18, color=TUNE), label(r"lower-register proxy", font_size=18, color=BLUE)).arrange(RIGHT, buff=0.8).next_to(roll, UP, buff=0.3)
         head = label(r"Joplin, \ \textit{Maple Leaf Rag} \ (1899), \ bars 1--16", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Here is the first strain of the Maple Leaf Rag, sixteen bars, played by Part 7's piano model from the score, at "
@@ -69,7 +69,7 @@ class Rag(SoundScene):
             x = fr.get_left()[0] + fr.width * q / total
             grid.add(Line([x, fr.get_bottom()[1], 0], [x, fr.get_top()[1], 0], color=GREY_D if q % 2 else GREY_B, stroke_width=1))
         stage = VGroup(*[label(t, font_size=20, color=GREY_A) for t in (r"right hand", r"left hand", r"both")]).arrange(RIGHT, buff=1.0).to_edge(DOWN, buff=0.7)
-        head = label(r"bars 1--4, \ hand by hand; \ grey lines: \ beats", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"bars 1--4, pitch-split proxies; grey lines: beats", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Take the first four bars apart. First the right hand alone: notes that start between the beats and run across "
             "them. Then the left hand alone: a bass note on each beat and a chord between, like a march band's tuba and "
@@ -111,11 +111,11 @@ class Rag(SoundScene):
             for j in (1, 2):
                 row[j][0].move_to([-2.9, y + (0.17 if j == 1 else -0.17), 0], aligned_edge=LEFT)
                 row[j][1].next_to(row[j][0], RIGHT, buff=0.12)
-        leg = VGroup(label(rf"right hand: \ {R_['onsets']} attack times", font_size=18, color=TUNE), label(rf"left hand: \ {L_['onsets']}", font_size=18, color=BLUE)).arrange(RIGHT, buff=0.8).to_edge(UP, buff=0.9)
-        note = label(rf"held across the next stronger position, \ with nothing new there: \ right hand {R_['syncopated']}, \ left hand {L_['syncopated']}", font_size=19, color=EAR).to_edge(DOWN, buff=0.9)
-        head = label(r"bars 1--16 counted", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
+        leg = VGroup(label(rf"upper register: \ {R_['onsets']} attack times", font_size=18, color=TUNE), label(rf"lower register: \ {L_['onsets']}", font_size=18, color=BLUE)).arrange(RIGHT, buff=0.8).to_edge(UP, buff=0.9)
+        note = label(rf"held across the next stronger position, with nothing new there: \\ upper {R_['syncopated']}, \ lower {L_['syncopated']}", font_size=19, color=EAR).to_edge(DOWN, buff=0.9)
+        head = label(r"bars 1--16: pitch-split proxy counts", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Monochord counts the strain's attacks, hand by hand. <bookmark mark='a'/> The left hand plays almost entirely "
+            "Monochord splits the encoded notes by a pitch threshold at MIDI sixty-one, a register proxy rather than verified score hand labels, then counts attacks in each group. <bookmark mark='a'/> The left hand plays almost entirely "
             f"on beats and half-beats: only {say(L_['between'])} of its {say(L_['onsets'])} attacks fall between. The right "
             f"hand puts {say(R_['between'])} of its {say(R_['onsets'])} attacks between the eighth notes, on sixteenths. "
             f"<bookmark mark='b'/> And {say(R_['syncopated'])} times a right-hand note starts off the beat and is held across "
@@ -134,14 +134,14 @@ class Rag(SoundScene):
         items = [
             (r"a rag is built like a march: \ sixteen-bar strains, \ each repeated", WHITE),
             (r"\textit{Maple Leaf Rag}: \ AA BB A CC DD, \ the C strain \ (the trio) \ in the subdominant, \ D$\flat$", WHITE),
-            (r"the score is fixed: \ ragtime was written music, \ not improvised", WHITE),
+            (r"published rags are composed; oral ragging also involved improvisation", WHITE),
             (r"player pianos and piano rolls spread it, \ and fixed performances in paper", TUNE),
             (r"Part 21's forms, \ in a new dress", GREY_A),
         ]
         rows_scene(self, r"the form of a rag", items,
                    "A rag is built like a march. <bookmark mark='b'/> Its sections are sixteen-bar strains, each repeated: the "
                    "Maple Leaf Rag runs A A, B B, A, C C, D D, with the C strain, the trio, in the subdominant, D flat. "
-                   "<bookmark mark='c'/> And ragtime was written music, not improvised. <bookmark mark='d'/> Player pianos and "
+                   "<bookmark mark='c'/> Published piano rags are composed works; ragtime also developed through oral performance, improvised ragging and practices not preserved on the printed page. <bookmark mark='d'/> Player pianos and "
                    "their paper rolls spread it, and fixed performances in paper. <bookmark mark='e'/> Part 21's forms, in a new "
                    "dress.", marks="bcde")
 

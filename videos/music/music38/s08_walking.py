@@ -50,14 +50,9 @@ class Walking(SoundScene):
         rules = VGroup(label(r"gold: \ the root, \ on the chord's first beat", font_size=18, color=TUNE),
                        label(r"pink: \ a semitone from the next root, \ just before it", font_size=18, color=EAR),
                        label(r"blue: \ chord tones, \ or scale tones; \ no leap bigger than a fifth", font_size=18, color=BLUE),
-                       label(r"among all lines that obey, \ the one with the least total motion \ (dynamic programming)", font_size=18, color=WHITE)).arrange(DOWN, buff=0.12, aligned_edge=LEFT).to_edge(DOWN, buff=0.25)
+                       label(r"weighted cost: motion + leap/scale penalties\\register preference; no repeated notes", font_size=18, color=WHITE)).arrange(DOWN, buff=0.12, aligned_edge=LEFT).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Monochord's walking bass follows four rules. <bookmark mark='a'/> On the first beat of each chord, play its "
-            "root. <bookmark mark='b'/> On the beat before a new chord, play a note a semitone above or below the new root, so "
-            "the line leans into it. <bookmark mark='c'/> On other beats, play a chord tone, or a note of the chord's scale, "
-            "and never leap more than a fifth. <bookmark mark='d'/> Among all the lines that obey, choose the one with the "
-            "least total motion. That is a shortest-path problem, solved beat by beat like Part 22's parser. Here are the "
-            "first four bars of a jazz blues in C."
+            "Monochord's walking bass follows four rules. <bookmark mark='a'/> On the first beat of each chord, play its root. <bookmark mark='b'/> On the beat before a new chord, play a note a semitone above or below the new root, so the line leans into it. <bookmark mark='c'/> On other beats, play a chord tone, or a note of the chord's scale, and never leap more than a fifth. <bookmark mark='d'/> Among all the lines that obey, minimize a weighted cost: total motion, added penalties for leaps above four semitones and non-chord scale tones, plus a small starting-register preference. Repeated notes are forbidden. That is a shortest-path problem, solved beat by beat like Part 22's parser. Here are the first four bars of a jazz blues in C."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(roll), FadeIn(names))
             for mark, r in zip("abcd", rules):

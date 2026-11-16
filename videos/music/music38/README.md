@@ -132,3 +132,7 @@ python -m videos.music.labs 38                                  # the lab (write
 * M. Pfleiderer, K. Frieler, J. Abeßer, W.-G. Zaddach and B. Burkhart (eds.), *Inside the Jazzomat* (2017), on the
   Weimar Jazz Database.
 * Part 13 for seventh chords; Part 18 for progressions; Part 32 for voice leading as distance; Part 37 for timelines.
+
+## Interpretation limits
+
+Basic blues sketches use seventh chords, not every blues performance. Blue-note regions are contextual rather than fixed universally bounded pitch bins. The rag hand groups use a MIDI-61 pitch threshold, not ground-truth hand labels, so their counts describe that proxy. Walking-bass optimization includes scale-tone and large-leap penalties, a register preference and a repeated-note ban. Guide tones do not uniquely distinguish Cm7 from Cm7b5: the fifth matters. The swing line and 30-ms delay are illustrative; delay audibility and swing judgments have no universal threshold. Composed published rags coexist with improvised ragtime practices. Contrafacts do not imply a blanket legal exemption.

@@ -24,20 +24,22 @@ class Guide(SoundScene):
                                (r"Cm7", (0, 3, 7, 10), r"minor third, \ minor seventh"),
                                (r"Cm7$\flat$5", (0, 3, 6, 10), r"minor third, \ flat fifth, \ minor seventh"),
                                (r"C$^{\circ}$7", (0, 3, 6, 9), r"minor third, \ flat fifth, \ diminished seventh")):
-            notes = VGroup(*[label(NN[i % 12], font_size=20, color=(TUNE if k in (1, 3) else GREY_A)) for k, i in enumerate(iv)]).arrange(RIGHT, buff=0.35)
+            spelling = {(0, 4, 7, 11): ["C", "E", "G", "B"],
+                        (0, 4, 7, 10): ["C", "E", "G", r"B$\flat$"],
+                        (0, 3, 7, 10): ["C", r"E$\flat$", "G", r"B$\flat$"],
+                        (0, 3, 6, 10): ["C", r"E$\flat$", r"G$\flat$", r"B$\flat$"],
+                        (0, 3, 6, 9): ["C", r"E$\flat$", r"G$\flat$", r"B$\flat\flat$"]}[iv]
+            notes = VGroup(*[label(n, font_size=20, color=(TUNE if k in (1, 3) else GREY_A)) for k, n in enumerate(spelling)]).arrange(RIGHT, buff=0.35)
             rows_.add(VGroup(label(name, font_size=22, color=WHITE), notes, label(desc, font_size=18, color=GREY_A)))
         for i, r in enumerate(rows_):
             y = 1.7 - 0.75 * i
             r[0].move_to([-5.0, y, 0], aligned_edge=LEFT)
             r[1].move_to([-2.6, y, 0], aligned_edge=LEFT)
             r[2].move_to([0.6, y, 0], aligned_edge=LEFT)
-        cap = label(r"gold: \ the third and the seventh, \ which tell the chords apart; \ the bass has the root, \ and the fifth adds little", font_size=19, color=TUNE).to_edge(DOWN, buff=0.7)
+        cap = label(r"gold: third and seventh, useful guide tones\\Cm7 and Cm7$\flat$5 share them; the fifth distinguishes those chords", font_size=19, color=TUNE).to_edge(DOWN, buff=0.7)
         head = label(r"five seventh chords on C", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Jazz harmony is built from seventh chords. Here are five on C. <bookmark mark='a'/> What tells them apart? Not "
-            "the root, which they share, and hardly the fifth, which only two change. It is the third and the seventh. With "
-            "the bass playing the root, those two notes alone are enough to name the chord. Players call them the guide "
-            "tones."
+            "Jazz harmony is built from seventh chords. Here are five on C. <bookmark mark='a'/> What tells them apart? The shared root does not distinguish them. The third and seventh identify much of their quality, but not everything: C minor seven and C half-diminished share E flat and B flat, and differ in the fifth. Even with a root, guide tones alone do not uniquely identify every chord. Players call them the guide tones."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r) for r in rows_], lag_ratio=0.2))
             vo.wait_until("a")
@@ -133,13 +135,13 @@ class Guide(SoundScene):
         side = VGroup(label(rf"fifteen chords, \ {len(mv)} changes: \ total motion {gj['total']} semitones", font_size=21, color=WHITE),
                       label(rf"the biggest step in either voice: \ {gj['max_step']} semitones", font_size=21, color=WHITE),
                       label(rf"changes where both voices move by at most a semitone: \ {sum(1 for i in range(len(mv)) if max(abs(gj['upper'][i + 1] - gj['upper'][i]), abs(gj['lower'][i + 1] - gj['lower'][i])) <= 1)} of {len(mv)}", font_size=21, color=TUNE),
-                      label(r"the same search Part 32 ran on triads, \ restricted to the two notes that matter", font_size=20, color=GREY_A)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 0.1)
+                      label(r"the same search Part 32 ran on triads, \ restricted to two structurally useful notes, with other chord tones omitted", font_size=20, color=GREY_A)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"guide tones through the jazz blues, \ counted", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             f"Through the whole jazz blues, the solver's two lines move {say(gj['total'])} semitones in all across "
             f"{say(len(mv))} chord changes, and neither voice ever moves more than {say(gj['max_step'])}. It is Part 32's "
-            "search for smooth voice leading, restricted to the two notes that matter. This is why jazz players practise "
-            "guide-tone lines: they are the shortest path through the changes, and every chord is audible in them."
+            "search for smooth voice leading, restricted to two structurally useful notes, with other chord tones omitted. This is why jazz players practise "
+            "guide-tone lines: they are the shortest path through the changes, and they can make harmonic movement clear, although guide tones alone leave some chord qualities ambiguous."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(s) for s in side], lag_ratio=0.4), run_time=3.0)
         self.wait(0.4)

@@ -43,11 +43,7 @@ class Form(SoundScene):
         g = VGroup(ch, roman, lines)
         head = label(r"the twelve-bar blues, \ in C", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "The commonest blues form is twelve bars long, in three lines of four. <bookmark mark='a'/> The first line stays "
-            "on the tonic chord, C. <bookmark mark='b'/> The second moves to the subdominant, F, and back. "
-            "<bookmark mark='c'/> The third reaches the dominant, G, falls through F to C, and ends on G to send the music "
-            "round again. Every chord is a dominant seventh: C seven, F seven, G seven. In Part 18's harmony C seven would "
-            "have to resolve to F; in the blues it is simply home."
+            "The commonest blues form is twelve bars long, in three lines of four. <bookmark mark='a'/> The first line stays on the tonic chord, C. <bookmark mark='b'/> The second moves to the subdominant, F, and back. <bookmark mark='c'/> The third reaches the dominant, G, falls through F to C, and ends on G to send the music round again. In this basic sketch each chord is a dominant seventh: C seven, F seven, G seven. In Part 18's harmony C seven commonly functions as a dominant of F; in the blues it is simply home."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(b) for b in ch.bars[:4]], *[FadeIn(r) for r in roman[:4]])
             vo.wait_until("a")
@@ -106,7 +102,7 @@ class Form(SoundScene):
     def sevenths(self):
         items = [
             (r"in the blues the seventh chord is the unit, \ not a dissonance that must resolve", WHITE),
-            (r"the tonic itself is a dominant seventh: \ C E G B$\flat$", WHITE),
+            (r"the tonic is often represented as a dominant-seventh-quality chord: \ C E G B$\flat$", WHITE),
             (r"the B$\flat$ and the melody's blue notes come from the same place: \ a scale that is neither major nor minor", WHITE),
             (r"Part 18's rules describe one tradition; \ the blues keeps another", TUNE),
             (r"chapter 8 returns to sevenths, \ and the tones that define them", GREY_A),

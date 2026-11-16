@@ -72,7 +72,7 @@ class Blue(SoundScene):
         head = label(r"where the blue notes live", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Where do blue notes live? <bookmark mark='a'/> In three regions of the scale: the third, between E flat and E; "
-            "the fifth, which may be flattened towards F sharp; and the seventh, between B flat and B. "
+            "the fifth, which may be flattened towards F sharp; and the lowered-seventh region, whose exact placement and movement vary rather than being restricted to one fixed interval between B flat and B. "
             "<bookmark mark='b'/> Singers and guitarists bend into these regions, and the notes are often moving, not "
             "fixed. A piano cannot bend, so blues pianists crush the minor and major thirds together, a grace note into the "
             "main note, to suggest the pitch between."

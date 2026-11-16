@@ -149,8 +149,4 @@ class Subs(SoundScene):
             (r"Part 39 follows the changes further", GREY_A),
         ]
         rows_scene(self, r"after swing", items,
-                   "After the swing era came bebop, in New York in the 1940s: Charlie Parker, Dizzy Gillespie, Thelonious Monk. "
-                   "<bookmark mark='b'/> Fast tempos, dense substitutions, and new melodies written over the chords of standards. "
-                   "<bookmark mark='c'/> A new melody on old changes also avoided paying for the song, since chord progressions "
-                   "are not copyrighted and melodies are. <bookmark mark='d'/> John Coltrane's Giant Steps, in 1959, moved its "
-                   "key centres by major thirds. <bookmark mark='e'/> Part 39 follows the changes further.", marks="bcde")
+                   "After the swing era came bebop, in New York in the 1940s: Charlie Parker, Dizzy Gillespie, Thelonious Monk. <bookmark mark='b'/> Fast tempos, dense substitutions, and new melodies written over the chords of standards. <bookmark mark='c'/> Writing new melodies on familiar changes produced contrafacts; rights questions depend on the material, arrangement and jurisdiction, rather than a blanket rule that removes every licensing obligation. <bookmark mark='d'/> John Coltrane's Giant Steps, in 1959, moved its key centres by major thirds. <bookmark mark='e'/> Part 39 follows the changes further.", marks="bcde")

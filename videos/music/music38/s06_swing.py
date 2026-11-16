@@ -153,8 +153,7 @@ class Swing(SoundScene):
             self.wait(0.3)
         ans = label(r"the late version sits back: \ `laid back', \ in players' words", font_size=21, color=TUNE).to_edge(DOWN, buff=0.9)
         with self.voiceover(
-            "To many listeners the second version sits back from the beat, the effect players call laid back. Thirty "
-            "milliseconds is far too short to hear as lateness; it is heard as feel."
+            'To many listeners the second version sits back from the beat, the effect players call laid back. Thirty milliseconds can be audible as timing displacement; whether it sounds late, laid back or more swinging depends on the listener, articulation, tempo and context.'
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -170,9 +169,4 @@ class Swing(SoundScene):
             (r"chapter 10 asks what corpora of recorded jazz can settle", GREY_A),
         ]
         rows_scene(self, r"groove", items,
-                   "The ethnomusicologist Charles Keil argued in 1987 that groove comes from participatory discrepancies, the "
-                   "small timing differences between players. <bookmark mark='b'/> A groove is made of agreements and "
-                   "disagreements about where the beat is. <bookmark mark='c'/> Perfect quantization, every note on the grid, "
-                   "tends to sound stiff. <bookmark mark='d'/> Swing lives in tens of milliseconds, below the threshold at which "
-                   "a delay is heard as a delay. <bookmark mark='e'/> Chapter ten asks what large collections of recorded jazz "
-                   "can settle.", marks="bcde")
+                   "The ethnomusicologist Charles Keil argued in 1987 that groove comes from participatory discrepancies, the small timing differences between players. <bookmark mark='b'/> A groove is made of agreements and disagreements about where the beat is. <bookmark mark='c'/> Perfect quantization, every note on the grid, tends to sound stiff. <bookmark mark='d'/> Swing can involve differences of tens of milliseconds, with no universal boundary separating an audible delay from musical feel. <bookmark mark='e'/> Chapter ten asks what large collections of recorded jazz can settle.", marks="bcde")

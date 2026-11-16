@@ -62,8 +62,7 @@ class Frontier(SoundScene):
             self.wait(0.3)
         ans = label(r"random shifts sound looser or sloppier, \ rarely more swinging: \ the deviations that matter are systematic", font_size=20, color=TUNE).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "To most ears the random version sounds looser, or a little sloppy, but not more swinging. That fits the 2019 "
-            "finding. If microtiming matters, it is the systematic kind, like late downbeats, not noise."
+            'Judge the two sketches for yourself; this informal comparison establishes no majority response. The cited experiments distinguish kinds of manipulation in particular performances and listener groups, rather than proving that only systematic timing can matter.'
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)

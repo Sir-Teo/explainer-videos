@@ -58,3 +58,9 @@ def test_the_part_keeps_the_series_rules():
     check_scenes_and_clips(compute, SCENES)
     check_windows(compute, SCENES)
     check_ear_thread(compute, SCENES)
+
+
+def test_guide_tones_do_not_distinguish_minor_and_half_diminished():
+    minor, half = BL.chord("Cm7"), BL.chord("Cm7b5")
+    assert (minor["third"], minor["seventh"]) == (half["third"], half["seventh"])
+    assert set(minor["pcs"]) != set(half["pcs"])

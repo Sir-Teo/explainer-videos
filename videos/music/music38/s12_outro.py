@@ -73,13 +73,7 @@ class Outro(SoundScene):
             r"ii--V--I, \ turnarounds, \ and the tritone shared by two dominants",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? The twelve-bar blues is three lines of four, and every chord is a seventh. "
-            "<bookmark mark='a'/> Blue notes are regions, not pitches, and the lyric is A A B, with room for answers. "
-            "<bookmark mark='b'/> Ragtime sets a syncopated right hand over a march-like left, as the counts in Joplin's rag "
-            "show. <bookmark mark='c'/> Swing is about three to one at slow tempos and even at fast ones, with the short note "
-            "near a tenth of a second. <bookmark mark='d'/> Walking bass lines and guide tones are shortest paths through the "
-            "changes. <bookmark mark='e'/> And two-five-one, turnarounds, and the tritone that two dominant sevenths share are "
-            "the material of jazz harmony."
+            "What did we find? The twelve-bar blues is three lines of four, using seventh chords in this basic version. <bookmark mark='a'/> Blue notes are regions, not pitches, and the lyric is A A B, with room for answers. <bookmark mark='b'/> Ragtime sets a syncopated right hand over a march-like left, as the counts in Joplin's rag show. <bookmark mark='c'/> Swing is about three to one at slow tempos and even at fast ones, with the short note near a tenth of a second. <bookmark mark='d'/> These bass and guide-tone solvers optimize their stated costs and constraints; real players use additional musical goals. <bookmark mark='e'/> And two-five-one, turnarounds, and the tritone that two dominant sevenths share are the material of jazz harmony."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
