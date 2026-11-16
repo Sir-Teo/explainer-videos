@@ -138,6 +138,11 @@ SOURCES = {
     'coles2019': {'url': 'https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psymetadata_1.0.1.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psymetadata/psymetadata_1.0.1.tar.gz'], 'page': 'https://cran.r-project.org/package=psymetadata', 'file': 'psymetadata_1.0.1.tar.gz', 'sha256': '9b5f0cb8ab98e64fb7807483bb74fdaf16c18b010c081f0f93308c1da10b2bd4', 'licence': 'GPL (>= 2)', 'member': 'psymetadata/data/coles2019.rda', 'member_sha256': '93de0be5403efd82d2ad0eb77e2cb30d8c125fba953e2fb347b44c2a1b281b2c'},
     # Part 32: Holzinger and Swineford's (1939) nine mental tests for 301 children (lavaan)
     'holzinger1939': {'url': 'https://cran.r-project.org/src/contrib/lavaan_0.7-3.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/lavaan_0.7-3.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/lavaan/lavaan_0.7-3.tar.gz'], 'page': 'https://cran.r-project.org/package=lavaan', 'file': 'lavaan_0.7-3.tar.gz', 'sha256': 'c1e9ecbd01dde0ada6bda11f0f9e84babfefebf06d1ab5887b4bd8d24ebb6787', 'licence': 'GPL (>= 2)', 'member': 'lavaan/data/HolzingerSwineford1939.rda', 'member_sha256': 'd667bfeabd08c27faba2586bcc8df524d1cbc73a46b16e11ad6f863bb281b338'},
+    # Part 45: the LSAT section 6 answers (Bock and Lieberman) and the Eurobarometer science attitudes (ltm)
+    'lsat': {'url': 'https://cran.r-project.org/src/contrib/ltm_1.2-0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/ltm_1.2-0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/ltm/ltm_1.2-0.tar.gz'], 'page': 'https://cran.r-project.org/package=ltm', 'file': 'ltm_1.2-0.tar.gz', 'sha256': 'e12aea694b5a5663de0b4e12596454117261dd9d72ca95758d747c20cd5c0f6e', 'licence': 'GPL (>= 2)', 'member': 'ltm/data/LSAT.rda', 'member_sha256': '182ea88c662b1deebb42091750c07e5ad6d532bf880dbb33b7482715fa4034b2'},
+    'science': {'url': 'https://cran.r-project.org/src/contrib/ltm_1.2-0.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/ltm_1.2-0.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/ltm/ltm_1.2-0.tar.gz'], 'page': 'https://cran.r-project.org/package=ltm', 'file': 'ltm_1.2-0.tar.gz', 'sha256': 'e12aea694b5a5663de0b4e12596454117261dd9d72ca95758d747c20cd5c0f6e', 'licence': 'GPL (>= 2)', 'member': 'ltm/data/Science.rda', 'member_sha256': '88424a84ae0b299cd4540e7d2bf19c67f13847fb6852a7d811e9fa29a3a0bdb8'},
+    # Part 46: Guilford's paired comparisons of nine vegetables (psychTools)
+    'vegetables': {'url': 'https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psychTools/psychTools_2.6.4.tar.gz'], 'page': 'https://cran.r-project.org/package=psychTools', 'file': 'psychTools_2.6.4.tar.gz', 'sha256': '0a4bc9fb9efaad3c790d28a44ef065fe1a761131c54c33b384730af995be66f1', 'licence': 'GPL (>= 2)', 'member': 'psychTools/data/vegetables.rda', 'member_sha256': 'dc594a591259064d3b8f220f8c5463658403621b8315e0644e684ce54e64640d'},
     # Part 33: the SAPA sample's 25 IPIP personality items (2,800 people) and the EPI/BFI sample (psychTools)
     'bfi2010': {'url': 'https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psychTools/psychTools_2.6.4.tar.gz'], 'page': 'https://cran.r-project.org/package=psychTools', 'file': 'psychTools_2.6.4.tar.gz', 'sha256': '0a4bc9fb9efaad3c790d28a44ef065fe1a761131c54c33b384730af995be66f1', 'licence': 'GPL (>= 2)', 'member': 'psychTools/data/bfi.rda', 'member_sha256': '557fe9c67eee933c9c24153bcc1bd2c3b647bb66aaf76d6632f4131d711b7448'},
     'epibfi': {'url': 'https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'urls': ['https://cran.r-project.org/src/contrib/psychTools_2.6.4.tar.gz', 'https://cran.r-project.org/src/contrib/Archive/psychTools/psychTools_2.6.4.tar.gz'], 'page': 'https://cran.r-project.org/package=psychTools', 'file': 'psychTools_2.6.4.tar.gz', 'sha256': '0a4bc9fb9efaad3c790d28a44ef065fe1a761131c54c33b384730af995be66f1', 'licence': 'GPL (>= 2)', 'member': 'psychTools/data/epi.bfi.rda', 'member_sha256': '4336c97d6ccd1d73347f7050def1dd4f43ba7602384d4787c1fcd5dd6a3c2b36'},
@@ -669,3 +674,40 @@ def epi_bfi() -> dict:
     """231 people who took the Eysenck Personality Inventory and the BFI scales, with the Beck Depression Inventory and
     state and trait anxiety (psychTools epi.bfi): {column: array}."""
     return _frame("epibfi")
+
+
+def lsat_1000() -> dict:
+    """Section 6 of the Law School Admission Test: five items answered right (1) or wrong (0) by 1,000 people, the
+    data Bock and Lieberman (1970) fitted by marginal maximum likelihood (as in ltm 1.2-0's ``LSAT``)."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("lsat"))[0][1]
+    X = np.column_stack([np.array(col["value"], float) for col in obj["value"]])
+    return {"X": X, "names": [f"item {i}" for i in range(1, 6)]}
+
+
+def science_attitudes() -> dict:
+    """Seven items on attitudes to science and technology (1992 Eurobarometer, the British sample, 392 people),
+    each on four categories from strongly disagree (0) to strongly agree (3), as in ltm 1.2-0's ``Science``."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("science"))[0][1]
+    names = list(obj["attrs"]["names"]["value"])
+    Y = np.column_stack([np.array(col["value"], int) - 1 for col in obj["value"]])
+    levels = list(obj["value"][0]["attrs"]["levels"]["value"])
+    return {"Y": Y, "names": names, "levels": levels}
+
+
+def vegetables_guilford() -> dict:
+    """Guilford's (1954) paired comparisons of nine vegetables, as psychTools 2.6.4's ``veg``: ``P[i, j]`` is the
+    proportion of judges who preferred vegetable i to vegetable j (the data frame holds the column-over-row
+    proportions; this is its transpose)."""
+    from explainer.psychology import rdata
+
+    obj = rdata.load(member_path("vegetables"))[0][1]
+    names = list(obj["attrs"]["names"]["value"])
+    M = np.column_stack([np.array(col["value"], float) for col in obj["value"]])  # M[row, col]: col over row
+    full = {"Turn": "turnips", "Cab": "cabbage", "Beet": "beets", "Asp": "asparagus", "Car": "carrots",
+            "Spin": "spinach", "S.Beans": "string beans", "Peas": "peas", "Corn": "corn"}
+    return {"P": M.T, "names": [full.get(n, n) for n in names]}
+

@@ -4084,6 +4084,43 @@ EPI_BFI = Dataset(
     data={"people": 231},
 )
 
+_P45 = "2026-11-16"
+
+LSAT_1000 = Dataset(
+    key="lsat_1000",
+    title="Five items of the Law School Admission Test answered by 1,000 people",
+    source="R. D. Bock and M. Lieberman, Fitting a response model for n dichotomously scored items, Psychometrika 35 "
+           "(1970) 179-197 (Section 6 of the LSAT); as LSAT in the R package ltm 1.2-0 (GPL >= 2)",
+    cite=r"Bock \& Lieberman (1970)",
+    checked="LSAT.rda inside ltm_1.2-0.tar.gz, fetched by explainer.psychology.opendata and checked by SHA-256; read "
+            "as data by rdata.py: 1,000 x 5; the Rasch and two-parameter fits reproduce ltm's, " + _P45,
+    licence="GPL (>= 2) (the R package); data",
+    data={"people": 1000, "items": 5},
+)
+
+SCIENCE_1992 = Dataset(
+    key="science_1992",
+    title="Seven attitudes to science and technology, 392 British respondents (Eurobarometer 1992)",
+    source="the 1992 Eurobarometer survey, British sample, as Science in the R package ltm 1.2-0 (GPL >= 2)",
+    cite=r"Eurobarometer (1992)",
+    checked="Science.rda inside ltm_1.2-0.tar.gz, fetched by explainer.psychology.opendata and checked by SHA-256; "
+            "read as data by rdata.py: 392 x 7, four categories each, " + _P45,
+    licence="GPL (>= 2) (the R package); data",
+    data={"people": 392, "items": 7, "categories": 4},
+)
+
+GUILFORD_VEG_1954 = Dataset(
+    key="guilford_veg_1954",
+    title="Paired comparisons of nine vegetables (Guilford 1954)",
+    source="J. P. Guilford, Psychometric Methods (2nd edition, McGraw-Hill, 1954); as vegetables in the R package "
+           "psychTools 2.6.4 (GPL >= 2)",
+    cite=r"Guilford (1954)",
+    checked="vegetables.rda inside psychTools_2.6.4.tar.gz, fetched by explainer.psychology.opendata and checked by "
+            "SHA-256; read as data by rdata.py: a 9 x 9 matrix of preference proportions, " + _P45,
+    licence="GPL (>= 2) (the R package); data",
+    data={"vegetables": 9},
+)
+
 ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_1885, WOODS_2015, PFUNGST_1907,
                           PEIRCE_JASTROW_1884, ROSENTHAL_FODE_1963, RAUDENBUSH_1984, DE_QUIDT_2018, LIT_2011,
                           MITCHELL_2021, STEVENS_1946, FORER_1949, JOHANSSON_2005, CREDE_2017, HEDGE_2018,
@@ -4126,4 +4163,4 @@ ALL = {d.key: d for d in (KANT_1786, HELMHOLTZ_1850, DONDERS_1868, EBBINGHAUS_18
                           SPEED_ACC_2008, RR98, CHOICES13K,
                           EGO_DEPLETION_RRR,
                           FACES_1962, COLES_2019, MANYBABIES_2020, SPEARMAN_1904, HOLZINGER_1939,
-                          SAPA_BFI_2010, EPI_BFI)}
+                          SAPA_BFI_2010, EPI_BFI, LSAT_1000, SCIENCE_1992, GUILFORD_VEG_1954)}

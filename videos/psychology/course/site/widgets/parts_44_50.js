@@ -161,4 +161,145 @@
       note: "Nothing you answer is stored or sent. The data are simulated in your browser; the same reasoning holds for any sample size.",
     });
   };
+  // ---- Part 45: an adaptive test on you.  Which is larger?  Each item is chosen where it tells the most. ----
+  W.adaptive = function (el) {
+    var w = null;
+    var NODES = [], i;
+    for (i = -40; i <= 40; i++) NODES.push(i / 10);
+    var LEVELS = 9, A = 1.7, C0 = 0.5, N_ITEMS = 10;
+    function bOf(level) { return -2.4 + 0.6 * (level - 1); }
+    function pRight(th, b) { return C0 + (1 - C0) / (1 + Math.exp(-A * (th - b))); }
+    function infoAt(th, b) {
+      var P = pRight(th, b);
+      return A * A * (P - C0) * (P - C0) * (1 - P) / ((1 - C0) * (1 - C0) * P);
+    }
+    function ri(rand, lo, hi) { return lo + Math.floor(rand() * (hi - lo + 1)); }
+    // Two expressions for a level; returns {left, right, lv, rv}
+    function makeItem(level, rand) {
+      var a, b, c, d, L, R, lv, rv, tries = 0;
+      do {
+        tries++;
+        if (level === 1) { a = ri(rand, 2, 9); b = ri(rand, 2, 9); c = a + b + (rand() < 0.5 ? -1 : 1) * ri(rand, 3, 5);
+          L = a + " + " + b; R = String(c); lv = a + b; rv = c; }
+        else if (level === 2) { a = ri(rand, 2, 9); b = ri(rand, 2, 9); c = ri(rand, 2, 9); d = a + b - c + (rand() < 0.5 ? -2 : 2);
+          L = a + " + " + b; R = c + " + " + d; lv = a + b; rv = c + d; }
+        else if (level === 3) { a = ri(rand, 12, 49); b = ri(rand, 12, 49); c = ri(rand, 12, 49); d = a + b - c + (rand() < 0.5 ? -3 : 3);
+          L = a + " + " + b; R = c + " + " + d; lv = a + b; rv = c + d; }
+        else if (level === 4) { a = ri(rand, 3, 9); b = ri(rand, 3, 9); c = a * b + (rand() < 0.5 ? -1 : 1) * ri(rand, 3, 6);
+          L = a + " × " + b; R = String(c); lv = a * b; rv = c; }
+        else if (level === 5) { a = ri(rand, 3, 9); b = ri(rand, 3, 9); c = ri(rand, 3, 9); d = Math.max(2, Math.round(a * b / c) + (rand() < 0.5 ? -1 : 1));
+          L = a + " × " + b; R = c + " × " + d; lv = a * b; rv = c * d; }
+        else if (level === 6) { a = ri(rand, 13, 39); b = ri(rand, 3, 9); c = Math.round(a * b * (1 + (rand() < 0.5 ? -1 : 1) * (0.03 + 0.04 * rand())));
+          L = a + " × " + b; R = String(c); lv = a * b; rv = c; }
+        else if (level === 7) { b = ri(rand, 3, 9); a = ri(rand, 1, b - 1); d = ri(rand, 3, 9); c = Math.max(1, Math.min(d - 1, Math.round(a / b * d) + (rand() < 0.5 ? 0 : 1)));
+          L = a + "/" + b; R = c + "/" + d; lv = a / b; rv = c / d; }
+        else if (level === 8) { a = ri(rand, 13, 29); b = ri(rand, 13, 29); c = a + ri(rand, 1, 3); d = b - ri(rand, 1, 3);
+          L = a + " × " + b; R = c + " × " + d; lv = a * b; rv = c * d; }
+        else { b = ri(rand, 7, 13); a = ri(rand, 2, b - 2); d = b + ri(rand, 1, 3); c = Math.round(a / b * d);
+          L = a + "/" + b; R = c + "/" + d; lv = a / b; rv = c / d; }
+      } while ((Math.abs(lv - rv) < 1e-9 || !isFinite(lv) || !isFinite(rv)) && tries < 50);
+      if (Math.abs(lv - rv) < 1e-9) { R = String(Math.round(rv) + 1); rv = Math.round(rv) + 1; }
+      return { left: L, right: R, lv: lv, rv: rv, level: level, b: bOf(level) };
+    }
+    var S = { phase: "idle", k: 0, log: [], item: null, post: null, est: 0, sd: 1, path: [], seed: 45 };
+    function update() {
+      var lp = NODES.map(function (t) { return -0.5 * t * t; }), j, m = 0, m2 = 0, z = 0, mx = -Infinity;
+      S.log.forEach(function (r) {
+        for (j = 0; j < NODES.length; j++) { var P = pRight(NODES[j], r.b); lp[j] += r.right ? Math.log(P) : Math.log(1 - P); }
+      });
+      for (j = 0; j < lp.length; j++) mx = Math.max(mx, lp[j]);
+      for (j = 0; j < lp.length; j++) { var p = Math.exp(lp[j] - mx); z += p; m += p * NODES[j]; m2 += p * NODES[j] * NODES[j]; }
+      S.est = m / z; S.sd = Math.sqrt(Math.max(m2 / z - (m / z) * (m / z), 0));
+    }
+    function choose(rand) {
+      var best = 1, bi = -1, l;
+      for (l = 1; l <= LEVELS; l++) { var v = infoAt(S.est, bOf(l)); if (v > bi) { bi = v; best = l; } }
+      return makeItem(best, rand);
+    }
+    var rand = QB.rng ? QB.rng(45) : Math.random;
+    function next() {
+      if (S.k >= N_ITEMS) { S.phase = "done"; task.clear(); if (w) w.render(); return; }
+      S.item = choose(rand); S.phase = "ask"; S.t0 = T.now();
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "f": 0, "j": 1 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side) {
+        var it = S.item, right = side === 0 ? it.lv > it.rv : it.rv > it.lv;
+        S.log.push({ b: it.b, level: it.level, right: right });
+        task.count++; S.k++;
+        update();
+        S.path.push([S.est, S.sd]);
+        S.phase = "shown";
+        if (w) w.render();
+        task.later(next, 700);
+      },
+    });
+    function start(state) {
+      task.clear(); S.k = 0; S.log = []; S.est = 0; S.sd = 1; S.path = [[0, 1]]; task.count = 0;
+      rand = QB.rng ? QB.rng(45 + (state ? state.seed : 0)) : Math.random;
+      next();
+    }
+    w = QB.widget(el, {
+      title: "Which is larger?",
+      sub: "Ten pairs. Press F if the left one is larger, J if the right one is (or tap the side). Each pair is chosen where your answers so far say it will tell the most.",
+      panels: 2, height: 360, weights: [1.3, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; S.path = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), j;
+        ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if ((S.phase === "ask" || S.phase === "shown") && S.item) {
+          ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("Pair " + Math.min(S.k + (S.phase === "ask" ? 1 : 0), N_ITEMS) + " of " + N_ITEMS + "   (level " + S.item.level + " of 9)", b.cx, b.y + 24);
+          ctx.fillStyle = C.ink; ctx.font = "600 26px system-ui, sans-serif";
+          ctx.fillText(S.item.left, b.x + b.w * 0.27, b.cy);
+          ctx.fillText(S.item.right, b.x + b.w * 0.73, b.cy);
+          ctx.fillStyle = C.muted; ctx.font = "14px system-ui, sans-serif";
+          ctx.fillText("or", b.cx, b.cy);
+          if (S.phase === "shown") {
+            var last = S.log[S.log.length - 1];
+            ctx.fillStyle = last.right ? "#5bd18b" : "#ef6f6c"; ctx.font = "600 14px system-ui, sans-serif";
+            ctx.fillText(last.right ? "right" : "not this time", b.cx, b.y + b.h - 34);
+          } else {
+            ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+            ctx.fillText("F: left    J: right", b.cx, b.y + b.h - 34);
+          }
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "Ten pairs.",
+                    "The band narrowed as each answer was used, and harder pairs followed right answers. The difficulties here are set by design, not calibrated on people, so the position is not a measurement of you.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Ten pairs, chosen one at a time.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx, x0 = c2.x + 40, x1 = c2.x + c2.w - 14, y0 = c2.y + 30, y1 = c2.y + c2.h - 30;
+        function X(k) { return x0 + (x1 - x0) * k / N_ITEMS; }
+        function Y(t) { return y1 - (y1 - y0) * (t + 3) / 6; }
+        cx.save(); cx.strokeStyle = C.muted; cx.lineWidth = 1;
+        cx.beginPath(); cx.moveTo(x0, y0); cx.lineTo(x0, y1); cx.lineTo(x1, y1); cx.stroke();
+        cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif"; cx.textAlign = "left";
+        cx.fillText("The estimate and its 95% band, pair by pair", c2.x + 10, c2.y + 16);
+        cx.fillStyle = C.muted; cx.font = "11px system-ui, sans-serif"; cx.textAlign = "right";
+        [-2, 0, 2].forEach(function (t) { cx.fillText(String(t), x0 - 6, Y(t) + 4); });
+        for (j = 0; j < S.path.length; j++) {
+          var e = S.path[j], lo = Math.max(-3, e[0] - 1.96 * e[1]), hi = Math.min(3, e[0] + 1.96 * e[1]);
+          cx.strokeStyle = "rgba(179,157,219,0.6)"; cx.lineWidth = 5;
+          cx.beginPath(); cx.moveTo(X(j), Y(lo)); cx.lineTo(X(j), Y(hi)); cx.stroke();
+          cx.fillStyle = "#b39ddb"; cx.beginPath(); cx.arc(X(j), Y(e[0]), 3.5, 0, 2 * Math.PI); cx.fill();
+        }
+        for (j = 0; j < S.log.length; j++) {
+          cx.fillStyle = S.log[j].right ? "#5bd18b" : "#ef6f6c";
+          cx.fillRect(X(j + 1) - 3, Y(S.log[j].b) - 3, 6, 6);
+        }
+        cx.restore();
+      },
+      readout: function () {
+        return [["pairs", String(task.count)], ["band width", S.path.length ? (2 * 1.96 * S.sd).toFixed(2) : "-"]];
+      },
+      note: "Nothing you answer is stored or sent. The squares mark each pair's difficulty (green right, red not); the scale is illustrative, so this is a demonstration of adaptive testing, not a score.",
+    });
+  };
 })();

@@ -340,3 +340,6 @@ and summarized, not stored. Dates are the day the check was made.
 - **Forer (1949)** and **Nisbett and Wilson (1977)** in the original. Neither could be reached from this
   environment. Part 3 gives Forer's result as his reviewers report it and names Nisbett and Wilson's thesis
   without quoting its studies' numbers.
+| `lsat_1000` | Five LSAT items answered by 1,000 people | Bock and Lieberman (1970), Psychometrika 35, 179-197; ltm 1.2-0 (LSAT) | data fetched from CRAN on first use, not redistributed (GPL >= 2 package) | SHA-256 checked; 1000 x 5 read; Rasch and 2PL fits match ltm, 2026-11-16 |
+| `science_1992` | Seven attitudes to science and technology, 392 British respondents | the 1992 Eurobarometer, British sample; ltm 1.2-0 (Science) | data fetched from CRAN on first use, not redistributed (GPL >= 2 package) | SHA-256 checked; 392 x 7 read, 2026-11-16 |
+| `guilford_veg_1954` | Paired-comparison preferences for nine vegetables | Guilford (1954), Psychometric Methods, 2nd edition; psychTools 2.6.4 (vegetables) | data fetched from CRAN on first use, not redistributed (GPL >= 2 package) | SHA-256 checked; 9 x 9 proportions read, 2026-11-16 |

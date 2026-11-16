@@ -1,11 +1,11 @@
 # Psychology, Built (心理学，从零搭建)
 
-**Status (2026-11-15): the plan is accepted, the shared code is in place, and Parts 1 to 44 are built in English
+**Status (2026-11-15): the plan is accepted, the shared code is in place, and Parts 1 to 45 are built in English
 and Chinese.** Act I (Parts 1 to 4) is the method; Act II (Parts 5 to 10) is the biology, from *The Neuron* to
 *Chemistry and Clocks*; Act III (Parts 11 to 15) is the senses, from *The Threshold* to *The Other Senses*; Act IV
 (Parts 16 and 17) is learning, *Conditioning* and *Reward and Prediction*; and Act V, thinking, is complete:
 *Attention*, *Working Memory*, *Memory I: Storing and Finding*, *Memory II: Forgetting and Inventing*, *Concepts
-and Categories*, *Language*, *Reasoning and Problem Solving*, *Deciding in Time*, *Judgment and Choice* and *Consciousness* (Parts 18 to 27); and Act VI, feeling and wanting, is complete: *Motivation* and *Emotion* (Parts 28 and 29); and Act VII, growing, is complete: *The Infant Mind* and *The Lifespan* (Parts 30 and 31); and Act VIII, how people differ, is complete: *Intelligence* and *Personality* (Parts 32 and 33); and Act IX, other people, is complete: *Social Influence*, *Social Cognition*, *Us and Them*, *Bonds and Bargains* and *Culture and Morals* (Parts 34 to 38); and Act X, when minds suffer, is complete: *What Is a Disorder?*, *Fear and Sadness*, *Psychosis, Addiction and Development* and *Does Therapy Work?* (Parts 39 to 42); and the degree ends with its capstone, *The Replication* (Part 43). Act XI, the graduate toolkit, has begun with *Latent Variables* (Part 44). This file is the plan;
+and Categories*, *Language*, *Reasoning and Problem Solving*, *Deciding in Time*, *Judgment and Choice* and *Consciousness* (Parts 18 to 27); and Act VI, feeling and wanting, is complete: *Motivation* and *Emotion* (Parts 28 and 29); and Act VII, growing, is complete: *The Infant Mind* and *The Lifespan* (Parts 30 and 31); and Act VIII, how people differ, is complete: *Intelligence* and *Personality* (Parts 32 and 33); and Act IX, other people, is complete: *Social Influence*, *Social Cognition*, *Us and Them*, *Bonds and Bargains* and *Culture and Morals* (Parts 34 to 38); and Act X, when minds suffer, is complete: *What Is a Disorder?*, *Fear and Sadness*, *Psychosis, Addiction and Development* and *Does Therapy Work?* (Parts 39 to 42); and the degree ends with its capstone, *The Replication* (Part 43). Act XI, the graduate toolkit, has begun with *Latent Variables* and *Item Response Theory* (Parts 44 and 45). This file is the plan;
 the standard every part meets, the devices and all sixty-two parts chapter by chapter are in
 [`SYLLABUS.md`](SYLLABUS.md), with the progress table in its §9.
 

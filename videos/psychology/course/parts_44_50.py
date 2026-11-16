@@ -43,4 +43,44 @@ PARTS = [
               ("Its tests", "tests/psychology/test_sem.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=45, level="M", widget="adaptive", prereq=(3, 12, 44),
+        question="How can two people who took different questions be put on the same scale?",
+        story="In the 1950s the Danish mathematician Georg Rasch was asked to compare reading across tests that share "
+              "no items. Classical scores cannot do it: difficulty depends on the sample and scores on the test. Rasch "
+              "modelled the single encounter of one person with one item, and person and item separate. The part "
+              "derives the model's specific objectivity and the sufficiency of the sum score, adds discrimination and "
+              "guessing, measures information, fits the Law School Admission Test's items by marginal maximum "
+              "likelihood (matching the published fits), builds an adaptive test that needs about half the items of "
+              "the best fixed form, fits graded responses to attitude items, separates bias from impact with "
+              "Mantel and Haenszel, links two forms through anchors, shows why national surveys report plausible "
+              "values drawn from a conditioning model, and tracks learning with knowledge tracing and Elo.",
+        handoff="What happens between a question and its answer is Part 46; ability and learning over time Part 47; "
+                "response-time models Part 48; the weight of evidence Part 50.",
+        outside="Part 3's classical test theory, Part 12's logistic functions and Part 44's latent variables; the "
+                "logistic function, likelihood and Fisher information.",
+        objectives={
+            "U": ["Explain why a classical score depends on the test and an item's difficulty on the sample.",
+                  "Read an item characteristic curve: difficulty, discrimination and guessing.",
+                  "Say why a group gap on an item is not by itself evidence that the item is unfair."],
+            "M": ["Derive the sufficiency of the sum score in the Rasch model and fit it by conditional ML.",
+                  "Fit Rasch and two-parameter models by marginal ML with EM; compute item and test information, and "
+                  "build an adaptive test.",
+                  "Run a Mantel-Haenszel DIF analysis, a mean-sigma linking and a plausible-value analysis."],
+            "D": ["Argue how response times, generated items or learning test-takers change what a calibrated scale "
+                  "can claim."],
+            "I": ["Plan an adaptive questionnaire: bank, stopping rule, exposure control and a DIF check."],
+        },
+        results=[
+            ("Rasch model", r"P(X_{pi} = 1) = \frac{e^{\theta_p - b_i}}{1 + e^{\theta_p - b_i}}"),
+            ("Sufficiency", r"P(\mathbf{x} \mid r) = e^{-\sum_i x_i b_i} / \gamma_r(e^{-b_1}, \dots, e^{-b_k})"),
+            ("Item information", r"I_i(\theta) = a_i^2 P_i(\theta)(1 - P_i(\theta))"),
+            ("Mantel-Haenszel", r"\hat\alpha_{MH} = \frac{\sum_s A_s D_s/N_s}{\sum_s B_s C_s/N_s}, \ \Delta = -2.35 \ln \hat\alpha_{MH}"),
+            ("Mean-sigma linking", r"A = \mathrm{SD}(b^{old})/\mathrm{SD}(b^{new}), \ B = \bar b^{old} - A \bar b^{new}"),
+        ],
+        U=(0, 1, 2, 3, 9), D=(15,), I=(14,),
+        also=(("Psyche's irt module", "explainer/psychology/psyche/irt.py"),
+              ("Its tests", "tests/psychology/test_irt.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

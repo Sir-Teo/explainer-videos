@@ -594,10 +594,10 @@ shown(4, "SIMMONS_2011", "a simulation of what flexible analysis does to a null 
 shown(4, "SCHEEL_2021", "a comparison of two literatures; shown at the frontier as early evidence on a reform; its "
       "row (registered_reports) is entered in Part 43")
 shown(4, "LEVELT_2012", "the findings of an inquiry into one case of fraud")
-shown(4, "DREBER_2015", "prediction markets on replications: shown at the frontier, entered with meta-science",
-      row_in=50)
+shown(4, "DREBER_2015", "prediction markets on replications: shown at the frontier; the row "
+      "(replication_prediction) is entered in Part 50")
 shown(4, "PROTZKO_2023", "a retracted report about replication rates, shown at the frontier for what its "
-      "retraction says about the reforms; entered with meta-science", row_in=50)
+      "retraction says about the reforms; the row (rigour_replicability) is entered in Part 50")
 
 # ---------------------------------------------------------------------------
 # Part 6
@@ -791,7 +791,8 @@ shown(18, "ROGERS_MONSELL_1995", "task switching, described as a pattern with Ps
 shown(18, "MORAN_DESIMONE_1985", "a single-unit study, described schematically")
 shown(18, "REYNOLDS_HEEGER_2009", "a model, derived and run on Psyche")
 shown(18, "BUNDESEN_1990", "a theory, run on Psyche")
-shown(18, "MACKWORTH_1948", "the vigilance decrement, revisited from Part 12", row_in=51)
+shown(18, "MACKWORTH_1948", "the vigilance decrement, revisited from Part 12; its row (vigilance_decrement) is "
+      "entered in Part 51")
 shown(18, "STRAYER_2001", "a simulator study, read in full and described; driving returns in Part 51")
 shown(19, "MILLER_1956", "history and arithmetic: the spans and the recoding are described, not tested anew")
 shown(19, "SHALLICE_WARRINGTON_1970", "a single case, described as the evidence against the modal model's gateway")
@@ -1299,10 +1300,10 @@ add(Finding(
     data=("RATCLIFF_1992", "YONELINAS_1994"),
 ))
 
-shown(12, "MACKWORTH_1948", "the vigilance decrement, told as the story that started the field; vigilance is entered "
-      "in Part 51", row_in=51)
-shown(12, "SEE_1995", "a meta-analysis shown for its conclusion about the watch; vigilance is entered in Part 51",
-      row_in=51)
+shown(12, "MACKWORTH_1948", "the vigilance decrement, told as the story that started the field; its row "
+      "(vigilance_decrement) is entered in Part 51")
+shown(12, "SEE_1995", "a meta-analysis shown for its conclusion about the watch; the vigilance row is entered "
+      "in Part 51")
 shown(12, "GIGERENZER_HOFFRAGE_1995", "base-rate reasoning, a preview; Part 26 shows the frequency-format "
       "result beside its heuristics rows, as a method rather than a finding")
 shown(12, "MANISCALCO_LAU_2012", "a method at the frontier, a measure rather than a finding; Part 25 uses it to "
@@ -6299,3 +6300,51 @@ shown(44, r"Hamaker, Kuiper \& Grasman (2015)", "a methods result, reproduced in
 shown(44, r"Borsboom \& Cramer (2013)", "a theory of disorder, described (Part 39 shows its network)")
 shown(44, r"Spirtes, Glymour \& Scheines (2000)", "a method, described")
 shown(44, r"Muthén \& Asparouhov (2012); McNeish \& Wolf (2023)", "methods, described")
+
+# --- Part 45: Item Response Theory -----------------------------------------------------------------------------------
+
+add(Finding(
+    key="cat_efficiency", part=45, title=r"Adaptive tests need fewer items",
+    claim="An adaptive test reaches the precision of a fixed test with far fewer items, often about half.",
+    original=Study("Weiss", 1982, design="computerized adaptive tests of ability compared with conventional tests, "
+                   "in simulation and live testing", found="equal or better precision with substantially fewer items"),
+    status="replicated",
+    record=(Study("Wainer and colleagues (review)", 2000, design="the adaptive testing programmes of the 1980s and "
+                  "1990s, collected in Computerized Adaptive Testing: A Primer",
+                  found="large savings in test length at equal precision; item exposure and security as the costs"),
+            Study("Cella and colleagues (PROMIS)", 2010, design="adaptive tests of patient-reported symptoms against "
+                  "the full item banks", found="close agreement with the full banks from a handful of items")),
+    note="The saving depends on the bank: items spread across the abilities being measured, and well calibrated. "
+         "The first items are given to everyone, so exposure must be controlled.",
+    sources=("D. J. Weiss, Improving measurement quality and efficiency with adaptive testing, Applied "
+             "Psychological Measurement 6 (1982) 473-492",
+             "H. Wainer (ed.), Computerized Adaptive Testing: A Primer (2nd edition, Erlbaum, 2000)",
+             "D. Cella et al., The Patient-Reported Outcomes Measurement Information System (PROMIS) developed and "
+             "tested its first wave of adult self-reported health outcome item banks: 2005-2008, Journal of Clinical "
+             "Epidemiology 63 (2010) 1179-1194"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="deep_knowledge_tracing", part=45, title=r"Deep knowledge tracing's large gains",
+    claim="A recurrent neural network predicts students' answers far better than Bayesian knowledge tracing.",
+    original=Study("Piech and colleagues", 2015, design="deep knowledge tracing on tutoring-system logs",
+                   found="an area under the curve near 0.86, against 0.67 for Bayesian knowledge tracing"),
+    status="replicated, smaller",
+    record=(Study("Khajah, Lindsey and Mozer", 2016, design="Bayesian knowledge tracing extended with forgetting, "
+                  "student abilities and skill discovery", found="matched deep knowledge tracing on the same data"),
+            Study("Xiong and colleagues", 2016, design="the benchmark data re-examined",
+                  found="duplicated records had inflated the gain; much smaller once removed")),
+    note="Neural models do predict somewhat better on large logs, but much of the first gap came from a weak baseline "
+         "and a data artefact; the simple model's parameters are also interpretable.",
+    sources=("C. Piech et al., Deep knowledge tracing, Advances in Neural Information Processing Systems 28 (2015)",
+             "M. Khajah, R. V. Lindsey and M. C. Mozer, How deep is knowledge tracing?, Proceedings of Educational "
+             "Data Mining (2016)",
+             "X. Xiong, S. Zhao, E. G. Van Inwegen and J. E. Beck, Going deeper with deep knowledge tracing, "
+             "Proceedings of Educational Data Mining (2016)"),
+    checked="2026-11-16",
+))
+shown(45, r"Rasch (1960)", "the origin of the model, told as history")
+shown(45, r"Lord \& Novick (1968); \ Lord (1980)", "the two- and three-parameter models, described")
+shown(45, r"Holland \& Thayer (1988)", "a method, computed")
+shown(45, r"van der Linden (2007)", "a model, described")

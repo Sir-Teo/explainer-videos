@@ -1201,6 +1201,22 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Rebecca Kuiper; Raoul Grasman; Denny Borsboom; Angélique Cramer; Joost Kruis; Gunter Maris; Peter Spirtes; Clark Glymour; Richard Scheines | 丽贝卡·凯珀；拉乌尔·格拉斯曼；丹尼·博斯博姆；安热莉克·克拉默；约斯特·克鲁伊斯；冈特·马里斯；彼得·斯皮尔特斯；克拉克·格莱穆尔；理查德·沙因斯 |
 | Bengt Muthén; Tihomir Asparouhov; Rex Kline; Kenneth Bollen; Julia Rohrer; Roderick McDonald | 本特·穆滕；季霍米尔·阿斯帕鲁霍夫；雷克斯·克莱因；肯尼思·博伦；朱莉娅·罗勒；罗德里克·麦克唐纳 |
 
+## Part 45: item response theory
+
+| English | 中文 |
+|---|---|
+| item response theory; Rasch model; item characteristic curve; difficulty; discrimination; guessing; ability | 项目反应理论；拉施模型；项目特征曲线；难度；区分度；猜测；能力 |
+| specific objectivity; sufficient statistic; sum score; elementary symmetric functions; conditional, joint, marginal maximum likelihood | 特定客观性；充分统计量；总分；初等对称函数；条件、联合、边际最大似然 |
+| item information; test information; standard error; quadrature; EM algorithm; EAP; posterior | 项目信息；测验信息；标准误；求积；EM算法；期望后验估计；后验 |
+| computerized adaptive testing; item bank; stopping rule; item exposure; content balancing | 计算机化自适应测验；题库；终止规则；项目曝光；内容平衡 |
+| graded response model; partial credit model; threshold; rating scale | 等级反应模型；分部评分模型；阈值；评定量表 |
+| differential item functioning; impact; Mantel-Haenszel; common odds ratio; ETS delta | 项目功能差异；影响；曼特尔-亨塞尔；共同优势比；ETS德尔塔 |
+| linking; equating; anchor items; mean-sigma; matrix sampling; plausible values; conditioning model | 链接；等值；锚题；均值-标准差法；矩阵抽样；似真值；条件化模型 |
+| Bayesian knowledge tracing; learning, guess, slip; mastery; Elo rating; deep knowledge tracing; response time | 贝叶斯知识追踪；学习、猜测、失误；掌握；埃洛评分；深度知识追踪；反应时 |
+| Georg Rasch; Allan Birnbaum; Frederic Lord; Melvin Novick; Darrell Bock; Robert Lieberman; Murray Aitkin | 格奥尔格·拉施；艾伦·伯恩鲍姆；弗雷德里克·洛德；梅尔文·诺维克；达雷尔·博克；罗伯特·利伯曼；默里·艾特金 |
+| Fumiko Samejima; Geoff Masters; David Weiss; Howard Wainer; Paul Holland; Dorothy Thayer; Robert Mislevy | 鲛岛史子；杰夫·马斯特斯；戴维·韦斯；霍华德·韦纳；保罗·霍兰；多萝西·塞耶；罗伯特·米斯莱维 |
+| Albert Corbett; John Anderson; Chris Piech; Wim van der Linden; Susan Embretson; Steven Reise | 艾伯特·科比特；约翰·安德森；克里斯·皮耶希；维姆·范德林登；苏珊·恩布雷森；史蒂文·赖斯 |
+
 ## Names
 
 | English | 中文 |
