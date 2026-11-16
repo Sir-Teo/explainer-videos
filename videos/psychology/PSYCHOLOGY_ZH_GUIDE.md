@@ -1401,6 +1401,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | screen time; well-being; specification curve; machine behaviour | 屏幕时间；幸福感；设定曲线；机器行为 |
 | Frank Rosenblatt; Marcel Binz; Eric Schulz; Michal Kosinski; Tomer Ullman; Berkeley Dietvorst; Thomas Costello; Amy Orben; Andrew Przybylski; Jonathan Haidt; Iyad Rahwan | 弗兰克·罗森布拉特；马塞尔·宾茨；埃里克·舒尔茨；米哈尔·科辛斯基；托默·乌尔曼；伯克利·迪特沃斯特；托马斯·科斯特洛；艾米·奥本；安德鲁·普日比尔斯基；乔纳森·海特；伊亚德·拉万 |
 
+## Part 61: the next psychology
+
+| English | 中文 |
+|---|---|
+| explanation; prediction; common task framework; predictive ceiling | 解释；预测；通用任务框架；预测上限 |
+| big team science; many labs; heterogeneity; WEIRD samples; who is sampled | 大团队科学；多实验室；异质性；WEIRD样本；谁被抽样 |
+| integrative experiment design; design space; surrogate model; active learning | 整合式实验设计；设计空间；代理模型；主动学习 |
+| machine-assisted theory; theory as code; formal model; digital traces | 机器辅助的理论构建；以代码表达的理论；形式模型；数字痕迹 |
+| natural selection of bad science; registered report; automating research | 糟糕科学的自然选择；注册报告；研究自动化 |
+| Matthew Salganik; Richard Klein; Abdullah Almaatouq; Duncan Watts; Joshua Peterson; Paul Smaldino; Richard McElreath; Johannes Eichstaedt | 马修·萨尔加尼克；理查德·克莱因；阿卜杜拉·阿尔马图克；邓肯·瓦茨；约书亚·彼得森；保罗·斯马尔迪诺；理查德·麦克尔里斯；约翰内斯·艾希施泰特 |
+
 ## Names
 
 | English | 中文 |

@@ -107,4 +107,36 @@ PARTS = [
               ("Its tests", "tests/psychology/test_machines.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=61, level="D", widget="designspace", prereq=(2, 4, 38, 48, 50, 58),
+        question="What would psychology look like if it were designed today?",
+        story="In 2020, 160 teams with thousands of variables tried to predict six outcomes in children's lives and "
+              "barely beat a four-variable regression. The part separates explanation from prediction, reads "
+              "many-labs heterogeneity, shows what samples of millions can and cannot fix, asks who is sampled, "
+              "designs an experiment as a space with a surrogate model, follows machine-assisted theory and theory "
+              "as code, reruns the natural selection of bad science under two publication rules, takes apart a "
+              "digital-traces result, asks what research should automate, and ranks the reform proposals by "
+              "evidence.",
+        handoff="Part 62 carries one question through a registered report, then closes the series' accounts.",
+        outside="Part 2's design, Part 4's power and forking paths, Part 38's samples, Part 48's model comparison "
+                "and Part 50's meta-analysis; regression and simulation.",
+        objectives={
+            "U": ["Explain the difference between explanation and prediction, and what a predictability ceiling is.",
+                  "Explain why a huge self-selected sample can be precisely wrong."],
+            "M": ["Estimate heterogeneity across labs, and fit a surrogate model over a design space.",
+                  "Run a model of a research community and compute false-discovery rates from base rates and "
+                  "power."],
+            "D": ["Propose a test of whether a reform (formal theory, integrative design) speeds discovery."],
+            "I": ["Write a commissioning brief for research that will hold up."],
+        },
+        results=[
+            ("False share of positives", r"\frac{(1-b)\alpha}{(1-b)\alpha + bW}"),
+            ("Smaldino and McElreath's false-positive rate", r"\alpha(e) = \frac{W}{1 + (1 - W)e}"),
+            ("Meng's identity", r"\bar y_n - \bar y_N = \rho_{R,Y}\sqrt{\frac{N - n}{n}}\,\sigma_Y"),
+        ],
+        U=(0, 1, 2, 4, 5, 12, 13), D=(6, 8, 9, 15), I=(3, 10, 11, 14),
+        also=(("Psyche's community module", "explainer/psychology/psyche/community.py"),
+              ("Its tests", "tests/psychology/test_community.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

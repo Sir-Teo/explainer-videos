@@ -7899,3 +7899,88 @@ shown(60, r"Heinz et al.\ (2025)", "a single randomized trial against a waiting 
 shown(60, r"Argyle et al.\ (2023)", "a silicon-sample study, described; the method is computed here")
 shown(60, r"Lake et al.\ (2017)", "a theoretical review, described")
 shown(60, r"Rahwan et al.\ (2019)", "a programmatic review, described")
+
+# --- Part 61: The Next Psychology -------------------------------------------------------------------------------------
+add(Finding(
+    key="life_outcomes_unpredictable", part=61, title=r"Life outcomes are hard to predict",
+    claim="Even with thousands of variables and any method, children's life outcomes are predicted little better "
+          "than by a simple regression on a few variables.",
+    original=Study("Salganik and colleagues", 2020, n="160 teams; about 4,000 families",
+                   design="a mass collaboration with a common holdout set", found="the best held-out R-squared "
+                   "about 0.2 for two outcomes and much lower for four, barely above a four-variable benchmark"),
+    status="not directly tested",
+    record=(),
+    note="160 independent teams converged on the same ceiling, a kind of replication inside one study; the same "
+         "challenge has not been run on other cohorts.",
+    sources=("M. J. Salganik et al., Measuring the predictability of life outcomes with a scientific mass "
+             "collaboration, PNAS 117 (2020) 8398-8403",),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="manylabs_heterogeneity", part=61, title=r"Small heterogeneity across many labs",
+    claim="When one protocol is run in many labs and countries, most effects vary little between samples beyond "
+          "what sampling error produces.",
+    original=Study("Klein and colleagues (Many Labs 1)", 2014, n="36 samples, about 6,300 people",
+                   design="13 classic effects, one protocol", found="little variation across samples for most"),
+    status="replicated",
+    record=(Study("Klein and colleagues (Many Labs 2)", 2018, n="about 125 samples in 36 countries",
+                  design="28 effects", found="heterogeneity small for most effects, larger for some"),
+            Study("Olsson-Collentine, Wicherts and van Assen", 2020, design="heterogeneity across many direct "
+                  "replication projects", found="low to moderate, and larger for larger effects")),
+    note="Holds for the effects tested, with fixed protocols; it does not show that context never matters, only "
+         "that it matters less than single studies suggest.",
+    sources=("R. A. Klein et al., Investigating variation in replicability: a 'many labs' replication project, "
+             "Social Psychology 45 (2014) 142-152",
+             "R. A. Klein et al., Many Labs 2: investigating variation in replicability across samples and settings, "
+             "Advances in Methods and Practices in Psychological Science 1 (2018) 443-490",
+             "A. Olsson-Collentine, J. M. Wicherts and M. A. L. M. van Assen, Heterogeneity in direct replications in "
+             "psychology and its association with effect size, Psychological Bulletin 146 (2020) 922-940"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="web_equals_lab", part=61, title=r"Online experiments match the lab",
+    claim="Cognitive and perceptual experiments run online give results comparable to the same experiments run in "
+          "the laboratory.",
+    original=Study("Germine and colleagues", 2012, design="web and lab versions of cognitive and perceptual tasks",
+                   found="comparable means, distributions and reliabilities"),
+    status="replicated",
+    record=(Study("Crump, McDonnell and Gureckis", 2013, design="classic paradigms run on Mechanical Turk",
+                  found="most effects reproduced, timing-critical ones with more difficulty"),),
+    note="Replicated for many tasks; attention checks, data quality and who takes part online need monitoring, and "
+         "timing-critical tasks need care.",
+    sources=("L. Germine et al., Is the Web as good as the lab? Comparable performance from Web and lab in "
+             "cognitive/perceptual experiments, Psychonomic Bulletin and Review 19 (2012) 847-857",
+             "M. J. C. Crump, J. V. McDonnell and T. M. Gureckis, Evaluating Amazon's Mechanical Turk as a tool for "
+             "experimental behavioral research, PLoS ONE 8 (2013) e57410"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="twitter_heart_disease", part=61, title=r"Tweets predict heart disease",
+    claim="The language of tweets from US counties predicts county deaths from heart disease better than "
+          "demographic and health factors.",
+    original=Study("Eichstaedt and colleagues", 2015, n="about 1,300 counties", design="county-level language "
+                   "and mortality", found="hostile language with more deaths, optimism with fewer"),
+    status="contested",
+    record=(Study("Brown and Coyne", 2018, design="a reanalysis and critique",
+                  found="results sensitive to the counties and analysis; tweeters are not the people who die"),),
+    note="A population-level association at best; it says nothing about the individuals who tweet, and its size "
+         "depends on analytic choices.",
+    sources=("J. C. Eichstaedt et al., Psychological language on Twitter predicts county-level heart disease "
+             "mortality, Psychological Science 26 (2015) 159-169",
+             "N. J. L. Brown and J. C. Coyne, Does Twitter language reliably predict heart disease? A commentary on "
+             "Eichstaedt et al. (2015a), PeerJ 6 (2018) e5656"),
+    checked="2026-11-16",
+))
+shown(61, r"Yarkoni \& Westfall (2017)", "a methods review, described")
+shown(61, r"Hofman et al.\ (2021)", "a methods review, described")
+shown(61, r"Moshontz et al.\ (2018)", "the Accelerator's founding paper, described")
+shown(61, r"Awad et al.\ (2018)", "a very large online study, described")
+shown(61, r"Thalmayer, \ Toscanelli \& Arnett (2021)", "a survey of samples in journals, described")
+shown(61, r"Blasi et al.\ (2022)", "a review, described")
+shown(61, r"Almaatouq et al.\ (2024)", "a methods proposal, computed here in Psyche")
+shown(61, r"Peterson et al.\ (2021)", "a large dataset and model comparison; the data are Part 26's choices13k")
+shown(61, r"Borsboom et al.\ (2021)", "a methods proposal, described")
+shown(61, r"Smaldino \& McElreath (2016)", "a model, rerun here in Psyche")

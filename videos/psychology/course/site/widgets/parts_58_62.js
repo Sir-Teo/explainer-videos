@@ -210,4 +210,61 @@
       note: "Nothing you choose is stored or sent. The line is Part 60's: following an aid at random on a share of decisions mixes its accuracy with yours; when the aid is better, the best policy is to follow it every time, and algorithm aversion costs the difference.",
     });
   };
+
+  // ---- Part 61: one cell of a design space, then the whole space; and incentives for a research community. ----
+  W.designspace = function (el) {
+    var w = null;
+    var rand = function (seed) { var a = seed >>> 0; return function () { a = (a + 0x6d2b79f5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; };
+    var r = rand(61), K = 10, mains = [], pairs = [], i, j;
+    function gauss() { var u = Math.max(r(), 1e-9), v = r(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+    for (i = 0; i < K; i++) mains.push(0.1 * gauss());
+    for (i = 0; i < K; i++) { pairs.push([]); for (j = 0; j < K; j++) pairs[i].push(j > i ? 0.05 * gauss() : 0); }
+    function effect(cell) {
+      var e = 0.3, a, b;
+      for (a = 0; a < K; a++) { var xa = (cell >> a) & 1 ? 1 : -1; e += mains[a] * xa; for (b = a + 1; b < K; b++) e += pairs[a][b] * xa * ((cell >> b) & 1 ? 1 : -1); }
+      return e;
+    }
+    var all = []; for (i = 0; i < (1 << K); i++) all.push(effect(i));
+    var S = { phase: "idle", cell: 0, k: 0 };
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "pick"; },
+      respond: function (side) { S.cell |= side << S.k; S.k++; task.count++; if (S.k >= K) S.phase = "shown"; if (w) w.render(); },
+    });
+    var NAMES = ["text (F) or call (J)", "one reminder (F) or three (J)", "named sender (F) or not (J)", "deadline (F) or none (J)", "gain (F) or loss (J) framing", "morning (F) or evening (J)", "short (F) or long (J)", "online (F) or in person (J)", "students (F) or adults (J)", "country A (F) or B (J)"];
+    function fdr(base, power, alpha) { var tp = base * power, fp = (1 - base) * alpha; return fp / (tp + fp); }
+    w = QB.widget(el, {
+      title: "One experiment, or the space of them?",
+      sub: "You are testing whether a reminder raises attendance. Make ten design choices with F and J (or tap left and right); that picks one of 1,024 experiments, as a single study does. Then see the true effect in your cell against all of them. On the right: the share of published positive results that are false, for a field's base rate of true hypotheses, its power and its false-positive rate.",
+      panels: 2, height: 330,
+      controls: [
+        { k: "base", label: "share of tested hypotheses that are true", min: 0.05, max: 0.5, step: 0.05, value: 0.1, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "power", label: "power", min: 0.2, max: 0.95, step: 0.05, value: 0.8, fmt: function (x) { return x.toFixed(2); } },
+      ],
+      buttons: [
+        { label: "Start", act: function () { S.phase = "pick"; S.cell = 0; S.k = 0; task.count = 0; } },
+        { label: "Clear", act: function () { S.phase = "idle"; S.cell = 0; S.k = 0; } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (S.phase === "pick") {
+          T.message(ctx, b, "Choice " + (S.k + 1) + " of 10", NAMES[S.k]);
+        } else if (S.phase === "shown") {
+          var e = all[S.cell], below = 0; for (i = 0; i < all.length; i++) if (all[i] < e) below++;
+          T.message(ctx, b, "Your experiment's true effect: " + e.toFixed(2) + " SD",
+            "That is above " + Math.round(100 * below / all.length) + "% of the 1,024 possible experiments. Across the space the effect runs from " + Math.min.apply(null, all).toFixed(2) + " to " + Math.max.apply(null, all).toFixed(2) + ", and about a quarter of cells go the other way. A single study reports one cell; an integrative design maps them all.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start, then make ten design choices.");
+        }
+        var a = g[1].axes({ x: [0, 0.2], y: [0, 1], title: "False share of positives (gold) against the false-positive rate" });
+        var xs = [], ys = [], al;
+        for (al = 0.005; al <= 0.2; al += 0.005) { xs.push(al); ys.push(fdr(v.base, v.power, al)); }
+        a.line(xs, ys, { color: "#f2c14e", width: 2 });
+        var f5 = fdr(v.base, v.power, 0.05);
+        a.text(0.05, Math.min(f5 + 0.08, 0.95), "at 0.05: " + Math.round(100 * f5) + "%", { align: "center", size: 11 });
+      },
+      readout: function (v) { return [["false share at 0.05", Math.round(100 * fdr(v.base, v.power, 0.05)) + "%"]]; },
+      note: "Nothing you choose is stored or sent. The space is Part 61's: ten binary choices with main effects and pairwise interactions, drawn once. The right panel is the arithmetic behind Smaldino and McElreath's model: when few tested hypotheses are true, even honest labs publish many false positives.",
+    });
+  };
 })();
