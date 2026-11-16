@@ -17,19 +17,14 @@ class Side(SoundScene):
     # ------------------------------------------------------------------
     def family(self):
         items = [
-            (r"a limiter: \ a compressor with an infinite ratio and an instant attack, \ a ceiling nothing passes", WHITE),
+            (r"a limiter: \ ideal static limiting has infinite ratio; \\ practical timing and true-peak behavior vary", WHITE),
             (r"often with look-ahead: \ the signal is delayed a few milliseconds so the gain can come down before the peak", WHITE),
             (r"a gate: \ the reverse, \ below a threshold the level is cut, \ silencing hiss and spill between notes", WHITE),
             (r"an expander: \ a gentle gate, \ widening the dynamics instead of narrowing them", TUNE),
             (r"Part 57 meets the limiter again, \ in mastering's loudness war", GREY_A),
         ]
         rows_scene(self, r"the family", items,
-                   "The compressor has relatives. <bookmark mark='b'/> A limiter is a compressor with an infinite ratio and an "
-                   "instant attack: a ceiling nothing passes. <bookmark mark='c'/> It often looks ahead: the signal is delayed a few "
-                   "milliseconds, so the gain can come down before the peak arrives. <bookmark mark='d'/> A gate is the reverse: "
-                   "below a threshold the level is cut, silencing hiss and spill between notes. <bookmark mark='e'/> An expander is "
-                   "a gentle gate, widening the dynamics instead of narrowing them. <bookmark mark='f'/> Part 57 meets the limiter "
-                   "again, in mastering's loudness war.", marks="bcdef")
+                   "The compressor has relatives. <bookmark mark='b'/> An ideal static limiter has infinite ratio above its threshold; practical limiters use finite timing and often lookahead, with separate sample-peak and true-peak specifications. <bookmark mark='c'/> It often looks ahead: the signal is delayed a few milliseconds, so the gain can come down before the peak arrives. <bookmark mark='d'/> A gate is the reverse: below a threshold the level is cut, silencing hiss and spill between notes. <bookmark mark='e'/> An expander is a gentle gate, widening the dynamics instead of narrowing them. <bookmark mark='f'/> Part 57 meets the limiter again, in mastering's loudness war.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def duck(self):
@@ -114,7 +109,7 @@ class Side(SoundScene):
         ]
         rows_scene(self, r"looking ahead", items,
                    "How does a limiter keep its promise? <bookmark mark='b'/> It must never let a sample through above its ceiling, "
-                   "yet it must not distort. <bookmark mark='c'/> With no warning, the only way is to clip, and clipping is "
+                   "while limiting audible artifacts; any signal-dependent gain can create distortion. <bookmark mark='c'/> With no warning, the only way is to clip, and clipping is "
                    "distortion. <bookmark mark='d'/> So the signal is delayed a few milliseconds while the detector reads ahead, "
                    "<bookmark mark='e'/> and the gain starts falling before the peak arrives, smoothly, reaching just low enough as "
                    "it does. <bookmark mark='f'/> The cost is latency: fine for mastering, a problem on stage.", marks="bcdef")

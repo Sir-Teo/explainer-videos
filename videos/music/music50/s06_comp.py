@@ -44,8 +44,9 @@ class Comp(SoundScene):
         key = VGroup(*[label(rf"ratio {r} : 1", font_size=18, color=cols[r]) for r in ("2", "4", "10")]).arrange(DOWN, buff=0.2, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.5)
         th = VGroup(DashedLine(ax.to(-20, -60), ax.to(-20, 0), color=WHITE, stroke_width=1, stroke_opacity=0.5), label(r"threshold, \ -20 dB", font_size=15, color=GREY_A).next_to(ax.to(-20, 0), UP, buff=0.1))
         knee = label(r"a 6 dB soft knee: \ the bend is gradual", font_size=16, color=GREY_A).next_to(key, DOWN, buff=0.5)
-        xl = label(r"level in, \ dB", font_size=16, color=GREY_A).next_to(ax, DOWN, buff=0.2)
-        yl = label(r"level out", font_size=16, color=GREY_A).next_to(ax, LEFT, buff=0.2)
+        ticks = VGroup(*[label(str(v), font_size=13, color=GREY_A).next_to(ax.to(v, -60), DOWN, buff=0.1) for v in (-60, -40, -20, 0)], *[label(str(v), font_size=13, color=GREY_A).next_to(ax.to(-60, v), LEFT, buff=0.1) for v in (-60, -40, -20, 0)])
+        xl = label(r"level in, \ dB", font_size=16, color=GREY_A).next_to(ax, DOWN, buff=0.46)
+        yl = label(r"level out", font_size=16, color=GREY_A).next_to(ax, LEFT, buff=0.55)
         eq = MathTex(r"y = T + \frac{x - T}{R} \quad (x > T + W/2)", font_size=30).to_corner(UR, buff=0.5).shift(DOWN * 0.4)
         head = label(r"the static curve", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
@@ -55,7 +56,7 @@ class Comp(SoundScene):
             "other over six decibels instead of at a corner. This is the gain computer of Dimitrios Giannoulis, Michael "
             "Massberg and Joshua Reiss's 2012 design, which our compressor follows."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax), FadeIn(diag), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(diag), FadeIn(xl), FadeIn(yl), FadeIn(ticks))
             vo.wait_until("a")
             self.play(FadeIn(th))
             vo.wait_until("b")
@@ -156,7 +157,7 @@ class Comp(SoundScene):
         ]
         rows_scene(self, r"what the compressor hears", items,
                    "What level does a compressor see? <bookmark mark='b'/> The peak, instant by instant, or the RMS, an average over "
-                   "tens of milliseconds. Peak detection catches every transient; RMS detection follows loudness, as the ear does. "
+                   "tens of milliseconds. Peak detection follows amplitude peaks subject to its timing; RMS estimates energy over a window and is only a rough proxy for perceived loudness. "
                    "<bookmark mark='d'/> Feedforward compressors measure their input; feedback ones measure their own output, as "
                    "many classic units did. <bookmark mark='e'/> Optical compressors used a lamp and a photocell, whose slow, "
                    "level-dependent response gave them their character. <bookmark mark='f'/> Every one of these choices changes the "

@@ -104,7 +104,7 @@ class Pitch(SoundScene):
     def formants(self):
         items = [
             (r"a voice is a source and a filter \ (Part 8): \ the vocal folds set the pitch, \ the tract sets the formants", WHITE),
-            (r"resampling moves both; \ PSOLA moves only the pitch, \ because each grain carries the tract's response", WHITE),
+            (r"resampling moves both; \ PSOLA approximately preserves the vocal envelope \\ over suitable voiced material", WHITE),
             (r"spectral shifters separate the envelope by linear prediction or the cepstrum, \ shift the rest, \ and put the envelope back", WHITE),
             (r"shift the formants alone and the same singer sounds larger or smaller, \ older or younger", TUNE),
             (r"Part 8's model made this a matter of two numbers; \ here it is done to a recording", GREY_A),
@@ -112,7 +112,7 @@ class Pitch(SoundScene):
         rows_scene(self, r"pitch and formants", items,
                    "Why does PSOLA keep the vowel? <bookmark mark='b'/> A voice is a source and a filter, as Part 8 showed: the "
                    "vocal folds set the pitch, and the vocal tract sets the formants. <bookmark mark='c'/> Resampling moves both; "
-                   "PSOLA moves only the pitch, because each grain carries the tract's response with it. <bookmark mark='d'/> "
+                   "PSOLA approximately preserves the spectral envelope over suitable voiced signals because it reuses short waveform grains; large shifts and tracking errors can alter formants and introduce artifacts. <bookmark mark='d'/> "
                    "Spectral shifters separate the envelope by linear prediction or the cepstrum, shift the rest, and put the "
                    "envelope back. <bookmark mark='e'/> Shift the formants alone, and the same singer sounds larger or smaller, "
                    "older or younger. <bookmark mark='f'/> Part 8's model made this a matter of two numbers; here it is done to a "

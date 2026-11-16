@@ -71,14 +71,14 @@ class Hook(SoundScene):
     # ------------------------------------------------------------------
     def accidents(self):
         items = [
-            (r"1951: \ `Rocket 88' was recorded at Sun Studio through a guitar amplifier damaged on the way", WHITE),
+            (r"1951: \ `Rocket 88' was recorded at Memphis Recording Service through a guitar amplifier damaged on the way", WHITE),
             (r"its fuzzy, \ torn tone was kept, \ and distortion became the sound of rock", WHITE),
             (r"1997: \ Andy Hildebrand, \ who had found oil by autocorrelation, \ released Auto-Tune", WHITE),
             (r"1998: \ Cher's `Believe' set its speed to instant: \ the voice snapped between notes, \ and a style was born", TUNE),
             (r"both are nonlinear or time-varying: \ effects that the last part's linear rules cannot describe", GREY_A),
         ]
         rows_scene(self, r"two accidents, \ two genres", items,
-                   "Two accidents made two genres. <bookmark mark='b'/> In 1951 Rocket 88 was recorded at Sun Studio in Memphis "
+                   "Two celebrated production stories illustrate how artifacts became musical resources. <bookmark mark='b'/> In 1951 Rocket 88 was recorded at Sam Phillips's Memphis Recording Service, before the Sun label was founded "
                    "through a guitar amplifier damaged on the way to the session. <bookmark mark='c'/> Its fuzzy, torn tone was "
                    "kept, and distortion became the sound of rock. <bookmark mark='d'/> In 1997 Andy Hildebrand, a geophysicist who "
                    "had used autocorrelation to find oil, released Auto-Tune, to fix singers' pitch discreetly. "

@@ -65,18 +65,14 @@ class Outro(SoundScene):
     def recap(self):
         card = objectives_card([
             r"a nonlinear shaper makes harmonics; \ its symmetry decides which",
-            r"Chebyshev polynomials give any set of harmonics exactly",
-            r"two tones make intermodulation: \ fifths stay clean, \ thirds turn to mud",
+            r"Chebyshev sums select harmonics for a unit cosine, \ within bandwidth limits",
+            r"intermodulation clarity depends on tuning, register and shaper",
             r"digital distortion aliases; \ oversampling cures it best",
             r"compressors, \ limiters, \ gates and sidechains are gains that follow levels",
             r"PSOLA and the phase vocoder untie pitch from time; \ correction snaps pitch to a scale",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A nonlinear shaper makes harmonics, and its symmetry decides which. <bookmark mark='a'/> "
-            "Chebyshev polynomials give any set of harmonics exactly. <bookmark mark='b'/> Two tones make intermodulation: "
-            "fifths stay clean, and thirds turn to mud. <bookmark mark='c'/> Digital distortion aliases, and oversampling cures "
-            "it best. <bookmark mark='d'/> Compressors, limiters, gates and sidechains are gains that follow levels. "
-            "<bookmark mark='e'/> And PSOLA and the phase vocoder untie pitch from time, while correction snaps pitch to a scale."
+            "What did we find? A nonlinear shaper makes harmonics, and its symmetry decides which. <bookmark mark='a'/> Chebyshev sums produce selected harmonics for a unit-amplitude cosine, subject to digital bandwidth limits. <bookmark mark='b'/> Two tones make intermodulation whose perceived clarity depends on tuning, register and the shaper. <bookmark mark='c'/> Digital distortion aliases, and oversampling cures it best. <bookmark mark='d'/> Compressors, limiters, gates and sidechains are gains that follow levels. <bookmark mark='e'/> And PSOLA and the phase vocoder untie pitch from time, while correction snaps pitch to a scale."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

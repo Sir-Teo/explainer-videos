@@ -28,7 +28,7 @@ class Voc(SoundScene):
                    "The vocoder began as telephone engineering. <bookmark mark='b'/> Homer Dudley at Bell Labs built it in 1939, to "
                    "send speech in less bandwidth: split speech into bands, and send only how loud each band is, a few times a "
                    "second. <bookmark mark='d'/> At the far end, impose those band levels on a buzz or a hiss, and out comes "
-                   "intelligible, robotic speech. <bookmark mark='e'/> It encrypted Allied leaders' calls in the Second World War, "
+                   "intelligible, robotic speech. <bookmark mark='e'/> Vocoder analysis formed part of SIGSALY's secure wartime speech system; the encryption involved additional machinery, "
                    "and musicians took it up from the 1970s. <bookmark mark='f'/> The voice is the modulator; a synthesizer chord is "
                    "the carrier.", marks="bdef")
 
@@ -45,9 +45,7 @@ class Voc(SoundScene):
         cap = label(r"the voice's level in each of 16 bands, \ low to high, \ through the phrase: \ the pattern the carrier will be given", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.5)
         head = label(r"what the vocoder sends", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is what our sixteen-band vocoder extracts from a sung phrase whose vowels change on every note: each band's "
-            "level, low frequencies at the bottom, through time. The vowels show as moving patterns of formants. Nothing of the "
-            "voice's pitch is kept: only this pattern, which is then stamped onto the carrier."
+            "Here is what our sixteen-band vocoder extracts from a sung phrase whose vowels change on every note: each band's level, low frequencies at the bottom, through time. The vowels show as moving patterns of formants. Fine spectral structure is discarded, though band envelopes can retain periodicity cues; the transmitted representation here is this pattern, which is then stamped onto the carrier."
         ):
             self.play(FadeIn(head), FadeIn(img), FadeIn(lo), FadeIn(hi), FadeIn(vw), FadeIn(cap))
         self.wait(0.4)
@@ -86,7 +84,7 @@ class Voc(SoundScene):
         rows_scene(self, r"ring modulation", items,
                    "Ring modulation is simpler and stranger. <bookmark mark='b'/> Multiply the sound by a sine. Since the product of "
                    "two sines is half the difference of two cosines, every component splits in two, at its frequency minus the "
-                   "sine's and plus it. <bookmark mark='d'/> The original frequencies vanish, and the new ones are not harmonic: a "
+                   "sine's and plus it. <bookmark mark='d'/> For ideal balanced multiplication there are no unshifted carrier terms, although shifted components can coincide with original frequencies; harmonicity depends on frequency ratios: a "
                    "metallic, bell-like voice. <bookmark mark='e'/> The Daleks' voices on the BBC were made this way, and "
                    "Stockhausen used it in concert works. <bookmark mark='f'/> Part 52 meets frequency modulation, its more musical "
                    "cousin.", marks="bdef")

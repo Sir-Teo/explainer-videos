@@ -1,7 +1,7 @@
 # Music, Built: Part 50, Dynamics, Distortion and Pitch
 
 Part 50 of a sixty-eight-part course in music (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the third part of Act IX, *Electric Sound*. Two accidents made two genres. A damaged
+[the syllabus](../SYLLABUS.md)), the third part of Act IX, *Electric Sound*. Two celebrated production stories illustrate artifacts becoming musical resources. A damaged
 amplifier in 1951 gave rock its fuzz. In 1998 a pitch corrector, invented by a geophysicist who had used autocorrelation
 to find oil, was set to act instantly, and the sound of a voice snapping between notes became a style. This part builds
 the effects that are not linear, or that change with the signal: shapers and their harmonics, intermodulation and
@@ -130,3 +130,7 @@ python -m videos.music.labs 50                                  # the lab (write
 * A. Wright, E.-P. Damskägg and V. Välimäki, "Real-time black-box modelling with recurrent neural networks", DAFx
   (2019); A. Wright, E.-P. Damskägg, L. Juvela and V. Välimäki, "Real-time guitar amplifier emulation with deep
   learning", *Applied Sciences* (2020).
+
+## Interpretation limits
+
+The Rocket 88 session predates Sun’s label; amplifier distortion depends on circuit, bias and level rather than device stereotypes. Modulated linear systems can create sidebands. Chebyshev harmonic control assumes a unit cosine and sufficient digital bandwidth. Intermodulation clarity is contextual, and finite oversampling reduces rather than guarantees elimination of aliasing. Compressor timing and RMS energy are not universal perceptual loudness models; limiter sample and true peaks differ. PSOLA only approximately preserves formants. Nearest-scale targeting is a heuristic, not intent recognition, and vocoder envelopes may retain pitch cues.

@@ -72,7 +72,7 @@ class Imd(SoundScene):
         head = label(r"the power chord, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Hear it on the guitar, through heavy distortion: a power chord, root, fifth and octave, then a full major chord. "
-            "The power chord stays solid; the major chord turns to mud. That is why distorted guitar plays fifths."
+            "This power chord is clearer under the chosen distortion. Register, tuning and circuit matter, and distorted guitar also uses thirds and full chords."
         ):
             self.play(FadeIn(head), FadeIn(boxes), FadeIn(cap))
         st = d["starts"]

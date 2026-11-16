@@ -28,12 +28,7 @@ class Shape(SoundScene):
             (r"amplifiers driven too hard, \ tape saturated, \ valves and pedals all bend", GREY_A),
         ]
         rows_scene(self, r"new frequencies", items,
-                   "Every effect in Part 49 was linear: it could change the level and timing of the frequencies it was given, and "
-                   "nothing else. <bookmark mark='b'/> A nonlinear system creates new frequencies. <bookmark mark='c'/> The "
-                   "simplest is a waveshaper: each output sample a fixed function of the input sample, with no memory. "
-                   "<bookmark mark='d'/> If that function bends, a pure tone comes out with harmonics: the bend is in the "
-                   "waveform, the harmonics in the spectrum. <bookmark mark='e'/> Amplifiers driven too hard, saturated tape, "
-                   "valves and pedals all bend.", marks="bcde")
+                   "Part 49's fixed LTI filters change existing spectral components; its modulated effects are time-varying and can create sidebands even while remaining linear. <bookmark mark='b'/> A nonlinear system creates new frequencies. <bookmark mark='c'/> The simplest is a waveshaper: each output sample a fixed function of the input sample, with no memory. <bookmark mark='d'/> If that function bends, a pure tone comes out with harmonics: the bend is in the waveform, the harmonics in the spectrum. <bookmark mark='e'/> Amplifiers driven too hard, saturated tape, valves and pedals all bend.", marks="bcde")
 
     # ------------------------------------------------------------------
     def curves(self):
@@ -129,12 +124,7 @@ class Shape(SoundScene):
             (r"each has a shape, \ and the shape is the sound", GREY_A),
         ]
         rows_scene(self, r"valves, \ transistors and tape", items,
-                   "Each device has its own bend. <bookmark mark='b'/> Valves bend softly and lopsidedly, with a rich second "
-                   "harmonic, then a gentle rounding. <bookmark mark='c'/> Transistors and op-amps stay clean until they hit their "
-                   "supply rail, and then clip hard. <bookmark mark='d'/> Tape saturates gently and compresses as it goes, losing a "
-                   "little of its top. <bookmark mark='e'/> Fuzz pedals clip almost to a square wave; overdrives clip softly, often "
-                   "after a filter that shapes which frequencies distort. <bookmark mark='f'/> Each has a shape, and the shape is "
-                   "the sound.", marks="bcdef")
+                   "Each device has its own bend. <bookmark mark='b'/> Some valve stages produce soft asymmetric distortion, but topology, bias and operating level determine the result. <bookmark mark='c'/> Transistor and op-amp circuits can clip hard or softly depending on feedback, bias and surrounding components. <bookmark mark='d'/> Tape saturates gently and compresses as it goes, losing a little of its top. <bookmark mark='e'/> Fuzz pedals clip almost to a square wave; overdrives clip softly, often after a filter that shapes which frequencies distort. <bookmark mark='f'/> Each has a shape, and the shape is the sound.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def three(self):

@@ -37,7 +37,7 @@ class Tuning(SoundScene):
         rows_ = text_rows([
             (r"the difference function: \ $d(\tau) = \sum_j (x_j - x_{j+\tau})^2$, \ zero at a perfect period", WHITE),
             (r"normalise it by its running mean, \ so small shifts do not win by default", WHITE),
-            (r"take the first dip below a threshold, \ not the deepest: \ that is the period, \ not twice it", TUNE),
+            (r"take the first dip below a threshold, \ not the deepest: \ a period estimate, \ reducing octave errors", TUNE),
             (r"refine between samples by fitting a parabola", WHITE),
             (r"frame by frame, \ every 5 ms, \ it tracks the voice's pitch as it moves", GREY_A),
         ], font_size=23)
@@ -45,8 +45,7 @@ class Tuning(SoundScene):
         with self.voiceover(
             "YIN goes in four steps. <bookmark mark='a'/> Compute the difference between the signal and its shifted self, "
             "squared and summed: zero at a perfect period. <bookmark mark='b'/> Normalise it by its running mean, so that tiny "
-            "shifts do not win by default. <bookmark mark='c'/> Take the first dip below a threshold, not the deepest: that is "
-            "the period, not twice it. <bookmark mark='d'/> Refine the answer between samples by fitting a parabola. "
+            "shifts do not win by default. <bookmark mark='c'/> Take the first dip below a threshold, not the deepest: this reduces octave errors but does not guarantee the correct period. <bookmark mark='d'/> Refine the answer between samples by fitting a parabola. "
             "<bookmark mark='e'/> Done frame by frame, every few milliseconds, it tracks the voice's pitch as it moves."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(rows_, 0.15)))
@@ -85,7 +84,7 @@ class Tuning(SoundScene):
         names = VGroup(*[label(n, font_size=15, color=GREY_A).next_to(ax.to(0, s), LEFT, buff=0.12) for n, s in (("C", 0), ("E", 4), ("G", 7), ("A", 9))])
         head = label(r"the target, \ at three speeds", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Then decide what note was meant: the nearest note of the scale. <bookmark mark='a'/> Here is the out-of-tune voice's "
+            "Then choose the nearest scale note as this program's target; that heuristic cannot determine a singer's intended note in every context. <bookmark mark='a'/> Here is the out-of-tune voice's "
             "pitch, as YIN measured it. <bookmark mark='b'/> A slow corrector glides towards the target over a quarter of a "
             "second: the singer's own scoops and vibrato survive, and the result sounds natural. <bookmark mark='c'/> A faster "
             "one arrives in sixty milliseconds. <bookmark mark='d'/> At speed zero, the target jumps straight to the scale note "
@@ -114,7 +113,7 @@ class Tuning(SoundScene):
                    "The story of pitch correction is the story of fuzz again. <bookmark mark='b'/> Auto-Tune was sold to fix flat "
                    "notes invisibly, and it became routine in pop production. <bookmark mark='c'/> Cher's Believe, in 1998, made "
                    "the artefact the point. <bookmark mark='d'/> T-Pain built a style on it, and in hip-hop and Afrobeats it became "
-                   "an instrument. <bookmark mark='e'/> The same software, set gently, is inaudible; set hard, it is unmistakable. "
+                   "an instrument. <bookmark mark='e'/> Gentle settings can be transparent on suitable material, while fast correction often produces an audible effect. "
                    "<bookmark mark='f'/> A tool's mistakes became an art's materials, as fuzz did.", marks="bcdef")
 
     # ------------------------------------------------------------------

@@ -72,7 +72,7 @@ class Alias(SoundScene):
         with self.voiceover(
             "The first. The sweep's high harmonics hit the Nyquist frequency, fold, and come back down as the sweep goes up: "
             "faint tones moving the wrong way, and a grainy whine. Computed eight times faster, the harmonics have room above "
-            "hearing, and the filter removes them before they can fold."
+            "hearing, and filtering before decimation removes many high components; finite oversampling does not eliminate every alias from an unlimited-bandwidth shaper."
         ):
             self.play(FadeIn(VGroup(*a[2:])), FadeIn(VGroup(*b[2:])), FadeIn(cap))
         self.wait(0.4)

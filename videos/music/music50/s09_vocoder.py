@@ -112,7 +112,7 @@ class Pv(SoundScene):
         rows_scene(self, r"extreme stretching", items,
                    "Stretch far enough and a sound becomes a texture: eight times, eighty, eight hundred. <bookmark mark='b'/> Paul "
                    "Nasca's Paulstretch, from 2006, randomises each bin's phase, giving up the attack for a smooth wash. "
-                   "<bookmark mark='c'/> A pop song slowed eight hundred per cent became an ambient piece that spread online in "
+                   "<bookmark mark='c'/> An extremely stretched pop recording became an ambient piece that spread online in "
                    "2010. <bookmark mark='d'/> Variation 50 stretches one second of the Tune to eight. <bookmark mark='e'/> At that "
                    "scale the phase vocoder is less an effect than a microscope.", marks="bcde")
 
