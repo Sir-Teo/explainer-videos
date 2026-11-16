@@ -3,11 +3,11 @@
 Checkpoint: 16 November 2026. Review all 68 episodes in order, emphasizing educational clarity,
 accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8f9ba0a596bf960bc65f53e0075`.
 
-Cross-series regression: 889 tests passed (194.05 seconds); 1,138 episode Python files parsed. The later Part 37 son-clave repair also passed its 27 targeted checks. Rechecked 749 recorded source identities across Parts 1–40; all match. A final full regression and identity audit will follow Part 68.
+Closure verification: **889 regression cases passed in 674.32 seconds**, with one upstream `audioop` deprecation warning. This run includes all shared numerical and scoring repairs; subsequent changes repaired episode presentation. Evidence: `/workspace/scratch/music-series-closure-regression.log`.
 
-Cross-episode audit: Parts 1–53: 992 source identities, 671 fresh scene configurations; recorded sheet hashes rechecked where available (Parts 27 onward); all sound/motion results pass. Evidence: `/workspace/scratch/music-series-audit.log`.
+Final cross-episode audit: **Parts 1–68: 1,284 source identities and 866 fresh scene configurations verified**. Recorded sheet hashes were rechecked where available (Parts 27 onward), and every episode's sound and motion results pass. Evidence: `/workspace/scratch/music-series-audit.log`.
 
-Fresh whole-series regression after the Part 47 timing correction: **889 cases passed in 744.42 seconds**, with one upstream `audioop` deprecation warning. Evidence: `/workspace/scratch/music-series-final-regression.log`.
+All **1,138 episode Python files** parsed after the final changes; `git diff --check` passed. Each episode has an individual polish commit and a linked verification record in `docs/qa/music/`.
 
 | Part | Source and sampled-preview pass | Final narrated production |
 |---|---|---|
