@@ -73,14 +73,14 @@ class Dissonance(SoundScene):
         side.move_to(RIGHT * 3.75 + DOWN * 0.2)
         with self.voiceover(
             f"Now count. A program finds every dissonance against the bass in all {say(g['pieces'])} movements, "
-            f"{say(g['total'])} of them, and classifies each by how it is approached and left. <bookmark mark='a'/> "
+            f"{say(g['total'])} of them, and classifies each with a simplified motion-based heuristic; it does not enforce every metrical, preparation-duration or resolution condition. <bookmark mark='a'/> "
             f"{say(round(100 * sh['passing']))} in a hundred are passing notes, {say(round(100 * sh['suspension']))} "
             f"suspensions, {say(round(100 * sh['neighbour']))} neighbours, and a handful cambiatas and anticipations. "
-            f"<bookmark mark='b'/> Only {100 * sh['free']:.1f} in a hundred fit none of the rules, <bookmark mark='c'/> and "
+            f"<bookmark mark='b'/> Only {100 * sh['free']:.1f} in a hundred fit none of these implemented categories, <bookmark mark='c'/> and "
             f"in half the movements the share is below {say(round(100 * d['palestrina_free_quantiles'][1]))} in a hundred. "
             "<bookmark mark='d'/> Some of those few are not Palestrina's at all but the program's: figures it was not "
             "told about, and slips in the encoding. A style can be a set of rules followed ninety-seven times in a "
-            "hundred, and that is what Jeppesen meant."
+            "hundred, a descriptive result of this implementation, not a reproduction of every Jeppesen rule."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
             vo.wait_until("b")

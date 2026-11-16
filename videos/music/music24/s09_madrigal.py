@@ -74,7 +74,7 @@ class Madrigal(SoundScene):
             "The habit is called word painting. <bookmark mark='a'/> When the poem rises to heaven, the line rises; when "
             "it falls or dies, the line falls and ends low; a sigh is a note broken by a rest; a word meaning alone is "
             "sung by one voice; and pain, cruelty or bitterness are sung on a harsh dissonance or a chromatic step. "
-            "<bookmark mark='b'/> Later centuries found the devices naive and called them madrigalisms. "
+            "<bookmark mark='b'/> Some later critics dismissed the devices as naive and called them madrigalisms. "
             "<bookmark mark='c'/> But Thomas Morley's handbook of 1597 states the principle plainly: a composer must "
             "fit the music to the matter of the words. And the harsh dissonance for a word of pain is where the "
             "rules of the last chapters began to break."

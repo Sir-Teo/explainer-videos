@@ -229,13 +229,14 @@ def features(piece) -> np.ndarray:
 def loo_centroid(X: np.ndarray, y: list) -> dict:
     """Nearest-centroid classification, leave-one-out, on standardized features: accuracy and the confusion counts."""
     X = np.asarray(X, float)
-    mu, sd = X.mean(0), X.std(0) + 1e-9
-    Z = (X - mu) / sd
     labels = sorted(set(y))
     y = np.array(y)
     pred = []
-    for i in range(len(Z)):
-        mask = np.arange(len(Z)) != i
+    for i in range(len(X)):
+        mask = np.arange(len(X)) != i
+        # The held-out piece must not influence feature scaling.
+        mu, sd = X[mask].mean(0), X[mask].std(0) + 1e-9
+        Z = (X - mu) / sd
         cents = {c: Z[mask & (y == c)].mean(0) for c in labels}
         pred.append(min(labels, key=lambda c: float(np.sum((Z[i] - cents[c]) ** 2))))
     pred = np.array(pred)

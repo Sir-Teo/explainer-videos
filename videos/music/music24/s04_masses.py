@@ -24,8 +24,8 @@ class Masses(SoundScene):
         cells.arrange(RIGHT, buff=0.35).move_to(DOWN * 0.1)
         head = label(r"five texts, \ the same every day: \ Kyrie, \ Gloria, \ Credo, \ Sanctus, \ Agnus Dei", font_size=24, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "The largest form of the century was the Mass: the five texts sung at every Mass, Kyrie, Gloria, Credo, "
-            "Sanctus and Agnus Dei, set as one cycle on shared material. There were three ways to share it. "
+            "The largest form of the century was the Mass: the five Ordinary sections commonly set in a polyphonic Mass cycle, Kyrie, Gloria, Credo, "
+            "Sanctus and Agnus Dei, set as one cycle on shared material. Three important techniques were. "
             "<bookmark mark='a'/> In a cantus firmus Mass, a borrowed tune runs in long notes through one voice of every "
             "movement, and the others are built round it; a popular song, L'homme armé, the armed man, served for more "
             "than forty. <bookmark mark='b'/> In a paraphrase Mass, a chant is ornamented and passed through all the "
@@ -55,7 +55,7 @@ class Masses(SoundScene):
             (r"a whole career of one composer: \ a corpus for a census", TUNE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.move_to(RIGHT * 3.8 + DOWN * 0.2)
         with self.voiceover(
-            f"Giovanni Pierluigi da Palestrina, who spent his life in the churches of Rome, wrote over a hundred Masses. "
+            f"Giovanni Pierluigi da Palestrina, whose career centered on Roman church institutions, with an earlier post in Palestrina, wrote over a hundred Masses. "
             f"<bookmark mark='a'/> This part's corpus holds {say(d['works'])} of them, {say(d['movements'])} movements in "
             "all, encoded in the Humdrum format and kept in the music21 library's corpus. <bookmark mark='b'/> Most are "
             "for four, five or six voices. <bookmark mark='c'/> A whole career of one composer, in a single style, is "

@@ -45,7 +45,7 @@ class Artusi(SoundScene):
         cap = label(r"red: \ dissonances the program cannot explain as passing, \ neighbour, \ suspension or cambiata", font_size=20, color=RED).next_to(g, DOWN, buff=0.3)
         with self.voiceover(
             "Here is the opening of Cruda Amarilli, sung from the encoding. The red marks are where the program finds a "
-            "dissonance it cannot explain by any of Palestrina's rules. The passage Artusi quoted comes near the end of "
+            "dissonance it cannot explain by any of this simplified classifier’s treatment categories. The passage Artusi quoted comes near the end of "
             "this excerpt, where the top voice, on the words ahi lasso, alas, strikes a ninth and a seventh against the "
             "bass without preparation and leaves them by leap."
         ):
@@ -89,7 +89,7 @@ class Artusi(SoundScene):
             f"{d[names[0]]['shares']['free'] * 100:.1f} dissonances in a hundred are free. <bookmark mark='b'/> In "
             f"Monteverdi's third book, from 1592, {say(round(vals[1]))}. In the fourth, {say(round(vals[2]))}; in the "
             f"fifth, {say(round(vals[3]))}. <bookmark mark='c'/> And the suspension, nearly a third of Palestrina's "
-            "dissonances, almost disappears. <bookmark mark='d'/> The change is not chaos. Monteverdi's dissonances "
+            "dissonances, almost disappears. <bookmark mark='d'/> These aggregate differences do not by themselves establish a complete compositional rule system. Monteverdi's dissonances "
             "follow other rules, of the words and of the bass line, and the next generation made those rules into the "
             "harmony of the Baroque."
         ) as vo:

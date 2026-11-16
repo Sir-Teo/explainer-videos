@@ -33,7 +33,7 @@ class Stylometry(SoundScene):
                    "many of its sonorities have thirds, how long its notes are. <bookmark mark='c'/> Put the numbers on a "
                    "common scale and average each composer's pieces into a single point, a centroid. "
                    "<bookmark mark='d'/> Give a new piece to the composer whose centroid is nearest. <bookmark mark='e'/> "
-                   "And test it honestly: hide each piece in turn, build the centroids from all the others, and see "
+                   "And test it honestly: hide each piece in turn, fit both feature scaling and centroids using only the other pieces, and see "
                    "whether the hidden one is recognized. <bookmark mark='f'/> The accuracy on pieces the method has not "
                    "seen is the only number worth reporting.", marks="bcdef")
 
@@ -180,8 +180,8 @@ class Stylometry(SoundScene):
         with self.voiceover(
             f"B is Palestrina: in its four bars the program finds {say(d['B']['free'])} free dissonances. A is "
             f"Monteverdi's fourth book: {say(d['A']['free'])} in four bars, marked in red, chosen as the densest four bars "
-            "the program could find. The ear and the census agree; but notice that the excerpt was chosen to make the "
-            "point, which is exactly the kind of choice an honest test must not make."
+            "the program could find. The selected examples illustrate the detector’s contrast, without a listener experiment; but notice that the excerpt was chosen to make the "
+            "point, which is exactly a useful teaching contrast that cannot serve as unbiased evaluation evidence."
         ):
             self.play(FadeIn(marks), FadeIn(ans))
         self.wait(0.4)

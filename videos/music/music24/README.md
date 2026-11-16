@@ -146,3 +146,11 @@ python -m videos.music.labs 24                                  # the lab (write
   (*ISMIR* 2010), whose corpus holds the encodings.
 * Part 6 for tuning and meantone; Part 14 for gap fill; Part 16 for species counterpoint; Part 17 for the choir; Part 20
   for the counterpoint search; Part 23 for the fourteenth-century corpus and *musica ficta*.
+
+## Scope and classifier validation
+
+These uneven corpora measure selected encoded repertoires, not the whole Renaissance. Thirds and sixths had earlier uses; their increasing prominence is not the sudden invention of consonance. Imitation detection checks four opening intervals and a restricted near-match rule, not complete motivic or modal analysis. The dissonance classifier uses local pitch motion and preparation heuristics without enforcing every metrical or duration constraint of Jeppesen’s account. “Free” means unclassified by that implementation, not proof of an error or of text expression.
+
+Nearest-centroid leave-one-out classification now fits feature means and standard deviations separately on each training fold, as well as its centroids. The hidden piece no longer affects its own scaling. A regression case checks a held-out outlier that would change its own classification under global scaling. Descriptive feature-weight and scatter summaries still use the whole dataset; they are not held-out predictions.
+
+Palestrina versus Monteverdi remains confounded by genre, date and encoding; book classification has only 48 pieces and related sources. Selected contrasting audio is pedagogical, not unbiased evidence of listener agreement. Pure and 31-tone thirds are close, but their fifths and complete sonorities differ.

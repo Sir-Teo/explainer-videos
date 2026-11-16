@@ -72,8 +72,8 @@ class Tuning(SoundScene):
                 pulse(snd, rows_[i][0], st, end, buff=0.08)
         with self.voiceover(
             "The first, Pythagorean, beats fastest: its third is the wide one, and the upper partials of C and E beat "
-            "against each other about sixteen times a second, a roughness rather than a pulse. The just and "
-            "thirty-one-step chords are less than a cent apart, and sound alike: smooth."
+            "against each other about sixteen times a second, which can contribute to roughness; perceived beating depends on register, spectrum and listener. The just and "
+            "thirty-one-step chords are less than a cent apart, can sound quite similar in this voicing; their fifths and full chord tuning still differ."
         ):
             self.play(FadeIn(cap))
         self.wait(0.3)

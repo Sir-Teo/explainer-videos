@@ -65,7 +65,7 @@ class Frontier(SoundScene):
             "because editors disagree, and their disagreement is itself data. <bookmark mark='c'/> The second is this "
             "part's research problem: build an attribution test held out by source. <bookmark mark='d'/> Train on pieces "
             "from some manuscripts and prints and test on pieces from others. <bookmark mark='e'/> If the accuracy "
-            "collapses, the test was recognizing scribes and printers, not composers."
+            "collapses, source effects are a candidate explanation, alongside repertoire shift and other confounds."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

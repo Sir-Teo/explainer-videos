@@ -69,21 +69,12 @@ class Imitation(SoundScene):
         side = VGroup(*[label(s, font_size=23, color=c_) for s, c_ in (
             (rf"{100 * d['share']:.0f} in 100 of Palestrina's movements open with imitation", WHITE),
             (rf"{d['exact']:,} of {d['followers']:,} later entries copy the intervals exactly".replace(",", "{,}"), WHITE),
-            (r"at the octave, \ the fourth or the fifth: \ the steps of the mode stay in place", TUNE),
-            (rf"Monteverdi's madrigals: \ {100 * d['share_monteverdi']:.0f} in 100 \ (the words come first)", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+            (r"at the octave, \ the fourth or the fifth: \ modal adjustments may be needed", TUNE),
+            (rf"Monteverdi's madrigals: \ {100 * d['share_monteverdi']:.0f} in 100 \ (genre and encoding also differ)", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 6.4))
         side.move_to(RIGHT * 3.3 + DOWN * 0.2)
         with self.voiceover(
-            "How common is it? The program reads the first four melodic intervals of every voice and asks whether later "
-            f"voices begin with the same ones. <bookmark mark='a'/> {say(round(100 * d['share']))} in a hundred of "
-            "Palestrina's Mass movements open with imitation, <bookmark mark='b'/> and of the later entries, "
-            f"{say(d['exact'])} out of {say(d['followers'])} copy the intervals exactly; the rest adjust a step, as a "
-            "tonal answer does in Part 20. <bookmark mark='c'/> They enter at the octave, the fourth or the fifth, the "
-            "intervals that keep the mode's half steps in the same places: a motive that steps E to F in one voice steps "
-            "B to C a fifth higher, and the half step is still a half step. At the second it would not be, which is "
-            "one of this part's problems. <bookmark mark='d'/> Monteverdi's madrigals "
-            f"open imitatively only {say(round(100 * d['share_monteverdi']))} times in a hundred: in his music the words "
-            "come first."
+            f"How common is it? The program reads the first four melodic intervals of every voice and asks whether later voices begin with the same ones. <bookmark mark='a'/> {say(round(100 * d['share']))} in a hundred of Palestrina's Mass movements open with imitation, <bookmark mark='b'/> and of the later entries, {say(d['exact'])} out of {say(d['followers'])} copy the intervals exactly; the other matched entries allow each interval to differ by up to one semitone with the same direction; that does not establish a tonal-answer function. <bookmark mark='c'/> They enter at the octave, the fourth or the fifth, common imitation intervals, often requiring modal adjustments rather than preserving every scale interval: a motive that steps E to F in one voice steps B to C a fifth higher, and the half step is still a half step. At the second it would not be, which is one of this part's problems. <bookmark mark='d'/> Monteverdi's madrigals open imitatively only {say(round(100 * d['share_monteverdi']))} times in a hundred: this difference may reflect genre, text setting, date and the detector’s restricted opening template."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
             for mark, r in zip("abcd", side):

@@ -80,13 +80,13 @@ class Melody(SoundScene):
                        for j in range(3)]).arrange(RIGHT, buff=0.6).to_edge(UP, buff=0.6)
         pf, mf, tf = d["Palestrina"]["forbidden_per_1000"], d["Monteverdi"]["forbidden_per_1000"], d["fourteenth century"]["forbidden_per_1000"]
         with self.voiceover(
-            "Count those too. <bookmark mark='a'/> Forbidden intervals, sevenths, tritones, augmented and diminished "
+            "Count those too. <bookmark mark='a'/> Intervals flagged by this simplified style filter, sevenths, tritones, augmented and diminished "
             f"steps and leaps beyond the octave: in Palestrina, {pf:.1f} in every thousand moves, less than one; in the "
             f"fourteenth century about {say(round(tf))}; in Monteverdi's madrigals about {say(round(mf))}. "
             "<bookmark mark='b'/> Leaps turned back by step: "
             f"{say(round(100 * d['Palestrina']['recovered']))} in a hundred in Palestrina, against "
             f"{say(round(100 * d['Monteverdi']['recovered']))} in Monteverdi. <bookmark mark='c'/> And Monteverdi leaps "
-            "more often. The madrigal bends the line to the words, and the words sometimes want an ugly interval: a "
+            "more often. The madrigal bends the line to the words, and expressive text setting can motivate intervals outside the stricter teaching style: a "
             "sigh, a cry, a sudden drop. The rules describe one composer's habits better than they describe music."
         ) as vo:
             self.play(FadeIn(key))

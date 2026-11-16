@@ -54,3 +54,10 @@ def test_corpus():
     book = R.load()
     assert sum(p.book == 0 for p in book) == 1318 and sum(p.book > 0 for p in book) == 48
     assert len({p.work for p in book if p.book == 0}) == 101
+
+
+def test_held_out_outlier_does_not_set_the_feature_scale():
+    # Including the hidden outlier in the spread reverses this classification.
+    X = np.array([[10., 0.], [0., 1.], [0., 2.], [1., 0.], [2., 0.]])
+    result = PS.loo_centroid(X, ["a", "a", "a", "b", "b"])
+    assert result["pred"][0] == "b"

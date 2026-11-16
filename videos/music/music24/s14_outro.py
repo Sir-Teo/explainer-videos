@@ -71,10 +71,10 @@ class Outro(SoundScene):
         with self.voiceover(
             "What did we find? The third became the sound of the century, and then a place to end. "
             "<bookmark mark='a'/> Equal voices built pieces from points of imitation. <bookmark mark='b'/> Palestrina's "
-            "dissonance rules are real habits, broken about three times in a hundred. <bookmark mark='c'/> Printing made "
+            "dissonance rules are real habits, unclassified by this simplified treatment detector about three times in a hundred. <bookmark mark='c'/> Printing made "
             "Josquin's name a brand, and his works a puzzle. <bookmark mark='d'/> A statistical test can tell styles "
             "apart, and is easily fooled by the wrong comparison. <bookmark mark='e'/> And Monteverdi's second practice "
-            "is visible in the numbers, book by book, exactly where Artusi said it was."
+            "is visible in the numbers, book by book, consistent with broader stylistic changes, without treating detector labels as a complete adjudication of Artusi’s critique."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
