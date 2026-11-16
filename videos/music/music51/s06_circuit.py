@@ -77,13 +77,7 @@ class Circuit(SoundScene):
         head = label(r"the ladder against its circuit equations", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         f, c, t = cv["forward"], cv["corrected"], cv["trapezoid"]
         with self.voiceover(
-            "Here they are against the reference, driven hard with plenty of resonance, at one, two, four and eight times "
-            f"forty-eight kilohertz. <bookmark mark='a'/> Forward steps are only {say(-f[0], 1)} decibels from the truth at the "
-            f"normal rate, and gain six decibels for each doubling: a first-order method. <bookmark mark='b'/> The half-sample "
-            f"correction starts {say(c[0] - f[0], 1)} decibels lower and keeps the same slope. <bookmark mark='c'/> The trapezoid "
-            f"with Newton starts at {say(-t[0], 1)} and gains twelve decibels a doubling, second order: at the normal rate it is "
-            f"already better than forward steps at eight times the rate. Each of its samples costs about {say(d['cost'], 1)} "
-            "times as much on this computer: far less than eight times the samples."
+            f"Here they are against the reference, driven hard with plenty of resonance, at one, two, four and eight times forty-eight kilohertz. <bookmark mark='a'/> Forward steps are only {say(-f[0], 1)} decibels from the oversampled numerical reference at the normal rate, and gain six decibels for each doubling: a first-order method. <bookmark mark='b'/> The half-sample correction starts {say(c[0] - f[0], 1)} decibels lower and keeps the same slope. <bookmark mark='c'/> The trapezoid with Newton starts at {say(-t[0], 1)} and gains twelve decibels a doubling, second order: at the normal rate it is already better than forward steps at eight times the rate. Each of its samples costs about {say(d['cost'], 1)} times as much on this computer: far less than eight times the samples."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lp[0]), FadeIn(lp[2:]), FadeIn(xt), FadeIn(xl), FadeIn(cap), FadeIn(ghost(lp.lines, 0.25)))
             for mark, i in zip("abc", range(3)):
@@ -101,7 +95,7 @@ class Circuit(SoundScene):
                            r"uses the circuit's equations with every tanh removed; \ the other, \ the full circuit. \ Which is the circuit?", width=10.4)
         with self.voiceover(
             "Your turn. The Tune's first phrase on a sawtooth driven hard into the ladder, twice, at the same loudness. One run "
-            "uses the circuit's equations with every tanh removed, a perfectly linear filter; the other, the full circuit. "
+            "uses the circuit's equations with every tanh removed, a filter linear in its audio input for a fixed cutoff trajectory; the other, the full circuit. "
             "Which is the circuit?"
         ):
             self.play(FadeIn(card))

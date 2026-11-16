@@ -69,12 +69,7 @@ class Additive(SoundScene):
             (r"the same list is what the hook's search was matching", GREY_A),
         ]
         rows_scene(self, r"a tone is a list", items,
-                   "Fourier's theorem says this always works. <bookmark mark='b'/> Any periodic wave is a sum of sines at whole "
-                   "multiples of its frequency, as Part 3 showed. <bookmark mark='c'/> So a steady tone is a list of numbers: the "
-                   "level, and the phase, of each harmonic. <bookmark mark='d'/> For steady tones the ear mostly ignores the "
-                   "phases, as the same part found: the levels are the colour. <bookmark mark='e'/> Additive synthesis turns the list back "
-                   "into sound, one sine for each number. <bookmark mark='f'/> And the same list is what the hook's search was "
-                   "matching.", marks="bcdef")
+                   "Fourier's theorem says this always works. <bookmark mark='b'/> Any periodic wave is a sum of sines at whole multiples of its frequency, as Part 3 showed. <bookmark mark='c'/> So a steady tone is a list of numbers: the level, and the phase, of each harmonic. <bookmark mark='d'/> For resolved harmonics in suitable steady tones, phase often has less influence than harmonic levels; phase can matter for unresolved components and waveform envelopes, as the same part found: the levels are the colour. <bookmark mark='e'/> Additive synthesis turns the list back into sound, one sine for each number. <bookmark mark='f'/> And the same list is what the hook's search was matching.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def hammond(self):
@@ -83,18 +78,13 @@ class Additive(SoundScene):
         rat = VGroup(*[label(f"{r:g}" if r != 1.5 else "1.5", font_size=14, color=GREY_A).next_to(bars[j][2], DOWN, buff=0.12) for j, r in enumerate(d["ratios"])])
         rl = label(r"times the note", font_size=14, color=GREY_A).next_to(rat, LEFT, buff=0.25)
         info = VGroup(label(r"1935: \ Laurens Hammond's organ", font_size=20, color=WHITE),
-                      label(r"91 steel tonewheels on one shaft, \ each beside a magnetic pickup", font_size=17, color=GREY_A),
+                      label(r"91 tonewheels on geared shafts, \ each beside a magnetic pickup", font_size=17, color=GREY_A),
                       label(r"a wheel's bumps make a near-sine at its pitch", font_size=17, color=GREY_A),
                       label(r"nine drawbars, \ each a harmonic, \ each in nine steps", font_size=17, color=GREY_A),
                       label(r"16' \ is an octave below; \ 8' \ the note; \ 4' \ an octave up", font_size=17, color=GREY_A)).arrange(DOWN, buff=0.22, aligned_edge=LEFT).to_edge(RIGHT, buff=0.5)
         head = label(r"the Telharmonium in a cabinet", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "In 1935 Laurens Hammond put the Telharmonium in a cabinet. <bookmark mark='a'/> Ninety-one steel tonewheels turn on "
-            "one shaft, each beside a magnetic pickup, and a wheel's bumps make a near-sine at its pitch. <bookmark mark='b'/> "
-            "Nine drawbars mix them, each a harmonic, each in nine steps from silent to full. The names are organ-pipe lengths "
-            "in feet: sixteen feet sounds an octave below the key, eight feet the key itself, four feet an octave up, and the "
-            "odd ones, five and a third, two and two thirds, one and three fifths, one and a third, are the fifths and the "
-            "third between."
+            "In 1935 Laurens Hammond put the Telharmonium in a cabinet. <bookmark mark='a'/> A classic ninety-one-tone generator uses multiple geared shafts carrying steel tonewheels, each beside a magnetic pickup, and a wheel's bumps make a near-sine at its pitch. <bookmark mark='b'/> Nine drawbars mix them, each a harmonic, each in nine steps from silent to full. The names are organ-pipe lengths in feet: sixteen feet sounds an octave below the key, eight feet the key itself, four feet an octave up, and the odd ones, five and a third, two and two thirds, one and three fifths, one and a third, are the fifths and the third between."
         ) as vo:
             self.play(FadeIn(head), FadeIn(info[0]), FadeIn(ghost(bars, 0.3)))
             vo.wait_until("a")
@@ -161,12 +151,7 @@ class Additive(SoundScene):
         head = label(r"harmonics borrowed from the scale", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         note = label(r"91 wheels serve every key: \ there is no wheel at the true fifth or third of each note", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "One economy hides in the Hammond's harmonics. <bookmark mark='a'/> Ninety-one wheels must serve every key, so there "
-            "is no wheel at the true third harmonic of each note. Each drawbar borrows the wheel of the nearest note of the "
-            f"equal-tempered scale. <bookmark mark='b'/> The fifths come out {say(abs(d['cents'][4]), 1)} cents flat, too "
-            f"little to hear as mistuning; <bookmark mark='c'/> but the major third, the fifth harmonic, is "
-            f"{say(d['cents'][6], 1)} cents sharp, Part 6's tempered third. It beats slowly against the true harmonics of "
-            "anything else in the room, and that slow shimmer is part of the Hammond's sound."
+            f"One economy hides in the Hammond's harmonics. <bookmark mark='a'/> Ninety-one wheels must serve every key, so there is no wheel at the true third harmonic of each note. Each drawbar borrows the wheel of the nearest note of the equal-tempered scale. <bookmark mark='b'/> The fifths come out {say(abs(d['cents'][4]), 1)} cents flat, a small offset whose audibility depends on the listening context; <bookmark mark='c'/> but the major third, the fifth harmonic, is {say(d['cents'][6], 1)} cents sharp, Part 6's tempered third. It beats slowly against the true harmonics of anything else in the room, and that slow shimmer is part of the Hammond's sound."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
             vo.wait_until("a")

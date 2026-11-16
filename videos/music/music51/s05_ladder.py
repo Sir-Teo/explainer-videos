@@ -117,17 +117,12 @@ class Ladder(SoundScene):
             MathTex(r"\text{at } s = j\omega_c: \quad 1 + j = \sqrt{2}\,e^{j\pi/4}", font_size=34),
             MathTex(r"(1 + j)^4 = 4\,e^{j\pi} = -4", font_size=34),
             MathTex(r"(1 + j)^4 + k = k - 4", font_size=34),
-            MathTex(r"k = 4: \ \text{the denominator vanishes; the filter rings by itself}", font_size=34),
+            MathTex(r"k = 4: \ \text{ideal linear stability boundary: sustained ringing is possible}", font_size=34),
         ).arrange(DOWN, buff=0.45).move_to(UP * 0.1)
         side = label(r"each rung delays the cutoff frequency by 45 degrees; \ four make 180: \ the feedback stops subtracting and adds", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.5)
         head = label(r"why four is the edge", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Why does it ring? <bookmark mark='a'/> At the cutoff frequency, each rung's factor is one plus j: a gain of one over "
-            "root two and a phase lag of forty-five degrees. <bookmark mark='b'/> Four rungs lag a hundred and eighty degrees, "
-            "and one plus j to the fourth is exactly minus four. <bookmark mark='c'/> So the denominator at the cutoff is k "
-            "minus four. <bookmark mark='d'/> At k equals four it vanishes: the subtracted feedback has turned round and adds, "
-            "and the filter oscillates with no input at all, at its cutoff. Moog's players found this edge and used it, as we "
-            "will in the next chapter."
+            "Why does it ring? <bookmark mark='a'/> At the cutoff frequency, each rung's factor is one plus j: a gain of one over root two and a phase lag of forty-five degrees. <bookmark mark='b'/> Four rungs lag a hundred and eighty degrees, and one plus j to the fourth is exactly minus four. <bookmark mark='c'/> So the denominator at the cutoff is k minus four. <bookmark mark='d'/> At k equals four the ideal linear model is marginally stable at its cutoff; perturbations can sustain ringing. In the nonlinear circuit, sufficient feedback and a perturbation can start oscillation, with saturation limiting its amplitude. Moog's players found this edge and used it, as we will in the next chapter."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(lines, 0.25)))
             for mark, ln in zip("abcd", lines):

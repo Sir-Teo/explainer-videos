@@ -527,7 +527,7 @@ def compute_toms() -> dict:
     roll_ = mix(parts, duration=8 * 0.3 + 1.0)
     c = concat([*clips, roll_], gap=0.5, names=names + ["roll"])
     return {**out, "starts": {k: float(c.events[k]) for k in names + ["roll"]},
-            "clips": {"three": save("toms.three", c, detail="the ladder filter alone, feedback 3.9, struck by a 2 ms pulse at cutoffs 80, 125 and 190 Hz; then a fill on the three")}}
+            "clips": {"three": save("toms.three", c, needs="headphones or bass-capable speakers", detail="the ladder filter alone, feedback 3.9, struck by a 2 ms pulse at cutoffs 80, 125 and 190 Hz; then a fill on the three")}}
 
 
 # ---------------------------------------------------------------------------------------------------------- Variation 51

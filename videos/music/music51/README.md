@@ -1,7 +1,7 @@
 # Music, Built: Part 51, Synthesis I: Oscillators and Filters
 
 Part 51 of a sixty-eight-part course in music (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the fourth part of Act IX, *Electric Sound*. The first synthesizer weighed nearly two
+[the syllabus](../SYLLABUS.md)), the fourth part of Act IX, *Electric Sound*. One early large-scale electrical instrument weighed nearly two
 hundred tons: Thaddeus Cahill's Telharmonium (1906) summed the near-sines of dynamos and sent them down telephone lines,
 and it failed. Sixty years later Robert Moog's modules did the job by subtraction, and *Switched-On Bach* sold over a
 million copies. This part builds a synthesizer: oscillators that do not alias, the Moog ladder run against its own circuit
@@ -150,3 +150,7 @@ python -m videos.music.labs 51                                  # the lab (write
   J. Turian and M. Henry, "I'm sorry for your loss: spectrally-based audio distances are bad at pitch" (2020); B. Hayes
   and others, "A review of differentiable digital signal processing for music and speech synthesis", *Frontiers in
   Signal Processing* (2024).
+
+## Interpretation limits
+
+The Telharmonium was not the first electrically generated tone device. Classic Hammond generators use geared shafts, and tempered-drawbar offsets refer to this simplified model. Phase audibility depends on harmonic resolution and envelopes. PolyBLEP reduces aliasing rather than eliminating it, and off-grid-energy metrics include windowing effects. The ladder’s k=4 boundary belongs to the ideal linear model; nonlinear oscillation needs a perturbation and amplitude limiting. Numerical comparisons use an oversampled reference rather than exact physical truth. Patch fitting is a finite sampled search with a chosen spectral metric, not a proof of perceptual identity or impossibility.

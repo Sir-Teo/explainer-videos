@@ -82,8 +82,8 @@ class Hook(SoundScene):
             (r"subscribers heard it through the telephone, \ and it bled into other people's calls", WHITE),
             (r"by 1914 the company had failed; \ no recording of it survives", GREY_A),
         ]
-        rows_scene(self, r"the first synthesizer weighed two hundred tons", items,
-                   "The first synthesizer weighed two hundred tons. <bookmark mark='b'/> In 1897 Thaddeus Cahill patented a way to "
+        rows_scene(self, r"an early electrical instrument at industrial scale", items,
+                   "One early large-scale electrical instrument weighed nearly two hundred tons; it was not the first device to generate tones electrically. <bookmark mark='b'/> In 1897 Thaddeus Cahill patented a way to "
                    "make music from electricity and send it down wires. <bookmark mark='c'/> In 1906 his Telharmonium began to play "
                    "in New York: dynamos, one for each pitch, nearly two hundred tons of them, filling a floor. "
                    "<bookmark mark='d'/> Each dynamo made something close to a sine wave, and a note's colour was a sum of them: "

@@ -121,7 +121,7 @@ class Shapes(SoundScene):
             "The last trick is to use many oscillators on one note, slightly detuned: unison. <bookmark mark='a'/> One sawtooth "
             "has one line at each harmonic; here is its eighth, near a kilohertz. <bookmark mark='b'/> Seven sawtooths spread "
             f"over thirty-six cents put seven lines there, over {say(d['beat_hz'])} hertz, and they beat against each other, "
-            "never twice the same. <bookmark mark='c'/> The spread in hertz grows with the harmonic, so the top of the "
+            "with a changing beating pattern; fixed-frequency components do not guarantee mathematical nonrepetition. <bookmark mark='c'/> The spread in hertz grows with the harmonic, so the top of the "
             "spectrum shimmers most: the same thickening that sixteen violins give in Part 41, made by arithmetic."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(xl))
@@ -161,15 +161,15 @@ class Shapes(SoundScene):
     def history(self):
         items = [
             (r"an analogue oscillator drifts: \ its pitch wanders by cents as it warms", WHITE),
-            (r"two of them never quite agree, \ so every analogue chord had a little unison in it", WHITE),
+            (r"two of them never quite agree, \ so detuned multiple-oscillator patches can have beating", WHITE),
             (r"early digital synthesizers were exact, \ and sounded thin: \ designers added drift back on purpose", WHITE),
             (r"virtual analogue: \ the 1990s' name for imitating circuits, \ flaws and all", TUNE),
             (r"what to imitate, \ and what to improve, \ is still a matter of taste", GREY_A),
         ]
         rows_scene(self, r"perfect and imperfect", items,
                    "Unison began as a flaw. <bookmark mark='b'/> An analogue oscillator drifts; its pitch wanders by cents as it "
-                   "warms. <bookmark mark='c'/> Two of them never quite agree, so every analogue chord had a little unison in it. "
-                   "<bookmark mark='d'/> Early digital synthesizers were exact, and sounded thin beside them, so designers added the "
+                   "warms. <bookmark mark='c'/> Two of them never quite agree, so detuned multiple-oscillator patches can have beating. "
+                   "<bookmark mark='d'/> Some designers deliberately added detuning and drift to digital patches to imitate this texture, so designers added the "
                    "drift back on purpose. <bookmark mark='e'/> Virtual analogue was the 1990s' name for imitating the circuits, "
                    "flaws and all. <bookmark mark='f'/> What to imitate, and what to improve, is still a matter of taste.",
                    marks="bcdef")

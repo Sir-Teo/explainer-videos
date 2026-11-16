@@ -93,7 +93,7 @@ class Outro(SoundScene):
             "What did we find? Additive synthesis sums sines, and the Hammond borrows tempered ones. <bookmark mark='a'/> "
             "Subtractive synthesis filters a rich wave: a few knobs move every harmonic. <bookmark mark='b'/> A naive digital "
             "sawtooth aliases, and band-limited steps cut it by fourteen to sixteen decibels. <bookmark mark='c'/> The ladder "
-            "is four poles and a loop: it rings at k equals four, and its transistors saturate. <bookmark mark='d'/> The "
+            "is four poles and a loop: its ideal linear stability boundary is k equals four, and its transistors saturate. <bookmark mark='d'/> The "
             "trapezoid with Newton's method steps its circuit to second order. <bookmark mark='e'/> And envelopes, LFOs, pulse "
             "width, sync and unison move a sound, while fitting finds its knobs."
         ) as vo:

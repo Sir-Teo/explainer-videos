@@ -63,7 +63,7 @@ class Drums(SoundScene):
             f"The kick: a resonator at {say(d['f'])} hertz with a Q of {say(d['q'])}. <bookmark mark='a'/> The formula predicts a "
             f"decay time of {say(d['tau_theory'], 3)} seconds, and the computed kick's envelope measures {say(d['tau'], 3)}. "
             "<bookmark mark='b'/> One detail makes it a kick and not a bass note. While the trigger pulse lasts, it pulls the "
-            "circuit's resonance up, here by sixty per cent, relaxing within twenty milliseconds. Measured cycle by cycle the "
+            "circuit's resonance up, here by sixty per cent, relaxing with an approximately twenty-millisecond time constant. Measured cycle by cycle the "
             f"first periods run at {say(ch[0])}, {say(ch[1])}, {say(ch[2])} and {say(ch[3])} hertz: a falling chirp that the ear "
             "hears as the beater's thump."
         ) as vo:
@@ -162,11 +162,12 @@ class Drums(SoundScene):
         cells = choice_boxes([rf"{d['low']['fc']:.0f} Hz", rf"{d['mid']['fc']:.0f} Hz", rf"{d['high']['fc']:.0f} Hz", r"a fill"], width=2.4, buff=0.5,
                              colors=[EAR, TUNE, BLUE, GREY_A]).move_to(UP * 0.5)
         dec = VGroup(*[label(rf"decay {d[k]['tau']:.2f} s", font_size=16, color=GREY_A).next_to(cells[i], DOWN, buff=0.2) for i, k in enumerate(("low", "mid", "high"))])
-        cap = label(r"the ladder filter alone, \ $k = 3.9$, \ struck by a 2 ms pulse: \ chapter five's filter as a drum", font_size=17, color=GREY_A).to_edge(DOWN, buff=1.0)
+        cap = VGroup(label(r"the ladder filter alone, \ $k = 3.9$, \ struck by a 2 ms pulse: \ chapter five's filter as a drum", font_size=17, color=GREY_A),
+                     label(r"headphones or bass-capable speakers", font_size=16, color=TUNE)).arrange(DOWN, buff=0.16).to_edge(DOWN, buff=1.0)
         head = label(r"the ladder, \ struck", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "And any resonant filter is a drum. Chapter five's ladder, its feedback at three point nine, just short of "
-            "oscillating, struck by a two-millisecond pulse, at three cutoffs, then a fill on all three."
+            "oscillating, struck by a two-millisecond pulse, at three cutoffs, then a fill on all three. Use headphones or bass-capable speakers for these low toms."
         ):
             self.play(FadeIn(head), FadeIn(cells), FadeIn(dec), FadeIn(cap))
         st = d["starts"]

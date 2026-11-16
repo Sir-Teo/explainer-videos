@@ -54,7 +54,7 @@ class Alias(SoundScene):
         with self.voiceover(
             f"Here is one high note, D seven at {say(f0)} hertz, sampled at forty-eight kilohertz. Only ten of its harmonics fit "
             "below the twenty-four kilohertz limit; they are the white marks. <bookmark mark='a'/> The naive sawtooth's spectrum "
-            "is a forest: every peak that is not on a mark is a harmonic folded back, some as loud as the real ones high up, "
+            "is a forest: much of the off-grid energy comes from folded harmonics, with finite-window leakage also relevant to this metric, some as loud as the real ones high up, "
             "scattered down to the bass. <bookmark mark='b'/> The same note from a band-limited oscillator, PolyBLEP, which we "
             "are about to build: the same ten harmonics, and the forest cut far back."
         ) as vo:
@@ -77,17 +77,11 @@ class Alias(SoundScene):
         xt = VGroup(*[label(f"{f:g}", font_size=14, color=GREY_A).next_to(lp.to(i, -70), DOWN, buff=0.12) for i, f in enumerate(d["freqs"])])
         xl = label(r"the note, \ Hz", font_size=15, color=GREY_A).next_to(xt, DOWN, buff=0.15)
         key = VGroup(*[label(t, font_size=17, color=c) for _, t, c in order]).arrange(DOWN, buff=0.3, aligned_edge=LEFT).next_to(lp, RIGHT, buff=0.5)
-        add = label(r"additive: \ $-119$ \ (exact)", font_size=17, color=GREY_A).next_to(key, DOWN, buff=0.4, aligned_edge=LEFT)
+        add = label(r"additive: \ $-119$ dB \ (numerical floor)", font_size=17, color=GREY_A).next_to(key, DOWN, buff=0.4, aligned_edge=LEFT)
         head = label(r"aliasing against pitch", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         n, p, b = cv["naive"], cv["polyblep"], cv["blit"]
         with self.voiceover(
-            "Measure it across six octaves: the share of each note's energy that lies off its harmonics. <bookmark mark='a'/> The "
-            f"naive sawtooth: {say(-n[0], 1)} decibels down at a hundred and ten hertz, and only {say(-n[-1], 1)} at thirty-five "
-            "hundred, three decibels worse for every octave, because each octave up puts twice the folded harmonics into the "
-            f"band. <bookmark mark='b'/> PolyBLEP is {say(min(np.array(n) - np.array(p)))} to {say(max(np.array(n) - np.array(p)))} decibels better everywhere, {say(-p[2], 1)} at A four. "
-            f"<bookmark mark='c'/> Run it at twice the rate and filter, and you gain another {say(min(np.array(p) - np.array(cv['polyblep2'])))} to {say(max(np.array(p) - np.array(cv['polyblep2'])))}. <bookmark mark='d'/> "
-            f"BLIT, an older method, sits flat near {say(-b[2])} decibels. And adding sines below the limit, one by one, is exact "
-            "to the arithmetic, at the cost of a sine for every harmonic."
+            f"Measure it across six octaves: the share of each note's energy that lies off its harmonics. <bookmark mark='a'/> The naive sawtooth: {say(-n[0], 1)} decibels down at a hundred and ten hertz, and only {say(-n[-1], 1)} at thirty-five hundred, three decibels worse for every octave, as a trend for these tested waveforms and frequencies, rather than an exact law for every note. <bookmark mark='b'/> PolyBLEP is {say(min(np.array(n) - np.array(p)))} to {say(max(np.array(n) - np.array(p)))} decibels better everywhere, {say(-p[2], 1)} at A four. <bookmark mark='c'/> Run it at twice the rate and filter, and you gain another {say(min(np.array(p) - np.array(cv['polyblep2'])))} to {say(max(np.array(p) - np.array(cv['polyblep2'])))}. <bookmark mark='d'/> BLIT, an older method, sits flat near {say(-b[2])} decibels. And adding sines below the limit, one by one, is exact to the arithmetic, at the cost of a sine for every harmonic."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lp[0]), FadeIn(lp[2:]), FadeIn(xt), FadeIn(xl), FadeIn(ghost(lp.lines, 0.25)))
             for mark, i in zip("abcd", range(4)):

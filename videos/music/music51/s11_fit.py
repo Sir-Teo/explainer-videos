@@ -132,7 +132,7 @@ class Fit(SoundScene):
         side = VGroup(label(r"distance to the hook's target", font_size=18, color=WHITE),
                       label(rf"bright: \ near, \ {lo:.1f} dB", font_size=16, color=TUNE),
                       label(rf"dark: \ far, \ up to {hi:.0f} dB", font_size=16, color=GREY_A),
-                      label(rf"best: \ {f['cutoff']:.0f} Hz, \ $k = {f['res']:g}$, \ mix {f['mix']:g}", font_size=16, color=WHITE)).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(RIGHT, buff=0.4)
+                      label(rf"best: \ {f['cutoff']:.0f} Hz, \ $k = {f['res']:g}$, \ mix {f['mix']:g}", font_size=16, color=WHITE)).arrange(DOWN, buff=0.25, aligned_edge=LEFT).scale(0.9).to_edge(RIGHT, buff=0.55)
         head = label(r"the landscape, \ at the best mix", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Here is what the search saw for the hook's target, at the best mix: the distance for every cutoff and feedback "
@@ -206,7 +206,7 @@ class Fit(SoundScene):
             pulse(snd, boxes[1], st["patch"], c.duration, buff=0.08)
         with self.voiceover(
             "The organ sits an octave lower than its key, round and deep; the patch is a bright, mostly square tone at the key's own "
-            "pitch. A distance can say that a sound is out of reach, but not which module would bring it closer. Here the "
+            "pitch. A large error in this sampled search suggests a mismatch between the target and this patch family; it does not prove that no setting could fit, but not which module would bring it closer. Here the "
             "answer is a second oscillator an octave down: a change to the patch, not to its knobs."
         ):
             self.play(Indicate(sub, color=GREY_A, scale_factor=1.05))
