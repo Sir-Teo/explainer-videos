@@ -20,7 +20,7 @@ class Fdn(SoundScene):
         items = [
             (r"Jean-Marc Jot and Antoine Chaigne \ (1991): \ several delay lines whose outputs are mixed and fed back into all of them", WHITE),
             (r"every echo from every line returns into every line: \ the echoes multiply at each pass", WHITE),
-            (r"the mixing matrix must lose no energy: \ an orthogonal matrix, \ like a rotation", WHITE),
+            (r"orthogonal mixing preserves energy here; \ other stable structures exist", WHITE),
             (r"then a gain on each line sets the decay exactly, \ and a low-pass makes the highs die sooner", TUNE),
             (r"Schroeder's combs are the special case where nothing is mixed", GREY_A),
         ]
@@ -28,7 +28,7 @@ class Fdn(SoundScene):
                    "The design that replaced Schroeder's is the feedback delay network. <bookmark mark='b'/> Jean-Marc Jot and "
                    "Antoine Chaigne in 1991 took several delay lines and fed each one's output back into all of them, mixed. "
                    "<bookmark mark='c'/> Every echo from every line returns into every line, so the echoes multiply at each pass. "
-                   "<bookmark mark='d'/> The mixing matrix must lose no energy: an orthogonal matrix, like a rotation. "
+                   "<bookmark mark='d'/> An orthogonal mixing matrix preserves energy and is convenient here; other stable networks can use different mixing structures. "
                    "<bookmark mark='e'/> Then a gain on each line sets the decay exactly, and a low-pass in each loop makes the "
                    "highs die sooner, as in a hall. <bookmark mark='f'/> Schroeder's combs are the special case in which nothing "
                    "is mixed.", marks="bcdef")
@@ -47,10 +47,7 @@ class Fdn(SoundScene):
         lines = VGroup(*[label(rf"line {i + 1}: \ {ms} ms", font_size=17, color=WHITE) for i, ms in enumerate(d["fdn_ms"])]).arrange(DOWN, buff=0.13, aligned_edge=LEFT).move_to(RIGHT * 3.4 + UP * 0.2)
         head = label(r"eight lines, \ one matrix", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Ours has eight delay lines, from about twenty-nine to seventy-three milliseconds, lengths with no common "
-            "factors so that their echoes never line up. <bookmark mark='a'/> The mixing matrix is a Hadamard matrix: every "
-            "entry plus or minus one, scaled by one over root eight. Each line's output is spread into every line, with "
-            "signs that keep the total energy exactly the same."
+            "Ours has eight delay lines, from about twenty-nine to seventy-three milliseconds, chosen to reduce shared short periods; finite integer delay lengths still have common multiples, so coincidences are not impossible. <bookmark mark='a'/> The mixing matrix is a Hadamard matrix: every entry plus or minus one, scaled by one over root eight. Each line's output is spread into every line, with signs that keep the total energy exactly the same."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines))
             vo.wait_until("a")

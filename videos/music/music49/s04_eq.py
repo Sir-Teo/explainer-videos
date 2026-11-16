@@ -109,26 +109,16 @@ class Eq(SoundScene):
             (r"both are biquads in series, \ the cookbook's peak and shelf filters", GREY_A),
         ]
         rows_scene(self, r"the parametric equalizer", items,
-                   "The studio equalizer has a short history. <bookmark mark='b'/> Early ones had a few fixed frequencies and "
-                   "boosts, chosen by switches. <bookmark mark='c'/> In 1972 George Massenburg described the parametric equalizer, "
-                   "in which every band's frequency, width and gain can be set continuously. <bookmark mark='d'/> The width is set "
-                   "by Q, the centre frequency divided by the bandwidth. <bookmark mark='e'/> A graphic equalizer instead fixes "
-                   "many narrow bands and gives each a slider. <bookmark mark='f'/> Both are biquads in series: the cookbook's "
-                   "peak and shelf filters.", marks="bcdef")
+                   "The studio equalizer has a short history. <bookmark mark='b'/> Early ones had a few fixed frequencies and boosts, chosen by switches. <bookmark mark='c'/> In 1972 George Massenburg described the parametric equalizer, in which every band's frequency, width and gain can be set continuously. <bookmark mark='d'/> The width is set by Q, the centre frequency divided by the bandwidth. <bookmark mark='e'/> A graphic equalizer instead fixes many narrow bands and gives each a slider. <bookmark mark='f'/> Digital equalizers can use biquads, while parallel, FIR and analog architectures also exist.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def practice(self):
         items = [
             (r"cut before you boost: \ removing a mud band often helps more than lifting the rest", WHITE),
-            (r"high-pass everything that has no business below 100 Hz, \ so the bass and kick have room", WHITE),
+            (r"high-pass unwanted lows where useful; \ choose the cutoff for the source", WHITE),
             (r"a narrow cut can remove a resonance; \ a broad, \ gentle shelf changes a whole mix's colour", WHITE),
             (r"equalizing two instruments in complementary ways separates them \ (Part 41's masking)", TUNE),
             (r"Part 56 does this to a real mix", GREY_A),
         ]
         rows_scene(self, r"equalizing in practice", items,
-                   "Engineers have rules of thumb. <bookmark mark='b'/> Cut before you boost: removing a muddy band often helps "
-                   "more than lifting the rest. <bookmark mark='c'/> High-pass everything that has no business below a hundred "
-                   "hertz, so the bass and the kick have room. <bookmark mark='d'/> A narrow cut can remove a resonance; a broad, "
-                   "gentle shelf changes a whole mix's colour. <bookmark mark='e'/> And equalizing two instruments in "
-                   "complementary ways separates them, the masking of Part 41. <bookmark mark='f'/> Part 56 does this to a real "
-                   "mix.", marks="bcdef")
+                   "Engineers have rules of thumb. <bookmark mark='b'/> Cut before you boost: removing a muddy band often helps more than lifting the rest. <bookmark mark='c'/> High-pass unwanted low-frequency content where useful; select the cutoff by source and arrangement rather than applying one hundred hertz to everything. <bookmark mark='d'/> A narrow cut can remove a resonance; a broad, gentle shelf changes a whole mix's colour. <bookmark mark='e'/> And equalizing two instruments in complementary ways separates them, the masking of Part 41. <bookmark mark='f'/> Part 56 does this to a real mix.", marks="bcdef")

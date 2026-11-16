@@ -23,11 +23,7 @@ class Phase(SoundScene):
             (r"for a sharp attack, \ where every frequency must arrive together, \ it can be heard", GREY_A),
         ]
         rows_scene(self, r"timing, \ frequency by frequency", items,
-                   "A filter does two things to each frequency. <bookmark mark='b'/> It changes its level, and also its timing: "
-                   "the phase response. <bookmark mark='c'/> The group delay says how late each frequency's energy arrives; it is "
-                   "the slope of the phase. <bookmark mark='d'/> An all-pass filter changes no level at all, only the timing. "
-                   "<bookmark mark='e'/> For a steady tone a phase shift is almost inaudible, as Part 4 found. "
-                   "<bookmark mark='f'/> For a sharp attack, where every frequency must arrive together, it can be heard.",
+                   "A filter does two things to each frequency. <bookmark mark='b'/> It changes its level, and also its timing: the phase response. <bookmark mark='c'/> The group delay says how late each frequency's energy arrives; it is minus the derivative of unwrapped phase with respect to angular frequency. <bookmark mark='d'/> An all-pass filter changes no level at all, only the timing. <bookmark mark='e'/> For a steady tone a phase shift is almost inaudible, as Part 4 found. <bookmark mark='f'/> For a sharp attack, where every frequency must arrive together, it can be heard.",
                    marks="bcdef")
 
     # ------------------------------------------------------------------
@@ -72,6 +68,7 @@ class Phase(SoundScene):
         ax = logf_axes(width=9.0, height=3.2, flo=30, fhi=20000, ylo=0, yhi=max(d["group_delay_ms"]) * 1.1, center=DOWN * 0.3, ticks=(100, 1000, 10000))
         cv = curve(d["f"], d["group_delay_ms"], ax.to, color=TUNE, width=3)
         yl = label(r"delay, \ ms", font_size=16, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        yt = VGroup(*[label(f"{v:g}", font_size=14, color=GREY_A).next_to(ax.to(30, v), LEFT, buff=0.1) for v in (0, 5, 10, 15, 20) if v <= max(d["group_delay_ms"]) * 1.1])
         g0 = max(d["group_delay_ms"])
         g1 = min(d["group_delay_ms"])
         head = label(rf"the group delay of {d['stages']} all-passes", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
@@ -80,7 +77,7 @@ class Phase(SoundScene):
             f"back about {say(g0)} milliseconds; the highest pass in {say(g1, 1)}. Spread a click's frequencies over twenty "
             "milliseconds like that, and the ear hears the order they arrive in: high first, then low, a falling chirp."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax), FadeIn(yl))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(yl), FadeIn(yt))
             vo.wait_until("a")
             self.play(Create(cv), run_time=1.5)
         self.wait(0.4)
@@ -89,16 +86,11 @@ class Phase(SoundScene):
     # ------------------------------------------------------------------
     def linear(self):
         items = [
-            (r"a symmetric FIR filter delays every frequency equally: \ linear phase, \ no smearing", WHITE),
-            (r"but its delay is half its length, \ and its ringing comes before the attack as well as after: \ pre-echo", WHITE),
+            (r"a symmetric FIR filter delays every frequency equally: \ linear phase: constant passband group delay, \ with possible ringing", WHITE),
+            (r"but its delay is half its order, or length minus one divided by two, in samples, \ and its ringing comes before the attack as well as after: \ pre-echo", WHITE),
             (r"a minimum-phase filter puts all its energy as early as possible: \ no pre-echo, \ some phase distortion", WHITE),
-            (r"analogue filters, \ and the biquads modelled on them, \ are minimum phase", TUNE),
+            (r"many familiar EQ sections are minimum phase; \ all-pass filters are counterexamples", TUNE),
             (r"mastering engineers choose between them by ear, \ case by case", GREY_A),
         ]
         rows_scene(self, r"linear phase and minimum phase", items,
-                   "Can a filter avoid smearing? <bookmark mark='b'/> A symmetric FIR filter delays every frequency equally: linear "
-                   "phase, no smearing. <bookmark mark='c'/> But its delay is half its length, and its ringing comes before the "
-                   "attack as well as after: pre-echo. <bookmark mark='d'/> A minimum-phase filter puts all its energy as early "
-                   "as it can: no pre-echo, but some phase distortion. <bookmark mark='e'/> Analogue filters, and the biquads "
-                   "modelled on them, are minimum phase. <bookmark mark='f'/> Mastering engineers choose between the two by ear, "
-                   "case by case.", marks="bcdef")
+                   "Can a filter avoid smearing? <bookmark mark='b'/> A symmetric FIR filter delays every frequency equally: linear phase, so group delay is constant in its passband, though filtering can still ring. <bookmark mark='c'/> But its delay is half its order, or length minus one divided by two, in samples, and its ringing comes before the attack as well as after: pre-echo. <bookmark mark='d'/> A minimum-phase filter puts all its energy as early as it can: no pre-echo, but some phase distortion. <bookmark mark='e'/> Many familiar equalizer sections have minimum-phase behavior, but analog and digital all-pass filters provide counterexamples to any universal claim. <bookmark mark='f'/> Mastering engineers choose between the two by ear, case by case.", marks="bcdef")

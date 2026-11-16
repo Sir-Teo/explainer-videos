@@ -81,9 +81,4 @@ class Frontier(SoundScene):
             (r"Part 55 measures and simulates real halls", GREY_A),
         ]
         rows_scene(self, r"rooms from the wave equation", items,
-                   "A third frontier is simulating rooms from the wave equation itself. <bookmark mark='b'/> Image sources ignore "
-                   "diffraction and scattering; ray tracing adds scattering, but not wave effects. <bookmark mark='c'/> Wave-based "
-                   "methods solve the wave equation on a grid, as chapter ten did for the plate. <bookmark mark='d'/> A whole "
-                   "concert hall at audio rates needs billions of grid points, and graphics processors now make it possible. "
-                   "<bookmark mark='e'/> Stefan Bilbao and colleagues simulate rooms, instruments and loudspeakers this way. "
-                   "<bookmark mark='f'/> Part 55 measures and simulates real halls.", marks="bcdef")
+                   "A third frontier is simulating rooms from the wave equation itself. <bookmark mark='b'/> Image sources ignore diffraction and scattering; ray tracing adds scattering, but not wave effects. <bookmark mark='c'/> Wave-based methods solve the wave equation on a grid, as chapter ten did for the plate. <bookmark mark='d'/> Full-band wave simulation of a concert hall can require billions of grid points and remains expensive; GPU acceleration helps, with practical limits set by bandwidth, geometry and accuracy. <bookmark mark='e'/> Stefan Bilbao and colleagues simulate rooms, instruments and loudspeakers this way. <bookmark mark='f'/> Part 55 measures and simulates real halls.", marks="bcdef")

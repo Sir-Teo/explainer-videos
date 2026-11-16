@@ -132,5 +132,5 @@ class Combs(SoundScene):
                    "wall's echo about three milliseconds late, with notches every three hundred and forty hertz. "
                    "<bookmark mark='d'/> Two microphones on one source at different distances do the same when they are mixed. "
                    "<bookmark mark='e'/> That is why engineers check a mix in mono, and why a singer moving near a desk can sound "
-                   "phasey. <bookmark mark='f'/> The cure is distance, absorption, or a small delay to line the two up.",
+                   "phasey. <bookmark mark='f'/> Placement and absorption can reduce reflections; delaying a separate microphone signal can align direct arrivals but cannot remove every reflection-induced comb.",
                    marks="bcdef")

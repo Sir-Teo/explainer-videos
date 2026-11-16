@@ -52,19 +52,13 @@ class Poles(SoundScene):
         lbl = VGroup(label(r"$\times$ \ poles", font_size=18, color=EAR), label(r"$\circ$ \ zeros", font_size=18, color=BLUE), label(r"$\bullet$ \ a frequency, \ on the circle", font_size=18, color=WHITE)).arrange(DOWN, buff=0.15, aligned_edge=LEFT).next_to(zp, DOWN, buff=0.3)
         rows_ = text_rows([
             (r"a frequency is a point on the unit circle: \ 0 Hz on the right, \ the Nyquist frequency on the left", WHITE),
-            (r"the gain there is the product of its distances to the zeros, \ over the product of its distances to the poles", WHITE),
+            (r"gain: \ a constant times the distance-product ratio, \ zeros over poles", WHITE),
             (r"a pole near the circle makes a peak; \ a zero near it, \ a dip", TUNE),
             (r"a filter is a choice of where to put a few poles and zeros", GREY_A),
         ], font_size=19, width=6.6).move_to(RIGHT * 3.0 + DOWN * 0.2)
         head = label(r"the z-plane", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "There is a map that explains every such filter: the z-plane. <bookmark mark='a'/> Each frequency is a point on "
-            "the unit circle, zero hertz on the right and the Nyquist frequency on the left. <bookmark mark='b'/> The "
-            "filter's gain at that frequency is the product of the point's distances to the zeros, divided by the product "
-            "of its distances to the poles. <bookmark mark='c'/> So a pole close to the circle makes a peak where the "
-            "circle passes it, and a zero close to the circle makes a dip. These are the poles and zeros of a peaking "
-            "equalizer at one kilohertz. <bookmark mark='d'/> Designing a filter is choosing where to put a few poles and "
-            "zeros."
+            "There is a map that explains every such filter: the z-plane. <bookmark mark='a'/> Each frequency is a point on the unit circle, zero hertz on the right and the Nyquist frequency on the left. <bookmark mark='b'/> The filter's gain at that frequency is a gain factor times the product of distances to the zeros divided by the product of distances to the poles. <bookmark mark='c'/> So a pole close to the circle makes a peak where the circle passes it, and a zero close to the circle makes a dip. These are the poles and zeros of a peaking equalizer at one kilohertz. <bookmark mark='d'/> Designing a filter is choosing where to put a few poles and zeros."
         ) as vo:
             self.play(FadeIn(head), FadeIn(zp), FadeIn(lbl), FadeIn(ghost(rows_, 0.15)))
             for mark, r in zip("abcd", rows_):
@@ -125,14 +119,14 @@ class Poles(SoundScene):
     # ------------------------------------------------------------------
     def stability(self):
         items = [
-            (r"every pole must lie inside the unit circle", WHITE),
+            (r"causal rational BIBO stability: uncancelled poles strictly inside the unit circle", WHITE),
             (r"a pole at radius $r$ makes the impulse response decay as $r^n$: \ inside, \ it dies away", WHITE),
             (r"on the circle it rings forever; \ outside it grows until the numbers overflow", WHITE),
             (r"a feedback loop is a filter whose poles you place; \ place one outside and it screams", TUNE),
             (r"the same rule will make reverberation decay at exactly the rate we choose", GREY_A),
         ]
         rows_scene(self, r"stability", items,
-                   "One rule governs feedback. <bookmark mark='b'/> Every pole must lie inside the unit circle. <bookmark mark='c'/> "
+                   "One rule governs feedback. <bookmark mark='b'/> For a causal rational filter with uncancelled poles, BIBO stability requires every pole strictly inside the unit circle. <bookmark mark='c'/> "
                    "A pole at radius r makes the impulse response decay like r to the n: inside the circle, it dies away. "
                    "<bookmark mark='d'/> On the circle it rings forever; outside, it grows until the numbers overflow. "
                    "<bookmark mark='e'/> A feedback loop is a filter whose poles you place, and if you place one outside, it "

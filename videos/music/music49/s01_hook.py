@@ -53,15 +53,10 @@ class Hook(SoundScene):
             (r"the Harmonicats' `Peg o' My Heart', \ recorded with it, \ became a hit: \ the echo was the sound", WHITE),
             (r"studios built echo chambers; \ then steel plates \ (EMT, \ 1957) \ and springs in boxes", WHITE),
             (r"1962: \ Manfred Schroeder at Bell Labs built a room out of arithmetic", TUNE),
-            (r"everything an effects rack does is delay and addition", GREY_A),
+            (r"these effects use delays, weighted sums and feedback", GREY_A),
         ]
         rows_scene(self, r"a bathroom, \ sold as art", items,
-                   "The story starts in a bathroom. <bookmark mark='b'/> In 1947 Bill Putnam put a loudspeaker and a microphone in "
-                   "the tiled bathroom of his Chicago studio. <bookmark mark='c'/> The Harmonicats' Peg o' My Heart, recorded "
-                   "with it, became a hit, and the echo was the sound. <bookmark mark='d'/> Studios built echo chambers, then "
-                   "steel plates, from EMT in 1957, and springs in boxes. <bookmark mark='e'/> In 1962 Manfred Schroeder at Bell "
-                   "Labs built a room out of arithmetic. <bookmark mark='f'/> Everything an effects rack does is delay and "
-                   "addition.", marks="bcdef")
+                   "The story starts in a bathroom. <bookmark mark='b'/> In 1947 Bill Putnam put a loudspeaker and a microphone in the tiled bathroom of his Chicago studio. <bookmark mark='c'/> The Harmonicats' Peg o' My Heart, recorded with it, became a hit, and the echo was the sound. <bookmark mark='d'/> Studios built echo chambers, then steel plates, from EMT in 1957, and springs in boxes. <bookmark mark='e'/> In 1962 Manfred Schroeder at Bell Labs built a room out of arithmetic. <bookmark mark='f'/> The linear and modulated effects here can be built from delays, weighted sums and feedback; a full effects rack also contains nonlinear processing.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def plan(self):

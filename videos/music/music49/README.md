@@ -3,7 +3,7 @@
 Part 49 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the second part of Act IX, *Electric Sound*. In 1947 an engineer put a loudspeaker and a
 microphone in his studio's tiled bathroom and sold the echo as art. In 1962 Manfred Schroeder at Bell Labs built a room out
-of arithmetic: four comb filters and two all-passes. Everything an effects rack does is delay and addition, and this part
+of arithmetic: four comb filters and two all-passes. The linear and modulated effects here use delays, weighted sums and feedback, and this part
 builds it: convolution, poles and zeros, equalizers, phase, combs and their moving relatives, a simulated room measured by
 a sweep and checked against Sabine, Schroeder's reverberator, a feedback delay network, a steel plate by finite
 differences and a spring. The tools are Monochord's (`explainer/music/monochord/effects.py`); every room, plate and spring
@@ -137,3 +137,7 @@ python -m videos.music.labs 49                                  # the lab (write
   "Parametric spring reverberation effect", *JAES* (2010).
 * A. Fettweis, "Wave digital filters: theory and practice", *Proc. IEEE* (1986); J. Engel, L. Hantrakul, C. Gu and
   A. Roberts, "DDSP: differentiable digital signal processing", ICLR (2020).
+
+## Interpretation limits
+
+LTI convolution applies to fixed linear systems; moving modulation is time-varying, and nonlinear processors need other models. Pole stability assumes a causal rational system with uncancelled poles. Group delay is minus the phase derivative; linear phase does not eliminate ringing, and minimum phase is not universal among analog filters. EQ cutoffs depend on the source. Image sources and Sabine/Eyring use geometric and diffuse-field approximations. Orthogonal FDN mixing is a useful design choice, and finite integer delays still have common multiples. Echo density is a chosen Gaussian-reference statistic, not a complete perceptual equivalence test.
