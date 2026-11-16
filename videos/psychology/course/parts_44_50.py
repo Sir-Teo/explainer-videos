@@ -231,4 +231,40 @@ PARTS = [
               ("Its tests", "tests/psychology/test_neurodata.py"),
               ("Part 8's synthetic brain", "explainer/psychology/psyche/imaging.py")),
     ),
+    Part(
+        n=50, level="D", widget="grimtest", prereq=(4, 43, 49),
+        question="What does a whole literature say, and can it be trusted to say it?",
+        story="In 2008 Erick Turner and colleagues compared 74 registered antidepressant trials with what the journals "
+              "printed: about half positive against nearly all. The part builds the mathematics of a filtered "
+              "literature on simulated literatures with a known truth: fixed and random effects and the prediction "
+              "interval, moderators that hide, funnels and Egger's test, five corrections that each fail somewhere, "
+              "meta-analyses that run about three times the replications, registered reports, GRIM, SPRITE and "
+              "statcheck, fabricated mileage detected, specification curves, Meehl's paradox, and the series' own "
+              "Ledger audited.",
+        handoff="Act XII judges the practices of psychology at work by this standard (Parts 51 to 57); incentives and "
+                "the science of science are Part 61; the dissertation of Part 62 has to meet it.",
+        outside="Part 4's crisis, Part 43's replications and Part 49's analytic variability; weighted least squares "
+                "and maximum likelihood.",
+        objectives={
+            "U": ["Explain why the published studies on a question can overstate its effect, and what a funnel plot "
+                  "shows.",
+                  "Check a reported mean by GRIM and a reported p-value against its test statistic."],
+            "M": ["Pool studies by random effects with a prediction interval, and test a moderator by meta-regression.",
+                  "Run several corrections for selective publication and report their disagreement as uncertainty."],
+            "D": ["Plan a meta-analysis of a literature suspected of selective publication, from registries to "
+                  "sensitivity analyses."],
+            "I": ["Weigh a vendor's or a guideline's evidence by asking how many studies were run, not only how many "
+                  "were shown."],
+        },
+        results=[
+            ("Random-effects weight", r"w_i = 1/(v_i + \hat\tau^2)"),
+            ("I-squared", r"I^2 = (Q - (k-1))/Q"),
+            ("Prediction interval", r"\hat\mu \pm t_{k-2}\sqrt{\hat\tau^2 + \mathrm{SE}^2}"),
+            ("GRIM", r"\bar x \in \{\, t/n : t \in \mathbb{Z} \,\}\ \text{(to rounding)}"),
+        ],
+        U=(0, 1, 4, 8), D=(15,), I=(14,),
+        also=(("Psyche's meta module", "explainer/psychology/psyche/meta.py"),
+              ("Its tests", "tests/psychology/test_meta.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

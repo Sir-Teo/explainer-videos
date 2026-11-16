@@ -6696,3 +6696,120 @@ shown(49, r"Jonas \& Kording (2017)", "a demonstration about methods, on a micro
 shown(49, r"Elliott et al.\ (2020)", "a meta-analysis of a measurement's reliability, used as a number in a "
       "calculation")
 shown(49, r"Luck (2014)", "a textbook")
+
+# --- Part 50: The Weight of Evidence ---------------------------------------------------------------------------------
+
+add(Finding(
+    key="antidepressant_bias", part=50, title=r"Selective publication of antidepressant trials",
+    claim="The journal literature on antidepressants overstated their efficacy relative to all the trials registered "
+          "with the regulator, through unpublished negative trials and positively reported ones.",
+    original=Study("Turner and colleagues", 2008, design="74 trials of 12 antidepressants registered with the US "
+                   "Food and Drug Administration, against the journal articles", found="about half positive by the "
+                   "regulator's reading; nearly all positive as published; effect sizes inflated by about a third"),
+    status="replicated",
+    record=(Study("Kirsch and colleagues", 2008, design="a meta-analysis of the regulator's data, published and not",
+                  found="a modest average advantage over placebo, larger in more severe depression"),
+            Study("Cipriani and colleagues", 2018, design="a network meta-analysis of 522 trials including "
+                  "unpublished data", found="every drug better than placebo, with modest effects")),
+    note="The drugs work, modestly; the published record made them look better. Registration made the filter "
+         "visible, and the whole set of trials, not the journals, is the evidence.",
+    sources=("E. H. Turner, A. M. Matthews, E. Linardatos, R. A. Tell and R. Rosenthal, Selective publication of "
+             "antidepressant trials and its influence on apparent efficacy, New England Journal of Medicine 358 (2008) "
+             "252-260",
+             "I. Kirsch et al., Initial severity and antidepressant benefits, PLoS Medicine 5 (2008) e45",
+             "A. Cipriani et al., Comparative efficacy and acceptability of 21 antidepressant drugs, Lancet 391 (2018) "
+             "1357-1366"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="meta_inflation", part=50, title=r"Meta-analyses against preregistered replications",
+    claim="Meta-analyses of published studies in psychology estimate effects about as large as large preregistered "
+          "replications of the same effects find.",
+    original=Study("Hagger, Wood, Stiff and Chatzisarantis", 2010, design="a meta-analysis of published ego-depletion "
+                   "experiments", found="a medium-to-large average effect"),
+    status="failed",
+    record=(Study("Hagger and colleagues", 2016, design="a registered replication in 23 laboratories (Part 43)",
+                  found="an effect near zero"),
+            Study("Kvarven, Stromland and Johannesson", 2020, design="15 meta-analyses compared with multi-site "
+                  "preregistered replications of the same effects", found="meta-analytic effects about three times "
+                  "larger; bias corrections reduced but did not remove the gap")),
+    note="A meta-analysis inherits its literature's filter. Pooling filtered studies gives a precise estimate of the "
+         "wrong number (chapter six computes it).",
+    sources=("M. S. Hagger, C. Wood, C. Stiff and N. L. D. Chatzisarantis, Ego depletion and the strength model of "
+             "self-control: a meta-analysis, Psychological Bulletin 136 (2010) 495-525",
+             "M. S. Hagger et al., A multilab preregistered replication of the ego-depletion effect, Perspectives on "
+             "Psychological Science 11 (2016) 546-573",
+             "A. Kvarven, E. Stromland and M. Johannesson, Comparing meta-analyses and preregistered multiple-laboratory "
+             "replication projects, Nature Human Behaviour 4 (2020) 423-434"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="p_inconsistency", part=50, title=r"Inconsistent p-values",
+    claim="A substantial share of psychology articles report at least one p-value that does not match its test "
+          "statistic and degrees of freedom.",
+    original=Study("Bakker and Wicherts", 2011, design="statistical results in psychology journals, recomputed",
+                   found="a substantial share of articles with at least one inconsistent result, some changing the "
+                         "conclusion"),
+    status="replicated",
+    record=(Study("Nuijten and colleagues", 2016, design="automated checks (statcheck) of over 250,000 p-values "
+                  "from eight journals, 1985-2013", found="about half of articles with at least one inconsistency; "
+                  "about one in eight with one that changed significance"),),
+    note="Most errors are small and many are typos; the grossly inconsistent ones lean towards significance. "
+         "Automated checks now run before publication at some journals.",
+    sources=("M. Bakker and J. M. Wicherts, The (mis)reporting of statistical results in psychology journals, "
+             "Behavior Research Methods 43 (2011) 666-678",
+             "M. B. Nuijten, C. H. J. Hartgerink, M. A. L. M. van Assen, S. Epskamp and J. M. Wicherts, The prevalence "
+             "of statistical reporting errors in psychology (1985-2013), Behavior Research Methods 48 (2016) "
+             "1205-1226"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="replication_prediction", part=50, title=r"Predicting which findings replicate",
+    claim="Researchers' beliefs, pooled in prediction markets or surveys, predict which published findings will "
+          "replicate better than chance.",
+    original=Study("Dreber and colleagues", 2015, design="prediction markets on the outcomes of replications in the "
+                   "Reproducibility Project", found="market prices predicted outcomes better than individual surveys"),
+    status="replicated",
+    record=(Study("Camerer and colleagues", 2018, design="markets and surveys on 21 social-science replications in "
+                  "Nature and Science", found="beliefs correlated strongly with outcomes"),
+            Study("Forsell and colleagues", 2019, design="markets on the Many Labs 2 replications",
+                  found="better than chance, less accurate about effect sizes")),
+    note="Researchers can tell surprising, small-sample findings from robust ones; the literature published them "
+         "anyway. Simple features (sample size, p near 0.05, surprise) carry much of the signal.",
+    sources=("A. Dreber et al., Using prediction markets to estimate the reproducibility of scientific research, "
+             "Proceedings of the National Academy of Sciences 112 (2015) 15343-15347",
+             "C. F. Camerer et al., Evaluating the replicability of social science experiments in Nature and Science "
+             "between 2010 and 2015, Nature Human Behaviour 2 (2018) 637-644",
+             "E. Forsell et al., Predicting replication outcomes in the Many Labs 2 study, Journal of Economic "
+             "Psychology 75 (2019) 102117"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="rigour_replicability", part=50, title=r"Near-perfect replicability with rigour-enhancing practices",
+    claim="Discoveries made with preregistration, large samples and independent replication replicate at near the "
+          "rate their statistical power predicts.",
+    original=Study("Protzko and colleagues", 2023, design="four laboratories discovering and replicating each "
+                   "other's findings under rigour-enhancing practices", found="high replicability, close to "
+                   "the maximum expected from power"),
+    status="retracted",
+    record=(Study("the journal's retraction", 2024, design="concerns raised after publication about the study's own "
+                  "preregistration and reporting", found="the article was retracted"),),
+    note="A paper about rigour withdrawn over its own reporting; the practices it tested remain reasonable, but this "
+         "evidence for them is gone.",
+    sources=("J. Protzko et al., High replicability of newly discovered social-behavioural findings is achievable, "
+             "Nature Human Behaviour 8 (2024) 311-319, published online 2023, retracted 2024",),
+    checked="2026-11-16",
+))
+shown(50, r"Borenstein et al.\ (2009)", "a textbook")
+shown(50, r"Brown \& Heathers (2017)", "a method (GRIM), applied here to invented means")
+shown(50, r"Heathers et al.\ (2018)", "a method (SPRITE), applied here")
+shown(50, r"Steegen et al.\ (2016); \ Simonsohn, \ Simmons \& Nelson (2020)", "methods (multiverse analysis and "
+      "specification curves)")
+shown(50, r"Carter et al.\ (2019)", "a simulation study of correction methods, rerun here in small")
+shown(50, r"Meehl (1978); \ Meehl (1990)", "arguments about theory and testing, with their own calculation shown")
+shown(50, r"Oberauer \& Lewandowsky (2019)", "an argument about theory")
+shown(50, r"Smaldino \& McElreath (2016)", "a model of incentives, described")

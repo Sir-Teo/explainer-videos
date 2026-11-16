@@ -1277,6 +1277,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Joshua Carp; Rotem Botvinik-Nezer; Anders Eklund; James Haxby; Nikolaus Kriegeskorte; Thomas Naselaris; Alexander Huth | 乔舒亚·卡普；罗特姆·博特维尼克-内泽尔；安德斯·埃克伦德；詹姆斯·哈克斯比；尼古拉斯·克里格斯科尔特；托马斯·纳塞拉里斯；亚历山大·胡思 |
 | Marcus Raichle; Michael Greicius; Jonathan Power; Apostolos Georgopoulos; Jonathan Wolpaw; Scott Marek; Eric Jonas; Konrad Kording | 马库斯·赖希勒；迈克尔·格雷修斯；乔纳森·鲍尔；阿波斯托洛斯·乔治波洛斯；乔纳森·沃尔波；斯科特·马雷克；埃里克·乔纳斯；康拉德·科丁 |
 
+## Part 50: the weight of evidence
+
+| English | 中文 |
+|---|---|
+| effect size; standardized mean difference; Hedges's g; log odds ratio; sampling variance | 效应量；标准化均值差；赫奇斯g；对数比值比；抽样方差 |
+| fixed effect; random effects; heterogeneity; tau squared; I squared; prediction interval | 固定效应；随机效应；异质性；tau平方；I平方；预测区间 |
+| publication bias; small-study effect; funnel plot; Egger's test; trim and fill; PET-PEESE; selection model | 发表偏倚；小样本研究效应；漏斗图；埃格检验；剪补法；PET-PEESE；选择模型 |
+| p-curve; GRIM test; statcheck; forensic meta-science; registered trial; outcome switching | p曲线；GRIM检验；statcheck；法证元科学；注册试验；结局转换 |
+| many analysts; multiverse analysis; prediction market; living review; replication Bayes factor | 多分析者研究；多元宇宙分析；预测市场；动态综述；重复贝叶斯因子 |
+| Erick Turner; Matthias Egger; Uri Simonsohn; Nick Brown; James Heathers; Michèle Nuijten; Anna Dreber | 埃里克·特纳；马蒂亚斯·埃格；乌里·西蒙松；尼克·布朗；詹姆斯·希瑟斯；米歇尔·纽伊滕；安娜·德雷伯 |
+
 ## Names
 
 | English | 中文 |

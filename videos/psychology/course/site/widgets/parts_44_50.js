@@ -807,4 +807,84 @@
       note: "Nothing you choose is stored or sent. The brain, its people and their head motion are simulated in your browser; red voxels are false positives, gold ones are in a planted region.",
     });
   };
+  // ---- Part 50: GRIM on you.  Possible or impossible?  Each reported mean is checked by arithmetic. ----
+  W.grimtest = function (el) {
+    var w = null;
+    var ITEMS = [[5.19, 28], [3.45, 20], [4.68, 15], [2.17, 12], [6.33, 21], [3.48, 17], [4.05, 19], [2.86, 14]];
+    function grim(m, n) {
+      var t = m * n, lo = Math.floor(t), hi = Math.ceil(t);
+      function r2(x) { return Math.round(x * 100 + 1e-9) / 100; }
+      return { ok: r2(lo / n) === r2(m) || r2(hi / n) === r2(m), lo: lo, hi: hi, mlo: lo / n, mhi: hi / n };
+    }
+    var S = { phase: "idle", k: 0, log: [], order: [] };
+    function next() {
+      if (S.k >= ITEMS.length) { S.phase = "done"; task.clear(); if (w) w.render(); return; }
+      S.phase = "ask"; if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "f": 0, "j": 1 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side) {
+        var it = ITEMS[S.order[S.k]], g = grim(it[0], it[1]);
+        S.log.push({ m: it[0], n: it[1], said: side === 0, truth: g.ok, g: g });
+        S.k++; task.count++; S.phase = "shown"; if (w) w.render();
+        task.later(next, 1600);
+      },
+    });
+    function start(state) {
+      task.clear(); S.k = 0; S.log = []; task.count = 0;
+      var rand = mulberry(50 + (state ? state.seed : 0));
+      S.order = ITEMS.map(function (_, i) { return i; });
+      for (var i = S.order.length - 1; i > 0; i--) { var j = Math.floor(rand() * (i + 1)); var t = S.order[i]; S.order[i] = S.order[j]; S.order[j] = t; }
+      next();
+    }
+    w = QB.widget(el, {
+      title: "Possible or impossible?",
+      sub: "Each line is a mean reported for n people who each answered one question with a whole number from 1 to 7. Press F if the mean could happen, J if it cannot (or tap a side). Work it out: the total must be a whole number.",
+      panels: 2, height: 330, weights: [1.2, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if (S.phase === "ask" || S.phase === "shown") {
+          var it = ITEMS[S.order[Math.min(S.k - (S.phase === "shown" ? 1 : 0), ITEMS.length - 1)]];
+          ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("Report " + Math.min(S.k + (S.phase === "ask" ? 1 : 0), ITEMS.length) + " of " + ITEMS.length, b.cx, b.y + 24);
+          ctx.fillStyle = C.ink; ctx.font = "600 28px system-ui, sans-serif";
+          ctx.fillText("mean " + it[0].toFixed(2) + ",  n = " + it[1], b.cx, b.cy - 10);
+          ctx.font = "13px system-ui, sans-serif"; ctx.fillStyle = C.muted;
+          if (S.phase === "shown") {
+            var last = S.log[S.log.length - 1], right = last.said === last.truth;
+            ctx.fillStyle = right ? "#5bd18b" : "#ef6f6c"; ctx.font = "600 14px system-ui, sans-serif";
+            ctx.fillText((last.truth ? "Possible" : "Impossible") + (right ? ": you were right" : ": not this time"), b.cx, b.cy + 30);
+            ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+            ctx.fillText("totals " + last.g.lo + " and " + last.g.hi + " give " + last.g.mlo.toFixed(3) + " and " + last.g.mhi.toFixed(3), b.cx, b.cy + 54);
+          } else {
+            ctx.fillText("F: possible     J: impossible", b.cx, b.y + b.h - 30);
+          }
+        } else if (S.phase === "done") {
+          var nr = S.log.filter(function (r) { return r.said === r.truth; }).length;
+          T.message(ctx, b, nr + " of " + S.log.length + " right",
+                    "GRIM needs only the mean, the number of people and the fact that answers are whole numbers. It cannot show a mean is right, only that some cannot be.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Eight reported means; decide whether each could happen.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx, y0 = c2.y + 30;
+        cx.save(); cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif"; cx.textAlign = "left";
+        cx.fillText("Your answers so far", c2.x + 10, c2.y + 16);
+        cx.font = "12px system-ui, sans-serif";
+        S.log.forEach(function (r, i) {
+          cx.fillStyle = r.said === r.truth ? "#5bd18b" : "#ef6f6c";
+          cx.fillText(r.m.toFixed(2) + " (n = " + r.n + "): " + (r.truth ? "possible" : "impossible") + (r.said === r.truth ? "  ✓" : "  ✗"), c2.x + 14, y0 + 18 * i + 10);
+        });
+        cx.restore();
+      },
+      readout: function () { return [["checked", String(task.count)]]; },
+      note: "Nothing you answer is stored or sent. The reported means are invented for practice.",
+    });
+  };
 })();
