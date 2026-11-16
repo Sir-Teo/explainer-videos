@@ -1185,6 +1185,22 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Mark Brandt; Rolf Zwaan; Daniel Lakens; Uri Simonsohn; Josine Verhagen; Eric-Jan Wagenmakers | 马克·勃兰特；罗尔夫·兹万；丹尼尔·拉肯斯；乌里·西蒙森；若西娜·费尔哈根；埃里克-扬·瓦根梅克斯 |
 | Brian Nosek; Timothy Errington; Chris Chambers; Loukia Tzavella; Jay Van Bavel; Allen and Mehler; Anne Scheel | 布赖恩·诺塞克；蒂莫西·埃林顿；克里斯·钱伯斯；洛基娅·察韦拉；杰伊·范巴维尔；艾伦与梅勒；安妮·舍尔 |
 
+## Part 44: latent variables
+
+| English | 中文 |
+|---|---|
+| latent variable; indicator; path analysis; tracing rule; structural equation model; measurement model; structural model | 潜变量；指标；路径分析；追踪规则；结构方程模型；测量模型；结构模型 |
+| confirmatory factor analysis; loading; factor covariance; error variance; identification; marker variable; degrees of freedom | 验证性因子分析；载荷；因子协方差；误差方差；识别；标记变量；自由度 |
+| maximum likelihood; discrepancy function; chi-square test of exact fit; RMSEA; CFI; TLI; SRMR; cut-off; dynamic fit | 最大似然；差异函数；精确拟合的卡方检验；RMSEA；CFI；TLI；SRMR；临界值；动态拟合 |
+| measurement invariance; configural, metric, scalar invariance; intercept | 测量不变性；形态、度量、标量不变性；截距 |
+| mediation; indirect effect; product of coefficients; sequential ignorability; equivalent models; Markov equivalence; collider | 中介；间接效应；系数乘积；序贯可忽略性；等价模型；马尔可夫等价；对撞因子 |
+| growth curve; cross-lagged panel model; random intercept; within-person; between-person | 增长曲线；交叉滞后面板模型；随机截距；个体内；个体间 |
+| network model; partial correlation; common cause; causal discovery; PC algorithm; Bayesian SEM; omega | 网络模型；偏相关；共同原因；因果发现；PC算法；贝叶斯结构方程模型；ω系数 |
+| Sewall Wright; Karl Jöreskog; Karl Holzinger; Frances Swineford; Li-tze Hu; Peter Bentler; Daniel McNeish; Melissa Wolf | 休厄尔·赖特；卡尔·约雷斯科格；卡尔·霍尔津格；弗朗西丝·斯温福德；胡立德；彼得·本特勒；丹尼尔·麦克尼什；梅利莎·沃尔夫 |
+| William Meredith; Reuben Baron; David Kenny; John Bullock; Donald Green; Shang Ha; Robert MacCallum; Ellen Hamaker | 威廉·梅雷迪思；鲁本·巴伦；戴维·肯尼；约翰·布洛克；唐纳德·格林；夏尚；罗伯特·麦卡勒姆；埃伦·哈马克 |
+| Rebecca Kuiper; Raoul Grasman; Denny Borsboom; Angélique Cramer; Joost Kruis; Gunter Maris; Peter Spirtes; Clark Glymour; Richard Scheines | 丽贝卡·凯珀；拉乌尔·格拉斯曼；丹尼·博斯博姆；安热莉克·克拉默；约斯特·克鲁伊斯；冈特·马里斯；彼得·斯皮尔特斯；克拉克·格莱穆尔；理查德·沙因斯 |
+| Bengt Muthén; Tihomir Asparouhov; Rex Kline; Kenneth Bollen; Julia Rohrer; Roderick McDonald | 本特·穆滕；季霍米尔·阿斯帕鲁霍夫；雷克斯·克莱因；肯尼思·博伦；朱莉娅·罗勒；罗德里克·麦克唐纳 |
+
 ## Names
 
 | English | 中文 |

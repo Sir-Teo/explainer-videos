@@ -591,8 +591,8 @@ add(Finding(
 
 shown(4, "SIMMONS_2011", "a simulation of what flexible analysis does to a null result, recomputed here: a "
       "demonstration, not an empirical finding")
-shown(4, "SCHEEL_2021", "a comparison of two literatures; shown at the frontier as early evidence on a reform, "
-      "before the meta-science part", row_in=50)
+shown(4, "SCHEEL_2021", "a comparison of two literatures; shown at the frontier as early evidence on a reform; its "
+      "row (registered_reports) is entered in Part 43")
 shown(4, "LEVELT_2012", "the findings of an inquiry into one case of fraud")
 shown(4, "DREBER_2015", "prediction markets on replications: shown at the frontier, entered with meta-science",
       row_in=50)
@@ -6226,3 +6226,76 @@ shown(43, r"Nosek \& Errington (2020); \ Van Bavel et al.\ (2016)", "a definitio
       "argument whose record is the hidden-moderators row")
 shown(43, r"Simonsohn (2015)", "a method, computed")
 shown(43, r"Verhagen \& Wagenmakers (2014)", "a method, computed")
+
+# --- Part 44: Latent Variables ---------------------------------------------------------------------------------------
+
+add(Finding(
+    key="glucose_self_control", part=44, title=r"Glucose as the mediator of self-control",
+    claim="Self-control draws on blood glucose: depletion lowers it, and a sugary drink restores self-control.",
+    original=Study("Gailliot and colleagues", 2007, design="mediation of depletion by measured blood glucose, and "
+                   "glucose drinks", found="glucose fell after self-control and a sugary drink restored performance"),
+    status="failed",
+    record=(Study("Lange and Eggert", 2014, design="a preregistered test of a glucose drink",
+                  found="no effect on self-control"),
+            Study("Vadillo, Gold and Osman (meta-analysis)", 2016, design="the glucose literature",
+                  found="signs of publication bias; little evidence once it is accounted for")),
+    note="A mediator chosen from a correlation failed when manipulated; the parent effect, ego depletion, failed "
+         "too (Part 28).",
+    sources=("M. T. Gailliot et al., Self-control relies on glucose as a limited energy source: willpower is more "
+             "than a metaphor, Journal of Personality and Social Psychology 92 (2007) 325-336",
+             "F. Lange and F. Eggert, Sweet delusion: glucose drinks fail to counteract ego depletion, Appetite 75 "
+             "(2014) 54-63",
+             "M. A. Vadillo, N. Gold and M. Osman, The bitter truth about sugar and willpower, Psychological Science "
+             "27 (2016) 1207-1214"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="factor_network_equivalence", part=44, title=r"Factors and networks fit the same data",
+    claim="A latent-factor model and a network model of direct interactions can imply exactly the same distribution "
+          "of observed responses.",
+    original=Study("Kruis and Maris", 2016, design="a mathematical proof for binary data",
+                   found="the Ising network, a latent-variable model and a common-cause model are equivalent"),
+    status="replicated",
+    record=(Study("Marsman and colleagues", 2018, design="the network and item-response models related formally",
+                  found="the equivalence holds in general for these model families"),),
+    note="A theorem, not an experiment: fit cannot decide between a hidden cause and a system of mutual causes; "
+         "interventions and time can.",
+    sources=("J. Kruis and G. Maris, Three representations of the Ising model, Scientific Reports 6 (2016) 34175",
+             "M. Marsman et al., An introduction to network psychometrics: relating Ising network models to item "
+             "response theory models, Multivariate Behavioral Research 53 (2018) 15-35"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="fit_cutoffs", part=44, title=r"Universal cut-offs for model fit",
+    claim="Fixed cut-offs for fit indices, such as CFI of at least 0.95 and RMSEA of at most 0.06, separate good "
+          "models from bad ones in general.",
+    original=Study("Hu and Bentler", 1999, design="simulations of a few model types",
+                   found="cut-offs that balanced the errors in those conditions"),
+    status="failed",
+    record=(Study("Marsh, Hau and Wen", 2004, design="a critique with simulations", found="the cut-offs do not "
+                  "generalize beyond the conditions studied"),
+            Study("McNeish and Wolf", 2023, design="dynamic fit-index cut-offs", found="the right cut-off depends on "
+                  "the model, the loadings and the sample, and is often far from the conventional one")),
+    note="Useful in the conditions they came from; as general rules, misleading.",
+    sources=("L. Hu and P. M. Bentler, Cutoff criteria for fit indexes in covariance structure analysis, Structural "
+             "Equation Modeling 6 (1999) 1-55",
+             "H. W. Marsh, K.-T. Hau and Z. Wen, In search of golden rules, Structural Equation Modeling 11 (2004) "
+             "320-341",
+             "D. McNeish and M. G. Wolf, Dynamic fit index cutoffs for confirmatory factor analysis models, "
+             "Psychological Methods 28 (2023) 61-88"),
+    checked="2026-11-16",
+))
+
+shown(44, r"Wright (1921); \ Jöreskog (1969)", "the origins of path analysis and confirmatory factor analysis, told as "
+                                                  "history and derived")
+shown(44, r"Holzinger \& Swineford (1939)", "a classic dataset, fitted and checked against lavaan")
+shown(44, r"Baron \& Kenny (1986)", "a method, described with its critique")
+shown(44, r"Bullock, Green \& Ha (2010)", "a methods critique, described")
+shown(44, r"MacCallum et al. (1993)", "a methods result on equivalent models, described")
+shown(44, r"Meredith (1993)", "the invariance ladder, described and computed")
+shown(44, r"Hamaker, Kuiper \& Grasman (2015)", "a methods result, reproduced in simulation")
+shown(44, r"Borsboom \& Cramer (2013)", "a theory of disorder, described (Part 39 shows its network)")
+shown(44, r"Spirtes, Glymour \& Scheines (2000)", "a method, described")
+shown(44, r"Muthén \& Asparouhov (2012); McNeish \& Wolf (2023)", "methods, described")
