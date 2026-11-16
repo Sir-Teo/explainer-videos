@@ -24,13 +24,7 @@ class Meters(SoundScene):
             (r"from 2006: \ ITU-R BS.1770, \ a meter built on listening tests", TUNE),
         ]
         rows_scene(self, r"three old meters", items,
-                   "What should a meter measure? <bookmark mark='b'/> A sample-peak meter shows the largest sample. It says when the "
-                   "converter will clip, and nothing about how loud anything is. <bookmark mark='c'/> The VU meter of 1939 is a "
-                   "needle that averages over about three hundred milliseconds, roughly how loud speech and music seem. "
-                   "<bookmark mark='d'/> The BBC's peak programme meter rises in ten milliseconds and falls slowly, a broadcaster's "
-                   "guard against overload. <bookmark mark='e'/> None of them hears like an ear: as Part 4 showed, a deep bass and a "
-                   "bright tone at the same voltage are not equally loud. <bookmark mark='f'/> From 2006 there is a meter built on "
-                   "listening tests: the ITU's BS.1770.", marks="bcdef")
+                   "What should a meter measure? <bookmark mark='b'/> A sample-peak meter shows the largest sample. It flags sample overload, but cannot by itself rule out reconstructed inter-sample overload, and nothing about how loud anything is. <bookmark mark='c'/> The VU meter of 1939 is a needle that averages over about three hundred milliseconds, roughly how loud speech and music seem. <bookmark mark='d'/> The BBC's peak programme meter rises in ten milliseconds and falls slowly, a broadcaster's guard against overload. <bookmark mark='e'/> None of them hears like an ear: as Part 4 showed, a deep bass and a bright tone at the same voltage are not equally loud. <bookmark mark='f'/> From 2006 there is a meter built on listening tests: the ITU's BS.1770.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def drum(self):

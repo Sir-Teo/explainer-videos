@@ -63,7 +63,7 @@ class Outro(SoundScene):
             r"BS.1770: \ K-weighting, \ 400 ms blocks, \ two gates; \ LUFS, \ LRA",
             r"true peaks live between samples; \ measure them oversampled; \ leave $-1$ dBTP",
             r"a look-ahead limiter buys loudness with the peak-to-loudness ratio",
-            r"normalization took the war's prize away; \ compare only at equal loudness",
+            r"normalization reduces playback-level advantage; \ compare only at equal loudness",
             r"dither turns rounding's distortion into hiss; \ vinyl has its own curve",
         ], title=r"What we found", font_size=21).move_to(DOWN * 0.1)
         with self.voiceover(
@@ -71,7 +71,7 @@ class Outro(SoundScene):
             "measures loudness through K-weighting, four-hundred-millisecond blocks and two gates. <bookmark mark='b'/> True "
             "peaks live between the samples, so they are measured oversampled, and a master leaves a decibel of room. "
             "<bookmark mark='c'/> A look-ahead limiter buys loudness with the peak-to-loudness ratio. <bookmark mark='d'/> "
-            "Normalization took the war's prize away, and comparisons are fair only at equal loudness. <bookmark mark='e'/> And "
+            "Normalization reduces the automatic playback-level advantage, and comparisons are fair only at equal loudness. <bookmark mark='e'/> And "
             "dither turns rounding's distortion into hiss, while vinyl has a curve of its own."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
@@ -123,7 +123,7 @@ class Outro(SoundScene):
             (r"listening", r"compare at equal loudness, \ blind, \ quickly"),
         ], font_size=25)
         with self.voiceover(
-            "And in practice. Master for the target, not for loudness: at minus fourteen, nothing is lost. Read integrated "
+            "And in practice. Master for the target, not for loudness: a service's normalization target is not a universal mastering requirement. Read integrated "
             "loudness, true peak and the peak-to-loudness ratio every time. Deliver at minus one true peak, dither once, and "
             "make one master per medium. And compare at equal loudness, blind, and quickly."
         ):

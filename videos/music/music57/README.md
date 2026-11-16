@@ -4,14 +4,14 @@ Part 57 of a sixty-eight-part course in music (see [the series plan](../README.m
 [the syllabus](../SYLLABUS.md)), the fourth part of Act X, *The Studio and the Stage*. In 2008 fans of a rock band found
 that the version of its new album inside a video game sounded better than the CD, which had been mastered so loud that
 the peaks were shaved flat. The loudness war had a casualty with waveforms to prove it. Then streaming services began
-turning loud records down, and the incentive vanished. This part builds the instruments of both the war and the peace: a
+turning loud records down, reducing the automatic playback-level advantage when normalization is active. This part builds the instruments of both the war and the peace: a
 gated loudness meter and a true-peak meter (the series' own, checked against ffmpeg), a look-ahead limiter, a mastering
 chain, platform normalization and dither. The tools are Monochord's (`explainer/music/monochord/master.py`, with
 `loudness.py`); the music is Part 56's session and earlier parts' Variations.
 
 * **A record too loud for its own good.** An ear question (Part 56's mix mastered gently and for loudness, played at the
   same loudness: which was mastered for loudness? the second, its peak-to-loudness ratio 6.7 dB against 13); *Death
-  Magnetic* and *Guitar Hero III*; how the war ended; the plan.
+  Magnetic* and *Guitar Hero III*; how normalization changed incentives; the plan.
 * **1. What mastering is for.** Between the mix and the listener; Monochord's chain (tilt EQ, glue compression, a
   look-ahead limiter, dither), stage by stage, and heard; an album, not a track.
 * **2. Meters.** Sample peak, VU and PPM; three meters on one drum hit (the VU 22 dB below the peak); K-weighting; two
@@ -62,7 +62,7 @@ Monochord's tools are held in `tests/music/test_master.py`; this part's claims a
 mastered here; Part 38's piano for dither; sine tones; the Variations of Parts 52 to 55.
 
 **What the models are, and are not.** *The limiter* looks ahead by having its gain look ahead rather than delaying the
-audio, which gives the same result without latency; its detector is the 4× oversampled peak. *The mastering chain* is
+audio, which gives the same result without delaying this offline output; a causal streaming implementation needs look-ahead latency. Its detector is the 4× oversampled peak. *The mastering chain* is
 deliberately simple (no multiband processing, no clipper), which is why it tops out near −7.7 LUFS on this mix. *The
 record* is only the RIAA filters: no groove, no stylus, no surface noise. *The dither* is shown at 8 bits so that it can be
 heard; at 16 bits the same effects lie near −96 dBFS.

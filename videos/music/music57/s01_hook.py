@@ -75,28 +75,18 @@ class Hook(SoundScene):
             (r"a war fought since the jukebox: \ louder sounds better for a moment, \ so every record tried to be louder than the last", TUNE),
         ]
         rows_scene(self, r"a casualty with waveforms", items,
-                   "The question has a history. <bookmark mark='b'/> In September 2008 Metallica released Death Magnetic. "
-                   "<bookmark mark='c'/> The CD was mastered so loud that its peaks were shaved flat, clipped, audibly, on track "
-                   "after track. <bookmark mark='d'/> The same songs, released for the video game Guitar Hero Three, had been "
-                   "mastered with far less limiting, and sounded better. <bookmark mark='e'/> Fans compared the waveforms, posted "
-                   "them, and petitioned for a remaster; the press called the album a casualty of the loudness war. "
-                   "<bookmark mark='f'/> A war fought since the jukebox: louder sounds better for a moment, so every record tried to "
-                   "be louder than the one before.", marks="bcdef")
+                   "The question has a history. <bookmark mark='b'/> In September 2008 Metallica released Death Magnetic. <bookmark mark='c'/> The CD was mastered so loud that its peaks were shaved flat, clipped, audibly, on track after track. <bookmark mark='d'/> The same songs, released for the video game Guitar Hero Three, used a less heavily limited version, which many fans preferred. <bookmark mark='e'/> Fans compared the waveforms, posted them, and petitioned for a remaster; the press called the album a casualty of the loudness war. <bookmark mark='f'/> A war fought since the jukebox: louder sounds better for a moment, so every record tried to be louder than the one before.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def turn(self):
         items = [
             (r"then the playback changed: \ streaming services began turning every track to the same loudness", WHITE),
             (r"a record mastered louder is simply turned down, \ and keeps only the damage", WHITE),
-            (r"the incentive vanished; \ the war's weapons \ (meters, \ limiters) \ became the peace's instruments", WHITE),
+            (r"the playback-level incentive weakened; \ the war's weapons \ (meters, \ limiters) \ became the peace's instruments", WHITE),
             (r"this part builds them: \ a loudness meter, \ a true-peak meter, \ a limiter, \ a mastering chain, \ dither", TUNE),
         ]
-        rows_scene(self, r"how the war ended", items,
-                   "And then it ended, almost by accident. <bookmark mark='b'/> Streaming services began turning every track to the "
-                   "same loudness. <bookmark mark='c'/> A record mastered louder is simply turned down, and keeps only the damage. "
-                   "<bookmark mark='d'/> The incentive vanished, and the war's weapons, meters and limiters, became the instruments "
-                   "of the peace. <bookmark mark='e'/> This part builds them: a loudness meter, a true-peak meter, a limiter, a "
-                   "mastering chain, and dither.", marks="bcde")
+        rows_scene(self, r"how normalization changed the incentive", items,
+                   "Normalization later changed the incentive, though loud mastering continued. <bookmark mark='b'/> Many streaming services introduced loudness normalization, with settings and policies that vary. <bookmark mark='c'/> A record mastered louder is simply turned down, and keeps only the damage. <bookmark mark='d'/> The automatic playback-level advantage was reduced on normalized playback, and the war's weapons, meters and limiters, became the instruments of the peace. <bookmark mark='e'/> This part builds them: a loudness meter, a true-peak meter, a limiter, a mastering chain, and dither.", marks="bcde")
 
     # ------------------------------------------------------------------
     def plan(self):

@@ -25,12 +25,7 @@ class Purpose(SoundScene):
             (r"the album: \ songs matched to each other, \ the order, \ the gaps, \ the fades; \ then the delivery files", TUNE),
         ]
         rows_scene(self, r"between the mix and the listener", items,
-                   "What is mastering? <bookmark mark='b'/> It is the last creative step in making a record and the first technical "
-                   "one in delivering it. <bookmark mark='c'/> A mastering engineer brings fresh ears and a room built for "
-                   "accuracy. <bookmark mark='d'/> They make the mix translate, with gentle equalization, so that it works on every "
-                   "system, Part 56's phone included. <bookmark mark='e'/> They set a loudness that suits the medium, and peaks that "
-                   "will survive conversion. <bookmark mark='f'/> And they make an album: songs matched to each other, the order, "
-                   "the gaps and the fades, and then the files for every format.", marks="bcdef")
+                   "What is mastering? <bookmark mark='b'/> It is the last creative step in making a record and the first technical one in delivering it. <bookmark mark='c'/> A mastering engineer brings fresh ears and a room built for accuracy. <bookmark mark='d'/> They make the mix translate, with gentle equalization, to improve translation across playback systems; no master can guarantee identical reproduction everywhere, Part 56's phone included. <bookmark mark='e'/> They set a loudness that suits the medium, and peaks that will survive conversion. <bookmark mark='f'/> And they make an album: songs matched to each other, the order, the gaps and the fades, and then the files for every format.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def chain_boxes(self):
@@ -48,7 +43,7 @@ class Purpose(SoundScene):
         head = label(r"Monochord's mastering chain", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         note = label(r"\texttt{master.master(y, target)}: \ the gain into the limiter is found by iteration until the loudness is right", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Here is the chain Monochord uses, the usual one. <bookmark mark='a'/> The mix arrives at minus twenty LUFS. A "
+            "Here is the chain Monochord uses, one illustrative order among several valid mastering workflows. <bookmark mark='a'/> The mix arrives at minus twenty LUFS. A "
             "tilt equalizer lifts the extremes a little. <bookmark mark='b'/> A gentle compressor, two to one, slow, makes the "
             "mix move as one. <bookmark mark='c'/> Then the look-ahead limiter, which sets the loudness: the mix is pushed into "
             "it until it reads, here, minus ten, with no peak above minus one. <bookmark mark='d'/> Last, dither, when the "

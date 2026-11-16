@@ -21,11 +21,11 @@ class Normalize(SoundScene):
             (r"the arms race lost its prize: \ a master 6 dB louder is played 6 dB quieter", TUNE),
         ]
         rows_scene(self, r"one gain per track", items,
-                   "Here is how the war ended. <bookmark mark='b'/> A player measures each track's integrated loudness, or reads it "
+                   "Here is how normalization changes playback incentives. <bookmark mark='b'/> A player measures each track's integrated loudness, or reads it "
                    "from the file, and plays the track with one gain. <bookmark mark='c'/> The gain is the target minus the track's "
                    "loudness, so louder masters are turned down. <bookmark mark='d'/> Quieter ones are turned up only as far as "
                    "their true peak allows, or not at all. <bookmark mark='e'/> From the early 2010s it became the default on radio, "
-                   "on television under R 128, and on the big streaming services. <bookmark mark='f'/> The arms race lost its prize: "
+                   "on television under R 128, and on the big streaming services. <bookmark mark='f'/> The simple gain advantage is reduced when normalization is active: "
                    "a master six decibels louder is simply played six decibels quieter.", marks="bcdef")
 
     # ------------------------------------------------------------------
@@ -99,8 +99,4 @@ class Normalize(SoundScene):
             (r"so the right master is no longer the loudest, \ but the one that sounds best at the target", TUNE),
         ]
         rows_scene(self, r"tracks and albums", items,
-                   "One detail matters for albums. <bookmark mark='b'/> Track normalization brings every song to the target, so a "
-                   "quiet ballad comes up as loud as the single. <bookmark mark='c'/> Album normalization uses one gain for the "
-                   "whole album, keeping the balance the mastering engineer chose between songs. <bookmark mark='d'/> Services play "
-                   "albums album-normalized when they can tell an album is being played. <bookmark mark='e'/> So the right master "
-                   "is no longer the loudest, but the one that sounds best at the target.", marks="bcde")
+                   "One detail matters for albums. <bookmark mark='b'/> Track normalization brings every song to the target, so a quiet ballad comes up as loud as the single. <bookmark mark='c'/> Album normalization uses one gain for the whole album, keeping the balance the mastering engineer chose between songs. <bookmark mark='d'/> Some services use album gain in supported album-playback modes; playlists, settings and implementations differ. <bookmark mark='e'/> So the right master is no longer the loudest, but the one that sounds best at the target.", marks="bcde")

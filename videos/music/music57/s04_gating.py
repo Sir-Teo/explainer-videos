@@ -144,11 +144,7 @@ class Gating(SoundScene):
         rows.move_to(DOWN * 0.1)
         head = label(r"targets", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "With a meter, regulators and services could set targets. <bookmark mark='a'/> European broadcasting adopted EBU "
-            "R 128 in 2010: programmes at minus twenty-three LUFS, true peaks under minus one. American broadcast uses minus "
-            "twenty-four, under the name LKFS. The AES recommends minus sixteen to minus twenty for streaming; music services "
-            "play at about minus fourteen to minus sixteen. <bookmark mark='b'/> And this series' narration sits at minus "
-            "sixteen, the usual figure for online video."
+            "With a meter, regulators and services could set targets. <bookmark mark='a'/> European broadcasting adopted EBU R 128 in 2010: programmes at minus twenty-three LUFS, true peaks under minus one. American broadcast uses minus twenty-four, under the name LKFS. The AES recommends minus sixteen to minus twenty for streaming; service targets and modes vary; the values shown are illustrative rather than a permanent delivery standard. <bookmark mark='b'/> And this series' narration sits at minus sixteen, this course's chosen narration target, not a universal online-video requirement."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
             vo.wait_until("a")

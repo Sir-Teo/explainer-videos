@@ -67,8 +67,9 @@ Fresh whole-series regression after the Part 47 timing correction: **889 cases p
 | 54 — Microphones and Loudspeakers | Complete | Open |
 | 55 — Rooms and Space | Complete | Open |
 | 56 — Recording and Mixing | Complete | Open |
-| 57 — Mastering and Loudness | In progress | Open |
-| 58–68 | Queued | Open |
+| 57 — Mastering and Loudness | Complete | Open |
+| 58 — Compression for the Ear | In progress | Open |
+| 59–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -205,7 +206,9 @@ Part 55: all 13 chapter preview sheets reviewed; sound and 10 listening-window m
 
 Part 56: all 13 chapter preview sheets reviewed; sound and 12 listening-window motion checks pass. Local identities: `renders/qa/music56/source-receipt.json`.
 
-**Current: Part 57.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 57: all 13 chapter preview sheets reviewed; sound and 10 listening-window motion checks pass. Local identities: `renders/qa/music57/source-receipt.json`.
+
+**Current: Part 58.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

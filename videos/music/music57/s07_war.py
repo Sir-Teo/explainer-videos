@@ -138,7 +138,7 @@ class War(SoundScene):
             pulse(snd, boxes[0], st["m20"], st["m14"] - 0.3, buff=0.08)
             pulse(snd, boxes[1], st["m14"], st["m8"] - 0.3, buff=0.08)
             pulse(snd, boxes[2], st["m8"], c.duration, buff=0.08)
-        with self.voiceover("Played like this, the loudest is the most exciting, at first. That is the whole reason for the war, and the next chapter is how it ended."):
+        with self.voiceover("Played like this, the loudest is the most exciting, at first. That is the whole reason for the war, and the next chapter shows how normalization changed the playback advantage."):
             self.play(Indicate(boxes[2], color=EAR, scale_factor=1.04))
         self.wait(0.4)
         self.clear_scene()

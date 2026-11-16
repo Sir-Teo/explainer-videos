@@ -31,11 +31,9 @@ class Matched(SoundScene):
             pulse(snd, boxes[0], st["first"], st["second"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
             pulse(snd, boxes[2], 0, c.duration, rate=5.0, color=GREY_B, buff=0.08)
-        res = label(r"the same master, \ sample for sample; \ the second is 1 dB louder, \ and nothing else", font_size=20, color=TUNE).move_to(DOWN * 1.4)
+        res = label(r"the same source master; \ the second is scaled by $+1$ dB", font_size=20, color=TUNE).move_to(DOWN * 1.4)
         with self.voiceover(
-            "If you chose the second, you are in good company. They are the same master, sample for sample; the second is "
-            "one decibel louder, and nothing else. A decibel is barely a change in loudness, and yet it reliably reads as a "
-            "change in quality."
+            'If you chose the second, you are in good company. They are the same source master; the second is multiplied by a one-decibel gain, so the samples differ only by that scaling, and nothing else. A decibel is barely a change in loudness, and yet it can bias quality judgments; this demonstration does not measure a universal preference.'
         ):
             self.play(boxes[2][0].animate.set_stroke(TUNE, width=4), FadeIn(res))
         self.wait(0.4)
@@ -67,25 +65,20 @@ class Matched(SoundScene):
             (r"ITU-R BS.1116 and MUSHRA formalize this for codecs and systems \ (Part 58)", TUNE),
         ]
         rows_scene(self, r"the method", items,
-                   "So comparisons have a method. <bookmark mark='b'/> Match the integrated loudness to a tenth of a decibel before "
-                   "comparing anything. <bookmark mark='c'/> Switch quickly, because memory for timbre fades within seconds. "
-                   "<bookmark mark='d'/> Compare blind: the ABX test, from David Clark's comparator of about 1980, asks only whether X is "
-                   "A or B, and the listener must not know. <bookmark mark='e'/> Repeat, and count: twelve right out of sixteen is "
-                   "significant at five per cent, as Part 67 will show. <bookmark mark='f'/> The ITU's BS.1116 and the MUSHRA "
-                   "method formalize all this for testing codecs and systems, which Part 58 uses.", marks="bcdef")
+                   "So comparisons have a method. <bookmark mark='b'/> Match the integrated loudness to a tenth of a decibel before comparing anything. <bookmark mark='c'/> Switch quickly, because memory for timbre fades within seconds. <bookmark mark='d'/> Compare blind: the ABX test, from David Clark's comparator of about 1980, asks only whether X is A or B, and the listener must not know. <bookmark mark='e'/> Repeat, and count: twelve or more correct out of sixteen has a one-sided binomial chance probability of about three point eight per cent, for a preplanned independent fair-guess test; repeated testing needs adjustment, as Part 67 will show. <bookmark mark='f'/> The ITU's BS.1116 and the MUSHRA method formalize all this for testing codecs and systems, which Part 58 uses.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def series_rule(self):
         items = [
             (r"every ear question in this series compares sounds already matched in loudness, \ unless loudness is the point", WHITE),
             (r"each clip is set by its loudest 400 ms: \ $-15$ LUFS for an example, \ $-21$ for one meant to sit back", WHITE),
-            (r"so when Part 50 compared a compressed sound with the original, \ louder could not win; \ and here the gentle master did not lose by being quieter", WHITE),
+            (r"so when Part 50 compared a compressed sound with the original, \ the comparison aims to reduce loudness bias; a momentary meter match is not a guarantee of equal perceived loudness; \ and here the gentle master did not lose by being quieter", WHITE),
             (r"equal loudness is the series' way of making an ear question a fair one", TUNE),
         ]
         rows_scene(self, r"this series' rule", items,
                    "This series has followed the rule from the start. <bookmark mark='b'/> Every ear question compares sounds "
                    "already matched in loudness, unless loudness is the point. <bookmark mark='c'/> Each clip is set by its loudest "
                    "four hundred milliseconds, to minus fifteen LUFS for an example, minus twenty-one for one meant to sit back. "
-                   "<bookmark mark='d'/> So when Part 50 compared a compressed sound with the original, louder could not win, and in this "
+                   "<bookmark mark='d'/> So when Part 50 compared a compressed sound with the original, the comparison aims to reduce loudness bias; a momentary meter match is not a guarantee of equal perceived loudness, and in this "
                    "part's hook the gentle master did not lose by being quieter. <bookmark mark='e'/> Equal loudness is what makes an ear question "
                    "fair.", marks="bcde")

@@ -102,11 +102,11 @@ class TruePeak(SoundScene):
             (r"a converter rebuilds the wave with an interpolating filter: \ the same arithmetic as the true-peak meter, \ at a finer step", WHITE),
             (r"many converters leave a few decibels of headroom above digital full scale for exactly these overs; \ some leave none", WHITE),
             (r"a master that is legal sample by sample can still distort on a cheap player", WHITE),
-            (r"the true-peak ceiling is a promise about every converter the master will ever meet", TUNE),
+            (r"the true-peak ceiling provides headroom relative to a specified reconstruction estimate; later processing and playback implementations can still change peaks", TUNE),
         ]
         rows_scene(self, r"inside the converter", items,
                    "Where do the overs actually happen? <bookmark mark='b'/> A converter rebuilds the wave with an interpolating "
                    "filter: the same arithmetic as the true-peak meter, at a finer step. <bookmark mark='c'/> Many converters leave a "
                    "few decibels of headroom above digital full scale for exactly these overs; some leave none. "
                    "<bookmark mark='d'/> So a master that is legal sample by sample can still distort on a cheap player. "
-                   "<bookmark mark='e'/> The true-peak ceiling is a promise about every converter the master will ever meet.", marks="bcde")
+                   "<bookmark mark='e'/> The true-peak ceiling provides headroom relative to a specified reconstruction estimate; later processing and playback implementations can still change peaks.", marks="bcde")

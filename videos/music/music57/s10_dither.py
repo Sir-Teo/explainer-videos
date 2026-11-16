@@ -54,7 +54,7 @@ class Dither(SoundScene):
             "See it on a sine only two and a half quantization steps tall. <bookmark mark='a'/> Rounded, it becomes a "
             "staircase, and its error repeats with every cycle: harmonics that were never in the music. "
             "<bookmark mark='b'/> Now add a little random noise before rounding, triangular-distributed, two steps from peak to "
-            "peak. Each sample is noisier, but the error no longer follows the wave; on average the output is the wave itself, "
+            "peak. Each sample is noisier, but the total error's first two moments become independent of the ideal non-overloading quantizer input; on average the output is the wave itself, "
             "plus a steady hiss. Stanley Lipshitz and John Vanderkooy proved in the 1980s that triangular dither makes the "
             "error's first two moments independent of the signal."
         ) as vo:
@@ -118,15 +118,10 @@ class Dither(SoundScene):
     # ------------------------------------------------------------------
     def when(self):
         items = [
-            (r"dither once, \ at the last step, \ whenever the word length is cut: \ to 24 bits as well as to 16", WHITE),
+            (r"dither once, \ at the last step, \ when reducing fixed-point precision that needs dither", WHITE),
             (r"at 16 bits the dither's hiss sits near $-96$ dBFS: \ inaudible in a loud master, \ audible in a quiet classical fade", WHITE),
-            (r"never dither twice; \ never cut the word length without it", WHITE),
+            (r"avoid repeated quantization; \ later fixed-point requantization may need fresh dither", WHITE),
             (r"lossy codecs \ (Part 58) \ work from the high-resolution master, \ not from a dithered 16-bit file", TUNE),
         ]
         rows_scene(self, r"when to dither", items,
-                   "The practice is simple. <bookmark mark='b'/> Dither once, at the very last step, whenever the word length is "
-                   "cut, to twenty-four bits as well as to sixteen. <bookmark mark='c'/> At sixteen bits the hiss sits near minus "
-                   "ninety-six dBFS: inaudible in a loud master, audible in a quiet classical fade on headphones. "
-                   "<bookmark mark='d'/> Never dither twice, and never cut the word length without it. <bookmark mark='e'/> And lossy "
-                   "codecs, the subject of Part 58, should start from the high-resolution master, not from a dithered sixteen-bit "
-                   "file.", marks="bcde")
+                   "The practice is simple. <bookmark mark='b'/> Dither once, at the very last step, when rendering to a lower fixed-point precision that needs it, ideally at the final such conversion. <bookmark mark='c'/> At sixteen bits the hiss sits near minus ninety-six dBFS: inaudible in a loud master, audible in a quiet classical fade on headphones. <bookmark mark='d'/> Avoid unnecessary repeated quantization and dither; later fixed-point requantization may need fresh dither, and floating-point changes require separate consideration. <bookmark mark='e'/> And lossy codecs, the subject of Part 58, should start from the high-resolution master, not from a dithered sixteen-bit file.", marks="bcde")

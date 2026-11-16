@@ -19,17 +19,11 @@ class Limiter(SoundScene):
             (r"a compressor with an infinite ratio and an instant attack: \ nothing passes the ceiling", WHITE),
             (r"but an instant gain change is itself a distortion: \ the gain must start falling before the peak arrives", WHITE),
             (r"look-ahead: \ at each moment, \ the least gain needed over the next 1.5 ms, \ glided down in time", WHITE),
-            (r"the detector watches the true peak \ (4$\times$ oversampled), \ so no inter-sample over escapes", WHITE),
+            (r"the detector watches the true peak \ (4$\times$ oversampled), \ to reduce inter-sample overs; output still needs to be remeasured after processing", WHITE),
             (r"then a release of 80 ms lets the gain recover; \ a final clip at the ceiling catches what is left", TUNE),
         ]
         rows_scene(self, r"a look-ahead limiter", items,
-                   "The tool that won the loudness war is the limiter. <bookmark mark='b'/> It is a compressor with an infinite "
-                   "ratio and an instant attack: nothing passes the ceiling. <bookmark mark='c'/> But an instant change of gain is a "
-                   "distortion in itself, so the gain must start falling before the peak arrives. <bookmark mark='d'/> Monochord's "
-                   "limiter looks ahead: at each moment it takes the least gain needed over the next one and a half milliseconds, "
-                   "and glides down to it. <bookmark mark='e'/> Its detector watches the true peak, oversampled four times, so no "
-                   "inter-sample over escapes. <bookmark mark='f'/> Then a release of eighty milliseconds lets the gain recover, and "
-                   "a final clip at the ceiling catches anything left.", marks="bcdef")
+                   "The tool that won the loudness war is the limiter. <bookmark mark='b'/> It is a compressor with an infinite ratio and an instant attack: nothing passes the ceiling. <bookmark mark='c'/> But an instant change of gain is a distortion in itself, so the gain must start falling before the peak arrives. <bookmark mark='d'/> Monochord's limiter looks ahead: at each moment it takes the least gain needed over the next one and a half milliseconds, and glides down to it. <bookmark mark='e'/> Its detector watches the true peak, oversampled four times, to reduce inter-sample overs; output still needs to be remeasured after processing. <bookmark mark='f'/> Then a release of eighty milliseconds lets the gain recover, and a final clip at the ceiling catches anything left.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def zoom(self):
@@ -47,11 +41,7 @@ class Limiter(SoundScene):
         key = VGroup(label(r"pushed to $-8$ LUFS, \ before", font_size=15, color=GREY_B), label(r"clipped", font_size=15, color=EAR), label(r"limited", font_size=15, color=TUNE)).arrange(RIGHT, buff=0.6).next_to(a1, UP, buff=0.1)
         head = label(r"0.6 seconds, \ close up", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Here is six tenths of a second of our mix pushed to about minus eight LUFS, close up, with the ceiling at minus "
-            "one. <bookmark mark='a'/> In grey, the signal before: its drum hits go far over. <bookmark mark='b'/> A clipper "
-            "slices them off: flat tops, corners and all. <bookmark mark='c'/> The limiter turns the whole signal down around "
-            f"each hit, by up to {say(d['gr_max'])} decibels, gliding down just before it and recovering after, so the "
-            "waveform keeps its shape and only its size changes."
+            f"Here is six tenths of a second of our mix pushed to about minus eight LUFS, close up, with the ceiling at minus one. <bookmark mark='a'/> In grey, the signal before: its drum hits go far over. <bookmark mark='b'/> A clipper slices them off: flat tops, corners and all. <bookmark mark='c'/> The limiter turns the whole signal down around each hit, by up to {say(d['gr_max'])} decibels, gliding down just before it and recovering after, so peaks are controlled by a moving gain rather than hard slicing alone; time-varying gain still changes spectrum and envelope."
         ) as vo:
             self.play(FadeIn(head), FadeIn(a1), FadeIn(ceil), FadeIn(a2), FadeIn(g2l), FadeIn(key[0]))
             vo.wait_until("a")
@@ -94,8 +84,4 @@ class Limiter(SoundScene):
             (r"the loud masters of the 2000s stacked all three: \ clippers, \ multiband, \ limiter, \ and then clipped the converter", TUNE),
         ]
         rows_scene(self, r"clippers, \ on purpose", items,
-                   "And yet engineers clip on purpose. <bookmark mark='b'/> Clipping a few tenths of a millisecond off a drum's "
-                   "spike is inaudible, and buys level. <bookmark mark='c'/> A soft clipper rounds the corners, Part 50's hyperbolic "
-                   "tangent, trading a little distortion for a lot of loudness. <bookmark mark='d'/> Multiband limiters split the "
-                   "spectrum and limit each band apart, so that the kick does not pump the voice. <bookmark mark='e'/> The loud "
-                   "masters of the 2000s stacked all three, and then clipped the converter for the last decibel.", marks="bcde")
+                   "And yet engineers clip on purpose. <bookmark mark='b'/> Brief transient clipping can be hard to hear in some material, but audibility depends on amount, waveform and context, and buys level. <bookmark mark='c'/> A soft clipper rounds the corners, Part 50's hyperbolic tangent, trading a little distortion for a lot of loudness. <bookmark mark='d'/> Multiband limiters split the spectrum and limit each band apart, so that the kick does not pump the voice. <bookmark mark='e'/> The loud masters of the 2000s stacked all three, and then clipped the converter for the last decibel.", marks="bcde")
