@@ -130,4 +130,110 @@
       note: "Nothing you press is stored or sent. Rare signals usually raise the criterion (fewer presses, more misses): the prevalence effect of chapter seven, in ninety seconds.",
     });
   };
+
+  // ---- Part 52: Fitts's law on you.  Click targets of three sizes at three distances; your line and throughput. ----
+  W.pointer = function (el) {
+    var w = null, SIZES = [12, 24, 48], DISTS = [70, 140, 210], REPS = 2;
+    var S = { phase: "idle", trials: [], k: 0, target: null, t0: 0, log: [], from: null };
+    var mouse = { x: null, y: null };
+    function track(e) {
+      var c = e.target;
+      if (!c || c.tagName !== "CANVAS") return;
+      var r = c.getBoundingClientRect(); mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+    }
+    el.addEventListener("pointermove", track);
+    el.addEventListener("pointerdown", track); // registered before the task kit's, so it runs first
+    function place(b) {
+      var tr = S.trials[S.k], scale = Math.min(1, (Math.min(b.w, b.h * 1.6) - 70) / 260);
+      var D = tr.D * scale, Wd = tr.W, from = S.from || { x: b.cx, y: b.cy }, a, x, y, i;
+      for (i = 0; i < 24; i++) {
+        a = 2 * Math.PI * ((tr.ang + i * 0.37) % 1);
+        x = from.x + D * Math.cos(a); y = from.y + D * Math.sin(a);
+        if (x > b.x + 20 + Wd && x < b.x + b.w - 20 - Wd && y > b.y + 34 + Wd && y < b.y + b.h - 20 - Wd) break;
+      }
+      x = Math.max(b.x + 20 + Wd, Math.min(b.x + b.w - 20 - Wd, x)); y = Math.max(b.y + 34 + Wd, Math.min(b.y + b.h - 20 - Wd, y));
+      S.target = { x: x, y: y, W: Wd, D: Math.hypot(x - from.x, y - from.y), from: from };
+      S.t0 = T.now();
+    }
+    function fit() {
+      var n = S.log.length, i, mx = 0, my = 0, sxy = 0, sxx = 0;
+      if (n < 3) return null;
+      for (i = 0; i < n; i++) { mx += S.log[i].ID; my += S.log[i].MT; }
+      mx /= n; my /= n;
+      for (i = 0; i < n; i++) { sxy += (S.log[i].ID - mx) * (S.log[i].MT - my); sxx += (S.log[i].ID - mx) * (S.log[i].ID - mx); }
+      var b = sxx > 0 ? sxy / sxx : 0, a = my - b * mx;
+      // throughput: per width, the effective width from the spread of endpoints along the movement axis
+      var tp = [], hits = 0;
+      SIZES.forEach(function (Wd) {
+        var r = S.log.filter(function (q) { return q.W === Wd; });
+        if (r.length < 2) return;
+        var m = 0, v = 0; r.forEach(function (q) { m += q.dx; }); m /= r.length;
+        r.forEach(function (q) { v += (q.dx - m) * (q.dx - m); }); v /= (r.length - 1);
+        var we = Math.max(4.133 * Math.sqrt(v), 1);
+        r.forEach(function (q) { tp.push(Math.log2(q.D / we + 1) / q.MT); });
+      });
+      S.log.forEach(function (q) { if (q.hit) hits++; });
+      var mtp = tp.length ? tp.reduce(function (s, x) { return s + x; }, 0) / tp.length : NaN;
+      return { a: a, b: b, tp: mtp, hits: hits };
+    }
+    var task = T.create(el, {
+      keys: { " ": 0 },
+      accepting: function () { return S.phase === "run"; },
+      respond: function () {
+        if (!S.target) return;
+        var t = S.target, px = mouse.x === null ? t.x : mouse.x, py = mouse.y === null ? t.y : mouse.y;
+        var ux = (t.x - t.from.x) / (t.D || 1), uy = (t.y - t.from.y) / (t.D || 1);
+        var dx = (px - t.x) * ux + (py - t.y) * uy, hit = Math.hypot(px - t.x, py - t.y) <= t.W;
+        var mt = (T.now() - S.t0) / 1000;
+        S.log.push({ W: t.W, D: t.D, ID: Math.log2(t.D / (2 * t.W) + 1), MT: Math.max(mt, 0.05), dx: dx, hit: hit });
+        task.count++; S.from = { x: px, y: py }; S.k++; S.target = null;
+        if (S.k >= S.trials.length) { S.phase = "done"; S.target = null; }
+        if (w) w.render();
+      },
+    });
+    function start(state) {
+      var rand = mulberry(52 + (state ? state.seed : 0)), tr = [], r, i, j;
+      for (r = 0; r < REPS; r++) SIZES.forEach(function (Wd) { DISTS.forEach(function (D) { tr.push({ W: Wd, D: D, ang: rand() }); }); });
+      for (i = tr.length - 1; i > 0; i--) { j = Math.floor(rand() * (i + 1)); var t = tr[i]; tr[i] = tr[j]; tr[j] = t; }
+      S.trials = tr; S.k = 0; S.log = []; S.from = null; S.target = null; task.count = 0; S.phase = "run";
+      if (w) w.render();
+    }
+    w = QB.widget(el, {
+      title: "Point and click",
+      sub: "Eighteen targets of three sizes appear at three distances. Click each one (or put the pointer on it and press the space bar) as fast as you can while staying accurate. The page fits your own Fitts's law line and works out your throughput in bits per second from where your clicks landed.",
+      panels: 2, height: 340, weights: [1.15, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Clear", act: function (state) { state.seed++; S.phase = "idle"; S.log = []; S.target = null; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (S.phase === "run") {
+          if (!S.target) place(b);
+          ctx.save();
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif"; ctx.textAlign = "center";
+          ctx.fillText("target " + (S.k + 1) + " of " + S.trials.length, b.cx, b.y + 20);
+          ctx.fillStyle = "rgba(242,193,78,0.85)";
+          ctx.beginPath(); ctx.arc(S.target.x, S.target.y, S.target.W, 0, 2 * Math.PI); ctx.fill();
+          ctx.restore();
+        } else if (S.phase === "done") {
+          var f = fit();
+          T.message(ctx, b, "Done: " + (f ? f.hits : 0) + " of " + S.log.length + " clicks on target.",
+            f ? "Your line: MT = " + f.a.toFixed(2) + " + " + f.b.toFixed(2) + " x ID seconds. Throughput about " + (isFinite(f.tp) ? f.tp.toFixed(1) : "?") + " bits per second (a mouse usually gives about 3.5 to 5)." : "");
+        } else {
+          T.message(ctx, b, "On you", "Press Start, then click each yellow target as it appears.");
+        }
+        var a2 = g[1].axes({ x: [0, 4.5], y: [0, 2], title: "Your movements", xlabel: "index of difficulty (bits)", ylabel: "seconds" });
+        var xs = S.log.map(function (q) { return q.ID; }), ys = S.log.map(function (q) { return Math.min(q.MT, 1.98); });
+        a2.dots(xs, ys, { color: function (i) { return S.log[i].hit ? "#5bd18b" : "#ef6f6c"; }, r: 3.5 });
+        var f2 = fit();
+        if (f2) a2.line([0.2, 4.3], [f2.a + 0.2 * f2.b, f2.a + 4.3 * f2.b], { color: "#f2c14e", width: 2 });
+      },
+      readout: function () {
+        var f = fit();
+        return [["clicks", String(task.count)], ["slope (s/bit)", f ? f.b.toFixed(2) : "–"], ["throughput", f && isFinite(f.tp) ? f.tp.toFixed(1) + " bit/s" : "–"]];
+      },
+      note: "Nothing you click is stored or sent. Green dots were on target, red ones missed. With eighteen movements the line is rough; the law shows itself better with more.",
+    });
+  };
 })();

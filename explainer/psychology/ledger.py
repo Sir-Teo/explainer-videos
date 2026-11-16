@@ -6901,3 +6901,85 @@ shown(51, r"Endsley (1995)", "a theory of situation awareness, described")
 shown(51, r"Hart \& Staveland (1988)", "a measurement method (NASA-TLX)")
 shown(51, r"Reason (1990)", "a framework for human error")
 shown(51, r"Jones \& Endsley (1996)", "a coding of incident reports, described with its rough shares")
+
+
+# --- Part 52: Designing for Minds ------------------------------------------------------------------------------------
+
+add(Finding(
+    key="klm_accuracy", part=52, title=r"The keystroke-level model",
+    claim="Adding standard operator times predicts skilled users' error-free task times to within about 20%.",
+    original=Study("Card, Moran and Newell", 1980, design="predictions for 1,280 user-system-task interactions with "
+                   "editors and graphics systems", found="an average prediction error of about 21%"),
+    status="replicated",
+    record=(Study("Olson and Olson", 1990, design="a review of GOMS and keystroke-level studies",
+                  found="good predictions of expert, error-free performance across systems"),
+            Study("John and Kieras", 1996, design="a review of GOMS models used in practice",
+                  found="useful predictions in real design decisions, including Project Ernestine")),
+    note="It predicts the time of skilled, error-free work and nothing about learning, errors or motivation; within "
+         "that scope it holds up.",
+    sources=("S. K. Card, T. P. Moran and A. Newell, The keystroke-level model for user performance time with "
+             "interactive systems, Communications of the ACM 23 (1980) 396-410",
+             "J. R. Olson and G. M. Olson, The growth of cognitive modeling in human-computer interaction since GOMS, "
+             "Human-Computer Interaction 5 (1990) 221-265",
+             "B. E. John and D. E. Kieras, Using GOMS for user interface design and evaluation: which technique?, ACM "
+             "Transactions on Computer-Human Interaction 3 (1996) 287-319"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="graphical_perception", part=52, title=r"The graphical-perception ranking",
+    claim="People judge quantities from charts most accurately by position along a common scale, then length, then "
+          "angle, then area, volume and shading.",
+    original=Study("Cleveland and McGill", 1984, design="judgements of the percentage one mark is of another, across "
+                   "encodings", found="position best, then length, angle, area and shading"),
+    status="replicated",
+    record=(Study("Heer and Bostock", 2010, design="the same judgements by crowd workers online",
+                  found="the same ranking, with similar error sizes"),),
+    note="The ranking concerns reading values; for spotting patterns, clusters or trends other encodings can do "
+         "well, and the exponents of Part 11 explain much of it.",
+    sources=("W. S. Cleveland and R. McGill, Graphical perception: theory, experimentation, and application to the "
+             "development of graphical methods, Journal of the American Statistical Association 79 (1984) 531-554",
+             "J. Heer and M. Bostock, Crowdsourcing graphical perception: using Mechanical Turk to assess "
+             "visualization design, Proceedings of CHI 2010, 203-212"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="five_users", part=52, title=r"Five users are enough",
+    claim="A usability test with five users finds about 85% of an interface's usability problems.",
+    original=Study("Nielsen and Landauer", 1993, design="a model of problem discovery fitted to eleven studies",
+                   found="an average detection probability of about 0.31, so five users find about 85%"),
+    status="contested",
+    record=(Study("Spool and Schroeder", 2001, design="usability tests of large web sites",
+                  found="five users found far fewer than 85% of the problems"),
+            Study("Faulkner", 2003, design="samples of five drawn from sixty users of one system",
+                  found="from about 55% to nearly 100% of problems, depending on the five")),
+    note="The formula is right; its assumption that every problem is equally findable is not, and the share found "
+         "depends on the tasks and the users. Small iterative tests remain good practice.",
+    sources=("J. Nielsen and T. K. Landauer, A mathematical model of the finding of usability problems, Proceedings "
+             "of INTERCHI 1993, 206-213",
+             "J. Spool and W. Schroeder, Testing web sites: five users is nowhere near enough, CHI 2001 Extended "
+             "Abstracts, 285-286",
+             "L. Faulkner, Beyond the five-user assumption, Behavior Research Methods, Instruments, and Computers 35 "
+             "(2003) 379-383"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="habit_21_days", part=52, title=r"Twenty-one days to a habit",
+    claim="A new habit forms in about 21 days of repetition.",
+    original=Study("Maltz", 1960, design="a self-help book's remark about patients adjusting to surgery",
+                   found="a minimum of about 21 days to get used to a change"),
+    status="failed",
+    record=(Study("Lally, van Jaarsveld, Potts and Wardle", 2010, n="96 volunteers",
+                  design="a chosen daily behaviour rated for automaticity over twelve weeks",
+                  found="95% of the plateau after a median of 66 days, range 18 to 254"),),
+    note="The number was never a finding. The measured time is longer, varies widely between people and behaviours, "
+         "and a missed day does not reset it.",
+    sources=("M. Maltz, Psycho-Cybernetics (Prentice-Hall, 1960)",
+             "P. Lally, C. H. M. van Jaarsveld, H. W. W. Potts and J. Wardle, How are habits formed: modelling habit "
+             "formation in the real world, European Journal of Social Psychology 40 (2010) 998-1009"),
+    checked="2026-11-16",
+))
+shown(52, r"Gray, \ John \& Atwood (1993)", "a field study told as the part's story; its numbers quoted as reported")
+shown(52, r"Card, \ Moran \& Newell (1983)", "an engineering model of the user, described and computed")

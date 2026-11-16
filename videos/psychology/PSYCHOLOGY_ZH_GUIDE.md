@@ -1300,6 +1300,18 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Swiss cheese model; latent condition; checklist; crew resource management; fatigue risk management | 瑞士奶酪模型；潜在条件；检查单；机组资源管理；疲劳风险管理 |
 | Paul Fitts; Alphonse Chapanis; Norman Mackworth; James Reason; Jens Rasmussen; Lisanne Bainbridge; Mica Endsley | 保罗·菲茨；阿方斯·查帕尼斯；诺曼·麦克沃斯；詹姆斯·里森；延斯·拉斯穆森；莉莎妮·班布里奇；米卡·恩兹利 |
 
+## Part 52: designing for minds
+
+| English | 中文 |
+|---|---|
+| Model Human Processor; GOMS; keystroke-level model; operator; mental preparation; critical path | 模型人类处理器；GOMS；击键层次模型；操作符；心理准备；关键路径 |
+| index of difficulty; effective width; throughput; steering law; pie menu; menu breadth and depth | 难度指数；有效宽度；吞吐量；引导定律；饼状菜单；菜单宽度与深度 |
+| information foraging; information scent; marginal value theorem; first-click test | 信息觅食；信息气味；边际价值定理；首次点击测试 |
+| gulf of execution; gulf of evaluation; affordance; signifier; Norman door | 执行的鸿沟；评估的鸿沟；可供性；示能符号；诺曼门 |
+| usability test; think-aloud; System Usability Scale; problem-discovery curve | 可用性测试；出声思考；系统可用性量表；问题发现曲线 |
+| graphical perception; contrast ratio; relative luminance; colour-vision deficiency; dark pattern | 图形知觉；对比度；相对亮度；色觉缺陷；黑暗模式 |
+| Stuart Card; Thomas Moran; Bonnie John; Wayne Gray; Peter Pirolli; Jakob Nielsen; William Cleveland; Phillippa Lally | 斯图尔特·卡德；托马斯·莫兰；邦妮·约翰；韦恩·格雷；彼得·皮罗利；雅各布·尼尔森；威廉·克利夫兰；菲莉帕·拉利 |
+
 ## Names
 
 | English | 中文 |
