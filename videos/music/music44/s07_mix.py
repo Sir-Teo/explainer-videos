@@ -91,16 +91,16 @@ class Mix(SoundScene):
     # ------------------------------------------------------------------
     def craft(self):
         items = [
-            (r"composers write around dialogue: \ thin textures, \ low or high registers, \ no melody in the voice's range", WHITE),
-            (r"a solo clarinet under a tenor's line competes; \ sustained low strings do not", WHITE),
+            (r"composers write around dialogue: \ thin textures, \ low or high registers, \ careful register and texture around the voice, without a universal ban on melody in its range", WHITE),
+            (r"a solo clarinet under a tenor's line competes; \ sustained low strings may compete less, depending on levels and spectra", WHITE),
             (r"the final mix balances three stems: \ dialogue, \ music, \ effects", WHITE),
             (r"cinema mixes aim dialogue at a steady loudness; \ Part 57 measures it", TUNE),
             (r"chapter 7: \ games, \ where nobody knows what happens next", GREY_A),
         ]
         rows_scene(self, r"writing for the mix", items,
                    "Good scores make the mixer's job easy. <bookmark mark='b'/> Composers write around dialogue: thin textures, "
-                   "low or high registers, no melody in the voice's range. <bookmark mark='c'/> A solo clarinet under a tenor's "
-                   "line competes; sustained low strings do not. <bookmark mark='d'/> The final mix balances three stems, "
+                   "low or high registers, careful register and texture around the voice, without a universal ban on melody in its range. <bookmark mark='c'/> A solo clarinet under a tenor's "
+                   "line competes; sustained low strings may compete less, depending on levels and spectra. <bookmark mark='d'/> The final mix balances three stems, "
                    "dialogue, music and effects, <bookmark mark='e'/> and cinema mixes aim the dialogue at a steady loudness, "
                    "which Part 57 measures. <bookmark mark='f'/> Chapter seven turns to games, where nobody knows what happens "
                    "next.", marks="bcdef")
@@ -109,15 +109,10 @@ class Mix(SoundScene):
     def loudness(self):
         items = [
             (r"broadcasters normalise programmes to a target loudness \ (EBU R 128: \ $-$23 LUFS)", WHITE),
-            (r"many measure loudness on the dialogue alone, \ so the voice sits at the same level from show to show", WHITE),
+            (r"R 128 measures integrated programme loudness; \\ dialogue-gated targets belong to other specifications", WHITE),
             (r"music and effects then get the room the dialogue leaves", WHITE),
             (r"cinema mixes keep a wide range: \ quiet dialogue, \ very loud action; \ home versions compress it", TUNE),
             (r"Part 57 builds the loudness meter itself", GREY_A),
         ]
         rows_scene(self, r"loudness standards", items,
-                   "There are also rules for the whole programme. <bookmark mark='b'/> European broadcasters normalise to a "
-                   "target loudness, minus twenty-three LUFS under EBU R 128. <bookmark mark='c'/> Many measure loudness on the "
-                   "dialogue alone, so the voice sits at the same level from show to show, <bookmark mark='d'/> and music and "
-                   "effects get the room the dialogue leaves. <bookmark mark='e'/> Cinema mixes keep a wide range, quiet dialogue "
-                   "and very loud action, and home versions compress it. <bookmark mark='f'/> Part 57 builds the loudness meter "
-                   "itself.", marks="bcdef")
+                   "There are also rules for the whole programme. <bookmark mark='b'/> European broadcasters normalise to a target loudness, minus twenty-three LUFS under EBU R 128. <bookmark mark='c'/> EBU R 128 normally uses integrated programme loudness; dialogue-gated measurements belong to particular other delivery specifications, <bookmark mark='d'/> and music and effects get the room the dialogue leaves. <bookmark mark='e'/> Cinema mixes keep a wide range, quiet dialogue and very loud action, and home versions compress it. <bookmark mark='f'/> Part 57 builds the loudness meter itself.", marks="bcdef")

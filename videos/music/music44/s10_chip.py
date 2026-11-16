@@ -26,13 +26,7 @@ class Chip(SoundScene):
             (r"our chip, \ in their manner: \ two pulses, \ a 4-bit triangle, \ an LFSR noise, \ updated 60 times a second", GREY_A),
         ]
         rows_scene(self, r"sound chips", items,
-                   "The first game music came from chips. <bookmark mark='b'/> General Instrument's AY-3-8910 of 1978 and Texas "
-                   "Instruments' SN76489 each gave three square-wave tones and a noise channel. <bookmark mark='c'/> Nintendo's "
-                   "console chip of 1983 had two pulse waves, a triangle, a noise channel and short samples, "
-                   "<bookmark mark='d'/> and the Commodore 64's SID of 1982 had three oscillators with a real filter. "
-                   "<bookmark mark='e'/> A few voices, crude waveforms, volumes in sixteen steps, registers changed fifty or sixty "
-                   "times a second. <bookmark mark='f'/> Our chip works in their manner: two pulse channels, a four-bit triangle, "
-                   "a noise channel from a shift register, updated sixty times a second.", marks="bcdef")
+                   "Early game sound used varied discrete and chip-based circuits; programmable sound chips shaped the examples here. <bookmark mark='b'/> The AY-3-8910 and SN76489 offered three tone channels plus noise generation, with different architectures: the AY shares its noise generator across channel mixers. <bookmark mark='c'/> Nintendo's console chip of 1983 had two pulse waves, a triangle, a noise channel and short samples, <bookmark mark='d'/> and the Commodore 64's SID of 1982 had three oscillators with a real filter. <bookmark mark='e'/> A few voices, crude waveforms, volumes in sixteen steps, registers changed fifty or sixty times a second. <bookmark mark='f'/> Our chip works in their manner: two pulse channels, a four-bit triangle, a noise channel from a shift register, updated sixty times a second.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def duty(self):

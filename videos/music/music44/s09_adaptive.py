@@ -104,7 +104,7 @@ class Adaptive(SoundScene):
         with self.voiceover(
             "Waiting for a musical boundary costs time. <bookmark mark='a'/> Over two hundred simulated games, a change "
             "waits on average a quarter of a second for the next beat, a second for the next bar, and two seconds for the next "
-            "phrase. Theory predicts exactly half the boundary's length, because changes arrive at random moments. The worst "
+            "phrase. Half a boundary is the expectation if event phases are uniform relative to that boundary; correlated or scripted events can differ. The worst "
             "case is the whole length: almost four seconds of the wrong music for a phrase. In our game the bar-line delay "
             f"averaged {say(g['mean_delay'], 2)} seconds; the stinger covers it."
         ) as vo:

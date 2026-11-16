@@ -93,16 +93,12 @@ class Hook(SoundScene):
     # ------------------------------------------------------------------
     def silent(self):
         items = [
-            (r"`silent' films were never silent: \ a pianist, \ an organist or an orchestra played in every cinema", WHITE),
+            (r"many silent-film screenings had accompaniment; \ provision varied by venue and occasion", WHITE),
             (r"studios sent cue sheets: \ lists of scenes with suggested music and timings, \ from the 1910s", WHITE),
             (r"from 1926 the Vitaphone system put the score on a disc synchronised with the film", WHITE),
             (r"with sound film, \ the score became part of the film itself, \ timed to the frame", TUNE),
             (r"games, \ fifty years later, \ undid the fixed timing again", GREY_A),
         ]
         rows_scene(self, r"a short history", items,
-                   "A short history. <bookmark mark='b'/> So-called silent films were never silent: a pianist, an organist or an "
-                   "orchestra played in every cinema. <bookmark mark='c'/> From the 1910s studios sent cue sheets, lists of scenes "
-                   "with suggested music and timings. <bookmark mark='d'/> From 1926 the Vitaphone system put a score on a disc "
-                   "synchronised with the film, <bookmark mark='e'/> and with sound film the score became part of the film "
-                   "itself, timed to the frame. <bookmark mark='f'/> Games, fifty years later, undid the fixed timing again.",
+                   "A short history. <bookmark mark='b'/> So-called silent films were never silent: many screenings used live musicians or recorded accompaniment, while provision varied by place, venue and occasion. <bookmark mark='c'/> From the 1910s studios sent cue sheets, lists of scenes with suggested music and timings. <bookmark mark='d'/> From 1926 the Vitaphone system put a score on a disc synchronised with the film, <bookmark mark='e'/> and with sound film the score became part of the film itself, timed to the frame. <bookmark mark='f'/> Games, fifty years later, undid the fixed timing again.",
                    marks="bcdef")

@@ -19,14 +19,14 @@ class Spotting(SoundScene):
         items = [
             (r"spotting: \ director and composer watch the cut and decide where music starts, \ stops, \ and what it does", WHITE),
             (r"each cue gets start and end times, \ and hit points: \ moments the music must meet", WHITE),
-            (r"film runs at 24 frames a second: \ one frame is 41.7 ms; \ timecode names every frame", WHITE),
+            (r"this example uses 24 frames a second: \ one frame is 41.7 ms; \ timecode names every frame", WHITE),
             (r"a cue is written so its hits land on beats, \ or on strong parts of beats", TUNE),
             (r"the craft is mostly arithmetic, \ done before a note is written", GREY_A),
         ]
         rows_scene(self, r"spotting", items,
                    "Scoring starts with spotting. <bookmark mark='b'/> The director and composer watch the cut together and "
                    "decide where music starts and stops, and what it does. <bookmark mark='c'/> Each cue gets start and end times, "
-                   "and hit points: moments the music must meet. <bookmark mark='d'/> Film runs at twenty-four frames a second, "
+                   "and hit points: moments the music must meet. <bookmark mark='d'/> This example uses twenty-four frames a second; actual delivery frame rates vary, "
                    "so one frame lasts forty-one point seven milliseconds, and timecode names every frame. "
                    "<bookmark mark='e'/> A cue is written so that its hits land on beats, or on strong parts of beats. "
                    "<bookmark mark='f'/> Much of the craft is arithmetic, done before a note is written.", marks="bcdef")
@@ -69,9 +69,7 @@ class Spotting(SoundScene):
         ans = VGroup(label(r"first: \ late; \ second: \ early; \ third: \ in sync", font_size=21, color=TUNE),
                      label(r"most people find the early sound the more wrong: \ in the world, \ light always arrives first", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The third. The first was late, the second early. Most people find the early sound the more wrong of the two, "
-            "and there is a reason: in the world, light always arrives before sound, so a sound slightly after its image "
-            "is natural, and a sound before it never is."
+            'The third. The first was late, the second early. Audio-visual synchrony judgments often tolerate more sound lag than lead, but the window depends on content, task, listener and equipment. Physical propagation can contribute, without making this a universal verdict on these examples.'
         ):
             self.play(FadeOut(boxes), FadeIn(ans))
         self.wait(0.4)
@@ -95,9 +93,9 @@ class Spotting(SoundScene):
         head = label(r"how far can sound and picture drift?", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "How far can they drift before anyone notices? <bookmark mark='a'/> Broadcasters measured it for television: "
-            f"viewers barely notice sound up to about {say(lead)} milliseconds early, or up to about {say(lag)} milliseconds "
+            f"the cited television tests report approximate detection thresholds of {say(lead)} milliseconds early, or up to about {say(lag)} milliseconds "
             "late. The window is lopsided, for the same reason the early slam felt wrong. In frames, that is about one frame "
-            "early and three late: a cue whose hit is a frame off still works, three frames early does not."
+            "early and three late: these are content- and task-dependent guidance values, not guaranteed acceptability limits for every cue."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(ticks), FadeIn(frames_), FadeIn(labs[:3]), FadeIn(cap))
             vo.wait_until("a")

@@ -69,16 +69,11 @@ class Outro(SoundScene):
             r"a leitmotif keeps its contour and rhythm while its mood changes",
             r"hits are arithmetic: \ beats = seconds $\times$ tempo / 60, \ to within a frame",
             r"sound may lag a picture more than it may lead it",
-            r"adaptive scores are state machines; \ waiting for a boundary costs half its length",
+            r"adaptive scores are state machines; \ mean wait is half a boundary for uniform event phases",
             r"hardware limits made a style: \ duty cycles, \ arpeggio chords, \ noise drums",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Music tells a viewer how to read a picture. <bookmark mark='a'/> A leitmotif keeps its "
-            "contour and rhythm while its mood changes. <bookmark mark='b'/> Hits are arithmetic: beats equal seconds times "
-            "tempo over sixty, to within a frame. <bookmark mark='c'/> Sound may lag a picture more than it may lead it. "
-            "<bookmark mark='d'/> Adaptive scores are state machines, and waiting for a musical boundary costs half its "
-            "length on average. <bookmark mark='e'/> And hardware limits made a style: duty cycles, arpeggio chords and noise "
-            "drums."
+            "What did we find? Music tells a viewer how to read a picture. <bookmark mark='a'/> A leitmotif keeps its contour and rhythm while its mood changes. <bookmark mark='b'/> Hits are arithmetic: beats equal seconds times tempo over sixty, to within a frame. <bookmark mark='c'/> Sound may lag a picture more than it may lead it. <bookmark mark='d'/> Adaptive scores are state machines, and waiting costs half a boundary on average under a uniform event-phase assumption. <bookmark mark='e'/> And hardware limits made a style: duty cycles, arpeggio chords and noise drums."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

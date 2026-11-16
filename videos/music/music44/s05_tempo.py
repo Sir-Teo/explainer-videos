@@ -185,7 +185,7 @@ class Tempo(SoundScene):
             drive_stage(snd, st, 0.0)
             drive_strip(snd, sp, 0.0)
         with self.voiceover(
-            "Almost nobody can. Tempo changes of a per cent or two pass unnoticed, which is why a variable click is a "
+            "Judge it for yourself. Changes of a percent or two may escape notice in some passages, but are not universally inaudible, which is why a variable click is a "
             "composer's quiet friend."
         ):
             self.play(Indicate(cap))

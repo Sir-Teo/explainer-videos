@@ -91,18 +91,14 @@ class Games(SoundScene):
     # ------------------------------------------------------------------
     def layers(self):
         items = [
-            (r"layers must agree at every moment: \ same tempo, \ same key, \ same bar length", WHITE),
+            (r"these simple layers share tempo, harmonic plan and bar length", WHITE),
             (r"segments must join: \ each ends where any allowed successor can begin \ (the dice game's trick)", WHITE),
             (r"intensity changes on beat boundaries, \ so a layer never enters mid-note", WHITE),
             (r"the composer writes the pieces and the joins; \ the game decides the order", TUNE),
             (r"chapter 8: \ a game played, \ and its score heard", GREY_A),
         ]
         rows_scene(self, r"what makes it work", items,
-                   "What makes such a score work? <bookmark mark='b'/> Layers must agree at every moment: same tempo, same key, "
-                   "same bar length. <bookmark mark='c'/> Segments must join: each ends where any allowed successor can begin, "
-                   "the dice game's trick again. <bookmark mark='d'/> Intensity changes only on beat boundaries, so a layer never "
-                   "enters in the middle of a note. <bookmark mark='e'/> The composer writes the pieces and the joins; the game "
-                   "decides the order. <bookmark mark='f'/> Chapter eight plays a game and lets us hear its score.", marks="bcdef")
+                   "What makes such a score work? <bookmark mark='b'/> These simple layers share tempo, harmonic plan and bar length; other adaptive systems can reconcile polymeter, changing keys or asynchronous textures. <bookmark mark='c'/> Segments must join: each ends where any allowed successor can begin, the dice game's trick again. <bookmark mark='d'/> Intensity changes only on beat boundaries, which aligns entries to the selected grid, though held notes can still cross that boundary. <bookmark mark='e'/> The composer writes the pieces and the joins; the game decides the order. <bookmark mark='f'/> Chapter eight plays a game and lets us hear its score.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def switch(self):

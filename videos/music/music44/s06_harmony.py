@@ -23,17 +23,12 @@ class Harmony(SoundScene):
         items = [
             (r"Frank Lehman, \ \textit{Hollywood Harmony} \ (2018): \ the chords of film scores, \ analysed like a style", WHITE),
             (r"film scores are tonal, \ but move between keys freely, \ often by chords a third apart", WHITE),
-            (r"such `chromatic mediants' keep one note and move two by a semitone: \ Part 31's L, \ P and R, \ combined", WHITE),
+            (r"such `chromatic mediants' can keep one note with short moves in the others: \ Part 31's L, \ P and R, \ combined", WHITE),
             (r"they sound strange and inevitable at once: \ a step outside the key that the ear can follow", TUNE),
             (r"a shared vocabulary: \ certain progressions mean certain things on screen", GREY_A),
         ]
         rows_scene(self, r"Hollywood harmony", items,
-                   "Is there a Hollywood harmony? <bookmark mark='b'/> Frank Lehman's book of 2018 analyses the chords of film "
-                   "scores as a style. <bookmark mark='c'/> Film scores are tonal, but they move between keys freely, often by "
-                   "chords a third apart. <bookmark mark='d'/> These chromatic mediants keep one note and move the others by a "
-                   "semitone, Part 31's transformations L, P and R in combination. <bookmark mark='e'/> They sound strange and "
-                   "inevitable at once: a step outside the key that the ear can follow. <bookmark mark='f'/> And film has built a "
-                   "shared vocabulary in which certain progressions mean certain things.", marks="bcdef")
+                   "Is there a Hollywood harmony? <bookmark mark='b'/> Frank Lehman's book of 2018 analyses the chords of film scores as a style. <bookmark mark='c'/> Many scores in this tonal symphonic tradition move between keys freely; film music also includes other harmonic and textural practices, often by chords a third apart. <bookmark mark='d'/> Selected chromatic-mediant voicings keep one note while others move by one or two semitones, Part 31's transformations L, P and R in combination. <bookmark mark='e'/> They sound strange and inevitable at once: a step outside the key that the ear can follow. <bookmark mark='f'/> And film has built a shared vocabulary in which certain progressions mean certain things.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def hear(self):

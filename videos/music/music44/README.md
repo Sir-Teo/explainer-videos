@@ -113,3 +113,7 @@ python -m videos.music.labs 44                                  # the lab (write
 * ITU-R BT.1359, "Relative timing of sound and vision for broadcasting" (1998); EBU R 128, loudness normalisation.
 * M. Z. Land and P. N. McConnell, the iMUSE patent, US 5,315,057 (1994).
 * B. Eno and others on generative music for *Spore* (2008); the procedural soundtrack of *No Man's Sky* (2016).
+
+## Interpretation limits
+
+Frame arithmetic uses 24 fps for this example; actual formats vary. Synchrony windows and tempo-change detection depend on content, task and listeners. Chromatic-mediant associations describe a film-scoring tradition, not fixed chord emotions. EBU R 128 uses integrated programme loudness, distinct from particular dialogue-gated specifications. Adaptive transition delay averages half a boundary only for uniform event phases. Layer compatibility rules are choices of this simple engine, not universal requirements. The vowel-only dialogue demonstrates band energy and ducking, not measured word intelligibility.
