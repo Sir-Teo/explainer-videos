@@ -31,9 +31,9 @@ quartets instead. Published findings are the ones listed under Sources.
   an octave more range); Haydn in London; a motive worked to exhaustion; Beethoven's Op. 59 No. 2 finale, an E minor
   movement that begins in C major, heard with the tracker undecided; an ear question (which is Beethoven?); *Figaro*'s
   Act II finale; Gluck's reform.
-* **7. Who wrote this, fairly.** One genre, one city, one generation: Part 24's features score 42 in 100, eight Classical
-  features 55, always guessing Mozart 45; the two best features plotted; 2000 shuffles of the names score 33 on average
-  and as well as the real names about 3 times in 100; why it is hard.
+* **7. Who wrote this, fairly.** One genre, related works across several decades: Part 24's features score 42 in 100, eight Classical
+  features 52, always guessing Mozart 45; the two best features plotted; 2000 shuffles of the names score 33 on average
+  and as well as the real names about 5.4 times in 100; why it is hard.
 * **8. The fortepiano and the metronome.** An instrument that can be soft and loud; a crescendo on Part 7's piano,
   heard; the Mannheim orchestra; Maelzel's metronome and Beethoven's marks; Viennese and English pianos; period
   instruments; Beethoven's puzzling marks.
@@ -136,3 +136,15 @@ python -m videos.music.labs 26                                  # the lab (write
 * Part 7 for the bowed string and the piano; Part 15 for keys; Part 18 for n-grams; Part 21 for the period, the sentence
   and sonata theory; Part 22 for topics; Part 24 for the attribution test; Part 25 for the binary dance and the
   ritornello.
+
+## Scope of the measurements
+
+Cadence detection finds selected bass-fifth arrivals with upper tonic/third conditions, not every authentic cadence. Key-profile estimates can suggest tonal regions but do not independently identify themes, formal boundaries or a listener’s sense of home. Four- and eight-bar gaps are measured between detected events, not verified complete phrases.
+
+Note-attack counts are a proxy for activity, with ties favoring earlier instruments, rather than thematic leadership. The accompaniment detector finds broad repeated/chordal figures, not specifically Alberti bass. Movement length in notated bars is not duration, and the uneven sample does not establish universal composer tendencies.
+
+The attribution task holds genre more nearly fixed than Part 24, but date, edition, source and generation still differ. Leave-one-movement-out permits other movements of the same quartet in training; a genuinely independent test should hold out whole quartets and sources. The permutation test assumes exchangeable movements, which related movements undermine. Best single features are selected on this dataset. There is no measured human-listener baseline. Scaling uses the corrected training-fold-only routine from Part 24.
+
+Periods can have weaker authentic antecedent closes as well as half cadences. Sonata and concerto descriptions are common templates with historical alternatives. Dynamics, measured tempo and independent chamber parts all have precedents; the fortepiano’s touch response and metronome’s adoption expanded existing possibilities.
+
+With training-fold-only scaling, the Classical-feature classifier gets 17/33 (51.5%), the counterpoint features 14/33 (42.4%), and the majority baseline 15/33 (45.5%). The 2,000-shuffle tail is 109/2001 ≈ 0.0545; this is not below 0.05, even before addressing related-movement dependence.

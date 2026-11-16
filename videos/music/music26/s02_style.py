@@ -44,7 +44,7 @@ class Style(SoundScene):
         ]
         rows_scene(self, r"the stock patterns", items,
                    "Those patterns now have names. <bookmark mark='b'/> The musicologist Robert Gjerdingen, in 2007, "
-                   "revived and named them: the Romanesca, the Prinner, the Fonte, the Monte, the Ponte, and a dozen more. "
+                   "systematized historical schemata, retaining some older names and introducing others: the Romanesca, the Prinner, the Fonte, the Monte, the Ponte, and a dozen more. "
                    "<bookmark mark='c'/> Each is a bass line and a melody moving together in a known way. "
                    "<bookmark mark='d'/> Apprentices learned them in Naples, through the partimenti of Part 25. "
                    "<bookmark mark='e'/> A listener who knows them hears what is coming, and notices when it does not "
@@ -61,13 +61,7 @@ class Style(SoundScene):
             (r"Classical style: \ conventions so shared that they can be played with", GREY_A),
         ]
         rows_scene(self, r"a joke about endings", items,
-                   "Haydn's joke shows how strong the expectations were. <bookmark mark='b'/> The finale of his String "
-                   "Quartet Opus 33 Number 2, of 1781, is a cheerful rondo, <bookmark mark='c'/> but near the end it "
-                   "slows to an Adagio, then breaks its tune into fragments separated by silences, "
-                   "<bookmark mark='d'/> each of which could be the end and is not, until after a long rest the opening "
-                   "phrase returns, and stops in mid-air. <bookmark mark='e'/> The joke only works because everyone in the "
-                   "room knew exactly how a piece ought to end. <bookmark mark='f'/> That is the Classical style: "
-                   "conventions so firmly shared that a composer could play with them, and the audience would get it.", marks="cdef")
+                   "Haydn's joke shows how strong the expectations were. <bookmark mark='b'/> The finale of his String Quartet Opus 33 Number 2, of 1781, is a cheerful rondo, <bookmark mark='c'/> but near the end it slows to an Adagio, then breaks its tune into fragments separated by silences, <bookmark mark='d'/> each of which could be the end and is not, until after a long rest the opening phrase returns, and stops in mid-air. <bookmark mark='e'/> The joke only works because familiar conventions can support an ending joke, without assuming uniform knowledge across an audience. <bookmark mark='f'/> That is the Classical style: conventions so firmly shared that a composer could play with them, and the audience would get it.", marks="cdef")
 
     # ------------------------------------------------------------------
     def k265(self):
@@ -91,7 +85,7 @@ class Style(SoundScene):
             (r"the style is clear because its audience is wide", GREY_A),
         ]
         rows_scene(self, r"a public for music", items,
-                   "Who listened? <bookmark mark='b'/> In Vienna, audiences in theatres, halls and private houses; in 1784 Mozart sold subscriptions to his own concerts. <bookmark mark='c'/> In London, the violinist and impresario Johann Peter Salomon brought Haydn over twice in the 1790s for concert seasons that made him a celebrity. <bookmark mark='d'/> Publishers in Vienna, Paris and London sold the parts, and keyboard arrangements for the home. <bookmark mark='e'/> A public that pays expects to understand at first hearing, <bookmark mark='f'/> and the clarity of the style is partly a consequence of the width of its audience.", marks="cdef")
+                   "Who listened? <bookmark mark='b'/> In Vienna, audiences in theatres, halls and private houses; in 1784 Mozart sold subscriptions to his own concerts. <bookmark mark='c'/> In London, the violinist and impresario Johann Peter Salomon brought Haydn over twice in the 1790s for concert seasons that made him a celebrity. <bookmark mark='d'/> Publishers in Vienna, Paris and London sold the parts, and keyboard arrangements for the home. <bookmark mark='e'/> Public concerts and domestic publishing helped circulate recognizable conventions, <bookmark mark='f'/> and the clarity of the style is partly a consequence of the width of its audience.", marks="cdef")
 
     # ------------------------------------------------------------------
     def empfindsam(self):

@@ -48,7 +48,7 @@ class Sonata(SoundScene):
             "<bookmark mark='b'/> Then the development wanders: G minor, E flat, D minor, A minor, keys related to the "
             "home key but not the home key. <bookmark mark='c'/> And at about bar ninety C major returns and holds, with "
             "only brief excursions, to the end: the recapitulation, where the music of the second group comes back, now "
-            "at home. The program knows nothing about themes; the plan is visible in the keys alone."
+            "at home. The program knows nothing about themes; the key estimates support parts of this interpretation, but do not independently identify themes or prove formal boundaries."
         ) as vo:
             self.play(FadeIn(head), FadeIn(labs_))
             vo.wait_until("a")
@@ -139,9 +139,7 @@ class Sonata(SoundScene):
         ans = VGroup(label(rf"bar {d['exp_bar']:.0f}: \ in G", font_size=22, color=BLUE).next_to(gA, DOWN, buff=0.35),
                      label(rf"bar {d['rec_bar']:.0f}: \ in C, \ home", font_size=22, color=TUNE).next_to(gB, DOWN, buff=0.35))
         with self.voiceover(
-            f"B, from bar {say(round(d['rec_bar']))}, is the recapitulation, in C. A, from bar {say(round(d['exp_bar']))}, "
-            "is in G. Out of context the difference is subtle; in the movement, after a development that has avoided C, the "
-            "return is unmistakable. That is the point of the form."
+            f"B, from bar {say(round(d['rec_bar']))}, is the recapitulation, in C. A, from bar {say(round(d['exp_bar']))}, is in G. Out of context the difference is subtle; in the movement, after a development that has avoided C, the return can be perceptually salient; this film has not measured listeners’ responses. That is the point of the form."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -175,7 +173,7 @@ class Sonata(SoundScene):
             (r"the concerto as drama: \ an individual against a group", GREY_A),
         ]
         rows_scene(self, r"the concerto, Classical", items,
-                   "The concerto took on the form too. <bookmark mark='b'/> Mozart wrote a dozen piano concertos for his own concerts in Vienna between 1784 and 1786. <bookmark mark='c'/> Their first movements have a double exposition: the orchestra states the themes, staying at home, and then the soloist enters and restates them, this time making the move to the new key. <bookmark mark='d'/> The orchestral passages are what remains of Part 25's ritornello. <bookmark mark='e'/> Near the end the orchestra stops on a held chord and the soloist improvises a cadenza on the themes. <bookmark mark='f'/> It is sonata form as a drama between an individual and a group.", marks="cdef")
+                   "The concerto took on the form too. <bookmark mark='b'/> Mozart wrote a dozen piano concertos for his own concerts in Vienna between 1784 and 1786. <bookmark mark='c'/> Many first movements combine orchestral and solo rotations, often taught as a double exposition: the orchestra states the themes, staying at home, and then the soloist enters and restates them, this time making the move to the new key. <bookmark mark='d'/> The orchestral passages are what remains of Part 25's ritornello. <bookmark mark='e'/> Near the end the orchestra stops on a held chord and the soloist improvises a cadenza on the themes. <bookmark mark='f'/> It is sonata form as a drama between an individual and a group.", marks="cdef")
 
     # ------------------------------------------------------------------
     def binary(self):

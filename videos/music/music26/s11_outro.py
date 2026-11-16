@@ -72,14 +72,7 @@ class Outro(SoundScene):
             rf"a fair attribution test: \ {100 * st['acc26']:.0f} in 100; \ shuffled names {100 * np.mean(st['null']):.0f}, \ always Mozart {100 * st['chance']:.0f}",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? The Classical style runs on shared expectations, strong enough to joke with. "
-            "<bookmark mark='a'/> Its phrases lean on four and eight bars, though most real cadences fall elsewhere. "
-            "<bookmark mark='b'/> Sonata form is visible to a key-finder that knows no themes, and most major-key movements "
-            "go first to the dominant. "
-            "<bookmark mark='c'/> The quartet is a conversation led, most of the time, by the first violin. "
-            "<bookmark mark='d'/> Beethoven took the language longer and wider. <bookmark mark='e'/> And the numbers "
-            "do know something about who wrote a quartet, more than shuffled names, but less than a rule that always says "
-            "Mozart: style is easier to hear than to count."
+            "What did we find? The Classical style runs on shared expectations, strong enough to joke with. <bookmark mark='a'/> Its phrases lean on four and eight bars, though most real cadences fall elsewhere. <bookmark mark='b'/> Sonata form is visible to a key-finder that knows no themes, and most retained major-key movements first sustain a dominant estimate under this tracker. <bookmark mark='c'/> The quartet is a conversation led, most of the time, by the first violin. <bookmark mark='d'/> Beethoven took the language longer and wider. <bookmark mark='e'/> And the numbers do know something about who wrote a quartet, with seventeen correct movements against fifteen for the majority baseline, and a shuffle tail near zero point zero five four: these scores do not establish human comparative accuracy."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

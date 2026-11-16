@@ -62,7 +62,7 @@ class Phrases(SoundScene):
                    "common theme-type, which Part 21 heard, is the sentence: an idea, its repetition, and a faster "
                    "continuation driving to the cadence. <bookmark mark='e'/> The theorist Heinrich Christoph Koch "
                    "described this phrasing at the time, building melodies from two-bar units the way sentences are built "
-                   "from clauses. <bookmark mark='f'/> William Caplin's modern theory of formal functions makes it exact.", marks="cdef")
+                   "from clauses. <bookmark mark='f'/> William Caplin's modern theory of formal functions gives a detailed analytical vocabulary.", marks="cdef")
 
     # ------------------------------------------------------------------
     def forms(self):
@@ -95,23 +95,23 @@ class Phrases(SoundScene):
         ks = list(range(2, 17))
         bars = columns([g.get(k, 0) for k in ks], [str(k) for k in ks], width=7.8, height=2.6, color=TUNE, fmt="{:.0f}", font_size=17)
         bars.move_to(LEFT * 2.4 + DOWN * 0.4)
-        t = label(rf"bars between authentic cadences, \ {d['cadences']} cadences in 33 quartet movements", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.35)
+        t = label(rf"bars between detected cadence candidates, \ {d['cadences']} cadences in 33 quartet movements", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.35)
         per = d["periodic"]
         side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
             (r"the peaks: \ 4 and 8 bars", TUNE),
-            (rf"exactly 4 or 8, \ in 100: \ Haydn {100 * per['haydn']:.0f}, \ Mozart {100 * per['mozart']:.0f}, \ Beethoven {100 * per['beethoven']:.0f}", WHITE),
+            (rf"4 or 8 bars, \ in 100 gaps: \\ Haydn {100 * per['haydn']:.0f}, Mozart {100 * per['mozart']:.0f}\\Beethoven {100 * per['beethoven']:.0f}", WHITE),
             (r"most gaps are elsewhere", EAR),
-            (r"a strict detector: \ bass down a fifth", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+            (r"a strict detector:\\bass down a fifth", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 4.2))
-        side.move_to(RIGHT * 4.5 + DOWN * 0.2)
+        side.move_to(RIGHT * 4.1 + DOWN * 0.2)
         with self.voiceover(
-            "How periodic is the real music? A program finds every authentic cadence in the thirty-three quartet "
+            "How periodic is the real music? A program detects a restricted subset of candidate authentic cadences in the thirty-three quartet "
             f"movements, {say(d['cadences'])} of them, where the bass falls a fifth onto a downbeat and the top voice "
             "lands on the tonic or its third, and measures the bars between them. <bookmark mark='a'/> The peaks are at "
             "four and eight bars. <bookmark mark='b'/> But gaps of exactly four or eight are a minority: Mozart's are "
             f"{say(round(100 * per['mozart']))} in a hundred, Haydn's {say(round(100 * per['haydn']))}. "
             "<bookmark mark='c'/> Real phrases stretch, overlap and elide; the four-bar norm is the background against "
-            "which those departures are heard. <bookmark mark='d'/> The detector is also strict, and misses cadences "
+            "which those departures are heard. <bookmark mark='d'/> These gap statistics mix phrase structure with the detector’s omissions; it is also strict, and misses cadences "
             "where the bass does not move by a fifth."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))

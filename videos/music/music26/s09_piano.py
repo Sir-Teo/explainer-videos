@@ -29,7 +29,7 @@ class Piano(SoundScene):
                    "The keyboard changed under the composers' hands. <bookmark mark='b'/> Bartolomeo Cristofori's harpsichord "
                    "with hammers, built in Florence around 1700, had become by the 1780s the Viennese fortepiano: "
                    "<bookmark mark='c'/> leather-covered hammers, a light action, five octaves, soft or loud by the touch "
-                   "of the finger, as Part 7 simulated. <bookmark mark='d'/> A harpsichord cannot make a crescendo; the "
+                   "of the finger, as Part 7 simulated. <bookmark mark='d'/> A single harpsichord note has little touch-sensitive dynamic range; texture, registration and articulation can still shape a crescendo; the "
                    "fortepiano can, <bookmark mark='e'/> and dynamics became part of the composition, written into the score "
                    "as piano, forte, sudden accents and crescendos. <bookmark mark='f'/> By Beethoven's last sonatas the "
                    "instrument had six octaves and more, and iron bracing was on its way.", marks="cdef")
@@ -45,9 +45,7 @@ class Piano(SoundScene):
         head = label(r"one phrase, \ three times, \ a long crescendo", font_size=26, color=GREY_A).to_edge(UP, buff=0.5)
         cap = label(r"the hammer strikes faster: \ louder, \ and brighter \ (Part 7: \ more high partials)", font_size=22, color=GREY_A).next_to(g, DOWN, buff=0.45)
         with self.voiceover(
-            "This is what the harpsichord could not do. The Tune's first phrase three times on Part 7's piano, the hammer "
-            "striking a little faster on every note: a long crescendo. Listen for the tone brightening as it grows louder, "
-            "because a faster hammer excites more of the string's high partials."
+            "This is what the harpsichord could not do. The Tune's first phrase three times on Part 7's piano, the hammer striking a little faster on every note: a long crescendo. Listen for the modeled tone changing as it grows louder; the result depends on this hammer-and-string model."
         ):
             self.play(FadeIn(head), FadeIn(g), FadeIn(cap))
         with self.listen(c) as snd:
@@ -66,12 +64,7 @@ class Piano(SoundScene):
             (r"was his metronome broken? \ did he misread it? \ did he mean them?", EAR),
         ]
         rows_scene(self, r"tempo as a number", items,
-                   "A machine changed tempo too. <bookmark mark='b'/> In 1815 Johann Nepomuk Maelzel patented the "
-                   "metronome, borrowing the design of the Dutch inventor Dietrich Winkel. <bookmark mark='c'/> In 1817 "
-                   "Beethoven published metronome marks for his first eight symphonies, <bookmark mark='d'/> and for the "
-                   "first time a composer's tempo was a number rather than a word. <bookmark mark='e'/> Many of the marks "
-                   "are very fast, faster than most performers have dared, <bookmark mark='f'/> and the argument about them "
-                   "has run for two centuries.")
+                   "A machine changed tempo too. <bookmark mark='b'/> In 1815 Johann Nepomuk Maelzel patented the metronome, borrowing the design of the Dutch inventor Dietrich Winkel. <bookmark mark='c'/> In 1817 Beethoven published metronome marks for his first eight symphonies, <bookmark mark='d'/> and composers gained a widely adopted numerical tempo reference, following earlier attempts to measure tempo. <bookmark mark='e'/> Many of the marks are very fast, faster than most performers have dared, <bookmark mark='f'/> and the argument about them has run for two centuries.")
 
     # ------------------------------------------------------------------
     def debate(self):

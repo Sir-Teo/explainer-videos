@@ -26,13 +26,7 @@ class Quartet(SoundScene):
             (r"music for players more than for audiences: \ chamber music", GREY_A),
         ]
         rows_scene(self, r"four rational people", items,
-                   "The genre that best shows the style is the string quartet. <bookmark mark='b'/> Two violins, a viola "
-                   "and a cello: four equal players and, for the first time, no continuo filling in the harmony. "
-                   "<bookmark mark='c'/> Haydn wrote about seventy quartets over forty years and more or less invented the "
-                   "genre. <bookmark mark='d'/> Goethe later described a quartet as four rational people conversing. "
-                   "<bookmark mark='e'/> Mozart dedicated six quartets to Haydn in 1785, calling them the fruit of long and "
-                   "laborious toil. <bookmark mark='f'/> It was music for the players first, played at home among friends: "
-                   "chamber music.", marks="cdef")
+                   "The genre that best shows the style is the string quartet. <bookmark mark='b'/> Two violins, a viola and a cello: four equal players and, typically no continuo filling in the harmony. <bookmark mark='c'/> Haydn wrote about seventy quartets over forty years and was central to developing the genre, alongside earlier and contemporary contributors. <bookmark mark='d'/> Goethe later described a quartet as four rational people conversing. <bookmark mark='e'/> Mozart dedicated six quartets to Haydn in 1785, calling them the fruit of long and laborious toil. <bookmark mark='f'/> It was music for the players first, played at home among friends: chamber music.", marks="cdef")
 
     # ------------------------------------------------------------------
     def hunt(self):
@@ -73,14 +67,14 @@ class Quartet(SoundScene):
                               label(rf"changes hands in {100 * d[c]['changes']:.0f} bars in 100", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.2))
         groups.arrange(RIGHT, buff=1.0).move_to(LEFT * 1.8 + DOWN * 0.2)
         key = VGroup(*[VGroup(Square(side_length=0.22, stroke_width=0, fill_color=[TUNE, BLUE, EAR, GREY_A][j], fill_opacity=0.9), label(INST[j], font_size=18, color=GREY_A)).arrange(RIGHT, buff=0.15) for j in range(4)]).arrange(DOWN, buff=0.25, aligned_edge=LEFT).move_to(RIGHT * 5.0 + UP * 0.4)
-        t = label(r"which instrument has the most notes in each bar, \ in 100 bars", font_size=21, color=GREY_A).to_edge(UP, buff=0.5)
+        t = label(r"which instrument has the most note attacks; ties favor the earlier instrument in this implementation in each bar, \ in 100 bars", font_size=21, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
             "Is it a conversation, or a first violin with accompaniment? Count, bar by bar, which instrument has the most "
             "notes. <bookmark mark='a'/> In Haydn's movements the first violin leads in "
             f"{say(round(100 * d['haydn']['shares'][0]))} bars in a hundred; <bookmark mark='b'/> in Mozart's, "
             f"{say(round(100 * d['mozart']['shares'][0]))}, with the second violin busier; <bookmark mark='c'/> in "
             f"Beethoven's, {say(round(100 * d['beethoven']['shares'][0]))}, with the viola and cello taking more of the "
-            "lead. The first violin is still the main speaker, but the others get the floor in a third to a half of the "
+            "lead. This note-attack proxy favors the first violin; it does not directly measure thematic leadership, but the others get the floor in a third to a half of the "
             "bars, and the lead changes hands in almost every other bar."
         ) as vo:
             self.play(FadeIn(t), FadeIn(key))

@@ -61,7 +61,7 @@ class Figures(SoundScene):
         with self.voiceover(
             "In a quartet, the second violin and viola do the same job. A program counts the bars in which one of the lower "
             "three instruments plays at least four notes drawn from one chord or one or two pitches: repeated notes, "
-            "broken chords. <bookmark mark='a'/> It is the quartet's Alberti bass, the inner voices pulsing. "
+            "broken chords. <bookmark mark='a'/> It is a broad repeated-note or chordal-figure proxy, not specifically an Alberti-pattern detector, the inner voices pulsing. "
             f"<bookmark mark='b'/> About a quarter of all bars have one: {say(round(100 * d['haydn']['accompaniment']))} in a "
             f"hundred in Haydn, {say(round(100 * d['mozart']['accompaniment']))} in Mozart. <bookmark mark='c'/> The "
             "accompaniment is not filler; it is the motor of the style. <bookmark mark='d'/> And in Beethoven an "

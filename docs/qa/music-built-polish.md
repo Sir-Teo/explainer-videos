@@ -30,8 +30,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 23 — Chant to Polyphony | Complete | Open |
 | 24 — The Renaissance | Complete | Open |
 | 25 — The Baroque | Complete | Open |
-| 26 — The Classical Style | In progress | Open |
-| 27–68 | Queued | Open |
+| 26 — The Classical Style | Complete | Open |
+| 27 — Built: Part 27, The Romantic Century | In progress | Open |
+| 28–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -104,9 +105,11 @@ Part 23: fifteen chapter previews reviewed; 26 tests, the lab, 15 sound cases an
 
 Part 24: fourteen chapter previews reviewed; 23 tests, the lab, 14 sound cases and 13 listening-window motion checks pass. Three native stills inspected. Identities: `renders/qa/music24/source-receipt.json`.
 
-**Current: Part 25.** Chapter previews are rendering. Parts 26–60 have source repairs and verification
-underway for sequential previews. Automated endpoint preflight continues; warnings require review and do not
-constitute episode approval.
+Part 25: twelve chapter previews reviewed; 22 tests, the lab, 12 sound cases and 14 listening-window motion checks pass. Three native stills inspected. Identities: `renders/qa/music25/source-receipt.json`.
+
+Part 26: all 11 chapter preview sheets reviewed; sound and 12 listening-window motion checks pass. Local identities: `renders/qa/music26/source-receipt.json`.
+
+**Current: Part 27.** Source review has reached Part 68; episode-specific model computations, native checks and sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

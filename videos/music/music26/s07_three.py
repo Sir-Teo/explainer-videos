@@ -56,7 +56,7 @@ class Three(SoundScene):
         with self.voiceover(
             "The expansion can be measured on the corpus. <bookmark mark='a'/> Haydn's and Mozart's quartet movements "
             f"average about {say(round(d['haydn']['bars'], -1))} and {say(round(d['mozart']['bars'], -1))} bars; "
-            f"Beethoven's, {say(round(d['beethoven']['bars'], -1))}, three times as long, though a bar is not a fixed unit "
+            f"Beethoven's, {say(round(d['beethoven']['bars'], -1))}, roughly three times as many notated bars in this small selected sample, though a bar is not a fixed unit "
             "of time and the figures are rough. <bookmark mark='b'/> And each of Beethoven's instruments covers about "
             f"{say(round(d['beethoven']['span']))} semitones on average, against about {say(round(d['haydn']['span']))} for "
             "Haydn and Mozart: nearly an octave more, the strings pushed higher and lower."
@@ -154,7 +154,7 @@ class Three(SoundScene):
             (r"the Classical language, \ pushed until it carries a personal drama", GREY_A),
         ]
         rows_scene(self, r"a motive worked to exhaustion", items,
-                   "Beethoven's other expansion was of the motive. <bookmark mark='b'/> His Fifth Symphony, of 1808, begins with four notes, three short and a long, <bookmark mark='c'/> and that rhythm runs through every movement and every instrument. <bookmark mark='d'/> Development stops being one section of the form and becomes what the whole movement does; <bookmark mark='e'/> the codas grow into second developments. <bookmark mark='f'/> It is the Classical language pushed until it carries what listeners heard as a personal drama, and that is where Part 27 begins.", marks="cdef")
+                   "Beethoven's other expansion was of the motive. <bookmark mark='b'/> His Fifth Symphony, of 1808, begins with four notes, three short and a long, <bookmark mark='c'/> and related rhythmic figures are often traced across the symphony; their identity and structural role require analysis. <bookmark mark='d'/> Development stops being one section of the form and becomes what the whole movement does; <bookmark mark='e'/> the codas grow into second developments. <bookmark mark='f'/> It is the Classical language pushed until it carries what listeners heard as a personal drama, and that is where Part 27 begins.", marks="cdef")
 
     # ------------------------------------------------------------------
     def figaro(self):

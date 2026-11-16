@@ -26,7 +26,7 @@ class Frontier(SoundScene):
                    "Meyer argued in 1989 that a style is a set of choices made within constraints, and so, in effect, a set "
                    "of probabilities. <bookmark mark='c'/> Models trained on a corpus, the n-grams of Part 18 and the "
                    "grammars of Part 22, or neural networks, learn those probabilities directly. <bookmark mark='d'/> A "
-                   "model's surprise at each note then measures how typical that note is of the style, "
+                   "model's surprise at each note then measures predictive fit under that model and training distribution, not an all-purpose stylistic typicality score, "
                    "<bookmark mark='e'/> and composers become distributions: where in a phrase does Haydn surprise, and "
                    "where Mozart? <bookmark mark='f'/> The limits are the ones this part ran into: small corpora, symbolic "
                    "scores without performance, and models that know nothing of form or wit.", marks="cdef")

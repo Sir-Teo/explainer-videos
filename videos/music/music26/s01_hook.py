@@ -48,7 +48,7 @@ class Hook(SoundScene):
         with self.voiceover(
             "Here is the theme, as the film harmonizes it: the Tune over plain chords on the fortepiano of Part 7. "
             "Notice how little it needs: the tonic, the subdominant, the dominant, a chord every bar or two, and a cadence "
-            "every four bars. A Viennese listener of 1781 would know, after two bars, almost exactly what was coming."
+            "every four bars. A Viennese listener of 1781 would know, after two bars, many likely continuations, with individual responses and context still varying."
         ):
             self.play(FadeIn(head), FadeIn(g), FadeIn(cap))
         with self.listen(c) as snd:

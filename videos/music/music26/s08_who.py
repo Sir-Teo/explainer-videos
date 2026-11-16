@@ -26,7 +26,7 @@ class Who(SoundScene):
             for k, cell in enumerate(row):
                 cell.move_to([[-5.8, -3.9, -2.2, -0.5][k], 1.3 - 0.55 * i, 0])
         side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
-            (rf"one genre, \ one city, \ one generation: \ {d['n']} quartet movements", WHITE),
+            (rf"one genre, \ related works across several decades: \ {d['n']} quartet movements", WHITE),
             (rf"Part 24's twelve counterpoint features: \ {100 * d['acc24']:.0f} in 100", WHITE),
             (rf"eight Classical features: \ {100 * d['acc26']:.0f} in 100", TUNE),
             (rf"always guessing Mozart, \ the largest group: \ {100 * d['chance']:.0f} in 100", EAR),
@@ -34,16 +34,7 @@ class Who(SoundScene):
         side.scale_to_fit_width(min(side.width, 6.4))
         side.move_to(RIGHT * 3.6 + DOWN * 0.1)
         with self.voiceover(
-            "Part 24 ended with a demand: a fair attribution test, holding genre, place and time fixed. These quartets are "
-            "exactly that. <bookmark mark='a'/> One genre, one city, one generation, thirty-three movements. "
-            "<bookmark mark='b'/> First, Part 24's twelve features, built for sixteenth-century counterpoint: hidden one at "
-            f"a time, the movements are attributed correctly {say(round(100 * d['acc24']))} times in a hundred. "
-            "<bookmark mark='c'/> Then eight features built for this style: harmonic rhythm, periodic phrasing, cadence "
-            f"rate, who leads, how often the lead changes, density, register span, accompaniment figures. "
-            f"{say(round(100 * d['acc26']))} in a hundred. <bookmark mark='d'/> But always guessing Mozart, who has the "
-            f"most movements, would score {say(round(100 * d['chance']))}. <bookmark mark='e'/> The table shows why: "
-            "Beethoven is recognized two times in three, mostly by his register; Haydn and Mozart are confused with each "
-            "other almost as often as not."
+            f"Part 24 ended with a demand: a fair attribution test, holding genre, place and time fixed. These quartets hold genre more nearly fixed, but not date, source or generation. <bookmark mark='a'/> One genre, a small selected repertory, several decades and related movements, thirty-three movements. <bookmark mark='b'/> First, Part 24's twelve features, built for sixteenth-century counterpoint: hidden one at a time, the movements are attributed correctly {say(round(100 * d['acc24']))} times in a hundred. <bookmark mark='c'/> Then eight features built for this style: harmonic rhythm, periodic phrasing, cadence rate, who leads, how often the lead changes, density, register span, accompaniment figures. {say(round(100 * d['acc26']))} in a hundred. <bookmark mark='d'/> But always guessing Mozart, who has the most movements, would score {say(round(100 * d['chance']))}. <bookmark mark='e'/> The table shows why: Beethoven is recognized two times in three, mostly by his register; Haydn and Mozart are confused with each other almost as often as not."
         ) as vo:
             self.play(FadeIn(tab))
             for mark, r in zip("abcde", side):
@@ -98,17 +89,11 @@ class Who(SoundScene):
             (rf"shuffled: \ about {np.mean(d['null']) * n:.0f} right", GREY_A),
             (rf"real names: \ {real} right", TUNE),
             (rf"as good by luck: \ {100 * d['p_perm']:.0f} in 100", WHITE),
-            (r"real information, \ but not much", EAR))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
+            (r"suggestive result; \\ grouped validation needed", EAR))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 4.2))
         side.move_to(RIGHT * 4.6 + DOWN * 0.2)
         with self.voiceover(
-            "Is the test then learning nothing? The standard way to ask is to shuffle the names. Give the thirty-three "
-            "movements their composers' names at random, run the same test, and count the hits; do it two thousand times. "
-            f"<bookmark mark='a'/> With shuffled names the test gets about {say(round(np.mean(d['null']) * n))} right, by luck. "
-            f"<bookmark mark='b'/> With the real names it gets {say(real)}. <bookmark mark='c'/> Only about "
-            f"{say(round(100 * d['p_perm']))} shuffles in a hundred do as well. <bookmark mark='d'/> So the features carry "
-            "real information about the composer, though less than a trivial rule that always says Mozart: two different "
-            "questions, and both answers are true."
+            f"Is the test then learning nothing? The standard way to ask is to shuffle the names. Give the thirty-three movements their composers' names at random, run the same test, and count the hits; do it two thousand times. <bookmark mark='a'/> With shuffled names the test gets about {say(round(np.mean(d['null']) * n))} right, by luck. <bookmark mark='b'/> With the real names it gets {say(real)}. <bookmark mark='c'/> About {say(round(100 * d['p_perm']))} shuffles in a hundred do as well. <bookmark mark='d'/> This movement-level label shuffle suggests an association in the selected sample, assuming exchangeable movements; movements of a shared quartet violate independence and call for grouped testing, The score is two movements above the majority baseline. The shuffle tail is about 0.054, without a grouped-source validation."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
             for mark, r in zip("abcd", side):
@@ -123,14 +108,8 @@ class Who(SoundScene):
             (r"thirty-three pieces is a small sample: \ a few movements either way change the score", WHITE),
             (r"the features are coarse: \ no themes, \ no harmony beyond chord changes, \ no dynamics", WHITE),
             (r"Haydn and Mozart wrote in one shared language, \ and learned from each other", TUNE),
-            (r"what tells them apart for a listener \ (wit, \ melody, \ timing) \ is not yet a number", WHITE),
-            (r"an honest result: \ style is easier to hear than to count", GREY_A),
+            (r"these features omit motivic, \ harmonic and timing distinctions", WHITE),
+            (r"no measured listener baseline; \ test complete quartets and sources", GREY_A),
         ]
         rows_scene(self, r"why it is hard", items,
-                   "Why so hard? <bookmark mark='b'/> Partly the sample: thirty-three movements, so that a few either way "
-                   "change the score. <bookmark mark='c'/> Partly the features, which know nothing of themes, harmony "
-                   "beyond its rate of change, or dynamics. <bookmark mark='d'/> But mostly the music: Haydn and Mozart "
-                   "wrote in one shared language and learned from each other; that was the point of the style. "
-                   "<bookmark mark='e'/> What tells them apart for an experienced listener, the wit, the melodic shape, the "
-                   "timing of a surprise, has not yet been turned into a number. <bookmark mark='f'/> The honest result is "
-                   "that style, here, is easier to hear than to count.", marks="cdef")
+                   "Why so hard? <bookmark mark='b'/> Partly the sample: thirty-three movements, so that a few either way change the score. <bookmark mark='c'/> Partly the features, which know nothing of themes, harmony beyond its rate of change, or dynamics. <bookmark mark='d'/> But mostly the music: Haydn and Mozart wrote in one shared language and learned from each other; that was the point of the style. <bookmark mark='e'/> These features omit many candidate distinctions in motives, harmony and timing; that does not establish that those distinctions cannot be measured. <bookmark mark='f'/> The honest result is that no human-listener baseline is measured here, so relative human accuracy remains untested.", marks="cdef")

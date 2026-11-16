@@ -45,9 +45,9 @@ def test_texture_three_and_style():
     assert (s["haydn"]["movements"], s["mozart"]["movements"], s["beethoven"]["movements"]) == (9, 15, 9)
     assert s["beethoven"]["span"] > s["haydn"]["span"] + 8
     st = load("style")
-    assert st["n"] == 33 and st["acc26"] == pytest.approx(18 / 33) and st["acc24"] == pytest.approx(14 / 33)
+    assert st["n"] == 33 and st["acc26"] == pytest.approx(17 / 33) and st["acc24"] == pytest.approx(14 / 33)
     assert st["chance"] == pytest.approx(15 / 33) and st["conf26"]["beethoven"]["beethoven"] == 6
-    assert st["p_perm"] < 0.05 and np.mean(st["null"]) == pytest.approx(1 / 3, abs=0.02)
+    assert st["p_perm"] == pytest.approx(109 / 2001) and np.mean(st["null"]) == pytest.approx(1 / 3, abs=0.02)
     assert st["singles"][0][0] == "register span"
     m = load("minuet")
     assert m["in34"] == 11 and m["bar_beats"] == 3.0
