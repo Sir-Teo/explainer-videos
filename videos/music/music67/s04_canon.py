@@ -49,13 +49,7 @@ class Canon(SoundScene):
         head = label(r"`melodies move mostly by step'", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         a, b = d["chorales"], d["tunes"]
         with self.voiceover(
-            "Take a rule every textbook states: melodies move mostly by step. Test it on two corpora. <bookmark mark='a'/> In "
-            f"Bach's chorale tunes, {say(round(100 * a['steps']['value']))} per cent of moves are steps. In Part 14's wider "
-            f"collection of folk songs, hymns and nursery tunes, {say(round(100 * b['steps']['value']))} per cent, and the "
-            "intervals do not overlap. Both are mostly steps; but how mostly depends on the corpus, by a margin larger than "
-            "most effects analysts argue about. <bookmark mark='b'/> The tunes also repeat notes far more, "
-            f"{say(round(100 * b['repeats']['value']))} per cent of the time against {say(round(100 * a['repeats']['value']))}. "
-            "A rule measured on a canon is a rule about the canon until it is tested elsewhere."
+            f"Take a rule every textbook states: melodies move mostly by step. Test it on two corpora. <bookmark mark='a'/> In Bach's chorale tunes, {say(round(100 * a['steps']['value']))} per cent of moves are steps. In Part 14's wider collection of folk songs, hymns and nursery tunes, {say(round(100 * b['steps']['value']))} per cent, and the intervals do not overlap. Both are mostly steps; but how mostly depends on the corpus, by a substantial difference for these two selected corpora. <bookmark mark='b'/> The tunes also repeat notes far more, {say(round(100 * b['repeats']['value']))} per cent of the time against {say(round(100 * a['repeats']['value']))}. A rule measured on a canon is a rule about the canon until it is tested elsewhere."
         ) as vo:
             self.play(FadeIn(head), FadeIn(top), FadeIn(note))
             vo.wait_until("a")

@@ -21,14 +21,10 @@ class Sources(SoundScene):
             (r"most early music survives only in copies of copies; \ every scribe made mistakes, \ and later scribes copied them", WHITE),
             (r"Lachmann's method \ (19th century, \ for classical texts): \ shared errors reveal who copied from whom", WHITE),
             (r"build the family tree, \ the stemma; \ then reconstruct the lost original from its branches", WHITE),
-            (r"the same mathematics as biology's family trees of species", TUNE),
+            (r"related tree-inference methods, \ under different assumptions", TUNE),
         ]
         rows_scene(self, r"copies of copies", items,
-                   "Most early music survives only in copies of copies, and every scribe made mistakes that later scribes copied. "
-                   "<bookmark mark='c'/> Karl Lachmann's method, made for classical texts in the nineteenth century, uses shared "
-                   "errors to reveal who copied from whom. <bookmark mark='d'/> Build the family tree, the stemma, then reconstruct "
-                   "the lost original from its branches. <bookmark mark='e'/> It is the same mathematics as biology's family trees "
-                   "of species.", marks="cde")
+                   "Most early music survives only in copies of copies, and every scribe made mistakes that later scribes copied. <bookmark mark='c'/> Karl Lachmann's method, made for classical texts in the nineteenth century, uses shared errors to reveal who copied from whom. <bookmark mark='d'/> Build the family tree, the stemma, then reconstruct the lost original from its branches. <bookmark mark='e'/> Related tree-inference methods are also used in evolutionary biology, with different assumptions.", marks="cde")
 
     # ------------------------------------------------------------------
     def tradition(self):
@@ -43,11 +39,7 @@ class Sources(SoundScene):
         key = VGroup(*[label(rf"generation {g}", font_size=15, color=c) for g, c in zip((1, 2, 3, 4), (TUNE, BLUE, EAR, GREY_B))]).arrange(RIGHT, buff=0.5).to_edge(DOWN, buff=0.4)
         head = label(r"a tradition of the Tune, \ simulated", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            f"Monochord simulates one. The Tune, {say(d['n_notes'])} notes, is copied by scribes for four generations, each "
-            f"copy misreading about one note in twenty on top of its exemplar's mistakes: {say(d['n_mss'])} manuscripts in all. "
-            f"The original is lost, and so are many copies; {say(d['n_survive'])} survive. <bookmark mark='a'/> Here is how "
-            f"many notes each survivor gets wrong, from {say(min(errs))} to {say(max(errs))}, coloured by generation: the "
-            "later the copy, the more errors it has inherited. Every one of them is wrong somewhere."
+            f"Monochord simulates one. The Tune, {say(d['n_notes'])} notes, is copied by scribes for four generations, each copy misreading about one note in twenty on top of its exemplar's mistakes: {say(d['n_mss'])} manuscripts in all. The original is lost, and so are many copies; {say(d['n_survive'])} survive. <bookmark mark='a'/> Here is how many notes each survivor gets wrong, from {say(min(errs))} to {say(max(errs))}, coloured by generation: later copies tend to accumulate inherited errors in this simulation; individual errors can also cancel. Every one of them is wrong somewhere."
         ) as vo:
             self.play(FadeIn(head), FadeIn(key))
             vo.wait_until("a")
@@ -63,18 +55,13 @@ class Sources(SoundScene):
         pic = heat_image(-D, -D.max(), 0, width=4.2, height=4.2, smooth=False).move_to(LEFT * 3.6 + DOWN * 0.3)
         lab = label(r"notes on which each pair of copies differ", font_size=15, color=GREY_A).next_to(pic, DOWN, buff=0.2)
         rf = d["rf"]
-        side = VGroup(label(r"neighbour joining \ (Saitou and Nei, \ 1987): \ join the closest pair, \ again and again", font_size=18, color=WHITE),
+        side = VGroup(label(r"neighbour joining \ (Saitou and Nei, \ 1987): \ join pairs by a corrected distance criterion", font_size=18, color=WHITE),
                       label(rf"the true tree has {rf['true_splits']} groupings of the surviving copies", font_size=18, color=WHITE),
                       label(rf"the recovered tree finds {rf['recovered']} of them", font_size=20, color=TUNE),
                       label(r"what it misses: \ copies whose shared ancestor added no error of its own", font_size=16, color=GREY_A)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 2.4 + DOWN * 0.3)
         head = label(r"the family tree, \ from the errors", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Now forget the history and recover it. <bookmark mark='a'/> Count, for every pair of surviving copies, the notes "
-            "on which they differ: copies that share a lost ancestor share its errors, and differ less. <bookmark mark='b'/> "
-            "Neighbour joining, a method of Naruya Saitou and Masatoshi Nei from 1987, builds a tree by joining the closest pair "
-            f"again and again. <bookmark mark='c'/> The true tree groups the survivors in {say(rf['true_splits'])} ways; the "
-            f"recovered tree finds {say(rf['recovered'])} of them. What it misses are copies whose common ancestor made no "
-            "mistake of its own, and so left no trace."
+            f"Now forget the history and recover it. <bookmark mark='a'/> Count, for every pair of surviving copies, the notes on which they differ: copies that share a lost ancestor share its errors, and differ less. <bookmark mark='b'/> Neighbour joining, a method of Naruya Saitou and Masatoshi Nei from 1987, builds a tree using a corrected distance criterion, not simply the smallest raw pairwise distance. <bookmark mark='c'/> The true tree groups the survivors in {say(rf['true_splits'])} ways; the recovered tree finds {say(rf['recovered'])} of them. What it misses are copies whose common ancestor made no mistake of its own, and so left no trace."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -111,7 +98,7 @@ class Sources(SoundScene):
         self.play(FadeOut(plain), FadeIn(boxes))
         with self.voiceover(
             f"The second was the corrupt copy, {say(d['witness_errors'][d['worst']])} notes wrong; the first was the Tune as "
-            "written, and the third the reconstruction. A simple majority of the copies gets {say(d['majority_errors'])} notes wrong. Lachmann's refinement, one vote for "
+            f"written, and the third the reconstruction. A simple majority of the copies gets {say(d['majority_errors'])} notes wrong. Lachmann's refinement, one vote for "
             "each branch of the tradition so that a prolific branch cannot outvote the rest, gets "
             f"{say(d['branch_errors'])}. Editors of real music face worse: copies that mix two exemplars, scribes who corrected "
             "what they thought were errors, and composers who changed their minds."

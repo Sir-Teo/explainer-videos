@@ -66,15 +66,11 @@ class Data(SoundScene):
         items = [
             (r"labels come from annotators, \ and annotators disagree: \ on chords, \ on beats, \ on where a section ends", WHITE),
             (r"Part 62: \ two people annotating the same song's chords or structure often differ at the boundaries", WHITE),
-            (r"a model cannot be measured more finely than its annotators agree: \ their agreement is a ceiling", WHITE),
+            (r"annotation disagreement adds uncertainty; \ pairwise agreement is not a universal ceiling", WHITE),
             (r"so report agreement between annotators beside every score, \ and keep more than one annotation", TUNE),
         ]
         rows_scene(self, r"how far people agree", items,
-                   "The labels themselves are uncertain. <bookmark mark='b'/> They come from annotators, and annotators disagree: on "
-                   "chords, on beats, on where a section ends. <bookmark mark='c'/> Part 62 met this: two people annotating the same "
-                   "song often differ at the boundaries. <bookmark mark='d'/> A model cannot be measured more finely than its "
-                   "annotators agree; their agreement is a ceiling. <bookmark mark='e'/> So report the agreement between annotators "
-                   "beside every score, and keep more than one annotation.", marks="bcde")
+                   "The labels themselves are uncertain. <bookmark mark='b'/> They come from annotators, and annotators disagree: on chords, on beats, on where a section ends. <bookmark mark='c'/> Part 62 met this: two people annotating the same song often differ at the boundaries. <bookmark mark='d'/> Annotator agreement measures reference uncertainty; it is not a universal ceiling on a model's score against an individual or consensus annotation. <bookmark mark='e'/> So report the agreement between annotators beside every score, and keep more than one annotation.", marks="bcde")
 
     # ------------------------------------------------------------------
     def tappers(self):
@@ -84,16 +80,11 @@ class Data(SoundScene):
             label(rf"the second sometimes taps the off-beat \ ({100 * d['offbeat_share']:.0f}\% of taps)", font_size=19, color=WHITE),
             label(rf"each against the beats as played: \ F = {d['a_vs_played']:.2f} and {d['b_vs_played']:.2f}", font_size=20, color=TUNE),
             label(rf"against each other: \ F = {d['a_vs_b']:.2f}", font_size=20, color=EAR),
-            label(r"if they were the annotators, \ no tracker could be shown to beat about that", font_size=18, color=GREY_A),
+            label(r"pairwise annotation agreement is not a universal performance ceiling", font_size=18, color=GREY_A),
         ).arrange(DOWN, buff=0.35)
-        head = label(r"an agreement ceiling, \ computed", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"annotation disagreement, \ simulated", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is the ceiling computed. <bookmark mark='a'/> Two simulated people tap the beat of one performance, a little "
-            "early as people do, each with their own jitter, <bookmark mark='b'/> and the second sometimes taps the off-beat. "
-            f"<bookmark mark='c'/> Scored against the beats as played, with Part 62's seventy-millisecond window, they reach "
-            f"{say(d['a_vs_played'], 2)} and {say(d['b_vs_played'], 2)}. <bookmark mark='d'/> Against each other, "
-            f"{say(d['a_vs_b'], 2)}. <bookmark mark='e'/> If they were a dataset's annotators, no beat tracker could be shown to "
-            "do better than about that."
+            f"Here is an illustration of annotation disagreement. <bookmark mark='a'/> Two simulated people tap the beat of one performance, a little early as people do, each with their own jitter, <bookmark mark='b'/> and the second sometimes taps the off-beat. <bookmark mark='c'/> Scored against the beats as played, with Part 62's seventy-millisecond window, they reach {say(d['a_vs_played'], 2)} and {say(d['b_vs_played'], 2)}. <bookmark mark='d'/> Against each other, {say(d['a_vs_b'], 2)}. <bookmark mark='e'/> If they were a dataset's annotators, their disagreement would complicate evaluation, but a tracker could score above their pairwise agreement against a chosen reference."
         ) as vo:
             self.play(FadeIn(head))
             for mark, r in zip("abcde", rows_):
@@ -133,7 +124,7 @@ class Data(SoundScene):
             window(snd, r"two tappers", kind="physical model", detail=r"Part 38's piano; \ clicks", corner=DL, tag_corner=DR)
             pulse(snd, boxes[0], st["first"], st["second"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
-        with self.voiceover("Both are plausible annotations of the beat; neither is the truth, and a model scored against either inherits its looseness."):
+        with self.voiceover("Both are plausible annotations of the beat; neither perfectly reproduces the simulated played beats, and a model scored against either inherits its looseness."):
             self.play(FadeIn(note))
         self.wait(0.4)
         self.clear_scene()

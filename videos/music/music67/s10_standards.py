@@ -29,7 +29,7 @@ class Standards(SoundScene):
                    "<bookmark mark='c'/> Loudness: the LUFS of Part 57, and the equal-loudness contours of Part 4. "
                    "<bookmark mark='d'/> Listening tests: the ITU's recommendations for small impairments and for intermediate ones, "
                    "MUSHRA, from Part 58. <bookmark mark='e'/> In music information retrieval, shared tasks and common scoring code. "
-                   "<bookmark mark='f'/> A standard is a promise that two laboratories measured the same thing.", marks="bcdef")
+                   "<bookmark mark='f'/> A standard specifies a shared procedure; calibration, implementation and uncertainty still matter.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def reporting(self):

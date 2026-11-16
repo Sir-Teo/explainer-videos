@@ -5,7 +5,7 @@ Part 67 of a sixty-eight-part course in music (see [the series plan](../README.m
 minutes of Mozart raised a spatial score, and within five years a governor proposed a classical CD for every newborn in his
 state; the effect did not replicate as claimed. This part asks how each kind of music research knows what it claims, and
 gives each something to compute: a manuscript tradition recovered from its errors, a canon set against a wider corpus, a
-literature bent by selective publication, the power of listening tests, leakage and annotator ceilings, and an audit of
+literature bent by selective publication, the power of listening tests, leakage and annotation uncertainty, and an audit of
 this series' own verdicts. The tools are Monochord's (`explainer/music/monochord/research.py`) and *Statistics, Built*'s kit.
 
 * **Ten minutes of Mozart.** An ear question (an ABX trial: X was B, the coder at 48 kbit/s; one trial proves nothing);
@@ -129,3 +129,5 @@ python -m videos.music.labs 67                                  # the lab (write
   Foulds, "Comparison of phylogenetic trees", *Mathematical Biosciences* (1981).
 * B. L. Sturm, "The GTZAN dataset" (2013) and "A simple method to determine if a music information retrieval system is a
   horse" (2014); ITU-R BS.1116 and BS.1534 (MUSHRA); ISO 16 (1975).
+
+Review qualifications: annotator pairwise agreement is not a universal model-performance ceiling. Power calculations assume the stated independent-trial or paired-rating model; finite synthetic audits are scoped checks. The series discusses fieldwork but its computations are not substitutes for community-based ethnographic research.

@@ -77,8 +77,8 @@ Fresh whole-series regression after the Part 47 timing correction: **889 cases p
 | 64 — Source Separation | Complete | Open |
 | 65 — Machines that Compose | Complete | Open |
 | 66 — Generative Audio | Complete | Open |
-| 67 — Doing Research in Music | In progress | Open |
-| 68–68 | Queued | Open |
+| 67 — Doing Research in Music | Complete | Open |
+| 68 — The Variations | In progress | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -235,7 +235,9 @@ Part 65: all 13 chapter preview sheets reviewed; sound and 13 listening-window m
 
 Part 66: all 13 chapter preview sheets reviewed; sound and 13 listening-window motion checks pass. Local identities: `renders/qa/music66/source-receipt.json`.
 
-**Current: Part 67.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 67: all 13 chapter preview sheets reviewed; sound and 10 listening-window motion checks pass. Local identities: `renders/qa/music67/source-receipt.json`.
+
+**Current: Part 68.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

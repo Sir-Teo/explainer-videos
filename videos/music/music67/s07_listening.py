@@ -23,16 +23,11 @@ class Listening(SoundScene):
             label(rf"20 trials: \ to pass at the 5\% level you need {t['critical']} right \ (the chance of that by guessing: \ {100 * t['size']:.1f}\%)", font_size=20, color=WHITE),
             label(r"a listener who truly hears the difference 60\% of the time:", font_size=20, color=WHITE),
             label(rf"passes 20 trials only {100 * t['power']:.0f}\% of the time", font_size=24, color=EAR),
-            label(r"a failed test is not evidence that nothing is heard", font_size=19, color=TUNE),
+            label(r"a nonsignificant result alone does not establish inaudibility; confidence bounds and power determine what differences it can rule out", font_size=19, color=TUNE),
         ).arrange(DOWN, buff=0.4)
         head = label(r"the hook's test, \ counted", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The hook's test, counted. <bookmark mark='a'/> In each trial a listener says whether X is A or B, and by guessing is "
-            f"right half the time. <bookmark mark='b'/> In twenty trials, passing at the five per cent level takes "
-            f"{say(t['critical'])} right. <bookmark mark='c'/> Now take a listener who really does hear the difference, though "
-            f"only sixty per cent of the time. <bookmark mark='d'/> That listener passes twenty trials only "
-            f"{say(round(100 * t['power']))} per cent of the time. <bookmark mark='e'/> So a failed test is not evidence that "
-            "nothing is heard. Many audio debates have been settled by tests that could not have found what they looked for."
+            f"The hook's test, counted. <bookmark mark='a'/> In each trial a listener says whether X is A or B, and by guessing is right half the time. <bookmark mark='b'/> In twenty trials, passing at the five per cent level takes {say(t['critical'])} right. <bookmark mark='c'/> Now take a listener who really does hear the difference, though only sixty per cent of the time. <bookmark mark='d'/> That listener passes twenty trials only {say(round(100 * t['power']))} per cent of the time. <bookmark mark='e'/> So a nonsignificant result alone does not establish inaudibility; confidence bounds and power determine what differences it can rule out. Many audio debates have been settled by tests that could not have found what they looked for."
         ) as vo:
             self.play(FadeIn(head))
             for mark, ln in zip("abcde", lines):
@@ -78,12 +73,7 @@ class Listening(SoundScene):
             (r"online studies reach thousands; \ their headphones and rooms are unknown, \ so screen for them", TUNE),
         ]
         rows_scene(self, r"listening panels", items,
-                   "Running listening tests well takes more than trials. <bookmark mark='b'/> Listeners differ: pool many and report "
-                   "each, because a few may hear what most do not. <bookmark mark='c'/> Blind and randomized: neither the listener nor "
-                   "the person running the test may know which is which. <bookmark mark='d'/> Training and anchors: MUSHRA's hidden "
-                   "reference and low anchor, from Part 58, catch listeners who are not really listening. <bookmark mark='e'/> And "
-                   "online studies reach thousands, with headphones and rooms unknown, so screen for them with a test that only "
-                   "headphones pass.", marks="bcde")
+                   "Running listening tests well takes more than trials. <bookmark mark='b'/> Listeners differ: pool many and report each, because a few may hear what most do not. <bookmark mark='c'/> Blind and randomized: neither the listener nor the person running the test may know which is which. <bookmark mark='d'/> Training and anchors: MUSHRA's hidden reference and low anchor, from Part 58, help assess test reliability, subject to prespecified screening rules. <bookmark mark='e'/> And online studies reach thousands, with headphones and rooms unknown, so screen for them with a headphone-screening test, which itself has false positives and false negatives.", marks="bcde")
 
     # ------------------------------------------------------------------
     def quiz2(self):
@@ -120,7 +110,7 @@ class Listening(SoundScene):
         head = label(r"how many listeners for MUSHRA?", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The same arithmetic for rating tests. In a MUSHRA test listeners rate each system from nought to a hundred, and "
-            "listeners differ by about fifteen points. <bookmark mark='a'/> To find a difference of twenty points takes "
+            "suppose the standard deviation of paired rating differences is fifteen points. <bookmark mark='a'/> To find a difference of twenty points takes "
             f"{say(d['20'])} listeners; ten points, {say(d['10'])}; five points, {say(d['5'])}; three points, {say(d['3'])}. "
             "Many published comparisons of codecs and separators use a dozen or two listeners, enough for large differences "
             "and not for small ones."

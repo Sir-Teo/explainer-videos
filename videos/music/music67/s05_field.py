@@ -78,11 +78,14 @@ class Field(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"sung", kind="synthesized", detail=r"Part 8's alto", corner=DL, tag_corner=DR)
             snd.show(cv)
-            snd.drive(cv, lambda m, tt: m.set_stroke(opacity=1.0))
+            marker = VGroup(Line(DOWN * 1.3, UP * 1.3, color=WHITE, stroke_width=3), Dot(radius=0.08, color=WHITE))
+            snd.show(marker)
+            snd.drive(marker, lambda m, tt: m.move_to(ax.to(np.clip(tt, 0, t.max()), (tr.min() + tr.max()) / 2)))
+        self.add(cv)
         with self.voiceover(
             f"Only {say(round(100 * d['within10']))} per cent of the voice's moments sit within ten cents of the written note, "
             f"and {say(round(100 * d['within25']))} per cent within a quarter of a semitone. The rest is vibrato, glide and "
-            "arrival: everything the performer added, and everything a staff-notation transcription leaves out."
+            "arrival: everything the performer added, and details a basic note-only transcription omits; richer notation can indicate some of them."
         ):
             self.play(FadeIn(res))
         self.wait(0.4)

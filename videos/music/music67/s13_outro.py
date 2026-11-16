@@ -64,7 +64,7 @@ class Outro(SoundScene):
         ], title=r"What we found", font_size=20).move_to(DOWN * 0.1)
         with self.voiceover(
             "What did we find? Music research knows in six ways, each with its failure and its check. <bookmark mark='a'/> "
-            "Shared errors recover a family of manuscripts and its lost original. <bookmark mark='b'/> A rule measured on a "
+            "Shared errors can support a family-tree reconstruction and a proposed original under explicit copying assumptions. <bookmark mark='b'/> A rule measured on a "
             "canon is a rule about the canon. <bookmark mark='c'/> Selective publication leaves a funnel with a bite out of it, "
             "and the first result is usually the luckiest. <bookmark mark='d'/> Listening tests need many trials. "
             "<bookmark mark='e'/> And data must be split by what repeats, with verdicts re-run and their spread reported, "

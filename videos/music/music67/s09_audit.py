@@ -23,8 +23,8 @@ class Audit(SoundScene):
             (r"with new seeds and splits, \ and report the spread", TUNE),
         ]
         rows_scene(self, r"one run is not enough", items,
-                   "Every number in this series came from one run: one split, one seed, one stretch of music. "
-                   "<bookmark mark='c'/> A verdict that changes with the seed is not a verdict. <bookmark mark='d'/> So re-run five of "
+                   "Many demonstrations in this series report a particular run, split, seed or stretch of music. "
+                   "<bookmark mark='c'/> A result that changes with the seed needs its variability and scope reported. <bookmark mark='d'/> So re-run five of "
                    "them: Part 61's pitch tracker, Part 63's fingerprinter, Part 64's median filter, Part 65's best order, and Part "
                    "66's watermark detector. "
                    "<bookmark mark='e'/> With new seeds and new splits, and report the spread.", marks="cde")
@@ -54,12 +54,12 @@ class Audit(SoundScene):
             "Here they are. <bookmark mark='a'/> Part 61 said YIN gets nine per cent of frames grossly wrong at nought decibels; "
             f"over ten new noises, {say(round(100 * y['lo']))} to {say(round(100 * y['hi']))} per cent. It holds, with a "
             f"spread worth stating. <bookmark mark='b'/> Part 64's median filter: {say(h['lo'], 1)} to {say(h['hi'], 1)} "
-            "decibels over three stretches of the session; it holds. Part 63's fingerprinter, said to name sixty-one per cent "
+            "decibels over three stretches of the session; these finite trials support it within the tested scope. Part 63's fingerprinter, said to name sixty-one per cent "
             f"of queries level with a bar's noise: {say(round(100 * min(a63['values'])))} to {say(round(100 * max(a63['values'])))} "
             "per cent over three new noises. <bookmark mark='c'/> Part 65 said order two predicts new "
             f"tunes best. Over ten splits by tune it is best in {say(round(10 * o['share']))}, and order one in the rest: the "
             "claim was true for the split shown, and weaker than it sounded. <bookmark mark='d'/> Part 66's detector fired on "
-            f"{say(w['above5'])} of sixty unmarked phrases; it holds."
+            f"{say(w['above5'])} of sixty unmarked phrases; these finite trials support it within the tested scope."
         ) as vo:
             self.play(FadeIn(head))
             for mark, r in zip("abbcd", g):
@@ -98,7 +98,7 @@ class Audit(SoundScene):
     def errata(self):
         items = [
             (r"Part 61: \ a quantizer with one tempo put 1 of 14 rubato onsets right; \ replaced by one whose tempo drifts \ (14 of 14)", WHITE),
-            (r"Part 63: \ a classifier split by excerpt looked better than chance; \ split by clip, \ it is at chance", WHITE),
+            (r"Part 63: \ a classifier split by excerpt looked better than chance; \ split by clip, \ it does not beat the majority baseline in the shown experiment", WHITE),
             (r"Part 64: \ a network trained on phrases the test repeats; \ retrained without them, \ and the leak shown", WHITE),
             (r"Part 65: \ `order 2 is best' \ holds in 7 of 10 splits; \ the notes now give the spread", WHITE),
             (r"Part 38: \ a piano note's force stopped abruptly, \ a click; \ fixed, \ but earlier parts' stored sounds keep it", TUNE),
@@ -107,7 +107,7 @@ class Audit(SoundScene):
                    "An honest audit ends in errata, and this series has some. <bookmark mark='b'/> In Part 61 a quantizer with one "
                    "tempo put one rubato onset in fourteen in the right place; it was replaced by one whose tempo may drift, which "
                    "puts all fourteen there. <bookmark mark='c'/> In Part 63 a classifier split by excerpt looked better than "
-                   "chance; split by clip, it is at chance. <bookmark mark='d'/> In Part 64 a network was trained on phrases the "
+                   "chance; split by clip, it does not beat the majority baseline in the shown experiment. <bookmark mark='d'/> In Part 64 a network was trained on phrases the "
                    "test repeats; it was retrained without them, and the leak is shown. <bookmark mark='e'/> Part 65's best order "
                    "holds in seven splits of ten, and its notes now give the spread. <bookmark mark='f'/> And Part 38's piano cut "
                    "each note's string force off abruptly, a faint click; it is fixed, but sounds stored by earlier parts keep it. "

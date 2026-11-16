@@ -29,7 +29,7 @@ class Kinds(SoundScene):
             r[2].next_to(r[1], RIGHT, buff=0.3)
         head = label(r"six ways of knowing", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Music research knows things in at least six ways, and this series has used all of them. <bookmark mark='a'/> From "
+            "Music research knows things in at least six ways, and this series discusses all of them, while its own computations are mainly synthetic demonstrations and corpus analysis. <bookmark mark='a'/> From "
             "sources: what was written, by whom and when, from manuscripts, prints and letters. <bookmark mark='b'/> From "
             "analysis: an argument about how a piece works, tested against the score. <bookmark mark='c'/> From fieldwork: what "
             "music means to the people who make it, learnt by living with them. <bookmark mark='d'/> From experiment: what "

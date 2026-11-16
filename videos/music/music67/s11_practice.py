@@ -84,10 +84,5 @@ class Practice(SoundScene):
             (r"what was not said, \ and was heard anyway: \ `Mozart makes babies smarter'", TUNE),
         ]
         rows_scene(self, r"the 1993 paper, \ read that way", items,
-                   "Read the 1993 paper that way. <bookmark mark='b'/> The claim: ten minutes of a Mozart sonata raises spatial "
-                   "reasoning, for about ten to fifteen minutes. <bookmark mark='c'/> What would refute it: no difference against "
-                   "other music, or against anything that simply wakes listeners up. <bookmark mark='d'/> The evidence is an "
-                   "experiment, whose usual failure is not to replicate. <bookmark mark='e'/> The numbers: thirty-six students, one "
-                   "laboratory, three conditions, and no preregistration, which nobody did then. <bookmark mark='f'/> And what was "
-                   "not said, but heard anyway: that Mozart makes babies smarter. The paper studied students, not babies.",
+                   "Read the 1993 paper that way. <bookmark mark='b'/> The claim: ten minutes of a Mozart sonata raises spatial reasoning, for about ten to fifteen minutes. <bookmark mark='c'/> What would challenge a Mozart-specific mechanism: no difference against other music, or against anything that simply wakes listeners up. <bookmark mark='d'/> The evidence is an experiment, whose usual failure is not to replicate. <bookmark mark='e'/> The numbers: thirty-six students, one laboratory, three conditions, and no preregistration reported in the account discussed here. <bookmark mark='f'/> And what was not said, but heard anyway: that Mozart makes babies smarter. The paper studied students, not babies.",
                    marks="bcdef")

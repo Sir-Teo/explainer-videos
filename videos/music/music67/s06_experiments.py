@@ -36,13 +36,20 @@ class Experiments(SoundScene):
         d = load("meta")
         est, se, pub = np.array(d["est"]), np.array(d["se"]), np.array(d["published"])
         ax = frame_axes(width=7.0, height=4.2, xlo=-1.0, xhi=1.6, ylo=0, yhi=1 / se.min() * 1.05, center=DOWN * 0.3 + LEFT * 1.6)
+        ticks = VGroup()
+        for x in (-1.0, -0.5, 0.0, 0.5, 1.0, 1.5):
+            ticks.add(label(f"{x:g}", font_size=11, color=GREY_A).move_to(ax.to(x, 0) + DOWN * 0.16))
+        for y in (0, 2, 4, 6, 8):
+            if y <= 1 / se.min() * 1.05:
+                ticks.add(label(f"{y:g}", font_size=11, color=GREY_A).move_to(ax.to(-1.0, y) + LEFT * 0.18))
+        ax.add(ticks)
         pr = 1 / se
         dots_un = VGroup(*[Dot(ax.to(e, p), radius=0.05, color=GREY_D) for e, p, k in zip(est, pr, pub) if not k])
         dots_pub = VGroup(*[Dot(ax.to(e, p), radius=0.06, color=TUNE) for e, p, k in zip(est, pr, pub) if k])
         true = DashedLine(ax.to(d["true"], 0), ax.to(d["true"], pr.max()), color=WHITE, stroke_width=2)
         ys = np.linspace(0.5, pr.max(), 40)
         line = VMobject(stroke_color=EAR, stroke_width=2).set_points_as_corners([ax.to(1.96 / y, y) for y in ys if 1.96 / y < 1.6])
-        xl = label(r"estimated effect \ (standard deviations)", font_size=14, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        xl = label(r"estimated effect \ (standard deviations)", font_size=14, color=GREY_A).next_to(ax, DOWN, buff=0.25)
         yl = label(r"precision \ (1 / standard error): \ big studies at the top", font_size=14, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         side = VGroup(label(r"grey: \ unpublished", font_size=16, color=GREY_B), label(r"gold: \ published", font_size=16, color=TUNE),
                       label(r"red: \ the edge of significance", font_size=16, color=EAR), label(r"white: \ the true effect", font_size=16, color=WHITE)).arrange(DOWN, buff=0.25, aligned_edge=LEFT).to_edge(RIGHT, buff=0.5)
@@ -51,7 +58,7 @@ class Experiments(SoundScene):
             "Plot each study's estimate against its precision: a funnel, wide at the bottom where studies are small, narrow at "
             "the top. <bookmark mark='a'/> All one hundred and twenty studies scatter symmetrically around the true effect. "
             "<bookmark mark='b'/> Now keep only the published ones. The small studies that survive are those that happened to "
-            "land right of the red line, where significance lies; the funnel's lower left is missing."
+            "land right of the red line, in the region selected by this simulation's significance rule; the funnel's lower left is missing."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xl), FadeIn(yl), FadeIn(side), Create(true), Create(line))
             vo.wait_until("a")
@@ -76,6 +83,11 @@ class Experiments(SoundScene):
         for r in g:
             r[1].next_to(r[0], RIGHT, buff=0.3).align_to(g, LEFT).shift(RIGHT * 5.4)
             r[2].next_to(r[1], RIGHT, buff=0.2)
+        baseline = min(r[1].get_left()[0] for r in g)
+        for r in g:
+            r[1].shift(RIGHT * (baseline - r[1].get_left()[0]))
+            r[2].next_to(r[1], RIGHT, buff=0.2)
+        g.scale(min(1.0, 12.6 / g.width)).move_to(DOWN * 0.2)
         eg = d["egger"]
         note = label(rf"Egger's test for the missing corner: \ intercept {eg['intercept']:.2f}, \ p = {eg['p']:.2f}; \ PET's estimate at infinite precision {eg['slope']:.2f}", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.4)
         head = label(r"what each reader would believe", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
@@ -131,6 +143,11 @@ class Experiments(SoundScene):
         for r in g:
             r[1].next_to(r[0], RIGHT, buff=0.3).align_to(g, LEFT).shift(RIGHT * 5.6)
             r[2].next_to(r[1], RIGHT, buff=0.2)
+        baseline = min(r[1].get_left()[0] for r in g)
+        for r in g:
+            r[1].shift(RIGHT * (baseline - r[1].get_left()[0]))
+            r[2].next_to(r[1], RIGHT, buff=0.2)
+        g.scale(min(1.0, 12.6 / g.width)).move_to(DOWN * 0.2)
         note = label(r"no true effect anywhere: \ the share of studies that find one at $p < 0.05$ \ (Simmons, \ Nelson and Simonsohn, \ 2011)", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.4)
         head = label(r"how choices make effects", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
@@ -139,7 +156,7 @@ class Experiments(SoundScene):
             f"{say(round(100 * d['none']))} per cent find an effect, as they should. <bookmark mark='b'/> Each reasonable-looking "
             "choice raises it: two measures to pick from, ten more people if the first look fails, a covariate, a different "
             f"comparison. <bookmark mark='c'/> All together, {say(round(100 * d['ABCD']))} per cent of studies of nothing find "
-            "something. Preregistration exists to remove those choices."
+            "something. Preregistration makes planned choices visible and helps distinguish confirmatory analyses from exploration."
         ) as vo:
             self.play(FadeIn(head), FadeIn(note))
             vo.wait_until("a")
