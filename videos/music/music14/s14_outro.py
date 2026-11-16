@@ -25,7 +25,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it has built. This part built "
             "ways to change a melody, and a model that expects. And changing this particular melody "
-            "has a history: around 1781 Mozart wrote twelve variations for piano on Ah, vous dirai-je, "
+            "has a history: around 1781–82 Mozart wrote twelve variations for piano on Ah, vous dirai-je, "
             "maman, and his first one does what our third version does: it fills the tune with running "
             "notes. <bookmark mark='a'/> So here is the "
             "Tune's first phrase, and then that phrase decorated three ways: with neighbour notes, with "
@@ -36,7 +36,7 @@ class Outro(SoundScene):
             first = d["phrases"][0]
             pre = roll(first["pitches"], first["beats"], width=10.0, height=2.6, lo=-3, hi=20, lines=(0, 12), color=TUNE).move_to(UP * 0.1)
             moz = VGroup(label(r"W. A. Mozart, \ \textit{Twelve Variations on ``Ah, vous dirai-je, maman''}, \ K. 265", font_size=26, color=WHITE),
-                         label(r"Vienna, \ about 1781", font_size=22, color=GREY_B)).arrange(DOWN, buff=0.12).move_to(DOWN * 1.9)
+                         label(r"Vienna, \ about 1781--82", font_size=22, color=GREY_B)).arrange(DOWN, buff=0.12).move_to(DOWN * 1.9)
             self.play(FadeIn(head), FadeIn(pre))
             self.wait(5.0)
             self.play(FadeIn(moz))
@@ -74,21 +74,14 @@ class Outro(SoundScene):
     def recap(self):
         card = objectives_card([
             r"a melody is first a contour; \ the intervals come second",
-            r"half of all moves are steps; \ a tune fits in an octave, \ and lives near its middle",
-            r"phrases are arches, \ a breath long, \ ending lower than they began",
+            r"in this corpus, about half the moves are steps; \ most corpus tunes fit an octave, \ notes cluster near their medians",
+            r"the average corpus phrase is an arch, \ individual shapes and durations vary, \ the average ends slightly lower",
             r"leaps turn back by regression to the mean: \ shuffled notes do it more",
             r"left over for the composer: \ tendency tones, \ repetition, \ question and answer",
-            r"a note carries about two and a half bits; \ a counting model is surprised by the Tune's one leap",
+            r"a note carries about two and a half bits; \ the largest early surprise is at the leap",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A melody is first a contour, and listeners keep the contour before the "
-            "intervals. <bookmark mark='a'/> Half of all moves are steps; a tune fits in an octave and "
-            "lives near its middle. <bookmark mark='b'/> Phrases are arches, a breath long, and they end "
-            "lower than they began. <bookmark mark='c'/> Leaps turn back because of regression to the "
-            "mean: shuffled notes do it more than real tunes. <bookmark mark='d'/> What is left over for "
-            "the composer is tendency tones, repetition, and phrases that ask and answer. "
-            "<bookmark mark='e'/> And a note carries about two and a half bits of news; a model that "
-            "only counts is surprised by the Tune exactly once, at its leap."
+            "What did we find? A melody is first a contour, and listeners keep the contour before the intervals. <bookmark mark='a'/> In this corpus about half the moves are steps, most tunes fit an octave, and notes cluster near their medians. <bookmark mark='b'/> The average of our hand-segmented phrases is an arch ending slightly lower; individual phrases take many shapes. <bookmark mark='c'/> Leaps turn back because of regression to the mean: shuffled notes do it more than real tunes. <bookmark mark='d'/> What is left over for the composer is tendency tones, repetition, and phrases that ask and answer. <bookmark mark='e'/> And a note carries about two and a half bits of news; a model that only counts has its largest early surprise at the Tune’s leap; the other notes also have nonzero surprise."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -123,14 +116,14 @@ class Outro(SoundScene):
             (r"tendency tones become a key, \ with a home", [15]),
             (r"two melodies at once: \ counterpoint", [16, 20]),
             (r"motive and sequence become form", [21]),
-            (r"raga and maqam: \ melody as the whole of the art", [34, 35]),
+            (r"raga and maqam: \ melodic organization in a broader practice", [34, 35]),
             (r"expectation and emotion", [46]),
             (r"machines that predict, \ and compose", [65]),
         ], font_size=26)
         with self.voiceover(
             "Where does this come back? At once: the next part turns tendency tones into a key, with a "
             "home. Then two melodies at once, which is counterpoint. Motive and sequence grow into form. "
-            "In raga and maqam, melody is the whole of the art. Expectation returns as a theory of "
+            "Raga and maqam give melodic organization a central role alongside rhythm, text, performance and other practices. Expectation returns as a theory of "
             "musical emotion. And the counting model of this part is the ancestor of the machines that "
             "compose."
         ):
@@ -176,14 +169,10 @@ class Outro(SoundScene):
         t = load("hook")["tune"]
         r = roll(t["pitches"][7:14], t["beats"][7:14], width=6.0, height=1.8, lo=-2, hi=7, lines=(0,), color=TUNE).move_to(UP * 1.3)
         home = label(r"home", font_size=26, color=EAR).next_to(r.notes[-1], DOWN, buff=0.25)
-        q = label(r"every tune has a home note. \ What makes it home, \ and can a tune move house?", font_size=30, color=EAR).move_to(DOWN * 0.6)
+        q = label(r"these tonal tunes have a home note. \ What makes it home, \ and can a tune move house?", font_size=30, color=EAR).move_to(DOWN * 0.6)
         nxt = VGroup(label(r"Part 15", font_size=32, color=GREY_B), label(r"Key", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "One thing has been in every chapter without being explained. Ninety-six tunes in a hundred "
-            "end on the same degree of the scale. <bookmark mark='a'/> Notes lean toward it. Phrases ask "
-            "questions that only it can answer. Every tune has a home note. What makes one note out of "
-            "seven the home, how does a listener find it within a few seconds, and can a piece of music "
-            "leave home and come back? <bookmark mark='b'/> Next time. Part 15: Key."
+            "One thing has been in every chapter without being explained. In this selected corpus, about ninety-six percent end on the first scale degree. <bookmark mark='a'/> Notes lean toward it. Phrases ask questions that only it can answer. The tonal tunes studied here have an identified home; not every kind of melody requires one. What makes one note out of seven the home, how does a listener find it within a few seconds, and can a piece of music leave home and come back? <bookmark mark='b'/> Next time. Part 15: Key."
         ) as vo:
             self.play(FadeIn(r))
             vo.wait_until("a")

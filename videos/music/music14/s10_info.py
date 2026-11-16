@@ -22,14 +22,7 @@ class Info(SoundScene):
         head = label(rf"{d['alphabet']} different notes: \ $\log_2 {d['alphabet']} = {d['uniform']:.1f}$ bits each, \ if nothing is known", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         saved = 1 - d["by_order"][1] / d["uniform"]
         with self.voiceover(
-            "We can put a number on all of this. Claude Shannon's measure of information, from 1948, "
-            "is the bit: the answer to one yes-or-no question. Our tunes use "
-            f"{say(d['alphabet'])} different notes. If every note were as likely as every other, each "
-            f"would carry {say(d['uniform'], 1)} bits. <bookmark mark='a'/> But they are not equally "
-            f"likely. Knowing only which notes are common brings it down to {say(d['by_order'][0], 1)}. "
-            f"<bookmark mark='b'/> Knowing the previous note as well: {say(d['by_order'][1], 1)} bits. "
-            f"So about {say(round(100 * saved, -1))} percent of every "
-            "note is no news at all: it could have been predicted from the scale and the note before."
+            f"We can put a number on all of this. Claude Shannon's measure of information, from 1948, is the bit: the answer to one yes-or-no question. Our tunes use {say(d['alphabet'])} different notes. If every note were as likely as every other, each would carry {say(d['uniform'], 1)} bits. <bookmark mark='a'/> But they are not equally likely. Knowing only which notes are common brings it down to {say(d['by_order'][0], 1)}. <bookmark mark='b'/> Knowing the previous note as well: {say(d['by_order'][1], 1)} bits. So about {say(round(100 * saved, -1))} percent less cross-entropy than the uniform baseline: it could have been predicted from the scale and the note before."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(ch.bars[0]), FadeIn(ch.labels[0]), FadeIn(ch.values[0]), FadeIn(yl))
             vo.wait_until("a")
@@ -65,7 +58,7 @@ class Info(SoundScene):
             "same note three times; two steps down. Most patterns are rare. <bookmark mark='b'/> On "
             "logarithmic axes, the ranks fall close to a straight line, with a slope of about "
             f"minus {say(abs(z['slope']), 1)}. The frequencies of words in a language fall on such a "
-            "line too; it is called Zipf's law. Melodies, like languages, are made from a small common "
+            "line too; it resembles a Zipf-like rank-frequency trend; a short approximately straight plot does not establish a power law. Melodies, like languages, are made from a small common "
             "vocabulary and a long tail of rarities."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g))
@@ -84,14 +77,7 @@ class Info(SoundScene):
                      VGroup(label(r"by blind luck, \ first time", font_size=26, color=GREY_A), label(rf"{100 * d['chance_first']:.0f} in a hundred", font_size=44, color=WEAK)).arrange(DOWN, buff=0.15)).arrange(RIGHT, buff=1.0).move_to(DOWN * 0.3)
         head = label(r"Shannon's guessing game: \ what is the next note?", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "Shannon had a way to make bits concrete: a guessing game. Hide the next letter of a "
-            "sentence, and count how many guesses a reader needs. Play it on melody. Show a model a tune "
-            "it has never met, one note at a time, and ask it to guess the next. <bookmark mark='a'/> "
-            f"Its first guess is right {say(100 * d['first'])} times in a hundred. <bookmark mark='b'/> "
-            f"Within three guesses it is right {say(100 * d['three'])} times. <bookmark mark='c'/> Blind "
-            f"luck would manage {say(100 * d['chance_first'])} in a hundred at the first attempt. That "
-            "gap is what the word predictable means; and it is why you can sing along to the second "
-            "verse of a song that you have never heard before."
+            f"Shannon had a way to make bits concrete: a guessing game. Hide the next letter of a sentence, and count how many guesses a reader needs. Play it on melody. Show a model a tune it has never met, one note at a time, and ask it to guess the next. <bookmark mark='a'/> Its first guess is right {say(100 * d['first'])} times in a hundred. <bookmark mark='b'/> Within three guesses it is right {say(100 * d['three'])} times. <bookmark mark='c'/> Blind luck would manage {say(100 * d['chance_first'])} in a hundred at the first attempt. That gap is what the word predictable means; and it illustrates predictive structure; singing a repeated verse also relies on learning its melody."
         ) as vo:
             self.play(FadeIn(head))
             for mark, b in zip("abc", big):

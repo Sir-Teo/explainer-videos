@@ -19,16 +19,11 @@ class Model(SoundScene):
         a = d["after"]["C, C"]
         ch = columns([x["p"] for x in a], [x["note"] + (r" below" if x["pitch"] < 0 else "") for x in a], width=5.5, height=2.2, color=WEAK, hot=(0, 1), hot_color=TUNE, fmt="{:.2f}", font_size=24, top=0.5).move_to(RIGHT * 3.3 + DOWN * 0.8)
         q = label(r"after \ C, \ C: \ what next?", font_size=30, color=WHITE).next_to(ch, UP, buff=0.5)
-        steps = VGroup(label(r"1. \ count: \ after these two notes, \ what came next?", font_size=26, color=WHITE), label(r"2. \ never seen those two? \ use the last one", font_size=26, color=WHITE),
-                       label(r"3. \ never seen that? \ use how common each note is", font_size=26, color=WHITE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(LEFT * 3.2 + UP * 0.3)
+        steps = VGroup(label(r"1. \ count: \ after these two notes, \ what came next?", font_size=26, color=WHITE), label(r"2. \ blend in counts after the last note", font_size=26, color=WHITE),
+                       label(r"3. \ blend in overall note frequencies", font_size=26, color=WHITE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(LEFT * 3.2 + UP * 0.3)
         head = label(r"a listener made of counts: \ fifty-three tunes, \ and not the Tune", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Now build the listener. Give Monochord fifty-three tunes, everything except the Tune, and "
-            "let it count. <bookmark mark='a'/> After these two notes, what came next, and how often? "
-            "<bookmark mark='b'/> When it has never met those two notes together, it falls back on the "
-            "last one alone; <bookmark mark='c'/> and then on nothing but how common each note is. That "
-            "is a variable-order Markov model. It is the core of Marcus Pearce's model of melodic "
-            "expectation, which he called IDyOM."
+            "Now build the listener. Give Monochord fifty-three tunes, everything except the Tune, and let it count. <bookmark mark='a'/> After these two notes, what came next, and how often? <bookmark mark='b'/> It blends these counts with counts after the last note alone; <bookmark mark='c'/> and with overall note frequencies. Unseen contexts rely on the shorter contexts. That is a variable-order Markov model. Variable-order statistical prediction is one ingredient in Marcus Pearce’s fuller model of melodic expectation, which he called IDyOM."
         ) as vo:
             self.play(FadeIn(head))
             for mark, s in zip("abc", steps):
@@ -109,10 +104,7 @@ class Model(SoundScene):
                 sing(snd, rolls[k], d["gen_times"][str(k)], hot=WHITE, base=CHANCE_C)
                 pulse(snd, tags[k], ev[f"o{k}"], ev[f"o{k + 1}"] - 0.5 if k < 2 else c.duration, buff=0.1)
         with self.voiceover(
-            "With no memory, the notes are the right notes and the result is nonsense. With memory, it "
-            "begins to step and to repeat, and for a moment it sounds like something. But it has no "
-            "phrases, no arch, no questions and answers, and no home. Those are shapes longer than two "
-            "notes, and a model has to be built to look for them."
+            'With no memory, the notes are the right notes and the result is nonsense. With memory, it begins to step and to repeat, and for a moment it sounds like something. It has no explicit phrase, contour-plan or tonal-home representation, though some generated samples may show those features by chance. Those are shapes longer than two notes, and a model has to be built to look for them.'
         ):
             self.play(FadeOut(note))
         self.wait(0.4)
@@ -143,12 +135,12 @@ class Model(SoundScene):
             sing(snd, rh, d["times"]["hard"], hot=WHITE, base=EAR)
             pulse(snd, le, ev["easy"], ev["hard"] - 0.5, buff=0.1)
             pulse(snd, lh, ev["hard"], c.duration, buff=0.1)
-        cap = VGroup(label(r"the model grew up on tunes in major keys.", font_size=28, color=WHITE), label(r"what a listener expects is what that listener has heard.", font_size=30, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
+        cap = VGroup(label(r"the model grew up on tunes in major keys.", font_size=28, color=WHITE), label(r"exposure helps shape expectation; context and perception also matter.", font_size=30, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "Nothing is wrong with the second tune: millions of people know it by heart. But our model "
             "grew up almost entirely on tunes in major keys, and a minor-key melody from somewhere else "
-            "surprises it at every turn. That is not a flaw in the method. It is the most important "
-            "thing the method shows. What a listener expects is what that listener has heard, and a "
+            "surprises it at every turn. This also exposes a limitation of this training distribution. It is the most important "
+            "thing the method shows. A listener’s exposure helps shape expectation, alongside other perceptual and contextual factors, and a "
             "tune that is obvious in one tradition is strange in another."
         ):
             self.play(FadeIn(cap))

@@ -18,8 +18,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 11 — Rhythm and Meter | Complete; [repair and verification record](music/part11.md) | Open |
 | 12 — Scales and Modes | Complete; [repair and verification record](music/part12.md) | Open |
 | 13 — Intervals and Chords | Complete; [repair and verification record](music/part13.md) | Open |
-| 14 — Melody | In progress | Open |
-| 15–68 | Queued | Open |
+| 14 — Melody | Complete; [repair and verification record](music/part14.md) | Open |
+| 15 — Key | In progress | Open |
+| 16–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -65,9 +66,12 @@ motion checks pass. Three native 1080p stills inspected. Local identities: `rend
 Part 13: thirteen chapter previews reviewed; 37 tests, the lab, 13 sound-gate cases and 27 listening-window
 motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music13/source-receipt.json`.
 
-**Current: Part 14.** Chapter previews are rendering. Parts 15–18 have source repairs, tests and native
-still checks prepared for sequential previews; Part 19 source review is underway. Automated endpoint
-preflight continues; warnings require review and do not constitute episode approval.
+Part 14: fourteen chapter previews reviewed; 25 tests, the lab, 14 sound-gate cases and 18 listening-window
+motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music14/source-receipt.json`.
+
+**Current: Part 15.** Chapter previews are rendering. Parts 16–23 have source repairs and verification
+underway for sequential previews; Part 24 source review is underway. Automated endpoint preflight continues;
+warnings require review and do not constitute episode approval.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

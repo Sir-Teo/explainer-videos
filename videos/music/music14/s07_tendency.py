@@ -49,7 +49,7 @@ class Tendency(SoundScene):
         cl = label(r"to", font_size=22, color=GREY_B).next_to(hm, UP, buff=0.1)
         goes = d["goes"]
         lines = VGroup(*[label(rf"{a} $\rightarrow$ {goes[a]['to']}: \quad {100 * goes[a]['p']:.0f} in a hundred", font_size=30, color=WHITE) for a in ("7", "4", "6", "2")]).arrange(DOWN, buff=0.28, aligned_edge=LEFT).move_to(RIGHT * 3.0 + UP * 0.5)
-        home = label(rf"degrees 1, \ 3 and 5: \ {100 * d['triad']:.0f}\% of all the time", font_size=28, color=TUNE).next_to(lines, DOWN, buff=0.6)
+        home = label(rf"degrees 1, \ 3 and 5: \ {100 * d['triad']:.0f}\% of major-mode duration", font_size=24, color=TUNE).next_to(lines, DOWN, buff=0.6)
         head = label(r"where each degree of the scale goes next", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         cells = {"7": (6, 0), "4": (3, 2), "6": (5, 4), "2": (1, 0)}
         with self.voiceover(
@@ -65,10 +65,7 @@ class Tendency(SoundScene):
                 vo.wait_until(mark)
                 self.play(FadeIn(ln), Create(SurroundingRectangle(hm.cell[cells[a]], color=EAR, buff=0.02, stroke_width=3)), run_time=0.7)
         with self.voiceover(
-            "These are the tendency tones. Degrees two, four, six and seven lean toward their "
-            "neighbours one, three and five: the notes of the home chord of Part 13, where our tunes "
-            f"spend {say(100 * d['triad'])} percent of their time. Shuffled notes do not lean. This is "
-            "the scale itself at work: the pull of the tritone in Part 13, heard one note at a time."
+            f"These are the tendency tones. Degrees two, four, six and seven lean toward their neighbours one, three and five: the notes of the home chord of Part 13, where our tunes spend {say(100 * d['triad'])} percent of their time. Shuffling removes these sequential tendencies while retaining note frequencies. These are learned tonal tendencies in this corpus; scale membership does not physically compel resolution."
         ):
             self.play(FadeIn(home))
         self.wait(0.4)
@@ -96,10 +93,7 @@ class Tendency(SoundScene):
                        zip((r"stays on the second", r"falls to the seventh", r"comes home to the first"), (GREY_A, GREY_A, TUNE), rolls)])
         fin = label(rf"last phrases that end on the first degree: \ {100 * p['final_end']['1']:.0f} in a hundred", font_size=28, color=TUNE).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "C. In A the phrase stayed on the second degree; in B it fell to the seventh; in C it came "
-            f"home to the first. <bookmark mark='a'/> In our tunes, {say(100 * p['final_end']['1'])} "
-            "last phrases in a hundred end on the first degree. The others sound like a question "
-            "waiting for an answer, and in the next chapter but one we will hear that used."
+            f"C. In A the phrase stayed on the second degree; in B it fell to the seventh; in C it came home to the first. <bookmark mark='a'/> In our tunes, {say(100 * p['final_end']['1'])} last phrases in a hundred end on the first degree. Other endings can sound open in the tonal context illustrated here, and in the next chapter but one we will hear that used."
         ) as vo:
             self.play(FadeIn(ans), rolls[2].notes[-1].animate.set_fill(TUNE))
             vo.wait_until("a")

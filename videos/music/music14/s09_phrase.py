@@ -22,13 +22,7 @@ class Phrase(SoundScene):
         head = label(r"the size of a phrase", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         total = sum(d["lengths"].values())
         with self.voiceover(
-            "Phrases have a typical size. <bookmark mark='a'/> "
-            f"{say(100 * d['lengths']['8'] / total)} in a hundred of ours last eight beats, and most of "
-            "the rest six, four or twelve: a few seconds, the length of a comfortable breath. "
-            "<bookmark mark='b'/> And the last note of a phrase is long: on average "
-            f"{say(d['lengthening'], 1)} times as long as the others. A singer needs the time to "
-            "breathe, and a listener uses the long note to hear that a phrase has ended. Speech does the "
-            "same, and linguists call it final lengthening."
+            f"Phrases have a typical size. <bookmark mark='a'/> {say(100 * d['lengths']['8'] / total)} in a hundred of ours last eight beats, and most of the rest six, four or twelve: a duration that depends on tempo and the chosen beat unit. <bookmark mark='b'/> And the last note of a phrase is long: on average {say(d['lengthening'], 1)} times as long as the others. Breathing and musical phrasing can both contribute, and a listener uses the long note to hear that a phrase has ended. Speech does the same, and linguists call it final lengthening."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -56,7 +50,7 @@ class Phrase(SoundScene):
         tags = VGroup(*[label(rf"ends on {deg[o['pitches'][ends[k + 1] - 1]]}", font_size=26, color=EAR if o["pitches"][ends[k + 1] - 1] else TUNE).next_to(rolls[k], RIGHT, buff=0.4) for k in range(2)])
         head = label(r"\textit{Ode to Joy}: \ two phrases", font_size=28, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "And phrases come in pairs. Here is the whole of Beethoven's tune: two long phrases. Listen "
+            "And phrases come in pairs. Here is the selected paired-phrase excerpt of Beethoven’s tune: two long phrases. Listen "
             "to the last note of each."
         ):
             self.play(FadeIn(head), FadeIn(rows))
@@ -72,12 +66,7 @@ class Phrase(SoundScene):
         cap = VGroup(label(r"a phrase in the middle of a tune ends on " + r", \ ".join(order[:3]) + rf" or {order[3]}", font_size=26, color=WHITE),
                      label(rf"the last phrase ends on 1: \ {100 * fin['1']:.0f} in a hundred", font_size=28, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "The first phrase ends on the second degree: open, a question. The second is the same music, "
-            "and ends on the first: an answer. Musicians call such a pair an antecedent and a "
-            "consequent. <bookmark mark='a'/> In our tunes, a phrase in the middle may end on the "
-            "fifth degree, the first, the third or the second. The final phrase ends on the first "
-            f"{say(100 * fin['1'])} times in a hundred. A tune is a series of questions, and one last "
-            "answer."
+            f"The first phrase ends on the second degree: open, a question. The second is the same music, and ends on the first: an answer. Musicians call such a pair an antecedent and a consequent. <bookmark mark='a'/> In our tunes, a phrase in the middle may end on the fifth degree, the first, the third or the second. The final phrase ends on the first {say(100 * fin['1'])} times in a hundred. This question-and-answer description is useful here, rather than a definition of all melody."
         ) as vo:
             self.play(Indicate(tags[0], color=EAR), Indicate(tags[1], color=TUNE))
             vo.wait_until("a")

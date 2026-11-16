@@ -26,7 +26,7 @@ class Hook(SoundScene):
             "Open a textbook on writing melodies and you will find a rule that is four hundred years "
             "old. After a leap, turn back. <bookmark mark='a'/> Jump up, and then step down. Jump down, "
             "and then step up. It sounds like craft: advice that good composers follow. So let us test "
-            f"it. This series now has a small library: {say(d['tunes'])} tunes that half the world can "
+            f"it. This series now has a small library: {say(d['tunes'])} mostly Western traditional tunes in hand-entered versions that many listeners may "
             f"sing, about nineteen hundred notes. <bookmark mark='b'/> In them there are "
             f"{say(d['leaps'])} leaps of a minor third or more. And when a tune moves on from a leap, it "
             f"turns back {say(100 * d['real'])} times in a hundred. The rule holds."
@@ -50,9 +50,7 @@ class Hook(SoundScene):
         l1 = label(r"the Tune", font_size=26, color=GREY_A).next_to(r1, UP, buff=0.15).align_to(r1, LEFT)
         l2 = label(r"the same notes, \ shuffled", font_size=26, color=GREY_A).next_to(r2, UP, buff=0.15).align_to(r2, LEFT)
         with self.voiceover(
-            "Now a control experiment. Take the same tunes, and shuffle each one's notes into a random "
-            "order. Every note is still there. All of the design is gone. Here is the Tune; and then the "
-            "Tune, shuffled."
+            "Now a control experiment. Take the same tunes, and shuffle each one's notes into a random order. Every note is still there. Their sequential design is disrupted, while pitch-duration pairs and the assigned phrase boundaries remain. Here is the Tune; and then the Tune, shuffled."
         ):
             self.play(FadeIn(r1), FadeIn(l1))
             self.play(FadeIn(r2), FadeIn(l2))
@@ -65,10 +63,7 @@ class Hook(SoundScene):
         res = VGroup(label(rf"real tunes: \ {100 * d['real']:.0f} in a hundred", font_size=32, color=REAL_C),
                      label(rf"shuffled tunes: \ {100 * d['chance']:.0f} in a hundred", font_size=32, color=CHANCE_C)).arrange(RIGHT, buff=1.2).to_edge(DOWN, buff=0.75)
         with self.voiceover(
-            "Nobody composed that. <bookmark mark='a'/> Yet count the leaps in the shuffled tunes, and "
-            f"they turn back {say(100 * d['chance'])} times in a hundred: more often than the real ones "
-            "do. Noise obeys the rule better than music does. So whatever this rule is, it is not a "
-            "secret of the composer's craft."
+            f"Nobody composed that. <bookmark mark='a'/> Yet count the leaps in the shuffled tunes, and they turn back {say(100 * d['chance'])} times in a hundred: more often than the real ones do. Noise obeys the rule better than music does. Reversal frequency alone therefore cannot establish intentional craft."
         ) as vo:
             self.play(FadeIn(res[0]))
             vo.wait_until("a")
@@ -83,21 +78,12 @@ class Hook(SoundScene):
             r"a melody is first a shape: \ contour",
             r"how tunes move: \ small steps, \ in a small range, \ in arches",
             r"the leap rule, \ explained: \ regression to the mean",
-            r"what chance does not explain: \ tendency tones, \ repetition, \ phrases",
+            r"beyond these chance controls: \ tendency tones, \ repetition, \ phrases",
             r"information: \ how many bits in a note",
-            r"a model that learns tunes, \ and is surprised in the right places",
+            r"a model that learns tunes, \ and predicts learned expectations",
         ], title=r"Part 14: \ Melody", font_size=26).move_to(DOWN * 0.5)
         with self.voiceover(
-            "That is the question of this part. Part 13 stacked notes into chords; a melody is notes in "
-            "a line, and people have been writing rules for it for centuries. We will ask, of each rule: "
-            "do melodies really do this? And would they do it anyway, by arithmetic alone? "
-            "<bookmark mark='a'/> We begin with what a melody is: before anything else, a shape. "
-            "<bookmark mark='b'/> Then how tunes move: in small steps, in a small range, in arches. "
-            "<bookmark mark='c'/> Then the leap rule, and why noise obeys it. <bookmark mark='d'/> Then "
-            "the things that chance cannot explain: notes that lean, patterns that repeat, phrases that "
-            "ask and answer. <bookmark mark='e'/> We measure how much information a note carries. "
-            "<bookmark mark='f'/> And we build a model that learns from tunes and is surprised where a "
-            "listener is."
+            "That is the question of this part. Part 13 stacked notes into chords; a melody is notes in a line, and people have been writing rules for it for centuries. We will ask, of each rule: do melodies really do this? And would they do it anyway, by arithmetic alone? <bookmark mark='a'/> We begin with what a melody is: before anything else, a shape. <bookmark mark='b'/> Then how tunes move: in small steps, in a small range, in arches. <bookmark mark='c'/> Then the leap rule, and why noise obeys it. <bookmark mark='d'/> Then patterns not fully explained by these particular chance controls: notes that lean, patterns that repeat, phrases that ask and answer. <bookmark mark='e'/> We measure how much information a note carries. <bookmark mark='f'/> And we build a model that learns from tunes and offers testable predictions about learned expectation."
         ) as vo:
             self.play(FadeIn(idea))
             self.play(FadeIn(card.head))

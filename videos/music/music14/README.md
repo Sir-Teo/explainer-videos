@@ -3,10 +3,10 @@
 Part 14 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)). Part 13 stacked notes into chords; this part puts them in a line. It asks, of
 each thing melodies are said to do, whether they do it, and whether any string of notes in a small range would do
-it anyway. It counts the moves, ranges and phrase shapes of fifty-four tunes that half the world can sing; shows
+it anyway. It counts the moves, ranges and phrase shapes of fifty-four selected, hand-entered tunes; shows
 that the old rule "after a leap, turn back" is obeyed more faithfully by shuffled notes than by real tunes, and
 why; finds what chance does not explain (tendency tones, momentum, repetition, phrases that ask and answer);
-measures the information in a note; and trains a model that is surprised by the Tune exactly where a listener is.
+measures the information in a note; and trains a model whose predictions illustrate learned melodic expectation.
 The melody module is Monochord's (`explainer/music/monochord/melody.py`), the corpus is
 `explainer/music/monochord/tunes.py`, the pictures are in `explainer/music/melodyviz.py`, and every sound is
 computed in `compute.py`. Published findings are the ones listed under Sources.
@@ -15,7 +15,7 @@ computed in `compute.py`. Published findings are the ones listed under Sources.
   more, and 63 in a hundred are followed by a turn back; the Tune and the same fourteen notes shuffled, heard; in
   shuffled tunes the figure is 79; the plan.
 * **1. The shape of a tune.** An ear question: one famous tune with its octaves scrambled (every note right, the
-  shape gone) and with its intervals doubled (every note wrong, the shape kept); contour first, then intervals,
+  shape gone) and with its intervals doubled (nonzero intervals changed, the shape kept); contour first, then intervals,
   then rhythm (Deutsch 1972; Dowling 1978); the Tune on C and on F♯: no note in common, the same tune; Parsons's
   code of ups, downs and repeats: eight moves tell all 54 tunes apart.
 * **2. Small steps.** 1,844 moves: half steps, a quarter repeats, a quarter leaps; mean two semitones; 99 in a
@@ -45,7 +45,7 @@ computed in `compute.py`. Published findings are the ones listed under Sources.
   first degree 96 times in a hundred.
 * **9. How much news is in a note?** Twenty notes: 4.3 bits each if nothing is known; 3.2 given which are
   common; 2.6 given the note before; longer memories do not help on 54 tunes; the guessing game: right first
-  time 33 in a hundred, within three guesses 77; patterns of two moves follow Zipf's law (slope −1.3).
+  time 33 in a hundred, within three guesses 77; patterns of two moves show a Zipf-like rank-frequency trend (slope −1.3).
 * **10. A model that is surprised.** A variable-order Markov model (the core of Pearce's IDyOM) trained on 53
   tunes; the Tune's surprise note by note, heard: 5.1 bits at the leap of a fifth, about two elsewhere; every tune
   scored by a model trained on the rest: the Ode to Joy is easiest (1.9 bits a note), a minor-key Russian tune
@@ -53,7 +53,7 @@ computed in `compute.py`. Published findings are the ones listed under Sources.
 * **11. Words and tune.** Mandarin's four tones on Part 8's voice, heard; Cantonese songs follow their tones
   about nine times in ten (Wong and Diehl 2002); speech glides, song holds; a spoken phrase repeated becomes song
   (Deutsch and others 2011).
-* **12. Frontier: predicting the listener.** Three predictors scored on unseen tunes: common notes 3.2 bits,
+* **12. Frontier: predicting the listener.** Three predictors (counting models leave-one-out; proximity optimized in-sample): common notes 3.2 bits,
   nearness 3.2, the counting model 2.6; IDyOM and what listeners and their brains report; memory for melody and
   the tunes that stick (Jakubowski and others 2017); medium surprise is liked best (Gold and others 2019).
   ★ research problem: which tunes will be remembered.
@@ -112,6 +112,10 @@ starved of data. *The hardest tune for the model* is hard because the corpus is 
 measures the model's upbringing, not the tune. *The four tones* are idealised contours on a synthetic vowel,
 without consonants or the durations and voice quality of real speech. *The inverted U* of the frontier chapter is
 drawn as a sketch of a published finding, not from data of ours.
+
+## Additional scope
+
+Reversal percentages exclude cases where the next note repeats; the die reverses in 40/60 qualifying triples, or 40/50 (80%) after excluding repeats. The degree-transition and chord-tone duration analyses use major-mode tunes. Shuffling permutes pitch-duration pairs, preserving their multiset and assigned phrase-boundary indices rather than the original rhythm order. The proximity baseline is fitted and scored on the same corpus, unlike the leave-one-tune-out counting models. A near-linear rank-frequency plot is not proof of a power law. Vocal range, phrase length, tonal closure, speech prosody and listener preferences vary. Correlation between model surprise and responses does not equate model and human expectation.
 
 ## Build
 

@@ -24,11 +24,7 @@ class Range(SoundScene):
         facts = VGroup(label(rf"the middle tune: \ {d['median']:.0f} semitones, \ an octave", font_size=28, color=WHITE),
                        label(rf"{d['within_octave']} of {d['of']} fit in an octave", font_size=28, color=TUNE)).arrange(RIGHT, buff=1.0).next_to(head, DOWN, buff=0.3)
         with self.voiceover(
-            "How much room does a melody use? Measure each tune from its lowest note to its highest. "
-            "<bookmark mark='a'/> The middle value is exactly an octave. "
-            f"{say(d['within_octave'])} of the {say(d['of'])} fit within an octave, and none needs more "
-            "than an octave and a fourth. That is the comfortable compass of an untrained voice, and "
-            "tunes that everyone sings are tunes that everyone can sing."
+            f"How much room does a melody use? Measure each tune from its lowest note to its highest. <bookmark mark='a'/> The middle value is exactly an octave. {say(d['within_octave'])} of the {say(d['of'])} fit within an octave, and none needs more than an octave and a fourth. Comfortable vocal range varies by person, register and training; this corpus does not define a universal limit."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch), FadeIn(xl), run_time=1.5)
             vo.wait_until("a")
@@ -40,10 +36,7 @@ class Range(SoundScene):
         ln = label(r"Hot Cross Buns: \ three notes", font_size=24, color=TUNE).next_to(rn, UP, buff=0.15)
         lw = label(r"The Star-Spangled Banner: \ a tenth in two lines", font_size=24, color=EAR).next_to(rw, UP, buff=0.15)
         with self.voiceover(
-            "At one end is Hot Cross Buns: three notes, a major third from bottom to top. At the other, "
-            "Silent Night, which spans an eleventh; and the Star-Spangled Banner, whose first two lines "
-            "already cover a tenth, and the whole song an octave and a fifth, which is why crowds dread "
-            "it. Listen to the narrowest, and then to the start of the widest."
+            'At one end is Hot Cross Buns: three notes, a major third from bottom to top. At the other, Silent Night, which spans an eleventh; and the Star-Spangled Banner, whose first two lines already cover a tenth, and the whole song an octave and a fifth, which can make it challenging for group singing. Listen to the narrowest, and then to the start of the widest.'
         ):
             self.play(FadeOut(ch), FadeOut(xl), FadeOut(facts), FadeIn(rn), FadeIn(ln), FadeIn(rw), FadeIn(lw))
         with self.listen(c) as snd:

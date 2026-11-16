@@ -67,10 +67,7 @@ class Steps(SoundScene):
         lf = label(r"nine semitones away", font_size=26, color=GREY_A).next_to(far, DOWN, buff=0.4)
         ln = label(r"the middle note a tone away", font_size=26, color=GREY_A).next_to(near, DOWN, buff=0.4).align_to(lf, DOWN)
         with self.voiceover(
-            "Why steps? One reason is the voice: a small change of pitch is a small change in the "
-            "tension of the vocal folds. The other reason is the ear. Listen to a three-note gallop, "
-            "low, high, low, played fast. First with the middle note a tone away; then with it nine "
-            "semitones away."
+            'Why steps? One reason is the voice: nearby pitches often require less vocal adjustment, though pitch depends on tissue tension, length and aerodynamic conditions. The other reason is the ear. Listen to a three-note gallop, low, high, low, played fast. First with the middle note a tone away; then with it nine semitones away.'
         ):
             self.play(FadeIn(near), FadeIn(ln), FadeIn(far), FadeIn(lf))
         with self.listen(c) as snd:
@@ -79,11 +76,7 @@ class Steps(SoundScene):
             pulse(snd, far, ev["far"], c.duration, buff=0.2)
         res = VGroup(label(r"one line, \ galloping", font_size=28, color=TUNE).next_to(ln, DOWN, buff=0.3), label(r"two lines, \ and no gallop", font_size=28, color=EAR).next_to(lf, DOWN, buff=0.3))
         with self.voiceover(
-            "The first is one line that gallops. The second splits into two lines, a high one and a "
-            "low one, and the gallop is gone. <bookmark mark='a'/> Albert Bregman named this auditory "
-            "streaming: at speed, the ear groups sounds by their nearness in pitch. A melody that leaps "
-            "too far, too fast, stops being one melody. Bach used the effect on purpose, to make one "
-            "violin sound like two."
+            "The first is one line that gallops. The second splits into two lines, a high one and a low one, and the gallop is gone. <bookmark mark='a'/> Albert Bregman named this auditory streaming: at speed, the ear groups sounds by their nearness in pitch. Wide rapid alternation can encourage stream segregation; tempo, timbre, attention and exposure also matter. Bach used the effect on purpose, to make one violin sound like two."
         ) as vo:
             self.play(FadeIn(res[0]))
             vo.wait_until("a")
@@ -113,10 +106,7 @@ class Steps(SoundScene):
         ans = VGroup(label(rf"A: \ each \textit{{note}} drawn at random: \ {d['urn_mean']:.1f} semitones a move", font_size=26, color=CHANCE_C),
                      label(rf"B: \ each \textit{{move}} drawn from the tunes' own moves: \ {d['walk_mean']:.1f} semitones", font_size=26, color=REAL_C)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "B, for most listeners. In A, each note was drawn at random from the octave. In B, each "
-            "move was drawn at random from the moves that our fifty-four tunes make: mostly steps and "
-            "repeats. Neither was composed. Small moves are most of what makes a string of notes sound "
-            "like a tune at all."
+            'B, for most listeners. In A, each note was drawn at random from the octave. In B, each move was drawn at random from the moves that our fifty-four tunes make: mostly steps and repeats. Neither was composed. Small moves help these examples cohere, but do not by themselves explain melody or guarantee a listener preference.'
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)

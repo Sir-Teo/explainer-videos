@@ -20,7 +20,7 @@ class Arch(SoundScene):
         r = roll(o["pitches"], o["beats"], width=11.0, height=2.6, lines=(0,), phrase_ends=o["phrase_ends"], color=TUNE).move_to(UP * 0.5)
         head = label(r"two phrases of Beethoven's \textit{Ode to Joy}", font_size=28, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "Melodies come in phrases, each about one breath long. Here are two phrases of Beethoven's "
+            "Melodies come in phrases, often shaped as singable units, with boundaries marked here by hand. Here are two phrases of Beethoven's "
             "Ode to Joy. Watch the shape of each."
         ):
             self.play(FadeIn(head), FadeIn(r))
@@ -60,18 +60,13 @@ class Arch(SoundScene):
             vo.wait_until("a")
             self.play(FadeIn(ch))
         with self.voiceover(
-            "Now average all the phrases together. <bookmark mark='a'/> What emerges is an arch: up by "
-            "about a semitone in the first third, then down, ending half a semitone below where it "
-            "began. David Huron found the same arch in 1996, in six thousand European folk songs. "
-            "<bookmark mark='b'/> Speech does it too. The pitch of a spoken sentence drifts downward as "
-            "the air in the lungs runs out. A phrase of melody is shaped like a breath: it rises as it "
-            "sets out, and it sinks as it ends."
+            "Now average all the phrases together. <bookmark mark='a'/> What emerges is an arch: up by about a semitone in the first third, then down, ending half a semitone below where it began. David Huron found the same arch in 1996, in six thousand European folk songs. <bookmark mark='b'/> Speech often shows pitch declination, influenced by linguistic structure, prosody and physiology; it is not simply air running out. A phrase of melody is shaped like a breath: it rises as it sets out, and it sinks as it ends."
         ) as vo:
             self.play(FadeIn(g), FadeIn(faint))
             vo.wait_until("a")
             self.play(Create(mean), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(label(r"a phrase is shaped like a breath", font_size=30, color=TUNE).next_to(head, DOWN, buff=0.3)))
+            self.play(FadeIn(label(r"this corpus’s average phrase forms an arch", font_size=30, color=TUNE).next_to(head, DOWN, buff=0.3)))
         self.wait(0.4)
         self.clear_scene()
 
@@ -83,13 +78,7 @@ class Arch(SoundScene):
         head = label(r"``save the high note for two thirds of the way through''?", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         cap = label(rf"in the middle tune, \ a quarter of the way through; \ {d['second_half']} of {d['of']} wait for the second half", font_size=26, color=WHITE).next_to(head, DOWN, buff=0.35)
         with self.voiceover(
-            "Here is a piece of advice that is often given with the arch: save the highest note of a "
-            "melody for about two thirds of the way through. Test it. <bookmark mark='a'/> In our "
-            "tunes, the top note first arrives, in the middle case, only a quarter of the way through. "
-            f"In {say(d['fifths'][0])} of the {say(d['of'])} it comes in the first fifth of the tune, "
-            f"and only {say(d['second_half'])} wait until the second half. These tunes climb early, and "
-            "spend the rest of their time coming down. The advice may suit a symphony. It does not "
-            "describe the songs that everyone knows."
+            f"Here is a piece of advice that is often given with the arch: save the highest note of a melody for about two thirds of the way through. Test it. <bookmark mark='a'/> In our tunes, the top note first arrives, in the middle case, only a quarter of the way through. In {say(d['fifths'][0])} of the {say(d['of'])} it comes in the first fifth of the tune, and only {say(d['second_half'])} wait until the second half. These tunes climb early, and spend the rest of their time coming down. The advice may suit a symphony. It does not describe the median first-peak position of this selected corpus."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

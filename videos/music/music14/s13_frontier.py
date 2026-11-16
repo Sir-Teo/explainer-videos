@@ -19,26 +19,21 @@ class Frontier(SoundScene):
         vals = [d["uniform"], d["unigram"], d["proximity"], d["ngram"]]
         names = [r"knows nothing", r"which notes are common", r"``the next note is near''", r"the counting model"]
         ch = columns(vals, names, width=10.5, height=2.6, color=WEAK, hot=(3,), hot_color=TUNE, fmt="{:.1f}", font_size=22, top=4.6).move_to(DOWN * 0.9)
-        yl = label(r"bits per note, \ on tunes not seen before \quad (lower is better)", font_size=22, color=GREY_B).next_to(ch, DOWN, buff=0.15)
+        yl = label(r"bits per note, \ LOO counting models; proximity fitted in-sample \quad (lower is better)", font_size=22, color=GREY_B).next_to(ch, DOWN, buff=0.15)
         head = label(r"three ways to guess the next note", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "How good is our model? Score three predictors on tunes they have not seen. "
-            f"<bookmark mark='a'/> One knows only which notes are common: {say(d['unigram'], 1)} bits a "
-            "note. <bookmark mark='b'/> One knows only that the next note is probably near the last "
-            f"one, which is most of what the old rules of melody say: also {say(d['proximity'], 1)}. "
-            f"<bookmark mark='c'/> The counting model: {say(d['ngram'], 1)}. Learning from examples "
-            "beats the rule, even with only fifty-three examples."
+            f"How good is our model? Compare three predictors. The counting models use leave-one-tune-out evaluation; the proximity baseline is optimized on this same corpus, so its score is an optimistic in-sample reference, not an independent held-out test. <bookmark mark='a'/> One knows only which notes are common: {say(d['unigram'], 1)} bits a note. <bookmark mark='b'/> One knows only that the next note is probably near the last one, which is most of what the old rules of melody say: also {say(d['proximity'], 1)}. <bookmark mark='c'/> The counting model: {say(d['ngram'], 1)}. The learned model scores lower here, though this small comparison does not establish performance across traditions or datasets."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(VGroup(ch.bars[0], ch.labels[0], ch.values[0])), FadeIn(yl))
             for mark, k in zip("abc", (1, 2, 3)):
                 vo.wait_until(mark)
                 self.play(FadeIn(VGroup(ch.bars[k], ch.labels[k], ch.values[k])))
         cap = VGroup(label(r"M. Pearce's IDyOM: \ hundreds of melodies; \ pitch, \ scale degree and rhythm together", font_size=24, color=WHITE),
-                     label(r"its surprise follows what listeners say they expected, \ and how strongly their brains respond", font_size=24, color=TUNE)).arrange(DOWN, buff=0.18).next_to(head, DOWN, buff=0.3)
+                     label(r"model surprise correlates with expectation judgments \ and some measured brain responses", font_size=24, color=TUNE)).arrange(DOWN, buff=0.18).next_to(head, DOWN, buff=0.3)
         with self.voiceover(
             "Pearce's full model learns from hundreds of melodies, and tracks scale degree and rhythm "
-            "as well as pitch. Its surprise, note by note, follows what listeners report they expected; "
-            "and it follows the size of the electrical response of the brain to each note, measured at "
+            "as well as pitch. Its predictions correlate with expectation judgments in reported experiments; "
+            "and related measures correlate with some event-related brain responses, measured at "
             "the scalp. Expectation is not a figure of speech. It can be computed, and it can be seen."
         ):
             self.play(FadeIn(cap))
@@ -54,18 +49,11 @@ class Frontier(SoundScene):
         note = label(r"a sketch of the finding, \ not data", font_size=18, color=GREY_B).next_to(g, DOWN, buff=0.55)
         star = VGroup(label(r"$\bigstar$ \ open", font_size=30, color=LIMIT),
                       label(r"which tunes will stick?", font_size=34, color=WHITE),
-                      label(r"one melody lodges in millions of memories after one hearing;", font_size=24, color=GREY_A),
-                      label(r"a thousand others, \ equally well formed, \ are gone by morning.", font_size=24, color=GREY_A),
-                      label(r"no model yet says which, \ in advance.", font_size=28, color=TUNE)).arrange(DOWN, buff=0.22).move_to(RIGHT * 3.2 + UP * 0.1)
+                      label(r"some melodies are remembered after one hearing;", font_size=24, color=GREY_A),
+                      label(r"others are soon forgotten.", font_size=24, color=GREY_A),
+                      label(r"prediction remains imperfect, \\ especially across listeners.", font_size=28, color=TUNE)).arrange(DOWN, buff=0.22).move_to(RIGHT * 3.2 + UP * 0.1)
         with self.voiceover(
-            "Neural networks trained on far more music now predict a little better still. But "
-            "prediction is not the whole of melody. <bookmark mark='a'/> Listeners like music of medium "
-            "surprise best: neither obvious nor random. Experiments by Benjamin Gold and colleagues in "
-            "2019 found that liking follows an upside-down U. <bookmark mark='b'/> And nobody can yet "
-            "say which tunes will stick. One melody lodges in the memories of millions after a single "
-            "hearing, while a thousand others, equally well formed, are gone by the next morning. Our "
-            "model can tell a tune from noise. It cannot tell a good tune from a dull one. That "
-            "difference is still the composer's secret."
+            "Neural networks trained on far more music now predict a little better still. But prediction is not the whole of melody. <bookmark mark='a'/> Some experiments find an intermediate-predictability preference, dependent also on uncertainty, listener and stimulus: neither obvious nor random. Experiments by Benjamin Gold and colleagues in 2019 found that liking follows an upside-down U. <bookmark mark='b'/> Predicting which tunes will be remembered remains difficult; models can explain some variance without perfectly predicting individuals. One melody lodges in the memories of millions after a single hearing, while a thousand others, equally well formed, are gone by the next morning. Our model assigns different average likelihoods to these tune and shuffled examples; we have not established a general tune-versus-noise classifier. It cannot tell a good tune from a dull one. Likelihood alone is not a complete theory of musical quality or memory."
         ) as vo:
             lead = label(r"prediction is not the whole of melody", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
             self.play(FadeIn(lead), FadeIn(g), FadeIn(ul))
@@ -79,19 +67,12 @@ class Frontier(SoundScene):
     # ------------------------------------------------------------------
     def memory(self):
         rows = VGroup(label(r"we remember contour and rhythm first; \ exact pitches last", font_size=28, color=WHITE),
-                      label(r"a tune learnt in one key is recognised in any other", font_size=28, color=WHITE),
+                      label(r"transposition often preserves recognition; register and experience matter", font_size=28, color=WHITE),
                       label(r"tunes that get stuck in the head: \ fast, \ with a common overall shape", font_size=28, color=WHITE),
                       label(r"and one or two unusual leaps", font_size=28, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(UP * 0.1)
         head = label(r"what is known about memory for melody", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "What about memory? A few things are well established. <bookmark mark='a'/> Listeners keep "
-            "contour and rhythm first, and exact pitches last. <bookmark mark='b'/> A tune learnt in one "
-            "key is recognised in any other. <bookmark mark='c'/> And in 2017 Kelly Jakubowski and "
-            "colleagues compared tunes that people report getting stuck in their heads with similar "
-            "tunes that do not. The sticky ones were faster, and had the most common overall shapes, "
-            "the arch above all; <bookmark mark='d'/> but they also had one or two leaps that were out "
-            "of the ordinary. A familiar shape, with a small surprise in it. That is very nearly a "
-            "description of the Tune."
+            "What about memory? A few things are well established. <bookmark mark='a'/> Listeners keep contour and rhythm first, and exact pitches last. <bookmark mark='b'/> Melodies can often be recognized after transposition, with effects of register, timbre and listener experience. <bookmark mark='c'/> And in 2017 Kelly Jakubowski and colleagues compared tunes that people report getting stuck in their heads with similar tunes that do not. The sticky ones were faster, and had the most common overall shapes, the arch above all; <bookmark mark='d'/> but they also had one or two leaps that were out of the ordinary. A familiar shape, with a small surprise in it. That is very nearly a description of the Tune."
         ) as vo:
             self.play(FadeIn(head))
             for mark, r in zip("abcd", rows):

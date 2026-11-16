@@ -70,14 +70,7 @@ class Leaps(SoundScene):
         pb.legend.next_to(pb, UP, buff=0.35)
         head = label(r"how often the note after a leap turns back, \ in a hundred, \ by where the leap lands", font_size=26, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "It carries on: four times in five. <bookmark mark='a'/> When a leap heads away from the "
-            f"middle, the tune turns back {say(100 * d['departing']['real'])} times in a hundred. "
-            f"<bookmark mark='b'/> When it heads toward the middle, only "
-            f"{say(100 * d['approaching']['real'])}. And shuffled notes show exactly the same pattern. "
-            "<bookmark mark='c'/> In the year 2000, Paul von Hippel and David Huron showed this in "
-            "hundreds of melodies from Europe, Africa, China and native America. The textbook rule is "
-            "true as a description. As advice it is unnecessary: any melody in a limited range will "
-            "follow it without being told."
+            f"It carries on: four times in five. <bookmark mark='a'/> When a leap heads away from the middle, the tune turns back {say(100 * d['departing']['real'])} times in a hundred. <bookmark mark='b'/> When it heads toward the middle, only {say(100 * d['approaching']['real'])}. And shuffled notes show exactly the same pattern. <bookmark mark='c'/> In the year 2000, Paul von Hippel and David Huron showed this in hundreds of melodies from Europe, Africa, China and native America. The textbook rule is true as a description. As advice it is unnecessary: bounded random sequences can show it without such a rule; designed melodies need not."
         ) as vo:
             self.play(FadeOut(card), FadeIn(head), FadeIn(pb[0]), FadeIn(pb.legend), FadeIn(pb.groups[2]))
             vo.wait_until("a")
@@ -95,15 +88,9 @@ class Leaps(SoundScene):
         pb = pair_bars([(r"all leaps", 100 * d["real"], 100 * d["shuffled"])], width=3.6, height=2.6, names=(r"the tunes", r"by chance")).move_to(LEFT * 4.0 + DOWN * 0.6)
         pb.legend.next_to(pb, UP, buff=0.3)
         steps = VGroup(label(r"1. \ find a regularity", font_size=30, color=WHITE), label(r"2. \ ask what chance would do, \ under the same constraints", font_size=30, color=WHITE),
-                       label(r"3. \ what is left over is the craft", font_size=32, color=TUNE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 2.3 + UP * 0.2)
+                       label(r"3. \ residual structure needs further explanation", font_size=32, color=TUNE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 2.3 + UP * 0.2)
         with self.voiceover(
-            "Notice what just happened, because it is the method of this whole part. A regularity in "
-            "music is not yet a fact about composers. <bookmark mark='a'/> First ask what chance would "
-            "do, under the same constraints. <bookmark mark='b'/> What is left over after that is the "
-            f"craft. And here the leftover points the other way: real tunes turn back "
-            f"{say(100 * d['real'])} times in a hundred, chance {say(100 * d['shuffled'])}. If "
-            "anything, composers resist the rule. A real melody holds its direction longer than a "
-            "shuffled one would."
+            f"Notice what just happened, because it is the method of this whole part. A regularity in music is not yet a fact about composers. <bookmark mark='a'/> First ask what chance would do, under the same constraints. <bookmark mark='b'/> A residual suggests structure not captured by the control, not proof of an intention. And here the leftover points the other way: real tunes turn back {say(100 * d['real'])} times in a hundred, chance {say(100 * d['shuffled'])}. If anything, composers resist the rule. A real melody holds its direction longer than a shuffled one would."
         ) as vo:
             self.play(FadeIn(steps[0]), FadeIn(pb), FadeIn(pb.legend))
             vo.wait_until("a")
@@ -125,15 +112,9 @@ class Leaps(SoundScene):
         arrow = label(r"a leap up", font_size=24, color=EAR).next_to(VGroup(rolls3[0], rolls3[1]), DOWN, buff=0.2)
         rows = VGroup(label(rf"rolls where the second die beats the first by two or more: \ {d['cases']}", font_size=26, color=WHITE),
                       label(rf"the third roll is lower: \ {d['fall']} \quad higher: \ {d['rise']} \quad the same: \ {d['same']}", font_size=26, color=WHITE),
-                      label(rf"it turns back {100 * d['share']:.0f} times in a hundred", font_size=34, color=TUNE)).arrange(DOWN, buff=0.3).move_to(DOWN * 1.2)
+                      label(rf"among nonrepeating third rolls: {100 * d['share']:.0f}\% reverse", font_size=34, color=TUNE)).arrange(DOWN, buff=0.3).move_to(DOWN * 1.2)
         with self.voiceover(
-            "You can check the argument with a die, and no music at all. Roll it three times. Suppose "
-            "the second roll is higher than the first by two or more: a leap up. <bookmark mark='a'/> "
-            f"There are {say(d['cases'])} ways that can happen, and on average the second roll is then a "
-            f"{say(d['mean_landing'])}. Now the third roll. <bookmark mark='b'/> It is lower in "
-            f"{say(d['fall'])} of those cases, and higher in only {say(d['rise'])}. The die turns back "
-            f"{say(100 * d['share'])} times in a hundred. A die has no taste and no training. It has a "
-            "range, from one to six, and that is enough."
+            f"You can check the argument with a die, and no music at all. Roll it three times. Suppose the second roll is higher than the first by two or more: a leap up. <bookmark mark='a'/> There are {say(d['cases'])} ways that can happen, and on average the second roll is then a {say(d['mean_landing'])}. Now the third roll. <bookmark mark='b'/> It is lower in {say(d['fall'])} of those cases, and higher in only {say(d['rise'])}. Excluding repeated third rolls, the next move turns back {say(100 * d['share'])} times in a hundred. A die has no taste and no training. It has a range, from one to six, and that is enough."
         ) as vo:
             self.play(FadeIn(rolls3), FadeIn(arrow))
             vo.wait_until("a")

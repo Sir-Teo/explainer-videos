@@ -210,7 +210,7 @@ def compute_range() -> dict:
             "top_share": float(np.mean([np.mean(np.array(m.pitches) == max(m.pitches)) for m in CORPUS])),
             "narrow": rows(hot, (0, 2)), "wide": rows(banner, (0, 2)),
             "times": {"narrow": note_times(seq, len(rows(hot, (0, 2))["pitches"]), "narrow."), "wide": note_times(seq, len(rows(banner, (0, 2))["pitches"]), "wide.")},
-            "clips": {"two": save("range.two", seq, level=None, detail="a tune of three notes; a tune of a twelfth")}}
+            "clips": {"two": save("range.two", seq, level=None, detail="three-note Hot Cross Buns; the selected Star-Spangled Banner excerpt")}}
 
 
 def compute_arch() -> dict:

@@ -19,11 +19,11 @@ class Contour(SoundScene):
         c = clip("contour.disguises")
         ev = c.events
         o = d["original"]
-        card = listen_card(r"One famous tune, \ disguised twice. \ In A, \ every note has the right name but the wrong octave. \ In B, \ every interval is wrong, \ "
+        card = listen_card(r"One famous tune, \ disguised twice. \ In A, \ every note has the right name but the wrong octave. \ In B, \ every nonzero interval is expanded, \ "
                            r"but the notes go up and down as the tune does. \ Which can you name?", width=10.0)
         with self.voiceover(
             "Start with a puzzle for your ear. One famous tune, disguised twice. In A, every note has "
-            "the right name, but is in the wrong octave. In B, every interval is wrong, but the notes go "
+            "the right name, but is in the wrong octave. In B, every nonzero interval is expanded, but the notes go "
             "up and down as the tune does. Which one can you name?"
         ):
             self.play(FadeIn(card))
@@ -42,7 +42,7 @@ class Contour(SoundScene):
         c2 = clip("contour.real")
         rR = roll(o["pitches"], o["beats"], width=7.0, height=1.5, lines=(0,), color=TUNE).to_edge(DOWN, buff=1.25)
         lr = label(r"Fr\`ere Jacques", font_size=30, color=TUNE).next_to(rR, UP, buff=0.15)
-        with self.voiceover("Most people cannot name A, and can name B. It is Frère Jacques."):
+        with self.voiceover("You may find B easier to recognize than A; we have not measured listener responses to these particular examples. It is Frère Jacques."):
             self.play(rA.animate.scale(0.75).shift(UP * 0.6), rB.animate.scale(0.75).shift(UP * 0.6), la.animate.shift(UP * 0.25), lb.animate.shift(UP * 0.25), FadeIn(rR), FadeIn(lr))
         with self.listen(c2) as snd:
             window(snd, r"undisguised", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
@@ -63,9 +63,9 @@ class Contour(SoundScene):
         with self.voiceover(
             "In A, every note had the right name. Only the octaves were scrambled, and that destroyed "
             f"the ups and downs: just {say(d['scrambled_kept'])} of the thirteen moves kept their "
-            "direction. In B, every interval was doubled, so not one of them was right; but the shape "
+            "direction. In B, every interval was doubled, so every nonzero interval changed, while repeats remained repeats; but the shape "
             "was. <bookmark mark='a'/> Diana Deutsch did the first experiment of this kind in 1972, and "
-            "Jay Dowling showed soon after that contour is what listeners keep first: the pattern of "
+            "Jay Dowling showed soon after that contour can be particularly useful for recognizing unfamiliar melodies: the pattern of "
             "ups and downs. Exact intervals come later, with familiarity."
         ) as vo:
             self.play(FadeIn(r))
@@ -73,7 +73,7 @@ class Contour(SoundScene):
             self.play(LaggedStart(*[FadeIn(m) for m in marks], lag_ratio=0.1), run_time=2.5)
         with self.voiceover(
             "So a melody is not a list of notes. It is first of all a shape in time. <bookmark mark='a'/> "
-            "Then, hung on that shape, exact intervals in a scale. <bookmark mark='b'/> And then rhythm, "
+            "Then, hung on that shape, exact intervals in a scale. <bookmark mark='b'/> Alongside them is rhythm, "
             "which Part 11 took apart. This part is about the shape: what shapes melodies have, and why "
             "they have them."
         ) as vo:
@@ -107,7 +107,7 @@ class Contour(SoundScene):
             pulse(snd, l2, ev["Fs"], c.duration, buff=0.1)
         cap = VGroup(label(r"not one note in common; \ the same tune.", font_size=32, color=TUNE), label(r"a melody is a pattern of relations between notes, \ not the notes", font_size=26, color=GREY_A)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "The two versions do not have a single note in common, and nobody hears two tunes. A child "
+            "The two versions do not have a single note in common, while many listeners recognize the same tune. A child "
             "can sing a song back in a different key without noticing. So a melody is not its notes. It "
             "is a pattern of relations between notes: the same shape, with the same intervals, wherever "
             "it is put. Very few people can name a note they hear; nearly everyone can recognise a tune."
@@ -127,13 +127,7 @@ class Contour(SoundScene):
         xl = label(rf"moves of contour known \quad (bars: \ how many of the {d['of']} tunes are then unlike every other)", font_size=22, color=GREY_B).next_to(ch1, DOWN, buff=0.15)
         k = next(i for i, v in enumerate(d["contour"]) if v == d["of"])
         with self.voiceover(
-            "How much does contour alone tell you? Write a tune as nothing but ups, downs and repeats. "
-            "<bookmark mark='a'/> In 1975 Denys Parsons published a directory of thousands of themes "
-            "indexed this way, so that you could look up a tune you could only hum. Try it on our "
-            f"library. <bookmark mark='b'/> With five moves of contour, {say(d['contour'][3])} of the "
-            f"{say(d['of'])} tunes are already unlike every other. With {say(d['n'][k])}, all of them "
-            "are. Three symbols, a handful of moves, and a tune is identified. Every system that finds a "
-            "song from a hummed fragment begins here."
+            f"How much does contour alone tell you? Write a tune as nothing but ups, downs and repeats. <bookmark mark='a'/> In 1975 Denys Parsons published a directory of thousands of themes indexed this way, so that you could look up a tune you could only hum. Try it on our library. <bookmark mark='b'/> With five moves of contour, {say(d['contour'][3])} of the {say(d['of'])} tunes are already unlike every other. With {say(d['n'][k])}, all of them are. Three symbols, a handful of moves, and a tune is identified. Contour is one useful retrieval feature, alongside intervals, rhythm and learned audio representations."
         ) as vo:
             self.play(FadeIn(cl), LaggedStart(*[FadeIn(x) for x in cells], lag_ratio=0.15), run_time=3.0)
             vo.wait_until("a")

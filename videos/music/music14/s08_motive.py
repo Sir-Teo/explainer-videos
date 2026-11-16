@@ -28,7 +28,7 @@ class Motive(SoundScene):
         lk = label(r"Kuckuck, \ Kuckuck \ (Germany)", font_size=24, color=GREY_A).next_to(rk, UP, buff=0.2)
         lj = label(r"Joy to the World", font_size=24, color=GREY_A).next_to(rj, UP, buff=0.2)
         with self.voiceover(
-            "A melody that never repeated itself would be impossible to remember. Listen to how these "
+            "Repetition can make melodies easier to learn; literal repetition is not necessary for remembering one. Listen to how these "
             "two tunes are built: a short pattern, and then the same pattern again, one step higher or "
             "one step lower. Musicians call that a sequence."
         ):
@@ -61,7 +61,7 @@ class Motive(SoundScene):
         facts = VGroup(label(rf"{d['phrases_repeated']} of {d['phrases']} phrases repeat an earlier phrase exactly", font_size=28, color=WHITE),
                        label(rf"{d['moved']} tunes contain a sequence", font_size=28, color=WHITE),
                        label(rf"{d['exact']} repeat a short pattern at once", font_size=28, color=WHITE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 3.0 + UP * 1.0)
-        cap = VGroup(label(r"say a sentence twice, \ and it is odd.", font_size=28, color=GREY_A), label(r"play a phrase twice, \ and it is music.", font_size=30, color=TUNE)).arrange(DOWN, buff=0.15).move_to(RIGHT * 3.0 + DOWN * 1.6)
+        cap = VGroup(label(r"repetition can aid musical learning; \ ", font_size=28, color=GREY_A), label(r"speech also repeats; \\ repetition alone does not define music.", font_size=30, color=TUNE)).arrange(DOWN, buff=0.15).move_to(RIGHT * 3.0 + DOWN * 1.6)
         head = label(r"repetition in the fifty-four tunes", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
             "Repetition is everywhere in the fifty-four. <bookmark mark='a'/> "
@@ -78,10 +78,7 @@ class Motive(SoundScene):
             vo.wait_until("b")
             self.play(FadeIn(dm), FadeIn(ml))
         with self.voiceover(
-            "The psychologist Elizabeth Margulis has argued that this is what most separates music "
-            "from speech. Say a sentence twice, and it is odd. Play a phrase twice, and it is music. A "
-            "motive is the smallest thing in a tune that can be said twice; and chance, which explained "
-            "the leap rule, does not repeat itself."
+            'The psychologist Elizabeth Margulis has argued that this is what most separates music from speech. Repeated phrases can support recognition, but repetition alone does not define music. A motive is the smallest thing in a tune that can be said twice; and chance can repeat too, but recurrence beyond a suitable baseline can reveal additional structure.'
         ):
             self.play(FadeIn(cap))
         self.wait(0.4)
@@ -105,12 +102,7 @@ class Motive(SoundScene):
         rows.arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(UP * 0.3)
         head = label(r"each phrase a letter; \ a phrase heard before keeps its letter", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Give each phrase of a tune a letter, and give a phrase you have heard before the letter it "
-            "had. <bookmark mark='a'/> The Tune is A, B, C, C, A, B: it goes out, and it comes back. "
-            "<bookmark mark='b'/> Frère Jacques says everything twice: A, A, B, B, C, C, D, D; which is "
-            "why it works as a round. <bookmark mark='c'/> Au clair de la lune is A, B, A, B, then "
-            "something new, then A, B again. Statement, departure, return. With a handful of letters "
-            "you have the plan of a tune, and in Part 21 the same letters will describe a symphony."
+            "Give each phrase of a tune a letter, and give a phrase you have heard before the letter it had. <bookmark mark='a'/> The Tune is A, B, C, C, A, B: it goes out, and it comes back. <bookmark mark='b'/> Frère Jacques says everything twice: A, A, B, B, C, C, D, D; though working as a round also requires compatible overlapping entries. <bookmark mark='c'/> Au clair de la lune is A, B, A, B, then something new, then A, B again. Statement, departure, return. With a handful of letters you have the plan of a tune, and in Part 21 the same letters will describe a symphony."
         ) as vo:
             self.play(FadeIn(head), *[FadeIn(r[0]) for r in rows])
             vo.wait_until("a")
