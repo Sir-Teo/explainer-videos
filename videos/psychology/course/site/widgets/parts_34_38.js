@@ -516,4 +516,96 @@
       note: "Nothing you answer is stored or sent, and no money changes hands. The offers are scripted, not chosen by people, which matters: in experiments, low offers are rejected less often when people know a computer chose them.",
     });
   };
+
+  W.trolley = function (el) {
+    var w = null;
+    // the three cases with Awad et al.'s (2020) country-level averages; three variants of the same cases follow
+    var CASES = [
+      { name: "Switch", text: "Pull a lever: the trolley turns onto a side track and kills one person instead of five.", pub: 0.81 },
+      { name: "Loop", text: "Pull a lever: the trolley turns onto a loop, where one person's body stops it before it comes back to the five.", pub: 0.72 },
+      { name: "Footbridge", text: "Push a large man off a bridge: his body stops the trolley, and he dies instead of the five.", pub: 0.51 },
+      { name: "Switch, a stranger on the side track", text: "As Switch, but you are told the one person on the side track is a stranger to everyone.", pub: null },
+      { name: "Footbridge, a trapdoor", text: "As Footbridge, but you pull a lever that opens a trapdoor under the man instead of pushing him.", pub: null },
+      { name: "Loop, a heavy weight", text: "As Loop, but a heavy weight is on the loop beside the person; the weight alone would stop the trolley.", pub: null },
+    ];
+    var S = { phase: "idle", k: -1, log: [] };
+    function next() {
+      S.k++;
+      if (S.k >= CASES.length) { S.phase = "done"; task.clear(); }
+      else S.phase = "ask";
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "y": 1, "n": 0, "f": 1, "j": 0 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side, how) {
+        var yes = how === "tap" ? (side === 0 ? 1 : 0) : side;
+        S.log.push({ k: S.k, yes: yes });
+        task.count++;
+        S.phase = "shown";
+        if (w) w.render();
+        task.later(next, 500);
+      },
+    });
+    function start() { task.clear(); S.k = -1; S.log = []; task.count = 0; next(); }
+    function answer(k) {
+      var r = S.log.filter(function (x) { return x.k === k; });
+      return r.length ? r[0].yes : null;
+    }
+    w = QB.widget(el, {
+      title: "Three trolleys, and three variants",
+      sub: "A runaway trolley will kill five people. For each case, is it acceptable to act? Press Y (or F) for yes and N (or J) for no, or tap the left or right half.",
+      panels: 2, height: 380, weights: [1.3, 1],
+      buttons: [
+        { label: "Start", act: function () { start(); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), j;
+        ctx.save();
+        if (S.phase === "ask" || S.phase === "shown") {
+          var c = CASES[S.k];
+          ctx.textAlign = "center"; ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("Case " + (S.k + 1) + " of " + CASES.length, b.cx, b.y + 24);
+          ctx.fillStyle = C.ink; ctx.font = "600 17px system-ui, sans-serif";
+          ctx.fillText(c.name, b.cx, b.y + 52);
+          ctx.font = "14px system-ui, sans-serif";
+          T.wrap(ctx, c.text, b.cx, b.cy - 10, b.w - 40, 19);
+          ctx.font = "600 14px system-ui, sans-serif";
+          ctx.fillText(S.phase === "shown" ? (S.log[S.log.length - 1].yes ? "acceptable" : "not acceptable") : "yes (left)  or  no (right)?", b.cx, b.y + b.h - 30);
+        } else if (S.phase === "done") {
+          var s = answer(0), l = answer(1), f = answer(2), same = (s >= l && l >= f);
+          T.message(ctx, b, same ? "Your answers keep the order found in all 42 countries." : "Your answers break the usual order.",
+                    "Across 42 countries, Switch was accepted most (81% on average), then Loop (72%), then Footbridge (51%), in every country, with levels lower in Eastern countries. The variants test what drives the difference: personal force (the trapdoor) and whether the death is the means (the weight).");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Six cases; answer each one.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx;
+        cx.save(); cx.textAlign = "left"; cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif";
+        cx.fillText("Your answers against 42 countries' averages", c2.x + 10, c2.y + 18);
+        var bw = (c2.w - 40) / 3, base = c2.y + c2.h - 34, hmax = c2.h - 80;
+        for (j = 0; j < 3; j++) {
+          var x = c2.x + 20 + j * bw, h = hmax * CASES[j].pub, a = answer(j);
+          cx.fillStyle = "#3a3f48"; cx.fillRect(x, base - hmax, bw - 14, hmax);
+          cx.fillStyle = "#7ec8f5"; cx.fillRect(x, base - h, bw - 14, h);
+          cx.fillStyle = C.muted; cx.textAlign = "center"; cx.font = "11px system-ui, sans-serif";
+          cx.fillText(CASES[j].name, x + (bw - 14) / 2, base + 14);
+          cx.fillText(Math.round(100 * CASES[j].pub) + "%", x + (bw - 14) / 2, base - h - 6);
+          if (a !== null) {
+            cx.fillStyle = a ? "#5bd18b" : "#ef6f6c"; cx.font = "600 12px system-ui, sans-serif";
+            cx.fillText(a ? "you: yes" : "you: no", x + (bw - 14) / 2, base + 28);
+          }
+        }
+        cx.textAlign = "left"; cx.fillStyle = C.muted; cx.font = "11px system-ui, sans-serif";
+        cx.fillText("blue: share accepting, country average (Awad et al., 2020)", c2.x + 10, c2.y + 34);
+        cx.restore();
+      },
+      readout: function () {
+        var yes = S.log.filter(function (r) { return r.yes; }).length;
+        return [["answers", String(task.count)], ["acceptable", S.log.length ? yes + " / " + S.log.length : "-"]];
+      },
+      note: "Nothing you answer is stored or sent. The three classic cases are compared with published country averages; the three variants have no published comparison here and are for you to compare with your own first answers.",
+    });
+  };
 })();

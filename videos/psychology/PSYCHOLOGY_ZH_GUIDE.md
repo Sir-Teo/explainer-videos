@@ -1085,6 +1085,26 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Paul Eastwick, Eli Finkel, Samantha Joel; John Gottman; Heyman, Smith Slep; Cindy Hazan, Phillip Shaver; Caryl Rusbult | 保罗·伊斯特威克，伊莱·芬克尔，萨曼莎·乔尔；约翰·戈特曼；海曼，史密斯·斯莱普；辛迪·哈赞，菲利普·谢弗；卡里尔·拉斯布特 |
 | David Buss; Walter; Julianne Holt-Lunstad; Kalick, Hamilton; Gale, Shapley | 戴维·巴斯；沃尔特；朱莉安·霍尔特-伦斯塔德；卡利克，汉密尔顿；盖尔，沙普利 |
 
+## Part 38: culture and morals
+
+| English | 中文 |
+|---|---|
+| WEIRD (Western, educated, industrialized, rich, democratic); majority world; generalizability; constraints on generality | WEIRD（西方的、受过教育的、工业化的、富裕的、民主的）；多数世界；可推广性；推广限制声明 |
+| Müller-Lyer illusion; carpentered world; independent self, interdependent self; self-construal; analytic, holistic | 缪勒-莱尔错觉；木工世界；独立自我，互依自我；自我建构；分析式，整体式 |
+| individualism, collectivism; the rice theory; relational mobility; kinship intensity | 个人主义，集体主义；稻米理论；关系流动性；亲属关系紧密度 |
+| back-translation; measurement invariance; reference-group effect; convenience sample | 回译；测量不变性；参照群体效应；方便样本 |
+| cultural evolution; conformist bias; prestige bias; overimitation; cumulative culture; critical population | 文化演化；从众偏向；声望偏向；过度模仿；累积文化；临界人口 |
+| social intuitionist model; moral dumbfounding; dual-process model; personal force; moral foundations (care, fairness, loyalty, authority, purity) | 社会直觉模型；道德失语；双过程模型；亲身施力；道德基础（关爱、公平、忠诚、权威、纯洁） |
+| trolley problem: Switch, Loop, Footbridge; the Moral Machine; helper, hinderer; fixation index | 电车难题：扳道、环线、天桥；道德机器；帮忙者，阻挠者；固定指数 |
+| Jeffrey Arnett; Joseph Henrich, Steven Heine, Ara Norenzayan; Thalmayer, Toscanelli; Rad, Martingano, Ginges | 杰弗里·阿内特；约瑟夫·亨里奇，史蒂文·海涅，阿拉·诺伦扎扬；塔尔迈尔，托斯卡内利；拉德，马丁加诺，金吉斯 |
+| Marshall Segall, Donald Campbell, Melville Herskovits; Tapan Gandhi; Amir, Firestone | 马歇尔·西格尔，唐纳德·坎贝尔，梅尔维尔·赫斯科维茨；塔潘·甘地；阿米尔，费尔斯通 |
+| Hazel Markus, Shinobu Kitayama; Takahiko Masuda, Richard Nisbett; Geert Hofstede; Daphna Oyserman | 黑兹尔·马库斯，北山忍；增田贵彦，理查德·尼斯贝特；吉尔特·霍夫斯泰德；达夫娜·奥伊瑟曼 |
+| Thomas Talhelm; Robert Thomson; Jonathan Schulz; Steven Heine, Lehman, Peng, Greenholtz | 托马斯·塔尔赫姆；罗伯特·汤姆森；乔纳森·舒尔茨；史蒂文·海涅，莱曼，彭，格林霍尔茨 |
+| Robert Boyd, Peter Richerson; Victoria Horner, Andrew Whiten; Nielsen, Tomaselli; Berl, Hewlett; Krist Vaesen | 罗伯特·博伊德，彼得·里彻森；维多利亚·霍纳，安德鲁·怀滕；尼尔森，托马塞利；伯尔，休利特；克里斯特·瓦森 |
+| Lawrence Kohlberg; Jonathan Haidt; Edward Royzman; Joshua Greene; McGuire; Jesse Graham, Brian Nosek; Kathryn Iurino, Gerard Saucier | 劳伦斯·科尔伯格；乔纳森·海特；爱德华·罗伊兹曼；约书亚·格林；麦圭尔；杰西·格雷厄姆，布赖恩·诺塞克；凯瑟琳·尤里诺，杰勒德·索西耶 |
+| Edmond Awad; Bence Bago; Kiley Hamlin, Karen Wynn, Paul Bloom; ManyBabies 4; Many Labs 2 | 埃德蒙·阿瓦德；本斯·巴戈；凯莉·哈姆林，卡伦·温，保罗·布卢姆；众婴4号；众实验室2号 |
+| Daniel Simons, Yuichi Shoda, Stephen Lindsay; Mohammad Atari; Michael Muthukrishna | 丹尼尔·西蒙斯，正田佑一，斯蒂芬·林赛；穆罕默德·阿塔里；迈克尔·穆图克里希纳 |
+
 ## Names
 
 | English | 中文 |

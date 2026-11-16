@@ -188,4 +188,45 @@ PARTS = [
               ("Its tests", "tests/psychology/test_social.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=38, level="U", widget="trolley",
+        question="Whose mind has psychology been describing, and what in moral judgment is universal?",
+        story="In 2008 a count found 68% of the samples in six leading journals were American and 96% Western; in 2010 "
+              "the WEIRD paper showed these samples are often outliers, even on the Müller-Lyer illusion. The part "
+              "asks what varies across cultures and why: independent and interdependent selves and the weak scales "
+              "that measure them, rice farming, relational mobility and kinship, and the reference-group effect "
+              "that lets a real difference vanish from self-reports. Culture is then treated as a second "
+              "inheritance with its own mathematics: conformist and prestige-biased copying, faithful "
+              "overimitation, and Henrich's model in which small populations lose skills. Morality is the test "
+              "case: intuition before reasoning, Greene's dual process, moral foundations that do not travel "
+              "cleanly, one trolley judged in 42 countries with the same order everywhere and different levels, "
+              "and a famous infant study that did not replicate in 37 laboratories.",
+        handoff="Culture in diagnosis opens Act X in Part 39; measurement invariance is Part 44; surveys across "
+                "countries Part 46; machines' values Part 60.",
+        outside="Part 3's measurement, Part 14's Müller-Lyer row, Part 30's infants and Part 31's Kohlberg; logistic "
+                "models, difference equations and the extreme-value (Gumbel) distribution.",
+        objectives={
+            "U": ["Explain what WEIRD sampling is, how large it is, and why it matters for generalization.",
+                  "Describe independent and interdependent selves, the rice, mobility and kinship theories, and "
+                  "the evidence and doubts about each.",
+                  "Describe the intuitionist and dual-process accounts of moral judgment, the trolley results "
+                  "across countries, and the infant helper studies."],
+            "M": ["Derive conformist transmission's step and fixed points, and Henrich's critical population size.",
+                  "Simulate the reference-group effect and show which designs recover a real difference.",
+                  "Fit an additive logistic model of judgments across countries and test whether the order of "
+                  "cases is shared."],
+            "D": ["Evaluate claims of cultural causation from correlational, historical and cross-national data."],
+            "I": ["Plan the localization of a product, a test or a survey, and audit whose values a model reflects."],
+        },
+        results=[
+            ("Conformist transmission", r"\Delta p = D\, p (1 - p)(2p - 1)"),
+            ("Henrich's gain", r"\Delta \bar z = \beta(\gamma + \ln N) - \alpha"),
+            ("Critical population", r"N^\* = e^{\alpha/\beta - \gamma}"),
+            ("Trolley model", r"P(\text{accept}) = \sigma(c_k + \ell_j)"),
+        ],
+        U=(0, 1, 2, 3, 4, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's culture module", "explainer/psychology/psyche/culture.py"),
+              ("Its tests", "tests/psychology/test_culture.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

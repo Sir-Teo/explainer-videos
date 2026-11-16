@@ -51,11 +51,20 @@ def test_a_declaration_nothing_needs_is_stale(monkeypatch):
     assert any("stale" in p and "KANT_1786" in p for p in problems)
 
 
+def _defer(name: str, part: int):
+    return [ledger.Shown(s.part, s.name, s.why, part) if s.name == name else s for s in ledger.SHOWN]
+
+
 def test_a_deferred_row_comes_due_when_its_part_is_built(monkeypatch):
-    monkeypatch.setattr(gate, "built_parts", lambda: {**PARTS, 38: "psych38"})
+    monkeypatch.setattr(ledger, "SHOWN", _defer("PEIRCE_JASTROW_1884", 3))
     problems, _ = gate.check("psych2")
-    assert any("deferred to Part 38" in p for p in problems)
-    assert not any("Part 42" in p for p in problems)
+    assert any("PEIRCE_JASTROW_1884" in p and "deferred to Part 3" in p for p in problems)
+
+
+def test_a_row_deferred_to_an_unbuilt_part_waits(monkeypatch):
+    monkeypatch.setattr(ledger, "SHOWN", _defer("PEIRCE_JASTROW_1884", 99))
+    problems, _ = gate.check("psych2")
+    assert not any("PEIRCE_JASTROW_1884" in p for p in problems)
 
 
 def test_a_declaration_needs_a_reason_and_a_later_part():

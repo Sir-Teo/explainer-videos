@@ -364,7 +364,7 @@ shown(2, "PEIRCE_JASTROW_1884", "shown for its method, the shuffled deck; its re
 shown(2, "MITCHELL_2021", "shown for the authors' own count of who guessed their arm, which they call anecdotal; "
       "the trial's result is not presented", row_in=42)
 shown(2, r"Arnett (2008); \ Henrich, Heine \& Norenzayan (2010)", "a count of who is sampled, shown to pose "
-      "the question of external validity", row_in=38)
+      "the question of external validity; its row (weird samples) is entered in Part 38")
 
 # ---------------------------------------------------------------------------
 # Part 3 · The Measure
@@ -4403,7 +4403,8 @@ shown(22, r"Landauer \& Dumais (1997); \ Caliskan et al. (2017); \ Harnad (1990)
       "measurement of text and a philosophical argument; not psychological findings to replicate")
 shown(22, "LANDAUER_DUMAIS_1997", "a model's score on a test, not a finding about people")
 shown(22, r"Fried \& Nesse (2015); \ Kotov et al. (2017); \ APA, \ DSM-5 (2013)", "a count of symptom profiles, a "
-      "classification proposal and a manual's criteria; diagnosis as a category is entered in Part 39", row_in=39)
+      "classification proposal and a manual's criteria; diagnosis as a category is entered in Part 39 (its rows "
+      "dimensional structure and p factor)")
 shown(22, r"Yang et al. (2020), \ the ImageNet person subtree", "a dataset's audit, described; not a finding about "
       "people")
 shown(22, r"Marjieh, \ Sucholutsky, \ van Rijn, \ Jacoby \& Griffiths (2024)", "a study of language models at the "
@@ -4642,7 +4643,7 @@ shown(30, r"Fearon et al.\ (2010)", "a meta-analysis quoted for the size of an a
 shown(30, r"Thomas \& Chess (1977)", "a descriptive longitudinal study of temperament")
 shown(30, r"Vygotsky (1934); \ Csibra \& Gergely (2009)", "theories of learning from others, described")
 shown(30, r"Horner \& Whiten (2005); \ Lyons, \ Young \& Keil (2007)", "overimitation, described from its first "
-      "studies; its replication across cultures is taken up with culture in Part 38", row_in=38)
+      "studies; its row (overimitation across cultures) is entered in Part 38")
 shown(30, r"Schweinhart et al.\ (2005); \ Puma et al.\ (2012); \ Durkin et al.\ (2022)", "evaluations of programmes, "
       "described as applications; early intervention is taken up with education in Part 54", row_in=54)
 shown(30, r"DeLoache et al.\ (2010)", "a single trial of a product, described as an application")
@@ -5393,3 +5394,203 @@ add(Finding(
 shown(37, r"Festinger, \ Schachter \& Back (1950)", "a field study of friendship and proximity, described without its "
       "percentages")
 shown(37, r"Hazan \& Shaver (1987); \ Rusbult (1980)", "a self-selected survey and a theory of commitment, described")
+
+# --- Part 38: Culture and Morals -------------------------------------------------------------------------------------
+
+add(Finding(
+    key="weird_samples", part=38, title=r"Psychology's WEIRD samples",
+    claim="Most participants in psychology's leading journals come from Western, educated, industrialized, rich and "
+          "democratic societies, which hold a small share of humanity.",
+    original=Study("Arnett", 2008, n="six APA journals, 2003 to 2007", design="a count of sample origins",
+                   found="68% of samples from the United States, 96% from Western industrialized countries"),
+    status="replicated",
+    record=(Study("Henrich, Heine and Norenzayan (review)", 2010, found="these samples are often outliers on "
+                  "perception, fairness, cooperation, reasoning and the self"),
+            Study("Rad, Martingano and Ginges", 2018, n="Psychological Science, 2014",
+                  found="about half the samples American; generalization rarely justified"),
+            Study("Thalmayer, Toscanelli and Arnett", 2021, n="the same six journals, 2014 to 2018",
+                  found="a little over 60% American; majority-world samples about 4 to 5%")),
+    note="Still true a decade on; the share from other Western countries grew, not the share from the majority world.",
+    sources=("J. J. Arnett, The neglected 95%: why American psychology needs to become less American, American "
+             "Psychologist 63 (2008) 602-614",
+             "J. Henrich, S. J. Heine and A. Norenzayan, The weirdest people in the world?, Behavioral and Brain "
+             "Sciences 33 (2010) 61-83",
+             "M. S. Rad, A. J. Martingano and J. Ginges, Toward a psychology of Homo sapiens, PNAS 115 (2018)",
+             "A. G. Thalmayer, C. Toscanelli and J. J. Arnett, The neglected 95% revisited, American Psychologist 76 "
+             "(2021) 116-129"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="self_construal", part=38, title=r"Independent and interdependent selves",
+    claim="People in East Asian cultures construe the self as interdependent and people in Western cultures as "
+          "independent, and questionnaires measure the difference.",
+    original=Study("Markus and Kitayama", 1991, design="a theory with supporting studies",
+                   found="two construals of the self shaping cognition, emotion and motivation"),
+    status="contested",
+    record=(Study("Oyserman, Coon and Kemmelmeier (meta-analysis)", 2002, n="individualism and collectivism scales",
+                  found="European Americans more individualistic and less collectivistic, with differences smaller "
+                        "and less consistent than assumed and dependent on the scale"),
+            Study("Heine, Lehman, Peng and Greenholtz", 2002, design="self-reports against expert judgments",
+                  found="reference-group effects can hide expected differences on Likert scales")),
+    note="Behavioural and attentional differences replicate better than self-report scales; the measures, not the "
+         "idea, are the weak point.",
+    sources=("H. R. Markus and S. Kitayama, Culture and the self, Psychological Review 98 (1991) 224-253",
+             "D. Oyserman, H. M. Coon and M. Kemmelmeier, Rethinking individualism and collectivism, Psychological "
+             "Bulletin 128 (2002) 3-72",
+             "S. J. Heine, D. R. Lehman, K. Peng and J. Greenholtz, What's wrong with cross-cultural comparisons of "
+             "subjective Likert scales?, Journal of Personality and Social Psychology 82 (2002) 903-918"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="rice_theory", part=38, title=r"The rice theory",
+    claim="People from rice-farming regions think more holistically and interdependently than people from "
+          "wheat-farming regions.",
+    original=Study("Talhelm and colleagues", 2014, n="1,162 Han Chinese students from six sites",
+                   found="southern rice regions more holistic and interdependent than northern wheat regions"),
+    status="contested",
+    record=(Study("Ruan, Xie and Zhang", 2014, design="a reanalysis with other crop and survey data",
+                  found="weaker and different patterns; corn and other crops grouped with wheat"),
+            Study("Thomson and colleagues", 2018, n="nearly 17,000 people in 39 societies",
+                  found="lower relational mobility where farming was settled and threat high")),
+    note="A bold ecological account with supportive and critical analyses; no independent test has settled it.",
+    sources=("T. Talhelm et al., Large-scale psychological differences within China explained by rice versus wheat "
+             "agriculture, Science 344 (2014) 603-608",
+             "J. Ruan, Z. Xie and X. Zhang, a reanalysis of the rice theory, IFPRI discussion paper (2014)",
+             "R. Thomson et al., Relational mobility predicts social behaviors in 39 countries and is tied to "
+             "historical farming and threat, PNAS 115 (2018) 7521-7526"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="trolley_universal", part=38, title=r"Switch, loop and footbridge across countries",
+    claim="People everywhere find sacrificing one to save five more acceptable by a switch than by personal force.",
+    original=Study("Greene and colleagues", 2001, design="personal and impersonal dilemmas",
+                   found="personal dilemmas such as the footbridge judged less acceptable"),
+    status="replicated",
+    record=(Study("Awad and colleagues", 2020, n="70,000 people in 42 countries",
+                  found="Switch 81%, Loop 72%, Footbridge 51% on average; the order held in every country"),
+            Study("Bago and colleagues", 2022, n="45 countries",
+                  found="the personal-force effect in every cultural cluster; its interaction with intention "
+                        "inconclusive outside the West")),
+    note="The order is universal in these samples; the level of approval varies, lower in Eastern countries.",
+    sources=("J. D. Greene et al., An fMRI investigation of emotional engagement in moral judgment, Science 293 "
+             "(2001) 2105-2108",
+             "E. Awad, S. Dsouza, A. Shariff, I. Rahwan and J.-F. Bonnefon, Universals and variations in moral "
+             "decisions made in 42 countries by 70,000 participants, PNAS 117 (2020) 2332-2337",
+             "B. Bago et al., Situational factors shape moral judgements in the trolley dilemma in Eastern, Southern "
+             "and Western countries in a culturally diverse sample, Nature Human Behaviour 6 (2022) 880-895"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="moral_foundations_structure", part=38, title=r"Five moral foundations across cultures",
+    claim="Moral intuitions fall into five foundations (care, fairness, loyalty, authority, purity) that the Moral "
+          "Foundations Questionnaire measures the same way across cultures.",
+    original=Study("Graham, Haidt and Nosek", 2009, design="questionnaires of moral relevance and judgment",
+                   found="liberals weight care and fairness most; conservatives weight all five more evenly"),
+    status="contested",
+    record=(Study("Iurino and Saucier", 2020, n="the short questionnaire in 27 countries",
+                  found="the five-factor model did not fit or converge well across countries"),),
+    note="The liberal-conservative pattern is often found; the five-factor structure does not travel cleanly.",
+    sources=("J. Graham, J. Haidt and B. A. Nosek, Liberals and conservatives rely on different sets of moral "
+             "foundations, Journal of Personality and Social Psychology 96 (2009) 1029-1046",
+             "K. Iurino and G. Saucier, Testing measurement invariance of the Moral Foundations Questionnaire across "
+             "27 countries, Assessment 27 (2020) 365-372"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="infant_helper", part=38, title=r"Infants preferring helpers",
+    claim="Infants of six to ten months prefer a character who helps another to one who hinders it.",
+    original=Study("Hamlin, Wynn and Bloom", 2007, n="12 six-month-olds and 16 ten-month-olds",
+                   design="the hill paradigm with puppets", found="12 of 12 and 14 of 16 reached for the helper"),
+    status="failed",
+    record=(Study("Lucca and colleagues (ManyBabies 4)", 2025, n="1,018 infants tested, 567 included, 37 labs",
+                  design="a registered multi-laboratory replication", effect=0.4934, unit="share choosing the helper",
+                  found="49.3% chose the helper; neither condition differed from chance"),),
+    note="The authors conclude the effect is weaker than thought, absent, or develops later.",
+    sources=("J. K. Hamlin, K. Wynn and P. Bloom, Social evaluation by preverbal infants, Nature 450 (2007) "
+             "557-559",
+             "K. Lucca et al., Infants' social evaluation of helpers and hinderers: a large-scale, multi-lab, "
+             "coordinated replication study, Developmental Science 28 (2025) e13581"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="population_complexity", part=38, title=r"Population size and cumulative culture",
+    claim="Larger, better-connected populations accumulate more complex technology, and small isolated ones lose "
+          "skills.",
+    original=Study("Henrich", 2004, design="a model of imperfect copying, applied to Tasmania",
+                   found="below a critical population, skills decay"),
+    status="contested",
+    record=(Study("Vaesen, Collard, Cosgrove and Roebroeks", 2016, design="a critique of the models and the data",
+                  found="the effect needs restrictive assumptions; hunter-gatherer toolkits track environment "
+                        "better"),),
+    note="Laboratory transmission chains often show the effect; whether it explains the archaeological record is "
+         "argued.",
+    sources=("J. Henrich, Demography and cultural evolution, American Antiquity 69 (2004) 197-214",
+             "K. Vaesen, M. Collard, R. Cosgrove and W. Roebroeks, Population size does not explain past changes "
+             "in cultural complexity, PNAS 113 (2016) E2241-E2247"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="overimitation_culture", part=38, title=r"Overimitation across cultures",
+    claim="Children copy a demonstrator's causally unnecessary actions, in every culture tested.",
+    original=Study("Horner and Whiten", 2005, n="young chimpanzees and children", design="a puzzle box, opaque or "
+                   "transparent, opened after unnecessary actions",
+                   found="with a transparent box, chimpanzees skipped the useless actions and children copied them"),
+    status="replicated",
+    record=(Study("Nielsen and Tomaselli", 2010, n="San children in the Kalahari and Australian children",
+                  found="overimitation in both"),
+            Study("Berl and Hewlett", 2015, n="Aka and Ngandu children and Aka adults, Congo Basin",
+                  found="Aka children overimitated at one of the lowest rates recorded"),
+            Study("Stengelin, Hepach and Haun", 2020, design="children in several societies",
+                  found="variation in how much, but not whether, children overimitate")),
+    note="Found wherever it has been tested; how much children do it varies with culture.",
+    sources=("V. Horner and A. Whiten, Causal knowledge and imitation/emulation switching in chimpanzees and "
+             "children, Animal Cognition 8 (2005) 164-181",
+             "M. Nielsen and K. Tomaselli, Overimitation in Kalahari Bushman children and the origins of human "
+             "cultural cognition, Psychological Science 21 (2010) 729-736",
+             "M. Berl and B. S. Hewlett, Cultural variation in the use of overimitation by the Aka and Ngandu of the "
+             "Congo Basin, PLoS ONE 10 (2015)",
+             "R. Stengelin, R. Hepach and D. B. M. Haun, Cross-cultural variation in how much, but not whether, "
+             "children overimitate, Journal of Experimental Child Psychology (2020)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="moral_dumbfounding", part=38, title=r"Moral dumbfounding",
+    claim="People keep moral judgments they cannot justify once every reason is ruled out: intuition leads and "
+          "reasoning follows.",
+    original=Study("Haidt", 2001, design="the social intuitionist model, with harmless-taboo vignettes such as "
+                   "consensual sibling incest", found="people condemned the acts and some could give no reason"),
+    status="contested",
+    record=(Study("Royzman, Kim and Leeman", 2015, design="the sibling vignette with checks on beliefs about harm",
+                  found="many rejected the story's harmlessness; beliefs about harm predicted condemnation; true "
+                        "dumbfounding rare"),),
+    note="Intuitions clearly shape moral judgments; how often people are truly dumbfounded is disputed.",
+    sources=("J. Haidt, The emotional dog and its rational tail: a social intuitionist approach to moral judgment, "
+             "Psychological Review 108 (2001) 814-834",
+             "E. B. Royzman, K. Kim and R. F. Leeman, The curious tale of Julie and Mark: unraveling the moral "
+             "dumbfounding effect, Judgment and Decision Making 10 (2015) 296-313"),
+    checked="2026-11-16",
+))
+
+shown(38, r"Masuda \& Nisbett (2001)", "an attention study described as an example of the theory; the "
+      "self_construal row carries the evidence")
+shown(38, r"Hofstede (1980); \ Oyserman, \ Coon \& Kemmelmeier (2002)", "measures described; the self_construal row "
+      "carries the evidence")
+shown(38, r"Thomson et al.\ (2018)", "a cross-national survey described with the rice theory; see its row")
+shown(38, r"Schulz et al.\ (2019)", "a historical correlational argument, described with its limits")
+shown(38, r"Awad et al.\ (2018)", "a self-selected online sample described; the trolley row carries the classic "
+      "cases")
+shown(38, r"Klein et al.\ (2018), \ Many Labs 2", "each of its 28 findings belongs to its own topic; described for "
+      "its heterogeneity result")
+shown(38, r"Simons, \ Shoda \& Lindsay (2017)", "a reporting proposal, not a finding")
+shown(38, r"Greene et al.\ (2001); \ McGuire et al.\ (2009)", "a reanalysis of the original response times; the "
+      "trolley row carries the personal-force result")
+shown(38, r"Atari et al.\ (2023), \ preprint", "a preprint, described as an example in the practice chapter")
+shown(38, r"Muthukrishna et al.\ (2020)", "a method for measuring cultural distance, described")
