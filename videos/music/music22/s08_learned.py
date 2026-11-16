@@ -27,10 +27,10 @@ class Learned(SoundScene):
         head = label(r"training a grammar", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
             "Can such a grammar be learned from music, and does it describe it better than the chord-pair model of "
-            f"Part 18? <bookmark mark='a'/> Take Part 17's chorales and cut them at their fermatas: {say(d['train_phrases'])} "
+            f"Part 18? <bookmark mark='a'/> Take the major-mode subset of Part 17’s chorales and cut them at their fermatas, retaining phrases of two to fourteen recognized chord labels: {say(d['train_phrases'])} "
             f"phrases to learn from, {say(d['test_phrases'])} from chorales with other tunes held out. "
             f"<bookmark mark='b'/> Each phrase is a sequence of chord names, about {say(round(d['mean_length']))} long. "
-            "<bookmark mark='c'/> Start from the six rules and learn all the probabilities, which rule a region uses and "
+            "<bookmark mark='c'/> Start from the six branching rules with soft emissions that allow every vocabulary chord in each region, and learn the probabilities, which rule a region uses and "
             "which chord it emits, by the inside-outside algorithm: <bookmark mark='d'/> guess the probabilities, parse "
             "every phrase in every possible way, count how often each rule was used, weighted by the probability of "
             "its tree, re-estimate, and repeat. <bookmark mark='e'/> Then score every model by the bits it needs per "
@@ -62,7 +62,7 @@ class Learned(SoundScene):
             f"to learn them. <bookmark mark='a'/> The six-rule grammar costs {say(b['functional'], 1)}: worse than pairs. "
             "<bookmark mark='b'/> Give a grammar twelve symbols of its own, every rule allowed, and let it invent its "
             f"categories: after training it costs {say(b['latent']['12']['test'], 1)}, close to pairs but not better. "
-            "<bookmark mark='c'/> On this data, a tree does not predict the next chord better than the chord before it."
+            "<bookmark mark='c'/> On this split and these settings, these grammar models do not beat the bigram baseline in held-out complete-phrase bits per symbol."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(t))
             vo.wait_until("a")
@@ -110,13 +110,7 @@ class Learned(SoundScene):
             (r"prediction and explanation are different tests", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"what that means", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "What does that mean? <bookmark mark='a'/> The same result is well known in language: simple grammars "
-            "predict the next word worse than counting pairs and triples of words. <bookmark mark='b'/> A grammar's "
-            "strength is elsewhere, in dependencies across a distance: <bookmark mark='c'/> a phrase that opens on the "
-            "tonic must close on it, however long the middle, which a tree states and a chain of pairs cannot. "
-            "<bookmark mark='d'/> Chorale phrases are short, about six chords, which leaves little room for depth to "
-            "pay off. <bookmark mark='e'/> And prediction and explanation are different tests: a grammar can be the "
-            "better description of how a progression is organized and still be the worse guesser of what comes next."
+            "What does that mean? <bookmark mark='a'/> The same result is well known in language: simple grammars predict the next word worse than counting pairs and triples of words. <bookmark mark='b'/> A grammar's strength is elsewhere, in dependencies across a distance: <bookmark mark='c'/> a grammar can represent an opening-to-closing tonic dependency when its rules encode one, however long the middle, which a tree states and a simple first-order chain cannot retain arbitrarily distant opening context. <bookmark mark='d'/> Chorale phrases are short, about six chords, which leaves little room for depth to pay off. <bookmark mark='e'/> And prediction and explanation are different tests: a grammar can be the better description of how a progression is organized and still be the worse guesser of what comes next."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

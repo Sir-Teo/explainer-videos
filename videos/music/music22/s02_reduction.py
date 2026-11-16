@@ -27,11 +27,7 @@ class Reduction(SoundScene):
             (r"in each, \ one note is structural; \ the others serve it", WHITE),
             (r"the structural note is \textit{prolonged}: \ it lasts, \ in the mind, \ through the others", TUNE))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Reduction rests on a few ways one note can serve another. <bookmark mark='a'/> A passing note fills the "
-            "gap between two notes a third apart. A neighbour note steps away and comes back. An arpeggiation unfolds a "
-            "chord in time. A repetition strikes the same note again. <bookmark mark='b'/> In each, one note is "
-            "structural and the others serve it, and the structural note is said to be prolonged: it lasts, in the "
-            "listener's mind, through the notes that decorate it."
+            "Reduction rests on a few ways one note can serve another. <bookmark mark='a'/> A passing note fills the gap between two notes a third apart. A neighbour note steps away and comes back. An arpeggiation unfolds a chord in time. A repetition strikes the same note again. <bookmark mark='b'/> These examples suggest structural and elaborating notes; the full context determines a reduction, and the structural note is said to be prolonged: it lasts, in the listener's mind, through the notes that decorate it."
         ) as vo:
             self.play(FadeIn(cells[0]))
             vo.wait_until("a")
@@ -82,10 +78,7 @@ class Reduction(SoundScene):
         ans = VGroup(label(names(d["A"]), font_size=26, color=GREY_A).next_to(gA, DOWN, buff=0.3),
                      label(names(d["B"]), font_size=26, color=TUNE).next_to(gB, DOWN, buff=0.3))
         with self.voiceover(
-            "B: C, G, E, C. Each of its notes is a note of the chord sounding at that moment, on the strongest beat of "
-            "its span, and a stable degree of the scale. A replaced two of them by their neighbours, A and F, and they "
-            "rub against the chords. A skeleton is not any set of notes that fits the rhythm: it is the set the harmony "
-            "supports."
+            'B: C, G, E, C. Each of its notes is a note of the chord sounding at that moment, on the strongest beat of its span, and a stable degree of the scale. A replaced two of them by their neighbours, A and F, and they rub against the chords. A skeleton is not any set of notes that fits the rhythm: it is one contextually supported reading, rather than a uniquely determined subset.'
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -101,12 +94,7 @@ class Reduction(SoundScene):
             (r"the question for this part: \ is that true, \ and can it be computed?", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"prolongation at every scale", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The idea scales up. <bookmark mark='a'/> A note can be prolonged for a bar, a phrase, or longer. "
-            "<bookmark mark='b'/> A whole section can prolong a single chord: the development of a sonata, Part 21's "
-            "drama, can be heard as one long dominant. <bookmark mark='c'/> So a piece becomes a tree, every event "
-            "elaborating a deeper one. <bookmark mark='d'/> The claim behind reduction is that listeners hear the deep "
-            "events through the surface, as a reader hears a sentence's structure through its words. "
-            "<bookmark mark='e'/> This part asks whether that is true, and whether it can be computed."
+            "The idea scales up. <bookmark mark='a'/> A note can be prolonged for a bar, a phrase, or longer. <bookmark mark='b'/> A whole section can prolong a single chord: some passages can be analyzed as extended dominant preparation; a sonata development does not universally prolong one dominant. <bookmark mark='c'/> So a piece becomes a tree, every event elaborating a deeper one. <bookmark mark='d'/> The claim behind reduction is that listeners hear the deep events through the surface, as a reader hears a sentence's structure through its words. <bookmark mark='e'/> This part asks whether that is true, and whether it can be computed."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

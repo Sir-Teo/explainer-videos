@@ -22,21 +22,12 @@ class Frontier(SoundScene):
             (rf"chapter 7: \ 4 invented symbols, \ {lat['4']['test']:.2f} bits a chord; \ 12, \ {lat['12']['test']:.2f}", WHITE),
             (r"what the symbols learn need not be the theory's categories", TUNE),
             (r"the hard part: \ training gets stuck, \ and different starts find different grammars", WHITE),
-            (r"neural networks now model harmony far better, \ with no symbols at all", GREY_A))]).arrange(DOWN, buff=0.36, aligned_edge=LEFT)
+            (r"neural models offer another approach; \ no matched benchmark is computed here", GREY_A))]).arrange(DOWN, buff=0.36, aligned_edge=LEFT)
         rows_.scale_to_fit_width(min(rows_.width, 12.6))
         rows_.move_to(DOWN * 0.1)
         head = label(r"grammars induced from data", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The frontier is to let the data write the grammar. <bookmark mark='a'/> Start with symbols that mean "
-            "nothing and every rule allowed, and let training give them meaning. <bookmark mark='b'/> In chapter seven, "
-            f"a grammar with four invented symbols reached {say(lat['4']['test'], 2)} bits a chord, and one with twelve "
-            f"reached {say(lat['12']['test'], 2)}. <bookmark mark='c'/> And what the symbols learn need not be "
-            "the theory's categories: even the six-rule grammar drifted in training, its symbol for the subdominant "
-            "region ending up emitting the tonic chord more often than any other. "
-            "<bookmark mark='d'/> The difficulty is the training itself: it gets stuck, and different starting points "
-            "find different grammars. <bookmark mark='e'/> Meanwhile neural networks predict harmony far better than "
-            "either, with no explicit symbols at all, which leaves the old question open in a new form: is the grammar "
-            "in the music, or only in our description of it?"
+            f"The frontier is to let the data write the grammar. <bookmark mark='a'/> Start with symbols that mean nothing and every rule allowed, and let training give them meaning. <bookmark mark='b'/> In chapter seven, a grammar with four invented symbols reached {say(lat['4']['test'], 2)} bits a chord, and one with twelve reached {say(lat['12']['test'], 2)}. <bookmark mark='c'/> And what the symbols learn need not be the theory's categories: even the six-rule grammar drifted in training, its symbol for the subdominant region ending up emitting the tonic chord more often than any other. <bookmark mark='d'/> The difficulty is the training itself: it gets stuck, and different starting points find different grammars. <bookmark mark='e'/> Neural sequence models provide another approach; no matched neural benchmark is computed here. This leaves the old question open in a new form: is the grammar in the music, or only in our description of it?"
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -57,12 +48,7 @@ class Frontier(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"where the trees are deepest", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The richest ground for grammars of harmony has turned out to be jazz. <bookmark mark='a'/> Jazz standards "
-            "are built from long chains of two-five progressions, dominants of dominants of dominants, exactly the nesting "
-            "a recursive grammar describes. <bookmark mark='b'/> In 2018 Daniel Harasim and colleagues in Rohrmeier's "
-            "group built a grammar-based parser for jazz chord sequences, <bookmark mark='c'/> and in 2020 Rohrmeier set out the "
-            "syntax of jazz harmony. <bookmark mark='d'/> The field is building annotated trees for standards, a treebank "
-            "like those linguists build for sentences. <bookmark mark='e'/> Part 39 will take one of those trees apart."
+            "The richest ground for grammars of harmony has turned out to be jazz. <bookmark mark='a'/> Jazz standards are built from long chains of two-five progressions, dominants of dominants of dominants, patterns a recursive grammar can represent, though a dominant chain alone does not prove hierarchical listening. <bookmark mark='b'/> In 2018 Daniel Harasim and colleagues in Rohrmeier's group built a grammar-based parser for jazz chord sequences, <bookmark mark='c'/> and in 2020 Rohrmeier set out the syntax of jazz harmony. <bookmark mark='d'/> The field is building annotated trees for standards, a treebank like those linguists build for sentences. <bookmark mark='e'/> Part 39 will take one of those trees apart."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

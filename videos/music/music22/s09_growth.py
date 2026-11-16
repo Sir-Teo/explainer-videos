@@ -69,10 +69,7 @@ class Growth(SoundScene):
         ans = VGroup(label(r"the grammar's", font_size=26, color=EAR).next_to(gA, DOWN, buff=0.35),
                      label(r"the Tune", font_size=26, color=TUNE).next_to(gB, DOWN, buff=0.35))
         with self.voiceover(
-            "A is the grammar's. It obeys the harmony and moves by sensible steps, but nothing in it repeats: no "
-            "motive comes back, no rhythm is copied. The Tune's charm is its repetitions, C C G G A A G, which the "
-            "rules, choosing independently at every note, never think to make. Part 21's lesson returns: what a "
-            "listener hears as a tune is largely repetition, and this grammar has no rule for it."
+            "A is the grammar's. It obeys the harmony and moves by sensible steps, but it has no explicit rule tying later elaborations to earlier motives, though chance and its fixed durations can produce repeats. The Tune's charm is its repetitions, C C G G A A G, which the rules, choosing independently at every note, never think to make. Part 21's lesson returns: what a listener hears as a tune is largely repetition, and this grammar has no rule for it."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -82,20 +79,15 @@ class Growth(SoundScene):
     def copy_rule(self):
         rows_ = VGroup(*[label(t, font_size=25, color=c_) for t, c_ in (
             (r"the missing rule: \ copy \ (elaborate this span as an earlier one was elaborated)", WHITE),
-            (r"a copy rule makes the grammar context-sensitive: \ a choice depends on an earlier choice", WHITE),
-            (r"that is a step up Chomsky's hierarchy, \ and parsing gets much harder", WHITE),
+            (r"unrestricted copying of arbitrary sequences exceeds context-free power", WHITE),
+            (r"finite named motives and bounded copies can be encoded context-freely", WHITE),
             (r"music needs it: \ motives, \ sequences, \ rounds, \ fugues", TUNE),
-            (r"Part 20's canons and Part 21's repetitions are exactly what context-free rules cannot say", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
+            (r"this independent-elaboration grammar lacks a mechanism for planned motivic recurrence", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
         rows_.scale_to_fit_width(min(rows_.width, 12.6))
         rows_.move_to(DOWN * 0.1)
         head = label(r"a rule for repetition", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "What rule is missing? <bookmark mark='a'/> A rule that says: elaborate this span the way an earlier span "
-            "was elaborated. Copy. <bookmark mark='b'/> But a rule like that is context-sensitive: the choice at one "
-            "place depends on the choice made at another. <bookmark mark='c'/> That is a step up Noam Chomsky's "
-            "hierarchy of grammars, and the parsing problem becomes much harder. <bookmark mark='d'/> Music needs it "
-            "everywhere: motives, sequences, rounds, fugues. <bookmark mark='e'/> Part 20's canons and Part 21's "
-            "repetitions are precisely what a context-free grammar of the kind used for harmony cannot express."
+            "What rule is missing? <bookmark mark='a'/> A rule that says: elaborate this span the way an earlier span was elaborated. Copy. <bookmark mark='b'/> Unrestricted exact copying of an arbitrarily long unknown sequence is beyond a context-free grammar: the choice at one place depends on the choice made at another. <bookmark mark='c'/> But a finite stock of named motives or bounded copies can be encoded context-freely; computational cost depends on the formalism. <bookmark mark='d'/> Music needs it everywhere: motives, sequences, rounds, fugues. <bookmark mark='e'/> Part 20's canons and Part 21's repetitions are not captured by this small independent-elaboration grammar, without proving that every such musical pattern exceeds context-free power."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -128,7 +120,7 @@ class Growth(SoundScene):
             for row, key in zip(g, d["order"]):
                 s0 = d["three_starts"][key]
                 flash(snd, row[0].notes, [s0 + n[1] * d["beat"] for n in d["grown"][key]["notes"]], hot=WHITE, base=[TUNE, BLUE, EAR][list(d["order"]).index(key)])
-        with self.voiceover("Three tunes, all lawful, none of them memorable: the grammar knows what may follow, not what should."):
+        with self.voiceover("Three tunes, all lawful, their memorability has not been tested: the grammar knows what may follow, not what should."):
             self.play(Indicate(head, color=TUNE, scale_factor=1.03))
         self.wait(0.4)
         self.clear_scene()

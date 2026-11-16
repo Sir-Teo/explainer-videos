@@ -57,7 +57,7 @@ class Gttm(SoundScene):
             "Take grouping. Three of their preference rules: a boundary is preferred after a long note, across a leap, "
             "and where the note lengths change. <bookmark mark='a'/> Score every gap between the Tune's notes by those "
             "three rules. <bookmark mark='b'/> The five strongest gaps fall exactly on the Tune's five phrase ends, each "
-            "after a long note. A few lines of rules recover what every listener hears."
+            "after a long note. These selected rules match the supplied phrase boundaries of this teaching tune; listener agreement is not measured here."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")
@@ -85,7 +85,7 @@ class Gttm(SoundScene):
                 dots.add(Dot([-5.0 + 10.0 * t / (T - 1), -0.6 + 0.35 * k, 0], radius=0.06, color=TUNE if k == lev - 1 and lev == 4 else GREY_B))
         cap = label(r"the metrical grid: \ more dots, \ a stronger beat", font_size=22, color=GREY_A).next_to(dots, DOWN, buff=0.4)
         rows_ = VGroup(*[label(t, font_size=24, color=c_) for t, c_ in (
-            (r"metre: \ levels of beats, \ each twice as slow as the one below \ (Part 11)", WHITE),
+            (r"metre: \ levels of beats, \ in this duple-grid example, each twice as slow as the one below; other metres group beats differently \ (Part 11)", WHITE),
             (r"preference rules: \ a strong beat where notes begin, \ where they are long, \ where harmony changes", WHITE),
             (r"the reduction uses both: \ a span's head is stable \ and on a strong beat", TUNE))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(UP, buff=0.6)
         rows_.scale_to_fit_width(min(rows_.width, 12.6))
@@ -119,7 +119,7 @@ class Gttm(SoundScene):
         with self.voiceover(
             "Lerdahl and Jackendoff did not say how much each rule counts. <bookmark mark='a'/> When rules conflict, "
             "the book leaves the decision to the reader's musical judgement. <bookmark mark='b'/> In the 2000s Masatoshi "
-            "Hamanaka, Keiji Hirata and Satoshi Tojo gave every rule a numerical weight, <bookmark mark='c'/> and built "
+            "Hamanaka, Keiji Hirata and Satoshi Tojo developed computational subsets and numerical preference weights, <bookmark mark='c'/> and built "
             "programs that compute grouping, metre and time-span trees from a score, <bookmark mark='d'/> first with "
             "weights tuned by hand, later learned from analyses made by experts. <bookmark mark='e'/> That is the price "
             "of computing a theory: every word prefer must become a number, and the numbers are themselves claims that "

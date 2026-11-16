@@ -25,7 +25,7 @@ class Hook(SoundScene):
         head = label(r"the Tune, \ and the Tune reduced", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Here is the Tune, and below it the Tune reduced: at each level, every span keeps only its most important "
-            "note, the one most stable in its harmony and on the strongest beat. Listen to the levels one after "
+            "note, the note preferred by this simplified harmony-and-metre score. Listen to the levels one after "
             "another, from the surface down to the skeleton."
         ):
             self.play(FadeIn(head), FadeIn(rolls))
@@ -48,7 +48,7 @@ class Hook(SoundScene):
 
     # ------------------------------------------------------------------
     def claim(self):
-        card = history_card(1935, r"Vienna: \ Heinrich Schenker, \ \textit{Der freie Satz}", r"every tonal masterpiece elaborates one descent to the tonic, \ over I--V--I", width=11.0, font_size=26).to_edge(UP, buff=0.4)
+        card = history_card(1935, r"Vienna: \ Heinrich Schenker, \ \textit{Der freie Satz}", r"the tonal works he regarded as masterpieces elaborates one descent to the tonic, \ over I--V--I", width=11.0, font_size=26).to_edge(UP, buff=0.4)
         rows_ = VGroup(*[label(t, font_size=26, color=c_) for t, c_ in (
             (r"the deepest level: \ a line falling by step to the tonic, \ 3--2--1 or 5--4--3--2--1", WHITE),
             (r"under it, \ the bass: \ tonic, \ dominant, \ tonic", WHITE),

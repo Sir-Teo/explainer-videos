@@ -26,8 +26,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 19 — Chromatic Harmony | Complete | Open |
 | 20 — Canon and Fugue | Complete | Open |
 | 21 — Form | Complete | Open |
-| 22 — Analysis | In progress | Open |
-| 23–68 | Queued | Open |
+| 22 — Analysis | Complete | Open |
+| 23 — Chant to Polyphony | In progress | Open |
+| 24–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -94,7 +95,9 @@ Part 20: fourteen chapter previews reviewed; 25 tests, the lab, 14 sound cases a
 
 Part 21: fourteen chapter previews reviewed; 23 tests, the lab, 14 sound cases and 13 listening-window motion checks pass. Four native stills inspected. Identities: `renders/qa/music21/source-receipt.json`.
 
-**Current: Part 22.** Chapter previews are rendering. Parts 23–47 have source repairs and verification
+Part 22: fourteen chapter previews reviewed; 24 tests, the lab, 14 sound cases and 11 listening-window motion checks pass. Three native stills inspected. Identities: `renders/qa/music22/source-receipt.json`.
+
+**Current: Part 23.** Chapter previews are rendering. Parts 24–51 have source repairs and verification
 underway for sequential previews. Automated endpoint preflight continues; warnings require review and do not
 constitute episode approval.
 

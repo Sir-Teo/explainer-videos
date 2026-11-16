@@ -24,7 +24,7 @@ class Grammar(SoundScene):
         with self.voiceover(
             "Linguists describe sentences with grammars: a sentence is a noun phrase and a verb phrase, a noun phrase a "
             "determiner and a noun, and so on, down to words. In 2011 Martin Rohrmeier wrote harmony the same way. "
-            "<bookmark mark='a'/> Here is the core of it. A tonic region can be a dominant region followed by a tonic "
+            "<bookmark mark='a'/> Here is a small teaching grammar inspired by that work. A tonic region can be a dominant region followed by a tonic "
             "region: the cadence. A dominant region can be a subdominant region followed by a dominant region: the "
             "preparation. Any region can be two regions of the same kind: prolongation. <bookmark mark='b'/> And at the "
             "bottom, each region is a chord of its function. <bookmark mark='c'/> Six rules and three lists, and every "
@@ -49,7 +49,7 @@ class Grammar(SoundScene):
         c1 = label(r"I \ IV \ V \ I", font_size=26, color=GREY_A).next_to(t1, UP, buff=0.3)
         c2 = label(r"I \ vi \ ii \ V \ I", font_size=26, color=GREY_A).next_to(t2, UP, buff=0.3)
         with self.voiceover(
-            "Two parses, the most probable trees under these rules. <bookmark mark='a'/> I, IV, V, I: an opening tonic "
+            "Two parses, the most probable trees under a soft-emission version of these rules. <bookmark mark='a'/> I, IV, V, I: an opening tonic "
             "prolonged by a cadence, the cadence a dominant region, prepared by IV, resolving to the final I. "
             "<bookmark mark='b'/> I, vi, ii, V, I: the first two chords group together as one tonic region, vi "
             "prolonging I, and the rest is the same cadence, prepared by ii. <bookmark mark='c'/> The tree says what a "
@@ -87,7 +87,7 @@ class Grammar(SoundScene):
             "One feature of these rules matters more than the rest. <bookmark mark='a'/> A dominant region can contain "
             "a dominant region. <bookmark mark='b'/> So cadences can nest inside cadences: the dominant of the dominant "
             "of the dominant, Part 19's chain of applied dominants, each one preparing the next. "
-            "<bookmark mark='c'/> A rule that contains its own symbol on its right-hand side makes a grammar recursive. "
+            "<bookmark mark='c'/> A productive self-embedding rule permits recursive derivations; recursion can also involve several mutually dependent symbols. "
             "<bookmark mark='d'/> In language, recursion is what lets sentences grow without limit: the cat that the dog "
             "that the man owned chased. <bookmark mark='e'/> Whether listeners actually hear nested harmony, or whether "
             "it exists only in the analyst's tree, is the question of chapter eleven."

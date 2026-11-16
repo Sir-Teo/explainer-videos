@@ -69,7 +69,7 @@ class Ursatz(SoundScene):
                 pulse(snd, cells[k][0], d["starts"][key], end, buff=0.1)
         ans = label(r"B: \ D over V, \ then C over I: \ the cadence the \textit{Ursatz} is made of", font_size=24, color=TUNE).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "B. Over a held tonic, A's descent is a scale that stops; nothing pulls D to C. Over the Tune's own bass, the "
+            "B. Over a held tonic, A's descent is a scale that stops; it lacks the dominant-to-tonic bass articulation of B, though melodic closure remains possible. Over the Tune's own bass, the "
             "D sits on the dominant and the C arrives with the tonic, and the step is a cadence. That is why Schenker "
             "joined the two lines: the falling melody and the bass's motion to the dominant together make the close."
         ):
@@ -90,12 +90,7 @@ class Ursatz(SoundScene):
                       label(rf"shuffled: \ about {shuf.get('5-4-3-2-1', 0) + shuf.get('3-2-1', 0):.0f}", font_size=24, color=WHITE),
                       label(r"the surface ending, \ the easiest place to find it", font_size=20, color=GREY_B)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 4.0 + DOWN * 0.3)
         with self.voiceover(
-            "How common is the fundamental line on the surface? Take Part 14's major-key tunes and ask whether each one "
-            "ends with a stepwise descent to the tonic, five-four-three-two-one or three-two-one, with repeated notes "
-            f"merged. <bookmark mark='a'/> {say(tot)} of the {say(d['n'])} do, {say(real.get('5-4-3-2-1', 0))} of them "
-            "from the fifth, the Tune among them. <bookmark mark='b'/> Shuffle each tune's notes, keeping its last note, "
-            f"and about {say(round(shuf.get('5-4-3-2-1', 0) + shuf.get('3-2-1', 0)))} would by chance. The descent is real, "
-            "and it is everywhere at the ends of tunes: a cadence is usually a melody stepping down to home."
+            f"How common is the fundamental line on the surface? Take Part 14's major-key tunes and ask whether each one ends with a stepwise descent to the tonic, five-four-three-two-one or three-two-one, with repeated notes merged. <bookmark mark='a'/> {say(tot)} of the {say(d['n'])} do, {say(real.get('5-4-3-2-1', 0))} of them from the fifth, the Tune among them. <bookmark mark='b'/> Shuffle each tune's notes, keeping its last note, and about {say(round(shuf.get('5-4-3-2-1', 0) + shuf.get('3-2-1', 0)))} would by chance. These selected major-key tunes show more of the specified surface descents than this shuffle baseline; many cadences use other melodic endings."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(tags))
             vo.wait_until("a")
@@ -117,7 +112,7 @@ class Ursatz(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"what the claim explains, \ and what it costs", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "What does the Ursatz buy? <bookmark mark='a'/> It explains why tunes end as they do, and why some notes "
+            "What does the Ursatz buy? <bookmark mark='a'/> It offers an interpretation of some tonal endings, and why some notes "
             "feel more important than others. <bookmark mark='b'/> But it is a theory that decides in advance what it "
             "will find: the analyst looks for a descent, and finds one. <bookmark mark='c'/> Two analysts can reduce "
             "the same piece in different ways, both following the method. <bookmark mark='d'/> And it was built for "

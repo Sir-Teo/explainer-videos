@@ -55,7 +55,7 @@ class Controversy(SoundScene):
             "set of responses, some of which were widely condemned as racist themselves. <bookmark mark='d'/> The "
             "Society's executive board and many theorists criticized the issue, and the university that publishes the "
             "journal reviewed how it had been produced. <bookmark mark='e'/> Ewell's argument appeared as an article "
-            "in Music Theory Online the same year. The dispute continues, in journals and in court."
+            "in Music Theory Online the same year. The dispute has also involved institutional and legal proceedings; those are historical context rather than a current case-status report."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("acde", rows_[1:]):
@@ -81,7 +81,7 @@ class Controversy(SoundScene):
             "the method itself encodes a ranking, since it defines good music as music that fits it, and that teaching "
             "it as the core of the subject passes the ranking on. <bookmark mark='c'/> What a course like this one can "
             "add is to state the theory as explicit rules and test its claims. <bookmark mark='d'/> Some survive: the "
-            "stepwise descent to the tonic is really there, far beyond chance, in the endings of these tunes. The claim "
+            "stepwise descent to the tonic is really there, more often than under this particular shuffle, in these selected major-key tunes. The claim "
             "that only some music deserves to be heard this way is not a finding of any analysis. "
             "<bookmark mark='e'/> And a theory built on one repertoire should be tested on others, as Act VI of this "
             "series will do."

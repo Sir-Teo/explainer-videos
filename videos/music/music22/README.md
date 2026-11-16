@@ -148,3 +148,13 @@ python -m videos.music.labs 22                                  # the lab (write
   Studies* 12 (2020) and the statements of the Society for Music Theory's executive board.
 * Part 14 for the tunes; Part 17 for the chorales; Part 18 for the n-gram models; Part 19 for Lerdahl's tension; Part 21
   for Cook's experiment.
+
+## Limits of these models
+
+The reduction is a weighted teaching heuristic, not the full GTTM or a unique Schenkerian analysis. Its selected surface descents and shuffle comparison neither prove an Ursatz for every piece nor establish what listeners hear.
+
+The strict parse **counter** assigns each chord to its named function. The probabilistic parser and learned grammar instead use nonzero emissions of every vocabulary chord in every region. Thus zero strict parses does not imply zero probabilistic parses. The depth plot’s retained share is limited by its restricted vocabulary and phrase-length filter; it is not coverage of the strict six-rule grammar.
+
+Learning uses major-mode phrases of 2–14 labels, a tune-grouped train/test split, a training-derived vocabulary and a rare-label bucket. The reported complete-phrase bits use the stated normalization; they are not a universal comparison of hierarchy with sequential models. No matched neural benchmark is computed.
+
+Unrestricted exact copying of arbitrary unknown strings exceeds context-free power, but finite named motives, bounded repetitions and many musical canons can be represented without that general operation. This small independent-elaboration grammar lacks planned recurrence; that is a model limitation rather than a theorem about all musical repetition. Neural responses to nonlocal changes do not by themselves prove recursion or identical computations in music and language.

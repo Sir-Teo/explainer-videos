@@ -13,7 +13,7 @@ from explainer.music.scaleviz import BLUE, GOLD, RED  # noqa: F401
 from .compute import BEAT, CACHE, CLIPS, load  # noqa: F401
 
 PART = 22
-clip = clip_loader(CACHE, CLIPS)
+clip = clip_loader(CACHE, CLIPS, item_aliases={"grammar": "progressions", "parsing": "progressions", "recursion": "progressions", "reduction": "kinds"})
 WEAK = "#8A93A0"
 DIM = "#3A4250"
 REGION_C = {"TR": "#F5C542", "DR": "#F472B6", "SR": "#A3E635"}

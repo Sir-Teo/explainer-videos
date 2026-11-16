@@ -43,10 +43,7 @@ class Outro(SoundScene):
         rws = (rows_before(PART) + [{"part": v["part"], "title": v["title"], "seconds": v["seconds"], "measure": v["measure"]}])[-6:]
         led = variations_ledger(rws, highlight=(len(rws) - 1,)).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            f"Row twenty-two of the ledger. {say(v['seconds'])} seconds. The measurement: {say(len(d['skeleton']))} skeleton "
-            f"notes grown into {say(len(d['regrown']))}, and on {say(d['chord_tones_on_strong_beats'])} of "
-            f"{say(d['strong_beats'])} strong beats a note of the chord. The grammar keeps the harmony most of the time; it "
-            "never keeps the Tune's repetitions."
+            f"Row twenty-two of the ledger. {say(v['seconds'])} seconds. The measurement: {say(len(d['skeleton']))} skeleton notes grown into {say(len(d['regrown']))}, and on {say(d['chord_tones_on_strong_beats'])} of {say(d['strong_beats'])} strong beats a note of the chord. The grammar keeps the harmony most of the time; it does not explicitly preserve the Tune’s motivic repetitions."
         ):
             self.play(FadeIn(led, shift=UP * 0.2))
         self.wait(0.4)
@@ -67,13 +64,7 @@ class Outro(SoundScene):
             r"a theory and its author: \ the argument; \ recursion heard over seconds, \ not minutes",
         ], title=r"What we found", font_size=23).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Reduction rests on a few ways one note serves another. <bookmark mark='a'/> Schenker's "
-            "descent to the tonic is really there at the ends of tunes, far beyond chance. <bookmark mark='b'/> A handful "
-            "of explicit preference rules recover the Tune's phrases and its tonic, dominant, tonic. "
-            "<bookmark mark='c'/> Harmony can be written as a recursive grammar, whose ambiguity grows like the Catalan "
-            "numbers. <bookmark mark='d'/> Trained on Bach, such a grammar describes but does not out-predict chord "
-            "pairs. <bookmark mark='e'/> And the theory's author, and whether nesting is heard at all, remain open "
-            "arguments."
+            "What did we find? Reduction rests on a few ways one note serves another. <bookmark mark='a'/> Schenker's descent to the tonic is really there at the ends of tunes, more often than this shuffle baseline. <bookmark mark='b'/> A handful of explicit preference rules recover the Tune's phrases and its tonic, dominant, tonic. <bookmark mark='c'/> Harmony can be written as a recursive grammar, whose possible tree counts can grow rapidly, depending on its rules. <bookmark mark='d'/> Trained on Bach, such a grammar describes but does not out-predict chord pairs. <bookmark mark='e'/> And the theory's author, and whether nesting is heard at all, remain open arguments."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

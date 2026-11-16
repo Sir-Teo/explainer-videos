@@ -28,18 +28,11 @@ class Recursion(SoundScene):
         t = label(r"held-out chorale phrases: \ depth of the best tree, \ by number of chords", font_size=21, color=GREY_A).next_to(ch1, UP, buff=0.4)
         side = VGroup(label(r"a chain would be as deep as it is long", font_size=22, color=WHITE),
                       label(r"a balanced tree: \ about $\log_2$ of the length", font_size=22, color=WHITE),
-                      label(rf"Bach's phrases: \ almost as deep as they are long \ ({100 * d['parsed_share']:.0f} in 100 parsed by the six rules)", font_size=22, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+                      label(rf"selected phrases: \\ deep best trees; \\ {100 * d['parsed_share']:.0f} in 100 pass the vocabulary filter", font_size=22, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 4.6))
         side.move_to(RIGHT * 4.4 + DOWN * 0.3)
         with self.voiceover(
-            "If harmony is recursive, real progressions should have deep trees. Parse every held-out chorale phrase that "
-            "the six rules can parse, and measure the depth of its best tree. <bookmark mark='a'/> A pure chain, each "
-            "chord attached to the next, would be as deep as the phrase is long. <bookmark mark='b'/> A perfectly "
-            "balanced tree would be only about the logarithm of the length. <bookmark mark='c'/> Bach's phrases, the "
-            "fifth of them that the six rules can parse at all, are almost as deep as they are long: chains of "
-            "preparation and resolution, each chord leaning on the next, a tree that branches only one way. On phrases "
-            "this short, a nested grammar and a chain of pairs describe nearly the same thing, and the data cannot tell "
-            "them apart, let alone show what a listener hears."
+            "Tree depth is one descriptive property; recursive grammars need not produce deeply nested examples. Parse every held-out chorale phrase that the six rules can parse, and measure the depth of its best tree. <bookmark mark='a'/> A pure chain, each chord attached to the next, would be as deep as the phrase is long. <bookmark mark='b'/> A perfectly balanced tree would be only about the logarithm of the length. <bookmark mark='c'/> For the subset whose labels lie in the restricted vocabulary, the soft-emission grammar’s best trees are almost as deep as the phrases are long: chains of preparation and resolution, each chord leaning on the next, a tree that branches only one way. On phrases this short, a nested grammar and a chain of pairs describe nearly the same thing, and the data cannot tell them apart, let alone show what a listener hears."
         ) as vo:
             self.play(FadeIn(ch1), FadeIn(t))
             for mark, r in zip("abc", side):
@@ -95,15 +88,7 @@ class Recursion(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"the evidence", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The question matters beyond music. <bookmark mark='a'/> In 2002 Marc Hauser, Noam Chomsky and Tecumseh "
-            "Fitch proposed that recursion might be the one thing special to human language. If music has it too, the "
-            "two may share machinery. <bookmark mark='b'/> In 2013 Stefan Koelsch and colleagues, Rohrmeier among them, "
-            "rewrote Bach chorales so that the key a phrase opened in was not the key it closed in, <bookmark mark='c'/> "
-            "with a passage in another key embedded between: a dependency across a distance, like the subject and verb "
-            "of a long sentence. <bookmark mark='d'/> Listeners' brains responded to the broken dependency as they do to "
-            "a grammatical error. <bookmark mark='e'/> Yet, as Part 21 found, over several minutes listeners hardly notice "
-            "a piece ending in the wrong key. <bookmark mark='f'/> Nesting, it seems, is heard over seconds, perhaps not "
-            "over minutes: harmony may be recursive in the short range, and something else holds long pieces together."
+            "The question matters beyond music. <bookmark mark='a'/> In 2002 Marc Hauser, Noam Chomsky and Tecumseh Fitch proposed that recursion might be the one thing special to human language. If music has it too, the two may share machinery. <bookmark mark='b'/> In 2013 Stefan Koelsch and colleagues, Rohrmeier among them, rewrote Bach chorales so that the key a phrase opened in was not the key it closed in, <bookmark mark='c'/> with a passage in another key embedded between: a dependency across a distance, like the subject and verb of a long sentence. <bookmark mark='d'/> The study reported an electrophysiological response to the manipulation, consistent with sensitivity to a nonlocal dependency; it does not establish identical language processing or recursion by itself. <bookmark mark='e'/> Yet, as Part 21 found, over several minutes listeners hardly notice a piece ending in the wrong key. <bookmark mark='f'/> Together these task-specific results motivate further tests across timescales, rather than a fixed limit on musical nesting: harmony may be recursive in the short range, and something else holds long pieces together."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcdef", rows_[1:]):
