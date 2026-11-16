@@ -1378,6 +1378,18 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Bayesian brain; resource rationality; Hebbian learning; backpropagation; unified theory | 贝叶斯脑；资源理性；赫布学习；反向传播；统一理论 |
 | Horace Barlow; Bruno Olshausen; David Field; Simon Laughlin; Xue-Xin Wei; Alan Stocker; Roger Shepard; Rajesh Rao; Dana Ballard; Karl Friston; Falk Lieder; Tom Griffiths | 霍勒斯·巴洛；布鲁诺·奥尔斯豪森；大卫·菲尔德；西蒙·劳克林；魏学昕；艾伦·斯托克；罗杰·谢泼德；拉杰什·拉奥；达娜·巴拉德；卡尔·弗里斯顿；福尔克·利德；汤姆·格里菲斯 |
 
+## Part 59: computational psychiatry
+
+| English | 中文 |
+|---|---|
+| computational psychiatry; theory-driven; data-driven; computational phenotype | 计算精神病学；理论驱动；数据驱动；计算表型 |
+| model-based control; model-free control; compulsivity; two-step task | 基于模型的控制；无模型的控制；强迫性；两步任务 |
+| volatility; learning rate; mood as an integral of prediction errors | 波动性；学习率；作为预测误差积分的心境 |
+| reliability paradox; test-retest reliability; difference score; attenuation | 信度悖论；重测信度；差异分数；衰减 |
+| biotype; clustering; stability; adjusted Rand index; cross-trial prediction; personalized advantage index | 生物型；聚类；稳定性；调整兰德指数；跨试验预测；个体化优势指数 |
+| digital phenotyping; brain stimulation; psychedelic-assisted therapy | 数字表型；脑刺激；迷幻剂辅助疗法 |
+| Craig Hedge; Claire Gillan; Quentin Huys; Peter Dayan; Robb Rutledge; Adam Chekroud; Robert DeRubeis | 克雷格·赫奇；克莱尔·吉兰；昆廷·休斯；彼得·达扬；罗布·拉特利奇；亚当·切克劳德；罗伯特·德鲁贝斯 |
+
 ## Names
 
 | English | 中文 |

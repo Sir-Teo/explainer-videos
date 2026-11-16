@@ -7693,3 +7693,100 @@ shown(58, r"Vul et al.\ (2014)", "a model, computed here")
 shown(58, r"Lieder \& Griffiths (2020)", "a theoretical review, described")
 shown(58, r"Lillicrap et al.\ (2020)", "a theoretical review, described")
 shown(58, r"Newell (1973)", "an essay, quoted")
+
+
+# --- Part 59: Computational Psychiatry --------------------------------------------------------------------------------
+add(Finding(
+    key="reliability_paradox", part=59, title=r"The reliability paradox",
+    claim="Cognitive tasks with robust group effects (Stroop, flanker, stop-signal) measure individual differences "
+          "poorly: their difference scores have low test-retest reliability.",
+    original=Study("Hedge, Powell and Sumner", 2018, n="two samples of about 50 and 60 students, tested three weeks "
+                   "apart", design="seven classic tasks, test and retest",
+                   found="robust effects with retest reliabilities often between 0 and 0.6"),
+    status="replicated",
+    record=(Study("Enkavi and colleagues", 2019, n="about 150 people retested",
+                  design="dozens of self-regulation tasks and surveys",
+                  found="surveys reliable, task measures much less so"),
+            Study("Rouder and Haaf", 2019, design="a hierarchical model of trial noise",
+                  found="most of the shortfall is trial noise; many more trials or trial-level models are needed")),
+    note="The paradox is arithmetic: a task chosen because everyone shows the effect has little true variance "
+         "between people left to measure, and difference scores double the trial noise.",
+    sources=("C. Hedge, G. Powell and P. Sumner, The reliability paradox: why robust cognitive tasks do not produce "
+             "reliable individual differences, Behavior Research Methods 50 (2018) 1166-1186",
+             "A. Z. Enkavi et al., Large-scale analysis of test-retest reliabilities of self-regulation measures, "
+             "PNAS 116 (2019) 5472-5477",
+             "J. N. Rouder and J. M. Haaf, A psychometrics of individual differences in experimental tasks, "
+             "Psychonomic Bulletin and Review 26 (2019) 452-467"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="model_based_compulsivity", part=59, title=r"Compulsivity and model-based control",
+    claim="Weaker model-based (goal-directed) control on the two-step task goes with a transdiagnostic dimension of "
+          "compulsive behaviour and intrusive thought.",
+    original=Study("Gillan and colleagues", 2016, n="about 1,400 online participants",
+                   design="the two-step task and nine symptom questionnaires, factor analysed",
+                   found="a compulsive dimension associated with less model-based control, more than any diagnosis"),
+    status="replicated",
+    record=(Study("Patzelt and colleagues", 2019, design="an online sample with incentives",
+                  found="the association held"),
+            Study("Gillan and colleagues", 2020, design="patients with and without an OCD diagnosis",
+                  found="self-reported compulsivity tracked planning deficits better than the diagnosis")),
+    note="Replicated as a population association; small, and limited by the task's modest retest reliability; "
+         "whether changing planning changes compulsion is untested.",
+    sources=("C. M. Gillan, M. Kosinski, R. Whelan, E. A. Phelps and N. D. Daw, Characterizing a psychiatric symptom "
+             "dimension related to deficits in goal-directed control, eLife 5 (2016) e11305",
+             "E. H. Patzelt et al., Incentives boost model-based control across a range of severity on several "
+             "psychiatric constructs, Biological Psychiatry 85 (2019) 425-433",
+             "C. M. Gillan et al., Comparison of the association between goal-directed planning and self-reported "
+             "compulsivity vs obsessive-compulsive disorder diagnosis, JAMA Psychiatry 77 (2020) 77-85"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="connectivity_biotypes", part=59, title=r"Biotypes of depression",
+    claim="Resting-state connectivity divides depression into four biotypes that differ in symptoms and in response "
+          "to brain stimulation.",
+    original=Study("Drysdale and colleagues", 2017, n="about 1,200 fMRI scans",
+                   design="connectivity features chosen by correlation with symptoms, then clustered",
+                   found="four clusters, with different symptom profiles and TMS response"),
+    status="contested",
+    record=(Study("Dinga and colleagues", 2019, n="187 people",
+                  design="a methodological replication of the pipeline",
+                  found="the symptom-connectivity link replicated weakly; clusters were not stable, and data "
+                        "without clusters gave similar results"),),
+    note="Choosing features by their link to symptoms and then clustering on them guarantees clusters that differ in "
+         "symptoms; a stability check and an independent sample are needed before a cluster is a type.",
+    sources=("A. T. Drysdale et al., Resting-state connectivity biomarkers define neurophysiological subtypes of "
+             "depression, Nature Medicine 23 (2017) 28-38",
+             "R. Dinga et al., Evaluating the evidence for biotypes of depression: methodological replication and "
+             "extension of Drysdale et al. (2017), NeuroImage: Clinical 22 (2019) 101796"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="cross_trial_prediction", part=59, title=r"Treatment outcome predicted across trials",
+    claim="A machine-learning model trained on one clinical trial predicts which patients will respond to treatment "
+          "in other trials.",
+    original=Study("Chekroud and colleagues", 2016, n="about 1,900 patients in the training trial",
+                   design="25 baseline items, a gradient-boosted model, tested in another trial's arms",
+                   found="about 60% accuracy in a similar drug arm; little above chance in a different one"),
+    status="failed",
+    record=(Study("Chekroud and colleagues", 2024, design="five antipsychotic trials, train in one, test in the "
+                  "others", found="good accuracy within a trial, close to chance across trials"),),
+    note="Within-sample accuracy, and even cross-validated accuracy, overstates what a model does in a new trial "
+         "with different sites, patients and protocols; the original's own external result was modest.",
+    sources=("A. M. Chekroud et al., Cross-trial prediction of treatment outcome in depression: a machine learning "
+             "approach, Lancet Psychiatry 3 (2016) 243-250",
+             "A. M. Chekroud et al., Illusory generalizability of clinical prediction models, Science 383 (2024) "
+             "164-167"),
+    checked="2026-11-16",
+))
+shown(59, r"Huys, \ Maia \& Frank (2016)", "a programmatic review, described")
+shown(59, r"Browning et al.\ (2015)", "a task study of anxiety and volatility, described; later results mixed")
+shown(59, r"Mathys et al.\ (2011)", "a model, described in outline")
+shown(59, r"Rutledge et al.\ (2014)", "a model of momentary happiness, described")
+shown(59, r"DeRubeis et al.\ (2014)", "a method for treatment selection, computed here")
+shown(59, r"Cole et al.\ (2022)", "a small sham-controlled stimulation trial, described")
+shown(59, r"Goodwin et al.\ (2022)", "a dose-controlled psilocybin trial, described")
+shown(59, r"Insel (2017)", "a programmatic essay, quoted")

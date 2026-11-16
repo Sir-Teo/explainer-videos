@@ -38,4 +38,39 @@ PARTS = [
               ("Its tests", "tests/psychology/test_efficient.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=59, level="D", widget="taskdesign", prereq=(3, 4, 17, 39, 48),
+        question="Can a model of the mind tell a clinician something a conversation cannot?",
+        story="Computational psychiatry plans to give a patient a task, fit a model and read off the parameter that "
+              "has gone wrong. Its first obstacle is the reliability paradox: tasks with enormous group effects "
+              "measure individuals poorly. The part sets out the theory-driven and data-driven routes, compulsivity "
+              "and model-based control, anxiety and volatility, mood as an integral of prediction errors; buys "
+              "reliability with trials, finds biotypes in data with none and exposes them by stability, scores a "
+              "prediction model in sample, cross-validated and in a new trial, sizes a trial for choosing "
+              "treatments, judges stimulation, psychedelics and phones by Part 2's standards, and sets five tests "
+              "for a computational target. It opens with the care card.",
+        handoff="Part 60 asks what models of machines can tell psychology; Part 61 takes up big-team science and "
+                "registered models; Part 62's dissertation can measure individuals properly.",
+        outside="Part 3's reliability and attenuation, Part 4's winner's curse, Part 17's learning models and Part "
+                "48's model fitting; correlation, logistic regression and cross-validation.",
+        objectives={
+            "U": ["Explain the reliability paradox and why it limits tasks as clinical tests.",
+                  "Explain why a model scored on its own data overstates how it will do in a new clinic."],
+            "M": ["Compute the trials needed for a target reliability, and the attenuation of a correlation.",
+                  "Run a clustering pipeline with a stability check, and cross-validate a prediction model "
+                  "properly."],
+            "D": ["Design a study that tests whether a computational parameter is a treatment target."],
+            "I": ["Evaluate a biomarker or digital-health claim with six questions."],
+        },
+        results=[
+            ("Difference-score reliability", r"\rho = \frac{\sigma_b^2}{\sigma_b^2 + 2\sigma_t^2/n}"),
+            ("Spearman-Brown", r"\rho_k = \frac{k\rho}{1 + (k-1)\rho}"),
+            ("Attenuation", r"r_{\text{obs}} = r_{\text{true}}\sqrt{\rho_x\rho_y}"),
+            ("An interaction's sample", r"N_{\text{interaction}} \approx 4\,N_{\text{main}}"),
+        ],
+        U=(0, 1, 2, 3, 6, 8, 13), D=(5, 7, 12, 15), I=(9, 10, 11, 14),
+        also=(("Psyche's precision module", "explainer/psychology/psyche/precision.py"),
+              ("Its tests", "tests/psychology/test_precision.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

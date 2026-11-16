@@ -92,4 +92,65 @@
       note: "Nothing you choose is stored or sent. The model is Part 58's: 72 units tuned to orientation, adaptation lowering the gain of those near the adapter, and a readout that does not know about the adaptation.",
     });
   };
+
+  // ---- Part 59: design a task for groups or for individuals, then buy reliability with trials. ----
+  W.taskdesign = function (el) {
+    var w = null;
+    var S = { phase: "idle", pred: null, q: 0, preds: [] };
+    function rel(share, trials) { var sb = share * 60, err = 2 * 120 * 120 / trials; return sb * sb / (sb * sb + err); }
+    function groupD(share, trials) { var sb = share * 60; return (1 - share) * 60 / Math.sqrt(sb * sb + 2 * 120 * 120 / trials); }
+    var QS = [
+      { share: 0.25, trials: 60, head: "A huge group effect: a reliable measure of each person?",
+        why: "Everyone shows the effect, so there is little difference between people left to measure: the reliability paradox (Hedge, Powell and Sumner, 2018)." },
+      { share: 0.25, trials: 600, head: "Same task, ten times the trials: reliable now?",
+        why: "Trial noise averages away; the between-person differences were there all along. Trials cost participants' time." },
+      { share: 0.75, trials: 60, head: "Back to 60 trials, but a task whose effect varies more between people: reliable?",
+        why: "Reliability rises, and the group effect falls: a task built for individuals is a weaker demonstration in a group." },
+    ];
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "ask" || S.phase === "shown"; },
+      respond: function (side) {
+        if (S.phase === "shown") { S.q++; S.phase = S.q >= QS.length ? "done" : "ask"; if (w) w.render(); return; }
+        S.pred = side; S.preds.push(side); S.phase = "shown"; task.count++; if (w) w.render();
+      },
+    });
+    w = QB.widget(el, {
+      title: "A task for groups, or for people?",
+      sub: "First a prediction: a Stroop-like effect so robust that 400 people show it with t near 50. Will each person's effect correlate well with itself three weeks later? Press F for well (above 0.7), J for poorly (or tap); then two more versions of the task. The sliders: how much of the effect varies between people, and how many trials each person does.",
+      panels: 2, height: 320,
+      controls: [
+        { k: "share", label: "share of the effect that varies between people", min: 0.05, max: 0.95, step: 0.05, value: 0.25, fmt: function (x) { return x.toFixed(2); } },
+        { k: "trials", label: "trials per condition", min: 20, max: 2000, step: 20, value: 60, fmt: function (x) { return x.toFixed(0); } },
+      ],
+      buttons: [
+        { label: "Start", act: function () { S.phase = "ask"; S.pred = null; S.q = 0; S.preds = []; } },
+        { label: "Clear", act: function () { S.phase = "idle"; S.pred = null; S.q = 0; S.preds = []; } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        var Q = QS[Math.min(S.q, QS.length - 1)];
+        if (S.phase === "ask") {
+          T.message(ctx, b, (S.q + 1) + " of 3. " + Q.head, Q.share * 100 + "% of the effect varies between people, " + Q.trials + " trials per condition.   F: yes, retest above 0.7.   J: no, much lower.");
+        } else if (S.phase === "shown") {
+          var rq = rel(Q.share, Q.trials);
+          T.message(ctx, b, "In Psyche the retest correlation is " + rq.toFixed(2) + ", the group effect d " + groupD(Q.share, Q.trials).toFixed(1) + ".",
+            "You predicted " + (S.pred ? "a poor measure" : "a good one") + (((rq > 0.7) === (S.pred === 0)) ? ": right. " : ": not this time. ") + Q.why + " Any key: next.");
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "Three tasks, one trade-off.", "Only more trials buy both a group effect and a reliable measure. Try the sliders: they show the whole curve.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start for the prediction; the sliders work any time.");
+        }
+        var a = g[1].axes({ x: [0, 1], y: [0, 1], title: "Reliability (gold) against share varying between people" });
+        var xs = [], ys = [], s;
+        for (s = 0.05; s <= 0.951; s += 0.05) { xs.push(s); ys.push(rel(s, v.trials)); }
+        a.line(xs, ys, { color: "#f2c14e", width: 2 });
+        a.line([0, 1], [0.8, 0.8], { color: "#5bd18b", width: 1 });
+        var r = rel(v.share, v.trials);
+        a.text(v.share, Math.min(r + 0.08, 0.95), "reliability " + r.toFixed(2) + ", group d " + groupD(v.share, v.trials).toFixed(1), { align: "center", size: 10 });
+      },
+      readout: function (v) { return [["reliability", rel(v.share, v.trials).toFixed(2)], ["group effect d", groupD(v.share, v.trials).toFixed(2)]]; },
+      note: "Nothing you choose is stored or sent. The task is Part 59's: an effect budget of 60 ms split between a common mean and differences between people, with trial noise of 120 ms. Only more trials buy both a group effect and a reliable measure.",
+    });
+  };
 })();
