@@ -64,16 +64,11 @@ class Ajnas(SoundScene):
             (r"three sizes of step: \ semitone \ (about 100), \ three-quarter tone \ (about 150), \ whole tone \ (200)", WHITE),
             (r"and the augmented second of Hijaz \ (about 300)", WHITE),
             (r"the three-quarter tone is the signature: \ a `neutral' second, \ neither minor nor major", TUNE),
-            (r"two of them make a neutral third: \ Rast's E half-flat", WHITE),
+            (r"Rast: 200 + 150 = 350 cents\\two 150-cent steps make a minor third", WHITE),
             (r"Part 12's scales had two step sizes; \ these have three or four", GREY_A),
         ]
         rows_scene(self, r"the steps", items,
-                   "Look at the steps. <bookmark mark='b'/> There are three main sizes: a semitone, about one hundred cents; a "
-                   "three-quarter tone, about one hundred and fifty; and a whole tone, two hundred. <bookmark mark='c'/> Hijaz "
-                   "adds a wide augmented second, about three hundred. <bookmark mark='d'/> The three-quarter tone is the "
-                   "signature of the system, a neutral second, neither minor nor major. <bookmark mark='e'/> Two of them make a "
-                   "neutral third, Rast's E half-flat. <bookmark mark='f'/> Part 12's familiar scales had two step sizes; these "
-                   "have three or four.", marks="cdef")
+                   "Look at the steps. <bookmark mark='b'/> There are three main sizes: a semitone, about one hundred cents; a three-quarter tone, about one hundred and fifty; and a whole tone, two hundred. <bookmark mark='c'/> Hijaz adds a wide augmented second, about three hundred. <bookmark mark='d'/> The three-quarter tone is the signature of the system, a neutral second, neither minor nor major. <bookmark mark='e'/> A whole tone plus a three-quarter tone makes the Rast neutral third in this grid; two three-quarter tones make three hundred cents, a minor third. <bookmark mark='f'/> Part 12's familiar scales had two step sizes; these have three or four.", marks="cdef")
 
     # ------------------------------------------------------------------
     def tonics(self):

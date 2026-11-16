@@ -127,3 +127,7 @@ python -m videos.music.labs 35                                  # the lab (write
   Music Research* (2009).
 * H. Farhat, *The Dastgah Concept in Persian Music* (1990).
 * Part 5 for roughness; Part 6 for commas; Part 33 for temperaments; Part 34 for raga.
+
+## Interpretation limits
+
+The twenty-four-step and fifty-three-step grids are teaching approximations, not fixed performer tunings or a shared system for every regional tradition. The Arel–Ezgi–Uzdilek interval theory is approximated here by equal steps rather than equated with that tuning. Rast’s 350-cent third is an illustrative value. Two 150-cent steps make a 300-cent minor third; Rast’s neutral third uses 200 + 150 cents in this grid. Saba’s lowered octave degree describes the chosen ascent, not a ban on the tonic octave. Maqsum’s eight displayed slots divide a usual four-beat cycle; the other cycles use the indicated subdivision units. No universal pitch-discrimination threshold or emotional meaning is established. Automatic recognition results depend on recordings, candidate sets and held-out splits.

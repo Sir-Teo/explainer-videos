@@ -20,7 +20,7 @@ class Frontier(SoundScene):
             (r"computational makam analysis \ (Bozkurt and colleagues, \ 2000s--2010s; \ CompMusic)", WHITE),
             (r"pitch tracked from recordings; \ the tonic found; \ pitch histograms per makam", WHITE),
             (r"histogram peaks compared with theory's pitches: \ several notes differ by a comma or more", WHITE),
-            (r"makam recognised automatically from histograms, \ well above chance", TUNE),
+            (r"makam recognised automatically from histograms, \ with reported above-chance results on specific datasets and makam candidate sets", TUNE),
             (r"Part 34's raga studies used the same tools", GREY_A),
         ]
         rows_scene(self, r"measuring makam", items,
@@ -28,7 +28,7 @@ class Frontier(SoundScene):
                    "CompMusic project, <bookmark mark='c'/> tracked pitch in recordings, found the tonic and drew pitch "
                    "histograms for each makam. <bookmark mark='d'/> Comparing histogram peaks with theory's pitches, they found "
                    "several notes differing by a comma or more. <bookmark mark='e'/> They also recognised makams automatically "
-                   "from the histograms, well above chance. <bookmark mark='f'/> Part 34's raga studies used the same tools.",
+                   "from the histograms, with reported above-chance results on specific datasets and makam candidate sets. <bookmark mark='f'/> Part 34's raga studies used the same tools.",
                    marks="cdef")
 
     # ------------------------------------------------------------------

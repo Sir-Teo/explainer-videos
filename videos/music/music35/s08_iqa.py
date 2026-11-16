@@ -41,7 +41,7 @@ class Iqa(SoundScene):
         rows_scene(self, r"dum and tek", items,
                    "Rhythm in this music is organised in cycles too. <bookmark mark='b'/> The Arabic iqa, the Turkish usul, is a "
                    "cycle of strong and weak strokes. <bookmark mark='c'/> Dum is the low stroke at the centre of the drum, tek "
-                   "the high stroke at the rim. <bookmark mark='d'/> Maqsum, eight beats, dum tek, tek dum, tek, is the commonest "
+                   "the high stroke at the rim. <bookmark mark='d'/> Maqsum, shown here as eight equal subdivisions of its usual four-beat cycle, dum tek, tek dum, tek, is the commonest "
                    "Arabic cycle. <bookmark mark='e'/> There are cycles of nine, aksak, of ten, samai thaqil, and far longer. "
                    "<bookmark mark='f'/> The drum keeps the cycle; the melody moves freely over it.", marks="cdef")
 
@@ -49,11 +49,10 @@ class Iqa(SoundScene):
     def quiz(self):
         d = load("iqa")
         c = clip("iqa.quiz")
-        card = listen_card(r"Three cycles on the darbuka, \ each three times round. \ One has 8 beats, \ one 9, \ one 10. \ "
-                           r"Which has ten, \ A, \ B or C? \ Count the beats between the deep strokes that start each cycle.", width=10.4)
+        card = listen_card(r"Three cycles on the darbuka, \ each three times round. \ We count subdivision slots: 8, 9 or 10. \ "
+                           r"Which has ten, \ A, \ B or C? \ Count the slots between the deep strokes that start each cycle.", width=10.4)
         with self.voiceover(
-            "A question for your ears. Three cycles on the darbuka, each three times round. One has eight beats, one nine, "
-            "one ten. Which has ten? Count from each deep stroke that begins a cycle."
+            'A question for your ears. Three cycles on the darbuka, each three times round. We count subdivision slots: one has eight, one nine, one ten. Which has ten? Count from each deep stroke that begins a cycle.'
         ):
             self.play(FadeIn(card))
         self.wait(0.8)
@@ -74,8 +73,7 @@ class Iqa(SoundScene):
                     pulse(snd, rows_[gi][1].cells[i % n][0], t0, t0 + b - 0.02, buff=0.02)
         ans = label(r"A: \ maqsum, \ 8; \ \ B: \ sam\=a`\=\i\ thaq\=\i l, \ 10; \ \ C: \ aksak, \ 9", font_size=22, color=TUNE).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "B has ten: samai thaqil, a slow, stately cycle used for an instrumental form of the same name. A was maqsum, "
-            "eight; C was aksak, nine, the limping cycle of Turkish music, two, two, two, three."
+            'B has ten: samai thaqil, a slow, stately cycle used for an instrumental form of the same name. A was maqsum, eight slots representing four main beats; C was aksak, nine, the limping cycle of Turkish music, two, two, two, three.'
         ):
             self.play(*[r[1].animate.set_opacity(1.0) for r in rows_], FadeIn(ans))
         self.wait(0.4)
@@ -102,10 +100,10 @@ class Iqa(SoundScene):
         d = load("baladi")
         c = clip("baladi.two")
         rows_ = VGroup(*[VGroup(label(k, font_size=24, color=TUNE), iqa_row(d["strokes"][k])).arrange(RIGHT, buff=0.5) for k in ("maqsum", "baladi")]).arrange(DOWN, buff=0.6, aligned_edge=LEFT).move_to(UP * 0.3)
-        cap = label(r"one stroke apart: \ the second beat is tek in maqsum, \ dum in baladi", font_size=21, color=GREY_A).to_edge(DOWN, buff=1.1)
+        cap = label(r"one stroke apart: \ the second subdivision slot here is tek in maqsum, \ dum in baladi", font_size=21, color=GREY_A).to_edge(DOWN, buff=1.1)
         head = label(r"maqsum and baladi", font_size=28, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Two cycles of eight can differ by a single stroke. Maqsum's second beat is tek, a light stroke; baladi's is dum, "
+            "Two cycles of eight can differ by a single stroke. Maqsum’s second subdivision slot here is tek, a light stroke; baladi's is dum, "
             "a heavy one, which gives it a weightier, earthier feel, the rhythm of much popular and folk music. Listen to "
             "both, three cycles each."
         ):

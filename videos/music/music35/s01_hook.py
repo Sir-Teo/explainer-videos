@@ -36,9 +36,7 @@ class Hook(SoundScene):
                 pulse(snd, ruler.rows[i][3], d["starts"][k], end, buff=0.08)
         ans = label(r"A: \ 300 cents \ (E$\flat$); \ B: \ 400 \ (E); \ C: \ 350, \ the third of maqam Rast", font_size=22, color=TUNE).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "C lies between: three hundred and fifty cents, half way from E flat to E. It is the third of maqam Rast, the "
-            "most basic mode of Arabic music, and it is neither major nor minor. Musicians call such notes half-flat. This "
-            "part is about a music whose notes lie between the piano's keys."
+            "C lies between: three hundred and fifty cents, half way from E flat to E. It is the simplified twenty-four-step third used for our Rast example, an important Arabic maqam, and it is neither major nor minor. Musicians call such notes half-flat. This part is about a music whose notes lie between the piano's keys."
         ):
             self.play(*[r[1][1].animate.set_opacity(1.0) for r in ruler.rows], FadeIn(ans))
         self.wait(0.4)

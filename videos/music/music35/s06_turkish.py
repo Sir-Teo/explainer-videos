@@ -29,17 +29,12 @@ class Turkish(SoundScene):
             x += w
         nm = VGroup(*[label(n, font_size=15, color=GREY_A).move_to([-5.5 + 11.0 * c / 53, 1.15, 0]) for n, c in zip(names, tr["commas"])])
         rows_ = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
-            (r"Arel--Ezgi--Uzdilek \ (early 20th century): \ the octave as 53 Holdrian commas of 22.6 cents", WHITE),
+            (r"Arel--Ezgi--Uzdilek \ (early 20th century): \ 53 equal-step approximation used here", WHITE),
             (r"a whole tone is 9 commas; \ intervals of 1, \ 4, \ 5, \ 8 and 9 commas have names", WHITE),
             (rf"Rast: \ 9, \ 8, \ 5, \ 9, \ 9, \ 8, \ 5 commas: \ Segah at {d['third']['turkish']:.0f} cents, \ near the pure 5:4", TUNE))]).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.6)
-        head = label(r"Turkish Rast, \ in commas", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"Turkish Rast: a 53-step approximation", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Turkish theory went another way. <bookmark mark='a'/> In the early twentieth century the theorists Arel, Ezgi "
-            "and Uzdilek divided the octave into fifty-three commas, each about twenty-two and a half cents, a nearly "
-            "Pythagorean system. <bookmark mark='b'/> A whole tone is nine commas, and intervals of one, four, five, eight and "
-            "nine commas each have names. <bookmark mark='c'/> Turkish Rast steps nine, eight, five, nine, nine, eight, five. "
-            f"Its third note, segah, is seventeen commas up, {say(round(d['third']['turkish']))} cents: not three hundred and fifty "
-            "like the Arabic E half-flat, but close to a pure major third."
+            f"Turkish theory went another way. <bookmark mark='a'/> In the early twentieth century the theorists Arel, Ezgi and Uzdilek used a nearly Pythagorean comma-based interval system, often approximated by fifty-three equal steps. This film uses that equal-step approximation, about twenty-two and a half cents each. <bookmark mark='b'/> A whole tone is nine commas, and intervals of one, four, five, eight and nine commas each have names. <bookmark mark='c'/> Turkish Rast steps nine, eight, five, nine, nine, eight, five. Its third note, segah, is seventeen commas up, {say(round(d['third']['turkish']))} cents: contrasting with our simplified Arabic grid value of three hundred and fifty, but close to a pure major third."
         ) as vo:
             self.play(FadeIn(head), FadeIn(boxes), FadeIn(nm))
             for mark, r in zip("abc", rows_):
@@ -69,7 +64,7 @@ class Turkish(SoundScene):
             pulse(snd, ruler.rows[1][3], d["starts"]["B"], c.duration, buff=0.08)
         ans = label(r"B: \ the Turkish segah, \ 385 cents; \ A: \ the Arabic E half-flat, \ 350", font_size=22, color=TUNE).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "B is higher: the Turkish segah. Thirty-five cents is a third of a semitone, and with the tonic and fifth sounding "
+            "B is higher in these theoretical sketches: the comma-grid segah. Thirty-five cents is a third of a semitone, and with the tonic and fifth sounding "
             "the difference is plain: A has the neutral colour, B sounds almost like a major chord. The two traditions share "
             "names, Rast and segah among them, but not always the same pitches."
         ):

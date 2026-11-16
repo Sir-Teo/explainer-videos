@@ -28,11 +28,7 @@ class Maqamat(SoundScene):
         ], font_size=24)
         head = label(r"two ajnas make a maqam", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Join two ajnas and you have a maqam. <bookmark mark='a'/> Rast is jins Rast on C and jins Rast again on G, giving "
-            "C, D, E half-flat, F, G, A, B half-flat, C. <bookmark mark='b'/> Bayati is jins Bayati on D with jins Nahawand on "
-            "G. <bookmark mark='c'/> Hijaz is jins Hijaz on D, again with Nahawand on G. <bookmark mark='d'/> Saba is jins "
-            "Saba on D with Hijaz on F, and it famously does not close at the octave. <bookmark mark='e'/> The note where the "
-            "upper jins starts is the ghammaz, a second centre of the maqam."
+            "Join two ajnas and you have a maqam. <bookmark mark='a'/> Rast is jins Rast on C and jins Rast again on G, giving C, D, E half-flat, F, G, A, B half-flat, C. <bookmark mark='b'/> Bayati is jins Bayati on D with jins Nahawand on G. <bookmark mark='c'/> Hijaz is jins Hijaz on D, again with Nahawand on G. <bookmark mark='d'/> Saba is jins Saba on D with Hijaz on F, and one common ascending form reaches a lowered octave degree. <bookmark mark='e'/> An important secondary pivot, often where an upper jins begins, is called the ghammaz, a second centre of the maqam."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("abcde", rows_):
@@ -142,9 +138,7 @@ class Maqamat(SoundScene):
         cap = label(r"Saba's top note is D$\flat$, \ 100 cents short of the octave", font_size=21, color=GREY_A).to_edge(DOWN, buff=1.1)
         head = label(r"Saba: \ the maqam that misses its octave", font_size=27, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Saba is the exception that shows how much a maqam is built from ajnas rather than octaves. Climb it from D in "
-            "one common form, and where the octave D would be, the scale reaches D flat. The jins structure continues, and "
-            "the octave never arrives. Listen to the climb."
+            'Saba is the exception that shows how much a maqam is built from ajnas rather than octaves. Climb it from D in one common form, and where the octave D would be, the scale reaches D flat. The jins structure continues, in this selected outline; other phrases can include the tonic octave, so this is not a prohibition on it. Listen to the climb.'
         ):
             self.play(FadeIn(head), FadeIn(ruler), FadeIn(oct_), FadeIn(cap))
         with self.listen(c) as snd:

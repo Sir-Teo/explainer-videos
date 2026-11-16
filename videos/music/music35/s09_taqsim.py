@@ -49,10 +49,7 @@ class Taqsim(SoundScene):
         head = label(r"a taqsim of ours: \ Bayati on D, \ a visit to Saba, \ home", font_size=25, color=GREY_A).to_edge(UP, buff=0.35)
         cap = label(r"gold: \ Bayati; \ blue: \ the Saba passage, \ its lowered fourth G$\flat$ in pink", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Here is a short taqsim of our own on the oud, in Bayati on D, drawn as pitch against time. It dwells on the "
-            "tonic, rises to the fourth, G, and falls back. Then it changes one note: G becomes G flat, and the music is "
-            "suddenly in Saba, darker and more anxious, a common move from Bayati. It climbs to A through the new note, and "
-            "finally returns to Bayati's G and comes home to D."
+            "Here is a short taqsim of our own on the oud, in Bayati on D, drawn as pitch against time. It dwells on the tonic, rises to the fourth, G, and falls back. Then it changes one note: G becomes G flat, and the sketch suggests Saba through the lowered fourth; the expressive effect depends on the phrase and context, a common move from Bayati. It climbs to A through the new note, and finally returns to Bayati's G and comes home to D."
         ):
             self.play(FadeIn(head), FadeIn(lines), FadeIn(labs), FadeIn(segs), FadeIn(cap))
         with self.listen(c) as snd:
