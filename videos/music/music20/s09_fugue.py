@@ -24,13 +24,7 @@ class Fugue(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"a fugue's parts", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "A fugue is not a form so much as a procedure built from canon. <bookmark mark='a'/> One voice states the "
-            "subject, the theme, alone. <bookmark mark='b'/> A second voice enters with the answer, the subject again "
-            "but a fifth higher, in the key of the dominant. <bookmark mark='c'/> Meanwhile the first voice goes on with "
-            "a counter-line, and if it is kept and reused, it is called the countersubject. <bookmark mark='d'/> Each "
-            "voice enters in turn, subject, answer, subject, and when all have entered, the exposition is over. "
-            "<bookmark mark='e'/> After that come episodes, sequences built from fragments, entries in other keys, "
-            "perhaps a stretto, where entries overlap, and often a held bass note, a pedal, before the end."
+            "A fugue is not a form so much as a procedure built from canon. <bookmark mark='a'/> One voice states the subject, the theme, alone. <bookmark mark='b'/> A second voice enters with the answer, typically the subject transposed toward the dominant, with adjustments possible in a tonal answer. <bookmark mark='c'/> Meanwhile the first voice goes on with a counter-line, and if it is kept and reused, it is called the countersubject. <bookmark mark='d'/> Each voice enters in turn, subject, answer, subject, and when all have entered, the exposition is over. <bookmark mark='e'/> After that come episodes, sequences built from fragments, entries in other keys, perhaps a stretto, where entries overlap, and often a held bass note, a pedal, before the end."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -85,14 +79,7 @@ class Fugue(SoundScene):
             (r"why the fifth: \ the dominant is the nearest key \ (Parts 15 and 18)", GREY_A))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"the tonal answer, \ as an algorithm", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The rule fits in a line of code. <bookmark mark='a'/> In the subject's head, its opening notes, wherever "
-            "it moves between the tonic and the dominant, swap them: <bookmark mark='b'/> tonic answered by dominant, "
-            "dominant by tonic, so a fifth becomes a fourth. <bookmark mark='c'/> After the head, move everything up a "
-            "fifth within the scale. <bookmark mark='d'/> Answering at the fifth is the canon at the fifth of chapter "
-            "two, with the follower delayed until the leader has finished. <bookmark mark='e'/> And the fifth because "
-            "the dominant is the nearest key, the first stop on every journey Parts 15 and 18 measured: the answer "
-            "leaves home only as far as the next room. A subject that never touches the dominant near its start gets a "
-            "real answer; one that opens on the dominant, or leaps from tonic to dominant, gets a tonal one."
+            "The rule fits in a line of code. <bookmark mark='a'/> In the subject's head, its opening notes, wherever it moves between the tonic and the dominant, swap them: <bookmark mark='b'/> tonic answered by dominant, dominant by tonic, so a fifth becomes a fourth. <bookmark mark='c'/> After the head, move everything up a fifth within the scale. <bookmark mark='d'/> Answering at the fifth is the canon at the fifth of chapter two, with the follower delayed until the leader has finished. <bookmark mark='e'/> And the fifth because the dominant is the nearest key, the first stop on every journey Parts 15 and 18 measured: the answer leaves home only as far as the next room. These are common teaching guidelines; actual real and tonal answers depend on the subject’s complete tonal design."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

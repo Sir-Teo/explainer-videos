@@ -79,7 +79,7 @@ class Forms(SoundScene):
             "becomes a step up of the same number of scale degrees: the Tune's rising fifth C to G becomes a falling "
             "fifth C to F, and its rising sixth to A becomes a falling sixth to E. <bookmark mark='b'/> Or exactly, "
             "semitone for semitone: then the falling major sixth from C lands on E flat, a note outside the key. "
-            "<bookmark mark='c'/> Bach inverts within the key, so his inversions stay in it; the twelve-tone composers "
+            "<bookmark mark='c'/> Bach often adapts inversion to tonal context; real passages can use chromatic alterations; the twelve-tone composers "
             "of Part 29 invert exactly, and have no key to stay in."
         ) as vo:
             self.play(FadeIn(g1), FadeIn(t1))
@@ -108,22 +108,15 @@ class Forms(SoundScene):
         tab = VGroup(grid, heads_top, heads_left).move_to(LEFT * 3.2 + DOWN * 0.2)
         cap = label(r"row, \ then column: \ do the column's, \ then the row's", font_size=20, color=GREY_B).next_to(tab, DOWN, buff=0.3)
         rows_ = VGroup(*[label(t, font_size=25, color=c_) for t, c_ in (
-            (r"each form, \ done twice, \ gives the line back", WHITE),
-            (r"any two together give the third: \ I then R is RI", WHITE),
+            (r"each form twice: \ identity (up to transposition here)", WHITE),
+            (r"two different nonidentity operations: \ I then R is RI", WHITE),
             (r"order does not matter", WHITE),
             (r"a group: \ Klein's four-group, \ the symmetries of a rectangle", TUNE),
             (r"add the twelve transpositions: \ the forms of a twelve-tone row \ (Part 29)", GREY_A))]).arrange(DOWN, buff=0.36, aligned_edge=LEFT)
         rows_.scale_to_fit_width(min(rows_.width, 6.4))
         rows_.move_to(RIGHT * 3.4 + DOWN * 0.1)
         with self.voiceover(
-            "The four forms have an arithmetic. Do one and then another, and you always land on one of the four. "
-            "<bookmark mark='a'/> Each form undoes itself: upside down twice is the right way up. "
-            "<bookmark mark='b'/> Any two different ones make the third: inverting a retrograde gives the retrograde "
-            "inversion. <bookmark mark='c'/> And the order never matters. <bookmark mark='d'/> Mathematicians call such "
-            "a set a group, and this one is the smallest interesting group there is, Klein's four-group, the "
-            "symmetries of a rectangle: flip it across, flip it along, or turn it half round. The program checks the "
-            "table on the Tune itself. <bookmark mark='e'/> Add the twelve transpositions and you have the "
-            "forty-eight forms of a twelve-tone row, which Part 29 will need."
+            "The four forms have an arithmetic. Do one and then another, and you always land on one of the four. <bookmark mark='a'/> Each form undoes itself: upside down twice is the right way up. <bookmark mark='b'/> Any two different nonidentity operations make the third: inverting a retrograde gives the retrograde inversion. <bookmark mark='c'/> And the order never matters. <bookmark mark='d'/> Mathematicians call such a set a group, and this one is a standard four-element noncyclic group, Klein's four-group, the symmetries of a rectangle: flip it across, flip it along, or turn it half round. The program checks the table on the Tune itself. <bookmark mark='e'/> With a fixed inversion convention, twelve transpositions give up to forty-eight labeled forms of a twelve-tone row, which Part 29 will need."
         ) as vo:
             self.play(FadeIn(tab), FadeIn(cap))
             for mark, r in zip("abcde", rows_):

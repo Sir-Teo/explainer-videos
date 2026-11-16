@@ -46,7 +46,8 @@ class Outro(SoundScene):
                 total = max(n[1] + n[2] for ln in lines for n in ln)
                 g = voices_roll(lines, width=11.4, height=3.2, total=total).move_to(DOWN * 0.3)
                 t = label(titles[name], font_size=28, color=GREY_A).next_to(g, UP, buff=0.35)
-                shown = [g, t]
+                playhead = cursor(snd, g, start=d["starts"][name], beat=d["beats"][name])
+                shown = [g, t, playhead]
                 self.add(*shown)
                 sing_voices(snd, g, lines, start=d["starts"][name], beat=d["beats"][name])
         if shown is not None:
@@ -78,9 +79,9 @@ class Outro(SoundScene):
             r"the fugue: \ subject, \ tonal answer, \ countersubject by Viterbi search, \ stretto",
         ], title=r"What we found", font_size=24).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A round works when every piece of a tune agrees with every other, and a program that "
+            "What did we find? A round needs compatible overlaps at its chosen entry delay, and a program that "
             "knew nothing of rounds found the famous ones. <bookmark mark='a'/> Canons exist at every interval, "
-            "counted exactly, rare but plentiful, hardest at the fourth and seventh. <bookmark mark='b'/> The four "
+            "counted exactly, rare but plentiful, with the fourth and seventh hardest under this chosen rule set. <bookmark mark='b'/> The four "
             "forms of a line make Klein's four-group. <bookmark mark='c'/> Lines can swap places, if they avoid what "
             "the swap would spoil. <bookmark mark='d'/> Crab canons are common, good ones rare, and a canon in Shepard "
             "tones can climb for ever. <bookmark mark='e'/> And a fugue's exposition can be built by rule, subject, "
@@ -138,10 +139,7 @@ class Outro(SoundScene):
             (r"producers", r"delay and echo are canons at the unison: \ set the delay to a beat or a bar"),
         ], font_size=26)
         with self.voiceover(
-            "And in practice. Choirs and classrooms teach harmony through rounds, since every singer learns every "
-            "part. Keyboard players learn fugues a voice at a time. Songwriters let a backing line answer the melody a "
-            "bar later. And a producer's delay effect is a canon at the unison, which is why it sounds best set to a "
-            "beat or a bar."
+            "And in practice. Choirs and classrooms teach harmony through rounds, since every singer learns every part. Keyboard players learn fugues a voice at a time. Songwriters let a backing line answer the melody a bar later. And a producer's delay effect is a canon at the unison, and beat-synchronized delay is one useful production choice."
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(0.4)

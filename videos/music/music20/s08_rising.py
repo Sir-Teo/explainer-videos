@@ -78,7 +78,7 @@ class Rising(SoundScene):
             (r"Hofstadter's word for it: \ a strange loop", GREY_A))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"a strange loop", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Most listeners hear every lap as higher than the one before. <bookmark mark='a'/> <bookmark mark='b'/> "
+            "The construction is designed to suggest rising laps, though responses vary; this example has no listener study. <bookmark mark='a'/> <bookmark mark='b'/> "
             "Yet the seventh lap is the first lap, sample for sample. <bookmark mark='c'/> Part 4 explained why: pitch "
             "has two parts, height, and where a note sits within the octave, its chroma. <bookmark mark='d'/> Shepard "
             "tones keep the chroma and hide the height, so each step up is heard as up, and the steps add up to "

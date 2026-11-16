@@ -68,7 +68,7 @@ class Canons(SoundScene):
             "and by the usual leaps. <bookmark mark='e'/> Whether the next note is allowed depends only on the leader's "
             "last three notes, the two the follower is copying and the one before. So the program never lists the "
             "melodies: it counts, for every three-note ending, how many ways there are to reach it, and adds up. "
-            "Hundreds of millions of melodies are counted in a fraction of a second."
+            "Hundreds of millions of melodies are counted in a compact dynamic-programming search."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -86,13 +86,7 @@ class Canons(SoundScene):
         tot = d["total_melodies"]
         cap = label(rf"of {tot / 1e6:.0f} million melodies: \ about 1 in {tot / d['counts']['fifth']:.0f} at the fifth, \ 1 in {tot / d['counts']['fourth']:.0f} at the fourth", font_size=23, color=TUNE).to_edge(DOWN, buff=0.55)
         with self.voiceover(
-            f"Here are the counts. Every interval works: there are hundreds of thousands of canons at each. "
-            f"<bookmark mark='a'/> But they are rare. Of about {say(round(tot / 1e6))} million melodies the leader could "
-            f"sing, about one in {say(round(tot / d['counts']['fifth']))} makes a canon at the fifth or the octave. "
-            f"<bookmark mark='b'/> The fourth and the seventh are hardest, about one in {say(round(tot / d['counts']['fourth']))} "
-            "at the fourth: a fourth is dissonant over the bass, and a seventh copies every consonance onto a "
-            "dissonance a step away. Bach's ladder of intervals in the Goldberg Variations climbs through the hard rungs "
-            "too."
+            f"Here are the counts. Every interval works: there are hundreds of thousands of canons at each. <bookmark mark='a'/> But they are rare. Of about {say(round(tot / 1000000.0))} million melodies the leader could sing, about one in {say(round(tot / d['counts']['fifth']))} makes a canon at the fifth or the octave. <bookmark mark='b'/> The fourth and the seventh are hardest, about one in {say(round(tot / d['counts']['fourth']))} at the fourth: a fourth is dissonant over the bass, and a seventh copies every consonance onto a dissonance a step away. Bach’s canons also use rhythmic and tonal freedoms absent from this restricted count; these rankings do not measure his compositional difficulty."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(t))
             vo.wait_until("a")
@@ -143,7 +137,7 @@ class Canons(SoundScene):
         cells.arrange(RIGHT, buff=0.4).move_to(DOWN * 0.1)
         with self.voiceover(
             "Three of the canons the solver found, heard: at the unison, at the second, and at the fifth below. In "
-            "each, the pink voice copies the gold one two beats later. Not one beat clashes."
+            "each, the pink voice copies the gold one two beats later. Not one sampled beat violates this consonance check."
         ):
             self.play(FadeIn(cells))
         with self.listen(c) as snd:
@@ -152,7 +146,7 @@ class Canons(SoundScene):
                 sing_voices(snd, cells[j][1], [ex[k]["leader"], ex[k]["follower"]], start=ex[k]["start"])
                 pulse(snd, cells[j][0], ex[k]["start"], ex[k]["start"] + 14 * BEAT, buff=0.08)
         with self.voiceover(
-            "They are correct, and they are not Bach. The rules guarantee that nothing clashes; they say nothing about "
+            "They are correct, and they are not Bach. The rules constrain sampled vertical intervals and parallels; they say nothing about "
             "shape, direction or a climax. The solver shows how much room there is. The art is in choosing."
         ):
             self.wait(0.5)

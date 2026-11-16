@@ -129,16 +129,7 @@ class Stretto(SoundScene):
         side.scale_to_fit_width(min(side.width, 5.6))
         side.move_to(RIGHT * 3.9 + DOWN * 0.2)
         with self.voiceover(
-            "How special is that? Run the same search on the opening phrase of every tune in Part 14's collection, "
-            "allowing the second voice to enter anywhere up to the phrase's midpoint. "
-            f"<bookmark mark='a'/> {say(d['with_stretto'])} of the {say(d['n'])} phrases allow at least one stretto. "
-            "<bookmark mark='b'/> Folk tunes repeat notes and outline a chord, which makes them easy to overlap. "
-            "<bookmark mark='c'/> A chromatic subject like the king's is the opposite. With its rhythm simplified, "
-            f"the program finds no stretto for the king's theme until the second voice waits {say(int(d['royal']['earliest']))} "
-            f"of its {say(int(d['royal']['length']))} beats, when the two hardly overlap: its slide clashes with itself "
-            "almost everywhere, which is part of why the king's challenge was hard. <bookmark mark='d'/> Bach's own "
-            "fugue subjects could not be counted here, since no fugue scores were available to this series offline; "
-            "the problem set asks you to do it."
+            f"How special is that? Run the same search on the opening phrase of every tune in Part 14's collection, allowing the second voice to enter anywhere up to the phrase's midpoint. <bookmark mark='a'/> {say(d['with_stretto'])} of the {say(d['n'])} phrases allow at least one stretto. <bookmark mark='b'/> Folk tunes repeat notes and outline a chord, which makes them easy to overlap. <bookmark mark='c'/> A chromatic subject like the king's is the opposite. With its rhythm simplified, the program finds no stretto for the king's theme until the second voice waits {say(int(d['royal']['earliest']))} of its {say(int(d['royal']['length']))} beats, when the two hardly overlap: its slide clashes with itself almost everywhere, which is part of why the king's challenge was hard. <bookmark mark='d'/> Bach’s complete fugue subjects were not counted in this offline build, since no fugue scores were available to this series offline; the problem set asks you to do it."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(t))
             for mark, r in zip("abcd", side):

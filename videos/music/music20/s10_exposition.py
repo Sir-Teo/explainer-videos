@@ -27,16 +27,7 @@ class Exposition(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"a three-voice exposition on the Tune, \ step by step", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Now build an exposition on the Tune, in three voices. <bookmark mark='a'/> Bars one and two: the subject, "
-            "the Tune's first phrase, alone in the top voice. <bookmark mark='b'/> Bars three and four: the tonal "
-            "answer in the middle voice, and above it the countersubject. <bookmark mark='c'/> The program writes the "
-            "countersubject by searching for the smoothest line, one note a beat, that is consonant with the answer on "
-            "every beat, makes no parallels, and avoids fifths, so that it could later go below. <bookmark mark='d'/> "
-            "The search is Part 17's Viterbi again: for every possible note on every beat, it keeps only the cheapest "
-            "way of arriving there. <bookmark mark='e'/> Bars five and six: the subject enters in the bass, the "
-            "countersubject moves down to the middle voice above it, and the top voice gets a free line, found the "
-            "same way against both. <bookmark mark='f'/> Moved down, one note of the countersubject clashed with the "
-            "subject, and the program altered it by a step, as composers did."
+            "Now build an exposition on the Tune, in three voices. <bookmark mark='a'/> Bars one and two: the subject, the Tune's first phrase, alone in the top voice. <bookmark mark='b'/> Bars three and four: the tonal answer in the middle voice, and above it the countersubject. <bookmark mark='c'/> The program writes the countersubject by searching for the smoothest line, one note a beat, that is consonant with the answer on every beat, makes no parallels, and avoids fifths, so that it could later go below. <bookmark mark='d'/> The search is Part 17's Viterbi again: for each candidate state it keeps the cheapest path into it, with the transition information this cost requires. <bookmark mark='e'/> Bars five and six: the subject enters in the bass, the countersubject moves down to the middle voice above it, and the top voice gets a free line, found the same way against both. <bookmark mark='f'/> Moved down, one note of the countersubject clashed with the subject, and the program altered it by a step, as composers did."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcdef", rows_[1:]):
@@ -108,12 +99,7 @@ class Exposition(SoundScene):
             (r"the rules make the exposition possible; \ they do not make it good", GREY_A))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"what the program did, \ and did not do", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            f"Check it: on all {say(f['beats'])} beats where two or three voices sound, {say(f['dissonant'])} are "
-            f"dissonant and there are {say(f['parallels'])} parallels. <bookmark mark='a'/> It is correct, and it is "
-            "plain: one note a beat, no suspensions, no rhythm of its own. <bookmark mark='b'/> A real countersubject "
-            "contrasts with its subject: it moves in quick notes where the subject holds, and holds where the subject "
-            "moves, so that the ear can follow two lines. <bookmark mark='c'/> As with the canons, the rules make an "
-            "exposition possible; they do not make it good."
+            f"Check it: on all {say(f['beats'])} beats where two or three voices sound, {say(f['dissonant'])} are dissonant and there are {say(f['parallels'])} parallels. <bookmark mark='a'/> It passes these limited checks, and it is deliberately plain: one note a beat, no suspensions, no rhythm of its own. <bookmark mark='b'/> A real countersubject contrasts with its subject: it moves in quick notes where the subject holds, and holds where the subject moves, so that the ear can follow two lines. <bookmark mark='c'/> As with the canons, the rules make an exposition possible; they do not make it good."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("abc", rows_[1:]):

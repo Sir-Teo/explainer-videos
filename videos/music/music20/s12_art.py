@@ -61,7 +61,7 @@ class Art(SoundScene):
             sing_voices(snd, g, [d["motif"]], beat=0.5)
             flash(snd, list(nm), [0.0, 1.0, 2.0, 3.0], hot=WHITE, base=TUNE)
         with self.voiceover(
-            "Four notes packed within a whole tone: a chromatic cell, the king's slide in miniature, and a signature "
+            "Four notes spanning a minor third: a chromatic cell, the king's slide in miniature, and a signature "
             "that composers from Schumann and Liszt to Schoenberg and Webern have borrowed."
         ):
             self.play(FadeIn(rows_[1]), FadeIn(rows_[2]))
@@ -80,14 +80,7 @@ class Art(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"the fugue that stops", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The story attached to it is famous. <bookmark mark='a'/> The final fugue breaks off in the middle of a "
-            "bar, soon after B, A, C, H has been combined with the other subjects. <bookmark mark='b'/> In the "
-            "manuscript, his son Carl Philipp Emanuel wrote that the composer died over this fugue. "
-            "<bookmark mark='c'/> Scholars now doubt it: the handwriting is earlier, and the ending was most likely "
-            "written on a separate sheet that is lost, or left for later. <bookmark mark='d'/> The plan, most agree, "
-            "was to bring the main subject in as a fourth, making a quadruple fugue, and the four subjects do fit "
-            "together, as later musicians who completed it have shown. <bookmark mark='e'/> Bach died in July 1750, and "
-            "the collection was printed the next year, unfinished."
+            "The story attached to it is famous. <bookmark mark='a'/> The final fugue breaks off in the middle of a bar, soon after B, A, C, H has been combined with the other subjects. <bookmark mark='b'/> In the manuscript, his son Carl Philipp Emanuel wrote that the composer died over this fugue. <bookmark mark='c'/> Scholars now doubt it: the handwriting is earlier, and a lost continuation and an unfinished plan are competing possibilities; the precise reason remains uncertain. <bookmark mark='d'/> One influential reconstruction proposes to bring the main subject in as a fourth, making a quadruple fugue, and the four subjects do fit together, as later musicians who completed it have shown. <bookmark mark='e'/> Bach died in July 1750, and the collection was printed the next year, unfinished."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

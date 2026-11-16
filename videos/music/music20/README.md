@@ -13,8 +13,7 @@ under Sources.
 
 * **A king's theme.** Potsdam, 7 May 1747; the royal theme heard (rhythm simplified); the *Musical Offering*; the
   plan.
-* **1. Rounds.** *Frère Jacques* in three voices, heard; why a round works (every two-bar piece against every
-  other; *Sumer is icumen in*); every one of Part 14's 54 tunes sung against itself in three voices at its best delay,
+* **1. Rounds.** *Frère Jacques* in three voices, heard; why a round works (compatible overlapping two-bar pieces; *Sumer is icumen in*); every one of Part 14's 54 tunes sung against itself in three voices at its best delay,
   judged on the strong beats: *Frère Jacques*, *Row, Row, Row Your Boat* and *Three Blind Mice*, the three known
   rounds, rank 1st, 3rd and 4th (the 2nd, *Go Tell Aunt Rhody*, has a harmony that never moves).
 * **2. Canon at every interval.** The Goldberg canons (1741), unison to ninth; a solver that counts canons exactly by
@@ -89,7 +88,7 @@ make a third, fifth, sixth, unison or octave (a fourth allowed above the lowest 
 parallel fifths or octaves; it hears no dissonance between beats and knows nothing of shape, so passing notes in real
 music would count as faults if they fell on beats. *The canon counts* are for one note a beat in C major within
 C4 to G5, starting and ending on C, with no repeated notes and leaps of at most a fifth or an octave; other choices
-change the numbers but not their order. *The rounds* are judged at each tune's best delay, a whole number of bars of
+can change both the numbers and their order. *The rounds* are judged at each tune's best delay, a whole number of bars of
 two beats, on strong beats only, with three voices in unison. *The two Bach subjects* (the royal theme and the head of
 *The Art of Fugue*) are written out for the series with their rhythm simplified; no score files were available
 offline, so the stretto search was not run on Bach's fugues, and the film says so. *The exposition* is one note a beat
@@ -160,3 +159,9 @@ python -m videos.music.labs 20                                  # the lab (write
 * D. Cope, *Experiments in Musical Intelligence* (1996); C.-Z. A. Huang and others, "Counterpoint by convolution",
   ISMIR (2017).
 * Part 14 for the tunes; Part 16 for the rules of two voices; Part 17 for Viterbi search.
+
+## Interpretation limits
+
+The round test checks the overlaps produced by a chosen delay; three voices do not require every pair of sections to sound together. The exact canon counts and interval ranking apply only to the stated pitch range, rhythm and rules. They are not measures of Bach’s difficulty or complete historical style. The sampled harmony checker cannot establish that a passage is universally consonant or artistically successful.
+
+The four-form table uses a fixed axis, or identifies sequences up to transposition when the axis follows the first note. Forty-eight row labels need not mean forty-eight distinct sequences for a symmetric row. Real and tonal answers require contextual musical judgment beyond this teaching heuristic. Bach’s tonal inversions can include chromatic adjustments. The cause of the unfinished final fugue and its intended continuation remain uncertain.

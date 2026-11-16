@@ -47,7 +47,7 @@ class Invertible(SoundScene):
         card = listen_card(r"Two counter-lines were written below the Tune's phrase. \ Each is now moved above it. \ Which survives the move, \ A or B?", width=10.0)
         with self.voiceover(
             "Two counter-lines were written below the Tune's first phrase by the solver: line A freely, line B with "
-            "no fifths against the phrase. Each has now been moved above the phrase. Which still sounds right, A or B?"
+            "no fifths against the phrase. Each has now been moved above the phrase. Which avoids the displayed on-beat fourths, A or B?"
         ):
             self.play(FadeIn(card))
         self.wait(0.8)
@@ -68,7 +68,7 @@ class Invertible(SoundScene):
         with self.voiceover(
             f"B. Below the phrase, both lines were clean. Moved above it, line A's fifths have become fourths over the "
             f"bass, {say(fa['dissonant'])} of them on the beat; line B, written without fifths, comes through with "
-            f"{say(fb['dissonant'])}. Bach planned his countersubjects like line B, so that they could go above or below "
+            f"{say(fb['dissonant'])}. Invertible countersubjects can be planned along these lines, with stylistic treatment of dissonance, so that they could go above or below "
             "the subject."
         ):
             self.play(FadeIn(res))

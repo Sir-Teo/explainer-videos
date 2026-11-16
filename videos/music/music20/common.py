@@ -17,7 +17,7 @@ from explainer.music.staff import GrandStaff, Staff  # noqa: F401
 from .compute import BEAT, CACHE, CLIPS, load  # noqa: F401
 
 PART = 20
-clip = clip_loader(CACHE, CLIPS)
+clip = clip_loader(CACHE, CLIPS, item_aliases={"fugue": "exposition"})
 WEAK = "#8A93A0"
 DIM = "#3A4250"
 VOICE_C = ("#F5C542", "#F472B6", "#7DD3FC", "#A3E635")             # first, second, third, fourth voice

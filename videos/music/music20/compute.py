@@ -98,13 +98,6 @@ def faults(lines, **kw):
 
 # ---------------------------------------------------------------------------
 def compute_hook() -> dict:
-    inv = K.diatonic_invert(a, K.degree_of(72)[0])
-    by_inversion = []
-    for dl in [float(x) for x in range(1, 7)]:
-        for iv in (-24, -19, -17, -12, -7, -5, 0, 5, 7, 12):
-            f = K.faults([a, K.transpose(K.shift(inv, dl), iv)], start=dl, stop=K.end(a))
-            if f["beats"] >= 2 and f["dissonant"] == 0 and f["parallels"] == 0:
-                by_inversion.append({"delay": dl, "interval": iv, "overlap": f["beats"]})
     roy = K.line(K.ROYAL_THEME, K.ROYAL_RHYTHM)
     c = play_lines([roy], beat=0.36)
     s = concat([c.at_level(LEVEL)], gap=0.0, names=["theme"])

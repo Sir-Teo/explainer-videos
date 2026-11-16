@@ -74,14 +74,7 @@ class Augment(SoundScene):
             (r"which is a search, \ like the solver's", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"canons as riddles", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Bach's canons in the Musical Offering continue this tradition of puzzles. <bookmark mark='a'/> Only one "
-            "line is printed. <bookmark mark='b'/> The clues are a sign where another voice enters, perhaps a clef "
-            "printed upside down, or a Latin motto. <bookmark mark='c'/> Over one of them Bach wrote: quaerendo "
-            "invenietis, seek and you shall find. <bookmark mark='d'/> To solve such a riddle, you try every entry "
-            "point, every interval and every one of the four forms, and keep the ones in which nothing clashes. "
-            "<bookmark mark='e'/> That is exactly a search over the possibilities, the kind the canon solver does. "
-            "Riddle canons have more than one solution surprisingly often, and solvers since Bach's pupils have argued "
-            "over which he meant."
+            "Bach's canons in the Musical Offering continue this tradition of puzzles. <bookmark mark='a'/> Some puzzle canons leave a following voice to be inferred from the printed material. <bookmark mark='b'/> The clues are a sign where another voice enters, perhaps a clef printed upside down, or a Latin motto. <bookmark mark='c'/> Over one of them Bach wrote: quaerendo invenietis, seek and you shall find. <bookmark mark='d'/> To solve such a riddle, you try every entry point, every interval and selected transformations and rhythmic proportions, and check the proposed solutions against stylistic constraints. <bookmark mark='e'/> That is exactly a search over the possibilities, the kind the canon solver does. Riddle canons have more than one solution surprisingly often, and solvers since Bach's pupils have argued over which he meant."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

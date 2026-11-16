@@ -27,12 +27,7 @@ class Crab(SoundScene):
             (r"so fill the melody from both ends at once, \ a pair at a time", TUNE))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(DOWN, buff=0.55)
         head = label(r"\textit{canon cancrizans}: \ the crab canon", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "The Musical Offering's crab canon is two voices playing the same line, one forwards and one backwards, "
-            "at the same time: crabs were thought to walk backwards. <bookmark mark='a'/> So the first note sounds "
-            "against the last, the second against the second-to-last, and so on. <bookmark mark='b'/> Every pair of "
-            "notes is heard twice, once near the start and once, the other way round, near the end, and the middle of "
-            "the piece is where the two voices cross. <bookmark mark='c'/> That suggests how to find such lines: fill "
-            "the melody from both ends at once, a pair of notes at a time, checking each pair against the pair before."
+            "The Musical Offering's crab canon is two voices playing the same line, one forwards and one backwards, at the same time: crabs were thought to walk backwards. <bookmark mark='a'/> So the first note sounds against the last, the second against the second-to-last, and so on. <bookmark mark='b'/> Every pair of notes is heard twice, once near the start and once, the other way round, near the end, and the midpoint is the temporal mirror; the voices need not cross in pitch. <bookmark mark='c'/> That suggests how to find such lines: fill the melody from both ends at once, a pair of notes at a time, checking each pair against the pair before."
         ) as vo:
             self.play(FadeIn(head), FadeIn(dots_a), FadeIn(ia))
             vo.wait_until("a")
@@ -57,14 +52,7 @@ class Crab(SoundScene):
                       label(r"plenty of crabs: \ the hard part is a good one", font_size=24, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 4.2 + DOWN * 0.3)
         r = d["counts"]["12"] / d["counts"]["10"]
         with self.voiceover(
-            "Count them, with the canon solver's rules: every pair consonant, no parallel fifths or octaves, beginning "
-            "and ending on notes of the home chord. <bookmark mark='a'/> For four notes there are "
-            f"{say(d['counts']['4'])}; for twelve, about {say(round(d['counts']['12'] / 1e6))} million, about "
-            f"{say(round(r))} times more for every two notes added, about five times for each note. That is "
-            "because each new pair of notes, one at either end, must agree only with itself and with the pair before; "
-            "the count grows exponentially, as every such chain of constraints does. <bookmark mark='b'/> Crab "
-            "canons are not rare at all. What is rare is one that makes sense forwards and backwards as a melody, with a shape a listener can "
-            "follow both ways."
+            f"Count them, with the canon solver's rules: every pair consonant, no parallel fifths or octaves, beginning and ending on notes of the home chord. <bookmark mark='a'/> For four notes there are {say(d['counts']['4'])}; for twelve, about {say(round(d['counts']['12'] / 1000000.0))} million, about {say(round(r))} times more for every two notes added, about five times for each note. That is because each new pair of notes, one at either end, must agree only with itself and with the pair before; the count grows exponentially, for these transition rules; local constraints do not universally imply this growth rate. <bookmark mark='b'/> There are many crab canons under this finite rule set. What is rare is one that makes sense forwards and backwards as a melody, with a shape a listener can follow both ways."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(nums), FadeIn(t))
             vo.wait_until("a")
@@ -94,9 +82,7 @@ class Crab(SoundScene):
             sing_voices(snd, g1, [d["lines"][0]], start=d["starts"]["alone"])
             sing_voices(snd, g2, d["lines"], start=d["starts"]["both"])
         with self.voiceover(
-            "In 1979 Douglas Hofstadter wrote a dialogue in this shape for his book Gödel, Escher, Bach: its lines "
-            "read the same forwards and backwards, spoken by two characters, the Tortoise and Achilles. A crab canon "
-            "is a palindrome that two voices sing at once."
+            'In 1979 Douglas Hofstadter wrote a dialogue in this shape for his book Gödel, Escher, Bach: its dialogue structure mirrors itself in reverse order, spoken by two characters, the Tortoise and Achilles. A crab canon is a palindrome that two voices sing at once.'
         ):
             self.wait(0.5)
         self.wait(0.4)

@@ -72,3 +72,19 @@ def test_the_part_keeps_the_series_rules():
     check_scenes_and_clips(compute, SCENES)
     check_windows(compute, SCENES)
     check_ear_thread(compute, SCENES)
+
+
+def test_hook_builds_from_the_royal_theme_without_a_warm_cache(monkeypatch):
+    from explainer.music.sound import Clip
+
+    played = []
+    def render(lines, **kwargs):
+        played.extend(lines)
+        return Clip(np.zeros(24000), events={f"v0.n{k}": float(k) for k in range(len(lines[0]))})
+
+    monkeypatch.setattr(compute, "play_lines", render)
+    monkeypatch.setattr(compute, "save", lambda *args, **kwargs: {"test": True})
+    result = compute.compute_hook()
+    assert played == [K.line(K.ROYAL_THEME, K.ROYAL_RHYTHM)]
+    assert result["theme"] == compute.rows(played[0])
+    assert len(result["times"]) == len(K.ROYAL_THEME)

@@ -50,14 +50,7 @@ class Frontier(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"fugues written by machine", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "And to write one. <bookmark mark='a'/> Rules and search, as in this part, give results that are correct and "
-            "exhaustive, and plain. <bookmark mark='b'/> In the 1980s and 1990s, David Cope's program EMI wrote music "
-            "in the style of Bach and others by recombining fragments of their own works. <bookmark mark='c'/> More "
-            "recently, neural networks trained on Bach's chorales learned to fill in missing voices, and in 2019 a web "
-            "page let millions of people write a melody and hear it harmonized in his style. "
-            "<bookmark mark='d'/> Fugue is harder than chorale: it needs a plan over minutes, entries placed in keys, "
-            "tension built and released. Models that write convincing local counterpoint still struggle with that "
-            "long-range shape, which is Part 21's subject: form."
+            "And to write one. <bookmark mark='a'/> Rules and search, as in this part, can exhaust the specified finite search space, without guaranteeing full stylistic correctness or musical quality. <bookmark mark='b'/> In the 1980s and 1990s, David Cope's program EMI wrote music in the style of Bach and others by recombining fragments of their own works. <bookmark mark='c'/> More recently, neural networks trained on Bach's chorales learned to fill in missing voices, and in 2019 a web page let millions of people write a melody and hear it harmonized in his style. <bookmark mark='d'/> Fugue is harder than chorale: it needs a plan over minutes, entries placed in keys, tension built and released. Models that write convincing local counterpoint still struggle with that long-range shape, which is Part 21's subject: form."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcd", rows_[1:]):
@@ -77,12 +70,7 @@ class Frontier(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"what is still open", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "And the old question that canons raise. <bookmark mark='a'/> When a subject is turned upside down or "
-            "backwards, does the listener hear the same theme? <bookmark mark='b'/> Experiments suggest that untrained "
-            "listeners recognize inversions some of the time and retrogrades rarely, as chapter three's question may "
-            "have shown you. <bookmark mark='c'/> So how much of a fugue's structure is for the ear, and how much for "
-            "the eye of a reader of the score? <bookmark mark='d'/> Designing an experiment that separates the two is "
-            "this part's research problem."
+            "And the old question that canons raise. <bookmark mark='a'/> When a subject is turned upside down or backwards, does the listener hear the same theme? <bookmark mark='b'/> Experiments suggest that recognition of inversions and retrogrades depends on task, familiarity, contour and training; retrogrades are often difficult, as chapter three's question may have shown you. <bookmark mark='c'/> So how much of a fugue's structure is for the ear, and how much for the eye of a reader of the score? <bookmark mark='d'/> Designing an experiment that separates the two is this part's research problem."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcd", rows_[1:]):

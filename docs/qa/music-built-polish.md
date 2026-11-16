@@ -24,8 +24,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 17 — Four Voices | Complete | Open |
 | 18 — Progressions | Complete | Open |
 | 19 — Chromatic Harmony | Complete | Open |
-| 20 — Canon and Fugue | In progress | Open |
-| 21–68 | Queued | Open |
+| 20 — Canon and Fugue | Complete | Open |
+| 21 — Form | In progress | Open |
+| 22–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -88,7 +89,9 @@ motion checks pass. Four native 1080p stills inspected. Local identities: `rende
 
 Part 19: fourteen chapter previews reviewed; 24 tests, the lab, 14 sound cases and 12 listening-window motion checks pass. Three native stills inspected. Identities: `renders/qa/music19/source-receipt.json`.
 
-**Current: Part 20.** Chapter previews are rendering. Parts 21–39 have source repairs and verification
+Part 20: fourteen chapter previews reviewed; 25 tests, the lab, 14 sound cases and 15 listening-window motion checks pass. Three native stills inspected. Identities: `renders/qa/music20/source-receipt.json`.
+
+**Current: Part 21.** Chapter previews are rendering. Parts 22–42 have source repairs and verification
 underway for sequential previews. Automated endpoint preflight continues; warnings require review and do not
 constitute episode approval.
 

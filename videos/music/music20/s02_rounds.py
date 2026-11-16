@@ -45,12 +45,7 @@ class Rounds(SoundScene):
             (r"\textit{Sumer is icumen in}, \ about 1250: \ six voices over one harmony", GREY_A))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"why a round works", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Why does it work? <bookmark mark='a'/> Cut the tune into its two-bar pieces. <bookmark mark='b'/> With "
-            "three voices two bars apart, you hear the first piece against the second against the third, then the "
-            "second against the third against the fourth. <bookmark mark='c'/> So every piece must sound well with "
-            "every other. <bookmark mark='d'/> The easy way is for every piece to outline the same chord: Frère Jacques "
-            "never leaves its home chord. <bookmark mark='e'/> The oldest round in English, Sumer is icumen in, written down "
-            "in about 1250, does the same in six voices: the cuckoo sings over a harmony that barely moves."
+            "Why does it work? <bookmark mark='a'/> Cut the tune into its two-bar pieces. <bookmark mark='b'/> With three voices two bars apart, you hear the first piece against the second against the third, then the second against the third against the fourth. <bookmark mark='c'/> So the pieces that overlap at this entry delay must fit together; not every pair need overlap in three voices. <bookmark mark='d'/> The easy way is for every piece to outline the same chord: this simplified Frère Jacques arrangement stays over its home harmony. <bookmark mark='e'/> The earliest surviving well-known English round, Sumer is icumen in, written down in about 1250, combines four round voices with a two-voice repeating pes: the cuckoo sings over a harmony that barely moves."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -76,7 +71,7 @@ class Rounds(SoundScene):
             f"{ORD[k['Frère Jacques']]}, Row, Row, Row Your Boat {ORD[k['Row, Row, Row Your Boat']]}, and Three Blind Mice "
             f"{ORD[k['Three Blind Mice']]}, "
             f"out of {say(d['n_tunes'])}. The fourth tune in the top four, Go Tell Aunt Rhody, simply has a harmony that "
-            "never moves. A round is a melody that agrees with itself."
+            "never moves. This ranks compatibility on selected strong beats, not every aspect of successful round writing."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(t))
             vo.wait_until("a")
