@@ -23,12 +23,7 @@ class Planing(SoundScene):
             (r"the rule against parallels broken on purpose, \ and all the time", GREY_A),
         ]
         rows_scene(self, r"planing", items,
-                   "The new scales came with a new way of using chords. <bookmark mark='b'/> In functional harmony every chord "
-                   "has a job, tonic, subdominant, dominant, as Part 18 said, <bookmark mark='c'/> and the voices move by the "
-                   "shortest way, with parallel fifths forbidden, as in Part 17. <bookmark mark='d'/> Planing puts one chord "
-                   "shape under every note of a melody and slides it along in parallel. <bookmark mark='e'/> The chord no "
-                   "longer has a job; it thickens the line, like an organ stop adding a colour. <bookmark mark='f'/> The rule "
-                   "against parallels is broken on purpose, in every chord.", marks="cdef")
+                   "The new scales came with a new way of using chords. <bookmark mark='b'/> In functional harmony every chord has a job, tonic, subdominant, dominant, as Part 18 said, <bookmark mark='c'/> and voice-leading conventions often favor smooth motion and restrict parallel perfect intervals, without requiring a unique shortest path, as in Part 17. <bookmark mark='d'/> Planing puts one chord shape under every note of a melody and slides it along in parallel. <bookmark mark='e'/> Parallel motion can emphasize color over conventional function, though planed chords can retain contextual roles; it thickens the line, like an organ stop adding a colour. <bookmark mark='f'/> The rule against parallels is broken on purpose, in every chord.", marks="cdef")
 
     # ------------------------------------------------------------------
     def quiz(self):
@@ -75,13 +70,7 @@ class Planing(SoundScene):
             (r"Debussy is in the public domain; \ the next chapters' composers mostly are not, \ so the film plays its own sketches", GREY_A),
         ]
         rows_scene(self, r"a sunken cathedral", items,
-                   "Debussy's best-known planing is in La cathédrale engloutie, the sunken cathedral, of 1910, a church that "
-                   "rises from the sea in a legend and sinks back. <bookmark mark='c'/> Its chords of open fifths and octaves "
-                   "slide in parallel, like an organ heard from far away, <bookmark mark='d'/> and they ring like bells, "
-                   "because a planed chord of fifths and octaves is close to the overtones of a single note, which Part 3 "
-                   "drew. <bookmark mark='e'/> The technique went on to become a sound of jazz piano and of film. "
-                   "<bookmark mark='f'/> One note on what you will hear: most of this era's music is still in copyright, so "
-                   "the examples in this part are the film's own sketches, built on the Tune.", marks="cdef")
+                   "Debussy's best-known planing is in La cathédrale engloutie, the sunken cathedral, of 1910, a church that rises from the sea in a legend and sinks back. <bookmark mark='c'/> Its chords of open fifths and octaves slide in parallel, like an organ heard from far away, <bookmark mark='d'/> and they ring like bells, because a planed chord of fifths and octaves is close to the overtones of a single note, which Part 3 drew. <bookmark mark='e'/> The technique went on to become a sound of jazz piano and of film. <bookmark mark='f'/> One note on what you will hear: the examples in this part are the film’s own sketches, keeping the construction explicit, built on the Tune.", marks="cdef")
 
     # ------------------------------------------------------------------
     def jazz(self):

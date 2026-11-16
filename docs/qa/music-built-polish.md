@@ -32,8 +32,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 25 — The Baroque | Complete | Open |
 | 26 — The Classical Style | Complete | Open |
 | 27 — The Romantic Century | Complete | Open |
-| 28 — New Scales, New Rhythms | In progress | Open |
-| 29–68 | Queued | Open |
+| 28 — New Scales, New Rhythms | Complete | Open |
+| 29 — Twelve Tones | In progress | Open |
+| 30–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -112,7 +113,9 @@ Part 26: all 11 chapter preview sheets reviewed; sound and 12 listening-window m
 
 Part 27: all 12 chapter preview sheets reviewed; sound and 10 listening-window motion checks pass. Local identities: `renders/qa/music27/source-receipt.json`.
 
-**Current: Part 28.** Source review has reached Part 68; episode-specific model computations, native checks and sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 28: all 12 chapter preview sheets reviewed; sound and 14 listening-window motion checks pass. Local identities: `renders/qa/music28/source-receipt.json`.
+
+**Current: Part 29.** Source review has reached Part 68; episode-specific model computations, native checks and sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

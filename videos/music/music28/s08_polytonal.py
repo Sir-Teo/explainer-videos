@@ -77,13 +77,7 @@ class Polytonal(SoundScene):
             (r"two clear keys make one unclear one", WHITE))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
         side.move_to(RIGHT * 3.6 + DOWN * 0.2)
         with self.voiceover(
-            "Ask the key-finder. <bookmark mark='a'/> The tune alone: C major, with a correlation of "
-            f"{say(f['melody']['r'], 2)}, about as clear as a key gets. <bookmark mark='b'/> The chords alone: F sharp "
-            f"major, {say(f['chords']['r'], 2)}. <bookmark mark='c'/> Both together: the best single key it can find "
-            f"is {kspeak(f['both']['key'])}, which is neither, "
-            f"and it fits only {say(f['both']['r'], 2)}. <bookmark mark='d'/> Two clear keys add up to one unclear "
-            "one. Whether a listener hears two keys or one strange one depends on keeping the layers apart, by register, "
-            "by instrument and by rhythm, which is what Part 45's auditory scene is about."
+            f"Ask the key-finder. <bookmark mark='a'/> The tune alone: C major, with a correlation of {say(f['melody']['r'], 2)}, about as clear as a key gets. <bookmark mark='b'/> The chords alone: F sharp major, {say(f['chords']['r'], 2)}. <bookmark mark='c'/> Both together: the best single key it can find is {kspeak(f['both']['key'])}, which is neither, and its correlation is {say(f['both']['r'], 2)}. <bookmark mark='d'/> The combined distribution produces a different best profile; correlation is not a calibrated measure of perceptual clarity. Whether a listener hears two keys or one strange one depends on keeping the layers apart, by register, by instrument and by rhythm, which is what Part 45's auditory scene is about."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
             for mark, r in zip("abcd", side):
@@ -105,7 +99,7 @@ class Polytonal(SoundScene):
                    "Paris kept experimenting. <bookmark mark='b'/> After 1918 a group of young composers, Les Six, took Erik "
                    "Satie as their mascot and turned against Wagner's weight and Debussy's mist. <bookmark mark='c'/> Satie's "
                    "music had long been plain, ironic and repetitive; his Gymnopédies date from 1888. <bookmark mark='d'/> "
-                   "Ravel's Boléro, of 1928, is one tune over one ostinato, made into a long crescendo of orchestration. "
+                   "Ravel's Boléro, of 1928, is two principal melodic strains over a repeating rhythmic ostinato, made into a long crescendo of orchestration. "
                    "<bookmark mark='e'/> Jazz arrived, and Milhaud put it into a ballet, La création du monde, in 1923. "
                    "<bookmark mark='f'/> The new scales and rhythms were becoming ordinary tools, in concert music and "
                    "popular music alike.", marks="cdef")
@@ -120,4 +114,4 @@ class Polytonal(SoundScene):
             (r"most of it unperformed for decades; \ a Pulitzer Prize in 1947", GREY_A),
         ]
         rows_scene(self, r"Ives in Connecticut", items,
-                   "Americans had got there by another road. <bookmark mark='b'/> Charles Ives ran an insurance agency in New York and composed in his spare time. <bookmark mark='c'/> His father, a Connecticut bandmaster, was remembered for marching two bands past each other playing different tunes. <bookmark mark='d'/> In The Unanswered Question, of 1908, strings play slow triads, a trumpet asks the same phrase again and again, and a group of flutes answers in a different key and tempo. <bookmark mark='e'/> Layers in different keys and tempos, heard at once, years before Paris. <bookmark mark='f'/> Most of it went unperformed for decades; his Third Symphony won a Pulitzer Prize in 1947.", marks="cdef")
+                   "Americans had got there by another road. <bookmark mark='b'/> Charles Ives ran an insurance agency in New York and composed in his spare time. <bookmark mark='c'/> His father, a Connecticut bandmaster, was remembered for marching two bands past each other playing different tunes. <bookmark mark='d'/> In The Unanswered Question, of 1908, strings play slow triads, a trumpet asks the same phrase again and again, and a group of flutes answers with contrasting, increasingly unsettled pitch material and tempo. <bookmark mark='e'/> Layers in different keys and tempos, heard at once, years before Paris. <bookmark mark='f'/> Most of it went unperformed for decades; his Third Symphony won a Pulitzer Prize in 1947.", marks="cdef")

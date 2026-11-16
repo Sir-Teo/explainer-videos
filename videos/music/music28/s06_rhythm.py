@@ -21,16 +21,10 @@ class Rhythm(SoundScene):
             (r"one dissonant chord, \ repeated in even pulses, \ with accents in unpredictable places", WHITE),
             (r"in its last dance the metre changes almost every bar: \ 3/16, \ 2/16, \ 5/16 ...", WHITE),
             (r"the ostinato: \ a short figure repeated, \ the music built from blocks set side by side", TUNE),
-            (r"the score is in copyright in much of the world: \ the film describes it and plays its own sketch", GREY_A),
+            (r"the film describes the work and plays an original sketch", GREY_A),
         ]
         rows_scene(self, r"the Rite", items,
-                   "The most famous rhythmic shock of the century came in 1913. <bookmark mark='b'/> Stravinsky's ballet The Rite "
-                   "of Spring, a vision of pagan Russia, was first danced in Paris on the twenty-ninth of May. "
-                   "<bookmark mark='c'/> In one of its dances a single dissonant chord is repeated in even pulses by the strings, "
-                   "while eight horns punch accents in places the ear cannot predict. <bookmark mark='d'/> In its last dance "
-                   "the metre changes almost every bar. <bookmark mark='e'/> And the music is built from ostinatos, short "
-                   "figures repeated and set side by side in blocks. <bookmark mark='f'/> The score is still in copyright in "
-                   "much of the world, so the film describes it and plays its own sketch of the idea.", marks="cdef")
+                   "The most famous rhythmic shock of the century came in 1913. <bookmark mark='b'/> Stravinsky's ballet The Rite of Spring, a vision of pagan Russia, was first danced in Paris on the twenty-ninth of May. <bookmark mark='c'/> In one of its dances a single dissonant chord is repeated in even pulses by the strings, while eight horns punch accents in places the ear cannot predict. <bookmark mark='d'/> In its last dance the metre changes almost every bar. <bookmark mark='e'/> And the music is built from ostinatos, short figures repeated and set side by side in blocks. <bookmark mark='f'/> The film describes the work and plays its own sketch so the construction remains explicit.", marks="cdef")
 
     # ------------------------------------------------------------------
     def quiz(self):
@@ -64,9 +58,7 @@ class Rhythm(SoundScene):
         ans = VGroup(label(rf"A: \ accents at random: \ {round(100 * d['off']['displaced'])} in 100 off the beat", font_size=21, color=EAR).next_to(rA, DOWN, buff=0.25),
                      label(r"B: \ every fourth pulse: \ the metre is obvious", font_size=21, color=BLUE).next_to(rB, DOWN, buff=0.25))
         with self.voiceover(
-            "In A the accents fall at random, and seven of the eight land off the beat of a four-four bar: the ear keeps "
-            "trying to build a metre and keeps failing. In B the metre announces itself after two accents. The pulse never "
-            "changed; only the accents moved."
+            'In A the accents fall at random, and seven of the eight land off the beat of a four-four bar: these accents conflict with the chosen four-four grid; listeners may still infer metre from other cues. In B the metre announces itself after two accents. The pulse never changed; only the accents moved.'
         ):
             self.play(FadeIn(ans), *[r.animate.set_color(EAR) for r in rA], *[r.animate.set_color(BLUE) for r in rB])
         self.wait(0.4)
@@ -76,19 +68,14 @@ class Rhythm(SoundScene):
     def measure(self):
         rows_ = text_rows([
             (r"Part 11's syncopation index: \ an accent on a weak pulse followed by silence on a strong one", WHITE),
-            (r"a random accent pattern is, \ on average, \ highly syncopated against any metre you try", WHITE),
-            (r"so the listener stops predicting: \ the pulse remains, \ the hierarchy of beats does not", WHITE),
+            (r"random accents can conflict with a chosen metre; \ other cues and metric models matter", WHITE),
+            (r"pulse can remain while accents give less consistent metric evidence", WHITE),
             (r"a new kind of rhythmic energy: \ surprise in place of swing", TUNE),
             (r"Part 46 measures what listeners predict, \ and what surprises them", GREY_A),
         ], font_size=24)
-        head = label(r"why the ear gives up", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        head = label(r"when metric cues conflict", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Why does the ear give up? <bookmark mark='a'/> Part 11 measured syncopation as accents on weak pulses "
-            "followed by silence on strong ones. <bookmark mark='b'/> Accents scattered at random are, on average, highly "
-            "syncopated against any metre the listener tries. <bookmark mark='c'/> So the listener stops predicting: the "
-            "pulse is still there, but the hierarchy of strong and weak beats is gone. <bookmark mark='d'/> It is a new "
-            "kind of rhythmic energy, surprise in place of swing. <bookmark mark='e'/> Part 46 measures what listeners "
-            "predict and what surprises them."
+            "Why does the ear give up? <bookmark mark='a'/> Part 11 measured syncopation as accents on weak pulses followed by silence on strong ones. <bookmark mark='b'/> Random accents can conflict with a specified metre, but syncopation depends on the pattern, the metric model and other cues. <bookmark mark='c'/> This can make metric prediction harder, without implying that every listener stops predicting: the pulse is still there, but the accents provide less consistent evidence for this hierarchy. <bookmark mark='d'/> It is a new kind of rhythmic energy, surprise in place of swing. <bookmark mark='e'/> Part 46 measures what listeners predict and what surprises them."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

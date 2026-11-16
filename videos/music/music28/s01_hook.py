@@ -66,7 +66,7 @@ class Hook(SoundScene):
     # ------------------------------------------------------------------
     def plan(self):
         card = objectives_card([
-            r"the whole-tone scale: \ a scale with no home note",
+            r"the whole-tone scale: \ a scale whose symmetric pitch collection does not uniquely privilege a home note",
             r"every scale with limited transposition, \ enumerated: \ Messiaen's seven among fifteen",
             r"planing, \ the octatonic, \ and two keys at once, \ heard",
             r"rhythm set loose: \ displaced accents and additive metres",
@@ -74,7 +74,7 @@ class Hook(SoundScene):
             r"is a passage octatonic, \ or would any passage fit?",
         ], title=r"In this part", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "Here is the plan. First, a scale with no home note, the whole-tone scale. <bookmark mark='b'/> Then every scale "
+            "Here is the plan. First, a scale whose symmetric pitch collection does not uniquely privilege a home note, the whole-tone scale. <bookmark mark='b'/> Then every scale "
             "that shares its symmetry, all of them, enumerated, with Messiaen's famous seven among them. "
             "<bookmark mark='c'/> Chords that slide in parallel, the octatonic scale, and two keys at once. "
             "<bookmark mark='d'/> Rhythm set loose, from displaced accents to additive metres. <bookmark mark='e'/> The "

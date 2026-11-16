@@ -52,12 +52,7 @@ class Symmetry(SoundScene):
         small = [i for i, s in enumerate(sym) if not s["mode"]]
         big = [i for i, s in enumerate(sym) if s["mode"]]
         with self.voiceover(
-            f"Only {say(d['n_symmetric'])} of the {say(d['classes'])} shapes do, leaving out the empty set and all twelve "
-            "notes. <bookmark mark='a'/> The small ones are familiar chords: the tritone, the augmented triad, the "
-            "diminished seventh, and a few six-note sets. <bookmark mark='b'/> The large ones, in gold, are exactly the "
-            "seven scales that Olivier Messiaen listed in 1944 as his modes of limited transposition: the whole-tone scale "
-            "is his first mode, the octatonic his second. Each label gives how many different transpositions the shape has: "
-            "two, three, four or six, never twelve."
+            f"Only {say(d['n_symmetric'])} of the {say(d['classes'])} shapes do, leaving out the empty set and all twelve notes. <bookmark mark='a'/> The small ones are familiar chords: the tritone, the augmented triad, the diminished seventh, and a few six-note sets. <bookmark mark='b'/> The highlighted ones are Messiaen’s selected seven scales, rather than all sets above a unique size threshold; these are the scales that Olivier Messiaen listed in 1944 as his modes of limited transposition: the whole-tone scale is his first mode, the octatonic his second. Each label gives how many different transpositions the shape has: two, three, four or six, never twelve."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -100,7 +95,7 @@ class Symmetry(SoundScene):
             (r"the modes cannot be transposed more than a few times without repeating: \ their `charm of impossibilities'", WHITE),
             (r"he heard them as colours: \ he had a form of synaesthesia, \ by his own account", WHITE),
             (r"modes 2 and 3 everywhere in his music, \ from the 1930s to the end of his life", TUNE),
-            (r"a theorem, \ discovered by a composer by ear", GREY_A),
+            (r"a compositional use of transpositional symmetry", GREY_A),
         ]
         rows_scene(self, r"Messiaen's modes", items,
                    "Messiaen arrived at them by ear. <bookmark mark='b'/> He set them out in his Technique of my Musical "
@@ -108,7 +103,7 @@ class Symmetry(SoundScene):
                    "cannot be transposed more than a few times without coming back to themselves. <bookmark mark='d'/> He "
                    "heard them as colours; by his own account he had a form of synaesthesia. <bookmark mark='e'/> The "
                    "second and third modes run through his music from the 1930s to the end of his life. "
-                   "<bookmark mark='f'/> It is a small theorem, found by a composer before anyone proved it.", marks="cdef")
+                   "<bookmark mark='f'/> It is a small theorem, used by a composer; this film does not establish priority for a mathematical discovery.", marks="cdef")
 
     # ------------------------------------------------------------------
     def heard(self):
@@ -144,11 +139,11 @@ class Symmetry(SoundScene):
     # ------------------------------------------------------------------
     def hexatonic(self):
         items = [
-            (r"the hexatonic scale \{0, 1, 4, 5, 8, 9\}: \ half step, \ minor third, \ repeated", WHITE),
+            (r"the hexatonic scale \{0, 3, 4, 7, 8, 11\}: \ half step, \ minor third, \ repeated", WHITE),
             (r"it holds three major and three minor triads, \ a major third apart", WHITE),
             (r"Richard Cohn: \ `hexatonic poles', \ C major to A$\flat$ minor, \ the uncanny in Wagner and in film", WHITE),
             (r"symmetric sets give chords that are close in notes and far in keys", TUNE),
             (r"Part 32 maps this closeness as geometry", GREY_A),
         ]
         rows_scene(self, r"the six-note symmetric sets", items,
-                   "One of the smaller symmetric sets has its own story. <bookmark mark='b'/> The hexatonic scale alternates a half step and a minor third: zero, one, four, five, eight, nine. <bookmark mark='c'/> It holds three major and three minor triads, a major third apart. <bookmark mark='d'/> The theorist Richard Cohn calls the move from C major to A flat minor, the two triads in it that share no notes, a hexatonic pole, and hears it as the sound of the uncanny, in Wagner and in film scores. <bookmark mark='e'/> Symmetric sets give chords that are close in notes and far apart in keys. <bookmark mark='f'/> Part 32 maps that closeness as a geometry.", marks="cdef")
+                   "One of the smaller symmetric sets has its own story. <bookmark mark='b'/> The hexatonic scale alternates a half step and a minor third: zero, three, four, seven, eight, eleven, a transposition of the canonical shape. <bookmark mark='c'/> It holds three major and three minor triads, a major third apart. <bookmark mark='d'/> The theorist Richard Cohn calls the move from C major to A flat minor, the two triads in it that share no notes, a hexatonic pole, and hears it as the sound of the uncanny, in Wagner and in film scores. <bookmark mark='e'/> Symmetric sets give chords that are close in notes and far apart in keys. <bookmark mark='f'/> Part 32 maps that closeness as a geometry.", marks="cdef")

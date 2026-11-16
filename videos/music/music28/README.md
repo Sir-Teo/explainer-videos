@@ -15,7 +15,7 @@ is an original sketch built on the Tune or on a stated rule (SYLLABUS §2.4); th
   major and in whole tones: which has no half steps?); Scriabin's mystic chord; Debussy's *Voiles*; the pentatonic; the
   same melody on five equal steps and on the black keys, heard (they differ by up to 80 cents); Busoni, Hába, Carrillo.
 * **2. Every symmetric scale.** 4,096 sets, 352 shapes up to transposition; the 15 with limited transposition, of which
-  the seven largest are Messiaen's modes; modes 1 to 3 heard; the hexatonic and Cohn's hexatonic poles; the proof that
+  seven form Messiaen’s selected modes; modes 1 to 3 heard; the hexatonic and Cohn's hexatonic poles; the proof that
   every symmetric set repeats a pattern every 1, 2, 3, 4 or 6 semitones; Messiaen's *Technique*.
 * **3. Chords that slide.** Planing; an ear question (planed major triads or functional chords?); planing in jazz and
   film; *La cathédrale engloutie*.
@@ -64,7 +64,7 @@ recordings, and no copyrighted music is played.
 Javanese tunings vary from set to set and are not equal, and real gamelan pieces are organized far more richly. *The
 octatonic and diatonic chance fits* count pitch-class sets, not passages: a real passage's notes are not chosen at
 random, which is why the research problem calls for a null built from music. *The golden-section null* places landmarks
-uniformly at random; real climaxes cluster in the second half of a piece, which makes chance hits more likely, not less.
+uniformly at random; real landmark distributions need not be uniform; their location and dependence can change the hit rate in either direction.
 *The accents* of the *Rite*-like example are placed by a random generator, not taken from the score. *The bitonal key
 fits* weight every note by its duration.
 
@@ -127,3 +127,11 @@ python -m videos.music.labs 28                                  # the lab (write
 * F. Busoni, *Sketch of a New Esthetic of Music* (1907).
 * Part 6 for temperaments; Part 9 for bars and gongs; Part 11 for syncopation and polyrhythm; Part 12 for scales and
   Burnside's count; Part 15 for key profiles; Part 21 for the golden section.
+
+## Symmetry and perception
+
+The 352 transposition classes include the empty and full sets; 15 nontrivial limited-transposition classes remain when those two symmetric cases are excluded. Messiaen’s seven are a selected subset, not uniquely the seven largest by cardinality. The C-major/A-flat-minor hexatonic-pole example uses {0,3,4,7,8,11}, a transposition of canonical {0,1,4,5,8,9}.
+
+Whole-tone symmetry does not uniquely privilege a tonic, but context can establish one. Major-scale asymmetry alone also does not choose a tonic among relative modes. Random accents can weaken a specified grid’s cues without universally destroying metre. Profile correlations are model fits, not calibrated perceptual clarity or proof that listeners hear two keys. A palindromic duration sequence need not have palindromic pitches or be perceptually recognized.
+
+The scale-fit probabilities use uniformly selected distinct pitch-class sets. Cardinality, segmentation, musical sampling and model complexity matter; long duration alone does not establish significance. Forte’s total of 224 TnI classes refers to all cardinalities including empty and full sets, rather than the scope of the original catalog alone. Boléro uses two principal melodic strains. The musical examples here are original constructions.

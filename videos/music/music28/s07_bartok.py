@@ -27,13 +27,7 @@ class Bartok(SoundScene):
             (r"Bartók died in 1945; \ much of his music is still in copyright in some countries", GREY_A),
         ]
         rows_scene(self, r"music from the villages", items,
-                   "In Hungary the new materials came from fieldwork. <bookmark mark='b'/> From 1906 Béla Bartók and Zoltán "
-                   "Kodály travelled through villages recording peasant songs on phonograph cylinders, <bookmark mark='c'/> "
-                   "Hungarian, Slovak and Romanian at first, later Turkish and Arab, and Bartók transcribed thousands of "
-                   "melodies. <bookmark mark='d'/> He found old modes, pentatonic tunes, and dances whose beats come in uneven "
-                   "groups of two and three pulses. <bookmark mark='e'/> His aim, he wrote, was not to quote these tunes but "
-                   "to absorb them until they became a composer's mother tongue. <bookmark mark='f'/> Much of his music is "
-                   "still in copyright in some countries, so the examples here are ours.", marks="cdef")
+                   "In Hungary the new materials came from fieldwork. <bookmark mark='b'/> From 1906 Béla Bartók and Zoltán Kodály travelled through villages recording peasant songs on phonograph cylinders, <bookmark mark='c'/> Hungarian, Slovak and Romanian at first, later Turkish and Arab, and Bartók transcribed thousands of melodies. <bookmark mark='d'/> He found old modes, pentatonic tunes, and dances whose beats come in uneven groups of two and three pulses. <bookmark mark='e'/> His aim, he wrote, was not to quote these tunes but to absorb them until they became a composer's mother tongue. <bookmark mark='f'/> The examples here are original sketches of the stated procedures.", marks="cdef")
 
     # ------------------------------------------------------------------
     def additive(self):
@@ -134,7 +128,7 @@ class Bartok(SoundScene):
             "can choose among many landmarks, climaxes, entries, changes of texture. With five to choose from, the chance is "
             f"{say(round(100 * d['p5']))} in a hundred. <bookmark mark='c'/> Allow two bars either way and ten landmarks, and "
             f"it is {say(round(100 * d['p10_2']))} in a hundred: more likely than not. <bookmark mark='d'/> A golden-section "
-            "claim is evidence only if its landmarks were fixed before anyone looked for the ratio."
+            "claim is stronger evidence when landmarks and tolerances are specified independently, or when selection and multiple testing are modeled explicitly."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl), Create(c1))
             vo.wait_until("a")

@@ -50,10 +50,7 @@ class Messiaen(SoundScene):
         g = mroll(d["notes"], width=9.0, height=2.0, lo=58, hi=82, color=TUNE).move_to(DOWN * 1.3)
         head = label(r"a rhythm that reads the same backwards, \ with chords from the second mode \ (ours)", font_size=24, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "A non-retrogradable rhythm is a palindrome: it reads the same forwards and backwards, so playing it in reverse "
-            "changes nothing. Here, durations of one, two, three, two and one sixteenths, mirrored about the middle. Each "
-            "duration carries a chord drawn from Messiaen's second mode, the octatonic, and the whole figure is played "
-            "twice."
+            "A non-retrogradable rhythm is a palindrome: it reads the same forwards and backwards, so reversing its duration sequence changes nothing; pitches and articulation need not be palindromic. Here, durations of one, two, three, two and one sixteenths, mirrored about the middle. Each duration carries a chord drawn from Messiaen's second mode, the octatonic, and the whole figure is played twice."
         ):
             self.play(FadeIn(head), FadeIn(boxes), FadeIn(nums), FadeIn(mirror), FadeIn(g))
         with self.listen(c) as snd:
@@ -83,12 +80,7 @@ class Messiaen(SoundScene):
         side.scale_to_fit_width(min(side.width, 4.6))
         side.move_to(RIGHT * 4.3 + DOWN * 0.2)
         with self.voiceover(
-            "How rare are they? Count every rhythm of a given length made of durations from one to four sixteenths, on a "
-            "logarithmic scale. <bookmark mark='a'/> Sixteen sixteenths, one four-four bar, can be filled in "
-            f"{say(d['all']['16'])} ways. <bookmark mark='b'/> Only {say(d['palindromes']['16'])} of them are palindromes. "
-            "<bookmark mark='c'/> A palindrome is decided by its first half alone, so their number grows like the square "
-            "root of the total. <bookmark mark='d'/> That rarity is what makes the mirror audible: a listener who hears the "
-            "middle can predict the rest."
+            f"How rare are they? Count every rhythm of a given length made of durations from one to four sixteenths, on a logarithmic scale. <bookmark mark='a'/> Sixteen sixteenths, one four-four bar, can be filled in {say(d['all']['16'])} ways. <bookmark mark='b'/> Only {say(d['palindromes']['16'])} of them are palindromes. <bookmark mark='c'/> A palindrome is decided by its first half alone, so their number grows like the square root of the total. <bookmark mark='d'/> Rarity under this enumeration does not by itself make the mirror audible: recognition and prediction depend on context and listener experience."
         ) as vo:
             self.play(Create(ax), FadeIn(ylabels), FadeIn(xl), Create(c1), Create(c2))
             for mark, r in zip("abcd", side):

@@ -61,20 +61,20 @@ class Outro(SoundScene):
         b = load("bartok")["golden"]
         card = objectives_card([
             r"the whole-tone scale: \ one step size, \ two transpositions, \ no home",
-            rf"{cen['classes']} scale shapes; \ {cen['n_symmetric']} symmetric; \ Messiaen's seven are the large ones",
+            rf"{cen['classes']} scale shapes; \ {cen['n_symmetric']} symmetric; \ Messiaen’s seven are a selected subset",
             r"planing, \ the octatonic, \ two keys at once: \ heard, \ and fitted by a key-finder",
             r"displaced accents and additive metres: \ the pulse kept, \ the hierarchy lost",
             rf"golden-section claims: \ ten loose landmarks hit by chance {100 * b['p10_2']:.0f} times in 100",
             rf"a 4-note passage fits an octatonic scale by chance {100 * oc['octatonic'][1]:.0f} times in 100",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? The whole-tone scale has one step size, two transpositions, and no home. "
+            "What did we find? The whole-tone scale has one step size, two transpositions, and no uniquely privileged tonic within its collection alone. "
             f"<bookmark mark='a'/> Of {say(cen['classes'])} possible scale shapes, {say(cen['n_symmetric'])} are symmetric, "
-            "and Messiaen's seven modes are the large ones. <bookmark mark='b'/> Planing, the octatonic and two keys at once "
+            "and Messiaen’s seven are a selected subset. <bookmark mark='b'/> Planing, the octatonic and two keys at once "
             "were heard, and a key-finder showed two clear keys making one unclear one. <bookmark mark='c'/> Displaced "
-            "accents keep the pulse and lose the hierarchy of beats. <bookmark mark='d'/> A golden-section claim with loose "
+            "accents keep the pulse and can weaken the chosen metric cues. <bookmark mark='d'/> A golden-section claim with loose "
             "landmarks succeeds by chance more often than not. <bookmark mark='e'/> And a short passage fits a scale by "
-            "chance so often that only long passages are evidence."
+            "chance so often that cardinality, null model and segmentation matter as well as duration."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

@@ -44,12 +44,7 @@ class Wholetone(SoundScene):
         lw = label(rf"whole-tone: \ one size of step, \ only {d['periods']['whole']} different transpositions", font_size=21, color=TUNE).next_to(wt, DOWN, buff=0.5)
         head = label(r"the twelve pitch classes round a clock \ (Part 12)", font_size=26, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Put the twelve pitch classes round a clock, as Part 12 did. The major scale uses two sizes of step, whole and "
-            "half, and that unevenness is what gives it a home: each of its twelve transpositions is a different set of "
-            "notes, and the half steps tell the ear where the tonic is. <bookmark mark='a'/> The whole-tone scale uses one "
-            "size of step only. Turn it by a whole step and it lands on itself; there are only two different whole-tone "
-            "scales in all. <bookmark mark='b'/> Every note is in the same position as every other: no half steps, no "
-            "leading tone, no dominant, no home."
+            "Put the twelve pitch classes round a clock, as Part 12 did. The major scale uses two sizes of step, whole and half, and that unevenness distinguishes its scale positions, though it does not alone choose a tonic among modes: each of its twelve transpositions is a different set of notes, and context helps listeners interpret the half steps and establish a tonic. <bookmark mark='a'/> The whole-tone scale uses one size of step only. Turn it by a whole step and it lands on itself; there are only two different whole-tone scales in all. <bookmark mark='b'/> Every note is in the same position as every other: no half steps, no diatonic leading tone or built-in unique tonic; a bass pedal and other context can still establish a center."
         ) as vo:
             self.play(FadeIn(head), FadeIn(maj), FadeIn(lm))
             vo.wait_until("a")
@@ -123,7 +118,7 @@ class Wholetone(SoundScene):
                    "half steps, which Part 12 found in music on every continent, <bookmark mark='c'/> became in Debussy and "
                    "Ravel a colour for the exotic and the pastoral. <bookmark mark='d'/> But slendro, the gamelan's five-note "
                    "tuning, is closer to five equal steps than to the piano's pentatonic, <bookmark mark='e'/> so the piano "
-                   "could only approximate what Debussy heard: the gamelan came to Europe through the black keys. "
+                   "could only approximate what Debussy heard: this black-key approximation is one compositional response, not an equivalence with gamelan tuning. "
                    "<bookmark mark='f'/> Act VI hears these musics on their own terms.", marks="cdef")
 
     # ------------------------------------------------------------------
