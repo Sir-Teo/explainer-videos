@@ -1217,6 +1217,20 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Fumiko Samejima; Geoff Masters; David Weiss; Howard Wainer; Paul Holland; Dorothy Thayer; Robert Mislevy | 鲛岛史子；杰夫·马斯特斯；戴维·韦斯；霍华德·韦纳；保罗·霍兰；多萝西·塞耶；罗伯特·米斯莱维 |
 | Albert Corbett; John Anderson; Chris Piech; Wim van der Linden; Susan Embretson; Steven Reise | 艾伯特·科比特；约翰·安德森；克里斯·皮耶希；维姆·范德林登；苏珊·恩布雷森；史蒂文·赖斯 |
 
+## Part 46: scaling, surveys and choice
+
+| English | 中文 |
+|---|---|
+| paired comparison; law of comparative judgment; Case V; scale value; Bradley-Terry model; MM algorithm | 成对比较；比较判断律；第五种情形；量表值；布拉德利–特里模型；MM算法 |
+| choice axiom; independence of irrelevant alternatives; random utility; Gumbel distribution; logit; conditional logit | 选择公理；无关选项独立性；随机效用；耿贝尔分布；逻辑斯蒂（logit）；条件logit |
+| attraction (decoy) effect; compromise effect; similarity effect; context effect | 吸引（诱饵）效应；折中效应；相似性效应；情境效应 |
+| conjoint analysis; attribute; level; part-worth; willingness to pay; market simulator | 联合分析；属性；水平；部分价值；支付意愿；市场模拟器 |
+| survey response process; comprehension; retrieval; judgment; response editing | 调查作答过程；理解；提取；判断；回答编辑 |
+| question wording; forbid and allow; order effect; acquiescence; straightlining; satisficing; attention check | 问题措辞；禁止与允许；顺序效应；默认倾向；直线作答；满意即止；注意力检查 |
+| net promoter score; promoters; detractors; standard error | 净推荐值；推荐者；贬损者；标准误 |
+| Louis Leon Thurstone; Ralph Bradley; Milton Terry; Duncan Luce; Daniel McFadden; Joel Huber; Itamar Simonson | 路易斯·利昂·瑟斯顿；拉尔夫·布拉德利；米尔顿·特里；邓肯·卢斯；丹尼尔·麦克法登；乔尔·休伯；伊塔马尔·西蒙森 |
+| Roger Tourangeau; Jon Krosnick; Howard Schuman; Stanley Presser; Fred Reichheld; J. P. Guilford | 罗杰·图兰若；乔恩·克罗斯尼克；霍华德·舒曼；斯坦利·普雷瑟；弗雷德·赖克哈尔德；J. P. 吉尔福德 |
+
 ## Names
 
 | English | 中文 |

@@ -6348,3 +6348,95 @@ shown(45, r"Rasch (1960)", "the origin of the model, told as history")
 shown(45, r"Lord \& Novick (1968); \ Lord (1980)", "the two- and three-parameter models, described")
 shown(45, r"Holland \& Thayer (1988)", "a method, computed")
 shown(45, r"van der Linden (2007)", "a model, described")
+
+# --- Part 46: Scaling, Surveys and Choice ----------------------------------------------------------------------------
+
+add(Finding(
+    key="attraction_effect", part=46, title=r"The decoy (attraction) effect",
+    claim="Adding an option that is clearly worse than one alternative, but not the other, raises the share of the "
+          "alternative that dominates it.",
+    original=Study("Huber, Payne and Puto", 1982, design="choices among options described by two numerical "
+                   "attributes, with and without an asymmetrically dominated decoy",
+                   found="the dominating option's share rose when the decoy was added"),
+    status="contested",
+    record=(Study("Frederick, Lee and Baskin", 2014, design="the effect with pictures and realistic descriptions",
+                  found="weak or absent unless the attributes are numbers that make dominance obvious"),
+            Study("Yang and Lynn", 2014, design="many product categories with realistic stimuli",
+                  found="the effect in only a small minority of categories")),
+    note="Robust with numerical, tabled attributes; much weaker when dominance has to be judged from realistic "
+         "descriptions.",
+    sources=("J. Huber, J. W. Payne and C. Puto, Adding asymmetrically dominated alternatives: violations of "
+             "regularity and the similarity hypothesis, Journal of Consumer Research 9 (1982) 90-98",
+             "S. Frederick, L. Lee and E. Baskin, The limits of attraction, Journal of Marketing Research 51 (2014) "
+             "487-507",
+             "S. Yang and M. Lynn, More evidence challenging the robustness and usefulness of the attraction effect, "
+             "Journal of Marketing Research 51 (2014) 508-513"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="forbid_allow", part=46, title=r"Forbid or not allow",
+    claim="Asking whether something should be forbidden or whether it should be allowed gives different answers, "
+          "though the questions are logically the same.",
+    original=Study("Rugg", 1941, design="split-ballot questions on public speeches against democracy",
+                   found="more people would 'not allow' such speeches than would 'forbid' them"),
+    status="replicated",
+    record=(Study("Schuman and Presser", 1981, design="split-ballot experiments on wording and order",
+                  found="the forbid-allow asymmetry repeated, with many other wording and order effects"),
+            Study("Hippler and Schwarz", 1986, design="the asymmetry across topics",
+                  found="repeated: forbidding is the stronger act, so fewer endorse it")),
+    note="Wording and order effects are among survey research's most reliable findings; their size varies by topic.",
+    sources=("D. Rugg, Experiments in wording questions: II, Public Opinion Quarterly 5 (1941) 91-92",
+             "H. Schuman and S. Presser, Questions and Answers in Attitude Surveys (Academic Press, 1981)",
+             "H.-J. Hippler and N. Schwarz, Not forbidding isn't allowing: the cognitive basis of the forbid-allow "
+             "asymmetry, Public Opinion Quarterly 50 (1986) 87-96"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="acquiescence", part=46, title=r"Acquiescence",
+    claim="Some respondents tend to agree with statements regardless of their content, and the tendency is stable "
+          "enough to distort scales keyed in one direction.",
+    original=Study("Cronbach", 1946, design="response sets in tests and questionnaires",
+                   found="consistent tendencies to answer 'true' or 'agree' that are not about content"),
+    status="replicated",
+    record=(Study("Billiet and McClendon", 2000, design="balanced scales modelled with a style factor",
+                  found="a separate acquiescence factor, related to education"),
+            Study("Weijters, Geuens and Schillewaert", 2010, design="response styles measured over a year",
+                  found="the styles are stable within people")),
+    note="Balanced keying cancels acquiescence in a sum score; it does not remove it from each item.",
+    sources=("L. J. Cronbach, Response sets and test validity, Educational and Psychological Measurement 6 (1946) "
+             "475-494",
+             "J. B. Billiet and M. J. McClendon, Modeling acquiescence in measurement models for two balanced sets of "
+             "items, Structural Equation Modeling 7 (2000) 608-628",
+             "B. Weijters, M. Geuens and N. Schillewaert, The stability of individual response styles, "
+             "Psychological Methods 15 (2010) 96-110"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="nps_growth", part=46, title=r"The net promoter score predicts growth best",
+    claim="One question, how likely a customer is to recommend a company, predicts its growth better than other "
+          "measures of customer satisfaction.",
+    original=Study("Reichheld", 2003, design="company growth and customer answers in several industries",
+                   found="the would-recommend question was the best single predictor of growth"),
+    status="failed",
+    record=(Study("Keiningham, Cooil, Andreassen and Aksoy", 2007, design="the same claim tested longitudinally "
+                  "against other satisfaction measures", found="no better than the alternatives; the original "
+                  "analysis was not reproducible"),),
+    note="A useful, simple tracking number; not shown to be the best predictor of growth, and it discards information "
+         "by collapsing eleven points into three groups.",
+    sources=("F. F. Reichheld, The one number you need to grow, Harvard Business Review 81 (2003) 46-54",
+             "T. L. Keiningham, B. Cooil, T. W. Andreassen and L. Aksoy, A longitudinal examination of net promoter "
+             "and firm revenue growth, Journal of Marketing 71 (2007) 39-51"),
+    checked="2026-11-16",
+))
+shown(46, r"Thurstone (1927)", "the origin of the method, told as history; the method fitted to Guilford's data")
+shown(46, r"McFadden (1974)", "a method and its forecast, described")
+shown(46, r"Huber, Payne \& Puto (1982); \ Simonson (1989); \ Tversky (1972)",
+      "context effects described; the attraction effect has its row, and the compromise and similarity effects are "
+      "modelled, not tested")
+shown(46, r"Tourangeau, Rips \& Rasinski (2000)", "a model of the response process, described")
+shown(46, r"Krosnick (1991)", "a theory of satisficing, described")
+shown(46, r"Likert (1932)", "a method, described")
+shown(46, r"Hainmueller, Hopkins \& Yamamoto (2014)", "a method, described")

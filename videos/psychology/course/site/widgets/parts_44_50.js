@@ -302,4 +302,117 @@
       note: "Nothing you answer is stored or sent. The squares mark each pair's difficulty (green right, red not); the scale is illustrative, so this is a demonstration of adaptive testing, not a score.",
     });
   };
+  // ---- Part 46: your own scale from paired comparisons, fitted by Bradley-Terry. ----
+  W.pairs = function (el) {
+    var w = null;
+    var ITEMS = ["apple", "banana", "cherry", "grape", "orange"];
+    var PAIRS = [], i, j;
+    for (i = 0; i < ITEMS.length; i++) for (j = i + 1; j < ITEMS.length; j++) PAIRS.push([i, j]);
+    var S = { phase: "idle", k: -1, order: [], log: [], wins: null, v: null };
+    function fit() {
+      var n = ITEMS.length, W = [], N = [], v = [], a, b, it;
+      for (a = 0; a < n; a++) { W.push([]); N.push([]); v.push(1); for (b = 0; b < n; b++) { W[a].push(0.5); N[a].push(a === b ? 0 : 1); } }
+      // a half win each way keeps the fit finite (a weak prior)
+      S.log.forEach(function (r) { W[r.win][r.lose] += 1; N[r.win][r.lose] += 1; N[r.lose][r.win] += 1; });
+      for (it = 0; it < 300; it++) {
+        var nv = [];
+        for (a = 0; a < n; a++) {
+          var wa = 0, den = 0;
+          for (b = 0; b < n; b++) if (b !== a) { wa += W[a][b]; den += N[a][b] / (v[a] + v[b]); }
+          nv.push(wa / den);
+        }
+        var g = Math.exp(nv.reduce(function (s, x) { return s + Math.log(x); }, 0) / n);
+        v = nv.map(function (x) { return x / g; });
+      }
+      S.v = v;
+    }
+    function triads() {
+      var n = ITEMS.length, beat = [], a, b, c, t = 0;
+      for (a = 0; a < n; a++) { beat.push([]); for (b = 0; b < n; b++) beat[a].push(0); }
+      S.log.forEach(function (r) { beat[r.win][r.lose] += 1; beat[r.lose][r.win] -= 1; });
+      for (a = 0; a < n; a++) for (b = a + 1; b < n; b++) for (c = b + 1; c < n; c++) {
+        var ab = beat[a][b], bc = beat[b][c], ca = beat[c][a];
+        if ((ab > 0 && bc > 0 && ca > 0) || (ab < 0 && bc < 0 && ca < 0)) t++;
+      }
+      return t;
+    }
+    function next() {
+      S.k++;
+      if (S.k >= S.order.length) { S.phase = "done"; fit(); task.clear(); } else S.phase = "ask";
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "f": 0, "j": 1 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side) {
+        var p = S.order[S.k], left = p[0], right = p[1];
+        S.log.push({ win: side === 0 ? left : right, lose: side === 0 ? right : left });
+        task.count++;
+        fit();
+        S.phase = "shown";
+        if (w) w.render();
+        task.later(next, 350);
+      },
+    });
+    function start(state) {
+      var rand = QB.rng(46 + (state ? state.seed : 0)), order = PAIRS.slice(), extra = [], k, t;
+      for (k = order.length - 1; k > 0; k--) { var r = Math.floor(rand() * (k + 1)); t = order[k]; order[k] = order[r]; order[r] = t; }
+      extra = [order[0], order[3]].map(function (p) { return [p[1], p[0]]; });  // two pairs again, sides swapped
+      S.order = order.map(function (p) { return rand() < 0.5 ? p : [p[1], p[0]]; }).concat(extra);
+      S.log = []; S.k = -1; S.v = null; task.count = 0; task.clear();
+      next();
+    }
+    w = QB.widget(el, {
+      title: "Which do you prefer?",
+      sub: "Twelve pairs of fruit. Press F for the left one, J for the right (or tap a side). Every pair once, and two pairs again.",
+      panels: 2, height: 340, weights: [1.2, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; S.v = null; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), j2;
+        ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if (S.phase === "ask" || S.phase === "shown") {
+          var p = S.order[Math.min(S.k, S.order.length - 1)];
+          ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("Pair " + (Math.min(S.k, S.order.length - 1) + 1) + " of " + S.order.length, b.cx, b.y + 24);
+          ctx.fillStyle = C.ink; ctx.font = "600 26px system-ui, sans-serif";
+          ctx.fillText(ITEMS[p[0]], b.x + b.w * 0.27, b.cy);
+          ctx.fillText(ITEMS[p[1]], b.x + b.w * 0.73, b.cy);
+          ctx.fillStyle = C.muted; ctx.font = "14px system-ui, sans-serif";
+          ctx.fillText("or", b.cx, b.cy);
+          ctx.fillText("F: left    J: right", b.cx, b.y + b.h - 30);
+        } else if (S.phase === "done") {
+          var t = triads();
+          T.message(ctx, b, "Your scale is on the right.",
+                    (t === 0 ? "No circular triads: your choices fit one line." : t + " circular triad" + (t > 1 ? "s" : "") + " (A over B, B over C, C over A): normal, and the reason Thurstone's method needs a model.") +
+                    " The two repeated pairs show how stable a single choice is.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Twelve quick choices.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx;
+        cx.save(); cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif"; cx.textAlign = "left";
+        cx.fillText("Bradley-Terry scale (log strength), from your choices so far", c2.x + 10, c2.y + 18);
+        if (S.v) {
+          var logs = S.v.map(Math.log), lo = Math.min.apply(null, logs), hi = Math.max.apply(null, logs);
+          if (hi - lo < 1e-6) { lo -= 1; hi += 1; }
+          var x0 = c2.x + 30, x1 = c2.x + c2.w - 30, yl = c2.y + c2.h / 2;
+          cx.strokeStyle = C.muted; cx.beginPath(); cx.moveTo(x0, yl); cx.lineTo(x1, yl); cx.stroke();
+          for (j2 = 0; j2 < ITEMS.length; j2++) {
+            var xx = x0 + (x1 - x0) * (logs[j2] - lo) / (hi - lo);
+            cx.fillStyle = "#f2c14e"; cx.beginPath(); cx.arc(xx, yl, 5, 0, 2 * Math.PI); cx.fill();
+            cx.fillStyle = C.ink; cx.font = "11px system-ui, sans-serif"; cx.textAlign = "center";
+            cx.fillText(ITEMS[j2], xx, yl + (j2 % 2 ? 22 : -14));
+          }
+        }
+        cx.restore();
+      },
+      readout: function () {
+        return [["choices", String(task.count)], ["circular triads", S.log.length ? String(triads()) : "-"]];
+      },
+      note: "Nothing you choose is stored or sent. The scale has no zero and no unit: only the order and the gaps mean anything.",
+    });
+  };
 })();

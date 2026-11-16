@@ -83,4 +83,44 @@ PARTS = [
               ("Its tests", "tests/psychology/test_irt.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=46, level="M", widget="pairs", prereq=(12, 26, 45),
+        question="How do you turn \"I prefer this one\" into a number, and what happens between a question and its "
+                 "answer?",
+        story="In 1927 Louis Thurstone asked students which of two offences was worse, for every pair, and derived a "
+              "scale from their inconsistencies. Luce replaced his normal curves with one axiom; McFadden made the "
+              "logit a forecasting tool. The part fits Case V and Bradley-Terry to Guilford's vegetables, derives the "
+              "logit from Gumbel noise, breaks the axiom with a red bus and a blue bus, builds the decoy and compromise "
+              "effects from one comparing chooser, recovers part-worths in a conjoint study, follows a survey answer "
+              "through Tourangeau's four steps, shows acquiescence and careless responding manufacturing "
+              "correlations, and puts an error bar on the net promoter score.",
+        handoff="People over time are Part 47; fitting and comparing models of behaviour Part 48; language models as "
+                "respondents Part 60.",
+        outside="Part 12's signal detection, Part 26's choice models and Part 45's graded responses; the normal and "
+                "logistic distributions, and maximum likelihood.",
+        objectives={
+            "U": ["Explain how paired comparisons give a scale, and why inconsistency is information.",
+                  "Describe the decoy and compromise effects, and why they break Luce's axiom.",
+                  "Name the four steps of answering a survey question and an error at each."],
+            "M": ["Derive Case V from two normal impressions and fit it; fit Bradley-Terry by the MM algorithm.",
+                  "Show by simulation that Gumbel random utility gives the logit, and recover part-worths and "
+                  "willingness to pay from a simulated conjoint study.",
+                  "Show how acquiescence and straightlining distort correlations, and how balanced keys help."],
+            "D": ["Argue what a model of context effects must explain, and design a test of its prediction about "
+                  "deliberation time."],
+            "I": ["Plan a conjoint or a survey: design, wording experiments, data-quality rules and reported "
+                  "uncertainty."],
+        },
+        results=[
+            ("Case V", r"P(j \succ i) = \Phi\big((s_j - s_i)/(\sigma\sqrt{2})\big)"),
+            ("Luce's axiom", r"P(i \mid M) = v_i / \textstyle\sum_{k \in M} v_k"),
+            ("MM update", r"v_i \leftarrow w_i / \textstyle\sum_j n_{ij}/(v_i + v_j)"),
+            ("Logit from Gumbel noise", r"P(j) = e^{V_j} / \textstyle\sum_k e^{V_k}"),
+            ("Willingness to pay", r"\mathrm{WTP}_k = -\beta_k / \beta_{\text{price}}"),
+        ],
+        U=(0, 1, 5, 8, 9), D=(15,), I=(14,),
+        also=(("Psyche's scaling module", "explainer/psychology/psyche/scaling.py"),
+              ("Its tests", "tests/psychology/test_scaling.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]
