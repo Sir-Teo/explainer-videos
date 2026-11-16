@@ -66,6 +66,9 @@ Part 37 adds bonds and bargains:
   group's average, free riders raise their contributions and cooperation holds.
 * :func:`ipd_tournament`: a round-robin of iterated prisoner's dilemmas among simple strategies, in the spirit of
   Axelrod's tournaments, with or without noise in executing moves.
+* :func:`stable_matching`: a marriage market solved by deferred acceptance (Gale and Shapley), where everyone
+  ranks the other side by attractiveness plus taste; couples end up matched in attractiveness although nobody sought
+  a match.
 * :func:`overfit_divorce`: a classifier fitted to a small sample of couples with many measured variables, scored on
   the couples it was fitted to and by leave-one-out cross-validation: in-sample accuracy is high even when the
   variables carry little real signal.
@@ -83,7 +86,8 @@ __all__ = ["cascade", "cascade_size", "cascade_curve", "degroot", "influence_wei
            "bystanders", "social_impact", "drive", "mentions", "grid_distances", "action_probs", "goal_posterior",
            "kelley", "dunning_kruger", "tajfel_matrix", "allocate", "iat_d", "iat_study",
            "list_experiment", "pipeline", "illusory_correlation", "fs_utility", "fs_threshold",
-           "ultimatum", "public_goods", "overfit_divorce", "ipd_tournament"]
+           "ultimatum", "public_goods", "overfit_divorce", "ipd_tournament",
+           "stable_matching"]
 
 
 # ---------------------------------------------------------------- thresholds
@@ -612,4 +616,36 @@ def ipd_tournament(strategies=IPD_STRATEGIES, rounds: int = 200, noise: float = 
                 pb += (R if x else Sx) if y else (T if x else P)
             M[i, j], M[j, i] = pa / rounds, pb / rounds
     return {"strategies": list(strategies), "matrix": M, "score": M.mean(axis=1)}
+
+
+def stable_matching(n: int = 200, taste: float = 0.5, similar: bool = False, seed: int = 0) -> dict:
+    """n people on each side of a market, each with an attractiveness score.  Each ranks the other side by the
+    other's attractiveness plus a private taste term (SD ``taste``), or, with ``similar``, by closeness to their own
+    attractiveness.  Deferred acceptance gives a stable matching; returns both sides' attractiveness and the
+    correlation between partners."""
+    rng = np.random.default_rng(seed)
+    a, b = rng.normal(size=n), rng.normal(size=n)
+    if similar:
+        sa = -np.abs(a[:, None] - b[None, :]) + taste * rng.normal(size=(n, n))
+        sb = -np.abs(b[:, None] - a[None, :]) + taste * rng.normal(size=(n, n))
+    else:
+        sa = b[None, :] + taste * rng.normal(size=(n, n))
+        sb = a[None, :] + taste * rng.normal(size=(n, n))
+    pref = np.argsort(-sa, axis=1)
+    nxt = np.zeros(n, int)
+    held = -np.ones(n, int)
+    free = list(range(n))
+    while free:
+        i = free.pop()
+        j = pref[i, nxt[i]]
+        nxt[i] += 1
+        if held[j] < 0:
+            held[j] = i
+        elif sb[j, i] > sb[j, held[j]]:
+            free.append(held[j])
+            held[j] = i
+        else:
+            free.append(i)
+    pa, pb = a[held], b
+    return {"a": pa, "b": pb, "r": float(np.corrcoef(pa, pb)[0, 1])}
 

@@ -1070,6 +1070,21 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Gordon Allport; Thomas Pettigrew, Linda Tropp; Elizabeth Levy Paluck, Seth Green, Donald Green; Porat, Clark | 戈登·奥尔波特；托马斯·佩蒂格鲁，琳达·特罗普；伊丽莎白·利维·帕卢克，塞斯·格林，唐纳德·格林；波拉特，克拉克 |
 | Edward Chang, Katherine Milkman; Michael LaCour; David Broockman, Joshua Kalla; Peter Aronow; Keith Payne, Vuletich, Lundberg; Connor, Evers | 爱德华·张，凯瑟琳·米尔克曼；迈克尔·拉库尔；大卫·布鲁克曼，约书亚·卡拉；彼得·阿罗诺；基思·佩恩，武莱蒂奇，伦德伯格；康纳，埃弗斯 |
 
+## Part 37: bonds and bargains
+
+| English | 中文 |
+|---|---|
+| ultimatum game; proposer, responder; dictator game; trust game; public-goods game; prisoner's dilemma | 最后通牒博弈；提议者，回应者；独裁者博弈；信任博弈；公共物品博弈；囚徒困境 |
+| inequity aversion; social preference; altruistic punishment; antisocial punishment; free rider; conditional cooperator | 不公平厌恶；社会偏好；利他惩罚；反社会惩罚；搭便车者；条件合作者 |
+| kin selection; Hamilton's rule; relatedness; reciprocity; reputation; tit for tat; grim trigger; win-stay lose-shift | 亲缘选择；汉密尔顿法则；亲缘系数；互惠；声誉；以牙还牙；冷酷触发；赢留输变 |
+| propinquity; mere exposure; similarity; matching; deferred acceptance; stable matching | 邻近性；单纯曝光；相似性；匹配；延迟接受；稳定匹配 |
+| speed dating; stated preference; actor, partner, relationship variance; investment model; attachment style | 快速约会；陈述的偏好；行动者、伙伴、关系方差；投资模型；依恋风格 |
+| in-sample accuracy; leave-one-out; base rate; loneliness; social isolation; odds ratio | 样本内准确率；留一法；基础比率；孤独感；社会隔离；比值比 |
+| Werner Güth; Hessel Oosterbeek; Robert Axelrod; Anatol Rapoport; Ernst Fehr, Klaus Schmidt, Simon Gächter; Herrmann, Thöni | 维尔纳·居特；黑塞尔·奥斯特比克；罗伯特·阿克塞尔罗德；阿纳托尔·拉波波特；恩斯特·费尔，克劳斯·施密特，西蒙·加赫特；赫尔曼，特尼 |
+| Joseph Henrich; Dana, Cain, Dawes; Leon Festinger, Stanley Schachter, Kurt Back; Robert Zajonc; Bornstein; Montoya | 约瑟夫·亨里奇；达纳，凯恩，道斯；利昂·费斯廷格，斯坦利·沙赫特，库尔特·巴克；罗伯特·扎荣茨；博恩斯坦；蒙托亚 |
+| Paul Eastwick, Eli Finkel, Samantha Joel; John Gottman; Heyman, Smith Slep; Cindy Hazan, Phillip Shaver; Caryl Rusbult | 保罗·伊斯特威克，伊莱·芬克尔，萨曼莎·乔尔；约翰·戈特曼；海曼，史密斯·斯莱普；辛迪·哈赞，菲利普·谢弗；卡里尔·拉斯布特 |
+| David Buss; Walter; Julianne Holt-Lunstad; Kalick, Hamilton; Gale, Shapley | 戴维·巴斯；沃尔特；朱莉安·霍尔特-伦斯塔德；卡利克，汉密尔顿；盖尔，沙普利 |
+
 ## Names
 
 | English | 中文 |

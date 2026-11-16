@@ -1076,7 +1076,8 @@ shown(9, "HOWE_2022", "a methods result at the frontier")
 shown(9, "YENGO_2022", "a result about height, set beside the twin estimate")
 shown(9, "MARTIN_2019", "a methods result at the frontier")
 shown(9, "KARAVANI_2019", "a simulation study, set beside the series' own formula")
-shown(9, "BUSS_1989", "the example of a cross-cultural test; its claim is entered with mate preferences", row_in=37)
+shown(9, "BUSS_1989", "the example of a cross-cultural test; its row (mate preferences) is entered in "
+      "Part 37")
 shown(9, "HEIJMANS_2008", "physiology, told with its limits")
 shown(9, "WEIR_2002", "comparative cognition, told with its later qualification")
 
@@ -5260,3 +5261,135 @@ shown(36, r"Payne, \ Vuletich \& Lundberg (2017); \ Connor \& Evers (2020)", "a 
       "frontier")
 shown(36, r"Tajfel \& Turner (1979); \ Turner et al.\ (1987)", "theories, described; the minimal_group row carries the "
       "evidence")
+
+# --- Part 37: Bonds and Bargains -------------------------------------------------------------------------------------
+
+add(Finding(
+    key="ultimatum_rejection", part=37, title=r"Fair offers and costly rejections",
+    claim="In the ultimatum game proposers offer far more than the minimum, and responders reject low offers at a cost "
+          "to themselves.",
+    original=Study("Guth, Schmittberger and Schwarze", 1982, design="the first ultimatum experiments",
+                   found="average offers near 37% of the sum; low offers rejected"),
+    status="replicated",
+    record=(Study("Oosterbeek, Sloof and van de Kuilen (meta-analysis)", 2004, n="37 papers, 75 results",
+                  found="average offer 40%"),
+            Study("Henrich and colleagues", 2001, n="15 small-scale societies",
+                  found="no society matched the selfish prediction; mean offers 26% to 58%")),
+    note="One of the most reproducible results in experimental economics; its size varies with culture and stakes.",
+    sources=("W. Guth, R. Schmittberger and B. Schwarze, An experimental analysis of ultimatum bargaining, Journal of "
+             "Economic Behavior and Organization 3 (1982) 367-388",
+             "H. Oosterbeek, R. Sloof and G. van de Kuilen, Cultural differences in ultimatum game experiments, "
+             "Experimental Economics 7 (2004) 171-188",
+             "J. Henrich et al., In search of homo economicus, American Economic Review 91 (2001) 73-78"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="punishment_cooperation", part=37, title=r"Punishment sustaining cooperation",
+    claim="When group members can punish free riders at a cost to themselves, contributions to a public good hold "
+          "up instead of decaying.",
+    original=Study("Fehr and Gachter", 2002, design="public-goods games with and without costly punishment",
+                   found="cooperation flourished with punishment and broke down without it"),
+    status="replicated",
+    record=(Study("Herrmann, Thoni and Gachter", 2008, n="16 participant pools",
+                  found="antisocial punishment of cooperators removed the benefit in some societies"),),
+    note="Robust where punishment targets free riders; where cooperators are punished too, the benefit can vanish.",
+    sources=("E. Fehr and S. Gachter, Altruistic punishment in humans, Nature 415 (2002) 137-140",
+             "B. Herrmann, C. Thoni and S. Gachter, Antisocial punishment across societies, Science 319 (2008) "
+             "1362-1367"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="mere_exposure", part=37, title=r"Mere exposure",
+    claim="Repeated exposure to a stimulus increases liking for it.",
+    original=Study("Zajonc", 1968, design="repeated exposure to unfamiliar stimuli", found="liking rose with exposure"),
+    status="replicated",
+    record=(Study("Bornstein (meta-analysis)", 1989, n="208 experiments", effect=0.26, unit="r",
+                  found="a reliable effect"),
+            Study("Montoya and colleagues (meta-analysis)", 2017, n="268 curves, 81 articles",
+                  found="an inverted U: liking rises, then falls with many exposures")),
+    note="Reliable, with limits: the effect peaks and declines with many exposures.",
+    sources=("R. B. Zajonc, Attitudinal effects of mere exposure, Journal of Personality and Social Psychology "
+             "Monograph 9(2) (1968)",
+             "R. F. Bornstein, Exposure and affect: overview and meta-analysis of research, 1968-1987, Psychological "
+             "Bulletin 106(2) (1989)",
+             "R. M. Montoya et al., A re-examination of the mere exposure effect, Psychological Bulletin (2017)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="stated_preferences", part=37, title=r"Stated preferences predicting desire",
+    claim="The partner qualities people say they want, and the sex differences in them, predict whom they come to "
+          "desire when they meet.",
+    original=Study("Buss", 1989, n="10,047 people, 37 cultures", design="ratings of an ideal partner",
+                   found="men weighted attractiveness, women earning prospects, more"),
+    status="failed",
+    record=(Study("Eastwick and Finkel", 2008, design="speed dating and follow-up",
+                  found="the sex differences in stated preferences did not appear in actual desire"),
+            Study("Joel, Eastwick and Finkel", 2017, n="two speed-dating studies, 100+ measures",
+                  found="desire unique to a pair was not predictable at all")),
+    note="Stated preferences replicate as statements (the next row but one); as predictions of desire in person they "
+         "fail.",
+    sources=("D. M. Buss, Sex differences in human mate preferences, Behavioral and Brain Sciences 12 (1989) 1-49",
+             "P. W. Eastwick and E. J. Finkel, Sex differences in mate preferences revisited, Journal of Personality "
+             "and Social Psychology 94(2) (2008)",
+             "S. Joel, P. W. Eastwick and E. J. Finkel, Is romantic desire predictable?, Psychological Science 28 "
+             "(2017)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="divorce_prediction", part=37, title=r"Divorce predicted with 90\% accuracy",
+    claim="Observing how a couple argues predicts which couples will divorce with about 90% accuracy.",
+    original=Study("Gottman and colleagues", 1998, n="newlywed couples",
+                   found="a model fitted the outcomes with about 90% accuracy"),
+    status="contested",
+    record=(Study("Heyman and Slep", 2001, found="the figures were in-sample fits; accuracy falls under "
+                                                  "cross-validation, and base rates matter"),
+            Study("Joel and colleagues", 2020, n="11,196 couples",
+                  found="change in relationship quality largely unpredictable")),
+    note="Process findings about conflict may hold; the headline accuracy was never shown on new couples.",
+    sources=("J. M. Gottman, J. Coan, S. Carrere and C. Swanson, Predicting marital happiness and stability from "
+             "newlywed interactions, Journal of Marriage and the Family 60 (1998)",
+             "R. E. Heyman and A. M. Smith Slep, The hazards of predicting divorce without crossvalidation, Journal of "
+             "Marriage and Family 63 (2001)",
+             "S. Joel et al., Machine learning uncovers the most robust self-report predictors of relationship "
+             "quality across 43 longitudinal couples studies, PNAS 117(32) (2020)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="mate_preferences", part=37, title=r"Sex differences in stated mate preferences",
+    claim="Across cultures, men say they value physical attractiveness and youth in a partner more than women do, "
+          "and women value earning prospects more.",
+    original=Study("Buss", 1989, n="10,047 people, 37 cultures", found="the differences in most cultures"),
+    status="replicated",
+    record=(Study("Walter and colleagues", 2020, n="14,399 people, 45 countries",
+                  found="the same differences; not robustly predicted by gender equality or pathogens"),),
+    note="Replicated as stated preferences; what they mean for actual choice is two rows up.",
+    sources=("D. M. Buss, Sex differences in human mate preferences, Behavioral and Brain Sciences 12 (1989) 1-49",
+             "K. V. Walter et al., Sex differences in mate preferences across 45 countries: a large-scale "
+             "replication, Psychological Science 31(4) (2020)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="isolation_mortality", part=37, title=r"Social relationships and survival",
+    claim="People with stronger social relationships are more likely to survive over follow-up periods.",
+    original=Study("Holt-Lunstad, Smith and Layton (meta-analysis)", 2010, n="148 studies, 308,849 people",
+                   effect=1.50, unit="OR", lo=1.42, hi=1.59, found="odds of survival 1.5 times higher"),
+    status="replicated",
+    record=(Study("Holt-Lunstad and colleagues (meta-analysis)", 2015,
+                  found="isolation OR 1.29, loneliness 1.26, living alone 1.32 for mortality"),),
+    note="A robust association; whether connection causes survival is not established by these observational data.",
+    sources=("J. Holt-Lunstad, T. B. Smith and J. B. Layton, Social relationships and mortality risk: a "
+             "meta-analytic review, PLoS Medicine 7(7) (2010) e1000316",
+             "J. Holt-Lunstad et al., Loneliness and social isolation as risk factors for mortality, Perspectives on "
+             "Psychological Science 10(2) (2015)"),
+    checked="2026-11-16",
+))
+
+shown(37, r"Festinger, \ Schachter \& Back (1950)", "a field study of friendship and proximity, described without its "
+      "percentages")
+shown(37, r"Hazan \& Shaver (1987); \ Rusbult (1980)", "a self-selected survey and a theory of commitment, described")

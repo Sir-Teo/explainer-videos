@@ -131,3 +131,10 @@ def test_divorce_prediction_overfits_without_cross_validation():
     r = [S.overfit_divorce(seed=s) for s in range(30)]
     assert np.mean([x["insample"] for x in r]) > 0.85
     assert np.mean([x["loo"] for x in r]) < np.mean([x["base"] for x in r]) + 0.02
+
+
+def test_stable_matching_gives_matched_couples_either_way():
+    best = S.stable_matching(n=150, taste=0.5, seed=1)
+    alike = S.stable_matching(n=150, taste=0.5, similar=True, seed=1)
+    assert best["r"] > 0.7 and alike["r"] > 0.7
+    assert len(set(best["a"].round(12))) == 150  # each person is matched exactly once

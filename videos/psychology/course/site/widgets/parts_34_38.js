@@ -424,4 +424,96 @@
       note: "Nothing you choose is stored or sent, and the points go to nobody. The two kinds of matrix separate motives: in the first, the column with the biggest lead for your group gives everyone fewer points than the far end; in the second, every column has the same total, and the middle is equal. A lead in either is favouritism for a group defined by a picture you preferred a minute ago.",
     });
   };
+
+  // ---- Part 37: the ultimatum game, as the responder.  Ten offers out of ten coins from scripted proposers; accept
+  // or reject each.  Your threshold is placed among Psyche's inequity-averse responders. ----
+  W.ultimatum = function (el) {
+    var w = null;
+    var OFFERS = [3, 1, 5, 2, 4, 1, 3, 5, 2, 4];
+    var S = { phase: "idle", k: -1, log: [], msg: "" };
+    // Psyche's responders: 30% selfish (threshold 0), the rest with alpha spread over 0.3..1.5
+    var THR = [], i;
+    for (i = 0; i < 30; i++) THR.push(0);
+    for (i = 0; i < 70; i++) { var a = 0.3 + 1.2 * i / 69; THR.push(a / (1 + 2 * a)); }
+    function next() {
+      S.k++;
+      if (S.k >= OFFERS.length) { S.phase = "done"; task.clear(); }
+      else S.phase = "offer";
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "a": 1, "r": 0, "f": 1, "j": 0 },
+      accepting: function () { return S.phase === "offer"; },
+      respond: function (side, how) {
+        var acc = how === "tap" ? (side === 0 ? 1 : 0) : side;
+        S.log.push({ offer: OFFERS[S.k], accept: acc });
+        task.count++;
+        S.phase = "shown";
+        if (w) w.render();
+        task.later(next, 500);
+      },
+    });
+    function start() { task.clear(); S.k = -1; S.log = []; task.count = 0; next(); }
+    function threshold() {
+      // the smallest offer you accepted at or above which you accepted everything; null if none
+      var t = null, o;
+      for (o = 5; o >= 1; o--) {
+        var rows = S.log.filter(function (r) { return r.offer === o; });
+        if (!rows.length) continue;
+        if (rows.every(function (r) { return r.accept; })) t = o; else break;
+      }
+      return t;
+    }
+    w = QB.widget(el, {
+      title: "Take it, or leave it",
+      sub: "A stranger has ten coins and offers you some; you get the offer if you accept, and nobody gets anything if you reject. Ten offers, from proposers who are scripted: press A (or F) to accept and R (or J) to reject, or tap the left or right half.",
+      panels: 2, height: 360, weights: [1.2, 1],
+      buttons: [
+        { label: "Start", act: function () { start(); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), j;
+        ctx.save();
+        if (S.phase === "offer" || S.phase === "shown") {
+          var o = OFFERS[S.k], r = Math.min(16, b.w / 26), x0 = b.cx - 10 * r * 1.15, y = b.cy - 10;
+          ctx.textAlign = "center"; ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("Offer " + (S.k + 1) + " of " + OFFERS.length + ": the proposer keeps " + (10 - o) + ", you get " + o, b.cx, b.y + 26);
+          for (j = 0; j < 10; j++) {
+            ctx.beginPath(); ctx.arc(x0 + j * r * 2.3 + r, y, r, 0, 2 * Math.PI);
+            ctx.fillStyle = j < 10 - o ? "#7ec8f5" : "#f2c14e"; ctx.fill();
+          }
+          ctx.fillStyle = C.ink; ctx.font = "600 14px system-ui, sans-serif";
+          ctx.fillText(S.phase === "shown" ? (S.log[S.log.length - 1].accept ? "accepted" : "rejected") : "accept (left)  or  reject (right)?", b.cx, y + 50);
+        } else if (S.phase === "done") {
+          var t = threshold(), share = t === null ? null : t / 10, n = 0;
+          for (j = 0; j < THR.length; j++) if (share !== null && THR[j] < share - 1e-9) n++;
+          T.message(ctx, b, t === null ? "You rejected even the fairest offers you saw." : (t === 1 ? "You accepted every offer: the textbook responder." : "You accepted offers of " + t + " coins or more."),
+                    t === null ? "" : "Among Psyche's responders (30% caring only about money, the rest averse to earning less), " + n + " in 100 would accept less than you would. Real responders often reject offers of 2 or less; proposers who know this offer about 4.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Ten offers; accept or reject each.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx;
+        cx.save(); cx.textAlign = "left"; cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif";
+        cx.fillText("Your answers by offer (coins out of 10)", c2.x + 10, c2.y + 18);
+        var bw = (c2.w - 40) / 5, base = c2.y + c2.h - 30, hmax = c2.h - 70;
+        for (j = 1; j <= 5; j++) {
+          var rows = S.log.filter(function (r) { return r.offer === j; }), acc = rows.filter(function (r) { return r.accept; }).length;
+          var h = rows.length ? hmax * acc / rows.length : 0;
+          cx.fillStyle = "#3a3f48"; cx.fillRect(c2.x + 20 + (j - 1) * bw, base - hmax, bw - 10, hmax);
+          cx.fillStyle = "#5bd18b"; cx.fillRect(c2.x + 20 + (j - 1) * bw, base - h, bw - 10, h);
+          cx.fillStyle = C.muted; cx.textAlign = "center"; cx.font = "11px system-ui, sans-serif";
+          cx.fillText(String(j), c2.x + 20 + (j - 1) * bw + (bw - 10) / 2, base + 14);
+        }
+        cx.textAlign = "left"; cx.fillText("green: share accepted", c2.x + 10, c2.y + 34);
+        cx.restore();
+      },
+      readout: function () {
+        var acc = S.log.filter(function (r) { return r.accept; }).length;
+        return [["answers", String(task.count)], ["accepted", S.log.length ? acc + " / " + S.log.length : "-"]];
+      },
+      note: "Nothing you answer is stored or sent, and no money changes hands. The offers are scripted, not chosen by people, which matters: in experiments, low offers are rejected less often when people know a computer chose them.",
+    });
+  };
 })();

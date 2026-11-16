@@ -142,4 +142,50 @@ PARTS = [
               ("Its tests", "tests/psychology/test_social.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=37, level="U", widget="ultimatum",
+        question="Why do people cooperate with strangers, and can a relationship be predicted?",
+        story="Offer someone one coin out of ten, take it or both get nothing: a selfish responder accepts, yet "
+              "proposers offer about 40% and low offers are rejected at a cost. The part follows cooperation from "
+              "five economic games to its four routes (kin, reciprocity, reputation, punishment), a tournament of "
+              "strategies, public goods that decay without punishment and hold up with it (unless cooperators are "
+              "punished too), inequity aversion as a utility function, and the same game in fifteen small "
+              "societies, where offers ran from 26% to 58%. Then the closest bargains: proximity and mere exposure, "
+              "stated preferences that do not predict desire, machine learning that cannot predict the chemistry of "
+              "a pair, 11,196 couples whose own perceptions predict their satisfaction, a divorce model that is "
+              "90% accurate only on the couples it was fitted to, mate preferences in 45 countries, and the link "
+              "between relationships and survival.",
+        handoff="Culture and morals are Part 38; therapy's evidence Part 42; teams and incentives at work Part 53; "
+                "games with machines Part 60.",
+        outside="Part 17's reinforcement learning, Part 26's utility, and the game theory of Philosophy, Built Part "
+                "34. Expected value, logistic and least-squares fitting, cross-validation and odds ratios.",
+        objectives={
+            "U": ["Describe the dictator, ultimatum, trust, prisoner's dilemma and public-goods games, what selfish "
+                  "play predicts and what people do.",
+                  "Explain kin selection, reciprocity, reputation and punishment, and what Fehr and Gachter and the "
+                  "fifteen-society study found.",
+                  "Describe the findings on proximity, mere exposure, stated preferences and relationship "
+                  "prediction, and the association between social ties and survival."],
+            "M": ["Derive an inequity-averse responder's threshold and a proposer's best offer against a population "
+                  "of responders.",
+                  "Simulate a public-goods game with and without punishment, and a tournament of repeated "
+                  "prisoner's dilemma strategies.",
+                  "Show why in-sample accuracy overstates prediction, and estimate accuracy by cross-validation."],
+            "D": ["Separate actor, partner and relationship variance in dyadic data, and say what each can and cannot "
+                  "predict.",
+                  "Evaluate causal claims about social connection and health from observational data."],
+            "I": ["Design a reputation system, a team incentive or a dating product's claim with the evidence in "
+                  "view."],
+        },
+        results=[
+            ("Inequity aversion", r"U_i = x_i - \alpha (x_j - x_i)^+ - \beta (x_i - x_j)^+"),
+            ("Responder threshold", r"s^\* = \frac{\alpha}{1 + 2\alpha}"),
+            ("Hamilton's rule", r"rB > C"),
+            ("Proposer's problem", r"\max_s\, (1 - s)\, P(s \ge s^\*)"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's social module", "explainer/psychology/psyche/social.py"),
+              ("Its tests", "tests/psychology/test_social.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]
