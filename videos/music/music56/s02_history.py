@@ -31,12 +31,7 @@ class History(SoundScene):
         note = label(r"one horn, \ one groove, \ one take \ $\to$ \ hundreds of tracks, \ every one editable", font_size=18, color=WHITE).to_edge(DOWN, buff=0.35)
         head = label(r"tracks against years", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Count the tracks a studio could record separately, year by year. <bookmark mark='a'/> From Edison's tinfoil in "
-            "1877 to the 1940s, one: a horn or a microphone, cutting one groove, in one take. <bookmark mark='b'/> Magnetic "
-            "tape arrived after the war, and Les Paul had an eight-track machine by 1957. The Beatles made Sergeant Pepper "
-            "in 1967 on four tracks, bouncing them together to free more; by 1974 machines had twenty-four. "
-            "<bookmark mark='c'/> Then digital tape, and in 1991 a computer with four tracks, Pro Tools, whose descendants "
-            "hold as many as the computer can. A record stopped being a performance and became an object built in layers."
+            "Count the tracks a studio could record separately, year by year. <bookmark mark='a'/> This simplified timeline emphasizes commercial mono recording; electrical mixing, multiple microphones and experimental multitracking complicate a literal one-track history. <bookmark mark='b'/> Magnetic tape arrived after the war, and Les Paul had an eight-track machine by 1957. The Beatles made Sergeant Pepper in 1967 on four tracks, bouncing them together to free more; by 1974 machines had twenty-four. <bookmark mark='c'/> Then digital tape, and in 1991 a computer with four tracks, Pro Tools, whose descendants hold as many as the computer can. A record stopped being a performance and became an object built in layers."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(yt), FadeIn(xt), FadeIn(yl), FadeIn(ghost(VGroup(steps, dots), 0.25)))
             vo.wait_until("a")
@@ -89,8 +84,4 @@ class History(SoundScene):
             (r"what stayed the same is what this part is about: \ microphones, \ gain, \ balance, \ masking, \ space, \ the ear", TUNE),
         ]
         rows_scene(self, r"the workstation", items,
-                   "Then the computer. <bookmark mark='b'/> In the workstation of Part 53 every track is a file, every edit can be "
-                   "undone, every setting is saved. <bookmark mark='c'/> The console became software, its faders, equalizers, "
-                   "compressors and reverberators plug-ins. <bookmark mark='d'/> Nothing need be decided until the end, and many "
-                   "decisions never are. <bookmark mark='e'/> What stayed the same is what this part is about: microphones, gain, "
-                   "balance, masking, space, and the ear.", marks="bcde")
+                   "Then the computer. <bookmark mark='b'/> In the workstation of Part 53 every track is a file, many edits are nondestructive and undoable, provided the source and project history are preserved, every setting is saved. <bookmark mark='c'/> The console became software, its faders, equalizers, compressors and reverberators plug-ins. <bookmark mark='d'/> Nothing need be decided until the end, and many decisions never are. <bookmark mark='e'/> What stayed the same is what this part is about: microphones, gain, balance, masking, space, and the ear.", marks="bcde")

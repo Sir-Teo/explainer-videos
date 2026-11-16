@@ -71,11 +71,7 @@ class Phase(SoundScene):
         rows = text_rows(items, font_size=21).move_to(DOWN * 0.9)
         head = label(r"the 3 : 1 rule", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Engineers turned that into a rule. <bookmark mark='a'/> The three to one rule: a second microphone should be at "
-            "least three times as far from a source as the source's own microphone. <bookmark mark='b'/> Then the comb it adds "
-            "stays within about three decibels either way. <bookmark mark='c'/> It is a rule for spot microphones spread over a "
-            "band; it is broken on purpose when two microphones share one instrument. <bookmark mark='d'/> And the worst case is "
-            "two microphones on one drum, facing each other."
+            "Engineers turned that into a rule. <bookmark mark='a'/> The three to one rule: a second microphone should be at least three times as far from a source as the source's own microphone. <bookmark mark='b'/> For an ideal inverse-distance source at a three-to-one ratio, the coherent sum ranges about plus two point five to minus three point five decibels; real rooms and gain settings change this. <bookmark mark='c'/> It is a rule for spot microphones spread over a band; it is broken on purpose when two microphones share one instrument. <bookmark mark='d'/> And the worst case is two microphones on one drum, facing each other."
         ) as vo:
             self.play(FadeIn(head), FadeIn(eq))
             for mark, r in zip("abcd", rows):
@@ -99,11 +95,7 @@ class Phase(SoundScene):
                            (r"summed as recorded, \ the body of the drum cancels; \ flip one, \ and it adds", WHITE)], font_size=20, width=6.6).move_to(RIGHT * 3.0)
         head = label(r"a snare from both sides", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Like this. A snare drum is often recorded from both sides: a microphone over the top head, for the crack, and one "
-            "under the bottom, for the rattle of the wires. <bookmark mark='a'/> The stick pushes the top head down. "
-            "<bookmark mark='b'/> To the top microphone the air is pulled away; <bookmark mark='c'/> to the bottom one, the air "
-            "is pushed towards it: the same sound, inverted. <bookmark mark='d'/> Summed as recorded, the body of the drum "
-            "cancels; flip one microphone's polarity, and it adds."
+            "Like this. A snare drum is often recorded from both sides: a microphone over the top head, for the crack, and one under the bottom, for the rattle of the wires. <bookmark mark='a'/> The stick pushes the top head down. <bookmark mark='b'/> To the top microphone the air is pulled away; <bookmark mark='c'/> to the bottom one, the air is pushed towards it: approximately opposite polarity in a simplified low-frequency model; real heads and snare wires give different waveforms. <bookmark mark='d'/> Summed as recorded, some body energy can cancel; a polarity flip may improve the sum, which should be checked with the actual placement."
         ) as vo:
             self.play(FadeIn(head), FadeIn(shell), FadeIn(top), FadeIn(bot), FadeIn(wires), FadeIn(m1), FadeIn(m2))
             vo.wait_until("a")
@@ -152,9 +144,4 @@ class Phase(SoundScene):
             (r"and phase \ (Part 49's all-pass) \ can be rotated a little, \ band by band, \ as a tone control", GREY_A),
         ]
         rows_scene(self, r"putting it right", items,
-                   "Putting it right. <bookmark mark='b'/> Polarity: the button marked with a slashed circle on every channel, for "
-                   "microphones that face each other. <bookmark mark='c'/> Time: slide the close microphone's track later by the "
-                   "extra distance, so the two copies line up. <bookmark mark='d'/> Workstations find the delay by cross-correlation "
-                   "and align the tracks automatically. <bookmark mark='e'/> But aligning is a choice, not a correction: the delay "
-                   "between a close and a room microphone is the sound of the room. <bookmark mark='f'/> And phase can be rotated "
-                   "a little, band by band, with Part 49's all-passes, as a tone control of its own.", marks="bcdef")
+                   "Putting it right. <bookmark mark='b'/> Polarity inversion may improve summation when signals oppose, but orientation alone does not determine whether to invert. <bookmark mark='c'/> Time: slide the close microphone's track later by the extra distance, so the two copies line up. <bookmark mark='d'/> Workstations find the delay by cross-correlation and align the tracks automatically. <bookmark mark='e'/> But aligning is a choice, not a correction: the delay between a close and a room microphone is the sound of the room. <bookmark mark='f'/> And phase can be rotated a little, band by band, with Part 49's all-passes, as a tone control of its own.", marks="bcdef")

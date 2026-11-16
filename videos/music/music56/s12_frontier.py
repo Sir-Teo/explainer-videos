@@ -68,8 +68,7 @@ class Frontier(SoundScene):
             pulse(snd, boxes[0], st["first"], st["second"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
         with self.voiceover(
-            "The second. Its hi-hat is far too loud, and its bass is thin: the rules gave every track the same loudness, and a "
-            "hi-hat as loud as a voice is not what anyone wants."
+            'The second. Its hi-hat is far too loud, and its bass is thin: the rules gave every track the same loudness, which we judge too prominent for this example; preferences depend on production goals.'
         ):
             self.play(boxes[1][0].animate.set_stroke(TUNE, width=4), FadeIn(label(r"the second: \ every track at one loudness, \ the hi-hat as loud as the voice", font_size=19, color=TUNE).move_to(DOWN * 1.4)))
         self.wait(0.4)
@@ -98,7 +97,7 @@ class Frontier(SoundScene):
             "quietest track, and centred the bass and kick by their low energy, as we did; its pans are not unlike ours. "
             "<bookmark mark='b'/> And the masking map tells a mixed story: the machine's hi-hat and piano are freer than ours, "
             f"but its bass is {say(100 * d['masked']['machine']['bass'])} per cent buried, against our "
-            f"{say(100 * d['masked']['hand']['bass'])}. By these numbers the machine's mix is not worse. By ear, it is. "
+            f"{say(100 * d['masked']['hand']['bass'])}. By these numbers the machine's mix is not worse. For our intended balance, we prefer the hand mix; this is not a blind listener study. "
             "Measures of a mix are not yet measures of a good one."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))

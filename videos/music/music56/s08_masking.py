@@ -46,7 +46,7 @@ class Masking(SoundScene):
     def rule(self):
         eq = MathTex(r"\text{masked fraction}_{k,b} = \frac{\sum_t E_k(b,t)\,\bigl[E_{\text{rest}}(b,t) > E_k(b,t)\bigr]}{\sum_t E_k(b,t)}", font_size=34, color=TUNE).move_to(UP * 1.2)
         items = [
-            (r"$E_k(b, t)$: \ track $k$'s energy in band $b$ \ (24 bands, \ equally spaced in ERBs, \ 50 Hz to 12 kHz) \ and frame $t$ \ (21 ms)", WHITE),
+            (r"$E_k(b, t)$: \ track $k$'s energy in band $b$ \ (24 bands, \ equally spaced in ERBs, \ 50 Hz to 12 kHz) \ and frame $t$ \ (43 ms windows, \ 21 ms steps)", WHITE),
             (r"$E_{\text{rest}}$: \ everything else in the mix, \ in the same channel; \ left and right are judged apart, \ so panning counts", WHITE),
             (r"a cell is given away when the rest is stronger: \ the ideal binary mask of Part 64's source separation", WHITE),
             (r"a stand-in for the ear's partial loudness, \ simple and explicit", GREY_A),
@@ -55,7 +55,7 @@ class Masking(SoundScene):
         head = label(r"a masking map", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Here is Monochord's map. <bookmark mark='a'/> Split each track into twenty-four bands, equally spaced on the "
-            "ear's ERB scale from fifty hertz to twelve kilohertz, and into frames of twenty-one milliseconds. "
+            "ear's ERB scale from fifty hertz to twelve kilohertz, and into forty-three-millisecond analysis windows at twenty-one-millisecond steps. "
             "<bookmark mark='b'/> In each cell compare the track with everything else in the mix, left and right channels "
             "separately, so that panning counts. <bookmark mark='c'/> Where the rest is stronger, the cell is given away; it is "
             "the ideal binary mask that Part 64 will use to pull sources apart. The masked fraction is the share of the track's "
@@ -88,15 +88,9 @@ class Masking(SoundScene):
                        label(r"all", font_size=13, color=GREY_A)).arrange(RIGHT, buff=0.15).to_edge(DOWN, buff=0.35)
         tag = label(r"the rough mix: \ every fader at 0, \ every pan centre, \ no EQ", font_size=17, color=WHITE).to_edge(UP, buff=0.95)
         tag2 = label(r"carved: \ panned, \ high-passed, \ cut where the tracks collide", font_size=17, color=TUNE).to_edge(UP, buff=0.95)
-        head = label(r"our session's masking map", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"binary energy-overlap proxy: \ our session", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is our session's map, a row for each track, low bands on the left, red where the track is buried. "
-            "<bookmark mark='a'/> In the rough mix, every fader at nought, every pan in the centre, no equalization: the voice "
-            f"is mostly clear, but the guitar loses {say(100 * d['overall']['rough']['guitar'])} per cent of its energy, the "
-            f"bass {say(100 * d['overall']['rough']['bass'])}, the piano {say(100 * d['overall']['rough']['piano'])}. "
-            "<bookmark mark='b'/> Carved, panned and high-passed and cut where the tracks collide, the reds thin out: the "
-            f"guitar down to {say(100 * d['overall']['carved']['guitar'])} per cent, the voice to "
-            f"{say(100 * d['overall']['carved']['vox'])}."
+            f"Here is our session's map, a row for each track, low bands on the left, red where the track is buried. <bookmark mark='a'/> In the rough mix, every fader at nought, every pan in the centre, no equalization: the voice is mostly clear, but the binary energy-overlap proxy marks {say(100 * d['overall']['rough']['guitar'])} per cent of its energy as overlapped, not removed or proven inaudible, the bass {say(100 * d['overall']['rough']['bass'])}, the piano {say(100 * d['overall']['rough']['piano'])}. <bookmark mark='b'/> Carved, panned and high-passed and cut where the tracks collide, the reds thin out: the guitar down to {say(100 * d['overall']['carved']['guitar'])} per cent, the voice to {say(100 * d['overall']['carved']['vox'])}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(names), FadeIn(fx), FadeIn(fl), FadeIn(scale), FadeIn(ovh))
             vo.wait_until("a")
@@ -125,12 +119,7 @@ class Masking(SoundScene):
         rows.move_to(DOWN * 0.1)
         head = label(r"the carving", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is the carving. <bookmark mark='a'/> The voice high-passed and given a little presence near three "
-            "kilohertz. The piano panned left, high-passed at a hundred and eighty hertz, and cut at nine hundred, where the "
-            "guitar's arpeggios live; the guitar panned right, high-passed, and lifted at two kilohertz. "
-            "<bookmark mark='b'/> The kick and the bass divide the bottom between them: the bass gives up sixty hertz to the "
-            "kick, the kick gives up a hundred and thirty and three hundred to the bass's notes. The snare loses some box, "
-            "and the hi-hat keeps only its sizzle. Every cut gives a band to someone else."
+            "Here is the carving. <bookmark mark='a'/> The voice high-passed and given a little presence near three kilohertz. The piano panned left, high-passed at a hundred and eighty hertz, and cut at nine hundred, where the guitar's arpeggios live; the guitar panned right, high-passed, and lifted at two kilohertz. <bookmark mark='b'/> The kick and the bass divide the bottom between them: this example cuts the bass around sixty hertz to favor its kick, the kick gives up a hundred and thirty and three hundred to the bass's notes. The snare loses some box, and the hi-hat keeps only its sizzle. Every cut gives a band to someone else."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
             vo.wait_until("a")
@@ -171,8 +160,4 @@ class Masking(SoundScene):
             (r"the first equalizer is the arrangement: \ parts written in different registers do not need carving \ (Part 41)", TUNE),
         ]
         rows_scene(self, r"what the map teaches", items,
-                   "What does the map teach? <bookmark mark='b'/> Carving is a trade: every band given to one track is taken from "
-                   "another, and the map shows both sides of the bargain. <bookmark mark='c'/> Cut before boosting: a cut makes "
-                   "room, a boost makes everything louder and fights the rest. <bookmark mark='d'/> Pan to unmask: two parts in the "
-                   "same band, on opposite sides, hide each other less. <bookmark mark='e'/> And the first equalizer is the "
-                   "arrangement: parts written in different registers, as Part 41's orchestrators knew, need no carving at all.", marks="bcde")
+                   "What does the map teach? <bookmark mark='b'/> Carving is a trade: every band given to one track is taken from another, and the map shows both sides of the bargain. <bookmark mark='c'/> Cutting and boosting are both useful; choose them for the target sound and available headroom. <bookmark mark='d'/> Pan to unmask: two parts in the same band, on opposite sides, hide each other less. <bookmark mark='e'/> And the first equalizer is the arrangement: parts written in different registers, as Part 41's orchestrators knew, may need less spectral adjustment.", marks="bcde")

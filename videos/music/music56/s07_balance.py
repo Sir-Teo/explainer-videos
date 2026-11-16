@@ -62,12 +62,7 @@ class Balance(SoundScene):
             (r"a balance is a ranking, \ and every ranking is a choice: \ the three mixes of the hook are three rankings", TUNE),
         ]
         rows_scene(self, r"faders", items,
-                   "The faders come first. <bookmark mark='b'/> A fader is calibrated in decibels: nought is unity, minus ten is "
-                   "about half as loud, by Part 4's sones, and minus infinity is off. <bookmark mark='c'/> Balance is the first act "
-                   "of a mix: which part leads, which supports, which is felt rather than heard. <bookmark mark='d'/> One common "
-                   "way is to set the voice first, then the kick and bass that carry the groove, then the rest around them. "
-                   "<bookmark mark='e'/> A balance is a ranking, and every ranking is a choice: the hook's three mixes were three "
-                   "rankings of the same parts.", marks="bcde")
+                   "The faders come first. <bookmark mark='b'/> A fader is calibrated in decibels: nought is unity, minus ten can sound roughly half as loud under suitable conditions; loudness depends on spectrum and level, by Part 4's sones, and minus infinity is off. <bookmark mark='c'/> Balance is the first act of a mix: which part leads, which supports, which is felt rather than heard. <bookmark mark='d'/> One common way is to set the voice first, then the kick and bass that carry the groove, then the rest around them. <bookmark mark='e'/> A balance is a ranking, and every ranking is a choice: the hook's three mixes were three rankings of the same parts.", marks="bcde")
 
     # ------------------------------------------------------------------
     def laws(self):
@@ -85,11 +80,7 @@ class Balance(SoundScene):
         key = VGroup(*[label(rf"{float(k):g} dB in the centre", font_size=16, color=LCOL[k]) for k in LCOL]).arrange(RIGHT, buff=0.5).to_edge(UP, buff=1.0)
         head = label(r"four pan laws", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Part 55 compared two pan laws; consoles offer four. <bookmark mark='a'/> They differ in how much a centred sound "
-            "is turned down in each channel: nought decibels, a plain balance control; minus three, constant power; minus six, "
-            "constant amplitude; and minus four and a half, between the two. <bookmark mark='b'/> In stereo, only the minus "
-            "three law keeps the total power the same as a sound moves; the others bulge or sag by up to three decibels in the "
-            "middle."
+            "Part 55 compared two pan laws; consoles offer four. <bookmark mark='a'/> They differ in how much a centred sound is turned down in each channel: nought decibels, a plain balance control; minus three, constant power; minus six, constant amplitude; and minus four and a half, between the two. <bookmark mark='b'/> For the squared-gain sum, only the minus three law is constant power as a sound moves; the others bulge or sag by up to three decibels in the middle."
         ) as vo:
             self.play(FadeIn(head), FadeIn(key), FadeIn(a1), FadeIn(a2), FadeIn(t1), FadeIn(t2), FadeIn(xt), FadeIn(yt), FadeIn(ghost(VGroup(g, pw), 0.25)))
             vo.wait_until("a")
@@ -119,7 +110,7 @@ class Balance(SoundScene):
             "But mixes are also heard in mono, on phones, radios and shop speakers, where the two channels are added. "
             "<bookmark mark='a'/> Then a centred sound under the minus three law comes out three decibels louder than the same "
             "sound panned to one side, while under the minus six law it comes out the same. <bookmark mark='b'/> No law is "
-            "right both ways: minus three is true in stereo, minus six in mono, and minus four and a half splits the "
+            "right both ways: minus three preserves squared gains, minus six preserves the coherent mono sum, and minus four and a half splits the "
             "difference. Broadcast consoles often use minus six; music consoles minus three or four and a half."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
@@ -153,7 +144,7 @@ class Balance(SoundScene):
         with self.voiceover(
             "Here are our own faders and pans for the close-and-dry mix. <bookmark mark='a'/> The voice a decibel up and in "
             "the centre; the piano half left and the guitar half right, so that they flank the voice; bass, kick and snare in "
-            "the centre, where the low end belongs, because it must survive mono and both loudspeakers share the work; the "
+            "the centre, a common low-end choice, though stereo bass is not universally prohibited, because it must survive mono and both loudspeakers share the work; the "
             "hi-hat a little right, as a drummer would see it from the audience. The equalizers come next, because they are "
             "about masking."
         ) as vo:

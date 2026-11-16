@@ -66,7 +66,7 @@ class Monitor(SoundScene):
         head = label(r"where the mix will be heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "And most listeners will not hear the mix on studio monitors. <bookmark mark='a'/> Here is Part 54's phone "
-            "loudspeaker, which barely works below eight hundred hertz. <bookmark mark='b'/> Our bass line's fundamentals, "
+            "loudspeaker, whose simulated minus-three-decibel point is near eight hundred hertz; real phones vary. <bookmark mark='b'/> Our bass line's fundamentals, "
             "sixty-five to ninety-eight hertz, are forty decibels and more down. <bookmark mark='c'/> But "
             f"{say(100 * d['bass_above_844'])} per cent of the bass track's energy lies in its harmonics above eight hundred "
             "and forty-four hertz, where the phone works, and Part 4's missing fundamental does the rest: the ear hears the "
@@ -117,7 +117,7 @@ class Monitor(SoundScene):
         rows_scene(self, r"checking a mix", items,
                    "So engineers check. <bookmark mark='b'/> Against reference tracks: finished records in the same style, at the "
                    "same loudness, switched in and out. <bookmark mark='c'/> On small speakers: the Auratone cube of 1958 and "
-                   "Yamaha's NS-10 of 1978 sat on consoles for decades as the deliberately bad check. <bookmark mark='d'/> In mono, "
+                   "Yamaha's NS-10 of 1978 sat on consoles for decades as familiar reference checks, not simply because they were bad. <bookmark mark='d'/> In mono, "
                    "in the car, on earbuds and laptops: a mix that works on all of them is said to translate. "
                    "<bookmark mark='e'/> With meters, for what ears miss: loudness, which is Part 57, correlation, and a spectrum "
                    "against the references. <bookmark mark='f'/> And with rest: ears adapt within minutes, and a mix heard fresh "

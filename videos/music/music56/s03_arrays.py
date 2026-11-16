@@ -38,7 +38,7 @@ class Arrays(SoundScene):
             "ninety degrees apart. Blumlein's pair: two figure-8s, also ninety degrees apart. ORTF, French radio's choice: "
             "two cardioids a hundred and ten degrees apart and seventeen centimetres apart, about the width of a head. NOS, "
             "Dutch radio's: ninety degrees and thirty centimetres. And AB: two omnis sixty centimetres apart. "
-            "<bookmark mark='b'/> Coincident pairs make only level differences; spaced pairs only time differences; "
+            "<bookmark mark='b'/> Coincident pairs make only level differences; our far-field spaced-omni model only time differences; real distance and microphone responses can also change levels; "
             "near-coincident pairs both."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
@@ -106,7 +106,7 @@ class Arrays(SoundScene):
             "<bookmark mark='c'/> The angle at which a source reaches the loudspeaker, doubled, is the pair's recording angle: "
             f"the width of stage it spreads between the loudspeakers. Blumlein's pair, {say(d['pairs']['Blumlein']['sra'])} "
             f"degrees; AB, {say(d['pairs']['AB']['sra'])}; ORTF, {say(d['pairs']['ORTF']['sra'])}, though more careful charts "
-            "say about a hundred; and XY never quite reaches the loudspeakers at all. A pair is chosen for the width of what it "
+            "say about a hundred; and this simplified localization rule does not quite reach the loudspeakers for the tested XY configuration. A pair is chosen for the width of what it "
             "has to record."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(yt), FadeIn(ghost(cs, 0.25)))
@@ -143,8 +143,7 @@ class Arrays(SoundScene):
         head = label(r"one stage, \ three pairs", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Hear it, with headphones. Our piano forty degrees to the left, the voice in the centre, the guitar forty degrees to "
-            "the right, recorded by an XY pair, an ORTF pair and an AB pair, and played on two loudspeakers. The rule puts the "
-            "instruments where the dots are."
+            "the right, recorded by an XY pair, an ORTF pair and an AB pair, and played on two loudspeakers. The dots show this rule’s predictions, not measured listener positions."
         ):
             self.play(FadeIn(head), FadeIn(key), FadeIn(lines), FadeIn(note))
         st = d["starts"]
@@ -176,6 +175,6 @@ class Arrays(SoundScene):
                    "because there are no time differences to comb. <bookmark mark='c'/> Spaced pairs give spaciousness and "
                    "envelopment, but vaguer images, and they comb when summed. <bookmark mark='d'/> Decca's engineers in the 1950s "
                    "hung three omnis in a triangle over the orchestra, the centre one filling the middle: the Decca tree. "
-                   "<bookmark mark='e'/> Spot microphones close to soloists are delayed to match the main pair and mixed in a "
+                   "<bookmark mark='e'/> Spot microphones may be delayed to match a main pair; alignment is an artistic and technical choice and mixed in a "
                    "little. <bookmark mark='f'/> And in pop, the pair is usually the room: each instrument gets a close "
                    "microphone, and is placed by the mix.", marks="bcdef")

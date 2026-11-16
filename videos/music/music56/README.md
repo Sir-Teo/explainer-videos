@@ -2,7 +2,7 @@
 
 Part 56 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the third part of Act X, *The Studio and the Stage*. Take one multitrack recording and mix
-it three times: close and dry, a wall of sound, a dub. It is three different pieces of music. Since the 1960s the studio
+it three times: close and dry, a wall of sound, a dub. The same simulated performances receive three different presentations. Since the 1960s the studio
 has been an instrument, and this part learns to play it, with a session band built from earlier parts: Part 8's voice,
 Part 38's piano, guitar and bass, and Part 40's drums, nine tracks of the Tune. The tools are Monochord's
 (`explainer/music/monochord/studio.py`); every microphone, room, console and loudspeaker is simulated. Several sounds are

@@ -23,17 +23,10 @@ class Gain(SoundScene):
             (r"the preamplifier adds gain, \ and its own hiss \ (Part 54's noise budget), \ and the room's", WHITE),
             (r"the converter reaches full scale, \ 0 dBFS, \ at +18 dBu; \ above it there is nothing: \ the waveform is cut flat", WHITE),
             (r"below, \ the floor: \ the hiss carried along, \ and the converter's own \ (a 16-bit one near $-98$ dBFS)", WHITE),
-            (r"gain staging: \ set each stage so that the peaks clear the ceiling and the quiet parts clear the floor", TUNE),
+            (r"gain staging: \ set each stage so that peaks remain below the ceiling and the quiet parts clear the floor", TUNE),
         ]
         rows_scene(self, r"from the air to the converter", items,
-                   "Every recording passes through a chain of gains. <bookmark mark='b'/> A voice peaking at a hundred and four "
-                   "decibels into a condenser microphone of twelve millivolts per pascal gives about minus twenty-six dBu, a few "
-                   "dozen millivolts. <bookmark mark='c'/> The preamplifier adds gain, and its own hiss, as in Part 54's noise "
-                   "budget, and the room's hiss rides along. <bookmark mark='d'/> The converter reaches full scale, nought dBFS, at "
-                   "plus eighteen dBu; above that there is nothing, and the waveform is cut flat. <bookmark mark='e'/> Below is "
-                   "the floor: the hiss carried along, and the converter's own, near minus ninety-eight for sixteen bits. "
-                   "<bookmark mark='f'/> Gain staging is setting each stage so that the peaks clear the ceiling and the quiet "
-                   "passages clear the floor.", marks="bcdef")
+                   "Every recording passes through a chain of gains. <bookmark mark='b'/> A voice peaking at a hundred and four decibels into a condenser microphone of twelve millivolts per pascal gives about minus twenty-six dBu, a few dozen millivolts. <bookmark mark='c'/> The preamplifier adds gain, and its own hiss, as in Part 54's noise budget, and the room's hiss rides along. <bookmark mark='d'/> Our example converter maps plus eighteen dBu to full scale; calibration varies; above that there is nothing, and the waveform is cut flat. <bookmark mark='e'/> Below is the floor: the hiss carried along, and a simplified sixteen-bit noise floor; the familiar ninety-eight-decibel figure is full-scale sine SNR under ideal assumptions. <bookmark mark='f'/> Gain staging is setting each stage so that peaks remain below the ceiling and the quiet passages clear the floor.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def diagram(self):
@@ -111,13 +104,7 @@ class Gain(SoundScene):
             (r"the ceiling returns at the end: \ the converter on the way out, \ and the file", TUNE),
         ]
         rows_scene(self, r"twenty-four bits and floating point", items,
-                   "Modern equipment changes the balance. <bookmark mark='b'/> A twenty-four-bit converter's floor is set by its "
-                   "analogue parts, near minus a hundred and fifteen dBFS, so recording low costs almost nothing. "
-                   "<bookmark mark='c'/> Modern practice is to let the peaks reach about minus eighteen to minus twelve, and never "
-                   "near nought. <bookmark mark='d'/> Inside the workstation, signals are thirty-two-bit floating point, with a "
-                   "range of over fifteen hundred decibels and no ceiling to hit between plug-ins. <bookmark mark='e'/> But plug-ins "
-                   "modelled on analogue gear react to level, as the gear did in Part 50, so drive them as their originals were "
-                   "driven. <bookmark mark='f'/> The ceiling comes back at the end: the converter on the way out, and the file.", marks="bcdef")
+                   "Modern equipment changes the balance. <bookmark mark='b'/> A twenty-four-bit converter's floor is set by its analogue parts, near minus a hundred and fifteen dBFS, so recording low costs almost nothing. <bookmark mark='c'/> A practical tracking approach leaves substantial headroom; suitable peak targets depend on source, calibration and workflow. <bookmark mark='d'/> Inside the workstation, signals are thirty-two-bit floating point, with very large representable headroom; finite arithmetic, fixed-point stages and nonlinear plug-ins still have limits. <bookmark mark='e'/> But plug-ins modelled on analogue gear react to level, as the gear did in Part 50, so drive them as their originals were driven. <bookmark mark='f'/> The ceiling comes back at the end: the converter on the way out, and the file.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def references(self):

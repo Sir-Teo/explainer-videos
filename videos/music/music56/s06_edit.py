@@ -50,11 +50,7 @@ class Edit(SoundScene):
         note = label(rf"in our edit the voice jumps by {d['jump']:.2f} of its full swing in one sample: \ a click", font_size=17, color=WHITE).to_edge(DOWN, buff=0.3)
         head = label(r"why a cut clicks", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Why does a cut click? <bookmark mark='a'/> Two takes are never in the same place in their cycle at the same "
-            "moment. Join them with a butt splice and the waveform jumps, and a jump contains every frequency at once: a click. "
-            f"In our edit, in the middle of a note, the voice jumps by {say(d['jump'], 2)} of its full swing in a single sample. "
-            "<bookmark mark='b'/> A crossfade spreads the jump over a few milliseconds, and the click becomes a smooth change "
-            "of timbre the ear accepts."
+            f"Why does a cut click? <bookmark mark='a'/> Two takes can have different instantaneous waveform values at a splice. Join them with a butt splice and the waveform jumps, and a jump contains every frequency at once: a click. In our edit, in the middle of a note, the voice jumps by {say(d['jump'], 2)} of its full swing in a single sample. <bookmark mark='b'/> A crossfade spreads the jump over a few milliseconds, and the click becomes a smooth change of timbre the ear accepts."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(ax2), FadeIn(ghost(VGroup(wave, wave2), 0.3)))
             vo.wait_until("a")
@@ -106,7 +102,7 @@ class Edit(SoundScene):
             "sound, say two pieces of one sustained take, their waves add in amplitude, and a linear fade, one gain falling as "
             "the other rises, keeps the level flat; <bookmark mark='b'/> but the same fade between unrelated sounds dips by "
             "three decibels in the middle, because unrelated sounds add in power. <bookmark mark='c'/> The equal-power fade, "
-            "a cosine and a sine, fixes that, and bulges by three decibels on related material. It is Part 55's pan law "
+            "a cosine and a sine, fixes that, and bulges by three decibels on coherent, in-phase material. It is Part 55's pan law "
             "again, in time instead of space."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(yt), FadeIn(ghost(cs, 0.25)))
@@ -129,9 +125,4 @@ class Edit(SoundScene):
             (r"the craft is to fix what distracts, \ and keep what moves", GREY_A),
         ]
         rows_scene(self, r"time and pitch", items,
-                   "Editing reaches inside performances too. <bookmark mark='b'/> Timing: cut a drum track at every hit and slide "
-                   "the pieces onto the grid, crossfading every gap. <bookmark mark='c'/> Or stretch the audio between the hits "
-                   "instead, with Part 50's phase vocoder. <bookmark mark='d'/> Pitch: Part 50's correction, note by note, as "
-                   "Melodyne has done since 2001. <bookmark mark='e'/> Every one of these can make a performance perfect and "
-                   "lifeless: the expressive timing of Part 43 is exactly what gets edited out. <bookmark mark='f'/> The craft is "
-                   "to fix what distracts, and keep what moves.", marks="bcdef")
+                   "Editing reaches inside performances too. <bookmark mark='b'/> Timing: cut a drum track at every hit and slide the pieces onto the grid, crossfading every gap. <bookmark mark='c'/> Or stretch the audio between the hits instead, with Part 50's phase vocoder. <bookmark mark='d'/> Pitch: Part 50's correction, note by note, as Melodyne has done since 2001. <bookmark mark='e'/> Every one of these can remove intended expression when applied indiscriminately: the expressive timing of Part 43 is exactly what gets edited out. <bookmark mark='f'/> The craft is to fix what distracts, and keep what moves.", marks="bcdef")

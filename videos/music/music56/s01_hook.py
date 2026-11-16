@@ -60,13 +60,7 @@ class Hook(SoundScene):
         note = label(r"the same nine tracks, \ the same notes, \ the same performances", font_size=19, color=TUNE).to_edge(DOWN, buff=0.45)
         head = label(r"the second was the dub", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The second. <bookmark mark='a'/> The first was a wall of sound: every part doubled or tripled, an echo chamber, "
-            "the whole mix squeezed through a compressor, and everything in the centre; its crest factor, the peaks over the "
-            f"average, is only {say(me['wall']['crest_db'])} decibels. <bookmark mark='b'/> The second, the dub: drums and bass "
-            "pushed forward, the voice let through only in fragments, into a tape echo, a spring reverb on the snare, and the "
-            "drums dropped out near the end. <bookmark mark='c'/> The third, close and dry: each microphone close to its "
-            "instrument, panned, carved, with a little of the room. <bookmark mark='d'/> The same tracks, the same notes, the "
-            "same performances: three different pieces of music."
+            f"The second. <bookmark mark='a'/> The first was a wall of sound: every part doubled or tripled, an echo chamber, the whole mix squeezed through a compressor, and everything in the centre; its crest factor, the peaks over the average, is only {say(me['wall']['crest_db'])} decibels. <bookmark mark='b'/> The second, the dub: drums and bass pushed forward, the voice let through only in fragments, into a tape echo, a spring reverb on the snare, and the drums dropped out near the end. <bookmark mark='c'/> The third, close and dry: the simulated close pickups, panned, carved, with a little of the room. <bookmark mark='d'/> The same simulated performances become three different presentations of the Tune."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
             for mark, r in zip("abc", rows[1:]):
@@ -87,13 +81,7 @@ class Hook(SoundScene):
             (r"the studio became an instrument; \ this part learns to play it", TUNE),
         ]
         rows_scene(self, r"the studio as an instrument", items,
-                   "This is the story of the last seventy years of popular music. <bookmark mark='b'/> Until the 1950s a record was "
-                   "a performance, caught as well as it could be. <bookmark mark='c'/> Then came tape, and many tracks: Les Paul "
-                   "layering his own guitar on itself, and from 1962 Phil Spector's wall of sound, a dozen musicians in a small "
-                   "room, doubled and drenched in echo. <bookmark mark='d'/> In Jamaica in the 1970s, King Tubby and Lee Perry "
-                   "remixed songs into dubs at the mixing desk, live, muting and echoing as a performance in itself. "
-                   "<bookmark mark='e'/> In 1979 Brian Eno lectured on the recording studio as a compositional tool. "
-                   "<bookmark mark='f'/> The studio had become an instrument, and this part learns to play it.", marks="bcdef")
+                   "This is the story of the last seventy years of popular music. <bookmark mark='b'/> Many early records emphasized capturing a performance, although editing, overdubbing and studio construction had earlier precedents. <bookmark mark='c'/> Then came tape, and many tracks: Les Paul layering his own guitar on itself, and from 1962 Phil Spector's wall of sound, a dozen musicians in a small room, doubled and drenched in echo. <bookmark mark='d'/> In Jamaica in the 1970s, King Tubby and Lee Perry remixed songs into dubs at the mixing desk, live, muting and echoing as a performance in itself. <bookmark mark='e'/> In 1979 Brian Eno lectured on the recording studio as a compositional tool. <bookmark mark='f'/> The studio had become an instrument, and this part learns to play it.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def session(self):

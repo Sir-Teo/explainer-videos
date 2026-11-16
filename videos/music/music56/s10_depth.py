@@ -27,7 +27,7 @@ class Depth(SoundScene):
         ]
         rows_scene(self, r"cues for depth", items,
                    "Panning gives left and right. Depth comes from the distance cues of Part 55. <bookmark mark='b'/> Level: further "
-                   "is quieter, six decibels for every doubling of distance. <bookmark mark='c'/> Treble: air and obstacles take the "
+                   "is quieter, about six decibels per doubling for a free-field point source, before room contributions. <bookmark mark='c'/> Treble: air and obstacles take the "
                    "highs first. <bookmark mark='d'/> The ratio of direct sound to reverberation, the strongest cue of all. "
                    "<bookmark mark='e'/> And pre-delay, the gap before the reverberation starts: a long one keeps a source close "
                    "even in a big room, a short one pushes it back.", marks="bcdef")
@@ -99,14 +99,7 @@ class Depth(SoundScene):
         rows = text_rows(items, font_size=20).move_to(DOWN * 0.8)
         head = label(r"width", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Width has tools of its own. <bookmark mark='a'/> Mid-side, Blumlein's again: the mid is the sum, the side the "
-            "difference; turn the side up to widen a stereo track, down to narrow it, to nothing for mono. "
-            "<bookmark mark='b'/> And the Haas trick: put the same mono track in both channels with one twelve milliseconds "
-            "late. The precedence effect fuses them into one wide source. <bookmark mark='c'/> Its cost: the two channels are "
-            f"nearly unrelated, a correlation of {say(d['correlation'], 2)}, and summed to mono they comb, with notches from "
-            f"{say(d['notch_hz'])} hertz and every {say(d['spacing_hz'])} hertz above. <bookmark mark='d'/> So a correlation "
-            "meter sits on the master: near plus one is narrow and safe, near nought is wide, and below nought something "
-            "will cancel in mono."
+            f"Width has tools of its own. <bookmark mark='a'/> Mid-side, Blumlein's again: the mid is the sum, the side the difference; turn the side up to widen a stereo track, down to narrow it, to nothing for mono. <bookmark mark='b'/> And the Haas trick: put the same mono track in both channels with one twelve milliseconds late. Depending on delay, signal and playback, precedence can bias localization toward the earlier channel while the sound may seem wider. <bookmark mark='c'/> Its cost: the two channels are nearly unrelated, a correlation of {say(d['correlation'], 2)}, and summed to mono they comb, with notches from {say(d['notch_hz'])} hertz and every {say(d['spacing_hz'])} hertz above. <bookmark mark='d'/> So a correlation meter sits on the master: positive correlation generally supports mono compatibility, while negative correlation warns of cancellation; one broadband number does not determine width or reveal all frequency-specific problems."
         ) as vo:
             self.play(FadeIn(head), FadeIn(eq))
             for mark, r in zip("abcd", rows):

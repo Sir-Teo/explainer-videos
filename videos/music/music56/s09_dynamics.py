@@ -23,12 +23,13 @@ class Dynamics(SoundScene):
             b = Rectangle(width=w, height=0.6, stroke_width=0, fill_color=col, fill_opacity=0.8)
             b.move_to([-3.0 + w / 2, 0.6 - 1.1 * i, 0])
             bars.add(VGroup(b, label(k, font_size=19, color=col).next_to(b, LEFT, buff=0.3), label(rf"{v:.1f} dB", font_size=19, color=WHITE).next_to(b, RIGHT, buff=0.2)))
+        bars.scale(min(1.0, 12.6 / bars.width)).move_to(ORIGIN)
         cap = label(r"how far the voice's level wanders: \ the 95th minus the 10th percentile of its 50 ms levels", font_size=17, color=GREY_A).move_to(UP * 1.8)
         sett = label(rf"threshold $-26$ dBFS, \ ratio 4 : 1, \ attack 5 ms, \ release 120 ms: \ {d['gr_mean']:.0f} dB of gain reduction on average, \ {d['gr_max']:.0f} at most",
                      font_size=17, color=WHITE).to_edge(DOWN, buff=0.6)
         head = label(r"a compressor on the voice", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Part 50 built the compressor; a mix uses it on nearly every track. <bookmark mark='a'/> A singer's level wanders: "
+            "Part 50 built the compressor; many mixes use it on selected tracks. <bookmark mark='a'/> A singer's level wanders: "
             f"ours by {say(d['spread_before'], 1)} decibels between its quiet and loud moments. Over a band, the quiet words "
             "are masked and the loud ones jump out. <bookmark mark='b'/> A compressor at four to one, starting at minus "
             f"twenty-six, narrows that to {say(d['spread_after'], 1)}, turning the loudest notes down by up to "
@@ -105,13 +106,7 @@ class Dynamics(SoundScene):
             (r"the wall of sound was this taken to its end: \ everything through one compressor, \ pushed until it saturated", TUNE),
         ]
         rows_scene(self, r"buses", items,
-                   "Mixes are built in groups. <bookmark mark='b'/> The drums, the backing voices, the strings: each group is "
-                   "summed to a bus with its own fader and its own compressor. <bookmark mark='c'/> A gentle compressor on the "
-                   "whole mix, two decibels of reduction, makes the parts rise and fall together; engineers call it glue. "
-                   "<bookmark mark='d'/> Side-chains, from Part 50, let the kick duck the bass and the voice duck the guitars, so "
-                   "that each gets out of the other's way: masking handled in time rather than frequency. "
-                   "<bookmark mark='e'/> The wall of sound was this taken to its end: everything through one compressor, pushed "
-                   "until it saturated.", marks="bcde")
+                   "Mixes are built in groups. <bookmark mark='b'/> The drums, the backing voices, the strings: each group is summed to a bus with its own fader and its own compressor. <bookmark mark='c'/> A gentle compressor on the whole mix, two decibels of reduction, makes the parts rise and fall together; engineers call it glue. <bookmark mark='d'/> Side-chains, from Part 50, let the kick duck the bass and the voice duck the guitars, so that each gets out of the other's way: masking handled in time rather than frequency. <bookmark mark='e'/> Our wall-of-sound illustration combines doubling, reverberation and strong compression; historical productions used varied recording chains.", marks="bcde")
 
     # ------------------------------------------------------------------
     def automation(self):
