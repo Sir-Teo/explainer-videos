@@ -77,7 +77,7 @@ class Hook(SoundScene):
         ], title=r"In this part", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
             "Here is the plan. First, what a tape machine does to a sound. <bookmark mark='b'/> Then chance, silence, and "
-            "the electronic studios. <bookmark mark='c'/> Xenakis's clouds, whose onsets obey Poisson's law, and his sieves. "
+            "the electronic studios. <bookmark mark='c'/> Xenakis's clouds, modeled here with independent Poisson-process onsets, and his sieves. "
             "<bookmark mark='d'/> Masses of sound that beat, and two loops of one figure drifting apart. "
             "<bookmark mark='e'/> A single spectrum given to an ensemble, and the first computer to sing. "
             "<bookmark mark='f'/> And at the frontier, composing with machines and listening to data."

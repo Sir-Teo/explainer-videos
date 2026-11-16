@@ -28,7 +28,7 @@ class Phasing(SoundScene):
                    "In 1965 Steve Reich recorded a street preacher in San Francisco saying it's gonna rain. "
                    "<bookmark mark='c'/> He made two tape loops of the phrase and played them on two machines that ran at "
                    "slightly different speeds. <bookmark mark='d'/> The loops began in unison, became an echo, then a canon, then "
-                   "a texture nobody had composed. <bookmark mark='e'/> In Piano Phase, of 1967, two pianists play the same "
+                   "an emergent texture produced by a deliberately chosen compositional process. <bookmark mark='e'/> In Piano Phase, of 1967, two pianists play the same "
                    "figure, and one slowly pulls ahead of the other. <bookmark mark='f'/> Reich called it music as a gradual "
                    "process: a process you can hear happening, the opposite of a hidden row.", marks="cdef")
 
@@ -70,12 +70,7 @@ class Phasing(SoundScene):
         t2 = label(r"distinct pairs of notes sounding together", font_size=20, color=BLUE).next_to(b2, UP, buff=0.3)
         cap = label(r"the figure passes through twelve alignments; \ symmetric about six, \ because ahead by $k$ is behind by $12 - k$", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "The process is a walk through twelve alignments, one for each number of notes the second piano is ahead. "
-            "<bookmark mark='a'/> For each, the program counts the unisons, both pianos on the same note: twelve at the "
-            "start, none one note later, six at three, six and nine notes ahead, where the figure's repeated three-note "
-            "cells line up. <bookmark mark='b'/> And it counts the distinct pairs of notes sounding together, a measure of "
-            "how rich the composite is: richest at four, five, seven and eight notes ahead. The pattern is symmetric, "
-            "because being k notes ahead is the same as being twelve minus k behind."
+            "The process is a walk through twelve alignments, one for each number of notes the second piano is ahead. <bookmark mark='a'/> For each, the program counts the unisons, both pianos on the same note: twelve at the start, none one note later, six at three, six and nine notes ahead, where the figure's repeated three-note cells line up. <bookmark mark='b'/> And it counts the distinct pairs of notes sounding together, a simple combinatorial diversity count, not a measured richness judgment: richest at four, five, seven and eight notes ahead. The pattern is symmetric, because being k notes ahead is the same as being twelve minus k behind."
         ) as vo:
             self.play(FadeIn(b1), FadeIn(t1), FadeIn(cap))
             vo.wait_until("b")

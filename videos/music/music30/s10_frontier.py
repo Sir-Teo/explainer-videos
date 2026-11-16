@@ -40,13 +40,7 @@ class Frontier(SoundScene):
             (r"the evidence for when sonification helps is still thin", EAR),
         ]
         rows_scene(self, r"listening to data", items,
-                   "The second side turns the studio around: sound as a way of reading data. <bookmark mark='b'/> In "
-                   "sonification, data become sound so that the ear can find their patterns. <bookmark mark='c'/> A Geiger "
-                   "counter's clicks are chapter four's Poisson process, made audible. <bookmark mark='d'/> Heartbeats, "
-                   "earthquake records and gravitational waves have been sped up into the audible range. "
-                   "<bookmark mark='e'/> The ear is very good at rhythm, periodicity and change, things a static graph can hide. "
-                   "<bookmark mark='f'/> But careful evidence of when sonification really helps, compared with a picture, is "
-                   "still thin.", marks="cdef")
+                   "The second side turns the studio around: sound as a way of reading data. <bookmark mark='b'/> In sonification, data become sound so that the ear can find their patterns. <bookmark mark='c'/> A Geiger counter can approximate a Poisson counting process under steady conditions; detector dead time and changing sources affect it, made audible. <bookmark mark='d'/> Heartbeats, earthquake records and gravitational waves have been sped up into the audible range. <bookmark mark='e'/> The ear is very good at rhythm, periodicity and change, things a static graph can hide. <bookmark mark='f'/> But careful evidence of when sonification really helps, compared with a picture, is still thin.", marks="cdef")
 
     # ------------------------------------------------------------------
     def problem(self):

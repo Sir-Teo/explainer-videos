@@ -36,14 +36,14 @@ class Computer(SoundScene):
     # ------------------------------------------------------------------
     def daisy(self):
         items = [
-            (r"1961: \ an IBM 7094 at Bell Labs sings `Daisy Bell', \ with a computed voice", WHITE),
+            (r"1961: \ a Bell Labs computer sings `Daisy Bell', \ with a computed voice", WHITE),
             (r"John Kelly and Carol Lochbaum made the voice; \ Mathews the accompaniment", WHITE),
             (r"a model of the vocal tract as a chain of tubes \ (Part 8's two-tube mouth, \ extended)", WHITE),
             (r"Arthur C. Clarke heard it, \ and Kubrick's HAL sings it as he is shut down in \textit{2001}", TUNE),
             (r"the voice this series uses is a distant descendant", GREY_A),
         ]
         rows_scene(self, r"Daisy, Daisy", items,
-                   "In 1961 a computer sang. <bookmark mark='b'/> At Bell Labs an IBM 7094 performed the song Daisy Bell, "
+                   "In 1961 a computer sang. <bookmark mark='b'/> At Bell Labs a computer performed the song Daisy Bell, "
                    "<bookmark mark='c'/> its voice computed by John Kelly and Carol Lochbaum and its accompaniment by Max "
                    "Mathews, <bookmark mark='d'/> from a model of the vocal tract as a chain of tubes, Part 8's two-tube mouth "
                    "extended. <bookmark mark='e'/> The writer Arthur C. Clarke heard the demonstration, and in Stanley Kubrick's "
@@ -99,7 +99,7 @@ class Computer(SoundScene):
         head = label(r"a unit-generator patch \ (as in MUSIC and every synthesizer since)", font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
         cap = label(r"heard three times: \ the oscillator; \ with the envelope; \ through the filter", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Mathews's idea is still how every synthesizer works. Connect unit generators: an oscillator making a sawtooth "
+            "Mathews's idea is still one influential modular synthesis architecture. Connect unit generators: an oscillator making a sawtooth "
             "wave, full of harmonics; an envelope that shapes its loudness over time; a filter that removes the higher "
             "harmonics, here more and more as the note dies away. Hear the oscillator alone, then with the envelope, then "
             "through the filter: three blocks, and a raw buzz becomes something like a plucked bass."
@@ -120,8 +120,8 @@ class Computer(SoundScene):
             (r"Wendy Carlos, \ \textit{Switched-On Bach} \ (1968): \ Bach on a Moog synthesizer, \ a best-selling classical record", WHITE),
             (r"Laurie Spiegel at Bell Labs: \ \textit{The Expanding Universe} \ (1980), \ music from algorithms", WHITE),
             (r"Suzanne Ciani, \ Éliane Radigue, \ Isao Tomita: \ the synthesizer as a voice of its own", WHITE),
-            (r"by the 1980s, \ the electronic studio had become an instrument anyone could buy", TUNE),
+            (r"by the 1980s, \ the electronic studio had become a widely marketed instrument, though cost and access still varied", TUNE),
             (r"Part 51 builds the analogue synthesizer", GREY_A),
         ]
         rows_scene(self, r"synthesizers reach the public", items,
-                   "Synthesizers reached a wide public quickly. <bookmark mark='b'/> Wendy Carlos's Switched-On Bach, of 1968, played Bach on a Moog synthesizer and became one of the best-selling classical records of its time. <bookmark mark='c'/> At Bell Labs, Laurie Spiegel composed with algorithms; her album The Expanding Universe appeared in 1980. <bookmark mark='d'/> Suzanne Ciani, Éliane Radigue and Isao Tomita each made the synthesizer a voice of its own. <bookmark mark='e'/> By the 1980s the electronic studio had become an instrument anyone could buy. <bookmark mark='f'/> Part 51 builds the analogue synthesizer.", marks="cdef")
+                   "Synthesizers reached a wide public quickly. <bookmark mark='b'/> Wendy Carlos's Switched-On Bach, of 1968, played Bach on a Moog synthesizer and became one of the best-selling classical records of its time. <bookmark mark='c'/> At Bell Labs, Laurie Spiegel composed with algorithms; her album The Expanding Universe appeared in 1980. <bookmark mark='d'/> Suzanne Ciani, Éliane Radigue and Isao Tomita each made the synthesizer a voice of its own. <bookmark mark='e'/> By the 1980s the electronic studio had become a widely marketed instrument, though cost and access still varied. <bookmark mark='f'/> Part 51 builds the analogue synthesizer.", marks="cdef")

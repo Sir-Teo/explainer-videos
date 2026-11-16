@@ -32,7 +32,7 @@ class Spectral(SoundScene):
                    "<bookmark mark='c'/> In Gérard Grisey's Partiels, of 1975, the starting point is the spectrum of a low "
                    "trombone note, analysed by machine, <bookmark mark='d'/> and each of its harmonics is given to an instrument, "
                    "at its own loudness, so that the ensemble rebuilds the note. <bookmark mark='e'/> The harmony is the harmonic "
-                   "series of Part 1: in tune with physics, and out of tune with the piano. <bookmark mark='f'/> It was a reply to "
+                   "series of Part 1: based on selected spectral relationships, often differing from the equal-tempered keyboard. <bookmark mark='f'/> It was a reply to "
                    "serialism: compose with sound as it is, not with rows.", marks="cdef")
 
     # ------------------------------------------------------------------
@@ -103,12 +103,7 @@ class Spectral(SoundScene):
         ], font_size=23)
         head = label(r"harmonics against the piano's keys", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Why can a piano not play this chord? <bookmark mark='a'/> The octave harmonics, one, two, four, eight and "
-            "sixteen, fall on keys. <bookmark mark='b'/> But the fifth harmonic is fourteen cents flatter than the piano's "
-            "major third, and the third two cents sharper than its fifth. <bookmark mark='c'/> The seventh is thirty-one "
-            "cents flat; the eleventh lies almost exactly between two keys; the thirteenth is forty-one cents above the key "
-            "below it. <bookmark mark='d'/> So spectral composers wrote quarter tones and eighth tones, <bookmark mark='e'/> "
-            "Part 6's tuning differences, heard as harmony rather than as error."
+            "Why can a piano not play this chord? <bookmark mark='a'/> When the fundamental is on an equal-tempered key, its octave harmonics one, two, four, eight and sixteen also fall on keys. <bookmark mark='b'/> But the fifth harmonic is fourteen cents flatter than the piano's major third, and the third two cents sharper than its fifth. <bookmark mark='c'/> The seventh is thirty-one cents flat; the eleventh lies almost exactly between two keys; the thirteenth is forty-one cents above the key below it. <bookmark mark='d'/> So spectral composers wrote quarter tones and eighth tones, <bookmark mark='e'/> Part 6's tuning differences, heard as harmony rather than as error."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -167,4 +162,4 @@ class Spectral(SoundScene):
             (r"Part 33 asks which tunings are possible at all", GREY_A),
         ]
         rows_scene(self, r"the name, and after", items,
-                   "The movement got its name in 1979, from the composer and philosopher Hugues Dufourt. <bookmark mark='c'/> Horațiu Rădulescu built spectra from piano strings bowed and struck from inside the instrument. <bookmark mark='d'/> Georg Friedrich Haas's in vain, of 2000, plays chords from the harmonic series with the hall's lights going down to near darkness. <bookmark mark='e'/> In all of them the harmonic series is heard as consonance, and the tempered scale as one tuning among many. <bookmark mark='f'/> Part 33 asks which tunings are possible at all.", marks="cdef")
+                   "The movement got its name in 1979, from the composer and philosopher Hugues Dufourt. <bookmark mark='c'/> Horațiu Rădulescu built spectra from piano strings bowed and struck from inside the instrument. <bookmark mark='d'/> Georg Friedrich Haas's in vain, of 2000, plays chords from the harmonic series with the hall's lights going down to near darkness. <bookmark mark='e'/> Harmonic spectra can promote fusion, while consonance and roughness still depend on voicing, level and context, and the tempered scale as one tuning among many. <bookmark mark='f'/> Part 33 asks which tunings are possible at all.", marks="cdef")

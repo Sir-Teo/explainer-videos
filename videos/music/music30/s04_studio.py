@@ -19,7 +19,7 @@ class Studio(SoundScene):
         items = [
             (r"Cologne, \ 1951: \ the studio for electronic music at West German Radio \ (Herbert Eimert)", WHITE),
             (r"the opposite of Paris: \ no recordings, \ only sounds made from electronic oscillators", WHITE),
-            (r"Fourier \ (Part 3): \ any steady sound is a sum of sine waves; \ so build sounds from sines", WHITE),
+            (r"Fourier \ (Part 3): \ an ideal periodic sound can be represented by a harmonic Fourier series; nonperiodic sounds require a broader spectral description; \ so build sounds from sines", WHITE),
             (r"Karlheinz Stockhausen's \textit{Studie II} \ (1954): \ sine-tone mixtures on a scale of his own", TUNE),
             (r"\textit{Gesang der Jünglinge} \ (1956): \ a boy's voice and electronic sounds, \ for five groups of loudspeakers", GREY_A),
         ]
@@ -51,7 +51,7 @@ class Studio(SoundScene):
             "Stockhausen's scale for Study Two divides the interval of five to one, two octaves and a major third, into "
             "twenty-five equal steps, each a little more than a semitone: a hundred and eleven cents. Eighty-one frequencies "
             "from a hundred hertz. Each of his sounds is a mixture of five sine tones at equal steps on this scale. Here are "
-            "five mixtures of our own: not chords, but new timbres, each a small synthetic spectrum."
+            "five mixtures of our own: mixtures that can be heard as timbres or as multiple tones, depending on spacing, envelopes and listening, each a small synthetic spectrum."
         ):
             self.play(FadeIn(head), FadeIn(bars), FadeIn(axis), FadeIn(cap))
         with self.listen(c) as snd:
@@ -82,7 +82,7 @@ class Studio(SoundScene):
     def columbia(self):
         items = [
             (r"New York, \ 1959: \ the Columbia--Princeton Electronic Music Center and its RCA Mark II synthesizer", WHITE),
-            (r"programmed by punched paper tape: \ every pitch, \ envelope and timbre specified exactly", WHITE),
+            (r"programmed by punched paper tape: \ pitch, envelope and timbre \ programmed within the machine’s controls", WHITE),
             (r"Babbitt's serial works for synthesizer; \ Bülent Arel, \ Mario Davidovsky, \ Halim El-Dabh", WHITE),
             (r"Tokyo, \ Milan, \ Utrecht, \ Warsaw: \ radio studios across the world", TUNE),
             (r"the voltage-controlled synthesizer \ (Moog, \ Buchla, \ mid-1960s) \ \ is Part 51", GREY_A),
@@ -90,7 +90,7 @@ class Studio(SoundScene):
         rows_scene(self, r"studios everywhere", items,
                    "Studios multiplied. <bookmark mark='b'/> In New York, from 1959, the Columbia-Princeton Electronic Music "
                    "Center housed the room-sized RCA Mark Two synthesizer, <bookmark mark='c'/> programmed with punched paper "
-                   "tape, so that every pitch, envelope and timbre could be specified exactly. <bookmark mark='d'/> Babbitt "
+                   "tape, so that many pitches, envelopes and timbral parameters could be specified within the machine’s finite controls. <bookmark mark='d'/> Babbitt "
                    "wrote serial works for it, and so did Bülent Arel, Mario Davidovsky and Halim El-Dabh. "
                    "<bookmark mark='e'/> Radio studios opened in Tokyo, Milan, Utrecht and Warsaw. <bookmark mark='f'/> In the "
                    "mid-1960s Robert Moog and Don Buchla built voltage-controlled synthesizers, which Part 51 builds.",

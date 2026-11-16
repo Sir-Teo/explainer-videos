@@ -68,7 +68,7 @@ class Outro(SoundScene):
             r"tape: \ speed, \ reversal, \ and the cut attack that hides a bell",
             r"chance and silence: \ the composer's choices given away",
             r"Studie II's 81 frequencies; \ Xenakis's clouds obey Poisson's law",
-            r"clusters beat about 8 times a second: \ roughness from physics",
+            r"neighbouring fundamentals beat about 8 times a second: \ flutter and spectral interactions",
             r"two loops pass through 12 alignments, \ symmetric about 6",
             r"one brass note rebuilt by an ensemble, \ in quarter and eighth tones",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
@@ -76,7 +76,7 @@ class Outro(SoundScene):
             "What did we find? Tape can speed, reverse and cut a sound, and without its attack a bell is hardly a bell. "
             "<bookmark mark='a'/> Chance and silence gave the composer's choices away. <bookmark mark='b'/> Studie Two built "
             "sounds from eighty-one sine frequencies, and Xenakis's clouds follow Poisson's law. <bookmark mark='c'/> "
-            "Clusters beat about eight times a second, which is why they sound rough. <bookmark mark='d'/> Two loops of one "
+            "Close tones and their partials create multiple interactions; beating near eight hertz can sound like flutter as well as contribute to a complex texture. <bookmark mark='d'/> Two loops of one "
             "figure pass through twelve alignments, symmetric about six. <bookmark mark='e'/> And one brass note can be "
             "rebuilt by an ensemble, if it plays between the piano's keys."
         ) as vo:

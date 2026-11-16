@@ -19,7 +19,7 @@ class Mass(SoundScene):
     def history(self):
         items = [
             (r"Krzysztof Penderecki, \ \textit{Threnody for the Victims of Hiroshima} \ (1960): \ 52 strings in quarter-tone clusters", WHITE),
-            (r"György Ligeti, \ \textit{Atmosphères} \ (1961): \ no melody, \ no rhythm, \ only slowly changing texture", WHITE),
+            (r"György Ligeti, \ \textit{Atmosphères} \ (1961): \ texture foregrounded over melody \ and a regular pulse", WHITE),
             (r"`micropolyphony': \ dozens of lines too close and too many to hear one by one", WHITE),
             (r"the cluster as a sound in itself: \ a band of pitches, \ a colour, \ a mass", TUNE),
             (r"heard by millions in Kubrick's \textit{2001} \ (1968), \ used without Ligeti's permission", GREY_A),
@@ -27,7 +27,7 @@ class Mass(SoundScene):
         rows_scene(self, r"masses of sound", items,
                    "In Poland and Hungary composers wrote masses of sound. <bookmark mark='b'/> Krzysztof Penderecki's Threnody "
                    "for the Victims of Hiroshima, of 1960, sets fifty-two strings in clusters of quarter tones. "
-                   "<bookmark mark='c'/> György Ligeti's Atmosphères, of 1961, has no melody and no rhythm, only a slowly "
+                   "<bookmark mark='c'/> György Ligeti's Atmosphères, of 1961, foregrounds slowly changing texture over conventional melodic lines or a regular pulse, only a slowly "
                    "changing texture. <bookmark mark='d'/> Ligeti called it micropolyphony: dozens of lines, too close together "
                    "and too many to be heard one by one. <bookmark mark='e'/> The cluster becomes a sound in itself, a band of "
                    "pitches heard as a colour. <bookmark mark='f'/> Millions heard Atmosphères in Stanley Kubrick's film 2001, in "
@@ -65,18 +65,18 @@ class Mass(SoundScene):
         bars.move_to(LEFT * 2.8 + DOWN * 0.4)
         t = label(r"beats per second between neighbouring strings", font_size=21, color=GREY_A).next_to(bars, UP, buff=0.35)
         side = VGroup(*[label(s, font_size=22, color=c_) for s, c_ in (
-            (r"half a semitone apart near middle C: \ about 8 beats a second", WHITE),
-            (r"Part 5: \ beats this fast are heard as roughness", TUNE),
-            (r"eight strings: \ seven neighbouring pairs, \ and many more distant ones, \ all beating at once", WHITE),
-            (r"the mass is rough because of physics, \ not notation", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+            (r"half-semitone neighbours near C4:\\about 8 beats per second", WHITE),
+            (r"8 Hz can remain audible as flutter or pulses", TUNE),
+            (r"eight strings: seven adjacent pairs\\plus more distant pair interactions", WHITE),
+            (r"roughness: spacing, spectra, levels\\and auditory filtering", EAR))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 5.4))
         side.move_to(RIGHT * 3.6 + DOWN * 0.2)
         with self.voiceover(
             "Why does a cluster sound rough? <bookmark mark='a'/> Neighbouring strings half a semitone apart near middle C "
             "differ by about eight hertz, so they beat about eight times a second. <bookmark mark='b'/> Part 5 showed that "
-            "beats this fast are no longer heard as a pulse but as roughness. <bookmark mark='c'/> With eight strings, seven "
+            "beating around eight hertz can remain audible as flutter or pulses; roughness depends on component spacing, frequency, level and auditory filtering. <bookmark mark='c'/> With eight strings, seven "
             "neighbouring pairs beat at once, and every more distant pair adds its own faster beating. "
-            "<bookmark mark='d'/> The mass is rough because of physics, whatever the score calls it."
+            "<bookmark mark='d'/> Multiple fundamental and partial interactions can contribute to this model’s roughness; perception is not determined by one beat rate alone."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
             for mark, r in zip("abcd", side):
@@ -113,11 +113,11 @@ class Mass(SoundScene):
         b = col(d["open"], TUNE).move_to(RIGHT * 3.0 + DOWN * 0.2)
         la = label(r"a cluster: \ half a semitone apart", font_size=22, color=EAR).next_to(a, UP, buff=0.4)
         lb = label(r"the same eight strings, \ in fifths and fourths", font_size=22, color=TUNE).next_to(b, UP, buff=0.4)
-        cap = label(r"neighbours a fifth or a fourth apart beat far too fast to hear as roughness", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.45)
+        cap = label(r"wider fundamental spacing; partials can still interact", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "The roughness comes from closeness, not from the number of strings. The same eight bowed strings, first as the "
+            "Close spectral spacing contributes to roughness; the number, levels and spectra of strings also matter. The same eight bowed strings, first as the "
             "cluster, half a semitone apart, then spread out in fifths and fourths across four octaves. The second is "
-            "smooth and open: neighbours so far apart no longer beat at a rate the ear hears as roughness."
+            "smooth and open: the more widely spaced fundamentals reduce some interactions, though their partials can still overlap."
         ):
             self.play(FadeIn(a), FadeIn(b), FadeIn(la), FadeIn(lb), FadeIn(cap))
         with self.listen(c) as snd:

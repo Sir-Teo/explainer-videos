@@ -94,11 +94,11 @@ python -m videos.music.labs 30                                  # the lab (write
    *Solution.* The lab prints the order. Even clouds are heard as a pulse within a second or two; Poisson clouds clump and
    pause.
 
-4. **Build.** Write the phasing engine for any figure, and find the figures whose twelve alignments are all different.
+4. **Build.** Write the phasing engine for any figure, and find the figures whose alignments are distinct after identifying k with 12 − k.
 
    *Where to look.* `soundmass.phase_patterns` gives the pairs at each shift; describe each alignment by its multiset of
    pairs up to the symmetry k ↔ 12 − k, and search figures (for instance, all sequences over a small pitch set) for
-   those whose alignments are pairwise different; such figures make a phasing piece that never repeats a texture.
+   those whose seven alignment classes are pairwise different. With unordered simultaneous pairs, opposite shifts necessarily match, so twelve distinct textures are impossible under this descriptor.
 
 5. ★ **For which patterns in data does listening beat looking?**
 
@@ -117,3 +117,7 @@ python -m videos.music.labs 30                                  # the lab (write
   *JAES* (1973).
 * T. Hermann, A. Hunt and J. G. Neuhoff (eds.), *The Sonification Handbook* (2011).
 * Part 1 for the string; Part 2 for tape speed; Part 3 for Fourier; Part 5 for beats; Parts 7–9 for the instruments.
+
+## Interpretation limits
+
+Eight-hertz beating can sound like flutter or pulses; roughness depends on spectral spacing, level and auditory filtering. Wider-spaced fundamentals can still have interacting partials. Poisson clouds assume a steady rate and independent events; they illustrate one model, not every Xenakis process. Phase-pair diversity is a combinatorial descriptor, not a listener rating. Historical studio controls specify parameters within a finite machine, and the 1961 Daisy example is attributed to a Bell Labs computer without an uncertain model number.

@@ -21,7 +21,7 @@ class Xenakis(SoundScene):
         items = [
             (r"Iannis Xenakis, \ 1922--2001: \ resistance fighter in Greece, \ wounded, \ exiled to Paris in 1947", WHITE),
             (r"an engineer in Le Corbusier's office, \ a composition student of Messiaen", WHITE),
-            (r"\textit{Metastaseis} \ (1954): \ 61 players, \ every string with its own glissando", WHITE),
+            (r"\textit{Metastaseis} \ (1954): \ 61 players; \ prominent independent string glissandi", WHITE),
             (r"the same ruled surfaces as the Philips Pavilion's roof: \ straight lines making curves", TUNE),
             (r"`stochastic music': \ compose the statistics of a mass, \ not each of its notes", EAR),
         ]
@@ -29,7 +29,7 @@ class Xenakis(SoundScene):
                    "The sharpest critic of total serialism was an engineer. <bookmark mark='b'/> Iannis Xenakis fought in the "
                    "Greek resistance, was badly wounded, and reached Paris as a refugee in 1947, <bookmark mark='c'/> where he "
                    "worked as an engineer for Le Corbusier and studied composition with Messiaen. <bookmark mark='d'/> His "
-                   "Metastaseis, of 1954, gives each of sixty-one players their own glissando, <bookmark mark='e'/> drawn as the "
+                   "Metastaseis, of 1954, uses a sixty-one-player ensemble with a prominent mass of independently moving string glissandi, <bookmark mark='e'/> drawn as the "
                    "same ruled surfaces, curves made of straight lines, that he would use for the Philips Pavilion's roof. "
                    "<bookmark mark='f'/> He called the method stochastic music: compose the statistics of a mass of sound, not "
                    "each of its notes.", marks="cdef")
@@ -104,19 +104,14 @@ class Xenakis(SoundScene):
             dots.add(Dot([x0 + (k + 0.5) * bars.width / 14, bars.get_bottom()[1] + 0.35 + 2.8 * d["expect"][k] / max(d["hist"]), 0], radius=0.07, color=EAR))
         t = label(r"notes per second, \ counted over ten minutes of a cloud at 5 a second", font_size=20, color=GREY_A).next_to(bars, UP, buff=0.35)
         side = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
-            (r"gold: \ how many seconds held 0, \ 1, \ 2 ... notes", TUNE),
-            (r"pink: \ Poisson's law, \ $e^{-\lambda}\lambda^k/k!$ \ with $\lambda = 5$", EAR),
-            (rf"the gaps' spread equals their mean: \ ratio {d['gap_cv']:.2f} \ (exactly 1 in the long run)", WHITE),
-            (r"Xenakis chose $\lambda$ for each cell of his score, \ and let the law place the notes", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+            (r"gold: seconds with 0, 1, 2 ... onsets", TUNE),
+            (r"pink: Poisson, $e^{-\lambda}\lambda^k/k!$\\$\lambda = 5$ onsets per second", EAR),
+            (rf"8-second example: gap SD / mean {d['gap_cv']:.2f}\\theoretical value: 1", WHITE),
+            (r"Xenakis composed density cell by cell\\this model assumes steady rate\\and independent events", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 4.8))
         side.move_to(RIGHT * 4.3 + DOWN * 0.2)
         with self.voiceover(
-            "Xenakis governed his clouds with a law from probability. Let the cloud run for ten minutes at an average of five "
-            "notes a second, and count the notes in each second. <bookmark mark='a'/> The gold bars are the counts. "
-            "<bookmark mark='b'/> The pink points are Poisson's law, the distribution of counts when events happen "
-            "independently at a steady rate; the two agree. <bookmark mark='c'/> The gaps between notes vary as much as their "
-            "average length, which is why the cloud clumps. <bookmark mark='d'/> In Achorripsis, of 1957, Xenakis chose the "
-            "average density for each cell of his score and let the law place the notes."
+            "Xenakis governed his clouds with a law from probability. Let the cloud run for ten minutes at an average of five notes a second, and count the notes in each second. <bookmark mark='a'/> The gold bars are the counts. <bookmark mark='b'/> The pink points are Poisson's law, the count distribution for the specified homogeneous Poisson-process model; the two agree. <bookmark mark='c'/> The gaps between notes vary as much as their average length, which is why the cloud clumps. <bookmark mark='d'/> In Achorripsis, of 1957, Xenakis chose the average density for each cell of his score and used probabilistic distributions in a composed density framework, not an assertion that all his music follows this one process."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars), FadeIn(dots))
             for mark, r in zip("abcd", side):

@@ -41,14 +41,7 @@ class Chance(SoundScene):
             (r"there is no silence: \ only sounds we have not chosen to listen to", EAR),
         ]
         rows_scene(self, r"4 minutes 33 seconds", items,
-                   "Then came the most famous piece of the century in which nothing is played. <bookmark mark='b'/> At "
-                   "Woodstock, New York, in August 1952, the pianist David Tudor sat at a piano, opened the lid, and played "
-                   "nothing for four minutes and thirty-three seconds, <bookmark mark='c'/> marking three movements by closing "
-                   "and opening the keyboard lid. <bookmark mark='d'/> The music was what the audience heard: wind in the trees, "
-                   "rain on the roof, people talking and leaving. <bookmark mark='e'/> Cage had visited an anechoic room at "
-                   "Harvard and still heard two sounds, one high and one low; he was told they were his nervous system and his "
-                   "blood. <bookmark mark='f'/> His conclusion: there is no such thing as silence, only sounds we have not "
-                   "chosen to hear.", marks="cdef")
+                   "Then came the most famous piece of the century in which nothing is played. <bookmark mark='b'/> At Woodstock, New York, in August 1952, the pianist David Tudor sat at a piano, opened the lid, and played nothing for four minutes and thirty-three seconds, <bookmark mark='c'/> marking three movements by closing and opening the keyboard lid. <bookmark mark='d'/> The music was what the audience heard: wind in the trees, rain on the roof, people talking and leaving. <bookmark mark='e'/> Cage had visited an anechoic room at Harvard and still heard two sounds, one high and one low; he reported being told they were his nervous system and his blood; this anecdote is not a verified physiological diagnosis. <bookmark mark='f'/> His conclusion: there is no such thing as silence, only sounds we have not chosen to hear.", marks="cdef")
 
     # ------------------------------------------------------------------
     def dice(self):
@@ -82,12 +75,7 @@ class Chance(SoundScene):
             (r"Part 42 asks what composing is; \ Part 65, \ what a machine's random choices add", GREY_A),
         ]
         rows_scene(self, r"open works", items,
-                   "Chance came in two kinds. <bookmark mark='b'/> Cage used it in composing; others, Morton Feldman, Earle "
-                   "Brown, Stockhausen, left choices to the performer. <bookmark mark='c'/> Brown's December 1952 is a single "
-                   "page of lines and rectangles. <bookmark mark='d'/> Stockhausen's Piano Piece Eleven, of 1956, lets the "
-                   "pianist play its nineteen fragments in any order the eye happens to fall on. <bookmark mark='e'/> Every "
-                   "performance is a different piece, which raises the question of what the work is. "
-                   "<bookmark mark='f'/> Part 42 asks what composing is, and Part 65 what a machine's random choices add.",
+                   "Chance came in two kinds. <bookmark mark='b'/> Cage used it in composing; others, Morton Feldman, Earle Brown, Stockhausen, left choices to the performer. <bookmark mark='c'/> Brown's December 1952 is a single page of lines and rectangles. <bookmark mark='d'/> Stockhausen's Piano Piece Eleven, of 1956, lets the pianist play its nineteen fragments in any order the eye happens to fall on. <bookmark mark='e'/> Performances can be different realizations of the same work, which raises questions about a work’s identity across different realizations. <bookmark mark='f'/> Part 42 asks what composing is, and Part 65 what a machine's random choices add.",
                    marks="cdef")
 
     # ------------------------------------------------------------------

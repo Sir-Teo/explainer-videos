@@ -61,7 +61,7 @@ class Tape(SoundScene):
         with self.voiceover(
             "C is the untouched bell: a sharp strike, then a long ringing decay. B is the same sound backwards, swelling to "
             "a sudden stop. D is an octave lower and twice as long. And A, the one with its strike removed, is the "
-            "surprise: without its first quarter-second the bell hardly sounds like a bell at all. Schaeffer found that "
+            "surprise: without its first quarter-second the bell’s attack cue is weakened, though its remaining spectrum can still suggest a bell. Schaeffer found that "
             "the attack carries much of what tells us what made a sound."
         ):
             self.play(FadeIn(ans), cells[2][1].animate.set_color(TUNE))
@@ -120,7 +120,7 @@ class Tape(SoundScene):
         with self.voiceover(
             "Hear the first operation. The Tune's first phrase on Part 7's piano, recorded; then the same recording played "
             "twice as fast, an octave higher and half as long; then at half speed, an octave lower and twice as long. On "
-            "tape, pitch and time cannot be changed separately: that took digital processing, which Part 50 builds. Listen "
+            "tape, pitch and time cannot be changed separately: later processing methods can decouple them; digital techniques made this especially flexible, which Part 50 builds. Listen "
             "too to the piano's character changing."
         ):
             self.play(FadeIn(head), FadeIn(rows_))
