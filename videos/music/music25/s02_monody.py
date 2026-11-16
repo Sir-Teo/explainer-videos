@@ -70,10 +70,10 @@ class Monody(SoundScene):
                    "The consequence went far beyond song. <bookmark mark='b'/> The bass and the chords above it became the "
                    "frame of almost all music for a century and a half, the basso continuo, the continuous bass. "
                    "<bookmark mark='c'/> What the composer wrote was the melody and the bass; the middle was filled in by "
-                   "the player. <bookmark mark='d'/> The texture of Palestrina, equal voices, gave way to a polarity, a top "
+                   "the player. <bookmark mark='d'/> The texture of Palestrina, contrapuntal textures continued alongside a more prominent polarity, a top "
                    "and a bottom. <bookmark mark='e'/> It is Monteverdi's second practice from Part 24 made into a "
                    "system: the words govern the melody, and the bass governs the harmony. <bookmark mark='f'/> From 1600 "
-                   "to about 1750, almost every piece of Western art music, sacred or secular, sung or played, has a "
+                   "to about 1750, a large share of ensemble music in these European traditions, sacred or secular, sung or played, has a "
                    "continuo part.", marks="cdef")
 
     # ------------------------------------------------------------------

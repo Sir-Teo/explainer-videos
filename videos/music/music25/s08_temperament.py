@@ -38,10 +38,10 @@ class Temperament(SoundScene):
             "Part 6 showed that no tuning makes every interval pure in every key. The Baroque lived with the choice. "
             "The chart shows the major third of each major key, going round the circle of fifths, in cents wider than "
             "pure. <bookmark mark='a'/> In quarter-comma meantone, the eight common keys have pure thirds, and four keys "
-            "far from home have thirds forty-one cents wide, unusable. <bookmark mark='b'/> In Andreas Werckmeister's "
-            f"third temperament, of 1691, every key is usable, but no two are alike: C's third is {wc['third_error']:.0f} "
+            "far from home have thirds forty-one cents wide, strongly compromised in this layout. <bookmark mark='b'/> In Andreas Werckmeister's "
+            f"third temperament, of 1691, every key is usable, with several different interval profiles; some keys share the same third sizes: C's third is {wc['third_error']:.0f} "
             f"cents wide, F sharp's {wf['third_error']:.0f}, as wide as Pythagorean. <bookmark mark='c'/> In equal "
-            "temperament every third is fourteen cents wide, and every key is the same."
+            "temperament every third is fourteen cents wide, and transposed interval ratios are the same, while register and instruments still matter."
         ) as vo:
             self.play(Create(ax), FadeIn(xl), FadeIn(yl))
             for mark, cv, kk in zip("abc", curves, keys_):
@@ -60,7 +60,7 @@ class Temperament(SoundScene):
         head = label(r"quarter-comma meantone: \ a good fifth, \ and the wolf", font_size=28, color=GREY_A).to_edge(UP, buff=0.5)
         cap = label(r"eleven fifths a little narrow; \ the twelfth absorbs the rest, \ 35.7 cents too wide", font_size=22, color=WHITE).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Why were meantone's remote keys unusable? Because the circle does not close. Eleven of its fifths are each "
+            "Why were meantone's remote keys strongly compromised in this layout? Because the circle does not close. Eleven of its fifths are each "
             "narrowed by a quarter of a comma, and the twelfth, between G sharp and E flat, has to absorb the "
             "difference: it is more than a third of a semitone too wide. Players called it the wolf, for its howl. Here "
             "is a good meantone fifth, then the wolf."
@@ -116,7 +116,7 @@ class Temperament(SoundScene):
                    "major sharp and stubborn, and F minor deep and heavy, and others gave different lists. "
                    "<bookmark mark='c'/> Part of it is tuning: in a well temperament the remote keys really are rougher, "
                    "as you just heard. <bookmark mark='d'/> Part is instruments: string players' open strings favour some "
-                   "keys, and trumpets without valves played only in D or C. <bookmark mark='e'/> And part is convention, "
+                   "keys, and natural trumpets were often built or crooked for favored keys such as D and C. <bookmark mark='e'/> And part is convention, "
                    "learned from the pieces in each key. <bookmark mark='f'/> In 1722 Bach compiled The Well-Tempered "
                    "Clavier, a prelude and fugue in each of the twenty-four keys, playable on one instrument in one "
                    "tuning: well-tempered, not necessarily equal, a question chapter ten returns to.", marks="cdef")

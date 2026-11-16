@@ -132,3 +132,13 @@ python -m videos.music.labs 25                                  # the lab (write
 * M. S. Cuthbert and C. Ariza, "music21" (*ISMIR* 2010), whose corpus holds the Corelli and Handel encodings.
 * Part 6 for temperaments; Part 10 for figures and the realizer; Part 15 for keys; Part 17 for the chorales and the choir;
   Part 18 for the rule of the octave; Part 21 for binary form; Part 24 for Palestrina's modes.
+
+## Interpretation and model scope
+
+The pitch demonstration spans 392–465 Hz, about 296 cents: approximately a minor third, not a fourth. A=415 is a modern convention near some historical levels, rather than the single Baroque standard. Instrument construction, string tension and response varied.
+
+Corelli’s figures are inferred from the violin parts later compared with the realization. Pitch-class inclusion therefore measures reconstruction with supplied harmonic information, not independent prediction from an unfigured bass. The voicing realizer enforces selected constraints and does not recreate Corelli’s complete counterpoint.
+
+Werckmeister III has repeated third sizes; not every key has a unique third. Equal temperament preserves transposed interval ratios, not instrument/register identity. Modern modal and key tags are editorial metadata, not a direct census of historical conceptual categories. Changes toward major-minor practice had multiple causes.
+
+One affect per movement, fixed ornament lengths, national styles and continuo prevalence are teaching generalizations with contextual exceptions. Bach’s reception predates 1829, and Handel developed English oratorio from earlier practices. Galilei’s experiment refutes the proposed weight ratio for an ideal string; it does not remove mathematical relationships from acoustics.

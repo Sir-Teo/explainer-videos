@@ -47,7 +47,7 @@ class Opera(SoundScene):
                    "a fanfare-like toccata, and instrumental ritornellos return between the strophes of the songs, the "
                    "first hint of the returning sections of chapter six. <bookmark mark='d'/> At its centre Orpheus pleads "
                    "with the ferryman of the dead in a song that uses every resource of the new style and of the old art of "
-                   "ornament. <bookmark mark='e'/> With Orfeo, opera stopped being an experiment and became a form.")
+                   "ornament. <bookmark mark='e'/> With Orfeo, opera gained a particularly influential early example.")
 
     # ------------------------------------------------------------------
     def lament(self):
@@ -58,7 +58,7 @@ class Opera(SoundScene):
         cap = label(r"A G F E, \ again and again: \ the descending tetrachord, \ the sign of grief", font_size=22, color=WHITE).next_to(g, DOWN, buff=0.35)
         with self.voiceover(
             "Opera also gave grief its own sound. A bass that falls by step through four notes, A, G, F, E, repeated "
-            "over and over, with a voice lamenting above it, became the sign of a lament: Monteverdi's Lament of the "
+            "over and over, with a voice lamenting above it, became one influential lament convention: Monteverdi's Lament of the "
             "Nymph uses it, and half a century later Dido's lament in Purcell's opera uses a chromatic form of it. Here is one built for the "
             "film: the ground three times, the voice rising and falling against it."
         ):

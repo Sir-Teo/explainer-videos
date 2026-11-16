@@ -29,8 +29,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 22 — Analysis | Complete | Open |
 | 23 — Chant to Polyphony | Complete | Open |
 | 24 — The Renaissance | Complete | Open |
-| 25 — The Baroque | In progress | Open |
-| 26–68 | Queued | Open |
+| 25 — The Baroque | Complete | Open |
+| 26 — The Classical Style | In progress | Open |
+| 27–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.

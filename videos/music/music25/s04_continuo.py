@@ -48,7 +48,7 @@ class Continuo(SoundScene):
         with self.voiceover(
             "Before the test, see how much freedom the figures leave. Here are the first two bars of Corelli's bass, with "
             "the figures the violins imply, realized three times by the program, asked each time to start with its top "
-            "voice in a different place. All three are correct; they differ at the start and then settle onto the same "
+            "voice in a different place. All three pass the realizer’s limited constraints; they differ at the start and then settle onto the same "
             "smoothest path. A real player would differ much more, breaking the chords and adding melody."
         ):
             self.play(FadeIn(fl), FadeIn(rolls), FadeIn(cap))
@@ -91,7 +91,7 @@ class Continuo(SoundScene):
                      label(r"the realizer: \ the right chords, \ no melody", font_size=22, color=EAR).next_to(gB, DOWN, buff=0.35))
         with self.voiceover(
             "A is Corelli: two violins weaving in suspensions, one over the other, each a melody. B is the program: "
-            "smooth, correct chords, and no melody at all."
+            "smooth, correct chords, and a deliberately plain upper line."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -113,13 +113,7 @@ class Continuo(SoundScene):
         side.scale_to_fit_width(min(side.width, 6.2))
         side.move_to(RIGHT * 3.4 + DOWN * 0.2)
         with self.voiceover(
-            f"The numbers. Over the Grave's {say(d['notes'])} bass notes, the violins imply no figure most often, then six, "
-            f"then seven: a texture rich in suspensions. <bookmark mark='a'/> The realizer's chords contain "
-            f"{say(round(100 * ag['pitch_classes']))} in a hundred of the notes Corelli's violins actually play: the harmony is "
-            "almost all there in the bass and its figures. <bookmark mark='b'/> But the realizer's top note is the first "
-            f"violin's only {say(round(100 * ag['top']))} times in a hundred. <bookmark mark='c'/> It writes no parallels, "
-            "and no melody either. <bookmark mark='d'/> That is the Baroque division of labour: the bass and its figures "
-            "carry the harmony, and the art of the composer, and of a good continuo player, is in the lines above it."
+            f"The numbers. Over the Grave's {say(d['notes'])} bass notes, the violins imply no figure most often, then six, then seven: a texture rich in suspensions. <bookmark mark='a'/> The realizer's chords contain {say(round(100 * ag['pitch_classes']))} in a hundred of the notes Corelli's violins actually play: these figures were inferred from the very violin notes being compared, so this measures reconstruction with supplied harmonic information, not independent prediction from bass alone. <bookmark mark='b'/> But the realizer's top note is the first violin's only {say(round(100 * ag['top']))} times in a hundred. <bookmark mark='c'/> Its selected voicing path avoids the checked parallels; it does not reproduce Corelli’s melodic design. <bookmark mark='d'/> That is the Baroque division of labour: the bass and its figures carry the harmony, and the art of the composer, and of a good continuo player, is in the lines above it."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
             for mark, r in zip("abcd", side):
@@ -138,4 +132,4 @@ class Continuo(SoundScene):
             (r"its graduates staffed the courts and opera houses of Europe", GREY_A),
         ]
         rows_scene(self, r"the bass as a school", items,
-                   "The figured bass was also a school of composition. <bookmark mark='b'/> In the conservatories of Naples, which began as orphanages, boys were trained as musicians, <bookmark mark='c'/> and their daily exercise was the partimento: a bass, often without figures, to be realized at the keyboard. <bookmark mark='d'/> They learned the rule of the octave from Part 18, a chord for every step of the scale in the bass, and a stock of patterns for every situation. <bookmark mark='e'/> Composition was taught as improvisation over a bass, <bookmark mark='f'/> and the conservatories' graduates staffed the courts and opera houses of eighteenth-century Europe.", marks="cdef")
+                   "The figured bass was also a school of composition. <bookmark mark='b'/> In the conservatories of Naples, which grew from charitable institutions with differing histories, boys were trained as musicians, <bookmark mark='c'/> and their daily exercise was the partimento: a bass, often without figures, to be realized at the keyboard. <bookmark mark='d'/> They learned the rule of the octave from Part 18, a chord for every step of the scale in the bass, and a stock of patterns for every situation. <bookmark mark='e'/> Composition was taught as improvisation over a bass, <bookmark mark='f'/> and the conservatories' graduates staffed the courts and opera houses of eighteenth-century Europe.", marks="cdef")

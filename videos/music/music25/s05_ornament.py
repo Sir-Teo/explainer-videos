@@ -20,17 +20,10 @@ class Ornament(SoundScene):
             (r"joy, \ grief, \ anger, \ tenderness: \ each with its keys, \ tempos, \ intervals and figures", WHITE),
             (r"Johann Mattheson, \ \textit{The Complete Kapellmeister} \ (1739): \ a catalogue of them", WHITE),
             (r"rhetoric as a model: \ musical figures named like figures of speech", TUNE),
-            (r"one affect per movement: \ contrast comes between movements, \ not within them", GREY_A),
+            (r"governing affects are one historical ideal; \ movements can contain internal contrast", GREY_A),
         ]
         rows_scene(self, r"one passion at a time", items,
-                   "Baroque writers explained music's power with a theory of the passions. <bookmark mark='b'/> A piece, "
-                   "or a movement, should portray one affect, joy or grief, anger or tenderness, each with its suitable "
-                   "keys, tempos, intervals and figures. <bookmark mark='c'/> The Hamburg critic Johann Mattheson "
-                   "catalogued them in his Complete Kapellmeister of 1739. <bookmark mark='d'/> The model was rhetoric: "
-                   "theorists named musical figures after figures of speech, a rising line for exaltation, a falling "
-                   "chromatic line for lament. <bookmark mark='e'/> One affect per movement meant that contrast came "
-                   "between movements rather than within them, which is exactly what the Classical style of Part 26 "
-                   "would change.")
+                   "Baroque writers explained music's power with a theory of the passions. <bookmark mark='b'/> A piece, or a movement, should portray one affect, joy or grief, anger or tenderness, each with its suitable keys, tempos, intervals and figures. <bookmark mark='c'/> The Hamburg critic Johann Mattheson catalogued them in his Complete Kapellmeister of 1739. <bookmark mark='d'/> The model was rhetoric: theorists named musical figures after figures of speech, a rising line for exaltation, a falling chromatic line for lament. <bookmark mark='e'/> One-affect descriptions are a teaching generalization; Baroque movements also contain internal contrasts. Part 26 examines later approaches to contrast.")
 
     # ------------------------------------------------------------------
     def heard(self):
@@ -50,7 +43,7 @@ class Ornament(SoundScene):
             "The page also left the ornaments to the player. Here is a plain line, then the same line as a player might "
             "decorate it: a leaning note, an appoggiatura, on the first beat; a quick mordent; a trill from the upper note "
             "at the cadence. Then a run of even eighth notes, and the same run as a French player would have played it, "
-            "long, short, long, short, the notes inégales, unequal notes, which French scores never wrote."
+            "long, short, long, short, the notes inégales, unequal notes, often left implicit in the relevant French performance conventions."
         ):
             self.play(FadeIn(head), FadeIn(cells))
         with self.listen(c) as snd:
@@ -73,7 +66,7 @@ class Ornament(SoundScene):
                    "Composers and teachers printed tables of the signs. <bookmark mark='b'/> Jean-Henri d'Anglebert in "
                    "1689, François Couperin in 1713, and Bach in the little book he wrote out for his son Wilhelm Friedemann "
                    "in 1720. <bookmark mark='c'/> A trill, by these rules, begins on the note above, on the beat, so that "
-                   "it starts as a dissonance and resolves. <bookmark mark='d'/> An appoggiatura takes half the value of "
+                   "it starts as a dissonance and resolves. <bookmark mark='d'/> In a common teaching convention, an appoggiatura takes half the value of "
                    "the note it leans on, or two thirds of a dotted one. <bookmark mark='e'/> Inequality applied, in French "
                    "music, to pairs of the shortest common notes moving by step. <bookmark mark='f'/> How much of this "
                    "applied where, in Bach as against Couperin, in Italy as against France, is still argued over by "

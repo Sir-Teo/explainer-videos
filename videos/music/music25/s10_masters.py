@@ -24,13 +24,7 @@ class Masters(SoundScene):
             (r"old-fashioned at his death; \ revived from 1829, \ with Mendelssohn's \textit{St Matthew Passion}", GREY_A),
         ]
         rows_scene(self, r"Bach", items,
-                   "Three composers born within two years of each other gathered the century up. <bookmark mark='b'/> "
-                   "Johann Sebastian Bach, born in 1685, was an organist and court musician before he became cantor of "
-                   "Saint Thomas's in Leipzig, <bookmark mark='c'/> where for years he produced a cantata almost every "
-                   "Sunday, as well as the Passions and, later, the Mass in B minor. <bookmark mark='d'/> His music is the "
-                   "summit of the counterpoint of Parts 17 and 20, <bookmark mark='e'/> combining the French, Italian and "
-                   "German styles of his time. <bookmark mark='f'/> At his death he was old-fashioned, and his revival "
-                   "dates from 1829, when Felix Mendelssohn conducted the St Matthew Passion in Berlin.", marks="cdef")
+                   "Three composers born within two years of each other gathered the century up. <bookmark mark='b'/> Johann Sebastian Bach, born in 1685, was an organist and court musician before he became cantor of Saint Thomas's in Leipzig, <bookmark mark='c'/> where for years he produced a cantata almost every Sunday, as well as the Passions and, later, the Mass in B minor. <bookmark mark='d'/> His music is an influential example of the counterpoint of Parts 17 and 20, <bookmark mark='e'/> combining the French, Italian and German styles of his time. <bookmark mark='f'/> At his death he was old-fashioned, and the 1829 performance became a major revival landmark, alongside continuing earlier reception, when Felix Mendelssohn conducted the St Matthew Passion in Berlin.", marks="cdef")
 
     # ------------------------------------------------------------------
     def handel(self):
@@ -42,13 +36,7 @@ class Masters(SoundScene):
             (r"never out of the repertory since", GREY_A),
         ]
         rows_scene(self, r"Handel", items,
-                   "George Frideric Handel was born a few weeks earlier, in the same part of Germany, but his career ran "
-                   "the other way. <bookmark mark='b'/> Trained in Germany and formed in Italy, he settled in London, "
-                   "<bookmark mark='c'/> where from Rinaldo in 1711 he wrote Italian operas for London audiences, made of "
-                   "da capo arias. <bookmark mark='d'/> When the fashion for Italian opera collapsed he invented the English "
-                   "oratorio, Messiah among them, first performed in Dublin in 1742. <bookmark mark='e'/> He was a "
-                   "businessman as well as a composer, running his own companies and his own seasons. "
-                   "<bookmark mark='f'/> Unlike Bach, he has never left the repertory.", marks="cdef")
+                   "George Frideric Handel was born a few weeks earlier, in the same part of Germany, but his career ran the other way. <bookmark mark='b'/> Trained in Germany and formed in Italy, he settled in London, <bookmark mark='c'/> where from Rinaldo in 1711 he wrote Italian operas for London audiences, made of da capo arias. <bookmark mark='d'/> When the fashion for Italian opera collapsed he developed an influential English-oratorio practice, drawing on earlier traditions, Messiah among them, first performed in Dublin in 1742. <bookmark mark='e'/> He was a businessman as well as a composer, running his own companies and his own seasons. <bookmark mark='f'/> Unlike Bach, he has never left the repertory.", marks="cdef")
 
     # ------------------------------------------------------------------
     def lascia(self):

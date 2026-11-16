@@ -39,8 +39,8 @@ class Keys(SoundScene):
             f"Dorian and Mixolydian still lead. <bookmark mark='b'/> A century and a half later, Bach's chorales are "
             f"labelled {say(b.get('major', 0))} major and {say(b.get('minor', 0))} minor, and nothing else, <bookmark mark='c'/> "
             "even when the melody Bach harmonized was an old modal tune. <bookmark mark='d'/> One mechanism was the "
-            "leading tone: once singers raised the seventh at every cadence, by the rules of musica ficta from Part 23, "
-            "Dorian and Mixolydian cadences sounded like minor and major ones, and the modes converged on two."
+            "leading tone: once singers often raised a cadential leading note in relevant contexts, by the rules of musica ficta from Part 23, "
+            "Dorian and Mixolydian cadences sounded like minor and major ones, and several interacting changes supported major-minor practice; modern editorial labels are not a direct historical census of listeners’ concepts."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
             for mark, r in zip("abcd", side):
@@ -59,14 +59,7 @@ class Keys(SoundScene):
             (r"he grounded it in the harmonic series \ (Part 3): \ the major triad given by nature", GREY_A),
         ]
         rows_scene(self, r"the theory of keys", items,
-                   "The theory caught up in 1722, the year of the Well-Tempered Clavier. <bookmark mark='b'/> Jean-Philippe "
-                   "Rameau's Treatise on Harmony treated chords, not intervals, as the units of music: a chord and its "
-                   "inversions are one chord. <bookmark mark='c'/> Beneath the real bass he traced a fundamental bass of "
-                   "chord roots, moving mostly by fifths, as Part 18 counted in Bach's chorales. <bookmark mark='d'/> He "
-                   "named the tonic, the dominant and the subdominant, the functions of Part 15. <bookmark mark='e'/> And "
-                   "he grounded the whole system in the harmonic series of Part 3, where the major triad appears among the "
-                   "first partials of any musical tone: harmony given by nature, he argued, though the minor triad gave "
-                   "him more trouble.")
+                   "The theory caught up in 1722, the year of the Well-Tempered Clavier. <bookmark mark='b'/> Jean-Philippe Rameau's Treatise on Harmony treated chords, not intervals, as the units of music: a chord and its inversions are one chord. <bookmark mark='c'/> Beneath the real bass he traced a fundamental bass of chord roots, moving mostly by fifths, as Part 18 counted in Bach's chorales. <bookmark mark='d'/> He named the tonic, the dominant and the subdominant, the functions of Part 15. <bookmark mark='e'/> And he grounded the whole system in the harmonic series of Part 3, where the major triad appears among the low partials of an ideal harmonic complex; many musical sounds are inharmonic: harmony given by nature, he argued, though the minor triad gave him more trouble.")
 
     # ------------------------------------------------------------------
     def fundamental(self):
@@ -104,4 +97,4 @@ class Keys(SoundScene):
             (r"Part 19's pathfinder walks the same map", GREY_A),
         ]
         rows_scene(self, r"the circle of keys", items,
-                   "With every key usable, theorists began to draw maps of them. <bookmark mark='b'/> In 1711 Johann David Heinichen, a Dresden composer, drew a musical circle of all twenty-four keys, <bookmark mark='c'/> the major keys round the circle of fifths, each next to its relative minor. <bookmark mark='d'/> It is a map for modulation: neighbouring keys share most of their notes, as Part 15 measured. <bookmark mark='e'/> Such a map only makes sense once every key is playable, which is what the new temperaments allowed. <bookmark mark='f'/> Part 19's pathfinder walks the same map with chromatic doors added.", marks="cdef")
+                   "With every key usable, theorists began to draw maps of them. <bookmark mark='b'/> In 1711 Johann David Heinichen, a Dresden composer, drew a musical circle of all twenty-four keys, <bookmark mark='c'/> the major keys round the circle of fifths, each next to its relative minor. <bookmark mark='d'/> It is a map for modulation: neighbouring keys share most of their notes, as Part 15 measured. <bookmark mark='e'/> A conceptual key map can also describe relationships beyond one instrument’s practical tuning, which is what the new temperaments allowed. <bookmark mark='f'/> Part 19's pathfinder walks the same map with chromatic doors added.", marks="cdef")

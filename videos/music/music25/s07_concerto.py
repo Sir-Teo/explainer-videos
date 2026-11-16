@@ -23,9 +23,9 @@ class Concerto(SoundScene):
             (r"Bach copied Vivaldi's concertos for keyboard to learn the form", GREY_A),
         ]
         rows_scene(self, r"the concerto", items,
-                   "The largest instrumental form of the age was the concerto. <bookmark mark='b'/> Corelli's concertos "
+                   "One major instrumental genre of the age was the concerto. <bookmark mark='b'/> Corelli's concertos "
                    "set a small group of soloists against the full string band; Antonio Vivaldi, a violinist-priest in "
-                   "Venice, set one violin against it, in a set printed in 1711 as L'estro armonico, harmonic inspiration. "
+                   "Venice, used varied solo groupings in his set printed in 1711 as L'estro armonico, harmonic inspiration. "
                    "<bookmark mark='c'/> Vivaldi's fast movements use ritornello form: the band's opening theme, the "
                    "ritornello, returns again and again, in different keys, and between its returns the soloist's "
                    "episodes travel from key to key. <bookmark mark='d'/> A typical plan: the ritornello in the home key, "

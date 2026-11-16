@@ -30,7 +30,7 @@ class Suite(SoundScene):
                    "moderate, in four, with a short upbeat; <bookmark mark='d'/> the courante, in three, wavering between "
                    "three beats and two; <bookmark mark='e'/> the sarabande, slow and grave, its weight on the second beat "
                    "of the bar; <bookmark mark='f'/> and the gigue, fast, in compound time, often beginning in imitation. "
-                   "Nobody danced to Bach's suites; the dances had become rhythms, and the rhythms had become characters.", marks="cdef")
+                   "Bach’s suites are primarily stylized instrumental works rather than straightforward dance accompaniments; the dances had become rhythms, and the rhythms had become characters.", marks="cdef")
 
     # ------------------------------------------------------------------
     def heard(self):
@@ -62,9 +62,7 @@ class Suite(SoundScene):
                 end = d["starts"][ORDER[i + 1]] - 0.4 if i < 3 else c.duration
                 pulse(snd, rows_[i][0], st, end, buff=0.06)
         with self.voiceover(
-            "The same seven notes, four characters. That is what the doctrine of the affections meant in practice: a "
-            "rhythm and a tempo carry a feeling, and a listener of the time knew which dance, and which feeling, from the "
-            "first bar."
+            'The same seven notes, four characters. That is what the doctrine of the affections meant in practice: a rhythm and a tempo carry a feeling, and familiar dance conventions could suggest character; that does not assign every listener one fixed emotion.'
         ):
             self.play(Indicate(rows_[2][0], color=WHITE, scale_factor=1.05))
         self.wait(0.3)

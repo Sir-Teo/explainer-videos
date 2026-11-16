@@ -62,7 +62,7 @@ class Hook(SoundScene):
         with self.voiceover(
             "B. Doubling the weight does not give an octave: it gives a ratio of the square root of two, six hundred "
             "cents, a tritone, the most dissonant interval of the old theory. To get an octave you need four times the "
-            "weight. The legend was false, and had been repeated, unchecked, for two thousand years."
+            "weight. The legend was false, and had been repeated, despite earlier criticism and an unreliable historical attribution."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -81,15 +81,7 @@ class Hook(SoundScene):
         ])
         head = label(r"the numbers belong to the strings", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The law behind it was written down by Marin Mersenne in 1636: <bookmark mark='a'/> a string's pitch goes as "
-            f"the square root of its tension. <bookmark mark='b'/> One kilogram on a string sixty-five centimetres long, weighing six tenths of a gram a metre, gives "
-            f"{say(round(ms[0]['hz']))} hertz; four kilograms, an octave higher; nine, an octave and a fifth. "
-            "<bookmark mark='c'/> Galilei drew a polemical conclusion: the simple ratios belong to strings of equal "
-            "tension, not to the structure of heaven, and music need not obey them. <bookmark mark='d'/> In his Dialogue "
-            "on ancient and modern music, from 1581, he had already argued that music should serve the words and move the "
-            "listener, as the Greeks were said to have done, rather than display counterpoint. "
-            "<bookmark mark='e'/> Out of that argument, and the one between Artusi and Monteverdi, came opera, the "
-            "figured bass, and the major and minor keys."
+            f"The law behind it was written down by Marin Mersenne in 1636: <bookmark mark='a'/> a string's pitch goes as the square root of its tension. <bookmark mark='b'/> One kilogram on a string sixty-five centimetres long, weighing six tenths of a gram a metre, gives {say(round(ms[0]['hz']))} hertz; four kilograms, an octave higher; nine, an octave and a fifth. <bookmark mark='c'/> Galilei drew a polemical conclusion: the simple ratios belong to strings of equal tension, not to the structure of heaven, and music need not obey them. <bookmark mark='d'/> In his Dialogue on ancient and modern music, from 1581, he had already argued that music should serve the words and move the listener, as the Greeks were said to have done, rather than display counterpoint. <bookmark mark='e'/> Out of that argument, and the one between Artusi and Monteverdi, helped shape monody and opera, alongside other developments behind continuo and major-minor tonality."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

@@ -31,7 +31,7 @@ class Frontier(SoundScene):
                    "gathered in Bruce Haynes's history of performing pitch. <bookmark mark='d'/> Musicians spoke of chamber "
                    "pitch, choir pitch and French pitch, a whole tone and more apart. <bookmark mark='e'/> Today's players "
                    "of Baroque music mostly use four hundred and fifteen, a semitone below the modern four hundred and "
-                   "forty, <bookmark mark='f'/> which is a convenient compromise, not a historical fact.", marks="cdef")
+                   "forty, <bookmark mark='f'/> which is a convenient modern standard that also lies near some historical pitch levels.", marks="cdef")
 
     # ------------------------------------------------------------------
     def heard(self):
@@ -41,11 +41,11 @@ class Frontier(SoundScene):
         for name, a4 in d["standards"]:
             rows_.add(VGroup(label(rf"A = {a4:.0f} Hz", font_size=26, color=TUNE if a4 == 415 else WHITE), label(name, font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.6))
         rows_.arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to(UP * 0.2)
-        cap = label(r"from the lowest to the highest: \ almost a fourth", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.6)
+        cap = label(r"from the lowest to the highest: \ about three semitones, a minor third", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "Here is the range: one chord, A major, with its A tuned to three hundred and ninety-two, four hundred and "
             "fifteen, four hundred and forty, and four hundred and sixty-five hertz. From the lowest to the highest is "
-            "almost a fourth. A singer whose part is comfortable at one is straining at the other."
+            "about three semitones, a minor third. A singer whose part is comfortable at one is straining at the other."
         ):
             self.play(FadeIn(rows_), FadeIn(cap))
         with self.listen(c) as snd:
@@ -111,4 +111,4 @@ class Frontier(SoundScene):
             (r"copies made today test the treatises against what the instruments can do", GREY_A),
         ]
         rows_scene(self, r"the instruments themselves", items,
-                   "The instruments are evidence too. <bookmark mark='b'/> Baroque violins had gut strings at lower tension and lighter bows than today's, and a softer, quicker sound. <bookmark mark='c'/> Trumpets and horns had no valves and played only the notes of the harmonic series, as in Part 8. <bookmark mark='d'/> Flutes had one key, oboes few. <bookmark mark='e'/> Most surviving instruments were altered later to suit later music, so they must be read with care. <bookmark mark='f'/> Copies made today let players test what the treatises say against what the instruments can actually do.", marks="cdef")
+                   "The instruments are evidence too. <bookmark mark='b'/> Historical violins and bows varied; gut strings, setup and bow design affect response, and blanket claims of uniformly lower tension or softer sound are unreliable. <bookmark mark='c'/> Trumpets and horns had no valves and played only the notes of the harmonic series, as in Part 8. <bookmark mark='d'/> Flutes had one key, oboes few. <bookmark mark='e'/> Most surviving instruments were altered later to suit later music, so they must be read with care. <bookmark mark='f'/> Copies made today let players test what the treatises say against what the instruments can actually do.", marks="cdef")

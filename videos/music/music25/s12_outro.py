@@ -69,12 +69,7 @@ class Outro(SoundScene):
             rf"modes to keys: \ Ionian and Aeolian {100 * (pal['ion'] + pal['aeo']) / tagged:.0f} in 100 in Palestrina; \ all of Bach's chorales",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Galilei's weights broke an ancient legend, and with it the idea that music must obey "
-            "number. <bookmark mark='a'/> Monody put one voice on top of a bass, and opera grew from it. "
-            "<bookmark mark='b'/> The figured bass holds most of the harmony and none of the melody. "
-            "<bookmark mark='c'/> Ritornello form is returns, which a program can find, if it allows for mode. "
-            "<bookmark mark='d'/> Well temperament gave keys real colours. <bookmark mark='e'/> And eight modes became two "
-            "keys, between Palestrina and Bach."
+            "What did we find? Galilei's weights broke an ancient legend, and with it an unreliable numerical legend, without removing mathematics from musical acoustics. <bookmark mark='a'/> Monody put one voice on top of a bass, and opera grew from it. <bookmark mark='b'/> The figured bass holds most of the harmony and leaves the melodic realization underdetermined. <bookmark mark='c'/> Ritornello form is returns, which a program can find, if it allows for mode. <bookmark mark='d'/> Well temperament gave keys real colours. <bookmark mark='e'/> And eight modes became two keys, between Palestrina and Bach."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -153,7 +148,7 @@ class Outro(SoundScene):
         top = label(r"Act IV: \ a thousand years", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
         nxt = VGroup(label(r"Part 26", font_size=32, color=GREY_B), label(r"The Classical Style", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "The Baroque kept one affect to a movement and built its forms from returns. <bookmark mark='a'/> The next "
+            "Many descriptions of Baroque movements emphasize a governing affect, despite internal contrasts and built its forms from returns. <bookmark mark='a'/> The next "
             "generation, in Vienna, put contrast inside the movement, and built its forms from departures and arrivals. "
             "<bookmark mark='b'/> Next time. Part 26: The Classical Style."
         ) as vo:
