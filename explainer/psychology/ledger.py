@@ -4719,3 +4719,222 @@ shown(33, r"Kosinski et al.\ (2013); \ simulated: \ \texttt{personality.likes\_a
       "original, with a simulation")
 shown(33, r"Youyou et al.\ (2015); \ Azucar et al.\ (2018)", "the likes row's record")
 shown(33, r"Matz et al.\ (2017); \ Eckles et al.\ (2018)", "the targeting row")
+
+
+# ---------------------------------------------------------------- Part 34: social influence
+
+add(Finding(
+    key="asch_conformity", part=34, title=r"Conformity to a unanimous majority",
+    claim="People often give an answer they can see is wrong when a unanimous group gives it first.",
+    original=Study("Asch", 1956, n="123 men, three universities", design="12 critical line-judgment trials",
+                   found="36.8% of critical answers went with the wrong majority; a quarter never conformed"),
+    status="replicated, smaller",
+    record=(Study("Bond and Smith (meta-analysis)", 1996, n="133 studies, 17 countries",
+                  found="higher in collectivist cultures; declining in the US since the 1950s"),
+            Study("Franzen and Mader", 2023, n="210 students, five confederates",
+                  found="33% of critical answers wrong; 25% when correct answers were paid"),),
+    note="Robust and durable, though smaller in later and individualist samples; one dissenting ally removes most of "
+         "it.",
+    sources=("S. E. Asch, Opinions and social pressure, Scientific American 193(5) (1955) 31-35",
+             "S. E. Asch, Studies of independence and conformity: I. A minority of one against a unanimous majority, "
+             "Psychological Monographs 70(9) (1956)",
+             "R. Bond and P. B. Smith, Culture and conformity: a meta-analysis of studies using Asch's line judgment "
+             "task, Psychological Bulletin (1996)",
+             "A. Franzen and S. Mader, The power of social influence: a replication and extension of the Asch "
+             "experiment, PLOS ONE 18 (2023) e0294325"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="milgram_obedience", part=34, title=r"Obedience to a destructive authority",
+    claim="Most ordinary people will give apparently dangerous shocks to another person when an experimenter tells "
+          "them to.",
+    original=Study("Milgram", 1963, n="40 men, New Haven", design="the remote-feedback condition",
+                   found="26 of 40 (65%) went to the 450-volt switch"),
+    status="not directly tested",
+    record=(Study("Burger", 2009, n="70 adults", design="stopped at 150 volts",
+                  found="70% went past 150 volts, against 82.5% in Milgram's matching condition"),
+            Study("Haslam, Loughnan and Perry (synthesis)", 2014, n="21 conditions, 740 people",
+                  found="43.6% obeyed to the end overall, from 0% to 92.5% by condition"),
+            Study("Perry et al. (archive reanalysis)", 2020, n="656 post-experiment questionnaires",
+                  found="only about half fully believed the shocks were real"),),
+    note="Never run in full again; milder versions replicate the willingness to go on, while the reading of it "
+         "(blind obedience, or engaged followership amid doubt) is contested.",
+    sources=("S. Milgram, Behavioral study of obedience, Journal of Abnormal and Social Psychology 67 (1963) 371-378",
+             "S. Milgram, Obedience to Authority (1974)",
+             "J. M. Burger, Replicating Milgram: would people still obey today?, American Psychologist 64 (2009)",
+             "N. Haslam, S. Loughnan and G. Perry, Meta-Milgram: an empirical synthesis of the obedience experiments, "
+             "PLOS ONE 9 (2014) e93927",
+             "G. Perry, Behind the Shock Machine (2012)",
+             "G. Perry, A. Brannigan, R. A. Wanner and H. Stam, Credibility and incredulity in Milgram's obedience "
+             "experiments: a reanalysis of an unpublished test, Social Psychology Quarterly 83 (2020) 88-106",
+             "S. A. Haslam, S. D. Reicher and K. Millard, Shock treatment: using immersive digital realism to restage and "
+             "re-examine Milgram's obedience to authority research, PLOS ONE (2015)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="stanford_prison", part=34, title=r"The Stanford prison experiment",
+    claim="Randomly assigned to be guards, ordinary students spontaneously became abusive: a role takes over the "
+          "person.",
+    original=Study("Zimbardo and colleagues", 1971, n="24 male students", design="a mock prison, stopped on day six",
+                   found="abusive guards and distressed prisoners"),
+    status="story and record",
+    record=(Study("Reicher and Haslam (BBC prison study)", 2006, n="men randomly assigned, eight days",
+                  found="guards did not identify with the role; the prisoners became a group and overcame them"),
+            Study("Le Texier (archives and interviews)", 2019, n="the archives and 15 participants",
+                  found="guards were given precise instructions and were not told they were subjects"),),
+    note="Not an experiment on what a role does by itself: the guards were coached toward the result.",
+    sources=("C. Haney, C. Banks and P. Zimbardo, Interpersonal dynamics in a simulated prison, International Journal "
+             "of Criminology and Penology 1 (1973)",
+             "S. Reicher and S. A. Haslam, Rethinking the psychology of tyranny: the BBC prison study, British Journal "
+             "of Social Psychology 45 (2006) 1-40",
+             "T. Le Texier, Debunking the Stanford Prison Experiment, American Psychologist 74 (2019) 823-839"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="genovese_witnesses", part=34, title=r"The 38 witnesses",
+    claim="Thirty-eight neighbours watched Kitty Genovese's murder and none called the police.",
+    original=Study("Gansberg (The New York Times)", 1964, n="one murder, Queens", design="a news report",
+                   found="38 witnesses who did nothing"),
+    status="story and record",
+    record=(Study("Manning, Levine and Collins", 2007, n="the trial and police record",
+                  found="about a dozen heard or saw parts of the attack; at least one called the police"),),
+    note="The bystander effect it inspired is real (next row); the story that launched it was not.",
+    sources=("M. Gansberg, 37 who saw murder didn't call the police, The New York Times (27 March 1964)",
+             "R. Manning, M. Levine and A. Collins, The Kitty Genovese murder and the social psychology of helping: "
+             "the parable of the 38 witnesses, American Psychologist 62 (2007) 555-562"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="bystander_effect", part=34, title=r"The bystander effect",
+    claim="The more bystanders there are, the less likely each one is to help.",
+    original=Study("Darley and Latané", 1968, n="students over an intercom", design="an apparent seizure",
+                   found="85% helped alone, 31% with four others"),
+    status="replicated",
+    record=(Study("Fischer et al. (meta-analysis)", 2011, n="105 effects, more than 7,700 people",
+                  found="g = -0.35; weaker in dangerous emergencies"),
+            Study("Philpot et al.", 2020, n="219 filmed public conflicts, three countries",
+                  found="someone intervened in about nine in ten; more bystanders, more help"),),
+    note="True of each individual in the laboratory; in real public conflicts, a larger crowd still makes help from "
+         "someone more likely.",
+    sources=("J. M. Darley and B. Latané, Bystander intervention in emergencies: diffusion of responsibility, Journal "
+             "of Personality and Social Psychology 8 (1968) 377-383",
+             "B. Latané and J. M. Darley, Group inhibition of bystander intervention in emergencies, Journal of "
+             "Personality and Social Psychology 10 (1968) 215-221",
+             "P. Fischer et al., The bystander-effect, Psychological Bulletin 137 (2011) 517-537",
+             "R. Philpot, L. S. Liebst, M. Levine, W. Bernasco and M. R. Lindegaard, Would I be helped?, American "
+             "Psychologist 75 (2020) 66-75"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="social_facilitation", part=34, title=r"An audience helps easy tasks and hurts hard ones",
+    claim="The presence of others improves performance on simple tasks and impairs it on complex ones.",
+    original=Study("Zajonc, Heingartner and Herman", 1969, n="cockroaches", design="runway and maze, with or without "
+                   "an audience", found="faster on the runway, slower in the maze, with an audience"),
+    status="contested",
+    record=(Study("Halfmann, Bredehöft and Häusser (preregistered)", 2020, n="cockroaches, direct replication",
+                  found="an audience slowed them on both tasks; no interaction"),),
+    note="Social inhibition replicates; the facilitation half of the famous interaction did not.",
+    sources=("R. B. Zajonc, Social facilitation, Science 149 (1965) 269-274",
+             "R. B. Zajonc, A. Heingartner and E. M. Herman, Social enhancement and impairment of performance in the "
+             "cockroach, Journal of Personality and Social Psychology 13 (1969)",
+             "E. Halfmann, J. Bredehöft and J. A. Häusser, Replicating roaches: a preregistered direct replication of "
+             "Zajonc, Heingartner, and Herman's (1969) social-facilitation study, Psychological Science 31 (2020) "
+             "332-337",
+             "W. Stroebe, The truth about Triplett (1898), but nobody seems to care, Perspectives on Psychological "
+             "Science 7 (2012) 54-57"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="social_loafing", part=34, title=r"Social loafing",
+    claim="People exert less effort on a collective task than when working alone.",
+    original=Study("Latané, Williams and Harkins", 1979, n="students shouting and clapping",
+                   found="82% of solo effort with one other, 74% with five"),
+    status="replicated",
+    record=(Study("Karau and Williams (meta-analysis)", 1993, n="78 studies",
+                  found="moderate and general; smaller when effort is identifiable or the task matters"),),
+    note="One of the steadier group effects; the collective effort model predicts when it shrinks.",
+    sources=("B. Latané, K. Williams and S. Harkins, Many hands make light the work, Journal of Personality and Social "
+             "Psychology 37 (1979)",
+             "S. J. Karau and K. D. Williams, Social loafing: a meta-analytic review and theoretical integration, "
+             "Journal of Personality and Social Psychology 65 (1993) 681-706"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="groupthink", part=34, title=r"Groupthink",
+    claim="Cohesive, insulated groups under directive leaders seek consensus and make defective decisions.",
+    original=Study("Janis", 1972, n="historical case studies", design="American foreign-policy fiascos",
+                   found="a syndrome of concurrence-seeking"),
+    status="contested",
+    record=(Study("Fuller and Aldag (review)", 1998, n="25 years of research",
+                  found="virtually devoid of support"),
+),
+    note="Case studies fit it; experiments rarely confirm its causal model.",
+    sources=("I. L. Janis, Victims of Groupthink (1972)",
+             "S. R. Fuller and R. J. Aldag, Organizational Tonypandy: lessons from a quarter century of the "
+             "groupthink phenomenon, Organizational Behavior and Human Decision Processes 73 (1998) 163-184"),
+
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="hotel_towel_norms", part=34, title=r"Descriptive norms on a hotel card",
+    claim="Telling guests that most guests reuse their towels increases towel reuse more than an environmental "
+          "appeal.",
+    original=Study("Goldstein, Cialdini and Griskevicius", 2008, n="1,058 opportunities, one US hotel",
+                   found="44.1% against 35.1%; the same-room norm did best"),
+    status="contested",
+    record=(Study("Bohner and Schlüter", 2014, n="two German hotels (724 and 204)",
+                  found="both messages beat no message; the norm no better than the standard appeal"),),
+    note="Norm messages help, but their edge over ordinary appeals depends on the setting.",
+    sources=("N. J. Goldstein, R. B. Cialdini and V. Griskevicius, A room with a viewpoint, Journal of Consumer "
+             "Research 35 (2008) 472-482",
+             "G. Bohner and L. E. Schlüter, A room with a viewpoint revisited, PLOS ONE 9 (2014) e104086"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="crowd_influence", part=34, title=r"Social influence undermines the wisdom of crowds",
+    claim="Seeing others' estimates reduces a crowd's diversity without making it more accurate.",
+    original=Study("Lorenz, Rauhut, Schweitzer and Helbing", 2011, n="144 people, factual estimates",
+                   found="less diversity, no gain in accuracy, more confidence"),
+    status="contested",
+    record=(Study("Becker, Brackbill and Centola", 2017, n="networked estimation experiments",
+                  found="in decentralized networks, influence improved accuracy; in centralized ones it could hurt"),),
+    note="Whether influence helps or harms a crowd depends on who is listened to: the network decides.",
+    sources=("J. Lorenz, H. Rauhut, F. Schweitzer and D. Helbing, How social influence can undermine the wisdom of "
+             "crowd effect, PNAS 108 (2011) 9020-9025",
+             "J. Becker, D. Brackbill and D. Centola, Network dynamics of social influence in the wisdom of crowds, "
+             "PNAS 114 (2017) E5070-E5076",
+             "F. Galton, Vox populi, Nature (7 March 1907)"),
+    checked="2026-11-16",
+))
+
+shown(34, r"Asch (1951, \ 1955, \ 1956)", "Asch's procedure, described; the conformity row is asch_conformity")
+shown(34, r"Sherif (1935); \ Jacobs \& Campbell (1961)", "the founding norm studies, described, with an illustration of "
+      "the design")
+shown(34, r"Haslam \& Reicher (2012); \ Haslam, \ Reicher \& Millard (2015)", "readings of Milgram, part of the "
+      "milgram_obedience row's record")
+shown(34, r"the Stanford prison experiment (1971)", "the study as taught; its row is stanford_prison")
+shown(34, r"Darley \& Latan\'e (1968); \ Latan\'e \& Darley (1968)", "the intercom and smoke studies; the row is "
+      "bystander_effect")
+shown(34, r"Latan\'e, \ Williams \& Harkins (1979); \ Karau \& Williams (1993)", "the social_loafing row")
+shown(34, r"Stoner (1961); \ Moscovici \& Zavalloni (1969)", "the history of group polarization, described")
+shown(34, r"Janis (1972); \ Fuller \& Aldag (1998); \ Baron (2005)", "the groupthink row and a later review")
+shown(34, r"Moscovici, \ Lage \& Naffrechoux (1969)", "minority influence, described with its reported figures")
+shown(34, r"Hovland \& Weiss (1951); \ Hovland, \ Janis \& Kelley (1953)", "the Yale programme and the sleeper "
+      "effect, described with the later meta-analysis")
+shown(34, r"Petty, \ Cacioppo \& Goldman (1981)", "the elaboration likelihood model's founding study, drawn "
+      "schematically")
+shown(34, r"Cialdini (1984)", "a book of principles from field observation, described; Part 55 tests nudges")
+shown(34, r"Galton (1907); \ Wallis (2014)", "a historical demonstration and its reanalysis; the crowd row is "
+      "crowd_influence")
+shown(34, r"Muchnik, \ Aral \& Taylor (2013)", "a randomized field experiment on ratings, described in practice")
+shown(34, r"Bond et al.\ (2012)", "a randomized field experiment on voting, described in practice")
+shown(34, r"Husz\'ar et al.\ (2022)", "a randomized platform audit, described in the frontier")

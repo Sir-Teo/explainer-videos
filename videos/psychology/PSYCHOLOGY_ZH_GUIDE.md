@@ -1007,6 +1007,30 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Michal Kosinski, David Stillwell, Thore Graepel; Danny Azucar; Sandra Matz, Gideon Nave; Dean Eckles | 米哈尔·科辛斯基，戴维·斯蒂尔韦尔，托雷·格雷佩尔；丹尼·阿苏卡尔；桑德拉·马茨，吉迪恩·纳韦；迪安·埃克尔斯 |
 | Murray Barrick, Michael Mount; Birkeland; Angélique Cramer; Heinrich Peters; Gurven; Laajaj | 默里·巴里克，迈克尔·芒特；比克兰；安热莉克·克莱默；海因里希·彼得斯；古尔文；拉亚伊 |
 
+## Part 34: social influence
+
+| English | 中文 |
+|---|---|
+| social influence; conformity; obedience; norm; the autokinetic effect | 社会影响；从众；服从；规范；自主运动效应 |
+| confederate; critical trial; unanimous majority; ally; dissenter | 同谋者；关键轮次；一致的多数；同盟者；异议者 |
+| the shock generator; the prods; the agentic state; engaged followership | 电击发生器；催促；代理状态；投入的追随者 |
+| the Stanford prison experiment; the BBC prison study; guard; prisoner | 斯坦福监狱实验；英国广播公司监狱研究；看守；囚犯 |
+| bystander; the bystander effect; diffusion of responsibility | 旁观者；旁观者效应；责任分散 |
+| social facilitation; social inhibition; drive; social loafing; the collective effort model | 社会促进；社会抑制；驱力；社会懈怠；集体努力模型 |
+| group polarization; the risky shift; groupthink; minority influence; the hidden profile | 群体极化；冒险转移；群体思维；少数人影响；隐藏剖面 |
+| the sleeper effect; the elaboration likelihood model; central and peripheral routes; social proof; descriptive norm | 睡眠者效应；精细加工可能性模型；中心路径与边缘路径；社会认同；描述性规范 |
+| threshold; cascade; tipping point; consensus; bounded confidence; camp | 阈值；级联；临界点；共识；有界信任；阵营 |
+| simple contagion; complex contagion; rewiring; clustering; homophily | 简单传染；复杂传染；重连；聚集；同质性 |
+| the wisdom of crowds; the diversity prediction identity; cumulative advantage; unpredictability; algorithmic amplification | 群体智慧；多样性预测恒等式；累积优势；不可预测性；算法放大 |
+| Stanley Milgram; Solomon Asch; Muzafer Sherif; Philip Zimbardo; Gina Perry; Thibault Le Texier | 斯坦利·米尔格拉姆；所罗门·阿希；穆扎费尔·谢里夫；菲利普·津巴多；吉娜·佩里；蒂博·勒泰谢 |
+| Burger; Haslam, Loughnan; Alex Haslam, Stephen Reicher; Millard | 伯格；哈斯拉姆，拉夫南；亚历克斯·哈斯拉姆，斯蒂芬·赖歇尔；米勒德 |
+| Kitty Genovese; Manning, Levine, Collins; John Darley, Bibb Latané; Fischer; Philpot | 基蒂·吉诺维斯；曼宁，莱文，柯林斯；约翰·达利，比布·拉塔内；费舍尔；菲尔波特 |
+| Norman Triplett; Wolfgang Stroebe; Zajonc; Halfmann; Williams, Harkins; Karau | 诺曼·特里普利特；沃尔夫冈·斯特勒贝；扎荣茨；哈尔夫曼；威廉斯，哈金斯；卡劳 |
+| James Stoner; Moscovici, Zavalloni; Janis; Baron; Stasser, Titus | 詹姆斯·斯托纳；莫斯科维奇，扎瓦洛尼；贾尼斯；巴伦；斯塔瑟，泰特斯 |
+| Carl Hovland; Kelley; Weiss; Petty, Cacioppo, Goldman; Cialdini; Goldstein, Griskevicius; Bohner, Schlüter | 卡尔·霍夫兰；凯利；韦斯；佩蒂，卡乔波，戈德曼；西奥迪尼；戈尔茨坦，格里斯克维西乌斯；博纳，施吕特 |
+| Granovetter; DeGroot; Rainer Hegselmann, Ulrich Krause; Damon Centola; Francis Galton; Lorenz | 格兰诺维特；德格鲁特；赖纳·黑格塞尔曼，乌尔里希·克劳泽；达蒙·森托拉；弗朗西斯·高尔顿；洛伦茨 |
+| Salganik, Dodds, Watts; Muchnik, Aral, Taylor; Bond; Cosma Shalizi, Andrew Thomas; Huszár | 萨尔加尼克，多兹，瓦茨；穆赫尼克，阿拉尔，泰勒；邦德；科斯马·沙利兹，安德鲁·托马斯；胡萨尔 |
+
 ## Names
 
 | English | 中文 |
