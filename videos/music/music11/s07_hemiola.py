@@ -111,12 +111,9 @@ class Hemiola(SoundScene):
 
     def four_three(self):
         with self.voiceover(
-            "The second one was four against three, on a cycle of twelve. Any two whole numbers will do, "
-            "and the two parts meet once in every cycle, at the start. The smaller the numbers, the "
-            "sooner they meet, and the easier the pattern is to hear as one thing. Keep that in mind. "
-            "Three against two is going to come back at the end of this part, in a different disguise."
+            'The second one was four against three, on a cycle of twelve. Any two positive whole numbers give a ratio. Reduce the ratio first: for coprime counts, aligned evenly spaced parts coincide once per minimal cycle. Unreduced counts have repeated coincidences. Smaller reduced counts generally make the pattern easier to follow, with tempo and training also important. Keep that in mind. Three against two is going to come back at the end of this part, in a different disguise.'
         ):
-            head = VGroup(label(r"$a$ against $b$", font_size=40, color=TUNE), label(r"they meet once in every cycle; \ small numbers meet soonest", font_size=30, color=GREY_A),
+            head = VGroup(label(r"$a$ against $b$", font_size=40, color=TUNE), label(r"reduced coprime counts: \ one coincidence per minimal cycle", font_size=30, color=GREY_A),
                           MathTex(r"2:1 \qquad 3:2 \qquad 4:3 \qquad 5:4", font_size=48)).arrange(DOWN, buff=0.5)
             self.play(FadeIn(head))
         self.wait(0.4)
@@ -159,9 +156,7 @@ class Hemiola(SoundScene):
                 on = [i for i, ch in enumerate(base) if ch == "x"]
                 flash(snd, [top.cells[i] for rep in range(2) for i in on], [t0 + (rep * 16 + i) * d["canon_pulse"] for rep in range(2) for i in on], base=HIGH, hot=WHITE, fade=0.12)
         with self.voiceover(
-            "The composer Steve Reich made whole pieces out of this, a pattern drifting slowly against "
-            "itself, and called it phasing. It is the cheapest composing there is: one rhythm, and a "
-            "decision about when to start."
+            "The composer Steve Reich made whole pieces out of this, a pattern drifting slowly against itself, and called it phasing. This example shifts a repeated pattern by fixed offsets; Reich's continuous phasing also changes relative timing gradually."
         ):
             self.play(Indicate(bars[8], color=TUNE), Indicate(bars[2], color=TUNE))
         self.wait(0.4)

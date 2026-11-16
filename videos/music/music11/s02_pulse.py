@@ -114,15 +114,7 @@ class Pulse(SoundScene):
         best = VGroup(Line([ax.X(1 / lim["preferred_s"]) + ax.get_center()[0] * 0, ax[0].get_y(), 0], [ax.X(1 / lim["preferred_s"]), ax[0].get_y() + 0.9, 0], color=WHITE, stroke_width=4))
         best.add(label(r"about two a second: \ where tapping is steadiest", font_size=24, color=WHITE).next_to(best[0], DOWN, buff=0.75))
         with self.voiceover(
-            "Slower than about one click every two seconds, there is no beat: each click is an event by "
-            "itself, and you cannot predict the next. <bookmark mark='a'/> Then a window opens. From "
-            "about two seconds between beats down to a quarter of a second, you can tap along, walk, or "
-            "dance. <bookmark mark='b'/> Faster than that, your hand cannot keep up, but you still hear "
-            "a rhythm; these are the divisions of a beat, and they run out at about ten to the second. "
-            "<bookmark mark='c'/> Then comes a flutter. And at about twenty a second the clicks fuse into "
-            "a tone with a pitch, as Part 4 found. <bookmark mark='d'/> So the beat lives in a window "
-            "only three octaves wide. In the middle of it, near two beats a second, people tap most "
-            "steadily, and that is the tempo of a brisk walk, and of a great deal of dance music."
+            "Slower than about one click every two seconds, many listeners lose a compelling beat without additional subdivisions or contextual cues; prediction itself is not impossible. <bookmark mark='a'/> Then a window opens. From about two seconds between beats down to a quarter of a second, you can tap along, walk, or dance. <bookmark mark='b'/> Faster than that, synchronizing each tap becomes harder for many people, but you still hear a rhythm; these are the divisions of a beat, and their individual rhythmic identity becomes harder to track around ten to the second, depending on the task. <bookmark mark='c'/> Then comes a flutter. And at about twenty a second a pulse train can acquire a low repetition pitch, with a gradual and stimulus-dependent transition, as Part 4 found. <bookmark mark='d'/> So the beat lives in a window roughly three octaves wide in this schematic guide. In the middle of it, near two beats a second, people tap most steadily, and that is the tempo of a brisk walk, and of a great deal of dance music."
         ) as vo:
             self.play(FadeOut(marker), FadeIn(ax.zones[0]))
             vo.wait_until("a")
@@ -140,16 +132,16 @@ class Pulse(SoundScene):
     def tapping(self):
         beat = [k * 1.0 for k in range(7)]
         cl = ticks(beat, -0.5, 6.5, width=11.0, height=0.7, color=TUNE, stroke_width=5).move_to(UP * 1.2)
-        tp = ticks([b - 0.1 for b in beat], -0.5, 6.5, width=11.0, height=0.7, color=LOW, stroke_width=5).move_to(DOWN * 0.4)
+        tp = ticks([b - 0.04 for b in beat], -0.5, 6.5, width=11.0, height=0.7, color=LOW, stroke_width=5).move_to(DOWN * 0.4)
         lc = label(r"the clicks", font_size=26, color=TUNE).next_to(cl, UP, buff=0.25).align_to(cl, LEFT)
-        lt = label(r"a listener's taps", font_size=26, color=LOW).next_to(tp, DOWN, buff=0.25).align_to(tp, LEFT)
+        lt = label(r"illustrative taps, \ 40 ms early", font_size=26, color=LOW).next_to(tp, DOWN, buff=0.25).align_to(tp, LEFT)
         guides = VGroup(*[DashedLine([cl.x_of(b), cl.base.get_y(), 0], [cl.x_of(b), tp.base.get_y() + 0.7, 0], color=GREY_D, stroke_width=1.5, dash_length=0.06) for b in beat])
-        early = label(r"early, \ by a few hundredths of a second, \ and the tapper does not know it", font_size=28, color=LOW).to_edge(DOWN, buff=1.1)
+        early = label(r"early, \ by a few hundredths of a second, \ often without the tapper noticing", font_size=28, color=LOW).to_edge(DOWN, buff=1.1)
         react = label(r"a reaction to each click would be late, \ by about a fifth of a second", font_size=26, color=GREY_B).next_to(early, DOWN, buff=0.25)
         with self.voiceover(
             "One more fact about the beat, before we build on it. Ask people to tap along with a "
-            "metronome, and measure when the finger lands. <bookmark mark='a'/> It lands early: a few "
-            "hundredths of a second before the click, time after time, and the tapper does not know it. "
+            "metronome, and measure when the finger lands. <bookmark mark='a'/> In many auditory tapping experiments the average tap lands early: a few "
+            "hundredths of a second before the click, time after time, often without the tapper noticing. "
             "<bookmark mark='b'/> If we were reacting to each click, we would be late, by a fifth of a "
             "second or so. We are not reacting. We are predicting when the next beat will come, and "
             "aiming at it. A beat is not a sound. It is a prediction that sounds keep confirming."
@@ -179,8 +171,8 @@ class Pulse(SoundScene):
         ans = VGroup(label(rf"A: \ {d['bpm_a']:.0f} to the minute", font_size=30, color=GREY_A), label(rf"B: \ {d['bpm_b']:.0f}", font_size=30, color=GOOD)).arrange(RIGHT, buff=1.0).move_to(DOWN * 1.6)
         with self.voiceover(
             f"B. It was {say(d['bpm_b'])} to the minute against {say(d['bpm_a'])}: five per cent faster. "
-            "That is close to the limit for most of us. A listener can usually tell two tempos apart "
-            "when they differ by a few per cent of the time between beats, whatever the tempo is; "
+            "This is an illustrative comparison, not a measured threshold for everyone. A listener can usually tell two tempos apart "
+            "when they differ by a few per cent of the time between beats, over a useful middle range, with poorer discrimination at extremes; "
             "practised musicians do a little better. Tempo, like pitch and loudness, is judged by ratios."
         ):
             self.play(FadeIn(ans))

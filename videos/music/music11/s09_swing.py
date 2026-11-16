@@ -29,12 +29,7 @@ class Swing(SoundScene):
         head = label(r"two eighth notes to the beat: \ long, \ short", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         heads = [r[0].head() for r in rows]
         with self.voiceover(
-            "There is one more way to cut a beat, and no notation writes it. In jazz, a pair of eighth "
-            "notes is not played evenly. The first is longer and the second shorter: the eighths swing. "
-            "How much longer is the swing ratio. <bookmark mark='a'/> One to one is even eighths. "
-            "<bookmark mark='b'/> Two to one is the triplet feel that the textbooks describe. "
-            "<bookmark mark='c'/> Three to one is a dotted rhythm. Listen to all three on a hi-hat, over "
-            "the same four beats."
+            "Detailed swing timing is often conveyed by style and listening, though it can be measured or encoded explicitly. In many jazz swing settings, paired eighths are uneven; other jazz settings use straight eighths. The first is longer and the second shorter: the eighths swing. How much longer is the swing ratio. <bookmark mark='a'/> One to one is even eighths. <bookmark mark='b'/> Two to one is the triplet feel that the textbooks describe. <bookmark mark='c'/> Three to one is a dotted rhythm. Listen to all three on a hi-hat, over the same four beats."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0][0]))
             self.wait(5.0)
@@ -55,25 +50,23 @@ class Swing(SoundScene):
     # ------------------------------------------------------------------
     def measured(self):
         d = load("swing")
-        g = axes([100, 335], [0.8, 3.8], x_length=9.0, y_length=3.4, xlabel=r"tempo (beats to the minute)", ylabel=r"swing ratio", xticks=[100, 150, 200, 250, 300], yticks=[1, 2, 3], font_size=22).move_to(UP * 0.5 + LEFT * 0.4)
+        g = axes([100, 335], [0.8, 3.8], x_length=9.0, y_length=3.4, xlabel=r"tempo (beats to the minute)", ylabel=r"illustrative model swing ratio", xticks=[100, 150, 200, 250, 300], yticks=[1, 2, 3], font_size=22).move_to(UP * 0.5 + LEFT * 0.4)
         cv = curve_from(g, d["bpm"], d["ratio"], TUNE, stroke_width=4)
-        two = VGroup(Dot(g.ax.c2p(d["triplet_bpm"], 2.0), radius=0.09, color=WHITE), label(rf"two to one, \ at {d['triplet_bpm']:.0f} only", font_size=24, color=WHITE))
+        two = VGroup(Dot(g.ax.c2p(d["triplet_bpm"], 2.0), radius=0.09, color=WHITE), label(rf"model 2:1, \ at {d['triplet_bpm']:.0f} only", font_size=24, color=WHITE))
         two[1].next_to(two[0], UR, buff=0.12)
         one = VGroup(Dot(g.ax.c2p(d["straight_bpm"], 1.0), radius=0.09, color=WHITE), label(r"even", font_size=24, color=WHITE))
         one[1].next_to(one[0], UP, buff=0.15)
-        rule = label(r"if the short note always lasts 100 ms: \ \ ratio $= \dfrac{\text{beat} - 100 \text{ ms}}{100 \text{ ms}}$", font_size=28, color=GREY_A).to_edge(DOWN, buff=0.6)
+        rule = label(r"100 ms model, \ capped to 1--3.5: \ \ ratio $= \dfrac{\text{beat} - 100 \text{ ms}}{100 \text{ ms}}$", font_size=28, color=GREY_A).to_edge(DOWN, buff=0.6)
         card = history_card(2002, r"Anders Friberg and Andreas Sundstr\"om", r"measured on records: \ about 3.5 to 1 at slow tempos, \ 1 to 1 at the fastest; \ the short note near 100 ms", width=5.6, font_size=22).to_corner(UR, buff=0.4)
         with self.voiceover(
             "Which ratio is the real one? In 2002 two Swedish researchers measured it on jazz records, "
             "from the drummers' ride cymbals. The answer was: all of them. <bookmark mark='a'/> At slow "
             "tempos the ratio was as large as three and a half to one. At the fastest it was one to one: "
-            "even eighths. Two to one, the triplet feel, turned up only at one tempo in the middle. "
-            "<bookmark mark='b'/> And they noticed why. From medium tempos upward the short note stayed "
-            "about the same length, a tenth of a second, whatever the tempo. Take that as a rule and the "
-            "ratio follows by subtraction. <bookmark mark='c'/> A tenth of a second is the floor we met "
+            "even eighths. The approximate trend moves through a triplet ratio in the middle; individual players, instruments and passages vary. "
+            "<bookmark mark='b'/> They also reported an approximately stable short interval across part of the tempo range. From medium tempos upward the short note stayed "
+            "about the same length, a tenth of a second, whatever the tempo. The drawn curve uses a hundred-millisecond short interval, capped between one and three and a half; these are model values, not plotted measurements. <bookmark mark='c'/> A tenth of a second is a useful rhythmic timescale, not a universal lower limit; it relates to the range discussed "
             f"in chapter one. On this curve the ratio is exactly two at {say(d['triplet_bpm'])} beats to "
-            f"the minute, and falls to one at {say(d['straight_bpm'])}. Swing is not a ratio. It is a "
-            "short note, played as short as a note can usefully be."
+            f"the minute, and falls to one at {say(d['straight_bpm'])}. A fixed ratio cannot describe all swing: articulation, ensemble coordination and style matter beyond this model."
         ) as vo:
             self.play(FadeIn(g), FadeIn(card))
             vo.wait_until("a")
@@ -94,12 +87,7 @@ class Swing(SoundScene):
                       label(rf"the player: \ which ratio, \ at this tempo, \ in this band; \ a few tens of milliseconds", font_size=28, color=TUNE),
                       label(r"in Part 10's terms: \ the page keeps the notes; \ the tradition keeps the rest", font_size=28, color=EAR)).arrange(DOWN, buff=0.4).move_to(DOWN * 1.3)
         with self.voiceover(
-            "On the page a swung line looks like this: even eighth notes, and the word swing at the top. "
-            "<bookmark mark='a'/> Everything we have just measured is left to the player: which ratio, "
-            "at this tempo, with this band, and how the soloist leans against the drummer. The "
-            "differences are a few tens of milliseconds, far finer than any notation in Part 10 "
-            "records. <bookmark mark='b'/> It is that part's lesson again. The page keeps the notes. A "
-            "living tradition keeps the rest, and you learn it by listening."
+            "On the page a swung line looks like this: even eighth notes, and the word swing at the top. <bookmark mark='a'/> Everything we have just measured is left to the player: which ratio, at this tempo, with this band, and how the soloist leans against the drummer. The differences are a few tens of milliseconds, often omitted from the printed example, though MIDI and other event encodings can record such detail. <bookmark mark='b'/> It is that part's lesson again. The page keeps the notes. A living tradition keeps the rest, and you learn it by listening."
         ) as vo:
             self.play(FadeIn(st), FadeIn(word), FadeIn(rows[0]))
             vo.wait_until("a")

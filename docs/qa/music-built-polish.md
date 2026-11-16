@@ -1,6 +1,6 @@
 # Music, Built: sequential polish and QA
 
-Checkpoint: 15 November 2026. Review all 68 episodes in order, emphasizing educational clarity,
+Checkpoint: 16 November 2026. Review all 68 episodes in order, emphasizing educational clarity,
 accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8f9ba0a596bf960bc65f53e0075`.
 
 | Part | Source and sampled-preview pass | Final narrated production |
@@ -15,8 +15,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 8 — Pipes, Reeds and Voices | Complete; [repair and verification record](music/part08.md) | Open |
 | 9 — Drums, Bars and Bells | Complete; [repair and verification record](music/part09.md) | Open |
 | 10 — Writing It Down | Complete; [repair and verification record](music/part10.md) | Open |
-| 11 — Rhythm and Meter | In progress | Open |
-| 12–68 | Queued | Open |
+| 11 — Rhythm and Meter | Complete; [repair and verification record](music/part11.md) | Open |
+| 12 — Scales and Modes | In progress | Open |
+| 13–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -53,10 +54,12 @@ motion checks pass. Five native 1080p stills inspected. Local identities: `rende
 Part 10: twelve chapter previews reviewed; 40 tests, the lab, 12 sound-gate cases and 12 listening-window
 motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music10/source-receipt.json`.
 
-**Current: Part 11.** Source repairs complete; preview review and final gates are in progress. Part 12 source
-review is prepared while rendering continues. Automated endpoint preflight is also running
-through the remaining episodes; its warnings require review and do not constitute episode approval. Keep numerical correctness, sampled visual review,
-motion detection, native-resolution checks and final listening/playback coverage distinct.
+Part 11: twelve chapter previews reviewed; 29 tests, the lab, 12 sound-gate cases and 19 listening-window
+motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music11/source-receipt.json`.
+
+**Current: Part 12.** Source repairs complete; preview review and gates are in progress. Part 13 source review
+and native still checks are prepared; Part 14 source review is underway. Automated endpoint preflight continues
+through the remaining episodes; warnings require review and do not constitute episode approval.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

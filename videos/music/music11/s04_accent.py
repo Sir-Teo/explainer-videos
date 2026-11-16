@@ -37,7 +37,7 @@ class Accent(SoundScene):
         names = VGroup(*[label(t, font_size=30, color=GREY_A).next_to(r, LEFT, buff=0.5) for t, r in zip((r"louder", r"longer", r"higher"), rows)])
         note = listen_note(r"twelve tones, \ three times. \ Every third one is marked: \ by loudness, \ then by length, \ then by pitch", width=10.4, font_size=26).to_edge(DOWN, buff=0.4)
         plain = VGroup(*[Circle(radius=0.13, stroke_width=0, fill_color=WEAK, fill_opacity=1.0) for _ in range(12)]).arrange(RIGHT, buff=0.5).move_to(UP * 0.6)
-        ask = label(r"twelve equal sounds. \ Which are the strong ones? \ The listener will decide, \ unless the musician does.", font_size=30, color=GREY_A).next_to(plain, DOWN, buff=0.7)
+        ask = label(r"twelve equal sounds. \ Which are strong?\\ The listener decides, \ unless the musician does.", font_size=30, color=GREY_A).next_to(plain, DOWN, buff=0.7)
         with self.voiceover(
             "A listener will supply strong and weak beats unasked. A musician who wants a particular "
             "meter has to say which beats are the strong ones, and there are three plain ways to do it. "
@@ -62,11 +62,7 @@ class Accent(SoundScene):
                     snd.wait_until(t)
                     self.play(r[k].animate(rate_func=there_and_back).shift(UP * 0.14), run_time=0.2)
         with self.voiceover(
-            "Each time you heard threes: a waltz with no tune. Musicians call the first kind a dynamic "
-            "accent and the second an agogic accent, from a Greek word for leading. In real music the "
-            "three usually agree, and a change of harmony or a low bass note agrees with them. When a "
-            "composer sets them against each other, the meter becomes uncertain, and that is a resource "
-            "too."
+            'Each time you heard threes: a waltz with no tune. Musicians call the first kind a dynamic accent and the second an agogic accent, from a Greek word for leading. In music these cues can reinforce one another, and a change of harmony or a low bass note agrees with them. When a composer sets them against each other, the meter becomes uncertain, and that is a resource too.'
         ):
             self.play(*[Indicate(VGroup(*[r[k] for k in range(0, 12, 3)]), color=TUNE, scale_factor=1.15) for r in rows], run_time=1.5)
         self.wait(0.3)
@@ -99,14 +95,7 @@ class Accent(SoundScene):
         la = label(r"LOUD, \ soft: \ the loud sound begins", font_size=26, color=GREY_A).next_to(ba, DOWN, buff=0.3)
         lb = label(r"short, \ LONG: \ the long sound ends", font_size=26, color=GREY_A).next_to(bb, DOWN, buff=0.3)
         with self.voiceover(
-            "Most listeners hear A as loud, soft; loud, soft. The loud sound begins the pair. "
-            "<bookmark mark='a'/> And most hear B as short, long; short, long. The long sound ends the "
-            "pair. <bookmark mark='b'/> Herbert Woodrow measured this in 1909, and it has held up since: "
-            "a louder sound tends to start a group, and a longer sound tends to finish one. That is why "
-            "a drummer marks the start of a bar with a stroke, and a melody marks the end of a phrase "
-            "with a long note. The Tune does exactly that: six short notes and a long one. The half about "
-            "length is the weaker of the two; it seems to depend on the rhythms of the language a "
-            "listener grew up with."
+            "Most listeners hear A as loud, soft; loud, soft. The loud sound begins the pair. <bookmark mark='a'/> And most hear B as short, long; short, long. The long sound ends the pair. <bookmark mark='b'/> Herbert Woodrow measured this in 1909, and it has held up since: a louder sound tends to start a group, and a longer sound tends to finish one. Those tendencies help explain common downbeat accents and phrase-ending lengthening; they are not compulsory rules for every style. The Tune does exactly that: six short notes and a long one. The half about length is the weaker of the two; it seems to depend on the rhythms of the language a listener grew up with."
         ) as vo:
             self.play(FadeIn(a_row), FadeIn(ba), FadeIn(la))
             vo.wait_until("a")

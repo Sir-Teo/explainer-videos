@@ -76,21 +76,21 @@ class Outro(SoundScene):
     def recap(self):
         s, a, w, k = load("sync"), load("additive"), load("swing"), load("continuum")
         card = objectives_card([
-            r"identical clicks are heard in twos: \ metre is added by the listener",
+            r"identical clicks often elicit grouping: \ metre is added by the listener",
             r"a beat can be felt from about a quarter of a second to two seconds; \ steadiest near two a second",
-            r"a metre is nested pulses; \ loud sounds begin groups and long ones end them",
+            r"a metre is nested pulses; \ loud/long grouping tendencies depend on context",
             rf"syncopation: \ notes on weak pulses before silent strong ones; \ the son clave scores {s['patterns'][1]['index']}",
-            rf"seven is $2{{+}}2{{+}}3$, \ three ways; \ swing is a short note of about 100 ms, \ not a ratio",
+            rf"seven is $2{{+}}2{{+}}3$, \ three ways; \ swing: \ tempo and style matter beyond our 100 ms model",
             rf"three against two, \ a hundred times a second, \ is a fifth: \ {k['cents']:.0f} cents",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Identical clicks are heard in pairs: the listener adds the meter. "
-            "<bookmark mark='a'/> A beat can be felt only inside a window, from about a quarter of a "
+            "What did we find? Identical clicks often elicit subjective grouping: the listener adds the meter. "
+            "<bookmark mark='a'/> A commonly reported beat range lies in a window, from about a quarter of a "
             "second to two seconds, and best near two to the second. <bookmark mark='b'/> A meter is "
             "pulses nested inside pulses; loud sounds begin groups, and long ones end them. "
             "<bookmark mark='c'/> Syncopation can be counted: notes on weak moments, before strong "
             "moments left silent. <bookmark mark='d'/> Beats need not be equal: seven is two, two and "
-            "three. And swing is not a ratio but a short note. <bookmark mark='e'/> And three against "
+            "three. Swing timing varies with tempo and style; our short-interval rule is an illustrative model. <bookmark mark='e'/> And three against "
             "two, played a hundred times a second, is a perfect fifth. Rhythm and harmony are one scale "
             "of ratios."
         ) as vo:
@@ -105,7 +105,7 @@ class Outro(SoundScene):
     def problems(self):
         ps = problem_set([
             r"A jig is marked 132 beats to the minute in six-eight, \ the beat a dotted quarter. \ How long, \ in milliseconds, \ is a bar, \ a beat and an eighth note? \ "
-            r"How fast could the tempo go before the eighth notes reached the limit of 100 ms?",
+            r"How fast could the tempo go before the eighth notes reached an illustrative subdivision duration of 100 ms?",
             r"Let $a(n)$ be the number of ways to fill $n$ pulses with beats of two and three. \ Show that $a(n) = a(n-2) + a(n-3)$, \ and find $a(12)$. \ "
             r"Which of the twelve have four beats?",
             r"\textbf{Ear.} \ The lab plays eight bars of six eighth notes in a random order, \ each grouped $3+3$ or $2+2+2$ by its accents. \ Say which is which.",
@@ -191,7 +191,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "We can now say when. Next we ask which: which notes a piece of music chooses from. "
             "<bookmark mark='a'/> Look at a keyboard. Seven white keys and five black to every octave, "
-            "the world over. Why seven, and why five? The answer starts from the same three to two that "
+            "on a conventional piano. Other keyboard layouts and scale traditions also exist. Why this familiar seven-and-five design? The answer starts from the same three to two that "
             "ended this part: stack fifths one on another, fold them back into an octave, and at certain "
             "numbers of notes something special happens. <bookmark mark='b'/> Next time. Part 12: Scales "
             "and Modes."

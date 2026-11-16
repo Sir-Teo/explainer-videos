@@ -9,7 +9,7 @@ swing, and what happens to a rhythm played too fast to count. The rhythm engine 
 (`explainer/music/monochord/instruments/drumkit.py`), and the pictures are in `explainer/music/rhythmviz.py`;
 every sound is computed in `compute.py`. Published findings are the ones listed under Sources.
 
-* **Tick, tock.** Sixteen identical strokes, heard in pairs (an ear question); measured: no difference between
+* **Tick, tock.** Sixteen identical strokes, often heard in groups (an ear question); measured: no difference between
   any two; Bolton (1894); the brain's larger response to a change on a "tick" (2003); metre is added by the
   listener; the plan.
 * **1. A pulse.** Tempo in beats per minute and in seconds; clicks from one every 2.5 seconds to fifty a second;
@@ -28,13 +28,14 @@ every sound is computed in `compute.py`. Published findings are the ones listed 
   something else holds; Witek's arch (2014): the urge to move is greatest at moderate syncopation.
 * **6. Three against two.** Six eighths as 3 + 3 and 2 + 2 + 2, alternating: hemiola; both at once: a cycle of
   six with strokes 2, 1, 1, 2 apart; four against three on a cycle of twelve (3, 1, 2, 2, 1, 3); a rhythm against
-  a late copy of itself (5, 1 and 0 strokes together at delays of 0, 2 and 8 pulses): phasing.
-* **7. Long beats and short.** Seven pulses as 2 + 2 + 3, 2 + 3 + 2 and 3 + 2 + 2; the number of metres made of
+  a late copy of itself (5, 1 and 0 strokes together at delays of 0, 2 and 8 pulses): fixed phase offsets,
+  related to continuous phasing.
+* **7. Long beats and short.** Seven pulses as 2 + 2 + 3, 2 + 3 + 2 and 3 + 2 + 2; the number of ordered groupings made of
   twos and threes: a(n) = a(n−2) + a(n−3), so 2 for five pulses, 3 for seven, 5 for nine, 12 for twelve; four
   Balkan dances.
 * **8. Swing.** Eighth notes at one, two and three to one; Friberg and Sundström (2002): about 3.5 to 1 at slow
   tempos, 1 to 1 at the fastest, the short note near 100 ms; so the ratio is (beat − 100 ms)/100 ms, two to one
-  at 200 beats to the minute only; what the page does not say.
+  at 200 beats to the minute in this model; what the page does not say.
 * **9. Where rhythm becomes pitch.** Three against two, sped up from 0.75 to 100 cycles a second (an ear
   question); at the end 200 Hz and 300 Hz, 702 cents: a perfect fifth; every interval of Part 1 as a
   polyrhythm; Cowell (1930); two patterns at 110 cycles a second: one pitch, two spectra: the pattern inside
@@ -85,6 +86,22 @@ and what is tapped is drawn from the product of the two; the two listeners' expe
 differ. It illustrates the method and why it converges on a listener's expectations; it is not a model of any
 population. *The drums* mark time; they are not studies of real drums.
 
+The timing ranges are approximate task-dependent guides, not limits on prediction, tapping or the shortest
+possible rhythmic event. The tapping diagram illustrates a 40 ms lead. Subjective grouping and accent
+preferences vary with tempo, attention, experience and musical context. The groove curve illustrates a
+reported association, not a complete causal explanation of pleasure.
+
+The clave index uses a specified one-bar model grid; the familiar son-clave onset shape is commonly
+notated across two bars at another pulse scale. Integer polyrhythm counts should be reduced before saying
+that the two parts coincide once per minimal cycle. Additive counts include ordered rotations from a
+fixed bar start; they do not count distinct musical traditions.
+
+The swing curve is an illustrative capped 100 ms model, not measurement points or a universal law. Printed
+“swing” instructions often omit precise timing; MIDI and other event encodings can record it. The fast-pattern
+bars show normalized Fourier factors of ideal onset patterns; the click waveform adds its own envelope.
+The rhythm/pitch analogy does not by itself explain consonance or rhythmic ease. Nonhuman primate predictive
+timing depends on species, training and task; the film avoids claiming universal inability.
+
 ## Build
 
 ```bash
@@ -102,7 +119,7 @@ python -m videos.music.labs 11                                  # the lab (write
 
 1. **A jig.** A jig is marked 132 beats to the minute in six-eight, the beat a dotted quarter. How long, in
    milliseconds, is a bar, a beat and an eighth note? How fast could the tempo go before the eighth notes reached
-   the limit of 100 ms?
+   an illustrative subdivision duration of 100 ms?
 
    *Solution.* A beat lasts 60/132 = 0.4545 s, or 455 ms. A bar is two beats, 909 ms; an eighth is a third of a
    beat, 152 ms. The eighths reach 100 ms when the beat is 300 ms, which is 200 beats to the minute. (Presto jigs

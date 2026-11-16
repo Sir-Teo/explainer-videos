@@ -25,9 +25,9 @@ class Meter(SoundScene):
             "A beat alone is only a pulse. Meter is several pulses at once, one inside another. Take one "
             "bar of four-four time. <bookmark mark='a'/> The fastest pulse here is sixteen to the bar. "
             "<bookmark mark='b'/> Every second one of those is an eighth. <bookmark mark='c'/> Every "
-            "second eighth is a quarter, and that is the level we tap: the beat. <bookmark mark='d'/> "
+            "second eighth is a quarter, often the tapping level in a moderate-tempo reading: the beat. <bookmark mark='d'/> "
             "Above it the half bar, and the bar itself. <bookmark mark='e'/> Now read down each column "
-            "and count the dots. The more levels a moment belongs to, the stronger it is. The first "
+            "and count the dots. In this metrical-grid model, membership in more levels gives a position greater structural weight; that is not necessarily greater loudness. The first "
             "moment of the bar belongs to all five: the downbeat. The middle of the bar has four. The "
             "moments between the eighths have one. This picture is from a book of 1983 by a composer and "
             "a linguist, Lerdahl and Jackendoff, and we will use it for the rest of this part."
@@ -96,7 +96,7 @@ class Meter(SoundScene):
         with self.voiceover(
             "So where does a listener's beat come from? Nobody knows in full, but here is a toy that does "
             "something like it. Give Monochord the moments when the notes of a tune begin, and nothing "
-            "else. It lays a steady grid over them, at every speed and every starting point, and scores "
+            "else. It searches a finite set of grid speeds and phases, and scores "
             "each grid. <bookmark mark='a'/> A good grid catches most of the notes, has a note on most "
             "of its points, and runs at a speed near two to the second. <bookmark mark='b'/> For the first "
             f"two phrases of the Tune the best grid has {say(d['period'], 2)} seconds between beats: "
@@ -123,8 +123,8 @@ class Meter(SoundScene):
             flash(snd, taps.marks, d["taps"], base=LOW, hot=WHITE)
         with self.voiceover(
             "It found the beat. It did not find the bar. Whether these beats go in twos or in threes is "
-            "not in the timing of this tune at all: every note but two is the same length. To hear a "
-            "meter, a listener needs to be told which beats are strong. That is the job of accent."
+            "not determined uniquely by these onset times: every note but two is the same length. To hear a "
+            "meter, accents and musical context can help a listener infer stronger positions. That is the job of accent."
         ):
             self.play(FadeOut(h1), FadeOut(h2))
         self.wait(0.4)

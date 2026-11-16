@@ -30,7 +30,7 @@ class Sync(SoundScene):
         clave = d["patterns"][1]
         p = rhythm_panel(w, clave["pattern"], width=11.0, row=0.34).move_to(UP * 0.9)
         nums = VGroup(*[label(str(x), font_size=22, color=GREY_B).move_to([col.get_x(), p.row.get_y() - 0.5, 0]) for x, col in zip(w, p.grid.cols)])
-        head = label(r"a rhythm from Cuba: \ the son clave", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
+        head = label(r"a rhythm from Cuba: \ a son-clave onset pattern", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         cells = p.row.cells
         a1 = CurvedArrow(cells[3].get_bottom() + DOWN * 0.75, cells[4].get_bottom() + DOWN * 0.75, color=BAD, angle=0.9, stroke_width=3, tip_length=0.16)
         a2 = CurvedArrow(cells[6].get_bottom() + DOWN * 0.75, cells[8].get_bottom() + DOWN * 0.75, color=BAD, angle=0.7, stroke_width=3, tip_length=0.16)
@@ -47,7 +47,7 @@ class Sync(SoundScene):
             "up the differences in weight. <bookmark mark='c'/> Here the second note has weight one, and "
             "the silence after it has weight three: two. <bookmark mark='d'/> The third note has weight "
             "two, and the silent middle of the bar has four: two more. <bookmark mark='e'/> The last two "
-            "notes are followed by nothing stronger. This rhythm scores four."
+            "notes are followed by nothing stronger. This pattern scores four under our chosen one-bar grid; the same onset shape is commonly notated as a two-bar son clave at another pulse scale."
         ) as vo:
             self.play(FadeIn(head), FadeIn(p.grid), FadeIn(nums))
             self.play(LaggedStart(*[FadeIn(x) for x in cells], lag_ratio=0.05), run_time=1.5)
@@ -138,8 +138,8 @@ class Sync(SoundScene):
         w = d["weights"]
         heard = rhythm_panel(w, "x...x...x...x...", width=5.6, row=0.2).move_to(LEFT * 3.3 + UP * 0.3)
         played = rhythm_panel(w, "..x...x...x...x.", width=5.6, row=0.2).move_to(RIGHT * 3.3 + UP * 0.3)
-        lh = label(r"alone: \ these strokes are the beat. \ Index 0", font_size=28, color=GREY_A).next_to(heard, DOWN, buff=0.4)
-        lp = label(r"with the drum: \ the same strokes are off the beat. \ Index 7", font_size=28, color=TUNE).next_to(played, DOWN, buff=0.4)
+        lh = label(r"alone: \ these strokes are the beat\\ index 0", font_size=28, color=GREY_A).next_to(heard, DOWN, buff=0.4)
+        lp = label(r"with the drum: \ the same strokes are off-beat\\ index 7", font_size=28, color=TUNE).next_to(played, DOWN, buff=0.4)
         note = listen_note(r"strokes half a second apart, \ alone. \ Tap along with them. \ Then a bass drum joins: \ where does it fall?", width=10.0, font_size=26)
         with self.voiceover(
             "One thing about this number should bother you. It needs a grid, and chapter one said that "
@@ -158,11 +158,7 @@ class Sync(SoundScene):
             snd.drive(drum, lambda m, t: m.set_opacity(float(np.exp(-9.0 * (t - fb[max(np.searchsorted(fb, t, side="right") - 1, 0)]))) if t >= fb[0] else 0.0))
         self.remove(lamp, drum)
         with self.voiceover(
-            "Alone, those strokes were the beat. You tapped with them, and their index was zero. "
-            "<bookmark mark='a'/> Then the drum arrived in between, and the very same strokes turned "
-            "into off-beats, with an index of seven. Nothing about the strokes had changed. Syncopation "
-            "is not a property of a rhythm. It is a rhythm set against a grid that something else is "
-            "holding: a drum, a bass, or the listener's memory of the bars before."
+            "Alone, those strokes were the beat. You tapped with them, and their index was zero. <bookmark mark='a'/> Then the drum arrived in between, and the very same strokes turned into off-beats, with an index of seven. Nothing about the strokes had changed. Syncopation depends on a rhythm's relation to an inferred grid that something else is holding: a drum, a bass, or the listener's memory of the bars before."
         ) as vo:
             self.play(FadeIn(heard), FadeIn(lh))
             vo.wait_until("a")
@@ -179,13 +175,7 @@ class Sync(SoundScene):
                       label(r"the most pleasure", font_size=24, color=TUNE).move_to(g.ax.c2p(4.2, 0.6)))
         src = label(r"the shape reported by Witek and colleagues (2014) for fifty drum breaks; \ drawn schematically", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Why would anyone want a rhythm that fights the meter? In 2014 Maria Witek and her "
-            "colleagues played fifty drum patterns to listeners on the web and asked two things: does "
-            "this make you want to move, and do you enjoy it? <bookmark mark='a'/> Plotted against a "
-            "syncopation index like ours, both answers made an arch. With no syncopation there is "
-            "nothing for the body to do: the pattern says only what the meter already said. With too "
-            "much, the listener loses the grid. In the middle, the listener's own beat has to fill the "
-            "gaps the drummer leaves, and that seems to be the pleasure of it."
+            "Why would anyone want a rhythm that fights the meter? In 2014 Maria Witek and her colleagues played fifty drum patterns to listeners on the web and asked two things: does this make you want to move, and do you enjoy it? <bookmark mark='a'/> Plotted against a syncopation index like ours, both answers made an arch. One interpretation is that intermediate complexity invites predictive engagement, while very high complexity can obscure the beat; a regular pattern can still invite movement. In the middle, the listener's own beat has to fill the gaps the drummer leaves, as one proposed explanation, rather than a mechanism established by the rating curve."
         ) as vo:
             self.play(FadeIn(g))
             vo.wait_until("a")

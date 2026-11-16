@@ -62,9 +62,7 @@ class Divide(SoundScene):
         ans = MathTex(r"\frac{60}{120} = 0.5 \text{ s}, \qquad \frac{500 \text{ ms}}{3} \approx 167 \text{ ms}", font_size=40).move_to(DOWN * 2.3)
         with self.voiceover(
             "Sixty over a hundred and twenty is half a second for the beat, and a third of that is a "
-            f"hundred and sixty-seven milliseconds. Remember the floor we found in chapter one: about a "
-            "hundred milliseconds. So at a fast tempo, sixteenth notes are as quick as rhythm gets, and "
-            "that is one reason fast music is written in simpler values."
+            f"hundred and sixty-seven milliseconds. Around a hundred milliseconds, tracking individual subdivisions becomes harder in many tasks. It is not a hard floor: faster ornaments and rhythmic events are possible, and written values depend on the chosen beat unit."
         ):
             self.play(FadeOut(card), FadeIn(ans))
         self.wait(0.4)

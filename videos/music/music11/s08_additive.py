@@ -22,10 +22,10 @@ class Additive(SoundScene):
             cols.add(VGroup(nk, MathTex(" + ".join(str(x) for x in comp), font_size=44)).arrange(DOWN, buff=0.4))
         cols.arrange(RIGHT, buff=1.1).move_to(UP * 0.5)
         seven = VGroup(*[Dot(radius=0.16, color=WEAK) for _ in range(7)]).arrange(RIGHT, buff=0.7).move_to(UP * 0.8)
-        no = label(r"seven pulses: \ no way to cut them into equal beats", font_size=30, color=BAD).next_to(seven, DOWN, buff=0.7)
+        no = label(r"seven pulses: \ no equal groups of two or three", font_size=30, color=BAD).next_to(seven, DOWN, buff=0.7)
         with self.voiceover(
             "So far every beat in a bar has been the same length. It need not be. Take seven quick "
-            "pulses to the bar. Seven is prime: it cannot be cut into equal beats. But it can be cut into "
+            "pulses to the bar. Seven cannot be divided into several equal groups of two or three pulses. It can, of course, be heard as seven single beats or one long cycle. But it can be cut into "
             "beats of two pulses and beats of three. <bookmark mark='a'/> Two, two, three. "
             "<bookmark mark='b'/> Two, three, two. <bookmark mark='c'/> Three, two, two. A bar of three "
             "beats, one of them half as long again as the others. In Turkish the word for it is aksak, "
@@ -71,7 +71,7 @@ class Additive(SoundScene):
             (r"11 = 2 + 2 + 3 + 2 + 2", r"kopanitsa, \ Bulgaria"),
         ], left=-5.4, text_left=-0.6, top=-1.35, step=0.55, name_size=26, text_size=24)
         with self.voiceover(
-            "How many such meters are there? Monochord counts every way to fill a bar with twos and "
+            "How many ordered groupings of twos and threes fill a bar? Monochord counts each ordering from a fixed bar start, treating rotations separately, and lists every way to fill a bar with twos and "
             "threes. <bookmark mark='a'/> Five pulses: two ways. Seven: three. Nine: five. Twelve: "
             "twelve. <bookmark mark='b'/> The numbers obey a simple rule. A bar must begin with a two or "
             "a three; after a two there are n minus two pulses left to fill, and after a three, n minus "

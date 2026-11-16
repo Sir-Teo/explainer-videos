@@ -30,11 +30,7 @@ class Hook(SoundScene):
         bars = VGroup(*[Rectangle(width=0.2, height=1.1, stroke_width=0, fill_color=LEVEL, fill_opacity=0.9).move_to(x.get_center() + DOWN * 1.5) for x in dots])
         same = label(rf"every stroke measured: \ the largest difference between any two is {d['spread_db']:.1f} dB", font_size=28, color=LEVEL).next_to(bars, DOWN, buff=0.35)
         with self.voiceover(
-            "Most people hear them in pairs. Tick, tock, tick, tock: strong, weak, strong, weak. Some hear "
-            "fours. Hardly anyone hears sixteen equal strokes. <bookmark mark='a'/> But here is the "
-            "measurement. Every stroke is the same sound, copied sixteen times, the same distance apart. "
-            "The difference in level between any two of them is zero. <bookmark mark='b'/> The tick and the "
-            "tock were not in the air. You put them there."
+            "Many listeners impose groups, often pairs: tick, tock, strong, weak. Others hear different groupings or no clear grouping; tempo, attention and experience matter. <bookmark mark='a'/> But here is the measurement. Every stroke is the same sound, copied sixteen times, the same distance apart. The difference in level between any two of them is zero. <bookmark mark='b'/> The tick and the tock were not in the air. You put them there."
         ) as vo:
             self.play(*[x.animate.set_color(TUNE if k % 2 == 0 else WEAK).scale(1.25 if k % 2 == 0 else 0.85) for k, x in enumerate(dots)], run_time=1.5)
             vo.wait_until("a")
@@ -54,15 +50,7 @@ class Hook(SoundScene):
         l2 = label(r"the same change on a ``tock'': \ a smaller one", font_size=26, color=GREY_B).next_to(l1, DOWN, buff=0.25)
         claim = label(r"metre is something the listener adds", font_size=36, color=EAR).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "This was first measured in 1894, when Thaddeus Bolton played trains of identical clicks to "
-            "students and asked what they heard. They heard groups of two, of three, of four; which one "
-            "depended on the speed. <bookmark mark='a'/> In 2003 a group in France looked for the effect "
-            "in the brain itself. They made one click in a train a little softer, and recorded the "
-            "listener's brain waves. <bookmark mark='b'/> When the soft click fell on an odd-numbered "
-            "place, a tick, the brain's response was larger than when it fell on a tock. The listeners "
-            "had been told nothing about ticks and tocks. <bookmark mark='c'/> Meter, the pattern of "
-            "strong and weak beats, is something a listener adds to sound. This part is about what the "
-            "listener adds, and about how musicians lean on it, and play against it."
+            "Bolton systematically studied subjective grouping in 1894, when Thaddeus Bolton played trains of identical clicks to students and asked what they heard. They heard groups of two, of three, of four; which one depended on the speed. <bookmark mark='a'/> In 2003 a group in France looked for the effect in the brain itself. They made one click in a train a little softer, and recorded the listener's brain waves. <bookmark mark='b'/> When the soft click fell on an odd-numbered place, a tick, the brain's response was larger than when it fell on a tock. The listeners had been told nothing about ticks and tocks. <bookmark mark='c'/> Meter is an inferred pattern of strong and weak positions, shaped by both acoustic cues and the listener's expectations. This part is about what the listener adds, and about how musicians lean on it, and play against it."
         ) as vo:
             self.play(FadeIn(card), FadeIn(row))
             xs = [x.get_x() for x in row]
@@ -104,7 +92,7 @@ class Hook(SoundScene):
             "stronger than another. <bookmark mark='c'/> We cut the beat into twos and threes. "
             "<bookmark mark='d'/> We put notes where the meter is weak, and measure that with a number; "
             "and we set three against two. <bookmark mark='e'/> We meet beats of unequal length, and "
-            "swing, which no notation writes. <bookmark mark='f'/> And at the end we take a rhythm and "
+            "swing, whose detailed timing is often left implicit. <bookmark mark='f'/> And at the end we take a rhythm and "
             "speed it up, until it stops being a rhythm and becomes an interval we met in Part 1."
         ) as vo:
             self.play(FadeIn(idea))

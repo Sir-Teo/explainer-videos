@@ -79,7 +79,7 @@ class Continuum(SoundScene):
         zl = VGroup(label(r"a rhythm", font_size=24, color=GOOD).move_to(zone[0]), label(r"two notes", font_size=24, color=AIR).move_to(zone[1]))
         ans = VGroup(MathTex(rf"\frac{{{d['f3']:.0f} \text{{ Hz}}}}{{{d['f2']:.0f} \text{{ Hz}}}} = \frac32", font_size=48), label(rf"{d['cents']:.0f} cents: \ a perfect fifth", font_size=34, color=TUNE)).arrange(RIGHT, buff=0.7).move_to(DOWN * 3.0)
         with self.voiceover(
-            "Somewhere near twenty clicks a second, the rhythm was gone. <bookmark mark='a'/> The clicks "
+            "As repetition rates entered the low audio range, many listeners will have heard pitch emerge; the transition is gradual and varies with the stimulus. <bookmark mark='a'/> The clicks "
             "of each part fused into a note, as the single train did in chapter one. At the end, one "
             f"part was clicking {say(d['f2'])} times a second and the other {say(d['f3'])}. Those are two "
             f"notes, and Monochord measures the distance between them: {say(d['cents'])} cents. "
@@ -105,14 +105,7 @@ class Continuum(SoundScene):
         head = label(r"every interval of Part 1 is a polyrhythm", font_size=34, color=TUNE).to_edge(UP, buff=0.5)
         card = history_card(1930, r"Henry Cowell, \ \textit{New Musical Resources}", r"rhythm and interval are one scale of ratios, \ heard at two speeds", width=6.4, font_size=22).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "So every interval of Part 1 is a polyrhythm. <bookmark mark='a'/> The octave is two "
-            "against one. The fifth, three against two. The fourth, four against three. A major chord "
-            "is four, five and six at once. <bookmark mark='b'/> And the reason given in Part 5 for "
-            "why those intervals sound smooth is the reason given in this part for why those rhythms "
-            "are easy: the pattern the parts make together repeats soon. The composer Henry Cowell "
-            "set this out in 1930, and built an instrument with Leon Theremin to play it. Below about "
-            "twenty a second we count the pattern, and call it rhythm. Above, we cannot count it, and we "
-            "hear its ratio as a quality: an interval. It is one phenomenon, heard at two speeds."
+            "So every interval of Part 1 is a polyrhythm. <bookmark mark='a'/> The octave is two against one. The fifth, three against two. The fourth, four against three. A major chord is four, five and six at once. <bookmark mark='b'/> And the reason given in Part 5 for short common periods link these simple ratios mathematically. Perceived consonance and rhythmic ease also depend on spectra, roughness, learning, tempo and task; the analogy is not a complete perceptual explanation. The composer Henry Cowell set this out in 1930, and built an instrument with Leon Theremin to play it. Slow pulse trains can be heard as rhythm, and faster periodic trains as pitch. The boundary is not a universal twenty-hertz switch. It is one phenomenon, heard at two speeds."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -132,7 +125,7 @@ class Continuum(SoundScene):
             nk = necklace(8, onsets=[i for i, ch in enumerate(pt) if ch == "x"], radius=1.0, color=col)
             h = d["timbre_harmonics"][nm]
             bars = VGroup(*[Rectangle(width=0.2, height=max(1.3 * v, 0.02), stroke_width=0, fill_color=col, fill_opacity=0.9).move_to([k * 0.3, 0, 0], aligned_edge=DOWN) for k, v in enumerate(h)])
-            cap = label(r"its harmonics, \ 1 to 12", font_size=20, color=GREY_B).next_to(bars, DOWN, buff=0.15)
+            cap = label(r"normalized pattern factor, \ harmonics 1--12", font_size=20, color=GREY_B).next_to(bars, DOWN, buff=0.15)
             cols.add(VGroup(label(nm, font_size=36, color=col), nk, VGroup(bars, cap)).arrange(DOWN, buff=0.4))
         cols.arrange(RIGHT, buff=2.2).move_to(UP * 0.2)
         for col in cols:
@@ -154,12 +147,7 @@ class Continuum(SoundScene):
                 pulse(snd, col[0], ev[f"fast{nm}"], ev[f"fast{nm}"] + 1.2, buff=0.12)
                 snd.drive(col[1].hand, col[1].turn(1.0, ev[f"slow{nm}"], ev[f"slow{nm}"] + 2.0))
         with self.voiceover(
-            "Fast, both are the same note, because the cycle goes round at the same rate. But they do "
-            "not sound alike. <bookmark mark='a'/> A has every harmonic at full strength. B has some "
-            "strong and some nearly missing. Those bars are the spectrum of Part 3, and they are fixed "
-            "by the pattern of strokes inside the cycle. So the rate of the cycle becomes the pitch, and "
-            "the rhythm inside the cycle becomes the tone colour. Rhythm, pitch and timbre are one "
-            "thing, heard at three speeds."
+            "Fast, both are the same note, because the cycle goes round at the same rate. But they do not sound alike. <bookmark mark='a'/> A's ideal impulse-pattern factor is equal across these harmonics. B has some strong and some nearly missing. Those bars show the normalized Fourier factor of the onset pattern; the finite click shape supplies an additional spectral envelope in the actual audio. So the rate of the cycle becomes the pitch, and the rhythm inside the cycle becomes the tone colour. The example links temporal pattern, repetition pitch and spectral colour, without making them identical perceptual quantities."
         ) as vo:
             vo.wait_until("a")
             self.play(*[col[2].animate.set_opacity(1) for col in cols])
