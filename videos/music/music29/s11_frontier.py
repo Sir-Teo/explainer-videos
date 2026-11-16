@@ -18,8 +18,8 @@ class Frontier(SoundScene):
         items = [
             (r"X-ray crystallography measures the distances between atoms, \ not their positions", WHITE),
             (r"Patterson \ (1944): \ two different arrangements can give the same distances: \ `homometric' sets", WHITE),
-            (r"on a circle of 12 points, \ homometric sets are exactly the Z-related sets of chapter four", TUNE),
-            (r"the hexachord theorem is a theorem about crystals: \ a set and its complement are always homometric", WHITE),
+            (r"Z-related sets: homometric, distinct TnI classes\\sets within one class are homometric too", TUNE),
+            (r"the hexachord theorem is a theorem about crystals: \ a six-note set and its complement are homometric", WHITE),
             (r"music theory and physics found the same fact from different ends", GREY_A),
         ]
         rows_scene(self, r"a fact from crystallography", items,
@@ -28,7 +28,7 @@ class Frontier(SoundScene):
                    "the crystallographer Lindo Patterson showed that two different arrangements can have exactly the same "
                    "distances; such sets are called homometric. <bookmark mark='d'/> On a circle of twelve points, homometric "
                    "sets are exactly the Z-related sets of chapter four, <bookmark mark='e'/> and the hexachord theorem is a "
-                   "statement physicists also know: a set of half the points and its complement are always homometric. "
+                   "statement physicists also know: on this finite cyclic twelve-point universe, a six-note subset and its complement are homometric. "
                    "<bookmark mark='f'/> Music theory and physics found the same fact from different ends.", marks="cdef")
 
     # ------------------------------------------------------------------

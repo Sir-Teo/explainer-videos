@@ -65,9 +65,9 @@ class Outro(SoundScene):
             r"six all-combinatorial hexachords; \ and listeners hear contour more than rows",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Free atonality keeps a centre, an interval rather than a tonic, with all twelve notes in play. "
+            "What did we find? Our free-atonal example emphasizes an interval and uses all twelve pitch classes; that is not a definition covering every atonal piece. "
             "<bookmark mark='a'/> There are two hundred and twenty-four set classes, by brute force and by Burnside's lemma, "
-            "as in Forte's table. <bookmark mark='b'/> Twenty-three Z-related pairs, and a hexachord theorem checked on all "
+            "with Forte’s counts in the catalogued cardinalities and 224 over all cardinalities. <bookmark mark='b'/> Twenty-three Z-related pairs, and a hexachord theorem checked on all "
             "nine hundred and twenty-four hexachords and proved. <bookmark mark='c'/> A row's forty-eight forms, and a canon "
             "by Webern in which every interval is inverted. <bookmark mark='d'/> Three thousand eight hundred and fifty-six "
             "all-interval rows, whose ends are always a tritone apart. <bookmark mark='e'/> Six all-combinatorial "

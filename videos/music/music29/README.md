@@ -6,14 +6,14 @@ rhythms; this part follows Vienna, where Schoenberg gave the key up and then loo
 the mathematics theorists later found underneath, pitch-class sets, their classes and interval vectors, Z-relations, the
 hexachord theorem, rows, all-interval rows and combinatoriality, verifying every count by enumeration and proving the
 theorems on screen, and asks whether listeners can hear any of it. The tools are Monochord's
-(`explainer/music/monochord/atonal.py`). Two pieces are played from the music21 corpus's encodings, both now in the
+(`explainer/music/monochord/atonal.py`). Three pieces are played from the music21 corpus's encodings, both now in the
 public domain: Schoenberg's Six Little Piano Pieces, Op. 19, Nos. 2 and 6 (1911), and Webern's canon *Dormi Jesu*,
 Op. 16 No. 2 (1924). The rows of Schoenberg's Op. 25 and Berg's *Lyric Suite* are shown as rows; every other example is
 ours.
 
 * **The air of another planet.** Schoenberg's Second String Quartet (1908); Op. 19 No. 6, whole, heard; the plan.
 * **1. Atonality, free.** The emancipation of the dissonance; Op. 19 No. 2, whole, heard; its pitch classes counted (G
-  and B tower, all twelve used); the two bell chords of No. 6, each a stack of fourths; Vienna's expressionism.
+  and B tower, all twelve used); the two bell chords of No. 6, with different classes (0 2 5) and (0 2 7); Vienna's expressionism.
 * **2. Pitch-class sets.** Transposition and inversion on the clock; an ear question (is B a transposition or an
   inversion of A?); prime forms (the Tristan chord and the half-diminished seventh share (0 2 5 8)); Lewin's operations;
   interval vectors.
@@ -126,3 +126,13 @@ python -m videos.music.labs 29                                  # the lab (write
 * M. S. Cuthbert and C. Ariza, "music21" (*ISMIR* 2010), whose corpus holds the Schoenberg and Webern encodings.
 * Part 3 for the Fourier transform; Part 12 for Burnside's lemma; Part 22 for hierarchy; Part 27 for chromaticism;
   Part 28 for symmetric sets.
+
+## Verification and interpretation notes
+
+The encoded first bell chord of Op. 19 No. 6 is A–F-sharp–B, prime form (0,2,5); the lower G–C–F chord is quartal, prime form (0,2,7). They are not the same set class. Together they have prime form (0,1,2,4,6,7).
+
+Set classes abstract from order, register, doubling and tuning; the twelve trichord classes cover three distinct classes in twelve-tone equal temperament, not every possible sonority in every tuning. Interval vectors are not unique timbral or perceptual descriptions. Homometry includes transposition/inversion-related sets as well as Z-related pairs; Z-related pairs are the homometric cases in distinct TnI classes.
+
+A row lists each pitch class once; that is not a ban on all repeated attacks, doubling or overlap in realized serial music. Webern’s row symmetry is equality to a retrograde **up to transposition**, not a literal palindrome of twelve distinct notes. Combinatorial complement mappings need not imply a reduced transposition period.
+
+The fixed-hexachord random-row probability does not include searching many candidate segmentations or transformations. Informal listening questions cannot establish population accuracy or an individual listening strategy. Historical perception studies are task- and training-dependent. Serial procedures constrain compositional choices without completely determining a piece.

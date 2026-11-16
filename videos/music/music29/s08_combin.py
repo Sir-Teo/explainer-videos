@@ -77,7 +77,7 @@ class Combin(SoundScene):
             "Babbitt found that only six kinds of hexachord map onto their complements under transposition and under "
             "inversion as well; he called them all-combinatorial. The program finds the same six by testing all fifty "
             "hexachord classes. They are the chromatic hexachord, two less familiar shapes, the hexatonic scale "
-            "from Part 28, the hexachord of five fifths in a row, and the whole-tone scale. Every one is highly symmetric."
+            "from Part 28, the hexachord of five fifths in a row, and the whole-tone scale. These sets have the specified complement-mapping properties, which need not mean a smaller transposition period."
         ):
             self.play(FadeIn(head), LaggedStart(*[FadeIn(x) for x in cells], lag_ratio=0.2), run_time=2.5)
         self.wait(0.4)
@@ -97,17 +97,17 @@ class Combin(SoundScene):
                    "essay appeared in 1958 under the headline Who cares if you listen?, a title chosen by the magazine's "
                    "editor; his own was The Composer as Specialist. <bookmark mark='d'/> He argued that advanced music, like "
                    "advanced science, is written for specialists. <bookmark mark='e'/> He worked with the RCA synthesizer at "
-                   "Princeton and Columbia, which let him specify every sound exactly, as Part 30 will show. "
+                   "Princeton and Columbia, which let him specify many sound parameters with unusual precision, as Part 30 will show. "
                    "<bookmark mark='f'/> His influence shaped a whole American academic tradition.", marks="cdef")
 
     # ------------------------------------------------------------------
     def webern21(self):
         items = [
             (r"Webern, \ Symphony Op. 21 \ (1928): \ a row whose second half is its first half backwards, \ transposed", WHITE),
-            (r"so the row is its own retrograde: \ only 24 distinct forms, \ not 48", WHITE),
+            (r"so its retrograde is a transposition of itself: \ only 24 distinct forms, \ not 48", WHITE),
             (r"the second movement's variations form a palindrome around their middle", WHITE),
             (r"symmetry at every scale: \ interval, \ row, \ movement", TUNE),
             (r"the next generation took Webern, \ not Schoenberg, \ as its model", GREY_A),
         ]
         rows_scene(self, r"Webern's symmetries", items,
-                   "Webern pushed symmetry further than anyone. <bookmark mark='b'/> In his Symphony, Opus 21, of 1928, the row's second half is its first half backwards and transposed, <bookmark mark='c'/> so the row is its own retrograde, and has only twenty-four different forms instead of forty-eight. <bookmark mark='d'/> The theme of the second movement's variations reads the same forwards and backwards around its middle. <bookmark mark='e'/> Symmetry at every scale: the interval, the row, the movement. <bookmark mark='f'/> The generation after 1945 took Webern, not Schoenberg, as its model.", marks="cdef")
+                   "Webern pushed symmetry further than anyone. <bookmark mark='b'/> In his Symphony, Opus 21, of 1928, the row's second half is its first half backwards and transposed, <bookmark mark='c'/> so its retrograde is a transposition of itself, and has only twenty-four different forms instead of forty-eight. <bookmark mark='d'/> The theme of the second movement's variations reads the same forwards and backwards around its middle. <bookmark mark='e'/> Symmetry at every scale: the interval, the row, the movement. <bookmark mark='f'/> The generation after 1945 took Webern, not Schoenberg, as its model.", marks="cdef")

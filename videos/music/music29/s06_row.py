@@ -29,7 +29,7 @@ class Row(SoundScene):
         rows_scene(self, r"the method", items,
                    "Schoenberg's answer came around 1921 to 1923. He called it a method of composing with twelve tones related "
                    "only to one another. <bookmark mark='c'/> A piece is built from a row: all twelve pitch classes in a fixed "
-                   "order, none repeated before the others have sounded. <bookmark mark='d'/> The row may be transposed, "
+                   "order, each appearing once in the row itself; performed music can repeat notes, double octaves and overlap row forms. <bookmark mark='d'/> The row may be transposed, "
                    "inverted, played backwards, which is called retrograde, or backwards and inverted. "
                    "<bookmark mark='e'/> Melody and harmony both come from it, as notes in succession or several sounded "
                    "together. <bookmark mark='f'/> His Piano Suite, Opus 25, is among the first pieces built wholly this way.",
@@ -50,7 +50,7 @@ class Row(SoundScene):
         side = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
             (r"across the top: \ the row, \ $P_0$", TUNE),
             (r"down the side: \ its inversion, \ $I_0$", BLUE),
-            (r"each row of the grid: \ a transposition; \ each column: \ an inverted one", WHITE),
+            (r"each row: a transposition\\each column: an inverted form", WHITE),
             (r"read right to left: \ retrogrades", WHITE),
             (rf"12 $\times$ 4 = 48 forms, \ all different for this row: \ {d['distinct']}", EAR))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 6.4))
@@ -118,11 +118,7 @@ class Row(SoundScene):
             (rf"{d['inverted']} of {d['intervals']} intervals: \ exactly inverted", EAR),
             (rf"{d['same_durations']} of {d['notes']} durations: \ the same", WHITE))]).arrange(RIGHT, buff=0.8).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Webern took the method's symmetries further than anyone. In Dormi Jesu, a short Latin song for voice and "
-            "clarinet from 1924, the program compares the two lines in the encoding. <bookmark mark='a'/> The clarinet "
-            "starts a bar ahead, and the voice follows with the same line upside down: every one of its forty-five "
-            "intervals is the clarinet's interval inverted, <bookmark mark='b'/> and every one of its forty-six durations "
-            "is the same. It is a strict canon in inversion, from first note to last."
+            "Webern took the method's symmetries in distinctive ways. In Dormi Jesu, a short Latin song for voice and clarinet from 1924, the program compares the two lines in the encoding. <bookmark mark='a'/> The clarinet starts a bar ahead, and the voice follows with the same line upside down: every one of the forty-five pitch-class intervals compared in this encoding is the clarinet's interval inverted, <bookmark mark='b'/> and every one of its forty-six durations is the same. It is a strict canon in inversion, from first note to last."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(key))
             vo.wait_until("a")

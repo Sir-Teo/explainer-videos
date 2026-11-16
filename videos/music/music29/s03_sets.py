@@ -121,7 +121,7 @@ class Sets(SoundScene):
             "Then count each class among all the pairs of notes in the set. <bookmark mark='c'/> A major triad has three "
             "pairs: one minor third, one major third, one fourth or fifth. <bookmark mark='d'/> The set zero one four six "
             "has six pairs, one of every class, which is why it is called the all-interval tetrachord. "
-            "<bookmark mark='e'/> The vector is a set's harmonic colour, unchanged by transposition and inversion."
+            "<bookmark mark='e'/> The vector describes pairwise interval-class content; it does not uniquely determine perceived harmonic color, unchanged by transposition and inversion."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -140,4 +140,4 @@ class Sets(SoundScene):
             (r"Part 31 builds this theory of transformations", GREY_A),
         ]
         rows_scene(self, r"operations as objects", items,
-                   "One more idea, which later parts build on. <bookmark mark='b'/> The theorist David Lewin argued, in 1987, that what matters is often the operation, not the sets. <bookmark mark='c'/> The twelve transpositions and twelve inversions form a group of twenty-four operations, the symmetries of a twelve-sided polygon. <bookmark mark='d'/> A passage that moves from one set to another by an inversion is about that inversion. <bookmark mark='e'/> The same group acts on major and minor triads, which leads to the neo-Riemannian transformations. <bookmark mark='f'/> Part 31 builds this theory.", marks="cdef")
+                   "One more idea, which later parts build on. <bookmark mark='b'/> The theorist David Lewin argued, in 1987, that what matters is often the operation, not the sets. <bookmark mark='c'/> The twelve transpositions and twelve inversions form a group of twenty-four operations, the symmetries of a twelve-sided polygon. <bookmark mark='d'/> A passage that moves from one set to another by an inversion is about that inversion. <bookmark mark='e'/> The same group acts on major and minor triads, related to, but distinct from, the neo-Riemannian group acting on those triads. <bookmark mark='f'/> Part 31 builds this theory.", marks="cdef")

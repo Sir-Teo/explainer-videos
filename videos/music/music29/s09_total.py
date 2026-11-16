@@ -24,13 +24,7 @@ class Total(SoundScene):
             (r"the composer chooses the series; \ the series chooses the notes", GREY_A),
         ]
         rows_scene(self, r"serialize everything", items,
-                   "After 1945 the young avant-garde pushed the method to its limit. <bookmark mark='b'/> They admired "
-                   "Webern's late music, few notes, wide leaps, silences and symmetry. <bookmark mark='c'/> Messiaen's piano "
-                   "study Mode de valeurs et d'intensités, of 1949, gives each pitch its own fixed duration, loudness and "
-                   "attack. <bookmark mark='d'/> Pierre Boulez's Structures Ia, of 1952, derives pitch, duration, dynamics and "
-                   "attack all from series. <bookmark mark='e'/> With Stockhausen and Nono and the summer courses at "
-                   "Darmstadt, it became the sound of the 1950s avant-garde. <bookmark mark='f'/> The composer chooses the "
-                   "series; the series chooses the notes.", marks="cdef")
+                   "After 1945 the young avant-garde pushed the method to its limit. <bookmark mark='b'/> They admired Webern's late music, few notes, wide leaps, silences and symmetry. <bookmark mark='c'/> Messiaen's piano study Mode de valeurs et d'intensités, of 1949, gives each pitch its own fixed duration, loudness and attack. <bookmark mark='d'/> Pierre Boulez's Structures Ia, of 1952, derives pitch, duration, dynamics and attack all from series. <bookmark mark='e'/> With Stockhausen and Nono and the summer courses at Darmstadt, it became the sound of the 1950s avant-garde. <bookmark mark='f'/> Series constrain selected parameters; composers still choose mappings, registers, structures and exceptions.", marks="cdef")
 
     # ------------------------------------------------------------------
     def points(self):
@@ -49,10 +43,7 @@ class Total(SoundScene):
         head = label(r"a pointillist passage \ (ours): \ pitch, \ duration and loudness each from a series", font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
         cap = label(r"dot size: \ loudness; \ grey line: \ duration, \ 1 to 12 sixteenths", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Here is the idea in miniature, ours. Twelve notes: their pitch classes from a row, their durations from a series "
-            "of one to twelve sixteenths, their loudness from a third series, and their octaves scattered. The result is "
-            "pointillist: single notes, isolated in register and time, each with its own weight. Listen for how little "
-            "the ear can group."
+            'Here is the idea in miniature, ours. Twelve notes: their pitch classes from a row, their durations from a series of one to twelve sixteenths, their loudness from a third series, and their octaves scattered. The result is pointillist: single notes, isolated in register and time, each with its own weight. Listen for what you group; the example has no measured listener result.'
         ):
             self.play(FadeIn(head), FadeIn(dots), FadeIn(bars), FadeIn(cap))
         with self.listen(c) as snd:

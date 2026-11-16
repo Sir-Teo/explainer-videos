@@ -45,7 +45,7 @@ class Hear(SoundScene):
                      label(r"B: \ $RI_5$, \ a true form", font_size=20, color=TUNE).next_to(gB, DOWN, buff=0.35))
         with self.voiceover(
             "B is the form: the retrograde inversion starting on F. A shares the row's second half exactly and so sounds "
-            "closer, but it is not a form at all. If you chose A, you heard what most listeners hear: shared content and "
+            "closer, but it is not a form at all. If you chose A, you may have prioritized shared content or contour; this informal question does not diagnose your strategy or establish a population result: shared content and "
             "shared contour, not the abstract identity of the forms."
         ):
             self.play(FadeIn(ans), gB.animate.set_color(TUNE), gA.animate.set_color(BLUE))
@@ -66,7 +66,7 @@ class Hear(SoundScene):
                    "trained musicians could not reliably tell which row a passage used. <bookmark mark='c'/> Carol Krumhansl "
                    "and colleagues, in 1987, found some sensitivity to a row's order, mostly in listeners with training. "
                    "<bookmark mark='d'/> Listeners follow contour, register, rhythm and texture far better than the identity "
-                   "of a row's forms. <bookmark mark='e'/> What the ear does hear is the absence of a tonal centre, the "
+                   "of a row's forms. <bookmark mark='e'/> Listeners can respond to tonal cues and their absence, with task, training and context affecting the result, the "
                    "constant circulation of all twelve notes, and a characteristic harmonic colour. <bookmark mark='f'/> A "
                    "composer's method need not be a listener's experience; Part 46 takes up what listeners expect.", marks="cdef")
 
@@ -85,7 +85,7 @@ class Hear(SoundScene):
             "There is a numerical way to see the gap. <bookmark mark='a'/> Ask how often a random ordering of the twelve "
             "notes happens to share the row's first six. <bookmark mark='b'/> Exactly one time in nine hundred and "
             "twenty-four, and a simulation agrees. <bookmark mark='c'/> So an analyst with the score who finds a shared "
-            "hexachord has strong evidence of a relation. <bookmark mark='d'/> A listener gets the same evidence spread over "
+            "hexachord has a selective match under this fixed-hexachord uniform-row null; searching many boundaries and transformations increases chance matches. <bookmark mark='d'/> A listener gets the same evidence spread over "
             "seconds and registers, with no score to look back at. <bookmark mark='e'/> The gap between analysis and "
             "perception is partly a gap in what is available."
         ) as vo:

@@ -87,10 +87,7 @@ class Classes(SoundScene):
         cells.arrange_in_grid(rows=2, cols=6, buff=(0.45, 0.4)).move_to(DOWN * 0.2)
         head = label(r"all twelve three-note chords \ (up to transposition and inversion)", font_size=25, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Here are all twelve classes of three-note chord, each in prime form, played as a close chord on middle C. From "
-            "the cluster of three semitones, through chords built of seconds and fourths, to the familiar ones near the end: "
-            "the diminished triad, the major and minor triad, which are one class, and the augmented triad. Every "
-            "three-note sonority in any music is one of these twelve."
+            'Here are all twelve classes of three-note chord, each in prime form, played as a close chord on middle C. From the cluster of three semitones, through chords built of seconds and fourths, to the familiar ones near the end: the diminished triad, the major and minor triad, which are one class, and the augmented triad. Every set of three distinct pitch classes in twelve-tone equal temperament belongs to one of these classes; register, doubling and tuning are omitted.'
         ):
             self.play(FadeIn(head), FadeIn(cells))
         with self.listen(c) as snd:

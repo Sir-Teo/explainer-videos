@@ -64,3 +64,15 @@ def test_the_part_keeps_the_series_rules():
     check_scenes_and_clips(compute, SCENES)
     check_windows(compute, SCENES)
     check_ear_thread(compute, SCENES)
+
+
+def test_encoded_bell_chords_have_different_set_classes():
+    from explainer.music.monochord import atonal as A
+
+    notes = load("hook")["notes"]
+    first = {int(p) % 12 for p, onset, duration in notes if onset == 0}
+    at_three = {int(p) % 12 for p, onset, duration in notes if onset <= 3 < onset + duration}
+    lower = at_three - first
+    assert first == {6, 9, 11} and lower == {0, 5, 7}
+    assert A.prime_form(first) == (0, 2, 5)
+    assert A.prime_form(lower) == (0, 2, 7)

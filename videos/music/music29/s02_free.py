@@ -30,7 +30,7 @@ class Free(SoundScene):
                    "best fit drops to about 0.55. <bookmark mark='d'/> What holds such music together is small cells of "
                    "intervals, repeated, transposed and turned upside down, <bookmark mark='e'/> and brevity: without a key to "
                    "return to, long forms were hard to hold together, and many pieces of these years last a minute or two. "
-                   "<bookmark mark='f'/> Schoenberg disliked the word atonal; he preferred pantonal, all keys at once.", marks="cdef")
+                   "<bookmark mark='f'/> Schoenberg disliked the word atonal; he preferred pantonal, a term expressing his objection to the negative implication of atonal; it does not mean every passage literally sounds all keys simultaneously.", marks="cdef")
 
     # ------------------------------------------------------------------
     def op19(self):
@@ -103,16 +103,12 @@ class Free(SoundScene):
         a = pc_clock([9, 6, 11], radius=1.15, color=TUNE).move_to(LEFT * 4.3 + DOWN * 0.2)
         b = pc_clock([7, 0, 5], radius=1.15, color=BLUE).move_to(DOWN * 0.2)
         c_ = pc_clock([9, 6, 11, 7, 0, 5], radius=1.15, color=EAR).move_to(RIGHT * 4.3 + DOWN * 0.2)
-        la = label(r"A, \ F$\sharp$, \ B: \ fourths, \ (0 2 5)", font_size=20, color=TUNE).next_to(a, DOWN, buff=0.45)
-        lb = label(r"G, \ C, \ F: \ fourths again, \ (0 2 5)", font_size=20, color=BLUE).next_to(b, DOWN, buff=0.45)
+        la = label(r"A, \ F$\sharp$, \ B: \ (0 2 5)", font_size=20, color=TUNE).next_to(a, DOWN, buff=0.45)
+        lb = label(r"G, \ C, \ F: \ fourths, \ (0 2 7)", font_size=20, color=BLUE).next_to(b, DOWN, buff=0.45)
         lc = label(r"together: \ (0 1 2 4 6 7)", font_size=20, color=EAR).next_to(c_, DOWN, buff=0.45)
         head = label(r"Op. 19 No. 6: \ the two `bell' chords", font_size=26, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Go back to the piece the part began with. <bookmark mark='a'/> Its first chord, high in the piano, is A, F sharp "
-            "and B, stacked in fourths. <bookmark mark='b'/> The second, lower, is G, C and F: fourths again, the same set "
-            "class. <bookmark mark='c'/> Sounding together they make a six-note set, though spread so widely that no "
-            "familiar chord is heard in it. The piece is built from these two bell-like chords, a small cell repeated and varied, which is exactly "
-            "how free atonality holds together."
+            "Go back to the piece the part began with. <bookmark mark='a'/> Its first chord, high in the piano, is A, F sharp and B, with prime form zero two five. <bookmark mark='b'/> The second, lower, is G, C and F, stacked fourths with prime form zero two seven, a different set class. <bookmark mark='c'/> Sounding together they make a six-note set, spread widely in register; its heard grouping depends on spacing and context. The piece is built from these two bell-like chords, a small cell repeated and varied, one example of motivic and textural organization in free atonality."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
