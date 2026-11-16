@@ -18,7 +18,7 @@ class Organum(SoundScene):
         card = history_card(900, r"\textit{Musica enchiriadis}, \ a handbook from northern France", r"a chant sung against itself, \ a fourth or a fifth below; \ the voices may be doubled at the octave", width=10.0, font_size=26).to_edge(UP, buff=0.4)
         names = VGroup(label(r"vox principalis: \ the chant", font_size=28, color=CF_C), label(r"vox organalis: \ the same, \ a fifth lower", font_size=28, color=UP_C)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(DOWN * 0.6)
         with self.voiceover(
-            "The oldest surviving instructions for singing in more than one part come from a handbook "
+            "Among the earliest surviving systematic instructions for notated Western polyphony come from a handbook "
             "written in northern France around the year 900, the Musica enchiriadis. It describes a "
             "practice called organum. <bookmark mark='a'/> One singer has the chant, the principal "
             "voice. A second sings the same chant, a fourth or a fifth lower, the organal voice, moving "
@@ -57,7 +57,7 @@ class Organum(SoundScene):
             pulse(snd, l2, d["starts"]["composite"], c.duration, buff=0.1)
         cap = label(r"four parts, \ and still one melody", font_size=32, color=TUNE).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Four parts, and still one melody. That was the point. Organum did not want independence. "
+            "The doubling in this example encourages a blended melodic line. Historical organum varied, and its creators’ aims cannot be reduced to one perceptual measure. "
             "It wanted a single line, made splendid: one voice for the whole church, as wide as the "
             "building. Parallel fifths and octaves were not a fault in it. They were the means, "
             "precisely because they fuse."
@@ -96,7 +96,7 @@ class Organum(SoundScene):
             "below a boundary note, here C, so at the start it waits on C while the chant rises, follows "
             "in parallel fourths, and at the end holds C again until the chant comes down to meet it in "
             "a unison. <bookmark mark='c'/> Then free organum, as in a treatise of about 1100: here "
-            "every interval is still an octave, fifth, fourth or unison, as most were then, but the "
+            "every interval is still an octave, fifth, fourth or unison, in this simplified teaching reconstruction, but the "
             "organal voice moves against the chant wherever it can. Monochord chose that voice by dynamic programming, rewarding contrary motion."
         ) as vo:
             self.play(FadeIn(head))
@@ -112,13 +112,7 @@ class Organum(SoundScene):
                 pulse(snd, rows[k][0], d["starts"][name], d["starts"][names[k + 1]] - 0.4 if k < 2 else c.duration, buff=0.08)
         f, o, fr = (d["independence"][n] for n in names)
         with self.voiceover(
-            f"Measure each the way this part will measure everything: at each move, are the voices "
-            f"moving together onto a fused interval, and are they moving in opposite directions? "
-            f"Parallel organum: fused at every move, contrary at none. The oblique kind: fused at "
-            f"{say(100 * o['fused'])} moves in a hundred, the rest standing still. Free organum: never "
-            f"fused, and contrary {say(100 * fr['contrary'])} times in a hundred, using only the "
-            "intervals that fuse most. It is the first sign of the rule Fux would write down: perfect "
-            "intervals are safe only if the voices reach them from opposite directions."
+            f"Measure each the way this part will measure everything: at each move, are the voices moving together onto a fused interval, and are they moving in opposite directions? Parallel organum: fused at every move, contrary at none. The oblique kind: fused at {say(100 * o['fused'])} moves in a hundred, the rest standing still. Free organum: zero by this co-motion measure, which does not mean no perceptual fusion, and contrary {say(100 * fr['contrary'])} times in a hundred, using only the intervals that fuse most. It is the first sign of the rule Fux would write down: the selected first-species rules restrict similar motion into perfect intervals; oblique approaches are also possible."
         ):
             self.play(LaggedStart(*[FadeIn(r[2]) for r in rows], lag_ratio=0.4), run_time=3.0)
         self.wait(0.4)
@@ -133,14 +127,7 @@ class Organum(SoundScene):
         cap = label(r"the change was in what the music wanted", font_size=30, color=GREY_A).to_edge(DOWN, buff=0.6)
         head = label(r"five centuries of a second voice", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "So over the next five centuries the goal changed. <bookmark mark='a'/> Around 1026 Guido "
-            "of Arezzo, whom Part 10 met inventing the staff, wanted the voices to come back together at "
-            "the ends of phrases. <bookmark mark='b'/> By about 1100, in free organum, the voices move "
-            "against each other. "
-            "<bookmark mark='c'/> By about 1200, in Paris, a new voice runs freely over the long held "
-            "notes of a chant: Part 23 tells that story. <bookmark mark='d'/> And by about 1500, "
-            "composers were avoiding exactly what organum had been built on. The ear had not changed. "
-            "What the music wanted had: two voices, heard as two."
+            "So over the next five centuries the goal changed. <bookmark mark='a'/> Around 1026 Guido of Arezzo, whom Part 10 met developing staff notation, wanted the voices to come back together at the ends of phrases. <bookmark mark='b'/> By about 1100, in free organum, the voices move against each other. <bookmark mark='c'/> By about 1200, in Paris, a new voice runs freely over the long held notes of a chant: Part 23 tells that story. <bookmark mark='d'/> And by about 1500, composers were avoiding exactly what organum had been built on. The ear had not changed. What the music wanted had: two voices, heard as two."
         ) as vo:
             self.play(FadeIn(head))
             for mark, s in zip("abcd", steps):

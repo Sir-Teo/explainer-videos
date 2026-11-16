@@ -26,7 +26,7 @@ class Fifth(SoundScene):
 
     def table(self):
         d = load("independence")["rows"]
-        cols = [("together", r"notes begin together"), ("fused", r"fused moments"), ("contrary", r"contrary motion"), ("parallel", r"parallel motion")]
+        cols = [("together", r"notes begin together"), ("fused", r"co-moving \\ perfect intervals"), ("contrary", r"contrary motion"), ("parallel", r"parallel motion")]
         xs = (-6.2, -2.4, 0.2, 2.6, 5.0)
         head = VGroup(label(r"", font_size=22, color=GREY_B).move_to([xs[0], 2.6, 0], aligned_edge=LEFT))
         for (k, t), x in zip(cols, xs[1:]):
@@ -43,7 +43,7 @@ class Fifth(SoundScene):
             "the five species. <bookmark mark='a'/> Organum: every note begins together; every move "
             "lands on a fused interval with both voices moving together; all the motion is parallel. "
             "It is designed to be one voice. <bookmark mark='b'/> First species: still every note "
-            "together, but fused moments gone, and contrary motion nearly everywhere. "
+            "together, but co-moving perfect intervals absent by our proxy, and contrary motion nearly everywhere. "
             "<bookmark mark='c'/> Then, species by species, the onsets come apart: half together, a "
             "quarter, almost none. The rules attack the three cues of fusion one after another: "
             "first the fused intervals, then the common motion, then the common onsets."
@@ -65,13 +65,7 @@ class Fifth(SoundScene):
         head = label(r"Huron, \ 2001: \ six principles of hearing, \ and the rules that follow from them", font_size=26, color=GREY_A).to_edge(UP, buff=0.45)
         cap = label(r"the rules are not taste. \ They are acoustics, \ and listening.", font_size=30, color=TUNE).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Huron's paper of 2001 put it in one table. Start from six principles of hearing, each "
-            "established in the laboratory. <bookmark mark='a'/> Use tones with clear pitches. Keep the "
-            "voices out of each other's critical bands, the masking of Part 4. Avoid the intervals "
-            "that fuse. Move by small steps, so each line stays one stream, as in Part 14. Avoid "
-            "moving together. Avoid starting together. <bookmark mark='b'/> From these, with a goal, "
-            "to keep the voices audible as independent lines, he derived nearly all the traditional "
-            "rules of voice leading, and some that textbooks had never stated but composers had obeyed."
+            "Huron's paper of 2001 put it in one table. Start from six principles of hearing, each established in the laboratory. <bookmark mark='a'/> Use tones with clear pitches. Manage spectral overlap and register to reduce masking, the masking of Part 4. Limit or offset the intervals that promote fusion when independence is the goal. Move by small steps, so each line stays one stream, as in Part 14. Avoid moving together. Avoid starting together. <bookmark mark='b'/> From these, with a goal, to keep the voices audible as independent lines, he explained many traditional voice-leading practices in perceptual terms, and some that textbooks had never stated but composers had obeyed."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

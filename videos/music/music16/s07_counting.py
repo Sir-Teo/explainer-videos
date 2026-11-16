@@ -34,7 +34,7 @@ class Counting(SoundScene):
             "four hundred. The rules for the beginning and the end remove most of the rest. The rules "
             "of melody cut deep. And when all twelve are in force, <bookmark mark='b'/> there are "
             f"{say(d['valid'])} good lines. Not one in thirty billion. The counting takes a fraction "
-            "of a second, by dynamic programming: the rules only ever look one or two notes back, so "
+            "of a second, by dynamic programming: the dynamic-programming state retains the recent motion, interval run and highest-note information needed by these rules, so "
             "the lines can be counted without being listed."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(names), FadeIn(dots[0]), FadeIn(top))
@@ -61,8 +61,8 @@ class Counting(SoundScene):
                 nums[(i, p)] = label(str(w), font_size=22, color=TUNE).move_to(c)
                 names.add(label(NAMES[p % 12] + str(p // 12 - 1), font_size=16, color=GREY_B).next_to(c, LEFT, buff=0.08))
         links = VGroup(*[Line(nodes[(i, a)].get_center(), nodes[(i + 1, b)].get_center(), buff=0.27, color=DIM, stroke_width=2) for i, es in enumerate(edges) for a, b in es])
-        cfl = VGroup(label(r"cantus:", font_size=22, color=CF_C).move_to([X(0) - 1.05, -3.25, 0]),
-                     *[label(NAMES[p % 12], font_size=24, color=CF_C).move_to([X(i), -3.25, 0]) for i, p in enumerate(cf)])
+        cfl = VGroup(label(r"cantus:", font_size=22, color=CF_C).move_to([X(0) - 1.05, -2.85, 0]),
+                     *[label(NAMES[p % 12], font_size=24, color=CF_C).move_to([X(i), -2.85, 0]) for i, p in enumerate(cf)])
         rule = VGroup(label(r"ways to finish from a note \\ = the sum of the ways \\ from the notes it may go to", font_size=24, color=WHITE),
                       label(rf"in all: \ {' + '.join(str(w) for _, _, w in cells[0])} = {t['total']}", font_size=26, color=TUNE)).arrange(DOWN, buff=0.4).move_to([5.0, 0.6, 0])
         rule[0].scale_to_fit_width(min(rule[0].width, 3.6))
@@ -128,13 +128,7 @@ class Counting(SoundScene):
                    label(r"the stricter rule, \ no perfect consonance reached by similar motion, \ already forbids them all", font_size=26, color=GREY_A),
                    label(rf"take that one away instead: \ {rows['direct']['count']} lines", font_size=30, color=EAR)).arrange(DOWN, buff=0.35).move_to(UP * 0.2)
         with self.voiceover(
-            "Counting also shows something no textbook mentions. Remove the most famous rule of all, "
-            "the one against parallel fifths and octaves, and count again. <bookmark mark='a'/> Still "
-            f"{say(d['full'])}. Not one line more. <bookmark mark='b'/> The reason is that a stricter "
-            "rule is already in force: no perfect consonance may be reached by similar motion at all, "
-            "and parallel motion is a kind of similar motion. <bookmark mark='c'/> Remove that rule "
-            f"instead, and the number rises to {say(rows['direct']['count'])}. In first species, the "
-            "famous rule does no work of its own. It is a special case, kept for its name."
+            f"Counting makes a logical redundancy explicit in this particular rule set. Remove the most famous rule of all, the one against parallel fifths and octaves, and count again. <bookmark mark='a'/> Still {say(d['full'])}. Not one line more. <bookmark mark='b'/> The reason is that a stricter rule is already in force: no perfect consonance may be reached by similar motion at all, and parallel motion is a kind of similar motion. <bookmark mark='c'/> Remove that rule instead, and the number rises to {say(rows['direct']['count'])}. In this implementation, the parallel-perfect rule adds no exclusion beyond the stronger direct-motion rule. It is a special case, kept for its name."
         ) as vo:
             self.play(FadeIn(t[0]))
             vo.wait_until("a")

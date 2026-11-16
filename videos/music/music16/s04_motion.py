@@ -60,8 +60,8 @@ class Motion(SoundScene):
             "single shape. Psychologists call it the law of common fate, and Albert Bregman showed in "
             "his book of 1990 that hearing uses the same law. <bookmark mark='b'/> Sounds whose pitches "
             "rise and fall together are taken to come from one source. Huron calls it pitch "
-            "co-modulation. Put that beside tonal fusion: two voices a fifth apart already half fuse; "
-            "make them move together, and they become one."
+            "co-modulation. Put that beside tonal fusion: the ideal fifth shares half of its upper harmonic series; that does not mean a fifty-percent fusion percept; "
+            "common motion can further favor grouping."
         ) as vo:
             self.play(FadeIn(head), FadeIn(dots), FadeIn(text[0]))
             vo.wait_until("a")
@@ -93,13 +93,7 @@ class Motion(SoundScene):
                         VGroup(Square(0.2, stroke_width=0, fill_color=WEAK, fill_opacity=0.9), label(r"lines that are only consonant", font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.12)).arrange(RIGHT, buff=0.8).next_to(chart, UP, buff=0.4)
         head = label(r"how often each motion occurs, \ in a hundred, \ over Fux's cantus firmus", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The rules push hard toward contrary motion. Take every line that obeys Fux's rules over "
-            "the cantus firmus we will meet in chapter five, and count the motions. "
-            f"<bookmark mark='a'/> Contrary motion: {say(100 * d['valid']['contrary'])} moves in a "
-            f"hundred. Lines that are merely consonant, with no other rules, manage "
-            f"{say(100 * d['consonant_only']['contrary'])}. Contrary motion is the one kind that can "
-            "never co-modulate. When one voice rises and the other falls, nothing in the sound "
-            "suggests a single source."
+            f"The rules push hard toward contrary motion. Take every line that obeys Fux's rules over the cantus firmus we will meet in chapter five, and count the motions. <bookmark mark='a'/> Contrary motion: {say(100 * d['valid']['contrary'])} moves in a hundred. Lines that are merely consonant, with no other rules, manage {say(100 * d['consonant_only']['contrary'])}. Contrary motion is the one kind that can never co-modulate. When one voice rises and the other falls, their pitch trajectories give a cue to separate streams, though other cues may still group them."
         ) as vo:
             self.play(FadeIn(head), FadeIn(legend), FadeIn(g))
             vo.wait_until("a")

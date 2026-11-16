@@ -18,15 +18,7 @@ class Fusion(SoundScene):
         yl = label(r"of the upper note's harmonics, \ the share that are also harmonics of the lower note \ (\%, \ just ratios)", font_size=22, color=GREY_B).next_to(ch, DOWN, buff=0.15)
         head = label(r"Carl Stumpf, \ 1890: \ some pairs of notes are heard as one", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Why would two voices merge? In 1890 Carl Stumpf asked listeners a simple question about "
-            "two notes played together: one tone, or two? Listeners without training often heard an "
-            "octave as a single tone, a fifth quite often, a fourth less often, and thirds and sixths "
-            "less often still. Stumpf called this tonal fusion. <bookmark mark='a'/> Part 5 gives the reason. "
-            "A note is a whole series of harmonics. Above a C, every harmonic of the C an octave higher "
-            "is already a harmonic of the lower C: all of them, a hundred in a hundred. For the fifth, "
-            "half. For the fourth, a third. For a major third, a quarter; for a minor second, one in "
-            "fifteen. The more of its harmonics a note shares with its partner, the more the ear takes "
-            "the two for one harmonic series, which means one sound."
+            "Why would two voices merge? In 1890 Carl Stumpf asked listeners a simple question about two notes played together: one tone, or two? Listeners without training often heard an octave as a single tone, a fifth quite often, a fourth less often, and thirds and sixths less often still. Stumpf called this tonal fusion. <bookmark mark='a'/> Part 5 suggests one acoustic contribution, illustrated here by an ideal infinite harmonic-series model. A note is a whole series of harmonics. Above a C, every harmonic of the C an octave higher is already a harmonic of the lower C: all of them, a hundred in a hundred. For the fifth, half. For the fourth, a third. For a major third, a quarter; for a minor second, one in fifteen. Shared harmonics can favor grouping, but the fraction is a proxy, not a measured probability of hearing one tone. Finite spectra, mistuning, onset and timbre also matter."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -34,9 +26,7 @@ class Fusion(SoundScene):
             self.play(*[Indicate(ch.bars[i], color=TUNE) for i in (12, 7, 5)])
         cap = label(r"the octave, \ the fifth, \ the fourth: \ the intervals of organum, \ and the ones that fuse", font_size=28, color=TUNE).next_to(head, DOWN, buff=0.35)
         with self.voiceover(
-            "So the intervals that fuse most are the octave, the fifth and the fourth: exactly the "
-            "intervals of organum, and exactly the ones that the later rules single out, as perfect "
-            "consonances, for special care."
+            'So the intervals that fuse most are the octave, the fifth and the fourth: exactly the intervals of organum, and intervals given special treatment in later rules; a fourth above the bass is treated as dissonant in the two-part species exercises here.'
         ):
             self.play(FadeIn(cap))
         self.wait(0.4)

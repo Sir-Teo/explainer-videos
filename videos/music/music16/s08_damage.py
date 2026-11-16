@@ -34,17 +34,7 @@ class Damage(SoundScene):
                              label(fmt(d["base"][key]), font_size=24, color=GREY_A).move_to([xs[3], y, 0], aligned_edge=LEFT),
                              label(fmt(r[key]), font_size=24, color=EAR).move_to([xs[4], y, 0], aligned_edge=LEFT)))
         with self.voiceover(
-            "Now take the rules away one at a time, and measure the damage. For each rule, count the "
-            "lines that obey all the others, draw three hundred of them at random, and measure what "
-            "has gone wrong in them. <bookmark mark='a'/> Without the rule of consonance there are a "
-            f"hundred and eighty times as many lines, and {say(100 * rows['consonance']['dissonant'])} "
-            "notes in a hundred clash with the cantus. <bookmark mark='b'/> Without the rule against "
-            f"similar motion into perfect intervals, {say(100 * rows['direct']['fused'])} moves in a "
-            "hundred land on a fused interval with both voices moving together: the organum effect "
-            "returns. <bookmark mark='c'/> Without the rules of melody, leaps larger than a fifth "
-            f"triple. Without the rule of recovery, the line wanders: its moves grow. Without the rule "
-            "against unisons, the two voices meet in the middle and vanish into each other. Each rule "
-            "repairs one specific way of losing a voice."
+            f"Now take the rules away one at a time, and measure the damage. For each rule, count the lines that obey all the others, draw three hundred of them at random, and measure what has gone wrong in them. <bookmark mark='a'/> Without the rule of consonance there are a hundred and eighty times as many lines, and {say(100 * rows['consonance']['dissonant'])} notes in a hundred clash with the cantus. <bookmark mark='b'/> Without the rule against similar motion into perfect intervals, {say(100 * rows['direct']['fused'])} moves in a hundred land on a fused interval with both voices moving together: the organum effect returns. <bookmark mark='c'/> Without the rules of melody, leaps larger than a fifth triple. Without the rule of recovery, the line wanders: its moves grow. Without the rule against unisons, the two voices meet in the middle and vanish into each other. The measures illustrate several consequences; rules can interact and are not each a unique isolated cause of voice loss."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -88,7 +78,7 @@ class Damage(SoundScene):
             g2.notes[0][k].set_fill(EAR)
         with self.voiceover(
             "B clashes: it breaks the rule of consonance, at the pink notes. A breaks the rule on "
-            "similar motion, and at its pink notes the two voices fuse."
+            "similar motion, and its pink notes mark similar motion into perfect intervals, our proxy for increased grouping risk."
         ):
             self.play(ReplacementTransform(la, l1), ReplacementTransform(lb, l2), *[Indicate(g1.notes[0][k], color=EAR) for k in d["direct_at"]],
                       *[Indicate(g2.notes[0][k], color=EAR) for k in d["dissonant_at"]])

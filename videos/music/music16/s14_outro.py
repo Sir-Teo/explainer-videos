@@ -64,7 +64,7 @@ class Outro(SoundScene):
         with self.voiceover(
             f"Row sixteen of the ledger. {say(v['seconds'])} seconds. The measurement: in the organum "
             f"phrase every note began together with the cantus, and every move landed on a fused "
-            f"interval. In the fourth-species phrase, no note began with the cantus, and none fused. "
+            f"interval. In the fourth-species phrase, no note began with the cantus, and none met our co-motion proxy; this is not a perceptual listening result. "
             "The same melody underneath; two ways of being heard."
         ):
             self.play(FadeOut(chips), FadeIn(led, shift=UP * 0.2))
@@ -83,15 +83,7 @@ class Outro(SoundScene):
             r"species two to five: \ passing, \ neighbouring and suspended dissonances, \ and voices apart in time",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Organum wanted one voice, made thicker, and parallel perfect intervals "
-            "were its means. <bookmark mark='a'/> Three cues make the ear merge two voices: intervals "
-            "that fuse, moving together, and starting together. <bookmark mark='b'/> Fux's rules, for "
-            "the most part, follow from avoiding those cues, as Huron showed. <bookmark mark='c'/> Over "
-            f"Fux's cantus, {say(c['valid'])} lines obey every rule, out of four point six million "
-            "million, and the famous rule against parallel fifths adds nothing that the others do not "
-            "already do. <bookmark mark='d'/> Each rule removed lets back one particular way of losing "
-            "a voice. <bookmark mark='e'/> And the later species bring dissonance back, as passing "
-            "notes, neighbours and suspensions, while pulling the voices apart in time."
+            f"What did we find? Organum wanted one voice, made thicker, and parallel perfect intervals were its means. <bookmark mark='a'/> Three cues make the ear merge two voices: intervals that fuse, moving together, and starting together. <bookmark mark='b'/> Fux's rules, for the most part, follow from avoiding those cues, in Huron’s perceptual account, alongside stylistic choices. <bookmark mark='c'/> Over Fux's cantus, {say(c['valid'])} lines obey every rule, out of four point six million million, and the famous rule against parallel fifths adds nothing that the others do not already do. <bookmark mark='d'/> Removing rules changes our modeled features, with interactions between constraints. <bookmark mark='e'/> And the later species bring dissonance back, as passing notes, neighbours and suspensions, while pulling the voices apart in time."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

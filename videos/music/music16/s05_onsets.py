@@ -35,12 +35,7 @@ class Onsets(SoundScene):
         ans = VGroup(label(r"A: \ started together: \ one tone", font_size=26, color=GREY_A).next_to(pA, DOWN, buff=0.4),
                      label(rf"B: \ the upper note {d['delay_ms']} ms late: \ two tones, \ at least at first", font_size=26, color=TUNE).next_to(pB, DOWN, buff=0.4))
         with self.voiceover(
-            f"B. The upper note came in thirty-five thousandths of a second late, far too short to "
-            "hear as a rhythm, and yet it is enough for the ear to notice a second tone arriving. "
-            "<bookmark mark='a'/> Rudolf Rasch measured this in 1978: an asynchrony of a few tens of "
-            "milliseconds helps listeners pick out each of two simultaneous notes, and performers "
-            "use it without knowing: in ensembles, the notes that are supposed to start together "
-            "usually do not."
+            f"B. The upper note came in thirty-five thousandths of a second late, a short attack offset whose percept depends on sound and listener, and yet it is enough for the ear to notice a second tone arriving. <bookmark mark='a'/> Rudolf Rasch measured this in 1978: an asynchrony of a few tens of milliseconds helps listeners pick out each of two simultaneous notes, and performers use it without knowing: in ensembles, the notes that are supposed to start together usually do not."
         ) as vo:
             self.play(FadeIn(ans))
             vo.wait_until("a")
@@ -74,13 +69,7 @@ class Onsets(SoundScene):
             for k, cell in enumerate(cells):
                 pulse(snd, cell, st[k], st[k + 1] - 0.4, buff=0.12)
         with self.voiceover(
-            "At ten milliseconds most listeners hear one tone with a slightly different attack. Somewhere "
-            "around twenty, a second note can be heard arriving. <bookmark mark='a'/> That is close to the "
-            "figure Ira Hirsh measured in 1959 for telling which of two sounds came first. And it is "
-            "smaller than the gaps musicians leave without meaning to: Rasch, recording trios and "
-            "ensembles, found the notes that are written together typically thirty to fifty "
-            "milliseconds apart. Ensemble playing is never perfectly together, and that is part of why "
-            "the voices stay audible."
+            "In this illustrative ladder, increasing offset can make a second attack easier to notice. We have not measured a threshold for these sounds or this listener. <bookmark mark='a'/> Hirsh’s roughly twenty-millisecond temporal-order result concerns a different task; it is not a universal tone-separation threshold. And it is smaller than the gaps musicians leave without meaning to: Rasch, recording trios and ensembles, found the notes that are written together with offsets of tens of milliseconds in the studied ensembles; values depend on instrument, role and measurement. Ensemble playing is never perfectly together, and that is part of why the voices stay audible."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(note))

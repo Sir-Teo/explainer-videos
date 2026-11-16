@@ -52,7 +52,7 @@ class Fux(SoundScene):
         hr = label(r"what it protects \ (Huron, \ 2001)", font_size=24, color=TUNE).move_to([-0.2, 2.95, 0], aligned_edge=LEFT)
         with self.voiceover(
             "In first species, the new line has one note for each note of the cantus, and it must obey "
-            "rules. Here are twelve of them, as modern textbooks state Fux. Only consonances against "
+            "rules. Here are twelve of them, in this explicit modern-textbook-inspired implementation, with choices that affect the counts. Only consonances against "
             "the cantus. Begin on a perfect consonance, and end on the octave, approached by step. No "
             "unisons in the middle. No parallel fifths or octaves, and no perfect consonance reached by "
             "similar motion. No awkward leaps, no repeated notes, and a step back after a large leap. "
@@ -88,14 +88,21 @@ class Fux(SoundScene):
             self.play(FadeIn(st), FadeIn(g), FadeIn(ints), FadeIn(il))
         with self.listen(c) as snd:
             window(snd, r"the cantus; \ then two voices", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
+            head = Line(UP * 1.1, DOWN * 1.1, color=GREY_A, stroke_width=5).set_y(-1.6)
+            x0 = g.notes[1][0].get_left()[0]
+            snd.show(head)
+            snd.drive(head, lambda m, t: m.set_x(x0 + 9.2 * min(t if t < 15.4 else t - 15.4, 13.2) / 13.2))
             sing_voice(snd, g.notes[1], d["times"]["cf"] + [999] * 0, base=CF_C)
             sing_voice(snd, g.notes[0], d["times"]["both"][0], base=UP_C)
+            # During the recorded gap, cue the added voice before its entrance.
+            snd.wait_until(13.2)
+            self.play(Indicate(VGroup(*g.notes[0]), color=UP_C), run_time=1.5)
         mot = d["motions"]
         cap = label(rf"{sum(m == 'contrary' for m in mot)} of its {len(mot)} moves are contrary motion; \ it ends sixth, \ octave, \ through C$\sharp$", font_size=26, color=TUNE).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             f"Nine of its ten moves are in contrary motion. It begins on the octave and ends on it, "
             "through a major sixth, with the cantus falling to D as the new voice rises to it through "
-            "C sharp, the leading note Part 15 found in every cadence. It does not belong to the mode. "
+            "C sharp, the raised leading note used in the closing formula illustrated in Part 15. It does not belong to the mode. "
             "In earlier centuries such notes were often left unwritten, and singers supplied them by "
             "rule; the practice was called musica ficta."
         ):
@@ -121,7 +128,7 @@ class Fux(SoundScene):
             "Fux then turns the exercise over: the cantus on top, and the new voice below it. Most rules "
             "carry over, measured from the lower note. Two change. The line must begin on the octave or "
             "the unison, never a fifth below, because a fifth below the D would be G, and a bass on G "
-            "makes the listener hear G, not D, as home. And at the cadence the new voice still takes the "
+            "can suggest G as a bass foundation in this style; this is a pedagogical convention, not an inevitable percept. And at the cadence the new voice still takes the "
             "leading note, C sharp, now a third below the cantus's E, closing to the unison."
         ):
             self.play(FadeIn(st), FadeIn(g), FadeIn(ints), FadeIn(il))

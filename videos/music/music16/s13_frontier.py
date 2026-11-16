@@ -47,7 +47,7 @@ class Frontier(SoundScene):
         with self.voiceover(
             "The perceptual account also makes predictions that can be checked against music. "
             "<bookmark mark='a'/> If the rules come from hearing, then composers who never read Fux "
-            "should obey them anyway, wherever they want independent voices. <bookmark mark='b'/> "
+            "may show similar tendencies when independent streams are a goal; culture and stylistic convention can also contribute. <bookmark mark='b'/> "
             "Huron's corpus studies found exactly that: fused intervals are approached with offset "
             "onsets, and by contrary motion, more than chance would give. <bookmark mark='c'/> And where "
             "the goal is a single thick voice, as in a hymn's chords moving together or a horn section "
@@ -67,13 +67,7 @@ class Frontier(SoundScene):
                       label(rf"over Fux's cantus there are {load('counting')['valid']} lines that obey every rule; \ teachers would not grade them equally", font_size=24, color=GREY_A),
                       label(r"no model yet ranks them as a good teacher would", font_size=28, color=TUNE)).arrange(DOWN, buff=0.35).move_to(UP * 0.1)
         with self.voiceover(
-            "What remains open is the other half of the craft. The rules say what to avoid. They say "
-            f"nothing about what to prefer. There are {say(load('counting')['valid'])} lines over "
-            "Fux's cantus that break no rule, and a teacher would not grade them equally: some have a "
-            "shape, a climax in the right place, a sense of going somewhere; others merely comply. "
-            "Monochord's preference for contrary motion is a crude guess at that judgement. Whether a "
-            "model can rank good lines as a good teacher does, and from what it would have to learn, "
-            "is not settled."
+            f"What remains open is the other half of the craft. The rules say what to avoid. The hard constraints used here do not by themselves rank all valid lines. There are {say(load('counting')['valid'])} lines over Fux's cantus that break no rule, and a teacher would not grade them equally: some have a shape, a climax in the right place, a sense of going somewhere; others merely comply. Monochord's preference for contrary motion is a crude guess at that judgement. Whether a model can rank good lines as a good teacher does, and from what it would have to learn, is not settled."
         ):
             self.play(LaggedStart(*[FadeIn(x) for x in star], lag_ratio=0.5), run_time=2.0)
         self.wait(0.4)

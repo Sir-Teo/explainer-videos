@@ -107,6 +107,10 @@ whether the voices move together onto an octave, fifth or fourth; Huron's corpus
 free organum of chapter 1 is chosen by a scoring rule of ours, in the style of the treatises, not transcribed
 from one. The delay ladder's thresholds are what most listeners report, not a measurement of ours.
 
+## Additional scope
+
+Historical organum had varied textures and aims. Perceptual principles can explain tendencies toward blending or independence without uniquely deriving a style’s rules. The infinite-series 1/q fraction is not a probability of hearing one tone; the two-part exercises also treat the fourth above the bass as dissonant. The `fused` field counts co-moving arrivals on selected perfect intervals, not listener reports of fusion. Delay examples do not establish individual thresholds, and temporal-order identification is a distinct task from detecting separate tones. Dynamic-programming state includes recent motion, interval runs and highest-note information. Counts and redundancy apply to this explicit rule set, while later species are checked under their stated subset of constraints.
+
 ## Build
 
 ```bash

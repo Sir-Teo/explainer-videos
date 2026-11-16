@@ -65,12 +65,7 @@ class Hook(SoundScene):
         cap = VGroup(label(r"the first sounds like one voice, \ made richer", font_size=28, color=WHITE).next_to(g1, DOWN, buff=0.4),
                      label(r"the second sounds like two people", font_size=28, color=WHITE).next_to(g2, DOWN, buff=0.4))
         with self.voiceover(
-            "The first does not sound like two melodies. It sounds like one melody, made thicker and "
-            "richer, like a choir in a large church. <bookmark mark='a'/> The second sounds like two "
-            "people, each going somewhere. That difference is the whole subject of this part. The rules "
-            "of counterpoint are not rules of taste. In 2001 the music psychologist David Huron showed "
-            "that they can be derived, almost all of them, from how hearing separates sounds into "
-            "streams. They are instructions for keeping two voices audible as two."
+            "The first does not sound like two melodies. It sounds like one melody, made thicker and richer, like a choir in a large church. <bookmark mark='a'/> The second sounds like two people, each going somewhere. That difference is the whole subject of this part. Counterpoint rules reflect stylistic goals as well as perceptual tendencies. In 2001 the music psychologist David Huron proposed perceptual principles that explain many traditional voice-leading practices when independence is the goal; this is not a unique derivation of every rule. They are instructions for keeping two voices audible as two."
         ) as vo:
             self.play(FadeIn(cap[0]))
             vo.wait_until("a")
@@ -90,15 +85,7 @@ class Hook(SoundScene):
             r"from organum to Bach: \ independence, \ measured",
         ], title=r"Part 16: \ Two Voices", font_size=26).move_to(DOWN * 0.5)
         with self.voiceover(
-            "This part opens Act Three, where music has more than one voice at a time. "
-            "<bookmark mark='a'/> We begin with organum, the first written polyphony, which wanted its "
-            "voices to merge. <bookmark mark='b'/> We find out why some intervals fuse, and why voices "
-            "that move together become one. <bookmark mark='c'/> Then we take the most famous exercise "
-            "in music education, Fux's, from 1725. <bookmark mark='d'/> We count every line that "
-            "obeys its rules, remove the rules one at a time, and measure what breaks. "
-            "<bookmark mark='e'/> We work through the five species. <bookmark mark='f'/> And we measure "
-            "how independent two voices are, from organum to the florid counterpoint that prepared "
-            "Bach."
+            "This part opens Act Three, where music has more than one voice at a time. <bookmark mark='a'/> We begin with early notated organum, one documented approach to polyphony whose textures often encourage blending. <bookmark mark='b'/> We find out why some intervals fuse, and why voices that move together become one. <bookmark mark='c'/> Then we take the most famous exercise in music education, Fux's, from 1725. <bookmark mark='d'/> We count every line that obeys its rules, remove the rules one at a time, and measure what breaks. <bookmark mark='e'/> We work through the five species. <bookmark mark='f'/> And we measure how independent two voices are, from organum to the florid counterpoint that prepared Bach."
         ) as vo:
             self.play(FadeIn(idea))
             self.play(FadeIn(card.head))

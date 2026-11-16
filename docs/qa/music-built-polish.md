@@ -20,8 +20,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 13 — Intervals and Chords | Complete; [repair and verification record](music/part13.md) | Open |
 | 14 — Melody | Complete; [repair and verification record](music/part14.md) | Open |
 | 15 — Key | Complete; [repair and verification record](music/part15.md) | Open |
-| 16 — Two Voices | In progress | Open |
-| 17–68 | Queued | Open |
+| 16 — Two Voices | Complete | Open |
+| 17 — Four Voices | In progress | Open |
+| 18–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -73,7 +74,10 @@ motion checks pass. Three native 1080p stills inspected. Local identities: `rend
 Part 15: fourteen chapter previews reviewed; 23 tests, the lab, 14 sound-gate cases and 14 listening-window
 motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music15/source-receipt.json`.
 
-**Current: Part 16.** Chapter previews are rendering. Parts 17–28 have source repairs and verification
+Part 16: fourteen chapter previews reviewed; 27 tests, the lab, 14 sound-gate cases and 16 listening-window
+motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music16/source-receipt.json`.
+
+**Current: Part 17.** Chapter previews are rendering. Parts 18–30 have source repairs and verification
 underway for sequential previews. Automated endpoint preflight continues; warnings require review and do not
 constitute episode approval.
 
