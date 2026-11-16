@@ -4,8 +4,7 @@ Part 65 of a sixty-eight-part course in music (see [the series plan](../README.m
 [the syllabus](../SYLLABUS.md)), the fifth part of Act XI, *Listening Machines*. In 1997 an audience in Oregon heard three
 pieces, one by Bach, one by a professor in Bach's style and one by David Cope's program EMI, and, as it was reported, took
 the program's for Bach's. This part builds composing machines that learn from music, from a Markov chain to a small
-transformer, on the melodies of Bach's chorales, and measures the trade none of them escapes: a model that copies less
-also coheres less. The tools are Monochord's (`explainer/music/monochord/machines.py`, on Part 17's chorale table and
+transformer, on the melodies of Bach's chorales, and measures relationships between copying and held-out prediction in these specific models, without treating prediction as a direct measure of coherence. The tools are Monochord's (`explainer/music/monochord/machines.py`, on Part 17's chorale table and
 harmonizer and *AI, Built*'s pocket transformer); every generated tune is checked against the training tunes for copying.
 
 * **Bach, a professor and a program.** An ear question (three pairs of harmonized chorale phrases: which is Bach's? the
@@ -33,7 +32,7 @@ harmonizer and *AI, Built*'s pocket transformer); every generated tune is checke
 * **8. Temperature.** Reshaping the odds; an ear question (one opening continued at 0.5, 1.0 and 1.5: in order); over 46
   continuations each, intervals closest to Bach's at 1.0, notes outside the key from 6 to 19 % (Bach 2 %), cadences on
   the tonic chord most often when cool, copying near none; top-k, nucleus and beam search.
-* **9. Four parts.** DeepBach and Gibbs sampling; Monochord's pipeline (the transformer's tune, Part 17's harmony); a
+* **9. Four parts.** DeepBach and pseudo-Gibbs sampling; Monochord's pipeline (the transformer's tune, Part 17's harmony); a
   machine's chorale heard (no parallel fifths or octaves); Bach's harmony beside Part 17's on a tune kept back, heard.
 * **10. Judging machines.** An ear question (which is copied? the second, an order-8 chain's, every note inside a copied
   run); every machine before the same judges (only copying separates them); pitfalls; listening tests.
@@ -137,3 +136,5 @@ python -m videos.music.labs 65                                  # the lab (write
   C.-Z. A. Huang et al., "Music Transformer" (ICLR, 2019); Y.-S. Huang and Y.-H. Yang, "Pop Music Transformer" (REMI,
   ACM Multimedia, 2020); A. Holtzman et al., "The curious case of neural text degeneration" (ICLR, 2020).
 * L.-C. Yang and A. Lerch, "On the evaluation of generative models in music", *Neural Computing and Applications* (2020).
+
+Review scope: tune-group holdouts apply to the melody generators. The separate Part 17 chord harmonizer uses its broader chorale corpus. Exact-run comparisons only measure copying against the supplied reference corpus.

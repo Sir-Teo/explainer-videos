@@ -91,14 +91,14 @@ class Temperature(SoundScene):
         head = label(r"twenty-three openings, \ continued twice", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         r05, r10, r15 = (rows[str(t)] for t in d["temps"])
         with self.voiceover(
-            "Measure it over all twenty-three openings kept back, each continued twice at each temperature. "
+            "Measure it over the held-out openings, each continued twice at each temperature. "
             "<bookmark mark='a'/> The intervals come closest to Bach's at temperature one, "
             f"{say(r10['kl'], 2)} bits away, against {say(r05['kl'], 2)} when cooler and {say(r15['kl'], 2)} when hotter: at "
             "one the model draws with its own odds, which were fitted to music like Bach's. Notes outside the key rise with "
             f"the temperature, from {say(round(100 * r05['chromatic']))} to {say(round(100 * r15['chromatic']))} per cent, "
             f"where Bach's tunes have {say(round(100 * b['chromatic']))}; and phrases end on the tonic chord most often when it "
             "is cool. <bookmark mark='b'/> Copying stays near nothing at every temperature: this model, stopped at its best, "
-            "does not recite. No setting is right for every purpose; people who use such models tune it by ear."
+            "shows little exact eight-note-run copying in these finite trials. No setting is right for every purpose; people who use such models tune it by ear."
         ) as vo:
             self.play(FadeIn(head), FadeIn(top))
             vo.wait_until("a")
@@ -117,8 +117,4 @@ class Temperature(SoundScene):
             (r"all of them trade surprise for safety; \ none adds knowledge the model does not have", TUNE),
         ]
         rows_scene(self, r"other ways to draw", items,
-                   "Temperature is one of several ways to draw. <bookmark mark='b'/> Top-k draws only among the k likeliest notes. "
-                   "<bookmark mark='c'/> Nucleus sampling, from Ari Holtzman and colleagues, draws among the likeliest notes that "
-                   "together hold a chosen share of the probability. <bookmark mark='d'/> Beam search finds the single likeliest "
-                   "tune, and for music that is usually the dullest one. <bookmark mark='e'/> All of "
-                   "them trade surprise for safety, and none adds knowledge the model does not have.", marks="bcde")
+                   "Temperature is one of several ways to draw. <bookmark mark='b'/> Top-k draws only among the k likeliest notes. <bookmark mark='c'/> Nucleus sampling, from Ari Holtzman and colleagues, draws among the likeliest notes that together hold a chosen share of the probability. <bookmark mark='d'/> Beam search approximately searches for high-probability sequences; it need not find the global optimum and can favour repetition. <bookmark mark='e'/> All of them trade surprise for safety, and none adds knowledge the model does not have.", marks="bcde")

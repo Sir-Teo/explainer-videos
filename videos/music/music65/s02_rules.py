@@ -53,7 +53,7 @@ class Rules(SoundScene):
                    "made explicit, and the machine only searches, as in Part 42. <bookmark mark='c'/> Some shape chance with a "
                    "distribution: dice, urns, Xenakis's clouds. <bookmark mark='d'/> And some learn statistics from music, what "
                    "follows what, counted or fitted. <bookmark mark='e'/> This part is about the third kind. It learns from a "
-                   "corpus, so it can only be as new as its model allows, and only as good as the music it learnt from.",
+                   "corpus, so it can only be as new as its model allows, and limited by its data, architecture and objective.",
                    marks="bcde")
 
     # ------------------------------------------------------------------
@@ -68,7 +68,7 @@ class Rules(SoundScene):
         ).arrange(DOWN, buff=0.35).move_to(DOWN * 0.6)
         head = label(r"the corpus", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         box = choice_boxes([rf"{bwv(d['example'])}, \ as Bach harmonized it"], width=5.2, height=0.8, size=18).move_to(UP * 2.0)
-        with self.voiceover("The music to learn from: Bach's chorales, the hymns he harmonized for four voices. Here are the first two phrases of one that the machines will never see."):
+        with self.voiceover("The music to learn from: Bach's chorales, the hymns he harmonized for four voices. Here are the first two phrases of one held out from the melody generators."):
             self.play(FadeIn(head), FadeIn(box))
         with self.listen(c) as snd:
             window(snd, r"a chorale", kind="synthesized", detail=r"Bach, \ on Part 17's organ tones", corner=DL, tag_corner=DR)

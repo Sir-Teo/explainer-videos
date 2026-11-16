@@ -31,7 +31,7 @@ class Tokens(SoundScene):
             f"{say(reps['note']['vocab'])} different symbols, about {say(round(reps['note']['mean_length']))} tokens a tune. "
             "<bookmark mark='b'/> Pitch, then length, as separate tokens, the way MIDI-like encodings do: only "
             f"{say(reps['split']['vocab'])} symbols, but {say(round(reps['split']['mean_length']))} tokens a tune. "
-            "<bookmark mark='c'/> Or a grid, one token every sixteenth note, with a symbol for holding, as DeepBach did: "
+            "<bookmark mark='c'/> Or a grid, one token every sixteenth note, with a symbol for holding, similar to the sixteenth-note grid used by DeepBach: "
             f"{say(reps['grid']['vocab'])} symbols, and {say(round(reps['grid']['mean_length']))} tokens a tune."
         ) as vo:
             self.play(FadeIn(head))
@@ -57,12 +57,12 @@ class Tokens(SoundScene):
                    "there are encodings with bars and positions as tokens, like REMI in 2020, or each instrument's notes "
                    "interleaved. <bookmark mark='e'/> Or skip symbols altogether, and use tokens from a neural codec of the audio "
                    "itself, the subject of Part 66. <bookmark mark='f'/> Monochord's transformer reads a pitch, then a length, then "
-                   "a fermata if the phrase ends: sixty-one symbols, with room for every pitch in every key.", marks="bcdef")
+                   "a fermata if the phrase ends: sixty-one symbols, with a bounded MIDI range and duration vocabulary.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def keys(self):
         items = [
-            (r"every tune here is in C: \ a model that sees only C learns C's pitches, \ not the tune's intervals", WHITE),
+            (r"every tune here is in C: \ one key limits training diversity; \ intervals can still be learned", WHITE),
             (r"the same tune a tone higher is, \ to a listener, \ the same tune: \ transposition is a free example", WHITE),
             (r"so a model can learn from each tune in twelve keys, \ as Chapter 7's transformer will", WHITE),
             (r"not quite free: \ the voice's range, \ and an instrument's open strings, \ make some keys rarer and some sounds unlike others", WHITE),

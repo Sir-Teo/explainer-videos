@@ -27,7 +27,7 @@ class Harmony(SoundScene):
                    "right. <bookmark mark='b'/> DeepBach, from Gaëtan Hadjeres, François Pachet and Frank Nielsen in 2017, puts the "
                    "four voices on a grid of sixteenths. <bookmark mark='c'/> A network learns to predict each voice's note at "
                    "one moment from everything around it, past and future, in all four voices. <bookmark mark='d'/> To compose, "
-                   "start from random notes and resample one note at a time, again and again: Gibbs sampling. "
+                   "start from random notes and repeatedly resample individual notes: a pseudo-Gibbs procedure, since learned conditionals need not define a consistent joint distribution. "
                    "<bookmark mark='e'/> Any note can be fixed in advance, a melody, a cadence, a bass, and the rest fills in "
                    "around it. <bookmark mark='f'/> In its listening test, many listeners took its chorales for Bach's.",
                    marks="bcdef")
@@ -68,7 +68,7 @@ class Harmony(SoundScene):
             pulse(snd, box, 0.0, c.duration, buff=0.06)
         with self.voiceover(
             f"{say(len(d['chords']))} chords, with {say(d['parallels'])} parallel fifths or octaves between them, and a tune "
-            f"whose longest copied run is {say(d['copy']['length'])} notes. It is correct, and it is plausible. Whether it is "
+            f"whose longest copied run is {say(d['copy']['length'])} notes. It passes these implemented checks and may sound plausible; the checks do not establish comprehensive stylistic correctness. Whether it is "
             "good is a question the next chapter takes seriously."
         ):
             self.play(FadeIn(res))
@@ -82,7 +82,7 @@ class Harmony(SoundScene):
         boxes = choice_boxes([r"Bach's harmony", r"Part 17's, \ on the same tune"], width=4.2, height=0.9, buff=0.9, size=18).move_to(UP * 0.6)
         note = label(r"the same two phrases, \ the same tune; \ Bach in his key, \ Part 17 in C", font_size=17, color=GREY_A).next_to(boxes, DOWN, buff=0.6)
         head = label(rf"{bwv(d['name'])}, \ twice", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
-        with self.voiceover("How good is the harmonizer? Hear a tune kept back from everything, harmonized by Bach, then by Part 17's search."):
+        with self.voiceover("How good is the harmonizer? Hear a tune held out from the melody generators; the Part 17 chord model uses the broader corpus, harmonized by Bach, then by Part 17's search."):
             self.play(FadeIn(head), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:

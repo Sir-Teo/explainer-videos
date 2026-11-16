@@ -20,12 +20,7 @@ class Recombine(SoundScene):
             (r"everything is copied; \ nothing is in that order anywhere", TUNE),
         ]
         rows_scene(self, r"recombinancy", items,
-                   "David Cope's EMI took the opposite road. <bookmark mark='b'/> Cut a composer's works into pieces and put them "
-                   "back together differently. <bookmark mark='c'/> The pieces join where they connect: the last note of one leads "
-                   "by step to the first of the next. <bookmark mark='d'/> Patterns the composer repeats, which Cope called "
-                   "signatures, are kept whole. <bookmark mark='e'/> And an analysis of each piece's role, opening, middle or "
-                   "cadence, decides where it may go. <bookmark mark='f'/> Everything is copied, and nothing is in that order "
-                   "anywhere.", marks="bcdef")
+                   "David Cope's EMI took the opposite road. <bookmark mark='b'/> Cut a composer's works into pieces and put them back together differently. <bookmark mark='c'/> The pieces join where they connect: the last note of one leads by step to the first of the next. <bookmark mark='d'/> Patterns the composer repeats, which Cope called signatures, are kept whole. <bookmark mark='e'/> And an analysis of each piece's role, opening, middle or cadence, decides where it may go. <bookmark mark='f'/> The approach recombines learned material; the extent of literal copying and novelty depends on the implementation and source corpus.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def heard(self):
@@ -66,9 +61,4 @@ class Recombine(SoundScene):
             (r"for the law, \ the size of what is copied matters: \ a phrase of a living composer's song is not a cadence of Bach's", TUNE),
         ]
         rows_scene(self, r"is it composing?", items,
-                   "Is it composing? <bookmark mark='b'/> Cope's chorales and inventions in Bach's style convinced listeners, and his "
-                   "critics said the convincing parts were Bach's. <bookmark mark='c'/> Cope answered that every composer "
-                   "recombines what they have heard, and that EMI only does it openly. <bookmark mark='d'/> Both are partly "
-                   "right: style is largely the recombination of shared patterns, as Parts 25 and 26 found for the Baroque and the "
-                   "Classical style, and the order is where the art is. <bookmark mark='e'/> For the law, the size of what is "
-                   "copied matters: a phrase of a living songwriter's melody is not a stock cadence of Bach's.", marks="bcde")
+                   "Is it composing? <bookmark mark='b'/> Cope's chorales and inventions in Bach's style convinced listeners, and his critics said the convincing parts were Bach's. <bookmark mark='c'/> Cope answered that every composer recombines what they have heard, and that EMI only does it openly. <bookmark mark='d'/> Both are partly right: style is largely the recombination of shared patterns, as Parts 25 and 26 found for the Baroque and the Classical style, and the order is where the art is. <bookmark mark='e'/> For the law, protectable expression, substantial similarity and jurisdiction matter, alongside what and how much is copied: a phrase of a living songwriter's melody is not a stock cadence of Bach's.", marks="bcde")

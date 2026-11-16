@@ -54,12 +54,7 @@ class Counting(SoundScene):
         mark = Circle(radius=0.16, color=EAR).move_to(ax.to(best, b[str(best)]))
         head = label(r"how well each order predicts Bach", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "How good is each order? Measure it on the tunes kept back, in bits per note: how surprised the model is by each "
-            f"note Bach actually wrote. <bookmark mark='a'/> Order nought needs {say(b['0'], 1)} bits a note; remembering one "
-            f"note brings it to {say(b['1'], 1)}; <bookmark mark='b'/> two notes, {say(b[str(best)], 2)}, the best. "
-            "<bookmark mark='c'/> Beyond that the curve rises again. Longer contexts are rarer: most four-note contexts in a "
-            "new tune were seen once or never, and what was seen once is a poor guide. The model knows its training tunes "
-            "better and better, and new tunes worse."
+            f"How good is each order? Measure it on the tunes kept back, in bits per note: how surprised the model is by each note Bach actually wrote. <bookmark mark='a'/> Order nought needs {say(b['0'], 1)} bits a note; remembering one note brings it to {say(b['1'], 1)}; <bookmark mark='b'/> two notes, {say(b[str(best)], 2)}, the best. <bookmark mark='c'/> Beyond that the curve rises again. Longer contexts are rarer: most four-note contexts in a new tune were seen once or never, and what was seen once is a poor guide. In this corpus and estimator, higher orders beyond the best generalize less well."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(ticks), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
@@ -109,12 +104,7 @@ class Counting(SoundScene):
         note = label(r"dashed: \ the fermatas, \ where phrases end", font_size=14, color=GREY_A).to_edge(DOWN, buff=0.25)
         head = label(rf"where {bwv(d['name'])} surprises", font_size=26, color=GREY_A).to_edge(UP, buff=0.25)
         with self.voiceover(
-            "Bits per note is an average; note by note it shows where the music surprises. Here is a tune kept back, and how "
-            "many bits the order-two chain needed for each of its notes. <bookmark mark='a'/> Inside a phrase most notes are "
-            f"cheap. <bookmark mark='b'/> The expensive ones sit at the boundaries: the note that ends a phrase, "
-            f"{say(d['markov_at_ends'], 1)} bits on average against {say(d['markov_mean'], 1)} overall, because the machine "
-            "must decide that the phrase ends there, and the note that begins the next, which can start almost anywhere. A "
-            "listener's expectations, Part 46 found, are least sure in the same places."
+            f"Bits per note is an average; note by note it shows where the music surprises. Here is a tune kept back, and how many bits the order-two chain needed for each of its notes. <bookmark mark='a'/> Inside a phrase most notes are cheap. <bookmark mark='b'/> The expensive ones sit at the boundaries: the note that ends a phrase, {say(d['markov_at_ends'], 1)} bits on average against {say(d['markov_mean'], 1)} overall, because the machine must decide that the phrase ends there, and the note that begins the next, which can start almost anywhere. Phrase boundaries can also affect listeners' expectations, though this model score is not a direct perceptual measurement."
         ) as vo:
             self.play(FadeIn(head), FadeIn(roll), FadeIn(ax), FadeIn(yl), FadeIn(note))
             vo.wait_until("a")

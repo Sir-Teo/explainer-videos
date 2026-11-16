@@ -69,13 +69,7 @@ class Outro(SoundScene):
             r"judge with uncurated samples, \ likelihood, \ copying and listeners",
         ], title=r"What we found", font_size=20).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Composing machines follow rules, shape chance, or learn statistics from music. "
-            "<bookmark mark='a'/> A Markov chain's order trades prediction for copying, and order two predicts Bach best. "
-            "<bookmark mark='b'/> Order eight copies whole chorales, where Bach's own tunes share about a tenth of their notes "
-            "in copied runs. <bookmark mark='c'/> Constraints let a chain sample exactly what must be true, and recombination "
-            "copies on purpose. <bookmark mark='d'/> A small transformer, given little music, memorizes; transposed copies "
-            "make it learn instead. <bookmark mark='e'/> And a composing machine should be judged by uncurated samples, "
-            "likelihood, copying and listeners together."
+            "What did we find? Composing machines follow rules, shape chance, or learn statistics from music. <bookmark mark='a'/> A Markov chain's order trades prediction for copying, and order two predicts these held-out melodies best among the tested counting models. <bookmark mark='b'/> Order eight copies whole chorales, where Bach's own tunes share about a tenth of their notes in copied runs. <bookmark mark='c'/> Constraints let a chain sample exactly what must be true, and recombination copies on purpose. <bookmark mark='d'/> A small transformer, given little music, memorizes; transposition augmentation improves held-out prediction in this experiment, without eliminating memorization in general. <bookmark mark='e'/> And a composing machine should be judged by uncurated samples, likelihood, copying and listeners together."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

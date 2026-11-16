@@ -33,7 +33,7 @@ class Hook(SoundScene):
         res = VGroup(label(rf"the second: \ Bach's chorale {bwv(d['bach'])}, \ which no machine here saw while learning", font_size=19, color=TUNE),
                      label(r"the first: \ a Markov chain's tune; \ the third: \ a transformer's; \ both harmonized by Part 17's search", font_size=17, color=GREY_A)).arrange(DOWN, buff=0.25).move_to(DOWN * 1.5)
         with self.voiceover(
-            f"The second was Bach's, the chorale {bwv_said(d['bach'])}, which none of the machines saw while learning. The first "
+            f"The second was Bach's, the chorale {bwv_said(d['bach'])}, which the melody generators did not see while learning; the separate Part 17 harmonizer uses a broader chorale corpus. The first "
             "tune came from a chain that counts which note follows which; the third from a small transformer, the kind of "
             "network behind today's language models: for each, the first draw that stayed in the key and could be harmonized, "
             "by Part 17's search. If you hesitated, you are in good company."
@@ -66,7 +66,7 @@ class Hook(SoundScene):
         card = objectives_card([
             r"dice, \ rules and chance: \ composing machines before computers learnt",
             r"counting what follows what: \ Markov chains on Bach's chorale tunes",
-            r"the trade nobody escapes: \ a model that copies less also coheres less",
+            r"these models: \ copying and prediction, not a universal coherence law",
             r"constraints, \ and Cope's recombination",
             r"music as tokens, \ and a transformer; \ temperature",
             r"four parts, \ judging machines, \ and who owns what they copy",
@@ -74,7 +74,7 @@ class Hook(SoundScene):
         with self.voiceover(
             "Here is the plan. Dice, rules and chance, the composing machines that came before learning. "
             "<bookmark mark='a'/> Counting which note follows which, on the melodies of Bach's chorales. "
-            "<bookmark mark='b'/> The trade that no generator escapes: a model that copies less also coheres less. "
+            "<bookmark mark='b'/> An empirical trade in these models between copying and prediction; coherence is not measured directly. "
             "<bookmark mark='c'/> Constraints, and Cope's recombination. <bookmark mark='d'/> Music as tokens, a "
             "transformer, and temperature. <bookmark mark='e'/> And four-part harmony, how to judge a composing machine, and "
             "who owns what it copies."

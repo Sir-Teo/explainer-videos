@@ -20,12 +20,7 @@ class Frontier(SoundScene):
             (r"Monochord's tunes end where their phrases end; \ none of them knows where it is in a piece", TUNE),
         ]
         rows_scene(self, r"long-range form", items,
-                   "Three frontiers. The first is form. <bookmark mark='b'/> The Music Transformer of 2018, from Cheng-Zhi Anna "
-                   "Huang and colleagues, attends by relative distance, so a motive can come back somewhere else and in another "
-                   "key. <bookmark mark='c'/> It wrote a minute of coherent piano music, learnt from performances; but the plan of "
-                   "a sonata across twenty minutes is still hard. <bookmark mark='d'/> Hierarchy helps: plan the sections, then "
-                   "the phrases, then the notes, as in Part 21's forms. <bookmark mark='e'/> Monochord's tunes end where their "
-                   "phrases end, and none of them knows where it is in a piece.", marks="bcde")
+                   "Three frontiers. The first is form. <bookmark mark='b'/> The Music Transformer of 2018, from Cheng-Zhi Anna Huang and colleagues, uses relative positional attention to help represent relationships across time; transposition invariance does not follow from relative positions alone. <bookmark mark='c'/> It wrote a minute of coherent piano music, learnt from performances; but the plan of a sonata across twenty minutes is still hard. <bookmark mark='d'/> Hierarchy helps: plan the sections, then the phrases, then the notes, as in Part 21's forms. <bookmark mark='e'/> Monochord's tunes end where their phrases end, and none of them knows where it is in a piece.", marks="bcde")
 
     # ------------------------------------------------------------------
     def control(self):
@@ -46,14 +41,14 @@ class Frontier(SoundScene):
         items = [
             (r"whose music is in a model's output? \ copying can be measured, \ as here, \ but only against data one has", WHITE),
             (r"influence is subtler than copying: \ which training pieces made this phrase likely?", WHITE),
-            (r"Bach is out of copyright; \ most music a large model learns from is not \ (Part 60's rights; \ Part 66's courts)", WHITE),
+            (r"Bach is out of copyright; \ training corpora can contain protected music, depending on the model and its dataset \ (Part 60's rights; \ Part 66's courts)", WHITE),
             (r"attribution and licensing for training data are being argued now \ (dated)", TUNE),
         ]
         rows_scene(self, r"attribution", items,
                    "The third is attribution. <bookmark mark='b'/> Whose music is in a model's output? Copying can be measured, as "
                    "this part measured it, but only against data one has. <bookmark mark='c'/> And influence is subtler than "
                    "copying: which training pieces made this phrase likely? <bookmark mark='d'/> Bach is long out of copyright; "
-                   "most music a large model learns from is not, as Part 60's rights and Part 66's courts make clear. "
+                   "training corpora can contain protected music, depending on the model and its dataset, as Part 60's rights and Part 66's courts make clear. "
                    "<bookmark mark='e'/> How training data should be attributed and licensed is being argued now.", marks="bcde")
 
     # ------------------------------------------------------------------

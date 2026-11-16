@@ -67,9 +67,7 @@ class Copying(SoundScene):
             pulse(snd, boxes[0], st["sample"], st["source"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["source"], c.duration, buff=0.08)
         with self.voiceover(
-            f"{say(lc['length'])} notes in a row, note for note, from {bwv_said(d['source'])}. With eight notes of memory and "
-            "only a few thousand notes to learn from, most contexts have been seen once, in one tune, and the chain can only "
-            "follow that tune where it went. It sounds like Bach because it is Bach."
+            f"{say(lc['length'])} notes in a row, note for note, from {bwv_said(d['source'])}. With eight notes of memory and only a few thousand notes to learn from, most contexts have been seen once, in one tune, and the fitted chain strongly favours following that tune until backoff or a branch changes it. Much of this particular output reproduces a training melody."
         ):
             self.play(FadeIn(res))
         self.wait(0.4)
@@ -81,24 +79,36 @@ class Copying(SoundScene):
         orders = ["1", "2", "3", "4", "6", "8"]
         bits = np.array([d["bits"][k] for k in orders])
         share = np.array([d["orders"][k]["share8"] for k in orders])
-        ax = frame_axes(width=7.0, height=3.4, xlo=0, xhi=1, ylo=3.2, yhi=4.0, center=DOWN * 0.4 + LEFT * 1.0)
+        ax = frame_axes(width=6.2, height=3.4, xlo=0, xhi=1, ylo=3.2, yhi=4.0, center=DOWN * 0.4 + LEFT * 1.6)
         cv = curve(share, bits, ax.to, color=TUNE, width=3)
-        dots = VGroup(*[VGroup(Dot(ax.to(x, y), radius=0.07, color=TUNE), label(f"{k}", font_size=14, color=GREY_A).next_to(ax.to(x, y), UP, buff=0.1)) for k, x, y in zip(orders, share, bits)])
+        ticks = VGroup()
+        for x in (0, 0.25, 0.5, 0.75, 1):
+            ticks.add(label(f"{100*x:g}\\%", font_size=11, color=GREY_A).move_to(ax.to(x, 3.2) + DOWN * 0.16))
+        for y in (3.2, 3.4, 3.6, 3.8, 4.0):
+            ticks.add(label(f"{y:.1f}", font_size=11, color=GREY_A).move_to(ax.to(0, y) + LEFT * 0.18))
+        ax.add(ticks)
+        dots = VGroup()
+        for k, x, y in zip(orders, share, bits):
+            dot = Dot(ax.to(x, y), radius=0.07, color=TUNE)
+            dots.add(dot)
+            if k != "6":
+                tag = label("6, 8" if k == "8" else k, font_size=14, color=GREY_A).next_to(dot, UP, buff=0.1)
+                if k == "1": tag.shift(RIGHT * 0.18)
+                dots.add(tag)
         b = d["bach"]
         bx = DashedLine(ax.to(b["share8"], 3.2), ax.to(b["share8"], 4.0), color=GOLD, stroke_width=2)
-        bl = label(r"Bach's share", font_size=14, color=GOLD).next_to(bx, UP, buff=0.08)
-        xl = label(r"share of notes inside a copied run of 8", font_size=14, color=GREY_A).next_to(ax, DOWN, buff=0.2)
+        bl = label(r"Bach reference", font_size=12, color=GOLD).next_to(bx, RIGHT, buff=0.08).align_to(bx, UP)
+        xl = label(r"share of notes inside a copied run of 8", font_size=14, color=GREY_A).next_to(ax, DOWN, buff=0.3)
         yl = label(r"bits per note on new tunes", font_size=14, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
-        side = VGroup(label(r"too little memory: \ new, \ and aimless", font_size=16, color=WHITE),
-                      label(r"too much: \ coherent, \ and copied", font_size=16, color=WHITE),
-                      label(r"the best predictor, \ order 2, \ copies a little less than Bach's tunes share", font_size=16, color=TUNE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(RIGHT, buff=0.4)
-        head = label(r"the trade nobody escapes", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        side = VGroup(label(r"low order: shorter copied runs", font_size=16, color=WHITE),
+                      label(r"high order: longer copied runs", font_size=16, color=WHITE),
+                      label(r"best on this held-out split: order 2", font_size=16, color=TUNE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(RIGHT, buff=0.4)
+        head = label(r"copying and held-out prediction", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Put the two measures together: copying across, prediction of new tunes up, one dot for each order. "
-            "<bookmark mark='a'/> With little memory a model is new and aimless; with much, coherent and copied. "
+            "<bookmark mark='a'/> Here low order has shorter copied runs and high order longer ones. Coherence is not measured directly. "
             "<bookmark mark='b'/> The order that predicts new tunes best, order two, copies a little less than Bach's own "
-            "tunes share with one another, and order three a good deal more. That is no accident: a model tuned to predict "
-            "new music cannot simply replay old music, and every generator in this part sits somewhere on such a curve. "
+            "tunes share with one another, and order three a good deal more. Good held-out prediction alone does not rule out copying, and these particular models illustrate one relationship; copied runs and held-out prediction do not prove a universal quality-novelty frontier. "
             "Alexandre Papadopoulos, Pierre Roy and François Pachet built Markov generators that forbid copying beyond a "
             "chosen length, by construction."
         ) as vo:

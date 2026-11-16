@@ -75,14 +75,10 @@ class Judging(SoundScene):
             (r"a Turing-style test asks only whether a machine passes for a person: \ the hook's question", WHITE),
             (r"better: \ rate qualities \ (coherence, \ interest, \ style) \ blind, \ against real music of the same kind", WHITE),
             (r"experts and novices hear differently: \ say who listened \ (Part 58's listening tests)", WHITE),
-            (r"and long-range form is where machines fail first: \ judge whole pieces, \ not eight bars", TUNE),
+            (r"and long-range form is another important property to evaluate: \ judge whole pieces, \ not eight bars", TUNE),
         ]
         rows_scene(self, r"listening tests", items,
-                   "And listening tests. <bookmark mark='b'/> A Turing-style test asks only whether the machine passes for a "
-                   "person, as the hook of this part did. <bookmark mark='c'/> Better to rate qualities, coherence, interest and "
-                   "style, blind, against real music of the same kind. <bookmark mark='d'/> Experts and novices hear differently, "
-                   "so say who listened, as Part 58's listening tests did. <bookmark mark='e'/> And long-range form is where "
-                   "machines fail first, so judge whole pieces, not eight bars.", marks="bcde")
+                   "And listening tests. <bookmark mark='b'/> A Turing-style test asks only whether the machine passes for a person, as the hook of this part did. <bookmark mark='c'/> Better to rate qualities, coherence, interest and style, blind, against real music of the same kind. <bookmark mark='d'/> Experts and novices hear differently, so say who listened, as Part 58's listening tests did. <bookmark mark='e'/> And long-range form is another important property to evaluate, so judge whole pieces, not eight bars.", marks="bcde")
 
     # ------------------------------------------------------------------
     def quiz(self):
@@ -104,7 +100,7 @@ class Judging(SoundScene):
         with self.voiceover(
             f"The second was the copy: an order-eight chain, {say(round(100 * d['copied']))} per cent of it inside runs copied "
             f"from Bach. The first, from the transformer, {say(round(100 * d['copied_new']))} per cent. If you could not tell, "
-            "that is the point: copying is not audible unless you know the source, so it has to be measured."
+            "that is the point: copying can be hard to identify by ear without knowing the source, so it has to be measured."
         ):
             self.play(boxes[1][0].animate.set_stroke(TUNE, width=4), FadeIn(res))
         self.wait(0.4)

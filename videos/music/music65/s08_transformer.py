@@ -42,21 +42,22 @@ class Transformer(SoundScene):
         ca = np.array(d["aug"]["curve"])
         top = max(cp[:, 1].max(), ca[:, 1].max()) * 1.05
         ax = frame_axes(width=8.0, height=3.2, xlo=0, xhi=max(cp[:, 0].max(), ca[:, 0].max()), ylo=0, yhi=top, center=DOWN * 0.4 + LEFT * 0.8)
+        ticks = VGroup()
+        for x in (0, 500, 1000, 1500):
+            ticks.add(label(str(x), font_size=11, color=GREY_A).move_to(ax.to(x, 0) + DOWN * 0.16))
+        for y in np.arange(0, top + 1e-9, 1):
+            ticks.add(label(f"{y:g}", font_size=11, color=GREY_A).move_to(ax.to(0, y) + LEFT * 0.18))
+        ax.add(ticks)
         c1 = curve(cp[:, 0], cp[:, 1], ax.to, color=EAR, width=3)
         c2 = curve(ca[:, 0], ca[:, 1], ax.to, color=TUNE, width=3)
-        xl = label(r"training steps", font_size=14, color=GREY_A).next_to(ax, DOWN, buff=0.15)
+        xl = label(r"training steps", font_size=14, color=GREY_A).next_to(ax, DOWN, buff=0.25)
         yl = label(r"loss on the tunes set aside \ (nats per token)", font_size=14, color=GREY_A).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
         key = VGroup(label(r"tunes alone", font_size=16, color=EAR), label(r"tunes in twelve keys", font_size=16, color=TUNE)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_edge(RIGHT, buff=0.6)
         i = int(np.argmin(cp[:, 1]))
         head = label(r"training", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         ia = int(np.argmin(ca[:, 1]))
         with self.voiceover(
-            "Watch both learn, scored on the tunes set aside. <bookmark mark='a'/> On the tunes alone the loss falls, then "
-            f"turns round near step {say(int(cp[i, 0]))} and climbs: the network has begun to learn its training tunes by "
-            "heart, and every step of memorizing makes it worse on new ones. <bookmark mark='b'/> In twelve keys it turns "
-            f"later, near step {say(int(ca[ia, 0]))}: no single key's tunes can be memorized as fast, so it "
-            "must learn intervals and patterns that hold in any key, though in the end it memorizes too. Each model is kept "
-            "as it was where the tunes set aside said to stop."
+            f"Watch both learn, scored on the tunes set aside. <bookmark mark='a'/> On the tunes alone the loss falls, then turns round near step {say(int(cp[i, 0]))} and climbs: the network has begun to learn its training tunes by heart, and the held-out loss increases after its best point in this run. <bookmark mark='b'/> In twelve keys it turns later, near step {say(int(ca[ia, 0]))}: no single key's tunes can be memorized as fast, which encourages useful transposition-related patterns; the curves alone do not prove what representation it learned. Each model is kept as it was where the tunes set aside said to stop."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xl), FadeIn(yl), FadeIn(key))
             vo.wait_until("a")
@@ -83,6 +84,12 @@ class Transformer(SoundScene):
             r[1].next_to(r[0], RIGHT, buff=0.3).align_to(g, LEFT).shift(RIGHT * 4.8)
             r[2].next_to(r[1], RIGHT, buff=0.2)
             r[3].next_to(r[2], RIGHT, buff=0.3)
+        baseline = min(r[1].get_left()[0] for r in g)
+        for r in g:
+            r[1].shift(RIGHT * (baseline - r[1].get_left()[0]))
+            r[2].next_to(r[1], RIGHT, buff=0.2)
+            r[3].next_to(r[2], RIGHT, buff=0.3)
+        g.scale(min(1.0, 12.6 / g.width)).move_to(DOWN * 0.2)
         note = label(r"bits per note on the test tunes: \ lower is better", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
         head = label(r"against counting", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         p, a, m = d["plain"]["bits"], d["aug"]["bits"], d["markov2"]
@@ -131,7 +138,8 @@ class Transformer(SoundScene):
     def samples(self):
         d = load("samples")
         c = clip("samples.three")
-        boxes = choice_boxes([rf"first \ ({d['keys'][0]})", rf"second \ ({d['keys'][1]})", rf"third \ ({d['keys'][2]})"], width=3.4, height=0.9, buff=0.5, size=17).move_to(UP * 0.8)
+        key_labels = [k.replace("♭", r"$\flat$").replace("♯", r"$\sharp$") for k in d["keys"]]
+        boxes = choice_boxes([rf"first \ ({key_labels[0]})", rf"second \ ({key_labels[1]})", rf"third \ ({key_labels[2]})"], width=3.4, height=0.9, buff=0.5, size=17).move_to(UP * 0.8)
         rolls = VGroup(*[tune_roll(x, width=3.4, height=1.0) for x in d["tunes"]]).arrange(RIGHT, buff=0.5).move_to(DOWN * 0.8)
         res = label(rf"longest runs copied from a training tune: \ {', '.join(str(x) for x in d['copies'])} notes", font_size=17, color=TUNE).to_edge(DOWN, buff=0.45)
         head = label(r"the network, \ composing", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
@@ -146,7 +154,7 @@ class Transformer(SoundScene):
                 pulse(snd, boxes[i], st[k], end, buff=0.06)
         with self.voiceover(
             f"Their longest copied runs are {', '.join(say(x) for x in d['copies'][:-1])} and {say(d['copies'][-1])} notes. They "
-            "move like hymn tunes and end their phrases where hymn tunes do; they are no one's in particular."
+            "move like hymn tunes and end their phrases where hymn tunes do; these exact-run checks find no long match in the comparison corpus, which does not establish originality against all existing music."
         ):
             self.play(FadeIn(res))
         self.wait(0.4)
