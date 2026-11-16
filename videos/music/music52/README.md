@@ -1,8 +1,7 @@
 # Music, Built: Part 52, Synthesis II: FM, Grains and Physical Models
 
 Part 52 of a sixty-eight-part course in music (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the fifth part of Act IX, *Electric Sound*. In 1967 John Chowning turned a vibrato up
-until it was faster than the note itself and heard bells. The mathematics is a Bessel function per sideband, the patent
+[the syllabus](../SYLLABUS.md)), the fifth part of Act IX, *Electric Sound*. In 1967 John Chowning explored audio-rate modulation and synthesized bell-like sounds. The mathematics is a Bessel function per sideband, the patent
 made Stanford a fortune, and the DX7 (1983) put the sound on a decade's records. This part builds FM, then the other ways
 out of the oscillator: grains, spectral models, samplers, and the physical models (Karplus–Strong tuned, digital
 waveguides, modes), each checked against Part 1's and Part 7's finite-difference string. The tools are Monochord's
@@ -88,13 +87,12 @@ python -m videos.music.labs 52                                  # the lab (write
 
    *Solution.* B ≈ 2(I + 1) fm = 2 × 2 × 100 = 400 Hz, so from about 200 to 600 Hz: the lines at 200, 300, 400, 500 and
    600 Hz (k = −2 … 2), with sizes J₂(1) = 0.11, J₁(1) = 0.44, J₀(1) = 0.77, 0.44, 0.11. The next pair, J₃(1) = 0.02, is
-   below 2 per cent.
+   about 2 per cent in amplitude; Carson’s bandwidth is approximate, not a strict cutoff.
 
-2. **Prove.** Prove that the energy of an FM tone does not depend on its index: Σ J_k(I)² = 1.
+2. **Prove.** Prove the coefficient identity for complex phase modulation: Σ J_k(I)² = 1.
 
    *Solution.* The generating function of the Bessel functions is e^{iI sin θ} = Σ_k J_k(I) e^{ikθ}. Its modulus is 1 for
-   every θ, so by Parseval's theorem over one period, 1 = (1/2π) ∫|e^{iI sin θ}|² dθ = Σ_k |J_k(I)|². Equivalently, FM
-   only moves the carrier's phase, and a sine's power does not depend on its phase.
+   every θ, so by Parseval's theorem over one period, 1 = (1/2π) ∫|e^{iI sin θ}|² dθ = Σ_k |J_k(I)|². This proves unit power for the complex exponential. A real sine's power can vary with index when folded sidebands coincide.
 
 3. **Ear.** The lab plays FM tones at random ratios; say which are harmonic and which are bells.
 

@@ -78,7 +78,7 @@ class Outro(SoundScene):
     def recap(self):
         card = objectives_card([
             r"FM puts lines at $f_c \pm k f_m$ with sizes $J_k(I)$: \ the ratio picks the lines, \ the index the brightness",
-            r"operators and algorithms made FM an instrument, \ and feedback makes a sawtooth",
+            r"operators and algorithms made FM an instrument, \ and feedback can make sawtooth-like spectra",
             r"grains trade time for frequency, \ and free time from pitch",
             r"spectral models turn a recording into knobs; \ samplers keep the recording",
             r"tuned Karplus--Strong, \ waveguides and modes compute physics, \ each with its own exactness and cost",
@@ -87,7 +87,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "What did we find? FM puts lines at the carrier plus and minus multiples of the modulator, with sizes given by "
             "Bessel's functions: the ratio picks the lines, the index the brightness. <bookmark mark='a'/> Operators and "
-            "algorithms made FM an instrument, and feedback makes a sawtooth. <bookmark mark='b'/> Grains trade time for "
+            "algorithms made FM an instrument, and feedback can make sawtooth-like spectra. <bookmark mark='b'/> Grains trade time for "
             "frequency, and free time from pitch. <bookmark mark='c'/> Spectral models turn a recording into knobs, while "
             "samplers keep the recording. <bookmark mark='d'/> Tuned Karplus-Strong, waveguides and modes compute physics, each "
             "with its own exactness and cost. <bookmark mark='e'/> And the methods differ most in what they let a player control."
@@ -103,7 +103,7 @@ class Outro(SoundScene):
     def problems(self):
         ps = problem_set([
             r"A carrier at 400 Hz is modulated at 100 Hz with index 1. \ Using Carson's rule, \ how wide is the spectrum, \ and which lines does it hold?",
-            r"Prove that the energy of an FM tone does not depend on its index: \ $\sum_k J_k(I)^2 = 1$.",
+            r"Prove the complex phase-modulation coefficient identity: \ $\sum_k J_k(I)^2 = 1$.",
             r"\textbf{Ear.} \ The lab plays FM tones at random ratios; \ say which are harmonic and which are bells.",
             r"\textbf{Build.} \ Add a bow to the waveguide string \ (a friction curve at the contact point) \ and find its threshold.",
             r"$\bigstar$ \ How few parameters can match an instrument across its range, \ including playing it never heard?",

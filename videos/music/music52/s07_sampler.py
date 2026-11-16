@@ -60,8 +60,8 @@ class Sampler(SoundScene):
                      label(rf"read 4 times faster: \ {du['84']:.2f} s, \ a short, \ toy-like plink", font_size=18, color=EAR)).arrange(DOWN, buff=0.25).move_to(DOWN * 1.5)
         with self.voiceover(
             "Two octaves down, the recording is slow and dark: the hammer's knock becomes a dull thud and the decay lasts "
-            f"{say(du['36'], 1)} seconds, where the real low C rings with its own, brighter attack. Two octaves up it lasts "
-            f"{say(du['84'], 2)} seconds, a toy plink, where the real high C is short but crisp. One recording cannot be an "
+            f"{say(du['36'], 1)} seconds, where the low C computed directly rings with its own, brighter attack. Two octaves up it lasts "
+            f"{say(du['84'], 2)} seconds, a toy plink, where the high C computed directly is short but crisp. One recording cannot be an "
             "instrument's whole range."
         ):
             self.play(FadeIn(res))
@@ -78,11 +78,7 @@ class Sampler(SoundScene):
             (r"the cure is brute force: \ record more", TUNE),
         ]
         rows_scene(self, r"why one recording is not enough", items,
-                   "Why does it fail? <bookmark mark='b'/> Reading faster scales every frequency: the harmonics, but also the body's "
-                   "resonances and the attack's noise. <bookmark mark='c'/> A real instrument keeps its resonances fixed while the "
-                   "notes move; the source moves, the filter stays, as Part 8 put it. <bookmark mark='d'/> And real decay times "
-                   "change with pitch in their own way, not in proportion. <bookmark mark='e'/> So within a few semitones resampling "
-                   "is fine; over octaves it is a different instrument. <bookmark mark='f'/> The cure is brute force: record more.",
+                   "Why does it fail? <bookmark mark='b'/> Reading faster scales every frequency: the harmonics, but also the body's resonances and the attack's noise. <bookmark mark='c'/> Many body resonances remain approximately fixed while played pitch changes; the source moves, the filter stays, as Part 8 put it. <bookmark mark='d'/> And real decay times change with pitch in their own way, not in proportion. <bookmark mark='e'/> So within a few semitones resampling is fine; over octaves it is a different instrument. <bookmark mark='f'/> The cure is brute force: record more.",
                    marks="bcdef")
 
     # ------------------------------------------------------------------

@@ -29,7 +29,7 @@ class Grains(SoundScene):
         rows_scene(self, r"acoustical quanta", items,
                    "A different idea of sound began in physics. <bookmark mark='b'/> In 1946 and 1947 Dennis Gabor, who later "
                    "invented holography, described sound as a grid of acoustical quanta: short tone bursts, each a sine inside a "
-                   "bell-shaped window. <bookmark mark='c'/> Fourier's sines last forever; Gabor's last milliseconds, and a sound is "
+                   "bell-shaped window. <bookmark mark='c'/> The Fourier-series basis is indefinitely sustained; Gabor used windowed tones, and a sound is "
                    "a mosaic of them. <bookmark mark='d'/> Iannis Xenakis composed with clouds of grains cut from tape in 1959, as "
                    "Part 30 told. <bookmark mark='e'/> Curtis Roads ran the first computer granular synthesis in 1975, and Barry "
                    "Truax made it run live in 1986. <bookmark mark='f'/> Granular synthesis makes sounds by scattering thousands of "
@@ -49,14 +49,14 @@ class Grains(SoundScene):
                              label(rf"{r['bw']:.0f} Hz wide", font_size=17, color=WHITE)).arrange(DOWN, buff=0.25))
         cells.arrange(RIGHT, buff=0.8).move_to(UP * 0.1)
         cap = label(r"three grains at 1 kHz \ (length: \ width at half height); \ below each, \ its spectrum from 0 to 2 kHz", font_size=15, color=GREY_A).next_to(cells, UP, buff=0.3)
-        rule = label(rf"length $\times$ width $\approx {np.mean([r['product'] for r in d['rows']]):.2f}$, \ whatever the length: \ Gabor's uncertainty \ (Part 3)", font_size=19, color=TUNE).to_edge(DOWN, buff=0.5)
+        rule = label(rf"length $\times$ width $\approx {np.mean([r['product'] for r in d['rows']]):.2f}$, \ for these Gaussian grains and width definitions", font_size=19, color=TUNE).to_edge(DOWN, buff=0.5)
         head = label(r"short in time, \ wide in frequency", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         rows = d["rows"]
         with self.voiceover(
             "Every grain trades time for frequency. <bookmark mark='a'/> A grain five milliseconds long, a click with a hint of "
             f"pitch, spreads over {say(rows[0]['bw'])} hertz. <bookmark mark='b'/> Twenty milliseconds: {say(rows[1]['bw'])} "
             f"hertz. Eighty milliseconds: {say(rows[2]['bw'])}, a clear tone. <bookmark mark='c'/> Length times width stays near "
-            f"{say(np.mean([r['product'] for r in rows]), 2)}: Gabor's uncertainty, the limit Part 3's spectrogram met. A "
+            f"{say(np.mean([r['product'] for r in rows]), 2)}: a width-duration product under these chosen width definitions; the uncertainty principle gives a lower bound when widths are defined as standard deviations. A "
             "grain's length decides whether you hear its pitch, or only its click."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), FadeIn(ghost(cells, 0.3)))
@@ -162,9 +162,4 @@ class Grains(SoundScene):
             (r"grains cut a sound in time; \ the next idea cuts it by frequency, \ into sines and the rest", TUNE),
         ]
         rows_scene(self, r"grains at work", items,
-                   "Grains are everywhere now. <bookmark mark='b'/> Granular time-stretching is in every digital audio workstation: "
-                   "a loop played at a new tempo, its pitch kept. <bookmark mark='c'/> Paulstretch's eight-hundred-per-cent "
-                   "slowdowns, from Part 50, are grains with random phases. <bookmark mark='d'/> Granular instruments freeze, scrub "
-                   "and scatter any recording in real time. <bookmark mark='e'/> The cost is smearing: a drum hit read by "
-                   "overlapping grains blurs, as the phase vocoder's did. <bookmark mark='f'/> Grains cut a sound in time; the next "
-                   "idea cuts it by frequency, into sines and the rest.", marks="bcdef")
+                   "Grains are everywhere now. <bookmark mark='b'/> Granular time-stretching is in many audio tools: a loop played at a new tempo, its pitch kept. <bookmark mark='c'/> Paulstretch, mentioned in Part 50, uses overlapping spectral windows with randomized phases. <bookmark mark='d'/> Granular instruments freeze, scrub and scatter any recording in real time. <bookmark mark='e'/> The cost is smearing: a drum hit read by overlapping grains blurs, as the phase vocoder's did. <bookmark mark='f'/> Grains cut a sound in time; the next idea cuts it by frequency, into sines and the rest.", marks="bcdef")

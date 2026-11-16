@@ -92,7 +92,7 @@ class Waveguide(SoundScene):
             "the bell. The bore is a delay line; the bell sends the wave back inverted and a little duller. "
             "<bookmark mark='b'/> The reed is Part 8's valve: the pressure across it decides how much of the returning wave it "
             "lets back. Michael McIntyre, Robert Schumacher and Jim Woodhouse showed in 1983 that a nonlinear junction like this, "
-            "on a linear delay, is all a wind instrument needs to oscillate. <bookmark mark='c'/> Closed at the reed and open at "
+            "on a linear delay, can explain self-sustained oscillation in a simplified wind model. <bookmark mark='c'/> Closed at the reed and open at "
             "the bell, the bore is a quarter-wave pipe, so only odd harmonics survive, as Part 8 found."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(blocks, 0.3)))
@@ -114,7 +114,8 @@ class Waveguide(SoundScene):
         dots = VGroup(*[Dot(ax.to(p, r), radius=0.04, color=TUNE) for p, r in zip(ps, rms)])
         xt = VGroup(*[label(f"{v:g}", font_size=14, color=GREY_A).next_to(ax.to(v, 0), DOWN, buff=0.1) for v in (0.2, 0.6, 1.0)])
         xl = label(r"mouth pressure \ (1 = closes the reed)", font_size=15, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"sound level \ (RMS)", font_size=15, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
+        yt = VGroup(*[label(f"{v:g}", font_size=13, color=GREY_A).next_to(ax.to(0.1, v), LEFT, buff=0.1) for v in (0, 0.2, 0.4, 0.6)])
+        yl = label(r"model output \ (RMS)", font_size=15, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
         on = ps[np.argmax(rms > 0.1)]
         off = ps[len(rms) - 1 - np.argmax(rms[::-1] > 0.1)]
         h = d["harmonics"]
@@ -122,13 +123,13 @@ class Waveguide(SoundScene):
         hl = label(r"its harmonics \ (dB re the first): \ the odd ones only", font_size=15, color=EAR).next_to(hb, UP, buff=0.3)
         head = label(r"a threshold, \ and odd harmonics", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The model behaves like a clarinet in two ways nobody put in. <bookmark mark='a'/> Blow gently and nothing sounds; the "
+            "The model behaves like a clarinet with two behaviours that emerge from its deliberately chosen reed and bore equations. <bookmark mark='a'/> Blow gently and nothing sounds; the "
             f"tone starts only above a threshold, here between {say(on - 0.05, 2)} and {say(on, 2)} of the pressure that "
             f"closes the reed. Blow too hard, above about {say(off, 2)}, and the reed is pushed shut and the sound stops, as a "
             "beginner discovers. <bookmark mark='b'/> And the spectrum: the second, fourth and sixth harmonics more than sixty "
             f"decibels down, the third at {say(h[2])} and the fifth at {say(h[4])}."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl))
+            self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(xl), FadeIn(yl), FadeIn(yt))
             vo.wait_until("a")
             self.play(Create(cv), FadeIn(dots), run_time=1.5)
             vo.wait_until("b")
@@ -154,9 +155,7 @@ class Waveguide(SoundScene):
             pulse(snd, cells[0], st["crescendo"], st["tune"] - 0.3, buff=0.08)
             pulse(snd, cells[1], st["tune"], c.duration, buff=0.08)
         with self.voiceover(
-            "Silence, a breathy hiss, and then the note blooms out of nothing as the pressure crosses the threshold, later than "
-            "the steady threshold because the oscillation needs time to grow. A sampler cannot do that: it has a soft "
-            "recording and a loud one, but no threshold between them."
+            'Silence, a breathy hiss, and then the note blooms out of nothing as the pressure crosses the threshold, later than the steady threshold because the oscillation needs time to grow. A basic velocity-layer sampler does not generate this feedback threshold from a reed equation; a sampler could still reproduce recorded or programmed threshold behaviour.'
         ):
             self.play(Indicate(cells[0], color=TUNE, scale_factor=1.03))
         self.wait(0.4)

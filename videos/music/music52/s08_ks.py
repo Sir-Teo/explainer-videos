@@ -34,7 +34,7 @@ class Ks(SoundScene):
             "Physical models start with the simplest one, met in Part 7. <bookmark mark='a'/> Fill a delay line one period long "
             "with noise. <bookmark mark='b'/> Send it round and round, and on each pass average neighbouring samples, so the high "
             "frequencies die faster than the low, as on a plucked string. <bookmark mark='c'/> Kevin Karplus and Alex Strong "
-            "published it in 1983: a plucked string in a few lines of code, cheaper than anything before it."
+            "published it in 1983: a plucked string in a few lines of code, a remarkably economical plucked-string algorithm."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(VGroup(cells, avg), 0.3)))
             vo.wait_until("a")
@@ -87,11 +87,7 @@ class Ks(SoundScene):
                        label(r"David Jaffe and Julius Smith \ (1983) \ added it, \ with controls for decay and brightness", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
         head = label(r"a fraction of a sample", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The fix is Part 49's first-order all-pass. <bookmark mark='a'/> It passes every frequency at full strength and only "
-            "delays it, and at low frequencies the delay is one minus c over one plus c samples. <bookmark mark='b'/> Choose c "
-            "so that the delay is exactly the missing fraction of a sample. <bookmark mark='c'/> David Jaffe and Julius Smith "
-            "added this in the same year, 1983, with controls for decay time and brightness, and turned a trick into an "
-            "instrument."
+            "The fix is Part 49's first-order all-pass. <bookmark mark='a'/> It passes every frequency at full strength and only delays it, and at low frequencies the delay is one minus c over one plus c samples. <bookmark mark='b'/> Choose c to supply the missing delay at low frequencies; a first-order all-pass has frequency-dependent delay. <bookmark mark='c'/> David Jaffe and Julius Smith added this in the same year, 1983, with controls for decay time and brightness, and turned a trick into an instrument."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(lines, 0.3)))
             vo.wait_until("a")
@@ -119,7 +115,7 @@ class Ks(SoundScene):
             pulse(snd, cells[1], st["tuned"], c.duration, buff=0.08)
         with self.voiceover(
             "With the delay rounded, the melody's intervals are subtly wrong, each note off by a different amount; tuned, it "
-            "sits in place. On a bass string nobody would notice. At the top of the keyboard it is the difference between an "
+            "sits in place. The same rounding generally produces smaller pitch errors on bass notes. At the top of the keyboard it is the difference between an "
             "instrument and a toy."
         ):
             self.play(Indicate(cells[1], color=TUNE, scale_factor=1.03))

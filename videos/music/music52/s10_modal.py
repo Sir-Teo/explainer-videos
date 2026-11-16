@@ -44,11 +44,7 @@ class Modal(SoundScene):
                        label(r"exact for this equation: \ no grid, \ no time step, \ no dispersion", font_size=18, color=TUNE)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
         head = label(r"the stiff string, \ as modes", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Take the stiff, damped string of Part 7. <bookmark mark='a'/> As modes, its pickup signal is a sum over n of the "
-            "pluck's share of mode n, the mode's shape at the pickup, a cosine at the mode's frequency, and a decay. "
-            "<bookmark mark='b'/> The frequencies follow the stiff string's law, each a little sharper than n times the first, "
-            "and higher modes die faster. <bookmark mark='c'/> For this equation the sum is exact: no grid, no time step, and "
-            "so no numerical error in the pitches."
+            "Take the stiff, damped string of Part 7. <bookmark mark='a'/> As modes, its pickup signal is a sum over n of the pluck's share of mode n, the mode's shape at the pickup, a cosine at the mode's frequency, and a decay. <bookmark mark='b'/> The frequencies follow the stiff string's law, each a little sharper than n times the first, and higher modes die faster. <bookmark mark='c'/> For the retained modes of this linear equation, frequencies are evaluated directly, avoiding grid dispersion; truncation, sampling and floating-point errors remain."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(lines, 0.3)))
             vo.wait_until("a")
@@ -113,7 +109,7 @@ class Modal(SoundScene):
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
         with self.voiceover(
             "The second. If you could not tell, that is the point: the grid's errors sit in the highest partials, which die "
-            "first, and differ from the exact sum by a few cents to a few tens. Most listeners hear two identical strings. "
+            "first, and differ from the exact sum by a few cents to a few tens. The difference may be subtle in this example; we have not measured listener discrimination. "
             "The bead simulation's virtue is elsewhere: it handles what modes cannot, like a string that hits a fret or "
             "stretches as it swings, where the equation is no longer linear."
         ):
@@ -125,7 +121,7 @@ class Modal(SoundScene):
     def uses(self):
         items = [
             (r"modes are exact and cheap to control: \ move one mode's frequency or decay and nothing else changes", WHITE),
-            (r"they need the object to be linear and its modes known: \ nonlinear joints and collisions break them", WHITE),
+            (r"they need the object to be linear and its modes known: \ nonlinear joints and collisions require additional coupling or contact models", WHITE),
             (r"games and films strike thousands of virtual objects this way: \ contact sounds from modes \ (van den Doel and Pai, \ 1998)", WHITE),
             (r"the costs differ: \ a mode per partial; \ a grid point per bead; \ a delay line per wave", WHITE),
             (r"which to choose depends on what you need to control", TUNE),
@@ -133,7 +129,7 @@ class Modal(SoundScene):
         rows_scene(self, r"modes at work", items,
                    "Modes have a clear profile. <bookmark mark='b'/> They are exact and easy to control: move one mode's frequency "
                    "or decay, and nothing else changes. <bookmark mark='c'/> But they need the object to be linear and its modes "
-                   "known; nonlinear joints and collisions break them. <bookmark mark='d'/> Games and films strike thousands of "
+                   "known; nonlinear joints and collisions require additional coupling or contact models. <bookmark mark='d'/> Games and films strike thousands of "
                    "virtual objects this way; Kees van den Doel and Dinesh Pai made contact sounds from modes in 1998. "
                    "<bookmark mark='e'/> And the costs differ: a mode per partial, a grid point per bead, a delay line per wave. "
                    "<bookmark mark='f'/> Which to choose depends on what you need to control.", marks="bcdef")

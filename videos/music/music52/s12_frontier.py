@@ -38,12 +38,7 @@ class Frontier(SoundScene):
             (r"the frontier runs between them", TUNE),
         ]
         rows_scene(self, r"black, \ grey and white", items,
-                   "There is a spectrum of models. <bookmark mark='b'/> Black boxes: a network maps controls straight to sound; "
-                   "realistic, but with nothing inside to turn, Part 66's subject. <bookmark mark='c'/> Grey boxes: a physical or FM "
-                   "core with learned parts, such as a reed's curve or a body's resonances. <bookmark mark='d'/> The test is the hard "
-                   "one: does the model react correctly to playing it never saw, as a sampler cannot? <bookmark mark='e'/> Part 7's "
-                   "string and this part's clarinet are white boxes, every number physics. <bookmark mark='f'/> The frontier runs "
-                   "between them.", marks="bcdef")
+                   "There is a spectrum of models. <bookmark mark='b'/> Black boxes: a network maps controls to sound; internal features are less directly tied to physical parameters, though controls and realism vary, Part 66's subject. <bookmark mark='c'/> Grey boxes: a physical or FM core with learned parts, such as a reed's curve or a body's resonances. <bookmark mark='d'/> The test is the hard one: does the model react correctly to playing it never saw, beyond the training recordings? <bookmark mark='e'/> Part 7's string and this part's clarinet are white-box models with explicit equations and simplifying assumptions. <bookmark mark='f'/> The frontier runs between them.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def problem(self):

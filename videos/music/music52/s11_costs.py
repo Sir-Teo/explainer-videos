@@ -44,12 +44,7 @@ class Costs(SoundScene):
         fd = [r for r in rows if r["name"].startswith("finite")][0]
         head = label(r"what one second costs", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Time every method for one second of sound, in this part's code, on this computer. <bookmark mark='a'/> The "
-            f"cheapest is Karplus-Strong, {say(ks['ms'], 1)} milliseconds: one delay line and one average. Two-operator FM is "
-            f"next, a few sines. <bookmark mark='b'/> At the other end, forty sines summed directly take {say(add['ms'])} "
-            f"milliseconds, sixty decaying modes {say(md['ms'])}, the bead simulation {say(fd['ms'])}. Every one runs "
-            "faster than real time, but multiply by sixteen voices and a dozen tracks, and the order matters, as it did when a "
-            "DX7 had to run on 1983's chips."
+            f"Time every method for one second of sound, in this part's code, on this computer. <bookmark mark='a'/> In this cached implementation benchmark, Karplus-Strong takes, {say(ks['ms'], 1)} milliseconds, using one delay line and simple filtering. Two-operator FM uses a few sines. <bookmark mark='b'/> At the other end, forty sines summed directly take {say(add['ms'])} milliseconds, sixty decaying modes {say(md['ms'])}, the bead simulation {say(fd['ms'])}. These recorded timings are implementation-specific and can change with hardware, compilation and load, but multiply by sixteen voices and a dozen tracks, and the order matters, as it did when a DX7 had to run on 1983's chips."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), FadeIn(VGroup(*[b[0] for b in bars])))
             vo.wait_until("a")

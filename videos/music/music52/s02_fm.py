@@ -4,7 +4,7 @@ import numpy as np
 
 from videos.music.music52.common import *  # noqa: F403
 
-JC = [WHITE, TUNE, BLUE, EAR, GOLD]
+JC = [WHITE, TUNE, BLUE, EAR, GREEN_A]
 
 
 class Fm(SoundScene):
@@ -94,11 +94,7 @@ class Fm(SoundScene):
         note = label(rf"largest difference: \ {d['max_err']:.6f}", font_size=20, color=WHITE).to_edge(DOWN, buff=0.4)
         head = label(r"$f_c = 1000$, \ $f_m = 250$, \ $I = 2$: \ predicted and measured", font_size=24, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Check it. A carrier at a thousand hertz, a modulator at two hundred and fifty, index two. <bookmark mark='a'/> "
-            "Bessel's functions predict each line's size; <bookmark mark='b'/> the measured spectrum of the computed sound "
-            f"agrees, line by line, to within {say(d['max_err'] * 1e6, 1)} millionths. The line at the carrier itself is only "
-            "J zero of two, a fifth of full size: most of the energy has moved into the sidebands. And the energy is all still "
-            "there: the squares of all the J's add up to one, because the modulation only moves the carrier's phase."
+            f"Check it. A carrier at a thousand hertz, a modulator at two hundred and fifty, index two. <bookmark mark='a'/> Bessel's functions predict each line's size; <bookmark mark='b'/> the measured spectrum of the computed sound agrees, line by line, to within {say(d['max_err'] * 1000000.0, 1)} millionths. The line at the carrier itself is only J zero of two, a fifth of full size: most of the energy has moved into the sidebands. The squared Bessel coefficients sum to one for the complex phase modulation. A real sine can have coincident folded sidebands, so its measured power need not be independent of index."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
             vo.wait_until("a")
@@ -118,14 +114,10 @@ class Fm(SoundScene):
         xt = VGroup(*[label(f"{v}", font_size=14, color=GREY_A).next_to(ax.to(v, -0.5), DOWN, buff=0.1) for v in (0, 2, 4, 6, 8, 10)])
         xl = label(r"index $I$", font_size=16, color=GREY_A).next_to(xt, DOWN, buff=0.12)
         z = Dot(ax.to(2.405, 0), radius=0.07, color=WHITE)
-        zl = label(r"$I = 2.405$: \ the carrier vanishes", font_size=15, color=WHITE).next_to(z, UP, buff=0.15)
+        zl = label(r"$I \approx 2.405$: \ $J_0$ crosses zero", font_size=17, color=WHITE).to_edge(UP, buff=1.1)
         head = label(r"Bessel's functions", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here are the first five Bessel functions against the index. <bookmark mark='a'/> J zero, the carrier, starts at one "
-            "and falls; <bookmark mark='b'/> J one, the first pair of sidebands, rises first, then J two, J three, J four, each "
-            "later than the last: turning up the index brings in sidebands one pair at a time, and the sound brightens. "
-            "<bookmark mark='c'/> They wobble as they go, and at an index of two point four, J zero is exactly zero: the "
-            "carrier itself disappears. That wobble is why FM sounds can be glassy and unstable as the index moves."
+            "Here are the first five Bessel functions against the index. <bookmark mark='a'/> J zero, the carrier, starts at one and falls; <bookmark mark='b'/> J one, the first pair of sidebands, rises first, then J two, J three, J four, each later than the last: turning up the index brings in sidebands one pair at a time, and the sound brightens. <bookmark mark='c'/> They wobble as they go, and near an index of two point four zero five, J zero crosses zero: its own carrier term disappears, though other sidebands can coincide with that frequency. That wobble is why FM sounds can be glassy and unstable as the index moves."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(xl), FadeIn(ghost(cs, 0.25)))
             vo.wait_until("a")
@@ -171,6 +163,7 @@ class Fm(SoundScene):
         for kk in keys:
             sets[kk].set_opacity(0.0)
         sets["8.0"].set_opacity(1.0)
+        self.add(sets["8.0"])  # listen-owned overlays leave when the sound window closes
         with self.voiceover(
             "From a pure sine, the tone grows brighter and brassier as more sidebands arrive, the lines spreading out across "
             "the harmonics of two hundred and twenty: one knob, the index, does what a filter's cutoff did in Part 51, and with "
@@ -189,7 +182,7 @@ class Fm(SoundScene):
             (rf"at $f_m = 220$: \ index 1, \ {bw['1.0']:.0f} Hz; \ index 4, \ {bw['4.0']:.0f} Hz; \ index 8, \ {bw['8.0']:.0f} Hz", WHITE),
             (r"the same mathematics carried FM radio: \ a voice swinging a carrier at 100 MHz", WHITE),
             (r"a big index on a high note runs past half the sample rate and aliases \ (Part 48): \ index must fall as pitch rises", WHITE),
-            (r"FM's whole spectrum is two numbers, \ the ratio and the index, \ and both can move", TUNE),
+            (r"simple FM: \ ratio and index set the relative line pattern", TUNE),
         ]
         rows_scene(self, r"how wide, \ and what it costs", items,
                    "How wide does the spectrum get? <bookmark mark='b'/> John Carson, working on radio in 1922, gave the rule: "
@@ -197,6 +190,6 @@ class Fm(SoundScene):
                    f"twenty hertz, index one spans about {say(bw['1.0'])} hertz, index four about {say(bw['4.0'])}, index eight "
                    f"about {say(bw['8.0'])}. <bookmark mark='d'/> The same mathematics carries FM radio, a voice swinging a "
                    "carrier at a hundred megahertz. <bookmark mark='e'/> And a big index on a high note runs past half the sample "
-                   "rate and aliases, as Part 48 warned, so in a good patch the index falls as the pitch rises. "
-                   "<bookmark mark='f'/> FM's whole spectrum is two numbers, the ratio and the index, and both can move.",
+                   "rate and aliases, as Part 48 warned, so reducing index on high notes is one way to limit aliasing; oversampling and bandlimited methods also help. "
+                   "<bookmark mark='f'/> For this simple sinusoidal modulation, ratio and index describe the relative line pattern; carrier frequency sets its scale, and envelopes can move it.",
                    marks="bcdef")

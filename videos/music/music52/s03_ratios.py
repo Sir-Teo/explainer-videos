@@ -32,13 +32,7 @@ class Ratios(SoundScene):
         cap = label(r"carrier 220 Hz, \ index 3; \ lines up to 3 kHz", font_size=15, color=GREY_A).to_edge(DOWN, buff=0.3)
         head = label(r"the ratio decides the series", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "The index sets how bright; the ratio of carrier to modulator sets which lines. <bookmark mark='a'/> At one to one "
-            "the lines fall on every harmonic of the carrier. <bookmark mark='b'/> At one to two, on the odd harmonics only, "
-            "the hollow series of the clarinet. <bookmark mark='c'/> At one to one point four, which is five to seven, they "
-            "are harmonics of forty-four hertz, so far below the note that no fundamental is heard: the lines sound "
-            "inharmonic, a bell. <bookmark mark='d'/> At one to three point five, two to seven, they are sparse harmonics of a "
-            "hundred and ten. The rule: write the ratio as whole numbers N one to N two, and the fundamental is the carrier "
-            "over N one."
+            "The index sets how bright; the ratio of carrier to modulator sets which lines. <bookmark mark='a'/> At one to one the lines fall on every harmonic of the carrier. <bookmark mark='b'/> At one to two, on the odd harmonics only, the hollow series of the clarinet. <bookmark mark='c'/> At one to one point four, which is five to seven, they are harmonics of forty-four hertz, so far below the note that no fundamental is heard: the lines sound inharmonic, a bell. <bookmark mark='d'/> At one to three point five, two to seven, they are sparse harmonics of a hundred and ten. The rule: write the ratio as whole numbers N one to N two, in lowest terms, the line-grid spacing is the carrier over N one; cancellations and hearing can change the apparent fundamental."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), FadeIn(ghost(rows, 0.25)))
             for mark, rr in zip("abcd", rows):
@@ -96,8 +90,7 @@ class Ratios(SoundScene):
                 end = st[names[i + 1]] - 0.3 if i + 1 < len(names) else c.duration
                 pulse(snd, cells[i], st[k], end, buff=0.08)
         with self.voiceover(
-            "One to one is bright and reedy, like a muted brass. One to two is hollow, a clarinet's cousin. One to one point "
-            "four has no clear pitch at all: a metallic clang. Same index, same two oscillators; only the ratio changed."
+            "One to one is bright and reedy, like a muted brass. One to two is hollow, a clarinet's cousin. One to one point four sounds less clearly pitched in this example: a metallic clang. Same index, same two oscillators; only the ratio changed."
         ):
             self.play(Indicate(cells[2], color=EAR, scale_factor=1.03))
         self.wait(0.4)
@@ -123,7 +116,7 @@ class Ratios(SoundScene):
             "<bookmark mark='a'/> Brass: one to one, with the index following the loudness envelope, so the note brightens as "
             "it swells, which is what Risset had measured on real trumpets. <bookmark mark='b'/> A bell: one to one point "
             "four, the index dying with the note, so the high lines fade first. <bookmark mark='c'/> And a drum: an inharmonic "
-            "ratio, eighty to fifty-five hertz, with an index of twenty-five that dies in twenty milliseconds: a burst of "
+            "ratio, eighty to fifty-five hertz, with an index of twenty-five that decays with a twenty-millisecond time constant: a burst of "
             "noise-like sidebands, then a thud."
         ) as vo:
             self.play(FadeIn(head), FadeIn(il), FadeIn(ghost(cells, 0.3)))
@@ -149,7 +142,7 @@ class Ratios(SoundScene):
                 end = st[names[i + 1]] - 0.3 if i + 1 < len(names) else c.duration
                 pulse(snd, cells[i], st[k], end, buff=0.08)
         with self.voiceover(
-            "None is a convincing copy of the real thing; each catches the one feature the ear uses most: brass that brightens "
+            "None is a convincing copy of the real thing; each catches a few useful perceptual cues: brass that brightens "
             "as it swells, a bell whose overtones die before its hum, a drum's burst and thud. That is FM's character: cheap, "
             "expressive, and slightly unreal."
         ):

@@ -52,7 +52,7 @@ class Hook(SoundScene):
             "The second. <bookmark mark='a'/> Part 9's bell is eight oscillators, one for each partial measured on real bells: "
             "the hum, the prime, the minor-third tierce and the rest. <bookmark mark='b'/> The second is two sines. One, the "
             "carrier, at the note; the other, the modulator, at 1.4 times it, pushing the carrier's phase back and forth. "
-            "Out come lines at the carrier plus and minus every multiple of the modulator, none of them in a harmonic series: "
+            "Out come lines at the carrier plus and minus every multiple of the modulator, many separated by a spacing far below the nominal note: "
             "a bell, from two oscillators, and as the push dies away the lines fade from the top down, as a struck bell's do."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(bx), FadeIn(xt), FadeIn(ghost(VGroup(a, b), 0.25)))
@@ -74,7 +74,7 @@ class Hook(SoundScene):
         ]
         rows_scene(self, r"bells from a vibrato", items,
                    "The story begins with a mistake that was not one. <bookmark mark='b'/> In 1967 John Chowning, a composer at "
-                   "Stanford, turned a vibrato up until it was faster than the note itself, and heard bells. <bookmark mark='c'/> "
+                   "Stanford, explored modulation rates in the audio range, and heard bells. <bookmark mark='c'/> "
                    "His 1973 paper explained it: one Bessel function for every sideband. <bookmark mark='d'/> Stanford patented it and "
                    "licensed it to Yamaha, and it became one of the most lucrative patents the university ever held. "
                    "<bookmark mark='e'/> In 1983 came the DX7, six operators and sixteen voices, the sound of a decade's records. "
