@@ -9,7 +9,7 @@ SCENES = [
     ("s04_ica", "Ica", "3. Independent components"),
     ("s05_hpss", "Hpss", "4. Harmonic and percussive"),
     ("s06_nmf", "Nmf", "5. Factorization, again"),
-    ("s07_masks", "Masks", "6. Masks and their bounds"),
+    ("s07_masks", "Masks", "6. Masks and oracle references"),
     ("s08_phase", "Phase", "7. The phase problem"),
     ("s09_network", "Network", "8. Networks that separate"),
     ("s10_metrics", "Metrics", "9. Measuring separation"),

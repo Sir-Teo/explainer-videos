@@ -5,7 +5,7 @@ Part 64 of a sixty-eight-part course in music (see [the series plan](../README.m
 voice, the bass and the drums in it at once, but for a machine un-mixing one channel is like un-baking a cake. This part
 builds the separators in order of what they assume: centre cancellation and panning for stereo, independent component
 analysis for clean two-channel mixtures, median filtering for harmonic against percussive, supervised non-negative
-matrix factorization, the oracle masks that bound every masking method, Griffin and Lim's phase, and a small network;
+matrix factorization, source-informed oracle reference masks (not universal SDR bounds), Griffin and Lim's phase, and a small network;
 then how separation is measured, and where the measure and the ear part company. The tools are Monochord's
 (`explainer/music/monochord/mir/separate.py`); the music is Part 56's session, whose every stem Monochord mixed itself,
 so every separation is scored exactly.
@@ -25,7 +25,7 @@ so every separation is scored exactly.
 * **5. Factorization, again.** Templates for sources; the voice's combs and the drums' smears; the separated stems
   (drums 8.5 dB, vocals 7.7, bass 5.4, piano and guitar 5.2); how many templates (5.3 dB with one, 7.7 with six, 7.9 with
   twenty-four); the vocals heard.
-* **6. Masks and their bounds.** Oracle masks; the vocals' ideal binary and ratio masks as pictures; the ceilings (vocals:
+* **6. Masks and their bounds.** Oracle masks; the vocals' ideal binary and ratio masks as pictures; the reference scores (vocals:
   NMF 7.7, binary 8.3, ratio 9.3, ratio with true phase 12.7; for the drums the binary mask wins); the oracles heard.
 * **7. The phase problem.** A mask keeps the mixture's phase; Griffin-Lim's phase heard (−3.2 dB against 8.7 with the
   mixture's); its inconsistency falls from −4 to −20 dB while its SDR stays near −3; an ear question on the phase gap

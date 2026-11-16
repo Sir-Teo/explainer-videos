@@ -18,15 +18,15 @@ class Network(SoundScene):
     def design(self):
         items = [
             (r"input: \ the mixture's log spectrogram, \ five frames at a time", WHITE),
-            (r"output: \ the vocals' ratio mask for the middle frame, \ 384 bins up to 9 kHz", WHITE),
-            (r"two hidden layers of 512 units: \ a few hundred thousand weights", WHITE),
+            (r"output: \ a clipped vocal-to-mixture magnitude mask for the middle frame, \ 384 bins up to 9 kHz", WHITE),
+            (r"two hidden layers of 512 units: \ roughly one and a half million trainable parameters", WHITE),
             (r"trained on the middle phrases, \ transposed five ways; \ tested on the first two, \ whose melody it never heard", WHITE),
             (r"a toy beside Demucs: \ the same idea, \ a tiny fraction of the data", TUNE),
         ]
         rows_scene(self, r"Monochord's separator", items,
                    "Monochord's network is small. <bookmark mark='b'/> Its input is the mixture's log spectrogram, five frames at "
-                   "a time. <bookmark mark='c'/> Its output is the vocals' ratio mask for the middle frame, up to nine kilohertz. "
-                   "<bookmark mark='d'/> Two hidden layers of five hundred and twelve units: a few hundred thousand weights. "
+                   "a time. <bookmark mark='c'/> Its output is a clipped vocal-to-mixture magnitude mask for the middle frame, up to nine kilohertz. "
+                   "<bookmark mark='d'/> Two hidden layers of five hundred and twelve units: roughly one and a half million trainable parameters. "
                    "<bookmark mark='e'/> It is trained on the session's middle phrases, transposed five ways, and tested on the first "
                    "two, whose melody it never heard. Not on the last two: the Tune ends by repeating its opening, and training "
                    "there would be training on the test. "
@@ -78,16 +78,14 @@ class Network(SoundScene):
             rows_.add(VGroup(label(name, font_size=19, color=col), Rectangle(width=max(0.03, 5.5 * max(v, 0) / top), height=0.42, stroke_width=0, fill_color=col, fill_opacity=0.8),
                              label(f"{v:.1f} dB", font_size=18, color=WHITE)))
         rows_.arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to(LEFT * 1.2)
-        for r in rows_:
-            r[1].next_to(r[0], RIGHT, buff=0.3).align_to(rows_, LEFT).shift(RIGHT * 3.2)
+        for i, r in enumerate(rows_):
+            y = 1.35 - 0.85 * i
+            r[0].move_to([-2.35 - r[0].width / 2, y, 0])
+            r[1].move_to([-2.0 + r[1].width / 2, y, 0])
             r[2].next_to(r[1], RIGHT, buff=0.2)
         head = label(r"the vocals, \ every method", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "All together, for the vocals. <bookmark mark='a'/> The network trails the factorization, which learnt from the "
-            f"same phrases: {say(net, 1)} decibels against {say(n, 1)}. Both sit below the oracles, what perfect knowledge of "
-            "the answer could do with a mask. A network is only as good as its data, and this one learnt from a few seconds of "
-            "one band, transposed; Demucs learnt from the hundred training songs of the MUSDB18 benchmark, and later versions "
-            "from hundreds more."
+            f"All together, for the vocals. <bookmark mark='a'/> The network trails the factorization, which learnt from the same phrases: {say(net, 1)} decibels against {say(n, 1)}. Both sit below these source-informed reference scores, which are not universal bounds. A network is only as good as its data, and this one learnt from a few seconds of one band, transposed; Demucs learnt from the hundred training songs of the MUSDB18 benchmark, and later versions from hundreds more."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -107,13 +105,18 @@ class Network(SoundScene):
         for r in rows_:
             r[1].next_to(r[0], RIGHT, buff=0.3).align_to(rows_, LEFT).shift(RIGHT * 6.0)
             r[2].next_to(r[1], RIGHT, buff=0.2)
+        baseline = min(r[1].get_left()[0] for r in rows_)
+        for r in rows_:
+            r[1].shift(RIGHT * (baseline - r[1].get_left()[0]))
+            r[2].next_to(r[1], RIGHT, buff=0.2)
+        rows_.scale(min(1.0, 12.6 / rows_.width)).move_to(DOWN * 0.1)
         note = label(r"the Tune ends by repeating its opening: \ the same notes, \ the same chords, \ the same band", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.6)
         head = label(r"what a leak is worth", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "A confession. The first version of this network was trained on four stretches of the session, two of which "
             "contained the Tune's last phrases, which repeat its first, and one the second test phrase itself. "
             f"<bookmark mark='a'/> Honest, it scores {say(d['honest'], 1)}. <bookmark mark='b'/> With the leak, "
-            f"{say(d['sdr'], 1)}, enough to beat the factorization and to tell a better story. Nothing in the code was wrong; "
+            f"{say(d['sdr'], 1)}, enough to beat the factorization and to tell a better story. The learning code could execute correctly while the evaluation design leaked test content; "
             "the test simply was not new. Part 63's horse, again: check what the test set shares with the training set "
             "before believing a score."
         ) as vo:

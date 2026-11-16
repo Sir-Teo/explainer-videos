@@ -1,7 +1,7 @@
 """Monochord's separators (Part 64, *Source Separation*).
 
 The mixing model is x = sum of sources, each perhaps panned; separation runs it backwards.  Monochord owns every stem it
-mixed, so every separation can be scored exactly, and against the best any method of its kind could do.
+mixed, so every separation can be scored exactly, and against source-informed reference estimates.
 
     stft, istft                         a Hann STFT with exact overlap-add inverse
     sdr, si_sdr                         signal-to-distortion ratio, and the scale-invariant version (Le Roux et al., 2019)
@@ -9,7 +9,7 @@ mixed, so every separation can be scored exactly, and against the best any metho
     fastica                             independent components of a two-channel instantaneous mixture (Hyvärinen, 1999)
     hpss                                harmonic and percussive by median filtering (FitzGerald, 2010)
     nmf_separate                        templates learnt from each source's own recordings, Wiener masks from the fit
-    oracle_masks                        the ideal binary and ratio masks, which need the answer: the bounds of masking
+    oracle_masks                        the ideal binary and ratio masks, which need the answer: reference masks, not universal SDR bounds
     griffin_lim                         a phase for a magnitude, by alternating projections (Griffin and Lim, 1984)
     mask_net_train, _mask, _apply       a small network that predicts a source's ratio mask from the mixture's spectrum
 
@@ -143,8 +143,8 @@ def nmf_separate(x, examples: dict, rank: int = 12, iters: int = 120, seed: int 
 
 def oracle_masks(sources: dict, mix=None) -> dict:
     """The ideal binary mask (each bin to the loudest source) and the ideal ratio mask (each bin shared in proportion
-    to the sources' magnitudes), applied to the mixture: they need the true sources, so they bound what any masking
-    method can do with this STFT."""
+    to the sources' magnitudes), applied to the mixture: they need the true sources, they are reference estimates, not universal optima for waveform SDR.
+    Phase-sensitive and complex masks use different constraints."""
     names = list(sources)
     length = len(next(iter(sources.values())))
     mix = sum(sources.values()) if mix is None else mix
@@ -180,7 +180,7 @@ def log_features(X) -> np.ndarray:
 
 
 def mask_net_train(mixes, targets, epochs: int = 20, hidden: int = 512, seed: int = 0) -> dict:
-    """A small network: log-magnitude frames of the mixture in, the target source's ratio mask (first 384 bins) out,
+    """A small network: log-magnitude frames of the mixture in, the clipped source-to-mixture magnitude mask (first 384 bins) out,
     trained by mean squared error on the masks."""
     import torch
     torch.manual_seed(seed)

@@ -45,14 +45,10 @@ class Mixing(SoundScene):
             (r"one channel, \ two sources: \ infinitely many answers add up to the same mixture", WHITE),
             (r"so every method assumes something about the sources: \ where they are panned, \ that they are independent, \ what they sound like", WHITE),
             (r"the stronger and truer the assumption, \ the better the separation", WHITE),
-            (r"a network assumes what its training data showed it: \ the most specific assumption of all", TUNE),
+            (r"a network assumes what its training data showed it: \ one set of learned statistical assumptions", TUNE),
         ]
         rows_scene(self, r"why it needs assumptions", items,
-                   "With one channel and two sources there are infinitely many pairs of signals that add up to the same mixture. "
-                   "<bookmark mark='b'/> So every method assumes something about the sources: where they are panned, that they are "
-                   "independent, what they sound like. <bookmark mark='c'/> The stronger and truer the assumption, the better the "
-                   "separation. <bookmark mark='d'/> A network assumes what its training data showed it, the most specific "
-                   "assumption of all.", marks="bcd")
+                   "With one channel and two sources there are infinitely many pairs of signals that add up to the same mixture. <bookmark mark='b'/> So every method assumes something about the sources: where they are panned, that they are independent, what they sound like. <bookmark mark='c'/> Assumptions help when they match the actual sources and mixing process. <bookmark mark='d'/> A network assumes what its training data showed it, one set of learned statistical assumptions.", marks="bcd")
 
     # ------------------------------------------------------------------
     def stems(self):
@@ -64,11 +60,11 @@ class Mixing(SoundScene):
             (r"every number in this part is exact: \ we own the ingredients of the cake", TUNE),
         ]
         rows_scene(self, r"the test set", items,
-                   "The test is our own. <bookmark mark='b'/> Part 56's session, whose every track Monochord recorded and mixed. "
+                   "The test is our own. <bookmark mark='b'/> Part 56's synthetic session, whose every track Monochord generated and mixed. "
                    "<bookmark mark='c'/> Four stems, as the field's benchmark has them: vocals, bass, drums, and everything else. "
                    "<bookmark mark='d'/> The separators learn from the session's later phrases and are tested on its first two. "
                    "<bookmark mark='e'/> The benchmark itself, MUSDB18 from 2017, has a hundred and fifty real songs with their stems. "
-                   "<bookmark mark='f'/> Every number in this part is exact: we own the ingredients of the cake.", marks="bcdef")
+                   "<bookmark mark='f'/> We can compute waveform errors against known references; numerical approximations and metric limitations still apply: we own the ingredients of the cake.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def meet(self):

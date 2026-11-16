@@ -14,13 +14,13 @@ class Frontier(SoundScene):
     # ------------------------------------------------------------------
     def generative(self):
         items = [
-            (r"a mask can only scale what the mixture contains; \ where a voice was buried, \ nothing is left to scale", WHITE),
+            (r"a bounded nonnegative real-valued mask can only attenuate each mixture bin; \ where a voice was buried, \ nothing is left to scale", WHITE),
             (r"generative separators model what a source sounds like, \ and fill in what was hidden \ (diffusion and token models; \ verify)", WHITE),
             (r"they can sound cleaner than any mask, \ and can also invent: \ a plausible note that was never sung", WHITE),
             (r"for restoration that is a question of honesty: \ which parts of the result were recorded?", TUNE),
         ]
         rows_scene(self, r"generative separation", items,
-                   "Two frontiers. The first: a mask can only scale what the mixture contains, and where a voice was buried "
+                   "Two frontiers. The first: a bounded nonnegative real-valued mask can only attenuate each mixture bin, and where a voice was buried "
                    "there is nothing left to scale. <bookmark mark='b'/> Generative separators model what a source sounds like and "
                    "fill in what was hidden, with the diffusion and token models of Part 66; check the latest. "
                    "<bookmark mark='c'/> They can sound cleaner than any mask, and they can also invent: a plausible note that was "
@@ -69,18 +69,11 @@ class Frontier(SoundScene):
     # ------------------------------------------------------------------
     def benchmarks(self):
         items = [
-            (r"MUSDB18 \ (2017): \ 150 songs with four stems, \ 100 to train and 50 to test; \ most results in the field are reported on it", WHITE),
+            (r"MUSDB18 \ (2017): \ 150 songs with four stems, \ 100 to train and 50 to test; \ many comparable separation results have been reported on it", WHITE),
             (r"fifty test songs is a small sample: \ a gain of a few tenths of a decibel can be noise", WHITE),
             (r"its stems are studio stems, \ mostly Western pop and rock: \ a separator tuned to it may stumble on a choir, \ a gamelan or a live room", WHITE),
             (r"and a benchmark that everyone tunes to is slowly overfitted, \ as Part 63's horse and Chapter 8's leak warn", WHITE),
             (r"Monochord can render mixtures whose stems are known on any instrument, \ in any room: \ test sets without end", TUNE),
         ]
         rows_scene(self, r"benchmarks", items,
-                   "A last frontier is the yardstick itself. <bookmark mark='b'/> The MUSDB18 benchmark of 2017 holds a hundred "
-                   "and fifty songs with four stems each, a hundred to train and fifty to test, and most results in the field "
-                   "are reported on it. <bookmark mark='c'/> Fifty test songs is a small sample: a gain of a few tenths of a "
-                   "decibel can be chance. <bookmark mark='d'/> Its stems are studio stems, mostly Western pop and rock, so a "
-                   "separator tuned to it may stumble on a choir, a gamelan or a live room. <bookmark mark='e'/> And a benchmark "
-                   "that everyone tunes to is slowly overfitted, as Part 63's horse and the leak of Chapter 8 warn. "
-                   "<bookmark mark='f'/> Here Monochord has something to offer: mixtures whose stems are known, on any "
-                   "instrument, in any room, as many as anyone wants.", marks="bcdef")
+                   "A last frontier is the yardstick itself. <bookmark mark='b'/> The MUSDB18 benchmark of 2017 holds a hundred and fifty songs with four stems each, a hundred to train and fifty to test, and many comparable separation results have been reported on it. <bookmark mark='c'/> Fifty test songs is a small sample: a gain of a few tenths of a decibel can be chance. <bookmark mark='d'/> Its stems are studio stems, mostly Western pop and rock, so a separator tuned to it may stumble on a choir, a gamelan or a live room. <bookmark mark='e'/> And a benchmark that everyone tunes to is slowly overfitted, as Part 63's horse and the leak of Chapter 8 warn. <bookmark mark='f'/> Here Monochord has something to offer: mixtures whose stems are known, on any instrument, in any room, as many as anyone wants.", marks="bcdef")

@@ -24,12 +24,7 @@ class Ica(SoundScene):
             (r"no model of the sources at all: \ `blind' source separation", TUNE),
         ]
         rows_scene(self, r"blind separation", items,
-                   "With two channels there is a purely statistical trick. <bookmark mark='b'/> Two microphones and two sources, "
-                   "each microphone hearing a different mix. <bookmark mark='c'/> If the sources are independent, look for the "
-                   "un-mixing that makes the outputs as independent as possible. <bookmark mark='d'/> The central limit theorem "
-                   "says how: a mix of independent signals is more Gaussian than either of them, so un-mix toward the least "
-                   "Gaussian. <bookmark mark='e'/> Aapo Hyvärinen's FastICA whitens the data, then rotates it until each output is "
-                   "as non-Gaussian as it can be. <bookmark mark='f'/> No model of the sources at all: blind source separation.",
+                   "With two channels there is a purely statistical trick. <bookmark mark='b'/> Two microphones and two sources, each microphone hearing a different mix. <bookmark mark='c'/> If the sources are independent, look for the un-mixing that makes the outputs as independent as possible. <bookmark mark='d'/> Under identifiable instantaneous mixing and independence assumptions, non-Gaussian contrasts can help recover sources; the central limit theorem motivates this, without making every two-source sum more Gaussian in every metric. <bookmark mark='e'/> Aapo Hyvärinen's FastICA whitens the data, then rotates it until each output is as non-Gaussian as it can be. <bookmark mark='f'/> No source templates, but strong independence and mixing assumptions: blind source separation.",
                    marks="bcdef")
 
     # ------------------------------------------------------------------
@@ -50,10 +45,7 @@ class Ica(SoundScene):
         lc = label(r"un-mixed by ICA", font_size=17, color=TUNE).next_to(c, UP, buff=0.3)
         head = label(r"what ICA sees", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is what it sees, sample by sample. <bookmark mark='a'/> Two independent sources: a scatter aligned with the "
-            "axes. <bookmark mark='b'/> Mixed, the scatter is sheared and rotated. <bookmark mark='c'/> ICA finds the "
-            "transformation that squares it up again; it cannot know the sources' order or loudness, but it recovers their "
-            "shapes."
+            "Here is what it sees, sample by sample. <bookmark mark='a'/> Two independent sources: a scatter aligned with the axes. <bookmark mark='b'/> Mixed, the scatter is sheared and rotated. <bookmark mark='c'/> ICA finds the transformation that squares it up again; it cannot know the sources' order or loudness, but it can recover their shapes under those assumptions."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -81,7 +73,7 @@ class Ica(SoundScene):
             pulse(snd, boxes[0], st["dry"], st["room"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["room"], c.duration, buff=0.08)
         with self.voiceover(
-            "Dry, it is essentially perfect. In a room it fails completely: each source reaches each microphone through "
+            "Dry, it is essentially perfect. In this simulated room the instantaneous method performs poorly: each source reaches each microphone through "
             "echoes, a convolution, and a single un-mixing matrix cannot undo that. Convolutive ICA works frequency by "
             "frequency, and must then decide which piece belongs to which source."
         ):

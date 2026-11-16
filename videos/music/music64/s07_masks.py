@@ -9,7 +9,7 @@ STEM_NAMES = (("vocals", r"vocals", TUNE), ("bass", r"bass", BLUE), ("drums", r"
 
 class Masks(SoundScene):
     def construct(self):
-        chapter(self, 6, r"Masks and their bounds", r"What is the best that any mask could do?")
+        chapter(self, 6, r"Masks and oracle references", r"What do source-informed masks tell us?")
         self.idea()
         self.pictures()
         self.table()
@@ -22,7 +22,7 @@ class Masks(SoundScene):
             MathTex(r"\hat S_j(t, f) = M_j(t, f)\, X(t, f)", font_size=38, color=TUNE),
             label(r"if we knew the true sources, \ we could choose the best masks:", font_size=20, color=WHITE),
             MathTex(r"\text{binary: } M_j = \big[\,|S_j| = \max_k |S_k|\,\big], \qquad \text{ratio: } M_j = \frac{|S_j|}{\sum_k |S_k|}", font_size=32, color=WHITE),
-            label(r"they need the answer, \ so they are not methods: \ they are the ceiling for every masking method on this STFT", font_size=19, color=GREY_A),
+            label(r"they need the answer, \ so they are not methods: \ source-informed references, not universal SDR bounds", font_size=19, color=GREY_A),
         ).arrange(DOWN, buff=0.4)
         head = label(r"oracle masks", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
@@ -30,7 +30,7 @@ class Masks(SoundScene):
             "bin of the spectrogram, <bookmark mark='b'/> multiplied into the mixture. <bookmark mark='c'/> If we knew the "
             "true sources, we could choose the best masks. <bookmark mark='d'/> The ideal binary mask gives each bin to the "
             "loudest source; the ideal ratio mask shares each bin in proportion. <bookmark mark='e'/> They need the answer, so "
-            "they are not methods; they are the ceiling for every masking method on this spectrogram."
+            "they are not methods; they are source-informed reference masks, not proven optima for waveform SDR; phase-sensitive or complex masks can perform differently."
         ) as vo:
             self.play(FadeIn(head))
             for mark, ln in zip("abcde", lines):
@@ -53,16 +53,10 @@ class Masks(SoundScene):
                 r[i].set_x(x)
         top = VGroup(*[label(t, font_size=15, color=GREY_A).move_to([x, g.get_top()[1] + 0.5, 0]) for t, x in
                        ((r"NMF", -1.8), (r"ideal binary", 0.4), (r"ideal ratio", 2.6), (r"ratio, \ true phase", 4.9))])
-        note = label(r"SDR in dB against each true stem: \ the gap between NMF and the oracles is what better masks could still win", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
-        head = label(r"how far from the ceiling?", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        note = label(r"SDR in dB against each true stem: \ known-source masks are references, not universal performance bounds", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
+        head = label(r"source-informed reference scores", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here are the ceilings, stem by stem. <bookmark mark='a'/> NMF, from the last chapter. <bookmark mark='b'/> The "
-            "ideal binary mask: NMF is already close to it, and for the bass and the piano and guitar a little above it. "
-            "<bookmark mark='c'/> The ideal ratio mask is higher for all but the drums, whose hits so dominate their bins that "
-            f"giving each bin away wins. NMF's vocals are only {say(o['irm']['vocals'] - n['vocals'], 1)} decibels below this "
-            "ceiling. <bookmark mark='d'/> The last column gives the ratio mask the true phase of each source, which no mask "
-            f"can, and it is {say(o['true_phase']['vocals'] - o['irm']['vocals'], 1)} decibels higher again for the vocals: the "
-            "biggest gap of all, and the next chapter's subject."
+            f"Here are the reference scores, stem by stem. <bookmark mark='a'/> NMF, from the last chapter. <bookmark mark='b'/> The ideal binary mask: NMF is already close to it, and for the bass and the piano and guitar a little above it. <bookmark mark='c'/> The ideal ratio mask is higher for all but the drums, whose hits so dominate their bins that giving each bin away wins. NMF's vocals are only {say(o['irm']['vocals'] - n['vocals'], 1)} decibels below this reference. <bookmark mark='d'/> The last column gives the ratio mask the true phase of each source, which these real-valued nonnegative masks cannot supply, and it is {say(o['true_phase']['vocals'] - o['irm']['vocals'], 1)} decibels higher again for the vocals: the biggest gap of all, and the next chapter's subject."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*[r[0] for r in g])), FadeIn(note))
             for mark, i in zip("abcd", range(1, 5)):

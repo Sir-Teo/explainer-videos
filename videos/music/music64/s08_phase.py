@@ -23,11 +23,7 @@ class Phase(SoundScene):
             (r"it finds a consistent phase, \ not the true one", TUNE),
         ]
         rows_scene(self, r"phase", items,
-                   "Masks have a blind spot. <bookmark mark='b'/> A mask scales magnitudes and keeps the mixture's phase in every "
-                   "bin. <bookmark mark='c'/> Where sources overlap, the mixture's phase is neither source's, and that error no mask "
-                   "can remove. <bookmark mark='d'/> Could the phase be rebuilt from the magnitude? Daniel Griffin and Jae Lim's "
-                   "method of 1984 goes back and forth between a spectrogram and a signal, keeping the magnitude each time. "
-                   "<bookmark mark='e'/> It finds a phase that is consistent, not the true one.", marks="bcde")
+                   "Masks have a blind spot. <bookmark mark='b'/> A mask scales magnitudes and keeps the mixture's phase in every bin. <bookmark mark='c'/> Where sources overlap, the mixture's phase is neither source's, and a nonnegative real-valued mask cannot correct that phase error; complex masks can change phase. <bookmark mark='d'/> Could the phase be rebuilt from the magnitude? Daniel Griffin and Jae Lim's method of 1984 goes back and forth between a spectrogram and a signal, keeping the magnitude each time. <bookmark mark='e'/> It seeks a more consistent spectrogram, without guaranteeing the true phase or a global optimum.", marks="bcde")
 
     # ------------------------------------------------------------------
     def heard(self):
@@ -48,8 +44,8 @@ class Phase(SoundScene):
             pulse(snd, boxes[1], st["mixphase"], c.duration, buff=0.08)
         with self.voiceover(
             "Griffin and Lim's sounds a little phasey and hollow, and by the waveform measure it is far from the truth, "
-            f"{say(s['griffin_lim'], 1)} decibels: its phases are consistent but not the voice's own. The mixture's phase, wrong "
-            f"only where the sources overlap, scores {say(s['mixture_phase'], 1)}. Phase is why masks have ceilings."
+            f"{say(s['griffin_lim'], 1)} decibels: its phases are approximately consistent but not the voice's own. The mixture's phase, wrong "
+            f"only where the sources overlap, scores {say(s['mixture_phase'], 1)}. Phase constrains these mixture-phase masks."
         ):
             self.play(FadeIn(res))
         self.wait(0.4)
@@ -64,11 +60,7 @@ class Phase(SoundScene):
             (r"on MUSDB18, \ vocals have improved from a few dB SDR in 2015 to around 9 or more \ (verify the latest)", TUNE),
         ]
         rows_scene(self, r"separating waveforms", items,
-                   "One answer is to avoid the spectrogram altogether. <bookmark mark='b'/> Separate in the waveform itself, with no "
-                   "phase to lose. <bookmark mark='c'/> Wave-U-Net in 2018 and Demucs, from Alexandre Défossez and colleagues in "
-                   "2019, are networks from samples to samples. <bookmark mark='d'/> Later Demucs versions combine both, a "
-                   "spectrogram branch and a waveform branch with a transformer between them. <bookmark mark='e'/> On the MUSDB18 "
-                   "benchmark, vocal separation improved from a few decibels around 2015 to about nine or more; check the latest.",
+                   "One answer is to avoid the spectrogram altogether. <bookmark mark='b'/> Separate in the waveform itself, so phase is represented implicitly in the samples. <bookmark mark='c'/> Wave-U-Net in 2018 and Demucs, from Alexandre Défossez and colleagues in 2019, are networks from samples to samples. <bookmark mark='d'/> Later Demucs versions combine both, a spectrogram branch and a waveform branch with a transformer between them. <bookmark mark='e'/> On the MUSDB18 benchmark, vocal separation improved from a few decibels around 2015 to about nine or more; check the latest.",
                    marks="bcde")
 
     # ------------------------------------------------------------------
@@ -88,7 +80,7 @@ class Phase(SoundScene):
         with self.voiceover(
             "Watch Griffin and Lim's method work. <bookmark mark='a'/> Iteration by iteration, the signal's spectrogram comes "
             f"closer to the target magnitude: from {say(-inc[0], 0)} decibels off to {say(-inc[-1], 0)} after a hundred rounds. "
-            "<bookmark mark='b'/> And its distance from the true vocals does not move at all; the SDR stays near minus three. It "
+            "<bookmark mark='b'/> And its distance from the true vocals stays poor in this run; the SDR stays near minus three. It "
             "finds a signal with the right spectrogram, and there are many, nearly all of them different from the voice "
             "sample by sample."
         ) as vo:

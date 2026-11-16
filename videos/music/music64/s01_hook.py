@@ -13,11 +13,10 @@ class Hook(SoundScene):
     def quiz(self):
         d = load("hook")
         c = clip("hook.three")
-        card = listen_card(r"A voice and a piano recorded together on one track. \ Then the voice twice: \ once as it was recorded alone, \ "
+        card = listen_card(r"A voice and a piano synthesized separately and summed onto one track. \ Then the voice twice: \ once as it was recorded alone, \ "
                            r"once separated from the mix by a machine. \ Which is the separated one?", width=10.0)
         with self.voiceover(
-            "A question for your ears. A voice and a piano recorded together on one track. Then the voice twice: once as it "
-            "was recorded on its own, once separated from the mix by a machine. Which is the separated one?"
+            'A question for your ears. A voice and a piano synthesized separately and summed onto one track. Then the voice twice: once as synthesized on its own, once separated from the mix by a machine. Which is the separated one?'
         ):
             self.play(FadeIn(card))
         self.wait(0.8)
@@ -70,7 +69,7 @@ class Hook(SoundScene):
         with self.voiceover(
             "Here is the plan. The mixing model, and what it takes to undo it. <bookmark mark='b'/> Separating by where sounds "
             "are panned, and by independence. <bookmark mark='c'/> Harmonic against percussive, and factorization again. "
-            "<bookmark mark='d'/> Masks, and the best any mask can do. <bookmark mark='e'/> The phase problem, and networks "
+            "<bookmark mark='d'/> Masks and source-informed reference estimates. <bookmark mark='e'/> The phase problem, and networks "
             "that separate. <bookmark mark='f'/> And how separation is measured, and what it is for."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))

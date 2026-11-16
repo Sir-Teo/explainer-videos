@@ -25,7 +25,7 @@ class Stereo(SoundScene):
         head = label(r"centre cancellation", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Stereo gives a first handle. <bookmark mark='a'/> Each source is panned by an angle: some of it in the left "
-            "channel, some in the right. <bookmark mark='b'/> A source in the centre is identical in both. "
+            "channel, some in the right. <bookmark mark='b'/> In this gain-only panning model, a centred source is identical in both. "
             "<bookmark mark='c'/> So subtract the channels, <bookmark mark='d'/> and it vanishes exactly: the old trick of "
             "karaoke machines, which removed a centred singer. <bookmark mark='e'/> It also removes everything else in the "
             "centre: the bass and the kick drum go with the voice."
@@ -98,7 +98,7 @@ class Stereo(SoundScene):
             "Here is the session's panning, bin by bin: how much energy sits at each panning index. <bookmark mark='a'/> Most "
             "of it is in the centre, where the voice, bass, kick and snare are. <bookmark mark='b'/> The rest spreads into "
             "broad shoulders, toward the piano on the left and the guitar and hi-hat on the right. They are broad because most "
-            "bins hold more than one source, and a shared bin's index falls between its sources' places. So panning selects "
+            "bins hold more than one source, and interference can complicate a shared bin's index. So panning selects "
             "the piano only roughly, and the tall peak in the middle holds four sources it cannot tell apart."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xl), FadeIn(yl), Create(cv), run_time=1.6)
