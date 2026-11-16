@@ -1247,6 +1247,21 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Herbert Clark; Harald Baayen; Dale Barr; Hannes Matuschek; Charles Judd; Tal Yarkoni | 赫伯特·克拉克；哈拉尔德·巴扬；戴尔·巴尔；汉内斯·马图舍克；查尔斯·贾德；塔尔·亚尔科尼 |
 | Peter Molenaar; Aaron Fisher; W. S. Robinson; Mihaly Csikszentmihalyi; Peter Kuppens; Ellen Hamaker; Marten Scheffer; Marieke Wichers | 彼得·莫莱纳尔；亚伦·费希尔；W. S. 罗宾逊；米哈里·契克森米哈赖；彼得·库彭斯；艾伦·哈马克；马滕·舍弗尔；玛丽克·维歇斯 |
 
+## Part 48: modelling behaviour
+
+| English | 中文 |
+|---|---|
+| cognitive model; generative model; likelihood; maximum likelihood; restarts; local optimum | 认知模型；生成模型；似然；最大似然；多次重启；局部最优 |
+| learning rate; inverse temperature; perseveration; Q-learning; reversal bandit | 学习率；逆温度；持续性（重复倾向）；Q学习；反转多臂老虎机 |
+| parameter recovery; model recovery; confusion matrix; identifiability; trade-off; likelihood surface | 参数恢复；模型恢复；混淆矩阵；可识别性；权衡；似然曲面 |
+| model comparison; likelihood ratio; AIC; BIC; cross-validation; posterior predictive check | 模型比较；似然比；AIC；BIC；交叉验证；后验预测检验 |
+| hierarchical model; empirical Bayes; shrinkage; population distribution | 层级模型；经验贝叶斯；收缩；总体分布 |
+| power law of practice; exponential learning; averaging artefact | 练习的幂律；指数学习；平均造成的假象 |
+| rational analysis; resource-rational analysis; connectionism; parallel distributed processing; backpropagation | 理性分析；资源理性分析；联结主义；并行分布式处理；反向传播 |
+| amortized inference; simulation-based inference; computational phenotype | 摊销推断；基于模拟的推断；计算表型 |
+| William Estes; Seth Roberts; Harold Pashler; Robert Wilson; Anne Collins; John Anderson; Andrew Heathcote | 威廉·埃斯蒂斯；塞思·罗伯茨；哈罗德·帕什勒；罗伯特·威尔逊；安妮·柯林斯；约翰·安德森；安德鲁·希思科特 |
+| David Rumelhart; James McClelland; Falk Lieder; Thomas Griffiths; Marcel Binz; Eric Schulz | 戴维·鲁梅尔哈特；詹姆斯·麦克莱兰；福尔克·利德；托马斯·格里菲斯；马塞尔·宾茨；埃里克·舒尔茨 |
+
 ## Names
 
 | English | 中文 |

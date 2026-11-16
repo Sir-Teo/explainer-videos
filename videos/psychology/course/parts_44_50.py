@@ -159,4 +159,39 @@ PARTS = [
               ("Its tests", "tests/psychology/test_within.py"),
               ("statkit's mixed models", "explainer/stats/kit/mixed.py")),
     ),
+    Part(
+        n=48, level="M", widget="fitme", prereq=(17, 25, 47),
+        question="When is a computational model of the mind more than a curve fit?",
+        story="In 1956 William Estes showed that a smooth learning curve can be the average of learners who each "
+              "learned in one jump. The part opens the fitting harness the whole series has used: four generative "
+              "models of a reversal bandit, maximum likelihood with restarts, parameter recovery and the ridge where "
+              "learning rate and inverse temperature trade off, model comparison and model recovery, a posterior "
+              "predictive check that catches a missing mechanism, people fitted as a population, and the power law "
+              "of practice unmasked as an average; then rational analysis, connectionism and language models given "
+              "the Battery.",
+        handoff="The brain's data, with subjects and voxels, are Part 49; the weight of evidence Part 50; "
+                "computational psychiatry and its parameters Part 59; whether a language model is a model of a mind "
+                "Part 60.",
+        outside="Part 17's Q-learner and Part 25's diffusion model; likelihood, AIC and BIC, and shrinkage.",
+        objectives={
+            "U": ["Explain what a cognitive model is: a program that turns parameters into trial-by-trial behaviour.",
+                  "Explain why an average curve can misdescribe every individual in it."],
+            "M": ["Fit a learning model by maximum likelihood with several starting points, and show parameter "
+                  "recovery for the number of trials collected.",
+                  "Compare models by BIC or cross-validation, and check the comparison by model recovery.",
+                  "Run a posterior predictive check on a qualitative effect such as staying after a loss."],
+            "D": ["Design the full set of checks for a new model of a new task before collecting data."],
+            "I": ["Judge whether a parameter fitted to users or patients is reliable enough to act on."],
+        },
+        results=[
+            ("Softmax choice", r"P(a) = e^{\beta Q_a} / \sum_b e^{\beta Q_b}"),
+            ("Q-learning", r"Q_a \leftarrow Q_a + \alpha (r - Q_a)"),
+            ("BIC", r"\mathrm{BIC} = -2 \ln \hat L + k \ln n"),
+            ("Shrinkage", r"\hat\theta_p = \frac{\hat\theta_p^{\text{own}} / v_p + \mu / \tau^2}{1 / v_p + 1 / \tau^2}"),
+        ],
+        U=(0, 1, 2, 9), D=(15,), I=(14,),
+        also=(("Psyche's fit module", "explainer/psychology/psyche/fit.py"),
+              ("Its tests", "tests/psychology/test_fit.py"),
+              ("Part 17's Q-learner", "explainer/psychology/psyche/rl.py")),
+    ),
 ]

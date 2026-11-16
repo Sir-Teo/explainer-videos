@@ -6514,3 +6514,51 @@ shown(47, r"Yarkoni (2022)", "a methodological argument, described")
 shown(47, r"Robinson (1950)", "the ecological fallacy's classic example, quoted")
 shown(47, r"Molenaar (2004)", "a methodological argument, described and simulated")
 shown(47, r"Hamaker, Kuiper \& Grasman (2015)", "a method, described (reproduced in Part 44)")
+
+# --- Part 48: Modelling Behaviour ------------------------------------------------------------------------------------
+
+add(Finding(
+    key="power_law_practice", part=48, title=r"The power law of practice",
+    claim="Response time falls with practice as a power function of the number of trials, for each learner.",
+    original=Study("Newell and Rosenbloom", 1981, design="practice curves across many tasks, mostly averaged over "
+                   "people", found="power functions fitted the curves well, a 'law of practice'"),
+    status="failed",
+    record=(Study("Heathcote, Brown and Mewhort", 2000, design="practice data fitted person by person",
+                  found="exponential functions fitted individual learners better; the power law appears in averages"),),
+    note="The average of exponential learners with different rates looks like a power law: a property of averaging, "
+         "not of each mind (chapter nine computes it).",
+    sources=("A. Newell and P. S. Rosenbloom, Mechanisms of skill acquisition and the law of practice, in J. R. "
+             "Anderson (ed.), Cognitive Skills and Their Acquisition (Erlbaum, 1981) 1-55",
+             "A. Heathcote, S. Brown and D. J. K. Mewhort, The power law repealed: the case for an exponential law of "
+             "practice, Psychonomic Bulletin and Review 7 (2000) 185-207"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="parameters_as_traits", part=48, title=r"Model parameters as stable traits",
+    claim="Parameters of fitted cognitive models, such as a learning rate, are stable traits of a person that "
+          "generalize across tasks and can serve as clinical markers.",
+    original=Study("Montague, Dolan, Friston and Dayan", 2012, design="the programme of computational psychiatry",
+                   found="model parameters proposed as measures of individual differences relevant to illness"),
+    status="contested",
+    record=(Study("Eckstein and colleagues", 2022, design="the same people fitted in several learning tasks",
+                  found="learning rates and other parameters often did not generalize across tasks"),
+            Study("Mkrtchian, Valton and Roiser", 2023, design="test-retest reliability of decision-making and "
+                  "learning parameters", found="reliability ranging from poor to good, often low")),
+    note="Parameters can be useful summaries within a task; as traits, many are too unreliable and too "
+         "task-specific so far. Recovery and reliability must be shown, not assumed.",
+    sources=("P. R. Montague, R. J. Dolan, K. J. Friston and P. Dayan, Computational psychiatry, Trends in Cognitive "
+             "Sciences 16 (2012) 72-80",
+             "M. K. Eckstein et al., The interpretation of computational model parameters depends on the context, "
+             "eLife 11 (2022) e75474",
+             "A. Mkrtchian, V. Valton and J. P. Roiser, Reliability of decision-making and reinforcement learning "
+             "computational parameters, Computational Psychiatry 7 (2023) 30-46"),
+    checked="2026-11-16",
+))
+shown(48, r"Wilson \& Collins (2019)", "methodological advice, described")
+shown(48, r"Roberts \& Pashler (2000)", "a methodological argument, described")
+shown(48, r"Anderson (1990)", "a method, described")
+shown(48, r"Lieder \& Griffiths (2020)", "a method, described")
+shown(48, r"Rumelhart, McClelland \& the PDP Group (1986)", "a modelling framework, described")
+shown(48, r"Binz \& Schulz (2023)", "a study of a language model on judgment tasks, described without a row; whether "
+      "such models are models of minds is Part 60's question")

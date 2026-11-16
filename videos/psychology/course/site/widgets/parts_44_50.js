@@ -490,4 +490,156 @@
       note: "Nothing you answer is stored or sent. The clouds are generated in your browser.",
     });
   };
+  // ---- Part 48: play a reversal bandit; the page fits a Q-learner to your choices and checks the fit. ----
+  W.fitme = function (el) {
+    var w = null;
+    var N_TRIALS = 80, SWAP = 40, PG = 0.75, PB = 0.25;
+    var AL = [], BE = [], i;
+    for (i = 0; i < 25; i++) AL.push(0.02 + 0.98 * i / 24);
+    for (i = 0; i < 25; i++) BE.push(0.5 + 14.5 * i / 24);
+    function loglik(a, b, C, R) {
+      var q0 = 0.5, q1 = 0.5, ll = 0, t, p1, d;
+      for (t = 0; t < C.length; t++) {
+        d = b * (q1 - q0);
+        p1 = 1 / (1 + Math.exp(-d));
+        p1 = Math.min(Math.max(p1, 1e-9), 1 - 1e-9);
+        ll += C[t] === 1 ? Math.log(p1) : Math.log(1 - p1);
+        if (C[t] === 1) q1 += a * (R[t] - q1); else q0 += a * (R[t] - q0);
+      }
+      return ll;
+    }
+    function fitGrid(C, R) {
+      var best = -Infinity, bi = 0, bj = 0, L = [], ia, ib;
+      for (ia = 0; ia < AL.length; ia++) {
+        L.push([]);
+        for (ib = 0; ib < BE.length; ib++) {
+          var v = loglik(AL[ia], BE[ib], C, R);
+          L[ia].push(v);
+          if (v > best) { best = v; bi = ia; bj = ib; }
+        }
+      }
+      return { L: L, a: AL[bi], b: BE[bj], ll: best };
+    }
+    function goodArm(t) { return t < SWAP ? 0 : 1; }
+    function payoff(arm, t, rand) { return rand() < (arm === goodArm(t) ? PG : PB) ? 1 : 0; }
+    function simulate(a, b, rand) {
+      var q0 = 0.5, q1 = 0.5, C = [], R = [], t;
+      for (t = 0; t < N_TRIALS; t++) {
+        var p1 = 1 / (1 + Math.exp(-b * (q1 - q0))), c = rand() < p1 ? 1 : 0, r = payoff(c, t, rand);
+        C.push(c); R.push(r);
+        if (c === 1) q1 += a * (r - q1); else q0 += a * (r - q0);
+      }
+      return { C: C, R: R };
+    }
+    var S = { phase: "idle", t: 0, C: [], R: [], last: null, fit: null, rec: [], who: "", seed: 48 };
+    var rand = mulberry(48);
+    function finish() {
+      S.phase = "done"; task.clear();
+      S.fit = fitGrid(S.C, S.R);
+      var r2 = mulberry(4800 + S.seed), k;
+      S.rec = [];
+      for (k = 0; k < 16; k++) {
+        var sim = simulate(S.fit.a, S.fit.b, r2), f = fitGrid(sim.C, sim.R);
+        S.rec.push([f.a, f.b]);
+      }
+      if (w) w.render();
+    }
+    function next() {
+      if (S.t >= N_TRIALS) { finish(); return; }
+      S.phase = "ask"; if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "f": 0, "j": 1 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side) {
+        var r = payoff(side, S.t, rand);
+        S.C.push(side); S.R.push(r); S.last = { arm: side, r: r };
+        S.t++; task.count++;
+        S.phase = "shown"; if (w) w.render();
+        task.later(next, 350);
+      },
+    });
+    function start(state) {
+      task.clear(); S.t = 0; S.C = []; S.R = []; S.fit = null; S.rec = []; S.who = "you"; task.count = 0;
+      rand = mulberry(48 + (state ? state.seed : 0));
+      next();
+    }
+    function demo(state) {
+      task.clear(); S.who = "Psyche";
+      rand = mulberry(480 + (state ? state.seed : 0));
+      var sim = simulate(0.3, 5, rand);
+      S.C = sim.C; S.R = sim.R; S.t = N_TRIALS; task.count = N_TRIALS;
+      finish();
+    }
+    function spread(v) {
+      var m = 0, s = 0; v.forEach(function (x) { m += x; }); m /= v.length;
+      v.forEach(function (x) { s += (x - m) * (x - m); });
+      return Math.sqrt(s / Math.max(v.length - 1, 1));
+    }
+    w = QB.widget(el, {
+      title: "Two machines",
+      sub: "Eighty choices. Press F for the left machine, J for the right (or tap a side). One pays more often than the other, and at some point they may change. Then the page fits a learning model to your choices.",
+      panels: 2, height: 360, weights: [1.2, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Let Psyche play", act: function (state) { demo(state); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.C = []; S.R = []; S.fit = null; S.rec = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), j;
+        ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if (S.phase === "ask" || S.phase === "shown") {
+          ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("Choice " + Math.min(S.t + (S.phase === "ask" ? 1 : 0), N_TRIALS) + " of " + N_TRIALS, b.cx, b.y + 24);
+          [0, 1].forEach(function (arm) {
+            var x = b.x + b.w * (arm === 0 ? 0.3 : 0.7), lit = S.phase === "shown" && S.last && S.last.arm === arm;
+            ctx.fillStyle = lit ? (S.last.r ? "#5bd18b" : "#ef6f6c") : "rgba(127,127,127,0.25)";
+            ctx.fillRect(x - 46, b.cy - 50, 92, 100);
+            ctx.fillStyle = C.ink; ctx.font = "600 18px system-ui, sans-serif";
+            ctx.fillText(arm === 0 ? "F" : "J", x, b.cy - 12);
+            if (lit) { ctx.font = "600 14px system-ui, sans-serif"; ctx.fillText(S.last.r ? "paid" : "nothing", x, b.cy + 18); }
+          });
+          var won = 0; S.R.forEach(function (r) { won += r; });
+          ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("paid so far: " + won, b.cx, b.y + b.h - 30);
+        } else if (S.phase === "done" && S.fit) {
+          var ra = spread(S.rec.map(function (x) { return x[0]; }));
+          T.message(ctx, b, "Fitted: learning rate " + S.fit.a.toFixed(2) + ", inverse temperature " + S.fit.b.toFixed(1),
+                    (S.who === "Psyche" ? "Psyche played with a planted learning rate of 0.3 and inverse temperature of 5. " : "") + "Sixteen simulated players with exactly these values, refitted, give learning rates spread by about " + ra.toFixed(2) + " (the dots). From eighty choices, a learning rate is a rough estimate, not a measurement of a trait.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start to play, or let Psyche play to see a planted learner fitted.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx, x0 = c2.x + 40, x1 = c2.x + c2.w - 14, y0 = c2.y + 30, y1 = c2.y + c2.h - 34;
+        function X(a) { return x0 + (x1 - x0) * (a - 0.02) / 0.98; }
+        function Y(bb) { return y1 - (y1 - y0) * (bb - 0.5) / 14.5; }
+        cx.save();
+        cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif"; cx.textAlign = "left";
+        cx.fillText("Log-likelihood of the choices; up: inverse temperature", c2.x + 10, c2.y + 16);
+        if (S.fit) {
+          var mx = S.fit.ll, cw = (x1 - x0) / AL.length + 1, ch = (y1 - y0) / BE.length + 1, ia, ib;
+          for (ia = 0; ia < AL.length; ia++) for (ib = 0; ib < BE.length; ib++) {
+            var drop = Math.min((mx - S.fit.L[ia][ib]) / 12, 1);
+            cx.fillStyle = "rgba(179,157,219," + (0.9 * (1 - drop)).toFixed(3) + ")";
+            cx.fillRect(X(AL[ia]) - cw / 2, Y(BE[ib]) - ch / 2, cw, ch);
+          }
+          S.rec.forEach(function (r) { cx.fillStyle = "#f2c14e"; cx.beginPath(); cx.arc(X(r[0]), Y(r[1]), 3, 0, 2 * Math.PI); cx.fill(); });
+          cx.strokeStyle = "#ffffff"; cx.lineWidth = 2;
+          cx.beginPath(); cx.arc(X(S.fit.a), Y(S.fit.b), 6, 0, 2 * Math.PI); cx.stroke();
+        }
+        cx.strokeStyle = C.muted; cx.lineWidth = 1;
+        cx.beginPath(); cx.moveTo(x0, y0); cx.lineTo(x0, y1); cx.lineTo(x1, y1); cx.stroke();
+        cx.fillStyle = C.muted; cx.font = "11px system-ui, sans-serif"; cx.textAlign = "center";
+        [0.25, 0.5, 0.75, 1].forEach(function (a) { cx.fillText(String(a), X(a), y1 + 13); });
+        cx.fillText("learning rate", (x0 + x1) / 2, y1 + 26);
+        cx.textAlign = "right";
+        [1, 5, 10, 15].forEach(function (bb) { cx.fillText(String(bb), x0 - 6, Y(bb) + 4); });
+        cx.restore();
+      },
+      readout: function () {
+        return [["choices", String(task.count)], ["fit", S.fit ? "α " + S.fit.a.toFixed(2) + ", β " + S.fit.b.toFixed(1) : "-"]];
+      },
+      note: "Nothing you choose is stored or sent. The left machine pays 75% of the time and the right 25% for the first forty choices, then they swap. The fit is a grid search over the Q-learner of Part 17; the dots are refits of players simulated at your values, the recovery check of chapter four.",
+    });
+  };
 })();
