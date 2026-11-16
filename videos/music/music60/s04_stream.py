@@ -22,7 +22,7 @@ class Stream(SoundScene):
         t30 = label(r"30 s: \ now it counts as a stream", font_size=17, color=TUNE).next_to(mark30, UP, buff=0.15)
         fill = Rectangle(width=0.01, height=0.35, stroke_width=0, fill_color=BLUE, fill_opacity=0.8).align_to(bar, LEFT).align_to(bar, DOWN)
         head = label(r"one stream", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
-        with self.voiceover("Start with one stream: our session playing the whole Tune. On the largest service, a play counts as a stream, and earns, only once it passes thirty seconds."):
+        with self.voiceover("Start with one stream: our session playing the whole Tune. On the largest service, a thirty-second listening rule is one counting condition on Spotify; payment also depends on eligibility, territory, policy and contracts, so it is not an unconditional per-play payout."):
             self.play(FadeIn(head), FadeIn(bar), FadeIn(mark30), FadeIn(t30))
         self.add(fill)
         sec = d["seconds"]
@@ -109,7 +109,7 @@ class Stream(SoundScene):
             f"Scale it up to a million streams, at the rate our simulated service of Chapter 5 pays: about {say(100 * d['rate'], 2)} "
             f"cents a stream to all the rights holders together, {say(1e6 * d['rate'])} dollars in all. <bookmark mark='a'/> On a "
             f"label deal the artist is credited about {say(lab['the artist (credited, against the advance)'])} dollars, and "
-            "credited is the word: it is set against the advance, and paid only once that is repaid. <bookmark mark='b'/> "
+            "credited is the word: it is set against the advance, and normally paid out only after the contractual recoupment balance is cleared. <bookmark mark='b'/> "
             f"Self-released through a distributor taking fifteen percent, the artist keeps about {say(ind['the artist (credited, against the advance)'])}, "
             f"but paid for the recording themselves. <bookmark mark='c'/> Either way, each of three songwriters gets about "
             f"{say(lab['each songwriter'])} dollars per million streams."
@@ -133,9 +133,4 @@ class Stream(SoundScene):
             (r"the money is real, \ and large; \ it is divided among far more music, \ and far more musicians", TUNE),
         ]
         rows_scene(self, r"is that a lot?", items,
-                   "Is that a lot? <bookmark mark='b'/> A CD in 1999 cost about fifteen dollars; at the rights holders' rate, the "
-                   "same money is about three thousand streams. <bookmark mark='c'/> A fan who bought one album a year paid its "
-                   "makers more than a subscriber who listens for an hour a day pays to any one artist. <bookmark mark='d'/> Yet "
-                   "recorded music's revenue has grown again: worldwide, it passed its 1999 peak, in money of the day, in the "
-                   "early 2020s. <bookmark mark='e'/> The money is real, and large; it is divided among far more music, and far more "
-                   "musicians, than ever before.", marks="bcde")
+                   "Is that a lot? <bookmark mark='b'/> A CD in 1999 cost about fifteen dollars; at the rights holders' rate, the same money is about three thousand streams. <bookmark mark='c'/> Comparisons depend on listening concentration, deal terms and costs; retail album price and rights-holder streaming receipts are not directly equivalent. <bookmark mark='d'/> Yet recorded music's revenue has grown again: worldwide, it passed its 1999 peak, in money of the day, in the early 2020s. <bookmark mark='e'/> The money is real, and large; it is divided among far more music, and far more musicians, than ever before.", marks="bcde")

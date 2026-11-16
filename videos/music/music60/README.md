@@ -136,3 +136,5 @@ python -m videos.music.labs 60                                  # the lab (write
   Skidmore v. Led Zeppelin (2020); Gray v. Hudson (2022); Structured Asset Sales v. Sheeran (2024); GEMA v. OpenAI (Munich
   Regional Court, 2025; under appeal). Dates of filings, settlements and statutes after 2023 should be checked against
   current sources.
+
+Scope: separate composition and recording rights do not imply two distinct owners or identical rights/terms. Streaming rates, recoupment and market simulations are hypothetical. Probability of coincidental similarity is not probability of copying; case-specific rights, eligibility and litigation status require their applicable records.

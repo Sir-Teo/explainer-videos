@@ -42,7 +42,7 @@ class Licences(SoundScene):
             "in public: on the radio, in a bar, at a concert, in a stream; in many countries the recording earns from performance "
             "too. <bookmark mark='c'/> A synchronization licence, to put music to pictures, negotiated with both owners. "
             "<bookmark mark='d'/> And a master use licence, to use the recording itself: a sample, or the original recording in "
-            "a film. A stream needs two of these four at once."
+            "a film. An on-demand stream needs permissions for both rights layers, including composition reproduction and performance and use of the recording; these four labels are not an exhaustive one-to-one checklist."
         ) as vo:
             self.play(FadeIn(head), FadeIn(top))
             for mark, r in zip("abcd", g):
@@ -116,7 +116,7 @@ class Licences(SoundScene):
             (r"satellite and internet radio do pay for recordings, \ through SoundExchange", WHITE),
             (r"unmatched money: \ a stream whose song cannot be traced to its writers is held, \ then shared out by market share", WHITE),
             (r"in 2021 the MLC received more than \$400 million of such money from the services", WHITE),
-            (r"metadata is money: \ a missing writer credit costs that writer every future payment", TUNE),
+            (r"metadata is money: \ missing ownership metadata can delay, misdirect or prevent payments until corrected", TUNE),
         ]
         rows_scene(self, r"gaps", items,
                    "The pipes leak. <bookmark mark='b'/> American AM and FM radio pays songwriters for performance, but nothing to "
@@ -125,4 +125,4 @@ class Licences(SoundScene):
                    "stream cannot be matched to its writers, its money is held, and if nobody claims it, shared out by market share, "
                    "mostly to the largest publishers. <bookmark mark='e'/> In 2021 the Mechanical Licensing Collective received more "
                    "than four hundred million dollars of such unmatched money from the services. <bookmark mark='f'/> Metadata is "
-                   "money: a missing writer credit costs that writer every future payment.", marks="bcdef")
+                   "money: missing ownership metadata can delay, misdirect or prevent payments until corrected.", marks="bcdef")

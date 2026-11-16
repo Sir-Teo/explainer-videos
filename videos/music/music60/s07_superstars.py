@@ -38,17 +38,11 @@ class Superstars(SoundScene):
             (r"Salganik, \ Dodds and Watts \ (Science, \ 2006): \ 14,341 people, \ 48 songs by unknown bands", WHITE),
             (r"each person listened, \ rated, \ and could download; \ one group saw nothing of what others did", WHITE),
             (r"eight other groups, \ eight separate `worlds', \ saw how often each song had been downloaded in their own world", WHITE),
-            (r"same songs, \ same kinds of people: \ any difference between the worlds is social influence and luck", WHITE),
+            (r"same songs, \ same kinds of people: \ random assignment helps identify social-influence effects across comparable groups, alongside ordinary sampling variation", WHITE),
             (r"they found: \ influence made hits bigger, \ and which songs became hits less predictable", TUNE),
         ]
         rows_scene(self, r"MusicLab", items,
-                   "A famous experiment asked. <bookmark mark='b'/> In 2006 Matthew Salganik, Peter Dodds and Duncan Watts put "
-                   "forty-eight songs by unknown bands online, and 14,341 people came. <bookmark mark='c'/> Each could listen, "
-                   "rate, and download. One group saw nothing of what anyone else did. <bookmark mark='d'/> Eight other groups, "
-                   "eight separate worlds, saw how often each song had been downloaded in their own world. "
-                   "<bookmark mark='e'/> Same songs, same kinds of people: any difference between the worlds is social influence "
-                   "and luck. <bookmark mark='f'/> They found that influence made the hits bigger, and which songs became hits "
-                   "less predictable.", marks="bcdef")
+                   "A famous experiment asked. <bookmark mark='b'/> In 2006 Matthew Salganik, Peter Dodds and Duncan Watts put forty-eight songs by unknown bands online, and 14,341 people came. <bookmark mark='c'/> Each could listen, rate, and download. One group saw nothing of what anyone else did. <bookmark mark='d'/> Eight other groups, eight separate worlds, saw how often each song had been downloaded in their own world. <bookmark mark='e'/> Same songs, same kinds of people: random assignment helps identify social-influence effects across comparable groups, alongside ordinary sampling variation. <bookmark mark='f'/> They found that influence made the hits bigger, and which songs became hits less predictable.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def shares(self):

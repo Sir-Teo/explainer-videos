@@ -108,7 +108,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "What did we find? A song is two works, the composition and the recording, with their own owners and terms. "
             "<bookmark mark='a'/> There are four main licences, and collecting societies exist because nobody could ask "
-            "everyone. <bookmark mark='b'/> A stream pays about half a cent to all its rights holders together, and an advance is "
+            "everyone. <bookmark mark='b'/> Our simulated service distributes about half a cent per counted stream; there is no universal fixed streaming rate, and an advance is "
             "repaid out of the artist's royalties. <bookmark mark='c'/> Divided pro rata, heavy listeners and bots decide where "
             "light listeners' money goes. <bookmark mark='d'/> Social influence makes hits bigger and less predictable, and the "
             "cost disease raises the price of a concert. <bookmark mark='e'/> And melodies are fewer than they look: shared "

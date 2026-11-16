@@ -24,7 +24,7 @@ class Deals(SoundScene):
         ]
         rows_scene(self, r"a record deal", items,
                    "A record deal, in its classic form, has a few moving parts. <bookmark mark='b'/> An advance: money paid up "
-                   "front to live on and to record with. It is not a loan, since the artist never repays it from their own pocket, "
+                   "front to live on and to record with. It is not a loan, since ordinary nonreturnable advances are generally recouped from specified earnings rather than personally repayable, subject to contractual exceptions, "
                    "but it is repaid from royalties. <bookmark mark='c'/> A royalty: the artist's share of what the label receives, "
                    "often fifteen to twenty-five percent for a new artist. <bookmark mark='d'/> Recoupment: the advance and the "
                    "recording costs are charged to the artist's account, and royalties fill it before any are paid out. "
@@ -52,14 +52,7 @@ class Deals(SoundScene):
         n2 = label(rf"the artist recoups at {need:.0f}M", font_size=15, color=BLUE).move_to(ax.to(120, -140))
         head = label(rf"a \${d['advance'] / 1e3:.0f}k advance and \${d['costs'] / 1e3:.0f}k of recording costs, \ an 18\% royalty", font_size=24, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is that arithmetic, stream by stream, at our simulated rate. A new artist gets a hundred-thousand-dollar "
-            "advance, and the album costs fifty thousand to make; the royalty is eighteen percent. <bookmark mark='a'/> The "
-            "artist's account starts a hundred and fifty thousand dollars down, and every stream credits eighteen percent of "
-            f"the label's share. It reaches zero only after {say(need)} million streams. <bookmark mark='b'/> The label, keeping "
-            f"eighty-two percent, has its money back after about {say(d['label_breakeven'] / 1e6)} million. Between those two "
-            "numbers the label is in profit and the artist still owes it, which is the answer to this chapter's question. "
-            "<bookmark mark='c'/> Self-released, with a distributor taking fifteen percent, the artist earns from the first "
-            "stream, but paid for the recording, the promotion and the risk themselves."
+            f"Here is that arithmetic, stream by stream, at our simulated rate. A new artist gets a hundred-thousand-dollar advance, and the album costs fifty thousand to make; the royalty is eighteen percent. <bookmark mark='a'/> The artist's account starts a hundred and fifty thousand dollars down, and every stream credits eighteen percent of the label's share. It reaches zero only after {say(need)} million streams. <bookmark mark='b'/> The label, keeping eighty-two percent, has its money back after about {say(d['label_breakeven'] / 1000000.0)} million. Between those two numbers, this simplified label cash-flow model has recovered its stated costs while the artist royalty account remains unrecouped; other label costs and contractual terms are omitted, which is the answer to this chapter's question. <bookmark mark='c'/> Self-released, with a distributor taking fifteen percent, the artist earns from the first stream, but paid for the recording, the promotion and the risk themselves."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(yt))
             vo.wait_until("a")
@@ -76,7 +69,7 @@ class Deals(SoundScene):
         items = [
             (r"the 360 deal \ (from the 2000s): \ the label takes a share of touring, \ merchandise and sponsorship too", WHITE),
             (r"licence and distribution deals: \ the artist keeps the recordings; \ a smaller advance, \ a larger share", WHITE),
-            (r"distributors for everyone: \ a flat fee or a percentage, \ no advance, \ and the artist owns everything", WHITE),
+            (r"distributors for everyone: \ a flat fee or a percentage, \ no advance, \ and the artist may retain the master, subject to contracts and the rights of collaborators", WHITE),
             (r"and catalogues have become assets: \ old songs bought and sold, \ valued at many years of their royalties", WHITE),
             (r"the deal is a bet on uncertain success: \ who bears the risk, \ and who keeps the upside", TUNE),
         ]
@@ -84,7 +77,7 @@ class Deals(SoundScene):
                    "There are other shapes. <bookmark mark='b'/> The 360 deal, common since the 2000s, gives the label a share of "
                    "touring, merchandise and sponsorship as well. <bookmark mark='c'/> Licence and distribution deals leave the "
                    "artist owning the recordings, for a smaller advance and a larger share. <bookmark mark='d'/> And distributors "
-                   "now serve anyone, for a flat fee or a percentage, with no advance, and the artist owns everything. "
+                   "now serve anyone, for a flat fee or a percentage, with no advance, and the artist may retain the master, subject to contracts and the rights of collaborators. "
                    "<bookmark mark='e'/> Meanwhile catalogues of old songs are bought and sold as assets, valued at many years of "
                    "their royalties. <bookmark mark='f'/> Every deal is a bet on uncertain success, and the question is always who "
                    "bears the risk and who keeps the upside.", marks="bcdef")
@@ -99,9 +92,4 @@ class Deals(SoundScene):
             (r"most musicians combine several, \ and many hold other jobs too: \ a portfolio, \ not a salary", TUNE),
         ]
         rows_scene(self, r"how musicians are paid", items,
-                   "Step back, and a musician's income has many sources. <bookmark mark='b'/> Recordings: streams, downloads and "
-                   "vinyl; for most musicians, a small part. <bookmark mark='c'/> Live performance: for most working musicians, "
-                   "the largest part. <bookmark mark='d'/> Songwriting and publishing: royalties, and synchronization fees for "
-                   "film, television and advertising. <bookmark mark='e'/> Teaching, session work, composing to order, merchandise, "
-                   "and fans who subscribe. <bookmark mark='f'/> Surveys of musicians find most combine several, and many hold "
-                   "other jobs too: a portfolio, not a salary.", marks="bcdef")
+                   "Step back, and a musician's income has many sources. <bookmark mark='b'/> Recordings: streams, downloads and vinyl; for most musicians, a small part. <bookmark mark='c'/> Live performance: a major source for many working musicians; income composition varies strongly by occupation, country and survey. <bookmark mark='d'/> Songwriting and publishing: royalties, and synchronization fees for film, television and advertising. <bookmark mark='e'/> Teaching, session work, composing to order, merchandise, and fans who subscribe. <bookmark mark='f'/> Surveys of musicians find most combine several, and many hold other jobs too: a portfolio, not a salary.", marks="bcdef")

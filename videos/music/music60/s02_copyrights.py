@@ -26,13 +26,7 @@ class Copyrights(SoundScene):
         rights = label(r"each gives the right to copy, \ distribute, \ perform in public and adapt, \ and to license others to", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.4)
         head = label(r"one song, \ two works", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Every recorded song is two works, with two owners. <bookmark mark='a'/> The composition: the notes and the "
-            "words, owned by the songwriters and their publishers, and protected in America, Europe and Britain for the writer's "
-            "life plus seventy years. Its mark is the c in a circle. <bookmark mark='b'/> And the sound recording: this "
-            "performance, fixed, owned by the label or the artist. In Europe and Britain it lasts seventy years from release; in "
-            "America, recordings had no federal copyright at all until 1972. Its mark is the p in a circle, for phonogram. "
-            "<bookmark mark='c'/> Each gives its owner the right to copy, distribute, perform in public and adapt, and to "
-            "license others to do so. Every payment in this part is for one of those permissions."
+            "A recorded song can involve two distinct rights layers, composition and recording; their ownership may overlap or be split. <bookmark mark='a'/> The composition: the notes and the words, owned by the songwriters and their publishers, and often protected for life plus seventy years in these jurisdictions, with important exceptions for older works, corporate authorship and national rules. Its mark is the c in a circle. <bookmark mark='b'/> And the sound recording: this performance, fixed, owned by the label or the artist. In Europe and Britain it lasts seventy years from release; in America, recordings had no federal copyright at all until 1972. Its mark is the p in a circle, for phonogram. <bookmark mark='c'/> The precise bundle differs by jurisdiction and rights layer; US sound-recording public-performance rights are narrower than composition rights, and to license others to do so. Every payment in this part is for one of those permissions."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -60,8 +54,7 @@ class Copyrights(SoundScene):
             pulse(snd, boxes[0], st["recording"], st["cover"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["cover"], c.duration, buff=0.08)
         with self.voiceover(
-            "One composition, two sound recordings with two owners. Anyone may record a cover of a published song, as long as "
-            "the composition's owners are paid; nobody may copy the recording itself without its owner's permission."
+            "One composition, two sound recordings with two owners. US compulsory mechanical licensing can permit qualifying audio covers after authorized release, subject to notice, payment and arrangement restrictions; it does not automatically cover video or all territories; nobody may copy the recording itself without its owner's permission."
         ):
             self.play(FadeIn(note))
         self.wait(0.4)
@@ -88,20 +81,14 @@ class Copyrights(SoundScene):
     # ------------------------------------------------------------------
     def tune(self):
         items = [
-            (r"the Tune: \ a French song, \ first printed in 1761, \ composer unknown: \ public domain everywhere", TUNE),
+            (r"the Tune: \ a French song, \ first printed in 1761, \ composer unknown: \ generally public domain in the jurisdictions discussed here; editions, arrangements and recordings must be considered separately", TUNE),
             (r"Mozart's twelve variations on it \ (K. 265, \ about 1781): \ public domain", WHITE),
             (r"Jane Taylor's `Twinkle, \ Twinkle, \ Little Star' \ (1806): \ public domain", WHITE),
             (r"but a new arrangement, \ and every new recording, \ is a new work, \ with a new owner", WHITE),
             (r"`Happy Birthday': \ its melody printed in 1893; \ royalties collected on it until a US court found the claim invalid in 2015", EAR),
         ]
         rows_scene(self, r"the Tune's own rights", items,
-                   "And the Tune? <bookmark mark='b'/> A French song first printed in 1761, its composer unknown: public domain "
-                   "everywhere. <bookmark mark='c'/> Mozart's twelve variations on it, from about 1781: public domain. "
-                   "<bookmark mark='d'/> Jane Taylor's words, Twinkle, twinkle, little star, from 1806: public domain. "
-                   "<bookmark mark='e'/> But a new arrangement of it, and every new recording, is a new work with a new owner, "
-                   "including the session you have heard all series. <bookmark mark='f'/> Ownership can also be claimed wrongly: "
-                   "Happy Birthday's melody was printed in 1893, and a publisher collected royalties on the song until a court in "
-                   "California found its claim invalid in 2015.", marks="bcdef")
+                   "And the Tune? <bookmark mark='b'/> A French song first printed in 1761, its composer unknown: generally public domain in the jurisdictions discussed here; editions, arrangements and recordings must be considered separately. <bookmark mark='c'/> Mozart's twelve variations on it, from about 1781: public domain. <bookmark mark='d'/> Jane Taylor's words, Twinkle, twinkle, little star, from 1806: public domain. <bookmark mark='e'/> But a new arrangement of it, and every new recording, is a new work with a new owner, including the session you have heard all series. <bookmark mark='f'/> Ownership can also be claimed wrongly: Happy Birthday's melody was printed in 1893, and a publisher collected royalties on the song until a court in California found its claim invalid in 2015.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def machines(self):
@@ -117,6 +104,6 @@ class Copyrights(SoundScene):
                    "that a piano roll was not a copy of the song it played; the next year Congress created the mechanical licence, at "
                    "two cents a copy, a rate that stood until 1978. <bookmark mark='c'/> In 1914 composers formed ASCAP to license "
                    "public performance, and then radio arrived and fought over what it should pay. <bookmark mark='d'/> In the "
-                   "1980s, the sampler; in 1991 the first court to rule that sampling without a licence infringes. "
+                   "1980s, the sampler; in 1991 a prominent US sampling infringement decision, not the first possible application of copyright to sampling. "
                    "<bookmark mark='e'/> In 1999, Napster: the file broke the album, and streaming later replaced the file. "
                    "<bookmark mark='f'/> And now, models trained on recordings: the arrangement still being written.", marks="bcdef")

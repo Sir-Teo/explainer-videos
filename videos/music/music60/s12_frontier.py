@@ -52,16 +52,11 @@ class Frontier(SoundScene):
             (r"for a disputed phrase, \ compute the chance it arises independently, \ given everything written before it", WHITE),
             (r"check the models' calibration on pairs known to be independent, \ and pairs known to be copied", WHITE),
             (r"$\bigstar$ \ research problem: \ can a model give a court a calibrated probability that a shared phrase arose by chance?", EAR),
-            (r"an answer would replace dueling musicologists with a number that can be tested", TUNE),
+            (r"an answer would add testable statistical evidence alongside musicological analysis; a collision probability is not the posterior probability of copying", TUNE),
         ])
         head = label(r"a research problem", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "A research problem to end on, from Chapter 9. <bookmark mark='a'/> Train melody models on large corpora of songs, "
-            "with their dates, holding out the songs at issue. <bookmark mark='b'/> For a disputed phrase, compute the chance it "
-            "would arise independently, given everything written before it. <bookmark mark='c'/> Check the models' calibration "
-            "on pairs known to be independent and pairs known to be copied. <bookmark mark='d'/> The question: can a model give a "
-            "court a calibrated probability that a shared phrase arose by chance? <bookmark mark='e'/> An answer would replace "
-            "dueling musicologists with a number that can be tested."
+            "A research problem to end on, from Chapter 9. <bookmark mark='a'/> Train melody models on large corpora of songs, with their dates, holding out the songs at issue. <bookmark mark='b'/> For a disputed phrase, compute the chance it would arise independently, given everything written before it. <bookmark mark='c'/> Check the models' calibration on pairs known to be independent and pairs known to be copied. <bookmark mark='d'/> The question: can a model give a court a calibrated probability that a shared phrase arose by chance? <bookmark mark='e'/> An answer would add testable statistical evidence alongside musicological analysis; a collision probability is not the posterior probability of copying."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(rows_, 0.15)))
             for mark, r in zip("abcde", rows_):

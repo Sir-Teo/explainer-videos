@@ -34,8 +34,7 @@ class Sampling(SoundScene):
         res = VGroup(label(r"the first: \ the recording itself, \ voice and room and all: \ two licences, \ the composition's and the master's", font_size=18, color=TUNE),
                      label(r"the second, \ re-played: \ an interpolation, \ which needs only the composition's", font_size=18, color=WHITE)).arrange(DOWN, buff=0.25).move_to(DOWN * 1.4)
         with self.voiceover(
-            "The first: the recording itself, voice and room and all, which needs two licences, one for the composition and one "
-            "for the master. The second re-plays the same notes; an interpolation like that needs only the composition's."
+            "The first: the recording itself, voice and room and all, which can require permissions for both composition and master when they are protected; here the underlying melody is public domain and the examples are ours. The second re-plays the same notes; an interpolation avoids using the original master, but composition permissions may still be needed if protected material is used."
         ):
             self.play(boxes[0][0].animate.set_stroke(TUNE, width=4), FadeIn(res))
         self.wait(0.4)
@@ -51,13 +50,7 @@ class Sampling(SoundScene):
             (r"2019: \ Pelham \ (EU Court of Justice): \ even two seconds needs a licence, \ unless changed beyond recognition", TUNE),
         ]
         rows_scene(self, r"sampling in court \ (dated)", items,
-                   "Sampling law was made case by case. <bookmark mark='b'/> In the 1980s hip-hop was built on samples, mostly "
-                   "uncleared. <bookmark mark='c'/> In 1991, in Grand Upright against Warner, an American court ruled an "
-                   "unlicensed sample an infringement. <bookmark mark='d'/> In 2005 the Sixth Circuit went further: get a license or "
-                   "do not sample, however short the sample. <bookmark mark='e'/> In 2016 the Ninth Circuit allowed a trivial "
-                   "sample, so the American circuits now disagree. <bookmark mark='f'/> And in 2019 the European Court of Justice, "
-                   "in a case over two seconds of Kraftwerk, held that even a tiny sample needs a licence, unless it is changed "
-                   "beyond recognition.", marks="bcdef")
+                   "Sampling law was made case by case. <bookmark mark='b'/> In the 1980s hip-hop was built on samples, mostly uncleared. <bookmark mark='c'/> In 1991, in Grand Upright against Warner, an American court ruled an unlicensed sample an infringement. <bookmark mark='d'/> In 2005 the Sixth Circuit went further: get a license or do not sample, however short the sample. <bookmark mark='e'/> In 2016 the Ninth Circuit allowed a trivial sample, so the American circuits now disagree. <bookmark mark='f'/> And in 2019 the European Court of Justice, in a case over two seconds of Kraftwerk, addressed phonogram reproduction, recognizability and exceptions including quotation; an unrecognizable sample was treated differently, not as a universal exemption from all rights.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def ai_quiz(self):
@@ -82,7 +75,7 @@ class Sampling(SoundScene):
                     font_size=18, color=TUNE).move_to(DOWN * 1.4)
         with self.voiceover(
             f"The first was the machine's. By the model's own measure it is the less surprising of the two, {say(d['surprise_new'], 1)} bits "
-            f"a note against {say(d['surprise_old'], 1)} for the folk song: machines trained on music drift towards the typical. "
+            f"a note against {say(d['surprise_old'], 1)} for the folk song: this particular generated example has lower surprise under its own model; that does not establish a universal tendency across music generators. "
             "Which raises the questions of the next minutes: whose music did it learn from, and who owns what it makes?"
         ):
             self.play(boxes[0][0].animate.set_stroke(TUNE, width=4), FadeIn(res))
@@ -99,14 +92,7 @@ class Sampling(SoundScene):
             (r"whether training itself is fair use, \ or needs a licence, \ is still being decided, \ country by country", TUNE),
         ]
         rows_scene(self, r"models and rights \ (dated; \ verify the latest)", items,
-                   "Models that make music are the latest machine to break the arrangement, and the story is moving fast, so take "
-                   "these dates as a snapshot. <bookmark mark='b'/> In June 2024 the major labels sued two music-generation "
-                   "companies, Suno and Udio, in American courts, over training on their recordings. <bookmark mark='c'/> From late "
-                   "2025 came settlements and licences: models to be trained on licensed catalogues, with payments to the rights "
-                   "holders. <bookmark mark='d'/> In November 2025 a court in Munich found that a chatbot reproducing song lyrics "
-                   "infringed, a judgment under appeal. <bookmark mark='e'/> In America a work needs a human author to be "
-                   "protected; a machine's output alone is not. <bookmark mark='f'/> Whether training itself is fair use, or needs a "
-                   "licence, is still being decided, country by country.", marks="bcdef")
+                   "Models that make music are the latest machine to break the arrangement, and the story is moving fast, so take these dates as a snapshot. <bookmark mark='b'/> In June 2024 the major labels sued two music-generation companies, Suno and Udio, in American courts, over training on their recordings. <bookmark mark='c'/> Litigation, settlements and catalogue-licensing agreements must be checked case by case; an agreement between parties does not settle training law generally. <bookmark mark='d'/> Disputes over training and reproduction also arise under European law; current procedural status requires the relevant court record. <bookmark mark='e'/> In America a work needs a human author to be protected; a machine's output alone is not. <bookmark mark='f'/> Whether training itself is fair use, or needs a licence, is still being decided, country by country.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def voices(self):
@@ -117,7 +103,7 @@ class Sampling(SoundScene):
             (r"the open question is scale: \ when imitation is free and endless, \ what does the original earn?", TUNE),
         ]
         rows_scene(self, r"voices and styles", items,
-                   "And voices. <bookmark mark='b'/> A voice is not a copyright: a singer's sound can be imitated, like a style. "
+                   "And voices. <bookmark mark='b'/> Copyright does not generally grant ownership of a voice or style alone; recordings, protected expression, publicity rights and other laws can restrict particular uses. "
                    "<bookmark mark='c'/> But it can be part of a person's likeness, and in 2024 Tennessee's ELVIS Act protected "
                    "voices from unauthorized cloning. <bookmark mark='d'/> Style is free: every composer learned from others, and a "
                    "model learns from millions. <bookmark mark='e'/> The open question is scale: when imitation is free and endless, "

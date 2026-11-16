@@ -41,12 +41,7 @@ class Live(SoundScene):
         note = label(rf"at 2\% a year: \ $\times${d['rise_1966']:.1f} since Baumol and Bowen wrote in 1966; \ $\times${d['rise_1790']:.0f} since 1790", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.35)
         head = label(r"Baumol's cost disease", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "That is the cost disease, named by William Baumol and William Bowen in 1966. <bookmark mark='a'/> Elsewhere, output "
-            "per hour grows, about two percent a year, and wages grow with it, musicians' included, or they would leave for other "
-            "work. But a quartet's output per hour does not grow at all. <bookmark mark='b'/> So the price of a performance, "
-            "relative to manufactured goods, rises exponentially: three times since 1966, more than a hundredfold since 1790. "
-            "<bookmark mark='c'/> Recording was the cure for listening: one performance, sold millions of times. But a concert "
-            "cannot be copied, and its price keeps rising."
+            "That is the cost disease, named by William Baumol and William Bowen in 1966. <bookmark mark='a'/> Elsewhere, our illustrative model assumes two-percent annual productivity growth elsewhere, and wages grow with it, musicians' included, or they would leave for other work. But a quartet's output per hour does not grow at all. <bookmark mark='b'/> So the price of a performance, relative to manufactured goods, rises exponentially: these multiples follow the assumed two-percent path; they are not measured historical ticket-price increases. <bookmark mark='c'/> Recording was the cure for listening: one performance, sold millions of times. But a concert cannot be copied, which creates cost pressure under these assumptions; subsidies, wages, capacity and technology also affect actual prices."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(yt))
             vo.wait_until("a")
@@ -85,7 +80,7 @@ class Live(SoundScene):
             "side takes 1.8 million dollars; resellers who buy a quarter of the seats take another 0.8, and the seats go to "
             "whoever was lucky, not to whoever wanted them most. <bookmark mark='b'/> At one price that just fills the house, the artist takes "
             "about twice as much and resellers nothing. <bookmark mark='c'/> And selling each seat at the most its buyer would "
-            "pay, the ideal of dynamic pricing, takes everything fans would have kept."
+            "pay, perfect first-degree price discrimination, which is stronger than ordinary dynamic pricing, takes everything fans would have kept."
         ) as vo:
             self.play(FadeIn(head), FadeIn(top), FadeIn(note))
             for mark, r in zip("abc", g):

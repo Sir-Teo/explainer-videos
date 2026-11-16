@@ -44,7 +44,7 @@ class Charts(SoundScene):
             pulse(snd, boxes[0], st["long"], st["short"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["short"], c.duration, buff=0.08)
         with self.voiceover(
-            "On a service the first seconds decide everything. A stream pays only after thirty seconds, and in 2014 Paul Lamere "
+            "On a service early skips can strongly affect engagement; they are not the only factor in success. The commonly cited thirty-second count threshold is one condition, not a guaranteed payment, and in 2014 Paul Lamere "
             "found that about a quarter of plays were skipped within five. <bookmark mark='a'/> Hugues Léveillé Gauvin measured "
             "hits' introductions: about twenty seconds in the mid-1980s, about five by 2015."
         ) as vo:
@@ -64,7 +64,7 @@ class Charts(SoundScene):
             (r"every format shaped music: \ the 78's three minutes, \ the LP's forty, \ radio's single, \ the stream's thirty seconds", TUNE),
         ]
         rows_scene(self, r"the attention economy", items,
-                   "And the rest of the system leans the same way. <bookmark mark='b'/> Paying per stream, whatever its length, "
+                   "And the rest of the system leans the same way. <bookmark mark='b'/> A simplified per-count allocation model, subject to eligibility rules, "
                    "rewards shorter tracks and more of them. <bookmark mark='c'/> Playlists became the new radio: a place on a large "
                    "one can make a career. <bookmark mark='d'/> Background listening grew, chill and sleep playlists, and tracks "
                    "made to fill them. <bookmark mark='e'/> On short-video platforms, a song's fifteen seconds can matter more "

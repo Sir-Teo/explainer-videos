@@ -74,7 +74,7 @@ class Pool(SoundScene):
             "where the light listeners' money goes. User by user, the niche artists' payout here more than doubles, "
             f"{say(d['change']['niche'])} percent, and the stars' falls by {say(-d['change']['chart'])}. <bookmark mark='d'/> Our "
             "population was built so that the two kinds of listener differ sharply; studies of real services' data have found "
-            "smaller shifts, though in the same direction."
+            "smaller shifts, with results varying across genres, listener groups and pool designs."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*[b[0] for b in bars])))
             vo.wait_until("a")
@@ -101,7 +101,7 @@ class Pool(SoundScene):
             f"The bots show the pool's weakness. <bookmark mark='a'/> The farm pays in {say(d['bot_fees'])} dollars. "
             f"<bookmark mark='b'/> Pro rata, its fake artist takes out {say(pr['fraud'])}, almost eight times what it paid, "
             "because its streams claim a share of everyone's fees. <bookmark mark='c'/> User by user, it gets back exactly its own "
-            "fees, and fraud stops paying. <bookmark mark='d'/> In a pool, every fake stream is paid for by every real listener."
+            "fees, and this particular self-funded bot strategy has no positive gross return in our user-centric model; stolen accounts, subsidies and other fraud remain possible. <bookmark mark='d'/> In a pool, every fake stream is paid for by every real listener."
         ) as vo:
             self.play(FadeIn(head))
             for mark, ln in zip("abcd", lines):

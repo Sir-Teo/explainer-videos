@@ -119,9 +119,7 @@ class Melodies(SoundScene):
                 end = st[ks[i + 1]] - 0.3 if i + 1 < len(ks) else c.duration
                 pulse(snd, boxes[i], st[k], end, buff=0.08)
         with self.voiceover(
-            "The transposed Tune shares not one note with the original, yet every interval, and every listener hears the same "
-            "tune. The second shares every rise and fall, and is a different tune. Similarity lives in intervals and rhythm, not "
-            "in notes, and contour alone is not enough."
+            'The transposed Tune shares not one note with the original, yet every interval, and many listeners recognize it as the same melody. The second shares every rise and fall, and is a different tune. Intervals and rhythm support transposition-invariant similarity, while absolute pitches, harmony, timbre and context can also matter, and contour alone is not enough.'
         ):
             self.play(FadeIn(n1), FadeIn(n2))
         self.wait(0.4)
@@ -143,5 +141,5 @@ class Melodies(SoundScene):
                    "verdict was upheld in 2018. <bookmark mark='d'/> Then the tide turned: Stairway to Heaven was cleared by the "
                    "Ninth Circuit in 2020, and in 2022 an appeals court held that an ostinato in Katy Perry's Dark Horse was too "
                    "common to own. <bookmark mark='e'/> In 2023 a jury cleared Ed Sheeran's Thinking Out Loud of copying Let's Get "
-                   "It On, and the appeal court agreed in 2024. <bookmark mark='f'/> The courts keep asking chance's question: is "
+                   "It On, and separate related litigation also produced appellate rulings; distinct cases and procedural histories should not be conflated. <bookmark mark='f'/> The courts keep asking chance's question: is "
                    "what is shared common property, or this writer's own expression?", marks="bcdef")
