@@ -28,7 +28,7 @@ class Census(SoundScene):
         cap = label(rf"a detector: \ the schema's bass and melody notes, \ in order, \ on the beats \ ({d['chorales_major']} major chorales)", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.5)
         tot = sum(ch["real"].values())
         with self.voiceover(
-            "If schemata are real, a machine should be able to find them. Write each one as its bass and melody "
+            "A formal schema template can be searched for, though any detector captures only part of an interpretive category. Write each one as its bass and melody "
             "notes, and search the chorales' beats for them, in order. As a control, search the same chorales "
             "with their beats shuffled. <bookmark mark='a'/> The result is nearly empty: "
             f"{say(tot)} schemata in {say(d['chorales_major'])} major chorales, against a handful by chance. Bach's "
@@ -60,13 +60,7 @@ class Census(SoundScene):
         head = label(rf"the melodies of the series' {d['tunes_major']} major tunes: \ schema melodies, \ note by note", font_size=26, color=GREY_A).to_edge(UP, buff=0.5)
         tune = label(r"the Tune: \ A A G F F E E \ = \ 6 6 5 4 4 3 3: \ a Prinner's melody", font_size=26, color=EAR).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "The schemata's melodies are another matter. Search the series' fifty-one major tunes, from Part 14, "
-            f"for them. <bookmark mark='a'/> The Prinner's falling six, five, four, three is in {say(m['6-5-4-3']['real'])} "
-            "tunes, against fewer than one if their notes were shuffled. A melody falling four, three, two, one is in "
-            f"{say(m['4-3-2-1']['real'])}. These are the stepwise descents of Part 14, and they are the melodies "
-            "that schemata were built on. <bookmark mark='b'/> And the Tune has one: A, A, G, F, F, E, E, from the "
-            "end of its first phrase into its second, is six, five, four, three. Its second half is a Prinner "
-            "waiting for its bass."
+            f"The schemata's melodies are another matter. Search the series' fifty-one major tunes, from Part 14, for them. <bookmark mark='a'/> The Prinner's falling six, five, four, three is in {say(m['6-5-4-3']['real'])} tunes, against fewer than one if their notes were shuffled. A melody falling four, three, two, one is in {say(m['4-3-2-1']['real'])}. These are the stepwise descents of Part 14, and they are the melodies that schemata were built on. <bookmark mark='b'/> And the Tune has one: A, A, G, F, F, E, E, from the end of its first phrase into its second, is six, five, four, three. This fragment matches the Prinner’s melodic descent; melody alone does not establish a complete historical schema."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

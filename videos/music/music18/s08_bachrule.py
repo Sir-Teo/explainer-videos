@@ -57,12 +57,14 @@ class BachRule(SoundScene):
             f"{say(round(100 * u7['within'] / u7['n']))} times in a hundred, a dominant chord over its third. "
             "<bookmark mark='b'/> Falling through the third and the seventh, often. Elsewhere, much less: on "
             "the second degree Bach often prefers a chord the rule does not offer. "
-            f"<bookmark mark='c'/> Over all {say(d['n'])} such beats, his chord is the rule's "
+            f"<bookmark mark='c'/> Over all {say(d['n'])} such beats, his labeled chord’s pitch classes are contained in the chosen rule chord "
             f"{say(round(100 * d['within']))} times in a hundred. The rule describes a common core of the style, "
-            "the part a beginner can learn first; Bach's harmony is richer, and freer, than the core."
+            "the part a beginner can learn first; the remaining cases reflect alternatives and labeling limits, not simply errors against a rule."
         ) as vo:
-            self.play(FadeIn(head))
+            ghost = VGroup(c1.copy(), c2.copy(), t1.copy(), t2.copy()).set_opacity(0.22)
+            self.play(FadeIn(head), FadeIn(ghost))
             vo.wait_until("a")
+            self.remove(ghost)
             self.play(FadeIn(c1), FadeIn(t1))
             vo.wait_until("b")
             self.play(FadeIn(c2), FadeIn(t2))

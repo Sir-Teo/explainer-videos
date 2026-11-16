@@ -19,13 +19,7 @@ class Hook(SoundScene):
             (r"the task: \ play the harmony above it, \ at the keyboard, \ at once", WHITE),
             (r"thousands of these basses, \ copied, \ played, \ memorized", TUNE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 0.9)
         with self.voiceover(
-            "In eighteenth-century Naples there were four conservatories. The word meant orphanages: places "
-            "that kept poor and orphaned boys, fed them, and trained them in a trade, and the trade was "
-            "music. <bookmark mark='a'/> From them came Pergolesi, Paisiello, Cimarosa, and dozens of "
-            "composers who ran the opera houses and chapels of Europe. <bookmark mark='b'/> How do you turn "
-            "a ten-year-old into a working composer? The answer was a bass line. The master wrote one out; "
-            "the boy played harmony above it at the keyboard, at sight. <bookmark mark='c'/> Thousands of "
-            "these exercises, called partimenti, were copied and played and learned by heart."
+            "In eighteenth-century Naples there were four conservatories. These institutions grew from charitable foundations: places that kept poor and orphaned boys, fed them, and trained them in a trade, and developed specialized musical training, also admitting students under other arrangements. <bookmark mark='a'/> From them came Pergolesi, Paisiello, Cimarosa, and dozens of composers who ran the opera houses and chapels of Europe. <bookmark mark='b'/> How do you turn a ten-year-old into a working composer? The answer was a bass line. The master wrote one out; the boy played harmony above it at the keyboard, at sight. <bookmark mark='c'/> Thousands of these exercises, called partimenti, were copied and played and learned by heart."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -62,7 +56,7 @@ class Hook(SoundScene):
             "Notice that the chords are not all the same kind. On some notes the bass carries a plain "
             "triad; on others the chord's third or seventh is in the bass. That recipe, which chord goes "
             "over which note of the scale, going up and going down, was called the rule of the octave, and "
-            "every student knew it by heart. It is a piece of grammar: not a melody, not a chord, but a "
+            "students practiced versions of it extensively. It is a piece of grammar: not a melody, not a chord, but a "
             "rule for how chords follow one another."
         ):
             self.play(FadeIn(figs))

@@ -21,6 +21,12 @@ class Outro(SoundScene):
         c = clip("tune.variation18")
         head = VGroup(label(r"Variation 18", font_size=48, color=TUNE), label(r"one tune, \ three basses", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.5, aligned_edge=DOWN).to_edge(UP, buff=0.3)
         titles = {"Romanesca": r"over the Romanesca", "lament": r"in minor, \ over the chromatic lament", "pedals": r"over a tonic pedal, \ then a dominant pedal"}
+        overview = VGroup()
+        for name in d["order"]:
+            mini = chord_roll(d["versions"][name]["chords"], width=3.6, height=1.6, lo=34, hi=84, thick=0.08)
+            title = label(titles[name], font_size=19, color=GREY_A).next_to(mini, UP, buff=0.3)
+            overview.add(VGroup(mini, title))
+        overview.arrange(RIGHT, buff=0.55).move_to(DOWN * 0.2)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it has built. This part built a grammar of "
             "basses. <bookmark mark='a'/> So the Tune's two phrases are played three times, over three of them: the "
@@ -28,8 +34,9 @@ class Outro(SoundScene):
             "key; and two pedals, the bass holding the tonic and then the dominant while the harmony changes "
             "above it. One melody, and three ways of supporting it."
         ) as vo:
-            self.play(FadeIn(head))
+            self.play(FadeIn(head), FadeIn(overview))
             vo.wait_until("a")
+        self.remove(overview)
         shown = None
         with self.listen(c) as snd:
             window(snd, r"Variation 18", detail=r"a plucked string", corner=DL, tag_corner=DR)
@@ -54,7 +61,7 @@ class Outro(SoundScene):
         with self.voiceover(
             f"Row eighteen of the ledger. {say(v['seconds'])} seconds. The measurement: twenty-four chords, every "
             "one holding the Tune's note at that moment, and not one pair of voices moving in parallel fifths or "
-            "octaves. The Tune is the same each time; the bass decides what it means."
+            "octaves. The melodic pattern is retained with the stated minor adaptation; the bass decides what it means."
         ):
             self.play(FadeIn(led, shift=UP * 0.2))
         self.wait(0.4)
@@ -79,7 +86,7 @@ class Outro(SoundScene):
             f"next chord costs about {say(p['n2'], 1)} bits when the last one is known, a bit and a half less than "
             "if the order were random. <bookmark mark='c'/> Sequences repeat a step; new chords land on strong "
             "beats. <bookmark mark='d'/> The Neapolitans taught harmony as a rule for every note of the scale, and "
-            "Bach's practice agrees with the rule about half the time. <bookmark mark='e'/> And composers of the "
+            "about half of the selected stepwise-bass cases have pitch-class inclusion in this chosen rule realization. <bookmark mark='e'/> And composers of the "
             "galant style spoke in stock phrases, schemata, while for four centuries musicians have improvised "
             "over grounds, a single progression repeated."
         ) as vo:

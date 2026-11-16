@@ -26,13 +26,7 @@ class RootMotion(SoundScene):
         cap = label(rf"falling fifths, \ falling thirds, \ rising steps: \ {100 * fw / (fw + bw):.0f} in a hundred of the moves that go anywhere", font_size=24, color=TUNE).to_edge(DOWN, buff=0.45)
         head = label(r"root motion", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Now forget the jobs and follow the roots. From each chord to the next, how far does the root "
-            "move? <bookmark mark='a'/> The commonest move by far is a falling fifth: five to one, two to five, "
-            f"six to two. It is {say(round(100 * d['fifth down'] / tot))} moves in a hundred. "
-            "<bookmark mark='b'/> Then rising steps and falling thirds. Their inverses, the rising fifth, the "
-            "rising third and the falling step, are all rarer. <bookmark mark='c'/> Nicolas Meeùs grouped them "
-            "this way in 2000: falling fifths, falling thirds and rising steps carry harmony forward, the "
-            f"others hold it back, and in Bach the forward kind is {say(round(100 * fw / (fw + bw)))} in a hundred."
+            f"Now forget the jobs and follow the roots. From each chord to the next, how far does the root move? <bookmark mark='a'/> The commonest move by far is a falling fifth: five to one, two to five, six to two. It is {say(round(100 * d['fifth down'] / tot))} moves in a hundred. <bookmark mark='b'/> Then rising steps and falling thirds. Their inverses, the rising fifth, the rising third and the falling step, are all rarer. <bookmark mark='c'/> Nicolas Meeùs grouped them this way in 2000: falling fifths, falling thirds and rising steps carry harmony forward, the others form his contrasting category; these labels are analytical conventions, and in Bach the forward kind is {say(round(100 * fw / (fw + bw)))} in a hundred."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch), FadeIn(t))
             vo.wait_until("a")
@@ -67,7 +61,7 @@ class RootMotion(SoundScene):
         with self.voiceover(
             "A. Its roots fall A, D, G, C, and each chord leads into the next until the last one lands on home. B "
             "starts at home and climbs away, and its last chord, six, leaves the question open. The same four "
-            "kinds of chord; the direction of the root decides whether the music arrives or departs."
+            "kinds of chord; root direction contributes to these examples’ tonal effect, alongside their endpoints, voicing and context."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -89,14 +83,7 @@ class RootMotion(SoundScene):
         rows_.scale_to_fit_width(min(rows_.width, 8.8))
         rows_.move_to(RIGHT * 1.9 + DOWN * 0.1)
         with self.voiceover(
-            "Why the falling fifth? Look at five going to one. <bookmark mark='a'/> The new root, C, lies a "
-            "fifth below G, and G is the third harmonic of C: the old chord is already part of the new one's "
-            "harmonic series, as if the music were falling home through its own overtones. "
-            "<bookmark mark='b'/> And the voices move as Part 17 liked: G held, B up a semitone to C, D down a "
-            "step. <bookmark mark='c'/> Rameau made the falling fifth the model of all harmony in 1722: the "
-            "real bass of every progression, he said, wants to move like a dominant to its tonic. "
-            "<bookmark mark='d'/> And a chain of falling fifths visits every chord of the key: chapter four "
-            "hears one."
+            "Why the falling fifth? Look at five going to one. <bookmark mark='a'/> The new root, C, lies a fifth below G, and G is the third harmonic of C: the old root’s pitch class appears among the new root’s harmonics; the entire old chord need not fit that series, as if the music were falling home through its own overtones. <bookmark mark='b'/> And the voices move as Part 17 liked: G held, B up a semitone to C, D down a step. <bookmark mark='c'/> Rameau made the falling fifth the model of all harmony in 1722: the real bass of every progression, he said, wants to move like a dominant to its tonic. <bookmark mark='d'/> And a chain of falling fifths visits every chord of the key: chapter four hears one."
         ) as vo:
             self.play(FadeIn(da), FadeIn(db), Create(ar), FadeIn(tags))
             for mark, r in zip("abcd", rows_):

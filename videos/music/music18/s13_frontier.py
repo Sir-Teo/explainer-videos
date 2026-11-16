@@ -17,7 +17,7 @@ class Frontier(SoundScene):
     # ------------------------------------------------------------------
     def corpora(self):
         rows_ = VGroup(*[label(t, font_size=24, color=c_) for t, c_ in (
-            (r"2011: \ de Clercq and Temperley: \ 200 rock songs, \ every chord annotated", WHITE),
+            (r"2011: \ de Clercq and Temperley: \ about 100 rock songs, \ every chord annotated", WHITE),
             (r"2011: \ the McGill Billboard corpus: \ hundreds of chart songs", WHITE),
             (r"2018: \ the Annotated Beethoven Corpus: \ all 16 string quartets, \ chord by chord", WHITE),
             (r"rock: \ IV and $\flat$VII freely, \ IV$\to$I among the commonest moves: \ the backward moves of chapter 2", TUNE),
@@ -26,14 +26,7 @@ class Frontier(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"harmony counted at scale", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "This part counted one composer's chorales. Recent work counts harmony at scale. "
-            "<bookmark mark='a'/> In 2011 Trevor de Clercq and David Temperley annotated every chord of two hundred "
-            "rock songs; <bookmark mark='b'/> the same year, the McGill Billboard corpus annotated hundreds of "
-            "chart songs; <bookmark mark='c'/> in 2018 a team led by Martin Rohrmeier annotated all sixteen of "
-            "Beethoven's string quartets. <bookmark mark='d'/> The syntax is not the same everywhere. In rock, four "
-            "and flat seven are everywhere, and four going to one is among the commonest moves of all: the "
-            "backward root motions that Bach used sparingly. <bookmark mark='e'/> Beethoven's quartets stay closer to "
-            "Bach's forward syntax, with more chromatic chords."
+            "This part counted one composer's chorales. Recent work counts harmony at scale. <bookmark mark='a'/> In 2011 Trevor de Clercq and David Temperley annotated every chord of roughly one hundred rock songs in the original 2011 study; <bookmark mark='b'/> the same year, the McGill Billboard corpus annotated hundreds of chart songs; <bookmark mark='c'/> in 2018 a team led by Martin Rohrmeier annotated all sixteen of Beethoven's string quartets. <bookmark mark='d'/> The syntax is not the same everywhere. In rock, four and flat seven are everywhere, and four going to one is among the commonest moves of all: the backward root motions that Bach used sparingly. <bookmark mark='e'/> Beethoven's quartets stay closer to Bach's forward syntax, with more chromatic chords."
         ) as vo:
             self.play(FadeIn(head))
             for mark, r in zip("abcde", rows_):
@@ -53,14 +46,7 @@ class Frontier(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"does the brain parse harmony?", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Is harmonic syntax only a description of what composers do, or something listeners process? "
-            "<bookmark mark='a'/> In 1998 Aniruddh Patel and colleagues found that a chord from a distant key, in the "
-            "middle of a progression, evokes the same late brain response, measured on the scalp, as a word that "
-            "breaks the grammar of a sentence. <bookmark mark='b'/> In 2000 Stefan Koelsch and colleagues found an "
-            "earlier response, about a fifth of a second after a chord that breaks the expected order, which they "
-            "called the early right anterior negativity. <bookmark mark='c'/> It appears in listeners with no musical "
-            "training at all: years of hearing the music around them are enough. <bookmark mark='d'/> It is strongest "
-            "when a cadence that should end on the tonic ends on a chord that does not belong there."
+            "Is harmonic syntax only a description of what composers do, or something listeners process? <bookmark mark='a'/> In 1998 Aniruddh Patel and colleagues found that a chord from a distant key, in the middle of a progression, evokes a late positivity with similarities to a response in some language tasks, measured on the scalp, associated with syntactic difficulty in sentences; a similar scalp response does not by itself establish identical neural computations. <bookmark mark='b'/> In 2000 Stefan Koelsch and colleagues found an earlier response, about a fifth of a second after a chord that breaks the expected order, which they called the early right anterior negativity. <bookmark mark='c'/> It appears in listeners with no musical training at all: consistent with implicit musical learning; the response is task- and stimulus-dependent. <bookmark mark='d'/> It is strongest when a cadence that should end on the tonic ends on a chord that does not belong there."
         ) as vo:
             self.play(FadeIn(head))
             for mark, r in zip("abcd", rows_):

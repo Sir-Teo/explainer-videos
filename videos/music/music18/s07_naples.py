@@ -19,18 +19,10 @@ class Naples(SoundScene):
             (r"Naples: \ Francesco Durante \ (1684--1755), \ Leonardo Leo, \ later Fedele Fenaroli", WHITE),
             (r"partimenti: \ basses, \ some with figures, \ realized at the keyboard", WHITE),
             (r"the students: \ Pergolesi, \ Paisiello, \ Cimarosa, \ and hundreds of working musicians", WHITE),
-            (r"rediscovered by Robert Gjerdingen \ (2007) \ and Giorgio Sanguinetti \ (2012)", TUNE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 0.1)
+            (r"renewed attention through Robert Gjerdingen \ (2007) \ and Giorgio Sanguinetti \ (2012)", TUNE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"the partimento tradition", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The rule of the octave was first printed under that name in Paris, in 1716, by the guitarist and theorbo player "
-            "François Campion. <bookmark mark='a'/> In Naples it became the backbone of a whole training. Masters "
-            "such as Francesco Durante and Leonardo Leo wrote partimenti, bass lines, sometimes with figures, "
-            "sometimes without, for students to realize at the keyboard. <bookmark mark='c'/> A student who had "
-            "played through hundreds of them knew, without thinking, what goes above any bass. "
-            "<bookmark mark='d'/> Pergolesi, Paisiello and Cimarosa came out of this training. "
-            "<bookmark mark='e'/> The manuscripts sat in libraries until musicologists, Robert Gjerdingen and "
-            "Giorgio Sanguinetti among them, read them again at the start of this century, and saw a way of "
-            "learning composition that had been forgotten."
+            "The rule of the octave was first printed under that name in Paris, in 1716, by the guitarist and theorbo player François Campion. <bookmark mark='a'/> In Naples it became the backbone of a whole training. Masters such as Francesco Durante and Leonardo Leo wrote partimenti, bass lines, sometimes with figures, sometimes without, for students to realize at the keyboard. <bookmark mark='c'/> A student who had played through hundreds of them knew, without thinking, what goes above any bass. <bookmark mark='d'/> Pergolesi, Paisiello and Cimarosa came out of this training. <bookmark mark='e'/> Recent work by Gjerdingen, Sanguinetti and others renewed broad interest, building on earlier scholarship and continuing practices."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             vo.wait_until("a")
@@ -58,9 +50,7 @@ class Naples(SoundScene):
         note = VGroup(label(r"the same degree, \ a different chord on the way down: \ 6 rising, \ \#6/4/3 falling", font_size=22, color=WHITE),
                       label(r"a plain triad only on 1 and 5: \ the two pillars of the key", font_size=22, color=TUNE)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Here is the rule, rising and falling, with its figures under the bass. Listen for the two "
-            "pillars: only the first and the fifth notes of the scale carry a plain triad. Every other note "
-            "carries an inverted chord, its root somewhere above the bass, which pulls toward the next pillar."
+            'Here is the rule, rising and falling, with its figures under the bass. Listen for the two pillars: only the first and the fifth notes of the scale carry a plain triad. In this selected realization, the other degrees carry inverted chords, its root somewhere above the bass, which pulls toward the next pillar.'
         ):
             self.play(FadeIn(su), FadeIn(sd), FadeIn(lu), FadeIn(ld), FadeIn(fu), FadeIn(fd))
         with self.listen(c) as snd:
@@ -102,7 +92,7 @@ class Naples(SoundScene):
             pulse(snd, tg, d["starts"]["full"], c.duration, buff=0.1)
             sing_chords(snd, g, d["times"]["full"], start=d["starts"]["full"])
         with self.voiceover(
-            "It is correct and a little dull, which is what a student's first realization was. The art came "
+            "This program gives a deliberately plain realization under its chosen rules; that does not describe every historical student’s first attempt. The art came "
             "afterwards: the teacher's next lessons added suspensions, passing notes and imitation over the same "
             "bass, until the exercise became a piece. Chapter nine will hear one of those additions."
         ):

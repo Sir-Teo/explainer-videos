@@ -55,7 +55,7 @@ class Predict(SoundScene):
         keys = [("uniform", r"every chord \\ equally likely"), ("n1", r"how common \\ each chord is"), ("n2", r"the chord \\ before"), ("n3", r"the two \\ before")]
         vals = [mj[k] for k, _ in keys]
         ch = columns(vals, [t for _, t in keys], width=7.4, height=2.6, color=WEAK, hot=(2,), hot_color=TUNE, fmt="{:.1f}", font_size=22).move_to(LEFT * 2.2 + DOWN * 0.7)
-        t = label(r"bits per chord, \ on 84 chorales whose tunes the model never saw \ (major)", font_size=22, color=GREY_A).next_to(ch, UP, buff=0.4)
+        t = label(r"bits per chord: \ major-mode subset of held-out tunes", font_size=22, color=GREY_A).next_to(ch, UP, buff=0.4)
         side = VGroup(label(rf"the same chords, \ shuffled: \ {mj['n2_shuffled']:.1f} bits", font_size=24, color=WHITE),
                       label(rf"minor keys: \ {mn['n2']:.1f} \ (shuffled \ {mn['n2_shuffled']:.1f})", font_size=24, color=WHITE),
                       label(r"two chords back helps less: \ too few chorales to learn it", font_size=22, color=GREY_B)).arrange(DOWN, buff=0.45, aligned_edge=LEFT)
@@ -66,9 +66,9 @@ class Predict(SoundScene):
             f"which chord comes next. Bach's major chorales use about {say(mj['vocab'])} different chords. "
             f"<bookmark mark='a'/> If every one were equally likely, each would cost {say(mj['uniform'], 1)} bits. "
             f"Knowing only how common each chord is brings that to {say(mj['n1'], 1)}. Knowing the chord before "
-            f"brings it to {say(mj['n2'], 1)}: that is the syntax, measured, on chorales whose tunes the model "
+            f"brings it to {say(mj['n2'], 1)}: that measures predictive sequential dependence under this label vocabulary and model, on chorales whose tunes the model "
             "never saw. <bookmark mark='b'/> Shuffle the same chords into a random order and the cost rises to "
-            f"{say(mj['n2_shuffled'], 1)}: the order carries more than a bit per chord. Two chords back helps "
+            f"{say(mj['n2_shuffled'], 1)}: this trained model’s cross-entropy increases by more than a bit per chord under that shuffle; this is not a universal entropy difference. Two chords back helps "
             "less, not because it carries nothing but because two hundred and eighty chorales are too few to "
             "learn every triple. For comparison, Part 14's melodies cost two point six bits a note given the "
             "note before, from a vocabulary of about twenty notes."
@@ -91,14 +91,7 @@ class Predict(SoundScene):
             (r"Meyer, \ 1956: \ emotion in music is expectation, \ delayed or denied", TUNE))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"surprise, \ in bits", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Bits also measure surprise, chord by chord. <bookmark mark='a'/> After a dominant, the home chord comes "
-            f"with probability {say(after_v[0][1], 2)}: hearing it carries only about one bit of news. "
-            "<bookmark mark='b'/> The chord on six comes with probability "
-            f"{say(p_vi, 2)}: about four bits. That is the deceptive cadence of Part 15, and it works because the "
-            "syntax made the listener expect home. <bookmark mark='c'/> A composer who knows the probabilities can "
-            "place a surprise where it will be felt. <bookmark mark='d'/> Leonard Meyer argued in 1956 that this is "
-            "where much of the emotion in music comes from: an expectation set up, then delayed, or denied, or "
-            "fulfilled at last."
+            f"Bits also measure surprise, chord by chord. <bookmark mark='a'/> After a dominant, the home chord comes with probability {say(after_v[0][1], 2)}: hearing it carries only about one bit of news. <bookmark mark='b'/> The chord on six comes with probability {say(p_vi, 2)}: about four bits. That is the deceptive cadence of Part 15, and its effect can involve learned expectations for home, without equating this model’s probabilities with every listener’s. <bookmark mark='c'/> A composer who knows the probabilities can place a surprise where it will be felt. <bookmark mark='d'/> Leonard Meyer argued in 1956 that this is where much of the emotion in music comes from: an expectation set up, then delayed, or denied, or fulfilled at last."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcd", rows_[1:]):

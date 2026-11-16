@@ -74,7 +74,7 @@ class Grounds(SoundScene):
             flash(snd, list(dots), [d["times"][n + k // 4] + (k % 4) * 0.279 for k in range(len(dots))], hot=WHITE, base=EAR)
         with self.voiceover(
             "Corelli's twenty-three variations do this with every resource of the violin: quick runs, double stops, "
-            "slow lyrical rounds, a gigue. The listener always knows where in the progression the music is, because "
+            "slow lyrical rounds, a gigue. A listener familiar with the ground may track their place in its cycle, because "
             "the ground never changes, and the pleasure is in the distance between what stays and what moves."
         ):
             self.wait(0.5)

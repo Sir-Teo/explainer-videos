@@ -20,7 +20,7 @@ class Functions(SoundScene):
             ("D", r"D", r"dominant: \ tension that wants home \ (V, \ and vii\textdegree)"))]).arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to(DOWN * 0.2)
         head = label(r"Riemann's three functions \ (Part 15)", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Part 15 sorted chords by the job they do, as Hugo Riemann did in 1893. <bookmark mark='a'/> The "
+            "Part 15 sorted chords by the job they do, using a simplified root-based classification inspired by later functional teaching; Riemann’s theory was more nuanced. <bookmark mark='a'/> The "
             "tonic is home. Chords that share two of its notes, six and three, can stand in for it. "
             "<bookmark mark='b'/> The subdominant moves away from home: four, and two, which shares two of "
             "four's notes. <bookmark mark='c'/> The dominant holds the tension that wants to go home: five, "
@@ -64,7 +64,7 @@ class Functions(SoundScene):
             "subdominant, subdominant to dominant, dominant home to tonic. "
             f"<bookmark mark='b'/> {say(round(fw, -2))} moves go that way, and {say(round(d['TD'], -2))} more go "
             f"straight from tonic to dominant, skipping a step; only {say(round(bw, -2))} go against the cycle. The rarest move of all is from dominant back to subdominant: {say(d['DS'])} times. "
-            "Once the tension of the dominant has arrived, it is almost never undone. That is the first "
+            "That return is uncommon under this classifier in the selected chorales, rather than universally forbidden. That is the first "
             "fact of harmonic syntax: away, tension, home. The minor chorales show the same order. And the "
             "commonest move against the cycle, subdominant straight to tonic, is the plagal cadence, the Amen "
             "at the end of hymns: four to one, a softer arrival without the dominant's leading note."
@@ -97,7 +97,7 @@ class Functions(SoundScene):
         ans = VGroup(label(r"I \ IV \ V \ I: \ T S D T", font_size=26, color=TUNE).next_to(sA, DOWN, buff=0.35),
                      label(r"I \ V \ IV \ I: \ T D S T", font_size=26, color=GREY_A).next_to(sB, DOWN, buff=0.35))
         with self.voiceover(
-            "A, for most listeners. It goes away, builds tension, and resolves it: one, four, five, one. B "
+            "A illustrates the common-practice authentic ending; preferences for these examples have not been measured here. It goes away, builds tension, and resolves it: one, four, five, one. B "
             "plays the same chords with the middle two swapped: the tension of five is raised and then "
             "abandoned for four, and the last chord arrives without having been prepared. Rock and blues "
             "use B's order freely, as the frontier will show; in Bach's style it is rare."

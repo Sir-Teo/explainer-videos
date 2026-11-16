@@ -24,7 +24,7 @@ class Phrase(SoundScene):
         with self.voiceover(
             "Put them in the order Gjerdingen found again and again. Open with a Do-Re-Mi; answer it with a "
             "Prinner. After the double bar, a Fonte, stepping down; a Monte, climbing; a Ponte, a held dominant "
-            "that waits for the return; and a cadence. Nothing here was composed, in the usual sense. Every "
+            "that waits for the return; and a cadence. The example was assembled from selected patterns; choosing, ordering and realizing patterns is itself compositional work. Every "
             "chord comes from a stock pattern, chained to the next by the shortest way."
         ):
             self.play(FadeIn(head), FadeIn(g), LaggedStart(*[FadeIn(b) for b in brackets], lag_ratio=0.2), run_time=3.0)
@@ -36,7 +36,7 @@ class Phrase(SoundScene):
                 t1 = d["phrase_times"][b] - 0.1 if b < len(d["phrase_times"]) else c.duration
                 pulse(snd, brackets[k][1], t0, t1, buff=0.06)
         with self.voiceover(
-            "It sounds like the music of 1760, without a melody worth the name: the skeleton of a minuet by "
+            "It sounds like the music of 1760, in a deliberately reduced teaching realization: the skeleton of a minuet by "
             "nobody. A Neapolitan student would now decorate it, with a tune, rhythms and ornaments, and the "
             "listeners of the time, who knew the schemata as well as the composer did, would hear each one go "
             "by, and enjoy how it was dressed. Gjerdingen's claim is that much of the style really was made "

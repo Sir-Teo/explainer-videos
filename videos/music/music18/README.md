@@ -85,6 +85,10 @@ only plain instances. The chorales are the wrong corpus for galant schemata, and
 corpus was available offline. *Ground basses* are reduced to one chord per half bar. *The frontier's corpus
 findings* are summarized from the publications, not recomputed.
 
+## Additional scope
+
+The functional classifier and directed-root categories are analytical choices. Cross-entropy depends on chord vocabulary, merge/drop preprocessing, split and model; the fixed label alphabet is collected from both training and test labels, while model frequencies use training only; the shuffle comparison is not a universal entropy of harmony. A template match is not a complete historical schema interpretation. Pitch-class containment in the selected octave-rule chord is weaker than exact harmonic agreement. The original 2011 rock study used about one hundred songs. Similar ERP responses in language and music do not prove identical computations. Seven perfect falling fifths fail to close the octave cycle; the endpoint can still be diatonic (for example F-sharp from G), so failure of closure does not imply an out-of-key final pitch.
+
 ## Build
 
 ```bash
@@ -116,7 +120,7 @@ python -m videos.music.labs 18                                  # the lab (write
    the root is degree 1 + 3k (mod 7). Since 3 and 7 share no factor, k = 0, …, 6 give seven different degrees, and
    k = 7 returns to the start. With perfect fifths only, k steps move 7k semitones, which is a multiple of 12 only
    when k is a multiple of 12; after seven steps the root is 49 mod 12 = 1 semitone away from where it began, a
-   note outside the key. So one step must be diminished, as in problem 1.
+   pitch class different from the starting tonic (the direction is reversed for falling fifths). So one step must be diminished, as in problem 1.
 
 3. **Ear.** The lab plays eight two-chord progressions. For each, say whether the root falls a fifth, rises a fifth,
    or moves by step.
@@ -161,3 +165,5 @@ Burgoyne, J. Wild and I. Fujinaga, "An expert ground truth set for audio chord r
 grammar", *Music Theory Online* 21 (2015); E. Bigand and R. Parncutt, "Perceiving musical tension in long chord
 sequences", *Psychological Research* 62 (1999); M. Rohrmeier and I. Cross, "Modelling unsupervised online-learning
 of artificial grammars: linking implicit and statistical learning", *Consciousness and Cognition* 27 (2014).
+
+Additional papers cited in the frontier: A. D. Patel, E. Gibson, J. Ratner, M. Besson and P. J. Holcomb, “Processing syntactic relations in language and music: an event-related potential study”, *Journal of Cognitive Neuroscience* 10 (1998), 717–733; S. Koelsch, T. Gunter, A. D. Friederici and E. Schröger, “Brain indices of music processing: ‘Nonmusicians’ are musical”, *Journal of Cognitive Neuroscience* 12 (2000), 520–541.
