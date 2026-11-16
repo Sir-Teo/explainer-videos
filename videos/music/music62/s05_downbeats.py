@@ -73,12 +73,7 @@ class Downbeats(SoundScene):
             (r"a downbeat tracker must first know which of these it is hearing", TUNE),
         ]
         rows_scene(self, r"other meters", items,
-                   "And bars come in more shapes than four-four. <bookmark mark='b'/> Duple and triple: a march in two, a waltz in "
-                   "three, their strong beats spaced differently. <bookmark mark='c'/> Compound meters: six-eight groups six quick "
-                   "beats in two threes, and is easily heard as three-four. <bookmark mark='d'/> Swing moves the off-beat late, "
-                   "about two thirds of the way through the beat, or less. <bookmark mark='e'/> Additive meters, like seven-eight "
-                   "as two plus two plus three, have beats of unequal length. <bookmark mark='f'/> A downbeat tracker must first "
-                   "know which of these it is hearing.", marks="bcdef")
+                   "And bars come in more shapes than four-four. <bookmark mark='b'/> Duple and triple: a march in two, a waltz in three, their strong beats spaced differently. <bookmark mark='c'/> Compound meters: six-eight commonly groups six eighth-note subdivisions into two dotted-quarter beats, and is easily heard as three-four. <bookmark mark='d'/> Swing moves the off-beat late, about two thirds of the way through the beat, or less. <bookmark mark='e'/> Additive meters, like seven-eight as two plus two plus three, have beats of unequal length. <bookmark mark='f'/> A downbeat tracker must first know which of these it is hearing.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def cues(self):

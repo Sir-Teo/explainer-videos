@@ -131,3 +131,5 @@ python -m videos.music.labs 62                                  # the lab (write
 * J. Foote, "Automatic audio segmentation using a measure of audio novelty" (ICME, 2000); B. McFee and D. P. W. Ellis,
   "Analyzing song structure with spectral clustering" (ISMIR, 2014); J. B. L. Smith et al., "Design and creation of a
   large-scale database of structural annotations" (SALAMI, ISMIR, 2011).
+
+The follower is a simulation on precomputed chroma with global normalization and an assumed 60 ms added delay, not a measured causal audio implementation. Its reported median error is absolute. The form demo supplies the known tempo and eight-beat phrase segmentation. Annotator disagreement is not an absolute performance ceiling.

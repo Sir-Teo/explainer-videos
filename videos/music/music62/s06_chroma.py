@@ -67,11 +67,7 @@ class Chroma(SoundScene):
             (r"or learn the chroma: \\ a network trained to output the notes' pitch classes, \\ not the partials'", TUNE),
         ]
         rows_scene(self, r"chroma's relatives", items,
-                   "Chroma has relatives. <bookmark mark='b'/> Takuya Fujishima's pitch class profile of 1999 was the first chroma used to "
-                   "recognize chords. <bookmark mark='c'/> Tuning matters: a band tuned thirty cents flat smears every bin, so "
-                   "systems estimate the tuning first and shift. <bookmark mark='d'/> Emilia Gómez's HPCP weights each peak and its "
-                   "harmonics; Meinard Müller's CENS smooths chroma for matching. <bookmark mark='e'/> Or the chroma can be learnt: "
-                   "a network trained to output the pitch classes of the notes, not of their partials.", marks="bcde")
+                   "Chroma has relatives. <bookmark mark='b'/> Takuya Fujishima's pitch class profile of 1999 was an influential early pitch-class-profile approach to chord recognition. <bookmark mark='c'/> Tuning matters: a band tuned thirty cents flat smears every bin, so systems estimate the tuning first and shift. <bookmark mark='d'/> Emilia Gómez's HPCP weights each peak and its harmonics; Meinard Müller's CENS smooths chroma for matching. <bookmark mark='e'/> Or the chroma can be learnt: a network trained to output the pitch classes of the notes, not of their partials.", marks="bcde")
 
     # ------------------------------------------------------------------
     def uses(self):
@@ -85,7 +81,7 @@ class Chroma(SoundScene):
                    "Chroma carries the rest of this part too. <bookmark mark='b'/> Part 15's key finder runs on chroma averaged over "
                    "a passage. <bookmark mark='c'/> Chapters 7 and 10 align recordings and match covers by comparing chroma "
                    "sequences. <bookmark mark='d'/> And Chapter 9's self-similarity is chroma against chroma. "
-                   "<bookmark mark='e'/> Chroma throws away the octave, the timbre and the rhythm; for harmony, that is the point.",
+                   "<bookmark mark='e'/> Chroma discards explicit register and much timbral detail; its time sequence still contains rhythmic timing and timbre can affect the estimates; for harmony, that is the point.",
                    marks="bcde")
 
     # ------------------------------------------------------------------

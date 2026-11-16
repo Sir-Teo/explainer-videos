@@ -49,7 +49,7 @@ class Outro(SoundScene):
         head = label(r"the Variations ledger", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Row sixty-two of the ledger. The deaf piano drifts away from the singer as the rubato grows. The follower stays "
-            f"with them, a median {say(d['median_ms'])} milliseconds behind: close enough to sound like accompaniment, late "
+            f"with them, a median {say(d['median_ms'])} milliseconds in absolute error; individual chords can be early or late: close enough to sound like accompaniment, late "
             "enough to sound like a careful one."
         ):
             self.play(FadeIn(head), FadeIn(led, shift=UP * 0.2))
@@ -67,12 +67,7 @@ class Outro(SoundScene):
             r"repetition finds form where novelty cannot; \ annotators set the ceiling",
         ], title=r"What we found", font_size=20).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Novelty curves show where things begin, and autocorrelation how often. <bookmark mark='a'/> A "
-            "prior near a hundred and twenty picks the tempo's level, and sometimes the wrong one. <bookmark mark='b'/> Dynamic "
-            "programming tracks beats, and rubato defeats a fixed period. <bookmark mark='c'/> Chroma folds the octaves, and an "
-            "HMM with Bach's transitions hears chords in context. <bookmark mark='d'/> Time warping aligns performances, offline "
-            "and live. <bookmark mark='e'/> And repetition finds a song's form where novelty cannot, while annotators set the "
-            "ceiling for all of it."
+            "What did we find? Novelty curves show where things begin, and autocorrelation how often. <bookmark mark='a'/> A prior near a hundred and twenty picks the tempo's level, and sometimes the wrong one. <bookmark mark='b'/> Dynamic programming tracks beats, and rubato defeats a fixed period. <bookmark mark='c'/> Chroma folds the octaves, and an HMM with Bach's transitions hears chords in context. <bookmark mark='d'/> Time warping aligns performances, offline and live. <bookmark mark='e'/> And repetition finds a song's form where novelty cannot, while annotation choices shape how all these results are interpreted."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

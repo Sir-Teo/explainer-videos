@@ -86,11 +86,7 @@ class Structure(SoundScene):
         side = label(rf"by mean chroma every phrase is alike: \ {np.min(Mm):.3f} or more", font_size=16, color=GREY_A).next_to(sections, DOWN, buff=0.6)
         head = label(r"repetition", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Repetition finds it instead. <bookmark mark='a'/> Cut the Tune into its six phrases, eight beats each, from the "
-            "beat tracker, and compare every pair moment by moment along the stripes. <bookmark mark='b'/> Phrases one and five "
-            "match, two and six, and three and four: a b, c c, a b. <bookmark mark='c'/> That is A B A, the Tune's form. "
-            "<bookmark mark='d'/> Averaged over each phrase, the chroma cannot tell them apart; the order of the notes is what "
-            "distinguishes them."
+            "Repetition finds it instead. <bookmark mark='a'/> Cut the Tune into its six phrases, eight beats each, using the known rendered tempo and eight-beat phrase length; phrase boundaries are supplied, not discovered by this step, and compare every pair moment by moment along the stripes. <bookmark mark='b'/> Phrases one and five match, two and six, and three and four: a b, c c, a b. <bookmark mark='c'/> That is A B A, the Tune's form. <bookmark mark='d'/> Averaged over each phrase, the chroma cannot tell them apart; the order of the notes is what distinguishes them."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -114,7 +110,7 @@ class Structure(SoundScene):
             (r"the form a machine finds is the form its features can see", TUNE),
         ]
         rows_scene(self, r"forms a machine might find", items,
-                   "What forms might a machine find? <bookmark mark='b'/> The Tune's A B A, the form of a nursery song and of a da "
+                   "What forms might a machine find? <bookmark mark='b'/> At this coarse level, the Tune's A B A, a form shared by some nursery songs and of a da "
                    "capo aria. <bookmark mark='c'/> AABA, the thirty-two-bar chorus of Tin Pan Alley that Part 40 counted. "
                    "<bookmark mark='d'/> Verse and chorus: the chorus returns with the same words, the verses with new words over the "
                    "same music. <bookmark mark='e'/> A labeller built on repetition hears a verse's music come back, but not its new "
@@ -124,13 +120,13 @@ class Structure(SoundScene):
     # ------------------------------------------------------------------
     def practice(self):
         items = [
-            (r"real songs combine both cues: \ the chorus is louder and fuller \ (novelty) \ and comes back \ (repetition)", WHITE),
+            (r"real songs combine both cues: \ a chorus may be louder and fuller, though this is not a defining rule \ (novelty) \ and comes back \ (repetition)", WHITE),
             (r"McFee and Ellis \ (2014): \ the two cues joined in one graph, \ sections found by spectral clustering", WHITE),
             (r"structure has levels: \ phrases within sections within the song", WHITE),
             (r"and people disagree: \ two experts annotating the same song agree on boundaries far from perfectly \ (Chapter 10)", TUNE),
         ]
         rows_scene(self, r"structure in practice", items,
-                   "In real songs the two cues work together: the chorus is louder and fuller, which novelty sees, and it comes "
+                   "In real songs the two cues work together: a chorus may be louder and fuller, though this is not a defining rule, which novelty sees, and it comes "
                    "back, which repetition sees. <bookmark mark='b'/> Brian McFee and Daniel Ellis joined both in one graph in 2014 "
                    "and found sections by spectral clustering. <bookmark mark='c'/> Structure also has levels: phrases within "
                    "sections within the song. <bookmark mark='d'/> And people disagree about it, as the next chapter measures.",

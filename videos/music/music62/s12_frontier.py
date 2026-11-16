@@ -21,12 +21,7 @@ class Frontier(SoundScene):
             (r"the beat a machine hears is the beat its training data annotated", TUNE),
         ]
         rows_scene(self, r"whose meter? \ (verify the latest)", items,
-                   "Two frontiers. The first is meter itself. <bookmark mark='b'/> Most annotated data is Western popular music in "
-                   "four-four at a steady tempo. <bookmark mark='c'/> Part 34's tala, Part 37's timelines and Balkan seven-eight "
-                   "are cycles of unequal beats, which a four-four tracker misreads. <bookmark mark='d'/> Datasets of other "
-                   "traditions, Carnatic, Hindustani, Turkish makam, Afro-Cuban, exist and change the picture. "
-                   "<bookmark mark='e'/> And in expressive music, where a nocturne's tempo moves every bar, beat trackers still fail, "
-                   "as Chapter 3 found. <bookmark mark='f'/> The beat a machine hears is the beat its training data annotated.",
+                   "Two frontiers. The first is meter itself. <bookmark mark='b'/> Most annotated data is Western popular music in four-four at a steady tempo. <bookmark mark='c'/> These traditions include varied cyclic and metrical structures; some have equal subdivisions, while additive groupings can produce unequal beat lengths, which a four-four tracker misreads. <bookmark mark='d'/> Datasets of other traditions, Carnatic, Hindustani, Turkish makam, Afro-Cuban, exist and change the picture. <bookmark mark='e'/> And in expressive music, where a nocturne's tempo moves every bar, beat trackers still fail, as Chapter 3 found. <bookmark mark='f'/> The beat a machine hears is the beat its training data annotated.",
                    marks="bcdef")
 
     # ------------------------------------------------------------------
@@ -57,7 +52,7 @@ class Frontier(SoundScene):
                    "are no future frames, and a deadline every few milliseconds. <bookmark mark='c'/> A phone must track beats and "
                    "chords as the music plays, for a light show, a game or a practice app. <bookmark mark='d'/> That needs causal "
                    "models small enough to run on the device, with their latency measured, not assumed. <bookmark mark='e'/> Live, "
-                   "the measure that matters is not the F-measure, but how late the answer comes.", marks="bcde")
+                   "the measure that matters is both accuracy and end-to-end latency.", marks="bcde")
 
     # ------------------------------------------------------------------
     def problem(self):

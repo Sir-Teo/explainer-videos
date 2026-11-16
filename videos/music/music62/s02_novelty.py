@@ -91,6 +91,14 @@ class Novelty(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"drums, \ then band", kind="physical model", detail=r"Part 56's session", corner=DL, tag_corner=DR)
             snd.show(c1, c2)
+            for axis, start, stop in ((a1, st["drums"], st["full"]), (a2, st["full"], c.duration)):
+                playhead = VGroup(Line(DOWN * 0.65, UP * 0.65, color=WHITE, stroke_width=3), Dot(radius=0.08, color=WHITE))
+                def sweep(m, tt, ax=axis, begin=start, end=stop):
+                    elapsed = np.clip(tt - begin, 0, t[-1])
+                    m.move_to(ax.to(elapsed, 0.525))
+                    m.set_opacity(1.0 if begin <= tt < end else 0.0)
+                snd.show(playhead)
+                snd.drive(playhead, sweep)
             snd.drive(c1, lambda m, tt: m.set_opacity(1.0 if tt >= st["drums"] else 0.0))
             snd.drive(c2, lambda m, tt: m.set_opacity(1.0 if tt >= st["full"] else 0.0))
         self.add(c1, c2)

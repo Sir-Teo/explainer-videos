@@ -54,16 +54,16 @@ class Align(SoundScene):
         eqs = VGroup(
             MathTex(r"D(i, j) = c(i, j) + \min\{D(i{-}1, j{-}1),\ D(i{-}1, j),\ D(i, j{-}1)\}", font_size=28, color=WHITE),
             label(r"$c$: \ 1 $-$ the cosine between chroma frames", font_size=16, color=GREY_A),
-            label(rf"offline: \ every beat placed within {d['err_ms']:.0f} ms \ (median), \ {d['err_max_ms']:.0f} at worst", font_size=17, color=TUNE),
-            label(rf"online, \ hearing only the past: \ {d['online_ms']:.0f} ms median, \ {d['online_max_ms']:.0f} at worst", font_size=17, color=BLUE),
+            label(rf"offline beat-alignment error: {d['err_ms']:.0f} ms \ (median), \ {d['err_max_ms']:.0f} at worst", font_size=17, color=TUNE),
+            label(rf"incremental path, precomputed features: \ {d['online_ms']:.0f} ms median, \ {d['online_max_ms']:.0f} at worst", font_size=17, color=BLUE),
         ).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 3.0 + DOWN * 0.3)
         head = label(r"dynamic time warping", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Dynamic time warping does it. <bookmark mark='a'/> Compare every chroma frame of one with every frame of the "
             "other: bright where they match. <bookmark mark='b'/> Then find the cheapest path from the start of both to the end "
             "of both, moving forward in one, the other or both at each step: dynamic programming, a third time. "
-            f"<bookmark mark='c'/> Offline, with both recordings whole, the path places every beat within {say(d['err_ms'])} "
-            f"milliseconds, at the median. <bookmark mark='d'/> Online, hearing only the past, as a live accompanist must, the "
+            f"<bookmark mark='c'/> Offline, with both recordings whole, the path has a beat-alignment error of {say(d['err_ms'])} "
+            f"milliseconds, at the median. <bookmark mark='d'/> In the incremental path algorithm, given precomputed features, the "
             f"median is {say(d['online_ms'])} milliseconds, with a worst moment of {say(d['online_max_ms'])}, at a held note where "
             "nothing new arrives."
         ) as vo:
@@ -111,11 +111,7 @@ class Align(SoundScene):
                      label(r"read from the warping path's slope", font_size=15, color=TUNE)).arrange(DOWN, buff=0.25, aligned_edge=LEFT).next_to(ax, RIGHT, buff=0.3)
         head = label(r"a tempo curve, \ from the path", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The warping path is also a measurement. <bookmark mark='a'/> Its slope says how much longer each beat of the "
-            "performance is than the same beat played strictly: a tempo curve. <bookmark mark='b'/> Read from the path, it "
-            "follows the truth, beat by beat: the stretching through each phrase and the held phrase end, all but the very last "
-            "beat, where the path runs out. This is how Part 43's tempo curves "
-            "of real pianists are measured, recording by recording."
+            "The warping path is also a measurement. <bookmark mark='a'/> Its slope says how much longer each beat of the performance is than the same beat played strictly: a tempo curve. <bookmark mark='b'/> Read from the path, it follows the truth, beat by beat: the stretching through each phrase and the held phrase end, all but the very last beat, where the path runs out. Alignment can estimate timing curves from real recordings; Part 43's synthetic examples should not be mistaken for new measurements of real pianists, recording by recording."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(yt), FadeIn(xl), FadeIn(one))
             vo.wait_until("a")

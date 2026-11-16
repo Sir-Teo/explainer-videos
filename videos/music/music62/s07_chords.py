@@ -57,7 +57,7 @@ class Chords(SoundScene):
                 j = k
                 while j < n and seq[j] == seq[k]:
                     j += 1
-                ok = col == GREY_B or np.mean(seq[k:j] == truth[k:j]) > 0.5
+                ok = ManimColor(col) == ManimColor(GREY_B) or np.mean(seq[k:j] == truth[k:j]) > 0.5
                 r = Rectangle(width=w * (j - k) / n, height=0.55, stroke_color=BLACK, stroke_width=1, fill_color=col if ok else RED, fill_opacity=0.55)
                 r.move_to([-w / 2 + w * (k + j) / 2 / n + 0.6, y, 0])
                 t = label(labels[seq[k]], font_size=12, color=WHITE).move_to(r) if (j - k) / n * w > 0.35 else VGroup()
@@ -68,12 +68,7 @@ class Chords(SoundScene):
         note = label(rf"frames right: \ {100 * acc['frame']:.0f}\%, \ {100 * acc['hmm']:.0f}\%, \ {100 * acc['bach']:.0f}\% \ (red: \ wrong)", font_size=17, color=WHITE).to_edge(DOWN, buff=0.35)
         head = label(r"the session's Tune, \ four phrases", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Here are the three recognizers on four phrases of the session, against the chords played. <bookmark mark='a'/> "
-            f"Frame by frame, the templates flicker, fooled by the melody and the attacks: {say(100 * acc['frame'])} percent of "
-            f"frames right. <bookmark mark='b'/> An HMM that only knows chords tend to stay put smooths the flicker: "
-            f"{say(100 * acc['hmm'])} percent. <bookmark mark='c'/> With Bach's transitions as the prior, the recognizer prefers "
-            f"the progressions music actually uses, and gets {say(100 * acc['bach'])} percent. Knowing what usually comes next is "
-            "worth as much as listening harder."
+            f"Here are the three recognizers on four phrases of the session, against the chords played. <bookmark mark='a'/> Frame by frame, the templates flicker, fooled by the melody and the attacks: {say(100 * acc['frame'])} percent of frames right. <bookmark mark='b'/> An HMM that only knows chords tend to stay put smooths the flicker: {say(100 * acc['hmm'])} percent. <bookmark mark='c'/> With Bach's transitions as the prior, the recognizer prefers transitions found in this selected major-key chorale corpus; that can help this Tune without being a universal grammar, and gets {say(100 * acc['bach'])} percent. Knowing what usually comes next is worth as much as listening harder."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g[0]))
             vo.wait_until("a")

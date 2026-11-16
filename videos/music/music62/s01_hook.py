@@ -63,8 +63,8 @@ class Hook(SoundScene):
                    "How do people do it? <bookmark mark='b'/> We do not wait for each beat: attention is entrained, like an oscillator "
                    "locked to the pulse, as Edward Large and Mari Riess Jones described in 1999. <bookmark mark='c'/> Tapping along, "
                    "people tap a few tens of milliseconds early: they predict the beat rather than react to it. "
-                   "<bookmark mark='d'/> Left to themselves, people tap and walk near a hundred and twenty a minute, Dirk Moelants "
-                   "found in 2002. <bookmark mark='e'/> An eighty-millisecond slip is obvious; a twenty-millisecond one is not. That "
+                   "<bookmark mark='d'/> Some studies report preferred tapping or movement rates near a hundred and twenty a minute, with substantial individual and contextual variation, Dirk Moelants "
+                   "found in 2002. <bookmark mark='e'/> Timing sensitivity depends on tempo, timbre, task and listener; eighty milliseconds is conspicuous in this example, while twenty can also be detectable. That "
                    "is the scale on which the machines of this part are judged.", marks="bcde")
 
     # ------------------------------------------------------------------

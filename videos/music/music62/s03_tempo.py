@@ -94,8 +94,4 @@ class Tempo(SoundScene):
             (r"the prior is a fact about listeners, \ not about the music", TUNE),
         ]
         rows_scene(self, r"which level?", items,
-                   "This is not only a machine's problem. <bookmark mark='b'/> Asked to tap along, listeners split between levels, "
-                   "above all at slow and fast tempos. <bookmark mark='c'/> And a tempo is not one number for long: performers "
-                   "speed up, slow down and hold. <bookmark mark='d'/> So evaluations ask two questions: did the system find a beat "
-                   "at some sensible level, and did it find the one most listeners tap? <bookmark mark='e'/> The prior near a "
-                   "hundred and twenty is a fact about listeners, not about the music.", marks="bcde")
+                   "This is not only a machine's problem. <bookmark mark='b'/> Asked to tap along, listeners split between levels, above all at slow and fast tempos. <bookmark mark='c'/> And a tempo is not one number for long: performers speed up, slow down and hold. <bookmark mark='d'/> So evaluations ask two questions: did the system find a beat at some sensible level, and did it find the one most listeners tap? <bookmark mark='e'/> The prior summarizes some listener studies; it is not a universal preferred tempo or a fact about the correct notated beat.", marks="bcde")

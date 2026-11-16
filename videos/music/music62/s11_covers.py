@@ -93,10 +93,4 @@ class Covers(SoundScene):
             (r"when annotators agree only so far, \ no system can be measured as better than that: \ the ceiling of the task", TUNE),
         ]
         rows_scene(self, r"how far people agree", items,
-                   "One more limit, for every chapter of this part. <bookmark mark='b'/> Every number here was scored against an "
-                   "answer key, and for real recordings people make the keys. <bookmark mark='c'/> Beats: annotators tap at "
-                   "different levels and disagree by tens of milliseconds. <bookmark mark='d'/> Chords: is that a C or a C major "
-                   "seventh, a passing chord or a new harmony? <bookmark mark='e'/> Structure: two experts' boundaries for the same "
-                   "song agree only in part; the SALAMI collection of 2011 has two annotations per song to show it. "
-                   "<bookmark mark='f'/> When people agree only so far, no system can be shown to do better than that: the ceiling "
-                   "of the task. Monochord's renders have exact keys; real music never will.", marks="bcdef")
+                   "One more limit, for every chapter of this part. <bookmark mark='b'/> Every number here was scored against an answer key, and for real recordings people make the keys. <bookmark mark='c'/> Beats: annotators tap at different levels and disagree by tens of milliseconds. <bookmark mark='d'/> Chords: is that a C or a C major seventh, a passing chord or a new harmony? <bookmark mark='e'/> Structure: two experts' boundaries for the same song agree only in part; the SALAMI collection of 2011 has two annotations per song to show it. <bookmark mark='f'/> When people agree only so far, annotator disagreement measures ambiguity and protocol dependence, not an absolute accuracy ceiling; a system can agree better with a defined consensus than two individual annotators agree with each other. Monochord's renders have exact keys; real recordings require an explicit annotation convention and uncertainty.", marks="bcdef")

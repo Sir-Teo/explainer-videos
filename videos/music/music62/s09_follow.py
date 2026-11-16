@@ -45,10 +45,7 @@ class Follow(SoundScene):
         note = label(r"each chord is played when the follower believes the score has reached it, \ plus 60 ms for processing", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.6)
         head = label(r"Monochord's accompanist", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Monochord's accompanist is the simplest that works. <bookmark mark='a'/> It hears the singer as chroma, frame by "
-            "frame. <bookmark mark='b'/> Online time warping against the score says where the singer has got to. "
-            "<bookmark mark='c'/> And when the score reaches a chord, it plays it, sixty milliseconds later, the time the "
-            "processing takes. It does not predict; Chapter 11's research takes that up."
+            "Monochord's accompanist is the simplest that works. <bookmark mark='a'/> It hears the singer as chroma, frame by frame. <bookmark mark='b'/> Online time warping against the score says where the singer has got to. <bookmark mark='c'/> And when the score reaches a chord, it plays it, with an assumed sixty-millisecond extra delay; we have not measured a live callback. The chroma is precomputed with whole-recording normalization, so this is an incremental-alignment simulation rather than an end-to-end causal system. It does not predict; Chapter 11's research takes that up."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -116,7 +113,7 @@ class Follow(SoundScene):
         head = label(r"how close the accompanist plays", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "How close does it play? <bookmark mark='a'/> Each bar is one chord: how far it sounded from the singer's beat. "
-            f"Most land late, by the processing delay and the time it takes the follower to be sure: a median of {say(d['median_ms'])} "
+            f"Most land late, by the processing delay and the time it takes the follower to be sure: a median absolute timing error of {say(d['median_ms'])} "
             "milliseconds. One lands early, where the follower jumped ahead. Ensemble players keep within a few tens of "
             "milliseconds; this accompanist would sound a little behind. You will hear it in the Variation."
         ) as vo:
