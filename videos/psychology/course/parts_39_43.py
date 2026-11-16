@@ -124,4 +124,43 @@ PARTS = [
               ("Its tests", "tests/psychology/test_clinic.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=42, level="U", widget="twographs",
+        question="How would you know that talking to someone helped?",
+        story="In 1952 Hans Eysenck concluded that about two thirds of neurotic patients improve with or without "
+              "psychotherapy. Answering him needed controls and a way to add up studies; in 1977 Smith and Glass "
+              "pooled 375 studies with meta-analysis and found an average effect of 0.68. The part shows why everyone "
+              "improves (regression to the mean, computed on the Pool), how the control sets the effect, and how "
+              "researcher allegiance tilts comparisons; builds a random-effects meta-analysis by hand; weighs the dodo "
+              "bird, the alliance and specific ingredients; compares therapy with medication and relapse after each; "
+              "measures publication bias in drug and therapy trials; derives Jacobson and Truax's reliable change and "
+              "cut-off; and ends with treatments that harm, lobotomy and ECT, and the dose-response curve.",
+        handoff="The capstone replication is Part 43, meta-analysis and bias properly Part 50, the treatment gap Part "
+                "57 and matching treatments to people Part 59.",
+        outside="Part 3's standard error of measurement, Part 4's file drawer and Part 12's base rates; weighted means, "
+                "the normal distribution and conditional expectation.",
+        objectives={
+            "U": ["Explain why treated people improve even when treatment does nothing, and why a control is needed.",
+                  "Describe the evidence for psychotherapy, the dodo bird debate, the alliance, and treatments that "
+                  "harm.",
+                  "Judge whether one person changed reliably and clinically, from two scores."],
+            "M": ["Simulate a therapy trial with different controls and show how the effect size depends on them.",
+                  "Compute a DerSimonian-Laird random-effects meta-analysis by hand.",
+                  "Show how a significance filter inflates the published effect, and by how much."],
+            "D": ["Design a trial that separates a specific ingredient from common factors and tests the order of "
+                  "mechanism and outcome."],
+            "I": ["Set up session-by-session outcome monitoring with reliable-change rules, and decide when to change "
+                  "course."],
+        },
+        results=[
+            ("Regression to the mean", r"E[\mu \mid x] = m + \frac{\sigma_\mu^2}{\sigma_\mu^2 + \sigma_e^2}(x - m)"),
+            ("Random-effects weights", r"w_i = \frac{1}{v_i + \hat\tau^2}, \quad \hat\mu = \frac{\sum w_i d_i}{\sum w_i}"),
+            ("Reliable change index", r"\mathrm{RCI} = \frac{x_2 - x_1}{\sqrt{2}\, s \sqrt{1 - r_{xx}}}"),
+            ("Jacobson and Truax's cut-off", r"c = \frac{s_0 \bar x_1 + s_1 \bar x_0}{s_0 + s_1}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's clinic module", "explainer/psychology/psyche/clinic.py"),
+              ("Its tests", "tests/psychology/test_clinic.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

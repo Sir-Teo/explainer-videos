@@ -1156,6 +1156,22 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Bruce Alexander; Bruce Petrie; Lee Robins; Stephen Higgins; Michael Prendergast; Leo Kanner; Hans Asperger; Bruno Bettelheim | 布鲁斯·亚历山大；布鲁斯·佩特里；李·罗宾斯；斯蒂芬·希金斯；迈克尔·普伦德加斯特；利奥·坎纳；汉斯·阿斯伯格；布鲁诺·贝特尔海姆 |
 | Andrew Wakefield; Anders Hviid; Elizabeth Pellicano; David Burr; Douglas Biklen; Douglas Wheeler; Stephen Faraone; Henrik Larsson; Timothy Layton; Uta Frith | 安德鲁·韦克菲尔德；安德斯·维德；伊丽莎白·佩利卡诺；戴维·伯尔；道格拉斯·比克伦；道格拉斯·惠勒；斯蒂芬·法拉奥内；亨里克·拉尔松；蒂莫西·莱顿；乌塔·弗里斯 |
 
+## Part 42: does therapy work?
+
+| English | 中文 |
+|---|---|
+| psychotherapy; spontaneous remission; custodial care; eclectic therapy; control group; waiting list; placebo therapy; treatment as usual | 心理治疗；自发缓解；看护照料；折中疗法；对照组；等待名单；安慰剂疗法；常规治疗 |
+| regression to the mean; natural recovery; researcher allegiance; blinding; intention to treat; dropout | 向均值回归；自然恢复；研究者忠诚；盲法；意向性治疗分析；脱落 |
+| meta-analysis; standardized difference; effect size; forest plot; random effects; heterogeneity; fixed effect | 元分析；标准化差异；效应量；森林图；随机效应；异质性；固定效应 |
+| dodo bird verdict; bona fide therapy; common factors; working alliance; specific ingredient; dismantling study | 渡渡鸟判决；真正的疗法；共同因素；工作联盟；特定成分；拆解研究 |
+| cognitive behavioural therapy; third wave; acceptance and commitment therapy; mindfulness-based cognitive therapy; psychodynamic therapy; dialectical behaviour therapy | 认知行为治疗；第三浪潮；接纳与承诺疗法；正念认知疗法；心理动力学治疗；辩证行为治疗 |
+| publication bias; file drawer; funnel plot; reliable change index; clinical significance; cut-off; outcome monitoring; deterioration | 发表偏倚；文件抽屉；漏斗图；可靠变化指数；临床意义；分界点；疗效监测；恶化 |
+| psychological debriefing; Scared Straight; recovered memory; conversion therapy; lobotomy (leucotomy); electroconvulsive therapy | 心理晤谈；恐吓从善；恢复记忆；扭转治疗；脑叶切除术（脑白质切断术）；电休克治疗 |
+| dose-response; stepped care; guided self-help; lay counsellor; psilocybin; MDMA-assisted therapy | 剂量-反应；阶梯式照护；有指导的自助；非专业咨询员；裸盖菇素；MDMA辅助治疗 |
+| Hans Eysenck; Mary Lee Smith; Gene Glass; Saul Rosenzweig; Lester Luborsky; Bruce Wampold; Christoph Flückiger; David Tolin | 汉斯·艾森克；玛丽·李·史密斯；吉恩·格拉斯；索尔·罗森茨威格；莱斯特·卢博斯基；布鲁斯·万波尔德；克里斯托夫·弗吕基格；戴维·托林 |
+| Marsha Linehan; Steven Hollon; Erick Turner; Ellen Driessen; Pim Cuijpers; Neil Jacobson; Paula Truax; Scott Lilienfeld | 玛莎·莱恩汉；史蒂文·霍伦；埃里克·特纳；埃伦·德里森；皮姆·奎珀斯；尼尔·雅各布森；葆拉·特鲁阿克斯；斯科特·利林费尔德 |
+| Egas Moniz; Walter Freeman; Ugo Cerletti; Lucio Bini; Kenneth Howard; Elliot Valenstein; DerSimonian and Laird | 埃加斯·莫尼斯；沃尔特·弗里曼；乌戈·切莱蒂；卢乔·比尼；肯尼思·霍华德；埃利奥特·瓦伦斯坦；德西蒙尼安与莱尔德 |
+
 ## Names
 
 | English | 中文 |

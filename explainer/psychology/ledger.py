@@ -6031,3 +6031,145 @@ shown(41, r"Kanner (1943); \ Asperger (1944)", "the first descriptions, told as 
 shown(41, r"Pellicano \& Burr (2012)", "a theory, run on Psyche")
 shown(41, r"CDC ADDM (2023)", "surveillance figures, quoted")
 
+# --- Part 42: Does Therapy Work? --------------------------------------------------------------------------------------
+
+add(Finding(
+    key="psychotherapy_vs_none", part=42, title=r"Psychotherapy against no treatment",
+    claim="People who receive psychotherapy end better off than comparable people who receive none.",
+    original=Study("Smith and Glass (meta-analysis)", 1977, n="375 controlled studies",
+                   design="every outcome expressed as a standardized difference", found="an average effect of 0.68"),
+    status="replicated",
+    record=(Study("Cuijpers and colleagues (meta-analysis)", 2019, design="trials of psychotherapy for adult "
+                  "depression", found="clear benefits over control conditions, smaller in the best trials"),),
+    note="The answer to Eysenck's challenge; how large the benefit is depends on the control condition and the trial's "
+         "quality.",
+    sources=("M. L. Smith and G. V. Glass, Meta-analysis of psychotherapy outcome studies, American Psychologist 32 "
+             "(1977) 752-760",
+             "H. J. Eysenck, The effects of psychotherapy: an evaluation, Journal of Consulting Psychology 16 (1952) "
+             "319-324",
+             "P. Cuijpers et al., Was Eysenck right after all? A reassessment of the effects of psychotherapy for "
+             "adult depression, Epidemiology and Psychiatric Sciences 28 (2019) 21-30"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="published_effect_size", part=42, title=r"The published size of therapy's effect",
+    claim="Psychotherapy for adult depression has a large effect, near g = 0.7 against control conditions, as the "
+          "whole published literature suggests.",
+    original=Study("Cuijpers and colleagues (all trials)", 2019, design="every randomized trial against a control",
+                   found="an average near 0.7"),
+    status="replicated, smaller",
+    record=(Study("Cuijpers and colleagues (low risk of bias)", 2019, design="trials at low risk of bias, without "
+                  "waiting-list controls, adjusted for publication bias", found="considerably smaller"),),
+    note="Real, but smaller once waiting lists, weak trials and unpublished results are accounted for; Driessen and "
+         "colleagues (2015) found a quarter of funded trials unpublished, and the effect smaller once they were added.",
+    sources=("E. Driessen et al., Does publication bias inflate the apparent efficacy of psychological treatment for "
+             "major depressive disorder? PLoS ONE 10 (2015) e0137864",
+             "P. Cuijpers et al., Was Eysenck right after all? Epidemiology and Psychiatric Sciences 28 (2019) 21-30"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="dodo_equivalence", part=42, title=r"The dodo bird verdict",
+    claim="All bona fide psychotherapies are about equally effective.",
+    original=Study("Luborsky, Singer and Luborsky", 1975, design="a review of comparisons between therapies",
+                   found="\"everyone has won and all must have prizes\""),
+    status="contested",
+    record=(Study("Wampold and colleagues (meta-analysis)", 1997, design="direct comparisons of bona fide therapies",
+                  found="differences near zero"),
+            Study("Tolin (meta-analysis)", 2010, design="cognitive behavioural therapy against other therapies",
+                  found="a small advantage for anxiety and depression")),
+    note="Near-equivalence on average for many conditions; specific ingredients matter for some, such as exposure "
+         "for anxiety.",
+    sources=("L. Luborsky, B. Singer and L. Luborsky, Comparative studies of psychotherapies: is it true that "
+             "\"everyone has won and all must have prizes\"? Archives of General Psychiatry 32 (1975) 995-1008",
+             "B. E. Wampold et al., A meta-analysis of outcome studies comparing bona fide psychotherapies, "
+             "Psychological Bulletin 122 (1997) 203-215",
+             "D. F. Tolin, Is cognitive-behavioral therapy more effective than other therapies? Clinical Psychology "
+             "Review 30 (2010) 710-720"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="alliance_outcome", part=42, title=r"The alliance and outcome",
+    claim="The quality of the working alliance between client and therapist correlates with how well therapy goes.",
+    original=Study("Horvath and Symonds (meta-analysis)", 1991, design="studies relating alliance to outcome",
+                   found="a correlation near 0.26"),
+    status="replicated",
+    record=(Study("Flückiger and colleagues (meta-analysis)", 2018, n="295 studies", found="a correlation near "
+                  "0.28"),),
+    note="The correlation replicates; whether the alliance causes improvement, or early improvement builds the "
+         "alliance, is contested.",
+    sources=("A. O. Horvath and B. D. Symonds, Relation between working alliance and outcome in psychotherapy: a "
+             "meta-analysis, Journal of Counseling Psychology 38 (1991) 139-149",
+             "C. Flückiger et al., The alliance in adult psychotherapy: a meta-analytic synthesis, Psychotherapy 55 "
+             "(2018) 316-340"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="dbt_self_harm", part=42, title=r"Dialectical behaviour therapy and self-harm",
+    claim="Dialectical behaviour therapy reduces self-harm in people with borderline personality disorder.",
+    original=Study("Linehan and colleagues", 1991, n="44 women", design="DBT against treatment as usual for a year",
+                   found="fewer and less severe acts of self-harm"),
+    status="replicated",
+    record=(Study("Linehan and colleagues", 2006, n="101 women", design="DBT against treatment by community experts",
+                  found="about half the rate of suicide attempts"),
+            Study("DeCou, Comtois and Landes (meta-analysis)", 2019, found="a small reduction in self-directed "
+                  "violence")),
+    note="Replicated, with smaller effects in later and independent trials.",
+    sources=("M. M. Linehan et al., Cognitive-behavioral treatment of chronically parasuicidal borderline patients, "
+             "Archives of General Psychiatry 48 (1991) 1060-1064",
+             "M. M. Linehan et al., Two-year randomized controlled trial and follow-up of dialectical behavior "
+             "therapy, Archives of General Psychiatry 63 (2006) 757-766",
+             "C. R. DeCou, K. A. Comtois and S. J. Landes, Dialectical behavior therapy is effective for the treatment "
+             "of suicidal behavior: a meta-analysis, Behavior Therapy 50 (2019) 60-72"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="debriefing", part=42, title=r"Debriefing after trauma",
+    claim="A single session of psychological debriefing soon after a trauma prevents post-traumatic stress.",
+    original=Study("Mitchell", 1983, design="critical incident stress debriefing for emergency workers",
+                   found="proposed and widely adopted on clinical experience"),
+    status="failed",
+    record=(Study("Rose, Bisson, Churchill and Wessely (Cochrane review)", 2002, design="randomized trials",
+                  found="no prevention of PTSD; some trials found more symptoms"),
+            Study("Mayou, Ehlers and Hobbs", 2000, design="road-accident victims followed for three years",
+                  found="those debriefed did worse")),
+    note="Possibly harmful; guidelines advise against routine single-session debriefing.",
+    sources=("J. T. Mitchell, When disaster strikes: the critical incident stress debriefing process, Journal of "
+             "Emergency Medical Services 8 (1983) 36-39",
+             "S. Rose, J. Bisson, R. Churchill and S. Wessely, Psychological debriefing for preventing post traumatic "
+             "stress disorder, Cochrane Database of Systematic Reviews (2002) CD000560",
+             "R. A. Mayou, A. Ehlers and M. Hobbs, Psychological debriefing for road traffic accident victims: "
+             "three-year follow-up, British Journal of Psychiatry 176 (2000) 589-593"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="scared_straight", part=42, title=r"Scared Straight",
+    claim="Taking young offenders to visit prisons, to be confronted by inmates, deters them from crime.",
+    original=Study("Scared Straight!, the programme and the documentary", 1978,
+                   found="dramatic claims of success"),
+    status="failed",
+    record=(Study("Petrosino and colleagues (Campbell review)", 2013, design="randomized trials",
+                  found="more offending among those who took part"),),
+    note="Harmful: the programmes increased offending.",
+    sources=("A. Petrosino et al., 'Scared Straight' and other juvenile awareness programs for preventing juvenile "
+             "delinquency, Campbell Systematic Reviews 9 (2013)",
+             "S. O. Lilienfeld, Psychological treatments that cause harm, Perspectives on Psychological Science 2 "
+             "(2007) 53-70"),
+    checked="2026-11-16",
+))
+
+shown(42, r"Eysenck (1952)", "the challenge, told as history; the row on therapy against no treatment answers it")
+shown(42, r"Driessen et al.\ (2015); \ Cuijpers et al.\ (2019)", "the evidence behind the row on the published size of "
+      "therapy's effect")
+shown(42, r"Hollon et al.\ (2005)", "a single relapse trial, described with its limits")
+shown(42, r"Turner et al.\ (2008)", "the registered and published record of antidepressant trials, described as the "
+      "file drawer at work")
+shown(42, r"Moniz (1936)", "the history of lobotomy, told as history")
+shown(42, r"Cerletti \& Bini (1938)", "the history of ECT, told as history")
+shown(42, r"Howard et al.\ (1986)", "a summary of the dose-response curve, quoted and drawn")
+

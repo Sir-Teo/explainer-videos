@@ -48,7 +48,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
 - *Psychology, Built* (`videos/psychology/`): sixty-two parts planned in thirteen acts (`psych1` … `psych62`: a degree,
-  the graduate methods sequence, industry practice and a research tier); Parts 1 to 41 are built (Acts I to IX, and Act X is under way). The folders are `psychN` while
+  the graduate methods sequence, industry practice and a research tier); Parts 1 to 42 are built (Acts I to X). The folders are `psychN` while
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
   plan is `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the progress table are
   `videos/psychology/SYLLABUS.md`. Shared code in `explainer/psychology/` (tested in `tests/psychology/`): the model

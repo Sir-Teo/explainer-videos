@@ -273,4 +273,96 @@
       note: "Nothing you answer is stored or sent. The prediction is a cosine of the light's direction, a simple stand-in for the prior; people differ, and the bias toward light from slightly left of above is well known.",
     });
   };
+
+  // ---- Part 42: the two-graphs problem, case by case.  Can this design show that therapy worked? ----
+  W.twographs = function (el) {
+    var w = null;
+    var CASES = [
+      { what: "Clients' symptom scores at the first and last session of therapy: they fell by a third.", right: 1,
+        why: "No control: people come at their worst and improve anyway (regression to the mean, natural recovery)." },
+      { what: "People randomized to therapy or a waiting list; the therapy group improved more.", right: 0,
+        why: "Randomization makes the groups comparable, so therapy did more than waiting, though waiting may itself do a little harm." },
+      { what: "People who chose therapy against people who were offered it and declined; the first group improved more.", right: 1,
+        why: "Self-selection: those who choose therapy may differ in motivation, support or severity." },
+      { what: "People randomized to therapy or to a credible placebo therapy with the same time and warmth; therapy did better.", right: 0,
+        why: "The strongest design here: it shows something beyond the common factors." },
+      { what: "A randomized trial analysed only the people who finished; 40% dropped out of therapy and 10% of the control arm.", right: 2,
+        why: "Uneven dropout breaks the randomization; analyse everyone randomized (intention to treat)." },
+      { what: "A meta-analysis of the published trials finds a large effect.", right: 2,
+        why: "It shows an effect, but published trials overstate its size when unpublished ones are missing." },
+    ];
+    var NAMES = ["yes", "no", "only partly"];
+    var S = { phase: "idle", k: -1, log: [] };
+    function next() {
+      S.k++;
+      if (S.k >= CASES.length) { S.phase = "done"; task.clear(); } else S.phase = "ask";
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "1": 0, "2": 1, "3": 2 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side, how) {
+        var choice = how === "tap" ? (side === 0 ? 0 : 1) : side;
+        S.log.push({ k: S.k, choice: choice, right: CASES[S.k].right });
+        task.count++;
+        S.phase = "shown";
+        if (w) w.render();
+        task.later(next, 2600);
+      },
+    });
+    function start() { task.clear(); S.k = -1; S.log = []; task.count = 0; next(); }
+    w = QB.widget(el, {
+      title: "Did the therapy work?",
+      sub: "Each case is a study. Can it show that the therapy caused the improvement? Press 1 for yes, 2 for no, 3 for only partly (or tap left for yes, right for no).",
+      panels: 2, height: 360, weights: [1.4, 1],
+      buttons: [
+        { label: "Start", act: function () { start(); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), j;
+        ctx.save(); ctx.textAlign = "center";
+        if (S.phase === "ask" || S.phase === "shown") {
+          var c = CASES[S.k];
+          ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("Study " + (S.k + 1) + " of " + CASES.length, b.cx, b.y + 22);
+          ctx.fillStyle = C.ink; ctx.font = "600 15px system-ui, sans-serif";
+          T.wrap(ctx, c.what, b.cx, b.y + 52, b.w - 40, 20);
+          if (S.phase === "shown") {
+            var last = S.log[S.log.length - 1];
+            ctx.font = "600 14px system-ui, sans-serif";
+            ctx.fillStyle = last.choice === last.right ? "#5bd18b" : "#ef6f6c";
+            ctx.fillText("The answer: " + NAMES[c.right] + ".", b.cx, b.cy + 30);
+            ctx.fillStyle = C.ink; ctx.font = "13px system-ui, sans-serif";
+            T.wrap(ctx, c.why, b.cx, b.cy + 54, b.w - 40, 18);
+          } else {
+            ctx.font = "600 14px system-ui, sans-serif"; ctx.fillStyle = C.ink;
+            ctx.fillText("1: yes    2: no    3: only partly", b.cx, b.y + b.h - 30);
+          }
+        } else if (S.phase === "done") {
+          var right = S.log.filter(function (r) { return r.choice === r.right; }).length;
+          T.message(ctx, b, "You matched " + right + " of " + CASES.length + ".",
+                    "Only a comparison with a randomized control can show what therapy added; the kind of control decides what it shows.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Six studies.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx;
+        cx.save(); cx.textAlign = "left"; cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif";
+        cx.fillText("Your answer and the answer, by study", c2.x + 10, c2.y + 18);
+        var bh = (c2.h - 50) / CASES.length;
+        for (j = 0; j < S.log.length; j++) {
+          var r = S.log[j], y = c2.y + 34 + j * bh;
+          cx.fillStyle = r.choice === r.right ? "#5bd18b" : "#ef6f6c";
+          cx.fillText((r.k + 1) + ".  you: " + NAMES[r.choice] + "   answer: " + NAMES[r.right], c2.x + 14, y + bh / 2);
+        }
+        cx.restore();
+      },
+      readout: function () {
+        var right = S.log.filter(function (r) { return r.choice === r.right; }).length;
+        return [["answers", String(task.count)], ["matched", S.log.length ? right + " / " + S.log.length : "-"]];
+      },
+      note: "Nothing you answer is stored or sent. The studies are illustrations, not descriptions of particular trials.",
+    });
+  };
 })();
