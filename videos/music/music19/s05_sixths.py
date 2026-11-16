@@ -26,7 +26,7 @@ class Sixths(SoundScene):
                           label(r"octave", font_size=20, color=TUNE).next_to(span2, DOWN, buff=0.25))
         rows_ = VGroup(*[label(t, font_size=26, color=c_) for t, c_ in (
             (tex(r"two notes, \ each a semitone from G: \ A♭ above it falls, \ F♯ below it rises"), WHITE),
-            (r"the strongest approach to the dominant there is", WHITE),
+            (r"a characteristic chromatic approach to the dominant", WHITE),
             (tex(r"Italian: \ A♭ C F♯; \ French: \ add D; \ German: \ add E♭"), WHITE),
             (r"named by later theorists, \ not by Italians, \ Frenchmen or Germans", GREY_A))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
         rows_.scale_to_fit_width(min(rows_.width, 7.6))
@@ -35,9 +35,9 @@ class Sixths(SoundScene):
             "Take G, the dominant of C minor, and the two notes that lean on it hardest: A flat, a semitone above, "
             "and F sharp, a semitone below, borrowed from outside the key. <bookmark mark='a'/> Put A flat in the bass and F sharp above it, and "
             "they make an augmented sixth, which opens outward, both voices moving by a semitone, to an octave on G. "
-            "<bookmark mark='b'/> It is the strongest approach to the dominant there is: a pincer. <bookmark mark='c'/> "
+            "<bookmark mark='b'/> It is a characteristic chromatic approach to the dominant: a pincer. <bookmark mark='c'/> "
             "Fill in the chord and it comes in three flavours, the Italian with C, the French with C and D, the German "
-            "with C and E flat. <bookmark mark='d'/> The national names were given by later theorists, and mean nothing."
+            "with C and E flat. <bookmark mark='d'/> The national names were given by later theorists, rather than securely documenting each chord’s national origin."
         ) as vo:
             self.play(FadeIn(a), FadeIn(b), FadeIn(tags[:2]), FadeIn(rows_[0]))
             vo.wait_until("a")
@@ -91,18 +91,12 @@ class Sixths(SoundScene):
         rows_ = VGroup(*[label(t_, font_size=24, color=c_) for t_, c_ in (
             (r"German sixth straight to V: \ A$\flat$--E$\flat$ moves to G--D", WHITE),
             (r"parallel fifths, \ the fault of Part 16", WHITE),
-            (r"the cure: \ a 6/4 chord between, \ E$\flat$ held as E$\natural$ or sliding to D later", WHITE),
-            (r"or let them sound: \ `Mozart fifths', \ tolerated for this chord alone", TUNE))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
+            (r"the cure: a 6/4 chord between\\E$\flat$ rises to E$\natural$ here;\\in minor, hold E$\flat$ before D", WHITE),
+            (r"or let them sound: \ `Mozart fifths': \ a debated stylistic exception", TUNE))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
         rows_.scale_to_fit_width(min(rows_.width, 5.8))
         rows_.move_to(RIGHT * 3.75 + DOWN * 0.1)
         with self.voiceover(
-            "The German sixth has a practical problem. <bookmark mark='a'/> Resolve it straight to the dominant and its "
-            "bass and its E flat, a perfect fifth apart, both fall a semitone, to G and D: <bookmark mark='b'/> "
-            "parallel fifths, the fault Part 16 explained. <bookmark mark='c'/> The usual cure is the one on the "
-            "staff: a six-four chord between, the home chord over the dominant's bass, so that E flat can move to E and "
-            "the fifths disappear. <bookmark mark='d'/> Composers also simply let them sound, and textbooks call them "
-            "Mozart fifths: the best-known parallel fifths that common practice tolerates, because the ear is busy with the "
-            "two voices opening outward."
+            "The German sixth has a practical problem. <bookmark mark='a'/> Resolve it straight to the dominant and its bass and its E flat, a perfect fifth apart, both fall a semitone, to G and D: <bookmark mark='b'/> parallel fifths, the fault Part 16 explained. <bookmark mark='c'/> The usual cure is the one on the staff: a six-four chord between, the home chord over the dominant's bass, here in C major, so that E flat rises to E natural and the fifths disappear. <bookmark mark='d'/> Composers also simply let them sound, and textbooks call them Mozart fifths: a stylistically discussed exception rather than a universally accepted license."
         ) as vo:
             self.play(FadeIn(st), FadeIn(nm))
             for mark, r in zip("abcd", rows_):

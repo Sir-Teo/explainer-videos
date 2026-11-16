@@ -67,10 +67,10 @@ class Tristan(SoundScene):
             "with G sharp an appoggiatura, a leaning note, that slides up to A; the chord then opens onto the dominant "
             "exactly as chapter four's sixths did. <bookmark mark='b'/> Second: as a sound, it is simply a "
             "half-diminished seventh, F, A flat, C flat, E flat respelled, the chord built on the second degree of E "
-            "flat minor, and listeners hear it as that sonority. <bookmark mark='c'/> Third: an altered dominant of E, "
+            "flat minor, as a pitch-class description; that alone does not settle its function. <bookmark mark='c'/> Third: an altered dominant of E, "
             "B, D sharp, F, A, the five-of-five with its fifth lowered. <bookmark mark='d'/> Fourth: Ernst Kurth, in 1920, "
-            "said it has no function at all. It is a moment of pure tension, defined by the lines that pass through it, "
-            "each of which moves by a semitone."
+            "emphasized linear motion and dynamic tension over a single functional label. It is a moment of pure tension, defined by the lines that pass through it, "
+            "whose interaction helps shape its tension."
         ) as vo:
             self.play(FadeIn(cards[0]))
             for mark, c_ in zip("bcd", cards[1:]):
@@ -104,7 +104,7 @@ class Tristan(SoundScene):
             "Kurth's reading points to where theory went next. Put the two chords on the clock of pitch classes. "
             "<bookmark mark='a'/> The best way to move from the first to the second: F falls to E, D sharp falls to "
             f"D, and B and G sharp stay where they are. <bookmark mark='b'/> {say(vl['cost'])} semitones in all. "
-            "<bookmark mark='c'/> No smaller move takes a half-diminished seventh to a dominant seventh. "
+            "<bookmark mark='c'/> This is the minimum under our pitch-class assignment metric, which ignores register and actual voice identity. "
             "<bookmark mark='d'/> Whatever the first chord is called, the way it moves is a fact we can measure. That is "
             "the idea of the last chapter: harmony as voice leading."
         ) as vo:

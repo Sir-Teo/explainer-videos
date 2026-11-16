@@ -82,13 +82,7 @@ class Comma(SoundScene):
             (r"so does every trapdoor that depends on F$\sharp$ = G$\flat$", TUNE))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"symmetry costs a comma", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            f"So in pure tuning the stack does not close. <bookmark mark='a'/> Four pure minor thirds come to an "
-            f"octave and {say(round(d['four minor thirds']))} cents. <bookmark mark='b'/> Three pure major thirds, "
-            f"the augmented triad, fall {say(round(-d['three major thirds']))} cents short, a gap called the diesis. "
-            "<bookmark mark='c'/> This is Part 6's lesson again: stacks of pure intervals never quite close the circle. "
-            "<bookmark mark='d'/> The diminished seventh's perfect symmetry, four equal steps round the octave, exists "
-            "only in equal temperament. <bookmark mark='e'/> And so does every trapdoor that depends on F sharp being "
-            "the same note as G flat."
+            f"So in pure tuning the stack does not close. <bookmark mark='a'/> Four pure minor thirds come to an octave and {say(round(d['four minor thirds']))} cents. <bookmark mark='b'/> Three pure major thirds, the augmented triad, fall {say(round(-d['three major thirds']))} cents short, a gap called the diesis. <bookmark mark='c'/> This is Part 6's lesson again: stacks of pure intervals never quite close the circle. <bookmark mark='d'/> The diminished seventh's perfect symmetry, four equal steps round the octave, exists only in equal temperament. <bookmark mark='e'/> Other circulating temperaments can also identify F sharp with G flat, though their thirds and these symmetries differ."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -113,7 +107,7 @@ class Comma(SoundScene):
         rows_.scale_to_fit_width(min(rows_.width, 6.4))
         rows_.move_to(RIGHT * 3.5 + DOWN * 0.1)
         with self.voiceover(
-            "Here is what that means for singers. <bookmark mark='a'/> A choir without a piano tunes each chord pure, "
+            "Here is what that means for singers. <bookmark mark='a'/> Suppose an unaccompanied choir tunes these local chords pure, without a fixed pitch reference, "
             "each major third in the ratio five to four. <bookmark mark='b'/> Let it sing chapter eight's cycle of "
             "chromatic mediants, C major, E major, A flat major, and home, each chord holding one note of the last. "
             f"<bookmark mark='c'/> Three pure major thirds; and the C it comes home to is {say(round(per))} cents lower "
@@ -138,13 +132,7 @@ class Comma(SoundScene):
             (r"chromatic harmony is an idea that needs a tuning", TUNE))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"a harmony built on a tuning", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "This had consequences. <bookmark mark='a'/> On the meantone keyboards of the sixteenth and seventeenth "
-            "centuries, G sharp and A flat were different notes, and only one of them could be played. "
-            "<bookmark mark='b'/> Some instruments had split black keys, front for one, back for the other. "
-            "<bookmark mark='c'/> The well temperaments of Bach's time, and then equal temperament, made them one key, "
-            "and the enharmonic door opened. <bookmark mark='d'/> Singers and string players still tune by ear, and a "
-            "choir that tunes each chord pure through a chain of enharmonic changes drifts in pitch: the comma comes "
-            "back. <bookmark mark='e'/> Chromatic harmony is an idea that needs a tuning to make it possible."
+            "This had consequences. <bookmark mark='a'/> On the meantone keyboards of the sixteenth and seventeenth centuries, G sharp and A flat were different notes, and only one of them could be played. <bookmark mark='b'/> Some instruments had split black keys, front for one, back for the other. <bookmark mark='c'/> The well temperaments of Bach's time, and then equal temperament, made them one key, and the enharmonic door opened. <bookmark mark='d'/> Singers and string players still tune by ear, and this particular locally pure, common-tone chain predicts drift unless the singers adjust or anchor their pitch: the comma comes back. <bookmark mark='e'/> Chromatic harmony is an idea that needs a tuning to make it possible."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

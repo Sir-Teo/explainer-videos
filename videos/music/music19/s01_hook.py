@@ -71,9 +71,9 @@ class Hook(SoundScene):
         with self.voiceover(
             "This part walks the road from one borrowed note to Tristan. <bookmark mark='a'/> First the borrowed "
             "leading notes and borrowed chords that Bach already used. <bookmark mark='b'/> Then the Neapolitan and the "
-            "augmented sixths, the strongest ways of approaching a dominant. <bookmark mark='c'/> Then the diminished "
+            "augmented sixths, characteristic chromatic approaches to a dominant. <bookmark mark='c'/> Then the diminished "
             "seventh, whose symmetry opens trapdoors to distant keys, <bookmark mark='d'/> and the comma those trapdoors "
-            "hide, which only equal temperament closes. <bookmark mark='e'/> Then chromatic mediants, a program that "
+            "hide, which pure thirds cannot close; equal temperament supplies exact symmetry. <bookmark mark='e'/> Then chromatic mediants, a program that "
             "finds the shortest way to any key, and a number for tension. <bookmark mark='f'/> And then back to the "
             "chord at the start."
         ) as vo:

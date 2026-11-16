@@ -47,7 +47,7 @@ class Tension(SoundScene):
             "<bookmark mark='a'/> It starts from what he called the basic space: five layers of notes, from the most "
             "important to the least. For the C major chord in the key of C: at the top, the root, C. Below it, root "
             "and fifth. Then the triad, C, E, G. Then the seven notes of the key. Then all twelve. "
-            "<bookmark mark='b'/> The picture is Part 15's tonal hierarchy, the probe-tone profile, written as levels."
+            "<bookmark mark='b'/> This is a theoretical hierarchy related to tonal-hierarchy research, rather than a direct transcription of measured probe-tone ratings."
         ) as vo:
             self.play(FadeIn(grid[1]), FadeIn(grid[2]))
             vo.wait_until("a")
@@ -115,13 +115,7 @@ class Tension(SoundScene):
         cap = label(r"each bar: \ the distance from the chord before", font_size=22, color=GREY_A).to_edge(DOWN, buff=0.55)
         mx = [max(d[n]["tension"]) for n, _, _ in specs]
         with self.voiceover(
-            "Score each chord by its distance from the one before, and a progression becomes a curve. "
-            f"<bookmark mark='a'/> Within the key, no step costs more than {say(mx[0])}. <bookmark mark='b'/> Through "
-            f"mixture and the Neapolitan, the curve climbs to {say(mx[1])}, as the D flat chord is followed by the "
-            f"dominant. <bookmark mark='c'/> Through the trapdoor, the single chord that changes the key costs "
-            f"{say(mx[2])}, and then the new key settles at once. <bookmark mark='d'/> In 2007 Lerdahl and Carol "
-            "Krumhansl asked listeners to rate tension, moment by moment, in passages of tonal music, and found that a version of this model, with chords arranged in a tree rather than a chain, "
-            "followed their ratings well."
+            f"Score each chord by its distance from the one before, and a progression becomes a curve. <bookmark mark='a'/> Within the key, no step costs more than {say(mx[0])}. <bookmark mark='b'/> Through mixture and the Neapolitan, the curve climbs to {say(mx[1])}, as the D flat chord is followed by the dominant. <bookmark mark='c'/> Through the trapdoor, the single chord that changes the key costs {say(mx[2])}, and then the new key settles at once. <bookmark mark='d'/> In 2007 Lerdahl and Krumhansl asked listeners to rate tension, moment by moment, in passages of tonal music, and found that a version of this model, with chords arranged in a tree rather than a chain, followed their ratings well."
         ) as vo:
             self.play(FadeIn(cap), FadeIn(cells[0]))
             for mark, c_ in zip("bc", cells[1:]):
@@ -160,14 +154,7 @@ class Tension(SoundScene):
         rows_.scale_to_fit_width(min(rows_.width, 6.0))
         rows_.move_to(RIGHT * 3.7 + DOWN * 0.1)
         with self.voiceover(
-            "Lerdahl's own model is subtler than a chain. <bookmark mark='a'/> It arranges the chords in a tree, each "
-            "chord elaborating a more important one: here A minor prolongs the opening C, D minor prepares G seven, and "
-            "G seven prepares the final C. A chord's tension is its distance from the chord it hangs from, "
-            "<bookmark mark='b'/> plus the tension that chord already carries. <bookmark mark='c'/> So D minor, which "
-            f"costs only {say(seq[2])} as a step from A minor, carries {say(hier[2])} in the tree: its own distance from "
-            "G seven, and G seven's from the end. <bookmark mark='d'/> The chain hears only neighbours; the tree hears "
-            "the phrase, tension rising toward the cadence and draining away at the close. Building such trees "
-            "automatically is Part 22's subject."
+            f"Lerdahl's own model is subtler than a chain. <bookmark mark='a'/> It arranges the chords in a tree, each chord elaborating a more important one: here A minor prolongs the opening C, D minor prepares G seven, and G seven prepares the final C. A chord's tension is its distance from the chord it hangs from, <bookmark mark='b'/> plus the tension that chord already carries. <bookmark mark='c'/> So D minor, which costs only {say(seq[2])} as a step from A minor, carries {say(hier[2])} in the tree: its own distance from G seven, and G seven's from the end. <bookmark mark='d'/> Our chain model scores neighbours; this hand-assigned tree models phrase relationships, tension rising toward the cadence and draining away at the close. Building such trees automatically is Part 22's subject."
         ) as vo:
             self.play(FadeIn(leaves), FadeIn(seqn), FadeIn(tags[1]), FadeIn(rows_[0]))
             vo.wait_until("a")

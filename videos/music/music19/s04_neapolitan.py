@@ -35,7 +35,7 @@ class Neapolitan(SoundScene):
         with self.voiceover(
             "B. In A the second chord is the plain minor four. In B it is a D flat major chord, with its third in the "
             "bass: the Neapolitan sixth. Its D flat is a semitone above home, and from it the bass and upper voices "
-            "fall onto the dominant by the smallest possible steps, D flat to C, D flat to B. The ear hears a chord from "
+            "fall onto the dominant with characteristic descending motion, including D flat toward C or B. The ear hears a chord from "
             "the far side of the key, and then the strongest pull back."
         ):
             self.play(FadeIn(ans))
@@ -47,19 +47,14 @@ class Neapolitan(SoundScene):
         rows_ = VGroup(*[label(t, font_size=26, color=c_) for t, c_ in (
             (tex(r"the Neapolitan: \ ♭II, \ the major triad on the lowered second degree"), WHITE),
             (r"named for the Neapolitan opera composers who used it in laments, \ though older", WHITE),
-            (tex(r"it does the subdominant's job \ (iv with D♭ for D): \ a predominant"), WHITE),
-            (tex(r"its D♭ falls to B through C: \ a diminished third, \ the most tense melodic step in the key"), WHITE),
+            (tex(r"it does the subdominant's job \ (iv with D♭ for C): \ a predominant"), WHITE),
+            (tex(r"D♭ may fall directly to B, or through C in a cadential 6/4"), WHITE),
             (r"Beethoven, \ \textit{Moonlight} sonata, \ first movement: \ the same chord at its darkest point", TUNE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         rows_.scale_to_fit_width(min(rows_.width, 12.6))
         rows_.move_to(DOWN * 0.1)
         head = label(r"the chord a semitone above home", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The chord is named after the opera composers of Naples, who used it in laments, though it is older than "
-            "them. <bookmark mark='a'/> It is the major triad on the lowered second degree. <bookmark mark='b'/> It "
-            "does the subdominant's job: in C minor, it is the minor four with D flat in place of D. "
-            "<bookmark mark='c'/> And its D flat must find its way down to B, the leading note, which means passing "
-            "through C: a diminished third, the most strained step in the key. <bookmark mark='d'/> Beethoven, in the "
-            "first movement of the Moonlight sonata, puts it at the point where the music is darkest."
+            "The chord is named after the opera composers of Naples, who used it in laments, though it is older than them. <bookmark mark='a'/> It is the major triad on the lowered second degree. <bookmark mark='b'/> It does the subdominant's job: in C minor, it is the minor four with D flat in place of C. <bookmark mark='c'/> And its D flat must find its way down to B, the leading note, either directly or through C in a cadential six-four; D flat to B is a diminished third. <bookmark mark='d'/> Beethoven, in the first movement of the Moonlight sonata, puts it at the point where the music is darkest."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]), FadeIn(rows_[1]))
             vo.wait_until("a")

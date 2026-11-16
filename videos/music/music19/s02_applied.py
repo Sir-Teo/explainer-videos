@@ -26,12 +26,7 @@ class Applied(SoundScene):
         rows_.scale_to_fit_width(min(rows_.width, 7.6))
         rows_.move_to(RIGHT * 2.4 + DOWN * 0.1)
         with self.voiceover(
-            "Part 15 found that a key is held together by its leading note, the seventh degree a semitone below home. "
-            "<bookmark mark='a'/> Now borrow one note from outside C major: F sharp. <bookmark mark='b'/> It sits a "
-            "semitone below G, and leans on G exactly as B leans on C. <bookmark mark='c'/> Build a dominant seventh on "
-            "it, D, F sharp, A, C, and G becomes, for a moment, a home of its own. The chord is called five-seven of "
-            "five, an applied or secondary dominant. <bookmark mark='d'/> Every major or minor chord in a key can be "
-            "given one."
+            "In common-practice major and harmonic-minor contexts, a leading note helps establish a tonic, the seventh degree a semitone below home. <bookmark mark='a'/> Now borrow one note from outside C major: F sharp. <bookmark mark='b'/> It sits a semitone below G, and leans on G exactly as B leans on C. <bookmark mark='c'/> Build D seven containing it: D, F sharp, A, C, and G becomes, for a moment, a home of its own. The chord is called five-seven of five, an applied or secondary dominant. <bookmark mark='d'/> Every major or minor chord in a key can be given one."
         ) as vo:
             self.play(FadeIn(st), FadeIn(tags))
             for mark, r in zip("abcd", rows_):

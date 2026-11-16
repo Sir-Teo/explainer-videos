@@ -85,7 +85,7 @@ class Mixture(SoundScene):
         with self.voiceover(
             "Did Bach borrow from the minor? Count the borrowed chords on the beats of his major chorales. "
             f"<bookmark mark='a'/> {say(n_mix)} beats in {say(d['bach_beats'])}, less than one in a hundred, and most of "
-            "those are flat seven chords in old modal tunes. Mixture as colour is a nineteenth-century habit. "
+            "those are flat seven chords in old modal tunes. Mixture long predates the nineteenth century, when many composers expanded its uses. "
             "<bookmark mark='b'/> But Bach borrowed the other way. Of his minor chorales that end on their tonic, "
             f"{say(fin.get('0 major', 0))} of {say(on_tonic)} end on a major chord: the minor key's third raised at the "
             "last moment, a Picardy third. Hear a cadence in C minor twice, ending minor and then major."
@@ -101,7 +101,7 @@ class Mixture(SoundScene):
             pulse(snd, la, d["picardy_starts"]["minor"], d["picardy_starts"]["Picardy"] - 0.5, buff=0.08)
             pulse(snd, lb, d["picardy_starts"]["Picardy"], c.duration, buff=0.08)
         with self.voiceover(
-            "One note changes, E flat to E natural, and the ending turns from grief to consolation. The borrowing "
+            "One note changes, E flat to E natural, and the ending can suggest a change of mood in this stylistic context. The borrowing "
             "runs in both directions, and the direction says something about the style."
         ):
             self.wait(0.5)

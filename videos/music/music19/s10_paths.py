@@ -60,7 +60,7 @@ class Paths(SoundScene):
         with self.voiceover(
             "How far is any key from C, counted in chords? Turn the question into a program. "
             "<bookmark mark='a'/> Put the twenty-four keys on Part 15's circle, majors outside, minors inside, and "
-            "join two keys by a step if a single chord can belong to both. <bookmark mark='b'/> Then search outward "
+            "join two keys by a step if a triad belongs to both under this chosen major/harmonic-minor vocabulary. <bookmark mark='b'/> Then search outward "
             "from C, breadth first, and record the fewest steps to every key. <bookmark mark='c'/> With only Part 15's "
             "pivot chords, triads shared by both keys, the neighbours of C are one step away, and the far side of the "
             "circle takes two. <bookmark mark='d'/> Now add this part's doors: the German sixth heard as a dominant "
@@ -138,12 +138,7 @@ class Paths(SoundScene):
                        label(tex(" → ".join([r2[0][0]] + [b for a, b, how in r2])), font_size=22, color=TUNE),
                        label(r"by " + r2[0][2], font_size=22, color=TUNE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 3.6 + DOWN * 0.2)
         with self.voiceover(
-            f"Count them. With pivot chords alone, {say(cnt['pivots'][0])} keys are one step from C and "
-            f"{say(cnt['pivots'][1])} need two. <bookmark mark='a'/> With the doors, {say(cnt['chromatic'][0])} are "
-            f"one step away, and only {say(cnt['chromatic'][1])} need two. <bookmark mark='b'/> Take F sharp major, "
-            "the key furthest from C on the circle, with six sharps. With pivots, the shortest route goes through E "
-            "minor. With the doors, the diminished seventh of C, respelled, lands there directly. This is what "
-            "chromatic harmony bought: the whole map of keys within reach of a single chord."
+            f"Count them. With pivot chords alone, {say(cnt['pivots'][0])} keys are one step from C and {say(cnt['pivots'][1])} need two. <bookmark mark='a'/> With the doors, {say(cnt['chromatic'][0])} are one step away, and only {say(cnt['chromatic'][1])} need two. <bookmark mark='b'/> Take F sharp major, the key furthest from C on the circle, with six sharps. With pivots, the shortest route goes through E minor. With the doors, the diminished seventh of C, respelled, lands there directly. This graph models selected harmonic reinterpretations, rather than the duration or perceptual certainty of a modulation."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(tags))
             vo.wait_until("a")

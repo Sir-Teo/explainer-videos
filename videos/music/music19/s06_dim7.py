@@ -34,7 +34,7 @@ class Dim7(SoundScene):
             "<bookmark mark='a'/> Put it on Part 12's clock of twelve notes. <bookmark mark='b'/> Its notes are three "
             "semitones apart all the way round: it cuts the octave into four equal parts, a square. "
             "<bookmark mark='c'/> Turn the square by three semitones and it lands on itself, so there are only three "
-            "different diminished sevenths in all. <bookmark mark='d'/> And because the chord is the same from every "
+            "different diminished-seventh pitch-class sets in twelve-tone equal temperament. <bookmark mark='d'/> And because the chord is the same from every "
             "note, any of its four notes can be heard as the leading note. B leads to C; D to E flat; F to F sharp, "
             "written E sharp; A flat, written G sharp, to A. One chord, four tonics, and each can be major or minor: "
             "eight keys. And the three diminished sevenths between them reach all twenty-four keys, each exactly once."

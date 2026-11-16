@@ -83,14 +83,7 @@ class Outro(SoundScene):
             rf"chromatic mediants and the hexatonic cycle; \ from C, \ {one} of 23 keys one chord away; \ tension as distance",
         ], title=r"What we found", font_size=25).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A single borrowed leading note makes any chord a temporary home, and Bach did it on "
-            f"about {say(round(100 * a['bach_share']))} beats in a hundred. <bookmark mark='a'/> A major key can borrow the "
-            "minor's chords. <bookmark mark='b'/> The Neapolitan and the augmented sixths approach the dominant from "
-            "outside the key. <bookmark mark='c'/> The diminished seventh can lead to eight keys, and the German sixth "
-            "is a dominant seventh in disguise. <bookmark mark='d'/> These doors are exact only in equal temperament: "
-            "pure thirds never close the octave. <bookmark mark='e'/> And smooth motion opens another road, the "
-            f"chromatic mediants; with all the doors, {say(one)} of the twenty-three other keys are one chord from C, "
-            "and Lerdahl's distance turns each step into a number."
+            f"What did we find? A single borrowed leading note makes any chord a temporary home, and Bach did it on about {say(round(100 * a['bach_share']))} beats in a hundred. <bookmark mark='a'/> A major key can borrow the minor's chords. <bookmark mark='b'/> The Neapolitan and the augmented sixths approach the dominant from outside the key. <bookmark mark='c'/> The diminished seventh can lead to eight keys, and the German sixth is a dominant seventh in disguise. <bookmark mark='d'/> Their equal-step symmetry is exact in equal temperament; other circulating tunings also allow enharmonic reinterpretation, while the specified pure-third cycles fail to close. <bookmark mark='e'/> And smooth motion opens another road, the chromatic mediants; with all the doors, {say(one)} of the twenty-three other keys are one chord from C, and Lerdahl's distance turns each step into a number."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

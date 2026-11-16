@@ -64,7 +64,7 @@ class Trapdoor(SoundScene):
             "wants to rise to G, its A flat to fall to G. <bookmark mark='b'/> On the right, the same keys as a "
             "dominant seventh in D flat: the same black key is now G flat, which wants to fall to F, and the bass A "
             "flat wants to fall a fifth to D flat. <bookmark mark='c'/> On a keyboard tuned in equal temperament, F "
-            "sharp and G flat are one key, so the listener cannot tell which chord it is until the next chord arrives. "
+            "sharp and G flat are one key, so spelling alone cannot distinguish the sounds; preceding and following context can suggest their function. "
             "Music theorists call a chord like this a pivot by enharmonic reinterpretation. Composers called it a "
             "door."
         ) as vo:

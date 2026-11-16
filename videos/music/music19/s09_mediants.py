@@ -127,9 +127,7 @@ class Mediants(SoundScene):
             pulse(snd, t1, 0.0, d["starts"]["hexatonic"] - 0.3, buff=0.08)
             pulse(snd, t2, d["starts"]["hexatonic"], c.duration, buff=0.08)
         with self.voiceover(
-            "The ear follows the smallest motion, not the key signature. A minimal step can carry the music into a "
-            "chord no key contains, and the listener accepts it, because each voice has barely moved. This is the "
-            "second idea of chromatic harmony: closeness measured in semitones of motion, not in shared scales."
+            'Smooth voice leading can support this progression alongside tonal and stylistic expectations. A minimal step can carry the music into a chord outside the starting key, and its small voice motions can help connect the harmonies. This is the second idea of chromatic harmony: closeness measured in semitones of motion, not in shared scales.'
         ):
             self.play(FadeIn(vl))
         self.wait(0.4)

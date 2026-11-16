@@ -160,3 +160,13 @@ python -m videos.music.labs 19                                  # the lab (write
 * E. Kurth, *Romantische Harmonik und ihre Krise in Wagners Tristan* (1920).
 * F. Lehman, *Hollywood Harmony* (2018).
 * Part 6 for the commas; Part 15 for keys and pivot chords; Part 17 for the chorales and voice leading.
+
+## Scope of the demonstrations
+
+The chord and key graphs use twelve equal-tempered pitch classes and a selected major/harmonic-minor triad vocabulary, with a major III substituted in minor. An edge is an allowed reinterpretation, not measured modulation duration or certainty. Three diminished-seventh sets and eight destinations per set describe that model; context affects what listeners expect.
+
+In C minor the Neapolitan replaces C in F–A-flat–C with D-flat. D-flat can resolve directly to B or pass through C in a cadential six-four. The displayed German-sixth remedy uses a **major** cadential six-four (E-flat rises to E-natural); a minor six-four can retain E-flat before D.
+
+Equal temperament makes the diminished seventh exactly symmetric. Other circulating temperaments also identify enharmonic keyboard notes, with different interval tradeoffs. The pure-third comma pump assumes a locally pure, common-tone chain without an external pitch anchor; real ensembles can adjust. Mixture predates the nineteenth century.
+
+The tension curves and hand-assigned hierarchy are teaching simplifications of tonal pitch space, not listener measurements or the full Lerdahl model. Minimum pitch-class voice-leading cost ignores register and actual voice identity. Historical readings of Tristan remain interpretations; a sonority label alone does not establish harmonic function.

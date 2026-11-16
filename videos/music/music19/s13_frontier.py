@@ -85,16 +85,7 @@ class Frontier(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"harmony as a geometry of motion", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The idea is older than it looks. <bookmark mark='a'/> In 1853 Carl Friedrich Weitzmann noticed that the "
-            "augmented triad sits a semitone from six different major and minor triads, a hub for chromatic moves. "
-            "<bookmark mark='b'/> In the 1880s Hugo Riemann described harmony as transformations between triads. "
-            "<bookmark mark='c'/> In 1996 Richard Cohn revived those transformations and found the hexatonic cycles, "
-            "and his 2012 book Audacious Euphony applied them to Schubert, Liszt and Wagner. <bookmark mark='d'/> In "
-            "2006 Dmitri Tymoczko, in the journal Science, placed every chord as a point in a geometric space of "
-            "voicings, with voice leadings as paths. <bookmark mark='e'/> In that space, chords that divide the octave "
-            "nearly evenly sit near the centre, with short paths to many others. <bookmark mark='f'/> The major triad "
-            "and the dominant seventh are nearly even, which may be one reason why they became the chords of tonal "
-            "music: they can always move smoothly somewhere."
+            "The idea is older than it looks. <bookmark mark='a'/> In 1853 Carl Friedrich Weitzmann noticed that the augmented triad sits a semitone from six different major and minor triads, a hub for chromatic moves. <bookmark mark='b'/> In the 1880s Hugo Riemann described harmony as transformations between triads. <bookmark mark='c'/> In 1996 Richard Cohn revived those transformations and found the hexatonic cycles, and his 2012 book Audacious Euphony applied them to Schubert, Liszt and Wagner. <bookmark mark='d'/> In 2006 Dmitri Tymoczko, in the journal Science, placed every chord as a point in a geometric space of voicings, with voice leadings as paths. <bookmark mark='e'/> In that space, chords that divide the octave nearly evenly sit near the centre, with short paths to many others. <bookmark mark='f'/> The major triad and the dominant seventh are nearly even, a geometric property that complements, without establishing the historical causes of, their tonal roles: they can always move smoothly somewhere."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcdef", rows_[1:]):
@@ -114,13 +105,7 @@ class Frontier(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"what is still open", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "And the questions now. <bookmark mark='a'/> Corpus studies measure, piece by piece, how far the harmony "
-            "strays from a single key. <bookmark mark='b'/> Across the Baroque, Classical and Romantic eras the measure "
-            "rises, and Part 27 builds such an index itself. <bookmark mark='c'/> In film music, Frank Lehman's 2018 "
-            "book Hollywood Harmony traces chromatic mediants used for wonder, and the hexatonic pole, a major chord "
-            "and the minor chord a major third below, used for menace. <bookmark mark='d'/> And the open question: is "
-            "this music best described as a grammar, the subject of Part 22, or as a geometry of smooth motion, or "
-            "both at once?"
+            "And the questions now. <bookmark mark='a'/> Corpus studies measure, piece by piece, how far the harmony strays from a single key. <bookmark mark='b'/> Some selected corpora show rising chromaticism across those eras; results depend on repertoire and measure, and Part 27 builds such an index itself. <bookmark mark='c'/> In film music, Frank Lehman's 2018 book Hollywood Harmony traces chromatic mediants used for wonder, and the hexatonic pole, a major triad and the minor triad a major third below, with no common tones, used for menace. <bookmark mark='d'/> And the open question: is this music best described as a grammar, the subject of Part 22, or as a geometry of smooth motion, or both at once?"
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcd", rows_[1:]):
