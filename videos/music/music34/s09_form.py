@@ -33,13 +33,13 @@ class Form(SoundScene):
                 b[2].shift(DOWN * 0.55)
             b[2].scale_to_fit_width(min(b[2].width, 3.6))
         head = label(r"an instrumental performance in the Hindustani manner \ (typical proportions)", font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
-        cap = label(r"the order runs from no pulse to fast pulse: \ the raga first, \ then time", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.6)
+        cap = label(r"one illustrative sequence; presentation varies\\jhala can also follow the gat", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "A Hindustani instrumental performance has an arc. <bookmark mark='a'/> It opens with alap: no pulse and no "
+            "One common Hindustani plucked-instrument presentation can follow this arc; instruments and genres vary. <bookmark mark='a'/> It opens with alap: no pulse and no "
             "drum, the raga revealed note by note, often for a long time. <bookmark mark='b'/> Then jor: a pulse appears, "
             "still without the drum. <bookmark mark='c'/> Then jhala: fast, with the drone strings struck between the "
-            "melody notes. <bookmark mark='d'/> And finally the gat: a composition in a tala, with tabla, and improvisation "
-            "around it, ending in tihais. The order is the point: first the raga, then time."
+            "melody notes. <bookmark mark='d'/> A gat is a composition in a tala, with tabla, and improvisation "
+            "around it, ending in tihais. Jhala can also follow the gat later, and other performance formats organize these stages differently. The contrast here is free exploration followed by explicit pulse and tala."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             for mark, b in zip("abcd", bars):
@@ -107,7 +107,7 @@ class Form(SoundScene):
         head = label(r"jh\=al\=a: \ a melody note, \ then the drone strings, \ faster and faster \ (ours)", font_size=24, color=GREY_A).to_edge(UP, buff=0.4)
         cap = label(r"gold: \ the melody; \ grey: \ strokes on the high drone string between", font_size=20, color=GREY_A).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "Jhala is the climax of the opening. After each melody note the player strikes the high drone strings, the "
+            "Jhala can provide a climax before or after the gat, depending on the presentation. After each melody note the player strikes the high drone strings, the "
             "chikari, several times, so the melody rides on a rapid rhythmic pulse, and the whole thing accelerates. Here is "
             "a short jhala of our own: one melody note, three drone strokes, speeding up."
         ):

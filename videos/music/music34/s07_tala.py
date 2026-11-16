@@ -20,14 +20,14 @@ class Tala(SoundScene):
         items = [
             (r"a tala is a cycle of beats \ (\textit{m\=atr\=a}s), \ grouped into sections \ (\textit{vibh\=ag}s)", WHITE),
             (r"each section begins with a clap \ (\textit{t\=al\=\i}) \ or a wave of the hand \ (\textit{kh\=al\=\i})", WHITE),
-            (r"beat 1 is \textit{sam}: \ the strongest point, \ where phrases resolve", TUNE),
+            (r"beat 1 is sam: a structural return\\not necessarily the loudest stroke", TUNE),
             (r"the drum's basic pattern for a tala is its \textit{\d{t}hek\=a}, \ spoken as syllables \ (\textit{bols})", WHITE),
             (r"khali sections use open, \ ringing strokes less: \ you can hear where you are", GREY_A),
         ]
         rows_scene(self, r"cycles of beats", items,
                    "Now rhythm. <bookmark mark='b'/> A tala is a cycle of beats, matras, grouped into sections, vibhags. "
                    "<bookmark mark='c'/> Each section begins with a clap of the hands, tali, or a wave, khali. "
-                   "<bookmark mark='d'/> Beat one is sam, the strongest point of the cycle, where phrases resolve. "
+                   "<bookmark mark='d'/> In Hindustani terminology beat one is sam, a structural point of return that need not be the loudest beat, where phrases resolve. "
                    "<bookmark mark='e'/> The tabla's basic pattern for each tala is its theka, spoken and learned as syllables "
                    "called bols. <bookmark mark='f'/> In the khali section the drummer avoids the ringing bass strokes, so a "
                    "listener can hear where in the cycle the music is.", marks="cdef")
@@ -66,7 +66,7 @@ class Tala(SoundScene):
     def carnatic(self):
         items = [
             (r"Carnatic tala: \ the Sul\=adi system, \ built from three kinds of part", WHITE),
-            (r"\textit{laghu}: \ a clap and finger counts \ (3, \ 4, \ 5, \ 7 or 9 beats); \ \textit{drutam}: \ a clap and a wave \ (2)", WHITE),
+            (r"laghu: clap + finger counts (3, 4, 5, 7, 9)\\drutam: clap + wave (2); anudrutam: clap (1)", WHITE),
             (r"\textit{\=Adi t\=a\d{l}a}: \ a laghu of 4 and two drutams \ = \ 8 beats, \ the most common", TUNE),
             (r"7 tala shapes $\times$ 5 laghu sizes \ = \ 35 talas, \ multiplied again by subdivisions \ (\textit{nadai})", WHITE),
             (r"the hand gestures are part of the music: \ audiences keep tala along with the performers", GREY_A),
@@ -74,7 +74,7 @@ class Tala(SoundScene):
         rows_scene(self, r"tala in the south", items,
                    "Carnatic music organises tala differently. <bookmark mark='b'/> The Suladi system builds every tala from "
                    "parts: <bookmark mark='c'/> a laghu, a clap followed by finger counts, of three, four, five, seven or nine "
-                   "beats; and a drutam, a clap and a wave, two beats. <bookmark mark='d'/> Adi tala, a laghu of four and two "
+                   "beats; a drutam, a clap and a wave, two beats; and an anudrutam, one clap and one beat. <bookmark mark='d'/> Adi tala, a laghu of four and two "
                    "drutams, eight beats in all, is the most common. <bookmark mark='e'/> Seven shapes times five laghu sizes "
                    "give thirty-five talas, multiplied again by how each beat is subdivided. <bookmark mark='f'/> And the "
                    "gestures are part of the music: audiences keep tala with their hands along with the performers.",

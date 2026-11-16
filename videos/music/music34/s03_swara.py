@@ -27,7 +27,7 @@ class Swara(SoundScene):
         head = label(r"the seven swaras", font_size=28, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "The notes are called swaras. <bookmark mark='a'/> There are seven, Sa, Re, Ga, Ma, Pa, Dha and Ni, sung as "
-            "sargam, the way Western singers use do, re, mi. <bookmark mark='b'/> Sa and Pa never change. Re, Ga, Dha and Ni "
+            "sargam, the way Western singers use do, re, mi. <bookmark mark='b'/> In this Hindustani naming scheme Sa and Pa have no komal or tivra variants; their sounding intonation and ornament still depend on practice. Re, Ga, Dha and Ni "
             "can be lowered, komal, and Ma can be raised, tivra. <bookmark mark='c'/> That gives twelve positions, like the "
             "piano's. <bookmark mark='d'/> In this film komal notes are written in lower case, tivra Ma with a mark, and a "
             "dot after a note means the octave below."
@@ -92,10 +92,7 @@ class Swara(SoundScene):
         ans = VGroup(label(r"A: \ 400 cents, \ equal temperament: \ beats", font_size=21, color=EAR).next_to(cells[0], DOWN, buff=0.5),
                      label(r"B: \ 386 cents, \ 5:4: \ still", font_size=21, color=TUNE).next_to(cells[1], DOWN, buff=0.5))
         with self.voiceover(
-            f"A beats. At four hundred cents, the tempered Ga's fourth partial and the drone's tenth miss each other by about "
-            f"{say(round(d['beat_hz']))} hertz, a fast shimmer. The pure third, three hundred and eighty-six cents, locks onto "
-            "the drone and the shimmer stops. Against a drone, singers and string players can hear exactly where a note sits; "
-            "the piano cannot adjust."
+            f"A beats. At four hundred cents, the tempered Ga's fourth partial and the drone's tenth miss each other by about {say(round(d['beat_hz']))} hertz, a fast shimmer. In this synthesis the five-to-four third aligns those particular partials and reduces their beating; this is not a single prescribed Ga for every raga. Against a drone, singers and string players can hear exactly where a note sits; the piano cannot adjust."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -131,7 +128,7 @@ class Swara(SoundScene):
             "Hear two of the shrutis. Re as nine eighths, two hundred and four cents, reached by stacking fifths. Re as ten "
             "ninths, one hundred and eighty-two cents, the step left when a pure third is split into two unequal tones. Each "
             "over the drone, then the two alternating alone. They differ by the syntonic comma of Part 6, twenty-one and a "
-            "half cents: small, but a trained ear hears the difference."
+            "half cents: small; audibility depends on the listener, duration, timbre and context."
         ):
             self.play(FadeIn(head), FadeIn(cells))
         with self.listen(c) as snd:
@@ -146,11 +143,11 @@ class Swara(SoundScene):
     # ------------------------------------------------------------------
     def fixed(self):
         items = [
-            (r"Sa and Pa are \textit{acala}: \ immovable", WHITE),
-            (r"Pa is a pure fifth above Sa: \ the drone's own second note", WHITE),
+            (r"Sa and Pa: no komal/tivra variants\\intonation and ornament remain contextual", WHITE),
+            (r"Pa is conventionally the fifth above Sa, often approached near the pure ratio: \ the drone's own second note", WHITE),
             (r"every other note is \textit{cala}: \ it has more than one form, \ and moves in gamaka", WHITE),
             (r"so the fixed frame is Sa--Pa--Sa, \ and everything else is placed against it", TUNE),
             (r"Part 5: \ the fifth is the most consonant interval after the octave", GREY_A),
         ]
-        rows_scene(self, r"why Sa and Pa never move", items,
-                   "Why are Sa and Pa never altered? <bookmark mark='b'/> They are called achala, immovable. <bookmark mark='c'/> Pa is a pure fifth above Sa, the drone's own other note. <bookmark mark='d'/> Every other note is chala: it has more than one form, and it moves in ornament. <bookmark mark='e'/> So the fixed frame is Sa, Pa and the upper Sa, and everything else is placed against it, <bookmark mark='f'/> resting on the consonance of the fifth from Part 5.", marks="cdef")
+        rows_scene(self, r"Sa and Pa as reference categories", items,
+                   "Why are Sa and Pa never altered? <bookmark mark='b'/> They are called achala, immovable. <bookmark mark='c'/> Pa is conventionally the fifth above Sa, often approached near the pure ratio, the drone's own other note. <bookmark mark='d'/> Every other note is chala: it has more than one form, and can move in ornament. <bookmark mark='e'/> So the fixed frame is Sa, Pa and the upper Sa, and everything else is placed against it, <bookmark mark='f'/> resting on the consonance of the fifth from Part 5.", marks="cdef")

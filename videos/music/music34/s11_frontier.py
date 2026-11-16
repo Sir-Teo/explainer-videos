@@ -18,7 +18,7 @@ class Frontier(SoundScene):
         items = [
             (r"CompMusic \ (2011--2017, \ Xavier Serra and colleagues): \ large corpora of Hindustani and Carnatic recordings", WHITE),
             (r"pitch tracked from recordings; \ the tonic Sa found automatically from the drone", WHITE),
-            (r"raga recognised from pitch histograms and phrase patterns, \ well above chance among dozens of ragas", WHITE),
+            (r"raga recognised from pitch histograms and phrase patterns, \ with reported above-chance results on particular annotated datasets and candidate sets", WHITE),
             (r"tala tracked, \ sam found, \ tabla strokes transcribed", TUNE),
             (r"the tools are Part 61's and 62's, \ tuned to this music", GREY_A),
         ]
@@ -26,8 +26,8 @@ class Frontier(SoundScene):
                    "Computers have studied this music closely. <bookmark mark='b'/> The CompMusic project, led by Xavier Serra "
                    "from 2011, built large collections of Hindustani and Carnatic recordings. <bookmark mark='c'/> It tracked "
                    "pitch from the recordings and found the tonic automatically from the drone. <bookmark mark='d'/> It "
-                   "recognised ragas from pitch histograms and characteristic phrases, well above chance among dozens of ragas. "
-                   "<bookmark mark='e'/> And it tracked tala, found sam, and transcribed tabla strokes. <bookmark mark='f'/> The "
+                   "recognised ragas from pitch histograms and characteristic phrases, with reported above-chance results on particular annotated datasets and candidate sets. "
+                   "<bookmark mark='e'/> Related studies addressed tala tracking, sam detection and tabla-stroke transcription, with task-specific datasets and errors rather than universal performance. <bookmark mark='f'/> The "
                    "tools are those of Parts 61 and 62, tuned to this music.", marks="cdef")
 
     # ------------------------------------------------------------------

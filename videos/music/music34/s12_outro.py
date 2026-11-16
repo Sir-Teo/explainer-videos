@@ -32,11 +32,11 @@ class Outro(SoundScene):
                     g2.cells[4 + 5 * k + i][0].set_fill(EAR, opacity=0.3)
         l1 = label(r"gat: \ the Tune, \ one cycle of Teentaal", font_size=17, color=TUNE).next_to(g1, LEFT, buff=0.3)
         l2 = label(r"tihai from beat 5", font_size=17, color=EAR).next_to(g2, LEFT, buff=0.3)
-        l1.scale_to_fit_width(min(l1.width, 2.2))
-        l2.scale_to_fit_width(min(l2.width, 2.2))
+        l1.scale_to_fit_width(min(l1.width, 2.2)).next_to(g1, LEFT, buff=0.3)
+        l2.scale_to_fit_width(min(l2.width, 2.2)).next_to(g2, LEFT, buff=0.3)
         with self.voiceover(
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> The Tune is in the major "
-            "scale, so here it is treated as Bilawal. First a short alap on its opening phrase, slow and free, with glides, "
+            "scale, so here it supplies a simplified Bilawal-based sketch, not a complete idiomatic raga performance. First a short alap on its opening phrase, slow and free, with glides, "
             "over the drone. Then its first two phrases as a gat, one cycle of Teentaal with the tabla. Then a second cycle: "
             "four beats of theka and a tihai from beat five, the melody falling Ga, Re, Sa three times, the last Sa landing on "
             "sam."
@@ -160,7 +160,7 @@ class Outro(SoundScene):
         lead.scale_to_fit_width(min(lead.width, 12.5))
         nxt = VGroup(label(r"Part 35", font_size=32, color=GREY_B), label(r"Maqam", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Raga is one great modal system. <bookmark mark='a'/> Another, from the Arab world, Turkey and Persia, builds its "
+            "Raga is one great modal system. <bookmark mark='a'/> Related but distinct modal traditions in the Arab world, Turkey and Iran, builds its "
             "scales with notes between the piano's keys. <bookmark mark='b'/> Next time. Part 35: Maqam."
         ) as vo:
             self.play(FadeIn(top), FadeIn(lead))

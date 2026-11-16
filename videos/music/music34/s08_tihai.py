@@ -27,7 +27,7 @@ class Tihai(SoundScene):
         with self.voiceover(
             "The tihai is an equation. <bookmark mark='a'/> A phrase of p beats is played three times, with a gap of g beats "
             "between the repetitions. <bookmark mark='b'/> It starts on beat s, and its last stroke must land on sam. "
-            "<bookmark mark='c'/> Counting from zero at sam, the last stroke is at s minus one, plus three p, plus two g, "
+            "<bookmark mark='c'/> Using one-based start beat s but time zero at sam, and equally spaced unit strokes whose phrase duration is p beats, the last stroke is at s minus one, plus three p, plus two g, "
             "minus one, and that must be a whole number of cycles. <bookmark mark='d'/> In the hook, s was five, p three and "
             "g two: four plus nine plus four minus one is sixteen, exactly one cycle of Teentaal. <bookmark mark='e'/> With no "
             "gap it is called bedam, without breath; with gaps, dumdar."

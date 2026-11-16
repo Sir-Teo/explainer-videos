@@ -35,13 +35,7 @@ class Thaat(SoundScene):
         head = label(r"Bhatkhande's thaats: \ 10 of the 32 possible seven-note scales", font_size=25, color=GREY_A).to_edge(UP, buff=0.35)
         cap = label(r"Sa and Pa fixed; \ Re, \ Ga, \ Ma, \ Dha, \ Ni each in one of two forms: \ $2^5$ \ = \ 32", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "In the early twentieth century the Hindustani scholar Vishnu Narayan Bhatkhande sorted the ragas of the north "
-            "into ten families by their scales, the thaats. <bookmark mark='a'/> With Sa and Pa fixed, and each of the "
-            "other five notes in one of two forms, there are two to the fifth, thirty-two possible scales; the program lists "
-            "them all, each as twelve cells. <bookmark mark='b'/> Bhatkhande's ten are lit: Bilawal, the major scale; "
-            "Kalyan, with raised Ma; Bhairavi, with every flattable note flat; and the more exotic Marwa, Purvi, Todi and "
-            "Bhairav, with their lowered Re. Many ragas fit no thaat exactly, and the scheme is a teaching tool rather than a "
-            "law."
+            "In the early twentieth century the Hindustani scholar Vishnu Narayan Bhatkhande sorted the ragas of the north into ten families by their scales, the thaats. <bookmark mark='a'/> With Sa and Pa fixed, and each of the other five notes in one of two forms, there are two to the fifth, thirty-two possible scales; the program lists them all, each as twelve cells. <bookmark mark='b'/> Bhatkhande's ten are lit: Bilawal, the major scale; Kalyan, with raised Ma; Bhairavi, with every flattable note flat; and Marwa, Purvi, Todi and Bhairav, with their lowered Re. Many ragas fit no thaat exactly, and the scheme is a teaching tool rather than a law."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cells), FadeIn(cap))
             vo.wait_until("a")
@@ -64,18 +58,18 @@ class Thaat(SoundScene):
             c_[1].move_to(c_[0])
         cells.arrange_in_grid(rows=6, cols=12, buff=0.08).move_to(LEFT * 1.6 + DOWN * 0.3)
         side = VGroup(*[label(s, font_size=20, color=c_) for s, c_ in (
-            (r"Venkatamakhin \ (17th century): \ every scale with Sa, \ Pa, \ one Ma, \ two of four Ri/Ga places, \ two of four Dha/Ni", WHITE),
+            (r"Venkatamakhin: earlier 72-mela scheme\\current sampurna order standardized later", WHITE),
             (r"2 Ma $\times$ 6 $\times$ 6 \ = \ 72 \ \textit{m\=e\d{l}akartas}", TUNE),
-            (r"numbered in a fixed order: \ 29 is the major scale, \ 65 the Lydian", WHITE),
+            (r"modern ordering: 29 = major-scale notes\\65 = Lydian-mode notes", WHITE),
             (r"Bhatkhande's ten thaats are ten of them \ (gold)", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 4.4)).move_to(RIGHT * 4.6)
         head = label(r"the 72 melakartas, \ generated", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The south had done this more thoroughly two centuries earlier. <bookmark mark='a'/> The scholar Venkatamakhin, "
+            "South Indian theorists developed a related exhaustive scale classification earlier. <bookmark mark='a'/> The scholar Venkatamakhin, "
             "in the seventeenth century, counted every scale with Sa and Pa, one of two Mas, and Ri and Ga in two of the four "
             "places between Sa and Ma, Dha and Ni in two of the four above Pa. <bookmark mark='b'/> Two Mas, six ways for "
             "the lower pair, six for the upper: seventy-two melakartas, the parent scales of Carnatic music. "
-            "<bookmark mark='c'/> They are numbered in a fixed order; the program generates them in it: number twenty-nine "
+            "<bookmark mark='c'/> The current sampurna scheme and naming were standardized later, associated with Govindacharya. They are numbered in a fixed order; the program generates that modern scheme: number twenty-nine "
             "is the major scale, Dheerashankarabharanam, and sixty-five the Lydian, Mechakalyani. <bookmark mark='d'/> "
             "Bhatkhande's ten thaats are ten of the seventy-two."
         ) as vo:

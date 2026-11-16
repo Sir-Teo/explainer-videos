@@ -125,3 +125,7 @@ python -m videos.music.labs 34                                  # the lab (write
   publications on tonic identification, raga recognition and rhythm (2011–2017).
 * V. N. Bhatkhande, *Hindusthani Sangeet Paddhati* (1909–32); Venkatamakhin, *Caturdaṇḍīprakāśikā* (about 1660).
 * Part 5 for consonance; Part 6 for commas; Part 9 for the tabla's membrane; Part 11 for metre; Part 33 for cycles.
+
+## Interpretation limits
+
+The sounds are simplified teaching sketches, not certified idiomatic raga performances. The swara alterations and vadi terminology here primarily follow Hindustani accounts, with school-dependent intonation and emphasis. Pa’s achala status concerns note categories, not an absolute ban on pitch movement. Bilawal is not exhausted by the major-scale pitch set. The modern numbered sampurna melakarta scheme was standardized after Venkatamakhin; Suladi tala also uses one-beat anudrutam. Sam is a structural return, not necessarily a loud clap, and Rupak starts with khali. Instrumental performance orders vary, including jhala after gat. Histogram and recognition claims depend on task, candidate set and held-out recordings or performers; no recognition experiment is run here. Tihai arithmetic uses an explicitly one-based starting beat and equal-unit stroke model.

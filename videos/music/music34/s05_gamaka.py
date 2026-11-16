@@ -73,11 +73,7 @@ class Gamaka(SoundScene):
         head = label(r"how long our ornamented alap spends at each pitch \ (cents above Sa, \ folded into one octave)", font_size=23, color=GREY_A).to_edge(UP, buff=0.35)
         cap = label(r"peaks at the notes, \ with wide skirts: \ the glides and swings fill the space between", font_size=21, color=GREY_A).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Computational studies of raga draw a picture like this from real recordings. Track the pitch of a performance "
-            "moment by moment and count how long it spends at each pitch, folded into one octave. This one is from a short alap "
-            "of our own, with ornaments. There are peaks at the notes, Sa, Re, Ga, Pa, and wide skirts between them, where the "
-            "glides and swings pass through. Real performances give much broader, raga-specific shapes, and the shape is a "
-            "fingerprint: it can tell ragas with the same scale apart."
+            'Computational studies of raga draw a picture like this from real recordings. Track the pitch of a performance moment by moment and count how long it spends at each pitch, folded into one octave. This one is from a short alap of our own, with ornaments. There are peaks at the notes, Sa, Re, Ga, Pa, and wide skirts between them, where the glides and swings pass through. Real performances give much broader, raga-specific shapes, and the distribution can help discriminate ragas, including some sharing a scale, but is not a unique fingerprint and also reflects performer, phrase and recording.'
         ):
             self.play(FadeIn(head), FadeIn(bars), FadeIn(names), FadeIn(cap))
         self.wait(0.4)
@@ -93,7 +89,7 @@ class Gamaka(SoundScene):
             (r"Part 61 tracks pitch automatically, \ the tool these studies rely on", GREY_A),
         ]
         rows_scene(self, r"gamaka in the south", items,
-                   "In Carnatic music ornament goes further. <bookmark mark='b'/> Its theory names ten classical gamakas, and in "
+                   "Carnatic music has its own rich systems of ornament. <bookmark mark='b'/> Its theory names ten classical gamakas, and in "
                    "practice the oscillation called kampita dominates: <bookmark mark='c'/> in some ragas almost every note "
                    "moves. <bookmark mark='d'/> Notation gives the notes; the gamakas are learned from a teacher's voice. "
                    "<bookmark mark='e'/> It is Part 10's question again: what can a score hold? <bookmark mark='f'/> Part 61 "
@@ -131,9 +127,9 @@ class Gamaka(SoundScene):
         items = [
             (r"in this music much of the time is spent between named pitches", WHITE),
             (r"a glide's speed and curve are part of the raga", WHITE),
-            (r"Western notation, \ built on fixed pitches, \ has no symbol for most of them", WHITE),
+            (r"ordinary staff notation often omits precise curves\\oral teaching supplies detailed practice", WHITE),
             (r"computer studies measure them from pitch tracks: \ duration, \ depth, \ rate of oscillation", TUNE),
             (r"the next section draws one", GREY_A),
         ]
         rows_scene(self, r"the space between the notes", items,
-                   "Think about what this means. <bookmark mark='b'/> In this music much of the time is spent between the named pitches. <bookmark mark='c'/> How fast a glide moves, and the curve it follows, are part of the raga. <bookmark mark='d'/> Western notation, built on fixed pitches, has no symbol for most of this. <bookmark mark='e'/> Computer studies measure it directly from pitch tracks: how long, how deep, how fast each oscillation is. <bookmark mark='f'/> Here is one drawn.", marks="cdef")
+                   "Think about what this means. <bookmark mark='b'/> In this music much of the time is spent between the named pitches. <bookmark mark='c'/> How fast a glide moves, and the curve it follows, are part of the raga. <bookmark mark='d'/> An ordinary staff transcription often omits the precise curves and timing; detailed notation can add glissandi, ornament signs and other instructions, while oral teaching supplies much of the practice. <bookmark mark='e'/> Computer studies measure it directly from pitch tracks: how long, how deep, how fast each oscillation is. <bookmark mark='f'/> Here is one drawn.", marks="cdef")

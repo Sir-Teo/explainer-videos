@@ -25,12 +25,7 @@ class Raga(SoundScene):
             (r"gamaka: \ how each note is approached, \ shaken, \ left", GREY_A),
         ]
         rows_scene(self, r"what a raga is", items,
-                   "A raga is not just a scale. <bookmark mark='b'/> It has one, but two ragas can share the same notes and still "
-                   "be different ragas. <bookmark mark='c'/> A raga has a way of climbing, the aroha, and a way of descending, "
-                   "the avaroha, often by different notes. <bookmark mark='d'/> It has characteristic phrases, pakad or calan, "
-                   "by which a listener recognises it within seconds. <bookmark mark='e'/> It has notes it dwells on, the vadi "
-                   "and samvadi. <bookmark mark='f'/> And it has its own ways of approaching, shaking and leaving each note, the "
-                   "gamakas of the next chapter.", marks="cdef")
+                   "A raga is not just a scale. <bookmark mark='b'/> It has one, but two ragas can share the same notes and still be different ragas. <bookmark mark='c'/> A raga has a way of climbing, the aroha, and a way of descending, the avaroha, often by different notes. <bookmark mark='d'/> It has characteristic phrases, pakad or calan, by which a listener recognises it within seconds. <bookmark mark='e'/> Hindustani accounts often identify prominent vadi and samvadi notes; their status and assignments vary by raga and school. <bookmark mark='f'/> And it has its own ways of approaching, shaking and leaving each note, the gamakas of the next chapter.", marks="cdef")
 
     # ------------------------------------------------------------------
     def quiz(self):
@@ -63,8 +58,8 @@ class Raga(SoundScene):
             pulse(snd, rows_[1][0], d["starts"]["B"], c.duration, buff=0.1)
         with self.voiceover(
             "B is Yaman. Its Ma is raised, tivra, written M with a mark, and it typically begins its climb from Ni below "
-            "Sa and skips Sa and Pa on the way up. A is Bilawal, the major scale, climbing straight. Same Sa, the same five "
-            "other notes, and a different raga: one note and a habit of movement are enough."
+            "Sa and skips Sa and Pa on the way up. A is our simplified Bilawal-based teaching sketch, using the major-scale notes. Same Sa, the same five "
+            "other notes, and a different raga: these sketches contrast a pitch alteration and a habit of movement; a complete raga identity needs more context."
         ):
             self.play(*[g[1].animate.set_opacity(1.0) for g in rows_])
         self.wait(0.4)
@@ -144,4 +139,4 @@ class Raga(SoundScene):
             (r"Part 15's key profiles measured the same idea for Western keys", GREY_A),
         ]
         rows_scene(self, r"the notes a raga leans on", items,
-                   "Ragas lean on particular notes. <bookmark mark='b'/> The vadi is the most important note, and the samvadi its partner, usually a fourth or fifth away. <bookmark mark='c'/> In Yaman, as commonly taught, the vadi is Ga and the samvadi Ni. <bookmark mark='d'/> In Bhupali, Ga and Dha. <bookmark mark='e'/> They are the raga's centre of gravity: phrases return to them and rest there. <bookmark mark='f'/> Part 15's key profiles measured the same idea for Western keys.", marks="cdef")
+                   "Ragas lean on particular notes. <bookmark mark='b'/> The vadi is the most important note, and the samvadi its partner, usually a fourth or fifth away. <bookmark mark='c'/> In Yaman, as commonly taught, the vadi is Ga and the samvadi Ni. <bookmark mark='d'/> In Bhupali, Ga and Dha. <bookmark mark='e'/> They are the raga's centre of gravity: phrases return to them and rest there. <bookmark mark='f'/> Part 15’s Western key profiles offer an analogy, not an equivalence with vadi theory.", marks="cdef")

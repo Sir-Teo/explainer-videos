@@ -39,7 +39,7 @@ class Drone(SoundScene):
         thread = Dot(LEFT * 0.4 + DOWN * 0.34, radius=0.06, color=EAR)
         labs = VGroup(label(r"string", font_size=20, color=TUNE).next_to(string, UP, buff=0.15).shift(RIGHT * 3.5),
                       label(r"curved bone bridge", font_size=20, color=GREY_B).next_to(brg, DOWN, buff=0.25),
-                      label(r"the thread \ (\textit{jiv\=ari})", font_size=20, color=EAR).next_to(thread, DOWN, buff=0.6))
+                      label(r"cotton thread", font_size=20, color=EAR).next_to(thread, RIGHT, buff=1.0).shift(DOWN * 0.6))
         rows_ = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
             (r"the string does not leave the bridge at a sharp edge: \ it grazes a curved surface", WHITE),
             (r"as it swings, \ the point where it leaves the bridge moves back and forth", WHITE),
