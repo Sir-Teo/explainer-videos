@@ -1138,6 +1138,24 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Colin MacLeod; Ioana Cristea; Claire Gillan; Aaron Beck; Robb Rutledge; Joseph Schildkraut; Joanna Moncrieff | 科林·麦克劳德；约安娜·克里斯泰亚；克莱尔·吉兰；阿伦·贝克；罗布·拉特利奇；约瑟夫·席尔德克劳特；乔安娜·蒙克里夫 |
 | Irving Kirsch; Andrea Cipriani; George Brown; Tirril Harris; Robert Culverhouse; Richard Border; John Cade; Joseph Franklin; Alex Pokorny | 欧文·基尔希；安德烈亚·奇普里亚尼；乔治·布朗；蒂里尔·哈里斯；罗伯特·卡尔弗豪斯；理查德·博德；约翰·凯德；约瑟夫·富兰克林；亚历克斯·波科尔尼 |
 
+## Part 41: psychosis, addiction and development
+
+| English | 中文 |
+|---|---|
+| hollow-mask illusion; prior precision; shape from shading; light-from-above prior | 凹面具错觉；先验精度；由明暗知形状；光来自上方的先验 |
+| schizophrenia; psychosis; positive, negative, cognitive symptoms; hallucination; delusion; first episode | 精神分裂症；精神病；阳性、阴性、认知症状；幻觉；妄想；首次发作 |
+| antipsychotic; chlorpromazine; D2 receptor; dopamine hypothesis; striatum; aberrant salience; predictive coding | 抗精神病药；氯丙嗪；D2受体；多巴胺假说；纹状体；异常显著性；预测编码 |
+| conditioned hallucinations; voice hearers; heritability; genome-wide association; complement component 4; synaptic pruning; schizophrenogenic mother | 条件化幻觉；听到声音的人；遗传力；全基因组关联；补体成分4；突触修剪；致精神分裂的母亲 |
+| addiction; tolerance; withdrawal; incentive sensitization; wanting, liking; delay discounting; preference reversal | 成瘾；耐受；戒断；诱因敏感化；想要，喜欢；延迟贴现；偏好反转 |
+| non-compensable prediction error; blocking; Rat Park; contingency management; harm reduction; opioid substitution; naloxone | 无法抵消的预测误差；阻断；老鼠乐园；应急管理；减害；阿片类替代治疗；纳洛酮 |
+| autism; autistic person; neurodiversity; refrigerator mother; facilitated communication; ideomotor effect; surveillance | 孤独症；孤独症人士；神经多样性；冰箱母亲；辅助沟通；观念运动效应；监测 |
+| ADHD (attention-deficit hyperactivity disorder); relative age; stimulant; transdiagnostic; muscarinic receptor; polygenic score | 注意缺陷多动障碍；相对年龄；兴奋剂；跨诊断；毒蕈碱型受体；多基因评分 |
+| Richard Gregory; Eugen Bleuler; David Rosenthal; Henri Laborit; Jean Delay, Pierre Deniker; Philip Seeman; Ian Creese; Solomon Snyder | 理查德·格雷戈里；欧根·布洛伊勒；戴维·罗森塔尔；亨利·拉博里；让·德莱，皮埃尔·德尼凯；菲利普·西曼；伊恩·克里斯；所罗门·斯奈德 |
+| Oliver Howes; Shitij Kapur; Albert Powers; Christoph Mathys; Philip Corlett; Philipp Sterzer; Patrick Sullivan; Kenneth Kendler; Michael Neale | 奥利弗·豪斯；希蒂杰·卡普尔；阿尔伯特·鲍尔斯；克里斯托夫·马蒂斯；菲利普·科利特；菲利普·施特尔策；帕特里克·沙利文；肯尼思·肯德勒；迈克尔·尼尔 |
+| Vassily Trubetskoy; Aswin Sekar; Arianna Marconi; Frieda Fromm-Reichmann; Terry Robinson; Kent Berridge; David Redish; Leigh Panlilio | 瓦西里·特鲁别茨科伊；阿斯温·塞卡尔；阿里安娜·马尔科尼；弗里达·弗洛姆-赖希曼；特里·鲁宾逊；肯特·贝里奇；戴维·雷迪什；利·潘利利奥 |
+| Bruce Alexander; Bruce Petrie; Lee Robins; Stephen Higgins; Michael Prendergast; Leo Kanner; Hans Asperger; Bruno Bettelheim | 布鲁斯·亚历山大；布鲁斯·佩特里；李·罗宾斯；斯蒂芬·希金斯；迈克尔·普伦德加斯特；利奥·坎纳；汉斯·阿斯伯格；布鲁诺·贝特尔海姆 |
+| Andrew Wakefield; Anders Hviid; Elizabeth Pellicano; David Burr; Douglas Biklen; Douglas Wheeler; Stephen Faraone; Henrik Larsson; Timothy Layton; Uta Frith | 安德鲁·韦克菲尔德；安德斯·维德；伊丽莎白·佩利卡诺；戴维·伯尔；道格拉斯·比克伦；道格拉斯·惠勒；斯蒂芬·法拉奥内；亨里克·拉尔松；蒂莫西·莱顿；乌塔·弗里斯 |
+
 ## Names
 
 | English | 中文 |

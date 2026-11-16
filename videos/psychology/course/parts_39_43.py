@@ -86,4 +86,42 @@ PARTS = [
               ("Its tests", "tests/psychology/test_clinic.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=41, level="U", widget="shading",
+        question="What happens when the machinery of inference and learning is set wrongly?",
+        story="A mask of a face, seen from behind, looks like an ordinary face to almost everyone: a prior strong "
+              "enough to overrule both eyes. In small studies, many people with schizophrenia see it as hollow. The "
+              "part uses the series' own models as a language for three kinds of condition. Psychosis: its symptoms "
+              "and course, chlorpromazine and the dopamine hypothesis, aberrant salience (computed), the hollow mask "
+              "on a Gaussian observer, conditioned hallucinations, and causes from hundreds of genes to cities. "
+              "Addiction: reward, tolerance, wanting without liking, habit and steep discounting; Redish's prediction "
+              "error that cannot be learned away (computed) and the test it failed; Rat Park, the Vietnam veterans "
+              "and contingency management. Development: autism's histories, the vaccine fraud, priors as a "
+              "trade-off, rising diagnoses and facilitated communication; ADHD, relative age and the MTA trial.",
+        handoff="The evidence for therapy is Part 42, the predictive brain Part 58 and computational psychiatry "
+                "Part 59.",
+        outside="Part 14's Bayesian observer, Part 17's prediction errors and habits, Part 26's discounting and Part "
+                "39's base rates; Gaussian algebra, sums of series and derivatives.",
+        objectives={
+            "U": ["Describe the symptoms and course of schizophrenia and the evidence on antipsychotics and dopamine.",
+                  "Explain addiction through reward, tolerance, incentive sensitization, habit and discounting.",
+                  "Weigh the evidence on autism and ADHD, including the retracted vaccine claim and facilitated "
+                  "communication."],
+            "M": ["Compute the hollow-mask percept from a prior and a likelihood, and the best strength of a prior.",
+                  "Simulate aberrant salience and conditioned hallucinations on a learner.",
+                  "Run Redish's model and show why a drug's value grows without bound."],
+            "D": ["Design a study that separates a trait from a state in proneness to conditioned hallucinations."],
+            "I": ["Judge a harm-reduction or early-intervention programme by its evidence and its trade-offs."],
+        },
+        results=[
+            ("Hollow mask percept", r"\hat z = \frac{\pi_p (+1) + \pi_e x}{\pi_p + \pi_e}"),
+            ("Best prior weight", r"w^* = \frac{1/\pi_e}{1/\pi_e + 4(1 - p)}"),
+            ("Redish's drug signal", r"\delta = \max(r - V + D,\; D)"),
+            ("Hyperbolic discounting", r"V = \frac{A}{1 + kD}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13), D=(15,), I=(14,),
+        also=(("Psyche's clinic module", "explainer/psychology/psyche/clinic.py"),
+              ("Its tests", "tests/psychology/test_clinic.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

@@ -73,6 +73,8 @@ Part 42 adds the evidence for therapy:
 * :func:`allegiance`: comparisons of two equally good therapies, each run by a team loyal to one of them.
 * :func:`reliable_change` and :func:`jt_cutoff`: Jacobson and Truax's reliable change index and the cut-off between
   the clinical and the healthy distributions.
+* :func:`jt_categories`: each person in a trial classified by Jacobson and Truax's two rules: recovered (reliable
+  improvement ending past the cut-off), improved, unchanged, or deteriorated (reliably worse).
 * :func:`dose_response`: the share improved after a number of sessions, as a log-normal curve.
 """
 
@@ -84,7 +86,7 @@ __all__ = ["kappa", "two_clinicians", "ising_network", "sweep", "episode", "como
            "clinician_vs_formula", "avoidance", "renewal", "renewal_contexts", "helplessness", "activation", "mood_task",
            "fit_mood", "hollow_mask", "prior_tradeoff", "conditioned_hallucinations", "aberrant_salience",
            "redish", "discount", "therapy_trial", "trial_effect", "publication_filter", "random_effects",
-           "allegiance", "reliable_change", "jt_cutoff", "dose_response"]
+           "allegiance", "reliable_change", "jt_cutoff", "jt_categories", "dose_response"]
 
 
 def kappa(table) -> float:
@@ -547,6 +549,20 @@ def reliable_change(x1, x2, sd: float, rxx: float):
 def jt_cutoff(m_clin: float, s_clin: float, m_well: float, s_well: float) -> float:
     """Criterion c: the point between the clinical and the well distributions, weighted by their SDs."""
     return (s_clin * m_well + s_well * m_clin) / (s_clin + s_well)
+
+
+def jt_categories(pre, post, sd: float, rxx: float, cutoff: float) -> dict:
+    """Shares recovered, improved (reliably but not past the cut-off), unchanged and deteriorated (reliably worse),
+    for scores where lower is better."""
+    rci = reliable_change(pre, post, sd, rxx)
+    post = np.asarray(post, float)
+    rec = (rci < -1.96) & (post < cutoff)
+    imp = (rci < -1.96) & ~rec
+    det = rci > 1.96
+    unc = ~(rec | imp | det)
+    n = float(len(post))
+    return {"recovered": rec.sum() / n, "improved": imp.sum() / n, "unchanged": unc.sum() / n,
+            "deteriorated": det.sum() / n}
 
 
 def dose_response(sessions, median: float = 8.0, at75: float = 26.0):

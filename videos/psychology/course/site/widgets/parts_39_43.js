@@ -190,4 +190,87 @@
     });
   };
 
+  // ---- Part 41: shading on you.  Bumps or dents, and the prior that light comes from above. ----
+  W.shading = function (el) {
+    var w = null, BUMP = "#5bd18b", DENT = "#ef6f6c";
+    // the direction the light seems to come from, in degrees clockwise from straight up
+    var ANGLES = [0, 45, 90, 135, 180, 225, 270, 315];
+    var S = { phase: "idle", k: -1, order: [], log: [] };
+    function shuffle(seed) {
+      var r = QB.rng(seed), a = [], i, j, t;
+      for (i = 0; i < 2; i++) for (j = 0; j < ANGLES.length; j++) a.push(ANGLES[j]);
+      for (i = a.length - 1; i > 0; i--) { j = Math.floor(r() * (i + 1)); t = a[i]; a[i] = a[j]; a[j] = t; }
+      return a;
+    }
+    function next() {
+      S.k++;
+      if (S.k >= S.order.length) { S.phase = "done"; task.clear(); } else S.phase = "ask";
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side) {
+        S.log.push({ angle: S.order[S.k], bump: side === 0 });
+        task.count++;
+        S.phase = "shown";
+        if (w) w.render();
+        task.later(next, 400);
+      },
+    });
+    function start(seed) { task.clear(); S.order = shuffle(seed); S.k = -1; S.log = []; task.count = 0; next(); }
+    function disc(ctx, x, y, r, angle) {
+      var a = (angle - 90) * Math.PI / 180, dx = Math.cos(a) * r, dy = Math.sin(a) * r;
+      var g = ctx.createLinearGradient(x + dx, y + dy, x - dx, y - dy);
+      g.addColorStop(0, "#f2f2f2"); g.addColorStop(1, "#202020");
+      ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, 2 * Math.PI); ctx.fill();
+    }
+    function shareBump(angle) {
+      var n = 0, b = 0, i;
+      for (i = 0; i < S.log.length; i++) if (S.log[i].angle === angle) { n++; if (S.log[i].bump) b++; }
+      return n ? b / n : NaN;
+    }
+    w = QB.widget(el, {
+      title: "Bumps or dents, on you",
+      sub: "Each disc is shaded light to dark. Does it bulge toward you, or is it a dent? Press F (or tap left) for a bump, J (or tap right) for a dent. Sixteen discs; then see how your answers follow the direction of the light.",
+      panels: 2, height: 340, weights: [1, 1.1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state.seed); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), i;
+        ctx.save(); ctx.textAlign = "center";
+        if (S.phase === "ask" || S.phase === "shown") {
+          disc(ctx, b.cx, b.cy, Math.min(b.w, b.h) * 0.22, S.order[S.k]);
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("disc " + (S.k + 1) + " of " + S.order.length + "    bump: F    dent: J", b.cx, b.y + 22);
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "Finished.", "On the right: how often you saw a bump, by where the light side was. A prior that light comes from above predicts bumps when the light side is up and dents when it is down, with doubt when it is to the side.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Nothing you answer is scored or kept.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx;
+        cx.save(); cx.textAlign = "center"; cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif";
+        cx.fillText("Share you saw as bumps, by direction of the light side", c2.x + c2.w / 2, c2.y + 18);
+        var bw = (c2.w - 40) / ANGLES.length, base = c2.y + c2.h - 50, top = c2.y + 40;
+        for (i = 0; i < ANGLES.length; i++) {
+          var x = c2.x + 20 + i * bw, pr = (Math.cos(ANGLES[i] * Math.PI / 180) + 1) / 2, sh = shareBump(ANGLES[i]);
+          cx.strokeStyle = "#9aa4b2"; cx.setLineDash([3, 3]);
+          cx.strokeRect(x + 4, base - (base - top) * pr, bw - 8, (base - top) * pr);
+          cx.setLineDash([]);
+          if (isFinite(sh)) { cx.fillStyle = sh >= 0.5 ? BUMP : DENT; cx.fillRect(x + 8, base - (base - top) * sh, bw - 16, (base - top) * sh); }
+          disc(cx, x + bw / 2, base + 20, Math.min(12, bw / 3), ANGLES[i]);
+        }
+        cx.fillStyle = C.muted; cx.font = "11px system-ui, sans-serif";
+        cx.fillText("dashed: what a light-from-above prior predicts", c2.x + c2.w / 2, c2.y + c2.h - 6);
+        cx.restore();
+      },
+      readout: function () {
+        return [["answers", String(task.count)], ["bumps", String(S.log.filter(function (r) { return r.bump; }).length)]];
+      },
+      note: "Nothing you answer is stored or sent. The prediction is a cosine of the light's direction, a simple stand-in for the prior; people differ, and the bias toward light from slightly left of above is well known.",
+    });
+  };
 })();

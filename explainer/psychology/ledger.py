@@ -4571,14 +4571,14 @@ shown(28, r"Yerkes \& Dodson (1908); \ Teigen (1994)", "a 1908 experiment and th
       "it: a history, not a finding tested here")
 shown(28, r"Berlyne (1960); \ Loewenstein (1994); \ Kang et al.\ (2009)", "theories of curiosity and one study "
       "illustrating them")
-shown(28, r"Berridge \& Robinson (1998); \ Pe\~cina et al.\ (2003)", "the wanting and liking dissociation; entered "
-      "with addiction", row_in=41)
+shown(28, r"Berridge \& Robinson (1998); \ Pe\~cina et al.\ (2003)", "the wanting and liking dissociation; described "
+      "again with addiction in Part 41, without a row of its own")
 shown(28, r"Pe\~cina \& Berridge (2005); \ Berridge \& Kringelbach (2015)", "hedonic hotspots and a review, "
-      "described; entered with addiction", row_in=41)
-shown(28, r"Robinson \& Berridge (2013)", "one experiment, modelled by Psyche; incentive salience is entered with "
-      "addiction", row_in=41)
+      "described; incentive salience returns in Part 41's chapter on addiction, without a row of its own")
+shown(28, r"Robinson \& Berridge (2013)", "one experiment, modelled by Psyche; incentive salience returns in "
+      "Part 41's chapter on addiction, without a row of its own")
 shown(28, r"Kirby, \ Petry \& Bickel (1999); \ Myerson, \ Green \& Warusawitharana (2001)", "discounting's clinical "
-      "correlates are entered with addiction; the area under the curve is a method", row_in=41)
+      "correlates are described with addiction in Part 41, without a row; the area under the curve is a method")
 shown(28, r"Locke \& Latham (2002); \ Ord\'o\~nez et al.\ (2009)", "goal-setting has its row; the review of its "
       "costs is cited in that row")
 shown(28, r"Duckworth et al.\ (2007); \ Cred\'e, \ Tynan \& Harms (2017)", "grit has its row; this tag names it "
@@ -4671,7 +4671,7 @@ shown(31, r"Pietschnig \& Voracek (2015)", "the Flynn effect, described as a coh
 shown(31, r"Bratsberg \& Rogeberg (2018)", "the reversal of the Flynn effect, described; entered with intelligence "
       "in Part 32")
 shown(31, r"Layton et al.\ (2018)", "a single large natural experiment, described as an application; relative age and "
-      "diagnosis are taken up with development that goes differently in Part 41", row_in=41)
+      "diagnosis are taken up again in Part 41's chapter on ADHD, without a row of its own")
 shown(31, r"Casey et al.\ (2018)", "the design of a cohort study at the frontier, described")
 
 shown(32, r"Spearman (1904); \ Binet \& Simon (1905)", "two founding studies told as history; the positive manifold has "
@@ -5851,4 +5851,183 @@ shown(40, r"Brown \& Harris (1978)", "a community interview study, described")
 shown(40, r"Cade (1949)", "the discovery of lithium, told as history")
 shown(40, r"Gillan et al.\ (2011); \ Gillan et al.\ (2016)", "studies of habit and compulsivity, described; "
       "computational psychiatry is Part 59's")
+
+# --- Part 41: Psychosis, Addiction and Development ---------------------------------------------------------------------
+
+add(Finding(
+    key="hollow_mask_schizophrenia", part=41, title=r"The hollow-mask illusion in schizophrenia",
+    claim="People with schizophrenia are less often fooled by the hollow-mask illusion than other people.",
+    original=Study("Emrich", 1989, design="binocular depth inversion of hollow faces in patients and controls",
+                   found="patients saw the hollow face as hollow more often"),
+    status="replicated",
+    record=(Study("Schneider and colleagues", 2002, design="binocular depth inversion in patients and controls",
+                  found="reduced depth inversion in patients"),
+            Study("Dima and colleagues", 2009, design="hollow masks during brain imaging, with a model of "
+                  "connectivity", found="patients were not fooled; top-down connections differed")),
+    note="Replicated in small samples; a large preregistered test is still missing.",
+    sources=("H. M. Emrich, A three-component-system hypothesis of psychosis, British Journal of Psychiatry 155 "
+             "(suppl. 5) (1989) 37-39",
+             "U. Schneider et al., Reduced binocular depth inversion in schizophrenic patients, Schizophrenia "
+             "Research 53 (2002) 101-108",
+             "D. Dima et al., Understanding why patients with schizophrenia do not perceive the hollow-mask illusion "
+             "using dynamic causal modelling, NeuroImage 46 (2009) 1180-1186"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="antipsychotic_efficacy", part=41, title=r"Antipsychotics for positive symptoms",
+    claim="Antipsychotic drugs reduce the positive symptoms of schizophrenia and prevent relapse better than "
+          "placebo.",
+    original=Study("Delay and Deniker", 1952, design="chlorpromazine given to agitated psychotic patients",
+                   found="marked calming and reduction of psychotic symptoms"),
+    status="replicated",
+    record=(Study("Leucht and colleagues (meta-analysis)", 2012, design="relapse-prevention trials against placebo",
+                  found="far fewer relapses within a year on the drug"),
+            Study("Leucht and colleagues (meta-analysis)", 2017, design="sixty years of placebo-controlled trials in "
+                  "acute schizophrenia", found="a moderate average benefit, smaller in recent trials")),
+    note="A real effect with real costs: movement disorders, weight gain and metabolic harm, varying by drug.",
+    sources=("J. Delay, P. Deniker and J. M. Harl, Utilisation en thérapeutique psychiatrique d'une phénothiazine "
+             "d'action centrale élective (4560 RP), Annales médico-psychologiques 110 (1952) 112-117",
+             "S. Leucht et al., Antipsychotic drugs versus placebo for relapse prevention in schizophrenia: a "
+             "systematic review and meta-analysis, Lancet 379 (2012) 2063-2071",
+             "S. Leucht et al., Sixty years of placebo-controlled antipsychotic drug trials in acute schizophrenia, "
+             "American Journal of Psychiatry 174 (2017) 927-942"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="strong_prior_hallucinations", part=41, title=r"Hallucinations as strong priors",
+    claim="People who hear voices weight prior expectations more heavily, and so are more prone to hallucinations "
+          "conditioned in the laboratory.",
+    original=Study("Powers, Mathys and Corlett", 2017, n="four groups: voice hearers and non-hearers, with and "
+                   "without a psychotic diagnosis", design="tones at threshold paired with a light, then made rarer",
+                   found="voice hearers reported more tones that were not there, and fitted models gave their priors "
+                   "more weight"),
+    status="contested",
+    record=(Study("Kafadar and colleagues", 2022, design="the same task, repeated over time",
+                  found="the effect tracked current hallucination severity"),),
+    note="An influential account with few independent tests; critics ask whether precision models make predictions "
+         "that other accounts do not.",
+    sources=("A. R. Powers, C. Mathys and P. R. Corlett, Pavlovian conditioning-induced hallucinations result from "
+             "overweighting of perceptual priors, Science 357 (2017) 596-600",
+             "E. Kafadar et al., Conditioned hallucinations and prior overweighting are state-sensitive markers of "
+             "hallucination susceptibility, Biological Psychiatry 92 (2022) 772-780",
+             "P. Sterzer et al., The predictive coding account of psychosis, Biological Psychiatry 84 (2018) "
+             "634-643"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="rat_park", part=41, title=r"Rat Park",
+    claim="Rats housed in a large, social, enriched colony drink far less morphine than rats housed alone.",
+    original=Study("Alexander, Coambs and Hadaway", 1978, n="rats", design="isolated cages against a large "
+                   "colony, with morphine solution available", found="colony rats drank much less morphine"),
+    status="contested",
+    record=(Study("Petrie", 1996, n="rats", design="a replication of the housing comparison",
+                  found="housing made little difference"),),
+    note="Enrichment and social housing often reduce drug-taking in later animal studies, but not always; Rat Park "
+         "itself is more often told than tested.",
+    sources=("B. K. Alexander, R. B. Coambs and P. F. Hadaway, The effect of housing and gender on morphine "
+             "self-administration in rats, Psychopharmacology 58 (1978) 175-179",
+             "B. F. Petrie, Environment is not the most important variable in determining oral morphine consumption "
+             "in Wistar rats, Psychological Reports 78 (1996) 391-400"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="contingency_management", part=41, title=r"Contingency management",
+    claim="Paying people, in vouchers or prizes, for drug-free urine samples increases abstinence during "
+          "treatment.",
+    original=Study("Higgins and colleagues", 1991, n="cocaine users in outpatient treatment",
+                   design="vouchers for cocaine-free samples against standard counselling",
+                   found="more patients stayed in treatment and stayed abstinent"),
+    status="replicated",
+    record=(Study("Prendergast and colleagues (meta-analysis)", 2006, design="trials of contingency management",
+                  found="a moderate effect on abstinence during treatment"),),
+    note="Operant conditioning that works; effects fade after the incentives stop.",
+    sources=("S. T. Higgins et al., A behavioral approach to achieving initial cocaine abstinence, American Journal "
+             "of Psychiatry 148 (1991) 1218-1224",
+             "M. Prendergast et al., Contingency management for treatment of substance use disorders: a "
+             "meta-analysis, Addiction 101 (2006) 1546-1560"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="vaccines_autism", part=41, title=r"Vaccines and autism",
+    claim="The measles, mumps and rubella vaccine causes autism.",
+    original=Study("Wakefield and colleagues", 1998, n="12 children", design="a case series",
+                   found="bowel disease and regression said to follow vaccination"),
+    status="retracted",
+    record=(Study("The Lancet's retraction", 2010, found="the paper withdrawn after findings of misconduct"),
+            Study("Hviid and colleagues", 2019, n="657,461 Danish children", design="a national cohort",
+                  found="no increase in autism after vaccination")),
+    note="Retracted for misconduct; no association in studies of millions of children; vaccination fell and measles "
+         "returned.",
+    sources=("A. J. Wakefield et al., Ileal-lymphoid-nodular hyperplasia, non-specific colitis, and pervasive "
+             "developmental disorder in children, Lancet 351 (1998) 637-641 (retracted, 2010)",
+             "A. Hviid et al., Measles, mumps, rubella vaccination and autism: a nationwide cohort study, Annals of "
+             "Internal Medicine 170 (2019) 513-520"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="facilitated_communication", part=41, title=r"Facilitated communication",
+    claim="Non-speaking autistic people can communicate fluent thoughts by typing with a facilitator steadying "
+          "their hand.",
+    original=Study("Biklen", 1990, design="observations of facilitated typing", found="fluent messages reported"),
+    status="failed",
+    record=(Study("Wheeler and colleagues", 1993, design="facilitator and typist shown different pictures",
+                  found="the messages matched what the facilitator saw"),
+            Study("Jacobson, Mulick and Schwartz (review)", 1995, design="controlled tests",
+                  found="the messages came from the facilitators")),
+    note="The ideomotor effect: facilitators moved the hands without knowing it; false allegations of abuse followed.",
+    sources=("D. Biklen, Communication unbound: autism and praxis, Harvard Educational Review 60 (1990) 291-314",
+             "D. L. Wheeler et al., An experimental assessment of facilitated communication, Mental Retardation 31 "
+             "(1993) 49-60",
+             "J. W. Jacobson, J. A. Mulick and A. A. Schwartz, A history of facilitated communication: science, "
+             "pseudoscience, and antiscience, American Psychologist 50 (1995) 750-765"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="adhd_stimulants", part=41, title=r"Stimulants for ADHD",
+    claim="Stimulant medication reduces the symptoms of ADHD in children more than behavioural treatment alone.",
+    original=Study("MTA Cooperative Group", 1999, n="579 children", design="medication, behavioural treatment, both, "
+                   "or community care, for 14 months", found="medication management reduced symptoms most"),
+    status="replicated, smaller",
+    record=(Study("Jensen and colleagues", 2007, design="the same children at three years",
+                  found="the groups no longer differed"),
+            Study("Cortese and colleagues (network meta-analysis)", 2018, design="short-term trials",
+                  found="stimulants reduced symptoms in the short term")),
+    note="Short-term benefit replicates; the advantage faded in long-term follow-up of the largest trial.",
+    sources=("MTA Cooperative Group, A 14-month randomized clinical trial of treatment strategies for "
+             "attention-deficit/hyperactivity disorder, Archives of General Psychiatry 56 (1999) 1073-1086",
+             "P. S. Jensen et al., 3-year follow-up of the NIMH MTA study, Journal of the American Academy of Child "
+             "and Adolescent Psychiatry 46 (2007) 989-1002",
+             "S. Cortese et al., Comparative efficacy and tolerability of medications for attention-deficit "
+             "hyperactivity disorder in children, adolescents, and adults, Lancet Psychiatry 5 (2018) 727-738"),
+    checked="2026-11-16",
+))
+
+shown(41, r"Gregory (1970)", "the hollow mask as a demonstration of perception as inference")
+shown(41, r"Rosenthal (1963)", "the Genain quadruplets, a case study told as history")
+shown(41, r"Seeman et al.\ (1976); \ Creese, \ Burt \& Snyder (1976)", "a pharmacological correlation; the "
+      "antipsychotic row carries the evidence")
+shown(41, r"Howes \& Kapur (2009)", "a theory, described")
+shown(41, r"Kapur (2003)", "a theory, run on Psyche")
+shown(41, r"Sullivan, \ Kendler \& Neale (2003); \ Trubetskoy et al.\ (2022); \ Sekar et al.\ (2016)",
+      "a twin meta-analysis, a genome-wide association study and a genetic mechanism, quoted; Part 9 entered "
+      "heritability and the candidate-gene record")
+shown(41, r"Panlilio et al.\ (2007)", "a test of Redish's model in rats, described as the model's failed prediction")
+shown(41, r"Faraone \& Larsson (2019)", "a review of twin studies, quoted for its estimate")
+shown(41, r"Layton et al.\ (2018)", "a natural experiment from insurance records, described")
+shown(41, r"Marconi et al.\ (2016)", "an observational meta-analysis, quoted; whether cannabis causes psychosis is "
+      "debated")
+shown(41, r"Fromm-Reichmann (1948)", "a theory that did harm, told as history")
+shown(41, r"Robinson \& Berridge (1993)", "a theory, recalled from Part 28")
+shown(41, r"Redish (2004)", "a model, run on Psyche")
+shown(41, r"Robins (1974)", "a follow-up of a cohort, described; it has not been repeated in a comparable cohort")
+shown(41, r"Kanner (1943); \ Asperger (1944)", "the first descriptions, told as history")
+shown(41, r"Pellicano \& Burr (2012)", "a theory, run on Psyche")
+shown(41, r"CDC ADDM (2023)", "surveillance figures, quoted")
 

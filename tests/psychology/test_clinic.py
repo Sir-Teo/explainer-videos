@@ -127,3 +127,9 @@ def test_reliable_change_and_cutoff():
     assert abs(K.reliable_change(28, 16, 7, 0.85) + 12 / (np.sqrt(2) * 7 * np.sqrt(0.15))) < 1e-12
     assert abs(K.jt_cutoff(28, 6, 7, 5) - (6 * 7 + 5 * 28) / 11) < 1e-12
     assert abs(K.dose_response(8) - 0.5) < 1e-12 and abs(K.dose_response(26) - 0.75) < 1e-9
+
+
+def test_jt_categories_sum_to_one_and_regression_fools_them():
+    r = K.therapy_trial("none", n=2000, seed=3)
+    c = K.jt_categories(r["pre"], r["post"], float(np.sqrt(50)), 0.85, 20.8)
+    assert abs(sum(c.values()) - 1) < 1e-12 and c["recovered"] > 0.2
