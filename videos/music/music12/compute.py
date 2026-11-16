@@ -8,7 +8,7 @@ module is Monochord's (``explainer/music/monochord/scales.py``); published findi
 
 Items:
     hook        the white keys from C, and the black keys
-    stack       one to twelve pure fifths, folded into an octave: the steps they leave; the stacks of 5, 7 and 12
+    stack       one- to twelve-note chains built from pure fifths, folded into an octave: the steps they leave; the stacks of 5, 7 and 12
     gaps        the number of sizes of step for stacks of up to sixty notes; where there are two
     modes       the seven modes on one note, brightest to darkest; two to compare; what each does to the Tune
     why         the diatonic scale's evenness, its two sizes of every interval, its interval vector; a scale moved
@@ -142,7 +142,7 @@ def compute_stack() -> dict:
     return {"rows": rows, "order": order, "chain": CHAIN, "fifth_cents": 1200 * S.FIFTH, "comma": 1200 * (12 * S.FIFTH - 7),
             "starts": {str(n): float(seq.events[f"s{n}"]) for n in (5, 7, 12)}, "counts": {"5": 6, "7": 8, "12": 13},
             "note_times": {str(n): times(seq, f"s{n}.", c) for n, c in ((5, 6), (7, 8), (12, 13))},
-            "clips": {"three": save("stack.three", seq, level=None, detail="stacks of five, seven and twelve pure fifths, played as scales")}}
+            "clips": {"three": save("stack.three", seq, level=None, detail="five-, seven- and twelve-note chains built from pure fifths, played as scales")}}
 
 
 def compute_gaps() -> dict:

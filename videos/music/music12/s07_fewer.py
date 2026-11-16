@@ -26,12 +26,7 @@ class Fewer(SoundScene):
             cols.add(VGroup(label(TITLES[k], font_size=30, color=COLS[k]), cl, steps).arrange(DOWN, buff=0.35))
         cols.arrange(RIGHT, buff=0.55).move_to(UP * 0.4)
         with self.voiceover(
-            "Seven is not the only number. <bookmark mark='a'/> Five notes: the pentatonic scale, the "
-            "first stop of the stack of fifths. It has no semitones at all, so no two of its notes clash, "
-            "and it turns up in the folk music of every inhabited continent. <bookmark mark='b'/> Six "
-            "equal steps: the whole-tone scale. <bookmark mark='c'/> Eight notes, in alternating whole "
-            "and half steps: the octatonic scale. <bookmark mark='d'/> And the blues scale: a minor "
-            "pentatonic with one note added in the crack between two others. Listen to the four."
+            "Seven is not the only number. <bookmark mark='a'/> Five notes: the pentatonic scale, the first stop of the stack of fifths. This anhemitonic pentatonic has no semitones, reducing one familiar source of close-note tension; roughness and musical fit still depend on register, spectrum and context, and it turns up in the folk music of every inhabited continent. <bookmark mark='b'/> Six equal steps: the whole-tone scale. <bookmark mark='c'/> Eight notes, in alternating whole and half steps: the octatonic scale. <bookmark mark='d'/> And a common six-note blues-scale diagram: minor pentatonic plus the flat fifth. Actual blues pitch practice also uses bends and flexible thirds. Listen to the four."
         ) as vo:
             lead = label(r"seven is not the only number", font_size=34, color=GREY_A).to_edge(DOWN, buff=0.8)
             self.add(lead)
@@ -55,18 +50,10 @@ class Fewer(SoundScene):
         cols = self.cols
         t = d["transpositions"]
         counts = VGroup(*[label(rf"{t[k]} versions", font_size=28, color=BAD if t[k] < 12 else GREY_A).next_to(col, DOWN, buff=0.3) for k, col in zip(d["kinds"], cols)])
-        facts = VGroup(label(r"whole-tone: \ no semitones, \ no fifths, \ no home", font_size=26, color=TUNE),
+        facts = VGroup(label(r"whole-tone: \ no semitones or fifths; \ tonic cues need context", font_size=26, color=TUNE),
                        label(r"octatonic: \ every interval, \ but the same from four of its notes", font_size=26, color=COLS["octatonic"])).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "Two of these are strange in a way you can count. Move the major scale up a semitone at a "
-            "time and you get twelve different sets of notes before it comes home. <bookmark mark='a'/> "
-            "The pentatonic and the blues scales have twelve versions too. But the whole-tone scale has "
-            "only two: move it up a whole tone and every note lands on another note of the scale. The "
-            "octatonic has only three. Olivier Messiaen, who built much of his music from such scales, "
-            "called them modes of limited transposition. <bookmark mark='b'/> A scale that maps onto "
-            "itself has no landmarks, and so no note that sounds like home. The whole-tone scale has no "
-            "fifths either. Composers reach for these scales when they want music to float, or to "
-            "threaten, without arriving anywhere."
+            "Two of these are strange in a way you can count. Move the major scale up a semitone at a time and you get twelve different sets of notes before it comes home. <bookmark mark='a'/> The pentatonic and the blues scales have twelve versions too. But the whole-tone scale has only two: move it up a whole tone and every note lands on another note of the scale. The octatonic has only three. Olivier Messiaen, who built much of his music from such scales, called them modes of limited transposition. <bookmark mark='b'/> Transpositional symmetry removes some pitch-inventory landmarks, but rhythm, drones and melodic emphasis can still establish a home. The whole-tone scale has no fifths either. Composers reach for these scales when they want music to float, or to threaten, without arriving anywhere."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x) for x in counts], lag_ratio=0.4), run_time=3.0)
@@ -105,12 +92,7 @@ class Fewer(SoundScene):
                 pulse(snd, col[0], t0, t0 + 0.26 * 15, buff=0.1)
                 flash(snd, list(col[1][1]), [t0 + 0.26 * j for j in range(14)], base=names[k][2], hot=WHITE, fade=0.2)
         with self.voiceover(
-            "Most people hear the first as nearly a tune, the second as a tune with a few odd corners, "
-            "and the third as wandering. Nobody composed any of them. With five notes and no semitones, "
-            "almost anything you do sounds acceptable; that is why beginners are given pentatonic "
-            "instruments, and why so many folk melodies are pentatonic. With twelve, nothing is ruled "
-            "out, so nothing is implied. A scale is a set of constraints, and the constraints do a good "
-            "deal of the composing."
+            'Listen to how the three versions differ. This is a toy comparison: identical scale-degree moves also change semitone distances and pitch range, so it does not isolate note count alone. Nobody composed any of them. With five notes and no semitones, many combinations can be forgiving in familiar styles; that is why beginners are given pentatonic instruments, and why so many folk melodies are pentatonic. With twelve, nothing is ruled out, so nothing is implied. A scale is a set of constraints, and the constraints do a good deal of the composing.'
         ):
             self.play(Indicate(cols[0][0], color=WHITE))
         self.wait(0.4)

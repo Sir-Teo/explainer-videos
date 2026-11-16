@@ -15,10 +15,10 @@ computed in `compute.py`. Published findings are the ones listed under Sources.
 * **1. Stacking fifths.** Pure fifths from F, folded into an octave and drawn round a circle; the steps they
   leave: two sizes at five notes (294 and 204 cents), three at six, two at seven (204 and 90), three from eight
   to eleven, two at twelve (114 and 90); why the stack never closes: the thirteenth note misses the first by
-  the Pythagorean comma of Part 3, 23.5 cents; the three stacks played: pentatonic, diatonic, chromatic.
+  the Pythagorean comma of Part 6, 23.5 cents; the three stacks played: pentatonic, diatonic, chromatic.
 * **2. Three gaps.** The three-gap theorem (1958); the number of sizes for stacks of up to sixty notes; a
   predict-pause (why a sixth note makes three sizes); two sizes at 2, 3, 5, 7, 12, 17, 29, 41, 53: Arabic
-  theory's 17, Jing Fang's 53, and the denominators of Part 6's continued fraction.
+  theory's 17, Jing Fang's 53, and denominators of convergents and intermediate convergents of Part 6's continued fraction.
 * **3. Seven notes, seven modes.** The white keys as a chain of fifths, F C G D A E B; a mode for each choice of
   home note, bright to dark along the chain; all seven on C, each the one before with one note lowered; an ear
   question (Dorian and Mixolydian); the seven degrees and their names (tonic, supertonic, mediant, subdominant,
@@ -26,22 +26,22 @@ computed in `compute.py`. Published findings are the ones listed under Sources.
   minor has C major's home and three other notes; why the Tune, which has no seventh, is the same in Ionian and
   Mixolydian.
 * **4. Why this scale.** Maximal evenness (Clough and Douthett, 1991): note k at ⌊(12k + 5)/7⌋ gives C D E F G
-  A B, and the five places left over are the black keys; every kind of interval in two sizes, with the tritone
-  as the one landmark; the interval vector ⟨2, 5, 4, 3, 6, 1⟩: a deep scale; a scale moved up a fifth keeps six
+  A B, and the five places left over are the black keys; generic seconds through sevenths in two sizes, with one tritone pair
+  as a landmark (it does not identify a tonic); the interval vector ⟨2, 5, 4, 3, 6, 1⟩: a deep scale; a scale moved up a fifth keeps six
   notes, up a semitone only two (heard on C, G and D flat).
 * **5. Minor's three forms.** Natural, harmonic (a step of three semitones) and melodic; two endings (an ear
   question): the leading note.
 * **6. Fewer notes, and more.** Pentatonic, whole-tone, octatonic and blues scales; how many transpositions each
-  has (12, 2, 3, 12): modes of limited transposition; scales with no landmark and no home; a random walk on
+  has (12, 2, 3, 12): modes of limited transposition; symmetric pitch inventories whose home can come from musical context; a random walk on
   each scale, heard: what the choice of notes does before any melody is composed.
 * **7. A scale in two halves.** Tetrachords: the six ways to fill a fourth; the major scale as two equal halves;
-  a scale of two other halves; Venkatamakhin's rule and the 72 melakartas (2 × 6 × 6); Mayamalavagowla.
+  a scale of two other halves; a modern 72-melakarta scheme following Venkatamakhin's organizing principle (2 × 6 × 6); Mayamalavagowla.
 * **8. Other maps of the octave.** A major scale, Rast in quarter tones, five equal steps as a stand-in for
   slendro, and Mayamalavagowla, as bars of cents and as sound; the neutral third, 350 cents, between minor and
   major (an ear question); a caution: a maqam, a raga and a gamelan's tuning are more than rows of pitches;
-  what nearly all scales share.
-* **9. Every scale there is.** Burnside's lemma on a necklace of four beads, counted by hand (six, not
-  sixteen); 2048 sets of notes that contain the home note; on twelve places: 352 shapes, by
+  some frequent features, without claiming universal rules.
+* **9. Shapes among twelve pitch classes.** Burnside's lemma on a necklace of four beads, counted by hand (six, not
+  sixteen); 2048 sets of notes that contain the home note; on twelve places: 352 unrooted shapes including the empty set (351 nonempty), by
   size 1, 1, 6, 19, 43, 66, 80, 66, 43, 19, 6, 1, 1; all 66 shapes of seven notes; three made only of whole and
   half steps (an ear question); one with its half steps as far apart as possible.
 * **10. Frontier: why five to seven unequal steps?** The 66 seven-note shapes scored by evenness, by number of
@@ -59,7 +59,7 @@ computed in `compute.py`. Published findings are the ones listed under Sources.
 | Item | What it computes | Checked against |
 |---|---|---|
 | `hook` | the white keys from C and the black keys, on Part 7's piano | — |
-| `stack` | one to twelve pure fifths folded into an octave; their steps in cents | 294/204, 204/90 and 114/90 cents; the comma, 23.46 |
+| `stack` | one- to twelve-note chains built from pure fifths, folded into an octave; their steps in cents | 294/204, 204/90 and 114/90 cents; the comma, 23.46 |
 | `gaps` | the number of sizes of step for stacks of 2 to 60 notes | never more than three; two at 2, 3, 5, 7, 12, 17, 29, 41, 53 |
 | `modes` | the seven modes on C, spelled; their brightness; which degrees of the Tune each changes | each is the one before with one note lowered |
 | `why` | the maximally even seven of twelve; evenness of every seven-note set; interval vectors; common tones | ⟨2, 5, 4, 3, 6, 1⟩; six notes kept a fifth away |
@@ -78,17 +78,21 @@ Monochord's scales are held against these in `tests/music/test_scales.py`; this 
 scales of chapter 1 are in pure fifths; Rast, the five equal steps and the seven equal steps are tuned in cents;
 everything else is in twelve-tone equal temperament. There are no recordings.
 
-**What the models are, and are not.** *The stack of fifths* is exact arithmetic. *Brightness* is the sum of a
+**What the models are, and are not.** *The stack of fifths* uses floating-point logarithms of pure fifths. *Brightness* is the sum of a
 mode's notes in semitones above its first; it orders the modes as their home notes lie along the chain of fifths,
 and it is a convention, not a measurement of anything heard. *Evenness* is the size of one Fourier coefficient of
 a set of notes; other measures agree on which seven notes come first. *Roughness* is Part 5's Plomp–Levelt model
 on equal-tempered pairs of seven-partial tones, averaged over a scale's 21 pairs; it is one model of consonance,
-and the ranking of the middle of the field would change with another, though not the winner. *Rast* is given in
+evaluated at a common reference pitch and spectrum. Other assumptions can change the ranking, including the winner. *Rast* is given in
 the quarter-tone approximation of twentieth-century Arabic theory (steps of 4, 3, 3, 4, 4, 3, 3 quarter tones);
 practice differs by region and by player. *Slendro* is represented by five equal steps, which no gamelan plays
 exactly: each is tuned to itself. *The melakartas* are generated by rule; their names and the ragas assigned to
 them are not. *The second voice of the Variation* is two scale steps below the melody, with no regard for
 harmony; it is there so that the seventh degree, which the Tune lacks, is heard.
+
+## Scope
+
+The five-note pure-fifth chain matches the black-key spacing pattern after transposition; it is not literally the equal-tempered black keys. Historical seventeen-note Arabic theory and Jing Fang’s fifty-three-fifth near-closure are not claims that those traditions used equal divisions. Glarean’s twelve historical modes differ from the modern seven rotations. The modern melakarta catalogue should not be attributed unchanged to its seventeenth-century precursor. Rast quarter tones and equal-step slendro are teaching proxies, not complete performance tunings. Roughness scores are model results, not universal preferences.
 
 ## Build
 
@@ -105,14 +109,14 @@ python -m videos.music.labs 12                                  # the lab (write
 
 ## Problems, with solutions
 
-1. **Five fifths.** A pure fifth is 702 cents. Stack five of them from C and fold them into one octave. Name the
+1. **Five-note chain.** A pure fifth is approximately 702 cents. Stack four of them from C and fold them into one octave. Name the
    five notes, give the steps between them in cents, and say which interval of the major scale is missing from
    this scale altogether.
 
    *Solution.* The fifths give C, G (702), D (1404 − 1200 = 204), A (906), E (1608 − 1200 = 408). In order: C, D,
    E, G, A, at 0, 204, 408, 702 and 906 cents, with steps of 204, 204, 294, 204 and 294 (the last back up to C).
    There is no semitone anywhere, and so no tritone either: the scale's interval vector is ⟨0, 3, 2, 1, 4, 0⟩.
-   That is why any two notes of a pentatonic scale can be sounded together without a harsh clash.
+   This removes semitone and tritone interval classes; it does not guarantee that every register, voicing and timbre sounds smooth.
 
 2. **Necklaces of six.** Use Burnside's lemma to count the shapes of scale on six notes to the octave (necklaces
    of six beads in two colours), and list them. Which of them maps onto itself when turned?
@@ -136,9 +140,9 @@ python -m videos.music.labs 12                                  # the lab (write
 4. **Build.** With `scales.stack`, use a generator other than the pure fifth: a fifth of 697 cents (meantone) and
    one of 709. At which numbers of notes do the steps come in two sizes now?
 
-   *Solution.* In the lab set `GENERATOR`. At 697 cents the list is 2, 3, 5, 7, 12, 19, 31: the same up to
+   *Solution.* In the lab set `GENERATOR`. At 697 cents the list is 2, 3, 5, 7, 12, 19, 31, 43 (through sixty notes): the same up to
    twelve, and then the meantone divisions of Part 6 (19 and 31 equal steps) in place of 17 and 29. At 709 cents
-   it is 2, 3, 5, 7, 12, 17, 22, 39. Five, seven and twelve survive any fifth between about 686 and 720 cents:
+   it is 2, 3, 5, 7, 12, 17, 22, 39. Five, seven and twelve remain two-gap counts over much of that neighborhood, except at exact closures such as 700 cents for twelve notes:
    they do not depend on the fifth being pure, only on its being roughly seven twelfths of an octave. What
    changes is which of the two steps is the larger: at twelve notes a 697-cent fifth gives steps of 115 and 79
    cents, a pure fifth 114 and 90, and at exactly 700 the two are equal.
@@ -151,8 +155,7 @@ python -m videos.music.labs 12                                  # the lab (write
    fifth (11 steps). Every generic interval comes in two sizes, so it has Myhill's property, and its tritone
    analogue occurs once. It is not deep in the strict sense (its interval vector, ⟨0, 2, 5, 0, 4, 3, 0, 6, 1⟩,
    has repeated zeros), though its non-zero entries are all different. The complement has twelve notes, with
-   steps 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2: a nineteen-note keyboard has seven white keys and twelve black,
-   which is how such instruments have been built since the sixteenth century. The open questions are
+   steps 1, 2, 1, 2, 1, 2, 2, 1, 2, 1, 2, 2: one possible nineteen-note keyboard could use seven white keys and twelve black. Historical keyboard layouts vary. The open questions are
    perceptual: which of the diatonic scale's properties listeners actually use, and whether scales built to
    have them in other tunings can be learned as readily (see Balzano 1980; Trehub and others 1999; and the
    microtonal literature in Sethares 2005).

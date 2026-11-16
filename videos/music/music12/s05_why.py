@@ -20,21 +20,13 @@ class Why(SoundScene):
         black = twelve([n for n in range(12) if n not in d["formula"]], radius=1.6, color=SHORT).move_to(RIGHT * 3.6 + DOWN * 0.3)
         f = MathTex(r"\text{note } k \text{ goes at } \left\lfloor \tfrac{12\,k + 5}{7} \right\rfloor: \quad 0,\ 2,\ 4,\ 5,\ 7,\ 9,\ 11", font_size=38).to_edge(UP, buff=0.5)
         ask = label(r"seven notes out of twelve places, \ as evenly as possible", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
-        ideal = VGroup(*[Dot(white.at(12 * (k + 5 / 7) / 7), radius=0.07, color=BAD) for k in range(7)])
+        ideal = VGroup(*[Dot(white.at((12 * k + 5) / 7), radius=0.07, color=BAD) for k in range(7)])
         spokes = VGroup(*[Line(white.ring.get_center(), d.get_center(), color=BAD, stroke_width=1.5, stroke_opacity=0.5) for d in ideal])
         empty = twelve([], radius=1.6).move_to(white)
         lw = label(r"seven notes, \ as evenly as twelve places allow", font_size=24, color=TUNE).next_to(white, DOWN, buff=0.35)
         lb = label(r"the five left over: \ also as even as can be", font_size=24, color=SHORT).next_to(black, DOWN, buff=0.35)
         with self.voiceover(
-            "The stack of fifths is one way to arrive at the white keys. Here is a second, which uses no "
-            "fifths at all. Suppose you want seven notes out of twelve, spread as evenly as possible "
-            "round the octave. Seven does not divide twelve, so they cannot be equally spaced. The best "
-            "you can do is to space them twelve sevenths apart, and move each one back to the nearest "
-            "place. <bookmark mark='a'/> That gives places zero, two, four, five, seven, nine and "
-            "eleven: C, D, E, F, G, A, B. The white keys. Where you begin the spacing only decides the "
-            "key. In 1991 John Clough and Jack Douthett called such a set maximally even. "
-            "<bookmark mark='b'/> And the five places left over, the black keys, are the most even way "
-            "to choose five. The keyboard is two maximally even sets, fitted together."
+            "The stack of fifths is one way to arrive at the white keys. Here is a second, which uses no fifths at all. Suppose you want seven notes out of twelve, spread as evenly as possible round the octave. Seven does not divide twelve, so they cannot be equally spaced. The best you can do is to space them twelve sevenths apart, and choose an offset of five sevenths of a semitone, then move each point back to the preceding integer semitone. <bookmark mark='a'/> That gives places zero, two, four, five, seven, nine and eleven: C, D, E, F, G, A, B. The white keys. This selects a pitch-class pattern; transposition and the separate choice of a home note determine its tonal use. In 1991 John Clough and Jack Douthett called such a set maximally even. <bookmark mark='b'/> And the five places left over, the black keys, are the most even way to choose five. The keyboard is two maximally even sets, fitted together."
         ) as vo:
             self.play(FadeIn(ask), FadeIn(empty))
             self.wait(9.0)
@@ -61,16 +53,10 @@ class Why(SoundScene):
             r[1].align_to(np.array([x1, 0, 0]), LEFT)
         rows.move_to(LEFT * 2.6 + DOWN * 0.2)
         rare = VGroup(label(r"fourths: \ six of 5 semitones, \\ one of 6: \ the tritone, \ F to B", font_size=28, color=EAR)).move_to(RIGHT * 3.4 + UP * 0.4)
-        use = label(r"hear the tritone, \\ and you know where you are", font_size=28, color=GREY_A).next_to(rare, DOWN, buff=0.5)
-        head = label(r"every kind of interval comes in exactly two sizes", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        use = label(r"a distinctive pair within the collection; \\ the home note still needs context", font_size=28, color=GREY_A).next_to(rare, DOWN, buff=0.5)
+        head = label(r"diatonic seconds through sevenths each come in two sizes", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Evenness has a consequence. In the white-key scale, count intervals in steps of the scale: "
-            "a second is one step, a third is two. <bookmark mark='a'/> Every one of them comes in exactly "
-            "two sizes. Seconds are one or two semitones. Thirds are three or four: minor and major. And "
-            "so on up. <bookmark mark='b'/> But the two sizes are not equally common. Of the seven "
-            "fourths, six are perfect, and one is a semitone wider: the tritone, from F to B. An interval "
-            "that occurs only once is a landmark. Hear it, and you know exactly which two notes of the "
-            "scale you are hearing, and so where home is. A scale of equal steps has no landmarks."
+            "Evenness has a consequence. In the white-key scale, count intervals in steps of the scale: a second is one step, a third is two. <bookmark mark='a'/> Every one of them comes in exactly two sizes. Seconds are one or two semitones. Thirds are three or four: minor and major. And so on up. <bookmark mark='b'/> But the two sizes are not equally common. Of the seven fourths, six are perfect, and one is a semitone wider: the tritone, from F to B. An interval that occurs only once is a landmark. Within this collection it identifies a distinctive pair, but every relative mode shares that pair. The tritone alone does not tell you which note is home. A scale of equal steps has no landmarks."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -116,11 +102,7 @@ class Why(SoundScene):
         rows = VGroup(label(r"on C", font_size=30, color=TUNE), label(rf"on G, \ a fifth up: \ {d['common'][6]} of the 7 notes are the same", font_size=30, color=GOOD),
                       label(rf"on D$\flat$, \ a semitone up: \ only {d['common'][0]} are", font_size=30, color=BAD)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 1.4)
         with self.voiceover(
-            "Those counts are not a curiosity. They say what happens when the scale is moved. Shift all "
-            "seven notes up by some interval: the number of notes that stay where they were is the "
-            "number of times that interval occurs in the scale. The fifth occurs six times. So a major "
-            "scale moved up a fifth keeps six of its seven notes, and changes one. Moved up a semitone, "
-            "which occurs twice, it keeps only two. Listen to the scale on C, then on G, then on D flat."
+            'Those counts are not a curiosity. They say what happens when the scale is moved. Shift all seven notes up by some interval: common-tone counts are related to interval multiplicities. For the non-tritone classes used in this example the counts agree; a tritone transposition counts both ends of each unordered tritone pair. The fifth occurs six times. So a major scale moved up a fifth keeps six of its seven notes, and changes one. Moved up a semitone, which occurs twice, it keeps only two. Listen to the scale on C, then on G, then on D flat.'
         ):
             self.play(FadeIn(kb), FadeIn(rows[0]))
         with self.listen(c) as snd:
@@ -141,7 +123,7 @@ class Why(SoundScene):
             "one note, so nearby keys share nearly everything, and a piece can slip from one to the next "
             "with a single sharp or flat. Part 15 is built on it. For now: the white keys are generated "
             "by fifths, they are as even as possible, their intervals come in two sizes with a single "
-            "landmark, and they are deep. No other seven notes out of twelve have all of that."
+            "landmark, and they are deep. Within this twelve-note model, the combined properties identify the diatonic pitch-class shape up to transposition."
         ):
             self.play(Indicate(rows[1], color=GOOD, scale_factor=1.05))
         self.wait(0.4)

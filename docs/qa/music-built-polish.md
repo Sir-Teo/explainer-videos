@@ -16,8 +16,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 9 — Drums, Bars and Bells | Complete; [repair and verification record](music/part09.md) | Open |
 | 10 — Writing It Down | Complete; [repair and verification record](music/part10.md) | Open |
 | 11 — Rhythm and Meter | Complete; [repair and verification record](music/part11.md) | Open |
-| 12 — Scales and Modes | In progress | Open |
-| 13–68 | Queued | Open |
+| 12 — Scales and Modes | Complete; [repair and verification record](music/part12.md) | Open |
+| 13 — Intervals and Chords | In progress | Open |
+| 14–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -57,9 +58,12 @@ motion checks pass. Three native 1080p stills inspected. Local identities: `rend
 Part 11: twelve chapter previews reviewed; 29 tests, the lab, 12 sound-gate cases and 19 listening-window
 motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music11/source-receipt.json`.
 
-**Current: Part 12.** Source repairs complete; preview review and gates are in progress. Part 13 source review
-and native still checks are prepared; Part 14 source review is underway. Automated endpoint preflight continues
-through the remaining episodes; warnings require review and do not constitute episode approval.
+Part 12: twelve chapter previews reviewed; 25 tests, the lab, 12 sound-gate cases and 16 listening-window
+motion checks pass. Three native 1080p stills inspected. Local identities: `renders/qa/music12/source-receipt.json`.
+
+**Current: Part 13.** Source repairs and native still review complete; chapter preview review and gates are
+in progress. Parts 14–16 are prepared for sequential previews; Part 17 source review is underway. Automated
+endpoint preflight continues; warnings require review and do not constitute episode approval.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

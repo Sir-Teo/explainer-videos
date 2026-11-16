@@ -43,7 +43,7 @@ class Stack(SoundScene):
             "of two hundred and four cents, and a wider step of two hundred and ninety-four. "
             "<bookmark mark='d'/> Add a sixth note, E, and that tidiness goes: three sizes. "
             "<bookmark mark='e'/> Add a seventh, B, and it comes back. Five whole tones, and two small "
-            "steps of ninety cents. These seven notes are the white keys. <bookmark mark='f'/> Go on. "
+            "steps of ninety cents. These have the white keys' diatonic pattern, here in Pythagorean tuning rather than modern equal temperament. <bookmark mark='f'/> Go on. "
             "Eight, nine, ten, eleven notes all leave three sizes of step. At twelve there are two "
             "again, and now they are nearly equal: ninety cents and a hundred and fourteen."
         ) as vo:
@@ -114,7 +114,7 @@ class Stack(SoundScene):
         names = {5: r"five: \ the pentatonic scale", 7: r"seven: \ the diatonic scale", 12: r"twelve: \ the chromatic scale"}
         note = listen_note(r"the stacks of five, \ seven and twelve notes, \ each played as a scale", width=9.0, font_size=26).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Five, seven and twelve. Those are the three stacks whose steps come in just two sizes, and "
+            "Five, seven and twelve. Among the stacks of four through twelve notes discussed here, those three have two step sizes, and "
             "each of them is a scale with a name. Here they are, in the tuning the stack gives them."
         ):
             self.play(FadeIn(note))
@@ -136,12 +136,10 @@ class Stack(SoundScene):
                     snd.wait_until(t)
                     self.play(cells[k % len(cells)].animate(rate_func=there_and_back).shift(UP * 0.15), run_time=min(0.22, 0.2))
         self.remove(shown)
-        facts = VGroup(label(r"5 \ \ pentatonic: \ the black keys", font_size=34, color=SHORT), label(r"7 \ \ diatonic: \ the white keys", font_size=34, color=TUNE),
+        facts = VGroup(label(r"5 \ \ pentatonic: \ the black-key pattern, \ transposed", font_size=34, color=SHORT), label(r"7 \ \ diatonic: \ the white keys", font_size=34, color=TUNE),
                        label(r"12 \ \ chromatic: \ all of them", font_size=34, color=GREY_A)).arrange(DOWN, buff=0.45, aligned_edge=LEFT)
         with self.voiceover(
-            "The pentatonic scale, five notes. The diatonic scale, seven. The chromatic, twelve. One "
-            "interval, repeated, has produced the black keys, the white keys, and the whole keyboard. "
-            "Is that luck? There is a theorem that says it is not."
+            'The pentatonic scale, five notes. The diatonic scale, seven. The chromatic, twelve. One interval, repeated, produces the pentatonic pattern, the diatonic pattern and twelve chromatic pitches. Our five-note chain starts on F; transpose its pattern to F sharp for the black keys. Is that luck? There is a theorem that says it is not.'
         ):
             self.play(LaggedStart(*[FadeIn(f) for f in facts], lag_ratio=0.5), run_time=3.0)
         self.wait(0.4)

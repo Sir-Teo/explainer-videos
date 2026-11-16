@@ -32,13 +32,7 @@ class Minor(SoundScene):
         gap.shift(DOWN * 0.3)
         gl.shift(DOWN * 0.3)
         with self.voiceover(
-            "The darker modes have a problem, and the way musicians solved it gave the minor scale three "
-            "forms. <bookmark mark='a'/> The natural minor is the Aeolian mode: on A, all white keys. "
-            "<bookmark mark='b'/> The harmonic minor raises the seventh note by a semitone, for a reason "
-            "we will hear in a moment. But that leaves a step of three semitones between the sixth and "
-            "the seventh, awkward to sing. <bookmark mark='c'/> So the melodic minor raises the sixth as "
-            "well, on the way up, and puts both back on the way down, where the pull toward the top note "
-            "is not needed."
+            "Common-practice tonal minor uses flexible sixth and seventh degrees, often taught through three scale forms. <bookmark mark='a'/> The natural minor is the Aeolian mode: on A, all white keys. <bookmark mark='b'/> The harmonic minor raises the seventh note by a semitone, for a reason we will hear in a moment. But that leaves a step of three semitones between the sixth and the seventh, an augmented second, which some styles avoid and others emphasize. <bookmark mark='c'/> So the melodic minor raises the sixth as well, on the way up, and puts both back on the way down, in the usual classical scale exercise. Actual melodies use these degrees flexibly; jazz melodic minor commonly keeps both raised in either direction."
         ) as vo:
             self.play(FadeIn(top))
             for mark, r in zip("abc", rows):
@@ -77,13 +71,7 @@ class Minor(SoundScene):
         tb = label(r"B: \ the raised seventh is a semitone below: \ a leading note", font_size=26, color=TUNE)
         VGroup(ta, tb).arrange(DOWN, buff=0.25).next_to(kb, DOWN, buff=0.4)
         with self.voiceover(
-            "Most listeners choose B. The two differ in one note of the first chord. In A it is the "
-            "natural seventh of the scale, a whole tone below the home note. <bookmark mark='a'/> In B "
-            "it is raised, so that it lies a semitone below. A note a semitone below home pulls upward "
-            "to it; musicians call it the leading note. The major scale has one built in. The minor "
-            "modes do not, so composers borrowed it, and the harmonic minor scale is the natural minor "
-            "with that one loan. A scale, it turns out, is not always a fixed set of notes. It can "
-            "change with what the music is doing."
+            "Listeners familiar with this tonal style may find B more final. The two differ in one note of the first chord. In A it is the natural seventh of the scale, a whole tone below the home note. <bookmark mark='a'/> In B it is raised, so that it lies a semitone below. In this harmonic and stylistic context, a note a semitone below home often suggests upward resolution; musicians call it the leading note. The major scale has one built in. The minor modes do not, so composers borrowed it, and the harmonic minor scale is the natural minor with that one loan. A scale, it turns out, is not always a fixed set of notes. It can change with what the music is doing."
         ) as vo:
             self.play(FadeIn(kb), FadeIn(ta))
             vo.wait_until("a")

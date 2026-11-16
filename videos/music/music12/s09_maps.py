@@ -17,7 +17,7 @@ class Maps(SoundScene):
         d = load("maps")
         c = clip("maps.four")
         specs = [(r"a major scale", d["major"], (LONG, SHORT, BAD)), (r"Rast, \ a maqam of Arabic music", d["rast"], (LONG, "#C4B5FD", SHORT)),
-                 (r"five equal steps: \ close to a Javanese slendro", d["five"], (LONG, SHORT, BAD)), (r"Mayamalavagowla", [100, 300, 100, 200, 100, 300, 100], ("#C4B5FD", LONG, SHORT))]
+                 (r"five equal steps: \ a rough proxy for slendro", d["five"], (LONG, SHORT, BAD)), (r"Mayamalavagowla", [100, 300, 100, 200, 100, 300, 100], ("#C4B5FD", LONG, SHORT))]
         rows = VGroup()
         for name, steps, cols in specs:
             rows.add(VGroup(label(name, font_size=26, color=GREY_A), step_bar(steps, width=10.0, height=0.5, colors=cols, font_size=20)).arrange(DOWN, buff=0.15))
@@ -27,7 +27,7 @@ class Maps(SoundScene):
             "Everything so far has lived on the twelve notes of a keyboard. Much of the world's music "
             "does not. Here is a first look; later parts go properly into each. <bookmark mark='a'/> A "
             "major scale, for reference: steps of two hundred cents and a hundred. <bookmark mark='b'/> "
-            "Rast, one of the central scales of Arabic music. Its third note lies between our minor "
+            "A quarter-tone teaching approximation to Rast, an important Arabic maqam. Its third note lies between our minor "
             "third and our major third, about three quarters of a tone above the second. No piano key "
             "plays it. <bookmark mark='c'/> Five equal steps of two hundred and forty cents: a rough "
             "stand-in for slendro, one of the two tunings of the Javanese gamelan. <bookmark mark='d'/> "
@@ -72,7 +72,7 @@ class Maps(SoundScene):
             "B. It lies halfway between: three hundred and fifty cents, where minor is three hundred and "
             "major four hundred. It is called a neutral third. To an ear raised on keyboards it can sound "
             "out of tune, a major third gone flat. To an ear raised on maqam it is a note in its own "
-            "right, as fixed and as expressive as any other. What counts as in tune is learned, and the "
+            "right, a meaningful pitch region, whose intonation can vary by phrase, performer and tradition. Experience shapes tuning judgments alongside auditory constraints, and the "
             "scale you grew up with is the ruler you measure with."
         ):
             self.play(FadeIn(g), FadeIn(marks))
@@ -83,22 +83,13 @@ class Maps(SoundScene):
     def caution(self):
         rows = rows_card([
             (r"maqam", r"a scale is the least of it: \ each maqam has its own paths, \ resting notes and phrases, \\ and its neutral intervals differ a little from Cairo to Aleppo to Istanbul."),
-            (r"raga", r"a parent scale says which notes; \ a raga says how to move among them, \\ which to dwell on, \ which to bend, \ and at what hour to play."),
-            (r"slendro, \ pelog", r"every gamelan is tuned to itself. \ Five nearly equal steps, \ or seven unequal ones, \\ fitted to bronze whose overtones are not a string's (Part 9)."),
+            (r"raga", r"a parent scale says which notes; \ a raga says how to move among them, \\ which to dwell on, \ which to bend, \ and, \ in some traditions, \ time associations."),
+            (r"slendro, \ pelog", r"many ensembles have individual tunings. \ Five nearly equal steps, \ or seven unequal ones, \\ fitted to bronze whose overtones are not a string's (Part 9)."),
         ], left=-6.3, text_left=-3.3, top=1.3, step=1.5, name_size=30, text_size=24)
         head = label(r"a scale is only the list of notes", font_size=32, color=TUNE).to_edge(UP, buff=0.45)
-        common = label(r"what nearly all share: \ the octave, \ a fifth or a fourth, \ and five to seven notes", font_size=28, color=TUNE).to_edge(DOWN, buff=0.5)
+        common = label(r"frequent patterns, \ with exceptions: \ the octave, \ a fifth or a fourth, \ and five to seven notes", font_size=28, color=TUNE).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "A warning before we go on. Those were scales as a keyboard player would hear them: rows of "
-            "pitches. In their own traditions they are more than that. <bookmark mark='a'/> A maqam is a "
-            "way of moving through its notes, with its own resting places, and its in-between intervals "
-            "are tuned a little differently from city to city. <bookmark mark='b'/> A raga is a path, a "
-            "mood and a time of day; its parent scale is only its list of ingredients. "
-            "<bookmark mark='c'/> And no two gamelans are tuned alike: each is tuned to its own bronze. "
-            "Parts 34 to 36 take these traditions on their own terms. <bookmark mark='d'/> For today, "
-            "notice what they have in common with the white keys. Nearly every scale in the world "
-            "repeats at the octave, contains a fifth or a fourth, and has between five and seven notes. "
-            "That last fact is the puzzle this part ends on."
+            "A warning before we go on. Those were scales as a keyboard player would hear them: rows of pitches. In their own traditions they are more than that. <bookmark mark='a'/> A maqam is a way of moving through its notes, with its own resting places, and its in-between intervals are tuned a little differently from city to city. <bookmark mark='b'/> A raga has characteristic melodic behaviour and expressive associations; some traditions also associate ragas with times of day. its parent scale is only its list of ingredients. <bookmark mark='c'/> Many gamelans have individual tunings, with intervals and octave stretch varying by ensemble and tradition. Parts 34 to 36 take these traditions on their own terms. <bookmark mark='d'/> For today, notice what they have in common with the white keys. Octave relations, fourths or fifths, and collections of roughly five to seven notes recur in many documented traditions. These are frequent patterns, with exceptions, not laws for every scale. That last fact is the puzzle this part ends on."
         ) as vo:
             self.play(FadeIn(head))
             for mark, r in zip("abc", rows):

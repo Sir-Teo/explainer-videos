@@ -70,21 +70,21 @@ class Outro(SoundScene):
         card = objectives_card([
             r"stacked fifths leave steps of two sizes at 5, \ 7 and 12 notes: \ the three-gap theorem",
             r"seven modes, \ bright to dark, \ each the last with one note lowered",
-            r"the white keys are maximally even; \ their intervals come in two sizes; \ they are deep: \ 2, 5, 4, 3, 6, 1",
+            r"the white keys are maximally even; \ their seconds through sevenths have two sizes; \ they are deep: \ 2, 5, 4, 3, 6, 1",
             r"minor borrows a leading note; \ whole-tone and octatonic scales have 2 and 3 versions",
             r"six fillings of a fourth; \ $2 \times 6 \times 6 = 72$ parent scales",
-            rf"{e['total']} shapes of scale on twelve notes; \ of the 66 with seven, \ ours is the most even and the smoothest",
+            rf"{e['total']} unrooted subset shapes, \ including empty; \ of the 66 with seven, \ diatonic: \ maximally even, \ lowest model roughness",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
             "What did we find? Stack fifths, and the steps come in two sizes at five, seven and twelve "
             "notes; a theorem says why. <bookmark mark='a'/> Seven notes give seven modes, in order of "
             "brightness, each the one before with a single note lowered. <bookmark mark='b'/> The white "
-            "keys are as even as seven notes among twelve can be; every interval in them comes in two "
+            "keys are as even as seven notes among twelve can be; each generic second through seventh comes in two "
             "sizes; and they are deep. <bookmark mark='c'/> The minor scale borrows a leading note, and "
-            "scales that map onto themselves have no home. <bookmark mark='d'/> A fourth can be filled "
+            "symmetric pitch sets need other musical cues to establish a home. <bookmark mark='d'/> A fourth can be filled "
             "six ways, and south Indian theory builds seventy-two parent scales from that. "
             "<bookmark mark='e'/> And of the three hundred and fifty-two shapes a scale can have on "
-            "twelve notes, the one on every keyboard is the most even and the smoothest of its size."
+            "twelve notes, the diatonic shape is maximally even and leads this particular roughness model among the sixty-six seven-note classes."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -96,7 +96,7 @@ class Outro(SoundScene):
     # ------------------------------------------------------------------
     def problems(self):
         ps = problem_set([
-            r"A pure fifth is 702 cents. \ Stack five of them from C and fold them into one octave. \ Name the five notes, \ give the steps between them in cents, \ "
+            r"A pure fifth is about 702 cents. \ Build five notes from C using four fifths and fold them into one octave. \ Name the five notes, \ give the steps between them in cents, \ "
             r"and say which interval of the major scale is missing from this scale altogether.",
             r"Use Burnside's lemma to count the shapes of scale on six notes to the octave \ (necklaces of six beads in two colours), \ and list them. \ "
             r"Which of them maps onto itself when turned?",
@@ -136,15 +136,15 @@ class Outro(SoundScene):
         self.clear_scene()
         prac = practice_card([
             (r"improvisers", r"learn each mode as a colour over a chord: \ Dorian over minor, \ Mixolydian over a dominant, \ Lydian for brightness"),
-            (r"film composers", r"reach for Lydian for wonder, \ Phrygian for menace, \ whole-tone for a dream: \ one changed note each"),
-            (r"songwriters", r"write whole songs on the five black keys, \ where no two notes can clash"),
+            (r"film composers", r"reach for Lydian for wonder, \ Phrygian for menace, \ whole-tone for a dream: \ conventional colours, \ shaped by context"),
+            (r"songwriters", r"write whole songs on the five black keys, \ while still choosing register, \ rhythm and harmony"),
             (r"instrument makers", r"choose which notes to leave out: \ a harmonica, \ a kalimba and a steel tongue drum are scales made solid"),
         ], font_size=26)
         with self.voiceover(
             "And in practice. An improviser learns each mode as a colour to play over a chord. A film "
             "composer reaches for Lydian when the scene needs wonder and Phrygian when it needs menace, "
-            "and the difference is one note. A songwriter can write a whole song on the five black keys, "
-            "where nothing clashes. And an instrument maker decides which notes to leave out: a "
+            "and these colours depend on several scale degrees and their musical context. A songwriter can write a whole song on the five black keys, "
+            "without semitone neighbours, while register and harmony still matter. And an instrument maker decides which notes to leave out: a "
             "harmonica or a kalimba is a scale made solid."
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
@@ -174,11 +174,7 @@ class Outro(SoundScene):
         q = label(r"three notes of a scale, \ sounded together. \ Why these three?", font_size=32, color=EAR).move_to(DOWN * 0.6)
         nxt = VGroup(label(r"Part 13", font_size=32, color=GREY_B), label(r"Intervals and Chords", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "We have chosen our notes. So far we have played them one at a time. The next question is "
-            "what happens when notes of a scale sound together. <bookmark mark='a'/> Take every other "
-            "note of the scale, three of them, and you have a chord that half the world's songs are "
-            "built on. Why that spacing, and how many chords does a scale contain? "
-            "<bookmark mark='b'/> Next time. Part 13: Intervals and Chords."
+            "We have chosen our notes. So far we have played them one at a time. The next question is what happens when notes of a scale sound together. <bookmark mark='a'/> Take every other note of the scale, three of them, and you have a triad central to many Western-style tonal songs. Why that spacing, and how many chords does a scale contain? <bookmark mark='b'/> Next time. Part 13: Intervals and Chords."
         ) as vo:
             self.play(FadeIn(kb))
             vo.wait_until("a")

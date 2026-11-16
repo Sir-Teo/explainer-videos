@@ -61,15 +61,7 @@ class Gaps(SoundScene):
         notes = VGroup(label(r"17: \ the scale of Arabic theory, \ thirteenth century", font_size=24, color=GREY_A), label(r"53: \ Jing Fang's, \ and Part 6's best equal division", font_size=24, color=GREY_A),
                        label(r"the same numbers as Part 6's continued fraction for the fifth", font_size=24, color=EAR)).arrange(DOWN, buff=0.18, aligned_edge=LEFT).next_to(nums, DOWN, buff=0.35)
         with self.voiceover(
-            "Two sizes of step occur at two, three, five, seven, twelve, seventeen, twenty-nine, forty-one "
-            "and fifty-three notes, and nowhere else below sixty. <bookmark mark='a'/> Five, seven and "
-            "twelve are in that list because of what a fifth is; no keyboard maker chose them. "
-            "<bookmark mark='b'/> And the list goes on to numbers that other musicians did choose. "
-            "Seventeen notes to the octave is the scale of medieval Arabic theory. Fifty-three is the "
-            "division that Jing Fang found in China two thousand years ago, and that Part 6 found again. "
-            "<bookmark mark='c'/> You have met these numbers. They are the denominators that came out of "
-            "Part 6's continued fraction for the size of a fifth. A scale with two sizes of step is what "
-            "a good rational approximation to the fifth looks like when you play it."
+            "Two sizes of step occur at two, three, five, seven, twelve, seventeen, twenty-nine, forty-one and fifty-three notes, and nowhere else below sixty. <bookmark mark='a'/> Five, seven and twelve are in that list because of what a fifth is; this generator has special near-closure properties; choosing it and building instruments around it also have a history. <bookmark mark='b'/> And the list goes on to numbers that other musicians did choose. An unequal seventeen-position system appears in medieval Arabic theory; it is not seventeen equal divisions or a description of every maqam. Jing Fang studied a fifty-three-fifth near-return in ancient China. Part 6 compared equal divisions and found fifty-three especially accurate within its tested range. <bookmark mark='c'/> You have met these numbers. They come from the continued-fraction family of approximations to the fifth, including intermediate convergents; not every number listed is a full convergent denominator. A scale with two sizes of step is what a good rational approximation to the fifth looks like when you play it."
         ) as vo:
             self.play(LaggedStart(*[FadeIn(n) for n in nums], lag_ratio=0.2), run_time=3.0)
             vo.wait_until("a")

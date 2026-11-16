@@ -19,9 +19,7 @@ class Hook(SoundScene):
         count = VGroup(label(r"7 white", font_size=40, color=WHITE), label(r"5 black", font_size=40, color=GREY_B), label(r"to every octave", font_size=30, color=GREY_A)).arrange(RIGHT, buff=0.6).next_to(kb, DOWN, buff=0.6)
         brace = Brace(VGroup(kb.key[0], kb.key[11]), UP, color=GREY_B, buff=0.1)
         with self.voiceover(
-            "Look at a keyboard. Any keyboard: a concert grand, a church organ, a toy. <bookmark mark='a'/> "
-            "In every octave there are seven white keys and five black ones, and it has been so for six "
-            "hundred years. Listen to the white keys, from C up to the next C. Then to the black keys."
+            "Look at a keyboard. A conventional piano-style keyboard: a concert grand, many church organs or a toy. <bookmark mark='a'/> In every octave there are seven white keys and five black ones, a design with a long history, alongside many alternative layouts. Listen to the white keys, from C up to the next C. Then to the black keys."
         ) as vo:
             self.play(FadeIn(kb))
             vo.wait_until("a")
@@ -31,9 +29,7 @@ class Hook(SoundScene):
             play_keys(snd, kb, d["white"] + d["black"], d["white_times"] + d["black_times"])
         kb.clear()
         with self.voiceover(
-            "You know both of those. The first is the scale that most of the tunes you grew up with are "
-            "made from. The second, the five black keys, is a scale too, and an older one: you can pick "
-            "out folk songs from Scotland, China and West Africa on those five keys alone."
+            'You know both of those. The first is the familiar major-scale pattern in Western tonal music. The second, the five black keys, is a scale too, with a long history in many traditions: you can pick out folk songs from Scotland, China and West Africa on those five keys alone.'
         ):
             self.play(*[kb.key[n].animate.set_fill(GOLD) for n in (0, 2, 4, 5, 7, 9, 11)], run_time=0.8)
             self.play(*[kb.key[n].animate.set_fill(BLUE) for n in (1, 3, 6, 8, 10)], run_time=0.8)
@@ -46,12 +42,7 @@ class Hook(SoundScene):
         qs = VGroup(label(r"why seven and five?", font_size=40, color=EAR), label(r"why not six and six, \ or eight and four?", font_size=30, color=GREY_A),
                     label(r"and why are the black keys in a two and a three?", font_size=30, color=GREY_A)).arrange(DOWN, buff=0.3).next_to(kb, DOWN, buff=0.5)
         with self.voiceover(
-            "So here is the question for this part. Why seven and five? <bookmark mark='a'/> Twelve keys "
-            "could be split six and six, or eight and four. <bookmark mark='b'/> And why are the black "
-            "keys bunched as a pair and a triple, and not spaced out evenly? It looks like an accident "
-            "of history, a habit of instrument makers. It is not. By the end of this part you will be "
-            "able to derive this picture from one interval, the fifth of Part 1, and to prove that among "
-            "all the ways of choosing seven notes out of twelve it is unlike any other."
+            "So here is the question for this part. Why seven and five? <bookmark mark='a'/> Twelve keys could be split six and six, or eight and four. <bookmark mark='b'/> And why are the black keys bunched as a pair and a triple, and not spaced out evenly? History and instrument making matter. We can also explain useful mathematical properties of this layout. By the end of this part you will be able to derive this picture from one interval, the fifth of Part 1, and to identify properties that distinguish its pitch-class shape, up to transposition, within a twelve-note model."
         ) as vo:
             self.play(FadeOut(self.count), FadeOut(self.brace), FadeIn(qs[0]))
             vo.wait_until("a")

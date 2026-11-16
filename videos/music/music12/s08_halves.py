@@ -31,7 +31,7 @@ class Halves(SoundScene):
         fills.arrange_in_grid(rows=2, cols=3, buff=(0.7, 0.5)).move_to(DOWN * 1.2)
         with self.voiceover(
             "Before keyboards, and long before anyone drew a circle of twelve notes, scales were built in "
-            "another way, by the Greeks and by nearly every tradition that learned from them. Fix the "
+            "another way, in ancient Greek theory, with related ways of combining pitch groups in other traditions; this is not a single origin story for all scales. Fix the "
             "strong notes first: the home note, the fourth above it, the fifth, and the octave. "
             "<bookmark mark='a'/> That leaves two fourths to fill, with a whole tone between them. Fill "
             "each fourth with two more notes, and you have a scale of seven. A filled fourth is called a "
@@ -57,11 +57,7 @@ class Halves(SoundScene):
         rows.arrange(DOWN, buff=0.9).move_to(UP * 0.4)
         note = listen_note(r"the lower half of a major scale; \ the upper half; \ the two joined. \ Then a scale made of two other halves", width=10.4, font_size=26).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "The major scale is two tetrachords of the same shape, tone, tone, semitone, with a tone "
-            "between. Sing the lower half and then the upper: they are the same four-note tune, a fifth "
-            "apart. <bookmark mark='a'/> Use a different filling, semitone, three semitones, semitone, "
-            "for both halves, and you get a scale that the major-minor system has no place for, but that "
-            "is everyday in Arabic, Turkish, Greek and Indian music."
+            "The major scale is two tetrachords of the same shape, tone, tone, semitone, with a tone between. Sing the lower half and then the upper: they are the same four-note tune, a fifth apart. <bookmark mark='a'/> Use a different filling, semitone, three semitones, semitone, for both halves, and you get a double-harmonic pattern found under different names in several traditions, and also used in Western music; this equal-tempered demonstration does not reproduce each tradition's tuning and phrasing."
         ) as vo:
             self.play(FadeIn(rows[0]))
             vo.wait_until("a")
@@ -84,18 +80,17 @@ class Halves(SoundScene):
         under = VGroup(label(r"the fourth: \\ plain or raised", font_size=24, color=GREY_A), label(r"the second and third: \\ any two of four places", font_size=24, color=GREY_A),
                        label(r"the sixth and seventh: \\ any two of four places", font_size=24, color=GREY_A))
         under.arrange(RIGHT, buff=0.9).move_to(UP * 0.2)
-        rule = label(r"Venkatamakhin's rule, \ seventeenth century", font_size=30, color=TUNE).to_edge(UP, buff=0.5)
+        rule = label(r"the modern 72-parent-scale scheme", font_size=30, color=TUNE).to_edge(UP, buff=0.5)
         eq.move_to(UP * 1.6)
         maya = twelve(d["maya"], radius=1.2, color=TUNE, font_size=16).move_to(LEFT * 3.4 + DOWN * 2.0)
-        ml = label(r"number 15 of the 72: \\ Mayamalavagowla, \\ the first scale a student in south India learns", font_size=24, color=GREY_A).next_to(maya, RIGHT, buff=0.6)
+        ml = label(r"number 15 of the 72: \\ Mayamalavagowla, \\ a common beginning scale in Carnatic teaching", font_size=24, color=GREY_A).next_to(maya, RIGHT, buff=0.6)
         with self.voiceover(
-            "South Indian music made a complete catalogue out of this idea. In the seventeenth century "
-            "the theorist Venkatamakhin laid down a rule. The home note and the fifth are fixed. "
-            "<bookmark mark='a'/> The fourth is either plain or raised: two choices. The second and "
-            "third notes take any two of the four places below the fourth: six choices. The sixth and "
-            "seventh take any two of the four places above the fifth: six more. <bookmark mark='b'/> "
+            "South Indian music made a complete catalogue out of this idea. Venkatamakhin developed a seventy-two-mela framework in the seventeenth century; later theorists standardized the modern catalogue illustrated here. The home note and the fifth are fixed. "
+            "<bookmark mark='a'/> The fourth is either plain or raised: two choices. For the second and "
+            "third notes, choose two of semitone positions one, two, three and four in this keyboard abstraction: six choices. For the sixth and "
+            "seventh, choose two of positions eight, nine, ten and eleven: six more. <bookmark mark='b'/> "
             "Two times six times six: seventy-two parent scales, the melakartas, each with a name and a "
-            "number, and every raga of the tradition is assigned to one of them. Monochord generates all "
+            "number, used as parents in modern Carnatic classification, with ambiguities and exceptions in how individual ragas relate to parents. Monochord generates all "
             f"seventy-two, and finds {say(d['modes_among'])} of our seven modes among them. "
             "<bookmark mark='c'/> Here is one that is not: the first scale a student in south India "
             "learns. You just heard it. It is the scale of two halves from a moment ago."

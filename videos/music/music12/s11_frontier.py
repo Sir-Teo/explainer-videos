@@ -17,7 +17,7 @@ class Frontier(SoundScene):
     def scatter(self):
         d = load("frontier")
         rows = d["rows"]
-        g = axes([0, 0.58], [1.5, 6.5], x_length=8.4, y_length=4.0, xlabel=r"how evenly the seven notes are spread", ylabel=r"fifths in the scale", xticks=[0, 0.2, 0.4], yticks=[2, 3, 4, 5, 6], font_size=22).move_to(LEFT * 1.6 + DOWN * 0.3)
+        g = axes([0, 0.58], [1.5, 6.5], x_length=8.4, y_length=4.0, xlabel=r"evenness score \ (higher = more even)", ylabel=r"fifths in the scale", xticks=[0, 0.2, 0.4], yticks=[2, 3, 4, 5, 6], font_size=22).move_to(LEFT * 1.6 + DOWN * 0.3)
         rough = np.array([r["roughness"] for r in rows])
         lo, hi = rough.min(), rough.max()
         rng = np.random.default_rng(2)
@@ -29,17 +29,10 @@ class Frontier(SoundScene):
         k = [r["steps"] for r in rows].index(d["diatonic"])
         ring = Circle(radius=0.22, color=WHITE, stroke_width=3).move_to(dots[k])
         tag = label(r"the white keys", font_size=26, color=WHITE).next_to(ring, RIGHT, buff=0.15)
-        key = VGroup(label(r"each dot: \ one of the 66 shapes", font_size=22, color=GREY_A), label(r"green: \ smooth, \ by Part 5's roughness", font_size=22, color=GOOD), label(r"red: \ rough", font_size=22, color=BAD)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to(RIGHT * 4.7 + UP * 0.6)
-        rank = label(rf"smoothest of the 66: \ number {d['roughness_rank']}", font_size=26, color=TUNE).next_to(key, DOWN, buff=0.5)
+        key = VGroup(label(r"each dot: \ one of the 66 shapes", font_size=22, color=GREY_A), label(r"green: \ smooth, \ by Part 5's roughness", font_size=22, color=GOOD), label(r"red: \ rough", font_size=22, color=BAD), label(r"vertical jitter separates integer counts", font_size=18, color=GREY_B)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).scale_to_fit_width(4.2).to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
+        rank = label(rf"model roughness rank:\\ {d['roughness_rank']} of 66", font_size=26, color=TUNE).next_to(key, DOWN, buff=0.5)
         with self.voiceover(
-            "Five to seven notes, in steps of two sizes: why does so much of the world's music settle "
-            "there? One kind of answer is that such scales are good at something. Take our sixty-six "
-            "shapes of seven notes and score each one three ways. <bookmark mark='a'/> Across: how evenly "
-            "its notes are spread. Up: how many of its pairs of notes are a fifth apart. Colour: how "
-            "smooth all its pairs sound together, by the roughness model of Part 5. "
-            "<bookmark mark='b'/> One shape is the most even, has the most fifths, and is the smoothest "
-            "of all sixty-six. It is the white keys again. On twelve notes, the three things a scale "
-            "might want do not compete. One shape wins all of them."
+            "Five to seven notes, in steps of two sizes: why does so much of the world's music settle there? One kind of answer is that such scales are good at something. Take our sixty-six shapes of seven notes and score each one three ways. <bookmark mark='a'/> Across: how evenly its notes are spread. Up: how many of its pairs of notes are a fifth apart. Colour: the mean modeled roughness of its twenty-one dyad intervals, evaluated at the model's common reference pitch and spectrum. <bookmark mark='b'/> One shape is the most even, has the most fifths, and is the smoothest of all sixty-six. It is the white keys again. On twelve notes, the three things a scale might want do not compete. The diatonic shape leads these particular scores. That is a model result, not proof that it must be preferred in every timbre, register or culture."
         ) as vo:
             cols = [x.get_color() for x in dots]
             for x in dots:
@@ -47,7 +40,7 @@ class Frontier(SoundScene):
             self.play(FadeIn(g), FadeIn(key[0]))
             self.play(LaggedStart(*[FadeIn(x, scale=2.0) for x in dots], lag_ratio=0.08), run_time=8.0)
             vo.wait_until("a")
-            self.play(*[x.animate.set_color(c_) for x, c_ in zip(dots, cols)], FadeIn(key[1]), FadeIn(key[2]), run_time=2.0)
+            self.play(*[x.animate.set_color(c_) for x, c_ in zip(dots, cols)], FadeIn(key[1]), FadeIn(key[2]), FadeIn(key[3]), run_time=2.0)
             vo.wait_until("b")
             self.play(Create(ring), FadeIn(tag), FadeIn(rank))
         self.wait(0.4)
@@ -77,16 +70,9 @@ class Frontier(SoundScene):
         facts = VGroup(label(rf"seven equal steps of {d['equal_step']:.0f} cents", font_size=28, color=TUNE),
                        label(rf"its third: \ {d['equal_third']:.0f} cents, \ between minor (300) and major (400)", font_size=26, color=GREY_A),
                        label(rf"its fifth: \ {d['equal_fifth']:.0f} cents, \ 16 flat of pure", font_size=26, color=GREY_A),
-                       label(r"every note has the same neighbours: \ no landmark, \ no home", font_size=26, color=EAR)).arrange(DOWN, buff=0.25).move_to(DOWN * 1.5)
+                       label(r"symmetric pitch inventory; \ a home can still come from context", font_size=26, color=EAR)).arrange(DOWN, buff=0.25).move_to(DOWN * 1.5)
         with self.voiceover(
-            "Neither. That was seven equal steps to the octave. <bookmark mark='a'/> Its third lies "
-            "between a minor and a major third. Its fifth is a little flat. <bookmark mark='b'/> And "
-            "something subtler is missing. Every note of an equal scale has exactly the same neighbours "
-            "at exactly the same distances. Nothing marks any note as different from the rest. Chapter "
-            "four's landmark, the interval that occurs only once, is gone. In 1999 Sandra Trehub and her "
-            "colleagues tested babies nine months old on scales they had never heard: one with unequal "
-            "steps, one with equal. The babies noticed a mistuned note in the unequal scale, and not in "
-            "the equal one. Unequal steps seem to give the ear something to hold on to."
+            "Neither. That was seven equal steps to the octave. <bookmark mark='a'/> Its third lies between a minor and a major third. Its fifth is a little flat. <bookmark mark='b'/> And something subtler is missing. Every note of an equal scale has exactly the same neighbours at exactly the same distances. Nothing marks any note as different from the rest. Chapter four's landmark, the interval that occurs only once, is gone. In 1999 Sandra Trehub and her colleagues tested babies nine months old on scales they had never heard: one with unequal steps, one with equal. In that task, infants detected changes more successfully in the tested unequal-step condition. This does not establish that equal-step scales cannot support pitch learning or a tonal centre. Unequal steps seem to give the ear something to hold on to."
         ) as vo:
             self.play(FadeIn(facts[0]))
             vo.wait_until("a")
@@ -100,24 +86,14 @@ class Frontier(SoundScene):
     def reasons(self):
         head = label(r"Four explanations, \ none of them settled", font_size=36, color=LIMIT).to_edge(UP, buff=0.4)
         rows = rows_card([
-            (r"memory", r"listeners can keep only about five to nine pitch categories apart; \\ more notes than that, \ and a scale stops being a set of landmarks."),
-            (r"unequal steps", r"they tell a listener where in the scale a melody is; \\ infants hear mistunings in unequal scales and not in equal ones."),
-            (r"consonance", r"the scales used most are those whose notes agree best with a harmonic series \\ (Gill and Purves, 2009), \ or that pack in the most fifths (McBride and Tlusty)."),
+            (r"memory", r"processing many pitch distinctions can be demanding; \\ this is a possible pressure, \ not a universal category limit."),
+            (r"unequal steps", r"they tell a listener where in the scale a melody is; \\ an infant task found an unequal-step advantage; \ other tasks may differ."),
+            (r"consonance", r"proposed models emphasize harmonicity or frequent fifths; assumptions matter \\ Gill and Purves (2009); \ McBride and Tlusty (2019)."),
             (r"transmission", r"scales are learned by ear and sung by voices; \ only what survives being \\ passed on, \ imperfectly, \ for generations is still here."),
         ], left=-6.5, text_left=-3.2, top=1.9, step=1.42, name_size=26, text_size=23, color=LIMIT)
         self.play(FadeIn(head), run_time=0.5)
         with self.voiceover(
-            "So why five to seven unequal steps? There are at least four explanations, and none is "
-            "settled. <bookmark mark='a'/> Memory: people can keep only a handful of categories of pitch "
-            "apart, and a scale with too many notes stops being a set of landmarks. <bookmark mark='b'/> "
-            "Orientation: unequal steps tell a listener where in the scale a melody is. "
-            "<bookmark mark='c'/> Consonance: the scales the world uses most are the ones whose notes "
-            "agree best with a harmonic series, or that pack in the most fifths. We saw a version of "
-            "that a minute ago. <bookmark mark='d'/> And transmission: scales are passed on by ear and "
-            "by voice, and only what survives being copied imperfectly for generations is still with us. "
-            "These are not rivals so much as pressures, and they mostly push the same way. Telling them "
-            "apart needs scales where they disagree, and people who use them. That work is being done "
-            "now, and the answers so far differ from one culture's music to the next."
+            "So why five to seven unequal steps? There are at least four explanations, and none is settled. <bookmark mark='a'/> Memory: processing and remembering many pitch distinctions can be demanding, but there is no established universal ceiling of five to nine usable pitch categories. <bookmark mark='b'/> Orientation: unequal steps tell a listener where in the scale a melody is. <bookmark mark='c'/> Consonance: some proposed models explain common scale patterns through harmonicity or frequent fifths; their predictions depend on assumptions and the traditions compared. We saw a version of that a minute ago. <bookmark mark='d'/> And transmission: scales are passed on by ear and by voice, and only what survives being copied imperfectly for generations is still with us. These are not rivals so much as pressures, and they mostly push the same way. Telling them apart needs scales where they disagree, and people who use them. That work is being done now, and the answers so far differ from one culture's music to the next."
         ) as vo:
             for mark, r in zip("abcd", rows):
                 vo.wait_until(mark)

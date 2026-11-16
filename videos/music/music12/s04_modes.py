@@ -52,14 +52,7 @@ class Modes(SoundScene):
         arrow = Arrow(tags.get_left() + DOWN * 0.6, tags.get_right() + DOWN * 0.6, buff=0, color=GREY_B, stroke_width=3, tip_length=0.18)
         ends = VGroup(label(r"brightest", font_size=24, color=TUNE).next_to(arrow, LEFT, buff=0.15), label(r"darkest", font_size=24, color=GREY_B).next_to(arrow, RIGHT, buff=0.15))
         with self.voiceover(
-            "Seven notes are not yet a scale. A scale needs a home: one note that the others are heard "
-            "against, where a tune comes to rest. Here are our seven notes as the stack made them, each a "
-            "fifth above the last. <bookmark mark='a'/> Any of the seven can be home, and each choice is "
-            "called a mode. The names are Greek, borrowed and misapplied by medieval theorists; the full "
-            "set dates from 1547. <bookmark mark='b'/> What matters is the order. Make F the home note, "
-            "and every other note lies above it in the chain of fifths: that is the brightest mode, "
-            "Lydian. Make B the home note, and every other note lies below it: Locrian, the darkest. "
-            "Between them the other five line up in order."
+            "An ordered pitch collection can already be called a scale. For the tonal modes illustrated here we also choose a home: one note that the others are heard against, where a tune comes to rest. Here are our seven notes as the stack made them, each a fifth above the last. <bookmark mark='a'/> Any of the seven can be home, and each choice is called a mode. The names are Greek, borrowed and misapplied by medieval theorists; Glarean expanded the historical modal system in 1547, but the modern seven-mode collection, including Locrian, is not simply his twelve-mode system. <bookmark mark='b'/> What matters is the order. Make F the home note, and every other note lies above it in the chain of fifths: in the usual raised-degree ordering this is the brightest mode, Lydian. Make B the home note, and every other note lies below it: Locrian, the darkest. Between them the other five line up in order."
         ) as vo:
             self.play(FadeIn(ch))
             vo.wait_until("a")
@@ -105,9 +98,9 @@ class Modes(SoundScene):
                 m.set_color(WHITE)
         with self.voiceover(
             "Bright to dark in six steps. The top three have a major third above the home note, and "
-            "sound major. The next three have a minor third, and sound minor; the fifth of them, "
+            "sound major. The next three have a minor third, and sound minor; the fifth row, "
             "Aeolian, is the natural minor scale. The last, Locrian, has no perfect fifth above its home "
-            "note, and almost no music is written in it."
+            "note, and it is less common as a stable tonal basis, though it is used."
         ):
             self.play(Indicate(VGroup(*[r[1][2] for r in tb.rows[:3]]), color=TUNE), run_time=1.5)
             self.play(Indicate(VGroup(*[r[1][2] for r in tb.rows[3:6]]), color=SHORT), run_time=1.5)
@@ -221,13 +214,7 @@ class Modes(SoundScene):
         rows.move_to(DOWN * 0.4)
         head = label(r"the Tune uses only six notes of its scale: \ degrees 1 to 6", font_size=28, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "What do the modes do to our Tune? Less than you might expect, and the reason is worth "
-            "noticing. The Tune uses only six notes of its scale; it never touches the seventh. "
-            "<bookmark mark='a'/> So in the Mixolydian mode, which differs from major only in the "
-            "seventh, the Tune does not change at all. A melody of six notes cannot tell those two modes "
-            "apart. Guido's hexachord, from Part 10, had the same blind spot, and it is why his singers "
-            "needed more than one of them. When we play the Tune in every mode, at the end of this part, "
-            "we will give it a second voice that does use the seventh."
+            "What do the modes do to our Tune? Less than you might expect, and the reason is worth noticing. The Tune uses only six notes of its scale; it never touches the seventh. <bookmark mark='a'/> So in the Mixolydian mode, which differs from major only in the seventh, the Tune does not change at all. A melody of six notes cannot tell those two modes apart. Guido's hexachord, from Part 10, had the same blind spot, and historical hexachord mutation served the wider gamut and solmization patterns, not merely this melody's missing seventh. When we play the Tune in every mode, at the end of this part, we will give it a second voice that does use the seventh."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(r[0]) for r in rows], lag_ratio=0.2), run_time=2.0)
             vo.wait_until("a")

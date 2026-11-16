@@ -12,7 +12,7 @@ SCENES = [
     ("s07_fewer", "Fewer", "6. Fewer notes, and more"),
     ("s08_halves", "Halves", "7. A scale in two halves"),
     ("s09_maps", "Maps", "8. Other maps of the octave"),
-    ("s10_every", "Every", "9. Every scale there is"),
+    ("s10_every", "Every", "9. Shapes among twelve pitch classes"),
     ("s11_frontier", "Frontier", "10. Frontier: why five to seven unequal steps?"),
     ("s12_outro", "Outro", "Variation 12, recap and problems"),
 ]

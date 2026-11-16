@@ -15,7 +15,7 @@ def tiny(steps, radius: float = 0.3, color=WEAK) -> VGroup:
 
 class Every(SoundScene):
     def construct(self):
-        chapter(self, 9, r"Every scale there is", r"How many scales are possible, \ and where is ours?")
+        chapter(self, 9, r"Shapes among twelve pitch classes", r"How many scales are possible, \ and where is ours?")
         self.small()
         self.count()
         self.wall()
@@ -64,9 +64,10 @@ class Every(SoundScene):
         d = load("every")
         l1 = MathTex(r"\text{sets of notes that contain C:} \quad 2^{11} = 2048", font_size=38)
         l2 = MathTex(r"\tfrac{1}{12}\left(2^{12} + 2^{6} + 2 \cdot 2^{4} + 2 \cdot 2^{3} + 2 \cdot 2^{2} + 4 \cdot 2^{1}\right) = \tfrac{4224}{12} = 352", font_size=38)
-        l3 = label(r"scale shapes: \ sets of notes, \ counted once however they are transposed", font_size=26, color=GREY_A)
+        l2.scale_to_fit_width(12.5)
+        l3 = label(r"scale shapes: \ unrooted subsets, \ including empty; \ transpositions counted once", font_size=26, color=GREY_A)
         VGroup(l1, l3, l2).arrange(DOWN, buff=0.4).to_edge(UP, buff=0.5)
-        g = axes([-0.7, 12.7], [0, 90], x_length=9.0, y_length=2.4, xlabel=r"notes in the scale", ylabel=r"shapes", xticks=list(range(0, 13)), yticks=[0, 40, 80], font_size=20).move_to(DOWN * 1.9)
+        g = axes([-0.7, 12.7], [0, 90], x_length=9.0, y_length=2.4, xlabel=r"notes in the scale", ylabel=r"shapes", xticks=list(range(0, 13)), yticks=[0, 40, 80], font_size=20).move_to(DOWN * 1.65)
         bars = VGroup(*[Rectangle(width=0.42, height=max(g.ax.c2p(0, v)[1] - g.ax.c2p(0, 0)[1], 0.02), stroke_width=0, fill_color=TUNE if k == 7 else WEAK, fill_opacity=0.9).move_to(g.ax.c2p(k, 0), aligned_edge=DOWN)
                         for k, v in enumerate(d["counts"])])
         nums = VGroup(*[label(str(v), font_size=18, color=WHITE).next_to(b, UP, buff=0.05) for v, b in zip(d["counts"], bars)])
@@ -74,16 +75,7 @@ class Every(SoundScene):
                                   label(NOTE_NAMES[k], font_size=24, color=BLACK if k == 0 else GREY_A)) for k in range(12)]).arrange(RIGHT, buff=0.12).move_to(UP * 0.6)
         ask = label(r"the home note is in. \ Each of the other eleven: \ in, \ or out?", font_size=30, color=GREY_A).next_to(boxes12, DOWN, buff=0.6)
         with self.voiceover(
-            "Now let us be thorough. How many scales could there be on twelve notes? A scale is a choice "
-            "of some notes, including its home note; each of the other eleven is in or out. "
-            "<bookmark mark='a'/> Two to the eleventh: two thousand and forty-eight. But many of those "
-            "are the same scale starting on a different note, or moved to a different key. Call two sets "
-            "the same shape if one is the other transposed. Counting shapes is a problem about "
-            "necklaces: twelve beads, each black or white, where turning the necklace does not make a "
-            "new one. <bookmark mark='b'/> Burnside's lemma counts them: average, over the twelve "
-            "rotations, the number of colourings each rotation leaves unchanged. The answer is three "
-            "hundred and fifty-two. Monochord also lists them all, and gets the same number. "
-            "<bookmark mark='c'/> Here they are by size. Sixty-six shapes have seven notes."
+            "Now let us be thorough. How many scales could there be on twelve notes? A scale is a choice of some notes, including its home note; each of the other eleven is in or out. <bookmark mark='a'/> Two to the eleventh: two thousand and forty-eight. But many of those are the same scale starting on a different note, or moved to a different key. Call two sets the same shape if one is the other transposed. Counting shapes is a problem about necklaces: twelve beads, each black or white, where turning the necklace does not make a new one. <bookmark mark='b'/> Burnside's lemma counts them: average, over the twelve rotations, the number of colourings each rotation leaves unchanged. There are three hundred and fifty-two unrooted subset shapes including the empty set: three hundred and fifty-one nonempty ones. This count discards the choice of tonic, so it is not a count of distinct rooted modes. Monochord also lists them all, and gets the same number. <bookmark mark='c'/> Here they are by size. Sixty-six shapes have seven notes."
         ) as vo:
             self.play(FadeIn(boxes12), FadeIn(ask))
             vo.wait_until("a")
@@ -115,7 +107,7 @@ class Every(SoundScene):
             "scales with no gap wider than a whole tone, built only from whole and half steps, and three "
             "are left. <bookmark mark='b'/> Ask that the two half steps be kept as far apart as they can "
             "be, and there is one. It is the white keys. Out of every possible scale of seven notes, the "
-            "one on the keyboard is the single smoothest shape."
+            "one on the keyboard is the unique shape up to transposition under this spacing criterion."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(x) for x in cells], lag_ratio=0.02), run_time=3.0)
             vo.wait_until("a")
@@ -145,7 +137,7 @@ class Every(SoundScene):
         with self.voiceover(
             "B. A was the melodic minor scale of chapter five, whose half steps are two notes apart "
             "instead of three. C had its two half steps side by side, after five whole tones: nearly a "
-            "whole-tone scale. All three are used. Only B is everywhere."
+            "whole-tone scale. All three are used. The major-scale family is widespread, but this comparison does not make it universal."
         ):
             self.play(FadeIn(tags), cols[1][1][1].animate.set_color(TUNE))
         self.wait(0.4)
