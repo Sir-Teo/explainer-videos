@@ -60,7 +60,7 @@ class Concert(SoundScene):
         ]
         rows_scene(self, r"the canon", items,
                    "And the concert became a museum. <bookmark mark='b'/> In 1829 Felix Mendelssohn, aged twenty, "
-                   "conducted Bach's St Matthew Passion in Berlin, its first performance since Bach's death, and in "
+                   "conducted Bach's St Matthew Passion in Berlin, a landmark public revival after a long period outside the regular concert repertory, and in "
                    "a shortened form. <bookmark mark='c'/> In 1850 the Bach Society began a complete edition of his works, and "
                    "editions of Handel, Mozart and Beethoven followed. <bookmark mark='d'/> Concert programmes, which in 1780 "
                    "had been mostly new music, filled with the music of the dead: the classics, the canon. "
@@ -95,9 +95,4 @@ class Concert(SoundScene):
             (r"the century ends with music that can be kept as sound, \ not only as a score", GREY_A),
         ]
         rows_scene(self, r"the first recordings", items,
-                   "The century ended with a machine. <bookmark mark='b'/> In 1877 Thomas Edison's phonograph recorded sound "
-                   "on tinfoil. <bookmark mark='c'/> In 1889 Brahms played part of his first Hungarian Dance into a wax "
-                   "cylinder in Vienna; the recording is barely audible through the noise. <bookmark mark='d'/> For the first "
-                   "time a musician's own playing could outlive them. <bookmark mark='e'/> And the earliest recordings show a "
-                   "style unlike today's: more rubato, freer tempos, more sliding between notes. <bookmark mark='f'/> The "
-                   "century that began with scores ended with music that could be kept as sound.", marks="cdef")
+                   "The century ended with a machine. <bookmark mark='b'/> In 1877 Thomas Edison's phonograph recorded sound on tinfoil. <bookmark mark='c'/> In 1889 Brahms played part of his first Hungarian Dance into a wax cylinder in Vienna; the recording is barely audible through the noise. <bookmark mark='d'/> Sound recording allowed an audible trace of playing to survive, alongside older mechanical and notated records. <bookmark mark='e'/> And the earliest recordings show a style unlike today's: different patterns of rubato, tempo flexibility and sliding, varying by performer and repertory. <bookmark mark='f'/> The century that began with scores ended with music that could be kept as sound.", marks="cdef")

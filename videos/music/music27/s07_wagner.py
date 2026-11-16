@@ -33,7 +33,7 @@ class Wagner(SoundScene):
                    "<bookmark mark='b'/> Richard Wagner wrote his own words and called his works music dramas. "
                    "<bookmark mark='c'/> The Ring of the Nibelung takes four evenings, about fifteen hours, and was finished in "
                    "1874. <bookmark mark='d'/> For it he built a theatre at Bayreuth, opened in 1876, with the orchestra hidden "
-                   "in a covered pit. <bookmark mark='e'/> There are no separate arias and recitatives, only continuous music, "
+                   "in a covered pit. <bookmark mark='e'/> Traditional aria-recitative divisions are often weakened in his mature dramas, though there are still recognizable numbers and formal articulations, "
                    "what he called endless melody. <bookmark mark='f'/> He is also a toxic figure: his antisemitic writings are "
                    "part of the record, and part of how his music was later used.", marks="cdef")
 
@@ -72,20 +72,14 @@ class Wagner(SoundScene):
         d = load("tristan")
         rows_ = text_rows([
             (r"F, \ B, \ D$\sharp$, \ G$\sharp$: \ the same sounds as F, \ A$\flat$, \ C$\flat$, \ E$\flat$, \ a half-diminished seventh", WHITE),
-            (r"spelled as Wagner spells it, \ it belongs to no single chord of A minor", WHITE),
+            (r"its spelling supports several functional readings in A minor \ (Part 19)", WHITE),
             (rf"keys whose scale holds all four notes: \ {d['fits_tristan'][0]} \ (a plain triad: \ {d['fits_plain'][0]})", WHITE),
             (r"the resolution goes to a dominant seventh \ ---\ itself unresolved", TUNE),
-            (r"the opera delays the tonic for hours; \ the last chord, \ at Isolde's death, \ is B major", EAR),
+            (r"delayed closure is a dramatic motif; \ the last chord, \ at Isolde's death, \ is B major", EAR),
         ], font_size=24)
         head = label(r"a chord that asks a question", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Why is the chord so unsettling? <bookmark mark='a'/> Its four sounds are the same as F, A flat, C flat and E "
-            "flat, an ordinary half-diminished seventh, but spelled as Wagner spells it, they belong to no single chord in "
-            "A minor. <bookmark mark='b'/> Count the keys whose scales contain all four notes: "
-            f"{say(d['fits_tristan'][0])}, against {say(d['fits_plain'][0])} for a plain A minor triad, counting the minor "
-            "scale's raised notes as inside. <bookmark mark='c'/> And where it resolves, it resolves only to a dominant "
-            "seventh, itself a question. <bookmark mark='d'/> The opera keeps postponing its tonic for hours; when it "
-            "ends, at Isolde's death, the chord is B major."
+            f"Why is the chord so unsettling? <bookmark mark='a'/> Its four sounds are the same as F, A flat, C flat and E flat, an ordinary half-diminished seventh, but spelled as Wagner spells it, their spelling invites several functional interpretations in A minor, as Part 19 showed. <bookmark mark='b'/> Count the keys whose scales contain all four notes: {say(d['fits_tristan'][0])}, against {say(d['fits_plain'][0])} for a plain A minor triad, counting the minor scale's raised notes as inside. <bookmark mark='c'/> And where it resolves, it resolves only to a dominant seventh, itself a question. <bookmark mark='d'/> Delayed closure is a dramatic motif, not the literal absence of local tonics throughout the opera. Its final B-major chord supplies a large-scale ending, rather than simply resolving the opening A-minor dominant."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("abcd", rows_[1:]):
@@ -140,7 +134,7 @@ class Wagner(SoundScene):
             (r"size and chromaticism grew together; \ both reached a limit", GREY_A),
         ]
         rows_scene(self, r"the century ends large", items,
-                   "The century ended large. <bookmark mark='b'/> Anton Bruckner's symphonies are cathedrals of brass, often over an hour long. <bookmark mark='c'/> Gustav Mahler is reported to have said that a symphony must be like the world, and embrace everything. <bookmark mark='d'/> His Eighth Symphony, first performed in Munich in 1910, was advertised as the Symphony of a Thousand, for the number of performers. <bookmark mark='e'/> Richard Strauss's Salome, of 1905, pushed the key nearly to its edge. <bookmark mark='f'/> Size and chromaticism grew together, and both were reaching a limit.", marks="cdef")
+                   "The century ended large. <bookmark mark='b'/> Anton Bruckner's symphonies are cathedrals of brass, often over an hour long. <bookmark mark='c'/> Gustav Mahler is reported to have said that a symphony must be like the world, and embrace everything. <bookmark mark='d'/> His Eighth Symphony, first performed in Munich in 1910, was advertised as the Symphony of a Thousand, for the number of performers. <bookmark mark='e'/> Richard Strauss's Salome, of 1905, pushed the key nearly to its edge. <bookmark mark='f'/> Some works expanded both scale and chromatic resources; neither had one universal historical limit.", marks="cdef")
 
     # ------------------------------------------------------------------
     def verdi(self):
@@ -152,4 +146,4 @@ class Wagner(SoundScene):
             (r"two opposite answers to one question: \ how should music serve drama?", GREY_A),
         ]
         rows_scene(self, r"the other opera", items,
-                   "Wagner was not the only answer. <bookmark mark='b'/> Italian opera ran from Rossini, Bellini and Donizetti to Giuseppe Verdi, born the same year as Wagner. <bookmark mark='c'/> Its ideal was bel canto, beautiful singing: the singer's line first, the orchestra often a large guitar beneath it. <bookmark mark='d'/> In Verdi's Rigoletto, of 1851, the Duke's song La donna è mobile is a tune the audience was meant to leave the theatre singing, <bookmark mark='e'/> and in the Library it is one of the plainest pieces of the century, two notes in a hundred outside its key. <bookmark mark='f'/> Verdi and Wagner gave opposite answers to one question: how music should serve drama.", marks="cdef")
+                   "Wagner was not the only answer. <bookmark mark='b'/> Italian opera ran from Rossini, Bellini and Donizetti to Giuseppe Verdi, born the same year as Wagner. <bookmark mark='c'/> Its ideal was bel canto, beautiful singing: the singer's line first, the orchestra often a large guitar beneath it. <bookmark mark='d'/> In Verdi's Rigoletto, of 1851, the Duke's song La donna è mobile is a tune the audience was meant to leave the theatre singing, <bookmark mark='e'/> and in the Library it is one of the plainest pieces of the century, two notes in a hundred outside its key. <bookmark mark='f'/> Verdi and Wagner developed distinct, internally varied approaches to one question: how music should serve drama.", marks="cdef")

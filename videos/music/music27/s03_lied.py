@@ -131,10 +131,4 @@ class Lied(SoundScene):
             (r"Part 40 returns to song: \ words, \ breath and accompaniment, \ in every tradition", GREY_A),
         ]
         rows_scene(self, r"songs that tell a story", items,
-                   "Songs gathered into stories. <bookmark mark='b'/> Beethoven's An die ferne Geliebte, of 1816, is usually "
-                   "called the first song cycle, songs that follow one another without a break. <bookmark mark='c'/> "
-                   "Schubert's two cycles on Müller's poems followed. <bookmark mark='d'/> In 1840, the year he married Clara "
-                   "Wieck, Robert Schumann wrote well over a hundred songs, among them Dichterliebe, whose last song ends with a "
-                   "long piano postlude: the piano has the last word. <bookmark mark='e'/> Clara Schumann, Fanny Hensel, "
-                   "Brahms and Hugo Wolf made the Lied a serious art. <bookmark mark='f'/> Part 40 comes back to song in every "
-                   "tradition: words, breath and accompaniment.", marks="cdef")
+                   "Songs gathered into stories. <bookmark mark='b'/> Beethoven's An die ferne Geliebte, of 1816, is an influential early integrated song cycle, with earlier collections and related practices complicating a first-ever claim, songs that follow one another without a break. <bookmark mark='c'/> Schubert's two cycles on Müller's poems followed. <bookmark mark='d'/> In 1840, the year he married Clara Wieck, Robert Schumann wrote well over a hundred songs, among them Dichterliebe, whose last song ends with a long piano postlude: the piano has the last word. <bookmark mark='e'/> Clara Schumann, Fanny Hensel, Brahms and Hugo Wolf further developed an already substantial song tradition. <bookmark mark='f'/> Part 40 comes back to song in every tradition: words, breath and accompaniment.", marks="cdef")

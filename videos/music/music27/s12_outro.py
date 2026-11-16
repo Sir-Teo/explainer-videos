@@ -78,8 +78,8 @@ class Outro(SoundScene):
             "<bookmark mark='a'/> A key-finder hears Schubert turn a stanza from major to minor. <bookmark mark='b'/> Rubato "
             "can be modelled two ways, both heard. <bookmark mark='c'/> A theme became a character, and a chord became a "
             f"question. <bookmark mark='d'/> Across the Library, instrumental music grew more chromatic by about "
-            f"{say(round(100 * lib['slope_i']))} notes in a hundred per century, while songs stayed plain. "
-            "<bookmark mark='e'/> And just after the century's end, the measure jumps: the key is nearly gone."
+            f"{say(round(100 * lib['slope_i']))} notes in a hundred per century, while the selected songs had lower averages. "
+            "<bookmark mark='e'/> And just after the century's end, the measure jumps: these selected post-tonal examples fit the key-profile model less well."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -159,7 +159,7 @@ class Outro(SoundScene):
         nxt = VGroup(label(r"Act V, \ Part 28", font_size=32, color=GREY_B), label(r"New Scales, \ New Rhythms", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "That completes Act Four: a thousand years, from one line of chant to Mahler's orchestra. <bookmark mark='a'/> "
-            "The last measurement in this part was a jump: after 1900 the key nearly disappears. What is left when it goes? "
+            "The last measurement in this part was a jump: three selected later works are substantially less diatonic under this index; tonal music continued alongside them. What is left when it goes? "
             "<bookmark mark='b'/> Act Five begins. Part 28: New Scales, New Rhythms."
         ) as vo:
             self.play(FadeIn(top))

@@ -98,17 +98,17 @@ class Measured(SoundScene):
         b_ins = np.polyfit(x[ins], y[ins], 1)
         l_all = Line(ax.c2p(1680, np.polyval(b_all, 1680)), ax.c2p(1900, np.polyval(b_all, 1900)), color=WHITE, stroke_width=3)
         l_ins = Line(ax.c2p(1680, np.polyval(b_ins, 1680)), ax.c2p(1900, np.polyval(b_ins, 1900)), color=TUNE, stroke_width=4)
-        t_all = label(rf"all {d['n_trend']}: \ {100 * d['slope_c']:+.1f} a century \ (95\% interval {100 * d['ci_c'][0]:+.1f} to {100 * d['ci_c'][1]:+.1f})", font_size=19, color=WHITE)
-        t_ins = label(rf"instrumental, \ {d['n_i']}: \ {100 * d['slope_i']:+.1f} a century \ ({100 * d['ci_i'][0]:+.1f} to {100 * d['ci_i'][1]:+.1f})", font_size=19, color=TUNE)
+        t_all = label(rf"all {d['n_trend']} plotted points: \ {100 * d['slope_c']:+.1f} a century \ (95\% interval {100 * d['ci_c'][0]:+.1f} to {100 * d['ci_c'][1]:+.1f})", font_size=19, color=WHITE)
+        t_ins = label(rf"instrumental points, \ {d['n_i']}: \ {100 * d['slope_i']:+.1f} a century \ ({100 * d['ci_i'][0]:+.1f} to {100 * d['ci_i'][1]:+.1f})", font_size=19, color=TUNE)
         VGroup(t_all, t_ins).arrange(DOWN, buff=0.18, aligned_edge=LEFT).to_corner(UL, buff=0.45).shift(RIGHT * 1.2)
         with self.voiceover(
             "Is there a trend between 1680 and 1900? Fit a straight line to those points. <bookmark mark='a'/> "
             f"Over all {say(d['n_trend'])} of them, chromaticism rises by about {say(100 * d['slope_c'], 1)} points a "
             "century, but a bootstrap, which refits the line on resampled points four thousand times, gives an interval "
             f"from {say(100 * d['ci_c'][0], 1)} to {say(100 * d['ci_c'][1], 1)}: it includes no change at all. "
-            f"<bookmark mark='b'/> Keep only the instrumental pieces, {say(d['n_i'])} of them, and the rise is "
+            f"<bookmark mark='b'/> Keep only the instrumental plotted points, {say(d['n_i'])} of them, and the rise is "
             f"{say(100 * d['slope_i'], 1)} points a century, with an interval from {say(100 * d['ci_i'][0], 1)} "
-            f"to {say(100 * d['ci_i'][1], 1)}, clear of zero. The stretching is real in instrumental music, and "
+            f"to {say(100 * d['ci_i'][1], 1)}, clear of zero. The association is positive in this instrumental subset under the stated bootstrap, without proving a repertoire-wide law, and "
             "gradual: a few notes in a hundred per century."
         ) as vo:
             self.play(Create(ax), FadeIn(yl), FadeIn(dots), FadeIn(others))
@@ -137,7 +137,7 @@ class Measured(SoundScene):
             f"<bookmark mark='a'/> The {say(d['n_songs'])} songs average about {say(round(100 * d['songs']))} in a hundred. "
             f"<bookmark mark='b'/> The {say(d['n_inst'])} instrumental pieces average about {say(round(100 * d['instrumental']))}, "
             "more than twice as much. <bookmark mark='c'/> In this Library genre matters as much as date. "
-            "<bookmark mark='d'/> A tune meant to be sung by anyone stays close to its key; it is the accompaniments, "
+            "<bookmark mark='d'/> These selected songs are relatively close to the inferred scales; song writing can also be highly chromatic; it is the accompaniments, "
             "developments and transitions that wander."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
@@ -190,14 +190,8 @@ class Measured(SoundScene):
             (r"a small, \ accidental Library: \ what the corpus happens to hold, \ not a sample of the century", WHITE),
             (r"keys from a profile: \ modal music and quick modulations both count as `chromatic'", WHITE),
             (r"dates are of composition, \ some approximate; \ groups average different numbers of pieces", WHITE),
-            (r"what holds anyway: \ instrumental music grew more chromatic, \ slowly; \ then a jump after 1900", TUNE),
+            (r"a rising instrumental-subset trend here; \ three later examples do not establish a universal break", TUNE),
             (r"the frontier \ (chapter ten): \ thousands of pieces, \ from audio as well as scores", GREY_A),
         ]
         rows_scene(self, r"what the measurement can and cannot say", items,
-                   "How far can this be trusted? <bookmark mark='b'/> The Library is small and accidental: what the corpus "
-                   "happens to hold, not a sample of the century. <bookmark mark='c'/> The key comes from a profile, so modal "
-                   "music, and music that modulates quickly, both count as chromatic. <bookmark mark='d'/> Dates are of "
-                   "composition and some are approximate, and the groups average different numbers of pieces. "
-                   "<bookmark mark='e'/> What holds anyway is the shape: instrumental music grew more chromatic, slowly, and "
-                   "then jumped after 1900. <bookmark mark='f'/> Chapter ten describes studies that do this with thousands of "
-                   "pieces, from recordings as well as scores.", marks="cdef")
+                   "How far can this be trusted? <bookmark mark='b'/> The plotted units mix individual works with group averages at representative dates; the bootstrap resamples those points, not independent pieces. The Library is small and accidental: what the corpus happens to hold, not a sample of the century. <bookmark mark='c'/> The key comes from a profile, so modal music, and music that modulates quickly, both count as chromatic. <bookmark mark='d'/> Dates are of composition and some are approximate, and the groups average different numbers of pieces. <bookmark mark='e'/> In this selected Library, the instrumental subset shows a rising trend under this measure; three later examples do not establish an abrupt universal change after 1900. <bookmark mark='f'/> Chapter ten describes studies that do this with thousands of pieces, from recordings as well as scores.", marks="cdef")

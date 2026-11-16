@@ -138,3 +138,11 @@ python -m videos.music.labs 27                                  # the lab (write
 * M. S. Cuthbert and C. Ariza, "music21" (*ISMIR* 2010), whose corpus holds the Library's encodings.
 * Part 7 for the piano and the bowed string; Part 15 for keys; Part 17 for the voice and choir; Part 21 for chroma;
   Parts 23 to 26 for the earlier collections.
+
+## Limits of the historical index
+
+The Library is a convenience selection. Its scatter combines individual pieces with group averages at representative dates; the Palestrina set is subsampled, and bootstrap resampling treats plotted points as exchangeable. Collections with many pieces therefore do not enter the trend as independent individual observations. Composer, genre, edition and date remain confounded. A positive slope in the selected instrumental subset is not a repertoire-wide causal law. Three selected Schoenberg/Webern examples cannot establish that tonality disappeared after 1900.
+
+The index compares windows with inferred major/minor profiles and includes the raised sixth/seventh in minor. It can mark modal or rapidly modulating music as chromatic, and correlation is model fit rather than measured listener certainty. Song and instrumental averages describe this selection. The contrasting passages are selected extreme-versus-typical examples, not a blinded test of date recognition.
+
+The phrase arch and unequal mazurka beats are illustrative timing models, not measurements of the excerpts’ historical performances. Register, dynamics, touch and orchestral balance in the synthetic sounds remain model-dependent. Instrumental storytelling, Russian opera and song-cycle practices all have precedents; the cited landmarks are not first-ever inventions.

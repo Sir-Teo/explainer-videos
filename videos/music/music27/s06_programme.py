@@ -28,12 +28,12 @@ class Programme(SoundScene):
             (r"the theme changes as the story does: \ a character, \ not a subject to develop", GREY_A),
         ]
         rows_scene(self, r"a symphony with a story", items,
-                   "Instrumental music began to tell stories. <bookmark mark='b'/> In 1830 Hector Berlioz performed his "
+                   "Nineteenth-century programme music expanded much older traditions of instrumental storytelling. <bookmark mark='b'/> In 1830 Hector Berlioz performed his "
                    "Symphonie fantastique in Paris, five movements with a printed programme. <bookmark mark='c'/> A young "
                    "artist, desperately in love, dreams of his beloved in an opium haze, <bookmark mark='d'/> and she appears "
                    "as a melody, the idée fixe, the obsession, which returns in every movement: <bookmark mark='e'/> at a "
                    "ball, in the fields, at his own execution, at a witches' sabbath. <bookmark mark='f'/> The theme changes "
-                   "as the story does. It is a character, not a subject to be developed in the Classical way.", marks="cdef")
+                   "as the story does. It is a character, while still capable of motivic development.", marks="cdef")
 
     # ------------------------------------------------------------------
     def idee(self):
@@ -123,4 +123,4 @@ class Programme(SoundScene):
             (r"Part 41 builds orchestration from Part 7's and Part 8's instruments", GREY_A),
         ]
         rows_scene(self, r"the orchestra as a palette", items,
-                   "Berlioz also wrote the book on it. <bookmark mark='b'/> His Treatise on Instrumentation, of 1844, describes each instrument's range, colour and character, <bookmark mark='c'/> and made orchestration a subject of its own: how a chord sounds depends on who plays it. <bookmark mark='d'/> Instruments changed too. Valves, added to horns and trumpets from the 1810s on, let them play every note in tune in every key, <bookmark mark='e'/> and in the 1840s Adolphe Sax invented whole families of instruments in his Paris workshop. <bookmark mark='f'/> Part 41 builds orchestration from the instruments of Parts 7 and 8.", marks="cdef")
+                   "Berlioz also wrote the book on it. <bookmark mark='b'/> His Treatise on Instrumentation, of 1844, describes each instrument's range, colour and character, <bookmark mark='c'/> and made orchestration a subject of its own: how a chord sounds depends on who plays it. <bookmark mark='d'/> Instruments changed too. Valves, added to horns and trumpets from the 1810s on, greatly expanded chromatic playing, while intonation still requires adjustment, <bookmark mark='e'/> and in the 1840s Adolphe Sax invented whole families of instruments in his Paris workshop. <bookmark mark='f'/> Part 41 builds orchestration from the instruments of Parts 7 and 8.", marks="cdef")

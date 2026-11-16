@@ -55,12 +55,7 @@ class Piano(SoundScene):
                         for m, n in ((21, "A0"), (36, "C2"), (60, "C4"), (84, "C6"), (108, "C8"))])
         head = label(r"the keyboard's compass, \ lowest key to highest", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "The keyboard grew too. Each bar here runs from an instrument's lowest key to its highest, from the makers' own "
-            "documented compasses. <bookmark mark='a'/> Cristofori's piano of about 1720 had four and a half octaves; the "
-            "Viennese fortepiano that Mozart played, five. <bookmark mark='b'/> Beethoven's Broadwood of 1817 had six; a "
-            "Viennese Graf of the 1820s, six and a half. <bookmark mark='c'/> By mid-century an Érard grand had seven, "
-            "and by the 1880s Steinway had settled on eighty-eight keys, from A zero to C eight, where the piano has "
-            "stayed."
+            "The keyboard grew too. Each bar here runs from an instrument's lowest key to its highest, from the makers' own documented compasses. <bookmark mark='a'/> Cristofori's piano of about 1720 had four and a half octaves; the Viennese fortepiano that Mozart played, five. <bookmark mark='b'/> Beethoven's Broadwood of 1817 had six; a Viennese Graf of the 1820s, six and a half. <bookmark mark='c'/> By mid-century an Érard grand had seven, and by the 1880s Steinway had settled on eighty-eight keys, from A zero to C eight, the common modern standard, with instruments of wider or narrower compass also existing."
         ) as vo:
             self.play(FadeIn(head), FadeIn(axis), FadeIn(rows_[0]))
             for mark, sl in zip("abc", (slice(1, 2), slice(2, 4), slice(4, 6))):
@@ -86,7 +81,7 @@ class Piano(SoundScene):
         with self.voiceover(
             "Hear what was added. First every C that a fortepiano of the 1780s could play, from C two to C six. Then the Cs "
             "the century added at either end: a deep C one, and C seven and C eight at the top, which on Part 7's piano "
-            "model, as on a real one, are short, bright and almost pitchless."
+            "model, as on a real one, are short and bright in this model, without implying that listeners cannot hear their pitches."
         ):
             self.play(FadeIn(head), FadeIn(kb), FadeIn(lab_old), FadeIn(lab_new), FadeIn(old), FadeIn(new))
         with self.listen(c) as snd:

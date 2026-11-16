@@ -24,7 +24,7 @@ class Nations(SoundScene):
         ]
         rows_scene(self, r"national styles", items,
                    "The century of nations wanted national music. <bookmark mark='b'/> Mikhail Glinka's A Life for the Tsar, "
-                   "of 1836, is usually counted the first Russian opera on a Russian story, <bookmark mark='c'/> and in St "
+                   "of 1836, is a landmark of Russian national opera, following earlier Russian operas and Russian-story settings, <bookmark mark='c'/> and in St "
                    "Petersburg a group of five, Balakirev, Borodin, Cui, Mussorgsky and Rimsky-Korsakov, set out to write "
                    "music that did not sound German. <bookmark mark='d'/> Smetana wrote a cycle of tone poems on Bohemia, "
                    "Grieg drew on Norwegian dances, and Chopin, as chapter three heard, on Poland's. <bookmark mark='e'/> The "

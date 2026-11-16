@@ -71,7 +71,7 @@ class Character(SoundScene):
         ans = VGroup(label(r"A: \ three equal beats, \ as written", font_size=21, color=GREY_A).next_to(g1, DOWN, buff=0.35),
                      label(r"B: \ beat 1 short, \ beat 2 long: \ the mazurka", font_size=21, color=TUNE).next_to(g2, DOWN, buff=0.35))
         with self.voiceover(
-            "B is the mazurka. The notes are identical; only their timing differs. The first beat is a little short, the "
+            "B uses this film’s illustrative unequal timing; both versions play the same mazurka. The notes are identical; only their timing differs. The first beat is a little short, the "
             "second a little long, and the bar begins to limp the way the dance does, the accent falling on the second "
             "or third beat rather than the first."
         ):
@@ -107,7 +107,7 @@ class Character(SoundScene):
             "Drawn as lengths, the written bar has three equal beats, and the played bar here gives them 0.85, 1.2 and 0.95 "
             "of a beat. <bookmark mark='a'/> Those numbers are the film's illustration, not a measurement. "
             "<bookmark mark='b'/> When researchers measured the beats in thousands of recorded mazurkas, they found many "
-            "patterns: pianists differ, and so do the dances. <bookmark mark='c'/> What is constant is the gap between "
+            "patterns: pianists differ, and so do the dances. <bookmark mark='c'/> These examples illustrate a gap between "
             "a regular notation and an irregular performance. The score is not the music."
         ) as vo:
             self.play(FadeIn(strict), FadeIn(bent), FadeIn(nums), FadeIn(lab))

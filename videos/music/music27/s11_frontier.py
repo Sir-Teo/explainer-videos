@@ -45,7 +45,7 @@ class Frontier(SoundScene):
                    "taken from thousands of recordings. <bookmark mark='c'/> Christof Weiß and colleagues did this in 2019 "
                    "for about two thousand recorded pieces composed between 1600 and 1910, <bookmark mark='d'/> and found "
                    "their measures of tonal complexity rising across the eras, most steeply towards the end of the Romantic "
-                   "period: the same shape as chapter seven, from very different data. <bookmark mark='e'/> Recordings bring "
+                   "period: a related finding under different features and sampling, not an exact replication of this film’s index. <bookmark mark='e'/> Recordings bring "
                    "performance into the measurement, and the biases of what gets recorded. <bookmark mark='f'/> Scores and "
                    "audio together check each other's errors.", marks="cdef")
 

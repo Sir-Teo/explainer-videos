@@ -32,7 +32,7 @@ class Rubato(SoundScene):
                    "<bookmark mark='c'/> Mozart described it in a letter to his father in 1777: in an adagio, he wrote, his "
                    "left hand kept strict time and knew nothing of what the right hand was doing. <bookmark mark='d'/> "
                    "Chopin's pupils described the same thing in his playing, a steady accompaniment under a free melody. "
-                   "<bookmark mark='e'/> Later the meaning shifted, to the whole texture slowing and quickening together, "
+                   "<bookmark mark='e'/> Another usage concerns, to the whole texture slowing and quickening together, "
                    "slower at the ends of phrases and faster in their middles. <bookmark mark='f'/> Both kinds can be "
                    "modelled, and heard.", marks="cdef")
 
@@ -48,11 +48,7 @@ class Rubato(SoundScene):
         yl = label(r"tempo, \ relative", font_size=19, color=GREY_A).next_to(ax, LEFT, buff=0.15).shift(UP * 1.0)
         head = label(r"a phrase arch \ (after Todd, \ 1992): \ speed up into the middle, \ slow into the end", font_size=24, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The second kind has a simple model, the phrase arch, after the psychologist Neil Todd. <bookmark mark='a'/> "
-            "Strict time is a flat line. <bookmark mark='b'/> Under the arch, each phrase begins a little slow, speeds into "
-            "its middle, and slows again into its end, here a tenth faster in the middle and a fifth slower at the ends; the slowing at the end is what "
-            "tells a listener a phrase is closing. Measurements of many pianists playing the same piece, by Bruno Repp "
-            "among others, find shapes like this, with every player bending a little differently."
+            "The second kind has a simple model, the phrase arch, after the psychologist Neil Todd. <bookmark mark='a'/> Strict time is a flat line. <bookmark mark='b'/> Under the arch, each phrase begins a little slow, speeds into its middle, and slows again into its end, here a tenth faster in the middle and a fifth slower at the ends; final slowing can cue closure alongside other musical features. Measurements of many pianists playing the same piece, by Bruno Repp among others, find shapes like this, with every player bending a little differently."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl))
             vo.wait_until("a")
