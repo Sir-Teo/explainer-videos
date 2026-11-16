@@ -71,8 +71,9 @@ Fresh whole-series regression after the Part 47 timing correction: **889 cases p
 | 58 — Compression for the Ear | Complete | Open |
 | 59 — Live Sound | Complete | Open |
 | 60 — The Business of Music | Complete | Open |
-| 61 — Pitch, Onsets and Transcription | In progress | Open |
-| 62–68 | Queued | Open |
+| 61 — Pitch, Onsets and Transcription | Complete | Open |
+| 62 — Beat, Chords and Structure | In progress | Open |
+| 63–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -217,7 +218,9 @@ Part 59: all 13 chapter preview sheets reviewed; sound and 10 listening-window m
 
 Part 60: all 13 chapter preview sheets reviewed; sound and 10 listening-window motion checks pass. Local identities: `renders/qa/music60/source-receipt.json`.
 
-**Current: Part 61.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 61: all 13 chapter preview sheets reviewed; sound and 14 listening-window motion checks pass. Local identities: `renders/qa/music61/source-receipt.json`.
+
+**Current: Part 62.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

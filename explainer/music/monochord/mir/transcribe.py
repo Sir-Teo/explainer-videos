@@ -286,25 +286,31 @@ def roll(notes, pitches, hop_s: float, frames: int) -> np.ndarray:
 
 
 def note_scores(ref, est, onset_tol: float = 0.05, offsets: bool = False, offset_ratio: float = 0.2) -> dict:
-    """Note-level precision, recall and F (as mir_eval.transcription computes them, with a greedy matching in onset
-    order): a note is found if its pitch is the same and its onset within ``onset_tol``; with ``offsets``, its offset
-    must also be within max(50 ms, ``offset_ratio`` of the reference note's length)."""
-    ref = sorted(ref, key=lambda z: z[1])
-    est = sorted(est, key=lambda z: z[1])
-    used = [False] * len(est)
-    hit = 0
-    for m, a, b in ref:
-        best, bi = None, -1
+    """Note precision/recall with maximum-cardinality one-to-one matching.
+
+    Pitches match as integer MIDI notes; onset tolerance is ``onset_tol``.
+    Optional offsets use max(50 ms, ``offset_ratio`` of reference duration).
+    This uses the same matching principle as mir_eval; it is not a call to
+    mir_eval and does not implement its continuous-pitch tolerance conventions.
+    """
+    from scipy.sparse import csr_matrix
+    from scipy.sparse.csgraph import maximum_bipartite_matching
+
+    ref, est = list(ref), list(est)
+    rows, cols = [], []
+    for i, (m, a, b) in enumerate(ref):
         for j, (m2, a2, b2) in enumerate(est):
-            if used[j] or int(m2) != int(m) or abs(a2 - a) > onset_tol:
+            if int(m2) != int(m) or abs(a2 - a) > onset_tol:
                 continue
             if offsets and abs(b2 - b) > max(0.05, offset_ratio * (b - a)):
                 continue
-            if best is None or abs(a2 - a) < best:
-                best, bi = abs(a2 - a), j
-        if bi >= 0:
-            used[bi] = True
-            hit += 1
+            rows.append(i)
+            cols.append(j)
+    if ref and est:
+        graph = csr_matrix((np.ones(len(rows)), (rows, cols)), shape=(len(ref), len(est)))
+        hit = int(np.count_nonzero(maximum_bipartite_matching(graph, perm_type="column") >= 0))
+    else:
+        hit = 0
     p = hit / max(len(est), 1)
     r = hit / max(len(ref), 1)
     return {"precision": p, "recall": r, "f": 2 * p * r / max(p + r, 1e-12), "hits": hit, "ref": len(ref), "est": len(est)}

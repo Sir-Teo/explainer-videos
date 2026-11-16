@@ -119,10 +119,7 @@ class Score(SoundScene):
         ).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(RIGHT * 2.8 + DOWN * 0.2)
         head = label(r"key and spelling", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Next, the key. <bookmark mark='a'/> Part 15's key finder, run on the transcribed notes weighted by their quantized "
-            f"durations, ranks {d['key'][0]} first, ahead of {d['key'][1]} and {d['key'][2]}. <bookmark mark='b'/> The key decides "
-            "the spelling: in C major the note between F and G is written F sharp, not G flat. And it decides the key signature, "
-            "and which notes need accidentals."
+            f"Next, the key. <bookmark mark='a'/> Part 15's key finder, run on the transcribed notes weighted by their quantized durations, ranks {d['key'][0]} first, ahead of {d['key'][1]} and {d['key'][2]}. <bookmark mark='b'/> Key alone does not fix chromatic spelling: in C major, F sharp may lead toward G, while G flat can have a different harmonic or voice-leading role. And it decides the key signature, and which notes need accidentals."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -144,7 +141,7 @@ class Score(SoundScene):
         rows_scene(self, r"the rest of a score", items,
                    "Everything else a score needs is a further decision. <bookmark mark='b'/> Meter: where the barlines go, from "
                    "accents and harmony, which Part 62's beat trackers take up. <bookmark mark='c'/> Key and spelling: is a note G "
-                   "sharp or A flat? The key finder of Part 15 decides. <bookmark mark='d'/> Voices and staves: which notes belong "
+                   "sharp or A flat? Part 15's key finder supplies one clue; local harmony and voice leading also affect spelling. <bookmark mark='d'/> Voices and staves: which notes belong "
                    "to which hand, and which line. <bookmark mark='e'/> Tuplets, grace notes, ties across barlines: each a decision a "
                    "musician makes without noticing. <bookmark mark='f'/> A readable score is the last and least solved step.",
                    marks="bcdef")

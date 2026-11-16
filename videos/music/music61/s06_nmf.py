@@ -23,16 +23,11 @@ class Nmf(SoundScene):
             label(r"$V$: \ the spectrogram, \ frequency by time", font_size=21, color=WHITE),
             label(r"$W$: \ one column per note: \ its spectrum, \ its comb of partials", font_size=21, color=WHITE),
             label(r"$H$: \ one row per note: \ how loud it is in each frame, \ its activation", font_size=21, color=WHITE),
-            label(r"non-negative: \ sounds only add; \ no note can cancel another's energy", font_size=19, color=GREY_A),
+            label(r"non-negative: \ sounds only add; \ magnitude additivity is only an approximation; underlying complex spectra can interfere", font_size=19, color=GREY_A),
         ).arrange(DOWN, buff=0.4)
         head = label(r"non-negative matrix factorization", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "In 2003 Paris Smaragdis and Judith Brown proposed treating the problem as algebra. <bookmark mark='a'/> Write the "
-            "spectrogram V as the product of two matrices, W times H, all three non-negative. <bookmark mark='b'/> V is "
-            "frequency by time. <bookmark mark='c'/> Each column of W is a note's spectrum, its comb of partials. "
-            "<bookmark mark='d'/> Each row of H is that note's activation: how loud it is in each frame. "
-            "<bookmark mark='e'/> Non-negative because sounds only add, roughly, in a magnitude spectrogram: no note can cancel "
-            "another's energy, so the parts must be additive, like notes."
+            "In 2003 Paris Smaragdis and Judith Brown proposed treating the problem as algebra. <bookmark mark='a'/> Write the spectrogram V as the product of two matrices, W times H, all three non-negative. <bookmark mark='b'/> V is frequency by time. <bookmark mark='c'/> Each column of W is a note's spectrum, its comb of partials. <bookmark mark='d'/> Each row of H is that note's activation: how loud it is in each frame. <bookmark mark='e'/> Non-negative because sounds only add, roughly, in a magnitude spectrogram: magnitude additivity is only an approximation; underlying complex spectra can interfere, so the parts must be additive, like notes."
         ) as vo:
             self.play(FadeIn(head))
             for mark, ln in zip("abcde", lines):
@@ -58,7 +53,7 @@ class Nmf(SoundScene):
         with self.voiceover(
             "How are W and H found? <bookmark mark='a'/> By Daniel Lee and Sebastian Seung's multiplicative updates: multiply "
             "each entry of H by a ratio that compares the spectrogram with its current reconstruction, and then do the same for "
-            "W. Entries that start non-negative stay non-negative, and the divergence between V and W H never increases. "
+            "W. Entries that start non-negative stay non-negative, and ideal multiplicative updates have a non-increasing objective under their assumptions; finite precision and numerical safeguards need to be checked. "
             "<bookmark mark='b'/> Here it is falling, iteration by iteration, on a test piece."
         ) as vo:
             self.play(FadeIn(head))
@@ -85,15 +80,15 @@ class Nmf(SoundScene):
             label(r"12 components, \ learnt from this piece alone", font_size=18, color=WHITE),
             label(rf"{good} look like one piano note \ (gold: \ cosine above 0.8 with its template)", font_size=18, color=TUNE),
             label(r"the rest: \ mixtures of notes that often sound together, \ or of attacks", font_size=18, color=EAR),
-            label(rf"the piece uses {len(d['piece_pitches'])} pitches: \ too many for 12 parts", font_size=18, color=GREY_A),
+            label(rf"the piece uses {len(d['piece_pitches'])} pitches: \ components need not be single notes", font_size=18, color=GREY_A),
         ).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 3.3 + DOWN * 0.4)
         head = label(r"left to itself", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Left to itself, what does the factorization find? <bookmark mark='a'/> Here are twelve components learnt from one "
             f"test piece alone, each labelled with the piano note it most resembles. <bookmark mark='b'/> {say(good)} of them "
             "look like a single piano note. <bookmark mark='c'/> The rest are mixtures: notes that often sounded together, or "
-            f"the noise of attacks. <bookmark mark='d'/> The piece uses {say(len(d['piece_pitches']))} pitches, more than twelve "
-            "parts can hold, and nothing told the factorization that a part should be a note."
+            f"the noise of attacks. <bookmark mark='d'/> The piece uses {say(len(d['piece_pitches']))} pitches. Twelve "
+            "components could accommodate those pitches, but nothing told the factorization that a component should be a note."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

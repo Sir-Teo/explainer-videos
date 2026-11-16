@@ -61,12 +61,7 @@ class Noise(SoundScene):
         r0 = [r for r in rows if r["snr"] == 0][0]
         rm = [r for r in rows if r["snr"] == -10][0]
         with self.voiceover(
-            "Now count. <bookmark mark='a'/> The share of frames that YIN gets wrong by more than twenty percent, an octave "
-            f"error or worse, against the noise. Clean, almost none; with the noise as loud as the voice, {say(100 * r0['yin'])} "
-            f"percent; ten decibels louder, {say(100 * rm['yin'])}. <bookmark mark='b'/> The plain autocorrelation of the same "
-            f"frames does {'better' if rm['acf'] < rm['yin'] else 'worse'} in heavy noise: {say(100 * rm['acf'])} percent at minus "
-            "ten. It averages over the whole frame, and white noise has no period to confuse it, while YIN's threshold, "
-            "designed for clean speech, finds no dip and has to guess."
+            f"Now count. <bookmark mark='a'/> The share of frames that YIN gets wrong by more than twenty percent, a gross pitch error under this twenty-percent threshold, which also includes smaller-than-octave errors, against the noise. Clean, almost none; with the noise as loud as the voice, {say(100 * r0['yin'])} percent; ten decibels louder, {say(100 * rm['yin'])}. <bookmark mark='b'/> The plain autocorrelation of the same frames does {('better' if rm['acf'] < rm['yin'] else 'worse')} in heavy noise: {say(100 * rm['acf'])} percent at minus ten. It averages over the whole frame, and white noise has no period to confuse it, while YIN's threshold, designed for clean speech, finds no dip and has to guess."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(yt), FadeIn(note))
             vo.wait_until("a")
@@ -86,10 +81,4 @@ class Noise(SoundScene):
             (r"measure on the noise you will meet, \ with an answer key", TUNE),
         ]
         rows_scene(self, r"what it means", items,
-                   "The lessons. <bookmark mark='b'/> No single method wins everywhere: YIN is accurate and cheap on clean sound, "
-                   "and averaging helps in noise. <bookmark mark='c'/> Real noise is worse than white: other voices, other "
-                   "instruments and reverberation, all with periods of their own. <bookmark mark='d'/> Later methods track pitch "
-                   "over time: probabilistic YIN, in 2014, keeps several candidates in each frame and chooses a smooth path through "
-                   "them. <bookmark mark='e'/> CREPE, in 2018, is a network trained on rendered audio with known pitch, like "
-                   "Monochord's. <bookmark mark='f'/> And the method that matters: measure on the noise you will meet, with an "
-                   "answer key.", marks="bcdef")
+                   "The lessons. <bookmark mark='b'/> No single method wins everywhere: YIN is accurate and cheap on clean sound, and averaging helps in noise. <bookmark mark='c'/> Real noise is worse than white: other voices, other instruments and reverberation, all with periods of their own. <bookmark mark='d'/> Later methods track pitch over time: probabilistic YIN, in 2014, keeps several candidates in each frame and chooses a smooth path through them. <bookmark mark='e'/> CREPE, in 2018, is a network trained on several pitch-annotated datasets, including recorded and synthesized material; our teaching network is trained on one synthetic instrument. <bookmark mark='f'/> And the method that matters: measure on the noise you will meet, with an answer key.", marks="bcdef")

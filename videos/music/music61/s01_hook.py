@@ -60,13 +60,13 @@ class Hook(SoundScene):
             (r"Act XI turns the series' chain around: \ sound in, \ notes, \ beats, \ names and sources out", WHITE),
             (r"a listening machine needs an answer key: \ the notes that were really played", WHITE),
             (r"for recordings, \ answer keys are rare, \ slow to make, \ and argued over", WHITE),
-            (r"Monochord makes its own sound, \ so every answer is exact, \ and unlimited", TUNE),
+            (r"Monochord makes its own sound, \ so commanded pitches and note-event times are known; audible onsets, offsets and expressive details still depend on the renderer, \ and unlimited", TUNE),
         ]
         rows_scene(self, r"Act XI: \ listening machines", items,
                    "This is the first part of Act Eleven, which turns the series' chain around: sound in, and notes, beats, "
                    "names and sources out. <bookmark mark='b'/> A listening machine is only as good as its answer key, the notes "
                    "that were really played. <bookmark mark='c'/> For recordings, answer keys are rare, slow to make, and argued "
-                   "over. <bookmark mark='d'/> Monochord makes its own sound, so every answer is exact, and there is no limit to "
+                   "over. <bookmark mark='d'/> Monochord makes its own sound, so commanded pitches and note-event times are known; audible onsets, offsets and expressive details still depend on the renderer, and there is no limit to "
                    "how many.", marks="bcd")
 
     # ------------------------------------------------------------------

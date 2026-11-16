@@ -25,12 +25,7 @@ class Evaluation(SoundScene):
         ).arrange(DOWN, buff=0.38)
         head = label(r"three ways to count", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "How should a transcription be scored? <bookmark mark='a'/> Frame by frame: for each twenty milliseconds and each "
-            "pitch, sounding or not. <bookmark mark='b'/> Note by note: a reported note is right if its pitch matches a played "
-            "note and its onset is within fifty milliseconds. <bookmark mark='c'/> Stricter still, its end must match too. "
-            "<bookmark mark='d'/> Precision is the share of reported notes that are right; recall, the share of played notes "
-            "found; F, their harmonic mean. <bookmark mark='e'/> Each played note can be matched only once, as in the field's "
-            "shared library, mir_eval."
+            "How should a transcription be scored? <bookmark mark='a'/> Frame by frame: for each twenty milliseconds and each pitch, sounding or not. <bookmark mark='b'/> Note by note: a reported note is right if its pitch matches a played note and its onset is within fifty milliseconds. <bookmark mark='c'/> Stricter still, its end must match too. <bookmark mark='d'/> Precision is the share of reported notes that are right; recall, the share of played notes found; F, their harmonic mean. <bookmark mark='e'/> Each played note can be matched only once, using maximum-cardinality one-to-one matching, as mir_eval does; our implementation matches exact integer MIDI pitch and uses the stated time tolerances."
         ) as vo:
             self.play(FadeIn(head))
             for mark, ln in zip("abcde", lines):
@@ -119,7 +114,7 @@ class Evaluation(SoundScene):
                    "The numbers are useful, and limited. <bookmark mark='b'/> A metric is a choice: fifty milliseconds is generous "
                    "for a drum and strict for a slow violin entry. <bookmark mark='c'/> An F-measure hides which errors were made: an "
                    "octave error and a missed note cost the same. <bookmark mark='d'/> Real answer keys are made by people, and people "
-                   "disagree; a Disklavier, or Monochord, does not. <bookmark mark='e'/> And a transcription that scores nine tenths "
+                   "disagree; instrument-linked or synthetic MIDI provides precise event commands, but acoustic alignment, pedal and audible offsets still need interpretation. <bookmark mark='e'/> And a transcription that scores nine tenths "
                    "can still be unreadable, while one that scores seven tenths can be useful. Readability is Chapter 9's subject.",
                    marks="bcde")
 

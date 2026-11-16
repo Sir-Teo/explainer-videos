@@ -57,7 +57,7 @@ class Pitch(SoundScene):
             "a wave, here a 220-hertz tone with two overtones. <bookmark mark='b'/> Shift it by a lag tau and add up the squared "
             "differences. At a lag of one period the wave matches itself, and the difference dips to nearly nothing. YIN divides "
             "the difference by its own running average, which removes the trivial match at lag zero and puts every dip on one "
-            "scale. <bookmark mark='c'/> The first dip under a threshold, a tenth, is the period: one two-hundred-and-twentieth of "
+            "scale. <bookmark mark='c'/> The first suitable local minimum below a threshold, a tenth here, estimates the period: one two-hundred-and-twentieth of "
             "a second. The same dip recurs at two and three periods; taking the first avoids reporting the octave below."
         ) as vo:
             self.play(FadeIn(head), FadeIn(a1), FadeIn(eq))
@@ -103,7 +103,7 @@ class Pitch(SoundScene):
                    "YIN improves on plain autocorrelation in four steps. <bookmark mark='b'/> It uses the difference function, "
                    "which does not favour short lags the way autocorrelation of a finite frame does. <bookmark mark='c'/> It "
                    "divides by the running mean, so the match at lag zero disappears and every dip is on one scale. "
-                   "<bookmark mark='d'/> It takes the first dip under a threshold, which avoids most octave errors. "
+                   "<bookmark mark='d'/> It takes the first dip under a threshold, which helps reduce octave errors under suitable signal conditions. "
                    "<bookmark mark='e'/> And it interpolates between lags, for accuracy finer than one sample. "
                    f"<bookmark mark='f'/> On a steady tone, YIN is within {say(abs(d['bias_yin']), 1)} cents; the plain "
                    f"autocorrelation of the same frame is pulled {say(abs(d['bias_acf']), 1)} cents sharp.", marks="bcdef")
@@ -145,9 +145,7 @@ class Pitch(SoundScene):
                 end = st[ks[i + 1]] - 0.3 if i + 1 < len(ks) else c.duration
                 pulse(snd, boxes[i], st[k], end, buff=0.06)
         with self.voiceover(
-            "Where the tracker is right, the tone and the voice fuse into one sound; an octave error or a wrong note would "
-            "stand out at once as a second line. Researchers listen to their pitch tracks this way, because a wrong frame "
-            "is easier to hear than to find in a table."
+            'Where the tracker is right, the tone and the voice fuse into one sound; an octave error or a wrong note can become easier to notice as a second line. Researchers listen to their pitch tracks this way, because a wrong frame is easier to hear than to find in a table.'
         ):
             self.play(FadeIn(note))
         self.wait(0.4)

@@ -40,11 +40,11 @@ class History(SoundScene):
         ]
         rows_scene(self, r"data with answers", items,
                    "What changed most was data with answers. <bookmark mark='b'/> In 2010 MAPS recorded a Disklavier, a piano that "
-                   "records the keys it plays, so the answer key was exact. <bookmark mark='c'/> In 2018 Curtis Hawthorne and "
+                   "records the keys it plays, giving instrument-linked note labels, with alignment, pedal and acoustic-boundary limitations. <bookmark mark='c'/> In 2018 Curtis Hawthorne and "
                    "colleagues' Onsets and Frames used one network to find where notes begin and another for how long they last, "
                    "each helping the other. <bookmark mark='d'/> In 2019 they released MAESTRO: about two hundred hours of "
                    "competition pianists on Disklaviers, notes aligned to a few milliseconds. <bookmark mark='e'/> With that much "
-                   "data, piano note F-measures rose above nine tenths on recordings like the training set. "
+                   "data, reported onset-based piano note F-measures exceeded nine tenths in particular benchmarks; offset-aware and cross-domain scores differ on recordings like the training set. "
                    "<bookmark mark='f'/> The lesson is the one Monochord teaches too: transcription is limited by its answer keys.",
                    marks="bcdef")
 

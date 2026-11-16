@@ -14,7 +14,7 @@ class Frontier(SoundScene):
     def many(self):
         items = [
             (r"MT3 \ (Gardner et al., \ 2022): \ a transformer reads a spectrogram and writes note events for every instrument, \ like a translation", WHITE),
-            (r"Basic Pitch \ (2022): \ a small network for any instrument, \ light enough for a phone", WHITE),
+            (r"Basic Pitch \ (2022): \ a compact instrument-agnostic transcriber, with limits on mixtures, range and playing conditions, \ light enough for a phone", WHITE),
             (r"multi-instrument results on real recordings still fall well short of solo piano \ (verify current results)", WHITE),
             (r"the bottleneck is again the answer key: \ real bands are rarely recorded with their exact notes", WHITE),
             (r"synthetic data, \ like Monochord's, \ helps; \ the gap between rendered and real sound is the open question", TUNE),
@@ -22,7 +22,7 @@ class Frontier(SoundScene):
         rows_scene(self, r"many instruments \ (dated)", items,
                    "Two frontiers. The first is the whole band. <bookmark mark='b'/> In 2022 MT3, from Josh Gardner and "
                    "colleagues, had a transformer read a spectrogram and write note events for every instrument, like a "
-                   "translation. <bookmark mark='c'/> The same year Basic Pitch offered a small network for any instrument, light "
+                   "translation. <bookmark mark='c'/> The same year Basic Pitch offered a compact instrument-agnostic transcriber, with limits on mixtures, range and playing conditions, light "
                    "enough for a phone. <bookmark mark='d'/> On real recordings of many instruments, results still fall well "
                    "short of solo piano; check the latest numbers, which move each year. <bookmark mark='e'/> The bottleneck is "
                    "again the answer key: real bands are rarely recorded with their exact notes. <bookmark mark='f'/> Synthetic "

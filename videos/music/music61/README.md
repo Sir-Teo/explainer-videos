@@ -8,7 +8,7 @@ out, and this part builds the first listeners: YIN for one voice's pitch and wha
 octave that hides in a chord, spectral flux for onsets, non-negative matrix factorization with note templates, a small
 network that learns from examples, what both do on timbres they never heard, how to keep score, and how performed seconds
 become written beats. The tools are Monochord's (`explainer/music/monochord/mir/transcribe.py` and `neural.py`); every
-piece is rendered by Monochord, so every answer key is exact.
+piece is rendered by Monochord, so commanded note labels are known; acoustic boundaries and pedal still require interpretation.
 
 * **The holy grail.** An ear question (the Tune with chords twice: which is the performance and which a network's
   transcription played back? the second was the original; the copy found 21 of 30 notes and added 43); Mozart and the
@@ -133,3 +133,5 @@ python -m videos.music.labs 61                                  # the lab (write
   transcription" (ICLR, 2022); C. Raffel et al., "mir_eval" (ISMIR, 2014).
 * A. T. Cemgil and B. Kappen, "Monte Carlo methods for tempo tracking and rhythm quantization", *JAIR* (2003); J. A. Moorer,
   "On the transcription of musical sound by computer", *Computer Music Journal* (1977).
+
+Note scoring uses maximum-cardinality one-to-one matching with exact integer MIDI pitches and stated timing tolerances; it does not call mir_eval. Network activations are not demonstrated to be calibrated probabilities.

@@ -74,7 +74,7 @@ class Outro(SoundScene):
             "<bookmark mark='a'/> Chords overlay combs of partials; salience ranks the candidates, and octaves hide. "
             "<bookmark mark='b'/> Spectral flux finds onsets, but bowed and repeated notes are hard. <bookmark mark='c'/> NMF "
             "factors a spectrogram into templates and activations. <bookmark mark='d'/> A small network trained on rendered "
-            "piano does better, on piano. <bookmark mark='e'/> Both fail on timbres they never heard; and quantization turns "
+            "piano does better, on piano. <bookmark mark='e'/> Both lose accuracy on these tested unseen timbres; the degree varies; and quantization turns "
             "performed notes into beats."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))

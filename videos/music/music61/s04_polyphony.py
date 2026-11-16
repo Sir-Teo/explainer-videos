@@ -29,11 +29,7 @@ class Polyphony(SoundScene):
             (r"so the question becomes: \ which set of combs explains this spectrum?", TUNE),
         ]
         rows_scene(self, r"why polyphony is hard", items,
-                   "A melody has one note at a time; music mostly does not. <bookmark mark='b'/> One note has one period and one "
-                   "comb of partials. <bookmark mark='c'/> A chord adds several combs, and the wave no longer repeats at any of "
-                   "their periods, so YIN has nothing to find. <bookmark mark='d'/> Worse, the combs share teeth. C and the G "
-                   "above it share every third partial of the C; an octave shares every partial of its upper note. "
-                   "<bookmark mark='e'/> So the question becomes: which set of combs explains this spectrum?", marks="bcde")
+                   "A melody has one note at a time; music mostly does not. <bookmark mark='b'/> One note has one period and one comb of partials. <bookmark mark='c'/> A chord adds several combs, and the wave no longer repeats at any of their periods, so a single-period tracker can return a shared period or subharmonic rather than identify each note. <bookmark mark='d'/> Worse, the combs share teeth. In exact three-to-two tuning, C and G share every third C partial; equal temperament and inharmonic instruments give near-overlaps instead; an octave shares every partial of its upper note. <bookmark mark='e'/> So the question becomes: which set of combs explains this spectrum?", marks="bcde")
 
     # ------------------------------------------------------------------
     def quiz(self):
@@ -51,7 +47,7 @@ class Polyphony(SoundScene):
             pulse(snd, boxes[0], st["first"], st["second"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
         res = label(r"different: \ the second adds C5, \ an octave above the C. \ It brightens the chord, \ but is easy to miss", font_size=19, color=TUNE).move_to(DOWN * 1.4)
-        with self.voiceover("Different. The second adds a C an octave above the lowest note. It makes the chord a little brighter, and it is easy to miss, for the reason we just saw: every partial of the upper C is already a partial of the lower one."):
+        with self.voiceover("Different. The second adds a C an octave above the lowest note. It makes the chord a little brighter, and it is easy to miss, for the reason we just saw: ideal harmonic spectra overlap this way; real piano inharmonicity, attacks and independent decay can supply extra cues."):
             self.play(FadeIn(res))
         self.wait(0.4)
         self.clear_scene()

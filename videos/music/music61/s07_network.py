@@ -33,7 +33,7 @@ class Network(SoundScene):
         with self.voiceover(
             "The other route is to learn from examples. <bookmark mark='a'/> Monochord's network is small: it reads five "
             "neighbouring frames of the log-frequency spectrogram, passes them through two layers of two hundred and fifty-six "
-            "units, and outputs, for each of the thirty-seven notes from C3 to C6, the probability that it is sounding. "
+            "units, and outputs, for each of the thirty-seven notes from C3 to C6, a sigmoid activation interpreted as a sounding-note score; weighted training does not guarantee calibrated probabilities. "
             "<bookmark mark='b'/> It is trained by binary cross-entropy against the answer key, with the rare positive frames "
             "weighted up. Nobody tells it what a partial is."
         ) as vo:
@@ -62,7 +62,7 @@ class Network(SoundScene):
         ).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(LEFT * 3.4 + DOWN * 0.6)
         head = label(r"training on rendered music", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            f"The training set is what Monochord can do and the field mostly cannot: {say(data['train_pieces'])} pieces of random "
+            f"The training set is a convenient source of exact commanded labels; the field also uses synthetic data and instrument-linked recordings: {say(data['train_pieces'])} pieces of random "
             f"polyphony, six seconds each, {say(data['train_notes'])} notes, every one with an exact answer, because Monochord "
             "played it. <bookmark mark='a'/> All on one instrument, Part 38's piano. <bookmark mark='b'/> The loss falls over "
             "the epochs, and the network has learnt what a piano note looks like from the inside."
@@ -152,7 +152,7 @@ class Network(SoundScene):
             "ones with the largest weights: each is a pattern over five frames and the log-frequency bins. "
             "<bookmark mark='b'/> Many are combs, bright at a set of partials and dark between them: learnt templates, like "
             "NMF's, but with negative weights too, so a unit can say not this note as well as this one. Some respond to a change "
-            "from frame to frame: an onset. Nobody wrote either down."
+            "from frame to frame: an onset. The feature basis and architecture are designed; these displayed patterns are learned weights, not proof of a unit's causal function."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

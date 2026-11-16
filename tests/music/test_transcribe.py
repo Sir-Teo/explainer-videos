@@ -123,3 +123,13 @@ def test_network_learns_a_toy_task():
     fit = NN.train(X, Y, hidden=32, epochs=40, seed=0)
     P = NN.predict(fit, X)
     assert ((P > 0.5).T == (Y > 0.5)).mean() > 0.97
+
+
+def test_note_scores_maximizes_one_to_one_matches():
+    # Nearest-first matching consumes .01 for the first reference and loses
+    # the second; a valid two-note matching pairs 0 with -.04 and .04 with .01.
+    ref = [(60, 0.0, 1.0), (60, 0.04, 1.04)]
+    est = [(60, -0.04, 0.96), (60, 0.01, 1.01)]
+    score = TR.note_scores(ref, est)
+    assert score["hits"] == 2 and score["f"] == 1.0
+    assert TR.note_scores(ref[::-1], est[::-1])["hits"] == 2
