@@ -66,14 +66,7 @@ class Ranges(SoundScene):
         rows_.move_to(RIGHT * 1.3 + DOWN * 0.1)
         head = label(r"spacing: \ the gaps between neighbouring voices", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Next, the gaps between neighbouring voices. <bookmark mark='a'/> On average the soprano is "
-            f"about {say(round(gm['S-A']))} semitones above the alto, the alto about {say(round(gm['A-T']))} "
-            f"above the tenor, and almost never more than an octave. <bookmark mark='b'/> The bass is "
-            f"further away, nearly {say(round(gm['T-B']))} semitones on average, and a fifth of the time "
-            "more than an octave below the tenor. <bookmark mark='c'/> That is the textbook rule of "
-            "spacing, and Part 5 gave the reason for it: wide intervals sound smooth low down, close "
-            "ones only higher up. So the chord is built like the harmonic series, open at the bottom "
-            "and close at the top."
+            f"Next, the gaps between neighbouring voices. <bookmark mark='a'/> On average the soprano is about {say(round(gm['S-A']))} semitones above the alto, the alto about {say(round(gm['A-T']))} above the tenor, and almost never more than an octave. <bookmark mark='b'/> The bass is further away, nearly {say(round(gm['T-B']))} semitones on average, and a fifth of the time more than an octave below the tenor. <bookmark mark='c'/> This resembles a common textbook spacing guideline, with roughness and masking providing partial acoustic motivations: wide intervals sound smooth low down, close ones only higher up. So the chord is built like the harmonic series, open at the bottom and close at the top."
         ) as vo:
             self.play(FadeIn(head), FadeIn(chord))
             for mark, k in zip("ab", (0, 2)):
@@ -101,8 +94,8 @@ class Ranges(SoundScene):
         with self.voiceover(
             "Four voices and a triad of three notes: one note must be sung twice. Which? <bookmark mark='a'/> "
             f"When the root is in the bass, Bach doubles the root {say(round(100 * root[0] / tr))} times in a "
-            f"hundred. The doubled root is the most stable choice: it reinforces the note that, in Part "
-            f"13's root model, the whole chord points to. <bookmark mark='b'/> With the third in the bass, "
+            f"hundred. Doubling the root is a common choice in this root-position subset: it reinforces the note that, in Part "
+            f"13's root model, the simplified model favors. <bookmark mark='b'/> With the third in the bass, "
             "the choice is spread almost evenly: root, third and fifth each about a third of the time. "
             "There the bass already has the third, and the voices double whatever lets them move "
             "smoothly. The textbook's rule, double the root, is a description of the first case, and "

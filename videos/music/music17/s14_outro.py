@@ -80,7 +80,7 @@ class Outro(SoundScene):
             "<bookmark mark='c'/> His chords, cadences and passing notes can be counted too. "
             "<bookmark mark='d'/> A search over chords and voicings, learned from the chorales and "
             "constrained by the rules, finds Bach's chord about four times in ten on tunes it never saw, "
-            "and breaks no rule. <bookmark mark='e'/> And what it lacks is the plan of a line over many "
+            "and produces no detected parallels in this test; other costs remain soft preferences. <bookmark mark='e'/> And what it lacks is the plan of a line over many "
             "beats, which is what the newer machines learn."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
@@ -141,7 +141,7 @@ class Outro(SoundScene):
             "And in practice. A choir director balances the inner voices, which carry the lines. An arranger "
             "keeps the upper parts close and lets the bass move. A church musician harmonizing a hymn at "
             "sight finds the cadence chords first and takes the shortest way between them. And the "
-            "auto-harmonizers in music software are, at heart, this part's search, larger."
+            "many auto-harmonizers use related search ideas, while architectures and objectives vary."
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(0.4)

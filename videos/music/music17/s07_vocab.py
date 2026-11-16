@@ -39,15 +39,11 @@ class Vocab(SoundScene):
         names = VGroup(*[label(t, font_size=28, color=TUNE) for t in (r"I", r"V", r"vi")]).arrange(RIGHT, buff=1.1).next_to(st, DOWN, buff=0.4)
         txt = VGroup(label(r"on every beat: \ the four notes sounding", font_size=26, color=WHITE),
                      label(r"name the chord by its root, \ relative to home \ (Part 13's Roman numerals)", font_size=26, color=WHITE),
-                     label(r"9 beats in 100 are no chord: \ passing notes in between", font_size=24, color=GREY_B)).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
+                     label(r"9 beats in 100 are unlabeled by this restricted matcher", font_size=24, color=GREY_B)).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
         txt.scale_to_fit_width(min(txt.width, 7.0))
         txt.move_to(RIGHT * 2.9 + DOWN * 0.1)
         with self.voiceover(
-            "To ask which chords Bach uses, name the chord on every beat. Take the four notes sounding at "
-            "the beat, find the root as Part 13 did, and write it as a Roman numeral relative to the "
-            "key: here the home chord, one, then the chord on the fifth degree, five, then six. "
-            "<bookmark mark='a'/> About nine beats in a hundred carry no chord at all: a passing note "
-            "happens to sound on the beat. Those are left unnamed."
+            "To ask which chords Bach uses, name the chord on every beat. Take the four notes sounding at the beat, find the root as Part 13 did, and write it as a Roman numeral relative to the key: here the home chord, one, then the chord on the fifth degree, five, then six. <bookmark mark='a'/> About nine percent of beats receive no label from this restricted chord matcher. Nonchord tones, incomplete chords and unsupported sonorities can all cause this; it does not mean there is no harmony."
         ) as vo:
             self.play(FadeIn(st), FadeIn(names), FadeIn(txt[0]), FadeIn(txt[1]))
             vo.wait_until("a")
@@ -109,14 +105,7 @@ class Vocab(SoundScene):
         j0, j1 = mj["top"][0][1] / tot_j, mj["top"][1][1] / tot_j
         head = label(r"the commonest chords on the beat", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Here are the commonest chords, in major keys and in minor. <bookmark mark='a'/> In major, the "
-            f"home chord takes {say(round(100 * j0))} beats in a hundred and the dominant "
-            f"{say(round(100 * j1))}: between them, nearly half the music. Then the chords on six, four "
-            "and two, and then a chord that is not in the key at all, two with a major third: it is the "
-            "dominant of the dominant, the pivot of Part 15, here borrowed for a moment. "
-            "<bookmark mark='b'/> In minor the home chord is again first, but the relative major, three, "
-            "comes second: minor chorales spend much of their time in the major key next door. And the "
-            "dominant in minor is major, with its raised leading note, as Part 15 found."
+            f"Here are the commonest chords, in major keys and in minor. <bookmark mark='a'/> In major, the home chord takes {say(round(100 * j0))} beats in a hundred and the dominant {say(round(100 * j1))}: between them, nearly half the music. Then the chords on six, four and two, and then a chord outside the unaltered diatonic collection, two with a major third: it is the dominant of the dominant, the applied dominant of Part 15; it is not a diatonic common-chord pivot, here borrowed for a moment. <bookmark mark='b'/> In minor the home chord is again first, but the relative major, three, comes second: minor chorales spend much of their time in the major key next door. And the dominant in minor is major, with its raised leading note, as Part 15 found."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

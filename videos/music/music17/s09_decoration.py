@@ -82,10 +82,7 @@ class Decoration(SoundScene):
         ans = VGroup(label(r"the same chords, \ blocks", font_size=24, color=GREY_A).next_to(gA, DOWN, buff=0.3),
                      label(r"Bach: \ the voices walk between them", font_size=24, color=TUNE).next_to(gB, DOWN, buff=0.3))
         with self.voiceover(
-            "B is Bach's. A has exactly his chords, on exactly the same beats, and it sounds like a "
-            "hymnbook played by someone in a hurry. The passing notes do not change the harmony; they "
-            "turn four voices holding chords into four people singing lines. Any harmonizer that only "
-            "chooses chords will sound like A."
+            "B is Bach's. A holds the sampled beat sonorities, on exactly the same beats, and it sounds like a hymnbook played by someone in a hurry. Many passing notes elaborate an underlying harmony, though they alter the instantaneous sonority; they turn four voices holding chords into four people singing lines. A system producing only held block chords lacks this particular between-beat activity; performance and voicing can still vary."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)

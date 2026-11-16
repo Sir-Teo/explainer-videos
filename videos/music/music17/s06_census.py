@@ -23,14 +23,7 @@ class Census(SoundScene):
                      label(rf"one in {d['rate']:.0f}", font_size=48, color=TUNE)).arrange(DOWN, buff=0.5).move_to(UP * 0.4)
         note = label(r"counted at every moment any voice moves, \ between every pair of voices", font_size=22, color=GREY_B).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "Take every moment in every chorale where any voice moves to a new note: "
-            f"{say(round(d['moves'], -2))} changes of chord. At each, check all six pairs of voices. "
-            f"<bookmark mark='a'/> Bach writes parallel fifths {say(par['fifths'])} times and parallel "
-            f"octaves {say(par['octaves'])} times. <bookmark mark='b'/> That is once in about "
-            f"{say(round(d['rate'], -1))} changes of chord, or about once in every five chorales. The "
-            "rule is real: by chance alone, writing four voices that move by step, you would make "
-            "parallels many times in every chorale, as the chord-chooser did in the hook. And Bach does "
-            "break it, now and then."
+            f"Take every moment in every chorale where any voice moves to a new note: {say(round(d['moves'], -2))} note-change events, not necessarily changes of harmonic function. At each, check all six pairs of voices. <bookmark mark='a'/> Our detector flags parallel fifths in these encodings {say(par['fifths'])} times and parallel octaves {say(par['octaves'])} times. <bookmark mark='b'/> That is once in about {say(round(d['rate'], -1))} changes of chord, or about once in every five chorales. The rule is real: by chance alone, writing four voices that move by step, you would make parallels many times in every chorale, as the chord-chooser did in the hook. And some encoded passages depart from this strict textbook detector; score context and encoding need checking."
         ) as vo:
             self.play(FadeIn(big[0]), FadeIn(note))
             vo.wait_until("a")
@@ -51,11 +44,7 @@ class Census(SoundScene):
         head = label(r"where Bach's parallels fall", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         side = VGroup(label(rf"{off} of {len(d['all'])}", font_size=40, color=TUNE), label(r"fall between the beats: \\ one of the notes is a passing note", font_size=24, color=WHITE)).arrange(DOWN, buff=0.25).move_to(RIGHT * 4.2 + DOWN * 0.2)
         with self.voiceover(
-            "Where do they fall? <bookmark mark='a'/> Between every pair of voices, the most often between "
-            "soprano and tenor. <bookmark mark='b'/> And "
-            f"{say(off)} of the {say(len(d['all']))} happen between the beats, where one of the two "
-            "voices is moving through a passing note, a quick note that is not part of either chord. "
-            "Most of Bach's parallels are fleeting: an eighth note long, in an inner voice."
+            f"Where do they fall? <bookmark mark='a'/> Between every pair of voices, the most often between soprano and tenor. <bookmark mark='b'/> And {say(off)} of the {say(len(d['all']))} happen between the beats, often where a voice has a short intervening note; off-beat position alone does not establish passing-note function, a quick note that is not part of either chord. Most of Bach's parallels are fleeting: an eighth note long, in an inner voice."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -89,9 +78,9 @@ class Census(SoundScene):
                 pulse(snd, gs[k][2], d["starts"][key], (d["starts"]["b"] - 0.5) if k == 0 else c.duration, buff=0.1)
         with self.voiceover(
             "They are hard to pick out. In a full texture of four voices, with the other two moving "
-            "differently, two voices moving in fifths for a single step do not fuse into one. The "
+            "differently, brief parallels need not erase the two voice identities, although this listening demonstration does not measure fusion. The "
             "rule matters most where few voices are sounding, or where the parallel voices are the outer "
-            "ones and exposed. Bach seems to have known exactly how much it mattered, and where."
+            "ones and exposed. These cases show why a detector’s flags need musical and editorial interpretation."
         ):
             self.wait(0.5)
         self.wait(0.4)

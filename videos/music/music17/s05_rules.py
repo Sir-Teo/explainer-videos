@@ -16,9 +16,9 @@ TEXT = {
                 "the cadence loses its pull."),
     "seventh": (r"a chord's seventh falls by step",
                 "Third, a seventh. In the dominant seventh chord G, B, D, F, the F is a dissonance against "
-                "the G, and it must resolve by falling a step, to E. Let it rise and the clash is left "
+                "the G, and in this closing example it normally resolves down by step, to E. Let it rise and the clash is left "
                 "hanging."),
-    "spacing": (r"the upper three voices within an octave of each other",
+    "spacing": (r"each adjacent pair of upper voices within an octave",
                 "And fourth, spacing, from chapter two. Spread the upper voices wide apart and leave the "
                 "middle empty, and the chord stops sounding like one sound and starts sounding like two "
                 "groups."),
@@ -36,18 +36,18 @@ class Rules(SoundScene):
     # ------------------------------------------------------------------
     def intro(self):
         rows_ = VGroup(*[label(t, font_size=26, color=WHITE) for t in (
-            r"from Part 16: \ no parallel perfect intervals; \ no unisons; \ approach perfect intervals with care",
+            r"from Part 16: \ no parallel perfect intervals; \ manage doublings; \ approach perfect intervals with care",
             r"new with four voices: \ six pairs to watch at every move",
             r"new with chords: \ tendency notes must go where they lean",
             r"and the chord must stay one sound: \ spacing and doubling")]).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(DOWN * 0.2)
         head = label(r"the rules of four-part writing, \ in four families", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The rules of four-part harmony, as every textbook gives them, come in four families. "
+            "The rules of four-part harmony, as organized in this common-practice teaching model, come in four families. "
             "<bookmark mark='a'/> Those of Part 16, to keep voices apart. <bookmark mark='b'/> More of "
             "them, because four voices make six pairs to watch at every move. <bookmark mark='c'/> Rules "
             "for the notes that lean, from Part 14 and Part 15: the leading note and the seventh. "
             "<bookmark mark='d'/> And rules that keep the chord a single sound. Here are four of them, "
-            "each heard twice: done wrong, then right."
+            "each heard twice: first violating, then satisfying the particular guideline."
         ) as vo:
             self.play(FadeIn(head))
             for mark, r in zip("abcd", rows_):
@@ -70,7 +70,7 @@ class Rules(SoundScene):
         notes = {"parallel": (r"S--T and S--B fifths, \ T--B octaves", r"contrary motion: \ none"),
                  "leading": (r"B falls to G", r"B rises to C"),
                  "seventh": (r"F rises to G", r"F falls to E"),
-                 "spacing": (r"soprano an octave and more above the alto", r"three upper voices within an octave")}[name]
+                 "spacing": (r"soprano an octave and more above the alto", r"adjacent upper voices within an octave")}[name]
         nw = label(notes[0], font_size=22, color=GREY_A).next_to(sw, DOWN, buff=0.35)
         nr = label(notes[1], font_size=22, color=GREY_A).next_to(sr, DOWN, buff=0.35)
         with self.voiceover(speech):

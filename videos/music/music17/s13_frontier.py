@@ -25,7 +25,7 @@ class Frontier(SoundScene):
         rows_.scale_to_fit_width(min(rows_.width, 12.8))
         head = label(r"Bach's chorales as a benchmark", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "The chorales became the first benchmark of music written by machine. <bookmark mark='a'/> In "
+            "The chorales became an influential benchmark for algorithmic harmonization, alongside earlier machine-composition work. <bookmark mark='a'/> In "
             "1988 Kemal Ebcioglu's program harmonized them with about three hundred and fifty rules, "
             "written by hand. <bookmark mark='b'/> In 2005 Moray Allan and Christopher Williams learned "
             "the harmonizer instead, as a hidden Markov model of chords under a tune, solved by the same "
@@ -55,7 +55,7 @@ class Frontier(SoundScene):
             "And how should they be judged? This part has tried three ways, and each has a flaw. "
             "<bookmark mark='a'/> A model's likelihood measures how well it predicts Bach's notes, but a "
             "model can predict well and still write dull music. <bookmark mark='b'/> Counting faults "
-            "rewards caution, and Bach himself has faults. <bookmark mark='c'/> Agreement with Bach's "
+            "rewards caution, and the detector also flags passages in the reference corpus. <bookmark mark='c'/> Agreement with Bach's "
             "chords punishes every other good answer. <bookmark mark='d'/> So the strongest claims rest "
             "on listening tests: play people real and generated chorales and ask which is Bach. In the "
             "tests reported by BachBot's and DeepBach's authors, many listeners, including trained "

@@ -97,10 +97,14 @@ a few have parts in unusual ranges or modes mislabelled as major or minor, and n
 on the beat can make a beat unlabelled or mislabelled, and inversions and sevenths are counted with their chords
 only where stated. *The rules* are textbook rules made exact (parallels need both voices to move; hidden fifths are
 outer voices only); other definitions give other counts. *The harmonizer* is a first-order model, one chord a beat,
-with hand-set penalties whose weights were tuned on a validation split of the training chorales; it does not
+with fixed hand-set penalties; this build does not reproduce a validation sweep or its full tuning history; it does not
 write notes between the beats (except by the rule of chapter 11) and does not see phrase structure. *Agreement with
 Bach* is not a measure of quality: chapter 1 shows that Bach sets one tune several ways. The choir is a model, not
 singers.
+
+## Additional scope
+
+Automated parallel flags concern the selected encodings under the implemented detector, not an edited verdict that Bach made mistakes. A note-change event need not change harmonic function. Off-beat position does not establish that a note is a passing tone. Unlabeled beats still have harmony; the chord vocabulary is restricted. A secondary dominant is not necessarily a common-chord pivot. Spacing constraints apply to adjacent upper voices, not the entire soprano-to-tenor span. The search uses soft penalties and candidate filters; zero detected parallels does not prove compliance with every textbook rule. The fixed weights are illustrative, and no reproducible validation search is included here.
 
 ## Build
 
@@ -149,8 +153,7 @@ python -m videos.music.labs 17                                  # the lab (write
    *Where to look.* `fourpart.ChordModel` counts pairs; a model of triples needs the state of the Viterbi search
    to be a pair of chords, which squares its size. With 280 chorales and about 25 chords in each mode, most
    triples are seen a few times or never, so the estimates are noisy and smoothing dominates; the gain, if any, is
-   small unless the counts are pooled (by function, or by backing off to pairs). Bach's agreement with himself
-   across settings of one tune sets a ceiling well below 100 in a hundred.
+   small unless the counts are pooled (by function, or by backing off to pairs). Different settings of one tune illustrate why agreement is not equivalent to quality; they do not establish a mathematical accuracy ceiling.
 
 5. ★ **A fair listening test.** Design a listening test that could show a machine's chorales are as good as
    Bach's. What would a fair test control for?

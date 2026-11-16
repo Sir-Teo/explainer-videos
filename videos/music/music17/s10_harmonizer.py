@@ -19,16 +19,10 @@ class Harmonizer(SoundScene):
             (r"given: \ a tune, \ one note a beat", WHITE),
             (r"choose at each beat: \ a chord that contains the note", WHITE),
             (r"and a voicing: \ where the alto, \ tenor and bass sing it", WHITE),
-            (r"so that the whole is likely, \ like Bach's, \ and breaks no rule", TUNE))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(DOWN * 0.1)
+            (r"so that the whole is likely, \ like Bach's, \ and minimizes implemented voice-leading costs", TUNE))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"the exercise, \ as a problem a computer can solve", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Now the exercise itself, set to a machine. <bookmark mark='a'/> Given a tune, one note to each "
-            "beat, choose at every beat a chord that contains the tune's note, <bookmark mark='b'/> and a "
-            "voicing of that chord: exactly where the alto, tenor and bass sing it. "
-            "<bookmark mark='c'/> Choose them so that the whole progression is likely, in the sense of "
-            "chapter six's table, and so that the voices move as chapter three found and break none of "
-            "chapter four's rules. Chords and voices have to be chosen together, because a rule like "
-            "no parallel fifths depends on both."
+            "Now the exercise itself, set to a machine. <bookmark mark='a'/> Given a tune, one note to each beat, choose at every beat a chord that contains the tune's note, <bookmark mark='b'/> and a voicing of that chord: exactly where the alto, tenor and bass sing it. <bookmark mark='c'/> Choose them so that the whole progression is likely, in the sense of chapter six's table, and so that the voices move as chapter three found and minimize its implemented voice-leading costs; only stated filters are hard constraints. Chords and voices have to be chosen together, because a rule like no parallel fifths depends on both."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             vo.wait_until("a")
@@ -59,12 +53,12 @@ class Harmonizer(SoundScene):
             picks.append(int(round(pos * (m - 1))))
         path = VMobject(stroke_color=TUNE, stroke_width=4).set_points_as_corners([cols[k][picks[k]].get_center() for k in range(n)])
         counts = VGroup(*[label(str(s_), font_size=16, color=GREY_B).move_to([xs[k], -2.3, 0]) for k, s_ in enumerate(states)])
-        tl = label(r"each dot: \ about 25 (chord, \ voicing) pairs under that beat's note", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.45)
-        head = label(rf"the hook's {n} beats: \ every way to harmonize them", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        tl = label(r"each dot: \ about 25 candidate (chord, \ voicing) pairs\\ gold path: \ schematic, \ not the computed optimum", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.45)
+        head = label(rf"the hook's {n} beats: \ candidates in the restricted search", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         big = label(rf"paths through the lattice: \ about $10^{{{d['log10_paths']:.0f}}}$", font_size=30, color=TUNE).to_edge(UP, buff=1.15)
         with self.voiceover(
             f"Lay the choices out as a lattice: a column for each of the hook's {say(n)} beats, a dot for "
-            f"every chord and voicing that fits that beat's note. <bookmark mark='a'/> There are between "
+            f"candidate chord-and-voicing groups after range limits and pruning to fourteen likely chord labels. Each displayed dot aggregates about twenty-five candidates, and the gold path is schematic, not the computed optimum. <bookmark mark='a'/> There are between "
             f"{say(min(states))} and {say(max(states))} under each note. <bookmark mark='b'/> A harmonization "
             f"is a path from left to right, one dot in each column, and there are about ten to the "
             f"{say(round(d['log10_paths']))} of them, too many to try. <bookmark mark='c'/> But the cost of "
@@ -101,16 +95,9 @@ class Harmonizer(SoundScene):
             r[1].move_to([0.3, 2.2 - 0.56 * k, 0], aligned_edge=LEFT)
             tab.add(r)
         head = label(r"the cost of a path: \ a sum of", font_size=30, color=GREY_A).to_edge(UP, buff=0.35)
-        foot = label(r"the weights were set on chorales held out from training, \ and never on the test", font_size=22, color=TUNE).to_edge(DOWN, buff=0.45)
+        foot = label(r"fixed hand-set weights; no reproduced validation sweep in this build", font_size=22, color=TUNE).to_edge(DOWN, buff=0.45)
         with self.voiceover(
-            "What goes into the cost. Two terms come from Bach's statistics: how unlikely each chord is, "
-            "given the one before it, and how unlikely the tune's note is within that chord, both counted "
-            "from two hundred and eighty chorales. <bookmark mark='a'/> The rest are this part's chapters "
-            "turned into penalties: how far the inner voices and the bass move; a heavy penalty for "
-            "parallel fifths and octaves; smaller ones for hidden fifths, overlaps and leaps; a leading "
-            "note or a seventh going the wrong way; inversions and doubling; and at each fermata, how "
-            "often Bach ends a phrase on that chord. <bookmark mark='b'/> How much each penalty weighs "
-            "was tuned on chorales kept apart from the training, and the test set was never used for it."
+            "What goes into the cost. Two terms come from Bach's statistics: how unlikely each chord is, given the one before it, and how unlikely the tune's note is within that chord, both counted from two hundred and eighty chorales. <bookmark mark='a'/> The rest are this part's chapters turned into penalties: how far the inner voices and the bass move; a heavy penalty for parallel fifths and octaves; smaller ones for hidden fifths, overlaps and leaps; a leading note or a seventh going the wrong way; inversions and doubling; and at each fermata, how often Bach ends a phrase on that chord. <bookmark mark='b'/> The build uses fixed hand-set weights. It does not reproduce a validation search or document its full tuning history, so these should be treated as illustrative settings rather than independently validated optimal weights."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab[0]), FadeIn(tab[1]))
             vo.wait_until("a")

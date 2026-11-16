@@ -20,10 +20,10 @@ class Book(SoundScene):
                        label(r"Bach's settings: \ the tune on top, \ three voices beneath, \ a pause (a fermata) at each line's end", font_size=26, color=WHITE),
                        label(r"since then: \ the exercise book of every harmony class", font_size=26, color=TUNE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 0.8)
         with self.voiceover(
-            "A chorale is a Lutheran hymn: a tune everyone could sing, one note to each syllable, a pause "
+            "A chorale is a Lutheran hymn: a congregational hymn tune, often largely syllabic, a pause "
             "at the end of each line of verse. Bach wrote hundreds of four-part settings of them for his "
             "cantatas and Passions. <bookmark mark='a'/> After his death his son Carl Philipp Emanuel "
-            "collected three hundred and seventy-one and had them printed, in four volumes, between 1784 "
+            "collected settings for the influential collection of three hundred and seventy-one printed, in four volumes, between 1784 "
             "and 1787. <bookmark mark='b'/> Composers and teachers studied them from the start, and for "
             "two centuries harmony students have been set the same "
             "exercise: here is a chorale tune, write the other three voices, then compare with Bach."

@@ -28,12 +28,12 @@ class Cadences(SoundScene):
         mj = tab(d["major"]["pairs"], -3.3, rf"major: \ {d['major']['total']} phrase endings", d["major"]["total"])
         mn = tab(d["minor"]["pairs"], 3.3, rf"minor: \ {d['minor']['total']} phrase endings", d["minor"]["total"])
         foot = VGroup(label(r"the chords at the pauses", font_size=30, color=GREY_A).to_edge(UP, buff=0.3),
-                      label(r"the chord before the fermata, \ and the chord under it; \ -- \ is a beat with no chord", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.5))
+                      label(r"the chord before the fermata, \ and the chord under it; \ -- \ is an unlabeled beat", font_size=20, color=GREY_B).to_edge(DOWN, buff=0.5))
         pj = {(a, z): n for a, z, n in d["major"]["pairs"]}
         auth = pj.get(("V", "I"), 0) + pj.get(("V7", "I"), 0)
         half = sum(n for a, z, n in d["major"]["pairs"] if z == "V")
         with self.voiceover(
-            "Every line of a chorale ends at a fermata, a pause. What chords does Bach put there? "
+            "Fermatas often mark chorale text-line endings, and here the encoded fermatas provide phrase markers. What chords does Bach put there? "
             "<bookmark mark='a'/> In major keys, the commonest ending is five to one, the authentic "
             f"cadence of Part 15: with the seventh added, {say(auth)} of "
             f"{say(d['major']['total'])} phrase endings. Next comes an ending on five itself, a half "
@@ -99,15 +99,7 @@ class Cadences(SoundScene):
                      label(r"`the Picardy third': \ the third raised in the last chord", font_size=24, color=GREY_A),
                      label(r"the rest end on another chord: \ older modes, \ which a key signature cannot name", font_size=22, color=GREY_B)).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.4)
         with self.voiceover(
-            "Did you notice the last chord of the minor chorale? It is major. <bookmark mark='a'/> Of "
-            f"{say(tot)} chorales in minor keys, {say(fn.get('I', 0))} end on a major home chord, and only "
-            f"{say(fn.get('i', 0))} on the minor one. The raised third in the final chord has a name, the "
-            "Picardy third, and in Bach's time it was the norm: the last sound of a piece should be the "
-            "most consonant one, and the major triad is the more consonant of the two: its notes are the "
-            "fourth, fifth and sixth harmonics of a single tone. "
-            "<bookmark mark='b'/> Most of the rest end on a chord the key signature does not call home: "
-            "these tunes are older than major and minor, in modes like the Phrygian, and Bach harmonized "
-            "them in their own terms."
+            f"Did you notice the last chord of the minor chorale? It is major. <bookmark mark='a'/> Of {say(tot)} chorales in minor keys, {say(fn.get('I', 0))} end on a major home chord, and only {say(fn.get('i', 0))} on the minor one. The raised third in the final chord has a name, the Picardy third, and this is common in the selected minor-key settings. Historical convention contributes; harmonic-series arguments alone do not establish why a composer chose a major final chord. <bookmark mark='b'/> Other final labels can reflect modal organization, relative-key endings, metadata errors or the chord matcher’s limitations; the automated counts do not decide among those explanations."
         ) as vo:
             self.play(self.gs.animate.shift(UP * 0.9).scale(0.85), FadeIn(txt[0]), FadeIn(txt[1]))
             vo.wait_until("a")

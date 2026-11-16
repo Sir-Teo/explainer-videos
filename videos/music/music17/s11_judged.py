@@ -22,7 +22,7 @@ class Judged(SoundScene):
             (r"the hook's tune is in the test set", GREY_A))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"a fair test", font_size=32, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "A harmonizer that has seen a tune has seen its answer. So the chorales are split by tune: "
+            "Seeing another setting of a test tune can leak melodic information, even when harmonization is not unique. So the chorales are split by tune: "
             f"<bookmark mark='a'/> {say(e['train'])} chorales to learn from, and {say(e['test'])} to test on, "
             "with every setting of a tune on the same side of the split. <bookmark mark='b'/> The Passion "
             "Chorale, all eleven settings, is in the test set; the model never heard it. On each test "
@@ -109,7 +109,7 @@ class Judged(SoundScene):
         with self.voiceover(
             "B is Bach's. Look at the pictures as well as listening: in A the alto and tenor hold long "
             "notes and the chords change underneath them; in B every voice is moving, with quick notes "
-            "between the beats. The search's version breaks no rule, and it is not wrong. It is a correct "
+            "between the beats. The search’s version has no parallels under the reported detector; soft penalties do not guarantee that every textbook rule is satisfied, and it is not wrong. It is a correct "
             "exercise. What it lacks is what chapter eight showed: lines."
         ):
             self.play(FadeIn(ans))

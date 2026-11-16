@@ -19,11 +19,7 @@ class Hook(SoundScene):
         g = choir_roll(d["bach"], which=(0,), width=10.0, height=1.6, lo=62, hi=80).move_to(DOWN * 1.2)
         tag = label(r"the tune: \ the Passion Chorale", font_size=26, color=VOICE_C[0]).next_to(g, UP, buff=0.3)
         with self.voiceover(
-            "In 1727, in Leipzig, Bach's St Matthew Passion was first performed. Five times in the course "
-            "of it, the choir stops the story to sing a hymn the congregation knew, and it is the same "
-            "hymn tune each time, written by Hans Leo Hassler in 1601. <bookmark mark='a'/> Bach "
-            "harmonized it anew for each moment of the story. Here is its last appearance, as Jesus "
-            "dies: the tune alone, its first two phrases."
+            "In 1727, in Leipzig, Bach's St Matthew Passion was first performed. Five times in the course of it, the choir stops the story to sing a hymn the congregation knew, and it is the same hymn tune each time, written by Hans Leo Hassler in 1601. <bookmark mark='a'/> Bach harmonized it anew for each moment of the story. Here is its last appearance, following Jesus’s death in the narrative: the tune alone, its first two phrases."
         ) as vo:
             self.play(FadeIn(card))
             vo.wait_until("a")
@@ -91,7 +87,7 @@ class Hook(SoundScene):
             "Part 16 kept two voices apart. Now there are four, and every moment is also a chord. "
             "<bookmark mark='a'/> We take Bach's chorales, three hundred and sixty-four of them, as "
             "data. <bookmark mark='b'/> We measure where each voice sings and how it moves, and state "
-            "the rules that keep four lines distinct. <bookmark mark='c'/> We count how often Bach "
+            "the style-specific rules that help organize four lines. <bookmark mark='c'/> We count how often Bach "
             "himself breaks them. <bookmark mark='d'/> We look at his chords, his cadences, and the notes "
             "he puts between the beats. <bookmark mark='e'/> And we build a harmonizer, a search over "
             "chords and voicings, and judge it against Bach on tunes it has never seen."
