@@ -501,4 +501,93 @@
       note: "Nothing you choose is stored or sent. The five arms are simplified descriptions and their effects are simulated for this page, not the published results.",
     });
   };
+
+  // ---- Part 56: a line-up.  A face is shown briefly; after a pause, six faces; pick one or none, then confidence. ----
+  W.lineup = function (el) {
+    var w = null, SHOW = 2500, PAUSE = 2500;
+    var S = { phase: "idle", culprit: null, faces: [], present: true, pick: null, conf: null, runs: [] };
+    function face(rand, base) {
+      var f = base ? Object.assign({}, base) : { hw: 0.8 + 0.3 * rand(), hh: 1.0 + 0.3 * rand(), eye: 0.25 + 0.15 * rand(),
+                                               ey: -0.1 + 0.15 * rand(), nose: 0.15 + 0.2 * rand(), mouth: -0.2 + 0.4 * rand(),
+                                               mw: 0.25 + 0.2 * rand(), hair: rand(), brow: -0.1 + 0.2 * rand() };
+      if (base) { ["hw", "hh", "eye", "ey", "nose", "mouth", "mw", "hair", "brow"].forEach(function (k) { f[k] = f[k] + (rand() - 0.5) * 0.22 * (k === "hair" ? 2 : 1); }); }
+      return f;
+    }
+    function draw(ctx, f, x, y, r, col) {
+      ctx.save(); ctx.strokeStyle = col; ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.ellipse(x, y, r * f.hw * 0.5, r * f.hh * 0.6, 0, 0, 2 * Math.PI); ctx.stroke();
+      ctx.beginPath(); ctx.arc(x, y - r * f.hh * 0.45, r * f.hw * 0.48, Math.PI * (1.05 + 0.1 * f.hair), Math.PI * (1.95 - 0.1 * f.hair)); ctx.stroke();
+      [-1, 1].forEach(function (sgn) {
+        ctx.beginPath(); ctx.arc(x + sgn * r * f.eye, y + r * f.ey, r * 0.06, 0, 2 * Math.PI); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(x + sgn * r * (f.eye - 0.1), y + r * (f.ey - 0.13 - f.brow * 0.3)); ctx.lineTo(x + sgn * r * (f.eye + 0.1), y + r * (f.ey - 0.13 + f.brow * 0.3)); ctx.stroke();
+      });
+      ctx.beginPath(); ctx.moveTo(x, y + r * f.ey); ctx.lineTo(x, y + r * (f.ey + f.nose)); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x - r * f.mw, y + r * 0.35); ctx.quadraticCurveTo(x, y + r * (0.35 + f.mouth), x + r * f.mw, y + r * 0.35); ctx.stroke();
+      ctx.restore();
+    }
+    var task = T.create(el, {
+      keys: { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4, "6": 5, "0": 6 },
+      accepting: function () { return S.phase === "lineup" || S.phase === "confidence" || S.phase === "done"; },
+      respond: function (k) {
+        if (S.phase === "done") { start(w ? w.state : null); return; }
+        if (S.phase === "lineup") { S.pick = k; S.phase = k === 6 ? "done" : "confidence"; task.count++; if (S.phase === "done") finish(); if (w) w.render(); return; }
+        S.conf = Math.min(k + 1, 5); task.count++; S.phase = "done"; finish(); if (w) w.render();
+      },
+    });
+    function finish() {
+      var correct = S.present ? (S.pick === S.cpos) : (S.pick === 6);
+      S.runs.push({ present: S.present, pick: S.pick, cpos: S.cpos, conf: S.conf, correct: correct });
+    }
+    function start(state) {
+      var rand = mulberry(56 + (state ? state.seed : 0) * 13 + S.runs.length), i;
+      S.culprit = face(rand, null);
+      S.present = rand() < 0.5;
+      S.faces = []; S.cpos = Math.floor(rand() * 6);
+      for (i = 0; i < 6; i++) S.faces.push(S.present && i === S.cpos ? S.culprit : face(rand, S.culprit));
+      S.pick = null; S.conf = null; S.phase = "show"; task.clear();
+      if (w) w.render();
+      task.later(function () { S.phase = "pause"; if (w) w.render(); task.later(function () { S.phase = "lineup"; if (w) w.render(); }, PAUSE); }, SHOW);
+    }
+    w = QB.widget(el, {
+      title: "A line-up",
+      sub: "A face appears for two and a half seconds. After a pause you see six faces; the person may or may not be among them. Press 1 to 6 for a face, or 0 if he is not there. Then give your confidence from 1 (a guess) to 5 (certain). Run it several times (any of those keys starts the next line-up): the person is present in about half the line-ups.",
+      panels: 2, height: 330, weights: [1.3, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.runs = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), i;
+        ctx.save(); ctx.textAlign = "center";
+        if (S.phase === "show") {
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif"; ctx.fillText("remember this face", b.cx, b.y + 22);
+          draw(ctx, S.culprit, b.cx, b.cy + 6, Math.min(b.w, b.h) * 0.32, "#f2c14e");
+        } else if (S.phase === "pause") {
+          T.message(ctx, b, "...", "");
+        } else if (S.phase === "lineup" || S.phase === "confidence" || S.phase === "done") {
+          var r = Math.min(b.w / 7.5, b.h / 4.2);
+          for (i = 0; i < 6; i++) {
+            var x = b.x + b.w * (0.18 + 0.32 * (i % 3)), y = b.y + b.h * (i < 3 ? 0.32 : 0.72);
+            var col = S.phase === "done" && S.present && i === S.cpos ? "#5bd18b" : (S.pick === i ? "#7ec8f5" : "#cfd6e3");
+            draw(ctx, S.faces[i], x, y, r, col);
+            ctx.fillStyle = C.muted; ctx.font = "11px system-ui, sans-serif"; ctx.fillText(String(i + 1), x, y + r * 0.95);
+          }
+          ctx.fillStyle = C.ink; ctx.font = "12px system-ui, sans-serif";
+          var msg = S.phase === "lineup" ? "1-6: pick a face; 0: not present" : S.phase === "confidence" ? "confidence: 1 (guess) to 5 (certain)" :
+            (S.present ? "He was number " + (S.cpos + 1) + "." : "He was not in this line-up.") + (S.runs.length && S.runs[S.runs.length - 1].correct ? " You were right." : " Not this time.") + " Any key: next line-up.";
+          ctx.fillText(msg, b.cx, b.y + 16);
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Watch the face; then pick from six, or say he is not there.");
+        }
+        ctx.restore();
+        var a2 = g[1].axes({ x: [0, 6], y: [0, 1], title: "Your line-ups", xlabel: "confidence", noY: false });
+        var xs = [], ys = [], cols = [];
+        S.runs.forEach(function (rr, k) { if (rr.conf) { xs.push(rr.conf + (k % 5) * 0.06); ys.push(rr.correct ? 0.85 : 0.15); cols.push(rr.correct ? "#5bd18b" : "#ef6f6c"); } });
+        a2.dots(xs, ys, { color: function (i) { return cols[i]; }, r: 5 });
+        a2.text(0.2, 0.95, "top: right   bottom: wrong", { size: 10, color: C.muted });
+      },
+      readout: function () { var n = S.runs.length, c = S.runs.filter(function (r) { return r.correct; }).length; return [["line-ups", String(n)], ["right", n ? c + " of " + n : "–"]]; },
+      note: "Nothing you choose is stored or sent. The faces are simple drawings; real faces are easier and harder in other ways. Part 56's point: judge your high-confidence picks against your low-confidence ones.",
+    });
+  };
 })();

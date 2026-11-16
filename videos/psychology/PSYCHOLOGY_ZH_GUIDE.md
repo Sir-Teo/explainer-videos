@@ -1345,6 +1345,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | choice overload; heterogeneous treatment effect; sludge; libertarian paternalism | 选择过载；异质处理效应；淤泥（行政摩擦）；自由主义家长制 |
 | Richard Thaler; Cass Sunstein; Eric Johnson; Daniel Goldstein; Katherine Milkman; Stefano DellaVigna; Elizabeth Linos; Gordon Pennycook; David Rand | 理查德·塞勒；卡斯·桑斯坦；埃里克·约翰逊；丹尼尔·戈尔茨坦；凯瑟琳·米尔克曼；斯特凡诺·德拉维尼亚；伊丽莎白·利诺斯；戈登·彭尼库克；大卫·兰德 |
 
+## Part 56: psychology and law
+
+| English | 中文 |
+|---|---|
+| line-up; simultaneous line-up; sequential line-up; filler; diagnosticity ratio; ROC; partial AUC | 列队辨认；同时列队；顺序列队；陪衬者；诊断比；ROC曲线；部分曲线下面积 |
+| estimator variable; system variable; double-blind administration; confidence statement; post-identification feedback | 估计变量；系统变量；双盲施测；信心陈述；辨认后反馈 |
+| false confession; interrogation; lie detection; polygraph; cognitive bias in forensic science | 虚假供述；审讯；谎言识别；测谎仪；法庭科学中的认知偏差 |
+| suggestibility; implanted memory; jury; risk assessment; calibration; equal error rates | 易受暗示性；植入记忆；陪审团；风险评估；校准；错误率相等 |
+| standard error of measurement; confidence interval of a test score | 测量标准误；测验分数的置信区间 |
+| Gary Wells; John Wixted; Saul Kassin; Itiel Dror; Elizabeth Loftus; Stephen Ceci; Maggie Bruck; Alexandra Chouldechova | 加里·韦尔斯；约翰·威克斯泰德；索尔·卡辛；伊蒂尔·德罗尔；伊丽莎白·洛夫特斯；斯蒂芬·切奇；玛吉·布鲁克；亚历山德拉·乔尔德乔娃 |
+
 ## Names
 
 | English | 中文 |

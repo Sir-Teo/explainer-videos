@@ -179,4 +179,38 @@ PARTS = [
               ("Its tests", "tests/psychology/test_work.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=56, level="U", widget="lineup", prereq=(12, 21, 3, 39),
+        question="How much should a court trust a memory, a confession or an expert?",
+        story="Mistaken identification figures in about three quarters of the first 250 DNA exonerations in the "
+              "United States. The part models the line-up as signal detection, shows why the sequential line-up was "
+              "adopted on its diagnosticity ratio and abandoned on its ROC, separates initial confidence (diagnostic "
+              "under clean procedure) from confidence inflated by feedback, and covers the reforms, false "
+              "confessions, lie detection at chance, context bias in forensic experts, children's suggestibility, "
+              "juries and the hungry judges, a calibrated risk score that cannot have equal error rates across "
+              "groups, and the IQ standard error in Hall v. Florida.",
+        handoff="Part 57 takes assessment into health care; Part 59 takes prediction into psychiatry; Part 60 "
+                "returns to fairness in machines.",
+        outside="Part 12's signal detection, Part 21's memory, Part 3's standard error and Part 39's actuarial "
+                "prediction; Bayes's rule.",
+        objectives={
+            "U": ["Explain why a confident witness can be wrong, and when initial confidence can be trusted.",
+                  "List the line-up reforms and the reason for each."],
+            "M": ["Compare line-up procedures by ROC and partial area rather than diagnosticity ratio.",
+                  "Show why a calibrated risk score cannot have equal error rates across groups with different base "
+                  "rates."],
+            "D": ["Design a field study that could estimate the accuracy of real identifications."],
+            "I": ["Weigh an identification by its likelihood ratio, and write a line-up protocol."],
+        },
+        results=[
+            ("Posterior odds", r"\frac{P(G\mid E)}{P(\bar G\mid E)} = \frac{P(E\mid G)}{P(E\mid \bar G)} \cdot "
+                               r"\frac{P(G)}{P(\bar G)}"),
+            ("Diagnosticity ratio", r"DR = \frac{\text{correct IDs}}{\text{innocent-suspect IDs}}"),
+            ("Standard error of measurement", r"SEM = SD\sqrt{1 - r_{xx}}"),
+        ],
+        U=(0, 1, 2, 4, 5, 6, 7, 9), D=(15,), I=(11, 12, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Part 21's line-up model", "explainer/psychology/psyche/memory.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

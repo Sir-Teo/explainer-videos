@@ -438,7 +438,7 @@ shown(3, "STEVENS_1946", "a committee's disagreement and a classification of sca
       "finding")
 shown(3, "CREDE_2017", "shown as the example of two names for nearly one thing; grit has its own row in Part "
       "28")
-shown(3, "HEDGE_2018", "the reliability paradox is stated here and paid off with its record later", row_in=59)
+shown(3, "HEDGE_2018", "the reliability paradox is stated here and paid off with its record later")
 shown(3, "FLAKE_FRIED_2020", "counts of how measures are reported in journals: a description of practice, not a "
       "finding about minds")
 
@@ -811,7 +811,7 @@ shown(20, "EBBINGHAUS_1885", "the first forgetting curve, refitted here; its sha
 shown(20, "DRESLER_2017", "a single training study, shown as an example of the method of loci; mnemonic training's record "
       "is reviewed in Part 54")
 shown(20, "KOHNKEN_1999", "a meta-analysis of an interview method; eyewitness memory and the interview are entered in Part "
-      "56", row_in=56)
+      "56")
 shown(20, "LIU_2012", "the engram experiment, recalled from Part 5; a neuroscience finding reported, not a behavioural "
       "effect")
 shown(20, "SCOVILLE_MILNER_1957", "a single case, recalled from Part 7; its lessons are argued, not replicated")
@@ -835,9 +835,9 @@ shown(20, r"Warrington \& Weiskrantz (1970); \ Graf, \ Squire \& Mandler (1984)"
 shown(20, r"Yonelinas et al.\ (2002); \ Wixted (2007); \ Squire et al.\ (2007)", "an open argument about brain "
       "localisation, described from both sides")
 shown(21, "TALARICO_RUBIN_2003", "flashbulb memories, shown as one study with a schematic of its pattern; eyewitness "
-      "memory and confidence are entered in Part 56", row_in=56)
+      "memory and confidence are entered in Part 56")
 shown(21, "WIXTED_WELLS_2017", "a review of eyewitness confidence, with a model computed here; the eyewitness rows are "
-      "Part 56's", row_in=56)
+      "Part 56's")
 shown(21, "DUNLOSKY_2013", "a review rating study techniques; the spacing and testing rows are this part's, and the "
       "classroom record is Part 54's")
 shown(21, r"Anderson, \ Bjork \& Bjork (1994); \ Murayama et al.\ (2014)", "retrieval-induced forgetting, described "
@@ -864,7 +864,7 @@ shown(21, r"Richards \& Frankland (2017)", "a theoretical argument")
 shown(21, r"Ryan et al.\ (2015)", "an animal neuroscience finding at the frontier")
 shown(21, r"Underwood (1957)", "a review of old experiments, shown as a schematic of its summary")
 shown(21, r"Wells et al.\ (2020); \ Garry et al.\ (1996)", "procedural recommendations and a finding about imagination; "
-      "the courtroom and therapy are Part 56's", row_in=56)
+      "the courtroom and therapy are Part 56's")
 shown(21, r"Wilson \& McNaughton (1994); \ Rasch et al.\ (2007)", "neuroscience of replay, and a targeted-reactivation "
       "experiment, reported as evidence for consolidation in sleep")
 shown(21, r"Wixted \& Mickes (2014)", "a model of line-ups, computed here")
@@ -1309,7 +1309,7 @@ shown(12, "GIGERENZER_HOFFRAGE_1995", "base-rate reasoning, a preview; Part 26 s
 shown(12, "MANISCALCO_LAU_2012", "a method at the frontier, a measure rather than a finding; Part 25 uses it to "
       "frame confidence")
 shown(12, "SWETS_2000", "a review of applications, not a finding")
-shown(12, "MICKES_2012", "line-ups, a preview of a live dispute; eyewitness memory is entered in Part 56", row_in=56)
+shown(12, "MICKES_2012", "line-ups, a preview of a live dispute; eyewitness memory is entered in Part 56")
 
 # ---------------------------------------------------------------------------------------------------------------
 # Part 13: The Eye and the Code
@@ -1534,7 +1534,7 @@ add(Finding(
 shown(14, "ADELSON_1995", "a demonstration, redrawn and explained by a model; lightness is not a finding in dispute")
 shown(14, "ADAMS_2004", "a single experiment showing that a prior can be retrained, told as an example")
 shown(14, "YIN_1969", "a classic demonstration of the face inversion effect, told as history; faces are entered with the face area")
-shown(14, "YAMINS_2014", "a modelling result at the frontier; deep networks as models are entered in Part 60", row_in=60)
+shown(14, "YAMINS_2014", "a modelling result at the frontier; deep networks as models are entered in Part 60")
 shown(14, "GEIRHOS_2019", "a property of artificial networks, reproduced on a small one; not a finding about minds")
 shown(14, "VONG_2024", "a modelling result at the frontier, described again in Part 30's frontier")
 shown(14, "WHEATSTONE_1838", "the history of an instrument and a stimulus")
@@ -4389,8 +4389,7 @@ shown(15, "BEKESY_1960", "the history of a measurement; the travelling wave is t
       "dispute")
 shown(15, "KEMP_1978", "the discovery of an effect told as history; otoacoustic emissions are a clinical test")
 shown(15, "MELZACK_WALL_1965", "a theory told as history and modelled; its circuit is revised in detail")
-shown(15, "LEVINE_1978", "a single experiment at the start of a literature; placebo analgesia is entered in Part 57",
-      row_in=57)
+shown(15, "LEVINE_1978", "a single experiment at the start of a literature; placebo analgesia is entered in Part 57")
 shown(15, "MCDERMOTT_2016", "a single cross-cultural study at the frontier of music perception, described with its "
       "limits")
 shown(15, "KUJAWA_LIBERMAN_2009", "an animal result at the frontier; its human counterpart is unsettled")
@@ -4413,7 +4412,7 @@ shown(22, r"Fried \& Nesse (2015); \ Kotov et al. (2017); \ APA, \ DSM-5 (2013)"
 shown(22, r"Yang et al. (2020), \ the ImageNet person subtree", "a dataset's audit, described; not a finding about "
       "people")
 shown(22, r"Marjieh, \ Sucholutsky, \ van Rijn, \ Jacoby \& Griffiths (2024)", "a study of language models at the "
-      "frontier, with its numbers; machine representations are Part 60's", row_in=60)
+      "frontier, with its numbers; machine representations are Part 60's")
 shown(22, r"Lake et al. (2015); \ Peterson et al. (2018); \ Lake \& Baroni (2023)", "models at the frontier, "
       "described with their benchmarks; Part 60's")
 shown(22, r"Huth, \ de Heer, \ Griffiths, \ Theunissen \& Gallant (2016)", "a mapping study at the frontier, "
@@ -4476,9 +4475,9 @@ shown(24, r"Simon (1955, \ 1956)", "a theory: bounded rationality")
 shown(24, r"Schmidt \& Hunter (1998); \ Sackett et al. (2022); \ Sweller \& Cooper (1985)", "selection and "
       "instruction research, described; personnel selection is Part 53's")
 shown(24, r"Ellis et al. (2021); \ Chollet (2019); \ LeGris et al. (2024)", "programs and benchmarks at the "
-      "frontier; Part 60's", row_in=60)
+      "frontier; Part 60's")
 shown(24, r"Webb, \ Holyoak \& Lu (2023), \ \emph{Nature Human Behaviour}", "machine analogy at the frontier; "
-      "Part 60's", row_in=60)
+      "Part 60's")
 
 shown(25, r"Wallis (1980); \ Wald (1945, \ 1947); \ Ratcliff (1978); \ Roitman \& Shadlen (2002)", "the history "
       "the part tells; LIP ramping has its row")
@@ -4491,8 +4490,7 @@ shown(25, r"Usher \& McClelland (2001); \ Bogacz et al. (2006)", "models, descri
 shown(25, r"Vickers (1979); \ Kiani \& Shadlen (2009); \ Pleskac \& Busemeyer (2010)", "accounts of confidence, "
       "described; metacognition's measures were Part 12's")
 shown(25, r"Green (2000); \ AASHTO stopping sight distance", "applied figures, described")
-shown(25, r"Ratcliff, \ Thapar \& McKoon (2001)", "ageing studies, described; individual differences are Part 59's",
-      row_in=59)
+shown(25, r"Ratcliff, \ Thapar \& McKoon (2001)", "ageing studies, described; individual differences are Part 59's")
 shown(26, r"Bernoulli (1738); \ Allais (1953); \ Kahneman \& Tversky (1979)", "the history of the idea; the "
       "Allais pattern has its row")
 shown(26, r"Pascal--Fermat letters (1654); \ Huygens (1657)", "the history of probability, described")
@@ -4550,8 +4548,7 @@ shown(27, r"Myles et al.\ (2004); \ Avidan et al.\ (2008); \ Pandit et al.\ (201
       "audit in anaesthesia, described as applications")
 shown(27, r"Schnakers et al.\ (2009); \ Giacino et al.\ (2018); \ Kondziella et al.\ (2020)", "clinical diagnosis "
       "and guidelines, described as applications")
-shown(27, r"Butlin, \ Long et al.\ (2023)", "a proposal for assessing machines, described; machines are Part 60's",
-      row_in=60)
+shown(27, r"Butlin, \ Long et al.\ (2023)", "a proposal for assessing machines, described; machines are Part 60's")
 shown(27, r"Nagel (1974); \ Chalmers (1995); \ Block (1995)", "philosophical distinctions, not findings")
 shown(27, r"the Koch--Chalmers wager (1998, \ settled 2023)", "a wager, told as history")
 shown(27, r"Tononi (2004); \ Oizumi, \ Albantakis \& Tononi (2014); \ Tononi et al.\ (2016)", "integrated "
@@ -4596,7 +4593,7 @@ shown(28, r"Lally, \ van Jaarsveld, \ Potts \& Wardle (2010)", "a study of habit
       "application")
 shown(28, r"Kurzban et al.\ (2013); \ Agrawal et al.\ (2022)", "theories at the frontier, described")
 shown(28, r"Schmidhuber (1991); \ Pathak et al.\ (2017)", "machine-learning methods, described; machines are Part "
-      "60's", row_in=60)
+      "60's")
 
 shown(29, r"James (1884)", "the James-Lange theory, told as history; its tests are Cannon's objections and the "
       "two-factor row")
@@ -4652,8 +4649,7 @@ shown(30, r"Schweinhart et al.\ (2005); \ Puma et al.\ (2012); \ Durkin et al.\ 
       "described as applications; early intervention is taken up with education in Part 54")
 shown(30, r"DeLoache et al.\ (2010)", "a single trial of a product, described as an application")
 shown(30, r"Vong et al.\ (2024)", "a modelling result at the frontier, described")
-shown(30, r"Piloto et al.\ (2022)", "a machine-learning model at the frontier, described; machines are Part 60's",
-      row_in=60)
+shown(30, r"Piloto et al.\ (2022)", "a machine-learning model at the frontier, described; machines are Part 60's")
 
 shown(31, r"Wiesel \& Hubel (1963); \ Hubel \& Wiesel (1970)", "the sensitive period in vision, told as history "
       "(Part 7); textbook physiology")
@@ -7312,3 +7308,144 @@ shown(55, r"Hall \& Madsen (2022)", "a natural experiment on message signs, desc
 shown(55, r"Kalla \& Broockman (2018)", "a meta-analysis of campaign contact, quoted")
 shown(55, r"Lewis \& Rao (2015)", "advertising experiments, described")
 shown(55, r"Chater \& Loewenstein (2023)", "an argument about framing, described")
+
+# --- Part 56: Psychology and Law -------------------------------------------------------------------------------------
+
+add(Finding(
+    key="sequential_lineups", part=56, title=r"Sequential line-ups are superior",
+    claim="Sequential line-ups, one face at a time, are better than simultaneous ones at separating guilty from "
+          "innocent suspects.",
+    original=Study("Lindsay and Wells", 1985, design="laboratory line-ups, simultaneous against sequential",
+                   found="fewer false identifications and a higher diagnosticity ratio for sequential"),
+    status="failed",
+    record=(Study("Mickes, Flowe and Wixted", 2012, design="ROC analysis of simultaneous and sequential line-ups",
+                  found="simultaneous at least as discriminating; sequential more conservative"),
+            Study("Wixted and colleagues (police field data)", 2016, design="a field test comparing procedures",
+                  found="no advantage for sequential"),
+            Study("Wells and colleagues", 2020, design="the updated scientific recommendations",
+                  found="no longer recommend sequential over simultaneous")),
+    note="The diagnosticity ratio rewarded a cautious criterion, not better discrimination; ROC analysis showed "
+         "sequential procedures mostly shift the criterion.",
+    sources=("R. C. L. Lindsay and G. L. Wells, Improving eyewitness identifications from lineups: simultaneous versus "
+             "sequential lineup presentation, Journal of Applied Psychology 70 (1985) 556-564",
+             "L. Mickes, H. D. Flowe and J. T. Wixted, Receiver operating characteristic analysis of eyewitness memory, "
+             "Journal of Experimental Psychology: Applied 18 (2012) 361-376",
+             "G. L. Wells et al., Policy and procedure recommendations for the collection and preservation of "
+             "eyewitness identification evidence, Law and Human Behavior 44 (2020) 3-36"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="initial_confidence", part=56, title=r"Initial high confidence is diagnostic",
+    claim="Under fair, double-blind procedures, an eyewitness's initial high-confidence identification is usually "
+          "accurate.",
+    original=Study("Juslin, Olsson and Winman", 1996, design="calibration analysis of eyewitness identifications",
+                   found="confidence and accuracy well calibrated despite a low confidence-accuracy correlation"),
+    status="replicated",
+    record=(Study("Wells and Bradfield", 1998, design="confirming feedback after an identification",
+                  found="confidence inflated afterwards: the initial statement is the one that counts"),
+            Study("Wixted, Mickes, Dunn, Clark and Wells", 2016, design="a police department's line-ups",
+                  found="filler identifications rare at high confidence"),
+            Study("Wixted and Wells", 2017, design="a review of confidence-accuracy characteristics",
+                  found="high accuracy for initial high-confidence identifications under good procedure")),
+    note="It holds for the first confidence statement, under clean procedure; confidence at trial, after feedback "
+         "and repetition, is much less informative.",
+    sources=("P. Juslin, N. Olsson and A. Winman, Calibration and diagnosticity of confidence in eyewitness "
+             "identification, Journal of Experimental Psychology: Learning, Memory, and Cognition 22 (1996) 1304-1316",
+             "J. T. Wixted and G. L. Wells, The relationship between eyewitness confidence and identification "
+             "accuracy, Psychological Science in the Public Interest 18 (2017) 10-65",
+             "J. T. Wixted et al., Estimating the reliability of eyewitness identifications from police lineups, "
+             "Proceedings of the National Academy of Sciences 113 (2016) 304-309",
+             "G. L. Wells and A. L. Bradfield, Good, you identified the suspect, Journal of Applied Psychology 83 "
+             "(1998) 360-376"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="lab_false_confession", part=56, title=r"False confessions in the laboratory",
+    claim="Innocent people accused of a minor laboratory offence often sign a confession, especially when presented "
+          "with false evidence.",
+    original=Study("Kassin and Kiechel", 1996, n="79 students", design="the ALT-key paradigm with or without a "
+                   "false witness", found="about two thirds signed; nearly all under false evidence and a fast pace"),
+    status="replicated",
+    record=(Study("Russano, Meissner, Narchet and Kassin", 2005, design="a cheating paradigm with guilty and innocent "
+                  "participants", found="minimization and deals raised false as well as true confessions"),
+            Study("Kassin and colleagues", 2010, design="a scientific review", found="the paradigm's effects "
+                  "replicated; the risk factors documented in real cases")),
+    note="Laboratory confessions cost little; the mechanisms, false evidence and minimization, are the ones found in "
+         "documented false confessions.",
+    sources=("S. M. Kassin and K. L. Kiechel, The social psychology of false confessions, Psychological Science 7 "
+             "(1996) 125-128",
+             "M. B. Russano et al., Investigating true and false confessions within a novel experimental paradigm, "
+             "Psychological Science 16 (2005) 481-486",
+             "S. M. Kassin et al., Police-induced confessions: risk factors and recommendations, Law and Human "
+             "Behavior 34 (2010) 3-38"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="lie_detection_chance", part=56, title=r"Lie detection near chance",
+    claim="People judging whether others are lying are only slightly better than chance.",
+    original=Study("Bond and DePaulo", 2006, design="a meta-analysis of 206 studies, about 24,000 judges",
+                   found="54% correct; truths judged better than lies"),
+    status="replicated",
+    record=(Study("Bond and DePaulo", 2008, design="individual differences in judging deception",
+                  found="little reliable variation between judges, including professionals"),
+            Study("Hartwig and Bond", 2011, design="a meta-analysis of cues and judgements",
+                  found="weak cues, not wrong beliefs, limit accuracy")),
+    note="The limit is the weak signal: liars and truth-tellers behave too similarly for any criterion to do much.",
+    sources=("C. F. Bond and B. M. DePaulo, Accuracy of deception judgments, Personality and Social Psychology "
+             "Review 10 (2006) 214-234",
+             "C. F. Bond and B. M. DePaulo, Individual differences in judging deception, Psychological Bulletin 134 "
+             "(2008) 477-492",
+             "M. Hartwig and C. F. Bond, Why do lie-catchers fail?, Psychological Bulletin 137 (2011) 643-659"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="forensic_context", part=56, title=r"Context bias in forensic experts",
+    claim="Forensic examiners' conclusions can be changed by irrelevant contextual information.",
+    original=Study("Dror, Charlton and Peron", 2006, n="5 fingerprint experts", design="their own earlier "
+                   "matches, re-presented with the context of a known misidentification", found="4 of 5 changed"),
+    status="replicated",
+    record=(Study("Dror and Charlton", 2006, design="six experts, eight prints of their own, with or without "
+                  "biasing context", found="inconsistent decisions, mostly on difficult prints"),
+            Study("Kukucka and Kassin", 2014, design="handwriting judgements after learning of a confession",
+                  found="more matches when a confession was known")),
+    note="Strongest on ambiguous evidence; blinding and sequential unmasking are the remedies.",
+    sources=("I. E. Dror, D. Charlton and A. E. Peron, Contextual information renders experts vulnerable to making "
+             "erroneous identifications, Forensic Science International 156 (2006) 74-78",
+             "I. E. Dror and D. Charlton, Why experts make errors, Journal of Forensic Identification 56 (2006) "
+             "600-616",
+             "J. Kukucka and S. M. Kassin, Do confessions taint perceptions of handwriting evidence?, Law and Human "
+             "Behavior 38 (2014) 256-270"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="hungry_judges", part=56, title=r"Hungry judges",
+    claim="Judges grant parole far more often after a food break, and almost never just before one.",
+    original=Study("Danziger, Levav and Avnaim-Pesso", 2011, n="1,112 parole rulings", design="decisions by "
+                   "position in the session", found="about 65% favourable after a break, near zero before the next"),
+    status="contested",
+    record=(Study("Weinshall-Margel and Shapard", 2011, design="a reply on how cases were ordered",
+                  found="unrepresented prisoners, usually refused, heard last in each session"),
+            Study("Glockner", 2016, design="simulations of rational scheduling of sessions",
+                  found="much of the pattern produced without any fatigue")),
+    note="The decline is in the data; whether it reflects fatigue or the order and scheduling of cases is not "
+         "settled.",
+    sources=("S. Danziger, J. Levav and L. Avnaim-Pesso, Extraneous factors in judicial decisions, Proceedings of "
+             "the National Academy of Sciences 108 (2011) 6889-6892",
+             "K. Weinshall-Margel and J. Shapard, Overlooked factors in the analysis of parole decisions, Proceedings "
+             "of the National Academy of Sciences 108 (2011) E833",
+             "A. Glockner, The irrational hungry judge effect revisited, Judgment and Decision Making 11 (2016) "
+             "601-610"),
+    checked="2026-11-16",
+))
+shown(56, r"Garrett (2011)", "a study of exonerations, quoted in the story")
+shown(56, r"Lindsay \& Wells (1985)", "cited in the sequential_lineups row; shown as the reform's origin")
+shown(56, r"Wells et al.\ (2020)", "cited in a row; the recommendations, listed")
+shown(56, r"Kassin et al.\ (2010)", "cited in a row; a review of interrogation risk factors")
+shown(56, r"Ceci \& Bruck (1995)", "experiments on children's suggestibility, described")
+shown(56, r"Englich, \ Mussweiler \& Strack (2006)", "an anchoring experiment with judges, described")
+shown(56, r"Dressel \& Farid (2018)", "an accuracy comparison, quoted")
