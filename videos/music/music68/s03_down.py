@@ -41,7 +41,7 @@ class Down(SoundScene):
                 pulse(snd, boxes[i], st[k], end, buff=0.06)
         res = label(r"the notes and their order never changed; \ almost everything else did", font_size=21, color=WHITE).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "The notes and their order never changed. Almost everything else did: the timing, the loudness, the space around "
+            "The intended performed notes and their order were held fixed. Almost everything else did: the timing, the loudness, the space around "
             "the sound, its colour, and at the end its cleanness."
         ):
             self.play(FadeIn(res))
@@ -76,8 +76,8 @@ class Down(SoundScene):
             f"{say(-d['reverb_db'], 1)} decibels below the direct sound. <bookmark mark='c'/> The microphone narrowed the band "
             f"and added noise {say(round(d['snr_db']))} decibels below the music. <bookmark mark='d'/> The master's limiter cut "
             f"the crest factor from {say(d['crest_before'], 1)} to {say(d['crest_after'], 1)} decibels. <bookmark mark='e'/> And "
-            "the coder: at a hundred and twenty-eight kilobits its noise sits "
-            f"{say(round(-d['codec']['128']['nmr_db']))} decibels under the mask, inaudible by its own model; at sixteen it is "
+            "the coder: at a hundred and twenty-eight kilobits its estimated noise-to-mask ratio sits "
+            f"{say(round(-d['codec']['128']['nmr_db']))} decibels under the mask, below this simplified masking estimate, which does not establish inaudibility; at sixteen it is "
             f"{say(round(c16['nmr_db']))} decibels over it."
         ) as vo:
             self.play(FadeIn(head))
@@ -160,7 +160,7 @@ class Down(SoundScene):
         ]
         rows_scene(self, r"the coder, \ rate by rate", items,
                    "The coder, rate by rate, as Part 58 built it. <bookmark mark='b'/> At a hundred and twenty-eight kilobits the "
-                   "band reaches eighteen kilohertz and the noise is well under the mask. <bookmark mark='c'/> At sixty-four the "
+                   "band reaches eighteen kilohertz and the estimated quantization-noise level is below the model mask. <bookmark mark='c'/> At sixty-four the "
                    "band is cut to fourteen kilohertz and the noise reaches the mask. <bookmark mark='d'/> At thirty-two, nine "
                    "kilohertz, and the noise is over it. <bookmark mark='e'/> At sixteen, five and a half kilohertz, and still over. "
                    "<bookmark mark='f'/> A coder spends bits where the ear would hear their absence, and below some rate there "
@@ -204,9 +204,7 @@ class Down(SoundScene):
             pulse(snd, key[0], st["cut"], st["wide"] - 0.4, buff=0.08)
             pulse(snd, key[1], st["wide"], c.duration, buff=0.08)
         with self.voiceover(
-            "The second keeps only the upper part of the spectrum, so what is left is thin and high, a ghost of the Tune. A "
-            "coder is not only its algorithm but its settings, and a setting can fail on one input in a way that an average "
-            "over many might hide."
+            'The second keeps only the upper part of the spectrum, so what is left is thin and high, a ghost of the Tune. A coder is not only its algorithm but its settings, and an implementation setting can fail on a particular input in a way an average can hide; this chain explicitly overrides the sixteen-kilobit cutoff.'
         ):
             self.wait(0.3)
         self.clear_scene()

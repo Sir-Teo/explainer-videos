@@ -24,15 +24,15 @@ suite and plays it, counts what was built, and ends with Variation 1 again. Its 
   wrong, Part 61's flux with the onset reading 23 %, SuperFlux 20 %; the Tune: wrong keys by
   stage (as written 6; performed 6; room 8; microphone 8; master 14; 128 12; 64 15; 32 14; 16 kbit/s 12); which notes go wrong (every change of key found as written, 17 of 24 at worst; repeated notes the weak spot, 9 to 14 of 18 found; the coder's false onsets at 32 and 16 kbit/s); beside Part 61's network; the first two phrases written and recovered; the key, G major by the recovered lengths and C major by the notes; an ear question (three
   recovered scores, replayed: which came from where?).
-* **4. What survives.** The sound's quiet part (filled by the room and the master, emptied by the starved coder) against the notes that change key, stage by stage; does it still sound like itself (the fingerprinter's match: 689 aligned votes on the performance, 25 through the room, and from the master on hardly more than the next best; tempo; the key, C major at 6 of 9); the room alone,
+* **4. What survives.** Thresholded spectrogram occupancy (changed by the room, master and coder) against the notes that change key, stage by stage; does it still sound like itself (the fingerprinter's match: 689 aligned votes on the performance, 25 through the room, and from the master on hardly more than the next best; tempo; the key, C major at 6 of 9); the room alone,
   heard; why notation kept pitch and time (Part 10's 168 bits); what the experiment does not show.
 * **5. Ordering a suite.** An excerpt rule fixed in advance; the excerpts mapped by Part 63's features; path
-  lengths (as made 636, nearest-next 391, 2000 random orders 653 to 745); an ear question
+  lengths (as made 636, nearest-next 390, 2000 random orders 653 to 745); an ear question
   (the suite's longest and shortest steps, Variations 27 to 28 and 31 to 32); the nearest-next order,
   heard; the order chosen: as made.
 * **6–8. The suite.** Three movements: Variations 1–22 (Acts I–III), 23–44 (IV–VII) and 45–67 (VIII–XII),
   8.5 seconds of each, 10.1 minutes in all, each cell lit as it plays with its ledger title.
-* **9. What was built.** Monochord counted (95 modules, about 25,508 lines, 866 tests, 999 sounds,
+* **9. What was built.** Monochord counted (95 modules, about 25,531 lines, 879 tests, 999 sounds,
   4.3 hours, 68 labs); its layers; how it was checked; what you can now do.
 * **10. The ledger.** All sixty-eight rows, page by page; what the ledger is.
 * **11. Frontier: what is still unknown.** Part 1's question; an ear question (a fifth at 3:2 and one mistuned by 1 %:
@@ -129,3 +129,5 @@ python -m videos.music.labs 68                                  # the lab (write
   Rosenkrantz, R. E. Stearns and P. M. Lewis, "An analysis of several heuristics for the traveling salesman
   problem", *SIAM J. Computing* (1977); W. S. Torgerson, "Multidimensional scaling" (1952).
 * J. O. Smith, *Physical Audio Signal Processing* (2010).
+
+Review scope: pitch-change/restrike detection counts match onset proximity within 80 ms and do not verify pitch; the separate note F-score requires pitch and a 50 ms onset window. Compact notation bit counts rely on shared decoding assumptions. The 16 kbit/s chain uses an explicit 5.5 kHz cutoff override. Feature-space ordering is not a validated perceptual optimum.

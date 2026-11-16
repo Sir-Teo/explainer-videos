@@ -188,7 +188,7 @@ def compute_hook() -> dict:
     c = variation_clip(1)
     v = json.load(open(REPO_ROOT / ".cache" / "music1" / "variation.json"))
     return {"title": v.get("title", ""), "seconds": c.duration, "measure": v.get("measure", ""),
-            "clips": {"one": save("hook.one", c, kind=c.meta.get("label", "physical model"), detail="Variation 1, as Part 1 made it: the Tune on one simulated string, its bridge moved for each note")}}
+            "clips": {"one": save("hook.one", c, kind=c.meta.get("label", "physical model"), level=None, ceiling=float("inf"), detail="Variation 1, as Part 1 made it: the Tune on one simulated string, its bridge moved for each note")}}
 
 
 def compute_chain() -> dict:

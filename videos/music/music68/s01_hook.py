@@ -38,7 +38,7 @@ class Hook(SoundScene):
         ).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "The same file, the same samples. <bookmark mark='a'/> But the opening leap is now many things at once: a ratio "
-            "of three to two, an interval without beats, two degrees of a key, the first step of a phrase, and a line a "
+            "of three to two, an interval whose aligned harmonic partials do not beat against each other, a tonic-to-dominant move in this key, the first step of a phrase, and a line a "
             "machine could write down. The notes have not changed. The listener has."
         ) as vo:
             self.play(FadeIn(res[0]))
@@ -58,7 +58,7 @@ class Hook(SoundScene):
         ]
         rows_scene(self, r"the \textit{Goldberg Variations}", items,
                    "In 1741 Johann Sebastian Bach published an aria with thirty variations, for a harpsichord with two keyboards. "
-                   "<bookmark mark='b'/> Every third variation is a canon, the first at the unison, the next at the second, and so "
+                   "<bookmark mark='b'/> Every third variation through number twenty-seven is a canon, the first at the unison, the next at the second, and so "
                    "on up to the ninth; the thirtieth is a quodlibet, two folk songs sung over the bass. <bookmark mark='c'/> The "
                    "variations keep the aria's bass and harmony, not its melody. <bookmark mark='d'/> And at the end the aria "
                    "comes back, note for note: aria da capo. <bookmark mark='e'/> The story that gives the work its name, an "

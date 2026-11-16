@@ -29,14 +29,14 @@ class Order(SoundScene):
         s = load("suite")
         items = [
             (r"sixty-seven Variations, \ 39 minutes in all: \ too long, \ and too uneven, \ for one sitting", WHITE),
-            (rf"an excerpt of each: \ the first {s['excerpt']:g} seconds from its first sound, \ brought to one loudness \ (a rule fixed in advance, \ not chosen by ear)", WHITE),
+            (rf"an excerpt of each: \ the first {s['excerpt']:g} seconds from its first sound, \ normalized by the chosen excerpt-level rule \ (a rule fixed in advance, \ not chosen by ear)", WHITE),
             (r"then an order: \ a suite is heard in sequence, \ and each piece is heard against the one before", WHITE),
             (r"three candidates: \ as they were made; \ each followed by the one that sounds nearest; \ at random", TUNE),
         ]
         rows_scene(self, r"from sixty-seven Variations to a suite", items,
                    "The plan for this part promised a suite. <bookmark mark='b'/> Sixty-seven Variations last about thirty-nine "
                    "minutes, too long and too uneven for one sitting. <bookmark mark='c'/> So the suite takes an excerpt of each: "
-                   "the first eight and a half seconds from its first sound, brought to one loudness. The rule was fixed in "
+                   "the first eight and a half seconds from its first sound, normalized by the chosen excerpt-level rule. The rule was fixed in "
                    "advance, not chosen by ear, so no excerpt was picked for flattering its part. <bookmark mark='d'/> Then it "
                    "needs an order, because a suite is heard in sequence, each piece against the one before. "
                    "<bookmark mark='e'/> Three candidates: the order they were made in; each followed by whichever sounds nearest; "
@@ -91,12 +91,7 @@ class Order(SoundScene):
         head = label(r"the length of the path, \ in standardized units", font_size=24, color=GREY_A).to_edge(UP, buff=0.35)
         pct = 100 * (1 - o["built_below_random"])
         with self.voiceover(
-            "Add up the steps of a path and you have a measure of how far, in sound, a suite travels. <bookmark mark='a'/> "
-            f"Two thousand random orders travel between {say(round(o['random_lo']))} and {say(round(o['random_hi']))} units, "
-            f"ninety-five times in a hundred. <bookmark mark='b'/> The order the Variations were made in travels "
-            f"{say(round(o['built']))}: shorter than {say(pct, 1)} per cent of the random ones. Consecutive parts sound alike "
-            "more often than chance. <bookmark mark='c'/> And a rule that always moves to the nearest excerpt not yet played "
-            f"travels only {say(round(o['nearest']))}."
+            f"Add up the steps of a path and you have a distance in these standardized content features, not a validated perceptual measure. <bookmark mark='a'/> Two thousand random orders travel between {say(round(o['random_lo']))} and {say(round(o['random_hi']))} units, ninety-five times in a hundred. <bookmark mark='b'/> The order the Variations were made in travels {say(round(o['built']))}: shorter than {say(pct, 1)} per cent of the random ones. Consecutive parts are closer under these features than most sampled random permutations. <bookmark mark='c'/> And a rule that always moves to the nearest excerpt not yet played travels only {say(round(o['nearest']))}."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(bars), FadeIn(cap))
             vo.wait_until("b")

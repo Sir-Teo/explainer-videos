@@ -16,12 +16,12 @@ class Frontier(SoundScene):
     def question(self):
         lines = VGroup(
             label(r"Part 1: \ stop a string at two thirds of its length, \ and it sounds a fifth higher", font_size=21, color=WHITE),
-            label(r"the oldest experiment in science is a musical one", font_size=21, color=WHITE),
+            label(r"an ancient experiment linking music and physical measurement is a musical one", font_size=21, color=WHITE),
             label(r"its question, \ 2{,}500 years old: \ why do simple ratios sound good?", font_size=26, color=TUNE),
         ).arrange(DOWN, buff=0.5).move_to(UP * 0.3)
         with self.voiceover(
             "The series began with a question. <bookmark mark='a'/> Stop a string at two thirds of its length and it sounds a "
-            "fifth higher. That is the oldest experiment in science, and it is a musical one. <bookmark mark='b'/> The "
+            "fifth higher. That is an ancient experiment linking music and physical measurement, and it is a musical one. <bookmark mark='b'/> The "
             "question it left is two and a half thousand years old: why do simple ratios sound good? Sixty-seven parts later, "
             "how much of it is answered?"
         ) as vo:
@@ -55,12 +55,12 @@ class Frontier(SoundScene):
         res = VGroup(
             label(rf"the second: \ the open string's third partial and the fifth's second, \ {say(3 * d['f0'])} Hz and "
                   rf"{2 * 1.5 * d['f0'] / 1.01:.0f} Hz, \ beat about {d['beat_hz']:.0f} times a second", font_size=19, color=TUNE),
-            label(r"at 3:2 the two partials coincide, \ and nothing beats", font_size=18, color=GREY_A),
+            label(r"at 3:2 the two partials coincide, \ and those two partials do not beat against each other", font_size=18, color=GREY_A),
         ).arrange(DOWN, buff=0.25).move_to(DOWN * 1.5)
         with self.voiceover(
             "The second. The open string's third partial and the fifth's second partial sit "
             f"{say(round(d['beat_hz']))} hertz apart, and so beat about {say(round(d['beat_hz']))} times a second. At exactly three "
-            "to two those two partials coincide, and nothing beats. That is Helmholtz's answer, and Part 5's."
+            "to two those two partials coincide, and those two partials do not beat against each other. That is Helmholtz's answer, and Part 5's."
         ):
             self.play(boxes[1][0].animate.set_stroke(TUNE, width=4), FadeIn(res))
         self.wait(0.4)
@@ -77,7 +77,7 @@ class Frontier(SoundScene):
         ]
         rows_scene(self, r"how much is answered", items,
                    "How much is answered? <bookmark mark='b'/> The physics: at simple ratios the partials of harmonic tones "
-                   "coincide, so they neither beat nor roughen. That was Helmholtz's answer, and Part 5 measured it. "
+                   "coincide, so those coinciding components do not beat against one another; other partial pairs can still contribute beating or roughness. That was Helmholtz's answer, and Part 5 measured it. "
                    "<bookmark mark='c'/> The ear: such a chord also looks to a pitch model like a single harmonic series, a single "
                    "source. <bookmark mark='d'/> The timbre: bend the partials, as Variation 5 did, and other intervals become "
                    "the smooth ones, so the ratios are good only for the sounds that have harmonic partials. "
@@ -119,5 +119,5 @@ class Frontier(SoundScene):
                    "musical cultures, and to some who know little music at all. <bookmark mark='c'/> Measure what each hears, "
                    "the roughness, the fusion into one sound, the pitch, apart from what each prefers. <bookmark mark='d'/> If "
                    "roughness is heard everywhere and preference varies, the goodness of the ratio is part sound and part "
-                   "learning, and the experiment says how much of each. <bookmark mark='e'/> Every tool it needs is in this "
+                   "learning, and the experiment helps compare perceptual and cultural contributions, without uniquely decomposing their causes. <bookmark mark='e'/> Every tool it needs is in this "
                    "series: stretched partials from Part 5, and listening tests with enough power from Part 67.", marks="bcde")

@@ -117,18 +117,11 @@ class Back(SoundScene):
         rest = {k: r[k]["restrikes_found"] for k in STAGES}
         b1 = stage_bars(moves, 0, 24, width=11.6, height=1.5, fmt=lambda v: f"{v:d}", font_size=14, center=UP * 1.2)
         b2 = stage_bars(rest, 0, 18, width=11.6, height=1.5, fmt=lambda v: f"{v:d}", font_size=14, colors={k: BLUE for k in STAGES}, center=DOWN * 1.75)
-        t1 = label(r"notes that change key: \ found, \ of 24", font_size=17, color=TUNE).next_to(b1, UP, buff=0.15)
-        t2 = label(r"notes that repeat the key before: \ found, \ of 18", font_size=17, color=BLUE).next_to(b2, UP, buff=0.15)
+        t1 = label(r"onsets near pitch changes: \ detected within 80 ms, \ of 24", font_size=17, color=TUNE).next_to(b1, UP, buff=0.15)
+        t2 = label(r"onsets at repeated pitches: \ detected within 80 ms, \ of 18", font_size=17, color=BLUE).next_to(b2, UP, buff=0.15)
         ex = r["codec32"]["extra"], r["codec16"]["extra"]
         with self.voiceover(
-            "Which notes go wrong? Split them in two. <bookmark mark='a'/> The Tune has twenty-four notes that change key: "
-            f"as written all {say(moves['score'])} come back, through the room and the microphone {say(moves['room'])}, and "
-            f"after the master between {say(min(moves[k] for k in STAGES[4:]))} and {say(max(moves[k] for k in STAGES[4:]))}. "
-            "<bookmark mark='b'/> And eighteen that repeat the key before: C, C; G, G. Those are the weak spot at every "
-            f"stage, {say(rest['score'])} found as written and {say(min(rest.values()))} at worst. A re-struck key adds "
-            "little that is new to the spectrum. And the master's limiter, which flattens every attack, costs notes of both "
-            "kinds: most of the loss arrives there, and the coders add little to it. The two lowest rates add something else: {say(ex[0])} and "
-            f"{say(ex[1])} onsets where there was no note, the coder's own."
+            f"Which notes go wrong? Split them in two. <bookmark mark='a'/> The Tune has twenty-four note positions counted as pitch changes, including its opening: as written, onsets are detected near all {say(moves['score'])} positions, through the room and the microphone {say(moves['room'])}, and after the master between {say(min((moves[k] for k in STAGES[4:])))} and {say(max((moves[k] for k in STAGES[4:])))}. <bookmark mark='b'/> And eighteen that repeat the key before: C, C; G, G. Those attacks are the weak spot in this onset-only diagnostic, {say(rest['score'])} found as written and {say(min(rest.values()))} at worst. A re-struck key adds little that is new to the spectrum. And the master's limiter, which reduces peaks and alters many attacks, costs notes of both kinds: most of the loss arrives there, and the coders add little to it. The two lowest rates add something else: {say(ex[0])} and {say(ex[1])} onsets where there was no note, the coder's own."
         ) as vo:
             self.play(FadeIn(VGroup(t1, b1, t2, b2).copy().set_opacity(0.15)))   # a ghost of what is coming
             vo.wait_until("a")
@@ -168,14 +161,7 @@ class Back(SoundScene):
         ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
         head = label(r"the first two phrases, \ written and recovered from the master", font_size=24, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Now the score itself, keys and note values together, for the first two phrases recovered from the master. "
-            "<bookmark mark='a'/> Red marks what differs. <bookmark mark='b'/> Over the whole Tune, "
-            f"{say(tot['master']['score_errors'])} edits turn the recovered score into the written one. The tempo it found is "
-            f"{say(round(tot['master']['bpm']))} beats a minute, for a performance played at a hundred and twenty with rubato. "
-            f"And the key: from the performance on, the key finder names {tot['played']['key']}. Counting the recovered notes "
-            f"alone, without the lengths the quantizer gave them, it names {tot['played']['key_by_count']}. The pitches were "
-            "right; the rhythm misled it. A missed repeat lengthens the note before it, and the lengths it wrote give D "
-            "and G more time than the score does, and C less: the weight of G major."
+            f"Now the score itself, keys and note values together, for the first two phrases recovered from the master. <bookmark mark='a'/> Red marks what differs. <bookmark mark='b'/> Over the whole Tune, {say(tot['master']['score_errors'])} edits turn the recovered score into the written one. The tempo it found is {say(round(tot['master']['bpm']))} beats a minute, for a performance played at a hundred and twenty with rubato. And the key: from the performance on, the key finder names {tot['played']['key']}. Counting the recovered notes alone, without the lengths the quantizer gave them, it names {tot['played']['key_by_count']}. Counting and duration weighting produce different key estimates here; that does not prove every recovered pitch is right. A missed repeat lengthens the note before it, and the lengths it wrote give D and G more time than the score does, and C less: the weight of G major."
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid[0]))
             vo.wait_until("a")

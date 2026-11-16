@@ -20,16 +20,10 @@ class Survive(SoundScene):
         b1 = stage_bars(filled, 0, max(filled.values()) * 1.1, width=11.6, height=1.6, fmt=lambda v: f"{v:.0f}\\%", font_size=14, colors={k: BLUE for k in STAGES}, center=UP * 1.3)
         b2 = stage_bars(moves, 0, 24, width=11.6, height=1.6, fmt=lambda v: f"{v:d}", font_size=14, center=DOWN * 1.75)
         t1 = label(r"the sound: \ how much of its picture is within 40 dB of its loudest", font_size=17, color=BLUE).next_to(b1, UP, buff=0.15)
-        t2 = label(r"the notes: \ notes that change key, \ found, \ of 24", font_size=17, color=TUNE).next_to(b2, UP, buff=0.15)
+        t2 = label(r"onsets near pitch changes: \ detected within 80 ms, \ of 24", font_size=17, color=TUNE).next_to(b2, UP, buff=0.15)
         f = {k: round(filled[k]) for k in STAGES}
         with self.voiceover(
-            "Put the sound and the notes side by side. <bookmark mark='a'/> Above, how much of the sound's picture lies within "
-            f"forty decibels of its loudest: the quiet part. Performed, {say(f['played'])} per cent; the room fills the gaps, "
-            f"{say(f['room'])}; the microphone and the master fill them further, {say(f['master'])}; and the starved coders "
-            f"empty them, {say(f['codec16'])}. The sound is remade at every link. <bookmark mark='b'/> Below, the notes that "
-            f"change key: {say(moves['score'])} of twenty-four as written, {say(moves['mic'])} through the room and the "
-            f"microphone, {say(min(moves[k] for k in STAGES[4:]))} to {say(max(moves[k] for k in STAGES[4:]))} after the "
-            "master. The sound swings from full to empty while the melody's moves hardly change."
+            f"Put the sound and the notes side by side. <bookmark mark='a'/> Above, how much of the sound's picture lies within forty decibels of its loudest: a thresholded spectrogram occupancy, not a direct noise-floor measurement. Performed, {say(f['played'])} per cent; the room fills the gaps, {say(f['room'])}; the microphone and the master fill them further, {say(f['master'])}; and the starved coders empty them, {say(f['codec16'])}. The sound is remade at every link. <bookmark mark='b'/> Below, detected onsets at pitch-changing note positions: {say(moves['score'])} of twenty-four as written, {say(moves['mic'])} through the room and the microphone, {say(min((moves[k] for k in STAGES[4:])))} to {say(max((moves[k] for k in STAGES[4:])))} after the master. This spectral occupancy changes greatly while many onset positions remain detectable."
         ) as vo:
             self.play(FadeIn(VGroup(t1, b1, t2, b2).copy().set_opacity(0.15)))   # a ghost of what is coming
             vo.wait_until("a")
@@ -118,13 +112,7 @@ class Survive(SoundScene):
             (r"what notation leaves out is not unimportant: \ it is what each performance, \ room and listener supplies", TUNE),
         ]
         rows_scene(self, r"why notation kept what it kept", items,
-                   "Why did notation keep what it kept? <bookmark mark='b'/> A score records pitch and time, and leaves out "
-                   "timbre, space and the exact sound, as Part 10 found. <bookmark mark='c'/> The chain changes timbre and space "
-                   "at every link, and pitch and time hardly at all. <bookmark mark='d'/> So a score is a code for what survives "
-                   "transmission, and a very compact one: Part 10 measured the Tune's page at a hundred and sixty-eight bits, and "
-                   "its sound at a hundred and twenty-seven thousand times as many. <bookmark mark='e'/> A copyist, a hall, a "
-                   "codec: each passes the notes on, and each changes the sound. <bookmark mark='f'/> What notation leaves out is "
-                   "not unimportant. It is what each performance, each room and each listener supplies.", marks="bcdef")
+                   "Why did notation keep what it kept? <bookmark mark='b'/> A basic pitch-duration encoding records selected aspects of pitch and time; richer scores also specify dynamics, instruments and articulation, as Part 10 found. <bookmark mark='c'/> The chain changes timbre and space at every link, and pitch and time hardly at all. <bookmark mark='d'/> So a score is a code for what survives transmission, and a very compact one: Part 10 used an illustrative compact Tune encoding of a hundred and sixty-eight bits, relying on shared decoding assumptions; its PCM audio used vastly more bits, without making this a lossless audio-compression comparison. <bookmark mark='e'/> A copyist, a hall, a codec: each passes the notes on, and each changes the sound. <bookmark mark='f'/> What notation leaves out is not unimportant. It is what each performance, each room and each listener supplies.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def coda(self):
@@ -139,4 +127,4 @@ class Survive(SoundScene):
                    "one take. <bookmark mark='c'/> Real chains have more links, and worse ones: phone loudspeakers, noisy rooms, "
                    "streams coded twice over. <bookmark mark='d'/> The transcriber listens for one line; with a chorus or a band "
                    "the notes survive less well, as Parts 61 and 64 found. <bookmark mark='e'/> The finding to keep is relative: "
-                   "notes outlast sound, and a score outlasts both.", marks="bcde")
+                   "in this particular chain, some intended note information remains recoverable despite large timbral changes.", marks="bcde")

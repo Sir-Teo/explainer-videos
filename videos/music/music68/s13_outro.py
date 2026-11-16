@@ -35,20 +35,13 @@ class Outro(SoundScene):
         card = objectives_card([
             r"the chain is the series: \ every link a part built and checked",
             r"down the chain the sound is remade at every link: \ timing, \ space, \ noise, \ peaks, \ bandwidth",
-            rf"back up it, \ the notes that change key come back \ ({r['score']['moves_found']} of 24 as written, \ {min(r[k]['moves_found'] for k in STAGES)} at worst); \ repeated notes are the weak spot",
+            rf"back up it, \ onsets at pitch-changing note positions are detected \ ({r['score']['moves_found']} of 24 as written, \ {min(r[k]['moves_found'] for k in STAGES)} at worst); \ repeated notes are the weak spot",
             r"notation keeps what survives the journey: \ pitch and time",
             rf"the Variations as made sit closer than {100 * (1 - o['built_below_random']):.1f}\% of random orders",
             r"what is still unknown includes Part 1's question",
         ], title=r"What we found", font_size=20).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? The chain is the series: every link a model some part built and checked. <bookmark mark='a'/> "
-            "Down the chain, the sound is remade at every link: its timing, its space, its noise, its peaks, its band. "
-            f"<bookmark mark='b'/> Back up it, the notes that change key come back, {say(r['score']['moves_found'])} of "
-            f"twenty-four as written and {say(min(r[k]['moves_found'] for k in STAGES))} at worst, while repeated notes are "
-            "the weak spot, and most of the loss arrives at the master's limiter, not at the coders. <bookmark mark='c'/> Notation "
-            "keeps what survives the journey, pitch and time. <bookmark mark='d'/> The Variations, in the order they were "
-            "made, sit closer together than almost any random order. <bookmark mark='e'/> And what is still unknown includes "
-            "the question Part 1 began with."
+            f"What did we find? The chain is the series: every link a model some part built and checked. <bookmark mark='a'/> Down the chain, the sound is remade at every link: its timing, its space, its noise, its peaks, its band. <bookmark mark='b'/> Back up it, onsets at pitch-changing note positions are detected, {say(r['score']['moves_found'])} of twenty-four as written and {say(min((r[k]['moves_found'] for k in STAGES)))} at worst, while repeated notes are the weak spot, and most of the loss arrives at the master's limiter, not at the coders. <bookmark mark='c'/> The simplified score encoding tracks intended pitch and duration separately from many timbral changes. <bookmark mark='d'/> The Variations, in the order they were made, sit closer together than almost any random order. <bookmark mark='e'/> And what is still unknown includes the question Part 1 began with."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -119,7 +112,7 @@ class Outro(SoundScene):
         s = string_figure().move_to(DOWN * 0.2)
         with self.voiceover(
             "And so, as the Goldberg does, the aria again. Variation 1, the Tune on one simulated string, the same samples "
-            "as in the first minute of Part 1."
+            "as in the original cached rendering of Variation 1."
         ):
             self.play(FadeIn(head), FadeIn(sub), FadeIn(s))
         with self.listen(c) as snd:

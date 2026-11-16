@@ -27,7 +27,7 @@ class Built(SoundScene):
             f"<bookmark mark='a'/> {say(b['modules'])} modules, <bookmark mark='b'/> about {say(round(b['lines'], -2))} lines "
             f"of code, <bookmark mark='c'/> and {say(b['tests'])} tests that hold it to account. <bookmark mark='d'/> Parts 1 "
             f"to 67 computed {say(b['clips'])} sounds with it, <bookmark mark='e'/> about {say(b['hours'], 1)} hours of them, "
-            f"every one made by the code and none recorded. <bookmark mark='f'/> And there is a lab for every part."
+            f"generated or assembled by the code, including the transparently described transformations of earlier synthetic clips. <bookmark mark='f'/> And there is a lab for every part."
         ) as vo:
             self.play(FadeIn(head), FadeIn(grid.copy().set_opacity(0.15)))   # a ghost of what is coming
             for m, c in zip("abcdef", grid):
@@ -84,7 +84,7 @@ class Built(SoundScene):
             (r"and where there was nothing independent, \ each part says so in its notes", TUNE),
         ]
         rows_scene(self, r"how we know it works", items,
-                   "How do we know it works? Each layer was checked against something that does not share its code. "
+                   "How do we know it works? The project includes independent checks for many layers, alongside internal consistency tests and model-specific assumptions. "
                    "<bookmark mark='b'/> Against closed forms: d'Alembert's solution for the string, Bessel's functions, Sabine's "
                    "formula, the binomial distribution. <bookmark mark='c'/> Against other people's code: SciPy's signal "
                    "processing, and ffmpeg's loudness meter beside the series' own. <bookmark mark='d'/> Against published "

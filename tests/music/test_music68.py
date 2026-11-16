@@ -70,3 +70,11 @@ def test_the_part_keeps_the_series_rules():
     check_scenes_and_clips(compute, SCENES)
     check_windows(compute, SCENES)
     check_ear_thread(compute, SCENES)
+
+
+def test_aria_reuses_original_samples_unmodified():
+    load("hook")
+    original = compute.variation_clip(1)
+    reprise = compute.CLIPS.load("hook.one")
+    assert reprise.sr == original.sr
+    np.testing.assert_array_equal(reprise.y, original.y)
