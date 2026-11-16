@@ -22,7 +22,7 @@ class Triads(SoundScene):
                         below=[rf"{k['thirds'][0]} + {k['thirds'][1]}" for k in kinds], font_size=26).move_to(UP * 0.9)
         note = label(r"semitones in the lower third + the upper third", font_size=22, color=GREY_B).next_to(row, DOWN, buff=0.3)
         with self.voiceover(
-            "A chord is three or more notes sounded together, and the simplest chords are triads: a "
+            "Here we use chord for three or more notes together, though definitions vary. A tertian triad is: a "
             "note, the third above it, and the fifth above it. Every other note of a scale. "
             "<bookmark mark='a'/> There are two sizes of third, so there are four ways to stack two of "
             "them. A major third with a minor third on top: a major triad. <bookmark mark='b'/> Minor "
@@ -54,7 +54,7 @@ class Triads(SoundScene):
             "perfect fifth. Only the order differs. <bookmark mark='a'/> The diminished triad has no "
             "perfect fifth: its outer interval is the tritone. <bookmark mark='b'/> The augmented triad "
             "has none either, and it cuts the octave into three equal parts; so, like the whole-tone "
-            "scale of Part 12, it has no landmark, and no way to tell which of its notes is the bottom."
+            "scale of Part 12, it has no landmark, and no unique root from pitch-class symmetry alone. The actual bass is still audible, and context or spelling can distinguish a root."
         ) as vo:
             self.play(FadeOut(note), FadeIn(facts[0]))
             vo.wait_until("a")
@@ -114,7 +114,7 @@ class Triads(SoundScene):
             "But why thirds? Why not stack seconds, or fourths? Part 12 counted every shape that three "
             f"notes can make on twelve. There are {say(d['count'])}. <bookmark mark='a'/> Now strike out "
             "every shape in which two of the notes are neighbours, a semitone or a whole tone apart, "
-            "because neighbours fall inside one critical band, and grate. <bookmark mark='b'/> Four "
+            "as a mathematical spacing constraint. Critical-band roughness provides a register- and timbre-dependent analogy, not a universal ban on seconds. <bookmark mark='b'/> Four "
             "shapes survive. They are exactly the four triads."
         ) as vo:
             self.play(FadeIn(head), LaggedStart(*[FadeIn(x) for x in clocks], lag_ratio=0.05), run_time=2.5)
@@ -126,10 +126,7 @@ class Triads(SoundScene):
                        label(r"no tritone either: \ major, \ minor and augmented remain.", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.55)
         dim_k = next(k for k in keep if shapes[k]["name"] == "diminished triad")
         with self.voiceover(
-            "So a stack of thirds is not a convention. It is what is left when you ask for three notes, "
-            "no two of them adjacent. <bookmark mark='a'/> Ask for no tritone either, and three remain: "
-            "major, minor and augmented. And of those, only two contain a perfect fifth. The whole of "
-            "common harmony rests on the two shapes that pass every test."
+            "So this spacing rule selects the familiar tertian shapes. The rule itself is a choice; many musical traditions and styles also use seconds and fourths. <bookmark mark='a'/> Ask for no tritone either, and three remain: major, minor and augmented. And of those, only two contain a perfect fifth. Major and minor are central in common-practice harmony, but this census is not a proof that other chord types are inferior."
         ) as vo:
             self.play(FadeIn(moral[0]))
             vo.wait_until("a")

@@ -37,12 +37,7 @@ class Hook(SoundScene):
         kb.clear()
         claim = VGroup(label(r"1722, \ Jean-Philippe Rameau:", font_size=28, color=GREY_A), label(r"these are one chord, \ with one root: \ C", font_size=38, color=TUNE)).arrange(DOWN, buff=0.2).move_to(DOWN * 0.6)
         with self.voiceover(
-            "In 1722 a French organist, Jean-Philippe Rameau, made a claim that sounds too simple to be a "
-            "discovery. <bookmark mark='a'/> Those are not three chords. They are one chord, with one "
-            "root, C, standing three ways. Most musicians before him had treated them as three separate "
-            "things, each with rules of its own. Rameau's claim turned a thicket of rules into a small "
-            "vocabulary, and it is the reason a guitarist today can read the single letter C on a page "
-            "and know what to play."
+            "In 1722 a French organist, Jean-Philippe Rameau, made a claim that sounds too simple to be a discovery. <bookmark mark='a'/> Those are not three chords. They are one chord, with one root, C, standing three ways. Earlier figured-bass practice distinguished their intervals above the bass; theorists including Lippius had already recognized inversional relationships. Rameau's claim turned a thicket of rules into a small vocabulary, and it helped shape the root-based vocabulary used in modern chord symbols."
         ) as vo:
             self.play(FadeOut(kb))
             vo.wait_until("a")
@@ -100,14 +95,7 @@ class Hook(SoundScene):
             r"four ways to write a chord; \ Euler's map of all of them",
         ], title=r"Part 13: \ Intervals and Chords", font_size=26).move_to(DOWN * 0.5)
         with self.voiceover(
-            "Part 12 chose the notes. This part sounds them together. <bookmark mark='a'/> We start with "
-            "two notes, and learn to name any interval exactly. <bookmark mark='b'/> Then three: the "
-            "triads, and the reason chords are built in thirds. <bookmark mark='c'/> Then Rameau's "
-            "claim, and the question underneath it: why should a chord have a root at all? "
-            "<bookmark mark='d'/> Four notes give us seventh chords, and the one interval that makes "
-            "harmony move. <bookmark mark='e'/> Then voicing: the same chord can be clear or muddy, and "
-            "we will compute which. <bookmark mark='f'/> And last, four ways to write a chord down, and "
-            "a map, drawn by Euler, on which every chord has its neighbours."
+            "Part 12 chose the notes. This part sounds them together. <bookmark mark='a'/> We start with two notes, and learn to name any interval exactly. <bookmark mark='b'/> Then three: the triads, and one explanation for the familiar tertian chord vocabulary. <bookmark mark='c'/> Then Rameau's claim, and the question underneath it: why should a chord have a root at all? <bookmark mark='d'/> Four notes give us seventh chords, and a characteristic interval in common-practice dominant harmony. <bookmark mark='e'/> Then voicing: the same chord can be clear or muddy, and we will compute which. <bookmark mark='f'/> And last, four ways to write a chord down, and a map, drawn by Euler, on which every chord has its neighbours."
         ) as vo:
             self.play(FadeIn(idea))
             self.play(FadeIn(card.head))

@@ -26,7 +26,7 @@ class Sevenths(SoundScene):
             row.above[k].set_color(KIND_COLOR[x["kind"]]).scale(1.25)
         with self.voiceover(
             "Add one more third on top of a triad and you have a seventh chord, named for the interval "
-            "between its outside notes. There are five that every musician knows. <bookmark mark='a'/> A "
+            "between its outside notes. Here are five common seventh-chord types; this is not an exhaustive list. <bookmark mark='a'/> A "
             "major triad with a major seventh. <bookmark mark='b'/> A major triad with a minor seventh: "
             "the dominant seventh. <bookmark mark='c'/> A minor triad with a minor seventh. "
             "<bookmark mark='d'/> A diminished triad with a minor seventh: half-diminished. "
@@ -62,15 +62,9 @@ class Sevenths(SoundScene):
             row.notes[k].ink.set_color(KIND_COLOR[x["kind"]])
             row.above[k].set_color(KIND_COLOR[x["kind"]])
         tri = VGroup(label(r"B and F: \ the scale's one tritone", font_size=30, color=EAR),
-                     label(r"G$^7$: \ the only major triad that carries it, \ as its third and its seventh", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.8)
+                     label(r"G$^7$: \ major triad plus F; \ as its third and its seventh", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Build sevenths on the degrees of the major scale, and four kinds appear. Major sevenths on "
-            "one and four. Minor sevenths on two, three and six. A half-diminished seventh on seven. "
-            "<bookmark mark='a'/> And one chord that occurs once only: the dominant seventh, on the "
-            "fifth degree. <bookmark mark='b'/> It is a major triad with the scale's one tritone inside "
-            "it: B, its third, and F, its seventh. Part 12 found that a major scale has exactly one "
-            "tritone, and that this is what tells you which key you are in. Here it is, packed into a "
-            "single chord. Hear a dominant seventh and you know where home is, before you have heard home."
+            "Build sevenths on the degrees of the major scale, and four kinds appear. Major sevenths on one and four. Minor sevenths on two, three and six. A half-diminished seventh on seven. <bookmark mark='a'/> And one chord that occurs once only: the dominant seventh, on the fifth degree. <bookmark mark='b'/> It is a major triad with the scale's one tritone inside it: B, its third, and F, its seventh. The major pitch collection has one tritone pair. That pair alone does not identify the tonic, since relative modes share it. Here it is, packed into a single chord. In common-practice context, a dominant seventh often suggests a tonic a fifth below; blues, secondary dominants and other contexts can use it differently."
         ) as vo:
             self.play(FadeIn(row), run_time=1.5)
             vo.wait_until("a")
@@ -102,7 +96,7 @@ class Sevenths(SoundScene):
         cap = VGroup(label(r"tension and release: \ two voices, \ a semitone each, \ in opposite directions", font_size=28, color=TUNE)).to_edge(DOWN, buff=0.9)
         with self.voiceover(
             "Tension, and release, from two voices each moving one semitone, in opposite directions. "
-            "Nearly every piece of tonal music you know ends with that motion. The five chord has a "
+            "This is a common cadential motion in Western tonal music, with many exceptions. The five chord has a "
             "leading note and, with its seventh, a note that wants to fall; the one chord is where "
             "they both land."
         ):
@@ -133,7 +127,7 @@ class Sevenths(SoundScene):
             "fifth, sixth and seventh harmonics of one fundamental. <bookmark mark='a'/> That seventh "
             f"harmonic is {say(1000 - d['cents']['harmonic'])} cents flatter than the piano's minor "
             "seventh, and with it the four notes fuse almost into one sound. Barbershop quartets tune "
-            "the chord that way, and no keyboard can play it. Rameau's sounding body, one step further "
+            "the chord that way, and an ordinary fixed twelve-tone equal-tempered keyboard cannot reproduce those exact ratios without retuning or pitch control. Rameau's sounding body, one step further "
             "up the series."
         ) as vo:
             self.play(FadeIn(ans[0]), FadeIn(ans[1]))
@@ -168,13 +162,9 @@ class Sevenths(SoundScene):
                 tags[j].set_color(TUNE)
             pulse(snd, tags, d["times"][-1] + 0.4, c.duration, buff=0.15)
         scale = VGroup(*[label(x, font_size=40, color=TUNE) for x in "CDEFGAB"]).arrange(RIGHT, buff=0.4).move_to(RIGHT * 3.3 + UP * 0.6)
-        cap = VGroup(label(r"a thirteenth chord is the whole scale,", font_size=28, color=WHITE), label(r"every other note at a time", font_size=28, color=WHITE)).arrange(DOWN, buff=0.12).next_to(scale, DOWN, buff=0.4)
+        cap = VGroup(label(r"this full diatonic stack uses the scale,", font_size=28, color=WHITE), label(r"every other note at a time", font_size=28, color=WHITE)).arrange(DOWN, buff=0.12).next_to(scale, DOWN, buff=0.4)
         with self.voiceover(
-            "Seven notes; and the next third would be the root again. Look at what they are. "
-            "<bookmark mark='a'/> C, E, G, B, D, F, A. A thirteenth chord is the whole scale, taken "
-            "every other note. So a chord and a scale are not two different things. They are the same "
-            "seven notes, stacked or spread, and jazz harmony lives on that fact: to a jazz player, a "
-            "chord symbol is also the name of a scale to improvise on."
+            "Seven notes; and the next third would be the root again. Look at what they are. <bookmark mark='a'/> C, E, G, B, D, F, A. A thirteenth chord is the whole scale, taken every other note. This full diatonic stack shares the scale's pitch classes. Actual thirteenth voicings often omit notes or alter extensions, and a chord symbol can support several context-dependent scale choices."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x) for x in scale], lag_ratio=0.2), FadeIn(cap), run_time=2.5)

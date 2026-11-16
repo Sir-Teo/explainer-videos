@@ -26,15 +26,10 @@ class Roots(SoundScene):
         ticks = rows.rows[0].ticks
         nums = VGroup(*[label(str(h + 1), font_size=24, color=GREY_B).next_to(ticks[h], UP, buff=0.12) for h in range(8)])
         nm = VGroup(*[label(t, font_size=30, color=MAJOR_C).next_to(ticks[h], DOWN, buff=0.2) for h, t in ((3, "C"), (4, "E"), (5, "G"))])
-        low = label(r"131 Hz: \ not played", font_size=24, color=EAR).next_to(ticks[0], DOWN, buff=0.2)
-        head = label(r"a major triad is harmonics 4, \ 5 and 6 of a note two octaves below its root", font_size=28, color=GREY_A).to_edge(UP, buff=0.6)
+        low = label(r"131 Hz: \ absent in first chord", font_size=24, color=EAR).next_to(ticks[0], DOWN, buff=0.2)
+        head = label(r"a pure major triad: harmonics 4, \ 5 and 6 of a note two octaves below its root", font_size=28, color=GREY_A).to_edge(UP, buff=0.6)
         with self.voiceover(
-            "Rameau wanted a physical reason for the root, and after reading about Sauveur's harmonics "
-            "he found one. A single low C already contains, as its fourth, fifth and sixth harmonics, a "
-            "C, an E and a G. <bookmark mark='a'/> So a major triad is a slice of one harmonic series; "
-            "and Part 4 showed what the ear does with a slice of a harmonic series. It supplies the "
-            "missing fundamental. <bookmark mark='b'/> Here are three pure tones, at four, five and six "
-            "times 131 hertz. Then a tone at 131 hertz itself. Then all of them together."
+            "Rameau wanted a physical reason for the root, and after reading about Sauveur's harmonics he found one. A single low C already contains, as its fourth, fifth and sixth harmonics, a C, an E and a G. <bookmark mark='a'/> So a major triad is a slice of one harmonic series; and Part 4 showed what the ear does with a slice of a harmonic series. It can support a missing-fundamental percept; that percept and a chord's harmonic root are related but distinct concepts. <bookmark mark='b'/> Here are three pure tones, at four, five and six times 131 hertz. Then a tone at 131 hertz itself. Then all of them together."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows), FadeIn(nums))
             vo.wait_until("a")
@@ -52,7 +47,7 @@ class Roots(SoundScene):
             pulse(snd, low, ev["low"], ev["both"] - 0.3, buff=0.1)
         cap = label(r"Rameau: \ \textit{le corps sonore}, \ the sounding body", font_size=30, color=TUNE).to_edge(DOWN, buff=0.7)
         with self.voiceover(
-            "The low C fits under the chord as if it had been there all along. In a sense it had. Rameau "
+            "The low C fits this harmonic pattern, although its fundamental frequency was absent from the first synthesized signal. Rameau "
             "called this the sounding body: the major triad is the resonance of its own root, and the "
             "root is the note of which the others are harmonics."
         ):
@@ -86,11 +81,7 @@ class Roots(SoundScene):
             vo.wait_until("b")
             self.play(FadeIn(major), FadeIn(mh))
         with self.voiceover(
-            "For the minor triad, C, E flat, G, the root is still C, with fifteen votes. "
-            "<bookmark mark='a'/> But E flat is close behind, with thirteen: the G above it is its major "
-            "third, and votes for it. The minor triad has a root, a slightly less certain one. That is "
-            "the asymmetry we saw in Zarlino's numbers, and it may be part of why minor sounds less "
-            "settled than major."
+            "For the minor triad, C, E flat, G, the root is still C, with fifteen votes. <bookmark mark='a'/> But E flat is close behind, with thirteen: the G above it is its major third, and votes for it. The minor triad has a root, a slightly less certain one. That is the asymmetry we saw in Zarlino's numbers, and it is a prediction of this model, not a universal measure of minor's stability."
         ) as vo:
             self.play(FadeIn(minor), FadeIn(nh))
             vo.wait_until("a")
@@ -115,7 +106,7 @@ class Roots(SoundScene):
         with self.voiceover(
             "It cannot decide. B, D and F tie, with ten votes each. <bookmark mark='a'/> And so does G: "
             "a note that is not in the chord at all. Play it, and you may hear why. Add a G underneath, "
-            "and nothing sounds added. Then let it go where it wants."
+            "and the added G can clarify a dominant-seventh interpretation. Then let it go where it wants."
         ) as vo:
             self.play(FadeOut(card), FadeIn(bars))
             vo.wait_until("a")
@@ -126,9 +117,9 @@ class Roots(SoundScene):
             window(snd, r"B, D, F; \ with a G below; \ and on", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
             light_chords(snd, kb, [[59, 62, 65], [43, 59, 62, 65], [48, 60, 64]], d["dim_times"], end=c.duration, colors=[DIM_C, GOLD, MAJOR_C])
         kb.clear()
-        cap = label(r"the diminished triad: \ a seventh chord with its root left out", font_size=28, color=TUNE).next_to(kb, DOWN, buff=0.3)
+        cap = label(r"one tonal interpretation: \ a dominant seventh with its root omitted", font_size=28, color=TUNE).next_to(kb, DOWN, buff=0.3)
         with self.voiceover(
-            "The chord turned out to be the top of a seventh chord on G all along. That is why many "
+            "In this tonal context, B, D and F can function as the upper notes of G seven. That is why many "
             "theorists, Rameau among them, treat the diminished triad as a dominant seventh with its "
             "root left out: a chord whose root is somewhere else."
         ):
@@ -190,12 +181,7 @@ class Roots(SoundScene):
                             label(r["kind"], font_size=26, color=col).next_to(bar, DOWN, buff=0.18), label(heard, font_size=22, color=GREY_A).next_to(bar, DOWN, buff=0.62)))
         head = label(r"Part 4's ear model, \ given each triad as sound: \ how strongly it hears one pitch", font_size=28, color=GREY_A).to_edge(UP, buff=0.55)
         with self.voiceover(
-            "Parncutt's model works on note names. Part 4's ear model works on sound, and it agrees. "
-            "<bookmark mark='a'/> Give it a major triad on middle C, and the strongest pitch it finds is "
-            "the C two octaves below. <bookmark mark='b'/> Give it the minor triad, and it finds a C one "
-            "octave below, a little more weakly. <bookmark mark='c'/> For the diminished and augmented "
-            "triads it finds nothing convincing. So a root is not a convention of notation. It is the "
-            "single pitch that your hearing assigns to a chord as a whole, when it can."
+            "Parncutt's model works on note names. Part 4's ear model works on sound, and it agrees. <bookmark mark='a'/> Give it a major triad on middle C, and the strongest pitch it finds is the C two octaves below. <bookmark mark='b'/> Give it the minor triad, and it finds a C one octave below, a little more weakly. <bookmark mark='c'/> For the diminished and augmented triads it finds nothing convincing. These models suggest acoustic contributions to root perception. A chord's theoretical root also depends on spelling, bass, learned style and context; it is not always a single perceived low pitch."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

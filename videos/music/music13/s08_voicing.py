@@ -70,17 +70,10 @@ class Voicing(SoundScene):
             bar = Rectangle(width=1.0, height=unit * w, stroke_width=0, fill_color=TUNE if w >= 1 else EAR, fill_opacity=0.9).move_to([x, base_y + unit * w / 2, 0])
             g.add(VGroup(bar, label(f"{w:.2f}", font_size=26, color=WHITE).next_to(bar, UP, buff=0.12), label(nm, font_size=28, color=GREY_A).move_to([x, base_y - 0.35, 0])))
         one = DashedLine([-5.6, base_y + unit, 0], [5.6, base_y + unit, 0], color=WHITE, stroke_width=2)
-        onel = label(r"one critical band", font_size=24, color=WHITE).next_to(one, UP, buff=0.08).align_to(one, RIGHT)
-        head = label(r"how wide a major third is, \ in critical bands of the ear", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
+        onel = label(r"one estimated ERB", font_size=24, color=WHITE).next_to(one, UP, buff=0.08).align_to(one, RIGHT)
+        head = label(r"major-third width / midpoint ERB \\ (approximate auditory-filter bandwidth)", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "Part 4 explains it. The ear sorts sound into critical bands, and two tones that fall inside "
-            "one band interfere: that is roughness. But a critical band is not a fixed musical interval. "
-            "High up, it is narrower than a minor third. Low down, it is wider than a fifth. "
-            "<bookmark mark='a'/> So measure our major third in critical bands. On the C above middle "
-            f"C it spans {say(bands[0], 1)} bands: the two notes are heard apart. On middle C, a little "
-            f"over one. <bookmark mark='b'/> An octave below that, {say(bands[2], 1)}: now they share a "
-            f"band. And at the bottom, {say(bands[4], 1)} of a band. The two fundamentals grind against "
-            "each other, and all their harmonics with them."
+            f"Part 4 explains it. The ear sorts sound into critical bands, and nearby partials can cause beating and roughness through overlapping auditory filters. This varies gradually with spacing, rather than switching at one band boundary. But a critical band is not a fixed musical interval. High up, it is narrower than a minor third. Low down, it is wider than a fifth. <bookmark mark='a'/> So measure our major third in critical bands. On the C above middle C it spans {say(bands[0], 1)} bands: the two notes are heard apart. On middle C, a little over one. <bookmark mark='b'/> An octave below that, {say(bands[2], 1)}: now they share a band. And at the bottom, {say(bands[4], 1)} of a band. The two fundamentals grind against each other, while some partial pairs add further interaction."
         ) as vo:
             self.play(FadeIn(head), Create(one), FadeIn(onel))
             vo.wait_until("a")
@@ -118,13 +111,7 @@ class Voicing(SoundScene):
             vo.wait_until("a")
             self.play(LaggedStart(*[Create(curves[k]) for k in ("12", "7", "4", "3")], lag_ratio=0.4), FadeIn(legend), run_time=5.0)
         with self.voiceover(
-            "Draw a line at the roughness of a major third on the C below middle C, which is about "
-            "where arrangers stop writing thirds. <bookmark mark='a'/> To stay under that line, a minor "
-            f"third must be no lower than {d['limit_names']['3'][0]}; a fifth can go down to F sharp, "
-            "half an octave lower; and an octave lower still. <bookmark mark='b'/> Arrangers keep tables "
-            "like this, called low-interval limits. Theirs differ by a few notes from book to book, and "
-            "with the instrument: soft strings forgive more than loud brass. The shape is always this "
-            "one. Thirds live in the middle of the keyboard; the bass belongs to octaves and fifths."
+            f"Draw a line at the roughness of a major third on the C below middle C, which is about where arrangers stop writing thirds. <bookmark mark='a'/> To stay under that line, a minor third must be no lower than {d['limit_names']['3'][0]}; a fifth can go down to F sharp, half an octave lower; and an octave lower still. <bookmark mark='b'/> Arrangers keep tables like this, called low-interval limits. Theirs differ by a few notes from book to book, and with the instrument: soft strings forgive more than loud brass. This trend depends on spectrum, register and level. Thirds live in the middle of the keyboard; the bass belongs to octaves and fifths."
         ) as vo:
             self.play(Create(ref))
             vo.wait_until("a")
@@ -143,17 +130,11 @@ class Voicing(SoundScene):
         cards = VGroup(
             VGroup(label(r"the roughest", font_size=28, color=EAR), label(rf"{d['worst_roughness']:.1f}", font_size=30, color=WHITE)).arrange(DOWN, buff=0.12),
             VGroup(label(r"the smoothest", font_size=28, color=TUNE), label(rf"{d['best_roughness']:.1f}", font_size=30, color=WHITE)).arrange(DOWN, buff=0.12),
-            VGroup(label(r"harmonics 1 to 6 of the low C", font_size=28, color=BLUE), label(r"octave, \ fifth, \ fourth, \ third, \ third", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12),
+            VGroup(label(r"ET approximation to harmonics 1--6", font_size=28, color=BLUE), label(r"octave, \ fifth, \ fourth, \ third, \ third", font_size=24, color=GREY_A)).arrange(DOWN, buff=0.12),
         ).arrange(RIGHT, buff=1.0).next_to(kb, DOWN, buff=0.55)
         head = label(rf"C major in four voices over a low C: \ {d['count']} ways", font_size=30, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The lesson for chords: wide at the bottom, close at the top. Monochord listed every way to "
-            f"voice a C major triad in four parts above a low C. There are {say(d['count'])}. "
-            "<bookmark mark='a'/> Ranked by roughness, the worst has all four notes crowded into the "
-            "bottom octave. <bookmark mark='b'/> The best has a bare twelfth at the bottom and the third "
-            "at the very top. <bookmark mark='c'/> And look at the harmonic series of the low C itself: "
-            "an octave, then a fifth, a fourth, a third, each interval smaller than the one below. The "
-            "best spacing imitates the way a single note is already built. Listen to all three."
+            f"The lesson for chords: wide at the bottom, close at the top. Monochord listed the four-part C major voicings admitted by its range and spacing constraints above a low C. There are {say(d['count'])}. <bookmark mark='a'/> Ranked by roughness, the worst has all four notes crowded into the bottom octave. <bookmark mark='b'/> The best has a bare twelfth at the bottom and the third at the very top. <bookmark mark='c'/> And look at the harmonic series of the low C itself: an octave, then a fifth, a fourth, a third, each interval smaller than the one below. The best spacing imitates the way a single note is already built. Listen to all three."
         ) as vo:
             self.play(FadeIn(head), FadeIn(kb))
             vo.wait_until("a")

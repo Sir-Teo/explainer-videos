@@ -54,7 +54,7 @@ class ScaleChords(SoundScene):
             "diminished. One, two, three, four, five, six, seven. <bookmark mark='b'/> The numerals are "
             "worth learning because they do not depend on the key. In C major, five is a G chord. In E "
             "flat major, five is B flat. In A major it is E. The letter changes; the job the chord does "
-            "in the key is the same, and it is the job that you hear."
+            "in the key is the same, though its actual function also depends on context and style."
         ) as vo:
             vo.wait_until("a")
             self.play(LaggedStart(*[FadeIn(x) for x in row.below], lag_ratio=0.25), run_time=3.5)
@@ -72,10 +72,7 @@ class ScaleChords(SoundScene):
         cap = label(r"I, \ IV and V between them hold every note of the scale", font_size=28, color=GREY_A)
         g = VGroup(cover, cap).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "Three of the seven matter most. One, four and five are the three major triads, "
-            "<bookmark mark='a'/> and between them they contain every note of the scale. C, E, G; F, A, "
-            "C; G, B, D. So any melody in a major key can be accompanied with just these three chords, "
-            "and a great many songs are. Here they are in order: one, four, five, and one again."
+            "Three of the seven matter most. One, four and five are the three major triads, <bookmark mark='a'/> and between them they contain every note of the scale. C, E, G; F, A, C; G, B, D. This supplies a simple harmonization vocabulary for many diatonic melodies. Covering every scale note does not guarantee that every melody or harmonic context is well served by only these chords. Here they are in order: one, four, five, and one again."
         ) as vo:
             self.play(*[row.notes[k].animate.set_opacity(0.25) for k in (1, 2, 5, 6)], *[row.above[k].animate.set_opacity(0.25) for k in (1, 2, 5, 6)],
                       *[row.below[k].animate.set_opacity(0.25) for k in (1, 2, 5, 6)])

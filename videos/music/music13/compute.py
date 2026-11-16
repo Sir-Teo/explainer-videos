@@ -337,7 +337,7 @@ def compute_voicing() -> dict:
             "best_roughness": CH.spacing_roughness(best), "worst_roughness": CH.spacing_roughness(worst), "series": series, "series_roughness": CH.spacing_roughness(series),
             "ranked": [CH.spacing_roughness(v) for v in ranked], "bw_times": times(bw, "", 3),
             "clips": {"thirds": save("voicing.thirds", thirds, detail="one major third, on five different Cs, from high to low"),
-                      "spread": save("voicing.spread", bw, detail="one chord, four voices over a low C: the roughest spacing, the smoothest, and the first six harmonics")}}
+                      "spread": save("voicing.spread", bw, detail="one chord, four voices over a low C: the roughest spacing, the smoothest, and an equal-tempered approximation to the first six harmonics")}}
 
 
 def spectrum_roughness(y, sr: int = SR, peaks: int = 50) -> float:
@@ -388,7 +388,7 @@ def compute_doubling() -> dict:
             "partials_db": lev, "shells": shells, "shell_names": ["C7, every note", "C7: root, third, seventh", "Cmaj7: root, third, seventh", "Cm7: root, third, seventh"],
             "shell_times": times(shell, "", 4), "power": power,
             "clips": {"shell": save("doubling.shell", shell, detail="a seventh chord whole; then three seventh chords with only root, third and seventh"),
-                      "power": save("doubling.power", pw, level=None, kind="physical model", detail="Part 1's plucked strings through a hard clipper: a fifth, a major third, a triad")}}
+                      "power": save("doubling.power", pw, level=None, kind="physical model", detail="Part 1's plucked strings through a smooth tanh saturator: a fifth, a major third, a triad")}}
 
 
 def compute_symbols() -> dict:

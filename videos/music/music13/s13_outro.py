@@ -86,22 +86,13 @@ class Outro(SoundScene):
         card = objectives_card([
             r"an interval is a number and a quality; \ the quality is a direction on the line of fifths",
             r"three notes with no two adjacent: \ exactly the four triads; \ a scale holds 3 major, \ 3 minor, \ 1 diminished",
-            r"Rameau: \ a chord has a root, \ in any inversion; \ the ear finds it as a missing fundamental",
+            r"tertian roots often survive inversion; \ acoustics, style and context contribute; \  \ root and missing-fundamental pitch are distinct",
             r"the dominant seventh carries the scale's one tritone, \ and the tritone resolves",
-            r"voicing: \ thirds turn to mud in the bass; \ double the root; \ the fifth can go, \ the third cannot",
+            r"voicing: \ thirds turn to mud in the bass; \ double the root; \ fifths are often omitted; \ thirds help specify quality",
             r"four notations; \ and Euler's map, \ where neighbours share two notes",
         ], title=r"What we found", font_size=26).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? An interval has a number and a quality, and the quality is a direction "
-            "on the line of fifths. <bookmark mark='a'/> Ask for three notes with no two of them "
-            "adjacent, and you get exactly the four triads; a major scale holds three major, three "
-            "minor and one diminished. <bookmark mark='b'/> Rameau was right that a chord has a root "
-            "whichever way up it stands, and the ear finds that root the way it finds a missing "
-            "fundamental. <bookmark mark='c'/> The dominant seventh carries the scale's one tritone, "
-            "and the tritone resolves. <bookmark mark='d'/> A chord's voicing can matter more than its "
-            "name: thirds turn to mud in the bass, the root is the note to double, the fifth can be "
-            "left out and the third cannot. <bookmark mark='e'/> And chords can be written four ways, "
-            "and laid out on a map where neighbours share two notes."
+            "What did we find? An interval has a number and a quality, and the quality is a direction on the line of fifths. <bookmark mark='a'/> Ask for three notes with no two of them adjacent, and you get exactly the four triads; a major scale holds three major, three minor and one diminished. <bookmark mark='b'/> Tertian chord labels often retain a root under inversion. Acoustic models contribute to root perception, alongside context and learned conventions. <bookmark mark='c'/> The dominant seventh carries the scale's one tritone, and the tritone resolves. <bookmark mark='d'/> A chord's voicing can matter more than its name: thirds turn to mud in the bass, doubling and omissions depend on style: roots are commonly doubled, fifths often omitted, and thirds help identify major or minor. <bookmark mark='e'/> And chords can be written four ways, and laid out on a map where neighbours share two notes."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -155,14 +146,10 @@ class Outro(SoundScene):
             (r"pianists and guitarists", r"learn every chord in every inversion, \ and choose the one nearest the last"),
             (r"arrangers", r"keep thirds out of the bass, \ and space a chord as the harmonic series is spaced"),
             (r"session players", r"read charts in numbers, \ and play them in whatever key the singer needs"),
-            (r"producers", r"thin a chord before distorting it: \ root and fifth survive, \ thirds do not"),
+            (r"producers", r"thin a chord before distorting it: \ sparse voicings may help; \ thirds remain an expressive option"),
         ], font_size=26)
         with self.voiceover(
-            "And in practice. A pianist or a guitarist learns every chord in every inversion, and then "
-            "chooses whichever lies nearest the last. An arranger keeps thirds out of the bass. A "
-            "session player reads a chart in numbers, and plays it in whatever key the singer needs. "
-            "And a producer thins a chord before distorting it, because roots and fifths survive and "
-            "thirds do not."
+            'And in practice. A pianist or a guitarist learns every chord in every inversion, and then chooses whichever lies nearest the last. An arranger keeps thirds out of the bass. A session player reads a chart in numbers, and plays it in whatever key the singer needs. And a producer thins a chord before distorting it, because sparse voicings can reduce roughness; distorted thirds are also used deliberately.'
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(0.4)

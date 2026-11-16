@@ -81,13 +81,13 @@ class Intervals(SoundScene):
         kb.clear()
         self.remove(*shown)
         groups = VGroup(
-            VGroup(label(r"seconds, \ thirds, \ sixths, \ sevenths", font_size=30, color=WHITE), label(r"two sizes: \ major and minor", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.15),
-            VGroup(label(r"unisons, \ fourths, \ fifths, \ octaves", font_size=30, color=WHITE), label(r"one size: \ perfect; \ $+1$ augmented, \ $-1$ diminished", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.15),
+            VGroup(label(r"seconds, \ thirds, \ sixths, \ sevenths", font_size=30, color=WHITE), label(r"basic forms: \ major and minor", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.15),
+            VGroup(label(r"unisons, \ fourths, \ fifths, \ octaves", font_size=30, color=WHITE), label(r"basic form: \ perfect; \ $+1$ augmented, \ $-1$ diminished", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.15),
             VGroup(label(r"six semitones", font_size=30, color=EAR), label(r"C to F$\sharp$: \ augmented fourth \quad C to G$\flat$: \ diminished fifth", font_size=28, color=GREY_A)).arrange(DOWN, buff=0.15),
         ).arrange(DOWN, buff=0.45).move_to(DOWN * 0.4)
         with self.voiceover(
-            "Seconds, thirds, sixths and sevenths come in two sizes, major and minor. <bookmark mark='a'/> "
-            "Unisons, fourths, fifths and octaves come in one, called perfect. Make a perfect interval a "
+            "The ordinary diatonic forms of seconds, thirds, sixths and sevenths are major and minor; augmented and diminished spellings also occur. <bookmark mark='a'/> "
+            "Unisons, fourths, fifths and octaves have a basic form called perfect. Make a perfect interval a "
             "semitone larger and it is augmented; a semitone smaller, diminished. <bookmark mark='b'/> And "
             "in the middle sits one distance with two names. Six semitones is an augmented fourth if you "
             "write it C to F sharp, and a diminished fifth if you write it C to G flat."
@@ -125,12 +125,7 @@ class Intervals(SoundScene):
         perfect, major, minor = span(-1, 1, r"perfect", WHITE, y), span(2, 5, r"major", MAJOR_C, y), span(-5, -2, r"minor", MINOR_C, y)
         aug, dim = span(6, 6, r"augmented", RED, y), span(-6, -6, r"diminished", RED, y)
         with self.voiceover(
-            "Why these names? One picture explains all of them at once. Lay the notes out in fifths: "
-            "the chain from Part 12, with C in the middle. Under each note is its interval above C. "
-            "<bookmark mark='a'/> Now the quality of an interval is simply how far apart its two notes "
-            "are on this line. One step: perfect. <bookmark mark='b'/> Two to five steps to the right: "
-            "major. <bookmark mark='c'/> Two to five steps to the left: minor. <bookmark mark='d'/> Six "
-            "or more: augmented on the right, diminished on the left."
+            "Why these names? One picture explains all of them at once. Lay the notes out in fifths: the chain from Part 12, with C in the middle. Under each note is its interval above C. <bookmark mark='a'/> Now the quality of an interval is simply how far apart its two notes are on this line. One step: perfect. <bookmark mark='b'/> Two to five steps to the right: major. <bookmark mark='c'/> Two to five steps to the left: minor. <bookmark mark='d'/> At the six-step endpoints shown here: augmented on the right, diminished on the left. Further spellings need attention to the letter interval; beyond twelve fifths, double alterations appear."
         ) as vo:
             self.play(FadeIn(head), FadeIn(links), LaggedStart(*[FadeIn(x) for x in cells], lag_ratio=0.06), run_time=2.5)
             vo.wait_until("a")
@@ -162,7 +157,7 @@ class Intervals(SoundScene):
                       label(r"perfect stays perfect", font_size=28, color=WHITE)).arrange(RIGHT, buff=0.7).next_to(sums, DOWN, buff=0.4)
         names = [r"semitone", r"tone", r"minor third", r"major third", r"fourth", r"tritone"]
         classes = VGroup(*[VGroup(label(str(k + 1), font_size=30, color=TUNE), label(nm, font_size=20, color=GREY_A)).arrange(DOWN, buff=0.12) for k, nm in enumerate(names)]).arrange(RIGHT, buff=0.55)
-        chead = label(r"six interval classes", font_size=26, color=GREY_A)
+        chead = label(r"six nonzero interval classes", font_size=26, color=GREY_A)
         cls = VGroup(chead, classes).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.45)
         with self.voiceover(
             "Turn an interval upside down, by lifting its lower note an octave, and you have its "
@@ -178,9 +173,7 @@ class Intervals(SoundScene):
             vo.wait_until("b")
             self.play(FadeIn(sums), FadeIn(rule))
         with self.voiceover(
-            "And if you do not care which way up an interval is, only six kinds are left: the interval "
-            "classes. Semitone, tone, minor third, major third, fourth, tritone. The interval vector of "
-            "Part 12 counted exactly these six, and they are the six ways two notes can sound together."
+            'And if you do not care which way up an interval is, six nonzero pitch-class distances remain in twelve-tone equal temperament; unison and octave equivalence form class zero. Semitone, tone, minor third, major third, fourth, tritone. The interval vector of Part 12 counted exactly these six, and they are six nonzero distances modulo inversion and octave, not six complete perceptual sounds.'
         ):
             self.play(FadeIn(chead), LaggedStart(*[FadeIn(x) for x in classes], lag_ratio=0.2), run_time=2.5)
         self.wait(0.4)

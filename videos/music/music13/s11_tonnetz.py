@@ -27,10 +27,7 @@ class Net(SoundScene):
         third = Arrow(net.at(0, 0), net.at(0, 1), buff=0.36, color=BLUE, stroke_width=5, max_tip_length_to_length_ratio=0.25)
         legend = VGroup(label(r"$\rightarrow$ \ a fifth up", font_size=26, color=TUNE), label(r"$\nearrow$ \ a major third up", font_size=26, color=BLUE)).arrange(RIGHT, buff=0.8).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "In 1739 Leonhard Euler, the mathematician, drew a map of musical notes. Put fifths along "
-            "one direction: F, C, G, D. <bookmark mark='a'/> Put major thirds along another: C, E, G "
-            "sharp. <bookmark mark='b'/> Then every note has six neighbours, the six notes most "
-            "consonant with it; and every small triangle is a triad."
+            "In 1739 Leonhard Euler, the mathematician, drew a map of musical notes. Put fifths along one direction: F, C, G, D. <bookmark mark='a'/> Put major thirds along another: C, E, G sharp. <bookmark mark='b'/> Then every note has six neighbours related by thirds and fifths in this lattice; and every small triangle is a triad."
         ) as vo:
             self.play(FadeIn(net), run_time=1.5)
             self.play(GrowArrow(fifth), FadeIn(legend[0]))
@@ -71,12 +68,7 @@ class Net(SoundScene):
             return t.animate.set_stroke(opacity=1.0).set_fill(opacity=0.4)
 
         with self.voiceover(
-            "On this map, the chords closest to a triad are the three that share an edge with it: two "
-            "notes kept, one moved. From C major: <bookmark mark='a'/> flip over the edge C to G, and "
-            "the E falls a semitone. C minor, the parallel. <bookmark mark='b'/> Flip over E to G, and "
-            "the C falls a semitone to B. E minor. <bookmark mark='c'/> Flip over C to E, and the G "
-            "rises a whole tone to A. A minor, the relative minor of Part 12. Each is the smallest "
-            "change a triad can make and still be a triad. Listen to the three."
+            "On this map, the chords closest to a triad are the three that share an edge with it: two notes kept, one moved. From C major: <bookmark mark='a'/> flip over the edge C to G, and the E falls a semitone. C minor, the parallel. <bookmark mark='b'/> Flip over E to G, and the C falls a semitone to B. E minor. <bookmark mark='c'/> Flip over C to E, and the G rises a whole tone to A. A minor, the relative minor of Part 12. Each preserves two pitch classes and changes the third; R moves a whole tone, while P and L move a semitone. Listen to the three."
         ) as vo:
             vo.wait_until("a")
             self.play(reveal(tris["P"]), FadeIn(rows[0]))
@@ -85,7 +77,7 @@ class Net(SoundScene):
             vo.wait_until("c")
             self.play(reveal(tris["R"]), FadeIn(rows[2]))
         with self.listen(c) as snd:
-            window(snd, r"three smallest moves", detail=r"C major to each neighbour", corner=DL, tag_corner=DR)
+            window(snd, r"three edge-sharing moves", detail=r"C major to each neighbour", corner=DL, tag_corner=DR)
             spans = {}
             for k, m in enumerate("PLR"):
                 a, b = d["plr_times"][m]
@@ -144,16 +136,10 @@ class Net(SoundScene):
         top, bot = net.node[(0, 0)], net.node[(0, -3)]
         marks = VGroup(SurroundingRectangle(top, color=EAR, buff=0.06, corner_radius=0.1), SurroundingRectangle(bot, color=EAR, buff=0.06, corner_radius=0.1))
         cm = d["commas"]
-        cap = VGroup(label(r"C, \ and D$\flat\flat$ three major thirds below", font_size=28, color=EAR), label(rf"on a piano: \ the same key", font_size=26, color=WHITE),
+        cap = VGroup(label(r"C, \ and D$\flat\flat$\\ three major thirds below", font_size=28, color=EAR), label(rf"on a piano: \ the same key", font_size=26, color=WHITE),
                      label(rf"in pure tuning: \ {cm['diesis']:.0f} cents apart", font_size=26, color=WHITE), label(r"equal temperament rolls the map up", font_size=28, color=TUNE)).arrange(DOWN, buff=0.22).move_to(RIGHT * 4.3 + DOWN * 0.2)
         with self.voiceover(
-            "And notice where we ended. <bookmark mark='a'/> Three major thirds below the C we started "
-            "from, on a note whose proper name is D double flat. On a piano that is the same key as C. "
-            "In pure tuning it is not: three pure major "
-            f"thirds fall short of an octave by {say(cm['diesis'])} cents, the diesis of Part 6. "
-            "<bookmark mark='b'/> Equal temperament is what rolls this map up, so that travelling far "
-            "enough in any direction brings you home. On Euler's own map, in pure intervals, you would "
-            "never come back at all."
+            f"And notice where we ended. <bookmark mark='a'/> Three major thirds below the C we started from, on a note whose proper name is D double flat. On a piano that is the same key as C. In pure tuning it is not: three pure major thirds fall short of an octave by {say(cm['diesis'])} cents, the diesis of Part 6. <bookmark mark='b'/> Equal temperament is what rolls this map up, so that travelling far enough in any direction brings you home. On the pure fifth/third lattice, these nontrivial paths do not return to exactly the same frequency."
         ) as vo:
             self.play(FadeOut(kb), FadeOut(note), FadeOut(chips))
             vo.wait_until("a")

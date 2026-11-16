@@ -26,7 +26,7 @@ class Doubling(SoundScene):
             bar.move_to([-1.0, 1.3 - 0.95 * j, 0], aligned_edge=LEFT)
             g.add(VGroup(label(r["label"], font_size=28, color=WHITE).next_to(bar, LEFT, buff=0.3), bar, label(f"{r['ambiguity']:.2f}", font_size=26, color=WHITE).next_to(bar, RIGHT, buff=0.15)))
         head = label(r"C, \ E, \ G in four voices: \ how ambiguous is the root?", font_size=30, color=GREY_A).to_edge(UP, buff=0.55)
-        rule = label(r"in root position, \ double the root; \ double the third last", font_size=30, color=TUNE).to_edge(DOWN, buff=0.8)
+        rule = label(r"a common root-position guideline: \ double the root; \ double the third last", font_size=30, color=TUNE).to_edge(DOWN, buff=0.8)
         with self.voiceover(
             "A triad has three notes. A choir has four voices, an orchestra dozens. Some note must be "
             "doubled. Which? Ask the root model of chapter 5, counting a doubled note twice. "
@@ -42,7 +42,7 @@ class Doubling(SoundScene):
             vo.wait_until("c")
             self.play(FadeIn(g[3]))
         with self.voiceover(
-            "That is the rule every harmony student is taught. In root position, double the root; the "
+            "This resembles one common root-position doubling guideline; other inversions and styles use other rules. In root position, double the root; the "
             "third is the note you double last. The model gives one reason for it. Chapter 6 gave "
             "another: when the third of a chord is a leading note, two voices singing it would both "
             "want to move to the same place."
@@ -62,15 +62,9 @@ class Doubling(SoundScene):
         lev = label(rf"in Part 7's piano: \ only {abs(db[2]):.0f} dB below the fundamental", font_size=26, color=MAJOR_C).next_to(ticks[2], DOWN, buff=0.3)
         head = label(r"the harmonics of one C", font_size=28, color=GREY_A).to_edge(UP, buff=0.55)
         facts = VGroup(label(rf"leave out the fifth: \ the root is still {d['no_fifth']['root']}, \ and the chord is still major or minor", font_size=28, color=WHITE),
-                       label(r"leave out the third: \ the root is clear, \ but the chord is neither", font_size=28, color=EAR)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(DOWN, buff=0.9)
+                       label(r"leave out the third: \ the root is clear, \ major/minor quality is less explicit", font_size=28, color=EAR)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(DOWN, buff=0.9)
         with self.voiceover(
-            "And if you must leave a note out? Leave out the fifth. It is hardly missed, and here is "
-            "why. <bookmark mark='a'/> The root's own third harmonic is that same note. In a piano's C, "
-            "the G an octave and a fifth above is already sounding, only "
-            f"{say(abs(db[2]))} decibels below the fundamental. The fifth is in the chord whether "
-            "anyone plays it or not. <bookmark mark='b'/> The third is different. The harmonic that "
-            "would supply it is the fifth one, higher and weaker; and the third alone says whether the "
-            "chord is major or minor. Leave it out and you have a root with no character."
+            f"And if you must leave a note out? Leave out the fifth. It is hardly missed, and here is why. <bookmark mark='a'/> The root's own third harmonic is that same note. In a piano's C, the G an octave and a fifth above is already sounding, only {say(abs(db[2]))} decibels below the fundamental. This partial can reinforce the fifth’s pitch class, but it is not equivalent to a separately played chord tone. <bookmark mark='b'/> The third is different. The harmonic that would supply it is the fifth one, higher and weaker; and the third alone says whether the chord is major or minor. Omitting it leaves major/minor quality less explicit, though context can still establish it."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows), FadeIn(nums))
             vo.wait_until("a")
@@ -102,7 +96,7 @@ class Doubling(SoundScene):
         kb.clear()
         cap = label(r"guide tones: \ the third says major or minor; \ the seventh says which seventh", font_size=28, color=TUNE).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Three notes each, and every chord is unmistakable. The third and the seventh are called "
+            "Three notes each, and much of each chord's identity remains in this context. The third and the seventh are called "
             "guide tones: between them they say what kind of chord it is. In a jazz group the bass "
             "player has the root, the pianist plays the guide tones, and everything else is free."
         ):
@@ -126,15 +120,15 @@ class Doubling(SoundScene):
             cols.add(VGroup(bc, bd, label(f"{pw[key]['clean']:.1f}", font_size=22, color=GREY_A).next_to(bc, UP, buff=0.1), label(f"{pw[key]['driven']:.1f}", font_size=24, color=WHITE).next_to(bd, UP, buff=0.1),
                             label(nm, font_size=26, color=WHITE).move_to([x, -2.1, 0])))
         legend = VGroup(VGroup(Square(0.22, stroke_width=0, fill_color=WEAK, fill_opacity=0.9), label(r"clean", font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.12),
-                        VGroup(Square(0.22, stroke_width=0, fill_color=EAR, fill_opacity=0.9), label(r"through a hard clipper", font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.12)).arrange(RIGHT, buff=0.6).move_to(UP * 1.55)
+                        VGroup(Square(0.22, stroke_width=0, fill_color=EAR, fill_opacity=0.9), label(r"through a smooth tanh saturator", font_size=22, color=GREY_A)).arrange(RIGHT, buff=0.12)).arrange(RIGHT, buff=0.6).move_to(UP * 1.55)
         head = label(r"two guitar strings into a distorting amplifier: \ roughness, \ by Part 5's model", font_size=28, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
             "Rock guitar went the other way, and for a reason you can now compute. A distorting "
             "amplifier is a nonlinear device. Feed it two notes, and it adds new tones at the sums and "
             "differences of all their partials. <bookmark mark='a'/> With a fifth, in the ratio three "
             "to two, those new tones land back on harmonics of a note an octave below: the sound gets "
-            "thicker, and stays in tune with itself. With a major third, they land in the cracks. "
-            "Here are two of Part 1's plucked strings through a hard clipper: a fifth, then a major "
+            "thicker, and stays in tune with itself. For a pure five-to-four third they also fit a common harmonic grid, but a lower, denser one. These examples use equal-tempered intervals, and their interaction depends on tuning and spectrum. "
+            "Here are two of Part 1's plucked strings through a smooth tanh saturator: a fifth, then a major "
             "third, then a full triad."
         ) as vo:
             self.play(FadeIn(head), FadeIn(legend))
@@ -146,11 +140,7 @@ class Doubling(SoundScene):
             pulse(snd, cols[1][4], ev["third"], ev["triad"] - 0.3, buff=0.12)
             pulse(snd, cols[2][4], ev["triad"], c.duration, buff=0.12)
         with self.voiceover(
-            "By the model, the distorted third is twice as rough as the distorted fifth, and the full "
-            "triad is worse again. <bookmark mark='a'/> So the power chord is a root and a fifth, with "
-            "no third: neither major nor minor. It is a voicing chosen by the amplifier. The same "
-            "physics that makes a low third muddy on a piano makes a full chord muddy through "
-            "distortion, and the musicians' answer was the same: leave notes out."
+            "By the model, the distorted third is twice as rough as the distorted fifth, and the full triad is worse again. <bookmark mark='a'/> So the power chord is a root and a fifth, with no third: neither major nor minor. It is a voicing chosen by the amplifier. Both critical-band interaction and nonlinear intermodulation can increase roughness; they are distinct mechanisms, and the musicians' answer was the same: leave notes out."
         ) as vo:
             self.play(*[FadeIn(VGroup(x[1], x[3])) for x in cols])
             vo.wait_until("a")

@@ -27,13 +27,7 @@ class Inversion(SoundScene):
         figs.shift(row.get_center() * RIGHT)
         said = VGroup(*[label(t, font_size=24, color=GREY_A).next_to(figs[k], DOWN, buff=0.2) for k, t in enumerate((r"a third and a fifth", r"a third and a sixth", r"a fourth and a sixth"))])
         with self.voiceover(
-            "Back to the opening. C, E, G with C at the bottom is called root position. "
-            "<bookmark mark='a'/> Put E at the bottom, and it is the first inversion. <bookmark mark='b'/> "
-            "Put G at the bottom: the second inversion. <bookmark mark='c'/> A keyboard player of Bach's "
-            "time, reading a figured bass as in Part 10, did not think of these as one chord. He read "
-            "the intervals above the bass note. A third and a fifth: five-three. A third and a sixth: "
-            "six-three, or just six. A fourth and a sixth: six-four. Three figures, three sets of rules "
-            "for what may come next."
+            "Back to the opening. C, E, G with C at the bottom is called root position. <bookmark mark='a'/> Put E at the bottom, and it is the first inversion. <bookmark mark='b'/> Put G at the bottom: the second inversion. <bookmark mark='c'/> A keyboard player of Bach's time reading figured bass, as in Part 10, read intervals above the bass note. Such players did not all share one theory of chord identity. A third and a fifth: five-three. A third and a sixth: six-three, or just six. A fourth and a sixth: six-four. Three figures, three sets of rules for what may come next."
         ) as vo:
             self.play(FadeIn(row.staff.systems[0].lines), FadeIn(row.staff.systems[0].clef), FadeIn(row.staff.barlines), FadeIn(row.notes[0]), FadeIn(row.above[0]))
             vo.wait_until("a")
@@ -67,10 +61,7 @@ class Inversion(SoundScene):
         note = VGroup(label(r"1612: \ Johannes Lippius had already described the triad and its inversions.", font_size=24, color=GREY_A),
                       label(r"Rameau built a theory of how roots \textit{move}.", font_size=28, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         with self.voiceover(
-            "He was not the first to notice. Johannes Lippius had described the triad and its inversions "
-            "a century earlier. What Rameau added was a theory built on it: a theory of how roots move "
-            "from one chord to the next. After him, harmony was taught as a grammar of chords, where "
-            "before it had been a set of rules about intervals above a bass."
+            'He was not the first to notice. Johannes Lippius had described the triad and its inversions a century earlier. What Rameau added was a theory built on it: a theory of how roots move from one chord to the next. His root-based theory became influential alongside continuing figured-bass and contrapuntal traditions.'
         ):
             self.play(FadeOut(card), FadeIn(note))
         self.wait(0.4)
@@ -93,7 +84,7 @@ class Inversion(SoundScene):
             "G, B, D, F. <bookmark mark='a'/> The root is G, and in the chord as written it is the "
             "second note from the bottom. A figured-bass player calls this a four-two chord. Rameau "
             "calls it a seventh chord on G with its seventh in the bass. Monochord's chord module does "
-            "this reduction for any set of notes: try each note as the bottom of a stack of thirds, and "
+            "this reduction for supported tertian chords; it need not find a unique answer for every collection: try each note as the bottom of a stack of thirds, and "
             "see which one works."
         ) as vo:
             self.play(FadeOut(card), FadeIn(row.notes[1]), FadeIn(row.above[1]), FadeIn(row.staff.barlines), FadeOut(row.above[0]))
@@ -123,11 +114,7 @@ class Inversion(SoundScene):
         kb.clear()
         verdict = VGroup(*[label(t, font_size=26, color=WHITE).next_to(tags[k], DOWN, buff=0.25) for k, t in enumerate((r"settled", r"lighter; \ wants to move", r"unstable"))])
         with self.voiceover(
-            "The same chord, yes. But not the same weight. With the root in the bass the chord is "
-            "settled: it can end a piece. <bookmark mark='a'/> With the third in the bass it is lighter, "
-            "and wants to move on. <bookmark mark='b'/> With the fifth in the bass it is unstable enough "
-            "that composers of Rameau's century treated it as a dissonance, and resolved it. Here is the "
-            "classic case: the six-four chord on G falls to a plain G chord, and then goes home."
+            "The same chord, yes. But not the same weight. In a common-practice closing context, root position can sound settled. <bookmark mark='a'/> With the third in the bass it may sound lighter; inversion alone does not require continuation. <bookmark mark='b'/> With the fifth in the bass it is unstable enough that composers of Rameau's century treated it as a dissonance, and resolved it. Here is the classic case: the six-four chord on G falls to a plain G chord, and then goes home."
         ) as vo:
             self.play(FadeIn(verdict[0]))
             vo.wait_until("a")

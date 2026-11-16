@@ -94,7 +94,7 @@ Monochord's chords are held against these in `tests/music/test_chords.py`; the e
 two tritones are organ tones in quarter-comma meantone; the missing-fundamental demonstration is three pure tones
 at 4, 5 and 6 times 130.8 Hz and an organ tone at 130.8 Hz; the two seventh chords of chapter 6 are organ tones,
 one equal-tempered and one at 4 : 5 : 6 : 7 (all `synthesized`). The distorted dyads are Part 1's plucked strings
-through a hard clipper (tanh). There are no recordings.
+through a smooth tanh saturator. There are no recordings.
 
 **What the models are, and are not.** *Interval names* are those of common-practice notation; other traditions
 count differently. *The census of three-note shapes* treats notes a tone or less apart as "neighbours"; that
@@ -112,6 +112,10 @@ listener* is a template matcher on a folded spectrum, the starting point of the 
 the state of the art; its 19 of 24 is a property of this Variation and this piano. *The Tonnetz* is drawn in
 equal temperament's names; in pure tuning its notes do not repeat. *Dates for the notations* are approximate.
 *The Variation's harmony* is one chord to every two beats, only I, IV and V (V7 at the close).
+
+## Scope
+
+The tertian census follows a chosen pitch-class spacing constraint; it does not derive all harmony from auditory physiology. Critical-band interaction varies continuously with frequency, spectrum and level. Root salience and missing-fundamental pitch are distinct from harmonic root analysis. Rameau had predecessors, and figured-bass practice was not theoretically uniform. Dominant resolution, inversion stability, doubling and omissions are style-dependent guidelines. A unique tritone pair does not identify the tonic among relative modes. A pure 5:4 third also has a common harmonic fundamental; distortion does not place all its products off a harmonic grid. Reported recognition scores belong to the stated synthetic examples, while cited benchmark results are historical and depend on metrics. Interval classes include class zero in addition to the six nonzero classes illustrated.
 
 ## Build
 
@@ -156,8 +160,7 @@ python -m videos.music.labs 13                                  # the lab (write
    *Solution.* The lab prints the answers. Listen first for stability: major and minor are at rest, diminished
    and augmented are not. Between major and minor, sing the lowest three notes as an arpeggio and listen for the
    size of the third above the root. For the inversion, listen for the widest gap: a fourth between the upper
-   two notes means the third is in the bass, a fourth between the lower two means the fifth is. An augmented
-   triad sounds the same in every inversion, so "which note is in the bass" has no answer by ear.
+   two notes means the third is in the bass, a fourth between the lower two means the fifth is. An equal-tempered augmented pitch-class set is symmetric: its bass pitch can be heard, but an inversion label requires a chosen root or spelling.
 
 4. **Build.** With `chords.voicings` and `chords.spacing_roughness`, find the smoothest five-voice spacing of a
    G seventh chord over the G at the bottom of the bass staff. Which note does it double? And if one note may be
@@ -175,11 +178,10 @@ python -m videos.music.labs 13                                  # the lab (write
 
    *Where the frontier is.* In the lab, with A lowest, any weight above about 1.1 makes A the root of A–C–E–G
    (A 17 + 1 > C 18 needs the bass counted a little more than once); but the same weight applied to C–E–G with
-   E lowest eventually makes E the root (above a weight of 15/7, about 2.1), which no musician hears. So a single number does
+   E lowest eventually makes E the root (above a weight of 15/7, about 2.1), which need not match the intended C-major analysis. So a single number does
    not do it: a first inversion keeps its root and a "slash chord" does not, and the difference is in the
    context. Parncutt's later models add weights for register and for the preceding chords; corpus-trained
-   models (Temperley's Bayesian key and root finding; neural chord estimators) learn them from data; none
-   matches annotators on ambiguous chords, and annotators do not match each other (Koops and others 2019).
+   models (Temperley's Bayesian key and root finding; neural chord estimators) learn them from data; models can disagree with annotators on ambiguous chords, and annotators do not match each other (Koops and others 2019).
 
 ## Sources
 

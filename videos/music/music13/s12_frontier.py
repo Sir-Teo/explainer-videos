@@ -25,11 +25,7 @@ class Frontier(SoundScene):
         cols.arrange(RIGHT, buff=1.2, aligned_edge=UP).move_to(UP * 0.6)
         head = label(r"the four triads, \ most consonant first", font_size=30, color=GREY_A).to_edge(UP, buff=0.5)
         with self.voiceover(
-            "Which triad is the most consonant? Ask listeners, and study after study gives the same "
-            "order: major, minor, diminished, augmented. <bookmark mark='a'/> Now ask the two models we "
-            "built. Part 5's roughness says: major, minor, augmented, diminished. <bookmark mark='b'/> "
-            "Part 4's fusion into one pitch says the same. Both models put the augmented triad above "
-            "the diminished. Listeners put it last."
+            "Which triad is the most consonant? Several studies with Western listeners report this average order, though responses vary with task, voicing and familiarity: major, minor, diminished, augmented. <bookmark mark='a'/> Now ask the two models we built. Part 5's roughness says: major, minor, augmented, diminished. <bookmark mark='b'/> Part 4's fusion into one pitch says the same. Both models put the augmented triad above the diminished. Listeners put it last."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cols[0]))
             vo.wait_until("a")
@@ -72,7 +68,7 @@ class Frontier(SoundScene):
             "the twelve notes, and compares the result with a template for each of the twenty-four "
             "major and minor triads. <bookmark mark='a'/> Here is what it sees in a C major triad on "
             "the piano: C, E and G, and a trace of B and D, which are harmonics of the E and the G. "
-            f"<bookmark mark='b'/> On clean piano chords it is right every time: {say(total)} out of "
+            f"<bookmark mark='b'/> On this clean synthetic piano test set it is right every time: {say(total)} out of "
             f"{say(4 * 24)}, in every inversion, even low and close in the mud."
         ) as vo:
             self.play(FadeIn(head))
@@ -94,7 +90,7 @@ class Frontier(SoundScene):
             g.add(VGroup(label(ph["name"], font_size=24, color=GREY_A).move_to([-5.9, y, 0], aligned_edge=LEFT), cells, label(rf"{ph['right']} of {ph['of']}", font_size=24, color=GREY_B).move_to([5.6, y, 0])))
         head = label(rf"the listener on this part's Variation, \ half a bar at a time: \ {d['variation_right']} of {d['variation_of']}", font_size=28, color=GREY_A).to_edge(UP, buff=0.5)
         cap = VGroup(label(r"C major heard as A minor: \ two notes shared; \ neighbours on Euler's map", font_size=28, color=EAR),
-                     label(r"the hard part is not hearing the notes. \ It is deciding which notes are the chord.", font_size=28, color=TUNE)).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.45)
+                     label(r"note estimation and harmonic interpretation: \ both can be difficult", font_size=28, color=TUNE)).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.45)
         wrong = d["variation_of"] - d["variation_right"]
         with self.voiceover(
             "So we gave it something harder: this part's Variation, the Tune with its accompaniment, "
@@ -108,10 +104,7 @@ class Frontier(SoundScene):
             vo.wait_until("a")
             self.play(FadeIn(cap[0]))
         with self.voiceover(
-            "That is the real difficulty of chord recognition. It is not hearing the notes. It is "
-            "deciding which notes count as the chord, when the answer depends on what came before and "
-            "what comes next. Human experts disagree too: in one study, four annotators labelling the "
-            "same fifty songs agreed on the root of the chord only about three quarters of the time."
+            'That is the real difficulty of chord recognition. It includes both estimating notes and deciding which notes count as the chord, when the answer depends on what came before and what comes next. Human experts disagree too: in one study, four annotators labelling the same fifty songs agreed on the root of the chord only about three quarters of the time.'
         ):
             self.play(FadeIn(cap[1]))
         self.wait(0.4)
@@ -121,15 +114,10 @@ class Frontier(SoundScene):
     def open(self):
         star = VGroup(label(r"$\bigstar$ \ open", font_size=30, color=LIMIT),
                       label(r"from chord names to Roman numerals: \ which key, \ and what job does each chord do in it?", font_size=28, color=WHITE),
-                      label(r"the best published systems match an expert's full analysis on about half the chords", font_size=26, color=GREY_A),
+                      label(r"cited early-2020s benchmark: roughly half of complete labels; corpus and metric matter", font_size=26, color=GREY_A),
                       label(r"harmony is not in the sound at one moment. \ It is in how moments follow one another.", font_size=30, color=TUNE)).arrange(DOWN, buff=0.4).move_to(UP * 0.2)
         with self.voiceover(
-            "Harder still is the step from chord names to Roman numerals: deciding the key, and the job "
-            "each chord does in it. <bookmark mark='a'/> On classical pieces, the best published "
-            "systems agree with an expert's complete analysis on only about half the chords. "
-            "<bookmark mark='b'/> And that tells us where the subject really lives. Harmony is not in "
-            "the sound at any one moment. It is in how moments follow one another, and that is where "
-            "the next parts of this series go."
+            "Harder still is the step from chord names to Roman numerals: deciding the key, and the job each chord does in it. <bookmark mark='a'/> In the cited early-2020s classical benchmarks, some systems matched the complete reference label on roughly half the chords. The value depends on corpus and scoring and is not a current universal performance ceiling. <bookmark mark='b'/> And that tells us where the subject really lives. Harmony is not in the sound at any one moment. It is in how moments follow one another, and that is where the next parts of this series go."
         ) as vo:
             self.play(FadeIn(star[0]), FadeIn(star[1]))
             vo.wait_until("a")
