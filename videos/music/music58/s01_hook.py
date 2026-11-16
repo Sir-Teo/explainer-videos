@@ -37,7 +37,7 @@ class Hook(SoundScene):
     # ------------------------------------------------------------------
     def reveal(self):
         d = load("hook")
-        rows = VGroup(VGroup(label(r"version", font_size=17, color=GREY_A), label(r"bit rate", font_size=17, color=GREY_A), label(r"size", font_size=17, color=GREY_A),
+        rows = VGroup(VGroup(label(r"version", font_size=17, color=GREY_A), label(r"estimated rate", font_size=17, color=GREY_A), label(r"rate ratio", font_size=17, color=GREY_A),
                              label(r"its noise against the mask", font_size=17, color=GREY_A)))
         data = [(r"first: \ our coder", f"{d['c64']['kbps']:.0f} kbit/s", rf"1/{d['pcm_kbps'] / d['c64']['kbps']:.0f}", rf"{d['c64']['margin']:.0f} dB below it", TUNE),
                 (r"second: \ the original", f"{d['pcm_kbps']:.0f} kbit/s", r"1", r"none", WHITE),
@@ -49,14 +49,14 @@ class Hook(SoundScene):
             for i, m in enumerate(r):
                 m.set_x(-4.4 + 3.0 * i)
         rows.move_to(UP * 0.2)
-        note = label(r"the first and second are, \ to almost every ear, \ the same: \ one is a twelfth the size", font_size=19, color=TUNE).to_edge(DOWN, buff=0.6)
+        note = label(r"estimated coding budgets; \ this demonstration does not establish transparency", font_size=19, color=TUNE).to_edge(DOWN, buff=0.6)
         head = label(r"the second was the original", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The second. <bookmark mark='a'/> The original is sixteen-bit samples at forty-eight kilohertz: seven hundred and "
-            "sixty-eight kilobits a second. The third was our codec at sixteen kilobits, a forty-eighth of the size, and you "
+            "sixty-eight kilobits a second. The third was our codec at sixteen kilobits, an estimated coding budget one forty-eighth of the PCM rate, and you "
             "could hear it: its noise rises above what the voice can hide. <bookmark mark='b'/> But the first was the same "
-            "codec at sixty-four, a twelfth of the size, and if you could not tell it from the original, that is the whole "
-            "idea of this part: most of the data in a recording describes things the ear cannot hear."
+            f"codec targeting sixty-four; its estimated rate here is about {say(d['c64']['kbps'])} kilobits a second. If you could not tell it from the original, that is the whole "
+            "idea of this part: substantial data reduction can be perceptually subtle under suitable conditions; this demonstration does not prove transparency. Our perceptual coder estimates coded lengths rather than serializing a complete bitstream."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(rows[2]))
             vo.wait_until("a")
@@ -82,7 +82,7 @@ class Hook(SoundScene):
                    "<bookmark mark='d'/> A voice alone has nothing to hide the coding noise behind, and he has said he listened to "
                    "it over and over while tuning the coder. <bookmark mark='e'/> The result became MPEG-1 Audio Layer Three, "
                    "standardized between 1991 and 1993, and from 1995 its files ended in dot m p three. <bookmark mark='f'/> In "
-                   "1999 came Napster: a file a tenth of the size of a CD's broke the record industry's business.", marks="bcdef")
+                   "1999 came Napster: small files and peer-to-peer distribution disrupted the record industry alongside other economic and technological changes.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def idea(self):

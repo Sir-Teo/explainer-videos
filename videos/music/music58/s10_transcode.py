@@ -77,11 +77,7 @@ class Transcode(SoundScene):
             (r"keep the lossless or high-resolution master; \ make every lossy file from it, \ once", WHITE),
             (r"never edit a lossy file and re-encode it if the master exists", WHITE),
             (r"streaming services ask for 24-bit masters and encode them themselves, \ at each rate", WHITE),
-            (r"and leave a true-peak margin \ (Part 57): \ every generation's decoder overshoots a little more", TUNE),
+            (r"and leave a true-peak margin \ (Part 57): \ decoded peaks can change across encodings; overshoot is not guaranteed to increase monotonically", TUNE),
         ]
         rows_scene(self, r"in practice", items,
-                   "The practice follows. <bookmark mark='b'/> Keep a lossless or high-resolution master, and make every lossy file "
-                   "from it, once. <bookmark mark='c'/> Never edit a lossy file and re-encode it if the master exists. "
-                   "<bookmark mark='d'/> Streaming services ask for twenty-four-bit masters and encode them themselves, at each rate "
-                   "they offer. <bookmark mark='e'/> And leave Part 57's true-peak margin, because every generation's decoder "
-                   "overshoots a little more.", marks="bcde")
+                   "The practice follows. <bookmark mark='b'/> Keep a lossless or high-resolution master, and make every lossy file from it, once. <bookmark mark='c'/> Never edit a lossy file and re-encode it if the master exists. <bookmark mark='d'/> Streaming services ask for twenty-four-bit masters and encode them themselves, at each rate they offer. <bookmark mark='e'/> And leave Part 57's true-peak margin, because decoded peaks can change across encodings; overshoot is not guaranteed to increase monotonically.", marks="bcde")

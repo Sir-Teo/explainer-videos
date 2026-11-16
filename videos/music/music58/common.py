@@ -13,7 +13,7 @@ from explainer.music.scaleviz import BLUE, GOLD, RED  # noqa: F401
 from .compute import CACHE, CLIPS, load  # noqa: F401
 
 PART = 58
-clip = clip_loader(CACHE, CLIPS)
+clip = clip_loader(CACHE, CLIPS, item_aliases={"tune": "tune58"})
 WEAK = "#8A93A0"
 DIM = "#3A4250"
 VOICE_C = [TUNE, BLUE, EAR, "#A3E635", GREY_B]

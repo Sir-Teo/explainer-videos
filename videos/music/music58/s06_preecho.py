@@ -23,12 +23,7 @@ class PreEcho(SoundScene):
             (r"pre-masking hides only a few milliseconds of it: \ the rest is heard as a swish before each attack, \ pre-echo", TUNE),
         ]
         rows_scene(self, r"time against frequency", items,
-                   "Every transform trades time for frequency. <bookmark mark='b'/> A long block, forty-three milliseconds here, "
-                   "resolves the spectrum finely, so the coder can follow the mask band by narrow band. <bookmark mark='c'/> But the "
-                   "noise it adds spreads evenly over the whole block. <bookmark mark='d'/> Put a castanet hit in the middle of a "
-                   "block, and its coding noise arrives up to twenty milliseconds before the hit, in silence. "
-                   "<bookmark mark='e'/> Pre-masking hides only a few milliseconds of that; the rest is heard as a swish before each "
-                   "attack: pre-echo.", marks="bcde")
+                   "Every transform trades time for frequency. <bookmark mark='b'/> A long block, forty-three milliseconds here, resolves the spectrum finely, so the coder can follow the mask band by narrow band. <bookmark mark='c'/> But its quantization error can spread across the transform window, including before an attack. <bookmark mark='d'/> Put a castanet hit in the middle of a block, and its coding noise arrives up to twenty milliseconds before the hit, in silence. <bookmark mark='e'/> Pre-masking hides only a few milliseconds of that; the rest is heard as a swish before each attack: pre-echo.", marks="bcde")
 
     # ------------------------------------------------------------------
     def zoom(self):
@@ -101,11 +96,4 @@ class PreEcho(SoundScene):
             (r"a bit reservoir pays for the expensive short blocks from the cheap frames around them", TUNE),
         ]
         rows_scene(self, r"window switching", items,
-                   "The cure is to switch. <bookmark mark='b'/> Use long blocks for steady sound, and eight short blocks the moment "
-                   "an attack is detected. <bookmark mark='c'/> The window's shape must change smoothly, through start and stop "
-                   "windows, so that the aliases still cancel. <bookmark mark='d'/> AAC switches between two thousand and "
-                   "forty-eight samples and two hundred and fifty-six; MP3 between five hundred and seventy-six and a hundred and "
-                   "ninety-two, inside a filter bank; Opus uses frames of two and a half to twenty milliseconds. "
-                   "<bookmark mark='e'/> AAC adds temporal noise shaping, a prediction across frequency that shapes the noise in "
-                   "time within a long block. <bookmark mark='f'/> And the bit reservoir pays for the expensive short blocks from "
-                   "the cheap frames around them.", marks="bcdef")
+                   "The cure is to switch. <bookmark mark='b'/> Use long blocks for steady sound, and eight short blocks the moment an attack is detected. <bookmark mark='c'/> The window's shape must change smoothly, through start and stop windows, so that the aliases still cancel. <bookmark mark='d'/> Common AAC-LC modes use two-thousand-and-forty-eight-sample long windows and two-hundred-and-fifty-six-sample short windows; other frame configurations exist; MP3 between five hundred and seventy-six and a hundred and ninety-two, inside a filter bank; Opus uses frames of two and a half to twenty milliseconds. <bookmark mark='e'/> AAC adds temporal noise shaping, a prediction across frequency that shapes the noise in time within a long block. <bookmark mark='f'/> And the bit reservoir pays for the expensive short blocks from the cheap frames around them.", marks="bcdef")

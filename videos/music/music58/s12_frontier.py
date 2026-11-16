@@ -20,12 +20,12 @@ class Frontier(SoundScene):
             (r"fidelity and plausibility have come apart; \ the tests of Chapter 8 measure only the second", TUNE),
         ]
         rows_scene(self, r"what neural codecs change", items,
-                   "Neural codecs change what a codec error is. <bookmark mark='b'/> A neural decoder does not add noise; when it "
+                   "Neural codecs change what a codec error is. <bookmark mark='b'/> Neural codec errors can include noise, altered detail and plausible reconstruction artifacts; when it "
                    "lacks bits it invents plausible detail. <bookmark mark='c'/> Invented detail can pass a listening test, because "
                    "it sounds real, though it is not what was played. <bookmark mark='d'/> These codecs fail differently on music "
                    "unlike what they were trained on: unusual instruments, tunings and voices. <bookmark mark='e'/> They cost far "
                    "more computation than an MDCT coder, though less every year. <bookmark mark='f'/> Fidelity and plausibility have "
-                   "come apart, and a listening test against a reference measures mostly the second.", marks="bcdef")
+                   "come apart, and reference-based tests assess fidelity as well as quality, while plausibility without a reference is a different task.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def metrics(self):
@@ -34,7 +34,7 @@ class Frontier(SoundScene):
             (r"PEAQ \ (ITU-R BS.1387, \ 1998): \ an ear model compares the coded signal with the reference, \ and predicts the test score", WHITE),
             (r"ViSQOL and others: \ similarity of spectro-temporal patterns, \ fitted to listening data", WHITE),
             (r"learned metrics: \ networks trained on thousands of ratings; \ excellent on codecs like those they saw, \ unreliable on new kinds of error", WHITE),
-            (r"a metric used to train a codec is soon fooled by it", TUNE),
+            (r"optimizing a metric can exploit its blind spots, so independent evaluation is needed", TUNE),
         ]
         rows_scene(self, r"learned metrics", items,
                    "And the measures. <bookmark mark='b'/> Listening tests are slow and costly, so coders are tuned by objective "
@@ -42,7 +42,7 @@ class Frontier(SoundScene):
                    "signal and the reference and predicts the test score. <bookmark mark='d'/> ViSQOL and others compare "
                    "spectro-temporal patterns, fitted to listening data. <bookmark mark='e'/> Learned metrics are networks trained "
                    "on thousands of ratings: excellent on errors like those they saw, unreliable on new kinds. "
-                   "<bookmark mark='f'/> And a metric used to train a codec is soon fooled by it.", marks="bcdef")
+                   "<bookmark mark='f'/> And optimizing a metric can exploit its blind spots, so independent evaluation is needed.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def problem(self):

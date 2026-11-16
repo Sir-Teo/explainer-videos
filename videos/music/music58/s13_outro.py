@@ -125,7 +125,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "And in practice. Keep lossless masters, and make every lossy file from them, once. Deliver music in AAC or Opus at "
             "a hundred and twenty-eight kilobits or more, with a true-peak margin. Judge codecs blind, level-matched, with "
-            "enough trials and a hidden reference. And test them on a lone voice or castanets, the hardest material there is."
+            "enough trials and a hidden reference. And test them on a lone voice or castanets, useful stress material alongside varied music and listening conditions."
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(0.4)

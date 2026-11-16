@@ -18,14 +18,14 @@ class Masking(SoundScene):
     def model(self):
         items = [
             (r"Part 4: \ a sound raises the threshold for others in its critical band, \ and a little beyond", WHITE),
-            (r"so in every band of every frame there is a level of noise the music will hide: \ the masking threshold", WHITE),
+            (r"so in every band of every frame there is a level of noise this simplified model predicts may be masked: \ the masking threshold", WHITE),
             (r"a coder may put its errors anywhere below that level, \ and nowhere above it", WHITE),
             (r"the model needs four ingredients: \ critical bands, \ spreading, \ tonality, \ and the threshold in quiet", TUNE),
         ]
         rows_scene(self, r"a masking model", items,
                    "A perceptual coder rests on Part 4. <bookmark mark='b'/> A sound raises the threshold for other sounds in its "
                    "critical band, and a little beyond. <bookmark mark='c'/> So in every band of every frame there is a level of "
-                   "noise the music will hide: the masking threshold. <bookmark mark='d'/> A coder may put its errors anywhere below "
+                   "noise this simplified model predicts may be masked: the masking threshold. <bookmark mark='d'/> A coder may put its errors anywhere below "
                    "that level, and nowhere above it. <bookmark mark='e'/> The model needs four ingredients: critical bands, how "
                    "masking spreads across them, whether the masker is a tone or noise, and the threshold in quiet.", marks="bcde")
 
@@ -33,7 +33,7 @@ class Masking(SoundScene):
     def spreading(self):
         dz = np.linspace(-4, 8, 200)
         S = 15.81 + 7.5 * (dz + 0.474) - 17.5 * np.sqrt(1 + (dz + 0.474) ** 2)
-        ax = frame_axes(width=8.4, height=3.0, xlo=-4, xhi=8, ylo=-80, yhi=5, center=DOWN * 0.4 + LEFT * 0.8)
+        ax = frame_axes(width=7.2, height=3.0, xlo=-4, xhi=8, ylo=-80, yhi=5, center=DOWN * 0.4 + LEFT * 2.2)
         cv = curve(dz, S, ax.to, color=TUNE, width=3)
         xt = VGroup(*[label(f"{v:+d}" if v else "0", font_size=14, color=GREY_A).next_to(ax.to(v, -80), DOWN, buff=0.1) for v in (-4, 0, 4, 8)])
         xl = label(r"distance from the masker, \ Bark \ (critical bands)", font_size=15, color=GREY_A).next_to(xt, DOWN, buff=0.15)
@@ -74,15 +74,11 @@ class Masking(SoundScene):
         key = VGroup(label(r"one frame of our mix, \ MDCT power", font_size=16, color=GREY_B), label(r"the allowed noise", font_size=16, color=TUNE),
                      label(r"the threshold in quiet", font_size=16, color=BLUE)).arrange(RIGHT, buff=0.6).to_edge(UP, buff=1.0)
         yt = VGroup(*[label(f"{v} dB", font_size=14, color=GREY_A).next_to(ax.to(30, v), LEFT, buff=0.1) for v in (0, -50, -100)])
-        note = label(r"everything between the grey spectrum and the gold line is noise the coder may add unheard; \ a band whose signal lies under the gold line need not be sent at all", font_size=16, color=WHITE).to_edge(DOWN, buff=0.3)
+        note = label(r"the simplified model predicts noise below the gold line may be masked; \ this is a model allowance, not a guarantee of inaudibility", font_size=16, color=WHITE).to_edge(DOWN, buff=0.3)
         note.scale_to_fit_width(min(note.width, 13.0))
         head = label(r"one frame's mask", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is the model at work on twenty-one milliseconds of our mix. <bookmark mark='a'/> In grey, the frame's "
-            "spectrum. <bookmark mark='b'/> In gold, the noise allowed in each critical band: the band energies spread, lowered "
-            "by the tonality offset. <bookmark mark='c'/> In blue, the threshold in quiet, which takes over at the top. "
-            "Everything between the grey and the gold is room for noise the music will hide; and any band whose music lies "
-            "entirely under the gold line need not be sent at all."
+            "Here is the model at work on twenty-one milliseconds of our mix. <bookmark mark='a'/> In grey, the frame's spectrum. <bookmark mark='b'/> In gold, the noise allowed in each critical band: the band energies spread, lowered by the tonality offset. <bookmark mark='c'/> In blue, the threshold in quiet, which takes over at the top. Everything between the grey and the gold is room for noise this simplified model predicts may be masked; and this model may allocate very few bits there; real audibility still depends on model accuracy, temporal structure and listening conditions."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(yt), FadeIn(ghost(VGroup(spec, al, q), 0.25)))
             vo.wait_until("a")
@@ -128,11 +124,11 @@ class Masking(SoundScene):
         items = [
             (r"masking also reaches across time: \ a loud sound hides quieter ones after it for up to about 100 ms", WHITE),
             (r"and, \ oddly, \ before it: \ for only a few milliseconds \ (pre-masking)", WHITE),
-            (r"a coder's frames last tens of milliseconds, \ so noise spread through a frame can land before an attack, \ where nothing hides it", WHITE),
+            (r"a coder's frames last tens of milliseconds, \ so quantization error spread through a frame can land before an attack, \ where nothing hides it", WHITE),
             (r"that is pre-echo, \ the subject of Chapter 5", TUNE),
         ]
         rows_scene(self, r"masking in time", items,
                    "Masking reaches across time as well. <bookmark mark='b'/> A loud sound hides quieter ones after it for up to "
                    "about a hundred milliseconds. <bookmark mark='c'/> And, oddly, before it, but only for a few milliseconds. "
-                   "<bookmark mark='d'/> A coder's frames last tens of milliseconds, so noise spread through a frame can land before "
+                   "<bookmark mark='d'/> A coder's frames last tens of milliseconds, so quantization error spread through a frame can land before "
                    "an attack, where nothing hides it. <bookmark mark='e'/> That is pre-echo, the subject of Chapter 5.", marks="bcde")

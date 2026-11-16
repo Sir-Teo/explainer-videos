@@ -19,20 +19,15 @@ class Lossless(SoundScene):
     def entropy(self):
         eq = MathTex(r"H = -\sum_i p_i \log_2 p_i \quad \text{bits per symbol}", font_size=40, color=TUNE).move_to(UP * 1.6)
         items = [
-            (r"Shannon \ (1948): \ no code can average fewer bits per symbol than the source's entropy", WHITE),
+            (r"Shannon \ (1948): \ for uniquely decodable lossless codes under the stated source model, expected length is bounded by entropy; sample correlations require entropy-rate reasoning", WHITE),
             (r"a fair coin: \ 1 bit; \ a coin that lands heads 90\% of the time: \ 0.47 bits", WHITE),
-            (r"16-bit samples spend 16 bits each; \ their entropy is lower, \ because common values can get short codes", WHITE),
+            (r"16-bit samples spend 16 bits each; \ their empirical sample-value entropy can be lower, \ because common values can get short codes", WHITE),
             (r"and lower still once we stop coding the samples and code what we could not predict", TUNE),
         ]
         rows = text_rows(items, font_size=22).move_to(DOWN * 0.8)
         head = label(r"entropy", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Start with the limit. <bookmark mark='a'/> Claude Shannon proved in 1948 that no code can average fewer bits per "
-            "symbol than the source's entropy: minus the sum of p log p. <bookmark mark='b'/> A fair coin has one bit of "
-            "entropy; a coin that lands heads nine times in ten, under half a bit. <bookmark mark='c'/> Sixteen-bit samples "
-            "spend sixteen bits each, but their entropy is lower, because common values can be given short codes. "
-            "<bookmark mark='d'/> And it falls much further once we stop coding the samples, and code only what we could not "
-            "predict."
+            "Start with the limit. <bookmark mark='a'/> Claude Shannon proved in 1948 that for uniquely decodable lossless codes under the stated source model, expected length is bounded by entropy; sample correlations require entropy-rate reasoning: minus the sum of p log p. <bookmark mark='b'/> A fair coin has one bit of entropy; a coin that lands heads nine times in ten, under half a bit. <bookmark mark='c'/> Sixteen-bit samples spend sixteen bits each, but their empirical sample-value entropy can be lower, because common values can be given short codes. <bookmark mark='d'/> And it falls much further once we stop coding the samples, and code only what we could not predict."
         ) as vo:
             self.play(FadeIn(head), FadeIn(eq))
             for mark, r in zip("abcd", rows):
@@ -157,9 +152,4 @@ class Lossless(SoundScene):
             (r"the best lossless coders reach 40 to 60\% on music; \ noise, \ by definition, \ cannot be compressed at all", TUNE),
         ]
         rows_scene(self, r"better predictors", items,
-                   "Real lossless coders go a little further. <bookmark mark='b'/> FLAC and MPEG-4 ALS fit a predictor to each "
-                   "block: linear prediction of order up to thirty-two, by the Levinson-Durbin recursion. <bookmark mark='c'/> The "
-                   "coefficients are quantized and sent with the block, and the decoder runs the same filter in integer arithmetic, "
-                   "so the result is still exact. <bookmark mark='d'/> For stereo they predict one channel from the other, or code "
-                   "the difference. <bookmark mark='e'/> The best reach forty to sixty per cent of the original on music; and noise, "
-                   "by definition, cannot be compressed at all.", marks="bcde")
+                   "Real lossless coders go a little further. <bookmark mark='b'/> FLAC and MPEG-4 ALS fit a predictor to each block: linear prediction of orders limited by the format; FLAC supports up to thirty-two, while ALS supports substantially higher orders, by the Levinson-Durbin recursion. <bookmark mark='c'/> The coefficients are quantized and sent with the block, and the decoder runs the same filter in integer arithmetic, so the result is still exact. <bookmark mark='d'/> For stereo they predict one channel from the other, or code the difference. <bookmark mark='e'/> The best reach forty to sixty per cent of the original on music; and independent uniformly distributed full-resolution noise offers little lossless compression; colored or otherwise structured noise can be predictable.", marks="bcde")

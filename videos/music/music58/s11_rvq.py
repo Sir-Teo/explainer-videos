@@ -21,7 +21,7 @@ class Rvq(SoundScene):
             (r"vector quantization codes several numbers at once, \ as the index of the nearest entry in a codebook", WHITE),
             (r"the codebook is learned from examples \ (k-means: \ Lloyd, \ 1957; \ Linde, \ Buzo and Gray, \ 1980)", WHITE),
             (r"8 neighbouring MDCT coefficients, \ normalized by their band's level; \ 256 entries: \ 8 bits for 8 numbers", WHITE),
-            (r"but one codebook of 256 cannot be fine; \ a codebook of $2^{40}$ cannot be searched", TUNE),
+            (r"but one codebook of 256 cannot be fine; \ a codebook of $2^{40}$ is impractical to search exhaustively in this simple implementation", TUNE),
         ]
         rows_scene(self, r"vector quantization", items,
                    "There is another way to spend bits. <bookmark mark='b'/> Scalar quantization rounds each number on its own. "
@@ -30,7 +30,7 @@ class Rvq(SoundScene):
                    "1957, as Linde, Buzo and Gray applied it to coding in 1980. <bookmark mark='e'/> Here: eight neighbouring MDCT "
                    "coefficients at a time, divided by their band's level, and a codebook of two hundred and fifty-six entries, so "
                    "eight bits for eight numbers. <bookmark mark='f'/> But one codebook of two hundred and fifty-six cannot be fine, "
-                   "and a codebook of two to the fortieth cannot be searched.", marks="bcdef")
+                   "and a codebook of two to the fortieth is impractical to search exhaustively in this simple implementation.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def residual(self):
@@ -130,10 +130,4 @@ class Rvq(SoundScene):
             (r"and their codes are tokens: \ the alphabet that generative audio \ (Part 66) \ writes in", TUNE),
         ]
         rows_scene(self, r"neural codecs", items,
-                   "This is where the field has gone. <bookmark mark='b'/> Neural codecs replace the MDCT with a learned encoder, "
-                   "and its inverse with a learned decoder. <bookmark mark='c'/> Between them sits residual vector quantization of "
-                   "the learned features, as in Google's SoundStream of 2021 and Meta's EnCodec of 2022. <bookmark mark='d'/> They "
-                   "are trained end to end, with a second network as critic, judging whether the decoded audio sounds real. "
-                   "<bookmark mark='e'/> They code speech in three kilobits a second, and music in six to twenty-four, a fraction of "
-                   "what a classical codec needs for the same rating. <bookmark mark='f'/> And their codes are tokens: the alphabet "
-                   "in which the generative audio of Part 66 writes.", marks="bcdef")
+                   "This is where the field has gone. <bookmark mark='b'/> Neural codecs replace the MDCT with a learned encoder, and its inverse with a learned decoder. <bookmark mark='c'/> Between them sits residual vector quantization of the learned features, as in Google's SoundStream of 2021 and Meta's EnCodec of 2022. <bookmark mark='d'/> They are trained end to end, with a second network as critic, judging whether the decoded audio sounds real. <bookmark mark='e'/> They code speech in three kilobits a second, and music in six to twenty-four, with promising low-rate quality in reported tests; comparisons depend on content, models, latency and evaluation conditions. <bookmark mark='f'/> And their codes are tokens: the alphabet in which the generative audio of Part 66 writes.", marks="bcdef")

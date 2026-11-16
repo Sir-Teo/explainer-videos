@@ -3,14 +3,14 @@
 Part 58 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the fifth part of Act X, *The Studio and the Stage*. The engineer tuning the first MP3
 encoder tested it on an unaccompanied voice, Suzanne Vega's "Tom's Diner", because on that voice it sounded dreadful.
-Years of research into what the ear cannot hear produced a file a tenth the size, and a few years later that file broke
-the record industry's business. This part builds the two kinds of compression: a lossless coder that rebuilds every bit,
+Years of research into what the ear cannot hear produced a file a tenth the size, and a few years later those files helped disrupt
+the record industry. This part builds the two kinds of compression: a lossless coder that rebuilds every bit,
 and a perceptual coder on Part 4's masking, with the MDCT, rate control, window sizes and mid-side stereo; then it asks how
-anyone could prove that a codec is transparent. The tools are Monochord's (`explainer/music/monochord/codec.py`); every
+controlled tests can establish limits on codec discrimination. The tools are Monochord's (`explainer/music/monochord/codec.py`); every
 codec heard here is Monochord's own, not MP3, AAC or Opus.
 
 * **A voice that sounded dreadful.** An ear question (the Tune sung alone, through our coder at 64 kbit/s, as recorded, and
-  at 16 kbit/s: which was the original? the second; the first is a twelfth of its size); *Tom's Diner* and the MP3; two
+  at 16 kbit/s: which was the original? the second; the first targets 64 kbit/s and estimates about 60 kbit/s on this signal); *Tom's Diner* and the MP3; two
   kinds of compression; the plan.
 * **1. Entropy and lossless coding.** Entropy; prediction; how much prediction saves (the voice from 13.0 to 3.5 bits a
   sample at order 4, the mix to 9.5 at order 2); Rice codes; a lossless coder, round trip (voice 23 %, mix 55 %, every
@@ -21,7 +21,7 @@ codec heard here is Monochord's own, not MP3, AAC or Opus.
 * **3. The MDCT.** Why a special transform; the modified discrete cosine transform; one frame's aliases; the aliases cancel
   (to 7 × 10⁻¹⁵, and 2 × 10⁻¹³ on the mix); aliases heard, from every other frame; a bank of filters.
 * **4. A perceptual coder.** Monochord's coder; bit allocation by step size; rate control; the voice and the mix at five
-  rates (the mix 19 dB under the mask at 128 kbit/s, 3 at 64, 18 over at 16); five rates heard.
+  rates (the mix 19 dB under the mask at 128 kbit/s, 3 at 64, 17 over at 16); five rates heard.
 * **5. Window switching and pre-echo.** Time against frequency; 30 ms before a hit (at equal noise-to-mask, long blocks
   leave 5.5 dB more noise before each hit, and short blocks cost three times the bits); an ear question (which had a swish
   before each hit? the long blocks); window switching.
@@ -60,7 +60,7 @@ Monochord's tools are held in `tests/music/test_codec.py`; this part's claims an
 through Monochord's coders.
 
 **What the models are, and are not.** *The perceptual coder* is mono, with one block size per run, no bit reservoir, no
-Huffman tables (Rice codes per band instead), 6-bit scale factors and a low-pass by bit rate; it is a teaching coder, and
+Huffman tables (Rice codes per band instead), a nominal six-bit scale-factor cost and a low-pass by target rate. Scale factors are not actually quantized and serialized, so these are estimated model rates, not measured complete files. It is a teaching coder, and
 its rates are not comparable one for one with MP3's or AAC's. *The masking model* is Johnston's (1988) in outline: Bark
 bands, Schroeder's spreading, a tonality offset from the spectral flatness, and Terhardt's threshold in quiet (capped at
 60 dB SPL), with a full-scale sine taken to play at 96 dB SPL. *The lossless coder* uses Shorten's fixed predictors, not

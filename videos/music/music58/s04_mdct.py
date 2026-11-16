@@ -46,10 +46,7 @@ class Mdct(SoundScene):
         win = label(r"$w_n = \sin\bigl(\pi(n + \tfrac12)/2N\bigr)$: \ the sine window; \ $w_n^2 + w_{n+N}^2 = 1$", font_size=18, color=WHITE).to_edge(DOWN, buff=0.6)
         head = label(r"the modified discrete cosine transform", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here it is. <bookmark mark='a'/> The modified discrete cosine transform takes a frame of two N samples, windowed, "
-            "and returns N coefficients, one for each of these windowed cosines: a half cycle, a cycle and a half, three and a "
-            "half cycles, shifted by a quarter frame. <bookmark mark='b'/> The window is a sine, chosen so that the squares of "
-            "its two halves add to one. Every coder from MP3 to Opus uses this transform, or a close relative."
+            "Here it is. <bookmark mark='a'/> The modified discrete cosine transform takes a frame of two N samples, windowed, and returns N coefficients, one for each of these windowed cosines: successive half-integer frequency bins, shifted by a quarter frame. <bookmark mark='b'/> The window is a sine, chosen so that the squares of its two halves add to one. The transform appears in MP3 and AAC and in Opus's CELT path; Opus's SILK path uses predictive coding."
         ) as vo:
             self.play(FadeIn(head), FadeIn(eq))
             vo.wait_until("a")

@@ -36,8 +36,8 @@ class Formats(SoundScene):
             "Real codecs are elaborations of ours. <bookmark mark='a'/> MP3, standardized in 1993, splits the signal into "
             "thirty-two bands and then applies a short MDCT within each. AAC, from 1997, uses the MDCT alone, with long and "
             "short blocks. Vorbis, from 2002, did the same, free of patents. HE-AAC, from 2003, added spectral band "
-            "replication. And Opus, from 2012, joins a speech coder to an MDCT coder with as little as five milliseconds of delay. "
-            "<bookmark mark='b'/> Each generation reached transparency at a lower bit rate: roughly a hundred and ninety-two "
+            "replication. And Opus, from 2012, joins a speech coder to an MDCT coder with a minimum algorithmic delay around five milliseconds in suitable modes, before transport, buffering and hardware delays. "
+            "<bookmark mark='b'/> Later codecs often improve quality at a given rate; no rate guarantees transparency for every encoder, excerpt or listener: roughly a hundred and ninety-two "
             "kilobits for MP3 in stereo, a hundred and twenty-eight for AAC, less again for Opus, though the figures depend on "
             "the music and on the encoder."
         ) as vo:

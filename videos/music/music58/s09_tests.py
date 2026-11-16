@@ -56,7 +56,7 @@ class Tests(SoundScene):
             "So repeat the trial, and count. <bookmark mark='a'/> If the listener hears no difference, each answer is a coin "
             "toss, and the number right follows the binomial distribution. Call the result significant when a guesser would do "
             "as well less than one time in twenty. <bookmark mark='b'/> In eight trials that needs seven right; in sixteen, "
-            "twelve; in a hundred, fifty-nine. This is the logic of every hypothesis test, which Part 67 will take further."
+            "twelve; in a hundred, fifty-nine. These thresholds assume a preplanned, one-sided test with independent fair guesses; repeated or adaptive testing needs adjustment, which Part 67 will take further."
         ) as vo:
             self.play(FadeIn(head), FadeIn(eq))
             vo.wait_until("a")
@@ -87,7 +87,7 @@ class Tests(SoundScene):
             "<bookmark mark='a'/> A listener right nine times in ten passes almost any test. <bookmark mark='b'/> But a listener "
             f"right seven times in ten, who certainly hears something, passes a sixteen-trial test only {say(100 * p16)} per cent "
             "of the time, and needs fifty trials to be found reliably. So a failed short test does not show that a difference is "
-            "inaudible; it shows only that the test was too small to tell."
+            "inaudible; it means this test did not establish discrimination; sample size, listener ability, excerpt and test conditions all matter."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(xl), FadeIn(yt), FadeIn(ghost(cs, 0.25)))
             vo.wait_until("a")
@@ -107,10 +107,4 @@ class Tests(SoundScene):
             (r"every codec in this chapter was tuned by tests like these; \ objective measures came later, \ and learned ones later still", TUNE),
         ]
         rows_scene(self, r"formal tests", items,
-                   "Codecs are judged by formal tests. <bookmark mark='b'/> The ITU's BS.1116, from 1994, is for small impairments: "
-                   "a hidden reference, a five-point scale, trained listeners and a quiet room. <bookmark mark='c'/> MUSHRA, "
-                   "BS.1534 from 2001, compares several systems at once against a hidden reference and a low-passed anchor, on a "
-                   "scale of nought to a hundred. <bookmark mark='d'/> Listeners are screened: anyone who rates the hidden reference "
-                   "low is dropped. <bookmark mark='e'/> The results are reported with confidence intervals across listeners and "
-                   "pieces of music, never as one number. <bookmark mark='f'/> Every codec of the last chapter was tuned by tests "
-                   "like these; objective measures came later, and learned ones later still.", marks="bcdef")
+                   "Codecs are judged by formal tests. <bookmark mark='b'/> The ITU's BS.1116, from 1994, is for small impairments: a hidden reference, a five-point scale, trained listeners and a quiet room. <bookmark mark='c'/> MUSHRA, BS.1534 from 2001, compares several systems at once against a hidden reference and a low-passed anchor, on a scale of nought to a hundred. <bookmark mark='d'/> Listeners are screened: exclusion criteria are specified by the test protocol and applied with care; a low reference rating alone is not a universal rule. <bookmark mark='e'/> The results are reported with confidence intervals across listeners and pieces of music, never as one number. <bookmark mark='f'/> Every codec of the last chapter was tuned by tests like these; objective measures came later, and learned ones later still.", marks="bcdef")

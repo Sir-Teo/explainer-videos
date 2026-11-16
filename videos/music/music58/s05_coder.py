@@ -32,8 +32,8 @@ class Coder(SoundScene):
             "Here is the coder this part builds, the shape of every perceptual codec. <bookmark mark='a'/> The signal is cut "
             "into MDCT frames of two thousand and forty-eight samples, a new frame every twenty-one milliseconds. "
             "<bookmark mark='b'/> The masking model looks at each frame and says how much noise each band can hide. "
-            "<bookmark mark='c'/> Each band is quantized with a step size from that allowance, and the integers are Rice-coded. "
-            "<bookmark mark='d'/> And a rate control turns one knob for the whole signal until the bits fit the budget."
+            "<bookmark mark='c'/> Each band is quantized with a step size from that allowance, and Rice-code lengths are estimated with a fixed per-band overhead. "
+            "<bookmark mark='d'/> And a rate control turns one knob for the whole signal until the estimated bits fit the budget."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(VGroup(top, model, rate), 0.25)), FadeIn(note))
             vo.wait_until("a")
@@ -50,19 +50,14 @@ class Coder(SoundScene):
     # ------------------------------------------------------------------
     def steps(self):
         lines = VGroup(
-            MathTex(r"\text{a uniform quantizer of step } \Delta \text{ adds noise of power } \Delta^2/12 \text{ per coefficient}", font_size=30),
+            MathTex(r"\text{a uniform quantizer of step } \Delta \text{ has approximate error variance } \Delta^2/12 \text{ per coefficient}", font_size=30),
             MathTex(r"\Delta_b = \sqrt{\frac{12\,M_b}{n_b}}\;10^{-m/20} \qquad (M_b \text{ the band's allowed noise}, \ n_b \text{ its coefficients})", font_size=30, color=TUNE),
-            MathTex(r"m > 0: \text{ the noise sits } m \text{ dB below the mask}; \quad m < 0: \text{ above it, audibly}", font_size=30),
-            MathTex(r"\text{bits} = \sum_{\text{frames, bands}} \bigl(6 \text{ for the scale factor} + \text{Rice}(q)\bigr)", font_size=30),
+            MathTex(r"m > 0: \text{ the noise sits } m \text{ dB below the mask}; \quad m < 0: \text{ above the model threshold}", font_size=30),
+            MathTex(r"\text{estimated bits} = \sum_{\text{frames, bands}} \bigl(6 \text{ for the scale factor} + \text{Rice}(q)\bigr)", font_size=30),
         ).arrange(DOWN, buff=0.45).move_to(DOWN * 0.1)
         head = label(r"bit allocation by step size", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The bit allocation is hidden in the step sizes. <bookmark mark='a'/> A uniform quantizer of step delta adds noise "
-            "of power delta squared over twelve to each coefficient. <bookmark mark='b'/> So choose each band's step to put its "
-            "noise exactly at the band's allowance, and then lower it by a margin, m decibels, the same for every band. "
-            "<bookmark mark='c'/> A positive margin puts the noise below the mask; a negative one above it, where it can be "
-            "heard. <bookmark mark='d'/> The bits are six for each band's scale factor plus the Rice codes of its integers; "
-            "bands where everything quantizes to zero cost almost nothing, and that is where most of the saving comes from."
+            "The bit allocation is hidden in the step sizes. <bookmark mark='a'/> Under a high-resolution, approximately uniform error model, a quantizer of step delta has error variance delta squared over twelve; coarse, signal-dependent quantization can depart from this. <bookmark mark='b'/> So choose each band's step to put its noise exactly at the band's allowance, and then lower it by a margin, m decibels, the same for every band. <bookmark mark='c'/> A positive margin puts the noise below the mask; a negative one above it, where it can be heard. <bookmark mark='d'/> Our rate estimate charges six bits per scale factor plus Rice-code costs; the teaching implementation does not serialize or quantize these scale factors into a complete interoperable bitstream; bands where everything quantizes to zero cost almost nothing, and that is where most of the saving comes from."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(lines, 0.25)))
             for mark, ln in zip("abcd", lines):
@@ -75,14 +70,14 @@ class Coder(SoundScene):
     def rate(self):
         items = [
             (r"rate control: \ find the margin $m$ that makes the whole signal fit the bit rate, \ by bisection", WHITE),
-            (r"plenty of bits: \ the margin is positive, \ the noise sits under the mask everywhere: \ transparent", WHITE),
+            (r"plenty of bits: \ the margin is positive, \ low predicted noise-to-mask ratio; \ transparency needs listening tests", WHITE),
             (r"too few: \ the margin goes negative, \ and the noise rises above the mask in band after band", WHITE),
             (r"real coders also low-pass at low rates, \ spending nothing above 9 to 16 kHz, \ and keep a bit reservoir between frames", TUNE),
         ]
         rows_scene(self, r"rate control", items,
                    "Then the rate control. <bookmark mark='b'/> Find the one margin that makes the whole signal fit the bit rate, "
                    "by bisection. <bookmark mark='c'/> With plenty of bits the margin is positive, and the noise sits under the mask "
-                   "everywhere: the coder is transparent. <bookmark mark='d'/> With too few, the margin goes negative, and the noise "
+                   "everywhere: the model predicts low audibility; transparency requires controlled listening tests. <bookmark mark='d'/> With too few, the margin goes negative, and the noise "
                    "rises above the mask in band after band. <bookmark mark='e'/> Real coders also cut off the top of the spectrum "
                    "at low rates, spending nothing above nine to sixteen kilohertz, and keep a reservoir of bits so that hard frames "
                    "can borrow from easy ones.", marks="bcde")
@@ -90,7 +85,7 @@ class Coder(SoundScene):
     # ------------------------------------------------------------------
     def table(self):
         d = load("rates")
-        rows = VGroup(VGroup(label(r"bit rate", font_size=16, color=GREY_A), label(r"size", font_size=16, color=GREY_A), label(r"voice: \ margin", font_size=16, color=GREY_A),
+        rows = VGroup(VGroup(label(r"target rate", font_size=16, color=GREY_A), label(r"target ratio", font_size=16, color=GREY_A), label(r"voice: \ margin", font_size=16, color=GREY_A),
                              label(r"mix: \ margin", font_size=16, color=GREY_A), label(r"mix: \ bands over the mask", font_size=16, color=GREY_A), label(r"cut above", font_size=16, color=GREY_A)))
         for v, m in zip(d["voice"], d["mix"]):
             col = TUNE if m["margin"] > 0 else EAR
@@ -104,12 +99,12 @@ class Coder(SoundScene):
                 m_.set_x(xs[i])
         rows.move_to(UP * 0.1)
         note = label(r"margin: \ how far below the mask the noise sits \ (negative: \ above it); \ mono, \ 48 kHz; \ the original is 768 kbit/s", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
-        head = label(r"our coder at five rates", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"nominal targets and estimated masking margins", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Here is our coder on the voice alone and on the mix, at five bit rates. <bookmark mark='a'/> At a hundred and "
             "twenty-eight kilobits both are far under the mask. At sixty-four the voice still has sixteen decibels to spare, the "
             "busy mix only three. <bookmark mark='b'/> At thirty-two the mix's noise is above the mask in most of its bands, and "
-            "at sixteen eighteen decibels above. The voice alone is the easier signal for this coder, because its spectrum is "
+            "at sixteen seventeen decibels above. The voice alone is the easier signal for this coder, because its spectrum is "
             "sparse and its bits go a long way; but where a coder does fail on a lone voice, nothing else is playing to hide "
             "the failure, which is what made Tom's Diner such a good test."
         ) as vo:
@@ -138,7 +133,7 @@ class Coder(SoundScene):
                 end = st[names[i + 1]] - 0.3 if i + 1 < len(names) else c.duration
                 pulse(snd, boxes[i], st[k], end, buff=0.06)
         with self.voiceover(
-            "The first two are indistinguishable from the original; at thirty-two a faint roughness appears; at twenty-four and "
+            "The first two may sound close to the original; we have not established indistinguishability in a listener study; at thirty-two a faint roughness appears; at twenty-four and "
             "sixteen the voice turns watery and metallic, the sound of a coder starved of bits."
         ):
             self.play(Indicate(boxes[4], color=EAR, scale_factor=1.04))
