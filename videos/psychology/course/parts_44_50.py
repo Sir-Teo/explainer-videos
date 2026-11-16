@@ -123,4 +123,40 @@ PARTS = [
               ("Its tests", "tests/psychology/test_scaling.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=47, level="M", widget="withinbetween", prereq=(31, 44, 46),
+        question="When is a finding about people a finding about a person?",
+        story="In 1973 Herbert Clark showed that a generation of language studies tested generalization to new people "
+              "but not to new words. The part simulates his fallacy (half of null studies significant), builds "
+              "multilevel models and partial pooling, crosses participants with items and plans the number of "
+              "stimuli, then turns to the deeper point: Simpson's paradox inside a person and person-mean centring, "
+              "a non-ergodic population whose group correlation describes almost no one, experience sampling and the "
+              "bias of inertia, cause over time, and critical slowing down before a tipping point, with the false "
+              "alarms that noisy diaries bring.",
+        handoff="Models of behaviour fitted person by person are Part 48; the brain's data with subjects and voxels "
+                "Part 49; the weight of evidence Part 50; computational psychiatry Part 59.",
+        outside="Part 31's growth curves and Part 44's latent variables; regression, variance components and "
+                "autoregression.",
+        objectives={
+            "U": ["Explain why stimuli must be treated as a sample, and what goes wrong when they are not.",
+                  "Recognize when a relation across people differs from the relation within a person."],
+            "M": ["Fit a multilevel model with random slopes, and explain partial pooling.",
+                  "Compute min F', plan the number of stimuli, and separate within- and between-person effects by "
+                  "person-mean centring.",
+                  "Estimate inertia from diary data and correct for its small-sample bias."],
+            "D": ["Argue which psychological processes could be ergodic, and design a test of critical slowing down "
+                  "that controls false alarms."],
+            "I": ["Audit a product or health metric for whether it describes users or a user."],
+        },
+        results=[
+            ("Multilevel model", r"y_{pt} = (\alpha + u_p) + (\beta + v_p) x_{pt} + \varepsilon_{pt}"),
+            ("min F'", r"\min F' = F_1 F_2 / (F_1 + F_2)"),
+            ("Within and between", r"y_{pt} = \beta_W (x_{pt} - \bar x_p) + \beta_B \bar x_p + \dots"),
+            ("Inertia's bias", r"E[\hat\phi] \approx \phi - (1 + 3\phi)/T"),
+        ],
+        U=(0, 1, 5, 7, 8), D=(15,), I=(14,),
+        also=(("Psyche's within module", "explainer/psychology/psyche/within.py"),
+              ("Its tests", "tests/psychology/test_within.py"),
+              ("statkit's mixed models", "explainer/stats/kit/mixed.py")),
+    ),
 ]

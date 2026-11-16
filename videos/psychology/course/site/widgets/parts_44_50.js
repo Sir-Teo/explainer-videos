@@ -415,4 +415,79 @@
       note: "Nothing you choose is stored or sent. The scale has no zero and no unit: only the order and the gaps mean anything.",
     });
   };
+  // ---- Part 47: one cloud, many people.  Guess the slope within one person before the colours show it. ----
+  W.withinbetween = function (el) {
+    var w = null;
+    var ROUNDS = 6, COLS = ["#7ec8f5", "#f2c14e", "#5bd18b", "#ef6f6c", "#b39ddb", "#f29e4c", "#6f9bf2", "#e07bb5"];
+    var S = { phase: "idle", k: -1, log: [], data: null };
+    function makeCloud(rand) {
+      var between = rand() < 0.5 ? -1 : 1, within = rand() < 0.5 ? -0.7 : 0.7, pts = [], p, t;
+      if (rand() < 0.25) within = between * 0.7;  // sometimes they agree
+      for (p = 0; p < 8; p++) {
+        var mx = (rand() - 0.5) * 6, my = between * mx + (rand() - 0.5) * 0.6;
+        for (t = 0; t < 10; t++) {
+          var dx = (rand() - 0.5) * 2.4;
+          pts.push({ p: p, x: mx + dx, y: my + within * dx + (rand() - 0.5) * 0.5 });
+        }
+      }
+      return { pts: pts, between: between, within: within, focus: Math.floor(rand() * 8) };
+    }
+    var rand = QB.rng(47);
+    function next() {
+      S.k++;
+      if (S.k >= ROUNDS) { S.phase = "done"; task.clear(); } else { S.phase = "ask"; S.data = makeCloud(rand); }
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "f": 0, "j": 1 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side) {
+        var guess = side === 0 ? -1 : 1, truth = S.data.within > 0 ? 1 : -1;
+        S.log.push({ guess: guess, truth: truth, between: S.data.between });
+        task.count++;
+        S.phase = "shown";
+        if (w) w.render();
+        task.later(next, 2400);
+      },
+    });
+    w = QB.widget(el, {
+      title: "Up or down, for one person?",
+      sub: "Each cloud is eight people measured ten times. One person's points are ringed. When their x is higher than usual, is their y higher or lower? F: lower, J: higher (or tap left or right).",
+      panels: 2, height: 340, weights: [1.3, 1],
+      buttons: [
+        { label: "Start", act: function (state) { rand = QB.rng(47 + state.seed); S.log = []; S.k = -1; task.count = 0; task.clear(); next(); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (S.phase === "ask" || S.phase === "shown") {
+          var x0 = b.x + 30, x1 = b.x + b.w - 30, y0 = b.y + 30, y1 = b.y + b.h - 40;
+          var X = function (v) { return x0 + (x1 - x0) * (v + 5) / 10; }, Y = function (v) { return y1 - (y1 - y0) * (v + 6) / 12; };
+          S.data.pts.forEach(function (q) {
+            var col = S.phase === "shown" ? COLS[q.p] : "#9aa0a6";
+            ctx.fillStyle = col; ctx.beginPath(); ctx.arc(X(q.x), Y(q.y), 3, 0, 2 * Math.PI); ctx.fill();
+            if (q.p === S.data.focus) { ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1; ctx.beginPath(); ctx.arc(X(q.x), Y(q.y), 6, 0, 2 * Math.PI); ctx.stroke(); }
+          });
+          ctx.save(); ctx.textAlign = "center"; ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif";
+          ctx.fillText("Cloud " + (S.k + 1) + " of " + ROUNDS + (S.phase === "shown" ? ("   within: " + (S.data.within > 0 ? "up" : "down") + ", across people: " + (S.data.between > 0 ? "up" : "down")) : "   F: lower    J: higher"), b.cx, b.y + b.h - 16);
+          ctx.restore();
+        } else if (S.phase === "done") {
+          var agree = S.log.filter(function (r) { return r.truth === r.between; }).length;
+          T.message(ctx, b, "Six clouds.", "In " + (ROUNDS - agree) + " of them the slope within a person ran against the slope across people. The overall cloud cannot tell you which; only each person's own points can.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Six clouds of people over time.");
+        }
+        var c2 = g[1].box, cx = g.ctx;
+        cx.save(); cx.textAlign = "left"; cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif";
+        cx.fillText("Your guess, within, and across people", c2.x + 10, c2.y + 18);
+        S.log.forEach(function (r, i) {
+          cx.fillStyle = r.guess === r.truth ? "#5bd18b" : "#ef6f6c";
+          cx.fillText((i + 1) + ".  you: " + (r.guess > 0 ? "up" : "down") + "   within: " + (r.truth > 0 ? "up" : "down") + "   across: " + (r.between > 0 ? "up" : "down"), c2.x + 14, c2.y + 44 + i * 22);
+        });
+        cx.restore();
+      },
+      readout: function () { return [["clouds", String(task.count)]]; },
+      note: "Nothing you answer is stored or sent. The clouds are generated in your browser.",
+    });
+  };
 })();

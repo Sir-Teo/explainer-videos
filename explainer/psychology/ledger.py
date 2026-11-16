@@ -6440,3 +6440,77 @@ shown(46, r"Tourangeau, Rips \& Rasinski (2000)", "a model of the response proce
 shown(46, r"Krosnick (1991)", "a theory of satisficing, described")
 shown(46, r"Likert (1932)", "a method, described")
 shown(46, r"Hainmueller, Hopkins \& Yamamoto (2014)", "a method, described")
+
+# --- Part 47: People over Time ---------------------------------------------------------------------------------------
+
+add(Finding(
+    key="items_as_fixed", part=47, title=r"Treating items as fixed inflates false positives",
+    claim="Analyses that treat a study's stimuli as fixed, rather than as a sample, find effects that do not "
+          "generalize to new stimuli far more often than their nominal error rate.",
+    original=Study("Clark", 1973, design="a critique of psycholinguistic studies analysed by participants only",
+                   found="significance tests that ignored item variability, and a quasi-F as the remedy"),
+    status="replicated",
+    record=(Study("Judd, Westfall and Kenny", 2012, design="simulations of studies with stimulus variability",
+                  found="false-positive rates far above 5% when stimuli are treated as fixed"),
+            Study("Barr, Levy, Scheepers and Tily", 2013, design="crossed random-effects models in simulation",
+                  found="nominal error rates only with random effects for both participants and items")),
+    note="A result of arithmetic as much as of experiment: when items vary and are few, ignoring them misstates the "
+         "uncertainty.",
+    sources=("H. H. Clark, The language-as-fixed-effect fallacy: a critique of language statistics in psychological "
+             "research, Journal of Verbal Learning and Verbal Behavior 12 (1973) 335-359",
+             "C. M. Judd, J. Westfall and D. A. Kenny, Treating stimuli as a random factor in social psychology, "
+             "Journal of Personality and Social Psychology 103 (2012) 54-69",
+             "D. J. Barr, R. Levy, C. Scheepers and H. J. Tily, Random effects structure for confirmatory hypothesis "
+             "testing: keep it maximal, Journal of Memory and Language 68 (2013) 255-278"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="emotional_inertia", part=47, title=r"Emotional inertia and depression",
+    claim="People whose moment-to-moment emotions carry over more from one moment to the next (higher "
+          "autocorrelation, 'inertia') are more prone to depression, and inertia adds information beyond how much "
+          "their emotions vary.",
+    original=Study("Kuppens, Allen and Sheeber", 2010, design="emotional inertia measured in daily-life and "
+                   "observational data", found="higher inertia in people with depressive symptoms"),
+    status="contested",
+    record=(Study("Dejonckheere and colleagues", 2019, design="many experience-sampling datasets, complex dynamics "
+                  "against simple mean and variance", found="dynamic measures such as inertia added little "
+                  "prediction beyond mean and variance"),),
+    note="Inertia does relate to depression, but much of its signal is shared with simpler summaries, and it is hard "
+         "to estimate from short series.",
+    sources=("P. Kuppens, N. B. Allen and L. B. Sheeber, Emotional inertia and psychological maladjustment, "
+             "Psychological Science 21 (2010) 984-991",
+             "E. Dejonckheere et al., Complex affect dynamics add limited information to the prediction of "
+             "psychological well-being, Nature Human Behaviour 3 (2019) 478-491"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="early_warning_depression", part=47, title=r"Early warnings before depression",
+    claim="Rising autocorrelation and variance in a person's daily emotions signal an approaching transition into "
+          "or out of depression (critical slowing down).",
+    original=Study("van de Leemput and colleagues", 2014, design="emotion time series in a general-population "
+                   "sample and in patients", found="higher autocorrelation, variance and correlation in those about "
+                   "to change"),
+    status="contested",
+    record=(Study("Wichers and colleagues", 2016, design="one person followed daily through a relapse",
+                  found="rising autocorrelation weeks before the shift"),
+            Study("Helmich and colleagues", 2024, design="early warning signals tested prospectively in many people",
+                  found="weak and inconsistent signals, with many false alarms")),
+    note="The theory is sound for systems near a tipping point; whether a given person's mood is such a system, and "
+         "whether the signals can be read in time from short noisy series, is unsettled.",
+    sources=("I. A. van de Leemput et al., Critical slowing down as early warning for the onset and termination of "
+             "depression, Proceedings of the National Academy of Sciences 111 (2014) 87-92",
+             "M. Wichers et al., Critical slowing down as a personalized early warning signal for depression, "
+             "Psychotherapy and Psychosomatics 85 (2016) 114-116",
+             "M. A. Helmich et al., Detecting impending symptom transitions using early warning signals in "
+             "individuals receiving treatment for depression, Clinical Psychological Science (2024)"),
+    checked="2026-11-16",
+))
+shown(47, r"Laird \& Ware (1982)", "a model, described")
+shown(47, r"Baayen, Davidson \& Bates (2008); \ Barr et al. (2013); \ Matuschek et al. (2017)",
+      "methods and a methodological debate, described; the false-positive inflation has its row")
+shown(47, r"Yarkoni (2022)", "a methodological argument, described")
+shown(47, r"Robinson (1950)", "the ecological fallacy's classic example, quoted")
+shown(47, r"Molenaar (2004)", "a methodological argument, described and simulated")
+shown(47, r"Hamaker, Kuiper \& Grasman (2015)", "a method, described (reproduced in Part 44)")

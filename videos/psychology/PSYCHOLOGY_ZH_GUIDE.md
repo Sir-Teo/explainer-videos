@@ -1231,6 +1231,22 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Louis Leon Thurstone; Ralph Bradley; Milton Terry; Duncan Luce; Daniel McFadden; Joel Huber; Itamar Simonson | 路易斯·利昂·瑟斯顿；拉尔夫·布拉德利；米尔顿·特里；邓肯·卢斯；丹尼尔·麦克法登；乔尔·休伯；伊塔马尔·西蒙森 |
 | Roger Tourangeau; Jon Krosnick; Howard Schuman; Stanley Presser; Fred Reichheld; J. P. Guilford | 罗杰·图兰若；乔恩·克罗斯尼克；霍华德·舒曼；斯坦利·普雷瑟；弗雷德·赖克哈尔德；J. P. 吉尔福德 |
 
+## Part 47: people over time
+
+| English | 中文 |
+|---|---|
+| repeated measures; multilevel (mixed) model; random intercept; random slope; partial pooling; shrinkage; BLUP | 重复测量；多层（混合）模型；随机截距；随机斜率；部分合并；收缩；最佳线性无偏预测 |
+| intraclass correlation; design effect; effective sample size | 组内相关；设计效应；有效样本量 |
+| language-as-fixed-effect fallacy; participants and items crossed; min F'; maximal random effects; convergence | 把语言当作固定效应的谬误；被试与项目交叉；min F'；最大化随机效应；收敛 |
+| generalizability crisis; stimulus sampling | 可推广性危机；刺激抽样 |
+| within-person; between-person; person-mean centring; ecological fallacy; Simpson's paradox | 个体内；个体间；个人均值中心化；生态谬误；辛普森悖论 |
+| ergodicity; homogeneity; stationarity; idiographic; nomothetic | 遍历性；同质性；平稳性；个案式；通则式 |
+| experience sampling; ecological momentary assessment; diary study; inertia; autoregression | 经验取样；生态瞬时评估；日记研究；惯性；自回归 |
+| random-intercept cross-lagged panel model; micro-randomized trial; single-case experiment | 随机截距交叉滞后面板模型；微随机化试验；单被试实验 |
+| tipping point; critical slowing down; early-warning signal; rolling window; false alarm | 临界点；临界减速；预警信号；滚动窗口；误报 |
+| Herbert Clark; Harald Baayen; Dale Barr; Hannes Matuschek; Charles Judd; Tal Yarkoni | 赫伯特·克拉克；哈拉尔德·巴扬；戴尔·巴尔；汉内斯·马图舍克；查尔斯·贾德；塔尔·亚尔科尼 |
+| Peter Molenaar; Aaron Fisher; W. S. Robinson; Mihaly Csikszentmihalyi; Peter Kuppens; Ellen Hamaker; Marten Scheffer; Marieke Wichers | 彼得·莫莱纳尔；亚伦·费希尔；W. S. 罗宾逊；米哈里·契克森米哈赖；彼得·库彭斯；艾伦·哈马克；马滕·舍弗尔；玛丽克·维歇斯 |
+
 ## Names
 
 | English | 中文 |
