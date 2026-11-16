@@ -21,11 +21,11 @@ class Chain(SoundScene):
             (r"Beethoven, \ Symphony No. 9 \ (1824), \ second movement, \ the development", WHITE),
             (r"a passage of nineteen triads: \ C, \ a, \ F, \ d, \ B$\flat$, \ g, \ E$\flat$ ...", WHITE),
             (r"each a fifth or a third from the last: \ R, \ L, \ R, \ L ... \ (Cohn)", WHITE),
-            (r"no key holds it: \ it slides through half the triads there are", TUNE),
+            (r"no key holds it: \ nineteen successive triads in Cohn’s reading", TUNE),
             (r"the full chain would visit all 24 before returning home", GREY_A),
         ]
         rows_scene(self, r"Beethoven's chain", items,
-                   "The longest chain in the classical repertory comes from Beethoven. <bookmark mark='b'/> In the development of "
+                   "A celebrated long chain comes from Beethoven. <bookmark mark='b'/> In the development of "
                    "the second movement of his Ninth Symphony, of 1824, <bookmark mark='c'/> Richard Cohn traces a passage of "
                    "nineteen triads, C major, A minor, F major, D minor, B flat, G minor, E flat and on, <bookmark mark='d'/> "
                    "each reached from the last by R or by L, alternately. <bookmark mark='e'/> No key holds it: it slides "
@@ -81,9 +81,7 @@ class Chain(SoundScene):
         ans = VGroup(label(r"A: \ all in C major: \ I, \ vi, \ IV, \ ii, \ V, \ I", font_size=21, color=TUNE).next_to(ga, DOWN, buff=0.3),
                      label(r"B: \ B$\flat$ and G minor bring in B$\flat$: \ the key has moved", font_size=21, color=EAR).next_to(gb, DOWN, buff=0.3))
         with self.voiceover(
-            "A stays home: C, A minor, F, D minor, G, C, every chord in C major. B starts the same way, but its fifth chord is "
-            "B flat major, and B flat is not in C major; the chain is already on its way to the flat keys. Both are smooth; "
-            "only one has a home."
+            'A stays home: C, A minor, F, D minor, G, C, every chord in C major. B starts the same way, but its fifth chord is B flat major, and B flat is not in C major; the chain is already on its way to the flat keys. Both can sound smooth; only A remains diatonic to C major. A chromatic chain can still have a tonal context.'
         ):
             self.play(FadeIn(ans), *[x.animate.set_color(TUNE) for x in ga])
         self.wait(0.4)

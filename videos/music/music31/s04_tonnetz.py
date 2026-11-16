@@ -76,18 +76,13 @@ class Tonnetz(SoundScene):
         rows_ = text_rows([
             (r"going right twelve fifths returns to the same pitch class", WHITE),
             (r"going up three major thirds returns too: \ C, \ E, \ G$\sharp$, \ C", WHITE),
-            (r"so the map wraps round in both directions: \ a torus, \ the surface of a doughnut", TUNE),
+            (r"identify all equal pitch classes, including diagonal equivalents:\\a torus with 12 nodes and 24 triangles", TUNE),
             (r"12 pitch classes, \ 24 triangles: \ exactly the 24 major and minor triads", WHITE),
             (r"chapter two's distance is a walk across triangles on this torus", GREY_A),
         ], font_size=24)
         head = label(r"the map closes up", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "The map does not go on for ever. <bookmark mark='a'/> Twelve steps to the right, twelve fifths, bring you back "
-            "to the same pitch class. <bookmark mark='b'/> Three steps up, three major thirds, C, E, G sharp, C, also bring you "
-            "back. <bookmark mark='c'/> So the map wraps round in both directions, and its true shape is a torus, the surface "
-            "of a doughnut. <bookmark mark='d'/> On it there are twelve nodes and twenty-four triangles: exactly the "
-            "twenty-four major and minor triads. <bookmark mark='e'/> Chapter two's distance is the number of triangles you "
-            "cross on this surface."
+            "The map does not go on for ever. <bookmark mark='a'/> Twelve steps to the right, twelve fifths, bring you back to the same pitch class. <bookmark mark='b'/> Three steps up, three major thirds, C, E, G sharp, C, also bring you back. <bookmark mark='c'/> Identifying every lattice point with the same twelve-tone pitch class, including diagonal equivalences, gives a torus, the surface of a doughnut. The two periods alone would leave repeated pitch classes. <bookmark mark='d'/> On it there are twelve nodes and twenty-four triangles: exactly the twenty-four major and minor triads. <bookmark mark='e'/> Chapter two's distance is the number of triangles you cross on this surface."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -201,9 +196,7 @@ class Tonnetz(SoundScene):
             pulse(snd, rows_[1], 2.6, 5.5, buff=0.08)
             pulse(snd, rows_[2], 5.6, c.duration, buff=0.08)
         with self.voiceover(
-            "In just intonation those are different notes, so the lattice never wraps round: it is an infinite plane. Equal "
-            "temperament splits the difference and calls both of them E, and only then does the map close into the torus "
-            "this part has been walking on."
+            'In just intonation those are different notes, so the lattice never wraps round: it is an infinite plane. Twelve-tone equal temperament identifies both routes with the same E. Identifying all equivalent pitch classes gives the finite torus used here; other finite temperaments can give other quotients.'
         ):
             self.play(FadeIn(rows_[3]))
         self.wait(0.4)

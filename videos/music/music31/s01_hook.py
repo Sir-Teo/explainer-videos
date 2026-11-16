@@ -18,12 +18,9 @@ class Hook(SoundScene):
         cells = VGroup(*[VGroup(label(tex_triad(n), font_size=40, color=TUNE if n == "C" else EAR)) for n in d["chain"]]).arrange(RIGHT, buff=0.9).move_to(UP * 0.6)
         moves = VGroup(*[label(m, font_size=22, color=GREY_A).move_to((cells[i].get_center() + cells[i + 1].get_center()) / 2 + DOWN * 0.8) for i, m in enumerate(d["moves"])])
         head = label(r"a progression in the manner of a film score \ (ours)", font_size=26, color=GREY_A).to_edge(UP, buff=0.5)
-        cap = label(r"C major and E major share one note; \ C major and A$\flat$ major share one note: \ no key holds both", font_size=21, color=GREY_A).to_edge(DOWN, buff=1.1)
+        cap = label(r"C major and E major share one note; \ C major and A$\flat$ major share one note: \ no single diatonic scale holds both", font_size=21, color=GREY_A).to_edge(DOWN, buff=1.1)
         with self.voiceover(
-            "Listen to a progression of our own, in the manner of a film score at a moment of wonder: C major, E major, C "
-            "major again, A flat major, F, and home. Every chord is an ordinary major triad. But C major and E major share "
-            "only one note, and no key contains both; the same is true of C and A flat. Functional harmony, tonic, "
-            "subdominant, dominant, has nothing to say about these moves, and audiences love them."
+            'Listen to a progression of our own, in the manner of a film score at a moment of wonder: C major, E major, C major again, A flat major, F, and home. Every chord is an ordinary major triad. But C major and E major share only one note, and no single diatonic scale contains both; the same is true of C and A flat. Tonal analysis can describe them through mixture, chromatic mediants or applied functions; transformations offer another useful account, without requiring one shared diatonic scale.'
         ):
             self.play(FadeIn(head), FadeIn(cells), FadeIn(cap))
         with self.listen(c) as snd:

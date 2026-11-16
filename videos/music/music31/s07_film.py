@@ -20,14 +20,14 @@ class Film(SoundScene):
         items = [
             (r"a chromatic mediant: \ two major \ (or two minor) \ triads a third apart, \ sharing one note", WHITE),
             (r"C major to E major: \ L then P \ (two steps); \ C to A$\flat$ major: \ P then L", WHITE),
-            (r"functional harmony has no name for them; \ the Tonnetz puts them two steps apart", WHITE),
+            (r"chromatic mediants also admit tonal accounts; \ the Tonnetz puts them two steps apart", WHITE),
             (r"Schubert used them constantly; \ by the twentieth century, \ film did too", TUNE),
             (r"the hook's progression was built from exactly these", GREY_A),
         ]
         rows_scene(self, r"chromatic mediants", items,
                    "The hook's progression used chords called chromatic mediants. <bookmark mark='b'/> Two major triads, or two "
                    "minor ones, a third apart, sharing just one note. <bookmark mark='c'/> C major to E major is L and then P; C "
-                   "to A flat major is P and then L. <bookmark mark='d'/> Functional harmony has no good name for them; on the "
+                   "to A flat major is P and then L. <bookmark mark='d'/> Tonal theory can call them chromatic mediants or explain them through mixture; on the "
                    "Tonnetz they are two steps apart. <bookmark mark='e'/> Schubert used them constantly, and in the twentieth "
                    "century film composers did too. <bookmark mark='f'/> The hook's progression was built from exactly these.",
                    marks="cdef")
@@ -70,15 +70,11 @@ class Film(SoundScene):
             (r"Frank Lehman, \ \textit{Hollywood Harmony} \ (2018): \ transformations in film scores, \ catalogued", WHITE),
             (r"chromatic mediants for awe and wonder; \ the hexatonic pole for menace and the supernatural", WHITE),
             (r"the scores are in copyright: \ the film analyses the moves, \ and plays its own", WHITE),
-            (r"the associations are learned, \ like a language, \ from many films", TUNE),
+            (r"associations depend on film conventions, \ exposure and context", TUNE),
             (r"Part 44 builds music for picture and play", GREY_A),
         ]
         rows_scene(self, r"Hollywood harmony", items,
-                   "Film music is now a field of study. <bookmark mark='b'/> Frank Lehman's Hollywood Harmony, of 2018, "
-                   "catalogues these transformations across many scores, <bookmark mark='c'/> chromatic mediants for awe and "
-                   "wonder, the hexatonic pole for menace and the supernatural. <bookmark mark='d'/> The scores are in copyright, "
-                   "so this film analyses the moves and plays its own. <bookmark mark='e'/> The associations are learned, like "
-                   "words in a language, from many films. <bookmark mark='f'/> Part 44 builds music for picture and play.",
+                   "Film music is now a field of study. <bookmark mark='b'/> Frank Lehman's Hollywood Harmony, of 2018, catalogues these transformations across many scores, <bookmark mark='c'/> chromatic mediants for awe and wonder, the hexatonic pole for menace and the supernatural. <bookmark mark='d'/> The scores are in copyright, so this film analyses the moves and plays its own. <bookmark mark='e'/> Film conventions and listener exposure can shape these associations; a chord change has no fixed emotional meaning. <bookmark mark='f'/> Part 44 builds music for picture and play.",
                    marks="cdef")
 
     # ------------------------------------------------------------------
@@ -110,7 +106,7 @@ class Film(SoundScene):
         with self.voiceover(
             "Three trips away from C major and back, on the bowed strings. To E major and back: L and P, a bright lift. To A "
             "flat major and back: P and L, warmer and darker. To F sharp major and back: four steps, no notes in common, "
-            "six semitones of voice leading, the farthest major chord of all, as far as the tritone can take you."
+            "six semitones of voice leading, tied with D and B flat major for the largest voice-leading distance from C among these triads."
         ):
             self.play(FadeIn(head), FadeIn(cells))
         with self.listen(c) as snd:

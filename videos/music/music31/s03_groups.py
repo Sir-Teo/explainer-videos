@@ -101,14 +101,10 @@ class Groups(SoundScene):
             (r"T/I sees C major and E major as related by $T_4$: \ a third away", WHITE),
             (r"PLR sees them as L then P: \ two smooth steps", WHITE),
             (r"a composer can think in either; \ the duality says they never conflict", TUNE),
-            (r"the same mathematics appears wherever a set has two commuting symmetry groups", GREY_A),
+            (r"duality here requires mutual centralizers and simply transitive actions", GREY_A),
         ]
         rows_scene(self, r"why it matters", items,
-                   "Why does it matter? <bookmark mark='b'/> The two groups are two descriptions of the same twenty-four triads. "
-                   "<bookmark mark='c'/> Transposition sees C major and E major as related by a move up a major third. "
-                   "<bookmark mark='d'/> The PLR group sees the same pair as two smooth steps, L and then P. "
-                   "<bookmark mark='e'/> A composer can think in either way, and the duality guarantees that the two never "
-                   "conflict. <bookmark mark='f'/> The same mathematics appears wherever a set has two commuting symmetry groups.",
+                   "Why does it matter? <bookmark mark='b'/> The two groups are two descriptions of the same twenty-four triads. <bookmark mark='c'/> Transposition sees C major and E major as related by a move up a major third. <bookmark mark='d'/> The PLR group sees the same pair as two smooth steps, L and then P. <bookmark mark='e'/> A composer can think in either way, and the duality specifies how their actions commute. <bookmark mark='f'/> This duality requires the stronger mutual-centralizer relationship, with simply transitive actions; commuting alone does not establish it.",
                    marks="cdef")
 
     # ------------------------------------------------------------------

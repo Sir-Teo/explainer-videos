@@ -137,3 +137,7 @@ python -m videos.music.labs 31                                  # the lab (write
   Music Theory* (1998); E. Gollin, "Some aspects of three-dimensional *Tonnetze*", *Journal of Music Theory* (1998).
 * Part 6 for the comma; Part 13 for triads; Part 19 for the hexatonic cycle; Part 27 for *Tristan*; Part 28 for the
   symmetric scales; Part 29 for inversion.
+
+## Interpretation limits
+
+The groups act on twelve-tone pitch classes, ignoring register, doubling and spelling. P and L move one semitone; R moves two and is not equally minimal. L retains a minor third and R a major third. A common diatonic scale is not required for a tonal interpretation. The torus identifies all lattice points with the same pitch class, including diagonal equivalences. Commutation alone does not prove group duality. The Tune search is given C major at both endpoints, fixed costs and melody samples every two beats; it does not independently discover tonality or constrain every melody note. Emotional associations and learned embeddings require separate listener evidence and controls.

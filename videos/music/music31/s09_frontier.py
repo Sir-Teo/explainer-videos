@@ -25,12 +25,7 @@ class Frontier(SoundScene):
             (r"the evidence is a handful of experiments, \ with small samples", GREY_A),
         ]
         rows_scene(self, r"what listeners hear", items,
-                   "Do listeners feel these distances? <bookmark mark='b'/> In 1998 Carol Krumhansl asked listeners to rate how "
-                   "well pairs of triads fitted together. <bookmark mark='c'/> Her results followed distance on the circle of "
-                   "keys, and also, separately, the PLR moves. <bookmark mark='d'/> The two descriptions are dual for the "
-                   "mathematics, but they make different predictions for the ear. <bookmark mark='e'/> Listeners with different "
-                   "training, or different exposure to film music, may also differ. <bookmark mark='f'/> And the evidence is still "
-                   "a handful of experiments, with small samples.", marks="cdef")
+                   "Do listeners feel these distances? <bookmark mark='b'/> In 1998 Carol Krumhansl asked listeners to rate how well pairs of triads fitted together. <bookmark mark='c'/> Her results followed distance on the circle of keys, and also, separately, the PLR moves. <bookmark mark='d'/> The group duality concerns actions on triads; it does not make a key-circle distance identical or dual to a PLR distance. These measures can make different predictions for the ear. <bookmark mark='e'/> Listeners with different training, or different exposure to film music, may also differ. <bookmark mark='f'/> And the evidence is still a handful of experiments, with small samples.", marks="cdef")
 
     # ------------------------------------------------------------------
     def spaces(self):
@@ -117,7 +112,7 @@ class Frontier(SoundScene):
                    "Machines offer a third witness. <bookmark mark='b'/> Train a model on many chord sequences and it gives every "
                    "chord a vector, a point in a learned space. <bookmark mark='c'/> In several such studies, chords a fifth apart, "
                    "and relative major and minor, end up near each other. <bookmark mark='d'/> The model never saw a Tonnetz, so "
-                   "whatever geometry it finds comes only from how chords are used. <bookmark mark='e'/> That makes a clean test: "
+                   "its geometry reflects the training data, representation, objective and model assumptions. <bookmark mark='e'/> That suggests a comparison, with held-out material and controls for chord frequency: "
                    "does the learned space agree with P L R distance, with voice leading, or with neither? <bookmark mark='f'/> "
                    "Part 62 builds chord recognition, and this part's distances are the baseline it can be compared with.",
                    marks="cdef")

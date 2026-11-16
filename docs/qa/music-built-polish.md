@@ -35,8 +35,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 28 — New Scales, New Rhythms | Complete | Open |
 | 29 — Twelve Tones | Complete | Open |
 | 30 — Sound Itself | Complete | Open |
-| 31 — Transformations | In progress | Open |
-| 32–68 | Queued | Open |
+| 31 — Transformations | Complete | Open |
+| 32 — The Geometry of Chords | In progress | Open |
+| 33–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -121,7 +122,9 @@ Part 29: all 12 chapter preview sheets reviewed; sound and 14 listening-window m
 
 Part 30: all 11 chapter preview sheets reviewed; sound and 17 listening-window motion checks pass. Local identities: `renders/qa/music30/source-receipt.json`.
 
-**Current: Part 31.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 31: all 10 chapter preview sheets reviewed; sound and 17 listening-window motion checks pass. Local identities: `renders/qa/music31/source-receipt.json`.
+
+**Current: Part 32.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

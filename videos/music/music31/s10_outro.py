@@ -27,7 +27,7 @@ class Outro(SoundScene):
             "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> This time a program "
             "harmonizes it by walking on the Tonnetz: every two beats it may stay, or take one or two P, L or R steps, to a "
             "triad containing the melody note, preferring the smallest moves and ending at home. The walk it finds is C, C, A "
-            "minor, C, F, C, G, C: given only the moves and the melody, it rediscovers the tonic, subdominant and dominant."
+            "minor, C, F, C, G, C: with C major supplied as both start and finish and a fixed transition cost, it chooses familiar tonic, subdominant and dominant triads. Chords need contain only the melody note sampled every two beats, not every intervening note."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")

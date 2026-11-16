@@ -90,13 +90,10 @@ class Moves(SoundScene):
             (r"P and L: \ one voice, \ one semitone", WHITE),
             (r"R: \ one voice, \ one whole tone", WHITE),
             (r"Richard Cohn: \ `parsimonious' voice leading", TUNE),
-            (r"the smoothest possible change between different triads", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
+            (r"P and L minimize motion; R moves a whole tone", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT)
         side.move_to(RIGHT * 3.3 + DOWN * 0.2)
         with self.voiceover(
-            "Count how far the voices move. <bookmark mark='a'/> P and L move one voice by one semitone; "
-            "<bookmark mark='b'/> R moves one voice by a whole tone. <bookmark mark='c'/> The theorist Richard Cohn calls "
-            "this parsimonious voice leading. <bookmark mark='d'/> No change between two different triads can be smoother, "
-            "which is why these moves sound so natural even when they leave the key."
+            "Count how far the voices move. <bookmark mark='a'/> P and L move one voice by one semitone; <bookmark mark='b'/> R moves one voice by a whole tone. <bookmark mark='c'/> The theorist Richard Cohn calls this parsimonious voice leading. <bookmark mark='d'/> P and L attain the one-semitone minimum for distinct triads; R requires two. This pitch-class economy is exact, while perceived smoothness also depends on register, voicing and context."
         ) as vo:
             self.play(FadeIn(t), FadeIn(bars))
             for mark, r in zip("abcd", side):
@@ -190,8 +187,8 @@ class Moves(SoundScene):
         heads = [r"move", r"on a major triad", r"on a minor triad", r"keeps"]
         data = [
             (r"P", r"third down a semitone \ (C, \ E, \ G to C, \ E$\flat$, \ G)", r"third up a semitone", r"root and fifth"),
-            (r"L", r"root down a semitone \ (C to B: \ e minor)", r"fifth up a semitone", r"the major third"),
-            (r"R", r"fifth up a whole tone \ (G to A: \ a minor)", r"root down a whole tone", r"the minor third"),
+            (r"L", r"root down a semitone \ (C to B: \ e minor)", r"fifth up a semitone", r"the minor third"),
+            (r"R", r"fifth up a whole tone \ (G to A: \ a minor)", r"root down a whole tone", r"the major third"),
         ]
         rows_ = VGroup()
         hr = VGroup(*[label(h, font_size=21, color=GREY_A) for h in heads])
@@ -206,9 +203,9 @@ class Moves(SoundScene):
         cap = label(r"on a minor triad each move runs backwards: \ that is why each move undoes itself", font_size=21, color=EAR).to_edge(DOWN, buff=0.6)
         with self.voiceover(
             "A table makes the pattern plain. <bookmark mark='a'/> P keeps the root and fifth and moves the third by a "
-            "semitone: down on a major triad, up on a minor one. <bookmark mark='b'/> L keeps the major third: on a major "
+            "semitone: down on a major triad, up on a minor one. <bookmark mark='b'/> L keeps the minor third: on a major "
             "triad the root drops a semitone, C to B, giving E minor; on a minor triad the fifth rises a semitone. "
-            "<bookmark mark='c'/> R keeps the minor third: on a major triad the fifth rises a whole tone, G to A, giving A "
+            "<bookmark mark='c'/> R keeps the major third: on a major triad the fifth rises a whole tone, G to A, giving A "
             "minor; on a minor triad the root falls a whole tone. <bookmark mark='d'/> On a minor triad every move runs the "
             "other way, and that is why doing a move twice brings you back."
         ) as vo:
