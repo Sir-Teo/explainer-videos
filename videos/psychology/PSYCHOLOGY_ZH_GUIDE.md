@@ -1356,6 +1356,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | standard error of measurement; confidence interval of a test score | 测量标准误；测验分数的置信区间 |
 | Gary Wells; John Wixted; Saul Kassin; Itiel Dror; Elizabeth Loftus; Stephen Ceci; Maggie Bruck; Alexandra Chouldechova | 加里·韦尔斯；约翰·威克斯泰德；索尔·卡辛；伊蒂尔·德罗尔；伊丽莎白·洛夫特斯；斯蒂芬·切奇；玛吉·布鲁克；亚历山德拉·乔尔德乔娃 |
 
+## Part 57: health and care
+
+| English | 中文 |
+|---|---|
+| stress; allostatic load; viral challenge; dose-response | 应激；稳态负荷；病毒激发试验；剂量-反应 |
+| placebo; nocebo; open-label placebo; regression to the mean; expectation as a prior | 安慰剂；反安慰剂；开放标签安慰剂；趋均数回归；作为先验的期待 |
+| chronic pain; adherence; lifestyle intervention; cognitive behavioural therapy for insomnia | 慢性疼痛；依从性；生活方式干预；失眠的认知行为疗法 |
+| mindfulness; treatment gap; stepped care; measurement-based care; task sharing; lay counsellor; digital therapeutic | 正念；治疗缺口；阶梯式照护；基于测量的照护；任务分担；非专业咨询员；数字疗法 |
+| Type A behaviour pattern; hostility; mindset | A型行为模式；敌意；心态 |
+| Sheldon Cohen; Fabrizio Benedetti; Ted Kaptchuk; Tor Wager; Vikram Patel; Meyer Friedman; Ray Rosenman; Alia Crum | 谢尔登·科恩；法布里齐奥·贝内代蒂；泰德·卡普丘克；托尔·瓦格；维克拉姆·帕特尔；迈耶·弗里德曼；雷·罗森曼；阿莉娅·克拉姆 |
+
 ## Names
 
 | English | 中文 |

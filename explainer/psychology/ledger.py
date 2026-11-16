@@ -7449,3 +7449,152 @@ shown(56, r"Kassin et al.\ (2010)", "cited in a row; a review of interrogation r
 shown(56, r"Ceci \& Bruck (1995)", "experiments on children's suggestibility, described")
 shown(56, r"Englich, \ Mussweiler \& Strack (2006)", "an anchoring experiment with judges, described")
 shown(56, r"Dressel \& Farid (2018)", "an accuracy comparison, quoted")
+
+# --- Part 57: Health and Care ----------------------------------------------------------------------------------------
+
+add(Finding(
+    key="stress_infection", part=57, title=r"Stress and catching a cold",
+    claim="People under more psychological stress are more likely to develop a cold after exposure to a cold virus.",
+    original=Study("Cohen, Tyrrell and Smith", 1991, n="about 400 volunteers", design="stress measured, then nasal "
+                   "drops of a cold virus and quarantine", found="a dose-response rise in colds with stress"),
+    status="replicated",
+    record=(Study("Cohen and colleagues", 1998, design="viral challenge with life events measured by interview",
+                  found="chronic stressors of a month or more raised the risk"),
+            Study("Cohen and colleagues", 2012, design="viral challenge with glucocorticoid resistance measured",
+                  found="a mechanism: stress-related resistance predicted colds")),
+    note="The virus is assigned and the stress measured, so confounding is reduced but not removed; the dose-response "
+         "and the mechanism work make it one of the strongest results in the field.",
+    sources=("S. Cohen, D. A. J. Tyrrell and A. P. Smith, Psychological stress and susceptibility to the common cold, "
+             "New England Journal of Medicine 325 (1991) 606-612",
+             "S. Cohen et al., Types of stressors that increase susceptibility to the common cold in healthy adults, "
+             "Health Psychology 17 (1998) 214-223",
+             "S. Cohen et al., Chronic stress, glucocorticoid receptor resistance, inflammation, and disease risk, "
+             "Proceedings of the National Academy of Sciences 109 (2012) 5995-5999"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="placebo_analgesia", part=57, title=r"Placebo analgesia",
+    claim="Placebos reduce reported pain, partly through the brain's own opioids.",
+    original=Study("Levine, Gordon and Fields", 1978, design="placebo after dental surgery, with or without naloxone",
+                   found="placebo pain relief, partly blocked by naloxone"),
+    status="replicated",
+    record=(Study("Benedetti and colleagues", 2005, design="a review of placebo neurobiology",
+                  found="opioid and non-opioid mechanisms of placebo analgesia"),
+            Study("Hrobjartsson and Gotzsche", 2010, design="a Cochrane review of placebo against no treatment",
+                  found="small effects on patient-reported outcomes, especially pain")),
+    note="Real but usually modest, highly variable between people, and largest for self-reported symptoms.",
+    sources=("J. D. Levine, N. C. Gordon and H. L. Fields, The mechanism of placebo analgesia, Lancet 312 (1978) "
+             "654-657",
+             "F. Benedetti, H. S. Mayberg, T. D. Wager, C. S. Stohler and J.-K. Zubieta, Neurobiological mechanisms of "
+             "the placebo effect, Journal of Neuroscience 25 (2005) 10390-10402",
+             "A. Hrobjartsson and P. C. Gotzsche, Placebo interventions for all clinical conditions, Cochrane Database "
+             "of Systematic Reviews (2010) CD003974"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="placebo_objective", part=57, title=r"Placebos on objective outcomes",
+    claim="Placebo treatments produce large improvements in clinical conditions generally, including objective "
+          "outcomes.",
+    original=Study("Beecher", 1955, design="a pooled look at 15 trials", found="about 35% of patients improved on "
+                   "placebo"),
+    status="failed",
+    record=(Study("Hrobjartsson and Gotzsche", 2001, design="trials with both placebo and no-treatment arms",
+                  found="little effect on objective and binary outcomes; a small one on subjective outcomes"),),
+    note="Most improvement on placebo is natural recovery and regression to the mean; the specific effect is mostly "
+         "on how symptoms are experienced.",
+    sources=("H. K. Beecher, The powerful placebo, Journal of the American Medical Association 159 (1955) 1602-1606",
+             "A. Hrobjartsson and P. C. Gotzsche, Is the placebo powerless? An analysis of clinical trials comparing "
+             "placebo with no treatment, New England Journal of Medicine 344 (2001) 1594-1602"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="open_label_placebo", part=57, title=r"Open-label placebo",
+    claim="Placebos given openly, with patients told they are inert, still improve symptoms.",
+    original=Study("Kaptchuk and colleagues", 2010, n="80 patients with irritable bowel syndrome",
+                   design="open-label placebo against no treatment for three weeks",
+                   found="adequate relief in about 59% against 35%"),
+    status="contested",
+    record=(Study("Carvalho and colleagues", 2016, n="97 patients with chronic low back pain",
+                  design="open-label placebo added to usual care", found="lower pain and disability"),
+            Study("von Wernsdorff and colleagues", 2021, design="a meta-analysis of open-label placebo trials",
+                  found="a moderate effect, mostly on self-reported outcomes in small trials")),
+    note="Every trial is small, unblinded and self-reported; the effects may be real or may be reporting shaped by "
+         "attention and hope.",
+    sources=("T. J. Kaptchuk et al., Placebos without deception, PLoS ONE 5 (2010) e15591",
+             "C. Carvalho et al., Open-label placebo treatment in chronic low back pain, Pain 157 (2016) 2766-2772",
+             "M. von Wernsdorff, M. Loef, B. Tuschen-Caffier and S. Schmidt, Effects of open-label placebos in clinical "
+             "trials, Scientific Reports 11 (2021) 3855"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="lifestyle_diabetes", part=57, title=r"Preventing diabetes by lifestyle",
+    claim="An intensive lifestyle programme reduces the incidence of type 2 diabetes in people at high risk.",
+    original=Study("Tuomilehto and colleagues (Finnish Diabetes Prevention Study)", 2001, n="522 adults",
+                   design="randomized lifestyle intervention", found="58% fewer new cases"),
+    status="replicated",
+    record=(Study("Diabetes Prevention Program Research Group", 2002, n="3,234 adults",
+                  design="lifestyle against metformin and placebo", found="58% fewer with lifestyle, 31% with metformin"),
+            Study("Diabetes Prevention Program Research Group", 2009, design="ten-year follow-up",
+                  found="a smaller but persistent reduction")),
+    note="Weight returns for many; the reduction in incidence partly persists. Behaviour is the treatment.",
+    sources=("J. Tuomilehto et al., Prevention of type 2 diabetes mellitus by changes in lifestyle among subjects with "
+             "impaired glucose tolerance, New England Journal of Medicine 344 (2001) 1343-1350",
+             "Diabetes Prevention Program Research Group, Reduction in the incidence of type 2 diabetes with lifestyle "
+             "intervention or metformin, New England Journal of Medicine 346 (2002) 393-403",
+             "Diabetes Prevention Program Research Group, 10-year follow-up of diabetes incidence and weight loss in "
+             "the Diabetes Prevention Program Outcomes Study, Lancet 374 (2009) 1677-1686"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="type_a", part=57, title=r"Type A behaviour and heart disease",
+    claim="The Type A behaviour pattern (hurried, competitive, hostile) causes coronary heart disease.",
+    original=Study("Rosenman and colleagues (Western Collaborative Group Study)", 1975, n="about 3,000 men",
+                   design="a prospective cohort", found="about twice the rate of heart disease in Type A men"),
+    status="failed",
+    record=(Study("Shekelle and colleagues (MRFIT)", 1985, design="a large prospective cohort",
+                  found="no association of Type A with coronary events"),
+            Study("Chida and Steptoe", 2009, design="a meta-analysis of anger and hostility",
+                  found="a small association of hostility with heart disease")),
+    note="Type A as a whole failed to replicate; hostility kept a weaker association. Some early work was funded by "
+         "the tobacco industry.",
+    sources=("R. H. Rosenman et al., Coronary heart disease in the Western Collaborative Group Study, Journal of the "
+             "American Medical Association 233 (1975) 872-877",
+             "R. B. Shekelle et al., The MRFIT behavior pattern study II, American Journal of Epidemiology 122 (1985) "
+             "559-570",
+             "Y. Chida and A. Steptoe, The association of anger and hostility with future coronary heart disease, "
+             "Journal of the American College of Cardiology 53 (2009) 936-946"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="maids_mindset", part=57, title=r"Exercise by mindset",
+    claim="Telling hotel workers that their work counts as exercise improves their weight and blood pressure.",
+    original=Study("Crum and Langer", 2007, n="84 room attendants in seven hotels",
+                   design="information given by hotel, measures after four weeks",
+                   found="small decreases in weight and blood pressure"),
+    status="contested",
+    record=(Study("Crum and colleagues", 2011, design="a related study of beliefs about a milkshake's calories",
+                  found="ghrelin responses differed with the label"),),
+    note="Small, assigned by hotel, without measures of actual activity, and not replicated at scale; plausible by "
+         "the expectation account, but untested.",
+    sources=("A. J. Crum and E. J. Langer, Mind-set matters: exercise and the placebo effect, Psychological Science "
+             "18 (2007) 165-171",
+             "A. J. Crum, W. R. Corbin, K. D. Brownell and P. Salovey, Mind over milkshakes, Health Psychology 30 "
+             "(2011) 424-429"),
+    checked="2026-11-16",
+))
+shown(57, r"Cohen, \ Tyrrell \& Smith (1991)", "cited in the stress_infection row; the story")
+shown(57, r"Felitti et al.\ (1998)", "an observational study of childhood adversity, described")
+shown(57, r"Hr\'objartsson \& G\o tzsche (2001)", "cited in the placebo_objective row")
+shown(57, r"Diabetes Prevention Program (2002)", "cited in the lifestyle_diabetes row")
+shown(57, r"Goyal et al.\ (2014)", "a meta-analysis of meditation programmes, quoted")
+shown(57, r"Kuyken et al.\ (2022)", "the MYRIAD school trial, described")
+shown(57, r"Clark (2018)", "a national programme, described")
+shown(57, r"Lambert et al.\ (2018)", "a meta-analysis of outcome feedback, described")
+shown(57, r"Chibanda et al.\ (2016)", "a cluster-randomized trial, described")
+shown(57, r"Friedman \& Rosenman (1959)", "the original description; the row cites the 1975 cohort report")

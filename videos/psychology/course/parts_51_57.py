@@ -213,4 +213,39 @@ PARTS = [
               ("Part 21's line-up model", "explainer/psychology/psyche/memory.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=57, level="U", widget="carepath", prereq=(10, 14, 39, 42),
+        question="How does the mind get into the body, and how does help get to the people who need it?",
+        story="In 1991 volunteers who reported more stress were more likely to catch a cold from nose drops, in a "
+              "dose-response line. The part weighs stress and illness and the limits of correlation, separates the "
+              "placebo's real effect from regression to the mean, models expectation as a prior on bodily signals, "
+              "treats chronic pain, adherence, diabetes prevention and insomnia as behaviour, reads mindfulness's "
+              "evidence, simulates the treatment gap and stepped care, and covers measurement-based care, lay "
+              "counsellors, digital therapeutics, Type A and a mindset study. It opens with the care card.",
+        handoff="Act XIII begins with the predictive brain (Part 58) and computational psychiatry (Part 59); Part 60 "
+                "takes up chatbots in care.",
+        outside="Part 10's stress loop and sleep model, Part 14's inference, Part 39's prevalence and Part 42's "
+                "treatments; averages and queues.",
+        objectives={
+            "U": ["Separate a placebo's real effect from natural recovery, and explain why placebos affect pain "
+                  "most.",
+                  "Explain why behaviour change is a treatment, with adherence and diabetes prevention as examples."],
+            "M": ["Model placebo analgesia as Bayesian inference and predict when it is largest.",
+                  "Simulate a stepped-care service and match capacity to flow."],
+            "D": ["Design a study that could test a causal effect of stress on disease."],
+            "I": ["Plan a stepped-care service's capacity and its outcome monitoring, and evaluate a digital "
+                  "therapeutic."],
+        },
+        results=[
+            ("Expectation as a prior", r"\hat s = w\,\mu_{\text{expect}} + (1 - w)\,x, \quad "
+                                       r"w = \frac{\sigma_x^{2}}{\sigma_x^{2} + \sigma_{\text{prior}}^{2}}"),
+            ("Little's law", r"\text{places in use} = \text{arrivals per week} \times \text{weeks per course}"),
+            ("Reliable change", r"\mathrm{RCI} = \frac{x_2 - x_1}{\sqrt{2}\,\mathrm{SEM}}, \quad "
+                                r"\mathrm{SEM} = s\sqrt{1 - r_{xx}}"),
+        ],
+        U=(0, 1, 2, 3, 6, 7, 8), D=(15,), I=(9, 10, 11, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Its tests", "tests/psychology/test_work.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

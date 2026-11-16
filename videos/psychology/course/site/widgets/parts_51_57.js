@@ -590,4 +590,74 @@
       note: "Nothing you choose is stored or sent. The faces are simple drawings; real faces are easier and harder in other ways. Part 56's point: judge your high-confidence picks against your low-confidence ones.",
     });
   };
+
+  // ---- Part 57: predict an open-label placebo trial, then plan a stepped-care service's capacity. ----
+  W.carepath = function (el) {
+    var w = null;
+    var S = { phase: "idle", pred: null, q: 0 };
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "ask" || S.phase === "shown"; },
+      respond: function (side) {
+        if (S.phase === "shown") { S.q++; S.phase = S.q >= 3 ? "done" : "ask"; if (w) w.render(); return; }
+        S.pred = side; S.phase = "shown"; task.count++; if (w) w.render();
+      },
+    });
+    function simulate(low, high, weeks) {
+      // expected-value flows: 100 referrals a week, 30% severe; stepped care; self-help 6 weeks, therapy 12 weeks
+      var qL = 0, qH = 0, inL = [], inH = [], waits = [], rec = 0, total = 0, t, k;
+      for (t = 0; t < weeks; t++) {
+        qL += 100; total += 100;
+        var doneL = inL[t] || 0, doneH = inH[t] || 0;
+        var recL = doneL * (0.7 * 0.45 + 0.3 * 0.225); rec += recL + doneH * 0.55; qH += doneL - recL;
+        var sL = Math.min(low, qL), sH = Math.min(high, qH); qL -= sL; qH -= sH;
+        inL[t + 6] = (inL[t + 6] || 0) + sL; inH[t + 12] = (inH[t + 12] || 0) + sH;
+        waits.push(qL / Math.max(low, 1) + qH / Math.max(high, 1) * 0.5);
+      }
+      return { queueL: qL, queueH: qH, rec: rec / total, wait: waits[weeks - 1] };
+    }
+    w = QB.widget(el, {
+      title: "A pill with nothing in it, and a service with too few places",
+      sub: "First, a prediction: patients with irritable bowel syndrome were given pills openly described as inert. Did more of them report adequate relief than patients who got nothing? Press F for no difference, J for yes (or tap). Then two predictions about a service, and set its weekly capacity of a stepped-care service with the sliders and watch the queues.",
+      panels: 2, height: 320,
+      controls: [
+        { k: "low", label: "guided self-help starts a week", min: 40, max: 140, step: 5, value: 70, fmt: function (x) { return x.toFixed(0); } },
+        { k: "high", label: "therapy starts a week", min: 10, max: 60, step: 2, value: 30, fmt: function (x) { return x.toFixed(0); } },
+      ],
+      buttons: [
+        { label: "Start", act: function () { S.phase = "ask"; S.pred = null; S.q = 0; } },
+        { label: "Clear", act: function () { S.phase = "idle"; S.pred = null; S.q = 0; } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        var CAP = [null, [70, 30], [100, 60]];
+        if (S.phase === "ask" && S.q === 0) {
+          T.message(ctx, b, "1 of 3. Open-label placebo: did it help?", "F: no difference from no treatment.   J: more reported relief.");
+        } else if (S.phase === "shown" && S.q === 0) {
+          T.message(ctx, b, "About 59% against 35% reported adequate relief (Kaptchuk et al., 2010).",
+            "You predicted " + (S.pred ? "a benefit" : "no difference") + ". The trial was small, three weeks long and self-reported, and no one can be blind to taking a pill: the result is contested. Any key: next.");
+        } else if (S.phase === "ask") {
+          T.message(ctx, b, (S.q + 1) + " of 3. A stepped-care service: " + CAP[S.q][0] + " self-help and " + CAP[S.q][1] + " therapy starts a week, 100 referrals.",
+            "After a year, do the waiting lists stay short?   F: yes.   J: no, they grow.");
+        } else if (S.phase === "shown") {
+          var rq = simulate(CAP[S.q][0], CAP[S.q][1], 52), short = rq.queueL + rq.queueH < 500;
+          T.message(ctx, b, "After a year: " + Math.round(rq.queueL + rq.queueH) + " people waiting, " + Math.round(100 * rq.rec) + "% recovered.",
+            (short === (S.pred === 0) ? "As you predicted. " : "Not as you predicted. ") + "Places must keep up with arrivals at each step; about half step up to therapy. Any key: next.");
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "Now set the capacities yourself", "Move the sliders: the bars on the right show the queues and recovery after a year.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start for the prediction; the service on the right works any time.");
+        }
+        var weeks = 52, r = simulate(v.low, v.high, weeks);
+        var a = g[1].axes({ x: [0, 4], y: [0, 1], title: "After a year: 100 referrals a week", noX: true });
+        var qL = Math.min(r.queueL / 5000, 1), qH = Math.min(r.queueH / 5000, 1);
+        a.bars([0.8, 1.8, 2.8], [qL, qH, r.rec], 0.6, { color: function (i) { return ["#ef6f6c", "#f2c14e", "#5bd18b"][i]; } });
+        a.text(0.8, qL + 0.06, "self-help queue " + Math.round(r.queueL), { align: "center", size: 10 });
+        a.text(1.8, qH + 0.06, "therapy queue " + Math.round(r.queueH), { align: "center", size: 10 });
+        a.text(2.8, r.rec + 0.06, "recovered " + Math.round(100 * r.rec) + "%", { align: "center", size: 10 });
+      },
+      readout: function (v) { var r = simulate(v.low, v.high, 52); return [["queues", Math.round(r.queueL + r.queueH).toString()], ["recovered", Math.round(100 * r.rec) + "%"]]; },
+      note: "Nothing you choose is stored or sent. The service is Part 57's simulation in expected values: about half the people step up to therapy, so therapy places must keep up with them, and self-help places with the referrals.",
+    });
+  };
 })();
