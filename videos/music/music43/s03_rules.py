@@ -92,7 +92,7 @@ class Rules(SoundScene):
             "a user set them and hear the result. <bookmark mark='e'/> In chapter eight we give ten model pianists ten sets of "
             "weights, and try to tell them apart."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.35)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
@@ -138,5 +138,6 @@ class Rules(SoundScene):
             window(snd, r"k = 0, \ 1, \ 2", detail=r"Part 7's piano, \ a plucked bass", corner=DL, tag_corner=DR)
             for i, k in enumerate(("0", "1", "2")):
                 flash(snd, rolls[i][1].notes, [st[k] + p["t"] for p in d["perfs"][k]], hot=WHITE, base=cols[k])
+                cursor(snd, rolls[i][1], st[k], 1.0, color=cols[k])
         self.wait(0.3)
         self.clear_scene()

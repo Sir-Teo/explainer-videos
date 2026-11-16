@@ -19,7 +19,7 @@ class Frontier(SoundScene):
             (r"computer-monitored pianos record every key and pedal: \ onset, \ velocity, \ release", WHITE),
             (r"the MAESTRO dataset \ (Hawthorne and colleagues, \ 2019): \ about 200 hours of competition performances, \ aligned to the audio", WHITE),
             (r"aligned with scores \ (ASAP, \ 2020): \ every performed note matched to its written note", WHITE),
-            (r"for the first time, \ expression can be studied on hundreds of thousands of notes per piece type", TUNE),
+            (r"large aligned datasets expand reproducible expression research", TUNE),
             (r"the deviations from the exact are now data", GREY_A),
         ]
         rows_scene(self, r"performance as data", items,
@@ -27,7 +27,7 @@ class Frontier(SoundScene):
                    "every key and pedal: when it went down, how fast, when it came up. <bookmark mark='c'/> The MAESTRO dataset of "
                    "2019 holds about two hundred hours of competition performances recorded this way, aligned to the audio. "
                    "<bookmark mark='d'/> Datasets such as ASAP match every performed note to its written note. "
-                   "<bookmark mark='e'/> For the first time expression can be studied on hundreds of thousands of notes.",
+                   "<bookmark mark='e'/> These datasets expand the scale and reproducibility of expression research beyond earlier large performance collections.",
                    marks="bcde")
 
     # ------------------------------------------------------------------

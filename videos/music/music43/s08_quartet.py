@@ -81,19 +81,13 @@ class Quartet(SoundScene):
     def conductor(self):
         items = [
             (r"an orchestra is too large to listen around: \ sound takes 30 ms to cross ten metres", WHITE),
-            (r"the conductor replaces listening with watching: \ a shared visual timekeeper", WHITE),
+            (r"the conductor adds a shared visual reference; \ players still listen", WHITE),
             (r"studies of conductors' gestures find players lock to the bottom of the beat and to sharp changes in speed", WHITE),
             (r"orchestras still play slightly after the beat, \ by an amount each orchestra learns", TUNE),
             (r"the conductor also shapes tempo, \ balance and phrasing: \ the interpretation, \ not only the clock", GREY_A),
         ]
         rows_scene(self, r"the conductor", items,
-                   "What about a full orchestra? <bookmark mark='b'/> It is too large to listen around: sound takes thirty "
-                   "milliseconds to cross ten metres, more than a duo's whole asynchrony. <bookmark mark='c'/> The conductor "
-                   "replaces listening with watching: a shared visual timekeeper. <bookmark mark='d'/> Studies of conductors' "
-                   "gestures find players lock to the lowest point of the beat and to sharp changes in the hand's speed. "
-                   "<bookmark mark='e'/> Orchestras still play slightly after the beat, by an amount each orchestra learns. "
-                   "<bookmark mark='f'/> And a conductor shapes tempo, balance and phrasing: the interpretation, not only the "
-                   "clock.", marks="bcdef")
+                   "What about a full orchestra? <bookmark mark='b'/> It is too large to listen around: sound takes thirty milliseconds to cross ten metres, more than a duo's whole asynchrony. <bookmark mark='c'/> The conductor supplies a shared visual reference while players continue listening to one another. <bookmark mark='d'/> Studies of conductors' gestures find players lock to the lowest point of the beat and to sharp changes in the hand's speed. <bookmark mark='e'/> Orchestras still play slightly after the beat, by an amount each orchestra learns. <bookmark mark='f'/> And a conductor shapes tempo, balance and phrasing: the interpretation, not only the clock.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def beyond(self):
@@ -132,9 +126,7 @@ class Quartet(SoundScene):
             pulse(snd, a, st["democratic"], st["autocratic"] - 0.4, buff=0.15)
             pulse(snd, b, st["autocratic"], c.duration, buff=0.15)
         with self.voiceover(
-            "They are very hard to tell apart by ear: the spreads in these two clips are "
-            f"{say(d['democratic']['clip_spread_ms'])} and {say(d['autocratic']['clip_spread_ms'])} milliseconds. Who leads "
-            "is invisible in the sound and plain in the numbers; that is why Wing and his colleagues had to estimate it."
+            f"They are very hard to tell apart by ear: the spreads in these two clips are {say(d['democratic']['clip_spread_ms'])} and {say(d['autocratic']['clip_spread_ms'])} milliseconds. Similar onset spreads do not uniquely reveal leadership; estimating correction patterns requires a model and suitable data; that is why Wing and his colleagues had to estimate it."
         ):
             self.play(Indicate(a[0]), Indicate(b[0]))
         self.wait(0.4)

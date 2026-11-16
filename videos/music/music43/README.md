@@ -3,7 +3,7 @@
 Part 43 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the third part of Act VII, *The Craft*. In 2007 a critic put a celebrated pianist's CD
 into a computer and the track database named another pianist: over a hundred recordings released under Joyce Hatto's
-name were other people's, and timing analysis showed it, because no two pianists shape time alike. This part asks what a
+name were other people's, and timing analysis showed it, using detailed timing and corroborating audio evidence. This part asks what a
 performer adds to the notes and measures it in milliseconds: rules of expression and the kinematics of slowing down,
 loudness and articulation, vibrato and intonation, ensembles that stay together by correcting each other, the timing
 fingerprint, and what practice, anxiety and the body have to do with it. The tools are Monochord's
@@ -133,3 +133,7 @@ python -m videos.music.labs 43                                  # the lab (write
 * C. Hawthorne and others, "Enabling factorized piano music modeling and generation with the MAESTRO dataset" (2019);
   D. Jeong and others, "VirtuosoNet" (2019); R. B. Dannenberg, "An on-line algorithm for real-time accompaniment"
   (1984); C. Raphael, *Music Plus One*.
+
+## Interpretation limits
+
+All heard pianists are synthetic models; the Hatto recordings are not played. Identification uses standardized log inter-onset intervals and uniform time scaling; no universal correlation threshold proves copying. Piano controls include pedals and instrument mechanics beyond three note parameters. Vibrato center judgments depend on rate and waveform, and hertz and cent averages differ. Duo stability applies to the stated linear model; quartet stability depends on its interaction matrix. Conductors supplement listening. Practice meta-analysis reports observational explained variance, not causal shares or a limit on individual potential.

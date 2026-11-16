@@ -77,7 +77,7 @@ class Touch(SoundScene):
             (r"the pedal adds another layer: \ strings keep sounding after the key is released \ (Part 7)", GREY_A),
         ]
         rows_scene(self, r"legato, \ measured", items,
-                   "On a piano, legato is literally an overlap: the next key goes down before the last one comes up. "
+                   "Piano legato often uses overlapping key holds, but perceived connection also depends on pedal, register, decay and texture. "
                    "<bookmark mark='b'/> Bruno Repp measured it in 1997: pianists overlap legato notes by tens of milliseconds, "
                    "<bookmark mark='c'/> and the overlap grows with the time between notes. <bookmark mark='d'/> Staccato, "
                    "portato and tenuto are points on the same scale of held time. <bookmark mark='e'/> And the sustain pedal adds "
@@ -93,10 +93,5 @@ class Touch(SoundScene):
             (r"chapter 5: \ instruments whose players shape every note's pitch", GREY_A),
         ]
         rows_scene(self, r"touch", items,
-                   "What about touch? <bookmark mark='b'/> Pianists have long argued about whether they can change a note's tone "
-                   "colour, and not only its loudness. <bookmark mark='c'/> For a single note, hammer velocity fixes the sound, "
-                   "as Part 7 showed: a robot that matches the velocity matches the tone, apart from key noise. "
-                   "<bookmark mark='d'/> But touch also means the timing between voices, the balance within a chord, the pedal. "
-                   "<bookmark mark='e'/> So colour on a piano is mostly how many notes are balanced and timed, not one note's "
-                   "tone. <bookmark mark='f'/> Chapter five turns to instruments whose players shape every note's pitch.",
+                   "What about touch? <bookmark mark='b'/> Pianists have long argued about whether they can change a note's tone colour, and not only its loudness. <bookmark mark='c'/> For a single note, hammer velocity is a major determinant of a fixed piano note's string excitation; pedal state, action and release noises, and instrument condition also matter. <bookmark mark='d'/> But touch also means the timing between voices, the balance within a chord, the pedal. <bookmark mark='e'/> So colour on a piano is mostly how many notes are balanced and timed, not one note's tone. <bookmark mark='f'/> Chapter five turns to instruments whose players shape every note's pitch.",
                    marks="bcdef")

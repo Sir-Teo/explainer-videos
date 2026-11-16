@@ -40,6 +40,8 @@ class Outro(SoundScene):
             window(snd, r"Variation 43", detail=r"Part 7's piano, \ a plucked bass", corner=DL, tag_corner=DR)
             flash(snd, a.notes, [st["written"] + p["t"] for p in d["deadpan"]], hot=WHITE, base=GREY_B)
             flash(snd, b.notes, [st["performed"] + p["t"] for p in d["performed"]], hot=WHITE, base=TUNE)
+            cursor(snd, a, st["written"], 1.0, color=WHITE)
+            cursor(snd, b, st["performed"], 1.0, color=TUNE)
         self.wait(0.3)
         self.clear_scene()
 
@@ -68,15 +70,10 @@ class Outro(SoundScene):
             r"a final ritardando slows like a body braking",
             r"vibrato is heard at its mean pitch",
             r"players stay together by correcting a fraction of each asynchrony, \ between 0 and 2",
-            r"timing is a fingerprint: \ a copy matches its source better than a player matches themself",
+            r"normalized timing supports identification; \ corroborating evidence matters",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A performance is the score plus deviations, measurable note by note. "
-            "<bookmark mark='a'/> Rules capture the common part: arches, contrast, punctuation. <bookmark mark='b'/> A final "
-            "ritardando slows like a body braking. <bookmark mark='c'/> Vibrato is heard at its average pitch. "
-            "<bookmark mark='d'/> Players stay together by correcting a fraction of each asynchrony, and the total must lie "
-            "between zero and two. <bookmark mark='e'/> And timing is a fingerprint: a copy matches its source better than "
-            "a player matches themself."
+            "What did we find? A performance is the score plus deviations, measurable note by note. <bookmark mark='a'/> Rules capture the common part: arches, contrast, punctuation. <bookmark mark='b'/> A final ritardando slows like a body braking. <bookmark mark='c'/> Vibrato is heard at its average pitch. <bookmark mark='d'/> Players stay together by correcting a fraction of each asynchrony, and this duo model is stable when total correction lies between zero and two; quartet stability depends on its interaction matrix. <bookmark mark='e'/> And normalized timing can support recording identification, but requires corroboration rather than a universal copy threshold."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

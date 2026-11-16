@@ -44,7 +44,7 @@ class Ritard(SoundScene):
             pts = [[x0 + W * xi, y0 + H * yi, 0] for xi, yi in zip(x, ys)]
             lines_.add(VMobject(color=QC[q], stroke_width=4).set_points_as_corners(pts))
         labs = VGroup(label(r"position in the ritardando", font_size=16, color=GREY_A).move_to([x0 + W / 2, y0 - 0.4, 0]),
-                      label(r"tempo", font_size=16, color=GREY_A).move_to([x0 - 0.5, y0 + H / 2, 0]),
+                      label(r"tempo", font_size=16, color=GREY_A).move_to([x0 + 0.5, y0 + H + 0.3, 0]),
                       label(r"1", font_size=14, color=GREY_A).move_to([x0 - 0.2, y0 + H, 0]), label(rf"{d['w']}", font_size=14, color=GREY_A).move_to([x0 - 0.25, y0 + H * d["w"], 0]))
         eq = VGroup(label(r"$v(x) = \left[1 + (w^q - 1)\,x\right]^{1/q}$", font_size=30, color=WHITE),
                     label(r"x: \ position, \ 0 to 1; \ \ w: \ final tempo", font_size=18, color=GREY_A),

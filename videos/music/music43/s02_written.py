@@ -87,15 +87,10 @@ class Written(SoundScene):
             (r"dynamics: \ how loud each note is, \ and how loudness moves", WHITE),
             (r"articulation: \ how long each note lasts against the gap to the next", WHITE),
             (r"timbre and intonation: \ on instruments that allow it, \ the colour and the exact pitch", TUNE),
-            (r"a pianist controls only when, \ how hard and how long \ (Part 7): \ everything else follows from those", GREY_A),
+            (r"key motion, releases and pedals shape piano performance; \\ our note model simplifies these controls", GREY_A),
         ]
         rows_scene(self, r"what a performer controls", items,
-                   "What can a performer change? <bookmark mark='b'/> Timing: when each note starts, and how the tempo bends "
-                   "across a phrase. <bookmark mark='c'/> Dynamics: how loud each note is, and how loudness moves. "
-                   "<bookmark mark='d'/> Articulation: how long each note lasts against the gap to the next. "
-                   "<bookmark mark='e'/> And on instruments that allow it, timbre and the exact pitch. <bookmark mark='f'/> A "
-                   "pianist, as Part 7 showed, controls only when a key goes down, how hard, and when it comes up: everything "
-                   "else follows from those three numbers per note.", marks="cdef")
+                   "What can a performer change? <bookmark mark='b'/> Timing: when each note starts, and how the tempo bends across a phrase. <bookmark mark='c'/> Dynamics: how loud each note is, and how loudness moves. <bookmark mark='d'/> Articulation: how long each note lasts against the gap to the next. <bookmark mark='e'/> And on instruments that allow it, timbre and the exact pitch. <bookmark mark='f'/> A pianist, as Part 7 showed, controls key and hammer motion, releases and pedals, with effects from action, voicing, instrument condition and recording context; three note parameters are only our simplification.", marks="cdef")
 
     # ------------------------------------------------------------------
     def repp(self):

@@ -46,11 +46,7 @@ class Practice(SoundScene):
         cap = label(r"share of the differences in performance accounted for by deliberate practice \ (Macnamara, \ Hambrick and Oswald, \ 2014; \ 88 studies)", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.7)
         head = label(r"what practice explains", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "In 2014 Brooke Macnamara, David Hambrick and Frederick Oswald pooled eighty-eight studies. <bookmark mark='a'/> "
-            "Deliberate practice accounted for about twenty-one per cent of the differences in performance in music, "
-            "twenty-six in games, eighteen in sports, four in education, and under one per cent in the professions. Practice "
-            "matters a great deal in music, and still leaves most of the differences between people to other things: when "
-            "they started, how they practised, their teachers, their bodies, and their genes."
+            "In 2014 Brooke Macnamara, David Hambrick and Frederick Oswald pooled eighty-eight studies. <bookmark mark='a'/> Deliberate practice accounted for about twenty-one per cent of the differences in performance in music, twenty-six in games, eighteen in sports, four in education, and under one per cent in the professions. Practice matters a great deal in music, and leaves substantial unexplained variation. These observational associations neither allocate the remainder among causes nor measure an individual's potential."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap))
             vo.wait_until("a")
@@ -86,27 +82,16 @@ class Practice(SoundScene):
             (r"memory: \ performers memorise by sound, \ by hand, \ by sight and by structure, \ so one can rescue another", GREY_A),
         ]
         rows_scene(self, r"memory and anxiety", items,
-                   "Then there is the stage. <bookmark mark='b'/> Performance anxiety is common: in surveys of orchestral "
-                   "musicians a large minority report it as a problem. <bookmark mark='c'/> Some arousal helps; too much narrows "
-                   "attention and stiffens the hands. <bookmark mark='d'/> In trials, cognitive and behavioural therapy, graded "
-                   "exposure and preparation help. <bookmark mark='e'/> Beta-blockers damp the trembling but not the worry, and "
-                   "are widely used. <bookmark mark='f'/> And memory: performers memorise by sound, by hand, by sight and by "
-                   "structure, so that when one fails another can rescue it.", marks="bcdef")
+                   "Then there is the stage. <bookmark mark='b'/> Performance anxiety is common: in surveys of orchestral musicians a large minority report it as a problem. <bookmark mark='c'/> Some arousal helps; too much narrows attention and stiffens the hands. <bookmark mark='d'/> In trials, cognitive and behavioural therapy, graded exposure and preparation help. <bookmark mark='e'/> Some musicians use prescribed beta-blockers for physical symptoms; effects, contraindications and treatment choices require individual clinical assessment. <bookmark mark='f'/> And memory: performers memorise by sound, by hand, by sight and by structure, so that when one fails another can rescue it.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def body(self):
         items = [
             (r"overuse injuries are the commonest complaint: \ hands, \ arms, \ neck and back", WHITE),
-            (r"focal dystonia: \ the brain's map of the practised hand blurs; \ about 1 in 100 professional musicians", WHITE),
+            (r"focal dystonia: \ a complex neurological movement disorder; \ about 1 in 100 professional musicians", WHITE),
             (r"hearing: \ orchestral players can exceed safe daily noise doses; \ woodwinds seated in front of the brass are the classic case", WHITE),
             (r"the EU's 2003 noise directive applies to orchestras: \ screens, \ seating and earplugs", TUNE),
             (r"chapter 10: \ machines that learn to perform", GREY_A),
         ]
         rows_scene(self, r"the performer's body", items,
-                   "Performing is also physical work. <bookmark mark='b'/> Overuse injuries of the hands, arms, neck and back are "
-                   "the commonest complaint. <bookmark mark='c'/> Focal dystonia, in which the brain's map of the practised hand "
-                   "blurs and fingers stop obeying, affects roughly one professional musician in a hundred. "
-                   "<bookmark mark='d'/> Hearing is at risk too: orchestral players can exceed safe daily noise doses, the "
-                   "woodwinds seated in front of the brass being the classic case. <bookmark mark='e'/> The European Union's "
-                   "2003 noise directive applies to orchestras, which now use screens, seating plans and earplugs. "
-                   "<bookmark mark='f'/> Chapter ten turns to machines that learn to perform.", marks="bcdef")
+                   "Performing is also physical work. <bookmark mark='b'/> Overuse injuries of the hands, arms, neck and back are the commonest complaint. <bookmark mark='c'/> Task-specific focal dystonia, a complex neurological movement disorder affecting voluntary control, affects roughly one professional musician in a hundred. <bookmark mark='d'/> Hearing is at risk too: orchestral players can exceed safe daily noise doses, the woodwinds seated in front of the brass being the classic case. <bookmark mark='e'/> The European Union's 2003 noise directive applies to orchestras, which now use screens, seating plans and earplugs. <bookmark mark='f'/> Chapter ten turns to machines that learn to perform.", marks="bcdef")

@@ -18,7 +18,7 @@ class Hook(SoundScene):
         card = listen_card(r"Three recordings of the same two phrases, \ released under three pianists' names. \ "
                            r"Two of them are really the same recording. \ Which two?", width=10.4)
         with self.voiceover(
-            "A question for your ears. Three recordings of the same two phrases, released under three pianists' names. Two "
+            "A question for your ears. Three synthetic model performances of the same two phrases, labeled as if released under three pianists' names; these are not Hatto recordings. Two "
             "of them are really one and the same recording. Which two?"
         ):
             self.play(FadeIn(card))
@@ -63,7 +63,7 @@ class Hook(SoundScene):
                    "went into a computer, and the online track database named a different pianist. <bookmark mark='c'/> Her "
                    "husband, the producer, had copied other pianists' recordings, sometimes time-stretched or re-equalised to "
                    "disguise them. <bookmark mark='d'/> Timing analyses, among them Nicholas Cook and Craig Sapp's, matched the "
-                   "recordings note by note, because no two pianists shape time alike. <bookmark mark='e'/> This part asks what "
+                   "recordings note by note, because matching detailed timing and audio can provide strong evidence of a shared recording. <bookmark mark='e'/> This part asks what "
                    "a performer adds to the notes, and measures it in milliseconds.", marks="bcde")
 
     # ------------------------------------------------------------------

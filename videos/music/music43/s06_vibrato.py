@@ -49,10 +49,7 @@ class Vibrato(SoundScene):
         self.add(trace)
         ans = label(rf"the same: \ the pitch heard is the mean, \ {d['mean_hz']:.1f} Hz, \ though it is there only in passing", font_size=20, color=TUNE).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "The same. The vibrato swings sixty cents either side of 440 hertz, more than half a semitone, five and a half "
-            f"times a second, and its average is {say(d['mean_hz'], 1)} hertz. Listeners hear a vibrato note at about its "
-            "average pitch, as Shonle and Horan found in 1980, even though the sound passes through that pitch only "
-            "for an instant in each swing."
+            f"The same. The vibrato swings sixty cents either side of 440 hertz, more than half a semitone, five and a half times a second, and its average is {say(d['mean_hz'], 1)} hertz. For suitable rates and symmetric vibrato, listeners often hear a pitch near its center, though averaging in hertz and cents differs and the result depends on waveform, as Shonle and Horan found in 1980, even though the sound passes through that pitch only for an instant in each swing."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -82,7 +79,7 @@ class Vibrato(SoundScene):
                 pulse(snd, cells[i], st[k], st[k] + 1.8, buff=0.1)
         with self.voiceover(
             "At three it sounds like a wobble in pitch; at ten, a nervous tremble; around five to seven, it fuses into one "
-            "warm, living tone. That is where singers and string players put it."
+            "warm, living tone. These are illustrative rate judgments, not universal preferences across voices, instruments and traditions."
         ):
             self.play(Indicate(cells[1]))
         self.wait(0.4)
@@ -109,16 +106,11 @@ class Vibrato(SoundScene):
     # ------------------------------------------------------------------
     def intonation(self):
         items = [
-            (r"players who can bend pitch do not play equal temperament \ (Part 6)", WHITE),
+            (r"players may adjust pitch around equal temperament \ (Part 6)", WHITE),
             (r"string players and singers raise leading tones and sharpen major thirds in melodies", WHITE),
             (r"in chords they lean towards pure intervals: \ barbershop quartets tune dominant sevenths near 7:4", WHITE),
             (r"intonation in practice is a compromise between melody's pull and harmony's purity, \ note by note", TUNE),
             (r"chapter 6: \ two players keeping time together", GREY_A),
         ]
         rows_scene(self, r"intonation in practice", items,
-                   "Players who can bend pitch also choose it. <bookmark mark='b'/> They do not play equal temperament, Part 6's "
-                   "compromise. <bookmark mark='c'/> String players and singers raise leading tones and sharpen major thirds in "
-                   "melodies, <bookmark mark='d'/> and in sustained chords lean towards pure intervals: barbershop quartets tune "
-                   "the dominant seventh near the ratio seven to four. <bookmark mark='e'/> Intonation in practice is a "
-                   "compromise between melody's pull and harmony's purity, decided note by note. <bookmark mark='f'/> Chapter six "
-                   "turns to two players keeping time together.", marks="bcdef")
+                   "Players who can bend pitch also choose it. <bookmark mark='b'/> They may adjust pitches away from equal temperament according to ensemble, style and musical role. <bookmark mark='c'/> String players and singers raise leading tones and sharpen major thirds in melodies, <bookmark mark='d'/> and in sustained chords lean towards pure intervals: barbershop quartets tune the dominant seventh near the ratio seven to four. <bookmark mark='e'/> Intonation in practice is a compromise between melody's pull and harmony's purity, decided note by note. <bookmark mark='f'/> Chapter six turns to two players keeping time together.", marks="bcdef")

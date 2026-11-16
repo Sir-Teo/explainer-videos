@@ -24,13 +24,7 @@ class Identity(SoundScene):
             (r"Cook and Sapp did this for Chopin mazurkas at the AHRC Research Centre for the History and Analysis of Recorded Music", GREY_A),
         ]
         rows_scene(self, r"a timing fingerprint", items,
-                   "How can timing identify a performer? <bookmark mark='b'/> Tap along with a recording, or let software find "
-                   "each beat, and you have a list of beat times. <bookmark mark='c'/> Divide the intervals between beats by "
-                   "their average and you have a tempo curve, whatever the overall speed. <bookmark mark='d'/> Time-stretching "
-                   "a recording, as the Hatto discs did, changes its speed but not its curve. <bookmark mark='e'/> Compare "
-                   "curves by correlation: one means the same shape. <bookmark mark='f'/> Nicholas Cook and Craig Sapp measured "
-                   "hundreds of recordings of Chopin's mazurkas this way at a British research centre for the history and "
-                   "analysis of recorded music.", marks="bcdef")
+                   "How can timing identify a performer? <bookmark mark='b'/> Tap along with a recording, or let software find each beat, and you have a list of beat times. <bookmark mark='c'/> Normalize inter-onset intervals to compare timing shape across overall speeds; this program specifically centers and standardizes their logarithms. <bookmark mark='d'/> Uniform time scaling preserves this normalized curve; nonuniform time warping and edits need not. <bookmark mark='e'/> Compare curves by correlation: one means the same shape. <bookmark mark='f'/> Nicholas Cook and Craig Sapp measured hundreds of recordings of Chopin's mazurkas this way at a British research centre for the history and analysis of recorded music.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def curves(self):
@@ -45,6 +39,11 @@ class Identity(SoundScene):
                        VGroup(label(r"pianist B", font_size=18, color=BLUE).move_to([x0 + 0.6, -2.0, 0]), line(B, BLUE, -2.8)))
         cap = label(rf"tempo curves of all {d['notes']} notes of the Tune: \ up, \ a longer note than the pianist's average", font_size=17, color=GREY_A).to_edge(DOWN, buff=0.25)
         head = label(r"three tempo curves", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
+        setup = VGroup(
+            label(r"ten model pianists: \ different rule weights, \ tempos and habits", font_size=21, color=WHITE),
+            label(r"pianist D: \ slowed 3\%, \ with 2 ms of editing jitter", font_size=21, color=EAR),
+            label(r"compare the normalized timing curves", font_size=19, color=GREY_A),
+        ).arrange(DOWN, buff=0.5).move_to(UP * 0.1)
         with self.voiceover(
             "Try it on ten model pianists, each with its own weights for the rules, its own tempo and its own habits, playing "
             "the whole Tune. Then take pianist D's recording, slow it by three per cent, add two milliseconds of editing "
@@ -52,9 +51,11 @@ class Identity(SoundScene):
             "<bookmark mark='b'/> the new release's; <bookmark mark='c'/> and pianist B's. Every curve rises at the phrase "
             "ends, because every pianist follows the same rules; the details are what differ."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(cap))
+            self.play(FadeIn(head), FadeIn(cap), FadeIn(setup))
             for mark, r in zip("abc", rows_):
                 vo.wait_until(mark)
+                if mark == "a":
+                    self.play(FadeOut(setup))
                 self.play(FadeIn(r[0]), Create(r[1]), run_time=1.5)
         self.wait(0.4)
         self.clear_scene()
@@ -88,12 +89,7 @@ class Identity(SoundScene):
         other = label(rf"pianist D's own second take: \ {tk[1]:.3f}", font_size=17, color=GREY_A).move_to([2.6, -1.4, 0])
         head = label(r"the Hatto test, \ on model pianists", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Now correlate. <bookmark mark='a'/> The ten pianists against one another: brighter is more similar. Their "
-            f"curves correlate {say(d['between_mean'], 2)} on average, because they share the rules, and never more than "
-            f"{say(d['between_max'], 2)}. <bookmark mark='b'/> The new release against all ten: pianist D at "
-            f"{say(d['ranking'][0][1], 4)}, the next at {say(d['ranking'][1][1], 2)}. <bookmark mark='c'/> And a second, "
-            f"honest take by pianist D scores {say(tk[1], 3)}: a performer repeats a shape closely, but never to four "
-            "decimal places. A copy is closer to its source than any performer is to themselves."
+            f"Now correlate. <bookmark mark='a'/> The ten pianists against one another: brighter is more similar. Their curves correlate {say(d['between_mean'], 2)} on average, because they share the rules, and never more than {say(d['between_max'], 2)}. <bookmark mark='b'/> The new release against all ten: pianist D at {say(d['ranking'][0][1], 4)}, the next at {say(d['ranking'][1][1], 2)}. <bookmark mark='c'/> And a second, honest take by pianist D scores {say(tk[1], 3)}: this model's fresh take differs more than its constructed copy. No universal correlation threshold proves copying in real performances."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(grid).copy().set_opacity(0.15)))
             vo.wait_until("a")

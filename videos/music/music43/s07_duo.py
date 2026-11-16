@@ -97,6 +97,9 @@ class Duo(SoundScene):
         def P_(a, v):
             return [x0 + W * a / 2.0, y0 + H * min(v, top) / top, 0]
         ax = VGroup(Line([x0, y0, 0], [x0 + W, y0, 0], color=GREY_B), Line([x0, y0, 0], [x0, y0 + H, 0], color=GREY_B))
+        for value in (0, 20, 40, 60):
+            y = y0 + H * value / top
+            ax.add(Line([x0 - 0.06, y, 0], [x0, y, 0], color=GREY_B), label(str(value), font_size=13, color=GREY_A).move_to([x0 - 0.3, y, 0]))
         line = VMobject(color=TUNE, stroke_width=4).set_points_as_corners([P_(a, v) for a, v in zip(al, ex)])
         dots = VGroup(*[Dot(P_(a, v), radius=0.05, color=BLUE) for a, v in zip(al, sm)])
         walls = VGroup(DashedLine([x0, y0, 0], [x0, y0 + H, 0], color=EAR), DashedLine([x0 + W, y0, 0], [x0 + W, y0 + H, 0], color=EAR))
@@ -154,10 +157,4 @@ class Duo(SoundScene):
             (r"synchronization is prediction, \ not reaction: \ a reaction would take 150 ms or more", GREY_A),
         ]
         rows_scene(self, r"early, \ on purpose", items,
-                   "One more finding from tapping. <bookmark mark='b'/> Tap along with a metronome and you will tap early, "
-                   "typically twenty to fifty milliseconds before the click: the negative mean asynchrony, found in almost every "
-                   "tapping study and smaller in musicians. <bookmark mark='c'/> One explanation is that the brain times the "
-                   "feel of the tap, which reaches it later than the sound of the click. <bookmark mark='d'/> Ensembles have "
-                   "offsets of their own, so the lead player's onset is not the only true beat. <bookmark mark='e'/> And all of "
-                   "this is prediction, not reaction: a reaction to a sound takes a hundred and fifty milliseconds or more, far "
-                   "too slow to play together.", marks="bcde")
+                   "One more finding from tapping. <bookmark mark='b'/> Tap along with a metronome and you will tap early, typically twenty to fifty milliseconds before the click: the negative mean asynchrony, common in these tasks, often smaller in musicians and dependent on feedback and instructions. <bookmark mark='c'/> One explanation is that the brain times the feel of the tap, which reaches it later than the sound of the click. <bookmark mark='d'/> Ensembles have offsets of their own, so the lead player's onset is not the only true beat. <bookmark mark='e'/> And all of this is prediction, not reaction: simple auditory reactions typically take much longer than ensemble asynchronies; predictive timing is central, alongside ongoing feedback.", marks="bcde")
