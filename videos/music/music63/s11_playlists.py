@@ -48,7 +48,7 @@ class Playlists(SoundScene):
         head = label(r"ordering a playlist", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "How was it ordered? <bookmark mark='a'/> A smooth playlist is a short path through the songs, step by step in the "
-            "embedding. <bookmark mark='b'/> That is the travelling salesman's problem: start with the nearest neighbour each "
+            "embedding. <bookmark mark='b'/> That is a travelling-salesman-like shortest open-path problem: start with the nearest neighbour each "
             "time, then swap pairs of steps while the path gets shorter. <bookmark mark='c'/> Ordering every Variation this way "
             "makes a path about half as long as a random order. <bookmark mark='d'/> But listeners also want variety, a shape, a "
             "beginning and an end: smoothness is not the only virtue of a playlist."

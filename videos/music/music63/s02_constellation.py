@@ -41,7 +41,7 @@ class Constellation(SoundScene):
         note = label(rf"8 seconds of {d['name'].split('/')[1]}: \ about {d['per_second']:.0f} peaks a second \ (0 to 2 kHz shown)", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.35)
         head = label(r"a spectrogram, \ and its peaks", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here are eight seconds of a Variation, at the eight kilohertz a phone sends. <bookmark mark='a'/> And its "
+            "Here are eight seconds of a Variation, resampled to eight kilohertz for this fingerprint implementation. <bookmark mark='a'/> And its "
             f"constellation: about {say(d['per_second'])} peaks a second, each the loudest point in its neighbourhood. That is "
             "all the fingerprinter keeps."
         ) as vo:
@@ -66,7 +66,7 @@ class Constellation(SoundScene):
             window(snd, r"full, \ then peaks", kind="synthesized", detail=r"a Variation's fingerprint", corner=DL, tag_corner=DR)
             pulse(snd, boxes[0], st["full"], st["peaks"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["peaks"], c.duration, buff=0.08)
-        with self.voiceover("A sparkle of beeps, in which the melody can just be followed. Little enough to search fast; enough to tell one recording from a million."):
+        with self.voiceover("A sparkle of beeps, in which the melody can just be followed. Little enough to search fast; enough to distinguish many recordings when sufficient peaks survive."):
             self.play(FadeIn(note))
         self.wait(0.4)
         self.clear_scene()

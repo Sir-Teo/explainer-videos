@@ -46,7 +46,7 @@ class Listeners(SoundScene):
             "The standard method for plays is from Yifan Hu, Yehuda Koren and Chris Volinsky, in 2008. <bookmark mark='a'/> "
             "Whether a listener played a song is the preference; how often sets the confidence in it. <bookmark mark='b'/> Find "
             "a short vector for every listener and every song so that their dot product predicts the preference, weighted by "
-            "the confidence. <bookmark mark='c'/> The listener's vector is their taste, the song's its profile, both learnt from "
+            "the confidence. <bookmark mark='c'/> The listener's vector is a fitted profile of observed behaviour, the song's its profile, both learnt from "
             "the plays alone. <bookmark mark='d'/> Solve by alternating least squares: fix the songs and solve for every "
             "listener, then fix the listeners and solve for every song."
         ) as vo:
@@ -75,12 +75,7 @@ class Listeners(SoundScene):
         note = label(r"recall at 10: \ the share of each listener's hidden songs in their top ten", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
         head = label(r"does it work?", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            f"Monochord simulates {say(d['users'])} listeners whose tastes it knows, {say(d['items'])} songs from the series' "
-            "library, and their plays; a fifth of each listener's songs are hidden, and each method must find them. "
-            f"<bookmark mark='a'/> Random songs find {say(100 * r['random'])} percent in the top ten. <bookmark mark='b'/> "
-            f"Recommending the most played songs to everyone finds {say(100 * r['popular'])} percent: popularity is a strong "
-            f"baseline. <bookmark mark='c'/> The factorization finds {say(100 * r['als'])} percent, by learning each listener's "
-            "taste."
+            f"Monochord simulates {say(d['users'])} listeners whose tastes it knows, {say(d['items'])} songs from the series' library, and their plays; a fifth of each listener's songs are hidden, and each method must find them. <bookmark mark='a'/> Random songs find {say(100 * r['random'])} percent in the top ten. <bookmark mark='b'/> Recommending the most played songs to everyone finds {say(100 * r['popular'])} percent: popularity is a strong baseline. <bookmark mark='c'/> The factorization finds {say(100 * r['als'])} percent, by fitting the simulated play patterns."
         ) as vo:
             self.play(FadeIn(head), FadeIn(setup), FadeIn(note))
             for mark, row in zip("abc", rows_):

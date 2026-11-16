@@ -321,24 +321,28 @@ def compute_horse() -> dict:
             Xc.append(F.embed(seg, SR))
             y.append(lab)
     X, Xc, y = np.array(X), np.array(Xc), np.array(y)
-    mu, sd = X.mean(axis=0), X.std(axis=0) + 1e-9
-    Z, Zc = (X - mu) / sd, (Xc - mu) / sd
-    # split by clip, not by excerpt: three excerpts of one clip are near neighbours, and must not sit on both sides
+        # split by clip, not by excerpt: three excerpts of one clip are near neighbours, and must not sit on both sides
     clip_of = np.repeat(np.arange(len(y) // 3), 3)
     cperm = rng.permutation(len(y) // 3)
     test_clips = set(cperm[int(0.7 * len(cperm)):].tolist())
     te = np.array([i for i in range(len(y)) if clip_of[i] in test_clips])
     tr = np.array([i for i in range(len(y)) if clip_of[i] not in test_clips])
+    mu, sd = X[tr].mean(axis=0), X[tr].std(axis=0) + 1e-9
+    Z, Zc = (X - mu) / sd, (Xc - mu) / sd
     w = F.logistic(Z[tr], y[tr], l2=1e-3, iters=800)
     acc_hum = float(np.mean(F.logistic_predict(w, Z[te]) == y[te]))
     acc_clean = float(np.mean(F.logistic_predict(w, Zc[te]) == y[te]))
+    clean_mu, clean_sd = Xc[tr].mean(axis=0), Xc[tr].std(axis=0) + 1e-9
+    Zc = (Xc - clean_mu) / clean_sd
     w_clean = F.logistic(Zc[tr], y[tr], l2=1e-3, iters=800)
     acc_fair = float(np.mean(F.logistic_predict(w_clean, Zc[te]) == y[te]))
     # the same honest classifier, but split by excerpt, so that excerpts of one clip sit on both sides: a second leak
     ep = np.random.default_rng(55).permutation(len(y))
     etr, ete = ep[: int(0.7 * len(y))], ep[int(0.7 * len(y)):]
-    w_leak = F.logistic(Zc[etr], y[etr], l2=1e-3, iters=800)
-    acc_leaky = float(np.mean(F.logistic_predict(w_leak, Zc[ete]) == y[ete]))
+    leak_mu, leak_sd = Xc[etr].mean(axis=0), Xc[etr].std(axis=0) + 1e-9
+    Zleak = (Xc - leak_mu) / leak_sd
+    w_leak = F.logistic(Zleak[etr], y[etr], l2=1e-3, iters=800)
+    acc_leaky = float(np.mean(F.logistic_predict(w_leak, Zleak[ete]) == y[ete]))
     base = float(max(np.mean(y[te]), 1 - np.mean(y[te])))
     blocks = {"band energies": slice(0, 24), "band spreads": slice(24, 48), "chroma": slice(48, 60), "flux": slice(60, 62)}
     def share(wv):

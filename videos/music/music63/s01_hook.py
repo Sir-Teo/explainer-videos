@@ -28,8 +28,7 @@ class Hook(SoundScene):
                      label(rf"from {r['track'].split('/')[0].replace('music', 'Part ')}, \ starting {r['offset_s']:.1f} s in \ (truly {d['offset_s']:.1f} s)", font_size=20, color=WHITE),
                      label(rf"{r['votes']} matching hashes, \ against {lib['clips']:,} clips of Parts 1 to 60", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.3).move_to(RIGHT * 2.2)
         with self.voiceover(
-            "It can. <bookmark mark='a'/> Monochord's fingerprinter names the Variation, and the moment in it, out of every "
-            f"sound in this series, {say(lib['clips'])} clips, in a fraction of a second."
+            f"It can. <bookmark mark='a'/> Monochord's fingerprinter names the Variation, and the moment in it, among the locally available cached sounds from Parts 1 to 60, {say(lib['clips'])} clips, in a fraction of a second."
         ) as vo:
             vo.wait_until("a")
             self.play(FadeIn(ans))
@@ -46,13 +45,7 @@ class Hook(SoundScene):
             (r"then the harder question: \ not which song is this, \ but which song should come next?", TUNE),
         ]
         rows_scene(self, r"finding music", items,
-                   "The idea is old enough to have been a phone call. <bookmark mark='b'/> In 2002 in London you could dial "
-                   "two-five-eight-oh, hold your phone up to the music, and get the song's name back in a text message. "
-                   "<bookmark mark='c'/> The company, Shazam, was founded in 1999; Avery Wang described its search in 2003, and Apple "
-                   "bought it in 2018. <bookmark mark='d'/> Ten bad seconds, millions of recordings, an answer in seconds: from "
-                   "spectrogram peaks and a hash table. <bookmark mark='e'/> The same idea polices uploads: YouTube's Content ID has "
-                   "matched every upload against rights holders' files since 2007. <bookmark mark='f'/> And then the harder "
-                   "question: not which song is this, but which should come next?", marks="bcdef")
+                   "The idea is old enough to have been a phone call. <bookmark mark='b'/> In 2002 in London you could dial two-five-eight-oh, hold your phone up to the music, and get the song's name back in a text message. <bookmark mark='c'/> The company, Shazam, was founded in 1999; Avery Wang described its search in 2003, and Apple bought it in 2018. <bookmark mark='d'/> Ten bad seconds, millions of recordings, an answer in seconds: from spectrogram peaks and a hash table. <bookmark mark='e'/> The same idea polices uploads: YouTube's Content ID has compared eligible uploads against participating rights holders' reference files since its 2007 introduction. <bookmark mark='f'/> And then the harder question: not which song is this, but which should come next?", marks="bcdef")
 
     # ------------------------------------------------------------------
     def plan(self):

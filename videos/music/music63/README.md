@@ -7,7 +7,7 @@ next. This part builds both kinds of finder: Wang's constellation fingerprint wi
 through noise, codecs, speed changes and samples, and a melody search that finds the song rather than the recording;
 then content embeddings, a classifier that was right for the wrong reason, implicit matrix factorization on simulated
 listeners, the cold start, a recommender feeding on its own popularity, and playlists. The tools are Monochord's
-(`explainer/music/monochord/mir/finder.py`); the library searched is every sound of Parts 1 to 60 (908 clips, 3.7 hours,
+(`explainer/music/monochord/mir/finder.py`); the library searched contains the locally available cached sounds of Parts 1 to 60 (908 clips, 3.7 hours,
 1.15 million hashes), and the listeners are simulated with tastes known, so every answer can be checked.
 
 * **A song from a noisy bar.** Five seconds of Variation 40, the music no louder than the bar, named with its offset
@@ -30,7 +30,7 @@ listeners, the cold start, a recommender feeding on its own popularity, and play
   principal components (the acts overlap almost completely: it knows sound, not subject); an ear question on neighbours
   (the second, Part 48's test tones, is the farthest clip in the series); GTZAN's faults.
 * **6. Right for the wrong reasons.** Clever Hans; an ear question (a Variation with a faint mains hum: the second); a
-  classifier of first-half against second-half Variations scores 83 % with the hum, 43 % with it removed, and 48 % trained
+  classifier of first-half against second-half Variations scores 81 % with the hum, 43 % with it removed, and 50 % trained
   honestly and split by clip, no better than guessing the commoner half (56 %); its weight on the three lowest bands
   (9 % against 3 %); how to catch a horse.
 * **7. Learning from listening.** Collaborative filtering; the play matrix (500 listeners by 300 clips, 11 % of cells lit)
@@ -139,3 +139,5 @@ python -m videos.music.labs 63                                  # the lab (write
   *Science* (2006); O. Celma and P. Cano, "From hits to niches?" (2008).
 * H. Léveillé Gauvin, "Drawing listener attention in popular music: testing five musical features arising from the theory
   of attention economy", *Musicae Scientiae* (2018).
+
+Review qualifications: cached-library counts and fixed numerical examples describe a computation snapshot. Recognition rates are finite synthetic trials, not guarantees at commercial scale. Hash false-match arithmetic assumes uniform independent hashes and is not an operational false-positive certificate. Classifier standardization is fitted on each training split only; exact-run and embedding distances have limited scope.

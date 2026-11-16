@@ -8,13 +8,13 @@ from videos.music.music63.common import *  # noqa: F403
 class Loop(SoundScene):
     def construct(self):
         chapter(self, 9, r"Popularity feeding on itself", r"What happens when a recommender learns from its own recommendations?")
-        self.setup()
+        self.simulation()
         self.curve()
         self.lorenz()
         self.meaning()
 
     # ------------------------------------------------------------------
-    def setup(self):
+    def simulation(self):
         items = [
             (r"a service recommends each listener the five most played songs", WHITE),
             (r"listeners play a recommendation if it suits them \ (their true taste decides)", WHITE),
@@ -49,7 +49,7 @@ class Loop(SoundScene):
             "Here is the inequality of plays, round by round. <bookmark mark='a'/> Without a recommender, listeners spread "
             "their plays: the Gini stays low. <bookmark mark='b'/> With the loop, the first few songs to be played are "
             "recommended to everyone, played more, and recommended more: the Gini climbs toward one. <bookmark mark='c'/> "
-            "Exploring a third of the time slows the runaway, because songs outside the top get a chance to be played. "
+            "Exploring thirty per cent of the time slows the runaway, because songs outside the top get a chance to be played. "
             f"<bookmark mark='d'/> At the end, the top one percent of songs hold {say(100 * d['top1'])} percent of all plays "
             f"with the loop, against {say(100 * d['top1_own'])} without a recommender."
         ) as vo:
@@ -70,17 +70,12 @@ class Loop(SoundScene):
         items = [
             (r"a recommender trained on its own outputs measures its own influence and calls it taste", WHITE),
             (r"real services mix popularity, \ personal taste, \ exploration and editors, \ and study the loop carefully", WHITE),
-            (r"offline tests on logged plays inherit the loop: \ the logs show only what was recommended", WHITE),
+            (r"offline tests on logged plays inherit the loop: \ the logs reflect exposure, selection and other routes to discovery", WHITE),
             (r"the remedies: \ randomized exploration, \ reweighting by how likely each recommendation was \ (inverse propensity)", WHITE),
             (r"what people play is partly what they were shown", TUNE),
         ]
         rows_scene(self, r"what the loop means", items,
-                   "What does it mean? <bookmark mark='b'/> A recommender trained on its own outputs measures its own influence and "
-                   "calls it taste. <bookmark mark='c'/> Real services mix popularity, personal taste, exploration and human "
-                   "editors, and study the loop carefully. <bookmark mark='d'/> Offline tests on logged plays inherit the loop, "
-                   "because the logs show only what was recommended. <bookmark mark='e'/> The remedies are randomized exploration, "
-                   "and reweighting each logged play by how likely its recommendation was. <bookmark mark='f'/> What people play is "
-                   "partly what they were shown.", marks="bcdef")
+                   "What does it mean? <bookmark mark='b'/> A recommender trained on its own outputs measures its own influence and calls it taste. <bookmark mark='c'/> Real services mix popularity, personal taste, exploration and human editors, and study the loop carefully. <bookmark mark='d'/> Offline tests on logged plays inherit the loop, because the logs reflect exposure, selection and other routes to discovery. <bookmark mark='e'/> Possible remedies include randomized exploration and inverse-propensity weighting, when exposure probabilities and overlap are known well enough. <bookmark mark='f'/> What people play is partly what they were shown.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def lorenz(self):

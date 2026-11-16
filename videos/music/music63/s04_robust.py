@@ -99,21 +99,15 @@ class Robust(SoundScene):
         d = load("falsematch")
         m = d["model"]
         lines = VGroup(
-            label(r"a random hash matches a given stored one with probability $2^{-24} \approx 6 \times 10^{-8}$", font_size=20, color=WHITE),
+            label(r"uniform independent model: \ a specified hash matches with $2^{-24} \approx 6 \times 10^{-8}$", font_size=20, color=WHITE),
             label(rf"a query's 400 hashes against {d['db_hashes']:,} stored: \ about {m['chance_hits']:.1f} chance hits in all", font_size=20, color=WHITE),
             label(r"but they scatter over every clip and every offset: \ a few at most in any one place", font_size=20, color=WHITE),
             label(rf"queries of pure noise: \ at most {max(d['noise_top_votes'])} votes in any one place; \ true matches: \ {min(d['true_votes'])} to {max(d['true_votes'])}", font_size=20, color=TUNE),
-            label(r"so a threshold of a few dozen votes almost never names the wrong recording", font_size=19, color=GREY_A),
+            label(r"finite trials support a threshold here; \ production false-alarm rates need calibration", font_size=19, color=GREY_A),
         ).arrange(DOWN, buff=0.4)
         head = label(r"the arithmetic of chance", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "And when the music is not in the library at all, does the system invent an answer? <bookmark mark='a'/> A random "
-            "hash matches a given stored hash with probability two to the minus twenty-four. <bookmark mark='b'/> A query's few "
-            f"hundred hashes against {say(d['db_hashes'])} stored ones give a handful of chance hits in all. "
-            "<bookmark mark='c'/> But they scatter over every clip and every offset. <bookmark mark='d'/> Queries of pure noise "
-            f"collect at most {say(max(d['noise_top_votes']))} votes in any one place; true matches collect "
-            f"{say(min(d['true_votes']))} or more. <bookmark mark='e'/> So a threshold of a few dozen votes almost never names the "
-            "wrong recording: Part 60's birthday problem, kept in check by demanding agreement in time."
+            f"And when the music is not in the library at all, does the system invent an answer? <bookmark mark='a'/> Under an ideal uniform independent model, a random hash matches a given stored hash with probability two to the minus twenty-four. <bookmark mark='b'/> A query's few hundred hashes against {say(d['db_hashes'])} stored ones give the expected number of chance hits in that model. <bookmark mark='c'/> But they scatter over every clip and every offset. <bookmark mark='d'/> Queries of pure noise collect at most {say(max(d['noise_top_votes']))} votes in any one place; true matches collect {say(min(d['true_votes']))} or more. <bookmark mark='e'/> These finite noise trials suggest a useful threshold here; they do not establish a production false-positive rate: Part 60's birthday problem, kept in check by demanding agreement in time."
         ) as vo:
             self.play(FadeIn(head))
             for mark, ln in zip("abcde", lines):
@@ -153,16 +147,18 @@ class Robust(SoundScene):
     def scale(self):
         d = load("scale")
         rows = d["rows"]
-        names = {908: r"this series", 10_000: r"ten thousand tracks", 1_000_000: r"a million", 100_000_000: r"a hundred million"}
+        def power(x):
+            mantissa, exponent = f"{x:.1e}".split("e")
+            return rf"${mantissa}\times 10^{{{int(exponent)}}}$"
+        names = {908: r"908-track model", 10_000: r"ten thousand tracks", 1_000_000: r"a million", 100_000_000: r"a hundred million"}
         g = VGroup()
         for r in rows:
             n = r["tracks"]
             def sci(x):
                 if x >= 1e-3:
                     return f"{x:.3f}" if x < 0.995 else r"near 1"
-                e = int(np.floor(np.log10(x)))
-                return rf"$10^{{{e}}}$"
-            g.add(VGroup(label(names.get(n, f"{n:,}"), font_size=18, color=WHITE), label(f"{r['hashes']:.1e}".replace("e+", r" $\times 10^{") + "}$", font_size=18, color=GREY_A),
+                return power(x)
+            g.add(VGroup(label(names.get(n, f"{n:,}"), font_size=18, color=WHITE), label(power(r["hashes"]), font_size=18, color=GREY_A),
                          label(f"{r['chance_hits']:,.0f}", font_size=18, color=GREY_A), label(sci(r["tail"]["3"]), font_size=18, color=EAR), label(sci(r["tail"]["6"]), font_size=18, color=TUNE)))
         g.arrange(DOWN, buff=0.38)
         for r in g:
@@ -170,17 +166,11 @@ class Robust(SoundScene):
                 r[i].set_x(x)
         g.move_to(DOWN * 0.3)
         top = VGroup(*[label(t, font_size=14, color=GREY_A).move_to([x, g.get_top()[1] + 0.5, 0]) for t, x in
-                       ((r"hashes stored", -1.9), (r"chance hits per query", 0.5), (r"P(3 in one place)", 2.6), (r"P(6 in one place)", 4.7))])
+                       ((r"hashes stored", -1.9), (r"chance hits per query", 0.5), (r"bound $\approx$: any bin $\ge 3$", 2.6), (r"bound $\approx$: any bin $\ge 6$", 4.7))])
         note = label(rf"three-minute-twenty tracks at this index's {d['per_second']:.0f} hashes a second; \ a query of 400 hashes", font_size=15, color=GREY_A).to_edge(DOWN, buff=0.4)
-        head = label(r"a hundred million tracks", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"uniform independent hash model", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "A real service holds a hundred million tracks, not nine hundred clips. Does chance catch up? <bookmark mark='a'/> "
-            "The stored hashes grow from millions to more than a trillion, and a query's chance hits from hundreds to tens of "
-            "millions. <bookmark mark='b'/> But they still scatter over every track and every offset. Three chance hits in one "
-            f"place goes from one in {say(round(1 / rows[0]['tail']['3'] / 1e6))} million to about one in "
-            f"{say(round(1 / rows[-1]['tail']['3']))}; six stays below one in ten to the sixteen. A true match, with dozens of votes in one place, "
-            "stands far above that, which is why requiring a handful of aligned votes is enough at any size. The cost of size "
-            "is memory and speed, not accuracy."
+            f"A real service holds a hundred million tracks, not nine hundred clips. Does chance catch up? <bookmark mark='a'/> The stored hashes grow from millions to more than a trillion, and a query's chance hits from hundreds to tens of millions. <bookmark mark='b'/> But they still scatter over every track and every offset. The Poisson union bound for at least three hits somewhere rises from about one in {say(round(1 / rows[0]['tail']['3'] / 1000000.0))} million to about one in {say(round(1 / rows[-1]['tail']['3']))}; six stays below one in ten to the sixteen. A true match, with dozens of votes in one place, stands far above that, in this independent uniform approximation. Real hashes are correlated, repeated music creates structured collisions, and searching more candidates increases opportunities for errors. Scale affects threshold calibration as well as memory and speed."
         ) as vo:
             self.play(FadeIn(head), FadeIn(top), FadeIn(note), FadeIn(g[0]))
             vo.wait_until("a")

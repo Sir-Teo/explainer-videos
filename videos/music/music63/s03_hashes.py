@@ -56,10 +56,10 @@ class Hashes(SoundScene):
             (r"a commercial service holds tens of millions of recordings, \ billions of hashes, \ on many machines", TUNE),
         ]
         rows_scene(self, r"the hash table", items,
-                   "Then index the library. <bookmark mark='b'/> Monochord's library is every clip of Parts 1 to 60: "
+                   "Then index the library. <bookmark mark='b'/> Monochord's library contains the available cached clips of Parts 1 to 60: "
                    f"{say(lib['clips'])} clips, {say(lib['hours'], 1)} hours of sound. <bookmark mark='c'/> That makes "
                    f"{say(lib['hashes'])} hashes, each stored under its value with the clip and the time it came from. "
-                   "<bookmark mark='d'/> Looking a hash up is one step, however large the table; that is what a hash table is for. "
+                   "<bookmark mark='d'/> Hash-table lookup has approximately constant average cost, while reading all postings and aggregating votes also takes time; that is what a hash table is for. "
                    "<bookmark mark='e'/> A commercial service holds tens of millions of recordings and billions of hashes, spread "
                    "over many machines.", marks="bcde")
 

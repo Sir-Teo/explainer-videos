@@ -25,7 +25,7 @@ class Outro(SoundScene):
         for k, row in zip(keys, f):
             ok = row["found"] == row["truth"]
             name = (row["found"] or "nothing").split("/")[-1]
-            cells.add(VGroup(RoundedRectangle(width=3.6, height=1.3, corner_radius=0.12, stroke_color=TUNE if ok else EAR),
+            cells.add(VGroup(RoundedRectangle(width=3.6, height=1.3, corner_radius=0.12, stroke_color=TUNE if ok else EAR, fill_opacity=0),
                              VGroup(label(name, font_size=17, color=TUNE if ok else EAR),
                                     label(rf"{row['votes']} votes, \ at {row['offset_s']:.1f} s" if row["offset_s"] is not None else r"no match", font_size=14, color=GREY_A)).arrange(DOWN, buff=0.12)).arrange(ORIGIN))
         cells.arrange(RIGHT, buff=0.3).move_to(DOWN * 0.2)
@@ -42,8 +42,15 @@ class Outro(SoundScene):
             window(snd, r"Variation 63", kind="physical model", detail=r"three Variations, \ a simulated bar", corner=DL, tag_corner=DR)
             for i, k in enumerate(keys):
                 end = st[keys[i + 1]] - 0.3 if i + 1 < len(keys) else c.duration
+                progress = VGroup(Line(LEFT * 1.65, RIGHT * 1.65, color=GREY_A, stroke_width=2), Dot(radius=0.09, color=WHITE)).move_to(cells[i].get_bottom() + DOWN * 0.18)
+                def advance(m, tt, begin=st[k], stop=end):
+                    fraction = np.clip((tt - begin) / max(stop - begin, 0.01), 0, 1)
+                    m[1].move_to(m[0].get_start() + fraction * (m[0].get_end() - m[0].get_start()))
+                    m.set_opacity(1.0 if begin <= tt < stop else 0.0)
+                snd.show(progress)
+                snd.drive(progress, advance)
                 snd.show(cells[i])
-                snd.drive(cells[i], lambda m, t, s1=end: m.set_opacity(1.0 if t >= s1 - 0.6 else 0.15))
+                snd.drive(cells[i], lambda m, t, s1=end: (m.set_opacity(1.0 if t >= s1 - 0.6 else 0.15), m[0].set_fill(opacity=0)))
         self.add(cells)
         self.wait(0.6)
         self.clear_scene()
@@ -55,8 +62,7 @@ class Outro(SoundScene):
         led = variations_ledger(rws, highlight=(len(rws) - 1,)).move_to(DOWN * 0.2)
         head = label(r"the Variations ledger", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            f"Row sixty-three of the ledger: {v['measure']}. The ledger is now also a library, and every row of it can be found "
-            "again from a few noisy seconds."
+            f"Row sixty-three of the ledger: {v['measure']}. The ledger is now also a library, and these three chosen excerpts were found under the demonstrated noise conditions."
         ):
             self.play(FadeIn(head), FadeIn(led, shift=UP * 0.2))
         self.wait(0.6)
@@ -67,18 +73,13 @@ class Outro(SoundScene):
         card = objectives_card([
             r"fingerprints: \ spectrogram peaks paired into hashes; \ votes agree in time",
             r"they survive noise and codecs, \ and identify recordings, \ not songs",
-            r"chance matches scatter; \ a few dozen votes at one offset is proof",
+            r"chance matches scatter; \ thresholds need empirical calibration",
             r"embeddings describe sound; \ a classifier can learn a hum instead of the music",
-            r"implicit ALS learns tastes from plays; \ content rescues new songs",
+            r"implicit ALS fits profiles from plays; \ content rescues new songs",
             r"popularity feeds on itself; \ exploring and fairness push back",
         ], title=r"What we found", font_size=20).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Fingerprints pair spectrogram peaks into hashes, and true matches agree in time. "
-            "<bookmark mark='a'/> They survive noise and codecs, and identify recordings, not songs. <bookmark mark='b'/> Chance "
-            "matches scatter, so a few dozen votes at one offset is close to proof. <bookmark mark='c'/> Embeddings describe sound, "
-            "and a classifier can learn a hum instead of the music. <bookmark mark='d'/> Implicit matrix factorization learns "
-            "tastes from plays, and the sound rescues songs nobody has played. <bookmark mark='e'/> And popularity feeds on "
-            "itself, while exploring and fairness push back."
+            "What did we find? Fingerprints pair spectrogram peaks into hashes, and true matches agree in time. <bookmark mark='a'/> They survive noise and codecs, and identify recordings, not songs. <bookmark mark='b'/> Chance matches scatter, but correlated music and multiple comparisons require empirical threshold calibration. <bookmark mark='c'/> Embeddings describe sound, and a classifier can learn a hum instead of the music. <bookmark mark='d'/> Implicit matrix factorization fits profiles from plays, and the sound rescues songs nobody has played. <bookmark mark='e'/> And popularity feeds on itself, while exploring and fairness push back."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

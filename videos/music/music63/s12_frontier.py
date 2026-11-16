@@ -78,10 +78,4 @@ class Frontier(SoundScene):
             (r"what a system rewards, \ people make more of: \ Chapter 9's loop, \ with musicians inside it", TUNE),
         ]
         rows_scene(self, r"the evidence so far", items,
-                   "What evidence is there? <bookmark mark='b'/> A stream is paid once it passes thirty seconds, as Part 60 showed, "
-                   "so the first seconds carry the money. <bookmark mark='c'/> Hubert Léveillé Gauvin measured the top-ten hits in "
-                   "the United States: their instrumental introductions shrank from about twenty seconds in the mid-1980s to about "
-                   "five by the mid-2010s. <bookmark mark='d'/> The voice and the title arrive sooner, and songs grew shorter in "
-                   "the streaming years. <bookmark mark='e'/> But radio, music video, changing taste and attention all overlap "
-                   "those years; a trend is not a cause. <bookmark mark='f'/> The principle is older than streaming: what a system "
-                   "rewards, people make more of. Chapter 9's loop, with musicians inside it.", marks="bcdef")
+                   "What evidence is there? <bookmark mark='b'/> Some services count eligible streams after about thirty seconds, subject to platform rules and agreements; that does not guarantee a fixed payment. <bookmark mark='c'/> Hubert Léveillé Gauvin measured the top-ten hits in the United States: their instrumental introductions shrank from about twenty seconds in the mid-1980s to about five by the mid-2010s. <bookmark mark='d'/> The voice and the title arrive sooner, and songs grew shorter in the streaming years. <bookmark mark='e'/> But radio, music video, changing taste and attention all overlap those years; a trend is not a cause. <bookmark mark='f'/> The principle is older than streaming: what a system rewards, people make more of. Chapter 9's loop, with musicians inside it.", marks="bcdef")

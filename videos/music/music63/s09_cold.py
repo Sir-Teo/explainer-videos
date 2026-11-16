@@ -59,7 +59,7 @@ class Cold(SoundScene):
         names = [n.split("/")[1] for n in d["cold_pair"]]
         boxes = choice_boxes([rf"new: \ {names[0]}", rf"nearest played: \ {names[1]}"], width=4.4, height=0.9, buff=0.8, size=17).move_to(UP * 0.5)
         head = label(r"a new song, \ and its nearest neighbour", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
-        with self.voiceover("Hear one of the new songs, and the played song whose sound is nearest to it in the embedding: the song it will be recommended alongside."):
+        with self.voiceover("Hear one of the new songs, and the played song whose sound is nearest to it in the embedding: a content neighbour; this similarity alone does not determine a real recommendation."):
             self.play(FadeIn(head), FadeIn(boxes))
         st = d["cold_starts"]
         with self.listen(c) as snd:

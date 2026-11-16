@@ -146,9 +146,10 @@ class Index:
 
 
 def false_match_rate(bits: int = 24, query_hashes: int = 400, db_hashes: int = 5_000_000, tracks: int = 1000, offsets: int = 2000) -> dict:
-    """Chance agreement: a random query hash equals a given database hash with probability 2^-bits; the expected
-    number of chance hits is query x database / 2^bits, spread over tracks x offsets bins.  A true match needs only a
-    handful of hits in one bin, which chance almost never piles up."""
+    """Idealized uniform independent hash model: a specified stored hash matches with probability 2^-bits.
+    Expected hits are query x database / 2^bits, distributed uniformly over tracks x offsets bins. The returned
+    tails are union bounds from a Poisson approximation, not measured false-positive rates for correlated music
+    fingerprints. Thresholds for a real index require empirical calibration."""
     p = 2.0 ** -bits
     hits = query_hashes * db_hashes * p
     per_bin = hits / (tracks * offsets)

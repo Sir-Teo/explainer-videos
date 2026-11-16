@@ -58,21 +58,16 @@ class Horse(SoundScene):
             bar = Rectangle(width=6.0 * v, height=0.45, stroke_width=0, fill_color=col, fill_opacity=0.8)
             rows_.add(VGroup(label(name, font_size=18, color=col), bar, label(f"{100 * v:.0f}\\%", font_size=18, color=WHITE)))
         rows_.arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to(DOWN * 0.2 + LEFT * 0.5)
-        for r in rows_:
-            r[1].next_to(r[0], RIGHT, buff=0.3).align_to(rows_, LEFT).shift(RIGHT * 4.6)
+        for i, r in enumerate(rows_):
+            y = 0.7 - 0.85 * i
+            r[0].move_to([-0.75 - r[0].width / 2, y, 0])
+            r[1].move_to([-0.4 + r[1].width / 2, y, 0])
             r[2].next_to(r[1], RIGHT, buff=0.2)
         task = label(rf"the task: \ was this Variation made in Parts 1 to 30, \ or 31 to 60? \ \ (always guessing the commoner half: \ {100 * d['majority']:.0f}\%)", font_size=18, color=GREY_A).to_edge(UP, buff=1.0)
         note = label(rf"its strongest features: \ {', '.join(d['top_features'])} \ (the lowest bands hold the hum)", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
         head = label(r"a horse", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The task: from five seconds, did this Variation come from the first thirty parts or the last thirty? Every "
-            "recording from the later parts carries that faint hum. <bookmark mark='a'/> A classifier on Monochord's embedding "
-            f"scores {say(100 * d['acc_hum'])} percent. Impressive. <bookmark mark='b'/> Remove the hum, change nothing about the "
-            f"music, and the same classifier falls to {say(100 * d['acc_clean'])} percent. It had learnt the hum. "
-            f"<bookmark mark='c'/> Trained honestly, without any hum, and tested on clips it never saw, it scores "
-            f"{say(100 * d['acc_fair'])} percent, no better than always guessing the commoner half, {say(100 * d['majority'])}. "
-            "In these sixty-two numbers the music says nothing about which half of the series it came from. Every point of "
-            "that impressive score was hum."
+            f"The task: from four-second training excerpts, did this Variation come from the first thirty parts or the last thirty? Every recording from the later parts carries that faint hum. <bookmark mark='a'/> A classifier on Monochord's embedding scores {say(100 * d['acc_hum'])} percent. Impressive. <bookmark mark='b'/> Remove the hum, change nothing about the music, and the same classifier falls to {say(100 * d['acc_clean'])} percent. It had learnt the hum. <bookmark mark='c'/> Trained honestly, without any hum, and tested on clips it never saw, it scores {say(100 * d['acc_fair'])} percent, no better than always guessing the commoner half, {say(100 * d['majority'])}. This classifier and this split do not establish that the music contains no information about its half of the series. The counterfactual drop shows that the added hum strongly affected this fitted classifier."
         ) as vo:
             self.play(FadeIn(head), FadeIn(task))
             for mark, r in zip("abc", rows_):
@@ -92,11 +87,7 @@ class Horse(SoundScene):
             (r"a high score is a hypothesis about what was learnt, \ not a proof", TUNE),
         ]
         rows_scene(self, r"how to catch a horse", items,
-                   "How do you catch a horse? <bookmark mark='b'/> Split the data by artist, album and studio, not by excerpt, so "
-                   "that no recording sits on both sides. <bookmark mark='c'/> Intervene: filter, add noise, change the level, "
-                   "re-encode, everything that should not matter. <bookmark mark='d'/> Look at what the model uses: its weights, "
-                   "its saliency, its errors. <bookmark mark='e'/> Test on music made elsewhere: another studio, decade or culture. "
-                   "<bookmark mark='f'/> A high score is a hypothesis about what was learnt, not a proof.", marks="bcdef")
+                   "How do you catch a horse? <bookmark mark='b'/> Split the data by artist, album and studio, not by excerpt, so that no recording sits on both sides. <bookmark mark='c'/> Intervene: filter, add noise, change the level, re-encode, everything that should not matter. <bookmark mark='d'/> Look at what the model uses: its weights, its saliency, its errors; feature weights depend on scaling and correlated predictors; feature weights depend on scaling and correlated predictors. <bookmark mark='e'/> Test on music made elsewhere: another studio, decade or culture. <bookmark mark='f'/> A high score is a hypothesis about what was learnt, not a proof.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def weights(self):
@@ -113,7 +104,12 @@ class Horse(SoundScene):
         names = VGroup(*[label(t, font_size=15, color=GREY_A).move_to([-3.0 + 2.0 * i, -1.95, 0]) for i, t in enumerate(blocks)])
         key = VGroup(label(r"trained with the hum", font_size=16, color=EAR), label(r"trained without", font_size=16, color=TUNE)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_corner(UR, buff=0.5)
         res = label(rf"the three lowest bands, \ where 50, \ 100 and 150 Hz fall: \ {100 * lb['hum']:.0f}\% of the weight with the hum, \ {100 * lb['fair']:.0f}\% without", font_size=18, color=EAR).to_edge(DOWN, buff=0.45)
-        head = label(r"where the weight goes", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        values = VGroup(*[
+            label(rf"{100 * share[key]:.0f}\%", font_size=13, color=col).next_to(bar, UP, buff=0.1)
+            for share, col, bars_ in ((d["share_hum"], EAR, a), (d["share_fair"], TUNE, b))
+            for key, bar in zip(blocks, bars_)
+        ])
+        head = label(r"share of absolute standardized-feature weights", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Could we have caught it without removing the hum? Look at what the model uses. <bookmark mark='a'/> Here is how "
             "the size of its weights divides among the embedding's four kinds of number, for the classifier trained with the "
@@ -124,7 +120,7 @@ class Horse(SoundScene):
         ) as vo:
             self.play(FadeIn(head), FadeIn(names), FadeIn(key))
             vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in [*a, *b]], lag_ratio=0.1), run_time=1.6)
+            self.play(LaggedStart(*[GrowFromEdge(r, DOWN) for r in [*a, *b]], lag_ratio=0.1), FadeIn(values), run_time=1.6)
             vo.wait_until("b")
             self.play(FadeIn(res))
         self.wait(0.6)

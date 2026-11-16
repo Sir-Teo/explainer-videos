@@ -42,12 +42,7 @@ class Tagging(SoundScene):
         ).arrange(DOWN, buff=0.4)
         head = label(r"embeddings", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Tags are words; machines prefer vectors. <bookmark mark='a'/> An embedding is a short vector per recording, near "
-            "for recordings that sound alike. <bookmark mark='b'/> Monochord's is simple: the energy in twenty-four bands and "
-            "how it varies, twelve chroma bins and the flux, sixty-two numbers. <bookmark mark='c'/> Learnt embeddings are a "
-            "network's last layer, trained on millions of tracks to predict tags or what people play together. "
-            "<bookmark mark='d'/> Nearest neighbours in the embedding give more like this. <bookmark mark='e'/> The risk is that "
-            "near in the embedding means near in recording conditions, not in music."
+            "Tags are words; machines prefer vectors. <bookmark mark='a'/> An audio embedding is a vector representation whose distances reflect its chosen features or training objective. <bookmark mark='b'/> Monochord's is simple: the energy in twenty-four bands and how it varies, twelve chroma bins and the flux, sixty-two numbers. <bookmark mark='c'/> Learnt embeddings are often taken from an intermediate or output layer, trained on millions of tracks to predict tags or what people play together. <bookmark mark='d'/> Nearest neighbours in the embedding give more like this. <bookmark mark='e'/> The risk is that near in the embedding means near in recording conditions, not in music."
         ) as vo:
             self.play(FadeIn(head))
             for mark, ln in zip("abcde", lines):
@@ -91,12 +86,7 @@ class Tagging(SoundScene):
         note = label(rf"the 62-number embedding of every clip, \ flattened onto its two main directions \ ({100 * (ex[0] + ex[1]):.0f}\% of its variance)", font_size=15, color=GREY_A).to_edge(DOWN, buff=0.3)
         head = label(rf"{len(xy)} clips of this series, \ by sound alone", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            f"Here are all {say(len(xy))} sounds of this series so far, each placed by its embedding alone, flattened onto the "
-            "two directions along which the embeddings vary most. <bookmark mark='a'/> Colour them by act. "
-            "<bookmark mark='b'/> The acts overlap almost completely. The first two lean a little toward the top, with their "
-            "pure tones and single strings, but every act has its plain tones and its full textures, and they land wherever "
-            "they sound like they belong. The map knows sound, not subject: similar sounds land near each "
-            "other, whatever they are about, and that nearness is all that tagging, search by example and playlists can use."
+            f"Here are all {say(len(xy))} sounds of this series so far, each placed by its embedding alone, flattened onto the two directions along which the embeddings vary most. <bookmark mark='a'/> Colour them by act. <bookmark mark='b'/> The acts overlap almost completely. The first two lean a little toward the top, with their pure tones and single strings, but every act has its plain tones and its full textures, and they land wherever they sound like they belong. The map knows sound, not subject: these features emphasize some similarities and miss others. A two-dimensional PCA projection also discards variation, so this picture is not a validated map of perceived similarity."
         ) as vo:
             self.play(FadeIn(head), FadeIn(note), FadeIn(VGroup(*layers).set_color(GREY_D)))
             vo.wait_until("a")

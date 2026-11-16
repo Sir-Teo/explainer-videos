@@ -29,10 +29,10 @@ class Recordings(SoundScene):
             pulse(snd, note[0], 0.0, c.duration, rate=5.0, color=GREY_B, buff=0.15)
         with self.voiceover(
             f"Not as a recording. Its best guess, {top[0]['track'].split('/')[1].replace('tune.variation', 'Variation ')}, "
-            f"collects {say(top[0]['votes'])} votes: more than chance, which never gave pure noise more than "
+            f"collects {say(top[0]['votes'])} votes: more than chance, which in our finite trials gave pure noise no more than "
             f"{say(max(d['noise_top_votes']))}, because a few notes and chords sound alike in both; but a tenth of the "
             f"{say(min(d['true_votes']))} or more that a true excerpt collects. A fingerprint identifies a recording, its exact "
-            "peaks at their exact times. A new performance of the same song, at another tempo, has other peaks entirely."
+            "peaks at their exact times. A new performance of the same song, at another tempo, can move many peaks enough to change these hashes."
         ):
             self.play(FadeIn(note[1]))
         self.wait(0.4)
@@ -48,12 +48,7 @@ class Recordings(SoundScene):
             (r"three questions, \ three kinds of similarity: \ the same signal, \ the same composition, \ the same taste", TUNE),
         ]
         rows_scene(self, r"three kinds of sameness", items,
-                   "This is a feature, not a flaw. <bookmark mark='b'/> Fingerprints answer which recording: exactly, fast, and "
-                   "blind to the song. <bookmark mark='c'/> Which song needs Part 62's cover matching, by chroma in any key and at "
-                   "any tempo: slower, and less sure. <bookmark mark='d'/> Songs like this one needs features of sound and style, the "
-                   "subject of the next chapters. <bookmark mark='e'/> And the difference matters for money: a re-upload and a cover "
-                   "carry different rights, as Part 60 explained. <bookmark mark='f'/> Three questions, three kinds of similarity: "
-                   "the same signal, the same composition, the same taste.", marks="bcdef")
+                   "This is a feature, not a flaw. <bookmark mark='b'/> Fingerprints answer which recording: by matching signal details, quickly when the index is suitable. <bookmark mark='c'/> Which song needs Part 62's cover matching, using transposition comparisons and restricted time warping: slower, and less sure. <bookmark mark='d'/> Songs like this one needs features of sound and style, the subject of the next chapters. <bookmark mark='e'/> And the difference matters for money: a re-upload and a cover carry different rights, as Part 60 explained. <bookmark mark='f'/> Three questions, three kinds of similarity: the same signal, the same composition, the same taste.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def speed(self):
