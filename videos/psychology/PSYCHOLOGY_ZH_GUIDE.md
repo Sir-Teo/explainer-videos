@@ -1412,6 +1412,16 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | natural selection of bad science; registered report; automating research | 糟糕科学的自然选择；注册报告；研究自动化 |
 | Matthew Salganik; Richard Klein; Abdullah Almaatouq; Duncan Watts; Joshua Peterson; Paul Smaldino; Richard McElreath; Johannes Eichstaedt | 马修·萨尔加尼克；理查德·克莱因；阿卜杜拉·阿尔马图克；邓肯·瓦茨；约书亚·彼得森；保罗·斯马尔迪诺；理查德·麦克尔里斯；约翰内斯·艾希施泰特 |
 
+## Part 62: the dissertation
+
+| English | 中文 |
+|---|---|
+| dissertation; registered report; Stage 1; Stage 2; in-principle acceptance; plan hash | 学位论文；注册报告；第一阶段；第二阶段；原则性接收；计划哈希值 |
+| deviation from the plan; design check; inconclusive; equivalence bounds | 偏离计划；设计检验；结论不确定；等效界限 |
+| split-half reliability; Spearman-Brown correction; mental-rotation slope | 分半信度；斯皮尔曼-布朗校正；心理旋转斜率 |
+| peer review; ethics as practice; scorecard; the Ledger by act | 同行评审；作为实践的伦理；记分卡；按幕整理的账本 |
+| Immanuel Kant; Roger Shepard; Jacqueline Metzler; Chris Chambers | 伊曼努尔·康德；罗杰·谢泼德；杰奎琳·梅茨勒；克里斯·钱伯斯 |
+
 ## Names
 
 | English | 中文 |

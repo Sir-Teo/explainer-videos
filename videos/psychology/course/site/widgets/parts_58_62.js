@@ -267,4 +267,78 @@
       note: "Nothing you choose is stored or sent. The space is Part 61's: ten binary choices with main effects and pairwise interactions, drawn once. The right panel is the arithmetic behind Smaldino and McElreath's model: when few tested hypotheses are true, even honest labs publish many false positives.",
     });
   };
+
+  // ---- Part 62: the last experiment: mental rotation on you, your slope, and its split-half reliability. ----
+  W.lastrotation = function (el) {
+    var w = null, ANG = [0, 60, 120, 180], N = 32;
+    var S = { phase: "idle", k: 0, trials: [], t0: 0, res: [] };
+    function plan(seed) {
+      var r = (function (a) { return function () { a = (a + 0x6d2b79f5) >>> 0; var t = a; t = Math.imul(t ^ (t >>> 15), t | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; })(seed >>> 0);
+      var out = [], i;
+      for (i = 0; i < N; i++) out.push({ angle: ANG[i % 4], mirror: (Math.floor(i / 4) % 2) === 1 });
+      for (i = out.length - 1; i > 0; i--) { var j = Math.floor(r() * (i + 1)), tmp = out[i]; out[i] = out[j]; out[j] = tmp; }
+      return out;
+    }
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "run"; },
+      respond: function (side) {
+        var tr = S.trials[S.k];
+        S.res.push({ angle: tr.angle, rt: T.now() - S.t0, correct: (side === 1) === tr.mirror, odd: S.k % 2 === 0 });
+        S.k++; task.count++;
+        if (S.k >= N) { S.phase = "done"; } else { S.t0 = T.now(); }
+        if (w) w.render();
+      },
+    });
+    function slope(rows) {
+      var n = rows.length, mx = 0, my = 0, i, sxx = 0, sxy = 0;
+      if (n < 3) return NaN;
+      for (i = 0; i < n; i++) { mx += rows[i].angle; my += rows[i].rt; }
+      mx /= n; my /= n;
+      for (i = 0; i < n; i++) { sxx += (rows[i].angle - mx) * (rows[i].angle - mx); sxy += (rows[i].angle - mx) * (rows[i].rt - my); }
+      return sxx > 0 ? sxy / sxx : NaN;
+    }
+    function drawR(ctx, x, y, angle, mirror, size) {
+      ctx.save(); ctx.translate(x, y); ctx.rotate(angle * Math.PI / 180); if (mirror) ctx.scale(-1, 1);
+      ctx.fillStyle = "#e8eef6"; ctx.font = "bold " + size + "px serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText("R", 0, 0); ctx.restore();
+    }
+    w = QB.widget(el, {
+      title: "The last experiment",
+      sub: "Press Start. Each trial shows an R on the left and, on the right, the same R turned (press F) or its mirror image turned (press J), or tap the left or right half. Thirty-two trials; answer as fast as you can without errors. Then see your time against the angle, your slope, and how well your odd and even trials agree.",
+      panels: 2, height: 330,
+      buttons: [
+        { label: "Start", act: function (state) { S.trials = plan(62 + (state ? state.seed : 0)); S.k = 0; S.res = []; task.count = 0; S.phase = "run"; S.t0 = T.now(); } },
+        { label: "Clear", act: function (state) { if (state) state.seed++; S.phase = "idle"; S.k = 0; S.res = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (S.phase === "run") {
+          var tr = S.trials[S.k];
+          ctx.fillStyle = "#cfd6e2"; ctx.font = "13px sans-serif"; ctx.textAlign = "center";
+          ctx.fillText("trial " + (S.k + 1) + " of " + N + ":   F same   J mirror", b.cx, b.y + 22);
+          drawR(ctx, b.x + b.w * 0.3, b.cy + 10, 0, false, 72);
+          drawR(ctx, b.x + b.w * 0.7, b.cy + 10, tr.angle, tr.mirror, 72);
+        } else if (S.phase === "done") {
+          var all = S.res.filter(function (r) { return r.correct; });
+          var so = slope(all.filter(function (r) { return r.odd; })), se = slope(all.filter(function (r) { return !r.odd; }));
+          var sl = slope(all);
+          T.message(ctx, b, "Your slope: " + (isFinite(sl) ? (sl).toFixed(1) + " ms per degree" : "too few correct trials"),
+            "Odd trials: " + (isFinite(so) ? so.toFixed(1) : "?") + "; even trials: " + (isFinite(se) ? se.toFixed(1) : "?") + " ms per degree. With only 16 trials in each half, the two halves of one person often disagree: that is why Part 62 needed 40 people, and found a reliability of 0.74 with an interval from 0.51 to 0.87.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start for 32 trials of mental rotation.");
+        }
+        var a = g[1].axes({ x: [-10, 190], y: [0, 3000], title: "Your correct trials: time (ms) against angle (degrees)" });
+        var means = [];
+        ANG.forEach(function (ang) {
+          var rs = S.res.filter(function (r) { return r.correct && r.angle === ang; }).map(function (r) { return r.rt; });
+          if (rs.length) { var m = rs.reduce(function (p, q) { return p + q; }, 0) / rs.length; means.push([ang, Math.min(m, 2950)]); }
+        });
+        if (means.length > 1) a.line(means.map(function (p) { return p[0]; }), means.map(function (p) { return p[1]; }), { color: "#f2c14e", width: 2 });
+        means.forEach(function (p) { a.text(p[0], p[1] + 120, Math.round(p[1]) + "", { align: "center", size: 10 }); });
+      },
+      readout: function () { var all = S.res.filter(function (r) { return r.correct; }); var sl = slope(all); return [["trials done", S.res.length + " of " + N], ["your slope", isFinite(sl) ? sl.toFixed(1) + " ms/deg" : "n/a"]]; },
+      note: "Nothing you do is stored or sent. The task is a two-dimensional version of Part 24's; the slope is the least-squares slope of your correct trials' times on the angle, computed in your browser.",
+    });
+  };
 })();

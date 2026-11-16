@@ -7984,3 +7984,33 @@ shown(61, r"Almaatouq et al.\ (2024)", "a methods proposal, computed here in Psy
 shown(61, r"Peterson et al.\ (2021)", "a large dataset and model comparison; the data are Part 26's choices13k")
 shown(61, r"Borsboom et al.\ (2021)", "a methods proposal, described")
 shown(61, r"Smaldino \& McElreath (2016)", "a model, rerun here in Psyche")
+
+# --- Part 62: The Dissertation ----------------------------------------------------------------------------------------
+add(Finding(
+    key="rotation_slope_reliability", part=62, title=r"Is a mental-rotation slope a reliable measure of a person?",
+    claim="A person's mental-rotation slope (response time per degree), though the effect is nearly universal, is "
+          "an unreliable measure of that person (split-half reliability below 0.70), as the reliability paradox "
+          "predicts.",
+    original=Study("Psychology, Built (Part 62, a registered report)", 2026,
+                   n="40 of Ganis and Kievit's 54 people (14 excluded by the registered rule as amended)",
+                   design="odd/even split-half reliability of each person's slope, Spearman-Brown corrected, bootstrap "
+                          "interval, decision threshold 0.70 fixed in advance",
+                   effect=0.74, unit="reliability", lo=0.51, hi=0.87,
+                   found="inconclusive for the paradox's prediction; the mean response time was more reliable (0.94)"),
+    status="not directly tested",
+    record=(),
+    note="One registered analysis of one open data set, with one reported deviation (the minimum trials per cell "
+         "lowered from 4 to 2 when the registered rule excluded everyone); an exploratory analysis of all 54 people "
+         "gave 0.73. The prediction was not supported, and not refuted.",
+    sources=("Psychology, Built, Part 62: a registered report, explainer/psychology/psyche/thesis.py (plan SHA-256 "
+             "1ee2fa7b1189547d57863b673b825ff6d434d63461032bd0d718fd6919aee462), 2026",
+             "G. Ganis and R. Kievit, A new set of three-dimensional shapes for investigating mental rotation "
+             "processes: validation data and stimulus set, Journal of Open Psychology Data 3 (2015) e3",
+             "C. Hedge, G. Powell and P. Sumner, The reliability paradox: why robust cognitive tasks do not produce "
+             "reliable individual differences, Behavior Research Methods 50 (2018) 1166-1186"),
+    checked="2026-11-16",
+))
+shown(62, r"Belmont Report (1979)", "a statement of ethical principles, described")
+shown(62, r"Hoffman et al.\ (2015)", "an independent review, described")
+shown(62, r"Ganis \& Kievit (2015)", "the open data set the registered report analyses; its result is this part's row")
+shown(62, "KANT_1786", "Kant's three objections, quoted again from Part 1 to be answered")

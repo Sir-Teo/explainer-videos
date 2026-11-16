@@ -1,11 +1,11 @@
 # Psychology, Built (心理学，从零搭建)
 
-**Status (2026-11-15): the plan is accepted, the shared code is in place, and Parts 1 to 61 are built in English
+**Status (2026-11-16): the series is complete. All sixty-two parts are built in English
 and Chinese.** Act I (Parts 1 to 4) is the method; Act II (Parts 5 to 10) is the biology, from *The Neuron* to
 *Chemistry and Clocks*; Act III (Parts 11 to 15) is the senses, from *The Threshold* to *The Other Senses*; Act IV
 (Parts 16 and 17) is learning, *Conditioning* and *Reward and Prediction*; and Act V, thinking, is complete:
 *Attention*, *Working Memory*, *Memory I: Storing and Finding*, *Memory II: Forgetting and Inventing*, *Concepts
-and Categories*, *Language*, *Reasoning and Problem Solving*, *Deciding in Time*, *Judgment and Choice* and *Consciousness* (Parts 18 to 27); and Act VI, feeling and wanting, is complete: *Motivation* and *Emotion* (Parts 28 and 29); and Act VII, growing, is complete: *The Infant Mind* and *The Lifespan* (Parts 30 and 31); and Act VIII, how people differ, is complete: *Intelligence* and *Personality* (Parts 32 and 33); and Act IX, other people, is complete: *Social Influence*, *Social Cognition*, *Us and Them*, *Bonds and Bargains* and *Culture and Morals* (Parts 34 to 38); and Act X, when minds suffer, is complete: *What Is a Disorder?*, *Fear and Sadness*, *Psychosis, Addiction and Development* and *Does Therapy Work?* (Parts 39 to 42); and the degree ends with its capstone, *The Replication* (Part 43). Act XI, the graduate toolkit, is complete: *Latent Variables*, *Item Response Theory*, *Scaling, Surveys and Choice*, *People over Time*, *Modelling Behaviour*, *Modelling the Brain's Data* and *The Weight of Evidence* (Parts 44 to 50). Act XII, psychology at work, is complete: *Human Factors*, *Designing for Minds*, *People at Work*, *The Science of Learning*, *Behaviour Change at Scale*, *Psychology and Law* and *Health and Care* (Parts 51 to 57). Act XIII, the frontier, has begun with *The Efficient, Predictive Brain*, *Computational Psychiatry*, *Minds and Machines* and *The Next Psychology* (Parts 58 to 61). This file is the plan;
+and Categories*, *Language*, *Reasoning and Problem Solving*, *Deciding in Time*, *Judgment and Choice* and *Consciousness* (Parts 18 to 27); and Act VI, feeling and wanting, is complete: *Motivation* and *Emotion* (Parts 28 and 29); and Act VII, growing, is complete: *The Infant Mind* and *The Lifespan* (Parts 30 and 31); and Act VIII, how people differ, is complete: *Intelligence* and *Personality* (Parts 32 and 33); and Act IX, other people, is complete: *Social Influence*, *Social Cognition*, *Us and Them*, *Bonds and Bargains* and *Culture and Morals* (Parts 34 to 38); and Act X, when minds suffer, is complete: *What Is a Disorder?*, *Fear and Sadness*, *Psychosis, Addiction and Development* and *Does Therapy Work?* (Parts 39 to 42); and the degree ends with its capstone, *The Replication* (Part 43). Act XI, the graduate toolkit, is complete: *Latent Variables*, *Item Response Theory*, *Scaling, Surveys and Choice*, *People over Time*, *Modelling Behaviour*, *Modelling the Brain's Data* and *The Weight of Evidence* (Parts 44 to 50). Act XII, psychology at work, is complete: *Human Factors*, *Designing for Minds*, *People at Work*, *The Science of Learning*, *Behaviour Change at Scale*, *Psychology and Law* and *Health and Care* (Parts 51 to 57). Act XIII, the frontier, is complete: *The Efficient, Predictive Brain*, *Computational Psychiatry*, *Minds and Machines*, *The Next Psychology* and *The Dissertation* (Parts 58 to 62). This file is the plan;
 the standard every part meets, the devices and all sixty-two parts chapter by chapter are in
 [`SYLLABUS.md`](SYLLABUS.md), with the progress table in its §9.
 
@@ -294,12 +294,12 @@ interactive is the part's experiment on the reader, built on the task kit
 
 ## Decisions taken
 
-The defaults below were accepted on 2026-11-13 and the series is being built to them. Details in the syllabus, §8.
+The defaults below were accepted on 2026-11-13 and the series was built to them. Details in the syllabus, §8.
 
 1. **Scope: sixty-two parts, about 52 hours.** The alternative is a first season of Parts 1–43 (the degree, about
    36 hours) with Acts XI–XIII committed to later.
 2. **Length: 30–60 minutes, most at 45–55**, as asked. The other series run 50–60; `tools/lecture_length.py`
-   already defaults to a 30-minute floor.
+   already defaults to a 30-minute floor. As built, the parts run from 28 to 66 minutes, about 44 hours in all: each film carries a part's core, and its lab, interactive and README carry the rest.
 3. **Video names `psych1` … `psych62`** in `videos/psychology/` (shorter than `psychology1`, and no clash with the
    existing names).
 4. **Bilingual from the start**, like the recent series, or English first like *Statistics, Built*.

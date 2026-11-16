@@ -139,4 +139,35 @@ PARTS = [
               ("Its tests", "tests/psychology/test_community.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=62, level="D", widget="lastrotation", prereq=(1, 2, 3, 4, 24, 59, 61),
+        question="Was Kant right that psychology could never become a science?",
+        story="The series ends as a doctorate does. A question where Part 24 and Part 59 collide (is a robust "
+              "effect, the mental-rotation slope, a reliable measure of a person?) is taken through a registered "
+              "report: the plan written as code and hashed before the analysis, a design check on simulated "
+              "people, reviews, Stage 2 on open data with one reported deviation, and a result reported as it fell "
+              "(inconclusive for the paradox, leaning against it). Then Psyche sits the Battery, the complete "
+              "Ledger is read by act, the Homunculus is drawn one last time, and Kant's three objections are "
+              "answered, with a fourth he did not make.",
+        handoff="The open problems of every part's frontier, gathered; the next row of the Ledger is the reader's.",
+        outside="Every earlier part; Part 3's reliability, Part 4's registered reports and Part 59's paradox above "
+                "all.",
+        objectives={
+            "U": ["Explain how a registered report protects a result, and what a reported deviation is.",
+                  "Give the verdict on each of Kant's objections, with evidence from the series."],
+            "M": ["Compute split-half reliability with a bootstrap interval, and a design check by simulation."],
+            "D": ["Write a Stage 1 registered report for an open problem from any part's frontier."],
+            "I": ["Choose a role and the parts that prepare for it, and commission research that will hold up."],
+        },
+        results=[
+            ("Spearman-Brown for a split half", r"\rho_{\text{full}} = \frac{2r}{1 + r}"),
+            ("The registered decision", r"\text{supported if } \mathrm{CI}_{95} < 0.70,\ \text{refuted if } "
+                                        r"\mathrm{CI}_{95} > 0.70"),
+            ("Attenuation", r"r_{\text{obs}} = r_{\text{true}}\sqrt{\rho_x\rho_y}"),
+        ],
+        U=(0, 1, 2, 3, 9, 10, 11), D=(4, 5, 6, 7, 15), I=(8, 12, 13, 14),
+        also=(("Psyche's thesis module", "explainer/psychology/psyche/thesis.py"),
+              ("Its tests", "tests/psychology/test_thesis.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

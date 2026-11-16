@@ -47,12 +47,12 @@ Manim videos with local neural narration. See README.md for layout and build com
 - *Computer Science, Built* (`videos/cs/`): sixty-one parts in eleven acts (`cs1` … `cs61`: a CS degree plus industry practice in Acts I–X, a research tier in Act XI and a *Frontier* chapter in every part), Parts 1–61 built or in progress; the series plan
   is `videos/cs/README.md`, the chapter-by-chapter syllabus and standard are `videos/cs/SYLLABUS.md`. The machine the
   series builds (Pebble) and its instruments will live in `explainer/cs/`.
-- *Psychology, Built* (`videos/psychology/`): sixty-two parts planned in thirteen acts (`psych1` … `psych62`: a degree,
-  the graduate methods sequence, industry practice and a research tier); Parts 1 to 61 are built (Acts I to XII, the capstone, and Act XIII is under way). The folders are `psychN` while
+- *Psychology, Built* (`videos/psychology/`): sixty-two parts in thirteen acts (`psych1` … `psych62`: a degree,
+  the graduate methods sequence, industry practice and a research tier); all sixty-two are built (Acts I to XIII and the capstone). The folders are `psychN` while
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
   plan is `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the progress table are
   `videos/psychology/SYLLABUS.md`. Shared code in `explainer/psychology/` (tested in `tests/psychology/`): the model
-  subject Psyche (`psyche/`, one module per faculty; so far `chronometry`, `cueing`, `neuron`, `circuits`, `brain`, `imaging`, `genes`, `body`, `psychophysics`, `sdt`, `vision`, `infer`, `hearing`, `conditioning`, `rl`, `attention`, `wm`, `memory`, `concepts`, `language`, `reason`, `decide`, `choice`, `workspace`, `drive`, `emotion`, `develop`, `lifespan`, `traits`, `personality`, `social`, `culture`, `clinic`, `sem`, `irt`, `scaling`, `within`, `fit`, `neurodata`, `meta`, `work`, `efficient`, `precision`, `machines` and `community`), the laboratory (`lab.py`:
+  subject Psyche (`psyche/`, one module per faculty: `chronometry`, `cueing`, `neuron`, `circuits`, `brain`, `imaging`, `genes`, `body`, `psychophysics`, `sdt`, `vision`, `infer`, `hearing`, `conditioning`, `rl`, `attention`, `wm`, `memory`, `concepts`, `language`, `reason`, `decide`, `choice`, `workspace`, `drive`, `emotion`, `develop`, `lifespan`, `traits`, `personality`, `social`, `culture`, `clinic`, `sem`, `irt`, `scaling`, `within`, `fit`, `neurodata`, `meta`, `work`, `efficient`, `precision`, `machines`, `community` and `thesis`), the laboratory (`lab.py`:
   designs run on the Pool with the truth known; a part that shows a study picks it by rule, the median of many, never
   by its result), the measurement library (`measure.py`: scale types, reliability, attenuation, alpha, kappa, the
   multitrait-multimethod matrix), the false-positive lab (`evidence.py`: power, forking paths, a filtered literature and
