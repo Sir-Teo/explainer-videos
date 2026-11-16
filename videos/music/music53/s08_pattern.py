@@ -109,12 +109,7 @@ class Pattern(SoundScene):
             (r"which is the engine's hardest rule", GREY_A),
         ]
         rows_scene(self, r"live coding", items,
-                   "Text can be performed. <bookmark mark='b'/> In live coding the musician edits the code while it plays, and the "
-                   "screen is shown to the audience. <bookmark mark='c'/> SuperCollider in 1996, ChucK from Ge Wang in 2003, "
-                   "TidalCycles in 2009 and Sonic Pi from Sam Aaron in 2012 made it possible, <bookmark mark='d'/> and since 2012 "
-                   "algoraves have been dance nights where the instrument is a text editor. <bookmark mark='e'/> Every change must "
-                   "take effect on the next cycle, without a glitch: the engine never stops. <bookmark mark='f'/> That is the "
-                   "engine's hardest rule.", marks="bcdef")
+                   "Text can be performed. <bookmark mark='b'/> In live coding the musician edits the code while it plays, and the screen is shown to the audience. <bookmark mark='c'/> SuperCollider in 1996, ChucK from Ge Wang in 2003, TidalCycles in 2009 and Sonic Pi from Sam Aaron in 2012 made it possible, <bookmark mark='d'/> and since 2012 algoraves have been dance nights where the instrument is a text editor. <bookmark mark='e'/> Changes must be scheduled safely; when they take effect depends on the environment and performer: the engine never stops. <bookmark mark='f'/> That is the engine's hardest rule.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def tree(self):
@@ -128,6 +123,8 @@ class Pattern(SoundScene):
         e2 = [Line(kids[2].get_bottom(), x.get_top(), color=GREY_B, stroke_width=2) for x in g]
         alt = VGroup(*[label(rf"cycle {i + 1}: \ {t}", font_size=14, color=EAR) for i, t in enumerate(("a4", "c5", "b4", "e5"))]).arrange(DOWN, buff=0.1).next_to(kids[3], DOWN, buff=0.7)
         e3 = Line(kids[3].get_bottom(), alt.get_top(), color=GREY_B, stroke_width=2)
+        diagram = VGroup(root, kids, *e1, dur, g, gl, *e2, alt, e3)
+        diagram.scale(min(1.0, 12.6 / diagram.width)).move_to(UP * 0.1)
         note = label(r"the parser builds this tree once; \ playing a cycle walks it, \ dividing time at every level", font_size=18, color=WHITE).to_edge(DOWN, buff=0.4)
         head = label(r"how the pattern is read", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(

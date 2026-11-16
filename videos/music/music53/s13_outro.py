@@ -110,7 +110,7 @@ class Outro(SoundScene):
             r"Prove that a variable-length quantity of $n$ bytes holds every number below $2^{7n}$, \ and that no code is the start of another.",
             r"\textbf{Ear.} \ The lab plays a groove with notes snapped to blocks or placed exactly, \ at random; \ say which.",
             r"\textbf{Build.} \ Add a tempo change to the MIDI writer \ (a second tempo event) \ and make the reader honour it.",
-            r"$\bigstar$ \ What is the best-sounding neural effect guaranteed never to miss a deadline?",
+            r"$\bigstar$ \ What is the best-sounding neural effect meeting a specified deadline under explicit platform assumptions?",
         ], font_size=21)
         with self.voiceover(
             "Five problems. One to compute, one to prove, one for your ears, one to build, and a research problem, marked "
@@ -141,12 +141,12 @@ class Outro(SoundScene):
             (r"producers", r"record with small blocks, \ mix with large ones"),
             (r"engineers", r"trust delay compensation, \ and check parallel paths by ear"),
             (r"plug-in developers", r"never allocate or lock in the audio thread"),
-            (r"performers", r"use MPE for slides and swells MIDI 1.0 cannot say"),
+            (r"performers", r"use MPE for slides and swells ordinary shared-channel pitch bend does not express"),
         ], font_size=25)
         with self.voiceover(
             "And in practice. Producers record with small blocks and mix with large ones. Engineers trust delay compensation "
             "and still check parallel paths by ear. Plug-in developers never allocate or lock in the audio thread. And "
-            "performers use MPE for the slides and swells MIDI 1.0 cannot say."
+            "performers use MPE for the slides and swells ordinary shared-channel pitch bend does not express."
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(0.4)

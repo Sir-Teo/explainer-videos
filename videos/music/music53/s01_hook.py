@@ -47,11 +47,7 @@ class Hook(SoundScene):
         note = label(rf"the last note arrives {d['spread_ms']:.1f} ms after the first: \ 320 microseconds a byte, \ two or three bytes a note", font_size=18, color=WHITE).to_edge(DOWN, buff=0.4)
         head = label(r"the first was the cable", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The first was the cable. <bookmark mark='a'/> MIDI sends one byte every three hundred and twenty microseconds, and "
-            "each note takes two or three bytes, so the twelve notes arrive one after another, the last "
-            f"{say(d['spread_ms'], 1)} milliseconds after the first. That is too short to hear as an arpeggio; it is heard, if "
-            "at all, as a softer, slightly smeared attack. Forty years of music have been played down this cable, and this is "
-            "almost the worst it does."
+            f"The first was the cable. <bookmark mark='a'/> MIDI sends one byte every three hundred and twenty microseconds, and each note takes two or three bytes, so the twelve notes arrive one after another, the last {say(d['spread_ms'], 1)} milliseconds after the first. That is too short to hear as an arpeggio; it is heard, if at all, as a softer, slightly smeared attack. Forty years of music have been played down this cable, and dense traffic can produce much larger queueing delays."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(yl))
             vo.wait_until("a")

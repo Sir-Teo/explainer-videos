@@ -37,7 +37,7 @@ class Bytes(SoundScene):
             "Start with the wire. <bookmark mark='a'/> MIDI is a serial line: each byte is sent as a start bit, eight data bits "
             "lowest first, and a stop bit. <bookmark mark='b'/> At thirty-one thousand two hundred and fifty bits a second, a "
             "speed chosen because it is a one-megahertz clock divided by thirty-two, a byte takes three hundred and twenty "
-            "microseconds. The signal is a current loop through an opto-isolator, so instruments share no ground and no hum; "
+            "microseconds. The signal is a current loop through an opto-isolator, reducing ground-loop paths through the data connection; other connections can still create hum; "
             "and each cable carries one direction, out, in, or thru to chain the next instrument."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(cells, 0.3)))
@@ -56,7 +56,7 @@ class Bytes(SoundScene):
                     label(r"velocity 100", font_size=16, color=BLUE).next_to(msg[2], DOWN, buff=0.3))
         rows = VGroup(label(r"a status byte has its top bit set \ (128 to 255); \ a data byte does not \ (0 to 127): \ seven bits, \ 128 values", font_size=18, color=WHITE),
                       label(r"the status's high four bits are the kind: \ 9 note on, \ 8 note off, \ B controller, \ E pitch bend, \ C program", font_size=18, color=GREY_A),
-                      label(r"its low four bits are the channel: \ sixteen instruments on one cable", font_size=18, color=GREY_A),
+                      label(r"its low four bits are the channel: \ sixteen logical channels on one cable", font_size=18, color=GREY_A),
                       label(r"MIDI says which key and how hard, \ never what it sounds like: \ a score, \ not a sound", font_size=18, color=TUNE)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         head = label(r"one note, \ three bytes", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
@@ -64,7 +64,7 @@ class Bytes(SoundScene):
             "C. Six four: velocity one hundred, how hard. <bookmark mark='b'/> The rule that makes the stream readable: a status "
             "byte has its top bit set, a data byte does not, so data has seven bits and a hundred and twenty-eight values. "
             "<bookmark mark='c'/> The status byte's high half is the kind of message, nine for note on, eight for off, B for a "
-            "controller, E for pitch bend; its low half is the channel, so sixteen instruments share one cable. "
+            "controller, E for pitch bend; its low half is the channel, so sixteen logical channels share one cable; channels need not map one-to-one to instruments. "
             "<bookmark mark='d'/> And notice what is missing: MIDI says which key and how hard, never what it sounds like. It is "
             "a score, not a sound."
         ) as vo:
@@ -125,7 +125,7 @@ class Bytes(SoundScene):
             "So how long does a chord take? <bookmark mark='a'/> Each note adds three bytes plainly, two with running status: "
             f"sixteen notes take {say(d['spread']['plain'][-1], 1)} milliseconds plainly and {say(d['spread']['running'][-1], 1)} "
             "with running status. <bookmark mark='b'/> For comparison, sound travels three and a half metres in ten "
-            "milliseconds: a drummer and a bassist a few metres apart live with that every night. A chord is safe; but a dense "
+            "milliseconds: a drummer and a bassist a few metres apart live with that every night. This idealized chord spread may be tolerable, but a dense "
             "passage with controllers moving on several channels can fill the cable, and then everything waits."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lp[0]), FadeIn(lp[2:]), FadeIn(xt), FadeIn(xl), FadeIn(ghost(lp.lines, 0.3)))
@@ -151,7 +151,7 @@ class Bytes(SoundScene):
                    "uses two data bytes for fourteen bits, sixteen thousand three hundred and eighty-four steps, with eight thousand "
                    "one hundred and ninety-two at rest. <bookmark mark='d'/> Program change chooses one of a hundred and twenty-eight "
                    "sounds, and General MIDI, in 1991, fixed which: one is a piano, forty-one a violin. <bookmark mark='e'/> System "
-                   "messages send a clock twenty-four times a beat to keep machines in step, and system exclusive carries anything "
+                   "messages send a clock twenty-four times per quarter note to keep machines in step, and system exclusive carries anything "
                    "else. <bookmark mark='f'/> In all, a handful of message types; the rest is convention.", marks="bcdef")
 
     # ------------------------------------------------------------------
@@ -159,14 +159,9 @@ class Bytes(SoundScene):
         items = [
             (r"a key closes two contacts, \ one early in its travel and one at the bottom", WHITE),
             (r"the time between them measures how fast it moved: \ a few milliseconds is loud, \ tens of milliseconds soft", WHITE),
-            (r"the keyboard's processor scans every key many times a millisecond and turns that time into a velocity, \ 1 to 127", WHITE),
+            (r"the keyboard's processor scans its keys repeatedly, at a design-dependent rate and turns that time into a velocity, \ 1 to 127", WHITE),
             (r"then three bytes leave the five-pin socket", WHITE),
             (r"the velocity is a measurement of a gesture: \ how the receiving instrument uses it is up to the instrument", TUNE),
         ]
         rows_scene(self, r"inside a keyboard", items,
-                   "Where do the three bytes come from? <bookmark mark='b'/> Each key closes two contacts, one early in its travel "
-                   "and one at the bottom. <bookmark mark='c'/> The time between them measures how fast the key moved: a few "
-                   "milliseconds is loud, tens of milliseconds soft. <bookmark mark='d'/> The keyboard's processor scans every key many times a "
-                   "millisecond and turns that time into a velocity from one to a hundred and twenty-seven, <bookmark mark='e'/> "
-                   "and three bytes leave the socket. <bookmark mark='f'/> The velocity is a measurement of a gesture; what the "
-                   "receiving instrument does with it is up to the instrument.", marks="bcdef")
+                   "Where do the three bytes come from? <bookmark mark='b'/> A common velocity-sensitive keyboard design uses two contacts per key, one early in its travel and one at the bottom. <bookmark mark='c'/> The time between them measures how fast the key moved: a few milliseconds is loud, tens of milliseconds soft. <bookmark mark='d'/> The keyboard's processor scans its keys repeatedly, at a design-dependent rate and turns that time into a velocity from one to a hundred and twenty-seven, <bookmark mark='e'/> and three bytes leave the socket. <bookmark mark='f'/> The velocity is a measurement of a gesture; what the receiving instrument does with it is up to the instrument.", marks="bcdef")

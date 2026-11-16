@@ -89,7 +89,7 @@ class Callback(SoundScene):
         head = label(r"what a block costs", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         L = d["load"]
         with self.voiceover(
-            "How hard is the deadline? <bookmark mark='a'/> Here is the work per block, measured on this computer. With "
+            "How hard is the deadline? <bookmark mark='a'/> Here is the median work per block, measured in this implementation on this computer. With "
             f"blocks of two thousand and forty-eight samples the engine uses {say(100 * L[-1])} per cent of the time it has. "
             f"<bookmark mark='b'/> With thirty-two it uses {say(100 * L[0])} per cent: small blocks cost more than their share, "
             "because each block carries a fixed overhead, the call, the bookkeeping, the start of every loop. Small blocks mean "
@@ -111,7 +111,7 @@ class Callback(SoundScene):
         cap = label(r"the late blocks are played as silence; \ the lateness is simulated \ (60\% load, \ rare stalls)", font_size=17, color=GREY_A).to_edge(DOWN, buff=1.0)
         head = label(r"a missed deadline, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "What happens when a block is late? The sound card cannot wait: it plays whatever is in the buffer, usually silence. "
+            "What happens when a block is late? The sound card cannot wait: it plays whatever is in the buffer, silence, repeated samples or another fallback depending on the driver; this example inserts silence. "
             f"Here is the same passage clean, then with {say(d['missed'])} of its {say(d['blocks_total'])} blocks late, each a gap "
             "of under three milliseconds."
         ):
@@ -162,14 +162,10 @@ class Callback(SoundScene):
         side = VGroup(label(r"a ring of slots shared by two threads", font_size=18, color=WHITE),
                       label(r"the interface writes messages at the write index \ (pink) \ and advances it", font_size=16, color=EAR),
                       label(r"the audio thread reads at the read index \ (blue) \ and advances it", font_size=16, color=BLUE),
-                      label(r"each index is changed by one thread only: \ no lock, \ no waiting, \ a bounded time", font_size=16, color=TUNE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(RIGHT, buff=0.5)
+                      label(r"one producer, \ one consumer: \\ atomic publication, \ correct memory ordering, \ full/empty handling", font_size=16, color=TUNE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).to_edge(RIGHT, buff=0.5)
         head = label(r"a lock-free queue", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "How does a message reach the audio thread without a lock? <bookmark mark='a'/> Through a ring of slots shared by "
-            "two threads. <bookmark mark='b'/> The interface writes each message at the write index and then advances it; "
-            "<bookmark mark='c'/> the audio thread reads at the read index and advances that. <bookmark mark='d'/> Each index is "
-            "changed by only one thread, so neither ever waits for the other, and reading a message takes a bounded time: "
-            "the kind of time a deadline can trust."
+            "How does a message reach the audio thread without a lock? <bookmark mark='a'/> Through a ring of slots shared by two threads. <bookmark mark='b'/> The interface writes each message at the write index and then advances it; <bookmark mark='c'/> the audio thread reads at the read index and advances that. <bookmark mark='d'/> With a suitable single-producer, single-consumer design, atomic publication, correct memory ordering, preallocated storage and explicit full/empty handling, each operation can have bounded cost: a design goal that this diagram illustrates rather than a production queue implemented here."
         ) as vo:
             self.play(FadeIn(head), FadeIn(circ))
             vo.wait_until("a")

@@ -31,12 +31,12 @@ class Graph(SoundScene):
                      Arrow(fx[2].get_right(), rev.get_left(), buff=0.06, color=GREY_B, stroke_width=2),
                      Arrow(rev.get_top(), mixn.get_bottom(), buff=0.06, color=GREY_B, stroke_width=2),
                      Arrow(mixn.get_right(), out.get_left(), buff=0.06, color=GREY_B, stroke_width=2))
-        notes = VGroup(label(r"a directed graph with no cycles: \ each node runs once a block, \ after everything feeding it", font_size=18, color=WHITE),
+        notes = VGroup(label(r"this acyclic routing example: \ each node follows its inputs; \ feedback needs explicit delay", font_size=18, color=WHITE),
                        label(r"the engine sorts the nodes \ (a topological order) \ and runs them in that order, \ every block", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         head = label(r"the processing graph", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Inside the engine, a session is a graph. <bookmark mark='a'/> Sources, the tracks; effects on each; buses that "
-            "gather them; the mix; the output. <bookmark mark='b'/> It is a directed graph with no cycles, so every node can run "
+            "gather them; the mix; the output. <bookmark mark='b'/> This simplified routing graph has no cycles; feedback systems require explicit delays and special scheduling, so every node can run "
             "once per block after everything that feeds it: the engine sorts the nodes, a topological order, and runs them in "
             "that order, every block."
         ) as vo:
@@ -58,12 +58,7 @@ class Graph(SoundScene):
             (r"and a delayed path in a graph of parallel paths is a problem", GREY_A),
         ]
         rows_scene(self, r"plug-ins", items,
-                   "Many nodes come from elsewhere. <bookmark mark='b'/> A plug-in is a node written by someone else and loaded into "
-                   "the host's graph. <bookmark mark='c'/> Steinberg's VST came in 1996, then Apple's Audio Units, Avid's AAX and, in "
-                   "2022, the open CLAP. <bookmark mark='d'/> The contract is the same: process this block, in place, before the "
-                   "deadline, and report your latency. <bookmark mark='e'/> A look-ahead limiter, from Part 50, must see the future, "
-                   "so it delays its output by its look-ahead. <bookmark mark='f'/> And a delayed path in a graph of parallel paths "
-                   "is a problem.", marks="bcdef")
+                   "Many nodes come from elsewhere. <bookmark mark='b'/> A plug-in is a node written by someone else and loaded into the host's graph. <bookmark mark='c'/> Steinberg's VST came in 1996, then Apple's Audio Units, Avid's AAX and, in 2022, the open CLAP. <bookmark mark='d'/> The contract is the same: process a block before its deadline, with buffers and scheduling specified by the plug-in API, and report your latency. <bookmark mark='e'/> A look-ahead limiter, from Part 50, must see the future, so it delays its output by its look-ahead. <bookmark mark='f'/> And a delayed path in a graph of parallel paths is a problem.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def parallel(self):
@@ -80,11 +75,7 @@ class Graph(SoundScene):
                        label(r"plug-in delay compensation: \ every path delayed to the slowest", font_size=17, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.5)
         head = label(r"two paths, \ one late", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is the problem in its commonest form. <bookmark mark='a'/> Parallel compression: the dry drums plus a heavily "
-            "squashed copy, for weight without losing the hits. <bookmark mark='b'/> The squashing is done by a look-ahead "
-            f"limiter whose output arrives {say(d['latency_ms'])} milliseconds late. <bookmark mark='c'/> Unless the host delays "
-            f"the dry path by the same {say(d['latency_samples'])} samples, the two copies meet misaligned. Hosts do this "
-            "automatically, plug-in delay compensation, delaying every path to match the slowest."
+            f"Here is the problem in its commonest form. <bookmark mark='a'/> Parallel compression: the dry drums plus a heavily squashed copy, for weight without losing the hits. <bookmark mark='b'/> The squashing is done by a look-ahead limiter whose output arrives {say(d['latency_ms'])} milliseconds late. <bookmark mark='c'/> Unless the host delays the dry path by the same {say(d['latency_samples'])} samples, the two copies meet misaligned. Hosts can do this when latency is correctly reported and compensation is enabled, plug-in delay compensation, delaying every path to match the slowest."
         ) as vo:
             self.play(FadeIn(head), FadeIn(srcn), FadeIn(dry), FadeIn(lim), FadeIn(mixn), FadeIn(arr))
             vo.wait_until("a")
@@ -152,9 +143,4 @@ class Graph(SoundScene):
             (r"real time is a promise about when; \ offline rendering keeps the promise about what", TUNE),
         ]
         rows_scene(self, r"freezing and bouncing", items,
-                   "One more trick makes heavy sessions possible. <bookmark mark='b'/> When the graph is too heavy for the deadline, "
-                   "the workstation renders a track offline, freezing it into audio. <bookmark mark='c'/> Offline there is no "
-                   "deadline: the same engine runs as fast or as slow as it needs. <bookmark mark='d'/> That is why offline and "
-                   "block renders must match exactly, as ours do. <bookmark mark='e'/> Bouncing renders the whole mix to a file the "
-                   "same way. <bookmark mark='f'/> Real time is a promise about when; offline rendering keeps the promise about "
-                   "what.", marks="bcdef")
+                   "One more trick makes heavy sessions possible. <bookmark mark='b'/> When the graph is too heavy for the deadline, the workstation renders a track offline, freezing it into audio. <bookmark mark='c'/> Offline there is no deadline: the same engine runs as fast or as slow as it needs. <bookmark mark='d'/> Our deterministic engine gives bit-identical offline and block output; real plug-ins can change quality modes or use randomness, so exact equality is not universal. <bookmark mark='e'/> Bouncing renders the whole mix to a file the same way. <bookmark mark='f'/> Real time is a promise about when; offline rendering keeps the promise about what.", marks="bcdef")

@@ -75,12 +75,7 @@ class Timing(SoundScene):
             (r"and every plug-in that looks ahead adds its own latency", TUNE),
         ]
         rows_scene(self, r"the latency budget", items,
-                   "Timing has a second side: latency. <bookmark mark='b'/> It adds up along the chain: the controller, the cable or "
-                   "USB, the input buffer, the engine's block, the output buffer, the converter. <bookmark mark='c'/> A player feels "
-                   "a delay above roughly ten milliseconds between the key and the sound. <bookmark mark='d'/> Sound in air takes "
-                   "about three milliseconds a metre, so a pianist hears the piano a few milliseconds late anyway. "
-                   "<bookmark mark='e'/> The budget is spent mostly on the block size: small blocks, low latency, heavy load. "
-                   "<bookmark mark='f'/> And every plug-in that looks ahead adds its own latency.", marks="bcdef")
+                   "Timing has a second side: latency. <bookmark mark='b'/> It adds up along the chain: the controller, the cable or USB, the input buffer, the engine's block, the output buffer, the converter. <bookmark mark='c'/> Latency sensitivity varies with player, instrument and task; roughly ten milliseconds is a useful design target, not a universal threshold between the key and the sound. <bookmark mark='d'/> Sound in air takes about three milliseconds a metre, so a pianist hears the piano a few milliseconds late anyway. <bookmark mark='e'/> The budget is spent mostly on the block size: small blocks, low latency, heavy load. <bookmark mark='f'/> And every plug-in that looks ahead adds its own latency.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def accurate(self):
@@ -93,15 +88,10 @@ class Timing(SoundScene):
         steps = VGroup(label(r"1. \ at the start of each block, \ take the events due before its end", font_size=17, color=WHITE),
                        label(r"2. \ for each, \ compute its offset inside the block", font_size=17, color=WHITE),
                        label(r"3. \ run the voice from that sample, \ not from the block's start", font_size=17, color=WHITE),
-                       label(r"incoming MIDI needs timestamps for this: \ USB and MIDI 2.0 carry them", font_size=17, color=TUNE)).arrange(DOWN, buff=0.22, aligned_edge=LEFT).to_edge(DOWN, buff=0.35)
+                       label(r"live events need timing information: \ host arrival times or transport-specific timestamps", font_size=17, color=TUNE)).arrange(DOWN, buff=0.22, aligned_edge=LEFT).to_edge(DOWN, buff=0.35)
         head = label(r"sample-accurate scheduling", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The cure for block timing is simple. <bookmark mark='a'/> At the start of each block, take the events due before "
-            "its end. <bookmark mark='b'/> For each, compute its offset inside the block: a note due at sample seventeen hundred "
-            "falls six hundred and seventy-six samples into the second block of a thousand and twenty-four. "
-            "<bookmark mark='c'/> Then run that voice from that sample, not from the block's start. <bookmark mark='d'/> For notes "
-            "played live, the engine needs to know when each message was sent, so incoming MIDI needs timestamps; USB MIDI and "
-            "MIDI 2.0 carry them."
+            "The cure for block timing is simple. <bookmark mark='a'/> At the start of each block, take the events due before its end. <bookmark mark='b'/> For each, compute its offset inside the block: a note due at sample seventeen hundred falls six hundred and seventy-six samples into the second block of a thousand and twenty-four. <bookmark mark='c'/> Then run that voice from that sample, not from the block's start. <bookmark mark='d'/> For notes played live, the engine needs to know when each message was sent, so incoming MIDI needs timestamps; the host can timestamp arrivals; timestamp support depends on the transport and protocol, and ordinary USB MIDI 1.0 packets do not carry a per-note timestamp."
         ) as vo:
             self.play(FadeIn(head), FadeIn(blocks), FadeIn(bl))
             vo.wait_until("a")

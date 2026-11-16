@@ -75,7 +75,7 @@ class Limits(SoundScene):
         bc = d["bend_cents"]
         rows = VGroup(
             label(r"pitch bend: \ 14 bits, \ 16,384 steps", font_size=22, color=WHITE),
-            label(rf"over $\pm 2$ semitones: \ {bc['2']:.3f} cents a step: \ finer than any ear", font_size=19, color=TUNE),
+            label(rf"over $\pm 2$ semitones: \ {bc['2']:.3f} cents a step: \ a very fine pitch increment in ordinary listening conditions", font_size=19, color=TUNE),
             label(rf"over $\pm 48$ semitones \ (an MPE default): \ {bc['48']:.2f} cents a step: \ still fine", font_size=19, color=TUNE),
             label(r"but one bend per channel: \ bend one note of a chord and every note on the channel bends", font_size=19, color=EAR),
             label(r"a keyboard sends one pressure per channel too: \ an instrument's voice is not a key", font_size=18, color=GREY_A),
@@ -83,10 +83,10 @@ class Limits(SoundScene):
         head = label(r"the second limit: \ one channel, \ one bend", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Pitch is better served. <bookmark mark='a'/> A bend has fourteen bits. Over two semitones each step is "
-            f"{say(bc['2'], 3)} of a cent, finer than any ear; <bookmark mark='b'/> over forty-eight semitones it is still "
+            f"{say(bc['2'], 3)} of a cent, a very fine pitch increment in ordinary listening conditions; <bookmark mark='b'/> over forty-eight semitones it is still "
             f"{say(bc['48'], 2)} of a cent. <bookmark mark='c'/> The real limit is that there is one bend per channel: bend one "
             "note of a chord and every note on that channel bends with it. <bookmark mark='d'/> A guitarist bends one string; a "
-            "violinist slides one finger; MIDI 1.0, built around a keyboard, cannot say that."
+            "violinist slides one finger; ordinary channel-wide bend cannot express that on a shared channel; separate channels or MPE can."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
             vo.wait_until("a")
@@ -120,32 +120,27 @@ class Limits(SoundScene):
     # ------------------------------------------------------------------
     def two(self):
         items = [
-            (r"MIDI 2.0 \ (adopted 2020): \ messages in 32-bit packets \ (the Universal MIDI Packet), \ not a byte stream", WHITE),
-            (r"velocity with 16 bits, \ controllers with 32: \ no more staircases", WHITE),
+            (r"MIDI 2.0 \ (adopted 2020): \ Universal MIDI Packets: \ one or more 32-bit words, \ depending on message type", WHITE),
+            (r"velocity with 16 bits, \ controllers with 32: \ much finer quantization, though values are still discrete", WHITE),
             (r"per-note controllers and per-note pitch, \ built in rather than borrowed from channels", WHITE),
             (r"devices that describe themselves to each other, \ and fall back to MIDI 1.0 when they must", WHITE),
             (r"the five-pin cable remains for MIDI 1.0; \ the new packets travel over USB and networks", TUNE),
         ]
         rows_scene(self, r"MIDI 2.0", items,
-                   "Then came a new version. <bookmark mark='b'/> MIDI 2.0, adopted in 2020, sends messages in thirty-two-bit "
-                   "packets, the Universal MIDI Packet, rather than a byte stream. <bookmark mark='c'/> Velocity gets sixteen bits "
-                   "and controllers thirty-two: no more staircases. <bookmark mark='d'/> Per-note controllers and per-note pitch are "
-                   "built in rather than borrowed from channels. <bookmark mark='e'/> Devices describe themselves to each other, and "
-                   "fall back to MIDI 1.0 when they must. <bookmark mark='f'/> The five-pin cable remains for MIDI 1.0; the new "
-                   "packets travel over USB and networks.", marks="bcdef")
+                   "Then came a new version. <bookmark mark='b'/> MIDI 2.0, adopted in 2020, uses Universal MIDI Packets built from thirty-two-bit words, with message-dependent lengths, the Universal MIDI Packet, rather than a byte stream. <bookmark mark='c'/> Velocity gets sixteen bits and controllers thirty-two: much finer quantization, though values are still discrete. <bookmark mark='d'/> Per-note controllers and per-note pitch are built in rather than borrowed from channels. <bookmark mark='e'/> Devices describe themselves to each other, and fall back to MIDI 1.0 when they must. <bookmark mark='f'/> The five-pin cable remains for MIDI 1.0; the new packets travel over USB and networks.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def right(self):
         items = [
             (r"what MIDI got right: \ it describes gestures, \ not sounds, \ so any instrument can obey any controller", WHITE),
             (r"it was small enough for an 8-bit processor of 1983 to read in real time", WHITE),
-            (r"it was free to use: \ no licence fee, \ so every maker adopted it", WHITE),
+            (r"it was free to use: \ no licence fee, \ which helped broad adoption", WHITE),
             (r"it was backward compatible for forty years: \ a 1983 keyboard still plays a 2024 plug-in", WHITE),
             (r"few standards have lasted as long with so little change", TUNE),
         ]
         rows_scene(self, r"what MIDI got right", items,
                    "Despite its limits, MIDI got a great deal right. <bookmark mark='b'/> It describes gestures, not sounds, so any "
                    "instrument can obey any controller. <bookmark mark='c'/> It was small enough for an eight-bit processor of 1983 to "
-                   "read in real time. <bookmark mark='d'/> It was free to use, with no licence fee, so every maker adopted it. "
+                   "read in real time. <bookmark mark='d'/> It was free to use, with no licence fee, which helped broad adoption. "
                    "<bookmark mark='e'/> And it stayed backward compatible for forty years: a 1983 keyboard still plays a modern "
                    "plug-in. <bookmark mark='f'/> Few standards have lasted as long with so little change.", marks="bcdef")

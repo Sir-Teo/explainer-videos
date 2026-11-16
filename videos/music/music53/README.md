@@ -37,7 +37,7 @@ The tools are Monochord's (`explainer/music/monochord/daw.py`); the cable, the d
   100); freezing and bouncing.
 * **11. Frontier: learning in the audio thread; networked performance.** Neural effects under a deadline (RAVE);
   networked performance (5 ms per 1000 km of fibre; ensembles hold tempo up to about 20–25 ms); the browser as a studio;
-  ★ research problem: what is the best-sounding model guaranteed never to miss a deadline?
+  ★ research problem: what is the best-sounding model meeting a specified deadline under explicit platform assumptions?
 * **Variation 53, recap and problems.** The Tune as a four-channel tracker module, then as a tempo canon at 3 : 4 : 5 : 6
   meeting on the last note; the ledger (32 tracker rows; meeting after 30.7 s; block and offline renders identical); what
   we found; five problems; where it comes back; in practice; references; Part 54.
@@ -103,9 +103,9 @@ python -m videos.music.labs 53                                  # the lab (write
    *Where to look.* Write a meta event FF 51 03 tt tt tt at its tick in the tempo track; in `read_smf`, keep a sorted list
    of (tick, tempo) and convert each event's tick to seconds by summing over the tempo segments before it.
 
-5. ★ **What is the best-sounding model that is guaranteed never to miss a deadline?**
+5. ★ **What is the best-sounding model that is meeting a specified deadline under explicit platform assumptions?**
 
-   *Where the frontier is.* Measure the worst-case, not the average, cost per block of neural effects inside a real-time
+   *Where the frontier is.* Measure observed maxima and tail latency per block; finite trials do not prove a worst-case bound. State platform and scheduling assumptions when arguing a guarantee. Measure the cost of neural effects inside a real-time
    engine; trade model size against block size and look-ahead (whose latency the graph must compensate); judge each by blind
    listening; and look for architectures whose cost is constant by construction.
 

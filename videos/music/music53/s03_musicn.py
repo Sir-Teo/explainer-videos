@@ -22,13 +22,7 @@ class Musicn(SoundScene):
             (r"the same idea as Moog's modules, \ four years earlier, \ in software", GREY_A),
         ]
         rows_scene(self, r"Max Mathews's MUSIC", items,
-                   "The computer made music before it made anything playable. <bookmark mark='b'/> In 1957 at Bell Labs, Max "
-                   "Mathews's program MUSIC computed a sound sample by sample on an IBM 704. <bookmark mark='c'/> It was not real "
-                   "time: seconds of sound could take hours, then be played back from tape. <bookmark mark='d'/> In 1961 a computer "
-                   "sang Daisy Bell, from John Kelly, Carol Lochbaum and Mathews, remembered from a film seven years later. "
-                   "<bookmark mark='e'/> And in 1960 MUSIC III introduced the unit generator: small blocks, an oscillator, an "
-                   "envelope, an adder, patched together. <bookmark mark='f'/> It is the same idea as Moog's modules, four years "
-                   "earlier, in software.", marks="bcdef")
+                   "The computer made music before it made anything playable. <bookmark mark='b'/> In 1957 at Bell Labs, Max Mathews's program MUSIC computed a sound sample by sample on an IBM 704. <bookmark mark='c'/> It was not real time: seconds of sound could take hours, then be played back from tape. <bookmark mark='d'/> In 1961 a computer sang Daisy Bell, from John Kelly, Carol Lochbaum and Mathews, remembered from a film seven years later. <bookmark mark='e'/> And in 1960 MUSIC III introduced the unit generator: small blocks, an oscillator, an envelope, an adder, patched together. <bookmark mark='f'/> This modular software approach preceded Moog's commercially influential 1964 modular synthesizer.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def ugens(self):
@@ -44,11 +38,7 @@ class Musicn(SoundScene):
         orch = label(r"the orchestra: \ how each instrument is wired", font_size=17, color=WHITE).next_to(blocks, UP, buff=0.3)
         head = label(r"an orchestra and a score", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "MUSIC split music into two files. <bookmark mark='a'/> The orchestra says how each instrument is wired from unit "
-            "generators: here an envelope generator feeding an oscillator's amplitude, the oscillator reading a stored table, a "
-            "sine with two harmonics. <bookmark mark='b'/> The score is a list of notes, one line each: which instrument, when it "
-            "starts, how long it lasts, and its frequency. That split, instruments and notes, is still how every synthesizer and "
-            "sequencer divides the work, and MIDI is its score."
+            "MUSIC split music into two files. <bookmark mark='a'/> The orchestra says how each instrument is wired from unit generators: here an envelope generator feeding an oscillator's amplitude, the oscillator reading a stored table, a sine with two harmonics. <bookmark mark='b'/> The score is a list of notes, one line each: which instrument, when it starts, how long it lasts, and its frequency. That split, instruments and notes, is still a useful division in many synthesizers and sequencers, and MIDI is its score."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(VGroup(blocks, score), 0.3)))
             vo.wait_until("a")

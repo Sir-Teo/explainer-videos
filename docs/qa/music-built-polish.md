@@ -63,8 +63,9 @@ Fresh whole-series regression after the Part 47 timing correction: **889 cases p
 | 50 — Dynamics, Distortion and Pitch | Complete | Open |
 | 51 — Synthesis I: Oscillators and Filters | Complete | Open |
 | 52 — Synthesis II: FM, Grains and Physical Models | Complete | Open |
-| 53 — MIDI, Sequencers and the DAW | In progress | Open |
-| 54–68 | Queued | Open |
+| 53 — MIDI, Sequencers and the DAW | Complete | Open |
+| 54 — Microphones and Loudspeakers | In progress | Open |
+| 55–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -193,7 +194,9 @@ Part 51: all 13 chapter preview sheets reviewed; sound and 16 listening-window m
 
 Part 52: all 13 chapter preview sheets reviewed; sound and 13 listening-window motion checks pass. Local identities: `renders/qa/music52/source-receipt.json`.
 
-**Current: Part 53.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 53: all 13 chapter preview sheets reviewed; sound and 11 listening-window motion checks pass. Local identities: `renders/qa/music53/source-receipt.json`.
+
+**Current: Part 54.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final
