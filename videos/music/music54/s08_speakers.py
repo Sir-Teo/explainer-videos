@@ -79,7 +79,7 @@ class Speakers(SoundScene):
                    "Engineers live with this. <bookmark mark='b'/> Mixes are checked on small speakers too, so that a bass line "
                    "survives as harmonics. <bookmark mark='c'/> Phones add a little distortion on purpose, or a virtual-bass "
                    "processor, to make harmonics the ear can use, <bookmark mark='d'/> and Part 4's missing fundamental does the "
-                   "rest. <bookmark mark='e'/> The room changes the bass more than the speaker does, which is Part 55. "
+                   "rest. <bookmark mark='e'/> Room modes can strongly change bass response alongside the speaker's own limits, which is Part 55. "
                    "<bookmark mark='f'/> And to get more sound out of a small driver, a different shape helps: the horn.",
                    marks="bcdef")
 
@@ -90,7 +90,7 @@ class Speakers(SoundScene):
             (r"cut the impulse response off before the first reflection arrives: \ a gated, \ quasi-anechoic measurement", WHITE),
             (r"the gate's length limits the lowest frequency it can see: \ 5 ms, \ about 200 Hz", WHITE),
             (r"below that, \ measure close to the cone, \ or outdoors on a pole", WHITE),
-            (r"and measure off axis too: \ most of what you hear in a room arrives from the speaker's sides", TUNE),
+            (r"and measure off axis too: \ off-axis radiation contributes strongly to room sound; its share depends on room, distance and directivity", TUNE),
         ]
         rows_scene(self, r"measuring a loudspeaker", items,
-                   "Real loudspeakers are measured, not just simulated. <bookmark mark='b'/> Play Part 49's exponential sweep, record it with a measurement microphone, and deconvolve. <bookmark mark='c'/> Cut the impulse response off before the first reflection from the floor arrives: a gated, quasi-anechoic measurement. <bookmark mark='d'/> The gate's length limits the lowest frequency it can see: five milliseconds, about two hundred hertz. <bookmark mark='e'/> Below that, measure close to the cone, or outdoors on a pole. <bookmark mark='f'/> And measure off axis too, because most of what you hear in a room arrives from the speaker's sides.", marks="bcdef")
+                   "Real loudspeakers are measured, not just simulated. <bookmark mark='b'/> Play Part 49's exponential sweep, record it with a measurement microphone, and deconvolve. <bookmark mark='c'/> Cut the impulse response off before the first reflection from the floor arrives: a gated, quasi-anechoic measurement. <bookmark mark='d'/> The gate's length limits the lowest frequency it can see: five milliseconds, about two hundred hertz. <bookmark mark='e'/> Below that, measure close to the cone, or outdoors on a pole. <bookmark mark='f'/> And measure off axis too, because off-axis radiation contributes strongly to room sound; its share depends on room, distance and directivity.", marks="bcdef")

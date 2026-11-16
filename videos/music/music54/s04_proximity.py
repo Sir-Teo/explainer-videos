@@ -107,7 +107,7 @@ class Proximity(SoundScene):
         rows_scene(self, r"playing the effect", items,
                    "Performers learned to play it. <bookmark mark='b'/> Singers move closer for intimacy and further back for the "
                    "loud notes; <bookmark mark='c'/> broadcasters lean in for authority, and podcasters too. <bookmark mark='d'/> "
-                   "Many microphones have a bass-cut switch to undo it. <bookmark mark='e'/> An omni has no proximity effect at all, "
+                   "Many microphones have a bass-cut switch to undo it. <bookmark mark='e'/> An ideal pressure omni has no pressure-gradient proximity boost, "
                    "because pressure has no gradient term. <bookmark mark='f'/> The effect is pure geometry: a spherical wave's "
                    "slope.", marks="bcdef")
 
@@ -121,4 +121,4 @@ class Proximity(SoundScene):
             (r"choosing a microphone is often choosing a proximity effect", TUNE),
         ]
         rows_scene(self, r"taming the effect", items,
-                   "There are ways to tame it. <bookmark mark='b'/> A bass-cut filter on the microphone or the desk undoes the rise, but only at one distance. <bookmark mark='c'/> Some microphones open several ports at different distances behind the diaphragm, so the rise is spread out and smaller. <bookmark mark='d'/> An omni has none, so it can be used close without boom, at the cost of hearing more of the room. <bookmark mark='e'/> Two diaphragms back to back let a microphone switch patterns, and the gradient part brings the rise with it. <bookmark mark='f'/> Choosing a microphone is often choosing a proximity effect.", marks="bcdef")
+                   "There are ways to tame it. <bookmark mark='b'/> A bass-cut filter on the microphone or the desk undoes the rise, but only at one distance. <bookmark mark='c'/> Some microphones open several ports at different distances behind the diaphragm, so the rise is spread out and smaller. <bookmark mark='d'/> An ideal pressure omni has no such gradient boost, so it can be used close without boom, at the cost of hearing more of the room. <bookmark mark='e'/> Two diaphragms back to back let a microphone switch patterns, and the gradient part brings the rise with it. <bookmark mark='f'/> Choosing a microphone is often choosing a proximity effect.", marks="bcdef")

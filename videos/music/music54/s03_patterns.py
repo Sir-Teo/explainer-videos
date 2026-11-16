@@ -89,15 +89,10 @@ class Patterns(SoundScene):
             for i, m in enumerate(r):
                 m.set_x(-4.2 + 2.9 * i)
         rows.move_to(DOWN * 0.1)
-        note = label(r"the hypercardioid is the most directional of the family: \ 6.0 dB, \ twice an omni's distance", font_size=18, color=TUNE).to_edge(DOWN, buff=0.4)
+        note = label(r"the hypercardioid is the most directional of the family: \ 6.0 dB, \ twice the distance in an ideal diffuse field", font_size=18, color=TUNE).to_edge(DOWN, buff=0.4)
         head = label(r"how directional?", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "How directional is each? <bookmark mark='a'/> Average a pattern's squared response over every direction: that is "
-            "how much of a room's reverberation it picks up. Its reciprocal is the directivity factor, and in decibels the "
-            "directivity index. The cardioid and the figure-8 both reach four point eight decibels, rejecting two thirds of the "
-            "room. <bookmark mark='b'/> The hypercardioid is the most directional of the family, six decibels: it can stand "
-            "twice as far from a singer as an omni and hear the same balance of voice and room. And the nulls tell you where to "
-            "put what you do not want to hear."
+            "How directional is each? <bookmark mark='a'/> Average a pattern's squared response over every direction: under an isotropic diffuse-field assumption, this estimates relative reverberant pickup. Its reciprocal is the directivity factor, and in decibels the directivity index. The cardioid and the figure-8 both reach four point eight decibels, rejecting two thirds of the room. <bookmark mark='b'/> The hypercardioid is the most directional of the family, six decibels: in this ideal diffuse-field model it can stand twice as far from an on-axis point source as an omni for the same direct-to-reverberant ratio. And the nulls tell you where to put what you do not want to hear."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
             vo.wait_until("a")

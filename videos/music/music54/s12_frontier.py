@@ -62,7 +62,7 @@ class Frontier(SoundScene):
         with self.voiceover(
             "The second. The soprano is quieter and duller there: overall about "
             f"{say(-d['rejection_db'])} decibels down, but much more at her upper harmonics than at her fundamentals, exactly as "
-            "the pattern predicted. A small array cannot steer the bass."
+            "the pattern predicted. This small conventional delay-and-sum array has little bass directivity; other array designs can trade robustness and noise for more."
         ):
             self.play(boxes[1][0].animate.set_stroke(TUNE, width=4))
         self.wait(0.4)
@@ -120,8 +120,4 @@ class Frontier(SoundScene):
             (r"the microphone has become a sensor array with software behind it", TUNE),
         ]
         rows_scene(self, r"microphones on a chip", items,
-                   "Arrays became cheap because microphones became chips. <bookmark mark='b'/> A MEMS microphone is a condenser etched "
-                   "in silicon, a millimetre across, made like any other chip, <bookmark mark='c'/> and its copies match each other "
-                   "almost exactly, so arrays of them cost little. <bookmark mark='d'/> A phone has three or four; a smart speaker "
-                   "six or seven, in a ring, <bookmark mark='e'/> feeding beamformers, cancellers and speech recognizers at once. "
-                   "<bookmark mark='f'/> The microphone has become a sensor array with software behind it.", marks="bcdef")
+                   "Arrays became cheap because microphones became chips. <bookmark mark='b'/> A MEMS microphone is a condenser etched in silicon, a millimetre across, made like any other chip, <bookmark mark='c'/> and production gives compact, consistent sensors, though mismatch and calibration still matter, so arrays of them cost little. <bookmark mark='d'/> Microphone counts vary by device; phones and smart speakers often use several, in a ring, <bookmark mark='e'/> feeding beamformers, cancellers and speech recognizers at once. <bookmark mark='f'/> The microphone has become a sensor array with software behind it.", marks="bcdef")

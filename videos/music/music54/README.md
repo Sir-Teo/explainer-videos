@@ -1,14 +1,13 @@
 # Music, Built: Part 54, Microphones and Loudspeakers
 
 Part 54 of a sixty-eight-part course in music (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the first part of Act X, *The Studio and the Stage*. Plug headphones into a microphone
-socket and speak into them: they work. A loudspeaker is a microphone run backwards. When microphones became electrical in
-1925, singers no longer had to fill a hall, and the intimate voice of the crooner was invented. This part builds both ends
+[the syllabus](../SYLLABUS.md)), the first part of Act X, *The Studio and the Stage*. A compatible dynamic headphone can act as a microphone; this part simulates that response. A loudspeaker is a microphone run backwards. When commercial electrical recording spread in
+1925, singers no longer had to fill a hall, helping popularize the intimate voice of the crooner. This part builds both ends
 of the chain as circuits: patterns and proximity, noise and balanced lines, a lumped-element loudspeaker simulator checked
 against Small's and Thiele's closed forms, horns, crossovers, an adaptive noise canceller and a steerable array. The tools
 are Monochord's (`explainer/music/monochord/transducer.py`); every microphone, cable, box and loudspeaker is simulated.
 
-* **A loudspeaker run backwards.** An ear question (the Tune sung into a measurement microphone and into headphones used as a
+* **A loudspeaker run backwards.** An ear question (the Tune through a flat reference and a simulated dynamic headphone used as a
   microphone: which was the headphones?); the headphone's response (6 dB less per octave above its 110 Hz resonance);
   electrical recording and the crooner; the plan.
 * **1. Transducers and their circuits.** Dynamic, condenser, ribbon and electret; one number both ways (e = Bl v, F = Bl i);

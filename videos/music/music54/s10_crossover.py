@@ -70,13 +70,7 @@ class Crossover(SoundScene):
             (r"every phone, \ smart speaker and most powered speakers now use it", GREY_A),
         ]
         rows_scene(self, r"amplifiers", items,
-                   "The loudspeaker needs power. <bookmark mark='b'/> In a class A amplifier the output transistors always conduct: "
-                   "clean, hot, and at best twenty-five to fifty per cent efficient. <bookmark mark='c'/> Class B uses one transistor "
-                   "for each half of the wave, at best pi over four, seventy-eight and a half per cent, and class A B hides the "
-                   "hand-over between them. <bookmark mark='d'/> Class D switches fully on or off hundreds of thousands of times a "
-                   "second and filters the result: over ninety per cent. <bookmark mark='e'/> It is Part 48's delta-sigma idea at "
-                   "power: very few levels, very fast, smoothed. <bookmark mark='f'/> Every phone, smart speaker and most powered "
-                   "speakers now use it.", marks="bcdef")
+                   "The loudspeaker needs power. <bookmark mark='b'/> In a class A amplifier the output transistors always conduct: clean, hot, and at best twenty-five to fifty per cent efficient. <bookmark mark='c'/> Class B uses one transistor for each half of the wave, at best pi over four, seventy-eight and a half per cent, and class A B hides the hand-over between them. <bookmark mark='d'/> Class D switches fully on or off hundreds of thousands of times a second and filters the result: over ninety per cent. <bookmark mark='e'/> It is a fast switching power stage, using pulse-width or related modulation; it is not necessarily a delta-sigma converter: very few levels, very fast, smoothed. <bookmark mark='f'/> Class D is common in phones, smart speakers and powered loudspeakers.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def digital(self):

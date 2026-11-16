@@ -5,7 +5,7 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 
 Cross-series regression: 889 tests passed (194.05 seconds); 1,138 episode Python files parsed. The later Part 37 son-clave repair also passed its 27 targeted checks. Rechecked 749 recorded source identities across Parts 1–40; all match. A final full regression and identity audit will follow Part 68.
 
-Cross-episode audit after Part 49: 916 recorded source identities match current files; 619 scene configurations are fresh and all per-episode sound/motion results pass. Recorded chapter-sheet hashes for Parts 27–49 also match. Evidence: `/workspace/scratch/music-series-audit.log`.
+Cross-episode audit: Parts 1–53: 992 source identities, 671 fresh scene configurations; recorded sheet hashes rechecked where available (Parts 27 onward); all sound/motion results pass. Evidence: `/workspace/scratch/music-series-audit.log`.
 
 Fresh whole-series regression after the Part 47 timing correction: **889 cases passed in 744.42 seconds**, with one upstream `audioop` deprecation warning. Evidence: `/workspace/scratch/music-series-final-regression.log`.
 
@@ -64,8 +64,9 @@ Fresh whole-series regression after the Part 47 timing correction: **889 cases p
 | 51 — Synthesis I: Oscillators and Filters | Complete | Open |
 | 52 — Synthesis II: FM, Grains and Physical Models | Complete | Open |
 | 53 — MIDI, Sequencers and the DAW | Complete | Open |
-| 54 — Microphones and Loudspeakers | In progress | Open |
-| 55–68 | Queued | Open |
+| 54 — Microphones and Loudspeakers | Complete | Open |
+| 55 — Rooms and Space | In progress | Open |
+| 56–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -196,7 +197,9 @@ Part 52: all 13 chapter preview sheets reviewed; sound and 13 listening-window m
 
 Part 53: all 13 chapter preview sheets reviewed; sound and 11 listening-window motion checks pass. Local identities: `renders/qa/music53/source-receipt.json`.
 
-**Current: Part 54.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 54: all 13 chapter preview sheets reviewed; sound and 10 listening-window motion checks pass. Local identities: `renders/qa/music54/source-receipt.json`.
+
+**Current: Part 55.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

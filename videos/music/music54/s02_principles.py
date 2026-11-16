@@ -28,7 +28,7 @@ class Principles(SoundScene):
             "diaphragm is one plate of a charged capacitor, and the voltage follows the gap, the design Wente built at Bell Labs "
             "in 1916. <bookmark mark='c'/> Ribbon: a thin metal ribbon in a magnet's gap, open to the air on both sides. "
             "<bookmark mark='d'/> And the electret, from Gerhard Sessler and James West in 1962: a condenser whose charge is "
-            "frozen into a plastic film. Billions are made every year; your phone has several."
+            "frozen into a plastic film. Electrets became ubiquitous; many current phones instead use MEMS microphones."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(cells, 0.3)))
             for mark, cc in zip("abcd", cells):
@@ -104,11 +104,7 @@ class Principles(SoundScene):
             (r"which is the next chapter", GREY_A),
         ]
         rows_scene(self, r"which microphone for which job", items,
-                   "Each kind found its job. <bookmark mark='b'/> Dynamic microphones are rugged and need no power: the stage's "
-                   "workhorses. <bookmark mark='c'/> Condensers are light and fast, and need power, forty-eight volts of phantom "
-                   "power sent down the same cable: the studio's choice. <bookmark mark='d'/> Ribbons are delicate and smooth, prized "
-                   "for brass and voices. <bookmark mark='e'/> And each responds either to pressure, or to its gradient, a difference "
-                   "that shapes how they hear direction, <bookmark mark='f'/> which is the next chapter.", marks="bcdef")
+                   "Each kind found its job. <bookmark mark='b'/> Dynamic microphones are rugged and need no power: the stage's workhorses. <bookmark mark='c'/> Condensers are light and fast, and need an electrical supply; forty-eight-volt phantom power is common, while other designs use batteries, plug-in power or separate supplies: the studio's choice. <bookmark mark='d'/> Ribbons are delicate and smooth, prized for brass and voices. <bookmark mark='e'/> And each responds either to pressure, or to its gradient, a difference that shapes how they hear direction, <bookmark mark='f'/> which is the next chapter.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def condenser(self):
@@ -116,14 +112,14 @@ class Principles(SoundScene):
             MathTex(r"C = \frac{\varepsilon A}{d}, \qquad V = \frac{Q}{C} = \frac{Q\,d}{\varepsilon A}", font_size=38),
             MathTex(r"\Delta V = \frac{Q}{\varepsilon A}\,\Delta d", font_size=38),
         ).arrange(DOWN, buff=0.5).move_to(UP * 0.8)
-        notes = VGroup(label(r"hold the charge $Q$ fixed: \ the voltage follows the gap $d$ exactly, \ a linear transducer", font_size=18, color=WHITE),
+        notes = VGroup(label(r"hold the charge $Q$ fixed: \ the voltage follows the gap $d$ exactly, \ an ideal constant-charge linear relation between gap and voltage; the complete microphone also has mechanical and electrical limits", font_size=18, color=WHITE),
                        label(r"the diaphragm can be a few microns of gold-coated film: \ light, \ so it follows the air to the highest frequencies", font_size=18, color=GREY_A),
                        label(r"its output impedance is enormous, \ so a transistor in the body converts it before the cable", font_size=18, color=TUNE)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
         head = label(r"the condenser, \ in two lines", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "The condenser deserves its two lines. <bookmark mark='a'/> A capacitor's capacitance is the permittivity times "
             "the area over the gap, and its voltage is the charge over the capacitance. <bookmark mark='b'/> Hold the charge "
-            "fixed, and a change in the gap makes a proportional change in voltage: a linear transducer. <bookmark mark='c'/> "
+            "fixed, and a change in the gap makes a proportional change in voltage: an ideal constant-charge linear relation between gap and voltage; the complete microphone also has mechanical and electrical limits. <bookmark mark='c'/> "
             "The diaphragm can be a few microns of gold-coated film, light enough to follow the air to the highest "
             "frequencies; but the output impedance is enormous, so a transistor inside the body converts it before the cable."
         ) as vo:

@@ -16,11 +16,10 @@ class Hook(SoundScene):
     def quiz(self):
         d = load("hook")
         c = clip("hook.two")
-        card = listen_card(r"The Tune's first phrase, \ sung twice. \ Once into a measurement microphone; \ once into a pair of headphones "
-                           r"plugged into the microphone socket. \ Which was the headphones?", width=10.0)
+        card = listen_card(r"The Tune's first phrase, \ sung twice. \ Flat reference response, \ then a simulated dynamic headphone "
+                           r"used as a microphone. \ Which was the headphone model?", width=10.0)
         with self.voiceover(
-            "A question for your ears. The Tune's first phrase, sung twice. Once into a measurement microphone. Once into a "
-            "pair of headphones plugged into the microphone socket. Which was the headphones?"
+            "A question for your ears. The Tune's first phrase, sung twice. Once through a flat reference response. Once through a simulated dynamic headphone used as a microphone. Which was the headphones?"
         ):
             self.play(FadeIn(card))
         self.wait(0.8)
@@ -71,7 +70,7 @@ class Hook(SoundScene):
         ]
         rows_scene(self, r"the voice the microphone made", items,
                    "The microphone changed singing. <bookmark mark='b'/> Before 1925 recording was acoustic: singers bellowed into a "
-                   "horn whose diaphragm cut a groove by sheer pressure. <bookmark mark='c'/> In 1925 came electrical recording, with "
+                   "horn whose diaphragm cut a groove by sheer pressure. <bookmark mark='c'/> In 1925 major record companies introduced commercial electrical recording, with "
                    "the condenser microphone Edward Wente had built at Bell Labs in 1916, and an amplifier. <bookmark mark='d'/> The "
                    "microphone heard a soft voice close to it as well as a loud one far away, <bookmark mark='e'/> and the crooners, "
                    "Bing Crosby above all, sang quietly and intimately, to a microphone, for millions. <bookmark mark='f'/> A "

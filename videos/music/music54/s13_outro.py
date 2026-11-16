@@ -127,7 +127,7 @@ class Outro(SoundScene):
         with self.voiceover(
             "And in practice. Singers work the proximity effect, in for warmth and out for power. Engineers aim a cardioid's "
             "null at what should not be heard. Speaker builders choose a box by its Thiele-Small parameters and check the port "
-            "by its impedance. And everyone uses balanced cables, and trusts noise cancelling only below a kilohertz."
+            "by its impedance. And everyone uses balanced cables, and checks noise-cancelling performance across frequency rather than assuming this model applies to every device."
         ):
             self.play(FadeIn(prac.head), LaggedStart(*[FadeIn(r) for r in prac.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(0.4)

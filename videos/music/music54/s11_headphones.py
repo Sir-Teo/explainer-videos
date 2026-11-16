@@ -47,7 +47,7 @@ class Headphones(SoundScene):
         with self.voiceover(
             "So fight noise with noise. <bookmark mark='a'/> Measure the noise, <bookmark mark='b'/> play its mirror image "
             "through the headphone, <bookmark mark='c'/> and at the ear the two cancel. Paul Lueg patented the idea in 1936; it "
-            "reached aviation headsets in 1989; now it is in every pair of earbuds. The hard part is that the anti-noise must "
+            "reached aviation headsets in 1989; it is now common in noise-cancelling earbuds. The hard part is that the anti-noise must "
             "be exact at the eardrum, through a path that changes every time the headphones move."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(bx), FadeIn(cx))
@@ -100,15 +100,11 @@ class Headphones(SoundScene):
             bars.add(VGroup(bar, label(rf"{b['lo']}--{b['hi']} Hz", font_size=15, color=GREY_A).next_to([-4.0 + 2.0 * i, 1.3, 0], UP, buff=0.12),
                             label(rf"{b['atten']:.0f} dB", font_size=17, color=WHITE).next_to(bar, DOWN, buff=0.1)))
         base = Line([-5.0, 1.3, 0], [5.0, 1.3, 0], color=GREY_B, stroke_width=1.5)
-        note = label(r"the speaker-to-ear path cannot make highs, \ and its delay outruns them: \ active cancelling is for low frequencies; \ the cup's seal does the rest", font_size=17, color=WHITE).to_edge(DOWN, buff=0.4)
+        note = label(r"this simulation: \ fixed path and reference preview favor low-band cancellation", font_size=17, color=WHITE).to_edge(DOWN, buff=0.4)
         head = label(r"how much it cancels, \ by band", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         b = d["bands"]
         with self.voiceover(
-            "Simulate an aircraft cabin: a drone at ninety-two hertz and its harmonics, rumble, and a little hiss. "
-            f"<bookmark mark='a'/> After the canceller adapts, the lowest band falls {say(-b[0]['atten'])} decibels, the next "
-            f"{say(-b[1]['atten'])}, and up to a kilohertz {say(-b[2]['atten'])}. <bookmark mark='b'/> Above that, almost nothing: "
-            "the anti-noise speaker's path cannot make high frequencies, and its delay outruns them. Active cancelling is for "
-            "low frequencies; the cup's seal does the rest."
+            f"Simulate an aircraft cabin: a drone at ninety-two hertz and its harmonics, rumble, and a little hiss. <bookmark mark='a'/> After the canceller adapts, the lowest band falls {say(-b[0]['atten'])} decibels, the next {say(-b[1]['atten'])}, and up to a kilohertz {say(-b[2]['atten'])}. <bookmark mark='b'/> Above that, little reduction in this simulation: its chosen secondary path, reference preview and adaptive filter limit cancellation. ANC is generally strongest at lower frequencies; passive isolation and seal also matter."
         ) as vo:
             self.play(FadeIn(head), FadeIn(base), FadeIn(ghost(bars, 0.3)))
             vo.wait_until("a")
@@ -150,4 +146,4 @@ class Headphones(SoundScene):
             (r"cancelling only subtracts sound: \ it does not protect hearing from loud music", TUNE),
         ]
         rows_scene(self, r"feedforward, \ feedback, \ transparency", items,
-                   "Real headphones use more than one scheme. <bookmark mark='b'/> Feedforward: the outer microphone hears the noise early, as in our simulation. <bookmark mark='c'/> Feedback: a microphone inside the cup cancels whatever arrives, including what the outer one missed. <bookmark mark='d'/> Most headphones combine the two. <bookmark mark='e'/> Transparency mode runs the system backwards: the outer microphones are played in, so you hear the world with the cups on. <bookmark mark='f'/> And cancelling only subtracts noise; it does not protect hearing from loud music.", marks="bcdef")
+                   "Real headphones use more than one scheme. <bookmark mark='b'/> Feedforward: the outer microphone hears the noise early, as in our simulation. <bookmark mark='c'/> Feedback: a microphone inside the cup cancels whatever arrives, including what the outer one missed. <bookmark mark='d'/> Many ANC designs combine the two. <bookmark mark='e'/> Transparency mode routes outside sound through a shaped microphone feed: the outer microphones are played in, so you hear the world with the cups on. <bookmark mark='f'/> And cancelling only subtracts noise; it does not protect hearing from loud music.", marks="bcdef")

@@ -50,7 +50,7 @@ class Driver(SoundScene):
         head = label(r"a woofer in Thiele--Small parameters", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "A woofer is described by a handful of numbers, named after Neville Thiele and Richard Small, who showed in the "
-            "1960s and 1970s that they are all a designer needs. <bookmark mark='a'/> Its resonance in free air, forty hertz "
+            "1960s and 1970s how a small set of parameters can describe low-frequency small-signal behavior; excursion limits, heating, breakup and directivity need more information. <bookmark mark='a'/> Its resonance in free air, forty hertz "
             "for ours. <bookmark mark='b'/> Three Qs, how sharp the resonance is: from the electrical side, where the motor "
             "acts as a brake, from the mechanical side, and in total. <bookmark mark='c'/> V a s, the volume of air as stiff as "
             "the suspension, fifty litres. The cone's area, the coil's resistance. <bookmark mark='d'/> From them follow the "
@@ -85,7 +85,7 @@ class Driver(SoundScene):
             "The simulator solves the circuit at every frequency. <bookmark mark='a'/> Here is the woofer's electrical impedance "
             "on a large baffle: six ohms almost everywhere, <bookmark mark='b'/> but at resonance it rises to "
             f"{say(Z[pk])} ohms, because the cone moves most there, and its moving coil makes a voltage that opposes the current. "
-            "This peak is how Thiele-Small parameters are measured: from the impedance alone."
+            "This peak is how Thiele-Small parameters are measured: using impedance measurements together with additional mass, enclosure or geometrical information to determine all the parameters."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(yl), FadeIn(ghost(cv, 0.3)))
             vo.wait_until("a")

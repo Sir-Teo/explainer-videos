@@ -24,14 +24,10 @@ class Noise(SoundScene):
             MathTex(rf"= {d['ein_dbu']:.1f}\ \text{{dBu}}", font_size=34),
         ).arrange(DOWN, buff=0.4).move_to(UP * 0.6)
         notes = VGroup(label(r"Johnson and Nyquist \ (1928): \ the electrons in any resistor jostle with the heat", font_size=18, color=WHITE),
-                       label(r"no amplifier connected to a 200-ohm microphone can be quieter than this: \ its equivalent input noise", font_size=18, color=TUNE)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
+                       label(r"200-ohm source thermal noise at this temperature and bandwidth; \ the preamp adds noise", font_size=18, color=TUNE)).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.6)
         head = label(r"the noise of warmth", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Every microphone signal rides on noise, and some of it is unavoidable. <bookmark mark='a'/> The electrons in any "
-            "resistor jostle with the heat, as John Johnson measured and Harry Nyquist explained in 1928: the noise voltage is the "
-            "square root of four k T R B. <bookmark mark='b'/> For a two-hundred-ohm microphone over the audio band, "
-            f"{say(d['vn_uv'], 2)} microvolts: <bookmark mark='c'/> {say(d['ein_dbu'], 1)} dBu. No preamplifier connected to "
-            "such a microphone can be quieter than this."
+            f"Every microphone signal rides on noise, and some of it is unavoidable. <bookmark mark='a'/> The electrons in any resistor jostle with the heat, as John Johnson measured and Harry Nyquist explained in 1928: the noise voltage is the square root of four k T R B. <bookmark mark='b'/> For a two-hundred-ohm microphone over the audio band, {say(d['vn_uv'], 2)} microvolts: <bookmark mark='c'/> {say(d['ein_dbu'], 1)} dBu. This is the thermal-noise contribution of that resistance at this temperature and bandwidth; a preamplifier adds its own noise."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(lines, 0.25)), FadeIn(notes[0]))
             for mark, ln in zip("abc", lines):
@@ -57,7 +53,7 @@ class Noise(SoundScene):
             f"ninety-four decibels of sound: {say(d['sig94_dbu'], 1)} dBu. <bookmark mark='b'/> The thermal floor is "
             f"{say(d['sig94_dbu'] - d['ein_dbu'], 1)} decibels below that, <bookmark mark='c'/> so the floor is like a sound of "
             f"{say(d['eq_spl'])} decibels arriving at the microphone. <bookmark mark='d'/> A very quiet room is about twenty-five; "
-            "a good condenser's own noise about ten. <bookmark mark='e'/> In practice the room is noisier than the microphone."
+            "a good condenser's own noise about ten. <bookmark mark='e'/> In many ordinary rooms ambient noise dominates; the balance depends on microphone sensitivity, self-noise and bandwidth."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(rows, 0.25)))
             for mark, r in zip("abcde", rows):
@@ -80,8 +76,7 @@ class Noise(SoundScene):
         head = label(r"a balanced line", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "A microphone's tiny voltage must then cross a long cable past lighting dimmers and transformers. <bookmark mark='a'/> "
-            "A balanced line sends it on two conductors, the hot carrying plus half the signal and the cold minus half, twisted "
-            "together inside a shield. <bookmark mark='b'/> Hum from a transformer lands almost equally on both. "
+            "Our symmetric balanced model uses two conductors carrying opposite halves of the signal. Balance means matched impedances to ground; equal and opposite signal voltages are not required. The conductors are twisted together inside a shield. <bookmark mark='b'/> Hum from a transformer lands almost equally on both. "
             "<bookmark mark='c'/> The receiver takes the difference: the signal comes back whole, and the hum, the same on both, "
             "cancels."
         ) as vo:
@@ -110,9 +105,7 @@ class Noise(SoundScene):
             pulse(snd, cells[0], st["unbalanced"], st["balanced"] - 0.3, buff=0.08)
             pulse(snd, cells[1], st["balanced"], c.duration, buff=0.08)
         with self.voiceover(
-            "Unbalanced, a buzz at fifty hertz and its odd harmonics sits under the voice. Balanced, with the two conductors "
-            f"matched to one per cent, it falls {say(d['rejection_db'])} decibels and all but vanishes. That is why every studio "
-            "microphone cable has three pins."
+            f"Unbalanced, a buzz at fifty hertz and its odd harmonics sits under the voice. Balanced, with the two conductors matched to one per cent, it falls {say(d['rejection_db'])} decibels and all but vanishes. This explains the common three-pin balanced XLR connection; other microphone interfaces also exist."
         ):
             self.play(Indicate(cells[1], color=TUNE, scale_factor=1.03))
         self.wait(0.4)

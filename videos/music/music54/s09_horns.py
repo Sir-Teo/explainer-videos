@@ -45,12 +45,7 @@ class Horns(SoundScene):
         yl = label(r"resistance, \ re $\rho c / S$", font_size=15, color=GREY_A).next_to(ax, LEFT, buff=0.15)
         head = label(r"what the driver sees", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is what the driver sees, as a fraction of the best possible match. <bookmark mark='a'/> A bare piston of the "
-            "throat's size: its resistance creeps up as frequency squared and only reaches full match high in the treble. "
-            "<bookmark mark='b'/> An exponential horn, whose area grows by the same factor every few centimetres, as Arthur "
-            "Webster described in 1919: above a cutoff set by its flare, the throat presents nearly the full match. "
-            f"<bookmark mark='c'/> At two hundred hertz that is {say(d['gain_200'])} decibels better loading. Below the cutoff, "
-            "nothing: a horn only works above its flare frequency, so a bass horn must be enormous."
+            f"Here is what the driver sees, as a fraction of the best possible match. <bookmark mark='a'/> A bare piston of the throat's size: its resistance creeps up as frequency squared and only reaches full match high in the treble. <bookmark mark='b'/> An exponential horn, whose area grows by the same factor every few centimetres, as Arthur Webster described in 1919: above a cutoff set by its flare, the throat presents nearly the full match. <bookmark mark='c'/> At two hundred hertz that is {say(d['gain_200'])} decibels better loading. Below cutoff this ideal infinite exponential horn has no propagating resistance; finite horns also have termination effects and resonances, so a bass horn must be enormous."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(yl), FadeIn(eq), FadeIn(ghost(VGroup(h, p), 0.25)))
             vo.wait_until("a")
