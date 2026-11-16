@@ -53,7 +53,7 @@ class Objects(SoundScene):
                    "Scene-based: the field itself, as in Ambisonics, decoded for whatever layout there is. "
                    "<bookmark mark='d'/> Object-based: every sound kept separate, with metadata saying where it is, how big, and how "
                    "it moves. <bookmark mark='e'/> Then a renderer, at playback, which knows the loudspeakers, or the headphones, "
-                   "places each object. <bookmark mark='f'/> Most mixes today are all three at once: a bed of channels, perhaps an "
+                   "places each object. <bookmark mark='f'/> Formats can combine these approaches; a channel bed with objects is common in object-audio productions: a bed of channels, perhaps an "
                    "ambisonic scene, and objects.", marks="bcdef")
 
     # ------------------------------------------------------------------
@@ -67,7 +67,7 @@ class Objects(SoundScene):
         rows_scene(self, r"objects in the cinema and at home", items,
                    "Objects reached the public through the cinema. <bookmark mark='b'/> Dolby Atmos opened in 2012 with Pixar's "
                    "Brave: up to a hundred and twenty-eight tracks, with objects rendered to as many as sixty-four loudspeakers, some "
-                   "of them overhead. <bookmark mark='c'/> At home the usual layout is seven point one point four: seven "
+                   "of them overhead. <bookmark mark='c'/> At home one illustrative layout is seven point one point four: seven "
                    "loudspeakers round the listener, one subwoofer, four in the ceiling. <bookmark mark='d'/> Broadcasting has "
                    "standards of its own, MPEG-H 3D Audio and AC-4. <bookmark mark='e'/> And from 2019, and widely from 2021, streaming "
                    "services began to offer music mixed in Atmos, heard mostly on headphones, and so rendered binaurally.", marks="bcde")

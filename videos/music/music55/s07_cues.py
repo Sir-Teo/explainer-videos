@@ -128,7 +128,7 @@ class Cues(SoundScene):
             pulse(snd, src, 0, c.duration, rate=5.0, color=GREY_B, buff=0.05)
         with self.voiceover(
             "Each cue alone moves the sound to the right, but not always to the same place, and often inside the head. "
-            "Together they agree, and the sound sits more firmly out to the right. In real life the two never disagree, so the "
+            "Together they agree, and the sound sits more firmly out to the right. Natural scenes can have reflections and mixtures that make cue combination ambiguous, so the "
             "brain combines them."
         ):
             self.play(boxes[2][0].animate.set_stroke(TUNE, width=4))
@@ -197,9 +197,7 @@ class Cues(SoundScene):
             pulse(snd, boxes[2], 0, c.duration, rate=5.0, color=GREY_B, buff=0.08)
         res = label(r"the first was in front; \ but the two are the same to the last sample: \ no listener can tell", font_size=19, color=TUNE).move_to(DOWN * 1.4)
         with self.voiceover(
-            "The first was in front, but you could not have known: the two renderings are identical, sample for sample. With a "
-            "spherical head, front and back give exactly the same signals. If you heard a difference, it came from what you "
-            "expected. The honest answer was neither."
+            'The first was in front, but you could not have known: the two renderings are identical, sample for sample. With a spherical head, front and back give exactly the same signals. Any perceived difference cannot reveal front versus back from these identical model signals. The honest answer was neither.'
         ):
             self.play(boxes[2][0].animate.set_stroke(TUNE, width=4), FadeIn(res))
         self.wait(0.4)

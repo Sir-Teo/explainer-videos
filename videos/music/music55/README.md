@@ -2,14 +2,14 @@
 
 Part 55 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the second part of Act X, *The Studio and the Stage*. In 1895 Harvard opened a lecture
-room in which nobody could understand a word. A young physicist, Wallace Sabine, spent his nights there with a stopwatch,
+room with severe speech-intelligibility problems. A young physicist, Wallace Sabine, spent his nights there with a stopwatch,
 an organ pipe and the seat cushions of a nearby theatre, found the law of reverberation, and used it to design Boston's
 Symphony Hall. Sixty years later a hall designed with far more science had to be gutted. This part explains both, then
 turns from the room to the listener: how two ears hear direction, and how stereo, Ambisonics, binaural rendering and object
 audio build space back. The tools are Monochord's (`explainer/music/monochord/space.py`); every room, wall and head is
 simulated. Several sounds are rendered for headphones.
 
-* **A room nobody could understand.** An ear question (a voice in a lecture room as built and after its cure: which was
+* **A room nobody could understand.** An ear question (a voice in a lecture room in untreated and more absorptive model conditions: which was
   as built? the first, 5.6 s against 1.1 s); Sabine's nights, the cushions and Symphony Hall; Philharmonic Hall (1962);
   the plan.
 * **1. Sabine's law.** A sound that dies away; the law derived from a diffuse field (T60 = 0.161 V/A); Sabine's cushions,

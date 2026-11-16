@@ -94,21 +94,16 @@ class Stereo(SoundScene):
         a2 = frame_axes(width=5.0, height=2.6, xlo=-1, xhi=1, ylo=-4, yhi=0.5, center=RIGHT * 3.3 + DOWN * 0.3)
         pw = VGroup(curve(p, d["lin_power_db"], a2.to, color=GREY_A, width=3), curve(p, d["pw_power_db"], a2.to, color=TUNE, width=3))
         t1 = label(r"the two gains", font_size=18, color=GREY_A).next_to(a1, UP, buff=0.2)
-        t2 = label(r"total power, \ dB", font_size=18, color=GREY_A).next_to(a2, UP, buff=0.2)
+        t2 = label(r"squared-gain sum, \ dB", font_size=18, color=GREY_A).next_to(a2, UP, buff=0.2)
         xt = VGroup(*[VGroup(label(r"left", font_size=14, color=GREY_A).next_to(a.to(-1, a_lo), DOWN, buff=0.1), label(r"right", font_size=14, color=GREY_A).next_to(a.to(1, a_lo), DOWN, buff=0.1))
                       for a, a_lo in ((a1, 0), (a2, -4))])
         yt = VGroup(label(r"$-3$", font_size=14, color=GREY_A).next_to(a2.to(-1, -3), LEFT, buff=0.1), label(r"0", font_size=14, color=GREY_A).next_to(a2.to(-1, 0), LEFT, buff=0.1))
         key = VGroup(label(r"linear: \ $g_L = \frac{1-p}{2}$, \ $g_R = \frac{1+p}{2}$", font_size=17, color=GREY_A),
-                     label(r"constant power: \ $g_L = \cos\frac{\pi(p+1)}{4}$, \ $g_R = \sin\frac{\pi(p+1)}{4}$", font_size=17, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
+                     label(r"constant power: \ $g_L = \cos\frac{\pi(p+1)}{4}$, \ $g_R = \sin\frac{\pi(p+1)}{4}$", font_size=17, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.9)
         dip = min(d["lin_power_db"])
         head = label(r"pan laws", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "How should the gains change as a pan knob turns? <bookmark mark='a'/> The obvious way is linear: one gain falls as "
-            "the other rises, always adding to one. <bookmark mark='b'/> But two loudspeakers playing the same sound at a "
-            "distance add in power, not in amplitude, and in the middle the linear law's power is half: "
-            f"{say(-dip, 2)} decibels down, a hole in the middle. <bookmark mark='c'/> The constant-power law moves along a "
-            "quarter circle instead, cosine and sine, so the power stays the same everywhere. Mixing desks offer both, and "
-            "compromises between them."
+            f"How should the gains change as a pan knob turns? <bookmark mark='a'/> The obvious way is linear: one gain falls as the other rises, always adding to one. <bookmark mark='b'/> But under a decorrelated or spatially averaged power model, we add squared gains; coherent loudspeaker signals also interfere, and in the middle the linear law's power is half: {say(-dip, 2)} decibels down, a hole in the middle. <bookmark mark='c'/> The constant-power law moves along a quarter circle instead, cosine and sine, so the sum of squared gains stays fixed. Mixing desks offer both, and compromises between them."
         ) as vo:
             self.play(FadeIn(head), FadeIn(a1), FadeIn(a2), FadeIn(t1), FadeIn(t2), FadeIn(xt), FadeIn(yt), FadeIn(ghost(VGroup(g, pw), 0.25)))
             vo.wait_until("a")
@@ -153,9 +148,7 @@ class Stereo(SoundScene):
             pulse(snd, boxes[1], st["power"], c.duration, buff=0.06)
             snd.drive(img, place)
         with self.voiceover(
-            "With the linear law the voice sinks as it crosses the middle, then comes back; with constant power it travels at "
-            "an even level. Both cross the stage at the same pace, crowding a little towards the centre, as the tangent law "
-            "predicts."
+            'With the linear law the voice sinks as it crosses the middle, then comes back; constant-power gains preserve the squared-gain sum; perceived level can still vary with correlation, acoustics and listener position. Both cross the stage at the same pace, crowding a little towards the centre, as the tangent law predicts.'
         ):
             self.play(boxes[1][0].animate.set_stroke(TUNE, width=4))
         self.wait(0.4)

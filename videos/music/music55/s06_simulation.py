@@ -102,7 +102,7 @@ class Simulation(SoundScene):
             "mirrors; twenty-five up to the second; eight hundred and thirty-three up to the eighth. <bookmark mark='b'/> The "
             "count grows as the cube of the order, the same cube as Weyl's modes. <bookmark mark='c'/> In time, the reflections "
             "arrive at a rate that grows as t squared: in a hall of three thousand cubic metres, a second after the sound, about "
-            f"{say(round(d['reflections_per_s'], -3))} reflections a second. No one computes them all: the image method handles "
+            f"{say(round(d['reflections_per_s'], -3))} reflections a second. Practical hybrid models often stop explicit image enumeration: the image method handles "
             "the early, sparse part, and statistics the dense tail."
         ) as vo:
             self.play(FadeIn(head), FadeIn(xl), FadeIn(ghost(bars, 0.25)))
@@ -137,9 +137,9 @@ class Simulation(SoundScene):
             "Monochord's image-source room, checked two ways. <bookmark mark='a'/> Its reverberation time, measured from its "
             "own response for four wall absorptions, against Sabine and Eyring. For a live room it rings longer than either: "
             f"at alpha nought point nought eight, {say(d['rt'][1]['image'], 2)} seconds against Sabine's "
-            f"{say(d['rt'][1]['sabine'], 2)}. <bookmark mark='b'/> That is not a bug. Both formulas assume a diffuse field, and "
+            f"{say(d['rt'][1]['sabine'], 2)}. <bookmark mark='b'/> This mismatch is consistent with a non-diffuse field, though finite-order truncation, response length and fitting procedure must also be checked. Both formulas assume a diffuse field, and "
             "a box with smooth walls is not one: the paths that graze along the long walls bounce least, and they keep the tail "
-            "alive. Real rooms scatter, and land closer to the formulas. <bookmark mark='c'/> And the peaks of its response, in "
+            "alive. Scattering can make diffuse-field formulas more applicable; real-room agreement is not guaranteed. <bookmark mark='c'/> And the peaks of its response, in "
             f"the bass, sit on the exact modes, the worst {say(d['worst_hz'], 1)} hertz away: the image method and the mode sum "
             "are two descriptions of the same field."
         ) as vo:

@@ -20,8 +20,7 @@ class Hook(SoundScene):
         card = listen_card(r"A voice in a lecture room, \ twice. \ Once in the room as it was built; \ once after the room was "
                            r"changed so that people could understand it. \ Which was the room as it was built?", width=10.0)
         with self.voiceover(
-            "A question for your ears. A voice in a lecture room, twice. Once in the room as it was built; once after the room "
-            "was changed so that people could understand what was said in it. Which was the room as it was built?"
+            'A question for your ears. A voice in a lecture room, twice. Once in a simulated untreated room; once after absorption was increased in the model so that people could understand what was said in it. Which was the room as it was built?'
         ):
             self.play(FadeIn(card))
         self.wait(0.8)
@@ -75,14 +74,7 @@ class Hook(SoundScene):
             (r"1900: \ Boston's Symphony Hall, \ the first hall designed by a formula, \ still among the best in the world", GREY_A),
         ]
         rows_scene(self, r"a room nobody could understand", items,
-                   "The room was real. <bookmark mark='b'/> In 1895 Harvard opened the lecture room of its new Fogg Art Museum, and "
-                   "nobody could understand a word spoken in it. <bookmark mark='c'/> The university's president asked a "
-                   "twenty-seven-year-old assistant professor of physics, Wallace Sabine, to fix it. <bookmark mark='d'/> For three "
-                   "years, at night when the city was quiet, Sabine timed how long an organ pipe's note went on sounding after it "
-                   "stopped, by ear and with a stopwatch. <bookmark mark='e'/> He borrowed the seat cushions of Sanders Theatre "
-                   "across the yard, and carried them in a few at a time. <bookmark mark='f'/> The times fell into a law: the "
-                   "room's volume over its absorption. <bookmark mark='g'/> In 1900 Boston's Symphony Hall opened, the first hall "
-                   "designed with a formula, and it is still among the best in the world.", marks="bcdefg")
+                   "The room was real. <bookmark mark='b'/> In 1895 Harvard opened the lecture room of its new Fogg Art Museum, with severe reverberation that impaired speech intelligibility. <bookmark mark='c'/> The university's president asked a twenty-seven-year-old assistant professor of physics, Wallace Sabine, to fix it. <bookmark mark='d'/> For three years, at night when the city was quiet, Sabine timed how long an organ pipe's note went on sounding after it stopped, by ear and with a stopwatch. <bookmark mark='e'/> He borrowed the seat cushions of Sanders Theatre across the yard, and carried them in a few at a time. <bookmark mark='f'/> The times fell into a law: the room's volume over its absorption. <bookmark mark='g'/> In 1900 Boston's Symphony Hall opened, an early influential hall designed with quantitative acoustic advice, and it is still among the best in the world.", marks="bcdefg")
 
     # ------------------------------------------------------------------
     def sequel(self):

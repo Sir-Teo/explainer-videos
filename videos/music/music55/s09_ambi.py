@@ -93,12 +93,7 @@ class Ambi(SoundScene):
                            (r"the far side plays inverted \ (blue): \ its job is to cancel", BLUE), (r"the field at the centre is exactly the source's", TUNE)], font_size=19, width=5.0).move_to(RIGHT * 3.6 + DOWN * 0.9)
         head = label(r"decoding to a ring", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Decoding asks: what should each loudspeaker play, so that the field at the centre has the right W, X and Y? "
-            "<bookmark mark='a'/> For a ring of N, the answer is this: each loudspeaker plays W plus twice the gradient "
-            "pointing its way, over N. <bookmark mark='b'/> For a source at twenty degrees, the nearest loudspeakers play "
-            "loudest, the side ones less, <bookmark mark='c'/> and the far side plays a little, inverted, shown in blue: its job "
-            "is to cancel the near side's sound where it should not be. <bookmark mark='d'/> At the very centre the pressure "
-            "and its gradient are exactly the source's."
+            "Decoding asks: what should each loudspeaker play, so that the field at the centre has the right W, X and Y? <bookmark mark='a'/> For a ring of N, the answer is this: each loudspeaker plays W plus twice the gradient pointing its way, over N. <bookmark mark='b'/> For a source at twenty degrees, the nearest loudspeakers play loudest, the side ones less, <bookmark mark='c'/> and the far side plays a little, inverted, shown in blue: its job is to cancel the near side's sound where it should not be. <bookmark mark='d'/> Within the stated first-order, horizontal, plane-wave model, the decoder matches the retained pressure and velocity components at the centre."
         ) as vo:
             self.play(FadeIn(head), FadeIn(sp), FadeIn(lis), FadeIn(src), FadeIn(sl), FadeIn(ghost(bars, 0.3)))
             vo.wait_until("a")
@@ -166,12 +161,7 @@ class Ambi(SoundScene):
         note = label(r"higher orders: \ more spherical harmonics, \ a sharper image, \ a wider sweet spot; \ third order is common in virtual reality", font_size=17, color=WHITE).to_edge(DOWN, buff=0.4)
         head = label(r"higher orders", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "First order is blurry because four channels can only hold a blurry picture. <bookmark mark='a'/> Higher-order "
-            "Ambisonics adds more terms of the field's expansion in circular or spherical harmonics: two N plus one channels for "
-            "a ring, N plus one squared for a sphere. <bookmark mark='b'/> With the max-r E decoder the energy vector grows as "
-            "cosine of pi over two N plus two, and the image's spread, its arc cosine, shrinks: forty-five degrees at first "
-            "order, twenty-two and a half at third, eleven at seventh. The sweet spot widens too. Third order, sixteen channels, "
-            "is the common choice for virtual reality."
+            "First order is blurry because four channels can only hold a blurry picture. <bookmark mark='a'/> Higher-order Ambisonics adds more terms of the field's expansion in circular or spherical harmonics: two N plus one channels for a ring, N plus one squared for a sphere. <bookmark mark='b'/> With the max-r E decoder the energy vector grows as cosine of pi over two N plus two, and the image's spread, its arc cosine, shrinks: forty-five degrees at first order, twenty-two and a half at third, eleven at seventh. The sweet spot widens too. Third order uses sixteen full-sphere channels and is one common choice for virtual reality."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows[0]), FadeIn(ghost(rows[1:], 0.25)))
             vo.wait_until("a")
@@ -203,11 +193,11 @@ class Ambi(SoundScene):
         alias = label(r"above $c/2\Delta x$ the wavefront breaks up: \ 17 cm spacing, \ 1 kHz", font_size=17, color=GREY_A).to_edge(UP, buff=1.0)
         head = label(r"wave-field synthesis", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "There is another way to rebuild a field, without a sweet spot at all. <bookmark mark='a'/> Christiaan Huygens said "
+            "There is another way to rebuild a field, over an extended listening region, with finite-array and frequency limits. <bookmark mark='a'/> Christiaan Huygens said "
             "that every point on a wavefront acts as a new source of wavelets. Guus Berkhout, at Delft in 1988, turned it "
             "round: put a line of loudspeakers where the wave would pass, and have each play the wave as it would arrive there, "
             "delayed and weighted. <bookmark mark='b'/> Their wavelets add up to the wavefront of a virtual source behind the "
-            "line, and everyone in front hears it in the same place. <bookmark mark='c'/> The price is loudspeakers: above c "
+            "line, and listeners within the usable region can hear a more stable virtual source. <bookmark mark='c'/> The price is loudspeakers: above c "
             "over twice their spacing the wavefront breaks up, so seventeen-centimetre spacing works up to one kilohertz, and "
             "an installation needs hundreds."
         ) as vo:

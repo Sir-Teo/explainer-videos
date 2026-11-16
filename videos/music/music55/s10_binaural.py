@@ -34,7 +34,7 @@ class Binaural(SoundScene):
         ]
         rows_scene(self, r"two signals", items,
                    "Stereo pans between loudspeakers. Headphones allow something else. <bookmark mark='b'/> We hear space with two "
-                   "signals, one at each eardrum; reproduce those two exactly, and you reproduce the space. "
+                   "signals, one at each eardrum; reproducing those signals can reproduce many spatial cues, with head movement, headphone transfer and visual context also relevant. "
                    "<bookmark mark='c'/> Binaural recording puts microphones in the ears of a dummy head, like Neumann's KU 80 of "
                    "1973. <bookmark mark='d'/> Played on headphones, the room, the directions and the distances come back, often "
                    "startlingly. <bookmark mark='e'/> But only for a head like the dummy's, and only while you keep still. "
@@ -155,12 +155,7 @@ class Binaural(SoundScene):
                            (r"the whole loop must take under about 50 ms, \ or the world swims", GREY_A)], font_size=19, width=6.4).move_to(RIGHT * 2.8 + DOWN * 0.8)
         head = label(r"head tracking", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Head tracking supplies the movement. <bookmark mark='a'/> A gyroscope in the headphones reports how far the head "
-            "has turned, <bookmark mark='b'/> and the renderer subtracts it from the source's direction, so the source stays "
-            "fixed in the room while the head moves. <bookmark mark='c'/> Turn towards a sound and it moves as a real one "
-            "would: front and back are settled at once, as Wallach found in 1940. <bookmark mark='d'/> The whole loop, sensor, "
-            "radio and filters, must take less than about fifty milliseconds, or the world seems to swim. Since 2020 phones and "
-            "earbuds do this for everyone."
+            "Head tracking supplies the movement. <bookmark mark='a'/> A gyroscope in the headphones reports how far the head has turned, <bookmark mark='b'/> and the renderer subtracts it from the source's direction, so the source stays fixed in the room while the head moves. <bookmark mark='c'/> Turn towards a sound and it moves as a real one would: front-back ambiguity can be reduced, as Wallach found in 1940. <bookmark mark='d'/> The whole loop, sensor, radio and filters, should have low latency; tolerable delay depends on motion and task, with fifty milliseconds an illustrative target, or the world seems to swim. Some compatible phones and headsets have offered head-tracked spatial audio since around 2020."
         ) as vo:
             self.play(FadeIn(head), FadeIn(hd), FadeIn(src), FadeIn(sl), FadeIn(rel), FadeIn(eq))
             vo.wait_until("a")

@@ -38,7 +38,7 @@ class Halls(SoundScene):
                    "<bookmark mark='d'/> Clarity, C eighty, is the energy in the first eighty milliseconds against everything "
                    "after, in decibels. <bookmark mark='e'/> Reverberation joins the notes; the early reflections decide how clear, "
                    "how loud, how near and how wide they are. <bookmark mark='f'/> Philharmonic Hall's trouble lay exactly here: "
-                   "its overhead panels reflected the treble but not the bass, and nothing came from the sides.", marks="bcdef")
+                   "its overhead panels reflected the treble but not the bass, and lateral reflections were inadequate at many seats.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def train(self):
@@ -83,13 +83,7 @@ class Halls(SoundScene):
         rows = text_rows(items, font_size=22).move_to(DOWN * 1.2)
         head = label(r"the sides", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The reflections from the sides are special. <bookmark mark='a'/> Harold Marshall in 1967, and Michael Barron in "
-            "experiments from 1971, found that they make the sound wide and enveloping, a quality they called spatial "
-            "impression. <bookmark mark='b'/> A reflection from the side reaches the two ears differently, so the ears hear "
-            "different sounds, and the brain hears the source broaden and the hall surround it. <bookmark mark='c'/> The "
-            "measure is the lateral fraction: the early energy arriving from the sides, weighted by the cosine squared of the "
-            "angle from the line through the ears, over all the early energy. <bookmark mark='d'/> Good halls lie between about "
-            "nought point one five and nought point three five."
+            "The reflections from the sides are special. <bookmark mark='a'/> Harold Marshall in 1967, and Michael Barron in experiments from 1971, found that they make the sound wide and enveloping, a quality they called spatial impression. <bookmark mark='b'/> A reflection from the side reaches the two ears differently, so the ears hear different sounds, and the brain hears the source broaden and the hall surround it. <bookmark mark='c'/> The measure is the lateral fraction: the early energy arriving from the sides, weighted by the cosine squared of the angle from the line through the ears, over all the early energy. <bookmark mark='d'/> Values around nought point one five to nought point three five are often discussed, but no single range guarantees hall quality."
         ) as vo:
             self.play(FadeIn(head), FadeIn(eq))
             for mark, r in zip("abcd", rows):
@@ -167,12 +161,4 @@ class Halls(SoundScene):
             (r"since the 1980s, \ every major hall is first built as a computer model, \ and often as a 1:10 scale model as well", TUNE),
         ]
         rows_scene(self, r"the shapes of halls", items,
-                   "Hall shapes follow from all this. <bookmark mark='b'/> The shoebox: Vienna's Musikverein of 1870, Amsterdam's "
-                   "Concertgebouw of 1888, Boston's Symphony Hall: narrow, tall and ornamented, full of side reflections and "
-                   "scattering. <bookmark mark='c'/> The fan: wide at the back for more seats and better sight lines, with few side "
-                   "reflections, and often disappointing. <bookmark mark='d'/> The vineyard: Berlin's Philharmonie, by Hans "
-                   "Scharoun with the acoustician Lothar Cremer, 1963, with the audience on terraces whose low walls reflect sound "
-                   "sideways. <bookmark mark='e'/> The surround: Hamburg's Elbphilharmonie of 2017, lined with ten thousand "
-                   "different gypsum panels, each cell shaped to scatter. <bookmark mark='f'/> Since the 1980s every major hall "
-                   "has been built first as a computer model, and often as a model at a tenth of the size as well. How do you "
-                   "simulate a hall?", marks="bcdef")
+                   "Hall shapes follow from all this. <bookmark mark='b'/> The shoebox: Vienna's Musikverein of 1870, Amsterdam's Concertgebouw of 1888, Boston's Symphony Hall: narrow, tall and ornamented, full of side reflections and scattering. <bookmark mark='c'/> The fan: wide at the back for more seats and better sight lines, with few side reflections, and often disappointing. <bookmark mark='d'/> The vineyard: Berlin's Philharmonie, by Hans Scharoun with the acoustician Lothar Cremer, 1963, with the audience on terraces whose low walls reflect sound sideways. <bookmark mark='e'/> The surround: Hamburg's Elbphilharmonie of 2017, lined with ten thousand different gypsum panels, each cell shaped to scatter. <bookmark mark='f'/> Computer modelling has become standard in major hall design, and often as a model at a tenth of the size as well. How do you simulate a hall?", marks="bcdef")

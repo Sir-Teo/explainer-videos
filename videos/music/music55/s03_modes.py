@@ -60,12 +60,7 @@ class Modes(SoundScene):
         note = label(rf"{len(d['modes'])} modes below 120 Hz, \ unevenly spaced: \ gaps of 10 Hz and more at the bottom", font_size=18, color=WHITE).to_edge(DOWN, buff=0.4)
         head = label(r"the modes of a living room", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here are the room's modes up to a hundred and twenty hertz, with the axial ones tallest, because they are the "
-            "strongest. <bookmark mark='a'/> The first few stand alone: one, nought, nought along the length at thirty-four "
-            "hertz, nought, one, nought across the width at forty-three, the first tangential mode at fifty-five, the height at "
-            f"sixty-four. <bookmark mark='b'/> There are {say(len(d['modes']))} below a hundred and twenty hertz, crowding "
-            "together as the frequency rises, but at the bottom there are gaps of ten hertz and more. A bass note that falls on a "
-            "mode booms; one that falls in a gap almost disappears."
+            f"Here are the room's modes up to a hundred and twenty hertz, with the axial ones tallest, as a visual convention; actual strengths depend on damping and source and receiver positions. <bookmark mark='a'/> The first few stand alone: one, nought, nought along the length at thirty-four hertz, nought, one, nought across the width at forty-three, the first tangential mode at fifty-five, the height at sixty-four. <bookmark mark='b'/> There are {say(len(d['modes']))} below a hundred and twenty hertz, crowding together as the frequency rises, but at the bottom there are gaps of ten hertz and more. Modes can create peaks and dips, depending on source and receiver positions and damping."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(key), FadeIn(ghost(st, 0.25)))
             vo.wait_until("a")
@@ -126,10 +121,10 @@ class Modes(SoundScene):
             "Where do modes stop mattering? <bookmark mark='a'/> Each mode is a resonance with a bandwidth set by the room's "
             "damping, about two point two over the reverberation time. <bookmark mark='b'/> Manfred Schroeder worked out in "
             "1954 that once about three modes overlap within each bandwidth, the response is a random jumble of peaks and dips, "
-            "the same everywhere on average, and Sabine's statistics apply. That happens above two thousand times the square "
+            "the same everywhere on average, making statistical descriptions more useful, provided their other assumptions are adequate. That happens above two thousand times the square "
             f"root of T over V. <bookmark mark='c'/> For the living room, {say(d['fs_room'])} hertz: its whole bass is a few "
             f"separate resonances. <bookmark mark='d'/> For a concert hall, {say(d['fs_hall'])} hertz: statistical almost "
-            "everywhere. Small rooms have a bass problem; halls do not."
+            "everywhere. Small rooms generally have separated modes over more of the bass range; halls can still have low-frequency problems."
         ) as vo:
             self.play(FadeIn(head), FadeIn(eq))
             for mark, r in zip("abcd", rows):
@@ -179,7 +174,7 @@ class Modes(SoundScene):
     def fixes(self):
         items = [
             (r"move the listener and the loudspeaker: \ away from the room's halfway and third-way planes, \ out of the corners", WHITE),
-            (r"bass traps: \ thick absorbers or tuned panels in the corners, \ where every mode is loud", WHITE),
+            (r"bass traps: \ thick absorbers or tuned panels in the corners, \ where ideal rigid-box pressure modes have antinodes; porous and pressure absorbers exploit different parts of the field", WHITE),
             (r"several subwoofers, \ placed so that they drive the modes against each other \ (Welti, \ 2002)", WHITE),
             (r"equalization can cut a peak, \ but cannot fill a node: \ no amount of power reaches a place where the mode is silent", TUNE),
             (r"and small rooms remain modal: \ the bass of a living room is never a hall's", GREY_A),
@@ -187,7 +182,7 @@ class Modes(SoundScene):
         rows_scene(self, r"taming the modes", items,
                    "What can be done? <bookmark mark='b'/> Move the listener and the loudspeaker, away from the planes halfway and "
                    "a third of the way across the room, and out of the corners. <bookmark mark='c'/> Put bass traps, thick absorbers "
-                   "or tuned panels, in the corners, where every mode is loud. <bookmark mark='d'/> Use several subwoofers, placed "
+                   "or tuned panels, in the corners, where ideal rigid-box pressure modes have antinodes; porous and pressure absorbers exploit different parts of the field. <bookmark mark='d'/> Use several subwoofers, placed "
                    "so that they drive the modes against each other, as Todd Welti showed in 2002. <bookmark mark='e'/> "
                    "Equalization can cut a peak, but it cannot fill a node: no amount of power reaches a place where a mode is "
                    "silent. <bookmark mark='f'/> And small rooms remain modal: the bass of a living room is never a hall's.", marks="bcdef")

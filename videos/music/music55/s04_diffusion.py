@@ -22,7 +22,7 @@ class Diffusion(SoundScene):
     def absorbers(self):
         items = [
             (r"porous absorbers \ (foam, \ mineral wool, \ curtains): \ air rubbing through fibres; \ they work where the air moves fastest", WHITE),
-            (r"next to a wall the air cannot move: \ a porous absorber must stand a quarter wavelength out, \ 86 cm for 100 Hz", WHITE),
+            (r"next to a wall the air cannot move: \ quarter-wave spacing is one design guide, \ not a requirement for absorption", WHITE),
             (r"panel absorbers: \ a sheet on an air gap, \ a mass on a spring, \ absorbing near its resonance, \ in the bass", WHITE),
             (r"Helmholtz resonators: \ a bottle's resonance, \ or slots in a board over a cavity", WHITE),
             (r"too much absorption makes a room dead: \ quiet, \ dry, \ and tiring to play in", TUNE),
@@ -30,7 +30,7 @@ class Diffusion(SoundScene):
         rows_scene(self, r"three ways to absorb", items,
                    "First, absorbers, of three kinds. <bookmark mark='b'/> Porous absorbers, foam, mineral wool, curtains, work by "
                    "air rubbing through fibres, so they work where the air moves fastest. <bookmark mark='c'/> Next to a wall the "
-                   "air cannot move at all, so a porous absorber must stand a quarter of a wavelength out to catch a frequency: "
+                   "air cannot move at all, so a quarter-wavelength spacing can place it near a velocity maximum in a simple normal-incidence standing wave; useful absorption does not require exactly that spacing: "
                    "eighty-six centimetres for a hundred hertz. That is why thin foam only removes the treble. "
                    "<bookmark mark='d'/> Panel absorbers are a sheet over an air gap, a mass on a spring, absorbing near their "
                    "resonance, in the bass. <bookmark mark='e'/> Helmholtz resonators are a bottle's resonance, or slots in a board "
@@ -82,15 +82,15 @@ class Diffusion(SoundScene):
     # ------------------------------------------------------------------
     def idea(self):
         items = [
-            (r"a flat wall is a mirror: \ all the reflected energy goes one way", WHITE),
-            (r"a diffuser sends it every way, \ without absorbing it", WHITE),
+            (r"a flat wall is a mirror: \ an ideal large flat wall reflects specularly", WHITE),
+            (r"a diffuser redistributes reflection; \ real devices also absorb", WHITE),
             (r"the trick: \ a surface whose wells delay the reflection by different amounts, \ so that the reflected wavefront is wrinkled", WHITE),
-            (r"Schroeder \ (1975): \ choose the depths by a number-theoretic sequence, \ and the energy spreads evenly into every direction the wells allow", TUNE),
+            (r"Schroeder \ (1975): \ choose the depths by a number-theoretic sequence, \ giving equal ideal discrete phase coefficients at the design frequency", TUNE),
             (r"his quadratic-residue diffuser \ (1979): \ depth of well $n$ proportional to $n^2 \bmod N$, \ for a prime $N$", GREY_A),
         ]
         rows_scene(self, r"scattering without absorbing", items,
-                   "What does a diffuser do? <bookmark mark='b'/> A flat wall is a mirror: all the reflected energy goes one way. "
-                   "<bookmark mark='c'/> A diffuser sends it every way, and absorbs almost none. <bookmark mark='d'/> The trick is a "
+                   "What does a diffuser do? <bookmark mark='b'/> A flat wall is a mirror: an ideal large flat wall reflects specularly. "
+                   "<bookmark mark='c'/> A diffuser redistributes reflected energy over directions within a useful band; real devices also absorb some. <bookmark mark='d'/> The trick is a "
                    "surface of wells of different depths, each delaying its part of the reflection by a different amount, so that "
                    "the reflected wavefront comes back wrinkled. <bookmark mark='e'/> Manfred Schroeder, from 1975, found how to "
                    "choose the depths: by a sequence from number theory, which spreads the energy evenly into every direction the "
@@ -144,17 +144,11 @@ class Diffusion(SoundScene):
             MathTex(r"\text{well } n \text{ returns the wave delayed by } \frac{2d_n}{c}: \quad \text{phase } \ 2\pi\,\frac{n^2}{N}\,\frac{f}{f_0}", font_size=30),
             MathTex(r"\text{at } f_0, \text{ the far field in diffraction direction } k: \quad R_k = \frac{1}{N}\sum_{n=0}^{N-1} e^{2\pi i\,(n^2 + kn)/N}", font_size=30),
             MathTex(r"|R_k| = \frac{1}{\sqrt{N}} \ \text{ for every } k \qquad (\text{Gauss's sum, } N \text{ an odd prime})", font_size=32, color=TUNE),
-            MathTex(r"\text{equal energy into every lobe:} \ \sin\theta_k = \frac{k\,\lambda}{N w}, \quad |\sin\theta_k| \le 1", font_size=30),
+            MathTex(r"\text{ideal discrete phase coefficients:} \ \sin\theta_k = \frac{k\,\lambda}{N w}, \quad |\sin\theta_k| \le 1", font_size=30),
         ).arrange(DOWN, buff=0.45).move_to(DOWN * 0.1)
         head = label(r"why it works: \ a Gauss sum", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Why does it work? <bookmark mark='a'/> Well n sends the wave back after a round trip of twice its depth, a phase of "
-            "two pi times n squared over N at the design frequency. <bookmark mark='b'/> A periodic surface reflects only into "
-            "a few diffraction directions, one for each whole number k, and the strength of lobe k is this sum of N phases. "
-            "<bookmark mark='c'/> Gauss proved that for an odd prime N its size is one over root N for every k: not one lobe "
-            "large and the others small, but all the same. <bookmark mark='d'/> So the energy goes equally into every lobe that "
-            "can exist, every direction whose sine is k lambda over the period. A two-hundred-year-old theorem about remainders "
-            "hangs on the walls of recording studios."
+            "Why does it work? <bookmark mark='a'/> Well n sends the wave back after a round trip of twice its depth, a phase of two pi times n squared over N at the design frequency. <bookmark mark='b'/> A periodic surface reflects only into a few diffraction directions, one for each whole number k, and the strength of lobe k is this sum of N phases. <bookmark mark='c'/> For this ideal discrete phase sequence at the design frequency and odd prime N, the normalized Gauss sum has magnitude one over root N for every discrete diffraction order: not one lobe large and the others small, but all the same. <bookmark mark='d'/> This equal coefficient result does not by itself guarantee equal radiated power: well directivity, incidence, finite size and propagating angles also matter. Propagating orders satisfy sine theta equals k lambda over the period. A two-hundred-year-old theorem about remainders hangs on the walls of recording studios."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(lines, 0.25)))
             for mark, ln in zip("abcd", lines):

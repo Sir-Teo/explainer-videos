@@ -25,13 +25,7 @@ class Sabine(SoundScene):
             (r"Sabine's stopwatch measured the time to inaudibility, \ close to the same thing", GREY_A),
         ]
         rows_scene(self, r"a sound that dies away", items,
-                   "What did Sabine measure? <bookmark mark='b'/> A sound in a room reaches you directly, then by one wall, by two, "
-                   "by three, by ever more paths and ever fainter. <bookmark mark='c'/> After a few dozen reflections the energy is "
-                   "spread evenly through the room and moves in every direction at once: a diffuse field. <bookmark mark='d'/> Each "
-                   "bounce loses a fraction of the energy, so the level falls by a fixed number of decibels every second. "
-                   "<bookmark mark='e'/> The reverberation time, T sixty, is how long the level takes to fall by sixty decibels, to "
-                   "a millionth of its energy. <bookmark mark='f'/> Sabine's stopwatch measured the time until the organ pipe "
-                   "became inaudible, which in a quiet room at night is close to the same thing.", marks="bcdef")
+                   "What did Sabine measure? <bookmark mark='b'/> A sound in a room reaches you directly, then by one wall, by two, by three, by ever more paths and ever fainter. <bookmark mark='c'/> In the diffuse-field idealization, energy is approximately uniform and moves in every direction at once: a diffuse field. <bookmark mark='d'/> Each bounce loses a fraction of the energy, so the level falls by a fixed number of decibels every second. <bookmark mark='e'/> The reverberation time, T sixty, is how long the level takes to fall by sixty decibels, to a millionth of its energy. <bookmark mark='f'/> Sabine's stopwatch measured the time until the organ pipe became inaudible, a threshold-dependent decay time that is not automatically a calibrated sixty-decibel interval.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def derive(self):
@@ -98,7 +92,7 @@ class Sabine(SoundScene):
         with self.voiceover(
             f"From {say(d['Ts'][0], 1)} seconds, to {say(d['Ts'][1], 1)}, to {say(d['Ts'][2], 1)}: a muddle, then a "
             "church, then a lecture room. Sabine's own cure for the Fogg was felt on the walls; it helped, though the room was "
-            "never good, and it was demolished in 1973."
+            "never good, and the original building was later demolished."
         ):
             self.play(Indicate(dots[2], color=TUNE, scale_factor=1.4))
         self.wait(0.4)
@@ -119,7 +113,7 @@ class Sabine(SoundScene):
                    "over four V times a second. <bookmark mark='d'/> Carl Eyring, at Bell Labs in 1930, counted the jumps: T "
                    "sixty is nought point one six one V over minus S times the log of one minus the average absorption. "
                    "<bookmark mark='e'/> For a live room the two agree. For a dead one Sabine overestimates: make every surface an "
-                   "open window, alpha one, and Sabine's law still gives a decay, while Eyring's correctly gives none. "
+                   "open window, alpha one, and Sabine's law still gives a decay, while Eyring tends to zero reverberation time; a fully open room no longer supports the assumed diffuse reverberant field. "
                    "<bookmark mark='f'/> And the air absorbs too, in the treble: add four m V to the absorption, which matters in "
                    "big halls above two kilohertz.", marks="bcdef")
 
@@ -143,7 +137,7 @@ class Sabine(SoundScene):
         with self.voiceover(
             "Absorption depends on frequency, so a room has a reverberation time for every band. <bookmark mark='a'/> Hard "
             "plaster absorbs almost nothing anywhere. A wooden panel on a frame absorbs the bass, because it moves. Carpet and "
-            "curtains absorb the treble, because the air must squeeze through their fibres, and fibres only catch fast air. "
+            "curtains absorb the treble, because the air must squeeze through their fibres, and viscous and thermal losses depend on thickness, flow resistivity, wavelength and placement. "
             "<bookmark mark='b'/> The best absorber in a concert hall is the audience, which is why halls are tuned with "
             "seats that absorb as much as a person does, so that a rehearsal sounds like a concert."
         ) as vo:
@@ -174,7 +168,7 @@ class Sabine(SoundScene):
             "lecture room, under a second, so that each syllable is gone before the next. <bookmark mark='b'/> For music, "
             "longer: opera and chamber music about a second and a half, a symphony hall about two seconds, enough to join the "
             "notes of a phrase and to make an orchestra sound bigger than it is. <bookmark mark='c'/> Organ music was written "
-            "for churches of three or four seconds and more, and plainchant for cathedrals that ring for six. Music and rooms "
+            "for churches of three or four seconds and more, and plainchant can be heard in cathedrals with much longer decays; practice and buildings vary. Music and rooms "
             "grew up together."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(ticks), FadeIn(ghost(bars, 0.25)))
