@@ -128,6 +128,6 @@ class Inter(SoundScene):
         rows_scene(self, r"hocket: \ the trick reversed", items,
                    "The reverse works too. <bookmark mark='b'/> Two players alternating notes can make one melody: medieval "
                    "hocket, from Part 23, and the interlocking parts of Part 37's mbira and gamelan. <bookmark mark='c'/> For the "
-                   "parts to fuse into one line they must share register and timbre, and leave no gaps. <bookmark mark='d'/> The "
+                   "parts to fuse into one line they often benefit from compatible register, timbre and timing; none is an absolute necessary condition for every listener and passage. <bookmark mark='d'/> The "
                    "same rules, read backwards: proximity binds what was played apart. <bookmark mark='e'/> Chapter four turns to "
                    "sounds that arrive at the same moment.", marks="bcde")

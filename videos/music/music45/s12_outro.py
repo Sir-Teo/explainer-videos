@@ -79,7 +79,7 @@ class Outro(SoundScene):
             "with one constant, a competition between nearness in time and nearness in pitch, fits the streaming boundary. "
             "<bookmark mark='c'/> Harmonicity, common onset, common fate and continuity group partials into sources. "
             "<bookmark mark='d'/> Counterpoint's rules protect those groupings. <bookmark mark='e'/> And pitch has height and "
-            "chroma, and ordinary memory keeps absolute pitch without the labels."
+            "chroma, and many listeners retain approximate pitch information for familiar music without explicit labels."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

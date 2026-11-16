@@ -18,36 +18,26 @@ class Absolute(SoundScene):
     def ap(self):
         items = [
             (r"absolute pitch: \ naming a note, \ or singing one, \ with no reference tone", WHITE),
-            (r"rare in the West: \ often quoted as about 1 in 10,000, \ more common among musicians who started early", WHITE),
+            (r"prevalence depends on definition and sample; \\ often associated with early musical training", WHITE),
             (r"Deutsch and colleagues \ (2006): \ far more common among students who speak a tone language and trained early", WHITE),
             (r"early training and a critical period matter; \ genes probably do too", TUNE),
             (r"it is a labelling skill: \ possessors still hear melody by its intervals", GREY_A),
         ]
         rows_scene(self, r"absolute pitch", items,
-                   "Some people can name a note with no reference tone at all. <bookmark mark='b'/> Absolute pitch is rare in "
-                   "the West, often quoted at about one person in ten thousand, and more common among musicians who began very "
-                   "early. <bookmark mark='c'/> Diana Deutsch and colleagues found in 2006 that it was far more common among "
-                   "conservatory students who spoke a tone language, such as Mandarin, and had trained early. "
-                   "<bookmark mark='d'/> Early training and a critical period matter, and genes probably do too. "
-                   "<bookmark mark='e'/> It is a labelling skill: possessors still hear a melody by its intervals.",
+                   "Some people can name a note with no reference tone at all. <bookmark mark='b'/> Population prevalence is uncertain and depends on the definition and sample; absolute pitch is uncommon in many Western unselected samples, and more common among musicians who began very early. <bookmark mark='c'/> Diana Deutsch and colleagues found in 2006 that it was far more common among conservatory students who spoke a tone language, such as Mandarin, and had trained early. <bookmark mark='d'/> Early training and a critical period matter, and genes probably do too. <bookmark mark='e'/> It is a labelling skill: possessors still hear a melody by its intervals.",
                    marks="bcdef")
 
     # ------------------------------------------------------------------
     def memory(self):
         items = [
             (r"Daniel Levitin \ (1994): \ people without absolute pitch sang familiar pop songs from memory", WHITE),
-            (r"most started within two semitones of the recording's key; \ many within one", WHITE),
-            (r"Levitin and Cook \ (1996): \ tempo is remembered just as well", WHITE),
+            (r"many reproduced a familiar recording's pitch within one or two semitones", WHITE),
+            (r"Levitin and Cook \ (1996): \ familiar recordings can also support useful tempo memory", WHITE),
             (r"ordinary listeners keep absolute pitch and tempo for music they know well; \ they lack only the labels", TUNE),
             (r"the Tune is remembered in whatever key it was learned", GREY_A),
         ]
         rows_scene(self, r"everyday pitch memory", items,
-                   "Everyone else remembers more than they think. <bookmark mark='b'/> In 1994 Daniel Levitin asked people "
-                   "without absolute pitch to sing familiar pop songs from memory, and most started within two semitones of the "
-                   "recording's key, many within one. <bookmark mark='c'/> With Perry Cook he showed in 1996 that tempo is "
-                   "remembered just as well. <bookmark mark='d'/> Ordinary listeners keep absolute pitch and tempo for music they "
-                   "know well; they lack only the labels. <bookmark mark='e'/> The Tune, too, is remembered in whatever key it "
-                   "was first learned.", marks="bcde")
+                   "Everyone else remembers more than they think. <bookmark mark='b'/> In 1994 Daniel Levitin asked people without absolute pitch to sing familiar pop songs from memory, and many reproduced the recording's pitch within one or two semitones. <bookmark mark='c'/> With Perry Cook he showed in 1996 that familiar recordings can also support useful tempo memory. <bookmark mark='d'/> Many listeners retain useful pitch and tempo information for familiar recordings, without necessarily having precise note labels or uniformly accurate recall. <bookmark mark='e'/> A familiar tune's remembered key can reflect particular recordings and exposure; not everyone recalls its first-learned key.", marks="bcde")
 
     # ------------------------------------------------------------------
     def relative(self):
@@ -85,7 +75,7 @@ class Absolute(SoundScene):
         ans = label(r"trial 1: \ the same; \ trial 2: \ a semitone higher", font_size=22, color=TUNE).to_edge(DOWN, buff=1.2)
         with self.voiceover(
             "The first was the same; the second was a semitone higher. Diana Deutsch showed in 1970 that the tones in between "
-            "are what make this hard: six tones of silence would leave the pitch intact, six intervening tones disturb it, "
+            "are what make this hard: a comparable silent delay often interferes less, six intervening tones disturb it, "
             "most of all when one of them is close in pitch to the tone being held. Pitch memory is fragile, and it is "
             "disturbed by other pitches."
         ):

@@ -71,7 +71,11 @@ class Timbre(SoundScene):
         dots = VGroup()
         for n, p in zip(names, xy):
             q = P_(p)
-            dots.add(VGroup(Dot(q, radius=0.09, color=TUNE), label(n, font_size=14, color=WHITE).next_to(q, RIGHT, buff=0.08)))
+            dot = Dot(q, radius=0.09, color=TUNE)
+            direction = LEFT if n == "horn" else RIGHT
+            name_label = label(n, font_size=14, color=WHITE).next_to(dot, direction, buff=0.12)
+            if n == "clarinet": name_label.shift(UP * 0.14)
+            dots.add(VGroup(dot, name_label))
         corr = sp["corr"]
         def top(dim):
             ks = sorted(corr, key=lambda k: -abs(corr[k][dim]))[:2]

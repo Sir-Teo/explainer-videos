@@ -19,17 +19,13 @@ class Model(SoundScene):
     def boundaries(self):
         items = [
             (r"van Noorden mapped two boundaries against tone repetition time \ (onset to onset)", WHITE),
-            (r"the temporal coherence boundary: \ above it, \ two streams are always heard, \ however hard you try to hold one", WHITE),
-            (r"the fission boundary: \ below it, \ one stream is always heard \ (about 1 to 2 semitones, \ nearly flat)", WHITE),
+            (r"the temporal coherence boundary: \ above it, \ two-stream reports dominate under these instructions", WHITE),
+            (r"the fission boundary: \ below it, \ one-stream reports dominated in those conditions \ (about 1 to 2 semitones, \ nearly flat)", WHITE),
             (r"between them, \ either can be heard: \ the ambiguous region", TUNE),
             (r"the coherence boundary climbs as the tones slow down", GREY_A),
         ]
         rows_scene(self, r"two boundaries", items,
-                   "Van Noorden mapped two boundaries against the tone repetition time, from one onset to the next. "
-                   "<bookmark mark='b'/> Above the temporal coherence boundary two streams are always heard, however hard you "
-                   "try to hold one. <bookmark mark='c'/> Below the fission boundary, about one to two semitones and nearly flat, "
-                   "one stream is always heard. <bookmark mark='d'/> Between them either can be heard: the ambiguous region. "
-                   "<bookmark mark='e'/> And the coherence boundary climbs as the tones slow down.", marks="bcde")
+                   "Van Noorden mapped two boundaries against the tone repetition time, from one onset to the next. <bookmark mark='b'/> Above the temporal coherence boundary two-stream reports dominated under the tested instructions. <bookmark mark='c'/> Below the fission boundary, about one to two semitones and nearly flat, one-stream reports dominated in those conditions. <bookmark mark='d'/> Between them either can be heard: the ambiguous region. <bookmark mark='e'/> And the coherence boundary climbs as the tones slow down.", marks="bcde")
 
     # ------------------------------------------------------------------
     def competition(self):
@@ -51,7 +47,7 @@ class Model(SoundScene):
             "<bookmark mark='e'/> Work it through and the boundary is a straight line in the repetition time, with a single "
             "constant, w over tau, to fit."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.15)))
+            self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.35)))
             for mark, r in zip("abcde", rows_):
                 vo.wait_until(mark)
                 self.play(FadeIn(r))
@@ -74,16 +70,16 @@ class Model(SoundScene):
         fb = DashedLine(P_(0.04, d["fission"]), P_(0.17, d["fission"]), color=BLUE)
         zones = VGroup(label(r"two streams", font_size=18, color=EAR).move_to(P_(0.07, 11.5)), label(r"one stream", font_size=18, color=BLUE).move_to(P_(0.14, 0.7)),
                        label(r"either", font_size=18, color=GREY_A).move_to(P_(0.15, 5.0)))
-        side = VGroup(label(r"pink: \ van Noorden's coherence boundary, \ read from his figure \ (to about a semitone)", font_size=17, color=EAR),
+        side = VGroup(label(r"pink: van Noorden's boundary, \\ read from the figure \\ (about one-semitone precision)", font_size=17, color=EAR),
                       label(r"gold: \ the model, \ one constant fitted", font_size=17, color=TUNE),
-                      label(rf"w / $\tau$ = {d['k']:.1f} ERB-numbers a second; \ error {d['rms_st']:.2f} semitones \ (root mean square)", font_size=17, color=WHITE),
+                      label(rf"w / $\tau$ = {d['k']:.1f} ERB-numbers per second \\ in-sample RMS error: {d['rms_st']:.2f} semitones", font_size=17, color=WHITE),
                       label(r"blue, \ dashed: \ the fission boundary", font_size=17, color=BLUE)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 4.6 + UP * 0.3)
         side.scale_to_fit_width(min(side.width, 4.6)).move_to(RIGHT * 4.6 + UP * 0.3)
         head = label(r"the model against the data", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Fit it. <bookmark mark='a'/> In pink, points on van Noorden's coherence boundary, read from his figure as "
             "Bregman's book reproduces it, good to about a semitone. <bookmark mark='b'/> In gold, the model, with its one "
-            f"constant fitted: {say(d['k'], 1)} ERB-numbers a second. It misses the points by "
+            f"constant fitted: {say(d['k'], 1)} ERB-numbers a second. On the same digitized points used to fit it, it misses by "
             f"{say(d['rms_st'], 2)} of a semitone on average. <bookmark mark='c'/> The dashed line is the fission boundary; "
             "between the two lies the region where either organisation can be heard. A one-line model of competition between "
             "nearness in time and nearness in pitch captures the boundary's shape."
@@ -145,7 +141,7 @@ class Model(SoundScene):
             window(snd, r"one semitone, \ fast", kind="synthesized", detail=r"sine tones", corner=DL, tag_corner=DR)
             pulse(snd, box, 0.0, c.duration, buff=0.1)
         with self.voiceover(
-            "You cannot. However hard you listen for the B tones alone, they stay part of a single trill-like line. That is "
+            "Many listeners find these B tones difficult to segregate; your percept can depend on attention, duration and individual hearing. That is "
             "the fission boundary: below it, attention cannot pull the sequence apart."
         ):
             self.play(Indicate(box))

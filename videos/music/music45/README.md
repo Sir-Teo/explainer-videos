@@ -129,3 +129,7 @@ python -m videos.music.labs 45                                  # the lab (write
   D. J. Levitin and P. R. Cook (1996).
 * A. J. E. Kell and others, *Neuron* (2018); E. C. Cherry, *JASA* (1953); S. A. MacDougall-Shackleton and others
   (1998).
+
+## Interpretation limits
+
+Illusion reports, side assignments and streaming boundaries vary with listener, attention, stimulus and task. The boundary error is an in-sample fit to approximate digitized points, not a held-out prediction. Grouping principles help explain selected voice-leading goals without deriving every historical convention. The timbre map uses standardized acoustic features, not listener similarity ratings. Absolute-pitch prevalence is sample-dependent; familiar-song memory is approximate. Source-separation models need not implement the same mechanisms as human hearing.

@@ -28,7 +28,7 @@ class Pitch(SoundScene):
                    "Pitch is built by the brain from a spectrum, as Part 4's missing fundamental showed. "
                    "<bookmark mark='b'/> It has two dimensions: height, which rises steadily, and chroma, which repeats every "
                    "octave. <bookmark mark='c'/> Roger Shepard drew it as a helix: C above C above C. <bookmark mark='d'/> "
-                   "Octave equivalence, notes an octave apart sharing a name, is found in almost every musical culture. "
+                   "Octave equivalence, notes an octave apart sharing a name, is widespread but its strength and musical use vary across populations and tasks. "
                    "<bookmark mark='e'/> Pull height and chroma apart, and pitch can go round in a circle.", marks="bcde")
 
     # ------------------------------------------------------------------

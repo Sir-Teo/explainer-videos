@@ -35,14 +35,14 @@ class Frontier(SoundScene):
     def separation(self):
         items = [
             (r"source separation: \ machines that undo the mixture, \ voice from band, \ violin from piano", WHITE),
-            (r"they use the same cues the ear does, \ learned rather than designed", WHITE),
+            (r"learned grouping cues may overlap with human cues", WHITE),
             (r"a separated stem is the machine's scene analysis, \ written out as audio \ (Part 64)", WHITE),
             (r"whether they separate where people do, \ and fail where people fail, \ is open", TUNE),
             (r"the scale illusion is a test case: \ which melodies would a network report?", GREY_A),
         ]
         rows_scene(self, r"machines that separate", items,
                    "A related frontier is source separation. <bookmark mark='b'/> Machines now undo the mixture: voice from band, "
-                   "violin from piano, <bookmark mark='c'/> using the same cues the ear does, learned rather than designed. "
+                   "violin from piano, <bookmark mark='c'/> using learned cues that may overlap with human grouping cues, without assuming the same internal mechanism. "
                    "<bookmark mark='d'/> A separated stem is the machine's scene analysis, written out as audio, Part 64's "
                    "subject. <bookmark mark='e'/> Whether they separate where people do, and fail where people fail, is open. "
                    "<bookmark mark='f'/> The scale illusion is a test case: which melodies would a network report?",
@@ -83,9 +83,4 @@ class Frontier(SoundScene):
             (r"music is often the hardest test for them: \ many sources, \ all wanted", GREY_A),
         ]
         rows_scene(self, r"when scene analysis fails", items,
-                   "Scene analysis also matters when it fails. <bookmark mark='b'/> Colin Cherry named the cocktail party problem "
-                   "in 1953: following one voice among many. <bookmark mark='c'/> With hearing loss or a cochlear implant, scene "
-                   "analysis is what fails first: sounds are heard but not separated. <bookmark mark='d'/> Implants carry only a "
-                   "few channels, so pitch and timbre cues blur and streams merge. <bookmark mark='e'/> Hearing aids now try to "
-                   "separate sources for the listener, with the methods of Part 64, <bookmark mark='f'/> and music is often their "
-                   "hardest test: many sources, all of them wanted.", marks="bcdef")
+                   "Scene analysis also matters when it fails. <bookmark mark='b'/> Colin Cherry named the cocktail party problem in 1953: following one voice among many. <bookmark mark='c'/> With hearing loss or a cochlear implant, difficulty separating sources can be a major challenge, alongside reduced audibility and spectral or temporal resolution. <bookmark mark='d'/> Implants carry only a few channels, so pitch and timbre cues blur and streams merge. <bookmark mark='e'/> Hearing aids now try to separate sources for the listener, with the methods of Part 64, <bookmark mark='f'/> and music is often their hardest test: many sources, all of them wanted.", marks="bcdef")

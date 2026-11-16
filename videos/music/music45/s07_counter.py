@@ -25,12 +25,7 @@ class Counter(SoundScene):
             (r"Part 16's rules, \ seen from the listener's side", GREY_A),
         ]
         rows_scene(self, r"rules from perception", items,
-                   "Now the payoff. <bookmark mark='b'/> In 2001 David Huron published a long paper, Tone and Voice, that derives "
-                   "the rules of voice leading from how hearing groups sound. <bookmark mark='c'/> Assume one goal: several lines, "
-                   "each heard as a line, none lost and none merged with another. <bookmark mark='d'/> Then each classical rule "
-                   "turns out to protect one of the grouping principles, <bookmark mark='e'/> and his counts in the repertoire "
-                   "showed composers obeying the rules more strictly where that goal mattered more. <bookmark mark='f'/> These "
-                   "are Part 16's rules, seen from the listener's side.", marks="bcdef")
+                   "Now the payoff. <bookmark mark='b'/> In 2001 David Huron published a long paper, Tone and Voice, that derives the rules of voice leading from how hearing groups sound. <bookmark mark='c'/> Assume one goal: several lines, each heard as a line, none lost and none merged with another. <bookmark mark='d'/> Several voice-leading conventions can then be interpreted as promoting perceptual independence, alongside historical and stylistic explanations, <bookmark mark='e'/> and his counts in the repertoire showed composers obeying the rules more strictly where that goal mattered more. <bookmark mark='f'/> These are Part 16's rules, seen from the listener's side.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def hear(self):
@@ -135,12 +130,10 @@ class Counter(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"two scales", kind="synthesized", detail=r"sine tones", corner=DL, tag_corner=DR)
             flash(snd, r.notes, [(i % n) * d["ioi"] for i in range(2 * n)], hot=WHITE, base=GREY_B)
+            cursor(snd, r, 0.0, d["ioi"], color=WHITE)
         cap2 = label(r"heard: \ a high line that comes down and goes back up, \ a low line that goes up and comes back down", font_size=19, color=EAR).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "Most people do not hear the scales cross. They hear a high line that comes down and bounces back up, and a low "
-            "line that rises and falls back, each staying in its own range: the scale illusion again, without the ears. "
-            "Yoshitaka Tougas and Bregman studied this in 1985. A composer who wants two crossing lines heard as crossing "
-            "must give them different timbres."
+            'Most people do not hear the scales cross. They hear a high line that comes down and bounces back up, and a low line that rises and falls back, each staying in its own range: the scale illusion again, without the ears. Tougas and Bregman studied this in 1985. Contrasting timbres can help preserve crossing-line identity, alongside rhythm, articulation and prior context.'
         ):
             self.play(FadeOut(a), FadeOut(b), FadeOut(cap), Create(bh), Create(bl), FadeIn(cap2))
         self.wait(0.3)

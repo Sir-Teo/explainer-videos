@@ -30,7 +30,11 @@ class Hook(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"each ear its own notes", kind="synthesized", detail=r"sine tones, \ stereo", corner=DL, tag_corner=DR)
             pulse(snd, box, 0.0, c.duration, buff=0.1)
-        self.play(FadeOut(box))
+        report = VGroup(
+            label(r"a common report: \ two smooth melodies", font_size=25, color=TUNE),
+            label(r"grouping and perceived side vary across listeners", font_size=20, color=GREY_A),
+        ).arrange(DOWN, buff=0.4).move_to(DOWN * 0.2)
+        self.play(ReplacementTransform(box, report))
         L = keyroll(d["left"], width=5.0, height=1.6, lo=58, hi=74, colors=[BLUE] * 8).move_to(LEFT * 3.3 + UP * 0.9)
         R = keyroll(d["right"], width=5.0, height=1.6, lo=58, hi=74, colors=[EAR] * 8).move_to(RIGHT * 3.3 + UP * 0.9)
         got = label(r"what each ear was given", font_size=18, color=GREY_A).next_to(VGroup(L, R), UP, buff=0.15)
@@ -38,8 +42,8 @@ class Hook(SoundScene):
         Lo = keyroll(d["heard_low"], width=5.0, height=1.6, lo=58, hi=74, colors=[TUNE] * 8).move_to(LEFT * 3.3 + DOWN * 1.6)
         heard = label(r"what most right-handed listeners hear", font_size=18, color=TUNE).next_to(VGroup(H, Lo), UP, buff=0.15)
         with self.voiceover(
-            "Most people hear a smooth melody on the right, going down and back up, and another on the left, going up and "
-            "back down. <bookmark mark='a'/> But look at what each ear was actually given: notes jumping by "
+            "A common report is a smooth melody on the right, going down and back up, and another on the left, going up and "
+            "back down. Side assignment and grouping vary across listeners. <bookmark mark='a'/> But look at what each ear was actually given: notes jumping by "
             f"{say(d['leap_right'], 1)} semitones on average, an ascending and a descending scale chopped up and dealt "
             "alternately to the two ears. <bookmark mark='b'/> What you heard was regrouped by pitch: the higher notes, "
             f"wherever they came from, made one smooth line, moving {say(d['leap_heard'], 1)} semitones a step, and the "
@@ -47,7 +51,7 @@ class Hook(SoundScene):
             "moves by small steps to the truth about which ear heard what."
         ) as vo:
             vo.wait_until("a")
-            self.play(FadeIn(L), FadeIn(R), FadeIn(got))
+            self.play(FadeOut(report), FadeIn(L), FadeIn(R), FadeIn(got))
             vo.wait_until("b")
             self.play(FadeIn(H), FadeIn(Lo), FadeIn(heard))
         self.wait(0.4)
@@ -60,14 +64,10 @@ class Hook(SoundScene):
             (r"the mind returns a scene: \ separate voices, \ each with its own pitch, \ timbre and place", WHITE),
             (r"Albert Bregman called the process `auditory scene analysis' \ (1990)", WHITE),
             (r"its rules can be measured, \ modelled and turned into music", TUNE),
-            (r"and Part 16's rules of counterpoint fall out of them", GREY_A),
+            (r"and they help explain some voice-leading conventions under a goal of perceptual independence", GREY_A),
         ]
         rows_scene(self, r"one wave, \ a whole scene", items,
-                   "The ear receives one pressure wave on each side, every voice and instrument summed together. "
-                   "<bookmark mark='b'/> The mind returns a scene: separate voices, each with its own pitch, timbre and place. "
-                   "<bookmark mark='c'/> Albert Bregman called the process auditory scene analysis, in his book of 1990. "
-                   "<bookmark mark='d'/> Its rules can be measured, modelled and turned into music, <bookmark mark='e'/> and "
-                   "Part 16's rules of counterpoint fall out of them.", marks="bcde")
+                   "The ear receives one pressure wave on each side, every voice and instrument summed together. <bookmark mark='b'/> The mind returns a scene: separate voices, each with its own pitch, timbre and place. <bookmark mark='c'/> Albert Bregman called the process auditory scene analysis, in his book of 1990. <bookmark mark='d'/> Its rules can be measured, modelled and turned into music, <bookmark mark='e'/> and they help explain some voice-leading conventions under a goal of perceptual independence.", marks="bcde")
 
     # ------------------------------------------------------------------
     def plan(self):
