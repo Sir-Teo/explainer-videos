@@ -56,6 +56,20 @@ Part 36 adds groups:
 * :func:`illusory_correlation`: Hamilton and Gifford's design, with distinctive (rare group, rare behaviour) events
   encoded more strongly; the judged rate of undesirable acts in each group.
 
+Part 37 adds bonds and bargains:
+
+* :func:`fs_utility`, :func:`fs_threshold` and :func:`ultimatum`: Fehr and Schmidt's inequity aversion.  A responder
+  who dislikes earning less (weight alpha) rejects any share below alpha / (1 + 2 alpha); a proposer facing a
+  population of such responders offers what maximizes expected payoff, which is far above the "rational" minimum.
+* :func:`public_goods`: rounds of a linear public-goods game with conditional cooperators (who match a fraction of
+  what the others gave last round) and free riders; contributions decay.  With costly punishment of those below the
+  group's average, free riders raise their contributions and cooperation holds.
+* :func:`ipd_tournament`: a round-robin of iterated prisoner's dilemmas among simple strategies, in the spirit of
+  Axelrod's tournaments, with or without noise in executing moves.
+* :func:`overfit_divorce`: a classifier fitted to a small sample of couples with many measured variables, scored on
+  the couples it was fitted to and by leave-one-out cross-validation: in-sample accuracy is high even when the
+  variables carry little real signal.
+
 Everything here is a simulated model and is labelled simulated; it does not stand in for any study's data.  Nothing
 here imports manim.
 """
@@ -68,7 +82,8 @@ __all__ = ["cascade", "cascade_size", "cascade_curve", "degroot", "influence_wei
            "clusters", "ring_lattice", "rewire", "contagion", "crowd", "influence_rounds", "gini", "music_market",
            "bystanders", "social_impact", "drive", "mentions", "grid_distances", "action_probs", "goal_posterior",
            "kelley", "dunning_kruger", "tajfel_matrix", "allocate", "iat_d", "iat_study",
-           "list_experiment", "pipeline", "illusory_correlation"]
+           "list_experiment", "pipeline", "illusory_correlation", "fs_utility", "fs_threshold",
+           "ultimatum", "public_goods", "overfit_divorce", "ipd_tournament"]
 
 
 # ---------------------------------------------------------------- thresholds
@@ -474,4 +489,127 @@ def illusory_correlation(counts=((18, 8), (9, 4)), boost: float = 0.6) -> dict:
     b_neg_w = b_neg * (1 + boost)
     return {"actual": (a_neg / (a_pos + a_neg), b_neg / (b_pos + b_neg)),
             "judged": (a_neg / (a_pos + a_neg), b_neg_w / (b_pos + b_neg_w))}
+
+
+# ---------------------------------------------------------------- bonds and bargains (Part 37)
+
+def fs_utility(mine: float, theirs: float, alpha: float, beta: float) -> float:
+    """Fehr and Schmidt's two-player utility: one's own payoff, minus alpha times any shortfall against the other,
+    minus beta times any lead."""
+    return mine - alpha * max(theirs - mine, 0.0) - beta * max(mine - theirs, 0.0)
+
+
+def fs_threshold(alpha) -> np.ndarray:
+    """The smallest share of a pie of 1 an inequity-averse responder accepts: s - alpha (1 - 2 s) >= 0, so
+    s >= alpha / (1 + 2 alpha); a responder with alpha = 0 accepts anything."""
+    a = np.asarray(alpha, float)
+    return a / (1 + 2 * a)
+
+
+def ultimatum(alphas, offers=None) -> dict:
+    """A proposer who keeps 1 - s and faces responders with the given alphas: the acceptance rate of each offer s,
+    the proposer's expected payoff (1 - s) P(accept), and the offer that maximizes it."""
+    t = fs_threshold(alphas)
+    s = np.linspace(0, 0.5, 51) if offers is None else np.asarray(offers, float)
+    accept = np.array([(t <= x + 1e-12).mean() for x in s])
+    payoff = (1 - s) * accept
+    return {"offers": s, "accept": accept, "payoff": payoff, "best": float(s[int(np.argmax(payoff))])}
+
+
+def public_goods(n_groups: int = 200, size: int = 4, rounds: int = 10, punishment: bool = False,
+                 free_riders: float = 0.25, slope: float = 0.9, start: float = 0.6, deterrence: float = 0.35,
+                 seed: int = 0) -> np.ndarray:
+    """Average contribution (as a share of the endowment) in each round of a linear public-goods game.  Conditional
+    cooperators give ``slope`` times what the others gave on average last round, with noise; free riders give
+    nothing.  With punishment, anyone below the group's average is punished and moves ``deterrence`` of the way
+    toward it next round, and cooperators, protected from being exploited, keep their level."""
+    rng = np.random.default_rng(seed)
+    kind = rng.random((n_groups, size)) < free_riders
+    c = np.where(kind, rng.uniform(0, 0.2, (n_groups, size)), np.clip(rng.normal(start, 0.15, (n_groups, size)), 0, 1))
+    out = [c.mean()]
+    for _ in range(rounds - 1):
+        others = (c.sum(axis=1, keepdims=True) - c) / (size - 1)
+        coop = np.clip(slope * others + rng.normal(0, 0.05, c.shape), 0, 1)
+        free = np.zeros_like(c)
+        if punishment:
+            avg = c.mean(axis=1, keepdims=True)
+            coop = np.clip(np.maximum(coop, c) + rng.normal(0, 0.03, c.shape), 0, 1)
+            free = np.clip(c + deterrence * np.maximum(avg - c, 0) + 0.05, 0, 1)
+        c = np.where(kind, free, coop)
+        out.append(c.mean())
+    return np.array(out)
+
+
+def overfit_divorce(n: int = 56, p: int = 30, signal: float = 0.25, seed: int = 0) -> dict:
+    """``n`` couples, ``p`` measured variables of which only the first carries ``signal`` (a standardized effect on
+    a latent risk); about a third divorce.  A linear discriminant (least squares on the outcome) is fitted to all n
+    and scored on them, and by leave-one-out.  Returns both accuracies and the base-rate accuracy."""
+    rng = np.random.default_rng(seed)
+    X = rng.normal(size=(n, p))
+    risk = signal * X[:, 0] + rng.normal(size=n)
+    y = (risk > np.quantile(risk, 2 / 3)).astype(float)
+    Z = np.column_stack([np.ones(n), X])
+    beta, *_ = np.linalg.lstsq(Z, y, rcond=None)
+    cut = 1 - y.mean()
+    def classify(fit):
+        return (fit > np.quantile(fit, cut)).astype(float)
+    insample = float((classify(Z @ beta) == y).mean())
+    loo = np.empty(n)
+    for i in range(n):
+        m = np.arange(n) != i
+        b, *_ = np.linalg.lstsq(Z[m], y[m], rcond=None)
+        loo[i] = Z[i] @ b
+    cv = float((classify(loo) == y).mean())
+    return {"insample": insample, "loo": cv, "base": float(max(y.mean(), 1 - y.mean()))}
+
+
+IPD_STRATEGIES = ("tit for tat", "always cooperate", "always defect", "grim trigger", "tit for two tats",
+                  "win-stay lose-shift", "random")
+
+
+def _ipd_move(name, mine, theirs, rng):
+    if name == "always cooperate":
+        return 1
+    if name == "always defect":
+        return 0
+    if name == "random":
+        return int(rng.random() < 0.5)
+    if not theirs:
+        return 1
+    if name == "tit for tat":
+        return theirs[-1]
+    if name == "grim trigger":
+        return int(all(theirs))
+    if name == "tit for two tats":
+        return int(not (len(theirs) >= 2 and theirs[-1] == 0 and theirs[-2] == 0))
+    if name == "win-stay lose-shift":
+        return mine[-1] if mine[-1] == theirs[-1] else 1 - mine[-1]
+    raise ValueError(name)
+
+
+def ipd_tournament(strategies=IPD_STRATEGIES, rounds: int = 200, noise: float = 0.0, seed: int = 0,
+                   payoff=(3, 0, 5, 1)) -> dict:
+    """Every strategy plays every other (and a copy of itself) for ``rounds`` moves of the prisoner's dilemma with
+    payoffs (R, S, T, P) = (3, 0, 5, 1); with probability ``noise`` an intended move is flipped.  Returns each
+    strategy's average score per move over all its matches, and the matrix of average scores per move."""
+    R, Sx, T, P = payoff
+    rng = np.random.default_rng(seed)
+    k = len(strategies)
+    M = np.zeros((k, k))
+    for i in range(k):
+        for j in range(i, k):
+            a, b, pa, pb = [], [], 0.0, 0.0
+            for _ in range(rounds):
+                x = _ipd_move(strategies[i], a, b, rng)
+                y = _ipd_move(strategies[j], b, a, rng)
+                if noise and rng.random() < noise:
+                    x = 1 - x
+                if noise and rng.random() < noise:
+                    y = 1 - y
+                a.append(x)
+                b.append(y)
+                pa += (R if y else Sx) if x else (T if y else P)
+                pb += (R if x else Sx) if y else (T if x else P)
+            M[i, j], M[j, i] = pa / rounds, pb / rounds
+    return {"strategies": list(strategies), "matrix": M, "score": M.mean(axis=1)}
 

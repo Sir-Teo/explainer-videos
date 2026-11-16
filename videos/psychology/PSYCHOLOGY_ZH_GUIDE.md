@@ -1052,6 +1052,24 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Rebecca Saxe, Nancy Kanwisher; Jason Mitchell; Baker, Joshua Tenenbaum, Jara-Ettinger | 丽贝卡·萨克斯，南希·坎维舍；杰森·米切尔；贝克，约书亚·特南鲍姆，哈拉-埃廷格 |
 | Richard Nisbett, Timothy Wilson; Johansson, Hall; Andrew Ng, Stuart Russell; Michal Kosinski, Tomer Ullman; Fiske, Taylor | 理查德·尼斯贝特，蒂莫西·威尔逊；约翰松，霍尔；吴恩达，斯图尔特·罗素；米哈尔·科辛斯基，托默·厄尔曼；菲斯克，泰勒 |
 
+## Part 36: us and them
+
+| English | 中文 |
+|---|---|
+| minimal group; ingroup favouritism; allocation matrix; maximum difference; joint profit | 最简群体；内群体偏袒；分配矩阵；最大差异；共同收益 |
+| social identity; positive distinctiveness; self-categorization; realistic conflict; superordinate goal | 社会认同；积极的独特性；自我归类；现实冲突；超常目标 |
+| stereotype; stereotype content model; warmth, competence; illusory correlation | 刻板印象；刻板印象内容模型；温暖，能力；错觉相关 |
+| social desirability; list experiment (item-count technique); sensitive item | 社会赞许性；列表实验（列表计数技术）；敏感陈述 |
+| the Implicit Association Test (IAT); D score; compatible, incompatible block; test-retest reliability | 内隐联想测验；D分数；相容组块，不相容组块；重测信度 |
+| audit study; callback; paired testing; stereotype threat; diagnostic | 审计研究；回电；配对测试；刻板印象威胁；诊断性的 |
+| intergroup contact; deep canvassing; feeling thermometer; diversity training; the bias of crowds | 群体间接触；深度游说；情感温度计；多元化培训；人群的偏差 |
+| Henri Tajfel, Billig, Bundy, Flament; John Turner; Balliet, Wu, De Dreu; Muzafer Sherif; Gina Perry | 亨利·泰弗尔，比利格，邦迪，弗拉芒；约翰·特纳；巴利特，吴，德德鲁；穆扎费尔·谢里夫；吉娜·佩里 |
+| Hamilton, Gifford; Susan Fiske, Cuddy, Glick, Xu; Anthony Greenwald, McGhee, Schwartz; Lai; Oswald; Forscher | 汉密尔顿，吉福德；苏珊·菲斯克，卡迪，格利克，徐；安东尼·格林沃尔德，麦吉，施瓦茨；赖；奥斯瓦尔德；福斯彻 |
+| Marianne Bertrand, Sendhil Mullainathan; Lincoln Quillian, Devah Pager, Hexel, Midtbøen | 玛丽安·伯特兰，森德希尔·穆莱纳坦；林肯·奎利恩，德瓦·佩杰，黑克塞尔，米特伯恩 |
+| Claude Steele, Joshua Aronson; Paul Sackett, Hardison, Cullen; Paulette Flore, Joris Mulder, Jelte Wicherts | 克劳德·斯蒂尔，约书亚·阿伦森；保罗·萨基特，哈迪森，卡伦；波莱特·弗洛雷，约里斯·穆尔德，耶尔特·维歇茨 |
+| Gordon Allport; Thomas Pettigrew, Linda Tropp; Elizabeth Levy Paluck, Seth Green, Donald Green; Porat, Clark | 戈登·奥尔波特；托马斯·佩蒂格鲁，琳达·特罗普；伊丽莎白·利维·帕卢克，塞斯·格林，唐纳德·格林；波拉特，克拉克 |
+| Edward Chang, Katherine Milkman; Michael LaCour; David Broockman, Joshua Kalla; Peter Aronow; Keith Payne, Vuletich, Lundberg; Connor, Evers | 爱德华·张，凯瑟琳·米尔克曼；迈克尔·拉库尔；大卫·布鲁克曼，约书亚·卡拉；彼得·阿罗诺；基思·佩恩，武莱蒂奇，伦德伯格；康纳，埃弗斯 |
+
 ## Names
 
 | English | 中文 |

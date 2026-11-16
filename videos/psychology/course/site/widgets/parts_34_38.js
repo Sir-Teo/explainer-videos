@@ -293,4 +293,135 @@
       note: "Nothing you answer is stored or sent. The model is the one in explainer/psychology/psyche/social.py: an agent picks each move with probability proportional to exp(-0.7 (1 + distance left)), and Bayes' rule turns the path into beliefs about the goal, as in Baker, Saxe and Tenenbaum's inverse planning (2009).",
     });
   };
+
+  // ---- Part 36: a minimal group.  Pick a picture, then share points between a member of your group and one of the
+  // other, in Tajfel-style matrices.  The groups mean nothing; nothing is stored or sent. ----
+  W.minimal = function (el) {
+    var w = null, K = 13;
+    // each matrix: top and bottom rows (functions of the column j), and whether your group is on top
+    function rowsFor(type, off) {
+      var a = [], b = [], j;
+      for (j = 0; j < K; j++) {
+        if (type === "A") { a.push(7 + off + j); b.push(1 + off + 2 * j); }        // lead against total
+        else { a.push(7 + off + j); b.push(19 + off - j); }                       // lead against equality
+      }
+      return [a, b];
+    }
+    var PLAN = [["A", 0, true], ["B", 0, false], ["A", 4, false], ["B", 4, true],
+                ["A", 2, true], ["B", 2, false], ["A", 6, false], ["B", 6, true]];
+    var PICK = [0, 3, 6, 9, 12];   // the five columns a reader can choose, numbered 1 to 5
+    var S = { phase: "idle", group: -1, trial: -1, log: [], msg: "" };
+    var lastX = 0.5;
+    el.addEventListener("pointerdown", function (e) {
+      var b = task && task.box, c = e.target;
+      if (!b || !c || c.tagName !== "CANVAS") return;
+      var r = c.getBoundingClientRect();
+      lastX = (e.clientX - r.left - b.x) / b.w;
+    });
+    function matrix() {
+      var p = PLAN[S.trial], rows = rowsFor(p[0], p[1]);
+      return { type: p[0], ownTop: p[2], top: rows[0], bottom: rows[1] };
+    }
+    function choose(j) {
+      var m = matrix(), own = m.ownTop ? m.top[j] : m.bottom[j], other = m.ownTop ? m.bottom[j] : m.top[j];
+      // the lead a chooser would have given by taking the most points in total (type A) or equality (type B)
+      var base = m.type === "A" ? (m.ownTop ? m.top[K - 1] - m.bottom[K - 1] : m.bottom[K - 1] - m.top[K - 1]) : 0;
+      S.log.push({ type: m.type, col: j, own: own, other: other, lead: own - other, base: base });
+      task.count++;
+      S.trial++;
+      if (S.trial >= PLAN.length) { S.phase = "done"; task.clear(); }
+      if (w) w.render();
+    }
+    var task = T.create(el, {
+      keys: { "1": 0, "2": 1, "3": 2, "4": 3, "5": 4 },
+      accepting: function () { return S.phase === "assign" || S.phase === "share"; },
+      respond: function (v, how) {
+        if (S.phase === "assign") {
+          if (how === "tap") v = lastX < 0.5 ? 0 : 1;
+          if (v !== 0 && v !== 1) return;
+          S.group = v; S.phase = "share"; S.trial = 0;
+          if (w) w.render();
+          return;
+        }
+        if (how === "tap") v = Math.max(0, Math.min(PICK.length - 1, Math.floor(lastX * PICK.length)));
+        choose(PICK[v]);
+      },
+    });
+    function start() { task.clear(); S.phase = "assign"; S.group = -1; S.trial = -1; S.log = []; task.count = 0; }
+    function summary(type) {
+      var n = 0, lead = 0, base = 0, k;
+      for (k = 0; k < S.log.length; k++) if (!type || S.log[k].type === type) { n++; lead += S.log[k].lead; base += S.log[k].base; }
+      return { n: n, lead: n ? lead / n : 0, base: n ? base / n : 0 };
+    }
+    var NAMES = ["the grid pictures", "the circle pictures"];
+    w = QB.widget(el, {
+      title: "Us and them, from nothing",
+      sub: "First pick the picture you prefer (1 or 2, or tap a side). Then, eight times, share points between one member of your group and one member of the other, choosing one of the five numbered columns with keys 1 to 5, or by tapping. You get nothing either way.",
+      panels: 2, height: 380, weights: [1.4, 1],
+      buttons: [
+        { label: "Start", act: function () { start(); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task), j;
+        ctx.save();
+        if (S.phase === "assign") {
+          var cw = b.w * 0.32, ch = b.h * 0.45, y = b.cy - ch / 2;
+          [0, 1].forEach(function (s) {
+            var x = b.x + b.w * (s ? 0.6 : 0.08);
+            ctx.strokeStyle = s ? "#ef6f6c" : "#7ec8f5"; ctx.lineWidth = 3; ctx.strokeRect(x, y, cw, ch);
+            ctx.fillStyle = ctx.strokeStyle; ctx.globalAlpha = 0.5;
+            if (!s) { for (var r = 0; r < 4; r++) for (var c = 0; c < 5; c++) if ((r * 3 + c * 5) % 3) ctx.fillRect(x + 8 + c * (cw - 16) / 5, y + 8 + r * (ch - 16) / 4, (cw - 16) / 5 - 4, (ch - 16) / 4 - 4); }
+            else { [[0.3, 0.35, 0.2], [0.65, 0.6, 0.15], [0.55, 0.25, 0.08], [0.25, 0.75, 0.1]].forEach(function (q) { ctx.beginPath(); ctx.arc(x + q[0] * cw, y + q[1] * ch, q[2] * cw, 0, 2 * Math.PI); ctx.stroke(); }); }
+            ctx.globalAlpha = 1; ctx.fillStyle = C.ink; ctx.textAlign = "center"; ctx.font = "600 14px system-ui, sans-serif";
+            ctx.fillText(String(s + 1), x + cw / 2, y + ch + 22);
+          });
+          ctx.fillStyle = C.muted; ctx.font = "13px system-ui, sans-serif"; ctx.textAlign = "center";
+          ctx.fillText("Which do you prefer?", b.cx, b.y + 26);
+        } else if (S.phase === "share") {
+          var m = matrix(), cell = Math.min(46, (b.w - 40) / K), x0 = b.cx - cell * K / 2, y0 = b.cy - 40;
+          ctx.textAlign = "center"; ctx.font = "13px system-ui, sans-serif"; ctx.fillStyle = C.muted;
+          ctx.fillText("Matrix " + (S.trial + 1) + " of " + PLAN.length + ": you are in the group that preferred " + NAMES[S.group], b.cx, b.y + 24);
+          var topName = m.ownTop ? "your group" : "the other group", botName = m.ownTop ? "the other group" : "your group";
+          ctx.textAlign = "right"; ctx.fillStyle = m.ownTop ? "#7ec8f5" : "#ef6f6c"; ctx.fillText(topName, x0 - 6, y0 + 22);
+          ctx.fillStyle = m.ownTop ? "#ef6f6c" : "#7ec8f5"; ctx.fillText(botName, x0 - 6, y0 + 62);
+          for (j = 0; j < K; j++) {
+            var x = x0 + j * cell;
+            var pk = PICK.indexOf(j);
+            ctx.strokeStyle = pk >= 0 ? "#f2c14e" : "#3a3f48"; ctx.lineWidth = pk >= 0 ? 2 : 1;
+            ctx.strokeRect(x + 1, y0, cell - 2, 80);
+            if (pk >= 0) { ctx.fillStyle = "#f2c14e"; ctx.font = "600 13px system-ui, sans-serif"; ctx.textAlign = "center"; ctx.fillText(String(pk + 1), x + cell / 2, y0 + 100); }
+            ctx.textAlign = "center"; ctx.font = "600 14px system-ui, sans-serif";
+            ctx.fillStyle = m.ownTop ? "#7ec8f5" : "#ef6f6c"; ctx.fillText(String(m.top[j]), x + cell / 2, y0 + 26);
+            ctx.fillStyle = m.ownTop ? "#ef6f6c" : "#7ec8f5"; ctx.fillText(String(m.bottom[j]), x + cell / 2, y0 + 64);
+          }
+        } else if (S.phase === "done") {
+          var a = summary();
+          T.message(ctx, b, "Done: on average your group finished " + (a.lead >= 0 ? a.lead.toFixed(1) + " points ahead" : (-a.lead).toFixed(1) + " points behind") + ".",
+                    "Taking the most points for everyone, or equality, would have averaged " + a.base.toFixed(1) + ". Anything above that is favouritism. Tajfel's boys, with labels as empty as yours, often gave up points to stay ahead.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Pick a picture, then share points eight times.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx, n = S.log.length, k;
+        cx.save(); cx.textAlign = "left"; cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif";
+        cx.fillText("Your group's lead in each choice (points)", c2.x + 10, c2.y + 18);
+        var mid = c2.y + c2.h / 2 + 10, bw = (c2.w - 40) / PLAN.length, scale = (c2.h / 2 - 40) / 18;
+        cx.strokeStyle = "#3a3f48"; cx.beginPath(); cx.moveTo(c2.x + 20, mid); cx.lineTo(c2.x + c2.w - 20, mid); cx.stroke();
+        for (k = 0; k < n; k++) {
+          var L = S.log[k].lead, h = Math.max(-18, Math.min(18, L)) * scale;
+          cx.fillStyle = L > 0 ? "#7ec8f5" : (L < 0 ? "#ef6f6c" : "#9aa4b2");
+          cx.fillRect(c2.x + 24 + k * bw, h > 0 ? mid - h : mid, bw - 8, Math.max(2, Math.abs(h)));
+        }
+        cx.fillStyle = C.muted; cx.font = "11px system-ui, sans-serif";
+        cx.fillText("above the line: your group ahead", c2.x + 10, c2.y + c2.h - 10);
+        cx.restore();
+      },
+      readout: function () {
+        var a = summary();
+        return [["choices", String(task.count)], ["average lead for your group", S.log.length ? a.lead.toFixed(1) : "-"]];
+      },
+      note: "Nothing you choose is stored or sent, and the points go to nobody. The two kinds of matrix separate motives: in the first, the column with the biggest lead for your group gives everyone fewer points than the far end; in the second, every column has the same total, and the middle is equal. A lead in either is favouritism for a group defined by a picture you preferred a minute ago.",
+    });
+  };
 })();

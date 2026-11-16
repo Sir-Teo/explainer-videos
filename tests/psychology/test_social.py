@@ -112,3 +112,22 @@ def test_list_experiment_pipeline_and_illusory_correlation():
     assert share[0] == 0.5 and np.all(np.diff(share) < 0) and 0.3 < share[-1] < 0.4
     ic = S.illusory_correlation()
     assert ic["actual"][0] == ic["actual"][1] and ic["judged"][1] > ic["judged"][0]
+
+
+def test_inequity_aversion_and_the_ultimatum_game():
+    assert S.fs_threshold(0.0) == 0.0 and abs(S.fs_threshold(1.0) - 1 / 3) < 1e-12
+    assert S.fs_utility(2, 8, alpha=1, beta=0) < 0 < S.fs_utility(5, 5, alpha=1, beta=0.5)
+    u = S.ultimatum(np.r_[np.zeros(30), np.linspace(0.3, 1.5, 70)])
+    assert 0.3 <= u["best"] <= 0.45 and u["accept"][0] == 0.3
+
+
+def test_punishment_sustains_public_goods():
+    plain = S.public_goods(seed=1)
+    punished = S.public_goods(punishment=True, seed=1)
+    assert plain[-1] < plain[0] / 3 and punished[-1] > punished[0]
+
+
+def test_divorce_prediction_overfits_without_cross_validation():
+    r = [S.overfit_divorce(seed=s) for s in range(30)]
+    assert np.mean([x["insample"] for x in r]) > 0.85
+    assert np.mean([x["loo"] for x in r]) < np.mean([x["base"] for x in r]) + 0.02

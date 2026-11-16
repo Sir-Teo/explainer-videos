@@ -98,4 +98,48 @@ PARTS = [
               ("Its tests", "tests/psychology/test_social.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=36, level="U", widget="minimal",
+        question="How little does it take to make a group, and what does a bias score mean?",
+        story="Henri Tajfel, who survived the war as a prisoner, divided Bristol schoolboys by a trivial test, and they "
+              "favoured their own group at once, often giving up points to stay ahead. The part follows social "
+              "identity, Robbers Cave as run and as staged, stereotypes as categories and an illusory correlation, "
+              "then three ways of measuring prejudice: asking (with a list experiment that reveals no one's answer), "
+              "timing (the Implicit Association Test, its retest reliability near .5, its small correlations with "
+              "behaviour, and 492 studies in which changing the score did not change behaviour), and behaviour "
+              "itself (identical resumes, 50% more callbacks for white-sounding names, and no change in 25 years). "
+              "Then stereotype threat and its registered test, contact and the 27 randomized studies, a radio drama "
+              "in Rwanda, diversity training, a faked canvassing study and the real one that followed, and a ladder "
+              "on which small biases compound.",
+        handoff="Cooperation, trust and punishment are Part 37; culture and which findings travel Part 38; "
+                "structured selection Part 53; field experiments and nudges Part 55; bias in machines Part 60.",
+        outside="Part 3's reliability and attenuation, Part 4's power and filtered literatures, Part 22's categories "
+                "and Part 25's diffusion model. Proportions, the normal distribution and conditional expectation.",
+        objectives={
+            "U": ["Describe the minimal-group studies, social identity theory and Robbers Cave, with what Perry's "
+                  "archive changed.",
+                  "Explain stereotypes as categories, the stereotype content model and illusory correlation.",
+                  "Describe the IAT, audit studies, stereotype threat, contact and what prejudice-reduction "
+                  "experiments have and have not shown."],
+            "M": ["Read Tajfel's matrices and separate joint profit, ingroup profit and maximum difference.",
+                  "Derive the list experiment's estimator and its variance, and size an audit study by power.",
+                  "Model an IAT as diffusion decisions and show how reliability bounds prediction, and compute "
+                  "how small biases compound on a promotion ladder."],
+            "D": ["Evaluate whether implicit measures describe persons or situations, and design a test between the "
+                  "accounts.",
+                  "Judge a prejudice-reduction claim by its design: randomization, outcome, delay and setting."],
+            "I": ["Design a hiring or promotion process that measures and reduces discrimination, and an evaluation "
+                  "of a training."],
+        },
+        results=[
+            ("List experiment", r"\hat\pi = \bar Y_{\text{treat}} - \bar Y_{\text{control}}"),
+            ("Attenuation", r"r_{\text{obs}} \le r\sqrt{\rho_{xx}}"),
+            ("Two-proportion sample size", r"n = \frac{(z_{\alpha/2} + z_{\beta})^2 [p_1(1-p_1) + p_2(1-p_2)]}{(p_1 - p_2)^2}"),
+            ("Ladder", r"(1 - s)\,\bar\Phi(c - \delta) + s\,\bar\Phi(c) = k,\quad s' = s\,\bar\Phi(c) / k"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12), D=(14,), I=(13,),
+        also=(("Psyche's social module", "explainer/psychology/psyche/social.py"),
+              ("Its tests", "tests/psychology/test_social.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

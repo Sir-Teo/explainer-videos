@@ -4678,8 +4678,8 @@ shown(32, r"Deary et al.\ (2007); \ Strenze (2007); \ Sackett et al.\ (2022)", "
       "study and meta-analyses; the job-performance figure has its row")
 shown(32, r"Calvin et al.\ (2011)", "a meta-analysis quoted for the size of an association, with its confounding")
 shown(32, r"Carpenter, \ Just \& Shell (1990)", "a process model of one test, described and rebuilt by Psyche")
-shown(32, r"Flore \& Wicherts (2015); \ Flore et al.\ (2018)", "stereotype threat's record, previewed; its row is "
-      "entered with prejudice in Part 36", row_in=36)
+shown(32, r"Flore \& Wicherts (2015); \ Flore et al.\ (2018)", "stereotype threat's record, previewed; its row "
+      "(stereotype_threat) is entered in Part 36")
 shown(32, r"Snyderman \& Herrnstein (1983)", "a historical dispute, described")
 shown(32, r"Kamin (1974); \ Hearnshaw (1979)", "a case of fraud, told as history")
 shown(32, r"Gould (1981); \ Lewis et al.\ (2011)", "a historical critique and its re-examination, described")
@@ -5099,3 +5099,164 @@ shown(35, r"Svenson (1981); \ Mezulis et al.\ (2004)", "the better_than_average 
 shown(35, r"Todorov et al.\ (2005)", "a correlational election study, described with its published figure")
 shown(35, r"Ullman (2023)", "a critique of a language-model result, described in the frontier")
 shown(35, r"Willis \& Todorov (2006)", "a judgment-agreement study, described; agreement is not accuracy")
+
+# --- Part 36: Us and Them -------------------------------------------------------------------------------------------
+
+add(Finding(
+    key="minimal_group", part=36, title=r"Favouritism in minimal groups",
+    claim="Assigning people to groups by a trivial criterion is enough for them to favour their own group.",
+    original=Study("Tajfel, Billig, Bundy and Flament", 1971, n="Bristol schoolboys aged 14-15",
+                   design="dot estimation or Klee against Kandinsky; points allocated by matrices",
+                   found="the boys favoured their own group, often at the cost of its absolute gain"),
+    status="replicated",
+    record=(Study("Balliet, Wu and De Dreu (meta-analysis)", 2014, n="212 studies",
+                  found="d = 0.19 where groups are only labels; 0.42 where outcomes are interdependent"),),
+    note="Robust but modest when groups are mere labels; mostly more warmth for the ingroup, not hostility to the "
+         "outgroup.",
+    sources=("H. Tajfel, M. G. Billig, R. P. Bundy and C. Flament, Social categorization and intergroup behaviour, "
+             "European Journal of Social Psychology 1(2) (1971) 149-178",
+             "D. Balliet, J. Wu and C. K. W. De Dreu, Ingroup favoritism in cooperation: a meta-analysis, "
+             "Psychological Bulletin 140(6) (2014) 1556-1581"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="iat_group", part=36, title=r"Implicit associations, on average",
+    claim="On average, people sort faster when categories and attributes are paired as common associations pair "
+          "them.",
+    original=Study("Greenwald, McGhee and Schwartz", 1998, n="three experiments",
+                   design="the Implicit Association Test",
+                   found="large differences between compatible and incompatible pairings"),
+    status="replicated",
+    record=(Study("Greenwald and Lai (review)", 2020, found="internal consistency about .8; test-retest about .5"),),
+    note="The average effect is robust across samples; what it means for any one person is the next row.",
+    sources=("A. G. Greenwald, D. E. McGhee and J. L. K. Schwartz, Measuring individual differences in implicit "
+             "cognition: the implicit association test, Journal of Personality and Social Psychology 74(6) (1998)",
+             "A. G. Greenwald and C. K. Lai, Implicit social cognition, Annual Review of Psychology 71 (2020)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="iat_individual", part=36, title=r"IAT scores predicting a person's behaviour",
+    claim="A person's IAT score predicts their discriminatory behaviour well enough to judge or select "
+          "individuals, and changing it changes behaviour.",
+    original=Study("Greenwald and colleagues (meta-analysis)", 2009, effect=0.24, unit="r",
+                   found="IAT scores predicted racially discriminatory behaviour at r = .24, self-reports at .12"),
+    status="failed",
+    record=(Study("Oswald, Mitchell, Blanton, Jaccard and Tetlock", 2013,
+                  found="poor prediction of most criteria, no better than explicit measures"),
+            Study("Forscher and colleagues (meta-analysis)", 2019, n="492 studies, 87,418 people",
+                  found="implicit scores can be changed; the changes did not carry through to behaviour")),
+    note="With retest reliability near .5 and correlations near .1 to .2, the score is a weak guide to one person; "
+         "changing it is not a way to change behaviour.",
+    sources=("A. G. Greenwald et al., Understanding and using the Implicit Association Test III: meta-analysis of "
+             "predictive validity, Journal of Personality and Social Psychology 97(1) (2009)",
+             "F. L. Oswald, G. Mitchell, H. Blanton, J. Jaccard and P. E. Tetlock, Predicting ethnic and racial "
+             "discrimination: a meta-analysis of IAT criterion studies, Journal of Personality and Social "
+             "Psychology 105(2) (2013)",
+             "P. S. Forscher et al., A meta-analysis of procedures to change implicit measures, Journal of "
+             "Personality and Social Psychology 117(3) (2019) 522-559"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="hiring_audits", part=36, title=r"Discrimination in hiring audits",
+    claim="Identical applications receive fewer callbacks when the name signals a Black applicant.",
+    original=Study("Bertrand and Mullainathan", 2004, design="fictitious resumes to Boston and Chicago ads",
+                   found="white-sounding names received 50% more callbacks"),
+    status="replicated",
+    record=(Study("Quillian, Pager, Hexel and Midtboen (meta-analysis)", 2017, n="28 studies, 55,842 applications",
+                  found="36% more callbacks for white applicants; no change from 1989 to 2015"),),
+    note="One of the most consistent findings in the part, measured as behaviour, with no decline in a quarter "
+         "century against African Americans.",
+    sources=("M. Bertrand and S. Mullainathan, Are Emily and Greg more employable than Lakisha and Jamal?, "
+             "American Economic Review 94(4) (2004) 991-1013",
+             "L. Quillian, D. Pager, O. Hexel and A. H. Midtboen, Meta-analysis of field experiments shows no change "
+             "in racial discrimination in hiring over time, PNAS 114(41) (2017)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="stereotype_threat", part=36, title=r"Stereotype threat",
+    claim="Reminding people of a negative stereotype about their group lowers their test performance.",
+    original=Study("Steele and Aronson", 1995, n="Black and white Stanford students",
+                   design="a verbal test described as diagnostic or not",
+                   found="Black students did worse when the test was called diagnostic (SAT-adjusted scores)"),
+    status="contested",
+    record=(Study("Sackett, Hardison and Cullen", 2004, found="the adjustment hid the gap; widely misreported"),
+            Study("Flore and Wicherts (meta-analysis)", 2015, design="schoolgirls in mathematics and science",
+                  found="signs of publication bias"),
+            Study("Flore, Mulder and Wicherts (registered)", 2018, n="2,064 Dutch pupils",
+                  found="no effect on girls' maths scores, and no moderation")),
+    note="Signs of publication bias and null registered tests; the effect may exist in some settings, but its size "
+         "and reach are unsettled.",
+    sources=("C. M. Steele and J. Aronson, Stereotype threat and the intellectual test performance of African "
+             "Americans, Journal of Personality and Social Psychology 69(5) (1995)",
+             "P. R. Sackett, C. M. Hardison and M. J. Cullen, On interpreting stereotype threat as accounting for "
+             "African American-White differences on cognitive tests, American Psychologist 59(1) (2004)",
+             "P. C. Flore and J. M. Wicherts, Does stereotype threat influence performance of girls in stereotyped "
+             "domains? A meta-analysis, Journal of School Psychology (2015)",
+             "P. C. Flore, J. Mulder and J. M. Wicherts, The influence of gender stereotype threat on mathematics "
+             "test scores of Dutch high school students: a registered report, Comprehensive Results in Social "
+             "Psychology 3(2) (2018; issue dated 2019) 140-174"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="intergroup_contact", part=36, title=r"Intergroup contact",
+    claim="Contact between members of different groups reduces prejudice.",
+    original=Study("Pettigrew and Tropp (meta-analysis)", 2006, n="more than 500 studies",
+                   found="contact associated with less prejudice; Allport's conditions helpful, not necessary"),
+    status="replicated",
+    record=(Study("Paluck, Green and Green", 2019, n="27 randomized studies with delayed outcomes",
+                  found="consistent with reduced prejudice; weaker for ethnic and racial prejudice"),),
+    note="The average holds in experiments too, but the causal evidence is thin where it matters most.",
+    sources=("G. W. Allport, The Nature of Prejudice (1954)",
+             "T. F. Pettigrew and L. R. Tropp, A meta-analytic test of intergroup contact theory, Journal of "
+             "Personality and Social Psychology 90(5) (2006)",
+             "E. L. Paluck, S. A. Green and D. P. Green, The contact hypothesis re-evaluated, Behavioural Public "
+             "Policy 3(2) (2019) 129-158"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="deep_canvassing", part=36, title=r"Deep canvassing",
+    claim="A single conversation at the door can durably reduce prejudice.",
+    original=Study("LaCour and Green", 2014, design="canvassing on same-sex marriage",
+                   found="large, lasting effects; the data were fabricated and the paper retracted in 2015"),
+    status="replicated",
+    record=(Study("Broockman and Kalla", 2016, n="Miami-Dade voters", design="randomized, about 10 minutes",
+                  found="about 10 points warmer toward transgender people, lasting months"),),
+    note="Replicated in a real experiment by the people who exposed the fake one; the first report remains "
+         "retracted.",
+    sources=("M. J. LaCour and D. P. Green, When contact changes minds, Science 346 (2014), retracted 2015",
+             "D. Broockman and J. Kalla, Durably reducing transphobia: a field experiment on door-to-door "
+             "canvassing, Science 352 (2016) 220-224"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="robbers_cave", part=36, title=r"Robbers Cave",
+    claim="Competition between groups of boys at a summer camp produced hostility, and shared goals removed it.",
+    original=Study("Sherif and colleagues", 1954, n="22 boys, Oklahoma", design="bonding, contests, shared goals",
+                   found="hostility under competition, reduced by superordinate goals"),
+    status="story and record",
+    record=(Study("Perry", 2018, design="Sherif's archives",
+                  found="an earlier 1953 run in which the boys would not turn on each other, and staff provocation"),),
+    note="A demonstration with the conditions arranged, after a failed first attempt left out of the report.",
+    sources=("M. Sherif, O. J. Harvey, B. J. White, W. R. Hood and C. W. Sherif, Intergroup Conflict and "
+             "Cooperation: The Robbers Cave Experiment (1961)",
+             "G. Perry, The Lost Boys: Inside Muzafer Sherif's Robbers Cave Experiment (2018)"),
+    checked="2026-11-16",
+))
+
+shown(36, r"Chang et al.\ (2019)", "a randomized field evaluation of a diversity training, described in its own terms")
+shown(36, r"Fiske, \ Cuddy, \ Glick \& Xu (2002)", "a descriptive model of stereotype content, shown without effect sizes")
+shown(36, r"Hamilton \& Gifford (1976)", "the illusory-correlation design, described; the judged rates on screen are "
+      "Psyche's model")
+shown(36, r"Paluck (2009)", "a randomized field experiment, described qualitatively")
+shown(36, r"Paluck, \ Porat, \ Clark \& Green (2021)", "a review of the field's evidence, described")
+shown(36, r"Payne, \ Vuletich \& Lundberg (2017); \ Connor \& Evers (2020)", "a theoretical debate, described in the "
+      "frontier")
+shown(36, r"Tajfel \& Turner (1979); \ Turner et al.\ (1987)", "theories, described; the minimal_group row carries the "
+      "evidence")
