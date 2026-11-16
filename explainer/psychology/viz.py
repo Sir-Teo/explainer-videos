@@ -31,7 +31,7 @@ from explainer.psychology.style import P, STATUS_COLOR
 CARD_FILL = "#0B0F17"
 PANEL_FILL = "#121722"
 
-__all__ = ["little_person", "gear", "head_outline", "butterfly", "FACULTIES", "homunculus_map", "demo_stage",
+__all__ = ["care_card", "CARE_HELP", "little_person", "gear", "head_outline", "butterfly", "FACULTIES", "homunculus_map", "demo_stage",
            "countdown_ring", "trial_strip", "stage_bar", "study_card", "status_chip", "ledger_card", "ledger_board",
            "pool_cloud", "panel", "CARD_FILL", "PANEL_FILL", "heading", "hist", "quote_card", "OBJECTIONS",
            "wager_board"]
@@ -446,6 +446,42 @@ def quote_card(text: str, who: str, width: float = 8.0, font_size=28, color=None
     inner.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.42)
     g = VGroup(box, bar, inner)
     g.body, g.src = body, src
+    return g
+
+
+#: where help is found, shown on the care card (SYLLABUS 1.2): emergency services first, then two national lines
+#: and an international directory of helplines
+CARE_HELP = [
+    (r"in danger now", r"call your local emergency number"),
+    (r"United States", r"call or text 988, \ the Suicide and Crisis Lifeline"),
+    (r"UK and Ireland", r"Samaritans, \ 116 123"),
+    (r"anywhere else", r"findahelpline.com lists free, \ confidential helplines by country"),
+]
+
+
+def care_card(width: float = 12.6, font_size=24, color=None) -> VGroup:
+    """The card that opens each part about suffering (Parts 39-42, 57, 59): education, not diagnosis or treatment,
+    and where help is found.  Returns VGroup(box, head, body, help) with ``.rows`` for the help lines."""
+    color = color or "#6F9BF2"
+    head = label(r"Before we start", font_size=font_size + 10, color=color)
+    body = wrapped_label(r"This part is education, \ not diagnosis or treatment. \ If any of it touches your own "
+                         r"life, \ talk to a doctor, \ a counsellor or someone you trust.", width - 1.2, font_size,
+                         WHITE)
+    rows = VGroup()
+    for who, how in CARE_HELP:
+        rows.add(VGroup(label(who, font_size=font_size - 3, color=color),
+                        wrapped_label(how, width - 5.2, font_size - 3, GREY_A)).arrange(RIGHT, buff=0.35))
+    for r in rows:
+        r[1].align_to(rows[0][0].get_left() + RIGHT * 3.4, LEFT)
+    rows.arrange(DOWN, aligned_edge=LEFT, buff=0.22)
+    for r in rows:
+        r[1].move_to([rows.get_left()[0] + 3.4, r[0].get_center()[1], 0], aligned_edge=LEFT)
+    inner = VGroup(head, body, rows).arrange(DOWN, aligned_edge=LEFT, buff=0.4)
+    box = RoundedRectangle(width=width, height=inner.height + 0.9, corner_radius=0.16, stroke_color=color,
+                           stroke_width=2, fill_color=CARD_FILL, fill_opacity=0.97)
+    inner.move_to(box).align_to(box, LEFT).shift(RIGHT * 0.55)
+    g = VGroup(box, head, body, rows)
+    g.box, g.head, g.body, g.rows = box, head, body, rows
     return g
 
 

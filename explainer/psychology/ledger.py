@@ -770,7 +770,7 @@ shown(17, "ADAMS_DICKINSON_1981", "the devaluation test, described as a method f
 shown(17, "MOMENNEJAD_2017", "a test of the successor representation, described with its partial result")
 shown(17, "HOWE_2013", "dopamine ramps, described at the frontier of the dopamine story")
 shown(17, "DABNEY_2020", "a distributional code, described; replicated in a second region since")
-shown(17, "REDISH_2004", "a model, run on Psyche; addiction is entered in Part 41", row_in=41)
+shown(17, "REDISH_2004", "a model, run on Psyche; the findings on addiction are entered in Part 41")
 shown(17, "LI_2010", "an engineering result, cited as an application")
 shown(17, "WEINTRAUB_2010", "a cross-sectional survey quoted for its rates")
 shown(17, "WANG_2018", "a model at the frontier")
@@ -878,7 +878,8 @@ shown(16, "MACKINTOSH_PEARCE_HALL", "models of attention, run on one history")
 shown(16, "GALLISTEL_GIBBON_2000", "a theory, and a summary of acquisition data shown with its exceptions")
 shown(16, "BRELAND_1961", "trainers' observations, told as the anecdotes they were")
 shown(16, "BANDURA_1961", "the Bobo doll, described without figures and with the doubt about what it measures")
-shown(16, "PRENDERGAST_2006", "a meta-analysis quoted for its effect sizes", row_in=42)
+shown(16, "PRENDERGAST_2006", "a meta-analysis quoted for its effect sizes; its row (contingency management) is "
+      "entered in Part 41")
 shown(16, "ZENDLE_CAIRNS_2018", "a survey, quoted with its limits; product design is Part 52")
 shown(16, "MITCHELL_2009", "a theoretical review at the frontier")
 shown(16, "GERSHMAN_2010", "a model at the frontier")
@@ -1166,7 +1167,7 @@ shown(10, "BORBELY_1982", "a model, tested here against its own predictions")
 shown(10, "HOBSON_1977", "two theories of dreaming, presented as an open dispute between theories, not as a "
       "finding to replicate")
 shown(10, "SIEGEL_1982", "an animal experiment on tolerance; its row is entered with conditioning, in Part 16")
-shown(10, "SOLOMON_CORBIT_1974", "a theory, shown as a model", row_in=41)
+shown(10, "SOLOMON_CORBIT_1974", "a theory, shown as a model; the findings on addiction are entered in Part 41")
 shown(10, "DUNSTER_2018", "a before-and-after comparison in two schools, described as that")
 shown(10, "TRAUER_2015", "a meta-analysis of a treatment; therapies are entered in Part 42", row_in=42)
 shown(10, "XIE_2013", "a finding in mice and its dispute, at the frontier")
@@ -5594,3 +5595,112 @@ shown(38, r"Greene et al.\ (2001); \ McGuire et al.\ (2009)", "a reanalysis of t
       "trolley row carries the personal-force result")
 shown(38, r"Atari et al.\ (2023), \ preprint", "a preprint, described as an example in the practice chapter")
 shown(38, r"Muthukrishna et al.\ (2020)", "a method for measuring cultural distance, described")
+
+# --- Part 39: What Is a Disorder? ------------------------------------------------------------------------------------
+
+add(Finding(
+    key="rosenhan_pseudopatients", part=39, title=r"Sane in insane places",
+    claim="Healthy people who faked one symptom were admitted to psychiatric hospitals and never detected: "
+          "psychiatric diagnosis cannot tell the sane from the insane.",
+    original=Study("Rosenhan", 1973, n="8 pseudopatients, 12 hospitals", design="feigned voices at admission, "
+                   "then normal behaviour", found="none detected by staff; most discharged with schizophrenia in "
+                   "remission"),
+    status="contested",
+    record=(Study("Cahalan (an investigation)", 2019, design="a search of Rosenhan's papers and the participants",
+                  found="only two other pseudopatients identified; one with a positive experience left out; notes "
+                        "that do not match the paper"),),
+    note="Never replicated, and the data are in serious doubt; its critique of unreliable diagnosis was taken up by "
+         "DSM-III's criteria.",
+    sources=("D. L. Rosenhan, On being sane in insane places, Science 179 (1973) 250-258",
+             "S. Cahalan, The Great Pretender (Grand Central, 2019)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="clinical_vs_statistical", part=39, title=r"Formulas beating clinical judgment",
+    claim="Combining information by a fixed formula predicts health and behaviour at least as well as an expert's "
+          "judgment, and often better.",
+    original=Study("Meehl", 1954, design="a review of comparisons between clinical and statistical prediction",
+                   found="the formula as good or better in nearly every study"),
+    status="replicated",
+    record=(Study("Dawes", 1979, design="improper (equal-weight) linear models against expert judges",
+                  found="equal weights outperformed the experts"),
+            Study("Grove and colleagues (meta-analysis)", 2000, n="studies of human health and behaviour",
+                  found="formula clearly better in 33 to 47% of studies, clinician in 6 to 16%")),
+    note="One of the most consistent findings in applied psychology; the gap is larger when clinicians add "
+         "interview impressions.",
+    sources=("P. E. Meehl, Clinical versus Statistical Prediction (University of Minnesota Press, 1954)",
+             "R. M. Dawes, The robust beauty of improper linear models in decision making, American Psychologist "
+             "34 (1979) 571-582",
+             "W. M. Grove, D. H. Zald, B. S. Lebow, B. E. Snitz and C. Nelson, Clinical versus mechanical "
+             "prediction: a meta-analysis, Psychological Assessment 12 (2000) 19-30"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="dimensional_structure", part=39, title=r"Disorders as dimensions",
+    claim="Most mental disorders are continua with conventional cut-offs rather than distinct categories.",
+    original=Study("Haslam, Holland and Kuppens (review)", 2012, n="177 articles, 311 taxometric findings",
+                   found="39% reported taxonic, an estimated 14% after correcting for method"),
+    status="replicated",
+    record=(Study("Haslam, McGrath, Viechtbauer and Kuppens (meta-analysis)", 2020,
+                  found="the great majority of latent variables continuous, psychopathology included"),),
+    note="A few conditions may be taxonic; for most, where to draw the line is a decision, not a discovery.",
+    sources=("N. Haslam, E. Holland and P. Kuppens, Categories versus dimensions in personality and "
+             "psychopathology: a quantitative review of taxometric research, Psychological Medicine 42 (2012) "
+             "903-920",
+             "N. Haslam, M. J. McGrath, W. Viechtbauer and P. Kuppens, Dimensions over categories: a meta-analysis "
+             "of taxometric research, Psychological Medicine 50 (2020) 1418-1432"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="p_factor", part=39, title=r"A general factor of psychopathology",
+    claim="A single general factor, p, accounts for much of the covariation among mental disorders, and it means "
+          "something: a shared liability.",
+    original=Study("Caspi and colleagues", 2014, n="the Dunedin cohort, ages 18 to 38",
+                   found="one general dimension fitted better than three correlated domains"),
+    status="contested",
+    record=(Study("Kotov and colleagues (HiTOP)", 2017, design="a consortium's hierarchical model from data",
+                  found="spectra under broader dimensions; a general factor as a provisional top level"),),
+    note="The statistical pattern is found in many samples; whether p is a cause or a summary is argued, as with g.",
+    sources=("A. Caspi et al., The p factor: one general psychopathology factor in the structure of psychiatric "
+             "disorders?, Clinical Psychological Science 2 (2014) 119-137",
+             "R. Kotov et al., The Hierarchical Taxonomy of Psychopathology (HiTOP), Journal of Abnormal Psychology "
+             "126 (2017) 454-477"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="diagnostic_biomarkers", part=39, title=r"Biological tests for diagnosis",
+    claim="A laboratory test can diagnose a mental disorder, as the dexamethasone suppression test was claimed to "
+          "diagnose melancholic depression.",
+    original=Study("Carroll and colleagues", 1981, design="the dexamethasone suppression test",
+                   found="reported as a specific test for melancholia"),
+    status="failed",
+    record=(Study("Kapur, Phillips and Insel (review)", 2012, design="why biological psychiatry lacks clinical "
+                  "tests", found="no biomarker has reached routine diagnostic use; candidate tests fail on "
+                  "replication and specificity"),),
+    note="No laboratory test is used to diagnose a common mental disorder; candidates have not replicated or were "
+         "not specific.",
+    sources=("B. J. Carroll et al., A specific laboratory test for the diagnosis of melancholia, Archives of "
+             "General Psychiatry 38 (1981) 15-22",
+             "S. Kapur, A. G. Phillips and T. R. Insel, Why has it taken so long for biological psychiatry to "
+             "develop clinical tests and what to do about it?, Molecular Psychiatry 17 (2012) 1174-1179"),
+    checked="2026-11-16",
+))
+
+shown(39, r"Cahalan, \ \emph{The Great Pretender} (2019)", "an investigation; the rosenhan pseudopatients row "
+      "carries it")
+shown(39, r"Wakefield (1992)", "a definition, described with its criticism")
+shown(39, r"APA (1973, \ 1974)", "a historical decision and its vote, told as history")
+shown(39, r"Regier et al.\ (2013)", "field-trial reliabilities quoted as reported, with the caveat about design")
+shown(39, r"Robins \& Guze (1970)", "a set of criteria for validity, described")
+shown(39, r"Fried \& Nesse (2015)", "a descriptive analysis of one trial's symptoms, quoted for its counts")
+shown(39, r"Kessler et al.\ (2005)", "an epidemiological survey, quoted for its estimates")
+shown(39, r"Kohn et al.\ (2004); \ Jorm et al.\ (2017)", "epidemiological reviews, quoted for their estimates")
+shown(39, r"Cramer et al.\ (2016); \ Borsboom (2017)", "a model and a theory, run on Psyche")
+shown(39, r"Nichter (1981); \ Kaiser et al.\ (2015)", "an anthropological concept and a systematic review, "
+      "described")
+shown(39, r"Kruis \& Maris (2016)", "a mathematical result about models, described")
+

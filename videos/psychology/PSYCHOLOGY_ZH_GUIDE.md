@@ -1105,6 +1105,23 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Edmond Awad; Bence Bago; Kiley Hamlin, Karen Wynn, Paul Bloom; ManyBabies 4; Many Labs 2 | 埃德蒙·阿瓦德；本斯·巴戈；凯莉·哈姆林，卡伦·温，保罗·布卢姆；众婴4号；众实验室2号 |
 | Daniel Simons, Yuichi Shoda, Stephen Lindsay; Mohammad Atari; Michael Muthukrishna | 丹尼尔·西蒙斯，正田佑一，斯蒂芬·林赛；穆罕默德·阿塔里；迈克尔·穆图克里希纳 |
 
+## Part 39: what is a disorder?
+
+| English | 中文 |
+|---|---|
+| mental disorder; harmful dysfunction; statistical rarity; distress; impairment | 精神障碍；有害的功能失调；统计上的罕见；痛苦；功能损害 |
+| pseudopatient; in remission; moral treatment; asylum; dementia praecox; manic-depressive illness | 假病人；缓解期；道德治疗；精神病院；早发性痴呆；躁狂抑郁症 |
+| reliability; validity; Cohen's kappa; inter-rater agreement; field trial; validators | 信度；效度；科恩卡帕系数；评分者间一致性；现场试验；效度标准 |
+| category, dimension; taxon, taxometrics; cut-off; comorbidity; positive manifold; p factor; HiTOP; RDoC | 类别，维度；分类群，分类测量法；切分点；共病；正向流形；p因子；精神病理层级分类系统；研究领域标准 |
+| symptom network; hysteresis; bistable; tipping point; episode; diathesis-stress | 症状网络；滞后；双稳态；临界点；发作；素质-压力 |
+| prevalence; lifetime prevalence; age of onset; treatment gap; screening; sensitivity, specificity; positive predictive value | 患病率；终生患病率；起病年龄；治疗缺口；筛查；灵敏度，特异度；阳性预测值 |
+| clinical versus statistical prediction; improper linear model; biomarker; idioms of distress; "thinking too much"; stigma | 临床预测与统计预测；不恰当线性模型；生物标记；痛苦的表达方式；“想得太多”；污名 |
+| David Rosenhan; Susannah Cahalan; Philippe Pinel, William Tuke; Emil Kraepelin; Thomas Szasz; Jerome Wakefield | 戴维·罗森汉；苏珊娜·卡哈兰；菲利普·皮内尔，威廉·图克；埃米尔·克雷佩林；托马斯·萨斯；杰尔姆·韦克菲尔德 |
+| Jacob Cohen; Darrel Regier; Eli Robins, Samuel Guze; Eiko Fried, Randolph Nesse; Nick Haslam | 雅各布·科恩；达雷尔·里吉尔；伊莱·罗宾斯，塞缪尔·古兹；艾科·弗里德，伦道夫·内斯；尼克·哈斯拉姆 |
+| Avshalom Caspi; Kotov; Denny Borsboom; Angélique Cramer; Joost Kruis, Gunter Maris | 阿夫沙洛姆·卡斯皮；科托夫；丹尼·博尔斯伯姆；安热莉克·克拉默；约斯特·克鲁伊斯，贡特尔·马里斯 |
+| Ronald Kessler; Robert Kohn; Anthony Jorm; Paul Meehl; Robyn Dawes; William Grove; Carroll; Kapur | 罗纳德·凯斯勒；罗伯特·科恩；安东尼·约姆；保罗·米尔；罗宾·道斯；威廉·格罗夫；卡罗尔；卡普尔 |
+| Mark Nichter; Bonnie Kaiser; Samaritans; Suicide and Crisis Lifeline | 马克·尼克特；邦妮·凯泽；撒玛利亚会；自杀与危机生命线 |
+
 ## Names
 
 | English | 中文 |
