@@ -6813,3 +6813,91 @@ shown(50, r"Carter et al.\ (2019)", "a simulation study of correction methods, r
 shown(50, r"Meehl (1978); \ Meehl (1990)", "arguments about theory and testing, with their own calculation shown")
 shown(50, r"Oberauer \& Lewandowsky (2019)", "an argument about theory")
 shown(50, r"Smaldino \& McElreath (2016)", "a model of incentives, described")
+
+# --- Part 51: Human Factors ------------------------------------------------------------------------------------------
+
+add(Finding(
+    key="vigilance_decrement", part=51, title=r"The vigilance decrement",
+    claim="In a long watch for rare signals, detection falls within the first half hour and keeps falling.",
+    original=Study("Mackworth", 1948, design="a clock pointer that occasionally jumped double, watched for two hours "
+                   "by trained observers", found="detection fell after the first half hour"),
+    status="replicated",
+    record=(Study("See, Howe, Warm and Dember", 1995, design="a meta-analysis of vigilance studies",
+                  found="the decrement in many tasks; whether sensitivity or criterion changes depends on the task"),
+            Study("Warm, Parasuraman and Matthews", 2008, design="a review of vigilance as effortful work",
+                  found="a reliable decrement, with high workload and stress rather than boredom alone")),
+    note="Rare signals, long watches and demanding discriminations make it worse; breaks, feedback and automation "
+         "aids reduce it.",
+    sources=("N. H. Mackworth, The breakdown of vigilance during prolonged visual search, Quarterly Journal of "
+             "Experimental Psychology 1 (1948) 6-21",
+             "J. E. See, S. R. Howe, J. S. Warm and W. N. Dember, Meta-analysis of the sensitivity decrement in "
+             "vigilance, Psychological Bulletin 117 (1995) 230-249",
+             "J. S. Warm, R. Parasuraman and G. Matthews, Vigilance requires hard mental work and is stressful, Human "
+             "Factors 50 (2008) 433-441"),
+    checked="2026-11-16",
+    data=("MACKWORTH_1948", "SEE_1995"),
+))
+
+add(Finding(
+    key="surgical_checklist", part=51, title=r"The surgical safety checklist",
+    claim="Introducing a short surgical safety checklist reduces deaths and complications after surgery.",
+    original=Study("Haynes and colleagues", 2009, design="before and after the checklist in eight hospitals in eight "
+                   "countries", found="deaths fell from about 1.5% to 0.8% and complications from about 11% to 7%"),
+    status="contested",
+    record=(Study("Urbach and colleagues", 2014, design="a province-wide mandate in Ontario, before and after",
+                  found="no significant reduction in deaths or complications"),
+            Study("Haugen and colleagues", 2015, design="a stepped-wedge cluster trial", found="fewer complications")),
+    note="Where teams adopt it as their own the checklist helps; imposed as paperwork, the effect shrinks or "
+         "vanishes. A checklist is a social intervention as much as a memory aid.",
+    sources=("A. B. Haynes et al., A surgical safety checklist to reduce morbidity and mortality in a global "
+             "population, New England Journal of Medicine 360 (2009) 491-499",
+             "D. R. Urbach et al., Introduction of surgical safety checklists in Ontario, Canada, New England Journal "
+             "of Medicine 370 (2014) 1029-1038",
+             "A. S. Haugen et al., Effect of the World Health Organization checklist on patient outcomes, Annals of "
+             "Surgery 261 (2015) 821-828"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="automation_complacency", part=51, title=r"Automation complacency",
+    claim="People who monitor reliable automation detect its rare failures less well than people who do the task "
+          "themselves, and less well the more reliable it has been.",
+    original=Study("Parasuraman, Molloy and Singh", 1993, design="monitoring an automated engine-systems task while "
+                   "flying a simulated aircraft", found="failures of constantly reliable automation detected less "
+                   "often than of variably reliable automation"),
+    status="replicated",
+    record=(Study("Parasuraman and Manzey", 2010, design="a review of complacency and automation bias",
+                  found="the effect across laboratory and field tasks, including experts"),),
+    note="It is an attention allocation that makes sense most of the time, which is why training alone barely "
+         "removes it; designs that keep the human engaged do better.",
+    sources=("R. Parasuraman, R. Molloy and I. L. Singh, Performance consequences of automation-induced "
+             "'complacency', International Journal of Aviation Psychology 3 (1993) 1-23",
+             "R. Parasuraman and D. H. Manzey, Complacency and bias in human use of automation, Human Factors 52 "
+             "(2010) 381-410"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="fatigue_alcohol", part=51, title=r"Fatigue and alcohol",
+    claim="Staying awake for 17 to 24 hours impairs performance about as much as a blood-alcohol concentration of "
+          "0.05% to 0.10%.",
+    original=Study("Dawson and Reid", 1997, design="a hand-eye tracking task during 28 hours awake, and in the same "
+                   "people after doses of alcohol", found="17 hours awake like 0.05%; 24 hours like 0.10%"),
+    status="replicated",
+    record=(Study("Williamson and Feyer", 2000, design="several cognitive and motor tests after 28 hours awake and "
+                  "after alcohol", found="17 to 19 hours awake as impairing as 0.05% on some tests"),),
+    note="The equivalence varies with the task, but the scale is right: a long shift ends with an impairment the law "
+         "forbids when it comes from a drink.",
+    sources=("D. Dawson and K. Reid, Fatigue, alcohol and performance impairment, Nature 388 (1997) 235",
+             "A. M. Williamson and A.-M. Feyer, Moderate sleep deprivation produces impairments in cognitive and motor "
+             "performance equivalent to legally prescribed levels of alcohol intoxication, Occupational and "
+             "Environmental Medicine 57 (2000) 649-655"),
+    checked="2026-11-16",
+))
+shown(51, r"Fitts \& Jones (1947)", "a report of pilot errors, told as the history of the field")
+shown(51, r"Fitts (1954)", "a law of movement, fitted on simulated data")
+shown(51, r"Bainbridge (1983)", "an argument about automation, modelled here")
+shown(51, r"Endsley (1995)", "a theory of situation awareness, described")
+shown(51, r"Hart \& Staveland (1988)", "a measurement method (NASA-TLX)")
+shown(51, r"Reason (1990)", "a framework for human error")
+shown(51, r"Jones \& Endsley (1996)", "a coding of incident reports, described with its rough shares")

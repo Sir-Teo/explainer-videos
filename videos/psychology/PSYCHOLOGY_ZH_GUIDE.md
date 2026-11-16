@@ -1288,6 +1288,18 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | many analysts; multiverse analysis; prediction market; living review; replication Bayes factor | 多分析者研究；多元宇宙分析；预测市场；动态综述；重复贝叶斯因子 |
 | Erick Turner; Matthias Egger; Uri Simonsohn; Nick Brown; James Heathers; Michèle Nuijten; Anna Dreber | 埃里克·特纳；马蒂亚斯·埃格；乌里·西蒙松；尼克·布朗；詹姆斯·希瑟斯；米歇尔·纽伊滕；安娜·德雷伯 |
 
+## Part 51: human factors
+
+| English | 中文 |
+|---|---|
+| human factors; compatibility; movement stereotype; shape coding; interlock | 人因学；兼容性；运动定型；形状编码；互锁 |
+| slip; lapse; mistake; violation; skill-, rule- and knowledge-based behaviour | 失误；遗漏；错误；违规；基于技能、规则和知识的行为 |
+| workload; multiple resources; NASA task load index; vigilance decrement; prevalence effect | 工作负荷；多重资源；NASA任务负荷指数；警觉下降；出现率效应 |
+| situation awareness; SAGAT; levels of automation; ironies of automation; mode confusion; takeover | 态势感知；SAGAT；自动化层级；自动化的讽刺；模式混淆；接管 |
+| calibrated trust; misuse; disuse; automation bias; complacency; alarm fatigue; cry-wolf effect | 校准过的信任；误用；弃用；自动化偏差；自满；警报疲劳；“狼来了”效应 |
+| Swiss cheese model; latent condition; checklist; crew resource management; fatigue risk management | 瑞士奶酪模型；潜在条件；检查单；机组资源管理；疲劳风险管理 |
+| Paul Fitts; Alphonse Chapanis; Norman Mackworth; James Reason; Jens Rasmussen; Lisanne Bainbridge; Mica Endsley | 保罗·菲茨；阿方斯·查帕尼斯；诺曼·麦克沃斯；詹姆斯·里森；延斯·拉斯穆森；莉莎妮·班布里奇；米卡·恩兹利 |
+
 ## Names
 
 | English | 中文 |
