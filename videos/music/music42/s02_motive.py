@@ -108,10 +108,7 @@ class Motive(SoundScene):
         up = scored(d["upside"], None, width=3.6, height=1.3, lo=56, hi=72, color=GREY_B)
         upg = VGroup(up, label(r"upside down \ (not played)", font_size=18, color=GREY_B)).arrange(DOWN, buff=0.25).next_to(pair, DOWN, buff=0.5)
         with self.voiceover(
-            "Backwards. The long G came first, then the leap down a fifth, then C, D, E rising: the same notes in reverse "
-            "order. Turned upside down, it would have started on E, risen by steps to G, and leapt down to C. Retrograde is "
-            "the harder of the two to hear, because a motive's identity lives mostly in its rhythm and its beginning, and "
-            "retrograde changes both."
+            'Backwards. The long G came first, then the leap down a fifth, then C, D, E rising: the same notes in reverse order. Turned upside down, it would have started on E, risen by steps to G, and leapt down to C. Retrograde can be difficult to recognize: it reverses the order of durations and changes the opening, but recognition depends on the motive and listener.'
         ):
             self.play(hidden.animate.set_opacity(1), FadeIn(upg))
         self.wait(0.4)

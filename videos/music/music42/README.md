@@ -137,3 +137,7 @@ python -m videos.music.labs 42                                  # the lab (write
 * C.-Z. A. Huang and others, "The Bach Doodle: approachable music composition with machine learning at scale" (2019);
   B. L. Sturm, J. F. Santos, O. Ben-Tal and I. Korshunova, "Music transcription modelling and composition using deep
   learning" (2016).
+
+## Interpretation limits
+
+Unity checks pre-cadential normalized shapes from the motive or its initial fragments followed by up to two operations, ignoring transposition and the final duration. Variety counts unique normalized figures, so transpositions count as repeats. Parallel-motion checks sample consecutive bar downbeats. Tension scores, creativity labels and fitness are chosen proxies, not listener validation. Higher-order walks have longer matching runs in this small corpus, not a general law or a plagiarism determination. Dice entropy is a lower bound on average binary coding length; compatibility does not guarantee artistic quality.

@@ -141,10 +141,10 @@ class Dice(SoundScene):
             h = 3.0 * p[str(s)] / max(p.values())
             bars.add(VGroup(Rectangle(width=0.42, height=h, stroke_width=0, fill_color=EAR if s == 7 else BLUE, fill_opacity=0.85).move_to([x0 + 0.5 * i, -1.6 + h / 2, 0]),
                             label(rf"{s}", font_size=15, color=GREY_A).move_to([x0 + 0.5 * i, -1.9, 0])))
-        side = VGroup(label(r"two dice do not choose evenly: \ 7 comes 6 times in 36, \ 2 and 12 once", font_size=19, color=WHITE),
-                      label(rf"so some minuets are likelier: \ the likeliest has probability {n['p_likeliest']:.1e}", font_size=19, color=WHITE),
-                      label(rf"the game's entropy: \ {n['entropy_bits']:.1f} bits, \ against {n['uniform_bits']:.1f} if every minuet were equally likely", font_size=19, color=TUNE),
-                      label(r"bits: \ how many yes-or-no questions it takes, \ on average, \ to name the minuet thrown", font_size=17, color=GREY_A)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 2.2 + UP * 0.2)
+        side = VGroup(label(r"two dice do not choose evenly: \\ 7 has 6 of 36 outcomes; 2 and 12 have 1", font_size=19, color=WHITE),
+                      label(rf"likeliest minuet probability: {n['p_likeliest']:.1e}", font_size=19, color=WHITE),
+                      label(rf"entropy: {n['entropy_bits']:.1f} bits; \\ uniform over distinct minuets: {n['uniform_bits']:.1f}", font_size=19, color=TUNE),
+                      label(r"entropy bounds average binary code length below; \\ it need not equal an attainable whole-number length", font_size=17, color=GREY_A)).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(RIGHT * 3.1 + UP * 0.2)
         head = label(r"what the dice favour", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "There is a subtlety the games' printers ignored. <bookmark mark='a'/> Two dice do not choose evenly: a sum of "
@@ -152,7 +152,7 @@ class Dice(SoundScene):
             "come up far more often, and some minuets are much likelier than others. <bookmark mark='c'/> Information "
             f"theory gives one number for the game's variety, its entropy: {say(n['entropy_bits'], 1)} bits, against "
             f"{say(n['uniform_bits'], 1)} if every distinct minuet were equally likely. A bit is one yes-or-no "
-            "question; it would take about forty-one, on average, to name the minuet you threw."
+            "question; about forty-one bits is the entropy lower bound on its average binary description length, rather than a guarantee of an exact whole-number code length."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(bars).copy().set_opacity(0.15)))
             vo.wait_until("a")
@@ -174,8 +174,4 @@ class Dice(SoundScene):
             (r"chapter 7: \ a computer in Illinois, \ 1957", GREY_A),
         ]
         rows_scene(self, r"what the dice game is", items,
-                   "What is a dice game, as a method? <bookmark mark='b'/> It is a grammar with one rule per bar, and the "
-                   "composer wrote the grammar. <bookmark mark='c'/> Every output is acceptable because every bar was made to fit "
-                   "every neighbour, <bookmark mark='d'/> so nothing is judged after the throw: generate, and never test. "
-                   "<bookmark mark='e'/> The next step came two centuries later: generate freely, and then test. "
-                   "<bookmark mark='f'/> Chapter seven goes to a computer in Illinois, in 1957.", marks="cdef")
+                   "What is a dice game, as a method? <bookmark mark='b'/> It is a grammar with one rule per bar, and the composer wrote the grammar. <bookmark mark='c'/> The table is designed to make adjacent choices compatible within its harmonic plan, without guaranteeing every output's artistic quality, <bookmark mark='d'/> so nothing is judged after the throw: generate, and never test. <bookmark mark='e'/> The next step came two centuries later: generate freely, and then test. <bookmark mark='f'/> Chapter seven goes to a computer in Illinois, in 1957.", marks="cdef")

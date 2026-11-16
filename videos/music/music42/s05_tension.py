@@ -23,14 +23,7 @@ class Tension(SoundScene):
             (r"a composer plans the curve: \ where it rises, \ where it peaks, \ where it lets go", GREY_A),
         ]
         rows_scene(self, r"what makes tension", items,
-                   "A phrase is also a shape in time: it tightens and relaxes. <bookmark mark='b'/> Listeners can trace that "
-                   "tension moment by moment, and they largely agree, as Carol Krumhansl and later Morwaread Farbood showed. "
-                   "<bookmark mark='c'/> It rises with pitch height, dissonance, distance from the home chord and the density of "
-                   "notes. <bookmark mark='d'/> Fred Lerdahl and Krumhansl predicted it from harmony in 2007; Farbood's model adds "
-                   "melody, loudness and tempo. <bookmark mark='e'/> Ours is crude, bar by bar: the height above middle C in "
-                   "octaves, plus the share of non-chord tones, plus the chord's distance from the tonic, plus notes per beat "
-                   "over two. <bookmark mark='f'/> A composer plans that curve: where it rises, where it peaks, and where it "
-                   "lets go.", marks="cdef")
+                   "A phrase is also a shape in time: it tightens and relaxes. <bookmark mark='b'/> Listeners can trace that tension moment by moment, with agreement depending on the excerpts, task and listeners, as studies by Carol Krumhansl and later Morwaread Farbood illustrate. <bookmark mark='c'/> Pitch height, dissonance, tonal distance and note density can contribute, with effects that depend on context and listener expectations. <bookmark mark='d'/> Fred Lerdahl and Krumhansl predicted it from harmony in 2007; Farbood's model adds melody, loudness and tempo. <bookmark mark='e'/> Ours is crude, bar by bar: the height above middle C in octaves, plus the share of non-chord tones, plus the chord's distance from the tonic, plus notes per beat over two. <bookmark mark='f'/> A composer plans that curve: where it rises, where it peaks, and where it lets go.", marks="cdef")
 
     # ------------------------------------------------------------------
     def plot(self, plan, curve, col, title, x0, w=5.2, h=2.2):

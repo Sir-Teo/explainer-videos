@@ -119,16 +119,11 @@ class Develop(SoundScene):
         d = load("search")
         v = d["best"]["verdict"]
         items = [
-            (r"unity: \ the share of bars whose figure the motive yields in at most two operations", WHITE),
-            (r"variety: \ the share of bars whose figure is not repeated note for note", WHITE),
+            (r"unity: \ pre-cadential figures from the motive or its first 2--3 notes, \\ then up to two operations; ignore transposition and final duration", WHITE),
+            (r"variety: \ unique normalized figures; \\ transposed figures count as repetitions", WHITE),
             (r"both are computable, \ because the operations are functions: \ search them all, \ two deep", WHITE),
             (rf"the searcher's kept draft: \ unity {v['unity']:.2f}, \ variety {v['variety']:.2f}", TUNE),
             (r"critics that measure a balance are the heart of chapter 9", GREY_A),
         ]
         rows_scene(self, r"unity and variety, \ measured", items,
-                   "Can that balance be measured? <bookmark mark='b'/> Call unity the share of bars whose figure the motive "
-                   "yields in at most two operations, <bookmark mark='c'/> and variety the share of bars whose figure is not "
-                   "repeated note for note. <bookmark mark='d'/> Both are computable, because the operations are functions: a "
-                   "program can try them all, two deep. <bookmark mark='e'/> The draft the searcher kept in the opening "
-                   f"question scores {say(v['unity'], 2)} for unity and {say(v['variety'], 2)} for variety. "
-                   "<bookmark mark='f'/> Critics that measure a balance are the heart of chapter nine.", marks="cdef")
+                   f"Can that balance be measured? <bookmark mark='b'/> Call unity pre-cadential figures from the motive or its first 2--3 notes, \\ then up to two operations; ignore transposition and final duration, <bookmark mark='c'/> and variety unique normalized figures; \\ transposed figures count as repetitions. <bookmark mark='d'/> Both are computable, because the operations are functions: a program can try them all, two deep. <bookmark mark='e'/> The draft the searcher kept in the opening question scores {say(v['unity'], 2)} for unity and {say(v['variety'], 2)} for variety. <bookmark mark='f'/> Critics that measure a balance are the heart of chapter nine.", marks="cdef")

@@ -76,15 +76,10 @@ class Outro(SoundScene):
             r"tension can be planned, \ and measured against the plan",
             r"rules shrink the space: \ 2.5 billion melodies to 9,252",
             r"dice games put the knowledge in the table; \ generate and test puts it in the critics",
-            r"more memory, \ more copying: \ plausibility bought with plagiarism",
+            r"this higher-order chain has longer corpus matches",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A motive and its operations are functions from melodies to melodies. "
-            "<bookmark mark='a'/> Developing variation grows a phrase from four notes. <bookmark mark='b'/> Tension can be "
-            "planned, and measured against the plan. <bookmark mark='c'/> Rules shrink the space of melodies, from two and a "
-            "half billion to nine thousand. <bookmark mark='d'/> The dice games put the composer's knowledge in the table; "
-            "generate and test puts it in the critics. <bookmark mark='e'/> And a chain that remembers more copies more: "
-            "plausibility bought with plagiarism."
+            "What did we find? A motive and its operations are functions from melodies to melodies. <bookmark mark='a'/> Developing variation grows a phrase from four notes. <bookmark mark='b'/> Tension can be planned, and measured against the plan. <bookmark mark='c'/> Rules shrink the space of melodies, from two and a half billion to nine thousand. <bookmark mark='d'/> The dice games put the composer's knowledge in the table; generate and test puts it in the critics. <bookmark mark='e'/> And in this small corpus the higher-order chain generates longer matching passages; copying descriptors and listener judgments ask different questions."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

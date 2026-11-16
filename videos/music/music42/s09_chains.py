@@ -76,20 +76,15 @@ class Chains(SoundScene):
         d = load("chains")
         o1, o4 = d["orders"]["1"], d["orders"]["4"]
         rows_ = text_rows([
-            (r"plagiarism, \ measured: \ the longest run of consecutive notes found verbatim in one corpus tune", WHITE),
+            (r"corpus overlap descriptor: \ the longest run of consecutive notes found verbatim in one corpus tune", WHITE),
             (rf"order 1: \ {o1['mean_copy']:.1f} notes on average over 40 walks \ (this one: \ {o1['copy']['run']}, \ from `{o1['copy']['tune']}')", WHITE),
             (rf"order 4: \ {o4['mean_copy']:.1f} notes on average \ (this one: \ {o4['copy']['run']}, \ from `{o4['copy']['tune']}')", EAR),
-            (r"the more a chain remembers, \ the more it copies: \ plausibility bought with plagiarism", TUNE),
+            (r"higher-order walks here have longer corpus matches; \\ this is not a universal law or a plagiarism verdict", TUNE),
             (r"the same trade-off haunts today's generative models \ (Parts 65 and 66)", GREY_A),
         ])
         head = label(r"how much does a chain copy?", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Measure the copying: the longest run of consecutive notes that appears, verbatim, in one of the corpus tunes. "
-            f"<bookmark mark='a'/> For order one, about {say(o1['mean_copy'])} notes on average over forty walks; short runs "
-            f"like these are just scales and repeated notes. <bookmark mark='b'/> For order four, about "
-            f"{say(o4['mean_copy'])}: whole phrases lifted from real tunes. <bookmark mark='c'/> The more a chain remembers, "
-            "the more it copies. Plausibility is bought with plagiarism. <bookmark mark='d'/> The same trade-off haunts "
-            "today's generative models, in Parts 65 and 66."
+            f"Measure the copying: the longest run of consecutive notes that appears, verbatim, in one of the corpus tunes. <bookmark mark='a'/> For order one, about {say(o1['mean_copy'])} notes on average over forty walks; short runs like these are just scales and repeated notes. <bookmark mark='b'/> For order four, about {say(o4['mean_copy'])}: whole phrases lifted from real tunes. <bookmark mark='c'/> In these walks, the higher-order chain produces longer exact corpus matches; this is not a theorem for every corpus or sampling method. This example trades local predictability against longer corpus matches; matching a passage is not by itself a legal or ethical finding of plagiarism. <bookmark mark='d'/> The same trade-off haunts today's generative models, in Parts 65 and 66."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("abcd", rows_[1:]):

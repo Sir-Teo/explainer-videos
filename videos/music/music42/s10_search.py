@@ -22,12 +22,12 @@ class Search(SoundScene):
                       label(r"leaps: \ no tritone, \ seventh, \ or more than an octave \ (Part 14)", font_size=18, color=WHITE),
                       label(r"cadence: \ end on C, \ on a downbeat, \ by step", font_size=18, color=WHITE),
                       label(r"range: \ no wider than a tenth", font_size=18, color=WHITE),
-                      label(r"parallels: \ no fifths or octaves with the bass \ (Part 16)", font_size=18, color=WHITE),
+                      label(r"parallels: \ no parallel fifths/octaves at successive bar downbeats", font_size=18, color=WHITE),
                       label(r"harmony: \ three in four strong beats on chord tones \ (Part 18)", font_size=18, color=WHITE)).arrange(DOWN, buff=0.22, aligned_edge=LEFT)
         soft = VGroup(label(r"soft critics: \ score what survives, \ 0 to 1", font_size=21, color=TUNE),
                       label(r"recovered: \ leaps followed by a step back \ (Part 14's gap fill)", font_size=18, color=WHITE),
                       label(r"unity: \ bars the motive yields in two operations \ (chapter 2)", font_size=18, color=WHITE),
-                      label(r"variety: \ bars not repeated note for note", font_size=18, color=WHITE),
+                      label(r"variety: \ figures unique up to transposition", font_size=18, color=WHITE),
                       label(r"tension: \ correlation with the plan \ (chapter 4)", font_size=18, color=WHITE),
                       label(r"harmony and flow: \ chord tones; \ no bar stuck on one held note", font_size=18, color=WHITE)).arrange(DOWN, buff=0.22, aligned_edge=LEFT)
         g = VGroup(hard, soft).arrange(RIGHT, buff=0.7, aligned_edge=UP)
@@ -36,7 +36,7 @@ class Search(SoundScene):
         with self.voiceover(
             "Now the searcher itself. Its judges are the series' own rules, turned into functions. <bookmark mark='a'/> Hard "
             "critics refuse a draft outright: no forbidden leap, from Part 14; a cadence on C; a range no wider than a tenth; "
-            "no parallel fifths or octaves with the bass, from Part 16; and at least three in four strong beats on chord "
+            "no parallel fifths or octaves with the bass between successive bar downbeats, a sampled check rather than every event; and at least three in four strong beats on chord "
             "tones. <bookmark mark='b'/> Soft critics score what survives, each from zero to one: leaps recovered by a step "
             "back; unity and variety, from chapter two; how well the tension follows the plan, from chapter four; chord "
             "tones, and flow."
@@ -216,6 +216,6 @@ class Search(SoundScene):
                    "Musical Intelligence wrote new pieces in the style of Bach, Chopin and Mozart. <bookmark mark='c'/> Its "
                    "method was recombination: cut a composer's works into fragments and reassemble them where the voice leading "
                    "matches, <bookmark mark='d'/> keeping intact the short patterns Cope called signatures. "
-                   "<bookmark mark='e'/> Listeners often could not tell its chorales and mazurkas from the originals. "
+                   "<bookmark mark='e'/> Some reported demonstrations found listeners had difficulty distinguishing selected outputs from historical pieces, without establishing universal indistinguishability. "
                    "<bookmark mark='f'/> Its generator was the composer's own music, so it raises chapter eight's copying "
                    "question by design.", marks="cdef")
