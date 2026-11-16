@@ -88,15 +88,11 @@ class Bolero(SoundScene):
             label(rf"piccolo, \ a twelfth up \ (G): \ {co['19']:.0f} cents from the 3rd harmonic", font_size=21, color=EAR),
             label(rf"piccolo, \ two octaves and a third up \ (E): \ +{co['28']:.0f} cents from the 5th harmonic", font_size=21, color="#A3E635"),
             label(rf"share of the combination's power on one harmonic series \ (within 20 cents): \ {100 * d['fusion']:.1f}\%", font_size=21, color=TUNE),
-            label(r"Ravel's players read equal-tempered notes, \ so the fifth harmonic is 14 cents sharp: \ the mixture shimmers slightly", font_size=19, color=GREY_A),
+            label(r"this model uses equal-tempered notes, \ so the fifth harmonic is 14 cents sharp: \ players may adjust intonation", font_size=19, color=GREY_A),
         ).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"how well do they fit?", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "How well do they fit? <bookmark mark='a'/> The celesta's octaves are exact. The piccolo on G is two cents flat "
-            "of the third harmonic, too little to hear. The piccolo on E is fourteen cents sharp of the fifth harmonic, "
-            "because the players read equal-tempered notes, Part 6's comma made audible. <bookmark mark='b'/> Monochord's "
-            "fusion measure, the share of the combination's power that lies on one harmonic series, is almost exactly one; "
-            "the small mistuning of the E gives the mixture a slight shimmer, which may be part of its charm."
+            "How well do they fit? <bookmark mark='a'/> The celesta's octaves are exact. The piccolo on G is two cents flat of the third harmonic, a small mistuning whose audibility depends on context. The piccolo on E is fourteen cents sharp of the fifth harmonic, in this equal-tempered model; real players can adjust intonation, Part 6's comma made audible. <bookmark mark='b'/> Monochord's harmonicity proxy, the share of power within twenty cents of one harmonic series, is almost exactly one; the small mistuning of the E gives the mixture a slight shimmer, which may be part of its charm."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[:3].copy().set_opacity(0.2)))
             vo.wait_until("a")
@@ -111,14 +107,14 @@ class Bolero(SoundScene):
         items = [
             (r"Bol\'ero's plan: \ one tune in two halves, \ eighteen statements, \ always in C until a final lurch to E", WHITE),
             (r"a snare drum plays one two-bar rhythm 169 times, \ from \textit{pianissimo} to \textit{fortissimo}", WHITE),
-            (r"the only development is orchestration: \ more instruments, \ new combinations, \ louder", WHITE),
+            (r"orchestration, dynamics and density dominate: \ more instruments, \ new combinations, \ louder", WHITE),
             (r"a fifteen-minute crescendo made of timbre", TUNE),
             (r"Ravel wrote it as a ballet, \ for the dancer Ida Rubinstein", GREY_A),
         ]
         rows_scene(self, r"a crescendo of timbre", items,
                    "The whole piece is built the same way. <bookmark mark='b'/> Boléro states its tune eighteen times, always in "
                    "C, until a final lurch to E near the end. <bookmark mark='c'/> A snare drum plays one two-bar rhythm a hundred "
-                   "and sixty-nine times, from very soft to very loud. <bookmark mark='d'/> The only development is orchestration: "
+                   "and sixty-nine times, from very soft to very loud. <bookmark mark='d'/> Orchestration, dynamics and density dominate the development: "
                    "more instruments, new combinations, more volume. <bookmark mark='e'/> A fifteen-minute crescendo made of "
                    "timbre. <bookmark mark='f'/> Ravel wrote it as a ballet, for the dancer Ida Rubinstein.", marks="cdef")
 
@@ -152,4 +148,4 @@ class Bolero(SoundScene):
             (r"the line between harmony and timbre is the harmonic series", GREY_A),
         ]
         rows_scene(self, r"mixtures before and after Ravel", items,
-                   "Ravel was not the first. <bookmark mark='b'/> The pipe organ's mixture stops sound octaves, fifths and thirds above every key: built-in harmonics. <bookmark mark='c'/> Organ builders did additive synthesis in pipes for centuries. <bookmark mark='d'/> Later, Messiaen wrote chords as colours, and the spectral composers of Part 30 wrote chords from analysed spectra. <bookmark mark='e'/> A chord on the harmonic series is heard as one tone; off it, as a chord. <bookmark mark='f'/> The line between harmony and timbre is the harmonic series.", marks="cdef")
+                   "Ravel was not the first. <bookmark mark='b'/> The pipe organ's mixture stops sound octaves, fifths and thirds above every key: built-in harmonics. <bookmark mark='c'/> Organ builders did additive synthesis in pipes for centuries. <bookmark mark='d'/> Later, Messiaen wrote chords as colours, and the spectral composers of Part 30 wrote chords from analysed spectra. <bookmark mark='e'/> Harmonic alignment can promote fusion, but attacks, level, register and listening context also matter; inharmonic sounds can still be heard as single sources. <bookmark mark='f'/> The boundary between harmony and timbre is perceptual, with harmonicity one cue among several.", marks="cdef")

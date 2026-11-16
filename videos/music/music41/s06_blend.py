@@ -47,14 +47,14 @@ class Blend(SoundScene):
             label(r"flute + clarinet", font_size=19, color=TUNE), label(f"{round(st['flute+clarinet']['centroid'])} Hz", font_size=19, color=TUNE), label(f"{round(100 * st['flute+clarinet']['flute_share'])}\\%", font_size=19, color=TUNE),
             label(r"flute + loud trumpet", font_size=19, color=EAR), label(f"{round(st['flute+trumpet']['centroid'])} Hz", font_size=19, color=EAR), label(f"{round(100 * st['flute+trumpet']['flute_share'])}\\%", font_size=19, color=EAR),
         ).arrange_in_grid(rows=5, cols=3, buff=(0.9, 0.35), col_alignments="lcc").move_to(UP * 0.2)
-        notes = VGroup(label(r"a unison doubling is a new timbre: \ its spectrum is the sum, \ its brightness in between", font_size=19, color=TUNE),
-                       label(r"a louder partner takes most of the power: \ the flute is covered, \ not blended", font_size=19, color=EAR)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
+        notes = VGroup(label(r"a unison doubling is a new timbre: \ this model adds spectral powers; brightness lies between", font_size=19, color=TUNE),
+                       label(r"a louder partner takes most of the power: \ power share alone does not establish masking or blend", font_size=19, color=EAR)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
         head = label(r"the doublings, \ measured", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Measure them. <bookmark mark='a'/> A unison doubling makes a new timbre: its spectrum is the sum of the two, so "
+            "Measure them. <bookmark mark='a'/> A unison doubling makes a new timbre: this calculation adds their spectral powers, an incoherent approximation rather than a phase-resolved waveform prediction, so "
             "its brightness lies between theirs, and the flute and clarinet each carry half the power. <bookmark mark='b'/> "
             f"With the loud trumpet the flute carries only {say(round(100 * st['flute+trumpet']['flute_share']))} per cent of "
-            "the power: it is not blended but covered. Blend and balance are different questions: does it fuse, and can "
+            "the power: that power ratio can contribute to masking, but does not by itself establish whether the flute is perceptually covered. Blend and balance are different questions: does it fuse, and can "
             "every part be heard?"
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_.copy().set_opacity(0.2)))

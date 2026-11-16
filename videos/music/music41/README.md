@@ -2,8 +2,7 @@
 
 Part 41 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the first part of Act VII, *The Craft*. Ravel called *Boléro* (1928) a piece for
-orchestra without music: one tune in two halves, stated eighteen times over one snare-drum rhythm, with only the
-instruments changing. In one statement a horn, a celesta and two piccolos sit on the tune's harmonics and fuse into an
+orchestra without music: two alternating melodic strains, stated eighteen times over one snare-drum rhythm, with orchestration, density and dynamics driving most of the change. In one statement a horn, a celesta and two piccolos sit on the tune's harmonics and fuse into an
 organ-like colour no single player owns: additive synthesis with players. This part builds an orchestra from the
 series' own physical models and asks what an orchestrator controls: ranges and registers, loudness and brightness,
 sections and the chorus effect, doubling and balance, spacing, texture, and the melody of timbres; then it turns
@@ -129,3 +128,7 @@ python -m videos.music.labs 41                                  # the lab (write
 * A. Schoenberg, *Harmonielehre* (1911); A. Webern, orchestration of Bach's six-part *Ricercar* (1935).
 * P. Esling, G. Carpentier and others on computer-aided orchestration (*Orchidée*, *Orchids*, *Orchidea*), IRCAM.
 * W. A. Sethares, *Tuning, Timbre, Spectrum, Scale* (2nd ed., 2005), for the roughness model.
+
+## Interpretation limits
+
+Ranges and balance ratios are approximate guides, not universal limits. Incoherent power addition predicts about 3 dB per doubling under stated assumptions. The blend fraction and 20-cent harmonicity proxy are descriptive models, not measured listener fusion or masking probabilities. Boléro alternates two strains and changes dynamics and density as well as instrumentation. Tempered pitch errors refer to this model; players adjust intonation. The solver prunes candidates before subset search, fits linear band powers, and ranks fits by an RMS dB metric. It is not a global orchestration optimum or a perceptual quality test. Its restricted harmonic candidate list, rather than an inability of orchestras to play inharmonic collections, limits its bell match.

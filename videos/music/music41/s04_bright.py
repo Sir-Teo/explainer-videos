@@ -64,12 +64,7 @@ class Bright(SoundScene):
             (r"Part 4's loudness, \ and Part 3's spectrum, \ working together", GREY_A),
         ]
         rows_scene(self, r"why louder is brighter", items,
-                   "Why? <bookmark mark='b'/> In real brass at high pressure, the sound wave steepens as it travels down the "
-                   "tube, almost into shock fronts: the brassy blare. <bookmark mark='c'/> In our model, which has no such "
-                   "steepening, harder blowing makes the lips close more abruptly, and sharper pulses carry more harmonics. "
-                   "<bookmark mark='d'/> And the ear judges loudness partly by brightness: a bright note sounds loud even when it "
-                   "is played quietly. <bookmark mark='e'/> So a fortissimo cannot be faked by turning up a pianissimo; the "
-                   "colour gives it away. <bookmark mark='f'/> Part 4's loudness and Part 3's spectrum, working together.",
+                   "Why? <bookmark mark='b'/> In real brass at high pressure, the sound wave steepens as it travels down the tube, almost into shock fronts: the brassy blare. <bookmark mark='c'/> In our model, which has no such steepening, harder blowing makes the lips close more abruptly, and sharper pulses carry more harmonics. <bookmark mark='d'/> And the ear judges loudness partly by brightness: brightness can influence inferred effort and loudness, but the relation depends on the spectrum and level. <bookmark mark='e'/> So a fortissimo cannot be faked by turning up a pianissimo; the colour gives it away. <bookmark mark='f'/> Part 4's loudness and Part 3's spectrum, working together.",
                    marks="cdef")
 
     # ------------------------------------------------------------------
@@ -121,9 +116,9 @@ class Bright(SoundScene):
         items = [
             (r"a single flute or violin spans perhaps 30 to 40 dB from its softest to its loudest", WHITE),
             (r"brass reach much higher levels: \ a trombone section at full power can exceed 110 dB nearby", WHITE),
-            (r"the full orchestra spans the widest range of any acoustic ensemble", WHITE),
+            (r"orchestral dynamic range depends on score, room and measurement", WHITE),
             (r"so the orchestrator controls loudness by number and choice of instruments, \ not only by markings", TUNE),
             (r"Part 57 measures loudness; \ Part 55 the hall that carries it", GREY_A),
         ]
         rows_scene(self, r"dynamic range across the orchestra", items,
-                   "How wide is the orchestra's dynamic range? <bookmark mark='b'/> A single flute or violin spans perhaps thirty or forty decibels from its softest to its loudest. <bookmark mark='c'/> Brass reach much higher levels: a trombone section at full power can exceed a hundred and ten decibels nearby. <bookmark mark='d'/> The full orchestra spans the widest range of any acoustic ensemble, <bookmark mark='e'/> so the orchestrator controls loudness by the number and choice of instruments, not only by the markings. <bookmark mark='f'/> Part 57 measures loudness, and Part 55 the hall that carries it.", marks="cdef")
+                   "How wide is the orchestra's dynamic range? <bookmark mark='b'/> A single flute or violin spans perhaps thirty or forty decibels from its softest to its loudest. <bookmark mark='c'/> Brass reach much higher levels: a trombone section at full power can exceed a hundred and ten decibels nearby. <bookmark mark='d'/> A full orchestra can span a very wide dynamic range, depending on the work, room and measurement position, <bookmark mark='e'/> so the orchestrator controls loudness by the number and choice of instruments, not only by the markings. <bookmark mark='f'/> Part 57 measures loudness, and Part 55 the hall that carries it.", marks="cdef")

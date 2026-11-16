@@ -43,9 +43,9 @@ class Hook(SoundScene):
         with self.voiceover(
             "Four: a horn, <bookmark mark='a'/> a celesta two octaves up, <bookmark mark='b'/> and two piccolos, one a "
             "twelfth up <bookmark mark='c'/> and one two octaves and a major third up, all moving together. "
-            "<bookmark mark='d'/> Most listeners hear one new instrument, an organ-like colour no single player owns, "
+            "<bookmark mark='d'/> The combination can suggest one composite instrument, an organ-like colour no single player owns, "
             "because each added instrument sits on a harmonic of the horn's notes: the fourth, the third and the fifth. "
-            "The instruments fuse into one sound."
+            "How completely they fuse depends on performance and listening context."
         ) as vo:
             self.play(FadeOut(stage), FadeOut(roll), FadeIn(stack.parts[0]), FadeIn(parts[0]))
             for mark, k in zip("abc", (1, 2, 3)):
@@ -60,15 +60,15 @@ class Hook(SoundScene):
     def ravel(self):
         items = [
             (r"Maurice Ravel, \ \textit{Bol\'ero} \ (1928): \ one tune in two halves, \ stated eighteen times, \ over one snare-drum rhythm", WHITE),
-            (r"Ravel called it `a piece for orchestra without music': \ only the instruments change", WHITE),
+            (r"Ravel called it `a piece for orchestra without music': \ orchestration, density and dynamics drive most of the change", WHITE),
             (r"in one statement he puts a horn, \ a celesta and two piccolos on the tune's harmonics", WHITE),
             (r"additive synthesis \ (Part 3), \ done with players instead of oscillators", TUNE),
             (r"this part is orchestration: \ which instruments play which notes, \ and why", GREY_A),
         ]
         rows_scene(self, r"Ravel's experiment", items,
-                   "That combination is Maurice Ravel's, from Boléro of 1928: one tune in two halves, stated eighteen times over "
+                   "That combination is Maurice Ravel's, from Boléro of 1928: two alternating melodic strains, with eighteen statements over "
                    "one unchanging rhythm on the snare drum. <bookmark mark='b'/> Ravel called it a piece for orchestra without "
-                   "music: only the instruments change. <bookmark mark='c'/> In one statement he puts a horn, a celesta and two "
+                   "music: orchestration, density and dynamics drive most of the change. <bookmark mark='c'/> In one statement he puts a horn, a celesta and two "
                    "piccolos on the tune's harmonics, <bookmark mark='d'/> which is Part 3's additive synthesis done with players "
                    "instead of oscillators. <bookmark mark='e'/> This part is about orchestration: which instruments play which "
                    "notes, and why. What you heard was our own phrase, on our own instruments, with Ravel's idea.", marks="bcde")

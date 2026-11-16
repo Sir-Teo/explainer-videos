@@ -37,7 +37,7 @@ class Orchestra(SoundScene):
             (r"Beethoven added trombones and piccolo; \ Berlioz, \ from 1830, \ wrote for ninety and more", WHITE),
             (r"Mahler and Strauss, \ around 1900: \ the largest regular orchestras, \ four or more of each wind", WHITE),
             (r"four families: \ woodwinds, \ brass, \ percussion, \ strings, \ each with its own physics \ (Parts 7--9)", TUNE),
-            (r"Berlioz's \textit{Treatise on Instrumentation} \ (1844) \ made orchestration a subject", GREY_A),
+            (r"Berlioz's \textit{Treatise on Instrumentation} \ (1844) \ helped codify an established craft", GREY_A),
         ]
         rows_scene(self, r"the orchestra", items,
                    "The orchestra grew. <bookmark mark='b'/> Haydn's, in the 1760s, had about thirty players: strings with "
@@ -45,7 +45,7 @@ class Orchestra(SoundScene):
                    "and Berlioz, from 1830, wrote for ninety players and more. <bookmark mark='d'/> Mahler and Strauss, around 1900, wrote for "
                    "the largest regular orchestras, four or more of each wind. <bookmark mark='e'/> It has four families, "
                    "woodwinds, brass, percussion and strings, each with its own physics, from Parts 7 to 9. "
-                   "<bookmark mark='f'/> And Berlioz's Treatise on Instrumentation of 1844 made orchestration a subject.",
+                   "<bookmark mark='f'/> Berlioz's influential Treatise on Instrumentation of 1844 helped codify an established craft.",
                    marks="cdef")
 
     # ------------------------------------------------------------------
@@ -156,7 +156,7 @@ class Orchestra(SoundScene):
         cap = label(r"same pitch, \ same level, \ same length: \ only the spectrum \ (bars: \ harmonics 1 to 12) \ and the attack differ", font_size=18, color=GREY_A).to_edge(DOWN, buff=1.0)
         with self.voiceover(
             "Hear the definition of timbre at work: one note, middle C, at the same level and length, on eight of our "
-            "instruments in turn. Only the spectrum and the attack differ, and each is unmistakable. The celesta's bars "
+            "instruments in turn. Only the spectrum and the attack differ, so compare the cues available for identifying each simplified model. The celesta's bars "
             "sit between the harmonics: a struck bar's partials are not a harmonic series."
         ):
             self.play(FadeIn(cells), FadeIn(cap))

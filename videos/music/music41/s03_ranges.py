@@ -41,7 +41,7 @@ class Ranges(SoundScene):
         with self.voiceover(
             "Here is the orchestra laid out by the notes it can sound, from the double bass's low E to the piccolo's top C, "
             "against the keys of the piano. <bookmark mark='a'/> Woodwinds in gold, brass in pink, strings in blue. "
-            "<bookmark mark='b'/> Every range has a comfortable middle and difficult ends: the bottom of a flute is weak and "
+            "<bookmark mark='b'/> The displayed ranges are approximate practical guides, with technique and individual players affecting the extremes: the bottom of a flute is weak and "
             "breathy, the top of a trumpet strained, the top of a cello thin. An orchestrator writes in the middle unless "
             "the extreme is the point."
         ) as vo:
@@ -122,10 +122,7 @@ class Ranges(SoundScene):
                        VGroup(label(r"register hole open", font_size=22, color=EAR), label(rf"the next mode up: \ {d['peak_hz']['high']:.0f} Hz, \ a twelfth higher", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.15)).arrange(RIGHT, buff=1.5).move_to(UP * 0.3)
         cap = label(r"three times the frequency: \ a closed-open cylinder has only odd modes \ (Part 8)", font_size=19, color=GREY_A).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "The physical model shows a register change directly. Here is Part 8's clarinet, blown the same way twice, first "
-            "with its register hole closed and then open. The small hole spoils the bore's lowest mode, so the reed locks onto "
-            "the next one, three times the frequency: a twelfth higher, not an octave, because a cylinder closed at one end "
-            "has only odd modes. A different register, and a different colour."
+            "The physical model shows a register change directly. Here is Part 8's clarinet, blown the same way twice, first with its register hole closed and then open. The small hole spoils the bore's lowest mode, so the reed locks onto the next one, three times the frequency: a twelfth higher, not an octave, because the ideal cylinder closed at one end has odd resonances; real bore geometry and tone holes modify them. A different register, and a different colour."
         ):
             self.play(FadeIn(cells), FadeIn(cap))
         with self.listen(c) as snd:

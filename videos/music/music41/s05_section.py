@@ -27,15 +27,11 @@ class Section(SoundScene):
         bars = VGroup(bar(d["coherent_gain_db"], EAR, 1.2, rf"eight players in perfect lockstep: \ +{d['coherent_gain_db']:.0f} dB \ (amplitudes add)"),
                       bar(d["incoherent_gain_db"], TUNE, 0.2, rf"eight independent players, \ in theory: \ +{d['incoherent_gain_db']:.0f} dB \ (powers add)"),
                       bar(d["gain_db"], BLUE, -0.8, rf"our section, \ measured: \ +{d['gain_db']:.1f} dB"))
+        bars.scale_to_fit_width(min(bars.width, 12.6)).move_to(DOWN * 0.1)
         cap = label(r"twice the players: \ +3 dB, \ not +6; \ a section grows louder slowly", font_size=20, color=WHITE).to_edge(DOWN, buff=1.0)
         head = label(r"eight violins against one", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Eight violins are louder than one, but by how much? <bookmark mark='a'/> If eight players moved in perfect "
-            "lockstep, their waves would add, eight times the amplitude, eighteen decibels. <bookmark mark='b'/> But real "
-            "players are never exactly together: their pitches differ by a few cents and their vibratos drift, so their "
-            "waves add up at random, and only their powers add: eight times the power, nine decibels. "
-            f"<bookmark mark='c'/> Our section of eight, each with its own small detuning, vibrato and timing, measures "
-            f"{d['gain_db']:.1f} decibels louder than one player. Doubling the players adds only three decibels."
+            f"Eight violins are louder than one, but by how much? <bookmark mark='a'/> If eight players moved in perfect lockstep, their waves would add, eight times the amplitude, eighteen decibels. <bookmark mark='b'/> But real players are never exactly together: their pitches differ by a few cents and their vibratos drift, so their phases tend to decorrelate, so an incoherent-power approximation is useful: eight times the power, nine decibels. <bookmark mark='c'/> Our section of eight, each with its own small detuning, vibrato and timing, measures {d['gain_db']:.1f} decibels louder than one player. Under that approximation and equal individual levels, doubling the players adds about three decibels."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*bars).copy().set_opacity(0.15)))
             for mark, b in zip("abc", bars):
@@ -87,18 +83,13 @@ class Section(SoundScene):
     def sizes(self):
         items = [
             (r"a modern string section: \ about 16 first violins, \ 14 second, \ 12 violas, \ 10 cellos, \ 8 basses", WHITE),
-            (r"against one or two of each wind: \ the strings are many because each is quiet", WHITE),
+            (r"with wind complements varying by score, often two to four of each in a large modern orchestra: \ the strings are many because each is quiet", WHITE),
             (r"a solo violin against the section: \ the concerto's contrast is one against many", WHITE),
             (r"dividing a section \ (\textit{divisi}) \ thins it: \ half the players, \ 3 dB less, \ less shimmer", TUNE),
             (r"chapter 5: \ what happens when different instruments share a line", GREY_A),
         ]
         rows_scene(self, r"section sizes", items,
-                   "This sets the orchestra's proportions. <bookmark mark='b'/> A modern string section has about sixteen first "
-                   "violins, fourteen seconds, twelve violas, ten cellos and eight basses, <bookmark mark='c'/> against one or two "
-                   "of each wind: the strings are many because each is quiet. <bookmark mark='d'/> A solo violin against the "
-                   "section is the concerto's contrast, one against many. <bookmark mark='e'/> Dividing a section, divisi, thins "
-                   "it: half the players, three decibels less, and less shimmer. <bookmark mark='f'/> Chapter five turns to "
-                   "different instruments sharing one line.", marks="cdef")
+                   "This sets the orchestra's proportions. <bookmark mark='b'/> A modern string section has about sixteen first violins, fourteen seconds, twelve violas, ten cellos and eight basses, <bookmark mark='c'/> with wind complements varying by score, often two to four of each in a large modern orchestra: the strings are many because each is quiet. <bookmark mark='d'/> A solo violin against the section is the concerto's contrast, one against many. <bookmark mark='e'/> Dividing a section, divisi, thins it: half the players, three decibels less, and less shimmer. <bookmark mark='f'/> Chapter five turns to different instruments sharing one line.", marks="cdef")
 
     # ------------------------------------------------------------------
     def sizes_(self):

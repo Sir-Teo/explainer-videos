@@ -3,6 +3,8 @@
 Checkpoint: 16 November 2026. Review all 68 episodes in order, emphasizing educational clarity,
 accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8f9ba0a596bf960bc65f53e0075`.
 
+Cross-series regression: 889 tests passed (194.05 seconds); 1,138 episode Python files parsed. The later Part 37 son-clave repair also passed its 27 targeted checks. Rechecked 749 recorded source identities across Parts 1–40; all match. A final full regression and identity audit will follow Part 68.
+
 | Part | Source and sampled-preview pass | Final narrated production |
 |---|---|---|
 | 1 — One String | Complete; [repair and verification record](music/part01.md) | Open |
@@ -45,8 +47,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 38 — Blues and Swing | Complete | Open |
 | 39 — Changes | Complete | Open |
 | 40 — The Song | Complete | Open |
-| 41 — Orchestration | In progress | Open |
-| 42–68 | Queued | Open |
+| 41 — Orchestration | Complete | Open |
+| 42 — Composing | In progress | Open |
+| 43–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -151,7 +154,9 @@ Part 39: all 12 chapter preview sheets reviewed; sound and 14 listening-window m
 
 Part 40: all 12 chapter preview sheets reviewed; sound and 19 listening-window motion checks pass. Local identities: `renders/qa/music40/source-receipt.json`.
 
-**Current: Part 41.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 41: all 12 chapter preview sheets reviewed; sound and 20 listening-window motion checks pass. Local identities: `renders/qa/music41/source-receipt.json`.
+
+**Current: Part 42.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

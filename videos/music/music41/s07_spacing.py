@@ -30,13 +30,10 @@ class Spacing(SoundScene):
         g = VGroup(dots, gaps).move_to(LEFT * 3.0 + DOWN * 0.1)
         side = VGroup(label(r"the harmonic series: \ wide intervals at the bottom, \ close ones at the top", font_size=20, color=WHITE),
                       label(r"orchestrators voice chords the same way: \ octaves and fifths in the bass, \ thirds above", font_size=20, color=TUNE),
-                      label(r"a chord spaced like the series sounds like one rich tone", font_size=20, color=GREY_A)).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(RIGHT * 2.8)
+                      label(r"such spacing can promote spectral coherence without guaranteeing perceptual fusion", font_size=20, color=GREY_A)).arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(RIGHT * 2.8)
         head = label(r"the harmonic series as a guide to spacing", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Part 1's harmonic series is also a guide to spacing. <bookmark mark='a'/> Its intervals are wide at the bottom, "
-            "an octave, then a fifth, a fourth, and close at the top, thirds and smaller. <bookmark mark='b'/> Orchestrators "
-            "voice chords the same way, octaves and fifths in the bass, thirds above, and a chord spaced like the series "
-            "sounds like one rich tone."
+            "Part 1's harmonic series is also a guide to spacing. <bookmark mark='a'/> Its intervals are wide at the bottom, an octave, then a fifth, a fourth, and close at the top, thirds and smaller. <bookmark mark='b'/> Orchestrators voice chords the same way, octaves and fifths in the bass, thirds above, and such spacing can promote spectral coherence without guaranteeing perceptual fusion."
         ) as vo:
             self.play(FadeIn(head), FadeIn(dots))
             vo.wait_until("a")
@@ -104,11 +101,7 @@ class Spacing(SoundScene):
             (r"chapter 7: \ how parts are arranged in time, \ textures", GREY_A),
         ]
         rows_scene(self, r"rules of spacing", items,
-                   "From this come rules of spacing. <bookmark mark='b'/> Below about C three, avoid thirds and use octaves and "
-                   "fifths: arrangers call it the low interval limit. <bookmark mark='c'/> The outer voices carry the chord, bass "
-                   "and melody, with the inner parts filling between. <bookmark mark='d'/> And spacing changes colour: the same "
-                   "notes, close or open, are different sounds. <bookmark mark='e'/> These are Part 17's voicing rules for choirs, "
-                   "rediscovered with instruments. <bookmark mark='f'/> Chapter seven turns to how parts are arranged in time.",
+                   "From this come rules of spacing. <bookmark mark='b'/> Low-interval-limit charts are rules of thumb for particular voicings, timbres and dynamics, rather than an absolute ban on thirds below C three. <bookmark mark='c'/> The outer voices carry the chord, bass and melody, with the inner parts filling between. <bookmark mark='d'/> And spacing changes colour: the same notes, close or open, are different sounds. <bookmark mark='e'/> These are Part 17's voicing rules for choirs, rediscovered with instruments. <bookmark mark='f'/> Chapter seven turns to how parts are arranged in time.",
                    marks="cdef")
 
     # ------------------------------------------------------------------

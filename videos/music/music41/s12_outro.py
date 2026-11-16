@@ -65,7 +65,7 @@ class Outro(SoundScene):
             "Instruments have ranges, registers, and sometimes transposed parts. <bookmark mark='b'/> Louder is brighter, and "
             "eight players are about ten decibels louder than one, not eighteen. <bookmark mark='c'/> Doubling makes new "
             "timbres, and balance is a separate question. <bookmark mark='d'/> Spacing follows the harmonic series, because "
-            "low thirds are rough. <bookmark mark='e'/> And instruments placed on harmonics fuse into one sound, so a solver "
+            "low thirds are rough. <bookmark mark='e'/> And harmonic alignment can encourage a composite timbre, so a solver "
             "can spell a vowel with an orchestra."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))

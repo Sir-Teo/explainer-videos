@@ -22,14 +22,14 @@ class Search(SoundScene):
             (r"turn Ravel around: \ given a sound, \ which instruments, \ on which notes, \ make it?", WHITE),
             (r"candidates: \ each instrument playing each harmonic of the target's pitch, \ within its range", WHITE),
             (r"fit: \ choose loudnesses so the sum's spectrum is close to the target's", WHITE),
-            (r"search: \ among all small groups of instruments, \ keep the best", TUNE),
+            (r"search: \ prune candidates, then search small subsets", TUNE),
             (r"a target of ours: \ a sung `ah' on C3", GREY_A),
         ]
         rows_scene(self, r"the problem", items,
                    "Now turn Ravel's idea around. <bookmark mark='b'/> Given a sound, which instruments, on which notes, would "
                    "make it? <bookmark mark='c'/> The candidates are each instrument playing each harmonic of the target's pitch, "
                    "within its range. <bookmark mark='d'/> Fit loudnesses so the sum's spectrum is close to the target's, "
-                   "<bookmark mark='e'/> and search among all small groups of instruments for the best. <bookmark mark='f'/> Our "
+                   "<bookmark mark='e'/> and search small subsets of a pruned candidate list for a match. <bookmark mark='f'/> Our "
                    "target is a sung vowel, ah, on C three.", marks="cdef")
 
     # ------------------------------------------------------------------
@@ -77,7 +77,7 @@ class Search(SoundScene):
         chosen = VGroup(*[label(rf"{c['instrument'].replace(' f', '')}: \ harmonic {c['harmonic']}", font_size=19, color=TUNE) for c in res["4"]["chosen"]]).arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to(RIGHT * 3.6 + UP * 0.4)
         cl = label(r"the best four", font_size=19, color=GREY_A).next_to(chosen, UP, buff=0.25)
         cap = label(r"error: \ the root-mean-square difference in band level, \ in decibels", font_size=18, color=GREY_A).to_edge(DOWN, buff=0.8)
-        head = label(rf"the solver: \ {res['4']['candidates']} candidates, \ every group of up to four", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
+        head = label(rf"the solver: \ {res['4']['candidates']} candidates; \\ subsets of up to four after pruning", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             f"The solver has {say(res['4']['candidates'])} candidates. It fits all of them at once by non-negative least "
             "squares, keeps the most promising, and then tries every group of one, two, three and four, refitting each. "
@@ -153,13 +153,10 @@ class Search(SoundScene):
         c = clip("bell.two")
         side = VGroup(label(r"a church bell's partials \ (Part 9): \ hum, \ prime, \ a minor-third `tierce', \ quint, \ nominal ...", font_size=20, color=WHITE),
                       label(rf"the solver's best four: \ {d['errors']['4']:.0f} dB off per band, \ against {d['vowel_error']:.0f} for the vowel", font_size=20, color=EAR),
-                      label(r"harmonic instruments cannot supply the minor third: \ it is not a harmonic", font_size=20, color=TUNE)).arrange(DOWN, buff=0.4).move_to(UP * 0.4)
+                      label(r"this harmonic-constrained candidate list limits the bell match; \\ arbitrary orchestral pitches allow other approximations", font_size=20, color=TUNE)).arrange(DOWN, buff=0.4).move_to(UP * 0.4)
         head = label(r"a harder target: \ a bell", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Now a harder target: Part 9's church bell, whose partials include a minor third above the strike note, the "
-            f"tierce. The solver's best four instruments are {say(round(d['errors']['4']))} decibels off per band, against "
-            f"{say(round(d['vowel_error']))} for the vowel, because harmonic instruments cannot supply a partial that is not "
-            "a harmonic. Hear the bell, and then the best the orchestra can do."
+            f"Now a harder target: Part 9's church bell, whose partials include a minor third above the strike note, the tierce. The solver's best four instruments are {say(round(d['errors']['4']))} decibels off per band, against {say(round(d['vowel_error']))} for the vowel, because this restricted search places candidates near harmonics of one base pitch; an orchestra with arbitrary pitches can approximate inharmonic spectra. Hear the bell, and then the best the orchestra can do."
         ):
             self.play(FadeIn(head), FadeIn(side))
         with self.listen(c) as snd:
@@ -186,7 +183,7 @@ class Search(SoundScene):
             "negative, since an instrument cannot play less than silence, that make A times w as close to b as possible: "
             "non-negative least squares. <bookmark mark='c'/> An orchestra cannot use every candidate at once, so the solver "
             "then tries every small group of the most promising, and refits each: sparsity by brute force. "
-            "<bookmark mark='d'/> And it judges the fit in decibels per band, the way the ear compares loudness."
+            "<bookmark mark='d'/> And it judges the fit in decibels per band, a convenient spectral error metric rather than a validated perceptual quality score."
         ) as vo:
             self.play(FadeIn(head), FadeIn(eq[0]))
             vo.wait_until("a")
