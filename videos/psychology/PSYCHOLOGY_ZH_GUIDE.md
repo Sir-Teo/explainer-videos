@@ -1390,6 +1390,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | digital phenotyping; brain stimulation; psychedelic-assisted therapy | 数字表型；脑刺激；迷幻剂辅助疗法 |
 | Craig Hedge; Claire Gillan; Quentin Huys; Peter Dayan; Robb Rutledge; Adam Chekroud; Robert DeRubeis | 克雷格·赫奇；克莱尔·吉兰；昆廷·休斯；彼得·达扬；罗布·拉特利奇；亚当·切克劳德；罗伯特·德鲁贝斯 |
 
+## Part 60: minds and machines
+
+| English | 中文 |
+|---|---|
+| perceptron; neural network as a model of the mind; representational similarity; brain score | 感知机；作为心智模型的神经网络；表征相似性；脑分数 |
+| machine psychology; contamination; prompt sensitivity; a model as a sample of one | 机器心理学；数据污染；提示敏感性；作为单一样本的模型 |
+| theory of mind; false-belief task; benchmark as a test; item response theory | 心理理论；错误信念任务；作为测验的基准；项目反应理论 |
+| algorithm aversion; algorithm appreciation; reliance; silicon sample | 算法厌恶；算法欣赏；依赖；硅样本 |
+| screen time; well-being; specification curve; machine behaviour | 屏幕时间；幸福感；设定曲线；机器行为 |
+| Frank Rosenblatt; Marcel Binz; Eric Schulz; Michal Kosinski; Tomer Ullman; Berkeley Dietvorst; Thomas Costello; Amy Orben; Andrew Przybylski; Jonathan Haidt; Iyad Rahwan | 弗兰克·罗森布拉特；马塞尔·宾茨；埃里克·舒尔茨；米哈尔·科辛斯基；托默·乌尔曼；伯克利·迪特沃斯特；托马斯·科斯特洛；艾米·奥本；安德鲁·普日比尔斯基；乔纳森·海特；伊亚德·拉万 |
+
 ## Names
 
 | English | 中文 |

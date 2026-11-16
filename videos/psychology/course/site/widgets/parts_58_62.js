@@ -153,4 +153,61 @@
       note: "Nothing you choose is stored or sent. The task is Part 59's: an effect budget of 60 ms split between a common mean and differences between people, with trial noise of 120 ms. Only more trials buy both a group effect and a reliable measure.",
     });
   };
+  // ---- Part 60: human or machine, then how much to rely on an aid. ----
+  W.humanormachine = function (el) {
+    var w = null;
+    var ITEMS = [
+      ["Everyone knows what attention is. It is the taking possession by the mind, in clear and vivid form, of one out of what seem several simultaneously possible objects or trains of thought.", 0],
+      ["Habit is the groove that a repeated act wears into the nervous system, so that what once cost effort comes at last to cost nothing at all.", 1],
+      ["The baby, assailed by eyes, ears, nose, skin, and entrails at once, feels it all as one great blooming, buzzing confusion.", 0],
+      ["Memory is not a storehouse but a performance; each time we recall, we rebuild, and the building is never quite the same.", 1],
+      ["It is nothing jointed; it flows. A 'river' or a 'stream' are the metaphors by which it is most naturally described.", 0],
+      ["We do not first see and then judge; the judging is already in the seeing, and the eye arrives at its object with an opinion.", 1],
+    ];
+    var S = { phase: "idle", k: 0, answers: [] };
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "run"; },
+      respond: function (side) {
+        S.answers.push(side); S.k++; task.count++;
+        if (S.k >= ITEMS.length) S.phase = "done";
+        if (w) w.render();
+      },
+    });
+    function score() { var c = 0, i; for (i = 0; i < S.answers.length; i++) if (S.answers[i] === ITEMS[i][1]) c++; return c; }
+    w = QB.widget(el, {
+      title: "Human or machine?",
+      sub: "Six sentences about the mind. Three are William James's (1890); three were written for Part 60 by a language model in his manner. For each, press F for James or J for the machine (or tap the left or right half). Then, on the right, choose how often to follow an aid that is right 80% of the time when you are right 70%.",
+      panels: 2, height: 330,
+      controls: [
+        { k: "rely", label: "share of decisions where you follow the aid", min: 0, max: 1, step: 0.05, value: 0.5, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+        { k: "aid", label: "the aid's accuracy", min: 0.5, max: 0.95, step: 0.05, value: 0.8, fmt: function (x) { return Math.round(100 * x) + "%"; } },
+      ],
+      buttons: [
+        { label: "Start", act: function () { S.phase = "run"; S.k = 0; S.answers = []; task.count = 0; } },
+        { label: "Clear", act: function () { S.phase = "idle"; S.k = 0; S.answers = []; } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (S.phase === "run") {
+          ctx.fillStyle = "#cfd6e2"; ctx.font = "13px sans-serif"; ctx.textAlign = "center";
+          ctx.fillText("sentence " + (S.k + 1) + " of " + ITEMS.length + ":   F James   J machine", b.cx, b.y + 22);
+          ctx.font = "15px serif"; ctx.fillStyle = "#e8eef6";
+          T.wrap(ctx, "\u201c" + ITEMS[S.k][0] + "\u201d", b.cx, b.cy - 30, b.w - 60, 20);
+        } else if (S.phase === "done") {
+          T.message(ctx, b, "You got " + score() + " of 6.",
+            "Sentences 1, 3 and 5 are James's (attention, the baby's blooming, buzzing confusion, the stream of thought); 2, 4 and 6 are the machine's. In larger studies people do little better than chance with short texts: we judge minds by their surface.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start to judge six sentences; the slider on the right works any time.");
+        }
+        var a = g[1].axes({ x: [0, 1], y: [0.5, 1], title: "Your accuracy (gold) against how often you follow the aid" });
+        var acc = function (s) { return s * v.aid + (1 - s) * 0.7; };
+        a.line([0, 1], [acc(0), acc(1)], { color: "#f2c14e", width: 2 });
+        a.line([0, 1], [Math.max(v.aid, 0.7), Math.max(v.aid, 0.7)], { color: "#5bd18b", width: 1 });
+        a.text(v.rely, Math.min(acc(v.rely) + 0.04, 0.97), Math.round(100 * acc(v.rely)) + "%", { align: "center", size: 11 });
+      },
+      readout: function (v) { return [["your accuracy", Math.round(100 * (v.rely * v.aid + (1 - v.rely) * 0.7)) + "%"], ["best possible", Math.round(100 * Math.max(v.aid, 0.7)) + "%"]]; },
+      note: "Nothing you choose is stored or sent. The line is Part 60's: following an aid at random on a share of decisions mixes its accuracy with yours; when the aid is better, the best policy is to follow it every time, and algorithm aversion costs the difference.",
+    });
+  };
 })();

@@ -73,4 +73,38 @@ PARTS = [
               ("Its tests", "tests/psychology/test_precision.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=60, level="D", widget="humanormachine", prereq=(2, 3, 4, 26, 35, 45, 47),
+        question="What can psychology and artificial intelligence now tell each other?",
+        story="The Perceptron was published in Psychological Review in 1958, by a psychologist; now language models "
+              "sit psychology's tests, are proposed as models of the mind, and are used as advisers, helpers and "
+              "stand-in participants. The part judges networks as models of vision and language, simulates the "
+              "traps of machine psychology (contamination, prompt sensitivity, one model as a sample of one), weighs "
+              "machine theory of mind, treats a benchmark as a test, models algorithm aversion, reads a dialogue "
+              "that reduced conspiracy belief and the evidence on chatbots in care, shows what silicon samples "
+              "erase, sets out the screens-and-well-being dispute with a specification curve, and proposes a "
+              "science of machine behaviour built on psychology's methods.",
+        handoff="Part 61 uses language models as research assistants and simulated participants and writes theories "
+                "as code; Part 62's dissertation is preregistered.",
+        outside="Part 3's validity, Part 4's forking paths, Part 45's item response theory and Part 47's units of "
+                "analysis; proportions, regression and power.",
+        objectives={
+            "U": ["Explain why a model matching people's behaviour need not share their mechanism.",
+                  "Explain algorithm aversion and appreciation, and when each appears."],
+            "M": ["Show by simulation how contamination and pseudo-replication mislead a machine evaluation.",
+                  "Compute the items needed to separate two models, and run a specification curve."],
+            "D": ["Design a valid test of a cognitive capacity in a machine, with new items and controls."],
+            "I": ["Write an evaluation plan for a model, and judge a silicon-sample or chatbot-care claim."],
+        },
+        results=[
+            ("Items to separate two accuracies", r"n \approx \frac{2p(1-p)(1-\rho)(z_{1-\alpha/2} + z_{1-\beta})^2}"
+                                                 r"{\Delta^2}"),
+            ("Accuracy with an aid", r"A = s\,a_{\text{aid}} + (1 - s)\,a_{\text{own}}"),
+            ("A benchmark item, two-parameter logistic", r"P(\text{correct}\mid\theta) = \frac{1}{1 + e^{-a(\theta - b)}}"),
+        ],
+        U=(0, 1, 2, 6, 7, 10, 13), D=(4, 11, 12, 15), I=(5, 8, 9, 14),
+        also=(("Psyche's machines module", "explainer/psychology/psyche/machines.py"),
+              ("Its tests", "tests/psychology/test_machines.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

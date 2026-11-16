@@ -7790,3 +7790,112 @@ shown(59, r"DeRubeis et al.\ (2014)", "a method for treatment selection, compute
 shown(59, r"Cole et al.\ (2022)", "a small sham-controlled stimulation trial, described")
 shown(59, r"Goodwin et al.\ (2022)", "a dose-controlled psilocybin trial, described")
 shown(59, r"Insel (2017)", "a programmatic essay, quoted")
+
+# --- Part 60: Minds and Machines --------------------------------------------------------------------------------------
+add(Finding(
+    key="lm_classic_biases", part=60, title=r"Human-like biases in language models",
+    claim="Large language models given psychology's classic judgment problems show the same biases people do.",
+    original=Study("Binz and Schulz", 2023, design="a language model given classic vignettes and decision tasks",
+                   found="human-like answers on many problems, including the Linda problem and framing"),
+    status="contested",
+    record=(Study("Hagendorff, Fabi and Kosinski", 2023, design="cognitive reflection and semantic-illusion items "
+                  "given to successive models", found="intuitive errors in earlier models, largely gone in later "
+                  "ones"),),
+    note="Whether a model shows a bias depends on the model, its version and the item's wording; the classic items "
+         "are in the training text, so new and perturbed items are needed before a bias says anything about "
+         "mechanism.",
+    sources=("M. Binz and E. Schulz, Using cognitive psychology to understand GPT-3, PNAS 120 (2023) e2218523120",
+             "T. Hagendorff, S. Fabi and M. Kosinski, Human-like intuitive behavior and reasoning biases emerged in "
+             "large language models but disappeared in ChatGPT, Nature Computational Science 3 (2023) 833-838"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="lm_theory_of_mind", part=60, title=r"Theory of mind in language models",
+    claim="Large language models solve false-belief tasks in a way that shows a robust theory of mind.",
+    original=Study("Kosinski", 2023, design="classic unexpected-contents and unexpected-transfer tasks given to "
+                   "successive models", found="recent models solved most of them"),
+    status="contested",
+    record=(Study("Ullman", 2023, design="the same tasks with trivial alterations",
+                  found="the models' answers failed"),
+            Study("Strachan and colleagues", 2024, n="about 1,900 people", design="a battery of theory-of-mind "
+                  "tests, models against people", found="at or above people on some tests, below on others")),
+    note="Performance on the familiar forms of the tasks is strong; robustness to perturbation, and what the "
+         "performance means, are disputed.",
+    sources=("M. Kosinski, Theory of mind may have spontaneously emerged in large language models, arXiv preprint "
+             "2302.02083 (2023); published as Evaluating large language models in theory of mind tasks, PNAS 121 "
+             "(2024) e2405460121",
+             "T. Ullman, Large language models fail on trivial alterations to theory-of-mind tasks, arXiv preprint "
+             "2302.08399 (2023)",
+             "J. W. A. Strachan et al., Testing theory of mind in large language models and humans, Nature Human "
+             "Behaviour 8 (2024) 1285-1295"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="algorithm_aversion", part=60, title=r"Algorithm aversion",
+    claim="After seeing an algorithm err, people avoid it in favour of human judgment, even when the algorithm is "
+          "more accurate.",
+    original=Study("Dietvorst, Simmons and Massey", 2015, design="forecasting tasks with a statistical model's "
+                   "forecasts available", found="seeing the model err reduced its use more than seeing a human err"),
+    status="contested",
+    record=(Study("Logg, Minson and Moore", 2019, design="advice labelled as from an algorithm or a person",
+                  found="people often weighted algorithmic advice more: appreciation"),
+            Study("Dietvorst, Simmons and Massey", 2018, design="letting people modify the model's forecasts",
+                  found="slight control restored much of the use")),
+    note="Both aversion and appreciation replicate; which appears depends on the task, visible errors and "
+         "control.",
+    sources=("B. J. Dietvorst, J. P. Simmons and C. Massey, Algorithm aversion: people erroneously avoid algorithms "
+             "after seeing them err, Journal of Experimental Psychology: General 144 (2015) 114-126",
+             "J. M. Logg, J. A. Minson and D. A. Moore, Algorithm appreciation: people prefer algorithmic to human "
+             "judgment, Organizational Behavior and Human Decision Processes 151 (2019) 90-103",
+             "B. J. Dietvorst, J. P. Simmons and C. Massey, Overcoming algorithm aversion: people will use imperfect "
+             "algorithms if they can (even slightly) modify them, Management Science 64 (2018) 1155-1170"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="dialogue_belief_change", part=60, title=r"Belief change from a conversation with a model",
+    claim="A short conversation with a language model that answers a person's own evidence durably reduces their "
+          "belief in a conspiracy theory.",
+    original=Study("Costello, Pennycook and Rand", 2024, n="about 2,000 participants in two studies",
+                   design="three rounds of dialogue against a control conversation, follow-up at two months",
+                   found="belief fell by about a fifth, and stayed lower at two months"),
+    status="not directly tested",
+    record=(),
+    note="Two studies in the original paper agree; independent replications by other groups, and tests outside "
+         "online samples, are needed before the size is trusted.",
+    sources=("T. H. Costello, G. Pennycook and D. G. Rand, Durably reducing conspiracy beliefs through dialogues "
+             "with AI, Science 385 (2024) eadq1814",),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="social_media_harm", part=60, title=r"Social media and adolescent well-being",
+    claim="The spread of smartphones and social media caused a large rise in depressive symptoms among "
+          "adolescents.",
+    original=Study("Twenge and colleagues", 2018, design="national surveys of US adolescents over time",
+                   found="depressive symptoms rose after 2012 alongside new-media screen time"),
+    status="contested",
+    record=(Study("Orben and Przybylski", 2019, n="about 355,000 adolescents in three surveys",
+                  design="specification curves", found="screen use explained at most 0.4% of the variance in "
+                  "well-being"),
+            Study("Allcott and colleagues", 2020, design="paid deactivation of Facebook for four weeks, adults",
+                  found="slightly higher subjective well-being")),
+    note="The rise in reported symptoms is real in several countries; the share caused by smartphones and social "
+         "media, and for whom, is disputed, and causal evidence in adolescents is scarce.",
+    sources=("J. M. Twenge, T. E. Joiner, M. L. Rogers and G. N. Martin, Increases in depressive symptoms, "
+             "suicide-related outcomes, and suicide rates among U.S. adolescents after 2010 and links to increased "
+             "new media screen time, Clinical Psychological Science 6 (2018) 3-17",
+             "A. Orben and A. K. Przybylski, The association between adolescent well-being and digital technology "
+             "use, Nature Human Behaviour 3 (2019) 173-182",
+             "H. Allcott, L. Braghieri, S. Eichmeyer and M. Gentzkow, The welfare effects of social media, American "
+             "Economic Review 110 (2020) 629-676"),
+    checked="2026-11-16",
+))
+shown(60, r"Rosenblatt (1958)", "a historical paper, described")
+shown(60, r"Yamins \& DiCarlo (2016)", "a review of goal-driven network models, described")
+shown(60, r"Heinz et al.\ (2025)", "a single randomized trial against a waiting list, described with its limits")
+shown(60, r"Argyle et al.\ (2023)", "a silicon-sample study, described; the method is computed here")
+shown(60, r"Lake et al.\ (2017)", "a theoretical review, described")
+shown(60, r"Rahwan et al.\ (2019)", "a programmatic review, described")
