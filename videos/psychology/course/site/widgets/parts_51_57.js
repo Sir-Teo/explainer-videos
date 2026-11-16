@@ -236,4 +236,88 @@
       note: "Nothing you click is stored or sent. Green dots were on target, red ones missed. With eighteen movements the line is rough; the law shows itself better with more.",
     });
   };
+
+  // ---- Part 53: whom would you hire?  Pairs of candidates: a test score and an interview impression. ----
+  W.hiring = function (el) {
+    var w = null, N = 12;
+    function gauss(rand) { var u = 1 - rand(), v = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+    function person(rand) {
+      var g = gauss(rand), s = gauss(rand);
+      return { perf: 0.31 * g + 0.45 * s + 0.837 * gauss(rand), test: g + 0.4 * gauss(rand), imp: s + 2.2 * gauss(rand) };
+    }
+    function pct(z) { var t = 1 / (1 + 0.2316419 * Math.abs(z)), d = 0.3989423 * Math.exp(-z * z / 2);
+      var p = d * t * (0.3193815 + t * (-0.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274)))); return Math.round(100 * (z > 0 ? 1 - p : p)); }
+    var S = { phase: "idle", pairs: [], k: 0, log: [] };
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side) {
+        var pr = S.pairs[S.k], pick = pr[side], other = pr[1 - side];
+        var testPick = pr[0].test > pr[1].test ? pr[0] : pr[1];
+        S.log.push({ right: pick.perf > other.perf, testRight: testPick.perf > (testPick === pr[0] ? pr[1] : pr[0]).perf,
+                     choseTest: pick === testPick });
+        task.count++; S.k++;
+        S.phase = S.k >= N ? "done" : "ask";
+        if (w) w.render();
+      },
+    });
+    function start(state) {
+      var rand = mulberry(53 + (state ? state.seed : 0)), i;
+      S.pairs = [];
+      while (S.pairs.length < N) {
+        var a = person(rand), b = person(rand);
+        if (Math.abs(a.test - b.test) > 0.8 && Math.abs(a.imp - b.imp) > 0.8 && (a.test - b.test) * (a.imp - b.imp) < 0) S.pairs.push(rand() < 0.5 ? [a, b] : [b, a]);
+      }
+      S.k = 0; S.log = []; task.count = 0; S.phase = "ask";
+      if (w) w.render();
+    }
+    function stars(z) { var n = Math.max(1, Math.min(5, Math.round(3 + z / 1.2))); return "★★★★★".slice(0, n) + "☆☆☆☆☆".slice(0, 5 - n); }
+    var WORDS = ["flat, hesitant", "polite, a little stiff", "pleasant, ordinary", "warm, articulate", "confident, memorable"];
+    w = QB.widget(el, {
+      title: "Whom would you hire?",
+      sub: "Twelve pairs of candidates for the same job. Each has a test score (as a percentile) and the interviewer's impression from an unstructured interview. Press F for the left candidate, J for the right (or tap a side). At the end, see how often your choices were the better performer, against simply taking the higher test score.",
+      panels: 2, height: 330, weights: [1.25, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Clear", act: function (state) { state.seed++; S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (S.phase === "ask") {
+          var pr = S.pairs[S.k];
+          ctx.save(); ctx.textAlign = "center";
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("pair " + (S.k + 1) + " of " + N, b.cx, b.y + 22);
+          [0, 1].forEach(function (i) {
+            var c = pr[i], x = b.x + b.w * (i ? 0.75 : 0.25), y = b.cy - 30;
+            ctx.fillStyle = C.ink; ctx.font = "600 15px system-ui, sans-serif";
+            ctx.fillText(i ? "Candidate B (J)" : "Candidate A (F)", x, y);
+            ctx.font = "13px system-ui, sans-serif"; ctx.fillStyle = "#b39ddb";
+            ctx.fillText("test: " + pct(c.test / 1.077) + "th percentile", x, y + 28);
+            ctx.fillStyle = "#f2c14e"; ctx.font = "16px system-ui, sans-serif";
+            ctx.fillText(stars(c.imp / 2.42), x, y + 54);
+            ctx.font = "12px system-ui, sans-serif"; ctx.fillText(WORDS[Math.max(0, Math.min(4, Math.round(2 + c.imp / 2.42 / 1.2)))], x, y + 74);
+          });
+          ctx.restore();
+        } else if (S.phase === "done") {
+          var mine = S.log.filter(function (r) { return r.right; }).length, test = S.log.filter(function (r) { return r.testRight; }).length;
+          var chose = S.log.filter(function (r) { return r.choseTest; }).length;
+          T.message(ctx, b, "You picked the better performer " + mine + " times in " + N + "; the higher test score would have " + test + ".",
+            "You chose the higher test score " + chose + " times. In these simulated candidates the test has validity about 0.3 and the unstructured impression about 0.2, so impressions mislead more often. Twelve pairs is a small sample: run it again.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. In each pair, one candidate has the better test score and the other the better interview impression.");
+        }
+        var a2 = g[1].axes({ x: [0, 3], y: [0, 1], title: "Better performer picked", noX: true });
+        if (S.log.length) {
+          var m = S.log.filter(function (r) { return r.right; }).length / S.log.length, t = S.log.filter(function (r) { return r.testRight; }).length / S.log.length;
+          a2.bars([0.9, 2.1], [m, t], 0.7, { color: function (i) { return i ? "#b39ddb" : "#f2c14e"; } });
+          a2.text(0.9, Math.min(m, 0.9) + 0.06, "you " + Math.round(100 * m) + "%", { align: "center", size: 11 });
+          a2.text(2.1, Math.min(t, 0.9) + 0.06, "test " + Math.round(100 * t) + "%", { align: "center", size: 11 });
+        }
+        a2.hline(0.5, { color: C.muted });
+      },
+      readout: function () { return [["choices", String(task.count)]]; },
+      note: "Nothing you choose is stored or sent. The candidates are simulated from Part 53's interview-noise model; real validities vary by job.",
+    });
+  };
 })();

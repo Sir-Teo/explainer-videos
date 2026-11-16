@@ -4474,8 +4474,7 @@ shown(24, r"Evans, \ Barston \& Pollard (1983), \ as tabulated by Evans et al. (
       "study's table, as reprinted; the finding has its row, belief_bias")
 shown(24, r"Simon (1955, \ 1956)", "a theory: bounded rationality")
 shown(24, r"Schmidt \& Hunter (1998); \ Sackett et al. (2022); \ Sweller \& Cooper (1985)", "selection and "
-      "instruction research, described; personnel selection is Part 53's",
-      row_in=53)
+      "instruction research, described; personnel selection is Part 53's")
 shown(24, r"Ellis et al. (2021); \ Chollet (2019); \ LeGris et al. (2024)", "programs and benchmarks at the "
       "frontier; Part 60's", row_in=60)
 shown(24, r"Webb, \ Holyoak \& Lu (2023), \ \emph{Nature Human Behaviour}", "machine analogy at the frontier; "
@@ -6983,3 +6982,86 @@ add(Finding(
 ))
 shown(52, r"Gray, \ John \& Atwood (1993)", "a field study told as the part's story; its numbers quoted as reported")
 shown(52, r"Card, \ Moran \& Newell (1983)", "an engineering model of the user, described and computed")
+
+# --- Part 53: People at Work -----------------------------------------------------------------------------------------
+
+add(Finding(
+    key="hawthorne_effect", part=53, title=r"The Hawthorne effect",
+    claim="In the Hawthorne illumination studies, output rose whenever the lighting was changed, because the "
+          "workers knew they were being studied.",
+    original=Study("Roethlisberger and Dickson", 1939, design="the Hawthorne Works studies of 1924 to 1932, as told "
+                   "in the official account", found="output rising under every change: an effect of attention"),
+    status="story and record",
+    record=(Study("Levitt and List", 2011, design="the rediscovered output records of the illumination studies",
+                  found="slight evidence of an effect; rises that track the season and the Monday changes"),),
+    note="The data barely support the story told about them. Effects of being observed are real in some settings "
+         "(Part 2), but Hawthorne is a poor example of one.",
+    sources=("F. J. Roethlisberger and W. J. Dickson, Management and the Worker (Harvard University Press, 1939)",
+             "S. D. Levitt and J. A. List, Was there really a Hawthorne effect at the Hawthorne plant? An analysis "
+             "of the original illumination experiments, American Economic Journal: Applied Economics 3 (2011) "
+             "224-238"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="structured_interviews", part=53, title=r"Structured interviews",
+    claim="Structured employment interviews predict job performance better than unstructured ones.",
+    original=Study("McDaniel, Whetzel, Schmidt and Maurer", 1994, design="a meta-analysis of interview validities",
+                   found="higher validity for structured than for unstructured interviews"),
+    status="replicated",
+    record=(Study("Schmidt and Hunter", 1998, design="a summary of 85 years of selection research",
+                  found="about 0.51 against 0.38, corrected"),
+            Study("Sackett, Zhang, Berry and Lievens", 2022, design="the corrections redone by study design",
+                  found="about 0.42 against 0.19: structured interviews at the top")),
+    note="The size of every validity changed in 2022; the advantage of structure did not.",
+    sources=("M. A. McDaniel, D. L. Whetzel, F. L. Schmidt and S. D. Maurer, The validity of employment interviews, "
+             "Journal of Applied Psychology 79 (1994) 599-616",
+             "F. L. Schmidt and J. E. Hunter, The validity and utility of selection methods in personnel psychology, "
+             "Psychological Bulletin 124 (1998) 262-274",
+             "P. R. Sackett, C. Zhang, C. M. Berry and F. Lievens, Revisiting meta-analytic estimates of validity in "
+             "personnel selection, Journal of Applied Psychology 107 (2022) 2040-2068"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="ability_validity", part=53, title=r"The validity of ability tests for hiring",
+    claim="General mental ability tests predict job performance with a corrected validity of about 0.5, the best "
+          "single predictor.",
+    original=Study("Schmidt and Hunter", 1998, design="a summary of meta-analyses with range-restriction "
+                   "corrections", found="about 0.51"),
+    status="contested",
+    record=(Study("Sackett, Zhang, Berry and Lievens", 2022, design="corrections applied only where restriction "
+                  "was plausible", found="about 0.31, below several other methods"),
+            Study("Oh, Le and Roth (reply)", 2023, design="a defence of larger corrections",
+                  found="estimates nearer the older values under other assumptions")),
+    note="The disagreement is about corrections, not data: how restricted the incumbents in validity studies were. "
+         "Ability tests predict; how well, and whether best, is now argued.",
+    sources=("F. L. Schmidt and J. E. Hunter (1998), as above",
+             "P. R. Sackett et al. (2022), as above",
+             "I.-S. Oh, H. Le and P. L. Roth, Revisiting Sackett et al.'s (2022) rationale behind their "
+             "recommendation against correcting for range restriction in concurrent validation studies, Journal of "
+             "Applied Psychology (2023)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="daycare_fine", part=53, title=r"A fine that increased lateness",
+    claim="Introducing a small fine for late pick-up at daycare centres increased late pick-ups, which stayed high "
+          "after the fine was removed.",
+    original=Study("Gneezy and Rustichini", 2000, n="ten daycare centres in Israel, six with the fine",
+                   design="a field experiment over twenty weeks", found="late pick-ups roughly doubled"),
+    status="not directly tested",
+    record=(Study("Gneezy, Meier and Rey-Biel", 2011, design="a review of when incentives crowd out motivation",
+                  found="crowding out in some settings and not others"),),
+    note="A single striking field experiment; incentives crowding out norms is documented in several settings, but "
+         "this result has not been repeated at scale.",
+    sources=("U. Gneezy and A. Rustichini, A fine is a price, Journal of Legal Studies 29 (2000) 1-17",
+             "U. Gneezy, S. Meier and P. Rey-Biel, When and why incentives (don't) work to modify behavior, Journal "
+             "of Economic Perspectives 25 (2011) 191-210"),
+    checked="2026-11-16",
+))
+shown(53, r"Lazear (2000)", "a firm's records analysed by an economist, quoted as reported")
+shown(53, r"Judge et al.\ (2001)", "a meta-analysis of satisfaction and performance, quoted")
+shown(53, r"Edmondson (1999)", "a field study of teams, described")
+shown(53, r"Bloom et al.\ (2015)", "a randomized trial of working from home, described")
+shown(53, r"Schmidt \& Hunter (1998); \ Sackett et al.\ (2022)", "the two summaries compared; both are rows")

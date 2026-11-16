@@ -1312,6 +1312,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | graphical perception; contrast ratio; relative luminance; colour-vision deficiency; dark pattern | 图形知觉；对比度；相对亮度；色觉缺陷；黑暗模式 |
 | Stuart Card; Thomas Moran; Bonnie John; Wayne Gray; Peter Pirolli; Jakob Nielsen; William Cleveland; Phillippa Lally | 斯图尔特·卡德；托马斯·莫兰；邦妮·约翰；韦恩·格雷；彼得·皮罗利；雅各布·尼尔森；威廉·克利夫兰；菲莉帕·拉利 |
 
+## Part 53: people at work
+
+| English | 中文 |
+|---|---|
+| criterion; validity; range restriction; criterion unreliability; Case II correction | 效标；效度；全距限制；效标不可靠；第二类校正 |
+| structured interview; unstructured interview; general mental ability; work sample | 结构化面试；非结构化面试；一般心理能力；工作样本 |
+| selection ratio; base rate; Taylor-Russell table; utility; standard deviation of performance in money | 录取率；基础比率；泰勒-拉塞尔表；效用；以金额计的绩效标准差 |
+| adverse impact; four-fifths rule; validity-diversity frontier; algorithmic hiring | 不利影响；五分之四规则；效度-多样性前沿；算法招聘 |
+| goal setting; crowding out; job satisfaction; working from home | 目标设定；挤出效应；工作满意度；居家办公 |
+| Hugo Münsterberg; Frank Schmidt; John Hunter; Paul Sackett; Edwin Locke; Gary Latham; Nicholas Bloom | 雨果·闵斯特伯格；弗兰克·施密特；约翰·亨特；保罗·萨基特；埃德温·洛克；加里·莱瑟姆；尼古拉斯·布鲁姆 |
+
 ## Names
 
 | English | 中文 |

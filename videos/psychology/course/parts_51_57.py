@@ -76,4 +76,41 @@ PARTS = [
               ("Its tests", "tests/psychology/test_work.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=53, level="U", widget="hiring", prereq=(2, 3, 28, 32),
+        question="How well can anyone predict who will be good at a job?",
+        story="The Hawthorne lighting studies became the founding story of work psychology, though their data barely "
+              "show the effect. The useful history is a correlation: how well a hiring method predicts later "
+              "performance. The part simulates 200,000 applicants to show how selection and unreliable ratings hide "
+              "validity and how corrections restore it or overshoot, sets Schmidt and Hunter's 1998 summary beside "
+              "Sackett and colleagues' 2022 revision, models why unstructured interviews feel informative, turns "
+              "validity into money with Taylor-Russell tables and the Brogden-Cronbach-Gleser formula, computes "
+              "adverse impact and the validity-diversity frontier, and ends with goals, incentives, crowding out, "
+              "teams and a randomized trial of working from home.",
+        handoff="Part 54 takes learning and training into the classroom; Part 55 scales incentives and defaults; Part "
+                "56 takes tests and judgement into court; Part 60 returns to fairness in algorithms.",
+        outside="Part 3's reliability, Part 32's ability testing and Part 28's motivation; correlation, the normal "
+                "distribution and a little algebra.",
+        objectives={
+            "U": ["Explain why a test can look weak among the people it selected, and why structured interviews beat "
+                  "unstructured ones.",
+                  "Apply the four-fifths rule and say what it does and does not establish."],
+            "M": ["Correct an observed validity for criterion unreliability and range restriction, in order, and show "
+                  "how a wrong correction overshoots.",
+                  "Compute Taylor-Russell success rates and Brogden-Cronbach-Gleser utility."],
+            "D": ["Evaluate the 2022 revision of selection validities and design a study that would settle it."],
+            "I": ["Design a selection system with its utility, adverse-impact analysis and validation plan.",
+                  "Audit an algorithmic hiring tool for validity and impact."],
+        },
+        results=[
+            ("Case II correction", r"r_c = \frac{r\,u}{\sqrt{1 + r^2 (u^2 - 1)}}"),
+            ("Utility", r"\Delta U = N_s T r\, SD_y\, \bar z_x - C"),
+            ("Mean score of those selected", r"\bar z_x = \phi(z_c) / SR"),
+            ("Impact ratio", r"SR_{\text{focal}} / SR_{\text{reference}} \ge 0.8"),
+        ],
+        U=(0, 1, 2, 3, 6, 10, 11, 12), D=(15,), I=(7, 8, 9, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Its tests", "tests/psychology/test_work.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]
