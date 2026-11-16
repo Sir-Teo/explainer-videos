@@ -105,8 +105,8 @@ class Ssm(SoundScene):
         arrow = Arrow(img.get_right(), lag.get_left(), buff=0.2, color=GREY_B)
         y32 = lag.get_top()[1] - lag.height * 32 / n
         mark = DashedLine([lag.get_left()[0], y32, 0], [lag.get_right()[0], y32, 0], color=EAR, stroke_width=2)
-        side = VGroup(label(r"a repeat 32 beats later: \ a line at lag 32", font_size=20, color=EAR),
-                      label(r"stripes become horizontal lines", font_size=20, color=WHITE)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).next_to(lag, RIGHT, buff=0.3)
+        side = VGroup(label(r"a repeat 32 beats later: \\ a line at lag 32", font_size=20, color=EAR),
+                      label(r"stripes become horizontal lines", font_size=20, color=WHITE)).arrange(DOWN, buff=0.2, aligned_edge=LEFT).next_to(lag, DOWN, buff=0.3)
         with self.voiceover(
             "There is a second way to draw the same numbers. <bookmark mark='a'/> Instead of time against time, plot "
             "time across and the lag, how far back you are comparing, down. <bookmark mark='b'/> Now every repeat "

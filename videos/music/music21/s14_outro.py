@@ -90,13 +90,13 @@ class Outro(SoundScene):
             rf"tunes repeat {100 * r['mean']:.0f} notes in 100 \ (shuffled {100 * r['mean_shuffled']:.0f}); \ golden sections by chance: \ 1 in {1 / g['base_rate']:.0f}",
         ], title=r"What we found", font_size=23).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Repetition turns speech into song, and form is the plan of what returns. "
+            "What did we find? Repetition can make selected speech sound songlike, and form is the plan of what returns. "
             "<bookmark mark='a'/> The period works by question and answer, the sentence by an idea repeated and then "
             "broken up. <bookmark mark='b'/> The large forms bring material back, or transform it. "
             "<bookmark mark='c'/> A self-similarity matrix shows repeats as stripes and sections as blocks, and its "
             "novelty curve finds the seams. <bookmark mark='d'/> From sound alone a program found most of the sonata's "
             "sections, but hardly any variation's. <bookmark mark='e'/> Tunes repeat a third of their notes against one in "
-            "a hundred by chance, and golden sections turn up by chance one time in six."
+            "a hundred by chance, and our chosen uniform division model gives golden-section hits about one time in six."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

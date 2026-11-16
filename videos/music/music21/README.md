@@ -152,3 +152,13 @@ python -m videos.music.labs 21                                  # the lab (write
 * J. B. L. Smith, J. A. Burgoyne, I. Fujinaga, D. De Roure and J. S. Downie, "Design and creation of a large-scale
   database of structural annotations", ISMIR (2011); C.-Z. A. Huang and others, "Music Transformer", ICLR (2019).
 * Part 14 for the tunes; Part 15 for the key finder; Part 7 for the piano.
+
+## Scope and interpretation
+
+The form templates are classical teaching examples, not definitions covering all music. Sonata secondary areas often use the dominant in major and the relative major in minor, with many alternatives. Graph distance does not predict emotional homecoming proportionally. The simplified graph in Part 19 has maximum distance two, so references to three steps cannot use that metric.
+
+The sound-based detector receives an analysis grid calibrated to the generated beat duration. It receives no score labels, but it does not estimate tempo independently. Kernel choices are compared on this same small synthetic collection, not held-out recordings, and no human baseline is measured. The repetition shuffle permutes pitch-duration pairs; the reported shares count only later nonoverlapping matches under this exact four-note interval/rhythm definition.
+
+The golden-section simulation assumes uniform larger-part ratios from 0.5 to 0.75; its 16 percent is conditional on that choice. The climax comparison uses a different uniform position reference, despite the observed early-climax distribution. Neither exercise establishes composers’ intentions or rejects every golden-section claim. Selection of landmarks and multiple testing matter.
+
+Speech-to-song responses vary with the voice, phrase and listener. The closure studies support task-specific results, not a universal one-minute memory limit. Annotator disagreement changes interpretation of benchmark scores but does not make perfect agreement with one reference mathematically impossible. Historical machine examples do not establish current model performance ceilings.

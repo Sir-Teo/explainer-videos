@@ -27,7 +27,7 @@ class Repetition(SoundScene):
             "How much does music repeat? Take every tune in Part 14's collection and ask, for each note, whether it "
             "belongs to a four-note figure, the same intervals and the same rhythm, that the tune has already sung "
             f"earlier. <bookmark mark='a'/> On average, {say(round(100 * d['mean']))} notes in a hundred do. "
-            f"<bookmark mark='b'/> Shuffle the same notes into a random order and the figure, by chance, repeats for "
+            f"<bookmark mark='b'/> Permute the same pitch-duration pairs into a random order and the figure, by chance, repeats for "
             f"about {say(round(100 * d['mean_shuffled']))} in a hundred. <bookmark mark='c'/> The Tune repeats itself "
             f"more than most: {say(round(100 * d['tune']['share']))} notes in a hundred, its last two phrases a copy of its "
             "first two, and its middle phrase sung twice. Prose that repeated a third of its phrases would be thought "
@@ -55,8 +55,8 @@ class Repetition(SoundScene):
             f"The extremes are telling. <bookmark mark='a'/> The most repetitive tune in the collection is the Tune itself, "
             f"followed by O Tannenbaum and Amazing Grace. <bookmark mark='b'/> At the other end, {say(len(zero))} tunes "
             "never repeat a four-note figure exactly, and one of them is Row, Row, Row Your Boat. That is not a "
-            "contradiction: a round repeats in its other voices, not within itself. Its line keeps moving so that, sung "
-            "against itself, it sounds full; the repetition is in the form, not in the tune."
+            "contradiction: a round can repeat between voices even when this within-line metric is low. Its line keeps moving so that, sung "
+            "against itself, it sounds full; the chosen metric does not measure all its repetition."
         ) as vo:
             self.play(FadeIn(left[0]), FadeIn(right[0]))
             vo.wait_until("a")

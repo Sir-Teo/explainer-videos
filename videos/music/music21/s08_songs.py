@@ -28,11 +28,11 @@ class Songs(SoundScene):
         rows_.scale_to_fit_width(min(rows_.width, 4.4))
         rows_.move_to(RIGHT * 4.6 + DOWN * 0.1)
         with self.voiceover(
-            "Songs have forms of their own. <bookmark mark='a'/> The oldest is strophic: one tune, sung again with new "
+            "Songs have forms of their own. <bookmark mark='a'/> A widespread one is strophic: one tune, sung again with new "
             "words for each verse, as in most folk songs and hymns. <bookmark mark='b'/> The popular songs of Tin Pan "
             "Alley, from the 1920s to the 1950s, were mostly AABA: two statements, a contrasting bridge, and a return, "
             "thirty-two bars in all. <bookmark mark='c'/> Rock and pop songs alternate verses, whose words change, with a "
-            "chorus, whose words do not. <bookmark mark='d'/> The chorus is a refrain, and its picture shows it: a "
+            "chorus, whose words typically recur. <bookmark mark='d'/> The chorus is a refrain, and its picture shows it: a "
             "lattice of bright blocks, like the rondo's."
         ) as vo:
             self.play(FadeIn(imgs), FadeIn(rows_[0]))
@@ -64,7 +64,7 @@ class Songs(SoundScene):
         rows_.scale_to_fit_width(min(rows_.width, 5.6))
         rows_.move_to(RIGHT * 3.8 + DOWN * 0.1)
         with self.voiceover(
-            "One song form is nothing but a chord progression: the twelve-bar blues. Three lines of four bars: four bars "
+            "One influential form has a characteristic harmonic framework: the twelve-bar blues. Three lines of four bars: four bars "
             "of the home chord; two of the subdominant and two of home; then dominant, subdominant, and home. Here it "
             "is with the Tune's first notes as a riff."
         ):

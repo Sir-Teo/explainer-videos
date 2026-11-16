@@ -30,7 +30,7 @@ class Frontier(SoundScene):
             "place, as Part 18 found in the brain's responses. <bookmark mark='b'/> Global structure, weakly: pieces "
             "whose sections have been reordered are judged nearly as coherent as the originals. "
             "<bookmark mark='c'/> Barbara Tillmann and Emmanuel Bigand, reviewing these experiments, concluded that "
-            "listeners are sensitive mostly to the structure of the last few seconds, at most a minute or so. "
+            "these tasks often reveal stronger local than global effects, rather than a universal one-minute memory limit. "
             "<bookmark mark='d'/> But a returning theme is recognized after minutes, and the recognition is felt. "
             "<bookmark mark='e'/> Perhaps form works on listeners through memory for themes, the stripes in the picture, "
             "more than through the plan of keys."
@@ -56,7 +56,7 @@ class Frontier(SoundScene):
         with self.voiceover(
             "The forms of this part are journeys, away and back. Not every tradition plans time that way. "
             "<bookmark mark='a'/> In Javanese gamelan, a piece is a cycle marked by the great gong, repeated with layers "
-            "of elaboration, sped up and slowed down. <bookmark mark='b'/> A performance of a Hindustani raga grows: a "
+            "of elaboration, sped up and slowed down. <bookmark mark='b'/> One common instrumental Hindustani performance sequence grows: a "
             "free, unmetred opening, then a pulse, then faster and denser playing, then a composition with drums. "
             "<bookmark mark='c'/> A dance-music track is a loop, with layers added and taken away. "
             "<bookmark mark='d'/> Form as a cycle, or as a growth, rather than a return: Parts 34, 36 and 40 take these up, "
@@ -76,7 +76,7 @@ class Frontier(SoundScene):
             (r"annual comparisons of segmenters: \ boundaries, \ and labels A, \ B, \ A$'$", WHITE),
             (r"two annotators of the same song often disagree: \ the ceiling is not 100", TUNE),
             (r"2018: \ Music Transformer: \ attention over long spans to make generated music repeat itself", WHITE),
-            (r"the long-range plan is still where generated music is weakest", EAR))]).arrange(DOWN, buff=0.36, aligned_edge=LEFT)
+            (r"the long-range plan remains an important evaluation challenge; these historical examples do not establish the performance ceiling of current systems", EAR))]).arrange(DOWN, buff=0.36, aligned_edge=LEFT)
         rows_.scale_to_fit_width(min(rows_.width, 12.6))
         rows_.move_to(DOWN * 0.1)
         head = label(r"what machines do", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
@@ -85,7 +85,7 @@ class Frontier(SoundScene):
             "project published structural annotations by experts for well over a thousand recordings, "
             "<bookmark mark='b'/> and segmenters are compared on them every year, both on where the boundaries are and "
             "on which sections are the same. <bookmark mark='c'/> One lesson: two expert annotators of the same song "
-            "often disagree, so no program can be expected to score a hundred. <bookmark mark='d'/> For writing music, "
+            "often disagree, so evaluation depends on annotation choices; disagreement is not a mathematical ceiling on a score against one reference. <bookmark mark='d'/> For writing music, "
             "the 2018 Music Transformer used attention across long spans so that the music it generated would return to "
             "its own material. <bookmark mark='e'/> Even so, the long-range plan, the thing this part is about, is still "
             "where generated music is weakest."

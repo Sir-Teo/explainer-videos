@@ -39,7 +39,7 @@ class Novelty(SoundScene):
             "Take a small checkerboard and slide it along the bright diagonal. <bookmark mark='b'/> Two of its squares "
             "count when the music just before a moment is like itself, and the music just after is like itself. "
             "<bookmark mark='c'/> The other two count against, when before and after are alike. <bookmark mark='d'/> "
-            "Add it up at every moment, and the total is high exactly where one homogeneous stretch gives way to a "
+            "Add it up at every moment, and the total can peak where one homogeneous stretch gives way to a "
             "different one. <bookmark mark='e'/> The peaks of this novelty curve are the candidate boundaries."
         ) as vo:
             self.play(FadeIn(g), FadeIn(rows_[0]))
@@ -98,7 +98,7 @@ class Novelty(SoundScene):
         t2 = label(r"12 beats wide: \ only the largest changes", font_size=22, color=BLUE).next_to(c2, UP, buff=0.2)
         cap = label(r"the width of the checkerboard sets the scale of form the program can see", font_size=24, color=WHITE).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "The width of the checkerboard decides what counts as a seam. <bookmark mark='a'/> Narrow, it reports every "
+            "The checkerboard width changes which contrasts this detector emphasizes. <bookmark mark='a'/> Narrow, it reports every "
             "change of chord. <bookmark mark='b'/> Wide, it smooths those away and responds only to changes that last, "
             "the boundaries between larger sections, and on a piece as short as the Tune it finds almost nothing. "
             "<bookmark mark='c'/> Form has levels, chord, phrase, section, movement, and a listener, like the program, "

@@ -54,19 +54,12 @@ class Golden(SoundScene):
         gold = Rectangle(width=W * 0.04, height=0.7, stroke_width=0, fill_color=TUNE, fill_opacity=0.85).move_to([x(d["phi"]), axis.get_y(), 0])
         ours = Triangle(color=EAR, fill_opacity=1.0).scale(0.15).rotate(PI).move_to([x(s["golden"]["rest"]), axis.get_y() + 0.55, 0])
         rows_ = VGroup(*[label(t, font_size=24, color=c_) for t, c_ in (
-            (r"a two-part piece's larger part: \ somewhere between half and three-quarters", BLUE),
+            (r"illustrative null: \ uniform larger-part ratio from 0.5 to 0.75", BLUE),
             (r"0.618, \ give or take 0.02: \ a band 0.04 wide", TUNE),
-            (rf"by chance alone: \ {100 * d['base_rate']:.0f} hits in a hundred", WHITE),
-            (rf"this part's sonata, \ composed without a thought of it: \ {s['golden']['rest']:.3f}", EAR))]).arrange(DOWN, buff=0.33, aligned_edge=LEFT).to_edge(DOWN, buff=0.5)
+            (rf"under this null: \ {100 * d['base_rate']:.0f} hits in a hundred", WHITE),
+            (rf"this part's sonata, \ illustrative section ratio: \ {s['golden']['rest']:.3f}", EAR))]).arrange(DOWN, buff=0.33, aligned_edge=LEFT).to_edge(DOWN, buff=0.5)
         with self.voiceover(
-            "Here is the chance. <bookmark mark='a'/> In a piece with two parts, the larger part is almost never less "
-            "than half the whole, and rarely more than three quarters: suppose it falls anywhere in that range. "
-            "<bookmark mark='b'/> Call it a hit if it lies within two hundredths of 0.618, a band four hundredths wide. "
-            f"<bookmark mark='c'/> Then chance alone gives a hit {say(round(100 * d['base_rate']))} times in a hundred, about "
-            "one piece in six; a simulation of two hundred thousand random divisions agrees. Find enough pieces, and the "
-            "golden ones are guaranteed. <bookmark mark='d'/> And this part's own miniature sonata, composed with no "
-            f"thought of proportion: its development and recapitulation take {say(s['golden']['rest'], 3)} of the whole. "
-            "A hit."
+            f"Here is the chance. <bookmark mark='a'/> In a piece with two parts, the larger part is almost never less than half the whole, and rarely more than three quarters: for this illustrative null, assume it is uniformly distributed over that range. <bookmark mark='b'/> Call it a hit if it lies within two hundredths of 0.618, a band four hundredths wide. <bookmark mark='c'/> Then chance alone gives a hit {say(round(100 * d['base_rate']))} times in a hundred, about one piece in six; a simulation of two hundred thousand random divisions agrees. Under this assumed uniform null, the chance of at least one hit increases with the number examined. <bookmark mark='d'/> And this part's own miniature sonata, whose displayed section lengths give an illustrative near match: its development and recapitulation take {say(s['golden']['rest'], 3)} of the whole. A hit."
         ) as vo:
             self.play(Create(axis), FadeIn(ticks), FadeIn(plaus), FadeIn(rows_[0]))
             vo.wait_until("a")
@@ -87,15 +80,10 @@ class Golden(SoundScene):
         ch = columns(bins, [r"0--0.2", r"0.2--0.4", r"0.4--0.6", r"0.6--0.8", r"0.8--1"], width=6.6, height=2.6, color=WEAK, hot=(), hot_color=TUNE, fmt="{:.0f}", font_size=20).move_to(LEFT * 2.6 + DOWN * 0.5)
         t = label(r"where each tune's highest note first arrives, \ as a share of its length", font_size=21, color=GREY_A).next_to(ch, UP, buff=0.4)
         side = VGroup(label(rf"{d['in_first_half']} of {d['n']} climaxes in the first half", font_size=24, color=WHITE),
-                      label(rf"within 0.02 of 0.618: \ {d['hits']} \ (chance: \ about {d['expected_uniform']:.0f})", font_size=24, color=TUNE),
-                      label(r"no golden section here", font_size=24, color=EAR)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 4.0 + DOWN * 0.2)
+                      label(rf"within 0.02 of 0.618: \ {d['hits']} \ (uniform reference: \ about {d['expected_uniform']:.0f})", font_size=24, color=TUNE),
+                      label(r"this comparison does not show intentional design", font_size=24, color=EAR)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 4.0 + DOWN * 0.2)
         with self.voiceover(
-            "The tunes can be tested too. Mark where each tune's highest note first arrives. <bookmark mark='a'/> "
-            f"{say(d['in_first_half'])} of the {say(d['n'])} climaxes come in the first half, as Part 14 found: these tunes "
-            f"leap up early and spend the rest coming down. <bookmark mark='b'/> Just {say(d['hits'])} fall within two "
-            f"hundredths of 0.618, about the {say(round(d['expected_uniform']))} that chance would put there. "
-            "<bookmark mark='c'/> Proportion matters in music, but the golden section is a claim that is easy to "
-            "confirm and hard to test, and the tests that control for chance have not found it."
+            f"The tunes can be tested too. Mark where each tune's highest note first arrives. <bookmark mark='a'/> {say(d['in_first_half'])} of the {say(d['n'])} climaxes come in the first half, as Part 14 found: these tunes leap up early and spend the rest coming down. <bookmark mark='b'/> Just {say(d['hits'])} fall within two hundredths of 0.618, about the {say(round(d['expected_uniform']))} that chance would put there. <bookmark mark='c'/> Proportion matters in music, but this small illustration does not establish intentional golden-section design or refute every published claim; conclusions depend on the null model, chosen landmarks and multiple comparisons."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(t))
             for mark, r in zip("abc", side):

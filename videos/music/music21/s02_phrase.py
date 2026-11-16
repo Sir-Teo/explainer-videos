@@ -28,9 +28,9 @@ class Phrase(SoundScene):
             (r"Caplin's theory of classical form: \ these two are the building blocks of themes", TUNE))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"the small forms", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Form starts small. <bookmark mark='a'/> A phrase is a stretch of music that ends with a cadence, the "
+            "Form starts small. <bookmark mark='a'/> In this classical teaching model, a phrase is a musical unit typically articulated by a cadence, the "
             "musical equivalent of punctuation. <bookmark mark='b'/> A period is two phrases that answer each other: "
-            "the first ends open, on the dominant, a question; the second ends closed, on the tonic, often beginning "
+            "the first has a weaker close, often on the dominant, a question; the second ends closed, on the tonic, often beginning "
             "the same way as the first. <bookmark mark='c'/> A sentence works differently: a short idea, the idea again, and then a quicker "
             "continuation that breaks the idea into fragments and drives to the cadence. <bookmark mark='d'/> William "
             "Caplin's theory of classical form, from 1998, takes these two as the main ways a theme is built."
@@ -123,7 +123,7 @@ class Phrase(SoundScene):
             (r"the same two plans scale up: \ themes, \ sections, \ whole movements", TUNE))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"two ways to make a theme", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Both are eight bars long in the classical style, built of two and two and four, or four and four. "
+            "These are schematic eight-bar classical examples; actual themes can be shorter, longer or irregular, built of two and two and four, or four and four. "
             "<bookmark mark='a'/> The period works by answer. Often its second phrase starts like the first, so the ear "
             "expects the same and gets a different ending; the Tune's opening is a contrasting period, whose answer "
             "starts elsewhere. <bookmark mark='b'/> The sentence works by acceleration: "

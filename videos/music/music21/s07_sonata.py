@@ -29,7 +29,7 @@ class Sonata(SoundScene):
     # ------------------------------------------------------------------
     def plan(self):
         rows_ = VGroup(*[label(t, font_size=25, color=c_) for t, c_ in (
-            (r"exposition: \ a first theme at home; \ a transition; \ a second theme in another key \ (usually the dominant)", WHITE),
+            (r"exposition: \ a first theme at home; \ a transition; \ a second theme in another key \ (often the dominant in major, or the relative major in minor)", WHITE),
             (r"development: \ fragments of the themes, \ through several keys, \ then back to the dominant", WHITE),
             (r"recapitulation: \ both themes again, \ the second now at home", WHITE),
             (r"the second theme's return in the home key is the resolution of the whole", TUNE),
@@ -40,7 +40,7 @@ class Sonata(SoundScene):
         with self.voiceover(
             "Sonata form is the plan of most first movements of symphonies, sonatas and quartets from about 1750 to "
             "1900. <bookmark mark='a'/> The exposition states a first theme at home, travels through a transition, and "
-            "states a second theme in another key, usually the dominant. <bookmark mark='b'/> The development breaks the "
+            "states a second theme in another key, often the dominant in major, or the relative major in minor. <bookmark mark='b'/> The development breaks the "
             "themes into fragments and takes them through several keys, then works its way back to the dominant. "
             "<bookmark mark='c'/> The recapitulation states both themes again, the second one now in the home key. "
             "<bookmark mark='d'/> That is the drama: what was stated away from home must be restated at home. "
@@ -96,16 +96,11 @@ class Sonata(SoundScene):
             (r"the keys the development visits: \ A minor, \ F major, \ D minor, \ then G", WHITE),
             (r"Part 19's pathfinder: \ each is one pivot chord from C", WHITE),
             (r"the miniature never leaves C's neighbourhood", WHITE),
-            (r"Beethoven's developments go further: \ to keys two or three steps away, \ by the doors of Part 19", TUNE),
-            (r"the farther the journey, \ the stronger the return", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
+            (r"other developments explore remote tonal regions; \ Part 19's pivot graph has maximum distance two", TUNE),
+            (r"tonal journeys can shape a return; \ graph distance is not a law of emotional strength", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"how far does the development go?", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "How far does the miniature travel? <bookmark mark='a'/> Its development visits A minor, F major and D "
-            "minor before the dominant. <bookmark mark='b'/> Ask Part 19's pathfinder: every one of them is a single "
-            "pivot chord away from C. <bookmark mark='c'/> The miniature never leaves C's neighbourhood. "
-            "<bookmark mark='d'/> Real developments, Beethoven's above all, go much further, to keys two or three steps "
-            "away, often through the enharmonic doors of Part 19. <bookmark mark='e'/> The farther the journey, the "
-            "more the return means: the recapitulation is felt as a homecoming in proportion to the distance travelled."
+            "How far does the miniature travel? <bookmark mark='a'/> Its development visits A minor, F major and D minor before the dominant. <bookmark mark='b'/> Ask Part 19's pathfinder: every one of them is a single pivot chord away from C. <bookmark mark='c'/> The miniature never leaves C's neighbourhood. <bookmark mark='d'/> Other developments, including Beethoven’s, may explore more remote tonal regions; in Part 19’s particular pivot graph every key is at most two edges away. Enharmonic changes offer additional routes. <bookmark mark='e'/> A return can suggest homecoming, without a proven proportional law relating feeling to graph distance."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -126,13 +121,7 @@ class Sonata(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"sonata theory", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "In 2006 James Hepokoski and Warren Darcy described the exposition as a journey with a goal. "
-            "<bookmark mark='a'/> <bookmark mark='b'/> The transition ends with a pause on the new key's dominant, the "
-            "medial caesura, a door through which the second theme enters. In the miniature sonata it is the "
-            "transition's last chord, D major. <bookmark mark='c'/> The exposition's goal is the first full cadence in "
-            "the new key. <bookmark mark='d'/> And the recapitulation must reach the same cadence at home, the moment "
-            "the whole movement has been heading for. <bookmark mark='e'/> Seen this way, a form is a set of "
-            "expectations that a composer can meet, delay or defy, and the drama is in which."
+            "In 2006 James Hepokoski and Warren Darcy described the exposition as a journey with a goal. <bookmark mark='a'/> <bookmark mark='b'/> The transition ends with a pause on the new key's dominant, the medial caesura, a door through which the second theme enters. In the miniature sonata it is the transition's last chord, D major. <bookmark mark='c'/> In this theory, essential expositional closure is the first satisfactory perfect authentic cadence in the secondary-theme zone, with exclusions and exceptions. <bookmark mark='d'/> And the recapitulation must reach the same cadence at home, the moment the whole movement has been heading for. <bookmark mark='e'/> Seen this way, a form is a set of expectations that a composer can meet, delay or defy, and the drama is in which."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

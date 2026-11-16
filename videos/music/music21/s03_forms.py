@@ -25,13 +25,7 @@ class Forms(SoundScene):
         img = ssm_image(d["ssm"], size=4.2).move_to(LEFT * 4.2 + DOWN * 0.2)
         cap = label(r"A A B B: \ the notes, \ beat by beat, \ compared with every other beat", font_size=18, color=GREY_B).next_to(img, DOWN, buff=0.25)
         with self.voiceover(
-            "The oldest plan for a whole piece has two halves, each played twice. <bookmark mark='a'/> Binary form: "
-            "repeat the first half, repeat the second. <bookmark mark='b'/> Typically the first half travels from the "
-            "home key to the dominant, and the second half finds its way back. <bookmark mark='c'/> Nearly every dance "
-            "in a Baroque suite is built this way. <bookmark mark='d'/> When the second half ends by bringing back the "
-            "opening, the form is called rounded binary, <bookmark mark='e'/> and it is the seed from which sonata form "
-            "grew. On the left, a picture of a binary piece on the Tune, which the next chapters will explain: for now, "
-            "notice the four squares, and how the first two match."
+            "One common historical plan for a whole piece has two halves, each played twice. <bookmark mark='a'/> Binary form: repeat the first half, repeat the second. <bookmark mark='b'/> Typically the first half travels from the home key to the dominant, and the second half finds its way back. <bookmark mark='c'/> Nearly every dance in a Baroque suite is built this way. <bookmark mark='d'/> When the second half ends by bringing back the opening, the form is called rounded binary, <bookmark mark='e'/> and it is one historical source of later sonata practices. On the left, a picture of a binary piece on the Tune, which the next chapters will explain: for now, notice the four squares, and how the first two match."
         ) as vo:
             self.play(FadeIn(rows_[0]), FadeIn(img), FadeIn(cap))
             for mark, r in zip("bcde", rows_[1:]):

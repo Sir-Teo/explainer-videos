@@ -63,8 +63,8 @@ class Found(SoundScene):
         t = label(r"F-score of the boundaries found, \ in a hundred \ (the best of three checkerboard widths)", font_size=21, color=GREY_A).next_to(ch, UP, buff=0.4)
         s = d["summary"]
         side = VGroup(label(r"high where sections change key", font_size=22, color=TUNE),
-                      label(r"lowest for the variations: \ same harmony, \ hardly a seam", font_size=22, color=EAR),
-                      label(rf"all pieces, \ one setting: \ about {round(100 * s[d['best_width']]['f'])} in a hundred", font_size=22, color=WHITE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+                      label(r"variations: \\ same harmony, \\ weak seams", font_size=22, color=EAR),
+                      label(rf"same collection, \\ selected setting: \ {round(100 * s[d['best_width']]['f'])} in a hundred", font_size=22, color=WHITE)).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 3.8))
         side.move_to(RIGHT * 5.0 + DOWN * 0.2)
         with self.voiceover(
@@ -72,8 +72,8 @@ class Found(SoundScene):
             "true boundaries it found with how many of its finds were true. <bookmark mark='a'/> The sonata scores best, "
             "because its sections change key. <bookmark mark='b'/> The set of variations scores lowest: every variation "
             "keeps the theme's harmony, so in a picture made of notes there is hardly a seam to find, although a listener "
-            "hears each new variation begin at once. <bookmark mark='c'/> With one setting for every piece, the program "
-            f"scores about {say(round(100 * s[d['best_width']]['f']))} in a hundred: better than nothing, far from a listener."
+            "hears each new variation begin at once. <bookmark mark='c'/> With one of three settings selected on this same collection, the program "
+            f"scores about {say(round(100 * s[d['best_width']]['f']))} in a hundred: better than nothing, with no human baseline measured here."
         ) as vo:
             self.play(FadeIn(ch), FadeIn(t))
             for mark, r in zip("abc", side):

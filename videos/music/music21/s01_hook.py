@@ -47,13 +47,7 @@ class Hook(SoundScene):
             (r"form is the plan of what comes back", EAR))]).arrange(DOWN, buff=0.38, aligned_edge=LEFT).move_to(DOWN * 0.1)
         head = label(r"the speech-to-song illusion", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Most listeners hear something change after a few repetitions: the syllables take on pitches, a rhythm, a "
-            "tune. <bookmark mark='a'/> And once it has sung, it keeps singing, even when you hear it again inside its "
-            "original sentence. <bookmark mark='b'/> In 2011 Deutsch and her colleagues showed that repetition alone "
-            "does it: when the repeats were changed slightly, transposed or jumbled, the effect weakened. "
-            "<bookmark mark='c'/> Repetition is the strongest signal that something is music. Music repeats far more "
-            "than speech, poetry or prose, and this part will measure how much. <bookmark mark='d'/> Form is the plan of "
-            "what comes back, and when."
+            "Repeated speech can begin to sound songlike for some listeners; this synthesized example may vary in effectiveness: the syllables take on pitches, a rhythm, a tune. <bookmark mark='a'/> The altered percept can persist, even when you hear it again inside its original sentence. <bookmark mark='b'/> In 2011 Deutsch and her colleagues showed that repetition alone does it: when the repeats were changed slightly, transposed or jumbled, the effect weakened. <bookmark mark='c'/> Repetition is one important cue to musical organization. Repetition is prominent in many musical traditions, as it also is in some speech and poetry, and this part will measure how much. <bookmark mark='d'/> Form is the plan of what comes back, and when."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("abcd", rows_[1:]):

@@ -36,7 +36,7 @@ class Closure(SoundScene):
                       label(r"ends in C: \ home", font_size=26, color=TUNE).next_to(bars[1], DOWN, buff=0.4))
         with self.voiceover(
             "B. Both pieces move to G in their middle; B comes back and closes in C, while A closes in G, a full cadence "
-            "in the wrong key. Over twenty seconds, almost everyone can tell: A sounds finished, but somewhere else."
+            "in the wrong key. These short examples invite a comparison; responses have not been measured here: A sounds finished, but somewhere else."
         ):
             self.play(FadeIn(ends))
         self.wait(0.4)
@@ -55,15 +55,7 @@ class Closure(SoundScene):
         rows_.move_to(DOWN * 0.1)
         head = label(r"how far does the ear reach?", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "But does that hold for a whole movement? <bookmark mark='a'/> In 1987 Nicholas Cook took classical pieces "
-            "and rewrote their endings to finish in a different key from their beginnings. <bookmark mark='b'/> Music "
-            "students, and listeners without training, rated how complete and coherent each version sounded. "
-            "<bookmark mark='c'/> For pieces shorter than about a minute, they preferred the version that ended at home. "
-            "<bookmark mark='d'/> For longer pieces they showed no reliable preference: after a few minutes, the "
-            "original key had faded from memory. <bookmark mark='e'/> In 1992 Michael Karno and Vladimir Konečni "
-            "rearranged the sections of a Mozart symphony's first movement, and listeners liked the scrambled versions "
-            "about as well. <bookmark mark='f'/> So is large-scale form something the ear hears, or something the mind "
-            "knows from the score and from habit? That is the frontier."
+            "But does that hold for a whole movement? <bookmark mark='a'/> In 1987 Nicholas Cook took classical pieces and rewrote their endings to finish in a different key from their beginnings. <bookmark mark='b'/> Music students, and listeners without training, rated how complete and coherent each version sounded. <bookmark mark='c'/> For pieces shorter than about a minute, they preferred the version that ended at home. <bookmark mark='d'/> For longer pieces they showed no reliable preference: in that task, ratings did not reliably favor the original endings; this does not directly prove that tonic memory had vanished. <bookmark mark='e'/> In 1992 Michael Karno and Vladimir Konečni rearranged the sections of a Mozart symphony's first movement, and listeners liked the scrambled versions about as well. <bookmark mark='f'/> So is large-scale form something the ear hears, or something the mind knows from the score and from habit? That is the frontier."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcdef", rows_[1:]):
