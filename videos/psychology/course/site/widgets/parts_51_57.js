@@ -430,4 +430,75 @@
       note: "Nothing you answer is stored or sent. In a single short session the spacing advantage is small; Part 54's simulations and studies measure it after days and weeks.",
     });
   };
+
+  // ---- Part 55: which nudge works?  Pairwise bets on five gym interventions, then a simulated megastudy. ----
+  W.gymrank = function (el) {
+    var w = null;
+    var ARMS = ["text reminders before planned workouts", "bonus points for returning after a missed workout",
+                "a message that most members go more than you", "a signed pledge to go", "a small cash reward per visit"];
+    var TRUE = [0.4, 1.6, 0.2, 0.1, 1.0]; // illustrative extra weekly visits (in tenths), simulated, not the study's
+    var S = { phase: "idle", pairs: [], k: 0, wins: [0, 0, 0, 0, 0], est: null, shr: null };
+    function gauss(rand) { var u = 1 - rand(), v = rand(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "ask"; },
+      respond: function (side) {
+        var pr = S.pairs[S.k]; S.wins[pr[side]]++; task.count++; S.k++;
+        if (S.k >= S.pairs.length) { S.phase = "done"; }
+        if (w) w.render();
+      },
+    });
+    function start(state) {
+      var rand = mulberry(55 + (state ? state.seed : 0)), i, j;
+      S.pairs = [];
+      for (i = 0; i < 5; i++) for (j = i + 1; j < 5; j++) S.pairs.push(rand() < 0.5 ? [i, j] : [j, i]);
+      for (i = S.pairs.length - 1; i > 0; i--) { j = Math.floor(rand() * (i + 1)); var t = S.pairs[i]; S.pairs[i] = S.pairs[j]; S.pairs[j] = t; }
+      S.est = TRUE.map(function (m) { return m + 0.5 * gauss(rand); });
+      var mean = S.est.reduce(function (a, b) { return a + b; }, 0) / 5, wgt = 0.5;
+      S.shr = S.est.map(function (e) { return mean + wgt * (e - mean); });
+      S.wins = [0, 0, 0, 0, 0]; S.k = 0; task.count = 0; S.phase = "ask";
+      if (w) w.render();
+    }
+    function rankOf(v) { var idx = [0, 1, 2, 3, 4].sort(function (a, b) { return v[b] - v[a]; }); var r = []; idx.forEach(function (x, k) { r[x] = k + 1; }); return r; }
+    w = QB.widget(el, {
+      title: "Which nudge works?",
+      sub: "Ten pairs of interventions a gym chain could test for four weeks. For each pair, press F if you think the left one raises attendance more, J for the right one (or tap). Then see a simulated megastudy: noisy estimates, the winner shrunk, and how your ranking compares.",
+      panels: 2, height: 340, weights: [1.2, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Clear", act: function (state) { state.seed++; S.phase = "idle"; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        if (S.phase === "ask") {
+          var pr = S.pairs[S.k];
+          ctx.save(); ctx.textAlign = "center";
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("pair " + (S.k + 1) + " of " + S.pairs.length + ": which raises attendance more?", b.cx, b.y + 22);
+          ctx.fillStyle = C.ink; ctx.font = "14px system-ui, sans-serif";
+          T.wrap(ctx, "F: " + ARMS[pr[0]], b.x + b.w * 0.27, b.cy - 10, b.w * 0.42, 18);
+          T.wrap(ctx, "J: " + ARMS[pr[1]], b.x + b.w * 0.73, b.cy - 10, b.w * 0.42, 18);
+          ctx.restore();
+        } else if (S.phase === "done") {
+          var mine = rankOf(S.wins), truth = rankOf(TRUE), agree = 0, i;
+          for (i = 0; i < 5; i++) if (mine[i] === truth[i]) agree++;
+          var top = rankOf(S.est).indexOf(1);
+          T.message(ctx, b, "Your top pick: " + ARMS[mine.indexOf(1)] + ".",
+            "In this simulated world the noisy estimates crowned \"" + ARMS[top] + "\" (" + S.est[top].toFixed(2) + " tenths of a visit); shrunk, " + S.shr[top].toFixed(2) + ". Your ranking matched the simulated truth in " + agree + " of 5 places. Forecasters in the real megastudy did little better than chance.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start: ten pairs of interventions, then a simulated megastudy.");
+        }
+        var a2 = g[1].axes({ x: [0, 5.5], y: [-0.5, 3], title: "Simulated megastudy (extra visits, tenths)", noX: true });
+        if (S.phase === "done") {
+          a2.bars([0.8, 1.8, 2.8, 3.8, 4.8], S.est, 0.35, { color: "#7ec8f5" });
+          a2.bars([1.15, 2.15, 3.15, 4.15, 5.15], S.shr, 0.3, { color: "#b39ddb" });
+          a2.dots([0.97, 1.97, 2.97, 3.97, 4.97], TRUE, { color: "#f2c14e", r: 4 });
+          a2.text(0.3, 2.8, "blue: estimate  purple: shrunk  yellow: truth", { size: 10, color: C.muted });
+        }
+        a2.hline(0, { color: C.muted });
+      },
+      readout: function () { return [["choices", String(task.count)]]; },
+      note: "Nothing you choose is stored or sent. The five arms are simplified descriptions and their effects are simulated for this page, not the published results.",
+    });
+  };
 })();

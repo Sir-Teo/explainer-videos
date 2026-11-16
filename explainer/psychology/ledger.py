@@ -4513,9 +4513,9 @@ shown(26, r"Stanovich \& West (2000); \ Evans \& Stanovich (2013); \ Kruglanski 
 shown(26, r"Parducci (1965); \ Walasek \& Stewart (2015)", "range-frequency theory, described; Walasek and "
       "Stewart's result is in the loss-aversion row")
 shown(26, r"Johnson \& Goldstein (2003); \ Levin \& Gaeth (1988)", "applications of defaults and framing, "
-      "described; defaults get their row with behaviour change at scale", row_in=55)
+      "described; defaults get their row with behaviour change at scale")
 shown(26, r"Thaler \& Benartzi (2004)", "an applied programme, described as uncontrolled; its row is due with "
-      "behaviour change at scale", row_in=55)
+      "behaviour change at scale")
 shown(26, r"Gigerenzer et al.\ (2007); \ Furedi (1999)", "risk communication, applied and described")
 shown(26, r"Peterson et al.\ (2021); \ Erev et al.\ (2017)", "methods for finding theories, described; the "
       "choices13k data are fitted in the film")
@@ -7181,3 +7181,134 @@ shown(54, r"Sweller (1988)", "a theory, described")
 shown(54, r"Settles \& Meeder (2016)", "a model, described; fitted in Part 21")
 shown(54, r"Castles, \ Rastle \& Nation (2018)", "a review of reading instruction, described")
 shown(54, r"Kluger \& DeNisi (1996)", "a meta-analysis of feedback, quoted")
+
+# --- Part 55: Behaviour Change at Scale ------------------------------------------------------------------------------
+
+add(Finding(
+    key="default_enrolment", part=55, title=r"Automatic enrolment",
+    claim="Making enrolment in a retirement plan the default greatly increases participation.",
+    original=Study("Madrian and Shea", 2001, design="a company's switch from opt-in to automatic enrolment for new "
+                   "employees", found="participation from 37% to 86% among new hires"),
+    status="replicated",
+    record=(Study("Choi, Laibson, Madrian and Metrick", 2004, design="several more companies' switches",
+                  found="large increases, with many staying at the default rate and fund"),
+            Study("Beshears, Choi, Laibson and Madrian", 2009, design="a review of defaults in savings",
+                  found="defaults among the most powerful tools in retirement policy")),
+    note="Defaults set how much people save as well as whether; a low default rate can lower saving for some.",
+    sources=("B. C. Madrian and D. F. Shea, The power of suggestion: inertia in 401(k) participation and savings "
+             "behavior, Quarterly Journal of Economics 116 (2001) 1149-1187",
+             "J. J. Choi, D. Laibson, B. C. Madrian and A. Metrick, For better or for worse: default effects and 401(k) "
+             "savings behavior, in Perspectives on the Economics of Aging (University of Chicago Press, 2004)",
+             "J. Beshears, J. J. Choi, D. Laibson and B. C. Madrian, The importance of default options for retirement "
+             "saving outcomes, in Social Security Policy in a Changing Environment (University of Chicago Press, 2009)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="energy_reports", part=55, title=r"Home energy reports",
+    claim="Mailing households a comparison of their energy use with their neighbours' reduces their consumption.",
+    original=Study("Schultz, Nolan, Cialdini, Goldstein and Griskevicius", 2007, design="door hangers with "
+                   "descriptive norms, with or without an approving face", found="reductions, with a boomerang "
+                   "among low users unless approval was added"),
+    status="replicated",
+    record=(Study("Allcott", 2011, n="about 600,000 households", design="randomized trials of utility reports",
+                  found="about 2% lower use"),
+            Study("Allcott and Rogers", 2014, design="long-run follow-up", found="partly persistent effects")),
+    note="Small per home and cheap; later sites showed smaller effects than the first, a lesson about scaling.",
+    sources=("P. W. Schultz et al., The constructive, destructive, and reconstructive power of social norms, "
+             "Psychological Science 18 (2007) 429-434",
+             "H. Allcott, Social norms and energy conservation, Journal of Public Economics 95 (2011) 1082-1095",
+             "H. Allcott and T. Rogers, The short-run and long-run effects of behavioral interventions, American "
+             "Economic Review 104 (2014) 3003-3037"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="nudge_size", part=55, title=r"The size of the average nudge",
+    claim="Choice-architecture interventions change behaviour by about as much as the published studies report.",
+    original=Study("Mertens, Herberz, Hahnel and Brosch", 2022, design="a meta-analysis of over 200 studies",
+                   found="an average effect of about d = 0.43"),
+    status="replicated, smaller",
+    record=(Study("Maier and colleagues", 2022, design="the same studies corrected for publication bias",
+                  found="no evidence for an average effect after correction"),
+            Study("DellaVigna and Linos", 2022, design="all 126 trials of two US nudge units",
+                  found="about 1.4 percentage points, against 8.7 in academic journals")),
+    note="Nudges do change behaviour on average, by much less than the published literature implies; defaults are "
+         "the reliable exception.",
+    sources=("S. Mertens, M. Herberz, U. J. J. Hahnel and T. Brosch, The effectiveness of nudging, Proceedings of the "
+             "National Academy of Sciences 119 (2022) e2107346118",
+             "M. Maier et al., No evidence for nudging after adjusting for publication bias, Proceedings of the "
+             "National Academy of Sciences 119 (2022) e2200300119",
+             "S. DellaVigna and E. Linos, RCTs to scale: comprehensive evidence from two nudge units, Econometrica 90 "
+             "(2022) 81-116"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="signing_first", part=55, title=r"Signing at the top",
+    claim="Signing an honesty pledge at the top of a form, rather than the bottom, reduces dishonest reporting.",
+    original=Study("Shu, Mazar, Gino, Ariely and Bazerman", 2012, design="laboratory studies and an insurer's "
+                   "mileage reports", found="less cheating when signing first"),
+    status="retracted",
+    record=(Study("Kristal and colleagues", 2020, n="over 4,000 participants", design="a large replication by the "
+                  "original authors and others", found="no effect"),),
+    note="In 2021 analysts showed the field data were fabricated, and the paper was retracted. The nudge had already "
+         "been recommended in guidance.",
+    sources=("L. L. Shu, N. Mazar, F. Gino, D. Ariely and M. H. Bazerman, Signing at the beginning makes ethics "
+             "salient and decreases dishonest self-reports in comparison to signing at the end, Proceedings of the "
+             "National Academy of Sciences 109 (2012) 15197-15200, retracted 2021",
+             "A. S. Kristal et al., Signing at the beginning versus at the end does not decrease dishonesty, "
+             "Proceedings of the National Academy of Sciences 117 (2020) 7103-7107"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="choice_overload", part=55, title=r"Choice overload",
+    claim="Offering more options reduces the likelihood of choosing and satisfaction with the choice.",
+    original=Study("Iyengar and Lepper", 2000, design="a tasting booth with 24 or 6 jams",
+                   found="more stopped at the larger display; far fewer bought"),
+    status="contested",
+    record=(Study("Scheibehenne, Greifeneder and Todd", 2010, design="a meta-analysis of 50 experiments",
+                  found="a mean effect near zero, with wide variation"),
+            Study("Chernev, Bockenholt and Goodman", 2015, design="a meta-analysis of moderators",
+                  found="overload under specific conditions: unclear preferences, hard comparisons, complexity")),
+    note="Not a law of choice; a pattern under conditions that can be stated.",
+    sources=("S. S. Iyengar and M. R. Lepper, When choice is demotivating, Journal of Personality and Social "
+             "Psychology 79 (2000) 995-1006",
+             "B. Scheibehenne, R. Greifeneder and P. M. Todd, Can there ever be too many options?, Journal of "
+             "Consumer Research 37 (2010) 409-425",
+             "A. Chernev, U. Bockenholt and J. Goodman, Choice overload: a conceptual review and meta-analysis, "
+             "Journal of Consumer Psychology 25 (2015) 333-358"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="accuracy_prompts", part=55, title=r"Accuracy prompts",
+    claim="Prompting people to think about accuracy improves the quality of the news they share.",
+    original=Study("Pennycook and colleagues", 2021, design="survey experiments and a field experiment on a social "
+                   "platform", found="more discerning sharing after rating one headline's accuracy"),
+    status="replicated, smaller",
+    record=(Study("Roozenbeek, Freeman and van der Linden", 2021, design="a replication and reanalysis",
+                  found="a smaller effect than first reported"),
+            Study("Pennycook and Rand", 2022, design="a meta-analysis of 20 experiments",
+                  found="a small, reliable improvement in sharing discernment, weaker in some groups")),
+    note="A cheap intervention with a small effect, real but not transformative.",
+    sources=("G. Pennycook et al., Shifting attention to accuracy can reduce misinformation online, Nature 592 (2021) "
+             "590-595",
+             "J. Roozenbeek, A. L. J. Freeman and S. van der Linden, How accurate are accuracy-nudge interventions?, "
+             "Psychological Science 32 (2021) 1169-1178",
+             "G. Pennycook and D. G. Rand, Accuracy prompts are a replicable and generalizable approach for reducing "
+             "the spread of misinformation, Nature Communications 13 (2022) 2333"),
+    checked="2026-11-16",
+))
+shown(55, r"Johnson \& Goldstein (2003)", "a cross-country comparison and an online experiment, told as the story")
+shown(55, r"DellaVigna \& Linos (2022)", "cited in the nudge_size row; quoted in the hook")
+shown(55, r"Thaler \& Benartzi (2004)", "a field programme, described")
+shown(55, r"Milkman et al.\ (2021)", "a megastudy, described; its structure simulated")
+shown(55, r"Bryan, \ Tipton \& Yeager (2021)", "an argument about heterogeneity")
+shown(55, r"Volpp et al.\ (2009)", "a randomized trial of incentives, described")
+shown(55, r"Charness \& Gneezy (2009)", "an experiment on paying for exercise, described")
+shown(55, r"Hall \& Madsen (2022)", "a natural experiment on message signs, described")
+shown(55, r"Kalla \& Broockman (2018)", "a meta-analysis of campaign contact, quoted")
+shown(55, r"Lewis \& Rao (2015)", "advertising experiments, described")
+shown(55, r"Chater \& Loewenstein (2023)", "an argument about framing, described")

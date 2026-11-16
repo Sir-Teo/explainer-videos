@@ -147,4 +147,36 @@ PARTS = [
               ("Part 21's memory model", "explainer/psychology/psyche/memory.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=55, level="U", widget="gymrank", prereq=(4, 26, 34, 50),
+        question="How much can a small change in how a choice is presented change what millions of people do?",
+        story="Opt-out organ donation and automatic pension enrolment made the nudge government policy; then the "
+              "accounting found the average published nudge near nine percentage points and the average nudge-unit "
+              "trial near one and a half. The part solves the algebra of a default, opens the toolbox, simulates a "
+              "megastudy with its winner's curse and shrinkage, reproduces the published-against-practice gap with a "
+              "publication filter, and weighs heterogeneity, incentives, backfires, persuasion, misinformation, a "
+              "fabricated nudge and the ethics of steering.",
+        handoff="Part 56 takes behaviour into court; Part 57 into health care; Part 61 turns incentives on science "
+                "itself.",
+        outside="Part 26's choice, Part 34's norms and Part 50's filtered literatures; proportions and a little "
+                "Bayes.",
+        objectives={
+            "U": ["Explain why defaults work and why most nudges are smaller than reported.",
+                  "Recognize sludge and the disclosure test for manipulation."],
+            "M": ["Correct a megastudy's winner by shrinkage and size a trial for a small effect.",
+                  "Show how a publication filter inflates an average effect."],
+            "D": ["Design a study of which interventions transfer across sites."],
+            "I": ["Design and preregister a behavioural trial with its power, persistence and cost per unit of "
+                  "change."],
+        },
+        results=[
+            ("A default's two types", r"\text{in} = (1-q)p, \quad \text{out} = q + (1-q)p"),
+            ("Empirical-Bayes shrinkage", r"\hat\theta_i^{EB} = \bar y + \frac{\tau^2}{\tau^2 + s^2}(y_i - \bar y)"),
+            ("Sample per arm (proportions)", r"n = (z_{\alpha/2} + z_\beta)^2 \frac{p_1 q_1 + p_2 q_2}{\delta^2}"),
+        ],
+        U=(0, 1, 2, 3, 8, 11, 12), D=(15,), I=(4, 5, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Its tests", "tests/psychology/test_work.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]

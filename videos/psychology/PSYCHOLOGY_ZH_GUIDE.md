@@ -1334,6 +1334,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | growth mindset; feedback intervention; self-explanation | 成长型思维；反馈干预；自我解释 |
 | Benjamin Bloom; Henry Roediger; Jeffrey Karpicke; Robert Bjork; John Dunlosky; John Sweller; Carol Dweck; Avraham Kluger; Angelo DeNisi | 本杰明·布鲁姆；亨利·罗迪格；杰弗里·卡皮克；罗伯特·比约克；约翰·邓洛斯基；约翰·斯威勒；卡罗尔·德韦克；亚伯拉罕·克鲁格；安杰洛·德尼西 |
 
+## Part 55: behaviour change at scale
+
+| English | 中文 |
+|---|---|
+| default; opt-in; opt-out; inertia; choice architecture; nudge | 默认选项；选择加入；选择退出；惯性；选择架构；助推 |
+| megastudy; winner's curse; shrinkage; nudge unit; publication bias | 超大型研究；赢家诅咒；收缩；助推小组；发表偏倚 |
+| social norm; descriptive norm; boomerang effect; reactance; backfire | 社会规范；描述性规范；回旋镖效应；心理抗拒；适得其反 |
+| incentive; commitment device; persuasion; inoculation; accuracy prompt; misinformation | 激励；承诺机制；说服；心理接种；准确性提示；错误信息 |
+| choice overload; heterogeneous treatment effect; sludge; libertarian paternalism | 选择过载；异质处理效应；淤泥（行政摩擦）；自由主义家长制 |
+| Richard Thaler; Cass Sunstein; Eric Johnson; Daniel Goldstein; Katherine Milkman; Stefano DellaVigna; Elizabeth Linos; Gordon Pennycook; David Rand | 理查德·塞勒；卡斯·桑斯坦；埃里克·约翰逊；丹尼尔·戈尔茨坦；凯瑟琳·米尔克曼；斯特凡诺·德拉维尼亚；伊丽莎白·利诺斯；戈登·彭尼库克；大卫·兰德 |
+
 ## Names
 
 | English | 中文 |
