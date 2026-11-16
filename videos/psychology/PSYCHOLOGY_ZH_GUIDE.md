@@ -1262,6 +1262,21 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | William Estes; Seth Roberts; Harold Pashler; Robert Wilson; Anne Collins; John Anderson; Andrew Heathcote | 威廉·埃斯蒂斯；塞思·罗伯茨；哈罗德·帕什勒；罗伯特·威尔逊；安妮·柯林斯；约翰·安德森；安德鲁·希思科特 |
 | David Rumelhart; James McClelland; Falk Lieder; Thomas Griffiths; Marcel Binz; Eric Schulz | 戴维·鲁梅尔哈特；詹姆斯·麦克莱兰；福尔克·利德；托马斯·格里菲斯；马塞尔·宾茨；埃里克·舒尔茨 |
 
+## Part 49: modelling the brain's data
+
+| English | 中文 |
+|---|---|
+| analysis pipeline; multiverse; fork; preprocessing; slice timing; motion correction; registration; smoothing | 分析流程；多元宇宙分析；分岔；预处理；层间时间校正；头动校正；配准；平滑 |
+| first level; second level; fixed effects; random effects; contrast; haemodynamic response | 第一层；第二层；固定效应；随机效应；对比；血流动力学响应 |
+| familywise error; false discovery rate; cluster-forming threshold; cluster-extent inference; permutation test | 族错误率；错误发现率；簇形成阈值；簇范围推断；置换检验 |
+| decoding; cross-validation; leakage; representational similarity analysis; dissimilarity matrix; noise ceiling | 解码；交叉验证；泄漏；表征相似性分析；相异矩阵；噪声上限 |
+| encoding model; ridge regression; resting state; default network; global-signal regression; anticorrelation | 编码模型；岭回归；静息态；默认网络；全局信号回归；负相关 |
+| event-related potential; time-frequency; source estimation; MEG | 事件相关电位；时频分析；源定位；脑磁图 |
+| population vector; neural manifold; brain-computer interface; information transfer rate; bits per minute | 群体向量；神经流形；脑机接口；信息传输率；每分钟比特数 |
+| brain-wide association study; winner's curse; attenuation; test-retest reliability | 全脑关联研究；赢家诅咒；衰减；重测信度 |
+| Joshua Carp; Rotem Botvinik-Nezer; Anders Eklund; James Haxby; Nikolaus Kriegeskorte; Thomas Naselaris; Alexander Huth | 乔舒亚·卡普；罗特姆·博特维尼克-内泽尔；安德斯·埃克伦德；詹姆斯·哈克斯比；尼古拉斯·克里格斯科尔特；托马斯·纳塞拉里斯；亚历山大·胡思 |
+| Marcus Raichle; Michael Greicius; Jonathan Power; Apostolos Georgopoulos; Jonathan Wolpaw; Scott Marek; Eric Jonas; Konrad Kording | 马库斯·赖希勒；迈克尔·格雷修斯；乔纳森·鲍尔；阿波斯托洛斯·乔治波洛斯；乔纳森·沃尔波；斯科特·马雷克；埃里克·乔纳斯；康拉德·科丁 |
+
 ## Names
 
 | English | 中文 |

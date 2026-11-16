@@ -642,4 +642,169 @@
       note: "Nothing you choose is stored or sent. The left machine pays 75% of the time and the right 25% for the first forty choices, then they swap. The fit is a grid search over the Q-learner of Part 17; the dots are refits of players simulated at your values, the recovery check of chapter four.",
     });
   };
+  // ---- Part 49: choose a pipeline for Psyche's brain, predict, then see the map and how the other pipelines voted. ----
+  W.pipelines = function (el) {
+    var w = null, M = 32, NS = 16;
+    var SM = [0, 2, 4], TH = ["p < 0.001 per voxel", "false discovery rate 5%", "Bonferroni 5%"];
+    function blur(a, fw) {
+      if (fw <= 0) return a.slice();
+      var sg = fw / 2.355, r = Math.ceil(3 * sg), k = [], i, j, x, y, s = 0;
+      for (i = -r; i <= r; i++) { k.push(Math.exp(-i * i / (2 * sg * sg))); s += k[k.length - 1]; }
+      for (i = 0; i < k.length; i++) k[i] /= s;
+      var tmp = new Float64Array(M * M), out = new Float64Array(M * M);
+      for (y = 0; y < M; y++) for (x = 0; x < M; x++) {
+        var v = 0; for (j = -r; j <= r; j++) { var xx = Math.min(M - 1, Math.max(0, x + j)); v += k[j + r] * a[y * M + xx]; }
+        tmp[y * M + x] = v;
+      }
+      for (y = 0; y < M; y++) for (x = 0; x < M; x++) {
+        var u = 0; for (j = -r; j <= r; j++) { var yy = Math.min(M - 1, Math.max(0, y + j)); u += k[j + r] * tmp[yy * M + x]; }
+        out[y * M + x] = u;
+      }
+      return out;
+    }
+    function erfc(x) {
+      var t = 1 / (1 + 0.5 * Math.abs(x));
+      var r = t * Math.exp(-x * x - 1.26551223 + t * (1.00002368 + t * (0.37409196 + t * (0.09678418 + t * (-0.18628806 +
+              t * (0.27886807 + t * (-1.13520398 + t * (1.48851587 + t * (-0.82215223 + t * 0.17087277)))))))));
+      return x >= 0 ? r : 2 - r;
+    }
+    function pUpper(t, df) {  // one-sided p of a t statistic, via Fisher's normal approximation
+      var z = t * (1 - 1 / (4 * df)) / Math.sqrt(1 + t * t / (2 * df));
+      return 0.5 * erfc(z / Math.SQRT2);
+    }
+    var mask = new Uint8Array(M * M), regA = new Uint8Array(M * M), regB = new Uint8Array(M * M), x, y;
+    for (y = 0; y < M; y++) for (x = 0; x < M; x++) {
+      var cx = (x - 15.5) / (0.46 * M), cy = (y - 15.5) / (0.48 * M);
+      mask[y * M + x] = cx * cx + cy * cy <= 1 ? 1 : 0;
+      regA[y * M + x] = ((x - 10) * (x - 10) + (y - 12) * (y - 12) <= 9) ? 1 : 0;
+      regB[y * M + x] = ((x - 21) * (x - 21) + (y - 19) * (y - 19) <= 9) ? 1 : 0;
+    }
+    var S = { seed: 49, data: null, results: null, guess: null, score: [0, 0] };
+    function makeData(seed) {
+      var rand = mulberry(seed), subj = [], motion = [], s, i;
+      for (s = 0; s < NS; s++) {
+        var dev = new Float64Array(M * M), err = new Float64Array(M * M);
+        for (i = 0; i < M * M; i++) { dev[i] = gauss(rand); err[i] = gauss(rand); }
+        dev = blur(dev, 6); err = blur(err, 2);
+        var sd1 = 0, sd2 = 0; for (i = 0; i < M * M; i++) { sd1 += dev[i] * dev[i]; sd2 += err[i] * err[i]; }
+        sd1 = Math.sqrt(sd1 / (M * M)); sd2 = Math.sqrt(sd2 / (M * M));
+        var mo = rand() < 0.2 ? 0.6 + rand() * 0.6 : rand() * 0.15, sign = rand() < 0.5 ? -1 : 1, m = new Float64Array(M * M);
+        for (y = 0; y < M; y++) for (x = 0; x < M; x++) {
+          i = y * M + x;
+          var rr = Math.sqrt(Math.pow((x - 15.5) / (0.46 * M), 2) + Math.pow((y - 15.5) / (0.48 * M), 2));
+          var rim = Math.exp(-Math.pow((rr - 1) / 0.1, 2));
+          m[i] = mask[i] ? (1.0 * regA[i] + 0.6 * regB[i] + 0.6 * dev[i] / sd1 + err[i] / sd2 + sign * 4 * mo * rim) : 0;
+        }
+        subj.push(m); motion.push(mo);
+      }
+      return { subj: subj, motion: motion };
+    }
+    function runPipe(sm, th, ex) {
+      var keep = [], i, s, cut = S.data.motion.slice().sort(function (a, b) { return a - b; })[NS - 4];
+      for (s = 0; s < NS; s++) if (!ex || S.data.motion[s] < cut) keep.push(blur(S.data.subj[s], SM[sm]));
+      var n = keep.length, t = new Float64Array(M * M), ps = [];
+      for (i = 0; i < M * M; i++) {
+        if (!mask[i]) continue;
+        var mu = 0, v = 0; for (s = 0; s < n; s++) mu += keep[s][i]; mu /= n;
+        for (s = 0; s < n; s++) v += Math.pow(keep[s][i] - mu, 2); v /= (n - 1);
+        t[i] = mu / Math.sqrt(v / n);
+        ps.push([pUpper(t[i], n - 1), i]);
+      }
+      var on = new Uint8Array(M * M), m = ps.length;
+      if (th === 0) ps.forEach(function (q) { if (q[0] < 0.001) on[q[1]] = 1; });
+      else if (th === 2) ps.forEach(function (q) { if (q[0] < 0.05 / m) on[q[1]] = 1; });
+      else {
+        ps.sort(function (a, b) { return a[0] - b[0]; });
+        var kmax = -1; for (i = 0; i < m; i++) if (ps[i][0] <= 0.05 * (i + 1) / m) kmax = i;
+        for (i = 0; i <= kmax; i++) on[ps[i][1]] = 1;
+      }
+      var b = 0, a = 0, f = 0;
+      for (i = 0; i < M * M; i++) if (on[i]) { if (regB[i]) b++; else if (regA[i]) a++; else f++; }
+      return { t: t, on: on, B: b > 0, A: a > 0, falseVox: f };
+    }
+    function recompute() {
+      S.data = makeData(S.seed); S.results = {};
+      var sm, th, ex;
+      for (sm = 0; sm < 3; sm++) for (th = 0; th < 3; th++) for (ex = 0; ex < 2; ex++)
+        S.results[sm + "," + th + "," + ex] = runPipe(sm, th, ex);
+    }
+    recompute();
+    function cur(v) { return S.results[v.sm + "," + v.th + "," + v.ex]; }
+    function predict(yes, v) {
+      S.guess = yes;
+      var r = cur(v);
+      S.score[1]++; if (r.B === yes) S.score[0]++;
+    }
+    var task = T.create(el, {
+      keys: { "f": 0, "j": 1 },
+      accepting: function () { return !!S.v; },
+      respond: function (side) {
+        if (S.guess === null) { predict(side === 0, S.v); task.count++; }
+        else { S.seed++; S.guess = null; recompute(); }
+        if (w) w.render();
+      },
+    });
+    w = QB.widget(el, {
+      title: "Choose a pipeline",
+      sub: "Psyche's brain: 16 simulated people, a strong region on the left and a weaker one (outlined) on the right. Choose the smoothing, the threshold and whether to drop the four people who moved most, then predict: will the outlined region light up? Press F (it will light up) or J (it will stay dark), or tap the left or right half of the map; press again for a new brain.",
+      panels: 2, height: 340, weights: [1, 1.15],
+      controls: [
+        { k: "sm", label: "Smoothing (voxels)", min: 0, max: 2, step: 1, value: 1, fmt: function (x) { return String(SM[x]); } },
+        { k: "th", label: "Threshold", min: 0, max: 2, step: 1, value: 0, fmt: function (x) { return TH[x]; } },
+        { k: "ex", label: "Drop the movers", min: 0, max: 1, step: 1, value: 0, fmt: function (x) { return x ? "yes" : "no"; } },
+      ],
+      onChange: function () { S.guess = null; },
+      buttons: [
+        { label: "New brain", act: function (state) { S.seed++; S.guess = null; recompute(); } },
+        { label: "It will light up", act: function (state, v) { if (S.guess === null) { predict(true, v); task.count++; } } },
+        { label: "It will stay dark", act: function (state, v) { if (S.guess === null) { predict(false, v); task.count++; } } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b0 = g[0].box, r = cur(v), i;
+        S.v = v;
+        task.box = { x: b0.x, y: b0.y, w: b0.w, h: b0.h, cx: b0.x + b0.w / 2, cy: b0.y + b0.h / 2 };
+        var side = Math.min(b0.w - 20, b0.h - 40), cell = side / M, x0 = b0.x + (b0.w - side) / 2, y0 = b0.y + 26;
+        ctx.save();
+        ctx.fillStyle = C.ink; ctx.font = "600 12px system-ui, sans-serif"; ctx.textAlign = "left";
+        ctx.fillText(S.guess === null ? "Predict first: the map appears after" : "The map from your pipeline", b0.x + 8, b0.y + 16);
+        for (y = 0; y < M; y++) for (x = 0; x < M; x++) {
+          i = y * M + x; if (!mask[i]) continue;
+          var col = "#1b2029";
+          if (S.guess !== null) {
+            var tv = Math.max(0, Math.min(1, r.t[i] / 6));
+            col = r.on[i] ? (regA[i] || regB[i] ? "#f2c14e" : "#ef6f6c") : "rgba(" + Math.round(40 + 120 * tv) + "," + Math.round(44 + 60 * tv) + "," + Math.round(56 + 20 * tv) + ",1)";
+          }
+          ctx.fillStyle = col; ctx.fillRect(x0 + x * cell, y0 + y * cell, cell + 0.5, cell + 0.5);
+        }
+        ctx.strokeStyle = "#7ec8f5"; ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(x0 + 21.5 * cell, y0 + 19.5 * cell, 3.4 * cell, 0, 2 * Math.PI); ctx.stroke();
+        if (S.guess !== null) {
+          ctx.fillStyle = r.B === S.guess ? "#5bd18b" : "#ef6f6c"; ctx.font = "600 13px system-ui, sans-serif"; ctx.textAlign = "center";
+          ctx.fillText((r.B ? "It lit up" : "It stayed dark") + (r.B === S.guess ? ": as you predicted" : ": not as you predicted"), b0.x + b0.w / 2, b0.y + b0.h - 6);
+        }
+        ctx.restore();
+        var b1 = g[1].box, cx = g.ctx, yes = 0, k = 0;
+        cx.save(); cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif"; cx.textAlign = "left";
+        cx.fillText("All 18 pipelines on this brain: does the outlined region light up?", b1.x + 8, b1.y + 16);
+        var cw = (b1.w - 140) / 6, ch = 30, gx = b1.x + 128, gy = b1.y + 46;
+        cx.font = "11px system-ui, sans-serif"; cx.fillStyle = C.muted;
+        ["0, keep", "0, drop", "2, keep", "2, drop", "4, keep", "4, drop"].forEach(function (s, j) { cx.textAlign = "center"; cx.fillText(s, gx + (j + 0.5) * cw, gy - 6); });
+        for (var th = 0; th < 3; th++) {
+          cx.textAlign = "right"; cx.fillStyle = C.muted; cx.fillText(TH[th].replace(" per voxel", ""), gx - 6, gy + th * (ch + 6) + ch / 2 + 4);
+          for (var sm = 0; sm < 3; sm++) for (var ex = 0; ex < 2; ex++) {
+            var rr = S.results[sm + "," + th + "," + ex], j2 = sm * 2 + ex;
+            k++; if (rr.B) yes++;
+            cx.fillStyle = S.guess === null ? "#2a303a" : (rr.B ? "#f2c14e" : "#3a3f48");
+            cx.fillRect(gx + j2 * cw + 3, gy + th * (ch + 6), cw - 6, ch);
+            if (sm === v.sm && th === v.th && ex === v.ex) { cx.strokeStyle = "#ffffff"; cx.lineWidth = 2; cx.strokeRect(gx + j2 * cw + 2, gy + th * (ch + 6) - 1, cw - 4, ch + 2); }
+          }
+        }
+        cx.textAlign = "left"; cx.fillStyle = C.ink; cx.font = "13px system-ui, sans-serif";
+        cx.fillText(S.guess === null ? "Columns: smoothing, and whether the movers were dropped." : yes + " of " + k + " pipelines say it lights up. The planted effect is the same in all of them.", b1.x + 8, gy + 3 * (ch + 6) + 22);
+        cx.restore();
+      },
+      readout: function () { return [["predictions right", S.score[0] + " of " + S.score[1]]]; },
+      note: "Nothing you choose is stored or sent. The brain, its people and their head motion are simulated in your browser; red voxels are false positives, gold ones are in a planted region.",
+    });
+  };
 })();

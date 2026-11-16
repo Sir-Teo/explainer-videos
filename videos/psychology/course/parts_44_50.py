@@ -194,4 +194,41 @@ PARTS = [
               ("Its tests", "tests/psychology/test_fit.py"),
               ("Part 17's Q-learner", "explainer/psychology/psyche/rl.py")),
     ),
+    Part(
+        n=49, level="D", widget="pipelines", prereq=(8, 47, 48),
+        question="What must be true for a brain map to be evidence?",
+        story="In 2020 seventy teams analysed one brain-imaging dataset and answered the same questions differently. "
+              "The part builds the analysis chain on a synthetic brain where the truth is known: 72 pipelines and 44 "
+              "different maps, head motion that makes connections, fixed effects that treat scans as people, cluster "
+              "inference that fails at lenient thresholds and permutation that does not, a decoder that reads noise "
+              "at 94% when it peeks, representational geometry and encoding models judged against noise ceilings, "
+              "anticorrelations made by global-signal regression, ERP windows chosen from the answer, the population "
+              "vector, brain-computer interfaces and their bit rates, and the samples of thousands that "
+              "brain-behaviour claims need.",
+        handoff="Reading a whole literature is Part 50; the predictive brain Part 58; computational psychiatry's "
+                "biomarkers Part 59; brains and machines compared Part 60.",
+        outside="Part 8's measurement chain; Part 47's multilevel models; permutation tests, ridge regression and "
+                "principal components.",
+        objectives={
+            "U": ["Explain why one dataset analysed through many defensible pipelines can give different answers.",
+                  "Explain why a brain-behaviour correlation from a few dozen people is usually inflated."],
+            "M": ["Fit a two-level model of brain data and threshold it by permutation, and explain when cluster "
+                  "inference fails.",
+                  "Cross-validate a decoder with every selection step inside the loop, and compare a model with "
+                  "brain data by representational similarity against a noise ceiling."],
+            "D": ["Plan a brain-behaviour study from the smallest effect of interest, the measures' reliabilities "
+                  "and a registered pipeline."],
+            "I": ["Audit a claim made for a neurotechnology product or a brain-based biomarker."],
+        },
+        results=[
+            ("Random-effects t", r"t_v = \bar c_v \big/ (s_v/\sqrt{n})"),
+            ("Permutation threshold", r"u = q_{0.95}\big(\max_v t_v^{(\pi)}\big)"),
+            ("Attenuation", r"r_{\text{obs}} = r\sqrt{\rho_{x}\rho_{y}}"),
+            ("Wolpaw's bit rate", r"B = \log_2 N + P\log_2 P + (1-P)\log_2\tfrac{1-P}{N-1}"),
+        ],
+        U=(0, 1, 5, 12), D=(15,), I=(14,),
+        also=(("Psyche's neurodata module", "explainer/psychology/psyche/neurodata.py"),
+              ("Its tests", "tests/psychology/test_neurodata.py"),
+              ("Part 8's synthetic brain", "explainer/psychology/psyche/imaging.py")),
+    ),
 ]

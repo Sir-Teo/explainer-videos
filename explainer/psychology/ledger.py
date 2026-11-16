@@ -6562,3 +6562,137 @@ shown(48, r"Lieder \& Griffiths (2020)", "a method, described")
 shown(48, r"Rumelhart, McClelland \& the PDP Group (1986)", "a modelling framework, described")
 shown(48, r"Binz \& Schulz (2023)", "a study of a language model on judgment tasks, described without a row; whether "
       "such models are models of minds is Part 60's question")
+
+# --- Part 49: Modelling the Brain's Data ------------------------------------------------------------------------------
+
+add(Finding(
+    key="analytic_variability", part=49, title=r"Analytic variability in brain imaging",
+    claim="Different defensible analysis pipelines applied to the same brain-imaging data can reach different "
+          "conclusions about the same hypotheses.",
+    original=Study("Carp", 2012, design="one event-related fMRI dataset analysed through thousands of pipelines "
+                   "built from common preprocessing and modelling choices",
+                   found="activation maps varied widely with the choices, in where and whether effects appeared"),
+    status="replicated",
+    record=(Study("Botvinik-Nezer and colleagues", 2020, design="seventy teams, one dataset, nine yes-or-no "
+                  "hypotheses (NARPS)", found="no two teams chose the same pipeline, and for several hypotheses the "
+                  "teams' answers split"),
+            Study("Silberzahn and colleagues", 2018, design="twenty-nine teams, one dataset and one question outside "
+                  "neuroscience", found="estimates ranged from null to large; most teams found an effect")),
+    note="The variability is a property of the analysis, not of the brain: report the forks, register the pipeline, "
+         "and where possible show the result across the reasonable paths (chapter zero runs 72 of them).",
+    sources=("J. Carp, On the plurality of (methodological) worlds: estimating the analytic flexibility of fMRI "
+             "experiments, Frontiers in Neuroscience 6 (2012) 149",
+             "R. Botvinik-Nezer et al., Variability in the analysis of a single neuroimaging dataset by many teams, "
+             "Nature 582 (2020) 84-88",
+             "R. Silberzahn et al., Many analysts, one data set, Advances in Methods and Practices in Psychological "
+             "Science 1 (2018) 337-356"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="default_mode", part=49, title=r"The default mode network",
+    claim="A set of brain regions, including medial prefrontal and posterior cingulate cortex, is more active at "
+          "rest than during many externally directed tasks, and its activity is correlated at rest.",
+    original=Study("Raichle and colleagues", 2001, design="PET and fMRI of the resting brain against many tasks",
+                   found="regions whose activity falls during goal-directed tasks: a default mode of brain function"),
+    status="replicated",
+    record=(Study("Greicius and colleagues", 2003, design="resting-state fMRI correlations",
+                  found="the same regions' slow fluctuations are correlated at rest"),
+            Study("Yeo and colleagues", 2011, design="resting-state data from 1,000 people, clustered",
+                  found="a default network among a handful of large-scale networks, reproducible across samples")),
+    note="The network is among the most reproducible findings in brain imaging; what it does (self-reference, "
+         "memory, simulation) is still argued, and its anticorrelations depend on the analysis (chapter eight).",
+    sources=("M. E. Raichle et al., A default mode of brain function, Proceedings of the National Academy of Sciences "
+             "98 (2001) 676-682",
+             "M. D. Greicius et al., Functional connectivity in the resting brain, Proceedings of the National Academy "
+             "of Sciences 100 (2003) 253-258",
+             "B. T. T. Yeo et al., The organization of the human cerebral cortex estimated by intrinsic functional "
+             "connectivity, Journal of Neurophysiology 106 (2011) 1125-1165"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="small_bwas", part=49, title=r"Brain-behaviour correlations in small samples",
+    claim="Correlations between individual differences in brain structure or function and complex behaviour, found "
+          "in samples of a few dozen people, are large and reproducible.",
+    original=Study("Kanai and Rees", 2011, design="a review of studies relating brain structure to individual "
+                   "differences in behaviour and cognition, mostly in small samples",
+                   found="many sizeable correlations between brain measures and traits"),
+    status="failed",
+    record=(Study("Boekel and colleagues", 2015, design="a preregistered replication of seventeen structural "
+                  "brain-behaviour correlations", found="evidence for almost none of them"),
+            Study("Marek and colleagues", 2022, design="brain-wide associations in samples of up to about 50,000",
+                  found="true correlations mostly small, so that thousands of people are needed to estimate them "
+                        "reliably")),
+    note="Small samples give wide sampling distributions; the significant ones are inflated (chapter twelve "
+         "computes it). The associations are real but small.",
+    sources=("R. Kanai and G. Rees, The structural basis of inter-individual differences in human behaviour and "
+             "cognition, Nature Reviews Neuroscience 12 (2011) 231-242",
+             "W. Boekel et al., A purely confirmatory replication study of structural brain-behavior correlations, "
+             "Cortex 66 (2015) 115-133",
+             "S. Marek et al., Reproducible brain-wide association studies require thousands of individuals, Nature "
+             "603 (2022) 654-660"),
+    checked="2026-11-16",
+    data=("MAREK_2022",),
+))
+
+add(Finding(
+    key="lenient_clusters", part=49, title=r"Cluster inference at lenient thresholds",
+    claim="Cluster-extent inference with a lenient cluster-forming threshold (p < 0.01), using the standard "
+          "parametric approximations, controls the familywise error at the stated 5%.",
+    original=Study("Friston and colleagues", 1994, design="Gaussian random field theory for the spatial extent of "
+                   "activations", found="a parametric p-value for the size of a cluster"),
+    status="failed",
+    record=(Study("Woo, Krishnan and Wager", 2014, design="a review of cluster-extent thresholds in use",
+                  found="lenient primary thresholds give low spatial specificity and invite false positives"),
+            Study("Eklund, Nichols and Knutsson", 2016, design="null group analyses of real resting-state data in "
+                  "common software", found="familywise error far above 5% at p < 0.01, near nominal at p < 0.001; "
+                  "permutation tests held the rate")),
+    note="The approximations assume a Gaussian spatial autocorrelation; real noise has a longer tail. Stricter "
+         "primary thresholds, or permutation, fix it (chapter four computes both).",
+    sources=("K. J. Friston, K. J. Worsley, R. S. J. Frackowiak, J. C. Mazziotta and A. C. Evans, Assessing the "
+             "significance of focal activations using their spatial extent, Human Brain Mapping 1 (1994) 210-220",
+             "C.-W. Woo, A. Krishnan and T. D. Wager, Cluster-extent based thresholding in fMRI analyses, NeuroImage "
+             "91 (2014) 412-419",
+             "A. Eklund, T. E. Nichols and H. Knutsson, Cluster failure, Proceedings of the National Academy of "
+             "Sciences 113 (2016) 7900-7905"),
+    checked="2026-11-16",
+    data=("EKLUND_2016",),
+))
+
+add(Finding(
+    key="category_decoding", part=49, title=r"Decoding object categories from ventral cortex",
+    claim="The category of a seen object (faces, houses, chairs, shoes and others) can be decoded from distributed "
+          "patterns of activity in ventral temporal cortex, even with the most selective regions left out.",
+    original=Study("Haxby and colleagues", 2001, design="fMRI of eight object categories; correlations between "
+                   "patterns from split halves of the data", found="categories identified from patterns well above "
+                   "chance, including with the maximally responsive voxels removed"),
+    status="replicated",
+    record=(Study("Kriegeskorte and colleagues", 2008, design="representational similarity in human and monkey "
+                  "inferior temporal cortex", found="a shared category structure (animate against inanimate, faces, "
+                  "bodies) across species"),
+            Study("Haxby and colleagues", 2011, design="hyperalignment across people watching a film",
+                  found="category decoding across individuals in a common model space")),
+    note="Decodable means the information is present in the pattern, not that the brain uses it in that form; the "
+         "leaks of chapter five make decoding easy to overstate.",
+    sources=("J. V. Haxby et al., Distributed and overlapping representations of faces and objects in ventral "
+             "temporal cortex, Science 293 (2001) 2425-2430",
+             "N. Kriegeskorte et al., Matching categorical object representations in inferior temporal cortex of man "
+             "and monkey, Neuron 60 (2008) 1126-1141",
+             "J. V. Haxby et al., A common, high-dimensional model of the representational space in human ventral "
+             "temporal cortex, Neuron 72 (2011) 404-416"),
+    checked="2026-11-16",
+))
+shown(49, r"Poldrack, \ Mumford \& Nichols (2011)", "a textbook")
+shown(49, r"Power et al.\ (2012)", "a methods result about motion, simulated here")
+shown(49, r"Murphy et al.\ (2009)", "a methods result about global-signal regression, simulated here")
+shown(49, r"Naselaris et al.\ (2011)", "a framework for encoding models")
+shown(49, r"Huth et al.\ (2016)", "one laboratory's semantic maps from hours of data per person, described as an "
+      "example of encoding models")
+shown(49, r"Georgopoulos et al.\ (1982)", "the history of a method, the population vector")
+shown(49, r"Willett et al.\ (2023)", "a brain-computer interface for speech in one participant, described with what it "
+      "decodes; the engineering is audited in practice")
+shown(49, r"Jonas \& Kording (2017)", "a demonstration about methods, on a microprocessor")
+shown(49, r"Elliott et al.\ (2020)", "a meta-analysis of a measurement's reliability, used as a number in a "
+      "calculation")
+shown(49, r"Luck (2014)", "a textbook")
