@@ -320,4 +320,114 @@
       note: "Nothing you choose is stored or sent. The candidates are simulated from Part 53's interview-noise model; real validities vary by job.",
     });
   };
+
+  // ---- Part 54: two lists, one massed and one spaced.  Predict, study, a short distraction, then the test. ----
+  W.spacedlists = function (el) {
+    var w = null, SHOW = 1300;
+    var POOL = [["harbour", "pencil"], ["violin", "garden"], ["granite", "candle"], ["meadow", "rocket"], ["lantern", "tiger"],
+                ["orchard", "button"], ["saddle", "mirror"], ["compass", "pillow"], ["thimble", "forest"], ["canyon", "ladder"],
+                ["walnut", "engine"], ["glacier", "spoon"]];
+    var S = { phase: "idle", seq: [], k: 0, A: [], B: [], test: [], log: [], pred: null, sums: [] };
+    function shuffle(a, rand) { for (var i = a.length - 1; i > 0; i--) { var j = Math.floor(rand() * (i + 1)); var t = a[i]; a[i] = a[j]; a[j] = t; } return a; }
+    function nextStudy() {
+      if (S.k >= S.seq.length) { S.phase = "distract"; S.k = 0; if (w) w.render(); return; }
+      if (w) w.render();
+      task.later(function () { S.k++; nextStudy(); }, SHOW);
+    }
+    var task = T.create(el, {
+      keys: { f: 0, j: 1 },
+      accepting: function () { return S.phase === "predict" || S.phase === "study" || S.phase === "distract" || S.phase === "test"; },
+      respond: function (side) {
+        if (S.phase === "predict") { S.pred = side; S.phase = "study"; S.k = 0; task.count++; nextStudy(); return; }
+        if (S.phase === "study") { task.clear(); task.count++; S.k++; nextStudy(); return; }
+        if (S.phase === "distract") {
+          task.count++; S.k++;
+          if (S.k >= S.sums.length) { S.phase = "test"; S.k = 0; }
+          if (w) w.render(); return;
+        }
+        var it = S.test[S.k];
+        S.log.push({ list: it.list, right: side === it.correct });
+        task.count++; S.k++;
+        if (S.k >= S.test.length) S.phase = "done";
+        if (w) w.render();
+      },
+    });
+    function start(state) {
+      var rand = mulberry(54 + (state ? state.seed : 0)), pairs = shuffle(POOL.slice(), rand), i;
+      S.A = pairs.slice(0, 6); S.B = pairs.slice(6, 12);
+      S.seq = [];
+      for (i = 0; i < 6; i++) {
+        S.seq.push(S.A[i], S.A[i], S.A[i]);
+        S.seq.push(S.B[i], S.B[(i + 2) % 6], S.B[(i + 4) % 6]);
+      }
+      S.sums = [];
+      for (i = 0; i < 6; i++) { var a = 3 + Math.floor(rand() * 7), b = 2 + Math.floor(rand() * 8), ok = rand() < 0.5; S.sums.push([a, b, ok ? a + b : a + b + (rand() < 0.5 ? 1 : -1)]); }
+      S.test = [];
+      [["massed", S.A], ["spaced", S.B]].forEach(function (L) {
+        L[1].forEach(function (p, j) {
+          var lure = L[1][(j + 1 + Math.floor(rand() * 5)) % 6][1], correct = rand() < 0.5 ? 0 : 1;
+          S.test.push({ list: L[0], cue: p[0], opts: correct === 0 ? [p[1], lure] : [lure, p[1]], correct: correct });
+        });
+      });
+      shuffle(S.test, rand);
+      S.k = 0; S.log = []; task.count = 0; S.pred = null; S.phase = "predict"; task.clear();
+      if (w) w.render();
+    }
+    w = QB.widget(el, {
+      title: "Two lists: massed and spaced",
+      sub: "Twelve word pairs. Six are shown three times in a row (massed); six are shown three times spread out (spaced). First predict which you will remember better, then watch the pairs (F or J moves on sooner), do six quick sums, and take the test: for each first word, pick its partner with F (left) or J (right).",
+      panels: 2, height: 330, weights: [1.25, 1],
+      buttons: [
+        { label: "Start", act: function (state) { start(state); } },
+        { label: "Clear", act: function (state) { state.seed++; task.clear(); S.phase = "idle"; S.log = []; } },
+      ],
+      draw: function (g) {
+        var ctx = g.ctx, b = T.stage(g, 0, task);
+        ctx.save(); ctx.textAlign = "center"; ctx.textBaseline = "middle";
+        if (S.phase === "predict") {
+          T.message(ctx, b, "Predict first", "Which list will you remember better? F: the massed list. J: the spaced list.");
+        } else if (S.phase === "study") {
+          var p = S.seq[Math.min(S.k, S.seq.length - 1)];
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("study " + (S.k + 1) + " of " + S.seq.length + " (F or J: next)", b.cx, b.y + 22);
+          ctx.fillStyle = C.ink; ctx.font = "600 26px system-ui, sans-serif";
+          ctx.fillText(p[0] + "  –  " + p[1], b.cx, b.cy);
+        } else if (S.phase === "distract") {
+          var q = S.sums[S.k];
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("a short break: is the sum right? F yes, J no (" + (S.k + 1) + " of 6)", b.cx, b.y + 22);
+          ctx.fillStyle = C.ink; ctx.font = "600 26px system-ui, sans-serif";
+          ctx.fillText(q[0] + " + " + q[1] + " = " + q[2], b.cx, b.cy);
+        } else if (S.phase === "test") {
+          var it = S.test[S.k];
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("test " + (S.k + 1) + " of " + S.test.length + ": which word went with it?", b.cx, b.y + 22);
+          ctx.fillStyle = C.ink; ctx.font = "600 26px system-ui, sans-serif";
+          ctx.fillText(it.cue, b.cx, b.cy - 30);
+          ctx.font = "18px system-ui, sans-serif"; ctx.fillStyle = "#b39ddb";
+          ctx.fillText("F: " + it.opts[0], b.x + b.w * 0.3, b.cy + 30);
+          ctx.fillText("J: " + it.opts[1], b.x + b.w * 0.7, b.cy + 30);
+        } else if (S.phase === "done") {
+          var m = S.log.filter(function (r) { return r.list === "massed" && r.right; }).length;
+          var s2 = S.log.filter(function (r) { return r.list === "spaced" && r.right; }).length;
+          T.message(ctx, b, "Massed: " + m + " of 6.  Spaced: " + s2 + " of 6.",
+            "You predicted the " + (S.pred === 0 ? "massed" : "spaced") + " list. Six pairs each is a tiny test and chance is 3 of 6, so one run proves little; the effect is clearer after a day. Try again tomorrow with new lists.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. First you predict, then twelve pairs, six sums and a twelve-item test.");
+        }
+        ctx.restore();
+        var a2 = g[1].axes({ x: [0, 3], y: [0, 6], title: "Your scores (of 6)", noX: true });
+        if (S.phase === "done") {
+          var m2 = S.log.filter(function (r) { return r.list === "massed" && r.right; }).length;
+          var sp = S.log.filter(function (r) { return r.list === "spaced" && r.right; }).length;
+          a2.bars([0.9, 2.1], [m2, sp], 0.7, { color: function (i) { return i ? "#5bd18b" : "#ef6f6c"; } });
+          a2.text(0.9, Math.min(m2, 5.4) + 0.4, "massed", { align: "center", size: 11 });
+          a2.text(2.1, Math.min(sp, 5.4) + 0.4, "spaced", { align: "center", size: 11 });
+        }
+        a2.hline(3, { color: C.muted });
+      },
+      readout: function () { return [["responses", String(task.count)]]; },
+      note: "Nothing you answer is stored or sent. In a single short session the spacing advantage is small; Part 54's simulations and studies measure it after days and weeks.",
+    });
+  };
 })();

@@ -1323,6 +1323,17 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | goal setting; crowding out; job satisfaction; working from home | 目标设定；挤出效应；工作满意度；居家办公 |
 | Hugo Münsterberg; Frank Schmidt; John Hunter; Paul Sackett; Edwin Locke; Gary Latham; Nicholas Bloom | 雨果·闵斯特伯格；弗兰克·施密特；约翰·亨特；保罗·萨基特；埃德温·洛克；加里·莱瑟姆；尼古拉斯·布鲁姆 |
 
+## Part 54: the science of learning
+
+| English | 中文 |
+|---|---|
+| retrieval practice; testing effect; spacing effect; interleaving; desirable difficulty | 提取练习；测试效应；间隔效应；交错练习；合意困难 |
+| learning against performance; fluency illusion; cognitive load; worked example | 学习与表现之别；流畅性错觉；认知负荷；样例 |
+| learning styles; meshing hypothesis; two sigma problem; intelligent tutoring system | 学习风格；匹配假设；二西格玛问题；智能辅导系统 |
+| review schedule; expanding schedule; simple view of reading; decoding; phonics | 复习计划；扩展间隔计划；阅读简单观；解码；自然拼读 |
+| growth mindset; feedback intervention; self-explanation | 成长型思维；反馈干预；自我解释 |
+| Benjamin Bloom; Henry Roediger; Jeffrey Karpicke; Robert Bjork; John Dunlosky; John Sweller; Carol Dweck; Avraham Kluger; Angelo DeNisi | 本杰明·布鲁姆；亨利·罗迪格；杰弗里·卡皮克；罗伯特·比约克；约翰·邓洛斯基；约翰·斯威勒；卡罗尔·德韦克；亚伯拉罕·克鲁格；安杰洛·德尼西 |
+
 ## Names
 
 | English | 中文 |

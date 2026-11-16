@@ -809,7 +809,7 @@ shown(19, "FTC_LUMOSITY_2016", "a regulatory settlement, reported as a fact; not
 shown(20, "EBBINGHAUS_1885", "the first forgetting curve, refitted here; its shape and its replication are Part 21's "
       "row (forgetting_curve)")
 shown(20, "DRESLER_2017", "a single training study, shown as an example of the method of loci; mnemonic training's record "
-      "is reviewed in Part 54", row_in=54)
+      "is reviewed in Part 54")
 shown(20, "KOHNKEN_1999", "a meta-analysis of an interview method; eyewitness memory and the interview are entered in Part "
       "56", row_in=56)
 shown(20, "LIU_2012", "the engram experiment, recalled from Part 5; a neuroscience finding reported, not a behavioural "
@@ -839,7 +839,7 @@ shown(21, "TALARICO_RUBIN_2003", "flashbulb memories, shown as one study with a 
 shown(21, "WIXTED_WELLS_2017", "a review of eyewitness confidence, with a model computed here; the eyewitness rows are "
       "Part 56's", row_in=56)
 shown(21, "DUNLOSKY_2013", "a review rating study techniques; the spacing and testing rows are this part's, and the "
-      "classroom record is Part 54's", row_in=54)
+      "classroom record is Part 54's")
 shown(21, r"Anderson, \ Bjork \& Bjork (1994); \ Murayama et al.\ (2014)", "retrieval-induced forgetting, described "
       "with its meta-analysis; the mechanism (inhibition or blocking) is the open question, not the effect")
 shown(21, r"Bartlett (1932); \ Bergman \& Roediger (1999)", "a classic informal method and its replication, described "
@@ -4431,7 +4431,7 @@ shown(23, r"Frazier \& Rayner (1982)", "an eye-tracking study described with a s
 shown(23, r"Gold (1967); \ Horning (1969); \ Chater \& Vit\'anyi (2007)", "theorems about learnability, not "
       "experiments")
 shown(23, r"Carey \& Bartlett (1978); \ Hart \& Risley (1995)", "a word-learning study and a disputed estimate of "
-      "input; the input gap is entered with the science of learning", row_in=54)
+      "input; the input gap is entered with the science of learning")
 shown(23, r"Marcus et al. (1992)", "a corpus count reported as the size of an effect; the rules-or-associations "
       "dispute is about mechanism")
 shown(23, r"Rumelhart \& McClelland (1986); \ Pinker \& Prince (1988)", "models and a critique of a model")
@@ -4445,7 +4445,7 @@ shown(23, r"Kutas \& Hillyard (1980); \ Osterhout \& Holcomb (1992)", "ERP compo
 shown(23, r"Whorf (1956, \ collected); \ Berlin \& Kay (1969)", "the history of the relativity question")
 shown(23, r"Frank, \ Everett, \ Fedorenko \& Gibson (2008)", "one field study, described with its design")
 shown(23, r"National Reading Panel (2000); \ Breitenstein et al. (2017), \ \emph{Lancet}", "a review and a trial "
-      "in practice; reading instruction is entered in Part 54", row_in=54)
+      "in practice; reading instruction is entered in Part 54")
 shown(23, r"Warstadt et al. (2020); \ Brown et al. (2020)", "machine benchmarks at the frontier; Part 60's")
 shown(23, r"Vong, \ Wang, \ Orhan \& Lake (2024), \ \emph{Science}", "a model trained on one child's input, at "
       "the frontier; Part 60's")
@@ -4586,7 +4586,7 @@ shown(28, r"Locke \& Latham (2002); \ Ord\'o\~nez et al.\ (2009)", "goal-setting
 shown(28, r"Duckworth et al.\ (2007); \ Cred\'e, \ Tynan \& Harms (2017)", "grit has its row; this tag names it "
       "with accents the gate does not read")
 shown(28, r"Dweck (2006); \ Sisk et al.\ (2018); \ Yeager et al.\ (2019)", "growth mindset, summarized from two "
-      "meta-analyses and a national trial; entered with education", row_in=54)
+      "meta-analyses and a national trial; entered with education")
 shown(28, r"Kool et al.\ (2010); \ Westbrook, \ Kester \& Braver (2013)", "effort avoidance and its price, "
       "described as the starting point of a model")
 shown(28, r"Kurzban et al.\ (2013); \ Inzlicht, \ Shenhav \& Olivola (2018)", "theories of effort, described")
@@ -4649,7 +4649,7 @@ shown(30, r"Vygotsky (1934); \ Csibra \& Gergely (2009)", "theories of learning 
 shown(30, r"Horner \& Whiten (2005); \ Lyons, \ Young \& Keil (2007)", "overimitation, described from its first "
       "studies; its row (overimitation across cultures) is entered in Part 38")
 shown(30, r"Schweinhart et al.\ (2005); \ Puma et al.\ (2012); \ Durkin et al.\ (2022)", "evaluations of programmes, "
-      "described as applications; early intervention is taken up with education in Part 54", row_in=54)
+      "described as applications; early intervention is taken up with education in Part 54")
 shown(30, r"DeLoache et al.\ (2010)", "a single trial of a product, described as an application")
 shown(30, r"Vong et al.\ (2024)", "a modelling result at the frontier, described")
 shown(30, r"Piloto et al.\ (2022)", "a machine-learning model at the frontier, described; machines are Part 60's",
@@ -7065,3 +7065,119 @@ shown(53, r"Judge et al.\ (2001)", "a meta-analysis of satisfaction and performa
 shown(53, r"Edmondson (1999)", "a field study of teams, described")
 shown(53, r"Bloom et al.\ (2015)", "a randomized trial of working from home, described")
 shown(53, r"Schmidt \& Hunter (1998); \ Sackett et al.\ (2022)", "the two summaries compared; both are rows")
+
+# --- Part 54: The Science of Learning --------------------------------------------------------------------------------
+
+add(Finding(
+    key="interleaving", part=54, title=r"Interleaved practice",
+    claim="Mixing problem types during practice improves later performance compared with practising each type in a "
+          "block, though blocked practice looks better during learning.",
+    original=Study("Rohrer and Taylor", 2007, design="students practising volumes of four solids, blocked or mixed",
+                   found="better during blocked practice, much better a week later after mixed practice"),
+    status="replicated",
+    record=(Study("Rohrer, Dedrick, Hartwig and Cheung", 2020, design="a classroom trial in seventh-grade mathematics",
+                  found="a benefit of interleaved practice on a test a month later"),
+            Study("Brunmair and Richter", 2019, design="a meta-analysis of interleaving",
+                  found="a moderate overall benefit, largest for confusable categories and absent for some materials")),
+    note="It helps most when the categories are easily confused, because it forces the learner to choose the method.",
+    sources=("D. Rohrer and K. Taylor, The shuffling of mathematics problems improves learning, Instructional Science "
+             "35 (2007) 481-498",
+             "D. Rohrer, R. F. Dedrick, M. K. Hartwig and C.-N. Cheung, A randomized controlled trial of interleaved "
+             "mathematics practice, Journal of Educational Psychology 112 (2020) 40-52",
+             "M. Brunmair and T. Richter, Similarity matters: a meta-analysis of interleaved learning and its "
+             "moderators, Psychological Bulletin 145 (2019) 1029-1052"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="learning_styles", part=54, title=r"Learning styles",
+    claim="Teaching matched to a learner's preferred style (visual, auditory, kinaesthetic) improves learning.",
+    original=Study("Dunn and Dunn", 1978, design="a learning-styles model for teachers",
+                   found="matching instruction to style recommended as raising achievement"),
+    status="failed",
+    record=(Study("Pashler, McDaniel, Rohrer and Bjork", 2008, design="a review of studies with the crossover design "
+                  "the hypothesis requires", found="almost no support, and several contradictions"),
+            Study("Rogowsky, Calhoun and Tallal", 2015, design="a test of auditory and visual learners with matched "
+                  "and mismatched instruction", found="no interaction between preference and method")),
+    note="People have preferences; matching teaching to them does not improve learning. The content should decide "
+         "the mode.",
+    sources=("R. Dunn and K. Dunn, Teaching Students Through Their Individual Learning Styles (Reston, 1978)",
+             "H. Pashler, M. McDaniel, D. Rohrer and R. Bjork, Learning styles: concepts and evidence, Psychological "
+             "Science in the Public Interest 9 (2008) 105-119",
+             "B. A. Rogowsky, B. M. Calhoun and P. Tallal, Matching learning style to instructional method: effects "
+             "on comprehension, Journal of Educational Psychology 107 (2015) 64-78"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="two_sigma", part=54, title=r"Bloom's two sigma",
+    claim="One-to-one tutoring raises achievement by about two standard deviations over conventional classroom "
+          "teaching.",
+    original=Study("Bloom", 1984, design="studies by his students comparing tutoring, mastery learning and "
+                   "conventional classes", found="about 2 SD for tutoring"),
+    status="replicated, smaller",
+    record=(Study("VanLehn", 2011, design="a review of human and computer tutoring",
+                  found="about 0.79 SD for human tutoring, 0.76 for step-based tutoring systems"),
+            Study("Nickow, Oreopoulos and Quan", 2020, design="a meta-analysis of randomized trials of school tutoring",
+                  found="about 0.37 SD on average")),
+    note="Tutoring has one of the largest effects in education, at a fraction of Bloom's figure, which came from short "
+         "studies with closely aligned tests.",
+    sources=("B. S. Bloom, The 2 sigma problem: the search for methods of group instruction as effective as "
+             "one-to-one tutoring, Educational Researcher 13 (1984) 4-16",
+             "K. VanLehn, The relative effectiveness of human tutoring, intelligent tutoring systems, and other "
+             "tutoring systems, Educational Psychologist 46 (2011) 197-221",
+             "A. Nickow, P. Oreopoulos and V. Quan, The impressive effects of tutoring on preK-12 learning, NBER "
+             "Working Paper 27476 (2020)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="growth_mindset", part=54, title=r"Growth-mindset interventions",
+    claim="Teaching students that ability can grow improves their academic achievement.",
+    original=Study("Blackwell, Trzesniewski and Dweck", 2007, design="a workshop for seventh-graders on the brain's "
+                   "capacity to grow", found="a reversal of declining mathematics grades"),
+    status="replicated, smaller",
+    record=(Study("Sisk, Burgoyne, Sun, Butler and Macnamara", 2018, design="meta-analyses of mindset and of mindset "
+                  "interventions", found="about 0.08 SD for interventions on achievement"),
+            Study("Yeager and colleagues", 2019, n="about 12,000 ninth-graders",
+                  design="a national randomized trial of a 50-minute online lesson",
+                  found="about 0.1 grade points for lower-achieving students, in supportive schools")),
+    note="Small, cheap and heterogeneous: an effect for some students in some schools, not a transformation.",
+    sources=("L. S. Blackwell, K. H. Trzesniewski and C. S. Dweck, Implicit theories of intelligence predict "
+             "achievement across an adolescent transition, Child Development 78 (2007) 246-263",
+             "V. F. Sisk et al., To what extent and under which circumstances are growth mind-sets important to "
+             "academic achievement?, Psychological Science 29 (2018) 549-571",
+             "D. S. Yeager et al., A national experiment reveals where a growth mindset improves achievement, Nature "
+             "573 (2019) 364-369"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="longhand_notes", part=54, title=r"The pen and the keyboard",
+    claim="Students who take notes by hand learn more from a lecture than those who type them.",
+    original=Study("Mueller and Oppenheimer", 2014, design="TED talks, notes by hand or laptop, then a test",
+                   found="better answers to conceptual questions after longhand notes"),
+    status="contested",
+    record=(Study("Morehead, Dunlosky and Rawson", 2019, design="a preregistered direct replication with an "
+                  "extension", found="no reliable difference between longhand and laptop"),
+            Study("Urry and colleagues", 2021, design="a multi-site replication",
+                  found="no reliable advantage for longhand on test performance")),
+    note="Typists transcribe more verbatim; whether that costs learning is not established. Distraction from other "
+         "applications is a separate problem.",
+    sources=("P. A. Mueller and D. M. Oppenheimer, The pen is mightier than the keyboard, Psychological Science 25 "
+             "(2014) 1159-1168",
+             "K. Morehead, J. Dunlosky and K. A. Rawson, How much mightier is the pen than the keyboard for note-taking?, "
+             "Educational Psychology Review 31 (2019) 753-780",
+             "H. L. Urry et al., Don't ditch the laptop just yet, Psychological Science 32 (2021) 326-339"),
+    checked="2026-11-16",
+))
+shown(54, r"Bloom (1984)", "the challenge told as the part's story; the row is two_sigma")
+shown(54, r"VanLehn (2011)", "a review quoted in the hook; the row is two_sigma")
+shown(54, r"VanLehn (2011); \ Nickow et al.\ (2020)", "the two reviews behind the two_sigma row")
+shown(54, r"Roediger \& Karpicke (2006)", "the testing effect is Part 21's row; the study is described")
+shown(54, r"Deslauriers et al.\ (2019)", "a classroom experiment on felt and actual learning, described")
+shown(54, r"Dunlosky et al.\ (2013)", "a review of study techniques, its ratings quoted")
+shown(54, r"Sweller (1988)", "a theory, described")
+shown(54, r"Settles \& Meeder (2016)", "a model, described; fitted in Part 21")
+shown(54, r"Castles, \ Rastle \& Nation (2018)", "a review of reading instruction, described")
+shown(54, r"Kluger \& DeNisi (1996)", "a meta-analysis of feedback, quoted")

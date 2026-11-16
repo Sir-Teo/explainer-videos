@@ -113,4 +113,38 @@ PARTS = [
               ("Its tests", "tests/psychology/test_work.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=54, level="U", widget="spacedlists", prereq=(20, 21, 45),
+        question="What is the most effective way to learn something, and why do learners choose the opposite?",
+        story="In 1984 Benjamin Bloom reported that tutored pupils scored two standard deviations above a class, and "
+              "challenged education to match it; later reviews put tutoring near 0.8 and school trials near 0.4. The "
+              "part turns memory research into engineering: the testing effect in classrooms, the spacing "
+              "ridgeline as a design rule, interleaving, learning against performance with Psyche cramming and "
+              "spacing, ten techniques ranked, cognitive load, the learning-styles crossover that never appears, "
+              "tutoring systems, four review schedules raced at equal study, the simple view of reading, "
+              "growth-mindset lessons at national scale, and feedback that makes things worse.",
+        handoff="Part 55 scales interventions from classrooms to countries; Part 56 takes memory to court; Part 62's "
+                "dissertation can test a learning intervention.",
+        outside="Parts 20 and 21's memory models, Part 45's knowledge tracing and Part 47's heterogeneity; "
+                "logarithms and effect sizes.",
+        objectives={
+            "U": ["Choose study methods by evidence (retrieval, spacing, interleaving) and explain why they feel "
+                  "worse.",
+                  "Explain why learning styles fail the crossover test."],
+            "M": ["Compare review schedules under a memory model at equal study time.",
+                  "Compute the sample a small educational effect needs, and read heterogeneity."],
+            "D": ["Design a study of transfer, or of an AI tutor, that separates performance from learning."],
+            "I": ["Redesign a course or training programme with retrieval, spacing, interleaving and faded examples, "
+                  "and plan its evaluation."],
+        },
+        results=[
+            ("Simple view of reading", r"RC = D \times LC"),
+            ("Bayesian knowledge tracing", r"P(K \mid \text{wrong}) = \frac{P(K)\,s}{P(K)\,s + (1 - P(K))(1 - g)}"),
+            ("Sample per arm", r"n = 2 (z_{1-\alpha/2} + z_{1-\beta})^2 / d^2"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, 10), D=(15,), I=(6, 9, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Part 21's memory model", "explainer/psychology/psyche/memory.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]
