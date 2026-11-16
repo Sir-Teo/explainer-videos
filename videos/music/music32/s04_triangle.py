@@ -51,20 +51,14 @@ class Triangle(SoundScene):
             label(r"C E$\flat$ G", font_size=16, color=BLUE).next_to(at((3, 4, 5)), LEFT, buff=0.1),
             label(r"triple unisons", font_size=16, color=GREY_A).next_to(at((12, 0, 0)), UP, buff=0.1))
         side = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
-            (r"a three-note chord's shape: \ its three steps round the octave, \ summing to 12", WHITE),
+            (r"ordered gaps around the octave: sum 12\\cyclic rotations repeat transposition classes", WHITE),
             (r"C E G: \ steps 4, \ 3, \ 5; \ C E$\flat$ G: \ 3, \ 4, \ 5", TUNE),
-            (r"the centre, \ 4, \ 4, \ 4: \ the augmented triad, \ perfectly even", EAR),
-            (r"the corners: \ all 12 in one step: \ three voices on one note", GREY_A),
-            (r"major and minor triads sit close to the centre, \ but not on it", WHITE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+            (r"centre: 4, 4, 4\\augmented triad, perfectly even", EAR),
+            (r"corners: all 12 in one step\\three voices on one pitch class", GREY_A),
+            (r"major/minor triads: near the centre", WHITE))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 5.6)).move_to(RIGHT * 3.6)
         with self.voiceover(
-            "With three notes, forget transposition for a moment and keep only a chord's shape: the three steps that go "
-            "round the octave, from note to note and back to the first, which always add up to twelve. <bookmark mark='a'/> "
-            "C major's steps are four, three and five; C minor's are three, four and five. <bookmark mark='b'/> Every shape "
-            "is a point of a triangle. At the centre, four, four, four: the augmented triad, perfectly even. "
-            "<bookmark mark='c'/> At the corners, all twelve in one step: three voices on a single note. "
-            "<bookmark mark='d'/> Major and minor triads sit close to the centre, but not on it. The brighter a dot, the more "
-            "even the chord."
+            "With three notes, forget transposition for a moment and keep only a chord's shape: the three steps that go round the octave, from note to note and back to the first, which always add up to twelve. <bookmark mark='a'/> C major's steps are four, three and five; C minor's are three, four and five. <bookmark mark='b'/> An ordered gap triple is a point of a triangle; cyclic rotations represent the same transposition class, so the triangle repeats class information. At the centre, four, four, four: the augmented triad, perfectly even. <bookmark mark='c'/> At the corners, all twelve in one step: three voices on a single note. <bookmark mark='d'/> Major and minor triads sit close to the centre, but not on it. The brighter a dot, the more even the chord."
         ) as vo:
             self.play(FadeIn(g), FadeIn(dots), FadeIn(side[0]))
             vo.wait_until("a")
@@ -155,13 +149,9 @@ class Triangle(SoundScene):
                          for i, (n, e) in enumerate(zip(names, d["even"]))]).arrange(RIGHT, buff=0.7).move_to(UP * 0.3)
         lab = label(r"distance from even", font_size=18, color=GREY_A).next_to(cells, LEFT, buff=0.3).shift(DOWN * 0.3)
         head = label(r"the space is continuous: \ from major to minor by quarters of a semitone", font_size=25, color=GREY_A).to_edge(UP, buff=0.4)
-        cap = label(r"halfway is the neutral triad, \ heard in Arabic and Persian music \ (Part 35): \ the most even of the five", font_size=21, color=GREY_A).to_edge(DOWN, buff=1.1)
+        cap = label(r"halfway: a neutral-third triad; most even of these five\\a geometric example, not a model of modal practice", font_size=21, color=GREY_A).to_edge(DOWN, buff=1.1)
         with self.voiceover(
-            "Nothing in the geometry needs the piano's twelve keys. The space is continuous, and the chords between the keys "
-            "are points too. Slide C major's third down a quarter of a semitone at a time until it becomes C minor. Halfway is "
-            "the neutral triad, with a third exactly between major and minor, a sound at home in Arabic and Persian music, "
-            "as Part 35 will show. On the triangle it lies on the straight line between major and minor, and it is the most "
-            "even of the five. Listen to the third sink."
+            "Nothing in the geometry needs the piano's twelve keys. The space is continuous, and the chords between the keys are points too. Slide C major's third down a quarter of a semitone at a time until it becomes C minor. Halfway is the neutral triad, with a third exactly between major and minor, a geometric illustration related to neutral thirds; Arabic and Persian intonation and modal practice cannot be reduced to this Western triad, as Part 35 will explain. On the triangle it lies on the straight line between major and minor, and it is the most even of the five. Listen to the third sink."
         ):
             self.play(FadeIn(head), FadeIn(cells), FadeIn(lab), FadeIn(cap))
         with self.listen(c) as snd:

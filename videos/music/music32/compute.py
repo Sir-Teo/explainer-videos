@@ -234,7 +234,7 @@ def compute_even() -> dict:
 def compute_scales() -> dict:
     seven = sorted({A.prime_form(c) for c in combinations(range(12), 7)})
     ranked = sorted(seven, key=lambda c: G.evenness(c))
-    named = {A.prime_form([0, 2, 4, 5, 7, 9, 11]): "diatonic", A.prime_form([0, 2, 3, 5, 7, 9, 11]): "melodic minor (the acoustic scale)",
+    named = {A.prime_form([0, 2, 4, 5, 7, 9, 11]): "diatonic", A.prime_form([0, 2, 3, 5, 7, 9, 11]): "melodic minor / acoustic set class",
              A.prime_form([0, 2, 3, 5, 7, 8, 11]): "harmonic minor (and harmonic major)", A.prime_form([0, 2, 4, 6, 8, 10, 11]): "whole-tone plus one"}
     top = [{"prime": list(c), "even": G.evenness(c), "name": named.get(tuple(c), "")} for c in ranked[:6]]
     keys = [[60, 62, 64, 65, 67, 69, 71], [60, 62, 64, 66, 67, 69, 71], [61, 62, 64, 66, 67, 69, 71]]

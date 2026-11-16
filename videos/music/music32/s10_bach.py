@@ -51,21 +51,21 @@ class Bach(SoundScene):
         a, u = d["all"], d["upper"]
         hist = [u["excess_hist"][k] for k in (0, 2, 4, 6)]
         bars = columns(hist, ["0", "2", "4", "6"], width=5.0, height=2.8, color=GREY_B, hot=(0,), hot_color=TUNE, fmt="{:,.0f}", font_size=17).move_to(LEFT * 3.4 + DOWN * 0.4)
-        xl = label(r"semitones more than the minimum \ (upper voices)", font_size=18, color=GREY_A).next_to(bars, DOWN, buff=0.4)
+        xl = label(r"upper-voice excess: 0, 2, 4, 6 shown\\larger excesses omitted", font_size=18, color=GREY_A).next_to(bars, DOWN, buff=0.4)
         side = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
-            (rf"{u['n']:,} changes of chord on the beat, \ 364 chorales", WHITE),
+            (rf"{u['n']:,} changed beat voicings\\364 encoded chorales", WHITE),
             (rf"upper three voices: \ the minimum in {100 * u['minimal_share']:.0f} changes in 100", TUNE),
-            (rf"mean: \ Bach {u['mean_actual']:.1f}, \ minimum {u['mean_minimal']:.1f}, \ voices shuffled {u['mean_shuffled']:.1f}", WHITE),
+            (rf"mean: \ Bach {u['mean_actual']:.1f}, \ minimum {u['mean_minimal']:.1f}, \ circular shuffled control {u['mean_shuffled']:.1f}", WHITE),
             (rf"with the bass: \ minimum in {100 * a['minimal_share']:.0f} in 100; \ mean {a['mean_actual']:.1f} against {a['mean_minimal']:.1f}", EAR),
-            (r"the bass leaps by fourths and fifths: \ it carries the roots, \ not a smooth line", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
+            (r"bass often carries root motion\\its melodic role can also vary", GREY_A))]).arrange(DOWN, buff=0.35, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 6.4)).move_to(RIGHT * 3.0)
-        head = label(r"all of Bach's chorales, \ measured", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"364 encoded Bach chorales, \ measured", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            f"Now all of them: {say(u['n'])} changes of chord on the beat, in three hundred and sixty-four chorales. "
+            f"Now all of them: {say(u['n'])} transitions between distinct registered beat voicings, in three hundred and sixty-four chorales. "
             f"<bookmark mark='a'/> In the upper three voices Bach's voice leading is the smallest possible in "
             f"{say(round(100 * u['minimal_share']))} changes out of a hundred. <bookmark mark='b'/> On average his upper voices move "
             f"{say(u['mean_actual'], 1)} semitones per change, against a minimum of {say(u['mean_minimal'], 1)}; "
-            f"give the same notes to the voices at random and they would move {say(u['mean_shuffled'], 1)}. "
+            f"a random assignment control, measured by shortest pitch-class motion rather than actual registered leaps, gives {say(u['mean_shuffled'], 1)}. "
             f"<bookmark mark='c'/> With the bass included, the minimum is reached only {say(round(100 * a['minimal_share']))} "
             "times in a hundred, <bookmark mark='d'/> and for a good reason: the bass leaps by fourths and fifths to carry "
             "the roots of the chords, as Part 17 found. Bach writes nearly shortest paths above a bass that does a "

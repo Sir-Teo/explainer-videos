@@ -24,12 +24,7 @@ class Frontier(SoundScene):
             (r"timbre: \ Part 5's roughness depends on the spectrum, \ not the pitch classes", GREY_A),
         ]
         rows_scene(self, r"what the geometry cannot see", items,
-                   "The geometry is powerful, and blind in places. <bookmark mark='b'/> It does not see function: G major to C "
-                   "major moves three semitones, G major to E flat major only two, yet the first is the strongest cadence in "
-                   "tonal music and the second a surprise. <bookmark mark='c'/> It treats every voice alike, while music gives the bass a different job. "
-                   "<bookmark mark='d'/> Octave equivalence throws away register and spacing. <bookmark mark='e'/> A path has no "
-                   "strong beats. <bookmark mark='f'/> And Part 5's roughness depends on the spectrum, which pitch classes alone "
-                   "do not record.", marks="cdef")
+                   "The geometry is powerful, and blind in places. <bookmark mark='b'/> It does not see function: G major to C major moves three semitones, G major to E flat major only two, yet the first can serve a central cadential role in tonal music and the second a surprise. <bookmark mark='c'/> It treats every voice alike, while music gives the bass a different job. <bookmark mark='d'/> Octave equivalence throws away register and spacing. <bookmark mark='e'/> A path has no strong beats. <bookmark mark='f'/> And Part 5's roughness depends on the spectrum, which pitch classes alone do not record.", marks="cdef")
 
     # ------------------------------------------------------------------
     def debate(self):
@@ -62,7 +57,7 @@ class Frontier(SoundScene):
                    "And it is not the only geometry. <bookmark mark='b'/> Part 31's Tonnetz counts moves, not semitones. "
                    "<bookmark mark='c'/> Fourier spaces measure qualities, not paths. <bookmark mark='d'/> Lerdahl's tonal pitch "
                    "space, from Part 19, measures distances between keys and chords. <bookmark mark='e'/> Learned embeddings fit a "
-                   "space to millions of chord sequences, as Part 62 will. <bookmark mark='f'/> Each is a hypothesis about what "
+                   "space to millions of chord sequences, as a possible extension to Part 62. <bookmark mark='f'/> Each is a hypothesis about what "
                    "makes two chords close.", marks="cdef")
 
     # ------------------------------------------------------------------

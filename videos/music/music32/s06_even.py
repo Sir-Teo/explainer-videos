@@ -82,7 +82,7 @@ class Even(SoundScene):
         with self.voiceover(
             "Hear what that buys. C major to E major, a whole key a major third away: C falls to B, G rises to G sharp, two "
             "semitones. C seven to E flat seven: two semitones. And the C major scale to the G major scale: one semitone, F "
-            "to F sharp, the smallest move there is. A composer with nearly even chords can change key while barely moving."
+            "to F sharp, the smallest move there is. These collections permit small pitch-class moves; establishing a new key also needs musical context."
         ):
             self.play(FadeIn(head), FadeIn(cells))
         with self.listen(c) as snd:
@@ -122,4 +122,4 @@ class Even(SoundScene):
             (r"the same technique runs through Wagner, \ Debussy and jazz piano", GREY_A),
         ]
         rows_scene(self, r"sliding through four-note space", items,
-                   "Composers used this long before the geometry. <bookmark mark='b'/> Chopin's Prelude in E minor, of 1839, has a left hand of slowly sliding chords. <bookmark mark='c'/> Tymoczko reads it as four-note chords moving mostly one voice, by one semitone, at a time. <bookmark mark='d'/> Many of the chords have no function in any key; the voice leading carries the music. <bookmark mark='e'/> In the space, it is a slow walk near the centre, among the nearly even four-note chords. <bookmark mark='f'/> The same technique runs through Wagner, Debussy and jazz piano.", marks="cdef")
+                   "Composers used this long before the geometry. <bookmark mark='b'/> Chopin's Prelude in E minor, of 1839, has a left hand of slowly sliding chords. <bookmark mark='c'/> Tymoczko reads it as four-note chords moving mostly one voice, by one semitone, at a time. <bookmark mark='d'/> Some chords resist a simple functional label; the voice leading offers an additional account alongside tonal interpretations. <bookmark mark='e'/> In the space, it is a slow walk near the centre, among the nearly even four-note chords. <bookmark mark='f'/> The same technique runs through Wagner, Debussy and jazz piano.", marks="cdef")

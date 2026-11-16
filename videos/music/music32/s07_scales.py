@@ -18,23 +18,19 @@ class Scales(SoundScene):
     def ranking(self):
         d = load("scales")
         top = d["top"]
-        nm = [t["name"] or ("(" + "".join("T" if x == 10 else "E" if x == 11 else str(x) for x in t["prime"]) + ")") for t in top]
+        nm = ["diatonic", "melodic minor", "harmonic minor", "(0124689)", "whole-tone + 1", "(0124679)"]
         bars = columns([t["even"] for t in top], None, width=6.4, height=3.0, color=GREY_B, hot=(0,), hot_color=TUNE, fmt="{:.2f}", font_size=18).move_to(LEFT * 2.6 + DOWN * 0.3)
-        names = VGroup(*[label(n, font_size=16, color=TUNE if i == 0 else GREY_A).rotate(PI / 5).next_to(bars.bars[i], DOWN, buff=0.2).shift(LEFT * 0.35)
+        names = VGroup(*[label(n, font_size=13, color=TUNE if i == 0 else GREY_A).rotate(PI / 5).next_to(bars.bars[i], DOWN, buff=0.2).shift(LEFT * 0.35)
                          for i, n in enumerate(nm)])
         side = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
-            (rf"all {d['count']} types of seven-note scale, \ ranked by distance from even", WHITE),
-            (r"first: \ the diatonic scale, \ Part 12's maximally even scale", TUNE),
-            (r"second and third: \ melodic minor, \ then harmonic minor and major", WHITE),
-            (r"the scales of tonal music are the most even seven-note chords", GREY_A))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
+            (rf"{d['count']} seven-note set classes\\ranked by distance from even", WHITE),
+            (r"first: diatonic\\maximally even in twelve steps", TUNE),
+            (r"second: melodic minor / acoustic class\\third: harmonic minor / major class", WHITE),
+            (r"familiar scale classes rank highly\\under this chosen measure", GREY_A))]).arrange(DOWN, buff=0.4, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 5.6)).move_to(RIGHT * 3.6)
         head = label(r"the six most even seven-note scales", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "A scale is a set of notes, so it is a chord too, a point in seven-note chord space. <bookmark mark='a'/> Rank "
-            f"all {say(d['count'])} types of seven-note scale by their distance from perfectly even. <bookmark mark='b'/> "
-            "First comes the diatonic scale, the maximally even scale of Part 12. <bookmark mark='c'/> Second, the melodic "
-            "minor, which jazz calls the acoustic scale; third, harmonic minor, with its mirror image harmonic major. "
-            "<bookmark mark='d'/> The scales of tonal music are exactly the most even seven-note chords."
+            f"A scale is a set of notes, so it is a chord too, a point in seven-note chord space. <bookmark mark='a'/> Rank all {say(d['count'])} types of seven-note scale by their distance from perfectly even. <bookmark mark='b'/> First comes the diatonic scale, the maximally even scale of Part 12. <bookmark mark='c'/> Second, the melodic-minor set class, which also contains the acoustic or Lydian-dominant mode; third, harmonic minor, with its mirror image harmonic major. <bookmark mark='d'/> These familiar scale classes rank highly under this chosen evenness measure; this is not a derivation of every tonal scale or its use."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(names), FadeIn(side[0]))
             for mark, r in zip("bcd", side[1:]):
@@ -89,13 +85,13 @@ class Scales(SoundScene):
     def jazz(self):
         items = [
             (r"jazz improvisers think in chord-scales: \ a seven-note scale for every chord", WHITE),
-            (r"the acoustic scale \ (melodic minor) \ and its modes: \ altered, \ Lydian dominant", WHITE),
+            (r"melodic-minor modes: altered and acoustic/Lydian dominant", WHITE),
             (r"moving between chord-scales: \ one or two notes change, \ the rest hold", TUNE),
             (r"so jazz harmony is voice leading at the level of scales, \ like modulation", WHITE),
             (r"Part 39 hears the changes; \ this chapter's geometry is underneath them", GREY_A),
         ]
         rows_scene(self, r"scales in jazz", items,
-                   "Jazz uses the second scale on the list as much as the first. <bookmark mark='b'/> Improvisers think in chord-scales, a seven-note scale for each chord. <bookmark mark='c'/> The acoustic scale, melodic minor, and its modes, the altered scale and the Lydian dominant, are everyday sounds. <bookmark mark='d'/> Moving from one chord-scale to the next usually changes one or two notes and holds the rest. <bookmark mark='e'/> So jazz harmony is voice leading at the level of scales, like modulation in Bach, only faster. <bookmark mark='f'/> Part 39 hears the changes; this geometry lies underneath them.", marks="cdef")
+                   "Jazz uses the second scale on the list as much as the first. <bookmark mark='b'/> Improvisers think in chord-scales, a seven-note scale for each chord. <bookmark mark='c'/> The ascending melodic-minor collection and its modes, including the altered scale and the acoustic or Lydian-dominant scale, are everyday sounds. <bookmark mark='d'/> Moving from one chord-scale to the next usually changes one or two notes and holds the rest. <bookmark mark='e'/> So jazz harmony is voice leading at the level of scales, like modulation in Bach, only faster. <bookmark mark='f'/> Part 39 hears the changes; this geometry lies underneath them.", marks="cdef")
 
     # ------------------------------------------------------------------
     def circle(self):

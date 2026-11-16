@@ -32,12 +32,7 @@ class Outro(SoundScene):
         l2 = label(rf"chords outside it: \ {d['far']['total']:.0f} semitones", font_size=20, color=EAR)
         g = VGroup(VGroup(l1, r1).arrange(DOWN, buff=0.25), VGroup(l2, r2).arrange(DOWN, buff=0.25)).arrange(DOWN, buff=0.7).move_to(DOWN * 0.3)
         with self.voiceover(
-            "Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> This time a program "
-            "harmonizes the Tune's first two phrases twice, one triad every two beats, each containing the melody note, "
-            "always choosing the path of smallest voice leading. First it may use only the chords of C major; it finds C, C, "
-            "A minor, C, F, A minor, D minor, C. Then it must leave C major wherever it can; it finds A major, F minor and G "
-            f"minor, and the whole path costs only {say(round(d['far']['total'] - d['plain']['total']))} semitones more. "
-            "Distant chords, reached by short steps."
+            f"Every part ends by doing something to the Tune with what it built. <bookmark mark='a'/> This time a program harmonizes the Tune's first two phrases twice, one triad every two beats, each containing the melody note sampled at that two-beat boundary, with C major supplied at both endpoints, minimizing total pitch-class voice-leading cost. First it may use only the chords of C major; it finds C, C, A minor, C, F, A minor, D minor, C. The second search permits chromatic triads and C major but excludes the other diatonic triads; it finds A major, F minor and G minor, and the whole path costs only {say(round(d['far']['total'] - d['plain']['total']))} semitones more. Distant chords, reached by short steps."
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
@@ -71,13 +66,7 @@ class Outro(SoundScene):
             rf"Bach's upper voices take the shortest path {100 * b['upper']['minimal_share']:.0f} times in 100",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? A chord is a point, and folding by octave and permutation curves the space. "
-            "<bookmark mark='a'/> Two-note chords live on a Möbius strip, three-note chords in a twisted prism around a "
-            "triangle. <bookmark mark='b'/> A voice leading has a size, the smallest total of semitones. "
-            "<bookmark mark='c'/> Nearly even chords, the triads, the seventh chords and the diatonic scale, reach their own "
-            "transpositions by one or two semitones. <bookmark mark='d'/> Five symmetries name music theory's objects, and "
-            "Fourier magnitudes their qualities. <bookmark mark='e'/> And Bach's upper voices take the shortest path two "
-            "times in three."
+            "What did we find? A chord is a point, and folding by octave and permutation curves the space. <bookmark mark='a'/> Two-note chords live on a Möbius strip, three-note chords in a twisted prism around a triangle. <bookmark mark='b'/> A voice leading has a size, the smallest total of semitones. <bookmark mark='c'/> Nearly even chords, the triads, the seventh chords and the diatonic scale, reach their own transpositions by one or two semitones. <bookmark mark='d'/> Five symmetries name music theory's objects, and Fourier magnitudes their qualities. <bookmark mark='e'/> And in this corpus and beat-sampling scheme, Bach's upper voices match the pitch-class minimum about two times in three."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

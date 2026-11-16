@@ -102,10 +102,7 @@ class Fourier(SoundScene):
                               label(rf"$|F_3|$ {d['f3'][i]:.1f}, \ $|F_5|$ {d['f5'][i]:.1f}, \ $|F_6|$ {d['f6'][i]:.1f}", font_size=18, color=GREY_A)).arrange(DOWN, buff=0.15).next_to(cells[i], DOWN, buff=0.4)
                        for i, n in enumerate(d["order"])])
         with self.voiceover(
-            "B: the pentatonic chord, C, D, E, G, A over a low G, the bright open sound of fifths, with a fifth coefficient "
-            "of three point seven and none of the others large. A is the hexatonic chord, all third coefficient and no fifth "
-            "at all; C is the whole-tone chord, nothing but the sixth. The ear hears these qualities directly; the transform "
-            "names them."
+            'B: the pentatonic chord, C, D, E, G, A over a low G, the bright open sound of fifths, with a fifth coefficient of three point seven and none of the others large. A is the hexatonic chord, all third coefficient and no fifth at all; C is the whole-tone chord, nothing but the sixth. These sketches invite a comparison of pitch-set qualities; this informal question does not establish that listeners directly compute Fourier coefficients. The transform uses distinct pitch classes, so the doubled G in B is counted once.'
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -125,7 +122,7 @@ class Fourier(SoundScene):
                    "Ian Quinn in 2006 showed that the Fourier magnitudes map out the set classes as qualities: fifthiness, "
                    "thirdiness and the rest. <bookmark mark='d'/> Emmanuel Amiot's book of 2016 and Jason Yust's analyses use "
                    "them to describe tonal and post-tonal music. <bookmark mark='e'/> Part 29's homometric pairs share every "
-                   "magnitude; only the phases tell them apart. <bookmark mark='f'/> And an open question: are listeners "
+                   "magnitude; phases can distinguish their pitch-class arrangements; magnitudes alone cannot. <bookmark mark='f'/> And an open question: are listeners "
                    "hearing the coefficients, or do the coefficients just describe what listeners hear?", marks="cdef")
 
     # ------------------------------------------------------------------

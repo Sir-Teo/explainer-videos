@@ -50,12 +50,12 @@ class Hook(SoundScene):
             window(snd, r"A, \ then B", kind="synthesized", detail=r"two gliding voices", corner=DL, tag_corner=DR)
             pulse(snd, la, d["starts"]["A"], d["starts"]["B"] - 0.6, buff=0.1)
             pulse(snd, lb, d["starts"]["B"], c.duration, buff=0.1)
-        cap = label(r"at every instant both sounds hold the same two pitches: \ no one can tell", font_size=23, color=EAR).to_edge(DOWN, buff=0.9)
+        cap = label(r"the same pitch multiset at every instant\\voice identity is absent from this representation", font_size=23, color=EAR).to_edge(DOWN, buff=0.9)
         with self.voiceover(
-            "The honest answer is that no one can tell. In A the voices really do cross; in B they bounce. But at every "
-            "instant both sounds contain exactly the same two pitches, and a chord does not remember which voice is which. "
-            "That one fact, that a chord is an unordered set of notes, bends the space of all chords into a strange shape. "
-            "This part draws that shape."
+            "Pitch content alone cannot tell you which abstract voice crossed. In A the voices really do cross; in B they bounce. But at every "
+            "instant both sounds contain exactly the same two pitches, and this chord-space representation does not retain voice identity. "
+            "That one fact, that a fixed-cardinality chord here is an unordered multiset of pitches, retaining doublings, bends the space of all chords into a strange shape. "
+            "The synthesized waveforms can differ in phase history, so this is not a proof of universal auditory indistinguishability. This part draws the pitch-space equivalence."
         ):
             self.play(FadeOut(hide), FadeOut(qs), FadeIn(cap))
         self.wait(0.4)

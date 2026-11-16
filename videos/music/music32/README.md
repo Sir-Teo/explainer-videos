@@ -10,15 +10,15 @@ chords' Fourier magnitudes, and measures how close Bach's chorales come to the s
 Monochord's (`explainer/music/monochord/geometry.py`); Bach's chorales are Part 17's; every chord is played on Part 7's
 piano, and the gliding voices of the hook are synthesized. Published findings are the ones listed under Sources.
 
-* **Two voices, one chord.** An ear question: two voices that cross and two that meet and turn back (no one can tell:
-  at every instant they hold the same two pitches); *Science*, 2006; the plan.
+* **Two voices, one chord.** An ear question: two voices that cross and two that meet and turn back (pitch content alone cannot distinguish them:
+  at every instant they hold the same two pitches, while synthesized phase histories can differ); *Science*, 2006; the plan.
 * **1. Chords as points.** Two voices as a point of the plane and a voice leading as a path; octave and permutation
   fold the plane (a torus, then half of it, glued with a twist, with the unisons as an edge); a short history; why fold.
 * **2. The Möbius strip.** All 78 two-note chords of twelve-note equal temperament, unisons on the one edge, tritones down
   the middle; parallel, contrary and oblique motion as three directions, heard; crossing and bouncing as one path; Fux's
   cantus with Part 16's best first-species line as a path whose every step is a shortest one (52 semitones, the
   minimum), heard.
-* **3. Three notes: a triangle in a prism.** The 91 shapes of three-note chords in a triangle, the augmented triad at the
+* **3. Three notes: a triangle in a prism.** The 91 ordered gap triples for three-note chords in a triangle, the augmented triad at the
   centre; from a cluster to the augmented triad, heard (distance from even 4.24, 2.83, 1.41, 0.82, 0); C major to C minor
   by quarter-semitones through the neutral triad, heard; the twisted prism; four notes and the tetrahedron, the
   diminished seventh at its centre; the smallest voice leading from C major to every triad (1 to C and E minor, 6 to D,
@@ -57,7 +57,7 @@ piano, and the gliding voices of the hook are synthesized. Published findings ar
 |---|---|---|
 | `hook` | crossing and bouncing glides (an ear question) | the same two pitches at every instant |
 | `strip`, `duet` | the 78 dyads on the strip; three kinds of motion; Fux's cantus and a first-species line | brute-force minimal sizes |
-| `triangle`, `neutral` | the 91 shapes and their evenness; a walk to the centre; major to minor by quarter-tones | — |
+| `triangle`, `neutral` | 91 ordered gap triples and their evenness; a walk to the centre; major to minor by quarter-tones | — |
 | `vlsize` | three voice leadings and three norms (an ear question); C major to all 24 triads | brute force with octaves (tests) |
 | `even` | evenness and nearest transposition for every 3- and 4-note set class; three demonstrations | — |
 | `scales` | the 38 seven-note types by evenness; three keys; the circle of fifths measured | — |
@@ -136,3 +136,7 @@ python -m videos.music.labs 32                                  # the lab (write
   *Music Theory Online* (2007).
 * Part 12 for maximal evenness; Part 16 for Fux; Part 17 for the chorales; Part 29 for set classes; Part 31 for the
   Tonnetz.
+
+## Interpretation limits
+
+The fixed-cardinality geometry retains repeated pitches as a multiset. Ordered gap triples repeat transposition classes under cyclic rotation. Neutral-triad interpolation is a geometric example, not a model of Arabic or Persian harmony. Acoustic/Lydian dominant is a mode of ascending melodic minor, not the same rooted scale. Fourier plots use distinct pitch classes and do not demonstrate a listener mechanism. The Bach census counts changed registered beat voicings, including revoicings; its random control uses circular pitch-class distances while the actual voice motion uses register. It is therefore not a matched-register comparison. Tune searches use sampled melody notes, supplied C-major endpoints and specified chord alphabets.
