@@ -18,7 +18,7 @@ class Frontier(SoundScene):
         items = [
             (r"predictive processing: \ the brain continually predicts its input and learns from the errors", WHITE),
             (r"Koelsch, \ Vuust and Friston \ (2019): \ musical pleasure as the reduction of prediction error, \ weighted by its precision", WHITE),
-            (r"precision is our uncertainty, \ inverted: \ errors count more when expectations were firm", WHITE),
+            (r"precision is model-specific confidence or inverse variance; \\ not reciprocal Shannon entropy: \ errors count more when expectations were firm", WHITE),
             (r"it explains Cheung's interaction, \ and the build and drop", TUNE),
             (r"but a framework that explains everything must still be tested on what it predicts", GREY_A),
         ]
@@ -26,7 +26,7 @@ class Frontier(SoundScene):
                    "The broadest current account is predictive processing. <bookmark mark='b'/> The brain continually predicts its "
                    "input and learns from the errors. <bookmark mark='c'/> Stefan Koelsch, Peter Vuust and Karl Friston argued in "
                    "2019 that musical pleasure comes from reducing prediction error, weighted by its precision, "
-                   "<bookmark mark='d'/> where precision is our uncertainty, inverted: errors count more when expectations were "
+                   "<bookmark mark='d'/> where precision refers to confidence or inverse variance in a specified model, not simply the reciprocal of our Shannon entropy: errors count more when expectations were "
                    "firm. <bookmark mark='e'/> It explains Cheung's interaction, and the build and the drop. <bookmark mark='f'/> "
                    "But a framework that explains everything must still be tested on what it predicts.", marks="bcdef")
 
@@ -40,11 +40,7 @@ class Frontier(SoundScene):
             (r"Part 65 builds a small one", GREY_A),
         ]
         rows_scene(self, r"models as listeners", items,
-                   "Machines have become listeners too. <bookmark mark='b'/> Large generative models of music are, underneath, "
-                   "next-token predictors, <bookmark mark='c'/> so their surprise can be read note by note, as ours was, and "
-                   "compared with people's. <bookmark mark='d'/> Early studies find that large models predict expectedness ratings "
-                   "and brain responses well, <bookmark mark='e'/> though they learn from far more music than any person hears. "
-                   "<bookmark mark='f'/> Part 65 builds a small one.", marks="bcdef")
+                   "Machines have become listeners too. <bookmark mark='b'/> Many symbolic music models predict next tokens; generative audio also uses diffusion and other objectives, <bookmark mark='c'/> so their surprise can be read note by note, as ours was, and compared with people's. <bookmark mark='d'/> Early studies find that large models predict expectedness ratings and brain responses well, <bookmark mark='e'/> though they learn from far more music than any person hears. <bookmark mark='f'/> Part 65 builds a small one.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def problem(self):

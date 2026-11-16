@@ -47,6 +47,9 @@ class Endings(SoundScene):
                     ts.append(st[k] + t * beat)
                     t += b
                 flash(snd, rows_[i][1].notes, ts, hot=WHITE, base=EC[k])
+                playhead = cursor(snd, rows_[i][1], st[k], beat, color=EC[k])
+                end = st[("expected", "delayed", "denied")[i + 1]] if i < 2 else c.duration
+                snd.drive(playhead, lambda m, now, a=st[k], b=end: m.set_opacity(0.7 if a <= now < b else 0.0))
         self.wait(0.3)
         self.clear_scene()
 

@@ -46,7 +46,7 @@ class Hook(SoundScene):
         with self.voiceover(
             f"Most surprising: the third, ending on F sharp, at {say(ics['F sharp'], 1)} bits. Least: the second, the "
             f"real ending on C, at {say(ics['C'], 1)}. The first, on A, sat between, at {say(ics['A'], 1)}. A bit is a "
-            "yes-or-no question: the model needed one or so to guess C, and eleven to guess F sharp. This part is about "
+            "yes-or-no question: the scores describe minus log probabilities, not literal counts of guesses or exact code lengths for each note. This part is about "
             "those numbers, and why they might have anything to do with feeling."
         ):
             self.play(FadeIn(bars))
@@ -57,18 +57,13 @@ class Hook(SoundScene):
     def chills(self):
         items = [
             (r"Valorie Salimpoor and colleagues \ (2011): \ listeners brought their own music that gave them chills", WHITE),
-            (r"PET and fMRI showed dopamine released twice: \ at the chill itself, \ and in the seconds before it", WHITE),
+            (r"PET: striatal dopamine release; \\ fMRI: distinct anticipation and peak-related activity", WHITE),
             (r"the anticipation lit the caudate; \ the peak, \ the nucleus accumbens", WHITE),
             (r"pleasure in music has a phase of wanting before a phase of getting", TUNE),
             (r"Leonard Meyer had argued in 1956 that musical emotion is expectation, \ delayed and fulfilled", GREY_A),
         ]
         rows_scene(self, r"chills, \ and before them", items,
-                   "In 2011 Valorie Salimpoor and colleagues asked listeners to bring music that gave them chills. "
-                   "<bookmark mark='b'/> Brain imaging showed dopamine released twice: at the chill itself, and in the seconds of "
-                   "anticipation before it. <bookmark mark='c'/> The anticipation involved the caudate; the peak, the nucleus "
-                   "accumbens. <bookmark mark='d'/> Pleasure in music has a phase of wanting before a phase of getting. "
-                   "<bookmark mark='e'/> Leonard Meyer had argued as much in 1956: musical emotion is expectation, delayed and "
-                   "fulfilled.", marks="bcde")
+                   "In 2011 Valorie Salimpoor and colleagues asked listeners to bring music that gave them chills. <bookmark mark='b'/> PET provided evidence of striatal dopamine release during intensely pleasurable music, while fMRI distinguished anticipatory and peak-related activity. <bookmark mark='c'/> Anticipation was associated more with caudate activity, and peak pleasure with nucleus accumbens activity; these methods do not directly time two separate dopamine pulses. <bookmark mark='d'/> Pleasure in music has a phase of wanting before a phase of getting. <bookmark mark='e'/> Leonard Meyer had argued as much in 1956: musical emotion is expectation, delayed and fulfilled.", marks="bcde")
 
     # ------------------------------------------------------------------
     def plan(self):

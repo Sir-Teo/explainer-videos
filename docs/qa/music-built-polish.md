@@ -52,8 +52,9 @@ Cross-series regression: 889 tests passed (194.05 seconds); 1,138 episode Python
 | 43 — Performing | Complete | Open |
 | 44 — Music for Picture and Play | Complete | Open |
 | 45 — The Scene | Complete | Open |
-| 46 — Expectation and Emotion | In progress | Open |
-| 47–68 | Queued | Open |
+| 46 — Expectation and Emotion | Complete | Open |
+| 47 — Origins and Universals | In progress | Open |
+| 48–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -168,7 +169,9 @@ Part 44: all 12 chapter preview sheets reviewed; sound and 15 listening-window m
 
 Part 45: all 12 chapter preview sheets reviewed; sound and 22 listening-window motion checks pass. Local identities: `renders/qa/music45/source-receipt.json`.
 
-**Current: Part 46.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 46: all 12 chapter preview sheets reviewed; sound and 16 listening-window motion checks pass. Local identities: `renders/qa/music46/source-receipt.json`.
+
+**Current: Part 47.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

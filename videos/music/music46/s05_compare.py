@@ -17,7 +17,7 @@ class Compare(SoundScene):
     # ------------------------------------------------------------------
     def bars(self):
         d = load("compare")
-        x0, W = -1.6, 6.6
+        x0, W = -2.0, 5.0
         mx = max(d["mean_ic"])
         rows_ = VGroup()
         for i, (n, a, b) in enumerate(zip(d["names"], d["mean_ic"], d["mean_entropy"])):
@@ -113,7 +113,7 @@ class Compare(SoundScene):
             window(snd, r"random, \ then the chain", detail=r"Part 7's piano", corner=DL, tag_corner=DR)
             pulse(snd, cells[0], st["random"], st["chain"] - 0.3, buff=0.1)
             pulse(snd, cells[1], st["chain"], c.duration, buff=0.1)
-        with self.voiceover("Random notes never let an expectation form; the chain borrows a folk tune's whole shape. Neither is the music we value, which lives between."):
+        with self.voiceover("Random notes never let an expectation form; the chain borrows a folk tune's whole shape. These sketches illustrate a proposed complexity trade-off; they do not establish what all listeners value."):
             self.play(Indicate(cells[0]), Indicate(cells[1]))
         self.wait(0.3)
         self.clear_scene()

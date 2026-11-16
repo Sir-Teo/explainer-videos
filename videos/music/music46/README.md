@@ -1,8 +1,7 @@
 # Music, Built: Part 46, Expectation and Emotion
 
 Part 46 of a sixty-eight-part course in music (see [the series plan](../README.md) and
-[the syllabus](../SYLLABUS.md)), the second part of Act VIII, *The Mind*. In 2011 a PET study caught dopamine being
-released twice: at the moment of a musical chill, and in the seconds of anticipation before it. Meyer had argued in 1956
+[the syllabus](../SYLLABUS.md)), the second part of Act VIII, *The Mind*. In 2011 PET supported striatal dopamine release during pleasurable music, while fMRI distinguished anticipatory and peak-related activity. Meyer had argued in 1956
 that musical emotion is expectation delayed and fulfilled. This part builds a listener model, measures surprise and
 uncertainty in bits, and engineers three endings for the Tune. The tools are Monochord's
 (`explainer/music/monochord/listener.py`). The listener is trained on the series' corpus of folk and public-domain tunes;
@@ -125,3 +124,7 @@ python -m videos.music.labs 46                                  # the lab (write
   emotions", *Physics of Life Reviews* (2013); J. A. Sloboda (1991); O. Grewe and others (2007); J. K. Vuoskoski and
   T. Eerola on sad music; C. L. Krumhansl and J. A. Zupnick (2013); D. E. Berlyne, *Aesthetics and Psychobiology*
   (1971); F. H. Rauscher and others (1993) and later meta-analyses of the "Mozart effect".
+
+## Interpretation limits
+
+PET and fMRI provide complementary evidence; they do not directly resolve two timed dopamine pulses. Surprise is minus log probability, not a literal guess count. This symbolic transition model is an analogy to statistical learning, not a complete infant or brain model. Probe-tone fit and predictability differ; corpus comparisons do not validate pleasure. Part 42’s tension proxy does not compute entropy, and predictive precision is not reciprocal Shannon entropy. Cheung’s reported chord results are sketched on our note data, not re-estimated. Emotion labels and inverted-U effects depend on listener and stimulus; mode changes alter pitches as well as performance.

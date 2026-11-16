@@ -113,9 +113,7 @@ class Learn(SoundScene):
                 end = st[d["order"][i + 1]] - 0.3 if i < 2 else c.duration
                 pulse(snd, cells[i], st[k], end, buff=0.1)
         with self.voiceover(
-            f"Listeners rate C as fitting best, then D, and F sharp worst; our listener's surprise ranks them the same way: "
-            f"{say(d['ic']['C'], 1)}, {say(d['ic']['D'], 1)} and {say(d['ic']['F sharp'], 1)} bits. Fit and predictability "
-            "are close to one thing."
+            f"Listeners rate C as fitting best, then D, and F sharp worst; our listener's surprise ranks them the same way: {say(d['ic']['C'], 1)}, {say(d['ic']['D'], 1)} and {say(d['ic']['F sharp'], 1)} bits. Fit and predictability can correlate but are distinct judgments; this toy ranking is not a new listener experiment."
         ):
             self.play(*[cc[1].animate.set_opacity(1) for cc in cells])
         self.wait(0.3)

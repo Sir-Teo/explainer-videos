@@ -17,20 +17,14 @@ class Uncert(SoundScene):
     # ------------------------------------------------------------------
     def cheung(self):
         items = [
-            (r"Vincent Cheung and colleagues \ (2019): \ 745 chords from 80 US pop songs, \ stripped of melody and lyrics", WHITE),
-            (r"a model gave each chord a surprise and an uncertainty; \ 79 listeners rated pleasure, \ some in an fMRI scanner", WHITE),
+            (r"Vincent Cheung and colleagues \ (2019): \ modeled a pop-song corpus; \\ tested selected chord sequences without melody or lyrics", WHITE),
+            (r"a model gave each chord a surprise and an uncertainty; \ behavioral and neuroimaging cohorts rated pleasure", WHITE),
             (r"pleasure was high for surprising chords after certain contexts, \ and for unsurprising chords after uncertain ones", WHITE),
             (r"neither number alone predicted pleasure; \ their interaction did, \ and with it amygdala and hippocampus activity", TUNE),
             (r"the published finding, \ quoted; \ its chords are under copyright and not played here", GREY_A),
         ]
         rows_scene(self, r"an interaction", items,
-                   "The most direct test came in 2019. <bookmark mark='b'/> Vincent Cheung and colleagues took seven hundred and "
-                   "forty-five chords from eighty American pop songs, stripped of melody and lyrics. <bookmark mark='c'/> A model "
-                   "gave each chord a surprise and an uncertainty, and seventy-nine listeners rated their pleasure, some in a "
-                   "scanner. <bookmark mark='d'/> Pleasure was high for surprising chords after certain contexts, and for "
-                   "unsurprising chords after uncertain ones. <bookmark mark='e'/> Neither number alone predicted pleasure; their "
-                   "interaction did, and so did activity in the amygdala and hippocampus. <bookmark mark='f'/> The finding is "
-                   "quoted here; the songs are under copyright and are not played.", marks="bcdef")
+                   "The most direct test came in 2019. <bookmark mark='b'/> Vincent Cheung and colleagues modeled harmonic expectations using a large corpus of US popular songs and tested selected chord sequences without melody or lyrics. <bookmark mark='c'/> A model gave each chord a surprise and an uncertainty, and listeners rated pleasure in behavioral and neuroimaging experiments. <bookmark mark='d'/> Pleasure was high for surprising chords after certain contexts, and for unsurprising chords after uncertain ones. <bookmark mark='e'/> Neither number alone predicted pleasure; their interaction did, and so did activity in the amygdala and hippocampus. <bookmark mark='f'/> The finding is quoted here; the songs are under copyright and are not played.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def saddle(self):
@@ -40,6 +34,12 @@ class Uncert(SoundScene):
         def P_(a, b):
             return [x0 + W * a / 5.0, y0 + H * min(b, 10) / 10.0, 0]
         ax = VGroup(Line(P_(0, 0), P_(5, 0), color=GREY_B), Line(P_(0, 0), P_(0, 10), color=GREY_B))
+        for value in range(6):
+            q = P_(value, 0)
+            ax.add(label(str(value), font_size=12, color=GREY_A).move_to([q[0], q[1] - 0.16, 0]))
+        for value in (0, 2, 4, 6, 8, 10):
+            q = P_(0, value)
+            ax.add(label(str(value) + ("+" if value == 10 else ""), font_size=12, color=GREY_A).move_to([q[0] - 0.2, q[1], 0]))
         ee, ss = np.median(e), np.median(s)
         good1 = Rectangle(width=W * ee / 5, height=H * (10 - ss) / 10, stroke_width=0, fill_color=TUNE, fill_opacity=0.15).move_to([(P_(0, 0)[0] + P_(ee, 0)[0]) / 2, (P_(0, ss)[1] + P_(0, 10)[1]) / 2, 0])
         good2 = Rectangle(width=W * (5 - ee) / 5, height=H * ss / 10, stroke_width=0, fill_color=TUNE, fill_opacity=0.15).move_to([(P_(ee, 0)[0] + P_(5, 0)[0]) / 2, (P_(0, 0)[1] + P_(0, ss)[1]) / 2, 0])
@@ -69,18 +69,14 @@ class Uncert(SoundScene):
     # ------------------------------------------------------------------
     def tension(self):
         items = [
-            (r"tension curves \ (Part 42) \ rise with uncertainty and fall with resolution", WHITE),
+            (r"Part 42 uses a chosen tension proxy, \ not this entropy measure", WHITE),
             (r"Lerdahl and Krumhansl's tension model and listeners' continuous ratings agree in broad shape", WHITE),
             (r"a phrase that builds uncertainty and then resolves predictably is the reassuring corner, \ stretched out in time", WHITE),
             (r"a phrase that sets up certainty and then twists is the other corner", TUNE),
             (r"composers engineer both", GREY_A),
         ]
         rows_scene(self, r"tension as uncertainty", items,
-                   "This links to tension. <bookmark mark='b'/> Part 42's tension curves rise with uncertainty and fall with "
-                   "resolution, <bookmark mark='c'/> and Lerdahl and Krumhansl's model and listeners' continuous ratings agree in "
-                   "broad shape. <bookmark mark='d'/> A phrase that builds uncertainty and then resolves predictably is the "
-                   "reassuring corner, stretched out in time; <bookmark mark='e'/> a phrase that sets up certainty and then "
-                   "twists is the other. <bookmark mark='f'/> Composers engineer both.",
+                   "This links to tension. <bookmark mark='b'/> Part 42's chosen tension proxy uses pitch height, non-chord tones, chord labels and density; it does not directly compute this listener's entropy, <bookmark mark='c'/> and Lerdahl and Krumhansl's model and listeners' continuous ratings agree in broad shape. <bookmark mark='d'/> A phrase that builds uncertainty and then resolves predictably is the reassuring corner, stretched out in time; <bookmark mark='e'/> a phrase that sets up certainty and then twists is the other. <bookmark mark='f'/> Composers engineer both.",
                    marks="bcdef")
 
     # ------------------------------------------------------------------

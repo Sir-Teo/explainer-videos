@@ -26,7 +26,7 @@ class Model(SoundScene):
         ])
         head = label(r"how the listener works", font_size=28, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Our listener learns the way an infant does, by counting. <bookmark mark='a'/> In the corpus, it counts which note "
+            "Our listener counts symbolic transitions; this is an analogy to statistical learning, not a complete model of an infant's learning. <bookmark mark='a'/> In the corpus, it counts which note "
             "followed every context of up to four notes. <bookmark mark='b'/> To predict, it uses the longest context it has "
             "seen before, keeps some probability back for the unseen, and passes that down to shorter contexts. "
             "<bookmark mark='c'/> This is prediction by partial matching, the method behind Marcus Pearce's model IDyOM. "
@@ -87,7 +87,7 @@ class Model(SoundScene):
             f"falls, from about {say(float(np.mean(ic[0:7])), 1)} bits a note in the first phrase to "
             f"{say(float(np.mean(ic[35:42])), 1)} in the last: the short-term model has learned the piece, so the returning "
             "phrases cost little. The Tune averages "
-            f"{say(d['mean_ic'], 2)} bits a note: very predictable, which is part of why children learn it."
+            f"{say(d['mean_ic'], 2)} bits a note: predictable under this small corpus model; that does not establish why children learn it."
         ):
             self.play(Indicate(a[3]))
         self.wait(0.3)
@@ -101,6 +101,12 @@ class Model(SoundScene):
         def P_(a, b):
             return [x0 + W * a / 5.0, y0 + H * min(b, 10) / 10.0, 0]
         ax = VGroup(Line(P_(0, 0), P_(5, 0), color=GREY_B), Line(P_(0, 0), P_(0, 10), color=GREY_B))
+        for value in range(6):
+            q = P_(value, 0)
+            ax.add(label(str(value), font_size=12, color=GREY_A).move_to([q[0], q[1] - 0.16, 0]))
+        for value in (0, 2, 4, 6, 8, 10):
+            q = P_(0, value)
+            ax.add(label(str(value) + ("+" if value == 10 else ""), font_size=12, color=GREY_A).move_to([q[0] - 0.2, q[1], 0]))
         dots = VGroup(*[Dot(P_(a, b), radius=0.025, color=BLUE, fill_opacity=0.5) for a, b in zip(e[::2], s[::2])])
         labs = VGroup(label(r"uncertainty before the note \ (bits)", font_size=15, color=GREY_A).move_to([x0 + W / 2, y0 - 0.4, 0]),
                       label(r"surprise \ (bits)", font_size=15, color=GREY_A).move_to([x0 + 0.5, y0 + H + 0.25, 0]))

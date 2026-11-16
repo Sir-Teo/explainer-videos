@@ -41,8 +41,8 @@ class Emotion(SoundScene):
         ans = VGroup(*[label(d["answer"][k], font_size=22, color=TUNE).next_to(boxes[i], DOWN, buff=0.3) for i, k in enumerate(keys)])
         how = label(r"fast, \ high, \ major, \ detached; \ \ slow, \ low, \ minor, \ legato; \ \ fast, \ low, \ minor, \ loud; \ \ slow, \ high, \ major, \ soft", font_size=16, color=GREY_A).to_edge(DOWN, buff=1.0)
         with self.voiceover(
-            "Happy, sad, angry, tender. Most listeners agree, and they agree across cultures more than you might expect. "
-            "The notes were the same each time. What changed were cues: tempo, register, mode, loudness, articulation and "
+            "Happy, sad, angry, tender. Those are the intended labels of our sketches; agreement depends on listener, culture and stimulus, and this demonstration does not measure it. "
+            "The underlying tune was kept, with mode and other performance features changed. What changed were cues: tempo, register, mode, loudness, articulation and "
             "timbre."
         ):
             self.play(FadeIn(ans), FadeIn(how))
@@ -158,5 +158,5 @@ class Emotion(SoundScene):
                    "value most the music of their late teens and early twenties; <bookmark mark='c'/> Carol Krumhansl and Justin "
                    "Zupnick found in 2013 that young adults also knew, and liked, the music of their parents' bump years. "
                    "<bookmark mark='d'/> Music cues autobiographical memories vividly, often with emotion attached, "
-                   "<bookmark mark='e'/> and in dementia musical memory is often among the last to go. <bookmark mark='f'/> "
+                   "<bookmark mark='e'/> and some musical memories can remain accessible in dementia, with substantial variation across people and disease stages. <bookmark mark='f'/> "
                    "Liking a song is partly liking a time of one's life.", marks="bcdef")

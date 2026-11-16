@@ -79,7 +79,7 @@ class Outro(SoundScene):
             "Expectations are learned by counting, without trying. <bookmark mark='b'/> A listener model measures surprise "
             "and uncertainty in bits. <bookmark mark='c'/> Delay makes a resolution more certain; denial leaves the cost "
             "unpaid. <bookmark mark='d'/> Pleasure lies in the interaction of surprise and uncertainty. "
-            "<bookmark mark='e'/> And groove and liking follow inverted U's, while expressed emotion has a code of cues."
+            "<bookmark mark='e'/> And selected groove and liking studies report inverted-U patterns, with effects depending on stimulus and listener, while expressed emotion has a code of cues."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
