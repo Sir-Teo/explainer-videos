@@ -37,8 +37,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 30 — Sound Itself | Complete | Open |
 | 31 — Transformations | Complete | Open |
 | 32 — The Geometry of Chords | Complete | Open |
-| 33 — The Mathematics of Rhythm and Scale | In progress | Open |
-| 34–68 | Queued | Open |
+| 33 — The Mathematics of Rhythm and Scale | Complete | Open |
+| 34 — Raga and Tala | In progress | Open |
+| 35–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -127,7 +128,9 @@ Part 31: all 10 chapter preview sheets reviewed; sound and 17 listening-window m
 
 Part 32: all 12 chapter preview sheets reviewed; sound and 13 listening-window motion checks pass. Local identities: `renders/qa/music32/source-receipt.json`.
 
-**Current: Part 33.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 33: all 12 chapter preview sheets reviewed; sound and 15 listening-window motion checks pass. Local identities: `renders/qa/music33/source-receipt.json`.
+
+**Current: Part 34.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

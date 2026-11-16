@@ -75,12 +75,7 @@ class Outro(SoundScene):
             r"temperaments as linear maps; \ a scale with no octave",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Euclid's algorithm spreads strokes as evenly as possible and generates the world's timelines. "
-            "<bookmark mark='a'/> The bell pattern and the major scale are one maximally even shape. <bookmark mark='b'/> "
-            "Stacks of fifths have two step sizes exactly at five, seven, twelve and the other denominators of the fifth's "
-            "continued fraction. <bookmark mark='c'/> Oddity, homometry, and a canon that tiles seventy-two pulses with "
-            "neither part repeating. <bookmark mark='d'/> Fibonacci numbers in Sanskrit metre, and every order of four bells "
-            "in Plain Bob. <bookmark mark='e'/> Temperaments as linear maps, and a scale with no octave."
+            "What did we find? Euclid's algorithm spreads strokes as evenly as possible and matches selected timelines from several traditions. <bookmark mark='a'/> The bell pattern and the major scale are one maximally even shape. <bookmark mark='b'/> Stacks of fifths have two step sizes exactly at five, seven, twelve and other convergent or intermediate-convergent denominators. <bookmark mark='c'/> Oddity, homometry, and a canon that tiles seventy-two pulses with neither part repeating. <bookmark mark='d'/> Fibonacci numbers in Sanskrit metre, and every order of four bells in Plain Bob. <bookmark mark='e'/> Temperaments as linear maps, and a scale with no octave."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

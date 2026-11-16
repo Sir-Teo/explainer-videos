@@ -141,3 +141,7 @@ python -m videos.music.labs 33                                  # the lab (write
 * M. Mathews, J. R. Pierce, A. Reeves and L. A. Roberts, "Theoretical and experimental explorations of the
   Bohlen–Pierce scale", *JASA* (1988).
 * Part 6 for temperaments; Part 11 for rhythm; Part 12 for maximal evenness; Part 29 for homometry.
+
+## Interpretation limits
+
+Euclidean necklaces abstract away the downbeat, accent, microtiming and cultural use. Oddity forbids antipodal onset pairs and does not imply aperiodicity. Generated scale sizes include intermediate convergents; five generated notes require four generator steps. The thirty-three-year leap pattern is an approximation, not the modern Iranian calendar rule. Prosodic morae are metrical units, not a claim about exact spoken duration. A ringing method need not be an extent. Temperament kernel statements compare the named commas rather than all infinitely many kernel elements. Odd-harmonic consonance does not abolish octave equivalence; beating also depends on the synthesis. Fuglede spectrality requires an orthogonal exponential basis; the cited historical results are not presented as a verified 2026 survey of open cases.

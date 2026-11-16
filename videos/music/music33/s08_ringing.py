@@ -39,7 +39,7 @@ class Ringing(SoundScene):
         head = label(r"plain hunt on four bells", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "In seventeenth-century England, ringers found a way to make music from heavy church bells that swing full circle "
-            "and cannot be hurried. <bookmark mark='a'/> A bell can only move one place earlier or later in the order of "
+            "and cannot be hurried. <bookmark mark='a'/> Under the conventional adjacent-change rule, each bell moves at most one place earlier or later in the order of "
             "striking from one round to the next, so each change swaps neighbours. <bookmark mark='b'/> The simplest pattern "
             "is plain hunt: swap every pair, then every inner pair, and repeat. <bookmark mark='c'/> Each bell weaves from "
             "the front to the back and back again; the gold line follows bell one. After eight changes the bells are back in "
@@ -100,19 +100,13 @@ class Ringing(SoundScene):
     def groups(self):
         items = [
             (r"the orders of n bells are the permutations of n things: \ the symmetric group, \ n! of them", WHITE),
-            (r"a method is a walk on its Cayley graph that visits every element once: \ a Hamiltonian cycle", WHITE),
+            (r"an extent visits every permutation\\ordinary methods need not be extents", WHITE),
             (r"Fabian Stedman's \textit{Campanalogia} \ (1677) \ worked with these structures by hand", WHITE),
             (r"ringers used cosets of subgroups before group theory had a name", TUNE),
             (r"an extent on eight bells: \ 40,320 changes, \ about 18 hours of ringing", GREY_A),
         ]
         rows_scene(self, r"bells and groups", items,
-                   "Mathematicians later recognised what the ringers were doing. <bookmark mark='b'/> The orders of n bells are "
-                   "the permutations of n things, the symmetric group, with n factorial elements. <bookmark mark='c'/> A method "
-                   "is a walk on the group's Cayley graph that visits every element once, a Hamiltonian cycle, like Part 31's "
-                   "tours of the triads. <bookmark mark='d'/> Fabian Stedman's Campanalogia of 1677 worked with these structures "
-                   "by hand, <bookmark mark='e'/> using what would later be called cosets of subgroups, long before group theory "
-                   "had a name. <bookmark mark='f'/> On eight bells an extent has forty thousand three hundred and twenty changes, "
-                   "about eighteen hours of continuous ringing.", marks="cdef")
+                   "Mathematicians later recognised what the ringers were doing. <bookmark mark='b'/> The orders of n bells are the permutations of n things, the symmetric group, with n factorial elements. <bookmark mark='c'/> An extent is a complete traversal of the permutations; ordinary methods need not visit every permutation. A valid extent returning to rounds gives a Hamiltonian cycle in the chosen change graph, like Part 31's tours of the triads. <bookmark mark='d'/> Fabian Stedman's Campanalogia of 1677 worked with these structures by hand, <bookmark mark='e'/> using what would later be called cosets of subgroups, long before group theory had a name. <bookmark mark='f'/> On eight bells an extent has forty thousand three hundred and twenty changes, about eighteen hours of continuous ringing.", marks="cdef")
 
     # ------------------------------------------------------------------
     def six(self):

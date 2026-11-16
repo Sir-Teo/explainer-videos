@@ -183,7 +183,7 @@ def is_tiling(A, B, n: int) -> bool:
 
 
 def tilings(A, n: int, limit: int = 100000) -> list[list[int]]:
-    """Every B containing 0 with A + B = Z_n exactly once over, by exact-cover backtracking."""
+    """Every B with A + B = Z_n exactly once over (up to the search limit), by exact-cover backtracking."""
     A = sorted(x % n for x in A)
     out, cover, B = [], [False] * n, []
 

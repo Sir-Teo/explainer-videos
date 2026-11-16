@@ -100,19 +100,14 @@ class Oddity(SoundScene):
     # ------------------------------------------------------------------
     def meaning(self):
         items = [
-            (r"oddity: \ a timeline that never divides into equal halves keeps the listener oriented", WHITE),
+            (r"oddity: no antipodal onset pairs\\does not imply aperiodicity", WHITE),
             (r"Arom's reading: \ the asymmetry tells players where they are in a long cycle", WHITE),
             (r"homometry: \ interval content does not determine a rhythm", WHITE),
             (r"the patterns are the music of particular people; \ the mathematics only describes them", TUNE),
             (r"Part 37 returns to timelines in their own musical worlds", GREY_A),
         ]
         rows_scene(self, r"what the properties mean", items,
-                   "What do these properties mean in music? <bookmark mark='b'/> A timeline that never splits into equal halves "
-                   "never sounds the same at two points of its cycle. <bookmark mark='c'/> Arom read this as a way for players to "
-                   "keep their place in a long cycle. <bookmark mark='d'/> Homometry says that the intervals alone do not fix a "
-                   "rhythm. <bookmark mark='e'/> And the patterns belong to particular people and traditions; the mathematics "
-                   "describes them, it does not explain why they were chosen. <bookmark mark='f'/> Part 37 returns to timelines "
-                   "in their own musical worlds.", marks="cdef")
+                   "What do these properties mean in music? <bookmark mark='b'/> Oddity forbids strokes half a cycle apart; it does not imply aperiodicity. For example, strokes at zero, four and eight in twelve have oddity but repeat every four pulses. <bookmark mark='c'/> Arom read this as a way for players to keep their place in a long cycle. <bookmark mark='d'/> Homometry says that the intervals alone do not fix a rhythm. <bookmark mark='e'/> And the patterns belong to particular people and traditions; the mathematics describes them, it does not explain why they were chosen. <bookmark mark='f'/> Part 37 returns to timelines in their own musical worlds.", marks="cdef")
 
     # ------------------------------------------------------------------
     def both(self):

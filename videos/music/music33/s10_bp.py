@@ -25,13 +25,13 @@ class Bp(SoundScene):
         ], font_size=23)
         head = label(r"the Bohlen--Pierce scale", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "Every tuning so far has been built on the octave. What if it were not? <bookmark mark='a'/> In 1972 Heinz "
+            "Most tunings discussed so far have used octave repetition. What if it were not? <bookmark mark='a'/> In 1972 Heinz "
             "Bohlen, and independently Kees van Prooijen and John Pierce, divided the ratio three to one, an octave and a "
             "fifth, the tritave, into thirteen equal steps. <bookmark mark='b'/> Each step is about one hundred and forty-six "
             "cents. <bookmark mark='c'/> Its consonances are built only from odd numbers: three, five, seven is its major "
             "triad. <bookmark mark='d'/> And the steps approximate those ratios well: nine sevenths within four cents, seven "
             "fifths within three. <bookmark mark='e'/> It suits tones with only odd harmonics, like a clarinet's low register "
-            "from Part 8, for which the octave is not a strong consonance at all."
+            "from Part 8, whose odd-harmonic spectrum changes the usual partial-overlap advantage of the octave."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):
@@ -58,10 +58,7 @@ class Bp(SoundScene):
                        label(r"3:5:7 on all harmonics", font_size=22, color=GREY_A)).arrange(RIGHT, buff=1.0).move_to(DOWN * 1.0)
         head = label(r"one tritave in 13 equal steps", font_size=28, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Here is the scale, thirteen steps from G up to the D an octave and a fifth higher, on a synthetic tone of odd "
-            "harmonics only. Notice there is no octave: it falls between the eighth and ninth steps. Then the three, five, "
-            "seven chord, first on odd harmonics, where it sounds settled, then on tones with all harmonics, where the even "
-            "partials clash with it."
+            'Here is the scale, thirteen steps from G up to the D an octave and a fifth higher, on a synthetic tone of odd harmonics only. Notice there is no octave: it falls between the eighth and ninth steps. Then the three, five, seven chord, first on odd harmonics, where it sounds settled, then on tones with all harmonics, where the added partials change the interactions and perceived quality.'
         ):
             self.play(FadeIn(head), FadeIn(line), FadeIn(ticks), FadeIn(octave), FadeIn(cells))
         with self.listen(c) as snd:
@@ -84,12 +81,7 @@ class Bp(SoundScene):
             (r"Part 52 builds timbres to fit any tuning", GREY_A),
         ]
         rows_scene(self, r"why it works", items,
-                   "Why does it work at all? <bookmark mark='b'/> Part 5 showed that consonance depends on a timbre's partials, "
-                   "not only on the ratio. <bookmark mark='c'/> For tones with only odd harmonics the octave's partials do not "
-                   "line up well, while the tritave's do. <bookmark mark='d'/> Max Mathews, John Pierce and colleagues ran listening "
-                   "tests in the late 1980s and found its chords heard as consonant, especially on odd-harmonic tones. <bookmark mark='e'/> The octave, it seems, is a "
-                   "fact about harmonic timbres rather than a law of music. <bookmark mark='f'/> Part 52 builds timbres to fit "
-                   "any tuning.", marks="cdef")
+                   "Why does it work at all? <bookmark mark='b'/> Part 5 showed that consonance depends on a timbre's partials, not only on the ratio. <bookmark mark='c'/> For tones with only odd harmonics the octave's partials do not line up well, while the tritave's do. <bookmark mark='d'/> Max Mathews, John Pierce and colleagues ran listening tests in the late 1980s and found its chords heard as consonant, especially on odd-harmonic tones. <bookmark mark='e'/> Timbre affects consonance; octave equivalence also involves perception, learning and musical practice, so this does not derive or abolish it. <bookmark mark='f'/> Part 52 builds timbres to fit any tuning.", marks="cdef")
 
     # ------------------------------------------------------------------
     def since(self):

@@ -18,19 +18,13 @@ class Frontier(SoundScene):
     def fuglede(self):
         items = [
             (r"Fuglede \ (1974): \ a shape tiles space by translation exactly when it has an orthogonal basis of exponentials", WHITE),
-            (r"`spectral' \ = \ a Fourier series exists on it; \ `tiles' \ = \ copies fill space", WHITE),
+            (r"spectral: orthogonal exponential basis\\tiling: translated copies fill space", WHITE),
             (r"Tao \ (2004): \ false in 5 dimensions and more; \ later counterexamples down to 3", WHITE),
-            (r"in 1 and 2 dimensions, \ and for cyclic groups, \ it is still open in general", TUNE),
+            (r"low-dimensional and finite-group variants:\\separate hypotheses and unresolved cases in cited literature", TUNE),
             (r"a rhythmic canon is a tiling of a cycle: \ the conjecture asks the same of canons", GREY_A),
         ]
         rows_scene(self, r"the spectral conjecture", items,
-                   "The canons lead to an open problem. <bookmark mark='b'/> In 1974 Bent Fuglede conjectured that a shape tiles "
-                   "space by translation exactly when it carries a basis of pure frequencies, an exact Fourier series. "
-                   "<bookmark mark='c'/> Spectral means the Fourier series exists; tiling means copies fill space. "
-                   "<bookmark mark='d'/> Terence Tao showed in 2004 that it is false in five dimensions and more, and later work "
-                   "brought counterexamples down to three. <bookmark mark='e'/> In one and two dimensions, and for cyclic groups, "
-                   "it is still open in general. <bookmark mark='f'/> A rhythmic canon is a tiling of a cycle, so the conjecture "
-                   "asks the same question of canons.", marks="cdef")
+                   "The canons lead to an open problem. <bookmark mark='b'/> In 1974 Bent Fuglede conjectured that a shape tiles space by translation exactly when it carries a basis of pure frequencies, an orthogonal basis of complex exponentials for square-integrable functions on the shape. <bookmark mark='c'/> Spectral means such an orthogonal exponential basis exists; tiling means copies fill space. <bookmark mark='d'/> Terence Tao showed in 2004 that it is false in five dimensions and more, and later work brought counterexamples down to three. <bookmark mark='e'/> The low-dimensional Euclidean and finite cyclic-group versions are separate questions with their own hypotheses; the cited literature discusses unresolved cases. We do not establish their current general status here. <bookmark mark='f'/> A rhythmic canon is a tiling of a cycle, so the conjecture asks the same question of canons.", marks="cdef")
 
     # ------------------------------------------------------------------
     def coven(self):
@@ -81,7 +75,7 @@ class Frontier(SoundScene):
             "<bookmark mark='b'/> Measure each one's distance from maximal evenness, against random rhythms of the same size. "
             "<bookmark mark='c'/> Test whether evenness predicts how easily listeners tap along or remember the pattern. "
             "<bookmark mark='d'/> Is maximal evenness a cultural choice, or a constraint of the mind? <bookmark mark='e'/> "
-            "The answer would say what the mathematics explains about music, and what it only describes."
+            "Such results could distinguish cultural and cognitive contributions; these need not be mutually exclusive."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

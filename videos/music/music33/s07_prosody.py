@@ -40,7 +40,7 @@ class Prosody(SoundScene):
         side.scale_to_fit_width(min(side.width, 5.4)).move_to(RIGHT * 3.6)
         head = label(r"light and heavy syllables filling five beats", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Sanskrit verse is built from light syllables, one beat long, and heavy ones, two beats long. Indian prosodists "
+            "Sanskrit verse is built from light syllables, one mora long, and heavy ones, two morae long in this metrical model. Indian prosodists "
             "asked how many patterns fill a given number of beats. <bookmark mark='a'/> For five beats there are eight, listed "
             "here. <bookmark mark='b'/> Every pattern ends either in a light syllable, after a pattern of four beats, or in a "
             "heavy one, after a pattern of three. <bookmark mark='c'/> So the count for five is the count for four plus the "
@@ -108,14 +108,14 @@ class Prosody(SoundScene):
     # ------------------------------------------------------------------
     def history(self):
         items = [
-            (r"Pi\.ngala's \textit{Chandah\'s\=astra} \ (before 200 BCE): \ metres listed as binary patterns", WHITE),
+            (r"Pi\.ngala's \textit{Chandah\'s\=astra} \ (date uncertain; often late centuries BCE): \ metres listed as binary patterns", WHITE),
             (r"its rules for listing and numbering the patterns amount to binary numbers", WHITE),
             (r"Halayudha's commentary \ (10th century): \ the triangle of binomial coefficients, \ the \textit{meru}", WHITE),
             (r"rhythm was one of the first places combinatorics was done at all", TUNE),
             (r"Part 34 hears the rhythms of Indian music in their own terms", GREY_A),
         ]
         rows_scene(self, r"combinatorics began here", items,
-                   "This tradition is old. <bookmark mark='b'/> Pingala's treatise on metre, from before two hundred BCE, lists "
+                   "This tradition is old. <bookmark mark='b'/> Pingala's treatise on metre, of uncertain date, often placed in the last few centuries BCE, lists "
                    "metres as patterns of light and heavy. <bookmark mark='c'/> Its rules for listing and numbering the patterns "
                    "amount to binary numbers. <bookmark mark='d'/> The commentator Halayudha, in the tenth century, drew the "
                    "triangle of binomial coefficients, the meru, to count patterns with a given number of heavy syllables. "

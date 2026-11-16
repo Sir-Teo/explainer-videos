@@ -38,7 +38,21 @@ class Even(SoundScene):
             vo.wait_until("b")
             self.play(FadeIn(np_), FadeIn(cap[1]))
         with self.listen(c) as snd:
-            window(snd, r"rhythm, \ then scale, \ twice", detail=r"Part 11's clave, \ Part 7's piano", corner=DL, tag_corner=DR)
+            window(snd, r"rhythm, \ then scale, \ twice", detail=r"clock hands follow time, including rests", corner=DL, tag_corner=DR)
+            # Clock hands retain a readable time reference through long notes and rests.
+            for g, rk, sk, finish, col in ((gb, "bell", "diatonic", d["starts"]["five"], TUNE),
+                                           (gp, "five", "pentatonic", snd.duration, BLUE)):
+                centre = g[0].get_center()
+                hand = Line(centre, centre + UP * 1.2, color=col, stroke_width=3)
+                snd.show(hand)
+                def follow(m, t, centre=centre, rk=rk, sk=sk, finish=finish):
+                    is_scale = t >= d["starts"][sk]
+                    start = d["starts"][sk if is_scale else rk]
+                    period = 12 * d["pulse"] * (1.6 if is_scale else 1)
+                    angle = PI / 2 - TAU * (t - start) / period
+                    m.put_start_and_end_on(centre, centre + 1.2 * np.array([np.cos(angle), np.sin(angle), 0]))
+                    m.set_stroke(opacity=0.85 if d["starts"][rk] <= t < finish else 0)
+                snd.drive(hand, follow)
             p = d["pulse"]
             for key, g, rk, sk in (("bell", gb, "bell", "diatonic"), ("pentatonic", gp, "five", "pentatonic")):
                 ons = d[key]["onsets"]
@@ -72,19 +86,14 @@ class Even(SoundScene):
     # ------------------------------------------------------------------
     def everywhere(self):
         items = [
-            (r"leap years: \ 8 leap years in 33, \ spread evenly \ (the Persian calendar)", WHITE),
+            (r"approximate leap scheme: 8 in 33\\modern Iranian calendar: astronomical", WHITE),
             (r"drawing a straight line on a pixel grid: \ Bresenham's algorithm, \ the same spacing", WHITE),
             (r"Sturmian words and the golden ratio: \ even spacing with an irrational rate", WHITE),
             (r"the same problem every time: \ k events in n slots, \ as smoothly as possible", TUNE),
             (r"chapter 3 runs it with an irrational step: \ the fifth", GREY_A),
         ]
         rows_scene(self, r"the same shape elsewhere", items,
-                   "The shape turns up wherever things must be spread evenly. <bookmark mark='b'/> The Persian calendar spreads "
-                   "eight leap years through thirty-three. <bookmark mark='c'/> A computer drawing a straight line on a grid of "
-                   "pixels steps up at Euclidean intervals, by Bresenham's algorithm. <bookmark mark='d'/> With an irrational rate "
-                   "the pattern never repeats: Sturmian words, and the golden ratio. <bookmark mark='e'/> It is always the same "
-                   "problem: k events in n slots, as smoothly as possible. <bookmark mark='f'/> The next chapter runs it with an "
-                   "irrational step, the perfect fifth.", marks="cdef")
+                   "The shape turns up wherever things must be spread evenly. <bookmark mark='b'/> An approximate thirty-three-year leap-year scheme uses eight leap years; the modern Iranian calendar is determined astronomically rather than by this fixed cycle. <bookmark mark='c'/> A computer drawing a straight line on a grid of pixels steps up at Euclidean intervals, by Bresenham's algorithm. <bookmark mark='d'/> With an irrational rate the pattern never repeats: Sturmian words, and the golden ratio. <bookmark mark='e'/> It is always the same problem: k events in n slots, as smoothly as possible. <bookmark mark='f'/> The next chapter runs it with an irrational step, the perfect fifth.", marks="cdef")
 
     # ------------------------------------------------------------------
     def layers(self):

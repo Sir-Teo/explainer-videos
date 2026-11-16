@@ -61,14 +61,7 @@ class Temper(SoundScene):
         tl = label(r"0: \ the comma vanishes", font_size=16, color=EAR).next_to(tbl, DOWN, buff=0.25)
         head = label(r"a temperament finder: \ worst error on 3/2 and 5/4, \ cents", font_size=24, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Now a search. For every equal division from five to sixty steps, take the nearest steps to a pure fifth and a pure "
-            "major third, and keep the worse error. List the divisions that beat every smaller one. <bookmark mark='a'/> The "
-            "records are five, seven, nine, ten, twelve, nineteen, twenty-two, thirty-one, thirty-four and fifty-three. "
-            "Twelve, nineteen, thirty-one and fifty-three are the ones history chose: nineteen and thirty-one were proposed in "
-            "the sixteenth and seventeenth centuries, fifty-three by Mercator and Holder. <bookmark mark='b'/> The kernel "
-            "explains their characters. Twelve tempers out the syntonic comma, the Pythagorean comma and the diesis; nineteen "
-            "and thirty-one temper out only the syntonic comma, like meantone; fifty-three tempers out none of these three, "
-            "only the tiny schisma, which is why it is so nearly just."
+            "Now a search. For every equal division from five to sixty steps, take the nearest steps to a pure fifth and a pure major third, and keep the worse error. List the divisions that beat every smaller one. <bookmark mark='a'/> The records are five, seven, nine, ten, twelve, nineteen, twenty-two, thirty-one, thirty-four and fifty-three. Twelve, nineteen, thirty-one and fifty-three are the ones history chose: nineteen and thirty-one were proposed in the sixteenth and seventeenth centuries, fifty-three by Mercator and Holder. <bookmark mark='b'/> The kernel explains their characters. Twelve tempers out the syntonic comma, the Pythagorean comma and the diesis; of those three named commas, nineteen and thirty-one temper out the syntonic comma, like meantone; fifty-three tempers out none of these three, only the tiny schisma, which is why it is so nearly just."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bars), FadeIn(xl))
             vo.wait_until("a")
@@ -84,9 +77,7 @@ class Temper(SoundScene):
         card = listen_card(r"A C major triad, \ four times, \ in four tunings: \ 12, \ 19 and 31 equal steps, \ and just. \ "
                            r"Which one is just, \ A, \ B, \ C or D? \ Listen for the chord that is still.", width=10.4)
         with self.voiceover(
-            "A question for your ears. One C major triad, four times, in four tunings: twelve, nineteen and thirty-one equal "
-            "steps, and just intonation, in some order. Which one is just? Listen for the chord whose sound is perfectly "
-            "still, with no slow beating."
+            'A question for your ears. One C major triad, four times, in four tunings: twelve, nineteen and thirty-one equal steps, and just intonation, in some order. Which uses the just ratios? Listen for reduced beating of corresponding partials in this synthesis; instrument inharmonicity and other interactions can remain.'
         ):
             self.play(FadeIn(card))
         self.wait(0.8)
