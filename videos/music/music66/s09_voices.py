@@ -37,12 +37,7 @@ class Voices(SoundScene):
             (r"the technique is the same as timbre transfer; \ the difference is whose sound it is", TUNE),
         ]
         rows_scene(self, r"cloned voices", items,
-                   "Voice conversion keeps a performance's content and timing and gives it another singer's timbre. "
-                   "<bookmark mark='c'/> A few minutes of someone's recordings can now be enough, and Part 64's separation supplies "
-                   "clean vocals from finished records. <bookmark mark='d'/> In 2023 a song with imitated voices of two famous "
-                   "singers spread widely before it was taken down. <bookmark mark='e'/> The singers had not consented, and the "
-                   "recordings the model learnt from belonged to someone. <bookmark mark='f'/> The technique is the same as the "
-                   "last chapter's timbre transfer; the difference is whose sound it is.", marks="cdef")
+                   "Voice conversion keeps a performance's content and timing and gives it another singer's timbre. <bookmark mark='c'/> A few minutes of someone's recordings can now be enough, and Part 64's separation supplies clean vocals from finished records. <bookmark mark='d'/> In 2023 a song with imitated voices of two famous singers spread widely before it was taken down. <bookmark mark='e'/> The singers had not consented, and the recordings the model learnt from belonged to someone. <bookmark mark='f'/> The goal is related to the last chapter's timbre transfer, though architectures and linguistic conditioning can differ; the difference is whose sound it is.", marks="cdef")
 
     # ------------------------------------------------------------------
     def law(self):
@@ -53,7 +48,7 @@ class Voices(SoundScene):
             (r"what is settled: \ consent and pay can be built in; \ what is not: \ the law across countries \ (verify the latest)", TUNE),
         ]
         rows_scene(self, r"the law, \ for now", items,
-                   "What does the law say? <bookmark mark='b'/> A voice is not a copyrighted work; protection comes from rights of "
+                   "What does the law say? <bookmark mark='b'/> A person's vocal identity itself is generally distinct from copyright in performances, recordings and compositions; protection comes from rights of "
                    "publicity and personality, which vary by place. <bookmark mark='c'/> Tennessee's ELVIS Act of 2024 added a "
                    "person's voice to the likeness they control. <bookmark mark='d'/> Platforms label or remove imitations on "
                    "request, and some artists license their voices to such models. <bookmark mark='e'/> What is settled is that "
@@ -78,7 +73,7 @@ class Voices(SoundScene):
                 pulse(snd, boxes[i], st[k], end, buff=0.06)
         with self.voiceover(
             "The performance stays; the source and the vocal tract change, and with them who seems to be singing. In Part 8 "
-            "each voice was a set of numbers we chose. A voice converter learns those numbers from someone's recordings, and "
+            "each voice was a set of numbers we chose. An actual voice converter learns a representation from recordings; this demonstration instead switches explicit formant and source parameters, and "
             "that is where the trouble starts."
         ):
             self.play(FadeIn(note))

@@ -48,20 +48,22 @@ class Judging(SoundScene):
             g.add(VGroup(label(k, font_size=18, color=cols[k]), Rectangle(width=max(0.03, 5.0 * v / top), height=0.42, stroke_width=0, fill_color=cols[k], fill_opacity=0.85),
                          label(f"{v:.1f}", font_size=17, color=WHITE)))
         g.arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to(LEFT * 1.0 + DOWN * 0.2)
-        for r in g:
-            r[1].next_to(r[0], RIGHT, buff=0.3).align_to(g, LEFT).shift(RIGHT * 3.6)
+        for i, r in enumerate(g):
+            y = 1.8 - 0.8 * i
+            r[0].move_to([-1.55 - r[0].width / 2, y, 0])
+            r[1].move_to([-1.2 + r[1].width / 2, y, 0])
             r[2].next_to(r[1], RIGHT, buff=0.2)
-        note = label(rf"distance from {d['chunks_real']} chunks of the training strings; \ smaller is closer", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
-        head = label(r"generated against real", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        note = label(rf"8-PC handcrafted features; \ {d['chunks_real']} reference chunks; \ smaller is closer", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
+        head = label(r"distance from the synthetic reference", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         ranked = sorted(d["order"], key=lambda k: dist[k])
         with self.voiceover(
             "Here are the distances from the training strings. <bookmark mark='a'/> First a cheat: the training notes "
             f"themselves, replayed, score {say(dist['the training notes, replayed'], 1)}, the best of all, as a copying "
-            "generator would. Another phrase of the real string model, "
+            "generator would. Another phrase of the physical string model, "
             f"the yardstick: {say(dist['another bowed phrase'], 1)}. Then the generators: DDSP "
             f"{say(dist['DDSP'], 1)}, the mel spectrogram turned back into sound {say(dist['mel and Griffin-Lim'], 1)}, the "
             f"sample-by-sample network {say(dist['sample by sample'], 1)}, and white noise {say(dist['white noise'], 1)}. "
-            f"The order, closest first: {', '.join(ranked)}. It agrees with what the ear would say here; it need not always."
+            f"The order, closest first: {', '.join(ranked)}. The ordering may sound plausible here, but no listener study validates that agreement."
         ) as vo:
             self.play(FadeIn(head), FadeIn(note))
             vo.wait_until("a")
@@ -74,15 +76,11 @@ class Judging(SoundScene):
         items = [
             (r"the score is only as good as the embedding: \ it sees what the embedding was trained to see", WHITE),
             (r"one number for a whole set: \ it cannot say which sound failed, \ or how", WHITE),
-            (r"and it rewards copying: \ a generator that replays its training set scores perfectly", WHITE),
+            (r"and it rewards copying: \ replaying the exact reference collection gives zero distance by construction; replaying training data need not score perfectly against an independent reference set", WHITE),
             (r"so report it with a listening test \ (Part 58), \ a copying test \ (Part 65), \ and the prompts used", TUNE),
         ]
         rows_scene(self, r"what the distance misses", items,
-                   "The distance has the faults of every single number. <bookmark mark='b'/> It is only as good as the embedding, "
-                   "and sees only what the embedding was trained to see. <bookmark mark='c'/> It is one number for a whole set, so "
-                   "it cannot say which sound failed, or how. <bookmark mark='d'/> And it rewards copying: a generator that replays "
-                   "its training set scores perfectly. <bookmark mark='e'/> So report it with a listening test, as in Part 58, a "
-                   "copying test, as in Part 65, and the prompts that were used.", marks="bcde")
+                   "The distance has the faults of every single number. <bookmark mark='b'/> It is only as good as the embedding, and sees only what the embedding was trained to see. <bookmark mark='c'/> It is one number for a whole set, so it cannot say which sound failed, or how. <bookmark mark='d'/> And it rewards copying: replaying the exact reference collection gives zero distance by construction; replaying training data need not score perfectly against an independent reference set. <bookmark mark='e'/> So report it with a listening test, as in Part 58, a copying test, as in Part 65, and the prompts that were used.", marks="bcde")
 
     # ------------------------------------------------------------------
     def listening(self):

@@ -18,7 +18,7 @@ class Rates(SoundScene):
         rows_ = VGroup(
             label(r"a second of CD audio: \ 44,100 samples, \ 16 bits each, \ two channels: \ 1.4 million bits", font_size=20, color=WHITE),
             label(r"a model of raw sound must decide every sample: \ 16,000 a second even at a speech rate", font_size=20, color=WHITE),
-            label(r"a three-minute song: \ about three million decisions, \ each depending on the ones before", font_size=20, color=WHITE),
+            label(r"a three-minute song: \ about 2.88 million decisions at that rate, \ each depending on the ones before", font_size=20, color=WHITE),
             label(r"a phrase lasts seconds: \ to keep a melody in mind, \ a model must look back tens of thousands of samples", font_size=20, color=WHITE),
             label(r"compare a word: \ a few tokens a second of speech; \ the gap between text and sound is a factor of thousands", font_size=20, color=TUNE),
         ).arrange(DOWN, buff=0.38)
@@ -26,8 +26,8 @@ class Rates(SoundScene):
         with self.voiceover(
             "Sound is a long sequence. <bookmark mark='a'/> A second of CD audio is 44,100 samples of 16 bits in each of two "
             "channels: one point four million bits. <bookmark mark='b'/> A model that writes raw sound must decide every "
-            "sample, sixteen thousand a second even at the rate of a telephone call. <bookmark mark='c'/> A three-minute song "
-            "is about three million decisions, each depending on the ones before. <bookmark mark='d'/> And a musical phrase "
+            "sample, sixteen thousand a second at a sixteen-kilohertz mono sampling rate. <bookmark mark='c'/> A three-minute song "
+            "is about 2.88 million decisions at that rate, each depending on the ones before. <bookmark mark='d'/> And a musical phrase "
             "lasts seconds, so to keep a melody in mind the model must look back tens of thousands of samples. "
             "<bookmark mark='e'/> A text model writes a few tokens for a second of speech; the gap is a factor of thousands."
         ) as vo:

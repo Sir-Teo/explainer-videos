@@ -18,14 +18,14 @@ class Frontier(SoundScene):
         items = [
             (r"MusicGen was trained on 20,000 hours of music licensed for the purpose \ (its paper says so)", WHITE),
             (r"for several commercial song generators, \ the training data was not disclosed", WHITE),
-            (r"Monochord's generators learnt only from sounds Monochord made: \ the honest version is the small one", WHITE),
+            (r"Monochord's generators learnt only from sounds Monochord made: \ this makes the provenance of these small demonstrations inspectable", WHITE),
             (r"what a model learnt from cannot be read off its weights; \ it must be disclosed, \ or found by tests like Part 65's", TUNE),
         ]
         rows_scene(self, r"data", items,
                    "The first frontier is data. <bookmark mark='b'/> MusicGen's authors say it was trained on twenty thousand hours "
                    "of music licensed for the purpose. <bookmark mark='c'/> For several commercial song generators, the training "
                    "data was not disclosed. <bookmark mark='d'/> Monochord's generators learnt only from sounds Monochord made, "
-                   "which is why they are small: the honest version is the small one. <bookmark mark='e'/> What a model learnt from "
+                   "which is why they are small: this makes the provenance of these small demonstrations inspectable. <bookmark mark='e'/> What a model learnt from "
                    "cannot be read off its weights. It must be disclosed, or found by tests like Part 65's.", marks="bcde")
 
     # ------------------------------------------------------------------
@@ -39,7 +39,7 @@ class Frontier(SoundScene):
         rows_scene(self, r"the courts \ (dated: \ verify the latest)", items,
                    "The second is the courts, and everything here is dated. <bookmark mark='b'/> In June 2024 the major record "
                    "labels sued Suno and Udio, two song generators, for training on their recordings without a licence. "
-                   "<bookmark mark='c'/> In 2025 settlements and licensing deals between labels and both companies were announced. "
+                   "<bookmark mark='c'/> Later case status and licensing arrangements require checking the current court records and company announcements; the June 2024 filings alone do not establish today's status. "
                    "<bookmark mark='d'/> Elsewhere, collecting societies have sued over lyrics and compositions, and courts are "
                    "weighing fair use and exceptions for text and data mining. <bookmark mark='e'/> The outcome will decide who is "
                    "paid when music is learnt from: Part 60's money, again.", marks="bcde")
@@ -50,14 +50,10 @@ class Frontier(SoundScene):
             (r"form: \ generated songs drift; \ verses, \ choruses and returns are imitated, \ not planned", WHITE),
             (r"control: \ a sentence is a blunt instrument; \ musicians want to edit a bar, \ a part, \ a mix \ (Part 64's stems)", WHITE),
             (r"attribution: \ which training recordings made this output likely?", WHITE),
-            (r"evaluation: \ no metric yet tracks what listeners value", TUNE),
+            (r"evaluation: \ no single metric captures everything listeners value", TUNE),
         ]
         rows_scene(self, r"unsolved", items,
-                   "And what is unsolved. <bookmark mark='b'/> Form: generated songs drift; verses, choruses and returns are "
-                   "imitated rather than planned. <bookmark mark='c'/> Control: a sentence is a blunt instrument, and musicians want "
-                   "to edit a bar, a part or a mix, the stems of Part 64. <bookmark mark='d'/> Attribution: which training "
-                   "recordings made this output likely? <bookmark mark='e'/> And evaluation: no metric yet tracks what listeners "
-                   "value.", marks="bcde")
+                   "And what is unsolved. <bookmark mark='b'/> Form: generated songs drift; verses, choruses and returns are imitated rather than planned. <bookmark mark='c'/> Control: a sentence is a blunt instrument, and musicians want to edit a bar, a part or a mix, the stems of Part 64. <bookmark mark='d'/> Attribution: which training recordings made this output likely? <bookmark mark='e'/> And evaluation: no single metric captures everything listeners value.", marks="bcde")
 
     # ------------------------------------------------------------------
     def problem(self):
@@ -70,11 +66,7 @@ class Frontier(SoundScene):
         ])
         head = label(r"a research problem", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
-            "A research problem to end on. <bookmark mark='a'/> Render a corpus whose every recording is known, with Monochord, "
-            "in several styles. <bookmark mark='b'/> Train a token model and a diffusion model on it, at several sizes. "
-            "<bookmark mark='c'/> For each output, estimate which training recordings it draws on, and check against the truth, "
-            "which here is known. <bookmark mark='d'/> Can attribution be made accurate enough to pay on? "
-            "<bookmark mark='e'/> An answer would turn Part 60's royalty waterfall into something a generator could run."
+            "A research problem to end on. <bookmark mark='a'/> Render a corpus whose every recording is known, with Monochord, in several styles. <bookmark mark='b'/> Train a token model and a diffusion model on it, at several sizes. <bookmark mark='c'/> For each output, estimate which training recordings it draws on, and evaluate with controlled training-set interventions; knowing the dataset alone does not provide ground-truth causal attribution for every output. <bookmark mark='d'/> Can attribution be made accurate enough to pay on? <bookmark mark='e'/> An answer would turn Part 60's royalty waterfall into something a generator could run."
         ) as vo:
             self.play(FadeIn(head))
             for mark, rr in zip("abcde", rows_):
@@ -104,14 +96,8 @@ class Frontier(SoundScene):
         items = [
             (r"every generator in this part learnt only from sounds Monochord made, \ in minutes, \ on one computer", WHITE),
             (r"so each is small and each falls short: \ a sample-level net that memorized, \ a token model with forty minutes of music", WHITE),
-            (r"but every number is checkable: \ the training data is known, \ so copying and quality can be measured exactly", WHITE),
+            (r"but every number is checkable: \ the training data is known, \ so specified errors and matches against known training examples can be measured, while perceptual quality and attribution remain uncertain", WHITE),
             (r"the large systems do the same things at a scale of data that no outsider can inspect", TUNE),
         ]
         rows_scene(self, r"the smallest honest versions", items,
-                   "A word about this part's own machines. <bookmark mark='b'/> Every one learnt only from sounds Monochord made, in "
-                   "minutes, on one computer. <bookmark mark='c'/> So each is small and each falls short: a sample-level network "
-                   "that memorized its notes, a token model that heard forty minutes of piano, a thirty-thousandth of MusicGen's "
-                   "twenty thousand hours. <bookmark mark='d'/> But "
-                   "every number they produced can be checked, because the training data is known, and so copying and quality can "
-                   "be measured exactly. <bookmark mark='e'/> The large systems do the same things at a scale of data that no "
-                   "outsider can inspect, which is the frontier's real problem.", marks="bcde")
+                   "A word about this part's own machines. <bookmark mark='b'/> Every one learnt only from sounds Monochord made, in minutes, on one computer. <bookmark mark='c'/> So each is small and each falls short: a sample-level network that overfit its small corpus, a token model that heard forty minutes of piano, a thirty-thousandth of MusicGen's twenty thousand hours. <bookmark mark='d'/> But every number they produced can be checked, because the training data is known, and so specified errors and matches against known training examples can be measured, while perceptual quality and attribution remain uncertain. <bookmark mark='e'/> The large systems do the same things at a scale of data that no outsider can inspect, which is the frontier's real problem.", marks="bcde")

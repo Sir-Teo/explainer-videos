@@ -30,7 +30,7 @@ class Diffusion(SoundScene):
             "the original and noise. <bookmark mark='c'/> Train a network that, shown a noisy example and how noisy it is, "
             "guesses the noise. <bookmark mark='d'/> Then generate: start from pure noise, and remove the guessed noise step by "
             "step back to the beginning. <bookmark mark='e'/> Jascha Sohl-Dickstein and colleagues proposed it in 2015, and "
-            "Jonathan Ho and colleagues made it work in 2020; most image generators now run this way."
+            "Jonathan Ho and colleagues made it work in 2020; many image generators use related diffusion or flow methods."
         ) as vo:
             self.play(FadeIn(head))
             for mark, ln in zip("abcde", lines):
@@ -80,7 +80,7 @@ class Diffusion(SoundScene):
             pulse(snd, boxes[0], st["real0"], st["gen0"] - 0.3, buff=0.06)
             pulse(snd, boxes[1], st["gen0"], c.duration, buff=0.06)
         with self.voiceover(
-            "The drawn tones are new, not copies: each differs from its nearest training profile by "
+            "The drawn profiles are not exact matches to the finite training profiles: each differs from its nearest training profile by "
             f"{say(min(near), 1)} to {say(max(near), 1)} decibels a harmonic on average. They are bright or dark as the string's "
             "are at those pitches. A steady profile is not an instrument, but the method that drew it scales."
         ):
@@ -98,12 +98,7 @@ class Diffusion(SoundScene):
             (r"the diffusion model of Part 66 \ (a profile) \ and of Stable Audio \ (a song) \ differ in size, \ not in kind", TUNE),
         ]
         rows_scene(self, r"diffusion for music", items,
-                   "For music, diffusion runs in a latent space, a compressed code of the sound learnt by an autoencoder. "
-                   "<bookmark mark='b'/> Stable Audio, from 2023, is latent diffusion conditioned on text and on timing, and makes "
-                   "minutes of audio. <bookmark mark='c'/> Every step refines the whole piece at once, with no left-to-right "
-                   "commitment, unlike a language model. <bookmark mark='d'/> Flow matching, from 2022, learns a straighter path "
-                   "from noise to data, and needs fewer steps. <bookmark mark='e'/> This chapter's model, which draws a profile, "
-                   "and Stable Audio, which draws a song, differ in size, not in kind.", marks="bcde")
+                   "For music, diffusion runs in a latent space, a compressed code of the sound learnt by an autoencoder. <bookmark mark='b'/> Stable Audio, from 2023, is latent diffusion conditioned on text and on timing, and makes minutes of audio. <bookmark mark='c'/> Every step refines the whole piece at once, with no left-to-right commitment, unlike a language model. <bookmark mark='d'/> Flow matching, from 2022, learns a vector field connecting distributions; sampling cost depends on the formulation, solver and model. <bookmark mark='e'/> This chapter's model, which draws a profile, and Stable Audio, which draws a song, share noise-based generative ideas but differ in architecture, representation, conditioning and task.", marks="bcde")
 
     # ------------------------------------------------------------------
     def profiles(self):

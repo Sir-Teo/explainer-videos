@@ -54,7 +54,7 @@ class Marks(SoundScene):
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
         z = d["rows"]["-35"]["marked"]
         res = label(rf"the first: \ its detection score is {z:.0f}; \ the second's, \ {d['clean']:.1f}", font_size=20, color=TUNE).move_to(DOWN * 1.4)
-        with self.voiceover(f"The first carried it. To the detector the difference is plain: a score of {say(round(z))} against {say(d['clean'], 1)}. To the ear, at thirty-five decibels down under a bowed string, it should be hard to hear at all."):
+        with self.voiceover(f"The first carried it. To the detector the difference is plain: a score of {say(round(z))} against {say(d['clean'], 1)}. To the ear, at thirty-five decibels down under a bowed string, it may be hard to hear; this demonstration does not measure audibility thresholds."):
             self.play(boxes[0][0].animate.set_stroke(TUNE, width=4), FadeIn(res))
         self.wait(0.4)
         self.clear_scene()
@@ -64,7 +64,7 @@ class Marks(SoundScene):
         d = load("watermark")
         rows = d["rows"]
         g = VGroup()
-        for k, name in (("marked", r"as marked"), ("coded", r"through Part 58's coder at 64 kbit/s"), ("shifted", r"moved 37 samples"),
+        for k, name in (("marked", r"as marked"), ("coded", r"through Part 58's coder at 64 kbit/s"), ("shifted", r"moved 37 samples at 16 kHz (2.3 ms)"),
                         ("shifted_search", r"moved, \ detector searching shifts"), ("room", r"played in a room \ (searching shifts)"),
                         ("other_key", r"checked with ten wrong keys \ (the largest)")):
             g.add(VGroup(label(name, font_size=18, color=WHITE), label(f"{rows['-25'][k]:.1f}", font_size=18, color=TUNE), label(f"{rows['-35'][k]:.1f}", font_size=18, color=EAR)))
@@ -75,16 +75,16 @@ class Marks(SoundScene):
                 r[i].set_x(x)
         g.move_to(DOWN * 0.3)
         top = VGroup(label(r"25 dB down", font_size=15, color=TUNE).move_to([2.4, g.get_top()[1] + 0.45, 0]), label(r"35 dB down", font_size=15, color=EAR).move_to([4.6, g.get_top()[1] + 0.45, 0]))
-        note = label(r"detection scores \ (about 0 $\pm$ 1 by chance; \ above 5, \ a near certainty)", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.4)
+        note = label(r"standardized detector scores; \ threshold 5 is illustrative, \ not a calibrated false-alarm guarantee", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.4)
         head = label(r"what the mark survives", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         r35 = rows["-35"]
         with self.voiceover(
             f"What does it survive? <bookmark mark='a'/> A perceptual coder: through Part 58's coder at sixty-four kilobits, the "
             f"score at thirty-five decibels down is {say(r35['coded'], 1)}. <bookmark mark='b'/> A shift of thirty-seven "
-            f"samples, under a millisecond, destroys it, {say(r35['shifted'], 1)}, unless the detector searches over shifts, "
+            f"samples at sixteen kilohertz, about two point three milliseconds, sharply reduces the unaligned score, {say(r35['shifted'], 1)}, unless the detector searches over shifts, "
             f"{say(r35['shifted_search'], 1)}. Played in a room, {say(r35['room'], 1)}: the echoes smear it. Checked with ten wrong "
             f"keys, the largest score is {say(r35['other_key'], 1)} and the average {say(r35['other_key_mean'], 1)}: chance, "
-            "with the occasional high one that is why a threshold of five is used. Real marks must also "
+            "with occasional high values. A threshold of five is an illustrative choice here, not a calibrated operational false-alarm guarantee. Real marks must also "
             "survive speed changes, re-recording through a room, and people trying to remove them, and the arms race is open."
         ) as vo:
             self.play(FadeIn(head), FadeIn(top), FadeIn(note), FadeIn(g[0]))

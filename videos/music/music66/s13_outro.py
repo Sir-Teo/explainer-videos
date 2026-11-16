@@ -49,7 +49,7 @@ class Outro(SoundScene):
         d = load("ddsp")
         with self.voiceover(
             f"Row sixty-six of the ledger: the DDSP string {say(d['dist'], 1)} decibels by spectrum from the string it learnt, "
-            "and a few seconds of piano continued by a model that has heard an hour of music."
+            "and a few seconds of piano continued by a model trained on the synthetic piano corpus described earlier."
         ):
             self.play(FadeIn(head), FadeIn(led, shift=UP * 0.2))
         self.wait(0.6)
@@ -66,13 +66,7 @@ class Outro(SoundScene):
             r"judge with distances, \ listeners and copying; \ marks label, \ but only what their makers mark",
         ], title=r"What we found", font_size=19).move_to(DOWN * 0.1)
         with self.voiceover(
-            "What did we find? Raw audio is long: sixteen thousand decisions a second, each, with mu-law, a choice among two "
-            "hundred and fifty-six. <bookmark mark='a'/> A network that writes sample by sample captures detail and no "
-            "structure. <bookmark mark='b'/> Spectrograms with vocoders, and codec tokens stage on stage, give compact "
-            "representations. <bookmark mark='c'/> A language model over tokens learns texture before structure. "
-            "<bookmark mark='d'/> Diffusion draws by removing noise, and DDSP learns the controls of a synthesizer. "
-            "<bookmark mark='e'/> And generated sound is judged by distances, listeners and copying together, and marks "
-            "label only what their makers chose to mark."
+            "What did we find? Raw audio is long: sixteen thousand decisions a second, each, with mu-law, a choice among two hundred and fifty-six. <bookmark mark='a'/> A network that writes sample by sample can capture local detail while struggling with long-range structure in this small experiment. <bookmark mark='b'/> Spectrograms with vocoders, and codec tokens stage on stage, give compact representations. <bookmark mark='c'/> A language model over tokens learns texture before structure. <bookmark mark='d'/> Diffusion draws by removing noise, and DDSP learns the controls of a synthesizer. <bookmark mark='e'/> And generated sound is judged by distances, listeners and copying together, and marks label only what their makers chose to mark."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):
@@ -147,10 +141,7 @@ class Outro(SoundScene):
         q = label(r"the effect did not replicate. \ \ How does a field know what it knows?", font_size=27, color=EAR).move_to(UP * 0.4)
         nxt = VGroup(label(r"Part 67", font_size=32, color=GREY_B), label(r"Doing Research in Music", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "1993: a study of thirty-six students reports that ten minutes of Mozart raised a spatial score, and within a few "
-            "years a governor is sending classical CDs to every newborn in his state. <bookmark mark='a'/> The effect did not "
-            "replicate. How does a field know what it knows? <bookmark mark='b'/> Next time, the first part of the coda. Part "
-            "67: Doing Research in Music."
+            "1993: a study of thirty-six students reports that ten minutes of Mozart raised a spatial score, and within a few years a governor is sending classical CDs to every newborn in his state. <bookmark mark='a'/> Later research did not support a general intelligence benefit, and found that arousal and mood can explain short-lived task effects. How does a field know what it knows? <bookmark mark='b'/> Next time, the first part of the coda. Part 67: Doing Research in Music."
         ) as vo:
             self.play(FadeIn(top), FadeIn(lead))
             vo.wait_until("a")

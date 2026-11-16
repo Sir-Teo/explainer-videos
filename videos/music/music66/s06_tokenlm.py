@@ -64,9 +64,9 @@ class TokenLM(SoundScene):
         d = load("tokenlm")
         c = clip("tokenlm.two")
         boxes = choice_boxes([r"the tune, \ through the codec", r"its first 4 s, \ then the model's next 6"], width=4.4, height=0.9, buff=0.8, size=18).move_to(UP * 0.6)
-        note = label(r"both decoded by the same one-token codec, \ so the difference is the model's", font_size=17, color=GREY_A).next_to(boxes, DOWN, buff=0.6)
+        note = label(r"both decoded by the same one-token codec, \ so codec reconstruction, phase synthesis and the model all affect the result", font_size=17, color=GREY_A).next_to(boxes, DOWN, buff=0.6)
         head = label(r"continued, \ heard", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
-        with self.voiceover("Hear a chorale tune the model never learnt from, through the codec, then its first four seconds continued by the model for six more. Both pass through the same codec, so the difference is the model's."):
+        with self.voiceover("Hear a chorale tune the model never learnt from, through the codec, then its first four seconds continued by the model for six more. Both pass through the same codec, so codec reconstruction, phase synthesis and the model all affect the result."):
             self.play(FadeIn(head), FadeIn(boxes))
         st = d["starts"]
         with self.listen(c) as snd:
@@ -74,9 +74,9 @@ class TokenLM(SoundScene):
             pulse(snd, boxes[0], st["true"], st["generated"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["generated"], c.duration, buff=0.08)
         with self.voiceover(
-            "After the prompt, listen for what survives. The piano's sound must, since every token is a frame of piano; "
+            "After the prompt, listen for what survives. The training representation strongly favours piano-like spectral frames, since every token is a frame of piano; "
             "whether a tune survives, a line anyone would write down, is for your ear to judge. With forty minutes of data "
-            "and under a million weights, texture comes first and structure last; the large models learnt structure from "
+            "and under a million weights, this example may preserve texture more readily than long-range structure; the large models learnt structure from "
             "thousands of hours."
         ):
             self.play(FadeIn(note))

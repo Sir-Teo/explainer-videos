@@ -16,14 +16,14 @@ class Samples(SoundScene):
     # ------------------------------------------------------------------
     def wavenet(self):
         items = [
-            (r"WaveNet \ (van den Oord et al., \ 2016): \ predict each sample from all the samples before it", WHITE),
+            (r"WaveNet \ (van den Oord et al., \ 2016): \ predict from a finite receptive field of preceding samples", WHITE),
             (r"dilated convolutions: \ layers that look 1, \ 2, \ 4, \ 8 \dots \ samples back, \ so a stack of 30 sees thousands", WHITE),
             (r"conditioned on what to say: \ text, \ or a speaker; \ unconditioned on music, \ it noodles", WHITE),
             (r"generation is serial: \ every sample waits for the last; \ the first versions took minutes for a second", WHITE),
             (r"its lasting use was as a vocoder: \ turning a spectrogram into sound \ (Chapter 3)", TUNE),
         ]
         rows_scene(self, r"WaveNet", items,
-                   "WaveNet, from Aäron van den Oord and colleagues in 2016, predicts each sample from all the samples before it. "
+                   "WaveNet, from Aäron van den Oord and colleagues in 2016, predicts each sample from a finite receptive field of preceding samples. "
                    "<bookmark mark='b'/> Its trick for looking far back cheaply is the dilated convolution: layers that look one, "
                    "two, four, eight samples back, so that a stack of thirty sees thousands. <bookmark mark='c'/> Told what to say, "
                    "a text or a speaker, it spoke astonishingly well; left to itself on music, it noodled. <bookmark mark='d'/> "
@@ -51,7 +51,7 @@ class Samples(SoundScene):
             "probability for each of the 256 levels of the next, trained on a minute of the bowed-string model's notes. "
             "<bookmark mark='a'/> On its training notes it learns quickly to beat a blind guess of eight bits a sample. "
             f"<bookmark mark='b'/> On a phrase it never heard, {say(d['bits_test'], 1)} bits"
-            + (", worse than the blind guess: it has learnt its training notes' waveforms by heart, not how a string behaves. "
+            + (", worse than the blind guess: this small model generalizes poorly on that phrase; the loss gap alone does not prove literal memorization. "
                if d["bits_test"] > 8 else ". ")
             + "And two hundred and fifty-six samples is a sixtieth of a second, a few cycles of the lowest notes, nothing like "
             "a phrase."
@@ -79,9 +79,9 @@ class Samples(SoundScene):
             pulse(snd, boxes[0], st["prime"], st["continued"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["continued"], c.duration, buff=0.08)
         with self.voiceover(
-            "After the string, it writes whatever a sixtieth of a second of memory, learnt by heart, allows. Sixteen thousand "
+            "After the string, it writes whatever a sixtieth of a second of learned local context, allows. Sixteen thousand "
             f"decisions took about {say(round(d['seconds_to_sample_1s']))} seconds of computing here. Bigger networks, trained "
-            "for weeks on far more audio, made such continuations sound like instruments; they still could not plan a phrase."
+            "for weeks on far more audio, made such continuations sound like instruments; long-range planning remained difficult for early sample-level systems."
         ):
             self.play(FadeIn(res))
         self.wait(0.4)
@@ -90,12 +90,9 @@ class Samples(SoundScene):
     # ------------------------------------------------------------------
     def lessons(self):
         items = [
-            (r"samples carry fine detail the ear needs, \ and almost none of the structure the music has", WHITE),
+            (r"raw samples represent fine detail; \ musical structure spans very long sequences", WHITE),
             (r"so: \ split the job \ \ \ structure in a compact representation, \ detail filled in by another model", WHITE),
             (r"the rest of this part is that split: \ spectrograms, \ codec tokens, \ latents, \ synthesizer controls", TUNE),
         ]
         rows_scene(self, r"the lesson", items,
-                   "The lesson was clear by 2017. <bookmark mark='b'/> Samples carry the fine detail the ear needs, and almost "
-                   "none of the structure the music has. <bookmark mark='c'/> So split the job: plan the structure in a compact "
-                   "representation, and let another model fill in the detail. <bookmark mark='d'/> The rest of this part is that "
-                   "split, four ways: spectrograms, codec tokens, latents, and the controls of a synthesizer.", marks="bcd")
+                   "The lesson was clear by 2017. <bookmark mark='b'/> Raw samples represent musical structure implicitly across very long sequences. <bookmark mark='c'/> So split the job: plan the structure in a compact representation, and let another model fill in the detail. <bookmark mark='d'/> The rest of this part is that split, four ways: spectrograms, codec tokens, latents, and the controls of a synthesizer.", marks="bcd")

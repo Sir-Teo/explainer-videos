@@ -38,12 +38,7 @@ class Codecs(SoundScene):
         ).arrange(DOWN, buff=0.38)
         head = label(r"residual vector quantization", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Monochord's codec is the quantizer without the networks. <bookmark mark='a'/> Each sixteenth of a second of sound "
-            "is a frame of 257 numbers, its log spectrum. <bookmark mark='b'/> The first codebook approximates the frame; "
-            "the second, what the first missed; and so on: residual vector quantization, the scheme SoundStream uses. "
-            "<bookmark mark='c'/> Each codebook has 256 entries, so a stage costs eight bits a frame, at sixty-two and a half "
-            "frames a second, learnt by k-means on the piano chorales. <bookmark mark='d'/> There is no learnt encoder or "
-            "decoder: the spectrum goes in, and Griffin-Lim's phase comes out."
+            "Monochord's codec is the quantizer without the networks. <bookmark mark='a'/> Each sixteen-millisecond hop supplies a frame of 257 numbers, its log spectrum. <bookmark mark='b'/> The first codebook approximates the frame; the second, what the first missed; and so on: residual vector quantization, the scheme SoundStream uses. <bookmark mark='c'/> Each codebook has 256 entries, so a stage costs eight bits a frame, at sixty-two and a half frames a second, learnt by k-means on the piano chorales. <bookmark mark='d'/> There is no learnt encoder or decoder: the spectrum goes in, and Griffin-Lim's phase comes out."
         ) as vo:
             self.play(FadeIn(head), FadeIn(lines[0]))
             for mark, ln in zip("abcd", lines[1:]):
@@ -86,7 +81,7 @@ class Codecs(SoundScene):
         d = load("codec")
         rows = d["rows"]
         g = VGroup()
-        for k, name in (("1", r"one token a frame"), ("2", r"two"), ("4", r"four"), ("phase only", r"no tokens: \ the true spectrum, \ Griffin-Lim's phase")):
+        for k, name in (("1", r"one token a frame"), ("2", r"two"), ("4", r"four"), ("phase only", r"unquantized spectrum: \ Griffin-Lim's phase")):
             r = rows[k]
             g.add(VGroup(label(name, font_size=19, color=WHITE), label(f"{r['tokens_per_second']:.1f}" if r["tokens_per_second"] else r"--", font_size=19, color=TUNE),
                          label(f"{r['kbps']:.1f}" if r["kbps"] else r"--", font_size=19, color=BLUE), label(f"{r['dist']:.1f} dB", font_size=19, color=EAR)))
@@ -96,16 +91,17 @@ class Codecs(SoundScene):
                 r[i].set_x(x)
         g.move_to(DOWN * 0.3)
         top = VGroup(*[label(t, font_size=15, color=GREY_A).move_to([x, g.get_top()[1] + 0.5, 0]) for t, x in
-                       ((r"tokens a second", 0.4), (r"kilobits a second", 2.6), (r"spectral distance", 4.9))])
+                       ((r"tokens a second", 0.4), (r"index kbit/s", 2.6), (r"spectral distance", 4.9))])
         head = label(r"bits against fidelity", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        note = label(r"index payload only; \ codebooks and metadata excluded", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.45)
         a, b = rows["1"], rows["4"]
         with self.voiceover(
-            f"Here is the trade. One token a frame is {say(a['tokens_per_second'], 1)} tokens a second, half a kilobit; it is "
+            f"Here is the trade. One token a frame is {say(a['tokens_per_second'], 1)} tokens a second, half a kilobit for indices alone, excluding codebooks and metadata. It is "
             f"{say(a['dist'], 1)} decibels from the original by spectrum. Four tokens a frame cost four times as much and come "
-            f"to {say(b['dist'], 1)}. And even with no tokens at all, the true spectrum with an invented phase is "
-            f"{say(rows['phase only']['dist'], 1)} away: a learnt decoder, as real codecs have, is what removes that floor. "
-            "A language model over these tokens writes about sixty symbols a second, not sixteen thousand."
+            f"to {say(b['dist'], 1)}. As an unquantized reference, the true spectrum with an invented phase is "
+            f"{say(rows['phase only']['dist'], 1)} away: a learned decoder can improve perceptual reconstruction; this phase-only reference is not a universal error floor. "
+            "A language model over these tokens writes about sixty-two and a half symbols a second for one stream, not sixteen thousand."
         ):
-            self.play(FadeIn(head), FadeIn(top), LaggedStart(*[FadeIn(r) for r in g], lag_ratio=0.25), run_time=2.0)
+            self.play(FadeIn(head), FadeIn(top), FadeIn(note), LaggedStart(*[FadeIn(r) for r in g], lag_ratio=0.25), run_time=2.0)
         self.wait(0.6)
         self.clear_scene()

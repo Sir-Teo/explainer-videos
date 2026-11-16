@@ -16,8 +16,7 @@ exactly. Results are reported as they are, including the failures.
 * **1. Why raw audio is hard.** A second at three magnifications; the numbers (a CD second is 1.4 million bits; a song
   three million decisions); mu-law; equal steps against mu-law on a quiet phrase, heard (18 against 37 dB).
 * **2. One sample at a time.** WaveNet; Monochord's network over the last 256 samples, trained on 49 s of the string model
-  (about 4.3 bits a sample on its training notes, 8.4 on a phrase it never heard: worse than a blind guess, it memorized
-  waveforms); half a second continued for one second, heard (278 s of computing); the lesson: split structure from detail.
+  (about 4.3 bits a sample on its training notes, 8.4 on a phrase it never heard: worse than a blind guess on that held-out phrase; the loss gap alone does not prove literal memorization); half a second continued for one second, heard (278 s of computing); the lesson: split structure from detail.
 * **3. Spectrograms and vocoders.** A phrase as a 64-band mel spectrogram; rebuilt by pseudo-inverse and Griffin-Lim,
   heard (15.4 dB away; the true spectrum with an invented phase, 3.8); 16, 64 and 256 bands, heard (20.6, 15.4 and
   8.3 dB); neural vocoders.
@@ -42,7 +41,7 @@ exactly. Results are reported as they are, including the failures.
   6.5 (a copier scores best), another real phrase 15.7, DDSP 20.0, mel and Griffin-Lim 41.1, the sample-level network
   44.9, white noise 203; what the distance misses; listening tests for generators.
 * **10. Watermarks and detection.** A spread-spectrum mark 35 dB down, standardized against 30 unused keys; an ear question
-  (which carries it? the first: 31 against −0.8); through Part 58's coder 25.6; shifted 37 samples −0.4, unless the
+  (which carries it? the first: 31 against −0.8); through Part 58's coder 25.6; shifted 37 samples at 16 kHz (2.3 ms), −0.4, unless the
   detector searches shifts (73); in a room 1.1; ten wrong keys at most 3.4 (mean 0.7); detectors and provenance.
 * **11. Frontier: data, consent and what is unsolved.** Training data; the courts (dated); what changed for musicians; form,
   control, attribution and evaluation; the smallest honest versions; ★ research problem: can training-data attribution for
@@ -75,8 +74,8 @@ playing Part 65's chorale tunes (split by hymn tune), Part 8's voices. Everythin
 48 kHz for the film.
 
 **What the models are, and are not.** *The sample-level network* is two dense layers over 256 samples, not WaveNet's
-dilated stack; it memorized. *The codec* has no learnt encoder or decoder: k-means codebooks on log spectra and
-Griffin-Lim's phase, so its floor is the phase, not the tokens. *The token model* has one codebook stream and forty minutes
+dilated stack; it generalizes poorly on the held-out phrase. *The codec* has no learnt encoder or decoder: k-means codebooks on log spectra and
+Griffin-Lim's phase, so reconstruction error includes both phase estimation and spectral quantization; the phase-only reference is not a universal bound. *The token model* has one codebook stream and forty minutes
 of one instrument. *The diffusion model* draws a 24-number profile, not audio. *The DDSP model* learns one synthetic string
 whose timbre does not depend on loudness, and has no reverb. *The Fréchet distance* uses Part 63's hand-made embedding
 reduced to 8 directions, from few chunks, so its values are rough. *The watermark* is a textbook spread-spectrum mark; it
@@ -142,3 +141,7 @@ python -m videos.music.labs 66                                  # the lab (write
 * J. Engel, L. Hantrakul, C. Gu and A. Roberts, "DDSP: differentiable digital signal processing" (ICLR, 2020).
 * K. Kilgour et al., "Fréchet Audio Distance" (Interspeech, 2019); R. San Roman et al., "Proactive detection of voice
   cloning with localized watermarking" (AudioSeal, 2024).
+
+Review qualifications: codec frames advance every 16 ms (62.5 Hz), not every sixteenth of a second. Exact matches and FAD-style distances are reference-dependent checks, not proofs of originality, causal attribution or perceptual quality. Current lawsuit and licensing status requires checking dated primary records. The formant-voice demonstration switches explicit synthesis parameters rather than implementing a trained voice converter.
+
+Token payload rates count code indices only and exclude codebooks and metadata; the unquantized-spectrum row is a reconstruction reference, not a zero-rate codec.

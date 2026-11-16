@@ -23,10 +23,7 @@ class Spectra(SoundScene):
                     label(r"40 Hz", font_size=13, color=GREY_A).next_to(pic, LEFT, buff=0.12).align_to(pic, DOWN))
         head = label(r"a picture of sound", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "The first split is the spectrogram. Here is a bowed phrase as a mel spectrogram: the energy in sixty-four bands "
-            "spaced as the ear spaces pitch, sixty-two times a second. <bookmark mark='a'/> The phrase's notes, their "
-            "harmonics and their attacks are all visible, and there are four thousand numbers a second instead of sixteen "
-            "thousand samples. What is gone is the phase, the exact timing of every wave, and the fine detail between bands."
+            "The first split is the spectrogram. Here is a bowed phrase as a mel spectrogram: the energy in sixty-four mel-spaced bands, an approximate perceptual frequency scale, sixty-two times a second. <bookmark mark='a'/> The phrase's notes, their harmonics and their attacks are all visible, and there are four thousand numbers a second instead of sixteen thousand samples. What is gone is the phase, the exact timing of every wave, and the fine detail between bands."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pic), FadeIn(ly))
             vo.wait_until("a")
@@ -66,11 +63,7 @@ class Spectra(SoundScene):
             (r"text-to-speech has worked this way since about 2018; \ much music generation too", TUNE),
         ]
         rows_scene(self, r"vocoders", items,
-                   "The fix is to learn the way back. <bookmark mark='b'/> A vocoder is a network that turns a mel spectrogram "
-                   "into sound, trained on many pairs of spectrogram and sound. <bookmark mark='c'/> WaveNet itself served as one "
-                   "from 2017, and then faster ones: WaveGlow, MelGAN, and HiFi-GAN in 2020, quicker than real time. "
-                   "<bookmark mark='d'/> So a generator can work on pictures: draw a spectrogram, then let a vocoder make it sound. "
-                   "<bookmark mark='e'/> Text-to-speech has worked this way since about 2018, and much music generation too.",
+                   "The fix is to learn the way back. <bookmark mark='b'/> A neural vocoder can turn acoustic features such as a mel spectrogram into sound; vocoders also include non-neural systems, trained on many pairs of spectrogram and sound. <bookmark mark='c'/> WaveNet itself served as one from 2017, and then faster ones: WaveGlow, MelGAN, and HiFi-GAN in 2020, quicker than real time. <bookmark mark='d'/> So a generator can work on pictures: draw a spectrogram, then let a vocoder make it sound. <bookmark mark='e'/> Text-to-speech has worked this way since about 2018, and much music generation too.",
                    marks="bcde")
 
     # ------------------------------------------------------------------

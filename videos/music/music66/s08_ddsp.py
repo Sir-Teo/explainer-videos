@@ -22,7 +22,7 @@ class Ddsp(SoundScene):
             (r"the synthesizer: \ 40 harmonics of the pitch, \ each with its own level, \ plus noise in 16 bands \ (Parts 3 and 51)", WHITE),
             (r"the network: \ from pitch and loudness, \ 250 times a second, \ to the harmonics' levels and the noise's", WHITE),
             (r"the loss: \ compare the synthesized and the real spectra at five resolutions; \ the synthesizer is differentiable, \ so the error flows back", WHITE),
-            (r"tiny, \ fast, \ and controllable: \ any pitch curve and loudness curve can drive it", TUNE),
+            (r"tiny, \ fast, \ and controllable: \ pitch and loudness curves can drive it within practical sampling and synthesis limits", TUNE),
         ]
         rows_scene(self, r"the fourth idea", items,
                    "The fourth idea keeps the synthesizer. <bookmark mark='b'/> DDSP, from Jesse Engel and colleagues at Google in "
@@ -31,7 +31,7 @@ class Ddsp(SoundScene):
                    "network turns pitch and loudness, two hundred and fifty times a second, into those levels. "
                    "<bookmark mark='e'/> It learns by comparing the synthesized and the real spectra at five resolutions; because "
                    "every step of the synthesizer is differentiable, the error flows back to the network. <bookmark mark='f'/> The "
-                   "result is tiny, fast and controllable: any pitch curve and loudness curve can drive it.", marks="bcdef")
+                   "result is tiny, fast and controllable: pitch and loudness curves can drive it within practical sampling and synthesis limits.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def training(self):
@@ -131,7 +131,7 @@ class Ddsp(SoundScene):
             window(snd, r"vibrato, \ then a glide", kind="synthesized", detail=r"the DDSP string", corner=DL, tag_corner=DR)
             pulse(snd, boxes[0], st["vibrato"], st["glide"] - 0.4, buff=0.08)
             pulse(snd, boxes[1], st["glide"], c.duration, buff=0.08)
-        with self.voiceover("Neither gesture was in its training notes, each of which held one pitch at one bow. The synthesizer's harmonics follow the pitch exactly, which is why such models generalize where sample-by-sample ones do not."):
+        with self.voiceover("Neither gesture was in its training notes, each of which held one pitch at one bow. The synthesizer's harmonics follow the pitch exactly, providing an explicit pitch relationship; the predicted timbre can still fail outside the training range."):
             self.play(FadeIn(note))
         self.wait(0.4)
         self.clear_scene()
