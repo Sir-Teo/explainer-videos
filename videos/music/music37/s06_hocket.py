@@ -69,8 +69,7 @@ class Hocket(SoundScene):
                 pulse(snd, stage[i], st[k], end, buff=0.08)
         ans = label(r"alone, \ each part is a stutter; \ together, \ one melody", font_size=22, color=TUNE).to_edge(DOWN, buff=0.35)
         with self.voiceover(
-            "Alone, each part is a stutter of notes and silences. Together, they are one melody, and the join is "
-            "inaudible. Andean siku bands are large, and every pair of players shares its melodies this way."
+            'Alone, each part is a stutter of notes and silences. Together, they are one melody, and the shared melody may fuse perceptually, depending on timbre, timing and attention. Andean siku bands are large, and every pair of players shares its melodies this way.'
         ):
             self.play(FadeOut(stage), FadeIn(ans))
         self.wait(0.4)
@@ -135,13 +134,13 @@ class Hocket(SoundScene):
             (r"breath: \ a pipe or horn player can rest between their notes", WHITE),
             (r"speed: \ two players together can play faster than either alone", WHITE),
             (r"sound: \ similar pipes, \ close in pitch, \ fuse into one line in the ear \ (Part 16)", WHITE),
-            (r"society: \ no one owns the melody; \ it exists only if everyone plays", TUNE),
+            (r"society: \ the complete line depends on coordinated contributions; that says nothing by itself about authorship or social ownership; \ it exists only if everyone plays", TUNE),
             (r"the next chapters hear an instrument that does this inside one player's hands", GREY_A),
         ]
         rows_scene(self, r"why hocket?", items,
                    "Why make music this way? <bookmark mark='b'/> For breath: a pipe player can rest between notes. "
                    "<bookmark mark='c'/> For speed: two players together can play faster than either alone. "
                    "<bookmark mark='d'/> For sound: similar pipes close in pitch fuse into one line in the ear, as Part 16 "
-                   "explained. <bookmark mark='e'/> And for society: no one owns the melody, which exists only if everyone plays. "
+                   "explained. <bookmark mark='e'/> And for society: the complete line depends on coordinated contributions; that says nothing by itself about authorship or social ownership, which exists only if everyone plays. "
                    "<bookmark mark='f'/> The next chapters hear an instrument on which one player's two hands do this, and the "
                    "ear does the rest.", marks="cdef")

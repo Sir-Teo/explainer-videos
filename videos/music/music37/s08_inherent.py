@@ -27,7 +27,7 @@ class Inherent(SoundScene):
         rows_scene(self, r"melodies nobody plays", items,
                    "In 1959 the young Austrian scholar Gerhard Kubik began studying the amadinda, a large xylophone of the "
                    "Buganda kingdom in Uganda. <bookmark mark='b'/> Two players interlock at great speed, each doubling their "
-                   "notes in octaves, and neither plays a melody. <bookmark mark='c'/> Yet listeners, and the players too, hear "
+                   "notes in octaves, and neither alone plays the composite inherent pattern. <bookmark mark='c'/> Yet listeners, and the players too, hear "
                    "melodies that are in nobody's part. <bookmark mark='d'/> Kubik called them inherent patterns, and in amadinda "
                    "music a third player picks one out and doubles it. <bookmark mark='e'/> The same happens between the mbira's "
                    "hands, and between its players.", marks="bcde")
@@ -139,10 +139,10 @@ class Inherent(SoundScene):
         with self.listen(c) as snd:
             window(snd, r"both parts, \ slowly", detail=r"tine models", corner=DL, tag_corner=DR)
             flash(snd, roll.notes, [nn[1] * d["slow"] for nn in mel], hot=EAR, base=WHITE)
-        ans = label(r"slowly, \ one leaping line: \ the inherent melody needs speed", font_size=22, color=TUNE).to_edge(DOWN, buff=0.8)
+        ans = label(r"slower playback may weaken the high stream \\ attention and experience also matter", font_size=22, color=TUNE).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Slowly, most listeners hear one leaping line, and melody B is hard to find. The inherent pattern needs speed. "
-            "That is one reason amadinda and mbira music is played as fast as it is."
+            "At this slower rate the high line may be less compelling, although listeners can still attend to it. This informal example measures no majority response or necessary speed threshold. "
+            "Performance tempo also belongs to musical and social practice; this synthesis does not establish its cause."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -175,9 +175,4 @@ class Inherent(SoundScene):
             (r"Part 30 met Reich's phasing; \ Part 42 composes with these ideas", GREY_A),
         ]
         rows_scene(self, r"composers who listened", items,
-                   "Composers listened. <bookmark mark='b'/> Steve Reich studied drumming in Ghana in 1970, and his Drumming "
-                   "followed in 1971. <bookmark mark='c'/> His phase pieces make inherent patterns appear as two identical parts "
-                   "slowly drift apart. <bookmark mark='d'/> György Ligeti heard Simha Arom's Central African recordings in the "
-                   "nineteen-eighties, and his piano Études owe them much. <bookmark mark='e'/> Both took the idea of patterns "
-                   "that emerge from parts, not the music itself. <bookmark mark='f'/> Part 30 met Reich's phasing, and Part 42 "
-                   "composes with these ideas.", marks="cdef")
+                   "Composers listened. <bookmark mark='b'/> Steve Reich studied drumming in Ghana in 1970, and his Drumming followed in 1971. <bookmark mark='c'/> His phase pieces make inherent patterns appear as two identical parts slowly drift apart. <bookmark mark='d'/> György Ligeti heard Simha Arom's Central African recordings in the nineteen-eighties, and his piano Études owe them much. <bookmark mark='e'/> Both transformed techniques and material encountered through particular musicians and recordings; influence and attribution require the specific historical context. <bookmark mark='f'/> Part 30 met Reich's phasing, and Part 42 composes with these ideas.", marks="cdef")

@@ -33,14 +33,7 @@ class Metrics(SoundScene):
             (r"\textbf{centrality}: \ how close a rhythm lies, \ on average, \ to its relatives", GREY_A),
         ]
         rows_scene(self, r"five ways to measure a timeline", items,
-                   "How might one measure a timeline? Here are five measures from the mathematical study of rhythm. "
-                   "<bookmark mark='b'/> Evenness: how far the strokes lie from perfectly even spacing, zero meaning perfectly even. "
-                   "<bookmark mark='c'/> Whether the rhythm is Euclidean: whether Bjorklund's algorithm from Part 33 produces it, "
-                   "up to rotation. <bookmark mark='d'/> Oddity, a property the ethnomusicologist Simha Arom found throughout "
-                   "Central African music: no two strokes cut the cycle into two equal halves. <bookmark mark='e'/> Off-beatness, "
-                   "from the computer scientist Godfried Toussaint, counting strokes that fall on pulses no regular polygon "
-                   "through the starting pulse can reach. <bookmark mark='f'/> And centrality: how close a rhythm lies, on "
-                   "average, to its relatives.", marks="cdef")
+                   "How might one measure a timeline? Here are five measures from the mathematical study of rhythm. <bookmark mark='b'/> Evenness: how far the strokes lie from perfectly even spacing, zero meaning perfectly even. <bookmark mark='c'/> Whether the rhythm is Euclidean: whether Bjorklund's algorithm from Part 33 produces it, up to rotation. <bookmark mark='d'/> Oddity, a property the ethnomusicologist Simha Arom found in particular Central African repertoires: no two strokes cut the cycle into two equal halves. <bookmark mark='e'/> Off-beatness, from the computer scientist Godfried Toussaint, counting strokes that fall on pulses no regular polygon through the starting pulse can reach. <bookmark mark='f'/> And centrality: how close a rhythm lies, on average, to its relatives.", marks="cdef")
 
     # ------------------------------------------------------------------
     def table(self):
@@ -106,13 +99,7 @@ class Metrics(SoundScene):
                       label(r"the standard pattern strikes three of them", font_size=19, color=TUNE),
                       label(r"a stroke there belongs to no beat grid \ in two, \ three, \ four or six", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 3.0)
         with self.voiceover(
-            "Off-beatness deserves a picture. Place twelve pulses on a circle and draw every regular polygon that passes "
-            "through the first pulse: <bookmark mark='a'/> the diameter, the triangle, the square, the hexagon. Those are the "
-            "grids of two, three, four and six beats a cycle. <bookmark mark='b'/> They reach every pulse except four: the "
-            "second, sixth, eighth and twelfth, which lie one, five, seven and eleven pulses after the start, numbers that "
-            "share no factor with twelve. <bookmark mark='c'/> A "
-            "stroke on one of those pulses belongs to none of the beat grids. The standard pattern strikes three of the four, "
-            "which is part of why it feels as though it is always leaning against the beat, whichever beat you choose."
+            "Off-beatness deserves a picture. Place twelve pulses on a circle and draw the proper regular beat polygons through the first pulse, excluding the full twelve-sided pulse grid: <bookmark mark='a'/> the diameter, the triangle, the square, the hexagon. Those are the grids of two, three, four and six beats a cycle. <bookmark mark='b'/> They reach every pulse except four: the second, sixth, eighth and twelfth, which lie one, five, seven and eleven pulses after the start, numbers that share no factor with twelve. <bookmark mark='c'/> A stroke on one of those pulses belongs to none of the beat grids. The standard pattern strikes three of the four, which is part of why it feels as though it is always leaning against the beat, whichever beat you choose."
         ) as vo:
             self.play(FadeIn(circ), FadeIn(ticks), FadeIn(nums))
             vo.wait_until("a")
@@ -174,9 +161,9 @@ class Metrics(SoundScene):
             "<bookmark mark='a'/> He measured the distance between two rhythms by the swap distance: the fewest swaps of a stroke "
             "with a neighbouring empty pulse that turn one into the other. Son and rumba clave are one swap apart. "
             "<bookmark mark='b'/> Add up each pattern's distances to the other five. Son clave's total is six, the smallest; "
-            "bossa nova's is eight; the rest are ten or twelve. Son clave sits at the centre of its family, the pattern from "
+            "bossa nova's is eight; the rest are ten or twelve. Son clave sits at the centre of these six selected patterns under this particular distance, the pattern from "
             "which the others are fewest steps away. Toussaint called it the rhythm that conquered the world, and his "
-            "suggestion is that a central rhythm is the easiest to vary."
+            "suggestion is that centrality may be useful for variation; this selected comparison does not prove why a rhythm spread or what listeners prefer."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pair.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")

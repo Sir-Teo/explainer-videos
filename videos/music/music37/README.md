@@ -153,3 +153,9 @@ python -m videos.music.labs 37                                  # the lab (write
   of music revealed by a cross-cultural comparison of rhythm priors in 15 countries", *Nature Human Behaviour* (2024).
 * Part 9 for bars and membranes; Part 11 for meter; Part 16 for streams; Part 33 for Euclidean rhythms; Part 36 for
   interlocking parts.
+
+## Interpretation limits
+
+Deep interval counts do not by themselves identify a downbeat. Centrality refers to six selected patterns under a specified distance, not every five-stroke rhythm or a causal account of popularity. Off-beatness excludes the full pulse polygon. The simplified cantilever model is not a measured spectrum of every mbira. The inherent melody was constructed in the parts; no population listening result or necessary tempo threshold is established. Traditional teaching and ensemble reference systems vary. The samba and kalimba histories involve earlier recordings, existing names and regional practices. Linda’s 2006 settlement is not presented as his family’s first-ever payment. Invented unequal proportions illustrate a task rather than document a tradition.
+
+The son ensemble uses sixteenth-note subdivisions: its standard 3–2 clave spans 32 subdivisions (two 4/4 bars), with three strokes in the first bar and two in the second. Bass, conga and guitar align to that same clock.

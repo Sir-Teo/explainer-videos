@@ -464,7 +464,8 @@ SON_CHORDS = [(48, [60, 64, 67]), (53, [60, 65, 69]), (55, [59, 62, 67]), (53, [
 
 
 def compute_son() -> dict:
-    son = T.onsets(T.TIMELINES["son clave (16)"])
+    # The textbook's 16 eighth-note slots span TWO 4/4 bars. Other parts use sixteenths.
+    son = [2 * o for o in T.onsets(T.TIMELINES["son clave (16)"])]
     order = [("clave", 2), ("bass", 2), ("conga", 2), ("guitar", 2), ("all", 4)]
     entries, t = {}, 0.0
     for name, c in order:
@@ -472,7 +473,7 @@ def compute_son() -> dict:
         t += c * 16 * P16
     total = int(round(t / (16 * P16)))
     parts = []
-    place(parts, cached(("clave",), lambda: DK.clave()), cycle_times(son, total, P16, 16), -4.0)
+    place(parts, cached(("clave",), lambda: DK.clave()), cycle_times(son, total // 2, P16, 32), -4.0)
     c0 = int(round(entries["bass"] / (16 * P16)))
     for c in range(c0, total):
         t0 = c * 16 * P16
@@ -495,7 +496,7 @@ def compute_son() -> dict:
         for o, k in gpat:
             parts.append((arr(pluck(ch[k] + 12, 0.45)), t0 + o * P16, -6.0))
     c = bounce(parts, t + 1.2)
-    return {"entries": entries, "order": [n for n, _ in order], "chords": ["C", "F", "G", "F"], "clave": son, "guitar": gpat,
+    return {"entries": entries, "order": [n for n, _ in order], "chords": ["C", "F", "G", "F"], "clave": son, "clave_period": 32, "guitar": gpat,
             "pulse": P16, "cycles": total,
             "clips": {"layers": save("son.layers", c, detail="a son texture of ours over son clave: bass anticipating each chord, conga, and a guitar figure, entering in turn; plucked-string, bar and membrane models")}}
 

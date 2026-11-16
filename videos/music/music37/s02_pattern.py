@@ -183,13 +183,7 @@ class Pattern(SoundScene):
                       label(r"a \textit{deep} set \ (Winograd, \ 1966): \ each distance has its own frequency", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.35, aligned_edge=LEFT).move_to(RIGHT * 3.3)
         head = label(r"how often each distance occurs between two strokes", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Here is a subtler likeness. Take every pair of the bell's seven strokes, twenty-one pairs, and measure the "
-            "distance between them around the cycle, from one to six pulses. <bookmark mark='a'/> Distance one occurs twice, "
-            "two five times, three four times, four three times, five six times, and six once. Every distance occurs a "
-            "different number of times. <bookmark mark='b'/> The major scale's intervals, counted the same way in semitones, "
-            "have exactly the same counts: it has six fifths and only one tritone. A set with this property is called deep, "
-            "after Terry Winograd's 1966 study of such scales. Each distance then has its own weight, so that a listener can, in "
-            "principle, tell where in the cycle they are."
+            "Here is a subtler likeness. Take every pair of the bell's seven strokes, twenty-one pairs, and measure the distance between them around the cycle, from one to six pulses. <bookmark mark='a'/> Distance one occurs twice, two five times, three four times, four three times, five six times, and six once. Every distance occurs a different number of times. <bookmark mark='b'/> The major scale's intervals, counted the same way in semitones, have exactly the same counts: it has six fifths and only one tritone. A set with this property is called deep, after Terry Winograd's 1966 study of such scales. Each distance has a different count, an exact combinatorial property. These rotation-invariant counts do not by themselves locate the downbeat or demonstrate how listeners orient in the cycle."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*[g[2] for g in bars])), FadeIn(xl))
             vo.wait_until("a")

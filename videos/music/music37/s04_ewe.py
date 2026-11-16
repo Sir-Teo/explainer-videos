@@ -119,12 +119,7 @@ class Ewe(SoundScene):
             (r"Part 11's meter, \ distributed across an ensemble", GREY_A),
         ]
         rows_scene(self, r"a part is a relation", items,
-                   "How do the players stay together? <bookmark mark='b'/> Each knows a part by where it falls against the bell, "
-                   "not by counting pulses. <bookmark mark='c'/> The parts are short and repeat; the music lies in how they "
-                   "interlock. <bookmark mark='d'/> A part played alone can sound like a different rhythm altogether: its "
-                   "meaning is its relation to the others. <bookmark mark='e'/> The bell is the one fixed point; teachers stress "
-                   "that to lose the bell is to lose your place. <bookmark mark='f'/> Part 11's meter, here distributed across a "
-                   "whole ensemble.", marks="cdef")
+                   "How do the players stay together? <bookmark mark='b'/> Parts are commonly learned through their relation to the bell, dance and other parts; explicit counting and teaching methods also vary. <bookmark mark='c'/> The parts are short and repeat; the music lies in how they interlock. <bookmark mark='d'/> A part played alone can sound like a different rhythm altogether: its meaning is its relation to the others. <bookmark mark='e'/> The bell is the one fixed point; teachers stress that to lose the bell is to lose your place. <bookmark mark='f'/> Part 11's meter, here distributed across a whole ensemble.", marks="cdef")
 
     # ------------------------------------------------------------------
     def lead(self):

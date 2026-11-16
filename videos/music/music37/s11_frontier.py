@@ -72,8 +72,7 @@ class Frontier(SoundScene):
             self.play(FadeOut(cover), FadeIn(props))
         ans = label(r"steady, \ but on a different grid", font_size=22, color=TUNE).next_to(props, UP, buff=0.4)
         with self.voiceover(
-            "To most listeners raised on equal subdivisions the second sounds lopsided at first, and then steady, but on a "
-            "different grid. To musicians who grew up with it, the uneven grid is simply the right one."
+            'Listeners accustomed to equal subdivisions may hear the second as uneven, or settle onto its repeating grid; responses vary and were not measured here. Experienced musicians may learn particular unequal templates; our invented proportions are not a claim about any one tradition’s correct timing.'
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -135,6 +134,6 @@ class Frontier(SoundScene):
                    "and central Africa from the nineteen-twenties, and his archive, the International Library of African Music, "
                    "is in Makhanda in South Africa. <bookmark mark='c'/> Projects now return copies of such recordings to the "
                    "communities they came from. <bookmark mark='d'/> Solomon Linda's Mbube, recorded in 1939, became a world hit "
-                   "under other names, and his family were paid only after a settlement in 2006. <bookmark mark='e'/> Credit, "
+                   "under other names, and disputes over credit and royalties led to a major settlement for his heirs in 2006. <bookmark mark='e'/> Credit, "
                    "consent and royalties are part of studying music; the people are not data. <bookmark mark='f'/> Part 67 sets "
                    "out how to do research with traditions well.", marks="cdef")

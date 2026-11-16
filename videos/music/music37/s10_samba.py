@@ -24,7 +24,7 @@ class Samba(SoundScene):
     def history(self):
         items = [
             (r"samba took shape in Rio de Janeiro around 1900, \ among Afro-Brazilian families from Bahia", WHITE),
-            (r"1917: \ \textit{Pelo Telefone}, \ registered by Donga, \ the first recorded samba", WHITE),
+            (r"1917: \ \textit{Pelo Telefone}, \ registered by Donga, \ a landmark early commercially recorded samba", WHITE),
             (r"from 1928 the \textit{escolas de samba}, \ samba schools, \ were founded to parade at Carnival", WHITE),
             (r"a \textit{bateria}, \ the percussion section, \ can number two or three hundred players", TUNE),
             (r"many layers, \ each simple, \ locked to one beat", GREY_A),
@@ -32,7 +32,7 @@ class Samba(SoundScene):
         rows_scene(self, r"samba", items,
                    "Across the Atlantic in Brazil, a different ensemble music grew. <bookmark mark='b'/> Samba took shape in Rio "
                    "de Janeiro around 1900, among Afro-Brazilian families who had come from Bahia. <bookmark mark='c'/> In 1917 "
-                   "Pelo Telefone, registered by the composer Donga, became the first recorded samba. <bookmark mark='d'/> From "
+                   "Pelo Telefone, registered by the composer Donga, became a landmark early commercially recorded samba, often called the first, although earlier recordings and genre labels complicate that claim. <bookmark mark='d'/> From "
                    "1928 samba schools were founded to parade at Carnival, <bookmark mark='e'/> and today a school's bateria, its "
                    "percussion section, can number two or three hundred players. <bookmark mark='f'/> Many layers, each simple, "
                    "all locked to one beat.", marks="cdef")

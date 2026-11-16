@@ -47,6 +47,11 @@ def test_clave_and_son():
     assert c["three_two"] == [0, 3, 6, 10, 12] and c["two_three"] == [2, 4, 8, 11, 14]
     s = load("son")
     assert s["chords"] == ["C", "F", "G", "F"]
+    # In sixteenth-note units, 3–2 son clave spans two 4/4 bars.
+    assert s["clave_period"] == 32
+    assert s["clave"] == [0, 6, 12, 20, 24]
+    assert [o for o in s["clave"] if o < 16] == [0, 6, 12]
+    assert [o - 16 for o in s["clave"] if o >= 16] == [4, 8]
 
 
 def test_variation_37():

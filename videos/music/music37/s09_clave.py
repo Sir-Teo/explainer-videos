@@ -115,8 +115,11 @@ class Clave(SoundScene):
             nxt = d["chords"][(k + 1) % 4]
             dd = Dot([x12, box.get_bottom()[1] + 0.25, 0], radius=0.09, color=EAR)
             marks.add(dd)
-            marks.add(label(nxt, font_size=16, color=EAR).next_to(dd, DOWN, buff=0.1))
-        cl = pat_row(["x" if i in d["clave"] else "." for i in range(16)] * 4, cell=0.175, name=r"clave", size=16).next_to(bars, DOWN, buff=0.9)
+            marks.add(label(nxt, font_size=16, color=EAR).next_to(box, DOWN, buff=0.12).set_x(x12))
+        cl = pat_row(["x" if i % d["clave_period"] in d["clave"] else "." for i in range(64)], cell=0.175, name=r"clave", size=16)
+        cl[1].stretch_to_fit_width(bars.width)
+        cl.arrange(RIGHT, buff=0.35).next_to(bars, DOWN, buff=0.9)
+        cl.shift(RIGHT * (bars.get_center()[0] - cl[1].get_center()[0]))
         side = VGroup(label(r"blue: \ the bass on the `and' of beat 2", font_size=19, color=BLUE),
                       label(r"pink: \ on beat 4, \ already the \textit{next} chord's root, \ held over the bar line", font_size=19, color=EAR),
                       label(r"no bass note on beat 1: \ the \textit{bajo anticipado}", font_size=19, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
@@ -139,24 +142,26 @@ class Clave(SoundScene):
     def son(self):
         d = load("son")
         c = clip("son.layers")
-        pats = {"clave": d["clave"], "bass": [6, 12], "conga": [4, 8, 14, 15], "guitar": [o for o, _ in d["guitar"]]}
+        n = d["clave_period"]
+        twice = lambda onsets: [bar * 16 + o for bar in range(2) for o in onsets]
+        pats = {"clave": d["clave"], "bass": twice([6, 12]), "conga": twice([4, 8, 14, 15]), "guitar": twice([o for o, _ in d["guitar"]])}
         names = {"clave": r"clave", "bass": r"bass", "conga": r"conga", "guitar": r"guitar"}
-        rows_ = VGroup(*[pat_row(["x" if i in pats[k] else "." for i in range(16)], cell=0.42, color=LAYER_C[k], name=names[k], size=20) for k in ("clave", "bass", "conga", "guitar")]).arrange(DOWN, buff=0.3, aligned_edge=RIGHT).move_to(UP * 0.3)
+        rows_ = VGroup(*[pat_row(["x" if i in pats[k] else "." for i in range(n)], cell=0.28, color=LAYER_C[k], name=names[k], size=20) for k in ("clave", "bass", "conga", "guitar")]).arrange(DOWN, buff=0.3, aligned_edge=RIGHT).move_to(UP * 0.3)
         chords = label(r"chords: \ C, \ F, \ G, \ F, \ one a bar", font_size=19, color=GREY_A).to_edge(DOWN, buff=1.1)
-        head = label(r"a son texture of ours, \ over the clave", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
+        head = label(r"a son texture of ours, \ two bars per clave cycle", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Now a son texture of our own, built over three-two clave: the clave alone, then the anticipated bass, a conga "
             "with a slap on beat two and two open tones at the end of the bar, and a guitar figure between the beats, each "
             "entering in turn. Every part fits the clave, and none of them doubles it."
         ):
             self.play(FadeIn(head), FadeIn(rows_), FadeIn(chords))
-        cyc = 16 * d["pulse"]
+        cyc = n * d["pulse"]
         with self.listen(c) as snd:
             window(snd, r"clave, \ bass, \ conga, \ guitar", detail=r"bar, \ string and membrane models", corner=DL, tag_corner=DR)
             for i, k in enumerate(("clave", "bass", "conga", "guitar")):
                 t0 = d["entries"][k] if k != "clave" else 0.0
-                ncyc = int(round(d["cycles"] - t0 / cyc))
-                flash_cells(snd, rows_[i].cells, pats[k], t0, d["pulse"], ncyc, 16, color=LAYER_C[k])
+                ncyc = int(round(d["cycles"] * 16 / n - t0 / cyc))
+                flash_cells(snd, rows_[i].cells, pats[k], t0, d["pulse"], ncyc, n, color=LAYER_C[k])
         self.wait(0.3)
         self.clear_scene()
 

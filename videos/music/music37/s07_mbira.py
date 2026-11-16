@@ -68,12 +68,7 @@ class Mbira(SoundScene):
         g = VGroup(left, spec, sl)
         g.shift(DOWN * 0.2)
         with self.voiceover(
-            "A key held at one end vibrates like a diving board. Its first three shapes have frequencies in the ratio one, "
-            "six point two seven, and seventeen point five five, from the same beam equation as Part 9's free bar, with one "
-            "end clamped. <bookmark mark='a'/> So the second partial lies more than two and a half octaves above the first, "
-            "far from where a string's harmonics would be, and it dies quickly. What remains is almost a pure tone, which is "
-            "why mbira notes blend so easily. The buzzers add the opposite: a wash of noise that follows each note. Hear one "
-            "tine, plain and then with its buzz."
+            "A key held at one end vibrates like a diving board. An ideal uniform cantilever beam, the simplified model used here, has its first three mode frequencies in the ratio one, six point two seven, and seventeen point five five, from the same beam equation as Part 9's free bar, with one end clamped. <bookmark mark='a'/> So the second partial lies more than two and a half octaves above the first, far from where a string's harmonics would be, and it dies quickly. Our decaying model leaves a nearly sinusoidal tail; real shaped tines and resonators have instrument-specific partials, so this is not a universal account of mbira blending. The buzzers add the opposite: a wash of noise that follows each note. Hear one tine, plain and then with its buzz."
         ) as vo:
             self.play(FadeIn(left))
             vo.wait_until("a")
@@ -165,16 +160,11 @@ class Mbira(SoundScene):
     # ------------------------------------------------------------------
     def travels(self):
         items = [
-            (r"in the 1950s Hugh Tracey made a factory-built lamellophone, \ and named it the kalimba", WHITE),
+            (r"Hugh Tracey commercialized a lamellophone \\ using an existing regional name, kalimba", WHITE),
             (r"from the 1970s Thomas Mapfumo's \textit{chimurenga} music moved mbira patterns to electric guitar", WHITE),
             (r"the mbira was discouraged by missionaries and colonial rule, \ and revived as a sign of independence", WHITE),
             (r"Shona teachers have taught mbira in the USA and Europe since the 1970s", TUNE),
             (r"Part 40 follows such patterns into the popular song: \ riffs and loops", GREY_A),
         ]
         rows_scene(self, r"the mbira travels", items,
-                   "The mbira has travelled. <bookmark mark='b'/> In the nineteen-fifties Hugh Tracey made a factory-built "
-                   "lamellophone and named it the kalimba. <bookmark mark='c'/> From the nineteen-seventies Thomas Mapfumo's "
-                   "chimurenga music moved mbira patterns onto the electric guitar. <bookmark mark='d'/> The mbira had been "
-                   "discouraged by missionaries and colonial rule, and its revival became a sign of independence. "
-                   "<bookmark mark='e'/> Shona teachers have taught it in the United States and Europe since the "
-                   "nineteen-seventies. <bookmark mark='f'/> Part 40 follows such patterns into the popular song, as riffs and loops.", marks="cdef")
+                   "The mbira has travelled. <bookmark mark='b'/> In the nineteen-fifties Hugh Tracey commercialized a factory-built lamellophone under the name kalimba, drawing on existing regional instrument names and designs. <bookmark mark='c'/> From the nineteen-seventies Thomas Mapfumo's chimurenga music moved mbira patterns onto the electric guitar. <bookmark mark='d'/> The mbira had been discouraged by missionaries and colonial rule, and its revival became a sign of independence. <bookmark mark='e'/> Shona teachers have taught it in the United States and Europe since the nineteen-seventies. <bookmark mark='f'/> Part 40 follows such patterns into the popular song, as riffs and loops.", marks="cdef")
