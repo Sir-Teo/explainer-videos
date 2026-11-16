@@ -1,6 +1,6 @@
 # Part 30 — Sound Itself
 
-Review date: 16 November 2026. Source review complete; sampled-preview verification in progress.
+Review date: 16 November 2026. Source and sampled-preview review complete; final production remains open.
 
 ## Changes
 
@@ -8,7 +8,10 @@ Qualify tape transformations, Cage’s anechoic anecdote, studio control limits,
 
 ## Verification
 
-22 targeted tests passed; lab and source-length checks passed. Three native stills inspected; revised captions rendered and inspected again. Full chapter previews queued. Logs and generated artifacts are local under `/workspace/scratch/` and `renders/qa/`.
+- Chapter/module/audio/loader tests: 22 passed; `/workspace/scratch/music30-tests.log`.
+- Lab and length-estimate logs: `/workspace/scratch/music30-lab.log`, `/workspace/scratch/music30-length.log`.
+- 3 selected native 1920×1080 stills inspected; `/workspace/scratch/music30-native/`.
+- All 11 chapter preview sheets inspected; 11 sound cases and 17 listening-window motion checks pass. Silent-narration previews: 39.75 minutes. Source hashes and freshness verified; identities: `renders/qa/music30/source-receipt.json`.
 
 ## Production gates still open
 

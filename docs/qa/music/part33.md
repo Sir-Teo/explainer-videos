@@ -1,6 +1,6 @@
 # Part 33 — The Mathematics of Rhythm and Scale
 
-Review date: 16 November 2026. Source review complete; sampled-preview verification in progress.
+Review date: 16 November 2026. Source and sampled-preview review complete; final production remains open.
 
 ## Changes
 
@@ -10,7 +10,10 @@ Add synchronized clock hands to the rhythm/scale comparison so sustained notes a
 
 ## Verification
 
-23 targeted tests passed. Lab and source-length checks passed. Three native stills inspected, including revised layouts. Full chapter previews queued. Local logs: `/workspace/scratch/`; generated QA artifacts: `renders/qa/`.
+- Chapter/module/audio/loader tests: 23 passed; `/workspace/scratch/music33-tests.log`.
+- Lab and length-estimate logs: `/workspace/scratch/music33-lab.log`, `/workspace/scratch/music33-length.log`.
+- 3 selected native 1920×1080 stills inspected; `/workspace/scratch/music33-native/`.
+- All 12 chapter preview sheets inspected; 12 sound cases and 15 listening-window motion checks pass. Silent-narration previews: 39.90 minutes. Source hashes and freshness verified; identities: `renders/qa/music33/source-receipt.json`.
 
 ## Production gates still open
 
