@@ -107,11 +107,12 @@ class Scale(SoundScene):
             label(r"the bebop scale on C: \ C D E F G A B$\flat$ B \ (eight notes)", font_size=21, color=WHITE),
             label(r"in descending order from C: \ C B B$\flat$ A G F E D \ C ...", font_size=21, color=WHITE),
             label(r"chord tones C, \ B$\flat$, \ G, \ E sit at positions 0, \ 2, \ 4, \ 6: \ every other note", font_size=21, color=TUNE),
-            label(r"so a run from any chord tone on a beat keeps chord tones on beats, \ and eight is even, \ so it survives every octave", font_size=21, color=TUNE),
-            label(rf"checked: \ every chord tone, \ both directions, \ two octaves: \ bebop 100\%, \ mixolydian {round(100 * d['claim']['plain_mean'])}\% on average", font_size=21, color=EAR),
+            label(r"so a run from any chord tone on a beat keeps chord tones on beats; \\ eight notes preserve this alignment across octaves", font_size=21, color=TUNE),
+            label(rf"checked: every chord tone, both directions, two octaves: \\ bebop 100\%, mixolydian {round(100 * d['claim']['plain_mean'])}\% on average", font_size=21, color=EAR),
             label(r"the major bebop scale \ (with G$\sharp$) \ does the same for C6: \ C E G A", font_size=19, color=GREY_A),
         ).arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to(DOWN * 0.1)
-        rows_.scale_to_fit_width(min(rows_.width, 13.0))
+        rows_.scale_to_fit_width(min(rows_.width, 12.5))
+        rows_.move_to(DOWN * 0.1)
         head = label(r"why it works", font_size=28, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
             "Why does it work? <bookmark mark='a'/> Write the bebop scale on C in descending order: C, B, B flat, A, G, F, "
@@ -136,17 +137,13 @@ class Scale(SoundScene):
     def everywhere(self):
         items = [
             (r"the trick is general: \ interleave a chord's four notes with four others", WHITE),
-            (r"a seven-note scale always needs one extra note: \ which one depends on the chord", WHITE),
+            (r"an extra note can interleave these chord tones: \ which one depends on the chord", WHITE),
             (r"Parker's lines often run this way for a bar, \ then change direction or leap", WHITE),
             (r"players do not stay on the grid: \ they shift the pattern deliberately, \ for tension", TUNE),
             (r"a rule to learn, \ and then to break on purpose", GREY_A),
         ]
         rows_scene(self, r"a general trick", items,
-                   "The trick is general: interleave a chord's four notes with four others. <bookmark mark='b'/> A seven-note "
-                   "scale always needs one extra note, and which one depends on the chord. <bookmark mark='c'/> Charlie Parker's "
-                   "lines often run this way for a bar, then change direction or leap. <bookmark mark='d'/> And players do not "
-                   "stay on the grid: they shift the pattern on purpose, for tension. <bookmark mark='e'/> A rule to learn, and "
-                   "then to break deliberately.", marks="bcde")
+                   "The trick is general: interleave a chord's four notes with four others. <bookmark mark='b'/> An even-length cycle is necessary for uninterrupted alternation. In these selected scales, adding one well-placed pitch supplies it; arbitrary scales and chords do not automatically interleave after just one addition. <bookmark mark='c'/> Charlie Parker's lines often run this way for a bar, then change direction or leap. <bookmark mark='d'/> And players do not stay on the grid: they shift the pattern on purpose, for tension. <bookmark mark='e'/> A rule to learn, and then to break deliberately.", marks="bcde")
 
     # ------------------------------------------------------------------
     def teach(self):

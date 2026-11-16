@@ -62,6 +62,8 @@ class Improviser(SoundScene):
             window(snd, r"A, \ then B", detail=r"piano, \ string and cymbal models", corner=DL, tag_corner=DR)
             flash(snd, ga.roll.notes, list(BL.swing_times([e for _, e in d["random"]], d["bpm"]) + d["starts"]["A"]), hot=WHITE, base=GREY_A)
             flash(snd, gb.roll.notes, list(BL.swing_times([e for _, e in d["improviser"]], d["bpm"]) + d["starts"]["B"]), hot=WHITE, base=GREY_A)
+            cursor(snd, ga.roll, d["starts"]["A"], 30.0 / d["bpm"], color=EAR)
+            cursor(snd, gb.roll, d["starts"]["B"], 30.0 / d["bpm"], color=EAR)
         ja, jb = d["judge_rnd"], d["judge_imp"]
         ans = label(rf"B: \ the improviser; \ it rests, \ and lands on chord tones \ ({round(100 * jb['on_beat_chord_tones'])}\% of beats against {round(100 * ja['on_beat_chord_tones'])}\%)", font_size=21, color=TUNE).to_edge(DOWN, buff=0.4)
         with self.voiceover(
@@ -99,7 +101,7 @@ class Improviser(SoundScene):
         leg = VGroup(*[label(t, font_size=17, color=col) for _, col, t in names]).arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=0.5)
         head = label(r"judged over fifty choruses each \ (per cent)", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "Judge it properly, over fifty choruses each, by the series' own measures, against two baselines: random notes "
+            "Compare these chosen descriptors over fifty generated choruses each, without treating them as a listener-quality evaluation, by the series' own measures, against two baselines: random notes "
             "from each chord's scale, and random notes from all twelve. <bookmark mark='a'/> On the beats, the improviser plays "
             f"chord tones {say(round(100 * st['improviser']['on_beat_chord_tones']))} per cent of the time, against "
             f"{say(round(100 * st['scale']['on_beat_chord_tones']))} and {say(round(100 * st['chromatic']['on_beat_chord_tones']))}. "

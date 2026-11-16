@@ -30,7 +30,7 @@ class Bebop(SoundScene):
                    "Monk, the drummer Kenny Clarke and the pianist Bud Powell. <bookmark mark='c'/> Small groups, fast tempos, long "
                    "lines of eighth notes, harmony moving every two beats. <bookmark mark='d'/> Music for listening rather than "
                    "dancing, by players who had come up in the swing bands of Part 38. <bookmark mark='e'/> A musicians' union "
-                   "recording ban from 1942 to 1944 hides its birth, so we first hear it almost fully formed, in 1945.",
+                   "recording ban from 1942 to 1944 limited commercial studio documentation, although earlier live and informal recordings survive; influential studio recordings followed in 1945.",
                    marks="bcde")
 
     # ------------------------------------------------------------------
@@ -43,12 +43,7 @@ class Bebop(SoundScene):
             (r"the changes became a shared language: \ everyone could play on them", GREY_A),
         ]
         rows_scene(self, r"the contrafact", items,
-                   "Bebop players wrote many of their tunes in a particular way. <bookmark mark='b'/> A contrafact is a new "
-                   "melody written over the chords of an existing song. <bookmark mark='c'/> Charlie Parker's Ornithology takes "
-                   "the changes of How High the Moon; the bebop tune Donna Lee, those of Indiana. <bookmark mark='d'/> The rhythm changes, "
-                   "from Gershwin's I Got Rhythm of 1930, carry hundreds of tunes. <bookmark mark='e'/> A chord progression cannot "
-                   "be owned the way a melody can, so the new tune was the player's own, and it paid no one else. "
-                   "<bookmark mark='f'/> The changes became a shared language that everyone could play on.", marks="cdef")
+                   "Bebop players wrote many of their tunes in a particular way. <bookmark mark='b'/> A contrafact is a new melody written over the chords of an existing song. <bookmark mark='c'/> Charlie Parker's Ornithology takes the changes of How High the Moon; the bebop tune Donna Lee, those of Indiana. <bookmark mark='d'/> The rhythm changes, from Gershwin's I Got Rhythm of 1930, carry hundreds of tunes. <bookmark mark='e'/> Contrafacts use familiar harmonic frameworks with new melodies; rights depend on the actual material and jurisdiction; that does not by itself establish a blanket exemption from every rights obligation. <bookmark mark='f'/> The changes became a shared language that everyone could play on.", marks="cdef")
 
     # ------------------------------------------------------------------
     def hear(self):

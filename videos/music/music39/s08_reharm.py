@@ -25,11 +25,7 @@ class Reharm(SoundScene):
             (r"Monochord does each, \ mechanically, \ to a phrase of ours", GREY_A),
         ]
         rows_scene(self, r"reharmonisation", items,
-                   "To reharmonise is to keep a melody and change the chords under it. <bookmark mark='b'/> The one constraint "
-                   "is that each melody note must still be a chord tone or a tension of its new chord. <bookmark mark='c'/> One "
-                   "move is the secondary dominant of Part 19: make each chord's predecessor its own dominant seventh. "
-                   "<bookmark mark='d'/> Another is Part 38's tritone substitute: replace those dominants with the dominant a "
-                   "tritone away. <bookmark mark='e'/> Monochord does each, mechanically, to a phrase of ours.", marks="bcde")
+                   "To reharmonise is to keep a melody and change the chords under it. <bookmark mark='b'/> This toy retains melody pitches that it labels chord tones or permitted tensions. Reharmonization in practice can also use deliberate non-chord tones and other contextual constraints. <bookmark mark='c'/> One move is the secondary dominant of Part 19: make each chord's predecessor its own dominant seventh. <bookmark mark='d'/> Another is Part 38's tritone substitute: replace those dominants with the dominant a tritone away. <bookmark mark='e'/> Monochord does each, mechanically, to a phrase of ours.", marks="bcde")
 
     # ------------------------------------------------------------------
     def table(self):

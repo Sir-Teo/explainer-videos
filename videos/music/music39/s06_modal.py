@@ -83,14 +83,10 @@ class Modal(SoundScene):
             keys2.add(VGroup(dot, label(NN[m % 12], font_size=20, color=WHITE).next_to(dot, LEFT, buff=0.2)))
         cap = VGroup(label(r"quartal: \ stacked fourths", font_size=20, color=TUNE).next_to(keys, DOWN, buff=0.5),
                      label(r"tertian: \ stacked thirds \ (Dm9)", font_size=20, color=BLUE).next_to(keys2, DOWN, buff=0.5))
-        side = label(r"no root, \ no clear major or minor: \ the voicing floats over the mode", font_size=20, color=WHITE).to_edge(DOWN, buff=0.4)
+        side = label(r"quartal spacing can leave the root implicit\\bass and context still establish mode", font_size=20, color=WHITE).to_edge(DOWN, buff=0.4)
         head = label(r"a voicing in fourths", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Modal jazz needed new chords for its static harmony. <bookmark mark='a'/> Pianists stacked fourths instead of "
-            "thirds: E, A, D, G, and a major third to B on top, the voicing heard on So What. <bookmark mark='b'/> Beside it, "
-            "the same mode's chord in thirds, a D minor ninth. The fourths have no clear root and no clear major or minor "
-            "third, so they float over the mode instead of pinning it to a chord. McCoy Tyner, Coltrane's pianist from 1960, "
-            "built a whole style on them."
+            "Quartal voicings became one influential option for modal jazz, rather than a requirement of static harmony. <bookmark mark='a'/> Pianists stacked fourths instead of thirds: E, A, D, G, and a major third to B on top, the voicing heard on So What. <bookmark mark='b'/> Beside it, the same mode's chord in thirds, a D minor ninth. Quartal spacing can make the root less explicit; the collection can still contain thirds and take a clear modal quality from the bass and context, so they float over the mode instead of pinning it to a chord. McCoy Tyner, Coltrane's pianist from 1960, built a whole style on them."
         ) as vo:
             self.play(FadeIn(head), FadeIn(keys.copy().set_opacity(0.2)))   # a ghost of what is coming: never a bare title
             vo.wait_until("a")

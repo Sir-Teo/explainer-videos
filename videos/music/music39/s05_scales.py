@@ -28,12 +28,7 @@ class Scales(SoundScene):
             (r"a simple rule, \ computed for five chords", GREY_A),
         ]
         rows_scene(self, r"chord scales", items,
-                   "Jazz teaching since the 1950s has answered with chord-scale theory: each chord implies a scale of seven or "
-                   "eight notes to improvise with. <bookmark mark='b'/> The chord's own notes, plus tensions, ninths, elevenths "
-                   "and thirteenths, that colour it. <bookmark mark='c'/> The scales are the modes of Part 12, chosen by the "
-                   "chord's quality: dorian for a minor seventh, mixolydian for a dominant. <bookmark mark='d'/> Some scale "
-                   "notes clash when they are held: the avoid notes, a semitone above a chord tone. <bookmark mark='e'/> A simple "
-                   "rule, computed here for five chords.", marks="bcde")
+                   "Jazz teaching since the 1950s has answered with chord-scale theory: each chord implies a scale of seven or eight notes to improvise with. <bookmark mark='b'/> The chord's own notes, plus tensions, ninths, elevenths and thirteenths, that colour it. <bookmark mark='c'/> The scales are the modes of Part 12, chosen by the chord's quality: dorian for a minor seventh, mixolydian for a dominant. <bookmark mark='d'/> Some teaching systems flag non-chord scale notes a semitone above chord tones as avoid notes. This is a voicing and style heuristic, not a universal ban; register, duration and intention matter. <bookmark mark='e'/> A simple rule, computed here for five chords.", marks="bcde")
 
     # ------------------------------------------------------------------
     def table(self):
@@ -117,7 +112,7 @@ class Scales(SoundScene):
     # ------------------------------------------------------------------
     def russell(self):
         items = [
-            (r"George Russell's \textit{Lydian Chromatic Concept of Tonal Organization} \ (1953): \ the first theory written from jazz", WHITE),
+            (r"George Russell's \textit{Lydian Chromatic Concept of Tonal Organization} \ (1953): \ an influential early systematic jazz theory", WHITE),
             (r"Russell made the lydian, \ not the major scale, \ the most stable: \ it avoids the avoid note", WHITE),
             (r"the Berklee school in Boston taught chord scales to generations of players from the 1950s", WHITE),
             (r"chord scales made improvising teachable, \ chord by chord", TUNE),
@@ -125,7 +120,7 @@ class Scales(SoundScene):
         ]
         rows_scene(self, r"Russell and Berklee", items,
                    "Where did the theory come from? <bookmark mark='b'/> George Russell's Lydian Chromatic Concept of Tonal "
-                   "Organization, from 1953, was the first theory written from jazz itself. <bookmark mark='c'/> Russell made the "
+                   "Organization, from 1953, was an influential early systematic jazz theory. <bookmark mark='c'/> Russell made the "
                    "lydian scale, not the major scale, the most stable; with its sharp fourth, it has no avoid note. "
                    "<bookmark mark='d'/> And the Berklee school in Boston taught chord scales to generations of players from the "
                    "1950s, <bookmark mark='e'/> making improvising teachable, chord by chord. <bookmark mark='f'/> Miles Davis "
@@ -135,14 +130,10 @@ class Scales(SoundScene):
     def critique(self):
         items = [
             (r"critics: \ thinking scale by scale makes lines that run up and down without going anywhere", WHITE),
-            (r"the bebop masters thought in lines and targets \ (chapters 2 and 3), \ not in scales", WHITE),
-            (r"a chord scale says which notes are safe, \ not which order to play them in", WHITE),
+            (r"bebop practice includes lines, targets and formulas \ (chapters 2 and 3), \ alongside scalar knowledge", WHITE),
+            (r"a chord scale says a pitch vocabulary under stated style assumptions, \ not which order to play them in", WHITE),
             (r"Part 22's analysts would say: \ a vocabulary is not a grammar", TUNE),
             (r"chapter 8 builds a grammar", GREY_A),
         ]
         rows_scene(self, r"a critique", items,
-                   "Chord-scale theory has critics. <bookmark mark='b'/> Thinking scale by scale, they say, makes lines that "
-                   "run up and down without going anywhere. <bookmark mark='c'/> The bebop masters thought in lines and targets, "
-                   "as chapters two and three showed, not in scales. <bookmark mark='d'/> A chord scale says which notes are "
-                   "safe, not in which order to play them. <bookmark mark='e'/> Part 22's analysts would put it this way: a "
-                   "vocabulary is not a grammar. <bookmark mark='f'/> Chapter eight builds a grammar.", marks="cdef")
+                   "Chord-scale theory has critics. <bookmark mark='b'/> Thinking scale by scale, they say, makes lines that run up and down without going anywhere. <bookmark mark='c'/> Accounts of bebop practice emphasize lines, targets and formulas alongside scalar knowledge; this is not evidence that every player excluded scale thinking. <bookmark mark='d'/> A chord scale says a pitch vocabulary under stated style assumptions, not in which order to play them. <bookmark mark='e'/> Part 22's analysts would put it this way: a vocabulary is not a grammar. <bookmark mark='f'/> Chapter eight builds a grammar.", marks="cdef")

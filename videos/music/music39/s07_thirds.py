@@ -140,7 +140,7 @@ class Thirds(SoundScene):
         gc = line_over([tuple(x) for x in d["lines"]["coltrane"]], d["coltrane"] * 2, width=11.4, height=1.5, color=TUNE, lo=56, hi=86, size=12).move_to(DOWN * 1.4)
         with self.voiceover(
             "Hear both, twice each, with the improviser's line on the piano: first the plain two-five-one, then Coltrane's "
-            "substitute. The improviser aims at each new chord's guide tones, so it has to leap when the keys do."
+            "substitute. The improviser aims at each new chord's guide tones, illustrating how its targets follow the changes; distant keys can still admit smooth voice leading."
         ):
             self.play(FadeIn(gp), FadeIn(gc))
         with self.listen(c) as snd:
@@ -148,6 +148,7 @@ class Thirds(SoundScene):
             for g, k, col in ((gp, "plain", GREY_A), (gc, "coltrane", TUNE)):
                 L = d["lines"][k]
                 flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], d["bpm"]) + d["starts"][k]), hot=WHITE, base=col)
+                cursor(snd, g.roll, d["starts"][k], 30.0 / d["bpm"], color=col)
         self.wait(0.3)
         self.clear_scene()
 

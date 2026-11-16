@@ -42,10 +42,7 @@ class Hook(SoundScene):
                     marks.append(SurroundingRectangle(ch.bars[b], color=colors[root], buff=0.02, stroke_width=4))
         ans = label(r"three: \ B, \ G and E$\flat$ major, \ each a major third from the next", font_size=22, color=TUNE).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "Three. The progression comes home to B major, G major and E flat major, again and again, and each is a major "
-            f"third from the next. That is {say(d['chords'])} chords in sixteen bars, a new key every few beats. These are the "
-            "changes of John Coltrane's Giant Steps, as lead sheets give them; chord progressions are shared property in "
-            "jazz, though melodies are not, so we play the chords and none of the tune."
+            f"Three. The progression comes home to B major, G major and E flat major, again and again, and each is a major third from the next. That is {say(d['chords'])} chords in sixteen bars, a new key every few beats. These are the changes of John Coltrane's Giant Steps, as lead sheets give them; these changes are widely shared practice material; rights in melodies and arrangements require separate consideration, so we play the chords and none of the tune."
         ):
             self.play(LaggedStart(*[Create(m) for m in marks], lag_ratio=0.05), FadeIn(ans))
         self.wait(0.4)
@@ -61,7 +58,7 @@ class Hook(SoundScene):
         with self.voiceover(
             f"Now the same changes at the speed of the original recording, about {say(d['bpm'])} beats a minute, with the "
             "improviser this part will build playing a line through them on the piano. Sixteen bars pass in under fifteen "
-            "seconds; a human player has to choose every note in about a tenth of a second."
+            "seconds; eighth notes are about a tenth of a second apart; players can prepare and retrieve larger gestures rather than consciously choose each note from scratch."
         ):
             self.play(FadeIn(head), FadeIn(g))
         with self.listen(c) as snd:
@@ -81,12 +78,7 @@ class Hook(SoundScene):
             (r"this part explains them, \ draws them on Part 31's Tonnetz, \ and builds an improviser", GREY_A),
         ]
         rows_scene(self, r"Giant Steps", items,
-                   "On the fifth of May 1959 in New York, John Coltrane recorded Giant Steps, at nearly two hundred and ninety "
-                   "beats a minute. <bookmark mark='b'/> His pianist, Tommy Flanagan, had seen the changes only briefly, and his "
-                   "solo is short and careful, a famous moment of a great player meeting something new. <bookmark mark='c'/> A "
-                   "new chord every two beats, in keys that share few notes. <bookmark mark='d'/> Why are these changes hard, "
-                   "and how do improvisers play through any changes at all? <bookmark mark='e'/> This part explains them, draws "
-                   "them on Part 31's Tonnetz, and builds an improviser.", marks="bcde")
+                   "On the fifth of May 1959 in New York, John Coltrane recorded Giant Steps, at nearly two hundred and ninety beats a minute. <bookmark mark='b'/> His pianist, Tommy Flanagan, had seen the changes only briefly, and his solo is short and careful, a famous moment of a great player meeting something new. <bookmark mark='c'/> Often a new chord after two beats, in keys that share few notes. <bookmark mark='d'/> Why are these changes hard, and how do improvisers play through any changes at all? <bookmark mark='e'/> This part explains them, draws them on Part 31's Tonnetz, and builds an improviser.", marks="bcde")
 
     # ------------------------------------------------------------------
     def plan(self):

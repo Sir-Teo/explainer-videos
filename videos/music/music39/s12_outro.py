@@ -46,6 +46,7 @@ class Outro(SoundScene):
             for g, key, k, col in ((g1, "head", "head", TUNE), (g2, "solo", "solo", BLUE), (g3, "cycle_line", "thirds", EAR)):
                 L = d[key]
                 flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], bpm) + st[k]), hot=WHITE, base=col)
+                cursor(snd, g.roll, st[k], 30.0 / bpm, color=col)
         self.play(FadeOut(panels))
         rws = (rows_before(PART) + [{"part": v["part"], "title": v["title"], "seconds": v["seconds"], "measure": v["measure"]}])[-6:]
         led = variations_ledger(rws, highlight=(len(rws) - 1,)).to_edge(DOWN, buff=0.25)
@@ -65,7 +66,7 @@ class Outro(SoundScene):
             r"targets, \ enclosures, \ formulas; \ chord scales and their avoid notes",
             r"modal jazz: \ few chords, \ quartal voicings",
             r"third cycles: \ three keys sharing three notes each, \ a line on the Tonnetz",
-            r"a page-long improviser beats random lines by the series' measures, \ and does not listen",
+            r"the toy improviser improves selected descriptors against these baselines, \ and does not listen",
         ], title=r"What we found", font_size=22).move_to(DOWN * 0.1)
         with self.voiceover(
             "What did we find? Bebop built new tunes on shared changes. <bookmark mark='a'/> The bebop scale interleaves a "
@@ -73,7 +74,7 @@ class Outro(SoundScene):
             "<bookmark mark='b'/> Lines aim at targets, enclose them, and draw on formulas; chord scales say which notes are "
             "safe. <bookmark mark='c'/> Modal jazz slowed the changes and voiced chords in fourths. <bookmark mark='d'/> "
             "Coltrane's third cycles join keys that share only three notes, a line up the Tonnetz. <bookmark mark='e'/> And a "
-            "page-long improviser beats random lines by every measure we have, and still does not listen."
+            "page-long improviser scores higher than these simple baselines on some descriptors its design targets, while scale adherence is lower than the scale-only baseline, and still does not listen."
         ) as vo:
             self.play(FadeIn(card.head), FadeIn(card.rows[0]))
             for mark, rr in zip("abcde", card.rows[1:]):

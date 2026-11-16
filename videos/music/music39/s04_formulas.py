@@ -20,17 +20,13 @@ class Formulas(SoundScene):
     def targets(self):
         items = [
             (r"improvisers think in \textit{targets}: \ a strong note of the next chord, \ on its first beat", WHITE),
-            (r"usually a guide tone \ (Part 38): \ the third or seventh, \ which names the new chord", WHITE),
+            (r"usually a guide tone \ (Part 38): \ the third or seventh, \ which helps outline the new chord, though guide tones do not distinguish every chord quality", WHITE),
             (r"the notes before it are the approach: \ by step, \ by arpeggio, \ or by surrounding it", WHITE),
             (r"an \textit{enclosure} surrounds the target: \ a note above, \ a note below, \ then the target", TUNE),
             (r"the ear hears the target coming, \ and its arrival lands harder", GREY_A),
         ]
         rows_scene(self, r"aiming at targets", items,
-                   "Improvisers think in targets: a strong note of the next chord, placed on its first beat. "
-                   "<bookmark mark='b'/> Usually it is a guide tone from Part 38, the third or the seventh, which names the new "
-                   "chord. <bookmark mark='c'/> The notes before it are the approach: by step, by arpeggio, or by surrounding "
-                   "it. <bookmark mark='d'/> An enclosure surrounds the target: a note above, a note below, then the target. "
-                   "<bookmark mark='e'/> The ear hears the target coming, and its arrival lands harder.", marks="bcde")
+                   "Improvisers think in targets: a strong note of the next chord, placed on its first beat. <bookmark mark='b'/> Usually it is a guide tone from Part 38, the third or the seventh, which helps outline the new chord, though guide tones do not distinguish every chord quality. <bookmark mark='c'/> The notes before it are the approach: by step, by arpeggio, or by surrounding it. <bookmark mark='d'/> An enclosure surrounds the target: a note above, a note below, then the target. <bookmark mark='e'/> The ear hears the target coming, and its arrival lands harder.", marks="bcde")
 
     # ------------------------------------------------------------------
     def diagram(self):
@@ -81,6 +77,7 @@ class Formulas(SoundScene):
             for g, k, col in zip(gs, ("plain", "enclosed", "double"), (GREY_A, TUNE, EAR)):
                 L = d["ways"][k]
                 flash(snd, g.roll.notes, list(BL.swing_times([e for _, e in L], d["bpm"]) + d["starts"][k]), hot=WHITE, base=col)
+                cursor(snd, g.roll, d["starts"][k], 30.0 / d["bpm"], color=col)
         self.wait(0.3)
         self.clear_scene()
 

@@ -123,3 +123,7 @@ python -m videos.music.labs 39                                  # the lab (write
 * J. A. Biles, "GenJam: a genetic algorithm for generating jazz solos" (1994); F. Pachet, "The Continuator: musical
   interaction with style", *Journal of New Music Research* (2003).
 * Part 18 for progressions; Part 31 for the Tonnetz; Part 38 for swing, guide tones and the tritone substitution.
+
+## Interpretation limits
+
+Contrafacts and shared changes do not establish a blanket rights exemption. The 1942–44 recording ban limited studio documentation; earlier live recordings survive. An even-length scale can alternate chord tones only when its pitch ordering actually interleaves them, as in the chosen examples. Avoid-note labels are a voicing heuristic, not universal perceptual laws. Quartal spacing can still contain thirds and express a clear mode. Fifty generated choruses compare designed descriptors against simple baselines, not listener quality; scale-only output has higher scale adherence. The response toy exchanges symbolic notes rather than listening to audio.

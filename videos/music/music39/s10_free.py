@@ -26,7 +26,7 @@ class Free(SoundScene):
         ]
         rows_scene(self, r"Ornette Coleman", items,
                    "1959 again. Ornette Coleman's The Shape of Jazz to Come. <bookmark mark='b'/> No piano and no fixed changes: "
-                   "the soloist sets the harmony as he goes, and the bass follows him. <bookmark mark='c'/> His Free Jazz, from "
+                   "players negotiate melodic and harmonic direction together rather than following a fixed chord chart. <bookmark mark='c'/> His Free Jazz, from "
                    "1961, set two quartets improvising at once for over half an hour. <bookmark mark='d'/> Coleman called his "
                    "principle harmolodics, giving melody, harmony and rhythm equal weight. <bookmark mark='e'/> It was the third "
                    "answer to bebop in a single year: more changes, fewer, or none.", marks="bcde")
@@ -60,10 +60,7 @@ class Free(SoundScene):
         leg = VGroup(label(r"saxophone: \ a figure", font_size=19, color=TUNE), label(r"piano: \ the answer, \ a fourth up and backwards", font_size=19, color=BLUE)).arrange(RIGHT, buff=0.9).next_to(roll, UP, buff=0.35)
         head = label(r"a toy free duo \ (ours): \ no changes, \ only answers", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is a toy of our own that shows the difference. No chord changes at all: the saxophone plays a short figure, "
-            "and the piano answers with the same figure a fourth higher and backwards; the saxophone's next figure starts "
-            "from where the answer ended. Crude as it is, it does the one thing chapter eight's improviser cannot: it "
-            "responds to what it heard."
+            "Here is a toy of our own that shows the difference. No chord changes at all: the saxophone plays a short figure, and the piano answers with the same figure a fourth higher and backwards; the saxophone's next figure starts from where the answer ended. Crude as it is, it does the one thing chapter eight's improviser cannot: it responds to the other part’s symbolic note data; this toy does not analyze live audio."
         ):
             self.play(FadeIn(head), FadeIn(leg), FadeIn(roll))
         from explainer.music.monochord import blues as BL
@@ -77,14 +74,17 @@ class Free(SoundScene):
     # ------------------------------------------------------------------
     def models(self):
         boxes = VGroup()
-        for title, body, col in ((r"referent", r"a tune, \ changes, \ a mode, \ a mood", TUNE),
-                                 (r"knowledge base", r"vocabulary: \ formulas, \ scales, \ licks, \ habits", BLUE),
-                                 (r"in the moment", r"choose the next event, \ hear it, \ continue or change", EAR)):
+        for title, body, col in ((r"referent", ("a tune or changes,", "a mode or a mood"), TUNE),
+                                 (r"knowledge base", ("vocabulary: formulas,", "scales, licks, habits"), BLUE),
+                                 (r"in the moment", ("choose the next event;", "hear it, continue or change"), EAR)):
             r = RoundedRectangle(width=3.6, height=1.9, corner_radius=0.15, stroke_color=col, stroke_width=2)
-            t = VGroup(label(title, font_size=22, color=col), label(body, font_size=17, color=WHITE)).arrange(DOWN, buff=0.25).move_to(r)
+            detail = VGroup(*[label(line, font_size=17, color=WHITE) for line in body]).arrange(DOWN, buff=0.1)
+            if detail.width > r.width - 0.4:
+                detail.scale_to_fit_width(r.width - 0.4)
+            t = VGroup(label(title, font_size=22, color=col), detail).arrange(DOWN, buff=0.22).move_to(r)
             boxes.add(VGroup(r, t))
         boxes.arrange(RIGHT, buff=0.7).move_to(UP * 0.4)
-        arrows = VGroup(Arrow(boxes[0].get_right(), boxes[2].get_left() + UP * 0.4, buff=0.1, color=GREY_B, path_arc=-0.6),
+        arrows = VGroup(CurvedArrow(boxes[0].get_top(), boxes[2].get_top(), color=GREY_B, angle=-0.6),
                         Arrow(boxes[1].get_right(), boxes[2].get_left(), buff=0.1, color=GREY_B))
         loop = CurvedArrow(boxes[2].get_bottom() + RIGHT * 0.8, boxes[2].get_bottom() + LEFT * 0.8, color=EAR, angle=-2.5)
         cap = label(r"after Jeff Pressing \ (1988): \ improvisation as choice, \ guided by a referent and a stored vocabulary", font_size=20, color=GREY_A).to_edge(DOWN, buff=0.8)
