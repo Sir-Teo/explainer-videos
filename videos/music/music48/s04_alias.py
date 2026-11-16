@@ -122,12 +122,15 @@ class Alias(SoundScene):
         a = panel(d["track_raw"], EAR, r"first")
         b = panel(d["track_filtered"], TUNE, r"second")
         g = VGroup(a, b).arrange(RIGHT, buff=1.0).move_to(UP * 0.2)
-        cap = label(r"grey: \ the sweep going in; \ coloured: \ what comes out; \ dashed: \ 4 kHz, \ the Nyquist frequency", font_size=16, color=GREY_A).to_edge(DOWN, buff=1.0)
+        cap = VGroup(
+            label(r"grey: \ input; \ coloured: \ output; \ dashed: \ 4 kHz, \ the Nyquist frequency", font_size=16, color=GREY_A),
+            label(r"vertical cursor: \ playback time; \ white dot: \ output pitch when present", font_size=14, color=GREY_A),
+        ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=1.0)
         self.play(FadeOut(card), FadeIn(VGroup(a[0], a[1], a[4], b[0], b[1], b[4])), FadeIn(cap))
         st = d["starts"]
         sec = d["seconds"]
-        cur_a = Dot(radius=0.08, color=WHITE)
-        cur_b = Dot(radius=0.08, color=WHITE)
+        cur_a = VGroup(Line(ORIGIN, UP, color=WHITE, stroke_width=2), Dot(radius=0.09, color=WHITE))
+        cur_b = VGroup(Line(ORIGIN, UP, color=WHITE, stroke_width=2), Dot(radius=0.09, color=WHITE))
         with self.listen(c) as snd:
             window(snd, r"a sweep, \ twice", kind="synthesized", detail=r"a sine, \ sampled at 8 kHz", corner=DL, tag_corner=DR)
             snd.show(cur_a)
@@ -138,8 +141,11 @@ class Alias(SoundScene):
                     u = min(max(t - start, 0.0), sec)
                     f = d["f0"] + (d["f1"] - d["f0"]) * u / sec
                     h = (f if f < 3800 else 0.0) if filtered else DG.alias(f, d["fs"])
-                    m.move_to(axg.to(u, h))
-                    m.set_opacity(1.0 if (start <= t <= start + sec and (not filtered or f < 3800)) else 0.0)
+                    active = start <= t <= start + sec
+                    m[0].put_start_and_end_on(axg.to(u, 0), axg.to(u, 12000))
+                    m[0].set_opacity(0.5 if active else 0.0)
+                    m[1].move_to(axg.to(u, h))
+                    m[1].set_opacity(1.0 if (active and (not filtered or f < 3800)) else 0.0)
                 return fn
             snd.drive(cur_a, mover(a[0], st["first"], False))
             snd.drive(cur_b, mover(b[0], st["second"], True))

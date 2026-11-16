@@ -106,13 +106,8 @@ class Shaping(SoundScene):
             (r"Michael Gerzon and Peter Craven \ (1989): \ shape the noise to follow the threshold of hearing", WHITE),
             (r"commercial dithers for mastering do exactly this when 24-bit masters become 16-bit CDs", WHITE),
             (r"the noise you perceive drops, \ though the measured total rises", WHITE),
-            (r"the cost: \ never shape twice, \ and never shape what will be processed again", TUNE),
+            (r"the cost: \ prefer strong shaping at final delivery; \\ later processing can expose or accumulate its noise", TUNE),
             (r"pushed to the extreme, \ with many times the sample rate, \ shaping makes one bit enough: \ chapter 8", GREY_A),
         ]
         rows_scene(self, r"shaping to the ear", items,
-                   "In 1989 Michael Gerzon and Peter Craven worked out how to shape the noise to follow the threshold of "
-                   "hearing. <bookmark mark='b'/> Commercial mastering dithers do exactly this when twenty-four-bit masters become "
-                   "sixteen-bit CDs. <bookmark mark='c'/> The noise you perceive drops, though the "
-                   "measured total rises. <bookmark mark='d'/> The cost: never shape twice, and never shape what will be "
-                   "processed again, since the hidden noise can be uncovered. <bookmark mark='e'/> Pushed to the extreme, with "
-                   "many times the sample rate, shaping makes one bit enough. That is chapter eight.", marks="bcde")
+                   "In 1989 Michael Gerzon and Peter Craven worked out how to shape the noise to follow the threshold of hearing. <bookmark mark='b'/> Commercial mastering dithers do exactly this when twenty-four-bit masters become sixteen-bit CDs. <bookmark mark='c'/> The noise you perceive drops, though the measured total rises. <bookmark mark='d'/> The cost: reserve strong final noise shaping for delivery when possible; repeated quantization and later processing can accumulate or expose shaped noise, rather than being mathematically forbidden. <bookmark mark='e'/> Pushed to the extreme, with many times the sample rate, shaping makes one bit enough. That is chapter eight.", marks="bcde")

@@ -141,10 +141,4 @@ class Onebit(SoundScene):
             (r"the hook's first version was such a stream, \ filtered back to 48 kHz", GREY_A),
         ]
         rows_scene(self, r"one bit in practice", items,
-                   "This is not a curiosity. <bookmark mark='b'/> Almost every converter today, in phones and studios alike, is a "
-                   "delta-sigma converter: <bookmark mark='c'/> it samples millions of times a second with a few bits, then "
-                   "filters and decimates to forty-eight kilohertz and twenty-four bits. <bookmark mark='d'/> The Super Audio CD, "
-                   "in 1999, stored the one-bit stream itself, Direct Stream Digital, at 2,822,400 bits a second for each channel, "
-                   "sixty-four times the CD rate. <bookmark mark='e'/> Its noise rises steeply above twenty kilohertz and must be "
-                   "filtered on playback. <bookmark mark='f'/> The hook's first version was such a stream, filtered back to "
-                   "forty-eight kilohertz.", marks="bcdef")
+                   "This is not a curiosity. <bookmark mark='b'/> Delta-sigma architectures are common in audio converters, including many phones and studio devices; other architectures remain in use: <bookmark mark='c'/> it samples millions of times a second with a few bits, then filters and decimates to forty-eight kilohertz and twenty-four bits. <bookmark mark='d'/> The Super Audio CD, in 1999, stored the one-bit stream itself, Direct Stream Digital, at 2,822,400 bits a second for each channel, sixty-four times the CD rate. <bookmark mark='e'/> Its noise rises steeply above twenty kilohertz and must be filtered on playback. <bookmark mark='f'/> The hook's first version was such a stream, filtered back to forty-eight kilohertz.", marks="bcdef")

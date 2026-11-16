@@ -26,7 +26,7 @@ class Frontier(SoundScene):
                    "and forty-six decibels, but no converter reaches it: the thermal noise of its own resistors sets the floor. "
                    "<bookmark mark='c'/> The best converters reach a dynamic range of roughly a hundred and twenty to a hundred and "
                    "thirty decibels: about twenty usable bits. <bookmark mark='d'/> Jitter, the modulator's stability and the reference voltage's noise set "
-                   "the rest. <bookmark mark='e'/> For audio this is far below anything a room or an ear can show. "
+                   "the rest. <bookmark mark='e'/> Such converter noise is often below room and microphone noise in ordinary recording, while audibility depends on gain and listening conditions. "
                    "<bookmark mark='f'/> The open problems are cost, power and size: converters in earbuds and hearing aids.",
                    marks="bcdef")
 
@@ -40,13 +40,7 @@ class Frontier(SoundScene):
             (r"music is not sparse in time, \ but often nearly sparse in frequency: \ where the theorem's fine print can be renegotiated", GREY_A),
         ]
         rows_scene(self, r"sampling below Nyquist", items,
-                   "Second, must we always sample at twice the band? <bookmark mark='b'/> The theorem asks that much of any "
-                   "band-limited signal, but a signal with few degrees of freedom may need far fewer samples. In 2002 Martin "
-                   "Vetterli, Pina Marziliano and Thierry Blu showed that a few spikes can be recovered exactly from a few "
-                   "samples. <bookmark mark='d'/> In 2006 Emmanuel Candès, Justin Romberg and Terence Tao, and David Donoho, founded "
-                   "compressed sensing: <bookmark mark='e'/> a signal that is sparse in some basis can be recovered from a few "
-                   "random measurements by minimising an l-one norm. <bookmark mark='f'/> Music is not sparse in time, but it is "
-                   "often nearly sparse in frequency, and that is where the theorem's fine print can be renegotiated.",
+                   "Second, must we always sample at twice the band? <bookmark mark='b'/> The theorem asks that much of any band-limited signal, but a signal with few degrees of freedom may need far fewer samples. In 2002 Martin Vetterli, Pina Marziliano and Thierry Blu showed that a few spikes can be recovered exactly from a few samples. <bookmark mark='d'/> In 2006 Emmanuel Candès, Justin Romberg and Terence Tao, and David Donoho, founded compressed sensing: <bookmark mark='e'/> a sufficiently sparse signal can be recovered from suitable measurements under incoherence or related recovery conditions, often by l-one optimization. <bookmark mark='f'/> Music is not sparse in time, but it is often nearly sparse in frequency, and that is where the theorem's fine print can be renegotiated.",
                    marks="bdef")
 
     # ------------------------------------------------------------------
@@ -61,7 +55,7 @@ class Frontier(SoundScene):
         head = label(r"a research problem", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
         with self.voiceover(
             "A research problem to end on. <bookmark mark='a'/> Take a recording's short frames, and measure how sparse each "
-            "is in a good basis. <bookmark mark='b'/> Sample them at random below the Nyquist rate, and recover them by "
+            "is in a good basis. <bookmark mark='b'/> Acquire suitable nonuniform or compressed measurements below the conventional full-band sample count, accounting for analog front-end and reconstruction assumptions, and recover them by "
             "minimising an l-one norm. <bookmark mark='c'/> Measure the error against the number of samples, frame by frame, "
             "for many kinds of music. <bookmark mark='d'/> The question: how far below the Nyquist rate can music be sampled "
             "before listeners notice? <bookmark mark='e'/> An answer would turn the theorem's worst case into music's typical "

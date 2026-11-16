@@ -21,7 +21,7 @@ class Dither(SoundScene):
         items = [
             (r"plain rounding makes the error a fixed function of the signal: \ it repeats when the signal repeats", WHITE),
             (r"a repeating error is distortion: \ new tones, \ locked to the music, \ that the ear picks out", WHITE),
-            (r"dither: \ add a little random noise before rounding, \ so the error no longer depends on the signal", WHITE),
+            (r"dither: \ add a little random noise before rounding, \ so chosen error moments no longer depend on the signal", WHITE),
             (r"we trade a pattern for a hiss; \ the ear forgives a steady hiss far more readily", TUNE),
             (r"and the right dither does it exactly, \ not approximately", GREY_A),
         ]
@@ -29,7 +29,7 @@ class Dither(SoundScene):
                    "Why did the noisier version sound better? <bookmark mark='b'/> Plain rounding makes the error a fixed function "
                    "of the signal: it repeats whenever the signal repeats. <bookmark mark='c'/> A repeating error is distortion: "
                    "new tones, locked to the music, which the ear picks out. <bookmark mark='d'/> Dither means adding a little "
-                   "random noise before rounding, so that the error no longer depends on the signal. <bookmark mark='e'/> We trade "
+                   "random noise before rounding, so that chosen error moments no longer depend on the signal, provided the quantizer does not overload. <bookmark mark='e'/> We trade "
                    "a pattern for a hiss, and the ear forgives a steady hiss far more readily. <bookmark mark='f'/> And the right "
                    "dither does it exactly, not approximately.", marks="bcdef")
 
@@ -47,9 +47,9 @@ class Dither(SoundScene):
             var = curve(xs, m["var"], b.to, color=col, width=3)
             g = VGroup(label(name, font_size=18, color=col), VGroup(a, mean), VGroup(b, var)).arrange(DOWN, buff=0.3)
             panels.add(g)
-        panels.arrange(RIGHT, buff=0.6).move_to(DOWN * 0.15)
+        panels.arrange(RIGHT, buff=0.6).scale(0.88).move_to(RIGHT * 0.5 + DOWN * 0.15)
         side = VGroup(label(r"average error", font_size=16, color=GREY_A).next_to(panels[0][1], LEFT, buff=0.3),
-                      label(r"its spread \ (variance)", font_size=16, color=GREY_A).next_to(panels[0][2], LEFT, buff=0.3))
+                      label(r"variance", font_size=16, color=GREY_A).next_to(panels[0][2], LEFT, buff=0.3))
         cap = label(r"across: \ where the input sits within one step; \ errors in steps", font_size=16, color=GREY_A).to_edge(DOWN, buff=0.4)
         head = label(r"the error's average and spread, \ for every input", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         tv = d["tpdf"]["var"]
@@ -61,7 +61,7 @@ class Dither(SoundScene):
             "more distortion. But its spread still depends on the input, so the noise rises and falls with the music, "
             "a modulation the ear can hear. <bookmark mark='c'/> With triangular dither two steps wide, both are flat: the "
             f"average is zero and the spread is a quarter of a step squared everywhere, {say(float(np.mean(tv)), 2)} measured. "
-            "The error is now plain, steady noise, whatever the music does."
+            "The mean and variance are now independent of input under this ideal, non-overloading model; this does not make every feature of the error distribution independent."
         ) as vo:
             self.play(FadeIn(head), FadeIn(cap), FadeIn(side), FadeIn(ghost(panels, 0.15)))
             for mark, p in zip("abc", panels):
@@ -148,12 +148,7 @@ class Dither(SoundScene):
             (r"rectangular dither one step wide makes the error's average independent of the signal", WHITE),
             (r"triangular dither, \ two steps wide, \ makes its average and its power independent: \ the least that does both", WHITE),
             (r"the price: \ three times the noise power of plain rounding, \ about 4.8 dB", TUNE),
-            (r"every reduction of word length, \ from 24 bits to 16 for a CD, \ should be dithered", GREY_A),
+            (r"apply appropriate dither at final fixed-point requantization; \\ existing noise and processing affect the choice", GREY_A),
         ]
         rows_scene(self, r"the theory", items,
-                   "The theory was settled in 1992 by Stanley Lipshitz, Robert Wannamaker and John Vanderkooy. "
-                   "<bookmark mark='b'/> Rectangular dither one step wide makes the error's average independent of the signal. "
-                   "<bookmark mark='c'/> Triangular dither, two steps wide, makes both its average and its power independent, and "
-                   "it is the least dither that does both. <bookmark mark='d'/> The price is three times the noise power of plain "
-                   "rounding, about 4.8 decibels. <bookmark mark='e'/> So every reduction of word length, from a studio's "
-                   "twenty-four bits to a CD's sixteen, should be dithered.", marks="bcde")
+                   "The theory was settled in 1992 by Stanley Lipshitz, Robert Wannamaker and John Vanderkooy. <bookmark mark='b'/> Rectangular dither one step wide makes the error's average independent of the signal. <bookmark mark='c'/> Triangular dither, two steps wide, makes both its average and its power independent, and it is the least dither that does both. <bookmark mark='d'/> The price is three times the noise power of plain rounding, about 4.8 decibels. <bookmark mark='e'/> Dither is normally applied at final fixed-point requantization when needed to decorrelate quantization artifacts; existing noise and the processing chain affect that choice.", marks="bcde")

@@ -58,7 +58,7 @@ class Resample(SoundScene):
         with self.voiceover(
             "The first. At sixteen thousand a second nothing above eight kilohertz survives: the cymbals lose their sizzle and "
             "the piano its edge. <bookmark mark='a'/> The spectra show it: the first stops dead at eight kilohertz; the second "
-            "carries on to the top. Sixteen thousand is a telephone-quality rate. The real question is whether anything is "
+            "carries on to the top. Sixteen kilohertz supports wideband speech; traditional narrowband telephony commonly uses eight kilohertz sampling. The real question is whether anything is "
             "lost between forty-four thousand one hundred and more."
         ) as vo:
             self.play(Create(lo))
@@ -72,19 +72,12 @@ class Resample(SoundScene):
         items = [
             (r"high-resolution formats: \ 96 or 192 kHz, \ 24 bits: \ is anything audible gained over 44.1 and 16?", WHITE),
             (r"E. Brad Meyer and David Moran \ (2007): \ a 16-bit, \ 44.1 kHz loop inserted into high-resolution playback", WHITE),
-            (r"in hundreds of double-blind trials, \ no listener could reliably detect it", WHITE),
+            (r"in hundreds of double-blind trials, \ aggregate performance did not reliably exceed chance under those study conditions", WHITE),
             (r"Joshua Reiss \ (2016): \ 18 studies, \ over 12,500 trials: \ a small but significant ability to tell, \ larger with training", TUNE),
             (r"trained listeners were right about 60 per cent of the time, \ where guessing gives 50", GREY_A),
         ]
         rows_scene(self, r"the high-resolution debate", items,
-                   "That is the high-resolution debate. <bookmark mark='b'/> Formats at ninety-six or a hundred and ninety-two "
-                   "kilohertz and twenty-four bits are sold as better than forty-four point one and sixteen. Is anything audible "
-                   "gained? <bookmark mark='c'/> In 2007 E. Brad Meyer and David Moran inserted a sixteen-bit, forty-four point one "
-                   "kilohertz loop into high-resolution playback, <bookmark mark='d'/> and in hundreds of double-blind trials no "
-                   "listener could reliably detect it. <bookmark mark='e'/> In 2016 Joshua Reiss pooled eighteen studies and over "
-                   "twelve thousand five hundred trials, and found a small but significant ability to tell, larger with training: "
-                   "<bookmark mark='f'/> trained listeners were right about sixty per cent of the time, where guessing gives "
-                   "fifty.", marks="bcdef")
+                   "That is the high-resolution debate. <bookmark mark='b'/> Formats at ninety-six or a hundred and ninety-two kilohertz and twenty-four bits are sold as better than forty-four point one and sixteen. Is anything audible gained? <bookmark mark='c'/> In 2007 E. Brad Meyer and David Moran inserted a sixteen-bit, forty-four point one kilohertz loop into high-resolution playback, <bookmark mark='d'/> and in hundreds of double-blind trials aggregate performance did not reliably exceed chance under those study conditions. <bookmark mark='e'/> In 2016 Joshua Reiss pooled eighteen studies and over twelve thousand five hundred trials, and found a small but significant ability to tell, larger with training: <bookmark mark='f'/> trained listeners were right about sixty per cent of the time, where guessing gives fifty.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def testing(self):

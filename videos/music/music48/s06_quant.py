@@ -32,7 +32,7 @@ class Quant(SoundScene):
             "The second half of digital audio is precision. A sample can only be one of a fixed set of levels: with N bits, two "
             "to the N of them. <bookmark mark='a'/> Here are three bits, eight levels: each input is rounded to the nearest, a "
             "staircase of output against input. <bookmark mark='b'/> The difference, the quantization error, is a sawtooth "
-            "that never exceeds half a step. Sixteen bits give 65,536 levels; the steps are tiny, but they are there."
+            "that stays within half a step when rounding without overload or clipping. Sixteen bits give 65,536 levels; the steps are tiny, but they are there."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(ex), FadeIn(la), FadeIn(lb), FadeIn(ideal))
             vo.wait_until("a")
@@ -138,10 +138,7 @@ class Quant(SoundScene):
             pulse(snd, boxes[1], st["second"], c.duration, buff=0.08)
         s = d["snr4"]
         with self.voiceover(
-            "The second. The first is rough and gritty, and the grit follows the music: it is distortion, the error locked to "
-            "the signal. The second hisses, a steady noise like tape, and the piano sounds clean through it. Measured, the "
-            f"second is worse: {say(s['tpdf'], 1)} decibels of signal to error against {say(s['none'], 1)}. Yet most listeners "
-            "prefer it. Chapter six explains why."
+            f"The second. The first is rough and gritty, and the grit follows the music: it is distortion, the error locked to the signal. The second hisses, a steady noise like tape, and the piano sounds clean through it. Measured, the second is worse: {say(s['tpdf'], 1)} decibels of signal to error against {say(s['none'], 1)}. Dither trades signal-correlated distortion for added noise; preference in this sketch has not been measured. Chapter six explains why."
         ):
             self.play(boxes[1][0].animate.set_stroke(TUNE, width=4))
         self.wait(0.4)

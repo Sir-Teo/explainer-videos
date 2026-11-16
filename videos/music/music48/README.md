@@ -46,7 +46,7 @@ original, amplified by a stated gain), since this video's own soundtrack is loss
   Nyquist can music be sampled before listeners notice?
 * **Variation 48, recap and problems.** The Tune's first phrase: the errors at 16 and 8 bits (+60 and +24 dB), without
   and with dither; the Tune at 4 bits both ways, at 1 bit, and as a one-bit stream at 64 times the rate; the ledger
-  (77 dB at 16 bits, 29 at 8, 5 at 4; one bit at 64 times 62 dB); what we found; five problems; where it comes back; in
+  (76 dB at 16 bits, 28 at 8, 4 at 4; one bit at 64 times 62 dB); what we found; five problems; where it comes back; in
   practice; references; Part 49.
 
 ## What is computed, and what is heard
@@ -139,3 +139,7 @@ python -m videos.music.labs 48                                  # the lab (write
   *JAES* (2007); J. D. Reiss, "A meta-analysis of high resolution audio perceptual evaluation", *JAES* (2016).
 * M. Vetterli, P. Marziliano and T. Blu, "Sampling signals with finite rate of innovation", *IEEE Trans. Signal
   Processing* (2002); E. J. Candès, J. Romberg and T. Tao (2006); D. L. Donoho, "Compressed sensing" (2006).
+
+## Interpretation limits
+
+Sampling uniqueness assumes an infinite exact sample sequence and strict band limitation, not a finite displayed dot set. Quantization half-step bounds exclude clipping; the 6.02N+1.76 dB rule assumes a full-scale sine and suitable error statistics. Dither makes specified error moments independent under its assumptions, not every possible statistic or overload behavior. Noise shaping and oversampling involve stability, filtering and later-processing trade-offs. This lossy video is not a controlled format-audibility test. Compressed sensing requires sparsity and suitable measurements; it does not repeal the general sampling theorem.

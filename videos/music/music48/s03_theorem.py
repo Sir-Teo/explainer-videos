@@ -28,7 +28,7 @@ class Theorem(SoundScene):
                    "times a second determine it completely. <bookmark mark='b'/> Not approximately: exactly, at every instant "
                    "between the samples too. <bookmark mark='c'/> Half the sample rate is called the Nyquist frequency; the "
                    "signal must stay below it. <bookmark mark='d'/> It sounds impossible: infinitely many curves pass through any "
-                   "set of dots. <bookmark mark='e'/> But only one of them contains no frequency above half the sample rate.",
+                   "set of dots. <bookmark mark='e'/> But an infinite, exact sample sequence uniquely determines the strictly band-limited signal under the theorem's assumptions; a finite set of displayed points alone does not.",
                    marks="bcde")
 
     # ------------------------------------------------------------------

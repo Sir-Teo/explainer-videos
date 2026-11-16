@@ -57,11 +57,11 @@ class Hook(SoundScene):
                              label(rf"{v:.0f} dB", font_size=18, color=col).move_to([X(v) + 0.5, y, 0])))
         head = label(r"the one-bit version was the first", font_size=26, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "The one-bit version was the first. If you could not tell, you are in good company: almost nobody can. "
+            "The one-bit version was the first. Judge this demonstration cautiously: the video's lossy soundtrack is not a controlled audibility test. "
             f"<bookmark mark='a'/> Measure the difference from the original instead. The music sits at {say(sig)} decibels. "
             f"<bookmark mark='b'/> The one-bit version's error is at {say(r['one bit'])}, <bookmark mark='c'/> the sixteen-bit "
-            f"version's at {say(r['16 bits'])}. Both errors are so far below the music that they are hidden under it. A stream "
-            "of yes-or-no answers, three million a second, carries the music as well as a CD does. This part shows why."
+            f"version's at {say(r['16 bits'])}. The measured error levels are low for this signal; audibility also depends on spectrum, playback level, equipment and listener. A stream "
+            "of yes-or-no answers, three million a second, can carry high-fidelity audio under suitable modulator and filtering conditions. This part shows why."
         ) as vo:
             self.play(FadeIn(head), FadeIn(axis), FadeIn(ghost(rows_, 0.2)))
             for mark, rr in zip("abc", rows_):
