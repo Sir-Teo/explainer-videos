@@ -100,4 +100,94 @@
       note: "Nothing you answer is stored or sent. The cases are illustrations with round numbers, not the properties of any real test.",
     });
   };
+  // ---- Part 40: the dot-probe, on you, and why twenty trials cannot measure a bias. ----
+  W.dotprobe = function (el) {
+    var w = null, DOT = "#7ec8f5", WORD = "#e8edf3";
+    // mild words only: the task needs a contrast in valence, not distressing material
+    var NEUTRAL = ["table", "carpet", "window", "garden", "pencil", "ladder", "kettle", "button"];
+    var NEGATIVE = ["danger", "failure", "mistake", "alarm", "reject", "storm", "worry", "blame"];
+    var run = T.timed(el, {
+      keys: { f: 0, j: 1 },
+      trials: function () { return w.v.n; },
+      seed: function () { return w.state.seed; },
+      stimulus: function (rand) {
+        return { neg: rand() < 0.5 ? 0 : 1, dot: rand() < 0.5 ? 0 : 1, a: Math.floor(rand() * 8), b: Math.floor(rand() * 8) };
+      },
+      correct: function (stim, side) { return side === stim.dot; },
+      render: function () { if (w) w.render(); },
+      foreperiod: [500, 800], timeout: 2000, pause: { scored: 500, early: 900, timeout: 800 },
+      words: { early: "Too early: wait for the dot.", timeout: "No answer in two seconds.",
+        wrong: function () { return "Other side (not counted)."; } },
+    });
+    function stats() {
+      var r = run.rts("probe"), m, sd = NaN;
+      if (!r.length) return null;
+      m = QB.mean(r);
+      if (r.length > 2) {
+        var ss = 0, i;
+        for (i = 0; i < r.length; i++) ss += (r[i] - m) * (r[i] - m);
+        sd = Math.sqrt(ss / (r.length - 1));
+      }
+      // trials of each kind needed to tell a 10 ms difference from noise (two-sided 5%, 80% power)
+      var need = isFinite(sd) ? Math.ceil(2 * Math.pow(1.96 + 0.84, 2) * sd * sd / 100) : NaN;
+      return { n: r.length, mean: m, sd: sd, need: need, rts: r };
+    }
+    w = QB.widget(el, {
+      title: "The dot-probe, on you",
+      sub: "Two words appear, one on the left and one on the right; then a dot replaces one of them. Press F (or tap left) if the dot is on the left, J (or tap right) if it is on the right, as fast as you can. Afterwards you see your times, and why a handful of trials cannot measure anything about one person.",
+      panels: 2, height: 320, weights: [1.1, 1],
+      controls: [{ k: "n", label: "Trials", min: 12, max: 40, step: 4, value: 20, fmt: function (x) { return x.toFixed(0); } }],
+      buttons: [
+        { label: "Start", act: function () { run.reset(); run.start("probe"); } },
+        { label: "Clear", act: function () { run.reset(); } },
+      ],
+      draw: function (g, v) {
+        var ctx = g.ctx, b = T.stage(g, 0, run.task), s = stats(), i;
+        ctx.save(); ctx.textAlign = "center";
+        if (run.phase === "wait" || run.phase === "go") {
+          ctx.strokeStyle = C.muted; ctx.lineWidth = 2; ctx.beginPath();
+          ctx.moveTo(b.cx - 8, b.cy); ctx.lineTo(b.cx + 8, b.cy); ctx.moveTo(b.cx, b.cy - 8); ctx.lineTo(b.cx, b.cy + 8);
+          ctx.stroke();
+          var xs = [b.x + b.w * 0.25, b.x + b.w * 0.75];
+          if (run.phase === "wait") {
+            ctx.fillStyle = WORD; ctx.font = "600 18px system-ui, sans-serif";
+            for (i = 0; i < 2; i++) ctx.fillText(i === run.stim.neg ? NEGATIVE[run.stim.a] : NEUTRAL[run.stim.b], xs[i], b.cy + 6);
+          } else {
+            ctx.fillStyle = DOT; ctx.beginPath(); ctx.arc(xs[run.stim.dot], b.cy, 8, 0, 2 * Math.PI); ctx.fill();
+          }
+          ctx.fillStyle = C.muted; ctx.font = "12px system-ui, sans-serif";
+          ctx.fillText("trial " + run.trial + " of " + v.n + "    left: F    right: J", b.cx, b.y + 22);
+        } else if (run.phase === "feedback") {
+          T.message(ctx, b, run.msg);
+        } else if (run.phase === "done" && s) {
+          T.message(ctx, b, "Your mean time: " + Math.round(s.mean) + " ms, spread " + (isFinite(s.sd) ? Math.round(s.sd) : "-") + " ms.",
+                    "In groups, the threat bias is a difference of a few to a few tens of milliseconds. With your spread, telling a 10 ms difference from noise in one person would take about " + (isFinite(s.need) ? s.need.toLocaleString() : "-") + " trials of each kind. That is why the score is unreliable for individuals; no score is computed here.");
+        } else {
+          T.message(ctx, b, "On you", "Press Start. Nothing you do is scored or kept.");
+        }
+        ctx.restore();
+        var c2 = g[1].box, cx = g.ctx;
+        cx.save(); cx.textAlign = "left"; cx.fillStyle = C.ink; cx.font = "600 12px system-ui, sans-serif";
+        cx.fillText("Your response times, trial by trial", c2.x + 10, c2.y + 18);
+        if (s && s.n) {
+          var lo = 150, hi = 1000, px = function (k) { return c2.x + 40 + (c2.w - 60) * k / Math.max(1, v.n - 1); };
+          var py = function (t) { return c2.y + c2.h - 30 - (c2.h - 70) * (Math.min(hi, Math.max(lo, t)) - lo) / (hi - lo); };
+          cx.fillStyle = "rgba(91,209,139,0.25)";
+          cx.fillRect(c2.x + 40, py(s.mean + 10), c2.w - 60, Math.max(2, py(s.mean - 10) - py(s.mean + 10)));
+          cx.fillStyle = DOT;
+          for (i = 0; i < s.rts.length; i++) { cx.beginPath(); cx.arc(px(i), py(s.rts[i]), 4, 0, 2 * Math.PI); cx.fill(); }
+          cx.fillStyle = C.muted; cx.font = "11px system-ui, sans-serif";
+          cx.fillText(hi + " ms", c2.x + 4, py(hi) + 4); cx.fillText(lo + " ms", c2.x + 4, py(lo) + 4);
+          cx.fillText("green band: 20 ms, about the size of the group effect", c2.x + 10, c2.y + c2.h - 10);
+        }
+        cx.restore();
+      },
+      readout: function () {
+        var s = stats();
+        return [["answers", String(run.task.count)], ["mean time", s ? Math.round(s.mean) + " ms" : "-"]];
+      },
+      note: "Nothing you answer is stored or sent, and no bias score is computed: the point is the trial-to-trial spread. The words are mild on purpose.",
+    });
+  };
+
 })();

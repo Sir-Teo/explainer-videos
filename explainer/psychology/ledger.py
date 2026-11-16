@@ -362,7 +362,7 @@ add(Finding(
 
 shown(2, "PEIRCE_JASTROW_1884", "shown for its method, the shuffled deck; its result is not presented")
 shown(2, "MITCHELL_2021", "shown for the authors' own count of who guessed their arm, which they call anecdotal; "
-      "the trial's result is not presented", row_in=42)
+      "the trial's result is not presented; Part 42's frontier discusses the unblinding problem in such trials")
 shown(2, r"Arnett (2008); \ Henrich, Heine \& Norenzayan (2010)", "a count of who is sampled, shown to pose "
       "the question of external validity; its row (weird samples) is entered in Part 38")
 
@@ -681,7 +681,8 @@ shown(6, "LIU_2012", "one laboratory's reactivation of a tagged memory in mice, 
       "strengthened synapses are the memory is argued with the evidence in Part 20, which reports it as a "
       "neuroscience finding, not a behavioural effect")
 shown(6, "TURNER_2008", "the registered and the published record of one class of drug trials, shown as a case of "
-      "Part 4's file drawer in an industry; entered with the evidence on treatments", row_in=42)
+      "Part 4's file drawer in an industry; Part 42 uses it as the record behind its row on the published size of "
+      "therapy's effect")
 
 # ---------------------------------------------------------------------------------------------------------------
 # Part 7: the brain
@@ -1169,7 +1170,7 @@ shown(10, "HOBSON_1977", "two theories of dreaming, presented as an open dispute
 shown(10, "SIEGEL_1982", "an animal experiment on tolerance; its row is entered with conditioning, in Part 16")
 shown(10, "SOLOMON_CORBIT_1974", "a theory, shown as a model; the findings on addiction are entered in Part 41")
 shown(10, "DUNSTER_2018", "a before-and-after comparison in two schools, described as that")
-shown(10, "TRAUER_2015", "a meta-analysis of a treatment; therapies are entered in Part 42", row_in=42)
+shown(10, "TRAUER_2015", "a meta-analysis of a treatment; Part 42 enters the evidence on psychotherapy in general")
 shown(10, "XIE_2013", "a finding in mice and its dispute, at the frontier")
 shown(10, "PHOENIX_1959", "animal physiology; the human evidence is indirect and is said to be")
 shown(10, "TEIGEN_1994", "a history of a textbook law, told again in Part 28: a history, not a finding")
@@ -5703,4 +5704,151 @@ shown(39, r"Cramer et al.\ (2016); \ Borsboom (2017)", "a model and a theory, ru
 shown(39, r"Nichter (1981); \ Kaiser et al.\ (2015)", "an anthropological concept and a systematic review, "
       "described")
 shown(39, r"Kruis \& Maris (2016)", "a mathematical result about models, described")
+
+# --- Part 40: Fear and Sadness ---------------------------------------------------------------------------------------
+
+add(Finding(
+    key="exposure_efficacy", part=40, title=r"Exposure therapy for anxiety",
+    claim="Treatments built on exposure to what is feared reduce anxiety more than control conditions.",
+    original=Study("Wolpe", 1958, design="systematic desensitization: graded imagined exposure with relaxation",
+                   found="most phobic patients improved"),
+    status="replicated",
+    record=(Study("Carpenter and colleagues (meta-analysis)", 2018, n="placebo-controlled trials of cognitive "
+                  "behavioural therapy for anxiety disorders", found="moderate benefits over placebo"),
+            Study("Craske and colleagues (review)", 2014, found="exposure works; how to make it last is the open "
+                  "question")),
+    note="Among the best-supported treatments in psychology; relapse after it is common, as the renewal row predicts.",
+    sources=("J. Wolpe, Psychotherapy by Reciprocal Inhibition (Stanford University Press, 1958)",
+             "J. K. Carpenter et al., Cognitive behavioral therapy for anxiety and related disorders: a meta-analysis "
+             "of randomized placebo-controlled trials, Depression and Anxiety 35 (2018) 502-514",
+             "M. G. Craske et al., Maximizing exposure therapy: an inhibitory learning approach, Behaviour Research "
+             "and Therapy 58 (2014) 10-23"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="fear_renewal", part=40, title=r"The return of extinguished fear",
+    claim="Fear removed by extinction returns when the context changes (renewal), with time, or after a reminder.",
+    original=Study("Bouton and Bolles", 1979, n="rats", design="conditioning in one context, extinction in another",
+                   found="fear returned when tested back in the first context"),
+    status="replicated",
+    record=(Study("Vervliet, Craske and Hermans (review)", 2013, design="animal and human studies",
+                  found="renewal, spontaneous recovery and reinstatement in many species and procedures"),),
+    note="Extinction is new, context-bound learning; relapse after exposure therapy fits the pattern.",
+    sources=("M. E. Bouton and R. C. Bolles, Contextual control of the extinction of conditioned fear, Learning and "
+             "Motivation 10 (1979) 445-466",
+             "B. Vervliet, M. G. Craske and D. Hermans, Fear extinction and relapse: state of the art, Annual Review "
+             "of Clinical Psychology 9 (2013) 215-248"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="learned_helplessness", part=40, title=r"Learned helplessness",
+    claim="Animals exposed to uncontrollable shock later fail to escape when escape is possible, because they have "
+          "learned that responding does not matter.",
+    original=Study("Seligman and Maier", 1967, n="dogs in three groups", design="escapable, yoked inescapable and "
+                   "no shock, then a shuttle box", found="the inescapable group mostly failed to escape"),
+    status="replicated",
+    record=(Study("Maier and Seligman (review)", 2016, design="decades of neuroscience in rats",
+                  found="passivity is the default response to prolonged shock; what is learned is control"),),
+    note="The effect replicates; its explanation was reversed by its own authors.",
+    sources=("M. E. P. Seligman and S. F. Maier, Failure to escape traumatic shock, Journal of Experimental "
+             "Psychology 74 (1967) 1-9",
+             "S. F. Maier and M. E. P. Seligman, Learned helplessness at fifty: insights from neuroscience, "
+             "Psychological Review 123 (2016) 349-367"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="attention_bias_modification", part=40, title=r"Training attention away from threat",
+    claim="Training attention away from threat in a dot-probe task reduces anxiety.",
+    original=Study("MacLeod and colleagues", 2002, design="attention training in the dot-probe task",
+                   found="trained attention changed, and so did reactions to stress"),
+    status="failed",
+    record=(Study("Cristea, Kok and Cuijpers (meta-analysis)", 2015, n="randomized trials of bias modification",
+                  found="small effects that disappeared after correcting for publication bias"),),
+    note="The dot-probe bias score is also too unreliable to measure one person.",
+    sources=("C. MacLeod et al., Selective attention and emotional vulnerability, Journal of Abnormal Psychology "
+             "111 (2002) 107-123",
+             "I. A. Cristea, R. N. Kok and P. Cuijpers, Efficacy of cognitive bias modification interventions in "
+             "anxiety and depression: meta-analysis, British Journal of Psychiatry 206 (2015) 7-16"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="serotonin_deficit", part=40, title=r"Depression as low serotonin",
+    claim="Depression is caused by a shortage of serotonin, which antidepressants correct.",
+    original=Study("Schildkraut and the monoamine hypothesis", 1965, design="inferences from reserpine and "
+                   "early antidepressants", found="a monoamine shortage proposed"),
+    status="failed",
+    record=(Study("Moncrieff and colleagues (umbrella review)", 2022, design="reviews of serotonin and depression",
+                  found="no consistent evidence of an association or a cause"),),
+    note="Failed as stated; serotonin may matter for some people, and the drugs' effect does not depend on the story.",
+    sources=("J. J. Schildkraut, The catecholamine hypothesis of affective disorders, American Journal of "
+             "Psychiatry 122 (1965) 509-522",
+             "J. Moncrieff et al., The serotonin theory of depression: a systematic umbrella review of the evidence, "
+             "Molecular Psychiatry (2022)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="antidepressants_placebo", part=40, title=r"Antidepressants against placebo",
+    claim="Antidepressants relieve depression more than placebo.",
+    original=Study("Kirsch and colleagues", 2008, design="trials submitted to the US regulator",
+                   found="about 1.8 points on the 52-point Hamilton scale; larger in severe depression"),
+    status="replicated, smaller",
+    record=(Study("Cipriani and colleagues (network meta-analysis)", 2018, n="522 trials, 116,477 people",
+                  found="all 21 drugs more effective than placebo; odds ratios about 1.4 to 2.1"),),
+    note="A real and modest average effect over about eight weeks; who benefits most is debated.",
+    sources=("I. Kirsch et al., Initial severity and antidepressant benefits, PLoS Medicine 5 (2008) e45",
+             "A. Cipriani et al., Comparative efficacy and acceptability of 21 antidepressant drugs, Lancet 391 "
+             "(2018) 1357-1366"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="httlpr_stress", part=40, title=r"A serotonin gene and stress",
+    claim="Stressful life events cause depression more often in carriers of the short 5-HTTLPR allele.",
+    original=Study("Caspi and colleagues", 2003, n="the Dunedin cohort", found="a gene-by-environment interaction"),
+    status="failed",
+    record=(Study("Culverhouse and colleagues (collaborative meta-analysis)", 2018, n="over 38,000 people",
+                  found="no interaction"),
+            Study("Border and colleagues", 2019, design="candidate genes in large samples",
+                  found="no support for the candidate genes or their interactions")),
+    note="Depression is highly polygenic; candidate genes of large effect did not survive large samples (Part 9).",
+    sources=("A. Caspi et al., Influence of life stress on depression: moderation by a polymorphism in the 5-HTT "
+             "gene, Science 301 (2003) 386-389",
+             "R. C. Culverhouse et al., Collaborative meta-analysis finds no evidence of a strong interaction between "
+             "stress and 5-HTTLPR genotype, Molecular Psychiatry 23 (2018) 133-142",
+             "R. Border et al., No support for historical candidate gene or candidate gene-by-interaction hypotheses "
+             "for major depression across multiple large samples, American Journal of Psychiatry 176 (2019) 376-387"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="suicide_prediction", part=40, title=r"Predicting suicidal behaviour",
+    claim="Known risk factors predict which individuals will make a suicide attempt with useful accuracy.",
+    original=Study("Pokorny", 1983, n="about 4,800 psychiatric inpatients", design="risk factors recorded at "
+                   "admission, then follow-up", found="the factors flagged far more people than died, and missed many "
+                   "who did"),
+    status="failed",
+    record=(Study("Franklin and colleagues (meta-analysis)", 2017, n="365 studies",
+                  found="prediction only slightly better than chance, and no better over fifty years"),),
+    note="Associations are real; individual prediction is poor, largely because of the low base rate.",
+    sources=("A. D. Pokorny, Prediction of suicide in psychiatric patients, Archives of General Psychiatry 40 (1983) "
+             "249-257",
+             "J. C. Franklin et al., Risk factors for suicidal thoughts and behaviors: a meta-analysis of 50 years of "
+             "research, Psychological Bulletin 143 (2017) 187-232"),
+    checked="2026-11-16",
+))
+
+shown(40, r"Mowrer (1947)", "a theory, run on Psyche; the exposure row carries the evidence")
+shown(40, r"Craske et al.\ (2014)", "a review of principles; cited in the exposure row")
+shown(40, r"Clark (1986)", "a cognitive model of panic, described")
+shown(40, r"Beck (1967); \ Abramson, \ Seligman \& Teasdale (1978)", "theories of depression, described")
+shown(40, r"Schildkraut (1965)", "the monoamine hypothesis; the serotonin row carries the evidence")
+shown(40, r"Brown \& Harris (1978)", "a community interview study, described")
+shown(40, r"Cade (1949)", "the discovery of lithium, told as history")
+shown(40, r"Gillan et al.\ (2011); \ Gillan et al.\ (2016)", "studies of habit and compulsivity, described; "
+      "computational psychiatry is Part 59's")
 

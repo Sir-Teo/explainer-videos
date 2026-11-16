@@ -1122,6 +1122,22 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Ronald Kessler; Robert Kohn; Anthony Jorm; Paul Meehl; Robyn Dawes; William Grove; Carroll; Kapur | 罗纳德·凯斯勒；罗伯特·科恩；安东尼·约姆；保罗·米尔；罗宾·道斯；威廉·格罗夫；卡罗尔；卡普尔 |
 | Mark Nichter; Bonnie Kaiser; Samaritans; Suicide and Crisis Lifeline | 马克·尼克特；邦妮·凯泽；撒玛利亚会；自杀与危机生命线 |
 
+## Part 40: fear and sadness
+
+| English | 中文 |
+|---|---|
+| learned helplessness; triadic design; escapable, inescapable shock; shuttle box; control | 习得性无助；三组设计；可逃脱、不可逃脱的电击；穿梭箱；控制 |
+| two-factor theory; avoidance; relief; exposure; response prevention; safety behaviour | 二因素理论；回避；解脱；暴露；反应阻止；安全行为 |
+| extinction; renewal; spontaneous recovery; reinstatement; inhibitory learning; retrieval cue | 消退；复燃；自发恢复；重建；抑制性学习；提取线索 |
+| specific phobia; panic disorder; social anxiety; generalized anxiety; obsessive-compulsive disorder; post-traumatic stress disorder | 特定恐惧症；惊恐障碍；社交焦虑；广泛性焦虑；强迫障碍；创伤后应激障碍 |
+| dot-probe; attentional bias; attention-bias modification; goal-directed control; habit; compulsivity | 点探测；注意偏向；注意偏向矫正；目标导向的控制；习惯；强迫性 |
+| negative triad; attributional style; rumination; anhedonia; behavioural activation; momentary happiness | 负性三联征；归因风格；反刍；快感缺失；行为激活；瞬时幸福感 |
+| monoamine hypothesis; serotonin; reserpine; iproniazid; umbrella review; network meta-analysis; odds ratio; number needed to treat | 单胺假说；血清素；利血平；异烟酰异丙肼；伞形综述；网络元分析；比值比；需治疗人数 |
+| life events; vulnerability factor; serotonin transporter; candidate gene; bipolar disorder; mania; lithium | 生活事件；易感因素；血清素转运体；候选基因；双相障碍；躁狂；锂盐 |
+| Martin Seligman; Steven Maier; O. Hobart Mowrer; Joseph Wolpe; Mark Bouton; Michelle Craske; David Clark | 马丁·塞利格曼；史蒂文·迈尔；O·霍巴特·莫勒；约瑟夫·沃尔普；马克·布顿；米歇尔·克拉斯克；戴维·克拉克 |
+| Colin MacLeod; Ioana Cristea; Claire Gillan; Aaron Beck; Robb Rutledge; Joseph Schildkraut; Joanna Moncrieff | 科林·麦克劳德；约安娜·克里斯泰亚；克莱尔·吉兰；阿伦·贝克；罗布·拉特利奇；约瑟夫·席尔德克劳特；乔安娜·蒙克里夫 |
+| Irving Kirsch; Andrea Cipriani; George Brown; Tirril Harris; Robert Culverhouse; Richard Border; John Cade; Joseph Franklin; Alex Pokorny | 欧文·基尔希；安德烈亚·奇普里亚尼；乔治·布朗；蒂里尔·哈里斯；罗伯特·卡尔弗豪斯；理查德·博德；约翰·凯德；约瑟夫·富兰克林；亚历克斯·波科尔尼 |
+
 ## Names
 
 | English | 中文 |

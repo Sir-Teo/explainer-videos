@@ -97,3 +97,33 @@ def test_discount_reversal():
 def test_extinction_in_more_contexts_generalizes():
     r = K.renewal_contexts()
     assert np.all(np.diff(r["fear"]) < 0) and r["fear"][0] > 0.6 and r["fear"][-1] < 0.25
+
+
+def test_scheduled_activity_breaks_the_trap():
+    stuck = np.median([K.activation(0, seed=s)["active"][-30:].mean() for s in range(21)])
+    freed = np.median([K.activation(14, seed=s)["active"][-30:].mean() for s in range(21)])
+    assert stuck < 0.2 and freed > 0.8
+
+
+def test_every_arm_improves_and_the_control_sets_the_effect():
+    changes = {a: K.therapy_trial(a)["change"] for a in K.ARMS}
+    assert all(c < -3 for c in changes.values())
+    assert K.trial_effect("active", "waitlist", n=1000) > K.trial_effect("active", "placebo", n=1000) + 0.3
+
+
+def test_publication_filter_inflates_and_random_effects_recovers():
+    p = K.publication_filter()
+    allr = K.random_effects(p["d"], p["v"])
+    pub = K.random_effects(p["d"][p["published"]], p["v"][p["published"]])
+    assert abs(allr["mu"] - 0.3) < 0.06 and pub["mu"] > allr["mu"] + 0.08
+
+
+def test_random_effects_matches_fixed_when_homogeneous():
+    r = K.random_effects([0.5, 0.5, 0.5], [0.1, 0.2, 0.3])
+    assert r["tau2"] == 0 and abs(r["mu"] - 0.5) < 1e-12
+
+
+def test_reliable_change_and_cutoff():
+    assert abs(K.reliable_change(28, 16, 7, 0.85) + 12 / (np.sqrt(2) * 7 * np.sqrt(0.15))) < 1e-12
+    assert abs(K.jt_cutoff(28, 6, 7, 5) - (6 * 7 + 5 * 28) / 11) < 1e-12
+    assert abs(K.dose_response(8) - 0.5) < 1e-12 and abs(K.dose_response(26) - 0.75) < 1e-9

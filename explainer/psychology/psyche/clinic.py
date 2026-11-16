@@ -31,6 +31,10 @@ Part 40 adds fear and sadness:
   features and any new context shares a fraction of features with each one, the inhibition a new context retrieves
   grows with the number of extinction contexts, and the fear that returns there shrinks.
 * :func:`helplessness`: the triadic design as a belief about control, with passivity as the default.
+* :func:`activation`: the trap behind behavioural activation.  A learner chooses each day between an activity
+  whose rewards it must sample to learn and a rest with a small, known reward; starting from a low estimate after a
+  loss, it rarely acts and so never learns that acting pays.  Scheduling the activity for a fortnight breaks the
+  trap.
 * :func:`mood_task` and :func:`fit_mood`: Rutledge and colleagues' model of momentary happiness as a decaying sum of
   certain rewards, expected values and reward prediction errors, simulated and fitted.
 
@@ -54,6 +58,22 @@ Part 41 adds inference and learning set wrongly:
   natural reward's value settles at the reward, and a cost added to the drug does not stop the rise.
 * :func:`discount`: hyperbolic delay discounting, V = A / (1 + kD), and the delay at which a larger, later reward
   stops being preferred to a smaller, sooner one.
+
+Part 42 adds the evidence for therapy:
+
+* :func:`therapy_trial`: people whose symptom scores wander around their own mean enrol when a score crosses a
+  threshold, at their worst, and are scored again later; arms add nothing, a waiting list's small harm, the
+  common factors of any credible therapy, or common and specific factors.  Regression to the mean and natural
+  recovery make every arm improve.
+* :func:`trial_effect`: the standardized difference between two arms' outcomes, so the effect depends on the control.
+* :func:`publication_filter`: many trials of one true effect; the published ones are those that reached
+  significance, plus a share of the rest.
+* :func:`random_effects`: DerSimonian and Laird's random-effects meta-analysis: the pooled effect, its standard
+  error, tau squared and I squared.
+* :func:`allegiance`: comparisons of two equally good therapies, each run by a team loyal to one of them.
+* :func:`reliable_change` and :func:`jt_cutoff`: Jacobson and Truax's reliable change index and the cut-off between
+  the clinical and the healthy distributions.
+* :func:`dose_response`: the share improved after a number of sessions, as a log-normal curve.
 """
 
 from __future__ import annotations
@@ -61,9 +81,10 @@ from __future__ import annotations
 import numpy as np
 
 __all__ = ["kappa", "two_clinicians", "ising_network", "sweep", "episode", "comorbidity", "screen",
-           "clinician_vs_formula", "avoidance", "renewal", "renewal_contexts", "helplessness", "mood_task",
+           "clinician_vs_formula", "avoidance", "renewal", "renewal_contexts", "helplessness", "activation", "mood_task",
            "fit_mood", "hollow_mask", "prior_tradeoff", "conditioned_hallucinations", "aberrant_salience",
-           "redish", "discount"]
+           "redish", "discount", "therapy_trial", "trial_effect", "publication_filter", "random_effects",
+           "allegiance", "reliable_change", "jt_cutoff", "dose_response"]
 
 
 def kappa(table) -> float:
@@ -289,6 +310,23 @@ def helplessness(pre: str = "inescapable", n_pre: int = 64, n_test: int = 10, pr
     return out / reps
 
 
+def activation(scheduled: int = 0, days: int = 90, v0: float = -0.5, reward: float = 0.6, rest: float = 0.2,
+               alpha: float = 0.2, beta: float = 8.0, noise: float = 0.4, seed: int = 0) -> dict:
+    """A day-by-day choice between an activity (reward ~ N(reward, noise), learned only by doing it, starting from
+    the estimate v0) and rest (a known reward ``rest``), by softmax with inverse temperature beta.  For the first
+    ``scheduled`` days the activity is done regardless.  Returns the estimate and the choices by day."""
+    rng = np.random.default_rng(seed)
+    V = v0
+    est, act = np.zeros(days), np.zeros(days, bool)
+    for t in range(days):
+        p = 1 / (1 + np.exp(-beta * (V - rest)))
+        a = t < scheduled or rng.random() < p
+        if a:
+            V += alpha * (rng.normal(reward, noise) - V)
+        est[t], act[t] = V, a
+    return {"estimate": est, "active": act}
+
+
 def mood_task(n: int = 90, w=(0.5, 0.0, 0.25, 0.6), gamma: float = 0.65, noise: float = 0.25, rpe_scale: float = 1.0,
               seed: int = 0) -> dict:
     """Rutledge and colleagues' (2014) model of momentary happiness in a gambling task: each trial offers a sure
@@ -426,3 +464,96 @@ def redish(D: float = 0.0, reward: float = 1.0, cost: float = 0.0, n_trials: int
 def discount(amount, delay, k: float):
     """Hyperbolic discounting, V = A / (1 + k D).  Vectorized."""
     return np.asarray(amount, float) / (1 + k * np.asarray(delay, float))
+
+
+ARMS = {"none": 0.0, "waitlist": -1.0, "placebo": 2.0, "active": 4.0}
+
+
+def therapy_trial(arm: str = "none", n: int = 200, threshold: float = 20.0, mean: float = 14.0, sd_person: float = 5.0,
+                  sd_occasion: float = 5.0, effects=None, seed: int = 0) -> dict:
+    """A symptom score is a person's own mean (N(mean, sd_person)) plus occasion noise (N(0, sd_occasion)).  People are
+    screened until n have a score of at least ``threshold`` (they come at their worst); each is scored again at the
+    end with fresh noise, minus the arm's effect in points (``ARMS``: a waiting list's small harm, a credible
+    placebo therapy's common factors, an active therapy's common and specific factors).  Returns the entry and end
+    scores."""
+    eff = (effects or ARMS)[arm]
+    rng = np.random.default_rng(seed)
+    pre, post = [], []
+    while len(pre) < n:
+        mu = rng.normal(mean, sd_person, 4 * n)
+        x = mu + rng.normal(0, sd_occasion, 4 * n)
+        keep = x >= threshold
+        pre.extend(x[keep])
+        post.extend(mu[keep] - eff + rng.normal(0, sd_occasion, int(keep.sum())))
+    pre, post = np.array(pre[:n]), np.array(post[:n])
+    return {"pre": pre, "post": post, "change": float(np.mean(post - pre))}
+
+
+def trial_effect(a: str, b: str, n: int = 200, seed: int = 0) -> float:
+    """Cohen's d between the end scores of arm ``b`` and arm ``a`` (positive when ``a`` ends lower)."""
+    x, y = therapy_trial(a, n, seed=seed)["post"], therapy_trial(b, n, seed=seed + 1)["post"]
+    sp = np.sqrt((x.var(ddof=1) + y.var(ddof=1)) / 2)
+    return float((y.mean() - x.mean()) / sp)
+
+
+def publication_filter(true_d: float = 0.3, k: int = 400, n_lo: int = 10, n_hi: int = 80, publish_null: float = 0.2,
+                       tau: float = 0.1, seed: int = 0) -> dict:
+    """k two-arm trials of a therapy with mean effect true_d (and between-trial SD tau), n per arm uniform in
+    [n_lo, n_hi].  A trial is published if its one-sided p < 0.025 or, otherwise, with probability publish_null.
+    Returns each trial's d, its variance, n, and whether it was published."""
+    rng = np.random.default_rng(seed)
+    n = rng.integers(n_lo, n_hi + 1, k)
+    theta = rng.normal(true_d, tau, k)
+    v = 2 / n + theta ** 2 / (4 * n)
+    d = rng.normal(theta, np.sqrt(v))
+    sig = d / np.sqrt(v) > 1.96
+    pub = sig | (rng.random(k) < publish_null)
+    return {"d": d, "v": v, "n": n, "published": pub, "significant": sig}
+
+
+def random_effects(y, v) -> dict:
+    """DerSimonian and Laird: inverse-variance weights, Q, tau^2 = max(0, (Q - (k - 1)) / (S1 - S2 / S1)), the
+    pooled mean with weights 1 / (v + tau^2), its standard error, and I^2 = max(0, (Q - (k - 1)) / Q)."""
+    y, v = np.asarray(y, float), np.asarray(v, float)
+    w = 1 / v
+    fixed = float(np.sum(w * y) / np.sum(w))
+    Q = float(np.sum(w * (y - fixed) ** 2))
+    k = len(y)
+    tau2 = max(0.0, (Q - (k - 1)) / (w.sum() - (w ** 2).sum() / w.sum()))
+    ws = 1 / (v + tau2)
+    mu = float(np.sum(ws * y) / ws.sum())
+    return {"mu": mu, "se": float(np.sqrt(1 / ws.sum())), "tau2": tau2, "I2": max(0.0, (Q - (k - 1)) / Q) if Q > 0 else 0.0,
+            "fixed": fixed, "Q": Q}
+
+
+def allegiance(k: int = 60, bias: float = 0.25, n: int = 40, seed: int = 0) -> dict:
+    """k trials comparing two equally effective therapies A and B, each run by a team loyal to one of them (half
+    each), whose loyalty adds ``bias`` to the observed advantage of their own therapy.  Returns each trial's
+    observed A-minus-B effect, its variance and the team's loyalty (+1 for A, -1 for B)."""
+    rng = np.random.default_rng(seed)
+    loyal = np.where(np.arange(k) % 2 == 0, 1.0, -1.0)
+    v = np.full(k, 2 / n)
+    d = rng.normal(loyal * bias, np.sqrt(v))
+    return {"d": d, "v": v, "loyal": loyal}
+
+
+def reliable_change(x1, x2, sd: float, rxx: float):
+    """Jacobson and Truax's RCI: (x2 - x1) / S_diff, S_diff = sqrt(2) * sd * sqrt(1 - rxx).  |RCI| > 1.96 is
+    reliable change."""
+    s_diff = np.sqrt(2) * sd * np.sqrt(1 - rxx)
+    return (np.asarray(x2, float) - np.asarray(x1, float)) / s_diff
+
+
+def jt_cutoff(m_clin: float, s_clin: float, m_well: float, s_well: float) -> float:
+    """Criterion c: the point between the clinical and the well distributions, weighted by their SDs."""
+    return (s_clin * m_well + s_well * m_clin) / (s_clin + s_well)
+
+
+def dose_response(sessions, median: float = 8.0, at75: float = 26.0):
+    """The share improved after a number of sessions, as a log-normal curve with the given median and 75th
+    percentile (Howard and colleagues' 1986 summary: half improved by 8 sessions, three quarters by 26)."""
+    from math import erf, log, sqrt
+    sigma = (log(at75) - log(median)) / 0.6744897501960817
+    s = np.atleast_1d(np.asarray(sessions, float))
+    out = np.array([0.0 if x <= 0 else 0.5 * (1 + erf((log(x) - log(median)) / (sigma * sqrt(2)))) for x in s])
+    return out if np.ndim(sessions) else float(out[0])
