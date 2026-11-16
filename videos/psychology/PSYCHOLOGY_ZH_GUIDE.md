@@ -1031,6 +1031,27 @@ On-screen text lives in `videos/psychology/psychology_text_zh.json` (exact `stri
 | Granovetter; DeGroot; Rainer Hegselmann, Ulrich Krause; Damon Centola; Francis Galton; Lorenz | 格兰诺维特；德格鲁特；赖纳·黑格塞尔曼，乌尔里希·克劳泽；达蒙·森托拉；弗朗西斯·高尔顿；洛伦茨 |
 | Salganik, Dodds, Watts; Muchnik, Aral, Taylor; Bond; Cosma Shalizi, Andrew Thomas; Huszár | 萨尔加尼克，多兹，瓦茨；穆赫尼克，阿拉尔，泰勒；邦德；科斯马·沙利兹，安德鲁·托马斯；胡萨尔 |
 
+## Part 35: social cognition
+
+| English | 中文 |
+|---|---|
+| social cognition; attribution; naive scientist; consensus, distinctiveness, consistency | 社会认知；归因；朴素的科学家；一致性，特异性，一贯性 |
+| the correspondence bias; the fundamental attribution error; a rational observer | 对应偏差；基本归因错误；理性观察者 |
+| cognitive dissonance; induced compliance; self-perception; arousal | 认知失调；诱导顺从；自我知觉；唤醒 |
+| attitude; the theory of planned behaviour; intention; perceived control | 态度；计划行为理论；意图；感知控制 |
+| the better-than-average effect; self-serving attribution; the false consensus effect; the Dunning-Kruger effect | 优于平均效应；自我服务归因；虚假一致性效应；邓宁-克鲁格效应 |
+| first impressions; thin slices; behavioural priming; semantic priming; repetition priming | 第一印象；薄片；行为启动；语义启动；重复启动 |
+| power posing; the winner's curse; regression to the mean | 力量姿势；赢家的诅咒；向均值回归 |
+| mentalizing; false belief; false photograph; the temporoparietal junction; localizer | 心智化；错误信念；错误照片；颞顶联合区；定位任务 |
+| inverse planning; goal inference; inverse reinforcement learning | 逆向规划；目标推断；逆强化学习 |
+| introspection; confabulation; choice blindness | 内省；虚构；选择盲 |
+| Leon Festinger, Carlsmith; Henry Riecken, Stanley Schachter; Heider, Simmel; Kelley; Jones, Harris | 利昂·费斯廷格，卡尔史密斯；亨利·里肯，斯坦利·沙赫特；海德，西美尔；凯利；琼斯，哈里斯 |
+| Daniel Gilbert, Patrick Malone; Walker, Smith, Vul; Bem; Fazio, Zanna, Cooper; Vaidis | 丹尼尔·吉尔伯特，帕特里克·马隆；沃克，史密斯，武尔；贝姆；法齐奥，赞纳，库珀；韦迪斯 |
+| LaPiere; Ajzen; Glasman, Albarracín; Ola Svenson; Mezulis; Lee Ross; Mullen; Kruger, Dunning; Nuhfer; McIntosh; Dawes | 拉皮尔；阿耶兹；格拉斯曼，阿尔瓦拉辛；奥拉·斯文森；梅祖利斯；李·罗斯；马伦；克鲁格，邓宁；努弗；麦金托什；道斯 |
+| Willis, Todorov; Ambady, Rosenthal; Bargh, Chen, Burrows; Doyen; Daniel Kahneman; Carney, Cuddy, Yap; Ranehill | 威利斯，托多罗夫；安巴迪，罗森塔尔；巴奇，陈，伯罗斯；杜瓦扬；丹尼尔·卡尼曼；卡尼，卡迪，叶；拉内希尔 |
+| Rebecca Saxe, Nancy Kanwisher; Jason Mitchell; Baker, Joshua Tenenbaum, Jara-Ettinger | 丽贝卡·萨克斯，南希·坎维舍；杰森·米切尔；贝克，约书亚·特南鲍姆，哈拉-埃廷格 |
+| Richard Nisbett, Timothy Wilson; Johansson, Hall; Andrew Ng, Stuart Russell; Michal Kosinski, Tomer Ullman; Fiske, Taylor | 理查德·尼斯贝特，蒂莫西·威尔逊；约翰松，霍尔；吴恩达，斯图尔特·罗素；米哈尔·科辛斯基，托默·厄尔曼；菲斯克，泰勒 |
+
 ## Names
 
 | English | 中文 |

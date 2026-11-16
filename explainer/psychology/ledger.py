@@ -4938,3 +4938,164 @@ shown(34, r"Galton (1907); \ Wallis (2014)", "a historical demonstration and its
 shown(34, r"Muchnik, \ Aral \& Taylor (2013)", "a randomized field experiment on ratings, described in practice")
 shown(34, r"Bond et al.\ (2012)", "a randomized field experiment on voting, described in practice")
 shown(34, r"Husz\'ar et al.\ (2022)", "a randomized platform audit, described in the frontier")
+
+# --- Part 35: Social Cognition ---------------------------------------------------------------------------------------
+
+add(Finding(
+    key="correspondence_bias", part=35, title=r"The correspondence bias",
+    claim="Observers infer a person's attitude from what they say or do even when the situation forced it.",
+    original=Study("Jones and Harris", 1967, n="Duke students", design="essays on Castro, writer chose or was assigned",
+                   found="a pro-Castro essay read as a pro-Castro writer even when the topic was assigned by coin toss"),
+    status="replicated",
+    record=(Study("Gilbert and Malone (review)", 1995, found="a robust bias, with four mechanisms behind it"),
+            Study("Nalipay and colleagues", 2017, n="Filipino students", design="the essay paradigm, political attitude",
+                  found="the attribution to the writer reappeared"),
+            Study("Walker, Smith and Vul", 2022, found="much of it is what a rational observer unsure of the constraint "
+                                                      "would infer")),
+    note="The effect reproduces; whether it is an error depends on how sure the observer can be about the situation.",
+    sources=("E. E. Jones and V. A. Harris, The attribution of attitudes, Journal of Experimental Social Psychology "
+             "3 (1967) 1-24",
+             "D. T. Gilbert and P. S. Malone, The correspondence bias, Psychological Bulletin 117(1) (1995) 21-38",
+             "Philippine Journal of Psychology (2017), a replication of Jones and Harris with a political attitude",
+             "D. E. Walker, K. A. Smith and E. Vul, The fundamental attribution error is rational in an uncertain "
+             "world, Decision (2022)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="induced_compliance", part=35, title=r"Induced-compliance dissonance",
+    claim="Freely choosing to argue against your own view moves your attitude toward what you argued, more than "
+          "being told to.",
+    original=Study("Festinger and Carlsmith", 1959, n="71 men", design="paid one dollar or twenty to call a dull task interesting",
+                   found="the one-dollar group rated the task more enjoyable"),
+    status="failed",
+    record=(Study("Vaidis and colleagues (multi-site)", 2024, n="4,898 people, 39 labs, 19 countries",
+                  design="high against low choice to write a counterattitudinal essay",
+                  found="no difference between high and low choice; writing the essay itself shifted attitudes"),),
+    note="The core prediction of the choice manipulation did not replicate; other dissonance paradigms are untested "
+         "here.",
+    sources=("L. Festinger and J. M. Carlsmith, Cognitive consequences of forced compliance, Journal of Abnormal and "
+             "Social Psychology 58(2) (1959) 203-210",
+             "D. C. Vaidis et al., A multilab replication of the induced-compliance paradigm of cognitive dissonance, "
+             "Advances in Methods and Practices in Psychological Science 7(1) (2024)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="false_consensus", part=35, title=r"The false-consensus effect",
+    claim="People overestimate how many others share their own choices and opinions.",
+    original=Study("Ross, Greene and House", 1977, n="Stanford students", design="wear a sandwich board, or refuse",
+                   found="each group thought most others would choose as they did"),
+    status="replicated",
+    record=(Study("Mullen and colleagues (meta-analysis)", 1985, n="115 hypothesis tests", effect=0.3, unit="r",
+                  found="a reliable effect of moderate size"),),
+    note="Reliable and moderate; some of it is reasonable inference from a sample of one.",
+    sources=("L. Ross, D. Greene and P. House, The false consensus effect, Journal of Experimental Social Psychology "
+             "13 (1977) 279-301",
+             "B. Mullen et al., The false consensus effect: a meta-analysis of 115 hypothesis tests, Journal of "
+             "Experimental Social Psychology 21 (1985) 262-283"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="dunning_kruger", part=35, title=r"The Dunning-Kruger pattern",
+    claim="The least skilled overestimate their standing the most, because they lack the skill to see their errors.",
+    original=Study("Kruger and Dunning", 1999, n="four studies", design="humour, grammar and logic",
+                   found="the bottom quarter scored near the 12th percentile and placed themselves near the 62nd"),
+    status="contested",
+    record=(Study("Nuhfer and colleagues", 2016, found="random numbers reproduce much of the famous graph"),
+            Study("McIntosh and colleagues", 2019, found="evidence for the metacognitive explanation weaker than "
+                                                          "claimed")),
+    note="The graph replicates easily; how much of it is a metacognitive deficit, rather than regression and a "
+         "better-than-average shift, is argued.",
+    sources=("J. Kruger and D. Dunning, Unskilled and unaware of it, Journal of Personality and Social Psychology "
+             "77(6) (1999) 1121-1134",
+             "E. Nuhfer et al., Random number simulations reveal how random noise affects the measurements and "
+             "graphical portrayals of self-assessed competency, Numeracy 9(1) (2016)",
+             "R. D. McIntosh et al., Wise up: clarifying the role of metacognition in the Dunning-Kruger effect, "
+             "Journal of Experimental Psychology: General (2019)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="better_than_average", part=35, title=r"The better-than-average effect",
+    claim="Most people rate themselves above the median on desirable traits and skills.",
+    original=Study("Svenson", 1981, n="US and Swedish students", design="driving skill against the group",
+                   found="93% of the US sample placed themselves above the median"),
+    status="replicated",
+    record=(Study("Koppel and colleagues (preregistered)", 2023, n="1,203 people",
+                  found="the effect replicated"),),
+    note="Robust; part of it reflects vague traits each person can define in their own favour.",
+    sources=("O. Svenson, Are we all less risky and more skillful than our fellow drivers?, Acta Psychologica 47(2) "
+             "(1981) 143-148",
+             "L. Koppel et al., a preregistered replication of Svenson (1981), Meta-Psychology (2023)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="elderly_priming", part=35, title=r"Behavioural priming by the elderly stereotype",
+    claim="Reading words about old age makes people walk more slowly afterwards.",
+    original=Study("Bargh, Chen and Burrows", 1996, design="scrambled sentences, then a timed walk to the elevator",
+                   found="primed students walked more slowly"),
+    status="failed",
+    record=(Study("Doyen, Klein, Pichon and Cleeremans", 2012, design="walking timed by infrared sensors",
+                  found="no effect; slowing appeared only when experimenters expected it"),),
+    note="The likely source of the original effect is the experimenters; semantic priming inside a task is a "
+         "different and solid finding.",
+    sources=("J. A. Bargh, M. Chen and L. Burrows, Automaticity of social behavior, Journal of Personality and Social "
+             "Psychology 71(2) (1996) 230-244",
+             "S. Doyen, O. Klein, C.-L. Pichon and A. Cleeremans, Behavioral priming: it's all in the mind, but whose "
+             "mind?, PLOS ONE 7(1) (2012) e29081"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="power_posing", part=35, title=r"Power posing",
+    claim="Holding an expansive pose for two minutes raises testosterone, lowers cortisol and increases risk-taking.",
+    original=Study("Carney, Cuddy and Yap", 2010, n="42 people", design="expansive or contracted poses",
+                   found="hormone changes and more risk-taking in expansive posers"),
+    status="failed",
+    record=(Study("Ranehill and colleagues", 2015, n="200 people",
+                  found="more self-reported power; no effect on hormones or behaviour"),
+            Study("Carney (public statement)", 2016, found="the first author no longer believed the effects real")),
+    note="The hormonal and behavioural claims failed; a small effect on how powerful people say they feel remains.",
+    sources=("D. R. Carney, A. J. C. Cuddy and A. J. Yap, Power posing, Psychological Science 21(10) (2010) 1363-1368",
+             "E. Ranehill et al., Assessing the robustness of power posing, Psychological Science 26(5) (2015) 653-656",
+             "D. R. Carney, My position on power poses (2016)"),
+    checked="2026-11-16",
+))
+
+add(Finding(
+    key="inverse_planning", part=35, title=r"Goal inference as inverse planning",
+    claim="People infer an agent's goal from its movement as a Bayesian observer of a roughly rational planner would.",
+    original=Study("Baker, Saxe and Tenenbaum", 2009, design="three experiments, agents moving in mazes",
+                   found="the model's goal inferences tracked people's (r = .96 in the 2007 version)"),
+    status="replicated",
+    record=(Study("Baker, Jara-Ettinger, Saxe and Tenenbaum", 2017, design="food trucks",
+                  found="beliefs, desires and percepts inferred jointly, again close to the model"),),
+    note="Replicated within the research programme and extended; independent tests of the same stimuli are fewer.",
+    sources=("C. L. Baker, R. Saxe and J. B. Tenenbaum, Action understanding as inverse planning, Cognition 113(3) "
+             "(2009) 329-349",
+             "C. L. Baker, J. Jara-Ettinger, R. Saxe and J. B. Tenenbaum, Rational quantitative attribution of "
+             "beliefs, desires and percepts in human mentalizing, Nature Human Behaviour 1 (2017) 0064"),
+    checked="2026-11-16",
+))
+
+shown(35, r"Ajzen (1991); \ Glasman \& Albarrac\'in (2006)", "a theory and a meta-analysis of when attitudes predict, "
+      "described without effect sizes")
+shown(35, r"Ambady \& Rosenthal (1993)", "thin slices, described qualitatively; Part 53 weighs interviews")
+shown(35, r"Bem (1967); \ Fazio, \ Zanna \& Cooper (1977)", "the rival theory to dissonance, described; the "
+      "induced_compliance row carries the test")
+shown(35, r"Festinger, \ Riecken \& Schachter (1956)", "an observational case study, told with its later criticism")
+shown(35, r"Heider \& Simmel (1944)", "a demonstration the viewer takes part in; no effect size is claimed")
+shown(35, r"Kosinski (2024)", "a contested result about language models, described in the frontier; Part 60 returns")
+shown(35, r"LaPiere (1934)", "a historical field study, described with its known flaw")
+shown(35, r"Mitchell (2008)", "an imaging comparison, described in the mentalizing chapter")
+shown(35, r"Ng \& Russell (2000)", "an algorithm, described in practice")
+shown(35, r"Saxe \& Kanwisher (2003)", "an imaging localizer, described; its specificity is discussed with Mitchell "
+      "(2008)")
+shown(35, r"Svenson (1981); \ Mezulis et al.\ (2004)", "the better_than_average row, and a meta-analysis of "
+      "self-serving attributions shown with its effect size")
+shown(35, r"Todorov et al.\ (2005)", "a correlational election study, described with its published figure")
+shown(35, r"Ullman (2023)", "a critique of a language-model result, described in the frontier")
+shown(35, r"Willis \& Todorov (2006)", "a judgment-agreement study, described; agreement is not accuracy")

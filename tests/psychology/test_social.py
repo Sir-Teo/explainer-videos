@@ -87,3 +87,28 @@ def test_kelley_cube_and_dunning_kruger_from_noise():
     assert dk["perceived"][0] > dk["actual"][0] + 30 and dk["perceived"][3] < dk["actual"][3]
     flat = S.dunning_kruger(rho=1.0, shift=0, seed=1)
     assert np.allclose(flat["perceived"], flat["actual"], atol=2)
+
+
+def test_tajfel_matrix_separates_the_strategies():
+    M = S.tajfel_matrix()
+    assert S.allocate(M, joint=1) == S.allocate(M, ingroup=1) == M.shape[1] - 1
+    assert S.allocate(M, difference=1) == 0
+    j = S.allocate(M, fairness=1)
+    assert M[0, j] == M[1, j] == 13
+
+
+def test_iat_reliability_limits_prediction_but_not_the_group_mean():
+    stable = S.iat_study(n=300, state_sd=0.0, seed=1)
+    noisy = S.iat_study(n=300, state_sd=0.12, seed=1)
+    assert noisy["retest"] < stable["retest"]
+    assert noisy["r_behaviour"] < stable["r_behaviour"] < 0.3
+    assert noisy["t"] > 10 and noisy["mean_d"] > 0.2
+
+
+def test_list_experiment_pipeline_and_illusory_correlation():
+    est = [S.list_experiment(n=1000, prevalence=0.2, seed=s)["estimate"] for s in range(100)]
+    assert abs(np.mean(est) - 0.2) < 0.02
+    share = S.pipeline(levels=8, keep=0.5, advantage=0.1)
+    assert share[0] == 0.5 and np.all(np.diff(share) < 0) and 0.3 < share[-1] < 0.4
+    ic = S.illusory_correlation()
+    assert ic["actual"][0] == ic["actual"][1] and ic["judged"][1] > ic["judged"][0]

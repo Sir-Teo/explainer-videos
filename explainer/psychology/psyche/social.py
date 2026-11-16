@@ -37,6 +37,25 @@ Part 35 adds reading minds:
   self-assessed skill (regression to the mean) plus a better-than-average shift, with no extra ignorance at the
   bottom.
 
+Part 36 adds groups:
+
+* :func:`tajfel_matrix` and :func:`allocate`: Tajfel's allocation matrices, each column a pair of points for an
+  anonymous member of one's own group and of the other.  A chooser weighing joint profit, ingroup profit and the
+  difference between the groups picks a column; maximum joint profit, maximum ingroup profit and maximum difference
+  pull in different directions, which is how the minimal-group studies told favouritism from greed.
+* :func:`iat_d` and :func:`iat_study`: an Implicit Association Test as two blocks of decisions by a diffusion
+  process whose drift is helped or hindered by an association.  The D score is the difference in mean times over
+  their pooled spread.  When the association a person brings has a stable part and a part that varies with the
+  occasion, the score's test-retest reliability falls, and so does any correlation with behaviour, while the
+  group's average stays clear.
+* :func:`list_experiment`: the item-count technique: a control group counts how many of J innocuous statements are
+  true for them, a treatment group gets the sensitive one too, and the difference in means estimates its
+  prevalence without anyone revealing their answer.
+* :func:`pipeline`: a promotion ladder where at every level a fixed fraction is promoted on a score, and one group
+  gets a small advantage; the other group's share at each level, computed exactly from normal tails.
+* :func:`illusory_correlation`: Hamilton and Gifford's design, with distinctive (rare group, rare behaviour) events
+  encoded more strongly; the judged rate of undesirable acts in each group.
+
 Everything here is a simulated model and is labelled simulated; it does not stand in for any study's data.  Nothing
 here imports manim.
 """
@@ -48,7 +67,8 @@ import numpy as np
 __all__ = ["cascade", "cascade_size", "cascade_curve", "degroot", "influence_weights", "bounded_confidence",
            "clusters", "ring_lattice", "rewire", "contagion", "crowd", "influence_rounds", "gini", "music_market",
            "bystanders", "social_impact", "drive", "mentions", "grid_distances", "action_probs", "goal_posterior",
-           "kelley", "dunning_kruger"]
+           "kelley", "dunning_kruger", "tajfel_matrix", "allocate", "iat_d", "iat_study",
+           "list_experiment", "pipeline", "illusory_correlation"]
 
 
 # ---------------------------------------------------------------- thresholds
@@ -361,3 +381,97 @@ def dunning_kruger(n: int = 4000, rho: float = 0.3, shift: float = 15.0, seed: i
     q = np.minimum((pa // 25).astype(int), 3)
     return {"actual": np.array([pa[q == k].mean() for k in range(4)]),
             "perceived": np.array([ps[q == k].mean() for k in range(4)]), "rho": rho, "shift": shift}
+
+
+# ---------------------------------------------------------------- groups (Part 36)
+
+def tajfel_matrix(k: int = 13, in0: float = 7, in_step: float = 1, out0: float = 1, out_step: float = 2) -> np.ndarray:
+    """One of Tajfel's matrices: a 2 x k array of points, row 0 for a member of the chooser's own group and row 1 for
+    a member of the other.  The default runs 7..19 against 1..25: the left end maximizes the difference in the
+    ingroup's favour, the right end maximizes both the ingroup's points and the joint total, and the column with 13
+    and 13 is fair."""
+    j = np.arange(k)
+    return np.vstack([in0 + in_step * j, out0 + out_step * j]).astype(float)
+
+
+def allocate(matrix, joint: float = 0.0, ingroup: float = 0.0, difference: float = 0.0, fairness: float = 0.0) -> int:
+    """The column a chooser picks who values the joint total, the ingroup's points, the ingroup's lead over the
+    outgroup and (negatively) any inequality, with the given weights.  Ties go to the leftmost column."""
+    M = np.asarray(matrix, float)
+    score = joint * (M[0] + M[1]) + ingroup * M[0] + difference * (M[0] - M[1]) - fairness * np.abs(M[0] - M[1])
+    return int(np.argmax(score))
+
+
+def iat_d(bias: float, trials: int = 60, rng=None, drift: float = 2.0, bound: float = 1.2,
+          t0: float = 0.35) -> float:
+    """The D score of one simulated IAT session.  Each trial's decision time is a diffusion process's first passage,
+    an inverse Gaussian with mean bound/drift and shape bound**2, plus a non-decision time t0 (seconds).  The
+    association ``bias`` speeds the compatible block (drift x (1 + bias)) and slows the incompatible one (drift x
+    (1 - bias)).  D = (mean incompatible - mean compatible) / SD of all trials."""
+    rng = np.random.default_rng(rng)
+    b = float(np.clip(bias, -0.9, 0.9))
+    vc, vi = drift * (1 + b), drift * (1 - b)
+    c = t0 + rng.wald(bound / vc, bound ** 2, trials)
+    i = t0 + rng.wald(bound / vi, bound ** 2, trials)
+    return float((i.mean() - c.mean()) / np.concatenate([c, i]).std(ddof=1))
+
+
+def iat_study(n: int = 400, mean: float = 0.15, trait_sd: float = 0.10, state_sd: float = 0.07, trials: int = 60,
+              behaviour_r: float = 0.3, seed: int = 0) -> dict:
+    """A sample of people, each with a stable association (normal, ``mean`` and ``trait_sd``) and an
+    occasion-to-occasion part (``state_sd``) drawn afresh at each of two sessions.  A behaviour correlates
+    ``behaviour_r`` with the stable part.  Returns both sessions' D scores, the test-retest correlation, the
+    correlation of session-1 D with the behaviour, the ceiling implied by the reliability, and the group's mean D
+    with its t statistic."""
+    rng = np.random.default_rng(seed)
+    trait = rng.normal(mean, trait_sd, n)
+    d1 = np.array([iat_d(t + rng.normal(0, state_sd), trials, rng) for t in trait])
+    d2 = np.array([iat_d(t + rng.normal(0, state_sd), trials, rng) for t in trait])
+    z = (trait - trait.mean()) / trait.std()
+    behaviour = behaviour_r * z + np.sqrt(1 - behaviour_r ** 2) * rng.normal(size=n)
+    retest = float(np.corrcoef(d1, d2)[0, 1])
+    return {"d1": d1, "d2": d2, "behaviour": behaviour, "retest": retest,
+            "r_behaviour": float(np.corrcoef(d1, behaviour)[0, 1]),
+            "ceiling": float(behaviour_r * np.sqrt(max(retest, 0.0))),
+            "mean_d": float(d1.mean()), "t": float(d1.mean() / (d1.std(ddof=1) / np.sqrt(n)))}
+
+
+def list_experiment(n: int = 1000, prevalence: float = 0.2, control_p=(0.5, 0.3, 0.6), seed: int = 0) -> dict:
+    """The item-count technique: half the sample counts how many of the control statements apply to them, the other
+    half counts the control statements plus a sensitive one held with probability ``prevalence``.  Returns the
+    difference-in-means estimate of the prevalence and its standard error."""
+    rng = np.random.default_rng(seed)
+    m = n // 2
+    p = np.asarray(control_p, float)
+    ctrl = (rng.random((m, len(p))) < p).sum(axis=1)
+    trt = (rng.random((n - m, len(p))) < p).sum(axis=1) + (rng.random(n - m) < prevalence)
+    est = trt.mean() - ctrl.mean()
+    se = np.sqrt(trt.var(ddof=1) / len(trt) + ctrl.var(ddof=1) / len(ctrl))
+    return {"estimate": float(est), "se": float(se), "control": ctrl, "treatment": trt}
+
+
+def pipeline(levels: int = 8, keep: float = 0.5, advantage: float = 0.1, start: float = 0.5) -> np.ndarray:
+    """A promotion ladder.  At each level everyone is scored afresh (normal, SD 1); one group's scores are shifted
+    up by ``advantage``; the top ``keep`` fraction moves up.  Returns the other group's share at each level, from the
+    entry level, computed exactly: the threshold c solves (1 - s) Q(c - advantage) + s Q(c) = keep, and the new
+    share is s Q(c) / keep, where Q is the normal upper tail."""
+    from scipy.optimize import brentq
+    from scipy.stats import norm
+    s = float(start)
+    out = [s]
+    for _ in range(levels - 1):
+        c = brentq(lambda x: (1 - s) * norm.sf(x - advantage) + s * norm.sf(x) - keep, -10, 10)
+        s = s * norm.sf(c) / keep
+        out.append(s)
+    return np.array(out)
+
+
+def illusory_correlation(counts=((18, 8), (9, 4)), boost: float = 0.6) -> dict:
+    """Hamilton and Gifford's design: group A with ``counts[0]`` (desirable, undesirable) acts and group B with
+    ``counts[1]``, in the same ratio.  If the rarest pairing (the smaller group's undesirable acts) is encoded
+    ``1 + boost`` times as strongly, the remembered share of undesirable acts in each group."""
+    (a_pos, a_neg), (b_pos, b_neg) = counts
+    b_neg_w = b_neg * (1 + boost)
+    return {"actual": (a_neg / (a_pos + a_neg), b_neg / (b_pos + b_neg)),
+            "judged": (a_neg / (a_pos + a_neg), b_neg_w / (b_pos + b_neg_w))}
+

@@ -52,4 +52,50 @@ PARTS = [
               ("Its tests", "tests/psychology/test_social.py"),
               ("The Ledger", "explainer/psychology/ledger.py")),
     ),
+    Part(
+        n=35, level="U", widget="goals",
+        question="How do you read a mind, including your own?",
+        story="In 1959 students paid one dollar to call a dull task interesting came to like it more than students "
+              "paid twenty. Festinger called it dissonance; Bem said people read their own attitudes from their "
+              "behaviour as an observer would. The part follows that reading: Kelley's cube as an analysis of "
+              "variance, the Castro essays and a rational observer of them, the 2024 test of dissonance in 39 "
+              "laboratories that found no effect of choice, LaPiere's road trip and when attitudes predict, the "
+              "self's flattering illusions and a Dunning-Kruger graph rebuilt from regression to the mean, faces "
+              "judged in a tenth of a second, and two famous collapses, behavioural priming and power posing, with "
+              "the winner's curse that explains them. Then the false-belief localizer, inverse planning (a goal "
+              "read from a path by Bayes' rule with a planner inside), Nisbett and Wilson's stockings and choice "
+              "blindness, and theory of mind in language models.",
+        handoff="Groups, stereotypes and bias scores are Part 36; cooperation and trust Part 37; attribution across "
+                "cultures Part 38; interviews and performance reviews Part 53; theory of mind in machines Part 60.",
+        outside="Part 3's measurement, Part 4's false positives and power, Part 17's planner, and Part 30's "
+                "false-belief tasks. Bayes' rule, analysis of variance, the bivariate normal and the truncated normal.",
+        objectives={
+            "U": ["Describe attribution, the correspondence bias, dissonance and self-perception, and what the "
+                  "2024 multi-laboratory test found.",
+                  "Explain when attitudes predict behaviour, and describe the better-than-average, false-consensus "
+                  "and Dunning-Kruger effects.",
+                  "Describe the elderly-priming and power-posing studies, their replications, and which kinds of "
+                  "priming are solid."],
+            "M": ["Decompose Kelley's cube as an analysis of variance, and infer an attitude from a forced essay by "
+                  "Bayes' rule.",
+                  "Derive the Dunning-Kruger graph from regression to the mean, and the winner's curse from a "
+                  "truncated normal.",
+                  "Infer an agent's goal from its path with an inverse planner, step by step."],
+            "D": ["Evaluate claims that language models have a theory of mind, and design controls that separate "
+                  "reasoning about minds from familiarity with the tasks.",
+                  "Explain why a brain region that responds to a task is not yet a region for that task."],
+            "I": ["Design interviews, reviews and user research that guard against snap impressions, the "
+                  "correspondence bias and people's theories about their own behaviour."],
+        },
+        results=[
+            ("Rational observer", r"P(\text{pro} \mid \text{pro essay}) = \frac{1}{1 + \pi}"),
+            ("Regression to the mean", r"E[Y \mid X] = 50 + s + \rho\,(X - 50)"),
+            ("Inverse planning", r"P(g \mid a_{1:t}) \propto P(g) \prod_k \frac{e^{-\beta Q_g(s_k, a_k)}}{\sum_a e^{-\beta Q_g(s_k, a)}}"),
+            ("Winner's curse", r"E[\hat d \mid \hat d > c\sigma] = d + \sigma \frac{\varphi(a)}{1 - \Phi(a)},\ a = c - d/\sigma"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's social module", "explainer/psychology/psyche/social.py"),
+              ("Its tests", "tests/psychology/test_social.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
 ]
