@@ -55,16 +55,11 @@ class Feedback(SoundScene):
             (r"$G H(f)$ is complex: \ a gain and a phase at every frequency", WHITE),
             (r"the loop runs away where the returning sound arrives in step with what is already there: \ phase a whole number of cycles", WHITE),
             (r"and is louder than it: \ $|G H| \ge 1$; \ together, \ $G H(f)$ reaches $+1$ on the real axis", WHITE),
-            (r"Nyquist \ (1932): \ as $G$ grows, \ the first frequency to go is the one where $H$'s real part is largest", TUNE),
-            (r"the gain before feedback: \ $G_{\max} = 1 / \max_f \operatorname{Re} H(f)$; \ the howl: \ that frequency", TUNE),
+            (r"Nyquist \ (1932): \ as $G$ grows, \ candidate boundaries require $\operatorname{Im}H=0$, \ $\operatorname{Re}H>0$", TUNE),
+            (r"the gain before feedback: \ $G_{\max} \approx 1 / \max_{\operatorname{Im}H(f)=0,\ \operatorname{Re}H(f)>0}\operatorname{Re} H(f)$; \ the howl: \ that frequency", TUNE),
         ]
         rows_scene(self, r"when a loop runs away", items,
-                   "When exactly does it run away? <bookmark mark='b'/> G H is complex: a gain and a phase at every frequency. "
-                   "<bookmark mark='c'/> The loop runs away where the returning sound arrives in step with what is already there, "
-                   "its phase a whole number of cycles, <bookmark mark='d'/> and louder than it: together, G H reaches plus one on "
-                   "the real axis. <bookmark mark='e'/> Harry Nyquist's criterion of 1932 follows: as the gain grows, the first "
-                   "frequency to go is the one where H's real part is largest. <bookmark mark='f'/> So the gain before feedback is "
-                   "one over the largest real part of H, and the howl is at that frequency.", marks="bcdef")
+                   "When exactly does it run away? <bookmark mark='b'/> G H is complex: a gain and a phase at every frequency. <bookmark mark='c'/> The loop runs away where the returning sound arrives in step with what is already there, its phase a whole number of cycles, <bookmark mark='d'/> and louder than it: together, G H reaches plus one on the real axis. <bookmark mark='e'/> Harry Nyquist's criterion of 1932 follows: as the gain grows, for this stable acoustic-path model, candidate boundaries occur where H crosses the positive real axis, with zero imaginary part. <bookmark mark='f'/> So the gain before feedback is the reciprocal of the largest positive real-axis crossing in the search band; our dense-grid interpolation estimates its gain and frequency.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def response(self):
@@ -83,12 +78,7 @@ class Feedback(SoundScene):
         note = label(rf"a 20 by 14 by 8 m hall, \ the loudspeaker 5 m from the microphone: \ gain before feedback {d['max_gain_db']:.1f} dB \ (re the loop's peak path)", font_size=16, color=WHITE).to_edge(DOWN, buff=0.35)
         head = label(r"the loop's response", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Here is a real-sized case: a hall twenty by fourteen by eight metres, simulated by Part 49's image method, with "
-            "the loudspeaker five metres from the microphone. <bookmark mark='a'/> The hall's response from "
-            "loudspeaker to microphone, shown here between two hundred and fifty and five hundred hertz, is a forest of peaks, "
-            "one every few hertz, from all the reflections; across the whole range there are thousands. "
-            "<bookmark mark='b'/> Its real part picks out where the phase comes round. <bookmark mark='c'/> The highest point "
-            f"of the real part is at {say(hz)} hertz: that is the note this system will howl at, first, as the gain is raised."
+            f"Here is a real-sized case: a hall twenty by fourteen by eight metres, simulated by Part 49's image method, with the loudspeaker five metres from the microphone. <bookmark mark='a'/> The hall's response from loudspeaker to microphone, shown here between two hundred and fifty and five hundred hertz, is a forest of peaks, one every few hertz, from all the reflections; across the whole range there are thousands. <bookmark mark='b'/> Its real part alone is insufficient: we require the imaginary part to cross zero too. <bookmark mark='c'/> The estimated critical positive-real-axis crossing is at {say(hz)} hertz: a candidate feedback frequency within the scanned band for this linear model."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ax), FadeIn(xt), FadeIn(note), FadeIn(ghost(VGroup(cm, cr), 0.25)))
             vo.wait_until("a")
@@ -140,7 +130,7 @@ class Feedback(SoundScene):
             pulse(snd, lab_[1], 0, c.duration, rate=5.0, color=GREY_B, buff=0.15)
         with self.voiceover(
             "The voice is swallowed by a rising whistle. Measured from the last second of the recording, it is at "
-            f"{say(d['found_hz'])} hertz, the frequency predicted from the loop's real part before anything was played."
+            f"{say(d['found_hz'])} hertz, the frequency predicted from the loop's positive-real-axis crossings before the simulation."
         ):
             self.play(FadeIn(lab_[2:]))
         self.wait(0.4)

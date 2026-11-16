@@ -52,7 +52,7 @@ class Outro(SoundScene):
         with self.voiceover(
             f"Row fifty-nine of the ledger. The back row hears the show only {say(-lv['back'])} decibels down from the desk, "
             f"as Chapter 4's line array promised, with the treble a little dulled by the air; the car park hears it {say(-lv['carpark'])} decibels down, and mostly "
-            "bass, the part no wall stops and the neighbours complain about."
+            "bass, the part this simplified wall model attenuates least and the neighbours complain about."
         ):
             self.play(FadeIn(head), FadeIn(led, shift=UP * 0.2))
         self.wait(0.6)

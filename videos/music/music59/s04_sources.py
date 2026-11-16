@@ -25,7 +25,7 @@ class Sources(SoundScene):
                    "The trouble in a stadium is distance. <bookmark mark='b'/> A point source spreads its power over a sphere whose "
                    "area grows as r squared, <bookmark mark='c'/> so its intensity falls six decibels for every doubling of "
                    "distance. <bookmark mark='d'/> From ten metres to eighty is three doublings, eighteen decibels: the front row "
-                   "deafened, or the back row starved. <bookmark mark='e'/> But a long line of sources spreads over a cylinder, "
+                   "deafened, or the back row starved. <bookmark mark='e'/> An ideal infinite line has cylindrical spreading; a finite coherent line only approximates this over suitable frequencies and distances, "
                    "whose area grows only as r: three decibels per doubling.", marks="bcde")
 
     # ------------------------------------------------------------------
@@ -108,7 +108,7 @@ class Sources(SoundScene):
         rows_scene(self, r"a line, \ or a row of points", items,
                    "There is a condition. <bookmark mark='b'/> The elements must be close: less than half a wavelength apart to act "
                    f"as one line. Our boxes are {say(d['spacing'] * 100)} centimetres apart, which strictly holds only to about five "
-                   "hundred hertz, and with care to a kilohertz or so. <bookmark mark='c'/> At four kilohertz our line of separate "
+                   "hundred hertz, the departure at higher frequencies depends on geometry, element directivity and averaging. <bookmark mark='c'/> At four kilohertz our line of separate "
                    f"sources falls {say(pdb['line_near'], 1)} decibels per doubling: no better than a point. <bookmark mark='d'/> The "
                    "cure is a waveguide in each box that turns its tweeter into a flat, continuous strip of sound, edge to edge with "
                    "the next box's. <bookmark mark='e'/> Christian Heil and Marcel Urban set out these rules as wavefront sculpture "

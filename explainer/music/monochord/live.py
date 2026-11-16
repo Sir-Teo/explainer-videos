@@ -49,22 +49,37 @@ def loop_response(f, ir, gain_db: float) -> np.ndarray:
 
 
 def feedback(ir, fmin: float = 100.0, fmax: float = 8000.0, notches=()) -> dict:
-    """The gain before feedback, by Nyquist's criterion: the closed loop 1 / (1 - G H) first becomes unstable as G grows
-    where G H(f) reaches +1 on the real axis, so the maximum stable gain is -20 log10 of the largest positive real part
-    of H, and the howl starts at that frequency.  (The largest |H| is a quick estimate that ignores phase.)
-    ``notches``: (frequency, depth dB, Q) filters in the loop."""
-    n = 1 << int(math.ceil(math.log2(len(ir) * 4)))
+    """Estimate the first positive-real-axis crossing of G H in the requested band.
+
+    For the stable FIR acoustic path and positive scalar gain, candidate boundaries
+    have Im(H)=0 and Re(H)>0. Maximal Re(H) *over those crossings*, not over all
+    frequencies, gives the smallest candidate gain. Linear interpolation on a dense
+    FFT grid is numerical; a limited search band is not a full stability certificate.
+    ``notches``: (frequency, depth dB, Q) filters in the loop.
+    """
+    n = max(65536, 1 << int(math.ceil(math.log2(len(ir) * 4))))
     H = np.fft.rfft(ir, n)
     f = np.fft.rfftfreq(n, 1 / SR)
     for fc, depth, q in notches:
         H = H * notch_response(f, fc, depth, q)
     sel = (f >= fmin) & (f <= fmax)
-    re = H[sel].real
-    i = int(np.argmax(re))
-    mag = np.abs(H[sel])
+    fs, hs = f[sel], H[sel]
+    # Locate zero-imaginary samples and sign changes, retaining positive crossings.
+    exact = np.flatnonzero(hs.imag == 0)
+    crossings = np.flatnonzero(hs.imag[:-1] * hs.imag[1:] < 0)
+    frac = -hs.imag[crossings] / (hs.imag[crossings + 1] - hs.imag[crossings])
+    cf = np.r_[fs[exact], fs[crossings] + frac * (fs[crossings + 1] - fs[crossings])]
+    cr = np.r_[hs.real[exact], hs.real[crossings] + frac * (hs.real[crossings + 1] - hs.real[crossings])]
+    positive = cr > 0
+    if not np.any(positive):
+        raise ValueError("No positive-real-axis crossing found in the search band")
+    cf, cr = cf[positive], cr[positive]
+    i = int(np.argmax(cr))
+    mag = np.abs(hs)
     j = int(np.argmax(mag))
-    return {"max_gain_db": float(-20 * np.log10(re[i])), "howl_hz": float(f[sel][i]), "f": f[sel], "mag_db": 20 * np.log10(mag + 1e-12),
-            "peak_gain_db": float(-20 * np.log10(mag[j])), "peak_hz": float(f[sel][j])}
+    return {"max_gain_db": float(-20 * np.log10(cr[i])), "howl_hz": float(cf[i]), "f": fs, "mag_db": 20 * np.log10(mag + 1e-12),
+            "peak_gain_db": float(-20 * np.log10(mag[j])), "peak_hz": float(fs[j])}
+
 
 
 def notch_response(f, fc: float, depth_db: float, q: float):

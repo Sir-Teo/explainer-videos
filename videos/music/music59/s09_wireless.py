@@ -23,13 +23,7 @@ class Wireless(SoundScene):
             (r"so the frequencies are chosen so that no product falls near any carrier", TUNE),
         ]
         rows_scene(self, r"intermodulation", items,
-                   "Large shows use dozens of radio microphones and in-ear transmitters. <bookmark mark='b'/> Each transmits on its "
-                   "own carrier, a few hundred kilohertz wide, in the UHF television band. <bookmark mark='c'/> But any nonlinearity, "
-                   "a receiver's amplifier, two transmitters worn side by side, mixes carriers into new frequencies. "
-                   "<bookmark mark='d'/> The worst are the third-order products, two f one minus f two, and f one plus f two minus f "
-                   "three, which land inside the band. <bookmark mark='e'/> If one lands on another microphone's carrier, that "
-                   "microphone hisses or drops out. <bookmark mark='f'/> So the frequencies are chosen so that no product falls near "
-                   "any carrier: Part 50's intermodulation, now in radio.", marks="bcdef")
+                   "Large shows use dozens of radio microphones and in-ear transmitters. <bookmark mark='b'/> Many conventional systems use separate UHF carriers of a few hundred kilohertz bandwidth; other bands and digital architectures also exist. <bookmark mark='c'/> But any nonlinearity, a receiver's amplifier, two transmitters worn side by side, mixes carriers into new frequencies. <bookmark mark='d'/> The worst are the third-order products, two f one minus f two, and f one plus f two minus f three, which land inside the band. <bookmark mark='e'/> If one lands on another microphone's carrier, that microphone hisses or drops out. <bookmark mark='f'/> So the frequencies are chosen so that no product falls near any carrier: Part 50's intermodulation, now in radio.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def plan(self):
@@ -74,10 +68,10 @@ class Wireless(SoundScene):
         rows_scene(self, r"in-ear monitors", items,
                    "Radio also changed what musicians hear. <bookmark mark='b'/> Wedges on the floor point loudspeakers at "
                    "microphones: Chapter 1's loop, on every stage. <bookmark mark='c'/> In-ear monitors send each musician a "
-                   "custom mix by radio to sealed earpieces, and there is no loop at all. <bookmark mark='d'/> The stage is quieter, "
+                   "custom mix by radio to sealed earpieces, and direct monitor-speaker coupling is greatly reduced. <bookmark mark='d'/> The stage is quieter, "
                    "the microphones cleaner, and the mix the same wherever the singer walks. <bookmark mark='e'/> The cost is "
                    "isolation from the room and the crowd, so engineers mix ambient microphones back in. <bookmark mark='f'/> And "
-                   "every pack has a limiter, because a sealed earpiece can deliver a dangerous level, the subject of Chapter 10.", marks="bcdef")
+                   "suitable monitor systems should use configured limiting and controlled levels; features vary, because a sealed earpiece can deliver a dangerous level, the subject of Chapter 10.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def network(self):
@@ -89,11 +83,4 @@ class Wireless(SoundScene):
             (r"redundancy: \ two networks, \ every packet sent twice", TUNE),
         ]
         rows_scene(self, r"networks and clocks", items,
-                   "And the cables have become a network. <bookmark mark='b'/> Dante from 2006, and the open standard AES67 from "
-                   "2013, carry hundreds of channels on one Ethernet cable. <bookmark mark='c'/> Every device must sample at the "
-                   "same instant, so they share a clock by the Precision Time Protocol, IEEE 1588, good to well under a "
-                   "microsecond. <bookmark mark='d'/> The latency budget: about a millisecond of network, a few of converters and "
-                   "processing, under ten from microphone to loudspeaker. <bookmark mark='e'/> A musician hears ten milliseconds as "
-                   "standing three and a half metres further away: tolerable on a stage, not in in-ear monitors, where it combs "
-                   "against the sound of their own skull. <bookmark mark='f'/> And everything is redundant: two networks, every "
-                   "packet sent twice.", marks="bcdef")
+                   "And the cables have become a network. <bookmark mark='b'/> Dante from 2006, and the open standard AES67 from 2013, carry hundreds of channels on one Ethernet cable. <bookmark mark='c'/> Every device must sample at the same instant, so they share a clock by the Precision Time Protocol, IEEE 1588, good to well under a microsecond. <bookmark mark='d'/> The latency budget: about a millisecond of network, a few of converters and processing, under ten from microphone to loudspeaker. <bookmark mark='e'/> A musician hears ten milliseconds as standing three and a half metres further away: tolerable on a stage, not in in-ear monitors, where it combs against the sound of their own skull. <bookmark mark='f'/> Some professional systems support dual-network redundancy; it is a configured capability, not inherent in every network.", marks="bcdef")

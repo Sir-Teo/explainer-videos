@@ -34,7 +34,7 @@ class Arrays(SoundScene):
             "tilted a little more than the one above, and the beam fans downwards: the top boxes throw to the back, the bottom "
             "ones cover the front."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(xl))
+            self.play(FadeIn(head), FadeIn(xl), FadeIn(panels))
             for mark, p in zip("abc", panels):
                 vo.wait_until(mark)
                 self.play(FadeIn(p), run_time=0.8)

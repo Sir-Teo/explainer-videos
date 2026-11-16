@@ -115,14 +115,14 @@ class RingOut(SoundScene):
             (r"the musicians need their own mix: \ wedges on the floor, \ aimed up at them", WHITE),
             (r"wedges are loudspeakers aimed at the microphones' backs: \ cardioids put the wedge in their null", WHITE),
             (r"a loud stage leaks into every microphone and the front-of-house mix", WHITE),
-            (r"in-ear monitors \ (1990s on): \ each musician's mix in earphones, \ no loop at all, \ and a quieter stage", WHITE),
+            (r"in-ear monitors \ (1990s on): \ each musician's mix in earphones, \ much less loudspeaker-to-microphone acoustic coupling; earpiece leakage and ambient feeds can still matter, \ and a quieter stage", WHITE),
             (r"the cost: \ isolation from the room and the audience, \ restored with ambient microphones", TUNE),
         ]
         rows_scene(self, r"monitors", items,
                    "And the musicians need to hear themselves, the problem of Shea Stadium. <bookmark mark='b'/> Wedges on the floor, "
                    "aimed up at each player, give each a mix of their own. <bookmark mark='c'/> They are loudspeakers aimed at the "
-                   "backs of the microphones, which is why stage microphones are cardioids with the wedge in their null. "
+                   "backs of the microphones, so microphone pattern and monitor position must be chosen together; supercardioids have rear lobes and different null angles. "
                    "<bookmark mark='d'/> And a loud stage leaks into every microphone and into the front-of-house mix. "
-                   "<bookmark mark='e'/> From the 1990s, in-ear monitors put each musician's mix in earphones: no loop at all, and a "
+                   "<bookmark mark='e'/> From the 1990s, in-ear monitors put each musician's mix in earphones: much less loudspeaker-to-microphone acoustic coupling; earpiece leakage and ambient feeds can still matter, and a "
                    "quieter stage. <bookmark mark='f'/> Their cost is isolation from the room and the audience, which engineers "
                    "restore with ambient microphones.", marks="bcdef")

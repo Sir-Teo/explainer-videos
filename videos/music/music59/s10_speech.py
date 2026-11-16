@@ -25,14 +25,7 @@ class Speech(SoundScene):
         ).arrange(DOWN, buff=0.5).move_to(DOWN * 0.1)
         head = label(r"the speech transmission index", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Music forgives a reverberant room; speech does not. Houtgast and Steeneken, in the 1970s, found a way to measure "
-            "why. <bookmark mark='a'/> Speech is a carrier whose loudness swings with the syllables, between about half a "
-            "time and twelve times a second. Understanding depends on hearing those swings. <bookmark mark='b'/> Reverberation "
-            "fills in the quiet between syllables, more for faster swings and longer reverberation times; noise lifts the floor "
-            "under all of them. Their product is how much of each swing survives. <bookmark mark='c'/> Each surviving depth is "
-            "turned into an apparent signal-to-noise ratio, clipped to fifteen decibels either way, and averaged onto a scale "
-            "from nought to one. <bookmark mark='d'/> Fourteen swing rates times seven octave bands, weighted by the standard, "
-            "IEC 60268-16: the speech transmission index."
+            "Music forgives a reverberant room; speech does not. Houtgast and Steeneken, in the 1970s, found a way to measure why. <bookmark mark='a'/> Speech is a carrier whose loudness swings with the syllables, between about half a time and twelve times a second. Understanding depends on hearing those swings. <bookmark mark='b'/> Reverberation fills in the quiet between syllables, more for faster swings and longer reverberation times; noise lifts the floor under all of them. Their product is how much of each swing survives. <bookmark mark='c'/> Each surviving depth is turned into an apparent signal-to-noise ratio, clipped to fifteen decibels either way, and averaged onto a scale from nought to one. <bookmark mark='d'/> The full IEC speech transmission index uses fourteen modulation rates and seven octave bands with additional corrections. Our illustration uses one decay and SNR in all bands and omits those details, so it is not a compliance measurement."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(lines, 0.25)))
             for mark, ln in zip("abcd", lines):
@@ -61,16 +54,16 @@ class Speech(SoundScene):
             label(r"0.45 to 0.60 \ fair", font_size=16, color=WHITE),
             label(r"0.30 to 0.45 \ poor", font_size=16, color=EAR),
             label(r"$< 0.30$ \ bad", font_size=16, color=EAR),
-            label(r"announcements: \ 0.50 or more", font_size=15, color=GREY_A),
+            label(r"illustrative model; \\ not a compliance test", font_size=15, color=GREY_A),
         ).arrange(DOWN, buff=0.25, aligned_edge=LEFT).next_to(pic, RIGHT, buff=0.5)
-        head = label(r"STI for reverberation and noise", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
+        head = label(r"simplified STI illustration", font_size=26, color=GREY_A).to_edge(UP, buff=0.3)
         with self.voiceover(
             "Here is the index computed by Monochord for every pair of reverberation time and signal-to-noise ratio. "
             "<bookmark mark='a'/> A dry room with the voice well above the noise, top right, scores over seven tenths. "
             "<bookmark mark='b'/> Down the columns, reverberation takes its share: at six seconds, a stone station hall, "
             "even a voice with no noise at all scores under a quarter. <bookmark mark='c'/> Along the rows, noise takes its "
             "share. Neither can be fixed by turning the voice up: louder speech raises the reverberation with it, and only beats "
-            "the noise. <bookmark mark='d'/> Emergency announcement systems must reach half."
+            "the noise. <bookmark mark='d'/> Required intelligibility thresholds depend on the applicable standard, jurisdiction, coverage statistic and project; this illustration is not a compliance test."
         ) as vo:
             self.play(FadeIn(head), FadeIn(pic), FadeIn(cl), FadeIn(rl), FadeIn(cx), FadeIn(rx))
             vo.wait_until("a")

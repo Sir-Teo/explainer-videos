@@ -2,8 +2,7 @@
 
 Part 59 of a sixty-eight-part course in music (see [the series plan](../README.md) and
 [the syllabus](../SYLLABUS.md)), the sixth part of Act X, *The Studio and the Stage*. In August 1965 fifty-five thousand
-people filled a baseball stadium in New York, and nobody, the band included, could hear the band: it played through the
-system that announced the batting order. The modern concert system was built to solve that night. This part works out
+people filled a baseball stadium in New York, and the band struggled to be heard over the crowd with the available sound reinforcement. The event exposed limits that later concert systems addressed through developments across many decades. This part works out
 why a microphone howls and how to predict the note, why loudspeakers are hung in curved lines, how bass is aimed, why a
 festival's back field hears the stage twice, how a system is measured while the band plays, how forty radio microphones
 share a stage, why the station announcement is unintelligible, and how loud is too loud. The tools are Monochord's
@@ -13,11 +12,10 @@ is simulated.
 * **Fifty-five thousand people and no sound.** An ear question (the band from the stands over a crowd through a 1965-style
   horn system, 6 dB under the crowd, and a modern one, 8 dB over: which was 1965? the first); Shea Stadium; what came
   after; the plan.
-* **1. Why a microphone howls.** The loop; when a loop runs away (Nyquist's criterion: the real part of G H reaching one,
-  not its magnitude); the loop's response in a simulated 20 × 14 × 8 m hall (the gain before feedback −17.9 dB, the howl
+* **1. Why a microphone howls.** The loop; when a loop runs away (candidate instability requires G H = 1: zero imaginary part and positive real part, with open-loop stability assumptions); the loop's response in a simulated 20 × 14 × 8 m hall (the gain before feedback −17.5 dB, the howl
   at 358 Hz; the magnitude alone says −18.4 dB); an ear question (a clap at 6, 0.5 and 2 dB below the edge: which was
   closest? the second); over the edge (the howl builds at 358 Hz, as predicted).
-* **2. Ringing out, and monitors.** Six narrow notches at the frequencies that would howl (+3.3 dB); heard; the cheaper
+* **2. Ringing out, and monitors.** Six narrow notches at the frequencies that would howl (+3.1 dB); heard; the cheaper
   decibels (distance, nulls, fewer open microphones); potential and needed acoustic gain (24.5 against 26.0 dB); monitors
   and in-ears.
 * **3. Point and line sources.** Spheres and cylinders; level against distance (6 dB per doubling from a point, 2.7 near
@@ -139,3 +137,5 @@ python -m videos.music.labs 59                                  # the lab (write
   standard for safe listening venues and events* (2022); S. G. Kujawa and M. C. Liberman, "Adding insult to injury:
   cochlear nerve degeneration after 'temporary' noise-induced hearing loss", *J. Neuroscience* (2009).
 * AES67-2013, *High-performance streaming audio-over-IP interoperability*; IEEE 1588 (Precision Time Protocol).
+
+Feedback stability uses interpolated zero-imaginary, positive-real crossings within a finite frequency band. The simplified STI and occupational dose illustrations are not compliance measurements or guarantees of safe exposure.

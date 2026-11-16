@@ -22,12 +22,7 @@ class Subs(SoundScene):
             (r"directivity at low frequencies comes only from several sources, \ and the delays between them", TUNE),
         ]
         rows_scene(self, r"bass goes everywhere", items,
-                   "Bass is the hardest part to aim. <bookmark mark='b'/> At fifty hertz the wavelength is seven metres; a "
-                   "subwoofer box is far too small to be directional. <bookmark mark='c'/> So subwoofers radiate everywhere: onto "
-                   "the stage, into the microphones, and out of the back of the venue to the neighbours. <bookmark mark='d'/> And a "
-                   "row of them across the stage interferes with itself, leaving loud and quiet stripes across the audience. "
-                   "<bookmark mark='e'/> At low frequencies, directivity comes only from several sources and the delays between "
-                   "them.", marks="bcde")
+                   "Bass is the hardest part to aim. <bookmark mark='b'/> At fifty hertz the wavelength is seven metres; a subwoofer box is far too small to be directional. <bookmark mark='c'/> So subwoofers radiate everywhere: onto the stage, into the microphones, and out of the back of the venue to the neighbours. <bookmark mark='d'/> And a row of them across the stage interferes with itself, leaving loud and quiet stripes across the audience. <bookmark mark='e'/> At low frequencies, practical compact directional bass systems use multiple radiating paths or sources with suitable spacing, delay and polarity.", marks="bcde")
 
     # ------------------------------------------------------------------
     def cardioid(self):

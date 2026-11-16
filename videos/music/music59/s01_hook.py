@@ -18,7 +18,7 @@ class Hook(SoundScene):
                            r"1965 stadium system, \ once through a modern one. \ Which was 1965?", width=10.0)
         with self.voiceover(
             "A question for your ears, with headphones. A band heard from the stands of a stadium, over a screaming crowd, "
-            "twice: once through a stadium sound system of 1965, once through a modern one. Which was 1965?"
+            "twice: once through our simplified historical-system model, once through a modern-system model; neither is an archival recording. Which was 1965?"
         ):
             self.play(FadeIn(card))
         self.wait(0.8)
@@ -53,7 +53,7 @@ class Hook(SoundScene):
                    "<bookmark mark='c'/> The band's amplifiers were hundred-watt Vox stacks; the voices went through the stadium's "
                    "announcement horns. <bookmark mark='d'/> The screaming crowd was louder than all of it; the band could not hear "
                    "itself play. <bookmark mark='e'/> They stopped touring a year later. "
-                   "<bookmark mark='f'/> The modern concert system was built to solve that night: power, coverage, monitors for the "
+                   "<bookmark mark='f'/> Modern concert sound developed through many events and innovations to address these problems: power, coverage, monitors for the "
                    "musicians, and control.", marks="bcdef")
 
     # ------------------------------------------------------------------

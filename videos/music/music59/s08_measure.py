@@ -26,9 +26,9 @@ class Measure(SoundScene):
             "Part 49 measured a room with a sweep. A live system cannot stop for a sweep, so engineers measure with the music "
             "itself. <bookmark mark='a'/> Take the signal going into the system and what a measurement microphone hears in the "
             "audience. <bookmark mark='b'/> Average their cross-spectrum and the input's auto-spectrum over many blocks; their "
-            "ratio is the transfer function, whatever the music happens to be. <bookmark mark='c'/> The coherence says how much "
+            "ratio is the transfer function, in bands where the input has sufficient excitation and the linear, stationary and noise assumptions are adequate. <bookmark mark='c'/> The coherence says how much "
             "of the microphone's signal is explained by the input: near one where the music had energy and the room is quiet, "
-            "lower where noise, reverberation or silence intrude. <bookmark mark='d'/> And the inverse transform's peak is the "
+            "lower where uncorrelated noise, time variation, inadequate averaging or windowing intrude; a stable linear reverberant path does not inherently reduce coherence. <bookmark mark='d'/> And the inverse transform's peak is the "
             "delay, which tells the engineer how far the microphone is from the loudspeaker."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ghost(lines, 0.25)))
@@ -106,8 +106,4 @@ class Measure(SoundScene):
             (r"then walk the room and listen: \ the measurement says what is there, \ the ear says whether it is right", TUNE),
         ]
         rows_scene(self, r"tuning a system", items,
-                   "With these traces a system is tuned. <bookmark mark='b'/> Its parts are aligned in time: subwoofers to arrays, "
-                   "arrays to fills, towers to the stage. <bookmark mark='c'/> Each zone is equalized to a target curve, but only "
-                   "where the coherence says the measurement is real. <bookmark mark='d'/> Cut, don't boost: a boost into a "
-                   "reflection's notch only adds energy everywhere else. <bookmark mark='e'/> And then the engineer walks the room "
-                   "and listens: the measurement says what is there, the ear whether it is right.", marks="bcde")
+                   "With these traces a system is tuned. <bookmark mark='b'/> Its parts are aligned in time: subwoofers to arrays, arrays to fills, towers to the stage. <bookmark mark='c'/> Each zone is equalized to a target curve, but only where the coherence says the measurement is real. <bookmark mark='d'/> Cut, don't boost: boosting a deep spatial cancellation is generally ineffective and can waste headroom. <bookmark mark='e'/> And then the engineer walks the room and listens: the measurement says what is there, the ear whether it is right.", marks="bcde")

@@ -116,3 +116,15 @@ def test_sti_and_dose():
     assert LV.allowed_hours(85.0) == pytest.approx(8.0) and LV.allowed_hours(100.0) == pytest.approx(0.25)
     assert LV.dose([85.0], [8.0]) == pytest.approx(100.0)
     assert LV.dose([91.0, 85.0], [1.0, 4.0]) == pytest.approx(100.0)
+
+
+def test_feedback_requires_zero_phase_not_maximum_real_part():
+    # H = .5 z^-1 - .4 z^-2. A complex pole pair reaches the unit circle
+    # at G=2.5 and cos(w)=.625; maximizing Re(H) alone predicts G~2.09.
+    ir = np.array([0.0, 0.5, -0.4])
+    result = LV.feedback(ir, fmin=1, fmax=SR / 2)
+    expected_hz = SR * math.acos(0.625) / (2 * math.pi)
+    assert result["max_gain_db"] == pytest.approx(20 * math.log10(2.5), abs=1e-4)
+    assert result["howl_hz"] == pytest.approx(expected_hz, abs=0.01)
+    roots = np.roots([1, -0.5 * 2.5, 0.4 * 2.5])
+    assert np.abs(roots) == pytest.approx(np.ones(2))

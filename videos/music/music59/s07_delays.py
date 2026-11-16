@@ -37,7 +37,7 @@ class Delays(SoundScene):
             "<bookmark mark='b'/> Played at the same moment, the tower would be heard first, a sixth of a second ahead, and the "
             "stage would arrive as an echo. <bookmark mark='c'/> So the tower is delayed by the difference, plus ten "
             f"milliseconds: {say(d['delay_ms'])} in all. Its sound now reaches you just after the stage's, and by Part 55's "
-            "precedence effect you hear the band on the stage, only louder."
+            "precedence effect this can help retain stage localization when delay and relative levels are chosen appropriately."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ground), FadeIn(stage), FadeIn(tower), FadeIn(you), FadeIn(names))
             vo.wait_until("a")
@@ -87,7 +87,7 @@ class Delays(SoundScene):
                    f"in the afternoon heat drifts by {say(abs(d['drift_ms']['10']))} milliseconds when the night cools by ten degrees, "
                    "and engineers re-measure. <bookmark mark='d'/> Temperature gradients bend sound: warm ground under cooler air, on "
                    "a sunny afternoon, bends it upwards, over the heads at the back. <bookmark mark='e'/> A cool ground at night bends "
-                   "it down again, which is why the neighbours hear the festival best after dark. <bookmark mark='f'/> And wind adds "
+                   "it down again, which can increase downwind or nighttime off-site sound under suitable weather conditions. <bookmark mark='f'/> And wind adds "
                    "to the speed of sound downwind and subtracts upwind: the same bending, and a gusting, shifting sound far away.", marks="bcdef")
 
     # ------------------------------------------------------------------

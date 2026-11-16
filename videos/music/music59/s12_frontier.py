@@ -39,7 +39,7 @@ class Frontier(SoundScene):
         ]
         rows_scene(self, r"quiet neighbours", items,
                    "The second is silence. <bookmark mark='b'/> Outdoor events carry noise limits at the nearest houses, usually "
-                   "hardest on the bass, which no fence stops. <bookmark mark='c'/> Bass carries kilometres, and Chapter 6's weather "
+                   "hardest on the bass, which ordinary small barriers attenuate less effectively than higher frequencies. <bookmark mark='c'/> Bass carries kilometres, and Chapter 6's weather "
                    "bends it down at night. <bookmark mark='d'/> Cardioid and end-fire subwoofers aim it, and optimized arrays can "
                    "trade a little level in the audience for much less off site. <bookmark mark='e'/> Sound zones push the idea "
                    "further: arrays driven so that one region is loud and another quiet, by Chapter 5's arithmetic, in a car or a "
