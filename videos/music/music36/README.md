@@ -124,3 +124,7 @@ python -m videos.music.labs 36                                  # the lab (write
 * W. Surjodiningrat, P. J. Sudarjana and A. Susanto, *Tone Measurements of Outstanding Javanese Gamelans in Jogjakarta
   and Surakarta* (1972); W. A. Sethares, *Tuning, Timbre, Spectrum, Scale* (2nd ed. 2005), chapter 10.
 * Part 5 for dissonance curves; Part 9 for bars, bells and gongs; Part 33 for continued fractions and tilings.
+
+## Interpretation limits
+
+The tomb’s full 65-bell assemblage is not uniformly the same two-tone bell type. Inscribed pitch names are not modern absolute frequency standards. Twelve generated notes require eleven generator steps, while twelve fifths produce the comma comparison. Pentatonic collections can establish tonic attraction without a semitone leading tone. Gagaku is a continuing tradition, not a frozen historical exhibit. Heterophony can coexist with counterpoint and chordal effects. The gamelan tunings, beat-rate profile and alternating interlock are illustrative choices; practices vary by ensemble, genre and region. Javanese performance can include prominent solo and leading parts. Timbre and tradition are joint explanations, not exclusive alternatives.

@@ -53,17 +53,13 @@ class Bells(SoundScene):
     def set(self):
         items = [
             (r"65 bells: \ the largest weighs over 200 kg; \ the set spans about five octaves", WHITE),
-            (r"with two notes per bell, \ a complete chromatic scale over much of the range", WHITE),
+            (r"the two-tone bells help supply \ a complete chromatic scale over much of the range", WHITE),
             (r"the inscriptions name each note in the Zeng system and its equivalents in other states", WHITE),
-            (r"measurements of the bells \ (1980s) \ found them still close to the inscribed pitches", TUNE),
+            (r"measurements related tones to inscribed pitch names\\names alone give no absolute modern frequency standard", TUNE),
             (r"a performance needed several players with mallets and poles", GREY_A),
         ]
         rows_scene(self, r"the set", items,
-                   "The set is enormous. <bookmark mark='b'/> Sixty-five bells, the largest over two hundred kilograms, span about "
-                   "five octaves, <bookmark mark='c'/> and with two notes per bell they give a complete chromatic scale over much "
-                   "of that range. <bookmark mark='d'/> The inscriptions name each note in the Zeng state's system and give its "
-                   "equivalents in other states. <bookmark mark='e'/> Measurements made in the 1980s found the bells still close to "
-                   "their inscribed pitches. <bookmark mark='f'/> Playing them took several musicians with mallets and poles.",
+                   "The set is enormous. <bookmark mark='b'/> Sixty-five bells, the largest over two hundred kilograms, span about five octaves, <bookmark mark='c'/> and the two-tone bells help give a complete chromatic scale over much of that range. <bookmark mark='d'/> The inscriptions name each note in the Zeng state's system and give its equivalents in other states. <bookmark mark='e'/> Measurements made in the 1980s related the measured tones to the inscribed pitch names; those names do not by themselves supply a modern absolute frequency standard. <bookmark mark='f'/> Playing them took several musicians with mallets and poles.",
                    marks="cdef")
 
     # ------------------------------------------------------------------
@@ -71,14 +67,14 @@ class Bells(SoundScene):
         items = [
             (r"European bells \ (Part 9): \ one strike note, \ a crowd of inharmonic partials, \ a long hum", WHITE),
             (r"Chinese \textit{bianzhong}: \ two strike notes, \ a fast decay, \ suited to melody", WHITE),
-            (r"the flat, \ studded surface damps the ring: \ notes stay distinct in quick succession", WHITE),
+            (r"shape and construction support short decay: \ notes stay distinct in quick succession", WHITE),
             (r"the bells were played in rituals and banquets, \ a sign of a ruler's status", TUNE),
             (r"after the Han dynasty the art of the two-tone bell was largely lost", GREY_A),
         ]
         rows_scene(self, r"two kinds of bell", items,
                    "Compare the bells of Part 9. <bookmark mark='b'/> A European church bell has one strike note, a crowd of "
                    "inharmonic partials and a long hum. <bookmark mark='c'/> The Chinese bianzhong has two strike notes and a "
-                   "fast decay, suited to melody: <bookmark mark='d'/> its flat, studded surface damps the ring so that notes "
+                   "fast decay, suited to melody: <bookmark mark='d'/> its shape and construction support the relatively short decay so that notes "
                    "stay distinct in quick succession. <bookmark mark='e'/> The bells sounded at rituals and banquets, a sign of "
                    "a ruler's status. <bookmark mark='f'/> After the Han dynasty the art of the two-tone bell was largely lost.",
                    marks="cdef")

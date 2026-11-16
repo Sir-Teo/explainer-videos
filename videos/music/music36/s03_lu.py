@@ -30,12 +30,7 @@ class Lu(SoundScene):
         side.move_to(RIGHT * 4.2)
         head = label(r"the rule of three: \ a pipe of length 81", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
-            "Chinese theory generated its pitches by a rule for cutting pipes or strings, recorded by the third century BCE. "
-            "<bookmark mark='a'/> Start with a length of eighty-one. Take away a third: fifty-four, a fifth higher. Add a "
-            "third: seventy-two, a fourth lower. Take away a third, add a third, alternately. <bookmark mark='b'/> Each step "
-            "multiplies by two thirds or four thirds, up a fifth or down a fourth, <bookmark mark='c'/> the same chain of "
-            "fifths Part 6 built for Pythagoras, found independently. Eighty-one was chosen because it can be divided by "
-            "three four times."
+            "Chinese theory generated its pitches by a rule for cutting pipes or strings, recorded by the third century BCE. <bookmark mark='a'/> Start with a length of eighty-one. Take away a third: fifty-four, a fifth higher. Add a third: seventy-two, a fourth lower. Take away a third, add a third, alternately. <bookmark mark='b'/> Each step multiplies by two thirds or four thirds, up a fifth or down a fourth, <bookmark mark='c'/> the same chain of fifths Part 6 built for Pythagoras, found independently. Eighty-one is convenient for repeated division by three; historical pitch standards also had numerical and cosmological meanings."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_))
             for mark, r in zip("abc", side):
@@ -75,10 +70,10 @@ class Lu(SoundScene):
         rows_ = VGroup(*[label(s, font_size=21, color=c_) for s, c_ in (
             (r"twelve steps give the twelve \textit{l\"u}: \ a chromatic scale of Pythagorean semitones", WHITE),
             (rf"but the twelfth step misses the octave by {d['comma']:.1f} cents: \ the Pythagorean comma", EAR),
-            (r"the circle does not close: \ the same problem every tuning system meets \ (Part 6)", GREY_A))]).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.6)
+            (r"the circle does not close: \ the familiar closure problem for a chain of pure fifths \ (Part 6)", GREY_A))]).arrange(DOWN, buff=0.3).to_edge(DOWN, buff=0.6)
         head = label(r"twelve steps: \ the twelve l\"u", font_size=28, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "Keep going. <bookmark mark='a'/> Twelve steps give the twelve lü, a chromatic scale of two sizes of semitone. "
+            "Keep going. <bookmark mark='a'/> Twelve generated notes give the twelve lü, a chromatic scale of two sizes of semitone. "
             "<bookmark mark='b'/> But the thirteenth pitch misses the starting note's octave by twenty-three and a half cents, "
             "the Pythagorean comma. <bookmark mark='c'/> The circle does not close, the same problem every tuning system "
             "meets. Chinese theorists spent two thousand years on it."

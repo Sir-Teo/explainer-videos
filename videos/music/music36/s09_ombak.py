@@ -21,14 +21,10 @@ class Ombak(SoundScene):
             (r"the pair is tuned slightly apart, \ so every note beats: \ \textit{ombak}, \ `wave'", WHITE),
             (r"the beating gives the ensemble its shimmer", WHITE),
             (r"Part 5: \ two tones close in pitch beat at their difference frequency", TUNE),
-            (r"in Europe a fault to be tuned away; \ in Bali a quality to be tuned in", GREY_A),
+            (r"regulated beating is prominent here; \ intentional detuning also exists elsewhere", GREY_A),
         ]
         rows_scene(self, r"ombak", items,
-                   "In Bali, instruments come in pairs. <bookmark mark='b'/> The two members, pengumbang and pengisep, are tuned "
-                   "slightly apart, so every note they play together beats: ombak, the wave. <bookmark mark='c'/> The beating "
-                   "gives the whole ensemble its shimmer. <bookmark mark='d'/> It is Part 5's physics: two tones close in pitch "
-                   "beat at their difference frequency. <bookmark mark='e'/> In a European orchestra, beating is a fault to be "
-                   "tuned away; in Bali it is a quality to be tuned in.", marks="bcde")
+                   "In many Balinese gamelan types, particular instruments are built in detuned pairs. <bookmark mark='b'/> The two members, pengumbang and pengisep, are tuned slightly apart, so every note they play together beats: ombak, the wave. <bookmark mark='c'/> The beating gives the whole ensemble its shimmer. <bookmark mark='d'/> It is Part 5's physics: two tones close in pitch beat at their difference frequency. <bookmark mark='e'/> European ensembles also use vibrato and intentional detuning; these Balinese pairs make a deliberately regulated beating texture especially prominent.", marks="bcde")
 
     # ------------------------------------------------------------------
     def quiz(self):
@@ -52,10 +48,7 @@ class Ombak(SoundScene):
         ans = VGroup(label(r"B: \ the second instrument 6 Hz higher at every pitch", font_size=21, color=TUNE),
                      label(rf"in cents: \ {offs} \ ---\ the same beat needs less detuning as pitch rises", font_size=19, color=GREY_A)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.9)
         with self.voiceover(
-            "B shimmers. Its second instrument is tuned six hertz higher at every pitch, so every note beats six times a "
-            f"second. In cents, that is {say(round(d['cents_off'][0]))} at the low note, {say(round(d['cents_off'][1]))} in the "
-            f"middle and {say(round(d['cents_off'][2]))} at the top: Balinese tuners keep the beat rate, not the interval, "
-            "roughly constant across the range."
+            f"B shimmers. Its second instrument is tuned six hertz higher at every pitch, so every note beats six times a second. In cents, that is {say(round(d['cents_off'][0]))} at the low note, {say(round(d['cents_off'][1]))} in the middle and {say(round(d['cents_off'][2]))} at the top: this demonstration keeps a constant beat rate rather than constant cents; real tuning practices and rate profiles vary."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)

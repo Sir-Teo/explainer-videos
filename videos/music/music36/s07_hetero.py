@@ -19,17 +19,12 @@ class Hetero(SoundScene):
         items = [
             (r"heterophony: \ one melody, \ played by several voices at once, \ each in its own version", WHITE),
             (r"one plays it plainly; \ one ornaments it; \ one holds its main notes", WHITE),
-            (r"not counterpoint \ (independent lines) \ and not harmony \ (chords): \ a third texture", TUNE),
+            (r"simultaneous variants of one melody\\can coexist with counterpoint or chords", TUNE),
             (r"common in East and Southeast Asian ensembles, \ in Arabic music, \ in folk hymn singing", WHITE),
             (r"the melody exists in the players' minds; \ each realizes it on their instrument", GREY_A),
         ]
         rows_scene(self, r"heterophony", items,
-                   "East Asian ensembles often use a texture that Western theory long overlooked. <bookmark mark='b'/> In "
-                   "heterophony several voices play one melody at once, each in its own version: <bookmark mark='c'/> one plainly, "
-                   "one ornamented, one holding its main notes. <bookmark mark='d'/> It is neither counterpoint, independent lines, "
-                   "nor harmony, chords, but a third texture, <bookmark mark='e'/> common in East and Southeast Asia, in Arabic "
-                   "music, and in some folk hymn singing. <bookmark mark='f'/> The melody exists in the players' minds; each "
-                   "realizes it on their own instrument.", marks="cdef")
+                   "East Asian ensembles often use a texture that Western theory long overlooked. <bookmark mark='b'/> In heterophony several voices play one melody at once, each in its own version: <bookmark mark='c'/> one plainly, one ornamented, one holding its main notes. <bookmark mark='d'/> It describes simultaneous variants of a melody; actual textures can combine it with counterpoint and chordal effects, <bookmark mark='e'/> common in East and Southeast Asia, in Arabic music, and in some folk hymn singing. <bookmark mark='f'/> The melody exists in the players' minds; each realizes it on their own instrument.", marks="cdef")
 
     # ------------------------------------------------------------------
     def hear(self):
@@ -63,15 +58,10 @@ class Hetero(SoundScene):
             (r"brought from Tang China and Korea in the 7th to 9th centuries, \ and preserved", WHITE),
             (r"the \textit{sh\=o}, \ a mouth organ of 17 pipes, \ plays sustained clusters, \ \textit{aitake}", WHITE),
             (r"slow, \ heterophonic, \ with a cycle marked by drums", TUNE),
-            (r"a living museum of music that changed elsewhere", GREY_A),
+            (r"a continuing tradition with historical change", GREY_A),
         ]
         rows_scene(self, r"gagaku", items,
-                   "Japan preserved one of the oldest orchestral traditions. <bookmark mark='b'/> Gagaku, the imperial court "
-                   "music, has been performed for over a thousand years, <bookmark mark='c'/> brought from Tang China and Korea "
-                   "between the seventh and ninth centuries and kept ever since. <bookmark mark='d'/> The sho, a mouth organ of "
-                   "seventeen pipes, sustains clusters of five or six notes called aitake. <bookmark mark='e'/> The music is slow "
-                   "and heterophonic, its cycles marked by drums. <bookmark mark='f'/> It is a living museum of music that "
-                   "changed elsewhere.", marks="cdef")
+                   "Japan preserved one of the oldest orchestral traditions. <bookmark mark='b'/> Gagaku, the imperial court music, has been performed for over a thousand years, <bookmark mark='c'/> brought from Tang China and Korea between the seventh and ninth centuries and kept ever since. <bookmark mark='d'/> The sho, a mouth organ of seventeen pipes, sustains clusters of five or six notes called aitake. <bookmark mark='e'/> The music is slow and heterophonic, its cycles marked by drums. <bookmark mark='f'/> It is a living tradition with its own historical changes and continuing creative practice.", marks="cdef")
 
     # ------------------------------------------------------------------
     def sho(self):
@@ -81,7 +71,7 @@ class Hetero(SoundScene):
         cells.scale_to_fit_width(min(cells.width, 12.4)).move_to(UP * 0.3)
         head = label(r"clusters in the manner of the sh\=o \ (ours)", font_size=27, color=GREY_A).to_edge(UP, buff=0.4)
         with self.voiceover(
-            "The sho's sound is unlike any Western harmony: six notes at once, many of them a tone or a fourth apart, swelling slowly and moving to the next cluster as the melody changes. These three are our own voicings in that manner, on additive tones, not the traditional aitake."
+            "The sho has a distinctive sustained cluster texture: six notes at once, many of them a tone or a fourth apart, swelling slowly and moving to the next cluster as the melody changes. These three are our own voicings in that manner, on additive tones, not the traditional aitake."
         ):
             self.play(FadeIn(head), FadeIn(cells))
         with self.listen(c) as snd:

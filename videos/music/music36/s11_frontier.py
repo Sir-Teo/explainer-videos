@@ -62,7 +62,7 @@ class Frontier(SoundScene):
             "instrument. <bookmark mark='b'/> Compute each set's dissonance minima from its own spectra. "
             "<bookmark mark='c'/> Test whether the tuning sits nearer those minima than chance would place it. "
             "<bookmark mark='d'/> Do gamelan tunings fit their instruments' spectra? <bookmark mark='e'/> The answer would "
-            "say whether timbre shapes scales, or tradition does."
+            "say how timbre and tradition jointly contribute to tuning; observational agreement alone does not establish causation."
         ) as vo:
             self.play(FadeIn(head), FadeIn(rows_[0]))
             for mark, r in zip("bcde", rows_[1:]):

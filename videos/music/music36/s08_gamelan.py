@@ -84,10 +84,10 @@ class Gamelan(SoundScene):
         lb = VMobject(color=BLUE, stroke_width=3).set_points_as_corners([ax.c2p(x, y) for x, y in zip(cs, d["bar"])])
         xt = VGroup(*[label(str(v), font_size=14, color=GREY_A).next_to(ax.c2p(v, 0), DOWN, buff=0.12) for v in (0, 400, 800, 1200)])
         side = VGroup(*[label(s, font_size=20, color=c_) for s, c_ in (
-            (r"Part 5's dissonance curve, \ for two spectra", WHITE),
-            (r"harmonic tone \ (gold): \ dips at the just intervals and the octave", TUNE),
-            (r"uniform free bar \ (blue): \ dips at " + r", \ ".join(f"{m:.0f}" for m in d["min_bar"]) + r"; \ no octave", BLUE),
-            (r"Sethares: \ measured gamelan spectra put dips near slendro's steps; \ our ideal bar does not", EAR))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
+            (r"Part 5's model roughness\\interval on x-axis in cents", WHITE),
+            (r"harmonic tone (gold):\\dips at just intervals and the octave", TUNE),
+            (r"uniform free bar \ (blue): \ dips at " + r", \ ".join(f"{m:.0f}" for m in d["min_bar"]) + r" cents;\\no dip at 1200 cents", BLUE),
+            (r"Sethares: some measured gamelan spectra\\have dips near slendro steps\\this ideal uniform bar does not", EAR))]).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
         side.scale_to_fit_width(min(side.width, 5.6)).move_to(RIGHT * 3.6)
         head = label(r"spectrum and scale", font_size=28, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(

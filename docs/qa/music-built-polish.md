@@ -40,8 +40,9 @@ accurate explanatory visualizations and aesthetic quality. Base: `eae705a04e5ae8
 | 33 — The Mathematics of Rhythm and Scale | Complete | Open |
 | 34 — Raga and Tala | Complete | Open |
 | 35 — Maqam | Complete | Open |
-| 36 — Bronze and Silk | In progress | Open |
-| 37–68 | Queued | Open |
+| 36 — Bronze and Silk | Complete | Open |
+| 37 — Timelines | In progress | Open |
+| 38–68 | Queued | Open |
 
 Part 1: all 15 chapters rendered and visually sampled; changed sections rerendered and reviewed;
 38 tests pass; the lab runs; all 15 sound-gate cases and 40 listening-window motion checks pass.
@@ -136,7 +137,9 @@ Part 34: all 12 chapter preview sheets reviewed; sound and 15 listening-window m
 
 Part 35: all 12 chapter preview sheets reviewed; sound and 17 listening-window motion checks pass. Local identities: `renders/qa/music35/source-receipt.json`.
 
-**Current: Part 36.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
+Part 36: all 12 chapter preview sheets reviewed; sound and 25 listening-window motion checks pass. Local identities: `renders/qa/music36/source-receipt.json`.
+
+**Current: Part 37.** Source review has reached Part 68; all episode-specific model computations and selected native still checks are complete. Sequential full chapter previews continue. Each episode is marked complete only after its own review and gates pass.
 
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final

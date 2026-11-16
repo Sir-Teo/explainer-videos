@@ -53,18 +53,14 @@ class Modes(SoundScene):
     # ------------------------------------------------------------------
     def melody(self):
         items = [
-            (r"pentatonic melodies have no semitones: \ no leading tone pulling to the tonic", WHITE),
+            (r"pentatonic melodies have no semitones: \ no semitone leading tone; contextual tonic attraction remains", WHITE),
             (r"cadence comes from contour and rhythm, \ not from a dominant chord", WHITE),
             (r"pentatonic scales appear worldwide: \ Scotland, \ West Africa, \ the Andes, \ East Asia", WHITE),
             (r"Part 12: \ the pentatonic is a maximally even five-note set", TUNE),
             (r"Part 47 asks whether such scales are universal", GREY_A),
         ]
         rows_scene(self, r"melody without semitones", items,
-                   "Pentatonic melody works differently. <bookmark mark='b'/> It has no semitones, so no leading tone pulls to the "
-                   "tonic, <bookmark mark='c'/> and cadence comes from contour and rhythm rather than from a dominant chord. "
-                   "<bookmark mark='d'/> Pentatonic scales appear all over the world, in Scotland, West Africa, the Andes and "
-                   "East Asia. <bookmark mark='e'/> Part 12 showed why they are natural: the pentatonic is the maximally even "
-                   "five-note set. <bookmark mark='f'/> Part 47 asks whether such scales are universal.", marks="cdef")
+                   "Pentatonic melody works differently. <bookmark mark='b'/> It has no semitones, so it has no diatonic semitone leading tone, although melodic context can still establish strong tonal attraction, <bookmark mark='c'/> and cadence comes from contour and rhythm rather than from a dominant chord. <bookmark mark='d'/> Pentatonic scales appear all over the world, in Scotland, West Africa, the Andes and East Asia. <bookmark mark='e'/> Part 12 showed one geometric property of them: the pentatonic is the maximally even five-note set. <bookmark mark='f'/> Part 47 asks whether such scales are universal.", marks="cdef")
 
     # ------------------------------------------------------------------
     def tunes(self):

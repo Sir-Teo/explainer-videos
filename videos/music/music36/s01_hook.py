@@ -52,14 +52,14 @@ class Hook(SoundScene):
         items = [
             (r"1978, \ Suizhou, \ Hubei: \ the tomb of Marquis Yi of Zeng, \ sealed in 433 BCE", WHITE),
             (r"65 bronze bells, \ hung in three tiers on a lacquered frame, \ with stone chimes, \ zithers and pipes", WHITE),
-            (r"each bell sounds two notes; \ inscriptions in gold name them, \ and how they relate to other states' systems", WHITE),
+            (r"many bells sound two distinct notes; \ inscriptions in gold name them, \ and how they relate to other states' systems", WHITE),
             (r"a tuning treatise in bronze, \ older than Aristoxenus", TUNE),
             (r"this part goes from those bells to the gamelan", GREY_A),
         ]
         rows_scene(self, r"a tomb in Hubei", items,
                    "In 1978 soldiers levelling a hill in Hubei province found a tomb. <bookmark mark='b'/> It was the tomb of "
                    "Marquis Yi of Zeng, sealed in 433 BCE. <bookmark mark='c'/> It held sixty-five bronze bells hung in three tiers "
-                   "on a lacquered frame, with stone chimes, zithers and pipes. <bookmark mark='d'/> Each bell sounds two notes, "
+                   "on a lacquered frame, with stone chimes, zithers and pipes. <bookmark mark='d'/> Many bells in the set sound two distinct notes; the set also includes a different gift bell, "
                    "and inscriptions inlaid in gold name them and relate them to the pitch systems of neighbouring states. "
                    "<bookmark mark='e'/> It is a treatise on tuning cast in bronze, older than the Greek theorist Aristoxenus. "
                    "<bookmark mark='f'/> This part goes from those bells to the gamelan of Java and Bali.", marks="cdef")

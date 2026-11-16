@@ -23,15 +23,12 @@ class Cycle(SoundScene):
         items = [
             (r"gamelan music is built on cycles, \ marked by the gongs: \ \textit{colotomic} structure", WHITE),
             (r"the big gong \ (\textit{gong ageng}) \ ends each cycle", WHITE),
-            (r"smaller gongs \ (kenong, \ kempul, \ ketuk) \ divide it into halves, \ quarters, \ eighths", WHITE),
+            (r"smaller gongs punctuate the cycle; \ placement depends on the form \ (our 16-beat example follows)", WHITE),
             (r"the \textit{balungan}, \ the skeleton melody, \ is played one note per beat on the sarons", TUNE),
             (r"Part 34's tala marked by claps; \ here marked by gongs", GREY_A),
         ]
         rows_scene(self, r"the gong cycle", items,
-                   "Gamelan music is built on cycles marked by gongs, a structure called colotomic. <bookmark mark='b'/> The great "
-                   "gong ends each cycle; <bookmark mark='c'/> smaller gongs, kenong, kempul and ketuk, divide it into halves, "
-                   "quarters and eighths. <bookmark mark='d'/> Over them the balungan, the skeleton melody, is played one note per "
-                   "beat on the sarons. <bookmark mark='e'/> Part 34's tala was marked by claps; this one by gongs.", marks="bcde")
+                   "Gamelan music is built on cycles marked by gongs, a structure called colotomic. <bookmark mark='b'/> The great gong ends each cycle; <bookmark mark='c'/> smaller gongs such as kenong, kempul and ketuk articulate subdivisions according to the particular form. <bookmark mark='d'/> Over them the balungan, the skeleton melody, is played one note per beat on the sarons. <bookmark mark='e'/> Part 34's tala was marked by claps; this one by gongs.", marks="bcde")
 
     # ------------------------------------------------------------------
     def hear(self):
@@ -95,9 +92,7 @@ class Cycle(SoundScene):
                     pulse(snd, rows_[ri][1][i % 16][0], t0, t0 + p - 0.01, buff=0.02)
         ans = label(r"one line: \ two players, \ each playing every other note, \ make a figure too fast for either alone", font_size=21, color=TUNE).to_edge(DOWN, buff=0.9)
         with self.voiceover(
-            "It sounds like one player, playing very fast. In fact each player has a gap on every other pulse, and together "
-            "they fill every pulse exactly once, like Part 33's tiling canon. Balinese musicians call this kotekan: "
-            "interlocking parts that let two players make a figure too fast for either alone."
+            "It sounds like one player, playing very fast. In fact each player has a gap on every other pulse, and together they fill every pulse exactly once, like Part 33's tiling canon. This is a simple alternating illustration of kotekan. Traditional patterns can overlap and use more elaborate relationships, rather than always leaving alternate pulses empty."
         ):
             self.play(FadeIn(ans))
         self.wait(0.4)
@@ -165,8 +160,8 @@ class Cycle(SoundScene):
             (r"university gamelans in North America, \ Europe, \ Australia and Japan", WHITE),
             (r"students learn by imitation and memory, \ often without notation", WHITE),
             (r"cipher notation \ (\textit{kepatihan}): \ the balungan written as numbers 1 to 7", WHITE),
-            (r"a gamelan is played by a group: \ no soloist, \ no conductor; \ the drummer leads", TUNE),
+            (r"drummer leads tempo and transitions\\solo and leading roles also occur", TUNE),
             (r"Part 43 turns to performing together", GREY_A),
         ]
         rows_scene(self, r"gamelan worldwide", items,
-                   "Gamelan is now played worldwide. <bookmark mark='b'/> Universities in North America, Europe, Australia and Japan own gamelans, <bookmark mark='c'/> and students learn by imitation and memory, often without notation, <bookmark mark='d'/> though a cipher notation, kepatihan, writes the balungan as the numbers one to seven. <bookmark mark='e'/> A gamelan has no soloist and no conductor; the drummer leads the tempo and the changes. <bookmark mark='f'/> Part 43 turns to performing together.", marks="cdef")
+                   "Gamelan is now played worldwide. <bookmark mark='b'/> Universities in North America, Europe, Australia and Japan own gamelans, <bookmark mark='c'/> and students learn by imitation and memory, often without notation, <bookmark mark='d'/> though a cipher notation, kepatihan, writes the balungan as the numbers one to seven. <bookmark mark='e'/> In many Javanese settings the drummer leads tempo and transitions without a Western-style conductor; singers and instruments can still have prominent solo or leading roles. <bookmark mark='f'/> Part 43 turns to performing together.", marks="cdef")
