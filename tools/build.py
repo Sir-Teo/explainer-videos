@@ -119,6 +119,16 @@ def sound_master(concat_list: Path, music: Path) -> str:
     return graph + "[a]"
 
 
+def series_score(video: str):
+    """The series' computed score (``explainer/<series>/score.py`` with a ``cues(timeline, cache)``), or None."""
+    series = video_dir(video).parent.name
+    try:
+        mod = importlib.import_module(f"explainer.{series}.score")
+    except ModuleNotFoundError:
+        return None
+    return mod if hasattr(mod, "cues") else None
+
+
 def scene_output(media: Path, module: str, cls: str, quality: str, fps: int) -> Path:
     return media / "videos" / module / f"{QUALITY[quality]}{fps}" / f"{cls}.mp4"
 
@@ -197,6 +207,8 @@ def main():
     ap.add_argument("--only", nargs="*", help="render only these scene classes (still stitches all)")
     ap.add_argument("--stitch-only", action="store_true")
     ap.add_argument("--lang", default="en", help="narration language (en, or zh from narration_zh.json)")
+    ap.add_argument("--no-score", action="store_true",
+                    help="leave out the series' computed score (explainer/<series>/score.py), if it has one")
     args = ap.parse_args()
     os.environ["EXPLAINER_LANG"] = args.lang  # the scene renders inherit it
     os.environ["EXPLAINER_VIDEO"] = args.video  # and the video's name (explainer/zh_text.py finds its series' table)
@@ -239,7 +251,7 @@ def main():
     suffix += "" if args.lang == "en" else f"_{args.lang}"
     name = f"{args.video}{suffix}"
 
-    parts, cues, chapters, offset, sound_cues = [], [], [], 0.0, []
+    parts, cues, chapters, offset, sound_cues, timeline = [], [], [], 0.0, [], []
     for module, cls, chapter in scenes:
         mp4 = scene_output(media, module, cls, args.quality, args.fps)
         if not mp4.exists():
@@ -265,7 +277,15 @@ def main():
         if chapter:
             chapters.append((offset, narration_lang.chapter_title(args.video, cls, chapter, args.lang)))
         parts.append(norm)
+        timeline.append({"cls": cls, "chapter": chapter, "start": offset, "duration": dur,
+                         "lines": [{"start": x["start"], "duration": x["duration"]} for x in lines]})
         offset += dur
+
+    score = series_score(args.video) if not args.no_score else None
+    if score is not None:  # a series with a computed score: its cues join the music stem
+        scored = score.cues(timeline, ROOT / ".cache")
+        print(f"score: {len(scored)} cue(s) from {score.__name__}")
+        sound_cues += scored
 
     concat_list = work / "concat.txt"
     concat_list.write_text("".join(f"file '{p}'\n" for p in parts))
@@ -284,7 +304,7 @@ def main():
             "-c:s", "mov_text", "-metadata:s:s:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }",
             "-metadata:s:a:0", f"language={ {'en': 'eng', 'zh': 'chi'}[args.lang] }", "-movflags", "+faststart",
             str(final)]
-    if sound_cues:  # Music, Built: the narration and the music stem are mastered apart and then joined
+    if sound_cues:  # Music, Built (or a series' score): narration and music stem are mastered apart, then joined
         music = work / "music.wav"
         music_stem(sound_cues, offset, music)
         graph = sound_master(concat_list, music)

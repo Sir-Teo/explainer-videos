@@ -78,3 +78,8 @@ Manim videos with local neural narration. See README.md for layout and build com
   (`course/site/widgets/00_tasks.js`, `QB.task`); it stores and sends nothing, and `tools/check_course.py` plays a
   scripted participant against it.
   Chinese narration tables in `psychN/zh_lines.py`; terms in `videos/psychology/PSYCHOLOGY_ZH_GUIDE.md`.
+  The films carry a computed score (`explainer/psychology/score.py`: theme, chapter stings, a bed in dead air), mixed
+  by `tools/build.py` through the music-stem path (`--no-score` leaves it out); ideas are drawn with the diagram
+  instruments in `viz.py` (`point_cards`, `flow_chain`, `quadrant`, `pyramid`, `rings`, `theory_card`, `verdict_row`).
+  `videos/psychology/READING.md` maps the textbooks, theories and classic studies to parts and chapters
+  (`tests/test_psychology_reading.py` checks every place against the scenes).

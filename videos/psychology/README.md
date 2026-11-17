@@ -155,6 +155,14 @@ The series draws in the manner of 3Blue1Brown with the instruments of `explainer
   channel, and back out.
 * **Real numbers.** Everything plotted is `computed` (the part's `compute.py`), `historical data` (the Archive,
   with source), `published` (cited), `simulated` (the Pool), `illustrative` or `schematic`, and tagged as such.
+* **Ideas are drawn, not listed.** A theory, a mechanism or a typology is a picture: `point_cards`, `flow_chain`,
+  `quadrant`, `pyramid`, `rings`, and `theory_card` with `verdict_row` for *the textbook's theory, then the record*
+  (`explainer/psychology/viz.py`).
+* **A score you can hear.** `explainer/psychology/score.py` computes a small score from sines (nothing recorded,
+  nothing third-party) and `tools/build.py` mixes it into every master: the theme climbing the pentatonic scale in
+  equal steps (Fechner's joke) under each hook, a three-note sting at each chapter card, a quiet chord that breathes
+  in the dead air of On-you pauses, and the theme coming back down under the outro. It sits 8 to 18 LU below the
+  narration; `--no-score` leaves it out.
 
 ## The parts
 
