@@ -28,6 +28,7 @@ class Attribution(VoiceoverScene):
         self.kelley()
         self.essays()
         self.rational()
+        self.biases()
 
     def card(self):
         card = chapter_card(2, r"Explaining behaviour", r"Was it the person, \ or the situation?",
@@ -40,25 +41,42 @@ class Attribution(VoiceoverScene):
     def kelley(self):
         d = load("kelley")
         head = heading(r"Kelley's cube: \ attribution as analysis of variance")
-        cubes = VGroup()
+        sub = label(r"Kelley, \ 1967: \ explain a behaviour by what it varies with: \ persons, \ entities, \ occasions",
+                    font_size=21, color=GREY_A).next_to(head, DOWN, buff=0.22)
+        xs = [-5.3, -3.2, -1.05, 1.15, 3.3, 5.45]  # cube, points to, consensus, distinctiveness, consistency, Psyche
+        ys = [1.0, -0.75, -2.5]
+        hy = 2.3
+        hdr = VGroup(*[VGroup(label(t, font_size=22, color=c), label(q, font_size=17, color=GREY_B)).arrange(
+            DOWN, buff=0.08).move_to([x, hy, 0]) for x, t, q, c in (
+            (xs[2], r"consensus", r"do others do it too?", CROWD),
+            (xs[3], r"distinctiveness", r"only with this entity?", CROWD),
+            (xs[4], r"consistency", r"every time?", CROWD))])
+        cause_h = label(r"points to", font_size=22, color=GREY_A).move_to([xs[1], hy, 0])
+        psy_h = VGroup(label(r"Psyche:", font_size=20, color=MODEL), label(r"share of variance", font_size=17,
+                                                                         color=MODEL)).arrange(DOWN, buff=0.08)
+        psy_h.move_to([xs[5], hy, 0])
+        rules = VGroup(*[Line([-6.75, y - 0.88, 0], [6.75, y - 0.88, 0], color=GREY_D, stroke_width=1)
+                         for y in ys[:2]])
+        rules.add(Line([-6.75, hy - 0.45, 0], [6.75, hy - 0.45, 0], color=GREY_C, stroke_width=1.5))
+        cubes, causes, cells, shares = VGroup(), VGroup(), VGroup(), VGroup()
+        part_name = {"person": r"person", "entity": r"entity", "occasion": r"occasion",
+                     "rest": r"one-off"}
         for k, (pat, nm, c) in enumerate((("person", r"the person", PERSON), ("entity", r"the entity", CROWD),
                                           ("circumstance", r"the occasion", MODEL))):
-            cb = cube(pat).scale(0.8).move_to([-4.6 + 3.0 * k, 1.1, 0])
+            cb = cube(pat).scale(0.62).move_to([xs[0], ys[k], 0])
+            cubes.add(cb)
+            causes.add(word_chip(nm, color=c, font_size=22, width=2.1).move_to([xs[1], ys[k], 0]))
+            row = VGroup()
+            for j, cue in enumerate(("consensus", "distinctiveness", "consistency")):
+                hi = d[pat][cue] >= 0.5
+                row.add(word_chip(r"high" if hi else r"low", color=GOOD if hi else GREY_B, font_size=21,
+                                  width=1.3).move_to([xs[2 + j], ys[k], 0]))
+            cells.add(row)
             sh = d[pat]["shares"]
-            cap = VGroup(label(nm, font_size=20, color=c),
-                         label(rf"person {sh['person']:.0%}, \ entity {sh['entity']:.0%}".replace("%", r"\%"),
-                               font_size=14, color=GREY_A)).arrange(DOWN, buff=0.08).next_to(cb, DOWN, buff=0.2)
-            cubes.add(VGroup(cb, cap))
-        rows = rows_of([
-            (r"Kelley, \ 1967: \ explain a behaviour the way a scientist explains an effect, \ by what it varies "
-             r"with: \ persons, \ entities, \ occasions", WHITE),
-            (r"consensus: \ do others do it too? \ distinctiveness: \ only with this entity? \ consistency: \ every "
-             r"time?", CROWD),
-            (r"low consensus, \ low distinctiveness, \ high consistency: \ the person; \ all three high: \ the "
-             r"entity; \ low consistency: \ the occasion", PERSON),
-            (r"Psyche reads each pattern as an analysis of variance: \ the main effect that carries the variance "
-             r"is the cause", MODEL),
-        ], 12.4, 20, 0.26).move_to([0, -2.3, 0])
+            top = max(sh, key=lambda key: sh[key])
+            shares.add(VGroup(label(pct(sh[top]), font_size=24, color=c),
+                              label(part_name[top], font_size=18, color=GREY_A)).arrange(DOWN, buff=0.06)
+                       .move_to([xs[5], ys[k], 0]))
         tag = psyche_tag(r"\texttt{social.kelley}")
         with self.voiceover(
             "In 1958 Heider described people as naive scientists, explaining behaviour by hidden causes. "
@@ -70,15 +88,18 @@ class Attribution(VoiceoverScene):
             "consistency points to the occasion. <bookmark mark='d'/> Psyche reads each pattern as an analysis of "
             "variance. The main effect that carries the variance is the cause."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(tag), LaggedStart(*[FadeIn(c_[0]) for c_ in cubes], lag_ratio=0.3))
+            self.play(FadeIn(head), FadeIn(tag), LaggedStart(*[FadeIn(c_) for c_ in cubes], lag_ratio=0.3))
             vo.wait_until("a")
-            self.play(FadeIn(rows[0]))
+            self.play(FadeIn(sub, shift=DOWN * 0.1))
             vo.wait_until("b")
-            self.play(FadeIn(rows[1]))
+            self.play(LaggedStart(*[FadeIn(h_, shift=DOWN * 0.1) for h_ in hdr], lag_ratio=0.4), Create(rules))
             vo.wait_until("c")
-            self.play(FadeIn(rows[2]))
+            for k in range(3):
+                extra = [FadeIn(cause_h)] if k == 0 else []
+                self.play(LaggedStart(*[FadeIn(c_) for c_ in cells[k]], lag_ratio=0.15),
+                          FadeIn(causes[k], shift=LEFT * 0.1), *extra, run_time=0.9)
             vo.wait_until("d")
-            self.play(*[FadeIn(c_[1]) for c_ in cubes], FadeIn(rows[3]))
+            self.play(FadeIn(psy_h), LaggedStart(*[FadeIn(s_, shift=LEFT * 0.1) for s_ in shares], lag_ratio=0.3))
         self.clear_scene()
 
     def essays(self):
@@ -166,4 +187,60 @@ class Attribution(VoiceoverScene):
             self.play(FadeIn(rows[2]))
             vo.wait_until("d")
             self.play(FadeIn(rows[3]))
+        self.clear_scene()
+
+    def biases(self):
+        head = heading(r"Four attribution biases, \ and their records")
+        sub = label(r"as the textbooks list them", font_size=21, color=GREY_A).next_to(head, DOWN, buff=0.2)
+        checks = verdict_row([
+            (r"the fundamental attribution error \ (Ross, \ 1977): \ the essays reproduce, \ but the bias is weaker "
+             r"when the situation is made plain, \ and in several East Asian samples", "replicated, smaller"),
+            (r"the actor--observer asymmetry \ (Jones and Nisbett, \ 1971): \ I blame the situation, \ you blame "
+             r"my character; \ Malle, \ 2006: \ 173 studies, \ close to zero overall", "failed"),
+            (r"the self-serving bias: \ credit for success, \ circumstances for failure; \ Mezulis and colleagues, "
+             r"\ 2004: \ large and robust, \ smaller in East Asian samples", "replicated"),
+            (r"belief in a just world \ (Lerner and Simmons, \ 1966): \ observers who could not help a suffering "
+             r"victim thought less of her; \ the theory's tests are uneven \ (Hafer and B\`egue, \ 2005)",
+             "contested"),
+        ], width=12.6, font_size=23)
+        checks.move_to([0, -0.45, 0])
+        tag = published_tag(r"Lerner \& Simmons (1966); \ Jones \& Nisbett (1971); \ Ross (1977); \ Mezulis et al.\ "
+                            r"(2004); \ Hafer \& B\`egue (2005); \ Malle (2006)")
+        with self.voiceover(
+            "Textbooks file the correspondence bias in a list of attribution biases, and the list has fared "
+            "unevenly. <bookmark mark='a'/> In 1977 Lee Ross named it the fundamental attribution error. The Castro "
+            "essays reproduce, but the word fundamental hasn't held: the bias is weaker when the situation is made "
+            "plain, and in several studies of East Asian participants. <bookmark mark='b'/> In 1971 Edward Jones "
+            "and Richard Nisbett added a twist. Actors, they proposed, explain their own behaviour by the "
+            "situation, while observers explain the same behaviour by the actor's character. "
+            "<bookmark mark='c'/> It was taught for thirty years. Then in 2006 Bertram Malle pooled a hundred and "
+            "seventy-three studies, and taken overall the asymmetry was close to zero. <bookmark mark='d'/> The "
+            "self-serving bias, taking credit for success and blaming circumstances for failure, is the opposite "
+            "case. In 2004 Amy Mezulis and colleagues pooled the studies and found it large and robust, though "
+            "smaller in East Asian samples: a cousin of chapter five's better-than-average effect. "
+            "<bookmark mark='e'/> And in 1966 Melvin Lerner and Carolyn Simmons had students watch a young woman "
+            "apparently receive painful shocks for her mistakes. When they could do nothing to help her, they "
+            "thought less of her. Lerner traced it to a belief in a just world: if the world is fair, victims must "
+            "deserve what happens to them. <bookmark mark='f'/> Blaming innocent victims has reappeared in many "
+            "experiments, but a 2005 review by Carolyn Hafer and Laurent Bègue found many of the theory's tests "
+            "loose. <bookmark mark='g'/> Four entries in one list, and four different records. A list of biases is "
+            "a list of claims, each to be checked on its own."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(sub), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(checks.rows[0].claim, shift=RIGHT * 0.15))
+            self.play(FadeIn(checks.rows[0].chip, scale=1.2))
+            vo.wait_until("b")
+            self.play(FadeIn(checks.rows[1].claim, shift=RIGHT * 0.15))
+            vo.wait_until("c")
+            self.play(FadeIn(checks.rows[1].chip, scale=1.2))
+            vo.wait_until("d")
+            self.play(FadeIn(checks.rows[2].claim, shift=RIGHT * 0.15))
+            self.play(FadeIn(checks.rows[2].chip, scale=1.2))
+            vo.wait_until("e")
+            self.play(FadeIn(checks.rows[3].claim, shift=RIGHT * 0.15))
+            vo.wait_until("f")
+            self.play(FadeIn(checks.rows[3].chip, scale=1.2))
+            vo.wait_until("g")
+            self.play(LaggedStart(*[Indicate(r_.chip, scale_factor=1.08) for r_ in checks.rows], lag_ratio=0.25))
         self.clear_scene()

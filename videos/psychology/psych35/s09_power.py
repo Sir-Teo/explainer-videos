@@ -19,17 +19,22 @@ class Power(VoiceoverScene):
 
     def story(self):
         head = heading(r"A pose, \ a talk, \ and a reversal")
-        rows = rows_of([
-            (r"Carney, \ Cuddy and Yap, \ 2010: \ 42 people held expansive or contracted poses for a few minutes; "
-             r"\ expansive posers showed more testosterone, \ less cortisol and more risk-taking", WHITE),
-            (r"a talk about it became one of the most watched of its kind", CROWD),
-            (r"Ranehill and colleagues, \ 2015: \ 200 people: \ they felt "
-             r"more powerful, \ but there was no effect on hormones or on behaviour", AUTH),
-            (r"in 2016 the first author, \ Dana Carney, \ posted that she no longer believed the effects were real "
-             r"and had stopped studying them", PERSON),
-            (r"what remains: \ a small effect on how powerful people say they feel; \ Amy Cuddy maintains that "
-             r"posture feeds back on feelings", YOU),
-        ], 12.4, 22, 0.36).move_to([0, -0.3, 0])
+        chain = flow_chain([(r"2010: \ Carney, \ Cuddy and Yap", WHITE), (r"a talk", CROWD),
+                            (r"2015: \ Ranehill and colleagues", AUTH), (r"2016: \ the first author's statement",
+                                                                         PERSON)],
+                           box_w=2.9, box_h=1.15, buff=0.5, font_size=21,
+                           notes=[r"42 people; \ expansive posers: \ more testosterone, \ less cortisol, \ more "
+                                  r"risk-taking", r"one of the most watched talks of its kind",
+                                  r"200 people: \ felt more powerful; \ no effect on hormones or behaviour",
+                                  r"Dana Carney no longer believed the effects were real, \ and stopped studying them"], note_size=18)
+        chain.move_to([0, 1.25, 0])
+        checks = verdict_row([
+            (r"hormones: \ more testosterone, \ less cortisol", "failed"),
+            (r"behaviour: \ more risk-taking", "failed"),
+            (r"feeling powerful: \ a small effect on what people say; \ Amy Cuddy maintains that posture feeds back "
+             r"on feelings", "replicated, smaller"),
+        ], width=12.2, font_size=21)
+        checks.move_to([0, -2.2, 0])
         tag = published_tag(r"Carney, \ Cuddy \& Yap (2010); \ Ranehill et al.\ (2015)")
         with self.voiceover(
             "The second collapse was more public. <bookmark mark='a'/> In 2010 Carney, Cuddy and Yap "
@@ -43,9 +48,16 @@ class Power(VoiceoverScene):
             "powerful people say they feel. Cuddy maintains that posture feeds back on feelings."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
-            for m, r in zip("abcde", rows):
+            for k, m in enumerate("abcd"):
                 vo.wait_until(m)
-                self.play(FadeIn(r, shift=RIGHT * 0.15))
+                anims = [FadeIn(chain.boxes[k], shift=RIGHT * 0.15), FadeIn(chain.notes[k], shift=UP * 0.1)]
+                if k:
+                    anims.insert(0, GrowArrow(chain.arrows[k - 1]))
+                if k == 2:
+                    anims += [FadeIn(checks.rows[0]), FadeIn(checks.rows[1])]
+                self.play(*anims)
+            vo.wait_until("e")
+            self.play(FadeIn(checks.rows[2], shift=RIGHT * 0.15))
         self.clear_scene()
 
     def curse(self):

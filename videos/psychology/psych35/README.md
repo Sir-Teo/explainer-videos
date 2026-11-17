@@ -10,7 +10,9 @@ findings of the field that did not survive being checked.
 
 The hook is the peg board, the dollar and the prophecy that failed; the viewer watches three shapes move, as in
 Heider and Simmel's film, and predicts four numbers. Then Kelley's cube as an analysis of variance (computed),
-Jones and Harris's Castro essays and a rational observer of them; dissonance against self-perception, Bem's
+Jones and Harris's Castro essays and a rational observer of them; the textbook's four attribution biases with
+their records (the fundamental attribution error, the actor-observer asymmetry that Malle's meta-analysis found
+near zero, the self-serving bias, belief in a just world); dissonance against self-perception, Bem's
 simulation, Fazio, Zanna and Cooper's reconciliation and the 2024 test in 39 laboratories; LaPiere's road trip and
 letter, the theory of planned behaviour and when attitudes predict; Svenson's drivers, self-serving attributions,
 false consensus, and the Dunning-Kruger graph rebuilt from regression to the mean (computed); faces judged in a tenth

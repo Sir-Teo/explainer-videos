@@ -5711,6 +5711,15 @@ add(Finding(
     checked="2026-11-16",
 ))
 
+shown(39, r"Engel (1977); \ Ghaemi (2009)", "a framework and its critique, drawn as a theory card")
+shown(39, r"Meehl (1962); \ Zubin \& Spring (1977)", "the diathesis-stress frame, drawn schematically; its tests (genes, "
+      "life events and the serotonin-transporter story) are Part 40's rows")
+shown(39, r"APA, \ DSM-5-TR (2022); \ WHO, \ ICD-11 (2022)", "the manuals' groups, named and mapped to the parts that "
+      "treat them; no criteria reproduced")
+shown(39, r"Hudson et al.\ (2007); \ Arcelus et al.\ (2011); \ Lock et al.\ (2010)", "the eating disorders: "
+      "prevalence, mortality and one treatment trial, quoted for their main results")
+shown(39, r"WHO, \ ICD-11 (2022); \ Zanarini et al.\ (2010)", "the personality disorders: the ICD-11 model described, "
+      "and a ten-year follow-up quoted for its main results")
 shown(39, r"Cahalan, \ \emph{The Great Pretender} (2019)", "an investigation; the rosenhan pseudopatients row "
       "carries it")
 shown(39, r"Wakefield (1992)", "a definition, described with its criticism")
