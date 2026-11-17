@@ -63,3 +63,22 @@ def test_every_shape_of_problem_set_folds():
 def test_inline_math_follows_github():
     html = course_site.md_to_html("costs $p(1 - p)$, a third $1/3$; $1.75 million and $2 later", ROOT)
     assert r"\(p(1 - p)\)" in html and r"\(1/3\)" in html and "$1.75 million and $2 later" in html
+
+
+def test_recorded_narration_fills_the_computed_numbers(tmp_path):
+    """``--record`` keeps a render's English lines beside the film; the notes then show the film's numbers."""
+    import json
+    import shutil
+
+    film = tmp_path / "quant3"
+    shutil.copytree(ROOT / "videos/quant/quant3", film, ignore=shutil.ignore_patterns("__pycache__", "narration_*.json"))
+    paras = lt.scene_paragraphs(film / "s02_timevalue.py", "TimeValue")
+    template = next(p for p in paras if "Ten payments of five" in p.text)
+    said = [lt.GAP_OPEN.join(template.text.split(lt.GAP_OPEN)[:1]) + "40.54."]  # the line as the render spoke it
+    dry = tmp_path / "dry"
+    dry.mkdir()
+    (dry / "TimeValue.narration.json").write_text(json.dumps({"lines": [{"text": said[0]}]}))
+    assert lt.record(film, dry) == film / "narration_en.json"
+    lt.rendered_lines.cache_clear()
+    filled = next(p for p in lt.chapter_text(film / "s02_timevalue.py", "TimeValue") if "Ten payments" in p.text)
+    assert filled.gaps == 0 and filled.text.endswith("are worth 40.54.")

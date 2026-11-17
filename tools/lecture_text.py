@@ -10,8 +10,12 @@ running the film: a chapter's paragraphs come in the order the film speaks them,
 methods it calls.
 
 A number the film computes when it renders (an f-string's ``{value}``) cannot be read from the source. Where the
-film keeps its rendered English lines (the bilingual films' ``narration_zh.json``), the number is taken from there;
-otherwise it is kept as a gap, which the pages show as a small box and explain once.  ``tools/export_script.py`` is the proof-reading
+film keeps its rendered English lines, the number is taken from there: the bilingual films' ``narration_zh.json``, and
+``narration_en.json``, which ``--record`` writes from a film's latest render. Otherwise it is kept as a gap, which the
+pages show as a small box and explain once.
+
+    python tools/build.py stats12 && python tools/lecture_text.py stats12 --record   # keep the rendered numbers
+    EXPLAINER_NARRATION_OUT=/tmp/n ... ; python tools/lecture_text.py stats12 --record /tmp/n   # from a dry run  ``tools/export_script.py`` is the proof-reading
 script of a single film, filled in from its latest render.
 """
 
@@ -233,19 +237,55 @@ def _strip_announcement(p: Paragraph, title: str) -> Paragraph | None:
 def rendered_lines(video_dir: Path) -> dict:
     """{scene class: [English line as last rendered]} from the film's ``narration_zh.json``, where the bilingual
     films keep each rendered English line beside its translation, computed numbers filled in."""
-    path = video_dir / "narration_zh.json"
-    if not path.exists():
-        return {}
     import json  # noqa: PLC0415
 
+    out: dict = {}
+    path = video_dir / "narration_en.json"
+    if path.exists():
+        try:
+            for cls, lines in json.loads(path.read_text()).get("lines", {}).items():
+                out.setdefault(cls, []).extend(_clean(x) for x in lines if isinstance(x, str))
+        except (ValueError, AttributeError):
+            pass
+    path = video_dir / "narration_zh.json"
+    if not path.exists():
+        return out
     try:
         lines = json.loads(path.read_text()).get("lines", {})
     except (ValueError, AttributeError):
-        return {}
-    out: dict = {}
+        return out
     for v in lines.values() if isinstance(lines, dict) else ():
         if isinstance(v, dict) and isinstance(v.get("en"), str):
             out.setdefault(v.get("scene", ""), []).append(_clean(v["en"]))
+    return out
+
+
+def record(video_dir: Path, source: Path | None = None) -> Path | None:
+    """Write ``narration_en.json`` beside the film: the rendered English lines of every chapter whose narration has
+    computed values, from ``source`` (a folder of ``<Scene>.narration.json`` files, as a dry run with
+    ``EXPLAINER_NARRATION_OUT`` writes them) or else from the latest render under ``media/<video>/``."""
+    import json  # noqa: PLC0415
+
+    m = runpy.run_path(str(video_dir / "manifest.py"))
+    lines: dict = {}
+    for module, cls, _ in m["SCENES"]:
+        if not any(p.gaps for p in scene_paragraphs(video_dir / f"{module}.py", cls)):
+            continue
+        if source is not None:
+            found = [source / f"{cls}.narration.json"]
+        else:
+            found = sorted((ROOT / "media" / video_dir.name / "videos" / module).glob(f"*/{cls}.narration.json"),
+                           key=lambda f: f.stat().st_mtime)[-1:]
+        if found and found[0].exists():
+            said = json.loads(found[0].read_text()).get("lines", [])
+            lines[cls] = [_clean(x["text"] if isinstance(x, dict) else str(x)) for x in said]
+    if not lines:
+        return None
+    out = video_dir / "narration_en.json"
+    out.write_text(json.dumps({"video": video_dir.name, "note": "Rendered English narration of the chapters whose "
+                               "numbers are computed at render time, written by tools/lecture_text.py --record; "
+                               "the course site fills those numbers in from here.", "lines": lines},
+                              ensure_ascii=False, indent=1) + "\n")
     return out
 
 
@@ -323,6 +363,13 @@ def main() -> None:
     found = sorted(ROOT.glob(f"videos/*/{name}/manifest.py"))
     if not found:
         sys.exit(f"no video named {name}")
+    if "--record" in sys.argv:
+        k = sys.argv.index("--record")
+        src = Path(sys.argv[k + 1]) if len(sys.argv) > k + 1 and not sys.argv[k + 1].startswith("--") else None
+        out = record(found[0].parent, src)
+        print(f"wrote {out.relative_to(ROOT)}" if out else "nothing to record: no rendered narration found for the "
+              "chapters with computed values")
+        return
     chapters = film_text(found[0].parent)
     if "--stats" in sys.argv:
         paras = [p for _, ps in chapters for p in ps]

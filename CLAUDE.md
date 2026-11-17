@@ -13,7 +13,9 @@ Manim videos with local neural narration. See README.md for layout and build com
   `## The parts` table gives the acts and each part's row) and `SYLLABUS.md` (`Part N · ` headings); README sections whose
   headings read as QA or review logs are left off the pages. Keep those shapes; `tests/test_series_site.py` checks them.
   A part's page is lecture notes: each chapter's text is the film's narration, read from the scenes by
-  `tools/lecture_text.py` (`python tools/lecture_text.py stats12`), so narration should read well as prose. READMEs are
+  `tools/lecture_text.py` (`python tools/lecture_text.py stats12`), so narration should read well as prose. Numbers a
+  scene computes at render time show as gaps until `python tools/lecture_text.py <video> --record` is run after a build
+  (it writes the rendered English lines to `narration_en.json`, which the pages fill them from). READMEs are
   rendered as CommonMark (markdown-it-py), as GitHub reads them; a README problem gives its statement, then a
   `*Solution.*` paragraph (the page folds the solution under the problem).
 - Every series is also a course (`videos/coursekit/`, how-to in `videos/coursekit/AUTHORING.md`): `videos/<series>/course/`
