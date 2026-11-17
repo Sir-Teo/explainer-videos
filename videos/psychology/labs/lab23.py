@@ -1,6 +1,9 @@
-"""Lab 23: Zipf's law for thirty novels and a typing monkey; the interactive activation model's word superiority;
+"""Lab 23: Zipf's law for this series' own narration and a typing monkey; the interactive activation model's word superiority;
 finding words in a syllable stream by transitional probabilities; a past-tense learner's U-shaped curve; and the
-surprisal of every word of the Natural Stories corpus, from a trigram model, against its reading times."""
+surprisal of every word of the Natural Stories corpus, from a trigram model, against its reading times.
+
+The film fits these on thirty Project Gutenberg novels. A lab downloads nothing, so its corpus is the narration of
+Psychology, Built's own sixty-two films (about 350,000 words of English prose), read from the scene files."""
 
 from collections import Counter
 
@@ -24,27 +27,33 @@ TASKS = [
 ]
 
 
-def _novels(limit: int = 1_500_000) -> list:
-    from explainer.tts import REPO_ROOT
+def _narration() -> list:
+    """The words of every chapter of this series' films, as the course pages print them (tools/lecture_text.py);
+    numbers computed at render time are left out."""
+    import re
+    import sys
+    from pathlib import Path
 
-    p = REPO_ROOT / ".cache" / "ai1" / "train.txt"
-    if not p.exists():
-        from videos.ai.ai1 import compute as ai1
+    root = Path(__file__).resolve().parents[3]
+    sys.path.insert(0, str(root / "tools"))
+    import lecture_text as lt
 
-        ai1._save("corpus", ai1.compute_corpus())
-    return LG.tokenize(p.read_text()[:12_000_000])[:limit]
+    gap = re.compile(f"{lt.GAP_OPEN}.*?{lt.GAP_CLOSE}")
+    paras = [gap.sub(" ", p.text) for m in sorted((root / "videos" / "psychology").glob("psych*/manifest.py"))
+             for _, ps in lt.film_text(m.parent) for p in ps]
+    return LG.tokenize("\n".join(paras))
 
 
 def run(seed=0):
     out = labs.Lab()
     rng = np.random.default_rng(seed)
-    toks = _novels()
+    toks = _narration()
     C = Counter(toks)
 
     # 1. Zipf, and a monkey
     z = LG.zipf_fit(C, top=5000)
     zm = LG.zipf_fit(LG.random_typing(n_chars=2_000_000, rng=rng), top=2000)
-    out.row("Zipf exponent: novels; typing monkey", f"{z['s']:.2f} (R^2 {z['r2']:.3f}); {zm['s']:.2f} (R^2 {zm['r2']:.2f})")
+    out.row("Zipf exponent: the narration; typing monkey", f"{z['s']:.2f} (R^2 {z['r2']:.3f}); {zm['s']:.2f} (R^2 {zm['r2']:.2f})")
     assert 0.9 < z["s"] < 1.4
 
     # 2. word superiority
@@ -95,12 +104,12 @@ def run(seed=0):
     else:
         out.row("surprisal and reading time", "the Natural Stories data could not be fetched")
 
-    out.note = ("Novels and monkeys both give power laws; WORK's K beats K alone because the word feeds back; dips in "
+    out.note = ("Lectures and monkeys both give power laws; WORK's K beats K alone because the word feeds back; dips in "
                 "transitional probability mark the words; a vocabulary flood makes the network say goed; and a "
                 "surprising word costs time on the word after it.")
 
     fig, ax = labs.figure(2, size=(11, 4.2))
-    ax[0].loglog(z["rank"], z["freq"], color=labs.GOLD, lw=1.5, label="novels")
+    ax[0].loglog(z["rank"], z["freq"], color=labs.GOLD, lw=1.5, label="the narration")
     ax[0].loglog(zm["rank"], zm["freq"], color=labs.BLUE, lw=1.2, label="monkey")
     ax[0].set(title="Zipf's law", xlabel="rank", ylabel="frequency")
     ax[0].legend(fontsize=8)
