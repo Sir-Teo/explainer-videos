@@ -15,7 +15,8 @@ on its error surface, and run on overshadowing, conditioned inhibition and overe
 ΔP, and Rescorla's ten groups reproduced. What it gets wrong: latent inhibition, spontaneous recovery and renewal, with
 a two-memory model of extinction; Mackintosh's and Pearce and Hall's learned attention; scalar timing and the I/T law
 of rate-estimation theory; Herrnstein's matching law derived from melioration, and melioration as a trap. Biology's
-limits: Garcia's taste aversions, the Brelands' misbehaving animals, preparedness, and Bandura's Bobo doll. The
+limits: Garcia's taste aversions, the Brelands' misbehaving animals, preparedness, and Bandura's Bobo doll drawn as its design, then his 1965 experiment separating learning from
+performance, and social learning theory and self-efficacy with the contested step from imitation to media violence. The
 practice chapter is exposure therapy, animal training and token economies, contingency management for addiction, and
 loot boxes; the frontier is propositional learning, latent causes, and reconsolidation.
 
@@ -88,7 +89,9 @@ history), Ferster and Skinner (schedules whose signatures are drawn on Psyche), 
 judgment, entered with judgment in Part 26), Rescorla (1968; a design reproduced on Psyche, the paper's figures not
 drawn), Rescorla and Wagner (a model), Lubow and Moore (latent inhibition, described and modelled; its row is in Part 18), Mackintosh and
 Pearce and Hall (models), Gallistel and Gibbon (a theory and a summary of data, with its exceptions), the Brelands
-(trainers' observations), Bandura, Ross and Ross (described without figures), Prendergast et al. (treatment
+(trainers' observations), Bandura, Ross and Ross (drawn as the design, with schematic bars), Bandura 1965 (the
+pattern of its result, not its means), Bandura et al. 1963, Bandura 1977, Anderson et al. 2010, Ferguson and Kilburn
+2010 and Hilgard et al. 2017 (a theory and its record), Prendergast et al. (treatment
 evidence, entered in Part 42), Zendle and Cairns (a survey, with its limits), Mitchell et al. and Gershman et al.
 (theory at the frontier), and Schiller et al. (reconsolidation, whose row is due in Part 21).
 
@@ -117,7 +120,7 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 | 0 | A response that comes back | Pavlov's laboratory; acquisition, extinction and recovery on Psyche; two dogs with the same pairings; objectives |
 | 1 | Pavlov's method | US, UR, CS, CR; generalization and discrimination; substitution against preparation |
 | 2 | The law of effect | Thorndike's cats; behaviourism; Little Albert as recorded, and as retold |
-| 3 | Skinner's box | The chamber and the recorder; shaping; four schedules; partial reinforcement |
+| 3 | Skinner's box | The chamber and the recorder; shaping; four schedules; partial reinforcement, drawn as two press records |
 | 4 | Contingency, not pairing | The fertilizer game; ΔP and the outcome-density effect; Rescorla's ten groups |
 | 5 | Blocking | Kamin's design; surprise and unblocking |
 | 6 | The Rescorla-Wagner rule | The rule; its derivation as gradient descent; acquisition and extinction; blocking on the error surface |
@@ -126,7 +129,7 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 | 9 | Attention to cues | Mackintosh against Pearce and Hall; one history, opposite attention; both, it seems |
 | 10 | Time | Scalar timing; the I/T law and rate estimation |
 | 11 | Choice | The matching law; melioration derives it; when melioration is a trap |
-| 12 | Biology's limits | Garcia and Koelling; instinctive drift and preparedness; learning by watching |
+| 12 | Biology's limits | Garcia and Koelling; instinctive drift and preparedness; learning by watching; learning against performance; social learning theory |
 | 13 | The Ledger | Blocking; taste aversion; conditioned tolerance; Little Albert; matching; renewal |
 | 14 | In practice: therapy, training and games | Exposure; clickers and token economies; contingency management; loot boxes |
 | 15 | Frontier: links, beliefs and hidden causes | What is solid and argued; propositions; latent causes; reconsolidation |
@@ -164,7 +167,7 @@ distributed choice, *J. Econ. Perspect.* 5 (1991) 137–156. J. Garcia and R. A.
 consequence in avoidance learning, *Psychon. Sci.* 4 (1966) 123–124. J. Garcia, F. R. Ervin and R. A. Koelling,
 Learning with prolonged delay of reinforcement, *Psychon. Sci.* 5 (1966) 121–122. M. Domjan and N. E. Wilson,
 Specificity of cue to consequence in aversion learning in the rat, *Psychon. Sci.* 26 (1972) 143–145. S. Siegel, R. E. Hinson, M. D. Krank and J. McCully, Heroin "overdose" death, *Science* 216 (1982) 436–437. S. Siegel and B. M. C. Ramos, Applying laboratory research: drug anticipation and the treatment of drug addiction, *Exp. Clin. Psychopharmacol.* 10 (2002) 162–183. K. Breland and
-M. Breland, The misbehavior of organisms, *Am. Psychol.* 16 (1961) 681–684. A. Bandura, D. Ross and S. A. Ross,
+M. Breland, The misbehavior of organisms, *Am. Psychol.* 16 (1961) 681–684. A. Bandura, Influence of models' reinforcement contingencies on the acquisition of imitative responses, *J. Pers. Soc. Psychol.* 1 (1965) 589–595; A. Bandura, *Social Learning Theory* (1977); C. A. Anderson et al., Violent video game effects on aggression, empathy, and prosocial behavior in Eastern and Western countries: a meta-analytic review, *Psychol. Bull.* 136 (2010) 151–173; C. J. Ferguson and J. Kilburn, *Psychol. Bull.* 136 (2010) 174–178; J. Hilgard, C. R. Engelhardt and J. N. Rouder, Overstated evidence for short-term effects of violent games on affect and behavior: a reanalysis of Anderson et al. (2010), *Psychol. Bull.* 143 (2017) 757–774. A. Bandura, D. Ross and S. A. Ross,
 Transmission of aggression through imitation of aggressive models, *J. Abnorm. Soc. Psychol.* 63 (1961) 575–582. M.
 Cook and S. Mineka, Observational conditioning of fear to fear-relevant versus fear-irrelevant stimuli in rhesus
 monkeys, *J. Abnorm. Psychol.* 98 (1989) 448–459. T. Maes et al., The elusive nature of the blocking effect: 15

@@ -15,6 +15,7 @@ Items:
     hanoi        the 3-disc state space and its layout, the shortest path, a hill-climber's path, the goal stack's
                  move latencies for 4 discs
     ninedots     every drawing of four lines through the nine dots, turning inside the box and outside it
+    jars         Luchins's (1942) water-jar problems: the practised method B - A - 2C and the shortest one on each
     analogy      a structure-mapping of the fortress story onto the radiation problem
     rotation     open data: time and errors by angle; each person's rotation rate; Psyche's rotation model
     causes       delta P and causal power for a cause that adds the same strength on different backgrounds
@@ -185,6 +186,36 @@ def compute_everyday() -> dict:
     return out
 
 
+# Luchins (1942), "Mechanization in problem solving": jars A, B, C and the amount wanted.  Problem 1 is the
+# worked example; 2-6 are the set problems, 7, 8, 10, 11 the critical ones, 9 the one the practised method fails.
+LUCHINS = [(29, 3, 0, 20), (21, 127, 3, 100), (14, 163, 25, 99), (18, 43, 10, 5), (9, 42, 6, 21), (20, 59, 4, 31),
+           (23, 49, 3, 20), (15, 39, 3, 18), (28, 76, 3, 25), (18, 48, 4, 22), (14, 36, 8, 6)]
+
+
+def compute_jars() -> dict:
+    """For each problem: does the practised formula B - A - 2C give the amount, and what is the shortest formula
+    a*A + b*B + c*C (fewest fillings and pourings, |a| + |b| + |c|, coefficients -3..3) that does."""
+    rng = range(-3, 4)
+    practised, shortest, steps = [], [], []
+    for A, B, C, goal in LUCHINS:
+        practised.append(B - A - 2 * C == goal)
+        best = None
+        for a in rng:
+            for b in rng:
+                for c in (rng if C else [0]):
+                    if (a, b, c) != (0, 0, 0) and a * A + b * B + c * C == goal:
+                        cost = abs(a) + abs(b) + abs(c)
+                        if best is None or cost < best[0]:
+                            best = (cost, a, b, c)
+        cost, a, b, c = best
+        terms = [(a, "A"), (b, "B"), (c, "C")]
+        txt = " ".join(f"{'+' if k > 0 else '-'} {'' if abs(k) == 1 else abs(k)}{n}" for k, n in terms if k)
+        shortest.append(txt.lstrip("+ ").replace("- ", "-", 1) if txt.startswith("-") else txt.lstrip("+ "))
+        steps.append(cost)
+    return {"jars": np.array(LUCHINS), "practised_works": np.array(practised), "shortest": np.array(shortest),
+            "shortest_steps": np.array(steps)}
+
+
 def compute_usability() -> dict:
     n = np.arange(0, 16)
     L = 0.31
@@ -196,6 +227,7 @@ ITEMS = {
     "selection": compute_selection,
     "hanoi": compute_hanoi,
     "ninedots": compute_ninedots,
+    "jars": compute_jars,
     "analogy": compute_analogy,
     "rotation": compute_rotation,
     "causes": compute_causes,

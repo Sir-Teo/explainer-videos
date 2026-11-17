@@ -879,7 +879,13 @@ shown(16, "RESCORLA_WAGNER_1972", "a model, derived and run, not a finding")
 shown(16, "MACKINTOSH_PEARCE_HALL", "models of attention, run on one history")
 shown(16, "GALLISTEL_GIBBON_2000", "a theory, and a summary of acquisition data shown with its exceptions")
 shown(16, "BRELAND_1961", "trainers' observations, told as the anecdotes they were")
-shown(16, "BANDURA_1961", "the Bobo doll, described without figures and with the doubt about what it measures")
+shown(16, "BANDURA_1961", "the Bobo doll, drawn as its design with schematic bars, and with the doubt about what it "
+      "measures")
+shown(16, r"Bandura (1965); \ the bars are schematic", "the learning-performance experiment, drawn as its design with "
+      "the pattern of its result, not its means")
+shown(16, r"Bandura, \ Ross \& Ross (1963); \ Bandura (1977); \ Anderson et al.\ (2010); \ Ferguson \& Kilburn (2010); \ "
+      r"Hilgard, \ Engelhardt \& Rouder (2017)", "a theory with its record: imitation, and the contested step from it to "
+      "media violence, told through the meta-analyses and their critics")
 shown(16, "PRENDERGAST_2006", "a meta-analysis quoted for its effect sizes; its row (contingency management) is "
       "entered in Part 41")
 shown(16, "ZENDLE_CAIRNS_2018", "a survey, quoted with its limits; product design is Part 52")
@@ -4452,6 +4458,10 @@ shown(23, r"Oh \& Schuler (2023), \ \emph{TACL}", "a model-comparison result at 
       "row's background")
 
 shown(24, r"Wason (1966, \ 1968)", "the selection task's history; its content effect is this part's row")
+shown(24, r"Thorndike (1898); \ K\"ohler (1917/1925); \ Birch (1945); \ Epstein et al.\ (1984)", "the history of "
+      "insight in animals, drawn schematically, with the two studies that gave it a learning history")
+shown(24, r"Luchins (1942); \ Bilali\'c, \ McLeod \& Gobet (2008)", "mental set: the water-jar problems computed here, "
+      "and an eye-tracking study of experts, described")
 shown(24, r"Johnson-Laird (1983); \ Johnson-Laird \& Bara (1984)", "a theory, described with a worked example")
 shown(24, r"Cheng \& Holyoak (1985); \ Cosmides (1989)", "in the content-effect row's record")
 shown(24, r"Oaksford \& Chater (1994), \ \emph{Psychological Review}", "a model, computed; its meta-analysis is "
@@ -4597,6 +4607,8 @@ shown(28, r"Kurzban et al.\ (2013); \ Agrawal et al.\ (2022)", "theories at the 
 shown(28, r"Schmidhuber (1991); \ Pathak et al.\ (2017)", "machine-learning methods, described; machines are Part "
       "60's")
 
+shown(29, r"Easterlin (1974); \ Deaton (2008); \ Stevenson \& Wolfers (2008); \ Easterlin et al.\ (2010)", "the Easterlin "
+      "paradox and the replies to it, drawn schematically; the within-person slope is this chapter's row")
 shown(29, r"James (1884)", "the James-Lange theory, told as history; its tests are Cannon's objections and the "
       "two-factor row")
 shown(29, r"Cannon (1927); \ Bard (1928)", "Cannon's objections and the Cannon-Bard theory, told as history")
@@ -4653,6 +4665,9 @@ shown(30, r"DeLoache et al.\ (2010)", "a single trial of a product, described as
 shown(30, r"Vong et al.\ (2024)", "a modelling result at the frontier, described")
 shown(30, r"Piloto et al.\ (2022)", "a machine-learning model at the frontier, described; machines are Part 60's")
 
+shown(31, r"Baumrind (1966, \ 1971); \ Maccoby \& Martin (1983); \ Lamborn et al.\ (1991); \ Bell (1968)", "parenting "
+      "styles as a typology with its correlational record; the causal question is this chapter's twin and adoption rows")
+shown(31, r"Bronfenbrenner (1979, \ 1986)", "a framework, drawn as a map, with no prediction to test")
 shown(31, r"Wiesel \& Hubel (1963); \ Hubel \& Wiesel (1970)", "the sensitive period in vision, told as history "
       "(Part 7); textbook physiology")
 shown(31, r"Schaie (2005); \ Salthouse (2009)", "a methodological debate between two research programmes, "
@@ -4694,6 +4709,8 @@ shown(32, r"Lee et al.\ (2018); \ Howe et al.\ (2022)", "genome-wide estimates q
       "Part 9's")
 shown(32, r"Chollet (2019)", "a proposal for measuring machine intelligence, described")
 
+shown(33, r"Kagan, \ Reznick \& Snidman (1988); \ Caspi \& Silva (1995); \ Clauss \& Blackford (2012)", "temperament: "
+      "a longitudinal programme and two later checks, drawn as the course of inhibited children")
 shown(33, r"Allport \& Odbert (1936)", "a lexical study told as history; the five factors have their row")
 shown(33, r"Mischel (1968)", "the person-situation debate; its row is person_situation")
 shown(33, r"Allport \& Odbert (1936); \ Tupes \& Christal (1961)", "history of the five; they have their row")

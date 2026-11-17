@@ -163,13 +163,47 @@ class Skinner(VoiceoverScene):
 
     def persistence(self):
         head = heading(r"Rewarded sometimes, \ given up slowly")
-        rows = rows_of([
-            (r"stop all rewards, \ and responding extinguishes, \ as Pavlov's salivation did", WHITE),
-            (r"but after a schedule that paid only sometimes, \ it takes far longer: \ the partial reinforcement "
-             r"extinction effect", US),
-            (r"a run of losses is normal under a ratio schedule, \ so it signals nothing", CS),
-            (r"a parent who gives in to tantrums now and then trains the most persistent tantrums", INHIB),
-        ], 12.4, 29, 0.42).move_to([0, -0.1, 0])
+        rng = np.random.default_rng(16)
+        n_before, n_after = 14, 16
+        x0, dx = -5.5, 0.38
+        partial = rng.random(n_before) < 0.3
+        partial[[1, 6, 12]] = True  # a paid press now and then, and a run of losses between
+        partial[[7, 8, 9, 10, 11]] = False
+        quit_at = {0: 3, 1: n_after}  # every press paid: it soon stops; paid sometimes: it keeps going
+
+        def strip(y, paid, col, k):
+            ticks = VGroup()
+            for i in range(n_before + n_after):
+                if i >= n_before + quit_at[k]:
+                    break
+                won = i < n_before and paid[i]
+                ticks.add(Circle(radius=0.12, stroke_color=col if won else GREY_C, stroke_width=2.5,
+                                 fill_color=col, fill_opacity=0.95 if won else 0.0).move_to([x0 + i * dx, y, 0]))
+            return ticks
+
+        always = strip(1.35, np.ones(n_before, bool), US, 0)
+        some = strip(-0.35, partial, US, 1)
+        names = VGroup(label(r"every press paid", font_size=22, color=WHITE).next_to(always[0], UP, buff=0.22,
+                                                                                    aligned_edge=LEFT),
+                       label(r"paid only sometimes", font_size=22, color=WHITE).next_to(some[0], UP, buff=0.22,
+                                                                                       aligned_edge=LEFT))
+        xs = x0 + (n_before - 0.5) * dx
+        stop = DashedLine([xs, 2.3, 0], [xs, -0.9, 0], color=INHIB, stroke_width=2.5)
+        stop_l = label(r"rewards stop", font_size=21, color=INHIB).next_to(stop, UP, buff=0.08)
+        quit_l = label(r"gives up", font_size=21, color=CS).next_to(always[-1], RIGHT, buff=0.25)
+        on_l = label(r"\dots still pressing", font_size=21, color=CS).next_to(some[-1], DOWN, buff=0.2,
+                                                                             aligned_edge=RIGHT)
+        run = SurroundingRectangle(VGroup(*some[7:12]), color=CS, buff=0.1, stroke_width=2)
+        run_l = label(r"a run of losses was normal before", font_size=21, color=CS).next_to(run, DOWN, buff=0.15)
+        key = VGroup(VGroup(Circle(radius=0.11, stroke_width=0, fill_color=US, fill_opacity=0.95),
+                            label(r"a press that paid", font_size=19, color=GREY_A)).arrange(RIGHT, buff=0.12),
+                     VGroup(Circle(radius=0.11, stroke_color=GREY_C, stroke_width=2.5),
+                            label(r"a press that did not", font_size=19, color=GREY_A)).arrange(RIGHT, buff=0.12)
+                     ).arrange(RIGHT, buff=0.5).move_to([3.4, 2.8, 0])
+        tantrum = point_cards([(r"The partial reinforcement extinction effect", r"a parent who gives in to tantrums "
+                                r"now and then trains the most persistent tantrums", INHIB)],
+                              width=9.6, font_size=22)
+        tantrum.move_to([0, -2.55, 0])
         with self.voiceover(
             "Schedules also decide what happens when the rewards stop. <bookmark mark='a'/> Take the food away and "
             "pressing extinguishes, as Pavlov's salivation did. <bookmark mark='b'/> But an animal rewarded on every "
@@ -180,8 +214,18 @@ class Skinner(VoiceoverScene):
             "uncomfortable. A parent who gives in to a tantrum now and then, but not always, is running a variable "
             "schedule, and trains the most persistent tantrums of all."
         ) as vo:
-            self.play(FadeIn(head))
-            for m, r in zip("abcd", rows):
-                vo.wait_until(m)
-                self.play(FadeIn(r, shift=RIGHT * 0.15))
+            self.play(FadeIn(head), FadeIn(key))
+            self.play(FadeIn(names), LaggedStart(*[FadeIn(t) for t in always[:n_before]], lag_ratio=0.05),
+                      LaggedStart(*[FadeIn(t) for t in some[:n_before]], lag_ratio=0.05), run_time=1.6)
+            vo.wait_until("a")
+            self.play(Create(stop), FadeIn(stop_l))
+            self.play(LaggedStart(*[FadeIn(t) for t in always[n_before:]], lag_ratio=0.3), FadeIn(quit_l),
+                      run_time=1.2)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[FadeIn(t) for t in some[n_before:]], lag_ratio=0.12), run_time=2.2)
+            self.play(FadeIn(on_l))
+            vo.wait_until("c")
+            self.play(Create(run), FadeIn(run_l))
+            vo.wait_until("d")
+            self.play(FadeIn(tantrum.cards[0], shift=UP * 0.15))
         self.clear_scene()

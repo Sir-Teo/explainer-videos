@@ -10,7 +10,9 @@ brute force over set models; 139 people's answers to every syllogism from open d
 and their search for counterexamples, three shortcuts (atmosphere, matching, probability heuristics) and all four
 accounts scored on the data; pragmatic schemas and cheater detection; optimal data selection derived and computed
 against Oaksford and Chater's meta-analysis; problems as spaces of states, the Tower of Hanoi drawn whole, a
-hill-climber's wandering and a goal-stack production system's pauses; think-aloud protocols; Duncker's candle, the
+hill-climber's wandering and a goal-stack production system's pauses; think-aloud protocols; Köhler's apes on Tenerife and the record that gave insight a
+learning history (Birch, Epstein et al.); Duncker's candle; Luchins's water jars computed and mental set in chess
+experts (Bilalić et al.); the
 nine dots proved unsolvable inside the box, and warmth ratings; chess memory, chunks and deliberate practice;
 the radiation problem and structure mapping computed; mental rotation fitted person by person to open data, and the
 imagery debate; delta P and causal power derived, and seeing against doing; everyday predictions under three priors,
@@ -34,6 +36,7 @@ models reason by analogy.
 | 27 states and 39 moves for three discs; the hill-climber's median of 101 runs 14 moves (7% optimal); 62 for four discs against 15 | Psyche (`reason.hanoi_graph`, `hill_climb`), item `hanoi` |
 | The goal stack's pauses for four discs, longest before moves 1, 9, then 5 and 13 | Psyche (`reason.goal_stack_solver`, one unit per move, 1.5 per subgoal), item `hanoi` |
 | Nine dots: no drawing turning inside the square; 16 outside it (the same 16 with a wider grid) | Psyche (`reason.nine_dots`), item `ninedots` |
+| Luchins's eleven water-jar problems (1942): B - A - 2C solves problems 2 to 8, 10 and 11; A - C solves 7 and 9, the shorter way on 7, the only one of the two on 9 | `compute.py`, item `jars` |
 | About 10%, 30% and 75% solve the radiation problem unaided, after the story, and with a hint | Gick and Holyoak (1980), as summarized in textbooks |
 | The fortress mapped onto the tumour: 4 objects, 9 relations matched | Psyche (`reason.structure_map`), item `analogy` |
 | Practice explains 26% of differences in games, 21% in music, 18% in sports, 4% in education, under 1% in professions | Macnamara, Hambrick and Oswald (2014) |
@@ -71,7 +74,9 @@ models reason by analogy.
 Shown without a row, with the reason recorded in `explainer/psychology/ledger.py`: Wason (the task's history),
 Johnson-Laird and Bara (a theory), Cheng and Holyoak and Cosmides (in the content row's record), Oaksford and Chater
 (a model, computed), Newell, Shaw and Simon and Anderson (theories of search and production systems), Ericsson and
-Simon (a method), Duncker and Adamson (demonstrations), Metcalfe and Wiebe and MacGregor et al. (insight,
+Simon (a method), Köhler, Thorndike, Birch and Epstein et al. (the history of insight in animals, drawn
+schematically), Duncker and Adamson (demonstrations), Luchins and Bilalić et al. (mental set: the jars computed, the
+eye-tracking study described), Metcalfe and Wiebe and MacGregor et al. (insight,
 described), Gick and Holyoak (a transfer study given as rough shares), Kosslyn, Pylyshyn and Zeman et al. (the
 imagery debate), Waldmann and Hagmayer (causal reasoning), Simon (bounded rationality), Evans et al. 2001 (the
 belief-bias table as reprinted), Schmidt and Hunter, Sackett et al. and Sweller and Cooper (Parts 53 and 54), Ellis
@@ -106,7 +111,7 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 | 3 | Why content helps | Pragmatic schemas and cheater detection; optimal data selection derived; information against people's choices |
 | 4 | Problem solving as search | States, operators and means-ends analysis; the Tower of Hanoi's whole space; the shortest path and a hill-climber |
 | 5 | Production systems | Rules that fire; ACT-R; where a goal stack predicts pauses; thinking aloud as data |
-| 6 | Insight | Duncker's candle; the nine dots by brute force; warmth ratings and progress monitoring |
+| 6 | Insight | Köhler's apes; Duncker's candle; Luchins's jars; the nine dots by brute force; warmth ratings and progress monitoring |
 | 7 | Expertise | De Groot, Chase and Simon; chunks; deliberate practice and how much it explains |
 | 8 | Analogy | The radiation problem and the fortress; structure mapping computed |
 | 9 | Mental imagery | Shepard and Metzler; 54 people's open data fitted; depictive or descriptive; aphantasia |
@@ -141,6 +146,12 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
   J. R. Anderson and S. Douglass, Tower of Hanoi: evidence for the cost of goal retrieval, JEP: Learning, Memory, and
   Cognition 27 (2001) 1331-1346; K. A. Ericsson and H. A. Simon, Verbal reports as data, Psychological Review 87
   (1980) 215-251, and Protocol Analysis (1993).
+* W. Köhler, *Intelligenzprüfungen an Menschenaffen* (1917; *The Mentality of Apes*, 1925); E. L. Thorndike,
+  Animal intelligence, Psychological Review Monograph Supplements 2 (1898) no. 8; H. G. Birch, The relation of previous
+  experience to insightful problem-solving, J. Comp. Psychol. 38 (1945) 367-383; R. Epstein, C. E. Kirshnit, R. P.
+  Lanza and L. C. Rubin, "Insight" in the pigeon, Nature 308 (1984) 61-62; A. S. Luchins, Mechanization in problem
+  solving, Psychological Monographs 54 (1942) no. 248; M. Bilalić, P. McLeod and F. Gobet, Why good thoughts block
+  better ones, Cognition 108 (2008) 652-661.
 * K. Duncker, On problem-solving, Psychological Monographs 58 (1945) no. 270; R. E. Adamson, JEP 44 (1952) 288-291;
   R. W. Weisberg and J. W. Alba, An examination of the alleged role of "fixation" in the solution of several
   "insight" problems, JEP: General 110 (1981) 169-192; J. Metcalfe and D. Wiebe, Intuition in insight and noninsight
