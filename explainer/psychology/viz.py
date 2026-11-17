@@ -15,6 +15,11 @@
 * :func:`heading`, :func:`hist`, :func:`quote_card`: a line saying what the screen is about, a histogram on
   axes, a quotation with its source.
 * :func:`wager_board`: Kant's three objections with the replies so far; every part ends by updating it.
+* Diagrams for ideas that are not data, so a beat is a picture and not a list: :func:`point_cards` (key points as
+  cards in a grid), :func:`flow_chain` (a mechanism or a sequence as boxes and arrows), :func:`quadrant` (a 2x2
+  typology on two axes), :func:`pyramid` (a stacked hierarchy), :func:`rings` (nested contexts),
+  :func:`theory_card` (a theory, its claim and what the record shows) and :func:`verdict_row` (claims beside
+  their Ledger statuses).
 """
 
 from __future__ import annotations
@@ -34,7 +39,7 @@ PANEL_FILL = "#121722"
 __all__ = ["care_card", "CARE_HELP", "little_person", "gear", "head_outline", "butterfly", "FACULTIES", "homunculus_map", "demo_stage",
            "countdown_ring", "trial_strip", "stage_bar", "study_card", "status_chip", "ledger_card", "ledger_board",
            "pool_cloud", "panel", "CARD_FILL", "PANEL_FILL", "heading", "hist", "quote_card", "OBJECTIONS",
-           "wager_board"]
+           "wager_board", "point_cards", "flow_chain", "quadrant", "pyramid", "rings", "theory_card", "verdict_row"]
 
 
 def panel(w, h, center=ORIGIN, color=GREY_D, fill=PANEL_FILL) -> RoundedRectangle:
@@ -518,4 +523,253 @@ def wager_board(replies=(None, None, None), font_size=30, width=13.0) -> VGroup:
     if g.width > width:
         g.width = width
     g.head, g.rows = head, rows
+    return g.move_to(ORIGIN)
+
+
+
+# ---------------------------------------------------------------------------
+# Diagrams for ideas (not data): cards, chains, typologies, hierarchies, nested contexts, theories and verdicts
+# ---------------------------------------------------------------------------
+def _accent_card(w: float, h: float, color, fill_opacity: float = 0.96) -> VGroup:
+    box = RoundedRectangle(width=w, height=h, corner_radius=0.14, stroke_color=color, stroke_width=1.8,
+                           fill_color=CARD_FILL, fill_opacity=fill_opacity)
+    bar = Rectangle(width=0.08, height=max(h - 0.3, 0.1), stroke_width=0, fill_color=color, fill_opacity=1)
+    bar.move_to(box.get_left() + RIGHT * 0.14)
+    return VGroup(box, bar)
+
+
+def point_cards(items, width: float = 12.6, cols: int | None = None, font_size=24, buff: float = 0.3,
+                max_height: float = 5.9) -> VGroup:
+    """Key points as a grid of cards: ``items`` is a list of ``(title, body, color)`` (``body`` may be "" or a
+    mobject).  Each card has a coloured bar, its title in the colour and its body in white; cards in a row share a
+    height.  ``cols`` defaults to 1 for one item, 2 for two or four, else 3.  Returns a VGroup whose ``.cards[i]``
+    has ``.box``, ``.title`` and ``.body``, centred at the origin; reveal the cards one at a time."""
+    n = len(items)
+    cols = cols or (1 if n == 1 else 2 if n in (2, 4) else 3)
+    cw = (width - buff * (cols - 1)) / cols
+    inners = []
+    for title, body, color in items:
+        t = wrapped_label(title, cw - 0.75, font_size + 2, color)
+        parts = [t]
+        if isinstance(body, Mobject):
+            if body.width > cw - 0.75:
+                body.width = cw - 0.75
+            parts.append(body)
+        elif body:
+            parts.append(wrapped_label(body, cw - 0.75, font_size, WHITE))
+        inner = VGroup(*parts).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
+        inner.title, inner.body, inner.accent = t, (parts[1] if len(parts) > 1 else None), color
+        inners.append(inner)
+    rows = [inners[i:i + cols] for i in range(0, n, cols)]
+    cards = VGroup()
+    y = 0.0
+    for row in rows:
+        h = max(x.height for x in row) + 0.5
+        for j, inner in enumerate(row):
+            frame = _accent_card(cw, h, inner.accent)
+            frame.move_to([j * (cw + buff) + cw / 2, y - h / 2, 0])
+            inner.move_to(frame).align_to(frame[0], LEFT).shift(RIGHT * 0.36)
+            c = VGroup(frame, inner)
+            c.box, c.title, c.body = frame, inner.title, inner.body
+            cards.add(c)
+        y -= h + buff
+    if len(rows) > 1 and len(rows[-1]) < cols:  # centre a short last row
+        last = VGroup(*cards[-len(rows[-1]):])
+        last.set_x(cards[0].get_left()[0] + (cols * cw + (cols - 1) * buff) / 2)
+    g = VGroup(*cards)
+    if g.height > max_height:
+        g.height = max_height
+    g.move_to(ORIGIN)
+    g.cards = cards
+    return g
+
+
+def flow_chain(steps, direction=RIGHT, box_w: float = 2.5, box_h: float = 1.1, buff: float = 0.55, font_size=22,
+               notes=None, note_size=18) -> VGroup:
+    """A mechanism or a sequence: ``steps`` is a list of ``(text, color)`` drawn as boxes joined by arrows, left to
+    right (or down, ``direction=DOWN``).  ``notes`` (optional, one string or "" per step) go under each box (beside
+    it when vertical).  Returns a VGroup with ``.boxes`` (each with ``.text``), ``.arrows`` and ``.notes``."""
+    boxes = VGroup()
+    for text, color in steps:
+        t = wrapped_label(text, box_w - 0.3, font_size, WHITE)
+        if t.height > box_h - 0.2:
+            t.height = box_h - 0.2
+        r = RoundedRectangle(width=box_w, height=box_h, corner_radius=0.12, stroke_color=color, stroke_width=2.2,
+                             fill_color=color, fill_opacity=0.14)
+        b = VGroup(r, t.move_to(r))
+        b.rect, b.text = r, t
+        boxes.add(b)
+    boxes.arrange(direction, buff=buff)
+    arrows = VGroup(*[Arrow(a.get_edge_center(direction), b.get_edge_center(-direction), buff=0.06,
+                            color=GREY_B, stroke_width=3, max_tip_length_to_length_ratio=0.35)
+                      for a, b in zip(boxes, boxes[1:])])
+    ns = VGroup()
+    for b, nt in zip(boxes, notes or [""] * len(steps)):
+        if nt:
+            if np.allclose(direction, DOWN) or np.allclose(direction, UP):
+                m = wrapped_label(nt, 4.2, note_size, GREY_A).next_to(b, RIGHT, buff=0.25)
+            else:
+                m = wrapped_label(nt, box_w + buff * 0.6, note_size, GREY_A).next_to(b, DOWN, buff=0.18)
+            ns.add(m)
+        else:
+            ns.add(VectorizedPoint(b.get_bottom()))
+    g = VGroup(boxes, arrows, ns)
+    if g.width > 13.4:
+        g.width = 13.4
+    g.boxes, g.arrows, g.notes = boxes, arrows, ns
+    return g.move_to(ORIGIN)
+
+
+def quadrant(cells, xlabel: str, ylabel: str, x_ends=(r"low", r"high"), y_ends=(r"low", r"high"),
+             size: float = 5.6, font_size=22) -> VGroup:
+    """A 2x2 typology on two axes: ``cells`` lists ``(title, body, color)`` for the top-left, top-right,
+    bottom-left and bottom-right cells (x grows to the right, y upward).  Returns a VGroup with ``.cells`` (each with
+    ``.title``, ``.body``), ``.axes`` (the two axis labels and their ends)."""
+    s = size / 2
+    out = VGroup()
+    cells_g = VGroup()
+    centres = [(-1, 1), (1, 1), (-1, -1), (1, -1)]
+    for (title, body, color), (cx, cy) in zip(cells, centres):
+        sq = RoundedRectangle(width=s - 0.08, height=s - 0.08, corner_radius=0.12, stroke_color=color,
+                              stroke_width=2, fill_color=color, fill_opacity=0.12).move_to([cx * s / 2, cy * s / 2, 0])
+        t = wrapped_label(title, s - 0.45, font_size + 2, color)
+        parts = [t]
+        if body:
+            parts.append(wrapped_label(body, s - 0.45, font_size - 3, WHITE))
+        inner = VGroup(*parts).arrange(DOWN, buff=0.14)
+        if inner.height > s - 0.35:
+            inner.height = s - 0.35
+        inner.move_to(sq)
+        c = VGroup(sq, inner)
+        c.box, c.title, c.body = sq, t, (parts[1] if len(parts) > 1 else None)
+        cells_g.add(c)
+    xa = Arrow([-s, -s - 0.25, 0], [s, -s - 0.25, 0], buff=0, color=GREY_B, stroke_width=2.5,
+               max_tip_length_to_length_ratio=0.04)
+    ya = Arrow([-s - 0.25, -s, 0], [-s - 0.25, s, 0], buff=0, color=GREY_B, stroke_width=2.5,
+               max_tip_length_to_length_ratio=0.04)
+    xl = label(xlabel, font_size=font_size, color=GREY_A).next_to(xa, DOWN, buff=0.12)
+    yl = label(ylabel, font_size=font_size, color=GREY_A).rotate(PI / 2).next_to(ya, LEFT, buff=0.12)
+    xe = VGroup(label(x_ends[0], font_size=font_size - 4, color=GREY_C).next_to(xa.get_start(), DOWN, buff=0.12),
+                label(x_ends[1], font_size=font_size - 4, color=GREY_C).next_to(xa.get_end(), DOWN, buff=0.12))
+    ye = VGroup(label(y_ends[0], font_size=font_size - 4, color=GREY_C).rotate(PI / 2)
+                .next_to(ya.get_start(), LEFT, buff=0.12),
+                label(y_ends[1], font_size=font_size - 4, color=GREY_C).rotate(PI / 2)
+                .next_to(ya.get_end(), LEFT, buff=0.12))
+    xe[0].align_to(xa, LEFT)
+    xe[1].align_to(xa, RIGHT)
+    ye[0].align_to(ya, DOWN)
+    ye[1].align_to(ya, UP)
+    axes_g = VGroup(xa, ya, xl, yl, xe, ye)
+    out.add(axes_g, cells_g)
+    out.cells, out.axes = cells_g, axes_g
+    return out.move_to(ORIGIN)
+
+
+def pyramid(levels, width: float = 7.0, height: float = 5.2, font_size=24, gap: float = 0.08) -> VGroup:
+    """A stacked hierarchy: ``levels`` lists ``(text, color)`` from the base to the top, drawn as the bands of a
+    triangle.  Returns a VGroup with ``.layers`` (each with ``.shape`` and ``.text``), base first."""
+    n = len(levels)
+    hb = (height - gap * (n - 1)) / n
+    layers = VGroup()
+    for i, (text, color) in enumerate(levels):
+        y0 = -height / 2 + i * (hb + gap)
+        y1 = y0 + hb
+        w0 = width * (1 - (y0 + height / 2) / height)
+        w1 = width * (1 - (y1 + height / 2) / height)
+        if i == n - 1:
+            w1 = 0.0
+        shape = Polygon([-w0 / 2, y0, 0], [w0 / 2, y0, 0], [w1 / 2, y1, 0], [-w1 / 2, y1, 0], stroke_color=color,
+                        stroke_width=2, fill_color=color, fill_opacity=0.22)
+        t = label(text, font_size=font_size, color=WHITE)
+        room = (w0 + w1) / 2 - 0.3 if i < n - 1 else w0 * 0.55
+        lead = None
+        if t.width > room and room / t.width < 0.75:  # too narrow to read: label beside the band, with a leader
+            t.set_color(color)
+            mid = np.array([(w0 + w1) / 4 + 0.05, y0 + hb * 0.45, 0])
+            t.next_to(mid, RIGHT, buff=0.55)
+            lead = Line(mid, t.get_left() + LEFT * 0.08, color=color, stroke_width=1.5)
+        else:
+            if t.width > room:
+                t.width = room
+            t.move_to([0, y0 + hb * (0.5 if i < n - 1 else 0.36), 0])
+        layer = VGroup(shape, t) if lead is None else VGroup(shape, lead, t)
+        layer.shape, layer.text = shape, t
+        layers.add(layer)
+    g = VGroup(*layers)
+    g.layers = layers
+    return g.move_to(ORIGIN)
+
+
+def rings(levels, radius: float = 3.2, font_size=21, centre=None) -> VGroup:
+    """Nested contexts (a person inside a family inside a community ...): ``levels`` lists ``(text, color)`` from
+    the innermost ring out; each label sits at the top of its band.  ``centre`` is a mobject for the middle (a little
+    person by default).  Returns a VGroup with ``.rings`` (each with ``.shape``, ``.text``) and ``.centre``."""
+    n = len(levels)
+    r0 = radius * 0.26
+    step = (radius - r0) / n
+    rs = VGroup()
+    for i, (text, color) in enumerate(levels):
+        r_in, r_out = r0 + i * step, r0 + (i + 1) * step
+        shape = Annulus(inner_radius=r_in, outer_radius=r_out, stroke_color=color, stroke_width=1.5,
+                        fill_color=color, fill_opacity=0.10 + 0.05 * (n - i) / n)
+        t = label(text, font_size=font_size, color=color)
+        if t.width > 2 * r_out * 0.8:
+            t.width = 2 * r_out * 0.8
+        t.move_to([0, (r_in + r_out) / 2, 0])
+        ring = VGroup(shape, t)
+        ring.shape, ring.text = shape, t
+        rs.add(ring)
+    c = centre if centre is not None else little_person(r0 * 1.2, color=P.ACCENT)
+    disc = Circle(radius=r0 - 0.02, stroke_width=0, fill_color=CARD_FILL, fill_opacity=1)
+    c.move_to(ORIGIN)
+    g = VGroup(*reversed(rs), disc, c)
+    g.rings, g.centre = rs, VGroup(disc, c)
+    return g
+
+
+def theory_card(name: str, who: str, claim: str, verdict: str, status: str, width: float = 6.4, font_size=22,
+                color=None) -> VGroup:
+    """A theory as the textbooks state it, and what the record shows: its name and author, the claim, a verdict
+    line, and a chip in the Ledger's colours (``status`` is a key of ``STATUS_COLOR``).  ``.claim``, ``.verdict``
+    and ``.status`` can be revealed one at a time."""
+    color = color or P.KANT
+    tag = label(r"Theory", font_size=font_size - 6, color=color)
+    nm = wrapped_label(name, width - 0.8, font_size + 6, WHITE)
+    by = label(who, font_size=font_size - 4, color=GREY_B)
+    cl = wrapped_label(claim, width - 0.8, font_size, GREY_A)
+    sc = STATUS_COLOR[status]
+    ve = wrapped_label(verdict, width - 0.8, font_size - 1, sc)
+    chip = status_chip(status, font_size - 4)
+    inner = VGroup(tag, nm, by, cl, ve, chip).arrange(DOWN, aligned_edge=LEFT, buff=0.14)
+    inner[3].shift(DOWN * 0.08)
+    inner[4:].shift(DOWN * 0.2)
+    frame = _accent_card(width, inner.height + 0.6, color)
+    inner.move_to(frame).align_to(frame[0], LEFT).shift(RIGHT * 0.38)
+    g = VGroup(frame, inner)
+    g.box, g.name, g.claim, g.verdict, g.status = frame, VGroup(tag, nm, by), cl, ve, chip
+    return g
+
+
+def verdict_row(items, width: float = 12.6, font_size=22) -> VGroup:
+    """Claims beside their verdicts: ``items`` lists ``(claim, status)``, drawn as lines with a status chip at the
+    right, the way the Ledger board reads.  Returns a VGroup with ``.rows`` (each with ``.claim``, ``.chip``)."""
+    rows = VGroup()
+    chips = [status_chip(st, font_size - 4) for _, st in items]
+    cw = max(c.width for c in chips)
+    for (claim, st), chip in zip(items, chips):
+        mk = _marker(True, STATUS_COLOR[st])
+        t = wrapped_label(claim, width - cw - 1.0, font_size, WHITE)
+        r = VGroup(mk, t).arrange(RIGHT, buff=0.22, aligned_edge=UP)
+        mk.align_to(t, UP).shift(DOWN * 0.05)
+        row = VGroup(r, chip)
+        chip.move_to([width / 2 - cw / 2, r.get_center()[1], 0])
+        r.move_to([-width / 2, r.get_center()[1], 0], aligned_edge=LEFT)
+        row.claim, row.chip = r, chip
+        rows.add(row)
+    rows.arrange(DOWN, buff=0.32)
+    for row in rows:
+        row.claim.set_x(-width / 2 + row.claim.width / 2)
+        row.chip.set_x(width / 2 - cw / 2)
+    g = VGroup(*rows)
+    g.rows = rows
     return g.move_to(ORIGIN)

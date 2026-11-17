@@ -10,6 +10,7 @@ class Rewards(VoiceoverScene):
         self.bayes()
         self.meta()
         self.sdt()
+        self.maslow()
 
     def card(self):
         card = chapter_card(5, r"Intrinsic and extrinsic", r"Can a reward make you like something less?",
@@ -179,4 +180,52 @@ class Rewards(VoiceoverScene):
             for m, r in zip("abc", rows):
                 vo.wait_until(m)
                 self.play(FadeIn(r, shift=RIGHT * 0.15))
+        self.clear_scene()
+
+    def maslow(self):
+        head = heading(r"Maslow's hierarchy, \ and what became of it")
+        py = pyramid([(r"physiological", BODY), (r"safety", INTR), (r"love and belonging", LIKE),
+                      (r"esteem", EXTR), (r"self-actualization", WANT)], width=6.0, height=4.6, font_size=22)
+        py.move_to([-3.3, -0.35, 0])
+        stamp = label(r"the pyramid is not in Maslow's paper", font_size=19, color=GREY_B)
+        stamp.next_to(py, DOWN, buff=0.2)
+        card_ = theory_card(r"A hierarchy of needs", r"Abraham Maslow, \ 1943",
+                            r"needs are satisfied in order: \ each level must be largely met before the next one "
+                            r"motivates", r"universal needs, \ yes; \ a fixed ladder, \ no", "contested",
+                            width=6.2, font_size=21, color=KANT)
+        card_.move_to([3.4, 1.05, 0])
+        checks = verdict_row([
+            (r"Wahba and Bridwell, \ 1976: \ little support for the ranking", "failed"),
+            (r"Tay and Diener, \ 2011: \ 123 countries; \ the needs are universal, \ and each is met "
+             r"partly independently of the others", "replicated, smaller"),
+        ], width=6.2, font_size=19)
+        checks.next_to(card_, DOWN, buff=0.35)
+        tag = published_tag(r"Maslow (1943); \ Wahba \& Bridwell (1976); \ Tay \& Diener (2011)")
+        with self.voiceover(
+            "Self-determination theory has a famous ancestor. <bookmark mark='a'/> In 1943 Abraham Maslow proposed "
+            "that human needs form a hierarchy: the body first, then safety, then love and belonging, then esteem, "
+            "and at the top what he called self-actualization, becoming what one is able to become. A need higher "
+            "up would motivate only once the ones below it were largely met. <bookmark mark='b'/> The pyramid that "
+            "carries his name is not in his paper. Management writers drew it in the nineteen-sixties, and it "
+            "became the best-known diagram in psychology. <bookmark mark='c'/> When the theory was tested, the "
+            "ladder did not hold. In 1976 Mahmoud Wahba and Lawrence Bridwell reviewed the studies and found "
+            "little support for the ranking. <bookmark mark='d'/> In 2011 Louis Tay and Ed Diener used surveys "
+            "from 123 countries. Needs like Maslow's were found everywhere, and meeting them went with "
+            "well-being, but people reported meeting the higher needs whether or not the lower ones were met. "
+            "<bookmark mark='e'/> So the list survives and the ladder does not: a lesson in how a theory can be "
+            "half right, and remembered for the wrong half."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(layer, shift=UP * 0.15) for layer in py.layers], lag_ratio=0.35),
+                      FadeIn(card_.box), FadeIn(card_.name), FadeIn(card_.claim), run_time=2.4)
+            vo.wait_until("b")
+            self.play(FadeIn(stamp, shift=UP * 0.1))
+            vo.wait_until("c")
+            self.play(FadeIn(checks.rows[0], shift=RIGHT * 0.15))
+            vo.wait_until("d")
+            self.play(FadeIn(checks.rows[1], shift=RIGHT * 0.15))
+            vo.wait_until("e")
+            self.play(FadeIn(card_.verdict), FadeIn(card_.status),
+                      *[layer.shape.animate.set_fill(opacity=0.32) for layer in py.layers[2:]])
         self.clear_scene()

@@ -67,18 +67,22 @@ class Goals(VoiceoverScene):
 
     def setting(self):
         head = heading(r"Specific, \ difficult goals")
-        rows = rows_of([
-            (r"Locke and Latham: \ hundreds of studies, \ in laboratories and workplaces, \ from loggers to "
-             r"scientists", WHITE),
-            (r"a specific, \ difficult goal leads to better performance than \emph{do your best}, \ which in practice "
-             r"sets no standard", INTR),
-            (r"how: \ goals direct attention, \ raise effort, \ extend persistence, \ and prompt a search for "
-             r"strategies", BODY),
-            (r"when: \ with commitment, \ feedback, \ and the ability to reach them; \ for a complex new task, \ a "
-             r"goal to learn beats a goal to perform", WANT),
-            (r"the cost: \ goals narrow attention, \ and hard targets invite cutting corners and cheating \ "
-             r"(Ord\'o\~nez et al., \ 2009)", LOST),
-        ], 12.2, 25, 0.38).move_to([0, -0.2, 0])
+        src = label(r"Locke and Latham: \ hundreds of studies, \ from loggers to scientists", font_size=22,
+                    color=GREY_A).next_to(head, DOWN, buff=0.3)
+        chain = flow_chain([(r"a specific, \ difficult goal", INTR),
+                            (r"attention, \ effort, \ persistence, \ strategy", BODY),
+                            (r"better performance than \emph{do your best}", WHITE)],
+                           box_w=3.5, box_h=1.25, buff=0.75, font_size=23)
+        chain.move_to([0, 0.75, 0])
+        vague = label(r"\emph{do your best} \ sets no standard", font_size=19, color=GREY_B)
+        vague.next_to(chain.boxes[2], DOWN, buff=0.18)
+        cards = point_cards([
+            (r"When they work", r"with commitment, \ feedback and the ability to reach them; \ for a complex new "
+             r"task, \ a goal to learn beats a goal to perform", WANT),
+            (r"The cost", r"goals narrow attention to what they measure; \ hard targets invite cutting corners "
+             r"and cheating \ (Ord\'o\~nez et al., \ 2009)", LOST),
+        ], width=12.0, font_size=22)
+        cards.move_to([0, -2.05, 0])
         tag = published_tag(r"Locke \& Latham (2002); \ Ord\'o\~nez et al.\ (2009)")
         with self.voiceover(
             "The most successful theory of goals is also one of the plainest. <bookmark mark='a'/> Edwin Locke and "
@@ -92,9 +96,17 @@ class Goals(VoiceoverScene):
             "cases where hard targets invited cutting corners, and outright cheating."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
-            for m, r in zip("abcde", rows):
-                vo.wait_until(m)
-                self.play(FadeIn(r, shift=RIGHT * 0.15))
+            vo.wait_until("a")
+            self.play(FadeIn(src, shift=DOWN * 0.1))
+            vo.wait_until("b")
+            self.play(FadeIn(chain.boxes[0]), GrowArrow(chain.arrows[0]), FadeIn(chain.boxes[1]),
+                      GrowArrow(chain.arrows[1]), FadeIn(chain.boxes[2]), FadeIn(vague), run_time=1.6)
+            vo.wait_until("c")
+            self.play(Indicate(chain.boxes[1], color=BODY, scale_factor=1.06))
+            vo.wait_until("d")
+            self.play(FadeIn(cards.cards[0], shift=UP * 0.15))
+            vo.wait_until("e")
+            self.play(FadeIn(cards.cards[1], shift=UP * 0.15))
         self.clear_scene()
 
     def ifthen(self):

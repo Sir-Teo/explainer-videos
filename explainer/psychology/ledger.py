@@ -4559,6 +4559,8 @@ shown(27, r"Weiskrantz, \ Warrington, \ Sanders \& Marshall (1974); \ Weiskrantz
       "case; blindsight has its row")
 
 shown(28, r"Bernard (1865); \ Cannon (1932); \ Hull (1943)", "the history of homeostasis and drive theory")
+shown(28, r"Maslow (1943); \ Wahba \& Bridwell (1976); \ Tay \& Diener (2011)", "a theory of needs and two "
+      "reviews of its evidence, shown as a theory card with their verdicts")
 shown(28, r"Sheffield \& Roby (1950); \ Olds \& Milner (1954)", "saccharin as a reward, told as history; "
       "brain-stimulation reward has its row")
 shown(28, r"Hetherington \& Ranson (1940); \ Zhang et al.\ (1994); \ Kojima et al.\ (1999)", "the physiology of "
