@@ -18,7 +18,7 @@ Manim videos with local neural narration. See README.md for layout and build com
   manim; `python -m videos.stats.labs 12`), `videos/<series>/course/site/widgets/*.js` one interactive per part.
   `python tools/check_course.py <series> N` checks a part end to end (it drives the interactive in a browser);
   `tests/test_courses.py` runs every lab. *Quant, Built* keeps its own older copy of the same scheme.
-- Chinese narration: `videos/<series>/<name>/narration_zh.json`; each bilingual series (`analysis`, `ai`, `philosophy`) keeps its on-screen text
+- Chinese narration: `videos/<series>/<name>/narration_zh.json`; each bilingual series (`analysis`, `ai`, `philosophy`, `psychology`) keeps its on-screen text
   table (`<series>_text_zh.json`) and term guide in `videos/<series>/`.
 - *AI, Built* (`videos/ai/`): thirty-one parts (`ai1` … `ai31`); the series plan is `videos/ai/README.md`, the
   chapter-by-chapter syllabus and the lecture standard every part meets are `videos/ai/SYLLABUS.md`; shared
@@ -59,3 +59,22 @@ Manim videos with local neural narration. See README.md for layout and build com
   usual ones: `tools/qa_sound.py musicN --sync`, `tools/dead_air.py <film> --sound musicN`, and
   `tools/lecture_length.py musicN` (30–60 minutes, listening included). `videos/music/soundcheck/` is the pipeline's
   two-minute test film.
+- *Psychology, Built* (`videos/psychology/`): sixty-two parts in thirteen acts (`psych1` … `psych62`: a degree,
+  the graduate methods sequence, industry practice and a research tier); all sixty-two are built (Acts I to XIII and the capstone). The folders are `psychN` while
+  the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
+  plan is `videos/psychology/README.md`, the chapter-by-chapter syllabus, the standard and the progress table are
+  `videos/psychology/SYLLABUS.md`. Shared code in `explainer/psychology/` (tested in `tests/psychology/`): the model
+  subject Psyche (`psyche/`, one module per faculty: `chronometry`, `cueing`, `neuron`, `circuits`, `brain`, `imaging`, `genes`, `body`, `psychophysics`, `sdt`, `vision`, `infer`, `hearing`, `conditioning`, `rl`, `attention`, `wm`, `memory`, `concepts`, `language`, `reason`, `decide`, `choice`, `workspace`, `drive`, `emotion`, `develop`, `lifespan`, `traits`, `personality`, `social`, `culture`, `clinic`, `sem`, `irt`, `scaling`, `within`, `fit`, `neurodata`, `meta`, `work`, `efficient`, `precision`, `machines`, `community` and `thesis`), the laboratory (`lab.py`:
+  designs run on the Pool with the truth known; a part that shows a study picks it by rule, the median of many, never
+  by its result), the measurement library (`measure.py`: scale types, reliability, attenuation, alpha, kappa, the
+  multitrait-multimethod matrix), the false-positive lab (`evidence.py`: power, forking paths, a filtered literature and
+  its replications, p-curves, equivalence tests), the Pool (`pool.py`, 100,000 simulated
+  people, always tagged simulated), the Battery (`battery.py`, tasks behind one `run`), the Replication Ledger
+  (`ledger.py`; every finding a part presents gets a row with sources and the date checked, and `tools/check_ledger.py psychN` fails a part that shows a study with neither a row nor a `ledger.shown` reason), the capstone pipeline (`capstone.py`: preregistration as code, power, small telescopes, the replication Bayes factor, the multiverse), the Archive (`archive/`,
+  every dataset registered in `archive/SOURCES.md`; open trial-level data is fetched on first use and checked by
+  SHA-256 by `opendata.py`, never committed; R data files inside CRAN packages are read by `rdata.py`, which never
+  evaluates anything), and the cards, maps and instruments in `__init__.py` and `viz.py`.
+  A part's interactive is an experiment the reader takes part in, built on the task kit
+  (`course/site/widgets/00_tasks.js`, `QB.task`); it stores and sends nothing, and `tools/check_course.py` plays a
+  scripted participant against it.
+  Chinese narration tables in `psychN/zh_lines.py`; terms in `videos/psychology/PSYCHOLOGY_ZH_GUIDE.md`.

@@ -1,0 +1,204 @@
+"""Psychology, Built as a course: Parts 39 to 43 (Act X, when minds suffer, and the capstone)."""
+
+from videos.coursekit import Part
+
+PARTS = [
+    Part(
+        n=39, level="U", widget="screening",
+        question="Where is the line between suffering and illness, and who draws it?",
+        story="In 1973 a study reported that eight healthy people faked one symptom, were admitted to psychiatric "
+              "hospitals and were never detected; it helped force explicit diagnostic criteria, and decades later "
+              "its data fell into serious doubt. The part asks what a disorder is: rarity, distress, dysfunction and "
+              "harm, Wakefield's harmful dysfunction, and a category removed by a vote. It derives Cohen's kappa, "
+              "shows the field trials' kappas (depression near 0.3) and why reliability caps validity, counts 227 "
+              "symptom combinations that make one diagnosis and 1,030 profiles among real patients, weighs categories "
+              "against dimensions, finds comorbidity and a p factor, and builds a symptom network that tips suddenly "
+              "and recovers slowly. Then epidemiology and the treatment gap, a positive screen in natural "
+              "frequencies, Meehl's formulas against clinical judgment, and idioms of distress.",
+        handoff="Anxiety and depression are Part 40, psychosis, addiction and development Part 41, the evidence for "
+                "therapy Part 42; latent variables and networks Parts 44 and 47.",
+        outside="Part 3's reliability, Part 12's base rates and Part 32's factor analysis; probability, logistic "
+                "functions and simple linear regression.",
+        objectives={
+            "U": ["Explain the candidate definitions of a disorder and their problems, and the history from asylums "
+                  "to DSM-III.",
+                  "Compute and interpret Cohen's kappa, and explain why a reliable diagnosis need not be valid.",
+                  "Work out what a positive screen means in natural frequencies, and describe prevalence and the "
+                  "treatment gap."],
+            "M": ["Show that reliability bounds validity, and simulate two clinicians to see it.",
+                  "Count the symptom combinations a criterion allows, and compare categorical and dimensional "
+                  "structure.",
+                  "Build a symptom network and show bistability and hysteresis under changing stress."],
+            "D": ["Explain why network, latent-variable and common-cause models can be statistically equivalent, and "
+                  "design a study to tell them apart."],
+            "I": ["Evaluate a screening programme or a risk tool by its predictive value at the real base rate."],
+        },
+        results=[
+            ("Cohen's kappa", r"\kappa = \frac{p_o - p_e}{1 - p_e}"),
+            ("Positive predictive value", r"\text{PPV} = \frac{\pi\,\text{sens}}{\pi\,\text{sens} + (1 - \pi)(1 - "
+                                          r"\text{spec})}"),
+            ("Reliability bounds validity", r"|r_{xy}| \le \sqrt{r_{xx}\, r_{yy}}"),
+            ("Symptom network", r"P(x_i = 1) = \sigma\big(b + s + c \textstyle\sum_{j \ne i} x_j\big)"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's clinic module", "explainer/psychology/psyche/clinic.py"),
+              ("Its tests", "tests/psychology/test_clinic.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=40, level="U", widget="dotprobe",
+        question="How do fear and sadness go wrong, and what do the treatments act on?",
+        story="In 1967 dogs given shocks they could not escape later lay down and took shocks they could escape; "
+              "fifty years later the authors reversed the explanation: passivity is the default, and what is learned "
+              "is control. The part builds anxiety and depression from the learning models of earlier acts: Mowrer's "
+              "two factors and an avoidance loop that never unlearns, extinction as context-bound learning and the "
+              "return of fear, the anxiety disorders and the panic spiral, attention to threat and the failed "
+              "bias-modification trials, depression's cognitive accounts, helplessness as a belief about control, and "
+              "a model of momentary mood fitted to a gambling task. Then the serotonin story and the 2022 review, "
+              "Kirsch's analysis and the 522-trial network meta-analysis, life events and the gene-by-stress finding "
+              "that did not survive large samples, lithium, and why suicide cannot be predicted well for individuals.",
+        handoff="Psychosis, addiction and development are Part 41, the evidence for therapy Part 42, symptoms tracked "
+                "day by day Part 47 and computational psychiatry Part 59.",
+        outside="Part 16's Rescorla-Wagner model, Part 17's prediction errors, Part 29's emotion and Part 39's base "
+                "rates; logarithms, geometric series and least squares.",
+        objectives={
+            "U": ["Explain Mowrer's two factors, why avoidance preserves fear, and why exposure works.",
+                  "Describe the cognitive, helplessness and reward accounts of depression and the evidence on each.",
+                  "Interpret the drug-placebo difference as an effect size and a number needed to treat, and explain "
+                  "why suicide risk cannot be predicted well for individuals."],
+            "M": ["Simulate avoidance and response prevention on a Rescorla-Wagner learner, and renewal after "
+                  "context-bound extinction.",
+                  "Model the triadic design as a Beta belief about control.",
+                  "Fit Rutledge and colleagues' model of momentary mood and show what blunted prediction errors do."],
+            "D": ["Design a study that separates liking, learning and effort in anhedonia, with the parameter each "
+                  "hypothesis predicts will differ."],
+            "I": ["Map a treatment onto the model it acts on, and judge a claimed effect by its size and the base rate."],
+        },
+        results=[
+            ("Rescorla-Wagner extinction", r"V_{t+1} = V_t + \alpha\,(0 - V_t)"),
+            ("Renewal", r"\text{fear}_A = E, \quad \text{fear}_B = E - I"),
+            ("Momentary mood", r"H_t = w_0 + w_1 \textstyle\sum_j \gamma^{t-j} CR_j + w_2 \sum_j \gamma^{t-j} EV_j "
+                               r"+ w_3 \sum_j \gamma^{t-j} \delta_j"),
+            ("Number needed to treat", r"\text{NNT} = \frac{1}{p_{\text{drug}} - p_{\text{placebo}}}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13), D=(15,), I=(14,),
+        also=(("Psyche's clinic module", "explainer/psychology/psyche/clinic.py"),
+              ("Its tests", "tests/psychology/test_clinic.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=41, level="U", widget="shading",
+        question="What happens when the machinery of inference and learning is set wrongly?",
+        story="A mask of a face, seen from behind, looks like an ordinary face to almost everyone: a prior strong "
+              "enough to overrule both eyes. In small studies, many people with schizophrenia see it as hollow. The "
+              "part uses the series' own models as a language for three kinds of condition. Psychosis: its symptoms "
+              "and course, chlorpromazine and the dopamine hypothesis, aberrant salience (computed), the hollow mask "
+              "on a Gaussian observer, conditioned hallucinations, and causes from hundreds of genes to cities. "
+              "Addiction: reward, tolerance, wanting without liking, habit and steep discounting; Redish's prediction "
+              "error that cannot be learned away (computed) and the test it failed; Rat Park, the Vietnam veterans "
+              "and contingency management. Development: autism's histories, the vaccine fraud, priors as a "
+              "trade-off, rising diagnoses and facilitated communication; ADHD, relative age and the MTA trial.",
+        handoff="The evidence for therapy is Part 42, the predictive brain Part 58 and computational psychiatry "
+                "Part 59.",
+        outside="Part 14's Bayesian observer, Part 17's prediction errors and habits, Part 26's discounting and Part "
+                "39's base rates; Gaussian algebra, sums of series and derivatives.",
+        objectives={
+            "U": ["Describe the symptoms and course of schizophrenia and the evidence on antipsychotics and dopamine.",
+                  "Explain addiction through reward, tolerance, incentive sensitization, habit and discounting.",
+                  "Weigh the evidence on autism and ADHD, including the retracted vaccine claim and facilitated "
+                  "communication."],
+            "M": ["Compute the hollow-mask percept from a prior and a likelihood, and the best strength of a prior.",
+                  "Simulate aberrant salience and conditioned hallucinations on a learner.",
+                  "Run Redish's model and show why a drug's value grows without bound."],
+            "D": ["Design a study that separates a trait from a state in proneness to conditioned hallucinations."],
+            "I": ["Judge a harm-reduction or early-intervention programme by its evidence and its trade-offs."],
+        },
+        results=[
+            ("Hollow mask percept", r"\hat z = \frac{\pi_p (+1) + \pi_e x}{\pi_p + \pi_e}"),
+            ("Best prior weight", r"w^* = \frac{1/\pi_e}{1/\pi_e + 4(1 - p)}"),
+            ("Redish's drug signal", r"\delta = \max(r - V + D,\; D)"),
+            ("Hyperbolic discounting", r"V = \frac{A}{1 + kD}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13), D=(15,), I=(14,),
+        also=(("Psyche's clinic module", "explainer/psychology/psyche/clinic.py"),
+              ("Its tests", "tests/psychology/test_clinic.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=42, level="U", widget="twographs",
+        question="How would you know that talking to someone helped?",
+        story="In 1952 Hans Eysenck concluded that about two thirds of neurotic patients improve with or without "
+              "psychotherapy. Answering him needed controls and a way to add up studies; in 1977 Smith and Glass "
+              "pooled 375 studies with meta-analysis and found an average effect of 0.68. The part shows why everyone "
+              "improves (regression to the mean, computed on the Pool), how the control sets the effect, and how "
+              "researcher allegiance tilts comparisons; builds a random-effects meta-analysis by hand; weighs the dodo "
+              "bird, the alliance and specific ingredients; compares therapy with medication and relapse after each; "
+              "measures publication bias in drug and therapy trials; derives Jacobson and Truax's reliable change and "
+              "cut-off; and ends with treatments that harm, lobotomy and ECT, and the dose-response curve.",
+        handoff="The capstone replication is Part 43, meta-analysis and bias properly Part 50, the treatment gap Part "
+                "57 and matching treatments to people Part 59.",
+        outside="Part 3's standard error of measurement, Part 4's file drawer and Part 12's base rates; weighted means, "
+                "the normal distribution and conditional expectation.",
+        objectives={
+            "U": ["Explain why treated people improve even when treatment does nothing, and why a control is needed.",
+                  "Describe the evidence for psychotherapy, the dodo bird debate, the alliance, and treatments that "
+                  "harm.",
+                  "Judge whether one person changed reliably and clinically, from two scores."],
+            "M": ["Simulate a therapy trial with different controls and show how the effect size depends on them.",
+                  "Compute a DerSimonian-Laird random-effects meta-analysis by hand.",
+                  "Show how a significance filter inflates the published effect, and by how much."],
+            "D": ["Design a trial that separates a specific ingredient from common factors and tests the order of "
+                  "mechanism and outcome."],
+            "I": ["Set up session-by-session outcome monitoring with reliable-change rules, and decide when to change "
+                  "course."],
+        },
+        results=[
+            ("Regression to the mean", r"E[\mu \mid x] = m + \frac{\sigma_\mu^2}{\sigma_\mu^2 + \sigma_e^2}(x - m)"),
+            ("Random-effects weights", r"w_i = \frac{1}{v_i + \hat\tau^2}, \quad \hat\mu = \frac{\sum w_i d_i}{\sum w_i}"),
+            ("Reliable change index", r"\mathrm{RCI} = \frac{x_2 - x_1}{\sqrt{2}\, s \sqrt{1 - r_{xx}}}"),
+            ("Jacobson and Truax's cut-off", r"c = \frac{s_0 \bar x_1 + s_1 \bar x_0}{s_0 + s_1}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12), D=(14,), I=(13,),
+        also=(("Psyche's clinic module", "explainer/psychology/psyche/clinic.py"),
+              ("Its tests", "tests/psychology/test_clinic.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=43, level="U", widget="stroop",
+        question="Can you run a study that deserves to be believed?",
+        story="The degree ends with a project: two classic effects replicated properly, on screen, with every tool the "
+              "series has built. Verbal overshadowing, expected to hold, and ego depletion, in doubt, are re-analysed "
+              "from the open lab-level data of their registered multi-lab replications; the viewer takes part in a "
+              "third study, the Stroop task. The part chooses its targets, defines a direct replication, sets the "
+              "smallest effect of interest, computes power and the small-telescopes benchmark, writes the "
+              "preregistration as code and runs it on simulated labs, builds the experiment, asks for consent, runs "
+              "the confirmatory analyses exactly as planned, applies three registered criteria and a replication "
+              "Bayes factor, explores a labelled multiverse, and writes the report; then it looks back on the "
+              "Ledger and the degree.",
+        handoff="Act XI begins with latent variables in Part 44; people over time are Part 47, the weight of evidence "
+                "Part 50, and the dissertation Part 62.",
+        outside="Parts 2 to 4 (the experiment, measurement and the false-positive lab) and Part 42's meta-analysis; "
+                "the normal and t distributions, and simple numerical root finding.",
+        objectives={
+            "U": ["Choose a replication target and say what makes a replication direct.",
+                  "Justify a sample size from the smallest effect of interest, and compute d33.",
+                  "Run a registered confirmatory analysis and judge it by registered criteria."],
+            "M": ["Write a preregistration as code and test it on simulated data before the real data.",
+                  "Compute a replication Bayes factor and explain when the criteria disagree.",
+                  "Build a small multiverse and label it as exploratory."],
+            "D": ["Argue what a failed replication licenses, and design a test of a proposed hidden moderator."],
+            "I": ["Apply the workflow to a product experiment: metric, smallest effect, sample size and analysis "
+                  "fixed before launch."],
+        },
+        results=[
+            ("Two-group power", r"1 - \beta = P\big(|T_{\nu, \delta}| > t_{1-\alpha/2}\big), \quad \delta = d\sqrt{n_1 n_2/(n_1 + n_2)}"),
+            ("Small telescopes", r"\text{power}(d_{33}; n_1, n_2) = 1/3"),
+            ("Replication Bayes factor", r"\mathrm{BF}_{r0} = \frac{N(\hat d_r; \hat d_o, \mathrm{se}_o^2 + \mathrm{se}_r^2)}{N(\hat d_r; 0, \mathrm{se}_r^2)}"),
+            ("Sample size", r"n \approx \frac{2 (z_{1-\alpha/2} + z_{1-\beta})^2}{d^2}"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13), D=(15,), I=(14,),
+        also=(("The capstone pipeline", "explainer/psychology/capstone.py"),
+              ("Its tests", "tests/psychology/test_capstone.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+]

@@ -1,6 +1,10 @@
 // Open built part pages and exercise their interactive (used by tools/check_course.py).
 //   node tools/check_widgets.js _site/stats/part12.html [more pages]
 // Fails (exit 1) on a script error, a widget that did not start, a blank canvas, or a page wider than the screen.
+// Where the interactive is an experiment (it registers a task with QB.task, the kit of Psychology, Built), a
+// scripted participant takes part first: it starts the experiment with the widget's first button and answers
+// whenever a task is ready, by key on the wide screen and by tap on the narrow one, and the page fails if its
+// answers are not recorded.
 // Exits 3 if Playwright is not installed.
 let chromium;
 try { ({ chromium } = require("playwright")); } catch (e) { console.log("playwright not installed: interactives not exercised"); process.exit(3); }
@@ -28,6 +32,27 @@ try { ({ chromium } = require("playwright")); } catch (e) { console.log("playwri
         return seen.size;
       });
       if ((await ink()) < 6) problems.push(`${width}px: the canvas is blank or missing`);
+      if (await page.evaluate(() => !!(window.QB && QB.task && QB.task.live.length))) {
+        const want = 3, how = width > 600 ? "key" : "tap";
+        await w.locator("button").first().click();
+        for (let k = 0; k < want + 2; k++) {
+          const ready = await page.waitForFunction(() => QB.task.live.some((t) => t.ready()), null, { timeout: 8000 }).then(() => true, () => false);
+          if (!ready) { problems.push(`${width}px: the experiment never became ready for a response`); break; }
+          await page.waitForTimeout(160);
+          const t = await page.evaluate((k) => {
+            const task = QB.task.live.find((x) => x.ready());
+            if (!task) return null;
+            const keys = Object.keys(task.keys), b = task.box;
+            return { key: keys[k % keys.length], x: b.x + b.w * (k % 2 ? 0.75 : 0.25), y: b.y + b.h / 2 };
+          }, k);
+          if (!t) continue;
+          if (how === "key") await page.keyboard.press(t.key === " " ? "Space" : t.key);
+          else await w.locator("canvas").click({ position: { x: t.x, y: t.y } });
+          await page.waitForTimeout(60);
+        }
+        const count = await page.evaluate(() => QB.task.live.reduce((s, t) => s + t.count, 0));
+        if (count < want) problems.push(`${width}px: a scripted participant answered by ${how}, but ${count} of its responses were recorded`);
+      }
       const sliders = w.locator('input[type="range"]');
       for (let i = 0; i < (await sliders.count()); i++) {
         for (const end of ["min", "max", "mid"]) {

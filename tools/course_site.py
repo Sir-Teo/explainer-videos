@@ -84,6 +84,32 @@ def narration_words(path: Path, cls: str) -> int:
                     words += len(re.sub(r"<bookmark[^>]*/>", " ", sub.value).split())
                 elif isinstance(sub, ast.FormattedValue):
                     words += 3
+        words += _section_words(node)
+    return words
+
+
+def _section_words(node) -> int:
+    """Narration a scene passes through its part's section helpers: ``rows_section(self, title, items, narration)``
+    and ``chips_section(...)`` take it as an argument, and ``card_section(self, n, title, question)`` speaks
+    "Chapter n. Title"."""
+    words = 0
+    for call in ast.walk(node):
+        if not isinstance(call, ast.Call):
+            continue
+        name = call.func.attr if isinstance(call.func, ast.Attribute) else getattr(call.func, "id", "")
+        if not name.endswith("_section"):
+            continue
+        if name == "card_section":
+            title = call.args[2] if len(call.args) > 2 else None
+            words += 2 + (len(title.value.split()) if isinstance(title, ast.Constant) and isinstance(title.value, str)
+                          else 3)
+            continue
+        arg = next((k.value for k in call.keywords if k.arg == "narration"), call.args[3] if len(call.args) > 3 else None)
+        for sub in ast.walk(arg) if arg is not None else ():
+            if isinstance(sub, ast.Constant) and isinstance(sub.value, str):
+                words += len(re.sub(r"<bookmark[^>]*/>", " ", sub.value).split())
+            elif isinstance(sub, ast.FormattedValue):
+                words += 3
     return words
 
 

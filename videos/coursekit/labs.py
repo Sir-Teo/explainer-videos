@@ -39,7 +39,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 _NAMESPACES = ("explainer", "explainer.ai", "explainer.analysis", "explainer.stats", "explainer.cs",
-               "explainer.philosophy", "explainer.quant", "explainer.music")
+               "explainer.philosophy", "explainer.quant", "explainer.music", "explainer.psychology")
 
 
 def _standalone() -> None:
@@ -156,7 +156,7 @@ def main(series: str | None = None) -> None:
 
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     if series is None:
-        ap.add_argument("series", help="ai, stats, cs, philosophy, analysis or music")
+        ap.add_argument("series", help="ai, stats, cs, philosophy, analysis, music or psychology")
     ap.add_argument("parts", nargs="*", type=int, help="part numbers")
     ap.add_argument("--all", action="store_true", help="run every lab")
     ap.add_argument("--list", action="store_true", help="list the labs and exit")

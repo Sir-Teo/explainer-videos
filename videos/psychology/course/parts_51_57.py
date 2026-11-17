@@ -1,0 +1,251 @@
+"""Psychology, Built as a course: Parts 51 to 57 (Act XII, psychology at work)."""
+
+from videos.coursekit import Part
+
+PARTS = [
+    Part(
+        n=51, level="U", widget="watchclock", prereq=(10, 12, 18, 25),
+        question="When a person makes a fatal error with a machine, whose error is it?",
+        story="In 1947 Paul Fitts and Richard Jones collected 460 reports of pilot error and found the same few again "
+              "and again: in some aircraft the flap and landing-gear levers sat side by side and felt the same, and "
+              "Alphonse Chapanis fixed it with a wheel-shaped knob and a flap-shaped one. Human factors begins with "
+              "the idea that error is designed in. The part fits Fitts's and Hick's laws, sorts slips, lapses and "
+              "mistakes, reads Three Mile Island, measures workload, watches Psyche's vigilance decline over two "
+              "hours and its criterion rise for rare targets, models Bainbridge's ironies of automation and an "
+              "alarm's two criteria, stacks correlated slices of Swiss cheese, and puts fatigue on the scale of "
+              "blood alcohol.",
+        handoff="Part 52 turns Fitts's and Hick's laws into an engineering model of the interface; Part 56 treats a "
+                "line-up as a detection task; humans supervising learning machines return in Part 60.",
+        outside="Part 12's signal detection, Part 18's attention, Part 10's clocks and Part 25's confidence; "
+                "logarithms and the normal distribution.",
+        objectives={
+            "U": ["Explain why many errors are designed in, and sort an error as a slip, a lapse, a mistake or a "
+                  "violation.",
+                  "Describe the vigilance decrement and the prevalence effect, and why rare targets are missed."],
+            "M": ["Fit Fitts's law and compute d' and c block by block for a long watch.",
+                  "Model an alarm's hit rate, positive predictive value and the share of events answered when "
+                  "operators match their response to its reliability."],
+            "D": ["State an open problem in supervising learning-based automation and design a study of it."],
+            "I": ["Write the human-factors section of a safety case: tasks, likely errors, evidence and residual "
+                  "risk.",
+                  "Design a takeover request and the simulator test that would show it works."],
+        },
+        results=[
+            ("Fitts's law", r"MT = a + b\log_2(D/W + 1)"),
+            ("Hick-Hyman law", r"RT = a + b\log_2(N + 1)"),
+            ("An alarm's positive predictive value", r"\mathrm{PPV} = \frac{pH}{pH + (1-p)F}"),
+            ("Independent defences", r"P(\text{accident}) = \prod_k h_k"),
+        ],
+        U=(0, 1, 2, 3, 4, 6, 7), D=(15,), I=(9, 10, 11, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Its tests", "tests/psychology/test_work.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=52, level="U", widget="pointer", prereq=(1, 11, 18, 51),
+        question="Can you predict how long a person will take to use something before it is built?",
+        story="In the late 1980s a telephone company was about to buy operator workstations expected to save time on "
+              "every call. Wayne Gray, Bonnie John and Michael Atwood modelled the operators' perception, cognition "
+              "and keystrokes on paper and predicted the new design would be slower; the field trial agreed. The "
+              "part builds the Model Human Processor and the keystroke-level model, measures pointing as throughput, "
+              "steers through tunnels, sets menu depth against breadth, follows an information forager by the "
+              "marginal value theorem, shows why five users find less than promised, ranks chart encodings, computes "
+              "contrast, and asks how long a habit takes.",
+        handoff="Part 53 turns from the interface to the people (selection and training); Part 55 scales defaults "
+                "and nudges; Part 60 returns to minds and machines.",
+        outside="Part 1's mental chronometry, Part 11's power law, Part 18's search and Part 51's human factors; "
+                "logarithms and a little probability.",
+        objectives={
+            "U": ["Predict a skilled user's task time with the keystroke-level model.",
+                  "Explain why position and length are read more accurately than angle and area."],
+            "M": ["Measure pointing throughput with the effective width, and fit Fitts's and the steering law.",
+                  "Derive the problem-discovery curve and show how unequal detectability lowers it."],
+            "D": ["Design a study of whether a simulated user's verdict on an interface can be trusted."],
+            "I": ["Compare two designs by keystroke-level analysis before testing, and choose the right test for the "
+                  "remaining questions.",
+                  "Audit an interface for contrast, target size and dark patterns."],
+        },
+        results=[
+            ("Keystroke-level model", r"T = \sum_i n_i t_i + R"),
+            ("Throughput", r"TP = \frac{\log_2(D/W_e + 1)}{MT}, \quad W_e = 4.133\,\sigma"),
+            ("Problem discovery", r"P(\text{found}) = 1 - (1 - p)^n"),
+            ("Contrast ratio", r"\frac{L_1 + 0.05}{L_2 + 0.05}"),
+        ],
+        U=(0, 1, 2, 3, 7, 9, 10), D=(15,), I=(8, 11, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Its tests", "tests/psychology/test_work.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=53, level="U", widget="hiring", prereq=(2, 3, 28, 32),
+        question="How well can anyone predict who will be good at a job?",
+        story="The Hawthorne lighting studies became the founding story of work psychology, though their data barely "
+              "show the effect. The useful history is a correlation: how well a hiring method predicts later "
+              "performance. The part simulates 200,000 applicants to show how selection and unreliable ratings hide "
+              "validity and how corrections restore it or overshoot, sets Schmidt and Hunter's 1998 summary beside "
+              "Sackett and colleagues' 2022 revision, models why unstructured interviews feel informative, turns "
+              "validity into money with Taylor-Russell tables and the Brogden-Cronbach-Gleser formula, computes "
+              "adverse impact and the validity-diversity frontier, and ends with goals, incentives, crowding out, "
+              "teams and a randomized trial of working from home.",
+        handoff="Part 54 takes learning and training into the classroom; Part 55 scales incentives and defaults; Part "
+                "56 takes tests and judgement into court; Part 60 returns to fairness in algorithms.",
+        outside="Part 3's reliability, Part 32's ability testing and Part 28's motivation; correlation, the normal "
+                "distribution and a little algebra.",
+        objectives={
+            "U": ["Explain why a test can look weak among the people it selected, and why structured interviews beat "
+                  "unstructured ones.",
+                  "Apply the four-fifths rule and say what it does and does not establish."],
+            "M": ["Correct an observed validity for criterion unreliability and range restriction, in order, and show "
+                  "how a wrong correction overshoots.",
+                  "Compute Taylor-Russell success rates and Brogden-Cronbach-Gleser utility."],
+            "D": ["Evaluate the 2022 revision of selection validities and design a study that would settle it."],
+            "I": ["Design a selection system with its utility, adverse-impact analysis and validation plan.",
+                  "Audit an algorithmic hiring tool for validity and impact."],
+        },
+        results=[
+            ("Case II correction", r"r_c = \frac{r\,u}{\sqrt{1 + r^2 (u^2 - 1)}}"),
+            ("Utility", r"\Delta U = N_s T r\, SD_y\, \bar z_x - C"),
+            ("Mean score of those selected", r"\bar z_x = \phi(z_c) / SR"),
+            ("Impact ratio", r"SR_{\text{focal}} / SR_{\text{reference}} \ge 0.8"),
+        ],
+        U=(0, 1, 2, 3, 6, 10, 11, 12), D=(15,), I=(7, 8, 9, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Its tests", "tests/psychology/test_work.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=54, level="U", widget="spacedlists", prereq=(20, 21, 45),
+        question="What is the most effective way to learn something, and why do learners choose the opposite?",
+        story="In 1984 Benjamin Bloom reported that tutored pupils scored two standard deviations above a class, and "
+              "challenged education to match it; later reviews put tutoring near 0.8 and school trials near 0.4. The "
+              "part turns memory research into engineering: the testing effect in classrooms, the spacing "
+              "ridgeline as a design rule, interleaving, learning against performance with Psyche cramming and "
+              "spacing, ten techniques ranked, cognitive load, the learning-styles crossover that never appears, "
+              "tutoring systems, four review schedules raced at equal study, the simple view of reading, "
+              "growth-mindset lessons at national scale, and feedback that makes things worse.",
+        handoff="Part 55 scales interventions from classrooms to countries; Part 56 takes memory to court; Part 62's "
+                "dissertation can test a learning intervention.",
+        outside="Parts 20 and 21's memory models, Part 45's knowledge tracing and Part 47's heterogeneity; "
+                "logarithms and effect sizes.",
+        objectives={
+            "U": ["Choose study methods by evidence (retrieval, spacing, interleaving) and explain why they feel "
+                  "worse.",
+                  "Explain why learning styles fail the crossover test."],
+            "M": ["Compare review schedules under a memory model at equal study time.",
+                  "Compute the sample a small educational effect needs, and read heterogeneity."],
+            "D": ["Design a study of transfer, or of an AI tutor, that separates performance from learning."],
+            "I": ["Redesign a course or training programme with retrieval, spacing, interleaving and faded examples, "
+                  "and plan its evaluation."],
+        },
+        results=[
+            ("Simple view of reading", r"RC = D \times LC"),
+            ("Bayesian knowledge tracing", r"P(K \mid \text{wrong}) = \frac{P(K)\,s}{P(K)\,s + (1 - P(K))(1 - g)}"),
+            ("Sample per arm", r"n = 2 (z_{1-\alpha/2} + z_{1-\beta})^2 / d^2"),
+        ],
+        U=(0, 1, 2, 3, 4, 5, 7, 10), D=(15,), I=(6, 9, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Part 21's memory model", "explainer/psychology/psyche/memory.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=55, level="U", widget="gymrank", prereq=(4, 26, 34, 50),
+        question="How much can a small change in how a choice is presented change what millions of people do?",
+        story="Opt-out organ donation and automatic pension enrolment made the nudge government policy; then the "
+              "accounting found the average published nudge near nine percentage points and the average nudge-unit "
+              "trial near one and a half. The part solves the algebra of a default, opens the toolbox, simulates a "
+              "megastudy with its winner's curse and shrinkage, reproduces the published-against-practice gap with a "
+              "publication filter, and weighs heterogeneity, incentives, backfires, persuasion, misinformation, a "
+              "fabricated nudge and the ethics of steering.",
+        handoff="Part 56 takes behaviour into court; Part 57 into health care; Part 61 turns incentives on science "
+                "itself.",
+        outside="Part 26's choice, Part 34's norms and Part 50's filtered literatures; proportions and a little "
+                "Bayes.",
+        objectives={
+            "U": ["Explain why defaults work and why most nudges are smaller than reported.",
+                  "Recognize sludge and the disclosure test for manipulation."],
+            "M": ["Correct a megastudy's winner by shrinkage and size a trial for a small effect.",
+                  "Show how a publication filter inflates an average effect."],
+            "D": ["Design a study of which interventions transfer across sites."],
+            "I": ["Design and preregister a behavioural trial with its power, persistence and cost per unit of "
+                  "change."],
+        },
+        results=[
+            ("A default's two types", r"\text{in} = (1-q)p, \quad \text{out} = q + (1-q)p"),
+            ("Empirical-Bayes shrinkage", r"\hat\theta_i^{EB} = \bar y + \frac{\tau^2}{\tau^2 + s^2}(y_i - \bar y)"),
+            ("Sample per arm (proportions)", r"n = (z_{\alpha/2} + z_\beta)^2 \frac{p_1 q_1 + p_2 q_2}{\delta^2}"),
+        ],
+        U=(0, 1, 2, 3, 8, 11, 12), D=(15,), I=(4, 5, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Its tests", "tests/psychology/test_work.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=56, level="U", widget="lineup", prereq=(12, 21, 3, 39),
+        question="How much should a court trust a memory, a confession or an expert?",
+        story="Mistaken identification figures in about three quarters of the first 250 DNA exonerations in the "
+              "United States. The part models the line-up as signal detection, shows why the sequential line-up was "
+              "adopted on its diagnosticity ratio and abandoned on its ROC, separates initial confidence (diagnostic "
+              "under clean procedure) from confidence inflated by feedback, and covers the reforms, false "
+              "confessions, lie detection at chance, context bias in forensic experts, children's suggestibility, "
+              "juries and the hungry judges, a calibrated risk score that cannot have equal error rates across "
+              "groups, and the IQ standard error in Hall v. Florida.",
+        handoff="Part 57 takes assessment into health care; Part 59 takes prediction into psychiatry; Part 60 "
+                "returns to fairness in machines.",
+        outside="Part 12's signal detection, Part 21's memory, Part 3's standard error and Part 39's actuarial "
+                "prediction; Bayes's rule.",
+        objectives={
+            "U": ["Explain why a confident witness can be wrong, and when initial confidence can be trusted.",
+                  "List the line-up reforms and the reason for each."],
+            "M": ["Compare line-up procedures by ROC and partial area rather than diagnosticity ratio.",
+                  "Show why a calibrated risk score cannot have equal error rates across groups with different base "
+                  "rates."],
+            "D": ["Design a field study that could estimate the accuracy of real identifications."],
+            "I": ["Weigh an identification by its likelihood ratio, and write a line-up protocol."],
+        },
+        results=[
+            ("Posterior odds", r"\frac{P(G\mid E)}{P(\bar G\mid E)} = \frac{P(E\mid G)}{P(E\mid \bar G)} \cdot "
+                               r"\frac{P(G)}{P(\bar G)}"),
+            ("Diagnosticity ratio", r"DR = \frac{\text{correct IDs}}{\text{innocent-suspect IDs}}"),
+            ("Standard error of measurement", r"SEM = SD\sqrt{1 - r_{xx}}"),
+        ],
+        U=(0, 1, 2, 4, 5, 6, 7, 9), D=(15,), I=(11, 12, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Part 21's line-up model", "explainer/psychology/psyche/memory.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+    Part(
+        n=57, level="U", widget="carepath", prereq=(10, 14, 39, 42),
+        question="How does the mind get into the body, and how does help get to the people who need it?",
+        story="In 1991 volunteers who reported more stress were more likely to catch a cold from nose drops, in a "
+              "dose-response line. The part weighs stress and illness and the limits of correlation, separates the "
+              "placebo's real effect from regression to the mean, models expectation as a prior on bodily signals, "
+              "treats chronic pain, adherence, diabetes prevention and insomnia as behaviour, reads mindfulness's "
+              "evidence, simulates the treatment gap and stepped care, and covers measurement-based care, lay "
+              "counsellors, digital therapeutics, Type A and a mindset study. It opens with the care card.",
+        handoff="Act XIII begins with the predictive brain (Part 58) and computational psychiatry (Part 59); Part 60 "
+                "takes up chatbots in care.",
+        outside="Part 10's stress loop and sleep model, Part 14's inference, Part 39's prevalence and Part 42's "
+                "treatments; averages and queues.",
+        objectives={
+            "U": ["Separate a placebo's real effect from natural recovery, and explain why placebos affect pain "
+                  "most.",
+                  "Explain why behaviour change is a treatment, with adherence and diabetes prevention as examples."],
+            "M": ["Model placebo analgesia as Bayesian inference and predict when it is largest.",
+                  "Simulate a stepped-care service and match capacity to flow."],
+            "D": ["Design a study that could test a causal effect of stress on disease."],
+            "I": ["Plan a stepped-care service's capacity and its outcome monitoring, and evaluate a digital "
+                  "therapeutic."],
+        },
+        results=[
+            ("Expectation as a prior", r"\hat s = w\,\mu_{\text{expect}} + (1 - w)\,x, \quad "
+                                       r"w = \frac{\sigma_x^{2}}{\sigma_x^{2} + \sigma_{\text{prior}}^{2}}"),
+            ("Little's law", r"\text{places in use} = \text{arrivals per week} \times \text{weeks per course}"),
+            ("Reliable change", r"\mathrm{RCI} = \frac{x_2 - x_1}{\sqrt{2}\,\mathrm{SEM}}, \quad "
+                                r"\mathrm{SEM} = s\sqrt{1 - r_{xx}}"),
+        ],
+        U=(0, 1, 2, 3, 6, 7, 8), D=(15,), I=(9, 10, 11, 14),
+        also=(("Psyche's work module", "explainer/psychology/psyche/work.py"),
+              ("Its tests", "tests/psychology/test_work.py"),
+              ("The Ledger", "explainer/psychology/ledger.py")),
+    ),
+]

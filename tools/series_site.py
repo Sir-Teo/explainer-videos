@@ -2,7 +2,7 @@
 """Build the course sites of every series but *Quant, Built* (which has its own table, labs and interactives:
 ``tools/course_site.py``), and the landing page that lists them all, for GitHub Pages.
 
-    python tools/series_site.py                       # -> _site/{ai,stats,cs,philosophy,analysis,films}/ and _site/index.html
+    python tools/series_site.py                       # -> _site/{ai,stats,cs,philosophy,psychology,analysis,films}/ and _site/index.html
     python tools/series_site.py --series stats cs     # only these courses (and the landing page)
     python tools/series_site.py --series ai --parts 5 # only these parts' pages (and the course pages)
     python tools/course_site.py                       # the whole site: Quant, Built, then everything here
@@ -172,6 +172,22 @@ COURSES = [
              "model on screen is computed by the Reasoner.",
     ),
     Course(
+        key="psychology", prefix="psych", name="Psychology, Built", zh="心理学，从零搭建", mark="Ψ",
+        colors=("#fb7185", "#fbbf24"),
+        kicker="A sixty-two-part course in psychology, from a first course to the research frontier",
+        tagline="Kant said the mind could never be measured. A model subject built part by part, an experiment on "
+                "you in every part, and a ledger of what replicated.",
+        lede="In 1786 Kant gave three reasons why psychology could never be a science: no mathematics, no "
+             "experiment, and an observer who disturbs what is observed. In 1850 Fechner and Helmholtz took the "
+             "wager. The course follows the reply. Each part measures a phenomenon, first on you; builds the "
+             "mechanism as a model that runs, a faculty of a model subject called Psyche; and enters the finding "
+             "in a ledger with what happened when someone ran it again. All sixty-two parts are built, in "
+             "English and Chinese.",
+        story=("The story", "The devices that hold it together", "Four ways through it", "The acts"),
+        note="Human data are white and the model orange on screen. Simulated participants are labelled simulated; "
+             "historical data are cited where they are used; every finding carries its replication status.",
+    ),
+    Course(
         key="analysis", prefix="analysis", name="Analysis, Built", zh="数学分析，从零搭建", mark="∫",
         colors=("#fb923c", "#f7d154"),
         kicker="A ten-part course in real, complex and functional analysis",
@@ -306,7 +322,8 @@ def acts(key: str) -> tuple:
     found = parts_table(key)[0]
     if key == "stats":  # the README calls its acts stages
         found = tuple((label.replace("Act", "Stage"), *rest) for label, *rest in found)
-    return found
+    built = len(entries(key))  # a series in production: its README lists every planned part, the site the built ones
+    return tuple((label, name, (a, min(b, built)), blurb) for label, name, (a, b), blurb in found if a <= built)
 
 
 def act_of(e: Entry) -> tuple:
@@ -556,13 +573,14 @@ def widgets_defined(key: str) -> set:
 
 def write_widgets(out: Path, key: str, only: set | None = None) -> None:
     """assets/widgets-<series>.js: the site's canvas library, the series' interactives, then the boot call.
-    ``only``: just the files that define these widgets (a check of some parts must not depend on the others)."""
+    ``only``: just the files that define these widgets (a check of some parts must not depend on the others), and
+    any file that defines none, which is code the interactives share (psychology's ``00_tasks.js``)."""
     core = quant_site.ASSETS / "widgets"
     source = widget_source(key)
     if only is not None:
         files = sorted((VIDEOS / key / "course" / "site" / "widgets").glob("*.js"))
-        source = "\n".join(t for t in (f.read_text() for f in files)
-                           if set(re.findall(r"\bW\.([A-Za-z0-9_]+) = function", t)) & only)
+        defined = [(t, set(re.findall(r"\bW\.([A-Za-z0-9_]+) = function", t))) for t in (f.read_text() for f in files)]
+        source = "\n".join(t for t, names in defined if not names or names & only)
     (out / "assets" / f"widgets-{key}.js").write_text(
         "\n".join([(core / "00_core.js").read_text(), source, (core / "99_boot.js").read_text()]))
 
