@@ -20,9 +20,10 @@ class Cooperate(VoiceoverScene):
     def routes(self):
         head = heading(r"Four routes to cooperation")
         items = [
-            (r"kin", r"help relatives, \ who share your genes: \ Hamilton's rule, \ help when $rB > C$, \ with $r$ "
+            (r"kin", r"help relatives, \ who share your genes: \ Hamilton's rule \ (1964), \ help when $rB > C$, \ with $r$ "
              r"the relatedness", GOOD),
-            (r"reciprocity", r"help those who will help you back: \ works when you meet again", CROWD),
+            (r"reciprocity", r"help those who will help you back: \ works when you meet again \ (Trivers's "
+             r"reciprocal altruism, \ 1971)", CROWD),
             (r"reputation", r"help, \ and others see it, \ and help you: \ works when others are watching", PERSON),
             (r"punishment", r"make cheating costly, \ even at a cost to yourself: \ works when someone will pay to "
              r"punish", AUTH),
@@ -34,10 +35,10 @@ class Cooperate(VoiceoverScene):
         rows.arrange(DOWN, aligned_edge=LEFT, buff=0.42).move_to([0, -0.2, 0])
         with self.voiceover(
             "If defecting pays, why does anyone cooperate? Biology and economics found four routes. "
-            "<bookmark mark='a'/> Kin: helping relatives, who share your genes. Hamilton's rule says help when the "
+            "<bookmark mark='a'/> Kin: helping relatives, who share your genes. William Hamilton's rule, from 1964, says help when the "
             "benefit times your relatedness exceeds the cost. A sibling counts half, a cousin an eighth. "
             "<bookmark mark='b'/> Reciprocity: help those who'll help you back, which works when you'll meet "
-            "again. <bookmark mark='c'/> Reputation: help, be seen helping, and be helped by others, which works "
+            "again; Robert Trivers called it reciprocal altruism, in 1971. <bookmark mark='c'/> Reputation: help, be seen helping, and be helped by others, which works "
             "when people are watching. <bookmark mark='d'/> And punishment: make cheating costly, even at a cost to "
             "yourself, which works when someone is willing to pay to punish."
         ) as vo:

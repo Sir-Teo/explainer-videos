@@ -177,7 +177,8 @@ class Reply(VoiceoverScene):
         cho = VGroup(curve(ax, L, d["acc_chosen"], LOSS, 4),
                      *[Dot(ax.c2p(x, y), radius=0.06, color=LOSS) for x, y in zip(L, d["acc_chosen"])])
         key = legend([(MODEL, r"questions drawn at random"), (LOSS, r"questions chosen to catch people out")],
-                     font_size=17).next_to(A, DOWN, buff=0.3)
+                     font_size=17).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
+        key.move_to(ax.c2p(0.515, 0.93), aligned_edge=UL)
         cards = point_cards([
             (r"Lichtenstein, \ Fischhoff and Phillips, \ 1982",
              r"people answering two-choice questions are right less often than they say they are sure", LOSS),
@@ -191,7 +192,6 @@ class Reply(VoiceoverScene):
         cards.move_to([3.4, -0.35, 0])
         tag = published_tag(r"Lichtenstein, \ Fischhoff \& Phillips (1982); \ Gigerenzer, \ Hoffrage \& "
                             r"Kleinb\"olting (1991); \ Juslin (1994); \ Klayman et al.\ (1999)")
-        ptag = psyche_tag(r"\texttt{compute: calibration}: \ 200{,}000 questions")
         with self.voiceover(
             "His third point was about the bias that seemed most robust of all. <bookmark mark='a'/> Ask people "
             "questions with two possible answers, and how sure they are of each, from fifty to a hundred percent. "
@@ -219,7 +219,7 @@ class Reply(VoiceoverScene):
             vo.wait_until("b")
             self.play(Indicate(cards.cards[0].title, color=LOSS))
             vo.wait_until("c")
-            self.play(FadeIn(ptag), Create(rnd[0]), LaggedStart(*[FadeIn(x) for x in rnd[1:]], lag_ratio=0.2),
+            self.play(Create(rnd[0]), LaggedStart(*[FadeIn(x) for x in rnd[1:]], lag_ratio=0.2),
                       FadeIn(key[0]), run_time=1.6)
             vo.wait_until("d")
             self.play(Create(cho[0]), LaggedStart(*[FadeIn(x) for x in cho[1:]], lag_ratio=0.2), FadeIn(key[1]),

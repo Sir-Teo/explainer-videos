@@ -589,6 +589,7 @@ add(Finding(
     data=("HODGKIN_HUXLEY_1952", "COLE_CURTIS_1939"),
 ))
 
+shown(4, r"Ioannidis (2005)", "an argument, derived on screen as the positive predictive value of a significant result")
 shown(4, "SIMMONS_2011", "a simulation of what flexible analysis does to a null result, recomputed here: a "
       "demonstration, not an empirical finding")
 shown(4, "SCHEEL_2021", "a comparison of two literatures; shown at the frontier as early evidence on a reform; its "
@@ -671,6 +672,9 @@ shown(5, "GOLGI_CAJAL_1906", "the neuron doctrine: a settled piece of anatomy, t
 shown(5, "GIDON_2020", "one laboratory's report of graded dendritic spikes in human cortex, shown at the frontier "
       "and not yet repeated elsewhere")
 
+shown(6, r"Castellucci \& Kandel (1974); \ Brunelli, \ Castellucci \& Kandel (1976); \ Bailey \& Chen (1983)", "the "
+      "Aplysia studies, told as history with a schematic of habituation and sensitization; the cellular findings are "
+      "textbook neuroscience")
 shown(6, "LOEWI_1921", "chemical transmission at a synapse: settled physiology, told as the history it is (the dream "
       "is Loewi's own later account, and the part says so)")
 shown(6, "HEBB_1949", "a postulate, quoted; it is a hypothesis about a rule, and the finding that bears on it is the "
@@ -6195,6 +6199,8 @@ add(Finding(
     checked="2026-11-16",
 ))
 
+shown(42, r"Rogers (1957); \ Elliott et al.\ (2018); \ Farber et al.\ (2018); \ Kolden et al.\ (2018)", "a theory of "
+      "therapy and the meta-analyses of its three conditions, quoted for their main results; the alliance has its row")
 shown(42, r"Eysenck (1952)", "the challenge, told as history; the row on therapy against no treatment answers it")
 shown(42, r"Driessen et al.\ (2015); \ Cuijpers et al.\ (2019)", "the evidence behind the row on the published size of "
       "therapy's effect")

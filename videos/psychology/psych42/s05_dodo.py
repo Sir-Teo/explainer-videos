@@ -7,6 +7,7 @@ class Dodo(VoiceoverScene):
     def construct(self):
         self.card()
         self.verdict()
+        self.rogers()
         self.alliance()
         self.specific()
 
@@ -45,6 +46,61 @@ class Dodo(VoiceoverScene):
             for m, r in zip("abcde", rows):
                 vo.wait_until(m)
                 self.play(FadeIn(r, shift=RIGHT * 0.15))
+        self.clear_scene()
+
+    def rogers(self):
+        head = heading(r"Three conditions, \ 1957")
+        client = little_person(1.0, color=PERSON).move_to([-3.5, 0.95, 0])
+        conds = VGroup(*[word_chip(t, color=c, font_size=21, width=w) for t, c, w in (
+            (r"empathy", GOOD, 2.3), (r"unconditional positive regard", CARE, 4.6), (r"congruence", SYMP, 2.6))])
+        conds[0].move_to([-5.45, 2.35, 0])
+        conds[1].move_to([-3.5, -0.45, 0])
+        conds[2].move_to([-1.55, 2.35, 0])
+        links = VGroup(*[Line(c.get_center(), client.get_center(), color=GREY_D, stroke_width=2).set_z_index(-1)
+                         for c in conds])
+        card_ = theory_card(r"Client-centred therapy", r"Carl Rogers, \ 1942--1957",
+                            r"empathy, \ unconditional positive regard and genuineness in the therapist are necessary "
+                            r"and sufficient for change", r"they matter; \ sufficient, \ no", "contested",
+                            width=6.2, font_size=20, color=CARE)
+        card_.move_to([3.45, 1.15, 0])
+        checks = verdict_row([
+            (r"empathy goes with better outcomes: \ Elliott and colleagues, \ 2018: \ $r$ about 0.28",
+             "replicated"),
+            (r"positive regard and genuineness: \ smaller positive correlations \ (Farber and colleagues; \ Kolden "
+             r"and colleagues, \ 2018)", "replicated, smaller"),
+            (r"sufficient on their own: \ for some disorders, \ specific treatments add \ (next screens)",
+             "contested"),
+        ], width=12.6, font_size=20)
+        checks.move_to([0, -2.05, 0])
+        tag = published_tag(r"Rogers (1957); \ Elliott et al.\ (2018); \ Farber et al.\ (2018); \ Kolden et al.\ "
+                            r"(2018)")
+        with self.voiceover(
+            "The boldest answer to what therapies share came from a therapist who thought it was the whole of "
+            "therapy. <bookmark mark='a'/> Carl Rogers, the humanistic psychologist of Part 1's third force, called "
+            "his method client-centred: the client, not the therapist, directs the work. He was also one of the "
+            "first to record therapy sessions so that they could be studied. <bookmark mark='b'/> In 1957 he named "
+            "three conditions in the therapist: empathy, understanding the client's world as the client sees it; "
+            "unconditional positive regard, warmth that does not depend on what the client says or does; and "
+            "congruence, being genuine rather than playing a role. These, he claimed, were necessary and "
+            "sufficient for change. <bookmark mark='c'/> Sixty years later, meta-analyses led by Robert Elliott "
+            "found that therapist empathy correlates with outcome at about point two eight. "
+            "<bookmark mark='d'/> Positive regard and genuineness show smaller, positive correlations. "
+            "<bookmark mark='e'/> Sufficient is another matter: for some disorders, as the next screens show, "
+            "specific treatments add to what any good relationship gives. Later researchers widened Rogers's three "
+            "conditions into one idea."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(client), FadeIn(card_.box), FadeIn(card_.name), run_time=1.4)
+            vo.wait_until("b")
+            self.play(LaggedStart(*[AnimationGroup(Create(l_), FadeIn(c_)) for l_, c_ in zip(links, conds)],
+                                  lag_ratio=0.5), FadeIn(card_.claim), run_time=2.4)
+            vo.wait_until("c")
+            self.play(FadeIn(checks.rows[0], shift=RIGHT * 0.15), Indicate(conds[0], color=GOOD))
+            vo.wait_until("d")
+            self.play(FadeIn(checks.rows[1], shift=RIGHT * 0.15))
+            vo.wait_until("e")
+            self.play(FadeIn(checks.rows[2], shift=RIGHT * 0.15), FadeIn(card_.verdict), FadeIn(card_.status))
         self.clear_scene()
 
     def alliance(self):

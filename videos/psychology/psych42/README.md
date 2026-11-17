@@ -10,7 +10,7 @@ of the published effect is real.
 The viewer is shown two graphs and asked which one shows therapy working, and predicts four numbers. Then the trial:
 regression to the mean on the Pool, how the control sets the effect, and researcher allegiance (computed);
 meta-analysis from Glass's standardized difference to a random-effects forest plot built by hand; the dodo bird, the
-alliance and specific ingredients; the four families of therapy and dialectical behaviour therapy; therapy against
+Rogers's three conditions and their meta-analytic record; the alliance and specific ingredients; the four families of therapy and dialectical behaviour therapy; therapy against
 medication, and relapse after each stops; the registered and published antidepressant trials, a filtered literature
 (computed) and "Was Eysenck right after all?"; Jacobson and Truax's reliable change and cut-off, derived and applied
 to four clients; treatments that harm; lobotomy and ECT; and the dose-response curve and the treatment gap.

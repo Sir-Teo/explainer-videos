@@ -12,7 +12,8 @@ problems as Kahneman and Tversky asked them, drawn in the probability triangle, 
 theory's reflection effect, value function, weighting function and the cumulative form of 1992; the fourfold
 pattern computed from the 1992 parameters, and the common-ratio effect; four models fitted to choices13k's
 described problems and cross-validated; availability, anchoring, Linda and the cab problem; natural frequencies and
-take-the-best against regression out of sample in two simulated worlds; the hot-hand bias by exact enumeration;
+take-the-best against regression out of sample in two simulated worlds; overconfidence and the calibration curve,
+with the selection reply (Gigerenzer et al., Juslin) made exact on a calibrated judge, and interval overconfidence; the hot-hand bias by exact enumeration;
 exponential, hyperbolic and beta–delta discounting with a computed reversal; decisions from experience, in Psyche
 and in choices13k's feedback blocks; the bat and the ball, two systems, and one accumulator that mimics them; and
 decision by sampling. The practice chapter is defaults, pensions and risk communication; the frontier is theories
@@ -38,6 +39,7 @@ found by machines, resource-rational anchoring, and whether risk preference is a
 | The cab problem: 12 of the 29 cabs called Blue are Blue, 0.41; median answer 0.80 | Psyche (`choice.bayes`, `natural_frequencies`), item `bayes`; Tversky and Kahneman (1982) |
 | Mammography: 8 of 103 positives have cancer, 7.8%; Bayesian answers about 16% with probabilities and 46% with frequencies | Psyche, item `bayes`; Gigerenzer and Hoffrage (1995) |
 | Take-the-best against regression and tallying, 6 binary cues, 120 objects, 300 worlds a point: in the non-compensatory world (weights 8, 4, …, noise 3) take-the-best leads by 5.4 points with 8 objects and up to 15 objects | Psyche (`choice.heuristics_cv`), item `ttb` |
+| Calibration: a judge that answers with a cue of validity 0.55 to 0.95 and states that validity; 200,000 questions. Drawn at random: sure 75%, right 75%. Keeping every misleading question and three in five of the rest: sure 74%, right 64% | `compute.py`, item `calibration` |
 | The hot hand: four flips, expected share of heads after a head 17/42 = 0.405; 100 shots after three hits, 0.460 (200,000 simulated sequences) | Psyche (`choice.streak_exact`, `streak_sim`), item `hothand` |
 | Hyperbolic k = 0.05 a week: 100 sooner against 110 four weeks later reverses at 20 weeks; exponential 0.97 a week never reverses | Psyche (`choice.discount`, `reversal_delay`), item `time` |
 | A 10% outcome is missed by seven draws 48% of the time; P(risky) described against seven draws: 0.36/0.58, 0.79/0.52, 0.10/0.48, 0.69/0.42 | Psyche (`choice.p_never_seen`, `sample_choices`, `cpt`), item `experience` |

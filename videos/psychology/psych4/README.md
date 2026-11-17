@@ -100,7 +100,7 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 | 0 | Feeling the future | Bem's experiment on recalling words practised afterwards; nine experiments; the dilemma; objectives |
 | 1 | How big is big? | Cohen's d as overlap and as the chance one person beats another; 0.2, 0.5 and 0.8 drawn; the same effect as a correlation and as variation explained; a tiny effect made "significant" by sample size |
 | 2 | What a p-value is | One study against 20,000 shuffles; the definition; six things a p-value is not |
-| 3 | Power | Power against sample size; Cohen's survey; 2,000 small studies of a real effect and the winner's curse; how many significant findings are true |
+| 3 | Power | Power against sample size; Cohen's survey; 2,000 small studies of a real effect and the winner's curse; how many significant findings are true; Ioannidis (2005) and the PPV curve |
 | 4 | On you: the garden of forking paths | A study of nothing and four choices; all sixteen analyses; how often nothing becomes something; the published 61% |
 | 5 | The file drawer | Twenty studies and one journal; two funnels of 1,000 laboratories; printed effect against study size; three p-curves |
 | 6 | Honest people, wrong results | Optional stopping, with the p-value's path; HARKing; choices that depend on the data though only one analysis is run |
