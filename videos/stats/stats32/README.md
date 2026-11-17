@@ -241,13 +241,13 @@ python tools/lecture_length.py stats32 --floor 50
 
 ## Problems and solutions
 
-**1. Ridge through the SVD.**
+**1. Ridge through the SVD.** Show that ridge's fitted values are $\sum_j u_j\, d_j^2/(d_j^2 + \lambda)\, u_j^\top y$ and that $\mathrm{df}(\lambda) = \sum_j d_j^2/(d_j^2 + \lambda)$.
 
 *Solution.* With X = UDVᵀ, XᵀX + λI = V(D² + λI)Vᵀ, so β̂_λ = V(D² + λI)⁻¹DUᵀy. The fit is Xβ̂_λ =
 UD(D² + λI)⁻¹DUᵀy = Σ_j u_j d_j²/(d_j² + λ) u_jᵀy. The hat matrix H_λ = U diag(d_j²/(d_j² + λ)) Uᵀ has trace
 Σ_j d_j²/(d_j² + λ).
 
-**2. Soft thresholding.**
+**2. Soft thresholding.** Derive the soft-threshold solution of $\min_b \tfrac12(b - z)^2 + \lambda|b|$ from the subgradient condition.
 
 *Solution.* The function f(b) = ½(b − z)² + λ|b| is strictly convex, and 0 ∈ ∂f(b) = b − z + λ∂|b|.
 - If b > 0, then b = z − λ, which needs z > λ.
@@ -256,19 +256,19 @@ UD(D² + λI)⁻¹DUᵀy = Σ_j u_j d_j²/(d_j² + λ) u_jᵀy. The hat matrix H
 
 Together, b = sign(z)(|z| − λ)₊.
 
-**3. Where the path begins.**
+**3. Where the path begins.** Show that $\hat\beta = 0$ solves the lasso iff $\lambda \ge \|X^\top y\|_\infty / n$.
 
 *Solution.* At β = 0 the gradient of the loss is −Xᵀy/n, and the subdifferential of λ‖β‖₁ is λ[−1, 1]ᵖ. So
 0 ∈ −Xᵀy/n + λ[−1, 1]ᵖ iff |x_jᵀy|/n ≤ λ for every j, i.e. λ ≥ ‖Xᵀy‖∞/n. By convexity, a point satisfying the
 optimality condition is a minimizer.
 
-**4. The null space property.**
+**4. The null space property.** Prove: if $\|h_S\|_1 < \|h_{S^c}\|_1$ for every $0 \ne h \in \mathrm{null}(A)$, basis pursuit recovers every $x$ supported on $S$.
 
 *Solution.* Let x be supported on S. Any other feasible point is z = x + h with 0 ≠ h ∈ null(A). Then
 ‖z‖₁ = ‖x_S + h_S‖₁ + ‖h_{S^c}‖₁ ≥ ‖x_S‖₁ − ‖h_S‖₁ + ‖h_{S^c}‖₁ > ‖x_S‖₁ = ‖x‖₁, using the reverse triangle
 inequality and then the hypothesis. So x is the unique minimizer.
 
-**5. The Laplace posterior mean.**
+**5. The Laplace posterior mean.** For $\theta \mid y$ with $y \sim N(\theta, 1)$ and a Laplace($\lambda$) prior, show $E(\theta \mid y) \ne 0$ for $y \ne 0$.
 
 *Solution.* The posterior density is π(θ | y) ∝ exp(−(y − θ)²/2 − λ|θ|), and the mean is
 E(θ | y) = ∫θ π / ∫π. Write the numerator as ∫θ e^{−(y−θ)²/2} e^{−λ|θ|} dθ. For y > 0, pair θ with −θ: the
@@ -276,7 +276,7 @@ integrand at θ > 0 exceeds the magnitude at −θ, because e^{−(y−θ)²/2} 
 numerator is strictly positive. Likewise it is negative for y < 0, so E(θ | y) ≠ 0 whenever y ≠ 0. (The
 closed form in `laplace_posterior_mean` writes the posterior as a mixture of two truncated normals.)
 
-**6. Singular value thresholding.**
+**6. Singular value thresholding.** Show that the prox of $\lambda\|Z\|_*$ soft-thresholds the singular values of $Z$ (use von Neumann's trace inequality).
 
 *Solution.* Minimize ½‖Z − W‖²_F + λ‖Z‖_*. Write W = UΣVᵀ. For any Z with singular values s, von Neumann's
 inequality gives ⟨Z, W⟩ ≤ Σ s_iσ_i. So ½‖Z − W‖² ≥ ½Σ(s_i − σ_i)², with equality when Z shares W's singular vectors.

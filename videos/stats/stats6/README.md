@@ -111,7 +111,7 @@ E X = 1 and P(X ≥ 3) = 1/3. In general, equality in Markov's inequality needs 
 
 The first two are guarantees; the third is an approximation, and a good one here, since np(1 − p) is large.
 
-**3. Binomial to Poisson by MGFs.**
+**3. Binomial to Poisson by MGFs.** Use moment generating functions to show that $\mathrm{Binomial}(n, \lambda/n) \to \mathrm{Poisson}(\lambda)$ in distribution.
 
 *Solution.* The MGF of Binomial(n, λ/n) is (1 − λ/n + (λ/n)e^t)^n = (1 + λ(e^t − 1)/n)^n. As n → ∞ this tends to
 exp(λ(e^t − 1)) for every t, using (1 + y/n)^n → e^y. That is the Poisson(λ) MGF, and by Curtiss's theorem the
@@ -126,7 +126,7 @@ method gives
 
 So 1/X̄, which is the maximum-likelihood estimator of λ (Part 9), has standard error about λ/√n.
 
-**5. The maximum of uniforms.**
+**5. The maximum of uniforms.** $U_1, \dots, U_n$ are i.i.d. uniform on $(0, 1)$. Show $n\,(1 - \max_i U_i) \to \mathrm{Exp}(1)$ in distribution.
 
 *Solution.* For 0 ≤ x ≤ n,
 

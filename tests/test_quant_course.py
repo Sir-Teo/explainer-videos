@@ -100,12 +100,14 @@ def test_site_builds(site):
 
 def test_part_page_has_the_course_material(site):
     page = (site / "quant" / "part10.html").read_text()
-    for needle in ('data-widget="hedge"', 'id="objectives"', 'id="results"', 'id="chapters"', 'id="lab"', 'id="notes"',
+    for needle in ('data-widget="hedge"', 'id="objectives"', 'id="results"', 'id="chapters"', 'id="lab"', 'id="problems"', 'id="lecture"',
                    'id="reading"', 'id="zh"', "Manufacture an option by delta hedging", "Black-Scholes premium",
                    "Desk questions, with solutions", "Problems, with worked solutions", "For the researcher",
                    "python -m videos.quant.labs 10", "labs/lab10.png"):
         assert needle in page, needle
     assert page.count('<li data-tier=') == len(course.chapters(10))
+    assert page.count('<section class="chapter"') == len(course.chapters(10)), "every chapter has its text"
+    assert page.count('<details class="sol">') >= 5, "solutions are folded under their problems"
     assert (site / "quant" / "labs" / "lab10.png").stat().st_size > 10_000
     assert (site / "quant" / "labs" / "lab10.py").read_text() == labs.source(10)
 

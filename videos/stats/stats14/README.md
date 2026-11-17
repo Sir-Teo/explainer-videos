@@ -117,12 +117,12 @@ python tools/lecture_length.py stats14 --floor 50
 
 ## Problems and solutions
 
-**1. Reading the Challenger coefficients.**
+**1. Reading the Challenger coefficients.** With $\text{logit}\,p = 15.04 - 0.232\,T$: find $p$ at $60^\circ$F, and the odds ratio for $10^\circ$F colder.
 
 *Solution.* At 60 °F, η = 15.04 − 0.232 × 60 = 1.11, so p = 1/(1 + e^(−1.11)) = 0.75. Ten degrees colder changes the
 log-odds by +2.32, so the odds multiply by e^2.32 = 10.2.
 
-**2. The logistic score and Hessian.**
+**2. The logistic score and Hessian.** For logistic regression, derive the score $X^\top(y - p)$ and the Hessian $-X^\top W X$, $W = \mathrm{diag}(p_i(1 - p_i))$.
 
 *Solution.* ℓ(β) = Σ[yᵢηᵢ − log(1 + e^ηᵢ)], with ηᵢ = xᵢᵀβ.
 - **Score:** ∂/∂β of log(1 + e^η) is pᵢxᵢ, so ∇ℓ = Σ(yᵢ − pᵢ)xᵢ = Xᵀ(y − p).
@@ -130,7 +130,7 @@ log-odds by +2.32, so the odds multiply by e^2.32 = 10.2.
 
 The Hessian is negative definite whenever X has full rank, so ℓ is concave and the maximum is unique when it exists.
 
-**3. A rate ratio.**
+**3. A rate ratio.** 30 events in 10,000 person-years exposed, 20 in 20,000 unexposed: the rate ratio and a 95% Wald interval.
 
 *Solution.* RR = (30/10,000)/(20/20,000) = 3. Then SE(log RR) = √(1/30 + 1/20) = 0.289. The 95% interval is
 3 × e^(±1.96 × 0.289) = [1.70, 5.28].
@@ -146,11 +146,11 @@ A is better for both kinds of stone. B looks better in total because it was give
 easier to cure: 270 of B's 350 patients, against 87 of A's. Stone size affected both which treatment was used and
 the chance of a cure, so compare within stone size.
 
-**5. The odds ratio's symmetry.**
+**5. The odds ratio's symmetry.** Show that the odds ratio of a $2\times2$ table is the same whether you compare rows or columns.
 
 *Solution.* Comparing rows gives (a/b)/(c/d) = ad/(bc). Comparing columns gives (a/c)/(b/d) = ad/(bc), the same.
 
-**6. The Brier score of a constant forecast.**
+**6. The Brier score of a constant forecast.** A constant forecast $q$ for a condition of prevalence $\pi$: show the expected Brier score is $(q - \pi)^2 + \pi(1 - \pi)$.
 
 *Solution.* E[(q − y)²] = q² − 2qπ + E[y²]. Since E[y²] = π, this equals q² − 2qπ + π = (q − π)² + π(1 − π). It is
 smallest at q = π, so the score is proper. The minimum is π(1 − π), which is 0.0099 for π = 0.01: the "always 1%"

@@ -170,7 +170,7 @@ python tools/lecture_length.py stats24 --floor 50
 
 ## Problems and solutions
 
-**1. The gamma family.**
+**1. The gamma family.** Write the gamma density in exponential-dispersion form: find $\theta$, $b(\theta)$, $\phi$ and $V(\mu)$.
 
 *Solution.* With shape ν and mean μ,
 log f = ν log ν − log Γ(ν) + (ν − 1) log y − ν log μ − νy/μ = (y(−1/μ) − log μ)/(1/ν) + c(y, ν).
@@ -178,23 +178,23 @@ log f = ν log ν − log Γ(ν) + (ν − 1) log y − ν log μ − νy/μ = (
 - **The moments.** b′(θ) = −1/θ = μ, and b″(θ) = 1/θ² = μ², so V(μ) = μ².
 - **The link.** The canonical link is θ = −1/μ, the (negative) inverse.
 
-**2. Scoring as least squares.**
+**2. Scoring as least squares.** Show that one Fisher-scoring step for a GLM is the weighted regression of $z = \eta + (y - \mu)\,d\eta/d\mu$.
 
 *Solution.* U = Σ xᵢ(yᵢ − μᵢ)(dμᵢ/dηᵢ)/(φVᵢ) = X'W(z − η)/φ, where wᵢ = (dμᵢ/dηᵢ)²/Vᵢ and zᵢ − ηᵢ = (yᵢ − μᵢ)dηᵢ/dμᵢ. The
 expected information is X'WX/φ. Then β + I⁻¹U = β + (X'WX)⁻¹X'W(z − η) = (X'WX)⁻¹X'Wz, since Xβ = η.
 
-**3. Poisson deviance.**
+**3. Poisson deviance.** Poisson deviance: show $D = 2\sum y_i \log(y_i/\hat\mu_i)$ when the model has an intercept and the log link.
 
 *Solution.* D = 2Σ{yᵢ log(yᵢ/μ̂ᵢ) − (yᵢ − μ̂ᵢ)}. With a log link and an intercept, the intercept's score equation is
 Σ(yᵢ − μ̂ᵢ) = 0, so the second sum vanishes and D = 2Σ yᵢ log(yᵢ/μ̂ᵢ).
 
-**4. Separation.**
+**4. Separation.** Show that complete separation makes $\ell(c\,b)$ increase to 0 as $c \to \infty$.
 
 *Solution.* If xᵢ'b > 0 exactly when yᵢ = 1, then for c > 0,
 ℓ(cb) = Σ_{y=1} −log(1 + e^{−c xᵢ'b}) + Σ_{y=0} −log(1 + e^{c xᵢ'b}). In both sums the exponent's argument tends to
 −∞ as c → ∞, so every term increases to 0. The supremum, 0, is not attained.
 
-**5. The negative binomial as a mixture.**
+**5. The negative binomial as a mixture.** NB as a mixture: $y \mid \lambda \sim$ Poisson$(\lambda)$, $\lambda \sim$ Gamma$(k, k/\mu)$: derive $E\,y$ and Var $y$.
 
 *Solution.* Take λ ~ Gamma with shape k and mean μ, so Var λ = μ²/k.
 - **The mean.** E y = E E(y | λ) = E λ = μ.
@@ -202,7 +202,7 @@ expected information is X'WX/φ. Then β + I⁻¹U = β + (X'WX)⁻¹X'W(z − �
 - **The marginal distribution.** Integrating the Poisson against the gamma gives the negative binomial probability
   function.
 
-**6. Propriety.**
+**6. Propriety.** Show that the Brier score is proper: $E_p (q - y)^2$ is minimized at $q = p$. Is $|q - y|$?
 
 *Solution.* E_p(q − y)² = p(1 − q)² + (1 − p)q², whose derivative 2(q − p) vanishes at q = p, a minimum, so the Brier
 score is proper. E_p|q − y| = p(1 − q) + (1 − p)q = p + q(1 − 2p) is linear in q. It is minimized at q = 0 when

@@ -112,18 +112,18 @@ python tools/lecture_length.py stats10 --floor 50
 
 ## Problems and solutions
 
-**1. Ten cups.**
+**1. Ten cups.** The tea with 10 cups, five milk-first: what is $p$ if she gets four of the five right? What is the smallest possible $p$?
 
 *Solution.* With five of each, P(j right) = C(5, j)C(5, 5 − j)/C(10, 5) = C(5, j)²/252.
 - Four right: P(≥ 4) = (25 + 1)/252 = 0.103. Not significant: four of five is easy to reach by guessing.
 - The smallest possible p is 1/252 = 0.0040, for a perfect score.
 
-**2. The uniform p-value.**
+**2. The uniform p-value.** Show that if $T$ has a continuous distribution under $H_0$, then $p = 1 - F_0(T)$ is Uniform$(0,1)$.
 
 *Solution.* P(p ≤ u) = P(1 − F₀(T) ≤ u) = P(F₀(T) ≥ 1 − u). For continuous F₀, F₀(T) is Uniform(0, 1) (the
 probability integral transform: P(F₀(T) ≤ v) = P(T ≤ F₀⁻¹(v)) = v). So P(p ≤ u) = u.
 
-**3. A most powerful Poisson test.**
+**3. A most powerful Poisson test.** $X \sim$ Poisson$(\lambda)$, one observation: find the most powerful test of $\lambda = 1$ against $\lambda = 3$ of size at most $0.05$, and its power. (Randomize if you want size exactly $0.05$.)
 
 *Solution.* p₃(x)/p₁(x) = 3ˣe⁻², which increases in x, so the NP test rejects for large x.
 - P₁(X ≥ 4) = 0.0190 and P₁(X ≥ 3) = 0.0803, so the best non-randomized test of size at most 0.05 rejects for
@@ -131,18 +131,18 @@ probability integral transform: P(F₀(T) ≤ v) = P(T ≤ F₀⁻¹(v)) = v). S
 - For size exactly 0.05, also reject at X = 3 with probability γ = (0.05 − 0.0190)/P₁(X = 3) = 0.506. The power rises
   to 0.353 + 0.506 · 0.224 = 0.466.
 
-**4. The LRT for a proportion.**
+**4. The LRT for a proportion.** Derive $W = -2\log\Lambda$ for $H_0: p = p_0$ from $x$ successes in $n$ trials, and evaluate it for Arbuthnot's 82 of 82 with $p_0 = \tfrac12$.
 
 *Solution.* W = 2[x log(x/(np₀)) + (n − x) log((n − x)/(n(1 − p₀)))], taking 0 log 0 = 0. For x = n = 82 and
 p₀ = ½, W = 2 · 82 log 2 = 113.7. The χ²₁ tail is 1.5 × 10⁻²⁶. That is the same order as the exact two-sided sign
 test, 2 · 2⁻⁸² = 4.1 × 10⁻²⁵; Wilks' approximation is poor this far out in the tail.
 
-**5. Sample size.**
+**5. Sample size.** How many observations per group give 90% power to detect $\delta = 0.4\sigma$ with a two-sided two-sample $z$-test at $\alpha = 0.05$?
 
 *Solution.* For two groups of n, SE(x̄ − ȳ) = σ√(2/n). So n = 2((z₀.₉₇₅ + z₀.₉₀)σ/δ)² = 2(1.960 + 1.282)²/0.16 = 131.3:
 132 per group.
 
-**6. Ten tests.**
+**6. Ten tests.** Ten independent tests, all nulls true: find $P(\text{at least one } p < 0.05)$, and the Šidák level $1 - (1 - \alpha)^{1/m}$ that makes it exactly $0.05$.
 
 *Solution.* P(at least one) = 1 − 0.95¹⁰ = 0.401. Testing each at 1 − 0.95^(1/10) = 0.005116 makes it exactly
 0.05 for independent tests (Šidák). That is barely larger than Bonferroni's 0.005.

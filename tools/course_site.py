@@ -17,7 +17,7 @@ The site is generated from what the repository already holds, so it cannot drift
 * ``videos/quant/labs``: the lab's code, its output and its figure, produced by running it;
 * ``videos/quant/READING.md``: the part's papers.
 
-It needs numpy, scipy, matplotlib, numba and markdown, not manim: ``.github/workflows/course-site.yml`` builds
+It needs numpy, scipy, matplotlib, numba and markdown-it-py, not manim: ``.github/workflows/course-site.yml`` builds
 and publishes it on every push to main.
 """
 
@@ -35,8 +35,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "tools"))  # lecture_text, beside this file
 
-import markdown  # noqa: E402
+from markdown_it import MarkdownIt  # noqa: E402  (CommonMark, as GitHub reads the READMEs)
 
 from videos.quant import course, labs  # noqa: E402  (labs first lets the House import without manim)
 
@@ -176,12 +177,13 @@ def restore_math(page: str, stash: list) -> str:
 
 
 _LINK = re.compile(r'(href|src)="([^"#][^"]*)"')
+_MD = MarkdownIt("commonmark", {"html": True, "typographer": False}).enable(["table", "strikethrough"])
 
 
 def md_to_html(text: str, base: Path) -> str:
     """Markdown to HTML; relative links are pointed at the file on GitHub (``base`` is the source's folder)."""
     text, stash = protect_math(text)
-    page = markdown.markdown(text, extensions=["tables", "fenced_code", "sane_lists"])
+    page = _MD.render(text)
 
     def link(m):
         attr, url = m.group(1), m.group(2)
@@ -199,6 +201,115 @@ def md_to_html(text: str, base: Path) -> str:
     page = _LINK.sub(link, page)
     page = page.replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
     return restore_math(page, stash)
+
+
+_SOLUTION = re.compile(r"<p>(?:<em>|<strong>|<i>|<b>)\s*(?:Solution|Answer|Hint and solution|解答|解|答)[^<]{0,20}"
+                       r"(?:</em>|</strong>|</i>|</b>)")
+_TAG = re.compile(r"<(/?)(li|ol|ul|div|details|blockquote|table|pre)\b[^>]*>|<p><strong>|<h[1-6]\b|<hr\b")
+
+
+def fold_solutions(page: str) -> str:
+    """Put each worked solution of a problem set behind a "Solution" toggle, so the problems can be tried first.
+    A solution starts at a paragraph that opens with an italic or bold "Solution" and runs to the end of its list
+    item, or to the next problem (a paragraph opening in bold), whichever comes first."""
+    starts = [m.start() for m in _SOLUTION.finditer(page)]
+    for start in reversed(starts):
+        depth, end = 0, len(page)
+        for m in _TAG.finditer(page, start + 3):
+            tag = m.group(0)
+            if m.group(2):
+                if m.group(1):
+                    depth -= 1
+                    if depth < 0:
+                        end = m.start()
+                        break
+                else:
+                    depth += 1
+            elif depth == 0:  # the next problem, a heading or a rule
+                end = m.start()
+                break
+        body = page[start:end]
+        label = "解答" if re.match(r"<p><(?:em|strong|i|b)>\s*解", body) else "Solution"
+        body = re.sub(r"^<p><(em|strong|i|b)>\s*(?:Solution|解答|解|答)[.:：。]?\s*</\1>[.:：]?\s*", "<p>", body)
+        body = re.sub(r"^<p>\s*</p>\s*", "", body)
+        page = (page[:start] + f'<details class="sol"><summary>{label}</summary>' + body + "</details>\n"
+                + page[end:])
+    return page
+
+
+# ---------------------------------------------------------------------------
+# Lecture notes: a part's chapters as text (tools/lecture_text.py), shared by both builders
+# ---------------------------------------------------------------------------
+def readme_chapter_table(readme: Path) -> dict:
+    """{chapter number: [(column, cell markdown)]} from the README's chapter table (a table whose first column is
+    the chapter's number, 0 for the cold open), leaving out the column that repeats the chapter's title."""
+    out, header = {}, None
+    for line in readme.read_text().splitlines():
+        if not line.startswith("|"):
+            header = None if not line.strip() else header
+            continue
+        cells = [x.strip() for x in line.strip().strip("|").split("|")]
+        if header is None:
+            header = cells
+            if not re.fullmatch(r"#|ch\.?|chapter|no\.?|scene", header[0].strip("*` ").lower()):
+                header = []
+            continue
+        if not header or re.fullmatch(r"[-:\s|]+", line.strip("|")) or len(cells) < 3:
+            continue
+        m = re.fullmatch(r"(\d+)\.?", cells[0].strip("*` "))
+        if not m:
+            continue
+        keep = [(h.strip("*` "), c) for h, c in zip(header[1:], cells[1:])
+                if c and c not in ("—", "-", "–") and not re.fullmatch(r"chapter|title|scene|name|chapter title|chapter \(scene\)",
+                                                                         h.strip("*` ").lower())]
+        if keep:
+            out.setdefault(int(m.group(1)), keep)
+    return out
+
+
+def contents_html(rows: list, tier_badge) -> str:
+    """The contents list: rows of (label, title, minutes, tier or None, anchor).  ``tier_badge(tier)`` labels a level."""
+    items = []
+    for label, title, mins, tier, anchor in rows:
+        attr = f' data-tier="{tier}"' if tier else ""
+        badge_ = tier_badge(tier) if tier else "<span></span>"
+        items.append(f'<li{attr}><span class="num">{label}</span><span class="title"><a href="#{anchor}">{esc(title)}</a>'
+                     f'</span>{badge_}<span class="mins">{f"{mins:.0f} min" if mins >= 0.5 else ""}</span></li>')
+    return f'<ol class="chapters">{"".join(items)}</ol>'
+
+
+def lecture_html(chapters: list, tier_badge, unit: str = "part", numbers: dict | None = None,
+                 base: Path = ROOT) -> str:
+    """The lecture text: chapters of (label, title, minutes, tier or None, anchor, paragraphs).  ``numbers`` is the
+    README's chapter table ({chapter number: [(column, markdown)]}), shown under the chapter it describes."""
+    import lecture_text  # noqa: PLC0415  (tools/, beside this file)
+
+    out, gaps = [], 0
+    for i, (label, title, mins, tier, anchor, paras) in enumerate(chapters):
+        gaps += sum(p.gaps for p in paras)
+        key = 0 if i == 0 and not label.isdigit() else (int(label) if label.isdigit() else None)
+        extra = ""
+        if numbers and key is not None and key in numbers:
+            cells = "; ".join(f"<b>{esc(h)}:</b> {inline_md(c, base)}" for h, c in numbers[key])
+            extra = f'<p class="numbers">{cells}</p>'
+        attr = f' data-tier="{tier}"' if tier else ""
+        num = f'<span class="cn">{label}</span>' if label.isdigit() and not (i == 0 and label == "0") else ""
+        head = (f'<h3>{num}{esc(title)}{tier_badge(tier) if tier else ""}'
+                f'{f"<span class=mins>{mins:.0f} min</span>" if mins >= 0.5 else ""}</h3>')
+        body = "".join(lecture_text.to_html(p) for p in paras) or "<p class=\"hint\">This chapter has no narration to read.</p>"
+        out.append(f'<section class="chapter" id="{anchor}"{attr}>{head}{body}{extra}</section>')
+    note = (f"The text of each chapter is the film's narration, as it is spoken, so you can read along or revise "
+            f"without the film. The pictures are in the film.")
+    if gaps:
+        note += (' A dashed box <span class="val"></span> stands for a number the film computes when it is rendered '
+                 '(hover over it to see what is computed); the README\'s figures for each chapter, where it lists them, '
+                 'follow the chapter\'s text.')
+    return f'<p class="note-box">{note}</p>' + "".join(out)
+
+
+def inline_md(text: str, base: Path = ROOT) -> str:
+    """One line of Markdown (a table cell) as inline HTML."""
+    return re.sub(r"^<p>|</p>\s*$", "", md_to_html(text, base).strip())
 
 
 _QA = re.compile(r"visual review|polish|validation|视觉审阅|首数据行|first-data-row|construction clarification|"
@@ -363,15 +474,6 @@ def lab_block(n: int, out_dir: Path, run_labs: bool) -> str:
 </section>"""
 
 
-def chapter_list(n: int, minutes: list) -> str:
-    rows = []
-    for (i, number, title, tier), mins in zip(course.chapters(n), minutes):
-        label = "Cold open" if i == 0 else ("" if number is None else str(number))
-        rows.append(f'<li data-tier="{tier}"><span class="num">{label}</span><span class="title">{esc(title)}</span>'
-                    f'{badge(tier)}<span class="mins">{mins:.0f} min</span></li>')
-    return "<ol class=\"chapters\">" + "".join(rows) + "</ol>"
-
-
 def track_buttons() -> str:
     buttons = ['<button class="on" data-track="">All chapters</button>']
     for key, (name, _) in course.TRACKS.items():
@@ -402,6 +504,30 @@ def readme_sections(sections: list, order: tuple, open_first: bool = False) -> s
     return "".join(out)
 
 
+def open_sections(sections: list, order: tuple, titled: bool = True) -> str:
+    """README sections shown open, as the notes' back matter; problem sets get folded solutions."""
+    chosen = [x for kind in order for x in sections if x[0] == kind]
+    out = []
+    for kind, title, heading, body in chosen:
+        orig = "" if heading.lower().startswith(title.lower()[:14]) else f'<p class="orig">{esc(heading)}</p>'
+        head = f"<h3>{esc(title)}</h3>" if titled or len(chosen) > 1 else ""
+        body = fold_solutions(body) if kind in ("problems", "desk") else body
+        out.append(f'<div class="sect sect-{kind}">{head}{orig}<div class="md">{body}</div></div>')
+    return "".join(out)
+
+
+def lecture_chapters(n: int, minutes: list) -> list:
+    """[(label, title, minutes, tier, anchor, paragraphs)] of Part ``n``: each chapter with its narration as text."""
+    import lecture_text  # noqa: PLC0415
+
+    scenes = course.manifest(n)[1]
+    out = []
+    for (i, number, title, tier), mins, (module, cls, full) in zip(course.chapters(n), minutes, scenes):
+        paras = lecture_text.chapter_text(QUANT / f"quant{n}" / f"{module}.py", cls, full)
+        out.append(("" if number is None else str(number), title, mins, tier, f"ch{i}", paras))
+    return out
+
+
 def part_page(n: int, out_dir: Path, run_labs: bool) -> tuple[str, dict]:
     p = course.PARTS[n]
     act = course.act_of(n)
@@ -420,42 +546,53 @@ def part_page(n: int, out_dir: Path, run_labs: bool) -> tuple[str, dict]:
     track_line = " · ".join(f"{course.TRACKS[k][0]} {fmt_minutes(tm[k])}" for k in "UMDI")
     widget = (f'<section id="try" class="try"><h2>Try it</h2><div class="widget" data-widget="{p.widget}">'
               f'<noscript>This interactive needs JavaScript.</noscript></div></section>') if p.widget else ""
-    en = readme_sections(readme["en"], ("chapters", "hands", "desk", "problems", "research", "audit", "data"))
-    zh = readme_sections(readme["zh"], ("intro", "chapters", "desk", "problems", "research", "audit", "papers", "data",
-                                        "hands", "build"))
+    lecture = lecture_chapters(n, minutes)
+    contents = contents_html([x[:5] for x in lecture], badge)
+    text = lecture_html(lecture, badge, "part", readme_chapter_table(QUANT / f"quant{n}" / "README.md"), QUANT / f"quant{n}")
+    problems = open_sections(readme["en"], ("desk", "problems"), titled=False)
+    research = open_sections(readme["en"], ("research",))
+    folded = readme_sections(readme["en"], ("hands", "audit", "data", "chapters"))
+    zh = fold_solutions(readme_sections(readme["zh"], ("intro", "chapters", "desk", "problems", "research", "audit",
+                                                       "papers", "data", "hands", "build")))
     papers = reading_for(n)
-    extra_papers = readme_sections(readme["en"], ("papers",))
+    extra_papers = open_sections(readme["en"], ("papers",))
     prev_ = f'<a class="prev" href="part{n - 1:02d}.html">← Part {n - 1}: {esc(course.title(n - 1))}</a>' if n > 1 else "<span></span>"
     next_ = (f'<a class="next" href="part{n + 1:02d}.html">Part {n + 1}: {esc(course.title(n + 1))} →</a>'
              if n < course.N_PARTS else '<a class="next" href="index.html">Back to the course map →</a>')
+    jumps = [("#lecture", "Lecture"), ("#results", "Key results"), ("#try", "Try it") if widget else None, ("#lab", "Lab"),
+             ("#problems", "Problems") if problems else None, ("#reading", "Reading"), ("#zh", "中文") if zh else None,
+             ("#build", "Build the film")]
+    jump = " · ".join(f'<a href="{h}">{t}</a>' for h, t in filter(None, jumps))
     body = f"""
 <article class="part" data-part="{n}">
-<p class="crumb"><a href="index.html#map">Act {act[0]} · {esc(act[1])}</a><span>Part {n} of {course.N_PARTS}</span></p>
-<h1>{esc(name)}</h1>
-<p class="meta">{badge(p.level)}<span>starts at this level</span><span class="dot">{fmt_minutes(total)}</span>
+<p class="crumb"><a href="index.html#map">Act {act[0]} · {esc(act[1])}</a></p>
+<span class="partno">Part {n} of {course.N_PARTS}</span><h1>{esc(name)}</h1>
+<p class="meta">{badge(p.level)}<span>starts at this level</span><span class="dot">{fmt_minutes(total)} of film</span>
 <span class="dot">{len(minutes)} chapters</span><span class="dot">prerequisites: {prereq}</span></p>
 <blockquote class="question">{tex_inline(p.question)}</blockquote>
 <p class="story">{tex_inline(p.story)}</p>
-<p class="handoff"><strong>Where it goes next.</strong> {tex_inline(p.handoff)}</p>
 <p class="outside"><strong>What you need.</strong> {tex_inline(p.outside)}</p>
-{widget}
 <section id="objectives"><h2>What you will be able to do</h2><div class="objectives">{objectives}</div></section>
-<section id="results"><h2>Key results</h2><div class="results">{results}</div></section>
-<section id="chapters"><h2>Chapters</h2>
-<p class="hint">Each chapter has a home level. Choose a track to see what to watch: {track_line}.</p>
+<section id="chapters"><h2>Contents</h2>
+<p class="hint">Each chapter has a home level. Choose a track to see what to read and watch: {track_line}.</p>
 {track_buttons()}
-{chapter_list(n, minutes)}
+{contents}
+<p class="hint">Also on this page: {jump}.</p>
 </section>
+<section id="lecture" class="lecture"><h2>Lecture</h2>
+{text}
+<p class="handoff"><strong>Where it goes next.</strong> {tex_inline(p.handoff)}</p>
+</section>
+<section id="results"><h2>Key results</h2><p class="hint">The part's results in one place, for revision.</p>
+<div class="results">{results}</div></section>
+{widget}
 {lab_block(n, out_dir, run_labs)}
-<section id="notes"><h2>Lecture notes, problems and solutions</h2>
-<p class="hint">From the part's <a href="{BLOB}/videos/quant/quant{n}/README.md">README</a>. Try the problems
-before opening the solutions; the last two of each set are at qualifying-exam level.</p>
-{en or '<p>See the README.</p>'}
-</section>
-<section id="reading"><h2>Reading</h2>
-<details class="notes"><summary><span class="kind">The part's papers</span><span class="orig">from READING.md</span></summary>
-<div class="md">{papers}</div></details>
+{f'<section id="problems"><h2>Problems, with solutions</h2><p class="hint">Try each problem before opening its solution; the last two of each set are at qualifying-exam level.</p>{problems}</section>' if problems else ''}
+<section id="reading"><h2>Reading and notes</h2>
+<div class="sect"><h3>The part's papers</h3><p class="orig">from READING.md</p><div class="md">{papers}</div></div>
 {extra_papers}
+{research}
+{folded}
 {f'<h3>Companion films in this repository</h3><ul>{also}</ul>' if also else ''}
 </section>
 {f'<section id="zh" lang="zh"><h2>中文讲义</h2><p class="hint">本讲的中文说明、交易台问题与习题解答（与英文版对应）。</p>{zh}</section>' if zh else ''}
@@ -464,7 +601,8 @@ before opening the solutions; the last two of each set are at qualifying-exam le
 python tools/make.py quant{n}                # the narrated film, English and Chinese
 EXPLAINER_TTS=silent python tools/qa_scene.py quant{n} Hook   # one chapter, silent, with a contact sheet</code></pre>
 <p class="hint">Scenes: <a href="{REPO}/tree/main/videos/quant/quant{n}">videos/quant/quant{n}</a>.
-Setup: <a href="index.html#setup">see the course page</a>.</p>
+Setup: <a href="index.html#setup">see the course page</a>. Source of these notes: the part's
+<a href="{BLOB}/videos/quant/quant{n}/README.md">README</a> and the scenes' narration.</p>
 </section>
 <nav class="pager">{prev_}{next_}</nav>
 </article>"""
@@ -510,13 +648,23 @@ def index_page(info: dict) -> str:
   <div class="stats"><span><b>{course.N_PARTS}</b> parts</span><span><b>{total / 60:.0f}</b> hours of lectures</span>
   <span><b>{sum(v['chapters'] for v in info.values())}</b> chapters</span><span><b>{course.N_PARTS}</b> runnable labs</span>
   <span><b>4</b> tracks</span></div>
-  <div class="hero-widget widget" data-widget="hero" aria-label="Simulated price paths under two measures"></div>
 </section>
+
+<section id="map"><h2>Contents</h2>
+<p class="hint">Each part opens as lecture notes: the text of every chapter, its key results, an interactive,
+a lab, problems with solutions and its reading. The label is the level at which a part can first be followed.</p>
+<div class="track-buttons map-filter" role="group" aria-label="Filter the map by track">
+<button class="on" data-level="">Everything</button><button data-level="U">Open to undergraduates</button>
+<button data-level="M">Master's and up</button></div>
+{''.join(cards)}
+</section>
+
 
 <section id="how"><h2>How to use the course</h2>
 <div class="steps">
-  <div><b>1 · Watch</b><p>Each part is a 50-65 minute lecture built in code: derivations in full, models
-  trained on screen, every number computed or cited. Build it from source, or read its chapter notes here.</p></div>
+  <div><b>1 · Read or watch</b><p>Each part is a 50-65 minute lecture built in code: derivations in full, models
+  trained on screen, every number computed or cited. Its page carries the lecture as text, chapter by chapter, so
+  you can follow along with the film or read it on its own.</p></div>
   <div><b>2 · Run the lab</b><p>One lab per part, on the series' own library, the House. Seeded, a few seconds
   each, no data to download. Each ends with three things to change.</p></div>
   <div><b>3 · Work the problems</b><p>Desk questions in the trading-interview tradition and a tiered problem
@@ -529,15 +677,6 @@ def index_page(info: dict) -> str:
 <p class="hint">Every chapter has a home level. A track is the set of chapters to watch at that level; on each
 part's page a button shows them.</p>
 <div class="tgrid">{''.join(tracks)}</div></section>
-
-<section id="map"><h2>The course map</h2>
-<p class="hint">The badge is the level at which a part can first be followed; the dots show which tracks have
-chapters in it.</p>
-<div class="track-buttons map-filter" role="group" aria-label="Filter the map by track">
-<button class="on" data-level="">Everything</button><button data-level="U">Open to undergraduates</button>
-<button data-level="M">Master's and up</button></div>
-{''.join(cards)}
-</section>
 
 <section id="devices"><h2>What runs through all of it</h2>
 <div class="steps">
@@ -552,6 +691,9 @@ chapters in it.</p>
   <div><b>Crisis files and firm files</b><p>Each idea is shown where it broke (1987, 1998, 2008, 2020, 2022) and
   in the hands of the firms whose business it is, from the public record.</p></div>
 </div></section>
+
+<section id="picture"><h2>The course in one picture</h2>
+<div class="hero-widget widget" data-widget="hero" aria-label="Simulated price paths under two measures"></div></section>
 
 <section id="setup"><h2>Setup</h2>
 <div class="cols"><div><h3>Run the labs (two minutes)</h3>

@@ -235,38 +235,38 @@ python tools/lecture_length.py stats31 --floor 50
 
 ## Problems and solutions
 
-**1. Double-centring.**
+**1. Double-centring.** Show that $B = -\tfrac12 J D^{(2)} J$ equals $X_0 X_0^\top$ when $D$ holds the Euclidean distances between the rows of $X$.
 
 *Solution.* Let x_i be the rows of X and X₀ = JX the centred rows x̃_i. Then d²_ij = ‖x̃_i‖² + ‖x̃_j‖² − 2x̃_iᵀx̃_j,
 so D⁽²⁾ = a1ᵀ + 1aᵀ − 2X₀X₀ᵀ with a_i = ‖x̃_i‖². Since J1 = 0, J(a1ᵀ)J = 0 and J(1aᵀ)J = 0. Hence
 −½JD⁽²⁾J = J X₀X₀ᵀ J = X₀X₀ᵀ, because JX₀ = X₀.
 
-**2. Union–intersection.**
+**2. Union–intersection.** Show that $\max_a t^2(a) = \tfrac{n_1 n_2}{n_1 + n_2} d^\top S^{-1} d$, $d = \bar x_1 - \bar x_2$, attained at $a \propto S^{-1} d$.
 
 *Solution.* Let c = n₁n₂/(n₁ + n₂) and d = x̄₁ − x̄₂. Then t²(a) = c(aᵀd)²/(aᵀSa). Write b = S^{1/2}a. Then aᵀd = bᵀS^{−1/2}d, and
 Cauchy–Schwarz gives (aᵀd)² ≤ ‖b‖²·‖S^{−1/2}d‖² = (aᵀSa)(dᵀS⁻¹d). So t²(a) ≤ c·dᵀS⁻¹d = T², with equality
 iff b ∝ S^{−1/2}d, i.e. a ∝ S⁻¹d.
 
-**3. Eckart–Young.**
+**3. Eckart–Young.** Prove Eckart–Young for the Frobenius norm: the best rank-$k$ approximation of $X_0$ truncates its SVD.
 
 *Solution.* Let X₀ = UDVᵀ and let B have rank ≤ k. By Weyl's inequality for singular values,
 σ_{i+k}(X₀) ≤ σ_i(X₀ − B) + σ_{k+1}(B) = σ_i(X₀ − B). So ‖X₀ − B‖²_F = Σ_i σ_i(X₀ − B)² ≥ Σ_i σ_{i+k}(X₀)² =
 Σ_{j>k} d_j². The truncated SVD attains this.
 
-**4. Invariance of canonical correlations.**
+**4. Invariance of canonical correlations.** Show that the canonical correlations are invariant to invertible linear maps of $x$ and of $y$ separately.
 
 *Solution.* Replace x by Ax + a and y by By + b, with A and B invertible. Then for any weights, corr(αᵀ(Ax), βᵀ(By)) =
 corr((Aᵀα)ᵀx, (Bᵀβ)ᵀy). As α and β range over all vectors, so do Aᵀα and Bᵀβ. The sequence of constrained maxima,
 each uncorrelated with the earlier variates (also invariant), is therefore the same.
 
-**5. Zeros of the precision matrix.**
+**5. Zeros of the precision matrix.** Show that $\theta_{ij} = 0$ iff the coefficient of $x_j$ is zero in the regression of $x_i$ on all the others.
 
 *Solution.* Partition x = (x_i, x_{−i}). For the normal, E(x_i | x_{−i}) = μ_i + Σ_{i,−i}Σ_{−i,−i}⁻¹(x_{−i} − μ_{−i}).
 By the block-inverse formula, the i-th row of Θ = Σ⁻¹ gives Θ_{i,−i} = −θ_ii Σ_{i,−i}Σ_{−i,−i}⁻¹. So the regression
 coefficient of x_j is β_ij = −θ_ij/θ_ii, which is zero iff θ_ij = 0. For the normal, the conditional distribution of
 x_i given the rest then does not involve x_j: conditional independence.
 
-**6. Lloyd's algorithm stops.**
+**6. Lloyd's algorithm stops.** Show that $k$-means's objective never increases under Lloyd's two steps, and that it stops in finitely many.
 
 *Solution.* With the assignment fixed, Σ_{i∈C_j}‖x_i − c‖² is minimized by the mean (its gradient is
 2Σ(c − x_i)), so the update step cannot increase the objective. With the centres fixed, sending each point to its

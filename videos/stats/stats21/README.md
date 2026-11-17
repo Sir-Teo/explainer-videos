@@ -158,13 +158,13 @@ python tools/lecture_length.py stats21 --floor 50
 
 ## Problems and solutions
 
-**1. Logistic concavity.**
+**1. Logistic concavity.** Show that the logistic log likelihood has Hessian $-X'WX$, $W = \operatorname{diag}(p_i(1 - p_i))$, so it is concave.
 
 *Solution.* ℓ(β) = Σ[yᵢxᵢ'β − log(1 + e^{xᵢ'β})], so ∇ℓ = Σ(yᵢ − pᵢ)xᵢ and ∇²ℓ = −Σpᵢ(1 − pᵢ)xᵢxᵢ' = −X'WX. For
 any v, v'X'WXv = Σ pᵢ(1 − pᵢ)(xᵢ'v)² ≥ 0, so the Hessian is negative semidefinite and ℓ is concave. It is strictly
 concave if X has full column rank.
 
-**2. Maximum entropy.**
+**2. Maximum entropy.** Maximize the entropy $-\sum_k p_k \log p_k$ subject to $\sum_k p_k = 1$ and $\sum_k k\,p_k = \mu$: show $p_k \propto e^{-\lambda k}$.
 
 *Solution.* The Lagrangian is −Σp log p − α(Σp − 1) − λ(Σkp − μ). Setting ∂/∂p_k = −log p_k − 1 − α − λk = 0 gives
 p_k = e^{−1−α}e^{−λk} ∝ e^{−λk}, with α and λ fixed by the two constraints. This is an exponential family with
@@ -172,20 +172,20 @@ sufficient statistic k when a normalizable interior solution exists. On a finite
 mean gives this form; boundary constraints can force zeros or degenerate support with no finite multiplier.
 On infinite support, feasibility, existence and a finite normalizing constant must also be checked.
 
-**3. The bakery's dual.**
+**3. The bakery's dual.** Write the dual of the bakery's LP and check that $y = (1, 0, 2)$ is feasible and optimal.
 
 *Solution.* min 14y₁ + 24y₂ + 9y₃ subject to y₁ + 3y₂ + y₃ ≥ 3, 2y₁ + 2y₂ + y₃ ≥ 4, y ≥ 0.
 - **Feasibility of y = (1, 0, 2).** 1 + 0 + 2 = 3 ≥ 3 and 2 + 0 + 2 = 4 ≥ 4.
 - **Optimality.** Its value is 14 + 18 = 32, the primal value, so by weak duality both are optimal.
 - **Complementary slackness.** The oven constraint is slack at x = (4, 5) (3·4 + 2·5 = 22 < 24), and y₂ = 0.
 
-**4. Newton for an exponential rate.**
+**4. Newton for an exponential rate.** Newton for an exponential rate: show $\lambda_1 - \hat\lambda = -\bar x(\lambda_0 - \hat\lambda)^2$. When does it go negative?
 
 *Solution.* ℓ(λ) = n log λ − λS, so ℓ' = n/λ − S and ℓ'' = −n/λ². Newton gives λ₁ = λ₀ − ℓ'/ℓ'' = 2λ₀ − λ₀²x̄.
 With λ̂ = 1/x̄, λ₁ − λ̂ = −x̄(λ₀ − λ̂)²: the error is squared at each step (quadratic convergence). λ₁ < 0 when
 λ₀ > 2/x̄ = 2λ̂: a start more than twice the answer jumps to an impossible rate.
 
-**5. The proximal operator of λ|x|.**
+**5. The proximal operator of λ|x|.** Derive the proximal operator of $\lambda|x|$: soft thresholding.
 
 *Solution.* Minimize λ|x| + (x − v)²/2.
 - **For x > 0.** The derivative λ + x − v vanishes at x = v − λ, which is valid if v > λ.
@@ -194,7 +194,7 @@ With λ̂ = 1/x̄, λ₁ − λ̂ = −x̄(λ₀ − λ̂)²: the error is squar
 
 Together: x = sign(v)(|v| − λ)₊.
 
-**6. Robbins–Monro step size.**
+**6. Robbins–Monro step size.** Robbins–Monro for a median with steps $a/k$: why $a > 1/(2f(\theta^*))$? The bound for $N(10, 3^2)$.
 
 *Solution.* Near θ*, M(θ) ≈ f(θ*)(θ − θ*), so the recursion behaves like e_{k+1} ≈ (1 − a f/k)e_k + noise/k.
 - **The noise term.** It contributes variance of order Σ a²/j² × Π(1 − af/i)², which is O(1/k) only if af > 1/2.

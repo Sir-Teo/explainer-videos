@@ -187,7 +187,7 @@ python tools/lecture_length.py stats26 --floor 50
 
 ## Problems and solutions
 
-**1. The marginal posterior of τ.**
+**1. The marginal posterior of τ.** Eight schools: show $p(\tau \mid y) \propto p(\tau)\, V_\mu^{1/2} \prod_j (\sigma_j^2 + \tau^2)^{-1/2} \exp\{-(y_j - \hat\mu)^2/2(\sigma_j^2 + \tau^2)\}$.
 
 *Solution.* Integrate the effects out first: y_j | μ, τ ~ N(μ, σ_j² + τ²) independently. So
 p(μ, τ | y) ∝ p(τ) Π_j (σ_j² + τ²)^{−1/2} exp{−(y_j − μ)²/2(σ_j² + τ²)}.
@@ -196,30 +196,30 @@ p(μ, τ | y) ∝ p(τ) Π_j (σ_j² + τ²)^{−1/2} exp{−(y_j − μ)²/2(σ
 - **Integrate μ out.** The Gaussian integral gives (2π/Σ w_j)^{1/2} = (2π V_μ)^{1/2}.
 - **The result.** p(τ | y) ∝ p(τ) V_μ^{1/2} Π_j (σ_j² + τ²)^{−1/2} exp{−(y_j − μ̂)²/2(σ_j² + τ²)}.
 
-**2. Jeffreys's invariance.**
+**2. Jeffreys's invariance.** Show that Jeffreys's prior is invariant: if $\eta = g(\theta)$, $\sqrt{I(\eta)} = \sqrt{I(\theta)}\,|d\theta/d\eta|$.
 
 *Solution.* With ℓ(θ) the log likelihood and θ = h(η), the score is dℓ/dη = (dℓ/dθ)(dθ/dη). Therefore
 I(η) = E{(dℓ/dη)²} = I(θ)(dθ/dη)², and √I(η) = √I(θ)|dθ/dη|. That is exactly the change-of-variables rule for a
 density: Jeffreys's prior for η is the transform of Jeffreys's prior for θ.
 
-**3. The Poisson–gamma posterior mean.**
+**3. The Poisson–gamma posterior mean.** Poisson–gamma: show the posterior mean is $\tfrac{b}{b + n}\tfrac{a}{b} + \tfrac{n}{b + n}\bar x$.
 
 *Solution.* The posterior is Gamma(a + Σx, b + n), whose mean is (a + nx̄)/(b + n) = {b/(b + n)}(a/b) + {n/(b + n)}x̄.
 That is a weighted average of the prior mean a/b and x̄, with the prior worth b observations.
 
-**4. The normal Bayes factor.**
+**4. The normal Bayes factor.** Derive $BF_{01}$ for $\bar y \sim N(\mu, \sigma^2/n)$, $H_0: \mu = 0$ vs $\mu \sim N(0, \tau^2)$; its limit as $\tau \to \infty$?
 
 *Solution.* Under H₀, ȳ ~ N(0, v) with v = σ²/n; under H₁, ȳ ~ N(0, v + τ²). So
 BF₀₁ = √{(v + τ²)/v} exp{−ȳ²/2v + ȳ²/2(v + τ²)} = √(1 + nτ²/σ²) exp{−(z²/2) nτ²/(σ² + nτ²)}, with z = ȳ/√v. As
 τ → ∞ the exponent tends to −z²/2 while the square root grows without bound, so BF₀₁ → ∞ for any fixed data:
 Bartlett's paradox.
 
-**5. The median and absolute loss.**
+**5. The median and absolute loss.** Show that the posterior median minimizes expected absolute loss.
 
 *Solution.* E|a − θ| = ∫_{θ<a} (a − θ)p(θ)dθ + ∫_{θ>a} (θ − a)p(θ)dθ. Its derivative in a is P(θ < a) − P(θ > a), which is
 negative below the median and positive above it. So the expected loss is minimized at the posterior median.
 
-**6. The expected number of tables.**
+**6. The expected number of tables.** CRP: show $E K_n = \sum_{i=0}^{n-1} \alpha/(\alpha + i)$.
 
 *Solution.* Customer i + 1 (i = 0, …, n − 1) opens a new table with probability α/(α + i), whatever happened before.
 K_n is the sum of these indicators, so E K_n = Σ_{i=0}^{n−1} α/(α + i). The sum behaves like ∫₀ⁿ α/(α + t) dt =

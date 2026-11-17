@@ -96,7 +96,7 @@ python tools/lecture_length.py stats7 --floor 50
 
 ## Problems and solutions
 
-**1. Two periods.**
+**1. Two periods.** Show that $x \mapsto (5x + 3) \bmod 16$ has full period, and find the period of $x \mapsto 5x \bmod 16$ started at 1.
 
 *Solution.* For x ↦ (5x + 3) mod 16, the Hull–Dobell conditions hold, so the period is the full 16:
 - c = 3 is coprime to 16;
@@ -105,14 +105,14 @@ python tools/lecture_length.py stats7 --floor 50
 
 For x ↦ 5x mod 16 from 1, the sequence is 1, 5, 9, 13, 1, …, so the period is 4.
 
-**2. Inversion.**
+**2. Inversion.** Derive inverse-CDF samplers for the Pareto ($P(X > x) = (x_m/x)^\alpha$) and the logistic ($F(x) = 1/(1 + e^{-x})$).
 
 *Solution.*
 - **Pareto:** F(x) = 1 − (x_m/x)^α for x ≥ x_m. Solving u = F(x) gives x = x_m (1 − u)^{−1/α}. Since 1 − U is also
   uniform, x_m U^{−1/α} works too.
 - **Logistic:** u = 1/(1 + e^{−x}) gives x = log(u/(1 − u)).
 
-**3. Rejection for 6x(1 − x).**
+**3. Rejection for 6x(1 − x).** Rejection from a uniform box for $f(x) = 6x(1 - x)$ on $[0, 1]$: find $M$, the acceptance rate, and the mean number of darts per draw.
 
 *Solution.* The density peaks at x = 1/2 with value 3/2, so M = 3/2. The acceptance rate is 1/M = 2/3, and the number
 of darts per draw is geometric with mean M = 1.5.
@@ -126,14 +126,14 @@ Var g(U) = 2/3 − π²/16 = 0.0498,
 and σ = 0.223. The standard error is σ/√n, so SE = 0.001 needs n = (0.223/0.001)², at least 49,817 using the unrounded variance. (Antithetic or
 stratified sampling would cut this by a large factor.)
 
-**5. A two-state chain.**
+**5. A two-state chain.** For $P = \begin{pmatrix} 1 - a & a \ b & 1 - b \end{pmatrix}$, find the stationary law and the second eigenvalue.
 
 *Solution.* Assume 0 ≤ a,b ≤ 1. If a=b=0, P=I and every distribution is stationary. Otherwise solving πP = π gives π = (b/(a + b), a/(a + b)); detailed balance π₁a = π₂b gives the same answer at once.
 The trace is 2 − a − b = 1 + λ₂, so λ₂ = 1 − a − b. When 0 < a+b < 2, the chain forgets its start geometrically at rate |1 − a − b|.
 - When a + b = 1, it forgets in one step.
 - When a = b = 1, it alternates for ever: periodic, with λ₂ = −1.
 
-**6. Metropolis with an unnormalized f.**
+**6. Metropolis with an unnormalized f.** Show that Metropolis with a symmetric proposal satisfies detailed balance for an *unnormalized* $f$.
 
 *Solution.* For y ≠ x, the off-diagonal transition density is T(x → y) = q(y | x) min(1, f(y)/f(x)). Then
 

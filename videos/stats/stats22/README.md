@@ -175,35 +175,35 @@ python tools/lecture_length.py stats22 --floor 50
 
 ## Problems and solutions
 
-**1. Poisson score identities.**
+**1. Poisson score identities.** Poisson: the score is $U = x/\lambda - 1$. Show $E\,U = 0$ and $\mathrm{Var}\,U = -E\,U' = 1/\lambda$.
 
 *Solution.* log f = x log λ − λ − log x!, so U = x/λ − 1 and U' = −x/λ².
 - **Mean.** E U = λ/λ − 1 = 0.
 - **Variance.** Var U = Var(x)/λ² = 1/λ.
 - **The identity.** −E U' = λ/λ² = 1/λ, so Var U = −E U' = I(λ).
 
-**2. Neyman–Scott with m readings per group.**
+**2. Neyman–Scott with m readings per group.** Neyman–Scott with $m$ readings per group: show $\hat\sigma^2 \to (m - 1)\sigma^2/m$. What fixes it?
 
 *Solution.* The MLE of each μᵢ is the group mean x̄ᵢ, and σ̂² = (1/(nm)) Σᵢ Σⱼ (xᵢⱼ − x̄ᵢ)². Each group's sum of squares
 has expectation (m − 1)σ², so E σ̂² = (m − 1)σ²/m. Being an average of n independent terms, σ̂² converges to that, not
 to σ². Dividing by n(m − 1) instead fixes it, and is exactly what the marginal likelihood of the within-group
 contrasts (or REML) gives. The bias vanishes only as m → ∞, not as n → ∞.
 
-**3. The trinity by hand.**
+**3. The trinity by hand.** Fourteen successes in twenty, $H_0\colon p = 0.5$: check $W = 3.81$, $S = 3.20$, $\Lambda = 3.29$.
 
 *Solution.* p̂ = 0.7, n = 20, p₀ = 0.5.
 - **Wald.** W = (0.7 − 0.5)² / (0.7 × 0.3/20) = 0.04/0.0105 = 3.81.
 - **Score.** U(p₀) = (14 − 10)/(p₀(1 − p₀)) and nI(p₀) = 20/0.25, so S = (14 − 10)²/(20 × 0.25) = 16/5 = 3.20.
 - **Likelihood ratio.** Λ = 2[14 log(0.7/0.5) + 6 log(0.3/0.5)] = 2[4.711 − 3.065] = 3.29.
 
-**4. EM for the mixing proportion alone.**
+**4. EM for the mixing proportion alone.** EM for $p$ alone, the components known: show $p_{t+1} = \bar r(p_t)$ and that $\ell(p_{t+1}) \ge \ell(p_t)$.
 
 *Solution.* With the components φ₁, φ₂ known, the E-step gives rᵢ = pφ₁(xᵢ)/(pφ₁(xᵢ) + (1 − p)φ₂(xᵢ)). The
 expected complete-data log likelihood is Q(p) = Σ[rᵢ log p + (1 − rᵢ) log(1 − p)] + const, maximized at
 p = Σrᵢ/n = r̄(pₜ). By Jensen, ℓ(p) ≥ ℓ(pₜ) + Q(p | pₜ) − Q(pₜ | pₜ), with equality at pₜ. Since pₜ₊₁ maximizes Q,
 Q(pₜ₊₁ | pₜ) ≥ Q(pₜ | pₜ), so ℓ(pₜ₊₁) ≥ ℓ(pₜ).
 
-**5. The sandwich for an intercept-only Poisson model.**
+**5. The sandwich for an intercept-only Poisson model.** Intercept-only Poisson fitted to any counts: the sandwich SE of $\log\hat\mu$ is $\sqrt{s^2/(n\bar y^2)}$.
 
 *Solution.* With log μ = β, the score is Uᵢ = yᵢ − e^β and the MLE is e^β̂ = ȳ.
 - **The bread.** A = Σ e^β = nȳ.
@@ -213,7 +213,7 @@ Q(pₜ₊₁ | pₜ) ≥ Q(pₜ | pₜ), so ℓ(pₜ₊₁) ≥ ℓ(pₜ).
 The model-based SE is √(1/(nȳ)), and they agree exactly when s² = ȳ, that is when the counts show Poisson
 dispersion.
 
-**6. Alice and Bob.**
+**6. Alice and Bob.** Alice and Bob: verify $P(X \ge 9) = 0.073$ (binomial) and $0.033$ (heads before the 3rd tail).
 
 *Solution.*
 - **Alice.** Under the fair coin, X ~ Binomial(12, ½), and P(X ≥ 9) = (220 + 66 + 12 + 1)/4096 = 299/4096 = 0.073.

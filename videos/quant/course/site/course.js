@@ -14,10 +14,10 @@
     });
   }
 
-  // Track buttons on a part's page: dim the chapters a track does not watch.
+  // Track buttons on a part's page: dim the chapters a track does not watch, in the contents and in the text.
   function trackButtons() {
     document.querySelectorAll("#chapters .track-buttons").forEach(function (bar) {
-      var items = document.querySelectorAll("#chapters .chapters li");
+      var items = document.querySelectorAll("#chapters .chapters li, #lecture .chapter[data-tier]");
       bar.addEventListener("click", function (e) {
         var b = e.target.closest("button");
         if (!b) return;

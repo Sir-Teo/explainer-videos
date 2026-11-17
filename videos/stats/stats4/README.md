@@ -81,7 +81,7 @@ python tools/lecture_length.py stats4 --floor 50
 
 ## Problems and solutions
 
-**1. The complementary projection.**
+**1. The complementary projection.** Show that if $P$ is a projection, so is $I - P$, and that $P(I - P) = 0$. What are the eigenvalues of $I - P$?
 
 *Solution.*
 - **It is a projection.** (I − P)² = I − 2P + P² = I − P, and (I − P)ᵀ = I − P.
@@ -89,11 +89,11 @@ python tools/lecture_length.py stats4 --floor 50
 - **Eigenvalues.** If Pv = λv with λ ∈ {0, 1}, then (I − P)v = (1 − λ)v. So the eigenvalues of I − P are also 0 and
   1, with the roles swapped. Hence rank(I − P) = n − rank P.
 
-**2. tr H = p.**
+**2. tr H = p.** Show that $\operatorname{tr}(H) = p$ for $H = X(X^\top X)^{-1}X^\top$ by cycling the trace.
 
 *Solution.* tr(X(XᵀX)⁻¹Xᵀ) = tr((XᵀX)⁻¹XᵀX) = tr(I_p) = p, by cycling X from the front to the back.
 
-**3. E s² = σ².**
+**3. E s² = σ².** Let $\mathbf x$ have common mean $\mu_0\mathbf 1$ and covariance $\sigma^2 I_n$. Use $E[\mathbf x^\top A\mathbf x] = \operatorname{tr}(A\Sigma) + \boldsymbol\mu^\top A\boldsymbol\mu$ to show $E\, s^2 = \sigma^2$.
 
 *Solution.* (n − 1)s² = xᵀ(I − J/n)x. Apply E[xᵀAx] = tr(AΣ) + μᵀAμ with Σ = σ²I and μ = μ₀**1**:
 - tr((I − J/n)σ²) = σ²(n − 1);
@@ -101,7 +101,7 @@ python tools/lecture_length.py stats4 --floor 50
 
 So E[(n − 1)s²] = (n − 1)σ², and E s² = σ². No normality is needed.
 
-**4. An ellipse.**
+**4. An ellipse.** Find the eigenvalues and eigenvectors of $\begin{pmatrix} 2 & 1 \ 1 & 2 \end{pmatrix}$, and sketch the ellipse $\mathbf x^\top A^{-1}\mathbf x = 1$.
 
 *Solution.* For A = [[2, 1], [1, 2]]:
 - eigenvalue 3 with eigenvector (1, 1)/√2;
@@ -109,7 +109,7 @@ So E[(n − 1)s²] = (n − 1)σ², and E s² = σ². No normality is needed.
 
 The ellipse xᵀA⁻¹x = 1 has semi-axes √3 along (1, 1) and 1 along (1, −1), tilted at 45°.
 
-**5. Sherman–Morrison.**
+**5. Sherman–Morrison.** Verify the Sherman–Morrison formula by multiplying it out.
 
 *Solution.* Multiply (A + uvᵀ) by A⁻¹ − A⁻¹uvᵀA⁻¹/(1 + vᵀA⁻¹u):
 
@@ -119,7 +119,7 @@ I + uvᵀA⁻¹ − [uvᵀA⁻¹ + u(vᵀA⁻¹u)vᵀA⁻¹]/(1 + vᵀA⁻¹u)
 
 This needs 1 + vᵀA⁻¹u ≠ 0.
 
-**6. Σ(zᵢ − z̄)² ~ χ²_{n−1}.**
+**6. Σ(zᵢ − z̄)² ~ χ²_{n−1}.** For $\mathbf z \sim N(\mathbf 0, I_n)$, show that $\sum_i (z_i - \bar z)^2 \sim \chi^2_{n-1}$ using the projection $I - \tfrac1n J$.
 
 *Solution.* Σ(zᵢ − z̄)² = zᵀ(I − J/n)z. Here I − J/n is a projection (symmetric and idempotent, since J² = nJ), with
 trace n − 1 and so rank n − 1. By chapter 11, zᵀPz ~ χ²_{rank P} for z ~ N(0, I).

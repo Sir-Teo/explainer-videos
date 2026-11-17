@@ -167,13 +167,13 @@ python tools/lecture_length.py stats23 --floor 50
 
 ## Problems and solutions
 
-**1. Two forms of F.**
+**1. Two forms of F.** Show that $F = (\mathrm{RSS}_0 - \mathrm{RSS})/(q s^2)$ equals the Wald form $(C\hat\beta - d)^\top[C(X^\top X)^{-1}C^\top]^{-1}(C\hat\beta - d)/(q s^2)$.
 
 *Solution.* Assume X has full column rank, n > p, and C has q independent rows. The restricted estimator is β̃ = β̂ − (X'X)⁻¹C'[C(X'X)⁻¹C']⁻¹(Cβ̂ − d), by Lagrange. Then
 y − Xβ̃ = e + X(β̂ − β̃), with X'e = 0, so RSS₀ = RSS + (β̂ − β̃)'X'X(β̂ − β̃). Substituting,
 (β̂ − β̃)'X'X(β̂ − β̃) = (Cβ̂ − d)'[C(X'X)⁻¹C']⁻¹(Cβ̂ − d) = Q. Dividing by qs² gives the same F.
 
-**2. Moulton's factor.**
+**2. Moulton's factor.** Equicorrelated errors within clusters of size $m$, a cluster-level regressor: derive Moulton's factor $1 + (m - 1)\rho$.
 
 *Solution.* Take clusters of size m with Var ε = σ²[(1 − ρ)I + ρ11'] within each cluster, and a regressor x constant
 within clusters.
@@ -183,24 +183,24 @@ within clusters.
   Var(β̂) = σ²(1 + (m − 1)ρ)/Σᵢ(xᵢ − x̄)².
 - **The ratio.** 1 + (m − 1)ρ. The familiar extension multiplying by a regressor ICC is an approximation under suitable exchangeability and balance; it is not exact for arbitrary adjusted designs or unequal cluster sizes.
 
-**3. Attenuation.**
+**3. Attenuation.** With $w = x + u$, show $\hat\beta_w \to \beta\lambda$. What happens to the intercept?
 
 *Solution.* In a simple linear conditional-mean model with finite variances and mean-zero independent classical measurement error, β̂_w → Cov(w, y)/Var(w) = Cov(x + u, α + βx + ε)/(σ²ₓ + σ²ᵤ) = βσ²ₓ/(σ²ₓ + σ²ᵤ) = βλ. The intercept
 converges to ȳ − βλ x̄ = α + β(1 − λ)μₓ: it absorbs what the slope lost, so it is biased unless μₓ = 0.
 
-**4. Residual variances.**
+**4. Residual variances.** Show $E\,e_i^2 = (1 - h_{ii})\sigma^2$ under homoskedasticity, so HC2 is unbiased there.
 
 *Solution.* With a correct mean E(ε | X) = 0, full-rank X, and hᵢᵢ < 1, e = (I − H)ε with H = X(X'X)⁻¹X' symmetric and idempotent. Under Var ε = σ²I,
 Var e = σ²(I − H)(I − H)' = σ²(I − H), so E eᵢ² = σ²(1 − hᵢᵢ). Hence eᵢ²/(1 − hᵢᵢ) has expectation σ², and the HC2
 meat Σ eᵢ²xᵢxᵢ'/(1 − hᵢᵢ) has expectation σ²X'X, so the HC2 covariance estimator is unbiased for the classical covariance. This does not imply exact t coverage.
 
-**5. The deletion formula.**
+**5. The deletion formula.** Derive $\hat\beta - \hat\beta_{(i)} = (X^\top X)^{-1}x_i e_i/(1 - h_{ii})$ from Sherman–Morrison.
 
 *Solution.* Assume the design remains full rank after deletion (hᵢᵢ < 1). Write A = X'X. Sherman–Morrison gives (A − xᵢxᵢ')⁻¹ = A⁻¹ + A⁻¹xᵢxᵢ'A⁻¹/(1 − hᵢᵢ). Then
 β̂₍ᵢ₎ = (A − xᵢxᵢ')⁻¹(X'y − xᵢyᵢ). Expanding and using xᵢ'β̂ = yᵢ − eᵢ, we get
 β̂₍ᵢ₎ = β̂ − A⁻¹xᵢeᵢ/(1 − hᵢᵢ).
 
-**6. The best linear predictor of x².**
+**6. The best linear predictor of x².** $x \sim N(0, 1)$, $y = x^2$: find $\beta^*$, and the true and classical variances of the OLS slope.
 
 *Solution.* With x ~ N(0, 1) and y = x², β* = (E xx')⁻¹E xy with x = (1, x)'. E xx' = I, and E xy = (E x², E x³) =
 (1, 0), so β* = (1, 0): a flat line at 1. The residual is r = x² − 1.

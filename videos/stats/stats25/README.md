@@ -194,7 +194,7 @@ python tools/lecture_length.py stats25 --floor 50
 
 ## Problems and solutions
 
-**1. Stein's lemma and SURE.**
+**1. Stein's lemma and SURE.** Prove Stein's lemma $E(X - \theta)h(X) = E\,h'(X)$ for $X \sim N(\theta, 1)$, and use it to derive SURE for $X + g(X)$.
 
 *Solution.* For X ~ N(θ, 1) and differentiable h with E|h′| < ∞, integrate by parts, using
 (x − θ)φ(x − θ) = −dφ(x − θ)/dx:
@@ -206,34 +206,34 @@ applying the lemma coordinate by coordinate. So SURE = p + ‖g‖² + 2∇·g i
 For James–Stein, g = −(p − 2)X/‖X‖², with ∇·g = −(p − 2)²/‖X‖² and ‖g‖² = (p − 2)²/‖X‖². So
 SURE = p − (p − 2)²/‖X‖² < p.
 
-**2. James–Stein as empirical Bayes.**
+**2. James–Stein as empirical Bayes.** Show that $E\{(p - 2)/\|X\|^2\} = 1/(1 + \tau^2)$ when $X_i \sim N(0, 1 + \tau^2)$ independently, $p \ge 3$.
 
 *Solution.* Under the model each Xᵢ ~ N(0, 1 + τ²) independently, so S = ‖X‖² = (1 + τ²)W with W ~ χ²_p. For p ≥ 3,
 E(1/W) = 1/(p − 2). Then E{(p − 2)/S} = (p − 2)/{(1 + τ²)(p − 2)} = 1/(1 + τ²) = B. Plugging this unbiased estimate of
 B into the Bayes rule (1 − B)X gives James–Stein. (Shrinking towards x̄ spends a degree of freedom: p − 3 and
 Σ(xᵢ − x̄)² ~ (1 + τ²)χ²_{p−1}.)
 
-**3. The BLUP of a random intercept.**
+**3. The BLUP of a random intercept.** Random intercept: show that the BLUP is $\hat u_g = \lambda_g(\bar y_g - \bar x_g^\top\hat\beta)$, $\lambda_g = \tau^2/(\tau^2 + \sigma^2/n_g)$.
 
 *Solution.* For school g, y_g = X_gβ + 1u_g + e_g, with V_g = σ²I + τ²11′. Henderson's formula gives
 û_g = τ²1′V_g⁻¹(y_g − X_gβ̂). By Sherman–Morrison, V_g⁻¹ = σ⁻²{I − τ²11′/(σ² + n_gτ²)}. Then
 1′V_g⁻¹ = σ⁻²{1 − n_gτ²/(σ² + n_gτ²)}1′ = 1′/(σ² + n_gτ²).
 So û_g = τ² n_g(ȳ_g − x̄_g′β̂)/(σ² + n_gτ²) = λ_g(ȳ_g − x̄_g′β̂), with λ_g = τ²/(τ² + σ²/n_g).
 
-**4. REML for one sample.**
+**4. REML for one sample.** One sample: show that REML gives $\hat\sigma^2 = \sum(y_i - \bar y)^2/(n - 1)$.
 
 *Solution.* With X = 1 and V = σ²I:
 ℓ_R = −½{n log σ² + Σ(yᵢ − ȳ)²/σ² + log(n/σ²)} + const = −½{(n − 1) log σ² + Σ(yᵢ − ȳ)²/σ²} + const.
 Setting the derivative to zero gives σ̂² = Σ(yᵢ − ȳ)²/(n − 1).
 
-**5. The boundary mixture.**
+**5. The boundary mixture.** For one variance with regular identifiable nuisance parameters and many groups, show that the limiting LR law at $\tau^2=0$ is $\tfrac12\chi^2_0 + \tfrac12\chi^2_1$ in large samples; what is the 5% cut-off?
 
 *Solution.* Asymptotically the unconstrained estimate of τ² is normal around 0 under H₀. With probability ½ it is
 negative; then the constrained MLE is 0 and the LR statistic is 0. Otherwise the constraint is inactive and the
 statistic is the square of the standardized estimate, χ²₁. So P(LR > c) = ½P(χ²₁ > c). Setting this to 0.05 gives
 P(χ²₁ > c) = 0.10, so c = 2.71.
 
-**6. Mundlak and fixed effects.**
+**6. Mundlak and fixed effects.** Mundlak: under common within-group variance, show that adding all group predictor means gives the within slope.
 
 *Solution.* Write x_gi = x̄_g + (x_gi − x̄_g). The model y = μ + βx + γx̄ + u + e is the same as
 y = μ + β(x − x̄) + (β + γ)x̄ + u + e. The regressors x − x̄ and x̄ are orthogonal: within each school, x − x̄ sums to 0

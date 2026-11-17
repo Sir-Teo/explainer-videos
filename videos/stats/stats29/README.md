@@ -235,7 +235,7 @@ python tools/lecture_length.py stats29 --floor 50
 
 ## Problems and solutions
 
-**1. The histogram's bias and optimal bin.**
+**1. The histogram's bias and optimal bin.** Show that the histogram's integrated squared bias is $\tfrac{h^2}{12} R(f') + o(h^2)$ and find $h^*$; evaluate it for $N(0, \sigma^2)$.
 
 *Solution.* For x in bin B_j = [t_j, t_j + h), E f̂(x) = p_j/h with
 p_j = ∫_{B_j} f = h f(t_j) + ½h² f′(t_j) + O(h³). So the bias at x is f′(t_j)(h/2 − (x − t_j)) + O(h²). Squaring and
@@ -244,7 +244,7 @@ variance is p_j(1 − p_j)/(nh²) ≈ f(x)/(nh), so the integrated variance is a
 1/(nh) + h²R(f′)/12 gives h* = (6/(nR(f′)))^{1/3}. For N(0, σ²), R(f′) = 1/(4√π σ³), so
 h* = (24√π)^{1/3} σ n^{−1/3} = 3.49 σ n^{−1/3}.
 
-**2. The kernel estimate's bias and variance.**
+**2. The kernel estimate's bias and variance.** Derive the KDE's bias $\tfrac12 h^2 \mu_2 f''(x)$ and variance $f(x) R(K)/(nh)$; minimize the AMISE.
 
 *Solution.* E f̂_h(x) = ∫K(u) f(x − hu) du. Expand f(x − hu) = f − huf′ + ½h²u²f″ + o(h²). Then ∫K = 1 and ∫uK = 0
 give bias ½h²μ₂f″(x) + o(h²). The variance is n⁻¹ Var(h⁻¹K((x − X)/h)), and
@@ -252,14 +252,14 @@ E h⁻²K²((x − X)/h) = h⁻¹ ∫K²(u) f(x − hu) du = f(x)R(K)/h + O(1). 
 AMISE = R(K)/(nh) + ¼h⁴μ₂²R(f″). Its minimizer is h* = (R(K)/(μ₂²R(f″)n))^{1/5}, and the minimum is
 (5/4)(μ₂R(K)²)^{2/5}R(f″)^{1/5} n^{−4/5}.
 
-**3. Epanechnikov's kernel.**
+**3. Epanechnikov's kernel.** Show that the Epanechnikov kernel minimizes $\mu_2^{1/2} R(K)$ among non-negative symmetric kernels.
 
 *Solution.* The functional μ₂^{1/2}R(K) is invariant to K ↦ K(u/a)/a, so fix μ₂ = 1/5 and minimize ∫K²
 subject to ∫K = 1, ∫u²K = 1/5 and K ≥ 0. For the candidate K₀ = ¾(1 − u²)₊ and any admissible K, write K = K₀ + δ with
 ∫δ = 0 and ∫u²δ = 0. Then ∫K² = ∫K₀² + 2∫K₀δ + ∫δ². On |u| ≤ 1, K₀ = ¾ − ¾u², so ∫_{|u|≤1} K₀δ = −∫_{|u|>1} (¾ − ¾u²)δ.
 Outside, δ = K ≥ 0 and ¾ − ¾u² < 0, so this term is ≥ 0. Hence ∫K² ≥ ∫K₀², with equality only at K = K₀.
 
-**4. The Reinsch–Schoenberg theorem.**
+**4. The Reinsch–Schoenberg theorem.** Prove the Reinsch–Schoenberg theorem: $\int s''(g'' - s'') = 0$ for the natural spline $s$ interpolating $g$.
 
 *Solution.* Let s be the natural cubic spline with s(x_i) = g(x_i), and h = g − s, so h(x_i) = 0. Integrating by
 parts on [x₁, x_n], ∫s″h″ = [s″h′] − ∫s‴h′. The boundary term is zero since s″(x₁) = s″(x_n) = 0. On each
@@ -267,14 +267,14 @@ parts on [x₁, x_n], ∫s″h″ = [s″h′] − ∫s‴h′. The boundary ter
 s″ = 0 there. Thus ∫g″² = ∫s″² + ∫h″² ≥ ∫s″², with the same fit to the data. The penalized criterion is therefore
 minimized by a natural cubic spline, with equality only if h is linear and vanishes at the x_i, i.e. h = 0.
 
-**5. The representer theorem.**
+**5. The representer theorem.** Prove the representer theorem for $\sum (y_i - f(x_i))^2 + \lambda \|f\|^2_{\mathcal H}$ and solve for $\alpha$.
 
 *Solution.* Write f = f∥ + f⊥ with f∥ ∈ span{k(x_i, ·)} and f⊥ orthogonal to it. By the reproducing property,
 f(x_i) = ⟨f, k(x_i, ·)⟩ = f∥(x_i), so the loss depends only on f∥. Meanwhile ‖f‖² = ‖f∥‖² + ‖f⊥‖², so the minimizer
 has f⊥ = 0 and f = Σα_j k(x_j, ·). Substituting gives ‖y − Kα‖² + λα′Kα. Setting the gradient
 −2K(y − Kα) + 2λKα to zero gives K((K + λI)α − y) = 0, solved by α = (K + λI)⁻¹y.
 
-**6. The maximum of n normals.**
+**6. The maximum of n normals.** Show that $E \max_{i \le n} |Z_i| \le \sqrt{2 \log(2n)}$ for $Z_i \sim N(0, 1)$, by Jensen on $e^{t \max |Z_i|}$.
 
 *Solution.* Let M = max|Z_i|. For t > 0, Jensen gives e^{tEM} ≤ E e^{tM} ≤ Σ E e^{t|Z_i|} ≤ 2n e^{t²/2}. So
 EM ≤ log(2n)/t + t/2, and t = √(2 log 2n) gives EM ≤ √(2 log(2n)). A matching lower bound shows

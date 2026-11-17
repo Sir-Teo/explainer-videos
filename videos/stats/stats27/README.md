@@ -204,40 +204,40 @@ python tools/lecture_length.py stats27 --floor 50
 
 ## Problems and solutions
 
-**1. Detailed balance for Metropolis–Hastings.**
+**1. Detailed balance for Metropolis–Hastings.** Show that the Metropolis–Hastings kernel satisfies detailed balance with respect to $\pi$.
 
 *Solution.* For x′ ≠ x the kernel density is K(x → x′) = q(x′ | x) α(x, x′). Then
 π(x) q(x′ | x) α(x, x′) = min{π(x) q(x′ | x), π(x′) q(x | x′)}. This is symmetric in (x, x′), so it equals
 π(x′) K(x′ → x). The rejection mass sits at x′ = x, where balance is trivial. Integrating over x gives
 ∫ π(x) K(x → x′) dx = π(x′): π is stationary.
 
-**2. Self-normalized importance sampling.**
+**2. Self-normalized importance sampling.** Show that the self-normalized importance estimator is consistent, and that $\mathrm{ESS} = n$ when $q = \pi$.
 
 *Solution.* By the law of large numbers, (1/n)Σ w_s f(x_s) → E_q(wf) = c E_π f and (1/n)Σ w_s → E_q w = c, where c is
 π's unknown normalizing constant. The ratio therefore converges to E_π f (Slutsky). If q = π up to the constant, every
 w_s is equal, and (Σ w)²/Σ w² = n.
 
-**3. Gibbs on a correlated normal.**
+**3. Gibbs on a correlated normal.** Gibbs for $N_2(0, [[1, \rho], [\rho, 1]])$: show $x_1^{(t+1)}$ is AR(1) with coefficient $\rho^2$; find its ESS.
 
 *Solution.* x₁ | x₂ ~ N(ρx₂, 1 − ρ²) and x₂ | x₁ ~ N(ρx₁, 1 − ρ²). Over one sweep,
 x₁^{(t+1)} = ρ x₂^{(t)} + e and x₂^{(t)} = ρ x₁^{(t)} + e′, so x₁^{(t+1)} = ρ² x₁^{(t)} + (noise). That is an AR(1) with
 φ = ρ², whose ESS per draw is (1 − φ)/(1 + φ) = (1 − ρ²)/(1 + ρ²). For ρ = 0.95 this is 0.051, about 100 from 2,000,
 the stationary large-run reference. The displayed finite-run ESS estimate of 33 has substantial sampling uncertainty and is not a second theoretical value.
 
-**4. Leapfrog preserves volume and is reversible.**
+**4. Leapfrog preserves volume and is reversible.** Show that a leapfrog step preserves volume and is reversible (negate $p$, step, negate again).
 
 *Solution.* Each of the three substeps is a shear: (q, p) ↦ (q, p − (ε/2)∇U(q)) changes p by a function of q only, so its
 Jacobian is unit triangular with determinant 1; likewise q ↦ q + εM⁻¹p. A composition of shears preserves volume.
 Reversibility: apply a step from (q′, p′) with momentum negated. The first half-kick undoes the last, the drift undoes
 the drift, and the final half-kick undoes the first. You arrive at (q, −p).
 
-**5. The ELBO identity.**
+**5. The ELBO identity.** Show that $\log p(y) = \text{ELBO}(q) + \mathrm{KL}(q \,\|\, p(\theta \mid y))$.
 
 *Solution.* log p(y) = E_q log p(y) = E_q log{p(y, θ)/p(θ | y)}. Write
 log p(y, θ)/p(θ | y) = log{p(y, θ)/q(θ)} + log{q(θ)/p(θ | y)}, and take expectations under q. The result is
 ELBO + KL(q ‖ p(θ | y)). Since KL ≥ 0, the ELBO is a lower bound, tight when q is the posterior.
 
-**6. The log transform's Jacobian.**
+**6. The log transform's Jacobian.** Show that if $\tau = e^u$ and $\tau \sim p$, then $u$ has density $p(e^u)\, e^u$.
 
 *Solution.* For u = log τ, P(U ≤ u) = P(τ ≤ e^u), and differentiating gives p_U(u) = p_τ(e^u) e^u. So on the
 unconstrained scale the log density gains the term log|dτ/du| = u. That is exactly what `Model` adds for a "positive"

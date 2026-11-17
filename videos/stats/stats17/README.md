@@ -119,27 +119,27 @@ python tools/lecture_length.py stats17 --floor 50
 
 ## Problems and solutions
 
-**1. An AR(1).**
+**1. An AR(1).** AR(1) with $\phi = 0.6$, $\mu = 0$: $\rho(2)$, $\mathrm{Var}(X_t)/\sigma^2$, and the 2-step forecast and its SE from $x_n = 5$.
 
 *Solution.* ρ(2) = φ² = 0.36. Var(Xₜ) = σ²/(1 − φ²) = σ²/0.64 = 1.5625σ². The two-step forecast is
 φ²xₙ = 0.36 × 5 = 1.8, with error eₙ₊₂ + φeₙ₊₁, so its SE is σ√(1 + φ²) = σ√1.36 ≈ 1.166σ.
 
-**2. An MA(1)'s autocorrelation.**
+**2. An MA(1)'s autocorrelation.** Show that an MA(1) has $|\rho(1)| \le \tfrac12$, with equality only at $\theta = \pm 1$.
 
 *Solution.* ρ(1) = θ/(1 + θ²). Since (1 − |θ|)² ≥ 0, 1 + θ² ≥ 2|θ|, so |ρ(1)| ≤ ½, with equality only when
 |θ| = 1. The population lag-one ACF cannot exceed ½ in magnitude under this MA(1) model. A sample ACF can exceed the bound through sampling error, so a single observed spike does not rule out the model.
 
-**3. An effective sample size.**
+**3. An effective sample size.** The effective sample size of the mean of 200 observations from an AR(1) with $\rho = 0.5$.
 
 *Solution.* For large n, n_eff ≈ n(1 − ρ)/(1 + ρ) = 200 × 0.5/1.5 ≈ 66.7. The mean's SE is about √3 ≈ 1.73 times the iid formula.
 
-**4. Is it stationary?**
+**4. Is it stationary?** Is the AR(2) with $\phi_1 = 0.5$, $\phi_2 = 0.3$ stationary? Find its roots.
 
 *Solution.* φ(z) = 1 − 0.5z − 0.3z². Its roots solve 0.3z² + 0.5z − 1 = 0: z = (−0.5 ± √(0.25 + 1.2))/0.6, that is
 z ≈ 1.174 and z ≈ −2.840. Both lie outside the unit circle, so the model is causal and stationary with the model innovations. The triangle agrees:
 φ₁ + φ₂ = 0.8 < 1, φ₂ − φ₁ = −0.2 < 1 and |φ₂| < 1. The roots are real (φ₁² + 4φ₂ = 1.45 > 0), so there is no complex-root pseudo-cycle; a negative real root can still contribute alternating signs.
 
-**5. Yule–Walker for an AR(2).**
+**5. Yule–Walker for an AR(2).** Yule–Walker for an AR(2), given $\hat\rho_1 = 0.7$ and $\hat\rho_2 = 0.5$.
 
 *Solution.* Solving ρ₁ = φ₁ + φ₂ρ₁ and ρ₂ = φ₁ρ₁ + φ₂ gives
 φ₁ = ρ₁(1 − ρ₂)/(1 − ρ₁²) and φ₂ = (ρ₂ − ρ₁²)/(1 − ρ₁²).
@@ -148,7 +148,7 @@ z ≈ 1.174 and z ≈ −2.840. Both lie outside the unit circle, so the model i
 
 The second lag adds almost nothing: these autocorrelations are close to an AR(1)'s (0.7, 0.49).
 
-**6. The weights of exponential smoothing.**
+**6. The weights of exponential smoothing.** Show that simple smoothing's weights sum to 1, and that the average age of the data they weight is $(1 - \alpha)/\alpha$.
 
 *Solution.* Σⱼ α(1 − α)ʲ = α/(1 − (1 − α)) = 1. Their average age is Σⱼ jα(1 − α)ʲ = α(1 − α)/α² = (1 − α)/α:
 2.33 periods for α = 0.3, 0.25 for α = 0.8.

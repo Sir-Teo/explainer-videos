@@ -20,7 +20,7 @@ Nothing here is written twice.  Every page is generated from what the series alr
   ``videos/<series>/labs``): the level, story, objectives by track and key results of each part, which chapters
   each track watches, the lab (run here: its output and figure go on the page) and the interactive.
 
-It needs numpy, scipy, matplotlib and markdown, not manim: no film is imported, only parsed.  ``--skip-labs``
+It needs numpy, scipy, matplotlib and markdown-it-py, not manim: no film is imported, only parsed.  ``--skip-labs``
 leaves the labs off the pages for a quick structural build.
 """
 
@@ -41,6 +41,7 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "tools"))
 
 import course_site as quant_site  # noqa: E402  (the Markdown and math helpers, the stylesheet, KaTeX)
+import lecture_text  # noqa: E402  (the narration as lecture text)
 from videos import coursekit  # noqa: E402
 from videos.coursekit import labs  # noqa: E402
 
@@ -665,23 +666,19 @@ def course_blocks(e: Entry) -> dict:
     # so a long result wraps on a phone instead of running off its card
     results = "".join(f'<div class="result"><span class="name">{esc(name)}</span><span class="tex wrap">\\(\\displaystyle '
                       f'{esc(_breakable(tex))}\\)</span></div>' for name, tex in p.results)
-    rows = "".join(f'<li data-tier="{tier}"><span class="num">{label}</span><span class="title">{esc(title)}</span>'
-                   f'{badge(key, tier)}<span class="mins">{f"{mins:.0f} min" if mins >= 0.5 else ""}</span></li>'
-                   for label, title, mins, tier in tiered_chapters(e))
     track_line = " · ".join(f"{t.tracks[k][0]} {fmt_minutes(tm[k])}" for k in "UMDI")
     also = "".join(f'<li><a href="{BLOB}/{path}">{esc(label)}</a></li>' for label, path in p.also)
     return {
         "level": f"{badge(key, p.level)}<span>starts at this level</span>",
         "prereq": f'<span class="dot">prerequisites: {prereq}</span>',
-        "story": (f'<blockquote class="question">{esc(p.question)}</blockquote><p class="story">{esc(p.story)}</p>'
-                  f'<p class="handoff"><strong>Where it goes next.</strong> {esc(p.handoff)}</p>'
-                  + (f'<p class="outside"><strong>What you need.</strong> {esc(p.outside)}</p>' if p.outside else "")),
         "widget": (f'<section id="try" class="try"><h2>Try it</h2><div class="widget" data-widget="{p.widget}">'
                    f'<noscript>This interactive needs JavaScript.</noscript></div></section>'),
         "objectives": (f'<section id="objectives"><h2>What you will be able to do</h2><div class="objectives">{objectives}'
-                       f'</div></section><section id="results"><h2>Key results</h2><div class="results">{results}</div></section>'),
-        "chapters": (f'<p class="hint">Each chapter has a home level. Choose a track to see what to watch: {track_line}.</p>'
-                     f'{track_buttons(key)}<ol class="chapters">{rows}</ol>'),
+                       f'</div></section>'),
+        "results": (f'<section id="results"><h2>Key results</h2><p class="hint">The part\'s results in one place, for '
+                    f'revision.</p><div class="results">{results}</div></section>'),
+        "tracks": (f'<p class="hint">Each chapter has a home level. Choose a track to see what to read and watch: '
+                   f'{track_line}.</p>{track_buttons(key)}'),
         "also": f'<h3>Companion material in this repository</h3><ul>{also}</ul>' if also else "",
     }
 
@@ -739,6 +736,30 @@ python -m pytest -q tests/test_courses.py -k {c.key}</code></pre>
     return shell(c, f"Labs · {c.name}", body, f"The runnable labs of {c.name}.")
 
 
+def lecture_chapters(e: Entry) -> list:
+    """[(label, title, minutes, tier or None, anchor, paragraphs)]: each chapter with its narration as text."""
+    tiers = [x[3] for x in tiered_chapters(e)] if entry_of(e) else [None] * len(chapters(e))
+    out = []
+    for i, ((label, title, mins), (module, cls, full), tier) in enumerate(zip(chapters(e), manifest(e.dir)[1], tiers)):
+        paras = lecture_text.chapter_text(e.dir / f"{module}.py", cls, full) if (e.dir / f"{module}.py").exists() else []
+        out.append((label if label.isdigit() else ("0" if i == 0 else ""), title, mins, tier, f"ch{i}", paras))
+    return out
+
+
+def open_sections(items: list, kinds: tuple, titled: bool = True) -> str:
+    """README sections shown open, as the notes' back matter (problems with folded solutions, glossary, sources).
+    ``titled=False``: a lone section under a heading that already names it goes without its own title."""
+    chosen = [x for kind in kinds for x in items if x[0] == kind]
+    out = []
+    for k, title, heading, body in chosen:
+        plain = len(heading) <= 24 or heading.lower().startswith(title.lower()[:8])
+        orig = "" if plain else f'<p class="orig">{esc(heading)}</p>'
+        head = f"<h3>{esc(title)}</h3>" if titled or len(chosen) > 1 else ""
+        body = quant_site.fold_solutions(body) if k == "problems" else body
+        out.append(f'<div class="sect sect-{k}">{head}{orig}<div class="md">{body}</div></div>')
+    return "".join(out)
+
+
 def part_page(e: Entry, out: Path | None = None, run_labs: bool = True) -> str:
     c = BY_KEY[e.course]
     cb = course_blocks(e)
@@ -752,64 +773,86 @@ def part_page(e: Entry, out: Path | None = None, run_labs: bool = True) -> str:
     rel = e.dir.relative_to(ROOT).as_posix()
     package = rel.replace("/", ".")
     subtitle = e.subtitle or syl["subtitle"]
-    meta = [cb.get("level", ""), f'<span class="{"dot" if cb else ""}">{fmt_minutes(total)}</span>' if total >= 1 else "",
+    p = entry_of(e)
+    meta = [cb.get("level", ""), f'<span class="{"dot" if cb else ""}">{fmt_minutes(total)} of film</span>' if total >= 1 else "",
             f'<span class="dot">{len(chs)} chapters</span>',
             cb.get("prereq") or (f'<span class="dot">prerequisites: {inline_md(syl["prereq"], e.dir.parent)}</span>'
                                  if syl["prereq"] else "")]
-    story = cb.get("story") or (
-        (f'<blockquote class="question">{inline_md(syl["question"], e.dir.parent)}</blockquote>' if syl["question"] else "")
-        + (f'<p class="story">{inline_md(syl["story"], e.dir.parent)}</p>' if syl["story"] else ""))
+    if p:
+        story = (f'<blockquote class="question">{esc(p.question)}</blockquote><p class="story">{esc(p.story)}</p>'
+                 + (f'<p class="outside"><strong>What you need.</strong> {esc(p.outside)}</p>' if p.outside else ""))
+    else:
+        story = ((f'<blockquote class="question">{inline_md(syl["question"], e.dir.parent)}</blockquote>' if syl["question"] else "")
+                 + (f'<p class="story">{inline_md(syl["story"], e.dir.parent)}</p>' if syl["story"] else ""))
     lab = lab_block(e, out, run_labs) if (out and has_lab(e)) else ""
     glance = "".join(f"<dt>{esc(_clean(h))}</dt><dd>{inline_md(x, e.dir.parent)}</dd>" for h, x in row)
-    rows = "".join(f'<li><span class="num">{label}</span><span class="title">{esc(title)}</span><span></span>'
-                   f'<span class="mins">{f"{mins:.0f} min" if mins >= 0.5 else ""}</span></li>' for label, title, mins in chs)
+    lecture = lecture_chapters(e)
+    contents = quant_site.contents_html([x[:5] for x in lecture], lambda t: badge(e.course, t))
+    numbers = quant_site.readme_chapter_table(e.dir / "README.md")
+    text = quant_site.lecture_html(lecture, lambda t: badge(e.course, t), c.unit, numbers, e.dir)
     plan = (f'<details class="notes"><summary><span class="kind">The syllabus\'s plan for this part</span>'
             f'<span class="orig">from SYLLABUS.md, the plan of record</span></summary>'
             f'<div class="md">{md_to_html(syl["plan"], VIDEOS / e.course)}</div></details>') if syl["plan"] else ""
-    notes = sections(readme["en"], _ORDER)
+    problems = open_sections(readme["en"], ("problems",), titled=False)
+    further = open_sections(readme["en"], ("back", "glossary", "sources"))
+    folded = sections(readme["en"], ("computed", "chapters", "notes", "visual"))
     zh = sections(readme["zh"], ("chapters", "problems", "glossary", "sources", "computed", "back", "notes", "visual", "build"))
+    zh = quant_site.fold_solutions(zh)
     build_notes = sections(readme["en"], ("build",))
     compute = f"python -m {package}.compute        # the {c.unit}'s numbers, into .cache/{e.video}\n" if (e.dir / "compute.py").exists() else ""
     label = f"{act[0]} · {act[1]}" if act[0] else act[1]
     prev_ = (f'<a class="prev" href="{all_[e.n - 2].slug}.html">← {esc(all_[e.n - 2].title)}</a>' if e.n > 1 else "<span></span>")
     next_ = (f'<a class="next" href="{all_[e.n].slug}.html">{esc(all_[e.n].title)} →</a>' if e.n < len(all_)
              else '<a class="next" href="index.html#map">Back to the course map →</a>')
-    overview = (f'<details class="notes overview"{"" if story else " open"}><summary><span class="kind">What '
-                f'the {c.unit} covers</span><span class="orig">from its README</span></summary>'
-                f'<div class="md">{readme["intro"]}</div></details>') if readme["intro"] else ""
+    about = (f'<details class="notes overview"><summary><span class="kind">About this {c.unit}</span>'
+             f'<span class="orig">from its README</span></summary><div class="md">{readme["intro"]}</div></details>'
+             if readme["intro"] and story else "")
+    intro = f'<div class="md intro">{readme["intro"]}</div>' if readme["intro"] and not story else ""
+    jumps = [("#lecture", "Lecture"), ("#results", "Key results") if p else None, ("#try", "Try it") if p else None,
+             ("#lab", "Lab") if lab else None, ("#problems", "Problems") if problems else None,
+             ("#further", "Notes and sources"), ("#zh", "中文") if zh else None, ("#build", "Build the film")]
+    jump = " · ".join(f'<a href="{h}">{t}</a>' for h, t in filter(None, jumps))
+    handoff = f'<p class="handoff"><strong>Where it goes next.</strong> {esc(p.handoff)}</p>' if p else ""
     body = f"""
 <article class="part" data-part="{e.n}">
-<p class="crumb"><a href="index.html#map">{esc(label)}</a><span>{c.unit.capitalize()} {e.n} of {len(all_)}</span></p>
-<h1>{esc(e.title)}</h1>
+<p class="crumb"><a href="index.html#map">{esc(label)}</a></p>
+<span class="partno">{c.unit.capitalize()} {e.n} of {len(all_)}</span><h1>{esc(e.title)}</h1>
 {f'<p class="sub">{esc(subtitle)}</p>' if subtitle else ''}
 <p class="meta">{''.join(meta)}</p>
 {story}
+{intro}
 {f'<dl class="glance">{glance}</dl>' if glance else ''}
-{overview}
-{cb.get("widget", "")}
 {cb.get("objectives", "")}
-<section id="chapters"><h2>Chapters</h2>
-{cb.get("chapters") or f'<ol class="chapters">{rows}</ol>'}
-{plan}
+<section id="chapters"><h2>Contents</h2>
+{cb.get("tracks", "")}
+{contents}
+<p class="hint">Also on this page: {jump}.</p>
 </section>
+<section id="lecture" class="lecture"><h2>Lecture</h2>
+{text}
+{handoff}
+</section>
+{cb.get("results", "")}
+{cb.get("widget", "")}
 {lab}
-<section id="notes"><h2>Lecture notes, problems and sources</h2>
-<p class="hint">From the {c.unit}'s <a href="{BLOB}/{rel}/README.md">README</a>. Try the problems before opening
-the solutions.</p>
-{notes or '<p>See the README.</p>'}
+{f'<section id="problems"><h2>Problems, with solutions</h2><p class="hint">Try each problem before opening its solution.</p>{problems}</section>' if problems else ''}
+<section id="further"><h2>Notes and sources</h2>
+{further}
+{about}
+{folded}
 {cb.get("also", "")}
+{plan}
 </section>
 {f'<section id="zh" lang="zh"><h2>中文讲义</h2><p class="hint">本讲的中文部分（与英文版对应）。</p>{zh}</section>' if zh else ''}
 <section id="build"><h2>Build the film</h2>
 <pre class="code"><code>{compute}python tools/build.py {e.video}                  # render and assemble the film
 EXPLAINER_TTS=silent python tools/qa_scene.py {e.video} {manifest(e.dir)[1][0][1]}   # one chapter, silent, with a contact sheet</code></pre>
 <p class="hint">Scenes: <a href="{REPO}/tree/main/{rel}">{rel}</a>. Setup: <a href="index.html#setup">see the
-course page</a>.</p>
+course page</a>. Source of these notes: the <a href="{BLOB}/{rel}/README.md">README</a> and the scenes' narration.</p>
 {build_notes}
 </section>
 <nav class="pager">{prev_}{next_}</nav>
 </article>"""
-    p = entry_of(e)
     description = (p.question if p else syl["question"]) or subtitle or f"{e.title}: a {c.unit} of {c.name}."
     return shell(c, f"{e.title} · {c.name}", body, _clean(description), widgets=bool(p))
 
@@ -877,10 +920,11 @@ def index_page(c: Course) -> str:
         stats.append(f"<span><b>{t['problems']}</b> problem sets with solutions</span>")
     if t["zh"]:
         stats.append(f"<span><b>{t['zh']}</b> {c.unit}s with Chinese notes</span>")
-    steps = [("Watch", f"Each {c.unit} is a lecture built in code: derivations in full, every number computed or "
-                       f"cited. Build it from source, or read what it covers and its chapter list here."),
-             ("Read the notes", f"Each {c.unit}'s page carries its README: what is computed and built, chapter "
-                                f"notes, the glossary, and where each idea comes back.")]
+    steps = [("Read or watch", f"Each {c.unit} is a lecture built in code: derivations in full, every number computed or "
+                               f"cited. Its page carries the lecture as text, chapter by chapter, so you can follow "
+                               f"along with the film or read it on its own."),
+             ("Revise", f"Each {c.unit}'s page ends with its key results, the glossary, where each idea comes back, "
+                        f"and what the film computes and builds.")]
     if n_labs:
         steps.append(("Run the lab", f"One lab per part{', on ' + tb.library[0] if tb and tb.library else ''}. Seeded, a few "
                                      f"seconds each, nothing to download. Each checks its own result and ends with "
@@ -910,13 +954,14 @@ def index_page(c: Course) -> str:
   <p class="lede">{esc(c.lede)}</p>
   <div class="stats">{''.join(stats)}</div>
 </section>
+<section id="map"><h2>Contents</h2>
+<p class="hint">Each {c.unit} opens as lecture notes: the text of every chapter{', its key results, an interactive and a lab' if tb and tb.parts else ''},
+problems with solutions, and sources.</p>
+{''.join(cards)}
+</section>
 <section id="how"><h2>How to use the course</h2><div class="steps">{how}</div></section>
 {tracks}
 {f'<section id="story"><h2>The story and the devices</h2>{"".join(story)}</section>' if story else ''}
-<section id="map"><h2>The course map</h2>
-<p class="hint">Each card opens the {c.unit}'s page: its chapters, notes, problems and sources.</p>
-{''.join(cards)}
-</section>
 <section id="setup"><h2>Setup</h2>
 <pre class="code"><code>git clone {REPO}.git
 cd explainer-videos
@@ -964,8 +1009,8 @@ def landing_page() -> str:
   <h1>Explainer Videos</h1>
   <p class="lede">Long-form lectures in the manner of 3Blue1Brown, generated from source: every derivation is
   animated in Manim, every number on screen is computed by the film's own code or cited, and the narration is
-  synthesized locally. These pages are the course material that goes with them: four tracks through each course,
-  a runnable lab and an interactive for every part, chapters, lecture notes, problems with worked solutions, and
+  synthesized locally. These pages are the lecture notes that go with them: every part's lecture as text,
+  chapter by chapter, with its key results, an interactive, a runnable lab, problems with worked solutions and
   sources, generated from the same repository as the films.</p>
   <div class="stats"><span><b>{len(cards) - 1}</b> courses</span><span><b>{parts}</b> lectures</span>
   <span><b>{hours:.0f}</b> hours</span></div>

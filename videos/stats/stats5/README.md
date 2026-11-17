@@ -132,7 +132,7 @@ conditional SD √(1 − 0.49) = 0.71. That is regression to the mean; nobody's 
 - By de Finetti, the fraction of red converges to that p, so the limit is uniform on (0, 1). The moments 1/(n + 1)
   determine the distribution, since it lives on a bounded interval.
 
-**6. U₁ + U₂ + U₃.**
+**6. U₁ + U₂ + U₃.** Find the density of $U_1 + U_2 + U_3$ for independent uniforms on $(0, 1)$, by convolving the triangle with a uniform.
 
 *Solution.* The sum of two uniforms has the triangle density t on [0, 1] and 2 − t on [1, 2]. Convolve it with U(0, 1),
 so that f₃(s) = ∫_{s−1}^{s} f₂(t) dt:

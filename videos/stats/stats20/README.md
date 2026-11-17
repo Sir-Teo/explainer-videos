@@ -155,31 +155,31 @@ python tools/lecture_length.py stats20 --floor 50
 
 ## Problems and solutions
 
-**1. Two positive tests (Parts 2, 15).** Assume conditional independence within both disease-status groups.
+**1. Two positive tests (Parts 2, 15).** A condition affects 1% of adults. Two tests, conditionally independent given disease status, each detect it 90% of the time and give false alarms 5% of the time. Both are positive: how likely is the condition?
 
 *Solution.* P(both + | sick) = 0.81 and P(both + | well) = 0.0025. So P(sick | both +) = 0.0081/(0.0081 + 0.002475)
 ≈ 0.766. One positive test alone gives 0.009/(0.009 + 0.0495) ≈ 0.154.
 
-**2. A survey's margin of error (Parts 8, 18).**
+**2. A survey's margin of error (Parts 8, 18).** A survey of $n = 4{,}948$ measures systolic pressure with SD 17 mm Hg; its design effect is 3.6. The 95% margin of error, with and without the design?
 
 *Solution.* As an SRS, 1.96 × 17/√4,948 = 0.474. With a design effect of 3.6, multiply by √3.6: 0.90. The effective
 sample size is 4,948/3.6 ≈ 1,374.
 
-**3. Attenuation (Part 12).**
+**3. Attenuation (Part 12).** Usual intake $X$ has variance 1; one day's recall $W = X + U$ adds independent noise of variance 2. A true slope of 2.5 mm Hg per g: what slope does a regression on $W$ find?
 
 *Solution.* λ = Var X/(Var X + Var U) = 1/3, so the slope tends to 2.5/3 ≈ 0.83. The mean of k recall days has noise
 variance 2/k, so λ_k = 1/(1 + 2/k). For k = 7, λ = 7/9 ≈ 0.78.
 
-**4. Sizing a trial (Parts 10, 13).**
+**4. Sizing a trial (Parts 10, 13).** Plan a parallel trial: low vs high sodium, a difference of 2.3 g at 2.5 mm Hg per g, SD 15 within arms. How many per arm for 80% power at the 5% level?
 
 *Solution.* Δ = 2.3 × 2.5 = 5.75 mm Hg. Then n = 2(1.96 + 0.8416)² × 15²/5.75² ≈ 106.8, so 107 per arm.
 
-**5. Counting bootstrap replicates (Parts 16, 18).**
+**5. Counting bootstrap replicates (Parts 16, 18).** NHANES's public design: 15 strata with 2 PSUs each. How many different Rao–Wu bootstrap replicates are there?
 
 *Solution.* Each of the 15 strata draws n_h − 1 = 1 of its 2 PSUs, so there are 2¹⁵ = 32,768 equally likely
 replicates. The PSU-level information has 30 − 15 = 15 degrees of freedom however many replicates are drawn.
 
-**6. Sixty-four forks (Parts 10, 19).**
+**6. Sixty-four forks (Parts 10, 19).** Sixty-four analyses, each with a 5% false-positive rate, if independent: the chance at least one is "significant"? And with a Bonferroni correction?
 
 *Solution.*
 - **Independent analyses.** 1 − 0.95⁶⁴ ≈ 0.962.

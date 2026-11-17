@@ -117,6 +117,10 @@ def test_part_page_has_the_course_material(built):
                    "python tools/build.py stats12", 'href="part11.html"', 'href="part13.html"'):
         assert needle in page, needle
     assert page.count('<span class="num">') == len(site.manifest(ROOT / "videos/stats/stats12")[1])
+    assert page.count('<section class="chapter"') == len(site.manifest(ROOT / "videos/stats/stats12")[1])
+    assert "Here's the principle in one picture" in page, "the lecture text is the narration"
+    assert "Chapter one. The principle." not in page, "the spoken chapter heading is not repeated"
+    assert page.count('<details class="sol">') == 6 and 'id="problems"' in page
     film_rows = (built / "films" / "quantum.html").read_text().count('<li><span class="num">')
     assert film_rows == len(site.manifest(ROOT / "videos/physics/quantum")[1])
     cs = (built / "cs" / "part07.html").read_text()

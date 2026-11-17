@@ -141,7 +141,7 @@ python tools/lecture_length.py stats19 --floor 50
 
 ## Problems and solutions
 
-**1. The optimism of least squares.**
+**1. The optimism of least squares.** OLS with $p$ terms, fixed $x$'s: show $E[\text{train}] = \sigma^2(1 - p/n)$ and $E[\text{test at the same } x\text{'s}] = \sigma^2(1 + p/n)$.
 
 *Solution.* Assume the model is right, so Xβ = f and the hat matrix H projects onto a p-dimensional space.
 - **Training error.** The residual vector is (I − H)y = (I − H)ε, so E[RSS] = σ² tr(I − H) = σ²(n − p). Dividing by n
@@ -151,7 +151,7 @@ python tools/lecture_length.py stats19 --floor 50
 
 The gap is 2σ²p/n, Mallows' penalty.
 
-**2. k-NN for a parabola.**
+**2. k-NN for a parabola.** $f(x) = x^2$, neighbours at $x_0 + jh$, $j = -m, \dots, m$: the bias and variance of $k$-NN, $k = 2m + 1$.
 
 *Solution.* The prediction at x₀ is the average of f(x₀ + jh) = x₀² + 2x₀jh + j²h² over j = −m, …, m. The middle
 term averages to zero.
@@ -159,7 +159,7 @@ term averages to zero.
 - **Variance.** σ²/k.
 - **MSE.** h⁴m²(m + 1)²/9 + σ²/(2m + 1). The squared bias grows like k⁴ and the variance falls like 1/k.
 
-**3. Neighbourhoods in high dimensions.**
+**3. Neighbourhoods in high dimensions.** In $p = 10$ dimensions, the edge of a cube holding 1% of uniform data; and in $p = 100$.
 
 *Solution.* The edge is e = 0.01^{1/p}. For p = 10, e = 0.01^{0.1} ≈ 0.63; for p = 100, e ≈ 0.955. To hold 1% of
 the data, the "neighbourhood" must span 63%, and then 95.5%, of every axis.
@@ -171,7 +171,7 @@ log[P_M(x)/P_H(x)] = x log(r_M/r_H) − t(r_M − r_H). With x = 0 and t = 2, it
 6.24/ln 10 ≈ 2.71 in base 10: about 500 to 1 for Madison from the absence of a single word. Hamilton would expect
 6.6 uses in such a paper, and e^{−6.6} is tiny.
 
-**5. Ridge and the lasso for a standardized orthogonal design.**
+**5. Ridge and the lasso for a standardized orthogonal design.** Standardized orthogonal design $X^\top X=nI$: show ridge gives $\hat\beta / (1 + \lambda)$ and the lasso the soft threshold of $\hat\beta$ at $\lambda$.
 
 *Solution.* Centre the predictors and response and let XᵀX = nI. Then β̂ = Xᵀy/n and SSE/(2n) = constant + ½||β − β̂||².
 - **Ridge.** Adding (λ/2)||β||² and setting the gradient to zero gives β = β̂/(1 + λ).
@@ -179,7 +179,7 @@ log[P_M(x)/P_H(x)] = x log(r_M/r_H) − t(r_M − r_H). With x = 0 and t = 2, it
 
 These use the same per-observation conventions as the scenes. The intercept is not penalized. With XᵀX = I and unnormalized loss, the effective penalty must be rescaled accordingly.
 
-**6. A good test for a rare condition.**
+**6. A good test for a rare condition.** A test with sensitivity 90%, specificity 95%, base rate 1%: its precision, and its accuracy.
 
 *Solution.* Per 10,000 people: 100 have the condition, of whom 90 test positive; 9,900 don't, of whom 495 test
 positive.

@@ -109,7 +109,7 @@ python tools/lecture_length.py stats12 --floor 50
 
 ## Problems and solutions
 
-**1. Simple regression.**
+**1. Simple regression.** Derive $\hat a, \hat b$ for simple regression from the normal equations, and show $\hat b = r\,s_y/s_x$.
 
 *Solution.* The first normal equation, Σ(yᵢ − a − bxᵢ) = 0, gives a = ȳ − bx̄. Substitute into the second,
 Σxᵢ(yᵢ − a − bxᵢ) = 0. Since Σx̄(yᵢ − ȳ − b(xᵢ − x̄)) = 0 as well, this becomes
@@ -117,14 +117,14 @@ python tools/lecture_length.py stats12 --floor 50
 
 Hence b̂ = Sxy/Sxx = r·√(Syy/Sxx) = r·s_y/s_x.
 
-**2. The hat matrix.**
+**2. The hat matrix.** Show that $H = X(X^\top X)^{-1}X^\top$ is symmetric and idempotent, and that $\mathrm{tr}\,H = p$.
 
 *Solution.*
 - **Symmetric:** Hᵀ = X((XᵀX)⁻¹)ᵀXᵀ = H, since XᵀX is symmetric.
 - **Idempotent:** H² = X(XᵀX)⁻¹XᵀX(XᵀX)⁻¹Xᵀ = H.
 - **Trace:** tr H = tr((XᵀX)⁻¹XᵀX) = tr Iₚ = p, by tr(AB) = tr(BA) (Part 4).
 
-**3. FWL.**
+**3. FWL.** Prove the Frisch–Waugh–Lovell theorem for two predictors.
 
 *Solution.* Let M₂ = I − X₂(X₂ᵀX₂)⁻¹X₂ᵀ. Multiply y = X₁β̂₁ + X₂β̂₂ + e by M₂. Since M₂X₂ = 0 and M₂e = e (e is
 orthogonal to X₂), this gives M₂y = M₂X₁β̂₁ + e.
@@ -132,19 +132,19 @@ orthogonal to X₂), this gives M₂y = M₂X₁β̂₁ + e.
 e is also orthogonal to X₁, hence to M₂X₁ = X₁ − X₂(⋯). So this is exactly the least squares decomposition of M₂y
 on M₂X₁, and its coefficient is β̂₁.
 
-**4. An omitted variable.**
+**4. An omitted variable.** True model $y = \beta_1 x_1 + \beta_2 x_2 + \varepsilon$; $x_2 = 0.5 x_1 + u$. What does the regression of $y$ on $x_1$ alone estimate?
 
 *Solution.* y = β₁x₁ + β₂(0.5x₁ + u) + ε = (β₁ + 0.5β₂)x₁ + (β₂u + ε). If u is uncorrelated with x₁, the short
 regression estimates β₁ + 0.5β₂: the bias is γδ with γ = β₂ and δ = 0.5.
 
-**5. Standard errors along the line.**
+**5. Standard errors along the line.** With $n = 25$, $\bar x = 10$, $\sum (x_i - \bar x)^2 = 100$, $s = 2$: the SE of the fitted mean at $x_0 = 10$ and at $x_0 = 20$, and the prediction SE at $x_0 = 20$.
 
 *Solution.* SE(ŷ(x₀)) = s√(1/n + (x₀ − x̄)²/Sxx).
 - At x₀ = 10: 2√(1/25) = 0.40.
 - At x₀ = 20: 2√(0.04 + 100/100) = 2√1.04 = 2.04.
 - Prediction at x₀ = 20: 2√(1 + 1.04) = 2.86.
 
-**6. The VIF for two predictors.**
+**6. The VIF for two predictors.** Two predictors with correlation $\rho$: show $\mathrm{VIF} = 1/(1 - \rho^2)$.
 
 *Solution.* Regressing x₁ on x₂ gives R₁² = ρ², so VIF₁ = 1/(1 − ρ²). By symmetry VIF₂ is the same. At ρ = 0.95 the
 VIF is 10.3.

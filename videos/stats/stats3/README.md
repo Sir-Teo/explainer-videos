@@ -86,7 +86,7 @@ P(X = k | X + Y = n) = [e^{−a}aᵏ/k! · e^{−b}b^{n−k}/(n−k)!] / [e^{−
 
 That is the binomial(n, a/(a+b)) pmf. It is thinning, run backwards.
 
-**2. Only the exponential is memoryless.**
+**2. Only the exponential is memoryless.** Show that the exponential is the only continuous law on $(0, \infty)$ with $P(T > s + t \mid T > s) = P(T > t)$ for all $s, t \ge 0$.
 
 *Solution.* Let G(t) = P(T > t). Memorylessness says G(s + t) = G(s)G(t) for all s, t ≥ 0, with G non-increasing and
 G(0) = 1. Then:
@@ -96,7 +96,7 @@ G(0) = 1. Then:
 
 So G(t) = e^{−λt} with λ = g(1). (λ = 0 is excluded for a proper waiting time.)
 
-**3. Two transformations of a uniform.**
+**3. Two transformations of a uniform.** $U$ is uniform on $(0, 1)$. Find the laws of $U^2$ and of $-2\log U$; name both families.
 
 *Solution.*
 - P(U² ≤ y) = P(U ≤ √y) = √y, so U² has density 1/(2√y) on (0, 1): **beta(½, 1)**.
@@ -104,7 +104,7 @@ So G(t) = e^{−λt} with λ = g(1). (λ = 0 is excluded for a proper waiting ti
 
 The second is half of Box–Muller: it is R², where R is the Box–Muller radius.
 
-**4. The first of several buses.**
+**4. The first of several buses.** Show that the minimum of $n$ independent exponential$(\lambda)$ waits is exponential$(n\lambda)$. Three bus routes each run every 10 minutes on average: how long until the first bus?
 
 *Solution.* P(min Tᵢ > t) = ∏ P(Tᵢ > t) = e^{−nλt}, so the minimum is exponential(nλ). With three routes of mean 10
 minutes, the rate is 3/10 and the expected wait is 10/3 ≈ 3.3 minutes. This is superposition.

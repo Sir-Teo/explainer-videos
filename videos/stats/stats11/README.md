@@ -105,36 +105,36 @@ python tools/lecture_length.py stats11 --floor 50
 
 ## Problems and solutions
 
-**1. Wilson after zero successes.**
+**1. Wilson after zero successes.** Find the 95% Wilson interval for 0 successes in 20 trials, and compare it with Wald's.
 
 *Solution.* With p̂ = 0 and z = 1.96, the centre is (z²/2)/(n + z²) = 1.921/23.84 = 0.0806. The half-width is
 z√(z²/(4n²))/(1 + z²/n) = 0.0806. So the interval is [0, 0.161]. The Wald interval is [0, 0]: it claims certainty
 from twenty observations.
 
-**2. The exponential pivot.**
+**2. The exponential pivot.** Show that $\lambda\sum X_i \sim \mathrm{Gamma}(n, 1)$ for exponential data, and give the 95% interval for $\lambda$ when $n = 5$, $\sum x_i = 10$.
 
 *Solution.* λXᵢ ~ Exp(1), and a sum of n independent Exp(1) variables is Gamma(n, 1), whatever λ is. So
 P(G₀.₀₂₅ ≤ λΣXᵢ ≤ G₀.₉₇₅) = 0.95 and λ ∈ [G₀.₀₂₅/Σxᵢ, G₀.₉₇₅/Σxᵢ]. With n = 5 the quantiles are 1.623 and 10.242.
 For Σxᵢ = 10 the interval is [0.162, 1.024].
 
-**3. Zero events in 200.**
+**3. Zero events in 200.** No adverse events in 200 patients: give the one-sided 95% upper limit exactly, and by the rule of three.
 
 *Solution.* The exact upper limit solves (1 − p)²⁰⁰ = 0.05, giving p = 1 − 0.05^(1/200) = 0.01487. The rule of three
 gives 3/200 = 0.015.
 
-**4. Confidence vs prediction.**
+**4. Confidence vs prediction.** Ten men: $\bar x = 176$, $s = 7$. Give the 95% confidence interval for $\mu$ and the 95% prediction interval for the next man.
 
 *Solution.* t₉,₀.₉₇₅ = 2.262.
 - **CI:** 176 ± 2.262 · 7/√10 = 176 ± 5.0 = [171.0, 181.0].
 - **PI:** 176 ± 2.262 · 7 · √1.1 = 176 ± 16.6 = [159.4, 192.6].
 
-**5. Fieller.**
+**5. Fieller.** $\bar x = 4$, $\bar y = 8$, independent, each with SE 1: find Fieller's 95% set for $\mu_y/\mu_x$, and the delta-method interval.
 
 *Solution.* (ȳ − ρx̄)² ≤ z²(1 + ρ²) gives (16 − 3.84)ρ² − 64ρ + (64 − 3.84) ≤ 0. The roots are
 (64 ± √(4096 − 4 · 12.16 · 60.16))/24.32, so ρ ∈ [1.225, 4.039]. The set is bounded because g = 3.84/16 = 0.24 < 1.
 The delta method gives 2 ± 1.96 · √(1 + 4)/4 = [0.904, 3.096], which is symmetric and too far left.
 
-**6. Welch's example.**
+**6. Welch's example.** Welch's example: for $X_1, X_2 \sim U(\theta - \tfrac12, \theta + \tfrac12)$, show $P(|X_1 - X_2| \ge \tfrac12) = \tfrac14$, and that the coverage given $|X_1 - X_2| < \tfrac12$ is $\tfrac13$.
 
 *Solution.* Take θ = 0. D = X₁ − X₂ has the triangular density 1 − |d| on [−1, 1], so
 P(|D| ≥ ½) = 2∫_{½}^{1}(1 − d) dd = ¼.

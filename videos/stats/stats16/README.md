@@ -125,25 +125,25 @@ python tools/lecture_length.py stats16 --floor 50
 
 ## Problems and solutions
 
-**1. A small permutation test.**
+**1. A small permutation test.** Two groups $\{3, 5, 9\}$ and $\{1, 2, 4\}$: the exact permutation $p$-value for the difference in means, one-sided.
 
 *Solution.* The pooled values are 1, 2, 3, 4, 5, 9, and there are C(6, 3) = 20 ways to choose the first group. The
 observed group sums to 17. A group of three without the 9 sums to at most 3 + 4 + 5 = 12. A group with the 9 needs the
 other two to sum to at least 8: only {3, 5} and {4, 5}. So 2 of the 20 splits are as extreme, and p = 2/20 = 0.10.
 
-**2. Wilcoxon's distribution for n = 4.**
+**2. Wilcoxon's distribution for n = 4.** $n = 4$: list the null distribution of Wilcoxon's $W^+$, and find $P(W^+ \ge 9)$.
 
 *Solution.* Multiply out (1 + x)(1 + x²)(1 + x³)(1 + x⁴) = 1 + x + x² + 2x³ + 2x⁴ + 2x⁵ + 2x⁶ + x⁷ + x⁸ + x⁹ + x¹⁰.
 The coefficients sum to 16 = 2⁴, and P(W⁺ = w) is the coefficient over 16. Then P(W⁺ ≥ 9) = (1 + 1)/16 = 1/8. With
 four pairs, no one-sided test at level 0.05 is possible: the smallest p is 1/16.
 
-**3. The rank sum as a pair count.**
+**3. The rank sum as a pair count.** With no ties, show that $U = R - m(m+1)/2$ counts the pairs $(i, j)$ with $x_i > y_j$, where $R$ is the rank sum of the $x$'s.
 
 *Solution.* Assume no ties. Sort the x's: x₍₁₎ < … < x₍ₘ₎. The rank of x₍ₖ₎ in the pooled sample is k (the x's at or below it) plus
 the number of y's below it. Summing over k, R = m(m + 1)/2 + #{(i, j) : xᵢ > yⱼ}. So U = R − m(m + 1)/2 is the pair
 count. With ties, average ranks give half credit to tied cross-group pairs.
 
-**4. The jackknife and Bessel's correction.**
+**4. The jackknife and Bessel's correction.** Show that the jackknife bias correction of $\hat\sigma^2 = \frac1n\sum(x_i - \bar x)^2$ gives exactly $s^2$.
 
 *Solution.* Let SS = Σ(xⱼ − x̄)² and dᵢ = xᵢ − x̄. Leaving out xᵢ, Σⱼ≠ᵢ(xⱼ − x̄₍ᵢ₎)² = SS − n dᵢ²/(n − 1), so
 σ̂²₍ᵢ₎ = [SS − n dᵢ²/(n − 1)]/(n − 1).
@@ -151,12 +151,12 @@ count. With ties, average ranks give half credit to tied cross-group pairs.
 - **The bias estimate:** (n − 1)[SS(n − 2)/(n − 1)² − SS/n] = −SS/(n(n − 1)).
 - **The corrected estimate:** SS/n + SS/(n(n − 1)) = SS/(n − 1) = s².
 
-**5. The chance a resample contains a point.**
+**5. The chance a resample contains a point.** For $n$ distinct values, find $P^*(\text{a resample contains } x_1)$, and its limit.
 
 *Solution.* Each of the n draws misses x₁ with probability 1 − 1/n, independently. So P*(x₁ in the resample) =
 1 − (1 − 1/n)ⁿ, which tends to 1 − 1/e ≈ 0.632. On average a resample contains about 63% of the distinct points.
 
-**6. The percentile interval for a maximum.**
+**6. The percentile interval for a maximum.** Show that the percentile interval for $\max_i x_i$ from Uniform$(0, \theta)$ never contains $\theta$.
 
 *Solution.* Every resampled value is one of the xᵢ, so every resampled maximum is at most maxᵢ xᵢ. Hence both
 percentiles are at most maxᵢ xᵢ. But maxᵢ xᵢ < θ with probability 1, since the uniform has no atom at θ. So the

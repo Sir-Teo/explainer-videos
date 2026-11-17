@@ -103,24 +103,24 @@ python tools/lecture_length.py stats9 --floor 50
 
 ## Problems and solutions
 
-**1. Moments for the Beta.**
+**1. Moments for the Beta.** Method of moments for the Beta$(\alpha, \beta)$: express $\hat\alpha, \hat\beta$ in terms of $\bar x$ and $v = \tfrac1n\sum (x_i - \bar x)^2$.
 
 *Solution.* With m = x̄, matching E X = α/(α + β) = m and Var X = m(1 − m)/(α + β + 1) = v gives
 α + β = m(1 − m)/v − 1 =: c. So α̂ = m·c and β̂ = (1 − m)·c. This needs v < m(1 − m), and v > 0; these hold for a nonconstant sample in (0, 1) when v uses divisor n.
 
-**2. The Pareto.**
+**2. The Pareto.** Pareto: $p_\theta(x) = \theta x^{-\theta - 1}$ for $x \ge 1$. Find the MLE of $\theta$, the Fisher information, and the MLE's approximate standard error.
 
 *Solution.* ℓ(θ) = n log θ − (θ + 1)Σ log xᵢ, so U(θ) = n/θ − Σ log xᵢ and θ̂ = n/Σ log xᵢ. Next, −∂²/∂θ² log p = 1/θ²,
 so I(θ) = 1/θ² and SE(θ̂) ≈ θ̂/√n. (log X is exponential with rate θ, so θ̂ is chapter 4's exponential MLE in
 disguise.)
 
-**3. The uniform.**
+**3. The uniform.** For $X_1, \dots, X_n$ uniform on $(0, \theta)$: show $M = \max X_i$ is sufficient and complete, and find the UMVUE of $\theta$.
 
 *Solution.* p_θ(x) = θ⁻ⁿ 1{M ≤ θ} · 1{min xᵢ ≥ 0}, so M is sufficient by factorization. M has density n mⁿ⁻¹/θⁿ on
 (0, θ). If E_θ g(M) = 0 for all θ, then ∫₀^θ g(m) mⁿ⁻¹ dm = 0 for all θ. Differentiating in θ gives g(θ)θⁿ⁻¹ = 0, so
 g = 0 almost everywhere, and M is complete. Since E M = nθ/(n + 1), the UMVUE is (n + 1)M/n by Lehmann–Scheffé.
 
-**4. A Rao–Blackwellized probability.**
+**4. A Rao–Blackwellized probability.** $X_i \sim N(\mu, 1)$: Rao–Blackwellize $\mathbf 1\{X_1 \le c\}$ given $\bar X$ to get the UMVUE of $P(X \le c) = \Phi(c - \mu)$.
 
 *Solution.* 1{X₁ ≤ c} is unbiased for Φ(c − μ), and X̄ is complete and sufficient. For n > 1, (X₁, X̄) is bivariate normal with
 Cov(X₁, X̄) = 1/n = Var X̄, so X₁ ∣ X̄ ~ N(X̄, 1 − 1/n). Hence
@@ -129,14 +129,14 @@ E(1{X₁ ≤ c} ∣ X̄) = Φ((c − X̄)/√(1 − 1/n)),
 
 the UMVUE. It is not the plug-in Φ(c − X̄), which is biased.
 
-**5. The Cramér–Rao bound for a normal variance.**
+**5. The Cramér–Rao bound for a normal variance.** $X_i \sim N(0, \sigma^2)$: find $I(\sigma)$ and the Cram\'er–Rao bound for unbiased estimators of $\sigma^2$; is it attained?
 
 *Solution.* log p = −log σ − x²/(2σ²) + const, so u = −1/σ + x²/σ³ and I(σ) = Var(X²)/σ⁶ = 2σ⁴/σ⁶ = 2/σ². For
 ψ(σ) = σ², ψ′ = 2σ, and the bound is (2σ)²/(n · 2/σ²) = 2σ⁴/n. The estimator (1/n)Σxᵢ² is unbiased with variance
 2σ⁴/n, so the bound is attained. This is the exponential-family case: T = Σxᵢ², estimating its own mean. With μ
 unknown, s² has variance 2σ⁴/(n − 1) and does not attain it.
 
-**6. The tank estimator is unbiased.**
+**6. The tank estimator is unbiased.** Tanks: show $E\,m = \tfrac{k(N + 1)}{k + 1}$, so $m(1 + \tfrac1k) - 1$ is unbiased. (Hint: $\sum_{j=k}^N j\binom{j-1}{k-1} = k\sum_{j=k}^N \binom{j}{k}$.)
 
 *Solution.* P(m = j) = C(j − 1, k − 1)/C(N, k), and j·C(j − 1, k − 1) = k·C(j, k). By the hockey-stick identity,
 Σⱼ₌ₖᴺ C(j, k) = C(N + 1, k + 1). So

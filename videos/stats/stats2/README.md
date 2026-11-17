@@ -103,7 +103,7 @@ V(a, b) = ½ V(a−1, b) + ½ V(a, b−1). This gives:
 - V(1,2) = ¾ and V(1,3) = ⅞;
 - V(2,3) = ½(⅞ + ½) = 11/16.
 
-**2. Inclusion–exclusion and Bonferroni.**
+**2. Inclusion–exclusion and Bonferroni.** Prove inclusion–exclusion for three events, and the Bonferroni lower bound $P(\bigcup_i A_i) \ge \sum_i P(A_i) - \sum_{i<j} P(A_i \cap A_j)$.
 
 *Solution.* Apply the two-event rule to (A ∪ B) ∪ C:
 
@@ -131,14 +131,14 @@ Take expectations. E N = Σ P(Aᵢ) and E C(N, 2) = Σ_{i<j} P(Aᵢ ∩ Aⱼ), b
 
 Even a 99%-accurate test mostly raises false alarms for a condition this rare.
 
-**4. Monty Hall with n doors.**
+**4. Monty Hall with n doors.** Monty Hall with $n$ doors: the host, who knows, opens $n - 2$ goat doors other than yours. Show that switching to the last closed door wins with probability $(n-1)/n$.
 
 *Solution.* Assume a knowledgeable host always opens n − 2 goat doors and always offers the switch. Switching
 wins exactly when your initial pick is a goat, so its unconditional success probability is (n − 1)/n, regardless
 of how the host chooses among eligible doors. Conditional odds after a particular set of doors is opened also
 require the host's selection rule; that finer observation need not be independent of the car's location.
 
-**5. Different faces in n rolls.**
+**5. Different faces in n rolls.** Use indicators to find the expected number of different faces seen in $n$ rolls of a die. How large must $n$ be for the expectation to exceed $5$?
 
 *Solution.* Let I_f indicate that face f appears at least once. Then E I_f = 1 − (5/6)ⁿ, and by linearity
 E[#faces] = 6(1 − (5/6)ⁿ). This exceeds 5 iff (5/6)ⁿ < 1/6, that is n > ln 6 / ln 1.2 ≈ 9.83. So n = 10, which

@@ -111,34 +111,34 @@ python tools/lecture_length.py stats15 --floor 50
 
 ## Problems and solutions
 
-**1. A small beta posterior.**
+**1. A small beta posterior.** Uniform prior, 3 successes in 5 trials: the posterior, its mean, and $P(p > \tfrac12 \mid \text{data})$.
 
 *Solution.* The posterior is Beta(1 + 3, 1 + 2) = Beta(4, 3), with mean 4/7 = 0.571.
 
 P(p > ½) = 1 − I½(4, 3). For integer parameters this is a binomial sum: P(at least 4 successes in 6 fair trials)
 = (15 + 6 + 1)/64 = 22/64 = 0.344. So P(p > ½) = 1 − 0.344 = 0.656.
 
-**2. Gamma–Poisson.**
+**2. Gamma–Poisson.** Show that a Gamma$(\alpha, \beta)$ prior and Poisson counts $y_1, \ldots, y_n$ give a Gamma$(\alpha + \sum y_i, \beta + n)$ posterior.
 
 *Solution.* π(λ) ∝ λ^(α−1) e^(−βλ) and the likelihood ∝ ∏ λ^(yᵢ) e^(−λ) = λ^(Σyᵢ) e^(−nλ). Their product is
 λ^(α+Σyᵢ−1) e^(−(β+n)λ), the kernel of Gamma(α + Σyᵢ, β + n).
 
-**3. One normal observation.**
+**3. One normal observation.** Prior $\mu \sim N(0, 1)$, one observation $x = 2$ with $\sigma = 1$: the posterior for $\mu$.
 
 *Solution.* The precisions add, 1 + 1 = 2, so the posterior variance is ½. The posterior mean is (0 · 1 + 2 · 1)/2
 = 1. The posterior is N(1, ½): halfway between prior and data, because they are equally precise.
 
-**4. The prior as imaginary data.**
+**4. The prior as imaginary data.** Show the Beta–binomial posterior mean is a weighted average of $a/(a + b)$ and $s/n$, and give the weights.
 
 *Solution.* (a + s)/(a + b + n) = [(a + b)/(a + b + n)] · a/(a + b) + [n/(a + b + n)] · s/n. The weights,
 (a + b)/(a + b + n) and n/(a + b + n), sum to 1, and the data's weight tends to 1 as n grows.
 
-**5. The rule of succession.**
+**5. The rule of succession.** Derive Laplace's rule of succession, $(s + 1)/(n + 2)$.
 
 *Solution.* With a uniform prior the posterior is Beta(s + 1, n − s + 1). P(next success) is its mean,
 (s + 1)/((s + 1) + (n − s + 1)) = (s + 1)/(n + 2).
 
-**6. A Bayes factor.**
+**6. A Bayes factor.** 9 heads in 10 tosses: the Bayes factor for $p \sim U(0, 1)$ against $p = \tfrac12$, and Jeffreys's verdict.
 
 *Solution.*
 - **Under H₁:** p(y | H₁) = C(10, 9) ∫p⁹(1 − p) dp = C(10, 9) B(10, 2) = 10/110.

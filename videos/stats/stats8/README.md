@@ -92,7 +92,7 @@ python tools/lecture_length.py stats8 --floor 50
 
 ## Problems and solutions
 
-**1. E Σ(xᵢ − x̄)² = (n − 1)σ².**
+**1. E Σ(xᵢ − x̄)² = (n − 1)σ².** Show that $E\sum_i (x_i - \bar x)^2 = (n - 1)\sigma^2$ for any i.i.d. sample with variance $\sigma^2$.
 
 *Solution.* Σ(xᵢ − x̄)² = Σ(xᵢ − μ)² − n(x̄ − μ)². The cross term is 2(x̄ − μ)Σ(xᵢ − x̄) = 0. Taking expectations
 gives nσ² − n·σ²/n = (n − 1)σ². Identical means and variances, independence, and a finite variance are sufficient.
@@ -105,12 +105,12 @@ gives nσ² − n·σ²/n = (n − 1)σ². Identical means and variances, indepe
 
 Both intervals have exact coverage under IID normal data; the variance interval is especially sensitive to nonnormality (chapter 4's coverage check).
 
-**3. t² = F.**
+**3. t² = F.** Show that if $T \sim t_k$ then $T^2 \sim F_{1,k}$.
 
 *Solution.* T = Z/√(V/k) with Z ⟂ V ~ χ²ₖ. Then T² = (Z²/1)/(V/k), and Z² ~ χ²₁ is independent of V, so T² is a ratio
 of independent χ²s over their df: F₁,ₖ.
 
-**4. The best divisor.**
+**4. The best divisor.** Normal data: find the $c$ minimizing $E\big(\tfrac1c\sum (x_i - \bar x)^2 - \sigma^2\big)^2$, and the minimum MSE.
 
 *Solution.* SS/σ² ~ χ²ₙ₋₁, so
 
@@ -123,7 +123,7 @@ MSE = σ⁴((n − 1 − n − 1)² + 2(n − 1))/(n + 1)² = 2σ⁴/(n + 1),
 
 against 2σ⁴/(n − 1) for the unbiased divisor.
 
-**5. The SE of a ratio.**
+**5. The SE of a ratio.** Use the delta method to find the SE of $\bar y/\bar x$ when $(x_i, y_i)$ are i.i.d. pairs.
 
 *Solution.* With R = μ_y/μ_x,
 
@@ -132,7 +132,7 @@ against 2σ⁴/(n − 1) for the unbiased divisor.
 So SE(ȳ/x̄) ≈ (1/|μ_x|)√((σ_y² − 2Rσ_xy + R²σ_x²)/n). Estimate it by plugging in x̄, R̂ and the sample variance of the
 residuals eᵢ = yᵢ − R̂xᵢ.
 
-**6. A sample size from N = 2,000.**
+**6. A sample size from N = 2,000.** How large a simple random sample (without replacement) from $N = 2{,}000$ gives $\mathrm{SE}(\bar x) = \sigma/20$?
 
 *Solution.* We need (σ²/n)(N − n)/(N − 1) = σ²/400, so n = 400N/(N + 399) = 800,000/2,399 = 333.5, and the sample
 needs 334. Without the correction it would need 400.

@@ -131,7 +131,7 @@ python tools/lecture_length.py stats13 --floor 50
 
 ## Problems and solutions
 
-**1. An exact randomization test.**
+**1. An exact randomization test.** Six plots, three by lot get a new variety: yields 14, 16, 18 (new) and 10, 11, 15 (old). Find the exact randomization $p$-value for the difference in means.
 
 *Solution.* The six yields total 84. If the new variety's three plots sum to S, the difference in means is
 (S − (84 − S))/3 = (2S − 84)/3.
@@ -143,13 +143,13 @@ C(6, 3) = 20 equally likely sets of three:
 
 So p = 4/20 = 0.20. Six plots cannot give strong evidence: the smallest possible two-sided p is 2/20 = 0.10.
 
-**2. The ANOVA identity.**
+**2. The ANOVA identity.** In a one-way layout, show $\text{SST} = \text{SSB} + \text{SSW}$: the cross term vanishes.
 
 *Solution.* Write yᵢⱼ − ȳ = (ȳᵢ − ȳ) + (yᵢⱼ − ȳᵢ) and square. The cross term is
 2Σᵢ(ȳᵢ − ȳ)Σⱼ(yᵢⱼ − ȳᵢ). Each inner sum is zero, because deviations from a group's own mean sum to zero. So
 SST = Σᵢnᵢ(ȳᵢ − ȳ)² + ΣᵢΣⱼ(yᵢⱼ − ȳᵢ)² = SSB + SSW.
 
-**3. Yates's algorithm on a 2².**
+**3. Yates's algorithm on a 2².** A $2^2$ factorial gives $(1) = 20$, $a = 30$, $b = 24$, $ab = 40$. Find the effects of A, B and AB by Yates's algorithm.
 
 *Solution.* In standard order the yields are 20, 30, 24, 40.
 - **Pass 1:** sums 50, 64; differences 10, 16.
@@ -158,7 +158,7 @@ SST = Σᵢnᵢ(ȳᵢ − ȳ)² + ΣᵢΣⱼ(yᵢⱼ − ȳᵢ)² = SSB + SSW.
 The column [114, 26, 14, 6] is the total and the contrasts for A, B and AB. Divide the contrasts by 2^(k−1) = 2:
 A = 13, B = 7, AB = 3. Check A directly: (30 + 40)/2 − (20 + 24)/2 = 35 − 22 = 13.
 
-**4. A half fraction of a 2⁵.**
+**4. A half fraction of a 2⁵.** A $2^{5-1}$ design has $E = ABCD$. Give the defining relation, its resolution, and the aliases of $A$ and $AB$.
 
 *Solution.* E = ABCD gives I = ABCDE. The shortest (only) word has five letters, so the design has resolution V.
 - A × ABCDE = BCDE, so A is aliased with a four-factor interaction.
@@ -166,7 +166,7 @@ A = 13, B = 7, AB = 3. Check A directly: (30 + 40)/2 − (20 + 24)/2 = 35 − 22
 
 Main effects and two-factor interactions are all clear of each other.
 
-**5. D-optimality for a line.**
+**5. D-optimality for a line.** Straight-line regression on $[-1, 1]$: show $\det M$ is the design's variance of $x$, and find the D-optimal design.
 
 *Solution.* With f(x) = (1, x),
 M = [[1, x̄], [x̄, mean(x²)]]
@@ -175,7 +175,7 @@ under the design ξ, so det M = mean(x²) − x̄² = Var_ξ(x).
 On [−1, 1], Var(x) ≤ mean(x²) ≤ 1, with equality only if every point is at ±1 and x̄ = 0. So the D-optimal design
 puts half the observations at each end, with det M = 1.
 
-**6. A sample size.**
+**6. A sample size.** How many plots per variety detect $\delta = 2.5$ with $\sigma = 4$, 80% power, $\alpha = 0.05$ (normal approximation)?
 
 *Solution.* n = 2(1.960 + 0.842)² σ²/δ² = 2 × 7.85 × (4/2.5)² = 40.2, so 41 plots per variety. The exact
 calculation with the noncentral t gives 42, the value in chapter 12.

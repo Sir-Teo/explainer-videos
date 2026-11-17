@@ -121,16 +121,16 @@ python tools/lecture_length.py stats18 --floor 50
 
 ## Problems and solutions
 
-**1. The fpc in a town.**
+**1. The fpc in a town.** A town of 2,000; an SRS of 400 gives $\bar y = 52$, $s = 20$. The SE with and without the fpc.
 
 *Solution.* Without the fpc, the SE is s/√n = 20/20 = 1.0. With it, multiply by √(1 − 400/2000) = √0.8: about 0.89.
 
-**2. The covariance of inclusion indicators.**
+**2. The covariance of inclusion indicators.** Show that for an SRS without replacement, $\mathrm{Cov}(R_i, R_j) = -f(1 - f)/(N - 1)$.
 
 *Solution.* P(Rᵢ = Rⱼ = 1) = n(n − 1)/(N(N − 1)), so Cov(Rᵢ, Rⱼ) = n(n − 1)/(N(N − 1)) − n²/N². Simplify with f = n/N:
 f[(n − 1)/(N − 1) − f] = f(n − N)/(N(N − 1)) = −f(1 − f)/(N − 1).
 
-**3. Neyman allocation for two strata.**
+**3. Neyman allocation for two strata.** Two strata, $N_1 = N_2$, $S_1 = 1$, $S_2 = 3$, $n = 100$: Neyman's allocation, and its variance vs proportional.
 
 *Solution.* Here n_h ∝ N_h S_h ∝ S_h, so n₁ = 25 and n₂ = 75. Ignoring the fpc, with W₁ = W₂ = ½:
 - **Neyman:** Var = ¼(1/25) + ¼(9/75) = 0.01 + 0.03 = 0.04.
@@ -138,16 +138,16 @@ f[(n − 1)/(N − 1) − f] = f(n − N)/(N(N − 1)) = −f(1 − f)/(N − 1)
 
 Neyman's allocation has 20% less variance.
 
-**4. An effective sample size.**
+**4. An effective sample size.** A self-selected sample of 1% of a population has $\rho_{R,Y} = 0.01$. Its effective sample size.
 
 *Solution.* n_eff = f/(1 − f)/ρ² = (0.01/0.99)/0.0001 ≈ 101. Whatever the population's size, the self-selected 1% is
 comparable to about a hundred random people on this squared-error scale, ignoring the comparison SRS's finite-population correction.
 
-**5. A design effect.**
+**5. A design effect.** Cluster sample, 30 per cluster, ICC 0.05: the design effect, and $n_{\text{eff}}$ for 1,500 interviews.
 
 *Solution.* deff = 1 + (30 − 1) × 0.05 = 2.45, so n_eff = 1,500/2.45 ≈ 612.
 
-**6. Horvitz–Thompson is unbiased.**
+**6. Horvitz–Thompson is unbiased.** Show that the Horvitz–Thompson total is unbiased for any design with all $\pi_i > 0$.
 
 *Solution.* Write T̂ = Σᵢ Rᵢyᵢ/πᵢ over the whole population. Then E[T̂] = Σᵢ E[Rᵢ]yᵢ/πᵢ = Σᵢ πᵢyᵢ/πᵢ = Σᵢ yᵢ = T. This
 holds for any design, provided every πᵢ > 0; otherwise some units can never be seen.

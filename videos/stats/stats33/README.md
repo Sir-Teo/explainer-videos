@@ -212,32 +212,32 @@ python tools/lecture_length.py stats33 --floor 50
 
 ## Problems and solutions
 
-**1. Holm controls the FWER under any dependence.**
+**1. Holm controls the FWER under any dependence.** Show that Holm's procedure controls the FWER at $\alpha$ under any dependence.
 
 *Solution.* Let I₀ be the true nulls, m₀ = |I₀|, and let j be the true null with the smallest p-value. A false
 rejection requires Holm to reach and reject j. When it does, at most m − m₀ hypotheses have been rejected before it,
 so j's step has threshold α/(m − k + 1) ≤ α/m₀. Hence a false rejection implies min_{i∈I₀} p_i ≤ α/m₀, and by the
 union bound P(min_{i∈I₀} p_i ≤ α/m₀) ≤ m₀·α/m₀ = α.
 
-**2. BH's exact FDR.**
+**2. BH's exact FDR.** Prove that BH's FDR equals $\pi_0 q$ for independent, continuous, uniform null $p$-values.
 
 *Solution.* With R⁽ⁱ⁾ the number BH rejects when p_i is set to 0, the events {i rejected, R = k} and
 {p_i ≤ qk/m, R⁽ⁱ⁾ = k} coincide. Then E[1{i rej}/R] = Σ_k (1/k)P(p_i ≤ qk/m)P(R⁽ⁱ⁾ = k) by independence. This is
 Σ_k (1/k)(qk/m)P(R⁽ⁱ⁾ = k) = q/m. Summing over the m₀ true nulls gives FDR = m₀q/m = π₀q.
 
-**3. The BY bound.**
+**3. The BY bound.** Show that BH at level $q/\sum_{i=1}^m 1/i$ controls the FDR under arbitrary dependence (bound $\mathbf 1\{p \le qk/m\}/k$).
 
 *Solution.* Let c = Σ_{j≤m} 1/j and Δ = q/(mc), and let i be a true null rejected with R = k. Then p_i ≤ kΔ, so
 p_i ∈ ((j − 1)Δ, jΔ] for some j ≤ k, and then 1/R = 1/k ≤ 1/j. Hence 1{i rejected}/R ≤ Σ_{j=1}^m (1/j)·1{p_i ∈
 ((j − 1)Δ, jΔ]}, whatever the dependence. For exactly uniform nulls, taking expectations, the contribution is at most
 Σ_j (1/j)Δ = cΔ = q/m. Summing over m₀ ≤ m nulls gives FDR ≤ q. For super-uniform nulls, use summation by parts with the nonincreasing step weight and P(p_i≤jΔ)≤jΔ; individual bin probabilities need not be bounded by Δ.
 
-**4. Storey’s uncapped estimate at a fixed λ has conservative expectation.**
+**4. Storey’s uncapped estimate at a fixed λ has conservative expectation.** Show that Storey's uncapped $\hat\pi_0(\lambda)$ at fixed $\lambda$ has expectation $\ge \pi_0$.
 
 *Solution.* E#{p_i > λ} ≥ E#{null p_i > λ} = m₀(1 − λ), because null p-values are uniform. So
 E π̂₀(λ) = E#{p_i > λ}/(m(1 − λ)) ≥ m₀/m = π₀. This refers to the uncapped estimator. Clipping at one can bias it downward (under an all-null uniform model, its expectation is strictly below one). An upward mean alone does not prove finite-sample FDR control for a plug-in adaptive procedure.
 
-**5. The knockoff coin flip.**
+**5. The knockoff coin flip.** For a null $j$, show $\mathrm{sign}(W_j)$ is a fair coin independent of $|W_j|$ for knockoffs.
 
 *Solution.* Swapping a null variable j with its knockoff leaves the joint law of (X, X̃, y) unchanged: it leaves that
 of (X, X̃) unchanged by exchangeability, and y depends on X only through non-null variables, given which X̃ is
@@ -245,7 +245,7 @@ irrelevant. But the swap maps W_j to −W_j and leaves |W_j| and the other W's u
 have the same law: conditional on all magnitudes and nonnull statistics, the nonzero null signs are independent fair coins. Zero W values are excluded. The joint flip-sign property is essential. The knockoff+ threshold then gives
 FDR ≤ q by a supermartingale (optional stopping) argument over the ordered |W|.
 
-**6. Ioannidis's formula.**
+**6. Ioannidis's formula.** Derive Ioannidis's PPV with bias $u$, and find the prior below which $\mathrm{PPV} < 1/2$ for power 0.8.
 
 *Solution.* Per unit of null studies there are R real ones. True positives come from real effects significant by
 power, (1 − β)R, plus a share u of the real-but-missed ones, uβR. False positives come from nulls, α, plus a share u

@@ -250,20 +250,20 @@ python tools/lecture_length.py stats28 --floor 50
 
 ## Problems and solutions
 
-**1. The optimism of a linear smoother.**
+**1. The optimism of a linear smoother.** For $\hat y = Sy$ with $S$ fixed and $\mathrm{Var}(y) = \sigma^2 I$, show that the optimism is $2\sigma^2 \mathrm{tr}(S)/n$.
 
 *Solution.* Let μ = E y, and let y⁰ be an independent copy. Then E(y⁰ᵢ − ŷᵢ)² = σ² + E(ŷᵢ − μᵢ)². Also
 E(yᵢ − ŷᵢ)² = σ² + E(ŷᵢ − μᵢ)² − 2Cov(yᵢ, ŷᵢ), expanding (yᵢ − μᵢ) − (ŷᵢ − μᵢ). Averaging, the optimism is
 (2/n)Σ Cov(yᵢ, ŷᵢ). With ŷ = Sy, Cov(ŷ, y) = S Var(y) = σ²S, and the diagonal sums to σ² tr S. So the optimism is
 2σ² tr(S)/n, and 2σ²d/n for least squares with d columns (tr H = d).
 
-**2. The leave-one-out shortcut.**
+**2. The leave-one-out shortcut.** For least squares with hat matrix $H$, show that $y_i - \hat y_{-i} = (y_i - \hat y_i)/(1 - h_{ii})$.
 
 *Solution.* Write A = XᵀX and β̂₋ᵢ = (A − xᵢxᵢᵀ)⁻¹(Xᵀy − xᵢyᵢ). Sherman–Morrison gives
 (A − xxᵀ)⁻¹ = A⁻¹ + A⁻¹xxᵀA⁻¹/(1 − h), with h = xᵀA⁻¹x = hᵢᵢ. Multiplying out,
 xᵢᵀβ̂₋ᵢ = (ŷᵢ − hᵢᵢyᵢ)/(1 − hᵢᵢ). Then yᵢ − xᵢᵀβ̂₋ᵢ = (yᵢ − hᵢᵢyᵢ − ŷᵢ + hᵢᵢyᵢ)/(1 − hᵢᵢ) = (yᵢ − ŷᵢ)/(1 − hᵢᵢ).
 
-**3. BIC from Laplace's method.**
+**3. BIC from Laplace's method.** Derive BIC from Laplace's method: show $\log p(y \mid M) = \ell(\hat\theta) - \tfrac k2 \log n + O_p(1)$.
 
 *Solution.* Expand ℓ(θ) = ℓ(θ̂) − ½(θ − θ̂)ᵀJₙ(θ − θ̂) + …, where Jₙ = −∇²ℓ(θ̂) = n Ĵ₁ and Ĵ₁ → I₁. Integrating
 against a prior continuous and positive at θ̂ gives
@@ -271,19 +271,19 @@ p(y | M) = e^{ℓ(θ̂)} p(θ̂)(2π)^{k/2}|nĴ₁|^{−1/2}(1 + O_p(n^{−1/2})
 log p(y | M) = ℓ(θ̂) − (k/2) log n + [log p(θ̂) + (k/2) log 2π − ½ log|Ĵ₁|] + o_p(1). The bracket is O_p(1). Multiply by
 −2 and drop it: BIC.
 
-**4. AIC's penalty for a normal mean, exactly.**
+**4. AIC's penalty for a normal mean, exactly.** Show AIC's penalty for the normal mean with known $\sigma$: $E[\ell(\hat\mu)] - E[\ell_{\text{new}}(\hat\mu)] = 1$, exactly.
 
 *Solution.* With σ known, ℓ(μ) = c − Σ(yᵢ − μ)²/(2σ²) and μ̂ = ȳ. E Σ(yᵢ − ȳ)² = (n − 1)σ², so
 E ℓ(μ̂) = c − (n − 1)/2. For new data y′ (n independent copies), E Σ(y′ᵢ − ȳ)² = nσ²(1 + 1/n) = (n + 1)σ², so
 E ℓ_new(μ̂) = c − (n + 1)/2. The difference is exactly 1 = k: AIC's penalty is exact here.
 
-**5. AIC overfits by one parameter 15.7% of the time.**
+**5. AIC overfits by one parameter 15.7% of the time.** Show that for nested models differing by one parameter, AIC prefers the larger with probability $\to P(\chi^2_1 > 2) = 0.157$.
 
 *Solution.* AIC prefers M_{k+1} to M_k iff −2ℓ_{k+1} + 2(k + 1) < −2ℓ_k + 2k, that is, iff 2(ℓ_{k+1} − ℓ_k) > 2. Under
 M_k (regular, nested), Wilks's theorem gives 2(ℓ_{k+1} − ℓ_k) → χ²₁, so the probability tends to P(χ²₁ > 2) =
 2(1 − Φ(√2)) = 0.157. BIC's threshold log n → ∞, so its probability → 0.
 
-**6. The log score is strictly proper.**
+**6. The log score is strictly proper.** Show that the log score is strictly proper: $E_g[-\log f(Y)]$ is minimized over densities $f$ at $f = g$.
 
 *Solution.* E_g[−log f(Y)] − E_g[−log g(Y)] = E_g log(g/f) = KL(g ‖ f). By Jensen, KL ≥ 0, with equality only if f = g
 almost everywhere. So reporting the true g uniquely minimizes the expected log score.

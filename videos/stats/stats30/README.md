@@ -236,14 +236,14 @@ python tools/lecture_length.py stats30 --floor 50
 
 ## Problems and solutions
 
-**1. The Wilcoxon efficacy.**
+**1. The Wilcoxon efficacy.** Show that the Wilcoxon test's Pitman efficacy is $12(\int f^2)^2$ and that $\mathrm{ARE}(W : t) = 3/\pi$ at the normal.
 
 *Solution.* Write W⁺/(n(n+1)/2) ≈ U = P̂(X_i + X_j > 0), a U-statistic. Under shift θ, μ(θ) = P(X₁ + X₂ + 2θ > 0) =
 ∫F(x + 2θ) f(x) dx for symmetric f, so μ′(0) = 2∫f². By Hoeffding's projection, Var U ≈ (4/n)Var(F(X)) = 4/(12n) =
 1/(3n). The efficacy is μ′(0)²/(1/3) = 12(∫f²)². The t-test's efficacy is 1/σ², so the ARE is 12σ²(∫f²)². At the
 normal, ∫φ² = 1/(2√π), giving 12/(4π) = 3/π.
 
-**2. The 0.864 bound.**
+**2. The 0.864 bound.** Show that $12\sigma^2(\int f^2)^2 \ge 108/125$ for every density with variance $\sigma^2$, with equality at the parabola.
 
 *Solution.* The ARE is invariant to scale, so fix σ² = 1 and minimize ∫f² over densities with ∫x²f = 1. With
 multipliers, the first variation gives 2f + a + bx² = 0 where f > 0, so f₀ = c(5 − x²)₊ after imposing the
@@ -251,24 +251,24 @@ constraints, with c = 3/(20√5). For any admissible f = f₀ + δ: ∫δ = 0 an
 ∫f² − ∫f₀² = 2∫f₀δ + ∫δ² ≥ 2∫f₀δ = −2c∫_{|x|>√5}(5 − x²)δ ≥ 0, since there δ = f ≥ 0 and 5 − x² < 0. So
 ∫f₀² = 3√5/25 is minimal, and the ARE is 12(3√5/25)² = 108/125.
 
-**3. The trimmed mean's influence function.**
+**3. The trimmed mean's influence function.** Find the influence function of the $\alpha$-trimmed mean at a symmetric $F$, and its gross-error sensitivity.
 
 *Solution.* With q = F⁻¹(1 − α), the α-trimmed mean has, at a regular symmetric F, the same local influence function as the fixed-cutoff clipped-score functional. Its IF at z is min(max(z, −q), q)/(1 − 2α). It is linear in the middle and constant beyond q,
 so γ* = q/(1 − 2α). At the normal with α = 0.1: 1.2816/0.8 = 1.60.
 
-**4. Hodges–Lehmann's breakdown.**
+**4. Hodges–Lehmann's breakdown.** Show that the Hodges–Lehmann estimator's asymptotic breakdown point is $1 - 1/\sqrt2$.
 
 *Solution.* With a share ε of points replaced, a Walsh average (x_i + x_j)/2 is uncontaminated only if both points
 are, a share (1 − ε)² of all pairs asymptotically. The median of the Walsh averages stays bounded while that share
 exceeds ½. Breakdown occurs at (1 − ε)² = ½, i.e. ε* = 1 − 1/√2 ≈ 0.293.
 
-**5. Huber's least favourable density.**
+**5. Huber's least favourable density.** Verify that Huber's least favourable $f_0$ integrates to 1 iff $2\phi(k)/k - 2\Phi(-k) = \varepsilon/(1 - \varepsilon)$.
 
 *Solution.* ∫f₀ = (1 − ε)[(2Φ(k) − 1) + 2φ(k)∫_k^∞ e^{−k(x − k)}dx] = (1 − ε)[1 − 2Φ(−k) + 2φ(k)/k]. Setting this
 to 1 gives 2φ(k)/k − 2Φ(−k) = ε/(1 − ε). Its score is −f₀′/f₀ = x on |x| ≤ k and k·sign(x) beyond, Huber's ψ, and
 I(F₀) = (1 − ε)(2Φ(k) − 1).
 
-**6. The median-of-means bound.**
+**6. The median-of-means bound.** Prove the median-of-means bound: with $k = \lceil 8 \log(1/\delta) \rceil$ blocks, $|\hat\mu - \mu| \le 2\sigma\sqrt{2k/n}$ w.p. $\ge 1 - \delta$.
 
 *Solution.* Each block has m = n/k points, so by Chebyshev P(|X̄_j − μ| > 2σ/√m) ≤ 1/4. If the median of the k block
 means is more than 2σ/√m from μ, at least k/2 blocks are. The number of such blocks is Binomial(k, p) with p ≤ 1/4,
