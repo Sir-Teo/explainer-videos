@@ -847,7 +847,7 @@ def tracks_page(info: dict) -> str:
                  "used (industry chapters), where it failed (crisis files) and the House's rule; the desk questions; "
                  "and the labs, which are the House's production code in miniature.",
         }[key]
-        out.append(f'<section id="{key}" class="track track-{key}"><h2>{badge(key)} {name} track</h2><p>{esc(blurb)}</p>'
+        out.append(f'<section id="{key}" class="track track-{key}"><h2>{name} track</h2><p>{esc(blurb)}</p>'
                    f'<p>{esc(intro)}</p><p class="hint">{len(rows)} parts · about {hours:.0f} hours of film.</p>'
                    f'<div class="table-wrap"><table class="plan"><thead><tr><th>Part</th><th>What you take from it</th>'
                    f'<th>{"Chapters of this track" if key in "DI" else "Chapters to watch"}</th><th>Time</th></tr></thead>'

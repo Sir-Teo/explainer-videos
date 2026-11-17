@@ -9,6 +9,10 @@ page. The worked example is *Statistics, Built* Part 12: read all three files be
 | The lab | `videos/<series>/labs/labNN.py` | `videos/stats/labs/lab12.py` |
 | The interactive | `videos/<series>/course/site/widgets/parts_AA_BB.js`, `W.<name> = function (el) {...}` | `videos/stats/course/site/widgets/parts_11_15.js` |
 
+The rest of the page is read from the film itself: each chapter's text is its narration (`tools/lecture_text.py`),
+and the problems, glossary and sources come from the part's README. There, write each problem as its statement
+followed by a paragraph that opens `*Solution.*`, so the page can fold the solution under its problem.
+
 Check your parts with `python tools/check_course.py <series> N N ...`. It checks the entry against the manifest,
 runs the lab, builds the page, and opens it in a browser at desktop and phone width, dragging every slider to both
 ends and pressing every button. It must end with `ALL OK`. Then look at the page yourself: take a screenshot of the

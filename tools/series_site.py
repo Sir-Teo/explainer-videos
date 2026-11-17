@@ -713,7 +713,7 @@ def tracks_page(c: Course) -> str:
             rows.append(f'<tr><td class="n">{e.n}</td><td><a href="{e.slug}.html">{esc(e.title)}</a><span class="goal">'
                         f'{esc(t.parts[e.n].objectives[key][0])}</span></td><td class="ch">{names}</td>'
                         f'<td class="m">{mins:.0f} min</td></tr>')
-        out.append(f'<section id="{key}" class="track track-{key}"><h2>{badge(c.key, key)} {esc(name)} track</h2><p>{esc(blurb)}</p>'
+        out.append(f'<section id="{key}" class="track track-{key}"><h2>{esc(name)} track</h2><p>{esc(blurb)}</p>'
                    f'<p>{esc(t.track_intro.get(key, ""))}</p><p class="hint">{len(rows)} parts · about {hours:.0f} hours of film.</p>'
                    f'<div class="table-wrap"><table class="plan"><thead><tr><th>Part</th><th>What you take from it</th>'
                    f'<th>{"Chapters of this track" if key in "DI" else "Chapters to watch"}</th><th>Time</th></tr></thead>'
