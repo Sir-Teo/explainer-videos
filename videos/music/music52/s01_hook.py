@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"Two bells on the same note. \ One is Part 9's tuned bell, \ built from its eight measured partials. \ The other "
                            r"was made with just two sine oscillators. \ Which one?", width=10.0)
         with self.voiceover(
-            "A question for your ears. Two bells on the same note. One is Part 9's tuned bell, built from the eight partials "
+            "In 1967 John Chowning, a composer at Stanford, heard bells. First, a pair for you to judge. Two bells on the same note. One is Part 9's tuned bell, built from the eight partials "
             "measured on real church bells. The other was made with just two sine oscillators. Which one?"
         ):
             self.play(FadeIn(card))

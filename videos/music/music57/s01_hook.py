@@ -18,7 +18,7 @@ class Hook(SoundScene):
         card = listen_card(r"Part 56's mix, \ mastered twice: \ once gently, \ once for maximum loudness. \ Here they are played "
                            r"at exactly the same loudness. \ Which was mastered for loudness?", width=10.0)
         with self.voiceover(
-            "A question for your ears. Part 56's mix, mastered twice: once gently, once for as much loudness as it would "
+            "In 2008 Metallica fans compared two releases of the same songs, waveform by waveform. Compare by ear first. Part 56's mix, mastered twice: once gently, once for as much loudness as it would "
             "take. Here they are played at exactly the same loudness. Which was mastered for loudness?"
         ):
             self.play(FadeIn(card))

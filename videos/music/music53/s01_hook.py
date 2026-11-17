@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"A twelve-note chord, \ struck four times, \ twice over. \ Once every note starts together; \ once the notes "
                            r"arrive as MIDI 1.0 sends them, \ one after another down a cable. \ Which was the cable?", width=10.2)
         with self.voiceover(
-            "A question for your ears. A twelve-note chord, struck four times, twice over. Once, every note starts together. "
+            "In January 1983, at a trade show, a key pressed on one synthesizer sounded another. Listen before the history. A twelve-note chord, struck four times, twice over. Once, every note starts together. "
             "Once, the notes arrive as MIDI sends them, one after another down a cable. Which was the cable?"
         ):
             self.play(FadeIn(card))

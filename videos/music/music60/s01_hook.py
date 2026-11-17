@@ -30,7 +30,7 @@ class Hook(SoundScene):
         c = clip("hook.two")
         card = listen_card(r"Two melodies. \ They open with the same eight notes. \ Did one composer copy the other, \ or could it be chance?", width=10.0)
         with self.voiceover(
-            "A question for your ears, and for a jury. Two melodies. They open with the same eight notes. Did one composer copy "
+            "This part follows one stream's fraction of a cent from a phone to a songwriter. First, a case for your ears and for a jury. Two melodies. They open with the same eight notes. Did one composer copy "
             "the other, or could it be chance?"
         ):
             self.play(FadeIn(card))

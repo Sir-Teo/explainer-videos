@@ -21,7 +21,7 @@ class Hook(SoundScene):
         card = listen_card(r"Headphones on. \ One recording of the Tune by a small band, \ mixed three times: \ close and dry, \ a wall of sound, \ "
                            r"and a dub, \ in some order. \ Which was the dub?", width=10.0)
         with self.voiceover(
-            "A question for your ears, with headphones. One recording of the Tune, by a small band, mixed three times: close "
+            "In Jamaica in the 1970s, King Tubby and Lee Perry remixed songs live at the mixing desk. Headphones on, and listen. One recording of the Tune, by a small band, mixed three times: close "
             "and dry, a wall of sound, and a dub, in some order. Which was the dub?"
         ):
             self.play(FadeIn(card))

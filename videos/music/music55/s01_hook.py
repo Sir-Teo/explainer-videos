@@ -20,7 +20,7 @@ class Hook(SoundScene):
         card = listen_card(r"A voice in a lecture room, \ twice. \ Once in the room as it was built; \ once after the room was "
                            r"changed so that people could understand it. \ Which was the room as it was built?", width=10.0)
         with self.voiceover(
-            'A question for your ears. A voice in a lecture room, twice. Once in a simulated untreated room; once after absorption was increased in the model so that people could understand what was said in it. Which was the room as it was built?'
+            'This part begins at Harvard, in 1895. Your ears go first. A voice in a lecture room, twice. Once in a simulated untreated room; once after absorption was increased in the model so that people could understand what was said in it. Which was the room as it was built?'
         ):
             self.play(FadeIn(card))
         self.wait(0.8)

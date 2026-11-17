@@ -18,7 +18,7 @@ class Hook(SoundScene):
         card = listen_card(r"Three recordings of the same two phrases, \ released under three pianists' names. \ "
                            r"Two of them are really the same recording. \ Which two?", width=10.4)
         with self.voiceover(
-            "A question for your ears. Three synthetic model performances of the same two phrases, labeled as if released under three pianists' names; these are not Hatto recordings. Two "
+            "In February 2007 a Joyce Hatto CD went into a computer, and a track database named a different pianist. Judge for yourself. Three synthetic model performances of the same two phrases, labeled as if released under three pianists' names; these are not Hatto recordings. Two "
             "of them are really one and the same recording. Which two?"
         ):
             self.play(FadeIn(card))

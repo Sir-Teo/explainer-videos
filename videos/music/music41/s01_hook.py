@@ -18,7 +18,7 @@ class Hook(SoundScene):
         card = listen_card(r"A phrase on a horn; \ then the same phrase again. \ "
                            r"The second time, \ how many instruments are playing: \ one, \ two, \ or four?", width=10.4)
         with self.voiceover(
-            "A question for your ears. A short phrase on a horn, and then the same phrase again. The second time, how many "
+            "In 1928 Maurice Ravel wrote what he called a piece for orchestra without music. Listen before we explain. A short phrase on a horn, and then the same phrase again. The second time, how many "
             "instruments are playing: one, two, or four?"
         ):
             self.play(FadeIn(card))

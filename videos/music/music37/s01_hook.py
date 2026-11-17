@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"An iron bell plays one short pattern, \ over and over. \ Clap or tap along. \ "
                            r"How many beats do you feel in each turn of the pattern?", width=10.4)
         with self.voiceover(
-            "A question for your ears. An iron bell plays one short pattern, over and over. Clap or tap along with it, "
+            "One bell pattern is heard from Ghana and Togo to Cuba and Brazil. Here it is. An iron bell plays one short pattern, over and over. Clap or tap along with it, "
             "however feels natural. How many beats do you feel in each turn of the pattern?"
         ):
             self.play(FadeIn(card))

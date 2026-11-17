@@ -18,7 +18,7 @@ class Hook(SoundScene):
         card = listen_card(r"The Tune's first phrase, \ sung alone, \ three times: \ once as recorded, \ twice through a codec that "
                            r"throws most of the data away. \ Which was the original?", width=10.0)
         with self.voiceover(
-            "A question for your ears. The Tune's first phrase, sung alone, three times: once as recorded, and twice through a "
+            "In the 1980s Karlheinz Brandenburg, at Erlangen in Germany, was coding music for digital telephone lines. Begin with a voice. The Tune's first phrase, sung alone, three times: once as recorded, and twice through a "
             "codec that throws most of the data away. Which was the original?"
         ):
             self.play(FadeIn(card))

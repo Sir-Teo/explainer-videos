@@ -16,7 +16,7 @@ class Hook(SoundScene):
         card = listen_card(r"A voice and a piano synthesized separately and summed onto one track. \ Then the voice twice: \ once as it was recorded alone, \ "
                            r"once separated from the mix by a machine. \ Which is the separated one?", width=10.0)
         with self.voiceover(
-            'A question for your ears. A voice and a piano synthesized separately and summed onto one track. Then the voice twice: once as synthesized on its own, once separated from the mix by a machine. Which is the separated one?'
+            'In 2023 software separated the voice of John Lennon from a cassette he had recorded at home. Try a smaller case first. A voice and a piano synthesized separately and summed onto one track. Then the voice twice: once as synthesized on its own, once separated from the mix by a machine. Which is the separated one?'
         ):
             self.play(FadeIn(card))
         self.wait(0.8)
