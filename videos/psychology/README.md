@@ -246,8 +246,10 @@ The series draws in the manner of 3Blue1Brown with the instruments of `explainer
 
 ## What it follows
 
-The series reads like the reading lists of a strong department. The spines (each part's reference card names its
-own, and the syllabus lists them):
+The series reads like the reading lists of a strong department. [`READING.md`](READING.md) maps the textbooks, every
+topic of the introductory course, the field's major theories (with what the record now shows) and its classic
+studies to the part and chapter that teach them, and says what the series leaves out. The spines (each part's
+reference card names its own, and the syllabus lists them):
 
 | Tier | Main texts |
 |---|---|
