@@ -63,6 +63,15 @@ python tools/qa_scene.py philosophy22 TwoD             # one chapter, silent, wi
 | 14 | `Industry` | Kusner et al. (2017); Wachter, Mittelstadt and Russell (2017); Stalnaker (1968); Lewis (1973); Ustun et al. (2019); Sato (1995); De Raedt et al. (2007). | the closest worlds that flip a decision; a ProbLog query over eight worlds |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Show that 'the number of planets is necessarily odd' is false de dicto. Is it true de re?
+2. Translate $\Box \exists x\, Fx \to \exists x\, \Box Fx$ into counterpart theory. Find a countermodel.
+3. Build a counterpart model where the 4 axiom fails, with one individual per world.
+4. Fill the two-dimensional matrix of 'Julius invented the zip'. Which box does it belong in?
+5. Pierre's puzzle: which principle does a Fregean give up, and what does it cost?
+6. Give a counterpossible about logic that seems false, and say which impossible world decides it.
+
 ## Sources
 
 Texts: Kripke, *Naming and Necessity* (1980); Lewis, *Counterfactuals* (1973) and *On the Plurality of Worlds* (1986);

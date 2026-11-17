@@ -56,6 +56,15 @@ python tools/qa_scene.py philosophy24 Kac              # one chapter, silent, wi
 | 14 | `Arrows` | Ritz and Einstein (1909); Popper (1956); Reichenbach; Lewis (1979); Albert; Maudlin; Price (1996). | — |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Add a term $0.5\,t^3$ to the falling-body law. How many data points before the best system finds it?
+2. Past: 50 heads in 100 tosses. What chance do the next 100 tosses give to undermining futures?
+3. For a dome of height $\propto r^{a}$, for which exponents $a$ can the ball start to slide on its own?
+4. With $\lambda = 0.9$, what initial precision forecasts the Lorenz system to time 50?
+5. Show that a Kac ring with an even number of marks returns to its start after $N$ ticks.
+6. Szilard's engine with the partition at $\tfrac13$: the expected work, and the cost of erasing the record.
+
 ## Sources
 
 Texts: Armstrong, *What Is a Law of Nature?* (1983); Earman, *A Primer on Determinism* (1986); Sklar, *Physics and

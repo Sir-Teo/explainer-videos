@@ -389,6 +389,8 @@ _ZH_TITLE = {"problems": "习题与解答", "chapters": "各章", "sources": "�
 
 def _intro(text: str, base: Path) -> str:
     """The README's opening, without the paragraphs that are production status."""
+    # the build instructions some films keep under their title belong in "Build the film", not the overview
+    text = re.split(r"^\*\*Build it[.:]?\*\*|^```|^<details", text.strip(), maxsplit=1, flags=re.M)[0]
     keep = [p for p in re.split(r"\n\s*\n", text.strip())
             if p.strip() and not re.search(r"\bQA\b|docs/qa/|narrated masters|\*\*Status|^Status:", p)]
     return md_to_html("\n\n".join(keep), base) if keep else ""
@@ -462,11 +464,19 @@ def fmt_minutes(m: float) -> str:
 
 
 def chapters(e: Entry) -> list:
-    """[(label, title, minutes)]: the cold open has no number; numbered chapters keep the film's numbers."""
+    """[(label, title, minutes)]: the cold open has no number; numbered chapters keep the film's numbers, and a
+    film whose chapters carry no numbers is numbered in order from 1."""
+    scenes = manifest(e.dir)[1]
+    numbered = any(re.match(r"^\d+\.\s", title) for _, _, title in scenes)
     out = []
-    for i, ((_, _, title), mins) in enumerate(zip(manifest(e.dir)[1], chapter_minutes(e))):
+    for i, ((_, _, title), mins) in enumerate(zip(scenes, chapter_minutes(e))):
         m = re.match(r"^(\d+)\.\s+(.*)$", title)
-        label, name = (m.group(1), m.group(2)) if m else ("Cold open" if i == 0 else "", title)
+        if m:
+            label, name = m.group(1), m.group(2)
+        elif not numbered:
+            label, name = str(i + 1), title
+        else:
+            label, name = ("Cold open" if i == 0 else ""), title
         out.append((label, name, mins))
     return out
 

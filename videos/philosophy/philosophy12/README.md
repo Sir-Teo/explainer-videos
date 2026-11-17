@@ -68,7 +68,7 @@ Nakamoto (2008); Kelly (2010); Ongaro and Ousterhout (2014); Lasonen-Aarnio (201
 
 ## Problems and solutions
 
-1. **The cards.** Three cards: after Ann announces `I hold 0', what does Ann know about Bob's card? Why?
+1. **The cards.** Three cards: after Ann announces 'I hold 0', what does Ann know about Bob's card? Why?
 
    *Solution.* After Ann announces "I hold 0", two worlds remain, 012 and 021, and Ann cannot tell them apart: she
    still does not know whether Bob holds 1 or 2. Her announcement told the others about her card; it told her nothing

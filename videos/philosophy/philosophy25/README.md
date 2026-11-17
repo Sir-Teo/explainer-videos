@@ -55,6 +55,15 @@ python tools/qa_scene.py philosophy25 Hole             # one chapter, silent, wi
 | 14 | `Emergence` | Maldacena (1997); Ryu and Takayanagi (2006); Van Raamsdonk (2010); Maldacena and Susskind (2013); Hawking, King and McCarthy (1976); Malament (1977); Bombelli, Lee, Meyer and Sorkin (1987); Huggett and Wüthrich. | a causal set's links; the dimension from order |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. How fast must a 15 cm bucket spin for the water to rise 10 cm at the wall?
+2. Show that a rotation of the plane keeps the sign of a polygon's signed area.
+3. A hyperbolic triangle has angles $30^\circ$, $45^\circ$, $60^\circ$. What is its area?
+4. Find the boost that makes the event $(t, x) = (0.3, 0.5)$ simultaneous with the origin.
+5. State the hole argument for Newtonian gravity in Galilean spacetime. Does it go through?
+6. Grandfather circuit with a CNOT instead of a NOT: find Deutsch's fixed points.
+
 ## Sources
 
 Texts: Earman, *World Enough and Space-Time* (1989); Huggett (ed.), *Space from Zeno to Einstein* (1999); Barbour,

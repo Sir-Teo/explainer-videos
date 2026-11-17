@@ -232,7 +232,7 @@ symmetric W counts the pair twice, cancelling the ½, and W_ii = 0 leaves no sel
 of h_i = Σ_j W_ij s_j, so Δs_i is zero or has the sign of h_i, and ΔE = −Δs_i h_i ≤ 0. E is bounded below on a finite
 set of states, so the network reaches a state that no update changes.
 
-**6. The divers' test and its power.** With `explainer.psychology.opendata`: redo Murre's sign-flip test, then find the power to detect a context effect of 4 words with 16 divers and his spread.
+**6. The divers' test and its power.** With `explainer.psychology.opendata': redo Murre's sign-flip test, then find the power to detect a context effect of 4 words with 16 divers and his spread.
 
 *Solution.* Murre's per-diver effects have mean −1.25 words and s.d. 2.32; the exact
 sign-flip test over all 65,536 patterns gives p = 0.055, two-sided. An effect of four words, the size of 1975's, is

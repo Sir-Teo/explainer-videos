@@ -81,7 +81,7 @@ PhilPapers Survey" (Phil. Imprint 2023).
    *Solution.* Our encoding gives each binary connective a fresh atom: three clauses for ∧, ∨ or →,
    four for ↔, and negations cost nothing (they flip a literal's sign). With k binary connectives of which m are ↔,
    that is 3(k − m) + 4m + 1 = 3k + m + 1 clauses, the 1 being the clause asserting the whole formula.
-4. **The second island.** On another island, A says `B is a knave' and B says `A and C are of the same kind'. What can you conclude about A? About C?
+4. **The second island.** On another island, A says 'B is a knave' and B says 'A and C are of the same kind'. What can you conclude about A? About C?
 
    *Solution.* A ↔ ¬B and B ↔ (A ↔ C). If B is a knight, A and C are of the same kind; A's claim "B is a
    knave" is false, so A is a knave, so C is a knave. If B is a knave, A and C differ; A's claim is true, so A is a

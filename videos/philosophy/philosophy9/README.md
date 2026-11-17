@@ -105,7 +105,7 @@ Manders (2008); Awodey and Warren (2009); Licata and Shulman (2013); Avigad, "Ma
    Peirce's law take two worlds w₀ ≤ w₁, with A true only at w₁ and B nowhere. A → B fails at w₀ and at w₁ (at w₁, A
    holds and B does not), so (A → B) → A holds at w₀ vacuously; A does not hold at w₀; so the root does not force
    ((A → B) → A) → A.
-4. **Brouwer's real and continuity.** Why can `$r = 0$ or $r \neq 0$' not be asserted constructively for Brouwer's $r$? Why must a computable function on the reals be continuous?
+4. **Brouwer's real and continuity.** Why can '$r = 0$ or $r \neq 0$' not be asserted constructively for Brouwer's $r$? Why must a computable function on the reals be continuous?
 
    *Solution.* r = 0 exactly when Goldbach's conjecture is true, so a constructive proof of
    "r = 0 or r ≠ 0", which must say which, would decide the conjecture. A computable function on the reals reads

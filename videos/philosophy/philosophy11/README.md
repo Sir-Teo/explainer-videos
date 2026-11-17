@@ -85,24 +85,24 @@ Across Cultures" (2017); Cova et al. (2021). Textbooks: Pritchard, *What Is This
    where Henry's perceptual belief is not inferred from anything. A case with inference but no false lemma (after
    Feldman 1974): Smith reasons from true premises only, "Nogot, who works in my office, has shown me papers saying
    he owns a Ford", to "someone in my office owns a Ford"; Nogot was lying, but Havit, also in the office, owns one.
-2. **The recipe for 99% reliability.** Apply Zagzebski's recipe to `X = the belief comes from a process that is 99% reliable'.
+2. **The recipe for 99% reliability.** Apply Zagzebski's recipe to 'X = the belief comes from a process that is 99% reliable'.
 
    *Solution.* Step one: a 99%-reliable thermometer, on one of its rare bad days, reads 20°
    when the room is 17°; the belief "it is 20°" is reliably formed and false. Step two: the heating has just pushed
    the room to exactly 20°, independently of the fault. The belief is true, believed, and from a 99%-reliable
    process, but a nearby world (the heating a minute later) has the same belief false: not safe, not knowledge.
-3. **Kripke's barns under safety.** Kripke's barns: is `there is a red barn' *safe*? Is `there is a barn' safe, if believed by deduction from it?
+3. **Kripke's barns under safety.** Kripke's barns: is 'there is a red barn' *safe*? Is 'there is a barn' safe, if believed by deduction from it?
 
    *Solution.* "There is a red barn" is safe: in every nearby world where Henry believes it, it
    is true (the only world that would fool him, a red facade, is far away). "There is a barn" formed by looking is
    unsafe (a green facade is nearby). Formed by deduction from "there is a red barn", it is safe: in the nearby
    worlds where Henry believes it on that basis, there is a red barn. Safety is relative to the basis of the belief,
    and closure under competent deduction survives.
-4. **A wider margin.** On the unmarked clock with a margin of 2 marks, for $p$ = `at most 20', where do $Kp$ and $KKp$ end?
+4. **A wider margin.** On the unmarked clock with a margin of 2 marks, for $p$ = 'at most 20', where do $Kp$ and $KKp$ end?
 
    *Solution.* With a margin of two marks, Kp holds where the hand is at 18 or below and KKp at 16 or below:
    each K strips two marks.
-5. **KK and margins.** Show that if KK held in a margin model, $p$ = `at most 20' could be known nowhere.
+5. **KK and margins.** Show that if KK held in a margin model, $p$ = 'at most 20' could be known nowhere.
 
    *Solution.* In a margin model, Kp at w requires p at w + 1, KKp requires Kp at w + 1 and so p at w + 2,
    and in general Kⁿp requires p at w + n. If KK held, Kp would give Kⁿp for every n, so p would hold at every

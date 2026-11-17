@@ -64,6 +64,15 @@ python tools/qa_scene.py philosophy21 Fission          # one chapter, silent, wi
 | 14 | `Copies` | Sandberg and Bostrom (2008); model instances; Shulman and Bostrom (2021); forks; model versions as ships of Theseus. | a weight vector drifting through forty updates |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Derive symmetry and transitivity of identity from reflexivity and Leibniz's law.
+2. Find a structure on three objects where two are relatively but not absolutely discernible.
+3. Run Nozick's closest continuer on Theseus: what if ship B is assembled only after ship A sinks?
+4. Give a model with non-rigid names where $\nabla(a = b)$ holds. Which step of Evans's proof fails?
+5. Reid's officer: add a memory link from the general to the boy. Is Locke's view now consistent?
+6. Parfit: in the fission case, is double survival better, worse, or as good as ordinary survival?
+
 ## Sources
 
 Texts: Noonan and Curtis, "Identity" (*Stanford Encyclopedia of Philosophy*, 2022); Wiggins, *Sameness and Substance

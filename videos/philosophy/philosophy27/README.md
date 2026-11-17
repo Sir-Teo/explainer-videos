@@ -62,6 +62,15 @@ python tools/qa_scene.py philosophy27 Parser           # one chapter, silent, wi
 | 15 | `Machines` | FraCaS (1996); Yu et al. (2018); Lake and Baroni (2018); Kim and Linzen (2020); Yanaka et al. (2019); Berglund et al. (2023); Mandelkern and Linzen. | SQL in sqlite; an inference suite proved |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Give Russell's analysis of 'the author of *Waverley* is not Scott' in both scopes; find a model separating them.
+2. Draw the two-dimensional matrix for 'I am here now', with contexts as rows.
+3. Write a truth theory for 'and', 'or' and 'not' that Foster's trick cannot fool. What did you add?
+4. Interpret 'no student read every book' in both scopes; build a model where they differ.
+5. Prove that 'at least half' is conservative and right-upward but neither way on the left.
+6. Show by an Ehrenfeucht–Fraïssé game that 'there is an even number of $P$' is not first-order.
+
 ## Sources
 
 Texts: Lycan, *Philosophy of Language* (3rd ed., 2019); Kripke, *Naming and Necessity* (1980); Heim and Kratzer,

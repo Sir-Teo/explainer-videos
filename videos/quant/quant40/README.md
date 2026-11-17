@@ -79,7 +79,7 @@ P&L attribution compares risk-theoretical with hypothetical P&L on a specified s
    *Solution.* Among 999 transitions, `n11=4`, `n10=10-4=6`, `n01=6`, `n00=999-16=983`. Thus `p11=4/(4+6)=.4` and `p01=6/(983+6)=.006066734`. The large difference indicates first-order clustering in this sequence. It does not identify volatility as its cause; without endpoint information the exact denominators would be underspecified.
 6. **GPD extrapolation.** Threshold 2%, $\xi = 0.2$, $\beta = 0.8\%$, 400 exceedances in 10,000 days: VaR and ES at 99.9%.
 
-   *Solution.* `u=.02,xi=.2,beta=.008,N_u/n=.04,alpha=.999`. The exceedance multiplier is `(25*.001)^(-.2)`. Hence `VaR=.02+.008/.2[(.025)^(-.2)-1]=.0636511642` and `ES=(VaR+.008-.2*.02)/(.8)=.0845639553`. Require alpha above the threshold's percentile, support positivity and xi<1 for finite ES. These are chosen parameters, not another fitted historical tail.
+   *Solution.* `u=.02,xi=.2,beta=.008,N_u/n=.04,alpha=.999`. The exceedance multiplier is `(25*.001)^(-.2)`. Hence `VaR=.02+.008/.2[(.025)^(-.2)-1]=.0636511642` and `ES=(VaR+.008-.2*.02)/(.8)=.0845639553'. Require alpha above the threshold's percentile, support positivity and xi<1 for finite ES. These are chosen parameters, not another fitted historical tail.
 
 ## Four advanced solutions
 
@@ -88,7 +88,7 @@ P&L attribution compares risk-theoretical with hypothetical P&L on a specified s
    *Solution.* The lower-tail limit is `2 t_5(-sqrt(5*(1-.5)/(1+.5)))=2 t_5(-sqrt(5/3))=.2531699951`. It is a limit of a conditional probability, not the joint probability at a finite 1% threshold; rho is a latent copula parameter.
 8. **Reverse stress, dollar SD=2m, target16m.** A portfolio with daily standard deviation \$2m: the distance of the most plausible \$16m loss, and its direction.
 
-   *Solution.* With zero center, positive-definite covariance Sigma and a linear loss `-w'x=L`, minimize `x'Sigma^-1 x`. Lagrange differentiation gives `2 Sigma^-1 x+lambda w=0`, so `x*=-L Sigma w/(w'Sigma w)`. Substitution satisfies the constraint and gives distance `L/sqrt(w'Sigma w)=8`. Positive definiteness gives uniqueness; maximum-density interpretation additionally requires a suitable elliptical model.
+   *Solution.* With zero center, positive-definite covariance Sigma and a linear loss '-w'x=L`, minimize 'x'Sigma^-1 x`. Lagrange differentiation gives `2 Sigma^-1 x+lambda w=0`, so 'x*=-L Sigma w/(w'Sigma w)`. Substitution satisfies the constraint and gives distance 'L/sqrt(w'Sigma w)=8`. Positive definiteness gives uniqueness; maximum-density interpretation additionally requires a suitable elliptical model.
 9. **Three Lomax/Pareto-II losses, exponent2.** Three Pareto losses with exponent 2 (VaR 9, ES 19 each at 99%): an upper bound on the worst-case VaR of the sum.
 
    *Solution.* Their quantile is `q_u=(1-u)^(-1/2)-1`; VaR99=9. Integrating the upper tail gives `ES99=2/sqrt(.01)-1=19`. For any dependence, `VaR99(sum)<=ES99(sum)<=sum ES99=57`, using integrability and ES subadditivity. The cached grid estimate about45.9 is separate numerical evidence, not a certified optimum or proof that57 is sharp.

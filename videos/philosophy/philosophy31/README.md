@@ -67,6 +67,15 @@ python tools/qa_scene.py philosophy31 Workspace        # one chapter, silent, wi
 | 15 | `Machines` | Butlin, Long et al. (2023); Chalmers (2023); Long, Sebo et al. (2024). | fourteen indicators, applied to three toys |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Extend the 2D matrix to 'heat is molecular motion'; where do its primary and secondary intensions differ?
+2. In Mary's model, what must be true of the possibilities for the ability hypothesis to be right?
+3. Find the delay at which the workspace ignites on half the trials, as a function of the noise.
+4. Show that a feedforward network has $\Phi = 0$ under the simplified measure, for any state.
+5. Compute $\Phi$ for a 3-by-3 torus of XOR gates in two different states. Does it depend on the state?
+6. Give the T-maze agent an unreliable cue (60%). When does it stop looking before it leaps?
+
 ## Sources
 
 Texts: Chalmers, *The Conscious Mind* (1996) and *The Character of Consciousness* (2010); Dennett, *Consciousness

@@ -73,6 +73,15 @@ The word-vector tables and plots keep the toy corpus's English words verbatim in
 both editions. These are the model's inputs and outputs; headings, category labels
 and explanations are translated.
 
+## Problems
+
+1. Show that 'neither \dots nor' alone generates all 16 truth functions of two propositions.
+2. Define a rival to 'plus' that agrees with it on all sums below 1000. What fact rules it out?
+3. Give a proxy function for a model of the natural numbers with '$<$'. What is preserved?
+4. Compute the RSA listener for 'some' with 4 cookies and $\alpha = 1$.
+5. In a 3-state signalling game, why is partial pooling an equilibrium?
+6. Design a corpus in which a probe *can* recover fictionality. What did you add?
+
 ## Sources
 
 Texts: Wittgenstein, *Tractatus Logico-Philosophicus* (1921) and *Philosophical Investigations* (1953); Kripke,

@@ -65,6 +65,15 @@ python tools/qa_scene.py philosophy32 Beta             # one chapter, silent, wi
 | 14 | `Machines` | Matthias (2004); Sparrow (2007). | — |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Show that rule $\beta$ is valid on every model in which each action leads to a single world.
+2. Find a model on which $\beta$ fails but agglomeration holds, or prove there is none.
+3. Give a buffered Frankfurt case on the options model, with no flicker at all.
+4. For the rollback, how many replays make the share within 0.01 of 0.7, 95% of the time?
+5. Show that with no noise, the accumulator never crosses a threshold above $I/k$.
+6. Write the diagonal agent for infinitely many predictors, and say what it needs to compute.
+
 ## Sources
 
 Texts: Kane (ed.), *The Oxford Handbook of Free Will* (2nd ed., 2011); van Inwagen, *An Essay on Free Will* (1983);

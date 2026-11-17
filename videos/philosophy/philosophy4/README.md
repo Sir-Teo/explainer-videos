@@ -107,12 +107,12 @@ Leroy, CompCert (CACM 2009); Newcombe et al., "How Amazon Web Services Uses Form
    atoms. They are not isomorphic (one world versus infinitely many). No finite model without a cycle would do: in a
    finite acyclic model every path has at most n steps, so □ⁿ⁺¹⊥ is true at every world, while ◇ⁿ⁺¹⊤ is true at the
    loop.
-5. **Two specifications in LTL.** Write `the light is never green in both directions' and `every request is eventually granted' in LTL.
+5. **Two specifications in LTL.** Write 'the light is never green in both directions' and 'every request is eventually granted' in LTL.
 
    *Solution.* "The light is never green in both directions": G ¬(green_NS ∧ green_EW), a safety
    property (a finite trace can refute it). "Every request is eventually granted": G (request → F grant), a liveness
    property (only an infinite run can refute it).
-6. **(Essay) The Master Argument has three exits.** (Essay) Which exit from the master argument would you take, and what does it say `possible' means?
+6. **(Essay) The Master Argument has three exits.** (Essay) Which exit from the master argument would you take, and what does it say 'possible' means?
 
    *Solution.* A strong answer chooses one and prices it. *Diodorus* (reject C:
    the possible is what is or will be true): the cost is a near-determinism in which nothing that never happens was

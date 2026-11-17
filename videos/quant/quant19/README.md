@@ -48,7 +48,7 @@ Sources are the pinned Federal Reserve fitted Treasury curve (GSW), FRED and cit
    *Solution.* For `a>0`, `r_T=b+(r_0-b)e^(-aT)+sigma integral_0^T e^(-a(T-s))dW_s`, giving mean `b+(r_0-b)e^(-aT)` and variance `sigma²(1-e^(-2aT))/(2a)`. When these are pricing-measure parameters, the long zero yield is `b-sigma²/(2a²)`.
 2. **Riccati.** Solve the Riccati equation $B' = 1 - aB$, $B(0) = 0$, and show that a Vasicek zero is $e^{A(T) - B(T) r_0}$ with $B(T) = (1 - e^{-aT})/a$.
 
-   *Solution.* With pricing drift `a(b-r)` and terminal bond value one, substitute `P=exp(A(tau)-B(tau)r)` into the pricing PDE. `A(0)=B(0)=0`, `B'=1-aB` and `A'=-abB+sigma²B²/2`. Thus `B=(1-e^(-a tau))/a`; `A` is the log prefactor, not its exponential.
+   *Solution.* With pricing drift `a(b-r)` and terminal bond value one, substitute `P=exp(A(tau)-B(tau)r)` into the pricing PDE. `A(0)=B(0)=0`, 'B'=1-aB` and 'A'=-abB+sigma²B²/2`. Thus `B=(1-e^(-a tau))/a`; `A` is the log prefactor, not its exponential.
 3. **Ho–Lee.** In HJM with constant volatility $\sigma$ (Ho–Lee), show that the drift of $f(t, T)$ is $\sigma^2 (T - t)$. What does it do to the forward curve over time?
 
    *Solution.* For `t<=T`, `f(t,T)=f(0,T)+sigma² t(T-t/2)+sigma W_t` under the money-market pricing measure. The drift correction steepens the expected fixed-calendar-maturity curve; individual realized curves need not rise, and rolling tenors require the maturity-shift term.
@@ -60,7 +60,7 @@ Sources are the pinned Federal Reserve fitted Treasury curve (GSW), FRED and cit
    *Solution.* Bachelier's price per annuity is `sigma_N sqrt(T/(2 pi))`. For notional one, `delta=.25`, discount factor `.96`, expiry one and normal volatility `.01`, price is `.25 × .96 × .01 / sqrt(2 pi) = .00095746`, or **9.575 bp of notional**. Fixing and payment dates differ.
 6. **Jamshidian.** Prove Jamshidian's decomposition for nonnegative coupon weights, monotone zero prices and an existing unique par root.
 
-   *Solution.* For nonnegative weights and monotone zero prices with a unique root, choose `x*` so `sum c_i P_i(x*)=1`, and `K_i=P_i(x*)`. All components change moneyness at the same state, so `(sum c_i P_i-1)+ = sum c_i(P_i-K_i)+`. This is a receiver's bond call; payer orientation gives puts. Without the weight/root assumptions this argument need not apply.
+   *Solution.* For nonnegative weights and monotone zero prices with a unique root, choose `x*` so `sum c_i P_i(x*)=1`, and `K_i=P_i(x*)`. All components change moneyness at the same state, so `(sum c_i P_i-1)+ = sum c_i(P_i-K_i)+'. This is a receiver's bond call; payer orientation gives puts. Without the weight/root assumptions this argument need not apply.
 7. **Exercise-rule bias.** Explain look-ahead in same-path exercise evaluation, the separate approximation error, and why independent policy evaluation gives an expected lower bound with sampling noise.
 
    *Solution.* Same-path fitting permits look-ahead, which can bias an evaluation upward relative to a feasible rule. Policy approximation can bias value downward relative to the optimum; the combined estimator has no general upper-bound guarantee. Independent evaluation of a fixed feasible policy has expected payoff at most optimal value. Its finite Monte Carlo estimate has sampling error; conditional standard errors do not capture all training-policy uncertainty.
@@ -69,10 +69,10 @@ Sources are the pinned Federal Reserve fitted Treasury curve (GSW), FRED and cit
    *Solution.* With continuous interpolation `S(t)=(1-c)^t=exp(-h t)`, `h=-ln(1-c)`, and no amortization or maturity, `E[tau]=integral S dt=1/h`: 16.16 years for 6%, 1.673 for 45%. Annual end-of-year geometric repayment instead has mean `1/c`. With maturity `T`, the continuous expected life is `(1-e^(-hT))/h`. Different constant speeds alone do not prove negative convexity; rate-dependent prepayments create that mechanism.
 9. **Normal floor payoff.** (qual) If $s_n \sim N(a_n, \sigma_n^2)$ under the forward measure, show $\mathbb E[\max(s_n, r)] = r + \sigma_n g((a_n - r)/\sigma_n)$ with $g(z) = z\Phi(z) + \varphi(z)$, and that $g' = \Phi$.
 
-   *Solution.* If `s~N(a,sigma_n²)` under the relevant measure, `E[max(s,r_min)]=r_min+sigma_n[phi(z)+z Phi(z)]`, `z=(a-r_min)/sigma_n`. Integration of the normal tail proves the formula, and `g'(z)=Phi(z)`. Using unfloored-model moments for the floored model's forward measure is an additional approximation.
+   *Solution.* If `s~N(a,sigma_n²)` under the relevant measure, `E[max(s,r_min)]=r_min+sigma_n[phi(z)+z Phi(z)]`, `z=(a-r_min)/sigma_n`. Integration of the normal tail proves the formula, and 'g'(z)=Phi(z)'. Using unfloored-model moments for the floored model's forward measure is an additional approximation.
 10. **Sensitivity.** (qual) In the one-factor shadow model, show $\partial f(n)/\partial s_t \approx \Phi(z_n)e^{-\kappa n}$ and explain why the 1-year yield's response to news collapses near the floor while the 10-year's does not.
 
-    *Solution.* Holding parameters and horizon variance fixed, `partial f(n)/partial s≈Phi(z_n)e^(-kappa n)`. Yield sensitivity averages this over maturity. With zero floor, `a=-1%` and `sigma_n=1%`, `f=8.332 bp`. A `-50 bp` move in today's state with loading `.8` gives local change **−6.346 bp**. Recompute at `a=-1.4%`: `f_new=3.667 bp`, an actual approximate-formula change **−4.665 bp**. A finite move is not its first-order derivative.
+    *Solution.* Holding parameters and horizon variance fixed, `partial f(n)/partial s≈Phi(z_n)e^(-kappa n)`. Yield sensitivity averages this over maturity. With zero floor, `a=-1%` and `sigma_n=1%`, `f=8.332 bp`. A `-50 bp' move in today's state with loading `.8` gives local change **−6.346 bp**. Recompute at `a=-1.4%`: `f_new=3.667 bp`, an actual approximate-formula change **−4.665 bp**. A finite move is not its first-order derivative.
 
 ## Reproduce this review
 

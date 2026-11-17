@@ -61,6 +61,15 @@ python tools/qa_scene.py philosophy18 Emergence        # one chapter, silent, wi
 | 16 | `Machines` | BACON (Langley 1978); AlphaFold; FunSearch; AlphaEvolve; Reichenbach (1938); Humphreys; de Regt; Sullivan. | 48 power products of the planets' data |
 | 17 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Show that Church's $D$ is not entailed by $O_1, O_2, O_3$ alone, so it is not itself an observation.
+2. State the flagpole as a Woodward intervention. Which variable can be set, and which follows?
+3. With $P(S \mid T) = 0.9$ and $P(S \mid \lnot T) = 0.1$, what base rate makes $P(T \mid S) = 1/2$?
+4. Show that a Galilean boost leaves Newton's equations for two bodies unchanged.
+5. Coarse-grain a $9 \times 9$ checkerboard by $3 \times 3$ majority. What do you get, and why?
+6. In the inductive-risk model, find the threshold when the two costs are equal and $P(\text{toxic}) = 1/2$.
+
 ## Sources
 
 Texts: Godfrey-Smith, *Theory and Reality* (2003; 2nd ed. 2021); Salmon, *Four Decades of Scientific Explanation*

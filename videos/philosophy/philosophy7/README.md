@@ -75,7 +75,7 @@ frontier" (2020); the Busy Beaver Challenge (2024).
 
 ## Problems and solutions
 
-1. **MIU.** Derive `MIIIII` (five I's) in MIU; then show that `MUIIIU` is not a theorem.
+1. **MIU.** Derive `MIIIII' (five I's) in MIU; then show that `MUIIIU` is not a theorem.
 
    *Solution.* MI →(2) MII →(2) MIIII →(2) MIIIIIIII →(1) MIIIIIIIIU →(3) MIIIIIUU →(4) MIIIII. (The Reasoner's
    breadth-first search finds this six-step derivation.) MUIIIU has three I's, a multiple of three, so the invariant of

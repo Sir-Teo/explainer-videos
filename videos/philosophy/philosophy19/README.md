@@ -57,6 +57,15 @@ python tools/qa_scene.py philosophy19 Alife            # one chapter, silent, wi
 | 13 | `Alife` | von Neumann (1966); Conway (1970); Berlekamp, Conway and Guy (1982); Beer (2004); Chan (2019); Langton (1987); Ray (1991); Lenski et al. (2003); Pattee (1989); Sober (1991). | Conway's glider; a Lenia creature, filmed; its mass over 1500 steps |
 | 14 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Derive the Price equation $\bar w \, \Delta \bar z = \mathrm{Cov}(w, z) + \mathrm{E}(w \, \Delta z)$ for two types with no mutation.
+2. In hawk–dove with $V = 4$, $C = 6$, find the mixed ESS, and show that it resists invasion by pure hawks.
+3. Show that with $r = 1/8$ and $c = 1$, altruism spreads only if $b > 8$. Which relative has $r = 1/8$?
+4. Give two groups in which altruists lose within each group yet rise overall. Which Price term is positive?
+5. A codon mutates at one letter. Why are third-position changes most often silent?
+6. Check by hand that the glider returns to its shape after four steps, shifted by $(1, 1)$.
+
 ## Sources
 
 Texts: Sober, *The Nature of Selection* (1984) and *Philosophy of Biology* (1993; 2nd ed. 2000); Okasha, *Evolution

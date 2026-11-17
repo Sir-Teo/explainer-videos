@@ -60,6 +60,15 @@ python tools/qa_scene.py philosophy26 Game             # one chapter, silent, wi
 | 14 | `FreeWill` | Conway and Kochen (2006); Ekert (1991); Pironio et al. (2010); Shor; Deutsch. | — |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Show that $\langle \Psi^- | \sigma_a \otimes \sigma_b | \Psi^- \rangle = -\cos(a - b)$.
+2. Find CHSH settings giving $|S| = 2.5$. What is the classical model nearest to them?
+3. Prove that shared randomness cannot raise the CHSH game above $\tfrac34$.
+4. Write the four-particle GHZ argument. How many local assignments must fail?
+5. In the Peres–Mermin square, which single constraint can always be met last? Why five, not six?
+6. GRW: how many particles must a superposition involve to collapse within a microsecond?
+
 ## Sources
 
 Texts: Albert, *Quantum Mechanics and Experience* (1992); Bell, *Speakable and Unspeakable in Quantum Mechanics*

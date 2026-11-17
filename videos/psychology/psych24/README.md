@@ -234,7 +234,7 @@ with probability q (a noisy-OR). Then P(e | c) = 1 − (1 − b)(1 − q) = b + 
 c) − b)/(1 − b) = ΔP/(1 − P(e | ¬c)). For a preventive cause that stops the effect with probability p, P(e | c) =
 b(1 − p), so p = −ΔP / P(e | ¬c): its power is measured against how often there is anything to prevent.
 
-**6. Mirror pairs.** With `explainer.psychology.opendata`: fit each person's rotation rate separately for same and mirror pairs. Are mirror pairs rotated at the same speed?
+**6. Mirror pairs.** With `explainer.psychology.opendata': fit each person's rotation rate separately for same and mirror pairs. Are mirror pairs rotated at the same speed?
 
 *Solution.* Fitting correct mirror trials person by person gives a median slope of 6.9 ms per degree (about
 145 degrees a second), against 10.8 for same trials, but mirror pairs start slower: their mean at 0 degrees is 2,332

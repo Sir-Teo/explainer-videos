@@ -222,7 +222,7 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
    *Solution.* 110/(1 + k(t + 4)) > 100/(1 + kt) when 10 kt > 400k − 10, that is t > 40 − 1/k. With
    k = 0.05, t > 20 weeks: nearer than 20 weeks the sooner 100 is preferred, further away the 110.
-6. **Prelec's function on choices13k.** With `explainer.psychology.opendata.choices13k`: fit prospect theory with Prelec's weighting function instead. Does it predict held-out problems better?
+6. **Prelec's function on choices13k.** With `explainer.psychology.opendata.choices13k': fit prospect theory with Prelec's weighting function instead. Does it predict held-out problems better?
 
    *Solution.* With w(p) = exp(−(−ln p)^a), separately for gains and losses, fitted the
    same way: α 0.75, λ 0.98, a 0.72 for gains and 0.53 for losses; mean squared error 0.0156 (R² 0.64), 10-fold

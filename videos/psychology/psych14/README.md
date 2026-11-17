@@ -241,7 +241,7 @@ ridge regression. As σ → 0 it tends to (NᵀN)⁻¹Nᵀs = N⁻¹s, the inter
 when the edges are not parallel). As σ grows, ridge regression shrinks most the component of v that N measures
 least, the direction along both edges, so v̂ slows and turns toward the edges' normals, and the vector average.
 
-**6. When the diet tips.** With `explainer.psychology.psyche.infer`: train `TinyConvNet` on sets in which a fraction $q$ of images carry their shape's own texture, and find the $q$ at which half the conflict answers follow texture.
+**6. When the diet tips.** With `explainer.psychology.psyche.infer`: train `TinyConvNet' on sets in which a fraction $q$ of images carry their shape's own texture, and find the $q$ at which half the conflict answers follow texture.
 
 *Solution.* See the table below; with the training of `compute.py` (600 images, 400 steps, seed 0) the
 share of conflict answers that follow texture rises steeply with q, and crosses one half when only a small minority

@@ -143,7 +143,7 @@ def _inline_math(body: str, text: str, end: int) -> bool:
     or money (``$1.75 million ... $``)."""
     if _MATHY.search(body) or _TOKEN.fullmatch(body.strip()):
         return True
-    if end < len(text) and text[end].isalnum():
+    if end < len(text) and text[end].isdigit():
         return False
     return not (_PROSE.search(body) or re.match(r"\d[\d.,]*\s*(?:[kKmMbB]n?\b|million|billion|thousand)", body)
                 or "\n" in body.strip())
@@ -347,7 +347,7 @@ def readme_chapter_table(readme: Path) -> dict:
         if not line.startswith("|"):
             header = None if not line.strip() else header
             continue
-        cells = [x.strip() for x in line.strip().strip("|").split("|")]
+        cells = [x.strip() for x in re.split(r"(?<!\\)\|", line.strip().strip("|"))]  # "\|" is a pipe inside a cell
         if header is None:
             header = cells
             if not re.fullmatch(r"#|ch\.?|chapter|no\.?|scene", header[0].strip("*` ").lower()):

@@ -57,6 +57,15 @@ python tools/qa_scene.py philosophy17 Discovery        # one chapter, silent, wi
 | 15 | `Mind` | Kim's exclusion argument (1998) as a **Price List**; Huxley, Sider, Bennett, List and Menzies; Yablo's pigeon (1992). | the Price List's five exits; proportionality on five shades |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. In the sprinkler graph, list every set that d-separates $S$ and $R$. Does $\{C, L\}$?
+2. Derive the back-door formula from the truncated factorization $\prod_{i \ne X} P(v_i \mid pa_i)$.
+3. Let the gene also affect tar. Which front-door step fails, and which path is open?
+4. With 10% defiers, compute PN and PNS, and show PNS $\ne P(y \mid do(x)) - P(y \mid do(x'))$.
+5. Show that $X \to Y \to Z$ and $X \leftarrow Y \to Z$ are Markov equivalent, but $X \to Y \leftarrow Z$ is not.
+6. Model Schaffer's trumping case. Is the sergeant's order a cause by Halpern–Pearl?
+
 ## Sources
 
 Texts: Pearl, *Causality* (2000; 2nd ed. 2009); Pearl and Mackenzie, *The Book of Why* (2018); Spirtes, Glymour and

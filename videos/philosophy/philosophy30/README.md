@@ -65,6 +65,15 @@ python tools/qa_scene.py philosophy30 Function         # one chapter, silent, wi
 | 13 | `Represent` | Clark and Chalmers (1998); Shea (2018); Elazar et al. (2021). | a probe, and its direction removed |
 | 14 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Realize the pain table of chapter 3 in a third substrate; prove the outputs agree step by step.
+2. Show that strong supervenience implies weak and global supervenience.
+3. Find two sets of worlds: weak but not global, and global but not weak.
+4. State Kim's argument as five propositions and find every minimal inconsistent subset.
+5. Estimate Blockhead's table for a 5-minute test with a 10\,000-word vocabulary.
+6. Build a network that uses $x$, and show that removing the probe's direction now hurts the output.
+
 ## Sources
 
 Texts: Kim, *Philosophy of Mind* (3rd ed., 2011) and *Mind in a Physical World* (1998); Turing (1950); Searle (1980,

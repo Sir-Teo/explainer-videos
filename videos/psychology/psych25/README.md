@@ -204,7 +204,7 @@ median is the mean, so SSRT = mean go time − SSD; averaged over the delays a s
 mean delay. With a skewed go distribution, or p far from a half, the two differ, which is why the integration method
 is preferred.
 
-**6. EZ on the open data.** With `explainer.psychology.opendata`: fit EZ diffusion to each of the 17 people's two kinds of block. Does EZ also put the bound lower under speed?
+**6. EZ on the open data.** With `explainer.psychology.opendata': fit EZ diffusion to each of the 17 people's two kinds of block. Does EZ also put the bound lower under speed?
 
 *Solution.* For each person and block, take the proportion correct, and the mean and variance of
 correct times, and apply `decide.ez` (with s = 1). EZ assumes an unbiased start and no variability between trials;

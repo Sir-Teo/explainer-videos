@@ -84,7 +84,7 @@ Kolodny and MacFarlane (2010); Wachter, Mittelstadt and Russell (2017); Khoo and
    *Solution.* Naturally, revising by ¬q puts pq̄ at 0 and keeps pq, p̄q, p̄q̄ in order; revising then by q
    returns to pq: p and q are believed. Amnesically, after ¬q everything but pq̄ is at rank 1, so revising by q leaves
    pq and p̄q tied: the belief in p, which neither piece of news concerned, is lost.
-4. **A tie.** Build a three-world model where `if $A$, $B$' and `if $A$, $\lnot B$' are both false.
+4. **A tie.** Build a three-world model where 'if $A$, $B$' and 'if $A$, $\lnot B$' are both false.
 
    *Solution.* Take an actual world where A is false and two A-worlds equally close to it, one with B and one without.
    The closest A-worlds include both, so neither "if A, B" nor "if A, ¬B" holds: conditional excluded middle fails,

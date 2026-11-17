@@ -64,6 +64,15 @@ python tools/qa_scene.py philosophy20 Mereology        # one chapter, silent, wi
 | 15 | `Graphs` | Wikidata; the Knowledge Graph (2012); Bordes et al. (2013); Li et al. (2023). | a TransE embedding and its answers |
 | 16 | `Outro` | recap; the Reasoner's modules; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Regiment 'every critic admires some novelist' and 'there is a novelist every critic admires'. What does each commit to?
+2. Evaluate 'the present King of France is not bald' in a model with one bald King, on both scopes.
+3. Show that in the imperfect community, no property is shared by all three objects.
+4. Show that a poset with exactly two elements cannot satisfy both supplementation and unrestricted fusion.
+5. Count the connected groups among four blocks in a row. How many objects exist on each answer?
+6. Run the tableau by hand: is every *Grandmother* a *Parent*?
+
 ## Sources
 
 Texts: Loux and Crisp, *Metaphysics: A Contemporary Introduction* (4th ed. 2017); van Inwagen, *Material Beings*

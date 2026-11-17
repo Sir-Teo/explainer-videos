@@ -71,6 +71,15 @@ python tools/qa_scene.py philosophy29 Frame            # one chapter, silent, wi
 | 15 | `Bridges` | Davos (1929); Heidegger (1929); Carnap (1932); Winograd and Flores (1986); Dennett (1991); Varela (1996); Petitot et al. (1999); Dreyfus–McDowell (2005–07). | — |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Prove that no viewpoint outside a convex polyhedron shows all its faces at once; find one that shows all but one.
+2. With decay $\lambda = \tfrac12$, show that the retentional present always determines the order of distinct notes. What if $\lambda = 1$?
+3. Write successor-state axioms for Dennett's room, including the ramification 'things on the wagon move with it'.
+4. Show that a second-order cellular automaton $x_{t+1} = f(x_t) \oplus x_{t-1}$ is invertible for every $f$.
+5. In the hermeneutic toy, prove that a text of only ambiguous words leaves every prejudice fixed.
+6. Find the minimum grounding set of a dictionary of your own design; when is it a single word?
+
 ## Sources
 
 Texts: Moran, *Introduction to Phenomenology* (2000); Zahavi, *Husserl's Phenomenology* (2003); Dreyfus,

@@ -63,6 +63,15 @@ python tools/qa_scene.py philosophy23 Godel            # one chapter, silent, wi
 | 14 | `Traditions` | Udayana (984); Dharmakīrti (c. 640); Avicenna (1037); the *Daodejing*. | Dharmakīrti's four claims checked |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Formalize Gaunilo's island in Anselm's form. Which premise does Plantinga's reply reject?
+2. Find a T frame on which $\Diamond\Box g \to \Box g$ fails. Which world falsifies it?
+3. Show that Gödel's definition of essence makes the empty property an essence of everything.
+4. Pascal: give a decision rule under which wagering beats flipping a coin. What does it give up?
+5. Rowe: for what value of $P(E \mid G)$ does the posterior stay at one half?
+6. Hume: with correlated witnesses, how many does it take? Model the correlation.
+
 ## Sources
 
 Texts: Oppy, *Arguing about Gods* (2006); Mackie, *The Miracle of Theism* (1982); Swinburne, *The Existence of God*

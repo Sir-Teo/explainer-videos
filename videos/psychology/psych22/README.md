@@ -224,7 +224,7 @@ are equal for every set of examples: the posterior ratio is the prior ratio fore
 outside 1 to 100, or a different kind of evidence (being told the rule), can decide. Any learner faces such sets of
 hypotheses that its data cannot separate; it is the number game's version of model mimicry (Part 48).
 
-**6. Prominence by dashes.** With `explainer.psychology.opendata`: rerun Tversky's sign count on Rothkopf's table with prominence measured by the number of dashes instead of the length.
+**6. Prominence by dashes.** With `explainer.psychology.opendata': rerun Tversky's sign count on Rothkopf's table with prominence measured by the number of dashes instead of the length.
 
 *Solution.* In `concepts.prominence_asymmetry`, pass the number of dashes of each signal as the
 prominence; pairs with equal counts drop out. On Rothkopf's table this leaves 493 pairs: in 266 the signal with fewer

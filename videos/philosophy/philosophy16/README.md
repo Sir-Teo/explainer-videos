@@ -54,6 +54,15 @@ python tools/qa_scene.py philosophy16 Betting          # one chapter, silent, wi
 | 13 | `Models` | AIC (1973) and BIC (1978); Forster and Sober (1994); consistency and efficiency. | training fit, AIC's estimate and predictive fit; which degree each picks |
 | 14 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Prevalence 0.1%, sensitivity 99%, false positives 1%: what share of positives are sick?
+2. For Ann's and Bo's coins, show that the Bayes factor under a uniform prior is the same.
+3. Prove that under $H_0$ the $p$-value of a continuous test statistic is uniform on $[0, 1]$.
+4. If $E_1, E_2$ are independent e-values, is $E_1 E_2$ one? Is $(E_1 + E_2)/2$?
+5. Compute Lindley's $B_{01}$ for $z = 3$, $n = 10^4$, $\tau = 1$. Which way does it point?
+6. Reweight Berkeley's six departments by total applicants: who is admitted more?
+
 ## Sources
 
 Texts: Royall, *Statistical Evidence: A Likelihood Paradigm* (1997); Hacking, *Logic of Statistical Inference*

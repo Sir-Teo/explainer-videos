@@ -49,13 +49,13 @@ Research pause: for N=2, if the only nonzero cross covariance is `Cov(x_1,r_2)=c
 
 1. **Squared-Sharpe gain.** With matching moments and unrestricted portfolio weights, show that the GRS numerator $\hat\alpha^\top\hat\Sigma^{-1}\hat\alpha$ equals $SR^2(f, R) - SR^2(f)$, the gain in the squared maximum Sharpe ratio from adding the test assets.
 
-   *Solution.* Write `R=α+Bf+ε`, with mean-zero ε orthogonal to f. Transform the joint portfolio space to `(f,R-Bf)=(f,α+ε)`. The second block has **mean α**, not mean-zero ε, and covariance Σ. With matching moments, cash convention and unrestricted weights, block orthogonality gives `SR²(f,R)=μ_f'Ω⁻¹μ_f+α'Σ⁻¹α`. The gain is `α'Σ⁻¹α`; there is no additional `1+SR_f²` divisor in this identity. That divisor belongs in the GRS statistic.
+   *Solution.* Write `R=α+Bf+ε`, with mean-zero ε orthogonal to f. Transform the joint portfolio space to `(f,R-Bf)=(f,α+ε)`. The second block has **mean α**, not mean-zero ε, and covariance Σ. With matching moments, cash convention and unrestricted weights, block orthogonality gives 'SR²(f,R)=μ_f'Ω⁻¹μ_f+α'Σ⁻¹α`. The gain is 'α'Σ⁻¹α`; there is no additional `1+SR_f²` divisor in this identity. That divisor belongs in the GRS statistic.
 2. **One asset and covariance conventions.** For $N=1$, use ML residual and factor covariance in standard GRS; show $F=t_{OLS}^2$. Why does the preserved mixed-convention proxy differ?
 
-   *Solution.* Let `ν=T-K-1`, `s_e²=U'U/ν`, `Ω_ML=F_c'F_c/T` and `q=f̄'Ω_ML⁻¹f̄`. Then `Var_OLS(α̂)=s_e²(1+q)/T`, so `t_OLS²=Tα̂²/[s_e²(1+q)]`. Standard GRS uses `Σ_ML=(ν/T)s_e²`; for N=1, `F=να̂²/[Σ_ML(1+q)]=t_OLS²` exactly. The preserved mixed-convention proxy instead satisfies `J/t_OLS²=(ν/T)(1+q)/[1+(T-1)q/T]`, not merely `ν/T`. This is a theoretical algebra exercise, not a corrected historical regression.
+   *Solution.* Let `ν=T-K-1`, 's_e²=U'U/ν`, 'Ω_ML=F_c'F_c/T` and 'q=f̄'Ω_ML⁻¹f̄`. Then `Var_OLS(α̂)=s_e²(1+q)/T`, so `t_OLS²=Tα̂²/[s_e²(1+q)]`. Standard GRS uses `Σ_ML=(ν/T)s_e²`; for N=1, `F=να̂²/[Σ_ML(1+q)]=t_OLS²` exactly. The preserved mixed-convention proxy instead satisfies `J/t_OLS²=(ν/T)(1+q)/[1+(T-1)q/T]`, not merely `ν/T`. This is a theoretical algebra exercise, not a corrected historical regression.
 3. **2×3 arithmetic.** Six portfolios return SL 1.2%, SM 1.0%, SH 1.5%, BL 0.6%, BM 0.8%, BH 1.1% in a month. Compute SMB and HML.
 
-   *Solution.* `SMB=(1.2+1.0+1.5)/3-(0.6+0.8+1.1)/3=0.40%`. `HML=(1.5+1.1)/2-(1.2+0.6)/2=0.40%`. This is one cross-section's cell arithmetic, not a production-factor replication.
+   *Solution.* `SMB=(1.2+1.0+1.5)/3-(0.6+0.8+1.1)/3=0.40%`. `HML=(1.5+1.1)/2-(1.2+0.6)/2=0.40%'. This is one cross-section's cell arithmetic, not a production-factor replication.
 4. **Gordon comparison.** With constant ROE, growth $g$ and discount rate $r$, show $M/B = (\text{ROE} - g)/(r - g)$. With ROE 12%, $g$ = 5%, what $r$ gives B/M = 0.8?
 
    *Solution.* With constant ROE/growth, `r>g`, clean-surplus payout assumptions and an appropriate terminal condition, `M/B=Σ(ROE-g)(1+g)^(τ-1)/(1+r)^τ=(ROE-g)/(r-g)`. With ROE 12%, g 5%, B/M 0.8: `1.25=0.07/(r-0.05)`, hence **r=10.6%**. The finite 200-year scene toy is only an approximation to this infinite sum.

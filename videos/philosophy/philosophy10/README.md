@@ -95,7 +95,7 @@ Held et al., "The newly sighted fail to match seen with felt", *Nature Neuroscie
    past sunrise. To prefer the first we must assume the future resembles the past. That assumption is not a relation
    of ideas (its denial is conceivable) and cannot be established from experience without assuming it, so no argument
    chooses; custom does.
-5. **Kant's grid.** Place in Kant's grid: `every effect has a cause'; `every event has a cause'; `a straight line is the shortest between two points'.
+5. **Kant's grid.** Place in Kant's grid: 'every effect has a cause'; 'every event has a cause'; 'a straight line is the shortest between two points'.
 
    *Solution.* "Every effect has a cause" is analytic (an effect is by definition something caused). "Every event
    has a cause" is synthetic a priori for Kant (the second analogy). "A straight line is the shortest between two

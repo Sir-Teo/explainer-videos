@@ -72,12 +72,12 @@ and van Rooij (2012); Beall and Murzi (2013).
 
 ## Problems and solutions
 
-1. **Two truth-tellers.** Find all fixed points of the world $A$: `$B$ is true', $B$: `$A$ is true'. Which are classical?
+1. **Two truth-tellers.** Find all fixed points of the world $A$: '$B$ is true', $B$: '$A$ is true'. Which are classical?
 
    *Solution.* A says "B is true", B says "A is true". The jump gives A the value of B and B the value of A,
    so the fixed points are exactly the assignments with A = B: both t, both f, or both n. Two are classical. The least
    fixed point leaves both n, so both are ungrounded but not paradoxical, like the single truth-teller.
-2. **Kripke versus revision.** Show that `the liar is true or the liar is not true' has no value in any Kripke fixed point, but is stably true in revision theory.
+2. **Kripke versus revision.** Show that 'the liar is true or the liar is not true' has no value in any Kripke fixed point, but is stably true in revision theory.
 
    *Solution.* Let S be "the liar is true or the liar is not true", T⌜L⌝ ∨ ¬T⌜L⌝. In every fixed
    point the liar is n (Chapter 5), so S has value n ∨ ¬n = n in every fixed point: it is paradoxical, and excluded
@@ -95,7 +95,7 @@ and van Rooij (2012); Beall and Murzi (2013).
    *Solution.* With Y₁…Yₙ, Yₙ says nothing, so it is true. Then Yₙ₋₁ ("Yₙ is untrue") is false, and every
    earlier Yₖ is false because Yₙ is a true later sentence. That assignment satisfies every biconditional, and it is
    forced: by backward induction from Yₙ, each value is determined. So there is exactly one.
-5. **The knower.** Derive a contradiction from the knower: `this sentence is not known', with $K\varphi \to \varphi$ known.
+5. **The knower.** Derive a contradiction from the knower: 'this sentence is not known', with $K\varphi \to \varphi$ known.
 
    *Solution.* Let K ↔ ¬Kn⌜K⌝. From Kn⌜K⌝ → K (factivity) and K → ¬Kn⌜K⌝ we get ¬Kn⌜K⌝, hence K. That derivation
    used only known principles, so its conclusion K is known: Kn⌜K⌝. Contradiction.

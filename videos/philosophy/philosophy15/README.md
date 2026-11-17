@@ -59,6 +59,15 @@ python tools/qa_scene.py philosophy15 Lunch            # one chapter, silent, wi
 | 15 | `Reichenbach` | the pragmatic vindication (1938); the straight rule; three objections; meta-induction (Schurz 2008) and its regret bound. | the straight rule converging; exponential weights over five methods, regret within the bound |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
+## Problems
+
+1. Derive $(s + 1)/(n + 2)$ from the uniform prior, using $\int_0^1 \theta^a (1-\theta)^b\, d\theta = \frac{a!\, b!}{(a + b + 1)!}$.
+2. In the ravens model, let $H'$ have 1{,}000 white ravens. Recompute both Bayes factors.
+3. Find $E_1$, $E_2$ that the log likelihood ratio and Christensen's measure rank oppositely.
+4. Place 'all emeralds are grue' and 'only finitely many emeralds are blue' in Kelly's hierarchy.
+5. Prove: exponential weights has regret at most $\frac{\ln N}{\eta} + \frac{\eta T}{8}$; optimize $\eta$.
+6. No free lunch, again: if every world's labels depend only on the *last* bit, how does nearest neighbour do?
+
 ## Sources
 
 Texts: Hume, *An Enquiry concerning Human Understanding* (1748), §4; Skyrms, *Choice and Chance* (4th ed. 2000);
