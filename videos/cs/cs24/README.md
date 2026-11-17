@@ -85,7 +85,9 @@ Amdahl 占比是假设；Pebble 模型账本与原生墙钟时间分开解释。
 
 ## Six worked exercises / 六道习题解答
 
-1. **Fenwick partition and bound.** For positive `i`, repeatedly removing its
+1. **Fenwick partition and bound.** Prove that a Fenwick prefix query visits at most $\lfloor \log_2 n \rfloor + 1$ cells, and that its ranges tile $[1, i]$.
+
+   *Solution.* For positive `i`, repeatedly removing its
    lowest set bit decomposes `[1,i]` into disjoint adjacent responsibility
    intervals. The query count is exactly `popcount(i)`, at most
    `floor(log2(n))+1`. Updating adds the lowest set bit, advancing its position
@@ -93,14 +95,18 @@ Amdahl 占比是假设；Pebble 模型账本与原生墙钟时间分开解释。
    **中文：** 每次去掉最低置位比特，负责区间首尾相接，恰好划分前缀。
    查询步数等于置位比特数；更新把最低置位比特向左推进，直到超过数组。
 
-2. **Deque amortization and ties.** Charge every push and removal to its index;
+2. **Deque amortization and ties.** Prove that the sliding-window maximum's deque does at most $2n$ pushes and pops in total.
+
+   *Solution.* Charge every push and removal to its index;
    an index enters once and leaves at most once, so total pushes plus pops are
    at most `2n`. Removing equal tail values keeps the newer representative.
    The executed `[2,2,1,3]`, width-two witness returns `[2,2,3]`.
    **中文：** 每个索引最多入队、离队各一次，合计不超过二 n。
    相等时保留较新的代表；执行见证的三个最大值为二、二、三。
 
-3. **Cartesian tree and RMQ.** Recursively choose the leftmost minimum as root.
+3. **Cartesian tree and RMQ.** Show that every range-minimum query is a lowest-common-ancestor query in the Cartesian tree, and build the tree in $O(n)$.
+
+   *Solution.* Recursively choose the leftmost minimum as root.
    In-order positions are array positions, so the LCA of two positions is their
    interval minimum. The monotone-stack construction pushes/pops each position
    at most once. For `[2,1,1,3]`, the executed parent array is `[1,-1,1,2]`.
@@ -109,14 +115,18 @@ Amdahl 占比是假设；Pebble 模型账本与原生墙钟时间分开解释。
    **中文：** 递归选最左最小值，保持中序位置，因此区间最小值就是两端的祖先。
    单调栈线性构造；当前稀疏表不是所引用的线性预处理结构。
 
-4. **All masks and submasks.** Each bit is absent, present only in the mask, or
+4. **All masks and submasks.** Prove that enumerating every submask of every mask of $n$ bits takes exactly $3^n$ steps.
+
+   *Solution.* Each bit is absent, present only in the mask, or
    present in both: three independent choices give exactly `3^n` body visits,
    including zero submasks. The executed witness checks `n=0..8`.
    This counts visits; arbitrary-width arithmetic adds bit cost.
    **中文：** 每位有不在掩码、只在掩码、同时在掩码与子掩码三种状态，
    所以恰好三的 n 次方次访问；大整数的位代价另计。
 
-5. **Bounded Pebble design.** First choose a fixed vocabulary and stable IDs.
+5. **Bounded Pebble design.** *Build.* Specify a bounded Pebble Fenwick design: fixed vocabulary, word lengths, counter width. Check the notes' arithmetic trace before attempting a port.
+
+   *Solution.* First choose a fixed vocabulary and stable IDs.
    Store counts in a one-based Fenwick array; the top-`k` frequency prefix then
    answers the question only if IDs have been fixed in that frequency order.
    Vocabulary construction and re-ranking are separate problems. For a bounded
@@ -137,7 +147,9 @@ Amdahl 占比是假设；Pebble 模型账本与原生墙钟时间分开解释。
    若更新使计数为负或总和超过 `2^31-1`，就拒绝。Python 轨迹核对全部前缀；移植还要证明
    词长、字节池和有符号计数范围，并拒绝零更新位置。这里没有宣称执行新移植。
 
-6. **Reproduce a research baseline.** The cited mean-exit-time analysis assumes
+6. **Reproduce a research baseline.** $\bigstar$ *Research.* Reproduce the IID fixed-slope mean-exit baseline; compare real and shuffled gaps across scales. A finite anchored-fit slope is not a new asymptotic law.
+
+   *Solution.* The cited mean-exit-time analysis assumes
    positive IID gaps, finite nonzero variance and an appropriate asymptotic regime.
    `worked_examples.py` executes 1,000 independent fixed-slope first-exit walks
    per epsilon on exponential gaps with population mean/variance one. For epsilon
