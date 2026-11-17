@@ -7,10 +7,11 @@ from videos.music.music6.common import *  # noqa: F403
 
 class WhyTwelve(SoundScene):
     def construct(self):
-        chapter(self, 7, r"Why twelve?", r"Is there something special about twelve notes to the octave?", lit=(1584,), extra=((1691, r"Huygens: \ thirty-one"),))
+        chapter(self, 7, r"Why twelve?", r"Is there something special about twelve notes to the octave?", lit=(1584,), extra=((1691, r"Huygens: \ thirty-one"), (1949, r"Partch: \ forty-three")))
         self.scan()
         self.fraction()
         self.others()
+        self.partch()
 
     # ------------------------------------------------------------------
     def scan(self):
@@ -130,5 +131,52 @@ class WhyTwelve(SoundScene):
             for mark, r in zip("abc", hist):
                 vo.wait_until(mark)
                 self.play(FadeIn(r), run_time=0.6)
+        self.wait(0.3)
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def partch(self):
+        # Harry Partch's 43 ratios to the octave, as published in Genesis of a Music (2nd ed., 1974, ch. 8)
+        ratios = ("1/1 81/80 33/32 21/20 16/15 12/11 11/10 10/9 9/8 8/7 7/6 32/27 6/5 11/9 5/4 14/11 9/7 21/16 4/3 27/20 "
+                  "11/8 7/5 10/7 16/11 40/27 3/2 32/21 14/9 11/7 8/5 18/11 5/3 27/16 12/7 7/4 16/9 9/5 20/11 11/6 15/8 "
+                  "40/21 64/33 160/81").split()
+        assert len(ratios) == 43
+        x0, w = -6.0, 12.0
+
+        def X(cents):
+            return x0 + w * cents / 1200.0
+
+        def cents(r):
+            p, q = (int(v) for v in r.split("/"))
+            return 1200.0 * np.log2(p / q)
+
+        card = history_card(1949, r"Harry Partch, \ \textit{Genesis of a Music}",
+                            r"forty-three unequal steps to the octave, \ each a ratio of whole numbers up to eleven; \ "
+                            r"then the instruments to play them", width=6.6).to_corner(UL, buff=0.4)
+        axis = Line([X(0), 0, 0], [X(1200), 0, 0], color=GREY_D, stroke_width=2).shift(DOWN * 0.4)
+        eq = VGroup(*[Line([X(100 * k), 0.15, 0], [X(100 * k), 0.75, 0], color=AIR, stroke_width=3) for k in range(13)]).shift(DOWN * 0.4)
+        pa = VGroup(*[Line([X(cents(r)), -0.15, 0], [X(cents(r)), -0.75, 0], color=TUNE, stroke_width=2) for r in ratios + ["2/1"]]).shift(DOWN * 0.4)
+        t12 = label(r"12 equal steps", font_size=26, color=AIR).next_to(eq, UP, buff=0.15).align_to(axis, LEFT)
+        t43 = label(r"Partch's 43", font_size=26, color=TUNE).next_to(pa, DOWN, buff=0.15).align_to(axis, LEFT)
+        keys = VGroup()
+        for r, name in (("4/3", r"$\tfrac43$"), ("3/2", r"$\tfrac32$"), ("5/4", r"$\tfrac54$"), ("7/4", r"$\tfrac74$"), ("11/8", r"$\tfrac{11}{8}$")):
+            keys.add(label(name, font_size=32, color=TUNE).move_to([X(cents(r)), axis.get_y() - 1.3, 0]))
+        foot = label(r"every tuning in this part keeps some ratios and gives up others; \ Partch kept them, \ and built his own orchestra",
+                     font_size=24, color=GREY_A).to_edge(DOWN, buff=0.35)
+        with self.voiceover(
+            "And some musicians left equal steps altogether. In 1949 the American composer Harry Partch published "
+            "Genesis of a Music: forty-three unequal steps to the octave, every one a ratio of whole numbers up to "
+            "eleven, and then he built the instruments to play them, from an adapted reed organ to marimbas and "
+            "kitharas. <bookmark mark='a'/> Here are his steps against the twelve. They crowd together where the pure "
+            "intervals are, around the fourth and the fifth and the thirds, and they include the seventh and eleventh "
+            "partials that twelve cannot reach at all. <bookmark mark='b'/> Every tuning in this part keeps some ratios "
+            "and gives up others. Partch kept them, and paid for it with an orchestra he had to build himself."
+        ) as vo:
+            self.play(FadeIn(card), Create(axis), FadeIn(t12), LaggedStart(*[Create(m) for m in eq], lag_ratio=0.05), run_time=1.5)
+            vo.wait_until("a")
+            self.play(FadeIn(t43), LaggedStart(*[Create(m) for m in pa], lag_ratio=0.03), run_time=2.0)
+            self.play(LaggedStart(*[FadeIn(k, shift=UP * 0.1) for k in keys], lag_ratio=0.2), run_time=1.2)
+            vo.wait_until("b")
+            self.play(FadeIn(foot))
         self.wait(0.3)
         self.clear_scene()

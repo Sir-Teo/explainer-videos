@@ -166,19 +166,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"can a melody be its own accompaniment?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"chords, \ and the lines inside them", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        nxt = VGroup(label(r"Part 20", font_size=32, color=GREY_B), label(r"Canon and Fugue", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
+        play_next_part(
+            self, 19, "Potsdam, 7 May 1747",
+            "Can a melody be its own accompaniment?",
             "This part treated harmony as chords, and found at the end that chords are lines moving together. "
-            "<bookmark mark='a'/> The next part starts from lines. Can a melody be its own accompaniment, entering "
-            "against itself, a few beats later, and still make harmony? <bookmark mark='b'/> Next time. Part 20: Canon "
-            "and Fugue."
-        ) as vo:
-            self.play(FadeIn(top))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+            "<bookmark mark='a'/> On a May evening in 1747 a king played Johann Sebastian Bach a theme, and asked him "
+            "to improvise a fugue on it. Can a melody enter against itself, a few beats later, and still make "
+            "harmony? And which melodies can? <bookmark mark='b'/> Next time. Part 20: Canon and Fugue.",
+            signoff=clip("bridge.signoff"))

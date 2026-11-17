@@ -17,7 +17,7 @@ class Hook(SoundScene):
         card = listen_card(r"The same song of ours, \ twice, \ with two different openings. \ "
                            r"In each, \ how long before the singer comes in: \ about five seconds, \ ten, \ or twenty?", width=10.4)
         with self.voiceover(
-            "A question for your ears. The same song of ours, twice, with two different openings. In each, how long before "
+            "This part follows the popular song from sheet music to the drop. First, a test. The same song of ours, twice, with two different openings. In each, how long before "
             "the singer comes in: about five seconds, ten, or twenty?"
         ):
             self.play(FadeIn(card))

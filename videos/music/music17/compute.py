@@ -38,7 +38,7 @@ from explainer.music.monochord import chorales as BC
 from explainer.music.monochord import fourpart as F
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import choir
-from explainer.music.monochord.partkit import organ_tone, saver
+from explainer.music.monochord.partkit import organ_tone, saver, signoff
 
 CACHE = Cache("music17")
 CLIPS = ClipStore("music17")
@@ -684,9 +684,16 @@ def compute_more() -> dict:
             "clips": {"whole": save("more.whole", seq, level=None, detail="Bach's last setting of the Passion Chorale (St Matthew Passion, 1727), complete: a model choir")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation17", 17)
+
+
 ITEMS = {"hook": compute_hook, "book": compute_book, "ranges": compute_ranges, "motion": compute_motion, "rules": compute_rules, "census": compute_census,
          "vocab": compute_vocab, "cadences": compute_cadences, "decoration": compute_decoration, "harmonizer": compute_harmonizer,
-         "evaluation": compute_evaluation, "improve": compute_improve, "tune": compute_tune, "variation": compute_variation, "more": compute_more}
+         "evaluation": compute_evaluation, "improve": compute_improve, "tune": compute_tune, "variation": compute_variation, "more": compute_more,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

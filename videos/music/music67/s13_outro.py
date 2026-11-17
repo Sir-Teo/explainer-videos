@@ -121,7 +121,8 @@ class Outro(SoundScene):
             [r"E. Clarke and N. Cook \ (eds.), \ \textit{Empirical Musicology} \ (2004)",
              r"B. Nettl, \ \textit{The Study of Ethnomusicology} \ (3rd ed., \ 2015)",
              r"J. Grier, \ \textit{The Critical Editing of Music} \ (1996)",
-             r"F. H. Rauscher, \ G. L. Shaw and K. N. Ky, \ `Music and spatial task performance' \ (\textit{Nature}, \ 1993)"],
+             r"F. H. Rauscher, \ G. L. Shaw and K. N. Ky, \ `Music and spatial task performance' \ (\textit{Nature}, \ 1993)",
+             r"J. Kerman, \ \textit{Contemplating Music} \ (1985); \ L. Goehr, \ \textit{The Imaginary Museum of Musical Works} \ (1992)"],
             [r"C. F. Chabris, \ `Prelude or requiem for the ``Mozart effect''?' \ (\textit{Nature}, \ 1999)",
              r"J. Pietschnig, \ M. Voracek and A. K. Formann, \ `Mozart effect--Shmozart effect' \ (\textit{Intelligence}, \ 2010)",
              r"B. L. Sturm, \ `The GTZAN dataset' \ (2013); \ `A simple method to determine if a MIR system is a horse' \ (2014)",
@@ -134,19 +135,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act XII: \ coda", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Bach's \textit{Goldberg Variations} end by playing the opening aria again, \ the same notes.", font_size=22, color=WHITE).move_to(UP * 1.7)
-        q = label(r"it does not sound the same. \ \ What has changed is the listener.", font_size=27, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 68", font_size=32, color=GREY_B), label(r"The Variations", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Bach's Goldberg Variations end by playing the opening aria again, the same notes. <bookmark mark='a'/> It does not "
-            "sound the same: what has changed is the listener. <bookmark mark='b'/> Next time, the last part. Part 68: The "
-            "Variations."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 67, r"the \textit{Goldberg Variations}",
+            "The same notes. A different listener?",
+            "Bach's Goldberg Variations end by playing the opening aria again, the same notes. <bookmark mark='a'/> "
+            "It does not sound the same: what has changed is the listener. <bookmark mark='b'/> Next time, the last "
+            "part. Part 68: The Variations.",
+            signoff=clip("bridge.signoff"))

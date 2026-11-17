@@ -150,18 +150,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what happens when the bass line becomes the foundation?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act IV: \ a thousand years", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        nxt = VGroup(label(r"Part 25", font_size=32, color=GREY_B), label(r"The Baroque", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Monteverdi's second practice put the words and the bass in charge. <bookmark mark='a'/> The next century "
-            "built a whole music on the bass line, figured, continuous, and a new idea of key. <bookmark mark='b'/> Next "
-            "time. Part 25: The Baroque."
-        ) as vo:
-            self.play(FadeIn(top))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 24, "Florence, 1589",
+            "What happens to music when the words, and the bass, take charge?",
+            "Monteverdi's second practice put the words in charge, and the old rules gave way. <bookmark mark='a'/> "
+            "In Florence the lutenist Vincenzo Galilei, the astronomer's father, was hanging weights on strings to "
+            "test an ancient story, and arguing for a new kind of song. Out of that argument came opera, the figured "
+            "bass, and a new idea of key. <bookmark mark='b'/> Next time. Part 25: The Baroque.",
+            signoff=clip("bridge.signoff"))

@@ -18,7 +18,7 @@ class Hook(SoundScene):
         card = listen_card(r"The Tune's first phrase, \ twice, \ with reverberation. \ One is a simulated tiled room: \ "
                            r"sound bouncing off six walls. \ The other is pure arithmetic: \ four delays fed back and two more. \ Which is the arithmetic?", width=10.4)
         with self.voiceover(
-            "A question for your ears. The Tune's first phrase, twice, with reverberation. One is a simulated tiled room: "
+            "In 1947 Bill Putnam put a loudspeaker and a microphone in his studio's tiled bathroom. Your ears first. The Tune's first phrase, twice, with reverberation. One is a simulated tiled room: "
             "sound bouncing between six walls. The other is pure arithmetic: four delays fed back into themselves, and two "
             "more. Both ring for the same time. Which is the arithmetic?"
         ):

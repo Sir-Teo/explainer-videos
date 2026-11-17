@@ -39,7 +39,7 @@ from explainer.music.monochord import EXAMPLE_LEVEL, Clip, ClipStore, concat
 from explainer.music.monochord import fourpart as FP
 from explainer.music.monochord import machines as M
 from explainer.music.monochord import tune as T
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music17 import compute as P17
 
 CACHE = Cache("music65")
@@ -463,11 +463,18 @@ def compute_bachvs17() -> dict:
 
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation65", 65)
+
+
 ITEMS = {"corpus": compute_corpus, "markov": compute_markov, "copy": compute_copy, "constrained": compute_constrained,
          "recombine": compute_recombine, "transformer": compute_transformer, "temperature": compute_temperature,
          "harmony": compute_harmony, "judge": compute_judge, "hook": compute_hook, "tune65": compute_tune65,
          "variation": compute_variation, "surprise": compute_surprise, "samples": compute_samples, "copyquiz": compute_copyquiz,
-         "bachvs17": compute_bachvs17}
+         "bachvs17": compute_bachvs17,
+         "signoff": compute_signoff}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

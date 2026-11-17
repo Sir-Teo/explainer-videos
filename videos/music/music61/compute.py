@@ -39,7 +39,7 @@ from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments import strings as STR
 from explainer.music.monochord.mir import neural as NN
 from explainer.music.monochord.mir import transcribe as TR
-from explainer.music.monochord.partkit import organ_tone, saver
+from explainer.music.monochord.partkit import organ_tone, saver, signoff
 from videos.music.music38 import compute as P38
 from videos.music.music56 import compute as P56
 
@@ -538,10 +538,17 @@ def compute_polyphony() -> dict:
     return {"voices": voices, **out}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation61", 61)
+
+
 ITEMS = {"data": compute_data, "pitch": compute_pitch, "chords": compute_chords, "onsets": compute_onsets, "nmf": compute_nmf,
          "net": compute_net, "timbres": compute_timbres, "hook": compute_hook, "score": compute_score, "tune61": compute_tune61,
          "variation": compute_variation, "pitchheard": compute_pitchheard, "nmfheard": compute_nmfheard, "scoreheard": compute_scoreheard,
-         "polyphony": compute_polyphony}
+         "polyphony": compute_polyphony,
+         "signoff": compute_signoff}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

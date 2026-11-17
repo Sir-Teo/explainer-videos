@@ -20,7 +20,7 @@ class Hook(SoundScene):
         card = listen_card(r"The Tune's first phrase, \ twice. \ One tone was built by hand from forty sine waves. \ The other is a "
                            r"two-oscillator synthesizer patch that a computer search set to imitate it. \ Which is the original?", width=10.4)
         with self.voiceover(
-            "A question for your ears. The Tune's first phrase, twice. One tone was built by hand from forty sine waves, each "
+            "In 1906 an instrument weighing nearly two hundred tons began to play in New York. First, something lighter. The Tune's first phrase, twice. One tone was built by hand from forty sine waves, each "
             "set to its own level. The other is a two-oscillator synthesizer patch that a computer search set to imitate it. "
             "Which is the original?"
         ):

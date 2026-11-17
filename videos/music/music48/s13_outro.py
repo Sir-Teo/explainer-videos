@@ -148,7 +148,8 @@ class Outro(SoundScene):
             [r"K. C. Pohlmann, \ \textit{Principles of Digital Audio} \ (6th ed., \ 2010)",
              r"J. O. Smith, \ \textit{Mathematics of the Discrete Fourier Transform} \ (2007)",
              r"R. Schreier and G. C. Temes, \ \textit{Understanding Delta-Sigma Data Converters} \ (2005)",
-             r"C. E. Shannon, \ `Communication in the presence of noise' \ (1949)"],
+             r"C. E. Shannon, \ `Communication in the presence of noise' \ (1949)",
+             r"A. V. Oppenheim and R. W. Schafer, \ \textit{Discrete-Time Signal Processing} \ (3rd ed., \ 2010)"],
             [r"S. P. Lipshitz, \ R. A. Wannamaker and J. Vanderkooy, \ `Quantization and dither: \ a theoretical survey' \ (1992)",
              r"M. A. Gerzon and P. G. Craven, \ `Optimal noise shaping and dither of digital signals' \ (1989)",
              r"E. B. Meyer and D. R. Moran, \ `Audibility of a CD-standard A/D/A loop ...' \ (2007)",
@@ -161,18 +162,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what can be done to them?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act IX: \ electric sound", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"The sound is now a list of numbers.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 49", font_size=32, color=GREY_B), label(r"Filters, \ Delay and Reverb", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "The sound is now a list of numbers. <bookmark mark='a'/> What can be done to them? <bookmark mark='b'/> Next "
-            "time. Part 49: Filters, Delay and Reverb."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 48, "Chicago, 1947",
+            "What can be done to a list of numbers? Can arithmetic build a room?",
+            "The sound is now a list of numbers. <bookmark mark='a'/> In 1947 an engineer put a loudspeaker and a "
+            "microphone in a tiled bathroom and sold the echo. Fifteen years later, at Bell Labs, Manfred Schroeder "
+            "built a room out of arithmetic. What can be done to a list of numbers? <bookmark mark='b'/> Next time. "
+            "Part 49: Filters, Delay and Reverb.",
+            signoff=clip("bridge.signoff"))

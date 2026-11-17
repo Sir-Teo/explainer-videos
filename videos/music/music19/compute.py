@@ -40,7 +40,7 @@ from explainer.music.monochord import fourpart as F
 from explainer.music.monochord import melody as M
 from explainer.music.monochord import tuning as TU
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import organ_tone, saver
+from explainer.music.monochord.partkit import organ_tone, saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music19")
@@ -411,9 +411,16 @@ def compute_variation() -> dict:
             "measure": rf"24 chords, {t['outside_c']} of them outside C major; one chord carries the Tune four keys away; {n_par} parallels", "clip": "tune.variation19"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation19", 19)
+
+
 ITEMS = {"hook": compute_hook, "applied": compute_applied, "mixture": compute_mixture, "neapolitan": compute_neapolitan, "sixths": compute_sixths,
          "dim7": compute_dim7, "trapdoor": compute_trapdoor, "comma": compute_comma, "mediants": compute_mediants, "paths": compute_paths,
-         "tension": compute_tension, "tristan": compute_tristan, "tune": compute_tune, "variation": compute_variation}
+         "tension": compute_tension, "tristan": compute_tristan, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

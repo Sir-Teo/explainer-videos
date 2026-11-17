@@ -20,7 +20,7 @@ class Hook(SoundScene):
         card = listen_card(r"Sixteen bars of chords, \ comped by piano, \ bass and cymbal, \ no melody. \ "
                            r"How many different keys does the progression come home to: \ one, \ two, \ or three?", width=10.4)
         with self.voiceover(
-            "A question for your ears. Sixteen bars of chords, comped by piano, bass and cymbal, with no melody. A key is "
+            "In New York in 1959, a pianist had to solo over chords he had seen only briefly. Meet them by ear first. Sixteen bars of chords, comped by piano, bass and cymbal, with no melody. A key is "
             "where a progression comes home to rest. How many different keys does this one come home to: one, two, or "
             "three?"
         ):

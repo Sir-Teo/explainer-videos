@@ -46,7 +46,7 @@ from explainer.music.monochord import dynamics as D
 from explainer.music.monochord import song as SONG
 from explainer.music.monochord import synth as S
 from explainer.music.monochord import tune as T
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 
 CACHE = Cache("music51")
 CLIPS = ClipStore("music51")
@@ -585,10 +585,17 @@ def compute_variation() -> dict:
             "clip": "tune.variation51"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation51", 51)
+
+
 ITEMS = {"fit": compute_fit, "hook": compute_hook, "partials": compute_partials, "organ": compute_organ, "waves": compute_waves,
          "sweep": compute_sweep, "alias": compute_alias, "ladder": compute_ladder, "ladder3": compute_ladder3, "drive": compute_drive,
          "sing": compute_sing, "env": compute_env, "mod": compute_mod, "pwmsync": compute_pwmsync, "unison": compute_unison,
-         "table": compute_table, "drums": compute_drums, "toms": compute_toms, "tune51": compute_tune51, "variation": compute_variation}
+         "table": compute_table, "drums": compute_drums, "toms": compute_toms, "tune51": compute_tune51, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

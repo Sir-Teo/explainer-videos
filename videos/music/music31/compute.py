@@ -43,7 +43,7 @@ from explainer.music.monochord import EXAMPLE_LEVEL, SR, Clip, ClipStore, concat
 from explainer.music.monochord import melody as M
 from explainer.music.monochord import neoriemann as N
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music31")
@@ -512,10 +512,17 @@ def compute_weitzmann() -> dict:
             "clips": {"region": save("weitzmann.region", s_, detail="the augmented triad C, E, G sharp, each time resolving by one semitone in one voice to one of its six neighbouring triads; Part 7's piano")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation31", 31)
+
+
 ITEMS = {"hook": compute_hook, "plr": compute_plr, "groups": compute_groups, "cycles": compute_cycles, "chain": compute_chain,
          "keys": compute_keys, "poles": compute_poles, "compound": compute_compound, "commute": compute_commute,
          "walk": compute_walk, "film3": compute_film3, "thirds": compute_thirds, "vl": compute_vl, "minor": compute_minor, "sevenths": compute_sevenths, "comma": compute_comma, "spheres": compute_spheres, "systems": compute_systems,
-         "relations": compute_relations, "hamilton": compute_hamilton, "weitzmann": compute_weitzmann, "tune": compute_tune, "variation": compute_variation}
+         "relations": compute_relations, "hamilton": compute_hamilton, "weitzmann": compute_weitzmann, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

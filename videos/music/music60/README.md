@@ -138,3 +138,4 @@ python -m videos.music.labs 60                                  # the lab (write
   current sources.
 
 Scope: separate composition and recording rights do not imply two distinct owners or identical rights/terms. Streaming rates, recoupment and market simulations are hypothetical. Probability of coincidental similarity is not probability of copying; case-specific rights, eligibility and litigation status require their applicable records.
+* J. Attali, *Noise: The Political Economy of Music* (1977; tr. B. Massumi, 1985).

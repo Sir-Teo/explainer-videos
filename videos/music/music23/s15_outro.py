@@ -141,7 +141,8 @@ class Outro(SoundScene):
             [r"R. H. Hoppin, \ \textit{Medieval Music} \ (1978)",
              r"R. Taruskin, \ \textit{The Oxford History of Western Music}, \ vol. 1 \ (2005)",
              r"T. F. Kelly, \ \textit{Capturing Music: \ The Story of Notation} \ (2014)",
-             r"D. Hiley, \ \textit{Western Plainchant: \ A Handbook} \ (1993)"],
+             r"D. Hiley, \ \textit{Western Plainchant: \ A Handbook} \ (1993)",
+             r"J. P. Burkholder, \ D. J. Grout and C. V. Palisca, \ \textit{A History of Western Music} \ (10th ed., \ 2019)"],
             [r"\textit{Polyphonic Music of the Fourteenth Century}, \ ed. L. Schrade and others \ (1956--1991)",
              r"M. S. Cuthbert and C. Ariza, \ ``music21'', \ \textit{ISMIR} \ (2010): \ the corpus",
              r"U. Günther, \ ``Das Ende der ars nova'', \ \textit{Die Musikforschung} 16 \ (1963)",
@@ -155,18 +156,12 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what happens when every voice becomes equal?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act IV: \ a thousand years", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        nxt = VGroup(label(r"Part 24", font_size=32, color=GREY_B), label(r"The Renaissance", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Act Four has begun its thousand years. <bookmark mark='a'/> By 1430 the tenor was losing its privilege; "
-            "the next century made increasingly integrated imitative voices and fuller sonorities, with many continuing distinctions of role. <bookmark mark='b'/> Next "
-            "time. Part 24: The Renaissance."
-        ) as vo:
-            self.play(FadeIn(top))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 23, "Nuremberg, 1540",
+            "When printers put a famous name on other people's music, can the style tell us who wrote it?",
+            "Act Four has begun its thousand years, from one line of chant towards voices of more equal weight. "
+            "<bookmark mark='a'/> In the next century music was printed, and the press made a composer famous: "
+            "Josquin des Prez. Printers knew his name sold copies, and some of them put it on music he had not "
+            "written. Can the style itself tell us who wrote a piece? <bookmark mark='b'/> Next time. Part 24: The "
+            "Renaissance.",
+            signoff=clip("bridge.signoff"))

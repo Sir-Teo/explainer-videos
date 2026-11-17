@@ -140,7 +140,8 @@ class Outro(SoundScene):
             [r"M. Müller, \ \textit{Fundamentals of Music Processing} \ (2nd ed., \ 2021)",
              r"O. Celma, \ \textit{Music Recommendation and Discovery} \ (2010)",
              r"M. Schedl et al., \ `Current challenges and visions in music recommender systems research' \ (2018)",
-             r"B. L. Sturm, \ `The GTZAN dataset: \ its contents, \ its faults, \ their effects on evaluation' \ (2013)"],
+             r"B. L. Sturm, \ `The GTZAN dataset: \ its contents, \ its faults, \ their effects on evaluation' \ (2013)",
+             r"P. Knees and M. Schedl, \ \textit{Music Similarity and Retrieval} \ (2016)"],
             [r"A. Wang, \ `An industrial-strength audio search algorithm' \ (ISMIR, \ 2003)",
              r"Y. Hu, \ Y. Koren and C. Volinsky, \ `Collaborative filtering for implicit feedback datasets' \ (ICDM, \ 2008)",
              r"B. L. Sturm, \ `A simple method to determine if a music information retrieval system is a horse' \ (2014)",
@@ -153,19 +154,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act XI: \ listening machines", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"2023: \ a voice is lifted off a 1970s home cassette, \ away from the piano on the same track, \ and a song is finished around it.", font_size=22, color=WHITE).move_to(UP * 1.7)
-        q = label(r"can a mix be un-mixed, \ and how would we know how well?", font_size=28, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 64", font_size=32, color=GREY_B), label(r"Source Separation", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "2023: a voice is lifted off a home cassette from the 1970s, away from the piano recorded on the same track, and a "
-            "finished song is built around it. <bookmark mark='a'/> Can a mix be un-mixed, and how would we know how well? "
-            "<bookmark mark='b'/> Next time. Part 64: Source Separation."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 63, "2023: a 1970s cassette",
+            "Can a mix be un-mixed, and how would we know how well?",
+            "2023: a voice is lifted off a home cassette from the 1970s, away from the piano recorded on the same "
+            "track, and a finished song is built around it. <bookmark mark='a'/> Can a mix be un-mixed, and how would "
+            "we know how well? <bookmark mark='b'/> Next time. Part 64: Source Separation.",
+            signoff=clip("bridge.signoff"))

@@ -43,7 +43,7 @@ from explainer.music.monochord.instruments import percussion as PC
 from explainer.music.monochord.instruments import strings as STR
 from explainer.music.monochord.instruments import winds as W
 from explainer.music.monochord.instruments.plucked import plucked as pluck
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music30")
@@ -448,10 +448,17 @@ def compute_unitgen() -> dict:
             "clips": {"three": save("unitgen.three", s_, kind="synthesized", detail="a unit-generator patch at 220 Hz: a sawtooth oscillator alone, then shaped by a decaying envelope, then through a low-pass filter whose cutoff falls")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation30", 30)
+
+
 ITEMS = {"hook": compute_hook, "tape": compute_tape, "chance": compute_chance, "phasing": compute_phasing, "studie": compute_studie, "clouds": compute_clouds,
          "gliss": compute_gliss, "sieves": compute_sieves, "mass": compute_mass, "spectral": compute_spectral, "speeds": compute_speeds, "density": compute_density,
          "spread": compute_spread, "additive": compute_additive, "buildup": compute_buildup, "unitgen": compute_unitgen, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

@@ -41,7 +41,7 @@ from explainer.music.monochord import rhythm as RH
 from explainer.music.monochord.instruments import drumkit as DK
 from explainer.music.monochord.instruments import percussion as PC
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music28")
@@ -421,10 +421,17 @@ def compute_added() -> dict:
             "clips": {"two": save("added.two", s_, detail="eight even notes on a woodblock, then the same with a sixteenth added in two places (Messiaen's added value); Part 9's bars")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation28", 28)
+
+
 ITEMS = {"hook": compute_hook, "wholetone": compute_wholetone, "census": compute_census, "planing": compute_planing, "octatonic": compute_octatonic,
          "accents": compute_accents, "bartok": compute_bartok, "polychord": compute_polychord, "messiaen": compute_messiaen, "slendro": compute_slendro, "modes": compute_modes,
          "triads": compute_triads, "blocks": compute_blocks, "added": compute_added, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

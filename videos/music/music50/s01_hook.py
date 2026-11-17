@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"The Tune's first phrase, \ sung twice by the same voice. \ One version was passed through a pitch corrector "
                            r"set to act instantly. \ Which one?", width=10.0)
         with self.voiceover(
-            "A question for your ears. The Tune's first phrase, sung twice by the same computed voice. One version was passed "
+            "In 1951 a guitar amplifier damaged on the way to a Memphis session gave a record its torn tone. That story comes later; listen first. The Tune's first phrase, sung twice by the same computed voice. One version was passed "
             "through a pitch corrector set to act instantly. Which one?"
         ):
             self.play(FadeIn(card))

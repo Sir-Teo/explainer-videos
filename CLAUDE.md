@@ -51,7 +51,8 @@ Manim videos with local neural narration. See README.md for layout and build com
   (progress in `videos/music/SYLLABUS.md` §8); the
   series plan is `videos/music/README.md`, the standard, devices (Monochord, the Tune and the Variations, the Chain,
   the Library), the sound pipeline and the part-by-part plan are `videos/music/SYLLABUS.md`, the working guide
-  `videos/music/LECTURE_GUIDE.md`. Monochord, the instrument the series builds, is `explainer/music/monochord/`
+  `videos/music/LECTURE_GUIDE.md`; the textbook, theory and paper map is `videos/music/READING.md`, written by
+  `python -m videos.music.reading` and checked by `tests/music/test_reading.py`. Monochord, the instrument the series builds, is `explainer/music/monochord/`
   (no manim; tested in `tests/music/`; a part's `compute.py` starts from `monochord/partkit.py`, its scenes from
   `explainer/music/kit.py`, its tests from `tests/music/partcheck.py`); scenes are `SoundScene`s (`explainer/music/sound.py`) and play clips from the
   part's `ClipStore` inside `with self.listen(clip) as snd:` windows, the picture driven by `snd.drive(...)`. Every

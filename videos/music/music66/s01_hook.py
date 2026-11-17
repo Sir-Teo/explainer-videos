@@ -16,7 +16,7 @@ class Hook(SoundScene):
         card = listen_card(r"Two bowed-string phrases. \ One is Monochord's physical model of a string, \ from Part 9. \ "
                            r"The other is a small network, \ given only the first's pitch and loudness. \ Which is the network?", width=10.0)
         with self.voiceover(
-            "A question for your ears. Two phrases on a bowed string. One is Monochord's physical model of a string, from "
+            "In 2016 a network wrote sound one sample at a time, sixteen thousand decisions a second. Listen first. Two phrases on a bowed string. One is Monochord's physical model of a string, from "
             "Part 9. The other was made by a small network that was given only the first one's pitch and loudness. Which is "
             "the network?"
         ):

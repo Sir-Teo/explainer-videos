@@ -40,7 +40,7 @@ from explainer.music.monochord import melody as M
 from explainer.music.monochord import romantic as R
 from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music29")
@@ -369,9 +369,16 @@ def compute_op25() -> dict:
             "clips": {"row": save("op25.row", s_, detail="the row of Schoenberg's Piano Suite, Op. 25 (1921-23), once up the keyboard; Part 7's piano")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation29", 29)
+
+
 ITEMS = {"hook": compute_hook, "op19": compute_op19, "sets": compute_sets, "classes": compute_classes, "zhex": compute_zhex, "row": compute_row,
          "allint": compute_allint, "combin": compute_combin, "total": compute_total, "hear": compute_hear, "trichords": compute_trichords, "hexpair": compute_hexpair, "op25": compute_op25, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

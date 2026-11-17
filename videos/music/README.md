@@ -28,7 +28,8 @@ something that runs, and plays what it builds. Two rules hold for every minute:
    `compute.py`. Numbers follow the rule of the other series: a computation, a measurement or a cited source.
 
 The videos are `music1` … `music68`. The standard, the devices, the sound pipeline and the part-by-part plan
-are in [`SYLLABUS.md`](SYLLABUS.md).
+are in [`SYLLABUS.md`](SYLLABUS.md); the textbooks, theories and papers it covers, part by part, are in
+[`READING.md`](READING.md).
 
 **Status (2026-11-15):** all sixty-eight parts are written: scenes, computed sounds and numbers, a lab and an
 interactive for each, and a README with problems and solutions in each part's folder (`music1/` … `music68/`). The

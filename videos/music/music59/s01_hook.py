@@ -17,7 +17,7 @@ class Hook(SoundScene):
         card = listen_card(r"Headphones on. \ A band heard from the stands of a stadium, \ over a screaming crowd, \ twice: \ once through a "
                            r"1965 stadium system, \ once through a modern one. \ Which was 1965?", width=10.0)
         with self.voiceover(
-            "A question for your ears, with headphones. A band heard from the stands of a stadium, over a screaming crowd, "
+            "In August 1965 the Beatles played Shea Stadium in New York. Put on headphones and judge first. A band heard from the stands of a stadium, over a screaming crowd, "
             "twice: once through our simplified historical-system model, once through a modern-system model; neither is an archival recording. Which was 1965?"
         ):
             self.play(FadeIn(card))

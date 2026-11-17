@@ -34,7 +34,7 @@ from explainer.music.monochord import ear as EAR
 from explainer.music.monochord import key as K
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music15")
@@ -477,8 +477,15 @@ def compute_variation() -> dict:
             "measure": rf"the key finder names the key of {t['found_right']} of its {t['of']} phrases", "clip": "tune.variation15"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation15", 15)
+
+
 ITEMS = {"hook": compute_hook, "profile": compute_profile, "functions": compute_functions, "cadences": compute_cadences, "meter": compute_meter, "finder": compute_finder,
-         "rare": compute_rare, "keymap": compute_keymap, "modulate": compute_modulate, "minor": compute_minor, "more": compute_more, "tune": compute_tune, "variation": compute_variation}
+         "rare": compute_rare, "keymap": compute_keymap, "modulate": compute_modulate, "minor": compute_minor, "more": compute_more, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

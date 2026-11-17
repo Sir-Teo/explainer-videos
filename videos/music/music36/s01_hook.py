@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"Three bronze bells, \ each struck twice: \ once in the middle of its face, \ once near its edge. \ "
                            r"Does each bell give the same note both times, \ or two different notes?", width=10.4)
         with self.voiceover(
-            "A question for your ears. Three bronze bells, each struck twice, once in the middle of its face and once near "
+            "A tomb sealed in China in 433 BCE held sixty-five bronze bells. Start with your ears. Three bronze bells, each struck twice, once in the middle of its face and once near "
             "its edge. Does each bell give the same note both times, or two different notes?"
         ):
             self.play(FadeIn(card))

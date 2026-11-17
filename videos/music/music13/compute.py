@@ -37,7 +37,7 @@ from explainer.music.monochord import scales as S
 from explainer.music.monochord import tune as TUNE
 from explainer.music.monochord.instruments import strings as STR
 from explainer.music.monochord.instruments.plucked import plucked
-from explainer.music.monochord.partkit import organ_tone, saver
+from explainer.music.monochord.partkit import organ_tone, saver, signoff
 from explainer.music.monochord.physics.string import String
 from explainer.music.monochord.score import Pitch
 
@@ -606,9 +606,16 @@ def compute_variation() -> dict:
             "measure": rf"re-voiced, the chords' three voices travel {t['voiced_motion']} semitones over the Tune instead of {t['block_motion']}", "clip": "tune.variation13"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation13", 13)
+
+
 ITEMS = {"hook": compute_hook, "intervals": compute_intervals, "triads": compute_triads, "scale": compute_scale, "inversion": compute_inversion, "roots": compute_roots,
          "sevenths": compute_sevenths, "voicing": compute_voicing, "doubling": compute_doubling, "symbols": compute_symbols, "tonnetz": compute_tonnetz,
-         "tune": compute_tune, "frontier": compute_frontier, "variation": compute_variation}
+         "tune": compute_tune, "frontier": compute_frontier, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

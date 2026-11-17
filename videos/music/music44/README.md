@@ -113,6 +113,8 @@ python -m videos.music.labs 44                                  # the lab (write
 * ITU-R BT.1359, "Relative timing of sound and vision for broadcasting" (1998); EBU R 128, loudness normalisation.
 * M. Z. Land and P. N. McConnell, the iMUSE patent, US 5,315,057 (1994).
 * B. Eno and others on generative music for *Spore* (2008); the procedural soundtrack of *No Man's Sky* (2016).
+* C. Gorbman, *Unheard Melodies: Narrative Film Music* (1987), the principles of the classical score in chapter 1.
+* M. Chion, *Audio-Vision: Sound on Screen* (1990; tr. C. Gorbman, 1994): added value and synchresis, chapter 1.
 
 ## Interpretation limits
 

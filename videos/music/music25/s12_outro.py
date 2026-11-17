@@ -144,18 +144,12 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what happens when one movement holds many affects?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act IV: \ a thousand years", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        nxt = VGroup(label(r"Part 26", font_size=32, color=GREY_B), label(r"The Classical Style", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Many descriptions of Baroque movements emphasize a governing affect, despite internal contrasts and built its forms from returns. <bookmark mark='a'/> The next "
-            "generation, in Vienna, put contrast inside the movement, and built its forms from departures and arrivals. "
-            "<bookmark mark='b'/> Next time. Part 26: The Classical Style."
-        ) as vo:
-            self.play(FadeIn(top))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 25, "Vienna, the early 1780s",
+            "What did listeners expect, so that a composer could surprise them?",
+            "A Baroque movement often keeps one governing affect, and builds its form from returns. "
+            "<bookmark mark='a'/> The next generation, in Vienna, put contrast inside the movement. In the early "
+            "1780s Mozart wrote twelve variations on a French song, and the song is our Tune. His style ran on "
+            "expectations so widely shared that Haydn could end a quartet with a joke about where the ending is. What "
+            "were they, and can they be measured? <bookmark mark='b'/> Next time. Part 26: The Classical Style.",
+            signoff=clip("bridge.signoff"))

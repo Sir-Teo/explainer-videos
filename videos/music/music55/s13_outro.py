@@ -139,7 +139,8 @@ class Outro(SoundScene):
             [r"H. Kuttruff, \ \textit{Room Acoustics} \ (6th ed., \ 2016)",
              r"L. Beranek, \ \textit{Concert Halls and Opera Houses} \ (2nd ed., \ 2004)",
              r"J. Blauert, \ \textit{Spatial Hearing} \ (rev. ed., \ 1997)",
-             r"F. Zotter and M. Frank, \ \textit{Ambisonics} \ (2019)"],
+             r"F. Zotter and M. Frank, \ \textit{Ambisonics} \ (2019)",
+             r"F. A. Everest and K. C. Pohlmann, \ \textit{Master Handbook of Acoustics} \ (7th ed., \ 2021)"],
             [r"W. C. Sabine, \ `Reverberation' \ (1900)",
              r"M. R. Schroeder, \ `Diffuse sound reflection by maximum-length sequences' \ (JASA, \ 1975)",
              r"J. B. Allen and D. A. Berkley, \ `Image method for efficiently simulating small-room acoustics' \ (JASA, \ 1979)",
@@ -152,18 +153,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act X: \ the studio and the stage", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Take one multitrack recording and mix it three times: \ close and dry, \ a wall of sound, \ a dub.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        q = label(r"is it still the same piece of music?", font_size=28, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 56", font_size=32, color=GREY_B), label(r"Recording and Mixing", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Take one multitrack recording and mix it three times: close and dry, a wall of sound, a dub. <bookmark mark='a'/> "
-            "Is it still the same piece of music? <bookmark mark='b'/> Next time. Part 56: Recording and Mixing."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 55, "one recording, three mixes",
+            "Is it still the same piece of music?",
+            "Take one multitrack recording and mix it three times: close and dry, a wall of sound, a dub. "
+            "<bookmark mark='a'/> Is it still the same piece of music? <bookmark mark='b'/> Next time. Part 56: "
+            "Recording and Mixing.",
+            signoff=clip("bridge.signoff"))

@@ -34,7 +34,7 @@ from explainer.ai.cache import Cache
 from explainer.music.monochord import EXAMPLE_LEVEL, SR, Clip, ClipStore, concat, mix
 from explainer.music.monochord import composer as K
 from explainer.music.monochord import melody as M
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 
 CACHE = Cache("music42")
@@ -350,10 +350,17 @@ def compute_variation() -> dict:
             "clip": "tune.variation42"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation42", 42)
+
+
 ITEMS = {"hook": compute_hook, "ode": compute_ode, "motive": compute_motive, "quiz": compute_quiz, "develop": compute_develop,
          "kinds": compute_kinds, "funnel": compute_funnel, "dice": compute_dice, "illiac": compute_illiac, "chains": compute_chains,
          "tension": compute_tension, "search": compute_search, "evolve": compute_evolve, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

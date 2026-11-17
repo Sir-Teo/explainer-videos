@@ -42,7 +42,7 @@ from explainer.music.monochord import romantic as R
 from explainer.music.monochord import trecento as TR
 from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music27")
@@ -486,9 +486,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation27"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation27", 27)
+
+
 ITEMS = {"hook": compute_hook, "keyboards": compute_keyboards, "lied": compute_lied, "mazurka": compute_mazurka, "rubato": compute_rubato,
          "idee": compute_idee, "tristan": compute_tristan, "library": compute_library, "nations": compute_nations, "orchestra": compute_orchestra, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

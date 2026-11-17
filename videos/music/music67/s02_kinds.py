@@ -9,6 +9,7 @@ class Kinds(SoundScene):
     def construct(self):
         chapter(self, 1, r"Kinds of knowing", r"What counts as evidence about music?")
         self.kinds()
+        self.turns()
         self.example()
         self.questions()
 
@@ -22,11 +23,18 @@ class Kinds(SoundScene):
                  (r"practice", r"what is learnt by making: \ composing, \ performing, \ building", r"Parts 41 to 44")]
         g = VGroup()
         for name, what, where in kinds:
-            g.add(VGroup(label(name, font_size=21, color=TUNE), label(what, font_size=17, color=WHITE), label(where, font_size=15, color=GREY_A)))
-        g.arrange(DOWN, buff=0.32, aligned_edge=LEFT).move_to(DOWN * 0.3 + LEFT * 0.2)
-        for r in g:
-            r[1].next_to(r[0], RIGHT, buff=0.3).align_to(g, LEFT).shift(RIGHT * 2.3)
-            r[2].next_to(r[1], RIGHT, buff=0.3)
+            g.add(VGroup(label(name, font_size=26, color=TUNE), label(what, font_size=21, color=WHITE), label(where, font_size=18, color=GREY_A)))
+        # three fixed columns: names right-aligned, then what, then where (aligned on the longest row)
+        name_w = max(r[0].width for r in g)
+        what_w = max(r[1].width for r in g)
+        for i, r in enumerate(g):
+            y = -0.72 * i
+            r[0].move_to([name_w - r[0].width / 2, y, 0])
+            r[1].move_to([name_w + 0.35 + r[1].width / 2, y, 0])
+            r[2].move_to([name_w + 0.35 + what_w + 0.4 + r[2].width / 2, y, 0])
+        g.move_to(DOWN * 0.3)
+        if g.width > 13.0:
+            g.scale_to_fit_width(13.0)
         head = label(r"six ways of knowing", font_size=26, color=GREY_A).to_edge(UP, buff=0.35)
         with self.voiceover(
             "Music research knows things in at least six ways, and this series discusses all of them, while its own computations are mainly synthetic demonstrations and corpus analysis. <bookmark mark='a'/> From "
@@ -36,12 +44,37 @@ class Kinds(SoundScene):
             "listeners do, under controlled conditions. <bookmark mark='e'/> From computation: what can be measured or built. "
             "<bookmark mark='f'/> And from practice: what is learnt by making it."
         ) as vo:
-            self.play(FadeIn(head))
+            names = VGroup(*(r[0] for r in g))
+            for n in names:
+                n.set_opacity(0.3)
+            self.play(FadeIn(head), FadeIn(names, lag_ratio=0.15), run_time=1.4)
             for mark, r in zip("abcdef", g):
                 vo.wait_until(mark)
-                self.play(FadeIn(r), run_time=0.6)
+                self.play(r[0].animate.set_opacity(1), FadeIn(r[1]), FadeIn(r[2]), run_time=0.6)
         self.wait(0.6)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def turns(self):
+        items = [
+            (r"Mantle Hood \ (1960): \ `bi-musicality': \ learn to perform the music you study", WHITE),
+            (r"Joseph Kerman, \ \textit{Contemplating Music} \ (1985): \ musicology had become facts about sources; \ it "
+             r"should be criticism too", WHITE),
+            (r"Lydia Goehr, \ \textit{The Imaginary Museum of Musical Works} \ (1992): \ the fixed `work' is an idea that "
+             r"settled around 1800", WHITE),
+            (r"Christopher Small, \ \textit{Musicking} \ (1998): \ music is an activity, \ and everyone taking part is doing it", WHITE),
+            (r"each moved what counts as evidence: \ the player's body, \ the critic's reading, \ the history of the idea, \ "
+             r"the event", TUNE),
+        ]
+        rows_scene(self, r"how the field argued", items,
+                   "The six did not arrive peacefully. <bookmark mark='b'/> In 1960 Mantle Hood asked ethnomusicologists to "
+                   "learn to perform the music they study, and called it bi-musicality. <bookmark mark='c'/> In 1985 Joseph "
+                   "Kerman's Contemplating Music argued that musicology had become the gathering of facts about sources, and "
+                   "should be criticism as well. <bookmark mark='d'/> In 1992 the philosopher Lydia Goehr argued that the idea "
+                   "of a fixed musical work, the thing a performance is of, settled into place around 1800, and is itself "
+                   "historical. <bookmark mark='e'/> In 1998 Christopher Small went further: music is not a thing but an "
+                   "activity, musicking, and the listeners, the dancers, even the person taking tickets at the door, are doing "
+                   "it. <bookmark mark='f'/> Each of them moved what counts as evidence.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def questions(self):

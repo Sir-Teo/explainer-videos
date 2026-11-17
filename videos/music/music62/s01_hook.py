@@ -18,7 +18,7 @@ class Hook(SoundScene):
         card = listen_card(r"The session, \ twice, \ with a click track. \ In one the clicks are on the beat; \ in the other they are "
                            rf"{d['offset_ms']} ms late. \ Which is on the beat?", width=9.5)
         with self.voiceover(
-            f"A question for your ears. The session, twice, with a click track. In one the clicks are on the beat; in the other "
+            f"A child can clap along to a song; for decades a program could not. First, your own sense of the beat. The session, twice, with a click track. In one the clicks are on the beat; in the other "
             f"they are {say(d['offset_ms'])} milliseconds late, less than a tenth of a second. Which is on the beat?"
         ):
             self.play(FadeIn(card))

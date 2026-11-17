@@ -136,7 +136,8 @@ class Outro(SoundScene):
             [r"R. Izhaki, \ \textit{Mixing Audio} \ (3rd ed., \ 2018)",
              r"M. Senior, \ \textit{Mixing Secrets for the Small Studio} \ (2nd ed., \ 2018)",
              r"G. Milner, \ \textit{Perfecting Sound Forever} \ (2009)",
-             r"M. Williams, \ \textit{Microphone Arrays for Stereo and Multichannel Sound Recording} \ (2004)"],
+             r"M. Williams, \ \textit{Microphone Arrays for Stereo and Multichannel Sound Recording} \ (2004)",
+             r"W. Moylan, \ \textit{Understanding and Crafting the Mix} \ (3rd ed., \ 2015)"],
             [r"B. De Man, \ J. D. Reiss and R. Stables, \ `Ten years of automatic mixing' \ (2017)",
              r"E. Perez-Gonzalez and J. D. Reiss, \ `Automatic gain and fader control for live mixing' \ (2009)",
              r"C. J. Steinmetz et al., \ `Automatic multitrack mixing with a differentiable mixing console' \ (2021)",
@@ -149,18 +150,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act X: \ the studio and the stage", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"In 2008 fans found that a rock album sounded better inside a video game than on its own CD.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        q = label(r"how can making a record louder make it worse?", font_size=28, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 57", font_size=32, color=GREY_B), label(r"Mastering and Loudness", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "In 2008 fans found that a rock album sounded better inside a video game than on its own CD. <bookmark mark='a'/> How "
-            "can making a record louder make it worse? <bookmark mark='b'/> Next time. Part 57: Mastering and Loudness."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 56, "2008: the game beat the CD",
+            "How can making a record louder make it worse?",
+            "In 2008 fans found that a rock album sounded better inside a video game than on its own CD. "
+            "<bookmark mark='a'/> How can making a record louder make it worse? <bookmark mark='b'/> Next time. Part "
+            "57: Mastering and Loudness.",
+            signoff=clip("bridge.signoff"))

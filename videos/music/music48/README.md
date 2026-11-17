@@ -139,6 +139,7 @@ python -m videos.music.labs 48                                  # the lab (write
   *JAES* (2007); J. D. Reiss, "A meta-analysis of high resolution audio perceptual evaluation", *JAES* (2016).
 * M. Vetterli, P. Marziliano and T. Blu, "Sampling signals with finite rate of innovation", *IEEE Trans. Signal
   Processing* (2002); E. J. Candès, J. Romberg and T. Tao (2006); D. L. Donoho, "Compressed sensing" (2006).
+* A. V. Oppenheim and R. W. Schafer, *Discrete-Time Signal Processing* (3rd ed., 2010): sampling, aliasing and reconstruction, the engineering textbook behind this part.
 
 ## Interpretation limits
 

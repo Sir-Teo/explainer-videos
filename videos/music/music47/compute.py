@@ -41,7 +41,7 @@ from explainer.music.monochord import origins as O
 from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments.percussion import modal
 from explainer.music.monochord.instruments.winds import jet_tone
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.romantic import load_library
 from videos.music.music38 import compute as P38
 from videos.music.music40 import compute as P40
@@ -423,10 +423,17 @@ def compute_rhythms() -> dict:
             "beat": 0.36, "clips": {"two": save("rhythms.two", c, detail="the first two phrases of Sur le pont d'Avignon and of Oh My Darling, Clementine; Part 7's piano")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation47", 47)
+
+
 ITEMS = {"hook": compute_hook, "lullaby": compute_lullaby, "universals": compute_universals, "rhythm": compute_rhythm,
          "chains": compute_chains, "sampling": compute_sampling, "tune47": compute_tune47, "family": compute_family,
          "relatives": compute_relatives, "npvi": compute_npvi, "beat": compute_beat, "amusia": compute_amusia,
-         "mozart": compute_mozart, "chords": compute_chords, "rhythms": compute_rhythms, "variation": compute_variation}
+         "mozart": compute_mozart, "chords": compute_chords, "rhythms": compute_rhythms, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

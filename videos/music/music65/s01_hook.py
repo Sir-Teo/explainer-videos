@@ -16,7 +16,7 @@ class Hook(SoundScene):
         card = listen_card(r"Three pairs of chorale phrases on an organ. \ One is Bach's. \ Two were written by machines \ "
                            r"(and harmonized by another). \ Which is Bach's?", width=10.0)
         with self.voiceover(
-            "A question for your ears. Three pairs of phrases in the style of a Bach chorale, on an organ. One is Bach's own. "
+            "In 1997 an audience in Oregon heard three pieces, one of them by Bach. Your turn. Three pairs of phrases in the style of a Bach chorale, on an organ. One is Bach's own. "
             "Two were written by machines, and harmonized by another. Which is Bach's?"
         ):
             self.play(FadeIn(card))

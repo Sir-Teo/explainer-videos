@@ -150,6 +150,7 @@ python -m videos.music.labs 51                                  # the lab (write
   J. Turian and M. Henry, "I'm sorry for your loss: spectrally-based audio distances are bad at pitch" (2020); B. Hayes
   and others, "A review of differentiable digital signal processing for music and speech synthesis", *Frontiers in
   Signal Processing* (2024).
+* C. Dodge and T. A. Jerse, *Computer Music: Synthesis, Composition, and Performance* (2nd ed., 1997); T. Holmes, *Electronic and Experimental Music* (6th ed., 2020), for the history from the Telharmonium on.
 
 ## Interpretation limits
 

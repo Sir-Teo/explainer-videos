@@ -136,17 +136,12 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act XII: \ coda", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"1993: \ thirty-six students, \ ten minutes of Mozart, \ a higher spatial score; \ soon, \ CDs for every newborn in a state.", font_size=21, color=WHITE).move_to(UP * 1.7)
-        q = label(r"the effect did not replicate. \ \ How does a field know what it knows?", font_size=27, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 67", font_size=32, color=GREY_B), label(r"Doing Research in Music", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "1993: a study of thirty-six students reports that ten minutes of Mozart raised a spatial score, and within a few years a governor is sending classical CDs to every newborn in his state. <bookmark mark='a'/> Later research did not support a general intelligence benefit, and found that arousal and mood can explain short-lived task effects. How does a field know what it knows? <bookmark mark='b'/> Next time, the first part of the coda. Part 67: Doing Research in Music."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 66, "1993: ten minutes of Mozart",
+            "How does a field know what it knows?",
+            "1993: a study of thirty-six students reports that ten minutes of Mozart raised a spatial score, and "
+            "within a few years a governor is sending classical CDs to every newborn in his state. "
+            "<bookmark mark='a'/> Later research did not support a general intelligence benefit, and found that "
+            "arousal and mood can explain short-lived task effects. How does a field know what it knows? "
+            "<bookmark mark='b'/> Next time, the first part of the coda. Part 67: Doing Research in Music.",
+            signoff=clip("bridge.signoff"))

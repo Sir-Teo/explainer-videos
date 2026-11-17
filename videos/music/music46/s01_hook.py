@@ -18,7 +18,7 @@ class Hook(SoundScene):
         card = listen_card(r"The Tune's last phrase, \ three times, \ each with a different last note. \ "
                            r"A model listener trained on fifty tunes heard them too. \ Which ending surprised it most, \ and which least?", width=10.4)
         with self.voiceover(
-            "A question for your ears. The Tune's last phrase, three times, each with a different last note. A model "
+            "In 1956 Leonard Meyer argued that musical emotion is expectation, delayed and fulfilled. Test your own expectations first. The Tune's last phrase, three times, each with a different last note. A model "
             "listener, trained on fifty other tunes, heard them too. Which ending surprised it most, and which least?"
         ):
             self.play(FadeIn(card))

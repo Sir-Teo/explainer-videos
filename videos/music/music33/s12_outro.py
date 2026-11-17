@@ -148,20 +148,12 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what does a whole musical tradition build from cycles and scales?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VI: \ many musics", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"This part ends Act Five. The mathematics of cycles and scales is universal; the music made from them is not.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        lead.scale_to_fit_width(min(lead.width, 12.5))
-        nxt = VGroup(label(r"Part 34", font_size=32, color=GREY_B), label(r"Raga and Tala", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "This part ends Act Five. The mathematics of cycles and scales is universal; the music made from them is not. "
-            "<bookmark mark='a'/> What does a whole musical tradition build from cycles of beats and families of scales? "
-            "<bookmark mark='b'/> Act Six begins. Part 34: Raga and Tala."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 33, "a sixteen-beat cycle",
+            "What does a whole tradition build from cycles of beats and families of scales?",
+            "This part ends Act Five. The mathematics of cycles and scales is universal; the music made from them is "
+            "not. <bookmark mark='a'/> In a North Indian concert a drummer plays one phrase three times, and "
+            "musicians and audience land together on the first beat of the cycle. What does a whole tradition build "
+            "from cycles of beats and families of scales? <bookmark mark='b'/> Act Six begins. Part 34: Raga and "
+            "Tala.",
+            signoff=clip("bridge.signoff"))

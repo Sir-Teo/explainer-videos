@@ -147,7 +147,8 @@ class Outro(SoundScene):
             [r"D. Temperley, \ \textit{The Musical Language of Rock} \ (2018)",
              r"M. Ohriner, \ \textit{Flow: \ The Rhythmic Voice in Rap Music} \ (2019)",
              r"A. Krims, \ \textit{Rap Music and the Poetics of Identity} \ (2000)",
-             r"J. Covach and A. Flory, \ \textit{What's That Sound?} \ (5th ed. 2018)"],
+             r"J. Covach and A. Flory, \ \textit{What's That Sound?} \ (5th ed. 2018)",
+             r"W. Everett, \ \textit{The Foundations of Rock} \ (2009); \ A. F. Moore, \ \textit{Song Means} \ (2012)"],
             [r"M. Mauch and others, \ `The evolution of popular music: \ USA 1960--2010' \ (2015)",
              r"J. Serr\`a and others, \ `Measuring the evolution of contemporary western popular music' \ (2012)",
              r"H. L\'eveill\'e Gauvin, \ `Drawing listener attention in popular music' \ (2018)",
@@ -160,19 +161,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"how do you choose which instrument plays which note?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VII: \ the craft", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Act VI has heard many musics; \ Act VII turns to making music.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        lead.scale_to_fit_width(min(lead.width, 12.5))
-        nxt = VGroup(label(r"Part 41", font_size=32, color=GREY_B), label(r"Orchestration", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Act VI has heard many musics; Act VII turns to making music. <bookmark mark='a'/> How do you choose which "
-            "instrument plays which note? <bookmark mark='b'/> Next time. Part 41: Orchestration."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 40, r"\textit{Bol\'ero}, 1928",
+            "How do you choose which instrument plays which note?",
+            "Act Six has heard many musics; Act Seven turns to making music. <bookmark mark='a'/> In Ravel's Boléro "
+            "one tune comes round eighteen times, and only the instruments change. At one point a horn, a celesta and "
+            "two piccolos fuse into a single sound that no instrument has. How do you choose which instrument plays "
+            "which note? <bookmark mark='b'/> Act Seven begins. Part 41: Orchestration.",
+            signoff=clip("bridge.signoff"))

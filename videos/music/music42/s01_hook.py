@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"Two eight-bar melodies, \ built from the same four-note idea over the same chords. \ "
                            r"A program wrote both, \ then threw one away. \ Which did it keep: \ the first or the second?", width=10.4)
         with self.voiceover(
-            "A question for your ears. Two eight-bar melodies, built from the same four-note idea over the same chords. A "
+            "Beethoven's sketchbooks of 1822 to 1824 show one tune approached in draft after draft. Now a program's drafts. Two eight-bar melodies, built from the same four-note idea over the same chords. A "
             "program wrote both, and then threw one of them away. Which did it keep, the first or the second?"
         ):
             self.play(FadeIn(card))

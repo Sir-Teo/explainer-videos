@@ -168,19 +168,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act X: \ the studio and the stage", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Everything so far has been numbers inside a computer.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        q = label(r"how does air become numbers, \ and numbers become air?", font_size=30, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 54", font_size=32, color=GREY_B), label(r"Microphones and Loudspeakers", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "That ends the act on electric sound. Everything so far has been numbers inside a computer. <bookmark mark='a'/> How "
-            "does air become numbers, and numbers become air? <bookmark mark='b'/> Next time, the studio and the stage begin. "
-            "Part 54: Microphones and Loudspeakers."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 53, "a loudspeaker, run backwards",
+            "How does air become numbers, and numbers become air?",
+            "That ends the act on electric sound. Everything so far has been numbers inside a computer. "
+            "<bookmark mark='a'/> Plug a pair of headphones into a microphone socket, speak into them, and they work. "
+            "How does air become numbers, and numbers become air? <bookmark mark='b'/> Next time, the studio and the "
+            "stage begin. Part 54: Microphones and Loudspeakers.",
+            signoff=clip("bridge.signoff"))

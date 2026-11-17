@@ -151,20 +151,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what happens when the tresillo, \ call and response, \ and a new kind of beat meet in America?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VI: \ many musics", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Timelines crossed the Atlantic.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        lead.scale_to_fit_width(min(lead.width, 12.5))
-        nxt = VGroup(label(r"Part 38", font_size=32, color=GREY_B), label(r"Blues and Swing", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Timelines crossed the Atlantic. <bookmark mark='a'/> What happens when the tresillo, call and response, and a new "
-            "kind of beat meet in America, and the pulse itself begins to swing? <bookmark mark='b'/> Next time. Part 38: "
-            "Blues and Swing."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 37, "What is swing?",
+            "If you have to ask, you will never know. Or can swing be measured?",
+            "Timelines crossed the Atlantic. <bookmark mark='a'/> In America the tresillo, call and response and the "
+            "blues met, and the pulse itself began to swing. The proverb says that if you have to ask what swing is, "
+            "you will never know. Can it be measured? <bookmark mark='b'/> Next time. Part 38: Blues and Swing.",
+            signoff=clip("bridge.signoff"))

@@ -11,6 +11,7 @@ class Picture(SoundScene):
         self.boltz()
         self.three()
         self.functions()
+        self.theory()
         self.diegetic()
         self.mickey()
 
@@ -96,6 +97,25 @@ class Picture(SoundScene):
                    "or hides. <bookmark mark='d'/> It binds cuts together: music running across shots makes them one scene. "
                    "<bookmark mark='e'/> It points: a sting tells us where to look, a motif who is near. <bookmark mark='f'/> And "
                    "it paces: the score's tempo becomes the scene's.", marks="bcdef")
+
+    # ------------------------------------------------------------------
+    def theory(self):
+        items = [
+            (r"Claudia Gorbman, \ \textit{Unheard Melodies} \ (1987): \ the classical score works unnoticed, \ cueing story and feeling", WHITE),
+            (r"Michel Chion, \ \textit{Audio-Vision} \ (1990): \ sound and image are not added together, \ they are combined", WHITE),
+            (r"added value: \ a sound makes us see something in the image, \ and we credit it to the image", WHITE),
+            (r"synchresis: \ a sound and an image that coincide fuse into one event, \ whatever made them", TUNE),
+            (r"why the late cut in the opening felt wrong, \ and why chapter 3 counts frames", GREY_A),
+        ]
+        rows_scene(self, r"two theories of the audiovisual", items,
+                   "Two theories give names to what we have just heard. <bookmark mark='b'/> In 1987 Claudia Gorbman described "
+                   "how the classical Hollywood score works: mostly unnoticed, cueing the story, binding the shots and "
+                   "signalling emotion. <bookmark mark='c'/> Three years later the composer and critic Michel Chion argued "
+                   "that sound and image are not added together, but combined. <bookmark mark='d'/> Sound adds value: it makes "
+                   "us see something in the picture, and we credit what we saw to the picture. <bookmark mark='e'/> And a sound "
+                   "and an image that coincide fuse into one event, whatever made them. Chion called that synchresis. "
+                   "<bookmark mark='f'/> It is why the late cut in this part's opening felt wrong, and why chapter three counts "
+                   "frames.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def mickey(self):

@@ -38,7 +38,7 @@ from explainer.music.monochord import EXAMPLE_LEVEL, SR, Clip, ClipStore, concat
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import strings as STR
 from explainer.music.monochord.instruments import winds as WINDS
-from explainer.music.monochord.partkit import organ_tone, saver
+from explainer.music.monochord.partkit import organ_tone, saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music14")
@@ -551,9 +551,16 @@ def compute_variation() -> dict:
             "measure": rf"the expected continuation costs {t['bits_most']:.1f} bits a note; the least expected, {t['bits_least']:.1f}", "clip": "tune.variation14"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation14", 14)
+
+
 ITEMS = {"hook": compute_hook, "contour": compute_contour, "steps": compute_steps, "range": compute_range, "arch": compute_arch, "leaps": compute_leaps,
          "tendency": compute_tendency, "motive": compute_motive, "phrase": compute_phrase, "info": compute_info, "model": compute_model, "tone": compute_tone,
-         "frontier": compute_frontier, "more": compute_more, "tune": compute_tune, "variation": compute_variation}
+         "frontier": compute_frontier, "more": compute_more, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

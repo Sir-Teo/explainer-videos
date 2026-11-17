@@ -146,18 +146,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what if the computer makes the sound in the first place?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act IX: \ electric sound", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Every effect so far has changed a sound that already existed.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 51", font_size=32, color=GREY_B), label(r"Synthesis I: \ Oscillators and Filters", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Every effect so far has changed a sound that already existed. <bookmark mark='a'/> What if the computer makes the "
-            "sound in the first place? <bookmark mark='b'/> Next time. Part 51: Synthesis One, Oscillators and Filters."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 50, "New York, 1906: two hundred tons",
+            "What if the machine makes the sound in the first place?",
+            "Every effect so far has changed a sound that already existed. <bookmark mark='a'/> In 1906 an instrument "
+            "of dynamos, nearly two hundred tons of them, sent tones down telephone lines to subscribers. Sixty years "
+            "later a module the size of a book did the same job. What if the machine makes the sound in the first "
+            "place? <bookmark mark='b'/> Next time. Part 51: Synthesis One, Oscillators and Filters.",
+            signoff=clip("bridge.signoff"))

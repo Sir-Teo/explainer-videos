@@ -147,19 +147,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act X: \ the studio and the stage", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"The engineer tuning the first MP3 encoder tested it on one unaccompanied voice, \ because it sounded dreadful.", font_size=23, color=WHITE).move_to(UP * 1.7)
-        q = label(r"how can a file a tenth the size sound the same?", font_size=28, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 58", font_size=32, color=GREY_B), label(r"Compression for the Ear", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "The engineer tuning the first MP3 encoder tested it on one unaccompanied voice, because on that voice it sounded "
-            "dreadful. <bookmark mark='a'/> How can a file a tenth the size sound the same? <bookmark mark='b'/> Next time. "
-            "Part 58: Compression for the Ear."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 57, "the first MP3 encoder",
+            "How can a file a tenth the size sound the same?",
+            "The engineer tuning the first MP3 encoder tested it on one unaccompanied voice, because on that voice it "
+            "sounded dreadful. <bookmark mark='a'/> How can a file a tenth the size sound the same? "
+            "<bookmark mark='b'/> Next time. Part 58: Compression for the Ear.",
+            signoff=clip("bridge.signoff"))

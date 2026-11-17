@@ -38,7 +38,7 @@ from explainer.music.monochord import business as B
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 from videos.music.music40 import compute as P40
 from videos.music.music56 import compute as P56
@@ -406,10 +406,17 @@ def compute_variation() -> dict:
             "clip": "tune.variation60"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation60", 60)
+
+
 ITEMS = {"hook": compute_hook, "melodies": compute_melodies, "rights": compute_rights, "waterfall": compute_waterfall,
          "stream": compute_stream, "deals": compute_deals, "pool": compute_pool, "market": compute_market,
          "intro": compute_intro, "live": compute_live, "similar": compute_similar, "sample": compute_sample,
-         "ai": compute_ai, "tune60": compute_tune60, "variation": compute_variation}
+         "ai": compute_ai, "tune60": compute_tune60, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

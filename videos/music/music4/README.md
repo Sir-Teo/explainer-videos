@@ -189,3 +189,4 @@ therapy for autosomal recessive deafness 9", *The Lancet* 403 (2024).
 Standards and reports: NIOSH, *Criteria for a Recommended Standard: Occupational Noise Exposure* (1998); ISO 226
 (equal-loudness contours); IEC 61672 (the A weighting); World Health Organization, *World Report on Hearing* (2021)
 and its "Make Listening Safe" initiative, for the estimate of over a billion young people at risk.
+* E. Zwicker and H. Fastl, *Psychoacoustics: Facts and Models* (3rd ed., 2007): the critical bands as the Bark scale (Zwicker, "Subdivision of the audible frequency range into critical bands", *JASA* 33, 1961), and loudness in sones; G. T. Fechner, *Elemente der Psychophysik* (1860), the logarithmic law that Stevens's power law replaced.

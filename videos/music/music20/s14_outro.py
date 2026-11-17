@@ -176,5 +176,5 @@ class Outro(SoundScene):
             self.play(FadeIn(q))
             vo.wait_until("b")
             self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
+        play_signoff(self, 20, clip("bridge.signoff"), clear=(top,))
         self.clear_scene()

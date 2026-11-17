@@ -43,7 +43,7 @@ from explainer.music.monochord import codec as K
 from explainer.music.monochord import machines as MC
 from explainer.music.monochord import melody as ML
 from explainer.music.monochord import research as R
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.stats.kit import multiple as MT
 from explainer.stats.kit import shrink as SH
 from explainer.tts import REPO_ROOT
@@ -483,12 +483,19 @@ def compute_auditheard() -> dict:
 
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation67", 67)
+
+
 ITEMS = {"hook": compute_hook, "stemma": compute_stemma, "canon": compute_canon, "meta": compute_meta, "power": compute_power,
          "leakage": compute_leakage, "audit": compute_audit, "stars": compute_stars, "tune67": compute_tune67,
          "variation": compute_variation, "canonheard": compute_canonheard, "phack": compute_phack, "abx2": compute_abx2,
          "tappers": compute_tappers, "audit63": compute_audit63, "repro": compute_repro, "notation": compute_notation,
          "mushra": compute_mushra, "dupes": compute_dupes, "pitchstd": compute_pitchstd, "copies": compute_copies,
-         "tapsheard": compute_tapsheard, "auditheard": compute_auditheard}
+         "tapsheard": compute_tapsheard, "auditheard": compute_auditheard,
+         "signoff": compute_signoff}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

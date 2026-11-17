@@ -41,7 +41,7 @@ from explainer.ai.cache import Cache
 from explainer.music.monochord import EXAMPLE_LEVEL, QUIET_LEVEL, SR, Clip, ClipStore, concat
 from explainer.music.monochord import loudness as LN
 from explainer.music.monochord import master as MS
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 from videos.music.music56 import compute as P56
 
@@ -334,9 +334,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation57"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation57", 57)
+
+
 ITEMS = {"hook": compute_hook, "meters": compute_meters, "truepeak": compute_truepeak, "limiter": compute_limiter, "war": compute_war,
          "norm": compute_norm, "matched": compute_matched, "dither": compute_dither, "vinyl": compute_vinyl, "chain": compute_chain,
-         "series": compute_series, "tune57": compute_tune57, "variation": compute_variation}
+         "series": compute_series, "tune57": compute_tune57, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

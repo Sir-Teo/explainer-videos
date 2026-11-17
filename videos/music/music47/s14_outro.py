@@ -139,7 +139,8 @@ class Outro(SoundScene):
             [r"A. D. Patel, \ \textit{Music, Language, and the Brain} \ (2008)",
              r"H. Honing \ (ed.), \ \textit{The Origins of Musicality} \ (2018)",
              r"B. Nettl, \ \textit{The Study of Ethnomusicology} \ (3rd ed., \ 2015)",
-             r"S. Mithen, \ \textit{The Singing Neanderthals} \ (2005)"],
+             r"S. Mithen, \ \textit{The Singing Neanderthals} \ (2005)",
+             r"J. Blacking, \ \textit{How Musical Is Man?} \ (1973); \ A. P. Merriam, \ \textit{The Anthropology of Music} \ (1964)"],
             [r"P. E. Savage and others, \ `Statistical universals reveal the structures and functions of human music' \ (2015)",
              r"S. A. Mehr and others, \ `Universality and diversity in human song' \ (2019)",
              r"N. Jacoby and J. H. McDermott, \ `Integer ratio priors on musical rhythm ...' \ (2017)",
@@ -152,19 +153,12 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what is a sound, \ once it becomes a list of numbers?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act IX: \ electric sound", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Every sound in this series has been computed.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 48", font_size=32, color=GREY_B), label(r"Digital Audio", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "That ends Act Eight, the mind. Every sound in this series has been computed. <bookmark mark='a'/> But what is a "
-            "sound, once it becomes a list of numbers? <bookmark mark='b'/> Act Nine, electric sound, begins next time. "
-            "Part 48: Digital Audio."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 47, "44{,}100 a second",
+            "What is a sound, once it becomes a list of numbers?",
+            "That ends Act Eight, the mind. Every sound in this series has been computed. <bookmark mark='a'/> A "
+            "compact disc holds forty-four thousand one hundred numbers a second, a figure inherited from video "
+            "recorders, and behind it is a theorem that sounds impossible: a smooth wave can be rebuilt exactly from "
+            "its samples. What is a sound, once it becomes a list of numbers? <bookmark mark='b'/> Act Nine begins. "
+            "Part 48: Digital Audio.",
+            signoff=clip("bridge.signoff"))

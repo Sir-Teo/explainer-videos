@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"The Tune's first phrase, \ sung twice. \ Flat reference response, \ then a simulated dynamic headphone "
                            r"used as a microphone. \ Which was the headphone model?", width=10.0)
         with self.voiceover(
-            "A question for your ears. The Tune's first phrase, sung twice. Once through a flat reference response. Once through a simulated dynamic headphone used as a microphone. Which was the headphones?"
+            "The microphone changed singing. Now hear an unusual one. The Tune's first phrase, sung twice. Once through a flat reference response. Once through a simulated dynamic headphone used as a microphone. Which was the headphones?"
         ):
             self.play(FadeIn(card))
         self.wait(0.8)

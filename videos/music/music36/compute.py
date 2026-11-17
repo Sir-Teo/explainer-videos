@@ -50,7 +50,7 @@ from explainer.music.monochord import bronze as B
 from explainer.music.monochord import maqam as Q
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import percussion as PC
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 
 CACHE = Cache("music36")
 CLIPS = ClipStore("music36")
@@ -551,12 +551,19 @@ def compute_variation() -> dict:
             "clip": "tune.variation36"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation36", 36)
+
+
 ITEMS = {"hook": compute_hook, "lu": compute_lu, "jingfang": compute_jingfang, "modes": compute_modes, "qin": compute_qin,
          "hetero": compute_hetero, "spectra": compute_spectra, "scales": compute_scales, "ombak": compute_ombak, "cycle": compute_cycle,
          "kotekan": compute_kotekan, "thirds": compute_thirds, "bellsong": compute_bellsong, "twelve": compute_twelve,
          "zhu": compute_zhu, "melody": compute_melody, "openqin": compute_openqin, "sho": compute_sho, "patet": compute_patet,
          "rates": compute_rates, "irama": compute_irama, "two_scales": compute_two_scales, "kebyar": compute_kebyar,
-         "stopped": compute_stopped, "tune": compute_tune, "variation": compute_variation}
+         "stopped": compute_stopped, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

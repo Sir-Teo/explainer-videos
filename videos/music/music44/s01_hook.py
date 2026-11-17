@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"A short animated scene, \ twice, \ with the same music. \ "
                            r"In one the music was cut to the picture; \ in the other it starts a little late. \ Which fits?", width=10.4)
         with self.voiceover(
-            "A question for your eyes and ears together. A short animated scene, shown twice, with the same music both "
+            "One scene with three scores is three different films. First, a test for your eyes and ears together. A short animated scene, shown twice, with the same music both "
             "times. Once the music was cut to the picture; the other time it starts a little late. Which one fits?"
         ):
             self.play(FadeIn(card))

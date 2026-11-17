@@ -40,7 +40,7 @@ from explainer.music.monochord import medieval as MD
 from explainer.music.monochord import melody as M
 from explainer.music.monochord import trecento as T
 from explainer.music.monochord.instruments import choir as CH
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 
 CACHE = Cache("music23")
 CLIPS = ClipStore("music23")
@@ -475,10 +475,17 @@ def compute_variation() -> dict:
             "clip": "tune.variation23"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation23", 23)
+
+
 ITEMS = {"hook": compute_hook, "chant": compute_chant, "guido": compute_guido, "organum": compute_organum, "rhythm": compute_rhythm,
          "notre": compute_notre, "motet": compute_motet, "mensuration": compute_mensuration, "isorhythm": compute_isorhythm,
          "vitry": compute_vitry, "census": compute_census, "landini": compute_landini, "cadence": compute_cadence,
-         "subtilior": compute_subtilior, "tune": compute_tune, "variation": compute_variation}
+         "subtilior": compute_subtilior, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

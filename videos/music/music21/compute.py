@@ -34,7 +34,7 @@ from explainer.music.monochord import fourpart as F
 from explainer.music.monochord import key as KY
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music21")
@@ -395,9 +395,16 @@ def compute_variation() -> dict:
             "clip": "sonata.whole"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "sonata.whole", 21)
+
+
 ITEMS = {"hook": compute_hook, "phrase": compute_phrase, "forms": compute_forms, "tune": compute_tune, "rondo": compute_rondo,
          "sonata": compute_sonata, "blues": compute_blues, "segment": compute_segment, "repetition": compute_repetition,
-         "golden": compute_golden, "closure": compute_closure, "variation": compute_variation}
+         "golden": compute_golden, "closure": compute_closure, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

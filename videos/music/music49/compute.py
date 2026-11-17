@@ -40,7 +40,7 @@ from explainer.music.monochord import EXAMPLE_LEVEL, SR, Clip, ClipStore, concat
 from explainer.music.monochord import effects as F
 from explainer.music.monochord import tune as T
 from explainer.music.monochord.dsp.fourier import stft
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 from videos.music.music40 import compute as P40
 
@@ -431,11 +431,18 @@ def compute_variation() -> dict:
             "clip": "tune.variation49"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation49", 49)
+
+
 ITEMS = {"hook": compute_hook, "conv": compute_conv, "onepole": compute_onepole, "biquads": compute_biquads, "eq": compute_eq,
          "phase": compute_phase, "combs": compute_combs, "mods": compute_mods, "room": compute_room, "sweep": compute_sweep,
          "schroeder": compute_schroeder, "plate": compute_plate, "spring": compute_spring, "echo": compute_echo, "ring": compute_ring,
          "bands": compute_bands, "cathedral": compute_cathedral, "tune49": compute_tune49,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

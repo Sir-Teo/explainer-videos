@@ -124,6 +124,7 @@ python -m videos.music.labs 46                                  # the lab (write
   emotions", *Physics of Life Reviews* (2013); J. A. Sloboda (1991); O. Grewe and others (2007); J. K. Vuoskoski and
   T. Eerola on sad music; C. L. Krumhansl and J. A. Zupnick (2013); D. E. Berlyne, *Aesthetics and Psychobiology*
   (1971); F. H. Rauscher and others (1993) and later meta-analyses of the "Mozart effect".
+* P. Kivy, *The Corded Shell: Reflections on Musical Expression* (1980), the contour theory of chapter 9; P. N. Juslin and P. Laukka, "Communication of emotions in vocal expression and music performance: different channels, same code?", *Psychological Bulletin* 129 (2003).
 
 ## Interpretation limits
 

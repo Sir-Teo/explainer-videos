@@ -42,7 +42,7 @@ from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import drumkit as DK
 from explainer.music.monochord.instruments import percussion as PC
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music33")
@@ -461,9 +461,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation33"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation33", 33)
+
+
 ITEMS = {"hook": compute_hook, "euclid": compute_euclid, "even": compute_even, "mos": compute_mos, "rank": compute_rank, "layers": compute_layers, "golden": compute_golden, "meru": compute_meru, "hunt6": compute_hunt6, "oddity": compute_oddity,
          "canon": compute_canon, "prosody": compute_prosody, "ringing": compute_ringing, "temper": compute_temper, "bp": compute_bp,
-         "tune": compute_tune, "variation": compute_variation}
+         "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

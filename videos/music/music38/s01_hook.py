@@ -40,7 +40,7 @@ class Hook(SoundScene):
         card = listen_card(r"A line of ours over bass and cymbal: \ each beat is split into a long note and a short one. \ "
                            r"How much longer is the long note: \ about the same, \ twice, \ or three times?", width=10.4)
         with self.voiceover(
-            "A question for your ears. A line of our own, played over a walking bass and a ride cymbal. Each beat is split "
+            "What is swing? Before anyone answers, measure it by ear. A line of our own, played over a walking bass and a ride cymbal. Each beat is split "
             "into two notes, a long one and a short one. How much longer is the long note than the short: about the same, "
             "twice as long, or three times?"
         ):

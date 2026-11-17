@@ -168,21 +168,12 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        g = duet([[(76, 0, 4), (77, 4, 4), (79, 8, 4)], [(72, 0, 4), (72, 4, 4), (74, 8, 4)], [(67, 0, 4), (69, 4, 4), (71, 8, 4)], [(48, 0, 4), (53, 4, 4), (55, 8, 4)]],
-                 colors=(UP_C, CF_C, UP_C, CF_C), width=6.0, height=2.6, lo=44, hi=82, thick=0.15).move_to(UP * 1.2)
-        q = label(r"four voices at once: \ each a line, \ together a chord", font_size=30, color=EAR).move_to(DOWN * 0.8)
-        nxt = VGroup(label(r"Part 17", font_size=32, color=GREY_B), label(r"Four Voices", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "Two voices can be kept apart by a handful of rules. Four is a different problem. "
-            "<bookmark mark='a'/> In a hymn or a chorale, every voice is a line, and every moment is a "
-            "chord: Part 13's chords, and this part's rules, at the same time. How do four lines move "
-            "from one chord to the next, each by the smallest step it can, without any two of them "
-            "merging? <bookmark mark='b'/> Next time. Part 17: Four Voices."
-        ) as vo:
-            self.play(FadeIn(g))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 16, "Leipzig, 1727",
+            "How do four lines move from chord to chord, each of them a good tune?",
+            "Two voices can be kept apart by a handful of rules. Four is a different problem. <bookmark mark='a'/> In "
+            "a chorale every voice is a line, and every moment is a chord. In one Passion Bach harmonized the same "
+            "hymn tune five different ways, and his chorales became the exercise book of harmony classes for three "
+            "centuries. How do four lines move from one chord to the next, without any two of them merging? "
+            "<bookmark mark='b'/> Next time. Part 17: Four Voices.",
+            signoff=clip("bridge.signoff"))

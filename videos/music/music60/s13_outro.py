@@ -173,7 +173,8 @@ class Outro(SoundScene):
             [r"D. S. Passman, \ \textit{All You Need to Know About the Music Business} \ (11th ed., \ 2023)",
              r"A. B. Krueger, \ \textit{Rockonomics} \ (2019)",
              r"W. J. Baumol and W. G. Bowen, \ \textit{Performing Arts: \ The Economic Dilemma} \ (1966)",
-             r"D. Hesmondhalgh, \ `Is music streaming bad for musicians?' \ (2021)"],
+             r"D. Hesmondhalgh, \ `Is music streaming bad for musicians?' \ (2021)",
+             r"J. Attali, \ \textit{Noise: The Political Economy of Music} \ (1977; \ tr.\ 1985)"],
             [r"S. Rosen, \ `The economics of superstars' \ (American Economic Review, \ 1981)",
              r"M. J. Salganik, \ P. S. Dodds and D. J. Watts, \ `Experimental study of inequality and unpredictability in an artificial cultural market' \ (Science, \ 2006)",
              r"A. B. Krueger, \ `The economics of real superstars' \ (J. Labor Economics, \ 2005)",
@@ -200,5 +201,5 @@ class Outro(SoundScene):
             self.play(FadeIn(q))
             vo.wait_until("b")
             self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
+        play_signoff(self, 60, clip("bridge.signoff"), clear=(top,))
         self.clear_scene()

@@ -134,7 +134,8 @@ class Outro(SoundScene):
             [r"G. Kubik, \ \textit{Africa and the Blues} \ (1999)",
              r"E. Berlin, \ \textit{Ragtime: \ A Musical and Cultural History} \ (1980)",
              r"G. Schuller, \ \textit{The Swing Era} \ (1989)",
-             r"P. F. Berliner, \ \textit{Thinking in Jazz} \ (1994)"],
+             r"P. F. Berliner, \ \textit{Thinking in Jazz} \ (1994)",
+             r"T. Gioia, \ \textit{The History of Jazz} \ (3rd ed., \ 2021)"],
             [r"A. Friberg and J. Sundstr\"om, \ `Swing ratios and ensemble timing in jazz performance' \ (2002)",
              r"F. Benadon, \ `Slicing the beat' \ (2006)",
              r"G. Datseris and others, \ `Does it swing?' \ (2019)",
@@ -147,19 +148,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"how do jazz players turn a song's chords into a lifetime of new melodies?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VI: \ many musics", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"The blues and swing gave jazz its language.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        lead.scale_to_fit_width(min(lead.width, 12.5))
-        nxt = VGroup(label(r"Part 39", font_size=32, color=GREY_B), label(r"Changes", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "The blues and swing gave jazz its language. <bookmark mark='a'/> How do jazz players turn a song's chords into a "
-            "lifetime of new melodies? <bookmark mark='b'/> Next time. Part 39: Changes."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 38, "New York, 5 May 1959",
+            "How do players turn a song's chords into new melodies, that fast?",
+            "The blues and swing gave jazz its language. <bookmark mark='a'/> In May 1959 John Coltrane recorded a "
+            "tune with twenty-six chords in sixteen bars, at nearly two hundred and ninety beats a minute. How do "
+            "jazz players turn a song's chords into a lifetime of new melodies? <bookmark mark='b'/> Next time. Part "
+            "39: Changes.",
+            signoff=clip("bridge.signoff"))

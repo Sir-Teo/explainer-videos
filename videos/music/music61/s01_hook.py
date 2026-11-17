@@ -17,7 +17,7 @@ class Hook(SoundScene):
         card = listen_card(r"The Tune with its chords, \ twice, \ on the same piano. \ One is a performance; \ the other is a machine's "
                            r"transcription of it, \ played back. \ Which is the original?", width=10.0)
         with self.voiceover(
-            "A question for your ears. The Tune with its chords, twice, on the same piano. One is a performance; the other is "
+            "In Rome in 1770, by his father's account, the fourteen-year-old Mozart wrote out Allegri's Miserere from memory. Now a machine tries. The Tune with its chords, twice, on the same piano. One is a performance; the other is "
             "a machine's transcription of that performance, played back. Which is the original?"
         ):
             self.play(FadeIn(card))

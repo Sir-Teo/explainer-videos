@@ -180,3 +180,4 @@ generation", *ICML* (2017); C.-Z. A. Huang, T. Cooijmans, A. Roberts, A. Courvil
 convolution", *ISMIR* (2017); C.-Z. A. Huang and others, "The Bach Doodle: approachable music composition with
 machine learning at scale", *ISMIR* (2019); M. S. Cuthbert and C. Ariza, "music21: a toolkit for computer-aided
 musicology and symbolic music data", *ISMIR* (2010).
+* J. P. Clendinning and E. W. Marvin, *The Musician's Guide to Theory and Analysis* (4th ed., 2021); M. Gotham and others, *Open Music Theory* (2nd ed., 2021, open access): the part-writing rules as taught today.

@@ -141,7 +141,8 @@ class Outro(SoundScene):
             [r"N. A. Jairazbhoy, \ \textit{The R\=ags of North Indian Music} \ (1971)",
              r"J. Bor \ (ed.), \ \textit{The Raga Guide} \ (1999)",
              r"M. Clayton, \ \textit{Time in Indian Music} \ (2000)",
-             r"T. Viswanathan, \ M. H. Allen, \ \textit{Music in South India} \ (2004)"],
+             r"T. Viswanathan, \ M. H. Allen, \ \textit{Music in South India} \ (2004)",
+             r"J. T. Titon \ (ed.), \ \textit{Worlds of Music} \ (6th ed., \ 2017)"],
             [r"N. A. Jairazbhoy, \ A. W. Stone, \ `Intonation in present-day North Indian classical music' \ (1963)",
              r"C. V. Raman, \ `On some Indian stringed instruments' \ (1921)",
              r"X. Serra, \ `A multicultural approach in music information research' \ (2011)",
@@ -154,19 +155,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what if the scale itself had notes between the piano's keys?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VI: \ many musics", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Raga is one great modal system.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        lead.scale_to_fit_width(min(lead.width, 12.5))
-        nxt = VGroup(label(r"Part 35", font_size=32, color=GREY_B), label(r"Maqam", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Raga is one great modal system. <bookmark mark='a'/> Related but distinct modal traditions in the Arab world, Turkey and Iran, builds its "
-            "scales with notes between the piano's keys. <bookmark mark='b'/> Next time. Part 35: Maqam."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 34, "Cairo, 1932",
+            "What is a scale whose notes lie between the piano's keys, placed by ear?",
+            "Raga is one great modal system. <bookmark mark='a'/> In 1932 a congress met in Cairo to settle, among "
+            "other things, the Arab scale, and its scale committee heard many tunings and did not settle on one equal "
+            "grid. In the Arab world, Turkey and Iran, related modal traditions place notes between the piano's keys, "
+            "by ear. What is a scale like that? <bookmark mark='b'/> Next time. Part 35: Maqam.",
+            signoff=clip("bridge.signoff"))

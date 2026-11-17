@@ -19,7 +19,7 @@ class Hook(SoundScene):
         card = listen_card(r"The Tune, \ twice. \ One version was stored as 16-bit numbers, \ 48,000 a second. \ "
                            r"The other as single bits, \ ones and zeros, \ 3 million a second. \ Which is the one-bit version?", width=10.4)
         with self.voiceover(
-            "A question for your ears. The Tune, twice. One version was stored as sixteen-bit numbers, forty-eight thousand of "
+            "The first digital recorders stored audio on video cassettes. Before we get there, listen. The Tune, twice. One version was stored as sixteen-bit numbers, forty-eight thousand of "
             "them a second. The other was stored as single bits, ones and zeros, three million a second. Which is the "
             "one-bit version?"
         ):

@@ -36,7 +36,7 @@ from explainer.music.monochord import EXAMPLE_LEVEL, SR, Clip, ClipStore, concat
 from explainer.music.monochord import blues as BL
 from explainer.music.monochord import changes as CH
 from explainer.music.monochord import melody as M
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 
 CACHE = Cache("music39")
@@ -452,9 +452,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation39"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation39", 39)
+
+
 ITEMS = {"hook": compute_hook, "fast": compute_fast, "echo": compute_echo, "formula": compute_formula, "scales": compute_scales, "contrafact": compute_contrafact, "bebop": compute_bebop, "enclose": compute_enclose, "avoid": compute_avoid,
          "modal": compute_modal, "thirds": compute_thirds, "reharm": compute_reharm, "improv": compute_improv, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":
