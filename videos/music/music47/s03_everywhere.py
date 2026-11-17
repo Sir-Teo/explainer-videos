@@ -17,8 +17,7 @@ class Everywhere(SoundScene):
     # ------------------------------------------------------------------
     def definition(self):
         items = [
-            (r"Alan Merriam, \ \textit{The Anthropology of Music} \ (1964): \ study what people think, \ what they do, \ "
-             r"and the sound, \ together", WHITE),
+            (r"Alan Merriam, \ \textit{The Anthropology of Music} \ (1964): \ what people think, \ what they do, \ and the sound", WHITE),
             (r"John Blacking, \ \textit{How Musical Is Man?} \ (1973): \ music is `humanly organized sound'", WHITE),
             (r"from the Venda of South Africa: \ musicality is a capacity everyone has, \ not a rare gift", WHITE),
             (r"many languages have no single word for `music': \ song, \ dance and drumming can be one practice", TUNE),

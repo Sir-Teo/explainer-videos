@@ -101,8 +101,7 @@ class Picture(SoundScene):
     # ------------------------------------------------------------------
     def theory(self):
         items = [
-            (r"Claudia Gorbman, \ \textit{Unheard Melodies} \ (1987): \ the classical score works unnoticed: \ it cues the story, \ "
-             r"binds the shots and signals emotion", WHITE),
+            (r"Claudia Gorbman, \ \textit{Unheard Melodies} \ (1987): \ the classical score works unnoticed, \ cueing story and feeling", WHITE),
             (r"Michel Chion, \ \textit{Audio-Vision} \ (1990): \ sound and image are not added together, \ they are combined", WHITE),
             (r"added value: \ a sound makes us see something in the image, \ and we credit it to the image", WHITE),
             (r"synchresis: \ a sound and an image that coincide fuse into one event, \ whatever made them", TUNE),
