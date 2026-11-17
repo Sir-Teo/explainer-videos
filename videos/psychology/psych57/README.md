@@ -9,7 +9,8 @@ with the care card (education, not diagnosis or treatment, and where help is fou
 The viewer predicts the result of an open-label placebo trial and four numbers. Then stress and illness, allostatic
 load, status and childhood adversity, and the limits of the correlations; the powerful placebo reconsidered, placebo
 analgesia and open-label placebo; expectation as a prior on bodily signals, nocebo and sham surgery; chronic pain
-and its treatment; adherence and the Diabetes Prevention Program; CBT for insomnia in Part 10's model;
+and its treatment; adherence; the health belief model, stages of change and the intention-behaviour gap with
+their records, and COM-B; the Diabetes Prevention Program; CBT for insomnia in Part 10's model;
 mindfulness's clinical evidence and the school null; the treatment gap and three ways to run a service, simulated;
 England's national programme; measurement-based care; the Friendship Bench and digital therapeutics; and Type A and
 a mindset study.

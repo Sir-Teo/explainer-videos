@@ -7096,6 +7096,11 @@ add(Finding(
              "of Economic Perspectives 25 (2011) 191-210"),
     checked="2026-11-16",
 ))
+shown(53, r"Herzberg, \ Mausner \& Snyderman (1959); \ Vroom (1964); \ Van Eerde \& Thierry (1996)", "two textbook "
+      "theories of work motivation, drawn as theory cards with the critique and meta-analysis that tested them")
+shown(53, r"Lewin, \ Lippitt \& White (1939); \ Judge et al.\ (2002); \ Judge, \ Piccolo \& Ilies (2004); \ van "
+      r"Knippenberg \& Sitkin (2013)", "leadership: a classic small experiment told as history, two meta-analyses "
+      "quoted for their main results, and a critique of the measures")
 shown(53, r"Lazear (2000)", "a firm's records analysed by an economist, quoted as reported")
 shown(53, r"Judge et al.\ (2001)", "a meta-analysis of satisfaction and performance, quoted")
 shown(53, r"Edmondson (1999)", "a field study of teams, described")
@@ -7628,6 +7633,9 @@ add(Finding(
              "(2011) 424-429"),
     checked="2026-11-16",
 ))
+shown(57, r"Rosenstock (1966); \ Prochaska \& DiClemente (1983); \ Bridle et al.\ (2005); \ Webb \& Sheeran (2006); \ "
+      r"Michie et al.\ (2011)", "the textbook models of health behaviour with the reviews that tested them, quoted for "
+      "their main results")
 shown(57, r"Cohen, \ Tyrrell \& Smith (1991)", "cited in the stress_infection row; the story")
 shown(57, r"Felitti et al.\ (1998)", "an observational study of childhood adversity, described")
 shown(57, r"Hr\'objartsson \& G\o tzsche (2001)", "cited in the placebo_objective row")

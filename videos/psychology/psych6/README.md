@@ -10,7 +10,7 @@ strength, and a strength that can change can store what happened.
 This part asks how neurons talk, and how talking changes them. The route: the chemical synapse step by step, and
 the packets Katz found; seven transmitters and the six places where a drug can act; how a membrane adds its
 inputs in time, and how a shunt divides; Hebb's rule, why it runs away, and Oja's repair, which finds a principal
-component; long-term potentiation, the NMDA receptor as the molecule that computes "both at once", spike timing,
+component; long-term potentiation, the NMDA receptor as the molecule that computes "both at once", spike timing, Kandel's Aplysia (habituation and sensitization at one synapse, then new structure),
 and a sliding threshold; then three small circuits built on one motif, mutual inhibition, which sharpen edges
 (Hartline's crab, Mach's bands), hold a choice (winner-take-all), and keep time (Graham Brown's half-centres);
 populations of excitatory and inhibitory cells that rest, oscillate or saturate (Wilson and Cowan); and the

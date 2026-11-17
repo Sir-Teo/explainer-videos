@@ -14,6 +14,7 @@ class Remember(VoiceoverScene):
         self.nmda()
         self.timing()
         self.bcm()
+        self.aplysia()
 
     def card(self):
         card = chapter_card(5, r"A synapse that remembers", r"Do real synapses follow Hebb's rule?",
@@ -299,4 +300,84 @@ class Remember(VoiceoverScene):
             self.play(FadeIn(lg[0]), FadeIn(lg[1]))
             vo.wait_until("e")
             self.play(FadeIn(end, shift=UP * 0.1))
+        self.clear_scene()
+
+    def aplysia(self):
+        head = heading(r"A memory in a sea slug")
+        # the circuit: siphon -> sensory neuron -> motor neuron -> gill; tail -> facilitating interneuron -> SN terminal
+        siphon = label(r"siphon", font_size=20, color=GREY_A).move_to([-6.2, 1.6, 0])
+        tail = label(r"tail", font_size=20, color=GREY_A).move_to([-6.2, -0.35, 0])
+        gill = label(r"gill", font_size=20, color=GREY_A).move_to([-0.75, 1.6, 0])
+        sn = unit(r"S", radius=0.36, color=DATA).move_to([-4.6, 1.6, 0])
+        mn = unit(r"M", radius=0.36, color=MODEL).move_to([-2.35, 1.6, 0])
+        fi = unit(r"F", radius=0.36, color=RULE).move_to([-4.6, -0.35, 0])
+        wires = VGroup(excite(siphon, sn, color=DATA), excite(sn, mn, color=DATA), excite(mn, gill, color=MODEL),
+                       excite(tail, fi, color=RULE))
+        term = Dot([-3.05, 1.6, 0], radius=0.09, color=DATA)
+        mod = Arrow(fi.get_top(), [-3.12, 1.48, 0], buff=0.08, color=RULE, stroke_width=4,
+                    max_tip_length_to_length_ratio=0.18)
+        mod_l = label(r"onto S's terminal", font_size=16, color=RULE).next_to(mod.get_center(), RIGHT, buff=0.15)
+        names = VGroup(label(r"sensory neuron", font_size=17, color=DATA).next_to(sn, UP, buff=0.15),
+                       label(r"motor neuron", font_size=17, color=MODEL).next_to(mn, UP, buff=0.15),
+                       label(r"interneuron: \ serotonin", font_size=17, color=RULE).next_to(fi, DOWN, buff=0.15))
+        # schematic: the reflex over trials, habituating, then restored by a shock to the tail
+        A = axes([0, 16], [0, 1.05], x_length=5.4, y_length=2.6, xticks=[1, 8, 16], yticks=[0, 1],
+                 xfmt=lambda v: f"{v:.0f}", yfmt=lambda v: f"{v:g}", xlabel=r"touches to the siphon",
+                 ylabel=r"gill withdrawal", center=[3.55, 0.85, 0], font_size=16)
+        k = np.arange(1, 17)
+        y = np.where(k <= 10, 0.25 + 0.75 * np.exp(-(k - 1) / 2.8), 0.25 + 0.75 * np.exp(-(k - 11) / 2.8))
+        pts_h = VGroup(*[Dot(A.ax.c2p(a, b), radius=0.065, color=DATA) for a, b in zip(k[:10], y[:10])])
+        pts_s = VGroup(*[Dot(A.ax.c2p(a, b), radius=0.065, color=RULE) for a, b in zip(k[10:], y[10:])])
+        shock = DashedLine(A.ax.c2p(10.5, 0), A.ax.c2p(10.5, 1.05), color=RULE, stroke_width=2)
+        shock_l = label(r"tail shock", font_size=16, color=RULE).next_to(shock, UP, buff=0.06)
+        habit_l = label(r"habituation", font_size=17, color=DATA).move_to(A.ax.c2p(5.2, 0.85))
+        sens_l = label(r"sensitization", font_size=17, color=RULE).move_to(A.ax.c2p(13.6, 0.95))
+        sch = label(r"schematic", font_size=15, color=GREY_B).next_to(A, DOWN, buff=0.05).align_to(A, RIGHT)
+        cards = point_cards([
+            (r"Minutes: \ the same synapse, \ stronger or weaker",
+             r"habituation: \ less transmitter from S onto M; \ sensitization: \ serotonin makes S release more", DATA),
+            (r"Days: \ new proteins, \ new synapses",
+             r"repeated training needs gene expression; \ S's synapses gain release sites after sensitization, \ "
+             r"lose them after habituation \ (Bailey and Chen, \ 1983)", RULE),
+        ], width=12.6, font_size=19)
+        cards.move_to([0, -2.45, 0])
+        tag = published_tag(r"Castellucci \& Kandel (1974); \ Brunelli, \ Castellucci \& Kandel (1976); \ Bailey \& "
+                            r"Chen (1983)")
+        with self.voiceover(
+            "Everything so far has come from the hippocampus of mammals. The first memory traced all the way to a "
+            "synapse was in a sea slug. <bookmark mark='a'/> Eric Kandel chose Aplysia because its neurons are few "
+            "and large, some big enough to see, and because it has a simple reflex. Touch its siphon, and it pulls "
+            "in its gill. A sensory neuron excites a motor neuron, which moves the gill. "
+            "<bookmark mark='b'/> Touch the siphon again and again, gently, and the withdrawal shrinks: habituation, "
+            "the simplest kind of learning. In 1974 Vincent Castellucci and Kandel found where it lives. The "
+            "sensory neuron releases less transmitter onto the motor neuron with each touch. <bookmark mark='c'/> "
+            "Now shock the tail. The reflex comes back bigger than before: sensitization. An interneuron releases "
+            "serotonin onto the sensory neuron's terminals, and they release more transmitter. "
+            "<bookmark mark='d'/> That much lasts minutes. With repeated training the change lasts days or weeks, "
+            "and then it needs new proteins and new structure. In 1983 Craig Bailey and Mary Chen looked at the "
+            "sensory neurons' synapses under the electron microscope: more release sites after long-term "
+            "sensitization, fewer after long-term habituation. "
+            "<bookmark mark='e'/> Kandel shared the Nobel Prize in 2000. A memory, in a slug as in a rabbit, is "
+            "written as a change at a synapse: in its strength for minutes, and in its structure for longer."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(siphon), FadeIn(gill), FadeIn(sn), FadeIn(mn), FadeIn(names[:2]),
+                      LaggedStart(*[GrowArrow(w) for w in wires[:3]], lag_ratio=0.3), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(A), FadeIn(sch), LaggedStart(*[FadeIn(p_) for p_ in pts_h], lag_ratio=0.15),
+                      FadeIn(habit_l), run_time=2.0)
+            self.play(wires[1].animate.set_stroke(width=1.5), run_time=0.8)
+            vo.wait_until("c")
+            self.play(FadeIn(tail), FadeIn(fi), FadeIn(names[2]), GrowArrow(wires[3]), GrowArrow(mod), FadeIn(term),
+                      FadeIn(mod_l),
+                      Create(shock), FadeIn(shock_l))
+            self.play(wires[1].animate.set_stroke(width=6), LaggedStart(*[FadeIn(p_) for p_ in pts_s],
+                                                                         lag_ratio=0.15), FadeIn(sens_l),
+                      run_time=1.8)
+            vo.wait_until("d")
+            self.play(FadeIn(cards.cards[0], shift=UP * 0.15))
+            self.play(FadeIn(cards.cards[1], shift=UP * 0.15))
+            vo.wait_until("e")
+            self.play(Indicate(wires[1], color=DATA))
         self.clear_scene()
