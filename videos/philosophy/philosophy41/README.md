@@ -75,11 +75,29 @@ labels the riskier neighbourhood high risk. The counterfactual model is X = U �
 response simulates 2,000 respondents with true share 0.3 (seed 1965); the reconstruction attack hides 64 bits behind
 256 noisy subset sums and solves by least squares (seed 2003).
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Derive Chouldechova's identity from the four cells of the confusion table.
+
+   *Solution.* Write the four cells as TP, FP, FN, TN, with $N$ people in all, prevalence $p = (TP + FN)/N$, $\text{PPV} = TP/(TP + FP)$, $\text{FNR} = FN/(TP + FN)$ and $\text{FPR} = FP/(FP + TN)$. From the PPV, $FP = TP\,(1 - \text{PPV})/\text{PPV}$. From the FNR, $TP = (1 - \text{FNR})(TP + FN) = (1 - \text{FNR})\,pN$. And $FP + TN = (1 - p)N$. Dividing, $\text{FPR} = \dfrac{p}{1 - p}\cdot\dfrac{1 - \text{PPV}}{\text{PPV}}\cdot(1 - \text{FNR})$. So if two groups have equal PPV and equal FNR but different prevalence $p$, their false-positive rates must differ.
+
 2. Show that a perfect predictor satisfies calibration and both balance conditions.
+
+   *Solution.* A perfect predictor gives score $S = Y$. Calibration: among those scored 1, everyone reoffends, and among those scored 0, no one does, in every group, so $P(Y = 1 \mid S = s, A) = s$. Balance for the positive class: $E[S \mid Y = 1, A] = 1$ in every group; for the negative class, $E[S \mid Y = 0, A] = 0$ in every group. All three hold at once, which is one of the two escape routes from Kleinberg, Mullainathan and Raghavan's theorem (the other is equal base rates).
+
 3. Why does a classifier that labels everyone high risk satisfy demographic parity?
+
+   *Solution.* Demographic parity asks that the share labelled high risk be the same in every group. If everyone is labelled high risk, that share is 1 in every group, so parity holds. (So do equal false-positive rates, all 1, and equal false-negative rates, all 0.) The classifier is useless and harsh on everyone: parity is a constraint on how labels are spread across groups, not on whether they track anything, which is why it is usually paired with accuracy.
+
 4. Compute ε for randomized response with a coin that shows heads with probability 3/4.
+
+   *Solution.* Use Warner's protocol with the biased coin for both tosses: heads (probability $3/4$), answer truthfully; tails, toss again and say yes on heads. Then $P(\text{yes} \mid \text{trait}) = \tfrac34 + \tfrac14\cdot\tfrac34 = \tfrac{15}{16}$, $P(\text{yes} \mid \text{no trait}) = \tfrac14\cdot\tfrac34 = \tfrac{3}{16}$, $P(\text{no} \mid \text{no trait}) = \tfrac34 + \tfrac14\cdot\tfrac14 = \tfrac{13}{16}$ and $P(\text{no} \mid \text{trait}) = \tfrac{1}{16}$. The privacy loss is the largest log ratio: $\max(\ln 5, \ln 13) = \ln 13 \approx 2.56$, against $\ln 3$ for the fair coin. (If only the first coin is biased and the second is fair, the ratios are 7 both ways and $\varepsilon = \ln 7 \approx 1.95$.) More truth, less privacy.
+
 5. Two queries with ε = 0.5 each: what is the total by basic composition?
+
+   *Solution.* Basic composition adds the budgets: $0.5 + 0.5 = 1$. Two $0.5$-differentially private releases together are $1$-differentially private, which bounds the ratio of output probabilities with and without any one person by $e^1 \approx 2.72$.
+
 6. Find the Shapley values of f = x₁x₂ at (1, 1) with baseline (0, 0).
+
+   *Solution.* With baseline $(0, 0)$, average each feature's marginal contribution over the two orders of adding them. Adding $x_1$ first: $f(1, 0) - f(0, 0) = 0$; then $x_2$ adds $f(1, 1) - f(1, 0) = 1$. Adding $x_2$ first: it adds 0, then $x_1$ adds 1. So $\varphi_1 = \tfrac12(0 + 1) = \tfrac12$ and $\varphi_2 = \tfrac12$. They sum to $f(1, 1) - f(0, 0) = 1$ (efficiency), and the interaction, which neither feature produces alone, is split equally (symmetry).
+

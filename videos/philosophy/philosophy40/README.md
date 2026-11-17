@@ -72,11 +72,29 @@ from the three above it with Laplace-smoothed counts. The golden-ratio test draw
 idiosyncrasy 1.0), true judges (0.4, 0.3), prejudiced judges with a shared bias of weight 1.2, 400 trials per panel
 size.
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Show that no positive integer power of 3/2 equals a positive integer power of 2.
+
+   *Solution.* Suppose $(3/2)^m = 2^n$ with $m, n \ge 1$. Multiplying by $2^m$ gives $3^m = 2^{m + n}$. The left side is odd and the right side even, so they cannot be equal (by unique factorization, a power of 3 is never a power of 2). So no stack of pure fifths ever lands exactly on a stack of octaves, which is why the circle of fifths does not close: twelve fifths overshoot seven octaves by the Pythagorean comma, $3^{12}/2^{19}$.
+
 2. How many cents is the syntonic comma 81/80?
+
+   *Solution.* In cents, a ratio $r$ is $1200\log_2 r$. For $81/80$: $1200\log_2 1.0125 = 1200 \times 0.01792 = 21.5$ cents, about a fifth of a semitone: the gap between four pure fifths (less two octaves), $81/64$, and the pure major third, $5/4$.
+
 3. For two harmonic tones with f₂/f₁ = 3/2, find all positive integer pairs (n, m) with nf₁ = mf₂. (n = 3k, m = 2k: every third partial of the lower tone matches every second partial of the higher.)
+
+   *Solution.* The $n$-th partial of the lower tone is at $nf_1$, the $m$-th of the higher at $mf_2 = \tfrac32 m f_1$. They coincide when $n = \tfrac32 m$, that is $2n = 3m$. Since 2 and 3 share no factor, $m$ must be even and $n$ a multiple of 3: $m = 2k$, $n = 3k$ for $k = 1, 2, \ldots$. Every third partial of the lower tone meets every second partial of the higher, which is why the fifth sounds smooth.
+
 4. Which wallpaper groups have no mirrors and no glides?
+
+   *Solution.* The five groups whose only symmetries are translations and rotations: p1 (translations only), p2 (half-turns), p3 (third-turns), p4 (quarter-turns) and p6 (sixth-turns). Each of the other twelve has a mirror or a glide reflection. These five are exactly the groups that preserve orientation: a pattern of one of them, and its mirror image, are different patterns.
+
 5. Why does averaging remove a critic's noise but not a shared prejudice?
+
+   *Solution.* In the film's model each critic's verdict is quality, plus a personal taste, plus noise. Averaging $n$ critics divides the variance of the independent parts by $n$, so they vanish as the panel grows. A shared prejudice is the same term $b$ in every critic's verdict, so the average contains all of it: $\bar v = q + b + (\text{terms that shrink})$. No panel size removes $b$, which is why the skilled but prejudiced panel stalls near a correlation of 0.6. Only judges whose prejudices differ, Hume's "many ages and nations", let biases average out like noise.
+
 6. State the paradox of taste as an inconsistent triad, and say which claim Kant denies.
+
+   *Solution.* As a triad: (1) judgments of taste are not based on concepts, otherwise taste could be settled by proof; (2) judgments of taste are based on concepts, otherwise we could not even dispute them, with a claim on others' agreement; (3) a judgment is either based on a determinate concept or on none. Together they are inconsistent. Kant denies (3): the judgment of taste rests on an indeterminate concept, the supersensible ground of nature and of our faculties, which cannot be used to prove anything (so (1) holds of determinate concepts) but grounds a claim on everyone's agreement (so (2) holds of the indeterminate one).
+

@@ -65,14 +65,31 @@ python tools/qa_scene.py philosophy30 Function         # one chapter, silent, wi
 | 13 | `Represent` | Clark and Chalmers (1998); Shea (2018); Elazar et al. (2021). | a probe, and its direction removed |
 | 14 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Realize the pain table of chapter 3 in a third substrate; prove the outputs agree step by step.
+
+   *Solution.* Third substrate: a register holding an integer, 0 for calm, 1 for soothed, 2 for hurt, updated by a lookup from (register, input, random draw) to (new register, output) that copies the table entry for entry. Claim: fed the same inputs and the same draws, the units, the tank and the register give the same outputs at every step. Proof by induction, with the encodings units-on $\leftrightarrow$ litres $\leftrightarrow$ register value. At step 0 all three encode calm. If at step $t$ they encode the same table state, then each applies the same table entry to the same input and draw, so each emits that entry's output and moves to the encoding of that entry's next state. So they agree at step $t + 1$, and for all steps. Physically the three share nothing but the table.
+
 2. Show that strong supervenience implies weak and global supervenience.
+
+   *Solution.* Weak: within each world, physical twins are mental twins. Strong: for any $x$ and $y$, in the same world or different ones, physical twins are mental twins. Strong implies weak by taking $x$ and $y$ in the same world. Strong implies global: suppose worlds $w_1, w_2$ have the same physical distribution, matched by a bijection $f$ between their individuals that preserves physical properties. By strong supervenience each $x$ in $w_1$ is a mental twin of $f(x)$ in $w_2$, so $f$ also preserves mental properties, and the mental distributions are the same.
+
 3. Find two sets of worlds: weak but not global, and global but not weak.
+
+   *Solution.* Weak but not global (the film's set A): worlds $w_1, w_2$, individuals $a, b$, all four physically alike; in $w_1$ both are mentally M, in $w_2$ both are mentally N. Within each world physical twins are mental twins, so weak supervenience holds; but the two worlds are physically identical and mentally different, so global fails. Global but not weak (set B): in $w_1$, $a$ and $b$ are physically alike but $a$ is M and $b$ is N, so weak fails; let $w_2$ differ physically in any way. Since no two worlds share a physical distribution, global supervenience holds vacuously.
+
 4. State Kim's argument as five propositions and find every minimal inconsistent subset.
+
+   *Solution.* (1) Distinctness: $M \ne P$. (2) Mental causation: $M$ causes $P^*$. (3) Closure: $P^*$ has a sufficient physical cause, $P$. (4) Exclusion: no event has two sufficient causes unless it is overdetermined. (5) No systematic overdetermination. From (1)–(3), $P^*$ has two distinct causes, $M$ and $P$; by (4) it is overdetermined, which (5) forbids. Every proper subset is consistent, as the positions on the Price List show: drop (1) and you are a reductive physicalist, (2) an epiphenomenalist, (3) an interactionist dualist, (4) with Yablo or List and Menzies, (5) with Bennett. So the only minimal inconsistent subset is all five.
+
 5. Estimate Blockhead's table for a 5-minute test with a 10\,000-word vocabulary.
+
+   *Solution.* At the film's rate of 300 characters a minute, about 60 words a minute, a five-minute test is about 300 words of the interrogator's. With a 10,000-word vocabulary there are $10{,}000^{300} = 10^{1200}$ possible inputs, and Blockhead needs an entry for each (and for every prefix, which adds less than one part in ten thousand). Against $10^{80}$ atoms in the observable universe that is more than $10^{1100}$ entries per atom.
+
 6. Build a network that uses $x$, and show that removing the probe's direction now hurts the output.
+
+   *Solution.* Use the film's network (two binary inputs, 32 hidden units) but make the output depend on $x$: output $x \oplus y$. A linear probe reads $x$ from the hidden layer perfectly, and a linear readout computes $x \oplus y$ perfectly. Remove the probe's direction: the trained readout falls to chance (51% in one run), because it was using that direction. Repeat, removing each new probe direction until $x$ can no longer be read (three directions here): a freshly trained readout of the output is then at chance too. Now the information about $x$ is not just carried but used, by Shea's standard represented, and amnesic probing shows the difference that the film's network, which ignored $x$, did not.
 
 ## Sources
 

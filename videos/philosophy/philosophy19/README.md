@@ -57,14 +57,31 @@ python tools/qa_scene.py philosophy19 Alife            # one chapter, silent, wi
 | 13 | `Alife` | von Neumann (1966); Conway (1970); Berlekamp, Conway and Guy (1982); Beer (2004); Chan (2019); Langton (1987); Ray (1991); Lenski et al. (2003); Pattee (1989); Sober (1991). | Conway's glider; a Lenia creature, filmed; its mass over 1500 steps |
 | 14 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Derive the Price equation $\bar w \, \Delta \bar z = \mathrm{Cov}(w, z) + \mathrm{E}(w \, \Delta z)$ for two types with no mutation.
+
+   *Solution.* Let type $i$ have frequency $q_i$, trait value $z_i$ and fitness $w_i$ (offspring per individual), with $\bar w = \sum_i q_i w_i$. Next generation, type $i$ has frequency $q_i' = q_i w_i/\bar w$, and its offspring's trait is $z_i' = z_i + \Delta z_i$. So $\bar z' = \sum_i q_i w_i (z_i + \Delta z_i)/\bar w$, and $\bar w\,\bar z' = \sum_i q_i w_i z_i + \sum_i q_i w_i \Delta z_i$. Subtract $\bar w \bar z$ and note $\sum_i q_i w_i z_i - \bar w \bar z = \mathrm{Cov}(w, z)$: $\bar w\,\Delta\bar z = \mathrm{Cov}(w, z) + \mathrm{E}(w\,\Delta z)$. With faithful transmission and no mutation, $\Delta z_i = 0$ and only the covariance, selection, is left.
+
 2. In hawk–dove with $V = 4$, $C = 6$, find the mixed ESS, and show that it resists invasion by pure hawks.
+
+   *Solution.* With hawk share $p$, a hawk earns $p(V - C)/2 + (1 - p)V$ and a dove $(1 - p)V/2$. They are equal when $p = V/C = 2/3$. Against a population at $p = 2/3$ a pure hawk earns exactly what the residents earn, so the second ESS condition decides: the residents must do better against the invader than the invader does against itself. Residents against a hawk earn $\tfrac23 \cdot \tfrac{V - C}{2} + \tfrac13 \cdot 0 = -\tfrac23$; a hawk against a hawk earns $(V - C)/2 = -1$. Since $-\tfrac23 > -1$, the hawks cannot spread.
+
 3. Show that with $r = 1/8$ and $c = 1$, altruism spreads only if $b > 8$. Which relative has $r = 1/8$?
+
+   *Solution.* Hamilton's rule says an altruistic act spreads when $rb > c$. With $r = 1/8$ and $c = 1$ that is $b/8 > 1$, so $b > 8$. First cousins are related by $r = 1/8$: they share a pair of grandparents, and a gene passes from you to a grandparent and back down to a cousin with probability $(1/2)^3$ through each grandparent, $2 \times 1/16$. Hence Haldane's quip about laying down his life for eight cousins.
+
 4. Give two groups in which altruists lose within each group yet rise overall. Which Price term is positive?
+
+   *Solution.* Let fitness be $1 + 5f$ for selfish individuals and $5f$ for altruists, where $f$ is the share of altruists in their group (benefit $b = 5$, cost $c = 1$). Group A has 80 altruists and 20 selfish, group B 20 and 80. Within A the altruists fall from 80% to 76%, within B from 20% to 11%: they lose in each group. But group A, full of altruists, has far more offspring, and overall the altruists rise from 50% to 57%. In the multilevel Price equation the covariance between group fitness and group altruism is positive; the within-group term is negative and smaller.
+
 5. A codon mutates at one letter. Why are third-position changes most often silent?
+
+   *Solution.* The genetic code is redundant mostly in the third position. Many amino acids are coded by all four codons that share the first two letters (alanine is GCU, GCC, GCA and GCG), and many others by pairs that differ only between U and C, or A and G, in the third. Crick's wobble hypothesis explains this: the third base pairs loosely with the transfer RNA's anticodon. So a change at the third letter usually leaves the amino acid, and the protein, unchanged, while a change at the first or second almost always alters it.
+
 6. Check by hand that the glider returns to its shape after four steps, shifted by $(1, 1)$.
+
+   *Solution.* Write the glider's live cells as (row, column): $(0,1), (1,2), (2,0), (2,1), (2,2)$. The rules: a live cell with two or three live neighbours survives, a dead cell with exactly three is born, every other cell is dead next step. Counting neighbours by hand: generation 1 is $(1,0), (1,2), (2,1), (2,2), (3,1)$; generation 2 is $(1,2), (2,0), (2,2), (3,1), (3,2)$; generation 3 is $(1,1), (2,2), (2,3), (3,1), (3,2)$; generation 4 is $(1,2), (2,3), (3,1), (3,2), (3,3)$, which is the starting shape with one added to every row and every column. Every phase has five cells, and the shape recurs every four steps, one cell further along the diagonal.
 
 ## Sources
 

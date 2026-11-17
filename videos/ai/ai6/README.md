@@ -192,90 +192,57 @@ Tabular Foundation Models, Really?* (arXiv 2606.30410, June 2026).
 
 1. For y_i = β₀ + β₁x_i + ε_i, show that the slope through the two end points is unbiased with variance
    2σ²/(x_n − x₁)², and that least squares' is σ²/Σ(x_i − x̄)². Which is smaller?
-2. Show that ridge's fit is Σ_j u_j d_j²/(d_j² + λ) u_jᵀy, and that tr Z(ZᵀZ + λI)⁻¹Zᵀ = Σ_j d_j²/(d_j² + λ).
-3. Derive the soft threshold from subgradients, and show that the lasso's weights are all zero exactly when
-   λ ≥ max_j |z_jᵀy|/n.
-4. Show that the logistic loss's Hessian XᵀSX/n is positive semidefinite, and that if a line separates the training
-   data, no finite weights minimize the loss.
-5. Show that the Gram matrix of K(x, z) = (x·z + 1)² is positive semidefinite, and find a Gram matrix of
-   tanh(x·z − 1) with a negative eigenvalue.
-6. Derive the dual of the soft-margin SVM, and use complementary slackness to show that α_i = C for every training
-   point strictly inside the street.
-7. Derive Var((1/B)Σ_b T_b) = ρσ² + (1 − ρ)σ²/B, and AdaBoost's α = ½ log((1 − ε)/ε) from the exponential loss.
-8. For the logistic loss, derive XGBoost's leaf weight −G/(H + λ) and split gain, and show that a single leaf at
-   p = ½ moves the log-odds by −4G/(n + 4λ).
 
-### Solutions
-
-1. Both are linear in y. The end-point slope is (y_n − y₁)/(x_n − x₁); its mean is (β₁x_n − β₁x₁)/(x_n − x₁) = β₁,
-   and since y_n and y₁ are independent with variance σ², its variance is 2σ²/(x_n − x₁)². Least squares' slope is
-   Σ(x_i − x̄)y_i / Σ(x_i − x̄)², with mean β₁ (because Σ(x_i − x̄) = 0) and variance σ²/Σ(x_i − x̄)². Since
-   Σ(x_i − x̄)² ≥ (x₁ − x̄)² + (x_n − x̄)² ≥ (x_n − x₁)²/2, least squares' variance is never larger — Gauss–Markov in
-   miniature. For the chapter's twelve points from 1 to 10: 0.0104σ² against 0.0247σ².
-2. With Z = UDVᵀ, ZᵀZ + λI = V(D² + λI)Vᵀ, so w = V(D² + λI)⁻¹DUᵀy and Zw = UD(D² + λI)⁻¹DUᵀy =
-   Σ_j u_j d_j²/(d_j² + λ) u_jᵀy. The hat matrix is H = U diag(d_j²/(d_j² + λ)) Uᵀ, whose trace is the sum of the
-   factors; at λ = 0 it is the rank, the number of weights.
-3. One coordinate minimizes ½(z − w)² + λ|w|. At a minimum, 0 ∈ w − z + λ∂|w|, where ∂|w| = {sign w} for w ≠ 0 and
-   [−1, 1] at 0. If w > 0, w = z − λ, needing z > λ; if w < 0, w = z + λ, needing z < −λ; w = 0 works exactly when
-   |z| ≤ λ. Together w = sign(z) max(|z| − λ, 0). For the whole lasso (1/2n)‖y − Zw‖² + λ‖w‖₁, w = 0 is optimal iff
-   0 ∈ −Zᵀy/n + λ∂‖0‖₁, i.e. |z_jᵀy|/n ≤ λ for every j.
-4. With p_i = σ(x_iᵀw), the Hessian is (1/n)Σ p_i(1 − p_i) x_i x_iᵀ, so vᵀHv = (1/n)Σ p_i(1 − p_i)(x_iᵀv)² ≥ 0. If
-   y_i(wᵀx_i) > 0 for all i (labels ±1), then along tw the loss Σ log(1 + e^{−t y_i wᵀx_i}) decreases strictly to 0 as
-   t → ∞ but is positive for every finite t, so no finite minimizer exists — Chapter 6's runaway weights.
-5. (x·z + 1)² = φ(x)·φ(z) with φ = (x₁², x₂², √2x₁x₂, √2x₁, √2x₂, 1) in two dimensions (and similarly in any), so
-   aᵀKa = ‖Σ_i a_iφ(x_i)‖² ≥ 0. For tanh: one point x = 0 gives K = tanh(−1) < 0, a 1×1 Gram matrix with a negative
-   eigenvalue; the chapter found 138 on the training pages.
-6. Lagrangian L = ½‖w‖² + CΣξ_i − Σα_i[y_i(w·x_i + b) − 1 + ξ_i] − Σμ_iξ_i with α, μ ≥ 0. ∂L/∂w = 0 gives
-   w = Σα_iy_ix_i; ∂L/∂b = 0 gives Σα_iy_i = 0; ∂L/∂ξ_i = 0 gives α_i + μ_i = C, so 0 ≤ α_i ≤ C. Substituting:
-   maximize Σα_i − ½ΣΣα_iα_jy_iy_j x_i·x_j subject to those constraints. Complementary slackness: μ_iξ_i = 0 and
-   α_i[y_if(x_i) − 1 + ξ_i] = 0. A point strictly inside the street has y_if(x_i) < 1, so ξ_i > 0, so μ_i = 0 and
-   α_i = C.
-7. Var((1/B)ΣT_b) = (1/B²)Σ_{b,c}Cov(T_b, T_c) = (1/B²)(Bσ² + B(B − 1)ρσ²) = ρσ² + (1 − ρ)σ²/B. For AdaBoost, with
-   weights w_i ∝ e^{−y_iF(x_i)} normalized and weighted error ε, L(α) ∝ (1 − ε)e^{−α} + εe^{α}; L′(α) = 0 gives
-   e^{2α} = (1 − ε)/ε.
-8. With g_i = p_i − y_i and h_i = p_i(1 − p_i), a leaf of weight w contributes Gw + ½(H + λ)w², minimized at
-   w* = −G/(H + λ) with value −½G²/(H + λ). A split replaces one leaf by two, so the gain is
-   ½[G_L²/(H_L + λ) + G_R²/(H_R + λ) − (G_L + G_R)²/(H_L + H_R + λ)] − γ. At p = ½ every h_i = ¼, so H = n/4 and
-   w* = −G/(n/4 + λ) = −4G/(n + 4λ).
-
-### 习题（中文）
-
-1. 对y_i = β₀ + β₁x_i + ε_i，证明穿过两个端点的斜率是无偏的，方差为2σ²/(x_n − x₁)²，而最小二乘斜率的方差为
-   σ²/Σ(x_i − x̄)²。哪个更小？
-2. 证明岭回归的拟合是Σ_j u_j d_j²/(d_j² + λ) u_jᵀy，并且tr Z(ZᵀZ + λI)⁻¹Zᵀ = Σ_j d_j²/(d_j² + λ)。
-3. 用次梯度推导软阈值，并证明套索回归的权重全为零，当且仅当λ ≥ max_j |z_jᵀy|/n。
-4. 证明逻辑回归损失的黑塞矩阵XᵀSX/n是半正定的；并证明若有一条直线能分开训练数据，则不存在有限的最优权重。
-5. 证明K(x, z) = (x·z + 1)²的格拉姆矩阵半正定，并找出tanh(x·z − 1)的一个有负特征值的格拉姆矩阵。
-6. 推导软间隔支持向量机的对偶问题，并用互补松弛证明：严格位于街道内部的每个训练点都有α_i = C。
-7. 推导Var((1/B)Σ_b T_b) = ρσ² + (1 − ρ)σ²/B，并由指数损失推导AdaBoost的α = ½ log((1 − ε)/ε)。
-8. 对逻辑损失，推导XGBoost的叶子权重−G/(H + λ)和分割增益，并证明在p = ½时，单片叶子让对数几率移动−4G/(n + 4λ)。
-
-### 解答（中文）
-
-1. 两者都对y是线性的。端点斜率是(y_n − y₁)/(x_n − x₁)，均值为β₁；y_n与y₁独立、方差均为σ²，所以方差是
+   *Solution.* 两者都对y是线性的。端点斜率是(y_n − y₁)/(x_n − x₁)，均值为β₁；y_n与y₁独立、方差均为σ²，所以方差是
    2σ²/(x_n − x₁)²。最小二乘斜率是Σ(x_i − x̄)y_i / Σ(x_i − x̄)²，因为Σ(x_i − x̄) = 0，其均值为β₁，方差为
    σ²/Σ(x_i − x̄)²。由于Σ(x_i − x̄)² ≥ (x₁ − x̄)² + (x_n − x̄)² ≥ (x_n − x₁)²/2，最小二乘的方差从不更大：这是
    高斯–马尔可夫定理的缩影。本章1到10上的12个点：0.0104σ²对0.0247σ²。
-2. 设Z = UDVᵀ，则ZᵀZ + λI = V(D² + λI)Vᵀ，所以w = V(D² + λI)⁻¹DUᵀy，Zw = Σ_j u_j d_j²/(d_j² + λ) u_jᵀy。
+
+2. Show that ridge's fit is Σ_j u_j d_j²/(d_j² + λ) u_jᵀy, and that tr Z(ZᵀZ + λI)⁻¹Zᵀ = Σ_j d_j²/(d_j² + λ).
+
+   *Solution.* 设Z = UDVᵀ，则ZᵀZ + λI = V(D² + λI)Vᵀ，所以w = V(D² + λI)⁻¹DUᵀy，Zw = Σ_j u_j d_j²/(d_j² + λ) u_jᵀy。
    帽子矩阵H = U diag(d_j²/(d_j² + λ)) Uᵀ，它的迹就是这些因子之和；λ = 0时等于秩，即权重的个数。
-3. 单个坐标最小化½(z − w)² + λ|w|。最优处0 ∈ w − z + λ∂|w|，其中w ≠ 0时∂|w| = {sign w}，在0处为[−1, 1]。
+
+3. Derive the soft threshold from subgradients, and show that the lasso's weights are all zero exactly when
+   λ ≥ max_j |z_jᵀy|/n.
+
+   *Solution.* 单个坐标最小化½(z − w)² + λ|w|。最优处0 ∈ w − z + λ∂|w|，其中w ≠ 0时∂|w| = {sign w}，在0处为[−1, 1]。
    若w > 0，则w = z − λ，要求z > λ；若w < 0，则w = z + λ，要求z < −λ；w = 0恰在|z| ≤ λ时成立。合起来就是
    w = sign(z) max(|z| − λ, 0)。对整个套索回归(1/2n)‖y − Zw‖² + λ‖w‖₁，w = 0最优当且仅当对每个j都有
    |z_jᵀy|/n ≤ λ。
-4. 记p_i = σ(x_iᵀw)，黑塞矩阵为(1/n)Σ p_i(1 − p_i) x_i x_iᵀ，所以vᵀHv = (1/n)Σ p_i(1 − p_i)(x_iᵀv)² ≥ 0。若对所有i
+
+4. Show that the logistic loss's Hessian XᵀSX/n is positive semidefinite, and that if a line separates the training
+   data, no finite weights minimize the loss.
+
+   *Solution.* 记p_i = σ(x_iᵀw)，黑塞矩阵为(1/n)Σ p_i(1 − p_i) x_i x_iᵀ，所以vᵀHv = (1/n)Σ p_i(1 − p_i)(x_iᵀv)² ≥ 0。若对所有i
    有y_i(wᵀx_i) > 0（标签取±1），则沿tw方向，损失Σ log(1 + e^{−t y_i wᵀx_i})随t → ∞严格减小并趋于0，但对每个有限的
    t都为正，所以不存在有限的最小值点：这就是第6章里跑掉的权重。
-5. 在二维中(x·z + 1)² = φ(x)·φ(z)，φ = (x₁², x₂², √2x₁x₂, √2x₁, √2x₂, 1)（任意维同理），所以
+
+5. Show that the Gram matrix of K(x, z) = (x·z + 1)² is positive semidefinite, and find a Gram matrix of
+   tanh(x·z − 1) with a negative eigenvalue.
+
+   *Solution.* 在二维中(x·z + 1)² = φ(x)·φ(z)，φ = (x₁², x₂², √2x₁x₂, √2x₁, √2x₂, 1)（任意维同理），所以
    aᵀKa = ‖Σ_i a_iφ(x_i)‖² ≥ 0。对tanh：取单个点x = 0，K = tanh(−1) < 0，就是一个有负特征值的1×1格拉姆矩阵；
    本章在训练页上找到了138个负特征值。
-6. 拉格朗日函数L = ½‖w‖² + CΣξ_i − Σα_i[y_i(w·x_i + b) − 1 + ξ_i] − Σμ_iξ_i，α, μ ≥ 0。∂L/∂w = 0得
+
+6. Derive the dual of the soft-margin SVM, and use complementary slackness to show that α_i = C for every training
+   point strictly inside the street.
+
+   *Solution.* 拉格朗日函数L = ½‖w‖² + CΣξ_i − Σα_i[y_i(w·x_i + b) − 1 + ξ_i] − Σμ_iξ_i，α, μ ≥ 0。∂L/∂w = 0得
    w = Σα_iy_ix_i；∂L/∂b = 0得Σα_iy_i = 0；∂L/∂ξ_i = 0得α_i + μ_i = C，所以0 ≤ α_i ≤ C。代回：在这些约束下最大化
    Σα_i − ½ΣΣα_iα_jy_iy_j x_i·x_j。互补松弛：μ_iξ_i = 0，且α_i[y_if(x_i) − 1 + ξ_i] = 0。严格位于街道内部的点有
    y_if(x_i) < 1，所以ξ_i > 0，于是μ_i = 0，α_i = C。
-7. Var((1/B)ΣT_b) = (1/B²)Σ_{b,c}Cov(T_b, T_c) = (1/B²)(Bσ² + B(B − 1)ρσ²) = ρσ² + (1 − ρ)σ²/B。对AdaBoost，
+
+7. Derive Var((1/B)Σ_b T_b) = ρσ² + (1 − ρ)σ²/B, and AdaBoost's α = ½ log((1 − ε)/ε) from the exponential loss.
+
+   *Solution.* Var((1/B)ΣT_b) = (1/B²)Σ_{b,c}Cov(T_b, T_c) = (1/B²)(Bσ² + B(B − 1)ρσ²) = ρσ² + (1 − ρ)σ²/B。对AdaBoost，
    权重w_i ∝ e^{−y_iF(x_i)}归一化后，加权错误率为ε，L(α) ∝ (1 − ε)e^{−α} + εe^{α}；令L′(α) = 0得
    e^{2α} = (1 − ε)/ε。
-8. 记g_i = p_i − y_i，h_i = p_i(1 − p_i)，权重为w的一片叶子贡献Gw + ½(H + λ)w²，在w* = −G/(H + λ)处取最小值
+
+8. For the logistic loss, derive XGBoost's leaf weight −G/(H + λ) and split gain, and show that a single leaf at
+   p = ½ moves the log-odds by −4G/(n + 4λ).
+
+   *Solution.* 记g_i = p_i − y_i，h_i = p_i(1 − p_i)，权重为w的一片叶子贡献Gw + ½(H + λ)w²，在w* = −G/(H + λ)处取最小值
    −½G²/(H + λ)。一次分割把一片叶子换成两片，所以增益是
    ½[G_L²/(H_L + λ) + G_R²/(H_R + λ) − (G_L + G_R)²/(H_L + H_R + λ)] − γ。在p = ½时每个h_i = ¼，H = n/4，
    w* = −G/(n/4 + λ) = −4G/(n + 4λ)。

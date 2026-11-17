@@ -215,50 +215,53 @@ Thinker–Talker MoE, 234 ms, 119/19/10 languages, Apache 2.0; the Talker no lon
 representations), "Qwen3.5-Omni Technical Report" (arXiv 2604.15804, 2026); R. Roy et al., "PersonaPlex" (arXiv
 2602.06053, 2026).
 
-## Problems
+## Problems and solutions
 
 1. Show that a BPE merge of a pair found n times (without overlaps) shortens the text by exactly n symbols. In
    "aaaa", how often does the pair (a, a) occur, and how many merges does it allow?
+
+   *Solution.* Replacing one occurrence of (a, b) by the single symbol ab turns two symbols into one, so n separate occurrences
+   save n symbols. In "aaaa" the pair (a, a) sits at three overlapping positions, but merging left to right gives
+   "aa aa": two merges, saving two symbols, not three. That is why `learn_bpe` here records the actual savings next to the
+   (overlapping) pair counts it ranks by, and checks that the merged text's length equals L₀ minus the savings.
+
 2. One model pays 9.6 bits per token with 3.2 characters a token; another pays 2.9 bits per byte on the same ASCII text.
    Which is better per character? Show that per-character perplexity is per-token perplexity to the power
    1/(characters per token).
+
+   *Solution.* The first: 9.6 / 3.2 = 3.0 bits per character. The second: on ASCII text a byte is a character, so 2.9 bits
+   per character; it is better. Perplexity per character is 2^(bits per character) = 2^(bits per token / characters per
+   token) = (2^(bits per token))^(1/characters per token).
+
 3. How many codes do FSQ levels (8, 5, 5, 5) give, and how many bits? What bitrate do 8 residual stages of 1,024 codes
    give at 75 frames a second?
+
+   *Solution.* 8 · 5 · 5 · 5 = 1,000 codes, log₂ 1000 ≈ 9.97 bits. 8 stages × log₂ 1024 = 10 bits × 75 frames/s = 6,000
+   bits/s: EnCodec's 6 kbps setting.
+
 4. Show that cos(2πft) and cos(2π(f_s − f)t) agree at every t = n/f_s. Sampled at 16 kHz, where does a 9 kHz tone
    appear?
+
+   *Solution.* At t = n/f_s, cos(2π(f_s − f)n/f_s) = cos(2πn − 2πfn/f_s) = cos(2πfn/f_s), by periodicity and evenness. At
+   16 kHz the Nyquist frequency is 8 kHz, and 9 kHz folds to 16 − 9 = 7 kHz.
+
 5. List every path of T = 3 frames over {a, b, ∅} that collapses to "ab", and check the count with the forward
    recursion. Why must every path for "aa" contain a blank?
+
+   *Solution.* aab, abb, ∅ab, a∅b, ab∅: five paths. With all probabilities 1 the recursion counts paths: on the states
+   (∅, a, ∅, b, ∅), α₁ = (1, 1, 0, 0, 0); α₂ = (1, 2, 1, 1, 0) (b may be reached from a, skipping the blank, since b ≠ a);
+   α₃(b) = α₂(b) + α₂(∅) + α₂(a) = 1 + 1 + 2 = 4 and α₃(final ∅) = α₂(final ∅) + α₂(b) = 0 + 1 = 1; total 5. For "aa",
+   two adjacent a's merge into one, so the skip from the first a to the second is forbidden: every path passes through
+   the blank between them.
+
 6. Show that f*(x, y) = log[p(y | x)/p(y)] minimizes InfoNCE, and that log N − L ≤ log N for any critic. How much
    information can a batch of 256 certify?
 
-## Solutions
-
-**1.** Replacing one occurrence of (a, b) by the single symbol ab turns two symbols into one, so n separate occurrences
-save n symbols. In "aaaa" the pair (a, a) sits at three overlapping positions, but merging left to right gives
-"aa aa": two merges, saving two symbols, not three. That is why `learn_bpe` here records the actual savings next to the
-(overlapping) pair counts it ranks by, and checks that the merged text's length equals L₀ minus the savings.
-
-**2.** The first: 9.6 / 3.2 = 3.0 bits per character. The second: on ASCII text a byte is a character, so 2.9 bits
-per character; it is better. Perplexity per character is 2^(bits per character) = 2^(bits per token / characters per
-token) = (2^(bits per token))^(1/characters per token).
-
-**3.** 8 · 5 · 5 · 5 = 1,000 codes, log₂ 1000 ≈ 9.97 bits. 8 stages × log₂ 1024 = 10 bits × 75 frames/s = 6,000
-bits/s: EnCodec's 6 kbps setting.
-
-**4.** At t = n/f_s, cos(2π(f_s − f)n/f_s) = cos(2πn − 2πfn/f_s) = cos(2πfn/f_s), by periodicity and evenness. At
-16 kHz the Nyquist frequency is 8 kHz, and 9 kHz folds to 16 − 9 = 7 kHz.
-
-**5.** aab, abb, ∅ab, a∅b, ab∅: five paths. With all probabilities 1 the recursion counts paths: on the states
-(∅, a, ∅, b, ∅), α₁ = (1, 1, 0, 0, 0); α₂ = (1, 2, 1, 1, 0) (b may be reached from a, skipping the blank, since b ≠ a);
-α₃(b) = α₂(b) + α₂(∅) + α₂(a) = 1 + 1 + 2 = 4 and α₃(final ∅) = α₂(final ∅) + α₂(b) = 0 + 1 = 1; total 5. For "aa",
-two adjacent a's merge into one, so the skip from the first a to the second is forbidden: every path passes through
-the blank between them.
-
-**6.** The loss is the cross-entropy of guessing which of the N captions is the partner. Given x and the N captions,
-the true posterior that slot k holds the partner is p(y_k | x) Π_{j≠k} p(y_j) divided by its sum over k, that is,
-[p(y_k | x)/p(y_k)] / Σ_l [p(y_l | x)/p(y_l)], a softmax of f* = log p(y | x)/p(y) (plus anything depending on x
-alone). A cross-entropy is smallest at the true posterior, so f* is optimal for every N. A cross-entropy of a discrete
-guess is never negative, so log N − L ≤ log N. With N = 256 the most it can certify is log 256 ≈ 5.55 nats = 8 bits.
+   *Solution.* The loss is the cross-entropy of guessing which of the N captions is the partner. Given x and the N captions,
+   the true posterior that slot k holds the partner is p(y_k | x) Π_{j≠k} p(y_j) divided by its sum over k, that is,
+   [p(y_k | x)/p(y_k)] / Σ_l [p(y_l | x)/p(y_l)], a softmax of f* = log p(y | x)/p(y) (plus anything depending on x
+   alone). A cross-entropy is smallest at the true posterior, so f* is optimal for every N. A cross-entropy of a discrete
+   guess is never negative, so log N − L ≤ log N. With N = 256 the most it can certify is log 256 ≈ 5.55 nats = 8 bits.
 
 ## 习题
 

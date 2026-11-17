@@ -76,11 +76,29 @@ and every valuation of p, as bitmasks. Modal combat evaluates each pair of bots 
 (world k sees the worlds below it), with PA + Con(PA) read as "at every world from 1 up"; the actions are stable from
 world 2. The Reasoner's statistics are counted from its source by `compute.py`.
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. With Gaussian V and E of equal variance, show that E[V | U] = U/2.
+
+   *Solution.* Let $V$ and $E$ be independent, mean zero, each with variance $s^2$, and $U = V + E$. Then $(V, U)$ is jointly Gaussian, so $E[V \mid U] = \frac{\mathrm{Cov}(V, U)}{\mathrm{Var}(U)}\,U = \frac{s^2}{2s^2}\,U = U/2$. Selecting on the proxy $U$ gets you, on average, only half of what the proxy shows: regressional Goodhart in its mildest, Gaussian form, where pushing harder still helps. With heavy-tailed $E$ the conditional expectation bends back toward zero for large $U$, as in the film.
+
 2. For u ~ N(μ, σ²), show that E[max(u, 0)] ≥ max(μ, 0), with equality only if σ = 0.
+
+   *Solution.* The function $x \mapsto \max(x, 0)$ is convex, so by Jensen's inequality $E[\max(u, 0)] \ge \max(E u, 0) = \max(\mu, 0)$. Explicitly, $E[\max(u, 0)] = \mu\,\Phi(\mu/\sigma) + \sigma\,\varphi(\mu/\sigma)$. Equality in Jensen for this function would need $u$ to lie, with probability one, on a single side of 0, where the function is linear; a Gaussian with $\sigma > 0$ puts positive probability on both sides, so the inequality is strict. So for a robot uncertain about the human's utility, deferring (and letting the human switch it off when $u < 0$) is worth strictly more than acting at once, unless it is already certain: Good's theorem in the off-switch game.
+
 3. Give two planner–reward pairs that explain a person who always picks the cheaper of two items.
+
+   *Solution.* (a) A rational planner (she picks what she values most) with reward $-\text{price}$: she likes cheapness. (b) An anti-rational planner (she picks what she values least) with reward $+\text{price}$: she likes expensive things and systematically chooses against her own values. (A third: a planner that ignores reward altogether and is hard-wired to pick the cheaper item, with any reward at all.) All three predict her choices exactly, so behaviour alone cannot tell which reward is hers: Armstrong and Mindermann's theorem in its simplest case.
+
 4. Why does the share of reward functions that avoid shutdown approach k/(k + 1)?
+
+   *Solution.* Give each of the $k + 1$ end states (off, and the $k$ behind the hub) an independent reward drawn from the same continuous distribution. Ignoring the one-step delay of going through the hub, the agent avoids shutdown exactly when the best of the $k$ states behind the hub beats off. By symmetry each of the $k + 1$ states is equally likely to be the best, so the probability that off is the best is $1/(k + 1)$, and the share avoiding shutdown is $k/(k + 1)$: one half, two thirds, three quarters, four fifths for $k = 1, 2, 3, 4$. Discounting makes the hub slightly less attractive, which is why the shares only approach these values (the film's three options gave 75%). As $k$ grows the share tends to 1, though no reward mentions survival.
+
 5. Use Löb's theorem to show that FairBot cooperates with FairBot.
+
+   *Solution.* FairBot cooperates with an opponent exactly when it can prove (in PA, say) that the opponent cooperates with it. Let $C$ be the sentence "FairBot cooperates with FairBot". By FairBot's code, $C \leftrightarrow \Box C$, and PA proves this, so in particular PA $\vdash \Box C \to C$. Löb's theorem says: if PA $\vdash \Box C \to C$, then PA $\vdash C$. So $C$ is provable, and since FairBot cooperates whenever it finds such a proof, $C$ is true: the two FairBots cooperate, each because it can prove the other will. (For real, proof-length-bounded agents a bounded version of Löb's theorem, due to Critch, gives the same.)
+
 6. Show that Löb's axiom fails on a single world that sees itself.
+
+   *Solution.* Take a single world $w$ with $wRw$, and let $p$ be false at $w$. Then $\Box p$ is false at $w$ ($w$ sees a world, itself, where $p$ fails), so $\Box p \to p$ is true at $w$, and since $w$ sees only itself, $\Box(\Box p \to p)$ is true at $w$. But $\Box p$ is false. So Löb's axiom $\Box(\Box p \to p) \to \Box p$ fails at $w$. Löb's axiom holds exactly on transitive frames with no infinite ascending chains, and a reflexive world is such a chain ($w R w R w \ldots$).
+

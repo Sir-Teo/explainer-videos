@@ -59,14 +59,31 @@ python tools/qa_scene.py philosophy15 Lunch            # one chapter, silent, wi
 | 15 | `Reichenbach` | the pragmatic vindication (1938); the straight rule; three objections; meta-induction (Schurz 2008) and its regret bound. | the straight rule converging; exponential weights over five methods, regret within the bound |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Derive $(s + 1)/(n + 2)$ from the uniform prior, using $\int_0^1 \theta^a (1-\theta)^b\, d\theta = \frac{a!\, b!}{(a + b + 1)!}$.
+
+   *Solution.* With a uniform prior and $s$ successes in $n$ trials, the posterior density is proportional to $\theta^s(1-\theta)^{n-s}$. The chance of a success next time is the posterior mean, $\int_0^1 \theta^{s+1}(1-\theta)^{n-s}\,d\theta \big/ \int_0^1 \theta^{s}(1-\theta)^{n-s}\,d\theta$. By the Beta integral the numerator is $(s+1)!\,(n-s)!/(n+2)!$ and the denominator $s!\,(n-s)!/(n+1)!$, so the ratio is $(s+1)/(n+2)$. After $n$ sunrises in $n$ days, $(n+1)/(n+2)$.
+
 2. In the ravens model, let $H'$ have 1{,}000 white ravens. Recompute both Bayes factors.
+
+   *Solution.* Keep the film's world: $10^8$ objects, $10^4$ ravens, 90% of everything not black. Under $H'$ 1,000 ravens are white. A random raven is black with probability 1 under $H$ and $9{,}000/10{,}000 = 0.9$ under $H'$: Bayes factor $1/0.9 = 1.111$. A random non-black thing is a non-raven with probability 1 under $H$ and $1 - 1{,}000/(9 \times 10^7)$ under $H'$: Bayes factor $1.0000111$. Each factor's distance from 1 grows about tenfold (from 1.0101 and 1.0000011), so their ratio barely moves: a black raven is now worth about 9,500 white shoes ($\ln 1.111 / \ln 1.0000111$), against about 9,000 before.
+
 3. Find $E_1$, $E_2$ that the log likelihood ratio and Christensen's measure rank oppositely.
+
+   *Solution.* The film's pair already does it. $E_1$: prior 0.01, likelihoods 0.9 and 0.1. $E_2$: prior 0.5, likelihoods 0.9 and 0.5. The log likelihood ratio is $\ln 9 = 2.20$ for $E_1$ and $\ln 1.8 = 0.59$ for $E_2$, so it ranks $E_1$ first. Christensen's measure $P(H \mid E) - P(H \mid \neg E)$ is $0.0833 - 0.0011 = 0.082$ for $E_1$ and $0.643 - 0.167 = 0.476$ for $E_2$, so it ranks $E_2$ first. The likelihood ratio ignores the prior; Christensen's measure is a difference of posteriors, which a long-shot prior keeps small.
+
 4. Place 'all emeralds are grue' and 'only finitely many emeralds are blue' in Kelly's hierarchy.
+
+   *Solution.* "All emeralds are grue" has the form of "all swans are white": one emerald seen to be non-grue (blue before $T$, or green after it) refutes it for good, and no finite run of grue emeralds verifies it. So it is refutable with certainty but not verifiable: Popper's rung. "Only finitely many emeralds are blue" is like the film's "only finitely many black swans": it is verifiable in the limit (say "true" whenever no blue emerald has appeared for a while; if the hypothesis is true you eventually stop changing your mind) but not refutable in the limit, and it cannot be decided with certainty at any finite time.
+
 5. Prove: exponential weights has regret at most $\frac{\ln N}{\eta} + \frac{\eta T}{8}$; optimize $\eta$.
+
+   *Solution.* Let $L_i$ be expert $i$'s total loss, losses in $[0, 1]$, and $W_t = \sum_i e^{-\eta L_{i,t}}$ with $W_0 = N$. Lower bound: $W_T \ge e^{-\eta L^*}$, so $\ln(W_T/W_0) \ge -\eta L^* - \ln N$. Upper bound: each step, $\ln(W_{t+1}/W_t) = \ln E_{p_t}[e^{-\eta \ell}] \le -\eta\, E_{p_t}[\ell] + \eta^2/8$ by Hoeffding's lemma, and summing gives $\ln(W_T/W_0) \le -\eta L_{\text{alg}} + \eta^2 T/8$. Together, $L_{\text{alg}} - L^* \le \ln N/\eta + \eta T/8$. The right side is smallest at $\eta = \sqrt{8 \ln N / T}$, where the regret is at most $\sqrt{(T \ln N)/2}$: it grows like $\sqrt T$, so the average regret per round goes to zero.
+
 6. No free lunch, again: if every world's labels depend only on the *last* bit, how does nearest neighbour do?
+
+   *Solution.* The training inputs are 000, 010, 100 and 110, all ending in 0, and the four unseen inputs all end in 1. The nearest training input to each unseen one is the one that differs only in the last bit. Of the four worlds whose labels depend only on the last bit, nearest neighbour is perfect in the two constant ones and wrong on every unseen input in the two where the label equals or reverses the last bit: an average of one half, the same as no free lunch. Its bias, that inputs one bit apart share labels, is exactly wrong for the one bit that matters, and the training set never varied that bit.
 
 ## Sources
 

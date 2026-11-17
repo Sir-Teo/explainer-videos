@@ -71,14 +71,31 @@ python tools/qa_scene.py philosophy29 Frame            # one chapter, silent, wi
 | 15 | `Bridges` | Davos (1929); Heidegger (1929); Carnap (1932); Winograd and Flores (1986); Dennett (1991); Varela (1996); Petitot et al. (1999); Dreyfus–McDowell (2005–07). | — |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Prove that no viewpoint outside a convex polyhedron shows all its faces at once; find one that shows all but one.
+
+   *Solution.* Let face $i$ have area $A_i$, outward unit normal $n_i$, and supporting plane $n_i \cdot x = h_i$, with an interior point at the origin so every $h_i > 0$. Face $i$ is visible from $p$ exactly when $n_i \cdot p > h_i$. Minkowski's relation for a closed polyhedron is $\sum_i A_i n_i = 0$. If every face were visible, then $\sum_i A_i\, n_i \cdot p > \sum_i A_i h_i > 0$, while the left side is $(\sum_i A_i n_i) \cdot p = 0$: a contradiction. All but one is possible for some polyhedra: look at a pyramid from a point high above its apex, and every lateral face is visible while the base is not. (A cube is never seen on more than three faces, since opposite faces exclude each other.)
+
 2. With decay $\lambda = \tfrac12$, show that the retentional present always determines the order of distinct notes. What if $\lambda = 1$?
+
+   *Solution.* With $\lambda = \tfrac12$ the present gives the note heard $k$ steps ago weight $2^{-k}$. For distinct notes the weights are distinct powers of two, so sorting the notes by weight recovers the order: the faintest came first. In fact even repeated notes are recovered, since each note's total weight is a sum of distinct powers of two, a binary numeral, which says exactly at which ages that note sounded. With $\lambda = 1$ every past note has weight 1: the present records only which notes have sounded (with repetitions, how often), and all orderings of the same notes give the same present. Order is lost.
+
 3. Write successor-state axioms for Dennett's room, including the ramification 'things on the wagon move with it'.
+
+   *Solution.* Fluents: DoorOpen$(s)$, On$(x, s)$ ($x$ is on the wagon), Out$(x, s)$ ($x$ is outside the room). Actions: open, pull, takeoff$(x)$. Successor-state axioms: DoorOpen$(do(a, s)) \leftrightarrow a = \text{open} \lor \text{DoorOpen}(s)$. On$(x, do(a, s)) \leftrightarrow \text{On}(x, s) \land a \ne \text{takeoff}(x)$. Out$(x, do(a, s)) \leftrightarrow \text{Out}(x, s) \lor (a = \text{pull} \land \text{DoorOpen}(s) \land (x = \text{wagon} \lor \text{On}(x, s)))$. The ramification "things on the wagon move with it" is the last disjunct: pulling moves whatever is on the wagon, so the planner sees the bomb come out and finds open, takeoff(bomb), pull.
+
 4. Show that a second-order cellular automaton $x_{t+1} = f(x_t) \oplus x_{t-1}$ is invertible for every $f$.
+
+   *Solution.* The rule maps the pair $(x_{t-1}, x_t)$ to $(x_t, x_{t+1})$ with $x_{t+1} = f(x_t) \oplus x_{t-1}$. Since $\oplus$ is its own inverse, $x_{t-1} = f(x_t) \oplus x_{t+1}$: from the later pair the earlier one is computed with the same $f$, whatever $f$ is. So the map on pairs is a bijection, its inverse is the same kind of rule run backwards, and on a finite ring every history returns to its start.
+
 5. In the hermeneutic toy, prove that a text of only ambiguous words leaves every prejudice fixed.
+
+   *Solution.* In the toy, an ambiguous word $w$ with senses river and money is read as river with probability $\theta/2 \big/ (\theta/2 + (1 - \theta)/2) = \theta$, where $\theta$ is the current belief that the text is about the river. The new belief is the average of the words' readings. If every word is ambiguous, every reading is $\theta$ and the average is $\theta$: every prejudice is a fixed point, and iterating changes nothing. Only an unambiguous word, read as river or money with certainty, pulls the average away from $\theta$.
+
 6. Find the minimum grounding set of a dictionary of your own design; when is it a single word?
+
+   *Solution.* Treat the dictionary as a graph with an arrow from each word to the words in its definition. A grounding set must meet every cycle (a word grounded from outside breaks every circle through it), so the minimum grounding set is a minimum feedback vertex set: in the film's dictionary, one word from each of three disjoint circles. Example: $a$ is defined by $b$, $b$ by $c$, $c$ by $a$, and $d$ by $a$ and $c$. There is one cycle, and grounding $a$ grounds everything: the set is $\{a\}$. In general a single word suffices exactly when one word lies on every cycle of the definition graph.
 
 ## Sources
 

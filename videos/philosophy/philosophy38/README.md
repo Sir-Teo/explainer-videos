@@ -68,11 +68,29 @@ CEEI is found by proportional response dynamics (3,000 rounds). Cake valuations 
 normalized to 1. Rent prices are searched on a $5 grid. The school-choice preferences were picked from random
 profiles so that deferred acceptance takes several rounds and there is more than one stable matching.
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Show that if only one person has rights, over any number of pairs, rights and Pareto never force a cycle.
+
+   *Solution.* Social strict preference is built from two sources: person 1's preferences on her decisive pairs, and unanimous preferences (Pareto). Every Pareto preference is also person 1's preference, since she is one of the unanimous. So every strict social preference agrees with person 1's own ranking, which is transitive, and a cycle $x \succ y \succ z \succ x$ would be a cycle in her ranking. No cycle can be forced, however many pairs she controls. Sen's paradox needs two people with rights, each over a pair, whose preferences the Pareto principle can link into a loop.
+
 2. Compute the Gini coefficient of the incomes (0, 0, 0, 1), and explain why it is not 1.
+
+   *Solution.* Using $G = \sum_i \sum_j |x_i - x_j| / (2n^2\mu)$: the ordered pairs with different incomes contribute $2 \times 3 \times 1 = 6$, and $2n^2\mu = 2 \times 16 \times 0.25 = 8$, so $G = 0.75$ (the Reasoner's formula gives the same). It is not 1 because with $n$ people the most unequal distribution, one person with everything, has $G = (n - 1)/n$: the one rich person is equal to herself. Only as $n \to \infty$ does the maximum approach 1.
+
 3. With societies (1, 9) and (4, 4), for which η does the CRRA chooser prefer the second?
+
+   *Solution.* With utility $u(x) = x^{1 - \eta}/(1 - \eta)$ ($\log x$ at $\eta = 1$) and an equal chance of being either person, the chooser prefers $(4, 4)$ when $u(4) > \tfrac12[u(1) + u(9)]$. At $\eta = 0$ the averages are 4 against 5, and $(1, 9)$ wins. At $\eta = \tfrac12$, $u(x) = 2\sqrt x$: $u(4) = 4$ and $\tfrac12(2 + 6) = 4$, a tie. For $\eta > \tfrac12$ the concavity outweighs the higher mean (at $\eta = 1$: $\log 4 = 1.39$ against $\tfrac12\log 9 = 1.10$). So the chooser prefers the equal society exactly when $\eta > 1/2$.
+
 4. Show that Ana, the first cutter, never envies whoever took the trimmed piece in Selfridge–Conway.
+
+   *Solution.* In Ana's measure her three pieces are worth $\tfrac13$ each, and the trimmed piece is worth less than $\tfrac13$ by the value of its trimming, $t$. Ana always gets an untrimmed piece, worth $\tfrac13$ to her. Whoever took the trimmed piece then gets at most part of the trimmings, worth at most $t$ to Ana. So in Ana's measure that person ends with at most $(\tfrac13 - t) + t = \tfrac13$, no more than Ana's untrimmed piece alone, and Ana also gets a share of the trimmings. She never envies them, whatever happens in the second round.
+
 5. Check that rents (1400, 900, 700) are also envy-free, and find the least surplus.
+
+   *Solution.* Rooms are assigned as in the film (person 1 the first room, and so on), with values person 1: (1500, 1000, 500), person 2: (1300, 1100, 600), person 3: (1200, 900, 900). With rents (1400, 900, 700) the surpluses are $1500 - 1400 = 100$, $1100 - 900 = 200$ and $900 - 700 = 200$. Envy checks: person 1 would get $1000 - 900 = 100$ from room 2 (no better) and $-200$ from room 3; person 2 would get $-100$ from either other room; person 3 would get $-200$ from room 1 and $0$ from room 2. So the rents are envy-free, and the least surplus is 100, against 165 for the Reasoner's maximin prices (1330, 935, 735).
+
 6. State the Wilt Chamberlain argument as an inconsistent set, and say which claim you would deny.
+
+   *Solution.* (1) D1, the equal distribution, is just. (2) Whatever arises from a just distribution by just steps is just. (3) Each fan's paying a quarter to watch Wilt is a just step. (4) D2, in which Wilt is far richer, violates the patterned principle that made D1 just, so it is unjust. The four are inconsistent. Nozick denies (4), and with it every patterned principle. I would deny (2), with Rawls: justice is a property of the basic structure, and individually fair transactions can cumulatively erode the background conditions (fair bargaining, equal political power) that made them fair, so the structure needs ongoing adjustment, such as taxation, rather than a one-off just start.
+

@@ -199,37 +199,45 @@ with the same endpoints. It does not guarantee identical fixed-weight behavior o
 ## Problems
 
 1. For q(x_t | x_{t-1}) = N(√(1−β_t) x_{t-1}, β_t I), show q(x_t | x_0) = N(√ᾱ_t x_0, (1−ᾱ_t) I) with ᾱ_t = ∏_{s≤t}(1−β_s).
-2. For x = α x_0 + σ ε, prove Tweedie's formula E[x_0 | x] = (x + σ² ∇log p(x))/α, and deduce that the best noise
-   guess is −σ ∇log p(x).
-3. Prove that denoising score matching and explicit score matching differ by a constant independent of θ.
-4. Show that DDIM's step x_s = α_s x̂_0 + σ_s ε̂ solves dx/dσ = (x − D)/σ exactly, in x/α and σ/α, when D = x̂_0 is constant
-   over the step.
-5. At a fixed noise level and with ideal conditional and unconditional scores, show that classifier-free guidance
-   with weight w gives the score of the normalized density proportional to p_t(x) p_t(c | x)^w, and w = 1 gives the
-   conditional score. This local identity does not establish the endpoint distribution of an entire guided trajectory.
-6. For masked diffusion on n symbols, show C(n, k) ∫₀¹ t^{k−1}(1−t)^{n−k} dt = 1/k, and deduce that the bound is the
-   any-order autoregressive loss.
 
-### Solutions
-
-1. By induction. Suppose x_{t−1} = √ᾱ_{t−1} x_0 + √(1−ᾱ_{t−1}) ε̄ with ε̄ standard normal. Then x_t = √(1−β_t) x_{t−1} +
+   *Solution.* By induction. Suppose x_{t−1} = √ᾱ_{t−1} x_0 + √(1−ᾱ_{t−1}) ε̄ with ε̄ standard normal. Then x_t = √(1−β_t) x_{t−1} +
    √β_t ε_t = √ᾱ_t x_0 + [√((1−β_t)(1−ᾱ_{t−1})) ε̄ + √β_t ε_t]. The bracket is a sum of independent Gaussians, so it is
    Gaussian with variance (1−β_t)(1−ᾱ_{t−1}) + β_t = 1 − (1−β_t)ᾱ_{t−1} = 1 − ᾱ_t. The base case t = 1 is the step
    itself.
-2. p(x) = ∫ N(x; α x_0, σ² I) p(x_0) dx_0. Differentiating under the integral, ∇p(x) = ∫ (α x_0 − x)/σ² N(x; α x_0, σ²I)
+
+2. For x = α x_0 + σ ε, prove Tweedie's formula E[x_0 | x] = (x + σ² ∇log p(x))/α, and deduce that the best noise
+   guess is −σ ∇log p(x).
+
+   *Solution.* p(x) = ∫ N(x; α x_0, σ² I) p(x_0) dx_0. Differentiating under the integral, ∇p(x) = ∫ (α x_0 − x)/σ² N(x; α x_0, σ²I)
    p(x_0) dx_0. Dividing by p(x), N p(x_0)/p(x) = p(x_0 | x), so ∇log p(x) = (α E[x_0 | x] − x)/σ², which rearranges to
    Tweedie's formula. Since ε = (x − α x_0)/σ, E[ε | x] = (x − α E[x_0 | x])/σ = −σ ∇log p(x), and the conditional mean
    minimizes the expected squared error.
-3. Write J_D = ½E‖s(x̃) − ∇log q(x̃|x)‖² and J_E = ½E‖s(x̃) − ∇log q_σ(x̃)‖². Expanding, each is ½E‖s‖² minus a cross term
+
+3. Prove that denoising score matching and explicit score matching differ by a constant independent of θ.
+
+   *Solution.* Write J_D = ½E‖s(x̃) − ∇log q(x̃|x)‖² and J_E = ½E‖s(x̃) − ∇log q_σ(x̃)‖². Expanding, each is ½E‖s‖² minus a cross term
    plus a term without θ. The cross terms are equal: E_{q_σ}[s·∇log q_σ] = ∫ s·∇q_σ dx̃ = ∫∫ s·∇_x̃ q(x̃|x) p(x) dx dx̃ =
    E_{x,x̃}[s·∇log q(x̃|x)], using ∇log q = ∇q/q twice and q_σ = ∫ q(x̃|x) p(x) dx. So J_D − J_E does not depend on θ.
-4. In x̃ = x/α and σ̃ = σ/α the state is x̃ = x_0 + σ̃ ε and the probability-flow ODE is dx̃/dσ̃ = (x̃ − D)/σ̃. With D
+
+4. Show that DDIM's step x_s = α_s x̂_0 + σ_s ε̂ solves dx/dσ = (x − D)/σ exactly, in x/α and σ/α, when D = x̂_0 is constant
+   over the step.
+
+   *Solution.* In x̃ = x/α and σ̃ = σ/α the state is x̃ = x_0 + σ̃ ε and the probability-flow ODE is dx̃/dσ̃ = (x̃ − D)/σ̃. With D
    constant, d(x̃ − D)/dσ̃ = (x̃ − D)/σ̃, so x̃ − D is proportional to σ̃: x̃_s = D + (σ̃_s/σ̃_t)(x̃_t − D). With
    ε̂ = (x̃_t − D)/σ̃_t this is x̃_s = D + σ̃_s ε̂; multiplying by α_s gives x_s = α_s D + σ_s ε̂, DDIM's step.
-5. At fixed t, with exact scores and densities evaluated at that noise level, the guided score is ∇log p(x) + w(∇log p(x|c) − ∇log p(x)). By Bayes, ∇log p(x|c) − ∇log p(x) = ∇log p(c|x) (p(c)
+
+5. At a fixed noise level and with ideal conditional and unconditional scores, show that classifier-free guidance
+   with weight w gives the score of the normalized density proportional to p_t(x) p_t(c | x)^w, and w = 1 gives the
+   conditional score. This local identity does not establish the endpoint distribution of an entire guided trajectory.
+
+   *Solution.* At fixed t, with exact scores and densities evaluated at that noise level, the guided score is ∇log p(x) + w(∇log p(x|c) − ∇log p(x)). By Bayes, ∇log p(x|c) − ∇log p(x) = ∇log p(c|x) (p(c)
    does not depend on x), so the guided score is ∇log p(x) + w ∇log p(c|x) = ∇log[p(x) p(c|x)^w]. At w = 1 it is
    ∇log p(x|c). (In ε or velocity form the same holds, since each is an affine function of the score at fixed t.)
-6. ∫₀¹ t^{k−1}(1−t)^{n−k} dt = B(k, n−k+1) = (k−1)!(n−k)!/n!, and multiplying by C(n, k) = n!/(k!(n−k)!) leaves 1/k.
+
+6. For masked diffusion on n symbols, show C(n, k) ∫₀¹ t^{k−1}(1−t)^{n−k} dt = 1/k, and deduce that the bound is the
+   any-order autoregressive loss.
+
+   *Solution.* ∫₀¹ t^{k−1}(1−t)^{n−k} dt = B(k, n−k+1) = (k−1)!(n−k)!/n!, and multiplying by C(n, k) = n!/(k!(n−k)!) leaves 1/k.
    The bound ∫₀¹ (1/t) E[Σ_{blanks} CE] dt sums over blank sets M of t^{|M|}(1−t)^{n−|M|}/t, so a set of size k gets weight
    1/(k C(n, k)): the bound is Σ_k E_{|M|=k}[(1/k) Σ_{i∈M} −log p(x_i | x_{∖M})]. In a uniformly random order, the step that
    reveals the j-th symbol has a uniformly random hidden set of size k = n − j + 1 and predicts a uniformly random member

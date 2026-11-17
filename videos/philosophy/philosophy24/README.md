@@ -56,14 +56,31 @@ python tools/qa_scene.py philosophy24 Kac              # one chapter, silent, wi
 | 14 | `Arrows` | Ritz and Einstein (1909); Popper (1956); Reichenbach; Lewis (1979); Albert; Maudlin; Price (1996). | — |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Add a term $0.5\,t^3$ to the falling-body law. How many data points before the best system finds it?
+
+   *Solution.* Use the film's mosaic: $t$ from 0 to 2, noise of standard deviation 0.6, code length $\tfrac{n}{2}\log_2(2\pi e\,\hat\sigma^2) + \tfrac{d+1}{2}\log_2 n$. On $[0, 2]$ the cubic term is mostly absorbed by the quadratic: the best parabola misses $0.5\,t^3$ by only about 0.076 in standard deviation, an eighth of the noise. So the extra parameter pays for itself only with many points. Over 300 noise draws each, the cubic is chosen about 20% of the time with 40 points, half the time at about 400, 84% at 800 and 92% at 1,000. The best system finds a small, nearly collinear term only when the mosaic is large; until then the quadratic really is the better system.
+
 2. Past: 50 heads in 100 tosses. What chance do the next 100 tosses give to undermining futures?
+
+   *Solution.* On the Humean view the chance of heads is the frequency over the whole history of 200 tosses, so "the chance is one half" requires exactly 50 heads in the next 100. Every other future undermines it. The theory gives that future probability $\binom{100}{50}/2^{100} = 0.080$, so it gives undermining futures probability $0.920$, more than the film's 75% with ten tosses: the longer the future, the more of its probability the theory spends on its own falsity.
+
 3. For a dome of height $\propto r^{a}$, for which exponents $a$ can the ball start to slide on its own?
+
+   *Solution.* Along the surface the pull of gravity is proportional to the slope, so the equation of motion is $\ddot r = c\,r^{a-1}$. Try $r = A\,t^k$, which starts at rest at the top: $k(k-1)\,A\,t^{k-2} = c\,A^{a-1}\,t^{k(a-1)}$, so $k - 2 = k(a - 1)$, $k = 2/(2 - a)$. This is a genuine start from rest ($k > 1$, so $\dot r(0) = 0$) exactly when $0 < a < 2$. The top must also be an equilibrium, a point where the force vanishes, which needs $a > 1$ (at $a = 1$ the dome is a cone and the ball cannot rest at the apex). So the ball can start to slide on its own for $1 < a < 2$; Norton's dome, $a = 3/2$, gives $r \propto t^4$. At $a = 2$ the force is linear, Lipschitz, and the solution is unique.
+
 4. With $\lambda = 0.9$, what initial precision forecasts the Lorenz system to time 50?
+
+   *Solution.* A forecast fails when the error, growing like $\varepsilon\,e^{\lambda t}$, reaches the size of the attractor, about 1 in the film's units, so the horizon is $t \approx \ln(1/\varepsilon)/\lambda$. For $t = 50$ with $\lambda = 0.9$, $\ln(1/\varepsilon) = 45$ and $\varepsilon = e^{-45} \approx 3 \times 10^{-20}$: about twenty correct decimal digits in the initial state, where one in a thousand bought about seven time units.
+
 5. Show that a Kac ring with an even number of marks returns to its start after $N$ ticks.
+
+   *Solution.* After $N$ ticks every ball has moved once around the ring of $N$ sites, so it is back at its starting site, and it has crossed every edge exactly once, so it has changed colour once for each mark. With an even number of marks every ball has changed colour an even number of times and has its original colour. So the whole configuration recurs after $N$ ticks. (With an odd number of marks every ball has the opposite colour at $N$, and the start recurs at $2N$, as in the film.)
+
 6. Szilard's engine with the partition at $\tfrac13$: the expected work, and the cost of erasing the record.
+
+   *Solution.* With the partition at $x = 1/3$, the molecule is on the small side with probability $1/3$ and expands it to the whole box, gaining $kT\ln 3$; on the large side, probability $2/3$, it gains $kT\ln(3/2)$. Expected work: $kT\big(\tfrac13\ln 3 + \tfrac23\ln\tfrac32\big) = kT \times 0.637$, the Shannon entropy of the measurement in nats (0.918 bits), less than the $kT\ln 2$ of a central partition. Erasing the record costs at least $kT$ times its entropy, $0.637\,kT$, if the eraser exploits the known odds, and $kT\ln 2$ for a memory treated as a full bit. Either way the cycle gains nothing.
 
 ## Sources
 

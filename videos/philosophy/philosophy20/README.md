@@ -64,14 +64,31 @@ python tools/qa_scene.py philosophy20 Mereology        # one chapter, silent, wi
 | 15 | `Graphs` | Wikidata; the Knowledge Graph (2012); Bordes et al. (2013); Li et al. (2023). | a TransE embedding and its answers |
 | 16 | `Outro` | recap; the Reasoner's modules; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Regiment 'every critic admires some novelist' and 'there is a novelist every critic admires'. What does each commit to?
+
+   *Solution.* "Every critic admires some novelist" is $\forall x\,(Cx \to \exists y\,(Ny \land Axy))$: each critic has a novelist of their own. "There is a novelist every critic admires" is $\exists y\,(Ny \land \forall x\,(Cx \to Axy))$: one novelist for all. By Quine's criterion, a theory is committed to what its bound variables must range over to make it true. The second commits outright to at least one novelist. The first commits to novelists only if there are critics; with no critics it is vacuously true. The second entails the first, not the reverse.
+
 2. Evaluate 'the present King of France is not bald' in a model with one bald King, on both scopes.
+
+   *Solution.* Russell's analysis gives two forms. Narrow scope: $\exists x\,(Kx \land \forall y\,(Ky \to y = x) \land \lnot Bx)$, "there is exactly one king and he is not bald". Wide scope: $\lnot\exists x\,(Kx \land \forall y\,(Ky \to y = x) \land Bx)$, "it is not the case that exactly one king exists and is bald". In a model with one king who is bald, both are false: the unique king is bald, so the narrow reading fails, and there is a unique bald king, so the wide reading fails. Scope matters only when there is no unique king; then narrow is false and wide is true, as in the film.
+
 3. Show that in the imperfect community, no property is shared by all three objects.
+
+   *Solution.* The objects are $a$ (F and G), $b$ (G and H) and $c$ (F and H). F is not shared by all three, because $b$ lacks it; G is missing from $c$; H is missing from $a$. No other property is assigned. So although every pair shares a property, nothing is common to the class of all three, and the one maximal class of pairwise resembling things corresponds to no property.
+
 4. Show that a poset with exactly two elements cannot satisfy both supplementation and unrestricted fusion.
+
+   *Solution.* A two-element partial order is either a chain, $a < b$, or two incomparable elements. In the chain, $a$ is a proper part of $b$, and weak supplementation needs another part of $b$ that does not overlap $a$; but $b$'s only parts are $a$ and $b$, and both overlap $a$. With two incomparable elements, fusion fails: the fusion of $a$ and $b$ must overlap both, but the only candidates are $a$ and $b$ themselves, which share no part. So no two-element order satisfies both. (Classical models have $2^k - 1$ elements: 1, 3, 7, ...)
+
 5. Count the connected groups among four blocks in a row. How many objects exist on each answer?
+
+   *Solution.* Number the blocks 1 to 4. Nihilism: only the simples, 4 objects. Contact (a group composes something when it is connected): the runs of adjacent blocks, $4 + 3 + 2 + 1 = 10$ objects. Universalism: every nonempty group, $2^4 - 1 = 15$ objects. Van Inwagen's organicism: blocks have no life, so again 4. Same simples, same arrangement, and 4, 10 or 15 things.
+
 6. Run the tableau by hand: is every *Grandmother* a *Parent*?
+
+   *Solution.* Unfold the definitions: Grandmother $=$ Mother $\sqcap \exists$hasChild.Parent, Mother $=$ Woman $\sqcap$ Parent. To test whether every Grandmother is a Parent, try to build an individual $x$ that is Grandmother $\sqcap \lnot$Parent. Unfolding gives $x$: Mother and $x$: $\exists$hasChild.Parent, then $x$: Woman and $x$: Parent. Now $x$ is labelled both Parent and $\lnot$Parent: a clash, and the only branch closes. No such $x$ can exist, so Grandmother $\sqsubseteq$ Parent. The tableau never needed to build the child.
 
 ## Sources
 

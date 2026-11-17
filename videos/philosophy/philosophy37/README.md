@@ -68,11 +68,29 @@ debunking toy is labelled an analogy: two hundred kinds of act, replicator dynam
 it models the structure of Street's argument, not human history. The equilibrium's links are hard constraints and
 its weights are invented.
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Show that p ⊢ p ∨ Oq is valid in KD, and that Oq can be replaced by any formula.
+
+   *Solution.* In KD, as in any normal modal logic, the propositional tautology $p \to (p \lor X)$ holds for every formula $X$, and modus ponens gives $p \vdash p \lor X$. With $X = Oq$, $p \vdash p \lor Oq$: from a purely descriptive premise, a conclusion containing "ought". That is Prior's first counterexample to Hume's law. Since nothing about $Oq$ was used, any formula, normative or not, can take its place, which is why Schurz's theorem counts such conclusions as only vacuously normative: the "ought" part can be replaced salva validitate.
+
 2. Find a countermodel to Op ⊢ p with two worlds.
+
+   *Solution.* Two worlds: $w_0$, the actual one, where $p$ is false, and $w_1$, where $p$ is true. Let $w_1$ be the only world ideal relative to $w_0$ ($w_0 R w_1$), and let $w_1$ see itself, so the frame is serial. At $w_0$, $Op$ holds (every ideal world makes $p$ true) and $p$ fails. So $Op \nvdash p$: what ought to be need not be, which is the point of deontic logic dropping the T axiom.
+
 3. Show that Op → Pp is valid in KD but not in K, where a world may have no ideal world.
+
+   *Solution.* $Pp$ is $\lnot O\lnot p$: some ideal world makes $p$ true. In KD every world has at least one ideal world (seriality). If $Op$ holds at $w$, $p$ is true at all of $w$'s ideal worlds, and there is at least one, so $Pp$ holds. In K a world may have no ideal worlds. There $Op$ is vacuously true (every ideal world, of which there are none, makes $p$ true) and $Pp$ is false. So $Op \to Pp$, the D axiom, is valid in KD and not in K: in K, a dead-end world makes everything obligatory and nothing permitted.
+
 4. In the norm-world semantics, show that "lying is wrong" and "lying is not wrong" leave no pair in common.
+
+   *Solution.* In Gibbard's semantics a judgment is the set of norm-world pairs it leaves open. "Lying is wrong" leaves open exactly the pairs whose norms forbid lying. "Lying is not wrong" (the negation of the whole judgment) leaves open exactly the pairs whose norms permit lying. Each pair's norm either forbids or permits lying, so every pair is in exactly one of the two sets: they are disjoint, and accepting both leaves no pair, no plan that can be carried out. That is the inconsistency the simple attitude theory could not express, and it falls out of the semantics as ordinary set complementation.
+
 5. Give weights for which reflective equilibrium keeps D, F and H.
+
+   *Solution.* In the film's problem the links make $D$ (never kill an innocent) conflict with switching ($S$) and with double effect ($DDE$), while agreeing with the footbridge ($F$) and the surgeon ($H$) judgments. Keeping $\{D, F, H\}$ beats the default equilibrium $\{DDE, S, F, H\}$ when $w_D + w_F + w_H > w_{DDE} + w_S + w_F + w_H$, that is $w_D > w_{DDE} + w_S = 6$. With $D$ raised from 3 to 7 and everything else as in the film, the Reasoner's equilibrium is $\{D, F, H\}$, weight 17 against 16; at $w_D = 6$ the two tie. Confidence in the absolute principle has to outweigh the switch judgment and double effect together.
+
 6. State Mackie's argument from queerness as a valid argument, and say which premise you would deny.
+
+   *Solution.* (1) If there are objective values, they are intrinsically action-guiding: knowing one would give anyone a reason to act, whatever they want. (2) Nothing else in the world is intrinsically action-guiding in that way. (3) If there were such entities, knowing them would require a special faculty of moral intuition, unlike any other way of knowing. (4) We have no such faculty, and no entity is metaphysically that strange. (5) So there are no objective values. As stated the argument is valid. The premise most worth denying is the implicit one that what is unlike anything else is therefore not real: the companions-in-guilt reply says epistemic norms ("believe what your evidence supports") are categorical and action-guiding in the same way, so premise (2) is false and queerness proves too much.
+

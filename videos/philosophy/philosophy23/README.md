@@ -63,14 +63,31 @@ python tools/qa_scene.py philosophy23 Godel            # one chapter, silent, wi
 | 14 | `Traditions` | Udayana (984); Dharmakīrti (c. 640); Avicenna (1037); the *Daodejing*. | Dharmakīrti's four claims checked |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Formalize Gaunilo's island in Anselm's form. Which premise does Plantinga's reply reject?
+
+   *Solution.* Gaunilo's parody, in Anselm's form: (1) the island than which no greater island can be conceived exists in the understanding; (2) if it existed only in the understanding, a greater island could be conceived, one existing in reality as well; (3) so it exists in reality. Each step copies Anselm's, and the conclusion is absurd. Plantinga's reply rejects premise (1) as stated: there is no such island to conceive, because island-greatness has no intrinsic maximum (one more palm tree, one more dancing girl, always makes a greater island), so the description is incoherent. Maximal greatness, he claims, does have a maximum, so the parody does not carry over.
+
 2. Find a T frame on which $\Diamond\Box g \to \Box g$ fails. Which world falsifies it?
+
+   *Solution.* Take two worlds: $w_1$ sees itself and $w_2$, and $w_2$ sees only itself, so the frame is reflexive (T) but not symmetric. Let $g$ be true at $w_2$ and false at $w_1$. At $w_2$, $\Box g$ holds, since $w_2$ sees only itself. So at $w_1$, $\Diamond\Box g$ holds ($w_1$ sees $w_2$). But $\Box g$ fails at $w_1$, which sees itself, where $g$ is false. So $w_1$ falsifies $\Diamond\Box g \to \Box g$; this is why the modal argument needs symmetry (B), or S5.
+
 3. Show that Gödel's definition of essence makes the empty property an essence of everything.
+
+   *Solution.* Gödel defined: $\varphi$ is an essence of $x$ if every property $\psi$ that $x$ has is necessarily entailed by $\varphi$: $\forall\psi\,(\psi(x) \to \Box\forall y\,(\varphi(y) \to \psi(y)))$. Take the empty property $E(y) := y \ne y$. Nothing has $E$ at any world, so $\Box\forall y\,(E(y) \to \psi(y))$ holds for every $\psi$, and the definition is met: $E$ is an essence of everything. Since Gödel's definition omits the clause "and $x$ has $\varphi$", nothing stops this. Then necessary existence (every essence of $x$ is necessarily exemplified) fails for everything, because $E$ is never exemplified; so necessary existence is empty, and the axiom that it is positive contradicts the axiom that positive properties are possibly exemplified.
+
 4. Pascal: give a decision rule under which wagering beats flipping a coin. What does it give up?
+
+   *Solution.* Rank options lexicographically: first by the probability of reaching the infinite reward, then by finite expected utility. Wagering outright reaches it with probability $p$ (if God exists); flipping a coin first gives $p/2$; waiting for the lottery gives $p$ times a tiny number. So wagering outright wins. The price is the continuity (Archimedean) axiom of expected utility: any increase in the chance of the infinite prize, however small, outweighs any finite cost, however large. That is fanaticism, and it makes the theory hostage to whoever promises the largest reward. (Surreal or hyperreal utilities, where $p \cdot \omega > (p/2) \cdot \omega$, encode the same rule.)
+
 5. Rowe: for what value of $P(E \mid G)$ does the posterior stay at one half?
+
+   *Solution.* With prior one half, the posterior is $\tfrac12 P(E \mid G) \big/ \big(\tfrac12 P(E \mid G) + \tfrac12 P(E \mid \lnot G)\big)$. It stays at one half exactly when $P(E \mid G) = P(E \mid \lnot G)$, here 0.9: when unexplained suffering is as likely if there is a God as if there is not. The skeptical theist argues for something near this; Rowe for something far below it.
+
 6. Hume: with correlated witnesses, how many does it take? Model the correlation.
+
+   *Solution.* A simple model: the first witness reports independently; each later witness, with probability $\rho$, repeats what the others said (a shared source or a shared hope), and otherwise reports independently with the film's reliability (0.99 if the miracle happened, 0.01 if not). Each extra witness then multiplies the odds by $(\rho + 0.99(1 - \rho))/(\rho + 0.01(1 - \rho))$ instead of 99. With the prior at one in a million: independent witnesses ($\rho = 0$) make the miracle more likely than not with 4 witnesses; with $\rho = 0.5$ it takes 15; with $\rho = 0.9$, 91. As $\rho \to 1$ no number suffices. Hume's second part is right that correlation, not reliability, is the real obstacle.
 
 ## Sources
 

@@ -65,14 +65,31 @@ python tools/qa_scene.py philosophy32 Beta             # one chapter, silent, wi
 | 14 | `Machines` | Matthias (2004); Sparrow (2007). | — |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Show that rule $\beta$ is valid on every model in which each action leads to a single world.
+
+   *Solution.* $N p$ holds when $p$ is true at the actual world and no available action leads only to $\lnot p$-worlds. If every action leads to a single world, "no action guarantees $\lnot p$" means every action's world is a $p$-world. Suppose $N p$ and $N(p \to q)$. Then every action's world is in $p$ and in $p \to q$, hence in $q$; and the actual world, in $p$ and $p \to q$, is in $q$. So $N q$: rule $\beta$ holds. It fails only when an action can lead to more than one world, as with McKay and Johnson's coin.
+
 2. Find a model on which $\beta$ fails but agglomeration holds, or prove there is none.
+
+   *Solution.* There is none. In this semantics $N$ is closed under entailment: if $X \subseteq Y$ and $N X$, then the actual world is in $Y$, and an action leading only to $\lnot Y$ would lead only to $\lnot X$, which $N X$ excludes. Now suppose agglomeration holds and $N p$, $N(p \to q)$. Agglomeration gives $N(p \land (p \to q))$, that is $N(p \land q)$, and closure gives $N q$. So agglomeration implies $\beta$, and a model where $\beta$ fails must be one where agglomeration fails too. (A brute-force search over every model with up to four worlds and three actions finds no counterexample, as it should.)
+
 3. Give a buffered Frankfurt case on the options model, with no flicker at all.
+
+   *Solution.* Make Black's trigger something Jones does not do: an involuntary sign, a blush that would appear only if Jones were going to decide not to shoot, and that does not appear. Then Jones's only available action is to deliberate and decide, and it leads to one world, "shoots on his own". In the options model there is a single action, so Jones has no choice about anything: $N$(shoots) and $N$(shoots on his own) both hold, and there is no flicker of freedom at all. Yet he shoots on his own, for his own reasons, and seems responsible. Pereboom's buffered version gets the same result with a voluntary but non-robust precondition for deciding otherwise. The cost, as Widerker argued, is that the sign must be a reliable indicator of a future free decision, which an indeterminist can deny exists.
+
 4. For the rollback, how many replays make the share within 0.01 of 0.7, 95% of the time?
+
+   *Solution.* The share in $n$ replays has standard deviation $\sqrt{0.7 \times 0.3/n}$. For it to lie within 0.01 of 0.7 with probability 95% we need $1.96\sqrt{0.21/n} \le 0.01$, so $n \ge 1.96^2 \times 0.21/0.0001 \approx 8{,}070$. The exact binomial calculation first reaches 95% at about $n = 8{,}000$ (the lattice of possible shares makes it oscillate slightly). A thousand replays, as in the film, pin the share down only to within about 0.03.
+
 5. Show that with no noise, the accumulator never crosses a threshold above $I/k$.
+
+   *Solution.* Without noise the accumulator is $dx/dt = I - kx$ from $x(0) = 0$, whose solution is $x(t) = (I/k)(1 - e^{-kt})$. This increases toward $I/k$ but is below it at every finite time. So a threshold above $I/k$ is never crossed, and one at $I/k$ only in the limit. In the film's units, $I = 0.1$ and $k = 0.5$, so the ceiling is 0.2: crossing a higher threshold is the work of noise alone, which is Schurger's point about the readiness potential.
+
 6. Write the diagonal agent for infinitely many predictors, and say what it needs to compute.
+
+   *Solution.* Let $P_1, P_2, \ldots$ be the predictors, each a function from situations to acts (left or right), with situations numbered $1, 2, \ldots$. The diagonal agent, in situation $k$, does the opposite of $P_k(k)$. It differs from every predictor $P_k$ at situation $k$, so no predictor on the list predicts it correctly everywhere. To act, it must compute $P_k(k)$ for each $k$: it needs an effective enumeration of the predictors and the ability to run each on its own index. If the list is given by a program (an effective listing of total computable predictors), the agent is computable, and so no effective list of predictors can include every computable agent. If the list is all total computable predictors, there is no such enumeration (deciding which programs are total is undecidable), and the agent would need an oracle: Cantor's diagonal, and Turing's, again.
 
 ## Sources
 

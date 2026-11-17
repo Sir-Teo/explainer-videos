@@ -228,34 +228,42 @@ These lines are not receipts for corrected outputs or for experiments performed 
 
 1. For DeepSeek-V3's gates g_i = σ(s_i)/Σ_{j∈K} σ(s_j), show that ∂L/∂s_j = (1 − σ(s_j)) g_j (u_j − ū) for j ∈ K, and 0
    otherwise.
-2. Show that if f = P, Switch's E Σ_i f_i P_i ≥ 1, with equality only when every f_i = 1/E. Why does it matter that f
-   has no gradient?
-3. Show that (N/k)^k ≤ C(N, k) ≤ (eN/k)^k, and compute C(64, 8)/C(16, 2).
-4. Eight experts get these shares of the token-slots: 0.3, 0.2, 0.2, 0.1, 0.1, 0.05, 0.03, 0.02. What share is dropped
-   at capacity factors 1 and 1.25?
-5. DeepSeek-V4-Pro: d = 7,168, experts of width 3,072, 6 routed per token. Compute the all-to-all bytes per token per
-   layer (FP8 out, BF16 back), the experts' FLOPs, and their ratio.
-6. Mixtral 8x7B: 32 layers, d = 4,096, SwiGLU experts of width 14,336, 32 query heads and 8 key-value heads of 128, a
-   vocabulary of 32,000. Count its total and active parameters.
 
-### Solutions
-
-1. With S = Σ_{j∈K} σ_j and σ′_j = σ_j(1 − σ_j): ∂g_i/∂s_j = (δ_ij σ′_j S − σ_i σ′_j)/S² = (σ′_j/S)(δ_ij − g_i) =
+   *Solution.* With S = Σ_{j∈K} σ_j and σ′_j = σ_j(1 − σ_j): ∂g_i/∂s_j = (δ_ij σ′_j S − σ_i σ′_j)/S² = (σ′_j/S)(δ_ij − g_i) =
    (1 − σ_j) g_j (δ_ij − g_i). So ∂L/∂s_j = Σ_{i∈K} u_i ∂g_i/∂s_j = (1 − σ_j) g_j (u_j − Σ_i g_i u_i). An unchosen s_j
    appears nowhere in the output (the top-k choice is piecewise constant in s), so its gradient is 0.
-2. With f = P and Σ f_i = 1, Cauchy–Schwarz gives (Σ f_i)² ≤ E Σ f_i², so E Σ f_i² ≥ 1, with equality iff all f_i are
+
+2. Show that if f = P, Switch's E Σ_i f_i P_i ≥ 1, with equality only when every f_i = 1/E. Why does it matter that f
+   has no gradient?
+
+   *Solution.* With f = P and Σ f_i = 1, Cauchy–Schwarz gives (Σ f_i)² ≤ E Σ f_i², so E Σ f_i² ≥ 1, with equality iff all f_i are
    equal, i.e. 1/E. f is a count (piecewise constant), so the gradient flows only through P: ∂L_aux/∂P_i = αE f_i,
    which pushes the probability of the busiest experts down hardest; the product makes the penalty differentiable
    while still measuring where tokens actually go.
-3. C(N, k) = Π_{i<k} (N − i)/(k − i) and each factor is ≥ N/k (since N ≥ k), giving the lower bound. And
+
+3. Show that (N/k)^k ≤ C(N, k) ≤ (eN/k)^k, and compute C(64, 8)/C(16, 2).
+
+   *Solution.* C(N, k) = Π_{i<k} (N − i)/(k − i) and each factor is ≥ N/k (since N ≥ k), giving the lower bound. And
    C(N, k) ≤ N^k/k! with k! ≥ (k/e)^k (because e^k = Σ_n k^n/n! ≥ k^k/k!), giving the upper bound.
    C(64, 8) = 4,426,165,368 and C(16, 2) = 120: a ratio of about 36.9 million.
-4. Capacity per expert is c/E of the slots: 0.125 at c = 1 and 0.15625 at c = 1.25. Dropped = Σ max(0, f_i − c/E):
+
+4. Eight experts get these shares of the token-slots: 0.3, 0.2, 0.2, 0.1, 0.1, 0.05, 0.03, 0.02. What share is dropped
+   at capacity factors 1 and 1.25?
+
+   *Solution.* Capacity per expert is c/E of the slots: 0.125 at c = 1 and 0.15625 at c = 1.25. Dropped = Σ max(0, f_i − c/E):
    at c = 1, 0.175 + 0.075 + 0.075 = 0.325; at c = 1.25, 0.14375 + 0.04375 + 0.04375 = 0.23125.
-5. Bytes: k d (1 + 2) = 6 × 7,168 × 3 = 129,024 (about 129 kB). FLOPs: 2 · 3 d h · k = 6 × 7,168 × 3,072 × 6 =
+
+5. DeepSeek-V4-Pro: d = 7,168, experts of width 3,072, 6 routed per token. Compute the all-to-all bytes per token per
+   layer (FP8 out, BF16 back), the experts' FLOPs, and their ratio.
+
+   *Solution.* Bytes: k d (1 + 2) = 6 × 7,168 × 3 = 129,024 (about 129 kB). FLOPs: 2 · 3 d h · k = 6 × 7,168 × 3,072 × 6 =
    792,723,456 (about 793 million). Ratio: 2h = 6,144 FLOPs per byte, against about 39,580 for an H100-class GPU's FP8
    arithmetic over 50 GB/s InfiniBand: sent naively, the network would take about 6.4 times as long as the experts.
-6. Attention per layer: 2 × 4,096² + 2 × 4,096 × 1,024 = 41,943,040. One expert: 3 × 4,096 × 14,336 = 176,160,768;
+
+6. Mixtral 8x7B: 32 layers, d = 4,096, SwiGLU experts of width 14,336, 32 query heads and 8 key-value heads of 128, a
+   vocabulary of 32,000. Count its total and active parameters.
+
+   *Solution.* Attention per layer: 2 × 4,096² + 2 × 4,096 × 1,024 = 41,943,040. One expert: 3 × 4,096 × 14,336 = 176,160,768;
    eight: 1,409,286,144; router 32,768; two norms 8,192. Per layer 1,451,270,144; × 32 = 46,440,644,608; embeddings
    and output 2 × 32,000 × 4,096 = 262,144,000; final norm 4,096: total 46,702,792,704 ≈ 46.7B. Active: per layer
    41,943,040 + 2 × 176,160,768 + 32,768 + 8,192 = 394,305,536; × 32 + 262,148,096 = 12,879,925,248 ≈ 12.9B.

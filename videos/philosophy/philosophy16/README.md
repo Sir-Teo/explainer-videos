@@ -54,14 +54,31 @@ python tools/qa_scene.py philosophy16 Betting          # one chapter, silent, wi
 | 13 | `Models` | AIC (1973) and BIC (1978); Forster and Sober (1994); consistency and efficiency. | training fit, AIC's estimate and predictive fit; which degree each picks |
 | 14 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Prevalence 0.1%, sensitivity 99%, false positives 1%: what share of positives are sick?
+
+   *Solution.* In 100,000 people, 100 are sick and 99 of them test positive; 99,900 are well and 999 of them test positive. So $99/(99 + 999) = 9.0\%$ of positives are sick. The test is good; the base rate is low, so most positives are false.
+
 2. For Ann's and Bo's coins, show that the Bayes factor under a uniform prior is the same.
+
+   *Solution.* Ann's likelihood is $\binom{12}{9}\theta^9(1-\theta)^3$ and Bo's, for the third tail on the twelfth toss, is $\binom{11}{9}\theta^9(1-\theta)^3$: the same function of $\theta$ up to a constant. The Bayes factor for "the chance is uniform on $[0, 1]$" against "the coin is fair" is $\int_0^1 c\,\theta^9(1-\theta)^3\,d\theta \,\big/\, c\,(1/2)^{12}$, and the constant $c$ cancels. With the Beta integral $9!\,3!/13! = 1/2860$, both get $4096/2860 = 1.43$: weak evidence of bias, the same for both, where their $p$-values (0.073 and 0.033) disagreed.
+
 3. Prove that under $H_0$ the $p$-value of a continuous test statistic is uniform on $[0, 1]$.
+
+   *Solution.* Let the statistic $T$ have continuous distribution function $F_0$ under $H_0$, and $p = 1 - F_0(T)$. Then $F_0(T)$ is uniform on $[0, 1]$ (the probability integral transform: $P(F_0(T) \le u) = P(T \le F_0^{-1}(u)) = u$), so $P(p \le u) = P(F_0(T) \ge 1 - u) = u$ for every $u$: $p$ is uniform. That is why, under the null, a test at level $\alpha$ rejects with probability exactly $\alpha$, and why a pile of $p$-values from true nulls is flat.
+
 4. If $E_1, E_2$ are independent e-values, is $E_1 E_2$ one? Is $(E_1 + E_2)/2$?
+
+   *Solution.* Both are. For the product, independence gives $E[E_1E_2] = E[E_1]\,E[E_2] \le 1$ under the null, and the product is nonnegative. (It is also valid when $E_2$ is an e-value conditionally on the first study's data, which is how betting continues a study.) For the average, linearity alone gives $E[(E_1 + E_2)/2] \le 1$, with no independence needed. The product grows fast when both studies point the same way; the average is the safe choice when the studies may be dependent.
+
 5. Compute Lindley's $B_{01}$ for $z = 3$, $n = 10^4$, $\tau = 1$. Which way does it point?
+
+   *Solution.* With known unit variance and $\theta \sim N(0, \tau^2)$ under $H_1$, $B_{01} = \sqrt{1 + n\tau^2}\,\exp\!\big(-\tfrac{z^2}{2}\cdot\tfrac{n\tau^2}{1 + n\tau^2}\big)$. For $z = 3$, $n = 10^4$, $\tau = 1$: $\sqrt{10001} \times e^{-4.4996} = 100.0 \times 0.0111 = 1.11$. A three-sigma result ($p = 0.0027$) leaves the Bayes factor slightly in favour of the null: with ten thousand observations a real effect of the size the prior expects would give a far larger $z$, so $z = 3$ is about as likely under the null.
+
 6. Reweight Berkeley's six departments by total applicants: who is admitted more?
+
+   *Solution.* Weight each department by its total applicants (men and women together, 4,526 in all) and apply each sex's own admission rate there. Men: $\sum_d w_d\,r^{\text{men}}_d = 38.7\%$. Women: 43.0%. Women are admitted more, reversing the raw 44.5% against 30.4%: the gap in the raw table came from women applying to the departments that admitted few applicants of either sex.
 
 ## Sources
 

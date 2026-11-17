@@ -63,14 +63,31 @@ python tools/qa_scene.py philosophy22 TwoD             # one chapter, silent, wi
 | 14 | `Industry` | Kusner et al. (2017); Wachter, Mittelstadt and Russell (2017); Stalnaker (1968); Lewis (1973); Ustun et al. (2019); Sato (1995); De Raedt et al. (2007). | the closest worlds that flip a decision; a ProbLog query over eight worlds |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Show that 'the number of planets is necessarily odd' is false de dicto. Is it true de re?
+
+   *Solution.* Use the film's three worlds, with eight, five and nine planets. De dicto, $\Box(\text{the number of planets is odd})$ needs the number of planets to be odd at every world; at ours it is eight, so the claim is false. De re, we take the actual number, eight, and ask whether that number is odd at every world: eight is even at every world, so the de re claim is false too, and necessarily so. The two readings come apart in the other direction when the actual count is odd: in Quine's day, with nine planets, the de re claim was true (nine is necessarily odd) and the de dicto claim still false (there could have been eight).
+
 2. Translate $\Box \exists x\, Fx \to \exists x\, \Box Fx$ into counterpart theory. Find a countermodel.
+
+   *Solution.* Translated, the antecedent $\Box\exists x\,Fx$ says: every world contains something that is F. The consequent $\exists x\,\Box Fx$ says: something $x$ in the actual world is such that, in every world, every counterpart of $x$ is F. Countermodel: the actual world contains $a$, which is F; a second world contains $b$, which is F, and $c$, which is not, and $c$ is $a$'s counterpart there. Every world has an F, so the antecedent holds. The only actual thing, $a$, has a counterpart that is not F, so the consequent fails.
+
 3. Build a counterpart model where the 4 axiom fails, with one individual per world.
+
+   *Solution.* Take three worlds with one individual each, $a_0, a_1, a_2$. Let $a_1$ be a counterpart of $a_0$ and $a_2$ a counterpart of $a_1$, but $a_2$ not a counterpart of $a_0$; everything is its own counterpart. Let F hold of $a_0$ and $a_1$ only. At the first world, $\Box Fa_0$ is true: $a_0$'s counterparts are $a_0$ and $a_1$, both F. But $\Box\Box Fa_0$ needs $\Box F$ of every counterpart of $a_0$, including $a_1$, and $a_1$ has the counterpart $a_2$, which is not F. So $\Box Fa_0$ holds and $\Box\Box Fa_0$ fails: the 4 axiom fails because the counterpart relation is not transitive.
+
 4. Fill the two-dimensional matrix of 'Julius invented the zip'. Which box does it belong in?
+
+   *Solution.* Take two worlds: $w_1$, where Judson invented the zip, and $w_2$, where Sundback did and Judson did not. The name "Julius" picks out, in the world considered as actual, whoever invented the zip there. Rows are worlds considered as actual, columns worlds considered as counterfactual. Row $w_1$: Julius is Judson, who invents the zip at $w_1$ and not at $w_2$: T, F. Row $w_2$: Julius is Sundback: F, T. The diagonal is all true, so the sentence is a priori; the actual row has a false, so it is contingent. It belongs in Kripke's box of the contingent a priori, beside the metre stick.
+
 5. Pierre's puzzle: which principle does a Fregean give up, and what does it cost?
+
+   *Solution.* A Fregean gives up Millianism: for Pierre, "Londres" and "London" have different senses, different ways of presenting the same city, so "Londres est jolie" and "London is pretty" express different thoughts, and he can believe one and deny the other without contradiction. The cost is that a name's sense is not part of the public language. Peter's two uses of the single name "Paderewski" have two senses, so senses vary from speaker to speaker and occasion to occasion, belief reports become hostage to how each believer thinks of the thing, and the Fregean owes an account of sense that survives Kripke's arguments against identifying it with a description.
+
 6. Give a counterpossible about logic that seems false, and say which impossible world decides it.
+
+   *Solution.* "If intuitionistic logic were the correct logic, excluded middle would still hold" seems false, while "... excluded middle would fail" seems true. If classical logic is correct, both antecedents are impossible, so with possible worlds only both are vacuously true. With impossible worlds, evaluate each at the closest world where intuitionistic logic is correct: an impossible world that differs from ours only in what logic holds, with some instance of excluded middle failing and as little else changed as possible. There excluded middle fails, so the first counterpossible is false and the second true. The vacuist (Williamson) instead accepts both as true and explains away the appearance of falsity.
 
 ## Sources
 

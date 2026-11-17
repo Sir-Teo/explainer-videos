@@ -61,14 +61,31 @@ python tools/qa_scene.py philosophy18 Emergence        # one chapter, silent, wi
 | 16 | `Machines` | BACON (Langley 1978); AlphaFold; FunSearch; AlphaEvolve; Reichenbach (1938); Humphreys; de Regt; Sullivan. | 48 power products of the planets' data |
 | 17 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Show that Church's $D$ is not entailed by $O_1, O_2, O_3$ alone, so it is not itself an observation.
+
+   *Solution.* Church's sentence is $D = (\lnot O_1 \land O_2) \lor (O_3 \land \lnot S)$. Make all three observations true: the first disjunct is false, and $D$ reduces to $\lnot S$. So whether $D$ holds is not settled by $O_1, O_2, O_3$; it depends on the arbitrary $S$. $D$ is not entailed by the observations (nor is its negation), so it is not itself an observation report. It is a theoretical sentence that Ayer's criterion counts as directly verifiable, which is how every $S$ slips in.
+
 2. State the flagpole as a Woodward intervention. Which variable can be set, and which follows?
+
+   *Solution.* The variables are the pole's height $H$, the sun's elevation $\theta$ and the shadow's length $L$, with $L = H/\tan\theta$. On Woodward's account an explanation cites a relation that stays true under interventions. Set the height (cut the pole, or lengthen it) with $\theta$ fixed, and the shadow changes as the equation says: $H$ can be set and $L$ follows. Set the shadow by some other means (cover the ground, cast another shadow over it) and the pole's height does not change. The relation is invariant under interventions on $H$ but not on $L$, so the height explains the shadow and not the reverse.
+
 3. With $P(S \mid T) = 0.9$ and $P(S \mid \lnot T) = 0.1$, what base rate makes $P(T \mid S) = 1/2$?
+
+   *Solution.* Let $\pi$ be the base rate of true theories. $P(T \mid S) = 0.9\pi / (0.9\pi + 0.1(1 - \pi))$. Setting this to $1/2$ gives $0.9\pi = 0.1(1 - \pi)$, so $\pi = 0.1$. If one candidate theory in ten is true, success makes a theory exactly as likely true as false; below that, a successful theory is more likely false. The no-miracles argument is only as strong as the unknown base rate.
+
 4. Show that a Galilean boost leaves Newton's equations for two bodies unchanged.
+
+   *Solution.* A boost is $x' = x - vt$, $t' = t$. Differentiating twice, $\ddot x' = \ddot x$: accelerations are the same in both frames. Newtonian forces between two bodies depend on their separation, and $x_1' - x_2' = x_1 - x_2$, so the forces are unchanged, and masses are unchanged. So $m_1 \ddot x_1 = F(x_1 - x_2)$ and $m_2 \ddot x_2 = -F(x_1 - x_2)$ hold in the boosted frame in the same form. Velocities change by $v$, so no experiment on the pair reveals absolute velocity: Galileo's ship.
+
 5. Coarse-grain a $9 \times 9$ checkerboard by $3 \times 3$ majority. What do you get, and why?
+
+   *Solution.* Every $3 \times 3$ block of a checkerboard has five squares of one colour and four of the other, and the majority colour is the colour of its corners. The corner of block $(i, j)$ sits at $(3i, 3j)$, whose colour has the parity of $3i + 3j$, that is, of $i + j$. So the coarse-grained picture is a $3 \times 3$ checkerboard: the pattern is a fixed point of the coarse-graining, as perfect alternation looks the same at every scale. (With an even block size the blocks would tie.) Coarse-graining once more leaves a single square.
+
 6. In the inductive-risk model, find the threshold when the two costs are equal and $P(\text{toxic}) = 1/2$.
+
+   *Solution.* In the Reasoner's model the statistic is $N(0, 1)$ for a safe chemical and $N(1.5, 1)$ for a toxic one. With equal costs and equal priors, expected loss is smallest where the two densities cross, halfway: threshold 0.75. Both error rates are then 22.7%. The film's threshold of about 1.3, with equal costs, came from its prior of 0.3 on toxicity; with the prior at one half the threshold falls, and the same data are called toxic more often.
 
 ## Sources
 

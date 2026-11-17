@@ -64,14 +64,31 @@ python tools/qa_scene.py philosophy21 Fission          # one chapter, silent, wi
 | 14 | `Copies` | Sandberg and Bostrom (2008); model instances; Shulman and Bostrom (2021); forks; model versions as ships of Theseus. | a weight vector drifting through forty updates |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Derive symmetry and transitivity of identity from reflexivity and Leibniz's law.
+
+   *Solution.* Symmetry: suppose $a = b$. Apply Leibniz's law to the property "being identical to $a$". $a$ has it, by reflexivity, so $b$ has it: $b = a$. Transitivity: suppose $a = b$ and $b = c$. By symmetry $b = a$. Apply Leibniz's law to "being identical to $c$": $b$ has it, so $a$ has it, $a = c$. So identity is an equivalence relation, from reflexivity and Leibniz's law alone.
+
 2. Find a structure on three objects where two are relatively but not absolutely discernible.
+
+   *Solution.* Take three objects and one relation $R$ forming a cycle: $aRb$, $bRc$, $cRa$, and nothing else. Rotating $a \to b \to c \to a$ preserves $R$, and any object can be rotated onto any other, so no condition in this language holds of one and not another: none is absolutely discernible. But $R$ holds from $a$ to $b$ and not from $b$ to $a$, so each pair is relatively discernible. (With two objects, $aRb$ alone already makes $a$ absolutely discernible: it is the one that bears $R$ to something.)
+
 3. Run Nozick's closest continuer on Theseus: what if ship B is assembled only after ship A sinks?
+
+   *Solution.* When B is assembled, A no longer exists, so B has no rival: if it is close enough (the original planks, in the original arrangement), it is the closest continuer and is Theseus's ship. Until A sank, A was the closest continuer and was the ship. So the ship was A until the sinking, and B afterwards, with a gap while the planks lay in the yard. The verdict on B depends on something extrinsic and accidental, when A happened to sink, which is Nozick's view's characteristic cost: the same B, built a day earlier, would not have been Theseus's ship.
+
 4. Give a model with non-rigid names where $\nabla(a = b)$ holds. Which step of Evans's proof fails?
+
+   *Solution.* Let worlds (or precisifications) $w_1, w_2$ share the objects $o_1, o_2$. Let $a$ denote $o_1$ at both, and $b$ denote $o_1$ at $w_1$ and $o_2$ at $w_2$. Then "$a = b$" is true at $w_1$ and false at $w_2$, so $\nabla(a = b)$ holds, with no vague identity between objects anywhere. Evans's abstraction step fails: from $\nabla(a = b)$ he infers that the object $b$ has the property $\lambda x\,[\nabla(x = a)]$. But the indeterminacy came from what "$b$" names, not from any object: neither $o_1$ nor $o_2$ is such that it is indeterminate whether it is $a$'s referent. The proof needs rigid names, as the film's models show.
+
 5. Reid's officer: add a memory link from the general to the boy. Is Locke's view now consistent?
+
+   *Solution.* Locke makes identity consist in memory. In Reid's story the officer remembers the boy and the general the officer, but the general does not remember the boy, so Locke must say the general is the officer and the officer the boy but the general is not the boy, which breaks transitivity. Add a memory from the general to the boy, and every identity Locke asserts holds and none he denies: the story is consistent. But the repair is luck, not a fix: any forgotten childhood restores the contradiction. The general remedy is the ancestral, identity as an unbroken chain of memories, which is transitive by construction.
+
 6. Parfit: in the fission case, is double survival better, worse, or as good as ordinary survival?
+
+   *Solution.* Parfit's answer is that double survival is about as good as ordinary survival. After fission you are not identical to either branch: identity is one-one and transitive, and the branches are two. But each branch stands to you in Relation R, psychological connectedness and continuity, exactly as you would to your future self in an ordinary day. Since what matters in survival is Relation R, not identity, fission contains what matters, twice. It is not twice as good (the branches cannot both live your one life with your partner, your job), and it is not death, since nothing that matters is lost.
 
 ## Sources
 

@@ -89,39 +89,47 @@ Books and notes: S. J. D. Prince, *Understanding Deep Learning* (2023), ch. 12; 
 
 1. A model has *L* layers and *H* key-value heads of *d_h* numbers, stored in bf16. How many bytes does its cache take
    per token? Evaluate for Llama 3.1 70B (*L* = 80, *H* = 8, *d_h* = 128) at 128,000 tokens, and with one key-value head.
-2. For *N* random unit keys in *d* dimensions, show E[(k_i · k_j)²] = 1/d for i ≠ j, and that adding *N* pairs gives a
-   relative read error of about (N − 1)/d.
-3. With ‖k‖ = 1, show the delta rule gives S_t k = (1 − β) S_{t−1} k + β v and leaves S_t u = S_{t−1} u for u ⊥ k.
-   Find the eigenvalues of I − β k kᵀ; for which β is it a projection, a reflection?
-4. Show that (a₁, b₁) • (a₂, b₂) = (a₁a₂, a₂b₁ + b₂) is associative, find its identity, and count the rounds of a scan
-   over 10⁶ tokens.
-5. For h′ = −λh + x, derive the zero-order hold Ā = e^{−λΔ}, B̄ = (1 − e^{−λΔ})/λ. When is Euler's Ā = 1 − λΔ
-   unstable? For eigenvalues −0.3 ± 2i, find the largest stable Euler step.
-6. A kNN-LM mixes p = λ p_kNN + (1 − λ) p_LM. Show it never costs more than log₂ 1/(1 − λ) bits on a token, and find
-   when it saves bits.
 
-### Solutions
-
-1. Keys and values: 2 × L × H × d_h numbers of 2 bytes, 4·L·H·d_h bytes a token. Llama 3.1 70B: 4 × 80 × 8 × 128 =
+   *Solution.* Keys and values: 2 × L × H × d_h numbers of 2 bytes, 4·L·H·d_h bytes a token. Llama 3.1 70B: 4 × 80 × 8 × 128 =
    327,680 bytes = 320 KiB; at 128,000 tokens 41.9 GB = 39.1 GiB. With one key-value head (MQA): 40 KiB a token,
    4.9 GiB.
-2. For independent unit vectors, E[k_i k_iᵀ] = I/d by symmetry, so E[(k_i·k_j)²] = E[k_jᵀ E[k_i k_iᵀ] k_j] = ‖k_j‖²/d
+
+2. For *N* random unit keys in *d* dimensions, show E[(k_i · k_j)²] = 1/d for i ≠ j, and that adding *N* pairs gives a
+   relative read error of about (N − 1)/d.
+
+   *Solution.* For independent unit vectors, E[k_i k_iᵀ] = I/d by symmetry, so E[(k_i·k_j)²] = E[k_jᵀ E[k_i k_iᵀ] k_j] = ‖k_j‖²/d
    = 1/d. Reading pair j gives S k_j − v_j = Σ_{i≠j} v_i (k_i · k_j); with independent values of equal norm the cross
    terms average out and E‖S k_j − v_j‖² = Σ_{i≠j} ‖v_i‖² E[(k_i·k_j)²] = (N − 1)‖v‖²/d. Relative error (N − 1)/d: as
    big as the answer by N ≈ d (the chapter's curve, d = 64).
-3. S_t = S_{t−1}(I − βkkᵀ) + βvkᵀ, so S_t k = S_{t−1}k − βS_{t−1}k(kᵀk) + βv(kᵀk) = (1 − β)S_{t−1}k + βv, and for
+
+3. With ‖k‖ = 1, show the delta rule gives S_t k = (1 − β) S_{t−1} k + β v and leaves S_t u = S_{t−1} u for u ⊥ k.
+   Find the eigenvalues of I − β k kᵀ; for which β is it a projection, a reflection?
+
+   *Solution.* S_t = S_{t−1}(I − βkkᵀ) + βvkᵀ, so S_t k = S_{t−1}k − βS_{t−1}k(kᵀk) + βv(kᵀk) = (1 − β)S_{t−1}k + βv, and for
    u ⊥ k, kᵀu = 0 gives S_t u = S_{t−1}u. I − βkkᵀ has eigenvalue 1 on the (d − 1)-dimensional space ⊥ k and 1 − β on
    k. β = 1: eigenvalues 1 and 0, the projection onto k⊥ (the old answer erased, then v written). β = 2: eigenvalues
    1 and −1, a reflection (a Householder matrix); for 0 < β < 2 the map is a contraction along k, and β ∈ (0, 2]
    keeps it stable while allowing the sign flip that lets these memories track parity.
-4. ((a₁,b₁)•(a₂,b₂))•(a₃,b₃) = (a₁a₂, a₂b₁+b₂)•(a₃,b₃) = (a₁a₂a₃, a₃a₂b₁ + a₃b₂ + b₃), and (a₁,b₁)•((a₂,b₂)•(a₃,b₃))
+
+4. Show that (a₁, b₁) • (a₂, b₂) = (a₁a₂, a₂b₁ + b₂) is associative, find its identity, and count the rounds of a scan
+   over 10⁶ tokens.
+
+   *Solution.* ((a₁,b₁)•(a₂,b₂))•(a₃,b₃) = (a₁a₂, a₂b₁+b₂)•(a₃,b₃) = (a₁a₂a₃, a₃a₂b₁ + a₃b₂ + b₃), and (a₁,b₁)•((a₂,b₂)•(a₃,b₃))
    = (a₁,b₁)•(a₂a₃, a₃b₂+b₃) = (a₁a₂a₃, a₂a₃b₁ + a₃b₂ + b₃): equal. Identity (1, 0). A Hillis–Steele scan takes
    ⌈log₂ 10⁶⌉ = 20 rounds; Blelloch's up and down sweeps take 2 × 20 = 40 rounds but only about 2 × 10⁶ combines.
-5. Over a step with x held constant, h(t+Δ) = e^{−λΔ}h(t) + ∫₀^Δ e^{−λ(Δ−s)} ds · x = e^{−λΔ}h(t) + (1 − e^{−λΔ})/λ · x.
+
+5. For h′ = −λh + x, derive the zero-order hold Ā = e^{−λΔ}, B̄ = (1 − e^{−λΔ})/λ. When is Euler's Ā = 1 − λΔ
+   unstable? For eigenvalues −0.3 ± 2i, find the largest stable Euler step.
+
+   *Solution.* Over a step with x held constant, h(t+Δ) = e^{−λΔ}h(t) + ∫₀^Δ e^{−λ(Δ−s)} ds · x = e^{−λΔ}h(t) + (1 − e^{−λΔ})/λ · x.
    Euler's |1 − λΔ| ≤ 1 needs Δ ≤ 2/λ; beyond it the recurrence blows up. For complex μ = −0.3 ± 2i, |1 + Δμ|² =
    (1 − 0.3Δ)² + 4Δ² ≤ 1 ⇔ Δ(4.09Δ − 0.6) ≤ 0 ⇔ Δ ≤ 0.6/4.09 ≈ 0.147: the chapter's Euler steps of 0.2 and 0.4 are
    unstable, which is why their errors exploded. The zero-order hold is stable for every Δ: |e^{Δμ}| = e^{−0.3Δ} < 1.
-6. p ≥ (1 − λ) p_LM, so −log₂ p ≤ −log₂ p_LM + log₂ 1/(1 − λ): at most log₂ 1/(1 − λ) bits worse (0.15 bits at λ =
+
+6. A kNN-LM mixes p = λ p_kNN + (1 − λ) p_LM. Show it never costs more than log₂ 1/(1 − λ) bits on a token, and find
+   when it saves bits.
+
+   *Solution.* p ≥ (1 − λ) p_LM, so −log₂ p ≤ −log₂ p_LM + log₂ 1/(1 − λ): at most log₂ 1/(1 − λ) bits worse (0.15 bits at λ =
    0.1, 0.42 at λ = 0.25). It saves bits exactly when λ p_kNN + (1 − λ) p_LM > p_LM, that is when p_kNN > p_LM: the
    neighbours give the true token more probability than the model does.
 

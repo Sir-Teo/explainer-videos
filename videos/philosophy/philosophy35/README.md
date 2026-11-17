@@ -75,11 +75,29 @@ scores pleasure +1 (−1 if cruel), a promise +1 (0 if coerced) and a lie −2 (
 permissible when the sum is at least 0; a defeater appears only with the reason it defeats, which leaves 27 cases.
 The consent test counts deception and force as making consent impossible, as O'Neill does.
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Show that W = min(E u₁, E u₂) violates the vNM independence axiom.
+
+   *Solution.* Take two people and two sure prospects: $A$ gives utility 1 to the first and 0 to the second, $B$ the reverse. $W(A) = \min(1, 0) = 0 = W(B)$, so society is indifferent between them. The independence axiom then requires indifference between $A$ and the half-half mixture $\tfrac12 A + \tfrac12 B$. But in the mixture each person expects $\tfrac12$, so $W = \tfrac12 > 0$: society strictly prefers mixing two prospects it ranks equal, which no von Neumann–Morgenstern ranking can do. That is Diamond's coin toss.
+
 2. Find a distribution that maximin ranks above another although both totals and priority sums are lower.
+
+   *Solution.* Compare $X = (3, 3, 3)$ with $Y = (2, 10, 10)$. Totals: 9 against 22. Priority sums with square roots: $3\sqrt3 = 5.20$ against $\sqrt2 + 2\sqrt{10} = 7.74$. Maximin looks only at the worst off, 3 against 2, and ranks $X$ above $Y$, though $X$ is lower on both sums. Any gain for the worst off, however small, outweighs any gains for others, however large.
+
 3. In the promise world, find the largest share of liars for which lending never stops.
+
+   *Solution.* In the Reasoner's seeded world (a thousand agents, 40 rounds, lenders lend while more than half of promises have been kept), lending continues through all 40 rounds for every share of liars up to 0.46. At 0.47 it stops after the first round. The threshold is just under one half: the share of promises kept is about $1 - f$, which must stay above 0.5, and near $f = 0.5$ random fluctuations in which agents are needy push it below and stop lending (at exactly 0.5 the seeded run happens to last 27 rounds before stopping). Below the threshold the liars do well; at and above it, no one gets money by promising.
+
 4. Write a maxim that the universal law test forbids though it is harmless, and explain why.
+
+   *Solution.* "I will play tennis on Sunday mornings, because the courts are empty then." Universalized, everyone plays on Sunday mornings, the courts are full, and the maxim cannot achieve its purpose: a contradiction in conception, of the same form as the lying promise. Yet the maxim is harmless. The test catches every maxim whose success depends on others not acting on it: free-riding and deception, but also innocent strategies of timing and coordination. Kantians (Herman, Korsgaard) respond by testing the practical purpose more carefully, or by reading the test as aimed at maxims that make exceptions of oneself in a morally relevant way.
+
 5. For what agent-relative weight k does the constraint against killing one to save n hold? (k > n.)
+
+   *Solution.* Count the deaths saved as worth 1 each and the agent's own killing as worth $k$ to the agent. Killing one to save $n$ then scores $n - k$, and refraining scores 0. The constraint, that the agent must not kill, holds exactly when $k > n$. Since the paradox of deontology turns on cases where killing one prevents $n$ other killings, and a constraint that holds for every $n$ needs $k > n$ for all $n$, the weight must be unbounded: in effect absolute. A finite $k$ gives a threshold deontology, which permits the killing once $n \ge k$.
+
 6. Show that range normalization can reverse a verdict of variance normalization.
+
+   *Solution.* Credence one half in each of two theories, four options. Theory 1 scores them $(8, 8, 7, 7)$; theory 2 scores them $(0, 1, 2, 6)$. Range normalization maps theory 1 to $(1, 1, 0, 0)$ and theory 2 to $(0, \tfrac16, \tfrac13, 1)$; the expected scores are $(0.50, 0.58, 0.17, 0.50)$, and the second option wins. Variance normalization maps theory 1 to $(1, 1, -1, -1)$ (its options differ by only one point, so each point is a whole standard deviation) and theory 2 to $(-0.99, -0.55, -0.11, 1.65)$; the expected scores are $(0.01, 0.23, -0.56, 0.32)$, and the fourth option wins. Range normalization lets theory 2's single outlier set its scale; variance normalization makes theory 1's small differences count heavily.
+

@@ -73,14 +73,31 @@ The word-vector tables and plots keep the toy corpus's English words verbatim in
 both editions. These are the model's inputs and outputs; headings, category labels
 and explanations are translated.
 
-## Problems
+## Problems and solutions
 
 1. Show that 'neither \dots nor' alone generates all 16 truth functions of two propositions.
+
+   *Solution.* Write $p \downarrow q$ for "neither $p$ nor $q$". Then $\lnot p = p \downarrow p$; $p \lor q = (p \downarrow q) \downarrow (p \downarrow q)$; $p \land q = (p \downarrow p) \downarrow (q \downarrow q)$. Every truth function of $p, q$ has a disjunctive normal form built from $\lnot$, $\land$ and $\lor$, and the tautology is $p \lor \lnot p$ and the contradiction $p \land \lnot p$, so all sixteen are expressible with $\downarrow$ alone. Wittgenstein's N, applied to collections, reaches them in three rounds from $p$ and $q$, as the film's table shows.
+
 2. Define a rival to 'plus' that agrees with it on all sums below 1000. What fact rules it out?
+
+   *Solution.* Define "quus$_{1000}$": $x \oplus y = x + y$ when $x, y < 1000$, and $5$ otherwise. If every sum you have done had arguments below 1000, your record fits both. Kripke's sceptic says no fact about you rules it out: not your finite past use, not any mental image or instruction (which also needs interpreting), not your dispositions (finite, error-prone, and descriptive where meaning is normative). The sceptical solution answers instead with conditions of assertion: a community that corrects deviant answers is entitled to say you mean plus. Lewis's alternative names a fact: plus is the more natural function, and reference goes to the most natural candidate that fits use ("reference magnetism").
+
 3. Give a proxy function for a model of the natural numbers with '$<$'. What is preserved?
+
+   *Solution.* Take the standard model of the natural numbers with $<$, and any permutation $f$ of its domain, say swapping 0 and 1. Reinterpret "$<$" as the relation $R = \{(f(m), f(n)) : m < n\}$, so that now 1 "comes before" 0 and both before 2, 3, .... The map $f$ is then an isomorphism from the old model to the new one, so every sentence keeps its truth value, but the numeral "0" in effect refers to a different object's role. (No nontrivial permutation preserves $<$ itself, since the natural numbers are well ordered; the proxy function works by moving the extension of the predicate along with the objects.) What is preserved is structure and truth; what is not fixed is reference.
+
 4. Compute the RSA listener for 'some' with 4 cookies and $\alpha = 1$.
+
+   *Solution.* States 0 to 4; "none" true at 0, "some" at 1–4, "all" at 4; uniform prior, $\alpha = 1$, no costs. Literal listener on "some": $1/4$ on each of 1–4. Speaker: in states 1, 2, 3 "some" is the only true word, so she says it with probability 1; in state 4 she weighs "some" by $L_0 = 1/4$ and "all" by 1, so she says "some" with probability $0.2$. Pragmatic listener on "some": proportional to $1, 1, 1, 0.2$, that is $0.3125$ each for 1, 2 and 3 and $0.0625$ for all four. The implicature is already there at $\alpha = 1$, weaker than at the film's $\alpha = 4$.
+
 5. In a 3-state signalling game, why is partial pooling an equilibrium?
+
+   *Solution.* In a partial pooling equilibrium the sender uses one signal for two states (say $s_1$ and $s_2$) and a second signal for $s_3$, and leaves the third signal unused; the receiver answers the pooled signal with the act for $s_1$ and the second with the act for $s_3$. Success is $2/3$. No one gains by deviating alone: if the sender switched $s_2$ to the unused signal, the receiver's reply to that signal is not the act for $s_2$, so nothing improves; if the receiver answered the pooled signal with the act for $s_2$, she would gain $s_2$ and lose $s_1$. So it is a Nash equilibrium, though not the best one. Under reinforcement learning the unused signal is never rewarded for $s_2$, so the trap is stable.
+
 6. Design a corpus in which a probe *can* recover fictionality. What did you add?
+
+   *Solution.* Add sentences in which distribution tracks fictionality: "Holmes is a character in a novel", "Frodo appears in a book by Tolkien", "Watson is a character" against "Darwin was born in 1809", "Newton died in 1727", "Dickens was born in Portsmouth". Now fictional names share contexts with "character", "novel" and "appears", and real ones with "born" and "died", and a nearest-centroid probe can separate them. What was added is text that marks the difference, not contact with the world: the probe recovers how the corpus talks about fictionality, which is exactly the limit the film drew.
 
 ## Sources
 

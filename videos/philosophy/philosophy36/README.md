@@ -70,11 +70,29 @@ two groups, of 1 to 20 people, at levels −4 to 10, with the repugnant conclusi
 million lives. Meacham's view is simplified to a one-to-one matching by place. The cost-effectiveness portfolio, the
 moral weights and the three patients are toys; the existential-risk model values each century survived at one.
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Show that the average view calls a mere addition worse exactly when the added lives are below the average.
+
+   *Solution.* A world of $N$ people with average welfare $a$ gains $M$ people with average $b$, everyone else untouched. The new average is $(Na + Mb)/(N + M)$, and $(Na + Mb)/(N + M) < a$ exactly when $Mb < Ma$, that is $b < a$. So the average view calls the addition worse exactly when the added lives are below the existing average, however good they are, and better when they are above it, even if they are miserable but less so than everyone else (the hell example).
+
 2. Show that every critical-level view with c > 0 implies the sadistic conclusion.
+
+   *Solution.* A critical-level view scores a population by $\sum_i (w_i - c)$. Compare adding one miserable life at $-\varepsilon$, which contributes $-\varepsilon - c$, with adding $n$ lives worth living at some level $w$ with $0 < w < c$, which contribute $-n(c - w)$. The miserable life scores higher whenever $n(c - w) > c + \varepsilon$, that is $n > (c + \varepsilon)/(c - w)$, which some finite $n$ always satisfies when $c > 0$. So for every positive critical level there are cases where adding a miserable life is better than adding many lives worth living: the sadistic conclusion. (The film's case: $c = 2$, five lives at 1 against one at $-1$.)
+
 3. Derive the Ramsey rule for u(c) = log c, and say what η is. (η = 1.)
+
+   *Solution.* The planner maximizes $\int_0^\infty e^{-\delta t} u(c_t)\,dt$. Giving up a unit now and investing it at rate $r$ returns $e^{rt}$ at time $t$; at the optimum $u'(c_0) = e^{-\delta t} e^{rt} u'(c_t)$. With $u(c) = \log c$, $u'(c) = 1/c$, and with consumption growing at rate $g$, $c_t = c_0 e^{gt}$, so $1/c_0 = e^{(r - \delta)t}/(c_0 e^{gt})$, hence $r = \delta + g$. The general rule is $r = \delta + \eta g$, where $\eta = -c\,u''(c)/u'(c)$ is the elasticity of marginal utility; for log utility $-c \cdot (-1/c^2)/(1/c) = 1$, so $\eta = 1$.
+
 4. With constant risk r after this century, show that halving this century's risk r is worth half a century, whatever r.
+
+   *Solution.* With risk $r$ per century in every later century, and survival of this one, humanity's expected future (counting this century) is $\sum_{k \ge 0}(1 - r)^k = 1/r$ centuries. If this century's risk is also $r$, the expected number of centuries from now is $(1 - r)/r$, plus the current one. Halving this century's risk to $r/2$ makes it $(1 - r/2)/r$. The gain is $(1 - r/2)/r - (1 - r)/r = (r/2)/r = \tfrac12$ century, whatever $r$ is. A higher background risk makes the future shorter but this century's survival matters more, and the two cancel exactly (Ord, Thorstad).
+
 5. Find two streams that the catching-up criterion leaves unranked.
+
+   *Solution.* The catching-up criterion ranks stream $x$ at least as good as $y$ if, from some time on, every partial sum of $x - y$ is non-negative. Take $x = (1, 0, 2, 0, 2, 0, \ldots)$ and $y = (0, 2, 0, 2, 0, 2, \ldots)$. Then $x - y = (1, -2, 2, -2, 2, \ldots)$, whose partial sums are $1, -1, 1, -1, \ldots$ forever. They are never eventually non-negative, and neither are those of $y - x$, so neither stream catches up with the other, and the criterion leaves them unranked.
+
 6. A rule costs $90 million and prevents 7 expected deaths: find its break-even VSL. ($12.86 million.)
+
+   *Solution.* The break-even value of a statistical life is cost divided by expected deaths prevented: 90 million dollars divided by 7, about 12.86 million dollars. If the agency values a statistical life above that, the rule passes the cost-benefit test; below it, it fails. (US agencies used figures around 11 to 13 million dollars in the early 2020s, so this rule sits close to the line.)
+

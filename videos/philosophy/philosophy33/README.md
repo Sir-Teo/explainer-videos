@@ -77,11 +77,29 @@ Newcomb survey shares are PhilPapers 2020 target faculty, accept or lean towards
 Asian disease percentages (72% of 152; 78% of 155) are those Tversky and Kahneman report; the prospect values are
 computed with their 1992 parameters.
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Show that the money pump needs only strict cyclic preference, not completeness.
+
+   *Solution.* Suppose $A \succ B$, $B \succ C$ and $C \succ A$, and nothing else is assumed about the agent's preferences. Holding $A$, she will pay a small sum $\varepsilon$ to trade it for $C$, since she strictly prefers $C$; then $\varepsilon$ to trade $C$ for $B$; then $\varepsilon$ to trade $B$ for $A$. She ends where she began, $3\varepsilon$ poorer, and the cycle can repeat. Each step uses only one of the three strict preferences; nothing requires her to compare any other pair of options, so completeness plays no part.
+
 2. Prove that g(f) = p log(1+f) + (1−p) log(1−f) is concave, and find where it crosses zero.
+
+   *Solution.* $g'(f) = p/(1 + f) - (1 - p)/(1 - f)$ and $g''(f) = -p/(1 + f)^2 - (1 - p)/(1 - f)^2 < 0$ on $(-1, 1)$, so $g$ is strictly concave. It is zero at $f = 0$, has its maximum where $g' = 0$, at $f^* = 2p - 1$ (Kelly's stake), and, for $p > 1/2$, crosses zero once more at some $f_0 > f^*$, beyond which betting shrinks wealth. There is no closed form for $f_0$; for $p = 0.6$, $f^* = 0.2$ and $f_0 \approx 0.389$, the "about 0.39" of the betting chapter in Part 16.
+
 3. For which u($1M) does REU with r(p) = p² give the Allais pattern? (About 0.33 to 0.83.)
+
+   *Solution.* Measure money in millions of dollars and set $u(0) = 0$, $u(5) = 1$, $u(1) = u$. REU ranks outcomes from worst up and weights each improvement by $r$ of the probability of getting at least that much. 1A: $u$. 1B: $r(0.99)\,u + r(0.10)(1 - u) = 0.9801u + 0.01(1 - u)$. 2A: $r(0.11)\,u = 0.0121u$. 2B: $r(0.10) = 0.01$. Choosing 1A needs $u > 0.9701u + 0.01$, so $u > 0.334$; choosing 2B needs $0.01 > 0.0121u$, so $u < 0.826$. For $0.334 < u < 0.826$ the risk-weighted agent has the Allais pattern, which no expected-utility agent can have.
+
 4. At what accuracy does a two-boxer's average equal a one-boxer's, in the simulation?
+
+   *Solution.* The opaque box holds 1,000,000 when one-boxing was predicted, and the clear box always holds 1,000. With accuracy $a$, a one-boxer averages $1{,}000{,}000\,a$ and a two-boxer $1{,}000 + 1{,}000{,}000(1 - a)$. They are equal when $2{,}000{,}000\,a = 1{,}001{,}000$, so $a = 0.5005$. Any predictor even slightly better than that makes one-boxers richer on average, which the evidential decision theorist takes as decisive and the causal decision theorist does not.
+
 5. Draw Good's envelope for two acts, and find a test with value exactly zero.
+
+   *Solution.* Plot each act's expected utility as a straight line in the probability $p$ of the state; Good's envelope is the upper envelope, the maximum of the two lines: a convex, V-shaped curve with its kink where the lines cross, at $p^*$. A free test moves $p$ to one of several posteriors whose average is the prior. Its value is the average of the envelope at the posteriors minus the envelope at the prior, never negative by convexity (Jensen). It is exactly zero when every posterior lies on the same side of $p^*$ as the prior, so the test cannot change the decision: for example, with acts crossing at $p^* = 0.6$, prior 0.3, and a test whose posteriors are 0.2 and 0.4.
+
 6. Show that no proper prior makes every amount equally likely to be the smaller envelope.
+
+   *Solution.* Let the smaller amount $S$ have prior $\pi$ on amounts $x$, with the larger $2S$, and suppose seeing $x$ always leaves even odds on being the smaller. Seeing $x$ arises from $S = x$ (you hold the smaller, probability $\pi(x)/2$) or $S = x/2$ ($\pi(x/2)/2$), so even odds requires $\pi(x) = \pi(x/2)$ for every $x$. Then $\pi$ is constant along each chain $\ldots, x/4, x/2, x, 2x, 4x, \ldots$, which has infinitely many members; a positive constant gives infinite total probability and zero gives none. So no proper prior does it, and the "switch for an expected gain of a quarter" argument assumes a prior that does not exist.
+

@@ -80,11 +80,29 @@ response equilibrium rather than their exact model. The public goods dynamics ar
 groups of four. The Skyrms basin is computed on an interior grid of the simplex (step 1/60; 1/40 for the correlated
 runs).
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Find every Nash equilibrium of rock–paper–scissors, and prove there are no others.
+
+   *Solution.* There is exactly one: both players mix rock, paper and scissors with probability $1/3$ each. It is an equilibrium, since against a uniform mix every action earns 0, so nothing does better. For uniqueness: the game is zero-sum and symmetric, so its value is 0, and in any equilibrium each player's strategy $p$ guarantees at least 0 against every pure reply. Against rock, paper and scissors that means $p_P - p_S \ge 0$, $p_S - p_R \ge 0$ and $p_R - p_P \ge 0$. The three left sides add to 0, so each is 0, and $p_R = p_P = p_S = 1/3$. The same holds for the other player.
+
 2. In the commons, show that total grazing tends to a − c as n → ∞.
+
+   *Solution.* In the film's model each of $n$ herders grazes $x_i$ cows, each worth $a - X$ (with $X$ the total) and costing $c$. Herder $i$ maximizes $x_i(a - X - c)$; setting the derivative to zero gives $a - X - c - x_i = 0$. In the symmetric equilibrium $x_i = (a - c)/(n + 1)$, so the total is $X = n(a - c)/(n + 1)$, which tends to $a - c$ as $n \to \infty$: the herd at which the last cow is worth exactly its cost, and the pasture's surplus is gone. The welfare-maximizing total is $(a - c)/2$.
+
 3. For what discount factor does grim trigger sustain cooperation in the repeated dilemma? (δ ≥ 1/2.)
+
+   *Solution.* Grim trigger: cooperate until the other defects, then defect forever. Against it, cooperating forever is worth $R/(1 - \delta) = 3/(1 - \delta)$; the best deviation, defecting now and then facing punishment, is worth $T + \delta P/(1 - \delta) = 5 + \delta/(1 - \delta)$. Cooperation is sustained when $3 \ge 5(1 - \delta) + \delta$, that is $\delta \ge 1/2$.
+
 4. Derive the extortionate strategy for χ = 2 with (T, R, P, S) = (5, 3, 1, 0).
+
+   *Solution.* Write $X$'s payoffs over (CC, CD, DC, DD) as $S_X = (3, 0, 5, 1)$ and $Y$'s as $S_Y = (3, 5, 0, 1)$. Press and Dyson: a memory-one strategy $p$ enforces $S_X - P = \chi(S_Y - P)$ when $p - (1, 1, 0, 0) = \varphi\,[(S_X - P) - \chi(S_Y - P)]$. With $\chi = 2$: $(2, -1, 4, 0) - 2(2, 4, -1, 0) = (-2, -9, 6, 0)$. So $p = (1 - 2\varphi,\ 1 - 9\varphi,\ 6\varphi,\ 0)$, a valid strategy for $0 < \varphi \le 1/9$; at $\varphi = 1/9$, $p = (7/9, 0, 2/3, 0)$. Whatever $Y$ does, $X$'s surplus over mutual defection is twice $Y$'s.
+
 5. Show that the Shapley value of a unanimity game on T gives 1/|T| to each member.
+
+   *Solution.* In the unanimity game $v(S) = 1$ if $T \subseteq S$ and 0 otherwise. A player outside $T$ never changes any coalition's value, so the null-player axiom gives them 0. Any two members of $T$ are interchangeable in every coalition, so symmetry gives them equal shares. Efficiency makes the shares sum to $v(N) = 1$. So each member of $T$ gets $1/|T|$. (Directly: a member's marginal contribution is 1 exactly when they are the last of $T$ to arrive, which happens in a fraction $1/|T|$ of orderings.)
+
 6. Prove that no student can gain by misreporting in deferred acceptance with two schools.
+
+   *Solution.* Let student $i$ truly prefer school A to school B. If truthful deferred acceptance gives her A, there is nothing to gain. Otherwise A rejected her: at some step A held $q_A$ students it ranks above her. Any misreport either keeps A first, or ranks B first, or drops a school. Keeping A first changes nothing that A sees. Ranking B first or dropping A only removes her from A's pool and can add her to B's; adding her to B can make B reject someone else, who then applies to A. Proposals to A from others never decrease, so A still holds at least $q_A$ students it prefers, and she cannot get A. And she cannot do better at B: truthful DA already gives her the best school she can get in any stable matching. (Dubins and Freedman's theorem: student-proposing DA is strategy-proof for students, with any number of schools.)
+

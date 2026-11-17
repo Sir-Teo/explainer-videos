@@ -55,14 +55,31 @@ python tools/qa_scene.py philosophy25 Hole             # one chapter, silent, wi
 | 14 | `Emergence` | Maldacena (1997); Ryu and Takayanagi (2006); Van Raamsdonk (2010); Maldacena and Susskind (2013); Hawking, King and McCarthy (1976); Malament (1977); Bombelli, Lee, Meyer and Sorkin (1987); Huggett and Wüthrich. | a causal set's links; the dimension from order |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. How fast must a 15 cm bucket spin for the water to rise 10 cm at the wall?
+
+   *Solution.* The surface is the paraboloid $h(r) = \omega^2 r^2/2g$, so the rise at the wall, $R = 0.15$ m, is $\omega^2R^2/2g$. Setting it to 0.10 m: $\omega^2 = 2 \times 9.81 \times 0.10 / 0.0225 = 87.2$, $\omega = 9.3$ rad/s, about 1.5 turns a second (89 rpm). As a check, the film's one turn a second ($\omega = 6.28$) gives $6.28^2 \times 0.0225/19.62 = 4.5$ cm.
+
 2. Show that a rotation of the plane keeps the sign of a polygon's signed area.
+
+   *Solution.* The signed area of a polygon with vertices $(x_i, y_i)$ is $A = \tfrac12\sum_i (x_i y_{i+1} - x_{i+1} y_i)$, a sum of two-dimensional cross products of successive vertices. Under a linear map $M$ each cross product is multiplied by $\det M$, so $A$ becomes $(\det M) A$. A rotation has $\det M = \cos^2\theta + \sin^2\theta = 1$, so the sign is kept. A translation adds the same vector to every vertex; the extra terms telescope around the closed polygon and cancel. A reflection has $\det M = -1$ and flips the sign: that is Kant's left and right hand.
+
 3. A hyperbolic triangle has angles $30^\circ$, $45^\circ$, $60^\circ$. What is its area?
+
+   *Solution.* In the hyperbolic plane of curvature $-1$ a triangle's area is its angle defect, $\pi$ minus the angle sum. Here the angles are $\pi/6 + \pi/4 + \pi/3 = 3\pi/4$, so the area is $\pi/4 \approx 0.785$. (With curvature $-K$ the area is $(\pi/4)/K$.)
+
 4. Find the boost that makes the event $(t, x) = (0.3, 0.5)$ simultaneous with the origin.
+
+   *Solution.* In units with $c = 1$, a boost of velocity $v$ gives $t' = \gamma(t - vx)$, $x' = \gamma(x - vt)$. The event is simultaneous with the origin when $t' = 0$, so $v = t/x = 0.6$, and $\gamma = 1/\sqrt{1 - 0.36} = 1.25$. In that frame $x' = 1.25\,(0.5 - 0.18) = 0.4$. Check: the interval is $x^2 - t^2 = 0.25 - 0.09 = 0.16 = 0.4^2$. Such a boost exists because the event is spacelike, $|x| > |t|$; for a timelike event no observer would call it simultaneous with the origin.
+
 5. State the hole argument for Newtonian gravity in Galilean spacetime. Does it go through?
+
+   *Solution.* Set Newtonian gravity in Galilean spacetime: fixed absolute time, Euclidean space on each instant, a fixed flat connection, and a potential $\varphi$ with $\nabla^2\varphi = 4\pi G\rho$. The hole argument needs a transformation that is the identity outside a region and not inside it, and that carries solutions to solutions. Here it would have to preserve the fixed structure, and the symmetries of Galilean spacetime (rotations, translations, boosts) are rigid: one that is the identity on an open region is the identity everywhere. So no hole transformation exists and the argument does not go through. It does go through for the generally covariant Newton–Cartan version, where the connection is itself a dynamical field: then the hole argument is a lesson about any theory with no fixed background, not about relativity alone.
+
 6. Grandfather circuit with a CNOT instead of a NOT: find Deutsch's fixed points.
+
+   *Solution.* Let the ordinary bit be the control and the time-travelling qubit the target of the CNOT. Deutsch's condition is that the state entering the curve, $\rho$, equals what comes out of the interaction, traced over the ordinary bit. If the ordinary bit is 0 the CNOT does nothing, and every state is a fixed point: a knowledge paradox, with Deutsch's maximum-entropy rule picking $I/2$. If it is 1, the CNOT is a NOT on the loop, the grandfather paradox: fixed points are the states with $\rho = X\rho X$, that is $\tfrac12(I + r_x X)$, including $I/2$ and the states $|{+}\rangle$, $|{-}\rangle$, and no classical bit. If it is $|{+}\rangle$, the map averages the two cases and the fixed points are the same as for 1. In every case $I/2$ is consistent, and the classical paradox appears only when the control is definitely 1.
 
 ## Sources
 

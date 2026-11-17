@@ -73,11 +73,29 @@ points, 1,320 agents of three step sizes from 1 to 12, teams of ten in relay; "s
 The opinion-leader jury model conditions on the leader: voters are independent given the leader's answer. The
 Bradley–Terry fit uses the infinite-data comparison probabilities and gradient ascent.
 
-## Problems (solutions in the notes)
+## Problems and solutions
 
 1. Show that with an odd number of voters, pairwise majority on two alternatives is never tied.
+
+   *Solution.* With two alternatives and strict preferences, every voter votes for exactly one of them, so the two tallies add to the number of voters, $n$. A tie would mean each tally is $n/2$, which is not a whole number when $n$ is odd. So one alternative always has a strict majority. (Abstention or indifference would bring ties back.)
+
 2. Find a profile of 3 voters on which the Borda winner is not the Condorcet winner.
+
+   *Solution.* With three voters and three alternatives no profile does it, but four alternatives suffice. Voters 1 and 2 rank $a \succ b \succ c \succ d$; voter 3 ranks $b \succ c \succ d \succ a$. Borda scores (3, 2, 1, 0 points): $a$ gets $3 + 3 + 0 = 6$, $b$ gets $2 + 2 + 3 = 7$, $c$ gets 4, $d$ gets 1, so $b$ wins. But $a$ beats every rival by two votes to one, so $a$ is the Condorcet winner. Borda rewards $b$ for voter 3's strong dislike of $a$, which pairwise majority ignores.
+
 3. Show that if preferences are single-peaked, the majority relation among 3 options has no cycle.
+
+   *Solution.* Order the options $a < b < c$ on the line. Single-peakedness rules out ranking the middle option $b$ last, so each voter ranks $abc$, $bac$, $bca$ or $cba$. A cycle $a \succ b \succ c \succ a$ needs a majority with $a$ over $b$ (only $abc$ voters) and a majority with $c$ over $a$ ($bca$ and $cba$ voters); these groups are disjoint, so both cannot be majorities. The reverse cycle $a \succ c \succ b \succ a$ needs majorities with $c$ over $b$ (only $cba$) and with $a$ over $c$ ($abc$ and $bac$), again disjoint. So no cycle: Black's median-voter theorem in miniature.
+
 4. Show that a dictatorship is strategy-proof.
+
+   *Solution.* A dictatorship picks the dictator's reported top choice. Reporting truthfully already gets the dictator her favourite, so no misreport can do better for her. Every other voter's report is ignored, so no one else can change the outcome at all, and in particular cannot improve it by lying. So no one ever gains by misreporting: strategy-proof, which is why the Gibbard–Satterthwaite theorem must exclude dictatorship by assumption.
+
 5. With p = 0.6, compute the probability that a majority of 3 independent voters is right.
+
+   *Solution.* A majority of three is right when at least two are right: $p^3 + 3p^2(1 - p) = 0.216 + 3 \times 0.36 \times 0.4 = 0.216 + 0.432 = 0.648$. The group (64.8%) beats each voter (60%), and by Condorcet's jury theorem the margin grows with the number of independent voters.
+
 6. Find quotas where Hamilton's method and Webster's method disagree.
+
+   *Solution.* The film's states, populations 20, 16 and 7 (43 in all), with 10 seats. Quotas: $10 \times 20/43 = 4.65$, $3.72$ and $1.63$. Hamilton gives the floors 4, 3, 1, then the two remaining seats to the largest remainders, 0.72 and 0.65: $(5, 4, 1)$. Webster's divisor method rounds each population divided by a common divisor to the nearest whole number, with the divisor chosen so the seats add to 10; with divisor 4.5: $4.44 \to 4$, $3.56 \to 4$, $1.56 \to 2$, giving $(4, 4, 2)$. The two methods disagree about whether the smallest state gets one seat or two.
+

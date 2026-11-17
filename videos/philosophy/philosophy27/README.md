@@ -62,14 +62,31 @@ python tools/qa_scene.py philosophy27 Parser           # one chapter, silent, wi
 | 15 | `Machines` | FraCaS (1996); Yu et al. (2018); Lake and Baroni (2018); Kim and Linzen (2020); Yanaka et al. (2019); Berglund et al. (2023); Mandelkern and Linzen. | SQL in sqlite; an inference suite proved |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Give Russell's analysis of 'the author of *Waverley* is not Scott' in both scopes; find a model separating them.
+
+   *Solution.* With $W$ for "wrote Waverley" and $s$ for Scott: narrow scope (the description outside the negation), $\exists x\,(Wx \land \forall y\,(Wy \to y = x) \land x \ne s)$, "exactly one person wrote Waverley, and it was not Scott". Wide scope (the negation outside), $\lnot\exists x\,(Wx \land \forall y\,(Wy \to y = x) \land x = s)$, "it is not the case that Scott and Scott alone wrote Waverley". They come apart when there is no unique author. In a model with Scott and Tom where nobody wrote Waverley (or where both wrote it together), the narrow reading is false and the wide reading true.
+
 2. Draw the two-dimensional matrix for 'I am here now', with contexts as rows.
+
+   *Solution.* Take two proper contexts: $c_1$, Ann in Paris at noon in world $w_1$, and $c_2$, Ann in Rome at noon in $w_2$ (in $w_1$ she is in Paris, in $w_2$ in Rome). Rows are contexts, columns circumstances of evaluation. Row $c_1$: the content is "Ann is in Paris at noon", true at $w_1$, false at $w_2$. Row $c_2$: "Ann is in Rome at noon", false at $w_1$, true at $w_2$. The diagonal (each context evaluated at its own world) is true, as it is for every proper context: the sentence cannot be uttered falsely, a logical truth in Kaplan's logic. But no row is true throughout, so what it says is contingent: Ann might have been elsewhere.
+
 3. Write a truth theory for 'and', 'or' and 'not' that Foster's trick cannot fool. What did you add?
+
+   *Solution.* The clauses: "$\varphi$ and $\psi$" is true iff $\varphi$ is true and $\psi$ is true; "$\varphi$ or $\psi$" iff at least one is; "not $\varphi$" iff $\varphi$ is not true; plus one clause per atomic sentence. Foster's deviant theory changes a clause (say, "snow is white" is true iff grass is green, or "$\varphi$ and $\psi$" is true iff both are true and the earth moves) and still yields only true T-sentences in the actual world. To stop it, require more than truth: every axiom must hold as a law, true in every world of the model, as the film's comparison across worlds does. In a world where grass is not green the deviant atomic clause makes false predictions, so it is ruled out. What was added is modal strength (Davidson's lawlikeness), with T-sentences derived canonically from the axioms.
+
 4. Interpret 'no student read every book' in both scopes; build a model where they differ.
+
+   *Solution.* Surface scope: $\lnot\exists s\,(\text{Student}(s) \land \forall b\,(\text{Book}(b) \to \text{Read}(s, b)))$, "no student read all the books". Inverse scope: $\forall b\,(\text{Book}(b) \to \lnot\exists s\,(\text{Student}(s) \land \text{Read}(s, b)))$, "every book went unread by every student". Model: students $s_1, s_2$, books $b_1, b_2$, with $s_1$ having read only $b_1$ and $s_2$ only $b_2$. No student read both books, so the surface reading is true; but $b_1$ was read, so the inverse reading is false. (The inverse reading entails the surface one whenever there is at least one book.)
+
 5. Prove that 'at least half' is conservative and right-upward but neither way on the left.
+
+   *Solution.* "At least half the A are B" is $|A \cap B| \ge |A|/2$. Conservative: the condition mentions only $A$ and $A \cap B$, and $A \cap (A \cap B) = A \cap B$, so it holds of $(A, B)$ iff it holds of $(A, A \cap B)$. Right-upward monotone: if $B \subseteq B'$ then $|A \cap B'| \ge |A \cap B| \ge |A|/2$. Not left-upward: with $A = \{a\} \subseteq A' = \{a, b, c\}$ and $B = \{a\}$, it holds of $(A, B)$ ($1 \ge 1/2$) and fails of $(A', B)$ ($1 < 3/2$). Not left-downward: with $A' = \{a, b\}$, $A = \{b\}$, $B = \{a\}$, it holds of $(A', B)$ ($1 \ge 1$) and fails of $(A, B)$ ($0 < 1/2$).
+
 6. Show by an Ehrenfeucht–Fraïssé game that 'there is an even number of $P$' is not first-order.
+
+   *Solution.* Fix $k$ and compare two structures in which everything is P: one with $2k$ elements, one with $2k + 1$. In each of $k$ rounds, Spoiler picks an element in either structure; Duplicator answers with the element matched to it before if Spoiler repeats one, and otherwise with a fresh element of the other structure, which always exists since each has at least $k$ elements. After $k$ rounds the chosen elements match one-for-one, with equalities and the predicate P preserved, so Duplicator wins. By the Ehrenfeucht–Fraïssé theorem the two structures agree on every sentence of quantifier depth $k$. One has an even number of P's and the other an odd number, and every first-order sentence has some finite depth, so no first-order sentence says "there is an even number of P".
 
 ## Sources
 

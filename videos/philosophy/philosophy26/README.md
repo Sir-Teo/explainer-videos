@@ -60,14 +60,31 @@ python tools/qa_scene.py philosophy26 Game             # one chapter, silent, wi
 | 14 | `FreeWill` | Conway and Kochen (2006); Ekert (1991); Pironio et al. (2010); Shor; Deutsch. | — |
 | 15 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Show that $\langle \Psi^- | \sigma_a \otimes \sigma_b | \Psi^- \rangle = -\cos(a - b)$.
+
+   *Solution.* Measure in the x–z plane: $\sigma_a = \cos a\,Z + \sin a\,X$. Expanding, $\langle\sigma_a \otimes \sigma_b\rangle = \cos a\cos b\,\langle ZZ\rangle + \sin a\sin b\,\langle XX\rangle + \cos a\sin b\,\langle ZX\rangle + \sin a\cos b\,\langle XZ\rangle$. For $|\Psi^-\rangle = (|01\rangle - |10\rangle)/\sqrt2$: $ZZ$ gives $-1$ on both terms; $XX$ swaps $|01\rangle$ and $|10\rangle$, sending $|\Psi^-\rangle$ to $-|\Psi^-\rangle$; and $ZX$, $XZ$ map it to a state orthogonal to it, so their expectations vanish. Hence $-\cos a\cos b - \sin a\sin b = -\cos(a - b)$: perfect anticorrelation along any common axis.
+
 2. Find CHSH settings giving $|S| = 2.5$. What is the classical model nearest to them?
+
+   *Solution.* Space the four settings evenly, $a = 0$, $b = \varphi$, $a' = 2\varphi$, $b' = 3\varphi$. With $E = -\cos(\text{angle})$, $|S| = 3\cos\varphi - \cos 3\varphi$, which is $2\sqrt2$ at $\varphi = 45^\circ$. It equals 2.5 at $\varphi \approx 26.4^\circ$ (and again at $60^\circ$). Equivalently, keep the optimal settings and add noise: a singlet of visibility $V = 2.5/2\sqrt2 = 0.884$ gives 2.5. The nearest a local model can come is $|S| = 2$, reached by a deterministic strategy (say every answer $+1$, which satisfies three of the four terms) or, for the noisy singlet, at visibility $1/\sqrt2$, below which a local model reproduces the statistics.
+
 3. Prove that shared randomness cannot raise the CHSH game above $\tfrac34$.
+
+   *Solution.* With shared randomness $\lambda$, a strategy is a mixture of deterministic ones: $P(\text{win}) = \sum_\lambda p(\lambda)\,P(\text{win} \mid \lambda)$, an average, so it is at most the best deterministic value. A deterministic strategy is four bits $a_0, a_1, b_0, b_1$, and winning all four questions would need $a_0 \oplus b_0 = 0$, $a_0 \oplus b_1 = 0$, $a_1 \oplus b_0 = 0$ and $a_1 \oplus b_1 = 1$. Adding the four equations modulo 2, the left side is 0 (each bit appears twice) and the right side 1. So at most three of the four questions are won: $P(\text{win}) \le 3/4$.
+
 4. Write the four-particle GHZ argument. How many local assignments must fail?
+
+   *Solution.* Take $(|0000\rangle + |1111\rangle)/\sqrt2$. Products with an even number of Y's are certain: $XXXX = +1$, and every product with two X's and two Y's is $-1$ (and $YYYY = +1$). Now suppose predetermined values $x_i, y_i = \pm1$. Multiply $XXYY$, $XYXY$ and $XYYX$: $(x_1x_2y_3y_4)(x_1y_2x_3y_4)(x_1y_2y_3x_4) = x_1x_2x_3x_4$, since $x_1^3 = x_1$ and each $y$ appears twice. Quantum mechanics says the left side is $(-1)^3 = -1$ and the right side $+1$. Every one of the $2^8 = 256$ assignments fails at least one of the eight certain predictions; the best satisfy six.
+
 5. In the Peres–Mermin square, which single constraint can always be met last? Why five, not six?
+
+   *Solution.* For any assignment of $\pm1$ to the nine cells, the product of the three row products and the product of the three column products are both the product of all nine numbers, so they are equal. The constraints demand $+1$ for all rows (product $+1$) and $+1, +1, -1$ for the columns (product $-1$): impossible together, so at least one constraint fails, for every assignment. But any five can be met: fill the cells to satisfy the constraints you choose, and the sixth is then forced to the wrong sign by the parity count. Which one is left over is entirely up to you; that is why the best assignments meet five, and none meets six.
+
 6. GRW: how many particles must a superposition involve to collapse within a microsecond?
+
+   *Solution.* A GRW hit comes to each particle at a rate of about $10^{-16}$ per second, and a hit on any one particle of an entangled pointer collapses the whole superposition, so $N$ particles collapse at rate $N \times 10^{-16}$ per second, with mean waiting time $10^{16}/N$ seconds. For a mean time of one microsecond, $N = 10^{16}/10^{-6} = 10^{22}$ particles: about a tenth of a gram of matter, small next to the $10^{23}$ particles of a pointer.
 
 ## Sources
 

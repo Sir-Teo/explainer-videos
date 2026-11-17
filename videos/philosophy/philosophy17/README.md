@@ -57,14 +57,31 @@ python tools/qa_scene.py philosophy17 Discovery        # one chapter, silent, wi
 | 15 | `Mind` | Kim's exclusion argument (1998) as a **Price List**; Huxley, Sider, Bennett, List and Menzies; Yablo's pigeon (1992). | the Price List's five exits; proportionality on five shades |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. In the sprinkler graph, list every set that d-separates $S$ and $R$. Does $\{C, L\}$?
+
+   *Solution.* The graph is $C \to S$, $C \to R$, $S \to W$, $R \to W$, $W \to L$. Two paths join $S$ and $R$: the fork $S \leftarrow C \to R$, blocked exactly when $C$ is in the set, and the collider path $S \to W \leftarrow R$, blocked exactly when neither $W$ nor its descendant $L$ is in the set. Among subsets of $\{C, W, L\}$, only $\{C\}$ blocks both. $\{C, L\}$ does not: conditioning on $L$, a descendant of the collider, opens $S \to W \leftarrow R$.
+
 2. Derive the back-door formula from the truncated factorization $\prod_{i \ne X} P(v_i \mid pa_i)$.
+
+   *Solution.* The truncated factorization says $P(v \mid do(x)) = \prod_{i \ne X} P(v_i \mid pa_i)$ for $v$ consistent with $X = x$, which equals $P(v)/P(x \mid pa_X)$. Let $Z = pa_X$, which satisfies the back-door criterion. Summing over every variable except $Y$ and $Z$: $P(y, z \mid do(x)) = P(y, x, z)/P(x \mid z) = P(y \mid x, z)\,P(z)$. Summing over $z$ gives the adjustment formula $P(y \mid do(x)) = \sum_z P(y \mid x, z)\,P(z)$. Any other set satisfying the back-door criterion gives the same answer, by the do-calculus's rule 2 applied to it.
+
 3. Let the gene also affect tar. Which front-door step fails, and which path is open?
+
+   *Solution.* Both conditions of the front door that mention the gene fail. Smoking's effect on tar is no longer identified by $P(t \mid s)$: the path smoking $\leftarrow$ gene $\to$ tar is an open back door from smoking to tar. And tar's effect on cancer is no longer identified by adjusting for smoking: tar $\leftarrow$ gene $\to$ cancer does not pass through smoking, so smoking does not block it. With the gene unobserved, the effect of smoking on cancer is not identified.
+
 4. With 10% defiers, compute PN and PNS, and show PNS $\ne P(y \mid do(x)) - P(y \mid do(x'))$.
+
+   *Solution.* Take the film's types and move a tenth of the population from "never" to defiers: responders 0.3, always 0.2, never 0.4, defiers 0.1, with treatment independent of type. Among the treated who recovered (responders and always-recoverers; defiers do not recover when treated), PN is the share who would not have recovered untreated: $0.3/0.5 = 0.6$. PNS is the share of responders, 0.3. But $P(y \mid do(x)) - P(y \mid do(x')) = 0.5 - 0.3 = 0.2$, the responders minus the defiers. With defiers the experimental difference understates PNS; it equals PNS only when there are none (monotonicity).
+
 5. Show that $X \to Y \to Z$ and $X \leftarrow Y \to Z$ are Markov equivalent, but $X \to Y \leftarrow Z$ is not.
+
+   *Solution.* Both $X \to Y \to Z$ and $X \leftarrow Y \to Z$ have the skeleton $X - Y - Z$ and no collider, and both entail exactly one independence, $X \perp Z \mid Y$: they are Markov equivalent, and no data on $X, Y, Z$ alone can tell them apart. $X \to Y \leftarrow Z$ has the same skeleton but a collider at $Y$: it entails $X \perp Z$ unconditionally and dependence given $Y$, the opposite pattern. Verma and Pearl's theorem: two graphs are Markov equivalent exactly when they share their skeleton and their colliders with unlinked parents.
+
 6. Model Schaffer's trumping case. Is the sergeant's order a cause by Halpern–Pearl?
+
+   *Solution.* Let each officer's order take three values, none, advance or retreat, with the soldiers obeying the major when he gives an order and the sergeant otherwise: $A = M$ if $M \ne$ none, else $A = S$. Actually $M = S =$ advance. The major's order is a cause by Halpern–Pearl: setting $M$ to retreat makes the soldiers retreat. The sergeant's order is not: with the major's actual order in place, no value of $S$ changes the advance, and there is no other variable to hold fixed. In a model with only two values per order (order or no order) the case collapses into overdetermination and neither order alone is a cause; the verdict depends on the model, which is the general lesson of Halpern and Hitchcock about choosing variables.
 
 ## Sources
 

@@ -67,14 +67,31 @@ python tools/qa_scene.py philosophy31 Workspace        # one chapter, silent, wi
 | 15 | `Machines` | Butlin, Long et al. (2023); Chalmers (2023); Long, Sebo et al. (2024). | fourteen indicators, applied to three toys |
 | 16 | `Outro` | recap; the Reasoner's module; the Wall; problems; payoffs; references. | — |
 
-## Problems
+## Problems and solutions
 
 1. Extend the 2D matrix to 'heat is molecular motion'; where do its primary and secondary intensions differ?
+
+   *Solution.* Take two worlds: Earth, where what causes the feeling of heat is molecular motion, and Caloric, where it is a subtle fluid. "Heat" picks out, in the world considered as actual, whatever causes heat sensations there. Row Earth: heat is molecular motion, and molecular motion is molecular motion at every world: T, T. Row Caloric: heat is caloric, which is never molecular motion: F, F. The actual row is all true, so the sentence is necessary; the diagonal reads T, F, so it is not a priori. The two intensions differ at the Caloric world: as a counterfactual world it makes the sentence true (heat is still molecular motion there, just not felt as heat), as an actual world it makes it false. Chalmers's point is that "pain is C-fibre firing" has no such row, because what fixes the reference of "pain" is the feeling itself.
+
 2. In Mary's model, what must be true of the possibilities for the ability hypothesis to be right?
+
+   *Solution.* On the ability hypothesis Mary rules out nothing on her release: what she gains is the ability to imagine, recognize and remember red. So the three possibilities she leaves open beforehand cannot be three ways the world might be; they must be one world described three times, or not possibilities at all. In the model: the three must agree not only on every physical truth but on every truth, so that seeing the tomato removes no world from her information state. If even one of them is a genuine alternative that her experience eliminates, she has learnt a fact, and the ability hypothesis is not the whole story.
+
 3. Find the delay at which the workspace ignites on half the trials, as a function of the noise.
+
+   *Solution.* In the Reasoner's workspace (stimulus strength 30, masks at varying delays, 80 trials per delay), the delay at which the workspace ignites on half the trials falls as noise rises: about 56 ms with no noise (a sharp threshold), 55 ms at noise 0.3, 54 ms at 0.6, 48 ms at 1.0 and 35 ms at 1.5. The curve also widens: the delays between 10% and 90% seen run 48–64 ms at noise 0.3 and 20–72 ms at 1.5. Noise lets subthreshold trials ignite by chance, so the midpoint moves earlier and ignition becomes a probability rather than a step.
+
 4. Show that a feedforward network has $\Phi = 0$ under the simplified measure, for any state.
+
+   *Solution.* Let the sources $A$ be the nodes that take input only from themselves, with an invertible update (COPY or NOT of their own past), and $B$ the rest, arranged in layers with no loops, so no arrow runs from $B$ into $A$. Given the current state $(a_1, b_1)$, the whole system's cause repertoire fixes $a_0$ exactly (invert the sources) and then constrains $b_0$ only through the deeper layers of $B$, whose current values are functions of $b_0$ alone; the first layer's values depend only on $a_0$ and are already consistent with it, since the state is reachable. The partitioned repertoires give the same thing: $A$'s own repertoire fixes $a_0$, and $B$'s, with $a_0$ treated as noise, imposes exactly the deeper-layer constraints on $b_0$. The two distributions are equal, the effective information across $A \mid B$ is 0, and since $\Phi$ is the minimum over bipartitions, $\Phi = 0$ in every state. The Reasoner's chain and a COPY–OR–AND–XOR tree give 0 in every reachable state, with this bipartition as the MIB.
+
 5. Compute $\Phi$ for a 3-by-3 torus of XOR gates in two different states. Does it depend on the state?
+
+   *Solution.* The 3-by-3 torus of XOR gates, each reading its four neighbours, has 16 reachable states. The simplified $\Phi$ is 2.0 bits in every one of them, with the minimum-information bipartition always cutting off a diagonal of three nodes. It does not depend on the state: XOR is linear over GF(2), so every reachable state has the same number of past states and the same cause repertoires up to a shift, and the measure sees only that structure. A grid of XORs that does nothing but compute parities has the same nonzero $\Phi$ whatever it is doing, Aaronson's complaint in miniature.
+
 6. Give the T-maze agent an unreliable cue (60%). When does it stop looking before it leaps?
+
+   *Solution.* With a 60% cue, looking first still wins: its expected free energy is $-1.17$ nats against $-0.66$ for going straight to an arm, so the agent picks it with probability 0.35 against 0.21 for each arm, where a 98% cue gave 0.86. The epistemic value of the cue shrinks as it becomes less reliable, but its risk term is no worse, so the cue policy stays best down to a validity of about 0.51. Only when the cue carries almost no information does the agent stop looking before it leaps.
 
 ## Sources
 

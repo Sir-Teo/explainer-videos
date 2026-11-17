@@ -148,41 +148,49 @@ Wang et al., DUSt3R (2024); Wang et al., VGGT (2025).
 
 1. A ViT cuts a 224 × 224 picture into p × p patches. How many tokens for p = 16 and p = 8? By what factors do
    attention's and the MLPs' costs grow when p halves?
-2. In an adaLN-Zero block with every gate α = 0, show the block is the identity and the gradients of its attention
-   weights vanish, but the gradient of the gate's map W can be nonzero.
-3. Derive the resolution shift σ_m = ασ_n / (1 + (α − 1)σ_n) from equal uncertainty about a flat picture, show it lowers
-   the log signal-to-noise ratio by 2 log α, and evaluate it for σ_n = 0.5, α = 3.
-4. MaskGIT draws 256 tokens in T = 8 passes, leaving ⌊256 cos(π k / 2T)⌋ masked after pass k. How many are fixed in each
-   pass? Compare a linear schedule.
-5. For density σ and colour c constant on [t_i, t_i + δ], show ∫ T σ c dt = T_i (1 − e^{−σδ}) c, and that the weights
-   T_i α_i sum to 1 − T_{N+1}.
-6. Compute the Jacobian of (u, v) = (f x / z, f y / z), and the projected covariance of an isotropic Gaussian s² I centred
-   on the optical axis at depth z.
 
-### Solutions
-
-1. (224/16)² = 196 patch tokens (197 with the summary token); (224/8)² = 784. Halving p multiplies the number of tokens N
+   *Solution.* (224/16)² = 196 patch tokens (197 with the summary token); (224/8)² = 784. Halving p multiplies the number of tokens N
    by 4. Attention's score and mixing cost grows like N² d: 16 times. The MLPs and the projections cost about N d² per
    layer: 4 times. The patch embedding touches each pixel once either way, so its cost doesn't change.
-2. The block computes h + α₁ ⊙ Attn(·) and then adds α₂ ⊙ MLP(·); with α = W c + b = 0 both branches vanish and the
+
+2. In an adaLN-Zero block with every gate α = 0, show the block is the identity and the gradients of its attention
+   weights vanish, but the gradient of the gate's map W can be nonzero.
+
+   *Solution.* The block computes h + α₁ ⊙ Attn(·) and then adds α₂ ⊙ MLP(·); with α = W c + b = 0 both branches vanish and the
    output is h. Any parameter θ inside a branch reaches the loss only through α ⊙ F(θ), so ∂L/∂θ = α ⊙ (∂L/∂out) ∂F/∂θ = 0
    (this includes the branch's scale and shift γ, β). But ∂L/∂α = (∂L/∂out) ⊙ F(·), which is generally non-zero, and
    ∂L/∂W = (∂L/∂α) cᵀ can be nonzero. With nonzero upstream gradients and condition c, the gate can learn first;
    after it opens, the branches can learn. A zero loss gradient or zero condition is a counterexample to an
    unconditional claim that W's gradient must be nonzero. This statement is about the block; a zero-initialized
    downstream output layer can also block its upstream gradients on the first step.
-3. For a flat picture, every pixel z_i = (1 − σ) c + σ ε_i; averaging n pixels gives z̄ = (1 − σ) c + σ ε̄ with
+
+3. Derive the resolution shift σ_m = ασ_n / (1 + (α − 1)σ_n) from equal uncertainty about a flat picture, show it lowers
+   the log signal-to-noise ratio by 2 log α, and evaluate it for σ_n = 0.5, α = 3.
+
+   *Solution.* For a flat picture, every pixel z_i = (1 − σ) c + σ ε_i; averaging n pixels gives z̄ = (1 − σ) c + σ ε̄ with
    ε̄ ~ N(0, 1/n), so ĉ = z̄ / (1 − σ) has standard deviation σ / ((1 − σ)√n). Setting it equal at m and n pixels:
    σ_m / (1 − σ_m) = α σ_n / (1 − σ_n) with α = √(m/n); solving, σ_m = α σ_n / (1 + (α − 1) σ_n). With SNR = (1 − σ)²/σ²,
    log SNR_m = 2 log((1 − σ_m)/σ_m) = 2 log((1 − σ_n)/(α σ_n)) = log SNR_n − 2 log α. For σ_n = 0.5, α = 3:
    σ_m = 1.5 / 2 = 0.75.
-4. Still masked after passes 0 … 8: 256, 251, 236, 212, 181, 142, 97, 49, 0; so the passes fix 5, 15, 24, 31, 39, 45, 48
+
+4. MaskGIT draws 256 tokens in T = 8 passes, leaving ⌊256 cos(π k / 2T)⌋ masked after pass k. How many are fixed in each
+   pass? Compare a linear schedule.
+
+   *Solution.* Still masked after passes 0 … 8: 256, 251, 236, 212, 181, 142, 97, 49, 0; so the passes fix 5, 15, 24, 31, 39, 45, 48
    and 49 tokens. A linear schedule fixes 32 every pass. The cosine schedule commits few tokens while the model knows
    least, and more once most of the picture is fixed.
-5. On the segment T(t) = T_i e^{−σ(t − t_i)}, so ∫ T σ c dt = T_i c ∫₀^δ σ e^{−σs} ds = T_i c (1 − e^{−σδ}) = T_i α_i c.
+
+5. For density σ and colour c constant on [t_i, t_i + δ], show ∫ T σ c dt = T_i (1 − e^{−σδ}) c, and that the weights
+   T_i α_i sum to 1 − T_{N+1}.
+
+   *Solution.* On the segment T(t) = T_i e^{−σ(t − t_i)}, so ∫ T σ c dt = T_i c ∫₀^δ σ e^{−σs} ds = T_i c (1 − e^{−σδ}) = T_i α_i c.
    Since T_{i+1} = T_i (1 − α_i), T_i α_i = T_i − T_{i+1}, and the sum telescopes to T_1 − T_{N+1} = 1 − T_{N+1}: the
    weights sum to at most 1, and the rest is the background's share.
-6. J = [[f/z, 0, −f x/z²], [0, f/z, −f y/z²]]. On the axis (x = y = 0), J = (f/z) [I₂ | 0], so
+
+6. Compute the Jacobian of (u, v) = (f x / z, f y / z), and the projected covariance of an isotropic Gaussian s² I centred
+   on the optical axis at depth z.
+
+   *Solution.* J = [[f/z, 0, −f x/z²], [0, f/z, −f y/z²]]. On the axis (x = y = 0), J = (f/z) [I₂ | 0], so
    Σ' = J (s² I) Jᵀ = (f s / z)² I₂: a circle whose radius shrinks like 1/z, as perspective requires.
 
 ## 习题（中文）
