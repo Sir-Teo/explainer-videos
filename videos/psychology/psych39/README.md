@@ -8,12 +8,15 @@ the study. Reliability was won; validity is still open; and the alternatives to 
 
 The hook is Rosenhan's study and what the archive showed; the viewer works out what a positive screen means and
 predicts four numbers. Then a short history from moral treatment to DSM-III; four candidate definitions of disorder,
-Wakefield's harmful dysfunction, and the 1973 removal of homosexuality from the manual and the 1974 vote; Cohen's
+Wakefield's harmful dysfunction, and the 1973 removal of homosexuality from the manual and the 1974 vote; Engel's
+biopsychosocial model and its critique, and the diathesis-stress frame from Meehl to Zubin and Spring; Cohen's
 kappa derived, the DSM-5 field trials' kappas, and a simulation in which reliability caps validity (computed);
 Robins and Guze's validators, the 227 symptom combinations that meet one diagnosis (counted), and 1,030 profiles
 among 3,703 patients; categories against dimensions and the taxometric evidence; comorbidity, a positive manifold
 (computed) and the p factor; a symptom network with hysteresis and an episode that starts suddenly and ends slowly
-(computed); prevalence, age of onset, the treatment gap and the treatment-prevalence paradox; Meehl's formulas against
+(computed); prevalence and age of onset; a map of the manual (DSM-5-TR and ICD-11) marking which parts treat each
+group; the eating disorders (prevalence, mortality, treatments with trials) and the personality disorders (ICD-11's
+severity model, Zanarini's ten-year follow-up); the treatment gap and the treatment-prevalence paradox; Meehl's formulas against
 clinical judgment, with a simulation of why (computed); and idioms of distress, stigma, and the diathesis-stress
 frame. The practice chapter is diagnosis, screening and risk tools; the frontier is network, latent and common-cause
 models, idiographic networks and what a biological classification would require.

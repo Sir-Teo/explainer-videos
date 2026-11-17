@@ -29,6 +29,8 @@ Items:
     systems      a diffusion process with a start near the intuitive answer: answers by response-time quintile
     sampling     decision by sampling: value as rank among remembered credits and debits
     rational     anchoring as resource-rational adjustment: bias after k steps, the best k for two costs of time
+    calibration  a judge calibrated to its world, asked questions drawn at random and questions chosen because the
+                 cue misleads (Gigerenzer et al. 1991; Juslin 1994): proportion correct by stated confidence
 """
 
 from __future__ import annotations
@@ -304,11 +306,32 @@ def compute_rational() -> dict:
     return out
 
 
+def compute_calibration() -> dict:
+    """Juslin's (1994) argument as a simulation.  Each question comes with a cue whose validity v (the chance the
+    cue's answer is right) is 0.55 to 0.95 in steps of 0.1; the judge answers with the cue and states v as its
+    confidence, so over the world's questions it is calibrated by construction.  Random questions are drawn as
+    they come; chosen questions keep every one on which the cue misleads but only three in five of those on which it
+    is right, as an experimenter looking for questions that catch people out might."""
+    rng = np.random.default_rng(1994)
+    levels = np.round(np.arange(0.55, 1.0, 0.1), 2)
+    n = 200_000
+    v = rng.choice(levels, n)
+    right = rng.random(n) < v
+    keep = right & (rng.random(n) < 0.6) | ~right
+    out = {"levels": levels}
+    for name, mask in (("random", np.ones(n, bool)), ("chosen", keep)):
+        out[f"acc_{name}"] = np.array([right[mask & (v == L)].mean() for L in levels])
+        out[f"conf_{name}"] = float(v[mask].mean())
+        out[f"hit_{name}"] = float(right[mask].mean())
+        out[f"over_{name}"] = float(v[mask].mean() - right[mask].mean())
+    return out
+
+
 ITEMS = {"framing": compute_framing, "stpete": compute_stpete, "allais": compute_allais, "curves": compute_curves,
          "fourfold": compute_fourfold, "c13k": compute_c13k, "bayes": compute_bayes, "ttb": compute_ttb,
          "hothand": compute_hothand, "time": compute_time, "experience": compute_experience,
          "systems": compute_systems, "sampling": compute_sampling,
-         "rational": compute_rational}
+         "rational": compute_rational, "calibration": compute_calibration}
 
 
 if __name__ == "__main__":

@@ -9,6 +9,7 @@ class Reply(VoiceoverScene):
         self.frequencies()
         self.ttb_rule()
         self.ttb_test()
+        self.calibration()
 
     def card(self):
         card = chapter_card(7, r"The reply: \ frequencies and fast, \ frugal rules", r"Are the biases errors at all?",
@@ -158,4 +159,73 @@ class Reply(VoiceoverScene):
             self.play(Create(c2), run_time=2)
             vo.wait_until("d")
             self.play(FadeIn(foot))
+        self.clear_scene()
+
+    def calibration(self):
+        d = load("calibration")
+        head = heading(r"Overconfidence, \ and where the questions came from")
+        A = axes([0.5, 1.0], [0.4, 1.0], x_length=5.0, y_length=4.0, xticks=[0.5, 0.75, 1.0],
+                 yticks=[0.4, 0.6, 0.8, 1.0], xfmt=lambda v: f"{100 * v:.0f}\\%", yfmt=lambda v: f"{100 * v:.0f}\\%",
+                 xlabel=r"confidence stated", ylabel=r"proportion correct", center=[-3.35, -0.35, 0], font_size=17)
+        ax = A.ax
+        diag = DashedLine(ax.c2p(0.5, 0.5), ax.c2p(1.0, 1.0), color=GREY_B, stroke_width=2)
+        diag_l = label(r"perfect calibration", font_size=17, color=GREY_B).next_to(ax.c2p(0.98, 0.98), LEFT, buff=0.2)
+        diag_l.shift(UP * 0.1)
+        L = d["levels"]
+        rnd = VGroup(curve(ax, L, d["acc_random"], MODEL, 4),
+                     *[Dot(ax.c2p(x, y), radius=0.06, color=MODEL) for x, y in zip(L, d["acc_random"])])
+        cho = VGroup(curve(ax, L, d["acc_chosen"], LOSS, 4),
+                     *[Dot(ax.c2p(x, y), radius=0.06, color=LOSS) for x, y in zip(L, d["acc_chosen"])])
+        key = legend([(MODEL, r"questions drawn at random"), (LOSS, r"questions chosen to catch people out")],
+                     font_size=17).next_to(A, DOWN, buff=0.3)
+        cards = point_cards([
+            (r"Lichtenstein, \ Fischhoff and Phillips, \ 1982",
+             r"people answering two-choice questions are right less often than they say they are sure", LOSS),
+            (rf"Psyche, \ calibrated by construction", rf"on random questions: \ sure {pct(d['conf_random'])}, "
+             rf"\ right {pct(d['hit_random'])}; \ on chosen ones: \ sure {pct(d['conf_chosen'])}, \ right "
+             rf"{pct(d['hit_chosen'])}", MODEL),
+            (r"The reply, \ and what is left", r"random samples of questions shrink the effect \ (Gigerenzer et "
+             r"al., \ 1991; \ Juslin, \ 1994); \ intervals people set around estimates stay far too narrow "
+             r"\ (Klayman et al., \ 1999)", NORM),
+        ], width=6.4, cols=1, font_size=19, buff=0.22)
+        cards.move_to([3.4, -0.35, 0])
+        tag = published_tag(r"Lichtenstein, \ Fischhoff \& Phillips (1982); \ Gigerenzer, \ Hoffrage \& "
+                            r"Kleinb\"olting (1991); \ Juslin (1994); \ Klayman et al.\ (1999)")
+        ptag = psyche_tag(r"\texttt{compute: calibration}: \ 200{,}000 questions")
+        with self.voiceover(
+            "His third point was about the bias that seemed most robust of all. <bookmark mark='a'/> Ask people "
+            "questions with two possible answers, and how sure they are of each, from fifty to a hundred percent. "
+            "Sarah Lichtenstein, Baruch Fischhoff and Lawrence Phillips, reviewing the studies in 1982, plotted the "
+            "proportion right against the confidence people stated. A perfectly calibrated judge sits on the "
+            "diagonal. People sat below it: when they said ninety percent, they were right much less often. "
+            "<bookmark mark='b'/> Gigerenzer, with Ulrich Hoffrage and Heinz Kleinbölting, replied in 1991 that the "
+            "questions had not been drawn at random. Experimenters chose questions that seemed interesting, and "
+            "those are often the ones where the usual cue points the wrong way. <bookmark mark='c'/> Psyche makes "
+            "the argument exact. Its judge answers with a cue and states the cue's validity as its confidence, so "
+            "on the world's questions it is calibrated by construction. <bookmark mark='d'/> Now keep every "
+            "question on which the cue misleads, but only three in five of those on which it is right, as an "
+            "experimenter hunting for questions that catch people out might. The same judge, unchanged, is now "
+            f"sure {100 * d['conf_chosen']:.0f} percent of the time on average and right only "
+            f"{100 * d['hit_chosen']:.0f}. <bookmark mark='e'/> When questions were drawn at random from a "
+            "domain, by Gigerenzer's group and by Peter Juslin in 1994, much of the overconfidence went away. "
+            "But not all of it. When people give an interval they are ninety percent sure contains a number, the "
+            "intervals are far too narrow, as Joshua Klayman and colleagues found in 1999. <bookmark mark='f'/> "
+            "So part of a famous bias was a property of the questions, and part of it is a property of us. "
+            "Telling the two apart is the whole job."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(A))
+            vo.wait_until("a")
+            self.play(Create(diag), FadeIn(diag_l), FadeIn(cards.cards[0], shift=UP * 0.15))
+            vo.wait_until("b")
+            self.play(Indicate(cards.cards[0].title, color=LOSS))
+            vo.wait_until("c")
+            self.play(FadeIn(ptag), Create(rnd[0]), LaggedStart(*[FadeIn(x) for x in rnd[1:]], lag_ratio=0.2),
+                      FadeIn(key[0]), run_time=1.6)
+            vo.wait_until("d")
+            self.play(Create(cho[0]), LaggedStart(*[FadeIn(x) for x in cho[1:]], lag_ratio=0.2), FadeIn(key[1]),
+                      FadeIn(cards.cards[1], shift=UP * 0.15), run_time=1.8)
+            vo.wait_until("e")
+            self.play(FadeIn(cards.cards[2], shift=UP * 0.15))
+            vo.wait_until("f")
+            self.play(Indicate(cho[0], color=LOSS), Indicate(rnd[0], color=MODEL))
         self.clear_scene()

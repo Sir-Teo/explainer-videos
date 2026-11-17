@@ -4501,6 +4501,9 @@ shown(25, r"Vickers (1979); \ Kiani \& Shadlen (2009); \ Pleskac \& Busemeyer (2
       "described; metacognition's measures were Part 12's")
 shown(25, r"Green (2000); \ AASHTO stopping sight distance", "applied figures, described")
 shown(25, r"Ratcliff, \ Thapar \& McKoon (2001)", "ageing studies, described; individual differences are Part 59's")
+shown(26, r"Lichtenstein, \ Fischhoff \& Phillips (1982); \ Gigerenzer, \ Hoffrage \& Kleinb\"olting (1991); \ "
+      r"Juslin (1994); \ Klayman et al.\ (1999)", "overconfidence and the selection reply, made exact on Psyche; the "
+      "reviews and studies quoted for their main results")
 shown(26, r"Bernoulli (1738); \ Allais (1953); \ Kahneman \& Tversky (1979)", "the history of the idea; the "
       "Allais pattern has its row")
 shown(26, r"Pascal--Fermat letters (1654); \ Huygens (1657)", "the history of probability, described")

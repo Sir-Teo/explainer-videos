@@ -9,6 +9,8 @@ class Define(VoiceoverScene):
         self.four()
         self.wakefield()
         self.removal()
+        self.engel()
+        self.diathesis()
 
     def card(self):
         card = chapter_card(3, r"What makes it a disorder?", r"Rare, distressing, dysfunctional or harmful?",
@@ -115,4 +117,118 @@ class Define(VoiceoverScene):
             self.play(FadeIn(rows[2]), *[GrowFromEdge(x, DOWN) for x in b], FadeIn(tops))
             vo.wait_until("d")
             self.play(FadeIn(rows[3]))
+        self.clear_scene()
+
+    def engel(self):
+        head = heading(r"Biology, \ mind and society")
+        spec = [(r"biological", r"genes, \ brain, \ body", SYMP, [-3.4, 1.05, 0], UP),
+                (r"psychological", r"learning, \ thought, \ emotion", MODEL, [-4.45, -0.75, 0], DL),
+                (r"social", r"family, \ work, \ poverty, \ culture", PERSON, [-2.35, -0.75, 0], DR)]
+        circles, names = VGroup(), VGroup()
+        for name, body, c, at, out in spec:
+            circ = Circle(radius=1.45, stroke_color=c, stroke_width=2.5, fill_color=c, fill_opacity=0.14).move_to(at)
+            circles.add(circ)
+            t = VGroup(label(name, font_size=21, color=c), label(body, font_size=17, color=GREY_A)).arrange(
+                DOWN, buff=0.08)
+            t.move_to(np.array(at) + 0.62 * np.array(out) / np.linalg.norm(out))
+            names.add(t)
+        mid = little_person(0.5, color=YOU).move_to([-3.4, -0.18, 0])
+        card_ = theory_card(r"The biopsychosocial model", r"George Engel, \ 1977",
+                            r"illness has biological, \ psychological and social causes at once, \ and care should "
+                            r"attend to all three", r"a reminder of where to look; \ too broad to be tested",
+                            "not directly tested", width=6.2, font_size=20, color=KANT)
+        card_.move_to([3.4, 0.85, 0])
+        checks = verdict_row([
+            (r"taught widely, \ in medical schools and clinical training; \ as a theory, \ never put to a test",
+             "not directly tested"),
+            (r"Ghaemi, \ 2009: \ it rules nothing out, \ and says nothing about which cause matters for this "
+             r"person", "contested"),
+        ], width=6.2, font_size=19)
+        checks.next_to(card_, DOWN, buff=0.3)
+        tag = published_tag(r"Engel (1977); \ Ghaemi (2009)")
+        with self.voiceover(
+            "A definition says what a disorder is. A second question is where one comes from. "
+            "<bookmark mark='a'/> In 1977 the American physician George Engel argued in the journal Science that "
+            "medicine's model was too narrow. The biomedical model explained illness by biology alone, and left out "
+            "the person who was ill. <bookmark mark='b'/> He proposed a biopsychosocial model. Biological causes, "
+            "like genes and the body; psychological ones, like learning, thought and emotion; and social ones, like "
+            "family, work, poverty and culture; all acting at once, on one person. <bookmark mark='c'/> It was "
+            "taught widely, in medical schools and in clinical training, and this act of the series follows its "
+            "outline. <bookmark mark='d'/> Its record is a critique rather than a test. In 2009 the psychiatrist "
+            "Nassir Ghaemi argued that the model is so broad that it rules nothing out. It tells a clinician to "
+            "attend to everything, but not which cause matters most for this person, or how the causes combine. "
+            "<bookmark mark='e'/> So it's better read as a reminder than as a theory: a list of places to look."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(circles[0]), FadeIn(names[0]), FadeIn(mid), FadeIn(card_.box), FadeIn(card_.name))
+            vo.wait_until("b")
+            self.play(FadeIn(circles[1]), FadeIn(names[1]), FadeIn(circles[2]), FadeIn(names[2]),
+                      FadeIn(card_.claim), run_time=1.6)
+            vo.wait_until("c")
+            self.play(FadeIn(checks.rows[0], shift=RIGHT * 0.15))
+            vo.wait_until("d")
+            self.play(FadeIn(checks.rows[1], shift=RIGHT * 0.15))
+            vo.wait_until("e")
+            self.play(FadeIn(card_.verdict), FadeIn(card_.status))
+        self.clear_scene()
+
+    def diathesis(self):
+        head = heading(r"Vulnerability meets stress")
+        A = axes([0, 10], [0, 10], x_length=4.6, y_length=3.6, xticks=None, yticks=None, xlabel=r"vulnerability",
+                 ylabel=r"stress", center=[-3.5, -0.15, 0], font_size=18)
+        xs = np.linspace(1.25, 10, 120)
+        line = curve(A.ax, xs, 12 / xs, AUTH, stroke_width=4)
+        top = [A.ax.c2p(x, min(10, 12 / x)) for x in xs] + [A.ax.c2p(10, 10), A.ax.c2p(1.25, 10)]
+        zone = Polygon(*top, stroke_width=0, fill_color=AUTH, fill_opacity=0.12)
+        zl = label(r"an episode", font_size=19, color=AUTH).move_to(A.ax.c2p(6.8, 8.4))
+        sch = label(r"schematic", font_size=17, color=GREY_B).next_to(A, DOWN, buff=0.15).align_to(A, RIGHT)
+        lo = Dot(A.ax.c2p(2.2, 1.2), radius=0.11, color=GOOD)
+        hi = Dot(A.ax.c2p(6.8, 1.2), radius=0.11, color=PERSON)
+        lo_l = label(r"less vulnerable", font_size=17, color=GOOD).next_to(lo, DOWN, buff=0.12)
+        hi_l = label(r"more vulnerable", font_size=17, color=PERSON).next_to(hi, DOWN, buff=0.12)
+        card_ = theory_card(r"Diathesis and stress", r"Paul Meehl, \ 1962; \ Joseph Zubin and Bonnie Spring, \ 1977",
+                            r"an episode begins when stress pushes a person past their own threshold, \ and ends "
+                            r"when the stress recedes", r"the frame holds; \ its single-gene version failed",
+                            "replicated, smaller", width=6.2, font_size=20, color=KANT)
+        card_.move_to([3.4, 0.85, 0])
+        checks = verdict_row([
+            (r"genes and stressful events each raise the risk of depression \ (Part 40)", "replicated"),
+            (r"one gene, \ the serotonin transporter, \ as the vulnerability \ (Part 40)", "failed"),
+        ], width=6.2, font_size=19)
+        checks.next_to(card_, DOWN, buff=0.3)
+        tag = published_tag(r"Meehl (1962); \ Zubin \& Spring (1977)")
+        with self.voiceover(
+            "An older idea says how two of those causes combine. <bookmark mark='a'/> In 1962 Paul Meehl, whose "
+            "formulas come in chapter ten, proposed that schizophrenia begins with an inherited vulnerability, which "
+            "he called schizotaxia, and that only some of the people who carry it ever become ill, depending on "
+            "other genes and on what happens to them. <bookmark mark='b'/> In 1977, the year of Engel's paper, "
+            "Joseph Zubin and Bonnie Spring made it general. Each of us has some degree of vulnerability. An episode "
+            "begins when stress pushes a person past their threshold, and it ends as the stress recedes. "
+            "<bookmark mark='c'/> Picture two people, and the same hard year. The same rise in stress carries the "
+            "more vulnerable person across the line, and leaves the other below it. Then the year passes. "
+            "<bookmark mark='d'/> What has the record said? Genes and stressful events each raise the risk of "
+            "depression, in twin studies and in studies of life events, as Part 40 shows. <bookmark mark='e'/> But "
+            "when the vulnerability was pinned on a single gene, the serotonin transporter, the finding didn't hold. "
+            "<bookmark mark='f'/> The frame survives; its simplest version doesn't. And before any cause can be "
+            "studied, a diagnosis has to be made the same way twice. That's the next chapter."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(A), FadeIn(sch))
+            vo.wait_until("a")
+            self.play(FadeIn(card_.box), FadeIn(card_.name))
+            vo.wait_until("b")
+            self.play(Create(line), FadeIn(zone), FadeIn(zl), FadeIn(card_.claim))
+            vo.wait_until("c")
+            self.play(FadeIn(lo), FadeIn(hi), FadeIn(lo_l), FadeIn(hi_l))
+            self.play(lo.animate.move_to(A.ax.c2p(2.2, 4.0)), hi.animate.move_to(A.ax.c2p(6.8, 4.0)), run_time=1.8)
+            self.play(Flash(hi, color=AUTH), hi.animate.set_color(AUTH))
+            self.wait(1.0)
+            self.play(lo.animate.move_to(A.ax.c2p(2.2, 1.2)), hi.animate.move_to(A.ax.c2p(6.8, 1.2)).set_color(PERSON),
+                      run_time=1.8)
+            vo.wait_until("d")
+            self.play(FadeIn(checks.rows[0], shift=RIGHT * 0.15))
+            vo.wait_until("e")
+            self.play(FadeIn(checks.rows[1], shift=RIGHT * 0.15))
+            vo.wait_until("f")
+            self.play(FadeIn(card_.verdict), FadeIn(card_.status))
         self.clear_scene()
