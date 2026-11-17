@@ -128,21 +128,35 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Regression to the mean.** Given a screened score x, the expected mean is 14 + (25/50)(x - 14) = 19 for x = 24,
+1. **Regression to the mean.** Each person's mean symptom score is $N(14, 5^2)$ and each occasion adds $N(0, 5^2)$. Someone enrols with a score of 24. What is their expected score next time, with no treatment?
+
+   *Solution.* Given a screened score x, the expected mean is 14 + (25/50)(x - 14) = 19 for x = 24,
    and the next score's expectation is the same: 19. Five points of improvement are expected with no treatment.
-2. **Three controls.** Against the waiting list d = (18.85 - 13.85)/6.7 = 0.75; against placebo therapy
+2. **Three controls.** At the end of a trial the waiting list averages 18.85, placebo therapy 15.85 and active therapy 13.85, with SD 6.7 in each arm. Find the active therapy's $d$ against each control.
+
+   *Solution.* Against the waiting list d = (18.85 - 13.85)/6.7 = 0.75; against placebo therapy
    (15.85 - 13.85)/6.7 = 0.30; the same therapy has an effect less than half as large against the stronger control.
-3. **A small meta-analysis.** Weights 25, 50, 20 (sum 95): the fixed-effect estimate is (10 + 30 + 4)/95 = 0.463 with
+3. **A small meta-analysis.** Three trials find $d$ = 0.4, 0.6 and 0.2, with variances 0.04, 0.02 and 0.05. Find the fixed-effect estimate, its SE, $Q$ and the DerSimonian-Laird $\hat\tau^2$.
+
+   *Solution.* Weights 25, 50, 20 (sum 95): the fixed-effect estimate is (10 + 30 + 4)/95 = 0.463 with
    SE 1/√95 = 0.103. Q = 25(0.063)² + 50(0.137)² + 20(0.263)² = 2.42 on 2 df, so
    τ² = (2.42 - 2)/(95 - 3525/95) = 0.42/57.9 = 0.0073.
-4. **Reliable change.** S_diff = √2 × 7 × √0.15 = 3.83, so a reliable change exceeds 1.96 × 3.83 = 7.5 points. From
+4. **Reliable change.** A scale has SD 7 and reliability 0.85. Find the change needed for reliable change, and say whether a client who goes from 26 to 20 has changed reliably.
+
+   *Solution.* S_diff = √2 × 7 × √0.15 = 3.83, so a reliable change exceeds 1.96 × 3.83 = 7.5 points. From
    26 to 20, RCI = -6/3.83 = -1.56: not reliable.
-5. **The cut-off.** c = (6 × 7 + 5 × 28)/(6 + 5) = 182/11 = 16.5.
-6. **A significance filter.** With 20 per arm, SE ≈ √(2/20) = 0.316, so significance needs d > 1.96 × 0.316 = 0.62.
+5. **The cut-off.** The clinical group averages 28 (SD 6) and the well group 7 (SD 5). Find Jacobson and Truax's cut-off $c$.
+
+   *Solution.* c = (6 × 7 + 5 × 28)/(6 + 5) = 182/11 = 16.5.
+6. **A significance filter.** A therapy's true effect is $d = 0.3$, trials have 20 people per arm, and only significant results are published. Find the power, and the average published effect.
+
+   *Solution.* With 20 per arm, SE ≈ √(2/20) = 0.316, so significance needs d > 1.96 × 0.316 = 0.62.
    Power = P(Z > 1.96 - 0.3/0.316) = P(Z > 1.01) ≈ 0.16. The published mean is the mean of a normal (0.3, 0.316)
    above 0.62: 0.3 + 0.316 × φ(1.01)/(1 - Φ(1.01)) = 0.3 + 0.316 × 0.240/0.156 ≈ 0.79, more than two and a half
    times the truth.
-7. **Ingredient against common factors.** Randomize to the full therapy, the same therapy without the ingredient
+7. ★ **Ingredient against common factors.** Design a trial that could separate a therapy's specific ingredient from its common factors, and show which comes first, the change in the mechanism or the improvement.
+
+   *Solution.* Randomize to the full therapy, the same therapy without the ingredient
    (a dismantling arm, delivered with equal warmth, rationale and time), and a credible placebo therapy; rate the
    alliance and measure the proposed mechanism every session; preregister that the ingredient's arm should beat
    the dismantled one, that mechanism change should precede symptom change within people (a lagged multilevel

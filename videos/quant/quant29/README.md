@@ -73,43 +73,63 @@ The four-position arithmetic example uses no assets, dates or historical sample.
 
 ## Problems 1–6: technical drills, with solutions
 
-**1. Count depth-two grammar trees.** There are six leaves. Five unary plus $7\times4$ time-series choices give 33 unary choices. Four arithmetic and four windowed correlation choices give eight binary choices. Hence
+**1. Count depth-two grammar trees.** With 6 fields, 5 unary operators, 7 time-series operators and correlation over 4 windows, and 4 binary operators, count trees of depth at most 2.
+
+*Solution.* There are six leaves. Five unary plus $7\times4$ time-series choices give 33 unary choices. Four arithmetic and four windowed correlation choices give eight binary choices. Hence
 
 $$a_1=6,\qquad a_2=6+33\cdot6+8\cdot6^2=492.$$
 
 This counts syntactic trees of depth at most two. Algebraic equivalence, repeated draws and equal rankings do not change this syntax count.
 
-**2. Noise mean IC.** Under IID daily noise with standard deviation 0.10 and 500 days, $\sigma_{\bar I}=0.1/\sqrt{500}=0.00447214$. For 10,000 independent Gaussian signed means, the leading one-sided maximum scale is
+**2. Noise mean IC.** IID daily IC noise has standard deviation 0.10 over 500 days. Give the leading independent Gaussian maximum scale for 10{,}000 signed means; also count both selectable signs.
+
+*Solution.* Under IID daily noise with standard deviation 0.10 and 500 days, $\sigma_{\bar I}=0.1/\sqrt{500}=0.00447214$. For 10,000 independent Gaussian signed means, the leading one-sided maximum scale is
 
 $$\sigma_{\bar I}\sqrt{2\ln10000}=0.0191941.$$
 
 Selecting either sign uses the leading absolute-maximum reference $\sigma_{\bar I}\sqrt{2\ln20000}=0.0199033$. These are asymptotic reference scales, not exact expectations, rejection quantiles or p-values for the actual formula family. Dependence, heterogeneous distributions and adaptive selection change calibration.
 
-**3. Ideal fundamental-law toy.** Under independent, equal-risk bets with the stipulated unconstrained forecasting/weighting model, $IR\approx IC\sqrt B=0.02\sqrt{100}=0.2$ per day. IID 365-day annualisation gives $0.2\sqrt{365}=3.82099$. One hundred coins are not automatically 100 independent bets; correlations, constraints, selection and costs can invalidate that translation. This is a fixed model calculation.
+**3. Ideal fundamental-law toy.** In the ideal independent, equal-risk, unconstrained fundamental-law toy, IC is 0.02 across 100 bets. Compute $IC\sqrt{100}$ and its 365-day annualisation; state why this is not implied by 100 coins alone.
 
-**4. Equicorrelation.** For standardised signals, the sum has variance $N+N(N-1)\rho$ and covariance $Nc$ with the standardised target. Therefore
+*Solution.* Under independent, equal-risk bets with the stipulated unconstrained forecasting/weighting model, $IR\approx IC\sqrt B=0.02\sqrt{100}=0.2$ per day. IID 365-day annualisation gives $0.2\sqrt{365}=3.82099$. One hundred coins are not automatically 100 independent bets; correlations, constraints, selection and costs can invalidate that translation. This is a fixed model calculation.
+
+**4. Equicorrelation.** For feasible standardised equicorrelated signals with equal target correlation $c$, derive $c\sqrt{N/(1+(N-1)\rho)}$; evaluate $N=10000,c=0.01,\rho=0.3$ and state the joint PSD restriction.
+
+*Solution.* For standardised signals, the sum has variance $N+N(N-1)\rho$ and covariance $Nc$ with the standardised target. Therefore
 
 $$IC_{EW}=c\sqrt{\frac{N}{1+(N-1)\rho}}.$$
 
 For $N=10000,c=0.01,\rho=0.3$, this is **0.0182553**, and variance breadth is **3.33256**. Joint PSD requires $Nc^2/[1+(N-1)\rho]\le1$. Positive signal covariance alone is insufficient. For $\rho>0$ the feasible large-$N$ multiplier is $1/\sqrt\rho$; its IC cannot exceed one. With $\rho=0$, feasibility requires $Nc^2\le1$.
 
-**5. Parsimony.** Ten extra nodes cost $10\times0.0005=0.005$ in absolute mean-IC fitness. A 0.005 gain exactly compensates, and a larger gain strictly improves fitness if everything else is equal. Selection/ties and the rest of the population still matter. Better penalised fitness need not mean higher raw IC because expression sizes differ.
+**5. Parsimony.** GP fitness is absolute mean IC minus 0.0005 per node. What gain pays for ten extra nodes? Does fitness monotonicity imply monotone raw IC?
 
-**6. Agent accounting.** Five hundred hypotheses at four windows yield 2,000 nominal evaluations. The independent Gaussian reference moves from $\sqrt{2\ln500}=3.52551$ to $\sqrt{2\ln2000}=3.89895$, a difference of 0.37344 standard deviations, about a 10.6% increase. Related windows, adaptive prompts, failed runs and human choices need separate accounting and null calibration; 2,000 evaluations do not imply 2,000 independent tests.
+*Solution.* Ten extra nodes cost $10\times0.0005=0.005$ in absolute mean-IC fitness. A 0.005 gain exactly compensates, and a larger gain strictly improves fitness if everything else is equal. Selection/ties and the rest of the population still matter. Better penalised fitness need not mean higher raw IC because expression sizes differ.
+
+**6. Agent accounting.** An agent scores 500 hypotheses over 4 windows. Count 2{,}000 nominal evaluations and compare independent Gaussian maximum scales with 500. Explain why adaptive counts need further calibration.
+
+*Solution.* Five hundred hypotheses at four windows yield 2,000 nominal evaluations. The independent Gaussian reference moves from $\sqrt{2\ln500}=3.52551$ to $\sqrt{2\ln2000}=3.89895$, a difference of 0.37344 standard deviations, about a 10.6% increase. Related windows, adaptive prompts, failed runs and human choices need separate accounting and null calibration; 2,000 evaluations do not imply 2,000 independent tests.
 
 ## Problems 7–10: worked extensions, with solutions
 
-**7. REINFORCE baseline.** Fix a state and a differentiable normalised policy with fixed support and valid differentiation under the sum/integral. For an action-independent baseline $b$,
+**7. REINFORCE baseline.** For a fixed policy and an action-independent baseline conditional on state, prove $\mathbb E[b\nabla\log\pi(a)]=0$. Must every baseline lower variance?
+
+*Solution.* Fix a state and a differentiable normalised policy with fixed support and valid differentiation under the sum/integral. For an action-independent baseline $b$,
 
 $$\mathbb E[b\nabla\log\pi(a)]=b\sum_a\nabla\pi(a)=b\nabla1=0.$$
 
 Treat reward/baseline as fixed when taking the score-function gradient. An action-dependent baseline generally needs a correction. A baseline can increase variance; an appropriate choice, not every constant, reduces it. This identity does not make backtest rewards unbiased or a changing pool stationary.
 
-**8. Equal-notional hedge toy.** Per initial dollar long and dollar short, simple-return P&L is $-0.20-(-0.05)=-0.15$: **15% loss per dollar long**, or 7.5% of initial gross exposure two. This omits basis, beta mismatch, financing, borrow, trading costs and changing positions. It is not a measured fund loss or causal attribution. A leverage multiplier requires a clearly specified capital denominator.
+**8. Equal-notional hedge toy.** Fixed equal initial notionals: long small caps, short index futures. Simple returns are $-20\%$ and $-5\%$. Compute P&L per dollar long before basis, costs and funding; distinguish a toy from attribution.
 
-**9. Assumed half-life.** With $IC(t)=0.03\,2^{-t/2}$, strict inequality $IC(t)<0.01$ is equivalent to $t>2\log_2 3=3.169925$ years. Equality holds at the boundary. If observations are restricted to integer years, the first is year four. The chosen exponential law and half-life are assumptions; three selected yearly means do not establish a causal crowding-decay rate.
+*Solution.* Per initial dollar long and dollar short, simple-return P&L is $-0.20-(-0.05)=-0.15$: **15% loss per dollar long**, or 7.5% of initial gross exposure two. This omits basis, beta mismatch, financing, borrow, trading costs and changing positions. It is not a measured fund loss or causal attribution. A leverage multiplier requires a clearly specified capital denominator.
 
-**10. Plug-in approximation.** For 20 pre-specified independent Gaussian coordinates with daily Sharpe 0.02,
+**9. Assumed half-life.** A chosen exponential IC half-life is 2 years, starting at 0.03. When is IC strictly below 0.01? Is the half-life established by three yearly observations?
+
+*Solution.* With $IC(t)=0.03\,2^{-t/2}$, strict inequality $IC(t)<0.01$ is equivalent to $t>2\log_2 3=3.169925$ years. Equality holds at the boundary. If observations are restricted to integer years, the first is year four. The chosen exponential law and half-life are assumptions; three selected yearly means do not establish a causal crowding-decay rate.
+
+**10. Plug-in approximation.** 20 fixed independent Gaussian return coordinates have daily Sharpe 0.02, known covariance and 365 observation days. Compute population optimum and the plug-in approximation, daily and 365-day annualised.
+
+*Solution.* For 20 pre-specified independent Gaussian coordinates with daily Sharpe 0.02,
 
 $$S=20(0.02)^2=0.008,\quad SR_*=\sqrt S=0.0894427.$$
 
@@ -121,7 +141,9 @@ per day. Multiplication by $\sqrt{365}$ gives population optimum **1.70880** and
 
 ## Problems 11–12: qualifying problems, with solutions
 
-**11. Gaussian concentration and finite addition.** For IID $r_t\sim N(\mu,\Sigma)$ with known positive definite $\Sigma$, set $\theta=\Sigma^{-1/2}\mu$ and $z=\Sigma^{-1/2}\hat\mu=\theta+\varepsilon/\sqrt T$, $\varepsilon\sim N(0,I_K)$. The population Sharpe of $\hat w=\Sigma^{-1}\hat\mu$ is exactly
+**11. Gaussian concentration and finite addition.**
+
+*Solution.* For IID $r_t\sim N(\mu,\Sigma)$ with known positive definite $\Sigma$, set $\theta=\Sigma^{-1/2}\mu$ and $z=\Sigma^{-1/2}\hat\mu=\theta+\varepsilon/\sqrt T$, $\varepsilon\sim N(0,I_K)$. The population Sharpe of $\hat w=\Sigma^{-1}\hat\mu$ is exactly
 
 $$SR(\hat w)=\frac{z^\top\theta}{\|z\|}.$$
 
@@ -143,7 +165,9 @@ $$a>\frac{2S}{TS+2K+\sqrt{(TS+2K)^2+4(TS+K)}}.$$
 
 Dropping the positive quadratic term yields $a>S/(TS+2K)$, a stronger first-order sufficient condition, not a necessary exact finite threshold. With $S=0$, any $a>0$ increases the objective. These use true incremental strengths in common observation units; annualised selected Sharpe estimates cannot be inserted as daily population strengths. Estimated covariance adds another problem. For unbiased Gaussian sample covariance, $\mathbb E\hat\Sigma^{-1}=(T-1)\Sigma^{-1}/(T-K-2)$ requires $T>K+2$. Scalar inflation alone leaves Sharpe unchanged; random directional error matters.
 
-**12. Optimal Pearson combination.** Centre and standardise the signals and target; assume finite second moments and positive definite signal correlation matrix $C$. For weights $w$,
+**12. Optimal Pearson combination.** (qual) For standardised signals with positive definite $C$ and target correlations $c$, derive maximal Pearson IC $\sqrt{c^\top C^{-1}c}$, joint PSD feasibility, and the equal-IC equicorrelation special case.
+
+*Solution.* Centre and standardise the signals and target; assume finite second moments and positive definite signal correlation matrix $C$. For weights $w$,
 
 $$IC(w)=\frac{w^\top c}{\sqrt{w^\top Cw}}.$$
 

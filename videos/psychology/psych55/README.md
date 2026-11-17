@@ -122,17 +122,31 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **The default algebra.** q = 0.9 - 0.4 = 0.5; p = 0.4/(1 - 0.5) = 0.8.
-2. **Shrinkage.** The weight on the arm's own estimate is 1/(1 + 1.5^2) = 0.31; shrunk = 1 + 0.31 x (5 - 1) = +2.2
+1. **The default algebra.** Opt-in enrolment 40%, opt-out 90%: solve the two-type model for $q$ and $p$.
+
+   *Solution.* q = 0.9 - 0.4 = 0.5; p = 0.4/(1 - 0.5) = 0.8.
+2. **Shrinkage.** A megastudy arm estimated at +5 points with SE 1.5; arms' true effects have mean +1 and SD 1. Shrink it.
+
+   *Solution.* The weight on the arm's own estimate is 1/(1 + 1.5^2) = 0.31; shrunk = 1 + 0.31 x (5 - 1) = +2.2
    points.
-3. **A trial's size.** n = (1.96 + 0.84)^2 (0.3 x 0.7 + 0.32 x 0.68)/0.02^2 = about 8,400 per arm.
-4. **A filtered average.** Published only if the estimate exceeds 1.96 x 4 = 7.8 points; the mean of N(1.5, 4)
+3. **A trial's size.** A trial: base rate 30%, effect 2 points, 80% power, 5% two-sided: people per arm?
+
+   *Solution.* n = (1.96 + 0.84)^2 (0.3 x 0.7 + 0.32 x 0.68)/0.02^2 = about 8,400 per arm.
+4. **A filtered average.** Academic trials with SE 4 points are published only if significant. True effect 1.5. Roughly what is the average published estimate?
+
+   *Solution.* Published only if the estimate exceeds 1.96 x 4 = 7.8 points; the mean of N(1.5, 4)
    above 7.8 is 1.5 + 4 phi(1.57)/(1 - Phi(1.57)) = about 9.5 points, six times the truth.
-5. **Cost per kWh.** Twelve letters cost $12 a year; 2% of 10,000 kWh is 200 kWh; $0.06 per kWh saved.
-6. **Nudge or manipulation.** The disclosure test: would it still work if the person were told exactly what was done
+5. **Cost per kWh.** Energy use falls 2% per home at a cost of \$1 a letter. A home uses 10,000 kWh a year. Cost per kWh saved, if one letter a month for a year?
+
+   *Solution.* Twelve letters cost $12 a year; 2% of 10,000 kWh is 200 kWh; $0.06 per kWh saved.
+6. **Nudge or manipulation.** Give one test that separates a nudge from manipulation, and apply it to a pre-ticked box.
+
+   *Solution.* The disclosure test: would it still work if the person were told exactly what was done
    and why? A pre-ticked enrolment box with a plain statement ("we have enrolled you; untick to opt out") still
    works in studies that disclosed it, so it passes; a hidden subscription renewal does not.
-7. **A trial design.** One primary outcome from administrative data, preregistered; arms for the current reminder,
+7. ★ **A trial design.** Design a trial of a new reminder for a public service: outcome, arms, power, preregistration, persistence and cost.
+
+   *Solution.* One primary outcome from administrative data, preregistered; arms for the current reminder,
    the new one and a variant; randomization by person with a power calculation from the base rate and the smallest
    effect worth having; the interval reported whatever it shows; planned subgroup checks only; a follow-up for
    persistence; and the cost per unit of change.

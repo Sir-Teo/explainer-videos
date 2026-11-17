@@ -96,28 +96,40 @@ All 13 numerical inputs regenerated. Seventeen checks cover audited kernels and 
 
 ## Problems and solutions
 
-1. **W₁ as an area.**
+1. **W₁ as an area.** Show that in one dimension $W_1(\mu, \nu) = \int |F(x) - G(x)|\,dx$.
+
+   *Solution.*
    - W₁ = ∫₀¹ |F⁻¹(u) − G⁻¹(u)| du is the area between the two quantile curves.
    - Swapping the roles of the axes, it is the area between the graphs of F and G, which is ∫ |F(x) − G(x)| dx.
    - Equivalently, by Kantorovich–Rubinstein, sup over 1-Lipschitz f of ∫ f d(μ − ν) = ∫ f′(x)(G(x) − F(x)) dx is
      maximized by f′ = sign(G − F).
-2. **Sparse vertices.**
+2. **Sparse vertices.** Show that a vertex of the transport polytope $\Pi(a, b)$ has at most $n + m - 1$ nonzero entries.
+
+   *Solution.*
    - The transport polytope has n + m equality constraints, of which n + m − 1 are independent (both sets of marginals
      sum to one).
    - A vertex of a polytope {P ≥ 0 : AP = r} has at most rank(A) = n + m − 1 positive coordinates.
-3. **Normal laws.**
+3. **Normal laws.** Show that $W_2^2\big(N(m_1, \sigma_1^2), N(m_2, \sigma_2^2)\big) = (m_1 - m_2)^2 + (\sigma_1 - \sigma_2)^2$.
+
+   *Solution.*
    - The monotone coupling of N(m₁, σ₁²) and N(m₂, σ₂²) is Y = m₂ + (σ₂/σ₁)(X − m₁).
    - So E(X − Y)² = (m₁ − m₂)² + E(Z(σ₁ − σ₂))² = (m₁ − m₂)² + (σ₁ − σ₂)².
-4. **Sinkhorn as dual ascent.**
+4. **Sinkhorn as dual ascent.** Derive Sinkhorn's updates as exact maximization of the entropic dual in $f$, then in $g$.
+
+   *Solution.*
    - The dual of the entropic problem is max over f, g of a′f + b′g − ε Σᵢⱼ aᵢbⱼ e^{(fᵢ + gⱼ − Cᵢⱼ)/ε} + ε.
    - Setting its derivative in fᵢ to zero gives fᵢ = −ε log Σⱼ bⱼ e^{(gⱼ − Cᵢⱼ)/ε}, and the same in gⱼ: these are the
      log-domain Sinkhorn updates.
    - Each is an exact block maximization of a concave function, so the dual objective increases monotonically.
-5. **Location-scale barycenter.**
+5. **Location-scale barycenter.** Show the 1D barycenter of a location-scale family has mean $\sum w_k m_k$ and sd $\sum w_k \sigma_k$.
+
+   *Solution.*
    - If F_k⁻¹(u) = m_k + σ_k Q(u) for a fixed quantile function Q, then Σ w_k F_k⁻¹(u) = Σ w_k m_k + (Σ w_k σ_k) Q(u).
    - This is the same family, with mean Σ w_k m_k and scale Σ w_k σ_k.
    - The mixture instead has variance Σ w_k(σ_k² + m_k²) − (Σ w_k m_k)², which includes the spread of the means.
-6. **Langevin's rate.**
+6. **Langevin's rate.** For $\pi = N(0, \Sigma)$ and Langevin from $N(m_0, \Sigma)$, show $\mathrm{KL}_t \le e^{-2t/\lambda_{\max}(\Sigma)}\mathrm{KL}_0$.
+
+   *Solution.*
    - With S₀ = Σ, the covariance stays Σ and the mean is m(t) = e^{−Σ⁻¹t}m₀, so KL_t = ½ m(t)′Σ⁻¹m(t).
    - In Σ's eigenbasis, each coordinate decays like e^{−t/λᵢ} and contributes e^{−2t/λᵢ} times its initial share.
    - Every factor is at most e^{−2t/λ_max}, so KL_t ≤ e^{−2t/λ_max}KL₀.

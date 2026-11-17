@@ -118,18 +118,30 @@ python tools/lecture_length.py stats56 --floor 50
 
 ## Problems and solutions
 
-1. **The decomposition's independence.** (η′Y, Z) is jointly Gaussian, and Cov(Z, η′Y) = Ση − c η′Ση = Ση − Ση = 0,
+1. **The decomposition's independence.** Show that $Z = Y - c\,\eta'Y$ with $c = \Sigma\eta/(\eta'\Sigma\eta)$ is independent of $\eta'Y$ when $Y \sim N(\mu, \Sigma)$.
+
+   *Solution.* (η′Y, Z) is jointly Gaussian, and Cov(Z, η′Y) = Ση − c η′Ση = Ση − Ση = 0,
    so Z and η′Y are independent.
-2. **Marginal screening.** {|Y_j| > t} = {Y_j > t} ∪ {−Y_j > t}, each a single linear inequality. Conditioning also on
+2. **Marginal screening.** For marginal screening $\{|Y_j| > t\}$, write the selection event as a union of polyhedra, and find $[\mathcal V^-, \mathcal V^+]$.
+
+   *Solution.* {|Y_j| > t} = {Y_j > t} ∪ {−Y_j > t}, each a single linear inequality. Conditioning also on
    the other coordinates (which are independent of Y_j under Σ = I), Y_j given selection is N(μ_j, 1) truncated to
    (−∞, −t) ∪ (t, ∞); with the sign also conditioned on, one of the two pieces.
-3. **Monotonicity.** The truncated family {N(μ, 1) restricted to [a, b]} is an exponential family in y with natural
+3. **Monotonicity.** Show that the truncated-normal survival function $P_\mu(Y > y \mid Y \in [a, b])$ is increasing in $\mu$.
+
+   *Solution.* The truncated family {N(μ, 1) restricted to [a, b]} is an exponential family in y with natural
    parameter μ, so it has a monotone likelihood ratio, and P_μ(Y > y | Y ∈ [a, b]) is increasing in μ.
-4. **The winner's curse rate.** By Jensen, e^{λE max} ≤ E e^{λ max} ≤ K e^{λ²/2}, so E max ≤ log K/λ + λ/2; with
+4. **The winner's curse rate.** For $K$ i.i.d. $N(0, 1)$, show $E\max_k Y_k \le \sqrt{2\log K}$, an upper growth bound for the winner's curse.
+
+   *Solution.* By Jensen, e^{λE max} ≤ E e^{λ max} ≤ K e^{λ²/2}, so E max ≤ log K/λ + λ/2; with
    λ = √(2 log K), E max ≤ √(2 log K).
-5. **Fission.** Cov(f, g) = σ² − τ(1/τ)σ² = 0 and joint Gaussianity give independence. Var f = (1 + τ²)σ² ≤ v forces
+5. **Fission.** Prove that fission's $f = X + \tau Z$ and $g = X - Z/\tau$ are independent, and find the $\tau$ minimizing $\mathrm{Var}\,g$ given $\mathrm{Var}\,f \le v$.
+
+   *Solution.* Cov(f, g) = σ² − τ(1/τ)σ² = 0 and joint Gaussianity give independence. Var f = (1 + τ²)σ² ≤ v forces
    τ² ≤ v/σ² − 1, and Var g = (1 + 1/τ²)σ² is decreasing in τ, so take τ² = v/σ² − 1.
-6. **Conformal p-values.** Assume IID calibration/test pairs and a score trained separately. Define V=−score(X) for Y≤c and V=+∞ for Y>c, and use the conservative **lower** rank p*=(1+#{calibration V_i≤V_j})/(n+1). On a null outcome, that conservative oracle rank is exactly the reported (1+#{calibration nulls: score_i≥score_j})/(n+1). IID pairs make the conservative lower rank superuniform (randomized ties make it uniform). Consequently P(p_j≤t, Y_j≤c)≤P(p*≤t)≤t. This is a **joint** bound, not conditional null validity. For n=9, all feature scores tied, and IID null probability 0.1, P(p≤0.1 | null)=0.9^9≈0.387, whereas the joint probability is ≈0.0387. BH FDR control additionally requires Jin–Candès's oracle/modified-vector dependence argument.
+6. **Conformal p-values.** For IID calibration and test pairs, prove $P(p_j\le t, Y_j\le c)\le t$; explain why this is not conditional null validity.
+
+   *Solution.* Assume IID calibration/test pairs and a score trained separately. Define V=−score(X) for Y≤c and V=+∞ for Y>c, and use the conservative **lower** rank p*=(1+#{calibration V_i≤V_j})/(n+1). On a null outcome, that conservative oracle rank is exactly the reported (1+#{calibration nulls: score_i≥score_j})/(n+1). IID pairs make the conservative lower rank superuniform (randomized ties make it uniform). Consequently P(p_j≤t, Y_j≤c)≤P(p*≤t)≤t. This is a **joint** bound, not conditional null validity. For n=9, all feature scores tied, and IID null probability 0.1, P(p≤0.1 | null)=0.9^9≈0.387, whereas the joint probability is ≈0.0387. BH FDR control additionally requires Jin–Candès's oracle/modified-vector dependence argument.
 
 
 ## Glossary

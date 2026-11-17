@@ -215,41 +215,59 @@ edition, Bali–Engle–Murray's Part I, and course syllabi for Hayashi).
 
 ## Problems, with solutions
 
-1. **The cost of overlap.** With y_t = Σ_{j=1}^{h} ε_{t+j} and a predictor that barely changes, the residuals are
+1. **The cost of overlap.** For $h$-month sums of iid returns regressed on a slowly moving predictor, show that the naive standard error understates the true one by roughly $\sqrt{h}$.
+
+   *Solution.* With y_t = Σ_{j=1}^{h} ε_{t+j} and a predictor that barely changes, the residuals are
    close to y_t. Neighbouring y_t share h − k shocks at lag k, so their autocorrelation is (h − k)/h, and
    Σ_{|k|<h}(1 − |k|/h) = h. In this limiting slowly moving-predictor calculation, the naive variance is too small by h and the standard error by √h: √60 ≈ 7.7 for
    five-year returns sampled monthly (compare 15.0 against 2.8).
-2. **Stambaugh's bias.** With r_{t+1} = a + βx_t + u and x_{t+1} = c + ρx_t + v, write u = φv + e, φ = σ_uv/σ_v², e
+2. **Stambaugh's bias.** From Kendall's $\mathbb{E}[\hat\rho - \rho] \approx -(1 + 3\rho)/T$, derive Stambaugh's bias; evaluate it for $\rho = 0.91$, $\phi=\sigma_{uv}/\sigma_v^2=-0.72$, $T = 149$.
+
+   *Solution.* With r_{t+1} = a + βx_t + u and x_{t+1} = c + ρx_t + v, write u = φv + e, φ = σ_uv/σ_v², e
    independent of the whole predictor path in the iid Gaussian system. OLS gives β̂ − β = φ(ρ̂ − ρ) + Σx̃e/Σx̃², whose second term has mean zero, and Kendall's
    E[ρ̂ − ρ] ≈ −(1 + 3ρ)/T. So E[β̂ − β] ≈ −φ(1 + 3ρ)/T. Annual data: ρ = 0.91, T = 149, φ = −0.72: bias
    +0.72 × 3.73/149 = +0.018. This is a first-order approximation, not an exact finite-sample bias formula.
-3. **The Sharpe ratio's standard error.** SR̂ = μ̂/σ̂; with iid normal returns Var(μ̂) = σ²/T, Var(σ̂) ≈ σ²/(2T),
+3. **The Sharpe ratio's standard error.** Derive the standard error of a Sharpe ratio from iid normal returns by the delta method.
+
+   *Solution.* SR̂ = μ̂/σ̂; with iid normal returns Var(μ̂) = σ²/T, Var(σ̂) ≈ σ²/(2T),
    independent. The delta method gives Var(SR̂) ≈ (1 + SR²/2)/T. For iid returns with finite fourth moment, fat tails add (κ − 3)SR²/4 and skewness −γ₃SR
    to the numerator; the whole expression is divided by T (Mertens 2002).
-4. **Holm.** Reject while p₍ᵢ₎ ≤ α/(m − i + 1). With m₀ true nulls, at the first false rejection at least m₀
+4. **Holm.** Show that Holm's procedure controls the family-wise error rate and rejects at least as much as Bonferroni.
+
+   *Solution.* Reject while p₍ᵢ₎ ≤ α/(m − i + 1). With m₀ true nulls, at the first false rejection at least m₀
    hypotheses remain, so its threshold is at most α/m₀; P(any false rejection) ≤ P(min over true nulls of p ≤ α/m₀) ≤
    α. Every threshold is at least α/m, so Holm rejects at least what Bonferroni rejects.
-5. **James–Stein.** For x ~ N(μ, I_k), Stein's lemma E[(x − μ)·g(x)] = E[∇·g] gives the risk of
+5. **James–Stein.** For $k \ge 3$ independent observations $x_i \sim N(\mu_i, 1)$, show that $(1 - (k - 2)/\|x\|^2)\,x$ has lower total squared error in expectation than $x$ (James–Stein).
+
+   *Solution.* For x ~ N(μ, I_k), Stein's lemma E[(x − μ)·g(x)] = E[∇·g] gives the risk of
    (1 − (k − 2)/‖x‖²)x as k − (k − 2)²E[1/‖x‖²] < k. Shrinking toward the grand mean spends a degree of freedom: the
    factor becomes (k − 3)/‖x − x̄‖², which needs k ≥ 4.
-6. **Within and between.** Write x̃_it = x_it − x̄_t. The month-fixed-effects slope is Σ_tΣ_i x̃_it r̃_it / Σ_tΣ_i x̃_it².
+6. **Within and between.** Show that pooled OLS with month fixed effects equals the Fama–MacBeth average weighted by each month's within-month sum of squared centred $x$, and that pooled OLS without them averages the within and between slopes.
+
+   *Solution.* Write x̃_it = x_it − x̄_t. The month-fixed-effects slope is Σ_tΣ_i x̃_it r̃_it / Σ_tΣ_i x̃_it².
    Each month's cross-sectional slope is γ̂_t = Σ_i x̃_it r̃_it / Σ_i x̃_it², so the numerator is Σ_t γ̂_t Σ_i x̃_it²,
    and the FE slope is Σ_t w_t γ̂_t with w_t = Σ_i x̃_it² / Σ_sΣ_i x̃_is². For pooled OLS, split x_it − x̄ =
    x̃_it + (x̄_t − x̄); the cross term sums to zero within each month, so Σ(x − x̄)² = SS_W + SS_B and the pooled
    numerator is SS_W·β_FE + SS_B·β_B: β_pooled = (SS_W β_FE + SS_B β_B)/(SS_W + SS_B). On the industries,
    0.45 × 0.0103 + 0.55 × (−0.0046) = 0.0022.
-7. **The iid bootstrap forgets dependence.** Each x*_i is drawn uniformly from the sample, so Var*(x*_i) = Γ̂₀ and the
+7. **The iid bootstrap forgets dependence.** Show that the iid bootstrap variance of $\sqrt n\,\bar x^*$ is $\hat\Gamma_0$, and that moving blocks of length $\ell$ give approximately a Bartlett-weighted long-run variance.
+
+   *Solution.* Each x*_i is drawn uniformly from the sample, so Var*(x*_i) = Γ̂₀ and the
    draws are independent: Var*(√n x̄*) = Γ̂₀, whatever the autocovariances. With moving blocks of length ℓ, a block
    mean contains ℓ − k pairs at lag k, so Var*(√n x̄*) ≈ Γ̂₀ + 2Σ_{k<ℓ}(1 − k/ℓ)Γ̂_k: a Bartlett-weighted long-run
    variance with bandwidth ℓ.
 
-8. **(qual) The local-to-unity limit.** With $x_t = \rho x_{t-1} + v_t$, $\rho = 1 + c/T$, the FCLT for near-integrated
+8. **(qual) The local-to-unity limit.** (qual) With $\rho = 1 + c/T$, show $T(\hat\rho - \rho) \Rightarrow \int_0^1 J_c\,dW/\int_0^1 J_c^2$, $dJ_c = cJ_c\,dt + dW$ (no intercept), from the FCLT for near-integrated processes.
+
+   *Solution.* With $x_t = \rho x_{t-1} + v_t$, $\rho = 1 + c/T$, the FCLT for near-integrated
    processes (Bobkoski 1983; Phillips 1987) gives $T^{-1/2}x_{\lfloor Tr\rfloor} \Rightarrow \sigma J_c(r)$, the
    Ornstein–Uhlenbeck process $dJ_c = cJ_c\,dt + dW$. Then $T(\hat\rho - \rho) = \frac{T^{-1}\sum x_{t-1}v_t}{T^{-2}\sum
    x_{t-1}^2}$; the denominator tends to $\sigma^2\int_0^1 J_c^2$ by continuous mapping, and the numerator to
    $\sigma^2\int_0^1 J_c\,dW$ by the weak convergence of stochastic integrals (Kurtz and Protter 1991), jointly. At $c =
    0$ this is the Dickey–Fuller limit of Part 7's problem.
-9. **(qual) The unit-root $t$.** With $\phi = -1$, $u = -(\sigma_u/\sigma_v)v$, so $\hat\beta - \beta =
+9. **(qual) The unit-root $t$.** (qual) With $\phi = -1$ and $\rho = 1$, show $t_{\hat\beta} = -\tau_{DF}$, and use Chapter 5's simulation tools to estimate the size of a nominal 5% one-sided test.
+
+   *Solution.* With $\phi = -1$, $u = -(\sigma_u/\sigma_v)v$, so $\hat\beta - \beta =
    -(\sigma_u/\sigma_v)(\hat\rho - \rho)$ and the residual variances scale identically: $t_{\hat\beta} = -\tau_{DF}$
    at $\rho = 1$. The test rejects when $\tau_{DF} < -1.645$; for the Dickey–Fuller law with an intercept that is
    about 46% (20,000 simulated random walks of 500 steps).

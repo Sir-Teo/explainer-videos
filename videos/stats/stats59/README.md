@@ -115,20 +115,32 @@ python tools/lecture_length.py stats59 --floor 50
 
 ## Problems and solutions
 
-1. **Least squares.** Given X, Cov(β̂) = σ²(X′X)⁻¹, so E‖β̂ − β‖² = σ² E tr (X′X)⁻¹. For Gaussian rows, X′X is
+1. **Least squares.** Show that for Gaussian least squares $E\|\hat\beta - \beta\|^2 = \sigma^2 p/(n - p - 1)$, and find its limit.
+
+   *Solution.* Given X, Cov(β̂) = σ²(X′X)⁻¹, so E‖β̂ − β‖² = σ² E tr (X′X)⁻¹. For Gaussian rows, X′X is
    Wishart(n, I_p) and E (X′X)⁻¹ = I_p/(n − p − 1), so the trace is p/(n − p − 1) → κ/(1 − κ).
-2. **Marchenko–Pastur.** Write S = Σ_i x_i x_i′/n. The identity tr (S − z)⁻¹ S − z tr (S − z)⁻¹ = p, the
+2. **Marchenko–Pastur.** Derive the Marchenko–Pastur equation $\kappa z m^2 - (1 - \kappa - z)m + 1 = 0$ by leaving one independent row contribution out.
+
+   *Solution.* Write S = Σ_i x_i x_i′/n. The identity tr (S − z)⁻¹ S − z tr (S − z)⁻¹ = p, the
    Sherman–Morrison formula for each x_i, and concentration of x_i′(S₋ᵢ − z)⁻¹x_i/n around (p/n) m give
    p + zpm = n(1 − 1/(1 + κm)). Rearranged, κzm² − (1 − κ − z)m + 1 = 0.
-3. **Optimal ridge.** Differentiating bias + variance in λ, and using the MP equation to eliminate m″, gives the
+3. **Optimal ridge.** From the ridge risk, show the optimal penalty is $\lambda_\star = \gamma\sigma^2/r^2$.
+
+   *Solution.* Differentiating bias + variance in λ, and using the MP equation to eliminate m″, gives the
    stationarity condition r²λ = σ²γ, so λ⋆ = γσ²/r². This is also the Bayes posterior mean under a normal prior of total
    energy r², which minimizes the risk among all estimators for that prior.
-4. **Ridgeless, γ > 1.** The minimum-norm solution is the projection of β onto the row space plus the noise fitted
+4. **Ridgeless, γ > 1.** Derive the ridgeless risk for $\gamma > 1$: $r^2(1 - 1/\gamma) + \sigma^2/(\gamma - 1)$.
+
+   *Solution.* The minimum-norm solution is the projection of β onto the row space plus the noise fitted
    there. The row space has dimension n of p, so the unseen part contributes r²(1 − 1/γ). The noise contributes
    σ² tr (XX′)⁻¹, whose limit by the MP law with ratio 1/γ is σ²/(γ − 1).
-5. **Gordon for least squares.** The auxiliary objective after optimizing directions is f(a) = √(a² + σ²)√n − a√p.
+5. **Gordon for least squares.** Solve Gordon's auxiliary problem for least squares and recover $\sigma^2\kappa/(1 - \kappa)$.
+
+   *Solution.* The auxiliary objective after optimizing directions is f(a) = √(a² + σ²)√n − a√p.
    Setting f′ = 0 gives a/√(a² + σ²) = √κ, so a² = σ²κ/(1 − κ).
-6. **AMP's fixed points.** At a fixed point, x = η(x + A′z; θτ) and z = y − Ax + z⟨η′⟩/δ. So z(1 − ⟨η′⟩/δ) = y − Ax,
+6. **AMP's fixed points.** Show that AMP's fixed points with the soft threshold are lasso solutions at the calibrated $\lambda$.
+
+   *Solution.* At a fixed point, x = η(x + A′z; θτ) and z = y − Ax + z⟨η′⟩/δ. So z(1 − ⟨η′⟩/δ) = y − Ax,
    and A′z lies in the subdifferential of θτ‖x‖₁ at x. Then A′(y − Ax) = (1 − ⟨η′⟩/δ) A′z ∈ λ ∂‖x‖₁ with
    λ = θτ(1 − ⟨η′⟩/δ), which is the lasso's optimality condition.
 

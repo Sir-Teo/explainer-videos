@@ -70,20 +70,32 @@ Kolodny and MacFarlane (2010); Wachter, Mittelstadt and Russell (2017); Khoo and
 
 ## Problems and solutions
 
-1. **Revise and contract.** K = {pq}. The most plausible ¬p world is p̄q, at rank 2, so K * ¬p = {p̄q}. Contracting p
+1. **Revise and contract.** With ranks $pq{:}\,0$, $p\bar q{:}\,1$, $\bar p q{:}\,2$, $\bar p \bar q{:}\,3$: compute $K * \lnot p$ and $K \div p$.
+
+   *Solution.* K = {pq}. The most plausible ¬p world is p̄q, at rank 2, so K * ¬p = {p̄q}. Contracting p
    adds the most plausible ¬p world to K: K ÷ p = {pq, p̄q}, which still believes q but no longer p.
-2. **Full meet revision.** Full meet revision is sphere revision with two spheres, K and everything. If K ∩ A ∩ B is
+2. **Full meet revision.** Show that full meet revision ($K * A = A$ when $\lnot A \in K$) satisfies K*7 and K*8.
+
+   *Solution.* Full meet revision is sphere revision with two spheres, K and everything. If K ∩ A ∩ B is
    nonempty, then K * A = K ∩ A and K * (A ∧ B) = K ∩ A ∩ B = (K * A) ∩ B; if K ∩ A is nonempty but K ∩ A ∩ B is
    empty, (K * A) ∩ B is empty, so K*7 holds and K*8's antecedent fails; if K ∩ A is empty, both sides are A ∩ B.
-3. **Remembering.** Naturally, revising by ¬q puts pq̄ at 0 and keeps pq, p̄q, p̄q̄ in order; revising then by q
+3. **Remembering.** Revise that ranking by $\lnot q$, then by $q$, naturally and amnesically. What is lost?
+
+   *Solution.* Naturally, revising by ¬q puts pq̄ at 0 and keeps pq, p̄q, p̄q̄ in order; revising then by q
    returns to pq: p and q are believed. Amnesically, after ¬q everything but pq̄ is at rank 1, so revising by q leaves
    pq and p̄q tied: the belief in p, which neither piece of news concerned, is lost.
-4. **A tie.** Take an actual world where A is false and two A-worlds equally close to it, one with B and one without.
+4. **A tie.** Build a three-world model where `if $A$, $B$' and `if $A$, $\lnot B$' are both false.
+
+   *Solution.* Take an actual world where A is false and two A-worlds equally close to it, one with B and one without.
    The closest A-worlds include both, so neither "if A, B" nor "if A, ¬B" holds: conditional excluded middle fails,
    as in Bizet and Verdi.
-5. **Lewis with new numbers.** P(C | A) = 0.5 / 0.75 = 2/3. Conditioning on C forces X to contain AC; on ¬C, to miss
+5. **Lewis with new numbers.** Run Lewis's proof with $P(AC) = 0.5$, $P(A\bar C) = 0.25$, $P(\bar A \bar C) = 0.25$.
+
+   *Solution.* P(C | A) = 0.5 / 0.75 = 2/3. Conditioning on C forces X to contain AC; on ¬C, to miss
    AC̄ and ĀC̄. So X = {AC} and P(X) = 0.5 ≠ 2/3.
-6. **A framework.** a is unattacked, so in; b is out. c and d attack each other, so the grounded extension is {a},
+6. **A framework.** Find all extensions of the framework $a \to b \to c \to d$, $d \to c$.
+
+   *Solution.* a is unattacked, so in; b is out. c and d attack each other, so the grounded extension is {a},
    with c and d undecided. The preferred, and stable, extensions are {a, c} and {a, d}; the complete ones are {a},
    {a, c} and {a, d}.
 

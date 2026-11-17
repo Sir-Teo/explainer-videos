@@ -182,26 +182,40 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Tetrads.** With r_ij = λ_iλ_j, r_ik r_jl − r_il r_jk = λ_iλ_kλ_jλ_l − λ_iλ_lλ_jλ_k = 0. And
+1. **Tetrads.** Under one factor, $r_{ij} = \lambda_i \lambda_j$ for $i \neq j$. Show that every tetrad difference $r_{ik} r_{jl} - r_{il} r_{jk}$ is zero, and that $\lambda_i^2 = r_{ij} r_{ik} / r_{jk}$.
+
+   *Solution.* With r_ij = λ_iλ_j, r_ik r_jl − r_il r_jk = λ_iλ_kλ_jλ_l − λ_iλ_lλ_jλ_k = 0. And
    r_ij r_ik / r_jk = λ_i²λ_jλ_k / (λ_jλ_k) = λ_i².
-2. **Three of Spearman's correlations.** λ_C² = .83 × .78 / .67 = 0.966, λ_C = 0.98; λ_F² = .83 × .67 / .78 = 0.713,
+2. **Three of Spearman's correlations.** From Spearman's table, $r_{CF} = .83$, $r_{CE} = .78$ and $r_{FE} = .67$. Estimate the loadings of Classics, French and English, and say why three tests give one answer but four test the model.
+
+   *Solution.* λ_C² = .83 × .78 / .67 = 0.966, λ_C = 0.98; λ_F² = .83 × .67 / .78 = 0.713,
    λ_F = 0.84; λ_E² = .78 × .67 / .83 = 0.630, λ_E = 0.79. Three tests give three correlations and three loadings, so
    the model fits exactly whatever the data; with four there are six correlations and four loadings, and the two
    independent tetrads must vanish, which is a test. (The full six-test ML fit gives 0.96, 0.87 and 0.81, close.)
-3. **Thorndike's case II.** Selection on X alone leaves the regression of Y on X unchanged: slope b = r s_Y/s_X is the
+3. **Thorndike's case II.** Derive Thorndike's correction for direct range restriction, $r_c = (r/u) / \sqrt{1 - r^2 + r^2/u^2}$, and apply it to $r = .28$, $u = .51$.
+
+   *Solution.* Selection on X alone leaves the regression of Y on X unchanged: slope b = r s_Y/s_X is the
    same in both groups, and so is the residual variance s_Y²(1 − r²). Write s_x = u s_X for the restricted SD. In the
    full group, r_c² = b²s_X² / (b²s_X² + e²) with e² the residual variance; substitute b = r s_y/s_x and
    e² = s_y²(1 − r²) from the restricted group and divide by s_y² to get r_c = (r/u) / √(1 − r² + r²/u²). With
    r = .28 and u = .51: (0.549) / √(0.9216 + 0.3014) = 0.50, the validity before selection.
-4. **Ratio IQs.** 100 × 16/40 = 40: mental age stops rising in the late teens, while chronological age keeps rising,
+4. **Ratio IQs.** Why does a ratio IQ give a 40-year-old with a mental age of 16 a score of 40? Give the deviation IQ of a raw score of 42 when the age group's mean is 34 and its SD is 6.
+
+   *Solution.* 100 × 16/40 = 40: mental age stops rising in the late teens, while chronological age keeps rising,
    so the quotient falls for every adult. A deviation IQ compares a person with their own age group:
    100 + 15 × (42 − 34)/6 = 120.
-5. **Kelley's estimate.** With T ~ N(μ, σ_T²) and E ~ N(0, σ_E²) independent, (T, X) is bivariate normal and
+5. **Kelley's estimate.** With true scores normal and $X = T + E$, show that $E[T \mid X] = \mu + \rho\,(X - \mu)$, with $\rho$ the reliability. Estimate the true score behind 130 at $\rho = 0.9$.
+
+   *Solution.* With T ~ N(μ, σ_T²) and E ~ N(0, σ_E²) independent, (T, X) is bivariate normal and
    E[T | X] = μ + (Cov(T, X)/Var X)(X − μ) = μ + (σ_T² / (σ_T² + σ_E²))(X − μ) = μ + ρ(X − μ). At 130 and ρ = 0.9:
    100 + 0.9 × 30 = 127. The posterior mean minimizes expected squared error.
-6. **Brogden.** Y = rX + √(1 − r²)Z with Z independent of X, so E[Y | X > z] = r E[X | X > z] = r φ(z)/(1 − Φ(z)).
+6. **Brogden.** For a standard normal test $X$ and criterion $Y$ with correlation $r$, show that $E[Y \mid X > z] = r\,\phi(z) / (1 - \Phi(z))$. What do the top 20% average at $r = 0.4$?
+
+   *Solution.* Y = rX + √(1 − r²)Z with Z independent of X, so E[Y | X > z] = r E[X | X > z] = r φ(z)/(1 − Φ(z)).
    For the top 20%, z = 0.842 and φ(z) = 0.280, so the gain is 0.4 × 0.280/0.2 = 0.56 SD.
-7. ★ **Common cause against mutualism.** Train one ability (for example, with practice on one test's skill) in a
+7. ★ **Common cause against mutualism.** Design an experiment that could tell a common cause from mutualism, and say what each world predicts for every test when one ability is trained.
+
+   *Solution.* Train one ability (for example, with practice on one test's skill) in a
    randomized group, and test every ability before, just after and months later. Under a common cause with no
    causal links, training a specific skill moves that test only (unless it moves g, in which case every test moves
    in proportion to its loading at once). Under mutualism, the trained ability moves first and the others follow,

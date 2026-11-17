@@ -196,21 +196,33 @@ python tools/lecture_length.py stats37 --floor 50
 
 ## Problems and solutions
 
-1. **Wald = 2SLS.** With Z binary and a constant, the first stage fits D̂ = E[D | Z]. Then
+1. **Wald = 2SLS.** With a binary instrument, show that 2SLS equals the Wald ratio $\frac{E[Y|Z=1]-E[Y|Z=0]}{E[D|Z=1]-E[D|Z=0]}$.
+
+   *Solution.* With Z binary and a constant, the first stage fits D̂ = E[D | Z]. Then
    cov(Y, Z)/cov(D, Z) = (E[Y | Z=1] − E[Y | Z=0])/(E[D | Z=1] − E[D | Z=0]), because cov(V, Z) =
    Var(Z)(E[V | Z=1] − E[V | Z=0]) for any V.
-2. **AR is robust.** Under H₀, Y − b₀D = Wγ + u with u independent of Z (exclusion and independence).
+2. **AR is robust.** Show that under $H_0: \beta = b_0$ the Anderson–Rubin statistic's distribution does not depend on the first stage.
+
+   *Solution.* Under H₀, Y − b₀D = Wγ + u with u independent of Z (exclusion and independence).
    - The regression of Y − b₀D on (W, Z) has instrument coefficients exactly zero.
    - With independent homoskedastic Gaussian errors conditional on the valid instruments and exogenous controls, the F statistic is exactly F(q, n − k); the first stage never enters. Mere marginal normality is insufficient. A heteroskedastic model needs robust AR inference.
-3. **The MSE bandwidth.** MSE(h) = B²h⁴ + V/(nh). Setting the derivative 4B²h³ − V/(nh²) to zero gives
+3. **The MSE bandwidth.** Local linear RD: bias $\approx B h^2$, variance $\approx V/(nh)$. Find $h_{\text{MSE}}$, and show bias/SD $= \frac12$ there.
+
+   *Solution.* MSE(h) = B²h⁴ + V/(nh). Setting the derivative 4B²h³ − V/(nh²) to zero gives
    h = (V/(4B²n))^{1/5} ∝ n^{−1/5}.
    - In this leading-term, nonzero-curvature approximation, B²h⁴ = V/(4nh), so bias² = variance/4 and absolute bias/SD = ½. Absolute bias can tend to zero while remaining material relative to the standard error.
-4. **TWFE in the 2×2.** With two units, or groups, and two periods, the two-way demeaned treatment is ±¼.
+4. **TWFE in the 2×2.** Show that with two groups and two periods, the TWFE coefficient equals the difference in differences.
+
+   *Solution.* With two units, or groups, and two periods, the two-way demeaned treatment is ±¼.
    - The regression coefficient is then the double difference of the four means.
-5. **Nickell with two periods.** With observations y₀, y₁, y₂, fixed effects equals first differences: Δy₂ on Δy₁.
+5. **Nickell with two periods.** For $y_{it} = \rho y_{i,t-1} + \alpha_i + \varepsilon_{it}$ with two usable periods, show FE converges to $\rho - (1+\rho)/2$.
+
+   *Solution.* With observations y₀, y₁, y₂, fixed effects equals first differences: Δy₂ on Δy₁.
    - plim = ρ + cov(Δy₁, Δε₂)/var(Δy₁) = ρ − σ²/(2σ²/(1 + ρ)) = ρ − (1 + ρ)/2.
    - This matches `nickell_bias(ρ, 2)`.
-6. **Manski.** Let E[Y(1)] ∈ [r₁ȳ₁, r₁ȳ₁ + 1 − r₁] and E[Y(0)] ∈ [r₀ȳ₀, r₀ȳ₀ + 1 − r₀].
+6. **Manski.** Derive Manski's bounds on $E[Y(1)] - E[Y(0)]$ for $Y \in [0,1]$ with response rates $r_1, r_0$; show the width is $2 - r_1 - r_0$.
+
+   *Solution.* Let E[Y(1)] ∈ [r₁ȳ₁, r₁ȳ₁ + 1 − r₁] and E[Y(0)] ∈ [r₀ȳ₀, r₀ȳ₀ + 1 − r₀].
    - The difference lies between the lower end of the first minus the upper end of the second, and the reverse.
    - The width is (1 − r₁) + (1 − r₀) = 2 − r₁ − r₀. Causal interpretation also needs random treatment or other identification of the arm means. These plug-in endpoints are not confidence limits.
 

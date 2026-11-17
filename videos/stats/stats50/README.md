@@ -114,25 +114,37 @@ All twelve scenes, six solutions, twelve computations, shared toolkit and tests 
 
 ## Problems and solutions
 
-1. **The worst θ for a linear rule.**
+1. **The worst θ for a linear rule.** For $y_k = \theta_k + \varepsilon z_k$ and $\hat\theta_k = c_k y_k$, find the worst $\theta$ on $\sum a_k^2\theta_k^2 \le C^2$ for given $c$.
+
+   *Solution.*
    - The risk of θ̂_k = c_k y_k is Σ(1 − c_k)²θ_k² + ε²Σc_k². Write u_k = a_kθ_k, so the constraint is Σu_k² ≤ C².
    - The first sum is Σ((1 − c_k)²/a_k²) u_k², maximized by putting all of C² on the k with the largest
      (1 − c_k)²/a_k²: sup = C² max_k (1 − c_k)²/a_k² + ε²Σc_k².
    - Minimizing over c gives Pinsker's taper: many boundary allocations over active coordinates are worst cases once c is optimal; a spread allocation is not unique. The exact finite-noise result is linear minimax, with unrestricted minimax equivalence asymptotic.
-2. **The Gaussian prior's Bayes rule.**
+2. **The Gaussian prior's Bayes rule.** Show that the Bayes rule for $\theta_k \sim N(0, \tau_k^2)$ is $\tau_k^2 y_k/(\tau_k^2 + \varepsilon^2)$, and find its Bayes risk.
+
+   *Solution.*
    - With θ_k ~ N(0, τ_k²) and y_k | θ_k ~ N(θ_k, ε²), the posterior mean is τ_k²y_k/(τ_k² + ε²).
    - Its Bayes risk is Σ τ_k²ε²/(τ_k² + ε²). This Gaussian law is not supported on the ellipsoid; a lower bound for that bounded parameter space needs prior-radius slack and controlled conditioning/truncation. With τ_k² = ε²(μ/a_k − 1)₊ the weights are (1 − a_k/μ)₊, Pinsker's.
-3. **Le Cam's bound.**
+3. **Le Cam's bound.** Prove Le Cam's bound: $\max_j E_j(\hat\theta - \theta_j)^2 \ge \tfrac{\delta^2}{2}(1 - \mathrm{TV}(P_0, P_1))$.
+
+   *Solution.*
    - For |θ₁−θ₀|=2δ, max_j E_j(θ̂ − θ_j)² ≥ ½(E₀ + E₁); define ψ = 1{|θ̂ − θ₁| < |θ̂ − θ₀|}. If ψ errs, |θ̂ − θ_j| ≥ δ.
    - So the average risk ≥ (δ²/2)(P₀(ψ = 1) + P₁(ψ = 0)) ≥ (δ²/2)(1 − TV(P₀, P₁)).
-4. **TV between normals.**
+4. **TV between normals.** Show $\mathrm{TV}(N(0,1), N(d,1)) = 2\Phi(|d|/2) - 1$, and check Pinsker's inequality for it.
+
+   *Solution.*
    - The densities cross at d/2, so For d≥0, TV = P_d(X > d/2) − P₀(X > d/2) = 2Φ(d/2) − 1.
    - KL = d²/2, so √(KL/2) = d/2. With x = d/2, 2Φ(x) − 1 = 2∫₀ˣ φ ≤ 2xφ(0) = x√(2/π) ≤ x, which is Pinsker's
      inequality for this pair.
-5. **Farrell's construction.**
+5. **Farrell's construction.** With a valid mass-preserving density perturbation $f_1=f_0+h(b_0-b_1)$, $h = Lw^s$, choose $w$ to get the rate $n^{-2s/(2s+1)}$ at $x_0$.
+
+   *Solution.*
    - |f₁(x₀) − f₀(x₀)| = h = c_{b,f₀,L}w^s after checking support, positivity and derivative norms; use a compensating disjoint bump so ∫f₁=1; χ²(f₁, f₀) ≍ h²w, so the n-sample TV stays below 1/2 when n h² w ≍ 1.
    - That is n w^{2s+1} ≍ 1, w ≍ n^{−1/(2s+1)}, and the risk ≳ h² = w^{2s} ≍ n^{−2s/(2s+1)}.
-6. **The maximum's boundary.**
+6. **The maximum's boundary.** For the sparse mixture, show that the maximum statistic detects iff $r > (1 - \sqrt{1 - \beta})^2$.
+
+   *Solution.*
    - Under the null, max X_i ≈ √(2 log n). The n^{1−β} signals have maximum ≈ √(2r log n) + √(2(1 − β) log n).
    - This exceeds √(2 log n) iff √r + √(1 − β) > 1, i.e. r > (1 − √(1 − β))², the boundary's very sparse branch.
 

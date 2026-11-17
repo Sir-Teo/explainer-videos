@@ -64,37 +64,61 @@ Multiplyingv_in by n(n−1)/[(n−K+1)(n−K)] is ensemble-unbiased for E[v_out]
 
 ## Problems 1–6: complete solutions
 
-**1. GMV.** For uncorrelated variances.01 and.04, minimise.01 w²+.04(1−w)². Its derivative.02 w−.08(1−w)=0 givesw₁=.8,w₂=.2. Variance=.0064+.0016=.008, volatility√.008=.0894427. These are known covariance unit-budget weights.
+**1. GMV.** Two uncorrelated assets have annual volatilities 10% and 20%. Derive unit-budget GMV weights and volatility.
 
-**2. ERC.** Equal variance contributions require(w₁σ₁)²=(w₂σ₂)². Positive weights givew₁/w₂=σ₂/σ₁=2, hence(2/3,1/3). Variance=2(.1×2/3)²=.00888889 and volatility.0942809. Equal weights have variance(.01+.04)/4=.0125 and volatility.111803. Different objectives produce different weights.
+*Solution.* For uncorrelated variances.01 and.04, minimise.01 w²+.04(1−w)². Its derivative.02 w−.08(1−w)=0 givesw₁=.8,w₂=.2. Variance=.0064+.0016=.008, volatility√.008=.0894427. These are known covariance unit-budget weights.
 
-**3. MP support.** q=49/60=.816667,√q=.903696; edges(1±√q)²=.00927444 and 3.62405889. The reference assumes the specified independent unit-variance high-dimensional null. These finite substituted edges are not confidence limits or proof that modes in the band lack economic signal.
+**2. ERC.** For the same chosen covariance, derive positive equal-risk-contribution weights and volatility; compare equal money.
 
-**4. Intensity.** Let A=E||S−Σ||²_Fand B=||F−Σ||²_F, with fixed F and E[S]=Σ. The cross term vanishes, so risk(δ)=δ²B+(1−δ)²A. Differentiation givesδ*=A/(A+B)=E||S−Σ||²/E||S−F||²; restrict it to[0,1], with allδ equivalent if A+B=0. If F is estimated from S, cross-covariance terms need not vanish, so this fixed-target derivation does not supply the fitted-target optimum.
+*Solution.* Equal variance contributions require(w₁σ₁)²=(w₂σ₂)². Positive weights givew₁/w₂=σ₂/σ₁=2, hence(2/3,1/3). Variance=2(.1×2/3)²=.00888889 and volatility.0942809. Equal weights have variance(.01+.04)/4=.0125 and volatility.111803. Different objectives produce different weights.
 
-**5. BL.** With no informative views, mean posterior isΠ=δΣ w_m and mean-uncertainty covariance M=τΣ. Using unchangedΣ gives risky demandΣ⁻¹Π/δ=w_m. Using predictiveΣ+M givesw_m/(1+τ). Other budgets, long-only constraints or rescaling define different allocation problems. Setting P=0 with positive-definiteΩhas this no-information limit; a singular defaultΩmust not be blindly inverted.
+**3. MP support.** Compute the Marchenko–Pastur null support at N=49,T=60. State why it is not a finite-sample test of economic noise.
 
-**6. Kelly.** In the known-parameter diffusion, f*=.06/.16²=2.34375. Excess growth is fμ−f²σ²/2. Atf=2 f*, it is 2μ²/σ²−2μ²/σ²=0, so total growth equals the risk-free rate in this model. This is not a discrete-path or solvency guarantee.
+*Solution.* q=49/60=.816667,√q=.903696; edges(1±√q)²=.00927444 and 3.62405889. The reference assumes the specified independent unit-variance high-dimensional null. These finite substituted edges are not confidence limits or proof that modes in the band lack economic signal.
+
+**4. Intensity.** For fixed target F and unbiased S, derive the Frobenius-optimal linear intensity, clipped to [0,1]. What changes if F is estimated from S?
+
+*Solution.* Let A=E||S−Σ||²_Fand B=||F−Σ||²_F, with fixed F and E[S]=Σ. The cross term vanishes, so risk(δ)=δ²B+(1−δ)²A. Differentiation givesδ*=A/(A+B)=E||S−Σ||²/E||S−F||²; restrict it to[0,1], with allδ equivalent if A+B=0. If F is estimated from S, cross-covariance terms need not vanish, so this fixed-target derivation does not supply the fitted-target optimum.
+
+**5. BL.** Black–Litterman with no views: give the posterior mean and risky demands under unchanged versus predictive covariance, with no budget constraint.
+
+*Solution.* With no informative views, mean posterior isΠ=δΣ w_m and mean-uncertainty covariance M=τΣ. Using unchangedΣ gives risky demandΣ⁻¹Π/δ=w_m. Using predictiveΣ+M givesw_m/(1+τ). Other budgets, long-only constraints or rescaling define different allocation problems. Setting P=0 with positive-definiteΩhas this no-information limit; a singular defaultΩmust not be blindly inverted.
+
+**6. Kelly.** In a known-parameter diffusion, market excess drift is 6%, volatility16%. Compute Kelly leverage and quadratic excess growth at twice Kelly.
+
+*Solution.* In the known-parameter diffusion, f*=.06/.16²=2.34375. Excess growth is fμ−f²σ²/2. Atf=2 f*, it is 2μ²/σ²−2μ²/σ²=0, so total growth equals the risk-free rate in this model. This is not a discrete-path or solvency guarantee.
 
 ## Problems 7–10: complete solutions
 
-**7. Two mixture bounds.** For positive gross returns, a frictionless continuous-uniform two-asset mixture satisfiesbest_continuous/mixture≤n+1, hence the log growth gap≤log(n+1)/n→0. For M fixed portfolios with equal initial capital, mixture wealth=(Σ_j S_j)/M≥max_j S_j/M, givingbest_grid/mixture≤M and log gap≤log M/n. The second competes only with its grid. A fixed grid does not approximate every continuous optimum with a certified error; neither theorem competes with arbitrary dynamic foresight strategies or includes costs.
+**7. Two mixture bounds.** For two assets derive Cover's continuous-uniform per-period bound; separately derive the M-component uniform finite-mixture bound. Distinguish their hindsight comparison classes.
 
-**8. Tail mass.** At 80%, worst 20%is exactly the loss 10, giving ES=10. At 60%, worst 40%is losses 5 and 10, giving ES=7.5. Equivalently minimiseα+E[(L−α)⁺]/(1−β); quantile atoms are included only as much as necessary. Simply averaging every observation at or above a chosen quantile can use too much mass.
+*Solution.* For positive gross returns, a frictionless continuous-uniform two-asset mixture satisfiesbest_continuous/mixture≤n+1, hence the log growth gap≤log(n+1)/n→0. For M fixed portfolios with equal initial capital, mixture wealth=(Σ_j S_j)/M≥max_j S_j/M, givingbest_grid/mixture≤M and log gap≤log M/n. The second competes only with its grid. A fixed grid does not approximate every continuous optimum with a certified error; neither theorem competes with arbitrary dynamic foresight strategies or includes costs.
 
-**9. Entropy.** q₁+q₂=1 and−.1 q₁+.1 q₂=.05 giveq₁=.25,q₂=.75. This is the only feasible probability vector, so it also minimises relative entropy to the positive prior. No Gaussian assumption is needed; support is fixed to the two supplied scenarios.
+**8. Tail mass.** Five equally likely losses are -2,0,1,5,10. Compute exact expected shortfall at 80% and60%, accounting for quantile mass.
 
-**10. Ratios.** K = 100,T=250,n=249 give E[v_in/v*]=150/249=.6024096 and E[v_out/v*]=248/149=1.6644295. Their ratio is(248/149)/(150/249), about 2.7630. The high-dimensional reference atγ=.4 is 1/.6²=2.77778. Neither is a known ratio for one fit. In the Gaussian model the report's Schur residual is independent of the regression coefficients determining out-risk, so when n > K+1 the expected random ratio is[(n−1)/(n−K)]×[n/(n−K−1)], a different quantity.
+*Solution.* At 80%, worst 20%is exactly the loss 10, giving ES=10. At 60%, worst 40%is losses 5 and 10, giving ES=7.5. Equivalently minimiseα+E[(L−α)⁺]/(1−β); quantile atoms are included only as much as necessary. Simply averaging every observation at or above a chosen quantile can use too much mass.
+
+**9. Entropy.** Two scenarios have returns -10% and+10% and positive equal prior weights. Impose a+5% mean and solve the entropy-pooling probabilities.
+
+*Solution.* q₁+q₂=1 and−.1 q₁+.1 q₂=.05 giveq₁=.25,q₂=.75. This is the only feasible probability vector, so it also minimises relative entropy to the positive prior. No Gaussian assumption is needed; support is fixed to the two supplied scenarios.
+
+**10. Ratios.** In the IID Gaussian GMV model with K=100,T=250, compute exact expected in/out ratios, their ratio, and the gamma=.4 limiting ratio. Distinguish ratio of expectations from expected ratio.
+
+*Solution.* K = 100,T=250,n=249 give E[v_in/v*]=150/249=.6024096 and E[v_out/v*]=248/149=1.6644295. Their ratio is(248/149)/(150/249), about 2.7630. The high-dimensional reference atγ=.4 is 1/.6²=2.77778. Neither is a known ratio for one fit. In the Gaussian model the report's Schur residual is independent of the regression coefficients determining out-risk, so when n > K+1 the expected random ratio is[(n−1)/(n−K)]×[n/(n−K−1)], a different quantity.
 
 ## Problems 11–12: qualifying solutions
 
-**11. Sampling laws and correction.** Rotate a fixed nonzeroa into the first coordinate, transformingΣ and Wtogether. Partition W. Block inversion gives(W⁻¹)₁₁=1/s, where s=W₁₁−W₁₂W₂₂⁻¹W₂₁. View W as the cross-product ofn Gaussian observations. Regressing the first column on the other K−1 leavesn−K+1 residual degrees of freedom, so s/σ₁₁·₂~χ²_{n−K+1}. Since(Σ⁻¹)₁₁=1/σ₁₁·₂, this proves the inverse-quadratic lemma. Takinga=1 and W=n S gives the reported-risk law and expectation(n−K+1)/n.
+**11. Sampling laws and correction.** (qual) Prove the inverse-Wishart quadratic chi-square lemma using a Schur complement. Derive the GMV out-risk F law via Gaussian regression, its mean conditions, concentration limits and ensemble bias correction.
+
+*Solution.* Rotate a fixed nonzeroa into the first coordinate, transformingΣ and Wtogether. Partition W. Block inversion gives(W⁻¹)₁₁=1/s, where s=W₁₁−W₁₂W₂₂⁻¹W₂₁. View W as the cross-product ofn Gaussian observations. Regressing the first column on the other K−1 leavesn−K+1 residual degrees of freedom, so s/σ₁₁·₂~χ²_{n−K+1}. Since(Σ⁻¹)₁₁=1/σ₁₁·₂, this proves the inverse-quadratic lemma. Takinga=1 and W=n S gives the reported-risk law and expectation(n−K+1)/n.
 
 For out-risk, whiten and rotate the transformed budget to the first coordinate, scaling so population minimum variance is one. Write W=[[a,b'];[b,C]], C~W ishart_{K−1}(n,I). The fitted unit-budget weights are(1,−β)withβ=C⁻¹b. Conditional on C, β~N(0,C⁻¹); integrating over Cgives√νβ a spherical multivariate t_νwithν=n−K+2. Therefore||β||²=(K−1)F_{K−1,ν}/νand true-risk ratio 1+||β||²has the stated law. Its mean needsν>2, i.e.n > K, and equals 1+(K−1)/(n−K)=(n−1)/(n−K). K = 1 is degenerate. The Gaussian regression residual producing the in-law is independent ofβ.
 
 For K,T→∞withγ<1, the appropriate chi-square degrees of freedom diverge and chi-square/df→1 in probability. The F component likewise concentrates when its dimensions grow; fixed K withγ=0 also gives the unit limits. Slutsky then gives the in/out limits and their random ratio. Dividing E[v_out/v*]by E[v_in/v*]gives the bias factor n(n−1)/[(n−K)(n−K+1)]. Multiplying the report by it estimates the ensemble mean E[v_out]without bias; it does not condition on the fitted sample. Shrinkage, dependence, tails and changingΣ require separate laws.
 
-**12. Adjusted quadratic.** Let S≻0 andwsolve minw'Swsubject to 1'w=1,w≥0. KKT gives 2 Sw−γ1−λ=0, λ≥0 andλ_iw_i=0. Define S~=S−(λ1'+1λ')/2. Then S~w=Sw−λ/2=γ1/2. For any other unit-budgetu=w+v,1'v=0. The objective difference isu'S~u−w'S~w=2 v'S~w+v'S~v=v'Sv>0 forv≠0, because the rank correction vanishes on zero-budget directions. Thuswuniquely minimises the adjusted quadratic on that affine set even if S~is not positive definite on the whole space. This proves an algebraic equivalence, not future dominance or an identification of every unconstrained short.
+**12. Adjusted quadratic.** (qual) With S positive definite, prove long-only GMV equivalence for adjusted S-1/2(lambda1'+1lambda'). Use zero-budget directions to explain why full-space positive definiteness of the adjusted matrix is unnecessary.
+
+*Solution.* Let S≻0 andwsolve minw'Swsubject to 1'w=1,w≥0. KKT gives 2 Sw−γ1−λ=0, λ≥0 andλ_iw_i=0. Define S~=S−(λ1'+1λ')/2. Then S~w=Sw−λ/2=γ1/2. For any other unit-budgetu=w+v,1'v=0. The objective difference isu'S~u−w'S~w=2 v'S~w+v'S~v=v'Sv>0 forv≠0, because the rank correction vanishes on zero-budget directions. Thuswuniquely minimises the adjusted quadratic on that affine set even if S~is not positive definite on the whole space. This proves an algebraic equivalence, not future dominance or an identification of every unconstrained short.
 
 ## Papers, chapter by chapter
 

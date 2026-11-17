@@ -66,25 +66,37 @@ Priest, *Towards Non-Being* (2005); Gonthier (2005); Hales et al., Flyspeck (201
 
 ## Problems and solutions
 
-1. **"Nobody loves everybody", twice; then "only philosophers admire Kant".** ¬∃x ∀y L(x, y), and equivalently
+1. **"Nobody loves everybody", twice; then "only philosophers admire Kant".**
+
+   *Solution.* ¬∃x ∀y L(x, y), and equivalently
    ∀x ∃y ¬L(x, y): for each person there is someone they do not love. "Only philosophers admire Kant" says every
    admirer of Kant is a philosopher: ∀x (A(x, kant) → P(x)). (A common error is ∀x (P(x) → A(x, kant)), which is "all
    philosophers admire Kant".)
-2. **A smallest countermodel to ∀x (P(x) ∨ Q(x)) ⊨ ∀x P(x) ∨ ∀x Q(x).** Two objects: a is P and not Q, b is Q and
+2. **A smallest countermodel to ∀x (P(x) ∨ Q(x)) ⊨ ∀x P(x) ∨ ∀x Q(x).**
+
+   *Solution.* Two objects: a is P and not Q, b is Q and
    not P. Everything is P or Q, but not everything is P (b) and not everything is Q (a). One object cannot work: if it
    is P, everything is P. The Reasoner's model finder returns exactly this two-object structure.
-3. **∃x Q(x) from ∀x (P(x) → Q(x)) and ∃x P(x).** 1 ∀x (P(x) → Q(x)) (premise); 2 ∃x P(x) (premise); 3 | P(a)
+3. **∃x Q(x) from ∀x (P(x) → Q(x)) and ∃x P(x).**
+
+   *Solution.* 1 ∀x (P(x) → Q(x)) (premise); 2 ∃x P(x) (premise); 3 | P(a)
    (assumption, a new); 4 | P(a) → Q(a) (∀E 1); 5 | Q(a) (→E 4, 3); 6 | ∃x Q(x) (∃I 5); 7 ∃x Q(x) (∃E 2, 3–6). The new
    name is introduced at line 3; ∃E is legal because a occurs in neither premise nor in the conclusion ∃x Q(x). The
    Reasoner's `fol.check_fitch` accepts this proof.
-4. **If φ has finite models of every size, it has an infinite one.** Consider {φ} ∪ {λ₂, λ₃, …}, where λₙ says
+4. **If φ has finite models of every size, it has an infinite one.**
+
+   *Solution.* Consider {φ} ∪ {λ₂, λ₃, …}, where λₙ says
    there are at least n things. A finite part mentions only finitely many λₙ, say up to λ_N; a finite model of φ of
    size N satisfies it. By compactness the whole set has a model; it satisfies every λₙ, so it is infinite, and it
    satisfies φ.
-5. **Skolemize ∀x ∃y ∀z ∃w R(x, y, z, w).** ∀x ∀z R(x, f(x), z, g(x, z)). The witness for y may depend only on the
+5. **Skolemize ∀x ∃y ∀z ∃w R(x, y, z, w).** Skolemize $\forall x\, \exists y\, \forall z\, \exists w R(x, y, z, w)$. On which variables does each Skolem function depend?
+
+   *Solution.* ∀x ∀z R(x, f(x), z, g(x, z)). The witness for y may depend only on the
    universal variables to its left (x); the witness for w on x and z. The result is satisfiable exactly when the
    original is (not equivalent: the Skolem functions add new symbols).
-6. **(Essay) Plato's beard has four exits.** A strong answer chooses one and prices it. *Russell–Quine*: the cost is
+6. **(Essay) Plato's beard has four exits.** (Essay) Plato's beard has four exits. Defend one, and say what it costs.
+
+   *Solution.* A strong answer chooses one and prices it. *Russell–Quine*: the cost is
    that proper names are not directly referential, which Kripke's *Naming and Necessity* (Part 27) attacks.
    *Meinong*: the cost is a realm of non-existent objects, and Russell's challenge: is the existent golden mountain
    existent? *Free logic*: the cost is a more complicated logic, and a decision about the truth of atomic sentences

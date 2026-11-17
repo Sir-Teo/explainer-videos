@@ -95,12 +95,24 @@ All 10 inputs regenerated; **20 checks pass** (14 audited local and six legacy).
 
 ## Problems and solutions
 
-1. **Front door.** Under the specified graph and positivity, identify P(m|do(a))=P(m|a); identify P(y|do(m)) by averaging P(y|m,a') over P(a'); combine through the mediator, which intercepts every directed treatment–outcome path. The formula does not follow from mediation alone without the back-door conditions.
-2. **Weight box.** Inverse propensity is one plus the odds against the observed arm. Bounding the full-versus-measured propensity odds ratio in [1/Lambda,Lambda] yields [1+(1/e-1)/Lambda,1+(1/e-1)Lambda]. These necessary bounds alone omit conditional compatibility constraints; optimizing the box is a relaxation of the population model.
-3. **Linear proximal moments.** If Y=b0+bA A+gamma U+epsilon and W=U+eta, then Y=b0+bA A+gamma W+(epsilon-gamma eta). Under valid proxy noise/exclusion assumptions the instruments (1,A,Z) are orthogonal to that error. A full-rank projected design then yields consistent 2SLS coefficients; the equation and rank condition need to hold, not merely marginal proxy correlation.
-4. **Bernoulli direct effect.** Under the stated exposure model and independent assignments, a unit's neighbors' treatment is independent of its own treatment. Therefore E[Y_i|Z_i=1]-E[Y_i|Z_i=0]=2. Finite arm means have random denominators and possible ratio bias; this identity is not a claim of exact finite-sample Hajek unbiasedness. A spillover contrast requires common positive exposure support.
-5. **Winner's curse.** For a fixed class with unbiased fixed-policy value estimates, Jensen's inequality gives E sup_pi Vhat(pi)>=sup_pi V(pi). Also E V(pihat)<=sup_pi V(pi), so expected selected in-sample optimism is nonnegative. Truly independent evaluation, conditional on independent nuisance training, removes this selection reuse; normal intervals still need distributional/regularity conditions.
-6. **Inverse odds.** Let p(x) be membership in a trial rather than its nonparticipant target in a common population. The two covariate laws are proportional to p(x)f(x) and (1-p(x))f(x); their density ratio is proportional to (1-p)/p. Normalized weighting cancels the constant. Targeting the entire baseline population instead would use inverse selection probabilities, not the same inverse odds. Causal transport additionally needs treatment randomization/exchangeability, consistency, conditional effect invariance and overlap.
+1. **Front door.** Derive the front-door formula from the back-door formula applied twice, on $A \to M$ and on $M \to Y$.
+
+   *Solution.* Under the specified graph and positivity, identify P(m|do(a))=P(m|a); identify P(y|do(m)) by averaging P(y|m,a') over P(a'); combine through the mediator, which intercepts every directed treatment–outcome path. The formula does not follow from mediation alone without the back-door conditions.
+2. **Weight box.** Show that under the marginal sensitivity model each IPW weight lies in $[1 + (1/e - 1)/\Lambda, 1 + (1/e - 1)\Lambda]$.
+
+   *Solution.* Inverse propensity is one plus the odds against the observed arm. Bounding the full-versus-measured propensity odds ratio in [1/Lambda,Lambda] yields [1+(1/e-1)/Lambda,1+(1/e-1)Lambda]. These necessary bounds alone omit conditional compatibility constraints; optimizing the box is a relaxation of the population model.
+3. **Linear proximal moments.** In the linear proximal model, show the 2SLS of $Y$ on $(A, W)$ with instruments $(A, Z)$ is consistent for $b_A$.
+
+   *Solution.* If Y=b0+bA A+gamma U+epsilon and W=U+eta, then Y=b0+bA A+gamma W+(epsilon-gamma eta). Under valid proxy noise/exclusion assumptions the instruments (1,A,Z) are orthogonal to that error. A full-rank projected design then yields consistent 2SLS coefficients; the equation and rank condition need to hold, not merely marginal proxy correlation.
+4. **Bernoulli direct effect.** Under the stated exposure model and Bernoulli assignment, show $E[Y_i\mid Z_i=1]-E[Y_i\mid Z_i=0]=2$; distinguish this from finite-sample ratio bias.
+
+   *Solution.* Under the stated exposure model and independent assignments, a unit's neighbors' treatment is independent of its own treatment. Therefore E[Y_i|Z_i=1]-E[Y_i|Z_i=0]=2. Finite arm means have random denominators and possible ratio bias; this identity is not a claim of exact finite-sample Hajek unbiasedness. A spillover contrast requires common positive exposure support.
+5. **Winner's curse.** Show that the in-sample value of the EWM rule is biased upward: $E\max_\pi \hat V(\pi) \ge \max_\pi V(\pi)$.
+
+   *Solution.* For a fixed class with unbiased fixed-policy value estimates, Jensen's inequality gives E sup_pi Vhat(pi)>=sup_pi V(pi). Also E V(pihat)<=sup_pi V(pi), so expected selected in-sample optimism is nonnegative. Truly independent evaluation, conditional on independent nuisance training, removes this selection reuse; normal intervals still need distributional/regularity conditions.
+6. **Inverse odds.** Show that inverse-odds weights $(1 - p)/p$ turn the trial's covariate law into the target's.
+
+   *Solution.* Let p(x) be membership in a trial rather than its nonparticipant target in a common population. The two covariate laws are proportional to p(x)f(x) and (1-p(x))f(x); their density ratio is proportional to (1-p)/p. Normalized weighting cancels the constant. Targeting the entire baseline population instead would use inverse selection probabilities, not the same inverse odds. Causal transport additionally needs treatment randomization/exchangeability, consistency, conditional effect invariance and overlap.
 
 ## Where it comes back
 

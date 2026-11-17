@@ -183,38 +183,52 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-**1. The power law and its hazard.** log S = log a − b log t is linear in log t, so least squares on the logs gives
+**1. The power law and its hazard.** Fit $S = a t^{-b}$ to Ebbinghaus's savings by least squares on $\log S$ against $\log t$, and show that its hazard $-d \ln S / dt$ is $b/t$.
+
+*Solution.* log S = log a − b log t is linear in log t, so least squares on the logs gives
 b as minus the slope; on Ebbinghaus's seven savings it is about 0.13 (the curve-space fit of chapter 1 weights the
 points differently and gives a similar value). −d ln S/dt = −d/dt(ln a − b ln t) = b/t, which falls with age: Jost's
 second law. An exponential's hazard is 1/τ, the same at every age.
 
-**2. Averaged exponentials.** With λ ~ Gamma(k, θ), E e^{−λt} = ∫ e^{−λt} λ^{k−1} e^{−λ/θ}/(Γ(k)θ^k) dλ =
+**2. Averaged exponentials.** Prove that if $\lambda \sim \mathrm{Gamma}(k, \theta)$, then $E\,e^{-\lambda t} = (1 + \theta t)^{-k}$, and say why this warns against reading a single trace's law off an average.
+
+*Solution.* With λ ~ Gamma(k, θ), E e^{−λt} = ∫ e^{−λt} λ^{k−1} e^{−λ/θ}/(Γ(k)θ^k) dλ =
 (1/θ^k) / (1/θ + t)^k = (1 + θt)^{−k}, the Laplace transform of the gamma density. A power-law average is therefore
 consistent with every trace being exponential; the law of a single trace cannot be read off an average over traces
 (or items, or people) that differ in rate.
 
-**3. Two stores.** h = e^{−at}. Then ċ + bc = k e^{−at}; multiplying by e^{bt}, d(c e^{bt})/dt = k e^{(b−a)t}, so
+**3. Two stores.** Solve $\dot h = -a h$, $\dot c = k h - b c$ from $h(0) = 1$, $c(0) = 0$, and find the age at which $c$ peaks.
+
+*Solution.* h = e^{−at}. Then ċ + bc = k e^{−at}; multiplying by e^{bt}, d(c e^{bt})/dt = k e^{(b−a)t}, so
 c e^{bt} = k (e^{(b−a)t} − 1)/(b − a) and c = k (e^{−bt} − e^{−at})/(a − b). Setting ċ = 0: b e^{−bt} = a e^{−at},
 so t* = ln(a/b)/(a − b). With a = 0.3 and b = 0.004, t* = ln 75/0.296 ≈ 14.6 time units: after a lesion, memories of
 about that age are the best kept.
 
-**4. Feedback in the bifurcation model.** With feedback, items that fail the initial test gain g_f instead of
+**4. Feedback in the bifurcation model.** In the bifurcation model, give feedback after the initial test so that failed items gain $g_f$. How does the crossover delay move as $g_f$ grows?
+
+*Solution.* With feedback, items that fail the initial test gain g_f instead of
 nothing. At g_f = 0 the crossover is the one fitted. As g_f grows, the tested group's distribution no longer leaves
 a block of weak items behind, so testing's advantage appears at shorter delays; once the average gain of the tested
 group exceeds the restudy gain, testing wins at every delay, and the crossover disappears. Run `memory.bifurcation`
 with the failed items' gain added to see the delay move toward zero.
 
-**5. The category adjustment model.** E(x̂ − x)² with x̂ = λy + (1 − λ)ρ, y = x + ε, x = ρ + δ (independent, with
+**5. The category adjustment model.** Show that $\hat{x} = \lambda y + (1 - \lambda) \rho$ with $\lambda = \sigma_c^2 / (\sigma_c^2 + \sigma_y^2)$ minimises $E(\hat{x} - x)^2$, and that the minimum is $\lambda \sigma_y^2$.
+
+*Solution.* E(x̂ − x)² with x̂ = λy + (1 − λ)ρ, y = x + ε, x = ρ + δ (independent, with
 variances σ_y² and σ_c²): x̂ − x = λε − (1 − λ)δ, so E(x̂ − x)² = λ²σ_y² + (1 − λ)²σ_c². Differentiating,
 2λσ_y² − 2(1 − λ)σ_c² = 0 gives λ = σ_c²/(σ_c² + σ_y²), and substituting gives σ_y²σ_c²/(σ_c² + σ_y²) = λσ_y².
 
-**6. Pooling the replication.** For each lab, d_i = p_verbal − p_control with variance p(1−p)/n summed over the two
+**6. Pooling the replication.** With `explainer.psychology.opendata`: pool the second overshadowing replication yourself, fixed and random effects, and test whether the original's effect lies in the pooled interval.
+
+*Solution.* For each lab, d_i = p_verbal − p_control with variance p(1−p)/n summed over the two
 groups. The fixed-effect estimate is Σ w_i d_i / Σ w_i with w_i = 1/v_i; DerSimonian and Laird's τ² is
 max(0, (Q − (k − 1))/(Σw − Σw²/Σw)) with Q = Σ w_i (d_i − d̄)². For the second replication τ² is zero, so the two
 estimates agree; the original's −25 points lies well outside the pooled interval, which is the sense in which the
 effect replicated smaller. `compute_overshadow` in this part's `compute.py` does exactly this.
 
-**7. ★ Feedback and the memory.** Show witnesses a line-up, record confidence at once, and then give confirming,
+**7. ★ Feedback and the memory.** Design a line-up study that could tell whether confidence inflation after feedback changes the memory itself, or only the report.
+
+*Solution.* Show witnesses a line-up, record confidence at once, and then give confirming,
 disconfirming or no feedback. Later, test the same witnesses with a new line-up in which the earlier choice and the
 culprit are both present (or with a forced choice between them), with confidence. If feedback changes only the
 report, later choices among the faces are unchanged and only confidence moves; if it changes the memory, later

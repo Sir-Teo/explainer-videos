@@ -132,14 +132,28 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Case V.** Φ⁻¹(0.84) ≈ 1, so s_j - s_i = σ√2 × 1 ≈ 1.41σ.
-2. **Luce.** P(2 ≻ 1) = 2/3. From {1, 2, 3}: 1/7, 2/7 and 4/7. The odds of 2 over 1 are 2 in both, as the axiom
+1. **Case V.** Under Thurstone's Case V, 84% prefer $j$ to $i$. How far apart are they, in units of $\sigma$?
+
+   *Solution.* Φ⁻¹(0.84) ≈ 1, so s_j - s_i = σ√2 × 1 ≈ 1.41σ.
+2. **Luce.** Luce strengths $v = (1, 2, 4)$. Find $P(2 \succ 1)$, the shares from the menu $\{1, 2, 3\}$, and check that the odds of 2 over 1 are the same in both.
+
+   *Solution.* P(2 ≻ 1) = 2/3. From {1, 2, 3}: 1/7, 2/7 and 4/7. The odds of 2 over 1 are 2 in both, as the axiom
    requires.
-3. **Logit shares.** e^0, e^(ln 2), e^(ln 3) are 1, 2, 3: shares 1/6, 1/3 and 1/2.
-4. **Red bus.** The logit gives the car 1/3; with identical buses the car keeps 1/2 and each bus takes 1/4.
-5. **Willingness to pay.** 0.5/0.6 × $100 = $83.
-6. **NPS.** 30 - 25 = 5. SE = 100 × √((0.30 + 0.25 - 0.05²)/400) = 100 × √(0.5475/400) = 3.7 points.
-7. **A split-ballot survey.** Randomize respondents to four versions: "allow" or "forbid" wording crossed with the
+3. **Logit shares.** A logit with utilities $0$, $\ln 2$ and $\ln 3$. Find the choice shares.
+
+   *Solution.* e^0, e^(ln 2), e^(ln 3) are 1, 2, 3: shares 1/6, 1/3 and 1/2.
+4. **Red bus.** Car and red bus are equally liked. Add an identical blue bus. Give the logit's car share and the true one.
+
+   *Solution.* The logit gives the car 1/3; with identical buses the car keeps 1/2 and each bus takes 1/4.
+5. **Willingness to pay.** A conjoint gives $-0.6$ per \$100 of price and $0.5$ for a great camera. What is the camera worth?
+
+   *Solution.* 0.5/0.6 × $100 = $83.
+6. **NPS.** 400 customers: 30% promoters, 25% detractors. Find the NPS and its standard error.
+
+   *Solution.* 30 - 25 = 5. SE = 100 × √((0.30 + 0.25 - 0.05²)/400) = 100 × √(0.5475/400) = 3.7 points.
+7. ★ **A split-ballot survey.** Design a split-ballot survey that measures support for a policy and estimates the effect of its wording and of question order, with balanced keys.
+
+   *Solution.* Randomize respondents to four versions: "allow" or "forbid" wording crossed with the
    policy question before or after a related question; within each, the attitude scale has half its items reversed.
    Estimate the policy support in each cell; the wording effect is the difference between wordings averaged over
    order, the order effect the difference between orders, and their interaction tests whether one changes the other;

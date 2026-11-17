@@ -162,48 +162,72 @@ python tools/make.py quant21 --cpu-voice -q m                # English and Chine
 
 In problem 11, M counts all transport columns, including survival. The research example has 120 default buckets plus one survival column. Pathwise sensitivity arguments at kinks require regularity and a justified exchange of differentiation and expectation; atoms and discontinuities need separate treatment.
 
-1. **A forward's exposure.** V(t) = σW_t is normal with mean 0 and variance σ²t, so EE(t) = E[max(σW_t, 0)] = σ√t
+1. **A forward's exposure.** For a forward contract with value $V(t) = \sigma W_t$, show that $\text{EE}(t) = \sigma\sqrt{t/(2\pi)}$ and $\text{PFE}_{95}(t) = 1.645\,\sigma\sqrt t$.
+
+   *Solution.* V(t) = σW_t is normal with mean 0 and variance σ²t, so EE(t) = E[max(σW_t, 0)] = σ√t
    E[max(Z, 0)] = σ√t φ(0) = σ√(t/2π). Its 95th percentile is 1.645 σ√t, and PFE₉₅ = 1.645 σ√t since that is positive.
-2. **The swap's hump.** f(t) = √t (T − t) has f′(t) = (T − t)/(2√t) − √t = 0 when T − t = 2t, so t = T/3: 3.3 years for
+2. **The swap's hump.** A swap's EE is roughly $\sigma\sqrt t\,(T - t)\,c$. At what $t$ is it largest? Compare with chapter 1's hump.
+
+   *Solution.* f(t) = √t (T − t) has f′(t) = (T − t)/(2√t) − √t = 0 when T − t = 2t, so t = T/3: 3.3 years for
    a 10-year swap. Chapter 1's profile peaks near year 4 on a monthly grid, later than T/3 because the coupons are
    annual, so the remaining payments fall in steps rather than smoothly.
-3. **CVA as a spread.** With a constant EE, flat hazard λ and rate r, the default density is λe^{−λt}, so CVA = (1 − R)
+3. **CVA as a spread.** With a flat hazard $\lambda$ and constant EE, show that $\text{CVA} \approx (1 - R)\,\lambda\,\text{EE}\int_0^T e^{-(r + \lambda)t}\,dt$, and hence that CVA as a running spread is about $(1 - R)\lambda \times \text{EPE}/N$.
+
+   *Solution.* With a constant EE, flat hazard λ and rate r, the default density is λe^{−λt}, so CVA = (1 − R)
    EE ∫₀ᵀ e^{−rt} λ e^{−λt} dt = (1 − R) λ EE ∫₀ᵀ e^{−(r+λ)t} dt. Dividing by the risky annuity ∫₀ᵀ e^{−(r+λ)t} dt on
    notional N gives a running spread of (1 − R) λ EE/N: the credit triangle applied to the exposure.
-4. **Bilateral CVA.** The bank loses on the counterparty's default at t only if it has not defaulted itself first. With
+4. **Bilateral CVA.** Show that bilateral CVA with independent defaults is $(1 - R)\int \text{EE}(t) P(0,t) Q_b(t)\,(-dQ_c(t))$, and explain why it is smaller than the unilateral CVA.
+
+   *Solution.* The bank loses on the counterparty's default at t only if it has not defaulted itself first. With
    independent defaults, P(τ_c ∈ dt, τ_b > t) = Q_b(t)(−dQ_c(t)), so CVA_bil = (1 − R) ∫ EE(t) P(0, t) Q_b(t)(−dQ_c(t)).
    Since Q_b(t) ≤ 1 everywhere, it is no larger than the unilateral CVA, and smaller whenever the bank can default.
-5. **Collateralised exposure.** With zero threshold and margin period m, the collateral at t is V(t − m), so the
+5. **Collateralised exposure.** Collateral with zero threshold and margin period $m$: show that for $V(t) = \sigma W_t$ the collateralised EE is about $\sigma\sqrt{m/(2\pi)}$, independent of $t$.
+
+   *Solution.* With zero threshold and margin period m, the collateral at t is V(t − m), so the
    exposure is max(σ(W_t − W_{t−m}), 0). The increment is normal with variance σ²m whatever t is, so EE = σ√(m/2π),
    constant in time: the square root of the margin period, not of the trade's age.
-6. **An SA-CCR add-on by hand.** The supervisory duration is (e^{−0.05·0} − e^{−0.05·10})/0.05 = (1 − 0.607)/0.05 = 7.87,
+6. **An SA-CCR add-on by hand.** Compute SA-CCR's add-on for a single 10-year payer swap on $100 million, unmargined ($S = 0$, $E = 10$).
+
+   *Solution.* The supervisory duration is (e^{−0.05·0} − e^{−0.05·10})/0.05 = (1 − 0.607)/0.05 = 7.87,
    so the effective notional is 100 × 7.87 = 787 (one trade, in the over-five-years bucket, maturity factor 1). The
    add-on is 0.5% × 787 = $3.93 million and, with zero replacement cost and multiplier 1, EAD = 1.4 × 3.93 = $5.5
    million: chapter 12's "10y payer alone".
-7. **Cover 2.** Under the exercise's imposed Cover Two requirement, resources cover the two largest stressed aggregate exposures beyond member margin in extreme but
+7. **Cover 2.** A CCP's two largest members would lose 30 and 25 beyond their margin in a stress. What default fund does Cover 2 require, and who pays if the third largest also defaults?
+
+   *Solution.* Under the exercise's imposed Cover Two requirement, resources cover the two largest stressed aggregate exposures beyond member margin in extreme but
    plausible markets: 30 + 25 = 55. If the third largest also defaults, its own margin and fund contribution are used
    first, then what remains of the mutualised fund after the CCP's own capital; beyond that, assessments on the
    surviving members, capped by the rulebook, and then recovery tools such as haircutting variation-margin gains. The
    survivors pay.
-8. **The cost of AAD.** Reverse mode computes the gradient as a vector–Jacobian product, sweeping the recorded
+8. **The cost of AAD.** Why can AAD compute $n$ sensitivities for the cost of a few valuations, while bumping costs $n$? What does it cost in memory?
+
+   *Solution.* Reverse mode computes the gradient as a vector–Jacobian product, sweeping the recorded
    operations once backwards; each operation's adjoint costs a small constant multiple of the operation itself, so all
    n sensitivities cost a few valuations regardless of n, against n + 1 valuations for one-sided bumps. The price is
    memory: every intermediate value of the forward pass (each path, date and operation) must be stored for the
    backward one, or recomputed from checkpoints.
-9. **When clearing one product helps.** Bilaterally, a dealer's exposure to each of N − 1 counterparties nets K
+9. **When clearing one product helps.** With $N$ dealers and $K$ independent, equal asset classes, show that clearing one class lowers a dealer's expected exposure if and only if $N > 1 + (\sqrt K + \sqrt{K - 1})^2$.
+
+   *Solution.* Bilaterally, a dealer's exposure to each of N − 1 counterparties nets K
    independent classes of variance σ², so it is σ√K φ with φ = 1/√(2π), and the total is (N − 1)σ√K φ. Clearing one
    class leaves (N − 1)σ√(K − 1)φ bilaterally and adds σ√(N − 1)φ at the CCP, where that class nets across all N − 1
    counterparties. Clearing helps iff (N − 1)(√K − √(K − 1)) > √(N − 1), that is √(N − 1) > 1/(√K − √(K − 1)) = √K +
    √(K − 1), or N > 1 + (√K + √(K − 1))²: 7, 15 and 31 dealers for K = 2, 4 and 8.
-10. **A KVA by hand.** KVA = h ∫₀ᵀ K₀(1 − t/T) dt = h K₀ [t − t²/(2T)]₀ᵀ = h K₀ T/2: the hurdle rate times the average
+10. **A KVA by hand.** A trade needs capital $K(t) = K_0(1 - t/T)$ for $T$ years. With hurdle $h$ and no discounting, show that $\text{KVA} = h K_0 T/2$.
+
+    *Solution.* KVA = h ∫₀ᵀ K₀(1 − t/T) dt = h K₀ [t − t²/(2T)]₀ᵀ = h K₀ T/2: the hurdle rate times the average
     capital times the life.
-11. **(qual) The transport problem.** With c_ij = (1 − R)D(t_j)V_i(t_j)⁺ (and c = 0 for survival), CVA(p) = Σc_ij p_ij is
+11. **(qual) The transport problem.** (qual) Write CVA over couplings of $N$ exposure paths and $M$ columns including survival as a transportation LP; show the bounds are attained at vertices with at most $N + M - 1$ positive cells, and solve the two-path example by hand.
+
+    *Solution.* With c_ij = (1 − R)D(t_j)V_i(t_j)⁺ (and c = 0 for survival), CVA(p) = Σc_ij p_ij is
    linear in p, and the feasible set {p ≥ 0: Σ_j p_ij = 1/N, Σ_i p_ij = q_j} is a transportation polytope. A linear
    function attains its maximum and minimum at vertices, and a vertex of an N × M transportation polytope has at most
    N + M − 1 positive cells (its support is a forest in the bipartite graph). Two paths (0 and 10, weight ½ each), one
    date with q = 0.2: independence gives 0.2 × 5 = 1; the worst puts all 0.2 on the second path (feasible, since
    0.2 ≤ ½): 2; the best puts it on the first: 0.
-12. **(qual) The entropic solution.** Assume θ > 0 and positive prescribed margins. The Lagrangian Σp c − (1/θ)Σp log(p/p⊥) + Σ_i α_i(Σ_j p_ij − 1/N) + Σ_j β_j(Σ_i p_ij −
+12. **(qual) The entropic solution.** (qual) For $\theta > 0$, show that maximizing $\sum p_{ij}c_{ij} - \frac1\theta\mathrm{KL}(p\,\|\,p^\perp)$ over couplings gives $p_{ij} = a_i b_j p^\perp_{ij}e^{\theta c_{ij}}$, and that Sinkhorn's alternating rescaling finds $a$, $b$.
+
+    *Solution.* Assume θ > 0 and positive prescribed margins. The Lagrangian Σp c − (1/θ)Σp log(p/p⊥) + Σ_i α_i(Σ_j p_ij − 1/N) + Σ_j β_j(Σ_i p_ij −
    q_j) has first-order condition c_ij − (1/θ)(log(p_ij/p⊥_ij) + 1) + α_i + β_j = 0, so p_ij = a_i b_j p⊥_ij e^{θc_ij}
    with a_i = e^{θα_i − 1/2}, b_j = e^{θβ_j − 1/2}. Sinkhorn alternates a ← (1/N)/(Kb), b ← q/(Kᵀa) with K = p⊥e^{θc};
    each step is a Bregman projection onto one set of margins, and the iteration converges to the unique solution.

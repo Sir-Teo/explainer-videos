@@ -162,37 +162,51 @@ meta-reinforcement learning system, *Nat. Neurosci.* 21 (2018) 860–868.
 
 ## Problems and solutions
 
-**1. Values on a short chain.** With the reward at the third step after the cue (steps 0, 1, 2, 3 and the juice at
+**1. Values on a short chain.** With $\gamma = 0.9$ and one reward of 1 three steps after a cue, find the value of each step after the cue, and the TD error at the cue once learning is complete.
+
+*Solution.* With the reward at the third step after the cue (steps 0, 1, 2, 3 and the juice at
 step 3), V(3) = 1, V(2) = 0.9, V(1) = 0.81, V(0) = 0.729. The moment before the cue has value 0, because nothing
 predicts the cue, so at the cue's onset δ = 0 + γV(0) − 0 = 0.656; at the juice, δ = 1 + 0 − 1 = 0.
 
-**2. The TD error from Bellman.** If V is correct, V(s) = E[r + γV(s′) | s], so E[δ | s] = E[r + γV(s′) | s] − V(s) = 0.
+**2. The TD error from Bellman.** Derive the TD error from the Bellman equation, and show that its expected value is zero when $V$ is correct.
+
+*Solution.* If V is correct, V(s) = E[r + γV(s′) | s], so E[δ | s] = E[r + γV(s′) | s] − V(s) = 0.
 A nonzero average error means the prediction is off, and moving V(s) by αδ is a stochastic step toward the fixed point
 (for a fixed policy, the Bellman operator is a contraction with factor γ, so the fixed point is unique).
 
-**3. The error's journey.** With α = 1, the first trial sets the value of the juice's own moment; on the next trial the
+**3. The error's journey.** On a delay line with $\alpha = 1$, show that the error moves back one step per trial, and find how many trials it takes to reach a cue 15 steps before the reward.
+
+*Solution.* With α = 1, the first trial sets the value of the juice's own moment; on the next trial the
 moment before it is a surprise and takes the value γ, and so on: each trial moves the first nonzero value one step
 earlier. Fifteen steps take fifteen trials, and from the sixteenth trial on the error sits at the cue's onset, where
 it stays because the cue is unpredicted. With smaller α the front still moves a step per trial but takes many trials
 to grow.
 
-**4. The bandit's likelihood.** log L(α, β) = Σₜ [β Q_t(a_t) − log Σ_b e^{β Q_t(b)}], with Q updated by α after each
+**4. The bandit's likelihood.** Write the log-likelihood of a choice sequence under Q-learning with a softmax, and say why $\beta$ is hard to recover when it is large.
+
+*Solution.* log L(α, β) = Σₜ [β Q_t(a_t) − log Σ_b e^{β Q_t(b)}], with Q updated by α after each
 outcome. When β is large, nearly every choice goes to the higher-valued option, so P(a_t) ≈ 1 for almost all trials
 whether β is 15 or 30: the likelihood is flat in β beyond a point, and β is poorly recovered (chapter five's plot).
 The learning rate is pinned down by the few trials around a change, which is why reversals help.
 
-**5. A successor matrix.** For the chain 1 → 2 → 3 (3 ends the episode), T has ones at (1, 2) and (2, 3), and
+**5. A successor matrix.** Compute the successor matrix $M = (I - \gamma T)^{-1}$ for a three-state chain, and show how $V = Mr$ handles a reward change but not a transition change.
+
+*Solution.* For the chain 1 → 2 → 3 (3 ends the episode), T has ones at (1, 2) and (2, 3), and
 M = I + γT + γ²T² has rows (1, γ, γ²), (0, 1, γ), (0, 0, 1). With a reward r at state 3, V = Mr gives V(1) = γ²r,
 V(2) = γr: a new r updates every value at once. If state 2 now leads to a state 4 instead, the true M changes row 1
 (and row 2); a learner that revisits only state 2 updates row 2, but row 1 still predicts a visit to 3: transition
 revaluation fails for the successor representation and succeeds for a planner that recomputes M from T.
 
-**6. The two-step signature against w.** Running `rl.two_step` with w from 0 to 1 and computing the interaction
+**6. The two-step signature against w.** With `explainer.psychology.psyche.rl`: run the two-step task with $w$ from 0 to 1, and plot the interaction in the stay probabilities against $w$.
+
+*Solution.* Running `rl.two_step` with w from 0 to 1 and computing the interaction
 (P(stay | rewarded, common) − P(stay | rewarded, rare)) − (P(stay | unrewarded, common) − P(stay | unrewarded, rare))
 gives about 0 at w = 0, rising roughly linearly to about 0.4 at w = 1 for the default α = 0.5, β = 5; the main effect
 of reward shrinks as w grows.
 
-**7. ★ What a ramp means.** If a ramp is a TD error under uncertainty about position or time, a sudden jump forward
+**7. ★ What a ramp means.** Design an experiment that tells a dopamine ramp that is a TD error under uncertainty from one that encodes value.
+
+*Solution.* If a ramp is a TD error under uncertainty about position or time, a sudden jump forward
 (teleporting the animal closer in virtual reality, or a cue that tells it more time has passed) should produce a
 phasic burst proportional to the jump in value, and the ramp's slope should change with running speed; if the ramp
 encodes value itself, a jump should shift its level without a transient burst. Kim et al. (2020) ran this logic in

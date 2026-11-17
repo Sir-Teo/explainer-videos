@@ -149,19 +149,33 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Laughlin's rule.** The response is the cumulative distribution: for contrasts uniform on [-1, 1], the straight
+1. **Laughlin's rule.** Laughlin's rule: contrasts are uniform on $[-1, 1]$. The best response curve? And if they are normal?
+
+   *Solution.* The response is the cumulative distribution: for contrasts uniform on [-1, 1], the straight
    line (c + 1)/2; for normal contrasts, the normal CDF, a sigmoid steepest at the mean.
-2. **Whitening.** Power falls as 1/f^2, so amplitude as 1/f; the filter's gain must grow as f to flatten it. That
+2. **Whitening.** Image power falls as $1/f^2$. How must a whitening filter's gain grow with $f$, and what does that do to noise?
+
+   *Solution.* Power falls as 1/f^2, so amplitude as 1/f; the filter's gain must grow as f to flatten it. That
    amplifies high-frequency noise without limit, so a real filter rolls off where noise dominates (the retina's
    band-pass shape).
-3. **Normalization.** Alone: 0.0225/(0.0225 + 0.0225) = 0.5. With a mask of 0.15: 0.0225/0.0675 = 1/3.
-4. **Variational inference by hand.** Posterior precision 1 + 4 = 5, variance 0.2, mean (2 x 4)/5 = 1.6. Surprise:
+3. **Normalization.** Normalization with $n = 2$, $\sigma = 0.15$: the response to $c = 0.15$ alone, and with a mask of 0.15?
+
+   *Solution.* Alone: 0.0225/(0.0225 + 0.0225) = 0.5. With a mask of 0.15: 0.0225/0.0675 = 1/3.
+4. **Variational inference by hand.** Prior N(0, 1), reading $x = 2$ with noise SD 0.5. The posterior mean and variance, and the surprise?
+
+   *Solution.* Posterior precision 1 + 4 = 5, variance 0.2, mean (2 x 4)/5 = 1.6. Surprise:
    -log N(2; 0, 1.25) = 0.5 log(2 pi x 1.25) + 4/2.5 = 1.03 + 1.6 = 2.63 nats.
-5. **A majority of three.** p^3 + 3p^2(1 - p) = 0.275 + 0.444 = 0.718.
-6. **Against free energy.** As a principle, nothing: any behaviour has some generative model under which it
+5. **A majority of three.** Each sample is right with probability 0.65. The accuracy of a majority of three?
+
+   *Solution.* p^3 + 3p^2(1 - p) = 0.275 + 0.444 = 0.718.
+6. **Against free energy.** "The brain minimizes free energy." What observation would count against it?
+
+   *Solution.* As a principle, nothing: any behaviour has some generative model under which it
    minimizes free energy. A specific model (a stated generative model with measured priors and precisions) can be
    refuted by behaviour or physiology it does not predict; that is where the principle's content is tested.
-7. **Predictive coding against adaptation.** Use a many-standards control: present the deviant tone in a sequence
+7. ★ **Predictive coding against adaptation.** Design an experiment that separates predictive coding from adaptation as the cause of a mismatch response.
+
+   *Solution.* Use a many-standards control: present the deviant tone in a sequence
    where it is as rare as in the oddball sequence but no standard sets a prediction. Adaptation predicts the same
    response in both (equal rarity); predictive coding predicts a larger response in the oddball sequence. Add
    omissions (a predicted tone left out): adaptation predicts no response, predictive coding an error response.

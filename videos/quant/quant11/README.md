@@ -241,29 +241,43 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
 
 ## Problems, with solutions
 
-1. **The gamma–theta integral.** Mark the option at σ_imp and hedge its delta. By Itô,
+1. **The gamma–theta integral.** Show that a delta-hedged option earns $\int \frac12\Gamma S^2(\sigma_{r,t}^2 - \sigma_{imp}^2)\,dt$, and explain why the same realized variance can pay very different amounts.
+
+   *Solution.* Mark the option at σ_imp and hedge its delta. By Itô,
    dV = Θdt + ΔdS + ½ΓS²σ²_r dt. By the Black–Scholes PDE at σ_imp (r = 0), Θ = −½ΓS²σ²_imp. So the hedged book earns
    ½ΓS²(σ²_r − σ²_imp)dt, and over the life ∫½ΓS²(σ²_r,t − σ²_imp)dt. The weight ΓS² is large near the strike and
    near expiry. The same realized variance therefore pays a lot if it happens there, and little far from the strike
    (May 2021).
-2. **Gamma at expiry.** Γ = φ(d₁)/(Sσ√τ). At the money with τ → 0, d₁ → 0 and φ(0) = 1/√(2π), so
+2. **Gamma at expiry.** Show that at the money $\Gamma \approx 1/(S\sigma\sqrt{2\pi\tau})$, and compare its value a day and a minute before expiry at $\sigma = 50\%$.
+
+   *Solution.* Γ = φ(d₁)/(Sσ√τ). At the money with τ → 0, d₁ → 0 and φ(0) = 1/√(2π), so
    Γ ≈ 1/(Sσ√(2πτ)). At S = 100 and σ = 0.5: a day (τ = 1/365) gives 0.152, and a minute (τ = 1/525,600) gives 5.78,
    √1440 ≈ 38 times larger.
-3. **Implied correlation for two assets.** σ_I² = ¼σ² + ¼σ² + 2·¼ρσ² = σ²(1 + ρ)/2, so ρ = 2σ_I²/σ² − 1.
-4. **The die with an informed counterparty.** Suppose the counterparty knows the roll with probability p and otherwise
+3. **Implied correlation for two assets.** For two assets of equal weight and volatility $\sigma$, show that implied correlation is $2\sigma_I^2/\sigma^2 - 1$.
+
+   *Solution.* σ_I² = ¼σ² + ¼σ² + 2·¼ρσ² = σ²(1 + ρ)/2, so ρ = 2σ_I²/σ² − 1.
+4. **The die with an informed counterparty.** In the die game, a counterparty knows the roll is even with probability $p$. What spread around 3.5 breaks even?
+
+   *Solution.* Suppose the counterparty knows the roll with probability p and otherwise
    trades at random. Quote 3.5 ± s with s ≤ 0.5. Uninformed trades earn s. Informed trades lose E|X − 3.5| − s =
    1.5 − s, since |X − 3.5| takes the values 0.5, 1.5 and 2.5 equally often, and all of them trade. Breaking even
    requires (1 − p)s = p(1.5 − s), so s = 1.5p, valid while p ≤ 1/3.
-5. **The band's scaling.** With a band of half-width h around delta, the mis-hedge variance per unit time scales as
+5. **The band's scaling.** Balance the cost of trading against the variance of a mis-hedge to show that the optimal band's half-width scales as $(\lambda S \Gamma^2/\gamma)^{1/3}$.
+
+   *Solution.* With a band of half-width h around delta, the mis-hedge variance per unit time scales as
    h²σ²S². The rate of trading needed to stay inside it scales as (Γσ S)²·S/h in shares times price. A hedger with
    risk aversion γ therefore minimizes γσ²S²h² + λσ²S³Γ²/h. Setting the derivative to zero gives
    h³ = λSΓ²/(2γ), so h ∝ (λSΓ²/γ)^{1/3}. Whalley and Wilmott's asymptotics give the constant 3/2 in place of 1/2.
-6. **Vanna and volga.** d₁ = (ln F/K + ½σ²τ)/(σ√τ), so ∂d₁/∂σ = √τ − d₁/σ = −d₂/σ (using d₂ = d₁ − σ√τ). Then
+6. **Vanna and volga.** Derive vanna $= -\varphi(d_1)d_2/\sigma$ and volga $= \mathcal{V}d_1d_2/\sigma$, and show volga $\approx 0$ at the money.
+
+   *Solution.* d₁ = (ln F/K + ½σ²τ)/(σ√τ), so ∂d₁/∂σ = √τ − d₁/σ = −d₂/σ (using d₂ = d₁ − σ√τ). Then
    vanna = ∂Δ/∂σ = φ(d₁)∂d₁/∂σ = −φ(d₁)d₂/σ, and since 𝒱 = Sφ(d₁)√τ and φ′(x) = −xφ(x),
    volga = ∂𝒱/∂σ = −Sd₁φ(d₁)√τ·∂d₁/∂σ = 𝒱d₁d₂/σ. At the forward, d₁ = ½σ√τ and d₂ = −½σ√τ, so d₁d₂ = −σ²τ/4,
    small and negative for short-dated options at the forward; volga is positive where d₁ and d₂ share a sign.
    At unadjusted 25-delta the call wing is positive, while the put wing needs σ√τ < 0.674.
-7. **The dispersion trade's sign.** Each locally frozen, delta-hedged leg earns
+7. **The dispersion trade's sign.** In the local matched-exposure toy, derive the correlation-gap contribution to dispersion P&L; explain why matching vega alone does not fix the total sign.
+
+   *Solution.* Each locally frozen, delta-hedged leg earns
    ½ΓS²(σ²_r − σ²_i) integrated over time, with its position quantity included in Γ.
    Vega matching alone does not equate these variance weights when leg volatilities differ.
    If member and index quantities instead give local variance weights cwᵢ and c, the P&L is
@@ -272,16 +286,22 @@ python tools/make.py quant11 --cpu-voice -q m            # English and Chinese, 
    c(ρ_impl − ρ_real)Σ_{i≠j}wᵢwⱼσᵢσⱼ. Its sign follows the correlation gap under those local
    matching assumptions. The simulation uses an approximate ATM vega scale and evolving Greeks;
    its 0.92 correlation and 95% sign agreement are numerical diagnostics, not an exact payoff identity.
-8. **The direction of the optimal quotes.** From the first-order condition δ^{b*} = 1/k + θ(q) − θ(q+1) and
+8. **The direction of the optimal quotes.** From the HJB of chapter 9, show that the optimal quotes move down when inventory is long.
+
+   *Solution.* From the first-order condition δ^{b*} = 1/k + θ(q) − θ(q+1) and
    δ^{a*} = 1/k + θ(q) − θ(q−1). The value θ is concave in q (the penalty −φq² makes extra inventory costlier the
    larger it is), so θ(q) − θ(q+1) increases in q and θ(q) − θ(q−1) decreases in q: when q grows the bid moves away
    from fair value and the ask moves toward it. Both quotes shift down, by about (q ± ½)√(φe/(Ak)) in the GLFT
    approximation.
-9. **(qual) Demand pressure.** A dealer who sells q options to end users at prices p and hedges them has wealth
+9. **(qual) Demand pressure.** (qual) A competitive mean-variance dealer must hold $-d$ options with hedged residuals $\varepsilon$. Derive $p = \mathbb E x + \gamma\Sigma_\varepsilon d$, show the cross-effects $\partial p_i/\partial d_j$ are symmetric, and that demand has no effect when $\Sigma_\varepsilon = 0$.
+
+   *Solution.* A dealer who sells q options to end users at prices p and hedges them has wealth
    W = q^⊤(p − E x) − q^⊤ε, with E W = q^⊤(p − E x) and Var W = q^⊤Σ_ε q. Maximizing
    E W − (γ/2)Var W gives p − E x = γΣ_ε q, and market clearing q = d gives p = E x + γΣ_ε d. Then ∂p_i/∂d_j = γΣ_ij =
    γΣ_ji = ∂p_j/∂d_i (symmetric, as Σ is), and with Σ_ε = 0 (perfect replication) p = E x whatever d is.
-10. **(qual) Exact exponential utility.** Short q units at price p with residual ε, the dealer's terminal wealth is
+10. **(qual) Exact exponential utility.** (qual) For centered residuals with a finite exponential moment near zero and fixed hedges, show the indifference premium is $\frac{1}{\gamma q}\log\mathbb E\,e^{\gamma q\varepsilon} = \frac{\gamma q}{2}\kappa_2 + \frac{\gamma^2q^2}{6}\kappa_3 + \dots$ in the cumulants of $\varepsilon$; what does a crash-skewed residual do to large positions?
+
+    *Solution.* Short q units at price p with residual ε, the dealer's terminal wealth is
    q(p − E x − ε). Indifference: E[−e^{−γq(p − Ex − ε)}] = −1, so p − E x = (1/(γq))log E e^{γqε}. With the cumulant
    expansion log E e^{tε} = κ₂t²/2 + κ₃t³/6 + …, t = γq: p − E x = γqκ₂/2 + γ²q²κ₃/6 + … The first term is the
    mean-variance (average) premium; a positive third cumulant, a residual that loses big in crashes, adds a term

@@ -144,25 +144,39 @@ netting; D'Avolio (2002), p. 271–272; the SIFMA–ICI–DTCC T+1 after-action 
 
 ## Problems, with solutions
 
-1. **Liquidation odds.** d = −ln[(1 − 1/L)/(1 − m)]: 0.218 at 5×, 0.100 at 10×. With σ = 4% a day and H = 30,
+1. **Liquidation odds.** A long opened at $P_0$ with leverage $L$ is liquidated at $P_0(1 - 1/L)/(1 - m)$. With $m = 0.5\%$ and daily volatility 4%, use the reflection principle to find the chance that 5x and 10x longs are liquidated within 30 days.
+
+   *Solution.* d = −ln[(1 − 1/L)/(1 − m)]: 0.218 at 5×, 0.100 at 10×. With σ = 4% a day and H = 30,
    σ√H = 0.219, so P = 2Φ(−d/σ√H): 2Φ(−0.995) = 32% at 5×, 2Φ(−0.458) = 65% at 10×. Doubling leverage more than
    halves the distance (the maintenance margin eats into it) and doubles the odds.
-2. **Netting.** G = 10 + 10 + 10 + 5 = 35. Bilateral: A–B 10, B–C 10, C–A 10 against 5 leaves 5: B = 25. Net
+2. **Netting.** A owes B 10, B owes C 10, C owes A 10, and A owes C 5. Compute the gross, bilateral and multilateral obligations and check $M \le B \le G$.
+
+   *Solution.* G = 10 + 10 + 10 + 5 = 35. Bilateral: A–B 10, B–C 10, C–A 10 against 5 leaves 5: B = 25. Net
    positions: A −5, B 0, C +5, so M = 5 ≤ 25 ≤ 35.
-3. **The deleveraging loop.** At the new haircut h′ the fund must cut assets to E/h′: a first sale s₀ = A(1 − h/h′).
+3. **The deleveraging loop.** A fund at a 2% haircut's leverage limit sees the haircut rise to 4%. Each unit sold lowers the price by $\lambda$. Write the deleveraging loop and find its fixed point; when does it wipe out the equity?
+
+   *Solution.* At the new haircut h′ the fund must cut assets to E/h′: a first sale s₀ = A(1 − h/h′).
    Each unit sold lowers the price by λ, which costs equity ≈ Aλ per unit and forces a further sale ≈ Aλ/h′ per unit:
    a loop with gain g = Aλ/h′. If g < 1 the sales converge to s₀/(1 − g); if g ≥ 1 there is no fixed point short of
    selling everything, and the equity is gone once the cumulative price fall exceeds E/A.
-4. **Hedge ratio.** h* = ρσ_S/σ_F = 0.8 × 1.25 = 1.0; effectiveness ρ² = 0.64.
-5. **Smoothing.** Σθ² = 0.36 + 0.09 + 0.01 = 0.46. True Sharpe = reported × √0.46 = 1.5 × 0.678 = 1.02. Reported
+4. **Hedge ratio.** Find the minimum-variance hedge ratio and its effectiveness when $\rho = 0.8$ and $\sigma_S/\sigma_F = 1.25$.
+
+   *Solution.* h* = ρσ_S/σ_F = 0.8 × 1.25 = 1.0; effectiveness ρ² = 0.64.
+5. **Smoothing.** A fund's returns are smoothed with $\theta = (0.6, 0.3, 0.1)$ and its reported Sharpe ratio is 1.5. What is its true Sharpe ratio, and its reported lag-1 autocorrelation?
+
+   *Solution.* Σθ² = 0.36 + 0.09 + 0.01 = 0.46. True Sharpe = reported × √0.46 = 1.5 × 0.678 = 1.02. Reported
    ρ₁ = (θ₀θ₁ + θ₁θ₂)/Σθ² = (0.18 + 0.03)/0.46 = 0.46.
 
-6. **(qual) Wilks for Kupiec.** With $\ell(q) = x\ln q + (T - x)\ln(1 - q)$, $\text{LR}_{uc} = 2[\ell(\hat p) -
+6. **(qual) Wilks for Kupiec.** (qual) Show $\text{LR}_{uc} = (\hat p - p)^2/(p(1 - p)/T) + o_p(1)$ under $H_0$, and hence $\text{LR}_{uc} \Rightarrow \chi^2_1$.
+
+   *Solution.* With $\ell(q) = x\ln q + (T - x)\ln(1 - q)$, $\text{LR}_{uc} = 2[\ell(\hat p) -
    \ell(p)]$. Taylor-expand $\ell(p)$ around $\hat p$: $\ell'(\hat p) = 0$ and $\ell''(\hat p) = -T/(\hat p(1 - \hat p))$,
    so $\text{LR}_{uc} = T(\hat p - p)^2/(\hat p(1 - \hat p)) + O_p(T^{-1/2})$, and $\hat p \to p$ makes the denominator
    $p(1 - p)$. Under $H_0$, $\sqrt T(\hat p - p)/\sqrt{p(1 - p)} \Rightarrow N(0, 1)$ (the CLT for Bernoulli draws), so
    its square, and $\text{LR}_{uc}$ by Slutsky, tends to $\chi^2_1$.
-7. **(qual) Christoffersen.** The Markov likelihood is $(1 - \pi_{01})^{n_{00}}\pi_{01}^{n_{01}}(1 - \pi_{11})^{n_{10}}
+7. **(qual) Christoffersen.** (qual) Derive the Markov MLEs $\hat\pi_{01}, \hat\pi_{11}$ and show $\text{LR}_{ind} \Rightarrow \chi^2_1$; evaluate it for breaches on days 40, 100, 101 and 102 out of 250 days.
+
+   *Solution.* The Markov likelihood is $(1 - \pi_{01})^{n_{00}}\pi_{01}^{n_{01}}(1 - \pi_{11})^{n_{10}}
    \pi_{11}^{n_{11}}$; each factor is a Bernoulli likelihood, so $\hat\pi_{01} = n_{01}/(n_{00} + n_{01})$ and $\hat\pi_{11} =
    n_{11}/(n_{10} + n_{11})$. Independence is the one restriction $\pi_{01} = \pi_{11}$, so Wilks gives $\chi^2_1$ (with
    $p$ interior, the chain ergodic and both rows' counts growing). For breaches on days 40, 100, 101 and 102 out of 250 days:

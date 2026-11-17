@@ -144,21 +144,35 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **The hollow mask.** The posterior mean is (6 × 1 + 4 × (-1)) / (6 + 4) = 0.2 > 0: a face is seen. It is exactly
+1. **The hollow mask.** The hollow mask: a prior at $+1$ with precision 6 meets a stereo signal at $-1$ with precision 4. Find the posterior mean. Is a face seen? At what prior precision is the posterior exactly 0?
+
+   *Solution.* The posterior mean is (6 × 1 + 4 × (-1)) / (6 + 4) = 0.2 > 0: a face is seen. It is exactly
    0 when the prior precision equals the eyes' precision, 4.
-2. **The best prior.** Setting the derivative of (1 - w)²/π_e + 4(1 - p)w² to zero gives
+2. **The best prior.** The expected error of a prior with weight $w$ is $(1 - w)^2/\pi_e + (1 - p)(2w)^2$. Find the best $w$, and the best prior precision, for $\pi_e = 4$ and $p = 0.95$, then $p = 0.6$.
+
+   *Solution.* Setting the derivative of (1 - w)²/π_e + 4(1 - p)w² to zero gives
    w = (1/π_e) / (1/π_e + 4(1 - p)). For π_e = 4 and p = 0.95, w = 0.25/0.45 = 0.556, and the prior precision
    w π_e / (1 - w) = 5.0. For p = 0.6, w = 0.25/1.85 = 0.135 and the precision is 0.625.
-3. **Redish's bound.** Since δ ≥ D whatever V is, each use adds αδ ≥ αD to V. After 300 uses,
+3. **Redish's bound.** In Redish's model, $\delta = \max(r - V + D, D)$. Show that $V$ grows by at least $\alpha D$ per use, and bound $V$ after 300 uses with $\alpha = 0.1$, $D = 0.2$.
+
+   *Solution.* Since δ ≥ D whatever V is, each use adds αδ ≥ αD to V. After 300 uses,
    V ≥ 300 × 0.1 × 0.2 = 6 (Psyche's run with a cost of 1 ends at 6.0, the bound exactly, because the cost keeps δ
    at D).
-4. **A reversal.** Now: 50 against 100/(1 + 1.5) = 40, so 50 now wins. Sixty days ahead: 50/(1 + 3) = 12.5
+4. **A reversal.** With $V = A/(1 + kD)$ and $k = 0.05$ per day, compare 50 now with 100 in 30 days, then 50 in 60 days with 100 in 90 days. What happens, and why does it matter for relapse?
+
+   *Solution.* Now: 50 against 100/(1 + 1.5) = 40, so 50 now wins. Sixty days ahead: 50/(1 + 3) = 12.5
    against 100/(1 + 4.5) = 18.2, so the larger, later reward wins. Preferences reverse as the smaller reward comes
    close: a plan to abstain made in advance gives way when the drug is at hand.
-5. **Aberrant salience.** At equilibrium the expected change is zero: E[δ] = 0 - V + qb = 0, so V = qb = 0.2.
-6. **Relative age.** The excess is 85.1 - 63.6 = 21.5 per 10,000, which is 21.5/85.1 ≈ 25% of the August-born
+5. **Aberrant salience.** A Rescorla-Wagner cue gets bursts of size $b$ on a share $q$ of trials and no reward. Find its average learned value. Evaluate it for $q = 0.2$, $b = 1$.
+
+   *Solution.* At equilibrium the expected change is zero: E[δ] = 0 - V + qb = 0, so V = qb = 0.2.
+6. **Relative age.** Children born in August are diagnosed with ADHD at 85.1 per 10{,}000, those born in September at 63.6. If the whole difference is due to relative age, what share of the August-born diagnoses does it account for?
+
+   *Solution.* The excess is 85.1 - 63.6 = 21.5 per 10,000, which is 21.5/85.1 ≈ 25% of the August-born
    diagnoses.
-7. **Trait or state.** Run the conditioned-hallucination task repeatedly in the same people over months, alongside
+7. ★ **Trait or state.** Design a study that could tell whether a tendency to conditioned hallucinations is a stable trait or tracks a person's current state.
+
+   *Solution.* Run the conditioned-hallucination task repeatedly in the same people over months, alongside
    ratings of current hallucination severity, in people with and without a history of hearing voices. A trait
    predicts stable individual differences that persist when symptoms remit; a state predicts that a person's own
    score rises and falls with their symptoms. A multilevel model separates between-person from within-person

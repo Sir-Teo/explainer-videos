@@ -132,25 +132,39 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **The responder's threshold.** Offered s of a pie of 1, the responder gets s and the proposer 1 − s, so for
+1. **The responder's threshold.** A responder has Fehr-Schmidt utility with $\alpha$ for disadvantageous inequity. Show that an offer $s$ of a pie of 1 is accepted iff $s \ge \alpha / (1 + 2\alpha)$, and find the threshold for $\alpha = 0.5$ and $2$.
+
+   *Solution.* Offered s of a pie of 1, the responder gets s and the proposer 1 − s, so for
    s < 1/2 the utility is s − α(1 − 2s); rejection gives 0. Accept iff s − α(1 − 2s) ≥ 0, that is,
    s(1 + 2α) ≥ α, so s ≥ α/(1 + 2α). For α = 0.5 the threshold is 1/4; for α = 2 it is 2/5.
-2. **The proposer's best offer.** With thresholds uniform on [0, 0.4], P(accept s) = s/0.4 for s ≤ 0.4, so the
+2. **The proposer's best offer.** Responders' thresholds are uniform on $[0, 0.4]$. Find the offer that maximizes a selfish proposer's expected share $(1 - s) P(\text{accept})$.
+
+   *Solution.* With thresholds uniform on [0, 0.4], P(accept s) = s/0.4 for s ≤ 0.4, so the
    proposer maximizes (1 − s)s/0.4, whose derivative (1 − 2s)/0.4 is positive throughout [0, 0.4]: the best offer is
    0.4, with an expected share of 0.6.
-3. **Defection and Grim Trigger.** Whatever the other does, defecting gives T > R or P > S, so it is dominant in one
+3. **Defection and Grim Trigger.** In a one-shot prisoner's dilemma with payoffs $T > R > P > S$, show that defecting is dominant. In the repeated game with continuation probability $\delta$, find the $\delta$ above which Grim Trigger against itself is a best response.
+
+   *Solution.* Whatever the other does, defecting gives T > R or P > S, so it is dominant in one
    round. In the repeated game, cooperating forever against Grim Trigger is worth R/(1 − δ); deviating gives T now and
    P forever after, T + δP/(1 − δ). Cooperation is a best response when R/(1 − δ) ≥ T + δP/(1 − δ), that is,
    δ ≥ (T − R)/(T − P): with (5, 3, 1), δ ≥ 1/2.
-4. **Hamilton's rule.** Help when rB > C, so B/C > 1/r: more than 2 for a full sibling (r = 1/2) and more than 8
+4. **Hamilton's rule.** Hamilton's rule: helping a full sibling costs you $C$ and gives them $B$. For which $B/C$ is helping favoured, and for a first cousin?
+
+   *Solution.* Help when rB > C, so B/C > 1/r: more than 2 for a full sibling (r = 1/2) and more than 8
    for a first cousin (r = 1/8).
-5. **Fitting any couples exactly.** With p + 1 ≥ n columns in general position, the design matrix has rank n, so
+5. **Fitting any couples exactly.** A classifier is fitted to $n$ couples with $p$ predictors and an intercept by least squares. Show that if $p + 1 \ge n$ the fit can reproduce any outcome exactly, and explain what this means for in-sample accuracy.
+
+   *Solution.* With p + 1 ≥ n columns in general position, the design matrix has rank n, so
    the least-squares fit can match any vector of outcomes exactly: in-sample accuracy is 100% whatever the truth.
    In-sample accuracy measures flexibility, not prediction, which is why it must be estimated on couples the model has
    not seen.
-6. **An odds ratio.** Survival odds in the reference group are 0.8/0.2 = 4; times 1.5 gives 6, so the share is
+6. **An odds ratio.** An odds ratio of 1.5 for survival: if 80% survive in the reference group, what share survive in the other?
+
+   *Solution.* Survival odds in the reference group are 0.8/0.2 = 4; times 1.5 gives 6, so the share is
    6/7 ≈ 86%: a gain of about six points, which is not "50% more likely to survive".
-7. **★ Finding pair-specific compatibility.** Measure the same people with many partners (a round-robin, as in speed
+7. **★ Finding pair-specific compatibility.** Design a study that could detect compatibility specific to a pair, and say what it would have to predict that actor and partner effects cannot.
+
+   *Solution.* Measure the same people with many partners (a round-robin, as in speed
    dating), and estimate actor, partner and relationship variance. Compatibility exists if a model built before
    meeting predicts the relationship component on held-out pairs: who will like whom beyond how choosy each person is
    and how desirable each partner is. Preregister the model and the held-out pairs.

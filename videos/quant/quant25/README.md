@@ -35,18 +35,42 @@ The original [compute.py](compute.py), House algorithms and global trial/track/m
 
 ## Problems, with solutions
 
-1. **Normal maximum.** Independence gives Pr(max Zᵢ ≤ c) = ∏Pr(Zᵢ ≤ c) = Φ(c)^n. The median solves Φ(c) = 2^(−1/n); for n = 200 it is about 2.70. This is the median of standard-normal maxima, not the Student-t simulation's mean.
-2. **Normal Bonferroni.** For 212 two-sided tests at 5%, p ≤ 0.05/212 = 0.00023585 and |z| ≥ Φ⁻¹(1 − 0.05/(2·212)) ≈ 3.68. The union bound uses valid marginal p-values and permits arbitrary dependence; exact finite-sample Student-t thresholds differ.
-3. **Five p-values.** Bonferroni's 0.01 threshold rejects 0.001 and 0.008: two. Holm thresholds 0.01, 0.0125, 0.01667, 0.025, 0.05 yield three before the 0.03 failure. BH thresholds 0.01k have last crossing at k = 4 (0.03 ≤ 0.04), so four.
-4. **Conditional empirical Bayes.** Under t = θ + ε with independent ε ~ N(0,1), θ ~ N(4,5), the observed variance is 6. Posterior mean at t = 7 is 4 + (5/6)(7 − 4) = 6.5. A fitted selected-universe model need not be calibrated for future returns.
-5. **Ridge in components.** For symmetric positive-definite Σ = Σ_k λ_k q_kq_k′ and γ ≥ 0, (Σ + γI)⁻¹μ = Σ_k (q_k′μ)/(λ_k + γ) q_k = Σ_k [λ_k/(λ_k + γ)] [(q_k′μ)/λ_k] q_k. Positive λ_k permits the unshrunk expression. The isotropic penalty is unit dependent.
-6. **Two directions.** Unshrunk loadings are 0.002/0.01 = 0.2 and 0.002/0.0001 = 20. At γ = 0.001 they are 0.1818 and 1.8182. The smaller-eigenvalue direction retains 1/11 of its loading, versus 10/11 for the larger. Under this prior it is shrunk more, without proving its mean is false.
-7. **RP-PCA at −1.** F′F/T − μμ′ = Σ_t(F_t − μ)(F_t − μ)′/T. This ML-centered covariance equals (T − 1)/T times the usual sample covariance, so eigenvectors agree but eigenvalues are rescaled.
-8. **Classical attenuation.** If β̂ = β + u, u is independent additive error, residuals are orthogonal to β and u, and an intercept is fitted, plim λ̂ = λ Var(β)/(Var(β)+Var(u)) = 0.2λ. These assumptions are not automatic for generated factor betas or weak-factor two-pass inference.
-9. **Conditional model comparison.** B has higher attainable SR² (0.8 versus 0.5). For a common union of traded returns and matching moments, the unexplained mean-variance gap is SR²(union) − SR²(model); B leaves a gap 0.3 smaller. Factors themselves can form that common union. Raw finite GRS values have additional model-specific scaling. This does not establish a unique risk story, exact spanning, investor dominance under constraints, or a future winner.
-10. **Expected noise counts.** With standard-normal null marginals, 29,000·2Φ̄(2) ≈ 1,320 and 29,000·2Φ̄(3) ≈ 78.3. Linearity of expectation needs no cross-test independence. Dependence does change dispersion and the chance of any exceedance.
-11. **Exact BH theorem.** Assume independent p-values and uniform true-null marginals. Let R⁽ⁱ⁾ be BH's rejection count with p_i set to zero, a function only of p₋ᵢ. For k ≥ 1, {p_i ≤ qk/m, R = k} = {p_i ≤ qk/m, R⁽ⁱ⁾ = k}. Lowering a rejected p does not change the final count; conversely a p at most qk/m preserves the kth crossing and cannot create a later one. Independence and uniformity give probability (qk/m)Pr(R⁽ⁱ⁾ = k). Therefore E[V/max(R,1)] = Σ_i∈H₀ Σ_k (1/k)(qk/m)Pr(R⁽ⁱ⁾ = k) = m₀q/m. Valid super-uniform nulls give ≤ rather than exact equality. Independence of the family is an explicit sufficient condition here.
-12. **Storey and local/tail rates.** For fixed λ and uniform true-null marginals, E#{p > λ} = m₀(1 − λ) + Σ_i∈H₁ Pr(p_i > λ) ≥ m₀(1 − λ). Dividing proves the untruncated expectation bound; a realised estimate need not be above π₀, and capping at one may break the expectation inequality. For m = m₀ = 1 and λ = 1/2, the capped estimator is 1{p > 1/2}, with expectation 1/2 < π₀ = 1. For a correctly specified two-group density f = π₀φ + (1 − π₀)f₁, and a positive upper-tail probability, Pr(H₀|Z ≥ z) = π₀Φ̄(z)/F̄(z) = ∫_z^∞ [π₀φ(u)/f(u)]f(u)du/F̄(z) = E[lfdr(Z)|Z ≥ z]. This uses a standard-normal null and one consistent positive tail. If lfdr decreases on that tail, the average is at most its threshold value. Arbitrary clipped fitted ratios do not inherit that posterior identity.
+1. **Normal maximum.** Show that $\Pr(\max_{i \le n} Z_i \le c) = \Phi(c)^n$ for independent standard normals, and that the median maximum solves $\Phi(c) = 2^{-1/n}$. Find it for $n = 200$.
+
+   *Solution.* Independence gives Pr(max Zᵢ ≤ c) = ∏Pr(Zᵢ ≤ c) = Φ(c)^n. The median solves Φ(c) = 2^(−1/n); for n = 200 it is about 2.70. This is the median of standard-normal maxima, not the Student-t simulation's mean.
+2. **Normal Bonferroni.** Bonferroni for $m = 212$ two-sided tests at 5%: find the $p$ and $|t|$ hurdles.
+
+   *Solution.* For 212 two-sided tests at 5%, p ≤ 0.05/212 = 0.00023585 and |z| ≥ Φ⁻¹(1 − 0.05/(2·212)) ≈ 3.68. The union bound uses valid marginal p-values and permits arbitrary dependence; exact finite-sample Student-t thresholds differ.
+3. **Five p-values.** $p$-values 0.001, 0.008, 0.012, 0.03, 0.2 ($m = 5$, 5%). How many rejections by Bonferroni, Holm, and Benjamini–Hochberg?
+
+   *Solution.* Bonferroni's 0.01 threshold rejects 0.001 and 0.008: two. Holm thresholds 0.01, 0.0125, 0.01667, 0.025, 0.05 yield three before the 0.03 failure. BH thresholds 0.01k have last crossing at k = 4 (0.03 ≤ 0.04), so four.
+4. **Conditional empirical Bayes.** Empirical Bayes: the zoo's $t$'s have mean 4 and variance 6. Shrink $t = 7$.
+
+   *Solution.* Under t = θ + ε with independent ε ~ N(0,1), θ ~ N(4,5), the observed variance is 6. Posterior mean at t = 7 is 4 + (5/6)(7 − 4) = 6.5. A fitted selected-universe model need not be calibrated for future returns.
+5. **Ridge in components.** Show that $(\Sigma + \gamma I)^{-1}\mu = \sum_k \frac{\lambda_k}{\lambda_k + \gamma}\frac{q_k^\top\mu}{\lambda_k}q_k$.
+
+   *Solution.* For symmetric positive-definite Σ = Σ_k λ_k q_kq_k′ and γ ≥ 0, (Σ + γI)⁻¹μ = Σ_k (q_k′μ)/(λ_k + γ) q_k = Σ_k [λ_k/(λ_k + γ)] [(q_k′μ)/λ_k] q_k. Positive λ_k permits the unshrunk expression. The isotropic penalty is unit dependent.
+6. **Two directions.** Two principal components with variances 0.01 and 0.0001 and projected means 0.002 each. Find the unshrunk and the $\gamma = 0.001$ loadings. Which direction does shrinkage distrust?
+
+   *Solution.* Unshrunk loadings are 0.002/0.01 = 0.2 and 0.002/0.0001 = 20. At γ = 0.001 they are 0.1818 and 1.8182. The smaller-eigenvalue direction retains 1/11 of its loading, versus 10/11 for the larger. Under this prior it is shrunk more, without proving its mean is false.
+7. **RP-PCA at −1.** Show that RP-PCA with $\gamma = -1$ is PCA of the (biased) sample covariance.
+
+   *Solution.* F′F/T − μμ′ = Σ_t(F_t − μ)(F_t − μ)′/T. This ML-centered covariance equals (T − 1)/T times the usual sample covariance, so eigenvectors agree but eigenvalues are rescaled.
+8. **Classical attenuation.** In a classical EIV illustration with independent additive beta error, true-beta variance 0.01 and error variance 0.04: find the attenuation factor. Why is this not a general two-pass identity?
+
+   *Solution.* If β̂ = β + u, u is independent additive error, residuals are orthogonal to β and u, and an intercept is fitted, plim λ̂ = λ Var(β)/(Var(β)+Var(u)) = 0.2λ. These assumptions are not automatic for generated factor betas or weak-factor two-pass inference.
+9. **Conditional model comparison.** Model A's factors reach $SR^2 = 0.5$ a year, model B's 0.8. Which is better by Barillas–Shanken, and why are no test assets needed?
+
+   *Solution.* B has higher attainable SR² (0.8 versus 0.5). For a common union of traded returns and matching moments, the unexplained mean-variance gap is SR²(union) − SR²(model); B leaves a gap 0.3 smaller. Factors themselves can form that common union. Raw finite GRS values have additional model-specific scaling. This does not establish a unique risk story, exact spanning, investor dominance under constraints, or a future winner.
+10. **Expected noise counts.** A miner tries 29{,}000 hypotheses with standard-normal null statistics. Find expected counts with $|Z|>2$ and $|Z|>3$. Do these expectations require independent tests?
+
+    *Solution.* With standard-normal null marginals, 29,000·2Φ̄(2) ≈ 1,320 and 29,000·2Φ̄(3) ≈ 78.3. Linearity of expectation needs no cross-test independence. Dependence does change dispersion and the chance of any exceedance.
+11. **Exact BH theorem.** (qual) For independent $p$-values with exactly uniform true-null distributions, prove that Benjamini–Hochberg at level $q$ has $\mathrm{FDR} = \pi_0 q$ exactly. Hint: $V/R = \sum_{i \in H_0} 1\{p_i \le qR/m\}/R$; condition on the other $p$'s.
+
+    *Solution.* Assume independent p-values and uniform true-null marginals. Let R⁽ⁱ⁾ be BH's rejection count with p_i set to zero, a function only of p₋ᵢ. For k ≥ 1, {p_i ≤ qk/m, R = k} = {p_i ≤ qk/m, R⁽ⁱ⁾ = k}. Lowering a rejected p does not change the final count; conversely a p at most qk/m preserves the kth crossing and cannot create a later one. Independence and uniformity give probability (qk/m)Pr(R⁽ⁱ⁾ = k). Therefore E[V/max(R,1)] = Σ_i∈H₀ Σ_k (1/k)(qk/m)Pr(R⁽ⁱ⁾ = k) = m₀q/m. Valid super-uniform nulls give ≤ rather than exact equality. Independence of the family is an explicit sufficient condition here.
+12. **Storey and local/tail rates.** (qual) Show the UNTRUNCATED Storey estimator satisfies $\mathbb E\hat\pi_0(\lambda)\ge\pi_0$ for uniform null p-values; explain why clipping at one can change this. Then, in the two-group model, show that the tail-area rate $\pi_0\bar\Phi(z)/\bar F(z)$ equals $\mathbb E[\operatorname{lfdr}(Z) \mid Z \ge z]$.
+
+    *Solution.* For fixed λ and uniform true-null marginals, E#{p > λ} = m₀(1 − λ) + Σ_i∈H₁ Pr(p_i > λ) ≥ m₀(1 − λ). Dividing proves the untruncated expectation bound; a realised estimate need not be above π₀, and capping at one may break the expectation inequality. For m = m₀ = 1 and λ = 1/2, the capped estimator is 1{p > 1/2}, with expectation 1/2 < π₀ = 1. For a correctly specified two-group density f = π₀φ + (1 − π₀)f₁, and a positive upper-tail probability, Pr(H₀|Z ≥ z) = π₀Φ̄(z)/F̄(z) = ∫_z^∞ [π₀φ(u)/f(u)]f(u)du/F̄(z) = E[lfdr(Z)|Z ≥ z]. This uses a standard-normal null and one consistent positive tail. If lfdr decreases on that tail, the average is at most its threshold value. Arbitrary clipped fitted ratios do not inherit that posterior identity.
 
 ## Data access and reproducibility
 

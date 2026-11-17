@@ -158,40 +158,58 @@ python tools/qa_scene.py quant10 Ledger           # one chapter, silent, with a 
 
 ## Problems, with solutions
 
-1. **Parity and delta.** C − P = [S N(d₁) − K e^{−rT} N(d₂)] − [K e^{−rT} N(−d₂) − S N(−d₁)] = S − K e^{−rT}, using
+1. **Parity and delta.** From the formula, prove put–call parity $C - P = S - Ke^{-rT}$, and show that $\Delta_C = N(d_1)$ using $S\,N'(d_1) = K e^{-rT} N'(d_2)$.
+
+   *Solution.* C − P = [S N(d₁) − K e^{−rT} N(d₂)] − [K e^{−rT} N(−d₂) − S N(−d₁)] = S − K e^{−rT}, using
    N(x) + N(−x) = 1. For delta, differentiate: ∂C/∂S = N(d₁) + [S φ(d₁) − K e^{−rT} φ(d₂)] ∂d₁/∂S (the two d's have
    the same derivative). Since d₂ = d₁ − σ√T, φ(d₂) = φ(d₁) e^{d₁σ√T − σ²T/2} = φ(d₁) S e^{rT}/K, so the bracket is
    zero and Δ = N(d₁).
-2. **The tree's probability.** q u S + (1 − q) d S = S[d + q(u − d)] = S e^{rΔt}, so the stock grows at r on average
+2. **The tree's probability.** Show that the CRR probability $q = (e^{r\Delta t} - d)/(u - d)$ makes the discounted stock a martingale on the tree, and that $q \to \tfrac12$ as $\Delta t \to 0$ when $r = 0$.
+
+   *Solution.* q u S + (1 − q) d S = S[d + q(u − d)] = S e^{rΔt}, so the stock grows at r on average
    and its discounted value is a martingale. At r = 0, q = (1 − d)/(u − d); with u = e^{σ√Δt}, d = 1/u, expanding
    gives q = ½ − σ√Δt/4 + O(Δt) → ½.
-3. **The volatility trader's estimate.** With r = 0 and no drift, the expected hedged P&L of a short option sold at σᵢ
+3. **The volatility trader's estimate.** A three-month at-the-money call is sold at 25% and the stock realizes 20%. Use $\tfrac12\Gamma S^2(\sigma_i^2 - \sigma_r^2)$ to estimate the hedged P&L per 100 of stock.
+
+   *Solution.* With r = 0 and no drift, the expected hedged P&L of a short option sold at σᵢ
    and hedged at σᵢ when the stock realizes σᵣ is exactly C(σᵢ) − C(σᵣ) = 4.98 − 3.99 = 1.00 per 100 for a three-month
    at-the-money call at 25% and 20%: vega × (σᵢ − σᵣ) = 19.9 × 0.05. The frozen-spot shortcut ½(σᵢ² − σᵣ²)∫ΓS²dt with
    Γ kept at the money gives vega × (σᵢ² − σᵣ²)/σᵢ = 1.79: too high, because real paths leave the strike, where
    gamma is smaller (chapter 8).
-4. **Leland.** σ_L² = σ²(1 + √(2/π) k / (σ√Δt)) with round-trip cost k = 0.2%. Daily (Δt = 1/252): σ_L = 21.2%;
+4. **Leland.** Leland: with a round-trip cost of 0.2% and $\sigma = 20\%$, find $\sigma_L$ for daily and for weekly hedging. Which is cheaper to sell?
+
+   *Solution.* σ_L² = σ²(1 + √(2/π) k / (σ√Δt)) with round-trip cost k = 0.2%. Daily (Δt = 1/252): σ_L = 21.2%;
    weekly (Δt = 1/52): σ_L = 20.6%. Weekly hedging is cheaper to sell, because it trades less, but its hedging error
    is about √5 ≈ 2.2 times larger (chapter 9).
-5. **Early exercise.** With no dividends and r ≥ 0, a call is worth at least S − K e^{−rT} ≥ S − K, so it is always worth at least as much alive as
+5. **Early exercise.** Why is an American call on a non-dividend stock never exercised early, while an American put can be? Give the put's early-exercise condition at $r = 0$.
+
+   *Solution.* With no dividends and r ≥ 0, a call is worth at least S − K e^{−rT} ≥ S − K, so it is always worth at least as much alive as
    exercised, and strictly more when r > 0: never exercise early without dividends. A put is worth at least
    K e^{−rT} − S, which is less than K − S when r > 0: exercising a deep put can win, because the strike received now
    earns interest. At r = 0 that bound is K − S itself, so the put is never exercised early either: with zero dividends, this removes the benefit of early put exercise. The argument assumes nonnegative rates; other carry conventions require a separate analysis.
-6. **Leland derived.** Over a step, delta changes by δΔ ≈ Γ δS = ΓSσ√Δt Z, so the shares traded are |δΔ| and the
+6. **Leland derived.** Derive Leland's $\sigma_L$ from the expected size of the hedge's trade, $\mathbb E|\delta\Delta|$, per step.
+
+   *Solution.* Over a step, delta changes by δΔ ≈ Γ δS = ΓSσ√Δt Z, so the shares traded are |δΔ| and the
    expected cost of the step is (k/2)·S·E|δΔ| = (k/2)ΓS²σ√Δt·√(2/π) for a round-trip cost k (half on each trade).
    Per unit of time that is ½ΓS²·σk√(2/π)/√Δt: the same form as the variance term ½ΓS²σ² of the hedging P&L. Adding
    it to the variance, σ_L² = σ² + σk√(2/π)/√Δt = σ²(1 + √(2/π) k/(σ√Δt)).
-7. **The forgotten forward.** Price an at-the-money-forward call with F = Se^{bT} and invert it with S and no carry:
+7. **The forgotten forward.** With carry $b$, show that inverting with $S$ instead of $F$ raises call implied vols and lowers put implied vols; estimate the error at the money for $b = 4\%$, $T = 0.5$, $\sigma = 45\%$.
+
+   *Solution.* Price an at-the-money-forward call with F = Se^{bT} and invert it with S and no carry:
    the formula thinks the call is in the money by ln(F/S) = bT, so it explains the price with a higher volatility.
    To first order δσ ≈ (∂C/∂F)(F − S)/vega ≈ N(d₁)·bT/(φ(d₁)√T) ≈ 0.5 × 0.02/(0.399 × 0.707) ≈ 3.5 points for
    b = 4%, T = 0.5, σ = 45%; the put, out of the money by the same amount, comes out about as much too low. The exact
    inversion (`carry` item): call 49.0% (+4.0), put 41.8% (−3.2); the asymmetry is second order.
-8. **(qual) Exit-time moments.** Let X = σS·W locally, with variance rate v = σ²S², and τ = inf{t: |X_t| = a}.
+8. **(qual) Exit-time moments.** (qual) For a Brownian motion with variance rate $v$ and $\tau$ its exit time from $(-a, a)$, show by optional stopping that $\mathbb E\tau = a^2/v$ and $\operatorname{Var}\tau = 2a^4/(3v^2)$; deduce that a hedge rebalanced at such times has error variance $\frac16\Gamma^2a^4$ per interval, against $\frac12\Gamma^2a^4$ at equal times.
+
+   *Solution.* Let X = σS·W locally, with variance rate v = σ²S², and τ = inf{t: |X_t| = a}.
    X² − vt is a martingale, so a² = vEτ: Eτ = a²/v. X⁴ − 6vtX² + 3v²t² is a martingale (Itô), so
    a⁴ − 6va²Eτ + 3v²Eτ² = 0, Eτ² = 5a⁴/(3v²) and Var τ = 2a⁴/(3v²). Over the interval the hedge error is
    ½Γ[(ΔX)² − vτ] = ½Γv(Eτ − τ), with variance ¼Γ²v²·2a⁴/(3v²) = Γ²a⁴/6. An equal-time step of the same mean length
    Δt = a²/v has error ½Γv Δt(Z² − 1), variance ½Γ²v²Δt² = Γ²a⁴/2.
-9. **(qual) The optimal band.** For deterministic coefficient functions in this pathwise exercise, per unit time the error variance accrues at (1/6)Γ²a²v (intervals of variance Γ²a⁴/6
+9. **(qual) The optimal band.** (qual) For deterministic coefficient functions, minimize $\int \frac16\Gamma^2a^2v\,dt$ subject to $\int v/a^2\,dt = N$ over band widths $a(t)$. Show $a \propto |\Gamma|^{-1/2}$, $N\operatorname{Var} = \frac16(\int|\Gamma|v\,dt)^2$, and that this is at most a third of the equal-time constant $\frac T2\int\Gamma^2v^2dt$.
+
+   *Solution.* For deterministic coefficient functions in this pathwise exercise, per unit time the error variance accrues at (1/6)Γ²a²v (intervals of variance Γ²a⁴/6
    at rate v/a²) and trades at v/a². The Lagrangian (1/6)Γ²a²v + λv/a² is minimized pointwise at a⁴ = 6λ/Γ², so
    a ∝ |Γ|^{−1/2}. Then Var = (c²/6)∫|Γ|v and N = (1/c²)∫|Γ|v with a = c|Γ|^{−1/2}, so N·Var = (1/6)(∫|Γ|v dt)². By
    Cauchy–Schwarz (∫|Γ|v dt)² ≤ T∫Γ²v²dt, so N·Var ≤ (1/6)T∫Γ²v² = (1/3)·(T/2)∫Γ²v², the equal-time constant.

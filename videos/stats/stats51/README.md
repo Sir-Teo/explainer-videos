@@ -122,25 +122,37 @@ python tools/lecture_length.py stats51 --floor 50
 
 ## Problems and solutions
 
-1. **Hoeffding's lemma.**
+1. **Hoeffding's lemma.** Show that a variable in $[a, b]$ with mean zero has $E e^{\lambda X} \le e^{\lambda^2(b-a)^2/8}$ (Hoeffding's lemma).
+
+   *Solution.*
    - Let ψ(λ) = log E e^{λX}. Then ψ(0) = 0, ψ′(0) = EX = 0, and ψ″(λ) is the variance of X under the tilted law
      dQ ∝ e^{λX} dP.
    - Any law on [a, b] has variance at most (b − a)²/4, so ψ″ ≤ (b − a)²/4. Taylor's theorem gives
      ψ(λ) ≤ λ²(b − a)²/8.
-2. **The sphere's coordinate.**
+2. **The sphere's coordinate.** For $x$ uniform on $S^{n-1}$, show $E x_1^2 = 1/n$ and that $\sqrt n\, x_1 \to N(0, 1)$.
+
+   *Solution.*
    - By symmetry, E x₁² = … = E xₙ², and they sum to 1, so E x₁² = 1/n.
    - Write x = g/‖g‖. Then √n x₁ = g₁/(‖g‖/√n), and ‖g‖/√n → 1 by the LLN, so √n x₁ → N(0, 1) by Slutsky.
-3. **Johnson–Lindenstrauss for one pair.**
+3. **Johnson–Lindenstrauss for one pair.** Prove Johnson–Lindenstrauss for one pair: $P(|\,\|Gu\|^2/k - 1| > \varepsilon) \le 2e^{-k\varepsilon^2/8}$, $\|u\| = 1$.
+
+   *Solution.*
    - For a k × d matrix G with N(0, 1) entries and a unit u, Gu ~ N(0, I_k), so ‖Gu‖² ~ χ²_k.
    - χ²_k − k is sub-exponential, and Bernstein gives P(|χ²_k/k − 1| > ε) ≤ 2e^{−kε²/8} for ε ≤ 1.
    - For 0 < ε ≤ 1 and failure probability α, a union bound over N(N − 1)/2 pairs is at most N(N − 1)e^{−kε²/8}. Thus k ≥ (8/ε²) log(N(N − 1)/α) suffices. The order log N/ε² alone does not specify a confidence level.
-4. **Three Lipschitz functions.**
+4. **Three Lipschitz functions.** Show that $\|g\|$ and $\max_i g_i$ are 1-Lipschitz, and that $s_{\max}(A)$ is 1-Lipschitz in the entries of $A$.
+
+   *Solution.*
    - The reverse triangle inequality gives |‖x‖ − ‖y‖| ≤ ‖x − y‖. Also |max xᵢ − max yᵢ| ≤ max|xᵢ − yᵢ| ≤ ‖x − y‖.
    - |s_max(A) − s_max(B)| ≤ ‖A − B‖_op ≤ ‖A − B‖_F, the Euclidean norm of the entries.
-5. **The exchangeable maximum.**
+5. **The exchangeable maximum.** For exchangeable $X_i = \sqrt{1-\rho}Z_i + \sqrt\rho W$, show $E\max_i X_i = \sqrt{1-\rho}\,E\max_i Z_i$.
+
+   *Solution.*
    - max_i(√(1 − ρ)Zᵢ + √ρ W) = √(1 − ρ) max_i Zᵢ + √ρ W, since W is common to every i.
    - Take expectations: E W = 0.
-6. **Two statistical dimensions.**
+6. **Two statistical dimensions.** Show the statistical dimension of an orthant in $\mathbb R^p$ is $p/2$, and of a $k$-dimensional subspace is $k$.
+
+   *Solution.*
    - The projection onto a k-dimensional subspace L gives ‖Π_L g‖² ~ χ²_k, with mean k.
    - The projection onto the orthant is (gᵢ)₊ coordinatewise, and E(gᵢ)₊² = 1/2, so δ = p/2.
 

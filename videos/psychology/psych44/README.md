@@ -125,16 +125,30 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Tracing.** The only path from X to Y runs through M, so r(X, Y) = 0.5 × 0.6 = 0.30.
-2. **Counting.** Free parameters: 9 loadings less 3 markers = 6, plus 3 factor variances and 3 covariances, plus 9
+1. **Tracing.** X causes M with standardized path 0.5, and M causes Y with path 0.6. Use Wright's tracing rules to find the correlation of X and Y.
+
+   *Solution.* The only path from X to Y runs through M, so r(X, Y) = 0.5 × 0.6 = 0.30.
+2. **Counting.** Nine tests, three factors, each test loading on one factor, a marker loading fixed for each factor. Count the free parameters and the degrees of freedom.
+
+   *Solution.* Free parameters: 9 loadings less 3 markers = 6, plus 3 factor variances and 3 covariances, plus 9
    residual variances: 21. Moments: 9 × 10/2 = 45. Degrees of freedom: 45 - 21 = 24.
-3. **RMSEA.** √((85.3 - 24)/(24 × 301)) = √(61.3/7224) = √0.00849 = 0.092.
-4. **Attenuation.** 0.32/√(0.63 × 0.63) = 0.32/0.63 = 0.51, close to the true 0.5.
-5. **Intercepts.** Δχ² = 164.1 - 124.0 = 40.1 on 60 - 54 = 6 df; the 5% critical value is 12.6 (p ≈ 4 × 10⁻⁷).
+3. **RMSEA.** $\chi^2 = 85.3$ on 24 df with $n = 301$. Compute the RMSEA.
+
+   *Solution.* √((85.3 - 24)/(24 × 301)) = √(61.3/7224) = √0.00849 = 0.092.
+4. **Attenuation.** Two sum scores each have reliability 0.63 and correlate 0.32. Correct the correlation for attenuation.
+
+   *Solution.* 0.32/√(0.63 × 0.63) = 0.32/0.63 = 0.51, close to the true 0.5.
+5. **Intercepts.** Metric invariance gives $\chi^2 = 124.0$ on 54 df; scalar, 164.1 on 60. Test the intercepts at 5%.
+
+   *Solution.* Δχ² = 164.1 - 124.0 = 40.1 on 60 - 54 = 6 df; the 5% critical value is 12.6 (p ≈ 4 × 10⁻⁷).
    Scalar invariance is rejected, so the schools' means are not comparable as they stand.
-6. **Equivalence.** X → M → Y, Y → M → X and X ← M → Y all imply that X and Y are independent given M and nothing
+6. **Equivalence.** Three variables, edges X–M and M–Y. Of the four ways to direct the two edges, which fit identically, and why?
+
+   *Solution.* X → M → Y, Y → M → X and X ← M → Y all imply that X and Y are independent given M and nothing
    else, so they fit identically, always. X → M ← Y implies that X and Y are independent, a different constraint.
-7. **The abstract.** Burnout → workload perceptions → turnover intention, or turnover intention → burnout →
+7. ★ **The abstract.** For chapter 12's invented abstract, draw two diagrams that fit equally well, and design a study that would tell them apart.
+
+   *Solution.* Burnout → workload perceptions → turnover intention, or turnover intention → burnout →
    workload perceptions, fit as well as the authors' chain. A study that tells them apart: randomize a reduction in
    workload (for instance, staffing) across teams, measure burnout and intention monthly, and preregister that
    burnout should fall before intention does; a second arm that targets burnout without changing workload tests

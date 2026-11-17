@@ -68,41 +68,65 @@ Opening; 1 Markowitz; 2 Tobin and estimation; 3 CAPM; 4 SDF and HJ; 5 APT/ICAPM;
 
 ## Problems, with solutions
 
-1. **The frontier.** Minimise ½ w'Σw subject to w'μ = m and w'1 = 1. The first-order condition Σw = λμ + γ1 gives
+1. **The frontier.** By Lagrange, show the frontier's variance at mean $m$ is $(Cm^2 - 2Am + B)/D$ with $A = \mathbf{1}^\top\Sigma^{-1}\mu$, $B = \mu^\top\Sigma^{-1}\mu$, $C = \mathbf{1}^\top\Sigma^{-1}\mathbf{1}$, $D = BC - A^2$.
+
+   *Solution.* Minimise ½ w'Σw subject to w'μ = m and w'1 = 1. The first-order condition Σw = λμ + γ1 gives
    w = λΣ⁻¹μ + γΣ⁻¹1. The constraints become λB + γA = m and λA + γC = 1, so λ = (Cm − A)/D and γ = (B − Am)/D. Then
    σ² = w'Σw = λm + γ = (Cm² − 2Am + B)/D.
-2. **Two assets.** w₁ = (σ₂² − ρσ₁σ₂)/(σ₁² + σ₂² − 2ρσ₁σ₂) = (0.01 − 0.006)/(0.04 + 0.01 − 0.012) = 0.105, w₂ = 0.895.
+2. **Two assets.** Two assets: $\sigma_1$ = 20%, $\sigma_2$ = 10%, $\rho$ = 0.3. Find the minimum-variance weights and volatility.
+
+   *Solution.* w₁ = (σ₂² − ρσ₁σ₂)/(σ₁² + σ₂² − 2ρσ₁σ₂) = (0.01 − 0.006)/(0.04 + 0.01 − 0.012) = 0.105, w₂ = 0.895.
    The variance is 0.105² × 0.04 + 0.895² × 0.01 + 2 × 0.105 × 0.895 × 0.006 = 0.00958, a volatility of 9.79%: a
    little below the safer asset's 10%.
-3. **Tangency and HJ.** The tangency weights are proportional to z = Σ⁻¹(μ − r_f1); its excess mean is
+3. **Tangency and HJ.** Show that the tangency portfolio's squared Sharpe ratio is $(\mu - r_f)^\top\Sigma^{-1}(\mu - r_f)$, and that it equals the square of the HJ coefficient-of-variation lower bound for same-period excess returns.
+
+   *Solution.* The tangency weights are proportional to z = Σ⁻¹(μ − r_f1); its excess mean is
    z'(μ − r_f1)/z'1 and its variance z'Σz/(z'1)² = z'(μ − r_f1)/(z'1)², so its Sharpe ratio squared is
    (μ − r_f1)'Σ⁻¹(μ − r_f1). This is the **square** of the necessary same-period HJ coefficient-of-variation lower bound. The bound itself is its square root. A positive-definite covariance and a normalisable positive-premium tangency are assumed; positivity of the pricing projection is not imposed.
-4. **How many years?** The standard error of a mean is σ/√T = 18%/√30 = 3.3% a year. Halving it needs four times as
+4. **How many years?** A mean return is estimated from 30 years of annual data with volatility 18%. Find its standard error; how many years would halve it?
+
+   *Solution.* The standard error of a mean is σ/√T = 18%/√30 = 3.3% a year. Halving it needs four times as
    much data: 120 years. A premium of about 6% is barely two standard errors from zero after thirty years.
-5. **The CAPM.** The tangency condition is Σw_M = κ(μ − r_f1) for some κ > 0; the i-th row says cov(R_i, R_M) =
+5. **The CAPM.** Show that if the market portfolio is the tangency portfolio, $\mathbb{E}[R_i] - r_f = \beta_i(\mathbb{E}[R_m] - r_f)$.
+
+   *Solution.* The tangency condition is Σw_M = κ(μ − r_f1) for some κ > 0; the i-th row says cov(R_i, R_M) =
    κ(E[R_i] − r_f). For the market itself, var(R_M) = κ(E[R_M] − r_f). Dividing, E[R_i] − r_f =
    β_i(E[R_M] − r_f) with β_i = cov(R_i, R_M)/var(R_M).
-6. **The CAPM's discount factor.** For an excess return, 0 = E[mR^e] = E[m]E[R^e] + cov(m, R^e). With m = a − bR_M,
+6. **The CAPM's discount factor.** Show that $m = a - bR_m$ prices every asset exactly when the CAPM holds, and find $a$ and $b$, using a known gross cash return. Does this linear pricing projection have to be positive?
+
+   *Solution.* For an excess return, 0 = E[mR^e] = E[m]E[R^e] + cov(m, R^e). With m = a − bR_M,
    cov(m, R^e) = −b cov(R_M, R^e), so E[R^e] = (b/E[m]) cov(R^e, R_M), which is the CAPM when b/E[m] =
    (E[R_M] − r_f)/var(R_M). Using gross market return R_M and known gross cash R_f consistently, cash pricing gives E[m] = 1/R_f, b = (E[R_M] − R_f)/(R_f var(R_M)) and a = 1/R_f + b E[R_M]. This linear pricing projection can be negative; CAPM pricing alone does not certify an equivalent probability density.
-7. **The riskless rate.** With m = e^{−δ}(C₁/C₀)^{−γ} and ln growth ~ N(g, σ²): 1/R_f = E[m] = e^{−δ − γg + γ²σ²/2},
+7. **The riskless rate.** In the lognormal CRRA model, derive $r_f = \delta + \gamma g - \gamma^2\sigma_c^2/2$. With $\delta$ = 1%, $g$ = $\sigma_c$ = 2% and $\gamma$ = 10, what is $r_f$?
+
+   *Solution.* With m = e^{−δ}(C₁/C₀)^{−γ} and ln growth ~ N(g, σ²): 1/R_f = E[m] = e^{−δ − γg + γ²σ²/2},
    so r_f = δ + γg − γ²σ²/2. With δ = 1%, g = σ = 2% and γ = 10: r_f = 0.01 + 0.20 − 0.02 = 19%, The 19% is a **log** rate in the iid Gaussian log-growth benchmark, not a simple rate. The saved bill proxy is nominal cash deflated ex post and has inflation risk; its mean cannot be called a known real risk-free rate.
-8. **A disaster.** Marginal utility scales as C^{−γ}, so a 29% fall raises it by 0.71^{−4} ≈ 3.9 times. An asset that
+8. **A disaster.** A disaster cuts consumption by $b$ = 29%. With $\gamma$ = 4, by what factor does marginal utility rise? Why does a 1.7% chance of it matter so much?
+
+   *Solution.* Marginal utility scales as C^{−γ}, so a 29% fall raises it by 0.71^{−4} ≈ 3.9 times. An asset that
    loses heavily in that state is paid for the loss weighted by nearly four, and with γ larger the weight explodes:
    a small probability times a large weight is a large premium.
-9. **The Campbell–Shiller constant.** R_{t+1} = (P_{t+1} + D_{t+1})/P_t; in logs r = pd_{t+1} − pd_t + Δd + ln(1 +
+9. **The Campbell–Shiller constant.** Derive the Campbell–Shiller approximation and $\rho = 1/(1 + e^{\overline{dp}})$; with $\overline{dp} = -3.25$, find $\rho$.
+
+   *Solution.* R_{t+1} = (P_{t+1} + D_{t+1})/P_t; in logs r = pd_{t+1} − pd_t + Δd + ln(1 +
    e^{−pd_{t+1}}). A first-order expansion of the last term around the mean gives κ + ρ pd_{t+1} with
    ρ = 1/(1 + e^{dp̄}) (dp̄ the mean log dividend yield). With dp̄ = −3.25, ρ = 1/(1 + e^{−3.25}) = 0.963.
-10. **Shleifer–Vishny.** p₁ = V − S₁ + F₁ = 1 − 0.3 + 0.2 = 0.90. p₂ = (V − S₂ + F₁(1 − a))/(1 − aF₁/p₁) =
+10. **Shleifer–Vishny.** Shleifer–Vishny with $V$ = 1, $S_1$ = 0.3, $S_2$ = 0.4, $F_1$ = 0.2, $a$ = 1.5: find $p_1$, $p_2$ and $F_2$.
+
+    *Solution.* p₁ = V − S₁ + F₁ = 1 − 0.3 + 0.2 = 0.90. p₂ = (V − S₂ + F₁(1 − a))/(1 − aF₁/p₁) =
     (1 − 0.4 − 0.1)/(1 − 0.3/0.9) = 0.5/0.667 = 0.75 (against 0.80 with a=0, no return-sensitive fund reduction). F₂ = F₁ + aF₁(p₂/p₁ − 1) =
     0.2 + 0.3 × (−0.167) = 0.15: the fund loses a quarter of its capital just as the price is furthest from value.
-11. **(qual) The fixed point.** The map TP = β max_i Q_i(d + P) is monotone and satisfies |TP − TP′|_∞ ≤ β|P − P′|_∞
+11. **(qual) The fixed point.** (qual) In Harrison and Kreps's model show that $P = \beta\max_i Q_i(d + P)$ has a unique solution, that $P \ge \max_i V_i$, and compute $P$ for their example ($24/13$, $27/13$).
+
+    *Solution.* The map TP = β max_i Q_i(d + P) is monotone and satisfies |TP − TP′|_∞ ≤ β|P − P′|_∞
    (each Q_i is a stochastic matrix and max is 1-Lipschitz), so it is a contraction with a unique fixed point. Since
    P = TP ≥ βQ_i(d + P) and V_i = βQ_i(d + V_i), P − V_i ≥ βQ_i(P − V_i); iterating, P − V_i ≥ (βQ_i)ⁿ(P − V_i) → 0.
    For the example, guess the holders (type 1 in state 0, type 2 in state 1) and solve the linear system
    P₀ = ¾[½(0 + P₀) + ½(1 + P₁)], P₁ = ¾[¼(0 + P₀) + ¾(1 + P₁)]: P₀ = 24/13, P₁ = 27/13; check that the guessed type is
    indeed the higher bidder in each state.
-12. **(qual) When the premium vanishes.** If type j has the highest Q_j(d + P) in every state, P = βQ_j(d + P), the
+12. **(qual) When the premium vanishes.** (qual) Show that if one type is the most optimistic in every state, $P = \max_i V_i$: the speculative premium needs the identity of the optimist to change with the state.
+
+    *Solution.* If type j has the highest Q_j(d + P) in every state, P = βQ_j(d + P), the
    same equation as V_j, whose solution is unique: P = V_j = max_i V_i. Strict premiums require changing **strict** optimists and suitable reachability, rather than an arbitrary change of tie-break. The positive transition matrices in the fixed example satisfy the relevant conditions.
 
 ## Data, reproducibility and QA scope

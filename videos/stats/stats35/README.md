@@ -216,27 +216,39 @@ python tools/lecture_length.py stats35 --floor 50
 
 ## Problems and solutions
 
-1. **Unbiasedness.** Under complete randomization P(Z_i = 1) = n₁/n.
+1. **Unbiasedness.** Show that under complete randomization $E(\bar Y_1 - \bar Y_0) = \bar\tau$, with the science fixed.
+
+   *Solution.* Under complete randomization P(Z_i = 1) = n₁/n.
    - Ȳ₁ = Σ Z_i Y_i(1)/n₁, so E Ȳ₁ = Σ (n₁/n) Y_i(1)/n₁ = Ȳ(1). Likewise E Ȳ₀ = Ȳ(0).
    - Hence E(Ȳ₁ − Ȳ₀) = τ̄.
-2. **Neyman's variance.** Ȳ₁ is the mean of a simple random sample of n₁ from the n values Y_i(1), so
+2. **Neyman's variance.** Derive $\mathrm{Var}(\bar Y_1 - \bar Y_0) = S_1^2/n_1 + S_0^2/n_0 - S_\tau^2/n$.
+
+   *Solution.* Ȳ₁ is the mean of a simple random sample of n₁ from the n values Y_i(1), so
    Var Ȳ₁ = (1 − n₁/n) S₁²/n₁; likewise Var Ȳ₀ = (1 − n₀/n) S₀²/n₀.
    - The covariance uses Cov(Z_i, Z_j) = −n₁n₀/(n²(n − 1)) for i ≠ j. It gives Cov(Ȳ₁, Ȳ₀) = −S₁₀/n, where S₁₀ is the
      finite-population covariance of Y(1) and Y(0).
    - Summing, with S_τ² = S₁² + S₀² − 2S₁₀: Var(Ȳ₁ − Ȳ₀) = S₁²/n₁ + S₀²/n₀ − S_τ²/n.
-3. **Conservativeness.** Within-arm sample variances are unbiased for the finite-population variances under SRS:
+3. **Conservativeness.** Show that $E(s_1^2/n_1 + s_0^2/n_0)$ exceeds the true variance by $S_\tau^2/n$.
+
+   *Solution.* Within-arm sample variances are unbiased for the finite-population variances under SRS:
    E s₁² = S₁² and E s₀² = S₀².
    - So E(s₁²/n₁ + s₀²/n₀) = S₁²/n₁ + S₀²/n₀ = Var + S_τ²/n ≥ Var, with equality if and only if τ is constant.
-4. **LATE.**
+4. **LATE.** Under randomization, exclusion and monotonicity, show that $\mathrm{ITT}_Y/\mathrm{ITT}_D$ is the compliers' average effect.
+
+   *Solution.*
    - By randomization, ITT_Y = Σ_strata π_g E[Y(D(1)) − Y(D(0)) | g]. Exclusion lets Y depend on Z only through D.
    - For never- and always-takers D(1) = D(0), so their terms vanish; defiers are absent by monotonicity. That leaves
      ITT_Y = π_c E[Y(1) − Y(0) | complier].
    - Similarly ITT_D = E[D(1) − D(0)] = π_c. So the ratio is the compliers' average effect.
-5. **Two looks.** Z₁ = S_n/√n and Z₂ = S_{2n}/√(2n) are bivariate normal with correlation √(1/2).
+5. **Two looks.** Show that $K$ looks at $|z| > 1.96$ give a false-positive rate above 5% for $K = 2$, and find it.
+
+   *Solution.* Z₁ = S_n/√n and Z₂ = S_{2n}/√(2n) are bivariate normal with correlation √(1/2).
    - The false-positive rate is P(|Z₁| > 1.96 or |Z₂| > 1.96) = 1 − P(|Z₁| ≤ 1.96, |Z₂| ≤ 1.96).
    - Numerically this is 0.083, above 0.05 because the two events are not nested (the kit's `crossing_probs` gives
      about 0.083; the simulation 8.2%).
-6. **Design effect.** For a cluster mean of m units with common variance σ² and pairwise correlation ρ:
+6. **Design effect.** Show that the design effect of equal clusters of size $m$ with correlation $\rho$ is $1 + (m-1)\rho$.
+
+   *Solution.* For a cluster mean of m units with common variance σ² and pairwise correlation ρ:
    - Var = m⁻²(mσ² + m(m − 1)ρσ²) = (σ²/m)(1 + (m − 1)ρ).
    - Relative to m independent units, the factor is 1 + (m − 1)ρ.
 

@@ -175,28 +175,42 @@ and never redistributed.
 
 ## Problems and solutions
 
-1. **Classical scaling.** With centred points, D⁽²⁾ᵢⱼ = |xᵢ|² + |xⱼ|² − 2xᵢ·xⱼ. The first two terms are constant
+1. **Classical scaling.** Show that double-centring the squared distances, $B = -\tfrac12 J D^{(2)} J$ with $J = I - \tfrac1n \mathbf{1}\mathbf{1}^\top$, gives $B = X X^\top$ for centred points $X$. Why are its top eigenvectors the best $k$-dimensional map?
+
+   *Solution.* With centred points, D⁽²⁾ᵢⱼ = |xᵢ|² + |xⱼ|² − 2xᵢ·xⱼ. The first two terms are constant
    along a column or a row, so double-centring removes them, and the mean of xᵢ·xⱼ over i or j is zero because X is
    centred. So −½ J D⁽²⁾ J = X Xᵀ. The best rank-k approximation of B in squared error (Eckart–Young) keeps its top k
    eigenpairs, and the map is V_k Λ_k^(1/2).
-2. **Procrustes.** tr(RᵀXᵀY) = tr(RᵀUΣVᵀ) = tr(ΣVᵀRᵀU) = Σᵢ σᵢ zᵢᵢ, with Z = VᵀRᵀU orthogonal, so |zᵢᵢ| ≤ 1.
+2. **Procrustes.** Show that the rotation $R$ maximizing $\mathrm{tr}(R^\top X^\top Y)$ is $U V^\top$, where $X^\top Y = U \Sigma V^\top$.
+
+   *Solution.* tr(RᵀXᵀY) = tr(RᵀUΣVᵀ) = tr(ΣVᵀRᵀU) = Σᵢ σᵢ zᵢᵢ, with Z = VᵀRᵀU orthogonal, so |zᵢᵢ| ≤ 1.
    The sum is largest when Z = I, that is R = UVᵀ.
-3. **Attribution.** The posterior is proportional to exp(−s/m) exp(−(a − c − s)²/2σ²). Completing the square,
+3. **Attribution.** In the attribution model, arousal $a \sim N(s + c, \sigma^2)$ with an exponential prior of mean $m$ on $s \geq 0$. Show that the posterior of $s$ is a normal with mean $a - c - \sigma^2/m$, truncated at 0.
+
+   *Solution.* The posterior is proportional to exp(−s/m) exp(−(a − c − s)²/2σ²). Completing the square,
    −(a − c − s)²/2σ² − s/m = −(s − (a − c − σ²/m))²/2σ² + const, so on s ≥ 0 it is a normal with mean
    a − c − σ²/m truncated at 0. An explanation c moves arousal away from the situation one for one, until the
    truncation takes over: the informed subjects feel little.
-4. **The forecaster.** The total extra happiness is ∫₀^∞ I e^(−t/τ) dt = Iτ, and the forecast's is Iτ_p, so the
+4. **The forecaster.** For $h(t) = I e^{-t/\tau}$, show that a forecaster with time constant $\tau_p$ overstates the total extra happiness by the factor $\tau_p / \tau$, and find when the forecast is twice the experience.
+
+   *Solution.* The total extra happiness is ∫₀^∞ I e^(−t/τ) dt = Iτ, and the forecast's is Iτ_p, so the
    forecast overstates it by τ_p/τ. The ratio at time t is e^(t(1/τ − 1/τ_p)), which is 2 at t = ln 2 · ττ_p/(τ_p −
    τ): 16 days for τ = 20 and τ_p = 150.
-5. **The meta-analysis.** Pooled within study first, τ² = 0.078, I² = 81% and the precision-effect intercept 0.196
+5. **The meta-analysis.** With the meta-analysis table (`opendata.coles\_2019`), recompute $\hat\tau^2$, $I^2$ and the PET intercept. What does PET assume about small studies?
+
+   *Solution.* Pooled within study first, τ² = 0.078, I² = 81% and the precision-effect intercept 0.196
    (SE 0.059), against a random-effects 0.199. PET regresses effects on their standard errors and reads the
    intercept as the effect of an infinitely precise study; it assumes that any small-study asymmetry comes from
    selection and is linear in the standard error. Here the intercept matches the pool, so the funnel shows little
    asymmetry at the study level, although unpublished effects (0.14) are smaller than published ones (0.25).
-6. **The hidden plateau.** Above x*, the mean is (1 − q)(b log x + c₁) + q c₂, with slope (1 − q)b. If the capped
+6. **The hidden plateau.** In a world where a share $q$ of people stop gaining above $x^*$ (and sit below the rest), show that the mean's slope above $x^*$ falls to $(1 - q)$ of its value, and that the 10th percentile flattens only if $q > 0.1$.
+
+   *Solution.* Above x*, the mean is (1 − q)(b log x + c₁) + q c₂, with slope (1 − q)b. If the capped
    group sits below everyone else, the p-th percentile lies inside it whenever p < q, so the 10th percentile goes
    flat above x* only if q > 0.1; for q = 0.2 the 10th flattens and the mean keeps rising.
-7. ★ **Construction against basic emotions.** The basic-emotion account predicts a pattern (in the face, the body or
+7. ★ **Construction against basic emotions.** Design a study that the constructed-emotion account and the basic-emotion account predict differently, and say what each predicts.
+
+   *Solution.* The basic-emotion account predicts a pattern (in the face, the body or
    the brain) for each emotion that holds across situations and cultures; the constructed account predicts patterns
    that classify within a situation and fail to transfer, and perception that depends on emotion concepts. For
    example: induce fear, anger and sadness in several different situations each, measure autonomic and facial

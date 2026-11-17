@@ -187,36 +187,54 @@ hour by hour, cached in `.cache/quant_data/`, each hour's SHA-256 recorded in `v
 
 ## Problems, with solutions
 
-1. **Parity with a borrow fee.** A share lent out earns h, so e^{−hT} shares grow to one share. A = call + Ke^{−rT}
+1. **Parity with a borrow fee.** Prove put–call parity for European options by a no-arbitrage argument, with a borrowing fee $h$ on the stock.
+
+   *Solution.* A share lent out earns h, so e^{−hT} shares grow to one share. A = call + Ke^{−rT}
    bonds and B = put + e^{−hT} shares lent both pay max(S_T, K), so C + Ke^{−rT} = P + Se^{−hT}. If C − P is larger,
    sell the call, buy the put, buy and lend e^{−hT} shares, borrow the rest: a positive amount today, nothing at T.
-2. **The one-period FTAP from Stiemke's lemma.** L = {(−θ·p, D^⊤θ)} ⊂ ℝ^{1+m} is a subspace; no arbitrage means
+2. **The one-period FTAP from Stiemke's lemma.**
+
+   *Solution.* L = {(−θ·p, D^⊤θ)} ⊂ ℝ^{1+m} is a subspace; no arbitrage means
    L ∩ ℝ^{1+m}_+ = {0}. By Stiemke's lemma (separate L from the simplex), there is λ ≫ 0 orthogonal to L:
    λ₀(−θ·p) + Σ_j λ_j(D^⊤θ)_j = 0 for all θ, so p = Dψ with ψ = λ_{1:m}/λ₀ ≫ 0. Conversely p = Dψ, ψ ≫ 0, gives
    θ·p = ψ·D^⊤θ > 0 whenever D^⊤θ ≥ 0, ≠ 0. (Schachermayer 1992 gives a Hilbert-space proof.)
-3. **The binomial probability.** Replicating both states gives V = e^{−rΔt}(qV_u + (1 − q)V_d) with
+3. **The binomial probability.** Derive the binomial risk-neutral probability and show that it lies in $(0, 1)$ if and only if $d < e^{r\Delta t} < u$.
+
+   *Solution.* Replicating both states gives V = e^{−rΔt}(qV_u + (1 − q)V_d) with
    q = (e^{rΔt} − d)/(u − d) ∈ (0, 1) iff d < e^{rΔt} < u; otherwise the stock dominates the bond in every state or
    the reverse.
-4. **Butterflies and the density.** C′(K) = −e^{−rT}∫_K^∞ q, C″(K) = e^{−rT}q(K); the butterfly over h² is the second
+4. **Butterflies and the density.** Show that a butterfly with strikes $K - h, K, K + h$, scaled by $1/h^2$, tends to $e^{-rT} q(K)$.
+
+   *Solution.* C′(K) = −e^{−rT}∫_K^∞ q, C″(K) = e^{−rT}q(K); the butterfly over h² is the second
    difference of C, which tends to C″(K) by Taylor's theorem.
-5. **The trinomial interval.** With S ∈ {80, 100, 125}, the call pays (0, 0, 25). The cheapest dominating portfolio
+5. **The trinomial interval.** A stock at 100 can be worth 80, 100 or 125 tomorrow, with zero rates. Find the no-arbitrage interval for a call struck at 100, by super-replication and by its dual over risk-neutral measures.
+
+   *Solution.* With S ∈ {80, 100, 125}, the call pays (0, 0, 25). The cheapest dominating portfolio
    rests on states 1 and 3: Δ = 5/9, B = −400/9, cost 100/9 ≈ 11.11; the dual's q = (5/9, 0, 4/9) gives 25 × 4/9. The
    richest dominated portfolio is zero (q → (0, 1, 0)). The interval is (0, 100/9), open since strictly positive
    measures never reach its ends.
-6. **The forward-start call's band.** (R − 1)^+ = ½|R − 1| + ½(R − 1), and for any martingale coupling
+6. **The forward-start call's band.** Show that the model-free band for a forward-start call $(S_2/S_1 - 1)^+$ is exactly half the band for the forward-start straddle $|S_2/S_1 - 1|$.
+
+   *Solution.* (R − 1)^+ = ½|R − 1| + ½(R − 1), and for any martingale coupling
    E[R − 1] = E[(S₂ − S₁)/S₁] = E[E[S₂ − S₁ | S₁]/S₁] = 0, so every model's forward-start call price is half its
    straddle price, and the sup and inf halve.
-7. **Margrabe.** With asset 2 as numeraire, V₀/S²₀ = E^{Q^{S²}}[(R_T − 1)^+], R = S¹/S² a Q^{S²}-martingale with
+7. **Margrabe.** Derive Margrabe's formula for the option to exchange asset 2 for asset 1 by changing numeraire to asset 2.
+
+   *Solution.* With asset 2 as numeraire, V₀/S²₀ = E^{Q^{S²}}[(R_T − 1)^+], R = S¹/S² a Q^{S²}-martingale with
    d ln R volatility σ_R² = σ₁² + σ₂² − 2ρσ₁σ₂ (Itô on a ratio), so V₀ = S¹₀N(d₁) − S²₀N(d₂) with
    d₁,₂ = (ln(S¹₀/S²₀) ± σ_R²T/2)/(σ_R√T).
-8. **(qual) The memory of fractional Brownian motion.** With step h, Var Δ = h^{2H} and E[B_h(B_{2h} − B_h)] =
+8. **(qual) The memory of fractional Brownian motion.**
+
+   *Solution.* With step h, Var Δ = h^{2H} and E[B_h(B_{2h} − B_h)] =
    E[B_hB_{2h}] − h^{2H} = ½(h^{2H} + (2h)^{2H} − h^{2H}) − h^{2H} = h^{2H}(2^{2H−1} − 1), and stationarity of the
    increments gives the same correlation 2^{2H−1} − 1 for every pair of neighbours, on every grid. Over n steps of
    [0, 1], E Σ|Δ_k|² = n·n^{−2H} = n^{1−2H}: for H > ½ this tends to 0, and a non-negative variable with mean → 0
    tends to 0 in L¹. For H < ½ the mean tends to ∞ and the variance of the sum, 2Σ_{j,k}Cov(Δ_j, Δ_k)², is of order
    n·n^{−4H}, so the sum over its mean tends to 1: the sum tends to ∞. A semimartingale with continuous paths has a
    finite quadratic variation. For H > 1/2, zero quadratic variation would force a continuous semimartingale to have finite total variation, whereas fBM has infinite total variation (p-variation index 1/H). Thus B^H is not a semimartingale when H ≠ 1/2. Zero quadratic variation alone would not suffice.
-9. **(qual) The best frequency.** Per trade, E[π_kΔ_k] = sign(ρ)E[sign(Δ_{k−1})Δ_k] = |ρ|E|Δ| = σn^{−H}√(2/π)|ρ|,
+9. **(qual) The best frequency.** (qual) For the sign strategy on $\sigma B^H$ with cost $\varepsilon$ per unit traded, derive the yearly mean $m(n) = n[\sigma n^{-H}\sqrt{2/\pi}\,|\rho| - 2\varepsilon p]$ with $p = \frac12 - \arcsin(\rho)/\pi$, find $n^*$, and show that $m(n^*) = H n^* \sigma (n^*)^{-H}\sqrt{2/\pi}\,|\rho|$.
+
+   *Solution.* Per trade, E[π_kΔ_k] = sign(ρ)E[sign(Δ_{k−1})Δ_k] = |ρ|E|Δ| = σn^{−H}√(2/π)|ρ|,
    and the position changes by 2 when consecutive increments differ in sign, probability p = ½ − arcsin(ρ)/π by
    Sheppard's formula, so the yearly cost is n·2εp and m(n) = n[σn^{−H}√(2/π)|ρ| − 2εp]. Setting m′(n) = 0:
    (1 − H)σn^{−H}√(2/π)|ρ| = 2εp, so n* = [(1 − H)σ√(2/π)|ρ|/(2εp)]^{1/H}; substituting, m(n*) = n*·g*·(1 − (1 − H))

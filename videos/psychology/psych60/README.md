@@ -126,21 +126,35 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Contamination.** 26% with four options is chance: the 85% came from remembering the published items, not
+1. **Contamination.** A model scores 85% on published items and 26% on reworded twins with four options each. What do you conclude?
+
+   *Solution.* 26% with four options is chance: the 85% came from remembering the published items, not
    from solving the problems. Test on new items.
-2. **The sample size.** Twelve: for a claim about models the model is the unit; the 100 phrasings per model
+2. **The sample size.** Twelve models, each tested with 100 phrasings. What is the sample size for a claim about models?
+
+   *Solution.* Twelve: for a claim about models the model is the unit; the 100 phrasings per model
    estimate each model's rate precisely but add no models.
-3. **Two models.** The paired standard error is sqrt(2 x 0.21 x 0.5 / 1000) = 0.0145; the difference is 2.1
+3. **Two models.** Two models at 70% and 73%, 1,000 shared items, item scores correlated 0.5. Can you tell them apart?
+
+   *Solution.* The paired standard error is sqrt(2 x 0.21 x 0.5 / 1000) = 0.0145; the difference is 2.1
    standard errors, so power is only about 54%: the comparison may or may not come out significant, and 1,800 items
    would be needed for 80% power.
-4. **Reliance.** 0.5 x 0.8 + 0.5 x 0.7 = 0.75; following the aid always gives 0.80.
-5. **Silicon samples.** Claims about averages may survive; claims about variability, polarization, correlations
+4. **Reliance.** An aid is right 80% of the time, you 70%. Your accuracy if you follow it half the time, at random?
+
+   *Solution.* 0.5 x 0.8 + 0.5 x 0.7 = 0.75; following the aid always gives 0.80.
+5. **Silicon samples.** Silicon respondents match a survey's mean but have half its SD. Which conclusions survive?
+
+   *Solution.* Claims about averages may survive; claims about variability, polarization, correlations
    between answers (attenuated by the shrunk spread) and small groups do not, and every claim must be checked on
    people.
-6. **A tiny association.** Yes: a small average can hide large effects for a few people, or effects of specific
+6. **A tiny association.** Screen time explains 0.4% of the variance in well-being. Could it still matter? For whom?
+
+   *Solution.* Yes: a small average can hide large effects for a few people, or effects of specific
    uses (at night, on particular content), and small effects summed over a population matter for policy. That is a
    reason to measure who is affected, not to assume large average harm.
-7. **A trial.** Randomize adults with depressive symptoms to the chatbot or to an active comparison (guided
+7. ★ **A trial.** Design a randomized trial of a mental-health chatbot that would meet Part 42's standards.
+
+   *Solution.* Randomize adults with depressive symptoms to the chatbot or to an active comparison (guided
    self-help, or a human-delivered brief therapy), with a preregistered primary outcome assessed blind at three and
    six months; count harms (adverse events, worsening, how urgent-help situations are handled); analyse everyone
    randomized; and report engagement from logs.

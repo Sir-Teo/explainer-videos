@@ -123,15 +123,29 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Softmax.** 1/(1 + e^(-5 × 0.2)) = 1/(1 + e^(-1)) = 0.73.
-2. **A Q-learning update.** 0.5 + 0.3 × (1 - 0.5) = 0.65.
-3. **A log-likelihood.** ln 0.7 + ln 0.6 + ln 0.8 = -0.357 - 0.511 - 0.223 = -1.09.
-4. **BIC.** With n = 200, ln n = 5.30: 120 + 2 × 5.30 = 130.6 against 116 + 3 × 5.30 = 131.9; BIC prefers the
+1. **Softmax.** A softmax chooser with $\beta = 5$ values two arms at 0.6 and 0.4. Find the probability of choosing the first.
+
+   *Solution.* 1/(1 + e^(-5 × 0.2)) = 1/(1 + e^(-1)) = 0.73.
+2. **A Q-learning update.** A Q-learner with $\alpha = 0.3$ values an arm at 0.5, chooses it, and is rewarded. Find the new value.
+
+   *Solution.* 0.5 + 0.3 × (1 - 0.5) = 0.65.
+3. **A log-likelihood.** A model gave a person's three choices probabilities 0.7, 0.6 and 0.8. Find the log-likelihood.
+
+   *Solution.* ln 0.7 + ln 0.6 + ln 0.8 = -0.357 - 0.511 - 0.223 = -1.09.
+4. **BIC.** Two models of 200 choices: log-likelihood $-60$ with 2 parameters, $-58$ with 3. Which does BIC prefer?
+
+   *Solution.* With n = 200, ln n = 5.30: 120 + 2 × 5.30 = 130.6 against 116 + 3 × 5.30 = 131.9; BIC prefers the
    two-parameter model, by a hair.
-5. **Jumping learners.** If a learner can jump after each of the first nine trials, 1 - 0.9⁹ = 0.61 have jumped by
+5. **Jumping learners.** Learners jump from 10% to 90% correct with probability 0.1 per trial. What does the average curve show on trial 10?
+
+   *Solution.* If a learner can jump after each of the first nine trials, 1 - 0.9⁹ = 0.61 have jumped by
    trial 10, so the average is 0.1 + 0.8 × 0.61 = 0.59: a value no learner shows, since each is at 0.1 or 0.9.
-6. **Shrinkage.** Weight the two by their precisions, 2 and 4: (2 × (-1.5) + 4 × (-0.7))/6 = -0.97.
-7. **A plan.** Simulate the model across its plausible parameters and check it produces the effects it is meant to;
+6. **Shrinkage.** A person's log-odds learning rate is $-1.5$ with variance 0.5; the population's mean is $-0.7$ with variance 0.25. Find the hierarchical estimate.
+
+   *Solution.* Weight the two by their precisions, 2 and 4: (2 × (-1.5) + 4 × (-0.7))/6 = -0.97.
+7. ★ **A plan.** Plan the checks for a new model of a new task: simulations, recovery, model recovery, a posterior predictive check, and the number of trials.
+
+   *Solution.* Simulate the model across its plausible parameters and check it produces the effects it is meant to;
    fit simulated data and show recovery for the number of trials you will collect; simulate from every candidate model
    and show the confusion matrix; after fitting, simulate from the winner and compare its stay-after-win and
    stay-after-loss (or the task's key effect) with the data; fix the trial count by recovery, not by habit.

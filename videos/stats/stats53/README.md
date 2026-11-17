@@ -116,24 +116,36 @@ python tools/lecture_length.py stats53 --floor 50
 
 ## Problems and solutions
 
-1. **Doob for a finite prior.**
+1. **Doob for a finite prior.** Prove Doob's theorem for a prior on finitely many $\theta$: show $\Pi(\theta_0 \mid X_{1:n}) \to 1$ by the LLN for log-likelihood ratios.
+
+   *Solution.*
    - Π(θ | X) ∝ π(θ) exp(Σᵢ log p_θ(Xᵢ)).
    - For θ ≠ θ₀, (1/n) Σ log(p_θ/p_θ₀)(Xᵢ) → −KL(θ₀, θ) < 0 almost surely, so each wrong θ's posterior weight relative to
      θ₀'s is π(θ)/π(θ₀) · e^{−n KL + o(n)} → 0.
    - With finitely many θ, Π(θ₀ | X) → 1.
-2. **The boundary posterior.**
+2. **The boundary posterior.** For $X_i \sim N(0, 1)$ and a Uniform$[1, 3]$ prior on the mean, show the posterior mean tends to 1.
+
+   *Solution.*
    - The posterior is N(x̄, 1/n) truncated to [1, 3]. Since x̄ → 0, almost all of the untruncated mass lies below 1.
    - The truncated normal piles up at 1, with mean 1 + O(1/(n|x̄ − 1|)) → 1: the KL projection of 0 onto [1, 3].
-3. **The sequence model's risk.**
+3. **The sequence model's risk.** In the sequence model, derive the posterior mean's risk $\sum (1 - w_k)^2\theta_k^2 + \sum w_k^2/n$, $w_k = n\lambda_k/(1 + n\lambda_k)$.
+
+   *Solution.*
    - θ̂ₖ = wₖYₖ = wₖθₖ + wₖZₖ/√n, so θ̂ₖ − θₖ = −(1 − wₖ)θₖ + wₖZₖ/√n.
    - Squaring and taking expectations: (1 − wₖ)²θₖ² + wₖ²/n. Sum over k.
-4. **The Beta posterior's moments.**
+4. **The Beta posterior's moments.** Show the Beta$(a + k, b + n - k)$ posterior's mean and variance match $\hat p$ and $\hat p(1 - \hat p)/n$ up to $O(1/n)$.
+
+   *Solution.*
    - The mean (a + k)/(a + b + n) = p̂ + O(1/n).
    - The variance (a + k)(b + n − k)/((a + b + n)²(a + b + n + 1)) = p̂(1 − p̂)/n + O(1/n²).
-5. **Dirichlet-process moments.**
+5. **Dirichlet-process moments.** For $F \sim \mathrm{DP}(\alpha, G_0)$, show $E[F(A)] = G_0(A)$ and $\mathrm{Var}[F(A)] = G_0(A)(1 - G_0(A))/(\alpha + 1)$.
+
+   *Solution.*
    - F(A) ~ Beta(αG₀(A), α(1 − G₀(A))), from the partition {A, Aᶜ}.
    - So E F(A) = G₀(A), and Var F(A) = G₀(A)(1 − G₀(A))/(α + 1).
-6. **The tempered posterior's variance.**
+6. **The tempered posterior's variance.** Show the tempered Gamma–Poisson posterior with $\eta = \mu/\sigma^2$ has variance $\approx \sigma^2/n$, the sandwich.
+
+   *Solution.*
    - Gamma(a + ηΣy, b + ηn) has variance (a + ηΣy)/(b + ηn)² ≈ ȳ/(ηn).
    - With η = μ/σ², this is ≈ σ²/n, the variance of ȳ: the sandwich, since for the mean parameter μ, the Poisson score is y/μ − 1 with variance σ²/μ² and the expected negative Hessian is 1/μ. The resulting sandwich variance is σ²/n. A scalar temperature does not generally match a multivariate sandwich covariance.
 

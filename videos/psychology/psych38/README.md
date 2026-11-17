@@ -145,27 +145,41 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Conformist transmission.** With k carriers among three models (binomial, p), the adoption chance is 0,
+1. **Conformist transmission.** Conformist transmission: show that $p + D p (1-p)(2p-1)$ is the expected share after one generation when learners sample three models and adopt a variant held by two of them with chance $2/3 + D/3$ and by one with chance $1/3 - D/3$. Find the fixed points and their stability.
+
+   *Solution.* With k carriers among three models (binomial, p), the adoption chance is 0,
    1/3 − D/3, 2/3 + D/3, 1. The expected share is 3p(1 − p)²(1/3 − D/3) + 3p²(1 − p)(2/3 + D/3) + p³. Without D this
    is p(1 − p)² + 2p²(1 − p) + p³ = p. The D terms add D p(1 − p)[p − (1 − p)] = D p(1 − p)(2p − 1). Fixed points:
    p = 0, 1/2, 1. The derivative of the step at p is 1 + D(−6p² + 6p − 1); at 0 and 1 it is 1 − D < 1 (stable for
    0 < D < 2), at 1/2 it is 1 + D/2 > 1 (unstable).
-2. **Henrich's critical population.** The best of N copies gains β(γ + ln N) − α. Setting it to zero gives
+2. **Henrich's critical population.** Henrich's model: the best of $N$ independent Gumbel$(\mu, \beta)$ draws has mean $\mu + \beta(\gamma + \ln N)$. Find the critical $N^*$ for $\alpha = 4.5$ and $\beta = 1$.
+
+   *Solution.* The best of N copies gains β(γ + ln N) − α. Setting it to zero gives
    N* = exp(α/β − γ) = exp(4.5 − 0.5772) ≈ 50.5.
-3. **The reference-group effect.** If each person reports a fixed function of their own z-score within their culture,
+3. **The reference-group effect.** Two cultures differ by $0.8$ SD on a trait, and everyone rates themselves relative to their own culture's mean. What is the expected difference in mean ratings? Name two designs that recover the true difference.
+
+   *Solution.* If each person reports a fixed function of their own z-score within their culture,
    the expected rating is the same in both cultures, so the expected difference is 0, whatever the true gap. Designs
    that recover it: an absolute behavioural measure (time worked, punctuality), anchoring vignettes that put everyone
    on the same reference, or ratings of the same targets by judges from both cultures.
-4. **The trolley model keeps the order.** For a country with level ℓ, the acceptance of case k is σ(c_k + ℓ). The
+4. **The trolley model keeps the order.** In Psyche's trolley model, $\Pr(\text{accept}) = \sigma(c_k + \ell_j)$. Show that if $c_1 > c_2 > c_3$, every country has the same order of acceptance, whatever its level $\ell_j$.
+
+   *Solution.* For a country with level ℓ, the acceptance of case k is σ(c_k + ℓ). The
    logistic function is strictly increasing, so c₁ > c₂ > c₃ implies σ(c₁ + ℓ) > σ(c₂ + ℓ) > σ(c₃ + ℓ) for every ℓ.
    Sampling noise can swap two close cases in a small sample, which is why Psyche uses 600 people per country.
-5. **How surprising was ManyBabies 4?** With a true preference of 0.6 and n = 567, the share chosen has mean 0.6 and
+5. **How surprising was ManyBabies 4?** A replication tests 567 infants; the original effect was 26 of 28. If the true preference were 0.6, what is the chance of observing 49% or fewer? Use the normal approximation.
+
+   *Solution.* With a true preference of 0.6 and n = 567, the share chosen has mean 0.6 and
    SD √(0.6 × 0.4/567) ≈ 0.0206. Observing 0.493 or less is (0.6 − 0.493)/0.0206 ≈ 5.2 SDs below the mean: chance of
    about 1 in 10 million. Even a modest true preference is very hard to square with the result.
-6. **Arnett's over-representation.** Per head, the WEIRD countries supply 96/12 = 8 samples per percent of
+6. **Arnett's over-representation.** Arnett's numbers: 96% of samples come from countries with 12% of the world's population. How many times over-represented is a person in those countries, relative to everyone else?
+
+   *Solution.* Per head, the WEIRD countries supply 96/12 = 8 samples per percent of
    population and the rest 4/88 ≈ 0.045, so a person in those countries is about 8/0.045 ≈ 176 times as likely to be
    in a sample.
-7. **A constraints-on-generality statement.** For example, the Switch–Footbridge order: "We expect the order to hold
+7. ★ **A constraints-on-generality statement.** Write a constraints-on-generality statement for one finding in this series, and design the smallest study that could test it.
+
+   *Solution.* For example, the Switch–Footbridge order: "We expect the order to hold
    in adults in any society with the concept of personal force, for these three cases as worded; we do not expect
    the levels to be constant; the 42-country and 45-country studies support this; the samples were online or
    student volunteers, so we do not claim it for people without schooling." The smallest test: the three cases with

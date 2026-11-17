@@ -74,24 +74,36 @@ Held et al., "The newly sighted fail to match seen with felt", *Nature Neuroscie
 
 ## Problems and solutions
 
-1. **What Proposition 14 rests on.** Following the citations back, Proposition 14 ("besides God, no substance") rests
+1. **What Proposition 14 rests on.** In the graph of *Ethics* I, which definitions, axioms and propositions does Proposition 14 ultimately rest on?
+
+   *Solution.* Following the citations back, Proposition 14 ("besides God, no substance") rests
    on fourteen items: Definitions 3, 5 and 6; Axioms 1, 4 and 5; and Propositions 1–7 and 11.
-2. **Two analyses.** Euclid's algorithm on 1071/462 gives [2; 3, 7] and stops: the ratio is commensurable (the
+2. **Two analyses.** Run Euclid's algorithm on $1071/462$ and on $\sqrt{3}$. Which analysis ends? What would Leibniz say?
+
+   *Solution.* Euclid's algorithm on 1071/462 gives [2; 3, 7] and stops: the ratio is commensurable (the
    greatest common divisor is 21). On √3 it gives [1; 1, 2, 1, 2, …], repeating forever. For Leibniz the first is like a
    truth of reason, whose analysis ends in an identity; the second like a truth of fact, whose analysis never ends,
    though it has a reason that God sees whole.
-3. **Descartes's method.** A circle centred at (0, k) through (2, 4) meets y = x² where y² + (1 − 2k)y + k² − r² = 0.
+3. **Descartes's method.** By Descartes's method, find the centre on the $y$-axis of the circle touching $y = x^2$ at $(2, 4)$.
+
+   *Solution.* A circle centred at (0, k) through (2, 4) meets y = x² where y² + (1 − 2k)y + k² − r² = 0.
    For a double root at y = 4 the roots sum to 8 = 2k − 1, so k = 9/2 (and r² = 17/4). The normal from (0, 9/2) to
    (2, 4) has slope −1/4, the tangent 4: their product is −1.
-4. **Hume's rival rules.** "The sun rises every day" and "the sun rises until today and never again" agree on every
+4. **Hume's rival rules.** Write two rules that agree about every past sunrise and disagree about tomorrow. Why, for Hume, can no argument choose?
+
+   *Solution.* "The sun rises every day" and "the sun rises until today and never again" agree on every
    past sunrise. To prefer the first we must assume the future resembles the past. That assumption is not a relation
    of ideas (its denial is conceivable) and cannot be established from experience without assuming it, so no argument
    chooses; custom does.
-5. **Kant's grid.** "Every effect has a cause" is analytic (an effect is by definition something caused). "Every event
+5. **Kant's grid.** Place in Kant's grid: `every effect has a cause'; `every event has a cause'; `a straight line is the shortest between two points'.
+
+   *Solution.* "Every effect has a cause" is analytic (an effect is by definition something caused). "Every event
    has a cause" is synthetic a priori for Kant (the second analogy). "A straight line is the shortest between two
    points" is Kant's own example of the synthetic a priori (B16); after general relativity, as a claim about physical
    space, it is a posteriori.
-6. **(Essay) The empiricist trilemma.** A strong answer uses Chapter 16's Price List and comparison table, and meets
+6. **(Essay) The empiricist trilemma.** (Essay) Which exit from the empiricist trilemma? Defend it against its strongest objection.
+
+   *Solution.* A strong answer uses Chapter 16's Price List and comparison table, and meets
    the objection its exit faces: for rationalism, why reason should fit the world; for Kant, non-Euclidean space and
    the unknowable things in themselves; for radical empiricism, the apparent necessity of logic and mathematics; for the
    Aristotelian, how a few cases could show what must be.

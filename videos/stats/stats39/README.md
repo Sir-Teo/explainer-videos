@@ -201,20 +201,32 @@ python tools/lecture_length.py stats39 --floor 50
 
 ## Problems and solutions
 
-1. **The ordinary kriging variance.** Minimize λᵀKλ − 2λᵀk₀ + C(0) + 2m(1ᵀλ − 1). Setting the gradient to zero gives
+1. **The ordinary kriging variance.** Ordinary kriging: minimize $\text{Var}(\lambda^\top Z - Z_0)$ subject to $\mathbf 1^\top\lambda = 1$; show the variance is $C(0) - \lambda^\top k_0 - m$.
+
+   *Solution.* Minimize λᵀKλ − 2λᵀk₀ + C(0) + 2m(1ᵀλ − 1). Setting the gradient to zero gives
    Kλ + m1 = k₀, which with 1ᵀλ = 1 is the system in chapter four. Substituting λᵀKλ = λᵀk₀ − m gives
    σ²_OK = C(0) − λᵀk₀ − m.
-2. **Screening on a line.** With C(h) = e^{−|h|}, the process is Markov (it is the stationary Ornstein–Uhlenbeck
+2. **Screening on a line.** On a line with $C(h) = e^{-|h|}$, show simple kriging at $s_1 < s_0 < s_2$ ignores every point beyond $s_1$ and $s_2$.
+
+   *Solution.* With C(h) = e^{−|h|}, the process is Markov (it is the stationary Ornstein–Uhlenbeck
    process). Given Z(s₁) and Z(s₂), Z(s₀) is independent of every value outside [s₁, s₂]. So the conditional mean,
    which is simple kriging, has zero weight on them.
-3. **Brownian motion's variogram.** γ(h) = ½E[W(t + h) − W(t)]² = σ²h/2, which grows without bound: no sill. It is a
+3. **Brownian motion's variogram.** For Brownian motion with $\text{Var}\,W(t) = \sigma^2 t$, find $\gamma(h)$, and show it has no sill.
+
+   *Solution.* γ(h) = ½E[W(t + h) − W(t)]² = σ²h/2, which grows without bound: no sill. It is a
    valid variogram (intrinsically stationary) without a covariance function, the reason geostatistics prefers γ.
-4. **Moran's mean.** Under random permutation, E[e_i e_j] for i ≠ j is −Σe_k²/(n(n − 1)), since Σ_{i≠j} e_i e_j =
+4. **Moran's mean.** Show that Moran's $I$ has mean $-1/(n-1)$ under random permutation of the values.
+
+   *Solution.* Under random permutation, E[e_i e_j] for i ≠ j is −Σe_k²/(n(n − 1)), since Σ_{i≠j} e_i e_j =
    −Σe_k². So E[eᵀWe] = −S₀ Σe_k²/(n(n − 1)) when W has a zero diagonal, and E[I] = (n/S₀)(−S₀/(n(n − 1))) =
    −1/(n − 1).
-5. **K under CSR.** For a homogeneous Poisson process of intensity λ, by Slivnyak's theorem the other points seen from
+5. **K under CSR.** For a homogeneous Poisson process in the plane, show $K(r) = \pi r^2$ (ignore edges).
+
+   *Solution.* For a homogeneous Poisson process of intensity λ, by Slivnyak's theorem the other points seen from
    a typical point are again Poisson(λ). The expected number within r is λπr², so K(r) = πr² and L(r) = r.
-6. **Expected improvement.** With f = μ + sZ, (f* − f)₊ = s(z − Z)₊ where z = (f* − μ)/s. Then
+6. **Expected improvement.** Derive $\text{EI} = (f^* - \mu)\Phi(z) + s\,\phi(z)$ for $f \sim N(\mu, s^2)$, $z = (f^* - \mu)/s$.
+
+   *Solution.* With f = μ + sZ, (f* − f)₊ = s(z − Z)₊ where z = (f* − μ)/s. Then
    E(z − Z)₊ = ∫_{−∞}^{z} (z − u)φ(u) du = zΦ(z) + φ(z). Multiplying by s gives (f* − μ)Φ(z) + sφ(z).
 
 ## Glossary

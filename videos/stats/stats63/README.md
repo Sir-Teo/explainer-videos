@@ -81,32 +81,44 @@ All 14 chapters reviewed, all 12 inputs regenerated and **20 checks pass** (14 l
 
 ## Problems and solutions
 
-1. **Randomized response.**
+1. **Randomized response.** Show that randomized response, truthful with probability $\pi = e^\varepsilon/(1 + e^\varepsilon)$, is $\varepsilon$-DP, and find the variance of $\hat p$.
+
+   *Solution.*
    - For a report r, P(r | x = 1)/P(r | x = 0) is π/(1 − π) or (1 − π)/π. With π = e^ε/(1 + e^ε), both lie in
      [e^{−ε}, e^ε], so the mechanism is ε-DP.
    - The report is 1 with probability q = πp + (1 − π)(1 − p) = (2π − 1)p + (1 − π). So
      p̂ = (q̂ − (1 − π))/(2π − 1) is unbiased.
    - Var(p̂) = q(1 − q)/(n(2π − 1)²).
-2. **The Laplace mechanism.**
+2. **The Laplace mechanism.** Show that adding $\mathrm{Laplace}(\Delta/\varepsilon)$ noise to a statistic of sensitivity $\Delta$ is $\varepsilon$-DP.
+
+   *Solution.*
    - The output densities are (ε/2Δ)exp(−ε|z − f(D)|/Δ) and the same with f(D′).
    - Their ratio is exp(ε(|z − f(D′)| − |z − f(D)|)/Δ) ≤ exp(ε|f(D) − f(D′)|/Δ) ≤ e^ε, by the triangle inequality and
      the definition of Δ.
    - Integrating over any set S gives the definition.
-3. **Gaussian trade-off curves.**
+3. **Gaussian trade-off curves.** Show that the Gaussian mechanism with noise $\sigma$ and sensitivity $\Delta$ has trade-off curve $G_{\Delta/\sigma}$, and that $G_{\mu_1} \otimes G_{\mu_2} = G_{\sqrt{\mu_1^2 + \mu_2^2}}$.
+
+   *Solution.*
    - The outputs are N(f(D), σ²) and N(f(D′), σ²). Standardizing gives N(0, 1) against N(s/σ, 1), with
      |s| = |f(D) − f(D′)| ≤ Δ.
    - Testing a larger shift is easier, so the worst case is s = Δ and the curve is G_{Δ/σ}.
    - For two independent mechanisms the pair is N(0, I) against N((μ₁, μ₂), I). The likelihood ratio depends only on
      the projection onto (μ₁, μ₂)/‖μ‖, which is N(0, 1) against N(‖μ‖, 1). Thus the independent Gaussian-shift experiment has this exact composed curve. For arbitrary mechanisms merely satisfying the GDP bounds, it is a sharp composition guarantee, not mandatory equality.
-4. **When central privacy becomes cheap.**
+4. **When central privacy becomes cheap.** For the central-DP mean of $n$ bits, find the $n$ at which the privacy term is a tenth of the MSE, at $p = 0.3$, $\varepsilon = 0.1$.
+
+   *Solution.*
    - The privacy term is 2/(nε)² and the sampling term is p(1 − p)/n. The privacy share is a tenth when
      2/(nε)² = p(1 − p)/(9n), that is, n = 18/(ε²p(1 − p)).
    - At p = 0.3 and ε = 0.1 this is n ≈ 8,571.
-5. **Chouldechova's identity.**
+5. **Chouldechova's identity.** Derive Chouldechova's identity $\mathrm{FPR} = \frac{p}{1 - p}\,\frac{1 - \mathrm{PPV}}{\mathrm{PPV}}\,(1 - \mathrm{FNR})$.
+
+   *Solution.*
    - The true positives number PPV · H = (1 − FNR)pn, and the false positives (1 − PPV)H = FPR(1 − p)n, where H is the
      number labelled high.
    - Dividing, (1 − PPV)/PPV = FPR(1 − p)/((1 − FNR)p). Solving for FPR gives the identity.
-6. **The impossibility.**
+6. **The impossibility.** Show that equal PPV and FNR in two groups with different base rates force unequal FPRs, unless PPV $= 1$ or FNR $= 1$.
+
+   *Solution.*
    - If both groups have the same PPV and FNR, then FPR_a/FPR_b = [p_a/(1 − p_a)]/[p_b/(1 − p_b)], provided the
      common factor (1 − PPV)(1 − FNR)/PPV is not zero.
    - The odds differ when the base rates differ, so the FPRs differ.

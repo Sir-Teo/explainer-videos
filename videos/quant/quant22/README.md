@@ -152,36 +152,60 @@ See [the evidence record](../../../docs/qa/quant22-polish-evidence.json).
 
 ## Problems and solutions
 
-1. **CIP.** For domestic per foreign spot `S`, matched frictionless deposits imply
+1. **CIP.** Derive covered interest parity from two riskless strategies, and show that with continuous compounding $\ln(F/S) = (r_d - r_f)\tau$.
+
+   *Solution.* For domestic per foreign spot `S`, matched frictionless deposits imply
    `F = S(1+r_d τ)/(1+r_f τ)`. For continuous rates, `ln(F/S)=(y_d-y_f)τ`.
-2. **Basis.** With `S=1.30, F=1.3025, r_d=.02, r_f=.012, τ=.25`,
+2. **Basis.** Sterling 3-month: $S$ = 1.30, $F$ = 1.3025, $r_{\mathrm{USD}}$ = 2.0%, $r_{\mathrm{GBP}}$ = 1.2%. Compute the basis in basis points (ignore day counts).
+
+   *Solution.* With `S=1.30, F=1.3025, r_d=.02, r_f=.012, τ=.25`,
    `x=ln(1+.02τ)/τ-ln(1+.012τ)/τ-ln(F/S)/τ`, about **+3 bp/year**.
    This made-up calculation ignores differing day counts and execution costs.
-3. **Fama identity.** If `f-s=E_t[Δs]+p` and the forecast error is orthogonal to the
+3. **Fama identity.** In the Fama regression, write $f - s = \mathbb{E}[\Delta s] + p$ and show that $\beta = 1 - \text{cov}(p, f - s)/\text{var}(f - s)$. What does $\beta < 0$ require?
+
+   *Solution.* If `f-s=E_t[Δs]+p` and the forecast error is orthogonal to the
    time-t forward premium, `β=1-cov(p,f-s)/var(f-s)`. A negative beta requires the
    covariance to exceed the forward-premium variance. The assumption is part of the result.
-4. **Deltas.** Under the stated convention, forward delta is `N(d1)`; premium-adjusted
+4. **Deltas.** Show that the Garman–Kohlhagen forward delta of a call is $N(d_1)$ and its premium-adjusted forward delta $(K/F) N(d_2)$.
+
+   *Solution.* Under the stated convention, forward delta is `N(d1)`; premium-adjusted
    forward delta is `(K/F)N(d2)`. The unnormalized price derivative is discounted.
-5. **DNS strike.** With unadjusted deltas, call plus put delta is zero when `d1=0`,
+5. **DNS strike.** Show that the delta-neutral straddle strike is $F e^{\sigma^2 T/2}$.
+
+   *Solution.* With unadjusted deltas, call plus put delta is zero when `d1=0`,
    giving `K=F exp(σ²T/2)`. Premium adjustment gives the opposite exponent.
-6. **Pillar vols.** In the smile-strangle convention, ATM 8%, RR −1 vol point and BF
+6. **Pillar vols.** From ATM = 8%, RR$_{25}$ = $-1\%$ and BF$_{25}$ = 0.3%, find the two 25-delta vols.
+
+   *Solution.* In the smile-strangle convention, ATM 8%, RR −1 vol point and BF
    0.3 vol points give call **7.8%**, put **8.8%**. A market-strangle convention differs.
-7. **Attack.** Under the specified linearized deterministic model,
+7. **Attack.** In Krugman's model with $\bar s = 1$, $d_0 = 0.4$, $\mu = 0.1$, $\alpha = 1$: when does the attack come, and how many reserves are taken on that day?
+
+   *Solution.* Under the specified linearized deterministic model,
    `T*=(1-.1-.4)/.1=5`, reserves taken `αμ=.1`; mechanical exhaustion would be time 6.
-8. **Convenience.** `y-u=.05-12 ln(71.5/70)`, about **−20.4%/year** under the
+8. **Convenience.** WTI: $F_1$ = 70, $F_2$ = 71.5 a month later, $r$ = 5%. Find the convenience yield net of storage.
+
+   *Solution.* `y-u=.05-12 ln(71.5/70)`, about **−20.4%/year** under the
    positive-price one-month carry approximation. It does not separately identify storage,
    inventories or a risk premium.
-9. **Implied repo.** Invoice `112×.89+1.1=100.78`; no intervening coupons gives
+9. **Implied repo.** A bond: dirty price 100.2, futures 112.0, conversion factor 0.89, accrued at delivery 1.1, 92 days. Find the implied repo rate.
+
+   *Solution.* Invoice `112×.89+1.1=100.78`; no intervening coupons gives
    `(100.78/100.2-1)×360/92`, about **2.27%**. Locked financing, day counts, accrued
    conventions, costs and delivery options matter for an actual trade.
-10. **Correlation.** Relative variance is `σ1²+σ2²−2ρσ1σ2`, decreasing in correlation
+10. **Correlation.** Why does a long position in an at-the-money spread option lose value as the correlation of its two legs rises?
+
+    *Solution.* Relative variance is `σ1²+σ2²−2ρσ1σ2`, decreasing in correlation
     for positive volatilities. At `ρ=1` it is `(σ1−σ2)²`, not generally zero.
-11. **Full carry and threshold.** Positive inventory implies `p+k=βE[p′]`.
+11. **Full carry and threshold.** (qual) In the storage model, show that $F_t-p_t=k/\beta+(\beta^{-1}-1)p_t$ whenever $I_t > 0$, and that $f$ is decreasing with $f(x) = P(x)$ below a threshold $x^*$; find $x^*$ in terms of $\mathbb E f(z')$.
+
+    *Solution.* Positive inventory implies `p+k=βE[p′]`.
     If `F=E[p′]`, then **`F-p=(β⁻¹−1)p+k/β`**. At zero inventory the same expression
     is an upper bound, not necessarily backwardation. With decreasing demand and a
     well-defined interior threshold, `P(x*)=βE[f(z′)]−k`; the right side must be in
     the inverse-demand range. Below the threshold `f=P`.
-12. **Monotonicity and skew.** With decreasing continuous demand and a decreasing
+12. **Monotonicity and skew.** (qual) Show that the time-iteration operator $Tf(x) = P(x - I_f(x))$ maps decreasing functions to decreasing functions, under decreasing continuous demand and a well-defined storage optimum; explain why right skewness is a model-dependent outcome, not a theorem of the inventory constraint alone.
+
+    *Solution.* With decreasing continuous demand and a decreasing
     candidate continuation price, the storage Euler root has inventory increasing by
     no more than availability, under appropriate regularity and uniqueness. Consumption
     therefore does not fall as availability rises, and the updated price is nonincreasing.

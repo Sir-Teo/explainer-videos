@@ -125,22 +125,36 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Spearman-Brown.** 2 x 0.58 / 1.58 = 0.73 (0.74 with the unrounded correlation).
-2. **A narrower interval.** Interval width shrinks roughly as one over the square root of the sample: four times as
+1. **Spearman-Brown.** Halves correlate 0.58. The Spearman-Brown reliability of the full test?
+
+   *Solution.* 2 x 0.58 / 1.58 = 0.73 (0.74 with the unrounded correlation).
+2. **A narrower interval.** A reliability of 0.74 from 40 people. Roughly how many people to make the 95% interval half as wide?
+
+   *Solution.* Interval width shrinks roughly as one over the square root of the sample: four times as
    many people, about 160.
-3. **What a reviewer could have asked.** For the number of 'same' trials per angle in the published data (it is in
+3. **What a reviewer could have asked.** The registered minimum excluded everyone. List two things a Stage 1 reviewer could have asked to catch it.
+
+   *Solution.* For the number of 'same' trials per angle in the published data (it is in
    the data descriptor), and for a pilot of the exclusion rule on simulated data with the real trial counts; or a
    pre-registered fallback rule if too many people were excluded.
-4. **Not a replication rate.** The rows are not a random sample of psychology's findings: they were chosen because
+4. **Not a replication rate.** Of 322 Ledger rows, 203 held. Why is that number not "the replication rate of psychology"?
+
+   *Solution.* The rows are not a random sample of psychology's findings: they were chosen because
    they were taught, famous or disputed, and their statuses mix direct replications with meta-analyses and
    judgment. The share describes this series' Ledger, not the field.
-5. **Serial self-terminating search.** On target-present trials the searcher stops halfway through on average, so the
+5. **Serial self-terminating search.** Psyche's search slopes: 10 ms per item present, 35 absent. What would a serial self-terminating search predict?
+
+   *Solution.* On target-present trials the searcher stops halfway through on average, so the
    absent slope should be about twice the present slope; 35 against 10 is steeper, and points to a model that
    rechecks items or terminates conservatively.
-6. **The fourth objection.** "The people who study the mind are rewarded for striking results, and that distorts
+6. **The fourth objection.** Write Kant's fourth objection in one sentence, and the evidence that it is being answered.
+
+   *Solution.* "The people who study the mind are rewarded for striking results, and that distorts
    what is published." It is being answered by registered reports (far more null results), open data and code, big
    team replications, and ledgers with dates.
-7. **A Stage 1 report.** A question from a frontier chapter; the theory as a model that makes a prediction the
+7. ★ **A Stage 1 report.** Choose an open problem from any part's Frontier and write its Stage 1 registered report.
+
+   *Solution.* A question from a frontier chapter; the theory as a model that makes a prediction the
    alternative forbids; data and exclusion rules (piloted on the real trial counts); the analysis as code; a design
    check on simulated people; a decision rule with an inconclusive region; the plan's hash.
 

@@ -192,7 +192,9 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-**1. The hardest syllogism.** Take the eight kinds of thing over A, B, C. *No A are B* empties every kind that is
+**1. The hardest syllogism.** Use the eight kinds of thing to show that *No $A$ are $B$; all $B$ are $C$* has exactly one valid conclusion, and say which.
+
+*Solution.* Take the eight kinds of thing over A, B, C. *No A are B* empties every kind that is
 both A and B; *all B are C* empties every kind that is B but not C. B names something, so the kind B, C, not A is
 inhabited: there are Cs that are not As, and *some C are not A* is true in every model. Every other answer fails
 somewhere: *no A are C* fails if the kind A, C, not B is inhabited; *some A are C* and *some A are not C* fail
@@ -200,37 +202,49 @@ depending on whether A's members lie inside C; *all C are A* fails because of th
 same counterexamples. So the one valid conclusion is *some C are not A*, which 4% of Ragni's 139 people chose; the
 commonest answer, *no A are C*, does not follow.
 
-**2. Without existential presupposition.** Allow empty terms (the empty model and every model with an empty set).
+**2. Without existential presupposition.** Without existential presupposition, which of the 27 valid syllogisms lose their conclusion? Explain why *all $A$ are $B$; all $B$ are $C$* still implies *some $A$ are $C$* only if $A$ is nonempty.
+
+*Solution.* Allow empty terms (the empty model and every model with an empty set).
 Then 22 of the 64 syllogisms keep a conclusion and five lose theirs: AA4, AE2, AE4, EA1 and EA4. Each needs some
 term to be inhabited to produce a particular conclusion: in AA4, *all B are A* and *all B are C* give *some A are
 C* only if some B exists; in EA1, the Cs that are not As are the Bs. Likewise *all A are B; all B are C* gives *some
 A are C* only if A is nonempty, though *all A are C* survives either way.
 
-**3. When not-q is worth turning.** Under dependence (M_D) a not-q card never has p on the back; under independence
+**3. When not-q is worth turning.** For optimal data selection with an even prior, show that the not-$q$ card's information gain does not depend on $P(q)$, and find where the $q$ card falls below it when $P(p) = 0.1$.
+
+*Solution.* Under dependence (M_D) a not-q card never has p on the back; under independence
 (M_I) it has p with probability P(p) = a. Neither depends on P(q), so the card's expected gain, the prior entropy
 minus the expected posterior entropy, is a function of a alone (0.052 bits at a = 0.1). For the q card the hidden
 side is p with probability a/b under M_D and a under M_I; as b grows the two predictions converge and the gain falls
 toward zero. With a = 0.1 and an even prior, Psyche finds the q card falls below the not-q card at P(q) ≈ 0.32.
 
-**4. The tower.** Each disc is on one of three pegs, and the order on a peg is forced (largest at the bottom), so
+**4. The tower.** Show that the Tower of Hanoi with $n$ discs has $3^n$ states and needs $2^n - 1$ moves, and that the goal stack's longest pause comes before the first move.
+
+*Solution.* Each disc is on one of three pegs, and the order on a peg is forced (largest at the bottom), so
 there are 3^n states. To move n discs, the n − 1 above the largest must first go to the spare peg, the largest moves
 once, and the n − 1 follow: T(n) = 2T(n − 1) + 1 with T(1) = 1, so T(n) = 2^n − 1, and no shorter path exists since
 the largest disc must move and both transfers of the rest are themselves minimal. The goal stack pushes one subgoal
 for each smaller disc in the way before its first move: n − 1 of them before move 1, more than anywhere else, so the
 first pause is the longest (5.5 units for four discs).
 
-**5. Causal power.** Suppose the background produces the effect with probability b and the cause, independently,
+**5. Causal power.** Derive causal power $q = \Delta P / (1 - P(e \mid \neg c))$ from the noisy-OR model, and find the corresponding power for a cause that prevents the effect.
+
+*Solution.* Suppose the background produces the effect with probability b and the cause, independently,
 with probability q (a noisy-OR). Then P(e | c) = 1 − (1 − b)(1 − q) = b + q(1 − b), and P(e | ¬c) = b. So q = (P(e |
 c) − b)/(1 − b) = ΔP/(1 − P(e | ¬c)). For a preventive cause that stops the effect with probability p, P(e | c) =
 b(1 − p), so p = −ΔP / P(e | ¬c): its power is measured against how often there is anything to prevent.
 
-**6. Mirror pairs.** Fitting correct mirror trials person by person gives a median slope of 6.9 ms per degree (about
+**6. Mirror pairs.** With `explainer.psychology.opendata`: fit each person's rotation rate separately for same and mirror pairs. Are mirror pairs rotated at the same speed?
+
+*Solution.* Fitting correct mirror trials person by person gives a median slope of 6.9 ms per degree (about
 145 degrees a second), against 10.8 for same trials, but mirror pairs start slower: their mean at 0 degrees is 2,332
 ms against 1,563. People seem to rotate until the shapes ought to match, find they do not, and then decide, which
 adds a constant and flattens the slope; a mirror pair at 0 degrees still needs the check. The rate on mirror
 trials is therefore not a clean measure of rotation speed.
 
-**7. Two priors, one person.** Teach each person a new quantity (say, the lifetimes of an invented machine) by
+**7. ★ Two priors, one person.** Design an experiment that separates a power-law prior from an Erlang prior in people's everyday predictions, person by person.
+
+*Solution.* Teach each person a new quantity (say, the lifetimes of an invented machine) by
 showing many examples drawn from either a power law or an Erlang distribution, then ask for predictions of the
 total at several values of t. A power-law prior predicts totals proportional to t; an Erlang prior predicts roughly
 t plus a constant. Fit both rules to each person's predictions and compare them by a cross-validated score, checking

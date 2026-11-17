@@ -65,25 +65,37 @@ PhilPapers Survey" (Phil. Imprint 2023).
 
 ## Problems and solutions
 
-1. **Show that {→, ⊥} is functionally complete. Is {∨, →}?** ¬p ≡ p → ⊥ and p ∨ q ≡ ¬p → q ≡ (p → ⊥) → q, and
+1. **Show that {→, ⊥} is functionally complete. Is {∨, →}?**
+
+   *Solution.* ¬p ≡ p → ⊥ and p ∨ q ≡ ¬p → q ≡ (p → ⊥) → q, and
    {¬, ∨} is complete (De Morgan turns DNF into ¬ and ∨). By Post's criterion: → lies outside "keeps F" (F → F is
    T), outside "self-dual", "monotone" and "affine"; ⊥ lies outside "keeps T". {∨, →} is not complete: both keep T
    (each is true when all its inputs are), so everything built from them is true when every atom is, and ¬p is not.
-2. **A Fitch proof of (p → q) → ((q → r) → (p → r)).** 1 | p → q (assumption); 2 | | q → r (assumption); 3 | | |
+2. **A Fitch proof of (p → q) → ((q → r) → (p → r)).**
+
+   *Solution.* 1 | p → q (assumption); 2 | | q → r (assumption); 3 | | |
    p (assumption); 4 | | | q (→E 1, 3); 5 | | | r (→E 2, 4); 6 | | p → r (→I 3–5); 7 | (q → r) → (p → r) (→I
    2–6); 8 (p → q) → ((q → r) → (p → r)) (→I 1–7). The Reasoner's checker accepts it.
-3. **Tseitin's clause count.** Our encoding gives each binary connective a fresh atom: three clauses for ∧, ∨ or →,
+3. **Tseitin's clause count.** How many clauses does Tseitin's encoding produce for a formula with $k$ binary connectives, none of them $\leftrightarrow$? With $m$ of them $\leftrightarrow$?
+
+   *Solution.* Our encoding gives each binary connective a fresh atom: three clauses for ∧, ∨ or →,
    four for ↔, and negations cost nothing (they flip a literal's sign). With k binary connectives of which m are ↔,
    that is 3(k − m) + 4m + 1 = 3k + m + 1 clauses, the 1 being the clause asserting the whole formula.
-4. **The second island.** A ↔ ¬B and B ↔ (A ↔ C). If B is a knight, A and C are of the same kind; A's claim "B is a
+4. **The second island.** On another island, A says `B is a knave' and B says `A and C are of the same kind'. What can you conclude about A? About C?
+
+   *Solution.* A ↔ ¬B and B ↔ (A ↔ C). If B is a knight, A and C are of the same kind; A's claim "B is a
    knave" is false, so A is a knave, so C is a knave. If B is a knave, A and C differ; A's claim is true, so A is a
    knight, so C is a knave. Two solutions (the Reasoner finds exactly these): nothing follows about A or B
    separately, but C is a knave either way.
-5. **Every minimal correction set meets every minimal unsatisfiable subset.** Let M be an MCS and S an MUS, and
+5. **Every minimal correction set meets every minimal unsatisfiable subset.**
+
+   *Solution.* Let M be an MCS and S an MUS, and
    suppose M ∩ S = ∅. Then S lies inside the complement of M, which is a maximal *satisfiable* subset; so S is
    satisfiable, contradicting its unsatisfiability. (The other half: a minimal hitting set H of the MUSes leaves a
    complement containing no MUS, hence satisfiable, and minimality of H makes it maximal.)
-6. **(Essay) Another exit in *Republic* I.** Two good candidates. (a) Deny o: what is *owed* is what is *fitting*
+6. **(Essay) Another exit in *Republic* I.** (Essay) In *Republic* I Socrates gives up both definitions. Make the best case for a different exit from one of the two contradictions.
+
+   *Solution.* Two good candidates. (a) Deny o: what is *owed* is what is *fitting*
    or *due*, so returning weapons to a madman is not owing anything; Polemarchus takes a version of this when he
    reinterprets Simonides, and much later Aristotle's account of justice as giving each what is due follows it. (b)
    Deny H: harming the wicked by punishment may make them better, not worse, a view Socrates himself defends in the

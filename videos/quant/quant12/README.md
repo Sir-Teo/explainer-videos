@@ -168,34 +168,52 @@ paper; Deribit DVOL methodology: ch. 11.
 
 ## Problems, with solutions
 
-1. **Dupire's formula.** The risk-neutral density p(K, T) solves ∂_T p = ½∂_KK(σ²_loc K² p) at zero rates. Since
+1. **Dupire's formula.** From $C(K, T)$ and the forward equation, derive Dupire's formula $\sigma^2_{loc} = \partial_T C / (\frac12 K^2 \partial_{KK} C)$ at zero rates.
+
+   *Solution.* The risk-neutral density p(K, T) solves ∂_T p = ½∂_KK(σ²_loc K² p) at zero rates. Since
    C_KK = p, integrate twice in K (the boundary terms vanish): ∂_T C = ½σ²_loc K² C_KK.
-2. **The log contract's strip.** Taylor's theorem with integral remainder about F gives
+2. **The log contract's strip.** Show that $-\log(S_T/F)$ equals a forward position plus a strip of options weighted $1/K^2$, and hence derive the variance-swap strike.
+
+   *Solution.* Taylor's theorem with integral remainder about F gives
    f(S) = f(F) + f′(F)(S − F) + ∫_0^F f″(K)(K − S)⁺dK + ∫_F^∞ f″(K)(S − K)⁺dK. With f = −log, f″ = 1/K². By Itô,
    ∫_0^T σ²dt = 2∫dS/S − 2 log(S_T/S_0). Taking Q-expectations (zero rates), K_var = (2/T)∫ OTM(K)/K² dK.
-3. **SSVI's two conditions.** Calendar (Gatheral–Jacquier 2014, Theorem 4.1): θ_T non-decreasing and
+3. **SSVI's two conditions.** For SSVI with the power-law $\varphi$, check Gatheral and Jacquier's calendar condition, and find the smallest $\theta$ above which their butterfly condition holds when $\gamma > \frac12$.
+
+   *Solution.* Calendar (Gatheral–Jacquier 2014, Theorem 4.1): θ_T non-decreasing and
    0 ≤ ∂_θ(θφ) ≤ ((1 + √(1 − ρ²))/ρ²)φ. For φ = η/(θ^γ(1 + θ)^{1−γ}), θφ = η(θ/(1 + θ))^{1−γ} rises, and the upper
    bound reduces to (1 − γ)/(1 + θ) ≤ (1 + √(1 − ρ²))/ρ², true for |ρ| < 1. Butterfly (Theorem 4.2, sufficient):
    θφ(1 + |ρ|) < 4 holds when η(1 + |ρ|) ≤ 2; θφ²(1 + |ρ|) = η²(1 + |ρ|)θ^{1−2γ}(1 + θ)^{2γ−2} ≤ 4 for all θ needs
    γ ≤ ½. For γ > ½ it holds for θ above the root of η²(1 + |ρ|)θ^{1−2γ}(1 + θ)^{2γ−2} = 4: on the Surface
    (γ = 0.557, η(1 + |ρ|) = 0.91) that is θ ≈ 1.4·10⁻⁷, far below the smallest quoted θ (0.002). The calibrated
    surface is therefore free of butterflies at every quoted maturity, but the theorem does not cover θ → 0.
-4. **Local skew is twice implied skew.** At short maturity, σ_imp(k) ≈ ((1/k)∫_0^k du/σ_loc(u))^{−1}
+4. **Local skew is twice implied skew.** Show that near the money, local-volatility skew is about twice the implied skew: $\partial_k\sigma_{loc} \approx 2\,\partial_k\sigma_{imp}$.
+
+   *Solution.* At short maturity, σ_imp(k) ≈ ((1/k)∫_0^k du/σ_loc(u))^{−1}
    (Berestycki–Busca–Florent). Write σ_loc(u) = σ_0 + s u; then 1/σ_imp ≈ (1/σ_0)(1 − s k/(2σ_0)), so
    σ_imp ≈ σ_0 + (s/2)k: ∂_kσ_imp(0) = ½∂_kσ_loc(0).
-5. **Martin's bound.** With E^Q[X] = R_f E[mX] and E[mR] = 1: var^Q(R) = R_f E[mR²] − R_f², and cov(mR, R) =
+5. **Martin's bound.** Derive Martin's bound: if $\text{cov}(m_T R_T, R_T) \le 0$, then $\mathbb{E}[R_T] - R_f \ge \text{var}^Q(R_T)/R_f$.
+
+   *Solution.* With E^Q[X] = R_f E[mX] and E[mR] = 1: var^Q(R) = R_f E[mR²] − R_f², and cov(mR, R) =
    E[mR²] − E[R]. Hence E[R] − R_f = var^Q(R)/R_f − cov(mR, R); if cov(mR, R) ≤ 0, E[R] − R_f ≥ var^Q(R)/R_f.
-6. **Gatheral's g.** With C/F = N(d₊) − e^k N(d₋), d± = −k/√w ± √w/2 and w = w(k): differentiate in K = F e^k twice.
+6. **Gatheral's g.** Derive Gatheral's $g(k)$ from Black's formula written in total variance $w$ and log-moneyness $k$.
+
+   *Solution.* With C/F = N(d₊) − e^k N(d₋), d± = −k/√w ± √w/2 and w = w(k): differentiate in K = F e^k twice.
    Using e^k N′(d₋) = N′(d₊), ∂_k(C/F) = −e^k N(d₋) + N′(d₊)w′/(2√w), and differentiating again and collecting terms
    gives ∂_KK C = (N′(d₋)/(K√w))·[(1 − kw′/(2w))² − (w′²/4)(1/w + 1/4) + w″/2] = g(k)·e^{−d₋²/2}/(K√(2πw)).
-7. **The vol swap's convexity.** √V ≈ √K + (V − K)/(2√K) − (V − K)²/(8K^{3/2}) about K = E V. Taking expectations,
+7. **The vol swap's convexity.** Show that $K_{vol} \approx \sqrt{K_{var}} - \text{Var}(V)/(8K_{var}^{3/2})$ for a volatility swap.
+
+   *Solution.* √V ≈ √K + (V − K)/(2√K) − (V − K)²/(8K^{3/2}) about K = E V. Taking expectations,
    the linear term vanishes: E√V ≈ √K − Var(V)/(8K^{3/2}). For Bitcoin the variance of variance is large and the
    expansion overshoots (4.1 against a measured 3.0 vol points).
-8. **(qual) The butterfly's bias and variance.** Taylor-expand C(K ± h) to fourth order: the odd terms cancel in
+8. **(qual) The butterfly's bias and variance.**
+
+   *Solution.* Taylor-expand C(K ± h) to fourth order: the odd terms cancel in
    C(K−h) − 2C(K) + C(K+h) = h²C″ + (h⁴/12)C⁗ + O(h⁶), and C″ = q, so E q̂_h = q + (h²/12)q″ + O(h⁴). The noise
    (η₋ − 2η₀ + η₊)/h² has variance (1 + 4 + 1)s²/h⁴. MSE = h⁴q″²/144 + 6s²/h⁴; its derivative vanishes at
    h⁸ = 864s²/q″², where the two terms are equal, so MSE(h*) = 12s²/h*⁴ = 12s²|q″|/(√864·s) = (√6/6)|q″|s.
-9. **(qual) Correlated errors.** A common error η₀ added to all three prices enters with weights 1 − 2 + 1 = 0 and
+9. **(qual) Correlated errors.** (qual) With a common price error $\eta_0$ plus independent errors, show $\eta_0$ cancels in $\hat q_h$. Now let adjacent errors have correlation $\rho$ and the outer pair be uncorrelated, with $|\rho|\le1/\sqrt2$; derive $\operatorname{Var}(\hat q_h)=(6-8\rho)s^2/h^4$.
+
+   *Solution.* A common error η₀ added to all three prices enters with weights 1 − 2 + 1 = 0 and
    cancels. With corr(η(K), η(K ± h)) = ρ and corr(η(K−h), η(K+h)) = ρ₂, Var = (s²/h⁴)[6 − 8ρ + 2ρ₂]: positively
    correlated neighbours help, which is why smooth (correlated) errors such as a stale forward do less harm than
    independent ones, and why alternating errors (bid–ask bounce, ρ < 0) do more.

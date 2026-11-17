@@ -163,53 +163,73 @@ Answers need specified filters, executable exposure and appropriate uncertainty.
 
 All numerical inputs are chosen.
 
-1. **Basic: stock risk fraction.** Weights (.6,.4), SDs (.2,.1), correlation zero.
+1. **Basic: stock risk fraction.** Basic 1. Chosen stock/bond SDs 20%/10%, rho=0, weights 60/40: stocks' Euler risk fraction?
+
+   *Solution.* Weights (.6,.4), SDs (.2,.1), correlation zero.
    Variance=(.6×.2)²+(.4×.1)²=.016. Stock Euler fraction=.0144/.016=**90%**.
    Euler SD fractions are also w_i(Σw)_i/σ²; they are not capital weights.
 
-2. **Basic: inverse volatility.** Same SDs, correlation −.2. Normalising inverse
+2. **Basic: inverse volatility.** Basic 2. Same SDs, rho=-.2: inverse-vol weights, base SD and scale to target SD 10%?
+
+   *Solution.* Same SDs, correlation −.2. Normalising inverse
    SDs gives (1/3,2/3). Weighted standalone SDs both equal 1/15.
    Variance=2(1/15)²(1−.2)=.00711111; base SD=**8.43274%**.
    L=.1/.0843274=**1.185854**, below chosen cap 4; positions
    (.395285,.790569). Equal Euler fractions are a two-asset special case.
 
-3. **Basic: four styles.** Equal-volatility, equal-Sharpe .6 and equal weights:
+3. **Basic: four styles.** Basic 3. Four equal-vol styles each SR=.6: equal-weight SR at average rho=0 and .3?
+
+   *Solution.* Equal-volatility, equal-Sharpe .6 and equal weights:
    SR=.6 sqrt(4/[1+3ρ̄]). At average correlation zero, **1.20**;
    at .3, 1.2/sqrt(1.9)=**.87057**. This does not reconstruct AQR multi-style.
 
-4. **Basic: forecast error.** Target .1, forecast .1, cap 3 gives
+4. **Basic: forecast error.** Basic 4. Target SD 10%, forecast 10%, true conditional SD 20%, cap 3: exposure and risk?
+
+   *Solution.* Target .1, forecast .1, cap 3 gives
    x=min(.1/.1,3)=**1**. True conditional SD .2 gives |x|.2=**20%**.
    Forecast-based exposure does not guarantee true risk.
 
-5. **Basic: income and tail.** Fifty months at .01, then one at −.30:
+5. **Basic: income and tail.** Basic 5. Fifty months at +1%, then one at -30%: arithmetic mean, skew sign and compound return?
+
+   *Solution.* Fifty months at .01, then one at −.30:
    mean=(50×.01−.30)/51=**.00392157**, or .392157% monthly.
    Deviations are .31/51 fifty times and −50×.31/51 once; cube sum
    (.31/51)³(50−50³)<0, hence negative skew. Compound total return
    1.01^50×.70−1=**15.12423%**, a different quantity from the arithmetic mean.
 
-6. **Basic: cost budget.** Additive annual gross budget .10, 504 equally charged
+6. **Basic: cost budget.** Basic 6. Linear annual gross budget 10%, 504 equally charged trade legs: break-even bp per leg?
+
+   *Solution.* Additive annual gross budget .10, 504 equally charged
    trade legs: .10−504c=0 gives c=.000198413=**1.98413 bp per leg**.
    If the count denotes round trips, the unit changes. Actual compounding,
    variable notional and impact need different accounting.
 
-7. **Advanced: independent drift.** Independent increments with mean μ and finite
+7. **Advanced: independent drift.** Advanced 7. Independent increments with mean mu: derive E[P] for the reset linear rule.
+
+   *Solution.* Independent increments with mean μ and finite
    second moment give E[r_s r_t]=μ² for s<t. Counting C(n,2) pairs yields
    **E[P]=C(n,2)μ²**. Zero mean is an additional assumption. Under stationarity
    with dependence add Σ_k(n−k)γ_k. Costs and capital scaling are separate.
 
-8. **Advanced: Gaussian aggregation.** At n=63, skew
+8. **Advanced: Gaussian aggregation.** Advanced 8. iid zero-mean Gaussian blocks, n=63: skew; then K=23 independent identical blocks' skew.
+
+   *Solution.* At n=63, skew
    2^(3/2)61/sqrt(63×62)=**2.760633**.
    K=23 independent identical profits with finite third moment have total
    variance Kv and centred third moment Km_3, because centred cross terms vanish.
    Skew therefore divides by sqrt(K), giving **.575632**.
    Zero pair correlation alone does not eliminate mixed third moments.
 
-9. **Advanced: detection horizon.** Given SE(SR)≈1/sqrt(T), true annual SR=.3:
+9. **Advanced: detection horizon.** Advanced 9. With SE(SR) approx 1/sqrt(T), true annual SR=.3: years for signal / SE =2?
+
+   *Solution.* Given SE(SR)≈1/sqrt(T), true annual SR=.3:
    .3 sqrt(T)=2 implies **T=(2/.3)²=44.444 years**.
    This is a planning signal/SE ratio, not a guarantee of rejection or specified
    power. Dependence, nonnormality and selection alter uncertainty.
 
-10. **Advanced: targeting counterexample.** Known σ is .1 or .2 with equal
+10. **Advanced: targeting counterexample.** Advanced 10. Known $\sigma=.1$ or $.2$ equally likely, $\mu=\sigma^2$, $r=\mu+\sigma\epsilon$: compare unconditional SR before/after x=.1/sigma; derive the conditional mean-variance optimum.
+
+    *Solution.* Known σ is .1 or .2 with equal
     probability, μ=σ², r=μ+σε, independent standard-normal ε.
     E[r]=.025; Var(r)=Eσ²+Var(σ²)=.025+.000225=.025225;
     unconditional one-period SR=**.157407**.
@@ -220,7 +240,9 @@ All numerical inputs are chosen.
     x*=μ/(γσ²)=**1/γ**, constant, whereas inverse-SD targeting varies.
     This fixed two-state example is not empirically calibrated.
 
-11. **Qualifying: Gaussian quadratic form.** For iid standard normals, let
+11. **Qualifying: Gaussian quadratic form.** Qual 11. iid $N(0,1)$: prove $\mathbb E[Y^2]=\binom n2$, $\mathbb E[Y^3]=n(n-1)(n-2)$; derive exact chi-square law and weak limit.
+
+    *Solution.* For iid standard normals, let
     Y=Σ_(s<t)z_s z_t. E[Y]=0. In Y², different edges leave at least one
     independent zero-mean vertex, so only identical edges survive. Each
     contributes one, giving E[Y²]=C(n,2).
@@ -238,7 +260,9 @@ All numerical inputs are chosen.
     Continuity at zero implies Pr(Y>0)→2Pr(Z>1)=.3173105.
     Positive skew does not imply a positive expected edge.
 
-12. **Qualifying: matched filter.** Fixed deterministic weights give
+12. **Qualifying: matched filter.** Qual 12. Fixed lag filter $P_w=\sum_{s<t}w_{t-s}r_s r_t$: stationary mean, iid zero-mean variance; derive the matched filter against specified zero-mean autocovariances using that variance reference.
+
+    *Solution.* Fixed deterministic weights give
     P_w=Σ_(s<t)w_(t−s)r_s r_t.
     Stationarity gives E[P_w]=Σ_k(n−k)w_k(γ_k+μ²), by pair counting.
     Under the separate iid zero-mean variance reference,

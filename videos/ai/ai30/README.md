@@ -323,31 +323,43 @@ Interpretability* (2025).
 
 ## Problems, with solutions
 
-1. **Soft thresholding.** Take a > 0, λ ≥ 0 and ‖d‖ = 1. Minimize ℓ(f) = ‖a d − f d‖² + λf = (a − f)² + λf over f ≥ 0.
+1. **Soft thresholding.** An L1 autoencoder rebuilds $x=a\,d$ ($\|d\|=1$, $a>0$, $\lambda\ge0$) from one latent: minimize $\|x-fd\|^2+\lambda f$ over $f\ge0$. Show $f^*=\max(a-\lambda/2,0)$; find the unpenalized scalar optimum for a retained TopK latent.
+
+   *Solution.* Take a > 0, λ ≥ 0 and ‖d‖ = 1. Minimize ℓ(f) = ‖a d − f d‖² + λf = (a − f)² + λf over f ≥ 0.
    On the positive branch, ℓ′(f) = −2(a − f) + λ = 0 gives f = a − λ/2; if a ≤ λ/2, the constrained minimum is f = 0.
    Thus f* = max(a − λ/2, 0). A positive optimum is shrunk by λ/2; a clipped optimum is zero. If this scalar latent is
    retained by TopK, its unpenalized objective (a − f)² has optimum f = a. This removes the L1 shrinkage term in this
    scalar comparison; it does not guarantee that a learned full encoder has unbiased amplitudes.
-2. **Random cosines.** Let d ≥ 1, and let u and v be independent and uniform on the unit sphere in ℝᵈ. Sign symmetry
+2. **Random cosines.** Let $u,v$ be independent and uniform on the unit sphere in $\mathbb{R}^d$ ($d\ge1$). Show $\mathbb{E}[u\cdot v]=0$ and $\mathbb{E}[(u\cdot v)^2]=1/d$.
+
+   *Solution.* Let d ≥ 1, and let u and v be independent and uniform on the unit sphere in ℝᵈ. Sign symmetry
    gives E[u·v] = 0. Conditional on v, orthogonal invariance and independence let us map v to e₁ without changing
    u's distribution. Hence E[(u·v)²] = E[u₁²] = (1/d) Σᵢ E[uᵢ²] = (1/d) E[‖u‖²] = 1/d. The standard deviation is 1/√d.
-3. **The composition score.** Let A and B be nonzero real matrices of compatible sizes, so the denominator is positive.
+3. **The composition score.** For nonzero real matrices $A,B$ of compatible sizes, show $\|AB\|_F/(\|A\|_F\|B\|_F)\in[0,1]$. It equals $1$ exactly when both have rank one and $A$'s right singular direction is parallel to $B$'s left one.
+
+   *Solution.* Let A and B be nonzero real matrices of compatible sizes, so the denominator is positive.
    If b_j are B's columns, ‖AB‖_F² = Σ_j ‖A b_j‖² ≤ ‖A‖₂² ‖B‖_F² ≤ ‖A‖_F² ‖B‖_F², giving a score in [0, 1].
    Equality in the final inequality requires A to have rank one: A = σ x yᵀ, with σ > 0 and unit x,y. Equality in the
    first requires every nonzero column of B to lie in span(y), so B = y zᵀ with z ≠ 0 and rank one. Conversely, these
    forms give AB = σ x zᵀ and score 1. The shared singular directions must therefore be parallel; their signs are immaterial.
-4. **AND under patching.** Clean (1, 1) gives y = 1; corrupted (0, 0) gives y = 0. Noising either input alone gives
+4. **AND under patching.** Two inputs feed $y = x_1 \wedge x_2$. Clean: both true; corrupted: both false. Show that noising either input alone destroys $y$, while denoising either alone restores nothing.
+
+   *Solution.* Clean (1, 1) gives y = 1; corrupted (0, 0) gives y = 0. Noising either input alone gives
    (0, 1) or (1, 0), hence y = 0. Denoising either input alone also gives one of those mixed inputs, hence y = 0.
    Each input is necessary for this AND output but neither alone is sufficient. The two patching directions ask
    different questions in these clean/corrupt contexts.
-5. **The zero-bias reference comparison.** W = (1, 0), b = 0: feature 1 is rebuilt exactly (ReLU(x₁) = x₁ ≥ 0), and
+5. **The zero-bias reference comparison.** Two features, one dimension, density $\rho$, importances $1$ and $r$, $x_i \sim U[0, 1]$ when on: show that with zero output bias, keeping feature 1 alone costs $r\rho/3$, keeping feature 2 alone $\rho/3$.
+
+   *Solution.* W = (1, 0), b = 0: feature 1 is rebuilt exactly (ReLU(x₁) = x₁ ≥ 0), and
    feature 2 is lost, costing r E[x₂²] = r ρ E[U²] = rρ/3. W = (0, 1), b = 0 costs ρ/3. For ρ > 0 and r > 0, keeping
    the more important feature is at least as good, with equality at r = 1; at ρ = 0 all these costs are zero.
    For a further comparison, assume independent feature draws and keep b = 0. The antipodal candidate W = (1, −1)
    gives ReLU(x₁ − x₂) and ReLU(x₂ − x₁): exact when at most one feature is on, with errors only when both are on,
    an event of probability ρ². For fixed r > 0 it beats the two stated zero-bias dedicated candidates at sufficiently
    small positive ρ. This is a comparison of those candidates, not a proof of the free-bias global optimum.
-6. **The grokking readout.** Let p be prime, ∅ ≠ K ⊆ {1,…,p−1}, and a,b,c ∈ ℤₚ. At c = a+b in ℤₚ every cosine is 1,
+6. **The grokking readout.** For prime $p$ and nonempty $K\subseteq\{1,\ldots,p-1\}$, fix $a,b\in\mathbb{Z}_p$. For $c\in\mathbb{Z}_p$, let $L(c)=\sum_{k\in K}\cos(2\pi k(a+b-c)/p)$. Show its unique maximizer is $c=(a+b)\bmod p$.
+
+   *Solution.* Let p be prime, ∅ ≠ K ⊆ {1,…,p−1}, and a,b,c ∈ ℤₚ. At c = a+b in ℤₚ every cosine is 1,
    so L(c) = |K|. For any other c, choose the nonzero residue s = (a+b−c) mod p. If cos(2πks/p) = 1, then p divides ks,
    impossible for 1 ≤ k,s ≤ p−1 because p is prime. Thus every term is below 1; since K is nonempty, L(c) < |K|.
    The maximizer is unique **over ℤₚ**. The original sum has unit positive weights; the same proof works with any

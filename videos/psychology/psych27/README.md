@@ -156,28 +156,42 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Unseen accuracy.** With μ = d/2, unseen trials are those with |x| < c. Accuracy among them is
+1. **Unseen accuracy.** With evidence $x \sim N(\pm d/2, 1)$ and "seen" when $|x| > c$, derive accuracy on unseen trials, and show that it exceeds one half whenever $d > 0$.
+
+   *Solution.* With μ = d/2, unseen trials are those with |x| < c. Accuracy among them is
    [Φ(c − μ) − Φ(−μ)] / [Φ(c − μ) − Φ(−c − μ)]. The numerator is the mass of N(μ, 1) on (0, c), the rest of the
    denominator its mass on (−c, 0); for μ > 0 the density is larger at every point of (0, c) than at its mirror
    image in (−c, 0), so the ratio exceeds one half.
-2. **Strict criteria.** As c grows, nearly every trial is called unseen, so accuracy on unseen trials tends to the
+2. **Strict criteria.** Show that the same model's unseen accuracy rises toward the overall accuracy as $c$ grows. What does that imply for claims of unconscious perception?
+
+   *Solution.* As c grows, nearly every trial is called unseen, so accuracy on unseen trials tends to the
    overall accuracy Φ(μ). A strict criterion therefore turns all of performance into "unconscious perception";
    showing a second system needs more than above-chance guessing, for instance zero objective sensitivity on the
    same trials, or metacognition that fails while discrimination succeeds.
-3. **The copy ring.** Cut the ring into two arcs. Only two links cross the cut, one each way; across each, the node
+3. **The copy ring.** For a ring of $n$ nodes that each copy their neighbour, show that every bipartition into two arcs has effective information 1 bit each way, so $\Phi = 2$.
+
+   *Solution.* Cut the ring into two arcs. Only two links cross the cut, one each way; across each, the node
    on the far side copies the near node's (uniformly random) state, carrying exactly 1 bit, and every other node of
    the receiving arc depends only on its own arc. So EI(A→B) = EI(B→A) = 1 and Φ = 2. A cut that interleaves the
    nodes crosses more links and carries more, so the minimum is at two arcs.
-4. **Two loops.** Separate the loops. Each loop's next state depends only on itself, so neither part's state tells
+4. **Two loops.** Why does a network of two unconnected loops have $\Phi = 0$, however much information each loop carries?
+
+   *Solution.* Separate the loops. Each loop's next state depends only on itself, so neither part's state tells
    anything about the other's next state: EI = 0 both ways, this cut is the minimum, and Φ = 0, however much each loop
    carries. Integration, not information, is what Φ measures.
-5. **The ramp.** Activity is reset at each crossing, so it is always below the threshold and its long-run average is
+5. **The ramp.** In Schurger's accumulator, show that the expected activity just before a crossing is higher than its long-run mean, whatever the drift.
+
+   *Solution.* Activity is reset at each crossing, so it is always below the threshold and its long-run average is
    lower still; just before a crossing it is, by definition, at the threshold. Averaging backward from crossings
    must therefore climb toward the threshold, whatever the drift.
-6. **Rivalry's shape.** With noise 0.15 and adaptation 0.15 the simulated durations become more irregular (gamma
+6. **Rivalry's shape.** With `workspace.rivalry`: raise the noise and lower the adaptation. What happens to the shape of the dominance distribution?
+
+   *Solution.* With noise 0.15 and adaptation 0.15 the simulated durations become more irregular (gamma
    shape near 2), because switches are driven more by noise than by fatigue; with little noise and strong adaptation
    they become regular (shape well above 10).
-7. ★ **A no-report test.** Present faces and houses in rivalry, read the percept from eye movements or pupil size
+7. ★ **A no-report test.** Design a no-report experiment that could tell whether prefrontal cortex is needed for seeing a face, and say what each theory predicts.
+
+   *Solution.* Present faces and houses in rivalry, read the percept from eye movements or pupil size
    rather than a key press, and silence or stimulate dorsolateral prefrontal cortex (or test patients with
    prefrontal lesions). The workspace and higher-order theories predict that experience, read from the reflexes and
    from later memory, is disrupted; integrated information and recurrent processing predict it is not, if

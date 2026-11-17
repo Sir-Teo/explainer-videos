@@ -125,16 +125,30 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Two corrections.** 0.25/sqrt(0.5) = 0.354; Case II with u = 1.5: 0.354 x 1.5 / sqrt(1 + 0.125 x 1.25) = 0.49.
-2. **Utility.** z = 1.28, phi(1.28) = 0.175, so the mean score of those hired is 1.75; 50 x 4 x 0.3 x 15,000 x 1.75 =
+1. **Two corrections.** An observed validity of 0.25 among hires, criterion reliability 0.5 among them, $u$ = 1.5. Correct for both, in order.
+
+   *Solution.* 0.25/sqrt(0.5) = 0.354; Case II with u = 1.5: 0.354 x 1.5 / sqrt(1 + 0.125 x 1.25) = 0.49.
+2. **Utility.** Validity 0.3, top 10% hired: $\bar z_x = \phi(1.28)/0.1$. With $SD_y$ = 15,000, 50 hires, 4 years, find the gain before costs.
+
+   *Solution.* z = 1.28, phi(1.28) = 0.175, so the mean score of those hired is 1.75; 50 x 4 x 0.3 x 15,000 x 1.75 =
    about 1.58 million before costs.
-3. **Four-fifths.** 0.20/0.30 = 0.67 < 0.8: flagged for adverse impact.
-4. **A composite.** (0.3 + 0.4)/sqrt(1 + 1 + 2 x 0.3) = 0.7/1.61 = 0.43.
-5. **Spearman-Brown.** 3 x 0.5/(1 + 2 x 0.5) = 0.75.
-6. **Concurrent studies.** The incumbents were not selected on the new test, so its range among them is nearly the
+3. **Four-fifths.** Selection rates 30% and 20%. Compute the impact ratio. Does it pass the four-fifths rule?
+
+   *Solution.* 0.20/0.30 = 0.67 < 0.8: flagged for adverse impact.
+4. **A composite.** Two predictors, validities 0.3 and 0.4, correlated 0.3, equal weights. Find the composite's validity.
+
+   *Solution.* (0.3 + 0.4)/sqrt(1 + 1 + 2 x 0.3) = 0.7/1.61 = 0.43.
+5. **Spearman-Brown.** A structured interview's three raters each rate with reliability 0.5. Find the reliability of their mean (Spearman-Brown).
+
+   *Solution.* 3 x 0.5/(1 + 2 x 0.5) = 0.75.
+6. **Concurrent studies.** Why does a concurrent study need little or no range-restriction correction? Give one case where it needs some.
+
+   *Solution.* The incumbents were not selected on the new test, so its range among them is nearly the
    applicants' range. It needs a correction if the incumbents were selected on something correlated with the test
    (indirect restriction), or if poor performers have left (attrition on the criterion).
-7. **A design.** Job analysis; two or three predictors with evidence for the role (a structured interview, a job
+7. ★ **A design.** Design a selection system for a role you know: job analysis, predictors, combination, adverse impact, validation and a decision log.
+
+   *Solution.* Job analysis; two or three predictors with evidence for the role (a structured interview, a job
    knowledge test or work sample), scored by anchored rules and combined by fixed weights; an adverse-impact check
    on a pilot with a search for alternatives along the frontier; a predictive validation with a multi-rater
    criterion a year on, corrected only for the restriction that happened; and a decision log written before the

@@ -135,26 +135,40 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Kappa by hand.** n = 200; agreement p_o = (30 + 130)/200 = 0.80. A says yes (30 + 25)/200 = 0.275, B says yes
+1. **Kappa by hand.** Two clinicians rate 200 patients: both yes 30, both no 130, A yes and B no 25, A no and B yes 15. Compute $p_o$, $p_e$ and Cohen's kappa.
+
+   *Solution.* n = 200; agreement p_o = (30 + 130)/200 = 0.80. A says yes (30 + 25)/200 = 0.275, B says yes
    (30 + 15)/200 = 0.225; p_e = 0.275 × 0.225 + 0.725 × 0.775 = 0.0619 + 0.5619 = 0.6238. κ = (0.80 − 0.6238) /
    (1 − 0.6238) ≈ 0.47.
-2. **Kappa and independence.** If the ratings are independent, P(both yes) = a b and P(both no) = (1 − a)(1 − b), so
+2. **Kappa and independence.** Show that kappa is 0 when the two clinicians' ratings are independent, whatever their base rates, and find the largest kappa possible when one says yes 10% of the time and the other 30%.
+
+   *Solution.* If the ratings are independent, P(both yes) = a b and P(both no) = (1 − a)(1 − b), so
    p_o = p_e and κ = 0. With base rates 0.1 and 0.3, agreement is greatest when every yes of the first is also a
    yes of the second: p_o = 0.1 + 0.7 = 0.8, p_e = 0.03 + 0.63 = 0.66, so κ_max = 0.14/0.34 ≈ 0.41. Different base
    rates cap kappa.
-3. **Combinations.** Subsets of nine with at least five members: 126 + 84 + 36 + 9 + 1 = 256. Those containing
+3. **Combinations.** Count the symptom combinations that meet "at least 5 of 9, including symptom 1 or symptom 2".
+
+   *Solution.* Subsets of nine with at least five members: 126 + 84 + 36 + 9 + 1 = 256. Those containing
    neither symptom 1 nor 2 are subsets of the other seven with at least five: 21 + 7 + 1 = 29. So 256 − 29 = 227.
-4. **Screens at three prevalences.** PPV = π·0.9 / (π·0.9 + (1 − π)·0.09): at 1%, 0.009/0.0981 ≈ 9%; at 10%,
+4. **Screens at three prevalences.** A screen has sensitivity 0.9 and specificity 0.91. Find the positive predictive value at prevalence 1%, 10% and 30%, and say when screening makes sense.
+
+   *Solution.* PPV = π·0.9 / (π·0.9 + (1 − π)·0.09): at 1%, 0.009/0.0981 ≈ 9%; at 10%,
    0.09/0.171 ≈ 53%; at 30%, 0.27/0.333 ≈ 81%. Screening makes sense where the condition is common enough, or as a
    first stage before a confirmatory assessment.
-5. **Reliability caps validity.** Write each measure as a true score plus independent error: X = T_X + E_X, Y = T_Y +
+5. **Reliability caps validity.** If a diagnosis has reliability $r_{xx}$ and an outcome has reliability $r_{yy}$, show that their correlation cannot exceed $\sqrt{r_{xx} r_{yy}}$.
+
+   *Solution.* Write each measure as a true score plus independent error: X = T_X + E_X, Y = T_Y +
    E_Y. Then cov(X, Y) = cov(T_X, T_Y) ≤ sd(T_X) sd(T_Y) = √(r_xx) sd(X) · √(r_yy) sd(Y), so |r_xy| ≤ √(r_xx r_yy).
-6. **Two stable states.** In a mean-field approximation each symptom is on with probability m = σ(b + s + c(n − 1)m).
+6. **Two stable states.** In a symptom network, each of $n$ symptoms is on with probability $\sigma(b + s + c\,k)$, where $k$ is the number of others on. Using a mean-field approximation, find the equation for the fraction on, and show how two stable solutions can coexist.
+
+   *Solution.* In a mean-field approximation each symptom is on with probability m = σ(b + s + c(n − 1)m).
    The right side is an S-shaped function of m; when c(n − 1) is large enough, the line m and the curve cross three
    times: the outer two crossings are stable (well and ill) and the middle one unstable. As s changes, one of the
    stable states disappears at a fold, which is where the network jumps; coming back, the jump happens at a
    different s: hysteresis.
-7. **Network or common cause?** Intervene on one symptom (for example, treat insomnia alone) and measure the others
+7. ★ **Network or common cause?** Design a study that could tell a network account of depression from a common-cause account.
+
+   *Solution.* Intervene on one symptom (for example, treat insomnia alone) and measure the others
    over time: a network predicts the others improve through their connections; a common cause predicts they do not,
    unless the cause itself changes. Repeated measures within people (Part 47) add the time order that
    cross-sectional data lack.

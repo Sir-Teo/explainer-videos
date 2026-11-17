@@ -128,18 +128,32 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **A ceiling.** With reliability 0.6, at most 60% of the outcome's variance is systematic, so no model can
+1. **A ceiling.** An outcome's reliability is 0.6 and it is a sum of many small causes. What is the most any model can predict?
+
+   *Solution.* With reliability 0.6, at most 60% of the outcome's variance is systematic, so no model can
    exceed R-squared 0.6, and a sum of many small causes, most unmeasured, puts the practical ceiling far lower.
-2. **Many labs.** Each lab's SE is about sqrt(4/100 + 0.09/200) = 0.20, so with no true variation the estimates
+2. **Many labs.** 40 labs, 100 people each, $d$ = 0.3, no true variation. The expected SD of the labs' estimates?
+
+   *Solution.* Each lab's SE is about sqrt(4/100 + 0.09/200) = 0.20, so with no true variation the estimates
    have SD about 0.20 and a 95% range of roughly 0.3 +/- 0.4.
-3. **A biased million.** 0.22 +/- 1.96/sqrt(1,000,000) = 0.22 +/- 0.002. The interval says nothing about the
+3. **A biased million.** A million volunteers, mean 0.22, SD 1. The 95% interval? What would you need to know about the bias?
+
+   *Solution.* 0.22 +/- 1.96/sqrt(1,000,000) = 0.22 +/- 0.002. The interval says nothing about the
    bias; you need to know how people came to take part (and a benchmark from a probability sample) to correct it.
-4. **A design space.** 2^10 = 1,024 cells; 1 + 10 + 45 = 56 parameters with an intercept, main effects and all
+4. **A design space.** A design space of 10 binary choices. How many cells, and how many parameters with all pairwise interactions?
+
+   *Solution.* 2^10 = 1,024 cells; 1 + 10 + 45 = 56 parameters with an intercept, main effects and all
    pairwise interactions.
-5. **Smaldino's arithmetic.** alpha = 0.8/(1 + 0.2 x 1) = 0.67 at effort 1, and 0.8/(1 + 0.2 x 75) = 0.05 at 75.
-6. **False positives.** True positives 0.1 x 0.8 = 0.08; false 0.9 x 0.05 = 0.045; the false share 0.045/0.125 =
+5. **Smaldino's arithmetic.** In Smaldino's model, $\alpha = W/(1 + (1 - W)e)$ with $W = 0.8$. The false-positive rate at efforts 1 and 75?
+
+   *Solution.* alpha = 0.8/(1 + 0.2 x 1) = 0.67 at effort 1, and 0.8/(1 + 0.2 x 75) = 0.05 at 75.
+6. **False positives.** One hypothesis in ten is true, power 0.8, $\alpha$ 0.05. The share of positives that are false?
+
+   *Solution.* True positives 0.1 x 0.8 = 0.08; false 0.9 x 0.05 = 0.045; the false share 0.045/0.125 =
    0.36.
-7. **A commissioning brief.** The decision and the smallest effect that would change it; a registered plan with
+7. ★ **A commissioning brief.** Write a commissioning brief for a study your organization will act on.
+
+   *Solution.* The decision and the smallest effect that would change it; a registered plan with
    power, primary outcome and analysis code; payment independent of the result; the sample described; data and
    code delivered; a replication if the stakes are high.
 

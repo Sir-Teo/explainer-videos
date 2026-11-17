@@ -65,25 +65,37 @@ All 15 chapters reviewed; all 15 inputs regenerated; **23 checks pass** (16 audi
 
 ## Problems and solutions
 
-1. **CR1 with singleton clusters.**
+1. **CR1 with singleton clusters.** Show that with singleton clusters the CR1 standard error equals the iid standard error $s/\sqrt{n}$.
+
+   *Solution.*
    - With G = n clusters of one, the cluster sums are the residuals rᵢ.
    - So SE² = n/(n − 1) · Σrᵢ²/n² = Σrᵢ²/(n(n − 1)) = s²/n.
-2. **The paired variance and McNemar.**
+2. **The paired variance and McNemar.** For two 0/1 score vectors, show $\mathrm{Var}(\bar a - \bar b) = (\sigma_a^2 + \sigma_b^2 - 2\sigma_{ab})/n$ and that McNemar's statistic depends only on $n_{10}, n_{01}$.
+
+   *Solution.*
    - ā − b̄ is the mean of dᵢ = aᵢ − bᵢ, so its variance is Var(d)/n = (σ_a² + σ_b² − 2σ_ab)/n.
    - dᵢ is 1, −1 or 0, so Σdᵢ = n₁₀ − n₀₁. Conditioning on the n₁₀ + n₀₁ discordant questions, each is equally
      likely to be +1 or −1 under the null, so the test uses only n₁₀ and n₀₁.
-3. **Bradley–Terry.**
+3. **Bradley–Terry.** Show that the Bradley–Terry log-likelihood is concave in $\theta$, and that only differences $\theta_i - \theta_j$ are identified.
+
+   *Solution.*
    - The log-likelihood is Σ[yₖ xₖ·θ − log(1 + e^{xₖ·θ})] with xₖ = e_i − e_j. Its Hessian is −Σ pₖ(1 − pₖ)xₖxₖᵀ,
      which is negative semidefinite, so it is concave.
    - Each xₖ sums to zero, so adding c to every θ leaves every xₖ·θ unchanged: only differences are identified.
-4. **The Gaussian's collapse.**
+4. **The Gaussian's collapse.** Show that $E[\hat\sigma_t^2] = ((n - 1)/n)^t$ for Gaussian recursive refits starting with fitted variance one, and that $\hat\sigma_t^2 \to 0$ a.s.
+
+   *Solution.*
    - Starting from fitted variance σ̂²₀=1, σ̂²ₜ = Π_{s ≤ t} χ²_{n−1,s}/n with independent factors, so E σ̂²ₜ = ((n − 1)/n)ᵗ.
    - log σ̂²ₜ / t → E log(χ²_{n−1}/n) by the strong law. By Jensen, that is below log((n − 1)/n) < 0, so
      log σ̂²ₜ → −∞ and σ̂²ₜ → 0 almost surely.
-5. **Prediction-powered inference.**
+5. **Prediction-powered inference.** Show that the prediction-powered mean $\bar f_N + \overline{(y - f)}_n$ is unbiased for any judge $f$, and find its variance.
+
+   *Solution.*
    - E f̄_N = E f and E(y − f)‾ₙ = E y − E f, so the sum has expectation E y for a fixed predictor independent of the labeled/unlabeled samples, from a common target population. A predictor trained on these labels needs fitting-dependence control such as cross-fitting.
    - The two averages are over independent samples, so the variance is Var(f)/N + Var(y − f)/n.
-6. **Tweedie.**
+6. **Tweedie.** Derive Tweedie's formula $E[x \mid y] = y + \sigma^2 \nabla \log p_\sigma(y)$ for $y = x + \sigma Z$.
+
+   *Solution.*
    - p_σ(y) = ∫ φ_σ(y − x)p(x)dx. Differentiating under the integral, ∇p_σ(y) = ∫ (x − y)/σ² · φ_σ(y − x)p(x)dx.
    - Dividing by p_σ(y) gives ∇log p_σ(y) = (E[x | y] − y)/σ². Rearranging gives the formula.
 

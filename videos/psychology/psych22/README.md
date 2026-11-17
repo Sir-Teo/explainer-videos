@@ -182,7 +182,9 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-**1. A prototype is a one-exemplar GCM.** The GCM gives P(A | x) = β_A Σ_{a∈A} η(x, a) / Σ_K β_K Σ_{k∈K} η(x, k),
+**1. A prototype is a one-exemplar GCM.** Show that the generalized context model with one exemplar per category, placed at the category's mean, is a prototype model, and find an item of the 5-4 structure on which the two must disagree.
+
+*Solution.* The GCM gives P(A | x) = β_A Σ_{a∈A} η(x, a) / Σ_K β_K Σ_{k∈K} η(x, k),
 with η(x, y) = exp(−c d(x, y)). If category A stores a single exemplar at its mean μ_A (and B one at μ_B), the sums
 have one term each and P(A | x) = β_A η(x, μ_A) / Σ_K β_K η(x, μ_K): the prototype model. In the 5-4 structure the
 prototype of A is (1, 1, 1, 1). Item A1 = 1110 differs from it in one feature and A2 = 1010 in two, so the prototype
@@ -190,38 +192,50 @@ model must rank A1 above A2. But A2 is one feature from two other A items (A1 an
 item, while A1 is one feature from two B items (B1 = 1100 and B2 = 0110), so the summed similarity favours A2. People
 made fewer errors on A2 (Medin and Schaffer 1978, Experiment 2): the exemplar model's ordering.
 
-**2. Double centring.** Let X be n × k with centred columns (1ᵀX = 0) and B = XXᵀ, so b_ij = x_i · x_j. Then
+**2. Double centring.** For centred points $X$, prove that $-\tfrac{1}{2} J D^{(2)} J = X X^\top$, and say what a negative eigenvalue of $B$ tells you about the dissimilarities.
+
+*Solution.* Let X be n × k with centred columns (1ᵀX = 0) and B = XXᵀ, so b_ij = x_i · x_j. Then
 d_ij² = b_ii + b_jj − 2 b_ij, i.e. D⁽²⁾ = diag(B) 1ᵀ + 1 diag(B)ᵀ − 2B. With J = I − 11ᵀ/n, J1 = 0, so the first two
 terms vanish under J · J and −½ J D⁽²⁾ J = J B J = B, since JX = X. B = XXᵀ is positive semi-definite; a negative
 eigenvalue of −½ J D⁽²⁾ J therefore shows that no Euclidean configuration, in any number of dimensions, has exactly
 these distances. Classical MDS then keeps the positive part; non-metric MDS gives up the distances and keeps their
 order.
 
-**3. Shepard's integral.** For s > d the region of size s holds the second stimulus with probability 1 − d/s, so
+**3. Shepard's integral.** Show that $\int_0^\infty s\, e^{-s} \max(0, 1 - d/s)\, ds = e^{-d}$, and find the gradient when sizes are uniform on $[0, L]$.
+
+*Solution.* For s > d the region of size s holds the second stimulus with probability 1 − d/s, so
 g(d) = ∫_d^∞ s e^{−s} (1 − d/s) ds = ∫_d^∞ (s − d) e^{−s} ds = e^{−d} ∫_0^∞ u e^{−u} du = e^{−d}. With sizes uniform on
 [0, L], g(d) = (1/L) ∫_d^L (1 − d/s) ds = (1/L)[L − d − d ln(L/d)] for d < L and 0 beyond. Its slope, −ln(L/d)/L, is
 unbounded at 0, so it falls steeply at first and reaches zero at d = L. Uncertainty spread over regions of every size
 is what gives the exponential's steady upward curve; a bounded prior gives a curve that ends.
 
-**4. The contrast model's asymmetry.** S(a, b) − S(b, a) = θ f(A∩B) − α f(A−B) − β f(B−A) − θ f(A∩B) + α f(B−A) +
+**4. The contrast model's asymmetry.** In the contrast model, show that $S(a, b) - S(b, a) = (\beta - \alpha)\,[f(A - B) - f(B - A)]$, and say when the asymmetry vanishes.
+
+*Solution.* S(a, b) − S(b, a) = θ f(A∩B) − α f(A−B) − β f(B−A) − θ f(A∩B) + α f(B−A) +
 β f(A−B) = (β − α)[f(A−B) − f(B−A)]. It vanishes when α = β (no focusing on the subject) or when the two objects have
 equally many distinctive features. With α > β, S(a, b) > S(b, a) exactly when f(A−B) < f(B−A): the subject with fewer
 distinctive features, the less prominent one, is more similar to the referent than the reverse.
 
-**5. Indistinguishable concepts.** Among 1 to 100, the multiples of 10 are 10, 20, …, 100 and the numbers ending in 0
+**5. Indistinguishable concepts.** Show that no examples from 1 to 100 can separate *multiples of 10* from *ending in 0*, and say what decides between them.
+
+*Solution.* Among 1 to 100, the multiples of 10 are 10, 20, …, 100 and the numbers ending in 0
 are the same ten numbers. Every example is in both or neither, and the two have the same size, so their likelihoods
 are equal for every set of examples: the posterior ratio is the prior ratio forever. Only the prior, or examples from
 outside 1 to 100, or a different kind of evidence (being told the rule), can decide. Any learner faces such sets of
 hypotheses that its data cannot separate; it is the number game's version of model mimicry (Part 48).
 
-**6. Prominence by dashes.** In `concepts.prominence_asymmetry`, pass the number of dashes of each signal as the
+**6. Prominence by dashes.** With `explainer.psychology.opendata`: rerun Tversky's sign count on Rothkopf's table with prominence measured by the number of dashes instead of the length.
+
+*Solution.* In `concepts.prominence_asymmetry`, pass the number of dashes of each signal as the
 prominence; pairs with equal counts drop out. On Rothkopf's table this leaves 493 pairs: in 266 the signal with fewer
 dashes heard first is called "same" more often, in 192 the reverse, 35 ties (sign test p ≈ 0.0006), a mean difference
 of 1.8 points. With temporal length it is 336, 182 and 37 (p ≈ 10⁻¹¹, 3.2 points), and with the share of dashes there
 is no asymmetry at all (266 against 276). What makes a signal prominent here is how much of it there is to hear, which
 length measures best.
 
-**7. ⋆ A study on which the models must disagree.** One answer: use a structure like 5-4, where an item closer to
+**7. ⋆ A study on which the models must disagree.** Prototype and exemplar models often predict the same accuracies. Design a study whose outcome they must predict differently.
+
+*Solution.* One answer: use a structure like 5-4, where an item closer to
 the prototype is surrounded by the other category's exemplars, and test it before and after adding exemplars of the
 other category near it. The exemplar model predicts that accuracy on that item falls as the new exemplars are added;
 the prototype model, if the prototypes are unchanged, predicts no change. Another: transfer to new items at equal

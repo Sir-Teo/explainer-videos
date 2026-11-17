@@ -154,30 +154,44 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Kelley's cube.** If only person 1 reacts, the response is 1 on every cell of person 1's slab and 0 elsewhere,
+1. **Kelley's cube.** Kelley's cube: a person reacts (1) or not (0) to an entity on an occasion, with 2 people, 2 entities and 2 occasions. If only person 1 ever reacts, show that the person main effect carries all the variance, and say which of consensus, distinctiveness and consistency are high and which low.
+
+   *Solution.* If only person 1 reacts, the response is 1 on every cell of person 1's slab and 0 elsewhere,
    so every cell equals the grand mean plus the person effect: the entity, occasion and interaction terms are zero
    and the person effect carries all the variance. Consensus is low (nobody else reacts), distinctiveness is low
    (person 1 reacts to every entity) and consistency is high (on every occasion): Kelley's pattern for blaming the
    person.
-2. **The rational observer.** P(pro essay | pro) = 1 and P(pro essay | anti) = π, so by Bayes' rule
+2. **The rational observer.** An observer thinks a writer's attitude is pro with probability $1/2$. A pro writer writes a pro essay; an anti writer does too if assigned, which the observer thinks happened with probability $\pi$. Show $P(\text{pro} \mid \text{pro essay}) = 1/(1 + \pi)$, and explain why it exceeds $1/2$ unless $\pi = 1$.
+
+   *Solution.* P(pro essay | pro) = 1 and P(pro essay | anti) = π, so by Bayes' rule
    P(pro | pro essay) = (1/2)/(1/2 + π/2) = 1/(1 + π). It exceeds 1/2 whenever π < 1: unless the observer is
    certain the assignment fully constrained the essay, the essay is some evidence about the writer, and inferring
    an attitude is reasonable.
-3. **Dunning-Kruger from regression.** Averaging E[Y | X] over the bottom quarter gives
+3. **Dunning-Kruger from regression.** Skill $X$ and self-estimate $Y$ are on a scale with mean 50 and equal spreads, with $E[Y \mid X] = 50 + s + \rho\,(X - 50)$. Show that the bottom quarter's mean estimate is $50 + s + \rho\,(E[X \mid \text{bottom}] - 50)$, and draw the graph for $\rho = 0$.
+
+   *Solution.* Averaging E[Y | X] over the bottom quarter gives
    50 + s + ρ(E[X | bottom] − 50). For a uniform skill percentile E[X | bottom] = 12.5, so the bottom quarter
    estimates 50 + s − 37.5ρ. With ρ = 0 every quarter estimates 50 + s: a flat line above the diagonal for the
    bottom and below it for the top, the famous picture with no insight in it at all.
-4. **Dawes's two thirds.** With a uniform prior on p and one observation (you agree), the posterior is Beta(2, 1),
+4. **Dawes's two thirds.** Dawes's false consensus: the share $p$ who agree is uniform on $[0, 1]$, and you agree. Show your posterior mean for $p$ is $2/3$, and compare it with Ross, Greene and House's estimates.
+
+   *Solution.* With a uniform prior on p and one observation (you agree), the posterior is Beta(2, 1),
    with mean 2/3. Ross, Greene and House's agreers estimated about 62% and refusers about 67% for their own choice:
    close to what an observer with one data point, themselves, should say.
-5. **The winner's curse.** Reported only when d̂ > 1.96σ, d̂ is a normal truncated below at 1.96σ, with mean
+5. **The winner's curse.** A study estimates $d$ with standard error $\sigma$ and reports it only if $\hat d / \sigma > 1.96$. For a true $d = 0.2$ and $\sigma = 0.31$, show that the expected reported $\hat d$ is about four times $d$.
+
+   *Solution.* Reported only when d̂ > 1.96σ, d̂ is a normal truncated below at 1.96σ, with mean
    d + σφ(a)/(1 − Φ(a)), where a = 1.96 − d/σ = 1.31. Then φ(a) = 0.169, 1 − Φ(a) = 0.095, and the mean is
    0.2 + 0.31 x 1.78 = 0.75: about 3.8 times the truth. The simulation's 0.78 differs because each study also
    estimates its own standard deviation.
-6. **One step of inverse planning.** The posterior is prior x likelihood, normalized. Equal likelihoods for A and C
+6. **One step of inverse planning.** In a gridworld, an agent's step is equally likely under goals A and C, and impossible under B. Show that the posterior ratio of A to C does not change, and that B drops to zero.
+
+   *Solution.* The posterior is prior x likelihood, normalized. Equal likelihoods for A and C
    multiply both by the same number, so their ratio is unchanged; a zero likelihood sends B to zero, and A and C
    split B's share in their old ratio.
-7. **★ Dissonance against self-perception.** Self-perception needs no arousal and works only where the attitude
+7. **★ Dissonance against self-perception.** Design an experiment that separates dissonance from self-perception, and say which result would favour each.
+
+   *Solution.* Self-perception needs no arousal and works only where the attitude
    was weak or ambiguous; dissonance predicts arousal, and change mainly for acts well outside the person's view.
    One design: have people write essays near or far from their own position, with high or low choice, and offer
    half a pill said to cause tension (a misattribution cue). Dissonance predicts that the pill removes the attitude

@@ -183,33 +183,43 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-**1. Surprisal is a change of belief.** If each analysis T fixes the words, then P(w_t | T, w_{<t}) is 1 when T is
+**1. Surprisal is a change of belief.** A reader holds a probability over analyses $T$. Show that $D_{\mathrm{KL}}(P(T \mid w_{\le t}) \,\|\, P(T \mid w_{<t})) = -\log P(w_t \mid w_{<t})$ when each analysis fixes the words.
+
+*Solution.* If each analysis T fixes the words, then P(w_t | T, w_{<t}) is 1 when T is
 consistent with w_t and 0 otherwise. By Bayes's rule P(T | w_{≤t}) = P(T | w_{<t}) 1[T fits w_t] / P(w_t | w_{<t}).
 So D_KL(P(T | w_{≤t}) ‖ P(T | w_{<t})) = Σ_T P(T | w_{≤t}) log [P(T | w_{≤t}) / P(T | w_{<t})] =
 Σ_{T fits w_t} P(T | w_{≤t}) log [1 / P(w_t | w_{<t})] = −log P(w_t | w_{<t}), since the posterior sums to one over
 the analyses that fit. This is Levy's (2008) result: the cost of a word is the amount by which it changes what the
 reader believes about the sentence, whatever grammar the beliefs are over.
 
-**2. The stream's transitional probabilities.** Inside a word, the syllable after the first is always the second and
+**2. The stream's transitional probabilities.** In a stream of four three-syllable words with no word repeated twice running, show that transitional probabilities are 1 inside words and $\tfrac{1}{3}$ across boundaries.
+
+*Solution.* Inside a word, the syllable after the first is always the second and
 after the second always the third, so P(next | this) = 1. The last syllable of word k is followed by the first
 syllable of the next word, which is one of the other three words, each equally likely when the next word is drawn
 uniformly with no repeat. The four first syllables are distinct, so each continuation has probability 1/3. (The
 estimates in a finite stream scatter around 1/3: in Psyche's 540 syllables they run from 0.21 to 0.40.)
 
-**3. How much the commonest words cover.** With frequencies f_r ∝ 1/r for r = 1, …, N, the k commonest words cover
+**3. How much the commonest words cover.** Under Zipf's law with exponent 1 and $N$ word types, show that the $k$ commonest words cover about $\ln k / \ln N$ of all tokens.
+
+*Solution.* With frequencies f_r ∝ 1/r for r = 1, …, N, the k commonest words cover
 H_k / H_N of the tokens, where H_n = Σ_{r≤n} 1/r = ln n + γ + O(1/n). So the share is (ln k + γ)/(ln N + γ) ≈
 ln k / ln N. With N = 60,000 types, the 100 commonest cover about 0.45 and the 1,000 commonest about 0.65: a reader
 who knows a thousand words still meets an unknown one every few lines, which is why vocabulary keeps growing for life.
 (The novels' exponent is 1.2, so their real coverage is higher.)
 
-**4. One unit's steady state.** In the interactive activation model a unit with positive net input n changes by
+**4. One unit's steady state.** For one unit of the interactive activation model with constant net input $n > 0$, find its steady activation, and say how decay and the ceiling share the work.
+
+*Solution.* In the interactive activation model a unit with positive net input n changes by
 Δa = n(M − a) − D(a − r), with maximum M, rest r and decay D. Setting Δa = 0 gives n(M − a) = D(a − r), so
 a* = (nM + Dr)/(n + D), a weighted average of the ceiling and the rest with weights n and D. Strong input pulls the
 unit towards M, but never past it, since the input's effect shrinks as a approaches M; decay pulls it back to rest in
 proportion to how far it has gone. With M = 1 and r = 0, a* = n/(n + D): doubling the input does not double the
 activation, which is what keeps a network of such units stable while letters and words excite each other.
 
-**5. Gold's argument.** Take the family of every finite language L_1 ⊂ L_2 ⊂ … (L_k the first k sentences) and their
+**5. Gold's argument.** Sketch why no learner can identify every language in a family that contains all finite languages and one infinite one, from examples alone.
+
+*Solution.* Take the family of every finite language L_1 ⊂ L_2 ⊂ … (L_k the first k sentences) and their
 union L_∞. Suppose a learner identifies every finite language in the limit. Build a text: give sentences of L_1
 until the learner guesses L_1 (it must, eventually, since this could be a text for L_1); then add the second
 sentence and repeat it until the learner guesses L_2 (it must, since this could be a text for L_2); and so on. The
@@ -218,13 +228,17 @@ infinitely often and never settles on L_∞. So no learner identifies the whole 
 Horning's answer is that probabilities change the problem: a learner that knows sentences are sampled can notice
 what never comes, and the simplest grammar that fits is identified with probability one.
 
-**6. Spillover two words back.** Adding the surprisal of the word two back to the regression on the ten stories
+**6. Spillover two words back.** With `explainer.psychology.opendata`: add the surprisal of the word two back to the reading-time regression. Does the cost spill over further?
+
+*Solution.* Adding the surprisal of the word two back to the regression on the ten stories
 gives 1.18 ms per bit on the next word (s.e. 0.08) and 0.43 ms per bit two words on (s.e. 0.08), with the word's own
 surprisal still near 0 (0.03, s.e. 0.11). The cost spills over further but fades. Self-paced reading is known for
 this: readers press the key before they have finished with a word. Eye movements show more of the cost on the word
 itself.
 
-**7. A nonce-verb study.** Words and rules says irregular forms are stored and generalize by similarity, while *-ed*
+**7. ★ A nonce-verb study.** Design a nonce-verb study (*spling*, *plip*) whose results a words-and-rules account and a single-network account must predict differently.
+
+*Solution.* Words and rules says irregular forms are stored and generalize by similarity, while *-ed*
 is a rule that applies to anything. A single network says both kinds generalize by similarity. So vary two things
 independently: how similar a made-up verb is to irregular families (*spling*, like *sing* and *cling*, against
 *ploamph*, like nothing) and to regular ones (*plip*, like *slip* and *flip*). Both accounts predict that *splung* is an

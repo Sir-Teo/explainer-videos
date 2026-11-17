@@ -131,20 +131,34 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Trials for 0.8.** Spearman-Brown: the factor is (0.8/0.2)/(0.3/0.7) = 9.3, so about 560 trials per condition.
-2. **Attenuation.** 0.4 x sqrt(0.5 x 0.8) = 0.4 x 0.63 = 0.25.
-3. **A leaky pipeline.** The features were chosen because they correlated with the outcome in every patient,
+1. **Trials for 0.8.** A task's retest reliability is 0.3 with 60 trials per condition. How many trials for 0.8?
+
+   *Solution.* Spearman-Brown: the factor is (0.8/0.2)/(0.3/0.7) = 9.3, so about 560 trials per condition.
+2. **Attenuation.** A true correlation of 0.4; reliabilities 0.5 and 0.8. The expected observed correlation?
+
+   *Solution.* 0.4 x sqrt(0.5 x 0.8) = 0.4 x 0.63 = 0.25.
+3. **A leaky pipeline.** Features were chosen on all patients, then the model was cross-validated. Why is the estimate too high, and how do you fix the pipeline?
+
+   *Solution.* The features were chosen because they correlated with the outcome in every patient,
    including the ones later held out, so each held-out fold has already been looked at. Put the selection (and any
    tuning) inside each training fold, and test the final model on an independent sample.
-4. **A stability check.** An adjusted Rand index of 0.15 means the two halves cut the sample in nearly unrelated
+4. **A stability check.** Two halves of a sample give clusters that agree with an adjusted Rand index of 0.15. What do you conclude, and what null would you compare against?
+
+   *Solution.* An adjusted Rand index of 0.15 means the two halves cut the sample in nearly unrelated
    ways: the clusters are not reproducible. Compare against the same pipeline run on data with the covariance kept
    and the clusters removed (for example, draws from a single Gaussian with the sample's covariance); if real data
    are no more stable than that null, there is no evidence of types.
-5. **An interaction of 0.2.** A main effect of 0.2 needs about 4 x (1.96 + 0.84)^2 / 0.2^2 = 785 patients; an
+5. **An interaction of 0.2.** A choice rule's benefit is an interaction of size 0.2. About how many patients to detect it?
+
+   *Solution.* A main effect of 0.2 needs about 4 x (1.96 + 0.84)^2 / 0.2^2 = 785 patients; an
    interaction of the same size about four times that, roughly 3,100.
-6. **A small study's correlation.** Fisher's z: atanh(0.6) = 0.69, standard error 1/sqrt(22) = 0.21, so 0.69 +/-
+6. **A small study's correlation.** A phone feature correlates 0.6 with mood in 25 people. Give a 95% interval for the correlation.
+
+   *Solution.* Fisher's z: atanh(0.6) = 0.69, standard error 1/sqrt(22) = 0.21, so 0.69 +/-
    0.42, and back-transformed 0.27 to 0.80. The interval is compatible with a modest correlation.
-7. **A target, tested.** Measure model-based control with a reliability-tuned task and a hierarchical model, at
+7. ★ **A target, tested.** Design a study to test whether model-based control is a treatment target: reliability, intervention, mediation.
+
+   *Solution.* Measure model-based control with a reliability-tuned task and a hierarchical model, at
    several sessions (aim for retest reliability of 0.8); randomize patients with compulsive symptoms to a training
    or treatment expected to change it, against an active control; measure the parameter and symptoms weekly;
    pre-register the mediation analysis (does the parameter change before symptoms, and does it carry the effect?);

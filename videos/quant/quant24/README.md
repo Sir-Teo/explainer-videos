@@ -47,18 +47,42 @@ Research pause: for N=2, if the only nonzero cross covariance is `Cov(x_1,r_2)=c
 
 ## Twelve problems, with worked solutions
 
-1. **Squared-Sharpe gain.** Write `R=α+Bf+ε`, with mean-zero ε orthogonal to f. Transform the joint portfolio space to `(f,R-Bf)=(f,α+ε)`. The second block has **mean α**, not mean-zero ε, and covariance Σ. With matching moments, cash convention and unrestricted weights, block orthogonality gives `SR²(f,R)=μ_f'Ω⁻¹μ_f+α'Σ⁻¹α`. The gain is `α'Σ⁻¹α`; there is no additional `1+SR_f²` divisor in this identity. That divisor belongs in the GRS statistic.
-2. **One asset and covariance conventions.** Let `ν=T-K-1`, `s_e²=U'U/ν`, `Ω_ML=F_c'F_c/T` and `q=f̄'Ω_ML⁻¹f̄`. Then `Var_OLS(α̂)=s_e²(1+q)/T`, so `t_OLS²=Tα̂²/[s_e²(1+q)]`. Standard GRS uses `Σ_ML=(ν/T)s_e²`; for N=1, `F=να̂²/[Σ_ML(1+q)]=t_OLS²` exactly. The preserved mixed-convention proxy instead satisfies `J/t_OLS²=(ν/T)(1+q)/[1+(T-1)q/T]`, not merely `ν/T`. This is a theoretical algebra exercise, not a corrected historical regression.
-3. **2×3 arithmetic.** `SMB=(1.2+1.0+1.5)/3-(0.6+0.8+1.1)/3=0.40%`. `HML=(1.5+1.1)/2-(1.2+0.6)/2=0.40%`. This is one cross-section's cell arithmetic, not a production-factor replication.
-4. **Gordon comparison.** With constant ROE/growth, `r>g`, clean-surplus payout assumptions and an appropriate terminal condition, `M/B=Σ(ROE-g)(1+g)^(τ-1)/(1+r)^τ=(ROE-g)/(r-g)`. With ROE 12%, g 5%, B/M 0.8: `1.25=0.07/(r-0.05)`, hence **r=10.6%**. The finite 200-year scene toy is only an approximation to this infinite sum.
-5. **Mix.** Mean 4.5%; variance `¼(0.01+0.01-1.2×0.01)=0.002`; volatility 4.472%; Sharpe **1.006**, versus 0.4 and 0.5. Assumed fixed moments and costless rebalancing; no general dominance guarantee.
-6. **Rebound beta.** `β_UMD=0.8-1.8=-1`. A 15% market return contributes **−15%** under the stated fixed-beta linear relation, before alpha, residual news and costs; it is not a realised-return guarantee.
-7. **Monthly scaling.** Exposure `min(3,0.12/0.40)=0.30`; a −34% factor month contributes **−10.2%**, excluding cash/funding/costs. The volatility estimate must precede the return; target volatility is not guaranteed realised volatility.
-8. **BAB.** `0.6%/0.7-0.8%/1.5=0.32381%` monthly. Multiplying by 12 gives **3.886% arithmetic annualisation**, not a compounded annual return. Estimated beta is `0.7/0.7-1.5/1.5=0`; realised beta, leverage and funding risk can differ.
-9. **Years.** Under iid returns and a stable known premium/volatility, `t≈SR√Y`. Thus `Y=(2/0.45)²=19.75` years and `SR=2/√5=0.8944` for five years. These are precision approximations, not power guarantees or selection-adjusted significance thresholds.
-10. **Green/brown multiplicative surprise.** With a surprise multiplier applied after baseline return, green `(1.05)(1.10)-1=15.5%`; brown `(1.07)(0.95)-1=1.65%`. The price shock alone **does not determine next-year expected returns**. They remain 5%/7% only under an additional fixed-conditional-return law after the level shift; other cash-flow or discount-rate changes can produce different expectations. The chart's additive shock toy uses another explicitly stated convention.
-11. **Exact sample decomposition.** Use covariance denominator T. `π̄=(1/N)Σ_i overline(x_i r_i)-overline(x̄_t r̄_t)`. Expand each product into covariance plus means, and use `Cov(x̄_t,r̄_t)=(1/N²)Σ_ij Cov(x_j,r_i)`. The diagonal coefficient is `(N-1)/N²`, off-diagonal coefficient `-1/N²`, and means contribute `(1/N)Σ_i(μ_xi-μ_x)(μ_ri-μ_r)`. This holds for the specified log-formation/simple-holding data without a causal interpretation.
-12. **Known population.** Let `r_it=μ_i+f_t+e_it`, equal unit factor loadings, iid f independent of all idiosyncratic innovations, and independent stationary `e_it=φe_i,t-1+z_it`. For one-period simple-return formation, own covariance is `φσ_z²/(1-φ²)`; cross covariance is zero in the population. The own contribution is `(N-1)φσ_z²/[N(1-φ²)]`; the mean contribution is the cross-sectional variance of μ. The equal-loading common factor cancels from demeaned zero-sum weights **path by path**. Finite estimates of the individual components need not equal their population values. Unequal loadings or serial dependence change the result.
+1. **Squared-Sharpe gain.** With matching moments and unrestricted portfolio weights, show that the GRS numerator $\hat\alpha^\top\hat\Sigma^{-1}\hat\alpha$ equals $SR^2(f, R) - SR^2(f)$, the gain in the squared maximum Sharpe ratio from adding the test assets.
+
+   *Solution.* Write `R=α+Bf+ε`, with mean-zero ε orthogonal to f. Transform the joint portfolio space to `(f,R-Bf)=(f,α+ε)`. The second block has **mean α**, not mean-zero ε, and covariance Σ. With matching moments, cash convention and unrestricted weights, block orthogonality gives `SR²(f,R)=μ_f'Ω⁻¹μ_f+α'Σ⁻¹α`. The gain is `α'Σ⁻¹α`; there is no additional `1+SR_f²` divisor in this identity. That divisor belongs in the GRS statistic.
+2. **One asset and covariance conventions.** For $N=1$, use ML residual and factor covariance in standard GRS; show $F=t_{OLS}^2$. Why does the preserved mixed-convention proxy differ?
+
+   *Solution.* Let `ν=T-K-1`, `s_e²=U'U/ν`, `Ω_ML=F_c'F_c/T` and `q=f̄'Ω_ML⁻¹f̄`. Then `Var_OLS(α̂)=s_e²(1+q)/T`, so `t_OLS²=Tα̂²/[s_e²(1+q)]`. Standard GRS uses `Σ_ML=(ν/T)s_e²`; for N=1, `F=να̂²/[Σ_ML(1+q)]=t_OLS²` exactly. The preserved mixed-convention proxy instead satisfies `J/t_OLS²=(ν/T)(1+q)/[1+(T-1)q/T]`, not merely `ν/T`. This is a theoretical algebra exercise, not a corrected historical regression.
+3. **2×3 arithmetic.** Six portfolios return SL 1.2%, SM 1.0%, SH 1.5%, BL 0.6%, BM 0.8%, BH 1.1% in a month. Compute SMB and HML.
+
+   *Solution.* `SMB=(1.2+1.0+1.5)/3-(0.6+0.8+1.1)/3=0.40%`. `HML=(1.5+1.1)/2-(1.2+0.6)/2=0.40%`. This is one cross-section's cell arithmetic, not a production-factor replication.
+4. **Gordon comparison.** With constant ROE, growth $g$ and discount rate $r$, show $M/B = (\text{ROE} - g)/(r - g)$. With ROE 12%, $g$ = 5%, what $r$ gives B/M = 0.8?
+
+   *Solution.* With constant ROE/growth, `r>g`, clean-surplus payout assumptions and an appropriate terminal condition, `M/B=Σ(ROE-g)(1+g)^(τ-1)/(1+r)^τ=(ROE-g)/(r-g)`. With ROE 12%, g 5%, B/M 0.8: `1.25=0.07/(r-0.05)`, hence **r=10.6%**. The finite 200-year scene toy is only an approximation to this infinite sum.
+5. **Mix.** Value and momentum: means 4% and 5%, volatilities 10% each, correlation $-0.6$. Find the Sharpe ratio of the 50/50 mix.
+
+   *Solution.* Mean 4.5%; variance `¼(0.01+0.01-1.2×0.01)=0.002`; volatility 4.472%; Sharpe **1.006**, versus 0.4 and 0.5. Assumed fixed moments and costless rebalancing; no general dominance guarantee.
+6. **Rebound beta.** After a bear market, winners have beta 0.8 and losers 1.8. The market rises 15% in a month. What does that do to UMD, before any stock-specific news?
+
+   *Solution.* `β_UMD=0.8-1.8=-1`. A 15% market return contributes **−15%** under the stated fixed-beta linear relation, before alpha, residual news and costs; it is not a realised-return guarantee.
+7. **Monthly scaling.** Momentum's realised volatility is 40% and the target 12%. What weight does this monthly volatility rule hold, and what is the scaled loss in a month of $-34\%$?
+
+   *Solution.* Exposure `min(3,0.12/0.40)=0.30`; a −34% factor month contributes **−10.2%**, excluding cash/funding/costs. The volatility estimate must precede the return; target volatility is not guaranteed realised volatility.
+8. **BAB.** BAB: $\beta_L = 0.7$, $\beta_H = 1.5$, monthly excess returns 0.6% and 0.8%. Compute the BAB return and its beta.
+
+   *Solution.* `0.6%/0.7-0.8%/1.5=0.32381%` monthly. Multiplying by 12 gives **3.886% arithmetic annualisation**, not a compounded annual return. Estimated beta is `0.7/0.7-1.5/1.5=0`; realised beta, leverage and funding risk can differ.
+9. **Years.** How many years does a Sharpe ratio of 0.45 need to reach $t = 2$? What Sharpe ratio reaches $t = 2$ in a five-year hold-out?
+
+   *Solution.* Under iid returns and a stable known premium/volatility, `t≈SR√Y`. Thus `Y=(2/0.45)²=19.75` years and `SR=2/√5=0.8944` for five years. These are precision approximations, not power guarantees or selection-adjusted significance thresholds.
+10. **Green/brown multiplicative surprise.** A green stock is priced to earn 5%, a brown one 7%. A climate-concern shock raises the green price 10% and lowers the brown 5% in one year. Use multiplicative surprise returns. What extra assumption fixes next-year expected returns?
+
+    *Solution.* With a surprise multiplier applied after baseline return, green `(1.05)(1.10)-1=15.5%`; brown `(1.07)(0.95)-1=1.65%`. The price shock alone **does not determine next-year expected returns**. They remain 5%/7% only under an additional fixed-conditional-return law after the level shift; other cash-flow or discount-rate changes can produce different expectations. The chart's additive shock toy uses another explicitly stated convention.
+11. **Exact sample decomposition.** (qual) Derive Lo and MacKinlay's identity: for $w_i = (x_i - \bar x)/N$, the average of $\sum_i w_ir_i$ equals own covariances times $(N - 1)/N^2$, minus cross covariances over $N^2$, plus the covariance of the means.
+
+    *Solution.* Use covariance denominator T. `π̄=(1/N)Σ_i overline(x_i r_i)-overline(x̄_t r̄_t)`. Expand each product into covariance plus means, and use `Cov(x̄_t,r̄_t)=(1/N²)Σ_ij Cov(x_j,r_i)`. The diagonal coefficient is `(N-1)/N²`, off-diagonal coefficient `-1/N²`, and means contribute `(1/N)Σ_i(μ_xi-μ_x)(μ_ri-μ_r)`. This holds for the specified log-formation/simple-holding data without a causal interpretation.
+12. **Known population.** (qual) For $N$ assets with equal unit loadings on a common iid factor and independent AR(1) idiosyncratic parts, compute each term, and show the factor contributes nothing to the profit.
+
+    *Solution.* Let `r_it=μ_i+f_t+e_it`, equal unit factor loadings, iid f independent of all idiosyncratic innovations, and independent stationary `e_it=φe_i,t-1+z_it`. For one-period simple-return formation, own covariance is `φσ_z²/(1-φ²)`; cross covariance is zero in the population. The own contribution is `(N-1)φσ_z²/[N(1-φ²)]`; the mean contribution is the cross-sectional variance of μ. The equal-loading common factor cancels from demeaned zero-sum weights **path by path**. Finite estimates of the individual components need not equal their population values. Unequal loadings or serial dependence change the result.
 
 ## Papers, chapter by chapter
 

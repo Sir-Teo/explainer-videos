@@ -234,38 +234,56 @@ parallel processes; `ppo_seeds` and `ppo_costs` collect them.
 
 ## Problems, with solutions
 
-1. **Kelly for any odds.** g(f) = p log(1 + bf) + q log(1 − f). g′(f) = pb/(1 + bf) − q/(1 − f) = 0 gives
+1. **Kelly for any odds.** For a bet that pays $b$ per unit with probability $p$, derive $f^* = p - q/b$ and show that, for a small edge, growth is zero again at about $2f^*$.
+
+   *Solution.* g(f) = p log(1 + bf) + q log(1 − f). g′(f) = pb/(1 + bf) − q/(1 − f) = 0 gives
    pb(1 − f) = q(1 + bf), so f* = (pb − q)/b = p − q/b. For a small edge, expand to second order:
    g(f) ≈ f(pb − q) − f²(pb² + q)/2. This is zero again at f ≈ 2(pb − q)/(pb² + q). Near fair odds pb² + q ≈ b, so this is approximately 2(pb − q)/b = 2f*.
-2. **Merton's value function.** HJB: V_t + max_π {(r + π(μ − r))wV_w + ½π²σ²w²V_ww} = 0. Substitute
+2. **Merton's value function.** Write the HJB equation for Merton's problem and show that $V = e^{a(T - t)}\,w^{1-\gamma}/(1 - \gamma)$ solves it with $\pi^* = (\mu - r)/(\gamma\sigma^2)$; find $a$.
+
+   *Solution.* HJB: V_t + max_π {(r + π(μ − r))wV_w + ½π²σ²w²V_ww} = 0. Substitute
    V = e^{a(T−t)}w^{1−γ}/(1 − γ), so that V_t = −aV, wV_w = (1 − γ)V and w²V_ww = −γ(1 − γ)V. Dividing by (1 − γ)V,
    the HJB becomes −a/(1 − γ) + max_π {r + π(μ − r) − ½γπ²σ²} = 0. The maximum is at π* = (μ − r)/(γσ²), where it
    equals r + (μ − r)²/(2γσ²). So a = (1 − γ)(r + (μ − r)²/(2γσ²)), and V(T) = u(w).
-3. **Fractional Kelly in constant-coefficient, continuously rebalanced GBM.** Excess growth is g(f) − r = f(μ − r) − ½f²σ², maximized at f* = (μ − r)/σ² with
+3. **Fractional Kelly in constant-coefficient, continuously rebalanced GBM.**
+
+   *Solution.* Excess growth is g(f) − r = f(μ − r) − ½f²σ², maximized at f* = (μ − r)/σ² with
    g* − r = (μ − r)²/(2σ²). At f = cf* it is c(μ − r)²/σ² − ½c²(μ − r)²/σ² = (2c − c²)(g* − r). The volatility is
    cf*σ. At c = ½: 75% of the growth and half the volatility. At c = 2: none of the growth and twice the volatility.
-4. **The secretary.** If the best candidate is at position j > k, the rule picks them exactly when the best of the
+4. **The secretary.** Show that the secretary rule's success probability tends to $-x\log x$ with $x = k/n$, maximized at $x = 1/e$.
+
+   *Solution.* If the best candidate is at position j > k, the rule picks them exactly when the best of the
    first j − 1 lies among the first k, which has probability k/(j − 1). So P(k) = (k/n)Σ_{j=k+1}^{n} 1/(j − 1). With
    x = k/n this is a Riemann sum for x∫_x^1 dt/t = −x log x. Its derivative, −log x − 1, is zero at x = 1/e, where
    the value is 1/e ≈ 36.8%. For n = 100 the best k is 37, with 37.1%.
-5. **Peters' coin.** Staking a fraction f each flip gives g(f) = ½log(1 + 0.5f) + ½log(1 − 0.4f).
+5. **Peters' coin.** In Peters' coin (+50%, $-40\%$), what fraction of wealth should you stake each flip, and at what growth rate?
+
+   *Solution.* Staking a fraction f each flip gives g(f) = ½log(1 + 0.5f) + ½log(1 − 0.4f).
    g′(f) = 0.25/(1 + 0.5f) − 0.2/(1 − 0.4f) = 0 gives 0.25 − 0.1f = 0.2 + 0.1f, so f* = 0.25. Then
    g = ½log(1.125 × 0.9) = ½log 1.0125 ≈ +0.62% a flip, where staking everything loses ½log(1/0.9) ≈ 5.3%. Staking a
    quarter turns a losing gamble into a growing one.
-6. **Smooth fit for the perpetual put.** Exercising at level b gives V_b(S) = (K − b)(S/b)^{−β} for S ≥ b, with
+6. **Smooth fit for the perpetual put.** For the perpetual American put, show that maximizing $(K - b)\,b^{\beta}$ over $b$ gives $b^* = \beta K/(1 + \beta)$, and that this is equivalent to smooth fit $V'(b^*) = -1$.
+
+   *Solution.* Exercising at level b gives V_b(S) = (K − b)(S/b)^{−β} for S ≥ b, with
    β = 2r/σ². For fixed S this is S^{−β}(K − b)b^{β}, so maximize h(b) = (K − b)b^{β}: h′(b) = b^{β−1}(β(K − b) − b) = 0
    gives b* = βK/(1 + β). The slope of V_b at S = b is −β(K − b)/b, which equals −1 exactly when β(K − b) = b, the same
    condition: choosing the best boundary and pasting smoothly onto the payoff are one equation. With r = 5%, σ = 30%,
    K = 100: β = 1.11, b* = 52.6, V(100) = 47.4 × (100/52.6)^{−1.11} = 23.2.
-7. **The liquidating crowd.** With φ = 0 the equation is Q″ + aQ′ = 0, a = κ(N − 1)/(2Nη), so Q′ = Ce^{−at} and
+7. **The liquidating crowd.** For $N$ symmetric traders with $\phi = 0$, solve $2\eta Q'' + \kappa\frac{N-1}{N}Q' = 0$, $Q(0) = 1$, $Q(T) = 0$, and find the share sold by $T/5$ when $\kappa T/(2\eta) = 2$ and $N \to \infty$.
+
+   *Solution.* With φ = 0 the equation is Q″ + aQ′ = 0, a = κ(N − 1)/(2Nη), so Q′ = Ce^{−at} and
    Q(t) = (e^{−at} − e^{−aT})/(1 − e^{−aT}) with Q(0) = 1, Q(T) = 0. As N → ∞, aT = κT/(2η) = 2, and the share sold by
    T/5 is 1 − Q(T/5) = (1 − e^{−0.4})/(1 − e^{−2}) = 0.3297/0.8647 = 38.1%, against 20% for one trader alone (a = 0,
    a straight line) and 28.7% for two (aT = 1).
-8. **(qual) The cost of an estimated edge.** CE(π) = πμ − ½γπ²σ². With π = cμ̂/(γσ²), E[π]μ = cμ²/(γσ²) = cθ²/γ and
+8. **(qual) The cost of an estimated edge.** (qual) With $\hat\mu \sim N(\mu, \sigma^2/T)$ and $\sigma$ known, show that the expected certainty equivalent of $c\,\hat\mu/(\gamma\sigma^2)$ is $[c\theta^2 - c^2(\theta^2 + 1/T)/2]/\gamma$, that the plug-in loses in expectation when $T < 1/\theta^2$, and that $c^* = T\theta^2/(T\theta^2 + 1)$.
+
+   *Solution.* CE(π) = πμ − ½γπ²σ². With π = cμ̂/(γσ²), E[π]μ = cμ²/(γσ²) = cθ²/γ and
    ½γσ²E[π²] = c²E[μ̂²]/(2γσ²) = c²(μ² + σ²/T)/(2γσ²) = c²(θ² + 1/T)/(2γ). So E CE = [cθ² − ½c²(θ² + 1/T)]/γ. At c = 1
    this is (θ² − 1/T)/(2γ), negative exactly when T < 1/θ². The derivative in c vanishes at c* = θ²/(θ² + 1/T) =
    Tθ²/(Tθ² + 1), where E CE = (θ²/2γ)·c* ≥ 0, strictly positive for θ ≠ 0. With θ = 0.4, T = 5, γ = 1: plug-in −2.0%, c* = 0.44 earning 3.6%.
-9. **(qual) Estimating the variance too.** For iid normal returns and n > 5, (n − 1)s²/σ² ~ χ²_k with k = n − 1, independent of
+9. **(qual) Estimating the variance too.** (qual) Now estimate $\sigma^2$ by $s^2$ from $n$ iid normal returns. Using $\mathbb E[\sigma^2/s^2] = (n - 1)/(n - 3)$ and $\mathbb E[\sigma^4/s^4] = (n - 1)^2/((n - 3)(n - 5))$, find the plug-in's expected certainty equivalent, and show it is negative for $\theta = 0.4$, $T = 5$ years of monthly data.
+
+   *Solution.* For iid normal returns and n > 5, (n − 1)s²/σ² ~ χ²_k with k = n − 1, independent of
    μ̂. For X ~ χ²_k, E[1/X] = 1/(k − 2) and E[1/X²] = 1/((k − 2)(k − 4)), so E[σ²/s²] = (n − 1)/(n − 3) = a₁ and
    E[σ⁴/s⁴] = (n − 1)²/((n − 3)(n − 5)) = a₂. With π̂ = μ̂/(γs²), E CE = [a₁θ² − ½a₂(θ² + 1/T)]/γ. For 60 months,
    a₁ = 59/57 = 1.035 and a₂ = 3481/3135 = 1.110, so at θ = 0.4: 1.035 × 0.16 − 1.110 × 0.18 = −3.4% a year, against

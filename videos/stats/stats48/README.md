@@ -197,34 +197,46 @@ All fourteen scenes and six solutions were read. Fourteen numerical inputs were 
 
 ## Problems and solutions
 
-1. **Symmetrization.**
+1. **Symmetrization.** Show that $E\,\|P_n - P\|_{\mathcal F} \le 2\,\mathcal R_n(\mathcal F)$ by introducing a ghost sample and random signs.
+
+   *Solution.*
    - Let X′ be an independent copy of the sample. Since P f = E′ P′_n f, Jensen gives
      E sup|P_n f − P f| ≤ E sup|P_n f − P′_n f|.
    - Each f(X_i) − f(X′_i) is symmetric and the pairs are independent, so multiplying by independent signs ε_i leaves
      the joint law unchanged.
    - Then sup|Σ ε_i (f(X_i) − f(X′_i))| ≤ sup|Σ ε_i f(X_i)| + sup|Σ ε_i f(X′_i)|, and the two terms have the same mean:
      E‖P_n − P‖ ≤ 2R_n.
-2. **Intervals.**
+2. **Intervals.** Show that intervals on the line pick out exactly $n(n+1)/2 + 1$ subsets of $n$ distinct points, so their VC dimension is 2.
+
+   *Solution.*
    - Sort the points. An interval picks out a contiguous run x_(i), …, x_(j), and every run is achievable. There are
      n(n + 1)/2 runs plus the empty set.
    - At n = 2 that is 4 = 2²: two points are shattered. At n = 3 it is 7 < 8: the outer two points without the middle
      one cannot be picked out. So the VC dimension is 2.
-3. **Brackets for half-lines.**
+3. **Brackets for half-lines.** Build $\lceil 1/\varepsilon^2 \rceil$ brackets for the half-lines in $L_2(P)$, and deduce the Glivenko–Cantelli theorem.
+
+   *Solution.*
    - Choose −∞ = t₀ < t₁ < … < t_k = ∞ with F(t_j) − F(t_{j−1}) ≤ ε², which needs k = ⌈1/ε²⌉ (for continuous F).
    - The brackets [1{x ≤ t_{j−1}}, 1{x ≤ t_j}] have L₂(P) size at most ε and cover every 1{x ≤ t} for t in the corresponding closed interval, using endpoint conventions at ±∞. The continuous-F construction is sufficient here; for a general distribution use brackets allowing its atoms.
    - So sup_t (F_n(t) − F(t)) ≤ max_j (F_n(t_j−) − F(t_j−)) + ε², and similarly below. The maximum of finitely many
      terms goes to 0 a.s. by the strong law; since ε is arbitrary, sup|F_n − F| → 0 a.s.
-4. **Dudley's integral for Brownian motion.**
+4. **Dudley's integral for Brownian motion.** For Brownian motion with $d(s,t) = \sqrt{|s-t|}$, show $N(\varepsilon) \le 1/\varepsilon^2 + 1$ and evaluate Dudley's integral.
+
+   *Solution.*
    - In d(s, t) = √|s − t| a ball of radius ε contains an interval of length 2ε², so ⌈1/(2ε²)⌉ ≤ 1/ε² + 1 balls cover
      [0, 1].
    - ∫₀¹ √(log(1/ε²)) dε = √2 ∫₀¹ √(log(1/ε)) dε = √2 Γ(3/2) = √(π/2), which is finite: sample paths are continuous
      and E sup B is finite (in fact √(2/π)).
-5. **The mean absolute deviation's footprint.**
+5. **The mean absolute deviation's footprint.** For $\theta = E|X - c|$ with $c$ the sample mean, find the influence function and the variance for Exp(1) data.
+
+   *Solution.*
    - For finite E|X| and no atom at c, θ(c) = E|X − c| has θ′(c) = 2F(c) − 1. This is mean absolute deviation, not the robust median absolute deviation. With ĉ = x̄, θ̂ − θ ≈ (P_n − P)|X − μ| + θ′(μ)(x̄ − μ), so
      IF(x) = |x − μ| − θ + (2F(μ) − 1)(x − μ).
    - For Exp(1), μ = 1, θ = 2/e, 2F(1) − 1 = 1 − 2/e. Var|X − 1| = E(X − 1)² − θ² = 1 − 4/e² = 0.459;
      Cov(|X − 1|, X − 1) = 0.472 (by quadrature). So n·Var = 0.459 + 2(0.264)(0.472) + 0.264² = 0.778.
-6. **The estimated-parameter KS law is parameter-free.**
+6. **The estimated-parameter KS law is parameter-free.** Show that the law of $D_n$ with $\hat\mu$, $\hat\sigma$ plugged in does not depend on $(\mu, \sigma)$ for normal data.
+
+   *Solution.*
    - Write X_i = μ + σZ_i. Then x̄ = μ + σz̄ and s = σ s_z, so (X_i − x̄)/s = (Z_i − z̄)/s_z.
    - D = sup_x |F_n(x) − Φ((x − x̄)/s)| depends only on these standardized values (substitute x = μ + σu), hence only on
      Z: its law is the same for every (μ, σ).

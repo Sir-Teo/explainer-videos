@@ -130,20 +130,32 @@ python tools/lecture_length.py stats58 --floor 50
 
 ## Problems and solutions
 
-1. **Wald's bound.** On {reject}, Λ_N ≥ A. Then P₁(reject) = E₀[Λ_N; reject] ≥ A P₀(reject), so P₀(reject) ≤
+1. **Wald's bound.** Show that Wald's thresholds give $P_0(\text{reject}) \le \alpha/(1 - \beta)$, by a change of measure.
+
+   *Solution.* On {reject}, Λ_N ≥ A. Then P₁(reject) = E₀[Λ_N; reject] ≥ A P₀(reject), so P₀(reject) ≤
    P₁(reject)/A ≤ 1/A = α/(1 − β).
-2. **Wald's identity.** For IID integrable increments and finite EN, S_N = Σ_i Z_i 1{N ≥ i}, and {N ≥ i} is determined by Z_1, …, Z_{i−1}, so it is independent of
+2. **Wald's identity.** Prove Wald's identity $E[S_N] = E[N]\,E[Z_1]$ for a stopping time with $E N < \infty$.
+
+   *Solution.* For IID integrable increments and finite EN, S_N = Σ_i Z_i 1{N ≥ i}, and {N ≥ i} is determined by Z_1, …, Z_{i−1}, so it is independent of
    Z_i. Hence E S_N = Σ_i E Z_i P(N ≥ i) = E Z₁ Σ_i P(N ≥ i) = E Z₁ E N, the exchange justified by Σ E|Z_i| 1{N ≥ i} =
    E|Z₁| E N < ∞.
-3. **Ville.** Let τ = inf{t: M_t ≥ 1/α} ∧ T. By optional stopping at the bounded time τ, 1 = E M_τ ≥ (1/α) P(max_{t≤T}
+3. **Ville.** Prove Ville's inequality $P(\sup_t M_t \ge 1/\alpha) \le \alpha$ for a nonnegative martingale with $M_0 = 1$.
+
+   *Solution.* Let τ = inf{t: M_t ≥ 1/α} ∧ T. By optional stopping at the bounded time τ, 1 = E M_τ ≥ (1/α) P(max_{t≤T}
    M_t ≥ 1/α). Let T → ∞ (monotone convergence).
-4. **Calibrators and merging.** For 0<κ<1, f_κ is decreasing, and ∫₀¹ κp^{κ−1} dp = 1, so E f_κ(P) ≤ 1 whenever P is
+4. **Calibrators and merging.** Show that $f_\kappa(p) = \kappa p^{\kappa - 1}$ is a calibrator, and that the mean of e-values is an e-value.
+
+   *Solution.* For 0<κ<1, f_κ is decreasing, and ∫₀¹ κp^{κ−1} dp = 1, so E f_κ(P) ≤ 1 whenever P is
    super-uniform (integrate f_κ against the distribution of P, using that f_κ is decreasing). For e-values E_1, …, E_K,
    E[(1/K) Σ E_k] = (1/K) Σ E E_k ≤ 1, with no assumption on dependence.
-5. **Robbins's mixture.** ∫ exp(λS − λ²t/2) φ_τ(λ) dλ = (1 + tτ²)^{−1/2} exp(τ²S²/(2(1 + tτ²))). Setting it < 1/α and
+5. **Robbins's mixture.** Derive Robbins's normal-mixture confidence sequence from the mixture martingale.
+
+   *Solution.* ∫ exp(λS − λ²t/2) φ_τ(λ) dλ = (1 + tτ²)^{−1/2} exp(τ²S²/(2(1 + tτ²))). Setting it < 1/α and
    solving gives S² < ((1 + tτ²)/τ²)(log(1 + tτ²) + 2 log(1/α)); divide by t² for the mean. Ville makes it hold at all
    t at once.
-6. **e-BH.** If H_i is rejected, e_i ≥ m/(αR), so 1{i rejected}/(R ∨ 1) ≤ α e_i/m. Summing over nulls and taking
+6. **e-BH.** Show that e-BH controls the FDR at $\alpha m_0/m$ under arbitrary dependence.
+
+   *Solution.* If H_i is rejected, e_i ≥ m/(αR), so 1{i rejected}/(R ∨ 1) ≤ α e_i/m. Summing over nulls and taking
    expectations, FDR ≤ (α/m) Σ_{i null} E e_i ≤ α m₀/m.
 
 ## Glossary

@@ -128,17 +128,31 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **The placebo effect.** Placebo against no treatment: 40% - 30% = 10 points. The 40% against baseline includes
+1. **The placebo effect.** Placebo against no treatment: 40% and 30% improve. Placebo against baseline: 40%. Which number is the placebo effect?
+
+   *Solution.* Placebo against no treatment: 40% - 30% = 10 points. The 40% against baseline includes
    natural recovery and regression to the mean.
-2. **Pain as inference.** The weight on expectation is (1/4)/(1/4 + 1) = 0.2; felt = 0.2 x 5 + 0.8 x 7 = 6.6.
-3. **Cases prevented.** 11 x 0.58 = 6.4 cases per 100 person-years.
-4. **Little's law.** Places in use = arrivals x duration = 80 x 10 = 800 at once (if everyone needs therapy).
-5. **Adherence.** Half the people get half the risk: 0.5 x 1 + 0.5 x 0.5 = 0.75, a 25% reduction in everyone
+2. **Pain as inference.** Pain as inference: stimulus 7, expectation 5, sensory SD 1, prior SD 2. The felt intensity?
+
+   *Solution.* The weight on expectation is (1/4)/(1/4 + 1) = 0.2; felt = 0.2 x 5 + 0.8 x 7 = 6.6.
+3. **Cases prevented.** Diabetes: 11 cases per 100 person-years on placebo, 58% fewer on lifestyle. Cases prevented per 100 person-years?
+
+   *Solution.* 11 x 0.58 = 6.4 cases per 100 person-years.
+4. **Little's law.** A service gets 80 referrals a week; therapy lasts 10 weeks. How many therapy places must be open at once?
+
+   *Solution.* Places in use = arrivals x duration = 80 x 10 = 800 at once (if everyone needs therapy).
+5. **Adherence.** Adherence 50%; a drug halves risk in those who take it. The effect in everyone prescribed it?
+
+   *Solution.* Half the people get half the risk: 0.5 x 1 + 0.5 x 0.5 = 0.75, a 25% reduction in everyone
    prescribed.
-6. **Open-label placebo.** Patients know whether they take a pill, so self-reports can carry expectation and
+6. **Open-label placebo.** An open-label placebo trial: why can it not be blinded, and what outcome would persuade a sceptic?
+
+   *Solution.* Patients know whether they take a pill, so self-reports can carry expectation and
    gratitude; an objective or observer-rated outcome that also improved, with an active comparison (an equally
    attentive no-pill condition), would persuade more.
-7. **An app's evaluation.** A randomized trial against usual care with a pre-registered outcome; engagement measured
+7. ★ **An app's evaluation.** Plan an evaluation of a mental health app for a health system: trial, engagement, outcomes, and privacy.
+
+   *Solution.* A randomized trial against usual care with a pre-registered outcome; engagement measured
    from logs (and the outcome analysed for everyone randomized); outcomes at follow-up; adverse events; and a
    privacy review of what data leave the device and to whom.
 

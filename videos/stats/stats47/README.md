@@ -232,29 +232,41 @@ The rest of the part's numbers, chapter by chapter:
 
 ## Problems and solutions
 
-1. **Hodges's limits.**
+1. **Hodges's limits.** Show that Hodges's estimator satisfies $n\,E_0 T_n^2 \to 0$, and $n\,E_{\theta}(T_n - \theta)^2 \to 1$ for fixed $\theta \ne 0$.
+
+   *Solution.*
    - At θ = 0, Z = √n x̄ ~ N(0, 1), and T_n = 0 unless |Z| ≥ n^{1/4}. So n E T_n² = E[Z² 1{|Z| ≥ n^{1/4}}] → 0,
      faster than any power of n.
    - At θ ≠ 0, P(|x̄| < n^{−1/4}) ≤ P(|Z| > √n|θ| − n^{1/4}) → 0 exponentially fast, so T_n = x̄ except on a vanishing
      event.
    - Hence n E(T_n − θ)² → E Z² = 1 (the contribution of the event is at most nθ² times an exponentially small
      probability).
-2. **The median as a Z-estimator.**
+2. **The median as a Z-estimator.** For $\psi(x, \theta) = \mathrm{sign}(x - \theta)$, compute the sandwich $V^{-1}BV^{-1}$ and recover the median's variance.
+
+   *Solution.*
    - ψ(x, θ) = sign(x − θ). Then B = E ψ² = 1, and V = d/dθ E sign(X − θ) = d/dθ [1 − 2F(θ)] = −2f(θ).
    - So V⁻¹BV⁻¹ = 1/(4f(θ)²), the median's variance p(1 − p)/f² at p = ½.
-3. **The influence function of a quantile.**
+3. **The influence function of a quantile.** Find the influence function of $T(F) = F^{-1}(p)$, and check that $E\,\mathrm{IF}^2 = p(1-p)/f(\xi_p)^2$.
+
+   *Solution.*
    - Differentiate F_t(ξ_t) = p with F_t = (1 − t)F + tδ_x: −F(ξ) + 1{x ≤ ξ} + f(ξ) ξ̇ = 0 at t = 0.
    - So IF(x) = (p − 1{x ≤ ξ_p})/f(ξ_p), which has mean 0 and E IF² = p(1 − p)/f(ξ_p)².
-4. **Gini's projection.**
+4. **Gini's projection.** For Gini's kernel $|x - y|$ with $N(0, 1)$ data, show that $h_1(x)=2\phi(x)+x(2\Phi(x)-1)-2/\sqrt\pi$.
+
+   *Solution.*
    - E|x − Y| = ∫(x − y)φ(y)dy over y < x plus ∫(y − x)φ(y)dy over y > x, which equals x(2Φ(x) − 1) + 2φ(x), using
      ∫_{y>x} yφ(y) dy = φ(x).
    - Subtracting θ = 2/√π gives h₁.
-5. **The sign test's local power.**
+5. **The sign test's local power.** Use Le Cam's third lemma to find the local power of the sign test, and its Pitman ARE $2/\pi$ against $t$.
+
+   *Solution.*
    - T_n = (2/√n) Σ (1{X_i > 0} − ½) is asymptotically N(0, 1) under H₀.
    - Its covariance with Λ_n = h Σ X_i/√n − h²/2 is τ = 2h E[X 1{X > 0}] = 2h φ(0) = h√(2/π).
    - By the third lemma the local power is 1 − Φ(z_α − h√(2/π)). The t test has τ = h, so the Pitman ARE is
      (√(2/π))² = 2/π.
-6. **The bootstrap maximum's atom.**
+6. **The bootstrap maximum's atom.** Show that $P^*(M^* = M) = 1 - (1 - 1/n)^n$ for the bootstrap of a sample maximum.
+
+   *Solution.*
    - M* = M exactly when the largest observation appears at least once among n draws with replacement.
    - So P*(M* = M) = 1 − (1 − 1/n)ⁿ, which tends to 1 − e⁻¹.
 

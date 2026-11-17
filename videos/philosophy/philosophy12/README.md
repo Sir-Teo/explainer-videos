@@ -68,23 +68,35 @@ Nakamoto (2008); Kelly (2010); Ongaro and Ousterhout (2014); Lasonen-Aarnio (201
 
 ## Problems and solutions
 
-1. **The cards.** After Ann announces "I hold 0", two worlds remain, 012 and 021, and Ann cannot tell them apart: she
+1. **The cards.** Three cards: after Ann announces `I hold 0', what does Ann know about Bob's card? Why?
+
+   *Solution.* After Ann announces "I hold 0", two worlds remain, 012 and 021, and Ann cannot tell them apart: she
    still does not know whether Bob holds 1 or 2. Her announcement told the others about her card; it told her nothing
    new.
-2. **Four children, two muddy.** Start: 16 worlds. The father's announcement removes 0000: 15. The first "nobody
+2. **Four children, two muddy.** Muddy children with $n = 4$ and $k = 2$ muddy: list the worlds left after each announcement.
+
+   *Solution.* Start: 16 worlds. The father's announcement removes 0000: 15. The first "nobody
    knows" removes the four worlds with exactly one muddy child: 11 (0011, 0101, 0110, 0111, 1001, 1010, 1011, 1100,
    1101, 1110, 1111). In the actual world 1100, the two muddy children now know (round 2); when they say so, the two
    clean ones learn that the world is 1100 (round 3).
-3. **One agent.** With one agent, Eφ is Kφ, so E²φ is KKφ, which in S5 is equivalent to Kφ, and every Eᵏφ (k ≥ 1)
+3. **One agent.** Show that if E$^2\varphi$ holds at every world, so does $C\varphi$, in a model with one agent.
+
+   *Solution.* With one agent, Eφ is Kφ, so E²φ is KKφ, which in S5 is equivalent to Kφ, and every Eᵏφ (k ≥ 1)
    is Kφ. So Cφ, the conjunction of all of them, is just Kφ = E²φ: for a single S5 agent, common knowledge is
    knowledge.
-4. **A new dialogue.** With the event {1, 5} and actual state 1: A says 1/3; B says 1/4; this tells A the state is
+4. **A new dialogue.** In the agreement dialogue, change the event to $\{1, 5\}$ and run the conversation.
+
+   *Solution.* With the event {1, 5} and actual state 1: A says 1/3; B says 1/4; this tells A the state is
    in {1, 2, 3, 4}, which leaves A's cell {1, 2, 3} and A says 1/3 again; that tells B the state is not 4 (where A
    would now say 0), and B's cell becomes {1, 2, 3}: both say 1/3.
-5. **Hume's witness.** With reliability r = 0.999, the posterior P·r / (P·r + (1 − P)(1 − r)) is below a half exactly
+5. **Hume's witness.** A witness is right 999 times in 1000. How rare must an event be before her report leaves it under even odds?
+
+   *Solution.* With reliability r = 0.999, the posterior P·r / (P·r + (1 − P)(1 − r)) is below a half exactly
    when P < (1 − r) = 0.001: any event rarer than one in a thousand stays more likely false than true after her
    report.
-6. **(Essay) Disagreement.** A strong answer applies Chapter 13's computation to a real case, says who counts as a
+6. **(Essay) Disagreement.** (Essay) Equal weight or steadfast? Take a real disagreement, and defend a policy for it.
+
+   *Solution.* A strong answer applies Chapter 13's computation to a real case, says who counts as a
    peer and why, and meets the strongest objection to its policy: spinelessness for equal weight, arrogance for
    steadfastness, and indeterminacy for total evidence.
 

@@ -172,35 +172,49 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-**1. No drift.** With v = 0 the equation is P'' = 0 with P(0) = 0 and P(a) = 1, so P(z) = z/a. In the general
+**1. No drift.** Show that with no drift the chance of the upper bound is $z/a$, and that the general formula tends to it as $v \to 0$.
+
+*Solution.* With v = 0 the equation is P'' = 0 with P(0) = 0 and P(a) = 1, so P(z) = z/a. In the general
 formula, write k = 2v/s²: (1 − e^{−kz})/(1 − e^{−ka}) ≈ (kz)/(ka) = z/a to first order in k.
 
-**2. The mean time with an unbiased start.** With z = a/2 and unit noise, P(upper) = (1 − e^{−va})/(1 − e^{−2va})
+**2. The mean time with an unbiased start.** With the start halfway, show that the mean decision time is $\frac{a}{2v}\tanh\!\big(\frac{va}{2}\big)$ (unit noise), and that it tends to $a^2/4$ as $v \to 0$.
+
+*Solution.* With z = a/2 and unit noise, P(upper) = (1 − e^{−va})/(1 − e^{−2va})
 = 1/(1 + e^{−va}). Then a P − a/2 = (a/2)(1 − e^{−va})/(1 + e^{−va}) = (a/2) tanh(va/2), and dividing by v gives
 E[T] = (a/2v) tanh(va/2). As v → 0, tanh(va/2) ≈ va/2 and E[T] → a²/4, which is z(a − z) at z = a/2.
 
-**3. The shortest run of Wald's test.** A hit adds log(0.7/0.5) = 0.336 and a miss adds log(0.3/0.5) = −0.511; the
+**3. The shortest run of Wald's test.** In Wald's test of $p = 0.5$ against $p = 0.7$ with $\alpha = \beta = 0.05$, what is the smallest number of shots that can end the test, each way?
+
+*Solution.* A hit adds log(0.7/0.5) = 0.336 and a miss adds log(0.3/0.5) = −0.511; the
 bounds are ±2.944. Accepting p = 0.7 needs the sum to reach 2.944, which takes at least nine hits in a row
 (8 × 0.336 = 2.69 is short). Accepting p = 0.5 takes at least six misses (5 × 0.511 = 2.55 is short; 6 × 0.511 =
 3.07).
 
-**4. Corrections.** After k corrections the remaining distance is D r^k, and the movement ends when it is below W/2:
+**4. Corrections.** With corrections that each leave a share $r$ of the distance, how many does a 5-bit movement need when $r = 0.25$? When $r = 0.5$?
+
+*Solution.* After k corrections the remaining distance is D r^k, and the movement ends when it is below W/2:
 r^k < W/(2D) = 2^{−5}, so k > 5/log₂(1/r). With r = 0.25, k > 2.5: three corrections. With r = 0.5, k > 5: six.
 Coarser corrections (smaller r) need fewer of them, and each bit costs 1/log₂(1/r) corrections.
 
-**5. Two estimates of the stop time.** The integration method sets SSRT = F⁻¹(p) − SSD, with p the share of stop
+**5. Two estimates of the stop time.** Show that the integration estimate of the stop time equals mean go time minus mean delay when half the stop trials escape and the go distribution is symmetric.
+
+*Solution.* The integration method sets SSRT = F⁻¹(p) − SSD, with p the share of stop
 trials that escape. When p = 0.5 the quantile is the go distribution's median, and for a symmetric distribution the
 median is the mean, so SSRT = mean go time − SSD; averaged over the delays a staircase visits, mean go time minus
 mean delay. With a skewed go distribution, or p far from a half, the two differ, which is why the integration method
 is preferred.
 
-**6. EZ on the open data.** For each person and block, take the proportion correct, and the mean and variance of
+**6. EZ on the open data.** With `explainer.psychology.opendata`: fit EZ diffusion to each of the 17 people's two kinds of block. Does EZ also put the bound lower under speed?
+
+*Solution.* For each person and block, take the proportion correct, and the mean and variance of
 correct times, and apply `decide.ez` (with s = 1). EZ assumes an unbiased start and no variability between trials;
 it puts the bound lower under speed for all 17 people, at a median 59% of the careful bound (the full fits: 16 of
 17, at 70%). Three summary statistics recover the main finding; the ratios differ because EZ assumes no variability
 between trials and uses correct responses only.
 
-**7. ⋆ A collapsing bound or variable drift?** Both can make errors slow and both shorten tails relative to some
+**7. ⋆ A collapsing bound or variable drift?** Design an experiment whose response times could tell a collapsing bound from variability in drift, and say what each predicts.
+
+*Solution.* Both can make errors slow and both shorten tails relative to some
 alternatives, so use the joint shape of correct and error distributions across difficulty. A collapsing bound
 predicts that the slowest responses are the least accurate at every difficulty and that the right tail's shape is
 nearly the same across difficulties (it is cut by the bound); variability in drift predicts slow errors that grow

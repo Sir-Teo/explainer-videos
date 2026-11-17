@@ -162,30 +162,46 @@ with GPUs* (2017); X. Yi et al., *Sampling-Bias-Corrected Neural Modeling for La
 
 ## Problems and solutions
 
-1. **Triangle inequality.** |a + b|² = |a|² + 2a·b + |b|² ≤ |a|² + 2|a||b| + |b|² = (|a| + |b|)², by
+1. **Triangle inequality.** Use Cauchy–Schwarz to prove the triangle inequality $|\mathbf{a} + \mathbf{b}| \le |\mathbf{a}| + |\mathbf{b}|$, and find when it is an equality.
+
+   *Solution.* |a + b|² = |a|² + 2a·b + |b|² ≤ |a|² + 2|a||b| + |b|² = (|a| + |b|)², by
    Cauchy–Schwarz. Equality needs a·b = |a||b|: one vector a non-negative multiple of the other.
-2. **Projections.** For A with full column rank, P² = A(AᵀA)⁻¹AᵀA(AᵀA)⁻¹Aᵀ = A(AᵀA)⁻¹Aᵀ = P, and
+2. **Projections.** For $A$ with full column rank, show that $P = A(A^{\top}A)^{-1}A^{\top}$ satisfies $P^2 = P = P^{\top}$, and that $I - P$ projects onto the vectors perpendicular to every column of $A$.
+
+   *Solution.* For A with full column rank, P² = A(AᵀA)⁻¹AᵀA(AᵀA)⁻¹Aᵀ = A(AᵀA)⁻¹Aᵀ = P, and
    Pᵀ = A((AᵀA)⁻¹)ᵀAᵀ = P because AᵀA is symmetric. For any y,
    Aᵀ(I − P)y = Aᵀy − AᵀA(AᵀA)⁻¹Aᵀy = 0, so (I − P)y is perpendicular to every column; and
    (I − P)² = I − 2P + P² = I − P.
-3. **Rayleigh quotient near an eigenvector.** With unit v₁ ⊥ v₂ and x = v₁ + εv₂: xᵀAx = λ₁ + ε²λ₂ and xᵀx = 1 + ε²,
+3. **Rayleigh quotient near an eigenvector.** For symmetric $A$ with $\lambda_1 > \lambda_2$, show that $R(\mathbf{v}_1 + \varepsilon\mathbf{v}_2) = \lambda_1 - (\lambda_1 - \lambda_2)\varepsilon^2 + O(\varepsilon^4)$ for unit eigenvectors: why the eigenvalue converges twice as fast as the vector.
+
+   *Solution.* With unit v₁ ⊥ v₂ and x = v₁ + εv₂: xᵀAx = λ₁ + ε²λ₂ and xᵀx = 1 + ε²,
    so R = (λ₁ + ε²λ₂)/(1 + ε²) = λ₁ − (λ₁ − λ₂)ε²/(1 + ε²) = λ₁ − (λ₁ − λ₂)ε² + O(ε⁴). An error ε in direction moves
    R by ε²; power iteration's direction error shrinks like (λ₂/λ₁)ᵏ, so the eigenvalue's shrinks like (λ₂/λ₁)²ᵏ.
-4. **Norms.** ‖A‖_F² = Σᵢⱼ aᵢⱼ² = tr(AᵀA) = tr(VΣ²Vᵀ) = tr(Σ²) = Σσᵢ². Then σ₁² ≤ Σσᵢ² ≤ rσ₁². The first bound is
+4. **Norms.** Prove $\|A\|_F^2 = \sum_i \sigma_i^2$ and $\|A\|_2 \le \|A\|_F \le \sqrt{r}\,\|A\|_2$, and find matrices that attain each bound.
+
+   *Solution.* ‖A‖_F² = Σᵢⱼ aᵢⱼ² = tr(AᵀA) = tr(VΣ²Vᵀ) = tr(Σ²) = Σσᵢ². Then σ₁² ≤ Σσᵢ² ≤ rσ₁². The first bound is
    attained by rank-one matrices (uvᵀ), the second by matrices with r equal singular values (any multiple of an
    orthogonal matrix, or of a partial isometry).
-5. **SGNS optimum.** For a, b > 0 and a free scalar x, ℓ(x) = a log σ(x) + b log σ(−x) has
+5. **SGNS optimum.** Maximize $\ell(x) = a\log\sigma(x) + b\log\sigma(-x)$ over $x$ for $a, b > 0$. For $P_n(c)=P(c)$, recover Levy and Goldberg's $\mathbf{w}\cdot\mathbf{c} = \mathrm{PMI}(w, c) - \log k$.
+
+   *Solution.* For a, b > 0 and a free scalar x, ℓ(x) = a log σ(x) + b log σ(−x) has
    ℓ′(x) = a(1 − σ(x)) − bσ(x) = aσ(−x) − bσ(x), zero when
    σ(x)/σ(−x) = eˣ = a/b, and ℓ″ < 0 there (it is the maximum of the log-likelihood; the loss −ℓ is minimized).
    With a = #(w,c) and b = k·#(w)·P_n(c): w·c = log(#(w,c)/(#(w)P_n(c))) − log k, the PMI with the negative
    distribution as P(c), shifted by log k.
-6. **Random directions.** By symmetry E[x₁²] = … = E[x_d²] and they sum to E|x|² = 1, so each is 1/d. For
+6. **Random directions.** For $\mathbf{x}, \mathbf{y}$ independent and uniform on the unit sphere in $\mathbb{R}^d$, show $\mathbb{E}[x_1^2] = 1/d$ and $\operatorname{Var}(\mathbf{x}\cdot\mathbf{y}) = 1/d$.
+
+   *Solution.* By symmetry E[x₁²] = … = E[x_d²] and they sum to E|x|² = 1, so each is 1/d. For
    independent uniform x, y: E[x·y] = 0 and E[(x·y)²] = E[yᵀ E[xxᵀ] y] = E[yᵀ (I/d) y] = 1/d.
-7. **χ² moment generating function.** For Z ~ N(0,1), E[e^{tZ²}] = ∫ e^{tz²} e^{−z²/2}/√(2π) dz = (1 − 2t)^{−1/2}
+7. **χ² moment generating function.** If $X \sim \chi^2_k$, show $\mathbb{E}\,e^{tX} = (1 - 2t)^{-k/2}$ for $t < 1/2$, and finish the optimization over $t$ in the Johnson–Lindenstrauss proof.
+
+   *Solution.* For Z ~ N(0,1), E[e^{tZ²}] = ∫ e^{tz²} e^{−z²/2}/√(2π) dz = (1 − 2t)^{−1/2}
    for t < 1/2, and the k squares are independent: (1 − 2t)^{−k/2}. Markov gives P(X ≥ (1+ε)k) ≤
    e^{−tk(1+ε)}(1 − 2t)^{−k/2}; minimizing over t gives 1 − 2t = 1/(1 + ε), i.e. t = ε/(2(1 + ε)), and the bound
    ((1 + ε)e^{−ε})^{k/2}. With ln(1 + ε) ≤ ε − ε²/2 + ε³/3: ≤ exp(−k(ε²/2 − ε³/3)/2).
-8. **A rank-k picture.** k(m + n + 1) < mn means k < 51,840/469 ≈ 110.5: up to k = 110 it saves space. Its error is
+8. **A rank-k picture.** A rank-$k$ copy of an $m \times n$ picture stores $k(m + n + 1)$ numbers. For $180 \times 288$, up to what $k$ does it save space, and what does Eckart–Young say its error is?
+
+   *Solution.* k(m + n + 1) < mn means k < 51,840/469 ≈ 110.5: up to k = 110 it saves space. Its error is
    (σ²_{k+1} + … + σ²_r)^{1/2}, the singular values left out, exactly, and no other rank-k matrix does better.
 
 ## 题目与解答

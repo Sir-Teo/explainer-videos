@@ -185,30 +185,44 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **The identity.** With cohort c = period − age, a·Age + p·Period + c·Cohort = (a − c)·Age + (p + c)·Period.
+1. **The identity.** Show that with linear effects, $(a, p, c)$ and $(a + k, p - k, c + k)$ give identical predictions for every person, and that only $a - c$ and $p + c$ are identified.
+
+   *Solution.* With cohort c = period − age, a·Age + p·Period + c·Cohort = (a − c)·Age + (p + c)·Period.
    Adding k to a and c and subtracting k from p leaves a − c and p + c unchanged, so every prediction is the same.
    Only the two combinations are identified; a third constraint must come from outside the data.
-2. **A cross-section invents ageing.** In year t, a person of age A was born in t − A, so a cohort gain g per year of
+2. **A cross-section invents ageing.** In a cross-section taken in one year, a cohort gain of $g$ per year of birth and no ageing at all produce an apparent ageing slope. What is it? What does a longitudinal study of one cohort show in the same world?
+
+   *Solution.* In year t, a person of age A was born in t − A, so a cohort gain g per year of
    birth gives a score g(t − A − t₀): an apparent ageing slope of −g per year of age, with no ageing at all. A
    longitudinal study of one cohort, in a world with no period effect, shows a flat line. Chapter two's cross-section
    (g = 0.02) shows −0.54 SD by 50 where the truth is flat: about −0.02 × 30 = −0.6, up to noise.
-3. **Shrinkage.** With the intercept known, a child's least-squares slope b̂ᵢ has sampling variance σ²/Sₓₓ, where
+3. **Shrinkage.** For the growth model, show that a child's BLUP slope shrinks its own least-squares slope toward $\beta_1$ by a factor that grows with the noise and falls with the number of visits (take the intercept as known).
+
+   *Solution.* With the intercept known, a child's least-squares slope b̂ᵢ has sampling variance σ²/Sₓₓ, where
    Sₓₓ = Σ(tⱼ − t̄)² over the child's visits. With bᵢ ~ N(β₁, σ₁²), the posterior mean is
    β₁ + λ(b̂ᵢ − β₁) with λ = σ₁² / (σ₁² + σ²/Sₓₓ). More noise (σ²) lowers λ, more shrinkage; more or more widely spread
    visits (Sₓₓ) raise it. A child who missed visits is shrunk more.
-4. **ACE.** r_MZ = h² + c² and r_DZ = h²/2 + c², so r_MZ − r_DZ = h²/2, giving h² = 2(r_MZ − r_DZ), and
+4. **ACE.** Under the ACE model, derive $h^2 = 2(r_{MZ} - r_{DZ})$ and $c^2 = 2r_{DZ} - r_{MZ}$, and say why the correlation of adoptive siblings is a direct estimate of $c^2$.
+
+   *Solution.* r_MZ = h² + c² and r_DZ = h²/2 + c², so r_MZ − r_DZ = h²/2, giving h² = 2(r_MZ − r_DZ), and
    c² = r_MZ − h² = 2r_DZ − r_MZ. Adoptive siblings share no genes by descent, so if placement is not selective their
    correlation is c² directly; that is why adoptive siblings' near-zero IQ correlation after adolescence is such
    direct evidence that the shared environment fades.
-5. **Attributable fractions.** With exposure prevalence p and relative risk RR, P(D) = P(D | Ē)[(1 − p) + p·RR] =
+5. **Attributable fractions.** Derive Levin's population attributable fraction from $P(D) = P(D \mid \bar E)\,(1 + p(\mathrm{RR} - 1))$, and show that for independent factors the combined fraction is $1 - \prod_i (1 - \mathrm{PAF}_i)$.
+
+   *Solution.* With exposure prevalence p and relative risk RR, P(D) = P(D | Ē)[(1 − p) + p·RR] =
    P(D | Ē)(1 + p(RR − 1)). The fraction removable by eliminating exposure is (P(D) − P(D | Ē))/P(D) =
    p(RR − 1)/(1 + p(RR − 1)). For independent factors acting multiplicatively, P(D)/P(D | none) = ∏(1 + pᵢ(RRᵢ − 1)) =
    ∏ 1/(1 − PAFᵢ), so the combined fraction is 1 − ∏(1 − PAFᵢ), less than the sum. Every step assumes the factor
    causes the disease and that removing it returns the risk to the unexposed level.
-6. **Old norms.** Eighteen years at 2.8 points a decade is 5.04 points: the average person now scores about 105.0.
+6. **Old norms.** A test was normed 18 years ago, and scores have drifted up 2.8 points a decade. What is the expected score of an average person today, and what share of people now score below 70, against 2.3% at norming?
+
+   *Solution.* Eighteen years at 2.8 points a decade is 5.04 points: the average person now scores about 105.0.
    Below 70 then requires z < (70 − 105.04)/15 = −2.34, about 1.0% of people, against 2.3% (z < −2) at norming. A
    cutoff of 70 on an old test identifies fewer than half as many people as it did when the test was new.
-7. ★ **Retirement and decline.** A cohort-sequential panel gives age and cohort under no period effect, but people
+7. ★ **Retirement and decline.** Design a study that could tell whether retirement speeds cognitive decline, and say which clock, and which assumption, each part of your design relies on.
+
+   *Solution.* A cohort-sequential panel gives age and cohort under no period effect, but people
    who retire early differ from those who do not (health, work, wealth), and declining people may retire because they
    decline. A design: use rules that move retirement for reasons unrelated to the person, such as pension
    eligibility ages that differ between countries or change between birth cohorts, as an instrument for retirement,

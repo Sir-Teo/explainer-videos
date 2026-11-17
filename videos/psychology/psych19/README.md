@@ -178,39 +178,53 @@ short-term and working memory, *Psychol. Bull.* 144 (2018) 885–958.
 
 ## Problems and solutions
 
-**1. Smith's arithmetic.** With groups of five binary digits recoded into one chunk and a span of 8 chunks, Smith
+**1. Smith's arithmetic.** Smith recoded binary digits in groups of five. With a span of 8 chunks, how many binary digits could he hold, and how many bits is that per chunk?
+
+*Solution.* With groups of five binary digits recoded into one chunk and a span of 8 chunks, Smith
 could hold 8 × 5 = 40 binary digits: 5 bits a chunk, 40 bits in all, against 9 bits without recoding. The span in
 chunks barely changed; the information per chunk did.
 
-**2. The two K formulas.** A single probe: on a change trial the changed item is stored with probability K/N and
+**2. The two K formulas.** Derive Cowan's $K = N(H - F)$ from a slot model with guessing, and Pashler's $K = N(H - F)/(1 - F)$ for a whole-display test.
+
+*Solution.* A single probe: on a change trial the changed item is stored with probability K/N and
 detected; otherwise "different" is guessed with probability g, so H = K/N + (1 − K/N) g. On a no-change trial, a stored
 probe is called "same" and an unstored one "different" with probability g, so F = (1 − K/N) g. Then H − F = K/N, K =
 N(H − F). With the whole display back and one item changed, a stored changed item is detected; a "same" display is
 called different only by guessing on unstored items, F = g (Pashler's assumption that guessing happens when the
 change is not seen), and H = K/N + (1 − K/N) g, so H − F = (K/N)(1 − g) and K = N(H − F)/(1 − F).
 
-**3. Townsend's mimicry.** If j comparisons each finish after an exponential time with rate 1/(jc), the first of them
+**3. Townsend's mimicry.** Show that $j$ exponential comparisons each at rate $1/(jc)$ finish first after an exponential time of mean $c$, and hence that limited-capacity parallel search mimics serial search.
+
+*Solution.* If j comparisons each finish after an exponential time with rate 1/(jc), the first of them
 finishes after an exponential time with rate j · 1/(jc) = 1/c (the minimum of independent exponentials has the sum of
 their rates), whose mean is c. By the memoryless property the remaining j − 1 comparisons start afresh, now each at
 rate 1/((j − 1)c). Summing the stages, the total is a sum of k exponentials of mean c: exactly the serial exhaustive
 model with exponential comparisons, in mean, variance and distribution.
 
-**4. SIMPLE by hand.** With c = 1, the similarity of ages a and b is exp(−|log a − log b|) = min(a, b)/max(a, b). At 3
+**4. SIMPLE by hand.** In SIMPLE with $c = 1$, find the discriminability of an item 3 s old among items 30 and 60 s old, and of the same item at 18 s.
+
+*Solution.* With c = 1, the similarity of ages a and b is exp(−|log a − log b|) = min(a, b)/max(a, b). At 3
 s among items 30 and 60 s old: D = 1/(1 + 0.1 + 0.05) = 0.87. At 18 s: D = 1/(1 + 0.6 + 0.3) = 0.53. Waiting fifteen
 seconds moved the item two-thirds of the way toward its neighbours on the log scale, and its distinctiveness fell by
 almost half, without any decay.
 
-**5. A von Mises's precision.** J = κ I1(κ)/I0(κ). At κ = 5, I1(5)/I0(5) = 0.8934, so J = 4.47. The circular s.d. is
+**5. A von Mises's precision.** Compute the Fisher information $J$ of a von Mises with $\kappa = 5$, and the circular s.d. of the same distribution.
+
+*Solution.* J = κ I1(κ)/I0(κ). At κ = 5, I1(5)/I0(5) = 0.8934, so J = 4.47. The circular s.d. is
 √(−2 log 0.8934) = 0.475 radians, 27 degrees; for large κ, J ≈ κ − 1/2 and the s.d. ≈ 1/√κ.
 
-**6. When can AIC be trusted?** Simulating a slots observer with K = 3 and J = 15 at set sizes 1, 2, 4 and 6 and
+**6. When can AIC be trusted?** With `explainer.psychology.psyche.wm`: simulate a slots observer, fit the variable-precision model, and report which model AIC prefers as the number of trials grows.
+
+*Solution.* Simulating a slots observer with K = 3 and J = 15 at set sizes 1, 2, 4 and 6 and
 fitting both models, AIC picked slots in 20 of 20 runs at 50, 200 and 800 trials per set size: a flat floor of true
 guesses beside sharply remembered items is hard for variable precision to fake, because it would need many items
 with almost no precision and the rest with a lot. The reverse is the hard direction: chapter seven's mimic shows a
 variable-precision observer producing a mixture fit that looks like slots, and recovering variable precision needs
 more trials. Parameter and model recovery, in both directions, are Part 48's subject.
 
-**7. ★ A convincing training study.** Randomize enough people to detect d = 0.2 on a pre-registered composite of
+**7. ★ A convincing training study.** Design a training study whose far-transfer result could convince a sceptic, and say what its control group must believe.
+
+*Solution.* Randomize enough people to detect d = 0.2 on a pre-registered composite of
 several reasoning tests (about 400 a group for 80% power); give the control group an adaptive, engaging placebo they
 believe is training, and measure expectations in both groups; blind the testers; test at follow-up as well as
 immediately; and require that individual gains on the trained task predict gains on reasoning. A control group that

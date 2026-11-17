@@ -119,18 +119,30 @@ python tools/lecture_length.py stats57 --floor 50
 
 ## Problems and solutions
 
-1. **The lemma's exact coverage.** With exchangeable, almost surely distinct scores S₁, …, S_{n+1}, assume scores are almost surely distinct (continuous marginals alone do not rule out dependent ties),
+1. **The lemma's exact coverage.** Show that with $n+1$ exchangeable almost surely distinct scores, $P(S_{n+1} \le S_{(k)}) = k/(n+1)$ exactly.
+
+   *Solution.* With exchangeable, almost surely distinct scores S₁, …, S_{n+1}, assume scores are almost surely distinct (continuous marginals alone do not rule out dependent ties),
    so every ordering is equally likely, so the rank of S_{n+1} is uniform on {1, …, n + 1}. S_{n+1} ≤ S_(k) (the k-th
    smallest of the first n) exactly when its rank among all n + 1 is at most k, so P = k/(n + 1).
-2. **The Beta law.** Assume IID continuous scores, conditional on a separately trained fixed score function. Given the calibration scores, coverage is F(S_(k)). The F(S_i) are i.i.d. uniform, and F is
+2. **The Beta law.** Show that the coverage of split conformal for IID continuous scores, given calibration, is Beta$(k, n + 1 - k)$.
+
+   *Solution.* Assume IID continuous scores, conditional on a separately trained fixed score function. Given the calibration scores, coverage is F(S_(k)). The F(S_i) are i.i.d. uniform, and F is
    increasing, so F(S_(k)) = U_(k), the k-th order statistic of n uniforms, which is Beta(k, n + 1 − k).
-3. **Bahadur–Savage.** Let c_n(M)=P(|T_{n−1}(−M√n)|≤t_{n−1,1−α/2}). On the no-atom event the sample is IID N(0,1), so coverage of the mixture mean M is at most 1−(1−ε)^n+(1−ε)^n c_n(M). At fixed n and M=3, sending ε→0 leaves the tiny **positive** c_n(3), about 4.928e−79 at n=50, rather than zero. For the general impossibility argument first let M grow to make c_n(M) arbitrarily small and then make ε small; the mixture still has a finite mean and finite variance for every member. The no-atom term uses a noncentral t distribution, not a normal approximation with a random denominator replaced by one.
-4. **ACI.** Summing α_{t+1} = α_t + γ(α − err_t) gives α_{T+1} − α₁ = γ Σ(α − err_t). If α_t < 0 the set is the whole
+3. **Bahadur–Savage.** For the Bahadur–Savage family, show the $t$-interval's coverage is at most $1-(1-\varepsilon)^n+(1-\varepsilon)^n c_n$, where $c_n$ is the no-atom coverage.
+
+   *Solution.* Let c_n(M)=P(|T_{n−1}(−M√n)|≤t_{n−1,1−α/2}). On the no-atom event the sample is IID N(0,1), so coverage of the mixture mean M is at most 1−(1−ε)^n+(1−ε)^n c_n(M). At fixed n and M=3, sending ε→0 leaves the tiny **positive** c_n(3), about 4.928e−79 at n=50, rather than zero. For the general impossibility argument first let M grow to make c_n(M) arbitrarily small and then make ε small; the mixture still has a finite mean and finite variance for every member. The no-atom term uses a noncentral t distribution, not a normal approximation with a random denominator replaced by one.
+4. **ACI.** Show that ACI's average miss rate satisfies $|\bar e_T - \alpha| \le (\max(\alpha_1, 1 - \alpha_1) + \gamma)/(\gamma T)$.
+
+   *Solution.* Summing α_{t+1} = α_t + γ(α − err_t) gives α_{T+1} − α₁ = γ Σ(α − err_t). If α_t < 0 the set is the whole
    line and err_t = 0, so α_t rises; if α_t > 1 the set is empty and err_t = 1, so it falls; hence α_t ∈ [−γ, 1 + γ]
    for all t, and |Σ(α − err_t)| ≤ (max(α₁, 1 − α₁) + γ)/γ. Divide by T.
-5. **Mondrian.** Conditional on the group g of the test point, the calibration points of group g and the test point
+5. **Mondrian.** Show that Mondrian conformal gives coverage $\ge 1 - \alpha$ within every group of a partition.
+
+   *Solution.* Conditional on the group g of the test point, the calibration points of group g and the test point
    are exchangeable (exchangeability is preserved by conditioning on a symmetric event), so the lemma applies within g.
-6. **Risk control.** Use a fixed ordered finite threshold grid with bounded nonincreasing losses and a feasible corrected-risk threshold; a continuous infimum additionally needs attainment/right-continuity. Let λ′ be the smallest grid value with Σ_{i≤n+1}L_i(λ)/(n+1)≤α, using the actual test loss. Since L_{n+1} ≤ B, λ′ ≤ λ̂, so L_{n+1}(λ̂) ≤ L_{n+1}(λ′) by monotonicity. By
+6. **Risk control.** Prove conformal risk control: $E L_{n+1}(\hat\lambda) \le \alpha$ for losses in $[0, B]$, nonincreasing in $\lambda$.
+
+   *Solution.* Use a fixed ordered finite threshold grid with bounded nonincreasing losses and a feasible corrected-risk threshold; a continuous infimum additionally needs attainment/right-continuity. Let λ′ be the smallest grid value with Σ_{i≤n+1}L_i(λ)/(n+1)≤α, using the actual test loss. Since L_{n+1} ≤ B, λ′ ≤ λ̂, so L_{n+1}(λ̂) ≤ L_{n+1}(λ′) by monotonicity. By
    exchangeability E L_{n+1}(λ′) = E (1/(n + 1)) Σ L_i(λ′) ≤ α.
 
 ## Glossary

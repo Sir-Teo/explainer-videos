@@ -183,34 +183,46 @@ The rest of the part's numbers, chapter by chapter:
 
 ## Problems and solutions
 
-1. **Conditional expectation as the best predictor.**
+1. **Conditional expectation as the best predictor.** Show that $E[X \mid \mathcal G]$ minimizes $E(X - Z)^2$ over $\mathcal G$-measurable $Z$, and that it is unique a.s.
+
+   *Solution.*
    - Assume X ∈ L²; let Y = E[X | 𝒢] and Z ∈ L²(𝒢).
    - E(X − Z)² = E(X − Y)² + 2E[(X − Y)(Y − Z)] + E(Y − Z)².
    - Y − Z is 𝒢-measurable, so E[(X − Y)(Y − Z)] = E[(Y − Z) E(X − Y | 𝒢)] = 0.
    - Hence E(X − Z)² = E(X − Y)² + E(Y − Z)² ≥ E(X − Y)². Equality holds iff Z = Y almost surely, which gives
      uniqueness.
-2. **The expected length of a fair game.**
+2. **The expected length of a fair game.** For a fair $\pm 1$ walk from $a$, stopped at $0$ or $b$, derive $E\tau = a(b - a)$ from $S_n^2 - n$.
+
+   *Solution.*
    - S_n² − n is a martingale for a ±1 walk.
    - τ, the exit time from (0, b) started at a, has E τ < ∞ (a geometric bound: from anywhere, b straight steps exit),
      and the stopped process is dominated by b² + τ.
    - So optional stopping gives E S_τ² − E τ = S₀² = a².
    - E S_τ² = b² · P(hit b) = b² · a/b = ab, so E τ = ab − a² = a(b − a).
-3. **De Moivre's martingale.**
+3. **De Moivre's martingale.** Show that $(q/p)^{S_n}$ is a martingale for a $p$-coin walk, and derive the probability of reaching $b$.
+
+   *Solution.*
    - E[(q/p)^{S_{n+1}} | ℱ_n] = (q/p)^{S_n} [p (q/p) + q (p/q)] = (q/p)^{S_n} (q + p) = (q/p)^{S_n}.
    - Stopping at 0 or b (bounded paths) gives (q/p)^a = P_b (q/p)^b + (1 − P_b).
    - So P(reach b) = (1 − (q/p)^a) / (1 − (q/p)^b). For roulette (p = 18/38), a = 10 and b = 20, this is 0.259.
-4. **A two-state chain.**
+4. **A two-state chain.** For a two-state chain with $P(1 \mid 1) = a$, $P(1 \mid 0) = b$, find $\pi_1$ and the lag-$k$ autocorrelation $(a - b)^k$.
+
+   *Solution.*
    - Balance: π₁(1 − a) = π₀ b, so π₁ = b / (1 − a + b).
    - The second eigenvalue of P is a − b, so E[X_k | X₀] − π₁ = (a − b)^k (X₀ − π₁) (true at k = 1 by direct check,
      then by the Markov property).
    - So under stationary initialization, Cov(X₀, X_k) = (a − b)^k Var X₀ and the lag-k correlation is (a − b)^k.
    - For *Onegin*, a = 0.128 and b = 0.663: π₁ = 0.663 / 1.535 = 0.432 and the lag-1 correlation is −0.534.
-5. **McDiarmid for empty bins.**
+5. **McDiarmid for empty bins.** Use McDiarmid to show that the empty-bin count $Z$ satisfies $P(|Z - EZ| \ge t) \le 2e^{-2t^2/n}$.
+
+   *Solution.*
    - Z = f(X₁, …, X_n), where X_i is ball i's bin, independent.
    - Moving one ball can empty at most one bin and fill at most one, so Z changes by at most 1: c_i = 1.
    - McDiarmid: P(|Z − EZ| ≥ t) ≤ 2 exp(−2t² / Σ c_i²) = 2 exp(−2t²/n).
    - For n = 1,000 the bound is below 0.05 only for t ≥ 43, but the simulated SD is 9.9: valid but loose.
-6. **The Nelson–Aalen variance.**
+6. **The Nelson–Aalen variance.** Derive the Nelson–Aalen bracket and its estimator $\sum d_j/Y_j^2$; distinguish them.
+
+   *Solution.*
    - Ĥ(t) − H*(t) = ∫₀ᵗ J(s)/Y(s) dM(s), where J = 1(Y > 0), H*(t) = ∫₀ᵗJ(s)λ(s)ds, and M = N − ∫Yλ. Assume a nonexplosive continuous-time intensity model with no simultaneous individual events and sufficient integrability.
    - The integrand is predictable, so the integral is a martingale with predictable variation
      ∫ J/Y² d⟨M⟩ = ∫ J/Y² · Y λ ds = ∫ J λ / Y ds.

@@ -34,11 +34,15 @@ All inputs below are explicit mathematical models. No problem restores a failed 
 
 ### Basic 1 — Quote shading
 
-Take mid (v-\gamma q), bid/ask mid (\mp s/2), inventory (q=40), shading coefficient (\gamma=0.05), full spread (s=1). The mid is (v-2), so **bid (v-2.5), ask (v-1.5)**. Lowering both quotes encourages inventory reduction in the specified arrival model. This arithmetic establishes neither optimality nor survival for an arbitrary dealer.
+(basic 1) Quote heuristic: q=40, gamma=0.05, full spread 1. Derive bid and ask relative to fair value.
+
+*Solution.* Take mid (v-\gamma q), bid/ask mid (\mp s/2), inventory (q=40), shading coefficient (\gamma=0.05), full spread (s=1). The mid is (v-2), so **bid (v-2.5), ask (v-1.5)**. Lowering both quotes encourages inventory reduction in the specified arrival model. This arithmetic establishes neither optimality nor survival for an arbitrary dealer.
 
 ### Basic 2 — One buy in Glosten–Milgrom
 
-Values are 0 and 1, prior (p=1/2), informed-arrival share (\mu=0.4), and independent noise traders buy/sell equally. Thus (P(B\mid V=1)=0.7), (P(B\mid V=0)=0.3). Bayes gives posterior (p'=0.7); the executed ask was 0.7. For the **next** trader,
+(basic 2) Binary GM model: prior 0.5 and informed share 0.4. After a buy, derive the posterior and next bid/ask.
+
+*Solution.* Values are 0 and 1, prior (p=1/2), informed-arrival share (\mu=0.4), and independent noise traders buy/sell equally. Thus (P(B\mid V=1)=0.7), (P(B\mid V=0)=0.3). Bayes gives posterior (p'=0.7); the executed ask was 0.7. For the **next** trader,
 
 \[
 a'={0.7\cdot0.7\over0.7\cdot0.7+0.3\cdot0.3}={49\over58}=0.8448276,
@@ -49,47 +53,65 @@ These are competitive conditional zero-profit quotes, not unconditional estimate
 
 ### Basic 3 — More noise in one-auction Kyle
 
-With fixed positive value variance and independent Gaussian noise, equilibrium has (\lambda=\sigma_v/(2\sigma_u)), (\beta=\sigma_u/\sigma_v), (x=\beta(v-p_0)), and (E\pi=\sigma_v\sigma_u/2). Doubling **noise variance** replaces (\sigma_u) by (\sqrt2\sigma_u). Hence (\lambda' =\lambda/\sqrt2), (\beta'=\sqrt2\beta), fixed-gap order (x'=\sqrt2x), and (E\pi'=\sqrt2E\pi). This compares equilibria; deviations against a fixed pricing rule are a separate problem.
+(basic 3) One-auction Gaussian Kyle: double noise variance at fixed value variance. Compare lambda, order and expected profit.
+
+*Solution.* With fixed positive value variance and independent Gaussian noise, equilibrium has (\lambda=\sigma_v/(2\sigma_u)), (\beta=\sigma_u/\sigma_v), (x=\beta(v-p_0)), and (E\pi=\sigma_v\sigma_u/2). Doubling **noise variance** replaces (\sigma_u) by (\sqrt2\sigma_u). Hence (\lambda' =\lambda/\sqrt2), (\beta'=\sqrt2\beta), fixed-gap order (x'=\sqrt2x), and (E\pi'=\sqrt2E\pi). This compares equilibria; deviations against a fixed pricing rule are a separate problem.
 
 ### Basic 4 — Roll's identity
 
-For lag-one covariance (-0.0004) dollars squared, the estimated full spread is (2\sqrt{0.0004}=\mathbf{0.04}) dollars. The square root restores dollar units. Identification requires constant spread and a price decomposition with independent suitable trade signs and independent efficient-price innovations. Reversal, correlated signs and sampling noise can contaminate the estimate; a negative sample covariance alone does not establish the assumptions. Nonnegative covariance leaves this real-valued formula undefined.
+(basic 4) Roll covariance -0.0004 dollars squared: compute the full spread and state the identification assumptions.
+
+*Solution.* For lag-one covariance (-0.0004) dollars squared, the estimated full spread is (2\sqrt{0.0004}=\mathbf{0.04}) dollars. The square root restores dollar units. Identification requires constant spread and a price decomposition with independent suitable trade signs and independent efficient-price innovations. Reversal, correlated signs and sampling noise can contaminate the estimate; a negative sample covariance alone does not establish the assumptions. Nonnegative covariance leaves this real-valued formula undefined.
 
 ### Basic 5 — Fitted change versus execution cost
 
-A descriptive slope (4.6) bp per $1m times observed net flow $10m gives **46 bp fitted same-bar change**. It does not identify the causal change from adding a $10m parent order.
+(basic 5) Descriptive flow slope 4.6 bp per million, flow 10 million. Compute fitted change; separately derive average cost on a permanent-linear execution path.
+
+*Solution.* A descriptive slope (4.6) bp per $1m times observed net flow $10m gives **46 bp fitted same-bar change**. It does not identify the causal change from adding a $10m parent order.
 
 Separately stipulate deterministic permanent linear execution impact (p(q)-p_0=\lambda q), with no outside flow, spread, fees, decay or opportunity cost. For quantity (Q), the mean shortfall is (Q^{-1}\int_0^Q\lambda q\,dq=\lambda Q/2=\mathbf{23\ bp}), while terminal change is 46 bp. This extra path assumption is not estimated by a same-minute regression or concave minute bins; their shape does not prove real execution is cheaper or prescribe slicing.
 
 ### Basic 6 — Bulk classification
 
-For volume 1000 BTC and standardized price change +2, bulk buys are (1000\Phi(2)=\mathbf{977.2499}) BTC; bulk sells are **22.7501** BTC. These are assigned volumes. Recorded taker volumes could be 500/500 because price change does not determine trade side. Neither number is the probability of private information. Comparing average absolute bucket imbalance with absolute imbalance after aggregating buckets changes the estimand: cancellation matters.
+(basic 6) Bulk classification: +2 standardized-return units, volume 1000 BTC. Compute assigned buys/sells and compare with possible balanced takers.
+
+*Solution.* For volume 1000 BTC and standardized price change +2, bulk buys are (1000\Phi(2)=\mathbf{977.2499}) BTC; bulk sells are **22.7501** BTC. These are assigned volumes. Recorded taker volumes could be 500/500 because price change does not determine trade side. Neither number is the probability of private information. Comparing average absolute bucket imbalance with absolute imbalance after aggregating buckets changes the estimand: cancellation matters.
 
 ### Advanced 7 — Trend weights and information shares
 
-Assume a stable two-market VECM with cointegrating vector ((1,-1)) and loadings (\alpha=(-0.9,0.1)). An orthogonal common-trend vector is ((0.1,0.9)), already summing to one. Thus B has **common-trend weight 0.9**, as it adjusts less to the discrepancy.
+(advanced 7) VECM alpha=(-0.9,0.1): derive common-trend weights. With equal independent innovation variances derive B information share.
+
+*Solution.* Assume a stable two-market VECM with cointegrating vector ((1,-1)) and loadings (\alpha=(-0.9,0.1)). An orthogonal common-trend vector is ((0.1,0.9)), already summing to one. Thus B has **common-trend weight 0.9**, as it adjusts less to the discrepancy.
 
 Information shares additionally depend on innovation covariance. With equal independent innovation variances, the variance contributions are proportional to (0.1^2) and (0.9^2). B's information share is (0.81/(0.01+0.81)=\mathbf{81/82=0.9878049}). If residuals correlate, Cholesky ordering affects attribution. Weight 0.9 is not information share 0.9, and neither is an unconditional causal leadership claim.
 
 ### Advanced 8 — Tick and fees
 
-At price $20, a one-cent **full** spread gives half-spread $0.005/$20 × 10,000 = **2.5 bp**. A maker rebate of 0.2 cent does not specify the taker fee, so all-in taker cost is initially unidentified.
+(advanced 8) Price 20 dollars, full spread 1 cent, natural full spread one third cent. Maker rebate 0.2 cent; then separately assume taker fee 0.2 cent. Derive one-way costs in bp.
+
+*Solution.* At price $20, a one-cent **full** spread gives half-spread $0.005/$20 × 10,000 = **2.5 bp**. A maker rebate of 0.2 cent does not specify the taker fee, so all-in taker cost is initially unidentified.
 
 Now separately stipulate a taker fee of 0.2 cent per share. One-way taker cost relative to the midpoint is 0.5 + 0.2 = **0.7 cent = 3.5 bp**. A hypothetical natural full spread of one-third cent has half-spread one-sixth cent = **0.833333 bp**. The binding tick alone multiplies half-spread by 3; tick plus the stipulated fee multiplies it by **4.2**, not 3. A half-cent tick permits finer quotes but need not produce that spread: competition, costs, queues and fill probability matter. Maker spread revenue adds its rebates before other costs; taker round-trip cost adds its two fees.
 
 ### Advanced 9 — Per-execution adverse loss
 
-In a chosen competitive risk-neutral per-fill model, each execution earns half-spread (s/2) and has adverse loss (J=3) ticks with probability (p=0.02); other costs are zero. Break-even gives (s/2-pJ=0), so expected adverse loss is **0.06 tick** and required full spread is **0.12 tick**. Tick-size constraints may force a larger feasible quote. Unconditional news frequency alone does not give adverse probability conditional on execution. A batch mechanism reduces this component only under its update, timing and competitive assumptions; other losses can remain.
+(advanced 9) Competitive per-fill model: adverse probability 0.02 and conditional loss 3 ticks; other costs zero. Derive the break-even full spread.
+
+*Solution.* In a chosen competitive risk-neutral per-fill model, each execution earns half-spread (s/2) and has adverse loss (J=3) ticks with probability (p=0.02); other costs are zero. Break-even gives (s/2-pJ=0), so expected adverse loss is **0.06 tick** and required full spread is **0.12 tick**. Tick-size constraints may force a larger feasible quote. Unconditional news frequency alone does not give adverse probability conditional on execution. A batch mechanism reduces this component only under its update, timing and competitive assumptions; other losses can remain.
 
 ### Advanced 10 — Participation and the volume clock
 
-Stipulate exogenous tradable volume rate 1 ADV/day and execution rate 9% of that clock, for order 0.05 ADV. Time is (0.05/0.09=\mathbf{5/9}) day. An **independent** doubling of that rate yields (5/18) day at unchanged participation and other conditions.
+(advanced 10) Sell 5 percent ADV at 9 percent of exogenous ADV/day. Compare independent volume doubling with own-generated turnover and state the clock.
+
+*Solution.* Stipulate exogenous tradable volume rate 1 ADV/day and execution rate 9% of that clock, for order 0.05 ADV. Time is (0.05/0.09=\mathbf{5/9}) day. An **independent** doubling of that rate yields (5/18) day at unchanged participation and other conditions.
 
 Turnover generated by this order is endogenous, so observing double turnover does not establish double outside liquidity. If participation instead means 9% of total volume **including the order**, and outside rate is (V), solve (q=0.09(V+q)), giving (q=(0.09/0.91)V). The same 0.05 ADV then takes (0.05\cdot0.91/0.09=0.505556) day at outside rate 1 ADV/day. This is a different denominator, not a contradiction or a safe real execution prescription. A feedback response to prints can accelerate without creating external capacity.
 
 ### Qualifying 11 — Verification, admissibility and the bridge
 
-Fix positive constant (\lambda) and noise diffusion (\sigma_u>0), on ([0,1]). Value (v) is known in the insider filtration and independent of its Brownian noise. Under the fixed price rule (dp=\lambda\theta\,dt+\lambda\sigma_u\,dW), let (g=v-p) and
+(qual 11) For fixed positive constant Kyle slope, derive the Ito verification identity and expected-profit bound. Specify admissibility, martingale integrability and terminal limits; verify the Gaussian bridge attains it.
+
+*Solution.* Fix positive constant (\lambda) and noise diffusion (\sigma_u>0), on ([0,1]). Value (v) is known in the insider filtration and independent of its Brownian noise. Under the fixed price rule (dp=\lambda\theta\,dt+\lambda\sigma_u\,dW), let (g=v-p) and
 
 \[
 J(t,p;v)={g^2+\lambda^2\sigma_u^2(1-t)\over2\lambda}.
@@ -116,7 +138,9 @@ However (E\theta_t^2=\sigma_u^2/(1-t)), whose integral diverges. Imposing global
 
 ### Qualifying 12 — Equilibrium and horizon units
 
-One auction: independent (v-p_0\sim N(0,\sigma_v^2)), (u\sim N(0,\sigma_u^2)); insider chooses (x=\beta(v-p_0)) before seeing noise; competitive risk-neutral dealers price (p=p_0+\lambda(x+u)). At fixed (\lambda>0), conditional profit is ((v-p_0)x-\lambda x^2); its maximizer gives (\beta=1/(2\lambda)). Gaussian conditional expectation gives
+(qual 12) Derive one-auction Gaussian equilibrium and expected noise loss. Verify filtering in the continuous equilibrium and horizon T scaling at fixed noise variance rate; compare equal total noise variance.
+
+*Solution.* One auction: independent (v-p_0\sim N(0,\sigma_v^2)), (u\sim N(0,\sigma_u^2)); insider chooses (x=\beta(v-p_0)) before seeing noise; competitive risk-neutral dealers price (p=p_0+\lambda(x+u)). At fixed (\lambda>0), conditional profit is ((v-p_0)x-\lambda x^2); its maximizer gives (\beta=1/(2\lambda)). Gaussian conditional expectation gives
 
 \[
 \lambda={\beta\sigma_v^2\over\beta^2\sigma_v^2+\sigma_u^2}.

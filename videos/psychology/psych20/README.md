@@ -196,39 +196,53 @@ Ji-An, C. Zhou, M. Benna and M. G. Mattar, Linking in-context learning in transf
 
 ## Problems and solutions
 
-**1. A saving.** (1,156 − 780)/1,156 = 32.5%. His formula at t = 1,440 minutes: log10 1,440 = 3.158, raised to 1.25 is
+**1. A saving.** Ebbinghaus took 1,156 s to learn a list and 780 s to relearn it a day later. What is the saving, and what does his formula predict for 24 hours?
+
+*Solution.* (1,156 − 780)/1,156 = 32.5%. His formula at t = 1,440 minutes: log10 1,440 = 3.158, raised to 1.25 is
 4.21, and 100 × 1.84/(4.21 + 1.84) = 30.4%, which is his own calculated value for a day; the observed saving in his
 table was 33.7%.
 
-**2. A lag-CRP by hand.** The transitions are 16→15 (−1), 15→14 (−1), 14→1 (−13), 1→2 (+1), 2→9 (+7). Lag −1 was
+**2. A lag-CRP by hand.** For the recall sequence 16, 15, 14, 1, 2, 9 of a 16-word list, count the actual and possible transitions at lags $+1$ and $-1$, and give both CRPs.
+
+*Solution.* The transitions are 16→15 (−1), 15→14 (−1), 14→1 (−13), 1→2 (+1), 2→9 (+7). Lag −1 was
 possible after 16, 15 and 14 (to 15, 14 and 13, none yet recalled) and taken twice: CRP(−1) = 2/3. Lag +1 was possible
 after 1 (to 2) and after 2 (to 3), but not after 16 (no 17), 15 or 14 (16 and 15 already recalled), and taken once:
 CRP(+1) = 1/2. `memory.lag_crp` agrees (`tests/psychology/test_memory.py`).
 
-**3. The drift of context.** With ‖c_{i−1}‖ = 1, ‖c^IN‖ = 1 and c_{i−1}·c^IN = 0, ‖ρc_{i−1} + βc^IN‖² = ρ² + β², which
+**3. The drift of context.** Show that for orthogonal inputs the drift keeps $\|\mathbf{c}\| = 1$ with $\rho = \sqrt{1 - \beta^2}$, and that $\mathbf{c}_i \cdot \mathbf{c}_j \to \rho^{|i-j|}$ for a long list.
+
+*Solution.* With ‖c_{i−1}‖ = 1, ‖c^IN‖ = 1 and c_{i−1}·c^IN = 0, ‖ρc_{i−1} + βc^IN‖² = ρ² + β², which
 is 1 when ρ = √(1 − β²); the general formula reduces to this when the dot product is zero. Unrolling, c_i = ρ^i c_0 +
 β Σ_{k≤i} ρ^{i−k} c^IN_k, and for orthogonal inputs c_i·c_j (j > i) = ρ^{i+j} + β² Σ_{k≤i} ρ^{i−k} ρ^{j−k} =
 ρ^{j−i}[ρ^{2i} + β²(1 − ρ^{2i})/(1 − ρ²)] = ρ^{j−i}, exactly, since β² = 1 − ρ².
 
-**4. A choice rule ignores a common factor.** (ka_i)^{1/τ}/Σ_k (ka_k)^{1/τ} = k^{1/τ}a_i^{1/τ}/(k^{1/τ} Σ_k a_k^{1/τ}),
+**4. A choice rule ignores a common factor.** Show that a choice rule $a_i^{1/\tau} / \sum_k a_k^{1/\tau}$ is unchanged when every $a_i$ is multiplied by the same constant, and use it to explain long-term recency.
+
+*Solution.* (ka_i)^{1/τ}/Σ_k (ka_k)^{1/τ} = k^{1/τ}a_i^{1/τ}/(k^{1/τ} Σ_k a_k^{1/τ}),
 and k^{1/τ} cancels. A delay that moves the test context away from all the words multiplies their matches by about
 the same factor, so among the words the competition is unchanged; recency fades only against cues that do not shrink
 with the rest (the pull to the start of the list, a baseline, noise). Distraction after every word also makes the
 neighbours of the last word much less similar to it, so it stands out among them again: the ratio rule. Chapter 8
 shows that our fitted version, whose start-of-list cue does not shrink, still fails this test.
 
-**5. A Hopfield network must settle.** Updating unit i changes s_i by Δs_i and E by ΔE = −Δs_i Σ_j W_ij s_j (the
+**5. A Hopfield network must settle.** Prove that an asynchronous update of a Hopfield network with symmetric weights and zero diagonal never raises $E = -\tfrac{1}{2}\mathbf{s}^\top W \mathbf{s}$.
+
+*Solution.* Updating unit i changes s_i by Δs_i and E by ΔE = −Δs_i Σ_j W_ij s_j (the
 symmetric W counts the pair twice, cancelling the ½, and W_ii = 0 leaves no self-term). The update sets s_i to the sign
 of h_i = Σ_j W_ij s_j, so Δs_i is zero or has the sign of h_i, and ΔE = −Δs_i h_i ≤ 0. E is bounded below on a finite
 set of states, so the network reaches a state that no update changes.
 
-**6. The divers' test and its power.** Murre's per-diver effects have mean −1.25 words and s.d. 2.32; the exact
+**6. The divers' test and its power.** With `explainer.psychology.opendata`: redo Murre's sign-flip test, then find the power to detect a context effect of 4 words with 16 divers and his spread.
+
+*Solution.* Murre's per-diver effects have mean −1.25 words and s.d. 2.32; the exact
 sign-flip test over all 65,536 patterns gives p = 0.055, two-sided. An effect of four words, the size of 1975's, is
 d = 4/2.32 = 1.73 at that spread; a paired t test at α = 0.05 has 80% power with five divers and essentially 100%
 with sixteen. The replication was not too small; the question is whether a warm, shallow pool in one session is the
 same experiment.
 
-**7. ★ One system or two.** Measure priming (identification speed or stem completion) and recognition for the same
+**7. ★ One system or two.** Design an experiment that could tell a single-system account of priming and recognition from a two-system account, and say what each predicts.
+
+*Solution.* Measure priming (identification speed or stem completion) and recognition for the same
 items in the same people, with recognition confidence. A single-system model, one strength read by two noisy tests,
 predicts that priming is larger for items recognised with higher confidence, and that a patient's or a condition's
 dissociation shrinks when the two tests are matched for reliability. A two-system model allows priming for items

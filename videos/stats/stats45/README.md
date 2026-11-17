@@ -233,30 +233,42 @@ The rest of the part's numbers, chapter by chapter:
 
 ## Problems and solutions
 
-1. **The binomial minimax rule.**
+1. **The binomial minimax rule.** Show that $(X + \sqrt n/2)/(n + \sqrt n)$ has constant risk for $X \sim \mathrm{Bin}(n, p)$, and deduce that it is minimax.
+
+   *Solution.*
    - With a = √n/2, the MSE of (X + a)/(n + 2a) is [np(1 − p) + a²(1 − 2p)²]/(n + 2a)².
    - The numerator is np − np² + (n/4)(1 − 4p + 4p²) = n/4, the same for every p. So the risk is
      n/(4(n + √n)²) = 1/(4(1 + √n)²).
    - The rule is the posterior mean under Beta(a, a), so it is Bayes with constant risk. By chapter 2's theorem, no
      rule has smaller maximum risk: its maximum equals its Bayes risk, which is the smallest possible average.
-2. **Completeness of the uniform maximum.**
+2. **Completeness of the uniform maximum.** Prove that $\max X_i$ is complete for $U(0, \theta)$, and find the UMVUE of $\theta$.
+
+   *Solution.*
    - M = max X_i has density n t^{n−1}/θⁿ on (0, θ).
    - If E_θ g(M) = 0 for all θ, then ∫₀^θ g(t) t^{n−1} dt = 0 for all θ. Differentiating gives g(θ)θ^{n−1} = 0 for
      almost every θ, so g = 0.
    - E M = nθ/(n + 1), so (n + 1)M/n is unbiased and, by Lehmann–Scheffé, the UMVUE.
-3. **The absurd unbiased estimator.**
+3. **The absurd unbiased estimator.** Show that $(-1)^X$ is the only unbiased estimator of $e^{-2\lambda}$ from one Poisson count.
+
+   *Solution.*
    - Unbiasedness means Σ_x δ(x) e^{−λ} λ^x/x! = e^{−2λ}, that is Σ_x δ(x) λ^x/x! = e^{−λ} = Σ_x (−1)^x λ^x/x! for
      every λ > 0.
    - Power series that agree on an interval have equal coefficients, so δ(x) = (−1)^x.
-4. **Basu for the range.**
+4. **Basu for the range.** Use Basu's theorem to show that $\bar X$ and $X_{(n)} - X_{(1)}$ are independent for $N(\mu, 1)$ data.
+
+   *Solution.*
    - With σ = 1 known, X̄ is complete sufficient for μ (a full-rank exponential family).
    - The range X_(n) − X_(1) is unchanged by shifting every observation, so its law does not involve μ: it is
      ancillary.
    - By Basu's theorem the two are independent, for every μ.
-5. **Pitman for a shifted exponential.**
+5. **Pitman for a shifted exponential.** Find the Pitman estimator for $f(x) = e^{-(x - \theta)}$, $x > \theta$, and show it is $\min x_i - 1/n$.
+
+   *Solution.*
    - ∏ f(x_i − t) = exp(−Σ x_i + nt) for t < m = min x_i, and 0 otherwise.
    - So θ̂_P = ∫_{−∞}^m t e^{nt} dt / ∫_{−∞}^m e^{nt} dt = m − 1/n. It is unbiased, since E min X_i = θ + 1/n.
-6. **The SURE-optimal shrinkage.**
+6. **The SURE-optimal shrinkage.** For $\delta = (1 - c/\|X\|^2) X$, $X \sim N_p(\theta, I)$, show that SURE is minimized at $c = p - 2$.
+
+   *Solution.*
    - For p ≥ 3, X ∼ N_p(θ,I) and x ≠ 0, let g = −c x/‖x‖²: ‖g‖² = c²/‖x‖² and ∇·g = −c(p − 2)/‖x‖².
    - So SURE = p + (c² − 2c(p − 2))/‖x‖². This is minimized at c = p − 2 for every x, giving p − (p − 2)²/‖x‖².
    - The expected value of this minimized SURE is James–Stein's risk.

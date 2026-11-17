@@ -129,20 +129,34 @@ are in [`PSYCHOLOGY_ZH_GUIDE.md`](../PSYCHOLOGY_ZH_GUIDE.md).
 
 ## Problems and solutions
 
-1. **d33 for 20 per group.** Power 1/3 needs d/SE = z(0.975) - z(2/3) = 1.96 - 0.43 = 1.53, with SE = √(2/20) =
+1. **d33 for 20 per group.** Using the normal approximation, find $d_{33}$ for an original study with 20 people per group.
+
+   *Solution.* Power 1/3 needs d/SE = z(0.975) - z(2/3) = 1.96 - 0.43 = 1.53, with SE = √(2/20) =
    0.316: d33 ≈ 0.48 (the noncentral t gives 0.50).
-2. **The original's power.** SE = √(1/23 + 1/24) = 0.292, so d/SE = 0.685 and power ≈ P(Z > 1.96 - 0.685) =
+2. **The original's power.** An original study has 23 and 24 people. Find its power, two-sided at 5%, for $d = 0.2$.
+
+   *Solution.* SE = √(1/23 + 1/24) = 0.292, so d/SE = 0.685 and power ≈ P(Z > 1.96 - 0.685) =
    P(Z > 1.275) ≈ 0.10.
-3. **One study at d = 0.1.** n = 2 (1.96 + 1.645)² / 0.1² = 2 × 12.99 / 0.01 ≈ 2,600 per group.
-4. **The replication Bayes factor.** Under the original: N(0.04; 0.68, 0.30² + 0.055²), sd 0.305, z = -2.10,
+3. **One study at d = 0.1.** How many people per group does one study need for 95% power at $d = 0.1$? Use the normal approximation.
+
+   *Solution.* n = 2 (1.96 + 1.645)² / 0.1² = 2 × 12.99 / 0.01 ≈ 2,600 per group.
+4. **The replication Bayes factor.** An original reports $d = 0.68$ (SE 0.30); a replication finds $d = 0.04$ (SE 0.055). Compute the replication Bayes factor in its normal form.
+
+   *Solution.* Under the original: N(0.04; 0.68, 0.30² + 0.055²), sd 0.305, z = -2.10,
    density 0.0442/0.305 = 0.145. Under no effect: N(0.04; 0, 0.055²), z = 0.73, density 0.306/0.055 = 5.57. BF =
    0.145/5.57 ≈ 0.026: about 38 to 1 for no effect.
-5. **Pooling two labs.** A: RD = 0.500 - 0.667 = -0.167, v = 0.25/60 + 0.222/60 = 0.00787 (w = 127); B: RD = 0.50 -
+5. **Pooling two labs.** Lab A: 30 of 60 correct after describing, 40 of 60 without; lab B: 50 of 100 and 62 of 100. Pool the risk differences with fixed-effect weights.
+
+   *Solution.* A: RD = 0.500 - 0.667 = -0.167, v = 0.25/60 + 0.222/60 = 0.00787 (w = 127); B: RD = 0.50 -
    0.62 = -0.12, v = 0.25/100 + 0.2356/100 = 0.00486 (w = 206). Pooled: (-0.167 × 127 - 0.12 × 206)/333 = -0.138,
    SE 1/√333 = 0.055: about 14 fewer correct per 100.
-6. **A multiverse.** 3 × 4 × 5 = 60 analyses; with independent 5% false-positive rates, 1 - 0.95⁶⁰ = 0.95. The
+6. **A multiverse.** A multiverse has 3 estimators, 4 exclusion rules and 5 subsets of labs. How many analyses? If each had an independent 5% false-positive rate, how likely is at least one significant result?
+
+   *Solution.* 3 × 4 × 5 = 60 analyses; with independent 5% false-positive rates, 1 - 0.95⁶⁰ = 0.95. The
    analyses share data, so the true rate is lower, but well above 5%: one more reason to register one of them.
-7. **A Stroop preregistration.** Hypothesis: incongruent trials are slower than congruent ones (one-sided). Smallest
+7. ★ **A Stroop preregistration.** Write a preregistration for a Stroop replication run on the course site: hypothesis, smallest effect of interest, sample size, exclusions and analysis.
+
+   *Solution.* Hypothesis: incongruent trials are slower than congruent ones (one-sided). Smallest
    effect of interest: 20 ms, the smallest interference reported in standard versions. With trial-level SD around
    100 ms and 48 trials per condition, one person's SE is about 20 ms; a group of 30 gives a within-person dz far
    above what is needed for 95% power. Exclusions, fixed in advance: trials faster than 200 ms or slower than 2,000

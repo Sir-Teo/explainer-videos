@@ -71,20 +71,32 @@ Lieder and Griffiths (2020).
 
 ## Problems and solutions
 
-1. **A Dutch book.** c(A) + c(B) = 0.7 but c(A ∨ B) = 0.8. Sell the agent a ticket on A ∨ B for 0.8 and buy tickets
+1. **A Dutch book.** $A$ and $B$ are incompatible; $c(A) = 0.3$, $c(B) = 0.4$, $c(A \lor B) = 0.8$. Build a Dutch book.
+
+   *Solution.* c(A) + c(B) = 0.7 but c(A ∨ B) = 0.8. Sell the agent a ticket on A ∨ B for 0.8 and buy tickets
    on A and on B from her for 0.3 and 0.4. If A: she gains 1 − 0.8 on the first ticket and pays out 1 on the A ticket
    she sold, having received 0.7: net −0.1. If B: the same, −0.1. If neither: −0.8 + 0.7 = −0.1. A sure loss of ten
    cents.
-2. **The log score.** f(q) = −p ln q − (1 − p) ln(1 − q). f′(q) = −p/q + (1 − p)/(1 − q) = 0 exactly when q = p, and
+2. **The log score.** Show that the log score is strictly proper: minimize $-p \ln q - (1 - p)\ln(1 - q)$ over $q$.
+
+   *Solution.* f(q) = −p ln q − (1 − p) ln(1 − q). f′(q) = −p/q + (1 − p)/(1 − q) = 0 exactly when q = p, and
    f″(q) = p/q² + (1 − p)/(1 − q)² > 0, so q = p is the unique minimizer: the rule is strictly proper.
-3. **A rarer disease.** P(ill | +) = 0.001 × 0.99 / (0.001 × 0.99 + 0.999 × 0.01) = 0.00099 / 0.01098 ≈ 9.0%. In
+3. **A rarer disease.** Prevalence 0.1%, sensitivity 99%, false positives 1%: find $P(\text{ill} \mid +)$.
+
+   *Solution.* P(ill | +) = 0.001 × 0.99 / (0.001 × 0.99 + 0.999 × 0.01) = 0.00099 / 0.01098 ≈ 9.0%. In
    natural frequencies: of 100,000 people, 100 are ill and 99 test positive; of the 99,900 who are well, 999 test
    positive.
-4. **Jeffrey's cloth in reverse.** With P(blue) = 0.2 and P(green) = 0.8 − v, P(sold) = 0.4(0.8 − v) + 0.4(0.2) +
+4. **Jeffrey's cloth in reverse.** Jeffrey's cloth: if the glimpse leaves $P(\text{blue}) = 0.2$, which $P(\text{violet})$ gives $P(\text{sold}) = 0.5$?
+
+   *Solution.* With P(blue) = 0.2 and P(green) = 0.8 − v, P(sold) = 0.4(0.8 − v) + 0.4(0.2) +
    0.8v = 0.4 + 0.4v. Setting this to 0.5 gives v = P(violet) = 0.25, and P(green) = 0.55.
-5. **One more chord.** A random-radius chord at distance d from the centre has length 2√(1 − d²), with d uniform on
+5. **One more chord.** For random-radius chords, what is the chance that a chord is longer than the radius?
+
+   *Solution.* A random-radius chord at distance d from the centre has length 2√(1 − d²), with d uniform on
    [0, 1]. It is longer than 1 exactly when d < √3/2, so the chance is √3/2 ≈ 0.866.
-6. **(Essay) Halfer or thirder?** A strong answer states which principle it keeps (no change without new evidence;
+6. **(Essay) Halfer or thirder?** (Essay) Halfer or thirder? Defend an answer, and say what it costs.
+
+   *Solution.* A strong answer states which principle it keeps (no change without new evidence;
    indifference among centred possibilities; conditionalization on self-locating evidence), shows what the other
    answers give up, and faces its own cost from Chapter 11: the thirder's change of credence without news about the
    coin, the halfer's two thirds for a fair future toss, or the double halfer's abandonment of conditionalization.

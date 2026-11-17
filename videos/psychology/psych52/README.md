@@ -120,16 +120,30 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **A keystroke-level model.** H + M + P + B + B + H + M + 4K = 0.4 + 1.35 + 1.1 + 0.1 + 0.1 + 0.4 + 1.35 + 1.12 =
+1. **A keystroke-level model.** Predict with the keystroke-level model: `H M P B B H M K K K K` (K = 0.28 s).
+
+   *Solution.* H + M + P + B + B + H + M + 4K = 0.4 + 1.35 + 1.1 + 0.1 + 0.1 + 0.4 + 1.35 + 1.12 =
    5.92 s.
-2. **Fitts's law.** ID = log2(300/20 + 1) = 4 bits; MT = 0.2 + 0.2 x 4 = 1.0 s.
-3. **Throughput.** We = 4.133 x 6 = 24.8 px; IDe = log2(256/24.8 + 1) = 3.50 bits; TP = 3.50/0.9 = 3.9 bit/s.
-4. **Discovery.** 1 - 0.8^5 = 0.67; 1 - 0.8^n >= 0.9 needs n >= ln 0.1/ln 0.8 = 10.3, so 11 users (if every problem
+2. **Fitts's law.** Fitts's law $MT = 0.2 + 0.2\,ID$, $ID = \log_2(D/W + 1)$: a 20-pixel button 300 pixels away.
+
+   *Solution.* ID = log2(300/20 + 1) = 4 bits; MT = 0.2 + 0.2 x 4 = 1.0 s.
+3. **Throughput.** Endpoints with SD 6 pixels, distance 256, mean time 0.9 s: find $W_e$, $ID_e$ and the throughput.
+
+   *Solution.* We = 4.133 x 6 = 24.8 px; IDe = log2(256/24.8 + 1) = 3.50 bits; TP = 3.50/0.9 = 3.9 bit/s.
+4. **Discovery.** Each problem is found by each user with $p = 0.2$: what share do 5 users find, and how many users for 90%?
+
+   *Solution.* 1 - 0.8^5 = 0.67; 1 - 0.8^n >= 0.9 needs n >= ln 0.1/ln 0.8 = 10.3, so 11 users (if every problem
    really had p = 0.2).
-5. **The marginal value theorem.** g(29) = 10(1 - e^(-0.967)) = 6.20; g'(29) = (10/30) e^(-0.967) = 0.127; g/(t + 20)
+5. **The marginal value theorem.** A patch gives $g(t) = 10(1 - e^{-t/30})$ facts; travel takes 20 s. Check that leaving at about 29 s satisfies $g'(t) = g(t)/(t + 20)$.
+
+   *Solution.* g(29) = 10(1 - e^(-0.967)) = 6.20; g'(29) = (10/30) e^(-0.967) = 0.127; g/(t + 20)
    = 6.20/49 = 0.127. Equal.
-6. **Contrast.** (1.0 + 0.05)/(0.18 + 0.05) = 4.57: it passes AA for normal text (4.5), narrowly.
-7. **A test plan.** A keystroke-level comparison of the old and new pages for the common tasks (fast, for skilled
+6. **Contrast.** Relative luminances 0.18 and 1.0: find the contrast ratio. Does it pass AA for normal text?
+
+   *Solution.* (1.0 + 0.05)/(0.18 + 0.05) = 4.57: it passes AA for normal text (4.5), narrowly.
+7. ★ **A test plan.** Plan a test of a redesigned settings page: a keystroke-level comparison, a usability test, and an experiment, with what each can and cannot tell you.
+
+   *Solution.* A keystroke-level comparison of the old and new pages for the common tasks (fast, for skilled
    users, no errors); a think-aloud test with five to eight users per round, iterated, to find problems (not rates);
    then a randomized experiment on live traffic with a preregistered metric (task completion, time, support
    contacts) and a sample size from a power analysis. Each answers a different question: how fast an expert could

@@ -143,15 +143,29 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Fitts's law.** ID = log2(2 x 16 / 2) = 4 bits; MT = 0.1 + 0.15 x 4 = 0.70 s.
-2. **A watch.** H = 28/40 = 0.70, F = 30/2,000 = 0.015; z(H) = 0.524, z(F) = -2.170; d' = 2.69, c = -(0.524 -
+1. **Fitts's law.** Fitts's law with $a$ = 0.1 s and $b$ = 0.15 s per bit: predict the time to reach a 2 cm target 16 cm away ($ID = \log_2(2D/W)$).
+
+   *Solution.* ID = log2(2 x 16 / 2) = 4 bits; MT = 0.1 + 0.15 x 4 = 0.70 s.
+2. **A watch.** A watch: 40 signals, 28 hits; 2,000 non-signals, 30 false alarms. Find $d'$ and $c$.
+
+   *Solution.* H = 28/40 = 0.70, F = 30/2,000 = 0.015; z(H) = 0.524, z(F) = -2.170; d' = 2.69, c = -(0.524 -
    2.170)/2 = 0.82: a conservative watcher.
-3. **Real alarms.** PPV = 0.005 x 0.9 / (0.005 x 0.9 + 0.995 x 0.05) = 0.0045/0.0543 = 0.083: about one alarm in
+3. **Real alarms.** Targets in 1 bag in 200; hit rate 0.9, false-alarm rate 0.05. What share of alarms are real?
+
+   *Solution.* PPV = 0.005 x 0.9 / (0.005 x 0.9 + 0.995 x 0.05) = 0.0045/0.0543 = 0.083: about one alarm in
    twelve is real.
-4. **Independent layers.** 0.05^4 = 6.25 x 10^-6, about one in 160,000; if the layers share causes, much more.
-5. **NASA-TLX.** (70 x 5 + 40 x 1 + 60 x 3 + 50 x 2 + 30 x 0 + 80 x 4)/15 = 990/15 = 66.
-6. **Takeovers in time.** P(T < 7) = Phi(ln(7/5)/0.45) = Phi(0.75) = 0.77.
-7. **A safety case for dose entry.** Tasks: select the drug, enter the dose and rate, confirm, start. Likely errors:
+4. **Independent layers.** Four independent layers, each failing one time in 20: the chance of an accident?
+
+   *Solution.* 0.05^4 = 6.25 x 10^-6, about one in 160,000; if the layers share causes, much more.
+5. **NASA-TLX.** NASA-TLX ratings 70, 40, 60, 50, 30, 80 with weights 5, 1, 3, 2, 0, 4: the weighted score?
+
+   *Solution.* (70 x 5 + 40 x 1 + 60 x 3 + 50 x 2 + 30 x 0 + 80 x 4)/15 = 990/15 = 66.
+6. **Takeovers in time.** A level-3 car hands over with a 7 s budget; takeover times are lognormal with median 5 s and log-SD 0.45. What share finish in time?
+
+   *Solution.* P(T < 7) = Phi(ln(7/5)/0.45) = Phi(0.75) = 0.77.
+7. ★ **A safety case for dose entry.** Write the human-factors section of a safety case for a medication pump's dose entry: tasks, likely slips, lapses and mistakes, the tests, and the residual risk.
+
+   *Solution.* Tasks: select the drug, enter the dose and rate, confirm, start. Likely errors:
    slips (a decimal point or an extra zero, the wrong drug in a look-alike list), lapses (a step skipped after an
    interruption), mistakes (units confused, mg against micrograms, or a wrong rule for a weight-based dose). Controls:
    a drug library with hard and soft limits, units always shown, no trailing zeros, a confirmation that restates the

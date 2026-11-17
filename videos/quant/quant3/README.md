@@ -240,31 +240,49 @@ The last component supplies 7.44% of the total 61.58.
 
 ## Problems, with solutions
 
-1. **P/E from Gordon.** P = D₁/(r − g) and D₁ = bE₁, so P/E₁ = b/(r − g). A P/E of 30 with b = 0.5 needs
+1. **P/E from Gordon.** Derive $P/E_1 = b/(r - g)$ from Gordon's model. With a payout ratio of 50% and $r = 8\%$, what perpetual growth does a P/E of 30 imply?
+
+   *Solution.* P = D₁/(r − g) and D₁ = bE₁, so P/E₁ = b/(r − g). A P/E of 30 with b = 0.5 needs
    r − g = 1.67%: at r = 8%, g ≈ 6.3% forever.
-2. **The DCF.** Forecasts 105, 110.25, 115.76, 121.55, 127.63; present values at 8%: 97.2, 94.5, 91.9, 89.3, 86.9
+2. **The DCF.** Free cash flow is 100 and grows 5% for five years, then 2% forever. Value it at 8%, give the terminal value's share, and value it again at 7% and 3%.
+
+   *Solution.* Forecasts 105, 110.25, 115.76, 121.55, 127.63; present values at 8%: 97.2, 94.5, 91.9, 89.3, 86.9
    (459.8). Terminal value at year 5: 127.63 × 1.02/0.06 = 2,169.7, worth 1,476.6 today. Total 1,936.5, 76% of it
    terminal. At 7% and 3%: 2,816 (+45%).
-3. **Modigliani–Miller.** Without taxes r_E = 8% + 4% × 1 = 12% and the WACC is 8% = r_A. With a 21% tax rate
+3. **Modigliani–Miller.** A firm's assets earn $r_A = 8\%$ and its debt costs $r_D = 4\%$. Find $r_E$ at $D/E = 1$ without taxes, and the WACC at that leverage with a 21% tax rate. Why does the WACC fall only when there are taxes?
+
+   *Solution.* Without taxes r_E = 8% + 4% × 1 = 12% and the WACC is 8% = r_A. With a 21% tax rate
    r_E = r_A + (r_A − r_D)(1 − t)D/E = 11.16% and the WACC is ½·11.16% + ½·4%·0.79 = 7.16%. Without taxes cheap debt
    is offset by dearer equity; with taxes the government pays part of the interest, so the after-tax cost falls and
    value rises by the shield.
-4. **Merton.** Black–Scholes with A = 100, F = 80, T = 5, σ = 25%, r = 2%: E = 35.75, D = 64.25, yield
+4. **Merton.** Merton: assets 100, debt of face 80 due in five years, asset volatility 25%, $r = 2\%$. Value the equity and the debt, and find the debt's credit spread.
+
+   *Solution.* Black–Scholes with A = 100, F = 80, T = 5, σ = 25%, r = 2%: E = 35.75, D = 64.25, yield
    −ln(64.25/80)/5 = 4.39%, a spread of 2.39%; risk-neutral default probability N(−d₂) = 38%.
-5. **Overlapping windows.** 1,560/120 ≈ 13 independent decades. With a predictor that barely changes within a decade,
+5. **Overlapping windows.** There are 1,560 overlapping ten-year windows in 1881–2010. Roughly how many independent observations is that, and by about what factor does treating them as independent overstate a $t$-statistic?
+
+   *Solution.* 1,560/120 ≈ 13 independent decades. With a predictor that barely changes within a decade,
    neighbouring windows' errors are almost perfectly correlated, and treating them as independent overstates t by
    roughly √120 ≈ 11. Part 6 derives the corrections (Hansen–Hodrick, Newey–West) and Stambaugh's bias.
-6. **Two IRRs.** −100 + 230/x − 132/x² = 0 with x = 1 + r gives 100x² − 230x + 132 = 0, so x = 1.1 or 1.2: IRRs of
+6. **Two IRRs.** A project costs 100, pays 230 in a year and costs 132 in two. Find both IRRs, and the NPV at 15%.
+
+   *Solution.* −100 + 230/x − 132/x² = 0 with x = 1 + r gives 100x² − 230x + 132 = 0, so x = 1.1 or 1.2: IRRs of
    10% and 20%. NPV(15%) = −100 + 200 − 99.81 = +0.19 > 0: accept at 15%, reject below 10% or above 20%.
-7. **Campbell–Shiller.** The identity b_r − b_d + ρφ ≈ 1: 0.05 + 0.03 + 0.96 × 0.95 = 0.992, within the
+7. **Campbell–Shiller.** With $\rho = 0.96$ and a dividend yield whose AR(1) persistence is $\phi = 0.95$, a one-year return slope $b_r = 0.05$ and dividend-growth slope $b_d = -0.03$: check the Campbell–Shiller identity and give the long-run shares.
+
+   *Solution.* The identity b_r − b_d + ρφ ≈ 1: 0.05 + 0.03 + 0.96 × 0.95 = 0.992, within the
    linearisation's error. Long-run slopes: b_r/(1 − ρφ) = 0.05/0.088 = 0.57 and b_d/(1 − ρφ) = −0.34; their difference,
    0.91, is the share of the yield's variance explained, with returns carrying about 0.57/0.91 ≈ 63% of it.
 
-8. **(qual) Residual income from clean surplus.** Clean surplus gives $d_t = x_t - (b_t - b_{t-1}) = x^a_t + Rb_{t-1} -
+8. **(qual) Residual income from clean surplus.** (qual) From the dividend discount model and clean surplus, prove $P_t = b_t + \sum_{\tau \ge 1}R^{-\tau}\mathbb E_t x^a_{t+\tau}$; state the transversality condition it needs.
+
+   *Solution.* Clean surplus gives $d_t = x_t - (b_t - b_{t-1}) = x^a_t + Rb_{t-1} -
    b_t$. Then $\sum_{\tau=1}^{T}R^{-\tau}d_{t+\tau} = \sum_{\tau=1}^{T}R^{-\tau}x^a_{t+\tau} + b_t - R^{-T}b_{t+T}$
    (the book terms telescope). Taking expectations and letting $T \to \infty$, $P_t = b_t + \sum_{\tau \ge 1}R^{-\tau}
    E_tx^a_{t+\tau}$ provided $R^{-T}E_tb_{t+T} \to 0$: book may not grow as fast as the discount rate forever.
-9. **(qual) Ohlson's blend.** With $\nu = 0$, $P = b + \frac{\omega}{R - \omega}(x - rb_{t-1})$, and clean surplus gives
+9. **(qual) Ohlson's blend.** (qual) Under Ohlson's dynamics with $\nu = 0$, show $P_t = (1 - k)b_t + k(\varphi x_t - d_t)$ with $k = r\omega/(R - \omega)$, $\varphi = R/r$.
+
+   *Solution.* With $\nu = 0$, $P = b + \frac{\omega}{R - \omega}(x - rb_{t-1})$, and clean surplus gives
    $b_{t-1} = b_t - x_t + d_t$, so $x - rb_{t-1} = Rx - rb - rd$. Hence $P = (1 - k)b + k(\varphi x - d)$ with $k =
    r\omega/(R - \omega)$ and $\varphi = R/r$: a weighted average of book and capitalised earnings (net of the dividend),
    with weight $k$ rising from 0 at $\omega = 0$ to 1 at $\omega = 1$.

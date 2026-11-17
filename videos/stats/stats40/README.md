@@ -204,19 +204,31 @@ python tools/lecture_length.py stats40 --floor 50
 
 ## Problems and solutions
 
-1. **KM without censoring.** With no censoring, n_{k+1} = n_k − d_k, so each factor is n_{k+1}/n_k and the product
+1. **KM without censoring.** With no censoring, show the Kaplan–Meier estimate is the empirical survival function $\#\{T_i > t\}/n$.
+
+   *Solution.* With no censoring, n_{k+1} = n_k − d_k, so each factor is n_{k+1}/n_k and the product
    telescopes to (n − Σ_{t_k ≤ t} d_k)/n = #{T_i > t}/n.
-2. **The censored exponential.** The log-likelihood is Σ δ_i log λ − λ Σ x_i = d log λ − λ Σ x_i. Setting the score to
+2. **The censored exponential.** Exponential lifetimes, right censoring: show $\hat\lambda = d / \sum_i x_i$ and $\text{Var}(\hat\lambda) \approx \lambda^2 / d$.
+
+   *Solution.* The log-likelihood is Σ δ_i log λ − λ Σ x_i = d log λ − λ Σ x_i. Setting the score to
    zero gives λ̂ = d/Σx_i. The information is d/λ², so Var(λ̂) ≈ λ²/d: precision comes from events, not people.
-3. **Cox's score is log-rank.** For one binary covariate at β = 0, x̄(t_k) = n_{1k}/n_k. So
+3. **Cox's score is log-rank.** Two groups, no ties: show Cox's score at $\beta = 0$ is $\sum_k (d_{1k} - n_{1k}/n_k)$, the log-rank O $-$ E.
+
+   *Solution.* For one binary covariate at β = 0, x̄(t_k) = n_{1k}/n_k. So
    U(0) = Σ_k (x_{(k)} − n_{1k}/n_k) = Σ_k (d_{1k} − E_{1k}) when each d_k = 1. The information at 0 is
    Σ (n_{1k}/n_k)(1 − n_{1k}/n_k), the log-rank variance without ties.
-4. **Weibull is PH and AFT.** With W extreme-value, S(t | x) = exp(−e^{(log t − x'γ)/σ}) = exp(−t^{1/σ} e^{−x'γ/σ}).
+4. **Weibull is PH and AFT.** Weibull: show $\log T = x^\top\gamma + \sigma W$ has proportional hazards with $\beta = -\gamma/\sigma$.
+
+   *Solution.* With W extreme-value, S(t | x) = exp(−e^{(log t − x'γ)/σ}) = exp(−t^{1/σ} e^{−x'γ/σ}).
    That is a Weibull with shape k = 1/σ, and the hazard k t^{k−1} e^{−x'γ/σ} is proportional in x with β = −γ/σ.
-5. **The gamma frailty's population hazard.** S(t) = E e^{−Z H_0} = (1 + θ H_0)^{−1/θ}, the gamma Laplace transform.
+5. **The gamma frailty's population hazard.** Gamma frailty: show the population hazard is $h_0(t)/(1 + \theta H_0(t))$.
+
+   *Solution.* S(t) = E e^{−Z H_0} = (1 + θ H_0)^{−1/θ}, the gamma Laplace transform.
    Then h_pop = −d log S/dt = h_0/(1 + θH_0). This equals E[Z | T > t] h_0, since the survivors' frailty is
    Gamma(1/θ, θ/(1 + θH_0)).
-6. **RMST.** min(T, τ) = ∫_0^τ 1{T > t} dt. Take expectations and swap the order (Fubini): E min(T, τ) = ∫_0^τ S(t) dt.
+6. **RMST.** Show $E \min(T, \tau) = \int_0^\tau S(t)\, dt$.
+
+   *Solution.* min(T, τ) = ∫_0^τ 1{T > t} dt. Take expectations and swap the order (Fubini): E min(T, τ) = ∫_0^τ S(t) dt.
 
 ## Glossary
 

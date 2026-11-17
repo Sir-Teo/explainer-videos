@@ -128,31 +128,49 @@ Part 16, MLMC and the optimal importance-sampling shift too.
 
 ## Problems, with solutions
 
-1. **Variations.** Each ΔW is N(0, 1/n). Then E|ΔW| = √(2/(πn)), so E Σ|ΔW| = n√(2/(πn)) = √(2n/π) → ∞. Also
+1. **Variations.** Show that $\sum |\Delta W|$ over a grid of $n$ steps on $[0, 1]$ has mean $\sqrt{2n/\pi}$, and $\sum (\Delta W)^2$ has mean 1 and variance $2/n$.
+
+   *Solution.* Each ΔW is N(0, 1/n). Then E|ΔW| = √(2/(πn)), so E Σ|ΔW| = n√(2/(πn)) = √(2n/π) → ∞. Also
    E(ΔW)² = 1/n and Var((ΔW)²) = 2/n², so Σ(ΔW)² has mean 1 and variance 2/n → 0.
-2. **∫W dW.** Left points: Σ W_k ΔW_k = ½Σ(W²_{k+1} − W²_k) − ½Σ(ΔW_k)² → ½(W_T² − T). Midpoints in time:
+2. **∫W dW.** Compute $\int_0^T W\,dW$ as a limit of left-point sums, and then of midpoint sums. Which one is a martingale in $T$?
+
+   *Solution.* Left points: Σ W_k ΔW_k = ½Σ(W²_{k+1} − W²_k) − ½Σ(ΔW_k)² → ½(W_T² − T). Midpoints in time:
    Σ W_{k+½}ΔW_k = ½(W_T² − T) + Σ(W_{k+½} − W_k)ΔW_k, and the last sum tends to ½T, giving ½W_T². Only the Itô
    integral ½(W_T² − T) is a martingale in T: its mean is zero for every T.
-3. **Milstein.** Over one step, X_{t+h} − X_t = ∫a ds + ∫b(X_s) dW_s, and b(X_s) ≈ b(X_t) + b'b(X_t)(W_s − W_t) by Itô
+3. **Milstein.** Derive Milstein's correction for $dX = a\,dt + b(X)\,dW$ from It\^o's lemma applied to $b(X)$ over one step.
+
+   *Solution.* Over one step, X_{t+h} − X_t = ∫a ds + ∫b(X_s) dW_s, and b(X_s) ≈ b(X_t) + b'b(X_t)(W_s − W_t) by Itô
    to first order. So ∫_t^{t+h} b(X_s) dW_s ≈ b ΔW + b'b ∫(W_s − W_t)dW_s = b ΔW + ½ b'b (ΔW² − h).
-4. **Vasicek.** r_T = θ + (r₀ − θ)e^{−κT} + σ∫e^{−κ(T−s)}dW_s is Gaussian, with mean θ + (r₀ − θ)e^{−κT} and variance
+4. **Vasicek.** For Vasicek, show that $r_T$ is Gaussian and find its mean and variance. What is the long-run probability of a negative rate with the fitted $\kappa = 0.099$, $\theta = 4.1\%$, $\sigma = 1.4\%$?
+
+   *Solution.* r_T = θ + (r₀ − θ)e^{−κT} + σ∫e^{−κ(T−s)}dW_s is Gaussian, with mean θ + (r₀ − θ)e^{−κT} and variance
    σ²(1 − e^{−2κT})/(2κ). In the long run it is N(θ, σ²/2κ): sd 0.014/√0.197 = 3.2%, so P(r < 0) = N(−4.1/3.2) ≈ 10%,
    as the lab's 200 paths show (10% below zero).
-5. **Hawkes.** In stationarity E[λ] = μ + (α/β)E[λ], so the rate is μ/(1 − α/β) = 0.1/(1 − 0.4) ≈ 0.167 a day. Each
+5. **Hawkes.** A Hawkes process has $\mu = 0.1$, $\alpha = 0.8$, $\beta = 2$ (per day). What is its long-run rate? What fraction of events are triggered by earlier ones?
+
+   *Solution.* In stationarity E[λ] = μ + (α/β)E[λ], so the rate is μ/(1 − α/β) = 0.1/(1 − 0.4) ≈ 0.167 a day. Each
    event triggers α/β = 0.4 children on average, so a fraction 0.4 of all events are triggered by earlier ones (the
    cluster size is 1/(1 − 0.4)).
-6. **E τ_a = ∞.** P(τ_a < ∞) = lim_{T→∞} 2(1 − Φ(a/√T)) = 1. But f(t) = a(2πt³)^{−½}e^{−a²/2t} ~ a(2π)^{−½}t^{−3/2}
+6. **E τ_a = ∞.** From the first-passage density $f_{\tau_a}(t) = \frac{a}{\sqrt{2\pi t^3}}e^{-a^2/2t}$, show that $\mathbb{E}\,\tau_a = \infty$ although $P(\tau_a < \infty) = 1$.
+
+   *Solution.* P(τ_a < ∞) = lim_{T→∞} 2(1 − Φ(a/√T)) = 1. But f(t) = a(2πt³)^{−½}e^{−a²/2t} ~ a(2π)^{−½}t^{−3/2}
    for large t, so E τ_a = ∫ t f(t) dt diverges like ∫ t^{−1/2} dt.
-7. **Clark–Ocone for W_T³.** D_tW_T³ = 3W_T², so H_t = E[3W_T² ∣ 𝓕_t] = 3(W_t² + T − t). Check: by Itô,
+7. **Clark–Ocone for W_T³.** Compute the Clark–Ocone integrand of $F = W_T^3$, and check it with It\^o's lemma.
+
+   *Solution.* D_tW_T³ = 3W_T², so H_t = E[3W_T² ∣ 𝓕_t] = 3(W_t² + T − t). Check: by Itô,
    W_T³ = ∫3W²dW + ∫3W dt, and ∫_0^T W_t dt = ∫_0^T (T − t) dW_t (integration by parts), so
    W_T³ = ∫_0^T 3(W_t² + T − t) dW_t, with mean zero as it should be.
 
-8. **(qual) Realized variance's CLT.** With deterministic continuous bounded $\sigma$ and positive integrated quarticity, $\Delta_iX \sim N(0, v_i)$ independently,
+8. **(qual) Realized variance's CLT.** (qual) For $dX = \sigma_t dW$ with deterministic continuous bounded $\sigma_t$ and positive integrated quarticity, prove $\sqrt n(\mathrm{RV}_n - \int\sigma^2) \Rightarrow N(0, 2\int\sigma^4)$ by the Lindeberg CLT.
+
+   *Solution.* With deterministic continuous bounded $\sigma$ and positive integrated quarticity, $\Delta_iX \sim N(0, v_i)$ independently,
    $v_i = \int_{(i-1)/n}^{i/n}\sigma^2$. Then $\xi_i = (\Delta_iX)^2 - v_i$ are independent, mean zero, $\operatorname{Var}
    \xi_i = 2v_i^2$, and $n\sum 2v_i^2 \to 2\int\sigma^4$ (a Riemann sum, $v_i \approx \sigma^2_{i/n}/n$). Lyapunov's
    condition holds since $E\xi_i^4 = 60v_i^4$, so $\sum E\xi_i^4/(\sum 2v_i^2)^2 = O(1/n) \to 0$; hence
    $\sqrt n(\mathrm{RV}_n - \mathrm{IV}) \Rightarrow N(0, 2\int\sigma^4)$.
-9. **(qual) Noise.** For a driftless square-integrable efficient-price martingale and iid mean-zero noise independent of that price, $\mathrm{RV}_n(Y) = \mathrm{RV}_n(X) + 2\sum\Delta_iX\,\Delta_i\varepsilon + \sum(\Delta_i\varepsilon)^2$.
+9. **(qual) Noise.** (qual) For a driftless efficient martingale price, add independent iid mean-zero noise $\varepsilon$ of variance $\omega^2$, show $\mathbb E\,\mathrm{RV}_n(Y) = \mathbb E\,\mathrm{IV} + 2n\omega^2$ and $\mathrm{RV}_n(Y)/2n \to \omega^2$.
+
+   *Solution.* For a driftless square-integrable efficient-price martingale and iid mean-zero noise independent of that price, $\mathrm{RV}_n(Y) = \mathrm{RV}_n(X) + 2\sum\Delta_iX\,\Delta_i\varepsilon + \sum(\Delta_i\varepsilon)^2$.
    The middle term has mean zero (independence), and $E\sum(\varepsilon_i - \varepsilon_{i-1})^2 = 2n\omega^2$, so
    $E\,\mathrm{RV}_n(Y) = E\,\mathrm{IV} + 2n\omega^2$. Dividing by $2n$, the first two terms vanish and the last is an
    average of a 1-dependent stationary sequence with mean $2\omega^2$, so the law of large numbers gives

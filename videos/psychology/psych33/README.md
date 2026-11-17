@@ -171,26 +171,40 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Aggregation.** The average of k situations is T + ū + ē, with Var(ū + ē) = σ_e²/k (the situational parts and
+1. **Aggregation.** Behaviour in situation $s$ is $T + u_s + e$, with variances $\sigma_T^2$ and $\sigma_e^2$ for the trait and everything else. Show that averages over $k$ situations correlate $k\rho/(1 + (k - 1)\rho)$, with $\rho = \sigma_T^2/(\sigma_T^2 + \sigma_e^2)$.
+
+   *Solution.* The average of k situations is T + ū + ē, with Var(ū + ē) = σ_e²/k (the situational parts and
    noise independent across situations). Two such averages over different situations share only T, so their
    correlation is σ_T² / (σ_T² + σ_e²/k) = kρ/(1 + (k − 1)ρ) with ρ = σ_T²/(σ_T² + σ_e²): the Spearman-Brown formula.
    With ρ = 0.29, k = 16 gives 0.87.
-2. **The arcsine law.** For a standard bivariate normal with correlation r, P(X > 0, Y > 0) = 1/4 + arcsin(r)/(2π)
+2. **The arcsine law.** Two normal scores correlate $r$. Show that both fall on the same side of their medians with probability $\tfrac12 + \arcsin(r)/\pi$, and give the chance of keeping all four letters of a type at $r = 0.8$.
+
+   *Solution.* For a standard bivariate normal with correlation r, P(X > 0, Y > 0) = 1/4 + arcsin(r)/(2π)
    (Sheppard's orthant probability), so P(same side) = 2 × that = 1/2 + arcsin(r)/π. At r = 0.8 this is 0.795, and
    for four independent dimensions 0.795⁴ = 0.40.
-3. **The median split.** For X standard normal and D = sign(X), Cov(X, D) = E|X| = √(2/π) and Var(D) = 1, so the
+3. **The median split.** Show that the correlation of a normal variable with its own median split is $\sqrt{2/\pi}$.
+
+   *Solution.* For X standard normal and D = sign(X), Cov(X, D) = E|X| = √(2/π) and Var(D) = 1, so the
    correlation is √(2/π) ≈ 0.80. Any correlation of X with Y passing through X alone shrinks by this factor.
-4. **D in many dimensions.** With independent unit-variance traits the pooled covariance is the identity, so D² is
+4. **D in many dimensions.** Two groups differ by $d$ on each of $p$ independent traits. Show that $D = d\sqrt{p}$, and find the overlap $2\Phi(-D/2)$ for $d = 0.2$ and $p = 25$.
+
+   *Solution.* With independent unit-variance traits the pooled covariance is the identity, so D² is
    the sum of the squared differences: D = d√p. For d = 0.2 and p = 25, D = 1.0 and the overlap is 2Φ(−0.5) = 0.62.
    (The SAPA items are correlated, which is why their D is 0.89 rather than 0.18 × 5.)
-5. **Reverse keys.** On a 1-to-6 scale, x and 7 − x have the same distance from the midpoint 3.5 on opposite sides,
+5. **Reverse keys.** Reverse-key an item on a 1 to 6 scale. Why $7 - x$, and what happens to Cronbach's alpha if you forget?
+
+   *Solution.* On a 1-to-6 scale, x and 7 − x have the same distance from the midpoint 3.5 on opposite sides,
    so 7 − x reverses the item without changing its spread. Left unreversed, a reverse-keyed item correlates
    negatively with the others, lowering the sum's variance relative to the items' and so lowering alpha, which can
    even become negative.
-6. **The effect-size display.** Two median splits with a 2 × 2 table of shares p, 1/2 − p, 1/2 − p, p have phi
+6. **The effect-size display.** In the binomial effect-size display, show that a correlation $r$ between two median splits gives success rates $50 \pm 50r$ percent.
+
+   *Solution.* Two median splits with a 2 × 2 table of shares p, 1/2 − p, 1/2 − p, p have phi
    coefficient (p − 1/4)/(1/4) = 4p − 1 = r, so p = (1 + r)/4, and the success rate in the upper half is p/(1/2) =
    (1 + r)/2 = 50 + 50r percent.
-7. ★ **Conscientiousness and longevity.** Observational data confound conscientiousness with income, education,
+7. ★ **Conscientiousness and longevity.** Design a study that could tell whether conscientiousness causes longer life or merely marks it, and say which confounders each part of your design removes.
+
+   *Solution.* Observational data confound conscientiousness with income, education,
    health and childhood circumstances. A design: a prospective cohort measuring conscientiousness in childhood
    (before most adult confounders), with siblings compared to remove shared family factors; mediators measured over
    time (smoking, diet, adherence to treatment) to trace mechanisms; and, for causality, randomized trials of a

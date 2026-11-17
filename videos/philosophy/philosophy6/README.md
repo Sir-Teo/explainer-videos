@@ -75,26 +75,38 @@ set-theoretic multiverse" (2012).
 
 ## Problems and solutions
 
-1. **The finite subsets of ℕ are countable.** Send a finite set S to the number Σ_{n ∈ S} 2ⁿ. Every natural number
+1. **The finite subsets of ℕ are countable.** Show that the set of all *finite* subsets of $\mathbb{N}$ is countable. (Hint: Ackermann.)
+
+   *Solution.* Send a finite set S to the number Σ_{n ∈ S} 2ⁿ. Every natural number
    has exactly one binary expansion, so this is a bijection between the finite subsets of ℕ and ℕ itself: S is read
    off from the 1-bits. (This is Ackermann's idea, applied once instead of hereditarily.) By contrast, *all* subsets
    of ℕ are uncountable (Chapter 3): the infinite ones are what the diagonal catches.
-2. **The functions ℕ → ℕ cannot be listed.** Given any list f₀, f₁, f₂, …, define g(n) = fₙ(n) + 1. Then g differs
+2. **The functions ℕ → ℕ cannot be listed.** Show by a diagonal argument that the functions from $\mathbb{N}$ to $\mathbb{N}$ cannot be listed.
+
+   *Solution.* Given any list f₀, f₁, f₂, …, define g(n) = fₙ(n) + 1. Then g differs
    from fₙ at the argument n, for every n, so g is not on the list. (In fact there are 2^ℵ₀ such functions: at
    least as many as the 0/1-valued ones, and at most as many as the subsets of ℕ × ℕ.)
-3. **Ordinal arithmetic.** (ω + 1)·2 = (ω + 1) + (ω + 1) = ω + (1 + ω) + 1 = ω + ω + 1 = ω·2 + 1. 2·(ω + 1) =
+3. **Ordinal arithmetic.** Compute $(\omega+1)\cdot 2$, $2\cdot(\omega+1)$, $\omega\cdot(\omega+1)$, and compare $\omega + \omega^2$ with $\omega^2 + \omega$.
+
+   *Solution.* (ω + 1)·2 = (ω + 1) + (ω + 1) = ω + (1 + ω) + 1 = ω + ω + 1 = ω·2 + 1. 2·(ω + 1) =
    2·ω + 2·1 = ω + 2 (left distributivity holds; 2·ω = ω). ω·(ω + 1) = ω·ω + ω = ω² + ω. And ω + ω² = ω², since ω²
    absorbs the smaller ω placed before it, while ω² + ω > ω². The Reasoner's `Ord` gives the same four answers.
-4. **Goodstein's sequence from 5.** Base 2: 5 = 2² + 1, ordinal ω^ω + 1. Base 3: 3³ + 1 − 1 = 27 = 3³, ordinal
+4. **Goodstein's sequence from 5.** Write the first five terms of Goodstein's sequence from 5, with their ordinals.
+
+   *Solution.* Base 2: 5 = 2² + 1, ordinal ω^ω + 1. Base 3: 3³ + 1 − 1 = 27 = 3³, ordinal
    ω^ω. Base 4: 4⁴ − 1 = 255 = 3·4³ + 3·4² + 3·4 + 3, ordinal ω³·3 + ω²·3 + ω·3 + 3. Base 5: 3·5³ + 3·5² + 3·5 + 3 − 1
    = 467, ordinal ω³·3 + ω²·3 + ω·3 + 2. Base 6: 775, ordinal ω³·3 + ω²·3 + ω·3 + 1. Each ordinal is smaller than the
    last, as the proof requires.
-5. **No set contains every set.** For any set A, separation gives R_A = {x ∈ A : x ∉ x}. If R_A were in A, it would
+5. **No set contains every set.** Use separation to show that no set contains every set. Why does the iterative conception agree?
+
+   *Solution.* For any set A, separation gives R_A = {x ∈ A : x ∉ x}. If R_A were in A, it would
    belong to itself exactly when it does not; so R_A ∉ A, and A is not the set of all sets. On the iterative
    conception, every set is formed at a stage from sets formed earlier, and for any set A the set {A} is formed at a
    later stage; a set containing every set would have to contain sets formed after it, and itself, which no stage
    allows.
-6. **(Essay) Is the continuum hypothesis true, false, or neither?** A strong answer uses Chapter 17's Price List and
+6. **(Essay) Is the continuum hypothesis true, false, or neither?**
+
+   *Solution.* A strong answer uses Chapter 17's Price List and
    says which claim it gives up and at what cost. *New axioms* (Gödel, Woodin): the cost is to show that some
    candidate axiom is justified, intrinsically or by its consequences, and Lévy–Solovay rules out the large
    cardinals as such axioms. *No fact of the matter* (Hamkins, Feferman): the cost is explaining why the same doubt

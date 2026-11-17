@@ -125,27 +125,39 @@ python tools/lecture_length.py stats52 --floor 50
 
 ## Problems and solutions
 
-1. **The basic inequality.**
+1. **The basic inequality.** Derive the lasso's basic inequality, and show it forces $\|\Delta_{S^c}\|_1 \le 3\|\Delta_S\|_1$ when $\lambda \ge 2\|X^\top\varepsilon/n\|_\infty$.
+
+   *Solution.*
    - Optimality of β̂ against β*: (1/2n)‖y − Xβ̂‖² + λ‖β̂‖₁ ≤ (1/2n)‖ε‖² + λ‖β*‖₁.
    - With y = Xβ* + ε and Δ = β̂ − β*, this is (1/2n)‖XΔ‖² ≤ ⟨X^⊤ε/n, Δ⟩ + λ(‖β*‖₁ − ‖β̂‖₁).
    - Hölder gives ⟨X^⊤ε/n, Δ⟩ ≤ (λ/2)‖Δ‖₁. The triangle inequality gives ‖β*‖₁ − ‖β̂‖₁ ≤ ‖Δ_S‖₁ − ‖Δ_{S^c}‖₁.
    - So 0 ≤ (λ/2)(‖Δ_S‖₁ + ‖Δ_{S^c}‖₁) + λ(‖Δ_S‖₁ − ‖Δ_{S^c}‖₁), which gives ‖Δ_{S^c}‖₁ ≤ 3‖Δ_S‖₁.
-2. **The noise's correlations.**
+2. **The noise's correlations.** For columns with $\|X_j\|^2 = n$, show $P(\|X^\top\varepsilon/n\|_\infty > \sigma\sqrt{2\log(2p/\delta)/n}) \le \delta$.
+
+   *Solution.*
    - For fixed columns with ‖X_j‖² = n and independent homoskedastic Gaussian errors, each X_j^⊤ε/n ~ N(0, σ²/n), so P(|X_j^⊤ε/n| > t) ≤ 2e^{−nt²/(2σ²)}.
    - A union bound over j gives 2p e^{−nt²/(2σ²)}. Setting this equal to δ gives t = σ√(2 log(2p/δ)/n).
-3. **The nuclear norm is decomposable.**
+3. **The nuclear norm is decomposable.** Show the nuclear norm is decomposable: $\|A + B\|_* = \|A\|_* + \|B\|_*$ if $A$ and $B$ have orthogonal row and column spaces.
+
+   *Solution.*
    - If A = U_A D_A V_A^⊤ and B = U_B D_B V_B^⊤ with U_A ⊥ U_B and V_A ⊥ V_B, then [U_A U_B] blockdiag(D_A, D_B) [V_A V_B]^⊤
      is an SVD of A + B.
    - So the singular values of A + B are those of A together with those of B, and the nuclear norms add.
-4. **Davis–Kahan in two dimensions.**
+4. **Davis–Kahan in two dimensions.** For $\Sigma = \mathrm{diag}(1 + \delta, 1)$ and $E = \varepsilon(e_1e_2^\top + e_2e_1^\top)$, find the exact angle of $v_1$, and compare with Davis–Kahan.
+
+   *Solution.*
    - The eigenvector of [[1 + δ, ε], [ε, 1]] is at angle θ with tan 2θ = 2ε/δ.
    - For small ε, sin θ ≈ ε/δ, against the bound 2ε/δ: right order, off by a factor of 2.
    - At ε = δ/2, θ = 22.5° and sin θ = 0.38, against the bound 1.
-5. **The BBP map.**
+5. **The BBP map.** Invert $\psi(\ell) = (1 + \ell)(1 + \gamma/\ell)$; show $\psi'(\ell) = 1 - \gamma/\ell^2$ and that $\psi$ is minimized at $\ell = \sqrt\gamma$.
+
+   *Solution.*
    - ψ(ℓ) = 1 + ℓ + γ + γ/ℓ, so ψ′(ℓ) = 1 − γ/ℓ², which is zero at ℓ = √γ. There ψ(√γ) = (1 + √γ)², the bulk's edge.
    - Solving ψ(ℓ) = λ̂ gives ℓ² − (λ̂ − 1 − γ)ℓ + γ = 0. Take the larger root, ℓ = [c + √(c² − 4γ)]/2 with
      c = λ̂ − 1 − γ.
-6. **Marchenko–Pastur from its quadratic.**
+6. **Marchenko–Pastur from its quadratic.** Solve $\gamma z m^2 + (z + \gamma - 1)m + 1 = 0$ and recover the Marchenko–Pastur density by Stieltjes inversion.
+
+   *Solution.*
    - m = [−(z + γ − 1) + √((z + γ − 1)² − 4γz)]/(2γz), choosing the branch with Im m > 0.
    - The discriminant (z − 1 − γ)² − 4γ is negative exactly for z ∈ (a, b), with a, b = (1 ∓ √γ)².
    - There Im m(x + i0) = √((b − x)(x − a))/(2γx), and dividing by π gives the density.

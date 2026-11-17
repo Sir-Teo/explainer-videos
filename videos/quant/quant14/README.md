@@ -88,30 +88,50 @@ python tools/make.py quant14 --cpu-voice -q m             # English and Chinese,
 
 ## Problems, with solutions
 
-1. **Variance of W^H.** By the Itô isometry, Var W^H_t = 2H ∫₀ᵗ (t − s)^{2H−1} ds = t^{2H}.
-2. **Scaling.** fBm has stationary Gaussian increments with variance Δ^{2H}, so B^H_{t+Δ} − B^H_t has the law of Δ^H Z
+1. **Variance of W^H.** Show that $W^H_t = \sqrt{2H}\int_0^t (t - s)^{H - 1/2}\,dW_s$ has variance $t^{2H}$.
+
+   *Solution.* By the Itô isometry, Var W^H_t = 2H ∫₀ᵗ (t − s)^{2H−1} ds = t^{2H}.
+2. **Scaling.** For fractional Brownian motion, show that $\mathbb{E}|B^H_{t + \Delta} - B^H_t|^q = c_q\,\Delta^{qH}$, so that $\zeta_q = qH$.
+
+   *Solution.* fBm has stationary Gaussian increments with variance Δ^{2H}, so B^H_{t+Δ} − B^H_t has the law of Δ^H Z
    and E|·|^q = Δ^{qH} E|Z|^q; hence ζ_q = qH.
-3. **Rough Bergomi's forward-variance identity.** W^H_t is Gaussian with variance t^{2H}, so E[exp(ηW^H_t − ½η²t^{2H})] = 1
+3. **Rough Bergomi's forward-variance identity.** In rough Bergomi, show that $\mathbb{E}[v_t] = \xi_0(t)$, and that each $\xi_t(T) = \mathbb{E}_t[v_T]$ is a martingale.
+
+   *Solution.* W^H_t is Gaussian with variance t^{2H}, so E[exp(ηW^H_t − ½η²t^{2H})] = 1
    and E[v_t] = ξ₀(t). Conditionally on F_s, the part of the integral after s is independent Gaussian with variance
    ∫_s^t 2H(t − u)^{2H−1}du; the same computation makes ξ_s(t) = E_s[v_t] an exponential martingale in s for each fixed future t. This is separate from stock true-martingality and does not make v a martingale.
-4. **The lift's identity.** Substituting y = xt, ∫₀^∞ e^{−xt}x^{−α}dx = Γ(1 − α)t^{α−1}; dividing by Γ(α)Γ(1 − α)
+4. **The lift's identity.** Show that $\int_0^\infty e^{-xt}\,\frac{x^{-\alpha}}{\Gamma(\alpha)\Gamma(1 - \alpha)}\,dx = \frac{t^{\alpha - 1}}{\Gamma(\alpha)}$ for $0 < \alpha < 1$: the identity behind the Markovian lift.
+
+   *Solution.* Substituting y = xt, ∫₀^∞ e^{−xt}x^{−α}dx = Γ(1 − α)t^{α−1}; dividing by Γ(α)Γ(1 − α)
    gives t^{α−1}/Γ(α). Quantising x^{−α}dx/(Γ(α)Γ(1 − α)) on a geometric grid gives the weights c_i and nodes x_i.
-5. **The Hawkes mean rate.** At stationarity Λ = μ + Λ‖φ‖₁, so Λ = μ/(1 − ‖φ‖₁); as ‖φ‖₁ → 1 the rate and each
+5. **The Hawkes mean rate.** For a stationary Hawkes process with baseline $\mu$ and kernel $\phi$, show that the mean rate is $\mu / (1 - \|\phi\|_1)$, and explain why $\|\phi\|_1 \to 1$ is called nearly unstable.
+
+   *Solution.* At stationarity Λ = μ + Λ‖φ‖₁, so Λ = μ/(1 − ‖φ‖₁); as ‖φ‖₁ → 1 the rate and each
    event's expected number of descendants ‖φ‖₁/(1 − ‖φ‖₁) explode: "nearly unstable".
-6. **The rough double integral.** ∫_t^T (u − t)^{H−½}du = (T − t)^{H+½}/(H + ½); integrating again in t gives
+6. **The rough double integral.** Compute $\int_0^T\!\int_t^T (u - t)^{H - 1/2}\,du\,dt$, and deduce the rough skew's $T^{H - 1/2}$.
+
+   *Solution.* ∫_t^T (u − t)^{H−½}du = (T − t)^{H+½}/(H + ½); integrating again in t gives
    T^{H+3/2}/((H + ½)(H + 3/2)). Divided by T², the first-order skew is ∝ T^{H−½}.
-7. **The hybrid scheme's b_k.** The cell k steps back covers lags [(k − 1)Δ, kΔ]; the kernel's average there is
+7. **The hybrid scheme's b_k.** Show that $b_k$ in the hybrid scheme is the point where the kernel equals its own average over cell $k$.
+
+   *Solution.* The cell k steps back covers lags [(k − 1)Δ, kΔ]; the kernel's average there is
    (1/Δ)∫ x^{H−½}dx = Δ^{H−½}(k^{H+½} − (k − 1)^{H+½})/(H + ½). Setting (b_kΔ)^{H−½} equal to it gives
    b_k = ((k^{H+½} − (k − 1)^{H+½})/(H + ½))^{1/(H−½)}.
-8. **The 4-factor PDV.** With K(τ) = λe^{−λτ}, R_t = ∫ λe^{−λ(t−u)} (r_u^n/Δt) du (piecewise-held daily return-rate input); differentiating,
+8. **The 4-factor PDV.** For a piecewise-held daily input $r_t^p/\Delta t$, derive $dR=\lambda(r_t^p/\Delta t-R)dt$ from the exponential convolution. Use $p=1$ for signed returns and $p=2$ for squared returns, with two EMA factors for each input.
+
+   *Solution.* With K(τ) = λe^{−λτ}, R_t = ∫ λe^{−λ(t−u)} (r_u^n/Δt) du (piecewise-held daily return-rate input); differentiating,
    dR = λ(r_t^n/Δt − R_t)dt: an exponential moving average, Markov. A convex mix of two such kernels is a mix of two
    EMAs: four factors for R₁ and R₂.
-9. **(qual) The exact strong error.** Y₁ − Ŷ₁ = √(2H)Σ_j∫_{cell j}((1 − s)^a − (c_jΔ)^a)dW_s, so by Itô's isometry
+9. **(qual) The exact strong error.** (qual) For $Y_1 = \sqrt{2H}\int_0^1(1 - s)^{H - 1/2}dW_s$ and a step kernel frozen at $c_j\Delta$ on the cell at lag $j$, show $\mathbb E|Y_1 - \hat Y_1|^2 = 2H\Delta^{2H}\sum_j\int_{j-1}^{j}(x^{a} - c_j^{a})^2dx$, that the sum converges, and that the optimal $c_j$ on each cell is $b_j$.
+
+   *Solution.* Y₁ − Ŷ₁ = √(2H)Σ_j∫_{cell j}((1 − s)^a − (c_jΔ)^a)dW_s, so by Itô's isometry
    E|Y₁ − Ŷ₁|² = 2HΣ_j∫_{(j−1)Δ}^{jΔ}(r^a − (c_jΔ)^a)²dr; with r = xΔ this is 2HΔ^{2a+1}Σ_j∫_{j−1}^{j}(x^a − c_j^a)²dx
    and 2a + 1 = 2H. For a fixed admissible within-cell rule and 0<H<1/2, for large j, x^a − c_j^a ≈ a c_j^{a−1}(x − c_j), so the j-th term is O(j^{2a−2}), summable since
    2a − 2 < −1. Each cell's term is minimized over c_j when c_j^a equals the cell average of x^a, which is
    (j^{a+1} − (j − 1)^{a+1})/(a + 1): c_j = b_j.
-10. **(qual) The naive scheme's bias.** Var Ŷ₁ = 2HΔ^{2H}Σ_{j≤n}j^{2a}, and for s = −2a = 1 − 2H ∈ (0, 1),
+10. **(qual) The naive scheme's bias.** (qual) Show that the left-point Riemann scheme's variance is $1 - \Delta^{2H}2H|\zeta(1 - 2H)|(1 + o(1))$ (for $H < \frac12$), and hence that exponentiating with $t^{2H}$ biases $\mathbb E[v_1]$ to leading order by a factor $e^{-\eta^2 H|\zeta(1 - 2H)|\Delta^{2H}}$.
+
+    *Solution.* Var Ŷ₁ = 2HΔ^{2H}Σ_{j≤n}j^{2a}, and for s = −2a = 1 − 2H ∈ (0, 1),
    Σ_{j≤n}j^{−s} = n^{1−s}/(1 − s) + ζ(s) + O(n^{−s}). So Var Ŷ₁ = 1 + 2Hζ(1 − 2H)Δ^{2H} + o(Δ^{2H}), with ζ(1 − 2H) < 0.
    Then E[exp(ηŶ₁ − ½η²)] = exp(½η²(Var Ŷ₁ − 1)) = exp(−η²H|ζ(1 − 2H)|Δ^{2H} + o(Δ^{2H})): at H = 0.1, ζ(0.8) = −4.44, and
    with η = 1.9 the leading-order factor is exp(−1.60Δ^{0.2}), about 0.50 at n = 64. Using Var Ŷ in the exponent instead removes this bias.

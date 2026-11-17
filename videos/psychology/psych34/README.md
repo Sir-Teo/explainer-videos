@@ -174,26 +174,40 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Granovetter's cascade.** Let F(k) be the number of thresholds at most k. Starting from 0, the number in after
+1. **Granovetter's cascade.** A crowd of $n$ has thresholds $0, 1, \dots, n - 1$. Show that everyone joins, and that raising one threshold from 1 to 2 stops the cascade at one person. In general, show the cascade ends at the first $k$ with $F(k) = k$, where $F(k)$ counts thresholds $\le k$.
+
+   *Solution.* Let F(k) be the number of thresholds at most k. Starting from 0, the number in after
    each step is F of the number before, so the process climbs to the first fixed point k* with F(k*) = k*. For
    thresholds 0, ..., n − 1, F(k) = k + 1 for every k < n, so there is no fixed point below n and all n join. Raise
    the threshold of 1 to 2: F(0) = 1, F(1) = 1, a fixed point, and the cascade stops at one person.
-2. **DeGroot's consensus.** If W is row-stochastic and primitive, Perron-Frobenius gives W^t → 1π^⊤, with π the
+2. **DeGroot's consensus.** In DeGroot's model $x_{t+1} = W x_t$ with $W$ row-stochastic and primitive. Show that everyone converges to $\pi^{\top} x_0$, where $\pi^{\top} W = \pi^{\top}$, and that a doubly stochastic $W$ gives the plain mean.
+
+   *Solution.* If W is row-stochastic and primitive, Perron-Frobenius gives W^t → 1π^⊤, with π the
    unique left eigenvector for eigenvalue 1 normalized to sum to 1. So x_t = W^t x_0 → (π^⊤x_0)1. If W is doubly
    stochastic, 1^⊤W = 1^⊤, so π = 1/n and the consensus is the plain mean.
-3. **The diversity identity.** Write x_i − θ = (x_i − x̄) + (x̄ − θ); square and average. The cross term averages to
+3. **The diversity identity.** Prove the diversity prediction identity: $(\bar x - \theta)^2 = \overline{(x_i - \theta)^2} - \overline{(x_i - \bar x)^2}$.
+
+   *Solution.* Write x_i − θ = (x_i − x̄) + (x̄ − θ); square and average. The cross term averages to
    (x̄ − θ) times the average of (x_i − x̄), which is zero, so the average squared error is the diversity plus
    (x̄ − θ)².
-4. **Bystanders.** With p_N = p/N, the chance that nobody helps is (1 − p/N)^N → e^{−p}, so someone helps with
+4. **Bystanders.** Each of $N$ bystanders helps with probability $p/N$. Show that the chance someone helps tends to $1 - e^{-p}$, and compare it with one person alone.
+
+   *Solution.* With p_N = p/N, the chance that nobody helps is (1 − p/N)^N → e^{−p}, so someone helps with
    probability tending to 1 − e^{−p}. For p = 0.85 that is 0.57, against 0.85 for one person alone: much less help
    from each, somewhat less from the crowd.
-5. **The hidden profile.** A fact known to all four comes up with chance 1 − 0.7⁴ = 0.76; a fact known to one, with
+5. **The hidden profile.** In a group of four, each member mentions what they know with probability 0.3. Compare the chance that a fact known to all four comes up with one known to only one member.
+
+   *Solution.* A fact known to all four comes up with chance 1 − 0.7⁴ = 0.76; a fact known to one, with
    chance 0.3. Shared facts are 2.5 times as likely to be discussed by arithmetic alone.
-6. **Bounded confidence.** If x_i ≤ x_j, every opinion within ε of x_i but not of x_j lies below the shared window,
+6. **Bounded confidence.** In bounded confidence, show that the order of opinions never changes, and explain why roughly $1/(2\varepsilon)$ camps remain from opinions spread evenly on $[0, 1]$.
+
+   *Solution.* If x_i ≤ x_j, every opinion within ε of x_i but not of x_j lies below the shared window,
    and every one within ε of x_j but not x_i lies above it, so the mean of i's window is at most the mean of j's:
    order is preserved. Opinions within 2ε of one another draw together until camps sit more than ε apart, so an
    even spread on [0, 1] ends with roughly one camp per 2ε.
-7. **★ Separating influence from homophily.** Randomize the treatment of one friend (for example, an invitation, a
+7. **★ Separating influence from homophily.** Design a study that could separate social influence from homophily in a network of friends, and say what each part of your design rules out.
+
+   *Solution.* Randomize the treatment of one friend (for example, an invitation, a
    message or a product) and measure the other's behaviour: randomization breaks the link to any shared hidden
    trait. Without an experiment, use variation the friends do not choose (a plausibly random exposure), compare
    with sham ties (pairs who are not friends but are matched on observables), and test for "influence" on

@@ -182,38 +182,52 @@ Sci.* 32 (2009) 183–198. S. J. Gershman, D. M. Blei and Y. Niv, Context, learn
 
 ## Problems and solutions
 
-**1. The rule by hand.** With one cue and λ = 1, V_{n+1} = V_n + 0.2(1 − V_n), so 1 − V_{n+1} = 0.8(1 − V_n) and
+**1. The rule by hand.** Under Rescorla-Wagner with $\alpha\beta = 0.2$ and $\lambda = 1$, find $V$ after $n$ reinforced trials from $V = 0$, and the number of trials to reach 0.9.
+
+*Solution.* With one cue and λ = 1, V_{n+1} = V_n + 0.2(1 − V_n), so 1 − V_{n+1} = 0.8(1 − V_n) and
 V_n = 1 − 0.8ⁿ. V reaches 0.9 when 0.8ⁿ ≤ 0.1, n ≥ ln 0.1 / ln 0.8 = 10.3: on the eleventh trial.
 
-**2. Gradient descent.** E = ½(λ − Σᵢ xᵢVᵢ)², so ∂E/∂V_X = −(λ − Σᵢ xᵢVᵢ)x_X. A step of size η against the gradient is
+**2. Gradient descent.** Show that the rule is gradient descent on $\tfrac12(\lambda - \sum_i x_i V_i)^2$, and say what step size $\alpha\beta$ plays.
+
+*Solution.* E = ½(λ − Σᵢ xᵢVᵢ)², so ∂E/∂V_X = −(λ − Σᵢ xᵢVᵢ)x_X. A step of size η against the gradient is
 ΔV_X = η(λ − ΣV)x_X, the Rescorla–Wagner rule for every cue present (x_X = 1) and no change for absent ones, with
 η = α_Xβ. A larger αβ is a longer step: faster learning, and, above 1/(number of cues present), overshoot.
 
-**3. The asymptote is ΔP.** Trials with the cue (probability q) carry C and X, with the outcome at p₁; trials without
+**3. The asymptote is ΔP.** Solve for the asymptotes of $V_C$ and $V_X$ when trials with the cue occur with probability $q$, and show that $V_X = \Delta P$ for every $q$.
+
+*Solution.* Trials with the cue (probability q) carry C and X, with the outcome at p₁; trials without
 it (1 − q) carry C alone, with the outcome at p₀. With equal β the expected changes are
 E[ΔV_X] ∝ q(p₁ − V_C − V_X) and E[ΔV_C] ∝ q(p₁ − V_C − V_X) + (1 − q)(p₀ − V_C). Setting both to zero gives V_C + V_X = p₁
 and then V_C = p₀, so V_X = p₁ − p₀ = ΔP for every q in (0, 1). With β for outcomes larger than for their absence the
 asymptote is no longer ΔP, and before the asymptote a frequent outcome inflates V_X (the outcome-density effect).
 
-**4. Overexpectation.** On an AB trial the error is 1 − (V_A + V_B) = 1 − 2 = −1, so both lose strength although the
+**4. Overexpectation.** In an overexpectation design, A and B each reach $V = 1$ alone. Find where they end after many AB$+$ trials, and why.
+
+*Solution.* On an AB trial the error is 1 − (V_A + V_B) = 1 − 2 = −1, so both lose strength although the
 food arrives. With equal α both fall by the same amount each trial (their difference never changes) until
 V_A + V_B = 1: each ends at 0.5. With unequal α the more salient cue loses more, and the difference between them is
 kept.
 
-**5. Matching from melioration.** The chooser shifts toward the key with the higher local rate, R/B, and stops only
+**5. Matching from melioration.** Show that melioration on two variable-interval keys stops where $R_L/B_L = R_R/B_R$, and that this is the matching law.
+
+*Solution.* The chooser shifts toward the key with the higher local rate, R/B, and stops only
 when R_L/B_L = R_R/B_R. Then B_L/B_R = R_L/R_R, and adding 1 to each side, B_L/(B_L + B_R) = R_L/(R_L + R_R). On
 variable-interval keys this equality is reachable, because spending less time on a key raises its local rate (its
 rewards wait to be collected); on ratio keys the local rates are fixed, so the chooser cannot equalize them and goes to
 the richer key.
 
-**6. Fixing renewal.** In `extinction_in_context` all excitation is context-free, so AAB = ABC. Split it: a share ω of
+**6. Fixing renewal.** With `explainer.psychology.psyche.conditioning`: run renewal in the AAA, ABA, ABC and AAB designs, and change the model so that AAB is weaker than ABC.
+
+*Solution.* In `extinction_in_context` all excitation is context-free, so AAB = ABC. Split it: a share ω of
 what acquisition writes is stored with the context of acquisition, expressed elsewhere with similarity s. With ω = 0.4,
 s = 0.15 and acquisition complete, extinction in A must cancel 0.6 + 0.4 = 1, so I_A = 1, and a test in B gives
 0.6 + 0.15 × 0.4 − 0.15 × 1 = 0.51. In ABC, extinction in B cancels 0.6 + 0.06 = 0.66, and a test in C gives
 0.6 + 0.06 − 0.15 × 0.66 = 0.56; in ABA, 0.6 + 0.4 − 0.15 × 0.66 = 0.90. The order ABA > ABC > AAB is the one in the
 data.
 
-**7. ★ Two theories of attention.** Learned predictiveness (after Le Pelley and McLaren): in phase 1, cue A is always
+**7. ★ Two theories of attention.** Design an experiment that tells Mackintosh's attention from Pearce and Hall's, and say what each predicts.
+
+*Solution.* Learned predictiveness (after Le Pelley and McLaren): in phase 1, cue A is always
 followed by outcome 1 and cue B is followed by it on a random half of trials; in phase 2, A and B are both paired with
 a new outcome, each in compound with a novel cue, and learning about each is measured at test (and attention by eye
 tracking). Mackintosh predicts faster new learning about A, the cue that predicted well; Pearce and Hall predict faster

@@ -128,17 +128,31 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **A Rasch probability.** e^0.5/(1 + e^0.5) = 1.649/2.649 = 0.622.
-2. **Information.** At θ = 0, P = 0.5 and I = 4 × 0.25 = 1. At θ = 1, P = 1/(1 + e^-2) = 0.881 and
+1. **A Rasch probability.** Under the Rasch model, a person with $\theta = 1$ meets an item with $b = 0.5$. Find the probability of a right answer.
+
+   *Solution.* e^0.5/(1 + e^0.5) = 1.649/2.649 = 0.622.
+2. **Information.** An item has $a = 2$, $b = 0$. Find its information at $\theta = 0$ and at $\theta = 1$.
+
+   *Solution.* At θ = 0, P = 0.5 and I = 4 × 0.25 = 1. At θ = 1, P = 1/(1 + e^-2) = 0.881 and
    I = 4 × 0.881 × 0.119 = 0.42.
-3. **A test's standard error.** Each item gives 1.5² × 0.25 = 0.5625; ten give 5.625, so SE = 1/√5.625 = 0.42.
-4. **Sufficiency by hand.** P(1 0 | r = 1) = e^0/(e^0 + e^-1) = 1/(1 + 0.368) = 0.731, whatever θ: the factor
+3. **A test's standard error.** Ten items, each with $a = 1.5$, all at difficulty equal to a person's ability. Find the test information and the standard error.
+
+   *Solution.* Each item gives 1.5² × 0.25 = 0.5625; ten give 5.625, so SE = 1/√5.625 = 0.42.
+4. **Sufficiency by hand.** Rasch items with $b_1 = 0$ and $b_2 = 1$. Given a score of 1, find the probability that the right answer was item 1, and show it does not depend on $\theta$.
+
+   *Solution.* P(1 0 | r = 1) = e^0/(e^0 + e^-1) = 1/(1 + 0.368) = 0.731, whatever θ: the factor
    e^θ/((1 + e^(θ-0))(1 + e^(θ-1))) is common to both patterns and cancels.
-5. **Linking.** A = 1.0/0.8 = 1.25, B = 0.4 - 1.25 × 0 = 0.4; the new item's difficulty on last year's scale is
+5. **Linking.** The anchors' difficulties have mean 0 and SD 0.8 on this year's scale, mean 0.4 and SD 1.0 on last year's. Find $A$ and $B$, and put a new item with $b = 1$ on last year's scale.
+
+   *Solution.* A = 1.0/0.8 = 1.25, B = 0.4 - 1.25 × 0 = 0.4; the new item's difficulty on last year's scale is
    1.25 × 1 + 0.4 = 1.65.
-6. **A step of knowledge tracing.** After a right answer, P(known) = 0.2 × 0.9/(0.2 × 0.9 + 0.8 × 0.2) = 0.18/0.34 =
+6. **A step of knowledge tracing.** Knowledge tracing with $L_0 = 0.2$, $T = 0.15$, $G = 0.2$, $S = 0.1$. A student answers right. Find P(known) after the update and after the learning step.
+
+   *Solution.* After a right answer, P(known) = 0.2 × 0.9/(0.2 × 0.9 + 0.8 × 0.2) = 0.18/0.34 =
    0.529; after the learning step, 0.529 + 0.471 × 0.15 = 0.600.
-7. **An adaptive anxiety questionnaire.** A bank of 60 or more graded items calibrated in a large sample spanning
+7. ★ **An adaptive anxiety questionnaire.** Design an adaptive anxiety questionnaire: its bank, its stopping rule, its exposure control, and the check that it works the same in two languages.
+
+   *Solution.* A bank of 60 or more graded items calibrated in a large sample spanning
    the range of severity; EAP scoring from a normal prior; the most informative item at each step, chosen at random
    among the best three for exposure, with at least one item from each content area (physical, cognitive,
    avoidance); stop at SE 0.3 or 12 items; before use, test each item for DIF between the two language versions by

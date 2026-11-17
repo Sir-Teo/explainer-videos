@@ -123,18 +123,32 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **The ridgeline.** In Psyche's ridgeline the best gap for a test 70 days away is about 35 days, and for 35 days
+1. **The ridgeline.** A test is 60 days away. Using the ridgeline, roughly when should a single restudy happen?
+
+   *Solution.* In Psyche's ridgeline the best gap for a test 70 days away is about 35 days, and for 35 days
    about 21, so for 60 days about a month; Cepeda et al.'s data put the optimum nearer 10 to 20% of the delay for
    long delays (one to two weeks). Either way, err long: the cost of too long a gap is small.
-2. **Schedules.** Equal: days 0, 9.3, 18.7, 28. Doubling: the unit is 28/7 = 4 days, so 0, 4, 12, 28.
-3. **The simple view.** 0.4 x 0.9 = 0.36; decoding is the limit, so phonics and fluency work helps more than
+2. **Schedules.** Three reviews per item, a 28-day window: write equal and expanding (doubling) schedules.
+
+   *Solution.* Equal: days 0, 9.3, 18.7, 28. Doubling: the unit is 28/7 = 4 days, so 0, 4, 12, 28.
+3. **The simple view.** Reading comprehension = decoding $\times$ language comprehension. Decoding 0.4, comprehension 0.9: predict, and say which teaching helps more.
+
+   *Solution.* 0.4 x 0.9 = 0.36; decoding is the limit, so phonics and fluency work helps more than
    vocabulary for this child.
-4. **Power for a small effect.** n = 2 (1.96 + 0.84)^2 / 0.08^2 = about 2,450 students per arm.
-5. **Knowledge tracing.** P(known | wrong) = 0.5 x 0.1 / (0.5 x 0.1 + 0.5 x 0.8) = 0.11.
-6. **The learning-styles test.** Classify learners by style, randomize each to matched or mismatched teaching, test
+4. **Power for a small effect.** A mindset effect of 0.08 SD: how many students per arm for 80% power (two-sided, 5%)?
+
+   *Solution.* n = 2 (1.96 + 0.84)^2 / 0.08^2 = about 2,450 students per arm.
+5. **Knowledge tracing.** Knowledge tracing with $L$ = 0.5, guess 0.2, slip 0.1: the student answers wrong. Find P(known) after.
+
+   *Solution.* P(known | wrong) = 0.5 x 0.1 / (0.5 x 0.1 + 0.5 x 0.8) = 0.11.
+6. **The learning-styles test.** Design the crossover test that would support learning styles. What result is needed?
+
+   *Solution.* Classify learners by style, randomize each to matched or mismatched teaching, test
    all on the same measure; the hypothesis needs a crossover interaction, with each group learning best from its own
    method. A main effect of method, or of style, does not support it.
-7. **A redesign.** Start-of-class retrieval quizzes; cumulative questions in every set and a cumulative final;
+7. ★ **A redesign.** Redesign a course you know: retrieval, spacing, interleaving, load, and how you will evaluate it.
+
+   *Solution.* Start-of-class retrieval quizzes; cumulative questions in every set and a cumulative final;
    interleaved, unlabelled problem types; worked examples faded to problems; and a delayed test against a previous
    cohort, with students told why the course feels harder.
 

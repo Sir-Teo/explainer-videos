@@ -9,8 +9,9 @@ given), so the notes and the film cannot drift apart.  This reads it with ``ast`
 running the film: a chapter's paragraphs come in the order the film speaks them, following ``construct`` into the
 methods it calls.
 
-A number the film computes when it renders (an f-string's ``{value}``) cannot be read from the source; it is kept
-as a gap, which the pages show as a small box and explain once.  ``tools/export_script.py`` is the proof-reading
+A number the film computes when it renders (an f-string's ``{value}``) cannot be read from the source. Where the
+film keeps its rendered English lines (the bilingual films' ``narration_zh.json``), the number is taken from there;
+otherwise it is kept as a gap, which the pages show as a small box and explain once.  ``tools/export_script.py`` is the proof-reading
 script of a single film, filled in from its latest render.
 """
 
@@ -136,6 +137,10 @@ def _tex_plain(text: str) -> str:
     """A card's question, written for the TeX on screen, as plain words."""
     text = re.sub(r"\\textit\{([^}]*)\}|\\emph\{([^}]*)\}", lambda m: m.group(1) or m.group(2), text)
     text = text.replace("``", '"').replace("''", '"').replace(r"\ ", " ").replace(r"\&", "&").replace("~", " ")
+    for tex, sign in ((r"\sharp", "♯"), (r"\flat", "♭"), (r"\natural", "♮"), (r"\times", "×"), (r"\to", "→"),
+                      (r"\%", "%"), (r"\$", "$"), ("---", "—"), ("--", "–")):
+        text = text.replace(tex, sign)
+    text = re.sub(r"(?<!\\)\$", "", text)
     return re.sub(r"\\[a-zA-Z]+\s*", "", text)
 
 
@@ -219,12 +224,49 @@ def _strip_announcement(p: Paragraph, title: str) -> Paragraph | None:
         if head and (len(head & words) >= max(1, len(head) // 2) or len(s.group(1).split()) <= 3):
             rest = rest[s.end():]
     rest = rest.strip()
+    if re.match(r"[a-z]+\b", rest) and not re.match(r"[a-z]+[A-Z]", rest):  # "Chapter seven, compactness, ..."
+        rest = rest[0].upper() + rest[1:]
     return Paragraph(rest, p.kind) if rest else None
 
 
+@functools.lru_cache(maxsize=None)
+def rendered_lines(video_dir: Path) -> dict:
+    """{scene class: [English line as last rendered]} from the film's ``narration_zh.json``, where the bilingual
+    films keep each rendered English line beside its translation, computed numbers filled in."""
+    path = video_dir / "narration_zh.json"
+    if not path.exists():
+        return {}
+    import json  # noqa: PLC0415
+
+    try:
+        lines = json.loads(path.read_text()).get("lines", {})
+    except (ValueError, AttributeError):
+        return {}
+    out: dict = {}
+    for v in lines.values() if isinstance(lines, dict) else ():
+        if isinstance(v, dict) and isinstance(v.get("en"), str):
+            out.setdefault(v.get("scene", ""), []).append(_clean(v["en"]))
+    return out
+
+
+def _fill(p: Paragraph, candidates: list) -> Paragraph:
+    """A paragraph with computed gaps, filled from the rendered line whose words match it exactly."""
+    parts = re.split(f"{GAP_OPEN}.*?{GAP_CLOSE}", p.text)
+    pattern = re.compile("(.+?)".join(re.escape(x) for x in parts), re.S)
+    for line in candidates:
+        m = pattern.fullmatch(line)
+        if m and all(len(g) <= 40 for g in m.groups()):
+            return Paragraph(line, p.kind)
+    return p
+
+
 def chapter_text(path: Path, cls: str, title: str = "") -> list[Paragraph]:
-    """A chapter's paragraphs for the page: the spoken heading dropped, very short lines joined to the next."""
+    """A chapter's paragraphs for the page: computed values filled in where the film's last render recorded them,
+    the spoken heading dropped, very short lines joined to the next."""
     paras = scene_paragraphs(path, cls)
+    rendered = rendered_lines(path.parent).get(cls)
+    if rendered:
+        paras = [_fill(p, rendered) if p.gaps else p for p in paras]
     if paras and paras[0].kind == "p":
         first = _strip_announcement(paras[0], title)
         paras = ([first] if first else []) + paras[1:]
@@ -235,13 +277,21 @@ def chapter_text(path: Path, cls: str, title: str = "") -> list[Paragraph]:
     for p in paras:
         if p.kind == "q" and out and out[-1].kind == "q":
             continue
-        if out and out[-1].kind == "p" and p.kind == "p" and out[-1].words < 14:
+        continues = re.match(r"[a-z]", p.text) and not re.search(r"[.!?\"')\u201d]$", out[-1].text) if out else False
+        if out and out[-1].kind == "p" and p.kind == "p" and (out[-1].words < 14 or continues):
             out[-1] = Paragraph(out[-1].text + " " + p.text)
         elif out and out[-1].kind == "q" and p.kind == "p" and _same(out[-1].text, p.text):
             out[-1] = p  # the card's question, then the narration repeating it: say it once
         else:
+            first = p.text.split(" ", 1)[0]
+            if p.kind == "p" and first in _SENTENCE_WORDS:  # a line that opens on a lowercase word: start a sentence
+                p = Paragraph(p.text[0].upper() + p.text[1:], p.kind)
             out.append(p)
     return out
+
+
+_SENTENCE_WORDS = set("the a an and but so then this that these those it its we in on at for with from to of as if "
+                      "when where while what which how why there here our one two".split())
 
 
 def _same(question: str, text: str) -> bool:

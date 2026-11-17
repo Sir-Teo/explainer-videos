@@ -47,3 +47,19 @@ def test_solutions_fold_under_their_problems():
     assert folded.count('<details class="sol">') == 2 and folded.count("</details>") == 2
     assert folded.index("<pre>") < folded.index("</details>"), "the code block stays inside its solution"
     assert "<em>Solution.</em>" not in folded
+
+
+def test_every_shape_of_problem_set_folds():
+    def folds(md):
+        return course_site.fold_solutions(course_site.md_to_html(md, ROOT)).count('<details class="sol">')
+
+    assert folds("**1.** *A question?*\n\nIts answer.\n\n**2.** *Another?*\n\nAnswer.\n") == 2  # Psychology's shape
+    assert folds("1. Statement.\n\n   Answer.\n\n2. Statement.\n\n   Answer.\n") == 2  # statement, then answer
+    assert folds("1. One.\n2. Two.\n\n### Solutions\n\n1. A.\n2. B.\n") == 1  # a block of solutions
+    assert folds("1. **Why?** Because.\n2. **What?** That.\n") == 2  # desk questions
+    assert folds("1. **Show it.** Proof.\n2. **And this.** Proof.\n") == 0  # an answer with no statement stays open
+
+
+def test_inline_math_follows_github():
+    html = course_site.md_to_html("costs $p(1 - p)$, a third $1/3$; $1.75 million and $2 later", ROOT)
+    assert r"\(p(1 - p)\)" in html and r"\(1/3\)" in html and "$1.75 million and $2 later" in html

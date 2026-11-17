@@ -136,19 +136,33 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Exposures avoidance allows.** Each full exposure multiplies V by 0.92. From 0.9, V < 0.3 needs n with
+1. **Exposures avoidance allows.** A Rescorla-Wagner learner has fear $V = 0.9$ and avoids on every trial with probability $0.95\,\sigma(10(V - 0.3))$. With extinction rate $0.08$, how many full exposures does it take to bring $V$ below 0.3, and roughly how many trials will that take?
+
+   *Solution.* Each full exposure multiplies V by 0.92. From 0.9, V < 0.3 needs n with
    0.9 × 0.92ⁿ < 0.3, so n > ln(1/3)/ln(0.92) ≈ 13.2: 14 exposures. While V is high the learner avoids on 95% of
    trials, so one exposure comes about every 20 trials: roughly 280 trials (fewer as V falls and avoidance weakens).
-2. **Renewal.** After extinction, fear in B is E − I ≈ 0, in A and in C it is E. Extinction generalizes better when
+2. **Renewal.** In the renewal model, excitation $E$ is expressed everywhere and inhibition $I$ only in context B. Write the fear in A, B and C after extinction, and suggest one way to make extinction generalize.
+
+   *Solution.* After extinction, fear in B is E − I ≈ 0, in A and in C it is E. Extinction generalizes better when
    it is practised in several contexts, or when retrieval cues from the extinction context are carried into others.
-3. **Belief about control.** Beta(1, 1) after 10 failures is Beta(1, 11): it tries with probability 1/12 ≈ 0.08. After
+3. **Belief about control.** A learner starts with a Beta(1, 1) belief about control. After 10 tries that all fail, what is its probability of trying? After 10 that all succeed?
+
+   *Solution.* Beta(1, 1) after 10 failures is Beta(1, 11): it tries with probability 1/12 ≈ 0.08. After
    10 successes, Beta(11, 1): 11/12 ≈ 0.92.
-4. **A mood.** H₁₀ = 0.5 + 0.6 × 0.5 × (1 − 0.7¹⁰)/(1 − 0.7) = 0.5 + 0.3 × 0.9718/0.3 ≈ 0.5 + 0.97 = 1.47.
-5. **Effect size and NNT.** d = (9.6 − 7.8)/8 ≈ 0.23. With response rates 50% and 40%, the number needed to treat is
+4. **A mood.** Happiness $H_t = w_0 + w_3 \sum_j \gamma^{t-j} \delta_j$. If every prediction error is 0.5 for ten trials, find $H_{10}$ for $\gamma = 0.7$, $w_0 = 0.5$, $w_3 = 0.6$.
+
+   *Solution.* H₁₀ = 0.5 + 0.6 × 0.5 × (1 − 0.7¹⁰)/(1 − 0.7) = 0.5 + 0.3 × 0.9718/0.3 ≈ 0.5 + 0.97 = 1.47.
+5. **Effect size and NNT.** A drug and a placebo improve depression by 9.6 and 7.8 points, with SD 8 in both groups. What is the standardized effect size, and how many people need to be treated for one extra response if response rates are 50% and 40%?
+
+   *Solution.* d = (9.6 − 7.8)/8 ≈ 0.23. With response rates 50% and 40%, the number needed to treat is
    1/(0.5 − 0.4) = 10.
-6. **A risk factor's yield.** Per 2,000 people, one dies; the factor flags 0.8 of that person and 0.2 × 1,999 ≈ 400
+6. **A risk factor's yield.** A risk factor has sensitivity 0.8 and specificity 0.8 for suicide death within a year, where the base rate is 1 in 2{,}000. What share of people it flags will die by suicide in that year?
+
+   *Solution.* Per 2,000 people, one dies; the factor flags 0.8 of that person and 0.2 × 1,999 ≈ 400
    others: the share of flagged people who die is 0.8/400.6 ≈ 0.2%, about 1 in 500.
-7. **Liking, learning or effort.** Measure hedonic ratings of rewards as received (liking); fit a learning model to
+7. ★ **Liking, learning or effort.** Design a study that could tell whether a person's anhedonia is a problem of liking, of learning or of effort.
+
+   *Solution.* Measure hedonic ratings of rewards as received (liking); fit a learning model to
    choices in a probabilistic reward task (learning rate and reward sensitivity); and offer choices between low-effort
    small rewards and high-effort large ones (effort). A person whose ratings are normal but whose learning is
    blunted differs from one whose effort is the problem; preregister which parameter each hypothesis predicts will

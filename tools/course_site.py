@@ -134,20 +134,33 @@ _MATHY = re.compile(r"[\\^_{}]")
 _TOKEN = re.compile(r"[A-Za-z]{1,3}(?:'|\([A-Za-z0-9,]{1,5}\))?|[A-Za-z]\s?[=<>≤≥]\s?-?[\dA-Za-z./]+")
 
 
+_PROSE = re.compile(r"[A-Za-z]{3,}[ ,;]+[A-Za-z]{3,}")
+
+
+def _inline_math(body: str, text: str, end: int) -> bool:
+    """Whether ``$body$`` is math, as GitHub reads it: TeX (a backslash, ^, _ or braces) or a short symbol always is;
+    otherwise a span is math unless the closing dollar runs into a digit (``$5 and $6``) or the span reads as prose
+    or money (``$1.75 million ... $``)."""
+    if _MATHY.search(body) or _TOKEN.fullmatch(body.strip()):
+        return True
+    if end < len(text) and text[end].isalnum():
+        return False
+    return not (_PROSE.search(body) or re.match(r"\d[\d.,]*\s*(?:[kKmMbB]n?\b|million|billion|thousand)", body)
+                or "\n" in body.strip())
+
+
 def protect_math(text: str) -> tuple[str, list]:
     """Pull ``$...$`` LaTeX out of Markdown (so underscores are not read as emphasis) and leave dollar amounts
-    alone.  A span is math if it holds a backslash, ^, _ or braces, or is a single short symbol like ``$n$``."""
+    alone (``_inline_math`` decides which is which)."""
     stash = []
 
     def repl(m):
         display, inline = m.group(1), m.group(2)
         body = display if display is not None else inline
-        if display is None and not (_MATHY.search(body) or _TOKEN.fullmatch(body.strip())):
-            return m.group(0)
-        if display is None and (body[0].isspace() or body[-1].isspace()):
+        if display is None and (body[0].isspace() or body[-1].isspace() or not _inline_math(body, m.string, m.end())):
             return m.group(0)
         stash.append((body, display is not None))
-        return f"zzMATH{len(stash) - 1}zz"  # plain letters: Python-Markdown reserves control characters for itself
+        return f"zzMATH{len(stash) - 1}zz"  # plain letters, which Markdown leaves alone
 
     # scan left to right so that a rejected "$1.75 million ... $" does not swallow the next real span
     out, pos = [], 0
@@ -180,6 +193,15 @@ _LINK = re.compile(r'(href|src)="([^"#][^"]*)"')
 _MD = MarkdownIt("commonmark", {"html": True, "typographer": False}).enable(["table", "strikethrough"])
 
 
+def _late_bold(page: str) -> str:
+    """``**粗体。**`` next to CJK punctuation is not emphasis under CommonMark's flanking rules (so GitHub shows the
+    asterisks too); outside code, set it bold anyway."""
+    parts = re.split(r"(<pre\b.*?</pre>|<code>.*?</code>)", page, flags=re.S)
+    for i in range(0, len(parts), 2):
+        parts[i] = re.sub(r"\*\*([^*<>\n]{1,120}?)\*\*", r"<strong>\1</strong>", parts[i])
+    return "".join(parts)
+
+
 def md_to_html(text: str, base: Path) -> str:
     """Markdown to HTML; relative links are pointed at the file on GitHub (``base`` is the source's folder)."""
     text, stash = protect_math(text)
@@ -199,6 +221,7 @@ def md_to_html(text: str, base: Path) -> str:
         return f'{attr}="{REPO}/{kind}/main/{rel.as_posix()}{"#" + frag if frag else ""}"'
 
     page = _LINK.sub(link, page)
+    page = _late_bold(page)
     page = page.replace("<table>", '<div class="table-wrap"><table>').replace("</table>", "</table></div>")
     return restore_math(page, stash)
 
@@ -208,33 +231,109 @@ _SOLUTION = re.compile(r"<p>(?:<em>|<strong>|<i>|<b>)\s*(?:Solution|Answer|Hint 
 _TAG = re.compile(r"<(/?)(li|ol|ul|div|details|blockquote|table|pre)\b[^>]*>|<p><strong>|<h[1-6]\b|<hr\b")
 
 
+def _wrap(page: str, start: int, end: int, label: str) -> str:
+    body = page[start:end]
+    body = re.sub(r"^\s*<p><(em|strong|i|b)>\s*(?:Solution|Answer|解答|解|答)[.:：。]?\s*</\1>[.:：]?\s*", "<p>", body)
+    body = re.sub(r"^\s*<p>\s*</p>\s*", "", body)
+    return page[:start] + f'<details class="sol"><summary>{label}</summary>' + body + "</details>\n" + page[end:]
+
+
+def _block_end(page: str, start: int) -> int:
+    """Where a solution that starts at ``start`` ends: the end of its list item, or the next problem (a paragraph
+    opening in bold), a heading or a rule, whichever comes first."""
+    depth = 0
+    for m in _TAG.finditer(page, start + 3):
+        if m.group(2):
+            depth += -1 if m.group(1) else 1
+            if depth < 0:
+                return m.start()
+        elif depth == 0:
+            return m.start()
+    return len(page)
+
+
+def _items(page: str) -> list:
+    """(content start, content end) of every list item that is not inside another list item."""
+    out, stack = [], []
+    for m in re.finditer(r"<(/?)li\b[^>]*>", page):
+        if not m.group(1):
+            stack.append(m.end())
+        elif stack:
+            start = stack.pop()
+            if not stack:
+                out.append((start, m.start()))
+    return out
+
+
 def fold_solutions(page: str) -> str:
     """Put each worked solution of a problem set behind a "Solution" toggle, so the problems can be tried first.
-    A solution starts at a paragraph that opens with an italic or bold "Solution" and runs to the end of its list
-    item, or to the next problem (a paragraph opening in bold), whichever comes first."""
+    The READMEs write problem sets in a few shapes, read in this order:
+
+    * a paragraph that opens with an italic or bold "Solution" (or 解答): it runs to the end of its list item, or
+      to the next problem (a paragraph opening in bold);
+    * a block of solutions after the problems, under a "Solutions" heading: the whole block is folded;
+    * problems as list items, each a statement paragraph followed by the answer: the rest of the item is folded;
+    * problems as paragraphs that open with a bold number and an italic question ("**1.** *the question*"), each
+      followed by its answer paragraphs;
+    * a bold question answered in the same paragraph or list item (the desk questions): the answer is folded.
+    """
+    # a label run into its problem's paragraph ("... and J1 = 0. *Solution.* ...") starts a paragraph of its own
+    page = re.sub(r"(?<=[^>\s])\s*(<(em|strong)>\s*(?:Solution|Answer)[.:]?\s*</\2>)", r"</p>\n<p>\1", page)
+    page = re.sub(r"<p>\s*</p>\n?", "", page)
     starts = [m.start() for m in _SOLUTION.finditer(page)]
-    for start in reversed(starts):
-        depth, end = 0, len(page)
-        for m in _TAG.finditer(page, start + 3):
-            tag = m.group(0)
-            if m.group(2):
-                if m.group(1):
-                    depth -= 1
-                    if depth < 0:
-                        end = m.start()
-                        break
-                else:
-                    depth += 1
-            elif depth == 0:  # the next problem, a heading or a rule
-                end = m.start()
-                break
-        body = page[start:end]
-        label = "解答" if re.match(r"<p><(?:em|strong|i|b)>\s*解", body) else "Solution"
-        body = re.sub(r"^<p><(em|strong|i|b)>\s*(?:Solution|解答|解|答)[.:：。]?\s*</\1>[.:：]?\s*", "<p>", body)
-        body = re.sub(r"^<p>\s*</p>\s*", "", body)
-        page = (page[:start] + f'<details class="sol"><summary>{label}</summary>' + body + "</details>\n"
-                + page[end:])
+    if starts:
+        for start in reversed(starts):
+            label = "解答" if re.match(r"<p><(?:em|strong|i|b)>\s*解", page[start:]) else "Solution"
+            page = _wrap(page, start, _block_end(page, start), label)
+        return page
+    block = re.search(r"<h[3-6][^>]*>\s*(?:Solutions|Answers|Worked solutions|解答)[^<]*</h[3-6]>|"
+                      r"<p><strong>\s*(?:Solutions|Answers|解答)[^<]*</strong>\s*</p>", page)
+    if block:
+        return page[:block.end()] + '<details class="sol"><summary>Solutions</summary>' + page[block.end():] + "</details>\n"
+    items = [(a, b) for a, b in _items(page) if _statement_then_more(page[a:b])]
+    if items:
+        for a, b in reversed(items):
+            cut = page.index("</p>", a) + 4
+            if page[cut:b].strip():
+                page = _wrap(page, cut, b, "Solution")
+        return page
+    # "**1.** *the question*": a bold number, then the question in italics (or ending in a question mark)
+    heads = [m.start() for m in re.finditer(r"<p><strong>[^<]{0,80}</strong>\s*<em>|<p><strong>[^<]{0,200}\?</strong>", page)]
+    if len(heads) >= 2 and _depth_zero(page, heads):
+        for i in reversed(range(len(heads))):
+            cut = page.index("</p>", heads[i]) + 4
+            end = heads[i + 1] if i + 1 < len(heads) else _block_end(page, cut - 4)
+            if page[cut:end].strip():
+                page = _wrap(page, cut, end, "Solution")
+        if '<details class="sol">' in page:
+            return page
+    # "**A question?** Its answer.": a bold question, answered in the same paragraph or list item
+    asked = list(re.finditer(r"(?:<li>|<p>)\s*<strong>[^<]{3,240}\?</strong>\s*(?=\S)", page))
+    if len(asked) >= 2:
+        for m in reversed(asked):
+            close = page.index("</li>" if m.group(0).startswith("<li>") else "</p>", m.end())
+            answer = page[m.end():close]
+            if answer.strip() and not re.search(r"<(li|ul|ol|p)\b", answer):  # a nested block: leave it open
+                page = page[:m.end()] + '<details class="sol"><summary>Answer</summary>' + answer + "</details>" + page[close:]
     return page
+
+
+def _statement_then_more(item: str) -> bool:
+    """A list item that opens with a paragraph and has more blocks after it (the answer)."""
+    item = item.strip()
+    if not item.startswith("<p>") or "</p>" not in item:
+        return False
+    return bool(re.match(r"\s*<(p|ul|ol|pre|div|table|blockquote)\b", item.split("</p>", 1)[1]))
+
+
+def _depth_zero(page: str, positions: list) -> bool:
+    """Whether every position is outside any list, table or quotation."""
+    for pos in positions:
+        before = page[:pos]
+        for tag in ("li", "table", "blockquote"):
+            if before.count(f"<{tag}") > before.count(f"</{tag}>"):
+                return False
+    return True
 
 
 # ---------------------------------------------------------------------------

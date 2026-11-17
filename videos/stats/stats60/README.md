@@ -107,12 +107,24 @@ All 11 computed inputs regenerated; **24 tests pass** (17 audited local checks, 
 - **Contamination-model distinction.** Diakonikolas, Kane, Pensia & Pittas, NeurIPS (2023), [arXiv:2312.01547](https://arxiv.org/abs/2312.01547), especially Theorem 1.3 and section 1.3.
 ## Problems and solutions
 
-1. **Contaminated scalar median.** For epsilon<1/2 and added mass at positive infinity, (1-epsilon)Phi(m)=1/2. Hence m=Phi^-1(1/[2(1-epsilon)])=sqrt(pi/2) epsilon+O(epsilon^2). Coordinate biases can accumulate in Euclidean norm under a common-coordinate attack.
-2. **Importance weights and ESS.** If Q_X is absolutely continuous with respect to P_X and the conditional outcome law is unchanged, integration gives E_P[w f]=E_Q[f]. Conditional on fixed covariates, independent outcomes with a constant conditional mean and variance sigma squared give Var(sum(wY)/sum w)=sigma squared sum(w squared)/(sum w) squared. Without constant mean/variance, or with estimated weights, this is not the full Hajek variance.
-3. **Adjusted counts.** E[q_CC]=q TPR+(1-q)FPR. If TPR differs from FPR, q=(E[q_CC]-FPR)/(TPR-FPR). Binary BBSE gives the same moment equation. Estimated rates and projection produce sampling uncertainty and possible finite-sample bias; singular confusion matrices do not identify prevalence.
-4. **Chi-square DRO.** Under (n/2)sum(q_i-1/n)^2<=rho, Cauchy-Schwarz bounds risk by mean(loss)+sqrt(2 rho Var_n(loss)). Equality holds for weights proportional to the centered loss perturbation while all weights remain nonnegative. At larger radii positivity binds; the checked KKT solver handles that regime.
-5. **Anchor limits.** Since P_A is an orthogonal projection, W=I-(1-sqrt(gamma))P_A gives the criterion ||W(y-Xb)|| squared. At gamma=1 this is OLS. As gamma grows, minimization first prioritizes ||P_A(y-Xb)|| squared. A unique limit equals 2SLS if X'P_A X is invertible; otherwise a further criterion can select among projected-loss minimizers and there is no unique IV coefficient vector.
-6. **Classifier odds.** In a pool of n0 source and n1 target draws, Bayes membership c=n1 q/(n0 p+n1 q). Therefore (n0/n1)c/(1-c)=q/p, with the orientation and class proportions specified. Fitted classifier probabilities need to approximate this posterior for the equality to be useful.
+1. **Contaminated scalar median.** Contaminate $N(0, 1)$ with $\varepsilon$ of mass at $+\infty$: show the median moves to $\Phi^{-1}\big(\tfrac{1}{2(1 - \varepsilon)}\big) \approx 1.25\,\varepsilon$.
+
+   *Solution.* For epsilon<1/2 and added mass at positive infinity, (1-epsilon)Phi(m)=1/2. Hence m=Phi^-1(1/[2(1-epsilon)])=sqrt(pi/2) epsilon+O(epsilon^2). Coordinate biases can accumulate in Euclidean norm under a common-coordinate attack.
+2. **Importance weights and ESS.** Show $E_P[w(X) f(X, Y)] = E_Q[f(X, Y)]$ under covariate shift, and that $n_{\mathrm{eff}} = (\sum w)^2/\sum w^2$ equals the conditional information count for independent homoskedastic outcomes with a constant mean.
+
+   *Solution.* If Q_X is absolutely continuous with respect to P_X and the conditional outcome law is unchanged, integration gives E_P[w f]=E_Q[f]. Conditional on fixed covariates, independent outcomes with a constant conditional mean and variance sigma squared give Var(sum(wY)/sum w)=sigma squared sum(w squared)/(sum w) squared. Without constant mean/variance, or with estimated weights, this is not the full Hajek variance.
+3. **Adjusted counts.** Derive $E[\hat q_{\mathrm{CC}}] = q\,\mathrm{TPR} + (1 - q)\,\mathrm{FPR}$, and show BBSE with two classes is Forman's adjusted count.
+
+   *Solution.* E[q_CC]=q TPR+(1-q)FPR. If TPR differs from FPR, q=(E[q_CC]-FPR)/(TPR-FPR). Binary BBSE gives the same moment equation. Estimated rates and projection produce sampling uncertainty and possible finite-sample bias; singular confusion matrices do not identify prevalence.
+4. **Chi-square DRO.** Show the $\chi^2$-ball worst case is $\bar\ell + \sqrt{2\rho\,\widehat{\mathrm{Var}}(\ell)}$ when no weight hits zero.
+
+   *Solution.* Under (n/2)sum(q_i-1/n)^2<=rho, Cauchy-Schwarz bounds risk by mean(loss)+sqrt(2 rho Var_n(loss)). Equality holds for weights proportional to the centered loss perturbation while all weights remain nonnegative. At larger radii positivity binds; the checked KKT solver handles that regime.
+5. **Anchor limits.** Show anchor regression with $\gamma = 1$ is OLS, and tends to unique 2SLS as $\gamma \to \infty$ when the projected design has full column rank.
+
+   *Solution.* Since P_A is an orthogonal projection, W=I-(1-sqrt(gamma))P_A gives the criterion ||W(y-Xb)|| squared. At gamma=1 this is OLS. As gamma grows, minimization first prioritizes ||P_A(y-Xb)|| squared. A unique limit equals 2SLS if X'P_A X is invertible; otherwise a further criterion can select among projected-loss minimizers and there is no unique IV coefficient vector.
+6. **Classifier odds.** Show that a classifier's odds $c/(1 - c)$, times $n_0/n_1$, equal the density ratio $q(x)/p(x)$.
+
+   *Solution.* In a pool of n0 source and n1 target draws, Bayes membership c=n1 q/(n0 p+n1 q). Therefore (n0/n1)c/(1-c)=q/p, with the orientation and class proportions specified. Fitted classifier probabilities need to approximate this posterior for the equality to be useful.
 
 ## Where it comes back
 

@@ -182,19 +182,27 @@ for 0<a<1. Original `compute_cox` remains unchanged.
 
 ## Ten worked problems
 
-1. **Merton debt and spread.** Put–call parity gives
+1. **Merton debt and spread.** In Merton's model show that the debt is worth $De^{-rT}N(d_2) + V_0N(-d_1)$, and derive the credit spread.
+
+   *Solution.* Put–call parity gives
    B=V−E=D exp(−rT)Φ(d₂)+VΦ(−d₁). Its yield is −ln(B/D)/T, so
    s=−ln[Φ(d₂)+(V exp(rT)/D)Φ(−d₁)]/T. This assumes a single terminal obligation,
    replicable lognormal assets, constant parameters and no intervening default.
-2. **Equity volatility.** Itô's diffusion term is E_V σ_V V dW. Because E_V=Φ(d₁),
+2. **Equity volatility.** Show that equity volatility is $\sigma_E = N(d_1)\,\sigma_V V/E$. Why does it rise as the firm approaches default?
+
+   *Solution.* Itô's diffusion term is E_V σ_V V dW. Because E_V=Φ(d₁),
    σ_E=Φ(d₁)σ_V V/E. Leverage magnifies equity volatility as the residual claim
    becomes small; a statement about a varying firm requires holding the other
    model inputs and financing conventions explicit.
-3. **Continuous CDS triangle.** With constant λ, recovery R, deterministic r and
+3. **Continuous CDS triangle.** With a constant hazard $\lambda$, show that a CDS's par spread is $(1 - R)\lambda$ when premiums are paid continuously.
+
+   *Solution.* With constant λ, recovery R, deterministic r and
    continuous premiums, premium PV is s∫₀ᵀexp[−(r+λ)t]dt. Protection PV is
    (1−R)λ times the same integral, hence s=(1−R)λ. Scheduled premiums and accrual
    conventions change the exact relation.
-4. **Three-year annual CDS, 120 bp.** Declare the convention: annual premiums at
+4. **Three-year annual CDS, 120 bp.** A 3-year CDS trades at 120 bp, recovery 40%, rates 4%, annual premiums. Bootstrap a flat hazard rate by hand (one iteration of the credit triangle is enough).
+
+   *Solution.* Declare the convention: annual premiums at
    1,2,3, no accrued premium, continuous protection payment, r=.04 and R=.4.
    Solve .012∑ᵢ₌₁³exp[−(.04+λ)i]
    =.6λ[1−exp(−3(.04+λ))]/(.04+λ).
@@ -202,12 +210,16 @@ for 0<a<1. Original `compute_cox` remains unchanged.
    one-year probability 1−exp(−λ)=1.92246%. Adding accrued premium requires a
    changed equation. One three-year quote cannot identify three unrestricted
    annual hazards without further assumptions.
-5. **Vasicek limit.** Given M, defaults have probability
+5. **Vasicek limit.** Derive Vasicek's large-pool distribution $\mathbb{P}(L \le x)$ from the one-factor model, and its 99.9% quantile.
+
+   *Solution.* Given M, defaults have probability
    p(M)=Φ[(Φ⁻¹(p)−√ρ M)/√(1−ρ)]. Conditional independence and vanishing equal
    weights give default fraction L∞=p(M). For 0<x<1 and 0<ρ<1,
    F(x)=Φ[(√(1−ρ)Φ⁻¹(x)−Φ⁻¹(p))/√ρ]. Consequently
    qα=Φ[(Φ⁻¹(p)+√ρ Φ⁻¹(α))/√(1−ρ)]. A fixed LGD multiplies the fraction.
-6. **Corporate IRB illustration.** For p=.02, LGD=.45 and maturity M=2.5, use
+6. **Corporate IRB illustration.** Compute the Basel capital $K$ for PD 2%, LGD 45%, $M$ = 2.5. Compare it with the expected loss.
+
+   *Solution.* For p=.02, LGD=.45 and maturity M=2.5, use
    R(p)=.12(1−exp(−50p))/(1−exp(−50))
    +.24[1−(1−exp(−50p))/(1−exp(−50))],
    b(p)=[.11852−.05478 ln p]² and
@@ -215,7 +227,9 @@ for 0<a<1. Original `compute_cox` remains unchanged.
    ×[1+(M−2.5)b]/(1−1.5b). The unchanged House function gives K=.0918834,
    versus expected loss .009; risk weight 12.5K=1.14854. This omits other current
    regulatory requirements and is not a bank-specific capital recommendation.
-7. **Tranche dependence.** Normalized tranche loss is
+7. **Tranche dependence.** In the homogeneous Gaussian large pool with fixed marginal PD and recovery, explain equity and super-senior loss sensitivity to correlation. Why need a bounded senior tranche not be monotone?
+
+   *Solution.* Normalized tranche loss is
    [(L−A)⁺−(L−D)⁺]/(D−A). First-loss equity and uncapped senior stop-loss payoffs
    have different convexity. Under the homogeneous fixed-marginal Gaussian pool,
    increasing dependence shifts mass toward joint survival and severe joint loss.
@@ -223,10 +237,14 @@ for 0<a<1. Original `compute_cox` remains unchanged.
    A capped senior tranche is a difference of stop losses, so its sensitivity
    need not have one sign for all PDs, attachments and correlations. A protection
    buyer and seller have opposite positions; spread repricing also needs premium legs.
-8. **Logit odds.** Odds are exp(β₀+βᵀx). A two-standard-deviation increase with
+8. **Logit odds.** A logit's coefficient on leverage is 0.5 per standard deviation. By what factor does a two-standard-deviation rise in leverage multiply the odds of default?
+
+   *Solution.* Odds are exp(β₀+βᵀx). A two-standard-deviation increase with
    coefficient .5 per standard deviation multiplies odds by exp(1)=2.71828,
    not probability. From probability p, new probability is ep/(1−p+ep).
-9. **Qualifying problem: finite pool.** Given the bad-state factor y, K|y is
+9. **Qualifying problem: finite pool.** (qual) For $N$ equal loans in Vasicek's model, show $\Pr(L \le k/N) = \int \operatorname{Bin}(k; N, p(y))\varphi(y)dy$ and that the $\alpha$-quantile of $L$ tends to $p(\Phi^{-1}(\alpha))$ as $N \to \infty$.
+
+   *Solution.* Given the bad-state factor y, K|y is
    Binomial(N,p(y)); therefore
    Pr(L≤k/N)=∫[∑ⱼ₌₀ᵏ C(N,j)p(y)ʲ(1−p(y))ᴺ⁻ʲ]φ(y)dy.
    This identity is exact under the model; numerical evaluation is not exact
@@ -235,7 +253,9 @@ for 0<a<1. Original `compute_cox` remains unchanged.
    converge too. The saved grid is y∈[−8,8] with 8,001 points. Its `exact` output
    is the discrete numerical quantile; `smooth` linearly interpolates the CDF
    between k/N support points. They must not be given the same name or error claim.
-10. **Qualifying problem: smooth granularity expansion.** Let Lε=μ(Y)+εU,
+10. **Qualifying problem: smooth granularity expansion.** (qual) For $L = \mu(Y) + \varepsilon U$ with $\mathbb E[U \mid Y] = 0$, derive the second-order expansion $q_\alpha(L) = q_\alpha(\mu) - \frac{\varepsilon^2}{2h(y)}\frac{d}{dy}\big[h(y)\operatorname{Var}(U \mid y)/\mu'(y)\big] + o(\varepsilon^2)$ at $y = q_\alpha(Y)$.
+
+    *Solution.* Let Lε=μ(Y)+εU,
     E[U|Y]=0, h the density of Y, v(y)=Var(U|y), with μ locally increasing,
     μ′≠0, h>0 and adequate smoothness, integrability and remainder control.
     Write fμ(x)=h(y)/μ′(y), y=μ⁻¹(x). Expanding a smooth CDF gives

@@ -261,28 +261,40 @@ python tools/lecture_length.py stats34 --floor 50
 
 ## Problems and solutions
 
-1. **The forest's variance.** Let t₁, …, t_B have common variance σ² and pairwise correlation ρ.
+1. **The forest's variance.** Show that $B$ identically distributed predictions with pairwise correlation $\rho$ average to variance $\rho\sigma^2 + (1-\rho)\sigma^2/B$.
+
+   *Solution.* Let t₁, …, t_B have common variance σ² and pairwise correlation ρ.
    - Var(Σ t_b / B) = B⁻² (Σ_b Var t_b + Σ_{b≠b'} Cov(t_b, t_b')) = B⁻² (Bσ² + B(B − 1)ρσ²) = ρσ² + (1 − ρ)σ²/B.
    - As B → ∞ this falls to ρσ². The excess over the limit is (1 − ρ)σ²/B, so it is within 5% of the limit once
      (1 − ρ)/(Bρ) ≤ 0.05; for ρ = 0.1, that is B ≥ 180.
-2. **What AdaBoost estimates.** With p = P(Y = 1 | x), E[e^{−YF} | x] = p e^{−F} + (1 − p) e^{F}.
+2. **What AdaBoost estimates.** Show that $\arg\min_F E[e^{-YF} \mid x] = \frac12 \log\{P(Y = 1 \mid x)/P(Y = -1 \mid x)\}$.
+
+   *Solution.* With p = P(Y = 1 | x), E[e^{−YF} | x] = p e^{−F} + (1 − p) e^{F}.
    - The derivative in F is −p e^{−F} + (1 − p) e^{F}, which is 0 when e^{2F} = p/(1 − p).
    - So F* = ½ log{p/(1 − p)}. The second derivative is positive, so this is the minimum.
-3. **The quantile lemma.** By exchangeability and continuity, the rank R of S_{n+1} among the n + 1 scores is uniform
+3. **The quantile lemma.** For continuous scores, prove $1 - \alpha \le P(S_{n+1} \le \hat q) \le 1 - \alpha + 1/(n+1)$.
+
+   *Solution.* By exchangeability and continuity, the rank R of S_{n+1} among the n + 1 scores is uniform
    on {1, …, n + 1}.
    - S_{n+1} ≤ S_(k) (the k-th smallest of the first n) if and only if R ≤ k. So P = k/(n + 1).
    - With k = ⌈(n + 1)(1 − α)⌉ we have (n + 1)(1 − α) ≤ k < (n + 1)(1 − α) + 1.
    - Dividing by n + 1 gives 1 − α ≤ P < 1 − α + 1/(n + 1).
-4. **Conditional coverage.** Assume calibration and test scores are i.i.d. with continuous distribution F conditional on a separately trained model. Given the calibration scores, coverage is F(S_(k)).
+4. **Conditional coverage.** Show that, given the calibration set, for i.i.d. continuous scores, the coverage $F(\hat q)$ is $\mathrm{Beta}(k, n + 1 - k)$.
+
+   *Solution.* Assume calibration and test scores are i.i.d. with continuous distribution F conditional on a separately trained model. Given the calibration scores, coverage is F(S_(k)).
    - For continuous F, the values U_i = F(S_i) are i.i.d. uniform, and F(S_(k)) = U_(k).
    - The k-th order statistic of n uniforms is Beta(k, n + 1 − k), with mean k/(n + 1).
-5. **PPI.** θ̂_λ = λ f̄_N − (λ f̄_n − ȳ_n).
+5. **PPI.** Show $\hat\theta^{PP}_\lambda$ is unbiased for every fixed $\lambda$; find the $\lambda$ minimizing its variance.
+
+   *Solution.* θ̂_λ = λ f̄_N − (λ f̄_n − ȳ_n).
    - For a fixed prediction function, independent representative samples and fixed λ, its expectation is λ E f − λ E f + E Y = θ. Estimating λ on the labelled sample need not preserve exact unbiasedness.
    - The two samples are independent, so Var = λ² Var(f)/N + Var(Y − λf)/n
      = λ² Var f (1/N + 1/n) − 2λ Cov(Y, f)/n + Var Y/n.
    - Setting the derivative in λ to zero gives λ* = Cov(Y, f) / ((1 + n/N) Var f), PPI++'s choice. At λ = 0 the
      estimator is the classical one, so the population variance optimum is never worse. Estimated weights achieve this only asymptotically under appropriate moment and consistency conditions.
-6. **The ACI bound.** Assume γ > 0, α₁ ∈ [0, 1], target α ∈ (0, 1), and the quantile convention q̂ = −∞ when α_t ≥ 1 and +∞ when α_t ≤ 0.
+6. **The ACI bound.** Prove the ACI bound $|\frac1T\sum_t \mathrm{err}_t - \alpha| \le (\max(\alpha_1, 1 - \alpha_1) + \gamma)/(\gamma T)$.
+
+   *Solution.* Assume γ > 0, α₁ ∈ [0, 1], target α ∈ (0, 1), and the quantile convention q̂ = −∞ when α_t ≥ 1 and +∞ when α_t ≤ 0.
    - Then α_t stays in [−γ, 1 + γ]: when α_t < 0 the band is infinite, no miss occurs, and α_t rises. When α_t > 1
      every step is a miss, and α_t falls.
    - Summing the update over t gives α_{T+1} − α₁ = γ Σ_t (α − err_t).

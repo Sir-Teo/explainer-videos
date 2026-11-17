@@ -132,19 +132,31 @@ playback/listening, Chinese narration/captions and final masters.
 
 ## Problems and solutions
 
-1. **Scale invariance.** Multiplying calibration and test weights by the same positive constant leaves
+1. **Scale invariance.** Show that weighted conformal with weights $c\,\hat w$ gives the same set for every constant $c > 0$.
+
+   *Solution.* Multiplying calibration and test weights by the same positive constant leaves
    normalized masses, the weighted quantile and the prediction set unchanged.
-2. **Normal TV.** Densities N(a,1), N(b,1) cross at (a+b)/2. Their mass difference on either half-line is
+2. **Normal TV.** Show that $\mathrm{TV}(N(a, 1), N(b, 1)) = 2\Phi(|a - b|/2) - 1$.
+
+   *Solution.* Densities N(a,1), N(b,1) cross at (a+b)/2. Their mass difference on either half-line is
    2Φ(|a−b|/2)−1.
-3. **Normal tilt.** Completing the square in exp(λμx−x²/2) gives N(λμ,1) after normalization.
-4. **Scores independent of covariates.** Conditional on independently trained score/model parameters,
+3. **Normal tilt.** Show that reweighting $N(0, 1)$ by $e^{\lambda\mu x}$ gives $N(\lambda\mu, 1)$.
+
+   *Solution.* Completing the square in exp(λμx−x²/2) gives N(λμ,1) after normalization.
+4. **Scores independent of covariates.** Show that if the conditional score law is constant in $x$, with an independently trained score, unweighted split conformal covers $Q$ at $\ge 1 - \alpha$ under any covariate shift.
+
+   *Solution.* Conditional on independently trained score/model parameters,
    suppose the law of S|X=x is constant across x. A covariate shift then preserves the score law;
    ordinary unweighted split-conformal scores are exchangeable and coverage is at least 1−α.
    Merely omitting x as an explicit score argument does not ensure this condition.
-5. **Common outcome kernel.** For any event A, integrate its indicator against P(dy|x) to obtain g(x)∈[0,1].
+5. **Common outcome kernel.** Show that $|Q(A) - \tilde Q(A)| \le \mathrm{TV}(Q_X, \tilde Q_X)$ when $Q$ and $\tilde Q$ share $P_{Y \mid X}$.
+
+   *Solution.* For any event A, integrate its indicator against P(dy|x) to obtain g(x)∈[0,1].
    The supremum of its integrals against Q_X−P_ŵ is TV. Taking events depending only on x proves equality
    for the joint laws sharing that kernel.
-6. **Dependent-weight stress test.** Compare independently fitted weights with weights overfitted on the
+6. **Dependent-weight stress test.** Design a simulation, with ADEMP, that could refute the theorem if its independence assumption were dropped.
+
+   *Solution.* Compare independently fitted weights with weights overfitted on the
    calibration observations under strong shift. Use bounded/clipped positive weights or verify integrability;
    arbitrary high-degree exponential-polynomial weights need not normalize. Record coverage and each replicate's
    bound with empirical gap MC SE; write the prediction before execution. A failure would challenge an extension

@@ -83,47 +83,69 @@ The library evaluates first-passage integrals by Simpson quadrature and uses a b
 
 ### Basic 1 — Speed from a daily slope
 
-Given b = 0.9 and Δt = one day, b = exp(−κΔt) implies κ = −ln(0.9) = 0.1053605 per day. Since the conditional mean displacement decays as exp(−κt), halving requires exp(−κh) = 1/2. Thus h = ln 2/κ = 6.5788 trading days. This is decay of the conditional mean, not a guaranteed hitting time. The mapping assumes a stationary OU sampled regularly.
+A spread's daily AR(1) slope is 0.9: its speed $\kappa$ and half-life.
+
+*Solution.* Given b = 0.9 and Δt = one day, b = exp(−κΔt) implies κ = −ln(0.9) = 0.1053605 per day. Since the conditional mean displacement decays as exp(−κt), halving requires exp(−κh) = 1/2. Thus h = ln 2/κ = 6.5788 trading days. This is decay of the conditional mean, not a guaranteed hitting time. The mapping assumes a stationary OU sampled regularly.
 
 ### Basic 2 — False passes and a family-wise bound
 
-Forty-nine assets give M = 49×48/2 = 1,176 unordered pairs. If every null is true and each test has calibrated size α = 0.05, linearity of expectation gives E[V] = ΣPr(reject null j) = 1,176×0.05 = 58.8 false passes; cross-pair independence is unnecessary. To bound the probability of any false pass by 0.05, the union bound permits marginal level α/M = 0.000042517 = 4.2517×10⁻⁵. This is Bonferroni, valid under dependence for valid individual tests. The fixed −3.34 screen is not automatically calibrated at that adjusted level; it needs appropriate critical values or valid p-values.
+All 1{,}176 pairs of 49 industries tested at 5%: the expected false passes, and the Bonferroni level.
+
+*Solution.* Forty-nine assets give M = 49×48/2 = 1,176 unordered pairs. If every null is true and each test has calibrated size α = 0.05, linearity of expectation gives E[V] = ΣPr(reject null j) = 1,176×0.05 = 58.8 false passes; cross-pair independence is unnecessary. To bound the probability of any false pass by 0.05, the union bound permits marginal level α/M = 0.000042517 = 4.2517×10⁻⁵. This is Bonferroni, valid under dependence for valid individual tests. The fixed −3.34 screen is not automatically calibrated at that adjusted level; it needs appropriate critical values or valid p-values.
 
 ### Basic 3 — A cost-scaled band
 
-Choose equilibrium width s = 2% and fixed round-trip spread cost c = 0.6%, so d = c/s = 0.3. The stored numerical policy calculation gives u ≈ 1.032879, hence m = su ≈ 0.02065758 = 2.065758%. This number is a bounded quadrature/grid approximation. The leading small-cost law gives u ≈ (0.9)^(1/3) = 0.965489, or m ≈ 1.930979%. Cost 0.3 is not infinitesimal, so the asymptotic error is unsurprising. The units are spread displacement, not gross portfolio capital.
+A spread with $s_{\text{eq}} = 2\%$ and round-trip cost 0.6%: $c/s_{\text{eq}}$, and the best band from the curve.
+
+*Solution.* Choose equilibrium width s = 2% and fixed round-trip spread cost c = 0.6%, so d = c/s = 0.3. The stored numerical policy calculation gives u ≈ 1.032879, hence m = su ≈ 0.02065758 = 2.065758%. This number is a bounded quadrature/grid approximation. The leading small-cost law gives u ≈ (0.9)^(1/3) = 0.965489, or m ≈ 1.930979%. Cost 0.3 is not infinitesimal, so the asymptotic error is unsurprising. The units are spread displacement, not gross portfolio capital.
 
 ### Basic 4 — A specified residual cost illustration
 
-Choose annual gross Sharpe 0.8, annual volatility 4%, daily turnover τ = 0.2 per leg, two legs and one-way cost k = 5 bp per traded dollar. Gross mean is 0.8×0.04 = 0.032 = 3.2% annually. Under constant turnover and 252 trading days, annual cost is 2kτ×252 = 2×0.0005×0.2×252 = 0.0504 = 5.04%. Net mean is −0.0184 = −1.84%. If costs are deterministic and volatility unchanged, net Sharpe is −0.0184/0.04 = −0.46. This chosen arithmetic does not fix the stored algorithm's missing holdings and turnover.
+A residual book: gross Sharpe 0.8 at 4% volatility, 20% daily turnover, 5 bp a side on both legs. Net return.
+
+*Solution.* Choose annual gross Sharpe 0.8, annual volatility 4%, daily turnover τ = 0.2 per leg, two legs and one-way cost k = 5 bp per traded dollar. Gross mean is 0.8×0.04 = 0.032 = 3.2% annually. Under constant turnover and 252 trading days, annual cost is 2kτ×252 = 2×0.0005×0.2×252 = 0.0504 = 5.04%. Net mean is −0.0184 = −1.84%. If costs are deterministic and volatility unchanged, net Sharpe is −0.0184/0.04 = −0.46. This chosen arithmetic does not fix the stored algorithm's missing holdings and turnover.
 
 ### Basic 5 — One cross-covariance
 
-For N = 2, choose zero means and zero own lag covariances; let the only nonzero element of Γ = Cov(r_t,r_{t−1}) be Γ₂₁ = γ. The contrarian weights are w_i = −(r_{i,t−1} − r̄_{t−1})/2. Explicitly, w₂ = (r₁,t−1 − r₂,t−1)/4 and w₁ = −w₂. Taking E[w₁r₁,t + w₂r₂,t] leaves γ/4. Equivalently the off-diagonal term is γ/N², own and mean-dispersion terms vanish. Profit is positive only if γ > 0, before implementation costs; no own-price reversal is required.
+Two zero-mean assets with $\operatorname{Cov}(r_{2,t}, r_{1,t-1}) = \gamma$ and no other autocovariance: the contrarian's expected profit.
+
+*Solution.* For N = 2, choose zero means and zero own lag covariances; let the only nonzero element of Γ = Cov(r_t,r_{t−1}) be Γ₂₁ = γ. The contrarian weights are w_i = −(r_{i,t−1} − r̄_{t−1})/2. Explicitly, w₂ = (r₁,t−1 − r₂,t−1)/4 and w₁ = −w₂. Taking E[w₁r₁,t + w₂r₂,t] leaves γ/4. Equivalently the off-diagonal term is γ/N², own and mean-dispersion terms vanish. Profit is positive only if γ > 0, before implementation costs; no own-price reversal is required.
 
 ### Basic 6 — Correlated innovations
 
-An innovation with AR(1) slope 0.3 retains positive serial dependence under that descriptive fit. It may indicate misspecification or unmodeled dynamics, but does not uniquely identify a slow filter. Cointegration instead requires integrated price series with a stable stationary fixed combination under the relevant definition. Adaptive residual stationarity, or its failure, is insufficient. Specify a fixed spread, estimate with prior information, check stability, and evaluate actual subsequent holdings after costs. The innovation statistic alone supplies no verdict.
+A filter's one-step forecast errors have AR(1) slope 0.3. What does that say about cointegration?
+
+*Solution.* An innovation with AR(1) slope 0.3 retains positive serial dependence under that descriptive fit. It may indicate misspecification or unmodeled dynamics, but does not uniquely identify a slow filter. Cointegration instead requires integrated price series with a stable stationary fixed combination under the relevant definition. Adaptive residual stationarity, or its failure, is insufficient. Specify a fixed spread, estimate with prior information, check stability, and evaluate actual subsequent holdings after costs. The innovation statistic alone supplies no verdict.
 
 ### Advanced 7 — Turnover units
 
-Choose gross mean 2 bp/day and define τ = Σ|Δw_j| = 0.4 as total one-way traded gross weight. With k = 5 bp per dollar, cost is kτ = 2 bp/day and net mean is 0 bp/day. If “turnover” instead means half that sum, use 2kτ, producing 4 bp cost and −2 bp net. If τ is specified separately for two legs, add both legs. No extra round-trip factor is justified without a definition. The stated answer zero uses the first convention and deterministic linear costs; financing and impact are excluded.
+A reversal earns 2 bp a day gross and trades 40% of its book daily at 5 bp a side. Net.
+
+*Solution.* Choose gross mean 2 bp/day and define τ = Σ|Δw_j| = 0.4 as total one-way traded gross weight. With k = 5 bp per dollar, cost is kτ = 2 bp/day and net mean is 0 bp/day. If “turnover” instead means half that sum, use 2kτ, producing 4 bp cost and −2 bp net. If τ is specified separately for two legs, add both legs. No extra round-trip factor is justified without a definition. The stated answer zero uses the first convention and deterministic linear costs; financing and impact are excluded.
 
 ### Advanced 8 — IC sample size
 
-For a small correlation from n independent, comparable forecast/target pairs, use se(IC) ≈ 1/√n. To separate IC = 0.01 from zero by two standard errors requires 0.01√n ≥ 2, so n ≥ 40,000. With 49 independent pairs each day, T ≥ 40,000/49 = 816.3265 days; 252 days/year gives 3.2394 years. Cross-sectional correlation, overlapping targets, serial dependence and selection reduce effective information, so this pooled iid calculation is a conditional planning illustration. It is neither guaranteed power nor proof after 3.24 years.
+A daily IC of 0.01 across 49 assets: the iid-approximation years for two standard errors.
+
+*Solution.* For a small correlation from n independent, comparable forecast/target pairs, use se(IC) ≈ 1/√n. To separate IC = 0.01 from zero by two standard errors requires 0.01√n ≥ 2, so n ≥ 40,000. With 49 independent pairs each day, T ≥ 40,000/49 = 816.3265 days; 252 days/year gives 3.2394 years. Cross-sectional correlation, overlapping targets, serial dependence and selection reduce effective information, so this pooled iid calculation is a conditional planning illustration. It is neither guaranteed power nor proof after 3.24 years.
 
 ### Advanced 9 — Sharpe precision
 
-Under the basic iid-return, low-Sharpe approximation, annual Sharpe standard error is about 1/√Y for Y years. For true annual Sharpe 0.3, set 0.3√Y = 2, giving Y = (2/0.3)² = 44.4444 years. This equates expected signal to two approximate standard errors; it is not a 95% power calculation. Higher moments, serial dependence, varying risk, estimator details and research selection alter it. Five years would give approximate error 0.4472, larger than 0.3, even before those complications.
+A true Sharpe ratio of 0.3: the iid-approximation years for two standard errors.
+
+*Solution.* Under the basic iid-return, low-Sharpe approximation, annual Sharpe standard error is about 1/√Y for Y years. For true annual Sharpe 0.3, set 0.3√Y = 2, giving Y = (2/0.3)² = 44.4444 years. This equates expected signal to two approximate standard errors; it is not a 95% power calculation. Higher moments, serial dependence, varying risk, estimator details and research selection alter it. Five years would give approximate error 0.4472, larger than 0.3, even before those complications.
 
 ### Advanced 10 — Small-cost arithmetic
 
-Choose d = 0.01. The leading asymptotic band is u = (3d)^(1/3) = 0.3107233. The leading retained frictionless rate is 1 − (3d)^(2/3)/2 = 0.9517255, about 95.17%. The unchanged bounded optimizer gives u ≈ 0.3129916 and rate 0.7598024 in κ = s = 1 units. Dividing by R(0⁺) = √(2/π) = 0.7978846 gives approximately 0.95227. This is a numerical comparison against an asymptotic prediction, not an exact finite-cost equality or evidence from market data.
+Use the small-cost law to find the band for $c/s_{\text{eq}} = 0.01$ and the share of the frictionless rate kept.
+
+*Solution.* Choose d = 0.01. The leading asymptotic band is u = (3d)^(1/3) = 0.3107233. The leading retained frictionless rate is 1 − (3d)^(2/3)/2 = 0.9517255, about 95.17%. The unchanged bounded optimizer gives u ≈ 0.3129916 and rate 0.7598024 in κ = s = 1 units. Dividing by R(0⁺) = √(2/π) = 0.7978846 gives approximately 0.95227. This is a numerical comparison against an asymptotic prediction, not an exact finite-cost equality or evidence from market data.
 
 ### Qualifying 11 — Passage times, renewal and a unique optimum
 
-Assume the OU model and policy stated above, start flat at zero, and take m > 0. Each cycle first hits either ±m and then returns to zero. Strong Markov and symmetry make successive full-cycle durations identically distributed and independent; their expectations are finite for this positive recurrent OU process and finite m. A full cycle has fixed reward m − c. The renewal-reward theorem gives almost-sure long-run completed-cycle rate R = (m−c)/(E₀τ_m + E₋ₘT₀). Incomplete-cycle mark-to-market needs its own accounting if one defines a wealth process; this policy formula concerns the renewal reward.
+(qual) For $dX = -\kappa X\,dt + \sigma dW$, derive $\mathbb E_{-m}[T_0]$ and $\mathbb E_0[\tau_m]$ from Dynkin's formula, prove the renewal-reward rate $R(m) = (m - c)/(\mathbb E_0[\tau_m] + \mathbb E_{-m}[T_0])$, and show by scaling that $m^*/s_{\text{eq}}$ depends on $c/s_{\text{eq}}$ alone.
+
+*Solution.* Assume the OU model and policy stated above, start flat at zero, and take m > 0. Each cycle first hits either ±m and then returns to zero. Strong Markov and symmetry make successive full-cycle durations identically distributed and independent; their expectations are finite for this positive recurrent OU process and finite m. A full cycle has fixed reward m − c. The renewal-reward theorem gives almost-sure long-run completed-cycle rate R = (m−c)/(E₀τ_m + E₋ₘT₀). Incomplete-cycle mark-to-market needs its own accounting if one defines a wealth process; this policy formula concerns the renewal reward.
 
 For a hitting-time expectation f(x), Dynkin's equation is (σ²/2)f″ − κxf′ = −1 in the continuation region, with zero value at the target boundary. Multiplying by exp(−κx²/σ²) yields
 
@@ -151,7 +173,9 @@ For u > d, differentiate: the sign of R′ is the sign of I(u) − (u−d)exp(u�
 
 ### Qualifying 12 — Frictionless limit and cube-root asymptotics
 
-Expand in u=m/s, keeping κ times the expected times dimensionless. With a=√(π/2), the integrand exp(y²/2)∫₋∞ʸ exp(−z²/2)dz equals a+y+ay²/2+y³/3+ay⁴/8+… . Integrating over [−u,0] gives
+(qual) With $c = 0$ show $R(m) \to \sigma\sqrt{\kappa/\pi}$ as $m \to 0$; then show the $m^2$ terms of the two passage times cancel, and deduce $m^*/s_{\text{eq}} \sim (3c/s_{\text{eq}})^{1/3}$ and $R(m^*)/R(0^+) = 1 - \frac12(3c/s_{\text{eq}})^{2/3} + o(c^{2/3})$.
+
+*Solution.* Expand in u=m/s, keeping κ times the expected times dimensionless. With a=√(π/2), the integrand exp(y²/2)∫₋∞ʸ exp(−z²/2)dz equals a+y+ay²/2+y³/3+ay⁴/8+… . Integrating over [−u,0] gives
 κE₋ₘT₀ = au − u²/2 + au³/6 − u⁴/12 + au⁵/40 + O(u⁶).
 The waiting integral gives κE₀τ_m = u²/2 + u⁴/12 + O(u⁶). Even terms cancel; their sum is aI(u)=a(u+u³/6+u⁵/40+…). With d=0,
 R=(κs/a)u/I(u)→κs/a=σ√(κ/π). Since I(u)>u for u>0, this value is strictly above every positive-band rate: it is a supremum, not an attained finite optimum.

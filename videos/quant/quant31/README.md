@@ -50,33 +50,57 @@ For zero-sum weights, `π=N sd_cs(w) sd_cs(r) Corr_P(w,r)`, using population-div
 
 ## Problems 1–6: complete solutions
 
-**1. Hook.** Scores and latent moments satisfy the research model. Monthly variance is .10²+(1−.05²−.10²)/500=.011975, so monthly IR=.05/√.011975=.45691. Independent months give annual√12 times this,1.5828. The usual small-correlation constant-IC benchmark is.05√(500×12)=3.8730; the exact constant-IC toy also divides by√(1−.05²).
+**1. Hook.** In the fixed normalised-score toy, compute annual IR for latent mean 0.05, sd 0.10, N=500 and independent months; compare the small-correlation benchmark.
 
-**2. Bias reference.** If zₜ are independent standard normals and b is their sample SD, `(T−1)b²` has χ²(T−1) law. The delta method gives SD(b)≈1/√[2(T−1)]; multiplying by1.96 gives approximate95% half-width .0618 atT=504, close to the shorthand√(2/T)=.0630. Thus1.30 lies outside either Gaussian reference. This is not an actual-data confidence statement without those assumptions.
+*Solution.* Scores and latent moments satisfy the research model. Monthly variance is .10²+(1−.05²−.10²)/500=.011975, so monthly IR=.05/√.011975=.45691. Independent months give annual√12 times this,1.5828. The usual small-correlation constant-IC benchmark is.05√(500×12)=3.8730; the exact constant-IC toy also divides by√(1−.05²).
 
-**3. Vasicek.** Known Gaussian observation variance and known Gaussian prior variance are both .3²=.09. Posterior precision is2/.09 and precision-weighted mean is `(1.8/.09+1/.09)/(2/.09)=1.4`. Actual empirical Bayes estimates its prior and standard errors rather than knowing them.
+**2. Bias reference.** At T=504, compute the approximate IID standard-normal 95% reference band for the sample SD of standardised returns. Is 1.30 inside?
 
-**4. Size.** Assume fixed8% gross return and costs proportional to√A. Costs at400m are2%√(400/100)=4%; net8%−4%=4%. Financing and any other costs are excluded by the question.
+*Solution.* If zₜ are independent standard normals and b is their sample SD, `(T−1)b²` has χ²(T−1) law. The delta method gives SD(b)≈1/√[2(T−1)]; multiplying by1.96 gives approximate95% half-width .0618 atT=504, close to the shorthand√(2/T)=.0630. Thus1.30 lies outside either Gaussian reference. This is not an actual-data confidence statement without those assumptions.
 
-**5. Capacity.** ForΠ=gA−cA^(3/2), g,c>0, break-evenA₀=(g/c)². SettingΠ′=g−(3/2)c√A=0 givesA*=(2g/3c)²=(4/9)A₀=400m. Π″=−3c/(4√A)<0. Net returnΠ/A atA* isg−2g/3=g/3 before management fees.
+**3. Vasicek.** Known Gaussian prior: beta mean 1.0, sd 0.3; estimate 1.8 with known Gaussian SE 0.3. Derive the posterior mean.
 
-**6. Rate.** Withρ=0, a solvesa²+γa−γλ=0, so `a=[−γ+√(γ²+4γλ)]/2`. Forλ≫γ, a≈√(γλ) and ratea/λ≈√(γ/λ). Quadrupling λ approximately halves the rate and approximately doubles a. At fixedρ>0 the extreme-cost approximation differs; no universal half-speed statement follows.
+*Solution.* Known Gaussian observation variance and known Gaussian prior variance are both .3²=.09. Posterior precision is2/.09 and precision-weighted mean is `(1.8/.09+1/.09)/(2/.09)=1.4`. Actual empirical Bayes estimates its prior and standard errors rather than knowing them.
+
+**4. Size.** With fixed gross return, net 6% at 100 m after 2% square-root costs: compute net return at 400 m.
+
+*Solution.* Assume fixed8% gross return and costs proportional to√A. Costs at400m are2%√(400/100)=4%; net8%−4%=4%. Financing and any other costs are excluded by the question.
+
+**5. Capacity.** For fixed positive g,c and profit $gA-cA^{3/2}$, break-even is 900 m. Derive profit-maximising size and net return before fees.
+
+*Solution.* ForΠ=gA−cA^(3/2), g,c>0, break-evenA₀=(g/c)². SettingΠ′=g−(3/2)c√A=0 givesA*=(2g/3c)²=(4/9)A₀=400m. Π″=−3c/(4√A)<0. Net returnΠ/A atA* isg−2g/3=g/3 before management fees.
+
+**6. Rate.** With zero discount and $\lambda\gg\gamma$, derive the GP trade-rate approximation and effect of quadrupling cost.
+
+*Solution.* Withρ=0, a solvesa²+γa−γλ=0, so `a=[−γ+√(γ²+4γλ)]/2`. Forλ≫γ, a≈√(γλ) and ratea/λ≈√(γ/λ). Quadrupling λ approximately halves the rate and approximately doubles a. At fixedρ>0 the extreme-cost approximation differs; no universal half-speed statement follows.
 
 ## Problems 7–10: complete solutions
 
-**7. Combination.** With unit-variance target and scores, feasible joint covariance andC=[[1,.5],[.5,1]], the best linear Pearson squared correlation isicᵀC⁻¹ic. EqualIC=.04 gives2×.04²/(1+.5)=.00213333; square root=.046188. Equal positive weights attain it here. This identity does not substitute average rank ICs.
+**7. Combination.** Two standardised finite-variance scores each have population Pearson IC 0.04 and score correlation 0.5. Derive the maximum combined Pearson IC.
 
-**8. RMS change.** For stationary unit-variance matched scores with correlation1−φ, E[(zₜ−zₜ₋₁)²]=2φ. The RMS ratio is√(.32/.02)=4. With zero-mean Gaussian increments E|Δz|=√(2/π)×RMS, so the same ratio applies to absolute score changes. Portfolio turnover additionally needs fixed holdings scale, gross normalisation, matched universe and consistent treatment of drift; the proxy alone does not establish it.
+*Solution.* With unit-variance target and scores, feasible joint covariance andC=[[1,.5],[.5,1]], the best linear Pearson squared correlation isicᵀC⁻¹ic. EqualIC=.04 gives2×.04²/(1+.5)=.00213333; square root=.046188. Equal positive weights attain it here. This identity does not substitute average rank ICs.
 
-**9. Attribution.** The sample identity uses the covariance term with divisorT. Static market contribution=.4×20%=8%; adding2% timing leaves12%−8%−2%=2% model-relative residual. The residual does not by itself prove skill.
+**8. RMS change.** For stationary unit-variance scores with lag correlations 1-0.02 and 1-0.32, derive the ratio of RMS changes. What extra assumptions convert it to a turnover ratio?
 
-**10. Ceiling and crossover.** In the bounded-latent toy, μ=.03,s=.06. The per-month limit μ/s=.5; independent months give annual√12/2=1.73205. Equating s² with(1−μ²−s²)/N gives `N*=(1−.0009−.0036)/.0036=276.5278`, about277. This continuous crossover is a model reference, not an estimated effective market breadth.
+*Solution.* For stationary unit-variance matched scores with correlation1−φ, E[(zₜ−zₜ₋₁)²]=2φ. The RMS ratio is√(.32/.02)=4. With zero-mean Gaussian increments E|Δz|=√(2/π)×RMS, so the same ratio applies to absolute score changes. Portfolio turnover additionally needs fixed holdings scale, gross normalisation, matched universe and consistent treatment of drift; the proxy alone does not establish it.
+
+**9. Attribution.** A fund returned 12%; average beta 0.4, sample market return 20%, exposure–next-return covariance term 2%. Compute the residual term.
+
+*Solution.* The sample identity uses the covariance term with divisorT. Static market contribution=.4×20%=8%; adding2% timing leaves12%−8%−2%=2% model-relative residual. The residual does not by itself prove skill.
+
+**10. Ceiling and crossover.** In the toy with independent monthly latent mean 0.03 and sd 0.06, derive the annual asymptotic IR and persistent-versus-diversifiable variance crossover $N^*$.
+
+*Solution.* In the bounded-latent toy, μ=.03,s=.06. The per-month limit μ/s=.5; independent months give annual√12/2=1.73205. Equating s² with(1−μ²−s²)/N gives `N*=(1−.0009−.0036)/.0036=276.5278`, about277. This continuous crossover is a model reference, not an estimated effective market breadth.
 
 ## Problems 11–12: qualifying solutions
 
-**11. Moving-latent-correlation theorem.** Substitute returns: `π=ρ N⁻¹Σzᵢ²+√(1−ρ²)N⁻¹Σzᵢεᵢ`. Normalisation makes the first termρ. Conditional noise payoff has mean0 and variance(1−ρ²)/N, from the stated conditional unit variances and zero cross-covariances. Thus Eπ=Eρ=μ. Total variance gives `Varπ=Varρ+E[(1−ρ²)/N]=s²+(1−μ²−s²)/N`. Writeb=1−μ²−s²>0. Forμ>0, `IR(N)=μ(s²+b/N)^−1/2`, with derivative `μb/[2N²(s²+b/N)^(3/2)]>0`. For s>0 its limit isμ/s; for s=0 the exact ratio isμ√N/√(1−μ²). For positive s the continuous crossoverN*=b/s² gives variance2s², soIR(N*)=μ/(s√2) exactly. IfN*<2, the crossover lies below feasible normalised-score breadth. Independent periods permit√T annual scaling; serial dependence generally changes it. The proof concerns latent moments, not measured sample rank ICs.
+**11. Moving-latent-correlation theorem.** (qual) Under the stated bounded-latent-correlation and normalised-score assumptions prove $IR=\mu/\sqrt{\sigma^2+(1-\mu^2-\sigma^2)/N}$. Prove monotonicity for $\mu>0$, the limit, and the exact continuous-crossover ratio $1/\sqrt 2$.
 
-**12. Scalar GP derivation.** Letd=1−ρ∈(0,1), c=1−φ, variancev>0, λ,γ>0 and known linear conditional forecastβcf. Current trade costs are paid now; operating return/risk and continuation are discounted:
+*Solution.* Substitute returns: `π=ρ N⁻¹Σzᵢ²+√(1−ρ²)N⁻¹Σzᵢεᵢ`. Normalisation makes the first termρ. Conditional noise payoff has mean0 and variance(1−ρ²)/N, from the stated conditional unit variances and zero cross-covariances. Thus Eπ=Eρ=μ. Total variance gives `Varπ=Varρ+E[(1−ρ²)/N]=s²+(1−μ²−s²)/N`. Writeb=1−μ²−s²>0. Forμ>0, `IR(N)=μ(s²+b/N)^−1/2`, with derivative `μb/[2N²(s²+b/N)^(3/2)]>0`. For s>0 its limit isμ/s; for s=0 the exact ratio isμ√N/√(1−μ²). For positive s the continuous crossoverN*=b/s² gives variance2s², soIR(N*)=μ/(s√2) exactly. IfN*<2, the crossover lies below feasible normalised-score breadth. Independent periods permit√T annual scaling; serial dependence generally changes it. The proof concerns latent moments, not measured sample rank ICs.
+
+**12. Scalar GP derivation.** (qual) For the scalar Bellman timing in Chapter 5, derive the quadratic value coefficients, Riccati equation, trade rate and aim multiplier. State model assumptions and distinguish fixed-positive-discount from negligible-discount cost asymptotics.
+
+*Solution.* Letd=1−ρ∈(0,1), c=1−φ, variancev>0, λ,γ>0 and known linear conditional forecastβcf. Current trade costs are paid now; operating return/risk and continuation are discounted:
 
 `V(x₋,f)=max_x{d[βcfx−γvx²/2]−λv(x−x₋)²/2+d E[V(x,f⁺)|f]}`, withE[f⁺|f]=cf and finite innovation variance. Use `V=−Axx x₋²/2+Axf x₋f−Aff f²/2+constant`. Let`H=dγv+λv+dAxx`. The first-order condition gives`x=(λv/H)x₋+[dc(β+Axf)/H]f`. Matching x₋² gives `Axx=λv−(λv)²/H`. Writek=1−λv/H andAxx=λvk. Algebra yields `dλk²+(dγ+ρλ)k−dγ=0`; the stable root has0<k<1, witha=λk and
 

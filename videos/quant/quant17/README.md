@@ -93,7 +93,9 @@ measures, and use the optimized no-claim baseline for an indifference premium.
 
 ## Ten worked solutions
 
-1. **Cash invariance and the seller's premium.** For γ > 0 and a finite exponential
+1. **Cash invariance and the seller's premium.**
+
+   *Solution.* For γ > 0 and a finite exponential
    moment, ρ(X+c) = γ⁻¹ log E exp(−γX−γc) = ρ(X)−c. Let Gδ be trading gains and Cδ
    costs. Define rZ = infδ ρ(−Z+Gδ−Cδ), r0 = infδ ρ(Gδ−Cδ), using the same admissible
    set. Cash invariance makes the optimized risk after selling for p equal to rZ−p;
@@ -102,7 +104,9 @@ measures, and use the optimized no-claim baseline for an indifference premium.
    gives r0 ≤ 0. Under physical drift r0 need not vanish. Discrete underhedged calls with
    lognormal tails can have infinite population entropic risk despite finite sample values.
 
-2. **Band turnover and scaling.** Locally write the hedge gap as reflected Brownian
+2. **Band turnover and scaling.** For a reflected hedge gap with variance rate $a^2$, derive total turnover $a^2/(2h)$ and minimize $\gamma\sigma^2S^2h^2/6+cS a^2/(2h)$. State the small-cost assumptions.
+
+   *Solution.* Locally write the hedge gap as reflected Brownian
    motion dε = a dW+dL−dU on [−h,h]. Stationarity and Itô on ε² give
    0 = a²−2h E[dL+dU]/dt, so total share turnover is a²/(2h). Its uniform stationary
    variance is h²/3. With a² = σ²S²Γ², the local objective per unit time is
@@ -110,7 +114,9 @@ measures, and use the optimized no-claim baseline for an indifference premium.
    Thus J′(h)=0 gives h³ = 3cSΓ²/(2γ). This is a local small-cost, continuous-rebalancing
    asymptotic with slowly varying coefficients, not an exact optimum for a daily neural policy.
 
-3. **BSDE and units.** For dXi = μiXi dt+σXi dWi, Itô gives
+3. **BSDE and units.** Use It\^o's formula and the pricing PDE to obtain $dY=f(Y)dt+Z\cdot dW$, with $Y=u(t,X)$ and $Z_i=\sigma X_i\partial_i u$; distinguish $Z$ from share holdings.
+
+   *Solution.* For dXi = μiXi dt+σXi dWi, Itô gives
    dY = (u_t+𝓛u)dt + Σi σXi∂iu dWi. With u_t+𝓛u=f(u),
    f(y)=[(1−δ)Q(y)+R]y and terminal u(T,X)=min Xi, set Zi=σXi∂iu.
    Zi is exposure per Brownian increment; the corresponding share holding is
@@ -118,14 +124,18 @@ measures, and use the optimized no-claim baseline for an indifference premium.
    Existence, uniqueness and the PDE representation require their integrability,
    Lipschitz, Markov and regularity assumptions.
 
-4. **Differential normal equations.** For n×p price features Φ, derivative feature
+4. **Differential normal equations.** Write the normal equations for linear differential regression with price-feature matrix $\Phi$, derivative-feature matrices $D_j$, and derivative weight $\lambda$.
+
+   *Solution.* For n×p price features Φ, derivative feature
    matrices Dj and observed derivative vectors zj, minimize
    ‖Φw−y‖² + λΣj‖Djw−zj‖². Differentiation gives
    (ΦᵀΦ+λΣjDjᵀDj)w = Φᵀy+λΣjDjᵀzj.
    With a singular system choose a suitable generalized solution or declared regularizer.
    Correlation or heteroskedasticity can motivate a different weighted statistical model.
 
-5. **Stopping.** Let gn be discounted exercise payoff and Gnext the discounted payoff
+5. **Stopping.** Derive the date-$n$ stopping decision from the conditional continuation value. Why is a fixed rule's expected discounted payoff a lower bound, but its simulated sample mean need not be?
+
+   *Solution.* Let gn be discounted exercise payoff and Gnext the discounted payoff
    obtained by the fixed continuation policy. At date n, conditional expected value is
    gnF + E[Gnext|Fn](1−F), affine in F∈[0,1]. Its maximum is attained by stopping when
    gn≥E[Gnext|Fn], with either decision allowed at equality. Conditioning on Xn alone
@@ -133,14 +143,18 @@ measures, and use the optimized no-claim baseline for an indifference premium.
    Its Monte Carlo mean can exceed the supremum through sampling error; the lower-bound
    statement concerns expectation. Evaluation should be independent of fitted-policy selection.
 
-6. **Leland's convention.** For a convex short option, a small step gives
+6. **Leland's convention.** Derive Leland's volatility correction using one-way proportional cost $c$; express it also using round-trip cost $k=2c$ and state the approximation.
+
+   *Solution.* For a convex short option, a small step gives
    E|ΔΔ|≈ΓσS√Δt√(2/π). One-way cost c per dollar traded contributes
    cΓσS²√(2/π)/√Δt per unit time. Absorbing this into ½σ²S²Γ yields
    σ̂²=σ²+2cσ√(2/π)/√Δt = σ²[1+√(2/π)k/(σ√Δt)], k=2c.
    State one-way versus round-trip costs. This smooth-Gamma, Gaussian-increment
    approximation is not exact finite-cost replication or a general utility price.
 
-7. **Merton's investment overlay.** In the frictionless complete constant-volatility
+7. **Merton's investment overlay.** In the continuous-time complete constant-volatility market with zero rates and exponential utility, derive the investment overlay $\mu/(\gamma\sigma^2 S)$ for a replicable claim.
+
+   *Solution.* In the frictionless complete constant-volatility
    model dS/S=μdt+σdW, zero rates, exponential utility and admissible replication,
    the claim hedge Δ separates from the no-claim investment problem. If π dollars are
    invested in the stock, the HJB first-order condition is μVx+πσ²Vxx=0.
@@ -149,14 +163,18 @@ measures, and use the optimized no-claim baseline for an indifference premium.
    in the indifference comparison; the complete-market premium is independent of μ.
    Daily constraints, costs and finite-sample fitting need not reproduce this ideal exactly.
 
-8. **Validation-label noise.** Let Y=F(θ)+ε, E[ε|θ]=0, with validation noise
+8. **Validation-label noise.** For conditionally unbiased validation labels with independent noise of variance $s^2$, derive the population MSE decomposition. Does the realized finite-sample RMSE have to exceed $s$?
+
+   *Solution.* Let Y=F(θ)+ε, E[ε|θ]=0, with validation noise
    conditionally independent of the fitted predictor, and E Var(ε|θ)=s².
    Expanding the square gives E(F̂−Y)²=E(F̂−F)²+s². This is a population identity;
    a realized finite-sample RMSE need not exceed s. Doubling label variance does not
    determine how the fitted predictor changes. Implied-volatility inversion is nonlinear
    and can bias labels, so the identity need not hold exactly for finite-path IVs.
 
-9. **Continuous linear population loss.** For predictable controls with
+9. **Continuous linear population loss.** (qual) For the continuous linear BSDE, prove $L_{\rm pop}=e^{2RT}(y_0-u_0)^2+\mathbb E\int_0^T e^{2R(T-t)}|Z-Z^*|^2dt$, under square-integrability assumptions.
+
+   *Solution.* For predictable controls with
    E∫₀ᵀe^{2R(T−t)}|Zt|²dt<∞, solve dY=RYdt+Z·dW:
    YT=e^{RT}y0+∫₀ᵀe^{R(T−t)}Zt·dWt. With the corresponding representation
    g=e^{RT}u0+∫₀ᵀe^{R(T−t)}Z*t·dWt, subtract, square and take expectations.
@@ -165,7 +183,9 @@ measures, and use the optimized no-claim baseline for an indifference premium.
    Therefore |y0−u0|≤e^{−RT}√Lpop. Known population loss 9 with R=.02,T=1
    gives 3e^{−.02}≈2.9406; an observed training loss of 9 alone gives no such certificate.
 
-10. **Step controls, Euler and rates.** On a uniform grid of width h, unweighted
+10. **Step controls, Euler and rates.** (qual) For predictable left-endpoint step controls, derive an $O(h)$ upper bound on the continuous population control-error floor under mean-square half-H\"older regularity. Does this prove an exact $1/N$ floor or certify Euler batch loss?
+
+    *Solution.* On a uniform grid of width h, unweighted
     predictable step projection uses
     Zbar_i=E[h⁻¹∫ti^{ti+h}Z*t dt|Fti]. The best weighted projection uses the same
     conditional weighted average with weight e^{2R(T−t)}. Testing the admissible

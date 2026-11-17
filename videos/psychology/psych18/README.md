@@ -179,33 +179,47 @@ Biol.* 22 (2012) 1000–1004. A. Vaswani et al., Attention is all you need, *Neu
 
 ## Problems and solutions
 
-**1. Setting the attenuator.** P(heard) = Φ((a − 0.55)/0.25) = 1/3 gives (a − 0.55)/0.25 = Φ⁻¹(1/3) = −0.431, so
+**1. Setting the attenuator.** Under Treisman's attenuator with noise s.d. 0.25, find the attenuation at which your name, threshold 0.55, is heard on a third of trials.
+
+*Solution.* P(heard) = Φ((a − 0.55)/0.25) = 1/3 gives (a − 0.55)/0.25 = Φ⁻¹(1/3) = −0.431, so
 a = 0.44: the ignored ear passes a little under half its signal. An ordinary word, threshold 1.1, is then heard with
 probability Φ((0.44 − 1.1)/0.25) = Φ(−2.6) ≈ 0.4%.
 
-**2. Serial, self-terminating search.** With n items checked in random order at t ms each, a present target is found
+**2. Serial, self-terminating search.** A serial, self-terminating search checks items at 50 ms each. Derive the target-present and target-absent slopes, and their ratio.
+
+*Solution.* With n items checked in random order at t ms each, a present target is found
 after (n + 1)/2 checks on average, so RT = base + t(n + 1)/2 and the slope is t/2 = 25 ms an item; an absent response
 needs all n checks, slope t = 50 ms. The ratio is exactly 2 for the means; a guided search lowers both slopes, and
 its absent slope depends on the quitting threshold, so the ratio need not be 2.
 
-**3. The bottleneck's slope.** RT2 = max(SOA + A2, A1 + B1) + B2 + C2 − SOA. While SOA + A2 < A1 + B1 the maximum is
+**3. The bottleneck's slope.** Show that a central bottleneck makes the second response time fall with slope $-1$ at short SOAs, and find the SOA at which the slope becomes 0.
+
+*Solution.* RT2 = max(SOA + A2, A1 + B1) + B2 + C2 − SOA. While SOA + A2 < A1 + B1 the maximum is
 A1 + B1, so RT2 = A1 + B1 + B2 + C2 − SOA and dRT2/dSOA = −1. Once SOA > A1 + B1 − A2 = 100 + 150 − 100 = 150 ms (with
 Psyche's means), RT2 = A2 + B2 + C2, a constant: slope 0. With variable stages the corner is rounded.
 
-**4. Why interference outweighs facilitation.** T(v) = (a/v) tanh(av) is decreasing and convex in v, so for a change
+**4. Why interference outweighs facilitation.** In a diffusion with bound $a$ and drift $v$, the mean decision time is $\frac{a}{v}\tanh(av)$. Show why subtracting drift costs more time than adding it saves.
+
+*Solution.* T(v) = (a/v) tanh(av) is decreasing and convex in v, so for a change
 Δ, T(v − Δ) − T(v) > T(v) − T(v + Δ). With a = 1.5, v = 2.5 and Δ = 1.2 (Psyche's word pathway after control), T(1.3) −
 T(2.5) = 0.51 and T(2.5) − T(3.7) = 0.19 units, or about 205 and 75 ms at 400 ms a unit: Psyche's 209 and 80.
 
-**5. Contrast gain from a uniform field.** With A constant over the pool, R = A E/(A pool(E) + σ). At high contrast σ
+**5. Contrast gain from a uniform field.** Write the normalization model with an attention field, and show that a uniform attention gain cancels at high contrast.
+
+*Solution.* With A constant over the pool, R = A E/(A pool(E) + σ). At high contrast σ
 is negligible and R → E/pool(E): A cancels and the maximum is unchanged. At low contrast R ≈ A E/σ: multiplying the
 drive by A is the same as multiplying c^n by A, that is, multiplying contrast by A^(1/n). With A = 2 and n = 2 the
 curve shifts left by √2, so c50 falls by a factor 0.71, Psyche's value for a small stimulus.
 
-**6. Misses against search time.** Raising the quitting margin z from 0.5 to 2.5 standard deviations (conjunction
+**6. Misses against search time.** With `explainer.psychology.psyche.attention`: vary the quitting threshold in guided search, and plot misses against the absent slope.
+
+*Solution.* Raising the quitting margin z from 0.5 to 2.5 standard deviations (conjunction
 search, 150 trials a point) lowers misses from 32% to 0.7% and raises the absent slope from 15 to 46 ms an item, while
 the present slope rises only from 4 to 11: thoroughness is paid for mostly on absent trials.
 
-**7. ★ A limit or a choice?** Keep the stimuli identical and change only what the observer is encouraged to do with
+**7. ★ A limit or a choice?** Design an experiment that tells a capacity limit from a strategic choice in the attentional blink.
+
+*Solution.* Keep the stimuli identical and change only what the observer is encouraged to do with
 T1: for example, add a concurrent irrelevant task, or tell people to attend more diffusely. If the blink shrinks while
 T1 accuracy holds, part of it is a strategy of over-investing in T1 rather than a fixed capacity limit; Olivers and
 Nieuwenhuis (2005) found that music or a free-association task reduced the blink in just this way.

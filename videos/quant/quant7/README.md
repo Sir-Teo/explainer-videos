@@ -196,44 +196,60 @@ market data (the leakage caveat on screen).
 
 ## Problems, with solutions
 
-1. **GARCH's term structure.** Write σ̄² = ω/(1 − α − β). Since E_t[r²_{t+k}] = E_t[σ²_{t+k}], taking expectations of
+1. **GARCH's term structure.** For GARCH(1,1), $\sigma^2_{t+1} = \omega + \alpha r_t^2 + \beta\sigma_t^2$, derive the $h$-step forecast $\mathbb{E}_t[\sigma^2_{t+h}] = \bar\sigma^2 + (\alpha + \beta)^{h-1}(\sigma^2_{t+1} - \bar\sigma^2)$ and the half-life of a shock.
+
+   *Solution.* Write σ̄² = ω/(1 − α − β). Since E_t[r²_{t+k}] = E_t[σ²_{t+k}], taking expectations of
    σ²_{t+k+1} − σ̄² = α(r²_{t+k} − σ̄²) + β(σ²_{t+k} − σ̄²) gives E_t[σ²_{t+k+1}] − σ̄² = (α + β)(E_t[σ²_{t+k}] − σ̄²),
    and by induction E_t[σ²_{t+h}] = σ̄² + (α + β)^{h−1}(σ²_{t+1} − σ̄²). A shock halves after log 0.5/log(α + β)
    days: 63 days for the US market's 0.989.
-2. **GARCH as ARMA, and its kurtosis.** Let ν_t = r_t² − σ_t², a martingale difference. Substituting σ_t² = r_t² − ν_t
+2. **GARCH as ARMA, and its kurtosis.** Derive the squared-return ARMA identity and the Gaussian GARCH fourth-moment condition; when finite, derive its kurtosis.
+
+   *Solution.* Let ν_t = r_t² − σ_t², a martingale difference. Substituting σ_t² = r_t² − ν_t
    into the GARCH recursion gives r_t² = ω + (α + β)r²_{t−1} + ν_t − βν_{t−1}: an ARMA(1, 1) with autoregressive root
    α + β. With normal shocks, E[r⁴] = 3E[σ⁴]. Taking expectations of the squared recursion gives
    E[σ⁴](1 − (α + β)² − 2α²) = ω² + 2ωσ̄²(α + β), and the kurtosis is 3(1 − (α + β)²)/(1 − (α + β)² − 2α²). This
    exceeds 3 whenever α > 0, and is finite only if (α + β)² + 2α² < 1.
-3. **Noise in realized variance, and the optimal sampling rate.** If observed log prices are p_i = p*_i + u_i with
+3. **Noise in realized variance, and the optimal sampling rate.** Under continuous prices and independent iid price noise, derive the $2n\eta^2$ bias and minimize the illustrative MSE $4n^2\eta^4+2IQ/n$.
+
+   *Solution.* If observed log prices are p_i = p*_i + u_i with
    iid noise of variance η², observed returns are r_i = r*_i + u_i − u_{i−1}, and E[Σr_i²] = ∫σ²dt + 2nη²: the bias
    grows with n (the signature plot). The estimation error of RV without noise has variance 2IQ/n (BNS). The mean
    squared error is about (2nη²)² + 2IQ/n = 4n²η⁴ + 2IQ/n; setting its derivative 8nη⁴ − 2IQ/n² to zero gives
    n* = (IQ/(4η⁴))^{1/3} (Bandi and Russell 2008). Two-scale RV removes the bias instead: it averages K sparse grids
    (bias 2n̄η² each) and subtracts (n̄/n)RV_all, converging at rate n^{−1/6}.
-4. **QLIKE.** E[h/ĥ − log(h/ĥ) − 1 | F] = E[h|F]/ĥ + log ĥ − E[log h | F] − 1. Its derivative in ĥ is
+4. **QLIKE.** With positive conditionally unbiased proxies, measurable forecasts and finite losses, derive the QLIKE target $\hat h=E[h\mid\mathcal F]$ and ranking robustness.
+
+   *Solution.* E[h/ĥ − log(h/ĥ) − 1 | F] = E[h|F]/ĥ + log ĥ − E[log h | F] − 1. Its derivative in ĥ is
    −E[h|F]/ĥ² + 1/ĥ, which is zero only at ĥ = E[h|F], and the function is convex there. The loss depends on h only
    through E[h|F] plus a term free of ĥ, so an unbiased proxy (E[h̃|F] = E[h|F]) adds the same constant to every
    forecast's expected loss and preserves the ranking (Patton 2011). For MSE on volatility, argmin E(√h̃ − σ̂)² =
    E√h̃ < √E h̃ by Jensen: with a squared return as the proxy, the minimiser is (2/π)h ≈ 0.64h.
-5. **The Kalman gain.** For x_t = x_{t−1} + w_t and y_t = x_t + v_t, with variances Q and R, the filter predicts
+5. **The Kalman gain.** Write the Kalman filter for a local-level model and show that its steady-state gain depends only on the signal-to-noise ratio.
+
+   *Solution.* For x_t = x_{t−1} + w_t and y_t = x_t + v_t, with variances Q and R, the filter predicts
    P⁻ = P + Q, uses the gain K = P⁻/(P⁻ + R), and updates P = (1 − K)P⁻. In steady state KP⁻ = Q, and P⁻ solves
    P⁻² − QP⁻ − QR = 0. Dividing by R² and writing q = Q/R gives p = P⁻/R = (q + √(q² + 4q))/2 and K = p/(p + 1),
    a function of q alone. For Bitcoin's q = 0.38, K ≈ 0.45.
-6. **The Dickey–Fuller limit with a constant.** Assume x₀ = 0 and iid mean-zero finite-variance shocks.
+6. **The Dickey–Fuller limit with a constant.** For a random walk fitted with a constant and no trend, derive the coefficient and DF $t$ limits using $W_\mu=W-\int_0^1 W$ and $A=\frac12(W(1)^2-1)-W(1)\int_0^1W$.
+
+   *Solution.* Assume x₀ = 0 and iid mean-zero finite-variance shocks.
    Let x̄₋ be the mean lagged level. The centered numerator is Σ(xₜ₋₁ − x̄₋)εₜ = ½(x_T² − Σεₜ²) − x̄₋x_T.
    Write Wμ(r) = W(r) − ∫₀¹W(s)ds and A = ½(W(1)² − 1) − W(1)∫₀¹W(r)dr. Donsker and continuous mapping give
    T(ρ̂ − 1) ⇒ A/∫Wμ² and t_DF ⇒ A/√∫Wμ². The notation ∫Wμ dW abbreviates this explicit path functional,
    rather than an ordinary adapted Itô integrand. This matches the fitted-constant/no-trend simulation. The uncentered
    no-intercept law differs; adding a deterministic trend changes the law and critical values again.
 
-7. **(qual) Why DM leans small.** Under the null the big model's forecast is $\hat y_2 = \hat y_1 + g$, where the gap $g$
+7. **(qual) Why DM leans small.** (qual) Under the stated nested-model orthogonality approximation, show $\mathbb E[e_2^2-e_1^2]\approx\mathbb E[(\hat y_1-\hat y_2)^2]>0$ and explain the DM bias.
+
+   *Solution.* Under the null the big model's forecast is $\hat y_2 = \hat y_1 + g$, where the gap $g$
    is the full fitted forecast difference, including refitted common coefficients and regressors at $t$, known before the shock
    $\varepsilon_{t+1}$. Then $e_2 = e_1 - g$ and $e_2^2 - e_1^2 = g^2 - 2ge_1$; under additional estimation and orthogonality conditions, $E[g\,e_1] = E[g\,\varepsilon_{t+1}] +
    E[g(\text{model 1's estimation error})] \approx 0$ to first order, $E[e_2^2 - e_1^2] \approx E[g^2] > 0$. So $E\bar d =
    E[e_1^2 - e_2^2] < 0$: the statistic is centred below zero, and Clark and West's $f = e_1^2 - (e_2^2 - g^2)$ is centred
    near zero.
-8. **(qual) How much.** With one extra regressor of variance $\sigma_x^2$, the recursive slope estimate at time $t$ has
+8. **(qual) How much.** (qual) In the idealized one-regressor case, derive the mean squared forecast-gap approximation $\sigma^2\ln(1+P/R)/P$.
+
+   *Solution.* With one extra regressor of variance $\sigma_x^2$, the recursive slope estimate at time $t$ has
    variance $\approx \sigma^2/(t\sigma_x^2)$, so $E[g_t^2] \approx \sigma_x^2 \cdot \sigma^2/(t\sigma_x^2) = \sigma^2/t$.
    Averaging over $t = R, \dots, R + P - 1$: $\frac{\sigma^2}{P}\sum 1/t \approx \sigma^2\ln(1 + P/R)/P$. With $R$ = 100 and
    $P$ = 200: $1.10\sigma^2/200$ per forecast, an order-of-magnitude estimation penalty in this idealized example, not a universal detection threshold.

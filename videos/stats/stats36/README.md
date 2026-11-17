@@ -222,24 +222,36 @@ python tools/lecture_length.py stats36 --floor 50
 
 ## Problems and solutions
 
-1. **Balancing.** P(T = 1 | X, e(X)) = P(T = 1 | X) = e(X), which depends on X only through e(X).
+1. **Balancing.** Prove that $e(X)$ is a balancing score: $X \perp\!\!\!\perp T \mid e(X)$.
+
+   *Solution.* P(T = 1 | X, e(X)) = P(T = 1 | X) = e(X), which depends on X only through e(X).
    - So P(T = 1 | X, e(X)) = P(T = 1 | e(X)), i.e. T ⊥ X | e(X).
-2. **Unconfoundedness given the score.**
+2. **Unconfoundedness given the score.** Show that unconfoundedness given $X$ implies unconfoundedness given $e(X)$.
+
+   *Solution.*
    P(T = 1 | Y(0), Y(1), e(X)) = E[P(T = 1 | Y(0), Y(1), X) | Y(0), Y(1), e(X)].
    - By unconfoundedness the inner probability is e(X), so this is E[e(X) | Y(0), Y(1), e(X)] = e(X), free of the
      potential outcomes.
-3. **IPW.** E[TY/e(X)] = E[E[T Y(1) | X]/e(X)] = E[E[T | X] E[Y(1) | X]/e(X)] = E[Y(1)].
+3. **IPW.** Show that $E[TY/e(X)] = E[Y(1)]$ under unconfoundedness and overlap.
+
+   *Solution.* E[TY/e(X)] = E[E[T Y(1) | X]/e(X)] = E[E[T | X] E[Y(1) | X]/e(X)] = E[Y(1)].
    - The middle step uses consistency and unconfoundedness, and the division needs overlap.
-4. **Double robustness.** Write the AIPW term for Y(1) as μ₁(X) + T(Y − μ₁(X))/e(X), and take its expectation given X:
+4. **Double robustness.** Show that the AIPW estimator is consistent if either $\mu_t$ or $e$ is correct.
+
+   *Solution.* Write the AIPW term for Y(1) as μ₁(X) + T(Y − μ₁(X))/e(X), and take its expectation given X:
    μ₁ + e₀(X)(m₁(X) − μ₁(X))/e(X), where m₁ = E[Y(1) | X] and e₀ is the true propensity.
    - If μ₁ = m₁, the correction is zero, so the mean is m₁ for any e.
    - If e = e₀, the result is μ₁ + m₁ − μ₁ = m₁ for any μ₁.
    - Averaging over X gives E[Y(1)] either way for fixed limiting nuisance functions satisfying overlap and integrability. Plug-in estimated nuisances need convergence and inference conditions; this is not a finite-sample unbiasedness proof.
-5. **M-bias.**
+5. **M-bias.** In the M-graph $T \leftarrow A \to M \leftarrow B \to Y$, $T \to Y$, show adjusting for $M$ alone violates the back-door criterion.
+
+   *Solution.*
    - With Z = {M}, the path T ← A → M ← B → Y has the collider M in Z, so it is open.
    - It begins with an arrow into T, so it is an open back-door path, and the criterion fails.
    - Adding A blocks it, since A is a non-collider in Z.
-6. **E-value.**
+6. **E-value.** Derive the E-value: show $RR + \sqrt{RR(RR - 1)}$ solves $\frac{E^2}{2E - 1} = RR$.
+
+   *Solution.*
    - VanderWeele & Ding's bound: a confounder with risk ratios RR_UT and RR_UY can shift an observed RR by at most
      B = RR_UT RR_UY/(RR_UT + RR_UY − 1).
    - Set both equal to E and require B = RR: E²/(2E − 1) = RR, so E² − 2RR·E + RR = 0, and E = RR + √(RR² − RR).

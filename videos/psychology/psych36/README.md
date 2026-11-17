@@ -147,25 +147,39 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Tajfel's matrix.** The joint total (7 + j) + (1 + 2j) = 8 + 3j and the ingroup's 7 + j both rise with j, so
+1. **Tajfel's matrix.** In Tajfel's matrix (top row $7 + j$, bottom row $1 + 2j$, $j = 0, \dots, 12$), find the columns that maximize the joint total, the ingroup's points, and the ingroup's lead, and the column that is fair.
+
+   *Solution.* The joint total (7 + j) + (1 + 2j) = 8 + 3j and the ingroup's 7 + j both rise with j, so
    both are maximized at j = 12 (19 and 25). The lead (7 + j) − (1 + 2j) = 6 − j is largest at j = 0 (7 and 1).
    Equality needs 7 + j = 1 + 2j, so j = 6 (13 and 13). A chooser who moves left of the right end is trading
    points for the ingroup, and for everyone, against a lead.
-2. **The illusory correlation.** A's undesirable share is 8/26 = 0.31 whatever b is. B's remembered share is
+2. **The illusory correlation.** Hamilton and Gifford's groups have 18 and 9 desirable acts and 8 and 4 undesirable ones. If the smaller group's undesirable acts are remembered with weight $1 + b$, find the remembered undesirable share for each group as a function of $b$.
+
+   *Solution.* A's undesirable share is 8/26 = 0.31 whatever b is. B's remembered share is
    4(1 + b)/(9 + 4(1 + b)), which is 0.31 at b = 0 and rises with b: 0.42 at b = 0.6, 0.47 at b = 1.
-3. **The list experiment.** The treatment count is C + Z with C the control count and Z the sensitive item, so its
+3. **The list experiment.** In a list experiment with $J$ control items, each held independently with probability $p_j$, and a sensitive item with prevalence $\pi$, show that the difference in mean counts is unbiased for $\pi$, and find its variance with $n$ people per arm.
+
+   *Solution.* The treatment count is C + Z with C the control count and Z the sensitive item, so its
    mean is E[C] + π and the difference in means has expectation π. With independent arms of n, the variance is
    (Var(C) + Var(C + Z))/n = (2 Σ p_j(1 − p_j) + π(1 − π))/n: the control items' variance enters twice, which is
    the price of privacy.
-4. **Attenuation.** Write the measure X = T + E with E independent of T and of the behaviour Y. Then
+4. **Attenuation.** A measure has test-retest reliability $\rho_{xx}$, and the trait it measures correlates $r$ with a behaviour measured without error. Show that the observed correlation is at most $r\sqrt{\rho_{xx}}$.
+
+   *Solution.* Write the measure X = T + E with E independent of T and of the behaviour Y. Then
    Cov(X, Y) = Cov(T, Y) = r SD(T) SD(Y), and Corr(X, Y) = r SD(T)/SD(X) = r √ρ_xx, since ρ_xx = Var(T)/Var(X) is
    the reliability. With extra noise in Y the correlation is smaller still.
-5. **Sizing an audit.** n = (1.96 + 0.84)² (0.096 × 0.904 + 0.064 × 0.936)/(0.032)² ≈ 1,125 per group.
-6. **The ladder.** With shares 1 − s and s, normal scores shifted by δ for the advantaged group, and a fraction k
+5. **Sizing an audit.** Callback rates are 9.6% and 6.4%. Find the number of applications per group that detects the gap with 80% power at the two-sided 5% level.
+
+   *Solution.* n = (1.96 + 0.84)² (0.096 × 0.904 + 0.064 × 0.936)/(0.032)² ≈ 1,125 per group.
+6. **The ladder.** At each level of a ladder the top half of a pool is promoted; one group's scores are $N(\delta, 1)$, the other's $N(0, 1)$. Write the equation for the cut-off, and show that the disadvantaged share falls at every level.
+
+   *Solution.* With shares 1 − s and s, normal scores shifted by δ for the advantaged group, and a fraction k
    promoted, the cut-off c solves (1 − s) Q(c − δ) + s Q(c) = k, where Q is the normal upper tail, and the new share
    is s Q(c)/k. Since Q(c − δ) > Q(c) for δ > 0, the promoted fraction of the disadvantaged group, Q(c), is below k,
    so s Q(c)/k < s at every level.
-7. **★ Evaluating a training.** Randomize the training across teams (not individuals, who share hiring
+7. **★ Evaluating a training.** Design a field experiment that tests whether a diversity training changes hiring decisions, and say what you would measure, for how long, and how many teams you need.
+
+   *Solution.* Randomize the training across teams (not individuals, who share hiring
    decisions), measure behaviour (who is interviewed, offered and promoted, from records) for at least a year, and
    attitudes as a secondary outcome. With a 2-point difference in an offer rate near 20% and a design effect from
    clustering, the number of teams needed follows from the power calculation of chapter six inflated by the design

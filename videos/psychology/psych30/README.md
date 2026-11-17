@@ -151,27 +151,41 @@ Data: ManyBabies 1's lab-level table, github.com/manybabies/mb1-analysis-public,
 
 ## Problems and solutions
 
-1. **The ideal learner.** With a Dirichlet(α) prior over k outcomes and counts c₁…c_k after n events, the
+1. **The ideal learner.** For a Dirichlet$(\alpha)$-multinomial learner with $k$ outcomes, show that the predictive probability of an outcome seen $c$ times in $n$ events is $(c + \alpha)/(n + k\alpha)$, and give its surprisal in bits.
+
+   *Solution.* With a Dirichlet(α) prior over k outcomes and counts c₁…c_k after n events, the
    posterior is Dirichlet(α + c), whose mean for outcome j is (c_j + α)/(n + kα): the predictive probability of the
    next event. Its surprisal is −log₂((c_j + α)/(n + kα)) bits. With α = 1 and k = 3 the first event always
    carries log₂ 3 = 1.58 bits.
-2. **Number by ratio.** The difference of the two representations is normal with mean n₁ − n₂ and variance
+2. **Number by ratio.** If a number $n$ is represented as a normal with mean $n$ and standard deviation $w n$, show that $P(\text{correct}) = \Phi\big(|n_1 - n_2| / (w\sqrt{n_1^2 + n_2^2})\big)$, and that it depends only on the ratio.
+
+   *Solution.* The difference of the two representations is normal with mean n₁ − n₂ and variance
    w²(n₁² + n₂²). The judgment is right when the difference has the sign of n₁ − n₂, with probability
    Φ(|n₁ − n₂| / (w√(n₁² + n₂²))). Replacing (n₁, n₂) by (λn₁, λn₂) cancels λ, so with r = n₁/n₂ it is
    Φ(|r − 1| / (w√(r² + 1))): a function of the ratio only.
-3. **The box of balls.** P(4 red, 1 white) = 5(1 − p)⁴p and P(1 red, 4 white) = 5(1 − p)p⁴; their ratio is
+3. **The box of balls.** From a box with a share $p$ of white balls, show that four red and one white is $\big(p/(1 - p)\big)^3$ times less probable than four white and one red.
+
+   *Solution.* P(4 red, 1 white) = 5(1 − p)⁴p and P(1 red, 4 white) = 5(1 − p)p⁴; their ratio is
    (p/(1 − p))³, which is 729 for p = 0.9.
-4. **ManyBabies with age alone.** The age slope is 0.050 per month (SE 0.010), against 0.047 with method held
+4. **ManyBabies with age alone.** With the ManyBabies table (`opendata.manybabies\_2020`), refit the meta-regression with age alone. How much does the age slope change, and why?
+
+   *Solution.* The age slope is 0.050 per month (SE 0.010), against 0.047 with method held
    fixed, because age and method are nearly uncorrelated across laboratories (r = 0.10). Age alone also takes τ²
    from 0.014 to zero: the little heterogeneity there was is mostly age.
-5. **When memory wins.** Without interactions the field at B after the cue is h + s + A e^(−t/τ) and at A is
+5. **When memory wins.** In a field with no interactions, a cue of strength $A$ at B decays as $A e^{-t/\tau}$ while a memory trace $c\,m$ sits at A. Show that the reach goes to A after $t^* = \tau \ln(A / c\,m)$.
+
+   *Solution.* Without interactions the field at B after the cue is h + s + A e^(−t/τ) and at A is
    h + s + c m. The reach goes to A once A e^(−t/τ) < c m, that is t > τ ln(A/(c m)). Stronger memories (more A
    trials) and faster decay (smaller τ, a less cooperative field) make the error come sooner.
-6. **Familiarity.** Infants who have had little exposure to a display prefer it; with more, they prefer novelty.
+6. **Familiarity.** Infants who have seen too little of a display prefer the familiar one. Show how a familiarity preference could produce longer looks at the 180-degree drawbridge without any knowledge of the box.
+
+   *Solution.* Infants who have had little exposure to a display prefer it; with more, they prefer novelty.
    After a short habituation to a 180-degree rotation, the impossible event, which repeats that rotation, can win a
    familiarity preference with no knowledge of the box. The test: vary familiarization and see whether the
    preference flips, as Bogartz, Shinskey and Schilling did.
-7. ★ **Core knowledge against rational constructivism.** Core knowledge predicts expectations that appear without
+7. ★ **Core knowledge against rational constructivism.**
+
+   *Solution.* Core knowledge predicts expectations that appear without
    relevant experience and resist short exposure to contrary evidence; rational constructivism predicts
    expectations calibrated to the statistics of experience and updated by them. For example: give infants a short,
    controlled exposure to a display world in which some regularity is reversed (objects that pass through barriers

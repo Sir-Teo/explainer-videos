@@ -136,16 +136,30 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Paths.** 2⁵ × 3 = 96; if independent, 1 - 0.95⁹⁶ = 0.99. (Real paths are correlated, so the true chance is
+1. **Paths.** A pipeline has 5 binary choices and 3 thresholds. How many paths? If each were an independent test at 5%, how likely is at least one false positive?
+
+   *Solution.* 2⁵ × 3 = 96; if independent, 1 - 0.95⁹⁶ = 0.99. (Real paths are correlated, so the true chance is
    lower, but still far above 5%.)
-2. **A group t.** t = 0.3/(1.0/√20) = 0.3 × 4.47 = 1.34, on 19 degrees of freedom: not significant.
-3. **Bonferroni.** 0.05/50,000 = 10⁻⁶ per voxel (z about 4.9).
-4. **Bits.** B = 1 + 0.8 log₂ 0.8 + 0.2 log₂ 0.2 = 1 - 0.258 - 0.464 = 0.278 bits per choice; 30 choices a minute
+2. **A group t.** 20 people, a contrast with mean 0.3 and SD 1.0 across people. Find the random-effects $t$.
+
+   *Solution.* t = 0.3/(1.0/√20) = 0.3 × 4.47 = 1.34, on 19 degrees of freedom: not significant.
+3. **Bonferroni.** A map has 50,000 voxels. Find the Bonferroni threshold for a familywise rate of 5%.
+
+   *Solution.* 0.05/50,000 = 10⁻⁶ per voxel (z about 4.9).
+4. **Bits.** A 2-target interface is right 80% of the time, one choice every 2 s. Find bits per minute.
+
+   *Solution.* B = 1 + 0.8 log₂ 0.8 + 0.2 log₂ 0.2 = 1 - 0.258 - 0.464 = 0.278 bits per choice; 30 choices a minute
    give 8.3 bits per minute.
-5. **Attenuation.** 0.25 × √(0.5 × 0.9) = 0.25 × 0.671 = 0.17.
-6. **A leak.** The test trials helped pick the voxels that happen to differ between the labels, so the test is no
+5. **Attenuation.** A true correlation of 0.25; the brain measure's reliability is 0.5 and the behaviour's 0.9. Find the expected observed correlation.
+
+   *Solution.* 0.25 × √(0.5 × 0.9) = 0.25 × 0.671 = 0.17.
+6. **A leak.** Why does selecting voxels on all the data before cross-validation inflate accuracy? Give the fix.
+
+   *Solution.* The test trials helped pick the voxels that happen to differ between the labels, so the test is no
    longer independent of the training; do every selection, scaling and tuning step inside each training fold.
-7. **A plan.** Choose the smallest correlation worth finding (say 0.15) and the measures' reliabilities; attenuate
+7. ★ **A plan.** Plan a brain-behaviour study of working memory and a fronto-parietal measure: sample size, reliability, pipeline, and a held-out test.
+
+   *Solution.* Choose the smallest correlation worth finding (say 0.15) and the measures' reliabilities; attenuate
    (with reliabilities 0.6 and 0.8, 0.15 becomes about 0.10), then size the sample for that (about 780 for 80% power,
    so use a shared dataset of thousands); register one pipeline, including motion censoring; fit in a discovery
    half and test once in a held-out half.

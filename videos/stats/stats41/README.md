@@ -180,21 +180,33 @@ python tools/lecture_length.py stats41 --floor 50
 
 ## Problems and solutions
 
-1. **Rubin's factorization.** f(Y_obs, R | θ, φ) = ∫ f(Y_obs, Y_mis | θ) P(R | Y_obs, Y_mis, φ) dY_mis. Under MAR the
+1. **Rubin's factorization.** Show that under MAR with distinct parameters, the likelihood factors as $P(R \mid Y_{\text{obs}}, \phi) f(Y_{\text{obs}} \mid \theta)$.
+
+   *Solution.* f(Y_obs, R | θ, φ) = ∫ f(Y_obs, Y_mis | θ) P(R | Y_obs, Y_mis, φ) dY_mis. Under MAR the
    second factor does not depend on Y_mis, so it leaves the integral: P(R | Y_obs, φ) ∫ f(Y_obs, Y_mis | θ) dY_mis =
    P(R | Y_obs, φ) f(Y_obs | θ). With θ and φ distinct, the first factor is constant in θ.
-2. **Selection on x.** If R depends on x only, f(y | x, R = 1) = f(y | x)P(R = 1 | x)/P(R = 1 | x) = f(y | x). So
+2. **Selection on x.** Bivariate normal, $y$ missing when $x > c$: show the complete-case slope of $y$ on $x$ is unbiased, but the mean of $y$ is not.
+
+   *Solution.* If R depends on x only, f(y | x, R = 1) = f(y | x)P(R = 1 | x)/P(R = 1 | x) = f(y | x). So
    E[y | x, R = 1] is the true regression, and least squares on complete cases is unbiased under the correctly specified conditional-mean model and adequate support. But E[y | R = 1] =
    E[E(y | x) | R = 1] averages the regression over the selected x's, which differ from the population's.
-3. **Rubin's variance.** Var(Q | Y_obs) = E[Var(Q | Y) | Y_obs] + Var[E(Q | Y) | Y_obs]. Estimate the first by W and
+3. **Rubin's variance.** Derive $T = W + (1 + 1/m)B$ from the law of total variance, including the $B/m$ term.
+
+   *Solution.* Var(Q | Y_obs) = E[Var(Q | Y) | Y_obs] + Var[E(Q | Y) | Y_obs]. Estimate the first by W and
    the second by B. Averaging m draws adds simulation variance B/m to the mean, giving T = W + B + B/m.
-4. **IPW and AIPW.** E[RY/π(X)] = E[E(R | X, Y) Y/π(X)] = E[π(X)Y/π(X)] = E[Y] under MAR.
+4. **IPW and AIPW.** Show $E[R Y / \pi(X)] = E[Y]$ under MAR, and distinguish population unbiasedness with fixed nuisance functions from fitted-estimator consistency.
+
+   *Solution.* E[RY/π(X)] = E[E(R | X, Y) Y/π(X)] = E[π(X)Y/π(X)] = E[Y] under MAR.
    - AIPW: E[m(X) + R(Y − m(X))/π(X)].
    - If π is right, the second term has expectation E[Y − m(X)], so the total is E[Y].
    - If m is right, E[Y − m(X) | X, R = 1] = 0, so the second term vanishes and E[m(X)] = E[Y].
-5. **Dilution.** Cov(W, Y) = Cov(X + U, α + βX + ε) = βσ²_X and Var W = σ²_X + σ²_U. So the OLS slope tends to
+5. **Dilution.** Show the OLS slope on $W = X + U$ tends to $\lambda\beta$, $\lambda = \sigma_X^2 / (\sigma_X^2 + \sigma_U^2)$.
+
+   *Solution.* Cov(W, Y) = Cov(X + U, α + βX + ε) = βσ²_X and Var W = σ²_X + σ²_U. So the OLS slope tends to
    βσ²_X/(σ²_X + σ²_U) = λβ.
-6. **The matrix method.** E[share reporting exposure] = Se p + (1 − Sp)(1 − p) = (Se + Sp − 1)p + (1 − Sp), which is
+6. **The matrix method.** With Se + Sp $> 1$, show the matrix method recovers the true exposure share exactly in expectation.
+
+   *Solution.* E[share reporting exposure] = Se p + (1 − Sp)(1 − p) = (Se + Sp − 1)p + (1 − Sp), which is
    linear in p. So p = (E[share] − (1 − Sp))/(Se + Sp − 1), as an inversion of expected proportions when Se + Sp > 1. Nonlinear sample odds-ratio corrections are not thereby exactly unbiased; incompatible rates may require a constrained model.
 
 ## Glossary

@@ -175,38 +175,56 @@ python tools/make.py quant4 --cpu-voice -q m                 # English and Chine
 
 ## Problems, with solutions
 
-1. **Exit time.** E[S²_{n+1} − (n + 1) | F_n] = S²_n + 2S_n·E[ξ] + E[ξ²] − n − 1 = S²_n − n, so S²_n − n is a
+1. **Exit time.** Show that $S_n^2 - n$ is a martingale for a fair $\pm 1$ walk. Use optional stopping to find the expected time for the walk to first reach $\pm a$.
+
+   *Solution.* E[S²_{n+1} − (n + 1) | F_n] = S²_n + 2S_n·E[ξ] + E[ξ²] − n − 1 = S²_n − n, so S²_n − n is a
    martingale. First stop at τ ∧ n, where τ is the first time |S| = a. Bounded-time optional stopping gives E[τ ∧ n] = E[S²_{τ∧n}] ≤ a². Monotone convergence gives E[τ] ≤ a² < ∞, so τ is finite almost surely. Dominated convergence for the bounded positions then gives E[τ] = a². Bounded steps alone would not justify stopping the squared martingale.
-2. **Biased ruin.** E[(q/p)^{X_{n+1}} | F_n] = (q/p)^{X_n}·(p·(q/p) + q·(p/q)) = (q/p)^{X_n}. Optional stopping gives
+2. **Biased ruin.** For a game with win probability $p$, show $(q/p)^{X_n}$ is a martingale and derive the ruin probability. Evaluate it for European roulette, $a = 10$, $b = 20$.
+
+   *Solution.* E[(q/p)^{X_{n+1}} | F_n] = (q/p)^{X_n}·(p·(q/p) + q·(p/q)) = (q/p)^{X_n}. Optional stopping gives
    (q/p)^a = P(hit b)(q/p)^b + (1 − P(hit b)), so P(hit b) = (1 − (q/p)^a)/(1 − (q/p)^b). With p = 18/37, a = 10 and
    b = 20 this is 36.8% (a simulation of 4,000 games gives 36.4%).
-3. **Doubling with 2^k − 1.** A session wins 1 unless the first k tosses are all losses (probability 2^{−k}), which
+3. **Doubling with 2^k − 1.** Doubling with a bankroll of $2^k - 1$: show each session's expected gain is zero, and find the expected number of sessions before ruin.
+
+   *Solution.* A session wins 1 unless the first k tosses are all losses (probability 2^{−k}), which
    loses 2^k − 1. The expected gain is (1 − 2^{−k}) − 2^{−k}(2^k − 1) = 0. The number of sessions up to and including
    the first ruin is geometric with mean 2^k: about 1,024 sessions for k = 10 (simulated 1,026).
-4. **Collapse of the likelihood ratio.** E_P[L_n] = Σ_ω P(ω)Q(ω)/P(ω) = 1. log L_n is a sum of i.i.d. terms with mean
+4. **Collapse of the likelihood ratio.** For coins $p = 0.5$ and $q = 0.6$, show $\mathbb{E}_P[L_n] = 1$ but $\tfrac{1}{n}\log L_n \to -D(P\,\|\,Q)$. Compute $D$ and predict the median of $L_{300}$.
+
+   *Solution.* E_P[L_n] = Σ_ω P(ω)Q(ω)/P(ω) = 1. log L_n is a sum of i.i.d. terms with mean
    E_P[log(Q/P)] = −D(P‖Q). Here D = ½ ln(0.5/0.6) + ½ ln(0.5/0.4) = 0.0204 nats a toss, so L_n → 0 almost surely.
    The median of L₃₀₀ is about e^{−300 × 0.0204} = 0.0022, which matches the simulated 0.002; after 10,000 tosses,
    log₁₀ L ≈ −10,000 × 0.0204/ln 10 = −88.6 (simulated median −88.3).
-5. **Ville's inequality and peeking.** Let τ be the first n with W_n ≥ c. Optional stopping at the bounded time
+5. **Ville's inequality and peeking.** Prove Ville's inequality from optional stopping at $\min(\tau, n)$. Why does a fixed $z$ cutoff checked every day eventually reject a true null with probability one?
+
+   *Solution.* Let τ be the first n with W_n ≥ c. Optional stopping at the bounded time
    min(τ, n) gives 1 ≥ E[W_{τ∧n}] ≥ c·P(τ ≤ n), so P(τ ≤ n) ≤ 1/c. Let n → ∞, and take c = 1/α. A daily known-variance z-statistic
    is S_n/√n. By the law of the iterated logarithm, S_n/√(2n log log n) has limsup 1, so |S_n|/√n exceeds any fixed
    level infinitely often, and a test checked forever rejects a true null with probability one.
-6. **Pólya's limit.** By induction: if P(R_n = k) = 1/(n + 1) for k = 1, …, n + 1 (with n + 2 balls), then
+6. **Pólya's limit.** P\'olya's urn from one red and one blue ball: show $P(R_n = k) = 1/(n + 1)$ for $k = 1, \dots, n + 1$, so the limit of the red fraction is Uniform$(0, 1)$.
+
+   *Solution.* By induction: if P(R_n = k) = 1/(n + 1) for k = 1, …, n + 1 (with n + 2 balls), then
    P(R_{n+1} = k) = P(R_n = k)·(n + 2 − k)/(n + 2) + P(R_n = k − 1)·(k − 1)/(n + 2) = (1/(n + 1))·(n + 1)/(n + 2) =
    1/(n + 2). So R_n/(n + 2) is uniform on {1/(n + 2), …, (n + 1)/(n + 2)}, and its limit is Uniform(0, 1).
-7. **Wald's identity.** With i.i.d. steps of mean μ and E|ξ| < ∞, M_n = S_n − nμ is a martingale with increments
+7. **Wald's identity.** Prove Wald's identity $\mathbb{E}S_\tau = \mu\,\mathbb{E}\tau$ when $\mathbb{E}\tau < \infty$, from the martingale $S_n - n\mu$ and optional stopping.
+
+   *Solution.* With i.i.d. steps of mean μ and E|ξ| < ∞, M_n = S_n − nμ is a martingale with increments
    bounded in mean: E[|ΔM| | F] ≤ E|ξ| + |μ|. If E τ < ∞, then |M_{τ∧n}| ≤ Σ_{k≤τ} |ΔM_k|, whose mean is at most
    (E|ξ| + |μ|) E τ (by Tonelli and the independence of ξ_k from {τ ≥ k}), so dominated convergence for this integrable bound gives
    E[S_τ − τμ] = 0, i.e. E S_τ = μ E τ.
 
-8. **(qual) The LIL's upper half.** Fix $\epsilon > 0$ and $1 < \theta < (1 + \epsilon)^2$; let $t_k = \theta^k$ and
+8. **(qual) The LIL's upper half.** (qual) For iid $N(0, 1)$ steps, prove $\limsup S_t/\sqrt{2t\log\log t} \le 1$ a.s. by Doob's maximal inequality on geometric blocks and Borel–Cantelli.
+
+   *Solution.* Fix $\epsilon > 0$ and $1 < \theta < (1 + \epsilon)^2$; let $t_k = \theta^k$ and
    $x_k = (1 + \epsilon)\sqrt{2t_k\log\log t_k}$. For Gaussian steps $e^{\lambda S_t}$ is a submartingale, so Doob gives
    $\Pr(\max_{t \le n}S_t \ge x) \le e^{-\lambda x}E e^{\lambda S_n} = e^{-\lambda x + \lambda^2 n/2}$, minimised at
    $\lambda = x/n$: $e^{-x^2/2n}$. If $S_t \ge (1 + \epsilon)\sqrt{2t\log\log t}$ for some $t \in (t_k, t_{k+1}]$ then
    $\max_{t \le t_{k+1}}S_t \ge x_k$, which has probability at most $\exp(-x_k^2/2t_{k+1}) = (k\log\theta)^{-(1 +
    \epsilon)^2/\theta}$, summable in $k$. By Borel–Cantelli only finitely many blocks see a crossing, so $\limsup \le 1 +
    \epsilon$ a.s.; let $\epsilon \downarrow 0$ along a sequence.
-9. **(qual) Robbins's boundary.** $\int e^{\lambda S - \lambda^2 t/2}\sqrt{\rho/2\pi}\,e^{-\rho\lambda^2/2}d\lambda =
+9. **(qual) Robbins's boundary.** (qual) Derive Robbins's mixture $M_t$ and show $\Pr\big(\exists t: |S_t| \ge \sqrt{(t + \rho)\log\frac{t + \rho}{\rho\alpha^2}}\big) \le \alpha$.
+
+   *Solution.* $\int e^{\lambda S - \lambda^2 t/2}\sqrt{\rho/2\pi}\,e^{-\rho\lambda^2/2}d\lambda =
    \sqrt{\rho/2\pi}\int e^{-\frac{t+\rho}{2}(\lambda - \frac{S}{t+\rho})^2}d\lambda\;e^{S^2/2(t+\rho)} = \sqrt{\rho/(t +
    \rho)}\,e^{S^2/2(t+\rho)}$. A mixture of mean-one nonnegative martingales is one (Fubini), so Ville gives
    $\Pr(\exists t: M_t \ge 1/\alpha) \le \alpha$, and $M_t \ge 1/\alpha$ iff $S_t^2 \ge (t + \rho)[\log((t + \rho)/\rho) +

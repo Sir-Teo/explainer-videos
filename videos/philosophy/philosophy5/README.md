@@ -93,28 +93,40 @@ Degrees of Truth* (2008); Zardini, "Truth without contra(di)ction" (2011); Cobre
 
 ## Problems and solutions
 
-1. **K3 has no tautologies, and LP has exactly the classical ones.** *K3:* give every atom the value ½. Each
+1. **K3 has no tautologies, and LP has exactly the classical ones.**
+
+   *Solution.* *K3:* give every atom the value ½. Each
    connective sends halves to a half (¬½ = ½, ½ ∧ ½ = ½ ∨ ½ = ½, ½ → ½ = max(½, ½) = ½), so by induction every
    formula takes ½, which K3 does not designate. *LP:* an LP tautology is true on the valuations that use only 0 and
    1, where LP's tables are classical, so it is a classical tautology. Conversely, Kleene's tables are *regular*:
    replacing a ½ in the input by 0 or 1 never changes an output that was already 0 or 1. So if some LP valuation gave
    a classical tautology the value 0, sharpening every ½ to 0 or 1 would give a classical valuation that also gives
    it 0, which is impossible. So it never takes 0 in LP, and LP designates the other two values.
-2. **(p → q) ∨ (q → p).** Not a K3 tautology: with p = q = ½, both disjuncts are ½ → ½ = ½. A tautology of Ł3 and of
+2. **(p → q) ∨ (q → p).** Is $(p \to q) \lor (q \to p)$ a tautology of K3? of Ł3? of G3? Explain the pattern.
+
+   *Solution.* Not a K3 tautology: with p = q = ½, both disjuncts are ½ → ½ = ½. A tautology of Ł3 and of
    G3: in both, a → b = 1 whenever a ≤ b, and the values form a chain, so one of p ≤ q or q ≤ p holds and one
    disjunct is 1. (It is classically valid but not intuitionistically: it is the axiom that turns intuitionistic
    logic into Gödel–Dummett logic LC, the logic of all linear Kripke frames.) The Reasoner confirms all three.
-3. **Belnap's computer, p = B, q = N.** ¬B = B, so p ∧ ¬p = B ∧ B = B; then B ∨ N is the join of B and N in the truth
+3. **Belnap's computer, p = B, q = N.** Belnap's computer has $p = \mathbf{B}$ and $q = \mathbf{N}$. Compute $(p \land \lnot p) \lor q$ and $\lnot(p \lor q)$.
+
+   *Solution.* ¬B = B, so p ∧ ¬p = B ∧ B = B; then B ∨ N is the join of B and N in the truth
    order, which is T. So (p ∧ ¬p) ∨ q = T. And p ∨ q = T, so ¬(p ∨ q) = F.
-4. **A ⊗ B ⊢ A & B and A & B ⊢ A ⊗ B.** The first: &R needs A ⊗ B ⊢ A and A ⊗ B ⊢ B, and after ⊗L the first is
+4. **A ⊗ B ⊢ A & B and A & B ⊢ A ⊗ B.** Neither $A \otimes B \vdash A \mathbin{\&} B$ nor $A \mathbin{\&} B \vdash A \otimes B$ is provable in linear logic. Which structural rule would each need?
+
+   *Solution.* The first: &R needs A ⊗ B ⊢ A and A ⊗ B ⊢ B, and after ⊗L the first is
    A, B ⊢ A, which needs *weakening* to discard B. The second: ⊗R must split the hypotheses between A and B, but there
    is only one hypothesis, A & B; you would need two copies of it, which is *contraction*. The Reasoner's prover finds
    neither, and both are classically valid (with ∧ for both ⊗ and &).
-5. **Men 0–4, with 0 and 1 clearly bald and 3 and 4 clearly not.** The admissible sharpenings put the cutoff after
+5. **Men 0–4, with 0 and 1 clearly bald and 3 and 4 clearly not.** Men 0–4; 0 and 1 clearly bald, 3 and 4 clearly not. Which of $B_1 \to B_2$, $B_2 \lor \lnot B_2$, $\exists i\,(B_i \land \lnot B_{i+1})$ are super-true?
+
+   *Solution.* The admissible sharpenings put the cutoff after
    man 1 or after man 2. B₁ → B₂ is false on the first and true on the second: not super-true. B₂ ∨ ¬B₂ is true on
    both: super-true, though neither disjunct is. ∃i (Bᵢ ∧ ¬Bᵢ₊₁) is true on both (witness 1 on the first, 2 on the
    second): super-true, with no super-true instance. The Reasoner's `supervaluate` gives I, T, T.
-6. **(Essay) An exit from the sorites quartet, and its second price.** A strong answer chooses an exit and names both
+6. **(Essay) An exit from the sorites quartet, and its second price.**
+
+   *Solution.* A strong answer chooses an exit and names both
    prices, using Chapter 12's table. *Epistemicism* keeps classical logic and bivalence; its price is a sharp fact
    that no use of the word fixes visibly, and the burden of showing that use fixes it invisibly (Williamson's margin
    for error explains our ignorance, not the fact). *Supervaluationism* gives up bivalence, and also tolerance as a

@@ -85,29 +85,41 @@ Manders (2008); Awodey and Warren (2009); Licata and Shulman (2013); Avigad, "Ma
 
 ## Problems and solutions
 
-1. **Frege's numbers on five objects.** There are 2⁵ = 32 concepts. Pairing off sorts them by size into six numbers,
+1. **Frege's numbers on five objects.** On a domain of five objects: how many concepts, how many numbers, and how many concepts in each? Why can Hume's principle not hold there?
+
+   *Solution.* There are 2⁵ = 32 concepts. Pairing off sorts them by size into six numbers,
    0 to 5, with 1, 5, 10, 10, 5 and 1 concepts each (a row of Pascal's triangle). Hume's principle makes each number an
    object of the domain and different numbers different objects, so it needs six objects in a world of five: by the
    pigeonhole principle, it cannot hold.
-2. **Basic Law V and Hume's principle.** Basic Law V needs a one-to-one map from the concepts on a domain D (its
+2. **Basic Law V and Hume's principle.** Show that Basic Law V has no model of any size, and that Hume's principle has one on $\{0, 1, 2, \dots\}$.
+
+   *Solution.* Basic Law V needs a one-to-one map from the concepts on a domain D (its
    subsets) into D itself. By Cantor's theorem (Part 6) there are more subsets than elements for every D, finite or
    infinite, so it has no model. Hume's principle holds on {0, 1, 2, …} with #F = 0 if F is infinite and #F = |F| + 1
    if F is finite: two finite concepts get the same number exactly when they have the same size; two infinite concepts
    on a countable domain are both countably infinite, so equinumerous, and both get 0; and a finite and an infinite
    concept are neither equinumerous nor given the same number.
-3. **A program and a countermodel.** λf. λg. λx. g (f x), composition, has type (A → B) → (B → C) → A → C. For
+3. **A program and a countermodel.** Find a program of type $(A \to B) \to (B \to C) \to A \to C$, and a two-world countermodel to $((A \to B) \to A) \to A$.
+
+   *Solution.* λf. λg. λx. g (f x), composition, has type (A → B) → (B → C) → A → C. For
    Peirce's law take two worlds w₀ ≤ w₁, with A true only at w₁ and B nowhere. A → B fails at w₀ and at w₁ (at w₁, A
    holds and B does not), so (A → B) → A holds at w₀ vacuously; A does not hold at w₀; so the root does not force
    ((A → B) → A) → A.
-4. **Brouwer's real and continuity.** r = 0 exactly when Goldbach's conjecture is true, so a constructive proof of
+4. **Brouwer's real and continuity.** Why can `$r = 0$ or $r \neq 0$' not be asserted constructively for Brouwer's $r$? Why must a computable function on the reals be continuous?
+
+   *Solution.* r = 0 exactly when Goldbach's conjecture is true, so a constructive proof of
    "r = 0 or r ≠ 0", which must say which, would decide the conjecture. A computable function on the reals reads
    finitely many digits of x before it outputs f(x) to a given precision; all reals that share those digits, an
    interval around x, get the same output to that precision, which is continuity at x.
-5. **Symmetry.** A path of four points has two symmetries, the identity and the reversal (the ends swap, and so do the
+5. **Symmetry.** Which points of a path of four points can structure alone pick out? Find a symmetry of the square that fixes no corner.
+
+   *Solution.* A path of four points has two symmetries, the identity and the reversal (the ends swap, and so do the
    inner points); the reversal fixes no point, so no single point is picked out by structure alone, though "an end"
    and "an inner point" are structural kinds. The square has eight symmetries; the rotation by a quarter turn fixes no
    corner.
-6. **(Essay) The Price List.** A strong answer uses Chapter 12's Price List and comparison table, and meets the
+6. **(Essay) The Price List.** (Essay) Which exit from the Benacerraf–Field Price List? Defend it against its strongest objection.
+
+   *Solution.* A strong answer uses Chapter 12's Price List and comparison table, and meets the
    objection its exit faces: for concrete numbers, the infinite; for modal structuralism, knowledge of possibility;
    for fictionalism, why the fiction applies (Wigner); for platonism, Field's reliability challenge.
 

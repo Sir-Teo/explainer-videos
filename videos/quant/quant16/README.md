@@ -62,28 +62,48 @@ These values identify the saved experiment. They are not promises for other prod
 
 ## Ten worked solutions — English
 
-1. **A fixed control coefficient.** For iid pairs with finite second moments and Var(C)>0,
+1. **A fixed control coefficient.** For a deterministic coefficient and finite second moments, show that the control-variate estimator $\bar Y - b(\bar C - \mathbb{E}C)$ has minimal variance at $b^* = \text{cov}(Y, C)/\text{var}(C)$, and that the variance falls by the factor $1 - \rho_{YC}^2$.
+
+   *Solution.* For iid pairs with finite second moments and Var(C)>0,
    Var(Ȳ−b(C̄−EC)) = [Var(Y)−2bCov(Y,C)+b²Var(C)]/n. Completing the square gives b*=Cov(Y,C)/Var(C), and minimum Var(Y)(1−ρ²)/n. This identity concerns a deterministic population coefficient. Same-sample fitting can bias the estimator; a frozen independent pilot preserves conditional unbiasedness.
 
-2. **Normal-shift importance sampling.** With p=N(0,1), qθ=N(θ,1), p(z)/qθ(z)=exp(−θz+θ²/2). Evaluate under qθ and weight every payoff. For zero dividend yield, log ST=log S₀+(r−σ²/2)T+σ√T z, so the strike threshold is zK=[log(K/S₀)−(r−σ²/2)T]/(σ√T). Setting θ=zK centres the proposal on the threshold. It need not minimize variance, and cross-entropy need not find that minimum either. Support and required moments must hold.
+2. **Normal-shift importance sampling.** For importance sampling with a normal shifted by $\theta$, derive the likelihood ratio, and the $\theta$ that centres the shifted normal on the strike.
 
-3. **Finite-grid dual upper expectation.** Let h be integrable discounted rewards on a finite horizon and M an admissible integrable martingale with M₀=0. Optional stopping gives EMτ=0 for every admissible stopping time. Thus Ehτ=E(hτ−Mτ)≤E maxᵢ(hᵢ−Mᵢ). Take the supremum over τ. The maximum must be integrable. A noisy nested process is not automatically a martingale; its expected-maximum argument uses the separate conditional-unbiasedness/Jensen construction. Finite Monte Carlo estimates are not sure bounds.
+   *Solution.* With p=N(0,1), qθ=N(θ,1), p(z)/qθ(z)=exp(−θz+θ²/2). Evaluate under qθ and weight every payoff. For zero dividend yield, log ST=log S₀+(r−σ²/2)T+σ√T z, so the strike threshold is zK=[log(K/S₀)−(r−σ²/2)T]/(σ√T). Setting θ=zK centres the proposal on the threshold. It need not minimize variance, and cross-entropy need not find that minimum either. Support and required moments must hold.
 
-4. **Heat-equation stability.** For u_t=a u_xx, the explicit centred update has amplification g=1−4λsin²(ξ/2), λ=aΔt/Δx². For a≥0, |g|≤1 at all frequencies exactly when 0≤λ≤1/2, under the periodic/infinite-grid Fourier setup. In Black–Scholes, a=σ²S²/2, so its diffusion-only criterion is σ²Smax²Δt/ΔS²≤1. A full pricing scheme must also handle drift, reaction and boundaries.
+3. **Finite-grid dual upper expectation.** On a finite exercise grid with integrable rewards and an integrable martingale, show that for $M_0=0$, $\sup_\tau \mathbb{E}[h_\tau] \le \mathbb{E}[\max_t (h_t - M_t)]$.
 
-5. **Reverse-tape work.** For scalar output y and differentiable elementary operations, seed ȳ=1. Each edge i→j contributes v̄ⱼ ∂vⱼ/∂vᵢ to v̄ᵢ. Visiting each edge once costs O(W) for tape work W under the operation model, with storage or recomputation costs. Computing all n input directions by separate forward sweeps costs O(nW). The tape's own W can grow with n; there is no universal wall-clock factor, and many output components can require more reverse sweeps.
+   *Solution.* Let h be integrable discounted rewards on a finite horizon and M an admissible integrable martingale with M₀=0. Optional stopping gives EMτ=0 for every admissible stopping time. Thus Ehτ=E(hτ−Mτ)≤E maxᵢ(hᵢ−Mᵢ). Take the supremum over τ. The maximum must be integrable. A noisy nested process is not automatically a martingale; its expected-maximum argument uses the separate conditional-unbiasedness/Jensen construction. Finite Monte Carlo estimates are not sure bounds.
 
-6. **Hybrid call gamma.** In Black–Scholes with S₀,σ,T>0, let D=e^(−rT)(ST/S₀)1{ST>K}, the pathwise delta integrand. For the lognormal terminal density, the spot score is Z/(S₀σ√T). D also has explicit dependence 1/S₀ at fixed ST. Differentiating its expectation by the score method therefore gives
+4. **Heat-equation stability.** Derive the stability condition of the explicit scheme for the heat equation by von Neumann analysis.
+
+   *Solution.* For u_t=a u_xx, the explicit centred update has amplification g=1−4λsin²(ξ/2), λ=aΔt/Δx². For a≥0, |g|≤1 at all frequencies exactly when 0≤λ≤1/2, under the periodic/infinite-grid Fourier setup. In Black–Scholes, a=σ²S²/2, so its diffusion-only criterion is σ²Smax²Δt/ΔS²≤1. A full pricing scheme must also handle drift, reaction and boundaries.
+
+5. **Reverse-tape work.** For a scalar-output differentiable tape, show reverse work is $O(\text{tape work})$; contrast computing all input directions by forward sweeps. State memory and elementary-operation assumptions.
+
+   *Solution.* For scalar output y and differentiable elementary operations, seed ȳ=1. Each edge i→j contributes v̄ⱼ ∂vⱼ/∂vᵢ to v̄ᵢ. Visiting each edge once costs O(W) for tape work W under the operation model, with storage or recomputation costs. Computing all n input directions by separate forward sweeps costs O(nW). The tape's own W can grow with n; there is no universal wall-clock factor, and many output components can require more reverse sweeps.
+
+6. **Hybrid call gamma.** Build a mixed estimator of a call's gamma: pathwise once (for delta), then the likelihood ratio.
+
+   *Solution.* In Black–Scholes with S₀,σ,T>0, let D=e^(−rT)(ST/S₀)1{ST>K}, the pathwise delta integrand. For the lognormal terminal density, the spot score is Z/(S₀σ√T). D also has explicit dependence 1/S₀ at fixed ST. Differentiating its expectation by the score method therefore gives
    Γ=E[e^(−rT)ST/S₀² ·1{ST>K}·(Z/(σ√T)−1)].
    The −1 term is essential. Density differentiation and integrability conditions justify the identity. A sample average estimates gamma with its own sampling variance; a discontinuous integrand should not be differentiated naively pathwise again.
 
-7. **MLMC when β=γ.** Assume the theorem's positive bias, correction-variance and work exponents, independent level estimates, α≥min(β,γ)/2 and appropriate integer-allocation/regularity conditions. With bias O(M^(−αL)), L=O(log ε⁻¹). Each √(VₗCₗ)=O(1) when β=γ, so the sum is O(L+1). Optimal continuous allocation gives cost proportional to ε⁻²(Σ√(VₗCₗ))², hence O(ε⁻²(log ε)²), including the theorem's allocation treatment. This does not certify an adaptive bias proxy.
+7. **MLMC when β=γ.** Under Giles's bias, independence and allocation conditions, with $\beta = \gamma$: show that $\sum_l \sqrt{V_l C_l}$ grows like $L \sim \log \varepsilon^{-1}$, so the cost is $O(\varepsilon^{-2}(\log\varepsilon)^2)$.
 
-8. **FFT spacing.** Set uⱼ=jη and kₘ=−b+mλ. In exp(−iuⱼkₘ), exp(ijηb) is a pre-factor, while the j,m kernel is exp(−ijmηλ). Matching the N-point FFT kernel exp(−2πijm/N) requires ηλ=2π/N. At fixed η, doubling N halves strike spacing and extends frequency cutoff. At fixed N, changing η trades spacing, truncation and aliasing effects.
+   *Solution.* Assume the theorem's positive bias, correction-variance and work exponents, independent level estimates, α≥min(β,γ)/2 and appropriate integer-allocation/regularity conditions. With bias O(M^(−αL)), L=O(log ε⁻¹). Each √(VₗCₗ)=O(1) when β=γ, so the sum is O(L+1). Optimal continuous allocation gives cost proportional to ε⁻²(Σ√(VₗCₗ))², hence O(ε⁻²(log ε)²), including the theorem's allocation treatment. This does not certify an adaptive bias proxy.
 
-9. **Gram diagonal and lognormal moments.** For iid states and finite Eψₖ⁴, Ĝₖₖ=N⁻¹Σψₖ(Xₙ)² has variance [Eψₖ⁴−(Eψₖ²)²]/N. If Eψₖ²=1 its standard deviation is √[(Eψₖ⁴−1)/N]. For S=exp(σW_t−σ²t/2), ESᵖ=exp[(p²−p)σ²t/2]. Therefore, for ψₖ=Sᵏ/√ES²ᵏ, Eψₖ⁴=ES⁴ᵏ/(ES²ᵏ)²=exp(4σ²tk²). This single-diagonal diagnostic does not control the full inverse Gram matrix or price error, and the unconditional law differs from in-the-money regression sampling.
+8. **FFT spacing.** Show that the FFT forces $\lambda\eta = 2\pi/N$ in Carr and Madan's discretisation.
 
-10. **One-date margin bound.** Given true continuation C, payoff h and fitted continuation Ĉ, a wrong decision loses Δ=|C−h| and requires Δ≤|C−Ĉ|. If |C−Ĉ|≤ε uniformly, expected loss ≤E[Δ1{0<Δ≤ε}]≤εP(0<Δ≤ε). A margin bound P(0<Δ≤u)≤Auᵅ gives loss ≤Aε^(1+α). Zero-gap atoms incur no loss and need not be excluded from the state distribution. Linear margin α=1 gives a quadratic bound with units and constants. Halving ε quarters this bound, not necessarily the realised loss. In multiple dates, use the Snell continuation and the policy-occupancy identity; dropping occupancy gives a sum of per-date bounds, rather than a naive equality over every wrong decision.
+   *Solution.* Set uⱼ=jη and kₘ=−b+mλ. In exp(−iuⱼkₘ), exp(ijηb) is a pre-factor, while the j,m kernel is exp(−ijmηλ). Matching the N-point FFT kernel exp(−2πijm/N) requires ηλ=2π/N. At fixed η, doubling N halves strike spacing and extends frequency cutoff. At fixed N, changing η trades spacing, truncation and aliasing effects.
+
+9. **Gram diagonal and lognormal moments.** (qual) Show that $\operatorname{Var}(\hat G_{kk}) = (\mathbb E\psi_k^4 - (\mathbb E\psi_k^2)^2)/N$, and that for $\psi_k = S^k/\sqrt{\mathbb E S^{2k}}$ with $S = e^{\sigma W_t - \sigma^2t/2}$, $\mathbb E\psi_k^4 = e^{4\sigma^2tk^2}$.
+
+   *Solution.* For iid states and finite Eψₖ⁴, Ĝₖₖ=N⁻¹Σψₖ(Xₙ)² has variance [Eψₖ⁴−(Eψₖ²)²]/N. If Eψₖ²=1 its standard deviation is √[(Eψₖ⁴−1)/N]. For S=exp(σW_t−σ²t/2), ESᵖ=exp[(p²−p)σ²t/2]. Therefore, for ψₖ=Sᵏ/√ES²ᵏ, Eψₖ⁴=ES⁴ᵏ/(ES²ᵏ)²=exp(4σ²tk²). This single-diagonal diagnostic does not control the full inverse Gram matrix or price error, and the unconditional law differs from in-the-money regression sampling.
+
+10. **One-date margin bound.** (qual) For a one-date stopping problem (stop and get $h$, or continue and get $C$), show that using $\hat C$ loses $\mathbb E[|C - h|\,\mathbf 1\{\text{wrong}\}] \le \mathbb E[|C - \hat C|\,\mathbf 1\{|C - h| \le |C - \hat C|\}]$, and that this is $O(\varepsilon^2)$ if $\Pr(0<|C - h| \le \varepsilon) = O(\varepsilon)$ and $|C - \hat C| \le \varepsilon$.
+
+    *Solution.* Given true continuation C, payoff h and fitted continuation Ĉ, a wrong decision loses Δ=|C−h| and requires Δ≤|C−Ĉ|. If |C−Ĉ|≤ε uniformly, expected loss ≤E[Δ1{0<Δ≤ε}]≤εP(0<Δ≤ε). A margin bound P(0<Δ≤u)≤Auᵅ gives loss ≤Aε^(1+α). Zero-gap atoms incur no loss and need not be excluded from the state distribution. Linear margin α=1 gives a quadratic bound with units and constants. Halving ε quarters this bound, not necessarily the realised loss. In multiple dates, use the Snell continuation and the policy-occupancy identity; dropping occupancy gives a sum of per-date bounds, rather than a naive equality over every wrong decision.
 
 ## 中文说明与十题解答
 

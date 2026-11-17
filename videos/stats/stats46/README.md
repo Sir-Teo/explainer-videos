@@ -237,34 +237,46 @@ The rest of the part's numbers, chapter by chapter:
 
 ## Problems and solutions
 
-1. **A UMP Poisson test.**
+1. **A UMP Poisson test.** Find the UMP level-$\alpha$ test of $\lambda \le 1$ vs $\lambda > 1$ from $n$ Poisson counts, and its power function.
+
+   *Solution.*
    - T = Σ X_i ~ Poisson(nλ). The family has a monotone likelihood ratio in T, since the ratio is (λ₁/λ₀)^T
      e^{−n(λ₁−λ₀)}.
    - By Karlin–Rubin the UMP test is φ = 1{T > c} + γ 1{T = c}, with P₁(T > c) + γ P₁(T = c) = α under nλ = n.
    - Its power is β(λ) = P_{nλ}(T > c) + γ P_{nλ}(T = c), increasing in λ.
-2. **The z test is UMPU.**
+2. **The z test is UMPU.** Show that the two-sided $z$ test of $\mu = 0$ is UMPU, using $E_0\phi = \alpha$ and $E_0[\bar X \phi] = 0$.
+
+   *Solution.*
    - X̄ ~ N(μ, 1/n) is an exponential family in T = X̄. A UMPU test rejects outside an interval [c₁, c₂], with
      E₀φ = α and E₀[X̄ φ] = α E₀X̄ = 0.
    - The symmetric test φ = 1{|X̄| > z_{α/2}/√n} has size α. Because φ is even and X̄ is symmetric under μ = 0,
      E₀[X̄ φ] = 0.
    - So it satisfies both conditions, and by the generalized Neyman–Pearson lemma it is the UMPU test.
-3. **The uniform's non-unique UMP test.**
+3. **The uniform's non-unique UMP test.** For $U(0, \theta)$, show that $\phi = \mathbf 1\{\max x_i > \theta_0 (1 - \alpha)^{1/n}\}$ is UMP for $\theta \le \theta_0$, but not unique.
+
+   *Solution.*
    - For θ₁ > θ₀ the ratio f_{θ₁}/f_{θ₀} = (θ₀/θ₁)ⁿ on {max ≤ θ₀} and ∞ on {θ₀ < max ≤ θ₁}. So any level-α test that
      rejects whenever max > θ₀ is most powerful.
    - φ = 1{max > θ₀(1 − α)^{1/n}} has P_{θ₀}(max > c) = 1 − (c/θ₀)ⁿ = α, and rejects whenever max > θ₀.
    - So does φ′ = α·1{max ≤ θ₀} + 1{max > θ₀}. For every θ > θ₀ both have power 1 − (1 − α)(θ₀/θ)ⁿ, so both are UMP,
      and they differ.
    - For θ ≤ θ₀ their powers are at most α, since the power is increasing.
-4. **Chernoff's mixture.**
+4. **Chernoff's mixture.** Show that $\max(0, Z)^2$ has the law $\tfrac12 \chi^2_0 + \tfrac12 \chi^2_1$ under $\mu = 0$.
+
+   *Solution.*
    - P(max(0, Z)² = 0) = P(Z ≤ 0) = ½.
    - For t > 0, P(max(0, Z)² > t) = P(Z > √t) = ½ P(Z² > t) = ½ P(χ²₁ > t).
    - Together these say the law is ½δ₀ + ½χ²₁.
-5. **Closed testing controls the FWER.**
+5. **Closed testing controls the FWER.** Prove that closed testing with level-$\alpha$ local tests controls the familywise error rate.
+
+   *Solution.*
    - Let T be the set of true nulls. If T is empty there are no false rejections.
    - Otherwise H_T is true, so its local test rejects it with probability at most α.
    - Any false rejection of some H_i, i ∈ T, requires every intersection containing i to be rejected, H_T among them.
      So P(any false rejection) ≤ P(H_T rejected) ≤ α.
-6. **The p-value calibration.**
+6. **The p-value calibration.** Show that $\min_{\xi \in (0,1)} 1/(\xi p^{\xi - 1}) = -e\,p \log p$ for $p < 1/e$.
+
+   *Solution.*
    - Minimize h(ξ) = ξ^{−1} p^{1−ξ} over ξ ∈ (0, 1). Then log h = −log ξ + (1 − ξ) log p, with derivative −1/ξ − log p.
    - The derivative vanishes at ξ* = −1/log p, which lies in (0, 1) exactly when p < 1/e.
    - There h(ξ*) = −log p · p · p^{1/log p} = −log p · p · e = −e p log p.

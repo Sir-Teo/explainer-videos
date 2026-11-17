@@ -119,32 +119,44 @@ All thirteen scenes and six solutions have been read; fourteen focused checks pa
 
 ## Problems and solutions
 
-1. **The independence projection.**
+1. **The independence projection.** Show that the tangent space of 'X$_1$ independent of X$_2$' is $\{a(x_1) + b(x_2)\}$, and project $\mathbf 1\{x = (1,1)\} - p_{11}$ onto it.
+
+   *Solution.*
    - A path p_t = p(1 + ts) stays in the independence model to first order iff s(x₁, x₂) = a(x₁) + b(x₂): the
      log-density of a product law is log p₁(x₁) + log p₂(x₂), and its derivatives are exactly such sums.
    - The projection of φ = 1{x = (1,1)} − p₁₁ onto that space is the influence function of p̂₁q̂₁:
      q₁(1{x₁ = 1} − p₁) + p₁(1{x₂ = 1} − q₁). (The residual is orthogonal to every a(x₁) and b(x₂) because under
      independence E[1{x₁ = 1}1{x₂ = 1} | x₁] = 1{x₁ = 1} q₁.)
    - Its variance is q₁²p₁(1 − p₁) + p₁²q₁(1 − q₁) = 0.0972 at p₁ = 0.3, q₁ = 0.6.
-2. **Two influence functions.**
+2. **Two influence functions.** Derive the influence function of $\psi = E\,Y$ along $p(1 + ts)$, and of $F^{-1}(p)$.
+
+   *Solution.*
    - The mean: d/dt ∫x p(1 + ts) = ∫x s p = E[(X − μ)s], so φ = x − μ.
    - The quantile: differentiate F_t(ξ_t) = p along p(1 + ts): E[1{X ≤ ξ}s] + f(ξ)ξ̇ = 0, so
      ξ̇ = −E[1{X ≤ ξ}s]/f(ξ) = E[((p − 1{X ≤ ξ})/f(ξ)) s], and φ = (p − 1{x ≤ ξ_p})/f(ξ_p).
-3. **The ATE.**
+3. **The ATE.** Derive the ATE's efficient influence function, and show its variance is $\mathrm{Var}\,\tau(X) + E[\sigma_1^2/e + \sigma_0^2/(1 - e)]$.
+
+   *Solution.*
    - Differentiate ψ = ∫∫ y [p(y | 1, x) − p(y | 0, x)] dy p(x) dx along a nonparametric path, factor the score into its
      X, T | X and Y | T, X parts, and collect terms: φ* = μ₁ − μ₀ − ψ + T(Y − μ₁)/e − (1 − T)(Y − μ₀)/(1 − e).
    - The three pieces are orthogonal: Var(μ₁ − μ₀) + E[T(Y − μ₁)²/e²] + E[(1 − T)(Y − μ₀)²/(1 − e)²]
      = Var τ(X) + E[σ₁²/e + σ₀²/(1 − e)].
-4. **The one-step's bias.**
+4. **The one-step's bias.** Show that the one-step ATE's bias is $E[(e - \hat e)(\mu_1 - \hat\mu_1)/\hat e] - E[(\hat e - e)(\mu_0 - \hat\mu_0)/(1 - \hat e)]$.
+
+   *Solution.*
    - E[μ̂₁ + T(Y − μ̂₁)/ê] − Eμ₁ = E[(μ̂₁ − μ₁)(1 − e/ê)] = E[(e − ê)(μ₁ − μ̂₁)/ê].
    - Similarly for the controls, E[μ̂₀ + (1 − T)(Y − μ̂₀)/(1 − ê)] − Eμ₀ = E[(ê − e)(μ₀ − μ̂₀)/(1 − ê)].
    - Subtract: both terms are products of a propensity error and an outcome error.
-5. **Orthogonality behind adaptation.**
+5. **Orthogonality behind adaptation.** For symmetric location, show that $-f'/f$ is orthogonal to every even function in $L_2(f)$.
+
+   *Solution.*
    - With f symmetric, f′ is odd, so −f′/f is odd. For even h, E[−(f′/f)(ε) h(ε)] = −∫ f′(u) h(u) du = 0, because the
      integrand is odd.
    - So the location score is orthogonal to the nuisance tangent space of symmetric shape changes, the efficient score
      is the full score, and the efficient information is I_f.
-6. **TMLE solves the efficient equation.**
+6. **TMLE solves the efficient equation.** Show that the TMLE update with $H = T/e - (1-T)/(1-e)$ solves $P_n \phi^* = 0$.
+
+   *Solution.*
    - The update μ̂*_t = μ̂_t + ε̂H_t with ε̂ the least-squares coefficient of Y − μ̂_T on H = T/ê − (1 − T)/(1 − ê)
      makes Σ H_i(Y_i − μ̂*_{T_i}) = 0.
    - With ψ̂ = mean(μ̂*₁ − μ̂*₀), P_nφ* = mean(μ̂*₁ − μ̂*₀ − ψ̂) + mean(H(Y − μ̂*_T)) = 0 + 0.

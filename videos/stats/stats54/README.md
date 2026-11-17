@@ -126,7 +126,9 @@ python tools/lecture_length.py stats54 --floor 50
 
 ## Problems and solutions
 
-1. **Two VC dimensions.**
+1. **Two VC dimensions.** Show that intervals on $\mathbb R$ have VC dimension 2, and half-planes in $\mathbb R^2$ have VC dimension 3.
+
+   *Solution.*
    - Intervals shatter two points a < b: ∅, {a}, {b} and {a, b} are each cut out by an interval. For three points
      a < b < c, the labelling (+, −, +) needs an interval containing a and c but not b, which is impossible. So the VC
      dimension is 2.
@@ -134,23 +136,33 @@ python tools/lecture_length.py stats54 --floor 50
      rest by a line. For four points, either one lies inside the triangle of the others (it cannot be labelled
      differently from all three) or they form a convex quadrilateral (the two diagonals' labelling, + − + − around the
      hull, cannot be separated: Radon's theorem). So the VC dimension is 3.
-2. **The finite-class bound.**
+2. **The finite-class bound.** Prove the finite-class bound $\sup_h|R_n - R| \le \sqrt{\log(2K/\delta)/(2n)}$ from Hoeffding and a union bound.
+
+   *Solution.*
    - For each h, Hoeffding gives P(|R_n(h) − R(h)| > t) ≤ 2e^{−2nt²}.
    - A union bound over K rules gives P(sup_h |R_n − R| > t) ≤ 2Ke^{−2nt²}.
    - Set this to δ and solve: t = √(log(2K/δ)/(2n)).
-3. **Linear classes.**
+3. **Linear classes.** Show $\hat{\mathfrak R}_n\{x \mapsto \langle w, x\rangle: \|w\| \le B\} \le B\sqrt{\sum\|x_i\|^2}/n$.
+
+   *Solution.*
    - sup_{‖w‖≤B} ⟨w, Σσᵢxᵢ⟩/n = B‖Σσᵢxᵢ‖/n by Cauchy–Schwarz.
    - By Jensen, E‖Σσᵢxᵢ‖ ≤ (E‖Σσᵢxᵢ‖²)^{1/2} = (Σ‖xᵢ‖²)^{1/2}, since the cross terms have mean zero.
-4. **The realizable threshold.**
+4. **The realizable threshold.** For realizable thresholds, show ERM's risk exceeds $\varepsilon$ with probability at most $2(1 - \varepsilon)^n$.
+
+   *Solution.*
    - Let the truth be t₀ and let A₊ = [t₀, t₀ + ε′] carry probability ε (similarly A₋ below t₀).
    - ERM's threshold lies within the sample points nearest t₀, so if the risk exceeds ε then no sample point fell in A₊ or
      none fell in A₋.
    - Each has probability (1 − ε)ⁿ; a union bound gives 2(1 − ε)ⁿ ≤ 2e^{−nε}, so the risk is O(log(1/δ)/n).
-5. **Hedge's regret.**
+5. **Hedge's regret.** Prove Hedge's regret bound $\log K/\eta + \eta T/8$ with the potential $\Phi_t = \log\sum_k e^{-\eta L_{t,k}}$.
+
+   *Solution.*
    - Let W_t = Σₖ e^{−ηL_{t,k}}. Then log(W_{t+1}/W_t) = log E_{w_t} e^{−ηℓ_t(k)} ≤ −η w_t·ℓ_t + η²/8 by Hoeffding's lemma.
    - Summing: log W_{T+1} − log K ≤ −η·(your loss) + η²T/8.
    - And log W_{T+1} ≥ −η min_k L_{T,k}. Rearranging: regret ≤ log K/η + ηT/8.
-6. **The hinge's ψ.**
+6. **The hinge's ψ.** Find $\psi$ for the hinge loss: show conditional excess hinge risk dominates conditional 0–1 excess.
+
+   *Solution.*
    - At a point with η = η(x), the conditional hinge risk of a prediction f is η(1 − f)₊ + (1 − η)(1 + f)₊, which is
      minimized over f ∈ [−1, 1] at sign(2η − 1), with value 1 − |2η − 1|.
    - A prediction with the wrong sign has hinge risk at least 1 (at f = 0), an excess of at least |2η − 1|, which is

@@ -189,21 +189,33 @@ python tools/lecture_length.py stats38 --floor 50
 
 ## Problems and solutions
 
-1. **White-noise periodogram.** At an interior positive Fourier frequency f_j (excluding Nyquist), the cosine and sine sums are uncorrelated Gaussians with
+1. **White-noise periodogram.** For Gaussian white noise, show that periodogram ordinates at distinct interior positive Fourier frequencies are independent $\sigma^2 \cdot$ Exp(1).
+
+   *Solution.* At an interior positive Fourier frequency f_j (excluding Nyquist), the cosine and sine sums are uncorrelated Gaussians with
    variance nσ²/2 each, and different interior positive j are orthogonal. So I(f_j) = (C² + S²)/n is σ²/2 times a χ²₂, that is σ² Exp(1),
    and the ordinates are independent. The zero and, for even n, Nyquist frequencies are exceptions: their real Gaussian transform gives a scaled χ²₁ rather than Exp(1).
-2. **The Dickey–Fuller numerator.** Squaring x_t = x_{t−1} + ε_t gives x_t² = x_{t−1}² + 2x_{t−1}ε_t + ε_t².
+2. **The Dickey–Fuller numerator.** For $\Delta x_t = \gamma x_{t-1} + \varepsilon_t$ with $\gamma = 0$, show $\frac{1}{T}\sum x_{t-1}\varepsilon_t = \frac{\sigma^2}{2}(x_T^2/(\sigma^2 T) - \hat\sigma^2/\sigma^2)$ approximately.
+
+   *Solution.* Squaring x_t = x_{t−1} + ε_t gives x_t² = x_{t−1}² + 2x_{t−1}ε_t + ε_t².
    - Summing, Σx_{t−1}ε_t = (x_T² − x_0² − Σε_t²)/2.
    - Divide by Tσ²: with x_0 = 0 this is ½(x_T²/(Tσ²) − σ̂²/σ²) → ½(W(1)² − 1) = ∫W dW.
-3. **GARCH(1,1).**
+3. **GARCH(1,1).** For GARCH(1,1), show $E\sigma_t^2 = \omega/(1-\alpha-\beta)$ and that $\varepsilon_t^2$ follows an ARMA(1,1).
+
+   *Solution.*
    - Taking expectations of σ_t² = ω + αε_{t−1}² + βσ_{t−1}², with E ε² = E σ², gives Eσ² = ω/(1 − α − β).
    - Let ν_t = ε_t² − σ_t², a martingale difference. Then ε_t² = ω + (α + β)ε_{t−1}² + ν_t − βν_{t−1}, an ARMA(1,1).
-4. **ARFIMA ρ₁.** From ρ_k = ∏(j − 1 + d)/(j − d), taking k = 1 gives ρ₁ = d/(1 − d). For d = 0.4 this is 0.67.
-5. **Local-level gain.** With H = 1, K = P(P + r)⁻¹ = P/(P + r).
+4. **ARFIMA ρ₁.** For ARFIMA$(0,d,0)$, show $\rho_1 = d/(1-d)$.
+
+   *Solution.* From ρ_k = ∏(j − 1 + d)/(j − d), taking k = 1 gives ρ₁ = d/(1 − d). For d = 0.4 this is 0.67.
+5. **Local-level gain.** Local level: show the gain is $K = P/(P + R)$, and find the steady-state $P$ in terms of $q/r$.
+
+   *Solution.* With H = 1, K = P(P + r)⁻¹ = P/(P + r).
    - The predicted variance recursion P' = P − P²/(P + r) + q has the steady state P² = q(P + r), so
      P = (q + √(q² + 4qr))/2.
    - For the Nile, with q/r = 0.097, K = 0.27.
-6. **AR(1) mean.** n Var(X̄) = γ₀ Σ_{|h|<n}(1 − |h|/n)φ^{|h|} → γ₀(1 + 2φ/(1 − φ)) = γ₀(1 + φ)/(1 − φ). For φ = 0.5
+6. **AR(1) mean.** For an AR(1), show $n\,\text{Var}(\bar X_n) \to \sigma_X^2 (1+\phi)/(1-\phi)$.
+
+   *Solution.* n Var(X̄) = γ₀ Σ_{|h|<n}(1 − |h|/n)φ^{|h|} → γ₀(1 + 2φ/(1 − φ)) = γ₀(1 + φ)/(1 − φ). For φ = 0.5
    that is 3γ₀, so the i.i.d. SE is too small by √3.
 
 ## Glossary

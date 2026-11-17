@@ -137,15 +137,29 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Fixed effect.** Weights 100, 25, 50; (100 x 0.2 + 25 x 0.5 + 50 x 0.3)/175 = (20 + 12.5 + 15)/175 = 0.27.
-2. **I-squared.** (30 - 14)/30 = 0.53.
-3. **A prediction interval.** Roughly 0.4 +/- 1.96 x sqrt(0.2^2 + 0.05^2) = 0.4 +/- 0.40, so about 0.0 to 0.8.
-4. **GRIM.** 3.48 x 17 = 59.16; 59/17 = 3.471 (3.47) and 60/17 = 3.529 (3.53): 3.48 is impossible.
-5. **statcheck.** p = 2 x P(t_24 > 1.90) = 0.070; the reported .03 is inconsistent, and gross: it crosses 0.05.
-6. **PET against naive.** Report both, and the selection model; PET's intercept near zero with a wide interval
+1. **Fixed effect.** Three studies: $d$ = 0.2, 0.5, 0.3 with variances 0.01, 0.04, 0.02. Find the fixed-effect estimate.
+
+   *Solution.* Weights 100, 25, 50; (100 x 0.2 + 25 x 0.5 + 50 x 0.3)/175 = (20 + 12.5 + 15)/175 = 0.27.
+2. **I-squared.** $Q$ = 30 on 14 degrees of freedom. Find $I^2$.
+
+   *Solution.* (30 - 14)/30 = 0.53.
+3. **A prediction interval.** A random-effects mean of 0.4 with SE 0.05 and $\tau$ = 0.2: give a rough 95% prediction interval.
+
+   *Solution.* Roughly 0.4 +/- 1.96 x sqrt(0.2^2 + 0.05^2) = 0.4 +/- 0.40, so about 0.0 to 0.8.
+4. **GRIM.** $n$ = 17 answers on a 1-to-5 scale, reported mean 3.48. Apply GRIM.
+
+   *Solution.* 3.48 x 17 = 59.16; 59/17 = 3.471 (3.47) and 60/17 = 3.529 (3.53): 3.48 is impossible.
+5. **statcheck.** Reported: $t(24) = 1.90$, $p = .03$ (two-sided). Recompute $p$; is the error gross?
+
+   *Solution.* p = 2 x P(t_24 > 1.90) = 0.070; the reported .03 is inconsistent, and gross: it crosses 0.05.
+6. **PET against naive.** PET's intercept is 0.05 (SE 0.06) and the naive estimate 0.38. What do you report?
+
+   *Solution.* Report both, and the selection model; PET's intercept near zero with a wide interval
    says the published estimate of 0.38 may be mostly filter. The honest summary is the range, and a call for a
    registered replication.
-7. **A plan.** Register the protocol; search databases, trial registries, preprints and authors for unpublished
+7. ★ **A plan.** Plan a meta-analysis of a literature you suspect is filtered: search, registries, models, corrections and how you will present their disagreement.
+
+   *Solution.* Register the protocol; search databases, trial registries, preprints and authors for unpublished
    studies; pool by random effects with Hartung-Knapp and a prediction interval; draw the funnel and run Egger; run
    trim-and-fill, PET-PEESE, a selection model and p-curve; present all of them together as a sensitivity range;
    weight registered studies separately; and say what a decisive registered study would need.

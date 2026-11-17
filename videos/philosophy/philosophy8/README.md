@@ -72,24 +72,36 @@ and van Rooij (2012); Beall and Murzi (2013).
 
 ## Problems and solutions
 
-1. **Two truth-tellers.** A says "B is true", B says "A is true". The jump gives A the value of B and B the value of A,
+1. **Two truth-tellers.** Find all fixed points of the world $A$: `$B$ is true', $B$: `$A$ is true'. Which are classical?
+
+   *Solution.* A says "B is true", B says "A is true". The jump gives A the value of B and B the value of A,
    so the fixed points are exactly the assignments with A = B: both t, both f, or both n. Two are classical. The least
    fixed point leaves both n, so both are ungrounded but not paradoxical, like the single truth-teller.
-2. **Kripke versus revision.** Let S be "the liar is true or the liar is not true", T⌜L⌝ ∨ ¬T⌜L⌝. In every fixed
+2. **Kripke versus revision.** Show that `the liar is true or the liar is not true' has no value in any Kripke fixed point, but is stably true in revision theory.
+
+   *Solution.* Let S be "the liar is true or the liar is not true", T⌜L⌝ ∨ ¬T⌜L⌝. In every fixed
    point the liar is n (Chapter 5), so S has value n ∨ ¬n = n in every fixed point: it is paradoxical, and excluded
    middle fails for it. In revision theory every hypothesis gives the liar a classical value, so S is a classical
    instance of excluded middle at every stage after the first: stably true. (The Reasoner's verdicts agree: s8 is
    paradoxical in Chapter 5 and stably true in Chapter 8.)
-3. **Grelling on the Price List.** (i) Every adjective is autological or heterological (classical logic); (ii) an
+3. **Grelling on the Price List.** Give the four steps of the Grelling paradox, and say which of the Price List's claims each uses.
+
+   *Solution.* (i) Every adjective is autological or heterological (classical logic); (ii) an
    adjective is heterological iff it does not apply to itself (the defining biconditional, a T-schema for
    "applies to"); (iii) "heterological" is an adjective of the language (self-reference); (iv) it cannot be both
    (consistency). Steps (i)–(iv) yield: heterological iff not heterological. Each Price List exit removes one step.
-4. **Finite Yablo.** With Y₁…Yₙ, Yₙ says nothing, so it is true. Then Yₙ₋₁ ("Yₙ is untrue") is false, and every
+4. **Finite Yablo.** Prove that every finite Yablo sequence has exactly one consistent assignment.
+
+   *Solution.* With Y₁…Yₙ, Yₙ says nothing, so it is true. Then Yₙ₋₁ ("Yₙ is untrue") is false, and every
    earlier Yₖ is false because Yₙ is a true later sentence. That assignment satisfies every biconditional, and it is
    forced: by backward induction from Yₙ, each value is determined. So there is exactly one.
-5. **The knower.** Let K ↔ ¬Kn⌜K⌝. From Kn⌜K⌝ → K (factivity) and K → ¬Kn⌜K⌝ we get ¬Kn⌜K⌝, hence K. That derivation
+5. **The knower.** Derive a contradiction from the knower: `this sentence is not known', with $K\varphi \to \varphi$ known.
+
+   *Solution.* Let K ↔ ¬Kn⌜K⌝. From Kn⌜K⌝ → K (factivity) and K → ¬Kn⌜K⌝ we get ¬Kn⌜K⌝, hence K. That derivation
    used only known principles, so its conclusion K is known: Kn⌜K⌝. Contradiction.
-6. **(Essay) Gap, glut, hierarchy or restriction?** A strong answer uses Chapter 12's Price List and the comparison
+6. **(Essay) Gap, glut, hierarchy or restriction?**
+
+   *Solution.* A strong answer uses Chapter 12's Price List and the comparison
    table, and meets its own revenge: for a gap, "not determinately true"; for a glut, "just true" and Curry; for a
    hierarchy, the single word "true" and Nixon and Jones; for a restriction, asserting sentences one calls untrue.
 

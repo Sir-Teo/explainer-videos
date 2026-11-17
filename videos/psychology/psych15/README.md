@@ -200,33 +200,47 @@ reinterpreted, *Acta Psychol.* 42 (1978) 313–329.
 
 ## Problems and solutions
 
-**1. Decibels.** 20 log₁₀ 10 = 20 dB for ten times the pressure; intensity goes as pressure squared, so ten times the
+**1. Decibels.** Show that 20 dB is ten times the pressure and 10 dB ten times the intensity. Two equal, unrelated sources of 60 dB play together: what is the level?
+
+*Solution.* 20 log₁₀ 10 = 20 dB for ten times the pressure; intensity goes as pressure squared, so ten times the
 intensity is 10 log₁₀ 10 = 10 dB. Two unrelated sources add in intensity: two equal 60 dB sources give 60 + 10 log₁₀ 2
 = 63 dB, not 120.
 
-**2. The ear's filters.** ERB(500) = 24.7 × (2.185 + 1) = 78.7 Hz; ERB(4000) = 24.7 × (17.48 + 1) = 456 Hz. The
+**2. The ear's filters.** Using $\mathrm{ERB}(f) = 24.7\,(4.37 f/1000 + 1)$, find the auditory filter's width at 500 Hz and 4 kHz, and the number of ERBs between 100 Hz and 8 kHz.
+
+*Solution.* ERB(500) = 24.7 × (2.185 + 1) = 78.7 Hz; ERB(4000) = 24.7 × (17.48 + 1) = 456 Hz. The
 ERB-rate is 21.4 log₁₀(4.37f/1000 + 1): 3.37 at 100 Hz and 33.3 at 8 kHz, so about 30 ERBs, about thirty
 independent-ish channels, span the range of speech.
 
-**3. Two ears.** At 90°, (0.0875/343)(π/2 + 1) = 2.55 × 10⁻⁴ × 2.571 = 656 µs. For small angles θ + sin θ ≈ 2θ, so
+**3. Two ears.** With Woodworth's $\mathrm{ITD} = (r/c)(\theta + \sin\theta)$, $r$ = 8.75 cm, $c$ = 343 m/s, find the delay at 90$^\circ$, and the direction a 10 $\mu$s difference corresponds to.
+
+*Solution.* At 90°, (0.0875/343)(π/2 + 1) = 2.55 × 10⁻⁴ × 2.571 = 656 µs. For small angles θ + sin θ ≈ 2θ, so
 10 µs gives θ ≈ 10⁻⁵/(2 × 2.55 × 10⁻⁴) = 0.0196 rad ≈ 1.1°: about a degree, which is roughly the best directional
 acuity measured straight ahead.
 
-**4. The missing fundamental.** Each component sin(2πnf₀t + φₙ) has period 1/(nf₀), which divides 1/f₀, so the sum
+**4. The missing fundamental.** Show that a sum of harmonics $n f_0$ repeats with period $1/f_0$ whichever harmonics are present, and so that its autocorrelation peaks at a lag of $1/f_0$.
+
+*Solution.* Each component sin(2πnf₀t + φₙ) has period 1/(nf₀), which divides 1/f₀, so the sum
 repeats every 1/f₀ whichever harmonics are present. The autocorrelation of any signal with period T is maximal (equal
 to its value at zero lag) at every multiple of T, and in each filter's output the same holds, so the summary peaks at
 1/f₀ even when no filter is tuned to f₀.
 
-**5. The label model.** Let X be A (the case X = B is symmetric). Each presentation receives a covert label, category
+**5. The label model.** Derive the label model of ABX discrimination: if listeners compare only covert labels, $P(\text{correct}) = \tfrac12[1 + (p_A - p_B)^2]$.
+
+*Solution.* Let X be A (the case X = B is symmetric). Each presentation receives a covert label, category
 2 with probability p_A, p_B or p_A. If A and B get different labels, the listener chooses the one whose label matches
 X's; if the same, a coin is tossed. P(correct) = p_A²(1 − p_B) + (1 − p_A)²p_B + ½[p_Ap_B + (1 − p_A)(1 − p_B)], which
 simplifies to ½[1 + (p_A − p_B)²]: a half when the labels are equally likely, one when they are certain and different.
 
-**6. The gate.** With w_L = 0.3, w_S = 1, k = 0.5, g = 3 and S = 1, T = (0.3L + 1)/(1 + 3(L − 0.5)) for L > 0.5. Setting
+**6. The gate.** With `explainer.psychology.psyche.hearing.gate`: for an injury signal of 1, find the touch input that halves T, and how it changes if $g$ is doubled.
+
+*Solution.* With w_L = 0.3, w_S = 1, k = 0.5, g = 3 and S = 1, T = (0.3L + 1)/(1 + 3(L − 0.5)) for L > 0.5. Setting
 T = 0.5 gives 0.3L + 1 = 1.5L − 0.25, so L ≈ 1.04. With g = 6, 0.3L + 1 = 3L − 1, so L ≈ 0.74: a stronger gate needs
 less rubbing.
 
-**7. ★ Hearing or reporting.** If the McGurk effect only changed responses, a visual ga would shift the criterion for
+**7. ★ Hearing or reporting.** The McGurk effect could change what people hear, or only what they report. Design a test, using Part 12's detection theory, that tells the two apart.
+
+*Solution.* If the McGurk effect only changed responses, a visual ga would shift the criterion for
 saying da without changing sensitivity. Use detection theory (Part 12): present audio da and audio ba, each with a
 face saying ga or a still face, and ask "da or not?" with confidence ratings. A perceptual effect lowers d′ between
 audio ba and audio da when the ga face is present (the two sounds become alike), while a pure response bias moves c

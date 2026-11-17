@@ -224,10 +224,14 @@ Learning: An Introduction*, 2nd ed. (2018).
 ## Problems, with solutions
 
 1. *A robot is at a door with prior probability q. It senses a door (probability 0.9 at one, 0.05 elsewhere). Find
-   the posterior, and how many consistent sightings take q = 0.1 above 0.99.* — Bayes: q' = 0.9q / (0.9q + 0.05(1 − q)).
+   the posterior, and how many consistent sightings take q = 0.1 above 0.99.*
+
+   *Solution.* Bayes: q' = 0.9q / (0.9q + 0.05(1 − q)).
    In odds, each sighting multiplies by the likelihood ratio 0.9/0.05 = 18. Prior odds 1/9; after k sightings 18ᵏ/9.
    Two give 36 (q = 0.973), three give 648 (q = 0.9985): three sightings.
-2. *Show −ln p ≥ 1 − p, so n½ ≤ 0.69/(1 − p); compute it for p = 0.98.* — ln x ≤ x − 1 for x > 0 (the logarithm is
+2. *Show −ln p ≥ 1 − p, so n½ ≤ 0.69/(1 − p); compute it for p = 0.98.*
+
+   *Solution.* ln x ≤ x − 1 for x > 0 (the logarithm is
    concave and touches its tangent at 1); put x = p. Hence n½ = ln 2/(−ln p) ≤ ln 2/(1 − p). For p = 0.98,
    n½ = 0.6931/0.02020 = 34.3 steps (the bound gives 34.7).
 3. *Prove J(π̂) ≤ J(π*) + T²ε for behaviour cloning, and build a task where it is nearly reached.* — Couple the
@@ -238,19 +242,27 @@ Learning: An Introduction*, 2nd ed. (2018).
    the expert never leaves "on"; the learner leaves with probability ε a step, and "lost" is absorbing with cost 1.
    Then J = Σₜ (1 − (1 − ε)ᵗ) ≈ T²ε/2 for Tε ≪ 1: the same order as the bound.
 4. *If success on a task of length t is exp(−(t/τ)ᵏ), show t₅₀/t₈₀ = (ln 2/ln 1.25)^{1/k}; find the k that gives METR's
-   median ratio; what does k < 1 mean?* — Success S at length t_S: (t_S/τ)ᵏ = −ln S, so t_S = τ(−ln S)^{1/k} and the
+   median ratio; what does k < 1 mean?*
+
+   *Solution.* Success S at length t_S: (t_S/τ)ᵏ = −ln S, so t_S = τ(−ln S)^{1/k} and the
    ratio is (ln 2/ln 1.25)^{1/k} = 3.106^{1/k}. With the measured median ratio r, k = ln 3.106/ln r (r = 5.08 gives
    k ≈ 0.70). k < 1 is a falling hazard: the longer a task has gone well, the less likely the next minute fails —
    what a mix of easy and hard tasks produces, and why long tasks are less hopeless than a constant hazard implies.
-5. *Show symlog is odd, increasing, ≈ x near 0, and that symexp inverts it.* — symlog(−x) = −sign(x) ln(1 + |x|) =
+5. *Show symlog is odd, increasing, ≈ x near 0, and that symexp inverts it.*
+
+   *Solution.* symlog(−x) = −sign(x) ln(1 + |x|) =
    −symlog(x); its derivative is 1/(1 + |x|) > 0; ln(1 + u) = u − u²/2 + …, so symlog(x) ≈ x for small x;
    symexp(symlog(x)) = sign(x)(e^{ln(1+|x|)} − 1) = sign(x)|x| = x.
 6. *With Aᵗ = (1 − τ)ε + τA, show dAᵗ/dτ = A − ε. If demonstrations are ±m with probability ½ each, the
-   squared-error-optimal deterministic action is 0.* — Differentiate the straight line. For the second part,
+   squared-error-optimal deterministic action is 0.*
+
+   *Solution.* Differentiate the straight line. For the second part,
    E[(a − Y)²] = a² − 2aE[Y] + E[Y²] is minimized at a = E[Y] = 0: the mean of the two modes, the path through the
    obstacle. A generative policy instead samples Y.
 7. *The orthonormal DCT is orthogonal; show that rounding γ·DCT(a) changes the signal by an RMS error of about
-   1/(γ√12).* — Orthogonality preserves Euclidean norms (Parseval), so the error in the signal equals the error in the
+   1/(γ√12).*
+
+   *Solution.* Orthogonality preserves Euclidean norms (Parseval), so the error in the signal equals the error in the
    coefficients. Rounding γc to an integer leaves an error roughly uniform on [−½, ½] when |γc| is large, variance
    1/12; divided by γ, variance 1/(12γ²) per coefficient, so the RMS error per sample is 1/(γ√12) (0.029 at γ = 10, in
    the normalized units). Coefficients rounded to 0 have error |c| < 1/(2γ), usually smaller, so this is about an

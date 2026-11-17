@@ -101,35 +101,49 @@ The Martin–Nagel item (`nagel`) is the slow one: 300 simulated markets, about 
 
 ## Problems, with solutions
 
-1. **Fair prices are martingales.** Eₜ[Pₜ₊₁] = Eₜ[Eₜ₊₁[X]] = Eₜ[X] = Pₜ by the tower property. For s < t, the
+1. **Fair prices are martingales.** Show that if $P_t = \mathbb E_t[X]$ for a fixed payoff $X$, then $P$ is a martingale, and that its increments are uncorrelated, though they need not be independent. Give an example of the second.
+
+   *Solution.* Eₜ[Pₜ₊₁] = Eₜ[Eₜ₊₁[X]] = Eₜ[X] = Pₜ by the tower property. For s < t, the
    increments satisfy E[(Pₜ₊₁ − Pₜ)(Pₛ₊₁ − Pₛ)] = E[(Pₛ₊₁ − Pₛ) Eₜ[Pₜ₊₁ − Pₜ]] = 0, so they are uncorrelated. They need
    not be independent: let εₜ be fair coin flips (±1) and Pₜ₊₁ = Pₜ + σₜ εₜ₊₁ with σₜ = 1 + |Pₜ − P₀|/10: every increment
    has mean zero given the past, but its size depends on the path so far (volatility clustering, chapter 6).
-2. **The lognormal means.** If r = ln(1 + R) ~ N(m, s²), then E[1 + R] = E[eʳ] = e^{m + s²/2}, the lognormal mean,
+2. **The lognormal means.** If one-period log returns are $N(m, s^2)$, show the arithmetic mean simple return is $e^{m + s^2/2} - 1$ and the geometric mean is $e^m - 1$. Check with chapter 2's numbers (11.95%, 10.02%, $\sigma$ = 19.9%).
+
+   *Solution.* If r = ln(1 + R) ~ N(m, s²), then E[1 + R] = E[eʳ] = e^{m + s²/2}, the lognormal mean,
    so the arithmetic mean simple return is e^{m+s²/2} − 1; a dollar invested for T periods grows like e^{Σr}, whose
    per-period growth is e^m − 1, the geometric mean. With chapter 2's numbers, e^m − 1 = 10.02% gives m = 9.55%, and
    e^{m+s²/2} − 1 = 11.95% gives s = 18.6%, close to the 19.9% standard deviation of the simple annual returns (the
    two measure slightly different things: log against simple returns, and real years aren't exactly lognormal).
-3. **The variance ratio.** For a stationary series with variance σ² and autocorrelations ρₖ,
+3. **The variance ratio.** Show $\operatorname{VR}(2) = 1 + \rho_1$ and $\operatorname{VR}(q) = 1 + 2\sum_{k<q}(1 - k/q)\rho_k$ for a stationary series.
+
+   *Solution.* For a stationary series with variance σ² and autocorrelations ρₖ,
    Var(r₁ + … + r_q) = qσ² + 2σ² Σ_{k=1}^{q−1} (q − k)ρₖ (each lag k appears q − k times). Divide by qσ²:
    VR(q) = 1 + 2Σ_{k<q}(1 − k/q)ρₖ; for q = 2, VR(2) = 1 + ρ₁.
-4. **Hill's estimator.** With P(X > x) = (x/x_m)^−α, Y = ln(X/x_m) has P(Y > y) = e^{−αy}: exponential with mean
+4. **Hill's estimator.** For a Pareto tail $P(X > x) = (x / x_m)^{-\alpha}$, show $\mathbb E[\ln(X / x_m)] = 1/\alpha$, which is Hill's estimator. If daily returns have $\alpha = 3$, which moments exist?
+
+   *Solution.* With P(X > x) = (x/x_m)^−α, Y = ln(X/x_m) has P(Y > y) = e^{−αy}: exponential with mean
    1/α. Hill's estimator is this, with x_m the (k+1)-th largest value and the k largest as the sample: α̂ = (mean of
    ln(X₍ᵢ₎/X₍ₖ₊₁₎))⁻¹. With α = 3, E|X|ᵖ is finite only for p < 3: the mean and variance exist, the third moment
    barely does not, and the fourth (kurtosis) is infinite, which is why chapter 8's running kurtosis never settles.
-5. **The best leverage.** A fund holding L times the market, rebalanced continuously and borrowing at r, has
+5. **The best leverage.** A fund holds $L$ times the market, rebalanced daily, borrowing at $r$. Show its growth rate is about $r + L(\mu - r) - \tfrac12 L^2\sigma^2$, find the best $L$, and evaluate it with chapter 2's numbers.
+
+   *Solution.* A fund holding L times the market, rebalanced continuously and borrowing at r, has
    instantaneous return r + L(μ − r) and variance L²σ², so its growth rate is g(L) = r + L(μ − r) − ½L²σ². Then
    g′(L) = 0 gives L* = (μ − r)/σ², the Kelly leverage, and g(L*) = r + (μ − r)²/(2σ²). From the daily data of
    1926–2020: μ = 10.6%, r = 3.0%, σ = 17.1% a year, so L* = 2.62 and g(L*) = 13.0% a year, against 9.2% at L = 1;
    growth falls back to the unlevered level at L = 2L* − 1 ≈ 4.2 and is negative beyond (μ − r + √((μ − r)² + 2rσ²))/σ²
    ≈ 5.6. Real funds pay fees and borrow above the bill rate, which moves the peak down.
 
-6. **(qual) The variance ratio's law.** Chapter 4's identity gives $\mathrm{VR}(q) - 1 = 2\sum_{k<q}(1 - k/q)\hat\rho_k
+6. **(qual) The variance ratio's law.** (qual) For iid increments with a finite fourth moment, prove $\sqrt n(\operatorname{VR}(q) - 1) \Rightarrow N\big(0, 2(2q-1)(q-1)/(3q)\big)$.
+
+   *Solution.* Chapter 4's identity gives $\mathrm{VR}(q) - 1 = 2\sum_{k<q}(1 - k/q)\hat\rho_k
    + O_p(1/n)$. For iid increments with $E\varepsilon^4 < \infty$, Bartlett's theorem gives $\sqrt n(\hat\rho_1, \dots,
    \hat\rho_{q-1}) \Rightarrow N(0, I)$ (the products $\varepsilon_t\varepsilon_{t-k}$ are uncorrelated across $k$ with
    variance $\sigma^4$; a martingale CLT and Slutsky handle the demeaning and the denominator). A fixed linear combination
    is normal with variance $4\sum_{k=1}^{q-1}(1 - k/q)^2 = \tfrac{4}{q^2}\sum_{j=1}^{q-1}j^2 = \tfrac{2(q-1)(2q-1)}{3q}$.
-7. **(qual) GARCH's fourth moments.** $\delta_k = E[\varepsilon_t^2\varepsilon_{t-k}^2]/\sigma^4 = 1 +
+7. **(qual) GARCH's fourth moments.** (qual) GARCH(1,1), normal shocks: show $\delta_k = 1 + (\kappa - 1)\rho_1(\alpha + \beta)^{k-1}$; for $(0.05, 0.12, 0.86)$ evaluate $\delta_1$ and show $\hat\delta_k$ has infinite variance.
+
+   *Solution.* $\delta_k = E[\varepsilon_t^2\varepsilon_{t-k}^2]/\sigma^4 = 1 +
    \operatorname{cov}(\varepsilon_t^2, \varepsilon_{t-k}^2)/\sigma^4 = 1 + (\kappa - 1)\rho_k$, with $\rho_k$ the
    autocorrelation of $\varepsilon^2$. GARCH(1,1) makes $\varepsilon_t^2$ an ARMA(1,1),
    $\varepsilon_t^2 = \omega + (\alpha + \beta)\varepsilon_{t-1}^2 + v_t - \beta v_{t-1}$ with $v_t = \varepsilon_t^2 -

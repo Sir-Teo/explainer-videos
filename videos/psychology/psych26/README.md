@@ -194,29 +194,43 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Parallel lines.** With outcomes x1 < x2 < x3, EU = p1 u1 + p3 u3 + (1 − p1 − p3) u2, so along an indifference
+1. **Parallel lines.** Show that every expected-utility indifference line in the probability triangle has slope $(u_2 - u_1)/(u_3 - u_2)$, and so that B over A forces D over C in Allais's problems.
+
+   *Solution.* With outcomes x1 < x2 < x3, EU = p1 u1 + p3 u3 + (1 − p1 − p3) u2, so along an indifference
    line (u1 − u2) dp1 + (u3 − u2) dp3 = 0, and dp3/dp1 = (u2 − u1)/(u3 − u2): a constant. The step from B to A is
    (+0.01, +0.33), the same as from D to C, and EU(A) − EU(B) = 0.01 (u1 − u2) + 0.33 (u3 − u2) = EU(C) − EU(D). So
    the two differences have the same sign: B over A forces D over C.
-2. **The value curve alone.** Saved frame: 200^0.88 = 105.9 against (1/3) 600^0.88 = 92.8, so the sure programme.
+2. **The value curve alone.** With $v(x) = x^{0.88}$ and no probability weighting, which programme does the disease problem's gain frame choose? What does the weighting function add?
+
+   *Solution.* Saved frame: 200^0.88 = 105.9 against (1/3) 600^0.88 = 92.8, so the sure programme.
    Death frame: −λ 400^0.88 = −194.9 λ against (2/3)(−λ 600^0.88) = −185.6 λ, so the gamble, for any λ. Curvature
    alone produces the framing effect. The weighting function widens the gaps (105.9 against 93.6; −438.5 against
    −353.1 with λ = 2.25), because w(1/3) and w(2/3) are below 1/3 and 2/3.
-3. **Why the cumulative form.** Take 100 with probability 0.05. Split it into 100 with 0.025 and 99.9 with 0.025: a
+3. **Why the cumulative form.** Show that the 1979 form $\sum w(p_i)\,v(x_i)$ can prefer a lottery to one that dominates it, and that the cumulative weights cannot.
+
+   *Solution.* Take 100 with probability 0.05. Split it into 100 with 0.025 and 99.9 with 0.025: a
    lottery dominated by the first. The 1979 form gives it weight 2 w(0.025) = 0.183 instead of w(0.05) = 0.132
    (with γ = 0.61), so it can be valued higher. Cumulative weights for the split are w(0.025) and
    w(0.05) − w(0.025), summing to w(0.05), and moving probability to a better outcome can only raise
    P(X ≥ x) and so the value: no violation of dominance.
-4. **Seventeen forty-seconds.** The shares after a head in the fourteen defined sequences are: HHHH 1, HHHT 2/3,
+4. **Seventeen forty-seconds.** For four fair flips, list the fourteen sequences with a flip after a head and verify that the average share of heads after a head is $17/42$.
+
+   *Solution.* The shares after a head in the fourteen defined sequences are: HHHH 1, HHHT 2/3,
    HHTH 1/2, HHTT 1/2, HTHH 1/2, HTHT 0, HTTH 0, HTTT 0, THHH 1, THHT 1/2, THTH 0, THTT 0, TTHH 1, TTHT 0. They sum
    to 17/3, and 17/3 ÷ 14 = 17/42 = 0.405.
-5. **The reversal point.** 110/(1 + k(t + 4)) > 100/(1 + kt) when 10 kt > 400k − 10, that is t > 40 − 1/k. With
+5. **The reversal point.** A hyperbolic discounter with $k = 0.05$ a week prefers 110 at week $t + 4$ to 100 at week $t$ for which $t$? Derive the reversal point.
+
+   *Solution.* 110/(1 + k(t + 4)) > 100/(1 + kt) when 10 kt > 400k − 10, that is t > 40 − 1/k. With
    k = 0.05, t > 20 weeks: nearer than 20 weeks the sooner 100 is preferred, further away the 110.
-6. **Prelec's function on choices13k.** With w(p) = exp(−(−ln p)^a), separately for gains and losses, fitted the
+6. **Prelec's function on choices13k.** With `explainer.psychology.opendata.choices13k`: fit prospect theory with Prelec's weighting function instead. Does it predict held-out problems better?
+
+   *Solution.* With w(p) = exp(−(−ln p)^a), separately for gains and losses, fitted the
    same way: α 0.75, λ 0.98, a 0.72 for gains and 0.53 for losses; mean squared error 0.0156 (R² 0.64), 10-fold
    cross-validated 0.0156 against 0.0162 for the Tversky–Kahneman form. Slightly better, and still a
    loss-aversion coefficient near one.
-7. ★ **Gap or small samples?** One design (after Rakow and colleagues' yoked studies): give each person in a
+7. ★ **Gap or small samples?** Design an experiment that would tell the description–experience gap from the effect of small samples alone, and say what each account predicts.
+
+   *Solution.* One design (after Rakow and colleagues' yoked studies): give each person in a
    description group the exact outcome frequencies that a matched person in the experience group saw. If the gap
    is only sampling error, the yoked descriptions reproduce the experience group's choices; if experience itself
    changes how rare events are weighted, a gap remains. A second design forces large samples (say 100 draws), so

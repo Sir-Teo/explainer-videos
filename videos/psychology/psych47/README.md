@@ -132,16 +132,30 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **min F′.** 6 × 2/(6 + 2) = 1.5; denominator df = (6 + 2)²/(6²/18 + 2²/29) = 64/(2 + 0.138) = 29.9. Not
+1. **min F′.** A by-participant test gives $F_1 = 6.0$ on (1, 29) df and a by-item test $F_2 = 2.0$ on (1, 18). Find min $F'$ and its denominator degrees of freedom.
+
+   *Solution.* 6 × 2/(6 + 2) = 1.5; denominator df = (6 + 2)²/(6²/18 + 2²/29) = 64/(2 + 0.138) = 29.9. Not
    significant (p ≈ 0.23), though F₁ alone gave p ≈ 0.02.
-2. **Shrinkage.** The weight on the person's own estimate is 0.09/(0.09 + 0.09) = 0.5, so the estimate is
+2. **Shrinkage.** A person's own slope is 1.0 with sampling variance 0.09; people's slopes have mean 0.5 and variance 0.09. Find the multilevel estimate.
+
+   *Solution.* The weight on the person's own estimate is 0.09/(0.09 + 0.09) = 0.5, so the estimate is
    0.5 + 0.5 × (1.0 - 0.5) = 0.75.
-3. **Within and between.** The within part is 0.6 × (6 - 4) = 1.2; the between part is -1 × 4 = -4.
-4. **Inertia's bias.** About 0.5 - (1 + 1.5)/25 = 0.5 - 0.1 = 0.4.
-5. **Items limit precision.** The difference of two means of ten item effects has SE √(2 × 0.5²/10) = 0.22, whatever
+3. **Within and between.** A person averages $\bar x_p = 4$; today $x = 6$. With $\beta_W = 0.6$ and $\beta_B = -1$, split today's predicted value into its within and between parts.
+
+   *Solution.* The within part is 0.6 × (6 - 4) = 1.2; the between part is -1 × 4 = -4.
+4. **Inertia's bias.** True inertia 0.5, 25 occasions per person. Roughly what will the average estimate be?
+
+   *Solution.* About 0.5 - (1 + 1.5)/25 = 0.5 - 0.1 = 0.4.
+5. **Items limit precision.** Ten items per condition, items vary with SD 0.5, effect 0.4. With unlimited participants, what is the standard error of the effect?
+
+   *Solution.* The difference of two means of ten item effects has SE √(2 × 0.5²/10) = 0.22, whatever
    the number of participants; an effect of 0.4 is then only 1.8 standard errors from zero.
-6. **An AR(1) variance.** 1/(1 - 0.4²) = 1/0.84 = 1.19.
-7. **A diary study.** Prompt five times a day for four weeks, with sleep reported each morning and anxiety at each
+6. **An AR(1) variance.** An AR(1) mood with $\phi = 0.4$ and shocks of SD 1. What is its variance?
+
+   *Solution.* 1/(1 - 0.4²) = 1/0.84 = 1.19.
+7. ★ **A diary study.** Design a diary study of whether poor sleep raises next-day anxiety within persons: occasions, lag, centring, model, and power at both levels.
+
+   *Solution.* Prompt five times a day for four weeks, with sleep reported each morning and anxiety at each
    prompt; centre sleep on each person's mean and enter the departure and the mean separately; model next-day
    anxiety with random intercepts and random slopes for the within-person sleep effect, and an autoregressive term
    for anxiety; plan power by simulation at both levels (about 100 people for the between-person effect, enough

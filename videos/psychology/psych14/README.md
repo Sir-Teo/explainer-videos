@@ -209,29 +209,41 @@ neuroscience, *Psychol. Bull.* 138 (2012) 389–414.
 
 ## Problems and solutions
 
-**1. The normal posterior.** log p(s | x) = −(x − s)²/2σ² − (s − μ₀)²/2σ₀² + c = −½(1/σ² + 1/σ₀²)s² + (x/σ² +
+**1. The normal posterior.** Multiply a normal prior $N(\mu_0, \sigma_0^2)$ by a normal likelihood $N(x, \sigma^2)$ and show the posterior is normal, with precision $1/\sigma_0^2 + 1/\sigma^2$, and mean the precision-weighted average.
+
+*Solution.* log p(s | x) = −(x − s)²/2σ² − (s − μ₀)²/2σ₀² + c = −½(1/σ² + 1/σ₀²)s² + (x/σ² +
 μ₀/σ₀²)s + c′. A quadratic with negative leading coefficient is a normal log density: its precision is the
 coefficient, 1/σ² + 1/σ₀², and its mean is (x/σ² + μ₀/σ₀²)/(1/σ² + 1/σ₀²) = wx + (1 − w)μ₀ with w = (1/σ²)/(1/σ² +
 1/σ₀²). Since the precision exceeds each term, σ_post < min(σ, σ₀).
 
-**2. Vision and touch.** w_V = (1/4)/(1/4 + 1/16) = 0.8, w_H = 0.2; σ = (1/4 + 1/16)^(−1/2) = 1.79 mm, below vision's 2.
+**2. Vision and touch.** Vision's $\sigma$ is 2 mm and touch's 4 mm. Find the weights and the combined $\sigma$. If the seen bar is 3 mm taller than the standard and the felt bar 3 mm shorter, where does the combined percept fall?
+
+*Solution.* w_V = (1/4)/(1/4 + 1/16) = 0.8, w_H = 0.2; σ = (1/4 + 1/16)^(−1/2) = 1.79 mm, below vision's 2.
 The combined percept is 0.8 × 3 + 0.2 × (−3) = 1.8 mm taller than the standard: it follows vision, but not all the way.
 
-**3. When two eyes stop helping.** δ ≈ IΔd/d²: at 0.5 m, 0.063 × 0.01 / 0.25 = 2.52 × 10⁻³ rad ≈ 520″ (8.7′); at
+**3. When two eyes stop helping.** With the eyes 6.3 cm apart, find the disparity, in seconds of arc, of 1 cm of depth at 0.5 m and at 5 m. Could an observer with a 10$''$ threshold see the second?
+
+*Solution.* δ ≈ IΔd/d²: at 0.5 m, 0.063 × 0.01 / 0.25 = 2.52 × 10⁻³ rad ≈ 520″ (8.7′); at
 5 m, 2.52 × 10⁻⁵ rad ≈ 5.2″. The second is below a 10″ threshold: invisible to that observer, though the best
 observers, at 2″ to 5″, might just see it.
 
-**4. A giant from a distance.** The angle is 2 arctan(0.9/10) = 10.3°. Taken to be 5 m away, the person looks
+**4. A giant from a distance.** A person 1.8 m tall stands 10 m away. What angle do they subtend? If the visual system takes them to be 5 m away, how tall do they look?
+
+*Solution.* The angle is 2 arctan(0.9/10) = 10.3°. Taken to be 5 m away, the person looks
 2 × 5 × tan(5.14°) = 0.90 m tall: half the distance, half the size. The Ames room does the reverse to the person in the
 near corner.
 
-**5. The aperture problem with a prior.** With the two normals as the rows of N and the measured normal speeds s, the
+**5. The aperture problem with a prior.** An edge with unit normal $\mathbf{n}$ moving at velocity $\mathbf{v}$ shows only $\mathbf{n}\cdot\mathbf{v}$. For two edges, find the MAP velocity under a prior $N(\mathbf{0}, \sigma_p^2 I)$ and noise $\sigma$, and show it tends to the intersection of constraints as $\sigma \to 0$.
+
+*Solution.* With the two normals as the rows of N and the measured normal speeds s, the
 log posterior is −|Nv − s|²/2σ² − |v|²/2σ_p², maximized by v̂ = (NᵀN/σ² + I/σ_p²)⁻¹Nᵀs/σ² = (NᵀN + (σ²/σ_p²)I)⁻¹Nᵀs:
 ridge regression. As σ → 0 it tends to (NᵀN)⁻¹Nᵀs = N⁻¹s, the intersection of the constraint lines (N is invertible
 when the edges are not parallel). As σ grows, ridge regression shrinks most the component of v that N measures
 least, the direction along both edges, so v̂ slows and turns toward the edges' normals, and the vector average.
 
-**6. When the diet tips.** See the table below; with the training of `compute.py` (600 images, 400 steps, seed 0) the
+**6. When the diet tips.** With `explainer.psychology.psyche.infer`: train `TinyConvNet` on sets in which a fraction $q$ of images carry their shape's own texture, and find the $q$ at which half the conflict answers follow texture.
+
+*Solution.* See the table below; with the training of `compute.py` (600 images, 400 steps, seed 0) the
 share of conflict answers that follow texture rises steeply with q, and crosses one half when only a small minority
 of the images are matched: texture is learned from far less evidence than shape, because a 5 × 5 filter sees it
 everywhere.
@@ -243,7 +255,9 @@ everywhere.
 The crossing is near q = 0.05: thirty matched images out of six hundred are enough to make the network answer by
 texture as often as by shape.
 
-**7. ★ Learned or present at birth.** Test the prior before the relevant experience could have taught it, and after
+**7. ★ Learned or present at birth.** Design an experiment that could tell whether a perceptual prior is learned in a lifetime or present at birth, and say what result would decide it.
+
+*Solution.* Test the prior before the relevant experience could have taught it, and after
 experience that contradicts it. Newly sighted people (as in Project Prakash) give a natural test for visual priors: if
 a prior is present within hours of sight onset, as the Müller-Lyer illusion was, it was not learned from seeing.
 Animals reared in controlled worlds give another: Hershberger (1970) reared chicks with light only from below, and they still pecked at photographed grains as if the light came from above, which points to an inborn prior in chickens. Then retrain it, as Adams, Graf and Ernst did:

@@ -117,18 +117,32 @@ The Chinese edition is `zh_lines.py` (the narration, line by line) and the serie
 
 ## Problems and solutions
 
-1. **Weighing a pick.** The diagnosticity ratio is 0.60/0.05 = 12; posterior odds = 1/4 x 12 = 3, about 3 to 1 for
+1. **Weighing a pick.** A line-up: correct-ID rate 0.60, innocent-suspect rate 0.05. The diagnosticity ratio, and the posterior odds from prior odds 1:4?
+
+   *Solution.* The diagnosticity ratio is 0.60/0.05 = 12; posterior odds = 1/4 x 12 = 3, about 3 to 1 for
    guilt (75%), if the procedure was clean.
-2. **A fair line-up.** In a fair culprit-absent line-up each face is equally likely to be picked: 0.60/6 = 0.10.
-3. **Ratio against curve.** The diagnosticity ratio rises as the criterion becomes stricter, along any one ROC;
+2. **A fair line-up.** Six faces, culprit absent, a fair line-up and a witness who picks someone 60% of the time: how often is the innocent suspect picked?
+
+   *Solution.* In a fair culprit-absent line-up each face is equally likely to be picked: 0.60/6 = 0.10.
+3. **Ratio against curve.** Why can a higher diagnosticity ratio come with a worse ROC? Draw two curves.
+
+   *Solution.* The diagnosticity ratio rises as the criterion becomes stricter, along any one ROC;
    a procedure that only makes witnesses more cautious moves down its curve to a higher ratio, while its curve can
    lie below another procedure's everywhere.
-4. **Lie judgements.** (0.61 + 0.47)/2 = 0.54.
-5. **An interval.** SEM = 15 sqrt(0.05) = 3.35; 69 +/- 1.96 x 3.35 = 62.4 to 75.6.
-6. **Impossibility.** If the same score means the same risk in both groups, the higher base-rate group has more
+4. **Lie judgements.** Lie judgements: 61% of truths and 47% of lies judged correctly. Overall accuracy with equal numbers?
+
+   *Solution.* (0.61 + 0.47)/2 = 0.54.
+5. **An interval.** IQ 69, reliability 0.95, SD 15: the SEM and the 95% interval.
+
+   *Solution.* SEM = 15 sqrt(0.05) = 3.35; 69 +/- 1.96 x 3.35 = 62.4 to 75.6.
+6. **Impossibility.** Base rates 0.2 and 0.4, one calibrated score: explain why the false-positive rates must differ.
+
+   *Solution.* If the same score means the same risk in both groups, the higher base-rate group has more
    people at high scores, so more of its non-reoffenders are flagged too: its false-positive rate must be higher at
    any shared threshold, unless prediction is perfect.
-7. **A protocol.** Double-blind administration (no cueing); unbiased instructions ("may or may not be present"); one
+7. ★ **A protocol.** Write the line-up protocol for a police force, with the reason for each rule.
+
+   *Solution.* Double-blind administration (no cueing); unbiased instructions ("may or may not be present"); one
    suspect per line-up with fillers matching the description; an immediate confidence statement in the witness's
    words, recorded; video of the procedure; no repeated line-ups with the same suspect; no feedback.
 

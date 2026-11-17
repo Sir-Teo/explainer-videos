@@ -78,31 +78,43 @@ Leroy, CompCert (CACM 2009); Newcombe et al., "How Amazon Web Services Uses Form
 
 ## Problems and solutions
 
-1. **B, p → □◇p, is valid on exactly the symmetric frames.** *If the frame is symmetric:* suppose p is true at w,
+1. **B, p → □◇p, is valid on exactly the symmetric frames.**
+
+   *Solution.* *If the frame is symmetric:* suppose p is true at w,
    and w R v. By symmetry v R w, so v sees a p-world, and ◇p is true at v. That holds for every v that w sees, so
    □◇p is true at w. *If the frame is not symmetric:* some w R v without v R w. Make p true at w only. Then p is true
    at w, but v sees no p-world (the only one is w, which v does not see), so ◇p fails at v, and □◇p fails at w. The
    Reasoner's correspondence checker agrees on all 16, 512 and 65,536 frames with 2, 3 and 4 worlds.
-2. **In S5, ◇□p → □p is valid; axiom 5 does the work.** Axiom 5 is ◇q → □◇q. Put q = ¬p and contrapose:
+2. **In S5, ◇□p → □p is valid; axiom 5 does the work.**
+
+   *Solution.* Axiom 5 is ◇q → □◇q. Put q = ¬p and contrapose:
    ¬□◇¬p → ¬◇¬p, and since ◇¬ is ¬□ and □¬ is ¬◇, this is ◇□p → □p. So it holds in every logic containing 5, on
    every euclidean frame; T and 4 are not needed. Semantically: if w sees v where □p holds, and w R u, then by the
    euclidean condition v R u, so p holds at u. The Reasoner finds ◇□p → □p valid on exactly the euclidean frames:
    7 of 16 with two worlds and 39 of 512 with three, the same frames as axiom 5.
-3. **A smallest frame on which □p → □□p fails has two worlds.** On one world, both possible relations (empty and a
+3. **A smallest frame on which □p → □□p fails has two worlds.**
+
+   *Solution.* On one world, both possible relations (empty and a
    loop) are transitive, so 4 is valid. On two worlds, take 0 R 1 and 1 R 0, with no loops, and make p true at 0
    only. At world 1, □p is true (the only world it sees is 0, where p holds), but □□p is false: 1 sees 0, which sees
    1, where p fails. The Reasoner finds exactly three two-world frames on which 4 fails, each containing this
    two-cycle with at most one loop.
-4. **Bisimilar models, one with a cycle and one without.** Take M, one world with a loop, and N, the infinite chain
+4. **Bisimilar models, one with a cycle and one without.**
+
+   *Solution.* Take M, one world with a loop, and N, the infinite chain
    0 → 1 → 2 → …, with the same atoms true everywhere in both. The relation that links M's world with every world of
    N is a bisimulation: every move on either side is matched by a move on the other, to a linked world with the same
    atoms. They are not isomorphic (one world versus infinitely many). No finite model without a cycle would do: in a
    finite acyclic model every path has at most n steps, so □ⁿ⁺¹⊥ is true at every world, while ◇ⁿ⁺¹⊤ is true at the
    loop.
-5. **Two specifications in LTL.** "The light is never green in both directions": G ¬(green_NS ∧ green_EW), a safety
+5. **Two specifications in LTL.** Write `the light is never green in both directions' and `every request is eventually granted' in LTL.
+
+   *Solution.* "The light is never green in both directions": G ¬(green_NS ∧ green_EW), a safety
    property (a finite trace can refute it). "Every request is eventually granted": G (request → F grant), a liveness
    property (only an infinite run can refute it).
-6. **(Essay) The Master Argument has three exits.** A strong answer chooses one and prices it. *Diodorus* (reject C:
+6. **(Essay) The Master Argument has three exits.** (Essay) Which exit from the master argument would you take, and what does it say `possible' means?
+
+   *Solution.* A strong answer chooses one and prices it. *Diodorus* (reject C:
    the possible is what is or will be true): the cost is a near-determinism in which nothing that never happens was
    ever possible, and possibility becomes a fact about time. *Cleanthes* (reject P: some past truths are not
    necessary): the cost is that the past is not fixed, unless "necessary" is read as unpreventable only for genuine

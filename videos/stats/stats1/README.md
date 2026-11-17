@@ -74,7 +74,8 @@ python tools/lecture_length.py stats1 --floor 50
 ## Problems and solutions
 
 **1. The median minimizes the sum of absolute deviations.**
-Let f(c) = Σ|xᵢ − c|. Away from the data points, f is linear with slope
+
+*Solution.* Let f(c) = Σ|xᵢ − c|. Away from the data points, f is linear with slope
 L(c) − R(c), the number of points below c minus the number above. Sort the data.
 - *n odd* (n = 2m + 1): the slope is negative for c < x₍ₘ₊₁₎ and positive after, so the unique minimizer is the
   median x₍ₘ₊₁₎.
@@ -82,7 +83,8 @@ L(c) − R(c), the number of points below c minus the number above. Sort the dat
   minimizer is unique only when x₍ₘ₎ = x₍ₘ₊₁₎.
 
 **2. Pythagoras for sums of squares.**
-Write xᵢ − c = (xᵢ − x̄) + (x̄ − c) and square:
+
+*Solution.* Write xᵢ − c = (xᵢ − x̄) + (x̄ − c) and square:
 
   Σ(xᵢ − c)² = Σ(xᵢ − x̄)² + 2(x̄ − c)Σ(xᵢ − x̄) + n(x̄ − c)².
 
@@ -90,7 +92,8 @@ The middle sum is zero, because deviations from the mean sum to zero. So
 Σ(xᵢ − c)² = Σ(xᵢ − x̄)² + n(x̄ − c)², which is at least Σ(xᵢ − x̄)², with equality exactly when c = x̄.
 
 **3. Summarizing 1, 2, 3, 4, 100.**
-- Centre: mean 22, median 3.
+
+*Solution.* - Centre: mean 22, median 3.
 - SD (divisor n): √1522 ≈ 39.0.
 - MAD: the absolute deviations from the median are 2, 1, 0, 1, 97, whose median is 1. Scaled by 1.4826, ≈ 1.48.
 - IQR: with numpy's interpolation, Q₁ = 2 and Q₃ = 4, so IQR = 2.
@@ -99,13 +102,15 @@ The median, MAD and IQR describe the four typical values. The mean and SD are do
 describe no observation at all.
 
 **4. Correlation under a change of units.**
-Let x′ = a + bx.
+
+*Solution.* Let x′ = a + bx.
 - Centring removes a, and both the covariance and s_x scale by |b| (the covariance with its sign, b). So
   r′ = b·cov / (|b| s_x s_y) = sign(b)·r: unchanged for b > 0, sign flipped for b < 0.
 - The slope of y on x′ is cov/(b s_x²), the old slope divided by b.
 
 **5. Building a Simpson reversal.**
-Take mild cases with treated 90 of 100 recovering against untreated 800 of 1,000, and severe cases with treated 300
+
+*Solution.* Take mild cases with treated 90 of 100 recovering against untreated 800 of 1,000, and severe cases with treated 300
 of 1,000 against untreated 20 of 100.
 - Within each group the treatment is better: 90% vs 80%, and 30% vs 20%.
 - Overall it is worse: treated (90 + 300)/1,100 = 35.5%, untreated (800 + 20)/1,100 = 74.5%.
@@ -113,6 +118,7 @@ of 1,000 against untreated 20 of 100.
   for the untreated, (1,000/1,100)·0.8 + (100/1,100)·0.2. The weights, the share of severe cases, are what differ.
 
 **6. Stabilizing an exponential.**
-By the delta method, SD(g(X)) ≈ |g′(μ)|·SD(X) = |g′(μ)|·μ. This is constant when g′(μ) ∝ 1/μ, that is g = log. In
+
+*Solution.* By the delta method, SD(g(X)) ≈ |g′(μ)|·SD(X) = |g′(μ)|·μ. This is constant when g′(μ) ∝ 1/μ, that is g = log. In
 fact, if X is exponential with mean μ, then log X = log μ + log E with E standard exponential. The spread of log X
 does not depend on μ at all; only its location moves.

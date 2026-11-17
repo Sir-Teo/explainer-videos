@@ -49,18 +49,42 @@ The access audit lists **32 possible pre-existing public manifest keys**, not 32
 
 These are explicitly fixed mathematical examples, not new market trials.
 
-1. **IID normal Sharpe variance.** For g(μ,σ)=μ/σ, gradient (1/σ,−SR/σ). Under normal IID observations, asymptotic Var(μ̂)=σ²/T, Var(σ̂)=σ²/(2T), Cov=0. The delta method gives Var(SR̂)≈(1+SR²/2)/T. This is an asymptotic per-period result, not an exact small-sample or serially dependent variance.
-2. **Normal maximum.** Independence gives P(max Zᵢ≤c)=∏P(Zᵢ≤c)=Φ(c)^N. At N=100 the median is Φ⁻¹(2^(−1/100))≈2.46204.
-3. **100 noise estimates, five years.** Let A_N=(1−γ)Φ⁻¹(1−1/N)+γΦ⁻¹(1−1/(Ne)). The normal/Gumbel mean approximation gives A_100/√5≈1.13172 annual Sharpe. This is not an exact Student-t simulation mean or significance threshold.
-4. **N=1,000, target Sharpe 1.** Equate the approximate null mean maximum to one: Y≈A_1000²≈10.5958 years. This mean-hurdle length does not specify confidence or detection power.
-5. **PSR score.** With monthly SR̂=0.1,T=60,skew=−1,kurtosis=6, z=0.1√59/√(1−(−1)0.1+(6−1)0.1²/4)≈0.72824. Φ(z)≈0.76677. This normal-reference confidence score is not a Bayesian posterior or an exact selection test.
-6. **Lo aggregation.** With ρ₁=0.3 and all other lags zero, η(12)=12/√(12+2·11·0.3)≈2.78243. Naive √12 scaling is about 24.50% larger. The assumptions concern stationary arithmetic-sum moments, not a universal compounded-return identity.
-7. **CSCV counts.** Choose 8 of 16 blocks: C(16,8)=12,870. A specified block is selected in C(15,7)=6,435 splits. The splits share observations and are not independent experiments.
-8. **Inclusive purging convention.** There are 5,000 observations, five contiguous folds, training label spans [i,i+20], and 20 additional embargo indices after the test label span. For an interior test fold [a,b] of 1,000 indices, its union of labels is [a,b+20]. Twenty earlier training spans intersect at the left; twenty later indices overlap the right; another twenty are embargoed. Thus 60 training observations are removed and 3,940 of the initial 4,000 remain. End folds have different counts. A different interval convention changes the answer.
-9. **Stationary bootstrap.** With restart probability p=0.1, geometric block length on {1,2,…} has E[L]=1/p=10 and P(L≥20)=(1−p)^19≈0.135085.
-10. **Repeated looks.** A nonnegative supermartingale E₀=1 under the actual conditional null satisfies P(sup_t E_t≥20)≤0.05, including 120 looks. For 120 independent 5% tests, P(any rejection)=1−0.95^120≈0.997878. Nested monthly tests are dependent, so that independent-test benchmark is not their universal error rate. Clipped raw-return monitors first need a justified clipped-increment null.
-11. **General Gaussian winner bounds.** X∼N(μ,Σ), Σ_jj>0, and known covariance. Set ρ_k=Σ_kj/Σ_jj and Z_k=X_k−ρ_kX_j; Gaussian projection makes Z independent of X_j. The event X_j≥X_k is Z_k≤a_kX_j with a_k=1−ρ_k. For a_k>0 it gives X_j≥Z_k/a_k; for a_k<0 it gives X_j≤Z_k/a_k; for a_k=0 it requires Z_k≤0. Combine all lower/upper bounds with feasibility. For equal variances and nondegenerate correlations below one, the upper bound is infinite. Conditional on feasible Z and winner j, the known-model distribution is the corresponding truncated normal. Exact inversion gives conditional coverage; finite solver caps, grids and estimated covariances do not inherit exact numerical guarantees.
-12. **Naive interval for an independent null winner.** For N independent standard normals, a symmetric interval max Zᵢ±1.96 covers the selected true mean zero iff max Zᵢ∈[−1.96,1.96]. Coverage is Φ(1.96)^N−Φ(−1.96)^N. It is approximately 95.00% for N=2 and 28.20% for N=50. Positive winner bias does not imply strict undercoverage for every N or covariance structure; the two-estimate case is a useful counterexample.
+1. **IID normal Sharpe variance.** For iid normal returns show, by the delta method, that $\operatorname{Var}\widehat{SR} \approx (1 + SR^2/2)/T$.
+
+   *Solution.* For g(μ,σ)=μ/σ, gradient (1/σ,−SR/σ). Under normal IID observations, asymptotic Var(μ̂)=σ²/T, Var(σ̂)=σ²/(2T), Cov=0. The delta method gives Var(SR̂)≈(1+SR²/2)/T. This is an asymptotic per-period result, not an exact small-sample or serially dependent variance.
+2. **Normal maximum.** Show that the maximum of $N$ independent standard normals has CDF $\Phi(c)^N$, and find its median for $N = 100$.
+
+   *Solution.* Independence gives P(max Zᵢ≤c)=∏P(Zᵢ≤c)=Φ(c)^N. At N=100 the median is Φ⁻¹(2^(−1/100))≈2.46204.
+3. **100 noise estimates, five years.** Use the independent-normal extreme-value mean approximation for the best annualised Sharpe ratio of 100 noise strategies over five years.
+
+   *Solution.* Let A_N=(1−γ)Φ⁻¹(1−1/N)+γΦ⁻¹(1−1/(Ne)). The normal/Gumbel mean approximation gives A_100/√5≈1.13172 annual Sharpe. This is not an exact Student-t simulation mean or significance threshold.
+4. **N=1,000, target Sharpe 1.** Equate the approximate mean null maximum to a target Sharpe of 1 for $N=1{,}000$ independent tries. Find the mean-hurdle length, not a power requirement.
+
+   *Solution.* Equate the approximate null mean maximum to one: Y≈A_1000²≈10.5958 years. This mean-hurdle length does not specify confidence or detection power.
+5. **PSR score.** PSR: monthly $\widehat{SR} = 0.1$, $T = 60$, skewness $-1$, kurtosis 6. Find $\text{PSR}(0)$.
+
+   *Solution.* With monthly SR̂=0.1,T=60,skew=−1,kurtosis=6, z=0.1√59/√(1−(−1)0.1+(6−1)0.1²/4)≈0.72824. Φ(z)≈0.76677. This normal-reference confidence score is not a Bayesian posterior or an exact selection test.
+6. **Lo aggregation.** Find Lo's $\eta(12)$ when $\rho_1 = 0.3$ and all other autocorrelations are zero. By how much does $\sqrt{12}$ overstate the annual Sharpe ratio?
+
+   *Solution.* With ρ₁=0.3 and all other lags zero, η(12)=12/√(12+2·11·0.3)≈2.78243. Naive √12 scaling is about 24.50% larger. The assumptions concern stationary arithmetic-sum moments, not a universal compounded-return identity.
+7. **CSCV counts.** CSCV with $S = 16$ blocks: how many splits are there, and in how many is a given block in sample?
+
+   *Solution.* Choose 8 of 16 blocks: C(16,8)=12,870. A specified block is selected in C(15,7)=6,435 splits. The splits share observations and are not independent experiments.
+8. **Inclusive purging convention.** Use the library convention $t_0=i,t_1=i+20$, inclusive spans, 5 contiguous folds of 5{,}000 observations and 20 additional embargo days after the test label span. How many training observations does an interior fold lose?
+
+   *Solution.* There are 5,000 observations, five contiguous folds, training label spans [i,i+20], and 20 additional embargo indices after the test label span. For an interior test fold [a,b] of 1,000 indices, its union of labels is [a,b+20]. Twenty earlier training spans intersect at the left; twenty later indices overlap the right; another twenty are embargoed. Thus 60 training observations are removed and 3,940 of the initial 4,000 remain. End folds have different counts. A different interval convention changes the answer.
+9. **Stationary bootstrap.** A stationary bootstrap with $p = 0.1$: the expected block length, and the probability a block is at least 20 days long.
+
+   *Solution.* With restart probability p=0.1, geometric block length on {1,2,…} has E[L]=1/p=10 and P(L≥20)=(1−p)^19≈0.135085.
+10. **Repeated looks.** A valid e-process under its bounded conditional-mean null is read 120 times at threshold 20. Bound any rejection. Compare with 120 independent 5% tests, then explain why nested monthly $t$-tests need not follow that benchmark.
+
+    *Solution.* A nonnegative supermartingale E₀=1 under the actual conditional null satisfies P(sup_t E_t≥20)≤0.05, including 120 looks. For 120 independent 5% tests, P(any rejection)=1−0.95^120≈0.997878. Nested monthly tests are dependent, so that independent-test benchmark is not their universal error rate. Clipped raw-return monitors first need a justified clipped-increment null.
+11. **General Gaussian winner bounds.** (qual) $X \sim N(\mu, \Sigma)$, winner $\hat\jmath = \arg\max X$. Show $Z = X - \Sigma_{\cdot j}X_j/\Sigma_{jj}$ is independent of $X_j$, and that given $\hat\jmath = j$ and $Z$, $X_j$ is a normal truncated to $[L(Z), U(Z)]$. Find $L, U$.
+
+    *Solution.* X∼N(μ,Σ), Σ_jj>0, and known covariance. Set ρ_k=Σ_kj/Σ_jj and Z_k=X_k−ρ_kX_j; Gaussian projection makes Z independent of X_j. The event X_j≥X_k is Z_k≤a_kX_j with a_k=1−ρ_k. For a_k>0 it gives X_j≥Z_k/a_k; for a_k<0 it gives X_j≤Z_k/a_k; for a_k=0 it requires Z_k≤0. Combine all lower/upper bounds with feasibility. For equal variances and nondegenerate correlations below one, the upper bound is infinite. Conditional on feasible Z and winner j, the known-model distribution is the corresponding truncated normal. Exact inversion gives conditional coverage; finite solver caps, grids and estimated covariances do not inherit exact numerical guarantees.
+12. **Naive interval for an independent null winner.**
+
+    *Solution.* For N independent standard normals, a symmetric interval max Zᵢ±1.96 covers the selected true mean zero iff max Zᵢ∈[−1.96,1.96]. Coverage is Φ(1.96)^N−Φ(−1.96)^N. It is approximately 95.00% for N=2 and 28.20% for N=50. Positive winner bias does not imply strict undercoverage for every N or covariance structure; the two-estimate case is a useful counterexample.
 
 ## References and textbook map
 

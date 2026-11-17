@@ -180,24 +180,38 @@ licence stated, fetched and never redistributed.
 
 ## Problems and solutions
 
-1. **The thermostat.** With e = x − s, de/dt = −ke + D, so e(t) = D/k + (e₀ − D/k)e^(−kt) and e → D/k. A
+1. **The thermostat.** Solve $dx/dt = -k(x - s) + D$ from $x(0) = x_0$, and show that the error at rest is $D/k$. Why does adding $-k_i \int (x - s)\,d\tau$ remove it?
+
+   *Solution.* With e = x − s, de/dt = −ke + D, so e(t) = D/k + (e₀ − D/k)e^(−kt) and e → D/k. A
    proportional controller only pushes when there is an error, and to cancel a constant D it must push with force D,
    which needs an error D/k. With the integral term, any steady state needs d/dt of ∫e = e = 0, so the error at rest
    is zero; the integral holds the push the disturbance needs.
-2. **The settling point.** ρ dW/dt = −c − a(W − W₀), so W − W₀ → −c/a, approached as e^(−at/ρ). Half of the loss
+2. **The settling point.** In the energy-balance loop, show that a lasting cut of $c$ kcal a day lowers weight by $c/a$ at rest, and find how long it takes to lose half of that.
+
+   *Solution.* ρ dW/dt = −c − a(W − W₀), so W − W₀ → −c/a, approached as e^(−at/ρ). Half of the loss
    takes ρ ln 2 / a: with ρ = 7,700 and a = 24, about 222 days. A defended set point adds h + g to a, shrinking both
    the loss and the time constant.
-3. **Atkinson.** dT/dP = (M_s − M_af)(1 − 2P) = 0 at P = 1/2, a maximum when M_s > M_af and a minimum when
+3. **Atkinson.** For Atkinson's $T = (M_s - M_{af}) P (1 - P)$, find the preferred $P$ for each sign of $M_s - M_{af}$.
+
+   *Solution.* dT/dP = (M_s − M_af)(1 − 2P) = 0 at P = 1/2, a maximum when M_s > M_af and a minimum when
    M_s < M_af; the failure-anxious then prefer P near 0 or 1.
-4. **Self-perception.** With R = 1, the posterior odds of interest are the prior odds times
+4. **Self-perception.** In the self-perception model, show that the inferred interest after drawing falls as the reward's pull $\beta_R$ rises. What happens when $\beta_R \to \infty$?
+
+   *Solution.* With R = 1, the posterior odds of interest are the prior odds times
    σ(β₀ + β_I + β_R)/σ(β₀ + β_R). As β_R grows, both terms tend to 1 and the ratio to 1, so the posterior falls to
    the prior: an act fully explained by its reward says nothing about the actor. (With β_R = 0 the ratio is largest.)
-5. **The RRR, again.** The fixed-effect estimate is 0.036 against the random-effects 0.037: τ² is small (I² = 35%)
+5. **The RRR, again.** With the RRR table (`opendata.ego\_depletion\_rrr`), recompute the pooled $d$ with a fixed-effect model and compare. Why are they so close?
+
+   *Solution.* The fixed-effect estimate is 0.036 against the random-effects 0.037: τ² is small (I² = 35%)
    and the laboratories' sample sizes are similar, so the two weightings nearly agree.
-6. **Remaining waits.** E[T − t | T > t] = ∫ₜ^∞ S(u) du / S(t). Its derivative has the sign of
+6. **Remaining waits.** Show that the expected remaining wait $\mathbb{E}[T - t \mid T > t]$ falls with $t$ for a normal $T$ and rises for a Pareto $T$.
+
+   *Solution.* E[T − t | T > t] = ∫ₜ^∞ S(u) du / S(t). Its derivative has the sign of
    h(t)·m(t) − 1, with h the hazard and m the mean residual life. For a normal T the hazard rises without bound, so m
    falls; for a Pareto T the hazard falls like 1/t and m(t) grows linearly with t.
-7. ★ **A test between accounts of effort.** The resource account predicts that depletion depends on what was spent
+7. ★ **A test between accounts of effort.** Design a test of the opportunity-cost account of effort that the resource account would fail, and say what each predicts.
+
+   *Solution.* The resource account predicts that depletion depends on what was spent
    and carries over regardless of what comes next; the opportunity-cost account predicts that the cost of effort
    rises with the value of the alternatives available, and can be lowered by making the current task more valuable or
    the alternatives worse, with no rest. For example: hold the first task fixed, and vary whether an attractive

@@ -75,22 +75,34 @@ frontier" (2020); the Busy Beaver Challenge (2024).
 
 ## Problems and solutions
 
-1. **MIU.** MI →(2) MII →(2) MIIII →(2) MIIIIIIII →(1) MIIIIIIIIU →(3) MIIIIIUU →(4) MIIIII. (The Reasoner's
+1. **MIU.** Derive `MIIIII` (five I's) in MIU; then show that `MUIIIU` is not a theorem.
+
+   *Solution.* MI →(2) MII →(2) MIIII →(2) MIIIIIIII →(1) MIIIIIIIIU →(3) MIIIIIUU →(4) MIIIII. (The Reasoner's
    breadth-first search finds this six-step derivation.) MUIIIU has three I's, a multiple of three, so the invariant of
    Chapter 1 rules it out. In fact a string M*x* is a theorem exactly when its number of I's is not a multiple of three.
-2. **1 × 2 = 2 in Q.** S0 × SS0 = (S0 × S0) + S0 (Q7) = ((S0 × 0) + S0) + S0 (Q7) = (0 + S0) + S0 (Q6) =
+2. **1 × 2 = 2 in Q.** Using $Q$'s axioms only, derive $1 \times 2 = 2$, naming the axiom at each step.
+
+   *Solution.* S0 × SS0 = (S0 × S0) + S0 (Q7) = ((S0 × 0) + S0) + S0 (Q7) = (0 + S0) + S0 (Q6) =
    S(0 + 0) + S0 (Q5) = S0 + S0 (Q4) = S(S0 + 0) (Q5) = SS0 (Q4). Seven steps; the Reasoner's `q_steps` gives the same.
-3. **Remainders.** x ≡ 1 (mod 4), x ≡ 2 (mod 5), x ≡ 3 (mod 7): x = 17 (and 17 + 140k). To code 1, 2, 3 with β, take
+3. **Remainders.** Find the least $x$ with $x \equiv 1 \pmod 4$, $x \equiv 2 \pmod 5$, $x \equiv 3 \pmod 7$; then code the list $1, 2, 3$ with $\beta$.
+
+   *Solution.* x ≡ 1 (mod 4), x ≡ 2 (mod 5), x ≡ 3 (mod 7): x = 17 (and 17 + 140k). To code 1, 2, 3 with β, take
    s = 3, d = 3! = 6; the moduli 1 + d = 7, 1 + 2d = 13, 1 + 3d = 19 are pairwise coprime, and the Chinese remainder
    theorem gives c = 288: 288 mod 7 = 1, 288 mod 13 = 2, 288 mod 19 = 3.
-4. **PA ⊢ Con(PA) → G.** Write □ for Prov. G ↔ ¬□G gives PA ⊢ G → ¬□G, so by D1 and D2, PA ⊢ □G → □¬□G. By D3,
+4. **PA ⊢ Con(PA) → G.** Prove from the derivability conditions that $\mathrm{PA} \vdash \mathrm{Con}(\mathrm{PA}) \to G$.
+
+   *Solution.* Write □ for Prov. G ↔ ¬□G gives PA ⊢ G → ¬□G, so by D1 and D2, PA ⊢ □G → □¬□G. By D3,
    PA ⊢ □G → □□G. Together, PA ⊢ □G → □(□G ∧ ¬□G), and since □G ∧ ¬□G → ⊥ is provable, D1 and D2 give PA ⊢ □G → □⊥.
    Contraposing: PA ⊢ ¬□⊥ → ¬□G, that is, Con(PA) → G.
-5. **Equivalence is undecidable.** Fix any program P₀. "Computes the same function as P₀" is a property of what a
+5. **Equivalence is undecidable.** Use Rice's theorem to show that no program decides whether two programs compute the same function.
+
+   *Solution.* Fix any program P₀. "Computes the same function as P₀" is a property of what a
    program does, and it is non-trivial (P₀ has it; a program computing a different function does not). By Rice's
    theorem it is undecidable. A decider for "do P and Q compute the same function?" would decide it, by taking
    Q = P₀; so there is none.
-6. **(Essay) Minds and machines.** A strong answer uses Chapter 16's Price List. For Lucas: say what grounds our
+6. **(Essay) Minds and machines.** (Essay) Does Gödel's theorem show that minds are not machines? Defend an answer against Lucas or against Benacerraf.
+
+   *Solution.* A strong answer uses Chapter 16's Price List. For Lucas: say what grounds our
    knowledge that our own system is consistent, given that we have believed inconsistent things before (naive set
    theory, Part 6). For Benacerraf: say whether we could be a machine we cannot identify, and whether that is a
    coherent picture of mathematical knowledge. Either way, note Gödel's disjunction: the theorems leave open both a

@@ -178,32 +178,46 @@ Jakobson and D. P. Carey, *Nature* 349 (1991) 154–156. L. G. Ungerleider and M
 
 ## Problems and solutions
 
-**1. The shape gives k.** With N ~ Poisson(λ), λ = aq, P(seen) = P(N ≥ k) = Q(k, λ), the regularized upper incomplete
+**1. The shape gives k.** Show that $P(N \ge k)$ for $N \sim \mathrm{Poisson}(a q)$ depends on $q$ and $a$ only through $\log a + \log q$, and so that the frequency-of-seeing curve's shape on a log axis gives $k$ without $a$.
+
+*Solution.* With N ~ Poisson(λ), λ = aq, P(seen) = P(N ≥ k) = Q(k, λ), the regularized upper incomplete
 gamma function of λ alone. On a log axis, log λ = log a + log q, so changing a shifts the curve by log a without
 changing its shape. Its slope at the midpoint, dP/d log₁₀ q = ln 10 · λ · P(N = k − 1), depends only on k: 0.80 for
 k = 1, 2.20 for k = 6, 2.71 for k = 9.
 
-**2. Hecht's arithmetic.** 54 × 0.96 × 0.5 × 0.2 = 5.2 and 148 × 0.096 = 14.2: five to fourteen. With n quanta in 500
+**2. Hecht's arithmetic.** Hecht's flashes delivered 54 to 148 quanta at the cornea. With 4% reflected, half the rest absorbed in the eye, and at most 20% of what reaches the retina caught, how many were absorbed? Over 500 rods, what is the chance that some rod caught two?
+
+*Solution.* 54 × 0.96 × 0.5 × 0.2 = 5.2 and 148 × 0.096 = 14.2: five to fourteen. With n quanta in 500
 rods, P(no rod has two) = ∏ᵢ (500 − i)/500 for i < n: 98% for n = 5, 83% for n = 14. So a rod catching two happens on
 2% to 17% of flashes; the argument needs only that most seen flashes involve no rod with two, which holds.
 
-**3. The mosaic.** Spacing 0.5 arcmin = 1/120 degree; one cycle needs two samples, so the Nyquist frequency is 60
+**3. The mosaic.** Foveal cones are about 0.5 minutes of arc apart. Find the Nyquist frequency, and the frequency a 90 c/deg grating would alias to.
+
+*Solution.* Spacing 0.5 arcmin = 1/120 degree; one cycle needs two samples, so the Nyquist frequency is 60
 c/deg. A 90 c/deg grating sampled at 120 per degree appears at |90 − 120| = 30 c/deg.
 
-**4. The DoG's peak.** With unit-area Gaussians, H(f) = exp(−2π²σc²f²) − exp(−2π²σs²f²). Setting dH/df = 0 gives
+**4. The DoG's peak.** Derive the frequency response of a difference of Gaussians, and find where it peaks when the surround is three times the centre and the two have equal area.
+
+*Solution.* With unit-area Gaussians, H(f) = exp(−2π²σc²f²) − exp(−2π²σs²f²). Setting dH/df = 0 gives
 σc² e^{−2π²σc²f²} = σs² e^{−2π²σs²f²}, so f* = √(ln(σs²/σc²) / (2π²(σs² − σc²))). With σs = 3σc, f* =
 √(ln 9 / (16π²σc²)) = √(2.197/157.9)/σc ≈ 0.118/σc cycles per unit of distance.
 
-**5. Metamers by projection.** P = I − Aᵀ(AAᵀ)⁻¹A is symmetric and P² = P; AP = A − A = 0, so for any v, A(s + Pv) =
+**5. Metamers by projection.** With the cone matrix $A$ ($3 \times N$), show that $P = I - A^\top (A A^\top)^{-1} A$ projects onto the null space, and that adding $P\mathbf{v}$ to any spectrum makes a metamer.
+
+*Solution.* P = I − Aᵀ(AAᵀ)⁻¹A is symmetric and P² = P; AP = A − A = 0, so for any v, A(s + Pv) =
 As: the same three cone excitations. Its rank is N − 3, the dimension of the null space (76 on a 79-point grid). A
 physical metamer also needs s + Pv ≥ 0, which bounds how large Pv can be.
 
-**6. A modern display's primaries.** `vision.matching_functions((630, 532, 467))` gives one row per wavelength. The red
+**6. A modern display's primaries.** With `explainer.psychology.psyche.vision`: compute the colour-matching functions for primaries at 630, 532 and 467 nm, and find the wavelengths where each is negative.
+
+*Solution.* `vision.matching_functions((630, 532, 467))` gives one row per wavelength. The red
 function is negative from about 470 to 530 nm, the blue from about 535 to 625 nm, and the green below about 465 nm
 and above about 635 nm; every set of three real primaries has negative lobes, which is why no display covers the
 spectral locus.
 
-**7. ★ A fourth dimension.** A trichromat's matches are fixed by three numbers, so a fourth cone shows up only as
+**7. ★ A fourth dimension.** Design a test that would reveal a fourth dimension of colour vision, and say why a match with three primaries would not.
+
+*Solution.* A trichromat's matches are fixed by three numbers, so a fourth cone shows up only as
 matches that trichromats accept and the observer rejects: give the observer a Rayleigh-type match (a mixture of two
 long-wave lights against a single one) and show that no setting satisfies them, or that the accepted settings form a
 point where a trichromat's form a line. Jordan et al. used such matches and discrimination thresholds along
