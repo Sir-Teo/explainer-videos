@@ -20,6 +20,9 @@ and an observer who disturbs what is observed. The part keeps score against them
 - behaviourism, and the two findings from inside it that needed something in the head: Tolman's maps and Lashley's
   plans;
 - the cognitive revolution of 1956, Shannon's bit and Hick's law;
+- the textbook's schools on one map (structuralism, functionalism, psychoanalysis, Gestalt, behaviourism, the
+  humanistic "third force", cognitive psychology, cognitive neuroscience, evolutionary psychology): what each asked,
+  and how most narrowed into perspectives whose methods the series still uses;
 - Marr's three levels of explanation, with his cash register;
 - the homunculus, and Dennett's rule for discharging it;
 - the series' four devices: Psyche, the Pool, the Battery and the Ledger;

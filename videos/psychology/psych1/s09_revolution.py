@@ -23,6 +23,7 @@ class Revolution(VoiceoverScene):
         self.birthday()
         self.hick()
         self.name()
+        self.schools()
 
     def card(self):
         card = chapter_card(8, r"The mind comes back", r"What made it respectable to talk about what happens inside?",
@@ -231,4 +232,111 @@ class Revolution(VoiceoverScene):
             vo.wait_until("b")
             self.play(Indicate(ops[2], color=WHITE, scale_factor=1.15), FadeIn(who, shift=DOWN * 0.2))
             self.play(FadeIn(q, shift=UP * 0.15))
+        self.clear_scene()
+
+    # ------------------------------------------------------------------
+    # the textbook's schools, on one time line: what each asked, and what the series keeps from it
+    SCHOOLS = (
+        # name, people, from, to (its height; None: still the main line), asked, kept, colour
+        (r"structuralism", r"Wundt, \ Titchener", 1879, 1927, r"what is experience made of?", r"the laboratory",
+         "#9FD8F0"),
+        (r"functionalism", r"James, \ Dewey, \ Angell", 1890, 1930, r"what is the mind for?",
+         r"the question of function", "#7BD88F"),
+        (r"psychoanalysis", r"Freud", 1900, 1960, r"what moves us unseen?", r"processes outside awareness",
+         "#F28FB8"),
+        (r"Gestalt", r"Wertheimer, \ K\"ohler, \ Koffka", 1912, 1945, r"why do we see wholes?",
+         r"demonstrations of grouping", "#B48EF0"),
+        (r"behaviourism", r"Watson, \ Skinner", 1913, 1960, r"what shapes behaviour?", r"the controlled experiment",
+         "#E3B98A"),
+        (r"humanistic", r"Maslow, \ Rogers", 1955, 1980, r"what lets a person grow?", r"therapy recorded and tested",
+         "#5FD3C6"),
+        (r"cognitive", r"Miller, \ Neisser", 1956, None, r"what happens in between?", r"models of processing",
+         P.ACCENT),
+        (r"cognitive neuroscience", r"", 1978, None, r"how does the brain do it?", r"the brain measured at work",
+         "#E8736B"),
+        (r"evolutionary", r"Cosmides, \ Tooby", 1988, None, r"what was it shaped to do?", r"what for, \ tested",
+         "#8FA3BF"),
+    )
+
+    def schools(self):
+        head = heading(r"The schools, \ and what became of them")
+        y0_, dy = 2.3, 0.56
+        t0, t1, xa, xb = 1870, 2010, -2.15, 3.4
+
+        def xt(year):
+            return xa + (xb - xa) * (year - t0) / (t1 - t0)
+
+        cols = VGroup(label(r"school", font_size=21, color=GREY_B).move_to([-6.85, 2.88, 0], aligned_edge=LEFT),
+                      label(r"at its height", font_size=21, color=GREY_B).move_to([(xa + xb) / 2, 2.88, 0]))
+        asked_h = label(r"what it asked", font_size=21, color=GREY_B).move_to([3.7, 2.88, 0], aligned_edge=LEFT)
+        kept_h = label(r"what the series keeps", font_size=21, color=P.ACCENT).move_to([3.7, 2.88, 0],
+                                                                                       aligned_edge=LEFT)
+        axis = Line([xa, -2.6, 0], [xb, -2.6, 0], color=GREY_C, stroke_width=2)
+        ticks = VGroup()
+        for yr in (1880, 1900, 1920, 1940, 1960, 1980, 2000):
+            ticks.add(Line([xt(yr), -2.6, 0], [xt(yr), -2.5, 0], color=GREY_C, stroke_width=2),
+                      label(str(yr), font_size=19, color=GREY_B).move_to([xt(yr), -2.86, 0]))
+        rows, bars, streams, asked, kept = [], [], [], [], []
+        for i, (name, who, a, b, q, k, col) in enumerate(self.SCHOOLS):
+            y = y0_ - dy * i
+            nm = label(name, font_size=23, color=col)
+            parts = [nm] + ([label(who, font_size=19, color=GREY_A)] if who else [])
+            left = VGroup(*parts).arrange(RIGHT, buff=0.18, aligned_edge=DOWN).move_to([-6.85, y, 0],
+                                                                                    aligned_edge=LEFT)
+            end = b if b else t1
+            bar = RoundedRectangle(width=xt(end) - xt(a), height=0.32, corner_radius=0.1, stroke_color=col,
+                                   stroke_width=1.5, fill_color=col, fill_opacity=0.7)
+            bar.move_to([(xt(a) + xt(end)) / 2, y, 0])
+            if b is None:  # still the main line: an arrow off the right of the time line
+                bar = VGroup(bar, Triangle(color=col, fill_color=col, fill_opacity=0.7, stroke_width=0).scale(0.11)
+                             .rotate(-PI / 2).next_to(bar, RIGHT, buff=0.02))
+            # after its height a school narrows to a perspective: a thin stream on to the present
+            if b and i > 0:
+                st = Line([xt(b), y, 0], [xt(t1) + 0.1, y, 0], color=col, stroke_width=3, stroke_opacity=0.8)
+            else:
+                st = VectorizedPoint([xt(a), y, 0])
+            qa = label(q, font_size=20, color=WHITE).move_to([3.7, y, 0], aligned_edge=LEFT)
+            ka = label(k, font_size=20, color=col).move_to([3.7, y, 0], aligned_edge=LEFT)
+            for m in (qa, ka):
+                if m.get_right()[0] > 6.95:
+                    m.scale_to_fit_width(6.95 - 3.7).move_to([3.7, y, 0], aligned_edge=LEFT)
+            rows.append(left)
+            bars.append(bar)
+            streams.append(st)
+            asked.append(qa)
+            kept.append(ka)
+        tag = note(r"schematic: each school at its height; \ dates approximate").to_corner(DR, buff=0.2)
+
+        def show(ks):
+            return [AnimationGroup(FadeIn(rows[k], shift=RIGHT * 0.1), GrowFromEdge(bars[k], LEFT),
+                                   FadeIn(asked[k])) for k in ks]
+
+        with self.voiceover(
+            "Before those two ideas, step back. Textbooks tell this history as a parade of schools, and it helps "
+            "to see them on one map. <bookmark mark='a'/> Wundt's laboratory, and Edward Titchener's at Cornell, "
+            "asked what conscious experience is made of. Titchener called that structuralism. William James, and "
+            "John Dewey and James Angell in Chicago, asked what the mind is for, a question from Darwin: "
+            "functionalism. <bookmark mark='b'/> Sigmund Freud asked what moves us that we cannot see. Max "
+            "Wertheimer, Wolfgang Köhler and Kurt Koffka asked why we see wholes, a tune rather than its notes: "
+            "Gestalt psychology. <bookmark mark='c'/> Behaviourism asked what experience does to behaviour. Then "
+            "Abraham Maslow and Carl Rogers called their movement a third force, against both psychoanalysis and "
+            "behaviourism: humanistic psychology, which asked what lets a person grow. <bookmark mark='d'/> Then "
+            "the cognitive revolution, and after it cognitive neuroscience, which asks how the brain does it, and "
+            "evolutionary psychology, which asks what the mind was shaped to do. <bookmark mark='e'/> Now look at "
+            "how they ended. Structuralism died with its method. Most of the others were never simply refuted and "
+            "replaced, the way a theory is in physics. They narrowed into perspectives, kinds of question, and "
+            "their methods became common property: the laboratory, the question of function, the demonstrations, "
+            "the controlled experiment, therapy recorded and tested. This series uses all of them. How such "
+            "different questions fit together is the next chapter."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(cols), FadeIn(asked_h), Create(axis), FadeIn(ticks), FadeIn(tag))
+            for mark_, ks in zip("abcd", ((0, 1), (2, 3), (4, 5), (6, 7, 8))):
+                vo.wait_until(mark_)
+                self.play(LaggedStart(*show(ks), lag_ratio=0.5), run_time=1.6 + 0.4 * len(ks))
+            vo.wait_until("e")
+            self.play(bars[0].animate.set_opacity(0.25), *[Create(s) for s in streams[1:6]],
+                      *[bars[k].animate.set_fill(opacity=0.25) for k in range(1, 6)], run_time=1.6)
+            self.play(ReplacementTransform(asked_h, kept_h),
+                      LaggedStart(*[ReplacementTransform(q, k) for q, k in zip(asked, kept)], lag_ratio=0.15),
+                      run_time=3.0)
         self.clear_scene()
