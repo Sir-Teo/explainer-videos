@@ -153,18 +153,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"why does music move us, \ and can that be measured?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VIII: \ the mind", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"We have seen how the ear builds a scene.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 46", font_size=32, color=GREY_B), label(r"Expectation and Emotion", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "We have seen how the ear builds a scene. <bookmark mark='a'/> Why does music move us, and can that be measured? "
-            "<bookmark mark='b'/> Next time. Part 46: Expectation and Emotion."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 45, "Montreal, 2011",
+            "Why does music move us, and can that be measured?",
+            "We have seen how the ear builds a scene. <bookmark mark='a'/> In 2011 a brain-imaging study found "
+            "dopamine released at the moment of a musical chill, and also in the seconds of anticipation before it. "
+            "Fifty-five years earlier Leonard Meyer had argued that emotion in music is expectation, delayed and "
+            "fulfilled. Why does music move us, and can that be measured? <bookmark mark='b'/> Next time. Part 46: "
+            "Expectation and Emotion.")

@@ -147,19 +147,9 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act X: \ the studio and the stage", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"August 1965: \ fifty-five thousand people fill a baseball stadium, \ and nobody can hear the band.", font_size=23, color=WHITE).move_to(UP * 1.7)
-        q = label(r"why does a microphone howl, \ and why are loudspeakers hung in curves?", font_size=28, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 59", font_size=32, color=GREY_B), label(r"Live Sound", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "August 1965: fifty-five thousand people fill a baseball stadium, and nobody, the band included, can hear the band. "
-            "<bookmark mark='a'/> Why does a microphone howl, and why are loudspeakers hung in curves? <bookmark mark='b'/> Next "
-            "time. Part 59: Live Sound."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 58, "August 1965",
+            "Why does a microphone howl, and why are loudspeakers hung in curves?",
+            "August 1965: fifty-five thousand people fill a baseball stadium, and nobody, the band included, can hear "
+            "the band. <bookmark mark='a'/> Why does a microphone howl, and why are loudspeakers hung in curves? "
+            "<bookmark mark='b'/> Next time. Part 59: Live Sound.")

@@ -200,3 +200,4 @@ ratio priors on musical rhythm revealed cross-culturally by iterated reproductio
 N. Jacoby and others, "Commonality and variation in mental representations of music revealed by a cross-cultural
 comparison of rhythm priors in 15 countries", *Nature Human Behaviour* 8 (2024); K. Stockhausen, "… wie die Zeit
 vergeht …", *Die Reihe* 3 (1957).
+* G. Cooper and L. B. Meyer, *The Rhythmic Structure of Music* (1960): grouping and accent before GTTM.

@@ -153,6 +153,7 @@ python -m videos.music.labs 23                                  # the lab (write
   classification and natural units in plainchant", *ISMIR* (2020).
 * Part 11 for polyrhythms and least common multiples; Part 16 for organum and the rules of counterpoint; Part 17 for
   the chorales and the choir; Part 20 for the crab canon.
+* J. P. Burkholder, D. J. Grout and C. V. Palisca, *A History of Western Music* (10th ed., 2019), with the *Norton Anthology of Western Music*: the survey textbook for all of Act IV.
 
 ## Historical and measurement scope
 

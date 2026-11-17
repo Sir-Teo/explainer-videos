@@ -179,6 +179,7 @@ python -m videos.music.labs 47                                  # the lab (write
 * A. L. C. Wood and others, "The Global Jukebox", *PLOS ONE* (2022); M. Niarchou and others, "Genome-wide association
   study of musical beat synchronization demonstrates high polygenicity", *Nature Human Behaviour* (2022); B. Nettl, *The
   Study of Ethnomusicology* (3rd ed., 2015).
+* J. Blacking, *How Musical Is Man?* (1973); A. P. Merriam, *The Anthropology of Music* (1964): the definitions chapter 2 starts from.
 
 ## Interpretation limits
 

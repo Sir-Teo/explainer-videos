@@ -149,19 +149,9 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act XI: \ listening machines", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"A child can clap along to a song; \ for decades a program could not, \ and still taps at half or double speed.", font_size=23, color=WHITE).move_to(UP * 1.7)
-        q = label(r"where is the beat, \ what is the chord, \ and where does the chorus start?", font_size=28, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 62", font_size=32, color=GREY_B), label(r"Beat, \ Chords and Structure", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "A child can clap along to a song; for decades a program could not, and it still taps at half or double speed. "
-            "<bookmark mark='a'/> Where is the beat, what is the chord, and where does the chorus start? <bookmark mark='b'/> "
-            "Next time. Part 62: Beat, Chords and Structure."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 61, "half or double speed",
+            "Where is the beat, what is the chord, where does the chorus start?",
+            "A child can clap along to a song; for decades a program could not, and it still taps at half or double "
+            "speed. <bookmark mark='a'/> Where is the beat, what is the chord, and where does the chorus start? "
+            "<bookmark mark='b'/> Next time. Part 62: Beat, Chords and Structure.")

@@ -112,7 +112,8 @@ class Bands(SoundScene):
                      ).arrange(DOWN, buff=0.2).move_to(RIGHT * 3.9 + DOWN * 0.9)
         per = w["inner"] * d["mm_per_band"] / w["length_mm"]
         foot = label(rf"about {d['bands_to_16k']:.0f} bands side by side cover all of hearing; \ each is {d['mm_per_band']:.1f} mm of membrane, \ "
-                     rf"about {round(per, -1):.0f} hair cells", font_size=24, color=GREY_A).to_edge(DOWN, buff=0.35)
+                     rf"about {round(per, -1):.0f} hair cells \\ Zwicker's older, \ wider count \ (1961): \ 24 critical bands, \ the Bark scale",
+                     font_size=24, color=GREY_A).to_edge(DOWN, buff=0.35)
         with self.voiceover(
             "Fifty years of such experiments give a formula for the width at any frequency. "
             "<bookmark mark='a'/> At two hundred and fifty hertz the band is "
@@ -138,7 +139,9 @@ class Bands(SoundScene):
             "two notes close together in the bass sound thick and muddy, while the same two notes sound clean "
             "three octaves up. <bookmark mark='c'/> Lay these bands side by side and about "
             f"{say(d['bands_to_16k'])} of them cover the whole of hearing. Each is a little under a millimetre "
-            f"of membrane, and holds about {say(round(per, -1))} hair cells."
+            f"of membrane, and holds about {say(round(per, -1))} hair cells. An older count, by Eberhard Zwicker "
+            "in 1961, used wider bands and found twenty-four; his unit, the Bark, is still the ruler of many audio "
+            "codecs, as Part 58 will show."
         ) as vo:
             self.play(FadeOut(ask), FadeIn(ans), table[1][2].animate.set_opacity(1))
             vo.wait_until("a")
@@ -226,7 +229,7 @@ class Bands(SoundScene):
         d = load("bands")
         c = clip("bands.phrase")
         pic = picture(d["cochleagram"], -50, 0, 7.0, 4.3).move_to(LEFT * 2.2 + DOWN * 0.1)
-        head = label(r"the Tune's first phrase, \ as the cochlea delivers it", font_size=30, color=GREY_A).to_edge(UP, buff=0.4)
+        head = label(r"the Tune's first phrase, \ as the cochlea delivers it", font_size=30, color=GREY_A).to_corner(UL, buff=0.4)
         ylab = VGroup(label(r"apex: \ 80 Hz", font_size=20, color=GREY_B).next_to(pic.frame.get_corner(DL), LEFT, buff=0.12),
                       label(r"base: \ 6 kHz", font_size=20, color=GREY_B).next_to(pic.frame.get_corner(UL), LEFT, buff=0.12),
                       label(r"64 places", font_size=20, color=GREY_B).rotate(PI / 2).next_to(pic.frame, LEFT, buff=0.2))

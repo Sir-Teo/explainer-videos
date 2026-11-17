@@ -154,18 +154,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what happens when the effect is not linear?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act IX: \ electric sound", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Every effect in this part obeyed superposition.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 50", font_size=32, color=GREY_B), label(r"Dynamics, \ Distortion and Pitch", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Every effect in this part obeyed superposition. <bookmark mark='a'/> What happens when the effect is not linear? "
-            "<bookmark mark='b'/> Next time. Part 50: Dynamics, Distortion and Pitch."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 49, "1951, and 1998",
+            "What happens when the effect is not linear?",
+            "Every effect in this part obeyed superposition. <bookmark mark='a'/> Two accidents made two sounds. An "
+            "amplifier damaged on the way to a session in 1951 gave a record its fuzz, and in 1998 a pitch corrector "
+            "set to act instantly made a voice snap between notes, and that became a style. What happens when the "
+            "effect is not linear? <bookmark mark='b'/> Next time. Part 50: Dynamics, Distortion and Pitch.")

@@ -114,7 +114,9 @@ class Loud(SoundScene):
         bx = boxes((r"one note", r"the same, \ $+10$ dB"), buff=0.8, width=3.4, height=1.3, font_size=30).move_to(RIGHT * 2.9 + UP * 1.9)
         with self.voiceover(
             "Phons say when two sounds are equally loud. They do not say how much louder one sound is than "
-            "another. In 1936 Stanley Stevens asked listeners a blunter question: make this sound twice as loud. "
+            "another. In 1860 Gustav Fechner had proposed that a sensation grows with the logarithm of what causes it, "
+            "and the decibel follows his idea. In 1936 Stanley Stevens asked listeners a blunter question: make this "
+            "sound twice as loud. "
             "<bookmark mark='a'/> Try his result. Here is a note, and then the same note with ten times the "
             "power, ten decibels more. How much louder is the second?"
         ) as vo:
@@ -140,7 +142,7 @@ class Loud(SoundScene):
         g.shift(UP * 0.35)
         VGroup(line, dots).shift(UP * 0.35)
         with self.voiceover(
-            "Most people say: about twice as loud. Not ten times. <bookmark mark='a'/> That is Stevens's law. For similar spectra at moderate and higher levels, ten times the power is heard as roughly twice the loudness, and his unit, the sone, doubles with every ten "
+            "Most people say: about twice as loud. Not ten times. <bookmark mark='a'/> That is Stevens's law, a power law rather than Fechner's logarithm. For similar spectra at moderate and higher levels, ten times the power is heard as roughly twice the loudness, and his unit, the sone, doubles with every ten "
             "phons. Loudness grows as roughly the zero point three power of the sound's power. "
             "<bookmark mark='b'/> And it settles something from Part 2. We found there that ten violins playing "
             "together are ten decibels stronger than one. Now we can say what that sounds like: twice as loud. To "

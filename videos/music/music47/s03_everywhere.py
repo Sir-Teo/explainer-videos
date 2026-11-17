@@ -8,10 +8,29 @@ from videos.music.music47.common import *  # noqa: F403
 class Everywhere(SoundScene):
     def construct(self):
         chapter(self, 2, r"Every society sings", r"Is there anything all music does?")
+        self.definition()
         self.ethnography()
         self.quiz()
         self.form()
         self.contexts()
+
+    # ------------------------------------------------------------------
+    def definition(self):
+        items = [
+            (r"Alan Merriam, \ \textit{The Anthropology of Music} \ (1964): \ study what people think, \ what they do, \ "
+             r"and the sound, \ together", WHITE),
+            (r"John Blacking, \ \textit{How Musical Is Man?} \ (1973): \ music is `humanly organized sound'", WHITE),
+            (r"from the Venda of South Africa: \ musicality is a capacity everyone has, \ not a rare gift", WHITE),
+            (r"many languages have no single word for `music': \ song, \ dance and drumming can be one practice", TUNE),
+            (r"so a count across the world must say what it counts", GREY_A),
+        ]
+        rows_scene(self, r"what would count?", items,
+                   "First, what would count as music? <bookmark mark='b'/> In 1964 the anthropologist Alan Merriam proposed "
+                   "studying three things at once: what people think about music, what they do with it, and the sound itself. "
+                   "<bookmark mark='c'/> In 1973 John Blacking defined music as humanly organized sound, <bookmark mark='d'/> and "
+                   "from his years with the Venda in South Africa argued that musicality is a capacity everyone has, not a rare "
+                   "gift. <bookmark mark='e'/> Many languages have no single word for music: song, dance and drumming can be one "
+                   "practice. <bookmark mark='f'/> So a count across the world has to say what it counts.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def ethnography(self):
@@ -23,7 +42,7 @@ class Everywhere(SoundScene):
             (r"and a typical society's songs vary more among themselves than societies differ from one another", GREY_A),
         ]
         rows_scene(self, r"the natural history of song", items,
-                   "In 2019 Samuel Mehr and a large team published the Natural History of Song. <bookmark mark='b'/> They read "
+                   "In 2019 Samuel Mehr and a large team counted song, in the Natural History of Song. <bookmark mark='b'/> They read "
                    "ethnographies of 315 societies and found music described in every one. <bookmark mark='c'/> They also "
                    "gathered field recordings of four kinds of song from around the world: dance songs, healing songs, love "
                    "songs and lullabies. <bookmark mark='d'/> Songs made for the same purpose turned out to share features "

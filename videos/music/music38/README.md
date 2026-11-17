@@ -132,6 +132,7 @@ python -m videos.music.labs 38                                  # the lab (write
 * M. Pfleiderer, K. Frieler, J. Abeßer, W.-G. Zaddach and B. Burkhart (eds.), *Inside the Jazzomat* (2017), on the
   Weimar Jazz Database.
 * Part 13 for seventh chords; Part 18 for progressions; Part 32 for voice leading as distance; Part 37 for timelines.
+* T. Gioia, *The History of Jazz* (3rd ed., 2021); L. Armstrong and his Hot Five, the OKeh recordings (Chicago, 1925--28), discussed and not played.
 
 ## Interpretation limits
 

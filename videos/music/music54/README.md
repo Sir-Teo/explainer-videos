@@ -125,3 +125,4 @@ python -m videos.music.labs 54                                  # the lab (write
   D. R. Morgan, *Active Noise Control Systems* (1996).
 * W. Klippel, "Loudspeaker nonlinearities: causes, parameters, symptoms", *JAES* (2006); J. Benesty, J. Chen and Y. Huang,
   *Microphone Array Signal Processing* (2008).
+* F. E. Toole, *Sound Reproduction: The Acoustics and Psychoacoustics of Loudspeakers and Rooms* (3rd ed., 2018).

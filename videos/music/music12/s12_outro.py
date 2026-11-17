@@ -170,16 +170,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        kb = keyboard(0, 12, width=7.0, height=1.8, lit=(0, 4, 7)).move_to(UP * 1.2)
-        q = label(r"three notes of a scale, \ sounded together. \ Why these three?", font_size=32, color=EAR).move_to(DOWN * 0.6)
-        nxt = VGroup(label(r"Part 13", font_size=32, color=GREY_B), label(r"Intervals and Chords", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "We have chosen our notes. So far we have played them one at a time. The next question is what happens when notes of a scale sound together. <bookmark mark='a'/> Take every other note of the scale, three of them, and you have a triad central to many Western-style tonal songs. Why that spacing, and how many chords does a scale contain? <bookmark mark='b'/> Next time. Part 13: Intervals and Chords."
-        ) as vo:
-            self.play(FadeIn(kb))
-            vo.wait_until("a")
-            self.play(FadeIn(q), *[Indicate(kb.key[n], color=GOLD) for n in (0, 4, 7)])
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 12, "Paris, 1722",
+            "Are C--E--G and E--G--C the same chord?",
+            "We have chosen our notes, and so far played them one at a time. <bookmark mark='a'/> In 1722 "
+            "Jean-Philippe Rameau made a radical claim: C, E, G and E, G, C are the same chord, one thing turned "
+            "over. If he is right, a thicket of intervals becomes a small vocabulary. What makes a chord, and how "
+            "many does one scale contain? <bookmark mark='b'/> Next time. Part 13: Intervals and Chords.")

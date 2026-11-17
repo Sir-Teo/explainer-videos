@@ -155,7 +155,8 @@ class Outro(SoundScene):
             [r"R. O. Gjerdingen, \ \textit{Music in the Galant Style} \ (2007)",
              r"G. Sanguinetti, \ \textit{The Art of Partimento} \ (2012)",
              r"F. Campion, \ \textit{Trait\'e d'accompagnement et de composition selon la r\`egle des octaves} \ (1716)",
-             r"S. G. Laitz, \ \textit{The Complete Musician} \ (4th ed., \ 2015)"],
+             r"S. G. Laitz, \ \textit{The Complete Musician} \ (4th ed., \ 2015)",
+             r"W. Piston, \ \textit{Harmony} \ (1941; \ 5th ed., \ rev. M. DeVoto, \ 1987)"],
             [r"N. Mee\`us, \ ``Toward a post-Schoenbergian grammar of tonal and pre-tonal harmonic progressions'', \ \textit{Music Theory Online} 6 (2000)",
              r"M. Rohrmeier, \ ``Towards a generative syntax of tonal harmony'', \ \textit{Journal of Mathematics and Music} 5 (2011)",
              r"T. de Clercq and D. Temperley, \ ``A corpus analysis of rock harmony'', \ \textit{Popular Music} 30 (2011)",
@@ -169,19 +170,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"how can music reach a distant key in a single chord?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"one key, \ and its neighbours", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        nxt = VGroup(label(r"Part 19", font_size=32, color=GREY_B), label(r"Chromatic Harmony", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "This part's syntax keeps to one key, and moves from it to its neighbours. <bookmark mark='a'/> But in "
-            "the nineteenth century composers learned to reach distant keys in a single chord, by moving a voice "
-            "or two by a semitone. How does a chord change its meaning on the way? <bookmark mark='b'/> Next time. "
-            "Part 19: Chromatic Harmony."
-        ) as vo:
-            self.play(FadeIn(top))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 18, "Munich, 1865",
+            "How does a chord change its meaning on the way to a distant key?",
+            "This part's syntax keeps to one key, and moves from it to its neighbours. <bookmark mark='a'/> In 1865, "
+            "in Munich, an opera reached the stage that begins with a chord musicians have argued over ever since: F, "
+            "B, D sharp, G sharp. Nineteenth-century composers learned to reach distant keys in a single chord, by "
+            "moving a voice or two by a semitone. How does a chord change its meaning on the way? "
+            "<bookmark mark='b'/> Next time. Part 19: Chromatic Harmony.")

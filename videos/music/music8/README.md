@@ -190,3 +190,4 @@ playing effects?", *JASA* 118 (2005); G. P. Scavone, A. Lefebvre and A. R. da Si
 influence during saxophone performance", *JASA* 123 (2008); J.-M. Chen, J. Smith and J. Wolfe, "Experienced
 saxophonists learn to tune their vocal tracts", *Science* 319 (2008), and "Pitch bending and glissandi on the
 clarinet: roles of the vocal tract and partial tone hole closure", *JASA* 126 (2009).
+* D. M. Campbell and C. A. Greated, *The Musician's Guide to Acoustics* (1987).

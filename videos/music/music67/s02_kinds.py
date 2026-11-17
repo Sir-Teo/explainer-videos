@@ -9,6 +9,7 @@ class Kinds(SoundScene):
     def construct(self):
         chapter(self, 1, r"Kinds of knowing", r"What counts as evidence about music?")
         self.kinds()
+        self.turns()
         self.example()
         self.questions()
 
@@ -42,6 +43,28 @@ class Kinds(SoundScene):
                 self.play(FadeIn(r), run_time=0.6)
         self.wait(0.6)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def turns(self):
+        items = [
+            (r"Mantle Hood \ (1960): \ `bi-musicality': \ learn to perform the music you study", WHITE),
+            (r"Joseph Kerman, \ \textit{Contemplating Music} \ (1985): \ musicology had become facts about sources; \ it "
+             r"should be criticism too", WHITE),
+            (r"Lydia Goehr, \ \textit{The Imaginary Museum of Musical Works} \ (1992): \ the fixed `work' is an idea that "
+             r"settled around 1800", WHITE),
+            (r"Christopher Small, \ \textit{Musicking} \ (1998): \ music is an activity, \ and everyone taking part is doing it", WHITE),
+            (r"each moved what counts as evidence: \ the player's body, \ the critic's reading, \ the history of the idea, \ "
+             r"the event", TUNE),
+        ]
+        rows_scene(self, r"how the field argued", items,
+                   "The six did not arrive peacefully. <bookmark mark='b'/> In 1960 Mantle Hood asked ethnomusicologists to "
+                   "learn to perform the music they study, and called it bi-musicality. <bookmark mark='c'/> In 1985 Joseph "
+                   "Kerman's Contemplating Music argued that musicology had become the gathering of facts about sources, and "
+                   "should be criticism as well. <bookmark mark='d'/> In 1992 the philosopher Lydia Goehr argued that the idea "
+                   "of a fixed musical work, the thing a performance is of, settled into place around 1800, and is itself "
+                   "historical. <bookmark mark='e'/> In 1998 Christopher Small went further: music is not a thing but an "
+                   "activity, musicking, and the listeners, the dancers, even the person taking tickets at the door, are doing "
+                   "it. <bookmark mark='f'/> Each of them moved what counts as evidence.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def questions(self):

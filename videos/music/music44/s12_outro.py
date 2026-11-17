@@ -134,7 +134,9 @@ class Outro(SoundScene):
             [r"F. Karlin and R. Wright, \ \textit{On the Track} \ (2nd ed., \ 2004)",
              r"F. Lehman, \ \textit{Hollywood Harmony} \ (2018)",
              r"K. Collins, \ \textit{Game Sound} \ (2008)",
-             r"A. J. Cohen, \ `Congruence-association model of music and multimedia' \ (2013)"],
+             r"A. J. Cohen, \ `Congruence-association model of music and multimedia' \ (2013)",
+             r"C. Gorbman, \ \textit{Unheard Melodies} \ (1987)",
+             r"M. Chion, \ \textit{Audio-Vision} \ (1990; \ tr.\ C. Gorbman, \ 1994)"],
             [r"M. G. Boltz, \ `Musical soundtracks as a schematic influence on the cognitive processing of filmed events' \ (2001)",
              r"ITU-R BT.1359, \ `Relative timing of sound and vision for broadcasting' \ (1998)",
              r"M. Z. Land and P. N. McConnell, \ the iMUSE patent \ (1994)",
@@ -147,19 +149,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"how does the ear decide which sounds belong together?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VIII: \ the mind", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"The craft is done: \ composing, \ performing, \ scoring.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 45", font_size=32, color=GREY_B), label(r"The Scene", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "The craft is done: orchestrating, composing, performing and scoring. Act eight turns to the mind. "
-            "<bookmark mark='a'/> When many sounds arrive at once, how does the ear decide which belong together? "
-            "<bookmark mark='b'/> Next time. Part 45: The Scene."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 44, "headphones on",
+            "When many sounds arrive at once, how does the ear decide which belong together?",
+            "The craft is done: orchestrating, composing, performing and scoring. Act Eight turns to the mind. "
+            "<bookmark mark='a'/> Send a jumping line of notes to each ear, and many listeners hear two smooth scales "
+            "instead, one on each side, which neither ear was given. When many sounds arrive at once, how does the "
+            "ear decide which belong together? <bookmark mark='b'/> Act Eight begins. Part 45: The Scene.")

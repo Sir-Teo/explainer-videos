@@ -160,3 +160,4 @@ I. Ortgies and by J. O'Donnell, *Early Music* 34 (2006); D. M. Howard, "Intonati
 tenor, bass quartet singing with key modulation", *Journal of Voice* 21 (2007); S. D'Amario, D. M. Howard,
 H. Daffern and N. Pennill, "A longitudinal study of intonation in an a cappella singing quintet", *Journal of
 Voice* 34 (2020); W. A. Sethares, "Adaptive tunings for musical scales", *JASA* 96 (1994).
+* H. Partch, *Genesis of a Music* (1949; 2nd ed., 1974): the 43-tone just scale of chapter 7's last beat, listed ratio by ratio in the scene; G. Loy, *Musimathics*, vol. 1 (2006), for the arithmetic of temperaments.

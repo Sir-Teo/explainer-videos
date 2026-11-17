@@ -150,7 +150,8 @@ class Outro(SoundScene):
             [r"J. S. Bach, \ \textit{371 vierstimmige Choralges\"ange}, \ ed. C. P. E. Bach \ (Breitkopf, \ 1784--87)",
              r"E. Aldwell and C. Schachter, \ \textit{Harmony and Voice Leading} \ (1978; \ 4th ed. 2011)",
              r"S. Kostka and D. Payne, \ \textit{Tonal Harmony} \ (1984; \ 8th ed. 2018)",
-             r"D. Huron, \ \textit{Voice Leading: The Science behind a Musical Art} \ (2016)"],
+             r"D. Huron, \ \textit{Voice Leading: The Science behind a Musical Art} \ (2016)",
+             r"J. P. Clendinning and E. W. Marvin, \ \textit{The Musician's Guide to Theory and Analysis} \ (4th ed., \ 2021)"],
             [r"K. Ebcio\u{g}lu, \ ``An expert system for harmonizing four-part chorales'', \ \textit{Computer Music Journal} 12 (1988)",
              r"M. Allan and C. K. I. Williams, \ ``Harmonising chorales by probabilistic inference'', \ \textit{NIPS} 17 (2005)",
              r"G. Hadjeres, \ F. Pachet and F. Nielsen, \ ``DeepBach'', \ \textit{ICML} (2017)",
@@ -164,21 +165,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        ex = [(72, 64, 55, 48), (72, 65, 57, 53), (71, 62, 55, 43), (72, 64, 55, 48)]
-        st = block_staff(ex, width=5.0, beats=2).move_to(UP * 1.3)
-        q = label(r"why does IV go to V, \ and V to I?", font_size=30, color=EAR).move_to(DOWN * 0.8)
-        nxt = VGroup(label(r"Part 18", font_size=32, color=GREY_B), label(r"Progressions", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "This part counted which chord follows which, and used the table without asking why. "
-            "<bookmark mark='a'/> Why does four go to five, and five to one? Is there a grammar of chords, "
-            "like the grammar of a sentence, and did musicians learn it as children learn to speak? In the "
-            "conservatories of eighteenth-century Naples, orphans learned it as patterns, by heart. "
-            "<bookmark mark='b'/> Next time. Part 18: Progressions."
-        ) as vo:
-            self.play(FadeIn(st))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 17, "Naples, the eighteenth century",
+            "Is there a grammar of chords, and can it be learned by heart?",
+            "This part counted which chord follows which, and used the table without asking why. <bookmark mark='a'/> "
+            "Why does four go to five, and five to one? Is there a grammar of chords, like the grammar of a sentence? "
+            "In the conservatories of eighteenth-century Naples, boys from poor families learned it as patterns, by "
+            "heart, and became some of the most employable composers in Europe. <bookmark mark='b'/> Next time. Part "
+            "18: Progressions.")

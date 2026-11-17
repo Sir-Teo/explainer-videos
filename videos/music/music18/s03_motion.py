@@ -25,12 +25,16 @@ class RootMotion(SoundScene):
         bw = sum(d.get(k, 0) for k in ORDER[3:6])
         cap = label(rf"falling fifths, \ falling thirds, \ rising steps: \ {100 * fw / (fw + bw):.0f} in a hundred of the moves that go anywhere", font_size=24, color=TUNE).to_edge(DOWN, buff=0.45)
         head = label(r"root motion", font_size=30, color=GREY_A).to_edge(UP, buff=0.45)
+        piston = label(r"W. Piston, \ \textit{Harmony} \ (1941): \ a `table of usual root progressions'", font_size=22,
+                       color=GREY_B).next_to(t, UP, buff=0.3)
         with self.voiceover(
-            f"Now forget the jobs and follow the roots. From each chord to the next, how far does the root move? <bookmark mark='a'/> The commonest move by far is a falling fifth: five to one, two to five, six to two. It is {say(round(100 * d['fifth down'] / tot))} moves in a hundred. <bookmark mark='b'/> Then rising steps and falling thirds. Their inverses, the rising fifth, the rising third and the falling step, are all rarer. <bookmark mark='c'/> Nicolas Meeùs grouped them this way in 2000: falling fifths, falling thirds and rising steps carry harmony forward, the others form his contrasting category; these labels are analytical conventions, and in Bach the forward kind is {say(round(100 * fw / (fw + bw)))} in a hundred."
+            f"Now forget the jobs and follow the roots. From each chord to the next, how far does the root move? <bookmark mark='a'/> The commonest move by far is a falling fifth: five to one, two to five, six to two. It is {say(round(100 * d['fifth down'] / tot))} moves in a hundred. <bookmark mark='b'/> Then rising steps and falling thirds. Their inverses, the rising fifth, the rising third and the falling step, are all rarer. <bookmark mark='p'/> Walter Piston's textbook of 1941 printed this as a table of usual root progressions, which generations of students learned by heart: five usually goes to one, four usually goes to five. Here it is counted. <bookmark mark='c'/> Nicolas Meeùs grouped them this way in 2000: falling fifths, falling thirds and rising steps carry harmony forward, the others form his contrasting category; these labels are analytical conventions, and in Bach the forward kind is {say(round(100 * fw / (fw + bw)))} in a hundred."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch), FadeIn(t))
             vo.wait_until("a")
             self.play(Indicate(ch.bars[0], color=TUNE))
+            vo.wait_until("p")
+            self.play(FadeIn(piston))
             vo.wait_until("c")
             self.play(FadeIn(cap))
         self.wait(0.4)

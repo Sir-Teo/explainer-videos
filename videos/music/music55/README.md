@@ -145,3 +145,4 @@ python -m videos.music.labs 55                                  # the lab (write
 * B. S. Atal and M. R. Schroeder, US patent 3,236,949 (1966; filed 1962); W. G. Gardner and K. D. Martin, "HRTF
   measurements of a KEMAR", *JASA* (1995); V. R. Algazi et al., "The CIPIC HRTF database" (2001); N. Raghuvanshi and
   J. Snyder, "Parametric wave field coding for precomputed sound propagation", *ACM Trans. Graph.* (2014).
+* F. A. Everest and K. C. Pohlmann, *Master Handbook of Acoustics* (7th ed., 2021); F. Rumsey, *Spatial Audio* (2001).

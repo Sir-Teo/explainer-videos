@@ -152,18 +152,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what does a performer add that the score leaves out?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VII: \ the craft", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"A searcher wrote notes on a grid, \ every beat exactly in time.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 43", font_size=32, color=GREY_B), label(r"Performing", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Our searcher wrote notes on a grid, every beat exactly in time. <bookmark mark='a'/> What does a performer add "
-            "that the score leaves out? <bookmark mark='b'/> Next time. Part 43: Performing."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 42, "2007: a CD in a computer",
+            "What does a performer add that the score leaves out?",
+            "Our searcher wrote notes on a grid, every beat exactly in time. <bookmark mark='a'/> In 2007 a critic "
+            "put a celebrated pianist's CD into a computer, and the track database named another pianist. Timing "
+            "analysis helped show whose playing it was, because no two performers shape time alike. What does a "
+            "performer add that the score leaves out? <bookmark mark='b'/> Next time. Part 43: Performing.")

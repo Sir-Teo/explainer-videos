@@ -125,6 +125,7 @@ python -m videos.music.labs 40                                  # the lab (write
 * J. Seabrook, *The Song Machine* (2015); A. Danielsen, *Presence and Pleasure: The Funk Grooves of James Brown and
   Parliament* (2006).
 * Part 9 for membranes; Part 21 for form; Part 37 for interlocking; Part 38 for swing and the blues.
+* W. Everett, *The Foundations of Rock* (2009); A. F. Moore, *Song Means: Analysing and Interpreting Recorded Popular Song* (2012); R. Middleton, *Studying Popular Music* (1990).
 
 ## Interpretation limits
 

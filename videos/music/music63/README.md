@@ -141,3 +141,4 @@ python -m videos.music.labs 63                                  # the lab (write
   of attention economy", *Musicae Scientiae* (2018).
 
 Review qualifications: cached-library counts and fixed numerical examples describe a computation snapshot. Recognition rates are finite synthetic trials, not guarantees at commercial scale. Hash false-match arithmetic assumes uniform independent hashes and is not an operational false-positive certificate. Classifier standardization is fitted on each training split only; exact-run and embedding distances have limited scope.
+* P. Knees and M. Schedl, *Music Similarity and Retrieval: An Introduction to Audio- and Web-based Strategies* (2016).

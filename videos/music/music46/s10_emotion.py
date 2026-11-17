@@ -10,6 +10,7 @@ class Emotion(SoundScene):
         chapter(self, 9, r"Expressed emotion", r"How does music sound happy or sad?")
         self.quiz()
         self.cues()
+        self.contour()
         self.chills()
         self.mechanisms()
         self.sad()
@@ -74,6 +75,26 @@ class Emotion(SoundScene):
             self.play(FadeIn(cap))
         self.wait(0.4)
         self.clear_scene()
+
+    # ------------------------------------------------------------------
+    def contour(self):
+        items = [
+            (r"Peter Kivy, \ \textit{The Corded Shell} \ (1980): \ music resembles the voice and bearing of a person who feels "
+             r"the emotion", WHITE),
+            (r"a sad person speaks slowly, \ softly and low, \ in small steps; \ so does sad music", WHITE),
+            (r"Juslin and Laukka \ (2003): \ across 145 studies, \ the same cues carry emotion in speech and in performance", WHITE),
+            (r"expressive of sadness, \ as a Saint Bernard's face looks sad, \ without being sad: \ Hanslick half answered", TUNE),
+            (r"expressed is not the same as felt: \ what music does to the listener comes next", GREY_A),
+        ]
+        rows_scene(self, r"why the cues work", items,
+                   "Why do those cues sound sad? <bookmark mark='b'/> The philosopher Peter Kivy gave the answer that is still "
+                   "the starting point, in 1980: music resembles the voice and the bearing of a person who feels the emotion. "
+                   "<bookmark mark='c'/> A sad person speaks slowly, softly and low, in small steps, and so does sad music. "
+                   "<bookmark mark='d'/> In 2003 Patrik Juslin and Petri Laukka reviewed a hundred and forty-five studies and "
+                   "found the same cues carrying emotion in speech and in musical performance. <bookmark mark='e'/> So music can "
+                   "be expressive of sadness the way a Saint Bernard's face looks sad, without being sad itself; that is Kivy's "
+                   "reply to Hanslick, from chapter one. <bookmark mark='f'/> And expressed is not the same as felt. What music "
+                   "does to the listener comes next.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def sad(self):

@@ -167,3 +167,4 @@ sequences", *Psychological Research* 62 (1999); M. Rohrmeier and I. Cross, "Mode
 of artificial grammars: linking implicit and statistical learning", *Consciousness and Cognition* 27 (2014).
 
 Additional papers cited in the frontier: A. D. Patel, E. Gibson, J. Ratner, M. Besson and P. J. Holcomb, “Processing syntactic relations in language and music: an event-related potential study”, *Journal of Cognitive Neuroscience* 10 (1998), 717–733; S. Koelsch, T. Gunter, A. D. Friederici and E. Schröger, “Brain indices of music processing: ‘Nonmusicians’ are musical”, *Journal of Cognitive Neuroscience* 12 (2000), 520–541.
+* W. Piston, *Harmony* (1941; 5th ed., rev. M. DeVoto, 1987): the table of usual root progressions that chapter 2 counts.

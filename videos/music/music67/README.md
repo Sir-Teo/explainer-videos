@@ -131,3 +131,4 @@ python -m videos.music.labs 67                                  # the lab (write
   horse" (2014); ITU-R BS.1116 and BS.1534 (MUSHRA); ISO 16 (1975).
 
 Review qualifications: annotator pairwise agreement is not a universal model-performance ceiling. Power calculations assume the stated independent-trial or paired-rating model; finite synthetic audits are scoped checks. The series discusses fieldwork but its computations are not substitutes for community-based ethnographic research.
+* J. Kerman, *Contemplating Music: Challenges to Musicology* (1985); L. Goehr, *The Imaginary Museum of Musical Works* (1992); C. Small, *Musicking: The Meanings of Performing and Listening* (1998); M. Hood, "The challenge of 'bi-musicality'", *Ethnomusicology* 4 (1960): chapter 1's turns in the discipline.

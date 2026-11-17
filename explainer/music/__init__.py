@@ -486,4 +486,135 @@ def listen_card(question: str, color=None, width: float = 8.0, font_size=28) -> 
     return _card(head, _body(question, width - 0.8, font_size), color, width, accent=False)
 
 
+# ---------------------------------------------------------------------------
+# The bridge: how every part hands the viewer to the next one
+# ---------------------------------------------------------------------------
+def act_strip(part: int, nxt: int | None = None, font_size=18) -> VGroup:
+    """The parts of ``part``'s act as numbered beads: those before it filled grey, ``part`` itself white, the rest
+    open.  When ``nxt`` opens a new act, that act's first bead follows after a divider, under the new act's name.
+    ``.bead[p]`` is part p's bead, ``.head`` the act's name, ``.next_head`` the new act's (or None)."""
+    nxt = part + 1 if nxt is None else nxt
+    a = act_of(part)
+    name, (lo, hi) = ACTS[a - 1]
+    beads = VGroup()
+    bead = {}
+
+    def make(p, state):
+        fill, stroke, num = {"done": (GREY_D, GREY_D, GREY_B), "now": (WHITE, WHITE, BLACK),
+                             "later": (BLACK, GREY_D, GREY_C)}[state]
+        c = Circle(radius=0.2, stroke_color=stroke, stroke_width=1.6, fill_color=fill, fill_opacity=1)
+        t = label(rf"\textbf{{{p}}}" if state == "now" else str(p), font_size=font_size, color=num)
+        if t.width > 0.3:
+            t.width = 0.3
+        g = VGroup(c, t.move_to(c))
+        g.p = p
+        bead[p] = g
+        return g
+
+    for p in range(lo, hi + 1):
+        beads.add(make(p, "done" if p < part else "now" if p == part else "later"))
+    beads.arrange(RIGHT, buff=0.16)
+    head = label(r"Act " + name.replace(r".\ ", r" \textperiodcentered\ ", 1), font_size=font_size + 4, color=GREY_A)
+    head.next_to(beads, UP, buff=0.18).align_to(beads, LEFT)
+    g = VGroup(beads, head)
+    g.next_head = None
+    if nxt > hi and nxt <= 68:
+        rule = DashedLine(UP * 0.3, DOWN * 0.3, color=GREY_D, stroke_width=1.5, dash_length=0.06)
+        rule.next_to(beads, RIGHT, buff=0.3)
+        b = make(nxt, "later").next_to(rule, RIGHT, buff=0.3)
+        nname = ACTS[act_of(nxt) - 1][0]
+        nh = label(r"Act " + nname.replace(r".\ ", r" \textperiodcentered\ ", 1) + r"\ begins", font_size=font_size + 4,
+                   color=MC.TUNE)
+        nh.next_to(b, UP, buff=0.18).align_to(b, LEFT)
+        g.add(rule, b, nh)
+        g.next_head = nh
+    g.bead, g.head = bead, head
+    if g.width > 12.6:
+        g.width = 12.6
+    return g
+
+
+def centered_lines(text: str, max_width: float, font_size=36, color=WHITE) -> VGroup:
+    """A short paragraph broken into centred lines of balanced length (no wider than ``max_width``), for a question
+    that stands alone on the screen."""
+    from explainer.analysis import _tex_words, _wrapped_lines
+
+    def width(s):
+        return label(s, font_size=font_size).width
+
+    one = label(text, font_size=font_size, color=color)
+    if one.width <= max_width:
+        return VGroup(one)
+    words = _tex_words(text)
+    lines = _wrapped_lines(words, max_width, width)
+    w = max_width
+    while w > 2.0:  # narrow the measure while the number of lines holds: the lines come out even
+        trial = _wrapped_lines(words, w - 0.25, width)
+        if len(trial) > len(lines):
+            break
+        lines, w = trial, w - 0.25
+    return VGroup(*[label(ln, font_size=font_size, color=color) for ln in lines]).arrange(DOWN, buff=0.16)
+
+
+def next_part_card(part: int, kicker: str, question: str, nxt: int | None = None, width: float = 11.6) -> VGroup:
+    """The last screen of a part.  Top: the Chain, lit with ``part``'s links (``.chain``) and, ready to replace it,
+    with the next part's (``.chain_next``).  Middle: the scene the next part opens on (``kicker``: a place and a
+    year, or what the viewer will be asked) and the question it answers.  Below: the act as beads, and the next
+    part's number and title (``.title``).  :func:`play_next_part` animates it."""
+    nxt = part + 1 if nxt is None else nxt
+    links, nlinks = PART_LINKS.get(part, ()), PART_LINKS.get(nxt, ())
+    detour = any(k in links for k, _ in DETOUR) or any(k in nlinks for k, _ in DETOUR)
+    ch = chain(lit=links, detour=detour).to_edge(UP, buff=0.4)
+    ch2 = chain(lit=nlinks, detour=detour).move_to(ch)
+    k = label(kicker, font_size=26, color=GREY_B) if kicker else VMobject()
+    q = centered_lines(question, width, 40, MC.EAR)
+    mid = VGroup(k, q).arrange(DOWN, buff=0.28) if kicker else VGroup(q)
+    strip = act_strip(part, nxt)
+    title = VGroup(label(rf"Part {nxt}", font_size=30, color=GREY_B),
+                   label(PARTS[nxt], font_size=50, color=MC.TUNE)).arrange(DOWN, buff=0.16)
+    if title[1].width > 12.4:
+        title[1].width = 12.4
+    title.to_edge(DOWN, buff=0.45)
+    strip.next_to(title, UP, buff=0.42)
+    top = ch.get_bottom()[1] - 0.25
+    bottom = strip.get_top()[1] + 0.25
+    if mid.height > top - bottom:
+        mid.height = top - bottom
+    mid.move_to([0, (top + bottom) / 2, 0])
+    done = VGroup(label(rf"Part {part}", font_size=30, color=GREY_B), label(PARTS[part], font_size=44, color=WHITE))
+    done.arrange(DOWN, buff=0.16)
+    if done.width > 12.0:
+        done.width = 12.0
+    done.move_to(mid)
+    g = VGroup(ch, mid, strip, title)
+    g.chain, g.chain_next, g.kicker, g.question, g.strip, g.title = ch, ch2, k, q, strip, title
+    g.done = done  # the part just finished, shown in the question's place until the question is asked
+    g.part, g.nxt = part, nxt
+    return g
+
+
+def play_next_part(scene, part: int, kicker: str, question: str, text: str, nxt: int | None = None):
+    """Narrate the bridge to the next part over :func:`next_part_card`.  It opens on the part just finished, its
+    links lit on the Chain and its bead on the act's strip.  ``text`` carries two bookmarks: at ``a`` the next part's
+    opening scene and question take its place and the Chain moves to the next part's links; at ``b`` the next part
+    is named and its bead lights.  Ends on a clear screen."""
+    card = next_part_card(part, kicker, question, nxt)
+    nb = card.strip.bead[card.nxt] if card.nxt in card.strip.bead else None
+    with scene.voiceover(text) as vo:
+        scene.play(FadeIn(card.chain), FadeIn(card.done), FadeIn(card.strip, lag_ratio=0.05), run_time=1.2)
+        vo.wait_until("a")
+        moves = [FadeOut(card.done, shift=UP * 0.15), FadeIn(card[1], shift=UP * 0.15)]
+        if PART_LINKS.get(card.part, ()) != PART_LINKS.get(card.nxt, ()):
+            moves.append(FadeTransform(card.chain, card.chain_next))
+        scene.play(*moves, run_time=1.2)
+        vo.wait_until("b")
+        lit = []
+        if nb is not None:
+            lit = [nb[0].animate.set_fill(MC.TUNE, 1).set_stroke(MC.TUNE), nb[1].animate.set_color(BLACK)]
+        scene.play(*lit, FadeIn(card.title, shift=UP * 0.2), run_time=1.0)
+    scene.wait(1.0)
+    scene.clear_scene()
+    return card
+
+
 from explainer.music.viz import *  # noqa: F401,F403,E402

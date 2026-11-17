@@ -175,19 +175,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"is there a grammar of music, \ as there is of language?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"forms: \ plans of sections", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        nxt = VGroup(label(r"Part 22", font_size=32, color=GREY_B), label(r"Analysis", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "This part treated form as a plan of sections, laid out in time. <bookmark mark='a'/> But analysts since "
-            "Heinrich Schenker have heard pieces as trees, every note an elaboration of a simpler one, and linguists have "
-            "asked whether that is a grammar. Is there a grammar of music, as there is of language? "
-            "<bookmark mark='b'/> Next time. Part 22: Analysis."
-        ) as vo:
-            self.play(FadeIn(top))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 21, "Vienna, 1935",
+            "Is there a grammar of music, as there is of language?",
+            "This part treated form as a plan of sections, laid out in time. <bookmark mark='a'/> But Heinrich "
+            "Schenker, in a book published in Vienna in 1935, claimed that every tonal masterpiece elaborates one "
+            "stepwise descent to the home note, and linguists have since asked whether hearing music is parsing it, "
+            "like a sentence. Is there a grammar of music, and what would it explain? <bookmark mark='b'/> Next time. "
+            "Part 22: Analysis.")

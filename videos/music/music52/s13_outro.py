@@ -165,19 +165,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act IX: \ electric sound", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"January 1983: \ two synthesizers from rival firms, \ joined by a five-pin cable.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        q = label(r"how did a few pages of specification run an industry for forty years?", font_size=28, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 53", font_size=32, color=GREY_B), label(r"MIDI, \ Sequencers and the DAW", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "In January 1983, on a trade-show floor, two synthesizers from rival firms were joined by a five-pin cable, and a key "
-            "pressed on one sounded the other. <bookmark mark='a'/> How did a few pages of specification run an industry for "
-            "forty years? <bookmark mark='b'/> Next time. Part 53: MIDI, Sequencers and the DAW."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 52, "January 1983",
+            "How did a few pages of specification run an industry for forty years?",
+            "In January 1983, on a trade-show floor, two synthesizers from rival firms were joined by a five-pin "
+            "cable, and a key pressed on one sounded the other. <bookmark mark='a'/> How did a few pages of "
+            "specification run an industry for forty years? <bookmark mark='b'/> Next time. Part 53: MIDI, Sequencers "
+            "and the DAW.")

@@ -154,18 +154,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"what is left when the key goes?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act IV complete: \ a thousand years, \ from chant to Mahler", font_size=28, color=GREY_A).to_edge(UP, buff=0.8)
-        nxt = VGroup(label(r"Act V, \ Part 28", font_size=32, color=GREY_B), label(r"New Scales, \ New Rhythms", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "That completes Act Four: a thousand years, from one line of chant to Mahler's orchestra. <bookmark mark='a'/> "
-            "The last measurement in this part was a jump: three selected later works are substantially less diatonic under this index; tonal music continued alongside them. What is left when it goes? "
-            "<bookmark mark='b'/> Act Five begins. Part 28: New Scales, New Rhythms."
-        ) as vo:
-            self.play(FadeIn(top))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 27, "Paris, 1889",
+            "What is left when the key goes?",
+            "That completes Act Four: a thousand years, from one line of chant to Mahler's orchestra. "
+            "<bookmark mark='a'/> The last measurement in this part found the key loosening. What is left when it "
+            "goes? In Paris in 1889 a young Debussy heard a Javanese gamelan at the World's Fair, tuned to scales no "
+            "European piano could play. <bookmark mark='b'/> Act Five begins. Part 28: New Scales, New Rhythms.")

@@ -134,3 +134,4 @@ python -m videos.music.labs 56                                  # the lab (write
   Workshop on Intelligent Music Production (2017); C. J. Steinmetz, J. Pons, S. Pascual and J. Serrà, "Automatic multitrack
   mixing with a differentiable mixing console of neural audio effects", ICASSP (2021).
 * D. Wang, "On ideal binary mask as the computational goal of auditory scene analysis" (2005).
+* W. Moylan, *Understanding and Crafting the Mix* (3rd ed., 2015); D. M. Huber and R. E. Runstein, *Modern Recording Techniques* (9th ed., 2017).

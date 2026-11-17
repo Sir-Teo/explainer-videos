@@ -169,3 +169,4 @@ Communications* 15 (2024); L. J. Trainor and B. M. Heinmiller, "The development 
 infants prefer to listen to consonance over dissonance", *Infant Behavior and Development* 21 (1998); J. Plantinga
 and S. E. Trehub, "Revisiting the innate preference for consonance", *Journal of Experimental Psychology: Human
 Perception and Performance* 40 (2014).
+* J. G. Roederer, *The Physics and Psychophysics of Music* (4th ed., 2008): the standard bridge from acoustics to perception for music students.

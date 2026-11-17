@@ -140,18 +140,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"if orchestrating is search, \ is composing search too?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VII: \ the craft", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Orchestration searched among instruments for a sound.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 42", font_size=32, color=GREY_B), label(r"Composing", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Orchestration searched among instruments for a sound. <bookmark mark='a'/> If orchestrating is search, is "
-            "composing search too? <bookmark mark='b'/> Next time. Part 42: Composing."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 41, "Illinois, 1957",
+            "If orchestrating is search, is composing search too?",
+            "Orchestration searched among instruments for a sound. <bookmark mark='a'/> Composers keep sketchbooks: "
+            "draft after rejected draft. In 1957 a computer in Illinois wrote a string quartet by generating notes "
+            "and throwing away those that broke the rules. If orchestrating is search, is composing search too? "
+            "<bookmark mark='b'/> Next time. Part 42: Composing.")

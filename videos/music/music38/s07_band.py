@@ -19,6 +19,7 @@ class Band(SoundScene):
         items = [
             (r"the swing era: \ big bands of the mid-1930s to the mid-1940s, \ playing for dancers", WHITE),
             (r"Fletcher Henderson's band and his arrangers set the pattern in New York in the 1920s", WHITE),
+            (r"Louis Armstrong, \ Henderson's soloist in 1924--25, \ then the Hot Five records: \ the phrasing the bands learned", WHITE),
             (r"Benny Goodman's success in 1935 made swing the popular music of America", WHITE),
             (r"Duke Ellington, \ Count Basie, \ Chick Webb at Harlem's Savoy Ballroom, \ where the Lindy Hop was danced", TUNE),
             (r"music for dancing, \ written down by arrangers, \ with room for soloists", GREY_A),
@@ -26,10 +27,12 @@ class Band(SoundScene):
         rows_scene(self, r"the swing era", items,
                    "From the mid-1930s to the mid-1940s, swing was the popular music of America, played by big bands for "
                    "dancers. <bookmark mark='b'/> Fletcher Henderson's band and its arrangers had set the pattern in New York in "
-                   "the 1920s. <bookmark mark='c'/> Benny Goodman's success in 1935 carried it everywhere. <bookmark mark='d'/> "
+                   "the 1920s. <bookmark mark='c'/> Its soloist for a year from 1924 was Louis Armstrong, and his Hot Five "
+                   "records, made in Chicago from 1925, are where many historians hear swing phrasing begin: the band "
+                   "learned to play the way he did. <bookmark mark='d'/> Benny Goodman's success in 1935 carried it everywhere. <bookmark mark='e'/> "
                    "Duke Ellington, Count Basie, and Chick Webb at Harlem's Savoy Ballroom, where the Lindy Hop was danced, led "
-                   "the great bands. <bookmark mark='e'/> It was music for dancing, written down by arrangers, with room for "
-                   "soloists.", marks="bcde")
+                   "the great bands. <bookmark mark='f'/> It was music for dancing, written down by arrangers, with room for "
+                   "soloists.", marks="bcdef")
 
     # ------------------------------------------------------------------
     def sections(self):

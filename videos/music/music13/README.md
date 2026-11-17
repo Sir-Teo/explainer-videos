@@ -206,3 +206,4 @@ Rome: pitch representation and model architecture for automatic harmonic analysi
 International Society for Music Information Retrieval* 3 (2020); N. Nápoles López, M. Gotham and I. Fujinaga,
 "AugmentedNet: a Roman numeral analysis network with synthetic training examples and additional tonal tasks",
 *Proceedings of ISMIR* (2021).
+* G. S. Karpinski, *Aural Skills Acquisition* (2000): the theory of the ear thread's drills (interval, quality, inversion), from listening to dictation.

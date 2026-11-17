@@ -140,7 +140,8 @@ class Outro(SoundScene):
             [r"L. B. Meyer, \ \textit{Emotion and Meaning in Music} \ (1956)",
              r"D. Huron, \ \textit{Sweet Anticipation} \ (2006)",
              r"P. N. Juslin and J. A. Sloboda \ (eds.), \ \textit{Handbook of Music and Emotion} \ (2010)",
-             r"M. T. Pearce, \ `The construction and evaluation of statistical models of melodic structure' \ (2005)"],
+             r"M. T. Pearce, \ `The construction and evaluation of statistical models of melodic structure' \ (2005)",
+             r"P. Kivy, \ \textit{The Corded Shell} \ (1980)"],
             [r"V. N. Salimpoor and others, \ `Anatomically distinct dopamine release ...' \ (2011)",
              r"V. K. M. Cheung and others, \ `Uncertainty and surprise jointly predict musical pleasure' \ (2019)",
              r"M. A. G. Witek and others, \ `Syncopation, body-movement and pleasure in groove music' \ (2014)",
@@ -153,18 +154,10 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        q = label(r"is any of this universal, \ and where did music come from?", font_size=30, color=EAR).move_to(UP * 0.4)
-        top = label(r"Act VIII: \ the mind", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"Our listener learned from fifty Western tunes.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        nxt = VGroup(label(r"Part 47", font_size=32, color=GREY_B), label(r"Origins and Universals", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "Our listener learned from fifty Western tunes. <bookmark mark='a'/> Is any of this universal, and where did "
-            "music come from? <bookmark mark='b'/> Next time. Part 47: Origins and Universals."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 46, "Hohle Fels, 35{,}000 years ago",
+            "Is any of this universal, and where did music come from?",
+            "Our listener learned from fifty Western tunes. <bookmark mark='a'/> In a cave in south-west Germany lay "
+            "a flute cut from a vulture's wing bone, at least thirty-five thousand years old. Every known society "
+            "makes music, and no one agrees why. Is any of what we have measured universal, and where did music come "
+            "from? <bookmark mark='b'/> Next time. Part 47: Origins and Universals.")

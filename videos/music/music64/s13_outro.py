@@ -141,19 +141,9 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act XI: \ listening machines", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"1997: \ an audience hears three pieces, \ one by Bach, \ one by a professor in Bach's style, \ one by a program.", font_size=22, color=WHITE).move_to(UP * 1.7)
-        q = label(r"they pick the program's as the real Bach. \ \ What does a machine that composes know?", font_size=27, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 65", font_size=32, color=GREY_B), label(r"Machines that Compose", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "1997: an audience in Oregon hears three pieces, one by Bach, one by a music professor in Bach's style, and one by "
-            "a program. <bookmark mark='a'/> They pick the program's as the real Bach. What does a machine that composes know? "
-            "<bookmark mark='b'/> Next time. Part 65: Machines that Compose."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 64, "Oregon, 1997",
+            "What does a machine that composes know?",
+            "1997: an audience in Oregon hears three pieces, one by Bach, one by a music professor in Bach's style, "
+            "and one by a program. <bookmark mark='a'/> They pick the program's as the real Bach. What does a machine "
+            "that composes know? <bookmark mark='b'/> Next time. Part 65: Machines that Compose.")

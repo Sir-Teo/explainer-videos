@@ -158,7 +158,8 @@ class Outro(SoundScene):
             [r"J.-P. Rameau, \ \textit{Trait\'e de l'harmonie} \ (1722; \ trans. P. Gossett, 1971)",
              r"R. Parncutt, \ \textit{Harmony: A Psychoacoustical Approach} \ (1989)",
              r"S. Laitz, \ \textit{The Complete Musician} \ (4th ed., 2015), \ chs. 1--6",
-             r"D. Tymoczko, \ \textit{A Geometry of Music} \ (2011), \ chs. 2--3"],
+             r"D. Tymoczko, \ \textit{A Geometry of Music} \ (2011), \ chs. 2--3",
+             r"G. S. Karpinski, \ \textit{Aural Skills Acquisition} \ (2000)"],
             [r"R. Parncutt, \ ``Revision of Terhardt's psychoacoustical model of the root(s) of a musical chord'', \ \textit{Music Perception} 6 (1988)",
              r"L. Euler, \ \textit{Tentamen novae theoriae musicae} \ (1739)",
              r"R. Cohn, \ ``Neo-Riemannian operations, parsimonious trichords, and their Tonnetz representations'', \ \textit{J. Music Theory} 41 (1997)",
@@ -173,22 +174,11 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        kb = keys(60, 84, width=8.0, height=1.6).move_to(UP * 1.3)
-        q = label(r"a chord is notes at one moment. \ What makes a line of notes a tune?", font_size=32, color=EAR).move_to(DOWN * 0.5)
-        nxt = VGroup(label(r"Part 14", font_size=32, color=GREY_B), label(r"Melody", font_size=50, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "We have stacked notes on top of each other. But most of the music people carry in their "
-            "heads is not a stack. It is a line: one note after another. <bookmark mark='a'/> Why do "
-            "some lines of notes stick, so that you can sing them back after one hearing, while others "
-            "fall apart? What makes a row of pitches a tune? <bookmark mark='b'/> Next time. Part 14: "
-            "Melody."
-        ) as vo:
-            self.play(FadeIn(kb))
-            for k, m in enumerate((60, 60, 67, 67, 69, 69, 67)):
-                self.play(Indicate(kb.key[m - 60], color=GOLD, scale_factor=1.0), run_time=0.35)
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 13, "a rule centuries old",
+            "After a leap, turn back: is that craft, or arithmetic?",
+            "We have stacked notes on top of each other. But most of the music people carry in their heads is not a "
+            "stack. It is a line, one note after another. <bookmark mark='a'/> Open a textbook on writing melodies "
+            "and you will find a rule that is centuries old: after a leap, turn back. Is that the craft of composers, "
+            "or something any tune kept inside a range would do anyway? And what makes a row of pitches a tune? "
+            "<bookmark mark='b'/> Next time. Part 14: Melody.")

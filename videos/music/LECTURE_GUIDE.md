@@ -136,6 +136,14 @@ run long, cut a second example of a point already made, not a derivation step an
   ledger of variations (`variations_ledger`). Its clip is `variation.<name>` in the part's clip store and its
   notes are checked in the tests.
 - Each chapter card lights the links of the Chain the chapter touches and the years it visits on the timeline.
+- The outro ends on the bridge to the next part: `play_next_part(self, N, kicker, question, text)`. The kicker is the
+  scene the next part opens on, a place and a year where it has one (`"Cairo, 1932"`); the narration names the
+  scene and asks the question, with bookmark `a` where the question comes and `b` where the next part is named.
+  Tease only what the next hook delivers: write the teaser after reading the next part's `s01_hook.py`.
+- The reference card cites the field's standard textbook for the part's subject, not only the specialist sources;
+  `videos/music/READING.md` (written by `python -m videos.music.reading`) maps the textbooks and theories to the
+  parts, and `tests/music/test_reading.py` keeps it true. A new book or theory goes into `reading.py` with a pattern
+  that finds it in the parts that cite it.
 
 ## Names the voice must say
 

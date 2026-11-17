@@ -125,6 +125,7 @@ python -m videos.music.labs 34                                  # the lab (write
   publications on tonic identification, raga recognition and rhythm (2011–2017).
 * V. N. Bhatkhande, *Hindusthani Sangeet Paddhati* (1909–32); Venkatamakhin, *Caturdaṇḍīprakāśikā* (about 1660).
 * Part 5 for consonance; Part 6 for commas; Part 9 for the tabla's membrane; Part 11 for metre; Part 33 for cycles.
+* J. T. Titon (ed.), *Worlds of Music: An Introduction to the Music of the World's Peoples* (6th ed., 2017): the introductory textbook for Act VI.
 
 ## Interpretation limits
 

@@ -136,7 +136,8 @@ class Outro(SoundScene):
             [r"J. Eargle, \ \textit{The Microphone Book} \ (2nd ed., \ 2004)",
              r"L. L. Beranek and T. J. Mellow, \ \textit{Acoustics: \ Sound Fields and Transducers} \ (2012)",
              r"H. F. Olson, \ \textit{Acoustical Engineering} \ (1957)",
-             r"S. M. Kuo and D. R. Morgan, \ \textit{Active Noise Control Systems} \ (1996)"],
+             r"S. M. Kuo and D. R. Morgan, \ \textit{Active Noise Control Systems} \ (1996)",
+             r"F. E. Toole, \ \textit{Sound Reproduction} \ (3rd ed., \ 2018)"],
             [r"A. N. Thiele, \ `Loudspeakers in vented boxes' \ (1961; \ JAES 1971)",
              r"R. H. Small, \ `Closed-box loudspeaker systems' \ (JAES, \ 1972)",
              r"S. H. Linkwitz, \ `Active crossover networks for noncoincident drivers' \ (JAES, \ 1976)",
@@ -149,19 +150,9 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act X: \ the studio and the stage", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"In 1895 Harvard opened a lecture hall in which nobody could understand a word.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        q = label(r"what did a young physicist measure with an organ pipe and a stopwatch?", font_size=28, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 55", font_size=32, color=GREY_B), label(r"Rooms and Space", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "In 1895 Harvard opened a lecture hall in which nobody could understand a word. <bookmark mark='a'/> What did a young "
-            "physicist measure there, with an organ pipe and a stopwatch? <bookmark mark='b'/> Next time. Part 55: Rooms and "
-            "Space."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 54, "Harvard, 1895",
+            "What did a young physicist measure with an organ pipe and a stopwatch?",
+            "In 1895 Harvard opened a lecture hall in which nobody could understand a word. <bookmark mark='a'/> What "
+            "did a young physicist measure there, with an organ pipe and a stopwatch? <bookmark mark='b'/> Next time. "
+            "Part 55: Rooms and Space.")

@@ -141,19 +141,9 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act XI: \ listening machines", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"2002: \ in London you could dial four digits, \ hold your phone up in a noisy bar, \ and get the song's name by text.", font_size=23, color=WHITE).move_to(UP * 1.7)
-        q = label(r"how do ten bad seconds find one song among millions, \ and what decides what we hear next?", font_size=27, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 63", font_size=32, color=GREY_B), label(r"Finding Music", font_size=46, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "2002: in London you could dial four digits, hold your phone up in a noisy bar, and get the song's name back by "
-            "text message. <bookmark mark='a'/> How do ten bad seconds find one song among millions, and what decides what we "
-            "hear next? <bookmark mark='b'/> Next time. Part 63: Finding Music."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 62, "London, 2002",
+            "How do ten bad seconds find one song among millions?",
+            "2002: in London you could dial four digits, hold your phone up in a noisy bar, and get the song's name "
+            "back by text message. <bookmark mark='a'/> How do ten bad seconds find one song among millions, and what "
+            "decides what we hear next? <bookmark mark='b'/> Next time. Part 63: Finding Music.")

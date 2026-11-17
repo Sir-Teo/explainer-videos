@@ -157,7 +157,8 @@ class Outro(SoundScene):
             [r"C. Roads, \ \textit{The Computer Music Tutorial} \ (2nd ed., \ 2023)",
              r"W. Pirkle, \ \textit{Designing Software Synthesizer Plug-Ins in C++} \ (2nd ed., \ 2021)",
              r"T. Pinch and F. Trocco, \ \textit{Analog Days} \ (2002)",
-             r"V. Zavalishin, \ \textit{The Art of VA Filter Design} \ (2012, \ rev. 2018)"],
+             r"V. Zavalishin, \ \textit{The Art of VA Filter Design} \ (2012, \ rev. 2018)",
+             r"C. Dodge and T. A. Jerse, \ \textit{Computer Music} \ (2nd ed., \ 1997)"],
             [r"V. V\"alim\"aki and A. Huovilainen, \ `Oscillator and filter algorithms for virtual analog synthesis' \ (2006)",
              r"A. Huovilainen, \ `Non-linear digital implementation of the Moog ladder filter' \ (2004)",
              r"T. Stilson and J. Smith, \ `Alias-free digital synthesis of classic analog waveforms' \ (1996)",
@@ -170,18 +171,9 @@ class Outro(SoundScene):
 
     # ------------------------------------------------------------------
     def next_part(self):
-        top = label(r"Act IX: \ electric sound", font_size=30, color=GREY_A).to_edge(UP, buff=0.8)
-        lead = label(r"In 1967 a composer turned a vibrato up until it was faster than the note itself.", font_size=24, color=WHITE).move_to(UP * 1.7)
-        q = label(r"why did he hear bells?", font_size=30, color=EAR).move_to(UP * 0.4)
-        nxt = VGroup(label(r"Part 52", font_size=32, color=GREY_B), label(r"Synthesis II: \ FM, \ Grains and Physical Models", font_size=44, color=TUNE)).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.8)
-        with self.voiceover(
-            "In 1967 a composer at Stanford turned a vibrato up until it was faster than the note itself. <bookmark mark='a'/> "
-            "Why did he hear bells? <bookmark mark='b'/> Next time. Part 52: Synthesis Two, FM, Grains and Physical Models."
-        ) as vo:
-            self.play(FadeIn(top), FadeIn(lead))
-            vo.wait_until("a")
-            self.play(FadeIn(q))
-            vo.wait_until("b")
-            self.play(FadeIn(nxt, shift=UP * 0.2))
-        self.wait(1.0)
-        self.clear_scene()
+        play_next_part(
+            self, 51, "Stanford, 1967",
+            "Why did a vibrato faster than the note sound like a bell?",
+            "In 1967 a composer at Stanford turned a vibrato up until it was faster than the note itself. "
+            "<bookmark mark='a'/> Why did he hear bells? <bookmark mark='b'/> Next time. Part 52: Synthesis Two, FM, "
+            "Grains and Physical Models.")
