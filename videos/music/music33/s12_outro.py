@@ -155,4 +155,5 @@ class Outro(SoundScene):
             "not. <bookmark mark='a'/> In a North Indian concert a drummer plays one phrase three times, and "
             "musicians and audience land together on the first beat of the cycle. What does a whole tradition build "
             "from cycles of beats and families of scales? <bookmark mark='b'/> Act Six begins. Part 34: Raga and "
-            "Tala.")
+            "Tala.",
+            signoff=clip("bridge.signoff"))

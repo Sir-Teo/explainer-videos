@@ -41,7 +41,7 @@ from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments import drumkit as DK
 from explainer.music.monochord.instruments import percussion as PC
 from explainer.music.monochord.instruments import winds as W
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 
 CACHE = Cache("music37")
 CLIPS = ClipStore("music37")
@@ -636,9 +636,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation37"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation37", 37)
+
+
 ITEMS = {"hook": compute_hook, "scale": compute_scale, "metrics": compute_metrics, "ewe": compute_ewe, "threetwo": compute_threetwo,
          "hocket": compute_hocket, "mbira": compute_mbira, "inherent": compute_inherent, "clave": compute_clave, "son": compute_son,
-         "samba": compute_samba, "callresp": compute_callresp, "uneven": compute_uneven, "tune": compute_tune, "variation": compute_variation}
+         "samba": compute_samba, "callresp": compute_callresp, "uneven": compute_uneven, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

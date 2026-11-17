@@ -151,4 +151,5 @@ class Outro(SoundScene):
             "The row ordered pitch; total serialism ordered everything else, and the critics said the result was a "
             "cloud. <bookmark mark='a'/> The next step was to compose the cloud. In 1948 an engineer at French radio "
             "closed the groove of a disc of railway noises, and heard music. What if the material were not notes at "
-            "all, but sound itself? <bookmark mark='b'/> Next time. Part 30: Sound Itself.")
+            "all, but sound itself? <bookmark mark='b'/> Next time. Part 30: Sound Itself.",
+            signoff=clip("bridge.signoff"))

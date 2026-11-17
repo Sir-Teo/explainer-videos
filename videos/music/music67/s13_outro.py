@@ -140,4 +140,5 @@ class Outro(SoundScene):
             "The same notes. A different listener?",
             "Bach's Goldberg Variations end by playing the opening aria again, the same notes. <bookmark mark='a'/> "
             "It does not sound the same: what has changed is the listener. <bookmark mark='b'/> Next time, the last "
-            "part. Part 68: The Variations.")
+            "part. Part 68: The Variations.",
+            signoff=clip("bridge.signoff"))

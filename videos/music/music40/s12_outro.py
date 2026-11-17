@@ -167,4 +167,5 @@ class Outro(SoundScene):
             "Act Six has heard many musics; Act Seven turns to making music. <bookmark mark='a'/> In Ravel's Boléro "
             "one tune comes round eighteen times, and only the instruments change. At one point a horn, a celesta and "
             "two piccolos fuse into a single sound that no instrument has. How do you choose which instrument plays "
-            "which note? <bookmark mark='b'/> Act Seven begins. Part 41: Orchestration.")
+            "which note? <bookmark mark='b'/> Act Seven begins. Part 41: Orchestration.",
+            signoff=clip("bridge.signoff"))

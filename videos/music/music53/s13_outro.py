@@ -174,4 +174,5 @@ class Outro(SoundScene):
             "That ends the act on electric sound. Everything so far has been numbers inside a computer. "
             "<bookmark mark='a'/> Plug a pair of headphones into a microphone socket, speak into them, and they work. "
             "How does air become numbers, and numbers become air? <bookmark mark='b'/> Next time, the studio and the "
-            "stage begin. Part 54: Microphones and Loudspeakers.")
+            "stage begin. Part 54: Microphones and Loudspeakers.",
+            signoff=clip("bridge.signoff"))

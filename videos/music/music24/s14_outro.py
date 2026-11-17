@@ -156,4 +156,5 @@ class Outro(SoundScene):
             "Monteverdi's second practice put the words in charge, and the old rules gave way. <bookmark mark='a'/> "
             "In Florence the lutenist Vincenzo Galilei, the astronomer's father, was hanging weights on strings to "
             "test an ancient story, and arguing for a new kind of song. Out of that argument came opera, the figured "
-            "bass, and a new idea of key. <bookmark mark='b'/> Next time. Part 25: The Baroque.")
+            "bass, and a new idea of key. <bookmark mark='b'/> Next time. Part 25: The Baroque.",
+            signoff=clip("bridge.signoff"))

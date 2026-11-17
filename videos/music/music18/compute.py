@@ -39,7 +39,7 @@ from explainer.music.monochord import melody as M
 from explainer.music.monochord import progression as P
 from explainer.music.monochord.instruments.plucked import plucked as pluck
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 
 CACHE = Cache("music18")
 CLIPS = ClipStore("music18")
@@ -518,9 +518,16 @@ def compute_more() -> dict:
     return out
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation18", 18)
+
+
 ITEMS = {"hook": compute_hook, "functions": compute_functions, "motion": compute_motion, "predict": compute_predict, "sequence": compute_sequence,
          "rhythm": compute_rhythm, "octave": compute_octave, "schemata": compute_schemata, "census": compute_census, "grounds": compute_grounds,
-         "tune": compute_tune, "variation": compute_variation, "more": compute_more}
+         "tune": compute_tune, "variation": compute_variation, "more": compute_more,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

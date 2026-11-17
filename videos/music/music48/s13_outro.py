@@ -168,4 +168,5 @@ class Outro(SoundScene):
             "The sound is now a list of numbers. <bookmark mark='a'/> In 1947 an engineer put a loudspeaker and a "
             "microphone in a tiled bathroom and sold the echo. Fifteen years later, at Bell Labs, Manfred Schroeder "
             "built a room out of arithmetic. What can be done to a list of numbers? <bookmark mark='b'/> Next time. "
-            "Part 49: Filters, Delay and Reverb.")
+            "Part 49: Filters, Delay and Reverb.",
+            signoff=clip("bridge.signoff"))

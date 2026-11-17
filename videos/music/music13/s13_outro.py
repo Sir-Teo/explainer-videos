@@ -181,4 +181,5 @@ class Outro(SoundScene):
             "stack. It is a line, one note after another. <bookmark mark='a'/> Open a textbook on writing melodies "
             "and you will find a rule that is centuries old: after a leap, turn back. Is that the craft of composers, "
             "or something any tune kept inside a range would do anyway? And what makes a row of pitches a tune? "
-            "<bookmark mark='b'/> Next time. Part 14: Melody.")
+            "<bookmark mark='b'/> Next time. Part 14: Melody.",
+            signoff=clip("bridge.signoff"))

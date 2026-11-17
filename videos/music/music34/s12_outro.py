@@ -161,4 +161,5 @@ class Outro(SoundScene):
             "Raga is one great modal system. <bookmark mark='a'/> In 1932 a congress met in Cairo to settle, among "
             "other things, the Arab scale, and its scale committee heard many tunings and did not settle on one equal "
             "grid. In the Arab world, Turkey and Iran, related modal traditions place notes between the piano's keys, "
-            "by ear. What is a scale like that? <bookmark mark='b'/> Next time. Part 35: Maqam.")
+            "by ear. What is a scale like that? <bookmark mark='b'/> Next time. Part 35: Maqam.",
+            signoff=clip("bridge.signoff"))

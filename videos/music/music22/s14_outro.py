@@ -148,4 +148,5 @@ class Outro(SoundScene):
             "Act Four goes back eight hundred years, to a half-built cathedral in Paris, where singers stretched a "
             "single syllable of chant beneath voices dancing above it. To keep them together, someone had to find a "
             "way to write down rhythm. How did one line of chant become many voices? <bookmark mark='b'/> Next time. "
-            "Part 23: Chant to Polyphony.")
+            "Part 23: Chant to Polyphony.",
+            signoff=clip("bridge.signoff"))

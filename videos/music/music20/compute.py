@@ -38,7 +38,7 @@ from explainer.music.monochord import ear as EAR
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments.plucked import plucked as pluck
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 
 CACHE = Cache("music20")
 CLIPS = ClipStore("music20")
@@ -388,10 +388,17 @@ def compute_variation() -> dict:
             "measure": rf"the whole Tune against itself two beats later: {t['canon_faults']['dissonant']} dissonant beats in {t['canon_faults']['beats']}", "clip": "tune.variation20"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation20", 20)
+
+
 ITEMS = {"hook": compute_hook, "rounds": compute_rounds, "canons": compute_canons, "forms": compute_forms, "invertible": compute_invertible,
          "augment": compute_augment, "crab": compute_crab, "rising": compute_rising, "answers": compute_answers,
          "exposition": compute_exposition, "episode": compute_episode, "stretto": compute_stretto, "bach": compute_bach, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

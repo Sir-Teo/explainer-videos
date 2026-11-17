@@ -152,4 +152,5 @@ class Outro(SoundScene):
             "How can a file a tenth the size sound the same?",
             "The engineer tuning the first MP3 encoder tested it on one unaccompanied voice, because on that voice it "
             "sounded dreadful. <bookmark mark='a'/> How can a file a tenth the size sound the same? "
-            "<bookmark mark='b'/> Next time. Part 58: Compression for the Ear.")
+            "<bookmark mark='b'/> Next time. Part 58: Compression for the Ear.",
+            signoff=clip("bridge.signoff"))

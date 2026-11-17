@@ -38,7 +38,7 @@ from explainer.music.monochord import orchestra as O
 from explainer.music.monochord import screen as S
 from explainer.music.monochord import tune as T
 from explainer.music.monochord.instruments import choir as CH
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 from videos.music.music40 import compute as P40
 
@@ -530,9 +530,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation44"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation44", 44)
+
+
 ITEMS = {"scene": compute_scene, "hook": compute_hook, "three": compute_three, "sync": compute_sync, "motif": compute_motif,
          "harmony": compute_harmony, "mix": compute_mix, "game": compute_game, "switch": compute_switch, "quantise": compute_quantise, "duty": compute_duty, "noise": compute_noise,
-         "arp": compute_arp, "chip": compute_chip, "tune": compute_tune, "variation": compute_variation}
+         "arp": compute_arp, "chip": compute_chip, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

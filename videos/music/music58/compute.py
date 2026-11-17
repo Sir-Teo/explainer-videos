@@ -36,7 +36,7 @@ from explainer.music.monochord import codec as K
 from explainer.music.monochord import tune as T
 from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments import drumkit as DK
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music56 import compute as P56
 
 CACHE = Cache("music58")
@@ -361,9 +361,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation58"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation58", 58)
+
+
 ITEMS = {"hook": compute_hook, "lossless": compute_lossless, "masking": compute_masking, "mdct": compute_mdct, "preecho": compute_preecho,
          "rates": compute_rates, "stereo": compute_stereo, "abx": compute_abx, "transcode": compute_transcode, "rvq": compute_rvq,
-         "tune58": compute_tune58, "variation": compute_variation}
+         "tune58": compute_tune58, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

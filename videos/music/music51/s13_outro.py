@@ -176,4 +176,5 @@ class Outro(SoundScene):
             "Why did a vibrato faster than the note sound like a bell?",
             "In 1967 a composer at Stanford turned a vibrato up until it was faster than the note itself. "
             "<bookmark mark='a'/> Why did he hear bells? <bookmark mark='b'/> Next time. Part 52: Synthesis Two, FM, "
-            "Grains and Physical Models.")
+            "Grains and Physical Models.",
+            signoff=clip("bridge.signoff"))

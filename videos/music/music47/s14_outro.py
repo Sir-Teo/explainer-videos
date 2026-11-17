@@ -160,4 +160,5 @@ class Outro(SoundScene):
             "compact disc holds forty-four thousand one hundred numbers a second, a figure inherited from video "
             "recorders, and behind it is a theorem that sounds impossible: a smooth wave can be rebuilt exactly from "
             "its samples. What is a sound, once it becomes a list of numbers? <bookmark mark='b'/> Act Nine begins. "
-            "Part 48: Digital Audio.")
+            "Part 48: Digital Audio.",
+            signoff=clip("bridge.signoff"))

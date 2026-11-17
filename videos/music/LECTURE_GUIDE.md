@@ -140,6 +140,8 @@ run long, cut a second example of a point already made, not a derivation step an
   scene the next part opens on, a place and a year where it has one (`"Cairo, 1932"`); the narration names the
   scene and asks the question, with bookmark `a` where the question comes and `b` where the next part is named.
   Tease only what the next hook delivers: write the teaser after reading the next part's `s01_hook.py`.
+  Pass `signoff=clip("bridge.signoff")` so the part ends on the opening of its Variation; `compute.py` makes that
+  clip with `partkit.signoff(CLIPS, "tune.variationN", N)` as its last item (`compute_signoff`).
 - The reference card cites the field's standard textbook for the part's subject, not only the specialist sources;
   `videos/music/READING.md` (written by `python -m videos.music.reading`) maps the textbooks and theories to the
   parts, and `tests/music/test_reading.py` keeps it true. A new book or theory goes into `reading.py` with a pattern

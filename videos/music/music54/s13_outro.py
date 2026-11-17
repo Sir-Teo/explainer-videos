@@ -155,4 +155,5 @@ class Outro(SoundScene):
             "What did a young physicist measure with an organ pipe and a stopwatch?",
             "In 1895 Harvard opened a lecture hall in which nobody could understand a word. <bookmark mark='a'/> What "
             "did a young physicist measure there, with an organ pipe and a stopwatch? <bookmark mark='b'/> Next time. "
-            "Part 55: Rooms and Space.")
+            "Part 55: Rooms and Space.",
+            signoff=clip("bridge.signoff"))

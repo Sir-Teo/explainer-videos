@@ -146,4 +146,5 @@ class Outro(SoundScene):
             "Orchestration searched among instruments for a sound. <bookmark mark='a'/> Composers keep sketchbooks: "
             "draft after rejected draft. In 1957 a computer in Illinois wrote a string quartet by generating notes "
             "and throwing away those that broke the rules. If orchestrating is search, is composing search too? "
-            "<bookmark mark='b'/> Next time. Part 42: Composing.")
+            "<bookmark mark='b'/> Next time. Part 42: Composing.",
+            signoff=clip("bridge.signoff"))

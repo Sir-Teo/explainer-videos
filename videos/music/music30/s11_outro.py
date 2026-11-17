@@ -160,4 +160,5 @@ class Outro(SoundScene):
             "<bookmark mark='a'/> And a film score can step between two major chords that share no key while the "
             "audience feels wonder, though the old harmony has little to say about why. What do all these operations "
             "have in common, and what if we named the moves between chords, not the chords? <bookmark mark='b'/> Next "
-            "time. Part 31: Transformations.")
+            "time. Part 31: Transformations.",
+            signoff=clip("bridge.signoff"))

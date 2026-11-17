@@ -182,4 +182,5 @@ class Outro(SoundScene):
             "Schenker, in a book published in Vienna in 1935, claimed that every tonal masterpiece elaborates one "
             "stepwise descent to the home note, and linguists have since asked whether hearing music is parsing it, "
             "like a sentence. Is there a grammar of music, and what would it explain? <bookmark mark='b'/> Next time. "
-            "Part 22: Analysis.")
+            "Part 22: Analysis.",
+            signoff=clip("bridge.signoff"))

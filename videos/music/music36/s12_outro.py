@@ -147,4 +147,5 @@ class Outro(SoundScene):
             "What if the cycle itself were the music?",
             "The gamelan keeps time with gongs. <bookmark mark='a'/> One bell pattern, seven strokes in twelve "
             "pulses, is heard from Ghana to Cuba to Brazil. What if the cycle itself were the music, struck over and "
-            "over while everything else moves around it? <bookmark mark='b'/> Next time. Part 37: Timelines.")
+            "over while everything else moves around it? <bookmark mark='b'/> Next time. Part 37: Timelines.",
+            signoff=clip("bridge.signoff"))

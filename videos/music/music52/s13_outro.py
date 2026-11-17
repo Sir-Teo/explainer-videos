@@ -171,4 +171,5 @@ class Outro(SoundScene):
             "In January 1983, on a trade-show floor, two synthesizers from rival firms were joined by a five-pin "
             "cable, and a key pressed on one sounded the other. <bookmark mark='a'/> How did a few pages of "
             "specification run an industry for forty years? <bookmark mark='b'/> Next time. Part 53: MIDI, Sequencers "
-            "and the DAW.")
+            "and the DAW.",
+            signoff=clip("bridge.signoff"))

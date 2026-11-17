@@ -177,4 +177,5 @@ class Outro(SoundScene):
             "in Munich, an opera reached the stage that begins with a chord musicians have argued over ever since: F, "
             "B, D sharp, G sharp. Nineteenth-century composers learned to reach distant keys in a single chord, by "
             "moving a voice or two by a semitone. How does a chord change its meaning on the way? "
-            "<bookmark mark='b'/> Next time. Part 19: Chromatic Harmony.")
+            "<bookmark mark='b'/> Next time. Part 19: Chromatic Harmony.",
+            signoff=clip("bridge.signoff"))

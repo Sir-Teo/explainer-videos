@@ -40,7 +40,7 @@ from explainer.music.monochord import tuning as TU
 from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments import strings as STR
 from explainer.music.monochord.instruments.plucked import plucked as pluck
-from explainer.music.monochord.partkit import organ_tone, saver
+from explainer.music.monochord.partkit import organ_tone, saver, signoff
 from explainer.music.monochord.score import Pitch
 from explainer.music.monochord.score import figured as FIG
 
@@ -450,10 +450,17 @@ def compute_pitch() -> dict:
             "clips": {"four": save("frontier.pitch", s_, kind="synthesized", level=None, detail="an A major chord with A at 392, 415, 440 and 465 Hz, organ tones")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation25", 25)
+
+
 ITEMS = {"hook": compute_hook, "realize3": compute_realize3, "wolf": compute_wolf, "fundamental": compute_fundamental,
          "lament": compute_lament, "pitch": compute_pitch, "monody": compute_monody, "corelli": compute_corelli, "modes": compute_modes, "ritornello": compute_ritornello,
          "ornaments": compute_ornaments, "dances": compute_dances, "keys": compute_keys, "handel": compute_handel, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

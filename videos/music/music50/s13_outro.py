@@ -152,4 +152,5 @@ class Outro(SoundScene):
             "Every effect so far has changed a sound that already existed. <bookmark mark='a'/> In 1906 an instrument "
             "of dynamos, nearly two hundred tons of them, sent tones down telephone lines to subscribers. Sixty years "
             "later a module the size of a book did the same job. What if the machine makes the sound in the first "
-            "place? <bookmark mark='b'/> Next time. Part 51: Synthesis One, Oscillators and Filters.")
+            "place? <bookmark mark='b'/> Next time. Part 51: Synthesis One, Oscillators and Filters.",
+            signoff=clip("bridge.signoff"))

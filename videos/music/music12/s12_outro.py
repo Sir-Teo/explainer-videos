@@ -176,4 +176,5 @@ class Outro(SoundScene):
             "We have chosen our notes, and so far played them one at a time. <bookmark mark='a'/> In 1722 "
             "Jean-Philippe Rameau made a radical claim: C, E, G and E, G, C are the same chord, one thing turned "
             "over. If he is right, a thicket of intervals becomes a small vocabulary. What makes a chord, and how "
-            "many does one scale contain? <bookmark mark='b'/> Next time. Part 13: Intervals and Chords.")
+            "many does one scale contain? <bookmark mark='b'/> Next time. Part 13: Intervals and Chords.",
+            signoff=clip("bridge.signoff"))

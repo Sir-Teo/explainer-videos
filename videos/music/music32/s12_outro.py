@@ -144,4 +144,5 @@ class Outro(SoundScene):
             "Nearly even sets of notes made the scales. <bookmark mark='a'/> An algorithm written to time the pulses "
             "of a neutron accelerator turns out to generate rhythms heard in Cuba, Ghana and Bulgaria, and it is "
             "Euclid's. Does the same mathematics describe rhythm, nearly even sets of beats? <bookmark mark='b'/> "
-            "Next time. Part 33: The Mathematics of Rhythm and Scale.")
+            "Next time. Part 33: The Mathematics of Rhythm and Scale.",
+            signoff=clip("bridge.signoff"))

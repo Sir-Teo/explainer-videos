@@ -154,4 +154,5 @@ class Outro(SoundScene):
             "Paris loosened the key with symmetric scales and new rhythms. <bookmark mark='a'/> Vienna asked a more "
             "radical question. In 1908 a soprano joined a string quartet, singing: I feel the air of another planet. "
             "And the key dissolved. What if all twelve notes were equal, and none of them home? <bookmark mark='b'/> "
-            "Next time. Part 29: Twelve Tones.")
+            "Next time. Part 29: Twelve Tones.",
+            signoff=clip("bridge.signoff"))

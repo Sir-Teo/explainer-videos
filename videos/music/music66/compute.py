@@ -42,7 +42,7 @@ from explainer.music.monochord import tune as T
 from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.instruments import strings as STR
 from explainer.music.monochord.mir import finder as F
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 
 CACHE = Cache("music66")
@@ -509,10 +509,17 @@ def compute_melbands() -> dict:
 
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation66", 66)
+
+
 ITEMS = {"corpus": compute_corpus, "rates": compute_rates, "ar": compute_ar, "vocoder": compute_vocoder, "codec": compute_codec,
          "tokenlm": compute_tokenlm, "diffusion": compute_diffusion, "ddsp": compute_ddsp, "fad": compute_fad,
          "watermark": compute_watermark, "hook": compute_hook, "tune66": compute_tune66, "variation": compute_variation,
-         "zoom": compute_zoom, "tokpic": compute_tokpic, "vibrato": compute_vibrato, "voices": compute_voices, "melbands": compute_melbands}
+         "zoom": compute_zoom, "tokpic": compute_tokpic, "vibrato": compute_vibrato, "voices": compute_voices, "melbands": compute_melbands,
+         "signoff": compute_signoff}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

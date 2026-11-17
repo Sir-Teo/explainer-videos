@@ -144,4 +144,5 @@ class Outro(SoundScene):
             "The Tonnetz is a map for triads. <bookmark mark='a'/> In 2006 the journal Science published a paper of "
             "music theory: the space of two-note chords is a Möbius strip. What if every chord, of any size, were a "
             "point, and every progression a path through a space? <bookmark mark='b'/> Next time. Part 32: The "
-            "Geometry of Chords.")
+            "Geometry of Chords.",
+            signoff=clip("bridge.signoff"))

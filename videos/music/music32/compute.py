@@ -39,7 +39,7 @@ from explainer.music.monochord import chorales as CH
 from explainer.music.monochord import geometry as G
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music32")
@@ -448,9 +448,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation32"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation32", 32)
+
+
 ITEMS = {"hook": compute_hook, "strip": compute_strip, "duet": compute_duet, "neutral": compute_neutral, "triangle": compute_triangle, "vlsize": compute_vlsize, "even": compute_even,
          "scales": compute_scales, "mirror": compute_mirror, "optic": compute_optic, "fourier": compute_fourier, "bach": compute_bach, "tune": compute_tune,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

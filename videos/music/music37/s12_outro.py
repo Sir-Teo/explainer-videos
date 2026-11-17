@@ -156,4 +156,5 @@ class Outro(SoundScene):
             "If you have to ask, you will never know. Or can swing be measured?",
             "Timelines crossed the Atlantic. <bookmark mark='a'/> In America the tresillo, call and response and the "
             "blues met, and the pulse itself began to swing. The proverb says that if you have to ask what swing is, "
-            "you will never know. Can it be measured? <bookmark mark='b'/> Next time. Part 38: Blues and Swing.")
+            "you will never know. Can it be measured? <bookmark mark='b'/> Next time. Part 38: Blues and Swing.",
+            signoff=clip("bridge.signoff"))

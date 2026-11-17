@@ -154,4 +154,5 @@ class Outro(SoundScene):
             "The blues and swing gave jazz its language. <bookmark mark='a'/> In May 1959 John Coltrane recorded a "
             "tune with twenty-six chords in sixteen bars, at nearly two hundred and ninety beats a minute. How do "
             "jazz players turn a song's chords into a lifetime of new melodies? <bookmark mark='b'/> Next time. Part "
-            "39: Changes.")
+            "39: Changes.",
+            signoff=clip("bridge.signoff"))

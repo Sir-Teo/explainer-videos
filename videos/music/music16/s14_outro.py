@@ -175,4 +175,5 @@ class Outro(SoundScene):
             "a chorale every voice is a line, and every moment is a chord. In one Passion Bach harmonized the same "
             "hymn tune five different ways, and his chorales became the exercise book of harmony classes for three "
             "centuries. How do four lines move from one chord to the next, without any two of them merging? "
-            "<bookmark mark='b'/> Next time. Part 17: Four Voices.")
+            "<bookmark mark='b'/> Next time. Part 17: Four Voices.",
+            signoff=clip("bridge.signoff"))

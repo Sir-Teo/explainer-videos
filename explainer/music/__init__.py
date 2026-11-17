@@ -593,11 +593,14 @@ def next_part_card(part: int, kicker: str, question: str, nxt: int | None = None
     return g
 
 
-def play_next_part(scene, part: int, kicker: str, question: str, text: str, nxt: int | None = None):
+def play_next_part(scene, part: int, kicker: str, question: str, text: str, nxt: int | None = None, signoff=None):
     """Narrate the bridge to the next part over :func:`next_part_card`.  It opens on the part just finished, its
     links lit on the Chain and its bead on the act's strip.  ``text`` carries two bookmarks: at ``a`` the next part's
     opening scene and question take its place and the Chain moves to the next part's links; at ``b`` the next part
-    is named and its bead lights.  Ends on a clear screen."""
+    is named and its bead lights.  With ``signoff`` (the part's ``bridge.signoff`` clip: the opening of its Variation,
+    computed by ``partkit.signoff``) the part then ends on music: after the narration, the Chain gives way to the
+    listening strip and the sound's label, and a ring on the next part's bead swells with the clip's loudness.
+    Ends on a clear screen."""
     card = next_part_card(part, kicker, question, nxt)
     nb = card.strip.bead[card.nxt] if card.nxt in card.strip.bead else None
     with scene.voiceover(text) as vo:
@@ -612,9 +615,45 @@ def play_next_part(scene, part: int, kicker: str, question: str, text: str, nxt:
         if nb is not None:
             lit = [nb[0].animate.set_fill(MC.TUNE, 1).set_stroke(MC.TUNE), nb[1].animate.set_color(BLACK)]
         scene.play(*lit, FadeIn(card.title, shift=UP * 0.2), run_time=1.0)
-    scene.wait(1.0)
+    if signoff is not None:
+        chain_now = card.chain_next if PART_LINKS.get(card.part, ()) != PART_LINKS.get(card.nxt, ()) else card.chain
+        play_signoff(scene, card.part, signoff, clear=(chain_now,), bead=nb)
+    else:
+        scene.wait(1.0)
     scene.clear_scene()
     return card
+
+
+def play_signoff(scene, part: int, clip, clear=(), bead=None):
+    """The part's last sound, after the narration: its ``bridge.signoff`` clip (the opening of its Variation) in a
+    listening window at the top of the frame, with its label and a strip that fills as it plays.  ``clear``: what to
+    fade out first to make room at the top.  ``bead``: a mobject to ring with a halo that follows the clip's
+    loudness (the next part's bead on the bridge)."""
+    from explainer.music.monochord.partkit import envelope
+
+    env = envelope(clip, rate=100)
+    if clear:
+        scene.play(*[FadeOut(m) for m in clear], run_time=0.5)
+    halo = None
+    if bead is not None:
+        halo = Circle(radius=0.27, stroke_color=MC.TUNE, stroke_width=3, fill_opacity=0).move_to(bead)
+        halo.set_stroke(opacity=0.0)
+        base = halo.copy()
+    with scene.listen(clip) as snd:
+        bar = listen_bar(snd, rf"Variation {part}, \ as this part leaves it", width=3.4)
+        tag = sound_tag(clip.meta.get("label", "synthesized"), corner=UR)
+        top = VGroup(bar, tag).arrange(RIGHT, buff=0.6, aligned_edge=DOWN).to_edge(UP, buff=0.5)
+        snd.show(top)
+        if halo is not None:
+            scene.add(halo)
+
+            def swell(m, t):
+                i = min(max(t * 100.0, 0.0), len(env) - 1.0)
+                a = float(env[int(i)])
+                m.become(base.copy().scale(1.0 + 0.45 * a).set_stroke(opacity=0.25 + 0.75 * a))
+
+            snd.drive(halo, swell)
+    scene.wait(0.6)
 
 
 from explainer.music.viz import *  # noqa: F401,F403,E402

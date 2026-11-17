@@ -152,4 +152,5 @@ class Outro(SoundScene):
             "Why does a microphone howl, and why are loudspeakers hung in curves?",
             "August 1965: fifty-five thousand people fill a baseball stadium, and nobody, the band included, can hear "
             "the band. <bookmark mark='a'/> Why does a microphone howl, and why are loudspeakers hung in curves? "
-            "<bookmark mark='b'/> Next time. Part 59: Live Sound.")
+            "<bookmark mark='b'/> Next time. Part 59: Live Sound.",
+            signoff=clip("bridge.signoff"))

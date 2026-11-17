@@ -45,7 +45,7 @@ from explainer.music.monochord import EXAMPLE_LEVEL, SR, Clip, ClipStore, concat
 from explainer.music.monochord import codec as K
 from explainer.music.monochord.instruments import choir as CH
 from explainer.music.monochord.mir import finder as F
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 
 CACHE = Cache("music63")
 CLIPS = ClipStore("music63")
@@ -798,12 +798,19 @@ def compute_lengthpair() -> dict:
 
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation63", 63)
+
+
 ITEMS = {"library": compute_library, "hook": compute_hook, "constellation": compute_constellation, "robust": compute_robust,
          "falsematch": compute_falsematch, "horse": compute_horse, "recs": compute_recs, "loop": compute_loop,
          "playlist": compute_playlist, "tune63": compute_tune63, "variation": compute_variation,
          "matches": compute_matches, "length": compute_length, "speed": compute_speed, "map": compute_map, "matrix": compute_matrix,
          "lorenz": compute_lorenz, "neighbours": compute_neighbours, "scale": compute_scale,
-         "sampled": compute_sampled, "hum": compute_hum, "lengthpair": compute_lengthpair}
+         "sampled": compute_sampled, "hum": compute_hum, "lengthpair": compute_lengthpair,
+         "signoff": compute_signoff}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

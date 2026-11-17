@@ -160,4 +160,5 @@ class Outro(SoundScene):
             "dopamine released at the moment of a musical chill, and also in the seconds of anticipation before it. "
             "Fifty-five years earlier Leonard Meyer had argued that emotion in music is expectation, delayed and "
             "fulfilled. Why does music move us, and can that be measured? <bookmark mark='b'/> Next time. Part 46: "
-            "Expectation and Emotion.")
+            "Expectation and Emotion.",
+            signoff=clip("bridge.signoff"))

@@ -146,4 +146,5 @@ class Outro(SoundScene):
             "How do ten bad seconds find one song among millions?",
             "2002: in London you could dial four digits, hold your phone up in a noisy bar, and get the song's name "
             "back by text message. <bookmark mark='a'/> How do ten bad seconds find one song among millions, and what "
-            "decides what we hear next? <bookmark mark='b'/> Next time. Part 63: Finding Music.")
+            "decides what we hear next? <bookmark mark='b'/> Next time. Part 63: Finding Music.",
+            signoff=clip("bridge.signoff"))

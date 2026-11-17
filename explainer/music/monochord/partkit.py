@@ -103,3 +103,24 @@ def organ_tone(hz: float, seconds: float, partials: int = 7, rolloff: float = 0.
 def organ_chord(freqs, seconds: float, fade=(0.03, 0.12), **kw) -> Clip:
     """Several :func:`organ_tone` notes together."""
     return Clip(sum(organ_tone(f, seconds, **kw) for f in freqs)).fade(*fade)
+
+
+SIGNOFF_LEVEL = -18.0  # the sign-off sits 3 dB under an example: a close, not a demonstration
+
+
+def signoff(clips: ClipStore, source: str, part: int, seconds: float = 6.0, fade: float = 1.6,
+            level: float = SIGNOFF_LEVEL) -> dict:
+    """The part's last sound, ``bridge.signoff``: the opening ``seconds`` of its Variation (``source``, a clip already
+    in the store), from its first note, faded out, so that every part ends on the Tune as that part left it.  It is
+    played under the next part's title, after the narration (``explainer.music.play_next_part``), never under the
+    voice.  The label is the source's: the sign-off is the same computed sound, cut."""
+    c = clips.load(source)
+    env = np.abs(c.mono)
+    on = int(np.argmax(env > 0.02 * env.max())) if env.max() > 0 else 0
+    start = max(0.0, on / c.sr - 0.05)
+    cut = c.trim(start, min(c.duration, start + seconds)).fade(0.01, fade)
+    cut = cut._with(cut.y, events={**cut.events, "end": cut.duration})
+    out = saver(clips, level, c.meta.get("label", "synthesized"))(
+        "bridge.signoff", cut, kind=c.meta.get("label", "synthesized"),
+        detail=f"the opening of Variation {part}, as the part ends")
+    return {"clips": {"signoff": out}, "source": source, "start": start}

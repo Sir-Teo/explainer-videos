@@ -155,4 +155,5 @@ class Outro(SoundScene):
             "chromatic and enormous. The piano gained an iron frame and far more power, the orchestra grew, and the "
             "expectations became something to stretch. It begins in a small room, with a song for a voice and a "
             "piano. How far can a key be stretched before it breaks? <bookmark mark='b'/> Next time. Part 27: The "
-            "Romantic Century.")
+            "Romantic Century.",
+            signoff=clip("bridge.signoff"))

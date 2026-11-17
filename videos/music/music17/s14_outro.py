@@ -172,4 +172,5 @@ class Outro(SoundScene):
             "Why does four go to five, and five to one? Is there a grammar of chords, like the grammar of a sentence? "
             "In the conservatories of eighteenth-century Naples, boys from poor families learned it as patterns, by "
             "heart, and became some of the most employable composers in Europe. <bookmark mark='b'/> Next time. Part "
-            "18: Progressions.")
+            "18: Progressions.",
+            signoff=clip("bridge.signoff"))

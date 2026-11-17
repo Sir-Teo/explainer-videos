@@ -35,7 +35,7 @@ from explainer.music.monochord import listener as L
 from explainer.music.monochord import melody as M
 from explainer.music.monochord import orchestra as O
 from explainer.music.monochord import tune as T
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 from videos.music.music40 import compute as P40
 
@@ -387,10 +387,17 @@ def compute_again() -> dict:
     return {"ic": [r["ic"][i] for i in idx], "clips": {"three": save("again.three", c, detail="the Tune's last phrase with its denied ending, three times in a row; Part 7's piano and a plucked bass")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation46", 46)
+
+
 ITEMS = {"hook": compute_hook, "tune": compute_tune, "corpus": compute_corpus, "compare": compute_compare, "learn": compute_learn,
          "endings": compute_endings, "groove": compute_groove, "emotion": compute_emotion, "tune46": compute_tune46,
          "variation": compute_variation, "rep": compute_rep, "probe": compute_probe, "sing": compute_sing, "drafts": compute_drafts,
-         "susp": compute_susp, "neap": compute_neap, "corners": compute_corners, "again": compute_again, "extremes": compute_extremes}
+         "susp": compute_susp, "neap": compute_neap, "corners": compute_corners, "again": compute_again, "extremes": compute_extremes,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

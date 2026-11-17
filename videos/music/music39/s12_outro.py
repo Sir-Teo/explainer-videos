@@ -154,4 +154,5 @@ class Outro(SoundScene):
             "Jazz kept its changes; popular song kept its hooks. <bookmark mark='a'/> Between the nineteen-eighties "
             "and the twenty-tens, the average introduction of a hit single shrank from about twenty seconds to about "
             "five. Why, and what has each technology that sold the song done to its shape? <bookmark mark='b'/> Next "
-            "time. Part 40: The Song.")
+            "time. Part 40: The Song.",
+            signoff=clip("bridge.signoff"))

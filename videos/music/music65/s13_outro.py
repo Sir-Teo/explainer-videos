@@ -146,4 +146,5 @@ class Outro(SoundScene):
             "What closed the gap between noodling and a finished song?",
             "2016: a network writes sound itself, sixteen thousand decisions a second, and its piano noodles nowhere. "
             "<bookmark mark='a'/> A few years later a sentence returns a finished song, singer and all. What closed "
-            "the gap? <bookmark mark='b'/> Next time. Part 66: Generative Audio.")
+            "the gap? <bookmark mark='b'/> Next time. Part 66: Generative Audio.",
+            signoff=clip("bridge.signoff"))

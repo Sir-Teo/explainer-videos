@@ -220,7 +220,11 @@ Rules for the Variations:
 - The bridge (`explainer.music.play_next_part`) is every part's last screen from Part 12 on: the Chain lit with the
   part's links moves to the next part's, the act's parts sit as beads with the next one lighting, and the next part
   is announced by the scene it opens on (a place and a year, or what the viewer will be asked) and its question.
-  The teaser names only what the next part's hook then shows.
+  The teaser names only what the next part's hook then shows. Then the part ends on music: after the narration,
+  under the next part's title, the opening six seconds of its own Variation (`bridge.signoff`, cut by
+  `partkit.signoff` from the Variation's clip and set 3 dB under an example), in a listening window whose picture
+  is the strip, the label and a ring on the next part's bead that swells with the sound. Watched in order, the
+  series' episode endings are the Tune changing, part by part.
 - Payoff cards ("where this comes back") link forward. Callbacks link to the other series instead of repeating
   them: the FFT and dynamic programming in *Computer Science, Built* Parts 19 and 21, Shannon's theorems in its
   Part 28, lock-free queues in its Part 33, the path tracer in its Part 51; Fourier analysis in *Analysis, Built*;

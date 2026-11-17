@@ -35,7 +35,7 @@ from explainer.music.monochord import consonance as CONS
 from explainer.music.monochord import scales as S
 from explainer.music.monochord import tune as TUNE
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import organ_tone, saver
+from explainer.music.monochord.partkit import organ_tone, saver, signoff
 from explainer.music.monochord.physics.string import String
 from explainer.music.monochord.tuning import continued_fraction, convergents
 
@@ -358,8 +358,15 @@ def compute_variation() -> dict:
             "measure": rf"from Lydian to Locrian, {t['lowered']} notes fall a semitone, one at a time", "clip": "tune.variation12"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation12", 12)
+
+
 ITEMS = {"hook": compute_hook, "stack": compute_stack, "gaps": compute_gaps, "modes": compute_modes, "why": compute_why, "minor": compute_minor, "fewer": compute_fewer,
-         "halves": compute_halves, "maps": compute_maps, "every": compute_every, "frontier": compute_frontier, "tune": compute_tune, "variation": compute_variation}
+         "halves": compute_halves, "maps": compute_maps, "every": compute_every, "frontier": compute_frontier, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

@@ -160,4 +160,5 @@ class Outro(SoundScene):
             "That completes Act Four: a thousand years, from one line of chant to Mahler's orchestra. "
             "<bookmark mark='a'/> The last measurement in this part found the key loosening. What is left when it "
             "goes? In Paris in 1889 a young Debussy heard a Javanese gamelan at the World's Fair, tuned to scales no "
-            "European piano could play. <bookmark mark='b'/> Act Five begins. Part 28: New Scales, New Rhythms.")
+            "European piano could play. <bookmark mark='b'/> Act Five begins. Part 28: New Scales, New Rhythms.",
+            signoff=clip("bridge.signoff"))

@@ -154,4 +154,5 @@ class Outro(SoundScene):
             "Where is the beat, what is the chord, where does the chorus start?",
             "A child can clap along to a song; for decades a program could not, and it still taps at half or double "
             "speed. <bookmark mark='a'/> Where is the beat, what is the chord, and where does the chorus start? "
-            "<bookmark mark='b'/> Next time. Part 62: Beat, Chords and Structure.")
+            "<bookmark mark='b'/> Next time. Part 62: Beat, Chords and Structure.",
+            signoff=clip("bridge.signoff"))

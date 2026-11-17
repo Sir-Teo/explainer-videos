@@ -41,7 +41,7 @@ from explainer.music.monochord import effects as E
 from explainer.music.monochord import space as SP
 from explainer.music.monochord import tune as T
 from explainer.music.monochord.instruments import choir as CH
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 
 CACHE = Cache("music55")
@@ -398,9 +398,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation55"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation55", 55)
+
+
 ITEMS = {"hook": compute_hook, "cushions": compute_cushions, "modes": compute_modes, "flutter": compute_flutter, "diffuser": compute_diffuser,
          "halls": compute_halls, "cues": compute_cues, "cone": compute_cone, "pan": compute_pan, "ambi": compute_ambi, "circle": compute_circle, "images": compute_images, "check": compute_check, "tune55": compute_tune55,
-         "variation": compute_variation}
+         "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

@@ -158,4 +158,5 @@ class Outro(SoundScene):
             "Is it still the same piece of music?",
             "Take one multitrack recording and mix it three times: close and dry, a wall of sound, a dub. "
             "<bookmark mark='a'/> Is it still the same piece of music? <bookmark mark='b'/> Next time. Part 56: "
-            "Recording and Mixing.")
+            "Recording and Mixing.",
+            signoff=clip("bridge.signoff"))

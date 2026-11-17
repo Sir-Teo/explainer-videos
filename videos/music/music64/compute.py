@@ -43,7 +43,7 @@ from explainer.ai.cache import Cache
 from explainer.music.monochord import EXAMPLE_LEVEL, SR, Clip, ClipStore, concat
 from explainer.music.monochord import space as SP
 from explainer.music.monochord.mir import separate as S
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music56 import compute as P56
 
 CACHE = Cache("music64")
@@ -488,11 +488,18 @@ def compute_truephase() -> dict:
 
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation64", 64)
+
+
 ITEMS = {"hook": compute_hook, "pan": compute_pan, "ica": compute_ica, "hpss": compute_hpss, "nmf": compute_nmf, "oracle": compute_oracle,
          "phase": compute_phase, "net": compute_net, "metrics": compute_metrics, "tune64": compute_tune64, "variation": compute_variation,
          "panmap": compute_panmap, "icascatter": compute_icascatter, "hpsssweep": compute_hpsssweep, "nmfrank": compute_nmfrank,
          "maskimg": compute_maskimg, "glcurve": compute_glcurve, "gain": compute_gain, "netleak": compute_netleak,
-         "meet": compute_meet, "remix": compute_remix, "hpssknob": compute_hpssknob, "truephase": compute_truephase}
+         "meet": compute_meet, "remix": compute_remix, "hpssknob": compute_hpssknob, "truephase": compute_truephase,
+         "signoff": compute_signoff}
 
 if __name__ == "__main__":
     CACHE.main(ITEMS, __doc__)

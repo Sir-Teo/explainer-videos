@@ -155,4 +155,5 @@ class Outro(SoundScene):
             "The craft is done: orchestrating, composing, performing and scoring. Act Eight turns to the mind. "
             "<bookmark mark='a'/> Send a jumping line of notes to each ear, and many listeners hear two smooth scales "
             "instead, one on each side, which neither ear was given. When many sounds arrive at once, how does the "
-            "ear decide which belong together? <bookmark mark='b'/> Act Eight begins. Part 45: The Scene.")
+            "ear decide which belong together? <bookmark mark='b'/> Act Eight begins. Part 45: The Scene.",
+            signoff=clip("bridge.signoff"))

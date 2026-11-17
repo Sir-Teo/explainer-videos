@@ -147,4 +147,5 @@ class Outro(SoundScene):
             "Maqam places its notes by ear. <bookmark mark='a'/> In 1978, in Hubei, a tomb sealed in 433 BCE gave up "
             "sixty-five bronze bells, many of which sound two notes, depending on where they are struck. And in Java "
             "and Bali, no two gamelan orchestras are tuned alike. What if the instruments themselves set the tuning? "
-            "<bookmark mark='b'/> Next time. Part 36: Bronze and Silk.")
+            "<bookmark mark='b'/> Next time. Part 36: Bronze and Silk.",
+            signoff=clip("bridge.signoff"))

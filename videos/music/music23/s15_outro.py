@@ -163,4 +163,5 @@ class Outro(SoundScene):
             "<bookmark mark='a'/> In the next century music was printed, and the press made a composer famous: "
             "Josquin des Prez. Printers knew his name sold copies, and some of them put it on music he had not "
             "written. Can the style itself tell us who wrote a piece? <bookmark mark='b'/> Next time. Part 24: The "
-            "Renaissance.")
+            "Renaissance.",
+            signoff=clip("bridge.signoff"))

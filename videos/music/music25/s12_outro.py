@@ -151,4 +151,5 @@ class Outro(SoundScene):
             "<bookmark mark='a'/> The next generation, in Vienna, put contrast inside the movement. In the early "
             "1780s Mozart wrote twelve variations on a French song, and the song is our Tune. His style ran on "
             "expectations so widely shared that Haydn could end a quartet with a joke about where the ending is. What "
-            "were they, and can they be measured? <bookmark mark='b'/> Next time. Part 26: The Classical Style.")
+            "were they, and can they be measured? <bookmark mark='b'/> Next time. Part 26: The Classical Style.",
+            signoff=clip("bridge.signoff"))

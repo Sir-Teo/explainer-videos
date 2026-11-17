@@ -158,4 +158,5 @@ class Outro(SoundScene):
             "Our searcher wrote notes on a grid, every beat exactly in time. <bookmark mark='a'/> In 2007 a critic "
             "put a celebrated pianist's CD into a computer, and the track database named another pianist. Timing "
             "analysis helped show whose playing it was, because no two performers shape time alike. What does a "
-            "performer add that the score leaves out? <bookmark mark='b'/> Next time. Part 43: Performing.")
+            "performer add that the score leaves out? <bookmark mark='b'/> Next time. Part 43: Performing.",
+            signoff=clip("bridge.signoff"))

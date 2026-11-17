@@ -40,7 +40,7 @@ from explainer.music.monochord import palestrina as PS
 from explainer.music.monochord import renaissance as R
 from explainer.music.monochord import trecento as T
 from explainer.music.monochord.instruments import choir as CH
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 
 CACHE = Cache("music24")
 CLIPS = ClipStore("music24")
@@ -453,9 +453,16 @@ def compute_madrigal() -> dict:
             "clips": {"opening": save("madrigal.opening", s_, level=None, detail=f"Monteverdi, Book 3 (1592), {p.name}: the opening, sung from the encoding")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation24", 24)
+
+
 ITEMS = {"hook": compute_hook, "thirds": compute_thirds, "imitation": compute_imitation, "masses": compute_masses, "fauxbourdon": compute_fauxbourdon, "line": compute_line, "madrigal": compute_madrigal,
          "dissonance": compute_dissonance, "kinds": compute_kinds, "melody": compute_melody, "style": compute_style, "quiz": compute_quiz,
-         "cruda": compute_cruda, "tuning": compute_tuning, "chromatic": compute_chromatic, "tune": compute_tune, "variation": compute_variation}
+         "cruda": compute_cruda, "tuning": compute_tuning, "chromatic": compute_chromatic, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

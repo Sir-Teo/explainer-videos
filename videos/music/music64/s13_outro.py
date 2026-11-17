@@ -146,4 +146,5 @@ class Outro(SoundScene):
             "What does a machine that composes know?",
             "1997: an audience in Oregon hears three pieces, one by Bach, one by a music professor in Bach's style, "
             "and one by a program. <bookmark mark='a'/> They pick the program's as the real Bach. What does a machine "
-            "that composes know? <bookmark mark='b'/> Next time. Part 65: Machines that Compose.")
+            "that composes know? <bookmark mark='b'/> Next time. Part 65: Machines that Compose.",
+            signoff=clip("bridge.signoff"))

@@ -172,4 +172,5 @@ class Outro(SoundScene):
             "This part treated harmony as chords, and found at the end that chords are lines moving together. "
             "<bookmark mark='a'/> On a May evening in 1747 a king played Johann Sebastian Bach a theme, and asked him "
             "to improvise a fugue on it. Can a melody enter against itself, a few beats later, and still make "
-            "harmony? And which melodies can? <bookmark mark='b'/> Next time. Part 20: Canon and Fugue.")
+            "harmony? And which melodies can? <bookmark mark='b'/> Next time. Part 20: Canon and Fugue.",
+            signoff=clip("bridge.signoff"))

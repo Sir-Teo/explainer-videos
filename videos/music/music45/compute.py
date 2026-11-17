@@ -47,7 +47,7 @@ from explainer.music.monochord import scene as SC
 from explainer.music.monochord import screen as SCR
 from explainer.music.monochord import tune as T
 from explainer.music.monochord.instruments import choir as CH
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 
 CACHE = Cache("music45")
@@ -425,11 +425,18 @@ def compute_memory() -> dict:
             "clips": {"two": save_synth("memory.two", c, detail="two pitch-memory trials after Deutsch (1970): a tone, six other tones, then a tone that is the same or a semitone higher; sine tones")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation45", 45)
+
+
 ITEMS = {"hook": compute_hook, "aba": compute_aba, "boundary": compute_boundary, "inter": compute_inter, "compound": compute_compound, "mistune": compute_mistune,
          "onset": compute_onset, "cont": compute_cont, "fuse": compute_fuse, "timbre": compute_timbre, "shepard": compute_shepard,
          "tune": compute_tune, "variation": compute_variation, "each": compute_each, "fission": compute_fission, "ambig": compute_ambig, "fate": compute_fate,
          "place": compute_place, "melcont": compute_melcont, "bounce": compute_bounce, "tstream": compute_tstream, "octaves": compute_octaves,
-         "risset": compute_risset, "memory": compute_memory}
+         "risset": compute_risset, "memory": compute_memory,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

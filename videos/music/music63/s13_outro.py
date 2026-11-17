@@ -159,4 +159,5 @@ class Outro(SoundScene):
             "Can a mix be un-mixed, and how would we know how well?",
             "2023: a voice is lifted off a home cassette from the 1970s, away from the piano recorded on the same "
             "track, and a finished song is built around it. <bookmark mark='a'/> Can a mix be un-mixed, and how would "
-            "we know how well? <bookmark mark='b'/> Next time. Part 64: Source Separation.")
+            "we know how well? <bookmark mark='b'/> Next time. Part 64: Source Separation.",
+            signoff=clip("bridge.signoff"))

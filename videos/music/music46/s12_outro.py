@@ -160,4 +160,5 @@ class Outro(SoundScene):
             "Our listener learned from fifty Western tunes. <bookmark mark='a'/> In a cave in south-west Germany lay "
             "a flute cut from a vulture's wing bone, at least thirty-five thousand years old. Every known society "
             "makes music, and no one agrees why. Is any of what we have measured universal, and where did music come "
-            "from? <bookmark mark='b'/> Next time. Part 47: Origins and Universals.")
+            "from? <bookmark mark='b'/> Next time. Part 47: Origins and Universals.",
+            signoff=clip("bridge.signoff"))

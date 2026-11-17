@@ -38,7 +38,7 @@ from explainer.music.monochord import melody as M
 from explainer.music.monochord import palestrina as PS
 from explainer.music.monochord.instruments import strings as STR
 from explainer.music.monochord.physics.string import String
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from explainer.music.monochord.trecento import Piece
 
 CACHE = Cache("music26")
@@ -385,8 +385,15 @@ def compute_minuet() -> dict:
             "clips": {"minuet": save("minuet.haydn", s_, level=None, detail="Haydn, String Quartet Op. 74 No. 1, third movement (Menuetto), bars 1-8 from the encoding, Part 7's bowed string")}}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation26", 26)
+
+
 ITEMS = {"hook": compute_hook, "forms": compute_forms, "develop": compute_develop, "dynamics": compute_dynamics, "keys": compute_keys, "minuet": compute_minuet, "phrases": compute_phrases, "plan": compute_plan, "texture": compute_texture, "figures": compute_figures,
-         "three": compute_three, "style": compute_style, "tune": compute_tune, "variation": compute_variation}
+         "three": compute_three, "style": compute_style, "tune": compute_tune, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

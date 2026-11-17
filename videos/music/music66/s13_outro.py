@@ -143,4 +143,5 @@ class Outro(SoundScene):
             "within a few years a governor is sending classical CDs to every newborn in his state. "
             "<bookmark mark='a'/> Later research did not support a general intelligence benefit, and found that "
             "arousal and mood can explain short-lived task effects. How does a field know what it knows? "
-            "<bookmark mark='b'/> Next time, the first part of the coda. Part 67: Doing Research in Music.")
+            "<bookmark mark='b'/> Next time, the first part of the coda. Part 67: Doing Research in Music.",
+            signoff=clip("bridge.signoff"))

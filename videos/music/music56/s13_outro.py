@@ -155,4 +155,5 @@ class Outro(SoundScene):
             "How can making a record louder make it worse?",
             "In 2008 fans found that a rock album sounded better inside a video game than on its own CD. "
             "<bookmark mark='a'/> How can making a record louder make it worse? <bookmark mark='b'/> Next time. Part "
-            "57: Mastering and Loudness.")
+            "57: Mastering and Loudness.",
+            signoff=clip("bridge.signoff"))

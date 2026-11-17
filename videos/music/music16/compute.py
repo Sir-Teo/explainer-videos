@@ -34,7 +34,7 @@ from explainer.music.monochord import consonance as CONS
 from explainer.music.monochord import counterpoint as K
 from explainer.music.monochord import melody as M
 from explainer.music.monochord.instruments import strings as STR
-from explainer.music.monochord.partkit import organ_tone, saver
+from explainer.music.monochord.partkit import organ_tone, saver, signoff
 from explainer.music.monochord.physics.string import String
 
 CACHE = Cache("music16")
@@ -498,9 +498,16 @@ def compute_more() -> dict:
     return out
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation16", 16)
+
+
 ITEMS = {"hook": compute_hook, "organum": compute_organum, "fusion": compute_fusion, "motions": compute_motions, "onsets": compute_onsets, "fux": compute_fux,
          "counting": compute_counting, "damage": compute_damage, "species": compute_species, "independence": compute_independence, "tune": compute_tune,
-         "variation": compute_variation, "more": compute_more}
+         "variation": compute_variation, "more": compute_more,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":

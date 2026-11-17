@@ -160,4 +160,5 @@ class Outro(SoundScene):
             "Every effect in this part obeyed superposition. <bookmark mark='a'/> Two accidents made two sounds. An "
             "amplifier damaged on the way to a session in 1951 gave a record its fuzz, and in 1998 a pitch corrector "
             "set to act instantly made a voice snap between notes, and that became a style. What happens when the "
-            "effect is not linear? <bookmark mark='b'/> Next time. Part 50: Dynamics, Distortion and Pitch.")
+            "effect is not linear? <bookmark mark='b'/> Next time. Part 50: Dynamics, Distortion and Pitch.",
+            signoff=clip("bridge.signoff"))

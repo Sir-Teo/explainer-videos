@@ -39,7 +39,7 @@ from explainer.music.monochord import synth as S1
 from explainer.music.monochord import synth2 as F
 from explainer.music.monochord import tune as T
 from explainer.music.monochord.instruments import percussion as PC
-from explainer.music.monochord.partkit import saver
+from explainer.music.monochord.partkit import saver, signoff
 from videos.music.music38 import compute as P38
 
 CACHE = Cache("music53")
@@ -491,9 +491,16 @@ def compute_variation() -> dict:
             "clip": "tune.variation53"}
 
 
+def compute_signoff() -> dict:
+    """The part's last sound: the opening of its Variation, under the next part's title."""
+    load("variation")
+    return signoff(CLIPS, "tune.variation53", 53)
+
+
 ITEMS = {"hook": compute_hook, "musicbox": compute_musicbox, "pianola": compute_pianola, "musicn": compute_musicn, "bytes": compute_bytes,
          "zipper": compute_zipper, "smf": compute_smf, "steps": compute_steps, "pattern": compute_pattern, "callback": compute_callback,
-         "timing": compute_timing, "pdc": compute_pdc, "tune53": compute_tune53, "variation": compute_variation}
+         "timing": compute_timing, "pdc": compute_pdc, "tune53": compute_tune53, "variation": compute_variation,
+         "signoff": compute_signoff}
 
 
 if __name__ == "__main__":
