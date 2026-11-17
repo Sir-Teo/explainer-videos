@@ -3535,3 +3535,36 @@ games), 37 (moral psychology). *Computer Science, Built*: Part 44 (people and pr
 | 60 | built, English and Chinese: 15 chapters, hook and outro, with the Perceptron and human or model on you; Psyche's machines module (contamination, prompt sensitivity, a benchmark as an IRT test, silicon samples that erase variance, reliance and algorithm aversion, a specification curve): networks as models of the mind, machine psychology, theory of mind in machines, people trusting and being changed by machines, helpers and companions, screens and well-being, a science of machine behaviour; five Ledger rows (classic biases in language models, machine theory of mind, algorithm aversion and social-media harm contested, dialogue belief change not directly tested); course entry, lab and interactive (human or model) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 31 min |
 | 61 | built, English and Chinese: 15 chapters, hook and outro, with 160 teams failing to predict a life and an experiment space on you; Psyche's community module (a prediction challenge, many labs, a selected sample, a design space with a surrogate model, integrative experiments, the natural selection of bad science under two publication rules): explanation and prediction, big team science, millions of participants, who is sampled, machine-assisted theory, theory as code, digital traces, automating research, reforms ranked by evidence; four Ledger rows (many-labs heterogeneity and web against lab replicated, Twitter and heart disease contested, unpredictable life outcomes not directly tested); course entry, lab and interactive (design the experiment space) checked; narration table and on-screen text translated and dry-run. Open checks in its README | 29 min |
 | 62 | built, English and Chinese: 15 chapters, hook and outro, back to Kant, with the last experiment on you; Psyche's thesis module (a registered plan written as code and hashed before the analysis, the design check on simulated people, Spearman-Brown split-half reliability, Stage 2 on open data with one reported deviation, Psyche's scorecard on the Battery, the Ledger by act): how research is done, ethics as practice, peer review, writing, the Ledger complete, the Homunculus's last drawing, the verdict on Kant, where to go; one Ledger row (the rotation slope's reliability, not directly tested); course entry, lab and interactive (the last rotation) checked; narration table and on-screen text translated and dry-run. Act XIII and the series complete. Open checks in its README | 29 min |
+
+## 10. A round of polish (2026-11-17)
+
+After the sixty-two parts were built, a coverage audit against the introductory and upper-level textbooks
+([`READING.md`](READING.md)) found staples the films never named, and a visual audit found beats that were lists of
+text. Each gap was filled as a new beat inside an existing chapter (no chapter was added or renumbered, so the course
+tables and caches stand), told as *the textbook's story, then the record*, in English and Chinese, with Ledger
+declarations and a render checked:
+
+| Part | Added |
+|---|---|
+| 1 | the schools of psychology on one map (structuralism to evolutionary psychology), what each asked and what the series keeps |
+| 4 | Ioannidis (2005): the positive predictive value of a significant result against prior odds, for three powers |
+| 6 | Kandel's *Aplysia*: habituation and sensitization at one synapse, and long-term structural change |
+| 16 | the Bobo doll drawn as its design; Bandura (1965) on learning against performance; social learning theory and self-efficacy, with the contested step to media violence; partial reinforcement drawn |
+| 24 | Köhler's apes and the studies that gave insight a learning history; Luchins's water jars computed, and mental set in chess experts |
+| 26 | overconfidence and calibration, with the selection reply made exact on Psyche, and interval overconfidence |
+| 28 | Maslow's hierarchy and its tests; goal setting drawn as a mechanism |
+| 29 | the Easterlin paradox and the replies |
+| 31 | Baumrind's parenting styles on Maccoby and Martin's axes, with the direction question; Bronfenbrenner's nested systems |
+| 33 | temperament, from Kagan's high-reactive infants to Dunedin and the inhibition–social-anxiety meta-analysis |
+| 34 | the obedience archive and the four prods redrawn |
+| 35 | the textbook's attribution biases with their records (the actor–observer asymmetry near zero); Kelley's covariation table; power posing as a timeline |
+| 37 | Trivers's reciprocal altruism and Hamilton's year named |
+| 39 | Engel's biopsychosocial model and its critique; diathesis and stress; a map of DSM-5-TR and ICD-11 against the parts; the eating and personality disorders |
+| 42 | Rogers's client-centred therapy and the meta-analyses of its three conditions |
+| 53 | Herzberg's two factors and Vroom's expectancy theory, with their records; leadership from Lewin's clubs to transformational leadership and its critique |
+| 57 | the health belief model, stages of change, the intention–behaviour gap and COM-B, with their records |
+
+Across the series: the diagram instruments of `explainer/psychology/viz.py` (§3), the text-only beats of Parts 48 and
+51–62 (the `rows_section` helper) now drawn as cards in a grid, and a computed score (`explainer/psychology/score.py`,
+mixed by `tools/build.py`): the theme under each hook, a sting at each chapter card, a breathing chord in long pauses,
+and the theme descending under each outro.

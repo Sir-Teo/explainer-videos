@@ -169,7 +169,11 @@ def rows_section(scene, title: str, items, narration: str, width: float = 12.4, 
                  buff: float = 0.42, tag=None, extra=None):
     """A heading and lines revealed one per bookmark (a, b, c, ...); ``extra`` mobjects appear with the heading."""
     head = heading(title)
-    rows = rows_of(items, width, font_size, buff).move_to([0, -0.3, 0])
+    if extra is None:  # each line a card with a bar in its colour (explainer.psychology.viz.point_cards)
+        rows = point_cards([("", t, c) for t, c in items], width=width, cols=2 if len(items) >= 4 else 1,
+                           font_size=font_size + 1, buff=0.28, pad=0.42, max_height=6.0).move_to([0, -0.3, 0]).cards
+    else:  # something else is drawn beside them: plain lines, as before
+        rows = rows_of(items, width, font_size, buff).move_to([0, -0.3, 0])
     with scene.voiceover(narration) as vo:
         scene.play(FadeIn(head), *([FadeIn(tag)] if tag is not None else []), *([FadeIn(extra)] if extra else []))
         for m, r in zip("abcdefgh", rows):

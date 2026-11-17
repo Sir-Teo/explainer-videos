@@ -539,32 +539,35 @@ def _accent_card(w: float, h: float, color, fill_opacity: float = 0.96) -> VGrou
 
 
 def point_cards(items, width: float = 12.6, cols: int | None = None, font_size=24, buff: float = 0.3,
-                max_height: float = 5.9) -> VGroup:
+                max_height: float = 5.9, pad: float = 0.5, body_color=WHITE) -> VGroup:
     """Key points as a grid of cards: ``items`` is a list of ``(title, body, color)`` (``body`` may be "" or a
     mobject).  Each card has a coloured bar, its title in the colour and its body in white; cards in a row share a
-    height.  ``cols`` defaults to 1 for one item, 2 for two or four, else 3.  Returns a VGroup whose ``.cards[i]``
+    height.  A ``title`` of "" gives a card with its body only (``body_color``); ``pad`` is the room above and
+    below the text.  ``cols`` defaults to 1 for one item, 2 for two or four, else 3.  Returns a VGroup whose ``.cards[i]``
     has ``.box``, ``.title`` and ``.body``, centred at the origin; reveal the cards one at a time."""
     n = len(items)
     cols = cols or (1 if n == 1 else 2 if n in (2, 4) else 3)
     cw = (width - buff * (cols - 1)) / cols
     inners = []
     for title, body, color in items:
-        t = wrapped_label(title, cw - 0.75, font_size + 2, color)
-        parts = [t]
+        t = wrapped_label(title, cw - 0.75, font_size + 2, color) if title else None
+        parts = [t] if t is not None else []
         if isinstance(body, Mobject):
             if body.width > cw - 0.75:
                 body.width = cw - 0.75
             parts.append(body)
         elif body:
-            parts.append(wrapped_label(body, cw - 0.75, font_size, WHITE))
+            parts.append(wrapped_label(body, cw - 0.75, font_size, body_color))
         inner = VGroup(*parts).arrange(DOWN, aligned_edge=LEFT, buff=0.16)
-        inner.title, inner.body, inner.accent = t, (parts[1] if len(parts) > 1 else None), color
+        inner.title = t
+        inner.body = parts[-1] if (t is None or len(parts) > 1) else None
+        inner.accent = color
         inners.append(inner)
     rows = [inners[i:i + cols] for i in range(0, n, cols)]
     cards = VGroup()
     y = 0.0
     for row in rows:
-        h = max(x.height for x in row) + 0.5
+        h = max(x.height for x in row) + pad
         for j, inner in enumerate(row):
             frame = _accent_card(cw, h, inner.accent)
             frame.move_to([j * (cw + buff) + cw / 2, y - h / 2, 0])

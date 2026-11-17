@@ -10,8 +10,10 @@ The viewer chooses between two candidates and predicts four numbers. Then the fi
 validity, the criterion problem and rater noise; range restriction and unreliability simulated on 200,000 applicants,
 corrected in order, and a correction that overshoots; Schmidt and Hunter's 1998 summary against Sackett and
 colleagues' 2022 revision; interviews, noise and structure; Taylor-Russell tables and the Brogden-Cronbach-Gleser
-utility; adverse impact, *Griggs* and the validity-diversity frontier; algorithms that learned past hiring; goals;
-pay by the windshield and a fine that became a price; satisfaction, psychological safety and a randomized trial of
+utility; adverse impact, *Griggs* and the validity-diversity frontier; algorithms that learned past hiring; Herzberg's two factors and Vroom's expectancy
+theory with their records; goals;
+pay by the windshield and a fine that became a price; satisfaction, psychological safety, leadership (Lewin's clubs, traits, the Ohio
+dimensions, transformational leadership and the critique of its measures) and a randomized trial of
 working from home.
 
 ## Where the numbers come from

@@ -9,6 +9,7 @@ class Teams(VoiceoverScene):
                      scale=("person", "society"))
         self.satisfaction()
         self.safety()
+        self.leaders()
         self.home()
 
     def satisfaction(self):
@@ -45,6 +46,61 @@ class Teams(VoiceoverScene):
            "so. <bookmark mark='c'/> It's the link to Part 51: crew resource management is psychological safety, "
            "trained. <bookmark mark='d'/> Most of the evidence is correlational and from surveys, and interventions "
            "that raise it are harder to test.", tag=published_tag(r"Edmondson (1999)"))
+
+    def leaders(self):
+        head = heading(r"Leaders")
+        q = quadrant([
+            (r"structure, \ little care", r"tasks and deadlines", AUTH),
+            (r"both", r"what the Ohio studies hoped for", GOOD),
+            (r"neither", r"absent", GREY_B),
+            (r"care, \ little structure", r"warm, \ supportive", CARE),
+        ], xlabel=r"consideration", ylabel=r"initiating structure", size=4.4, font_size=19)
+        q.move_to([-4.0, -0.15, 0])
+        checks = verdict_row([
+            (r"Lewin, \ Lippitt and White, \ 1939: \ boys' clubs under autocratic, \ democratic and laissez-faire "
+             r"leaders", "story and record"),
+            (r"traits: \ the Big Five predict who emerges and who is rated effective \ (Judge and colleagues, \ "
+             r"2002)", "replicated"),
+            (r"consideration and structure both relate to outcomes \ (Judge, \ Piccolo and Ilies, \ 2004)",
+             "replicated"),
+            (r"transformational leadership causes performance: \ the questionnaires mix leading with its effects \ "
+             r"(van Knippenberg and Sitkin, \ 2013)", "contested"),
+        ], width=7.6, font_size=18)
+        checks.move_to([2.75, -0.2, 0])
+        tag = published_tag(r"Lewin, \ Lippitt \& White (1939); \ Judge et al.\ (2002); \ Judge, \ Piccolo \& Ilies "
+                            r"(2004); \ van Knippenberg \& Sitkin (2013)")
+        with self.voiceover(
+            "Every team has someone in charge, and leadership is one of the largest literatures in work psychology. "
+            "<bookmark mark='a'/> It began with an experiment. In 1939 Kurt Lewin, Ronald Lippitt and Ralph White "
+            "ran after-school clubs for ten-year-old boys, with adults trained to lead in an autocratic, a "
+            "democratic or a laissez-faire style. The autocratic clubs turned either aggressive or apathetic; the "
+            "democratic ones were the boys' favourites. It was a few small groups, and it's remembered more than "
+            "it's repeated. <bookmark mark='b'/> The search for a leader's traits was declared a failure in the "
+            "nineteen-forties, and then revived: in 2002 Timothy Judge and colleagues found that the Big Five "
+            "predict who emerges as a leader and who is rated effective, extraversion most of all. "
+            "<bookmark mark='c'/> Studies at Ohio State described leaders on two dimensions: consideration, care "
+            "for the people, and initiating structure, care for the task. In 2004 Judge, Ronald Piccolo and Remus "
+            "Ilies found both related to outcomes, consideration more to satisfaction and structure more to "
+            "performance. <bookmark mark='d'/> The idea of the last forty years is transformational leadership: "
+            "leaders who inspire, and change what followers want. Its questionnaires correlate well with outcomes. "
+            "But in 2013 Daan van Knippenberg and Sim Sitkin argued that the questionnaires mix the leader's "
+            "behaviour with its effects, and are usually filled in by the same people who rate the results, so "
+            "the correlations say less than they seem to. <bookmark mark='e'/> A measure that contains its own "
+            "outcome is Part 3's validity problem, at the top of the organisation."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag))
+            vo.wait_until("a")
+            self.play(FadeIn(checks.rows[0], shift=RIGHT * 0.15))
+            vo.wait_until("b")
+            self.play(FadeIn(checks.rows[1], shift=RIGHT * 0.15))
+            vo.wait_until("c")
+            self.play(FadeIn(q.axes), LaggedStart(*[FadeIn(c_) for c_ in q.cells], lag_ratio=0.25),
+                      FadeIn(checks.rows[2], shift=RIGHT * 0.15), run_time=2.2)
+            vo.wait_until("d")
+            self.play(FadeIn(checks.rows[3], shift=RIGHT * 0.15))
+            vo.wait_until("e")
+            self.play(Indicate(checks.rows[3].chip, scale_factor=1.1))
+        self.clear_scene()
 
     def home(self):
         rows_section(self, r"Working from home, \ randomized", [
