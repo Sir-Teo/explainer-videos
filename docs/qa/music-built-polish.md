@@ -244,3 +244,26 @@ Part 68: all 13 chapter preview sheets reviewed; sound and 13 listening-window m
 The source/preview pass is separate from final production: revised neural narration, pronunciation and
 listening, complete-episode joins, measured final-film synchronization, native-resolution motion and final
 mastering remain open. The source and sampled-preview pass is complete across the series; final production approval remains open.
+
+## Round 2: bridges, sign-offs and the reading map
+
+- **Bridges.** Every outro from Part 12 to Part 67 ends on `play_next_part` (`explainer/music/__init__.py`). It shows
+  the Chain lit for this part and then the next, a kicker naming the scene the next hook opens on, the question, and
+  the act strip, which marks an act boundary ("Act VI · Many Musics begins"). Fifty teasers were rewritten after
+  reading the next part's hook. Every card was checked to fit the frame without shrinking the question.
+- **Sign-offs.** Each part from 12 to 67 now ends on the first six seconds of its own Variation (`bridge.signoff`,
+  made by `partkit.signoff` at −18 LUFS momentary), played in a captioned listening window under the next part's
+  title. The next part's bead carries a halo that swells with the clip's envelope. Rendered and checked: Parts 18, 33
+  (an act boundary) and 59 (a custom ending that clears its own heading). Part 63's fingerprint library leaves
+  `bridge.signoff` out, since it copies audio already in the library.
+- **Coverage.** `videos/music/READING.md`, written by `python -m videos.music.reading` and kept true by
+  `tests/music/test_reading.py`, maps about 125 textbooks and 56 theories to the parts that teach them. The following
+  were added to the reference cards and the narration where a part's subject called for them: Zwicker and the Bark
+  (Part 4), Fechner (Part 4), Partch's 43 (Part 6), Piston (Part 18), Armstrong (Part 38), Gorbman and Chion (Part 44),
+  Kivy and Juslin–Laukka (Part 46), Merriam and Blacking (Part 47), and Hood, Kerman, Goehr and Small (Part 67).
+- **Layout fixes found on contact sheets:**
+  - Part 4: the cochleagram heading sat under the sound tag.
+  - Part 18: the Piston citation collided with the heading.
+  - Part 6: the Partch beat now draws its 43 ratios against 12 equal steps.
+  - Part 67: the "six ways of knowing" table overprinted its own columns. It is now three fixed columns, with the six
+    names up from the first word.

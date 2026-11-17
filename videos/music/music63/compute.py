@@ -82,6 +82,8 @@ def library():
         store = ClipStore(f"music{n}")
         for j in sorted(glob.glob(os.path.join(d, "*.json"))):
             name = os.path.basename(j)[:-5]
+            if name == "bridge.signoff":      # a copy of the part's Variation opening, not a clip of its own
+                continue
             try:
                 out[(f"music{n}", name)] = store.load(name)
             except Exception:
