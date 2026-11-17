@@ -6,10 +6,12 @@ from videos.psychology.psych31.common import *  # noqa: F403
 class Parents(VoiceoverScene):
     def construct(self):
         self.card()
+        self.styles()
         self.confound()
         self.siblings()
         self.nurture()
         self.birth_order()
+        self.ecology()
 
     def card(self):
         card = chapter_card(7, r"Parents", r"What do parents do to how a child turns out?",
@@ -17,6 +19,61 @@ class Parents(VoiceoverScene):
                             scale=("person", "group"), marr=("what",))
         with self.voiceover("Chapter seven. Parents."):
             self.play(FadeIn(card, shift=UP * 0.2))
+        self.clear_scene()
+
+    def styles(self):
+        head = heading(r"Four parenting styles")
+        q = quadrant([
+            (r"authoritarian", r"firm rules, \ obedience, \ few reasons", LOST),
+            (r"authoritative", r"warm, \ firm, \ explains its rules", GOOD),
+            (r"neglectful", r"little warmth, \ little supervision", GREY_B),
+            (r"indulgent", r"warm, \ asks little", CARE),
+        ], xlabel=r"responsiveness: \ warmth", ylabel=r"demandingness: \ control", size=5.0, font_size=21)
+        q.move_to([-3.45, -0.2, 0])
+        card_ = theory_card(r"Parenting styles", r"Diana Baumrind, \ 1966--1971; \ Maccoby and Martin, \ 1983",
+                            r"warm, \ firm parents who explain their rules raise competent children",
+                            r"the correlation holds; \ how much of it the style causes is in doubt", "contested",
+                            width=6.3, font_size=20, color=CARE)
+        card_.move_to([3.45, 1.15, 0])
+        checks = verdict_row([
+            (r"Lamborn and colleagues, \ 1991: \ about 4{,}100 teenagers; \ authoritative homes best, \ "
+             r"neglectful homes worst", "replicated"),
+            (r"that the style is the cause: \ children shape their parents \ (Bell, \ 1968) \ and share their "
+             r"genes \ (Avinun and Knafo, \ 2014)", "contested"),
+        ], width=6.3, font_size=19)
+        checks.next_to(card_, DOWN, buff=0.3)
+        tag = published_tag(r"Baumrind (1966, \ 1971); \ Maccoby \& Martin (1983); \ Lamborn et al.\ (1991); \ "
+                            r"Bell (1968)")
+        with self.voiceover(
+            "Before the twin studies, the textbook answer was a typology. <bookmark mark='a'/> In the 1960s Diana "
+            "Baumrind observed preschool children in California, at home and in nursery school, and sorted their "
+            "parents. Authoritarian parents set firm rules and expected obedience, without reasons. Permissive "
+            "parents were warm and asked little. Authoritative parents were both warm and firm, and explained their "
+            "rules. <bookmark mark='b'/> In 1983 Eleanor Maccoby and John Martin turned the types into two "
+            "dimensions, how responsive a parent is and how demanding, and Baumrind's permissive parents split in "
+            "two: indulgent ones, warm but undemanding, and neglectful ones, neither warm nor demanding. "
+            "<bookmark mark='c'/> The children of authoritative parents did best, and as a correlation that has "
+            "held up. In 1991 Susie Lamborn and colleagues surveyed about four thousand one hundred American "
+            "teenagers: those from authoritative homes had the best grades and adjustment, and those from "
+            "neglectful homes the worst. <bookmark mark='d'/> But a correlation between families has more than one "
+            "cause. In 1968 Richard Bell pointed out that children shape their parents too: an easy child invites "
+            "warmth and reasons, a defiant one invites force. And parents and children share genes, which twin "
+            "studies find even in how parents treat each child. <bookmark mark='e'/> So the style goes with the "
+            "outcome. How much of the outcome the style causes is the question for the rest of this chapter."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(q.axes))
+            vo.wait_until("a")
+            self.play(FadeIn(q.cells[0]), FadeIn(q.cells[1]), FadeIn(q.cells[3]),
+                      FadeIn(card_.box), FadeIn(card_.name), FadeIn(card_.claim), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(q.cells[2], scale=0.9), Indicate(q.cells[3].title, color=CARE))
+            vo.wait_until("c")
+            self.play(FadeIn(checks.rows[0], shift=RIGHT * 0.15), Indicate(q.cells[1].box, color=GOOD,
+                                                                            scale_factor=1.04))
+            vo.wait_until("d")
+            self.play(FadeIn(checks.rows[1], shift=RIGHT * 0.15))
+            vo.wait_until("e")
+            self.play(FadeIn(card_.verdict), FadeIn(card_.status))
         self.clear_scene()
 
     def confound(self):
@@ -172,4 +229,55 @@ class Parents(VoiceoverScene):
             for m, r in zip("abcde", rows):
                 vo.wait_until(m)
                 self.play(FadeIn(r, shift=RIGHT * 0.15))
+        self.clear_scene()
+
+    def ecology(self):
+        head = heading(r"Beyond the family")
+        rg = rings([(r"microsystem", CARE), (r"mesosystem", CHILD), (r"exosystem", AGE), (r"macrosystem", COHORT)],
+                   radius=2.6, font_size=20, centre=person(0.55, CHILD))
+        rg.move_to([-3.4, 0.0, 0])
+        notes = VGroup(
+            label(r"family, \ class, \ friends", font_size=19, color=CARE),
+            label(r"the links between them", font_size=19, color=CHILD),
+            label(r"a parent's workplace, \ the council", font_size=19, color=AGE),
+            label(r"culture, \ laws, \ the economy", font_size=19, color=COHORT),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32)
+        notes.move_to([2.35, 1.35, 0], aligned_edge=LEFT)
+        dots = VGroup(*[Dot(radius=0.06, color=c).next_to(n, LEFT, buff=0.18)
+                        for n, c in zip(notes, (CARE, CHILD, AGE, COHORT))])
+        chrono = Arrow([-6.4, -3.4, 0], [-0.4, -3.4, 0], buff=0, color=PERIOD, stroke_width=4,
+                       max_tip_length_to_length_ratio=0.04)
+        chrono_l = label(r"chronosystem: \ the year and the generation \ (chapter one's clocks)", font_size=19,
+                         color=PERIOD).next_to(chrono, UP, buff=0.08)
+        card_ = theory_card(r"Ecological systems", r"Urie Bronfenbrenner, \ 1979",
+                            r"a child develops inside nested settings, \ and the links between them",
+                            r"a map of where a cause might sit, \ not a prediction that could fail",
+                            "not directly tested", width=5.2, font_size=19, color=COHORT)
+        card_.move_to([4.05, -1.55, 0])
+        tag = published_tag(r"Bronfenbrenner (1979, \ 1986)", corner=DR)
+        with self.voiceover(
+            "Parents, siblings and birth order all sit inside the family. An older framework drew what lies "
+            "around it. <bookmark mark='a'/> In 1979 Urie Bronfenbrenner described a child's world as nested "
+            "systems. The microsystem is the settings the child is in: the family, the classroom, the friends. "
+            "<bookmark mark='b'/> The mesosystem is the links between them, such as whether home and school pull "
+            "the same way. <bookmark mark='c'/> The exosystem holds settings the child never enters that still "
+            "reach it, like a parent's workplace or the local council. The macrosystem is the culture, the laws "
+            "and the economy around all of these. <bookmark mark='d'/> Later he added the chronosystem, time: the "
+            "year and the generation a child grows up in, which are chapter one's period and cohort clocks. "
+            "<bookmark mark='e'/> It is a framework rather than a theory with a prediction that could fail, and its "
+            "use is as a map of where a cause might sit. It was also meant for action: Bronfenbrenner helped plan "
+            "Head Start, the kind of programme the next chapter tests."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(rg.centre))
+            vo.wait_until("a")
+            self.play(FadeIn(rg.rings[0]), FadeIn(dots[0]), FadeIn(notes[0]))
+            vo.wait_until("b")
+            self.play(FadeIn(rg.rings[1]), FadeIn(dots[1]), FadeIn(notes[1]))
+            vo.wait_until("c")
+            self.play(FadeIn(rg.rings[2]), FadeIn(dots[2]), FadeIn(notes[2]))
+            self.play(FadeIn(rg.rings[3]), FadeIn(dots[3]), FadeIn(notes[3]))
+            vo.wait_until("d")
+            self.play(GrowArrow(chrono), FadeIn(chrono_l))
+            vo.wait_until("e")
+            self.play(FadeIn(card_, shift=UP * 0.15))
         self.clear_scene()

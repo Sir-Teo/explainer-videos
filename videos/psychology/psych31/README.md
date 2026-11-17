@@ -12,7 +12,8 @@ the identity that leaves only two of three slopes identified; cross-sectional, l
 designs on a simulated population with a true ageing curve and a cohort drift, and the Schaie–Salthouse debate; the
 viewer sorts three graphs by clock; growth curves as a linear mixed model fitted by EM, with BLUPs shrunk toward the
 fan; sensitive periods in vision, grammar and care; adolescence: peers and risk, the dual-systems curves and the late
-chronotype; parents, shared environment and adoptive siblings, the nurture assumption, and birth order; Perry
+chronotype; Baumrind's parenting styles on Maccoby and Martin's two axes, with Lamborn's survey and the
+question of direction; parents, shared environment and adoptive siblings, the nurture assumption, and birth order; Bronfenbrenner's nested systems; Perry
 Preschool, Abecedarian and the multiplicity of outcomes, and the word gap with its measurement problem; Kohlberg's
 stages, Gilligan's critique and its record, and Erikson; fluid and crystallized abilities, processing speed and the
 positivity effect; dementia, cognitive reserve, attributable fractions and the FINGER trial, and adult neurogenesis;

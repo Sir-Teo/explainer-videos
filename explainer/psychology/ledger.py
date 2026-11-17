@@ -5102,6 +5102,9 @@ add(Finding(
     checked="2026-11-16",
 ))
 
+shown(35, r"Lerner \& Simmons (1966); \ Jones \& Nisbett (1971); \ Ross (1977); \ Mezulis et al.\ (2004); \ Hafer \& "
+      r"B\`egue (2005); \ Malle (2006)", "the textbook's attribution biases, each with the meta-analysis or review that "
+      "tested it; the correspondence bias has its row")
 shown(35, r"Ajzen (1991); \ Glasman \& Albarrac\'in (2006)", "a theory and a meta-analysis of when attitudes predict, "
       "described without effect sizes")
 shown(35, r"Ambady \& Rosenthal (1993)", "thin slices, described qualitatively; Part 53 weighs interviews")

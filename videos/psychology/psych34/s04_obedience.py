@@ -148,15 +148,26 @@ class Obedience(VoiceoverScene):
 
     def archives(self):
         head = heading(r"What the archives show")
-        rows = rows_of([
-            (r"Gina Perry, \ \emph{Behind the Shock Machine}, \ 2012: \ the tapes and papers at Yale", WHITE),
-            (r"the experimenter did not keep to the script: \ he improvised prods and pressed some people beyond "
-             r"the four", AUTH),
-            (r"Milgram's own unpublished questionnaires, \ 656 of them, \ reanalysed: \ only about half the "
-             r"participants fully believed the shocks were real", CROWD),
-            (r"those who believed the learner was in pain were about two and a half times as likely to refuse", GOOD),
-            (r"so the 65\% mixes obedience with doubt about whether anything bad was happening", YOU),
-        ], 12.4, 22, 0.36).move_to([0, -0.3, 0])
+        top = point_cards([
+            (r"Gina Perry, \ \emph{Behind the Shock Machine}, \ 2012", r"the tapes and papers at Yale", WHITE),
+            (r"Off the script", r"the experimenter improvised prods, \ and pressed some people beyond the four",
+             AUTH),
+        ], width=12.4, font_size=21)
+        top.move_to([0, 1.85, 0])
+        src = label(r"Milgram's own unpublished questionnaires, \ 656 of them, \ reanalysed", font_size=21,
+                    color=CROWD).move_to([0, 0.25, 0])
+        W, H, y0 = 10.4, 0.85, -0.75
+        bel = Rectangle(width=W / 2, height=H, stroke_width=0, fill_color=AUTH, fill_opacity=0.75)
+        dbt = Rectangle(width=W / 2, height=H, stroke_width=0, fill_color=GREY_D, fill_opacity=0.9)
+        bar = VGroup(bel, dbt).arrange(RIGHT, buff=0.04).move_to([0, y0, 0])
+        bl = label(r"fully believed the shocks were real: \ about half", font_size=20, color=WHITE).move_to(bel)
+        dl = label(r"had doubts", font_size=20, color=WHITE).move_to(dbt)
+        ref = VGroup(Arrow(bel.get_bottom() + DOWN * 0.05, bel.get_bottom() + DOWN * 0.75, buff=0, color=GOOD,
+                           stroke_width=3, max_tip_length_to_length_ratio=0.3),
+                     label(r"about 2.5 times as likely to refuse", font_size=21, color=GOOD))
+        ref[1].next_to(ref[0], RIGHT, buff=0.2)
+        foot = wrapped_label(r"so the 65\% mixes obedience with doubt about whether anything bad was happening", 12.0,
+                             22, YOU).move_to([0, -2.95, 0])
         tag = published_tag(r"Perry (2012); \ Perry et al.")
         with self.voiceover(
             "Then the archives were opened. <bookmark mark='a'/> In 2012 the psychologist Gina Perry published "
@@ -169,25 +180,42 @@ class Obedience(VoiceoverScene):
             "percent mixes obedience with doubt about whether anything bad was happening at all."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
-            for m, r in zip("abcde", rows):
-                vo.wait_until(m)
-                self.play(FadeIn(r, shift=RIGHT * 0.15))
+            vo.wait_until("a")
+            self.play(FadeIn(top.cards[0], shift=UP * 0.15))
+            vo.wait_until("b")
+            self.play(FadeIn(top.cards[1], shift=UP * 0.15))
+            vo.wait_until("c")
+            self.play(FadeIn(src), GrowFromEdge(bel, LEFT), GrowFromEdge(dbt, LEFT), FadeIn(bl), FadeIn(dl),
+                      run_time=1.6)
+            vo.wait_until("d")
+            self.play(GrowArrow(ref[0]), FadeIn(ref[1], shift=RIGHT * 0.1))
+            vo.wait_until("e")
+            self.play(FadeIn(foot, shift=UP * 0.1))
         self.clear_scene()
 
     def prods(self):
         head = heading(r"Obedience, \ or engaged followership?")
-        rows = rows_of([
-            (r"Milgram's account: \ in the ``agentic state'' people hand responsibility to the authority and simply "
-             r"follow", AUTH),
-            (r"but the only prod that is a true order, \ ``you have no other choice, \ you must go on'', \ was the "
-             r"least effective, \ in Burger's study and in analyses of Milgram's recordings", CROWD),
-            (r"Haslam, \ Reicher and Millard, \ 2015: \ the procedure restaged in immersive digital realism with "
-             r"actors: \ after the fourth prod, \ nearly everyone refused", GOOD),
-            (r"Haslam and Reicher's reading, \ 2012: \ people went on when they identified with the experimenter's "
-             r"scientific cause, \ as engaged followers, \ not as automata", YOU),
-            (r"what is solid: \ ordinary people will hurt someone at an authority's request in some situations; \ "
-             r"why they do is still argued", MODEL),
-        ], 12.4, 22, 0.34).move_to([0, -0.3, 0])
+        ladder = flow_chain([(r"1. \ ``Please continue''", GREY_B),
+                             (r"2. \ ``The experiment requires that you continue''", GREY_B),
+                             (r"3. \ ``It is absolutely essential that you continue''", GREY_B),
+                             (r"4. \ ``You have no other choice, \ you must go on''", AUTH)],
+                            direction=DOWN, box_w=4.9, box_h=0.78, buff=0.26, font_size=19)
+        ladder.move_to([-3.75, 0.85, 0])
+        least = label(r"a true order, \ and the least effective", font_size=19, color=AUTH)
+        least.next_to(ladder.boxes[3], DOWN, buff=0.18)
+        restage = wrapped_label(r"Haslam, \ Reicher and Millard, \ 2015: \ restaged with actors in immersive "
+                                r"digital realism; \ after the fourth prod, \ nearly everyone refused", 5.4, 19, GOOD)
+        restage.next_to(least, DOWN, buff=0.22)
+        cards = point_cards([
+            (r"Milgram: \ the agentic state", r"people hand responsibility to the authority, \ and simply follow",
+             AUTH),
+            (r"Haslam and Reicher, \ 2012: \ engaged followership", r"people went on when they identified with the "
+             r"experimenter's scientific cause: \ followers, \ not automata", GOOD),
+        ], width=6.6, cols=1, font_size=21)
+        cards.move_to([3.15, 0.75, 0])
+        foot = wrapped_label(r"what is solid: \ ordinary people will hurt someone at an authority's request in some "
+                             r"situations; \ why they do is still argued", 6.6, 20, MODEL)
+        foot.next_to(cards, DOWN, buff=0.35)
         tag = published_tag(r"Haslam \& Reicher (2012); \ Haslam, \ Reicher \& Millard (2015)")
         with self.voiceover(
             "Why did people go on? <bookmark mark='a'/> Milgram's answer was the agentic state: people hand "
@@ -201,7 +229,16 @@ class Obedience(VoiceoverScene):
             "in some situations. Why they do is still argued."
         ) as vo:
             self.play(FadeIn(head), FadeIn(tag))
-            for m, r in zip("abcde", rows):
-                vo.wait_until(m)
-                self.play(FadeIn(r, shift=RIGHT * 0.15))
+            vo.wait_until("a")
+            self.play(FadeIn(cards.cards[0], shift=LEFT * 0.15),
+                      LaggedStart(*[FadeIn(b_) for b_ in ladder.boxes], lag_ratio=0.3),
+                      LaggedStart(*[GrowArrow(a_) for a_ in ladder.arrows], lag_ratio=0.3), run_time=2.0)
+            vo.wait_until("b")
+            self.play(Indicate(ladder.boxes[3], color=AUTH, scale_factor=1.05), FadeIn(least, shift=UP * 0.1))
+            vo.wait_until("c")
+            self.play(FadeIn(restage, shift=UP * 0.1))
+            vo.wait_until("d")
+            self.play(FadeIn(cards.cards[1], shift=LEFT * 0.15))
+            vo.wait_until("e")
+            self.play(FadeIn(foot, shift=UP * 0.1))
         self.clear_scene()

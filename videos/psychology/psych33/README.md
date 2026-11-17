@@ -12,7 +12,8 @@ varimax, alpha, the scales' correlations; the viewer predicts four numbers; type
 split's information loss and the arcsine law for retests; Hartshorne and May's honest and dishonest children and
 Mischel's .30, rebuilt in a simulated world of people and situations; Epstein's aggregation and the Spearman-Brown
 curve, Funder and Ozer's situational effects, Fleeson's distributions of states and if-then signatures; rank-order
-stability, mean-level change and changing on purpose; heritability, Eysenck and Gray, and a multitrait-multimethod
+stability, mean-level change and changing on purpose; heritability; temperament, from Kagan's high-reactive infants to
+the Dunedin cohort and Clauss and Blackford's meta-analysis; Eysenck and Gray, and a multitrait-multimethod
 table from real data; what traits predict and Soto's 78 replications, with the binomial effect-size display; Freud
 under Part 3's standards; women and men in one dimension and in many; personality from footprints, Cambridge
 Analytica and psychological targeting. The practice chapter is hiring, faking and personality products; the frontier

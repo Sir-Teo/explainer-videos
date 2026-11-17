@@ -7,6 +7,7 @@ class Origins(VoiceoverScene):
     def construct(self):
         self.card()
         self.genes()
+        self.temperament()
         self.biology()
         self.two_tests()
 
@@ -57,6 +58,64 @@ class Origins(VoiceoverScene):
             for m, r in zip("cd", rows[2:]):
                 vo.wait_until(m)
                 self.play(FadeIn(r, shift=RIGHT * 0.15))
+        self.clear_scene()
+
+    def temperament(self):
+        head = heading(r"Temperament: \ a trait before experience")
+        chain = flow_chain([
+            (r"about 1 baby in 5 thrashes and cries at new sights, \ sounds and smells", N_),
+            (r"inhibited: \ quiet with a stranger, \ slow to touch a new toy", N_),
+            (r"as a group, \ still quieter and more cautious", AGE),
+            (r"more often subdued and anxious; \ few had become bold", COHORT),
+        ], box_w=3.0, box_h=1.45, buff=0.42, font_size=20,
+            notes=[r"4 months: \ high-reactive", r"1 to 2 years", r"7\textonehalf\ years", r"adolescence"],
+            note_size=19)
+        chain.move_to([0, 1.25, 0])
+        who = label(r"Jerome Kagan's children, \ followed from infancy", font_size=21, color=GREY_A)
+        who.next_to(chain, UP, buff=0.22)
+        checks = verdict_row([
+            (r"Caspi and Silva, \ 1995: \ about 1{,}000 Dunedin children; \ inhibited at three, \ more cautious "
+             r"and less forceful at eighteen", "replicated, smaller"),
+            (r"Clauss and Blackford, \ 2012: \ a meta-analysis; \ inhibited children had more than seven times "
+             r"the odds of later social anxiety disorder", "replicated"),
+        ], width=12.4, font_size=20)
+        checks.move_to([0, -1.65, 0])
+        moral = label(r"a narrower range of outcomes, \ not a destiny", font_size=22, color=YOU)
+        moral.next_to(checks, DOWN, buff=0.3)
+        tag = published_tag(r"Kagan, \ Reznick \& Snidman (1988); \ Caspi \& Silva (1995); \ Clauss \& Blackford "
+                            r"(2012)")
+        with self.voiceover(
+            "If traits are partly inherited, something like them should show before life has had much say. Part 30 "
+            "met Alexander Thomas and Stella Chess's easy, difficult and slow-to-warm-up babies, sorted from what "
+            "their parents reported. <bookmark mark='a'/> Jerome Kagan brought temperament into the laboratory. At "
+            "four months he showed babies moving mobiles, recorded voices and new smells. About one in five "
+            "thrashed and cried, and he called them high-reactive. <bookmark mark='b'/> As toddlers, many of these "
+            "children were inhibited: quiet with a stranger, slow to touch a new toy, staying close to their "
+            "mothers. In 1988 Kagan, Steven Reznick and Nancy Snidman reported that children picked out near the "
+            "age of two as extremely inhibited or uninhibited still differed, as groups, at seven and a half. "
+            "<bookmark mark='c'/> Followed into adolescence, high-reactive infants were more often subdued and "
+            "anxious, and few had become bold. But many had moved toward the middle. <bookmark mark='d'/> Other "
+            "cohorts agree. In New Zealand's Dunedin study of about a thousand children, Avshalom Caspi and Phil "
+            "Silva found that inhibited three-year-olds were more cautious and less forceful at eighteen. And a "
+            "2012 meta-analysis by Jacqueline Clauss and Jennifer Blackford found that behaviourally inhibited "
+            "children had more than seven times the odds of a later social anxiety disorder. "
+            "<bookmark mark='e'/> So temperament narrows the range of outcomes rather than fixing one. And "
+            "inhibition, the clearest early form of a trait, looks like the anxious end of the systems that the "
+            "next theories describe."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(who))
+            vo.wait_until("a")
+            self.play(FadeIn(chain.boxes[0]), FadeIn(chain.notes[0]))
+            vo.wait_until("b")
+            self.play(GrowArrow(chain.arrows[0]), FadeIn(chain.boxes[1]), FadeIn(chain.notes[1]))
+            self.play(GrowArrow(chain.arrows[1]), FadeIn(chain.boxes[2]), FadeIn(chain.notes[2]))
+            vo.wait_until("c")
+            self.play(GrowArrow(chain.arrows[2]), FadeIn(chain.boxes[3]), FadeIn(chain.notes[3]))
+            vo.wait_until("d")
+            self.play(FadeIn(checks.rows[0], shift=RIGHT * 0.15))
+            self.play(FadeIn(checks.rows[1], shift=RIGHT * 0.15))
+            vo.wait_until("e")
+            self.play(FadeIn(moral, shift=UP * 0.1))
         self.clear_scene()
 
     def biology(self):

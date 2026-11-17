@@ -9,6 +9,7 @@ class Money(VoiceoverScene):
         self.two_findings()
         self.world()
         self.resolution()
+        self.easterlin()
 
     def card(self):
         card = chapter_card(11, r"Happiness and income", r"Does money buy happiness, \ and up to what point?",
@@ -125,4 +126,84 @@ class Money(VoiceoverScene):
             for m, r in zip("abcde", rows):
                 vo.wait_until(m)
                 self.play(FadeIn(r, shift=RIGHT * 0.15))
+        self.clear_scene()
+
+    def easterlin(self):
+        head = heading(r"Richer people, \ richer countries, \ richer years")
+        rng = np.random.default_rng(1974)
+        titles = [(r"within a country, \ one year", COG), (r"across countries", PLEAS),
+                  (r"one country, \ over time", UNPL)]
+        panels = VGroup()
+        for i, (t, c) in enumerate(titles):
+            A = axes([0, 1], [0, 1], x_length=3.3, y_length=2.1, xticks=None, yticks=None,
+                     xlabel=(r"log income" if i < 2 else r"year"), ylabel=r"happiness", font_size=17,
+                     center=[-4.45 + 4.45 * i, 1.0, 0])
+            ttl = label(t, font_size=21, color=c).next_to(A, UP, buff=0.12)
+            panels.add(VGroup(A, ttl))
+        xs = rng.uniform(0.05, 0.95, 70)
+        people = scatter(panels[0][0].ax, xs, np.clip(0.25 + 0.45 * xs + rng.normal(0, 0.14, 70), 0.03, 0.97),
+                         COG, radius=0.035)
+        xc = rng.uniform(0.08, 0.92, 26)
+        nations = scatter(panels[1][0].ax, xc, np.clip(0.15 + 0.7 * xc + rng.normal(0, 0.07, 26), 0.03, 0.97),
+                          PLEAS, radius=0.055)
+        ax3 = panels[2][0].ax
+        yrs = np.linspace(0.05, 0.95, 25)
+        inc = curve(ax3, yrs, 0.18 + 0.7 * yrs, GREY_B, 3)
+        hap = curve(ax3, yrs, 0.5 + 0.03 * np.sin(9 * yrs), UNPL, 4)
+        inc_l = label(r"income", font_size=17, color=GREY_B).next_to(ax3.c2p(0.95, 0.88), LEFT, buff=0.1)
+        hap_l = label(r"happiness", font_size=17, color=UNPL).next_to(ax3.c2p(0.95, 0.5), DOWN, buff=0.12)
+        hap_l.align_to(inc_l, RIGHT)
+        why = point_cards([
+            (r"comparison", r"income is judged against other people's; \ when everyone grows richer, \ nobody "
+             r"moves up", COG),
+            (r"adaptation", r"like chapter ten's lottery winners, \ last year's raise becomes this year's normal",
+             BODY),
+        ], width=12.4, font_size=20)
+        why.move_to([0, -2.05, 0])
+        checks = verdict_row([
+            (r"within and across countries, \ happiness rises with log income \ (Deaton; \ Stevenson and "
+             r"Wolfers, \ 2008)", "replicated"),
+            (r"over ten years or more, \ faster growth does not bring faster-rising happiness \ (Easterlin et "
+             r"al., \ 2010)", "contested"),
+        ], width=12.4, font_size=20)
+        checks.move_to([0, -2.05, 0])
+        stamp = label(r"schematic: \ the shapes the studies reported", font_size=17, color=GREY_B)
+        stamp.move_to([0, -0.62, 0])
+        tag = published_tag(r"Easterlin (1974); \ Deaton (2008); \ Stevenson \& Wolfers (2008); \ "
+                            r"Easterlin et al.\ (2010)")
+        with self.voiceover(
+            "The question is older than these studies, and it began with nations. <bookmark mark='a'/> In 1974 the "
+            "economist Richard Easterlin gathered surveys that asked people how happy they were. Within a country, "
+            "in any one year, richer people said they were happier. <bookmark mark='b'/> But in the United States, "
+            "from 1946 to 1970, income per head rose a long way, and reported happiness did not rise with it. If "
+            "money buys happiness for each person, why not for a nation? It became known as the Easterlin paradox. "
+            "<bookmark mark='c'/> His answer had two parts. People judge their income against other people's, so "
+            "when everyone grows richer together, nobody moves up. And people adapt, like the lottery winners of "
+            "chapter ten: last year's raise becomes this year's normal. <bookmark mark='d'/> In 2008 came replies "
+            "from larger data. Angus Deaton, with the Gallup World Poll, and Betsey Stevenson and Justin Wolfers, "
+            "with many surveys, found that across countries life satisfaction rises steadily with the logarithm of "
+            "income, with no point where it stops, and they argued that the short, noisy series over time were "
+            "consistent with the same slope. <bookmark mark='e'/> Easterlin and his colleagues replied in 2010 "
+            "that over ten years or more, countries whose incomes grew faster did not become happier faster, even "
+            "where income doubled within twenty years. <bookmark mark='f'/> So the slope across people and across "
+            "countries is settled. Whether growth makes a nation happier is still argued, and the answer turns on "
+            "which surveys, which countries, and how long a run."
+        ) as vo:
+            self.play(FadeIn(head), FadeIn(tag), FadeIn(stamp))
+            vo.wait_until("a")
+            self.play(FadeIn(panels[0]), LaggedStart(*[FadeIn(p) for p in people], lag_ratio=0.02), run_time=2.0)
+            vo.wait_until("b")
+            self.play(FadeIn(panels[2]), Create(inc), FadeIn(inc_l), run_time=1.6)
+            self.play(Create(hap), FadeIn(hap_l), run_time=1.6)
+            vo.wait_until("c")
+            self.play(FadeIn(why.cards[0], shift=UP * 0.15))
+            self.play(FadeIn(why.cards[1], shift=UP * 0.15))
+            vo.wait_until("d")
+            self.play(FadeOut(why), FadeIn(panels[1]), LaggedStart(*[FadeIn(p) for p in nations], lag_ratio=0.05),
+                      FadeIn(checks.rows[0], shift=RIGHT * 0.15), run_time=2.0)
+            vo.wait_until("e")
+            self.play(FadeIn(checks.rows[1], shift=RIGHT * 0.15))
+            vo.wait_until("f")
+            self.play(Indicate(checks.rows[1].chip, color=STATUS_COLOR["contested"], scale_factor=1.1),
+                      Indicate(panels[2][1], color=UNPL, scale_factor=1.06))
         self.clear_scene()

@@ -14,7 +14,8 @@ the camera, and 286 effects pooled from the open data, with groups by manipulati
 precision-effect test; an appraisal model that labels six scenarios; LeDoux's two roads and a stick-or-snake
 circuit; S.M.; stress, the process model, reappraisal against suppression; the impact bias, an adaptation model and
 lottery winners; the 2010 plateau and the 2021 no-plateau reconciled in a simulated world and by the 2023
-adversarial collaboration; and the critical positivity ratio, the Lorenz equations and how they were taken apart.
+adversarial collaboration, and the Easterlin paradox across people, countries and years, with Deaton's and
+Stevenson and Wolfers's replies and Easterlin's; and the critical positivity ratio, the Lorenz equations and how they were taken apart.
 The practice chapter is emotion-recognition software, well-being statistics and reappraisal in therapy; the
 frontier is interoceptive inference, emotion in animals, and affect in machines.
 
