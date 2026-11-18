@@ -78,7 +78,7 @@ class Church(WatchScene):
         self.clear_scene()
 
     def arithmetic(self):
-        self.ask(r"Church numerals: \\ $\textsf{times}\\ 2\\ 3$ reduces to...", [r"the numeral 5", r"the numeral 6",
+        self.ask(r"Church numerals: \\ $\textsf{times}\ 2\ 3$ reduces to...", [r"the numeral 5", r"the numeral 6",
                  r"the numeral 8"], 1,
                  say="With Church numerals, what does times two three reduce to?",
                  reveal="The numeral six: apply f three times, two times over.")
