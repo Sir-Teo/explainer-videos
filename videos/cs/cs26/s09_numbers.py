@@ -4,21 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, words)
 
 
-class Numbers(VoiceoverScene):
+class Numbers(WatchScene):
     def construct(self):
         self.card()
         self.pseudo()
         self.strong()
 
     def card(self):
-        card = chapter_card(8, r"Strong and weak hardness", r"When is a hard problem only hard because of big "
-                            r"numbers?", lit=(1975, 1978), extra=((1975, r"Ibarra--Kim"), (1978, r"Garey--Johnson")),
-                            part=PART)
-        with self.voiceover("Chapter eight. Strong and weak hardness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Strong and weak hardness", r"When is a hard problem only hard because of big "
+                            r"numbers?", lit=(1975, 1978), extra=((1975, r"Ibarra--Kim"), (1978, r"Garey--Johnson")), part=PART, said="Chapter eight. Strong and weak hardness.")
 
     def pseudo(self):
+        self.ask(r"Subset sum by dynamic programming in time $n \cdot W$. \\ Polynomial time?", [r"yes",
+                 r"no: pseudo-polynomial"], 1,
+                 say="Dynamic programming solves subset sum in n times W steps. Is that polynomial time?",
+                 reveal="No: W can be exponential in the number of digits used to write it. Pseudo-polynomial.")
         k = load("knapsack")
         head = label(r"Subset sum: \ NP-complete, \ yet the DP is fast?", font_size=32).to_edge(UP, buff=0.35)
         rows = [[str(r["digits"]), words(r["W"]), f"{r['dp_s'] * 1000:.2f} ms"] for r in k["rows"]]
@@ -63,7 +63,7 @@ class Numbers(VoiceoverScene):
             label(r"so ``NP-hard'' is the start of the analysis, \ not the end", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.28).next_to(head, DOWN, buff=0.5)
         with self.voiceover(
-            "Numeric encodings refine hardness. <bookmark mark='a'/> Weakly NP-hard numerical problems such as subset sum admit pseudo-polynomial algorithms, but their binary-encoded general cases remain NP-hard. <bookmark mark='b'/> Strong NP-hardness persists even when numeric parameters are polynomially bounded, as in three-partition and suitable bin-packing decision formulations. <bookmark mark='c'/> This distinction is about the input encoding and restrictions; it is not a guarantee about every instance. <bookmark mark='d'/> Some optimization problems admit useful rounding schemes. <bookmark mark='e'/> Positive-profit zero-one knapsack has an FPTAS: for each positive epsilon it obtains at least one minus epsilon of optimum in time polynomial in the input length and one over epsilon. <bookmark mark='f'/> Weak hardness alone does not guarantee an FPTAS. For strongly NP-hard optimization with an integer objective polynomially bounded on the hard restricted instances, an FPTAS would imply P equals NP. Asymptotic schemes such as bin packing's have a different guarantee. <bookmark mark='g'/> State the objective and approximation definition before drawing conclusions from hardness."
+            "Numeric encodings refine hardness. <bookmark mark='a'/> Weakly NP-hard numerical problems such as subset sum admit pseudo-polynomial algorithms, but their binary-encoded general cases remain NP-hard. <bookmark mark='b'/> Strong NP-hardness persists even when numeric parameters are polynomially bounded, as in three-partition and suitable bin-packing decision formulations. <bookmark mark='c'/> <bookmark mark='d'/> Some optimization problems admit useful rounding schemes. <bookmark mark='e'/> Positive-profit zero-one knapsack has an FPTAS: for each positive epsilon it obtains at least one minus epsilon of optimum in time polynomial in the input length and one over epsilon. <bookmark mark='f'/> Weak hardness alone does not guarantee an FPTAS. For strongly NP-hard optimization with an integer objective polynomially bounded on the hard restricted instances, an FPTAS would imply P equals NP. Asymptotic schemes such as bin packing's have a different guarantee. <bookmark mark='g'/> State the objective and approximation definition before drawing conclusions from hardness."
         ) as vo:
             self.play(FadeIn(head))
             for mk, ln in zip("abcdefg", lines):

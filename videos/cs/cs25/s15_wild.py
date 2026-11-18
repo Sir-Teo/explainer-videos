@@ -10,21 +10,20 @@ def life_step(cells):
     return {p for p, k in cnt.items() if k == 3 or (k == 2 and p in cells)}
 
 
-class Wild(VoiceoverScene):
+class Wild(WatchScene):
     def construct(self):
         self.card()
         self.accidents()
         self.physics()
 
     def card(self):
-        card = chapter_card(14, r"Undecidability in the wild", r"Where do working programmers meet it?",
-                            lit=(2003, 2019), extra=((2003, r"C++ templates"), (2017, r"Java generics"),
-                                                    (2019, r"Magic: the Gathering")), part=PART)
-        with self.voiceover("Chapter fourteen. Undecidability in the wild."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Undecidability in the wild", r"Where do working programmers meet it?", lit=(2003, 2019), extra=((2003, r"C++ templates"), (2017, r"Java generics"),
+                                                    (2019, r"Magic: the Gathering")), part=PART, said="Chapter fourteen. Undecidability in the wild.")
 
     def accidents(self):
+        self.ask(r"C++ templates, alone, at compile time: \\ Turing complete?", [r"no", r"yes"], 1,
+                 say="C++ templates, evaluated entirely at compile time. Are they Turing complete?",
+                 reveal="Yes, with unbounded resources: so is deciding what a template program will do.")
         head = label(r"Accidentally Turing complete", font_size=34).to_edge(UP, buff=0.3)
         items = [
             (r"C++ templates", r"Veldhuizen \ (2003): \ type-level programs; \\ compilers cap the depth \ "
@@ -63,7 +62,7 @@ class Wild(VoiceoverScene):
                    color=GREY_A).next_to(frames, DOWN, buff=0.1)
         note_ = label('ideal unbounded resources; finite implementation limits change the decision problem', font_size=20, color=NO).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "Universality can appear in unexpected rule systems under IDEAL UNBOUNDED resources. <bookmark mark='a'/> C++ template metaprograms encode computation; real compilers impose depth and memory limits. <bookmark mark='b'/> Grigore's Java-generics result concerns the formal unbounded subtyping problem. Recursive type-level systems likewise differ from finite implementations with cutoffs. <bookmark mark='c'/> The Magic construction uses a precise idealized game model; finite hardware limits are not part of its universality theorem. <bookmark mark='d'/> Dolan's move-instruction construction requires a repeating control-flow convention as well as unbounded storage. A finite straight-line list of moves alone is not universal. <bookmark mark='e'/> Life uses an unbounded grid; the displayed finite glider merely illustrates local dynamics. <bookmark mark='f'/> Choose restrictions for a particular decision problem. Being less than Turing complete by itself does not prove all semantic questions decidable."
+            "Universality can appear in unexpected rule systems under IDEAL UNBOUNDED resources. <bookmark mark='a'/> C++ template metaprograms encode computation; real compilers impose depth and memory limits. <bookmark mark='b'/> Grigore's Java-generics result concerns the formal unbounded subtyping problem. Recursive type-level systems likewise differ from finite implementations with cutoffs. <bookmark mark='c'/> The Magic construction uses a precise idealized game model; finite hardware limits are not part of its universality theorem. <bookmark mark='d'/> Dolan's move-instruction construction requires a repeating control-flow convention as well as unbounded storage. A finite straight-line list of moves alone is not universal. <bookmark mark='e'/> Life uses an unbounded grid; the displayed finite glider merely illustrates local dynamics. <bookmark mark='f'/> Choose restrictions for a particular decision problem."
         ) as vo:
             self.play(FadeIn(head))
             for mk, k in zip("abcde", [[0], [1, 2], [3], [4], [5]]):

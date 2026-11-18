@@ -5,7 +5,7 @@ from videos.cs.cs26.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, bar
                                    load)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.formulas()
@@ -14,12 +14,9 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ complexity about complexity", r"How hard is it to tell how hard a "
+        self.chapter(16, r"Frontier: \ complexity about complexity", r"How hard is it to tell how hard a "
                             r"function is?", lit=(1949, 2022), extra=((1949, r"Shannon"), (2020, r"Liu--Pass"),
-                                                                        (2022, r"Hirahara")), part=PART)
-        with self.voiceover("Chapter sixteen, the frontier. Complexity about complexity."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                        (2022, r"Hirahara")), part=PART, said="Chapter sixteen, the frontier. Complexity about complexity.")
 
     def formulas(self):
         f = load("formulas")
@@ -84,6 +81,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def meta(self):
+        self.ask(r"Given a truth table and a size $s$, \\ is there a circuit that small? \\ NP-complete?",
+                 [r"proved", r"open"], 1,
+                 say="Given a function's truth table, is there a circuit of size s? Is that problem NP-complete?",
+                 reveal="Nobody knows. It's the minimum circuit size problem, at the centre of meta-complexity.")
         head = label(r"Meta-complexity", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"\textbf{MCSP}: \ given a truth table and $s$, \ is there a circuit of size $\le s$?", font_size=22,

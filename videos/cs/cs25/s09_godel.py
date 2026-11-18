@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Godel(VoiceoverScene):
+class Godel(WatchScene):
     def construct(self):
         self.card()
         self.numbering()
@@ -13,11 +13,8 @@ class Godel(VoiceoverScene):
         self.second()
 
     def card(self):
-        card = chapter_card(8, r"G\"odel, through halting", r"Can a theory prove every true statement about "
-                            r"programs?", lit=(1931, 1936), extra=((1931, r"G\"odel"), (1936, r"Turing")), part=PART)
-        with self.voiceover("Chapter eight. Gödel, through halting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"G\"odel, through halting", r"Can a theory prove every true statement about "
+                            r"programs?", lit=(1931, 1936), extra=((1931, r"G\"odel"), (1936, r"Turing")), part=PART, said="Chapter eight. Gödel, through halting.")
 
     def numbering(self):
         g = load("godel")
@@ -74,6 +71,9 @@ class Godel(VoiceoverScene):
         self.clear_scene()
 
     def halting(self):
+        self.ask(r"A consistent theory that proves \\ every true statement of arithmetic. Possible?", [r"yes", r"no"], 1,
+                 say="Could a consistent, effective theory prove every true statement about arithmetic?",
+                 reveal="No. If it could, it would decide halting. That's Gödel's first theorem, through Turing.")
         head = label(r"Incompleteness from the halting problem", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(
             label('an EFFECTIVELY axiomatized arithmetic theory $T$: a program enumerates every theorem', font_size=22,

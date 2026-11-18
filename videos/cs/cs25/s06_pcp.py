@@ -15,7 +15,7 @@ def domino(top, bot, w=None, color=DATA, font=22):
     return VGroup(box_, rule, t, b)
 
 
-class Pcp(VoiceoverScene):
+class Pcp(WatchScene):
     def construct(self):
         self.card()
         self.game()
@@ -24,13 +24,14 @@ class Pcp(VoiceoverScene):
         self.grammars()
 
     def card(self):
-        card = chapter_card(5, r"Post's correspondence problem", r"Can a puzzle with dominoes be undecidable?",
-                            lit=(1946,), extra=((1946, r"Post"),), part=PART)
-        with self.voiceover("Chapter five. Post's correspondence problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Post's correspondence problem", r"Can a puzzle with dominoes be undecidable?", lit=(1946,), extra=((1946, r"Post"),), part=PART, said="Chapter five. Post's correspondence problem.")
 
     def game(self):
+        self.ask(r"Post's dominoes: is there a sequence \\ whose tops and bottoms spell the same string?",
+                 [r"always decidable", r"undecidable"], 1,
+                 say="Given a set of dominoes, can you always decide whether some sequence spells the same string on top and "
+                     "bottom?",
+                 reveal="No: Post's correspondence problem is undecidable, and that spreads to grammars.")
         p = load("pcp")
         head = label(r"Make the top string equal the bottom string", font_size=32).to_edge(UP, buff=0.35)
         ds = VGroup(*[domino(t, b) for t, b in p["sipser"]]).arrange(RIGHT, buff=0.35).next_to(head, DOWN, buff=0.45)
@@ -182,7 +183,7 @@ class Pcp(VoiceoverScene):
             label('nonempty CFG intersection follows here; CFG universality needs a different reduction', font_size=21, color=GREY_A),
         ).arrange(DOWN, buff=0.22).next_to(gl, DOWN, buff=0.4).set_x(0)
         with self.voiceover(
-            "Here is the promised ambiguity reduction. <bookmark mark='a'/> For each domino, the T rules generate its top string, and the B rules its bottom, followed by distinct index markers in reverse sequence order. Markers use a disjoint terminal alphabet. <bookmark mark='b'/> Each half is unambiguous because the markers determine every rule choice. <bookmark mark='c'/> A string has parses through both halves precisely when the same nonempty index sequence makes equal top and bottom strings. <bookmark mark='d'/> Thus grammar ambiguity, and nonempty intersection of two context-free languages, are undecidable. <bookmark mark='e'/> Context-free grammar universality is also undecidable, but needs another reduction; this construction alone does not prove it. Parser conflicts concern particular parsing methods and are not a general ambiguity decider."
+            "Here is the promised ambiguity reduction. <bookmark mark='a'/> For each domino, the T rules generate its top string, and the B rules its bottom, followed by distinct index markers in reverse sequence order. Markers use a disjoint terminal alphabet. <bookmark mark='b'/> Each half is unambiguous because the markers determine every rule choice. <bookmark mark='c'/> A string has parses through both halves precisely when the same nonempty index sequence makes equal top and bottom strings. <bookmark mark='d'/> Thus grammar ambiguity, and nonempty intersection of two context-free languages, are undecidable. <bookmark mark='e'/> Context-free grammar universality is also undecidable, but needs another reduction. Parser conflicts concern particular parsing methods and are not a general ambiguity decider."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(gl))
             vo.wait_until("a")

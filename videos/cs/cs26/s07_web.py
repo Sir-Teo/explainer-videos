@@ -22,7 +22,7 @@ KARP = [
 ]
 
 
-class Web(VoiceoverScene):
+class Web(WatchScene):
     def construct(self):
         self.card()
         self.formula()
@@ -32,11 +32,7 @@ class Web(VoiceoverScene):
         self.karp()
 
     def card(self):
-        card = chapter_card(6, r"The web of reductions", r"How do you prove the next problem NP-complete?",
-                            lit=(1972,), extra=((1972, r"Karp's 21 problems"),), part=PART)
-        with self.voiceover("Chapter six. The web of reductions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The web of reductions", r"How do you prove the next problem NP-complete?", lit=(1972,), extra=((1972, r"Karp's 21 problems"),), part=PART, said="Chapter six. The web of reductions.")
 
     def formula(self):
         w = load("web")
@@ -72,6 +68,10 @@ class Web(VoiceoverScene):
         self.clear_scene()
 
     def independent(self):
+        self.ask(r"An independent set of size $k$ in a graph is... \\ in its complement graph.",
+                 [r"a clique of size $k$", r"a cover of size $k$"], 0,
+                 say="An independent set in a graph: what is it in the complement graph?",
+                 reveal="A clique of the same size. Two problems, one difficulty.")
         w = load("web")["is"]
         head = label(r"3-SAT $\le_p$ independent set", font_size=32).to_edge(UP, buff=0.3)
         verts = [tuple(v) for v in w["verts"]]
@@ -269,3 +269,9 @@ class Web(VoiceoverScene):
                 self.play(FadeIn(n_))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does NP-complete mean?", r"In NP, and every NP problem reduces to it"),
+             (r"How do you prove a problem NP-complete?", r"Show it's in NP, and reduce a known NP-complete problem to it")],
+            narration="Checkpoint. What does NP-complete mean? And how do you prove a new problem NP-complete?",
+            answers_narration="In NP, and every problem in NP reduces to it. And show it's in NP, then reduce a known "
+                              "NP-complete problem to it.")

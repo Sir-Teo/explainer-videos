@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -47,6 +47,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t_, shift=UP * 0.15) for t_ in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Is halting recognizable?", r"Yes; its complement isn't"),
+             (r"What is $\Omega$?", r"The halting probability of a universal prefix machine")],
+            narration="Last checkpoint. Is halting recognizable? And what is Omega?",
+            answers_narration="Yes, though its complement is not. And Omega is the probability that a universal prefix-free "
+                              "machine halts on random input.")
 
     def payoffs(self):
         card = payoff_card([
@@ -75,7 +81,7 @@ class Outro(VoiceoverScene):
             (r"testing", 'unbounded domains cannot be exhausted; finite exhaustive model tests can prove absence'),
         ])
         with self.voiceover(
-            'In practice, specify the model and the exact question. Terminating exact analysis of a nontrivial extensional property over universal unbounded programs is impossible; practical tools use approximations or restrictions. Finite compiler limits are different from ideal universality. A less expressive or total language can help with particular decisions, but does not automatically decide every semantic property. Testing an unbounded input domain cannot exhaust it. Exhaustive testing of a fully specified FINITE model, however, can establish absence of bugs within that model. Keep those scopes distinct.'
+            'In practice, specify the model and the exact question. Terminating exact analysis of a nontrivial extensional property over universal unbounded programs is impossible; practical tools use approximations or restrictions. Finite compiler limits are different from ideal universality. Testing an unbounded input domain cannot exhaust it. Exhaustive testing of a fully specified FINITE model, however, can establish absence of bugs within that model. Keep those scopes distinct.'
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
                                                      lag_ratio=0.35), run_time=3.0)

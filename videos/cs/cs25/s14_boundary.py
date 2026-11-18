@@ -7,7 +7,7 @@ PRIMEGAME = ["17/91", "78/85", "19/51", "23/38", "29/33", "77/29", "95/23", "77/
              "1/7", "55/1"]
 
 
-class Boundary(VoiceoverScene):
+class Boundary(WatchScene):
     def construct(self):
         self.card()
         self.theories()
@@ -16,14 +16,12 @@ class Boundary(VoiceoverScene):
         self.collatz()
 
     def card(self):
-        card = chapter_card(13, r"Where decidability ends", r"How little does it take to be undecidable?",
-                            lit=(1929, 1972), extra=((1929, r"Presburger"), (1955, r"Novikov"), (1972, r"Conway")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Where decidability ends."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Where decidability ends", r"How little does it take to be undecidable?", lit=(1929, 1972), extra=((1929, r"Presburger"), (1955, r"Novikov"), (1972, r"Conway")), part=PART, said="Chapter thirteen. Where decidability ends.")
 
     def theories(self):
+        self.ask(r"Arithmetic with addition only (Presburger). \\ Decidable?", [r"yes", r"no"], 0,
+                 say="Arithmetic with addition, but no multiplication. Is its truth decidable?",
+                 reveal="Yes: Presburger, 1929. Add multiplication, and it's undecidable.")
         head = label(r"Which theories can a machine decide?", font_size=32).to_edge(UP, buff=0.35)
         rows = [[r"whole numbers with $+$", r"\textbf{decidable}", 'Presburger (1929); Fischer--Rabin: doubly exponential WORST CASE in formula length'],
                 [r"real numbers with $+, \times, <$", r"\textbf{decidable}", r"Tarski \ (1948): \ so is Euclid's "
@@ -152,7 +150,7 @@ class Boundary(VoiceoverScene):
             ax, UP)
         fit_right(right)
         with self.voiceover(
-            "The ordinary Collatz question remains distinct from its universal generalizations. <bookmark mark='a'/> For positive integers, halve an even value and triple an odd value then add one. Twenty-seven takes one hundred and eleven steps to reach one. <bookmark mark='b'/> We retain stopping lengths and full trajectory peaks for EVERY positive start below a million, independently checked by an overflow-guarded native implementation. The longest takes five hundred and twenty-four steps from eight hundred and thirty-seven thousand, seven hundred and ninety-nine. <bookmark mark='c'/> These finite checks prove only this finite prefix; larger published verification ranges are dated claims, not executions of this run. <bookmark mark='d'/> Conway's generalized residue-dependent iterations can encode universal computation and have an undecidable halting problem. <bookmark mark='e'/> That does not prove ordinary Collatz undecidable or independent. It could be true with a proof, true but independent of a specified theory, or false. No independence result is established here."
+            "The ordinary Collatz question remains distinct from its universal generalizations. <bookmark mark='a'/> For positive integers, halve an even value and triple an odd value then add one. Twenty-seven takes one hundred and eleven steps to reach one. <bookmark mark='b'/> We retain stopping lengths and full trajectory peaks for EVERY positive start below a million, independently checked by an overflow-guarded native implementation. The longest takes five hundred and twenty-four steps from eight hundred and thirty-seven thousand, seven hundred and ninety-nine. <bookmark mark='c'/> These finite checks prove only this finite prefix; larger published verification ranges are dated claims, not executions of this run. <bookmark mark='d'/> Conway's generalized residue-dependent iterations can encode universal computation and have an undecidable halting problem. <bookmark mark='e'/> It could be true with a proof, true but independent of a specified theory, or false. No independence result is established here."
         ) as vo:
             self.play(FadeIn(head), Create(ax), FadeIn(yt), FadeIn(rule))
             vo.wait_until("a")

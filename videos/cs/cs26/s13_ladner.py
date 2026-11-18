@@ -4,20 +4,20 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right)
 
 
-class Ladner(VoiceoverScene):
+class Ladner(WatchScene):
     def construct(self):
         self.card()
         self.theorem()
         self.candidates()
 
     def card(self):
-        card = chapter_card(12, r"Between P and NP-complete", r"If P $\ne$ NP, \ is every problem easy or complete?",
-                            lit=(1975,), extra=((1975, r"Ladner"),), part=PART)
-        with self.voiceover("Chapter twelve. Between P and NP-complete."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Between P and NP-complete", r"If P $\ne$ NP, \ is every problem easy or complete?", lit=(1975,), extra=((1975, r"Ladner"),), part=PART, said="Chapter twelve. Between P and NP-complete.")
 
     def theorem(self):
+        self.ask(r"If $P \ne NP$: is every NP problem \\ either in P or NP-complete?", [r"yes",
+                 r"no: there are problems in between"], 1,
+                 say="Suppose P is not NP. Is every problem in NP either easy or NP-complete?",
+                 reveal="No. Ladner proved there are problems strictly in between.")
         head = label(r"Ladner's theorem \ (1975)", font_size=34).to_edge(UP, buff=0.35)
         np_ = Ellipse(width=6.4, height=3.8, color=HEAD).set_fill(HEAD, 0.05).shift(LEFT * 3.4 + DOWN * 0.5)
         p_ = Ellipse(width=2.0, height=1.4, color=DATA).set_fill(DATA, 0.2).move_to(np_.get_center() + LEFT * 1.7

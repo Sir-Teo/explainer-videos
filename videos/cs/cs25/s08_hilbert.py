@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Hilbert(VoiceoverScene):
+class Hilbert(WatchScene):
     def construct(self):
         self.card()
         self.pell()
@@ -12,14 +12,14 @@ class Hilbert(VoiceoverScene):
         self.primes()
 
     def card(self):
-        card = chapter_card(7, r"Hilbert's tenth problem", r"Can you decide whether an equation has whole-number "
-                            r"solutions?", lit=(1900, 1970), extra=((1900, r"Hilbert"), (1970, r"Matiyasevich")),
-                            part=PART)
-        with self.voiceover("Chapter seven. Hilbert's tenth problem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Hilbert's tenth problem", r"Can you decide whether an equation has whole-number "
+                            r"solutions?", lit=(1900, 1970), extra=((1900, r"Hilbert"), (1970, r"Matiyasevich")), part=PART, said="Chapter seven. Hilbert's tenth problem.")
 
     def pell(self):
+        self.ask(r"$x^2 - 61 y^2 = 1$. \\ The smallest positive solution has $x$ about...", [r"under 100",
+                 r"about 1.8 billion"], 1,
+                 say="x squared minus sixty-one y squared equals one. How big is the smallest solution?",
+                 reveal="x is about one point eight billion. Witnesses can be astronomically far away.")
         h = load("hilbert")
         head = label(r"Searching is not deciding", font_size=34).to_edge(UP, buff=0.35)
         rows = [[str(r["D"]), r["x"] if len(r["x"]) < 22 else r["x"][:20] + "...", str(r["digits"])]

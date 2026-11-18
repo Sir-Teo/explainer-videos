@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, mono, region)
 
 
-class Beavers(VoiceoverScene):
+class Beavers(WatchScene):
     def construct(self):
         self.card()
         self.growth()
@@ -12,11 +12,7 @@ class Beavers(VoiceoverScene):
         self.knowledge()
 
     def card(self):
-        card = chapter_card(12, r"Busy beavers, again", r"Where does knowledge run out?", lit=(1962, 2024),
-                            extra=((1962, r"Rad\'o"), (2016, r"Yedidia--Aaronson"), (2024, r"BB(5)")), part=PART)
-        with self.voiceover("Chapter twelve. Busy beavers, again."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Busy beavers, again", r"Where does knowledge run out?", lit=(1962, 2024), extra=((1962, r"Rad\'o"), (2016, r"Yedidia--Aaronson"), (2024, r"BB(5)")), part=PART, said="Chapter twelve. Busy beavers, again.")
 
     def growth(self):
         head = label(r"Three speeds of growth", font_size=34).to_edge(UP, buff=0.3)
@@ -55,6 +51,9 @@ class Beavers(VoiceoverScene):
         self.clear_scene()
 
     def dominate(self):
+        self.ask(r"Does the busy beaver function grow faster \\ than every computable function?", [r"no", r"yes"], 1,
+                 say="Does the busy beaver function eventually outgrow every function a computer can compute?",
+                 reveal="Yes: otherwise you could compute a bound and decide halting.")
         head = label(r"$S$ eventually exceeds every computable $f$", font_size=34).to_edge(UP, buff=0.35)
         parts = VGroup(
             region(3.0, 0.8, r"write $n$ \ ($n$ states)", DATA, font_size=20),

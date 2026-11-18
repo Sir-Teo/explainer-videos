@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs26.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, sci)
 
 
-class Sqrt(VoiceoverScene):
+class Sqrt(WatchScene):
     def construct(self):
         self.card()
         self.blocks()
@@ -14,14 +14,13 @@ class Sqrt(VoiceoverScene):
         self.numbers()
 
     def card(self):
-        card = chapter_card(11, r"Time in square-root space", r"How little memory does a long computation need?",
-                            lit=(1977, 2025), extra=((1977, r"Hopcroft--Paul--Valiant"), (2025, r"Williams")),
-                            part=PART)
-        with self.voiceover("Chapter eleven. Time in square-root space."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Time in square-root space", r"How little memory does a long computation need?", lit=(1977, 2025), extra=((1977, r"Hopcroft--Paul--Valiant"), (2025, r"Williams")), part=PART, said="Chapter eleven. Time in square-root space.")
 
     def blocks(self):
+        self.ask(r"A computation running time $t$. \\ How little space can simulate it?", [r"about $t$",
+                 r"about $t/\log t$", r"about $\sqrt{t \log t}$"], 2,
+                 say="Any computation that runs for time t. How little space is enough to simulate it?",
+                 reveal="About the square root of t log t: Ryan Williams, 2025.")
         head = label(r"A computation of $t$ steps, \ cut into blocks", font_size=32).to_edge(UP, buff=0.3)
         nb, nt = 8, 6
         cw, ch = 0.62, 0.5
@@ -121,3 +120,8 @@ class Sqrt(VoiceoverScene):
                 self.play(FadeIn(n_))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is $nW$ not polynomial?", r"$W$ is exponential in its number of digits"),
+             (r"Which class do games of polynomial length capture?", r"PSPACE")],
+            narration="Checkpoint. Why isn't n times W polynomial? And which class captures games of polynomial length?",
+            answers_narration="Because W is exponential in its number of digits. And PSPACE.")

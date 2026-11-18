@@ -4,20 +4,20 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, mono)
 
 
-class Reductions(VoiceoverScene):
+class Reductions(WatchScene):
     def construct(self):
         self.card()
         self.mapping()
         self.table()
 
     def card(self):
-        card = chapter_card(2, r"Mapping reductions", r"How do you prove a new problem impossible?", lit=(1944,),
-                            extra=((1944, r"Post's reducibilities"),), part=PART)
-        with self.voiceover("Chapter two. Mapping reductions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Mapping reductions", r"How do you prove a new problem impossible?", lit=(1944,), extra=((1944, r"Post's reducibilities"),), part=PART, said="Chapter two. Mapping reductions.")
 
     def mapping(self):
+        self.ask(r"$A$ reduces to $B$, and $A$ is undecidable. \\ Then $B$ is...", [r"decidable", r"undecidable",
+                 r"it depends"], 1,
+                 say="A reduces to B, and A is undecidable. What does that make B?",
+                 reveal="Undecidable: a decider for B would give one for A.")
         head = label('$A\\le_m B$: TOTAL computable $f$ with $w\\in A\\iff f(w)\\in B$', font_size=32).to_edge(
             UP, buff=0.35)
         A = Ellipse(width=3.2, height=3.8, color=DATA).shift(LEFT * 3.5 + UP * 0.25)

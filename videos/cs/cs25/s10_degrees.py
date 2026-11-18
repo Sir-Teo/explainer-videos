@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (fit_right, BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, mono)
 
 
-class Degrees(VoiceoverScene):
+class Degrees(WatchScene):
     def construct(self):
         self.card()
         self.oracles()
@@ -12,12 +12,7 @@ class Degrees(VoiceoverScene):
         self.post()
 
     def card(self):
-        card = chapter_card(9, r"Oracles and the arithmetic hierarchy", r"Is there anything harder than halting?",
-                            lit=(1939, 1957), extra=((1939, r"Turing's oracles"), (1957, r"Friedberg--Muchnik")),
-                            part=PART)
-        with self.voiceover("Chapter nine. Oracles and the arithmetic hierarchy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Oracles and the arithmetic hierarchy", r"Is there anything harder than halting?", lit=(1939, 1957), extra=((1939, r"Turing's oracles"), (1957, r"Friedberg--Muchnik")), part=PART, said="Chapter nine. Oracles and the arithmetic hierarchy.")
 
     def oracles(self):
         head = label(r"A machine with a magic box", font_size=34).to_edge(UP, buff=0.35)
@@ -42,7 +37,7 @@ class Degrees(VoiceoverScene):
                   r"\textbf{jumps}", font_size=22, color=HEAD),
         ).arrange(DOWN, buff=0.28).next_to(VGroup(m, o), DOWN, buff=0.7).set_x(0)
         with self.voiceover(
-            "An oracle answers a chosen membership query in one abstract step. <bookmark mark='a'/> Turing reducibility permits an algorithm to query the oracle during its computation. <bookmark mark='b'/> A K oracle decides a sigma-one question after a computable reduction to K and one query. The reduction itself still takes computation; the whole task is not necessarily one step. <bookmark mark='c'/> The diagonal argument relativizes: machines with a K oracle cannot decide their own halting problem, K prime. <bookmark mark='d'/> Repeating the jump produces an infinite strictly increasing tower of Turing degrees."
+            "An oracle answers a chosen membership query in one abstract step. <bookmark mark='a'/> Turing reducibility permits an algorithm to query the oracle during its computation. <bookmark mark='b'/> A K oracle decides a sigma-one question after a computable reduction to K and one query. <bookmark mark='c'/> The diagonal argument relativizes: machines with a K oracle cannot decide their own halting problem, K prime. <bookmark mark='d'/> Repeating the jump produces an infinite strictly increasing tower of Turing degrees."
         ) as vo:
             self.play(FadeIn(head), FadeIn(m), FadeIn(ml), FadeIn(o), FadeIn(ol))
             vo.wait_until("a")
@@ -54,6 +49,9 @@ class Degrees(VoiceoverScene):
         self.clear_scene()
 
     def ladder(self):
+        self.ask(r"Is there a problem \\ strictly harder than halting?", [r"no", r"yes"], 1,
+                 say="Is there any problem strictly harder than the halting problem?",
+                 reveal="Yes: halting for machines that can ask a halting oracle, and so on up forever.")
         head = label('Alternating quantifier blocks over computable predicates', font_size=34).to_edge(UP, buff=0.3)
         rungs = [
             ('$\\Delta_1$: decidable', r"$x$ is prime; \ $M$ halts within 100 steps", YES),

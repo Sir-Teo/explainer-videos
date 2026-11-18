@@ -5,7 +5,7 @@ from videos.cs.cs25.common import (fit_right, BG, CTRL, DATA, HEAD, LAM, NO, PAR
                                    words)
 
 
-class Tiles(VoiceoverScene):
+class Tiles(WatchScene):
     def construct(self):
         self.card()
         self.wang_()
@@ -13,13 +13,12 @@ class Tiles(VoiceoverScene):
         self.hat()
 
     def card(self):
-        card = chapter_card(6, r"Tiling the plane", r"Can a finite set of tiles hide a computer?", lit=(1961, 2023),
-                            extra=((1961, r"Wang"), (1966, r"Berger"), (2023, r"the hat")), part=PART)
-        with self.voiceover("Chapter six. Tiling the plane."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Tiling the plane", r"Can a finite set of tiles hide a computer?", lit=(1961, 2023), extra=((1961, r"Wang"), (1966, r"Berger"), (2023, r"the hat")), part=PART, said="Chapter six. Tiling the plane.")
 
     def wang_(self):
+        self.ask(r"Eleven Wang tiles. \\ Can they tile the plane, but never periodically?", [r"impossible", r"yes"], 1,
+                 say="Could a set of tiles cover the whole plane, but never in a repeating pattern?",
+                 reveal="Yes. Jeandel and Rao's eleven tiles do exactly that, and eleven is the minimum.")
         t = load("tiles")
         head = label(r"Wang tiles", font_size=34).to_edge(UP, buff=0.3)
         tiles = VGroup(*[VGroup(wang(tt, 0.55), mono(str(i), 14, GREY_B)) for i, tt in enumerate(t["tiles"])])

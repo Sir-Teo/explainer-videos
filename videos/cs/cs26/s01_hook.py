@@ -16,11 +16,11 @@ def graph60(h, r=2.6, center=ORIGIN, coloured=False):
     return VGroup(edges, dots_)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.letter()
         self.colouring()
-        self.plan()
+        self.title(PART)
 
     def letter(self):
         head = label(r"Princeton, \ 20 March 1956", font_size=34).to_edge(UP, buff=0.4)
@@ -88,27 +88,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ P versus NP", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            'polynomial time; \\ hierarchy and Savitch proof ideas, with model assumptions',
-            r"NP, \ reductions, \ and Cook--Levin's tableau, \ built and solved",
-            r"the reduction web, \ computed: \ independent set, \ 3-colouring, \ subset sum",
-            r"coNP, \ the polynomial hierarchy, \ PSPACE and games; \ time in square-root space",
-            r"SAT solvers in practice, \ and the 3-SAT phase transition",
-            r"why the question is hard, \ five possible worlds, \ and the frontier",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 26 of Computer Science, Built: P versus NP. <bookmark mark='a'/> In this part: what counts as "
-            "efficient, and the theorems that separate time and space classes; NP, reductions, and the Cook-Levin "
-            "theorem, built as a formula and solved; the web of reductions that ties a thousand problems together, "
-            "each one computed; coNP, the polynomial hierarchy, games and space, and a 2025 surprise about time and "
-            "space; SAT solvers in practice; why the question has resisted fifty years of attack; and the five "
-            "worlds we might be living in."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

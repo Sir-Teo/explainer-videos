@@ -22,20 +22,20 @@ def dur(s):
     return rf"${sci(y, 1)}$ years"
 
 
-class Polynomial(VoiceoverScene):
+class Polynomial(WatchScene):
     def construct(self):
         self.card()
         self.table()
         self.robust()
 
     def card(self):
-        card = chapter_card(1, r"What counts as efficient", r"Why polynomial time?", lit=(1965,),
-                            extra=((1965, r"Edmonds; \ Cobham"),), part=PART)
-        with self.voiceover("Chapter one. What counts as efficient."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"What counts as efficient", r"Why polynomial time?", lit=(1965,), extra=((1965, r"Edmonds; \ Cobham"),), part=PART, said="Chapter one. What counts as efficient.")
 
     def table(self):
+        self.ask(r"One step a microsecond, $n = 100$. \\ A $2^n$ algorithm takes...", [r"about a second", r"about a year",
+                 r"far longer than the age of the universe"], 2,
+                 say="A microsecond per step, a hundred items. How long does a two-to-the-n algorithm take?",
+                 reveal="Far longer than the age of the universe. n squared takes ten milliseconds.")
         g = load("growth")
         head = label(r"One step per microsecond", font_size=34).to_edge(UP, buff=0.35)
         rows = [[str(r["n"]), dur(r["n2"]), dur(r["n3"]), dur(r["2n"]), dur(r["fact"])] for r in g["rows"]]

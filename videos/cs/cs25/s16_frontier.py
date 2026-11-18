@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs25.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, mono)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.rings()
@@ -13,12 +13,8 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ Hilbert's tenth over other rings", r"Which number systems can a machine "
-                            r"solve equations in?", lit=(1978, 2025),
-                            extra=((1978, r"Denef--Lipshitz"), (2024, r"Koymans--Pagano")), part=PART)
-        with self.voiceover("Chapter fifteen, the frontier. Hilbert's tenth problem over other rings."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ Hilbert's tenth over other rings", r"Which number systems can a machine "
+                            r"solve equations in?", lit=(1978, 2025), extra=((1978, r"Denef--Lipshitz"), (2024, r"Koymans--Pagano")), part=PART, said="Chapter fifteen, the frontier. Hilbert's tenth problem over other rings.")
 
     def rings(self):
         head = label(r"Settled in 2024--25: \ every ring of integers", font_size=32).to_edge(UP, buff=0.35)
@@ -52,6 +48,9 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def rationals(self):
+        self.ask(r"Hilbert's tenth problem over the rationals. \\ Decidable?", [r"yes", r"no", r"nobody knows"], 2,
+                 say="Hilbert's tenth problem asks about integer solutions. Over the rationals, is it decidable?",
+                 reveal="Nobody knows. It's one of the great open problems at the border of logic and number theory.")
         head = label(r"Still open: \ the rational numbers", font_size=32).to_edge(UP, buff=0.35)
         eq = MathTex(r"y^2 = x^3 - 2 \quad\text{over } \mathbb{Q}:\ \ (3, 5),\ \left(\tfrac{129}{100}, "
                      r"\tfrac{383}{1000}\right),\ \ldots", font_size=34, color=HEAD).next_to(head, DOWN, buff=0.45)

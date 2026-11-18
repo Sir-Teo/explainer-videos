@@ -9,20 +9,20 @@ def tetromino(cells, color, s=0.28):
                     .move_to([x * s, -y * s, 0]) for x, y in cells])
 
 
-class Everywhere(VoiceoverScene):
+class Everywhere(WatchScene):
     def construct(self):
         self.card()
         self.games()
         self.work()
 
     def card(self):
-        card = chapter_card(7, r"NP-completeness everywhere", r"Where do NP-complete problems turn up?",
-                            lit=(1979, 2003), extra=((1979, r"Garey and Johnson"), (2003, r"Tetris")), part=PART)
-        with self.voiceover("Chapter seven. NP-completeness everywhere."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"NP-completeness everywhere", r"Where do NP-complete problems turn up?", lit=(1979, 2003), extra=((1979, r"Garey and Johnson"), (2003, r"Tetris")), part=PART, said="Chapter seven. NP-completeness everywhere.")
 
     def games(self):
+        self.ask(r"Tetris, with the whole piece sequence known in advance. \\ Can you survive?", [r"easy to decide",
+                 r"NP-complete"], 1,
+                 say="Tetris, where you know every piece in advance. Is it hard to decide whether you can clear the board?",
+                 reveal="NP-complete, even then.")
         head = label(r"Puzzles and games", font_size=34).to_edge(UP, buff=0.3)
         pics = [
             VGroup(tetromino([(0, 0), (1, 0), (2, 0), (1, 1)], LAM), tetromino([(0, 0), (0, 1), (1, 1), (1, 2)], NO)
