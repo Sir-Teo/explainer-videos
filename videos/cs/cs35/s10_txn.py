@@ -5,7 +5,7 @@ from videos.cs.cs35.common import (DATA, HEAD, KERN, LAM, NO, PART, T1C, T2C, YE
                                    schedule_view)
 
 
-class Txn(VoiceoverScene):
+class Txn(WatchScene):
     def construct(self):
         self.card()
         self.acid()
@@ -13,12 +13,8 @@ class Txn(VoiceoverScene):
         self.view()
 
     def card(self):
-        card = chapter_card(9, r"Transactions", r"What does it mean for concurrent work to be correct?",
-                            lit=(1976, 1981), extra=((1976, r"Eswaran et al.: \ serializability"),
-                                                     (1981, r"Gray: \ the transaction concept")), part=PART)
-        with self.voiceover("Chapter nine. Transactions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Transactions", r"What does it mean for concurrent work to be correct?", lit=(1976, 1981), extra=((1976, r"Eswaran et al.: \ serializability"),
+                                                     (1981, r"Gray: \ the transaction concept")), part=PART, said="Chapter nine. Transactions.")
 
     def acid(self):
         head = label(r"A transaction: \ all of it, \ or none, \ as if alone", font_size=36).to_edge(UP, buff=0.3)
@@ -58,6 +54,10 @@ class Txn(VoiceoverScene):
         self.clear_scene()
 
     def conflicts(self):
+        self.ask(r"A schedule's conflict graph has no cycle. \\ Then it is...", [r"deadlocked",
+                 r"equivalent to some serial order"], 1,
+                 say="Draw an arrow for every conflict between transactions. If the graph has no cycle, what do we know?",
+                 reveal="The schedule is equivalent to running them one at a time, in the graph's order.")
         s = load("serial")
         ex = s["examples"]
         head = label(r"Schedules, \ conflicts, \ and a graph", font_size=36).to_edge(UP, buff=0.3)

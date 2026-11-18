@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs35.common import (CODE, DATA, HEAD, LAM, NO, PART, YES, box, code, grid_table, load, mono, num)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.two_ways()
         self.how()
-        self.plan()
+        self.title(PART)
 
     def two_ways(self):
         j = load("job")
@@ -99,30 +99,6 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Databases", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"Codd's relational model, \ its algebra, \ and normal forms",
-            r"how a query runs: \ iterators, \ joins, \ and their costs, \ measured",
-            r"Selinger's optimizer, \ and why size estimates go wrong",
-            r"B+ trees, \ and indexes in general",
-            r"transactions: \ serializability, \ two-phase locking, \ snapshots, \ isolation levels",
-            r"recovery with ARIES, \ column stores, \ and our database running the Job",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 35 of Computer Science, Built: Databases. <bookmark mark='a'/> We start with Codd's idea "
-            "and the algebra it created, and the theory of good table design. We follow a query through iterators "
-            "and joins, measuring their costs, and watch an optimizer search for the cheapest plan, and see why its "
-            "estimates go wrong. We build a B-plus tree. Then transactions: what it means for concurrent work to be "
-            "correct, how locking and snapshots achieve it, and what the weaker isolation levels give up. Then "
-            "recovery with ARIES, column stores for analytics, and our own database running the Job."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (DATA, LAM)

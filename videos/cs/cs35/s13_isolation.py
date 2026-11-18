@@ -4,21 +4,20 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs35.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load)
 
 
-class Isolation(VoiceoverScene):
+class Isolation(WatchScene):
     def construct(self):
         self.card()
         self.table()
         self.definitions()
 
     def card(self):
-        card = chapter_card(12, r"Isolation levels", r"What exactly do the weaker levels give up?",
-                            lit=(1992, 1995, 1999), extra=((1995, r"Berenson et al.: \ a critique of ANSI levels"),
-                                                           (1999, r"Adya: \ levels as graph conditions")), part=PART)
-        with self.voiceover("Chapter twelve. Isolation levels."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Isolation levels", r"What exactly do the weaker levels give up?", lit=(1992, 1995, 1999), extra=((1995, r"Berenson et al.: \ a critique of ANSI levels"),
+                                                           (1999, r"Adya: \ levels as graph conditions")), part=PART, said="Chapter twelve. Isolation levels.")
 
     def table(self):
+        self.ask(r"The default isolation level of most databases:", [r"serializable", r"read committed"], 1,
+                 say="What isolation level do most databases give you by default?",
+                 reveal="Read committed, which allows several of the classic anomalies.")
         iso = load("isolation")
         head = label(r"Six levels, \ five anomalies, \ each one run", font_size=36).to_edge(UP, buff=0.3)
         an = iso["anomalies"]

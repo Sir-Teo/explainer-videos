@@ -10,7 +10,7 @@ def attrs(s: str) -> str:
     return r", \ ".join(rf"\textit{{{NAMES[c]}}}" for c in s)
 
 
-class Normal(VoiceoverScene):
+class Normal(WatchScene):
     def construct(self):
         self.card()
         self.anomalies()
@@ -18,13 +18,13 @@ class Normal(VoiceoverScene):
         self.decompose()
 
     def card(self):
-        card = chapter_card(3, r"Dependencies and normal forms", r"What makes a table design wrong?",
-                            lit=(1974,), extra=((1974, r"Armstrong; \ Boyce--Codd normal form"),), part=PART)
-        with self.voiceover("Chapter three. Dependencies and normal forms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Dependencies and normal forms", r"What makes a table design wrong?", lit=(1974,), extra=((1974, r"Armstrong; \ Boyce--Codd normal form"),), part=PART, said="Chapter three. Dependencies and normal forms.")
 
     def anomalies(self):
+        self.ask(r"The last student drops a course. \\ What else disappears from the table?", [r"nothing",
+                 r"its instructor's office"], 1,
+                 say="One table records students, courses, instructors and offices. The last student drops a course. What else disappears?",
+                 reveal="Who teaches it, and where their office is: a deletion anomaly.")
         n = load("normal")
         head = label(r"One table for everything", font_size=36).to_edge(UP, buff=0.3)
         tab = rel_table(["student", "course", "instructor", "office"], n["rows"], font=19).next_to(head, DOWN,

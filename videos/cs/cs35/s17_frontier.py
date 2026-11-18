@@ -6,25 +6,24 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs35.common import (CODE, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, mono, num)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.triangles()
         self.agm()
         self.learned()
         self.checking()
-        self.open_problems()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ joins, \ guesses, \ guarantees", r"What is still unsolved?",
-                            lit=(2008, 2012, 2019), extra=((2008, r"the AGM bound"),
+        self.chapter(16, r"Frontier: \ joins, \ guesses, \ guarantees", r"What is still unsolved?", lit=(2008, 2012, 2019), extra=((2008, r"the AGM bound"),
                                                            (2012, r"worst-case optimal joins"),
-                                                           (2019, r"learned optimizers")), part=PART)
-        with self.voiceover("Chapter sixteen. Frontier: joins, guesses, and guarantees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2019, r"learned optimizers")), part=PART, said="Chapter sixteen. Frontier: joins, guesses, and guarantees.")
 
     def triangles(self):
+        self.ask(r"Triangles in a graph of $N$ edges. \\ Some pairwise join plan always costs up to...", [r"$N$",
+                 r"$N^{1.5}$", r"$N^2$"], 2,
+                 say="Find triangles in a graph of N edges with joins of two tables at a time. How bad can it get?",
+                 reveal="N squared, though the answer has at most N to the one point five rows.")
         f = load("frontier")["rows"]
         head = label(r"A query every binary plan gets wrong", font_size=36).to_edge(UP, buff=0.3)
         sql = VGroup(mono("SELECT COUNT(*) FROM E AS R, E AS S, E AS T", 17, YES),
@@ -196,35 +195,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def open_problems(self):
-        head = label(r"Open problems", font_size=36).to_edge(UP, buff=0.3)
-        probs = VGroup(*[label(t, font_size=21, color=WHITE) for t in (
-            r"1. \ Cardinality estimates with provable error bounds, \ for queries with many joins",
-            r"2. \ Optimizers that mix binary and worst-case optimal joins, \ and cost both correctly",
-            r"3. \ Learned optimizers that are guaranteed never to regress",
-            r"4. \ Serializable transactions across continents at the cost of snapshot isolation",
-            r"5. \ Efficient checking of isolation levels on arbitrary black-box histories",
-            r"6. \ Self-driving databases: \ indexes, \ layouts and settings chosen and changed automatically",
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=0.8)
-        star = label(r"$\bigstar$ \ the part's research problem asks how few aborts a serializable snapshot scheduler "
-                     r"can make", font_size=19, color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Six problems at the frontier. <bookmark mark='a'/> Size estimates with provable error bounds, even for "
-            "queries with many joins. <bookmark mark='b'/> Optimizers that combine ordinary and worst-case optimal "
-            "joins in one plan, and cost both correctly. <bookmark mark='c'/> Learned optimizers that are guaranteed "
-            "never to make a query slower. <bookmark mark='d'/> Serializable transactions across continents, at the "
-            "price of snapshot isolation. <bookmark mark='e'/> Checking isolation levels efficiently on any history, "
-            "not just ones designed for checking. <bookmark mark='f'/> And databases that drive themselves, choosing "
-            "and changing their own indexes, layouts and settings. The research problem at the end of this part asks "
-            "something small and sharp: how few aborts can a serializable snapshot scheduler get away with?"
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcdef", probs):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
-            self.play(FadeIn(star))
-        self.wait(0.3)
-        self.clear_scene()
 
 
 _ = (CODE, DATA, NO)

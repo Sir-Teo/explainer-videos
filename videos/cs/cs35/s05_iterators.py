@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs35.common import (CODE, DATA, HEAD, KERN, LAM, NO, PART, YES, box, code, load, mono, num)
 
 
-class Iterators(VoiceoverScene):
+class Iterators(WatchScene):
     def construct(self):
         self.card()
         self.volcano()
@@ -12,11 +12,7 @@ class Iterators(VoiceoverScene):
         self.access()
 
     def card(self):
-        card = chapter_card(4, r"How a query runs", r"What does the database actually do?", lit=(1994,),
-                            extra=((1994, r"Graefe: \ Volcano"),), part=PART)
-        with self.voiceover("Chapter four. How a query runs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"How a query runs", r"What does the database actually do?", lit=(1994,), extra=((1994, r"Graefe: \ Volcano"),), part=PART, said="Chapter four. How a query runs.")
 
     def volcano(self):
         head = label(r"Operators as iterators", font_size=36).to_edge(UP, buff=0.3)
@@ -113,6 +109,10 @@ class Iterators(VoiceoverScene):
         self.clear_scene()
 
     def access(self):
+        self.ask(r"Index lookup, or read the whole table? \\ A full scan wins when...", [r"never",
+                 r"many rows match"], 1,
+                 say="An index finds rows directly. When is it faster to read the whole table instead?",
+                 reveal="When many rows match: every index hit can cost a random page read.")
         it = load("iterators")
         head = label(r"Choosing an access path", font_size=36).to_edge(UP, buff=0.3)
         cols = VGroup()

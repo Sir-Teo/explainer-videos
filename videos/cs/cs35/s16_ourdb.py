@@ -4,22 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs35.common import (CODE, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, mono, num)
 
 
-class OurDb(VoiceoverScene):
+class OurDb(WatchScene):
     def construct(self):
         self.card()
         self.plans()
         self.sqlite()
         self.ledger()
-        self.beyond()
 
     def card(self):
-        card = chapter_card(15, r"Our database runs the Job", r"What did it choose, \ and was it right?",
-                            lit=(2000,), extra=((2000, r"Hipp: \ SQLite"),), part=PART)
-        with self.voiceover("Chapter fifteen. Our database runs the Job."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Our database runs the Job", r"What did it choose, \ and was it right?", lit=(2000,), extra=((2000, r"Hipp: \ SQLite"),), part=PART, said="Chapter fifteen. Our database runs the Job.")
 
     def plans(self):
+        self.ask(r"Group the Job's words: by sorting, or by hashing? \\ Our optimizer picks...", [r"sort",
+                 r"hash"], 1,
+                 say="Our optimizer can group the words by sorting them or with a hash table. Which does it choose?",
+                 reveal="The hash, the same choice Part 17 made by hand.")
         j = load("job")
         head = label(r"Two correct plans, \ costed", font_size=36).to_edge(UP, buff=0.3)
         sql = mono(j["sql"], 17, YES).next_to(head, DOWN, buff=0.35)
@@ -143,51 +142,6 @@ class OurDb(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def beyond(self):
-        head = label(r"Beyond relational", font_size=36).to_edge(UP, buff=0.3)
-        kinds = [
-            (r"key-value", r"get and put by key; \ Dynamo \ (2007), \ Redis, \ RocksDB", DATA),
-            (r"document", r"nested records, \ JSON; \ MongoDB; \ now also a column type in PostgreSQL", HEAD),
-            (r"graph", r"nodes and edges, \ queries by path; \ Neo4j; \ SQL:2023 added property graphs", LAM),
-            (r"distributed SQL", r"transactions across machines: \ Spanner, \ CockroachDB \ (Part 39)", KERN),
-        ]
-        cards = VGroup()
-        for t, d, c in kinds:
-            g = VGroup(label(rf"\textbf{{{t}}}", font_size=22, color=c), label(d, font_size=18, color=WHITE)).arrange(
-                DOWN, buff=0.12)
-            fr = SurroundingRectangle(g, buff=0.2, color=c, stroke_width=1.5, corner_radius=0.08)
-            fr.stretch_to_fit_width(6.1)
-            fr.stretch_to_fit_height(1.4)
-            fr.move_to(g)
-            cards.add(VGroup(fr, g))
-        cards.arrange_in_grid(rows=2, cols=2, buff=(0.35, 0.3)).next_to(head, DOWN, buff=0.45)
-        lines = VGroup(
-            label(r"each began by giving up the relational model for speed or scale; \ most have since added SQL "
-                  r"and transactions back", font_size=19, color=WHITE),
-            label(r"Stonebraker and Pavlo \ (2024): \ ``what goes around comes around'': \ fifty years on, \ the "
-                  r"relational model and SQL still win", font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).next_to(cards, DOWN, buff=0.45)
-        for ln in lines:
-            if ln.width > 12.8:
-                ln.width = 12.8
-        lines.set_x(0)
-        with self.voiceover(
-            "Not every store is relational. <bookmark mark='a'/> Key-value stores, like Amazon's Dynamo, give up "
-            "queries for scale: get and put by key, and nothing else. <bookmark mark='b'/> Document stores keep nested "
-            "records. <bookmark mark='c'/> Graph databases query by path. <bookmark mark='d'/> And distributed SQL "
-            "systems, like Google's Spanner, keep transactions across many machines, which Part 39 explains. "
-            "<bookmark mark='e'/> Each new kind began by dropping Codd's model for speed or scale, and most have "
-            "since added SQL and transactions back. Michael Stonebraker and Andy Pavlo reviewed fifty years of this "
-            "in 2024, and their title says it: what goes around comes around."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, c in zip("abcd", cards):
-                vo.wait_until(mk)
-                self.play(FadeIn(c, shift=UP * 0.1))
-            vo.wait_until("e")
-            self.play(FadeIn(lines))
-        self.wait(0.3)
-        self.clear_scene()
 
 
 _ = (DATA, NO)
