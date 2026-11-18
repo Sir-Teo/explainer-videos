@@ -5,7 +5,7 @@ from explainer.cs.algo import strings as St
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Period(VoiceoverScene):
+class Period(WatchScene):
     def construct(self):
         self.card()
         self.fine_wilf()
@@ -13,13 +13,12 @@ class Period(VoiceoverScene):
         self.lyndon()
 
     def card(self):
-        card = chapter_card(15, r"Periods, \ palindromes and Lyndon words", r"What structure hides inside one string?",
-                            lit=(1965, 1975), extra=((1965, r"Fine--Wilf"), (1975, r"Manacher")), part=PART)
-        with self.voiceover("Chapter fifteen. Periods, palindromes and Lyndon words."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Periods, \ palindromes and Lyndon words", r"What structure hides inside one string?", lit=(1965, 1975), extra=((1965, r"Fine--Wilf"), (1975, r"Manacher")), part=PART, said="Chapter fifteen. Periods, palindromes and Lyndon words.")
 
     def fine_wilf(self):
+        self.ask(r"A long string with periods 4 and 6. \\ It must also have period...", [r"2", r"10", r"24"], 0,
+                 say="A long enough string has periods four and six. What other period must it have?",
+                 reveal="Two, their greatest common divisor: the Fine and Wilf theorem.")
         head = label(r"Periods", font_size=36).to_edge(UP, buff=0.35)
         w = "abaababaaba"
         per = St.periods(w.encode())

@@ -26,7 +26,7 @@ def tree_pos(parent, origin, dx=0.75, dy=0.95):
     return {v: origin + np.array([p[0] * dx, p[1] * dy, 0]) for v, p in pos.items()}
 
 
-class RangeMin(VoiceoverScene):
+class RangeMin(WatchScene):
     def construct(self):
         self.card()
         self.sparse()
@@ -34,14 +34,13 @@ class RangeMin(VoiceoverScene):
         self.cartesian()
 
     def card(self):
-        card = chapter_card(4, r"Range minimum and lowest common ancestors", r"Can a range minimum take constant time?",
-                            lit=(1984, 2000), extra=((1984, r"Harel--Tarjan"), (2000, r"Bender--Farach-Colton")),
-                            part=PART)
-        with self.voiceover("Chapter four. Range minimum, and lowest common ancestors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Range minimum and lowest common ancestors", r"Can a range minimum take constant time?", lit=(1984, 2000), extra=((1984, r"Harel--Tarjan"), (2000, r"Bender--Farach-Colton")), part=PART, said="Chapter four. Range minimum, and lowest common ancestors.")
 
     def sparse(self):
+        self.ask(r"A static array, $n \log n$ preprocessing. \\ A range-minimum query then costs...", [r"$\log n$",
+                 r"a constant"], 1,
+                 say="The array never changes. After n log n preprocessing, what does a range minimum cost?",
+                 reveal="A constant: two overlapping power-of-two windows.")
         d = load("rmq")
         a, T = d["a"], d["table"]
         l, r = d["query"]

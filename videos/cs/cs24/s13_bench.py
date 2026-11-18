@@ -7,18 +7,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, load, mono)
 
 
-class Benchmarking(VoiceoverScene):
+class Benchmarking(WatchScene):
     def construct(self):
         self.card()
         self.spread()
         self.traps()
 
     def card(self):
-        card = chapter_card(12, r"Benchmarking honestly", r"How do you know your measurement is real?",
-                            lit=(2009, 2013), extra=((2009, r"Mytkowicz et al."), (2013, r"Stabilizer")), part=PART)
-        with self.voiceover("Chapter twelve. Benchmarking honestly."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Benchmarking honestly", r"How do you know your measurement is real?", lit=(2009, 2013), extra=((2009, r"Mytkowicz et al."), (2013, r"Stabilizer")), part=PART, said="Chapter twelve. Benchmarking honestly.")
 
     def spread(self):
         b = load("bench")
@@ -67,6 +63,10 @@ class Benchmarking(VoiceoverScene):
         self.clear_scene()
 
     def traps(self):
+        self.ask(r"The same program, the same input. \\ Change the size of an environment variable. Can the time change?",
+                 [r"no", r"yes"], 1,
+                 say="Same program, same input. Change only the size of an environment variable. Can the running time change?",
+                 reveal="Yes: it shifts the stack's alignment. Mytkowicz and colleagues found this measurement bias in 2009.")
         b = load("bench")
         pads = b["pads"]
         head = label(r"Two traps", font_size=34).to_edge(UP, buff=0.3)

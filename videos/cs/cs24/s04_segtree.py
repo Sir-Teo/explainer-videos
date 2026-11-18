@@ -17,7 +17,7 @@ def seg_layout(n, top=2.45, width=12.0, dy=0.88):
     return pos
 
 
-class SegmentTrees(VoiceoverScene):
+class SegmentTrees(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -25,11 +25,7 @@ class SegmentTrees(VoiceoverScene):
         self.lazy()
 
     def card(self):
-        card = chapter_card(3, r"Segment trees", r"What if the question is not a sum?", lit=(1977,),
-                            extra=((1977, r"Bentley's segment trees"),), part=PART)
-        with self.voiceover("Chapter three. Segment trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Segment trees", r"What if the question is not a sum?", lit=(1977,), extra=((1977, r"Bentley's segment trees"),), part=PART, said="Chapter three. Segment trees.")
 
     def tree(self):
         d = load("segtree")
@@ -93,6 +89,10 @@ class SegmentTrees(VoiceoverScene):
         self.clear_scene()
 
     def monoid(self):
+        self.ask(r"Range minimum with point updates. \\ Can a Fenwick tree do it?", [r"yes",
+                 r"not easily: a minimum can't be undone"], 1,
+                 say="Could a Fenwick tree answer range minimums, the way it answers range sums?",
+                 reveal="Not easily: sums subtract, minimums don't. A segment tree combines pieces instead.")
         head = label(r"A node can carry more than one number", font_size=32).to_edge(UP, buff=0.35)
         L = [3, -4, 5, -1]
         R = [2, -6, 4, 1]

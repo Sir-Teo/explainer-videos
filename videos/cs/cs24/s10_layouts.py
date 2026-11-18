@@ -11,7 +11,7 @@ def human_bytes(b):
     return f"{b} B"
 
 
-class Layouts(VoiceoverScene):
+class Layouts(WatchScene):
     def construct(self):
         self.card()
         self.eytzinger()
@@ -19,14 +19,14 @@ class Layouts(VoiceoverScene):
         self.branches()
 
     def card(self):
-        card = chapter_card(9, r"Algorithm engineering I: \ layouts", r"Where should the data live for binary search?",
-                            lit=(1590, 2017), extra=((1590, r"Eytzinger's genealogies"), (2017, r"Khuong--Morin")),
-                            part=PART)
-        with self.voiceover("Chapter nine. Algorithm engineering, part one: layouts."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Algorithm engineering I: \ layouts", r"Where should the data live for binary search?", lit=(1590, 2017), extra=((1590, r"Eytzinger's genealogies"), (2017, r"Khuong--Morin")), part=PART, said="Chapter nine. Algorithm engineering, part one: layouts.")
 
     def eytzinger(self):
+        self.wrong_idea(r"Same big-O, same speed", r"Constants, layout and branches \\ can differ by ten times or more",
+                        narration="Two algorithms with the same big-O should run at about the same speed. Shouldn't they?",
+                        right_narration="Not on a real machine. Constants, memory layout and branch behaviour can differ by ten "
+                                        "times or more.")
+        self.clear_scene()
         head = label(r"The same 15 keys, \ three layouts", font_size=34).to_edge(UP, buff=0.3)
         keys = list(range(10, 160, 10))
         n = len(keys)
@@ -106,6 +106,10 @@ class Layouts(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"Binary search on a large array: \\ sorted order, or the Eytzinger layout?", [r"sorted order is faster",
+                 r"Eytzinger is faster"], 1,
+                 say="Binary search over a big array. Faster in plain sorted order, or in the Eytzinger layout?",
+                 reveal="Eytzinger: the next probes sit together in memory, so they can be prefetched.")
         d = load("layouts")
         rows = d["rows"]
         head = label(r"Nanoseconds per search, \ by array size", font_size=32).to_edge(UP, buff=0.3)

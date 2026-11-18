@@ -6,7 +6,7 @@ from fractions import Fraction
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, grid_table, load, mono, words)
 
 
-class MaxCut(VoiceoverScene):
+class MaxCut(WatchScene):
     def construct(self):
         self.card()
         self.sphere()
@@ -15,11 +15,7 @@ class MaxCut(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(10, r"A random hyperplane: \ MAX-CUT", r"How do you split a graph to cut the most edges?",
-                            lit=(1995,), extra=((1995, r"Goemans--Williamson"),), part=PART)
-        with self.voiceover("Chapter ten. A random hyperplane: MAX-CUT."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"A random hyperplane: \ MAX-CUT", r"How do you split a graph to cut the most edges?", lit=(1995,), extra=((1995, r"Goemans--Williamson"),), part=PART, said="Chapter ten. A random hyperplane: MAX-CUT.")
 
     def sphere(self):
         g = load("gw")
@@ -107,6 +103,10 @@ class MaxCut(VoiceoverScene):
         self.clear_scene()
 
     def alpha(self):
+        self.ask(r"Goemans and Williamson's random hyperplane for MAX-CUT. \\ Its guarantee?", [r"0.5", r"0.878",
+                 r"1"], 1,
+                 say="Goemans and Williamson round vectors with a random hyperplane. What fraction of the best cut is guaranteed?",
+                 reveal="About point eight seven eight, and the unique games conjecture says no one can do better.")
         g = load("gw")
         head = label(r"Where 0.878 comes from", font_size=34).to_edge(UP, buff=0.35)
         ax = Axes(x_range=[0, math.pi, math.pi / 4], y_range=[0, 1.6, 0.25], x_length=6.0, y_length=3.6,

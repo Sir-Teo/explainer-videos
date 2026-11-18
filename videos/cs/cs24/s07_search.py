@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, cells_row, grid_table, load, mono, words)
 
 
-class Searching(VoiceoverScene):
+class Searching(WatchScene):
     def construct(self):
         self.card()
         self.answer()
@@ -12,12 +12,7 @@ class Searching(VoiceoverScene):
         self.gallop()
 
     def card(self):
-        card = chapter_card(6, r"Searching for the answer", r"When can you binary-search something that isn't an array?",
-                            lit=(1946, 1976), extra=((1946, r"Mauchly's binary search"), (1976, r"Bentley--Yao")),
-                            part=PART)
-        with self.voiceover("Chapter six. Searching for the answer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Searching for the answer", r"When can you binary-search something that isn't an array?", lit=(1946, 1976), extra=((1946, r"Mauchly's binary search"), (1976, r"Bentley--Yao")), part=PART, said="Chapter six. Searching for the answer.")
 
     def answer(self):
         d = load("search")
@@ -77,6 +72,10 @@ class Searching(VoiceoverScene):
         self.clear_scene()
 
     def pitfalls(self):
+        self.ask(r"A binary-search bug that sat in Java's library for nine years. \\ It was...",
+                 [r"an off-by-one in the loop", r"$(lo + hi)/2$ overflowing"], 1,
+                 say="Java's standard binary search had a bug for nine years. What was it?",
+                 reveal="lo plus hi overflowed for arrays over a billion elements. Write lo plus hi minus lo over two.")
         head = label(r"Getting binary search right", font_size=34).to_edge(UP, buff=0.35)
         code_ = VGroup(*[mono(t, 21, c) for t, c in (
             ("lo, hi = 0, n          # search elements in [lo, hi)", WHITE),

@@ -12,7 +12,7 @@ def clean(s, n):
     return s[:n]
 
 
-class Bwt(VoiceoverScene):
+class Bwt(WatchScene):
     def construct(self):
         self.card()
         self.matrix()
@@ -21,11 +21,7 @@ class Bwt(VoiceoverScene):
         self.context()
 
     def card(self):
-        card = chapter_card(8, r"The Burrows--Wheeler transform", r"Can sorting make a book more compressible?",
-                            lit=(1994,), extra=((1994, r"Burrows--Wheeler"),), part=PART)
-        with self.voiceover("Chapter eight. The Burrows–Wheeler transform."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The Burrows--Wheeler transform", r"Can sorting make a book more compressible?", lit=(1994,), extra=((1994, r"Burrows--Wheeler"),), part=PART, said="Chapter eight. The Burrows–Wheeler transform.")
 
     def matrix(self):
         d = load("bwt")
@@ -84,6 +80,10 @@ class Bwt(VoiceoverScene):
         self.clear_scene()
 
     def invert(self):
+        self.ask(r"The Burrows--Wheeler transform scrambles the text by sorting. \\ Can it be undone?",
+                 [r"no", r"yes, exactly"], 1,
+                 say="The transform sorts every rotation and keeps the last column. Can the original text be recovered?",
+                 reveal="Exactly: the k-th of each letter in the last column is the k-th in the first.")
         d = load("bwt")
         head = label(r"Undoing it: \ the LF mapping", font_size=34).to_edge(UP, buff=0.3)
         L = d["L"]

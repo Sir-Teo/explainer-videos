@@ -13,21 +13,20 @@ def ellipse_mob(c, P, T, color, width=2.0):
     return VMobject(color=color, stroke_width=width).set_points_as_corners(pts)
 
 
-class PolyTime(VoiceoverScene):
+class PolyTime(WatchScene):
     def construct(self):
         self.card()
         self.ellipsoid()
         self.interior()
 
     def card(self):
-        card = chapter_card(5, r"Polynomial time: \ ellipsoids and the central path", r"Can an LP be solved in "
-                            r"polynomial time?", lit=(1979, 1984), extra=((1979, r"Khachiyan"), (1984, r"Karmarkar")),
-                            part=PART)
-        with self.voiceover("Chapter five. Polynomial time: ellipsoids and the central path."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Polynomial time: \ ellipsoids and the central path", r"Can an LP be solved in "
+                            r"polynomial time?", lit=(1979, 1984), extra=((1979, r"Khachiyan"), (1984, r"Karmarkar")), part=PART, said="Chapter five. Polynomial time: ellipsoids and the central path.")
 
     def ellipsoid(self):
+        self.ask(r"Is linear programming solvable in polynomial time?", [r"no", r"yes, since 1979"], 1,
+                 say="Can linear programs be solved in polynomial time?",
+                 reveal="Yes, since Khachiyan's ellipsoid method in 1979. Interior-point methods made it practical.")
         d = load("ellipsoid")
         A, b = np.array(d["A"]), np.array(d["b"])
         sc = 0.42

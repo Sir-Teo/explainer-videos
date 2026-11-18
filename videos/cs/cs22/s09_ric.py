@@ -7,7 +7,7 @@ from explainer.cs.algo import geometry as G
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, fit, grid_table, load, mono, words)
 
 
-class Incremental(VoiceoverScene):
+class Incremental(WatchScene):
     def construct(self):
         self.card()
         self.insertion()
@@ -15,12 +15,7 @@ class Incremental(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(8, r"Random order \ and backwards analysis", r"Why insert the points in random order?",
-                            lit=(1989, 1993), extra=((1989, r"Clarkson--Shor"), (1993, r"Seidel's backwards analysis")),
-                            part=PART)
-        with self.voiceover("Chapter eight. Random order and backwards analysis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Random order \ and backwards analysis", r"Why insert the points in random order?", lit=(1989, 1993), extra=((1989, r"Clarkson--Shor"), (1993, r"Seidel's backwards analysis")), part=PART, said="Chapter eight. Random order and backwards analysis.")
 
     def insertion(self):
         rng = random.Random(8)
@@ -82,6 +77,10 @@ class Incremental(VoiceoverScene):
         self.clear_scene()
 
     def backwards(self):
+        self.ask(r"Insert points in random order. \\ Expected triangles changed per insertion?", [r"a constant",
+                 r"about $n$"], 0,
+                 say="Add the points in random order. How many triangles change, on average, per insertion?",
+                 reveal="A constant, proved by running the analysis backwards.")
         head = label(r"Backwards analysis", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"in a bad order, \ each new point can have degree $\Theta(i)$: \ $\Theta(n^2)$ in all", font_size=22,

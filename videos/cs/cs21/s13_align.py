@@ -5,7 +5,7 @@ from explainer.cs.algo import strings as SA
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Align(VoiceoverScene):
+class Align(WatchScene):
     def construct(self):
         self.card()
         self.global_()
@@ -14,11 +14,7 @@ class Align(VoiceoverScene):
         self.scale()
 
     def card(self):
-        card = chapter_card(12, r"Alignment", r"How do you line up two texts that almost agree?", lit=(1970, 1981),
-                            extra=((1970, r"Needleman--Wunsch"), (1981, r"Smith--Waterman")), part=PART)
-        with self.voiceover("Chapter twelve. Alignment."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Alignment", r"How do you line up two texts that almost agree?", lit=(1970, 1981), extra=((1970, r"Needleman--Wunsch"), (1981, r"Smith--Waterman")), part=PART, said="Chapter twelve. Alignment.")
 
     def global_(self):
         d = load("align")
@@ -89,6 +85,10 @@ class Align(VoiceoverScene):
         self.clear_scene()
 
     def local(self):
+        self.ask(r"Smith--Waterman local alignment \\ differs from Needleman--Wunsch by...",
+                 [r"a zero in every cell: start fresh", r"a different alphabet"], 0,
+                 say="What does local alignment add to global alignment's table?",
+                 reveal="A zero option in every cell: start the alignment afresh wherever it pays.")
         d = load("align")
         head = label(r"Local alignment: \ the best matching \textit{part}", font_size=32).to_edge(UP, buff=0.3)
         lines = VGroup(

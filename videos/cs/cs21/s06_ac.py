@@ -9,7 +9,7 @@ POS = {0: (-5.6, 0.0), 1: (-3.8, 1.2), 2: (-2.0, 2.0), 8: (-0.2, 2.0), 9: (1.6, 
        7: (-0.2, 0.6), 3: (-3.8, -1.2), 4: (-2.0, -1.2), 5: (-0.2, -1.2)}
 
 
-class AhoCorasick(VoiceoverScene):
+class AhoCorasick(WatchScene):
     def construct(self):
         self.card()
         self.trie()
@@ -17,13 +17,13 @@ class AhoCorasick(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(5, r"Many patterns at once", r"How do you look for a thousand words in one pass?",
-                            lit=(1975,), extra=((1975, r"Aho--Corasick"),), part=PART)
-        with self.voiceover("Chapter five. Many patterns at once."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Many patterns at once", r"How do you look for a thousand words in one pass?", lit=(1975,), extra=((1975, r"Aho--Corasick"),), part=PART, said="Chapter five. Many patterns at once.")
 
     def trie(self):
+        self.ask(r"Search for a hundred names at once. \\ Aho--Corasick needs...", [r"a hundred passes",
+                 r"one pass, plus the matches"], 1,
+                 say="Search for a hundred different names at once. How many passes over the text?",
+                 reveal="One, plus the time to report the matches.")
         d = load("ac")["tiny_trie"]
         head = label(r"A trie of the patterns, \ with failure links", font_size=34).to_edge(UP, buff=0.35)
         pats = label(r"patterns: \ \texttt{he}, \ \texttt{she}, \ \texttt{his}, \ \texttt{hers}", font_size=22,
@@ -154,6 +154,13 @@ class AhoCorasick(VoiceoverScene):
             self.play(FadeIn(uses))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does KMP's failure table store?", r"The longest border of each matched prefix"),
+             (r"Why can Rabin--Karp report a false match?", r"Different windows can share a fingerprint")],
+            narration="Checkpoint. What does the failure table of Knuth, Morris and Pratt store? And why must Rabin-Karp "
+                      "check its matches?",
+            answers_narration="For each prefix, its longest border: the longest proper prefix that is also a suffix. And "
+                              "different windows can share a fingerprint.")
 
 
 def _trie(d):

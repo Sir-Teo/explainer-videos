@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class FmIndex(VoiceoverScene):
+class FmIndex(WatchScene):
     def construct(self):
         self.card()
         self.backward()
@@ -13,13 +13,14 @@ class FmIndex(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(9, r"Searching compressed text: \ the FM-index", r"Can we search a text we never "
-                            r"decompress?", lit=(2000,), extra=((2000, r"Ferragina--Manzini"),), part=PART)
-        with self.voiceover("Chapter nine. Searching compressed text: the FM-index."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Searching compressed text: \ the FM-index", r"Can we search a text we never "
+                            r"decompress?", lit=(2000,), extra=((2000, r"Ferragina--Manzini"),), part=PART, said="Chapter nine. Searching compressed text: the FM-index.")
 
     def backward(self):
+        self.ask(r"Count a pattern's occurrences with an FM-index. \\ The time depends on...",
+                 [r"the length of the text", r"the length of the pattern"], 1,
+                 say="Count how often a pattern occurs, using an FM-index. What does the time depend on?",
+                 reveal="Only the pattern's length: one rank step per character, however big the text.")
         d = load("fm")
         b = load("bwt")
         head = label(r"Backward search for \texttt{ana}", font_size=34).to_edge(UP, buff=0.3)

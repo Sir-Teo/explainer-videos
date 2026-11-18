@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -43,6 +43,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does an FM-index count a pattern?", r"Backward search: one rank step per character"),
+             (r"What does Myers' diff find?", r"A shortest edit script")],
+            narration="Last checkpoint. How does an FM-index count a pattern? And what does Myers' algorithm find?",
+            answers_narration="By backward search, one rank step per pattern character. And a shortest script of insertions "
+                              "and deletions.")
 
     def payoffs(self):
         card = payoff_card([
@@ -95,7 +101,7 @@ class Outro(VoiceoverScene):
             '$\\bigstar$ \\textit{Research.} \\ Reproduce a repetitive-index tradeoff: \\ allocated space, \\ count and locate; \\ audit newer results and their assumptions.',
         ], font_size=22)
         with self.voiceover(
-            'Six exercises are in the notes, with worked mathematical solutions and explicit build guidance. The fifth provides a tested streaming Horspool prototype; a Pebble port and emulator instruction counts remain work for the learner, not a measured result in this video. The starred project reproduces index tradeoffs and audits dated primary papers. It does not ask you to solve a supposedly open problem whose current status has not been established.'
+            'Six exercises are in the notes, with worked mathematical solutions and explicit build guidance. The fifth provides a tested streaming Horspool prototype; a Pebble port and emulator instruction counts remain work for the learner. The starred project reproduces index tradeoffs and audits dated primary papers. It does not ask you to solve a supposedly open problem whose current status has not been established.'
         ):
             self.play(FadeIn(ps.head), LaggedStart(*[FadeIn(r) for r in ps.rows], lag_ratio=0.3), run_time=3.0)
         self.wait(6.0)

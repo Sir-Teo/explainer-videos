@@ -51,7 +51,7 @@ def _tree(d):
     return dots, lines, path, leafs, VGroup(*lines.values(), *dots.values())
 
 
-class SuffixTree(VoiceoverScene):
+class SuffixTree(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -59,11 +59,7 @@ class SuffixTree(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(6, r"Suffix trees", r"Can we index every substring at once?", lit=(1973, 1995),
-                            extra=((1973, r"Weiner's suffix tree"), (1995, r"Ukkonen's online build")), part=PART)
-        with self.voiceover("Chapter six. Suffix trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Suffix trees", r"Can we index every substring at once?", lit=(1973, 1995), extra=((1973, r"Weiner's suffix tree"), (1995, r"Ukkonen's online build")), part=PART, said="Chapter six. Suffix trees.")
 
     def tree(self):
         d = load("stree")
@@ -144,6 +140,9 @@ class SuffixTree(VoiceoverScene):
         self.clear_scene()
 
     def uses(self):
+        self.ask(r"A suffix tree for a text of length $n$. \\ How many leaves?", [r"$n$", r"$n^2$", r"$\log n$"], 0,
+                 say="A suffix tree of a text of length n. How many leaves?",
+                 reveal="n, one per suffix, and fewer than n branching nodes.")
         s = load("sa")
         head = label(r"What a suffix tree answers", font_size=34).to_edge(UP, buff=0.35)
         rows = VGroup(

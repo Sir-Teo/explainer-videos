@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Kmp(VoiceoverScene):
+class Kmp(WatchScene):
     def construct(self):
         self.card()
         self.borders()
@@ -14,11 +14,7 @@ class Kmp(VoiceoverScene):
         self.amortized()
 
     def card(self):
-        card = chapter_card(3, r"Knuth, \ Morris and Pratt: \ never look back", r"What does a mismatch teach us?",
-                            lit=(1977,), extra=((1977, r"Knuth--Morris--Pratt"),), part=PART)
-        with self.voiceover('Chapter three. Knuth, Morris and Pratt: never look back.'):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Knuth, \ Morris and Pratt: \ never look back", r"What does a mismatch teach us?", lit=(1977,), extra=((1977, r"Knuth--Morris--Pratt"),), part=PART, said='Chapter three. Knuth, Morris and Pratt: never look back.')
 
     def borders(self):
         d = load("kmp")
@@ -155,6 +151,10 @@ class Kmp(VoiceoverScene):
         self.clear_scene()
 
     def amortized(self):
+        self.ask(r"Knuth--Morris--Pratt on a text of $n$ characters. \\ Total comparisons?", [r"at most $2n$",
+                 r"up to $n \cdot m$"], 0,
+                 say="Knuth, Morris and Pratt never re-read the text. How many comparisons on n characters, at most?",
+                 reveal="At most two n, whatever the pattern.")
         d = load("kmp")
         head = label(r"Never more than $2n$ comparisons", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(

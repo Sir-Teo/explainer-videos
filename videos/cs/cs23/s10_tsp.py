@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Tsp(VoiceoverScene):
+class Tsp(WatchScene):
     def construct(self):
         self.card()
         self.tours()
@@ -12,14 +12,14 @@ class Tsp(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(9, r"The travelling salesman", r"How close can we get to the shortest tour?",
-                            lit=(1976, 2021), extra=((1976, r"Christofides--Serdyukov"),
-                                                     (2021, r"Karlin, \ Klein and Oveis Gharan")), part=PART)
-        with self.voiceover("Chapter nine. The travelling salesman."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"The travelling salesman", r"How close can we get to the shortest tour?", lit=(1976, 2021), extra=((1976, r"Christofides--Serdyukov"),
+                                                     (2021, r"Karlin, \ Klein and Oveis Gharan")), part=PART, said="Chapter nine. The travelling salesman.")
 
     def tours(self):
+        self.ask(r"Christofides' algorithm on metric TSP. \\ Within...", [r"$1.5\times$", r"$2\times$",
+                 r"exact"], 0,
+                 say="Christofides' tour, when distances obey the triangle inequality. How close to optimal?",
+                 reveal="Within one and a half times: a spanning tree plus a matching.")
         d = load("tsp")["draw"]
         P = d["P"]
         L = d["lengths"]
@@ -112,7 +112,7 @@ class Tsp(VoiceoverScene):
         ).arrange(DOWN, buff=0.28).next_to(tab, DOWN, buff=0.45)
         with self.voiceover(
             (
-            "These forty seeded twelve-city instances compare finite tour ratios with independently checked optima. <bookmark mark='a'/> Double tree and Christofides obey their metric guarantees. Nearest neighbour followed by two-opt has the smallest sample mean here. Two-opt tries improving pairs of edges; uncrossing is one kind of improvement, not its entire definition. <bookmark mark='b'/> That empirical outcome is specific to this family and stopping rule. The combined heuristic inherits nearest neighbour's logarithmic metric guarantee because it never lengthens the starting tour. This sample does not establish a constant-factor improvement. <bookmark mark='c'/> A selected 2021 randomized metric-TSP theorem of Karlin, Klein and Oveis Gharan gives three halves minus a positive epsilon larger than ten to the minus thirty-six. It is a separate algorithm, not executed here, and is not presented as today's best bound. <bookmark mark='d'/> Euclidean TSP also admits a polynomial-time approximation scheme for each fixed positive epsilon, with dimension and epsilon dependence kept in its cost."
+            "These forty seeded twelve-city instances compare finite tour ratios with independently checked optima. <bookmark mark='a'/> Double tree and Christofides obey their metric guarantees. Nearest neighbour followed by two-opt has the smallest sample mean here. Two-opt tries improving pairs of edges; uncrossing is one kind of improvement, not its entire definition. <bookmark mark='b'/> That empirical outcome is specific to this family and stopping rule. The combined heuristic inherits nearest neighbour's logarithmic metric guarantee because it never lengthens the starting tour. <bookmark mark='c'/> A selected 2021 randomized metric-TSP theorem of Karlin, Klein and Oveis Gharan gives three halves minus a positive epsilon larger than ten to the minus thirty-six. It is a separate algorithm, not executed here, and is not presented as today's best bound. <bookmark mark='d'/> Euclidean TSP also admits a polynomial-time approximation scheme for each fixed positive epsilon, with dimension and epsilon dependence kept in its cost."
         )
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
@@ -164,3 +164,10 @@ class Tsp(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why are bipartite matching LPs integral?", r"Their matrix is totally unimodular"),
+             (r"The 2-approximation for vertex cover takes...?", r"Both endpoints of a maximal matching")],
+            narration="Checkpoint. Why does the bipartite matching LP always have an integer optimum? And how does the "
+                      "two-approximation for vertex cover work?",
+            answers_narration="Its constraint matrix is totally unimodular, so every vertex is integral. And it takes both "
+                              "endpoints of a maximal matching.")

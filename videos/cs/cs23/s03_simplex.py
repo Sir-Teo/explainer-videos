@@ -17,7 +17,7 @@ def frac_tex(s):
     return s
 
 
-class Simplex(VoiceoverScene):
+class Simplex(WatchScene):
     def construct(self):
         self.card()
         self.walk()
@@ -26,13 +26,12 @@ class Simplex(VoiceoverScene):
         self.rules()
 
     def card(self):
-        card = chapter_card(2, r"The simplex method", r"How do you walk to the best corner?", lit=(1947,),
-                            extra=((1947, r"Dantzig's simplex"),), part=PART)
-        with self.voiceover("Chapter two. The simplex method."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The simplex method", r"How do you walk to the best corner?", lit=(1947,), extra=((1947, r"Dantzig's simplex"),), part=PART, said="Chapter two. The simplex method.")
 
     def walk(self):
+        self.ask(r"The simplex method moves...", [r"through the interior", r"along edges, vertex to vertex"], 1,
+                 say="How does the simplex method move through the polytope?",
+                 reveal="Along edges, from vertex to vertex, improving the objective each time.")
         d = load("lp")
         s = load("simplex")
         head = label(r"Walk along edges, \ uphill", font_size=34).to_edge(UP, buff=0.3)

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Weights(VoiceoverScene):
+class Weights(WatchScene):
     def construct(self):
         self.card()
         self.experts()
@@ -12,12 +12,7 @@ class Weights(VoiceoverScene):
         self.games()
 
     def card(self):
-        card = chapter_card(12, r"Multiplicative weights", r"How do you learn from experts you can't trust?",
-                            lit=(1994, 2012), extra=((1994, r"Littlestone--Warmuth"), (2012, r"Arora--Hazan--Kale")),
-                            part=PART)
-        with self.voiceover("Chapter twelve. Multiplicative weights."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Multiplicative weights", r"How do you learn from experts you can't trust?", lit=(1994, 2012), extra=((1994, r"Littlestone--Warmuth"), (2012, r"Arora--Hazan--Kale")), part=PART, said="Chapter twelve. Multiplicative weights.")
 
     def experts(self):
         m = load("mw")
@@ -82,6 +77,10 @@ class Weights(VoiceoverScene):
         self.clear_scene()
 
     def proof(self):
+        self.ask(r"Multiplicative weights over $N$ experts, $T$ rounds. \\ Regret grows like...",
+                 [r"$T$", r"$\sqrt{T \log N}$", r"$N$"], 1,
+                 say="Multiplicative weights over N experts for T rounds. How does its regret grow?",
+                 reveal="Like the square root of T log N: per round, it vanishes.")
         head = label(r"Why the bound holds: \ watch the total weight", font_size=32).to_edge(UP, buff=0.35)
         rows = VGroup(
             MathTex(r"W_t = \sum_i w_i(t), \qquad W_0 = n", font_size=34, color=WHITE),

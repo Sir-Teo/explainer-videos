@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, grid_table, load, mono, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.diet()
         self.three()
-        self.plan()
+        self.title(PART)
 
     def diet(self):
         head = label(r"The cheapest diet, \ 1945", font_size=36).to_edge(UP, buff=0.4)
@@ -92,26 +92,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Optimization", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"linear programs, \ the simplex method, \ and duality's certificates",
-            r"why simplex is exponential in theory and fast in practice; \ ellipsoids and interior points",
-            r"integer programs: \ totally unimodular matrices, \ branch and bound",
-            r"approximation: \ covers, \ the travelling salesman, \ knapsack, \ and MAX-CUT by a random hyperplane",
-            r"online algorithms and multiplicative weights",
-            r"convex optimization in a page; \ the frontier: \ faster LPs, \ the Hirsch question, \ the UGC",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 23 of Computer Science, Built: Optimization. <bookmark mark='a'/> In this part: linear programs, "
-            "the simplex method and duality; why simplex is exponential in theory and fast in practice, and the "
-            "polynomial methods that came after it; integer programs and when they are easy; approximation "
-            "algorithms for covers, the travelling salesman, knapsack and MAX-CUT; online algorithms and "
-            "multiplicative weights; and convex optimization in a page."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

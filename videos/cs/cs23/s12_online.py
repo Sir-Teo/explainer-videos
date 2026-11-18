@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Online(VoiceoverScene):
+class Online(WatchScene):
     def construct(self):
         self.card()
         self.ski()
@@ -12,14 +12,15 @@ class Online(VoiceoverScene):
         self.lower()
 
     def card(self):
-        card = chapter_card(11, r"Online: \ deciding without the future", r"How well can you do if you can't see "
-                            r"ahead?", lit=(1985,), extra=((1985, r"Sleator--Tarjan competitive analysis"),),
-                            part=PART)
-        with self.voiceover("Chapter eleven. Online: deciding without the future."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Online: \ deciding without the future", r"How well can you do if you can't see "
+                            r"ahead?", lit=(1985,), extra=((1985, r"Sleator--Tarjan competitive analysis"),), part=PART, said="Chapter eleven. Online: deciding without the future.")
 
     def ski(self):
+        self.ask(r"Rent skis for 1 a day, or buy for 10. \\ The best strategy's worst ratio?", [r"about 1", r"about 2",
+                 r"10"], 1,
+                 say="Skis rent for one a day or sell for ten, and you don't know how many days you'll ski. How bad can the best "
+                     "strategy be?",
+                 reveal="Almost twice the optimum: rent until you've paid nearly the price, then buy.")
         o = load("online")
         B = o["B"]
         head = label(r"Ski rental", font_size=34).to_edge(UP, buff=0.3)

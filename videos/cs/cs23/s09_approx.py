@@ -7,7 +7,7 @@ POS9 = [(-5.8, 1.4), (-4.6, 2.2), (-4.4, 0.8), (-3.2, 0.2), (-2.6, 1.6), (-1.8, 
         (-1.4, -2.2)]
 
 
-class Approximation(VoiceoverScene):
+class Approximation(WatchScene):
     def construct(self):
         self.card()
         self.vertex_cover()
@@ -15,12 +15,7 @@ class Approximation(VoiceoverScene):
         self.set_cover()
 
     def card(self):
-        card = chapter_card(8, r"Approximation: \ covers", r"Can we be provably close when exact is hopeless?",
-                            lit=(1974, 1979), extra=((1974, r"Johnson's greedy bound"), (1979, r"Chv\'atal")),
-                            part=PART)
-        with self.voiceover("Chapter eight. Approximation: covers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Approximation: \ covers", r"Can we be provably close when exact is hopeless?", lit=(1974, 1979), extra=((1974, r"Johnson's greedy bound"), (1979, r"Chv\'atal")), part=PART, said="Chapter eight. Approximation: covers.")
 
     def graph(self, d, hl=(), col=YES):
         P = [np.array([x, y, 0]) for x, y in POS9]
@@ -31,6 +26,10 @@ class Approximation(VoiceoverScene):
         return lines, nodes, P, E
 
     def vertex_cover(self):
+        self.ask(r"Cover edges by taking both endpoints of an uncovered edge. \\ The cover is...",
+                 [r"at most twice the optimum", r"within $\log n$ of it", r"optimal"], 0,
+                 say="Pick any uncovered edge and take both its endpoints, until every edge is covered. How good is the cover?",
+                 reveal="At most twice the optimum: any cover must contain an endpoint of each picked edge.")
         a = load("approx")
         d = a["draw"]
         head = label(r"Vertex cover: \ two ways to be within 2", font_size=32).to_edge(UP, buff=0.3)

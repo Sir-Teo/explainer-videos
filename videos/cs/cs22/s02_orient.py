@@ -5,7 +5,7 @@ from explainer.cs.algo import geometry as G
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Orient(VoiceoverScene):
+class Orient(WatchScene):
     def construct(self):
         self.card()
         self.area()
@@ -14,11 +14,7 @@ class Orient(VoiceoverScene):
         self.adaptive()
 
     def card(self):
-        card = chapter_card(1, r"The one primitive", r"Left, right, or on the line?", lit=(1997, 2008),
-                            extra=((1997, r"Shewchuk's predicates"), (2008, r"Kettner et al.")), part=PART)
-        with self.voiceover("Chapter one. The one primitive."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The one primitive", r"Left, right, or on the line?", lit=(1997, 2008), extra=((1997, r"Shewchuk's predicates"), (2008, r"Kettner et al.")), part=PART, said="Chapter one. The one primitive.")
 
     def area(self):
         head = label(r"Orientation is the sign of an area", font_size=34).to_edge(UP, buff=0.35)
@@ -73,6 +69,10 @@ class Orient(VoiceoverScene):
         self.clear_scene()
 
     def rounding(self):
+        self.ask(r"A floating-point orientation test, near-collinear points. \\ Can it put a point on both sides of a line?",
+                 [r"no", r"yes"], 1,
+                 say="Can a floating-point orientation test say a point is left of a line, and also right of it?",
+                 reveal="Yes, for nearly collinear points: rounding can give contradictory answers.")
         head = label(r"Why floating point gets it wrong", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             MathTex(r"\underbrace{(q_x - p_x)(r_y - p_y)}_{a} \;-\; \underbrace{(q_y - p_y)(r_x - p_x)}_{b}",
@@ -98,6 +98,12 @@ class Orient(VoiceoverScene):
         self.clear_scene()
 
     def adaptive(self):
+        self.wrong_idea(r"Floating point is good enough for geometry",
+                        r"A wrong sign can make a hull algorithm crash or loop. \\ Use exact predicates",
+                        narration="For geometry, floating point seems good enough: a point is either left of a line or not.",
+                        right_narration="One wrong sign can make a hull algorithm crash or loop forever. Robust code uses exact "
+                                        "predicates, filtered for speed.")
+        self.clear_scene()
         o = load("orient")
         head = label(r"Adaptive exact predicates", font_size=34).to_edge(UP, buff=0.35)
         steps = VGroup(

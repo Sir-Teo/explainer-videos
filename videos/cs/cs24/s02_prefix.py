@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, cells_row, load, mono)
 
 
-class PrefixSums(VoiceoverScene):
+class PrefixSums(WatchScene):
     def construct(self):
         self.card()
         self.sums()
@@ -13,14 +13,13 @@ class PrefixSums(VoiceoverScene):
         self.scan()
 
     def card(self):
-        card = chapter_card(1, r"Prefix sums", r"How do you answer a range question with one subtraction?",
-                            lit=(1984, 2001), extra=((1984, r"Crow's summed-area tables"), (2001, r"Viola--Jones")),
-                            part=PART)
-        with self.voiceover("Chapter one. Prefix sums."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Prefix sums", r"How do you answer a range question with one subtraction?", lit=(1984, 2001), extra=((1984, r"Crow's summed-area tables"), (2001, r"Viola--Jones")), part=PART, said="Chapter one. Prefix sums.")
 
     def sums(self):
+        self.ask(r"Precompute the running totals of $n$ numbers. \\ Then any range sum costs...", [r"$n$", r"$\log n$",
+                 r"a constant"], 2,
+                 say="Precompute running totals once. What does any range sum cost afterwards?",
+                 reveal="A constant: one subtraction of two prefix sums.")
         d = load("prefix")
         a, S = d["a"], d["S"]
         l, r = d["query"]

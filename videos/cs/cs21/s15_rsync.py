@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Rsync(VoiceoverScene):
+class Rsync(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -12,11 +12,8 @@ class Rsync(VoiceoverScene):
         self.cdc()
 
     def card(self):
-        card = chapter_card(14, r"Rolling hashes at scale: \ rsync and chunking", r"How do you send only what "
-                            r"changed?", lit=(1996,), extra=((1996, r"rsync"),), part=PART)
-        with self.voiceover("Chapter fourteen. Rolling hashes at scale: rsync and chunking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Rolling hashes at scale: \ rsync and chunking", r"How do you send only what "
+                            r"changed?", lit=(1996,), extra=((1996, r"rsync"),), part=PART, said="Chapter fourteen. Rolling hashes at scale: rsync and chunking.")
 
     def problem(self):
         d = load("rsync")
@@ -54,6 +51,10 @@ class Rsync(VoiceoverScene):
         self.clear_scene()
 
     def rsync(self):
+        self.ask(r"Insert one sentence in the middle of a huge file. \\ rsync sends...", [r"the whole file",
+                 r"about one block, plus checksums"], 1,
+                 say="One sentence is inserted in the middle of a huge file. How much does rsync send?",
+                 reveal="About one block of new data, plus the checksums. The rolling hash re-finds every old block.")
         d = load("rsync")
         head = label(r"rsync: \ look for the old blocks at \textit{every} offset", font_size=32).to_edge(UP, buff=0.35)
         lines = VGroup(

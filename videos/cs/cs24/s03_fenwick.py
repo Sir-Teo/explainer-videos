@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Fenwick(VoiceoverScene):
+class Fenwick(WatchScene):
     def construct(self):
         self.card()
         self.ranges()
@@ -12,13 +12,12 @@ class Fenwick(VoiceoverScene):
         self.timing()
 
     def card(self):
-        card = chapter_card(2, r"Fenwick trees", r"Can a running total survive updates?", lit=(1994,),
-                            extra=((1994, r"Fenwick's binary indexed tree"),), part=PART)
-        with self.voiceover("Chapter two. Fenwick trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Fenwick trees", r"Can a running total survive updates?", lit=(1994,), extra=((1994, r"Fenwick's binary indexed tree"),), part=PART, said="Chapter two. Fenwick trees.")
 
     def ranges(self):
+        self.ask(r"A Fenwick tree. \\ Update, and prefix query, each cost...", [r"$1$ and $n$", r"$\log n$ each"], 1,
+                 say="A Fenwick tree balances updates against queries. What does each cost?",
+                 reveal="Log n each: one step per set bit of the index.")
         d = load("fenwick")
         n = d["n"]
         head = label(r"Each cell is responsible for a power-of-two range", font_size=30).to_edge(UP, buff=0.3)

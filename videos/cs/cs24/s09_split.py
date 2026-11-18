@@ -4,20 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, big, load, mono, words)
 
 
-class Splitting(VoiceoverScene):
+class Splitting(WatchScene):
     def construct(self):
         self.card()
         self.mitm()
         self.roots()
 
     def card(self):
-        card = chapter_card(8, r"Meet in the middle and square roots", r"What do you gain by cutting a problem in "
-                            r"two unequal ways?", lit=(1974,), extra=((1974, r"Horowitz--Sahni"),), part=PART)
-        with self.voiceover("Chapter eight. Meet in the middle, and square roots."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Meet in the middle and square roots", r"What do you gain by cutting a problem in "
+                            r"two unequal ways?", lit=(1974,), extra=((1974, r"Horowitz--Sahni"),), part=PART, said="Chapter eight. Meet in the middle, and square roots.")
 
     def mitm(self):
+        self.ask(r"Subset sum on 40 numbers. Brute force: $2^{40}$. \\ Meet in the middle?",
+                 [r"still $2^{40}$", r"about $2^{20}$, times a log", r"$40^2$"], 1,
+                 say="Subset sum on forty numbers takes two to the forty by brute force. What does meeting in the middle cost?",
+                 reveal="About two to the twenty for each half, plus a sorted merge.")
         d = load("split")
         head = label(r"Meet in the middle", font_size=34).to_edge(UP, buff=0.3)
         L = Rectangle(width=4.6, height=1.5, stroke_color=DATA, stroke_width=2).set_fill(DATA, 0.15)

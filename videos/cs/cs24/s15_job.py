@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (COST, CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class TheJob(VoiceoverScene):
+class TheJob(WatchScene):
     def construct(self):
         self.card()
         self.engineered()
@@ -12,13 +12,13 @@ class TheJob(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(14, r"The Job, \ engineered", r"How fast can the word count go on this machine?",
-                            lit=(2017,), extra=((2017, r"Swiss tables"),), part=PART)
-        with self.voiceover("Chapter fourteen. The Job, engineered."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The Job, \ engineered", r"How fast can the word count go on this machine?", lit=(2017,), extra=((2017, r"Swiss tables"),), part=PART, said="Chapter fourteen. The Job, engineered.")
 
     def engineered(self):
+        self.ask(r"The engineered Job, SIMD and a Swiss table. \\ Against the textbook hash version?",
+                 [r"about the same", r"several times faster"], 1,
+                 say="The Job engineered with vector scanning and a Swiss table. Against the textbook hash table?",
+                 reveal="Several times faster, with the same big-O.")
         d = load("job")
         tb, en = d["textbook"], d["engineered"]
         head = label(r"Part 17's hash table, \ engineered for this machine", font_size=32).to_edge(UP, buff=0.3)

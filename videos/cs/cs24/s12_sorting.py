@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, curve, grid_table, load, mono, words)
 
 
-class Sorting(VoiceoverScene):
+class Sorting(WatchScene):
     def construct(self):
         self.card()
         self.inside()
@@ -12,11 +12,7 @@ class Sorting(VoiceoverScene):
         self.topk()
 
     def card(self):
-        card = chapter_card(11, r"Sorting in practice", r"When does $n \log n$ lose to $n$?", lit=(1887, 2021),
-                            extra=((1887, r"Hollerith's tabulator"), (2021, r"vqsort, \ IPS$^4$o")), part=PART)
-        with self.voiceover("Chapter eleven. Sorting in practice."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Sorting in practice", r"When does $n \log n$ lose to $n$?", lit=(1887, 2021), extra=((1887, r"Hollerith's tabulator"), (2021, r"vqsort, \ IPS$^4$o")), part=PART, said="Chapter eleven. Sorting in practice.")
 
     def crossover(self):
         d = load("sorting")
@@ -106,6 +102,10 @@ class Sorting(VoiceoverScene):
         self.clear_scene()
 
     def topk(self):
+        self.ask(r"The twenty largest of sixteen million keys. \\ Sort them all, or keep a heap of twenty?",
+                 [r"sort them all", r"keep a heap of twenty"], 1,
+                 say="You want the twenty largest of sixteen million keys. Sort everything, or keep a small heap?",
+                 reveal="The heap: n log twenty instead of n log n, and most keys are rejected in one comparison.")
         t = load("topk")
         head = label(r"The top 20 of 16 million", font_size=34).to_edge(UP, buff=0.35)
         rows = [[r"sort everything", r"$O(n \log n)$", f"{t['sort'] * 1000:,.0f} ms"],

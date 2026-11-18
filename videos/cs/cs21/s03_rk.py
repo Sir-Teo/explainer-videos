@@ -4,20 +4,19 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class RabinKarp(VoiceoverScene):
+class RabinKarp(WatchScene):
     def construct(self):
         self.card()
         self.rolling()
         self.measured()
 
     def card(self):
-        card = chapter_card(2, r"Rolling hashes", r"Can one number stand for a whole window?", lit=(1987,),
-                            extra=((1987, r"Karp--Rabin"),), part=PART)
-        with self.voiceover("Chapter two. Rolling hashes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Rolling hashes", r"Can one number stand for a whole window?", lit=(1987,), extra=((1987, r"Karp--Rabin"),), part=PART, said="Chapter two. Rolling hashes.")
 
     def rolling(self):
+        self.ask(r"A rolling hash. \\ Moving to the next window costs...", [r"$m$ operations", r"a constant"], 1,
+                 say="With a rolling hash, what does it cost to move from one window to the next?",
+                 reveal="A constant: drop the old character, add the new one.")
         head = label(r"Compare fingerprints, \ not characters", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"read a window of $m$ characters as a number in base $b$, \ modulo a prime $p$", font_size=22,

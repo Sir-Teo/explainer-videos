@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.repetitive()
@@ -13,14 +13,14 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ indexes as small as the information", r"How small can a searchable "
-                            r"text be?", lit=(2018, 2020), extra=((2018, r"the r-index"), (2020, r"$r = O(z \log^2 n)$")),
-                            part=PART)
-        with self.voiceover("Chapter sixteen. Frontier: indexes as small as the information."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(16, r"Frontier: \ indexes as small as the information", r"How small can a searchable "
+                            r"text be?", lit=(2018, 2020), extra=((2018, r"the r-index"), (2020, r"$r = O(z \log^2 n)$")), part=PART, said="Chapter sixteen. Frontier: indexes as small as the information.")
 
     def repetitive(self):
+        self.ask(r"Many versions of one document, concatenated. \\ BWT runs $r$, against length $n$?",
+                 [r"$r \approx n$", r"$r \ll n$"], 1,
+                 say="Concatenate many versions of one document. How many runs does the transform have, against the length?",
+                 reveal="Far fewer: repetition becomes long runs, and indexes can shrink to match.")
         d = load("period")
         head = label(r"When texts repeat themselves", font_size=34).to_edge(UP, buff=0.35)
         rows = [

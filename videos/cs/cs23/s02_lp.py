@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs23.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, View3, grid_table, load, mono, words)
 
 
-class LinearPrograms(VoiceoverScene):
+class LinearPrograms(WatchScene):
     def construct(self):
         self.card()
         self.history()
@@ -12,11 +12,7 @@ class LinearPrograms(VoiceoverScene):
         self.polytope()
 
     def card(self):
-        card = chapter_card(1, r"Linear programs", r"What does it mean to choose the best point?", lit=(1939, 1947),
-                            extra=((1939, r"Kantorovich"), (1947, r"Dantzig")), part=PART)
-        with self.voiceover("Chapter one. Linear programs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Linear programs", r"What does it mean to choose the best point?", lit=(1939, 1947), extra=((1939, r"Kantorovich"), (1947, r"Dantzig")), part=PART, said="Chapter one. Linear programs.")
 
     def history(self):
         head = label(r"Maximize a linear function over linear constraints", font_size=32).to_edge(UP, buff=0.35)
@@ -133,6 +129,10 @@ class LinearPrograms(VoiceoverScene):
         self.clear_scene()
 
     def polytope(self):
+        self.ask(r"If a linear program has an optimum, \\ one optimum sits at...", [r"the centre of the region",
+                 r"a vertex", r"anywhere at all"], 1,
+                 say="If a linear program has a best point, where can you always find one?",
+                 reveal="At a vertex: a linear objective improves until it hits a corner.")
         d = load("lp")
         head = label(r"The feasible region is a polytope", font_size=34).to_edge(UP, buff=0.3)
         view = View3(origin=LEFT * 2.6 + DOWN * 0.9, scale=1.15, th=-0.75, ph=0.42, center=(1.2, 1.0, 1.0))

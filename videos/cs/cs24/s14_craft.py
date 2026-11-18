@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs24.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Craft(VoiceoverScene):
+class Craft(WatchScene):
     def construct(self):
         self.card()
         self.polya()
@@ -12,11 +12,7 @@ class Craft(VoiceoverScene):
         self.repertoire()
 
     def card(self):
-        card = chapter_card(13, r"Problem solving as a craft", r"What do you do with a problem you have never seen?",
-                            lit=(1945,), extra=((1945, r"P\'olya, \textit{How to Solve It}"),), part=PART)
-        with self.voiceover("Chapter thirteen. Problem solving as a craft."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Problem solving as a craft", r"What do you do with a problem you have never seen?", lit=(1945,), extra=((1945, r"P\'olya, \textit{How to Solve It}"),), part=PART, said="Chapter thirteen. Problem solving as a craft.")
 
     def polya(self):
         head = label(r"P\'olya's four steps, \ for programs", font_size=34).to_edge(UP, buff=0.35)
@@ -41,7 +37,7 @@ class Craft(VoiceoverScene):
             "<bookmark mark='d'/> Look back: explain an invariant and compare complete outputs on targeted and "
             'generated cases. Tests can expose counterexamples without proving every possible execution correct. '
             "<bookmark mark='e'/> This episode's receipts identify which illustrated algorithms, input domains "
-            'and native workloads were actually checked. One test file does not certify the entire series.'
+            'and native workloads were actually checked.'
         ) as vo:
             self.play(FadeIn(head))
             for mk, s_ in zip("abcde", steps):
@@ -51,6 +47,10 @@ class Craft(VoiceoverScene):
         self.clear_scene()
 
     def worked(self):
+        self.ask(r"Count pairs whose sum is at most $T$. \\ Sort, then two pointers. The time?", [r"$n^2$", r"$n \log n$"],
+                 1,
+                 say="Count the pairs whose sum is at most T, by sorting and walking two pointers inward. How long?",
+                 reveal="n log n for the sort, then linear: each step retires one pointer's worth of pairs.")
         d = load("pairs")
         head = label(r"The four steps on one problem", font_size=34).to_edge(UP, buff=0.35)
         prob = label(r"count the pairs $i < j$ with $a_i + a_j \le T$", font_size=26, color=WHITE).next_to(

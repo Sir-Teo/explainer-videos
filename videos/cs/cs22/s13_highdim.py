@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs22.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class HighDim(VoiceoverScene):
+class HighDim(WatchScene):
     def construct(self):
         self.card()
         self.curse()
@@ -14,13 +14,13 @@ class HighDim(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(12, r"High dimensions", r"Why does geometry break in a thousand dimensions?",
-                            lit=(1998, 2016), extra=((1998, r"Indyk--Motwani LSH"), (2016, r"HNSW")), part=PART)
-        with self.voiceover("Chapter twelve. High dimensions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"High dimensions", r"Why does geometry break in a thousand dimensions?", lit=(1998, 2016), extra=((1998, r"Indyk--Motwani LSH"), (2016, r"HNSW")), part=PART, said="Chapter twelve. High dimensions.")
 
     def curse(self):
+        self.ask(r"Random points in 1000 dimensions. \\ The nearest and farthest distances from a query are...",
+                 [r"very different", r"nearly equal"], 1,
+                 say="Random points in a thousand dimensions. How do the nearest and farthest distances from a query compare?",
+                 reveal="Nearly equal: distances concentrate, which is the curse of dimensionality.")
         d = load("highdim")
         head = label(r"The curse of dimensionality", font_size=34).to_edge(UP, buff=0.35)
         rows = [[str(r["d"]), f"{r['ratio']:.2f}" if r["ratio"] < 100 else words(round(r["ratio"]))] for r in d["conc"]]
@@ -46,7 +46,7 @@ class HighDim(VoiceoverScene):
                      font_size=19, color=GREY_A).move_to([3.6, 2.3, 0])
         dl = label(r"dimension $d$", font_size=18, color=GREY_A).move_to([3.6, -3.05, 0])
         with self.voiceover(
-            "Nearest-neighbour queries also arise for high-dimensional embeddings. <bookmark mark='a'/> Here are distances from one seeded query to two thousand uniform unit-cube points. The farthest-to-nearest ratio approaches one as dimension grows in these samples. This distributional effect does not imply that semantic nearest neighbours are meaningless for every dataset. <bookmark mark='b'/> On a separate twenty-thousand-point sample, we counted the kd-tree nodes visited for exact nearest-neighbour queries and checked each answer against a full distance scan. By twenty-four dimensions this run visits the entire tree. Visits are work counts, not a measured comparison with vectorized scan time. <bookmark mark='c'/> This is a warning about pruning and data distribution, not a universal lower bound on all high-dimensional indexes. Approximation and additional structure lead to other tradeoffs."
+            "Nearest-neighbour queries also arise for high-dimensional embeddings. <bookmark mark='a'/> Here are distances from one seeded query to two thousand uniform unit-cube points. The farthest-to-nearest ratio approaches one as dimension grows in these samples. <bookmark mark='b'/> On a separate twenty-thousand-point sample, we counted the kd-tree nodes visited for exact nearest-neighbour queries and checked each answer against a full distance scan. By twenty-four dimensions this run visits the entire tree. <bookmark mark='c'/> This is a warning about pruning and data distribution, not a universal lower bound on all high-dimensional indexes. Approximation and additional structure lead to other tradeoffs."
         ) as vo:
             self.play(FadeIn(head), FadeIn(VGroup(*t1.cells[0])), FadeIn(t1.rule), FadeIn(cap1),
                       FadeIn(VGroup(*t1.cells[1])), run_time=1.2)

@@ -23,11 +23,11 @@ def sign_image(fl, ex=None, scale=4):
     return m
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.question()
         self.grid()
-        self.plan()
+        self.title(PART)
 
     def question(self):
         d = load("hook")
@@ -109,22 +109,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Geometry", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            'the orientation filter, \\ with a rational exact fallback',
-            r"convex hulls, \ the sweep line, \ and guarding an art gallery",
-            r"Voronoi diagrams by Fortune's sweep; \ Delaunay triangulations, \ and the lifting map between them",
-            r"randomized incremental algorithms, \ and backwards analysis to price them",
-            r"linear programming in the plane, \ kd-trees, \ point location, \ and high dimensions",
-            r"duality, \ motion planning, \ and the frontier: \ exactness, \ 3SUM, \ nearest neighbours",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 22 of Computer Science, Built: Geometry. <bookmark mark='a'/> In this part: filtered orientation tests with an exact fallback; convex hulls, the sweep line, and guards for an art gallery; Voronoi diagrams grown by a sweep of parabolas, and Delaunay triangulations, which turn out to be the shadow of a three-dimensional hull; randomized algorithms and the backwards analysis that prices them; linear programming, range search, point location and the curse of high dimensions; and motion planning for a robot."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

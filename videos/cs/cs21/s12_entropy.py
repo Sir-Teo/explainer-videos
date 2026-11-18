@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Entropy(VoiceoverScene):
+class Entropy(WatchScene):
     def construct(self):
         self.card()
         self.whole_bits()
@@ -12,13 +12,13 @@ class Entropy(VoiceoverScene):
         self.models()
 
     def card(self):
-        card = chapter_card(11, r"Compression, \ II: \ coding the symbols", r"Can a symbol cost less than a bit?",
-                            lit=(2009,), extra=((2009, r"Duda's ANS"),), part=PART)
-        with self.voiceover("Chapter eleven. Compression, part two: coding the symbols."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Compression, \ II: \ coding the symbols", r"Can a symbol cost less than a bit?", lit=(2009,), extra=((2009, r"Duda's ANS"),), part=PART, said="Chapter eleven. Compression, part two: coding the symbols.")
 
     def whole_bits(self):
+        self.ask(r"A symbol with probability 0.9. \\ How many bits does a Huffman code spend on it?",
+                 [r"about 0.15", r"at least 1"], 1,
+                 say="A symbol appears ninety percent of the time. How many bits does Huffman coding spend on it?",
+                 reveal="At least one: Huffman codes use whole bits. Arithmetic coding and ANS get close to point one five.")
         d = load("entropy")
         head = label(r"Huffman's whole bits", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
@@ -135,3 +135,10 @@ class Entropy(VoiceoverScene):
             self.play(FadeIn(notes[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does the BWT help compression?", r"Sorting by context groups similar characters into runs"),
+             (r"What do suffix arrays trade against suffix trees?", r"Much less memory, a little more time")],
+            narration="Checkpoint. Why does the Burrows-Wheeler transform help compression? And what does a suffix array trade "
+                      "against a suffix tree?",
+            answers_narration="Sorting by what follows each character groups similar characters into runs. And it uses much "
+                              "less memory, for a little more search time.")

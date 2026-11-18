@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs21.common import (COST, CTRL, DATA, HEAD, LAM, NO, PART, YES, big, grid_table, load, mono, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.search()
         self.more()
-        self.plan()
+        self.title(PART)
 
     def search(self):
         d = load("hook")
@@ -59,22 +59,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Strings", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"matching: \ naive, \ rolling hashes, \ KMP's automaton, \ Boyer--Moore, \ Aho--Corasick",
-            'a small suffix tree; \\ a suffix array for all 25 MB',
-            r"the Burrows--Wheeler transform and the FM-index: \ search without decompressing",
-            r"compression: \ Lempel--Ziv, \ Huffman and ANS, \ against zlib, \ bzip2 and xz",
-            r"alignment, \ Myers' diff on this repository, \ rsync and content-defined chunks",
-            r"periods and palindromes; \ the frontier: \ indexes as small as the information",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 21 of Computer Science, Built: Strings. <bookmark mark='a'/> In this part: five ways to find a pattern; a small suffix tree and a suffix array built for the whole corpus; the Burrows–Wheeler transform and the FM-index, which searches text without decompressing it; Lempel–Ziv compression and the entropy coders behind it; alignment, diff and rsync; periods and palindromes; and indexes as small as the information in the text."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
