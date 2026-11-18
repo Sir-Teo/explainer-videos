@@ -1,121 +1,98 @@
 from __future__ import annotations
 
-import numpy as np
-
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, STAGE_COLOR, STAGES,
-                                  YES, PipeChart, PipeFigure, box, fmt, load, mono)
+from videos.cs.cs7.common import DATA, FUNC, HEAD, INF, NO, PART, YES, chapter, load
 
 
-class Structural(VoiceoverScene):
+class Structural(WatchScene):
     def construct(self):
-        self.card()
+        chapter(self, 4, r"Structural hazards", r"What if two instructions need the same part at once?")
         self.hazards()
         self.memory()
         self.divider()
 
-    def card(self):
-        card = chapter_card(4, r"Structural hazards", r"What if two instructions need the same part at once?",
-                            part=PART)
-        with self.voiceover("Chapter four. Structural hazards."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
-
     # ------------------------------------------------------------------
     def hazards(self):
-        head = label(r"Three kinds of hazard", font_size=38).to_edge(UP, buff=0.35)
-        kinds = VGroup(*[VGroup(label(a, font_size=30, color=c), label(b, font_size=24, color=GREY_A)).arrange(
-            DOWN, buff=0.15) for a, b, c in (
-            (r"structural", r"two instructions need \\ the same hardware", INF),
-            (r"data", r"an instruction needs a value \\ an earlier one has not produced", FUNC),
-            (r"control", r"the next instruction depends \\ on a branch not yet decided", NO))]).arrange(RIGHT, buff=1.0)
-        kinds.move_to(UP * 0.4)
-        fix = label(r"the cure is always the same in the last resort: \ \textit{stall}, \ and insert a bubble; \\ the art "
-                    r"is to stall as rarely as possible", font_size=24, color=HEAD).to_edge(DOWN, buff=0.6)
+        kinds = VGroup(*[node_box(t, c, font_size=44, pad=0.4, height=1.0) for t, c in (
+            (r"structural", INF), (r"data", FUNC), (r"control", NO))]).arrange(RIGHT, buff=0.8).move_to(UP * 1.4)
+        what = VGroup(*[label(t, font_size=30, color=GREY_A).next_to(k, DOWN, buff=0.4) for t, k in zip(
+            (r"two need the same hardware", r"one needs a value \\ not made yet", r"the next \texttt{pc} \\ isn't "
+             r"known yet"), kinds)])
+        bubble = Circle(radius=0.32, stroke_color=GREY_B).set_fill(GREY_D, 0.25)
+        bt = Text("nop", font="DejaVu Sans Mono", font_size=18, color=GREY_B).move_to(bubble)
+        b = VGroup(DashedVMobject(bubble, num_dashes=16), bt).scale(1.4).move_to(DOWN * 2.2 + LEFT * 5.6)
+        cure = label(r"the last resort: \ stall, \ and send a bubble down the pipe", font_size=32, color=HEAD).next_to(
+            b, RIGHT, buff=0.4)
         with self.voiceover(
-            "The ideal chart, one instruction per cycle, breaks whenever an instruction cannot proceed. These "
-            "situations are called hazards, and they come in three kinds. <bookmark mark='a'/> Structural hazards: two "
-            "instructions need the same piece of hardware in the same cycle. Data hazards: an instruction needs a value "
-            "that an earlier instruction has not produced yet. Control hazards: the machine needs to fetch the next "
-            "instruction before it knows where the program is going. <bookmark mark='b'/> The last-resort cure is "
-            "always the same: hold the instruction back, and let an empty slot, a bubble, travel down the pipeline in "
-            "its place. Every cycle lost this way raises the CPI above one. The art of pipeline design is stalling as "
-            "rarely as possible."
+            "The ideal pipe breaks whenever an instruction can't move on. These are hazards, and there are three "
+            "kinds. <bookmark mark='a'/> Structural: two instructions want the same hardware. Data: one needs a value "
+            "that isn't made yet. Control: the machine has to fetch before it knows where the program goes. "
+            "<bookmark mark='b'/> The last-resort cure is always the same. Hold the instruction, and let an empty "
+            "slot, a bubble, travel down the pipe in its place. The art is stalling as rarely as possible."
         ) as vo:
-            self.play(FadeIn(head),
-                      LaggedStart(*[FadeIn(k, shift=UP * 0.2) for k in kinds], lag_ratio=0.15), run_time=1.0)
+            self.play(LaggedStart(*[GrowFromCenter(k) for k in kinds], lag_ratio=0.3), run_time=1.2)
+            vo.wait_until("a")
+            self.play(LaggedStart(*[FadeIn(w, shift=UP * 0.1) for w in what], lag_ratio=0.5), run_time=3.0)
             vo.wait_until("b")
-            self.play(FadeIn(fix))
-        self.wait(0.3)
+            self.play(FadeIn(b), FadeIn(cure))
+            self.play(b.animate.shift(RIGHT * 10.0), cure.animate.set_opacity(0.6), run_time=2.5, rate_func=linear)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def memory(self):
         hz = load("hazards")["structural"]
         frac = hz["one memory port, the Job"]["memory_fraction"]
-        head = label(r"One memory, \ two stages", font_size=38).to_edge(UP, buff=0.35)
-        fig = PipeFigure(width=11.0, stage_w=1.6, h=1.1).move_to(UP * 1.4)
-        mem = box(3.0, 0.9, r"\text{one memory}", INF, 26).move_to(DOWN * 0.6)
-        a1 = Arrow(fig.stage["IF"].get_bottom(), mem.get_left() + UP * 0.2, buff=0.1, color=DATA, stroke_width=3)
-        a2 = Arrow(fig.stage["MEM"].get_bottom(), mem.get_right() + UP * 0.2, buff=0.1, color=INF, stroke_width=3)
-        clash = label(r"a load in MEM \ and a fetch in IF, \ in the same cycle", font_size=24, color=NO).next_to(
-            mem, DOWN, buff=0.3)
-        res = VGroup(
-            label(rf"in the Job, \ {100 * frac:.0f}\% of instructions are loads or stores: \ with one port, \ "
-                  rf"CPI $+\,{frac:.2f}$", font_size=24, color=GREY_A),
-            label('two logical ports over one coherent memory; \\\\ hardware often uses split instruction/data caches (Part 9)',
-                  font_size=24, color=YES),
-        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=0.4)
+        flow = PipelineFlow(load("charts")["ideal"], readouts=False).move_to(UP * 1.3)
+        mem = node_box(r"one memory", INF, font_size=28).move_to(DOWN * 1.2)
+        a1 = Line(flow.stage["IF"][0].get_bottom(), mem.get_left() + UP * 0.1, color=DATA, stroke_width=4)
+        a2 = Line(flow.stage["MEM"][0].get_bottom(), mem.get_right() + UP * 0.1, color=INF, stroke_width=4)
         with self.voiceover(
-            "Two stages may request memory in the same cycle. <bookmark mark='a'/> Fetch needs an instruction while "
-            "MEM may need a data load or store. One access port cannot serve both simultaneously. <bookmark mark='b'/> "
-            "If such stalls do not overlap other delays, their CPI contribution equals the fraction of instructions "
-            "accessing data memory. That estimate is shown for the Job. <bookmark mark='c'/> Our simulator instead "
-            "provides two ideal logical access ports over one coherent byte array, not disjoint instruction and data "
-            "copies. Split instruction and data caches are one common hardware solution. Real memory systems add cache "
-            "misses and other constraints."
+            "First, the structural kind. <bookmark mark='a'/> Suppose there's one memory. Fetch reads it every cycle. "
+            "<bookmark mark='b'/> And whenever a load or store reaches MEM, it wants the same memory, in the same "
+            "cycle."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(fig))
+            self.play(FadeIn(flow.boxes), FadeIn(flow.regs))
             vo.wait_until("a")
-            self.play(FadeIn(mem), GrowArrow(a1), GrowArrow(a2))
-            self.play(FadeIn(clash), Indicate(mem, color=NO))
+            self.play(GrowFromCenter(mem), Create(a1))
+            self.play(ShowPassingFlash(a1.copy().set_stroke(DATA, 10), time_width=0.5), run_time=0.8)
             vo.wait_until("b")
-            self.play(FadeIn(res[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(res[1]))
-        self.wait(0.3)
+            self.play(Create(a2))
+            self.play(ShowPassingFlash(a1.copy().set_stroke(DATA, 10), time_width=0.5),
+                      ShowPassingFlash(a2.copy().set_stroke(INF, 10), time_width=0.5), run_time=0.8)
+            self.play(Wiggle(mem, scale_value=1.15), mem.box.animate.set_stroke(NO, 4), run_time=0.9)
+        card = self.predict(rf"In the Job, {100 * frac:.0f}\% of instructions are loads or stores. \\ With one "
+                            r"memory port, \ CPI rises by about...",
+                            [r"$0.05$", rf"${frac:.2f}$", r"$1$"],
+                            narration=f"In the Job, {100 * frac:.0f} percent of instructions touch data memory. "
+                                      "With one port, each of them makes fetch wait a cycle. How much does CPI rise?",
+                            room=VGroup(flow.boxes, flow.regs, mem, a1, a2))
+        self.reveal(card, 1, narration=(
+            f"By about {frac:.2f}: one lost cycle for every memory instruction. The usual fix is two ports: split "
+            "instruction and data caches, which Part 9 builds. Our model gives Pebble two ports."))
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def divider(self):
         d = load("charts")["divide"]
-        st = load("stages")
-        hz = load("hazards")["structural"]
-        head = label(r"A unit that is busy for many cycles", font_size=36).to_edge(UP, buff=0.3)
-        pc = PipeChart(d, cycles=min(d["cycles"], 26), cw=0.36, ch=0.42, font_size=12, label_size=15,
-                       label_width=2.6).move_to(UP * 0.6)
-        notes = VGroup(
-            label('modeled divide latency: 16 EX cycles; \\\\ motivated by a radix-4 divider, not a connected gate pipeline', font_size=22,
-                  color=FUNC),
-            label(r"while it works, \ EX is occupied, \ and everything behind waits", font_size=22, color=NO),
-            label(rf"Part 4's multiplier, \ in contrast, \ settles in {st['mul_gates']} gate delays: \ it fits in EX "
-                  r"\ (the memories set the cycle)", font_size=22, color=YES),
-        ).arrange(DOWN, buff=0.18).to_edge(DOWN, buff=0.35)
+        hz = load("hazards")["structural"]["eight dependent divides"]
+        flow = PipelineFlow(d).move_to(DOWN * 0.3)
+        src = tag("assumed", r"a divide holds EX for 16 cycles").to_corner(DR, buff=0.3)
         with self.voiceover(
-            "Multi-cycle operations add another resource conflict. <bookmark mark='a'/> Our functional model assigns "
-            "division sixteen execute cycles, motivated by a radix-four divider producing two quotient bits per step. "
-            "It does not physically connect Part 4's divider to this simulator. While EX is occupied, following "
-            "instructions wait; the displayed add spends fifteen extra cycles in decode. <bookmark mark='b'/> "
-            "Multiplication is modeled as one execute cycle. The sampled Dadda-tree delay fits the assumed "
-            "memory-dominated budget, but that is not a routed timing guarantee. Real designs may pipeline, duplicate "
-            "or iteratively reuse these units, depending on throughput, area and power."
+            "Structural hazards also come from slow units. <bookmark mark='a'/> A divide occupies the execute stage "
+            "for sixteen cycles in our model, two quotient bits at a time, like Part 4's divider. <bookmark mark='b'/> "
+            "Watch the add behind it. It has nowhere to go, so it waits in decode, and bubbles flow out ahead of it."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(VGroup(*pc.rows.values())))
-            for c in range(pc.ncycles):
-                if c in pc.columns:
-                    self.play(FadeIn(pc.columns[c]), run_time=0.18)
-            self.play(FadeIn(notes[0]), FadeIn(notes[1]))
+            self.play(FadeIn(flow.boxes), FadeIn(flow.regs), FadeIn(flow.readouts), FadeIn(src))
+            vo.wait_until("a")
+            flow.run(self, 0, 6, per_cycle=0.6)
             vo.wait_until("b")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.3)
+            flow.run(self, 6, 16, per_cycle=0.35)
+        flow.run(self, 16, len(d["chart"]), per_cycle=0.3)
+        res = label(rf"eight dependent divides: \ {hz['cycles']} cycles, \ {hz['divide_stalls']} of them waiting",
+                    font_size=28, color=NO).next_to(flow, DOWN, buff=1.0)
+        with self.voiceover(
+            f"Chain eight divides and the program takes {hz['cycles']} cycles, {hz['divide_stalls']} of them "
+            "stalls. Multiplication, in contrast, settles inside one execute cycle, so it costs nothing extra."
+        ):
+            self.play(Write(res), Indicate(flow.cpi, color=NO))
         self.clear_scene()

@@ -1,7 +1,10 @@
 # Computer Science, Built — Part 7: Pipelines
 
 Part 7 of the sixty-one-part course ([plan](../README.md), [syllabus](../SYLLABUS.md)) opens Act II,
-*Making It Fast*. A functional cycle-by-cycle Pebble model overlaps instructions through five stages.
+*Making It Fast*. It is the pilot of the series' **watch standard** ([syllabus §1.2](../SYLLABUS.md)). The film opens on a
+loop that runs twelve times slower on shuffled data than on sorted data, measured on the rendering machine, and
+answers it in chapter 14. Every chapter asks a prediction first. The caveats the film shows only as source tags
+(`assumed`, `simulated`, `measured`) are stated in full below. A functional cycle-by-cycle Pebble model overlaps instructions through five stages.
 Finite tests compare selected programs/configurations with the instruction emulator. It is not a physical gate
 pipeline: memory delays, mux/control estimates and register overhead define an **assumed teaching clock budget**.
 The M-extension latencies are modeled, motivated by earlier arithmetic circuits.

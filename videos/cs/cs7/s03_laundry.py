@@ -3,182 +3,174 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, STAGE_COLOR, STAGES,
-                                  YES, box, fmt, laundry_strip, load)
+from videos.cs.cs7.common import (CLOCK, COST, DATA, FUNC, HEAD, NO, PART, STAGE_COLOR, STAGES, YES, chapter, fmt,
+                                  load)
+
+STEPS = (("wash", DATA), ("dry", HEAD), ("fold", YES), ("put away", FUNC))
 
 
-class Laundry(VoiceoverScene):
+def gantt(pipelined: bool, w=0.6, h=0.46, x0=-5.4, y0=1.0):
+    """Four loads against the hours: one block per load and step, placed where it runs."""
+    g = VGroup()
+    for i in range(4):
+        start = i if pipelined else 4 * i
+        for k, (name, c) in enumerate(STEPS):
+            r = RoundedRectangle(width=w * 0.94, height=h * 0.84, corner_radius=0.06, stroke_width=0, fill_color=c,
+                                 fill_opacity=0.75).move_to([x0 + (start + k + 0.5) * w, y0 - i * h, 0])
+            t = Text(name, font_size=11, color=WHITE)
+            if t.width > r.width * 0.9:
+                t.width = r.width * 0.9
+            g.add(VGroup(r, t.move_to(r)))
+    return g
+
+
+class Laundry(WatchScene):
     def construct(self):
-        self.card()
+        chapter(self, 2, r"Pipelining, like laundry", r"How do you finish more without finishing anything sooner?")
         self.laundry()
         self.formulas()
         self.unbalanced()
-        self.depth()
-
-    def card(self):
-        card = chapter_card(2, r"Pipelining, \ like laundry", 'How can throughput rise without reducing latency?', part=PART)
-        with self.voiceover("Chapter two. Pipelining, like laundry."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
 
     # ------------------------------------------------------------------
     def laundry(self):
-        head = label(r"Four loads of laundry", font_size=38).to_edge(UP, buff=0.35)
-        seq = laundry_strip(4, pipelined=False, w=0.62, h=0.42).move_to(UP * 1.2, aligned_edge=LEFT).to_edge(LEFT,
-                                                                                                         buff=0.8)
-        pip = laundry_strip(4, pipelined=True, w=0.62, h=0.42).to_edge(LEFT, buff=0.8).shift(DOWN * 1.4)
-        sl = label(r"one at a time: \ 16 hours", font_size=24, color=NO).next_to(seq, RIGHT, buff=0.3).shift(UP * 0.4)
-        pl = label(r"overlapped: \ 7 hours", font_size=24, color=YES).next_to(pip, RIGHT, buff=0.3).shift(UP * 0.4)
-        each = label(r"each load still takes 4 hours: \ \textit{latency} unchanged; \\ a load finishes every hour: "
-                     r"\ \textit{throughput} four times higher", font_size=24, color=HEAD).to_edge(DOWN, buff=0.4)
+        w = 0.62
+        hours = Axes(x_range=[0, 16, 1], y_range=[0, 1, 1], x_length=16 * w, y_length=0.01, tips=False,
+                     axis_config={"color": GREY_D, "include_numbers": True, "font_size": 16}).move_to(UP * 2.55)
+        x0 = hours.c2p(0, 0)[0]
+        hl = label(r"hours", font_size=20, color=GREY_B).next_to(hours, LEFT, buff=0.25)
+        seq = gantt(False, w=w, x0=x0, y0=1.7)
+        pip = gantt(True, w=w, x0=x0, y0=-0.9)
+        sl = label(r"one at a time", font_size=24, color=NO).next_to(seq, LEFT, buff=0.2).align_to(hl, RIGHT)
+        pl = label(r"overlapped", font_size=24, color=YES).next_to(pip, LEFT, buff=0.2).align_to(hl, RIGHT)
+        cursor = Line(UP * 0.35, DOWN * 0.35, color=CLOCK, stroke_width=4).move_to(hours.c2p(0, 0))
         with self.voiceover(
-            "Patterson and Hennessy's textbook pictures pipelining as a laundry. <bookmark mark='a'/> Each load needs four steps, "
-            "say an hour each: wash, dry, fold and put away. Done one load at a time, four loads take sixteen hours. "
-            "<bookmark mark='b'/> But the washer is free as soon as the first load moves to the dryer. Start the "
-            "second load then, and the third an hour later, and four loads are finished in seven hours. "
-            "<bookmark mark='c'/> Notice what did not change: each load still takes four hours from dirty to put away. "
-            "The time for one job, the latency, is the same. What improved is the throughput, the number of jobs "
-            "finished per hour, which in the steady state is four times higher. A processor does not need any single "
-            "instruction to finish sooner; it needs many of them to finish per second."
+            "Patterson and Hennessy picture this as laundry. <bookmark mark='a'/> Each load needs four steps of an hour: "
+            "wash, dry, fold, put away. One load at a time, four loads take sixteen hours."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(LaggedStart(*[FadeIn(x) for x in seq], lag_ratio=0.05), run_time=2.5)
-            self.play(FadeIn(sl))
+            self.play(Create(hours), FadeIn(hl))
+            vo.wait_until("a")
+            self.add(cursor)
+            self.play(FadeIn(sl), LaggedStart(*[GrowFromEdge(b, LEFT) for b in seq], lag_ratio=1.0),
+                      cursor.animate.move_to(hours.c2p(16, 0)), run_time=5.0, rate_func=linear)
+        card = self.predict(r"Start the next load as soon as the washer is free. \\ How long for all four?",
+                            [r"4 hours", r"7 hours", r"16 hours"],
+                            narration="But the washer is free after the first hour. Start the next load then. How "
+                                      "long for all four: four hours, seven, or still sixteen?",
+                            room=VGroup(hours, hl, seq, sl, cursor), where="right")
+        drop = pip.get_center()[1] - hours.c2p(0, 0)[1]
+        self.play(cursor.animate.move_to(hours.c2p(0, 0) + UP * drop).stretch_to_fit_height(pip.height + 0.2),
+                  run_time=0.5)
+        self.play(FadeIn(pl), LaggedStart(*[GrowFromEdge(b, LEFT) for b in pip], lag_ratio=0.25),
+                  cursor.animate.move_to(hours.c2p(7, 0) + UP * drop), run_time=3.5, rate_func=linear)
+        self.reveal(card, 1, narration="Seven hours.")
+        one = SurroundingRectangle(VGroup(*pip[12:16]), color=HEAD, buff=0.05)
+        lat = label(r"each load: \ still 4 hours \ (latency)", font_size=24, color=HEAD).next_to(pip, DOWN, buff=0.35)
+        thr = label(r"one load done every hour \ (throughput)", font_size=24, color=YES).next_to(lat, DOWN, buff=0.15)
+        with self.voiceover(
+            "Notice what didn't change. <bookmark mark='a'/> Each load still takes four hours from dirty to put away: "
+            "the latency is the same. <bookmark mark='b'/> What changed is throughput. Once the line is full, a load "
+            "comes out every hour. A processor works the same way. No instruction finishes sooner; more of them "
+            "finish per second."
+        ) as vo:
+            vo.wait_until("a")
+            self.play(Create(one), FadeIn(lat, shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x) for x in pip], lag_ratio=0.05), run_time=2.5)
-            self.play(FadeIn(pl))
-            vo.wait_until("c")
-            self.play(FadeIn(each))
-        self.wait(0.3)
+            self.play(FadeIn(thr, shift=UP * 0.1), *[Indicate(pip[4 * i + 3], color=YES) for i in range(4)])
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def formulas(self):
-        head = label(r"$k$ stages, \ and the cost of a register", font_size=36).to_edge(UP, buff=0.35)
-        f = VGroup(
-            MathTex(r"t_{\text{cycle}} = \frac{t}{k} + o", font_size=40, color=CLOCK),
-            MathTex(r"\text{latency} = k\left(\frac{t}{k} + o\right) = t + k\,o", font_size=40, color=NO),
-            MathTex(r"\text{speedup} = \frac{t + o}{t/k + o} \ \xrightarrow{\ k \to \infty\ } \ \frac{t + o}{o}",
-                    font_size=40, color=YES),
-        ).arrange(DOWN, buff=0.45).move_to(UP * 0.3)
-        notes = VGroup(
-            label('$t$: logic work; $o$: assumed register overhead (70 ps); equal stages, no stalls', font_size=22, color=GREY_A),
-            label(r"each register adds $o$ to the latency, \ and the speedup approaches $k$ only while $t/k \gg o$",
-                  font_size=22, color=GREY_A),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
+        st = load("stages")
+        o = 70
+        t = st["single_ps"] - o
+        head = label(r"Cut $t$ of work into $k$ stages", font_size=36).to_edge(UP, buff=0.35)
+        f0 = MathTex(r"t_{\text{cycle}}", r"=", r"\frac{t}{k}", r"+", r"o", font_size=48).move_to(UP * 1.5)
+        f0[0].set_color(CLOCK)
+        f0[4].set_color(COST)
+        f1 = MathTex(r"\text{latency}", r"=", r"k\left(\frac{t}{k} + o\right)", r"=", r"t + k\,o", font_size=44)
+        f1.next_to(f0, DOWN, buff=0.5)
+        f1[0].set_color(NO)
+        f2 = MathTex(r"\text{speedup}", r"=", r"\frac{t + o}{t/k + o}", r"\ \xrightarrow{\,k\to\infty\,}\ ",
+                     r"1 + \frac{t}{o}", font_size=44).next_to(f1, DOWN, buff=0.5)
+        f2[0].set_color(YES)
+        w1 = why(r"each register adds $o$", font_size=28).next_to(f1, RIGHT, buff=0.4)
+        w2 = why(r"registers, not logic, set the limit", font_size=28).next_to(f2, RIGHT, buff=0.4)
         with self.voiceover(
-            "Let one instruction's logic take time t, split into k equal stages. <bookmark mark='a'/> Assume each "
-            "pipeline register adds overhead o, seventy picoseconds in this teaching model. The cycle is t over k plus "
-            "o. <bookmark mark='b'/> One instruction's latency is k cycles: t plus k times o, so adding stages "
-            "increases it. <bookmark mark='c'/> Ideal steady-state throughput improves by t plus o divided by t over k "
-            "plus o, compared with the one-stage baseline. As k grows, this approaches one plus t over o, exactly the "
-            "limit in the equation. It approaches k only while stage work greatly exceeds register overhead. Balanced "
-            "stages and no stalls are essential assumptions."
+            "Now the arithmetic. Say an instruction is t of logic, cut into k equal stages, and every pipeline "
+            "register adds a little overhead, o. <bookmark mark='a'/> The cycle is t over k, plus o. <bookmark "
+            "mark='b'/> One instruction now takes k cycles, so its latency grows: t plus k times o. <bookmark "
+            "mark='c'/> But one finishes every cycle, so the speedup is t plus o over t over k plus o. Make k huge "
+            "and it stops at one plus t over o. The registers, not the logic, set the limit."
         ) as vo:
             self.play(FadeIn(head))
-            self.play(Write(f[0]))
+            vo.wait_until("a")
+            self.play(Write(f0))
             vo.wait_until("b")
-            self.play(Write(f[1]))
+            self.play(TransformFromCopy(f0[2:], f1[2]), Write(f1[:2]), run_time=1.2)
+            self.play(Write(f1[3:]), FadeIn(w1, shift=LEFT * 0.2))
             vo.wait_until("c")
-            self.play(Write(f[2]))
-            self.play(FadeIn(notes))
-        self.wait(0.3)
+            self.play(TransformFromCopy(f0[2:], f2[2]), Write(f2[:2]), run_time=1.2)
+            self.play(Write(f2[3:]), FadeIn(w2, shift=LEFT * 0.2))
+        self.wait(0.5)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def unbalanced(self):
         st = load("stages")
+        top = max(v["ps"] for v in st["stages"].values())
         head = label(r"Pebble's five stages are not equal", font_size=36).to_edge(UP, buff=0.35)
-        scale = 4.0 / max(v["ps"] for v in st["stages"].values())
-        bars = VGroup()
+        scale = 3.6 / st["single_ps"]
+        # Part 6's single cycle, one long bar, then cut into its stages
+        whole = VGroup()
+        x = -5.6
+        for s in STAGES:
+            wdt = st["stages"][s]["ps"] * scale * 3.0
+            whole.add(Rectangle(width=wdt, height=0.6, stroke_color=BLACK, stroke_width=2, fill_color=STAGE_COLOR[s],
+                                fill_opacity=0.7).move_to([x + wdt / 2, 1.6, 0]))
+            x += wdt
+        wl = label(rf"Part 6: \ one cycle, \ {fmt(st['single_ps'])} ps", font_size=24, color=GREY_A).next_to(
+            whole, UP, buff=0.2)
+        cols = VGroup()
         for k, s in enumerate(STAGES):
-            v = st["stages"][s]
-            h = v["ps"] * scale
-            r = Rectangle(width=1.1, height=h, stroke_width=0, fill_color=STAGE_COLOR[s], fill_opacity=0.65)
-            r.move_to([-4.6 + 1.6 * k, -2.0 + h / 2, 0])
-            nm = label(s, font_size=26, color=STAGE_COLOR[s]).next_to(r, DOWN, buff=0.15)
-            ps = label(rf"{fmt(v['ps'])} ps", font_size=20, color=GREY_A).next_to(r, UP, buff=0.1)
-            bars.add(VGroup(r, nm, ps))
-        line = DashedLine([-5.4, -2.0 + max(v["ps"] for v in st["stages"].values()) * scale, 0],
-                          [2.5, -2.0 + max(v["ps"] for v in st["stages"].values()) * scale, 0], color=NO,
-                          stroke_width=2)
-        notes = VGroup(
-            label(rf"assumed cycle: \ the slowest stage $+$ 70 ps \\ $=$ {fmt(st['period_ps'])} ps, \ "
-                  rf"{st['mhz']:.0f} MHz", font_size=24, color=CLOCK),
-            label(rf"Part 6's single cycle: \ {fmt(st['single_ps'])} ps", font_size=22, color=GREY_A),
-            label(rf"so the clock is {st['clock_ratio']:.2f} times faster, \ not 5", font_size=26, color=HEAD),
-            label(r"the memories set the pace; \ EX, \ with the whole ALU, \\ needs only "
-                  rf"{st['stages']['EX']['ps']:.0f} ps \ (Part 9 attacks the memories)", font_size=22, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.35).shift(UP * 0.2)
+            h = st["stages"][s]["ps"] * scale * 1.6
+            r = Rectangle(width=1.0, height=h, stroke_width=0, fill_color=STAGE_COLOR[s], fill_opacity=0.75)
+            r.move_to([-4.9 + 1.45 * k, -2.2 + h / 2, 0])
+            nm = label(s, font_size=24, color=STAGE_COLOR[s]).next_to(r, DOWN, buff=0.12)
+            ps = label(rf"{fmt(st['stages'][s]['ps'])}", font_size=20, color=GREY_A).next_to(r, UP, buff=0.08)
+            cols.add(VGroup(r, nm, ps))
+        src = tag("assumed", r"1 ns memories, 70 ps registers").to_corner(DR, buff=0.4)
         with self.voiceover(
-            "Stages need not be equal. <bookmark mark='a'/> These bars are a teaching budget: assumed one-nanosecond "
-            "memories, sampled unit-delay ALU settling, structural register-read depth, and estimated mux and control "
-            "costs. They are not physical timing results for a fabricated pipeline. <bookmark mark='b'/> Under those "
-            "assumptions, the slowest stage plus seventy picoseconds gives one point one three nanoseconds, about "
-            "eight hundred and eighty-five megahertz. The assumed single-cycle budget is two point six three "
-            "nanoseconds, so the clock ratio is about two point three, not five. <bookmark mark='c'/> The budget "
-            "suggests memory is the bottleneck. A real implementation needs timing analysis, routing and memory "
-            "characterization before claiming that clock."
+            "Real stages aren't equal. <bookmark mark='a'/> Here is Part 6's single cycle, divided by what each piece "
+            "does. <bookmark mark='b'/> Cut it at the stage boundaries and stand the pieces up. The two memories "
+            "dominate; decode and write back are slivers."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(LaggedStart(*[GrowFromEdge(b[0], DOWN) for b in bars], lag_ratio=0.2),
-                      *[FadeIn(b[1]) for b in bars], run_time=2.0)
-            self.play(*[FadeIn(b[2]) for b in bars])
+            self.play(FadeIn(head), FadeIn(src))
+            vo.wait_until("a")
+            self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in whole], lag_ratio=0.3), FadeIn(wl), run_time=1.8)
             vo.wait_until("b")
-            self.play(Create(line), FadeIn(notes[0]), FadeIn(notes[1]))
-            self.play(FadeIn(notes[2]))
-            vo.wait_until("c")
-            self.play(Indicate(bars[2], color=YES), FadeIn(notes[3]))
-        self.wait(0.3)
-        self.clear_scene()
-
-    # ------------------------------------------------------------------
-    def depth(self):
-        d = load("depth")
-        head = label(r"How many stages?", font_size=38).to_edge(UP, buff=0.3)
-        f = MathTex(r"T(k) = \left(\frac{t}{k} + o\right)\bigl(1 + b\,(k - 1)\bigr)", font_size=36,
-                    color=CODE).move_to(UP * 2.2 + LEFT * 2.6)
-        fl = label('$b$: fixed miss events per instruction; \\\\ assume each loses $k-1$ cycles',
-                   font_size=20, color=GREY_A).next_to(f, DOWN, buff=0.15).align_to(f, LEFT)
-        ks = np.array(d["k"])
-        ts = np.array(d["time_ps"])
-        ax = Axes(x_range=[0, 80, 10], y_range=[0, 900, 300], x_length=6.0, y_length=3.4, tips=False,
-                  axis_config={"color": GREY_C, "font_size": 18, "include_numbers": True}).move_to(LEFT * 2.4 +
-                                                                                                  DOWN * 1.2)
-        xl = note(r"stages $k$", font_size=20).next_to(ax, DOWN, buff=0.3)
-        yl = note(r"ps per instruction", font_size=20).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        curve = VMobject(color=YES, stroke_width=3).set_points_as_corners([ax.c2p(k, min(t, 900)) for k, t in
-                                                                           zip(ks, ts)])
-        kstar = d["kstar"]
-        dot = Dot(ax.c2p(kstar, (d['L_ps'] / kstar + d['o_ps']) * (1 + d['b'] * (kstar - 1))), color=HEAD, radius=0.08)
-        dl = label(rf"$k^* \approx {kstar:.0f}$", font_size=24, color=HEAD).next_to(dot, UP, buff=0.15)
-        deriv = VGroup(
-            MathTex(r"\frac{dT}{dk} = -\frac{t(1-b)}{k^2} + b\,o = 0", font_size=32, color=GREY_A),
-            MathTex(r"k^* = \sqrt{\frac{t\,(1-b)}{b\,o}}", font_size=40, color=HEAD),
-            label(rf"with $t = {d['L_ps']:.0f}$ ps, \ $o = {d['o_ps']:.0f}$ ps \\ and the Job's measured "
-                  rf"$b = {d['b']:.3f}$:", font_size=22, color=GREY_A),
-            MathTex(rf"k^* \approx {kstar:.0f}", font_size=40, color=YES),
-            label('fixed $b$, equal splits, penalty $k-1$: \\\\ continuous model optimum, not a hardware design', font_size=22, color=GREY_B),
-        ).arrange(DOWN, buff=0.25).move_to(RIGHT * 3.8 + DOWN * 0.75)
+            self.play(*[ReplacementTransform(whole[k], cols[k][0]) for k in range(5)], FadeOut(wl), run_time=1.6)
+            self.play(*[FadeIn(c[1:]) for c in cols])
+        cols_all = VGroup(cols)
+        card = self.predict(r"Cut into five, \ how short can the clock get?",
+                            [rf"{st['single_ps'] / 5:.0f} ps: \ a fifth", rf"{fmt(st['period_ps'])} ps",
+                             rf"{fmt(st['single_ps'])} ps: \ no change"],
+                            narration="Every stage gets the same clock. How short can that clock be? A fifth of the "
+                                      "old cycle? Something longer? Or no faster at all?", room=cols_all)
+        self.reveal(card, 1, narration=(
+            f"{fmt(st['period_ps'])} picoseconds. The clock must wait for the slowest stage, plus the register."))
+        bottom = cols[0][0].get_bottom()[1]
+        y = bottom + (top + 70) * scale * 1.6
+        line = DashedLine([-5.6, y, 0], [1.8, y, 0], color=NO, stroke_width=3)
+        verdict = VGroup(
+            label(rf"clock: \ the slowest stage $+$ 70 ps \ $=$ {fmt(st['period_ps'])} ps", font_size=26, color=CLOCK),
+            label(rf"{st['clock_ratio']:.1f}$\times$ faster, \ not 5$\times$", font_size=34, color=HEAD),
+        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).to_edge(RIGHT, buff=0.5).shift(UP * 0.6)
         with self.voiceover(
-            "Deeper is not always better. <bookmark mark='a'/> Consider a deliberately simple model: equally "
-            "splittable logic, fixed register overhead o, and a fixed fraction b of instructions each losing k minus "
-            "one cycles. Time per instruction is the cycle multiplied by one plus b times k minus one. <bookmark "
-            "mark='b'/> Holding b fixed produces this curve: short pipelines have long cycles; very deep ones pay "
-            "overhead and larger flushes. Real predictors and stage balances can change with depth. <bookmark "
-            "mark='c'/> Differentiating gives the displayed continuous optimum, about thirty-seven for these inputs. "
-            "An integer design must compare nearby feasible depths. This is a model exercise, not an optimal hardware "
-            "design or a prediction of Pentium 4's stage count."
+            f"So the clock gets {st['clock_ratio']:.1f} times faster, not five. <bookmark mark='a'/> The memories "
+            "set the pace, which is why Part 9 is all about them."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(Write(f), FadeIn(fl))
-            vo.wait_until("b")
-            self.play(Create(ax), FadeIn(xl), FadeIn(yl))
-            self.play(Create(curve), run_time=2.0)
-            vo.wait_until("c")
-            self.play(FadeIn(deriv[0]))
-            self.play(FadeIn(deriv[1]))
-            self.play(FadeIn(deriv[2]), FadeIn(deriv[3]), FadeIn(dot), FadeIn(dl))
-            self.play(FadeIn(deriv[4]))
-        self.wait(0.3)
+            self.play(Create(line), FadeIn(verdict[0], shift=LEFT * 0.2))
+            self.play(FadeIn(verdict[1], scale=1.1))
+            vo.wait_until("a")
+            self.play(Indicate(cols[0][0], color=NO), Indicate(cols[3][0], color=NO))
         self.clear_scene()

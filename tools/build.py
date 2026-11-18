@@ -258,7 +258,8 @@ def main():
             sys.exit(f"Missing render for {cls}: {mp4}")
         norm = work / f"{cls}.{'mov' if args.crf is not None else 'mp4'}"
         meta = mp4.with_suffix(".narration.json")
-        lines = json.loads(meta.read_text())["lines"] if meta.exists() else []
+        meta_json = json.loads(meta.read_text()) if meta.exists() else {}
+        lines = meta_json.get("lines", [])
         check_narration_audio(mp4, lines)
         normalize(mp4, norm, lossless=args.crf is not None)
         dur = ffprobe_duration(norm)
@@ -277,8 +278,9 @@ def main():
         if chapter:
             chapters.append((offset, narration_lang.chapter_title(args.video, cls, chapter, args.lang)))
         parts.append(norm)
-        timeline.append({"cls": cls, "chapter": chapter, "start": offset, "duration": dur,
-                         "lines": [{"start": x["start"], "duration": x["duration"]} for x in lines]})
+        timeline.append({"video": args.video, "cls": cls, "chapter": chapter, "start": offset, "duration": dur,
+                         "lines": [{"start": x["start"], "duration": x["duration"]} for x in lines],
+                         "marks": meta_json.get("marks", [])})
         offset += dur
 
     score = series_score(args.video) if not args.no_score else None

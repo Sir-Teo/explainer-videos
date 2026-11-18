@@ -3,12 +3,12 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
+from videos.cs.cs7.common import (chapter, BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
                                   load, mono)
 from videos.cs.cs7.s08_predict import acc_table
 
 
-class Correlate(VoiceoverScene):
+class Correlate(WatchScene):
     def construct(self):
         self.card()
         self.history()
@@ -19,11 +19,7 @@ class Correlate(VoiceoverScene):
         self.table()
 
     def card(self):
-        card = chapter_card(8, r"Correlation, \ and a perceptron", r"Can other branches predict this one?",
-                            lit=(1991, 1993, 2001, 2006), extra=((1991, r"two-level prediction"), (1993, r"gshare"), (2001, r"the perceptron predictor"), (2006, r"TAGE")), part=PART)
-        with self.voiceover("Chapter eight. Correlation, and a perceptron."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        chapter(self, 8, r"Correlation, \ and a perceptron", r"Can other branches predict this one?", lit=(1991, 1993, 2001, 2006), extra=((1991, r"two-level prediction"), (1993, r"gshare"), (2001, r"the perceptron predictor"), (2006, r"TAGE")))
 
     # ------------------------------------------------------------------
     def history(self):
@@ -165,9 +161,7 @@ class Correlate(VoiceoverScene):
             "weighted inputs; a nonnegative sum predicts taken. <bookmark mark='c'/> When wrong or insufficiently "
             "confident, adjust weights toward the observed outcome. The heatmap next shows the weights this rule "
             "learns. <bookmark mark='d'/> Parameter count grows linearly with history length, unlike a fully "
-            "enumerated context table. That comparison does not cover every table-based scheme. Perceptron-derived "
-            "predictors have appeared in real products, as Jimenez's 2016 paper notes; the exact predictor in an "
-            "unknown viewing device cannot be assumed."
+            "enumerated context table. That comparison does not cover every table-based scheme."
         ) as vo:
             self.play(FadeIn(head))
             self.play(FadeIn(xs), FadeIn(xl))
@@ -238,9 +232,17 @@ class Correlate(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def table(self):
+        pr0 = load("predictors")["table"]["the Job, chapter 1"]["rows"]
+        _names = ["2-bit", "gshare", "TAGE", "perceptron"]
+        _best = max(range(4), key=lambda k: pr0[_names[k]]["accuracy"])
+        card = self.predict(r"On the Job's branches, \\ which predictor wins?", [r"2-bit", r"gshare", r"TAGE",
+                            r"perceptron"], narration="Before the table: on the Job's branches, which of these wins?")
+        self.park(card)
+        self.expect(card, _best, narration=f"{_names[_best]}, at {100 * pr0[_names[_best]]['accuracy']:.1f} "
+                                           "percent.")
         pr = load("predictors")
         head = label(r"All the predictors, \ every benchmark", font_size=36).to_edge(UP, buff=0.35)
-        tab = acc_table(pr, ["2-bit", "gshare", "tournament", "TAGE", "perceptron"], font_size=19, cw=1.55).move_to(
+        tab = VGroup(*acc_table(pr, ["2-bit", "gshare", "tournament", "TAGE", "perceptron"], font_size=19, cw=1.55)).move_to(
             DOWN * 0.1 + RIGHT * 0.9)
         job = pr["table"]["the Job, chapter 1"]["rows"]
         notes = label(rf"the Job: \ {100 * job['2-bit']['accuracy']:.1f}\% $\to$ {100 * job['TAGE']['accuracy']:.1f}\%: "
@@ -249,10 +251,8 @@ class Correlate(VoiceoverScene):
         with self.voiceover(
             "Compare the learning predictors on these traces. <bookmark mark='a'/> Global information helps Fibonacci "
             "and the correlated benchmark, but the latter uses fixed-seed pseudorandom data, not genuine independent "
-            "coin flips. Its observed accuracy is not an information-theoretic ceiling. <bookmark mark='b'/> Our TAGE "
-            "is best on the shown Job trace and reduces misses relative to the two-bit predictor. Different data and "
-            "budgets can change that ranking. The irregular threshold stream is difficult for these online predictors; "
-            "that does not prove that no predictor with other information could learn it."
+            "coin flips. <bookmark mark='b'/> Our TAGE "
+            "is best on the shown Job trace and reduces misses relative to the two-bit predictor."
         ) as vo:
             self.play(FadeIn(head))
             self.play(FadeIn(tab, lag_ratio=0.02), run_time=2.5)

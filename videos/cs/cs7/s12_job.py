@@ -3,14 +3,14 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, PipeChart,
+from videos.cs.cs7.common import (chapter, BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, PipeChart,
                                   box, fmt, load, mono, sci)
 
 PART_COLORS = {"base": GREY_B, "load-use": FUNC, "data (no forwarding)": INF, "branches": NO, "jumps": HEAD,
                "divide": CTRL}
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.inner()
@@ -18,10 +18,7 @@ class Job(VoiceoverScene):
         self.corpus()
 
     def card(self):
-        card = chapter_card(11, r"The Job on the pipeline", r"Where do the Job's cycles go now?", part=PART)
-        with self.voiceover("Chapter eleven. The Job on the pipeline."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        chapter(self, 11, r"The Job on the pipeline", r"Where do the Job's cycles go now?")
 
     # ------------------------------------------------------------------
     def inner(self):
@@ -60,6 +57,12 @@ class Job(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def breakdown(self):
+        _il = load("ironlaw")["rows"]["pipeline"]["cpi"]
+        card = self.predict(r"The Job on the pipeline, \\ with forwarding and a good predictor. \\ Its CPI?",
+                            [r"1.00", rf"{_il:.2f}", r"2.00"],
+                            narration="The Job on the full pipeline, forwarding and a good predictor. What CPI?")
+        self.park(card)
+        self.expect(card, 1, narration=f"{_il:.2f}. Here's where the extra comes from.")
         hz = load("hazards")["benchmarks"]["the Job, chapter 1"]
         head = label(r"The Job's CPI, \ piece by piece", font_size=36).to_edge(UP, buff=0.35)
         cfgs = list(hz)

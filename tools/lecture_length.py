@@ -2,7 +2,7 @@
 """How long a video runs: estimated from its narration before rendering, measured after.
 
     python tools/lecture_length.py ai26                 # per chapter and total; exit 1 if under the floor
-    python tools/lecture_length.py ai26 --floor 30      # the floor in minutes (default 30; 50 for Computer Science, Built)
+    python tools/lecture_length.py ai26 --floor 30      # the floor in minutes (default 30)
     python tools/lecture_length.py music1               # Music, Built: listening counted, and a ceiling of 60
     python tools/lecture_length.py --series ai          # every part of a series, one line each
 
@@ -36,8 +36,8 @@ from explainer.paths import VIDEOS, video_dir, video_package  # noqa: E402
 
 WPM = 140
 SERIES_WPM = {"quant": 168, "music": 172}  # music: measured on Part 1's narrated build (listening counted apart)
-FLOORS = {"cs": 50.0}  # minutes; other series: 30
-CEILINGS = {"music": 60.0}  # minutes; other series: none
+FLOORS = {"cs": 30.0}  # minutes; other series: 30 (Computer Science, Built's watch standard, SYLLABUS 1.2)
+CEILINGS = {"music": 60.0, "cs": 60.0}  # minutes; other series: none
 CLIP_NAME = re.compile(r'clip\(f?"([a-z_0-9]+\.[a-z_0-9]+)"\)')
 
 

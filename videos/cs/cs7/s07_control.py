@@ -1,141 +1,114 @@
 from __future__ import annotations
 
-import numpy as np
-
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, STAGE_COLOR,
-                                  STAGES, YES, PipeChart, PipeFigure, box, fmt, load, mono)
+from videos.cs.cs7.common import COST, DATA, HEAD, HIST, NO, PART, YES, chapter, load, mono
 
 
-def reveal(scene, pc, rt=0.25):
-    for c in range(pc.ncycles):
-        if c in pc.columns:
-            scene.play(FadeIn(pc.columns[c]), run_time=rt)
-
-
-class Control(VoiceoverScene):
+class Control(WatchScene):
     def construct(self):
-        self.card()
+        chapter(self, 6, r"Control hazards", r"What do you fetch before you know where the program goes?")
         self.penalty()
         self.cost()
         self.options()
 
-    def card(self):
-        card = chapter_card(6, r"Control hazards", r"What do you fetch before you know where the program goes?",
-                            part=PART)
-        with self.voiceover("Chapter six. Control hazards."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
-
     # ------------------------------------------------------------------
     def penalty(self):
         d = load("charts")["branch"]
-        head = label(r"A taken branch, \ discovered in EX", font_size=36).to_edge(UP, buff=0.3)
-        pc = PipeChart(d, cw=0.42, ch=0.42, font_size=12, label_size=15, max_rows=13).move_to(UP * 0.2)
-        notes = VGroup(
-            label(r"fetch keeps going: \ \texttt{pc} $+ 4$, \ $+ 8$, \ \ldots \ \ the branch is decided only in EX",
-                  font_size=22, color=GREY_A),
-            label(r"taken: \ the two instructions fetched behind it are flushed \ (struck out), \ and fetch restarts at "
-                  r"the target", font_size=22, color=NO),
-            label(r"each taken branch: \ 2 cycles lost", font_size=26, color=HEAD),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.35)
+        flushed = sum(1 for v in d["seq"].values() if v["flushed"] and v["text"] != "?")
+        taken = max(1, sum(1 for r in d["chart"] for ev in r["events"] if ev[0] == "flush"))
+        per = flushed / taken
+        flow = PipelineFlow(d).move_to(DOWN * 0.3)
         with self.voiceover(
-            "The fetch stage must deliver a new instruction every cycle, but which one? After a branch, it depends on "
-            "the branch's outcome, which is not known until the branch reaches the execute stage. "
-            "<bookmark mark='a'/> The simplest policy is to keep fetching the next instructions in memory, as if the "
-            "branch will not be taken. Here a loop branch is taken twice. <bookmark mark='b'/> Each time, by the time "
-            "the ALU has decided, two wrong instructions are already in the pipeline: the one after the branch, in "
-            "decode, and the one after that, in fetch. They are flushed, turned into bubbles before they change "
-            "anything, and fetch restarts at the target. <bookmark mark='c'/> Every taken branch costs two cycles."
+            "Fetch must deliver an instruction every cycle. But after a branch, which one? <bookmark mark='a'/> The "
+            "branch is only decided in execute, two stages later. The simplest policy is to keep fetching the next "
+            "instructions in memory, and hope the branch isn't taken. Here's a loop whose branch is taken twice."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(pc.heads), FadeIn(VGroup(*pc.rows.values())))
-            reveal(self, pc)
-            vo.wait_until("b")
-            self.play(FadeIn(notes[0]), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.3)
+            self.play(FadeIn(flow.boxes), FadeIn(flow.regs), FadeIn(flow.readouts))
+            vo.wait_until("a")
+            flow.run(self, 0, 3, per_cycle=0.7)
+        card = self.predict(r"The branch turns out taken. \\ How many cycles are thrown away?",
+                            [r"one", r"two", r"five"],
+                            narration="When the branch turns out taken, how many cycles of work are thrown away? "
+                                      "One, two, or the whole pipe?", room=flow)
+        self.reveal(card, 1 if round(per) == 2 else (0 if round(per) == 1 else 2))
+        with self.voiceover(
+            "Watch the grey ones fall. <bookmark mark='a'/> By the time the ALU decides, two wrong instructions are "
+            "already inside, one in decode and one in fetch. They're flushed before they change anything, and fetch "
+            "restarts at the target. Two cycles lost, every taken branch."
+        ) as vo:
+            vo.wait_until("a")
+            flow.run(self, 3, len(d["chart"]), per_cycle=0.55)
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def cost(self):
         pr = load("predictors")["table"]["the Job, chapter 1"]
-        hz = load("hazards")["benchmarks"]["the Job, chapter 1"]["forwarding"]
         frac = pr["branches"] / pr["instructions"]
-        taken = pr["rows"]["always taken"]["accuracy"]
-        head = label(r"How much it costs", font_size=38).to_edge(UP, buff=0.35)
+        taken = pr["rows"]["always taken"]["accuracy"]  # taken branches: the ones predict-not-taken gets wrong
         eq = MathTex(r"\Delta\text{CPI}", r"=", r"\frac{\text{branches}}{\text{instruction}}", r"\times",
-                     r"\frac{\text{mispredicted}}{\text{branch}}", r"\times", r"\text{penalty}", font_size=40).move_to(
-            UP * 1.2)
+                     r"\frac{\text{wrong}}{\text{branch}}", r"\times", r"\text{penalty}", font_size=44).move_to(UP * 1.0)
         eq[0].set_color(COST)
-        num = MathTex(rf"= {frac:.2f} \times {taken:.2f} \times 2 \approx {frac * taken * 2:.2f}", font_size=40,
-                      color=HEAD).next_to(eq, DOWN, buff=0.4)
+        num = MathTex(r"\Delta\text{CPI}", r"=", f"{frac:.2f}", r"\times", f"{taken:.2f}", r"\times", r"2",
+                      font_size=52).move_to(eq)
+        num[0].set_color(COST)
+        num[2].set_color(DATA)
+        num[4].set_color(NO)
+        res = MathTex(rf"\approx {frac * taken * 2:.2f}", font_size=52, color=HEAD).next_to(num, RIGHT, buff=0.3)
         notes = VGroup(
-            label(rf"in the Job, \ {100 * frac:.0f}\% of instructions are conditional branches, \ "
-                  rf"{100 * taken:.0f}\% of them taken", font_size=24, color=GREY_A),
-            label(rf"with forwarding but no prediction, \ the Job's CPI is {hz['cpi']:.2f}: \ most of the excess is "
-                  r"branches and jumps", font_size=24, color=NO),
-            label(r"and the penalty grows with depth: \ a 20-stage pipeline loses 15 or more cycles per mistake",
-                  font_size=24, color=GREY_A),
-        ).arrange(DOWN, buff=0.25).to_edge(DOWN, buff=0.5)
+            label(rf"{100 * frac:.0f}\% of the Job's instructions are branches", font_size=30, color=DATA),
+            label(rf"{100 * taken:.0f}\% of those are taken: \ wrong, \ if we always guess not taken", font_size=30,
+                  color=NO),
+        ).arrange(DOWN, buff=0.2).next_to(eq, DOWN, buff=0.9)
         with self.voiceover(
-            "How bad is that? <bookmark mark='a'/> The cost per instruction is the fraction of instructions that are "
-            "branches, times the fraction of those the machine gets wrong, times the penalty for each mistake. "
-            "<bookmark mark='b'/> In the Job, nearly a third of all instructions are conditional branches, and with "
-            "predict-not-taken the machine is wrong whenever one is taken, about forty-three percent of the time. Two "
-            "cycles each: more than a quarter of a cycle added to every instruction. <bookmark mark='c'/> And the "
-            "penalty grows with the pipeline. A branch that is decided ten or fifteen stages after it was fetched "
-            "throws away ten or fifteen instructions. This one equation is why branch prediction became one of the "
-            "most studied problems in computer architecture."
+            "How much does that cost? <bookmark mark='a'/> The extra CPI is branches per instruction, times the "
+            "fraction we get wrong, times the penalty. <bookmark mark='b'/> In the Job, "
+            f"{100 * frac:.0f} percent of instructions are branches, and {100 * taken:.0f} percent of those are "
+            f"taken. <bookmark mark='c'/> Two cycles each: about {frac * taken * 2:.2f} cycles added to every "
+            "instruction. <bookmark mark='d'/> And a deeper pipeline decides later, so the penalty grows with depth. "
+            "This one equation made branch prediction one of the most studied problems in architecture."
         ) as vo:
-            self.play(FadeIn(head))
-            self.play(Write(eq))
+            self.play(Write(eq), run_time=2.0)
             vo.wait_until("b")
-            self.play(FadeIn(notes[0]))
-            self.play(Write(num), FadeIn(notes[1]))
+            self.play(FadeIn(notes[0], shift=UP * 0.1))
+            self.play(FadeIn(notes[1], shift=UP * 0.1))
             vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.3)
+            self.play(TransformMatchingTex(eq, num), run_time=1.4)
+            self.play(Write(res))
+            vo.wait_until("d")
+            self.play(Indicate(num[6], color=HEAD, scale_factor=1.4))
         self.clear_scene()
 
     # ------------------------------------------------------------------
     def options(self):
-        head = label(r"Three ways out", font_size=38).to_edge(UP, buff=0.35)
-        items = VGroup(
-            VGroup(label(r"decide earlier", font_size=28, color=DATA),
-                   label(r"a comparator in ID: \ a 1-cycle penalty, \\ but a longer ID stage \ and new hazards \\ (the "
-                         r"compared values must be forwarded to ID)", font_size=20, color=GREY_A)),
-            VGroup(label(r"delay the branch", font_size=28, color=HIST),
-                   label(r"MIPS (1985): \ the instruction after a branch \\ \textit{always} runs; \ the compiler fills "
-                         r"that slot \\ with useful work, \ or a \texttt{nop}", font_size=20, color=GREY_A)),
-            VGroup(label(r"guess", font_size=28, color=YES),
-                   label(r"fetch from the predicted target, \\ check the guess in EX, \\ flush only when wrong",
-                         font_size=20, color=GREY_A)),
+        boxes = VGroup(*[node_box(t, c, font_size=38, pad=0.35, height=0.9) for t, c in (
+            (r"decide earlier", DATA), (r"delay the branch", HIST), (r"guess", YES))])
+        for k, b in enumerate(boxes):
+            b.move_to([-4.3 + 4.3 * k, 1.6, 0])
+        what = VGroup(
+            label(r"compare in ID: \\ a 1-cycle penalty, \\ a longer stage", font_size=28, color=GREY_A),
+            VGroup(mono("beq  a0, a1, L", 22), mono("add  a2, a2, 1", 22, HIST),
+                   label(r"the slot always runs \\ (MIPS, 1985)", font_size=26, color=GREY_A)).arrange(
+                DOWN, aligned_edge=LEFT, buff=0.1),
+            label(r"fetch the likely path; \\ check in EX; \\ flush only when wrong", font_size=28, color=GREY_A),
         )
-        for it in items:
-            it.arrange(DOWN, buff=0.2)
-        items.arrange(RIGHT, buff=0.7, aligned_edge=UP).move_to(UP * 0.4)
-        slot = VGroup(mono("beq  a0, a1, L", 18), mono("add  a2, a2, 1   # the delay slot: always runs", 18,
-                                                      HIST)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        slot.next_to(items[1], DOWN, buff=0.4)
-        later = label('classic MIPS delay slots impose compatibility costs; \\\\ MIPS Release 6 removed them; RISC-V and ARM use other semantics', font_size=22,
-                      color=GREY_B).to_edge(DOWN, buff=0.35)
+        for w, b in zip(what, boxes):
+            w.next_to(b, DOWN, buff=0.45)
+        later = label(r"MIPS Release 6 dropped delay slots; \ RISC-V and ARM never had them", font_size=22,
+                      color=GREY_B).to_edge(DOWN, buff=0.8)
         with self.voiceover(
-            "There are several ways to handle the unknown next address. <bookmark mark='a'/> Decide earlier: comparing "
-            "in decode can reduce the redirect penalty, at the cost of a longer decode path and extra forwarding. "
-            "<bookmark mark='b'/> Change the architectural schedule: ordinary branches in classic MIPS expose a delay "
-            "slot whose instruction executes whether the branch is taken or not. A compiler can sometimes fill it "
-            "usefully. <bookmark mark='c'/> That compatibility obligation complicated later implementations, but it "
-            "was not permanent across every MIPS revision: Release 6 removed delay slots. RISC-V and ARM use other "
-            "branch semantics. <bookmark mark='d'/> Or predict: fetch the likely path, then redirect and discard "
-            "younger work when the prediction is wrong. This is the approach we study next."
+            "Three ways out. <bookmark mark='a'/> Decide earlier: compare in decode and lose only one cycle, at the "
+            "price of a longer stage. <bookmark mark='b'/> Change the rules: in classic MIPS the instruction after a "
+            "branch always runs, and the compiler tries to put something useful there. That slot became a burden "
+            "later, and newer designs dropped it. <bookmark mark='c'/> Or guess. Fetch the likely path, check in "
+            "execute, and pay only when wrong. Every fast processor since the nineties guesses, and guessing well is "
+            "the next chapter."
         ) as vo:
-            self.play(FadeIn(head), FadeIn(items[0]), run_time=0.7)
+            self.play(GrowFromCenter(boxes[0]), FadeIn(what[0], shift=UP * 0.1))
             vo.wait_until("b")
-            self.play(FadeIn(items[1]), FadeIn(slot))
-            vo.wait_until("c")
+            self.play(GrowFromCenter(boxes[1]), FadeIn(what[1], shift=UP * 0.1))
             self.play(FadeIn(later))
-            vo.wait_until("d")
-            self.play(FadeIn(items[2]), Indicate(items[2][0], color=YES))
-        self.wait(0.3)
+            vo.wait_until("c")
+            self.play(GrowFromCenter(boxes[2]), FadeIn(what[2], shift=UP * 0.1))
+            self.play(boxes[2].animate.scale(1.15), boxes[:2].animate.set_opacity(0.4), what[:2].animate.set_opacity(
+                0.4), run_time=0.8)
         self.clear_scene()

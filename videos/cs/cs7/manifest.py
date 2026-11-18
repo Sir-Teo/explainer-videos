@@ -3,7 +3,7 @@
 TITLE = "Computer Science, Built: Part 7, Pipelines"
 
 SCENES = [
-    ("s01_hook", "Hook", "Five instructions at once"),
+    ("s01_hook", "Hook", "Twelve times slower"),
     ("s02_ironlaw", "IronLaw", "1. The iron law"),
     ("s03_laundry", "Laundry", "2. Pipelining, like laundry"),
     ("s04_five", "Five", "3. Pebble's five stages"),
@@ -17,7 +17,7 @@ SCENES = [
     ("s12_job", "Job", "11. The Job on the pipeline"),
     ("s13_deep", "Deep", "12. Deeper, and the end of the race"),
     ("s14_amdahl", "Amdahl", "13. Amdahl's law"),
-    ("s15_sorted", "Sorted", "14. The sorted-array puzzle"),
+    ("s15_sorted", "Sorted", "14. The puzzle, solved"),
     ("s16_frontier", "Frontier", "15. Frontier: the limits of prediction"),
     ("s17_outro", "Outro", "Recap, problems, and where this comes back"),
 ]

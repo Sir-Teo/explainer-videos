@@ -1,11 +1,12 @@
-# Computer Science, Built: the syllabus (plan of record, draft 3)
+# Computer Science, Built: the syllabus (plan of record, draft 4)
 
 Goal: a university computer-science degree in video, followed by the curriculum industry actually works from. It
 aims to be **as comprehensive as the standard textbooks, as technical as a graduate course, as practical as a senior
 engineer's working knowledge, and as close to the frontier as primary sources allow**. It tells how the field got
 here alongside the mathematics. It is made in English and Chinese to the standard of *Analysis, Built* and *AI,
-Built*, and renders on macOS and Linux. Each part runs **50–60 minutes**, and its content decides where in that range
-it lands. Sixty-one parts come to about **58 hours**: a degree in fifty-five, and a research tier in six more.
+Built*, and renders on macOS and Linux. Each part runs **30–60 minutes**: content decides the length, the watch
+standard (§1.2) caps it, and what a film leaves out goes to the part's lecture notes and lab, not to the floor.
+Sixty-one parts come to about **50 hours**: a degree in fifty-five, and a research tier in six more.
 
 The plan has the shape of a degree plus a career:
 - **Act I** opens with discrete mathematics (Lehman, Leighton & Meyer) and then builds the machine. Acts I and II
@@ -43,6 +44,13 @@ The decisions in §7 are confirmed.
 
 *Draft 3 (2026-11-04)* adds the research tier at the user's request: a *Frontier* chapter and a research problem in
 every part (§1.1), and Act XI (Parts 56–61). Parts 1–55 keep their numbers.
+
+*Draft 4 (2026-11-18)* adds the **watch standard** (§1.2) at the user's request ("prioritize watch experience and
+cool, high quality, compact visuals and technical depth"): films of 30–60 minutes, a cold open, predictions and
+checkpoints, motion instead of slides, spoken narration without spoken hedges, and a computed score kept out from
+under explanation. Its gates are `tools/check_watch.py` and the 60-minute ceiling in `tools/lecture_length.py`.
+Part 7 is the pilot; the parts still being written (43–61) are finished to it, and Parts 1–42 are retrofitted in
+order. Parts keep their numbers. §7 records the decisions.
 
 ## 1. The standard every part meets
 
@@ -112,8 +120,9 @@ change.
   死锁, 共识, 线性一致性, 幂等, 限流, 灰度发布, 可观测性, …).
 - Code on screen is never translated. Comments and captions are.
 
-**Gates per part:** `tools/lecture_length.py` (fails under 50 min), `contact_sheet.py`, `dead_air.py`,
-`collect_text.py --check`, `check_narration.py`, `zh_lines.py --verify`, and the part's `tests/test_cs*_*.py`.
+**Gates per part:** `tools/lecture_length.py` (fails under 30 or over 60 min), `tools/check_watch.py` (§1.2),
+`contact_sheet.py`, `dead_air.py`, `collect_text.py --check`, `check_narration.py`, `zh_lines.py --verify`, and the
+part's `tests/test_cs*_*.py`.
 
 ### 1.1 The research tier
 
@@ -195,6 +204,98 @@ Frontier topic; each is refined in that part's frontier sweep.
 
 Parts 1–6 were built before the research tier; their Frontier chapters were added in a retrofit after Part 7
 (2026-11-04), with their notes, research problems and Chinese editions.
+
+### 1.2 The watch standard (draft 4)
+
+The series is a degree, but nobody is enrolled: a viewer stays only while the film earns it. The previews of Parts
+1–42 were correct and thorough and often hard to watch. They had about three moving animations for every hundred
+fade-ins, spoken caveats in most paragraphs, an objectives list before the first idea, no music, and lengths up to
+76 minutes. This section is the standard that replaces those habits. Where it conflicts with §1, it wins.
+
+What the standard rests on:
+- 3Blue1Brown's advice to creators: concrete before abstract, open with the key exercise, never start with
+  definitions, make every movement deliberate.
+- Muller et al. (2008): a film that states the misconception and refutes it beats clear exposition (d ≈ 0.8).
+- Crouch et al. (2004): watching a demonstration teaches little unless the viewer predicts its outcome first.
+- Szpunar, Khan & Schacter (2013): quizzes between lecture segments halved mind-wandering and raised the final
+  test from 68% to 90%.
+- Mayer's multimedia principles: coherence, signaling, segmenting, redundancy and personalization.
+- Moreno & Mayer (2000): music under narrated explanation hurt both retention and transfer.
+- Guo, Kim & Rubin (2014): edX viewers stay longer with enthusiastic, well-planned videos and leave dense ones.
+- Ben Eater, Nand2Tetris and MIT 6.S081: one real machine carried through the whole course.
+- YouTube's audience-retention report: watch the first 30 seconds and every dip.
+
+**Length.**
+- A film runs 30–60 minutes in 8–12 chapters of 3–6 minutes each.
+- The ceiling is a gate. A part over 60 minutes moves its least necessary chapters into the lecture notes and the
+  lab, which keep everything; the film keeps its spine.
+- No chapter exists only for completeness. A topic the story doesn't need goes to the notes.
+
+**The first minute.**
+- The film opens on the phenomenon, not on the part. It shows something running, failing, racing or measured,
+  and its question is on screen within 30 seconds.
+- No title, objectives, series map or "This is Part N" before it.
+- The title and the series map come after the cold open, together in about ten seconds, with the theme.
+- The objectives card is gone. The cold open's question is the objective, and the outro checks it.
+
+**Every chapter.**
+1. **A concrete hook**: a case, a number, a machine doing something, never a definition.
+2. **A prediction** (`self.predict(...)`). It is a question with two to four answers that the narration asks
+   aloud, a three-second countdown, and then the run that answers it. Every chapter has at least one.
+3. **The mechanism**, animated. Every step of a derivation stays on screen with its margin reason, as before.
+4. **The reveal against the data**: the computed result, labelled by its source.
+5. **One takeaway line**, and the question that pulls into the next chapter.
+
+**Every part.**
+- **A misconception**, named on a `wrong_idea` card and refuted on screen by a run: "a faster clock always means a
+  faster computer"; "more threads means more speed"; "a database uses the index you made".
+- **A checkpoint** about every ten minutes (`self.checkpoint(...)`): two short questions, a beat to answer, the
+  answers. A film has at least three.
+- The Frontier chapter, the problem set and the *In practice* card stay as §1 and §1.1 describe. The outro's
+  recap replays the cold open and answers it.
+
+**Narration.**
+- Spoken, second person and present tense: "you", "we", "watch this". Contractions are fine. A sentence carries
+  one idea and averages under 22 words.
+- **No spoken hedges.** A caveat that qualifies a number is a small on-screen tag (`assumed`, `schematic`,
+  `simulated`, `measured on this machine`, `illustrative`, `cited`) from `tag(...)`. A caveat that qualifies an
+  argument goes in the lecture notes. The narration says each caveat at most once per part, where it matters most.
+- The screen does not repeat the narration (Mayer's redundancy principle). On-screen text is labels and short
+  headlines, at most about twelve words per frame outside code, tables and equations.
+- The narration names the next thing before the screen shows it, so the eye knows where to go. Signaling uses
+  `Indicate`, a flash or a camera move, not a new paragraph.
+
+**Picture: motion, not slides.**
+- **An object that persists moves.** If something is on screen in two consecutive frames, it transforms, slides,
+  grows or travels between them. It does not fade out and back in. Fades are for entrances and exits.
+- **Every chapter has a live run**: an animation driven by real data from `compute.py` or the instruments,
+  stepping through a trace with a `ValueTracker` and updaters. Instructions travel the datapath, packets cross the
+  link, the heap fills, the cache flashes.
+- **The camera works.** Scenes are `WatchScene`s (a `MovingCameraScene` with narration). The camera zooms into the
+  detail being discussed and back out to the whole, and travels the tower between layers.
+- **Compact.** There is one focal instrument per frame, filling at least half of it. Labels sit on the thing they
+  name, at 20–28 pt, one or two lines long. No frame is a list of sentences.
+- `tools/check_watch.py` measures the ratio of motion (transforms, `.animate`, trackers, updaters, camera moves) to
+  fade-ins. The floor is 0.25 per part, the target 0.4. The flagship single films run 0.15–0.36. The Part 1–42
+  previews ran 0.035.
+
+**Sound** (`explainer/cs/score.py`, mixed by `tools/build.py`; `--no-score` leaves it out).
+- Music never plays under explanation.
+- The score plays in four places:
+  - a theme under the title, after the cold open;
+  - a short sting under each chapter card;
+  - a quiet bed only where the narration stops for more than 2.6 s (a live run playing out, a countdown);
+  - a close under the final recap.
+- It is computed, deterministic, and 8–18 LU below the narration. The series' motif is the clock: a pulse that
+  speeds up through the act *Making It Fast* and steadies after.
+- **Sound as content** (phase 2): where the sound is the idea (a modem handshake, the pipeline's clock, a sort
+  you can hear), a part computes it and plays it in a listening window. *Music, Built*'s `SoundScene` is the
+  model.
+
+**The pilot.** Part 7 is re-cut first and reviewed with the user before the standard is locked. Then Parts 43–61
+are finished to it, and Parts 1–42 are retrofitted in order. A retrofit rewrites the hook and every chapter's
+narration, adds predictions, checkpoints and the misconception, replaces fade decks with the instruments in
+`explainer/cs/watch.py`, and trims the part to 60 minutes. Computations, instruments and tests are kept.
 
 ## 2. The devices
 
@@ -3341,6 +3442,22 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
    order with reviews at Parts 40 and 56.
 6. **The research tier** (the user, 2026-11-04: "this course should also include PhD stuff"): a Frontier chapter and
    a research problem in every part (§1.1), and Act XI, Parts 56–61.
+7. **The watch standard** (2026-11-18). The user asked for the watch experience to come first, with compact,
+   high-quality visuals and technical depth, and left the choices to the plan. They are:
+   - **Parts keep their numbers.** No part is split. Nearly every part estimates at 48–60 minutes, and only six
+     run over 60 (Parts 1, 2, 4, 8, 10 and 13). Those are trimmed to the ceiling, and the trimmed material moves
+     to their notes and labs. Splitting would invalidate every cache, course table and Chinese table for little
+     gain.
+   - **The pilot is Part 7.** It had the lowest motion ratio of the built parts and the flattest hook.
+   - **Gaps in the curriculum become chapters in existing parts**, not new parts:
+     - media compression (the DCT, JPEG, perceptual audio coding, motion-compensated video) in Part 28;
+     - game theory, auctions and mechanism design in Part 23;
+     - sublinear algorithms and property testing in Part 20;
+     - information visualization in Part 44;
+     - reverse engineering and malware analysis in Part 55;
+     - GPU programming in Part 60;
+     - debugging as a craft in Part 40.
+   - **No Part 0.** The cold open of Part 1 is the on-ramp.
 
 ## 8. Progress (updated as parts land)
 
@@ -3352,7 +3469,7 @@ At *AI, Built*'s pace, that is one part per one or two long sessions.
 | 4 | scenes, computations, notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
 | 5 | scenes, computations, notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 54 min (estimate) |
 | 6 | scenes, computations (the gate-level CPU, co-simulation, the Job's ledger row 0), notes, tests and Chinese narration and on-screen text written; *Frontier* chapter and research problem added (retrofit, 2026-11-04); QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 48 min (estimate) |
-| 7 | scenes (17, including the first *Frontier* chapter), computations (the cycle-accurate pipeline, eight predictors and a limit study, the Job's ledger row 1), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 54 min (estimate) |
+| 7 | **watch-standard pilot (2026-11-18)**: a new cold open (the sorted-array race, measured on this machine); chapters 2–7, 12 and 14 rebuilt on the live instruments (`PipelineFlow`, `EventStrip`, `Race`, `Meter`); a prediction in every chapter, three checkpoints, the misconception in chapter 12; chapters 1 and 8–11, 13 and 15 retrofitted lightly (predictions, hedges cut) and due a rebuild; `tools/check_watch.py cs7` passes; English 480p silent previews reviewed; the Chinese narration and on-screen text are to be redone for the new script; awaiting the user's review, then the narrated master | ≈ 46 min (estimate) |
 | 8 | scenes (17, with the *Frontier* chapter), computations (the out-of-order core and its co-simulation, the scoreboard and Tomasulo on the textbook example, Wall's limit study on the Job, memory disambiguation, the Spectre attack and its mitigations, SMT in the limit study, the Job's ledger row 2), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 68 min (estimate) |
 | 9 | scenes (17, with the *Frontier* chapter), computations (a cache simulator and its analyses, this machine's latency staircase, bandwidth and matrix multiply measured, the exact LRU misses of the Job's corpus scans, the Job's ledger row 3 priced on Part 8's core), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 49 min (estimate) |
 | 10 | scenes (17, with the *Frontier* chapter), computations (MESI and the store-buffering test simulated; false sharing, the litmus test with and without a fence, atomics and the Job in C with SIMD and threads measured on this machine; greedy schedules against Brent's bound, work stealing, scans, sorting networks checked by the 0–1 principle, bisection widths by exhaustive search; the Job on four Pebble cores, ledger row 4), notes, tests and Chinese narration and on-screen text written; QA previews (480p, silent) reviewed; awaiting narrated master | ≈ 64 min (estimate) |

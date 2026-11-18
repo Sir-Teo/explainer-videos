@@ -4,7 +4,7 @@ import numpy as np
 
 from explainer import narration_credit
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, STAGE_COLOR,
+from videos.cs.cs7.common import (chapter, BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, STAGE_COLOR,
                                   STAGES, YES, PipeChart, box, fmt, load, mono)
 
 
@@ -20,11 +20,12 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
         self.practice()
+        self.check()
         self.problems()
         self.next_time()
         self.references()
@@ -66,8 +67,7 @@ class Outro(VoiceoverScene):
         ).arrange_in_grid(rows=2, cols=3, buff=(0.35, 0.35)).move_to(DOWN * 0.2)
         head = label(rf"Part {PART}: \ Pipelines", font_size=38).to_edge(UP, buff=0.3)
         with self.voiceover(
-            "What we built: the performance equation; a five-stage functional pipeline; and an explicitly assumed "
-            "clock budget. We visualized hazards, forwarding, load-use stalls, and precise architectural exceptions, "
+            " We visualized hazards, forwarding, load-use stalls, and precise architectural exceptions, "
             "with finite emulator comparisons. We measured counter, TAGE and perceptron implementations on specified "
             "traces, without claiming an absolute prediction limit. Short Job passages were simulated cycle by cycle; "
             "the full-corpus ledger row is a fitted projection, nearly twice as fast under its assumptions. Multiple "
@@ -123,6 +123,17 @@ class Outro(VoiceoverScene):
                                                      lag_ratio=0.35), run_time=3.0)
         self.wait(0.3)
         self.clear_scene()
+
+    def check(self):
+        h = load("sorted")["host"]
+        self.checkpoint(
+            [(r"Why is the shuffled loop slower?", r"Its branch is a coin flip: every wrong guess flushes the pipe"),
+             (r"A machine runs more MIPS. \\ Is it faster?", r"Not necessarily: only time per program counts"),
+             (r"Why did the deep pipelines of 2004 lose?", r"Each wrong guess cost more than the clock saved")],
+            narration=f"Last checkpoint. Why was the shuffled loop {h['ratio']:.0f} times slower? Does more MIPS mean "
+                      "faster? And why did the deep pipelines of 2004 lose?",
+            answers_narration="The branch was a coin flip, and every wrong guess flushes the pipe. No: only time per "
+                              "program counts. And each wrong guess cost more than the clock saved.", seconds=5.0)
 
     def problems(self):
         ps = problem_set([

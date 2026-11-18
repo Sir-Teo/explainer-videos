@@ -3,11 +3,11 @@ from __future__ import annotations
 import numpy as np
 
 from explainer.cs import *  # noqa: F403
-from videos.cs.cs7.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
+from videos.cs.cs7.common import (chapter, BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, box, fmt,
                                   load, mono)
 
 
-class Targets(VoiceoverScene):
+class Targets(WatchScene):
     def construct(self):
         self.card()
         self.btb()
@@ -15,10 +15,7 @@ class Targets(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(9, r"Where the branch goes", r"Knowing it is taken is not enough", part=PART)
-        with self.voiceover("Chapter nine. Where the branch goes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        chapter(self, 9, r"Where the branch goes", r"Knowing it is taken is not enough")
 
     # ------------------------------------------------------------------
     def btb(self):
@@ -107,6 +104,15 @@ class Targets(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def measured(self):
+        _b = load("btbras")
+        _f = _b["BTB"]["jalr_miss"] / _b["BTB"]["jalr"]
+        card = self.predict(r"A BTB remembers each return's last target. \\ In recursive Fibonacci, \\ how often is "
+                            r"that wrong?", [r"almost never", rf"about {100 * _f:.0f}\%", r"every time"],
+                            narration="A target buffer remembers where each return went last time. In recursive "
+                                      "Fibonacci, how often is that the wrong place?")
+        self.park(card)
+        self.expect(card, 1, narration=f"{100 * _f:.0f} percent of returns: the buffer only ever knows the last "
+                                       "caller. The return stack fixes almost all of them.")
         b = load("btbras")
         head = label(r"Fibonacci of 18, \ three front ends", font_size=36).to_edge(UP, buff=0.35)
         names = list(b)

@@ -26,6 +26,17 @@ CLOCK = C.CS_CLOCK
 HIST = C.HUMAN
 BG = "#121722"
 
+def chapter(scene, number, title, question="", lit=(), extra=()):
+    """The chapter card, spoken ("Chapter seven. Predicting branches."); it slides away to the left."""
+    card = chapter_card(number, title, question, lit=lit, extra=extra, part=PART)
+    words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+             "twelve", "thirteen", "fourteen", "fifteen", "sixteen"][number]
+    plain = title.replace("\\", " ").replace("\ ", " ").replace("$", "")
+    with scene.voiceover(f"Chapter {words}. {plain}."):
+        scene.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
+    scene.play(FadeOut(card, shift=LEFT * 0.6), run_time=0.6)
+
+
 STAGES = ("IF", "ID", "EX", "MEM", "WB")
 STAGE_COLOR = {"IF": DATA, "ID": CTRL, "EX": FUNC, "MEM": INF, "WB": YES}
 
