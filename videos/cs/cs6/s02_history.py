@@ -7,20 +7,15 @@ from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   say)
 
 
-class History(VoiceoverScene):
+class History(WatchScene):
     def construct(self):
         self.card()
         self.eniac()
-        self.draft()
         self.baby()
         self.edsac()
 
     def card(self):
-        card = chapter_card(1, r"Cables, \ then memory", r"How was the first computer programmed?",
-                            lit=(1945, 1948, 1949), part=PART)
-        with self.voiceover("Chapter one. Cables, then memory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Cables, \ then memory", r"How was the first computer programmed?", lit=(1945, 1948, 1949), part=PART, said="Chapter one. Cables, then memory.")
 
     # ------------------------------------------------------------------
     def eniac(self):
@@ -77,55 +72,13 @@ class History(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def draft(self):
-        head = label(r"The \textit{First Draft} \ (June 1945)", font_size=38).to_edge(UP, buff=0.35)
-        mem = box(3.2, 3.0, r"\text{memory}", DATA, 30).move_to(RIGHT * 2.6 + DOWN * 0.1)
-        inside = VGroup(*[Rectangle(width=2.6, height=0.28, stroke_color=CODE if k < 4 else DATA, stroke_width=1.4,
-                                    fill_color=CODE if k < 4 else DATA, fill_opacity=0.15) for k in range(7)])
-        inside.arrange(DOWN, buff=0.06).move_to(mem.get_center() + DOWN * 0.2)
-        tags = VGroup(label(r"instructions", font_size=22, color=CODE).move_to(VGroup(*inside[:4])),
-                      label(r"data", font_size=22, color=DATA).move_to(VGroup(*inside[4:])))
-        for t in tags:
-            t.add_background_rectangle(color=BG, opacity=0.85, buff=0.04)
-        mem.text.next_to(inside, UP, buff=0.12)
-        ca = box(2.2, 0.9, r"\text{central arithmetic}", FUNC, 22).move_to(LEFT * 2.6 + UP * 1.0)
-        cc = box(2.2, 0.9, r"\text{central control}", CTRL, 22).move_to(LEFT * 2.6 + DOWN * 0.6)
-        io = box(2.2, 0.7, r"\text{input, \ output}", GREY_B, 22).move_to(LEFT * 2.6 + DOWN * 2.0)
-        arrows = VGroup(*[DoubleArrow(b.get_right(), mem.get_left() + UP * dy, buff=0.08, color=GREY_B,
-                                      stroke_width=2.5, tip_length=0.16) for b, dy in ((ca, 0.9), (cc, -0.1),
-                                                                                         (io, -1.0))])
-        cite = label(r"John von Neumann, \ \textit{First Draft of a Report on the EDVAC}, \ 30 June 1945", font_size=22,
-                     color=HIST).to_edge(DOWN, buff=0.75)
-        credit = label(r"the ideas came from the ENIAC team's meetings \ (Eckert, Mauchly, Goldstine, Burks); \\ "
-                       r"Turing's 1936 universal machine already kept its program on its tape", font_size=21,
-                       color=GREY_B).to_edge(DOWN, buff=0.15)
-        with self.voiceover(
-            "While ENIAC was still being built, its designers were already planning a successor, the EDVAC, and in "
-            "June 1945 John von Neumann wrote up their discussions in a hundred-page report. <bookmark mark='a'/> It "
-            "describes a machine with a central arithmetic part, a central control part, input and output, and one "
-            "large memory. <bookmark mark='b'/> The crucial sentence is about what goes in that memory: the "
-            "instructions as well as the numbers, coded the same way. The program is no longer wiring. It is data the "
-            "control unit reads, one instruction after another. <bookmark mark='c'/> The report circulated under von "
-            "Neumann's name alone, and Eckert and Mauchly, whose ideas it drew on, never forgave it; the stored-program "
-            "design is still called the von Neumann architecture. And in a sense Turing had got there first: his "
-            "universal machine of 1936, from Part 1, already read its program from its own tape."
-        ) as vo:
-            self.play(FadeIn(head))
-            self.play(FadeIn(ca), FadeIn(cc), FadeIn(io), FadeIn(mem.box), FadeIn(mem.text))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[GrowArrow(a) for a in arrows], lag_ratio=0.2))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r) for r in inside], lag_ratio=0.1), FadeIn(tags))
-            self.play(Indicate(VGroup(*inside[:4]), color=CODE))
-            vo.wait_until("c")
-            self.play(FadeIn(cite))
-            self.play(FadeIn(credit))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def baby(self):
+        self.ask(r"June 1948: the first program ever run \\ from a computer's own memory. It computed...",
+                 [r"a table of squares", r"the largest factor of $2^{18}$", r"digits of $\pi$"], 1,
+                 say="In June 1948, a program ran from a computer's own memory for the first time. What did it compute?",
+                 reveal="The largest proper factor of two to the eighteen, by trying every candidate, in fifty-two minutes.")
         head = label(r"Manchester, \ 21 June 1948: \ the first stored program runs", font_size=34).to_edge(UP,
                                                                                                           buff=0.35)
         grid = VGroup(*[Dot(radius=0.05, color=YES if (r * 7 + c * 3) % 5 < 2 else GREY_D)

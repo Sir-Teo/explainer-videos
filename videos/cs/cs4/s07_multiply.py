@@ -35,22 +35,15 @@ def dot_matrix(heights, x0=4.6, dx=0.42, y0=-2.2, dy=0.38, color=DATA):
     return g
 
 
-class Multiply(VoiceoverScene):
+class Multiply(WatchScene):
     def construct(self):
         self.card()
         self.schoolbook()
-        self.array()
         self.carry_save()
         self.tree()
-        self.booth()
-        self.compare()
 
     def card(self):
-        card = chapter_card(6, r"Multiplication", r"How do you multiply in logarithmic time?", lit=(1951, 1964),
-                            part=PART)
-        with self.voiceover("Chapter six. Multiplication."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Multiplication", r"How do you multiply in logarithmic time?", lit=(1951, 1964), part=PART, said="Chapter six. Multiplication.")
 
     # ------------------------------------------------------------------
     def schoolbook(self):
@@ -98,42 +91,6 @@ class Multiply(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def array(self):
-        d = load("mult")
-        r = {(x["n"], x["kind"]): x for x in d["rows"]}
-        head = label(r"The array multiplier: \ one adder per row", font_size=36).to_edge(UP, buff=0.35)
-        n = 8
-        rows = VGroup()
-        for j in range(n):
-            g = VGroup(*[Square(0.3, stroke_color=GREY_D, stroke_width=1, fill_color=HEAD if j == 0 else CTRL,
-                                fill_opacity=0.55) for _ in range(n)]).arrange(LEFT, buff=0.05)
-            g.move_to([2.2 - 0.35 * j - 1.2, 2.0 - 0.48 * j, 0])
-            rows.add(g)
-        arrows = VGroup(*[Arrow(rows[j].get_bottom() + DOWN * 0.02, rows[j + 1].get_top() + UP * 0.02, buff=0.02,
-                                stroke_width=2, color=GREY_C, max_tip_length_to_length_ratio=0.4) for j in range(n - 1)])
-        txt = VGroup(label(r"row $j$: \ the running sum, \ plus $a \cdot b_j$ shifted, \ by a ripple adder", font_size=26,
-                           color=GREY_A),
-                     label(rf"$8 \times 8$: \ {r[(8, 'array')]['gates']} gates, \ {r[(8, 'array')]['settle']} gate delays",
-                           font_size=28, color=NO),
-                     label(rf"$16 \times 16$: \ {r[(16, 'array')]['gates']} gates, \ {r[(16, 'array')]['settle']} gate "
-                           r"delays: \ $O(n)$", font_size=28, color=NO)).arrange(DOWN, aligned_edge=LEFT,
-                                                                                  buff=0.3).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "The obvious circuit adds the rows one at a time. <bookmark mark='a'/> Each row of the array is an adder "
-            "that takes the running sum from the row above, adds the next partial product, and passes the result "
-            "down. <bookmark mark='b'/> It is regular and easy to lay out on a chip, which is why early multipliers "
-            "looked like this. But the carries ripple along each row and the sums ripple down the rows, and the delay "
-            "grows in step with n: for our sixteen-bit circuit, we observed eighty-eight gate delays in the test vectors. A processor that wanted to "
-            "multiply in one cycle needed a better idea."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rows))
-            vo.wait_until("a")
-            self.play(Create(arrows), FadeIn(txt[0]), run_time=2.0)
-            vo.wait_until("b")
-            self.play(FadeIn(txt[1]), FadeIn(txt[2]))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def carry_save(self):
@@ -186,6 +143,10 @@ class Multiply(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def tree(self):
+        self.ask(r"A Wallace tree for $n$-bit multiplication. \\ Its depth grows like...", [r"$n$", r"$\log n$",
+                 r"$n^2$"], 1,
+                 say="Wallace's tree adds all the partial products at once. How does its depth grow with n?",
+                 reveal="Like log n. Each carry-save layer turns three numbers into two.")
         d = load("mult")
         r = {(x["n"], x["kind"]): x for x in d["rows"]}
         stages = wallace_heights(8)
@@ -228,80 +189,4 @@ class Multiply(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def booth(self):
-        d = load("mult")
-        bb = d["booth"]
-        head = label(r"Booth recoding: \ half as many rows", font_size=36).to_edge(UP, buff=0.35)
-        b = bb["b"]
-        digits = bb["digits"]  # least significant first
-        bits = format(b, "08b")
-        cells = VGroup(*[MathTex(ch, font_size=40, color=DATA) for ch in bits]).arrange(RIGHT, buff=0.3).move_to(UP * 1.6)
-        groups = VGroup(*[SurroundingRectangle(VGroup(cells[2 * k], cells[2 * k + 1]), buff=0.08, color=CTRL,
-                                               corner_radius=0.05) for k in range(4)])
-        dig = VGroup(*[MathTex(f"{v:+d}" if v else "0", font_size=40, color=HEAD).next_to(groups[3 - k], DOWN, buff=0.35)
-                       for k, v in enumerate(digits)])
-        val = MathTex(r"118 = " + " ".join(
-            [rf"{'+' if v >= 0 and i else ''}{'-' if v < 0 else ''}{abs(v)} \cdot 4^{{{k}}}"
-             for i, (k, v) in enumerate(reversed(list(enumerate(digits))))]), font_size=36, color=GREY_A).move_to(DOWN * 0.3)
-        notes = VGroup(label(r"digits in $\{-2, -1, 0, 1, 2\}$, \ read from overlapping groups of three bits",
-                             font_size=26, color=GREY_A),
-                       label(r"each partial product is $0$, \ $\pm a$ \ or \ $\pm 2a$: \ a shift and a negation, \ no "
-                             r"multiplication", font_size=26, color=GREY_A),
-                       label(r"$n/2$ rows instead of $n$, \ and signed numbers come out right", font_size=28,
-                             color=YES)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "One more trick halves the work before it starts. <bookmark mark='a'/> Andrew Booth, in 1951, noticed that "
-            "a run of ones in the multiplier, like the three ones in a row here, can be written as a big power of two "
-            "minus a small one. The modern form reads the multiplier two bits at a time, plus one bit of overlap, "
-            "and turns each pair into one digit from minus two to two. <bookmark mark='b'/> A hundred and eighteen "
-            "becomes two times sixty-four, minus sixteen, plus two times four, minus two. <bookmark mark='c'/> Each "
-            "digit picks a partial product that is zero, plus or minus a, or plus or minus two a, which is only a "
-            "shift and a negation. Half as many rows go into the tree, and because the recoding treats the top bit as "
-            "a sign, two's complement numbers multiply correctly without any correction. Most fast multipliers "
-            "use it, in the radix-four form Orville MacSorley described in 1961."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cells))
-            vo.wait_until("a")
-            self.play(Create(groups), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(x, shift=DOWN * 0.1) for x in dig], lag_ratio=0.25), Write(val))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[1]), FadeIn(notes[2]))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def compare(self):
-        d = load("mult")
-        rows = d["rows"]
-        head = label(r"Measured: \ multipliers from 4 to 16 bits", font_size=36).to_edge(UP, buff=0.35)
-        ax = Axes(x_range=[4, 16, 4], y_range=[0, 90, 30], x_length=5.6, y_length=4.2, tips=False,
-                  axis_config={"color": GREY_C, "font_size": 18, "include_numbers": True}).move_to(LEFT * 3.0 + DOWN * 0.4)
-        t1 = note(r"gate delays \ against bits", font_size=20).next_to(ax, UP, buff=0.1)
-        curves, keys = VGroup(), VGroup()
-        for kind in ("array", "wallace", "dadda"):
-            rs = sorted([r for r in rows if r["kind"] == kind], key=lambda r: r["n"])
-            curves.add(axis_plot([r["n"] for r in rs], [r["settle"] for r in rs], ax, KIND_COLOR[kind]))
-            keys.add(label(kind.title(), font_size=24, color=KIND_COLOR[kind]))
-        keys.arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(ax, RIGHT, buff=0.2).shift(UP * 1.2)
-        r16 = {r["kind"]: r for r in rows if r["n"] == 16}
-        tab = VGroup(*[label(rf"{k.title()}: \ {r16[k]['gates']} gates, \ {r16[k]['settle']} delays", font_size=26,
-                             color=KIND_COLOR[k]) for k in ("array", "wallace", "dadda")]).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 3.8 + DOWN * 1.0)
-        tl = note(r"$16 \times 16$, \ every design checked against Python on 20{,}000 products \ (all of them up to "
-                  r"$8 \times 8$)", font_size=20).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "Measured in our netlists. <bookmark mark='a'/> The array multiplier's delay climbs in a straight line; "
-            "the two trees climb slowly, like log n. <bookmark mark='b'/> At sixteen bits, Dadda's tree is three and a "
-            "half times faster than the array, for about sixteen percent more gates, and fewer than Wallace's. The "
-            "multiplier inside a modern processor is a Booth-recoded tree with a prefix adder at the bottom: three or "
-            "four cycles for sixty-four bits, pipelined so a new multiplication can start every cycle."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(t1), FadeIn(keys))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[Create(c) for c in curves], lag_ratio=0.3), run_time=2.4)
-            vo.wait_until("b")
-            self.play(FadeIn(tab), FadeIn(tl))
-        self.wait(0.3)
-        self.clear_scene()

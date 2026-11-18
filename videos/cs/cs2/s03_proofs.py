@@ -16,21 +16,16 @@ def odd_dots(n_pairs: int, color, r=0.15, gap=0.46) -> VGroup:
     return g
 
 
-class Proofs(VoiceoverScene):
+class Proofs(WatchScene):
     def construct(self):
         self.card()
         self.direct()
         self.contrapositive()
         self.sqrt2()
         self.primes()
-        self.cases()
-        self.nonconstructive()
 
     def card(self):
-        card = chapter_card(2, r"Ways to prove", r"What counts as a proof?", part=PART)
-        with self.voiceover("Chapter two. Ways to prove."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Ways to prove", r"What counts as a proof?", part=PART, said="Chapter two. Ways to prove.")
 
     # ------------------------------------------------------------------
     def direct(self):
@@ -154,6 +149,10 @@ class Proofs(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def primes(self):
+        self.ask(r"$2 \cdot 3 \cdot 5 \cdot 7 \cdot 11 \cdot 13 + 1 = 30031$. \\ Is it prime?",
+                 [r"yes", r"no: a product of two new primes", r"no: divisible by 13"], 1,
+                 say="Multiply the first six primes and add one: thirty thousand and thirty-one. Is it prime?",
+                 reveal="No. It's fifty-nine times five hundred and nine: new primes, exactly what Euclid's proof needs.")
         d = load("numbers")
         head = label(r"Euclid: \ there are infinitely many primes", font_size=38).to_edge(UP, buff=0.4)
         steps = VGroup(*[label(t, font_size=30, color=c) for t, c in (
@@ -194,73 +193,4 @@ class Proofs(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def cases(self):
-        head = label(r"By cases: \ $n^2 + n$ is always even", font_size=38).to_edge(UP, buff=0.4)
-        fact = MathTex(r"n^2 + n = n\,(n + 1)", font_size=44).next_to(head, DOWN, buff=0.5)
-        left = VGroup(label(r"$n$ even", font_size=30, color=DATA),
-                      MathTex(r"n = 2k:\quad n(n+1) = 2\,k(n+1)", font_size=34)).arrange(DOWN, buff=0.25)
-        right = VGroup(label(r"$n$ odd", font_size=30, color=CTRL),
-                       MathTex(r"n + 1 = 2k:\quad n(n+1) = 2\,nk", font_size=34)).arrange(DOWN, buff=0.25)
-        VGroup(left, right).arrange(RIGHT, buff=1.4).next_to(fact, DOWN, buff=0.8)
-        both = label(r"every integer is one or the other: \ even, \ in every case", font_size=30, color=YES).next_to(
-            VGroup(left, right), DOWN, buff=0.7)
-        with self.voiceover(
-            "Proof by cases splits the world into pieces that together cover everything, and proves the claim in each. "
-            "<bookmark mark='a'/> Claim: n squared plus n is always even. It is n times n plus one. <bookmark mark='b'/> "
-            "If n is even, the first factor is even. If n is odd, the second is. <bookmark mark='c'/> Every integer is "
-            "one or the other, so the claim holds for all of them. The danger in this method is a missing case. A "
-            "compiler's exhaustiveness check, which Part 14 builds, is a machine that looks for exactly that mistake."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(fact))
-            vo.wait_until("b")
-            self.play(FadeIn(left, shift=UP * 0.15), FadeIn(right, shift=UP * 0.15))
-            vo.wait_until("c")
-            self.play(FadeIn(both))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def nonconstructive(self):
-        head = label(r"A proof that does not say which", font_size=38).to_edge(UP, buff=0.4)
-        claim = label(r"there are irrational $a, b$ \ with $a^b$ rational", font_size=32, color=DATA).next_to(
-            head, DOWN, buff=0.45)
-        x = MathTex(r"x = \sqrt2^{\sqrt2}", font_size=44, color=HEAD).next_to(claim, DOWN, buff=0.5)
-        c1 = VGroup(label(r"if $x$ is rational:", font_size=28, color=GREY_A),
-                    MathTex(r"a = b = \sqrt 2", font_size=36, color=YES)).arrange(DOWN, buff=0.2)
-        c2 = VGroup(label(r"if $x$ is irrational:", font_size=28, color=GREY_A),
-                    MathTex(r"x^{\sqrt2} = \sqrt2^{\sqrt2 \cdot \sqrt2} = \sqrt2^{\,2} = 2", font_size=36,
-                            color=YES)).arrange(DOWN, buff=0.2)
-        VGroup(c1, c2).arrange(RIGHT, buff=1.4).next_to(x, DOWN, buff=0.6)
-        which = label(r"either way the claim holds, \ and the proof never says which", font_size=28,
-                      color=HEAD).next_to(VGroup(c1, c2), DOWN, buff=0.55)
-        later = note(r"(the second: \ $x$ is irrational, \ by the Gelfond--Schneider theorem, 1934)", font_size=22)
-        later.next_to(which, DOWN, buff=0.2)
-        cs = label(r"a constructive proof is an algorithm \ (Part 14)", font_size=28, color=CODE).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "One more kind, and it matters for computer science. <bookmark mark='a'/> Claim: there are irrational "
-            "numbers a and b with a to the b rational. <bookmark mark='b'/> Look at root two to the power root two. "
-            "<bookmark mark='c'/> If it is rational, we are done, with a and b both root two. If it is irrational, raise "
-            "it to the power root two: the exponents multiply to two, and the answer is two, which is rational. "
-            "<bookmark mark='d'/> Either way the claim is true, and the proof never tells us which case we are in. "
-            "It took another theorem, in 1934, to settle that it is the second. <bookmark mark='e'/> A proof like this "
-            "is non-constructive: it proves something exists without producing it. A constructive proof hands you the "
-            "object, and so it is, in effect, a program. In Part 14 that observation becomes exact: proofs are programs, "
-            "and the propositions they prove are types."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(claim))
-            vo.wait_until("b")
-            self.play(Write(x))
-            vo.wait_until("c")
-            self.play(FadeIn(c1, shift=UP * 0.15))
-            self.play(FadeIn(c2, shift=UP * 0.15))
-            vo.wait_until("d")
-            self.play(FadeIn(which), FadeIn(later))
-            vo.wait_until("e")
-            self.play(FadeIn(cs))
-        self.wait(0.3)
-        self.clear_scene()

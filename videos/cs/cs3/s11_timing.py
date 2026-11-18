@@ -17,7 +17,7 @@ def waveform(values, x0, y0, dx=0.55, h=0.45, color=DATA, label_tex=""):
     return VGroup(m, lab)
 
 
-class Timing(VoiceoverScene):
+class Timing(WatchScene):
     def construct(self):
         self.card()
         self.delay()
@@ -26,10 +26,7 @@ class Timing(VoiceoverScene):
         self.wires()
 
     def card(self):
-        card = chapter_card(10, r"Gates take time", r"What happens between one answer and the next?", part=PART)
-        with self.voiceover("Chapter ten. Gates take time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Gates take time", r"What happens between one answer and the next?", part=PART, said="Chapter ten. Gates take time.")
 
     # ------------------------------------------------------------------
     def delay(self):
@@ -89,6 +86,10 @@ class Timing(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def hazard(self):
+        self.ask(r"$f = ab + \bar a c$ with $b = c = 1$: \\ $f$ is always 1. \\ When $a$ flips, can $f$ dip to 0?",
+                 [r"no: it stays 1", r"yes, for an instant"], 1,
+                 say="This function is one whatever a does. When a flips, can the output still dip to zero?",
+                 reveal="Yes, for an instant: a glitch, because the two paths take different times.")
         d = load("glitch")
         b = d["before"]
         head = label(r"A glitch", font_size=38).to_edge(UP, buff=0.35)
@@ -198,3 +199,10 @@ class Timing(VoiceoverScene):
             self.play(FadeIn(txt[4]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Size or depth: which sets a circuit's speed?", r"Depth: the longest chain of gates"),
+             (r"Why do clocked circuits ignore glitches?", r"Outputs are read only after everything settles")],
+            narration="Checkpoint. A circuit has a size and a depth. Which one sets its speed? And how do real chips live with "
+                      "glitches?",
+            answers_narration="Depth, the longest chain of gates. And clocked circuits read their outputs only after "
+                              "everything has settled.")

@@ -8,22 +8,21 @@ from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   gate, load, say)
 
 
-class Counted(VoiceoverScene):
+class Counted(WatchScene):
     def construct(self):
         self.card()
         self.blocks()
-        self.compare()
         self.missing()
         self.tower()
 
     def card(self):
-        card = chapter_card(14, r"The whole machine, \ counted", r"How big is a computer?", lit=(1975,), part=PART)
-        with self.voiceover("Chapter fourteen. The whole machine, counted."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The whole machine, \ counted", r"How big is a computer?", lit=(1975,), part=PART, said="Chapter fourteen. The whole machine, counted.")
 
     # ------------------------------------------------------------------
     def blocks(self):
+        self.ask(r"Most of Pebble's 8{,}224 gates do what?", [r"arithmetic", r"choosing and moving data", r"control"], 1,
+                 say="Pebble has eight thousand two hundred and twenty-four gates. Most of them do what?",
+                 reveal="Choose and move data: multiplexers and the register file, more than the ALU.")
         cp = load("cpu")
         head = label(r"Where Pebble's gates go", font_size=38).to_edge(UP, buff=0.35)
         order = [("register read", r"register read ports", YES), ("write-back", r"write-back and register writes", YES),
@@ -65,56 +64,6 @@ class Counted(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def compare(self):
-        cp = load("cpu")
-        head = label(r"Pebble among real processors", font_size=38).to_edge(UP, buff=0.35)
-        peb = cp["transistors_logic"] + cp["transistors_ff"]
-        items = [(r"MOS 6502 (1975)", 3510, GREY_B), (r"Intel 8086 (1978)", 29000, GREY_B),
-                 ("Pebble: \\ synthetic logic estimate", peb, HEAD), (r"Intel 80386 (1985)", 275000, GREY_B),
-                 (r"Apple M1 (2020), \ the whole chip", 16_000_000_000, GREY_B)]
-        lo, hi = 3, 10.5
-        x0, width = -2.0, 6.2
-        rows = VGroup()
-        for k, (name, n, c) in enumerate(items):
-            e = np.log10(n)
-            w = (e - lo) / (hi - lo) * width
-            y = 1.7 - 0.7 * k
-            r = Rectangle(width=w, height=0.45, stroke_width=0, fill_color=c, fill_opacity=0.7).move_to(
-                [x0 + w / 2, y, 0])
-            nl = label(name, font_size=21, color=c).move_to([x0 - 0.2, y, 0], aligned_edge=RIGHT)
-            vl = label(fmt(n) + r" transistors", font_size=19, color=GREY_A).next_to(r, RIGHT, buff=0.12)
-            rows.add(VGroup(nl, r, vl))
-        axis = VGroup(*[VGroup(DashedLine([x0 + (e - lo) / (hi - lo) * width, 2.1, 0],
-                                          [x0 + (e - lo) / (hi - lo) * width, -1.4, 0], color=GREY_D, stroke_width=1),
-                               MathTex(rf"10^{{{e}}}", font_size=18, color=GREY_B).move_to(
-                                   [x0 + (e - lo) / (hi - lo) * width, -1.6, 0])) for e in (3, 5, 7, 9)])
-        how = label(rf"{fmt(cp['nand'])} two-input NAND equivalents $\times$ 4 transistors, \ plus "
-                    rf"{cp['flip_flops']} flip-flops $\times$ 24", font_size=21, color=GREY_B).to_edge(DOWN, buff=0.9)
-        cav = label("Pebble excludes memory, I/O, clocks, buffers and layout; \\\\ different counting scopes, \\ not an area comparison", font_size=21, color=GREY_B).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "How does that compare with real chips? <bookmark mark='a'/> Our teaching count maps each two-input NAND "
-            "equivalent to four transistors and each flip-flop to twenty-four, giving about ninety thousand. This is a"
-            " synthetic logic estimate, excluding memory, I/O, clock distribution, buffers and physical layout; it is "
-            "not a fabricated chip count. <bookmark mark='b'/> The 6502, the processor of the Apple II and, in a "
-            "variant, the Commodore 64, had three and a half thousand, because it was eight bits wide and squeezed by "
-            "brilliant hand design. Intel's 8086 had twenty-nine thousand, and the 386, the first thirty-two-bit x86, "
-            "two hundred and seventy-five thousand. <bookmark mark='c'/> Apple's M1 was reported at sixteen billion "
-            "transistors for the whole system on a chip, including caches, graphics and accelerators. These bars show "
-            "orders of magnitude with different counting scopes, not how many working Pebbles fit on an M1 or a "
-            "physical area comparison."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(axis))
-            self.play(FadeIn(rows[2][0]), GrowFromEdge(rows[2][1], LEFT), FadeIn(rows[2][2]), FadeIn(how))
-            vo.wait_until("a")
-            vo.wait_until("b")
-            for k in (0, 1, 3):
-                self.play(FadeIn(rows[k][0]), GrowFromEdge(rows[k][1], LEFT), FadeIn(rows[k][2]), run_time=0.8)
-            vo.wait_until("c")
-            self.play(FadeIn(rows[4][0]), GrowFromEdge(rows[4][1], LEFT), FadeIn(rows[4][2]), run_time=1.2)
-            self.play(FadeIn(cav))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def missing(self):

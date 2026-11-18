@@ -17,20 +17,16 @@ def venn(scale=1.0):
     return VGroup(X, Y, Z, lx, ly, lz)
 
 
-class Boole(VoiceoverScene):
+class Boole(WatchScene):
     def construct(self):
         self.card()
         self.laws_of_thought()
-        self.syllogism()
         self.laws()
         self.distributive()
         self.proofs()
 
     def card(self):
-        card = chapter_card(1, r"Boole's algebra", r"Can reasoning be done with equations?", lit=(1854,), part=PART)
-        with self.voiceover("Chapter one. Boole's algebra."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Boole's algebra", r"Can reasoning be done with equations?", lit=(1854,), part=PART, said="Chapter one. Boole's algebra.")
 
     # ------------------------------------------------------------------
     def laws_of_thought(self):
@@ -59,45 +55,12 @@ class Boole(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def syllogism(self):
-        head = label(r"Boole's syllogisms, \ as equations", font_size=38).to_edge(UP, buff=0.35)
-        rows = VGroup(*[VGroup(label(a, font_size=28, color=GREY_A), MathTex(b, font_size=36, color=c)).arrange(
-            RIGHT, buff=0.6) for a, b, c in (
-            (r"``every $x$ is a $y$''", r"x = x\,y", DATA),
-            (r"``every $y$ is a $z$''", r"y = y\,z", DATA),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=1.2)
-        chain = MathTex(r"x", r"= x y", r"= x (y z)", r"= (x y) z", r"= x z", font_size=42).next_to(rows, DOWN, buff=0.7)
-        chain.align_to(rows, LEFT)
-        chain[-1].set_color(YES)
-        why = VGroup(note(r"substitute $y = yz$", font_size=22), note(r"associativity", font_size=22),
-                     note(r"substitute $xy = x$", font_size=22))
-        for k, (w, part) in enumerate(zip(why, chain[2:])):
-            w.next_to(part, DOWN, buff=0.2 + 0.4 * (k % 2))
-        concl = label(r"so: \ ``every $x$ is a $z$'' \ (Aristotle's \textit{Barbara})", font_size=30, color=HEAD)
-        concl.next_to(chain, DOWN, buff=1.2).align_to(chain, LEFT)
-        with self.voiceover(
-            "Boole's own showpiece was the oldest piece of logic there is: Aristotle's syllogisms. "
-            "<bookmark mark='a'/> Every x is a y becomes an equation: x equals x times y, since being an x and a y is "
-            "the same as being an x. Every y is a z: y equals y z. <bookmark mark='b'/> Now calculate. x equals x y; "
-            "substitute y z for y; regroup; substitute x for x y; and x equals x z. <bookmark mark='c'/> Every x is a "
-            "z. Two thousand years of memorized rules for valid arguments became a few lines of algebra that a clerk, "
-            "or a machine, could check."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rows, lag_ratio=0.4))
-            vo.wait_until("a")
-            self.play(Circumscribe(rows[0], color=HEAD))
-            vo.wait_until("b")
-            self.play(FadeIn(chain[0]))
-            for k in range(1, 5):
-                self.play(FadeIn(chain[k], shift=RIGHT * 0.1), *([FadeIn(why[k - 2])] if k >= 2 else []), run_time=0.7)
-            vo.wait_until("c")
-            self.play(FadeIn(concl))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def laws(self):
+        self.ask(r"Is $x + y z = (x + y)(x + z)$?", [r"never", r"only for ordinary numbers", r"always, in Boole's algebra"], 2,
+                 say="Is x plus y z the same as x plus y, times x plus z?",
+                 reveal="Always, in Boole's algebra, though never with ordinary numbers. Or distributes over and.")
         head = label(r"The laws, \ in pairs", font_size=38).to_edge(UP, buff=0.35)
         pairs = [
             (r"identity", r"x \cdot 1 = x", r"x + 0 = x"),

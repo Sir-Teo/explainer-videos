@@ -11,7 +11,7 @@ def val_col(v):
     return ONE if v else ZERO
 
 
-class Feedback(VoiceoverScene):
+class Feedback(WatchScene):
     def construct(self):
         self.card()
         self.latch_live()
@@ -19,10 +19,7 @@ class Feedback(VoiceoverScene):
         self.ring()
 
     def card(self):
-        card = chapter_card(1, r"Feedback", r"How can gates hold a bit?", part=PART)
-        with self.voiceover("Chapter one. Feedback."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Feedback", r"How can gates hold a bit?", part=PART, said="Chapter one. Feedback.")
 
     # ------------------------------------------------------------------
     def latch_live(self):
@@ -119,6 +116,10 @@ class Feedback(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def ring(self):
+        self.ask(r"Three inverters in a loop. \\ What happens?", [r"it settles at 0", r"it settles at 1",
+                 r"it oscillates forever"], 2,
+                 say="Two gates in a loop remember. What do three inverters in a loop do?",
+                 reveal="They oscillate forever: an odd loop has no state it can agree on.")
         d = load("latch")["ring"]
         head = label(r"An odd loop: \ the ring oscillator", font_size=38).to_edge(UP, buff=0.35)
         gs = VGroup(*[gate("NOT", size=0.8) for _ in range(3)]).arrange(RIGHT, buff=1.0).move_to(UP * 1.2)

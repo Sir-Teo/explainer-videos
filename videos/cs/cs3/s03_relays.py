@@ -32,7 +32,7 @@ def ladder(branches, x0=-4.0, x1=1.0, y0=1.2, dy=1.0, length=0.9):
     return g, sw
 
 
-class Relays(VoiceoverScene):
+class Relays(WatchScene):
     def construct(self):
         self.card()
         self.dictionary()
@@ -41,11 +41,7 @@ class Relays(VoiceoverScene):
         self.consensus()
 
     def card(self):
-        card = chapter_card(2, r"Circuits are expressions", r"How does a switching circuit compute?", lit=(1937,),
-                            part=PART)
-        with self.voiceover("Chapter two. Circuits are expressions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Circuits are expressions", r"How does a switching circuit compute?", lit=(1937,), part=PART, said="Chapter two. Circuits are expressions.")
 
     # ------------------------------------------------------------------
     def dictionary(self):
@@ -125,6 +121,10 @@ class Relays(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def simplify(self):
+        self.ask(r"Three paths in parallel: \\ $xy$, \\ $xz$, \\ $x\bar y \bar z$. \\ What does the network compute?",
+                 [r"$x$", r"$xy$", r"$y + z$"], 0,
+                 say="Three parallel paths: x and y, x and z, x and not y and not z. Seven contacts. What do they compute?",
+                 reveal="Just x. One contact does the work of seven.")
         head = label(r"Designing by algebra", font_size=38).to_edge(UP, buff=0.35)
         g, _ = ladder([[r"x", r"y"], [r"x", r"z"], [r"x", r"\bar y", r"\bar z"]], x0=-6.2, x1=-1.6, y0=1.3, dy=1.1,
                       length=0.8)

@@ -8,20 +8,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs4.common import BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF, NO, PART, YES, load, sci
 
 
-class Functions(VoiceoverScene):
+class Functions(WatchScene):
     def construct(self):
         self.card()
         self.reduce()
         self.minimax()
         self.cordic()
-        self.cordic_table()
 
     def card(self):
-        card = chapter_card(14, r"Computing sin, exp and log", r"How does a chip compute a sine?", lit=(1959, 1972),
-                            part=PART)
-        with self.voiceover("Chapter fourteen. Computing sine, exp and log."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Computing sin, exp and log", r"How does a chip compute a sine?", lit=(1959, 1972), part=PART, said="Chapter fourteen. Computing sine, exp and log.")
 
     # ------------------------------------------------------------------
     def reduce(self):
@@ -58,6 +53,10 @@ class Functions(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def minimax(self):
+        self.ask(r"A degree-4 polynomial for $e^x$ on a small interval. \\ Which is more accurate?",
+                 [r"the Taylor polynomial", r"the minimax polynomial", r"they're the same"], 1,
+                 say="Approximate e to the x with a degree-four polynomial. Taylor's, or the best one over the interval?",
+                 reveal="The minimax one, by a wide margin. Taylor is only exact at a single point.")
         r = load("functions")["remez"]
         head = label(r"Step two: \ the best polynomial, \ not Taylor's", font_size=36).to_edge(UP, buff=0.3)
         x = np.array(r["x"])
@@ -156,45 +155,3 @@ class Functions(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def cordic_table(self):
-        d = load("functions")["cordic"]
-        head = label(r"Sixteen steps, \ sixteen bits", font_size=38).to_edge(UP, buff=0.35)
-        rows = VGroup()
-        hdr = VGroup(*[MathTex(t, font_size=24, color=GREY_B) for t in (r"i", r"d", r"\arctan 2^{-i}", r"z \text{ left}")])
-        rows.add(hdr)
-        for s in d["steps"][:12]:
-            rows.add(VGroup(MathTex(str(s["i"]), font_size=24, color=GREY_B),
-                            MathTex("+" if s["d"] > 0 else "-", font_size=26, color=YES if s["d"] > 0 else NO),
-                            MathTex(f"{s['atan']:.6f}", font_size=24, color=GREY_A),
-                            MathTex(f"{s['z']:+.6f}", font_size=24, color=HEAD)))
-        for i, r in enumerate(rows):
-            for j, m in enumerate(r):
-                m.move_to([-5.6 + [0, 1.0, 2.6, 4.6][j], 2.5 - 0.42 * i, 0])
-        res = VGroup(
-            MathTex(rf"\cos 1 \approx {d['cos']:.7f} \quad ({d['true'][0]:.7f})", font_size=30, color=YES),
-            MathTex(rf"\sin 1 \approx {d['sin']:.7f} \quad ({d['true'][1]:.7f})", font_size=30, color=YES),
-            label(r"after 16 steps; \ the true values in brackets", font_size=22, color=GREY_B),
-            label(r"the HP-35 (1972), \ the first scientific pocket calculator, \\ computed its functions this way",
-                  font_size=24, color=HIST),
-            label(r"still inside FPGAs, \ radio chips \\ and small processors without a multiplier", font_size=24,
-                  color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to(RIGHT * 0.4 + DOWN * 0.2, aligned_edge=LEFT)
-        with self.voiceover(
-            "Here is the run, for an angle of one radian. <bookmark mark='a'/> Each row turns the vector one way or "
-            "the other by a smaller angle, and the angle left in z shrinks, roughly halving each time. "
-            "<bookmark mark='b'/> After sixteen steps, the vector's coordinates give the cosine and the sine of one, "
-            "right to about five decimal places, using nothing but shifts, additions and a small table of "
-            "arctangents. <bookmark mark='c'/> The HP-35 of 1972, the first scientific pocket calculator, computed its "
-            "functions with this kind of shift-and-add algorithm, and CORDIC is still used inside FPGAs, radio chips "
-            "and small processors that have no multiplier."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[1:]], lag_ratio=0.2), run_time=3.0)
-            vo.wait_until("b")
-            self.play(FadeIn(res[0]), FadeIn(res[1]), FadeIn(res[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(res[3]), FadeIn(res[4]))
-        self.wait(0.3)
-        self.clear_scene()

@@ -8,20 +8,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs2.common import COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, YES, fmt, load
 
 
-class Inclusion(VoiceoverScene):
+class Inclusion(WatchScene):
     def construct(self):
         self.card()
         self.venn()
         self.hats()
         self.limit()
-        self.phi()
 
     def card(self):
-        card = chapter_card(10, r"Inclusion and exclusion", r"How do you count a union without counting twice?",
-                            part=PART)
-        with self.voiceover("Chapter ten. Inclusion and exclusion."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Inclusion and exclusion", r"How do you count a union without counting twice?", part=PART, said="Chapter ten. Inclusion and exclusion.")
 
     # ------------------------------------------------------------------
     def venn(self):
@@ -69,6 +64,11 @@ class Inclusion(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def hats(self):
+        self.ask(r"$n$ people's hats handed back at random. \\ As $n$ grows, the chance nobody gets their own...",
+                 [r"falls to 0", r"settles near 37\%", r"rises to 1"], 1,
+                 say="Hats handed back at random. With more and more people, what happens to the chance that nobody gets "
+                     "their own?",
+                 reveal="It settles at one over e, about thirty-seven percent, almost at once.")
         d = load("derange")
         head = label(r"The hat-check problem", font_size=38).to_edge(UP, buff=0.35)
         q = label(r"$n$ hats are handed back at random: \ what is the chance that \textit{nobody} gets their own?",
@@ -155,49 +155,10 @@ class Inclusion(VoiceoverScene):
             self.play(FadeIn(bon))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why can no compressor shrink every file?", r"Pigeonhole: there are fewer short strings than long ones"),
+             (r"Seven pigeons, six holes. What follows?", r"Some hole holds at least two")],
+            narration="Checkpoint. Why can no compressor shrink every file? And what is the pigeonhole principle?",
+            answers_narration="There are fewer shorter strings than strings, so some file must grow. And seven pigeons in "
+                              "six holes put two in one hole.")
 
-    # ------------------------------------------------------------------
-    def phi(self):
-        d = load("derange")
-        phis = d["phi"]
-        head = label(r"Euler's $\varphi$: \ the numbers that share no factor with $n$", font_size=36).to_edge(UP,
-                                                                                                      buff=0.35)
-        f = MathTex(r"\varphi(n) = n \prod_{p \mid n} \left(1 - \frac1p\right)", font_size=40, color=FUNC).next_to(
-            head, DOWN, buff=0.35)
-        ex = MathTex(r"\varphi(60) = 60 \cdot \tfrac12 \cdot \tfrac23 \cdot \tfrac45 = 16", font_size=36,
-                     color=HEAD).next_to(f, DOWN, buff=0.3)
-        ax = Axes(x_range=[0, 61, 10], y_range=[0, 60, 20], x_length=10.5, y_length=3.0, tips=False,
-                  axis_config={"color": GREY_C, "font_size": 18},
-                  x_axis_config={"numbers_to_include": list(range(10, 61, 10))},
-                  y_axis_config={"numbers_to_include": [20, 40, 60]}).to_edge(DOWN, buff=0.7)
-        bars = VGroup()
-        for n, v in enumerate(phis, 1):
-            prime = v == n - 1
-            bars.add(Rectangle(width=ax.x_length / 61 * 0.75, height=max(ax.y_length * v / 60, 0.01), stroke_width=0,
-                               fill_color=YES if prime else (HEAD if n == 60 else DATA),
-                               fill_opacity=0.9).move_to(ax.c2p(n, 0), aligned_edge=DOWN))
-        xl = note(r"$\varphi(n)$ for $n \le 60$, \ computed by inclusion--exclusion over the prime factors \ "
-                  r"(green: \ primes, \ $\varphi(p) = p - 1$)", font_size=20).next_to(ax, DOWN, buff=0.12)
-        rsa = label(r"Part 30: \ RSA works because $a^{\varphi(n)} \equiv 1 \pmod n$", font_size=26,
-                    color=CTRL).next_to(ex, DOWN, buff=0.3)
-        with self.voiceover(
-            "Inclusion-exclusion also counts the numbers that share no factor with n. Remove the multiples of each "
-            "prime that divides n, add back what was removed twice, and so on. <bookmark mark='a'/> The result factors "
-            "into a product: n times one minus one over p, for each prime p dividing n. This is Euler's phi function. "
-            "<bookmark mark='b'/> For sixty: sixty, times a half, times two thirds, times four fifths: sixteen. "
-            "<bookmark mark='c'/> Here it is for every n up to sixty. The primes stand tallest, one less than "
-            "themselves; numbers with many small factors sit low. <bookmark mark='d'/> Phi is the hidden engine of RSA "
-            "encryption, which Part 30 builds."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(f))
-            vo.wait_until("b")
-            self.play(Write(ex))
-            vo.wait_until("c")
-            self.play(Create(ax), LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.02), FadeIn(xl),
-                      run_time=2.6)
-            vo.wait_until("d")
-            self.play(FadeIn(rsa))
-        self.wait(0.3)
-        self.clear_scene()

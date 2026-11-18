@@ -19,11 +19,10 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(box, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
-        self.practice()
         self.problems()
         self.next_time()
         self.references()
@@ -77,6 +76,13 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is overflow in two's complement?", r"Crossing the clock's edge, from the largest number to the smallest"),
+             (r"Ill-conditioned, or unstable?", r"The problem amplifies errors, or the algorithm adds them")],
+            narration="Last checkpoint. What is overflow, on the clock? And what is the difference between an ill-conditioned "
+                      "problem and an unstable algorithm?",
+            answers_narration="Overflow is crossing the clock's edge, from the largest number to the smallest. And an "
+                              "ill-conditioned problem amplifies any error; an unstable algorithm adds its own.")
 
     def payoffs(self):
         card = payoff_card([
@@ -100,29 +106,6 @@ class Outro(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def practice(self):
-        card = practice_card([
-            (r"integer overflow", r"a classic source of security holes: \ a wrapped length becomes a buffer overflow; "
-                                  r"\ Rust's checked arithmetic, \ sanitizers"),
-            (r"money", r"integer cents or decimal types: \ SQL \texttt{NUMERIC}, \ Java's \texttt{BigDecimal}, \ "
-                       r"Python's \texttt{decimal}"),
-            (r"numerical libraries", r"LAPACK and BLAS under numpy, \ high-accuracy \texttt{math.fsum}, \ libm's "
-                                     r"minimax polynomials"),
-            (r"machine learning", r"bfloat16 and FP8 on GPUs and TPUs, \ mixed precision with loss scaling"),
-            (r"hardware testing", r"after FDIV: \ formal proofs of floating-point units at Intel and AMD"),
-        ])
-        with self.voiceover(
-            "In practice: integer overflow is still a common cause of security holes, when a length wraps around and "
-            "a buffer is allocated too small, which is why Rust provides checked operations and enables overflow checks in default debug builds, and why sanitizers exist. Money is "
-            "often represented with integer minor units or decimal types, with explicit rounding rules. Numerical libraries, from LAPACK to the "
-            "maths library behind every sine, are built on Wilkinson's analysis and minimax polynomials. Machine "
-            "learning trains in bfloat16 and FP8. And since the FDIV bug, chip makers prove their floating-point "
-            "units correct by machine."
-        ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
-                                                     lag_ratio=0.35), run_time=3.0)
-        self.wait(0.3)
-        self.clear_scene()
 
     def problems(self):
         ps = problem_set([

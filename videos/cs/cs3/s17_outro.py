@@ -19,11 +19,10 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(box, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
-        self.practice()
         self.problems()
         self.next_time()
         self.references()
@@ -61,6 +60,11 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Switches in series compute...?", r"AND; in parallel, OR"),
+             (r"Most functions of $n$ inputs need about how many gates?", r"$2^n / n$: Shannon's counting argument")],
+            narration="Last checkpoint. Switches in series compute what? And how many gates does almost every function need?",
+            answers_narration="Series is and, parallel is or. And about two to the n over n gates, by Shannon's counting.")
 
     def payoffs(self):
         card = payoff_card([
@@ -83,26 +87,6 @@ class Outro(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def practice(self):
-        card = practice_card([
-            (r"hardware description", r"Verilog, \ VHDL, \ Chisel: \ circuits written as programs, \ like our netlists"),
-            (r"logic synthesis", r"Yosys, \ ABC, \ commercial tools: \ the laws of chapter one, \ at scale, \ "
-                                 r"with heuristics"),
-            (r"FPGAs", r"lookup tables and programmable wires: \ prototypes, \ networking, \ cloud accelerators"),
-            (r"verification", r"BDD- and SAT-based equivalence checking \ before every chip is made"),
-            (r"timing closure", r"making every critical path fit the clock: \ much of a chip team's year"),
-        ])
-        with self.voiceover(
-            "In practice: hardware engineers write circuits as programs, in Verilog, VHDL or Chisel, much like this "
-            "series' netlists. Synthesis tools apply the laws of chapter one, at enormous scale, to turn those programs "
-            "into gates. FPGAs run them as lookup tables. Equivalence checkers, built on decision diagrams and "
-            "satisfiability solvers, prove the optimized circuit still matches the specification. And a large part of "
-            "every chip project is timing closure: making every critical path fit inside the clock."
-        ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
-                                                     lag_ratio=0.35), run_time=3.0)
-        self.wait(0.3)
-        self.clear_scene()
 
     def problems(self):
         ps = problem_set([

@@ -6,23 +6,24 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs4.common import BG, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, YES, load, sci
 
 
-class Wilkinson(VoiceoverScene):
+class Wilkinson(WatchScene):
     def construct(self):
         self.card()
         self.two_questions()
         self.polynomial()
         self.why()
-        self.lesson()
 
     def card(self):
-        card = chapter_card(12, r"Conditioning and stability", r"Is it the problem or the algorithm?", lit=(1959, 1963),
-                            part=PART)
-        with self.voiceover("Chapter twelve. Conditioning and stability."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Conditioning and stability", r"Is it the problem or the algorithm?", lit=(1959, 1963), part=PART, said="Chapter twelve. Conditioning and stability.")
 
     # ------------------------------------------------------------------
     def two_questions(self):
+        self.wrong_idea(r"If a floating-point answer is wrong, \\ use more bits",
+                        r"An ill-conditioned problem loses accuracy at any precision. \\ The cure is algebra",
+                        narration="When a computed answer comes out wrong, the usual instinct is: use more bits.",
+                        right_narration="Sometimes that works. But if the problem itself is ill conditioned, every extra bit "
+                                        "buys you almost nothing. The cure is a better formulation.")
+        self.clear_scene()
         head = label(r"Two different questions", font_size=38).to_edge(UP, buff=0.35)
         cond = VGroup(label(r"conditioning: \ a property of the \textit{problem}", font_size=30, color=HEAD),
                       MathTex(r"\kappa = \frac{|\Delta f| / |f|}{|\Delta x| / |x|}", font_size=40, color=CODE),
@@ -61,6 +62,11 @@ class Wilkinson(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def polynomial(self):
+        self.ask(r"Wilkinson's polynomial, roots $1, 2, \ldots, 20$. \\ Change one coefficient by $2^{-23}$. The roots...",
+                 [r"barely move", r"move in the seventh digit", r"some turn complex"], 2,
+                 say="Change one coefficient of Wilkinson's polynomial by two to the minus twenty-three. What happens to the "
+                     "roots?",
+                 reveal="Some of them turn complex. Ten pairs of roots fly off the real line.")
         d = load("wilkinson")
         frames = d["frames"]
         head = label(r"Wilkinson's polynomial", font_size=38).to_edge(UP, buff=0.3)
@@ -148,31 +154,3 @@ class Wilkinson(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def lesson(self):
-        head = label(r"What numerical software learned", font_size=38).to_edge(UP, buff=0.4)
-        lines = VGroup(*[label(t, font_size=28, color=c) for t, c in (
-            (r"never find eigenvalues through the characteristic polynomial", GREY_A),
-            (r"QR and FFT: \ stable algorithms; \ pivoted LU: \ watch element growth", YES),
-            (r"report the condition number, \ not just the answer", HEAD),
-            (r"LAPACK, \ numpy, \ MATLAB, \ and every ML framework rest on this theory", GREY_A),
-            (r"more in Part 52, \ \textit{Computing with Real Numbers}", GREY_B),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(DOWN * 0.1)
-        with self.voiceover(
-            "Wilkinson turned that shock into a discipline. <bookmark mark='a'/> Never compute eigenvalues by forming "
-            "a characteristic polynomial and finding its roots in ordinary floating point: rounding the coefficients "
-            "can destroy the information. <bookmark mark='b'/> Choose stable algorithms. Gaussian elimination "
-            "with pivoting usually works well, but its error bound depends on element growth. QR and the fast Fourier transform have stronger stability guarantees. <bookmark mark='c'/> And report how well conditioned a "
-            "problem is along with its answer. <bookmark mark='d'/> Every numerical library we use, LAPACK under "
-            "numpy and MATLAB, and the linear algebra inside every machine learning framework, is built on his "
-            "theory, and Part 52 of this series returns to it in depth."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lines[0]))
-            vo.wait_until("a")
-            self.play(Indicate(lines[0], scale_factor=1.02))
-            for mk, l in zip("bcd", lines[1:4]):
-                vo.wait_until(mk)
-                self.play(FadeIn(l, shift=RIGHT * 0.1))
-            self.play(FadeIn(lines[4]))
-        self.wait(0.3)
-        self.clear_scene()

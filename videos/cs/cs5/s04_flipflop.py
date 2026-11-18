@@ -14,7 +14,7 @@ def box(w, h, text, color=CTRL, font_size=26):
     return VGroup(b, MathTex(text, font_size=font_size, color=color).move_to(b))
 
 
-class FlipFlop(VoiceoverScene):
+class FlipFlop(WatchScene):
     def construct(self):
         self.card()
         self.d_latch()
@@ -22,11 +22,7 @@ class FlipFlop(VoiceoverScene):
         self.registers()
 
     def card(self):
-        card = chapter_card(3, r"Latches, flip-flops \ and the clock", r"How do many bits change at the same moment?",
-                            part=PART)
-        with self.voiceover("Chapter three. Latches, flip-flops and the clock."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Latches, flip-flops \ and the clock", r"How do many bits change at the same moment?", part=PART, said="Chapter three. Latches, flip-flops and the clock.")
 
     # ------------------------------------------------------------------
     def d_latch(self):
@@ -71,6 +67,11 @@ class FlipFlop(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def edge(self):
+        self.ask(r"A transparent latch feeds logic that feeds back into it. \\ What can go wrong?",
+                 [r"nothing", r"the signal races round the loop many times", r"the latch forgets"], 1,
+                 say="A latch stays transparent while its enable is high. If its output feeds logic that loops back to its input, "
+                     "what goes wrong?",
+                 reveal="The signal races round the loop many times while the door is open. Two latches in a row fix it.")
         d = load("latch")["ms"]
         head = label(r"The edge-triggered flip-flop", font_size=38).to_edge(UP, buff=0.35)
         m1 = box(2.0, 1.0, r"\text{master}", DATA).move_to(LEFT * 2.0 + UP * 1.6)

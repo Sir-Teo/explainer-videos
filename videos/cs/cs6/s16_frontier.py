@@ -7,7 +7,7 @@ from videos.cs.cs6.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, 
                                   say)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): how good is the random co-simulation this part relied on?
     Mutation analysis on the emulator; coverage-guided CPU fuzzing; formal specifications and verified processors."""
 
@@ -16,16 +16,10 @@ class Frontier(VoiceoverScene):
         self.mutants()
         self.odds()
         self.fuzzing()
-        self.formal()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ is the processor right?", r"How much can random tests prove?",
-                            lit=(1994, 2017, 2024), part=PART,
-                            extra=((1994, r"the Pentium FDIV bug, found by hand"), (2017, r"Kami: a verified RISC-V core"),
-                                   (2024, r"Cascade: 37 CPU bugs")))
-        with self.voiceover("Chapter fifteen. Frontier: is the processor right?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ is the processor right?", r"How much can random tests prove?", lit=(1994, 2017, 2024), part=PART, extra=((1994, r"the Pentium FDIV bug, found by hand"), (2017, r"Kami: a verified RISC-V core"),
+                                   (2024, r"Cascade: 37 CPU bugs")), said="Chapter fifteen. Frontier: is the processor right?")
 
     # ------------------------------------------------------------------
     def mutants(self):
@@ -79,6 +73,11 @@ class Frontier(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def odds(self):
+        self.ask(r"Each random test catches a bug one time in a thousand. \\ Tests for a 99\% chance of seeing it?",
+                 [r"about 100", r"about 4{,}600", r"about a million"], 1,
+                 say="Each random test has a one in a thousand chance of catching a bug. How many tests give a ninety-nine "
+                     "percent chance of seeing it?",
+                 reveal="About four thousand six hundred, if the tests really are independent.")
         d = load("mutants")
         head = label(r"How many programs are enough?", font_size=36).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 6, 1], y_range=[0, 1, 0.25], x_length=6.6, y_length=3.8, tips=False,
@@ -200,35 +199,3 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def formal(self):
-        head = label(r"Or prove it", font_size=36).to_edge(UP, buff=0.35)
-        rows = VGroup(
-            label("\\textbf{executable specification.} \\ RISC-V Sail: \\ a formal model of supported ISA features; \\\\ useful for testing and proof, \\ not itself a processor-correctness proof",
-                  font_size=21, color=CTRL),
-            label("\\textbf{verified designs.} \\ Kami (2017): \\ pipelined RISC-V designs in Coq; \\\\ Silver + CakeML (2019): \\ connected hardware and compiler proofs, \\ with stated assumptions",
-                  font_size=21, color=YES),
-            label("\\textbf{scaling the argument.} \\ abstract OoO proofs and selected industrial checks exist; \\\\ full correctness and speculative-leakage security depend on models and threat boundaries", font_size=21,
-                  color=NO),
-            label("\\textbf{research exercise:} \\ specify operand classes, \\ then establish generator coverage; \\\\ scaling useful guarantees to realistic state spaces remains difficult", font_size=22, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to(DOWN * 0.1)
-        with self.voiceover(
-            "The alternative to testing is proof. <bookmark mark='a'/> It starts with a specification precise enough "
-            "to prove things about. The RISC-V Sail model uses a language for instruction-set semantics to describe "
-            "supported features precisely. It is a reference for testing and mechanized reasoning; the model alone "
-            "does not prove a processor correct. <bookmark mark='b'/> In 2017 the Kami project proved, in the Coq "
-            "proof assistant, that pipelined RISC-V processors implement the instruction set, and CakeML's Silver "
-            "processor runs code from a verified compiler on verified hardware. <bookmark mark='c'/> Proofs also exist"
-            " for abstract out-of-order machines and selected industrial properties. Scaling complete correctness and "
-            "security arguments to complex speculative implementations remains difficult, with explicit models, "
-            "assumptions and threat boundaries; Part 55 examines speculative leakage. <bookmark mark='d'/> For this "
-            "part's research exercise, define exactly which operand classes a generator covers, then check that claim."
-            " Extending useful guarantees to realistic state spaces is a research challenge; finite coverage "
-            "guarantees and proof-guided test generation already exist."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rows[0]))
-            for i, (mk, r) in enumerate(zip("abcd", rows)):
-                vo.wait_until(mk)
-                self.play(Indicate(r, scale_factor=1.02) if i == 0 else FadeIn(r, shift=UP * 0.1))
-        self.wait(0.3)
-        self.clear_scene()

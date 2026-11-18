@@ -34,7 +34,7 @@ def truth_grid(d, cw=0.3, ch=0.152):
     return g
 
 
-class Control(VoiceoverScene):
+class Control(WatchScene):
     def construct(self):
         self.card()
         self.table()
@@ -42,11 +42,7 @@ class Control(VoiceoverScene):
         self.microcode()
 
     def card(self):
-        card = chapter_card(5, r"The control unit", r"How does a word of bits steer the datapath?", lit=(1951,),
-                            part=PART)
-        with self.voiceover("Chapter five. The control unit."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The control unit", r"How does a word of bits steer the datapath?", lit=(1951,), part=PART, said="Chapter five. The control unit.")
 
     # ------------------------------------------------------------------
     def table(self):
@@ -154,6 +150,10 @@ class Control(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def microcode(self):
+        self.ask(r"Machines of the 1960s and 1970s, like IBM's System/360. \\ Their control was mostly...",
+                 [r"hard-wired gates", r"microcode: a program inside the processor"], 1,
+                 say="How did most big machines of the sixties and seventies generate their control signals?",
+                 reveal="With microcode: a little program inside the processor, one row of signals per step.")
         d = load("control")
         head = label(r"Microcode \ (Wilkes, 1951)", font_size=38).to_edge(UP, buff=0.35)
         rows, cols = 8, 10

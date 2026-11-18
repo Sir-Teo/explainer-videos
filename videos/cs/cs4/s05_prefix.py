@@ -28,21 +28,16 @@ def network(levels, x0=4.6, dx=0.6, y0=2.15, dy=0.6, color=HEAD):
     return rails, tops, per_level, outs
 
 
-class Prefix(VoiceoverScene):
+class Prefix(WatchScene):
     def construct(self):
         self.card()
         self.gpk()
-        self.lookahead()
         self.operator()
         self.networks()
         self.compare()
 
     def card(self):
-        card = chapter_card(4, r"Carries in parallel", r"Can every carry be known at once?", lit=(1960, 1973),
-                            part=PART)
-        with self.voiceover("Chapter four. Carries in parallel."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Carries in parallel", r"Can every carry be known at once?", lit=(1960, 1973), part=PART, said="Chapter four. Carries in parallel.")
 
     # ------------------------------------------------------------------
     def gpk(self):
@@ -88,41 +83,6 @@ class Prefix(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def lookahead(self):
-        head = label(r"Unroll the recurrence: \ carry lookahead", font_size=36).to_edge(UP, buff=0.35)
-        lines = VGroup(
-            MathTex(r"c_1 = g_0 + p_0 c_0", font_size=34),
-            MathTex(r"c_2 = g_1 + p_1 g_0 + p_1 p_0 c_0", font_size=34),
-            MathTex(r"c_3 = g_2 + p_2 g_1 + p_2 p_1 g_0 + p_2 p_1 p_0 c_0", font_size=34),
-            MathTex(r"c_4 = g_3 + p_3 g_2 + p_3 p_2 g_1 + p_3 p_2 p_1 g_0 + p_3 p_2 p_1 p_0 c_0", font_size=34),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(UP * 0.7)
-        for l in lines:
-            l.set_color(CODE)
-        read = label(r"``a carry reaches position 4 if some position generated one, \\ and every position after it "
-                     r"propagated''", font_size=26, color=GREY_A).next_to(lines, DOWN, buff=0.45)
-        cost = label(r"two levels of gates for every carry, \ but the terms grow like $n^2$, \ and the gates need "
-                     r"$O(n)$ inputs", font_size=26, color=NO).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "One idea is to unroll the recurrence. <bookmark mark='a'/> The carry into position one is g zero, or p "
-            "zero and the carry in. Substitute that into the next one, and the next. <bookmark mark='b'/> The carry "
-            "into position four reads like a sentence: a carry arrives if some position generated one and every "
-            "position after it propagated it. <bookmark mark='c'/> In principle every carry is now two levels of gates, "
-            "an and of p's and a g, then an or. In practice including the incoming carry, carry n has n plus one terms with up to n plus one inputs "
-            "each, and gates with dozens of inputs are slow. Real carry-lookahead adders use this for groups of four "
-            "bits, then treat each group as one big position and do it again. That repetition is the real idea, and "
-            "it has a beautiful algebra."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lines[0]))
-            vo.wait_until("a")
-            self.play(Indicate(lines[0], scale_factor=1.03))
-            self.play(FadeIn(lines[1]), FadeIn(lines[2]))
-            vo.wait_until("b")
-            self.play(FadeIn(lines[3]), FadeIn(read))
-            vo.wait_until("c")
-            self.play(FadeIn(cost))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def operator(self):
@@ -244,6 +204,9 @@ class Prefix(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def compare(self):
+        self.ask(r"The Kogge--Stone adder for 16 bits. \\ How many levels deep?", [r"15", r"4", r"1"], 1,
+                 say="The ripple chain for sixteen bits is fifteen levels deep. How deep is Kogge and Stone's tree?",
+                 reveal="Four: log base two of sixteen, at the price of many more combining cells.")
         d = load("prefix")
         head = label(r"Three ways to compute every carry", font_size=36).to_edge(UP, buff=0.4)
         rows = VGroup()
@@ -282,3 +245,10 @@ class Prefix(VoiceoverScene):
             self.play(FadeIn(bound))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does every computer use two's complement?", r"One adder serves both signed and unsigned numbers"),
+             (r"Why is a ripple adder slow?", r"The carry has to pass through every bit")],
+            narration="Checkpoint. Why does every computer store negative numbers in two's complement? And why is the ripple "
+                      "adder slow?",
+            answers_narration="Because one adder then works for signed and unsigned numbers alike. And because the carry has "
+                              "to pass through every bit, one after another.")

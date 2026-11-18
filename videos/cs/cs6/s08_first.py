@@ -11,7 +11,7 @@ def mono(s, size=19, color=CODE):
     return Text(s, font="DejaVu Sans Mono", font_size=size, color=color)
 
 
-class First(VoiceoverScene):
+class First(WatchScene):
     def construct(self):
         self.card()
         self.sum()
@@ -19,11 +19,7 @@ class First(VoiceoverScene):
         self.verify()
 
     def card(self):
-        card = chapter_card(7, r"First programs, \ gate by gate", r"Does the pile of gates really compute?",
-                            part=PART)
-        with self.voiceover("Chapter seven. First programs, gate by gate."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"First programs, \ gate by gate", r"Does the pile of gates really compute?", part=PART, said="Chapter seven. First programs, gate by gate.")
 
     def listing(self, d, x=-3.6, size=19):
         src = d["source"]
@@ -133,6 +129,10 @@ class First(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def verify(self):
+        self.ask(r"The gate-level machine agrees with the emulator \\ on hundreds of random programs. That proves...",
+                 [r"the gates are right", r"they agree on what was tried"], 1,
+                 say="The gate-level machine agrees with the emulator on hundreds of random programs. What does that prove?",
+                 reveal="That they agree on what was tried. Chapter fifteen asks how much more that is worth.")
         c = load("cosim")
         st = c["styles"]
         head = label(r"Is the gate-level machine right?", font_size=38).to_edge(UP, buff=0.35)

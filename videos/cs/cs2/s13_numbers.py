@@ -30,20 +30,16 @@ class Clock(VGroup):
         self.add(self.title)
 
 
-class Numbers(VoiceoverScene):
+class Numbers(WatchScene):
     def construct(self):
         self.card()
         self.bezout()
         self.clocks()
         self.inverse()
         self.crt()
-        self.unique()
 
     def card(self):
-        card = chapter_card(12, r"Numbers", r"What can you do with remainders?", part=PART)
-        with self.voiceover("Chapter twelve. Numbers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Numbers", r"What can you do with remainders?", part=PART, said="Chapter twelve. Numbers.")
 
     # ------------------------------------------------------------------
     def bezout(self):
@@ -96,6 +92,9 @@ class Numbers(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def clocks(self):
+        self.ask(r"The last digit of $7^{100}$?", [r"1", r"3", r"7", r"9"], 0,
+                 say="Seven to the hundredth has eighty-five digits. What is the last one?",
+                 reveal="One. Powers of seven end in a cycle of four: seven, nine, three, one.")
         head = label(r"Arithmetic on a clock", font_size=38).to_edge(UP, buff=0.35)
         c = Clock(10, radius=1.6).move_to(LEFT * 3.4 + DOWN * 0.3)
         defn = MathTex(r"a \equiv b \pmod m \iff m \mid a - b", font_size=38, color=CLOCK).move_to(RIGHT * 2.8 + UP * 1.8)
@@ -209,39 +208,3 @@ class Numbers(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def unique(self):
-        head = label(r"The fundamental theorem of arithmetic", font_size=38).to_edge(UP, buff=0.35)
-        stmt = label(r"every $n \ge 2$ is a product of primes \ in exactly one way \ (up to order)", font_size=30,
-                     color=DATA).next_to(head, DOWN, buff=0.4)
-        ex = MathTex(r"360 = 2^3 \cdot 3^2 \cdot 5", font_size=44, color=YES).next_to(stmt, DOWN, buff=0.45)
-        steps = VGroup(*[label(t, font_size=27, color=c) for t, c in (
-            (r"existence: \ chapter 3, \ by strong induction", GREY_A),
-            (r"uniqueness needs Euclid's lemma: \ if $p \mid ab$, \ then $p \mid a$ or $p \mid b$", CTRL),
-            (r"proof: \ if $p \nmid a$, \ Bezout gives $ps + at = 1$; \ multiply by $b$: \ $p \mid psb + abt = b$",
-             HEAD),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(ex, DOWN, buff=0.55)
-        warn = note(r"it fails in other number systems: \ in $\mathbb{Z}[\sqrt{-5}]$, \ $6 = 2 \cdot 3 = "
-                    r"(1 + \sqrt{-5})(1 - \sqrt{-5})$", font_size=22).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "One last theorem, which most people learn without ever seeing why it is true. <bookmark mark='a'/> Every "
-            "number from two up is a product of primes, in exactly one way, apart from the order. Three hundred and "
-            "sixty is two cubed, times three squared, times five, and nothing else. <bookmark mark='b'/> That a "
-            "factorization exists, chapter three proved by strong induction. That it is unique needs a lemma of "
-            "Euclid's: if a prime divides a product, it divides one of the factors. <bookmark mark='c'/> And that lemma "
-            "falls out of Bézout. If p does not divide a, then p s plus a t equals one for some s and t; multiply by b, "
-            "and p divides both terms on the left, so it divides b. <bookmark mark='d'/> It is not a triviality: in "
-            "other number systems it fails, and six factors in two different ways. Unique factorization is why the "
-            "hardness of factoring, the thing RSA bets on, is even a well-posed question."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(stmt), Write(ex))
-            vo.wait_until("b")
-            self.play(FadeIn(steps[0]), FadeIn(steps[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(steps[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(warn))
-        self.wait(0.3)
-        self.clear_scene()

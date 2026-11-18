@@ -7,7 +7,7 @@ from videos.cs.cs4.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD,
                                   load, say)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): how fast two numbers can be multiplied, and whether the
     functions of a math library can all be correctly rounded; both measured on the machine that renders the video."""
 
@@ -19,13 +19,9 @@ class Frontier(VoiceoverScene):
         self.dilemma()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ arithmetic's open questions", r"How fast can we multiply, \ and how exactly "
-                            r"can we compute $e^x$?", lit=(1971, 2019, 2022), part=PART,
-                            extra=((1971, r"Sch\"onhage and Strassen"), (2019, r"multiplication in $O(n \log n)$"),
-                                   (2022, r"CORE-MATH")))
-        with self.voiceover("Chapter fifteen. Frontier: arithmetic's open questions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ arithmetic's open questions", r"How fast can we multiply, \ and how exactly "
+                            r"can we compute $e^x$?", lit=(1971, 2019, 2022), part=PART, extra=((1971, r"Sch\"onhage and Strassen"), (2019, r"multiplication in $O(n \log n)$"),
+                                   (2022, r"CORE-MATH")), said="Chapter fifteen. Frontier: arithmetic's open questions.")
 
     # ------------------------------------------------------------------
     def multiply(self):
@@ -79,6 +75,9 @@ class Frontier(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def record(self):
+        self.ask(r"The fastest known way to multiply two $n$-digit numbers?", [r"$n^2$", r"$n^{1.58}$", r"$n \log n$"], 2,
+                 say="School multiplication takes n squared steps. What is the fastest known?",
+                 reveal="n log n, proved by Harvey and van der Hoeven in 2019.")
         head = label(r"The race to $n \log n$", font_size=36).to_edge(UP, buff=0.3)
         rows = [
             (r"antiquity", r"n^2", r"schoolbook", GREY_A),

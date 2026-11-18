@@ -11,7 +11,7 @@ def mono(s, size=19, color=CODE):
     return Text(s, font="DejaVu Sans Mono", font_size=size, color=color)
 
 
-class Io(VoiceoverScene):
+class Io(WatchScene):
     def construct(self):
         self.card()
         self.map()
@@ -19,13 +19,14 @@ class Io(VoiceoverScene):
         self.tape()
 
     def card(self):
-        card = chapter_card(9, r"Talking to the world", r"How does a program print a letter?", lit=(1970,), part=PART)
-        with self.voiceover("Chapter nine. Talking to the world."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Talking to the world", r"How does a program print a letter?", lit=(1970,), part=PART, said="Chapter nine. Talking to the world.")
 
     # ------------------------------------------------------------------
     def map(self):
+        self.ask(r"Pebble has no input or output instructions. \\ How does it print?",
+                 [r"it can't", r"it stores to a special address", r"it asks the operating system"], 1,
+                 say="Pebble has no instructions for input or output. So how does it print?",
+                 reveal="It stores to a special address. The address alone decides who answers.")
         head = label(r"Devices live at addresses", font_size=38).to_edge(UP, buff=0.35)
         bar = Rectangle(width=1.4, height=5.6, stroke_color=GREY_B, stroke_width=2).move_to(LEFT * 3.6 + DOWN * 0.3)
         ram = Rectangle(width=1.4, height=1.3, stroke_width=0, fill_color=DATA, fill_opacity=0.35).align_to(bar, DOWN)

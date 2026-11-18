@@ -22,7 +22,7 @@ def mod6(colors=None):
     return sd
 
 
-class Nerode(VoiceoverScene):
+class Nerode(WatchScene):
     def construct(self):
         self.card()
         self.languages()
@@ -31,11 +31,7 @@ class Nerode(VoiceoverScene):
         self.bridge()
 
     def card(self):
-        card = chapter_card(7, r"Machines and languages", r"What is the smallest machine for a job?", lit=(1957, 1958, 1971),
-                            part=PART)
-        with self.voiceover("Chapter seven. Machines and languages."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Machines and languages", r"What is the smallest machine for a job?", lit=(1957, 1958, 1971), part=PART, said="Chapter seven. Machines and languages.")
 
     # ------------------------------------------------------------------
     def languages(self):
@@ -66,6 +62,9 @@ class Nerode(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def theorem(self):
+        self.ask(r"Binary numbers divisible by three, read from the top bit. \\ The fewest states?", [r"2", r"3", r"8"], 1,
+                 say="What's the smallest machine that recognises binary numbers divisible by three?",
+                 reveal="Three states, one per remainder, and Myhill and Nerode prove no machine does better.")
         head = label(r"The Myhill--Nerode theorem \ (1958)", font_size=38).to_edge(UP, buff=0.35)
         defn = VGroup(
             label(r"two prefixes $x$ and $y$ are \textit{equivalent} if no suffix tells them apart:", font_size=26,

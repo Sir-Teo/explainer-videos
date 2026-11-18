@@ -8,7 +8,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs3.common import CODE, COST, CTRL, DATA, FUNC, HEAD, INF, LIMIT, NO, PART, WIRE, YES, gate, load, wire
 
 
-class Complexity(VoiceoverScene):
+class Complexity(WatchScene):
     def construct(self):
         self.card()
         self.size_depth()
@@ -18,10 +18,7 @@ class Complexity(VoiceoverScene):
         self.gap()
 
     def card(self):
-        card = chapter_card(9, r"How many gates?", r"How big must a circuit be?", part=PART)
-        with self.voiceover("Chapter nine. How many gates?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"How many gates?", r"How big must a circuit be?", part=PART, said="Chapter nine. How many gates?")
 
     # ------------------------------------------------------------------
     def size_depth(self):
@@ -84,6 +81,10 @@ class Complexity(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def counting(self):
+        self.ask(r"A random function of 30 inputs. \\ About how many gates does it need?",
+                 [r"about 30", r"about 900", r"tens of millions"], 2,
+                 say="Pick a function of thirty inputs at random. About how many gates does it need?",
+                 reveal="Tens of millions: two to the n over n. Almost every function is hopelessly hard.")
         head = label(r"Shannon's counting argument \ (1949)", font_size=38).to_edge(UP, buff=0.35)
         lhs = VGroup(label(r"functions of $n$ inputs:", font_size=30, color=GREY_A),
                      MathTex(r"2^{2^n}", font_size=56, color=FUNC)).arrange(DOWN, buff=0.25).move_to(LEFT * 3.6 + UP * 0.9)

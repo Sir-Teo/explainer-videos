@@ -6,21 +6,16 @@ from videos.cs.cs2.common import ADV, CODE, CTRL, DATA, HEAD, NO, PART, YES, tru
 TF = [(True, True), (True, False), (False, True), (False, False)]
 
 
-class Logic(VoiceoverScene):
+class Logic(WatchScene):
     def construct(self):
         self.card()
         self.connectives()
         self.implication()
-        self.equivalence()
         self.quantifiers()
         self.game()
 
     def card(self):
-        card = chapter_card(1, r"The grammar of truth", r"What exactly does a statement say?", lit=(1854, 1879),
-                            part=PART)
-        with self.voiceover("Chapter one. The grammar of truth."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The grammar of truth", r"What exactly does a statement say?", lit=(1854, 1879), part=PART, said="Chapter one. The grammar of truth.")
 
     # ------------------------------------------------------------------
     def connectives(self):
@@ -61,6 +56,10 @@ class Logic(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def implication(self):
+        self.ask(r"``If it rains, I'll bring an umbrella.'' \\ It doesn't rain, and I don't. \\ Did I keep my promise?",
+                 [r"yes", r"no", r"neither: it doesn't apply"], 0,
+                 say="If it rains, I'll bring an umbrella. It doesn't rain, and I don't bring one. Did I keep my promise?",
+                 reveal="Yes. A promise about rain can't be broken on a dry day: the implication is true.")
         head = label(r"If $P$, then $Q$", font_size=40).to_edge(UP, buff=0.4)
         rows = [[p, q, (not p) or q] for p, q in TF]
         tt = truth_table([r"P", r"Q", r"P \Rightarrow Q"], rows, font_size=36, col_w=1.8,
@@ -96,47 +95,6 @@ class Logic(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def equivalence(self):
-        head = label(r"Equivalent statements: \ the same truth table", font_size=38).to_edge(UP, buff=0.4)
-        # P => Q, its contrapositive (not Q) => (not P), and its converse Q => P
-        rows = [[p, q, (not p) or q, q or (not p), (not q) or p] for p, q in TF]
-        tt = truth_table([r"P", r"Q", r"P \Rightarrow Q", r"\neg Q \Rightarrow \neg P", r"Q \Rightarrow P"],
-                         rows, font_size=32, col_w=2.1,
-                         colors={0: DATA, 1: DATA, 2: CTRL, 3: YES, 4: NO}).move_to(UP * 0.1)
-        lab = VGroup(note(r"implication", font_size=22), note(r"contrapositive", font_size=22),
-                     note(r"converse", font_size=22))
-        for l_, j in zip(lab, (2, 3, 4)):
-            l_.next_to(tt.cells[0][j], UP, buff=0.22)
-        same = SurroundingRectangle(VGroup(*[tt.cells[i][j] for i in range(1, 5) for j in (2, 3)]), color=YES,
-                                    buff=0.12, corner_radius=0.1)
-        diff = VGroup(*[SurroundingRectangle(tt.cells[i][4], color=NO, buff=0.1) for i in (2, 3)])
-        dm = VGroup(MathTex(r"\neg(P \wedge Q) \equiv \neg P \vee \neg Q", font_size=36, color=CODE),
-                    MathTex(r"\neg(P \vee Q) \equiv \neg P \wedge \neg Q", font_size=36, color=CODE)).arrange(
-            RIGHT, buff=1.0).to_edge(DOWN, buff=0.7)
-        dml = note(r"De Morgan's laws, \ checked the same way", font_size=22).next_to(dm, UP, buff=0.18)
-        with self.voiceover(
-            "Two statements are equivalent when they have the same truth table: they say the same thing. "
-            "<bookmark mark='a'/> If P then Q, and if not Q then not P, agree on all four rows. The second is the "
-            "contrapositive. The hook's proof used it: if a position is reachable, its sum is even; so, if the sum is "
-            "odd, the position is not reachable. <bookmark mark='b'/> But if Q then P, the converse, disagrees in two "
-            "rows. Mixing up a statement and its converse is the most common error in all of reasoning. "
-            "<bookmark mark='c'/> De Morgan's laws, which say how not passes through and and or, are checked the same "
-            "way. With n variables a table has two to the n rows. Checking is easy; it is just long. Whether it can "
-            "always be done quickly is Part 26."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*[VGroup(*c) for c in tt.cells[:1]])), FadeIn(tt.rule),
-                      FadeIn(VGroup(*[VGroup(*r[:3]) for r in tt.rows])), FadeIn(lab[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(VGroup(*[r[3] for r in tt.rows])), FadeIn(lab[1]))
-            self.play(Create(same))
-            vo.wait_until("b")
-            self.play(FadeIn(VGroup(*[r[4] for r in tt.rows])), FadeIn(lab[2]))
-            self.play(Create(diff))
-            vo.wait_until("c")
-            self.play(FadeIn(dml), FadeIn(dm))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def quantifiers(self):

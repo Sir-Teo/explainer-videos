@@ -7,7 +7,7 @@ from explainer.cs.gates import junction
 from videos.cs.cs3.common import CODE, COST, CTRL, DATA, HEAD, NO, PART, WIRE, YES, gate, load, wire
 
 
-class Simulator(VoiceoverScene):
+class Simulator(WatchScene):
     def construct(self):
         self.card()
         self.netlist()
@@ -16,11 +16,7 @@ class Simulator(VoiceoverScene):
         self.verify()
 
     def card(self):
-        card = chapter_card(12, r"Our hardware layer", r"How will this series simulate a computer, gate by gate?",
-                            part=PART)
-        with self.voiceover("Chapter twelve. Our hardware layer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Our hardware layer", r"How will this series simulate a computer, gate by gate?", part=PART, said="Chapter twelve. Our hardware layer.")
 
     # ------------------------------------------------------------------
     def netlist(self):
@@ -101,6 +97,10 @@ class Simulator(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def bitparallel(self):
+        self.ask(r"Check an 8-bit comparator \\ on all 65{,}536 inputs, in Python. \\ How long?",
+                 [r"a fraction of a second", r"about a minute", r"about an hour"], 0,
+                 say="Check an eight-bit comparator on every one of its sixty-five thousand inputs, in Python. How long?",
+                 reveal="A fraction of a second: sixty-four test cases ride in every machine word.")
         head = label(r"64 tests at once", font_size=38).to_edge(UP, buff=0.35)
         rng = np.random.default_rng(3)
         a = rng.integers(0, 2, 24)

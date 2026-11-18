@@ -35,20 +35,16 @@ def tt_table(header, rows, font_size=26, col_colors=None):
     return VGroup(g, line)
 
 
-class Ripple(VoiceoverScene):
+class Ripple(WatchScene):
     def construct(self):
         self.card()
         self.by_hand()
         self.half_full()
         self.chain()
-        self.induction()
         self.slow()
 
     def card(self):
-        card = chapter_card(3, r"Adding, one bit at a time", r"How do gates add two numbers?", lit=(1937,), part=PART)
-        with self.voiceover("Chapter three. Adding, one bit at a time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Adding, one bit at a time", r"How do gates add two numbers?", lit=(1937,), part=PART, said="Chapter three. Adding, one bit at a time.")
 
     # ------------------------------------------------------------------
     def by_hand(self):
@@ -193,46 +189,14 @@ class Ripple(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def induction(self):
-        head = label(r"Why it is right: \ induction on the bits", font_size=38).to_edge(UP, buff=0.35)
-        claim = MathTex(r"\sum_{i<k} s_i\, 2^i \; + \; c_k\, 2^k \;=\; \sum_{i<k} (a_i + b_i)\, 2^i \; + \; c_{in}",
-                        font_size=40, color=CODE).move_to(UP * 1.6)
-        cap = label(r"the claim, \ for the first $k$ adders", font_size=26, color=GREY_A).next_to(claim, DOWN, buff=0.25)
-        base = MathTex(r"k = 0: \quad c_0 = c_{in}", font_size=34, color=GREY_A).move_to(LEFT * 3.4 + DOWN * 0.4)
-        step = VGroup(MathTex(r"k \to k + 1:", font_size=34, color=GREY_A),
-                      MathTex(r"a_k + b_k + c_k = s_k + 2\, c_{k+1}", font_size=34, color=HEAD),
-                      label(r"(what one full adder does)", font_size=22, color=GREY_B)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.2).move_to(RIGHT * 2.2 + DOWN * 0.6)
-        mult = MathTex(r"\times\, 2^k \ \text{and add to the claim for } k", font_size=28, color=GREY_A).next_to(
-            step, DOWN, buff=0.3).align_to(step, LEFT)
-        done = label(r"at $k = n$: \ the $n$ sum bits and $c_{out}$ are exactly $a + b + c_{in}$", font_size=28,
-                     color=YES).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "Why is the chain right? By induction, as in Part 2. <bookmark mark='a'/> The claim: after the first k "
-            "adders, the k sum bits plus the carry coming out of them, worth two to the k, equal the sum of the low k "
-            "bits of a and b, plus the carry in. <bookmark mark='b'/> For k equal to zero there are no bits, and the "
-            "carry is the carry in. <bookmark mark='c'/> For the step, one more full adder does exactly what its truth "
-            "table says: its three inputs add up to its sum bit plus twice its carry out. Multiply that by two to the k "
-            "and add it to the claim for k: the old carry term cancels, and the claim for k plus one appears. "
-            "<bookmark mark='d'/> At k equal to n, it says the adder's outputs are exactly a plus b plus the carry in. "
-            "Correct for every one of the two to the two n plus one inputs, and we never had to try them."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(claim))
-            vo.wait_until("a")
-            self.play(Indicate(claim, scale_factor=1.02), FadeIn(cap))
-            vo.wait_until("b")
-            self.play(FadeIn(base))
-            vo.wait_until("c")
-            self.play(FadeIn(step, lag_ratio=0.2))
-            self.play(FadeIn(mult))
-            vo.wait_until("d")
-            self.play(FadeIn(done))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def slow(self):
+        self.ask(r"An 8-bit ripple adder adds 1 to $0111\\,1111$. \\ How long until the answer settles?",
+                 [r"one full-adder delay", r"eight full-adder delays", r"sixty-four"], 1,
+                 say="An eight-bit ripple adder adds one to zero one one one one one one one. How long until the answer is "
+                     "ready?",
+                 reveal="Eight full-adder delays: the carry walks through every bit.")
         d = load("adders")
         ex = d["ripple_example"]
         times = ex["carry_times"]

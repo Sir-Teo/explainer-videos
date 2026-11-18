@@ -6,18 +6,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs4.common import BG, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, YES, bit_cells, load
 
 
-class Fixed(VoiceoverScene):
+class Fixed(WatchScene):
     def construct(self):
         self.card()
         self.qformat()
-        self.money()
         self.range_()
 
     def card(self):
-        card = chapter_card(9, r"Fixed point", r"How do integers hold fractions?", part=PART)
-        with self.voiceover("Chapter nine. Fixed point."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Fixed point", r"How do integers hold fractions?", part=PART, said="Chapter nine. Fixed point.")
 
     # ------------------------------------------------------------------
     def qformat(self):
@@ -56,42 +52,13 @@ class Fixed(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def money(self):
-        head = label(r"Money is counted in cents", font_size=38).to_edge(UP, buff=0.35)
-        left = VGroup(label(r"Python binary64", font_size=28, color=NO),
-                      Text("0.10 + 0.20 == 0.30\n→ False", font="DejaVu Sans Mono", font_size=26, color=GREY_A),
-                      Text("s = 0.0\nfor _ in range(10): s += 0.10\n→ 0.9999999999999999", font="DejaVu Sans Mono", font_size=26,
-                           color=GREY_A)).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to(LEFT * 3.4 + UP * 0.4)
-        right = VGroup(label(r"integer cents", font_size=28, color=YES),
-                       Text("10 + 20 == 30\n→ True", font="DejaVu Sans Mono", font_size=26, color=GREY_A),
-                       Text("sum([10] * 10)\n→ 100", font="DejaVu Sans Mono", font_size=26, color=GREY_A)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.35).move_to(RIGHT * 3.2 + UP * 0.4)
-        why = label(r"a tenth has no finite binary expansion: \ $0.1 = 0.0\overline{0011}_2$", font_size=28,
-                    color=HEAD).to_edge(DOWN, buff=1.1)
-        rule = note(r"banks, payment systems and databases store money as integers \ (or decimal types), \ and fix "
-                    r"the rounding rule in writing", font_size=22).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "Money makes the representation choice visible. <bookmark mark='a'/> In Python binary64, zero point one "
-            "plus zero point two differs from the stored zero point three. An explicit loop adding a tenth ten "
-            "times falls just below one. Python's built-in sum can do better, so here we show the loop itself. <bookmark mark='b'/> Counted as integers, in cents, every sum is exact. "
-            "<bookmark mark='c'/> The root cause is that one tenth has no finite expansion in binary, just as one third "
-            "has none in decimal: it is zero point zero, then zero zero one one, repeating forever, and any format "
-            "with finitely many bits must round it. So financial software keeps money in integer cents, or in decimal "
-            "types, and writes down exactly how and when to round."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(left[:2]))
-            vo.wait_until("a")
-            self.play(FadeIn(left[2]), run_time=1.0)
-            vo.wait_until("b")
-            self.play(FadeIn(right, lag_ratio=0.3), run_time=2.0)
-            vo.wait_until("c")
-            self.play(FadeIn(why), FadeIn(rule))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def range_(self):
+        self.ask(r"One 32-bit fixed-point format. \\ Can it hold an electron's mass and the Sun's?",
+                 [r"yes", r"no"], 1,
+                 say="Could one thirty-two-bit fixed-point format hold both the mass of an electron and the mass of the Sun?",
+                 reveal="No. Sixty orders of magnitude don't fit on an evenly spaced ruler.")
         head = label(r"What fixed point cannot do: \ range", font_size=38).to_edge(UP, buff=0.35)
         ax = NumberLine(x_range=[-40, 40, 10], length=12.0, color=GREY_C).move_to(UP * 0.3)
         ticks = VGroup(*[MathTex(rf"10^{{{k}}}", font_size=22, color=GREY_B).next_to(ax.n2p(k), DOWN, buff=0.15)

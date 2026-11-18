@@ -6,23 +6,24 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs2.common import COST, CTRL, DATA, FUNC, HEAD, NO, PART, YES, load
 
 
-class Pigeonhole(VoiceoverScene):
+class Pigeonhole(WatchScene):
     def construct(self):
         self.card()
         self.basic()
         self.monotone()
         self.proof()
-        self.random()
         self.compression()
 
     def card(self):
-        card = chapter_card(9, r"Pigeons", r"What must happen, just because there is not enough room?", part=PART)
-        with self.voiceover("Chapter nine. Pigeons."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Pigeons", r"What must happen, just because there is not enough room?", part=PART, said="Chapter nine. Pigeons.")
 
     # ------------------------------------------------------------------
     def basic(self):
+        self.ask(r"London: about nine million people, \\ none with more than 150{,}000 hairs. \\ Must some share a hair "
+                 r"count?", [r"no", r"yes, at least two", r"yes, at least sixty"], 2,
+                 say="London has about nine million people, and nobody has more than a hundred and fifty thousand hairs. "
+                     "Must some of them have exactly the same number?",
+                 reveal="Yes, at least sixty of them, by the pigeonhole principle.")
         head = label(r"The pigeonhole principle", font_size=38).to_edge(UP, buff=0.35)
         holes = VGroup(*[RoundedRectangle(width=1.1, height=1.0, corner_radius=0.1, stroke_color=GREY_B,
                                           stroke_width=2) for _ in range(6)]).arrange(RIGHT, buff=0.3).move_to(DOWN * 0.6)
@@ -140,47 +141,6 @@ class Pigeonhole(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def random(self):
-        d = load("monotone")
-        head = label(r"Sharp, \ and what random orders do", font_size=38).to_edge(UP, buff=0.35)
-        t = d["tight"]
-        pts = [np.array([-5.2 + i * 0.6, -1.4 + v * 0.32, 0]) for i, v in enumerate(t)]
-        dots = VGroup(*[Dot(p, radius=0.09, color=DATA) for p in pts])
-        tl = label(r"$9 = 3^2$ numbers \\ with no run of $4$", font_size=26, color=GREY_A).next_to(dots, UP, buff=0.4)
-        seq_t = MathTex(r"3,2,1,\ 6,5,4,\ 9,8,7", font_size=30, color=DATA).next_to(dots, DOWN, buff=0.3)
-        rows = VGroup()
-        hdr = VGroup(MathTex("n", font_size=30), MathTex(r"\text{longest increasing (mean)}", font_size=28),
-                     MathTex(r"\div \sqrt n", font_size=30))
-        rows.add(hdr)
-        for r in d["random"]:
-            rows.add(VGroup(MathTex(f"{r['n']:,}".replace(",", "{,}"), font_size=30, color=DATA),
-                            MathTex(f"{r['mean']:.1f}", font_size=30, color=CTRL),
-                            MathTex(f"{r['ratio']:.2f}", font_size=30, color=YES)))
-        for r in rows:
-            r[0].move_to(RIGHT * 0.6)
-            r[1].move_to(RIGHT * 3.3)
-            r[2].move_to(RIGHT * 5.8)
-        for i, r in enumerate(rows):
-            r.shift(UP * (1.6 - 0.58 * i))
-        cap = note(r"random permutations, \ computed; \ the ratio tends to $2$ \ (Vershik--Kerov, Logan--Shepp, 1977)",
-                   font_size=22).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "The bound is sharp. <bookmark mark='a'/> Three, two, one, six, five, four, nine, eight, seven: nine "
-            "numbers, and the longest run either way is three. <bookmark mark='b'/> And for a random order of n numbers, "
-            "the theorem promises a run of about root n. The truth, computed here for random permutations up to a "
-            "hundred thousand, is about twice that: the longest increasing run, divided by root n, creeps up towards two, "
-            "a fact proved in 1977. Patience sorting, a card game, computes this length, and Part 22 meets it as an "
-            "algorithm for longest increasing subsequences."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(dots, lag_ratio=0.1), FadeIn(tl), FadeIn(seq_t))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[0]), LaggedStart(*[FadeIn(r) for r in rows[1:]], lag_ratio=0.3), run_time=2.4)
-            self.play(FadeIn(cap))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def compression(self):

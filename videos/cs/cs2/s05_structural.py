@@ -36,23 +36,21 @@ def tree_mob(t, dx=2.0, dy=0.9, r=0.16) -> VGroup:
     return g
 
 
-class Structural(VoiceoverScene):
+class Structural(WatchScene):
     def construct(self):
         self.card()
         self.strings()
         self.proof_strings()
-        self.trees()
         self.expressions()
 
     def card(self):
-        card = chapter_card(4, r"Induction on structures", r"How do you prove something about every string, every tree?",
-                            part=PART)
-        with self.voiceover("Chapter four. Induction on structures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Induction on structures", r"How do you prove something about every string, every tree?", part=PART, said="Chapter four. Induction on structures.")
 
     # ------------------------------------------------------------------
     def strings(self):
+        self.ask(r"Balanced strings with four pairs of brackets: \\ how many?", [r"8", r"14", r"16"], 1,
+                 say="One pair of brackets: one balanced string. Two pairs: two. Three: five. Four pairs?",
+                 reveal="Fourteen. These are the Catalan numbers, and chapter eleven explains them.")
         head = label(r"A set defined by rules", font_size=38).to_edge(UP, buff=0.4)
         rules = VGroup(
             label(r"rule 1: \ the empty string $\varepsilon$ is balanced", font_size=30, color=YES),
@@ -133,53 +131,6 @@ class Structural(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def trees(self):
-        head = label(r"Full binary trees: \ leaves $=$ internal nodes $+ 1$", font_size=38).to_edge(UP, buff=0.35)
-        rules = VGroup(label(r"a leaf \ \ is a tree", font_size=28, color=YES),
-                       label(r"a node with two trees below \ is a tree", font_size=28, color=CTRL)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.2).to_corner(UL, buff=0.5).shift(DOWN * 0.8)
-        seq = [None, [None, None], [[None, None], None], [[None, None], [None, None]],
-               [[None, [None, None]], [None, None]], [[None, [None, None]], [[None, None], [None, [None, None]]]]]
-        trees = [tree_mob(t, dx=1.6, dy=0.68) for t in seq]
-        for t in trees:
-            t.move_to(RIGHT * 2.2 + UP * 0.2)
-        L = live_int(1, 34, YES)
-        I = live_int(0, 34, CTRL)
-        counts = VGroup(VGroup(label(r"leaves:", font_size=28, color=GREY_A), L).arrange(RIGHT, buff=0.2),
-                        VGroup(label(r"internal:", font_size=28, color=GREY_A), I).arrange(RIGHT, buff=0.2)).arrange(
-            DOWN, aligned_edge=LEFT, buff=0.25).next_to(rules, DOWN, buff=0.6).align_to(rules, LEFT)
-        L.add_updater(lambda m: m.next_to(counts[0][0], RIGHT, buff=0.2))
-        I.add_updater(lambda m: m.next_to(counts[1][0], RIGHT, buff=0.2))
-        proof = VGroup(MathTex(r"\text{leaf: } 1 = 0 + 1", font_size=32, color=YES),
-                       MathTex(r"\text{node: } L_1 + L_2 = (I_1 + 1) + (I_2 + 1) = (I_1 + I_2 + 1) + 1", font_size=32,
-                               color=CTRL)).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.4)
-        use = note(r"every expression tree, \ every tournament bracket, \ every merge of a sort (Part 16)",
-                   font_size=22).next_to(proof, UP, buff=0.25)
-        cur = trees[0]
-        with self.voiceover(
-            "Trees are the other great recursive structure. <bookmark mark='a'/> Here we use full binary trees: either a leaf, "
-            "or a node with exactly two full binary subtrees. <bookmark mark='b'/> Build some and count. One leaf, no internal nodes. "
-            "Grow it: two leaves, one node. Three and two. Four and three. Whatever shape, the leaves outnumber the "
-            "internal nodes by exactly one. <bookmark mark='c'/> The proof follows the definition. A leaf: one leaf, "
-            "zero nodes. A node: its leaves are the leaves of its two subtrees; by the hypothesis each has one more leaf "
-            "than nodes; add the new node, and the difference is still one. A knockout tournament with sixty-four teams "
-            "therefore plays exactly sixty-three games, whatever the bracket looks like."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(rules, lag_ratio=0.3))
-            vo.wait_until("b")
-            self.play(FadeIn(cur), FadeIn(counts))
-            for t in trees[1:]:
-                self.play(ReplacementTransform(cur, t), L.tracker.animate.set_value(t.leaves),
-                          I.tracker.animate.set_value(t.internal), run_time=1.0)
-                cur = t
-                self.wait(0.4)
-            vo.wait_until("c")
-            self.play(FadeIn(proof, lag_ratio=0.3), FadeIn(use))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def expressions(self):

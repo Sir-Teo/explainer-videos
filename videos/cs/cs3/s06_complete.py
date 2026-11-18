@@ -14,7 +14,7 @@ def dot(p):
     return Dot(np.asarray(p), radius=0.05, color=WIRE)
 
 
-class Complete(VoiceoverScene):
+class Complete(WatchScene):
     def construct(self):
         self.card()
         self.from_nand()
@@ -23,13 +23,13 @@ class Complete(VoiceoverScene):
         self.post()
 
     def card(self):
-        card = chapter_card(5, r"One gate is enough", r"Which gates can build every function?", part=PART)
-        with self.voiceover("Chapter five. One gate is enough."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"One gate is enough", r"Which gates can build every function?", part=PART, said="Chapter five. One gate is enough.")
 
     # ------------------------------------------------------------------
     def from_nand(self):
+        self.ask(r"Exclusive-or, \\ built from NAND gates alone. \\ How many?", [r"2", r"4", r"8"], 1,
+                 say="Build exclusive-or from NAND gates alone. How many do you need?",
+                 reveal="Four, and the search proves no circuit with three exists.")
         head = label(r"NOT, \ AND, \ OR, \ from NAND alone", font_size=38).to_edge(UP, buff=0.35)
         # NOT: tie the inputs
         g1 = gate("NAND", size=0.8).move_to(LEFT * 4.6 + UP * 0.8)
@@ -225,3 +225,10 @@ class Complete(VoiceoverScene):
             self.play(FadeIn(thm), *[Indicate(tab[1 + show.index(n)][0], color=YES) for n in ("NAND", "NOR")])
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does CMOS draw almost no power when idle?", r"For every input, one network is off: no path to ground"),
+             (r"Why is NAND enough to build anything?", r"It makes NOT, AND and OR, which make every truth table")],
+            narration="Checkpoint. Why does a CMOS gate draw almost no current when it isn't switching? And why is NAND "
+                      "enough to build anything?",
+            answers_narration="For every input, one of its two networks is off, so there's no path from supply to ground. "
+                              "And NAND builds not, and and or, which build every truth table.")

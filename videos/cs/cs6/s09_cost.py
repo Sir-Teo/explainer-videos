@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs6.common import (BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, NO, PART, YES, box, fmt, load, say)
 
 
-class Cost(VoiceoverScene):
+class Cost(WatchScene):
     def construct(self):
         self.card()
         self.iron()
@@ -15,10 +15,7 @@ class Cost(VoiceoverScene):
         self.mix()
 
     def card(self):
-        card = chapter_card(8, r"What a program costs", r"How long does a program take?", part=PART)
-        with self.voiceover("Chapter eight. What a program costs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"What a program costs", r"How long does a program take?", part=PART, said="Chapter eight. What a program costs.")
 
     # ------------------------------------------------------------------
     def iron(self):
@@ -82,11 +79,10 @@ class Cost(VoiceoverScene):
             "<bookmark mark='b'/> The series' library measures the logic part of that path in the netlist itself. The "
             "deepest chain of gates is fifty-nine long; the unit-delay simulation observes at most fifty-six gate "
             "delays across four thousand and ninety-six sampled inputs. That sample maximum is not a worst-case timing"
-            " proof. For a teaching budget, assume fifty-six ten-picosecond delays and seventy picoseconds of register"
+            " proof. assume fifty-six ten-picosecond delays and seventy picoseconds of register"
             " overhead: six hundred and thirty picoseconds before memory. <bookmark mark='c'/> But the two memory "
-            "accesses are in the cycle too, and our budget assumes one nanosecond for each. The assumed total is two "
-            "point six three nanoseconds, or about three hundred and eighty megahertz. This is a model, not a measured"
-            " silicon clock. An add still fetches its instruction, and waits through the cycle budget for a load's "
+            "accesses are in the cycle too, and our budget assumes one nanosecond for each. The total is two "
+            "point six three nanoseconds, or about three hundred and eighty megahertz. An add still fetches its instruction, and waits through the cycle budget for a load's "
             "data access too. Part 7 fixes that by cutting the path into pieces."
         ) as vo:
             self.play(FadeIn(head), FadeIn(bl),
@@ -102,6 +98,10 @@ class Cost(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def arrays(self):
+        self.ask(r"A loop adds 100 numbers from memory. \\ What fraction of its instructions is bookkeeping?",
+                 [r"1 in 5", r"3 in 5", r"4 in 5"], 1,
+                 say="A loop adds a hundred numbers from memory. What fraction of the instructions it runs are bookkeeping?",
+                 reveal="Three in every five: the counter, the pointer and the branch.")
         d = load("programs")["array"]
         head = label(r"A loop over an array", font_size=38).to_edge(UP, buff=0.35)
         src = [s_ for s_ in d["source"] if s_.strip() and not s_.strip().startswith(("array:", ".align"))]

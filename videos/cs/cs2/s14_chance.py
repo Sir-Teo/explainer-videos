@@ -15,7 +15,7 @@ def door(label_txt: str, color=GREY_B) -> VGroup:
     return VGroup(r, t)
 
 
-class Chance(VoiceoverScene):
+class Chance(WatchScene):
     def construct(self):
         self.card()
         self.monty()
@@ -24,13 +24,21 @@ class Chance(VoiceoverScene):
         self.bounds()
 
     def card(self):
-        card = chapter_card(13, r"Chance", r"How do you reason precisely about what is likely?", part=PART)
-        with self.voiceover("Chapter thirteen. Chance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Chance", r"How do you reason precisely about what is likely?", part=PART, said="Chapter thirteen. Chance.")
 
     # ------------------------------------------------------------------
     def monty(self):
+        self.wrong_idea(r"Two doors are left, \\ so it's fifty--fifty",
+                        r"Switching wins two times in three: \\ the host's choice wasn't random",
+                        narration="Here is a game where almost everyone's intuition fails. You pick one of three doors. The "
+                                  "host, who knows where the car is, opens another door: a goat. Two doors are left, so it's "
+                                  "fifty-fifty. Right?",
+                        right_narration="Wrong. The host's choice carried information. Switch, and you win two times in three.")
+        self.clear_scene()
+        self.ask(r"You picked door 1. The host opens door 3: a goat. \\ Stay, or switch to door 2?",
+                 [r"stay", r"switch", r"it makes no difference"], 1,
+                 say="So: stay, or switch?",
+                 reveal="Switch. You win two times in three.")
         d = load("chance")
         head = label(r"Three doors", font_size=38).to_edge(UP, buff=0.35)
         doors = VGroup(door("1"), door("2"), door("3")).arrange(RIGHT, buff=0.4).move_to(LEFT * 4.0 + UP * 0.6)

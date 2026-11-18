@@ -12,7 +12,7 @@ def box(w, h, text, color=CTRL, font_size=22):
     return VGroup(b, MathTex(text, font_size=font_size, color=color).move_to(b))
 
 
-class RegFile(VoiceoverScene):
+class RegFile(WatchScene):
     def construct(self):
         self.card()
         self.structure()
@@ -20,10 +20,7 @@ class RegFile(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(9, r"Pebble's register file", r"Where does a processor keep its working values?", part=PART)
-        with self.voiceover("Chapter nine. Pebble's register file."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Pebble's register file", r"Where does a processor keep its working values?", part=PART, said="Chapter nine. Pebble's register file.")
 
     # ------------------------------------------------------------------
     def structure(self):
@@ -126,6 +123,10 @@ class RegFile(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def cost(self):
+        self.ask(r"The register file gets one more read port. \\ The cost?", [r"a few gates", r"about 2{,}000 gates",
+                 r"it doubles"], 1,
+                 say="Give Pebble's register file one more read port. What does it cost?",
+                 reveal="About two thousand gates: another full multiplexer tree.")
         d = load("regfile")
         head = label(r"Built, \ verified, \ counted", font_size=38).to_edge(UP, buff=0.35)
         nums = VGroup(
@@ -177,3 +178,10 @@ class RegFile(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(p) for p in ports], lag_ratio=0.4), run_time=2.4)
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does a 4-bit LFSR from a nonzero seed visit 15 states?", r"Its feedback polynomial is primitive"),
+             (r"What does Myhill--Nerode give you?", r"The smallest machine: one state per class of prefixes")],
+            narration="Checkpoint. Why does a good four-bit feedback shift register visit all fifteen nonzero states? And what "
+                      "does the Myhill-Nerode theorem give you?",
+            answers_narration="Its feedback polynomial is primitive over the field with two elements. And the smallest machine "
+                              "for a language: one state per class of indistinguishable prefixes.")

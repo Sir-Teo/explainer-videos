@@ -21,7 +21,7 @@ def mux_symbol(h=1.0, w=0.55, color=CTRL):
     return g
 
 
-class Mux(VoiceoverScene):
+class Mux(WatchScene):
     def construct(self):
         self.card()
         self.mux2()
@@ -31,10 +31,7 @@ class Mux(VoiceoverScene):
         self.decoder()
 
     def card(self):
-        card = chapter_card(7, r"Choosing with gates", r"Can a circuit look up an answer?", part=PART)
-        with self.voiceover("Chapter seven. Choosing with gates."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Choosing with gates", r"Can a circuit look up an answer?", part=PART, said="Chapter seven. Choosing with gates.")
 
     # ------------------------------------------------------------------
     def mux2(self):
@@ -75,6 +72,10 @@ class Mux(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def universal(self):
+        self.ask(r"A 2-to-1 multiplexer, \\ plus the constants 0 and 1. \\ Can it build every circuit?",
+                 [r"no", r"yes", r"only with an extra NOT gate"], 1,
+                 say="Given only multiplexers, and the constants zero and one, can you build any circuit?",
+                 reveal="Yes. A multiplexer is complete on its own.")
         head = label(r"A multiplexer, \ with constants, \ is complete", font_size=36).to_edge(UP, buff=0.35)
         items = [(r"\bar x", "1", "0", "x"), (r"x\,y", "0", "y", "x"), (r"x + y", "y", "1", "x")]
         groups = VGroup()

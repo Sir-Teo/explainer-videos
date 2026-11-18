@@ -112,6 +112,9 @@ def _method(src: str, name: str):
 
 
 def _indent(code: str) -> str:
+    # specs write TeX inside raw strings; a doubled backslash before a command or a percent sign is a slip that
+    # would turn \\ldots into a line break and the word "ldots" (a real line break, \\\\, is followed by a space)
+    code = re.sub(r"\\\\(?=[A-Za-z%])", r"\\", code)
     code = code.strip("\n")
     lines = code.split("\n")
     pad = min(len(ln) - len(ln.lstrip()) for ln in lines if ln.strip())

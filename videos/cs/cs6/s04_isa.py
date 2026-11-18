@@ -8,7 +8,7 @@ from videos.cs.cs6.common import (code_text, BG, CODE, COST, CTRL, DATA, FIELD_C
                                   fmt, load, word_bits)
 
 
-class Isa(VoiceoverScene):
+class Isa(WatchScene):
     def construct(self):
         self.card()
         self.state()
@@ -17,11 +17,7 @@ class Isa(VoiceoverScene):
         self.compare()
 
     def card(self):
-        card = chapter_card(3, r"Designing an instruction set", r"What should a machine's words mean?",
-                            lit=(1964, 1980, 2010), part=PART)
-        with self.voiceover("Chapter three. Designing an instruction set."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Designing an instruction set", r"What should a machine's words mean?", lit=(1964, 1980, 2010), part=PART, said="Chapter three. Designing an instruction set.")
 
     # ------------------------------------------------------------------
     def state(self):
@@ -125,6 +121,9 @@ class Isa(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def opcodes(self):
+        self.ask(r"How many instructions does Pebble have?", [r"10", r"34", r"about 1{,}000"], 1,
+                 say="How many instructions does Pebble need?",
+                 reveal="Thirty-four. x86, by some counts, has well over a thousand.")
         d = load("isa")
         head = label(rf"{d['n_ops']} instructions, \ one opcode each", font_size=38).to_edge(UP, buff=0.3)
         groups = [

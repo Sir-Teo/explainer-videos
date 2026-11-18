@@ -21,7 +21,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -69,6 +69,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How does Pebble print without I/O instructions?", r"Memory-mapped I/O: stores to a device's address"),
+             (r"What must the hardware do when an interrupt arrives?", r"Finish the instruction, save the pc, jump to a handler")],
+            narration="Last checkpoint. How does Pebble print? And what must the hardware do when an interrupt arrives?",
+            answers_narration="By storing to a device's address. And it finishes the current instruction, saves the program "
+                              "counter, and jumps to a handler.")
 
     def payoffs(self):
         card = payoff_card([

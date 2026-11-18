@@ -15,7 +15,7 @@ HEAD = C.CS_HEAD
 HIST = C.HUMAN
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): exact minimum circuits for small functions, why the census
     stops at five inputs, and the open problem of deciding a function's circuit size."""
 
@@ -27,15 +27,15 @@ class Frontier(VoiceoverScene):
         self.mcsp()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ the smallest circuit", r"Can we find the best circuit, \ and can we "
-                            r"prove it is best?", lit=(2000, 2022), part=PART,
-                            extra=((2000, r"Kabanets and Cai: MCSP"), (2022, r"$3.1n$; partial MCSP is NP-hard")))
-        with self.voiceover("Chapter fifteen. Frontier: the smallest circuit."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ the smallest circuit", r"Can we find the best circuit, \ and can we "
+                            r"prove it is best?", lit=(2000, 2022), part=PART, extra=((2000, r"Kabanets and Cai: MCSP"), (2022, r"$3.1n$; partial MCSP is NP-hard")), said="Chapter fifteen. Frontier: the smallest circuit.")
 
     # ------------------------------------------------------------------
     def census(self):
+        self.ask(r"The hardest function of three inputs. \\ How many two-input gates does it need?",
+                 [r"3", r"4", r"7"], 1,
+                 say="Of all two hundred and fifty-six functions of three inputs, the hardest needs how many gates?",
+                 reveal="Four. We know the exact cost of every one.")
         d = load("census")
         head = label(r"Every function of three inputs, \ solved exactly", font_size=36).to_edge(UP, buff=0.3)
         steps = VGroup(*[label(rf"{k + 1} gate{'s' if k else ''}: \ {n:,} distinct search states".replace(",", "{,}"),

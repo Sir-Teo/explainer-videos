@@ -8,20 +8,16 @@ from videos.cs.cs4.common import BG, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO
 SIGN, EXP, FRAC = "#E5484D", "#4DABF7", "#69DB7C"
 
 
-class Floats(VoiceoverScene):
+class Floats(WatchScene):
     def construct(self):
         self.card()
         self.layout()
         self.ruler()
         self.spacing()
-        self.specials()
         self.rounding()
 
     def card(self):
-        card = chapter_card(10, r"Floating point", r"How do 32 bits cover 76 decades?", lit=(1985,), part=PART)
-        with self.voiceover("Chapter ten. Floating point."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Floating point", r"How do 32 bits cover 76 decades?", lit=(1985,), part=PART, said="Chapter ten. Floating point.")
 
     # ------------------------------------------------------------------
     def layout(self):
@@ -110,6 +106,10 @@ class Floats(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def spacing(self):
+        self.ask(r"Is 16{,}777{,}217 a 32-bit float?", [r"yes", r"no"], 1,
+                 say="Sixteen million, seven hundred and seventy-seven thousand, two hundred and seventeen. Can a thirty-two-bit "
+                     "float hold it exactly?",
+                 reveal="No. It's two to the twenty-four plus one, and above two to the twenty-four floats step by two.")
         d = load("floats")
         head = label(r"ulp and machine epsilon", font_size=38).to_edge(UP, buff=0.35)
         ax = Axes(x_range=[-3, 4, 1], y_range=[0, 1.2, 0.5], x_length=7.0, y_length=3.0, tips=False,
@@ -153,54 +153,6 @@ class Floats(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def specials(self):
-        head = label(r"The edges of the ruler", font_size=38).to_edge(UP, buff=0.35)
-        rows = VGroup()
-        for e, f, what, col in (
-            (r"00000000", r"0", r"$\pm 0$ \ (two zeros: \ $1/{-0} = -\infty$)", GREY_A),
-            (r"00000000", r"\ne 0", r"subnormal: \ $0.f \times 2^{-126}$", INF),
-            (r"00000001 \dots 11111110", r"\text{any}", r"normal: \ $1.f \times 2^{e - 127}$", FUNC),
-            (r"11111111", r"0", r"$\pm\infty$: \ $1/0$, \ overflow", HEAD),
-            (r"11111111", r"\ne 0", r"NaN: \ $0/0$, \ $\sqrt{-1}$, \ $\infty - \infty$", NO),
-        ):
-            rows.add(VGroup(MathTex(e, font_size=28, color=EXP), MathTex(f, font_size=28, color=FRAC),
-                            label(what, font_size=26, color=col)))
-        hdr = VGroup(label(r"exponent", font_size=22, color=GREY_B), label(r"fraction", font_size=22, color=GREY_B),
-                     label(r"meaning", font_size=22, color=GREY_B))
-        tab = VGroup(hdr, *rows)
-        for i, r in enumerate(tab):
-            r[0].move_to([-4.0, 2.0 - 0.62 * i, 0])
-            r[1].move_to([-1.0, 2.0 - 0.62 * i, 0])
-            r[2].move_to([0.2, 2.0 - 0.62 * i, 0], aligned_edge=LEFT)
-        nan = MathTex(r"\mathrm{NaN} \ne \mathrm{NaN}", font_size=34, color=NO).move_to(LEFT * 3.4 + DOWN * 1.9)
-        nl = note(r"the only value not equal to itself: \ \texttt{x != x} \ tests for NaN", font_size=22).next_to(
-            nan, DOWN, buff=0.2)
-        grad = MathTex(r"x - y = 0 \iff x = y", font_size=34, color=INF).move_to(RIGHT * 3.4 + DOWN * 1.9)
-        gl = note(r"finite operands, gradual underflow: \ distinct values stay distinct", font_size=22).next_to(grad, DOWN, buff=0.2)
-        with self.voiceover(
-            "The two extreme exponent patterns are reserved. <bookmark mark='a'/> An exponent of all zeros, with a "
-            "zero fraction, is zero, and since the sign bit is separate there are two zeros, plus and minus, which "
-            "compare equal but remember which side they came from. With a non-zero fraction, it is a subnormal. "
-            "<bookmark mark='b'/> An exponent of all ones with a zero fraction is infinity, the honest answer to one "
-            "over zero or to a result too large to hold; with any other fraction it is NaN, not a number, the answer "
-            "to zero over zero or the square root of minus one. NaNs flow through any later arithmetic, so an error is "
-            "never silently replaced by a plausible number. <bookmark mark='c'/> A NaN is the only value that is not "
-            "equal to itself, which is how programs test for one. And the subnormals buy a guarantee that sounds "
-            "obvious but fails without them: for finite operands, x minus y is zero only when x equals y. Kahan fought for this gradual "
-            "underflow against fierce opposition, because it cost hardware. The standard is a large part of why he "
-            "received the Turing Award in 1989."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr))
-            vo.wait_until("a")
-            self.play(FadeIn(rows[0]), FadeIn(rows[1]), FadeIn(rows[2]))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[3]), FadeIn(rows[4]))
-            vo.wait_until("c")
-            self.play(FadeIn(nan), FadeIn(nl))
-            self.play(FadeIn(grad), FadeIn(gl))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def rounding(self):
@@ -248,6 +200,14 @@ class Floats(VoiceoverScene):
             self.play(FadeIn(modes))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why isn't $0.1 + 0.2$ exactly $0.3$?", r"One tenth has no finite expansion in binary"),
+             (r"What does IEEE 754 promise for $+$, $-$, $\times$, $\div$, $\sqrt{}$?",
+              r"The exact answer, rounded once")],
+            narration="Checkpoint. Why is zero point one plus zero point two not zero point three? And what does the IEEE "
+                      "standard promise for the basic operations?",
+            answers_narration="One tenth has no finite binary expansion, so it is rounded before you start. And the standard "
+                              "promises the exact answer, rounded once.")
 
 
 def round_even(x: float) -> float:

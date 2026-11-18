@@ -32,19 +32,15 @@ def arrow_diagram(n_left, n_right, pairs, color=FUNC, gap=0.62, width=3.2) -> VG
     return g
 
 
-class Relations(VoiceoverScene):
+class Relations(WatchScene):
     def construct(self):
         self.card()
         self.functions()
         self.equivalence()
         self.orders()
-        self.dilworth()
 
     def card(self):
-        card = chapter_card(6, r"Sets, relations, functions", r"What shapes can mathematical data take?", part=PART)
-        with self.voiceover("Chapter six. Sets, relations and functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Sets, relations, functions", r"What shapes can mathematical data take?", part=PART, said="Chapter six. Sets, relations and functions.")
 
     # ------------------------------------------------------------------
     def functions(self):
@@ -91,6 +87,10 @@ class Relations(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def equivalence(self):
+        self.ask(r"The 15-puzzle's positions, grouped by \\ ``can be reached from each other''. \\ How many groups?",
+                 [r"one", r"two", r"thousands"], 1,
+                 say="Group the fifteen puzzle's positions by which ones can reach each other. How many groups?",
+                 reveal="Two: the hook's two halves, split by the parity invariant.")
         head = label(r"Equivalence relations cut a set into classes", font_size=38).to_edge(UP, buff=0.35)
         props = VGroup(*[label(t, font_size=27, color=c) for t, c in (
             (r"reflexive: \ $x \sim x$", GREY_A),
@@ -195,46 +195,3 @@ class Relations(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def dilworth(self):
-        head = label(r"Chains and antichains", font_size=38).to_edge(UP, buff=0.35)
-        h = self.hasse(scale=0.9).move_to(LEFT * 2.8 + DOWN * 0.4)
-        chains = [[1, 2, 4, 12, 60], [3, 6, 30], [5, 10, 20], [15]]
-        ccols = [HEAD, CTRL, FUNC, INF]
-        anti = [4, 6, 10, 15]
-        txt = VGroup(*[label(t, font_size=26, color=c) for t, c in (
-            (r"chain: \ every two comparable", GREY_A),
-            (r"antichain: \ no two comparable", GREY_A),
-            (r"the largest antichain here: \ $\{4, 6, 10, 15\}$", NO),
-            (r"the fewest chains that cover everything: \ $4$", YES),
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to(RIGHT * 3.4 + UP * 0.5)
-        thm = theorem_card(r"Dilworth (1950)", r"In any finite partial order, the largest antichain has exactly as many "
-                           r"elements as the fewest chains that cover it.", width=5.7, font_size=22)
-        thm.next_to(txt, DOWN, buff=0.4).align_to(txt, LEFT)
-        lines = VGroup()
-        for ch, col in zip(chains, ccols):
-            for a, b in zip(ch, ch[1:]):
-                lines.add(Line(h.nodes[a].get_center(), h.nodes[b].get_center(), buff=0.27, color=col,
-                               stroke_width=7))
-        rings = [h.nodes[d][0].animate.set_stroke(col, 5) for ch, col in zip(chains, ccols) for d in ch]
-        with self.voiceover(
-            "One theorem about orders, because it turns up in scheduling. <bookmark mark='a'/> A chain is a set in "
-            "which every two elements are comparable, like one, two, four, twelve, sixty. An antichain is a set in "
-            "which no two are. <bookmark mark='b'/> Here the largest antichain has four elements: four, six, ten and "
-            "fifteen. <bookmark mark='c'/> And the whole order can be covered by four chains, and no fewer. "
-            "<bookmark mark='d'/> Robert Dilworth proved in 1950 that those two numbers are always equal. Read the "
-            "order as tasks that must come before others: an antichain is work that can run at the same time, and a "
-            "chain is work one processor must do in sequence. Part 10, with its many cores, meets this trade-off "
-            "head on."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(h))
-            vo.wait_until("a")
-            self.play(FadeIn(txt[0]), FadeIn(txt[1]))
-            vo.wait_until("b")
-            self.play(*[h.nodes[d][0].animate.set_fill(NO, 0.6) for d in anti], FadeIn(txt[2]))
-            vo.wait_until("c")
-            self.play(Create(lines), *rings, FadeIn(txt[3]), run_time=1.6)
-            vo.wait_until("d")
-            self.play(FadeIn(thm))
-        self.wait(0.3)
-        self.clear_scene()

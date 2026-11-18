@@ -6,19 +6,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs5.common import BG, CLOCK, CODE, COST, CTRL, DATA, FUNC, HEAD, INF, NO, PART, WIRE, YES, load
 
 
-class Dram(VoiceoverScene):
+class Dram(WatchScene):
     def construct(self):
         self.card()
         self.cell()
         self.leak()
-        self.rows()
 
     def card(self):
-        card = chapter_card(11, r"Dynamic memory", r"How do you store a bit in one transistor?", lit=(1966, 1970),
-                            part=PART)
-        with self.voiceover("Chapter eleven. Dynamic memory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Dynamic memory", r"How do you store a bit in one transistor?", lit=(1966, 1970), part=PART, said="Chapter eleven. Dynamic memory.")
 
     # ------------------------------------------------------------------
     def cell(self):
@@ -84,6 +79,9 @@ class Dram(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def leak(self):
+        self.ask(r"How often must DRAM rewrite every cell?", [r"every hour", r"every 64 milliseconds", r"never"], 1,
+                 say="A DRAM cell's charge leaks away. How often must every cell be refreshed?",
+                 reveal="At least every sixty-four milliseconds.")
         d = load("dram")
         t = np.array(d["t"]) * 1000
         head = label(r"The charge leaks away", font_size=38).to_edge(UP, buff=0.35)
@@ -120,81 +118,3 @@ class Dram(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def rows(self):
-        head = label(r"Dense, \ and slow", font_size=38).to_edge(UP, buff=0.35)
-        # cell areas to scale: about 140 F^2 against 6 F^2
-        side_s = 1.5
-        sq_s = Square(side_s, stroke_color=YES, stroke_width=2.5, fill_color=YES, fill_opacity=0.25)
-        sq_d = Square(side_s * np.sqrt(6 / 140), stroke_color=DATA, stroke_width=2.5, fill_color=DATA, fill_opacity=0.5)
-        cells = VGroup(sq_s, sq_d).arrange(RIGHT, buff=1.4, aligned_edge=DOWN).move_to(LEFT * 4.5 + UP * 1.3)
-        cl = VGroup(label(r"SRAM \\ 6T \\ $\sim140\,F^2$ \\ example: 1 ns", font_size=22, color=YES)
-                    .next_to(sq_s, DOWN, buff=0.2),
-                    label(r"DRAM \\ 1T $+$ 1C \\ $6\,F^2$ \\ tens of ns", font_size=22, color=DATA)
-                    .next_to(sq_d, DOWN, buff=0.2))
-        cl[1].align_to(cl[0], UP)
-        cap = note('illustrative cell-area model', font_size=20).next_to(cells, UP, buff=0.2)
-        # a bank, its row buffer and its column multiplexer
-        nr, nc = 8, 16
-        bank = VGroup(*[Square(0.22, stroke_color=GREY_D, stroke_width=0.8, fill_color=DATA, fill_opacity=0.25)
-                        for _ in range(nr * nc)]).arrange_in_grid(nr, nc, buff=0.04).move_to(RIGHT * 2.6 + UP * 1.35)
-        buf = VGroup(*[Square(0.22, stroke_color=HEAD, stroke_width=0.8, fill_color=BG, fill_opacity=1)
-                       for _ in range(nc)]).arrange(RIGHT, buff=0.04).next_to(bank, DOWN, buff=0.35)
-        bufbox = SurroundingRectangle(buf, buff=0.06, color=HEAD, stroke_width=2)
-        bl_ = label(r"row buffer \ (sense amplifiers)", font_size=20, color=HEAD).next_to(bufbox, LEFT, buff=0.15)
-        bkl = label(r"one bank", font_size=20, color=DATA).next_to(bank, LEFT, buff=0.15)
-        mux = Arrow(bufbox.get_bottom(), bufbox.get_bottom() + DOWN * 0.45, buff=0.02, color=YES, stroke_width=3)
-        timing = VGroup(label(r"row hit: \ column read only, \ $t_{CL} \approx 14$ ns", font_size=22, color=YES),
-                        label(r"row conflict: \ $t_{RP} + t_{RCD} + t_{CL} \approx 42$ ns \ (DDR4)", font_size=22,
-                              color=NO)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(cl, DOWN, buff=0.3).to_edge(LEFT, buff=0.5)
-        steps = VGroup(
-            label(r"activate: \ open a whole row, \ thousands of bits, \ into the row buffer", font_size=24,
-                  color=HEAD),
-            label(r"read: \ take columns from the open row \ (fast while it stays open)", font_size=24, color=GREY_A),
-            label('precharge: close the active row; equalize bit lines for the next activation', font_size=24,
-                  color=GREY_A),
-            label(r"so memory is fast for neighbouring addresses \ and slow for scattered ones: \ Part 9's caches "
-                  r"exploit exactly this", font_size=23, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
-
-        def activate(r):
-            src = VGroup(*bank[r * nc:(r + 1) * nc])
-            copies = src.copy().set_fill(HEAD, 0.8)
-            return src, copies
-
-        with self.voiceover(
-            "DRAM trades a much smaller cell for additional control complexity. In the illustrative area model "
-            "shown here, its cell is about twenty times smaller than SRAM's. This density helps make DRAM "
-            "suitable for main memory. <bookmark mark='a'/> Small SRAM arrays can respond in nanoseconds; opening "
-            "a DRAM row often takes tens. Array size and technology matter. <bookmark mark='b'/> A DRAM access "
-            "opens an entire row of thousands of bits into a row buffer of sense amplifiers, reads the columns it "
-            "wants from that buffer, while the sense amplifiers restore the cells. Precharge then prepares the "
-            "bank for another row. Reading more of an open row is quick; reaching a different row means closing "
-            "and opening, which is slow. So a processor that reads memory in order runs fast, and one that jumps "
-            "around waits. Real chips split their rows into independent banks, each with its own open row, and "
-            "memory controllers reorder waiting requests so that as many as possible hit a row that is already "
-            "open; DDR4 commonly uses bursts of eight transfers, and DDR5 defaults to sixteen; burst transfers "
-            "amortize command and array overhead. Part 9 builds the cache hierarchy that hides as much of this as "
-            "possible."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cap), GrowFromCenter(sq_s), GrowFromCenter(sq_d))
-            vo.wait_until("a")
-            self.play(FadeIn(cl, lag_ratio=0.3))
-            vo.wait_until("b")
-            self.play(FadeIn(bank, lag_ratio=0.002), FadeIn(bkl), Create(bufbox), FadeIn(buf), FadeIn(bl_))
-            src, copies = activate(2)
-            self.play(src.animate.set_fill(HEAD, 0.6), FadeIn(steps[0]))
-            self.play(*[c.animate.move_to(b) for c, b in zip(copies, buf)], run_time=1.0)
-            self.play(GrowArrow(mux), FadeIn(steps[1]))
-            for col in (3, 4, 5):
-                self.play(Indicate(copies[col], color=YES, scale_factor=1.4), run_time=0.45)
-            self.play(FadeIn(timing[0]))
-            self.play(*[c.animate.move_to(b) for c, b in zip(copies, src)], FadeIn(steps[2]), run_time=0.9)
-            self.play(FadeOut(copies), src.animate.set_fill(DATA, 0.25), run_time=0.4)
-            src2, copies2 = activate(6)
-            self.play(src2.animate.set_fill(NO, 0.6), run_time=0.4)
-            self.play(*[c.animate.move_to(b).set_fill(NO, 0.8) for c, b in zip(copies2, buf)], FadeIn(timing[1]),
-                      run_time=1.0)
-            self.play(FadeIn(steps[3]))
-        self.wait(0.3)
-        self.clear_scene()
