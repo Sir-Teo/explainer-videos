@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Beyond(VoiceoverScene):
+class Beyond(WatchScene):
     def construct(self):
         self.card()
         self.schnorr()
@@ -12,13 +12,8 @@ class Beyond(VoiceoverScene):
         self.computing()
 
     def card(self):
-        card = chapter_card(15, r"Zero knowledge, \ sharing and computing on secrets",
-                            r"What else can public-key ideas do?", lit=(1979, 1986, 2009),
-                            extra=((1979, r"Shamir's secret sharing"), (1986, r"Yao's garbled circuits"),
-                                   (2009, r"Gentry: \ FHE")), part=PART)
-        with self.voiceover("Chapter fifteen. Zero knowledge, secret sharing, and computing on secrets."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Zero knowledge, \ sharing and computing on secrets", r"What else can public-key ideas do?", lit=(1979, 1986, 2009), extra=((1979, r"Shamir's secret sharing"), (1986, r"Yao's garbled circuits"),
+                                   (2009, r"Gentry: \ FHE")), part=PART, said="Chapter fifteen. Zero knowledge, secret sharing, and computing on secrets.")
 
     def schnorr(self):
         b = load("beyond")
@@ -69,6 +64,10 @@ class Beyond(VoiceoverScene):
         self.clear_scene()
 
     def sharing(self):
+        self.ask(r"A key split into five shares, any three recover it. \\ What do two shares reveal?",
+                 [r"two thirds of the key", r"nothing at all"], 1,
+                 say="A key is split five ways, so that any three shares recover it. What do two shares reveal?",
+                 reveal="Nothing: every key is equally consistent with them.")
         b = load("beyond")
         head = label(r"Shamir's secret sharing", font_size=34).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 6, 1], y_range=[0, 10, 2], x_length=4.6, y_length=3.6,

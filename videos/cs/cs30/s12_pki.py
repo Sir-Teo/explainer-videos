@@ -4,19 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, flow_box, load, mono)
 
 
-class Pki(VoiceoverScene):
+class Pki(WatchScene):
     def construct(self):
         self.card()
         self.chain()
         self.transparency()
 
     def card(self):
-        card = chapter_card(11, r"Certificates and trust", r"Whose public key is this?", lit=(1988, 2011, 2013),
-                            extra=((1988, r"X.509"), (2011, r"DigiNotar"), (2013, r"Certificate Transparency"),
-                                   (2015, r"Let's Encrypt")), part=PART)
-        with self.voiceover("Chapter eleven. Certificates, and trust."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Certificates and trust", r"Whose public key is this?", lit=(1988, 2011, 2013), extra=((1988, r"X.509"), (2011, r"DigiNotar"), (2013, r"Certificate Transparency"),
+                                   (2015, r"Let's Encrypt")), part=PART, said="Chapter eleven. Certificates, and trust.")
 
     def chain(self):
         k = load("pki")
@@ -66,6 +62,10 @@ class Pki(VoiceoverScene):
         self.clear_scene()
 
     def transparency(self):
+        self.ask(r"Hundreds of trusted roots. One is careless. \\ Which sites are at risk?", [r"its own customers",
+                 r"every website"], 1,
+                 say="Your browser trusts hundreds of certificate authorities. One of them is careless. Which websites are at risk?",
+                 reveal="Every website: any root can certify any name.")
         head = label(r"When authorities fail", font_size=34).to_edge(UP, buff=0.3)
         lines = VGroup(
             label(r"any of $\sim$150 roots can certify \textbf{any} name: \ the weakest one sets the security of all",

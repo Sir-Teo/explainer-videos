@@ -4,20 +4,20 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, mono)
 
 
-class Oracle(VoiceoverScene):
+class Oracle(WatchScene):
     def construct(self):
         self.card()
         self.padding()
         self.attack()
 
     def card(self):
-        card = chapter_card(6, r"Bleichenbacher's oracle", r"Can one bit of feedback reveal a whole message?",
-                            lit=(1998, 2017), extra=((1998, r"Bleichenbacher"), (2017, r"ROBOT")), part=PART)
-        with self.voiceover("Chapter six. Bleichenbacher's oracle."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Bleichenbacher's oracle", r"Can one bit of feedback reveal a whole message?", lit=(1998, 2017), extra=((1998, r"Bleichenbacher"), (2017, r"ROBOT")), part=PART, said="Chapter six. Bleichenbacher's oracle.")
 
     def padding(self):
+        self.ask(r"A server answers only ``valid padding'' or not. \\ Can an attacker decrypt an RSA ciphertext?",
+                 [r"no", r"yes"], 1,
+                 say="A server only tells you whether an RSA ciphertext decrypts to valid padding. Can that one bit decrypt a message?",
+                 reveal="Yes. Bleichenbacher showed how in 1998, by multiplying the ciphertext and watching the answers.")
         head = label(r"PKCS \#1 v1.5, \ and a server that complains", font_size=34).to_edge(UP, buff=0.3)
         parts = [("00", GREY_B, 0.6), ("02", HEAD, 0.6), ("random nonzero bytes", GREY_A, 5.4), ("00", GREY_B, 0.6),
                  ("message", YES, 2.4)]
@@ -112,3 +112,9 @@ class Oracle(VoiceoverScene):
                 self.play(FadeIn(n_))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does RSA decryption work?", r"$ed \equiv 1 \pmod{\varphi(n)}$, and Euler's theorem"),
+             (r"Why is textbook RSA insecure?", r"It is deterministic: guesses can be encrypted and compared")],
+            narration="Checkpoint. Why does RSA decryption undo encryption? And why is textbook RSA insecure?",
+            answers_narration="e times d is one modulo phi of n, and Euler's theorem does the rest. And it is deterministic, "
+                              "so an attacker can encrypt guesses and compare.")

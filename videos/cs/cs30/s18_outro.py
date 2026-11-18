@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -47,6 +47,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does Shor threaten RSA and ECC?", r"Period finding solves factoring and discrete logs"),
+             (r"What is learning with errors?", r"Recover $s$ from $As + e$, with small noise $e$")],
+            narration="Last checkpoint. Why does Shor's algorithm threaten both RSA and elliptic curves? And what is learning with errors?",
+            answers_narration="Period finding solves factoring and discrete logarithms alike. And recovering s from A s plus a "
+                              "small error, modulo q.")
 
     def payoffs(self):
         card = payoff_card([

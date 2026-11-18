@@ -9,11 +9,11 @@ def person(name, color, pos):
     return VGroup(c, label(name, font_size=22, color=color).next_to(c, DOWN, buff=0.15))
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.listen()
         self.scale()
-        self.plan()
+        self.title(PART)
 
     def listen(self):
         d = load("toydh")
@@ -111,27 +111,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Public Keys", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"key distribution, \ Merkle's puzzles, \ and the number theory of groups",
-            r"Diffie--Hellman, \ RSA from scratch, \ and the oracle that broke its padding",
-            r"factoring and discrete logarithms: \ rho, \ the sieve, \ index calculus",
-            r"elliptic curves: \ the chord and tangent, \ ECDH, \ ECDSA and its fatal nonce",
-            r"certificates and a TLS 1.3 handshake between two of our machines",
-            r"Shor's threat, \ lattices and ML-KEM, \ and computing on secrets",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 30 of Computer Science, Built: Public Keys. <bookmark mark='a'/> In this part: why distributing keys "
-            "was the hard problem, and the number theory that solved it; Diffie-Hellman, and RSA built from scratch, "
-            "with an attack on its padding; how factoring and discrete logarithms are attacked, which is what sets "
-            "the key sizes; elliptic curves, their signatures and how one repeated number destroyed a console's "
-            "security; certificates, and a full TLS handshake between two of our machines; and then the quantum "
-            "threat, the lattices that answer it, and cryptography that computes on secrets."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

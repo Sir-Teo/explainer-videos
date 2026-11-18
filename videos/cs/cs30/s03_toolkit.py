@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Toolkit(VoiceoverScene):
+class Toolkit(WatchScene):
     def construct(self):
         self.card()
         self.clock()
@@ -14,11 +14,7 @@ class Toolkit(VoiceoverScene):
         self.squaring()
 
     def card(self):
-        card = chapter_card(2, r"The toolkit: \ modular arithmetic", r"How do you compute with numbers of 600 digits?",
-                            lit=(1801,), extra=((1801, r"Gauss's \textit{Disquisitiones}"),), part=PART)
-        with self.voiceover("Chapter two. The toolkit: modular arithmetic."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The toolkit: \ modular arithmetic", r"How do you compute with numbers of 600 digits?", lit=(1801,), extra=((1801, r"Gauss's \textit{Disquisitiones}"),), part=PART, said="Chapter two. The toolkit: modular arithmetic.")
 
     def clock(self):
         head = label(r"Arithmetic on a clock", font_size=34).to_edge(UP, buff=0.3)
@@ -127,6 +123,10 @@ class Toolkit(VoiceoverScene):
         self.clear_scene()
 
     def squaring(self):
+        self.ask(r"$3^{218} \bmod 1000$ by repeated squaring. \\ Multiplications needed:", [r"$217$",
+                 r"about a dozen"], 1,
+                 say="Three to the two hundred and eighteen, modulo a thousand. How many multiplications does repeated squaring need?",
+                 reveal="About a dozen: one squaring per bit of the exponent, plus one multiply per one bit.")
         d = load("euclid")
         head = label(r"Powers by repeated squaring", font_size=34).to_edge(UP, buff=0.3)
         e = 218

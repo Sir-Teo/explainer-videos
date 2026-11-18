@@ -16,7 +16,7 @@ def mix(*cols):
     return interpolate_color(ManimColor(cols[0]), ManimColor(cols[1]), 0.5) if len(cols) == 2 else cols[0]
 
 
-class DiffieHellman(VoiceoverScene):
+class DiffieHellman(WatchScene):
     def construct(self):
         self.card()
         self.paint()
@@ -24,10 +24,7 @@ class DiffieHellman(VoiceoverScene):
         self.mitm()
 
     def card(self):
-        card = chapter_card(4, r"Diffie--Hellman", r"How do two strangers agree on a key?", lit=(1976,), part=PART)
-        with self.voiceover("Chapter four. Diffie-Hellman."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Diffie--Hellman", r"How do two strangers agree on a key?", lit=(1976,), part=PART, said="Chapter four. Diffie-Hellman.")
 
     def paint(self):
         head = label(r"Mixing paint", font_size=34).to_edge(UP, buff=0.3)
@@ -116,6 +113,9 @@ class DiffieHellman(VoiceoverScene):
         self.clear_scene()
 
     def mitm(self):
+        self.ask(r"Mallory can change the messages, not just read them. \\ Is Diffie--Hellman safe?", [r"yes", r"no"], 1,
+                 say="Suppose the attacker can change messages, not just read them. Does Diffie-Hellman still protect Alice and Bob?",
+                 reveal="No: Mallory runs one exchange with each of them, and relays.")
         d = load("mitm")
         head = label(r"The man in the middle", font_size=34).to_edge(UP, buff=0.3)
         A = label(r"Alice", font_size=24, color=DATA).move_to([-5.0, 1.6, 0])

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs30.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, mono)
 
 
-class Lattices(VoiceoverScene):
+class Lattices(WatchScene):
     def construct(self):
         self.card()
         self.basis()
@@ -13,11 +13,7 @@ class Lattices(VoiceoverScene):
         self.mlkem()
 
     def card(self):
-        card = chapter_card(14, r"Lattices", r"What problem might survive a quantum computer?", lit=(1982, 2005, 2024),
-                            extra=((1982, r"LLL"), (2005, r"Regev: \ LWE"), (2024, r"ML-KEM")), part=PART)
-        with self.voiceover("Chapter fourteen. Lattices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Lattices", r"What problem might survive a quantum computer?", lit=(1982, 2005, 2024), extra=((1982, r"LLL"), (2005, r"Regev: \ LWE"), (2024, r"ML-KEM")), part=PART, said="Chapter fourteen. Lattices.")
 
     def basis(self):
         L = load("lattices")
@@ -74,6 +70,10 @@ class Lattices(VoiceoverScene):
         self.clear_scene()
 
     def knapsack(self):
+        self.ask(r"Merkle--Hellman knapsack encryption, 1978. \\ Did it survive?", [r"yes",
+                 r"no: lattice reduction broke it"], 1,
+                 say="Merkle and Hellman proposed knapsack encryption in 1978. Did it survive?",
+                 reveal="No. Shamir broke it in 1982, and lattice reduction breaks its variants.")
         L = load("lattices")
         head = label(r"LLL as a weapon", font_size=34).to_edge(UP, buff=0.3)
         pub = ", ".join(f"{x:,}" for x in L["knap_pub"]).replace(",", "{,}")
