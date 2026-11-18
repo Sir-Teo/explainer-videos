@@ -58,7 +58,7 @@ def ring(n, radius):
             for k in range(n)]
 
 
-class Expanders(VoiceoverScene):
+class Expanders(WatchScene):
     def construct(self):
         self.card()
         self.definitions()
@@ -66,18 +66,19 @@ class Expanders(VoiceoverScene):
         self.proof()
         self.alon()
         self.measured()
-        self.existence()
 
     def card(self):
-        card = chapter_card(5, r"Expanders", r"Can a graph be sparse and yet impossible to cut?",
-                            lit=(1973, 1988), extra=((1973, r"Pinsker: \ random expanders"),
-                                                     (1988, r"Lubotzky, \ Phillips and Sarnak")), part=PART)
-        with self.voiceover("Chapter five. Expanders: graphs that are sparse, and yet impossible to cut."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Expanders", r"Can a graph be sparse and yet impossible to cut?", lit=(1973, 1988), extra=((1973, r"Pinsker: \ random expanders"),
+                                                     (1988, r"Lubotzky, \ Phillips and Sarnak")), part=PART, said="Chapter five. Expanders: graphs that are sparse, and yet impossible to cut.")
 
     # ------------------------------------------------------------------ three definitions
     def definitions(self):
+        self.wrong_idea(r"a well-connected network must be designed carefully",
+                        r"a random regular graph \\ is almost the best expander there is",
+                        narration="It is natural to think that a network with no bottlenecks must be laid out with great care.",
+                        right_narration="Coin flips do almost perfectly. A random regular graph is nearly as good an expander "
+                                        "as any graph can be. The hard part is building one without coins.")
+        self.clear_scene()
         head = label(r"Three ways to say \emph{expands}", font_size=36).to_edge(UP, buff=0.3)
         pos, edges = petersen()
         n = 10
@@ -272,6 +273,10 @@ class Expanders(VoiceoverScene):
 
     # ------------------------------------------------------------------ Alon-Boppana
     def alon(self):
+        self.ask(r"A large $d$-regular graph. \\ Its second eigenvalue can't go below about...", [r"$0$",
+                 r"$2\sqrt{d - 1}$", r"$d/2$"], 1,
+                 say="How small can the second adjacency eigenvalue of a large d-regular graph be?",
+                 reveal="About two root d minus one, the Alon-Boppana bound. Graphs that reach it are Ramanujan.")
         head = label(r"How small can $\lambda$ be?", font_size=36).to_edge(UP, buff=0.3)
         # the 3-regular tree to depth 3, drawn radially
         center = LEFT * 4.6 + UP * 0.2
@@ -407,82 +412,6 @@ class Expanders(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ existence by counting
-    def existence(self):
-        head = label(r"Expanders exist: \ count and union-bound", font_size=36).to_edge(UP, buff=0.3)
-        n, d = 8, 3
-        rng = random.Random(3)
-        choice = [rng.sample(range(n), d) for _ in range(n)]
-        L = [(-0.8, 1.55 - 0.45 * i) for i in range(n)]
-        R = [(0.8, 1.55 - 0.45 * i) for i in range(n)]
-        edges = [(i, n + j) for i in range(n) for j in choice[i]]
-        g = draw(L + R, edges, center=LEFT * 5.2 + DOWN * 0.3, r=0.08, sw=1.4)
-        S = {1, 4, 6}
-        NS = {j for i in S for j in choice[i]}
-        hl = [ln.animate.set_stroke(HEAD, width=3.5) for ln, (a, b) in zip(g[0], edges) if a in S]
-        cols = [g[1][i].animate.set_color(DATA) for i in S] + [g[1][n + j].animate.set_color(YES) for j in NS]
-        cap = label(rf"$|S| = {len(S)}$, \ $|N(S)| = {len(NS)}$", font_size=19, color=GREY_A).next_to(g, DOWN,
-                                                                                                     buff=0.3)
-        ill = note(r"illustrative: \ each left vertex picks 3 right neighbours", font_size=16).next_to(
-            cap, DOWN, buff=0.12)
-        if ill.get_left()[0] < -6.85:
-            ill.shift(RIGHT * (-6.85 - ill.get_left()[0]))
-        fs = 30
-        steps = VGroup(
-            cmath(r"\Pr[N(S) \subseteq T]", r"=", r"\left(\frac{|T|}{n}\right)^{d|S|}", font_size=fs),
-            cmath(r"p_s", r"\le", r"\binom{n}{s}", r"\binom{n}{\alpha s}", r"\left(\frac{\alpha s}{n}\right)^{ds}",
-                  font_size=fs),
-            cmath(r"p_s", r"\le", r"\left(\frac{en}{s}\right)^{s}", r"\left(\frac{en}{\alpha s}\right)^{\alpha s}",
-                  r"\left(\frac{\alpha s}{n}\right)^{ds}", font_size=fs),
-            cmath(r"p_s", r"\le", r"\left[\, e^{1+\alpha}\, \alpha^{d-\alpha} \left(\frac{s}{n}\right)^{d-1-\alpha}"
-                  r"\right]^{s}", font_size=fs),
-            cmath(r"\sum_{s=1}^{\delta n} p_s", r"\le", r"\sum_{s=1}^{\delta n} 2^{-s}", r"<", r"1", font_size=fs),
-        )
-        steps[4][4].set_color(YES)
-        whys = VGroup(
-            wrapped_label(r"each of the $d|S|$ edges from $S$ lands in $T$ with chance $|T|/n$", 4.8,
-                          font_size=19, color=GREY_B),
-            wrapped_label(r"$p_s$: \ some $|S| = s$ has $|N(S)| \le \alpha s$; \ union bound over $S$ and $T$",
-                          4.8, font_size=19, color=GREY_B),
-            label(r"$\binom{n}{k} \le (en/k)^k$", font_size=19, color=GREY_B),
-            label(r"collect the powers of $s/n$", font_size=19, color=GREY_B),
-            wrapped_label(r"if $d > \alpha + 1$ and $s \le \delta n$ with $\delta$ small, \ the bracket is at "
-                          r"most $\tfrac12$", 4.8, font_size=19, color=GREY_B),
-        )
-        steps.arrange(DOWN, aligned_edge=LEFT, buff=0.32).next_to(head, DOWN, buff=0.3)
-        steps.set_x(-3.3 + steps.width / 2)
-        for w, st in zip(whys, steps):
-            w.next_to([2.0, st.get_y(), 0], RIGHT, buff=0)
-        punch = label(r"so some degree-$d$ graph makes every set of up to $\delta n$ vertices expand by more than "
-                      r"$\alpha$: \ Pinsker \ (1973)", font_size=20, color=YES).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "Do expanders exist? Counting says yes, as in Part 2. <bookmark mark='a'/> Let each of n vertices on the "
-            "left pick d random neighbours on the right. <bookmark mark='b'/> A set S has all its neighbours inside a"
-            " set T only if all of its d times S edges land there. <bookmark mark='c'/> Take a union bound over every"
-            " S of size s and every T of size alpha s, <bookmark mark='d'/> bound the binomials, <bookmark mark='e'/>"
-            " and collect the powers: when d exceeds alpha plus one and sets are small, the bracket is below a half. "
-            "<bookmark mark='f'/> Summed over all sizes, the chance that some small set fails is below one, so some "
-            "graph never fails. Mark Pinsker used counting like this in 1973. <bookmark mark='g'/> But coin flips are"
-            " not a construction: a random graph on two to the hundred vertices cannot even be stored."
-        ) as vo:
-            self.play(FadeIn(head), Create(g[0]), FadeIn(g[1]), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(*cols, *hl, FadeIn(cap))
-            vo.wait_until("b")
-            self.play(Write(steps[0]), FadeIn(whys[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(steps[1], shift=DOWN * 0.1), FadeIn(whys[1]))
-            vo.wait_until("d")
-            self.play(TransformMatchingTex(steps[1].copy(), steps[2]), FadeIn(whys[2]))
-            vo.wait_until("e")
-            self.play(TransformMatchingTex(steps[2].copy(), steps[3]), FadeIn(whys[3]))
-            vo.wait_until("f")
-            self.play(FadeIn(steps[4], shift=DOWN * 0.1), FadeIn(whys[4]))
-            self.play(FadeIn(punch))
-            vo.wait_until("g")
-            self.play(Indicate(punch, color=HEAD))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, KERN, NO)

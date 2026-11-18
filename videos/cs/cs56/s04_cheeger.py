@@ -55,7 +55,7 @@ def cut_stats(A, S):
     return cut, float(d[S].sum()), float(d[~S].sum())
 
 
-class Cheeger(VoiceoverScene):
+class Cheeger(WatchScene):
     def construct(self):
         self.card()
         self.define()
@@ -63,15 +63,10 @@ class Cheeger(VoiceoverScene):
         self.shift()
         self.threshold()
         self.sweep()
-        self.check()
 
     def card(self):
-        card = chapter_card(3, r"Cheeger's inequality", r"Does a small eigenvalue promise a cheap cut?",
-                            lit=(1970, 1985), extra=((1970, r"Cheeger: \ curved manifolds"),
-                                                     (1985, r"Alon and Milman: \ graphs")), part=PART)
-        with self.voiceover("Chapter three. Cheeger's inequality, and the sweep cut."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Cheeger's inequality", r"Does a small eigenvalue promise a cheap cut?", lit=(1970, 1985), extra=((1970, r"Cheeger: \ curved manifolds"),
+                                                     (1985, r"Alon and Milman: \ graphs")), part=PART, said="Chapter three. Cheeger's inequality, and the sweep cut.")
 
     def define(self):
         head = label(r"Conductance: \ how cheap is the cheapest cut?", font_size=36).to_edge(UP, buff=0.3)
@@ -353,6 +348,10 @@ class Cheeger(VoiceoverScene):
         self.clear_scene()
 
     def sweep(self):
+        self.ask(r"The sweep cut sorts vertices by the eigenvector. \\ Cuts it tries:", [r"all $2^n$",
+                 r"the $n - 1$ prefixes"], 1,
+                 say="The sweep algorithm sorts vertices by their eigenvector entries. How many cuts does it try?",
+                 reveal="Only the n minus one prefixes, and Cheeger guarantees one is good.")
         p = load("partition")
         curve = p["sweep_curve"]
         kbest = int(np.argmin(curve)) + 1
@@ -436,59 +435,13 @@ class Cheeger(VoiceoverScene):
             self.play(FadeIn(best, scale=0.5), FadeIn(bestl), FadeIn(truth))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is $x^T L x$?", r"The sum over edges of $(x_i - x_j)^2$"),
+             (r"What does Cheeger's inequality bound?", r"Conductance, by $\lambda_2$ from both sides")],
+            narration="Checkpoint. What does the Laplacian's quadratic form measure? And what does Cheeger's inequality say?",
+            answers_narration="The sum over edges of squared differences: the energy of a labelling. And that lambda two over "
+                              "two bounds the conductance from below, and root two lambda two from above.")
 
-    def check(self):
-        rows = load("cheeger")["rows"]
-        head = label(r"Checked on random graphs", font_size=36).to_edge(UP, buff=0.3)
-        ax = CornerAxes(x_range=[0, 0.8, 0.2], y_range=[0, 1.3, 0.25], x_length=6.6, y_length=4.6, tips=False,
-                        axis_config={"stroke_color": GREY_C}).move_to(LEFT * 2.6 + DOWN * 0.3)
-        xt = VGroup(*[label(rf"{v:.1f}", font_size=15, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.08)
-                      for v in (0, 0.2, 0.4, 0.6, 0.8)])
-        yt = VGroup(*[label(rf"{v:g}", font_size=15, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.08)
-                      for v in (0, 0.5, 1.0)])
-        xl = label(r"$\lambda_2$ of $N$", font_size=18, color=GREY_A).next_to(xt, DOWN, buff=0.08)
-        yl = label(r"conductance", font_size=18, color=GREY_A).next_to(ax, UP, buff=0.1).align_to(ax, LEFT)
-        up = ax.plot(lambda x: min(math.sqrt(2 * x), 1.3), x_range=[0.0005, 0.8, 0.005], color=NO, stroke_width=3)
-        lo = ax.plot(lambda x: x / 2, x_range=[0, 0.8], color=DATA, stroke_width=3)
-        upl = label(r"$\sqrt{2\lambda_2}$", font_size=20, color=NO).next_to(ax.c2p(0.5, 1.0), UP, buff=0.12)
-        lol = label(r"$\lambda_2 / 2$", font_size=20, color=DATA).next_to(ax.c2p(0.8, 0.4), DOWN, buff=0.12)
-        exact = VGroup(*[Dot(ax.c2p(r["lambda2"], r["phi"]), radius=0.055, color=HEAD) for r in rows])
-        sw = VGroup(*[Circle(radius=0.085, color=LAM, stroke_width=2).move_to(ax.c2p(r["lambda2"], r["sweep"]))
-                      for r in rows])
-        nrow = len(rows)
-        same = sum(abs(r["phi"] - r["sweep"]) < 1e-12 for r in rows)
-        ok = all(r["lower"] <= r["phi"] + 1e-12 and r["sweep"] <= r["upper"] + 1e-12 for r in rows)
-        side = VGroup(
-            wrapped_label(rf"{nrow} connected random graphs on 12 vertices; \ $\phi(G)$ by brute force over all "
-                          r"2,047 cuts \ (yellow)", 4.4, font_size=19, color=HEAD),
-            wrapped_label(r"the sweep cut \ (purple rings)", 4.4, font_size=19, color=LAM),
-            wrapped_label((rf"all {nrow} inside the bounds; \ " if ok else "") +
-                          rf"the sweep found the best cut in {same} of {nrow}", 4.4, font_size=19, color=YES),
-            wrapped_label(r"both sides are tight: \ the hypercube has $\phi = \lambda_2/2$ exactly; \ on a long "
-                          r"cycle $\phi$ is of order $\sqrt{\lambda_2}$", 4.4, font_size=19, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to(RIGHT * 4.45 + DOWN * 0.2)
-        with self.voiceover(
-            "Finally, a check. <bookmark mark='a'/> Fifty-three connected random graphs on twelve vertices, small "
-            "enough to find the best cut by trying all two thousand and forty-seven of them. "
-            "<bookmark mark='b'/> Every graph lands between the two curves. <bookmark mark='c'/> The sweep cut "
-            "also stays under the upper curve, as the proof promised, and finds the very best cut in "
-            "thirty-two of the fifty-three. <bookmark mark='d'/> Neither side can be improved by more than a "
-            "constant. The hypercube meets the lower bound exactly, and on a long cycle the conductance really is "
-            "of the order of the square root of lambda two."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(x_, scale=0.5) for x_ in exact], lag_ratio=0.03), FadeIn(side[0]),
-                      run_time=2)
-            vo.wait_until("b")
-            self.play(Create(up), Create(lo), FadeIn(upl), FadeIn(lol))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[Create(c) for c in sw], lag_ratio=0.03), FadeIn(side[1]), run_time=2)
-            self.play(FadeIn(side[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(side[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, KERN)

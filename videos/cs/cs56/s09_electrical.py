@@ -91,7 +91,7 @@ def flow_arrows(pts, edges, f, color=YES, k=7.0, off=0.17, length=0.42):
     return out
 
 
-class Electrical(VoiceoverScene):
+class Electrical(WatchScene):
     def construct(self):
         self.card()
         self.kirchhoff()
@@ -103,12 +103,8 @@ class Electrical(VoiceoverScene):
         self.polya()
 
     def card(self):
-        card = chapter_card(8, r"Graphs as electrical networks", r"What does a graph do when current flows through it?",
-                            lit=(1847, 1989), extra=((1847, r"Kirchhoff: \ circuit laws"),
-                                                     (1989, r"Chandra et al.: \ commute times")), part=PART)
-        with self.voiceover("Chapter eight. Graphs as electrical networks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Graphs as electrical networks", r"What does a graph do when current flows through it?", lit=(1847, 1989), extra=((1847, r"Kirchhoff: \ circuit laws"),
+                                                     (1989, r"Chandra et al.: \ commute times")), part=PART, said="Chapter eight. Graphs as electrical networks.")
 
     # ------------------------------------------------------------------ Ohm and Kirchhoff give L v = b
     def kirchhoff(self):
@@ -214,6 +210,10 @@ class Electrical(VoiceoverScene):
 
     # ------------------------------------------------------------------ effective resistance
     def resistance(self):
+        self.ask(r"Two one-ohm resistors in parallel. \\ Effective resistance:", [r"$2\,\Omega$",
+                 r"$1\,\Omega$", r"$\tfrac12\,\Omega$"], 2,
+                 say="Two one-ohm resistors joined in parallel between s and t. What's the effective resistance?",
+                 reveal="Half an ohm: two paths share the current.")
         head = label(r"Effective resistance is a quadratic form", font_size=36).to_edge(UP, buff=0.3)
         v = potentials(6, EDGES, S, T)
         R = float(v[S] - v[T])

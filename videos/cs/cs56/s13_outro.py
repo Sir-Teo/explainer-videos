@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -50,6 +50,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How is commute time related to resistance?", r"Commute time $= 2m \cdot R_{\text{eff}}$"),
+             (r"How do spectral sparsifiers sample edges?", r"By effective resistance")],
+            narration="Last checkpoint. How is a random walk's commute time related to effective resistance? And how do sparsifiers choose edges?",
+            answers_narration="Commute time is twice the number of edges times the effective resistance. And they sample each "
+                              "edge with probability proportional to its effective resistance.")
 
     def payoffs(self):
         card = payoff_card([
