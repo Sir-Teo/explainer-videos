@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load, seq_diagram)
 
 
-class Txn(VoiceoverScene):
+class Txn(WatchScene):
     def construct(self):
         self.card()
         self.two_pc()
@@ -14,13 +14,9 @@ class Txn(VoiceoverScene):
         self.coordination()
 
     def card(self):
-        card = chapter_card(5, r"Transactions across machines", r"How do machines commit together?",
-                            lit=(1978, 2012), extra=((1978, r"Gray: \ two-phase commit"),
+        self.chapter(5, r"Transactions across machines", r"How do machines commit together?", lit=(1978, 2012), extra=((1978, r"Gray: \ two-phase commit"),
                                                      (1981, r"Skeen: \ three-phase commit"),
-                                                     (2012, r"Corbett et al.: \ Spanner")), part=PART)
-        with self.voiceover("Chapter five. Transactions across machines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2012, r"Corbett et al.: \ Spanner")), part=PART, said="Chapter five. Transactions across machines.")
 
     def two_pc(self):
         head = label(r"Two-phase commit", font_size=36).to_edge(UP, buff=0.3)
@@ -58,6 +54,10 @@ class Txn(VoiceoverScene):
         self.clear_scene()
 
     def blocking(self):
+        self.ask(r"The coordinator crashes after deciding, before telling anyone. \\ Participants that voted yes...",
+                 [r"abort", r"must wait"], 1,
+                 say="In two-phase commit, the coordinator crashes after deciding but before telling anyone. What can a participant that voted yes do?",
+                 reveal="Nothing but wait, holding its locks. Two-phase commit blocks.")
         t = load("txn")["two_pc"]
         head = label(r"Where two-phase commit blocks", font_size=36).to_edge(UP, buff=0.3)
         rows = [[f"{e[0]:.3f} s" if e[0] < 1 else f"{e[0]:.1f} s", e[1], e[2]] for e in t["events"]]

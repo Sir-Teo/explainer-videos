@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, mono)
 
 
-class Crdt(VoiceoverScene):
+class Crdt(WatchScene):
     def construct(self):
         self.card()
         self.lattice()
@@ -15,11 +15,7 @@ class Crdt(VoiceoverScene):
         self.cost()
 
     def card(self):
-        card = chapter_card(3, r"CRDTs", r"Can replicas accept every write and still agree?", lit=(2011, 2011),
-                            extra=((2011, r"Shapiro, Pregui\c{c}a, \\ Baquero and Zawirski"),), part=PART)
-        with self.voiceover("Chapter three. Conflict-free replicated data types."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"CRDTs", r"Can replicas accept every write and still agree?", lit=(2011, 2011), extra=((2011, r"Shapiro, Pregui\c{c}a, \\ Baquero and Zawirski"),), part=PART, said="Chapter three. Conflict-free replicated data types.")
 
     def lattice(self):
         head = label(r"Merge must be a join", font_size=36).to_edge(UP, buff=0.3)
@@ -68,6 +64,10 @@ class Crdt(VoiceoverScene):
         self.clear_scene()
 
     def gcounter(self):
+        self.ask(r"A replicated counter merges by adding the other's count. \\ Merge the same pair twice:",
+                 [r"still right", r"counted twice"], 1,
+                 say="A replicated counter merges by adding the other replica's count. What happens if the same merge happens twice?",
+                 reveal="It double-counts. A merge must be idempotent: taking the maximum per replica is.")
         c = load("crdt")
         head = label(r"A counter that cannot lose increments", font_size=36).to_edge(UP, buff=0.3)
         rows = [[s[0], mono(str(tuple(s[1])), 18, DATA), mono(str(tuple(s[2])), 18, LAM), mono(str(tuple(s[3])), 18,
@@ -285,6 +285,12 @@ class Crdt(VoiceoverScene):
             self.play(FadeIn(notes[3]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"When do quorums read the latest write?", r"When $R + W > N$"),
+             (r"Why do CRDT replicas converge?", r"Merges are commutative, associative, idempotent")],
+            narration="Checkpoint. When does a quorum read always see the latest write? And why do CRDT replicas always converge?",
+            answers_narration="When R plus W exceeds N. And because their merge is commutative, associative and idempotent, "
+                              "so order and repeats don't matter.")
 
 
 _ = (DATA,)

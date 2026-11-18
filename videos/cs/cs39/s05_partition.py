@@ -8,7 +8,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, trace)
 
 
-class Partition(VoiceoverScene):
+class Partition(WatchScene):
     def construct(self):
         self.card()
         self.ring()
@@ -17,15 +17,15 @@ class Partition(VoiceoverScene):
         self.chord()
 
     def card(self):
-        card = chapter_card(4, r"Partitioning", r"Which machine holds which key, as machines come and go?",
-                            lit=(1997, 2002), extra=((1997, r"Karger et al.: \ consistent hashing"),
+        self.chapter(4, r"Partitioning", r"Which machine holds which key, as machines come and go?", lit=(1997, 2002), extra=((1997, r"Karger et al.: \ consistent hashing"),
                                                      (2001, r"Stoica et al.: \ Chord"),
-                                                     (2002, r"Maymounkov and Mazi\`eres: \ Kademlia")), part=PART)
-        with self.voiceover("Chapter four. Partitioning."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2002, r"Maymounkov and Mazi\`eres: \ Kademlia")), part=PART, said="Chapter four. Partitioning.")
 
     def ring(self):
+        self.ask(r"Keys placed by hash mod $N$. \\ Grow from 10 to 11 machines: keys that move:", [r"about $1/11$",
+                 r"about $10/11$"], 1,
+                 say="Keys go to machine hash mod N. Add an eleventh machine to ten. How many keys move?",
+                 reveal="About ten in eleven. On a consistent-hashing ring, about one in eleven.")
         h = load("hashing")
         mv = h["moved"]
         head = label(r"The hash ring", font_size=36).to_edge(UP, buff=0.3)

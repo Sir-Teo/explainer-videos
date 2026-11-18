@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load)
 
 
-class Quorums(VoiceoverScene):
+class Quorums(WatchScene):
     def construct(self):
         self.card()
         self.rule()
@@ -14,15 +14,15 @@ class Quorums(VoiceoverScene):
         self.cap()
 
     def card(self):
-        card = chapter_card(2, r"Quorums and consistency", r"How many replicas must agree, and on what?",
-                            lit=(2000, 2012), extra=((2000, r"Brewer: \ CAP"), (2002, r"Gilbert and Lynch"),
+        self.chapter(2, r"Quorums and consistency", r"How many replicas must agree, and on what?", lit=(2000, 2012), extra=((2000, r"Brewer: \ CAP"), (2002, r"Gilbert and Lynch"),
                                                      (2007, r"DeCandia et al.: \ Dynamo"),
-                                                     (2012, r"Bailis et al.: \ PBS")), part=PART)
-        with self.voiceover("Chapter two. Quorums and consistency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2012, r"Bailis et al.: \ PBS")), part=PART, said="Chapter two. Quorums and consistency.")
 
     def rule(self):
+        self.ask(r"Three replicas. Which choice always reads \\ the latest write?", [r"$W = 1$, $R = 1$",
+                 r"$W = 2$, $R = 2$"], 1,
+                 say="Three replicas. Write to W, read from R. Which choice guarantees that a read sees the latest write?",
+                 reveal="W two, R two: any read set overlaps any write set, because R plus W exceeds N.")
         head = label(r"$R + W > N$", font_size=40).to_edge(UP, buff=0.3)
         reps = VGroup(*[Circle(radius=0.4, color=GREY_B, stroke_width=2.5) for _ in range(5)]).arrange(RIGHT, buff=0.6)
         reps.move_to([0, 1.3, 0])
@@ -135,6 +135,12 @@ class Quorums(VoiceoverScene):
         self.clear_scene()
 
     def cap(self):
+        self.wrong_idea(r"CAP: pick any two of three",
+                        r"partitions happen; during one, \\ choose consistency or availability",
+                        narration="CAP is often quoted as: consistency, availability, partition tolerance, pick any two.",
+                        right_narration="Partitions are not optional; networks fail. The theorem says only that during a "
+                                        "partition, a system must give up linearizability or availability.")
+        self.clear_scene()
         c = load("cap")
         head = label(r"CAP, \ precisely", font_size=36).to_edge(UP, buff=0.3)
         steps = VGroup(

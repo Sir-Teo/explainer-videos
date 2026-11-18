@@ -4,10 +4,10 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, gantt, load)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.job()
-        self.plan()
+        self.title(PART)
 
     def job(self):
         j = load("job")
@@ -52,35 +52,6 @@ class Hook(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Distributed Systems II: \ Scale", font_size=38).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the datacenter as a computer, \ and what its distances cost",
-            r"replication: \ leaders, \ lag, \ quorums and staleness",
-            r"consistency models, \ CAP precisely, \ and CRDTs that never conflict",
-            r"partitioning: \ consistent hashing, \ Chord",
-            r"transactions across machines: \ two-phase commit, \ Spanner's clocks",
-            r"MapReduce, \ the tail at scale, \ and failures that feed themselves",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 39 of Computer Science, Built: Distributed systems at scale. <bookmark mark='a'/> At "
-            "the scale of a datacenter, every guarantee has a price in latency or availability. We measure what "
-            "replication costs and how stale its reads are, state the CAP theorem precisely and build data types "
-            "that cannot conflict. We spread data with consistent hashing, commit across machines with two-phase "
-            "commit and with Spanner's atomic clocks, run the Job as MapReduce, and watch one slow server in a "
-            "hundred make most requests slow. "
-            "Part 38 asked whether machines can agree at all. This part asks what agreement costs when there are "
-            "thousands of machines, some always failing, and an ocean between them, and how much of it we can do "
-            "without. Almost every system you use, from a search box to a shopping cart, is an answer to that "
-            "question, and each answer is a choice about which anomalies its users are allowed to see. By the end we "
-            "will have measured those choices, not just named them, and Act Seven will be complete."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (HEAD, KERN)

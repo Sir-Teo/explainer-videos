@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, box, gantt, grid_table, load, trace)
 
 
-class MapReduce(VoiceoverScene):
+class MapReduce(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -14,14 +14,10 @@ class MapReduce(VoiceoverScene):
         self.beyond()
 
     def card(self):
-        card = chapter_card(6, r"MapReduce", r"How do you run one program on a thousand unreliable machines?",
-                            lit=(2003, 2015), extra=((2003, r"Ghemawat et al.: \ GFS"),
+        self.chapter(6, r"MapReduce", r"How do you run one program on a thousand unreliable machines?", lit=(2003, 2015), extra=((2003, r"Ghemawat et al.: \ GFS"),
                                                      (2004, r"Dean and Ghemawat: \ MapReduce"),
                                                      (2012, r"Zaharia et al.: \ Spark"),
-                                                     (2015, r"Akidau et al.: \ Dataflow")), part=PART)
-        with self.voiceover("Chapter six. MapReduce."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2015, r"Akidau et al.: \ Dataflow")), part=PART, said="Chapter six. MapReduce.")
 
     def model(self):
         j = load("job")
@@ -72,6 +68,9 @@ class MapReduce(VoiceoverScene):
         self.clear_scene()
 
     def runs(self):
+        self.ask(r"One of sixteen Pebbles crashes mid-job. \\ The Job...", [r"fails", r"re-runs its tasks, and is correct"], 1,
+                 say="One of the sixteen Pebbles crashes in the middle of the Job. What happens?",
+                 reveal="Its tasks are run again elsewhere, and the answer is exactly right.")
         j = load("job")
         head = label(r"Five runs on sixteen Pebbles", font_size=36).to_edge(UP, buff=0.3)
         names = [("plain", r"no trouble"), ("crash", r"Pebble 4 crashes at 0.4 s"),
@@ -219,6 +218,12 @@ class MapReduce(VoiceoverScene):
                 self.play(FadeIn(l))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does two-phase commit block?", r"Yes-voters can't decide without the coordinator"),
+             (r"How does Spanner order transactions?", r"It waits out TrueTime's uncertainty")],
+            narration="Checkpoint. Why does two-phase commit block? And how does Spanner make its timestamps safe?",
+            answers_narration="A participant that voted yes can't decide alone. And it waits out the clock's uncertainty "
+                              "before committing.")
 
 
 _ = (KERN, NO, gantt)

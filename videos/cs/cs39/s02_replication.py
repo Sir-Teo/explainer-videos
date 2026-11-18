@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs39.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, box, grid_table, load, trace)
 
 
-class Replication(VoiceoverScene):
+class Replication(WatchScene):
     def construct(self):
         self.card()
         self.latency()
@@ -13,12 +13,8 @@ class Replication(VoiceoverScene):
         self.conflicts()
 
     def card(self):
-        card = chapter_card(1, r"The datacenter, \ and replication", r"Why keep copies, and what do copies cost?",
-                            lit=(2009, 2009), extra=((2009, r"Barroso and H\"olzle: \\ The Datacenter as a "
-                                                           r"Computer"),), part=PART)
-        with self.voiceover("Chapter one. The datacenter, and replication."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"The datacenter, \ and replication", r"Why keep copies, and what do copies cost?", lit=(2009, 2009), extra=((2009, r"Barroso and H\"olzle: \\ The Datacenter as a "
+                                                           r"Computer"),), part=PART, said="Chapter one. The datacenter, and replication.")
 
     @staticmethod
     def human(s):
@@ -103,6 +99,10 @@ class Replication(VoiceoverScene):
         self.clear_scene()
 
     def lag(self):
+        self.ask(r"A user posts, then reloads from a lagging follower. \\ They see their post...", [r"always",
+                 r"sometimes not"], 1,
+                 say="A user posts something, then reloads, and the read goes to a follower that lags. Do they see their own post?",
+                 reveal="Sometimes not. Read-your-writes has to be arranged.")
         L = load("lag")
         head = label(r"Replication lag: \ reading your own writes", font_size=36).to_edge(UP, buff=0.3)
         rows = L["rows"]
