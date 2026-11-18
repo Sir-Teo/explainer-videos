@@ -1,8 +1,10 @@
 # Economics, Built (经济学，从零搭建)
 
-**Status (2026-11-18): a plan, awaiting review. Nothing is built.** This file is the plan; the standard every part
-meets, the devices and all sixty-eight parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md). The decisions
-that need an answer before work starts are at the end of this file.
+**Status (2026-11-18): Part 1, [*Who Feeds Paris?*](econ1/README.md), is built in English, with its computed
+score, lab and game; the shared code (Agora, the Island, the Facts, the Dials, the Data Room, the instruments and the
+score) is in `explainer/economics/`.** This file is the plan; the standard every part meets, the devices and all
+sixty-eight parts chapter by chapter are in [`SYLLABUS.md`](SYLLABUS.md), with progress in its §9. The decisions the
+building started from are at the end of this file.
 
 This is a sixty-eight-part course in economics on video: **an undergraduate degree, the first-year PhD core, the
 fields, the work economists are paid for, and a research tier**. It covers choice, firms and markets, general
@@ -347,7 +349,7 @@ own, and the syllabus lists them with the papers):
 
 ## Shared code
 
-`explainer/economics/` will hold what every part shares:
+`explainer/economics/` holds what every part shares (the modules for later parts are added as they are built):
 
 | Module | What it is |
 |---|---|
@@ -355,7 +357,7 @@ own, and the syllabus lists them with the papers):
 | `island.py` | the Island: the seeded world, its cast, its planted truths and its history from part to part; always tagged *simulated* |
 | `facts.py` | the Facts: the forty regularities, each with its data, its source and the test Agora must pass |
 | `dials.py` | the Dials: one validated row per number, with estimates, designs, sources and the date checked; `tools/check_dials.py econN` is its gate |
-| `data.py` | the Data Room: loaders with source, licence and vintage; `data/SOURCES.md` registers every dataset |
+| `data/` | the Data Room: frozen, cited extracts and their loaders, with source, licence and vintage (`data/SOURCES.md` registers every dataset); passages and tables transcribed from publications in `data/tables.py` |
 | `metrics.py` | the econometrics the series needs beyond statkit: BLP, dynamic discrete choice, GMM with simulated moments, SVAR identification schemes, local projections |
 | `score.py` | the computed score: the scissors theme, chapter stings, the bed, the data melodies |
 | `__init__.py`, `viz.py`, `style.py` | chapter cards with the timeline and scale strips, the Tableau, the game stage, dial and fact cards, the instruments, the palette |
@@ -367,9 +369,10 @@ decision models) and `explainer.music.monochord` (the score). The course materia
 (a course entry, a lab and an interactive per part); for this series the interactive is the part's game,
 played against Agora's agents.
 
-## Decisions to take
+## Decisions taken
 
-The first option in each is the default this plan is written to. Details and open risks are in the syllabus, §8.
+Building began on 2026-11-18 on the defaults (the first option in each). Details and open risks are in the syllabus,
+§8. The Chinese edition (decision 5) is planned but not yet made: Part 1 is English for now.
 
 1. **Scope: sixty-eight parts, about 63 hours at the planned lengths.** The alternative is a first season of
    Parts 1–50 (the degree, about 46 hours) with Acts X–XII committed to later; or a shorter first season of

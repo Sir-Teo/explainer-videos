@@ -189,6 +189,23 @@ COURSES = [
              "historical data are cited where they are used; every finding carries its replication status.",
     ),
     Course(
+        key="economics", prefix="econ", name="Economics, Built", zh="经济学，从零搭建", mark="E",
+        colors=("#5dadec", "#f2b84b"),
+        kicker="A sixty-eight-part course in economics, from a first course to the research frontier",
+        tagline="Who feeds Paris? An economy built in code part by part, a game you play in every part, and a record "
+                "of the numbers economics runs on.",
+        lede="In the 1840s Frédéric Bastiat marvelled that a million sleeping Parisians were fed every day by nobody "
+             "in particular. In 2008 the Queen asked why nobody had seen the financial crisis coming. The course "
+             "studies both: an order that nobody designed, and the ways it fails. Each part puts you in a market "
+             "first, then derives the model, builds it as code in an economy called Agora, and sets it against "
+             "data with its source and vintage. The plan covers sixty-eight parts, from principles to the graduate "
+             "core, the practice and the frontier; the parts are being built in order.",
+        story=("The story", "The devices that hold it together", "Made to be watched to the end", "Four ways through it",
+               "The acts"),
+        note="Data are white and the model orange on screen. Simulated results are labelled simulated; every dataset "
+             "carries its source and the date it was retrieved.",
+    ),
+    Course(
         key="analysis", prefix="analysis", name="Analysis, Built", zh="数学分析，从零搭建", mark="∫",
         colors=("#fb923c", "#f7d154"),
         kicker="A ten-part course in real, complex and functional analysis",

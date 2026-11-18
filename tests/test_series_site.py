@@ -16,7 +16,8 @@ sys.path.insert(0, str(ROOT / "tools"))
 import series_site as site  # noqa: E402
 
 PARTS = {"ai": 31, "stats": 65, "cs": 61, "philosophy": 42, "analysis": 10, "films": 13,
-         "psychology": len(list((ROOT / "videos" / "psychology").glob("psych[0-9]*/manifest.py")))}  # in production
+         "psychology": len(list((ROOT / "videos" / "psychology").glob("psych[0-9]*/manifest.py"))),  # in production
+         "economics": len(list((ROOT / "videos" / "economics").glob("econ[0-9]*/manifest.py")))}  # in production
 
 
 def test_every_part_is_found_and_sits_in_one_act():

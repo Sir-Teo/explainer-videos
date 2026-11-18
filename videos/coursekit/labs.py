@@ -39,7 +39,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 _NAMESPACES = ("explainer", "explainer.ai", "explainer.analysis", "explainer.stats", "explainer.cs",
-               "explainer.philosophy", "explainer.quant", "explainer.music", "explainer.psychology")
+               "explainer.philosophy", "explainer.quant", "explainer.music", "explainer.psychology",
+               "explainer.economics")
 
 
 def _standalone() -> None:

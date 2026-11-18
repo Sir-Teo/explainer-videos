@@ -2749,4 +2749,13 @@ Young Economist*.
 
 ## 9. Progress
 
-Nothing is built. This section will hold the progress table once Phase 0 starts.
+| Part | Status | Notes |
+|---|---|---|
+| Phase 0 | the first slice built | `explainer/economics/`: Agora (`market`, `crusoe`, `signals`), the Island, the Facts, the Dials and their gate, Called it?, the Data Room (Maddison 2023, FRED, the Philadelphia Fed's forecasters, frozen 2026-11-18), the instruments, the score; the course entry, the lab kit and the game kit (`00_games.js`); `tests/economics/`. Still to come: `READING.md`, the soundcheck film, the Chinese text table and term guide |
+| 1 | built, English | *Who Feeds Paris?* Every date, quotation and number checked against its source (see the part's README); the Chinese edition is next |
+
+**Corrections found while building Part 1** (the plan's draft, written from memory, against the sources): Bastiat's
+Paris passage is in *Economic Sophisms*, First Series, ch. 18 (1845), not the *Harmonies*; Hume's is/ought passage is
+in Book III of the *Treatise* (1740); after the Black Death England's GDP per head rose, and the long fall came in the
+seventeenth century; the Survey of Professional Forecasters' August 2008 median for 2009 was +1.5% against an outcome of
+−2.6%; Chamberlin's 1948 market is described from secondary summaries (Roth 1995), not re-read.

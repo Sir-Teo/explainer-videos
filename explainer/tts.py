@@ -701,6 +701,26 @@ LEXICON: list[tuple[str, str]] = [
     (r"(?<=\bf of )a\b", "[a](/ˈA/)"),  # f of a
     (r"\ba(?= (?:to|and) b\b)", "[a](/ˈA/)"),  # from a to b
     (r"(?<=\bat )a(?= and\b)", "[a](/ˈA/)"),  # down at a and up at b
+    # Economics, Built: people and places
+    (r"\bBastiat['’]s", "[Bastiat's](/bˌæstiˈɑz/)"),
+    (r"\bBastiat\b", "[Bastiat](/bˌæstiˈɑ/)"),
+    (r"\bQuesnay['’]s", "[Quesnay's](/kɛnˈAz/)"),
+    (r"\bQuesnay\b", "[Quesnay](/kɛnˈA/)"),
+    (r"\bHayek['’]s", "[Hayek's](/hˈIɛks/)"),
+    (r"\bHayek\b", "[Hayek](/hˈIɛk/)"),
+    (r"\bCoase['’]s", "[Coase's](/kˈOzᵻz/)"),
+    (r"\bCoase\b", "[Coase](/kˈOz/)"),
+    (r"\bGneezy\b", "[Gneezy](/ɡənˈizi/)"),
+    (r"\bRustichini\b", "[Rustichini](/ɹˌustɪkˈini/)"),
+    (r"\bGaricano\b", "[Garicano](/ɡˌæɹɪkˈɑnO/)"),
+    (r"\bBorges\b", "[Borges](/bˈɔɹhɛs/)"),
+    (r"\bKuznets\b", "[Kuznets](/kˈʊznɛts/)"),
+    (r"\bMONIAC\b", "[MONIAC](/mˈOniæk/)"),
+    (r"\bRodrik\b", "[Rodrik](/ɹˈɑdɹɪk/)"),
+    (r"\bWalras['’]s", "[Walras's](/vɑlɹˈɑsᵻz/)"),
+    (r"\bWalras\b", "[Walras](/vɑlɹˈɑs/)"),
+    (r"\bMaddison\b", "[Maddison](/mˈædɪsən/)"),
+    (r"\bvan Zanden\b", "[van](/vɑn/) [Zanden](/zˈɑndən/)"),
     (r"–|—", ", "),  # en/em dashes -> a short pause
 ]
 

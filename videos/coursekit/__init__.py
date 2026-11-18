@@ -32,8 +32,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 VIDEOS = ROOT / "videos"
-SERIES = ("ai", "stats", "cs", "philosophy", "analysis", "music", "psychology")
-PREFIX = {"psychology": "psych"}  # a series whose videos are not named <series>N: videos/psychology/psych1
+SERIES = ("ai", "stats", "cs", "philosophy", "analysis", "music", "psychology", "economics")
+PREFIX = {"psychology": "psych", "economics": "econ"}  # a series whose videos are not named <series>N: psych1, econ1
 TRACK_TIERS = {"U": "U", "M": "UMI", "D": "UMDI", "I": "UI"}  # the tiers each track watches
 TOLERANT = False  # tools/check_course.py sets this: skip a table module that does not import (someone is writing it)
 _NUMBERED = re.compile(r"^(\d+)\.\s+(.*)$")
