@@ -175,7 +175,8 @@ def lively(anim, top=True):
         return Create(m, **kw)
     if isinstance(m, MathTex):
         src = m.tex_string
-        if len(src) <= SHORT_TEX and "\\\\" not in src and m.get_fill_opacity() > 0:
+        if len(src) <= SHORT_TEX and "\\\\" not in src and any(
+                g.get_fill_opacity() > 0 for g in m.family_members_with_points()):
             return Write(m, **kw)
         return anim
     if top and type(m) is VGroup and 2 <= len(m.submobjects) <= 40:
