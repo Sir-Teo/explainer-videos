@@ -66,6 +66,13 @@ Manim videos with local neural narration. See README.md for layout and build com
   usual ones: `tools/qa_sound.py musicN --sync`, `tools/dead_air.py <film> --sound musicN`, and
   `tools/lecture_length.py musicN` (30–60 minutes, listening included). `videos/music/soundcheck/` is the pipeline's
   two-minute test film.
+- *Economics, Built* (`videos/economics/`): planned, nothing built. Sixty-eight parts in twelve acts (`econ1` … `econ68`;
+  the series key is `economics`, the prefix `econ`): the plan and the decisions still open are
+  `videos/economics/README.md`, the standard (with the rules for cold opens, the Island serial, Play it, the
+  intermission and the computed score), the devices (Agora, the Island, the Tableau, the Facts, the Dials, the Data
+  Room) and every part chapter by chapter `videos/economics/SYLLABUS.md`. Its dates and numbers are from memory
+  and marked to be verified in each part's frontier sweep. Phase 0 (shared code in `explainer/economics/`, the
+  site and coursekit entries) has not started.
 - *Psychology, Built* (`videos/psychology/`): sixty-two parts in thirteen acts (`psych1` … `psych62`: a degree,
   the graduate methods sequence, industry practice and a research tier); all sixty-two are built (Acts I to XIII and the capstone). The folders are `psychN` while
   the series key is `psychology` (`videos/coursekit.PREFIX`, and `prefix="psych"` in `tools/series_site.py`). The series
