@@ -52,7 +52,7 @@ def pipe(names, gap=0.42, size=16, stub=0.3, color=GREY_A):
     return g
 
 
-class Effects(VoiceoverScene):
+class Effects(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -63,14 +63,10 @@ class Effects(VoiceoverScene):
         self.handlers()
 
     def card(self):
-        card = chapter_card(8, r"Effects and monads", r"How can a mathematical meaning describe a program that does "
-                            r"things?", lit=(1991, 2009),
-                            extra=((1991, r"Moggi: \ notions of computation and monads"),
-                                   (2009, r"Plotkin and Pretnar: \ effect handlers")), part=PART)
-        with self.voiceover("Chapter eight. Effects and monads. How can a mathematical meaning describe a program "
-                            "that does things?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Effects and monads", r"How can a mathematical meaning describe a program that does "
+                            r"things?", lit=(1991, 2009), extra=((1991, r"Moggi: \ notions of computation and monads"),
+                                   (2009, r"Plotkin and Pretnar: \ effect handlers")), part=PART, said="Chapter eight. Effects and monads. How can a mathematical meaning describe a program "
+                            "that does things?")
 
     # ------------------------------------------------------------------ values are not computations
     def problem(self):
@@ -191,6 +187,9 @@ class Effects(VoiceoverScene):
 
     # ------------------------------------------------------------------ one program, three monads
     def three(self):
+        self.ask(r"Exceptions, state, nondeterminism. \\ Can one program text serve all three?", [r"no", r"yes, through bind"], 1,
+                 say="Exceptions, state, and nondeterminism. Can one program text be run with each of them?",
+                 reveal="Yes: written with return and bind, the monad decides the effect.")
         m = load("monads")
         head = label(r"Three monads, \ one shape of program", font_size=36).to_edge(UP, buff=0.3)
         xs = [-4.55, 0.0, 4.55]

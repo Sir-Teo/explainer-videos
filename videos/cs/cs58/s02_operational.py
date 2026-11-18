@@ -68,7 +68,7 @@ def M(s, fs=28, color=WHITE):
     return MathTex(s, font_size=fs, color=color)
 
 
-class Operational(VoiceoverScene):
+class Operational(WatchScene):
     def construct(self):
         self.card()
         self.language()
@@ -79,15 +79,17 @@ class Operational(VoiceoverScene):
         self.cek()
 
     def card(self):
-        card = chapter_card(1, r"Meaning as steps", r"What does a machine do with a program?", lit=(1981, 1987),
-                            extra=((1981, r"Plotkin: \ structural operational semantics"),
+        self.chapter(1, r"Meaning as steps", r"What does a machine do with a program?", lit=(1981, 1987), extra=((1981, r"Plotkin: \ structural operational semantics"),
                                    (1986, r"Felleisen and Friedman: \ the CEK machine"),
-                                   (1987, r"Kahn: \ natural semantics")), part=PART)
-        with self.voiceover("Chapter one. Meaning as steps. What does a machine do with a program?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (1987, r"Kahn: \ natural semantics")), part=PART, said="Chapter one. Meaning as steps. What does a machine do with a program?")
 
     def language(self):
+        self.wrong_idea(r"a program means whatever the compiler does with it",
+                        r"meaning is defined first; \\ a compiler is correct relative to it",
+                        narration="It is tempting to say a program means whatever the compiler and the machine make of it.",
+                        right_narration="Then every compiler would be correct by definition. Semantics defines meaning first, "
+                                        "so that a compiler, an optimizer or a proof can be checked against it.")
+        self.clear_scene()
         head = label(r"A small language with recursion", font_size=36).to_edge(UP, buff=0.3)
         g = VGroup(
             M(r"e \;::=\; n \;\mid\; b \;\mid\; x", 40),
@@ -307,6 +309,10 @@ class Operational(VoiceoverScene):
         self.clear_scene()
 
     def big_step(self):
+        self.ask(r"Small steps and big steps, on a terminating program. \\ Can they disagree on its value?",
+                 [r"yes", r"no"], 1,
+                 say="Small-step and big-step semantics, on a program that terminates. Can they give different values?",
+                 reveal="No: we prove they agree on every program.")
         a = load("agree")
         head = label(r"Big steps: \ $e \Downarrow v$ \ \ (Kahn, \ 1987)", font_size=36).to_edge(UP, buff=0.3)
         fs = 29

@@ -54,7 +54,7 @@ def rule(name, premise, concl, fs=30, color=WHITE):
     return VGroup(n, g)
 
 
-class Concurrency(VoiceoverScene):
+class Concurrency(WatchScene):
     def construct(self):
         self.card()
         self.syntax()
@@ -64,14 +64,9 @@ class Concurrency(VoiceoverScene):
         self.deadlock()
 
     def card(self):
-        card = chapter_card(10, r"Processes and channels", r"What does a program mean when it talks to others?",
-                            lit=(1978, 1980, 1992),
-                            extra=((1978, r"Hoare: \ CSP"), (1980, r"Milner: \ CCS"),
-                                   (1992, r"Milner, \ Parrow, \ Walker: \ the $\pi$-calculus")), part=PART)
-        with self.voiceover("Chapter ten. Processes and channels. What does a program mean when it talks to "
-                            "others?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Processes and channels", r"What does a program mean when it talks to others?", lit=(1978, 1980, 1992), extra=((1978, r"Hoare: \ CSP"), (1980, r"Milner: \ CCS"),
+                                   (1992, r"Milner, \ Parrow, \ Walker: \ the $\pi$-calculus")), part=PART, said="Chapter ten. Processes and channels. What does a program mean when it talks to "
+                            "others?")
 
     # ------------------------------------------------------------------ CCS: the grammar, and two parts
     def syntax(self):
@@ -348,6 +343,10 @@ class Concurrency(VoiceoverScene):
 
     # ------------------------------------------------------------------ deadlock: a reachable stuck state
     def deadlock(self):
+        self.ask(r"Two processes take two locks in opposite orders. \\ In CCS, deadlock is...", [r"undefined",
+                 r"a reachable state with no actions"], 1,
+                 say="Two processes take two locks in opposite orders. What does deadlock mean in CCS?",
+                 reveal="A reachable state with no possible action, found by exploring the transitions.")
         head = label(r"Deadlock: \ a reachable stuck state", font_size=36).to_edge(UP, buff=0.3)
         fs = 26
         g = [r"\overline{g_a}", r"\overline{g_b}", r"\overline{r_b}", r"\overline{r_a}"]

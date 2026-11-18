@@ -76,7 +76,7 @@ def trace_tex(ts) -> str:
     return r"\{\," + r",\ ".join(r"\varepsilon" if not tr else "".join(tr) for tr in items) + r"\,\}"
 
 
-class Equivalence(VoiceoverScene):
+class Equivalence(WatchScene):
     def construct(self):
         self.card()
         self.contexts()
@@ -85,16 +85,11 @@ class Equivalence(VoiceoverScene):
         self.vending()
         self.applicative()
         self.logical()
-        self.tait()
 
     def card(self):
-        card = chapter_card(5, r"When are two programs the same?", r"Can we prove it without trying every context?",
-                            lit=(1981, 1990), extra=((1981, r"Park: \ bisimulation"),
-                                                     (1990, r"Abramsky: \ applicative bisimulation")), part=PART)
-        with self.voiceover("Chapter five. When are two programs the same? Can we prove it without trying every "
-                            "context?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"When are two programs the same?", r"Can we prove it without trying every context?", lit=(1981, 1990), extra=((1981, r"Park: \ bisimulation"),
+                                                     (1990, r"Abramsky: \ applicative bisimulation")), part=PART, said="Chapter five. When are two programs the same? Can we prove it without trying every "
+                            "context?")
 
     # ------------------------------------------------------------------ every context is too many
     def contexts(self):
@@ -174,6 +169,9 @@ class Equivalence(VoiceoverScene):
         return L, nodes, edges, tp, tq
 
     def game(self):
+        self.ask(r"$a.(b + c)$ against $a.b + a.c$: \\ the same traces. Bisimilar?", [r"yes", r"no"], 1,
+                 say="One machine does a, then offers b or c. The other chooses at the start. They have the same traces. Are they bisimilar?",
+                 reveal="No: after a, the second machine may have already ruled out b.")
         b = load("bisim")["choice"]
         head = label(r"Same traces, \ different machines", font_size=36).to_edge(UP, buff=0.3)
         L, nodes, edges, tp, tq = self._choice()
@@ -549,58 +547,6 @@ class Equivalence(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ Tait's normalization, and NbE
-    def tait(self):
-        rows = load("nbe")["rows"]
-        head = label(r"Tait: \ every typed term normalizes", font_size=36).to_edge(UP, buff=0.3)
-        fs = 28
-        d = VGroup(
-            MathTex(r"\mathrm{Red}_\iota", r"=", r"\{\, t \mid t \text{ reaches a normal form} \,\}", font_size=fs,
-                    color=DATA),
-            MathTex(r"\mathrm{Red}_{\sigma \to \tau}", r"=", r"\{\, t \mid s \in \mathrm{Red}_\sigma \implies "
-                    r"t\ s \in \mathrm{Red}_\tau \,\}", font_size=fs, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        lem = VGroup(
-            label(r"1. \ $\mathrm{Red}_\tau$ contains only normalizing terms \ (induction on $\tau$)", font_size=20,
-                  color=GREY_A),
-            label(r"2. \ $\vdash t : \tau$ \ implies \ $t \in \mathrm{Red}_\tau$ \ (induction on $t$): \ the "
-                  r"application case \textit{is} the definition", font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12)
-        top = VGroup(d, lem).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(head, DOWN, buff=0.35)
-        if top.width > 13.2:
-            top.scale_to_fit_width(13.2)
-        top.set_x(0)
-        body = [[r["term"], str(r["nbe"]), str(r["beta"]), str(r["beta_steps"]),
-                 r"yes" if r["same_normal_form"] else r"no"] for r in rows]
-        cols = [[WHITE, YES, WHITE, GREY_A, YES if r["same_normal_form"] else NO] for r in rows]
-        tab = grid_table([r"Church term", r"NbE", r"normal order", r"its $\beta$-steps", r"same normal form"], body,
-                         widths=[2.2, 1.2, 2.0, 1.9, 2.6], row_h=0.42, font_size=20, colors=cols, mono_cols=(0,))
-        tab.next_to(top, DOWN, buff=0.45).set_x(0)
-        cap = label(r"our NbE: \ evaluate into Python functions, \ then read the normal form back", font_size=19,
-                    color=GREY_B).next_to(tab, DOWN, buff=0.15)
-        with self.voiceover(
-            "Logical relations first proved that typed programs stop. <bookmark "
-            "mark='a'/> At the base type, the reducible terms are those with a normal form; at a function type, "
-            "those that send reducible arguments to reducible results. <bookmark mark='b'/> Reducible terms "
-            "normalize, by induction on the type. Every typed term is reducible, by induction on the term, and "
-            "the application case that defeated the naive proof is now the definition. That is Tait's method, "
-            "from nineteen sixty-seven. <bookmark mark='c'/> Read as a program, such a proof normalizes: evaluate "
-            "into functions, then read a normal form back. Berger and Schwichtenberg made this precise in "
-            "nineteen ninety-one. <bookmark mark='d'/> Ours agrees with step-by-step reduction."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(d[0]))
-            self.play(FadeIn(d[1]))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(t) for t in lem], lag_ratio=0.6), run_time=2.0)
-            vo.wait_until("c")
-            self.play(FadeIn(VGroup(*tab.cells[0])), Create(tab.rule), FadeIn(cap))
-            self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3), run_time=2.0)
-            vo.wait_until("d")
-            self.play(Circumscribe(VGroup(*[r[4] for r in tab.cells[1:]]), color=YES))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (KERN, LAM)

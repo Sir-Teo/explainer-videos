@@ -16,7 +16,7 @@ def node(sym: str, color=GREY_B):
     return VGroup(c, t)
 
 
-class Denotational(VoiceoverScene):
+class Denotational(WatchScene):
     def construct(self):
         self.card()
         self.denote()
@@ -26,12 +26,7 @@ class Denotational(VoiceoverScene):
         self.recursion()
 
     def card(self):
-        card = chapter_card(2, r"Meaning as mathematics", r"What object does a program stand for?",
-                            lit=(1971,), extra=((1971, r"Scott and Strachey: \ toward a mathematical semantics"),),
-                            part=PART)
-        with self.voiceover("Chapter two. Meaning as mathematics. What object does a program stand for?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Meaning as mathematics", r"What object does a program stand for?", lit=(1971,), extra=((1971, r"Scott and Strachey: \ toward a mathematical semantics"),), part=PART, said="Chapter two. Meaning as mathematics. What object does a program stand for?")
 
     def denote(self):
         head = label(r"A program denotes an object", font_size=36).to_edge(UP, buff=0.3)
@@ -205,6 +200,10 @@ class Denotational(VoiceoverScene):
         self.clear_scene()
 
     def contexts(self):
+        self.ask(r"Two expressions with the same meaning. \\ Swap one for the other inside any program:",
+                 [r"the meaning may change", r"the meaning is the same"], 1,
+                 say="Two expressions have the same denotation. Swap one for the other inside any larger program. Does its meaning change?",
+                 reveal="Never: meanings are built from the meanings of parts. That licenses every optimizer.")
         head = label(r"Compositionality pays", font_size=36).to_edge(UP, buff=0.3)
         left = mono("fun x -> (fun y -> y + y) (", size=26, color=WHITE)
         hole = DashedVMobject(Rectangle(width=2.9, height=0.62, color=HEAD, stroke_width=2), num_dashes=30)

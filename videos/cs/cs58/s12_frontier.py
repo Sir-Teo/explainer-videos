@@ -13,22 +13,15 @@ def tile(title, body, col, w=4.2, h=3.0):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.real()
         self.hott()
-        self.open()
 
     def card(self):
-        card = chapter_card(11, r"Frontier: \ semantics of real languages",
-                            r"Can a whole real language be given a meaning a machine can check?", lit=(2009, 2017),
-                            extra=((2009, r"Leroy: \ CompCert"), (2017, r"WebAssembly's formal semantics")),
-                            part=PART)
-        with self.voiceover("Chapter eleven, the frontier. Can a whole real language be given a meaning that a "
-                            "machine can check?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Frontier: \ semantics of real languages", r"Can a whole real language be given a meaning a machine can check?", lit=(2009, 2017), extra=((2009, r"Leroy: \ CompCert"), (2017, r"WebAssembly's formal semantics")), part=PART, said="Chapter eleven, the frontier. Can a whole real language be given a meaning that a "
+                            "machine can check?")
 
     def real(self):
         head = label(r"Mechanized semantics, \ at full size", font_size=36).to_edge(UP, buff=0.3)
@@ -62,6 +55,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def hott(self):
+        self.ask(r"In homotopy type theory, \\ a proof that $a = b$ is...", [r"just true or false",
+                 r"a path, with structure of its own"], 1,
+                 say="In homotopy type theory, what is a proof that a equals b?",
+                 reveal="A path from a to b, and paths between paths: equality with structure.")
         head = label(r"Equality, \ rethought", font_size=36).to_edge(UP, buff=0.3)
         left = VGroup(MathTex(r"a =_A b", font_size=48, color=WHITE),
                       label(r"in Martin-L\"of type theory, \ a proof of equality is a value of a type", font_size=19,
@@ -96,38 +93,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Full abstraction for real languages}: \ a mathematical model that equates "
-                          r"exactly the programs no context can tell apart.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Concurrency}: \ a memory model for C and C++ without out-of-thin-air "
-                          r"results, \ that compilers can keep.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Effects}: \ one semantics that composes state, \ exceptions, \ "
-                          r"probability and concurrency.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Proof engineering}: \ semantics that stay maintainable as languages "
-                          r"evolve.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ a semantics of relaxed-memory concurrency "
-                             r"for C that forbids out-of-thin-air values, \ permits the optimizations compilers "
-                             r"perform, \ and is proved so", 12.4, font_size=23, color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Fully abstract models of real languages, which equate exactly the "
-            "programs that no context can tell apart. <bookmark mark='b'/> A memory model for C and C++ without "
-            "out-of-thin-air results that compilers can still respect. <bookmark mark='c'/> One semantics of effects "
-            "that composes state, exceptions, probability and concurrency. <bookmark mark='d'/> And semantics that "
-            "stay maintainable as languages change. <bookmark mark='e'/> This part's research problem is the second "
-            "of these: a relaxed-memory semantics for C that forbids values from thin air, still allows the "
-            "optimizations real compilers perform, and is proved to do both."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

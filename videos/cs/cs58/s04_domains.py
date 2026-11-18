@@ -18,7 +18,7 @@ def strip(values, w=0.66, h=0.46, color=YES, fs=24):
     return VGroup(*[cell(v, w, h, color, fs) for v in values]).arrange(RIGHT, buff=0.06)
 
 
-class Domains(VoiceoverScene):
+class Domains(WatchScene):
     def construct(self):
         self.card()
         self.order()
@@ -26,17 +26,12 @@ class Domains(VoiceoverScene):
         self.continuity()
         self.kleene()
         self.chain()
-        self.dinf()
 
     def card(self):
-        card = chapter_card(3, r"Domains and fixed points", r"Why does every recursive definition have a meaning?",
-                            lit=(1969, 1970), extra=((1969, r"Scott: \ a model of the untyped $\lambda$-calculus"),
+        self.chapter(3, r"Domains and fixed points", r"Why does every recursive definition have a meaning?", lit=(1969, 1970), extra=((1969, r"Scott: \ a model of the untyped $\lambda$-calculus"),
                                                      (1970, r"Scott: \ outline of a mathematical theory of "
-                                                            r"computation")), part=PART)
-        with self.voiceover("Chapter three. Domains and fixed points. Why does every recursive definition have a "
-                            "meaning?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                            r"computation")), part=PART, said="Chapter three. Domains and fixed points. Why does every recursive definition have a "
+                            "meaning?")
 
     def order(self):
         head = label(r"Ordered by information: \ $x \sqsubseteq y$", font_size=36).to_edge(UP, buff=0.3)
@@ -273,6 +268,10 @@ class Domains(VoiceoverScene):
         self.clear_scene()
 
     def chain(self):
+        self.ask(r"Kleene's chain for factorial. \\ After $k$ steps the approximation knows...", [r"all of factorial",
+                 r"factorial below $k$"], 1,
+                 say="Build factorial by Kleene's chain, starting from the function that knows nothing. What does the k-th approximation know?",
+                 reveal="Factorial for inputs below k. The limit knows all of it.")
         rows = load("kleene")["rows"]
         head = label(r"The Kleene chain of factorial", font_size=36).to_edge(UP, buff=0.3)
         y0, dy = -2.75, 0.58
@@ -352,62 +351,13 @@ class Domains(VoiceoverScene):
             self.play(FadeIn(notes[3]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Small-step or big-step?", r"What happens next, or what the answer is"),
+             (r"What is a recursive function's meaning?", r"The least fixed point of its functional")],
+            narration="Checkpoint. What does each operational style answer? And what does a recursive definition denote?",
+            answers_narration="Small steps say what happens next; big steps say what the answer is. And the least fixed point "
+                              "of its functional, the limit of Kleene's chain.")
 
-    def dinf(self):
-        head = label(r"Scott's $D_\infty$: \ a model of the untyped $\lambda$-calculus", font_size=36).to_edge(
-            UP, buff=0.3)
-        need = MathTex(r"D", r"\;\cong\;", r"[D \to D]", font_size=48, color=WHITE).next_to(head, DOWN, buff=0.5)
-        needl = label(r"every term is a function, \ and can be applied to any term, \ itself included \ (Part 14)",
-                      font_size=21, color=GREY_A).next_to(need, DOWN, buff=0.2)
-        cantor = VGroup(MathTex(r"|D \to D| \;\ge\; |2^D| \;>\; |D|", font_size=34, color=NO),
-                        label(r"for all set functions, \ once $D$ has two elements \ (Cantor)", font_size=20,
-                              color=NO)).arrange(DOWN, buff=0.15)
-        cantor.move_to([-3.8, -0.5, 0])
-        boxes = VGroup()
-        for k in range(4):
-            r = RoundedRectangle(width=1.0 + 1.3 * k, height=0.7 + 0.55 * k, corner_radius=0.15,
-                                 stroke_color=[DATA, LAM, KERN, YES][k], stroke_width=2)
-            boxes.add(r)
-        for r in boxes:
-            r.move_to([3.6, -0.75, 0], aligned_edge=DOWN)
-            r.shift(DOWN * 0.0)
-        bl = VGroup(*[MathTex(s, font_size=24, color=c).next_to(boxes[k].get_top(), DOWN, buff=0.08)
-                      for k, (s, c) in enumerate(((r"D_0", DATA), (r"D_1 = [D_0 \to D_0]", LAM),
-                                                   (r"D_2 = [D_1 \to D_1]", KERN), (r"\cdots", YES)))])
-        bl[0].move_to(boxes[0])
-        for k in (1, 2, 3):
-            bl[k].next_to(boxes[k].get_top(), DOWN, buff=0.08)
-        stack = VGroup(boxes, bl)
-        stack.move_to([3.6, -0.6, 0])
-        sl = label(r"continuous functions only, \ each domain inside the next", font_size=20, color=GREY_A).next_to(
-            stack, DOWN, buff=0.2)
-        lim = VGroup(MathTex(r"D_\infty", r"\;\cong\;", r"[D_\infty \to D_\infty]", font_size=44, color=YES),
-                     label(r"the limit: \ Dana Scott, \ 1969", font_size=21, color=YES)).arrange(RIGHT, buff=0.5)
-        lim.to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "The same ideas answered an old question about Church's lambda calculus, from Part 14: does the untyped "
-            "calculus have a mathematical model at all? <bookmark mark='a'/> There, every term is a function that can"
-            " be applied to any term, even itself, so a model needs a space D that is the same as the functions from "
-            "D to D. <bookmark mark='b'/> For ordinary functions that is impossible: by Cantor's diagonal argument, "
-            "there are always more functions from D to D than elements of D. <bookmark mark='c'/> Dana Scott's "
-            "answer, in nineteen sixty-nine, was to use only continuous functions, and to build D as a limit: a "
-            "domain, its space of continuous functions, that space's, and so on, each inside the next. <bookmark "
-            "mark='d'/> The limit, D infinity, is isomorphic to its own space of continuous functions: the first "
-            "mathematical model of the untyped lambda calculus."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(need), FadeIn(needl))
-            vo.wait_until("b")
-            self.play(FadeIn(cantor))
-            vo.wait_until("c")
-            for k in range(4):
-                self.play(Create(boxes[k]), FadeIn(bl[k]), run_time=0.7)
-            self.play(FadeIn(sl))
-            vo.wait_until("d")
-            self.play(FadeIn(lim))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (HEAD, LAM, NO)
