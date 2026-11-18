@@ -7,7 +7,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Persist(VoiceoverScene):
+class Persist(WatchScene):
     def construct(self):
         self.card()
         self.copying()
@@ -15,12 +15,8 @@ class Persist(VoiceoverScene):
         self.cache()
 
     def card(self):
-        card = chapter_card(13, r"Persistence, \ and the memory hierarchy", r"Can an update keep the past?",
-                            lit=(1989,), extra=((1989, r"Driscoll, \ Sarnak, \ Sleator and Tarjan"),
-                                                (1998, r"Okasaki: \ purely functional data structures")), part=PART)
-        with self.voiceover("Chapter thirteen. Persistence, and the memory hierarchy."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Persistence, \ and the memory hierarchy", r"Can an update keep the past?", lit=(1989,), extra=((1989, r"Driscoll, \ Sarnak, \ Sleator and Tarjan"),
+                                                (1998, r"Okasaki: \ purely functional data structures")), part=PART, said="Chapter thirteen. Persistence, and the memory hierarchy.")
 
     def copying(self):
         head = label(r"Path copying", font_size=34).to_edge(UP, buff=0.3)
@@ -74,6 +70,10 @@ class Persist(VoiceoverScene):
         self.clear_scene()
 
     def measured(self):
+        self.ask(r"Keep every version of a tree through 100{,}000 inserts. \\ The extra memory per insert?",
+                 [r"a whole tree", r"about $\log n$ nodes"], 1,
+                 say="Keep every old version of a tree, through a hundred thousand inserts. What does each insert cost in memory?",
+                 reveal="About log n nodes: only the search path is copied.")
         d = load("persist")
         head = label(r"What persistence costs", font_size=34).to_edge(UP, buff=0.3)
         rows = [[words(r["n"]), f"{r['copied_per_insert']:.1f}", f"{2 * r['ln']:.1f}", f"{r['full_copy']:,.0f}"]

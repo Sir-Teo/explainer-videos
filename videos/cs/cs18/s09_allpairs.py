@@ -5,7 +5,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    grid_table, load, mono, words)
 
 
-class AllPairs(VoiceoverScene):
+class AllPairs(WatchScene):
     def construct(self):
         self.card()
         self.floyd()
@@ -13,13 +13,12 @@ class AllPairs(VoiceoverScene):
         self.minplus()
 
     def card(self):
-        card = chapter_card(8, r"All pairs", r"Every distance, \ between every pair?", lit=(1962,),
-                            extra=((1962, r"Floyd; \ Warshall"), (1977, r"Johnson: \ reweighting")), part=PART)
-        with self.voiceover("Chapter eight. All pairs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"All pairs", r"Every distance, \ between every pair?", lit=(1962,), extra=((1962, r"Floyd; \ Warshall"), (1977, r"Johnson: \ reweighting")), part=PART, said="Chapter eight. All pairs.")
 
     def floyd(self):
+        self.ask(r"Floyd--Warshall on 1000 vertices. \\ About how many updates?", [r"a million", r"a billion"], 1,
+                 say="Floyd-Warshall on a thousand vertices. About how many updates?",
+                 reveal="A billion: three nested loops of a thousand.")
         head = label(r"Floyd--Warshall: \ allow one more waypoint", font_size=34).to_edge(UP, buff=0.3)
         src = code(["for k in 0 .. n-1:", "    for i in 0 .. n-1:", "        for j in 0 .. n-1:",
                     "            d[i][j] = min(d[i][j], d[i][k] + d[k][j])"], size=20, color=CODE).next_to(

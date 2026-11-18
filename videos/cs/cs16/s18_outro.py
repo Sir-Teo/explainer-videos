@@ -18,7 +18,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -52,6 +52,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Amortized cost: average over what?", r"Any sequence of operations, not random inputs"),
+             (r"What does the master theorem compare?", r"The work at the root against the number of leaves")],
+            narration="Last checkpoint. Amortized cost is an average over what? And what does the master theorem compare?",
+            answers_narration="Over any sequence of operations, with no randomness. And the work at the root against the "
+                              "number of leaves.")
 
     def payoffs(self):
         card = payoff_card([

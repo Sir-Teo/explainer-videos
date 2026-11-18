@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class Bellman(VoiceoverScene):
+class Bellman(WatchScene):
     def construct(self):
         self.card()
         self.broken()
@@ -15,13 +15,16 @@ class Bellman(VoiceoverScene):
         self.arbitrage()
 
     def card(self):
-        card = chapter_card(7, r"Negative edges", r"What if a road pays you to take it?", lit=(1958,),
-                            extra=((1956, r"Ford"), (1958, r"Bellman")), part=PART)
-        with self.voiceover("Chapter seven. Negative edges."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Negative edges", r"What if a road pays you to take it?", lit=(1958,), extra=((1956, r"Ford"), (1958, r"Bellman")), part=PART, said="Chapter seven. Negative edges.")
 
     def broken(self):
+        self.wrong_idea(r"Dijkstra's algorithm finds shortest paths \\ in any weighted graph",
+                        r"Only with non-negative weights. \\ One negative edge can fool it",
+                        narration="Dijkstra's algorithm is the shortest-path algorithm everyone knows, so it's easy to assume it "
+                                  "works on any weighted graph.",
+                        right_narration="It needs every edge to be non-negative. One negative edge can make it settle a vertex "
+                                        "too early.")
+        self.clear_scene()
         head = label(r"Dijkstra fails with a negative edge", font_size=34).to_edge(UP, buff=0.3)
         pos = {"s": (-5.8, 0.0), "a": (-3.8, 1.5), "b": (-3.8, -1.5), "t": (-1.8, 0.0)}
         w = {("s", "a"): 2, ("s", "b"): 5, ("b", "a"): -4, ("a", "t"): 1}
@@ -55,6 +58,10 @@ class Bellman(VoiceoverScene):
         self.clear_scene()
 
     def rounds(self):
+        self.ask(r"Bellman--Ford relaxes every edge, round after round. \\ How many rounds suffice?",
+                 [r"$V - 1$", r"$E$", r"$\log V$"], 0,
+                 say="Bellman-Ford relaxes every edge in rounds. How many rounds are enough, if there's no negative cycle?",
+                 reveal="V minus one: a shortest path has at most that many edges.")
         head = label(r"Bellman--Ford: \ relax everything, \ $V - 1$ times", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"round $k$: \ relax every edge once", font_size=23, color=GREY_A),
@@ -148,9 +155,7 @@ class Bellman(VoiceoverScene):
             "becomes a negative cycle because logarithms turn products into sums. <bookmark mark='c'/> "
             "The checked example finds yen to pounds to euros and back to yen. <bookmark mark='d'/> Its "
             "gross gain is about half a percent. The implementation uses floating arithmetic and a small "
-            "relaxation tolerance, so a nearly zero cycle needs numerical care. <bookmark mark='e'/> This"
-            " mathematical detector alone does not establish that a real sequence of trades can be "
-            "executed profitably."
+            "relaxation tolerance, so a nearly zero cycle needs numerical care. <bookmark mark='e'/>"
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab), FadeIn(cap))
             vo.wait_until("a")

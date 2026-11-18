@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class PageRank(VoiceoverScene):
+class PageRank(WatchScene):
     def construct(self):
         self.card()
         self.surfer()
@@ -15,11 +15,7 @@ class PageRank(VoiceoverScene):
         self.top()
 
     def card(self):
-        card = chapter_card(14, r"PageRank", r"Which page matters most?", lit=(1998,),
-                            extra=((1998, r"Brin and Page"),), part=PART)
-        with self.voiceover("Chapter fourteen. PageRank."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"PageRank", r"Which page matters most?", lit=(1998,), extra=((1998, r"Brin and Page"),), part=PART, said="Chapter fourteen. PageRank.")
 
     def surfer(self):
         d = load("pagerank")
@@ -129,6 +125,10 @@ class PageRank(VoiceoverScene):
         self.clear_scene()
 
     def top(self):
+        self.ask(r"Top ten by PageRank, \\ against top ten by incoming links. The same?", [r"identical",
+                 r"overlapping, but different"], 1,
+                 say="Rank the pages by PageRank, and by number of incoming links. Are the top tens the same?",
+                 reveal="They overlap, but differ: a link from an important page counts for more.")
         d = load("pagerank")
         head = label(r"The top pages", font_size=34).to_edge(UP, buff=0.3)
         rows = [[str(u), f"{100 * r:.2f}\\%", words(deg)] for u, r, deg in d["top"][:8]]

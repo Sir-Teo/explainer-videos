@@ -13,7 +13,7 @@ def tri(label_, color, w=0.7, h=0.75):
     return VGroup(t, MathTex(label_, font_size=26, color=color).move_to(t.get_center() + DOWN * 0.1))
 
 
-class Balanced(VoiceoverScene):
+class Balanced(WatchScene):
     def construct(self):
         self.card()
         self.rotation()
@@ -22,14 +22,13 @@ class Balanced(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(6, r"Balanced trees: \ AVL and red--black", r"Can a tree keep itself short?",
-                            lit=(1962,), extra=((1962, r"Adelson-Velsky and Landis"),
-                                                (1978, r"Guibas and Sedgewick: \ red--black")), part=PART)
-        with self.voiceover("Chapter six. Balanced trees: AVL and red–black."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Balanced trees: \ AVL and red--black", r"Can a tree keep itself short?", lit=(1962,), extra=((1962, r"Adelson-Velsky and Landis"),
+                                                (1978, r"Guibas and Sedgewick: \ red--black")), part=PART, said="Chapter six. Balanced trees: AVL and red–black.")
 
     def rotation(self):
+        self.ask(r"A tree rotation. \\ How many pointers change?", [r"3", r"about $\log n$", r"about $n$"], 0,
+                 say="A rotation rebalances a tree. How many pointers change?",
+                 reveal="Three, and the in-order sequence is untouched.")
         head = label(r"A rotation", font_size=34).to_edge(UP, buff=0.3)
 
         def node(k, col=DATA):

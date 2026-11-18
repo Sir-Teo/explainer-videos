@@ -9,7 +9,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
 POS = {"s": (-6.2, 0.0), "a": (-4.4, 1.5), "b": (-4.4, -1.5), "c": (-2.1, 1.5), "d": (-2.1, -1.5), "t": (-0.3, 0.0)}
 
 
-class Flow(VoiceoverScene):
+class Flow(WatchScene):
     def construct(self):
         self.card()
         self.augment()
@@ -17,11 +17,7 @@ class Flow(VoiceoverScene):
         self.bad()
 
     def card(self):
-        card = chapter_card(11, r"Flows and cuts", r"How much can get through?", lit=(1956,),
-                            extra=((1956, r"Ford and Fulkerson"), (1972, r"Edmonds and Karp")), part=PART)
-        with self.voiceover("Chapter eleven. Flows and cuts."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Flows and cuts", r"How much can get through?", lit=(1956,), extra=((1956, r"Ford and Fulkerson"), (1972, r"Edmonds and Karp")), part=PART, said="Chapter eleven. Flows and cuts.")
 
     def network(self, d):
         cap = d["cap"]
@@ -88,6 +84,10 @@ class Flow(VoiceoverScene):
         self.clear_scene()
 
     def theorem(self):
+        self.ask(r"The maximum flow from $s$ to $t$, \\ and the smallest cut between them...", [r"the flow is always smaller",
+                 r"they're equal"], 1,
+                 say="Compare the most water that can flow from source to sink with the smallest cut that separates them.",
+                 reveal="They're equal: the max-flow min-cut theorem.")
         d = load("flow")
         head = label(r"Max flow $=$ min cut", font_size=34).to_edge(UP, buff=0.3)
         g, nodes, es = self.network(d)
@@ -171,3 +171,10 @@ class Flow(VoiceoverScene):
                 self.play(FadeIn(p))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does Kruskal's greedy choice work?", r"The cut property: the lightest edge across a cut is safe"),
+             (r"Floyd--Warshall's cost?", r"$V^3$")],
+            narration="Checkpoint. Why can Kruskal's algorithm take the lightest edges greedily? And what does Floyd-Warshall "
+                      "cost?",
+            answers_narration="By the cut property: the lightest edge crossing any cut belongs to some minimum spanning tree. "
+                              "And V cubed.")

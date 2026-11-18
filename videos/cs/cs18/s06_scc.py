@@ -10,7 +10,7 @@ POS = {1: (-5.4, 1.2), 2: (-3.8, 1.2), 3: (-4.6, -0.2), 4: (-2.2, 1.2), 5: (-1.4
        7: (-0.6, 1.2), 8: (0.6, 1.2)}
 
 
-class Scc(VoiceoverScene):
+class Scc(WatchScene):
     def construct(self):
         self.card()
         self.components()
@@ -19,12 +19,7 @@ class Scc(VoiceoverScene):
         self.twosat()
 
     def card(self):
-        card = chapter_card(5, r"Strongly connected components", r"Which vertices can all reach each other?",
-                            lit=(1972,), extra=((1972, r"Tarjan: \ one pass"), (1978, r"Kosaraju: \ two passes")),
-                            part=PART)
-        with self.voiceover("Chapter five. Strongly connected components."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Strongly connected components", r"Which vertices can all reach each other?", lit=(1972,), extra=((1972, r"Tarjan: \ one pass"), (1978, r"Kosaraju: \ two passes")), part=PART, said="Chapter five. Strongly connected components.")
 
     def components(self):
         d = load("scc")
@@ -212,6 +207,9 @@ class Scc(VoiceoverScene):
         self.clear_scene()
 
     def twosat(self):
+        self.ask(r"Satisfiability with two literals per clause. \\ How hard?", [r"NP-hard", r"linear time"], 1,
+                 say="Satisfiability where every clause has just two literals. How hard is it?",
+                 reveal="Linear time, by strongly connected components. Three literals per clause is NP-complete.")
         head = label(r"2-SAT in linear time \ (Aspvall, \ Plass and Tarjan, \ 1979)", font_size=32).to_edge(
             UP, buff=0.3)
         formula = MathTex(r"(x_1 \lor x_2) \land (\lnot x_1 \lor x_3) \land (\lnot x_2 \lor \lnot x_3) \land "

@@ -7,7 +7,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.yao()
@@ -16,13 +16,9 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ how good can a data structure be?", r"Are the textbook bounds the "
+        self.chapter(16, r"Frontier: \ how good can a data structure be?", r"Are the textbook bounds the "
                             r"truth?", lit=(2025,), extra=((1985, r"Yao: \ uniform hashing is optimal?"),
-                                                           (2025, r"Farach-Colton, \ Krapivin and Kuszmaul")),
-                            part=PART)
-        with self.voiceover("Chapter sixteen. Frontier: how good can a data structure be?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2025, r"Farach-Colton, \ Krapivin and Kuszmaul")), part=PART, said="Chapter sixteen. Frontier: how good can a data structure be?")
 
     def yao(self):
         d = load("frontier")
@@ -94,6 +90,11 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def optimality(self):
+        self.ask(r"Is there a search tree within a constant factor \\ of the best, for every access sequence?",
+                 [r"yes, proved", r"open since 1985"], 1,
+                 say="Is there a binary search tree that is within a constant factor of the best possible, on every access "
+                     "sequence?",
+                 reveal="Nobody knows. Sleator and Tarjan conjectured that splay trees are, in 1985, and it's still open.")
         head = label(r"Is there a best binary search tree?", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"\textbf{dynamic optimality} \ (Sleator and Tarjan, \ 1985): \ splay trees are within $O(1)$ of "

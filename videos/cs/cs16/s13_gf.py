@@ -5,20 +5,19 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    words)
 
 
-class Generating(VoiceoverScene):
+class Generating(WatchScene):
     def construct(self):
         self.card()
         self.fibonacci()
         self.catalan()
 
     def card(self):
-        card = chapter_card(12, r"Generating functions", r"Can a sequence be a single function?", lit=(1730,),
-                            extra=((1730, r"de Moivre's generating functions"),), part=PART)
-        with self.voiceover("Chapter twelve. Generating functions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Generating functions", r"Can a sequence be a single function?", lit=(1730,), extra=((1730, r"de Moivre's generating functions"),), part=PART, said="Chapter twelve. Generating functions.")
 
     def fibonacci(self):
+        self.ask(r"Fibonacci numbers grow like...", [r"$n^2$", r"$\varphi^n$, $\varphi \approx 1.618$", r"$2^n$"], 1,
+                 say="How fast do the Fibonacci numbers grow?",
+                 reveal="Like the golden ratio to the n, and a generating function proves it.")
         d = load("gf")
         head = label(r"A sequence, \ packed into a function", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(

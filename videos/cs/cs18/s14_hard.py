@@ -9,7 +9,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Hard(VoiceoverScene):
+class Hard(WatchScene):
     def construct(self):
         self.card()
         self.icosian()
@@ -17,12 +17,7 @@ class Hard(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(13, r"Easy and hard", r"Why is visiting every vertex so much harder than every edge?",
-                            lit=(1857,), extra=((1857, r"Hamilton's icosian game"), (1962, r"Held and Karp")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Easy and hard."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Easy and hard", r"Why is visiting every vertex so much harder than every edge?", lit=(1857,), extra=((1857, r"Hamilton's icosian game"), (1962, r"Held and Karp")), part=PART, said="Chapter thirteen. Easy and hard.")
 
     def icosian(self):
         d = load("hard")
@@ -77,6 +72,10 @@ class Hard(VoiceoverScene):
         self.clear_scene()
 
     def contrast(self):
+        self.ask(r"Euler circuit, or Hamiltonian cycle: \\ which is easy to decide?", [r"the Euler circuit",
+                 r"the Hamiltonian cycle", r"both"], 0,
+                 say="Every edge once, or every vertex once. Which question is easy?",
+                 reveal="Every edge once: count degrees. Every vertex once is NP-complete.")
         head = label(r"Every edge once, \ or every vertex once", font_size=34).to_edge(UP, buff=0.3)
         left = VGroup(
             label(r"\textbf{Euler tour}: \ every edge exactly once", font_size=23, color=YES),

@@ -7,7 +7,7 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    mono, words)
 
 
-class Merge(VoiceoverScene):
+class Merge(WatchScene):
     def construct(self):
         self.card()
         self.merging()
@@ -15,11 +15,7 @@ class Merge(VoiceoverScene):
         self.substitution()
 
     def card(self):
-        card = chapter_card(4, r"Merge sort and the recursion tree", r"What does dividing buy?", lit=(1945,),
-                            extra=((1945, r"von Neumann's merge sort"),), part=PART)
-        with self.voiceover("Chapter four. Merge sort and the recursion tree."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Merge sort and the recursion tree", r"What does dividing buy?", lit=(1945,), extra=((1945, r"von Neumann's merge sort"),), part=PART, said="Chapter four. Merge sort and the recursion tree.")
 
     def merging(self):
         head = label(r"Merging two sorted lists", font_size=34).to_edge(UP, buff=0.3)
@@ -77,6 +73,10 @@ class Merge(VoiceoverScene):
         self.clear_scene()
 
     def tree(self):
+        self.ask(r"Merge sort's recursion tree. \\ The work on each level...", [r"halves each level down",
+                 r"is about $n$ on every level"], 1,
+                 say="Draw merge sort's recursion tree. How much merging work is done on each level?",
+                 reveal="About n on every level, and there are log n levels.")
         head = label(r"The recursion tree of $T(n) = 2T(n/2) + n$", font_size=32).to_edge(UP, buff=0.3)
         n = 16
         levels = 5

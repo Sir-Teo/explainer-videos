@@ -5,20 +5,20 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class Practice(VoiceoverScene):
+class Practice(WatchScene):
     def construct(self):
         self.card()
         self.libraries()
         self.native()
 
     def card(self):
-        card = chapter_card(14, r"Hash tables in practice", r"What do real systems build?", lit=(2017,),
-                            extra=((2012, r"SipHash"), (2017, r"Swiss tables")), part=PART)
-        with self.voiceover("Chapter fourteen. Hash tables in practice."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Hash tables in practice", r"What do real systems build?", lit=(2017,), extra=((2012, r"SipHash"), (2017, r"Swiss tables")), part=PART, said="Chapter fourteen. Hash tables in practice.")
 
     def libraries(self):
+        self.ask(r"Two hash tables with the same big-O. \\ What decides which is faster?",
+                 [r"nothing: same big-O, same speed", r"constants and memory layout"], 1,
+                 say="Two hash tables with the same big-O. What decides which one is faster?",
+                 reveal="Constants and memory layout: probes that stay in one cache line win.")
         head = label(r"What the standard libraries chose", font_size=34).to_edge(UP, buff=0.3)
         rows = [
             [r"Python \texttt{dict}", r"open addressing, \ perturbed probing; \ compact entry array, \ insertion "

@@ -7,7 +7,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Randomized(VoiceoverScene):
+class Randomized(WatchScene):
     def construct(self):
         self.card()
         self.treap()
@@ -15,11 +15,7 @@ class Randomized(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(7, r"Treaps and skip lists", r"Can coin flips replace rebalancing rules?", lit=(1989,),
-                            extra=((1989, r"Seidel and Aragon: \ treaps"), (1990, r"Pugh: \ skip lists")), part=PART)
-        with self.voiceover("Chapter seven. Treaps and skip lists."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Treaps and skip lists", r"Can coin flips replace rebalancing rules?", lit=(1989,), extra=((1989, r"Seidel and Aragon: \ treaps"), (1990, r"Pugh: \ skip lists")), part=PART, said="Chapter seven. Treaps and skip lists.")
 
     def treap(self):
         head = label(r"A treap: \ a tree on keys, \ a heap on priorities", font_size=34).to_edge(UP, buff=0.3)
@@ -62,6 +58,9 @@ class Randomized(VoiceoverScene):
         self.clear_scene()
 
     def skiplist(self):
+        self.ask(r"A skip list decides each node's height by...", [r"its key", r"coin flips"], 1,
+                 say="How does a skip list decide how tall each node is?",
+                 reveal="By coin flips: half the nodes reach level one, a quarter level two, and so on.")
         head = label(r"A skip list \ (Pugh, \ 1990)", font_size=34).to_edge(UP, buff=0.3)
         keys = [3, 7, 12, 19, 25, 31, 38, 44, 50, 57]
         rng = random.Random(3)

@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Bfs(VoiceoverScene):
+class Bfs(WatchScene):
     def construct(self):
         self.card()
         self.maze()
@@ -15,11 +15,7 @@ class Bfs(VoiceoverScene):
         self.bipartite()
 
     def card(self):
-        card = chapter_card(2, r"Breadth-first search", r"What is everything one step away, \ then two?", lit=(1959,),
-                            extra=((1945, r"Zuse"), (1959, r"Moore: \ the shortest path through a maze")), part=PART)
-        with self.voiceover("Chapter two. Breadth-first search."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Breadth-first search", r"What is everything one step away, \ then two?", lit=(1959,), extra=((1945, r"Zuse"), (1959, r"Moore: \ the shortest path through a maze")), part=PART, said="Chapter two. Breadth-first search.")
 
     def maze(self):
         d = load("bfs")
@@ -73,6 +69,9 @@ class Bfs(VoiceoverScene):
         self.clear_scene()
 
     def why(self):
+        self.ask(r"Breadth-first search finds shortest paths by...", [r"number of edges", r"total weight", r"both"], 0,
+                 say="Breadth-first search finds shortest paths. Shortest by what measure?",
+                 reveal="By number of edges. Weights need Dijkstra.")
         head = label(r"Why the layers are distances", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"\textbf{claim}: \ BFS removes vertices from the queue in order of their distance from $s$",

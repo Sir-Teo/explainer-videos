@@ -7,7 +7,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    draw_tree, grid_table, load, mono, words)
 
 
-class Bst(VoiceoverScene):
+class Bst(WatchScene):
     def construct(self):
         self.card()
         self.search()
@@ -15,11 +15,7 @@ class Bst(VoiceoverScene):
         self.bijection()
 
     def card(self):
-        card = chapter_card(5, r"Binary search trees", r"What if we need the keys in order?", lit=(1960,),
-                            extra=((1960, r"Windley, \ Booth and Colin, \ Hibbard"),), part=PART)
-        with self.voiceover("Chapter five. Binary search trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Binary search trees", r"What if we need the keys in order?", lit=(1960,), extra=((1960, r"Windley, \ Booth and Colin, \ Hibbard"),), part=PART, said="Chapter five. Binary search trees.")
 
     def search(self):
         d = load("bst")
@@ -60,6 +56,10 @@ class Bst(VoiceoverScene):
         self.clear_scene()
 
     def random(self):
+        self.ask(r"A binary search tree from $n$ keys in random order. \\ A typical depth?", [r"about $n/2$",
+                 r"about $2 \ln n$", r"exactly $\log_2 n$"], 1,
+                 say="Insert n keys into a binary search tree in random order. About how deep is a typical node?",
+                 reveal="About two natural log n: the same sum as quicksort's comparisons.")
         d = load("bst")
         head = label(r"Random insertion order", font_size=34).to_edge(UP, buff=0.3)
         rows = [[words(r["n"]), f"{r['depth']:.2f}", f"{r['theory']:.2f}", f"{r['height']:.1f}",

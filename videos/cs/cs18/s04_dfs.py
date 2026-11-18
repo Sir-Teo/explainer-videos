@@ -10,7 +10,7 @@ POS = {"a": (-5.2, 1.4), "b": (-3.6, 1.4), "c": (-4.4, 0.0), "d": (-5.2, -1.4), 
        "g": (-1.2, 0.6), "h": (-0.2, 1.6)}
 
 
-class Dfs(VoiceoverScene):
+class Dfs(WatchScene):
     def construct(self):
         self.card()
         self.times()
@@ -18,12 +18,7 @@ class Dfs(VoiceoverScene):
         self.classes()
 
     def card(self):
-        card = chapter_card(3, r"Depth-first search", r"What does a thread through a maze remember?", lit=(1972,),
-                            extra=((1882, r"Tr\'emaux: \ maze solving"), (1972, r"Tarjan: \ DFS and its uses")),
-                            part=PART)
-        with self.voiceover("Chapter three. Depth-first search."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Depth-first search", r"What does a thread through a maze remember?", lit=(1972,), extra=((1882, r"Tr\'emaux: \ maze solving"), (1972, r"Tarjan: \ DFS and its uses")), part=PART, said="Chapter three. Depth-first search.")
 
     def graph(self):
         d = load("dfs")
@@ -74,6 +69,9 @@ class Dfs(VoiceoverScene):
         self.clear_scene()
 
     def parentheses(self):
+        self.ask(r"Two vertices' discovery-to-finish intervals in a DFS. \\ Can they partly overlap?", [r"yes", r"no"], 1,
+                 say="Draw each vertex's lifetime in a depth-first search. Can two of those intervals partly overlap?",
+                 reveal="Never. They nest or they're disjoint, like parentheses.")
         d = load("dfs")
         head = label(r"The parenthesis theorem", font_size=34).to_edge(UP, buff=0.3)
         T = max(d["f"].values())

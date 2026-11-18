@@ -7,12 +7,12 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.bridges()
         self.everywhere()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     def bridges(self):
         head = label(r"K\"onigsberg, \ 1736", font_size=36).to_edge(UP, buff=0.35)
@@ -125,25 +125,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Graphs", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"Euler circuits; \ representations; \ breadth- and depth-first search",
-            r"topological sort; \ strongly connected components; \ 2-SAT",
-            r"shortest paths: \ Dijkstra, \ Bellman--Ford, \ all pairs, \ A* and contraction hierarchies",
-            r"minimum spanning trees; \ max flow and min cut; \ matching",
-            r"Hamiltonian cycles; \ PageRank; \ planarity and colouring",
-            r"the frontier: \ universal optimality, \ beyond the sorting barrier, \ almost-linear flow",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 18 of Computer Science, Built: Graphs. <bookmark mark='a'/> In this part: Euler circuits, how "
-            "to store a graph, and the two searches; topological order and strongly connected components; shortest "
-            "paths of every kind; spanning trees, flows, cuts and matchings; hard problems on graphs, PageRank and "
-            "planarity; and the results of the last five years."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

@@ -5,7 +5,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.dijkstra()
@@ -14,12 +14,8 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(16, r"Research results: \ models and dates", r"Was Dijkstra the end of the story?",
-                            lit=(2024,), extra=((2022, r"almost-linear max flow"), (2024, r"universal optimality"),
-                                                (2025, r"the sorting barrier broken"), (2026, r"improved directed bound")), part=PART)
-        with self.voiceover("Chapter sixteen. Selected research results, with their models and dates."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(16, r"Research results: \ models and dates", r"Was Dijkstra the end of the story?", lit=(2024,), extra=((2022, r"almost-linear max flow"), (2024, r"universal optimality"),
+                                                (2025, r"the sorting barrier broken"), (2026, r"improved directed bound")), part=PART, said="Chapter sixteen. Selected research results, with their models and dates.")
 
     def dijkstra(self):
         head = label(r"Distance vector or distance order?",font_size=34).to_edge(UP,buff=.3)
@@ -46,6 +42,10 @@ class Frontier(VoiceoverScene):
         self.wait(.3);self.clear_scene()
 
     def barrier(self):
+        self.ask(r"Directed shortest paths: \\ can anyone beat Dijkstra's $n \log n$ sorting barrier?", [r"no",
+                 r"yes, since 2025"], 1,
+                 say="Dijkstra's algorithm is stuck at a sorting cost of n log n. Can directed shortest paths go faster?",
+                 reveal="Yes. In 2025 Duan and colleagues broke the barrier, without sorting all the distances.")
         head=label(r"Selected directed shortest-path bounds: 2025 and 2026",font_size=32).to_edge(UP,buff=.3)
         model=label(r"nonnegative real weights; deterministic; comparison-addition; distance-only output",
                     font_size=20,color=LAM).set_y(2.55)

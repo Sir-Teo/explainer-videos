@@ -7,7 +7,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, slots, words)
 
 
-class Probing(VoiceoverScene):
+class Probing(WatchScene):
     def construct(self):
         self.card()
         self.linear()
@@ -16,13 +16,13 @@ class Probing(VoiceoverScene):
         self.robin()
 
     def card(self):
-        card = chapter_card(3, r"Open addressing", r"Can the table itself hold the overflow?", lit=(1963,),
-                            extra=((1963, r"Knuth: \ linear probing analysed"),), part=PART)
-        with self.voiceover("Chapter three. Open addressing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Open addressing", r"Can the table itself hold the overflow?", lit=(1963,), extra=((1963, r"Knuth: \ linear probing analysed"),), part=PART, said="Chapter three. Open addressing.")
 
     def linear(self):
+        self.ask(r"Linear probing, the table 90\% full. \\ An unsuccessful search takes about...",
+                 [r"2 probes", r"10 probes", r"50 probes"], 2,
+                 say="A linear-probing table is ninety percent full. About how many probes does an unsuccessful search take?",
+                 reveal="About fifty: Knuth's formula, one half of one plus one over one minus alpha, squared.")
         d = load("probing")
         head = label(r"Linear probing: \ try the next slot", font_size=34).to_edge(UP, buff=0.3)
         snaps = d["snaps"]
@@ -139,7 +139,7 @@ class Probing(VoiceoverScene):
             panel.scale_to_fit_width(5.7)
         panel.to_edge(RIGHT, buff=0.45)
         with self.voiceover(
-            "Here is a finite seeded illustration, not a proof of the random-home model. <bookmark "
+            " <bookmark "
             "mark='a'/> Each load uses a new key set and a universal affine hash, which controls pair "
             "collisions but does not supply fully independent home addresses. The red observations count "
             "unsuccessful searches at fixed load; they are the probe cost of one more insert before the "

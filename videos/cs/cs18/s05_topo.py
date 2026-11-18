@@ -9,7 +9,7 @@ POS = {"lexer.c": (-5.6, 2.0), "parser.c": (-5.6, 0.8), "ast.h": (-5.6, -0.4), "
        "tests": (1.9, 0.4)}
 
 
-class Topo(VoiceoverScene):
+class Topo(WatchScene):
     def construct(self):
         self.card()
         self.build()
@@ -17,11 +17,7 @@ class Topo(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(4, r"Topological sort", r"In what order can dependent tasks run?", lit=(1962,),
-                            extra=((1962, r"Kahn: \ topological sorting"), (1977, r"make")), part=PART)
-        with self.voiceover("Chapter four. Topological sort."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Topological sort", r"In what order can dependent tasks run?", lit=(1962,), extra=((1962, r"Kahn: \ topological sorting"), (1977, r"make")), part=PART, said="Chapter four. Topological sort.")
 
     def dag(self):
         d = load("topo")
@@ -73,6 +69,9 @@ class Topo(VoiceoverScene):
         self.clear_scene()
 
     def kahn(self):
+        self.ask(r"A dependency graph with a cycle. \\ Is there a valid build order?", [r"yes", r"no"], 1,
+                 say="If the dependencies contain a cycle, is there any valid build order?",
+                 reveal="No. Topological order exists exactly when the graph is acyclic.")
         d = load("topo")
         head = label(r"Kahn's algorithm \ (1962)", font_size=34).to_edge(UP, buff=0.3)
         g, nodes, es = self.dag()

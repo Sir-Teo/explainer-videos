@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, code, load, mono, words)
 
 
-class Models(VoiceoverScene):
+class Models(WatchScene):
     def construct(self):
         self.card()
         self.ram()
@@ -14,11 +14,7 @@ class Models(VoiceoverScene):
         self.others()
 
     def card(self):
-        card = chapter_card(1, r"What counts as a step", r"How do we measure an algorithm, not a machine?",
-                            lit=(1963,), extra=((1963, r"Shepherdson and Sturgis: \ register machines"),), part=PART)
-        with self.voiceover("Chapter one. What counts as a step."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"What counts as a step", r"How do we measure an algorithm, not a machine?", lit=(1963,), extra=((1963, r"Shepherdson and Sturgis: \ register machines"),), part=PART, said="Chapter one. What counts as a step.")
 
     def ram(self):
         head = label(r"The RAM: \ a machine for counting", font_size=34).to_edge(UP, buff=0.3)
@@ -68,6 +64,11 @@ class Models(VoiceoverScene):
         self.clear_scene()
 
     def pitfall(self):
+        self.ask(r"Start from 3 and square it, $n$ times. \\ The result has about how many digits?",
+                 [r"about $n$", r"about $2^n$"], 1,
+                 say="Start from three and square it n times. A machine that charges one step per multiplication says n steps. "
+                     "How many digits does the answer have?",
+                 reveal="About two to the n. That's why a fair cost model bounds the size of a word.")
         d = load("ram")
         head = label(r"The pitfall of unit cost", font_size=34).to_edge(UP, buff=0.3)
         src = code(["x = 3", "repeat n times:", "    x = x * x        # one step?"], size=20,

@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -52,6 +52,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does union-find cost per operation?", r"Inverse Ackermann: at most about 4"),
+             (r"Hash table or search tree: which keeps order?", r"The search tree")],
+            narration="Last checkpoint. What does union-find cost per operation? And which keeps keys in order, a hash table or "
+                      "a search tree?",
+            answers_narration="The inverse Ackermann function, at most about four. And the search tree.")
 
     def payoffs(self):
         card = payoff_card([

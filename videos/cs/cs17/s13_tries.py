@@ -5,7 +5,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Tries(VoiceoverScene):
+class Tries(WatchScene):
     def construct(self):
         self.card()
         self.trie()
@@ -13,12 +13,7 @@ class Tries(VoiceoverScene):
         self.succinct()
 
     def card(self):
-        card = chapter_card(12, r"Tries and succinct structures", r"Can the key's letters be the path?", lit=(1960,),
-                            extra=((1960, r"Fredkin: \ trie memory"), (1989, r"Jacobson: \ succinct trees")),
-                            part=PART)
-        with self.voiceover("Chapter twelve. Tries, and succinct structures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Tries and succinct structures", r"Can the key's letters be the path?", lit=(1960,), extra=((1960, r"Fredkin: \ trie memory"), (1989, r"Jacobson: \ succinct trees")), part=PART, said="Chapter twelve. Tries, and succinct structures.")
 
     def trie(self):
         head = label(r"A trie: \ one edge per letter", font_size=34).to_edge(UP, buff=0.3)
@@ -65,6 +60,10 @@ class Tries(VoiceoverScene):
         self.clear_scene()
 
     def corpus(self):
+        self.ask(r"58{,}000 words, 450{,}000 letters, in a trie. \\ How many nodes?", [r"about 450{,}000",
+                 r"far fewer"], 1,
+                 say="Fifty-eight thousand words, four hundred and fifty thousand letters. How many nodes in their trie?",
+                 reveal="Far fewer: words share their prefixes.")
         d = load("tries")
         head = label(r"The Job's vocabulary as a trie", font_size=34).to_edge(UP, buff=0.3)
         tab = grid_table([r"", r"count"], [

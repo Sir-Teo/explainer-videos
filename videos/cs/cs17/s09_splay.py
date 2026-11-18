@@ -5,7 +5,7 @@ from videos.cs.cs17.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class Splay(VoiceoverScene):
+class Splay(WatchScene):
     def construct(self):
         self.card()
         self.steps()
@@ -13,11 +13,7 @@ class Splay(VoiceoverScene):
         self.sequences()
 
     def card(self):
-        card = chapter_card(8, r"Splay trees", r"Can a tree learn what you look up?", lit=(1985,),
-                            extra=((1985, r"Sleator and Tarjan"),), part=PART)
-        with self.voiceover("Chapter eight. Splay trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Splay trees", r"Can a tree learn what you look up?", lit=(1985,), extra=((1985, r"Sleator and Tarjan"),), part=PART, said="Chapter eight. Splay trees.")
 
     def steps(self):
         head = label(r"Splaying: \ rotate the accessed node to the root", font_size=34).to_edge(UP, buff=0.3)
@@ -133,6 +129,10 @@ class Splay(VoiceoverScene):
         self.clear_scene()
 
     def sequences(self):
+        self.ask(r"A splay tree, scanned in sorted order again and again. \\ Cost per access?",
+                 [r"about $\log n$", r"constant, amortized"], 1,
+                 say="Access every key of a splay tree in sorted order, over and over. What does each access cost?",
+                 reveal="Constant, amortized: the sequential access theorem.")
         d = load("splay")
         head = label(rf"Splay against a balanced tree, \ {words(d['n'])} keys", font_size=34).to_edge(UP, buff=0.3)
         names = {"sequential": r"in order, \ five times", "uniform": r"uniform random",

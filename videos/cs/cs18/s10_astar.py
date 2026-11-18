@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, words)
 
 
-class AStar(VoiceoverScene):
+class AStar(WatchScene):
     def construct(self):
         self.card()
         self.goal()
@@ -16,12 +16,8 @@ class AStar(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(9, "Exact routes with less search", r"Why search where the destination isn't?",
-                            lit=(1968,), extra=((1968, r"Hart, \ Nilsson and Raphael: \ A*"),
-                                                (2008, r"contraction hierarchies")), part=PART)
-        with self.voiceover("Chapter nine. Exact routes with less search."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, "Exact routes with less search", r"Why search where the destination isn't?", lit=(1968,), extra=((1968, r"Hart, \ Nilsson and Raphael: \ A*"),
+                                                (2008, r"contraction hierarchies")), part=PART, said="Chapter nine. Exact routes with less search.")
 
     def _city(self, d, k=1.0, oy=-0.4):
         pos = {tuple(map(int, kk.split(","))): v for kk, v in d["pos"].items()}
@@ -40,6 +36,10 @@ class AStar(VoiceoverScene):
         return VGroup(frame, g, sd, td, lab)
 
     def goal(self):
+        self.ask(r"A* guided by straight-line distance. \\ Is its route still exactly the shortest?",
+                 [r"yes", r"no: only approximately"], 0,
+                 say="Guide the search with straight-line distance to the goal. Is the route still exactly the shortest?",
+                 reveal="Yes. Straight-line distance never overestimates, so A star stays exact and searches less.")
         d = load("astar")
         head = label(r"A*: \ head for the goal \ (Hart, \ Nilsson and Raphael, \ 1968)", font_size=32).to_edge(
             UP, buff=0.3)

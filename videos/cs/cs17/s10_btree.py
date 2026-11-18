@@ -13,7 +13,7 @@ def bnode(keys, col=DATA, kw=0.5):
     return VGroup(r, t)
 
 
-class Btree(VoiceoverScene):
+class Btree(WatchScene):
     def construct(self):
         self.card()
         self.shape()
@@ -21,11 +21,7 @@ class Btree(VoiceoverScene):
         self.height()
 
     def card(self):
-        card = chapter_card(9, r"B-trees", r"What if each step costs a disk read?", lit=(1970,),
-                            extra=((1970, r"Bayer and McCreight"),), part=PART)
-        with self.voiceover("Chapter nine. B-trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"B-trees", r"What if each step costs a disk read?", lit=(1970,), extra=((1970, r"Bayer and McCreight"),), part=PART, said="Chapter nine. B-trees.")
 
     def shape(self):
         head = label(r"Wide nodes, \ short paths", font_size=34).to_edge(UP, buff=0.3)
@@ -99,6 +95,10 @@ class Btree(VoiceoverScene):
         self.clear_scene()
 
     def height(self):
+        self.ask(r"A B-tree with 200{,}000 keys, \\ about a hundred keys a node. How many levels?",
+                 [r"about 3", r"about 17", r"about 100"], 0,
+                 say="Two hundred thousand keys in a B-tree, about a hundred keys per node. How many levels?",
+                 reveal="A handful: three or so. Each level multiplies the reach by a hundred.")
         d = load("btree")
         head = label(rf"{words(d['n'])} keys, \ measured", font_size=34).to_edge(UP, buff=0.3)
         rows = [[str(r["t"]), str(2 * r["t"] - 1), str(r["height"]), words(r["nodes"])] for r in d["rows"]]

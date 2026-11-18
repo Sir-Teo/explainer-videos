@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -45,12 +45,17 @@ class Outro(VoiceoverScene):
             "and compared actual route-search expansions on one synthetic city. Spanning-tree exchanges, "
             "feasible flows and matching certificates show how a proof can accompany an answer. Subset "
             "dynamic programming, damped PageRank and planar colouring illustrate different guarantees. "
-            "Keep measured runs, illustrative models and research theorems distinct."
+            ""
         ):
             self.play(FadeIn(head))
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Max flow equals...?", r"Min cut"),
+             (r"Which needs non-negative weights: Dijkstra or Bellman--Ford?", r"Dijkstra")],
+            narration="Last checkpoint. Max flow equals what? And which shortest-path algorithm needs non-negative weights?",
+            answers_narration="The minimum cut. And Dijkstra's.")
 
     def payoffs(self):
         card = payoff_card([
@@ -90,7 +95,7 @@ class Outro(VoiceoverScene):
             " dependency ordering with caching and invalidation. OSPF uses shortest-path computation on "
             "link-state data, while BGP adds path attributes and policy; it is not simply a shortest "
             "numeric-distance solver. Graph databases and fraud analysis use reachability, cycles and "
-            "neighbourhood queries, though a cycle alone does not prove fraud. These algorithms are "
+            "neighbourhood queries. These algorithms are "
             "useful building blocks whose application assumptions still need checking."
         ):
             self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],

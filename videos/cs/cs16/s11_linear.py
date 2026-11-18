@@ -5,7 +5,7 @@ from videos.cs.cs16.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    value_bars, words)
 
 
-class Linear(VoiceoverScene):
+class Linear(WatchScene):
     def construct(self):
         self.card()
         self.counting()
@@ -13,13 +13,13 @@ class Linear(VoiceoverScene):
         self.timed()
 
     def card(self):
-        card = chapter_card(10, r"Beating $n \log n$", r"What if we do more than compare?", lit=(1890,),
-                            extra=((1890, r"Hollerith: \ punched-card tabulation"),), part=PART)
-        with self.voiceover("Chapter ten. Beating n log n."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Beating $n \log n$", r"What if we do more than compare?", lit=(1890,), extra=((1890, r"Hollerith: \ punched-card tabulation"),), part=PART, said="Chapter ten. Beating n log n.")
 
     def counting(self):
+        self.ask(r"Sort a million keys of 8 bits each. \\ Can you beat $n \log n$?", [r"no: that's the lower bound",
+                 r"yes, in linear time"], 1,
+                 say="A million keys, each only eight bits. Can you sort them faster than n log n?",
+                 reveal="Yes: count the keys in two hundred and fifty-six bins. The lower bound only binds comparisons.")
         head = label(r"Sorting without comparing", font_size=34).to_edge(UP, buff=0.3)
         pts = VGroup(
             label(r"the lower bound is about \textit{comparisons}: \ an algorithm that reads the keys can escape it",

@@ -7,7 +7,7 @@ from videos.cs.cs18.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Mst(VoiceoverScene):
+class Mst(WatchScene):
     def construct(self):
         self.card()
         self.properties()
@@ -15,14 +15,14 @@ class Mst(VoiceoverScene):
         self.algorithms()
 
     def card(self):
-        card = chapter_card(10, r"Minimum spanning trees", r"What is the cheapest way to connect everything?",
-                            lit=(1926,), extra=((1926, r"Bor\r{u}vka: \ the Moravian grid"),
-                                                (1956, r"Kruskal"), (1957, r"Prim")), part=PART)
-        with self.voiceover("Chapter ten. Minimum spanning trees."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Minimum spanning trees", r"What is the cheapest way to connect everything?", lit=(1926,), extra=((1926, r"Bor\r{u}vka: \ the Moravian grid"),
+                                                (1956, r"Kruskal"), (1957, r"Prim")), part=PART, said="Chapter ten. Minimum spanning trees.")
 
     def properties(self):
+        self.ask(r"A connected graph with $V$ vertices. \\ Its spanning tree has how many edges?",
+                 [r"$V - 1$", r"$V$", r"as many as the graph"], 0,
+                 say="A spanning tree of a connected graph with V vertices. How many edges?",
+                 reveal="V minus one, whatever the graph.")
         head = label(r"Two properties, \ one proof each", font_size=34).to_edge(UP, buff=0.3)
         pos = {"a": (-5.8, 1.3), "b": (-5.3, -1.3), "c": (-4.1, 0.2), "d": (-2.2, 1.4), "e": (-1.8, -1.2),
                "f": (-0.7, 0.4)}
