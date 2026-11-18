@@ -8,7 +8,7 @@ from videos.cs.cs44.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes
 NAMES = ("data", "here", "true", "false", "lambda", "kernel")
 
 
-class Colour(VoiceoverScene):
+class Colour(WatchScene):
     def construct(self):
         self.card()
         self.light()
@@ -18,13 +18,9 @@ class Colour(VoiceoverScene):
         self.contrast()
 
     def card(self):
-        card = chapter_card(4, r"Colour", r"How do three numbers become a colour, \ and for whom?",
-                            lit=(1931, 1976, 2020), extra=((1931, r"CIE XYZ"), (1976, r"CIELAB"),
+        self.chapter(4, r"Colour", r"How do three numbers become a colour, \ and for whom?", lit=(1931, 1976, 2020), extra=((1931, r"CIE XYZ"), (1976, r"CIELAB"),
                                                            (2009, r"Machado et al.: \ simulated deficiency"),
-                                                           (2020, r"Ottosson: \ OKLab")), part=PART)
-        with self.voiceover("Chapter four. Colour."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2020, r"Ottosson: \ OKLab")), part=PART, said="Chapter four. Colour.")
 
     def light(self):
         head = label(r"Colour is three numbers", font_size=36).to_edge(UP, buff=0.3)
@@ -87,6 +83,10 @@ class Colour(VoiceoverScene):
         self.clear_scene()
 
     def gamma(self):
+        self.ask(r"sRGB code value 128 of 255. \\ Light emitted, compared with 255:", [r"about $50\%$",
+                 r"about $22\%$"], 1,
+                 say="An sRGB pixel at code value one hundred and twenty-eight, half way to full. How much light does it emit?",
+                 reveal="About twenty-two percent. Code values follow the eye, not the light.")
         gm = load("gamma")
         rows = gm["rows"]
         head = label(r"Code values are not light", font_size=36).to_edge(UP, buff=0.3)
@@ -345,6 +345,12 @@ class Colour(VoiceoverScene):
             self.play(ReplacementTransform(c2[1], c3[1]), FadeOut(c2[2]), FadeIn(c3[2]), FadeIn(lesson))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does Fitts's law say?", r"Time grows with $\log_2(1 + D/W)$"),
+             (r"Why compute contrast in linear light?", r"Code values aren't amounts of light")],
+            narration="Checkpoint. What does Fitts's law say? And why is contrast computed in linear light?",
+            answers_narration="Pointing time grows with log two of one plus distance over width. And because sRGB code values "
+                              "are not amounts of light.")
 
 
 _ = (BG, DATA, KERN, LAM)

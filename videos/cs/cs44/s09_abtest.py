@@ -39,7 +39,7 @@ def _two_hump(shift, x_length=7.6, y_length=2.6, font=17):
     return g
 
 
-class Abtest(VoiceoverScene):
+class Abtest(WatchScene):
     def construct(self):
         self.card()
         self.rct()
@@ -49,12 +49,8 @@ class Abtest(VoiceoverScene):
         self.power()
 
     def card(self):
-        card = chapter_card(8, r"The A/B test", r"Did the change cause the difference?", lit=(1935, 2009),
-                            extra=((1935, r"Fisher: \ \textit{The Design of Experiments}"),
-                                   (2009, r"Kohavi et al.: \ experiments on the web")), part=PART)
-        with self.voiceover("Chapter eight. The A/B test."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The A/B test", r"Did the change cause the difference?", lit=(1935, 2009), extra=((1935, r"Fisher: \ \textit{The Design of Experiments}"),
+                                   (2009, r"Kohavi et al.: \ experiments on the web")), part=PART, said="Chapter eight. The A/B test.")
 
     def rct(self):
         head = label(r"A randomized controlled trial", font_size=36).to_edge(UP, buff=0.3)
@@ -168,6 +164,12 @@ class Abtest(VoiceoverScene):
         self.clear_scene()
 
     def errors(self):
+        self.wrong_idea(r"$p < 0.05$ means a $95\%$ chance B is better",
+                        r"$p$ is the chance of data this extreme \\ \emph{if} B changed nothing",
+                        narration="A very common reading: p below point zero five means a ninety-five percent chance the new version is better.",
+                        right_narration="The p-value assumes there is no effect, and asks how surprising the data would be. "
+                                        "What it says about B depends on how often changes work at all.")
+        self.clear_scene()
         head = label(r"Two hypotheses, \ two errors", font_size=36).to_edge(UP, buff=0.3)
         shift = Z_A + Z_B
         g = _two_hump(shift).move_to([-2.0, 0.6, 0])
@@ -211,6 +213,10 @@ class Abtest(VoiceoverScene):
         self.clear_scene()
 
     def size(self):
+        self.ask(r"Detect a lift from $5\%$ to $5.5\%$, with $80\%$ power. \\ Users per arm:",
+                 [r"about 3,000", r"about 30,000", r"about 300,000"], 1,
+                 say="You want to detect a conversion lift from five percent to five and a half, with eighty percent power. How many users in each arm?",
+                 reveal="About thirty thousand.")
         s = load("size")
         rows_ = s["rows"]
         p = rows_[0]["p"]

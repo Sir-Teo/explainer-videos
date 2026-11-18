@@ -15,24 +15,18 @@ def _box(text, color, w, h=0.55, size=19):
     return VGroup(b, t.move_to(b))
 
 
-class Choice(VoiceoverScene):
+class Choice(WatchScene):
     def construct(self):
         self.card()
         self.hick()
         self.entropy()
-        self.limits()
         self.goms()
         self.klm()
 
     def card(self):
-        card = chapter_card(2, r"Choosing, \ and predicting a task's time", r"How long does a decision take?",
-                            lit=(1952, 1953, 1980), extra=((1952, r"Hick: \ the rate of gain of information"),
+        self.chapter(2, r"Choosing, \ and predicting a task's time", r"How long does a decision take?", lit=(1952, 1953, 1980), extra=((1952, r"Hick: \ the rate of gain of information"),
                                                      (1953, r"Hyman"),
-                                                     (1980, r"Card, \ Moran and Newell: \ keystroke-level model")),
-                            part=PART)
-        with self.voiceover("Chapter two. Choosing, and predicting how long a task will take."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (1980, r"Card, \ Moran and Newell: \ keystroke-level model")), part=PART, said="Chapter two. Choosing, and predicting how long a task will take.")
 
     def hick(self):
         h = load("hick")
@@ -87,6 +81,10 @@ class Choice(VoiceoverScene):
         self.clear_scene()
 
     def entropy(self):
+        self.ask(r"A menu whose items are not equally likely. \\ Choice time follows...", [r"the number of items",
+                 r"the entropy of the choice"], 1,
+                 say="Some menu items are chosen far more often than others. What does the time to choose follow?",
+                 reveal="The entropy of the choice, in bits, as Hyman found.")
         sk = load("hick")["skewed"]
         head = label(r"Hyman: \ the entropy, \ not the count", font_size=36).to_edge(UP, buff=0.3)
         items = [r"Reply", r"Forward", r"Archive", r"Delete", r"Spam"]
@@ -145,47 +143,6 @@ class Choice(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def limits(self):
-        head = label(r"Where Hick's law stops", font_size=36).to_edge(UP, buff=0.3)
-        g = axes([0, 16, 4], [0, 4, 1], x_length=6.2, y_length=3.8, x_label=r"number of choices $n$",
-                 y_label=r"time \ (arbitrary units)", xticks=range(0, 17, 4)).move_to([-3.0, -0.2, 0])
-        ax = g.ax
-        ns = [i / 4 for i in range(0, 65)]
-        decide = trace(ax, [(n, 0.6 * math.log2(n + 1)) for n in ns], HEAD, width=3)
-        search = trace(ax, [(n, 0.22 * n) for n in ns], NO, width=3)
-        practised = trace(ax, [(n, 0.2 * math.log2(n + 1)) for n in ns], YES, width=3)
-        lb = VGroup(label(r"decide: \ $\log_2(n + 1)$", font_size=18, color=HEAD).next_to(ax.c2p(16, 2.45), DOWN,
-                                                                                      buff=0.45).shift(LEFT * 0.9),
-                    label(r"scan an unfamiliar list: \ linear", font_size=18, color=NO).next_to(ax.c2p(13, 3.4), LEFT,
-                                                                                         buff=0.15),
-                    label(r"after long practice: \ flatter", font_size=18, color=YES).next_to(ax.c2p(16, 0.82), UP,
-                                                                                      buff=0.1).shift(LEFT * 0.9))
-        tag = note(r"illustrative shapes", font_size=16).next_to(g, UP, buff=0.1).align_to(g, RIGHT)
-        W = 5.0
-        side = VGroup(
-            wrapped_label(r"the law is for choices you must \textbf{decide} among, \ with the options known", W,
-                          font_size=20, color=HEAD),
-            wrapped_label(r"reading a menu item by item is \textbf{search}: \ time grows with the number of items, "
-                          r"\ not its logarithm", W, font_size=20, color=NO),
-            wrapped_label(r"practice flattens the slope, \ and familiar layouts become pointing, \ not choosing",
-                          W, font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.9, 0.0, 0])
-        with self.voiceover(
-            "Hick's law is often stretched too far. <bookmark mark='a'/> It describes choices you must decide "
-            "among, when you already know the options. <bookmark mark='b'/> Reading an unfamiliar menu item by item "
-            "is a search, and search time grows with the number of items, not with its logarithm. "
-            "<bookmark mark='c'/> And practice flattens the slope: an expert who knows where everything is no longer "
-            "chooses at all, but simply points."
-        ) as vo:
-            self.play(FadeIn(head), Create(g), FadeIn(tag))
-            vo.wait_until("a")
-            self.play(Create(decide), FadeIn(lb[0]), FadeIn(side[0]))
-            vo.wait_until("b")
-            self.play(Create(search), FadeIn(lb[1]), FadeIn(side[1]))
-            vo.wait_until("c")
-            self.play(Create(practised), FadeIn(lb[2]), FadeIn(side[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def goms(self):
         head = label(r"GOMS: \ goals, \ operators, \ methods, \ selection rules", font_size=36).to_edge(UP, buff=0.3)

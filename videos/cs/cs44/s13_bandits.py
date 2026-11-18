@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs44.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, load, tag_box, trace
 
 
-class Bandits(VoiceoverScene):
+class Bandits(WatchScene):
     def construct(self):
         self.card()
         self.thompson()
@@ -17,13 +17,9 @@ class Bandits(VoiceoverScene):
         self.consent()
 
     def card(self):
-        card = chapter_card(12, r"Bandits and metrics", r"Should an experiment earn while it learns, \ and what "
-                            r"should it count?", lit=(1933, 2010),
-                            extra=((1933, r"Thompson: \ sampling"), (1975, r"Goodhart"),
-                                   (2010, r"Brignull: \ dark patterns")), part=PART)
-        with self.voiceover("Chapter twelve. Bandits and metrics."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Bandits and metrics", r"Should an experiment earn while it learns, \ and what "
+                            r"should it count?", lit=(1933, 2010), extra=((1933, r"Thompson: \ sampling"), (1975, r"Goodhart"),
+                                   (2010, r"Brignull: \ dark patterns")), part=PART, said="Chapter twelve. Bandits and metrics.")
 
     def thompson(self):
         head = label(r"Earning while learning", font_size=36).to_edge(UP, buff=0.3)
@@ -88,6 +84,10 @@ class Bandits(VoiceoverScene):
         self.clear_scene()
 
     def regret(self):
+        self.ask(r"Thompson sampling against a fixed 50/50 split. \\ Conversions lost to the worse version:",
+                 [r"about the same", r"far fewer"], 1,
+                 say="Race Thompson sampling against a fixed fifty-fifty split. Which loses fewer conversions to the worse version?",
+                 reveal="Thompson sampling, by far: it moves traffic as evidence arrives.")
         b = load("bandit")
         pa, pb = b["p"]
         head = label(r"Regret against precision", font_size=36).to_edge(UP, buff=0.3)

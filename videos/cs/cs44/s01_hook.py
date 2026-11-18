@@ -4,12 +4,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs44.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.demo()
         self.lineage()
         self.measured()
-        self.plan()
+        self.title(PART)
 
     def demo(self):
         head = label(r"San Francisco, \ 9 December 1968", font_size=38).to_edge(UP, buff=0.35)
@@ -145,29 +145,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ People and Products", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"Fitts's law from channel capacity; \ Hick's law as entropy",
-            r"predicting task times; \ the thresholds of perception",
-            r"colour: \ sRGB, \ OKLab, \ contrast and colour blindness",
-            r"how many users a usability test needs",
-            r"the A/B test, \ its power, \ and the peeking problem",
-            r"CUPED, \ false discoveries, \ bandits and Goodhart",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 44 of Computer Science, Built, the last part of Act Eight. <bookmark mark='a'/> We will "
-            "derive Fitts's law from channel capacity and Hick's law from entropy; predict how long a task takes "
-            "before anyone does it; turn colour into formulas and check this series' own palette for colour-blind "
-            "viewers; and then run experiments on products, deriving their power, and seeing why looking at the "
-            "results every morning breaks them, and how to look safely."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, YES)

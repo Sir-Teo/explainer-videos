@@ -7,25 +7,23 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs44.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES
 
 
-class Perception(VoiceoverScene):
+class Perception(WatchScene):
     def construct(self):
         self.card()
         self.thresholds()
         self.latency()
         self.weber()
         self.popout()
-        self.change()
 
     def card(self):
-        card = chapter_card(3, r"Perception and its thresholds", r"What do people notice, \ and how fast?",
-                            lit=(1860, 1968, 1980), extra=((1860, r"Fechner: \ psychophysics"),
+        self.chapter(3, r"Perception and its thresholds", r"What do people notice, \ and how fast?", lit=(1860, 1968, 1980), extra=((1860, r"Fechner: \ psychophysics"),
                                                            (1968, r"Miller: \ response time"),
-                                                           (1980, r"Treisman and Gelade")), part=PART)
-        with self.voiceover("Chapter three. Perception and its thresholds."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1980, r"Treisman and Gelade")), part=PART, said="Chapter three. Perception and its thresholds.")
 
     def thresholds(self):
+        self.ask(r"To feel instantaneous, \\ a response must come within...", [r"0.1 s", r"1 s", r"10 s"], 0,
+                 say="How quickly must a computer respond for the response to feel instantaneous?",
+                 reveal="Within about a tenth of a second.")
         head = label(r"0.1, \ 1 and 10 seconds", font_size=36).to_edge(UP, buff=0.3)
         x0, dec, y = -5.6, 2.8, 0.9
 
@@ -240,64 +238,6 @@ class Perception(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def change(self):
-        head = label(r"Change blindness", font_size=36).to_edge(UP, buff=0.3)
-        vals = [(r"users", r"1{,}204"), (r"errors", r"17"), (r"latency", r"212 ms"), (r"queue", r"38"),
-                (r"disk", r"61\%"), (r"build", r"passing")]
-
-        def tile(k, v, color=WHITE):
-            b = RoundedRectangle(width=2.6, height=1.2, corner_radius=0.1, stroke_color=GREY_C, stroke_width=1.5,
-                                 fill_color=BG, fill_opacity=1)
-            t = VGroup(label(k, font_size=18, color=GREY_B), label(v, font_size=30, color=color)).arrange(
-                DOWN, buff=0.12).move_to(b)
-            return VGroup(b, t)
-        before = VGroup(*[tile(k, v) for k, v in vals]).arrange_in_grid(rows=2, cols=3, buff=0.3).move_to(
-            [-2.4, 0.6, 0])
-        after = before.copy()
-        new = tile(r"errors", r"71").move_to(before[1])
-        after[1].become(new)
-        cover = Rectangle(width=before.width + 0.4, height=before.height + 0.4, stroke_width=0, fill_color=GREY_E,
-                          fill_opacity=1).move_to(before)
-        tag = note(r"illustrative", font_size=16).next_to(before, DOWN, buff=0.15).align_to(before, LEFT)
-        W = 3.6
-        side = VGroup(
-            wrapped_label(r"a change hidden by a flicker, \ a blink or a page reload often goes unseen \ (Rensink, "
-                          r"\ O'Regan and Clark, \ 1997)", W, font_size=19, color=WHITE),
-            wrapped_label(r"so draw the eye: \ animate the change, \ or highlight it briefly", W, font_size=19,
-                          color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.8, 0.6, 0])
-        shown = before
-        with self.voiceover(
-            "<bookmark mark='a'/> Watch these six numbers while the screen "
-            "flickers. One of them changes each time. In 1997 Ronald Rensink, Kevin O'Regan and James Clark showed "
-            "that when a brief blank separates two pictures, even large changes go unseen for many seconds. "
-            "<bookmark mark='b'/> Here, the errors went from seventeen to seventy-one. A page that reloads, or a "
-            "value that updates during a scroll, is exactly such a blank. <bookmark mark='c'/> So an interface "
-            "should draw the eye to what changed: animate it, or highlight it briefly."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(before), FadeIn(tag))
-            vo.wait_until("a")
-            for k in range(5):
-                nxt = after if k % 2 == 0 else before
-                self.add(cover)
-                self.wait(0.15)
-                self.remove(shown)
-                self.add(nxt)
-                self.remove(cover)
-                shown = nxt
-                self.wait(0.9)
-            self.play(FadeIn(side[0]))
-            vo.wait_until("b")
-            if shown is not after:
-                self.remove(shown)
-                self.add(after)
-                shown = after
-            self.play(after[1][1][1].animate.set_color(NO), after[1][0].animate.set_stroke(NO, width=3))
-            self.play(Indicate(after[1], color=NO, scale_factor=1.1))
-            vo.wait_until("c")
-            self.play(FadeIn(side[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (LAM, HEAD)

@@ -8,7 +8,7 @@ METRICS = ("clicks", "revenue", "sessions", "time on page", "sign-ups", "basket 
            "ratings", "tickets", "emails opened", "video plays")
 
 
-class Pitfalls(VoiceoverScene):
+class Pitfalls(WatchScene):
     def construct(self):
         self.card()
         self.multiple()
@@ -19,15 +19,14 @@ class Pitfalls(VoiceoverScene):
         self.twyman()
 
     def card(self):
-        card = chapter_card(11, r"Pitfalls at scale", r"How do careful experiments still go wrong?",
-                            lit=(1951, 1995), extra=((1951, r"Simpson: \ the paradox"),
-                                                     (1995, r"Benjamini and Hochberg: \ false discovery rate")),
-                            part=PART)
-        with self.voiceover("Chapter eleven. Pitfalls at scale."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Pitfalls at scale", r"How do careful experiments still go wrong?", lit=(1951, 1995), extra=((1951, r"Simpson: \ the paradox"),
+                                                     (1995, r"Benjamini and Hochberg: \ false discovery rate")), part=PART, said="Chapter eleven. Pitfalls at scale.")
 
     def multiple(self):
+        self.ask(r"Twenty metrics, and the change moved none. \\ Chance at least one is significant:",
+                 [r"$5\%$", r"$36\%$", r"$64\%$"], 2,
+                 say="An experiment reports twenty metrics, and the change moved none of them. What's the chance at least one looks significant?",
+                 reveal="Sixty-four percent.")
         m = load("metrics")
         head = label(r"Twenty metrics, \ twenty chances", font_size=36).to_edge(UP, buff=0.3)
         tiles = VGroup()

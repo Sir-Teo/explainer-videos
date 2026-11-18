@@ -8,7 +8,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs44.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, load, tag_box, trace
 
 
-class Usability(VoiceoverScene):
+class Usability(WatchScene):
     def construct(self):
         self.card()
         self.heuristics()
@@ -18,12 +18,8 @@ class Usability(VoiceoverScene):
         self.caveats()
 
     def card(self):
-        card = chapter_card(7, r"Evaluating usability", r"How many people do you need to watch?", lit=(1990, 1993),
-                            extra=((1990, r"Nielsen and Molich: \ heuristic evaluation"),
-                                   (1993, r"Nielsen and Landauer")), part=PART)
-        with self.voiceover("Chapter seven. Evaluating usability."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Evaluating usability", r"How many people do you need to watch?", lit=(1990, 1993), extra=((1990, r"Nielsen and Molich: \ heuristic evaluation"),
+                                   (1993, r"Nielsen and Landauer")), part=PART, said="Chapter seven. Evaluating usability.")
 
     def heuristics(self):
         head = label(r"Nielsen's ten heuristics \ (1994)", font_size=36).to_edge(UP, buff=0.3)
@@ -124,6 +120,10 @@ class Usability(VoiceoverScene):
         self.clear_scene()
 
     def model(self):
+        self.ask(r"Each test user finds $31\%$ of the problems. \\ Five users find...", [r"about $50\%$",
+                 r"about $85\%$", r"all of them"], 1,
+                 say="Each test user, on average, uncovers thirty-one percent of a design's problems. How many do five users find?",
+                 reveal="About eighty-five percent: one minus point six nine to the fifth.")
         u = load("users")["uniform"]
         L = u[1]["found"]
         head = label(r"Five users find 85\%?", font_size=36).to_edge(UP, buff=0.3)

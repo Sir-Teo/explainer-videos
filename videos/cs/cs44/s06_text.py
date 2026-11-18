@@ -37,22 +37,16 @@ def _pixel_row(cover, x0, y, cell=0.42, color=WHITE, rows=3):
     return g
 
 
-class Text(VoiceoverScene):
+class Text(WatchScene):
     def construct(self):
         self.card()
         self.outlines()
         self.raster()
         self.hinting()
         self.subpixel()
-        self.readability()
 
     def card(self):
-        card = chapter_card(5, r"Text on screens", r"How does a curve become letters people can read?",
-                            lit=(1991, 2001), extra=((1991, r"TrueType"), (2001, r"ClearType in Windows XP")),
-                            part=PART)
-        with self.voiceover("Chapter five. Text on screens."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Text on screens", r"How does a curve become letters people can read?", lit=(1991, 2001), extra=((1991, r"TrueType"), (2001, r"ClearType in Windows XP")), part=PART, said="Chapter five. Text on screens.")
 
     def outlines(self):
         head = label(r"A letter is a curve", font_size=36).to_edge(UP, buff=0.3)
@@ -171,6 +165,10 @@ class Text(VoiceoverScene):
         self.clear_scene()
 
     def hinting(self):
+        self.ask(r"Three stems, each $1.4$ px wide, at different offsets. \\ Unhinted, they render...",
+                 [r"identical and crisp", r"blurred, and different"], 1,
+                 say="Three identical stems, each one point four pixels wide, start at different fractions of a pixel. How do they render without hinting?",
+                 reveal="Blurred, and each one differently. Hinting snaps them to the grid.")
         head = label(r"Hinting: \ fitting outlines to the grid", font_size=36).to_edge(UP, buff=0.3)
         width, starts, n = 1.4, (1.3, 4.0, 6.7), 10          # three equal stems, an illustrative 10-pixel row
         cell = 0.5
@@ -282,69 +280,6 @@ class Text(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def readability(self):
-        head = label(r"Readable text", font_size=36).to_edge(UP, buff=0.3)
-        prose = ("A line that is too long sends the eye a long way back to the start of the next one, and it is "
-                 "easy to land on the wrong line. A line that is too short breaks the sentence into pieces and "
-                 "makes the eye jump too often. Somewhere in between, reading feels effortless.")
-        wide, narrow = textwrap.wrap(prose, 96), textwrap.wrap(prose, 60)
-        long_block = Glyphs("\n".join(wide), font="DejaVu Serif", font_size=17, line_spacing=0.6, color=GREY_A)
-        long_block.next_to(head, DOWN, buff=0.75)
-        tl = label(rf"{max(len(s) for s in wide)} characters a line, \ tight spacing", font_size=18,
-                   color=NO).next_to(long_block, UP, buff=0.1).align_to(long_block, LEFT)
-        sweep = CurvedArrow(long_block.get_corner(DR) + DOWN * 0.1, long_block.get_corner(DL) + DOWN * 0.1,
-                            angle=-0.12, color=NO, stroke_width=2, tip_length=0.15)
-        short_block = Glyphs("\n".join(narrow), font="DejaVu Serif", font_size=17, line_spacing=1.5, color=WHITE)
-        short_block.move_to([-3.0, -0.35, 0])
-        ts = label(rf"{max(len(s) for s in narrow)} characters, \ line spacing 1.5", font_size=18,
-                   color=YES).next_to(short_block, UP, buff=0.12).align_to(short_block, LEFT)
-        samp = VGroup()
-        for f in ("FreeSerif", "DejaVu Sans"):
-            w = Glyphs("Hamburgefonstiv", font=f, font_size=40, color=WHITE)
-            x = Glyphs("x", font=f, font_size=40)
-            samp.add(VGroup(w, label(f, font_size=16, color=GREY_B)).arrange(DOWN, buff=0.12, aligned_edge=LEFT))
-            samp[-1].xh = x.height
-        samp.arrange(DOWN, buff=0.4, aligned_edge=LEFT).move_to([3.7, -0.35, 0])
-        guides = VGroup()
-        for s in samp:
-            w = s[0]
-            base = w[0].get_bottom()[1]          # the H sits on the baseline
-            for yy, c in ((base, GREY_C), (base + s.xh, HEAD)):
-                guides.add(DashedLine([w.get_left()[0] - 0.1, yy, 0], [w.get_right()[0] + 0.1, yy, 0], color=c,
-                                      stroke_width=1.5, dash_length=0.06))
-        tx = label(r"same size, \ different \textbf{x-height}", font_size=18, color=HEAD).next_to(samp, UP,
-                                                                                               buff=0.15)
-        notes = VGroup(
-            wrapped_label(r"Bringhurst, \ \textit{The Elements of Typographic Style}: \ 45 to 75 characters a line, \ "
-                          r"66 ideal; \ WCAG's 1.4.8 \ (AAA): \ at most 80, \ line spacing at least 1.5", 12.4,
-                          font_size=19, color=WHITE),
-            wrapped_label(r"a large x-height reads bigger at the same size \ (Verdana and Georgia were drawn for "
-                          r"screens that way); \ and contrast: \ at least 4.5 to 1 for body text \ (Part 42)", 12.4,
-                          font_size=19, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "<bookmark mark='a'/> A very long line sends the eye a long way "
-            "back to the start of the next, and it is easy to land on the wrong one. <bookmark mark='b'/> Robert "
-            "Bringhurst's Elements of Typographic Style puts a comfortable line at forty-five to seventy-five "
-            "characters; the Web Content Accessibility Guidelines, at their strictest level, ask for at most eighty, "
-            "with line spacing of at least one and a half. <bookmark mark='c'/> Fonts of the same size can look "
-            "very different, because the x-height, the height of the small letters, varies; Verdana and "
-            "Georgia, made for screens, have large ones. <bookmark mark='d'/> And text needs contrast: Part 42 "
-            "derived the ratio, and body text needs four and a half to one."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(long_block), FadeIn(tl))
-            self.play(Create(sweep))
-            vo.wait_until("b")
-            self.play(FadeIn(short_block), FadeIn(ts), FadeIn(notes[0]), long_block.animate.set_opacity(0.45))
-            vo.wait_until("c")
-            self.play(FadeIn(samp), FadeIn(tx))
-            self.play(Create(guides))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM)
