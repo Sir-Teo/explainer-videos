@@ -153,8 +153,10 @@ class Types(WatchScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            for r in rows:
-                self.play(FadeIn(r, shift=DOWN * 0.05), run_time=0.8)
+            self.play(FadeIn(rows[0], shift=DOWN * 0.05), run_time=0.8)
+            for prev, r in zip(rows, rows[1:]):  # each term is rewritten from the one above, under its rule's name
+                self.play(FadeIn(r[1], shift=RIGHT * 0.15), TransformMatchingShapes(prev[0].copy(), r[0]),
+                          run_time=0.9)
             vo.wait_until("b")
             self.play(FadeIn(note))
         self.wait(0.3)

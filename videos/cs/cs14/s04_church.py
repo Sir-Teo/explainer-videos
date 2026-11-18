@@ -70,8 +70,10 @@ class Church(WatchScene):
         ) as vo:
             self.play(FadeIn(head))
             vo.wait_until("a")
-            for r in rows:
-                self.play(FadeIn(r, shift=RIGHT * 0.1), run_time=0.8)
+            self.play(FadeIn(rows[0], shift=RIGHT * 0.1), run_time=0.8)
+            for prev, r in zip(rows, rows[1:]):  # each numeral grows from the one before: one more f, one more box
+                self.play(TransformMatchingShapes(prev[0].copy(), r[0]), TransformFromCopy(prev[1], r[1]),
+                          run_time=0.8)
             vo.wait_until("b")
             self.play(FadeIn(succ), FadeIn(sl))
         self.wait(0.3)
