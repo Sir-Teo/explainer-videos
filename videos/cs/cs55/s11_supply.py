@@ -21,7 +21,7 @@ def arrow(a, b, color=GREY_B, width=2.4):
                  max_stroke_width_to_length_ratio=10)
 
 
-class Supply(VoiceoverScene):
+class Supply(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -32,12 +32,7 @@ class Supply(VoiceoverScene):
         self.defences()
 
     def card(self):
-        card = chapter_card(10, r"Supply chains", r"Who else wrote the code you run?", lit=(2020, 2021, 2024),
-                            extra=((2020, r"SolarWinds"), (2021, r"dependency confusion"), (2024, r"xz-utils")),
-                            part=PART, layers=("practice", "apps"))
-        with self.voiceover("Chapter ten. Supply chains."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Supply chains", r"Who else wrote the code you run?", lit=(2020, 2021, 2024), extra=((2020, r"SolarWinds"), (2021, r"dependency confusion"), (2024, r"xz-utils")), part=PART, layers=("practice", "apps"), said="Chapter ten. Supply chains.")
 
     def tree(self):
         head = label(r"The code you did not write", font_size=36).to_edge(UP, buff=0.3)
@@ -251,6 +246,10 @@ class Supply(VoiceoverScene):
         self.clear_scene()
 
     def slowdown(self):
+        self.ask(r"The xz backdoor of 2024 was found by...", [r"a security audit",
+                 r"half a second of extra login delay"], 1,
+                 say="A backdoor was planted in xz-utils over two years. How was it found?",
+                 reveal="By accident: a developer noticed SSH logins taking half a second too long.")
         head = label(r"Half a second", font_size=36).to_edge(UP, buff=0.3)
         unit = 6.0
         before = Rectangle(width=unit * 0.35, height=0.55, stroke_width=0, fill_color=YES, fill_opacity=0.8)

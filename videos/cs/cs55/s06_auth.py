@@ -45,23 +45,18 @@ def sha_prefix(s: str, n=10) -> str:
     return hashlib.sha256(s.encode()).hexdigest()[:n]
 
 
-class Auth(VoiceoverScene):
+class Auth(WatchScene):
     def construct(self):
         self.card()
         self.entropy()
         self.guessing()
         self.storage()
-        self.codes()
         self.passkeys()
         self.lowe()
 
     def card(self):
-        card = chapter_card(5, r"Who are you? \ Authentication", r"How can a machine tell that it is really you?",
-                            lit=(1978, 1995, 2019), extra=((1978, r"Needham--Schroeder"), (1995, r"Lowe's attack"),
-                                                           (2019, r"WebAuthn")), part=PART)
-        with self.voiceover("Chapter five. Who are you? Authentication."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Who are you? \ Authentication", r"How can a machine tell that it is really you?", lit=(1978, 1995, 2019), extra=((1978, r"Needham--Schroeder"), (1995, r"Lowe's attack"),
+                                                           (2019, r"WebAuthn")), part=PART, said="Chapter five. Who are you? Authentication.")
 
     def entropy(self):
         tab = load("passwords")["table"]
@@ -126,6 +121,10 @@ class Auth(VoiceoverScene):
         self.clear_scene()
 
     def guessing(self):
+        self.ask(r"Ten million real passwords. \\ The ten most common cover...", [r"under $1\%$",
+                 r"about $18\%$"], 1,
+                 say="Take ten million passwords chosen by people. How many users do the ten most common passwords cover?",
+                 reveal="About eighteen percent, in our model of the published studies.")
         z = load("passwords")["zipf"]
         H = z["normaliser"]
         head = label(r"People do not choose at random", font_size=36).to_edge(UP, buff=0.3)
@@ -254,69 +253,6 @@ class Auth(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def codes(self):
-        t = load("totp")
-        sha1 = [r for r in t["totp"] if r["algorithm"] == "sha1"]
-        hotp1 = next(r["hotp"] for r in t["hotp"] if r["counter"] == 1)
-        head = label(r"One-time codes: \ an HMAC over the clock", font_size=36).to_edge(UP, buff=0.3)
-        f1 = MathTex(r"C", r"=", r"\left\lfloor \frac{t - T_0}{X} \right\rfloor", font_size=34)
-        f2 = MathTex(r"\text{code}", r"=", r"\text{Trunc}\big(\text{HMAC}_K(C)\big)", r"\bmod 10^{d}", font_size=34)
-        VGroup(f1, f2).arrange(RIGHT, buff=0.9).next_to(head, DOWN, buff=0.35)
-        steps = [(r"$t$", r"$t = 59$"), (r"$\lfloor (t - T_0)/30 \rfloor$", r"$C = 1$"),
-                 (r"HMAC-SHA-1$(K, C)$", r"20 bytes"), (r"truncate", r"31-bit integer"),
-                 (r"$\bmod 10^{8}$", rf"\texttt{{{sha1[0]['totp']}}}")]
-        pipe, vals = VGroup(), VGroup()
-        for s, v in steps:
-            box = RoundedRectangle(width=2.15, height=0.6, corner_radius=0.08, stroke_color=KERN, stroke_width=1.6,
-                                   fill_color=BG, fill_opacity=1)
-            tt = label(s, font_size=18, color=WHITE).move_to(box)
-            if tt.width > 2.0:
-                tt.width = 2.0
-            pipe.add(VGroup(box, tt))
-            vals.add(label(v, font_size=18, color=HEAD))
-        pipe.arrange(RIGHT, buff=0.42).next_to(VGroup(f1, f2), DOWN, buff=0.4)
-        arrows = VGroup(*[Arrow(pipe[i].get_right(), pipe[i + 1].get_left(), buff=0.04, stroke_width=2,
-                                color=GREY_B, max_tip_length_to_length_ratio=0.3) for i in range(len(pipe) - 1)])
-        for v, p in zip(vals, pipe):
-            v.next_to(p, DOWN, buff=0.15)
-        rows = [[f"{r['time']:,}", f"{r['time'] // 30:,}", r["totp"]] for r in sha1]
-        tab = grid_table([r"time $t$ (s)", r"counter $C$", r"code (8 digits)"], rows, widths=[2.6, 2.2, 2.2],
-                         row_h=0.42, font_size=19, mono_cols=(0, 1, 2))
-        tab.next_to(vals, DOWN, buff=0.35).to_edge(LEFT, buff=0.5)
-        for r in range(1, len(rows) + 1):
-            tab.cells[r][2].set_color(YES)
-        tl = label(r"RFC 6238's SHA-1 test values: \ ours match all six", font_size=17,
-                   color=YES).next_to(tab, DOWN, buff=0.12).align_to(tab, LEFT)
-        notes = VGroup(
-            wrapped_label(rf"HOTP \ (RFC 4226, \ 2005) \ at counter 1: \ \texttt{{{hotp1}}} \ --- \ the last six "
-                          rf"digits of the code at $t = 59$: \ the same HMAC, \ the same counter", 5.2, font_size=18,
-                          color=LAM),
-            wrapped_label(r"still a secret you type: \ a look-alike login page can relay it within its 30 seconds",
-                          5.2, font_size=18, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, RIGHT, buff=0.6).align_to(tab, UP)
-        with self.voiceover(
-            "A second factor proves something you have. <bookmark mark='a'/> Authenticator codes follow RFC 6238, "
-            "from 2011. Phone and server share a key, and each divides the time by thirty seconds, rounding down, to "
-            "get a counter. <bookmark mark='b'/> Each takes an HMAC of the counter, cuts four bytes from it where the "
-            "hash itself points, and keeps the last six or eight digits. <bookmark mark='c'/> Ours reproduces the "
-            "standard's test values exactly. <bookmark mark='d'/> At fifty-nine seconds the counter is one, and the "
-            "code ends in the same six digits as the older counter-based code at counter one: the same computation. "
-            "<bookmark mark='e'/> But it is still typed, so a fake page can relay it."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(f1), FadeIn(pipe[:2]), GrowArrow(arrows[0]))
-            vo.wait_until("b")
-            self.play(Write(f2), FadeIn(pipe[2:]), *[GrowArrow(a) for a in arrows[1:]])
-            self.play(LaggedStart(*[FadeIn(v, shift=DOWN * 0.1) for v in vals], lag_ratio=0.4), run_time=2.5)
-            vo.wait_until("c")
-            self.play(FadeIn(tab), FadeIn(tl))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[0]), Indicate(vals[-1], color=LAM))
-            vo.wait_until("e")
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def passkeys(self):
         head = label(r"Passkeys: \ a signature bound to the site \ (Part 30)", font_size=36).to_edge(UP, buff=0.3)

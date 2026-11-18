@@ -13,22 +13,18 @@ def tile(title, body, col, w=4.2, h=2.7):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.sky()
-        self.security()
-        self.open()
 
     def card(self):
-        card = chapter_card(14, r"Frontier: \ the open problems of the series",
-                            r"What did we meet that nobody knows?", lit=(1971, 2024),
-                            extra=((1971, r"Cook: \ P versus NP"), (2024, r"BB(5) proved")), part=PART)
-        with self.voiceover("Chapter fourteen, the frontier. What did this series meet that nobody knows?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frontier: \ the open problems of the series", r"What did we meet that nobody knows?", lit=(1971, 2024), extra=((1971, r"Cook: \ P versus NP"), (2024, r"BB(5) proved")), part=PART, said="Chapter fourteen, the frontier. What did this series meet that nobody knows?")
 
     def sky(self):
+        self.ask(r"P versus NP; whether one-way functions exist. \\ Settled?", [r"one of them", r"neither"], 1,
+                 say="P versus NP, and whether one-way functions exist. Has either been settled?",
+                 reveal="Neither. The security of Parts 29 and 30 rests on an open question.")
         rows = load("open")["rows"]
         head = label(r"Questions the degree left open", font_size=36).to_edge(UP, buff=0.3)
         cells = VGroup()
@@ -66,70 +62,7 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def security(self):
-        head = label(r"The frontier of trust", font_size=36).to_edge(UP, buff=0.3)
-        tiles = VGroup(
-            tile(r"memory safety at scale", r"rewriting or hardening billions of lines of C and C++; \ CHERI "
-                 r"capabilities in hardware; \ proving Rust's unsafe code", NO),
-            tile(r"speculation", r"processors that leak nothing through timing, \ at a cost people will pay; \ "
-                 r"contracts between hardware and software", HEAD),
-            tile(r"bootstrapping trust", r"building a whole toolchain from a seed of a few hundred bytes that a "
-                 r"person can audit \ (the bootstrappable-builds project)", YES),
-        ).arrange(RIGHT, buff=0.3).next_to(head, DOWN, buff=0.6)
-        foot = wrapped_label(r"each turns an informal promise \ --- \ this layer hides what is below \ --- \ into "
-                             r"something that can be checked", 12.4, font_size=21, color=WHITE).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "Three frontiers of trust in particular. <bookmark mark='a'/> Memory safety at scale: rewriting or "
-            "hardening billions of lines of C and C++, capabilities built into hardware, and proofs about the unsafe "
-            "corners of Rust. <bookmark mark='b'/> Speculation: processors that leak nothing through timing, at a "
-            "cost people will accept, and precise contracts between hardware and software about what may leak. "
-            "<bookmark mark='c'/> And bootstrapping: building a whole modern toolchain up from a seed program of a "
-            "few hundred bytes that a person can read, so that Thompson's attack has nowhere to hide. "
-            "<bookmark mark='d'/> Each turns an informal promise, that a layer hides what is below it, into "
-            "something that can be checked."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, t in zip("abc", tiles):
-                vo.wait_until(mk)
-                self.play(FadeIn(t, shift=UP * 0.15))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{One-way functions}: \ do they exist? \ All of Parts 29 and 30 assume so.",
-                          12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Speculation}: \ a processor provably free of transient-execution leaks, "
-                          r"\ at low cost.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Legacy code}: \ automatic, \ trustworthy translation of C into a "
-                          r"memory-safe language.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Supply chains}: \ knowing what is in the software you run, \ and who "
-                          r"could change it.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ a full software stack, \ from an "
-                             r"auditable seed of a few hundred bytes to a modern compiler and kernel, \ with every "
-                             r"build reproducible and every translation proved correct", 12.4, font_size=23,
-                             color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Whether one-way functions exist, the assumption under all of Parts "
-            "29 and 30. <bookmark mark='b'/> A processor provably free of transient-execution leaks at low cost. "
-            "<bookmark mark='c'/> Trustworthy automatic translation of C into a memory-safe language. "
-            "<bookmark mark='d'/> And knowing what is inside the software we run, and who could change it. "
-            "<bookmark mark='e'/> This part's research problem joins the last chapters together: a complete "
-            "software stack, built up from a seed small enough to audit, every step reproducible, every translation "
-            "proved correct, so that trusting it no longer means trusting anyone."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

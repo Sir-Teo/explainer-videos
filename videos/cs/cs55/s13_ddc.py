@@ -32,7 +32,7 @@ def arrow(a, b, color=GREY_B, width=2.4):
                  max_stroke_width_to_length_ratio=10)
 
 
-class Ddc(VoiceoverScene):
+class Ddc(WatchScene):
     def construct(self):
         self.card()
         self.idea()
@@ -43,13 +43,8 @@ class Ddc(VoiceoverScene):
         self.seed()
 
     def card(self):
-        card = chapter_card(12, r"Catching the trojan", r"How can you check a binary against its source?",
-                            lit=(2005, 2009, 2013), extra=((2005, r"Wheeler: \ DDC"), (2009, r"Wheeler's thesis"),
-                                                           (2013, r"reproducible builds")),
-                            part=PART, layers=("lang", "practice"))
-        with self.voiceover("Chapter twelve. Catching the trojan."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Catching the trojan", r"How can you check a binary against its source?", lit=(2005, 2009, 2013), extra=((2005, r"Wheeler: \ DDC"), (2009, r"Wheeler's thesis"),
+                                                           (2013, r"reproducible builds")), part=PART, layers=("lang", "practice"), said="Chapter twelve. Catching the trojan.")
 
     def idea(self):
         head = label(r"A second, \ independent compiler", font_size=36).to_edge(UP, buff=0.3)
@@ -193,6 +188,10 @@ class Ddc(VoiceoverScene):
         self.clear_scene()
 
     def trojaned(self):
+        self.ask(r"Diverse double-compiling: the two final binaries differ. \\ That means...", [r"noise in the build",
+                 r"the suspect isn't what its source says"], 1,
+                 say="Diverse double-compiling gives two final binaries, and they differ. What does that tell us?",
+                 reveal="If the build is reproducible, the suspect binary doesn't correspond to its source.")
         head = label(r"DDC on Thompson's compiler", font_size=36).to_edge(UP, buff=0.25)
         st = load("trojan")["stages"]
         d, hd, s1, ar, s2, n1, cmp, vv = self.build_panel(

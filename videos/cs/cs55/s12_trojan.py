@@ -45,7 +45,7 @@ def yes_no(v):
     return (r"accepted", NO) if v else (r"refused", GREY_B)
 
 
-class Trojan(VoiceoverScene):
+class Trojan(WatchScene):
     def construct(self):
         self.card()
         self.toy()
@@ -56,15 +56,16 @@ class Trojan(VoiceoverScene):
         self.moral()
 
     def card(self):
-        card = chapter_card(11, r"Reflections on trusting trust", r"Can you trust a program you compiled yourself?",
-                            lit=(1974, 1984), extra=((1974, r"Karger and Schell: \ Multics review"),
-                                                     (1984, r"Thompson: \ Trusting Trust")),
-                            part=PART, layers=("lang", "code"))
-        with self.voiceover("Chapter eleven. Reflections on trusting trust."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Reflections on trusting trust", r"Can you trust a program you compiled yourself?", lit=(1974, 1984), extra=((1974, r"Karger and Schell: \ Multics review"),
+                                                     (1984, r"Thompson: \ Trusting Trust")), part=PART, layers=("lang", "code"), said="Chapter eleven. Reflections on trusting trust.")
 
     def toy(self):
+        self.wrong_idea(r"if the source code is clean, \\ so is the program",
+                        r"the compiler that built it \\ may not be",
+                        narration="A natural belief: audit the source code, and you can trust the program.",
+                        right_narration="The program you run was made by a compiler, itself a program made by a compiler. "
+                                        "Thompson showed a trojan can live there, in no source file at all.")
+        self.clear_scene()
         st = load("trojan")["stages"]
         head = label(r"A compiler that can compile itself", font_size=36).to_edge(UP, buff=0.3)
         comp = panel(CLEAN_COMPILER.rstrip("\n").split("\n"), r"\texttt{compiler.py}", YES, size=16)
@@ -253,6 +254,10 @@ class Trojan(VoiceoverScene):
         self.clear_scene()
 
     def loop(self):
+        self.ask(r"Delete the trojan from the compiler's source. \\ Recompile it with the trojaned binary. Result:",
+                 [r"a clean compiler", r"the trojan survives"], 1,
+                 say="Remove every trace of the trojan from the compiler's source, and compile it with the trojaned binary. What comes out?",
+                 reveal="A trojaned compiler again, from perfectly clean source.")
         t = load("trojan")
         st, bd, fx = t["stages"], t["backdoor"], t["fixpoint"]
         head = label(r"Delete the trojan from the source", font_size=36).to_edge(UP, buff=0.3)

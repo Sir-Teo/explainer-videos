@@ -13,11 +13,11 @@ LAYERS = [(r"gates and memory", r"Rowhammer: \ hammering one DRAM row flips bits
           (r"the supply chain", r"a maintainer plants a backdoor in a compression library", r"Part 41")]
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.tower()
         self.thompson()
-        self.plan()
+        self.title(PART)
 
     def tower(self):
         head = label(r"Every layer leaks", font_size=36).to_edge(UP, buff=0.3)
@@ -100,30 +100,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Trusting Trust", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"threat models, \ and Saltzer and Schroeder's principles",
-            r"memory corruption, \ ROP, \ and memory safety",
-            r"hardware leaks, \ authentication and access control",
-            r"isolation, \ the web, \ networks and supply chains",
-            r"Thompson's trojan compiler, \ built and caught",
-            r"the tower end to end, \ and the open problems",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 55 of Computer Science, Built, the last part of the degree. <bookmark mark='a'/> We will "
-            "set out threat models and the classic design principles; corrupt memory and chain gadgets without "
-            "injecting code, then see what memory safety proves; follow leaks through hardware; authenticate, and "
-            "find a famous protocol's flaw with a model checker; control access and isolate; break the web, the "
-            "network and the supply chain; build Thompson's trojan and catch it; and finally walk the tower, from a "
-            "NAND gate to a cluster, one last time."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO, YES, HEAD)

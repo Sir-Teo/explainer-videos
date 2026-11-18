@@ -14,7 +14,7 @@ def cell(text, color, w=2.6, h=0.5):
     return VGroup(box, t)
 
 
-class Memory(VoiceoverScene):
+class Memory(WatchScene):
     def construct(self):
         self.card()
         self.smash()
@@ -24,13 +24,7 @@ class Memory(VoiceoverScene):
         self.control()
 
     def card(self):
-        card = chapter_card(2, r"Memory corruption, and return-oriented programming",
-                            r"What happens when input is longer than its buffer?", lit=(1988, 2007),
-                            extra=((1988, r"the Morris worm"), (1996, r"Aleph One"), (2007, r"Shacham: \ ROP")),
-                            part=PART)
-        with self.voiceover("Chapter two. Memory corruption, and return-oriented programming."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Memory corruption, and return-oriented programming", r"What happens when input is longer than its buffer?", lit=(1988, 2007), extra=((1988, r"the Morris worm"), (1996, r"Aleph One"), (2007, r"Shacham: \ ROP")), part=PART, said="Chapter two. Memory corruption, and return-oriented programming.")
 
     def smash(self):
         head = label(r"The stack smash \ (Part 11, \ on Pebble)", font_size=36).to_edge(UP, buff=0.3)
@@ -124,6 +118,10 @@ class Memory(VoiceoverScene):
         self.clear_scene()
 
     def aslr(self):
+        self.ask(r"Sixteen random bits of address layout. \\ Brute-force tries, on average:", [r"$16$",
+                 r"about $32{,}000$", r"$65$ billion"], 1,
+                 say="Address randomization with sixteen random bits. How many tries does brute force need, on average?",
+                 reveal="About thirty-two thousand: half of two to the sixteen. A probability, not a wall.")
         a = load("aslr")
         ent = a["entropy"]["layouts"]
         ex = a["experiment"]

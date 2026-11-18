@@ -24,22 +24,17 @@ def side_notes(items, width=3.3, size=19, buff=0.3):
         DOWN, aligned_edge=LEFT, buff=buff)
 
 
-class Isolation(VoiceoverScene):
+class Isolation(WatchScene):
     def construct(self):
         self.card()
         self.pages()
         self.ladder()
         self.sandbox()
-        self.browser()
         self.enclaves()
 
     def card(self):
-        card = chapter_card(7, r"Isolation", r"Can two programs share a machine, \ and nothing else?",
-                            lit=(1962, 2017, 2018), extra=((1962, r"Atlas: \ paging"), (2017, r"WebAssembly"),
-                                                           (2018, r"site isolation")), part=PART)
-        with self.voiceover("Chapter seven. Isolation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Isolation", r"Can two programs share a machine, \ and nothing else?", lit=(1962, 2017, 2018), extra=((1962, r"Atlas: \ paging"), (2017, r"WebAssembly"),
+                                                           (2018, r"site isolation")), part=PART, said="Chapter seven. Isolation.")
 
     def pages(self):
         head = label(r"The first wall: \ address spaces \ (Parts 31 and 32)", font_size=36).to_edge(UP, buff=0.3)
@@ -183,6 +178,10 @@ class Isolation(VoiceoverScene):
         self.clear_scene()
 
     def sandbox(self):
+        self.ask(r"A renderer installs a system-call filter on itself. \\ Can it remove the filter later?",
+                 [r"yes", r"no"], 1,
+                 say="A browser renderer installs a system-call filter on itself. Can it remove the filter later?",
+                 reveal="No. Filters can only be added, so a hijacked renderer stays boxed in.")
         head = label(r"Dropping privilege: \ system-call filters", font_size=36).to_edge(UP, buff=0.3)
         proc = box(r"a renderer, \ after start-up", DATA, 5.6, h=0.6, size=20, fill=0.12).move_to([-3.2, 2.15, 0])
         filt = box(r"the filter: \ an allow-list of system calls", HEAD, 6.2, h=0.55, size=19, fill=0.12)
@@ -235,62 +234,6 @@ class Isolation(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def browser(self):
-        head = label(r"The browser \ (Parts 15 and 42)", font_size=36).to_edge(UP, buff=0.3)
-        bp = box(r"browser process \ (privileged)", KERN, 4.6, h=0.55, size=19, fill=0.15).move_to([-3.6, 2.2, 0])
-        sites = [r"bank.example", r"news.example", r"evil.example"]
-        rs = VGroup(*[box(s, [YES, DATA, NO][k], 1.85, h=0.75, size=16, dashed=True, use_mono=True)
-                      for k, s in enumerate(sites)]).arrange(RIGHT, buff=0.2).move_to([-3.6, 0.75, 0])
-        links = VGroup(*[Line(bp.get_bottom(), r.get_top(), color=GREY_C, stroke_width=1.5) for r in rs])
-        rl = label(r"one sandboxed renderer process per site", font_size=18, color=GREY_A).next_to(rs, DOWN, buff=0.15)
-        sl = wrapped_label(r"after Spectre \ (Chapter 4), \ anything in the same address space can be read: \ so "
-                           r"the wall between sites must be a process \ --- \ \textbf{site isolation}, \ on by "
-                           r"default in desktop Chrome since 2018", 6.2, font_size=19, color=WHITE)
-        sl.next_to(rl, DOWN, buff=0.35).set_x(-3.6)
-        n = 8
-        cells = VGroup(*[Rectangle(width=0.42, height=0.55, stroke_color=DATA, stroke_width=1.2, fill_color=DATA,
-                                   fill_opacity=0.15) for _ in range(n)]).arrange(RIGHT, buff=0)
-        guard = Rectangle(width=1.6, height=0.55, stroke_color=GREY_C, stroke_width=1.2, fill_color=GREY_D,
-                          fill_opacity=0.5)
-        mem = VGroup(cells, guard).arrange(RIGHT, buff=0).move_to([3.6, 2.0, 0])
-        ml = label(r"linear memory: \ $[0, n)$", font_size=17, color=DATA).next_to(cells, UP, buff=0.1)
-        gl = label(r"guard pages", font_size=17, color=GREY_A).next_to(guard, UP, buff=0.1)
-        ptr = Arrow([cells[3].get_x(), 1.15, 0], cells[3].get_bottom(), buff=0.03, stroke_width=3, color=YES,
-                    max_tip_length_to_length_ratio=0.3)
-        ptr2 = Arrow([guard.get_x(), 1.15, 0], guard.get_bottom(), buff=0.03, stroke_width=3, color=NO,
-                     max_tip_length_to_length_ratio=0.3)
-        il = label(r"$i < n$: \ load", font_size=17, color=YES).next_to(ptr, DOWN, buff=0.05)
-        tl = label(r"$i \ge n$: \ trap", font_size=17, color=NO).next_to(ptr2, DOWN, buff=0.05)
-        rule = MathTex(r"\text{load}(i)", r"=", r"\begin{cases} M[\,\text{base} + i\,] & i < n \\ "
-                       r"\text{trap} & \text{otherwise} \end{cases}", font_size=30).move_to([3.6, -0.35, 0])
-        wn = side_notes([
-            (r"WebAssembly \ (in every major browser since 2017): \ a sandbox \textit{inside} a process; \ jumps only "
-             r"to validated code, \ calls through a typed table", WHITE),
-            (r"64-bit engines reserve the 4 GiB a 32-bit index can reach, \ plus guard pages: \ the bounds check "
-             r"is Part 32's paging, \ done by the hardware", YES),
-        ], width=5.6, size=18, buff=0.25).next_to(rule, DOWN, buff=0.35).set_x(3.6)
-        with self.voiceover(
-            "The browser is where these walls meet strangers' code every day. <bookmark mark='a'/> A privileged "
-            "browser process talks to the network and the disk, and each site runs in its own sandboxed renderer. "
-            "<bookmark mark='b'/> After Spectre, anything in the same address space could be read by speculation, so "
-            "the wall between sites had to be a process, and in 2018 Chrome turned site isolation on by default on "
-            "the desktop. <bookmark mark='c'/> Inside a page, WebAssembly, in every major browser since 2017, is a "
-            "sandbox within a process: every load is checked against its linear memory, and control reaches only "
-            "validated code. <bookmark mark='d'/> Sixty-four-bit engines reserve the whole range a thirty-two-bit "
-            "index can reach, plus guard pages, so the bounds check is Part 32's paging, done in hardware."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(bp), Create(links), FadeIn(rs), FadeIn(rl))
-            vo.wait_until("b")
-            self.play(FadeIn(sl))
-            vo.wait_until("c")
-            self.play(FadeIn(mem), FadeIn(ml), FadeIn(gl))
-            self.play(GrowArrow(ptr), FadeIn(il), Write(rule), FadeIn(wn[0]))
-            vo.wait_until("d")
-            self.play(GrowArrow(ptr2), FadeIn(tl), FadeIn(wn[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def enclaves(self):
         head = label(r"Enclaves, \ and their breaks", font_size=36).to_edge(UP, buff=0.3)

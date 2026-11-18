@@ -44,7 +44,7 @@ def message(x1, x2, y, text, color, size=16, use_mono=True):
     return VGroup(a, t)
 
 
-class Web(VoiceoverScene):
+class Web(WatchScene):
     def construct(self):
         self.card()
         self.origin()
@@ -52,14 +52,9 @@ class Web(VoiceoverScene):
         self.csrf()
         self.injection()
         self.binding()
-        self.pki()
 
     def card(self):
-        card = chapter_card(8, r"The web", r"When does a string become code?", lit=(1998, 2011),
-                            extra=((1998, r"SQL injection described"), (2011, r"DigiNotar")), part=PART)
-        with self.voiceover("Chapter eight. The web."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"The web", r"When does a string become code?", lit=(1998, 2011), extra=((1998, r"SQL injection described"), (2011, r"DigiNotar")), part=PART, said="Chapter eight. The web.")
 
     def origin(self):
         head = label(r"The same-origin policy \ (Part 42)", font_size=36).to_edge(UP, buff=0.3)
@@ -276,6 +271,10 @@ class Web(VoiceoverScene):
         self.clear_scene()
 
     def binding(self):
+        self.ask(r"Parameterized queries stop SQL injection \\ because...", [r"they escape quotes",
+                 r"input is never parsed as SQL"], 1,
+                 say="Why do parameterized queries stop SQL injection?",
+                 reveal="The user's input is never parsed as SQL: it arrives as a value, after parsing.")
         s = load("sql")
         head = label(r"The fix is a parsing fix \ (Part 12)", font_size=36).to_edge(UP, buff=0.3)
         steps = VGroup(
@@ -343,57 +342,6 @@ class Web(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def pki(self):
-        head = label(r"When a trust anchor fails: \ DigiNotar \ (2011)", font_size=36).to_edge(UP, buff=0.3)
-        store = cbox(r"your browser's root store", KERN, w=4.0, h=0.5, size=19, fill=0.12).move_to([-3.3, 2.2, 0])
-        cas = VGroup(*[cbox(n, NO if n == "DigiNotar" else GREY_B, w=1.6 if n == "DigiNotar" else 1.25, h=0.46,
-                            size=16) for n in (r"CA", r"DigiNotar", r"CA", r"CA")]).arrange(RIGHT, buff=0.12)
-        cas.move_to([-3.3, 1.05, 0])
-        dots = label(r"\dots", font_size=24, color=GREY_B).next_to(cas, RIGHT, buff=0.12)
-        le = VGroup(*[Line(store.get_bottom(), c.get_top(), color=GREY_C, stroke_width=1.3) for c in cas])
-        real = cbox(r"google.com", YES, w=2.3, h=0.46, size=17, use_mono=True).move_to([-5.0, -0.35, 0])
-        fake = cbox(r"*.google.com", NO, w=2.3, h=0.46, size=17, use_mono=True).move_to([-1.6, -0.35, 0])
-        e1 = Arrow(cas[0].get_bottom(), real.get_top(), buff=0.05, stroke_width=2.2, color=YES,
-                   max_tip_length_to_length_ratio=0.12)
-        e2 = Arrow(cas[1].get_bottom(), fake.get_top(), buff=0.05, stroke_width=2.2, color=NO,
-                   max_tip_length_to_length_ratio=0.12)
-        both = label(r"both accepted: \ any trusted CA may vouch for any name", font_size=18,
-                     color=HEAD).next_to(VGroup(real, fake), DOWN, buff=0.3).set_x(-3.3)
-        ill = label(r"schematic", font_size=16, color=GREY_B).next_to(both, DOWN, buff=0.12).set_x(-3.3)
-        notes = VGroup(
-            wrapped_label(r"2011: \ DigiNotar was broken into; \ a rogue certificate for \texttt{*.google.com} was "
-                          r"used to intercept users in Iran", 5.4, font_size=19, color=NO),
-            wrapped_label(r"Chrome, \ which pinned Google's keys, \ flagged it; \ every browser then removed "
-                          r"DigiNotar, \ and the company went bankrupt that year", 5.4, font_size=19, color=WHITE),
-            wrapped_label(r"\textbf{Certificate Transparency} \ (RFC 6962, \ 2013): \ certificates go into public, "
-                          r"append-only Merkle logs \ (Part 29), \ so a rogue one cannot stay hidden", 5.4,
-                          font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.7, 0.2, 0])
-        foot = wrapped_label(r"a chain of trust is as strong as its weakest anchor", 12.4, font_size=21,
-                             color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Beneath it all sits Part 30's public-key infrastructure, and it can fail too. <bookmark mark='a'/> Your "
-            "browser trusts a store of root authorities, and any of them may vouch for any name. <bookmark mark='b'/> "
-            "In 2011 the Dutch authority DigiNotar was broken into, and a certificate for every google dot com "
-            "address was issued and used to intercept users in Iran. <bookmark mark='c'/> Chrome, which pinned "
-            "Google's keys, noticed; the browsers removed DigiNotar, and it was bankrupt within the year. <bookmark "
-            "mark='d'/> The structural fix, Certificate Transparency, from 2013, puts every certificate in public, "
-            "append-only Merkle logs, so a rogue one cannot hide."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(store))
-            vo.wait_until("a")
-            self.play(Create(le), FadeIn(cas), FadeIn(dots))
-            self.play(GrowArrow(e1), FadeIn(real))
-            vo.wait_until("b")
-            self.play(GrowArrow(e2), FadeIn(fake), FadeIn(notes[0]))
-            self.play(FadeIn(both), FadeIn(ill))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[2]))
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES, PART, mono, tag_box)
