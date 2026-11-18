@@ -93,3 +93,18 @@ def test_a_shortened_line_keeps_its_translation(tmp_path, monkeypatch):
     assert lang._shortened("Something else entirely. <bookmark mark='a'/>", tmp_path, "Hook") is None
     assert lang._shortened("The core is fast. It wins.", tmp_path, "Hook") is None  # the bookmark went missing
     lang._table.cache_clear()
+
+
+def test_fades_get_the_entrance_their_content_suggests(manim, monkeypatch):
+    """explainer.cs.watch.lively: arrows grow, lines draw, short formulas are written, small groups cascade."""
+    from explainer.cs.watch import lively
+
+    m = manim
+    assert type(lively(m.FadeIn(m.Arrow(m.LEFT, m.RIGHT)))) is m.GrowArrow
+    assert type(lively(m.FadeIn(m.Line(m.LEFT, m.RIGHT)))) is m.Create
+    assert type(lively(m.FadeIn(m.MathTex(r"x^2")))) is m.Write
+    assert type(lively(m.FadeIn(m.VGroup(m.Dot(), m.Square(), m.Circle())))) is m.LaggedStart
+    long = m.FadeIn(m.MathTex(r"a + b + c + d + e + f + g + h + i + j + k + l + m + n"))
+    assert type(lively(long)) is m.FadeIn  # a long formula keeps its fade
+    monkeypatch.setenv("EXPLAINER_PLAIN_FADES", "1")
+    assert type(lively(m.FadeIn(m.Arrow(m.LEFT, m.RIGHT)))) is m.FadeIn

@@ -25,6 +25,8 @@ Everything a card shows is placed relative to the camera's frame, so it works wh
 
 from __future__ import annotations
 
+import os
+
 import numpy as np
 from manim import *  # noqa: F403
 
@@ -152,8 +154,41 @@ def series_strip(part: int, width=11.0, font_size=20) -> VGroup:
     return VGroup(acts, brace, lab)
 
 
+SHORT_TEX = 44  # characters of TeX source a label may have and still be written stroke by stroke
+
+
+def lively(anim, top=True):
+    """A plain ``FadeIn``, given the entrance its content suggests (videos/cs/SYLLABUS.md 1.2, picture and motion):
+    an arrow grows from its tail; a line, arc or plotted curve is drawn along its length; a short one-line label or
+    formula is written; a group of a few parts arrives part by part, each with its own entrance. The end state is the
+    same, so layouts are untouched; anything else keeps its fade. ``EXPLAINER_PLAIN_FADES=1`` turns this off."""
+    if os.environ.get("EXPLAINER_PLAIN_FADES") or type(anim) is not FadeIn:
+        return anim
+    m = anim.mobject
+    if top and os.environ.get("EXPLAINER_LIVELY_LOG"):  # which kinds of things fade in (the motion audit)
+        with open(os.environ["EXPLAINER_LIVELY_LOG"], "a") as f:
+            f.write(type(m).__name__ + "\n")
+    kw = {"run_time": anim.run_time, "rate_func": anim.rate_func}
+    if isinstance(m, Arrow):
+        return GrowArrow(m, **kw)
+    if isinstance(m, (Line, Arc, ParametricFunction)):
+        return Create(m, **kw)
+    if isinstance(m, MathTex):
+        src = m.tex_string
+        if len(src) <= SHORT_TEX and "\\\\" not in src and m.get_fill_opacity() > 0:
+            return Write(m, **kw)
+        return anim
+    if top and type(m) is VGroup and 2 <= len(m.submobjects) <= 40:
+        parts = [lively(FadeIn(c, shift=0.08 * UP), top=False) for c in m.submobjects]
+        return LaggedStart(*parts, lag_ratio=0.25, run_time=anim.run_time)
+    return anim
+
+
 class WatchScene(VoiceoverScene, MovingCameraScene):
     """A narrated scene with a camera, and the watch standard's set pieces."""
+
+    def play(self, *anims, **kw):
+        return super().play(*[lively(a) for a in anims], **kw)
 
     # ------------------------------------------------------------------ the camera
     def frame_center(self):

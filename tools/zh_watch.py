@@ -10,7 +10,7 @@ the options, the misconception, the checkpoint's questions and answers). ``--nee
 ``self.voiceover`` line, that a Chinese build could not translate, plus every on-screen string the series table leaves
 in English. ``--put`` writes the spoken ones to ``videos/cs/<part>/zh_watch.json``, which the part's ``zh_lines.py``
 folds into its table (literal lines by their text, f-strings as templates; see tools/zh_lines.py), and the on-screen
-ones to ``videos/cs/cs_text_zh.json`` through tools/text_zh_add.py.
+ones to the part's own ``videos/cs/<part>/text_zh.json``, which takes precedence over the series table.
 """
 
 from __future__ import annotations
@@ -19,9 +19,7 @@ import argparse
 import ast
 import json
 import os
-import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -36,9 +34,12 @@ SPOKEN = {"ask": ("say", "reveal"), "predict": ("narration",), "reveal": ("narra
           "chapter": ("said",)}
 SHOWN = {"ask": (0, 1), "predict": (0, 1), "wrong_idea": (0, 1), "checkpoint": (0,)}
 LOADER = '''
-_watch = Path(__file__).with_name("zh_watch.json")
+import json as _json  # noqa: E402
+from pathlib import Path as _Path  # noqa: E402
+
+_watch = _Path(__file__).with_name("zh_watch.json")
 if _watch.exists():  # the watch retrofit's lines (tools/zh_watch.py)
-    ZH.update(json.loads(_watch.read_text()))
+    ZH.update(_json.loads(_watch.read_text()))
 '''
 
 
@@ -127,11 +128,12 @@ def put(video: str, need_file: Path, zh_file: Path) -> None:
         if "zh_watch.json" not in zl.read_text():
             zl.write_text(zl.read_text().rstrip("\n") + "\n" + LOADER)
         print(f"{path.relative_to(ROOT)}: {len(said)} spoken line(s)")
-    if shown:
-        with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as f:
-            json.dump({"strings": shown, "patterns": []}, f, ensure_ascii=False)
-        subprocess.run([sys.executable, str(ROOT / "tools" / "text_zh_add.py"), "cs", f.name], check=True)
-        os.unlink(f.name)
+    if shown:  # the part's own table: short options ("one", "two") read differently in different parts
+        path = d / "text_zh.json"
+        old = json.loads(path.read_text()) if path.exists() else {}
+        old.setdefault("strings", {}).update(shown)
+        path.write_text(json.dumps(old, ensure_ascii=False, indent=1) + "\n")
+        print(f"{path.relative_to(ROOT)}: {len(shown)} on-screen string(s)")
 
 
 def main(argv=None) -> int:
