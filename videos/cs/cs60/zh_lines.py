@@ -402,3 +402,10 @@ PHRASES.update({"an eighth": "八分之一", "a ninth": "九分之一", "a tenth
                 "a twelfth": "十二分之一", "a sixteenth": "十六分之一", "a seventeenth": "十七分之一",
                 "an eighteenth": "十八分之一", "a nineteenth": "十九分之一", "a twentieth": "二十分之一",
                 "a small fraction": "一小部分"})
+
+import json as _json  # noqa: E402
+from pathlib import Path as _Path  # noqa: E402
+
+_watch = _Path(__file__).with_name("zh_watch.json")
+if _watch.exists():  # the watch retrofit's lines (tools/zh_watch.py)
+    ZH.update(_json.loads(_watch.read_text()))
