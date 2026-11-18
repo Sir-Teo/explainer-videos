@@ -12,21 +12,16 @@ def log_strip(n_filled, n=8, color=DATA, side=0.26):
     return g.arrange(RIGHT, buff=0.04)
 
 
-class Replication(VoiceoverScene):
+class Replication(WatchScene):
     def construct(self):
         self.card()
         self.replicas()
         self.lag()
         self.failover()
         self.fencing()
-        self.active()
 
     def card(self):
-        card = chapter_card(9, r"Replication in practice", r"What do copies cost when the leader can fail?",
-                            lit=(2006, 2006), extra=((2006, r"Burrows: \ Chubby's lock sequencers"),), part=PART)
-        with self.voiceover("Chapter nine. Replication in practice."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Replication in practice", r"What do copies cost when the leader can fail?", lit=(2006, 2006), extra=((2006, r"Burrows: \ Chubby's lock sequencers"),), part=PART, said="Chapter nine. Replication in practice.")
 
     # ------------------------------------------------------------------ leader and read replicas
     def replicas(self):
@@ -193,6 +188,10 @@ class Replication(VoiceoverScene):
 
     # ------------------------------------------------------------------ split brain and fencing
     def fencing(self):
+        self.ask(r"A paused leader wakes after its lease expired, \\ and writes with token 33. Storage...",
+                 [r"accepts it", r"rejects it: it has seen 34"], 1,
+                 say="A paused leader wakes up after its lease has expired and writes with token thirty-three. What does storage do?",
+                 reveal="Rejects it: it has already seen token thirty-four.")
         head = label(r"Split brain and fencing tokens", font_size=36).to_edge(UP, buff=0.3)
         lanes = {"A": 2.05, "lock": 1.05, "B": 0.05, "store": -0.95}
         names = {"A": (r"leader A", KERN), "lock": (r"lock service", LAM), "B": (r"leader B", DATA),
@@ -258,72 +257,13 @@ class Replication(VoiceoverScene):
             self.play(FadeIn(notes[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a token bucket guarantee?", r"At most $b + rs$ in any interval $s$"),
+             (r"What is a fencing token for?", r"Rejecting a stale leader's writes")],
+            narration="Checkpoint. What does a token bucket guarantee? And what is a fencing token for?",
+            answers_narration="No more than the bucket size plus rate times time, in any interval. And letting storage reject "
+                              "writes from a leader whose lease has passed.")
 
-    # ------------------------------------------------------------------ active-active
-    def active(self):
-        w = load39("lww")
-        R = {r["skew_ms"]: r for r in w["rows"]}
-        head = label(r"Active--active across regions", font_size=36).to_edge(UP, buff=0.3)
-        eu = module_box(r"leader, \ Europe", KERN, w=2.2, h=0.6, font=18).move_to([-5.2, 1.9, 0])
-        us = module_box(r"leader, \ America", DATA, w=2.2, h=0.6, font=18).move_to([-1.6, 1.9, 0])
-        link = DoubleArrow(eu.get_right(), us.get_left(), buff=0.08, color=GREY_B, stroke_width=2,
-                           max_tip_length_to_length_ratio=0.12)
-        ll = label(rf"{w['delta_ms']:.0f} ms", font_size=17, color=GREY_B).next_to(link, UP, buff=0.08)
-        wa = label(r"\texttt{x = 1}", font_size=20, color=KERN).next_to(eu, DOWN, buff=0.3)
-        wb = label(r"\texttt{x = 2}", font_size=20, color=DATA).next_to(us, DOWN, buff=0.3)
-        cross = VGroup(Arrow(wa.get_right(), [us.get_x() - 0.6, wb.get_y() - 0.75, 0], buff=0.1, color=KERN,
-                             stroke_width=2, max_tip_length_to_length_ratio=0.1),
-                       Arrow(wb.get_left(), [eu.get_x() + 0.6, wa.get_y() - 0.75, 0], buff=0.1, color=DATA,
-                             stroke_width=2, max_tip_length_to_length_ratio=0.1))
-        lww = VGroup(label(r"last writer wins:", font_size=19, color=NO), label(r"\texttt{x = 2}", font_size=20,
-                                                                                 color=DATA),
-                     label(r"\texttt{x = 1} \ discarded", font_size=19, color=NO)).arrange(RIGHT, buff=0.25)
-        vv = VGroup(label(r"version vectors:", font_size=19, color=YES),
-                    label(r"siblings \ \{\texttt{1}, \ \texttt{2}\}: \ merge them", font_size=19, color=YES)).arrange(
-            RIGHT, buff=0.25)
-        VGroup(lww, vv).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([-3.4, -1.0, 0])
-        shown = (0, 100, 250)
-        tab = grid_table([r"clock skew", r"concurrent", r"lost by LWW", r"lost by VV"],
-                         [[f"{s} ms", rf"{100 * R[s]['concurrent']:.1f}\%", rf"{100 * R[s]['lww_lost']:.1f}\%",
-                           rf"{100 * R[s]['vv_lost']:.0f}\%"] for s in shown],
-                         widths=[1.5, 1.6, 1.7, 1.5], row_h=0.5, font_size=19,
-                         colors=[[WHITE, HEAD, NO, YES]] * 3, mono_cols=())
-        tab.move_to([3.6, 1.0, 0])
-        tl = wrapped_label(rf"Part 39: \ two regions, \ each writing one key {w['rate']:.0f} times a second; \ "
-                           r"clock skew: \ how far America's clock runs fast", 6.2, font_size=18, color=GREY_A).next_to(
-            tab, UP, buff=0.25).align_to(tab, LEFT)
-        notes = VGroup(
-            wrapped_label(r"LWW drops half of every concurrent pair; \ with skew it also drops writes that had "
-                          r"\textit{seen} the one it keeps", 6.2, font_size=19, color=NO),
-            wrapped_label(r"version vectors keep both, \ for the application or a CRDT \ (Part 39) \ to merge",
-                          6.2, font_size=19, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(tab, DOWN, buff=0.45).align_to(tab, LEFT)
-        with self.voiceover(
-            "Finally, leaders in several regions, each accepting writes locally: active-active. Writes are fast "
-            "everywhere, but two regions can change the same record before hearing of each other. "
-            "<bookmark mark='a'/> Part 39 simulated it: two regions, each writing one key five times a second, "
-            "fifty milliseconds apart. A fifth of all writes were concurrent with one from the other region. "
-            "<bookmark mark='b'/> Last writer wins keeps the larger timestamp and silently discards the other: "
-            "nearly ten percent of writes lost, with perfect clocks. <bookmark mark='c'/> With one clock a hundred "
-            "milliseconds fast, it also discards writes that had seen the one it keeps: about sixteen percent "
-            "lost; at a quarter of a second, twenty-three. <bookmark mark='d'/> Version vectors lose nothing. "
-            "They hand both versions back, to be merged by a rule, or by a CRDT."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(eu), FadeIn(us), GrowFromCenter(link), FadeIn(ll))
-            vo.wait_until("a")
-            self.play(FadeIn(wa), FadeIn(wb))
-            self.play(GrowArrow(cross[0]), GrowArrow(cross[1]))
-            self.play(FadeIn(tl), FadeIn(VGroup(*tab.cells[0])), Create(tab.rule), FadeIn(tab.cells[1][1]),
-                      FadeIn(tab.cells[1][0]))
-            vo.wait_until("b")
-            self.play(FadeIn(lww), FadeIn(tab.cells[1][2]))
-            vo.wait_until("c")
-            self.play(FadeIn(VGroup(*tab.cells[2][:3])), FadeIn(VGroup(*tab.cells[3][:3])), FadeIn(notes[0]))
-            vo.wait_until("d")
-            self.play(FadeIn(vv), FadeIn(VGroup(tab.cells[1][3], tab.cells[2][3], tab.cells[3][3])),
-                      FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, HEAD, LAM, load)

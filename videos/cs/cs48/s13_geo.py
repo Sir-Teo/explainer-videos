@@ -67,7 +67,7 @@ def hexagon(center, r, color, opacity):
     return Polygon(*pts, stroke_color=GREY_B, stroke_width=1.2, fill_color=color, fill_opacity=opacity)
 
 
-class Geo(VoiceoverScene):
+class Geo(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -78,12 +78,8 @@ class Geo(VoiceoverScene):
         self.nearest()
 
     def card(self):
-        card = chapter_card(12, r"Maps as keys", r"How does an index built for a line find what is near?",
-                            lit=(1891, 2018), extra=((1891, r"Hilbert's curve"), (1966, r"Morton: \ Z-order"),
-                                                     (2018, r"Uber: \ H3")), part=PART)
-        with self.voiceover("Chapter twelve. Maps as keys."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Maps as keys", r"How does an index built for a line find what is near?", lit=(1891, 2018), extra=((1891, r"Hilbert's curve"), (1966, r"Morton: \ Z-order"),
+                                                     (2018, r"Uber: \ H3")), part=PART, said="Chapter twelve. Maps as keys.")
 
     # ------------------------------------------------------------------ two dimensions, one index
     def problem(self):
@@ -143,6 +139,10 @@ class Geo(VoiceoverScene):
 
     # ------------------------------------------------------------------ Morton: interleave the bits
     def interleave(self):
+        self.ask(r"Interleave the bits of $x$ and $y$. \\ Nearby points always get nearby keys?", [r"yes",
+                 r"mostly, with jumps"], 1,
+                 say="Interleave the bits of x and y into one key. Do nearby points always get nearby keys?",
+                 reveal="Mostly, but the curve jumps at quadrant boundaries.")
         cv = load("curves")["order3"]
         head = label(r"Interleave the bits", font_size=36).to_edge(UP, buff=0.3)
         n, cell = 8, 0.56

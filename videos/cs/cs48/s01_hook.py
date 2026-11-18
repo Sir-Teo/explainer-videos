@@ -11,12 +11,12 @@ def si(x: float) -> str:
     return f"{x:.0f}"
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.napkin()
         self.numbers()
         self.blocks()
-        self.plan()
+        self.title(PART)
 
     def napkin(self):
         n = load("napkin")
@@ -126,29 +126,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ System Design I: \ Building Blocks", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"estimate before you design",
-            r"Maglev hashing and the power of two choices",
-            r"cache hit rates, \ Che's approximation, \ TinyLFU",
-            r"stampedes, \ early expiration, \ token buckets",
-            r"shards, \ replicas, \ time-ordered IDs",
-            r"space-filling curves, \ and the Job as a service",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 48 of Computer Science, Built, the first of two parts on system design. "
-            "<bookmark mark='a'/> We will estimate before we design; balance load with Maglev hashing and two random "
-            "choices; predict a cache's hit rate with Che's approximation and beat LRU with an admission filter; "
-            "survive a stampede; limit rates with token buckets; shard, replicate and name things; turn a map into "
-            "keys with space-filling curves; and load-test the Job as a service."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES, si)

@@ -15,22 +15,17 @@ def arrow(a, b, color=GREY_B, buff=0.08, width=2.0):
     return Arrow(a, b, buff=buff, stroke_width=width, color=color, max_tip_length_to_length_ratio=0.15)
 
 
-class Realtime(VoiceoverScene):
+class Realtime(WatchScene):
     def construct(self):
         self.card()
         self.transports()
         self.connections()
         self.notifications()
         self.presence()
-        self.search()
 
     def card(self):
-        card = chapter_card(13, r"Real-time blocks", r"How does the server speak first?",
-                            lit=(2006, 2011), extra=((2006, r"``Comet'': \ long polling named"),
-                                                     (2011, r"RFC 6455: \ WebSocket")), part=PART)
-        with self.voiceover("Chapter thirteen. Real-time blocks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Real-time blocks", r"How does the server speak first?", lit=(2006, 2011), extra=((2006, r"``Comet'': \ long polling named"),
+                                                     (2011, r"RFC 6455: \ WebSocket")), part=PART, said="Chapter thirteen. Real-time blocks.")
 
     # ------------------------------------------------------------------ polling, long polling, a socket
     def transports(self):
@@ -110,6 +105,10 @@ class Realtime(VoiceoverScene):
 
     # ------------------------------------------------------------------ connection servers
     def connections(self):
+        self.ask(r"A connection server restarts. \\ 100,000 clients reconnect at once, without jitter:",
+                 [r"fine", r"a thundering herd"], 1,
+                 say="A server holding a hundred thousand open connections restarts, and every client reconnects at once. What happens?",
+                 reveal="A thundering herd. Backoff with jitter spreads them out.")
         st = load43("storm")
         imm, bo = st["immediate"], st["backoff"]
         cap = 100
@@ -309,68 +308,6 @@ class Realtime(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ search as a block
-    def search(self):
-        comp = load47("spell")["complete"]
-        head = label(r"Search as a block", font_size=36).to_edge(UP, buff=0.3)
-        box = RoundedRectangle(width=3.6, height=0.6, corner_radius=0.1, stroke_color=GREY_A,
-                               stroke_width=2).move_to([-4.5, 2.0, 0])
-        typed = ["e", "el", "eli", "eliz"]
-        texts = [mono(t, size=22, color=WHITE).move_to(box).align_to(box, LEFT).shift(RIGHT * 0.2) for t in typed]
-        sugg = VGroup(*[mono(w, size=19, color=YES) for w in comp["eliz"]]).arrange(DOWN, buff=0.14,
-                                                                                    aligned_edge=LEFT)
-        drop = SurroundingRectangle(sugg, buff=0.15, color=GREY_C, stroke_width=1.2, corner_radius=0.06)
-        VGroup(drop, sugg).next_to(box, DOWN, buff=0.1).align_to(box, LEFT)
-        sl = wrapped_label(r"the five commonest words beginning \texttt{eliz} in the thirty novels \ (Part 47)",
-                           3.6, font_size=17, color=GREY_A).next_to(drop, DOWN, buff=0.15).align_to(box, LEFT)
-        db = module_box(r"database", LAM, w=1.8, h=0.6, font=18).move_to([0.6, 2.0, 0])
-        log = module_box(r"change log", GREY_B, w=1.9, h=0.6, font=18).move_to([3.1, 2.0, 0])
-        idxr = module_box(r"indexer", KERN, w=1.5, h=0.6, font=18).move_to([5.5, 2.0, 0])
-        index = module_box(r"search index", YES, w=2.2, h=0.6, font=18).move_to([5.3, 0.3, 0])
-        app = module_box(r"application", DATA, w=2.0, h=0.6, font=18).move_to([0.6, 0.3, 0])
-        flow = VGroup(arrow(db.get_right(), log.get_left()), arrow(log.get_right(), idxr.get_left()),
-                      arrow(idxr.get_bottom(), index.get_top() + RIGHT * 0.2))
-        ask = arrow(app.get_right() + UP * 0.1, index.get_left() + UP * 0.1, color=DATA)
-        ids = arrow(index.get_left() + DOWN * 0.1, app.get_right() + DOWN * 0.1, color=YES)
-        fetch = arrow(app.get_top(), db.get_bottom(), color=LAM)
-        al = label(r"query $\to$ ids", font_size=16, color=DATA).next_to(ask, UP, buff=0.06)
-        fl = label(r"records by id", font_size=16, color=LAM).next_to(fetch, LEFT, buff=0.08)
-        tl = label(r"Part 46", font_size=16, color=GREY_B).next_to(log, UP, buff=0.08)
-        notes = VGroup(
-            wrapped_label(r"the database stays the truth; \ the index is a view of it, \ fed by its change log", 6.2,
-                          font_size=19, color=WHITE),
-            wrapped_label(r"so search is eventually consistent: \ a new item appears after the pipeline's lag; \ "
-                          r"read your own writes from the database", 6.2, font_size=19, color=NO),
-            wrapped_label(r"type-ahead sends a query per keystroke: \ wait for a pause, \ and cache popular "
-                          r"prefixes \ (chapter 3)", 6.2, font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.5, -1.85, 0])
-        with self.voiceover(
-            "The last block is Part 47's search. <bookmark mark='a'/> The database stays the truth. Its change log, "
-            "from Part 46, feeds an indexer that keeps a search index current. The application sends the query to the"
-            " index, gets back ids, and fetches the records from the database. <bookmark mark='b'/> So search is "
-            "eventually consistent: a new item appears after the pipeline's lag, and a user who has just written "
-            "something should read it from the database. <bookmark mark='c'/> Type-ahead searches at every keystroke:"
-            " typing e l i z returns the five commonest such words in our thirty novels, Elizabeth first. Wait for a "
-            "pause in the typing, and cache popular prefixes."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(box), FadeIn(db), FadeIn(app))
-            vo.wait_until("a")
-            self.play(GrowArrow(flow[0]), FadeIn(log), FadeIn(tl))
-            self.play(GrowArrow(flow[1]), FadeIn(idxr), GrowArrow(flow[2]), FadeIn(index))
-            self.play(GrowArrow(ask), FadeIn(al), FadeIn(notes[0]))
-            self.play(GrowArrow(ids), GrowArrow(fetch), FadeIn(fl))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]), Indicate(flow[1], color=NO))
-            vo.wait_until("c")
-            cur = texts[0]
-            self.play(FadeIn(cur), run_time=0.4)
-            for t in texts[1:]:
-                self.play(ReplacementTransform(cur, t), run_time=0.4)
-                cur = t
-            self.play(FadeIn(drop), LaggedStart(*[FadeIn(s, shift=DOWN * 0.08) for s in sugg], lag_ratio=0.2),
-                      FadeIn(sl), FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, HEAD)

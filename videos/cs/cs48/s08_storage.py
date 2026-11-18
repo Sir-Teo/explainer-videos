@@ -16,22 +16,17 @@ def cells(rows, cols, w=0.34, h=0.2, color=GREY_B, head=True):
     return g
 
 
-class Storage(VoiceoverScene):
+class Storage(WatchScene):
     def construct(self):
         self.card()
         self.shapes()
         self.columns()
         self.engine()
-        self.denormalize()
         self.indexes()
 
     def card(self):
-        card = chapter_card(7, r"Choosing storage", r"Which shape of database fits the questions you will ask?",
-                            lit=(1970, 2006), extra=((1970, r"Codd: \ the relational model"),
-                                                     (2006, r"Chang et al.: \ Bigtable")), part=PART)
-        with self.voiceover("Chapter seven. Choosing storage."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Choosing storage", r"Which shape of database fits the questions you will ask?", lit=(1970, 2006), extra=((1970, r"Codd: \ the relational model"),
+                                                     (2006, r"Chang et al.: \ Bigtable")), part=PART, said="Chapter seven. Choosing storage.")
 
     # ------------------------------------------------------------------ six shapes
     def shapes(self):
@@ -178,6 +173,9 @@ class Storage(VoiceoverScene):
 
     # ------------------------------------------------------------------ the engine underneath
     def engine(self):
+        self.ask(r"A write-heavy workload. \\ Which engine suits it?", [r"a B-tree", r"an LSM tree"], 1,
+                 say="A workload that writes far more than it reads. Which storage engine suits it?",
+                 reveal="An LSM tree: appends and merges, instead of updates in place.")
         L = load34("lsm")
         head = label(r"The engine underneath", font_size=36).to_edge(UP, buff=0.3)
         bt = L["btree"]
@@ -241,75 +239,6 @@ class Storage(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ denormalization
-    def denormalize(self):
-        head = label(r"Joins or copies", font_size=36).to_edge(UP, buff=0.3)
-        users = grid_table([r"id", r"name"], [["42", "Ada"], ["43", "Bob"]], widths=[1.0, 1.6], row_h=0.5,
-                           font_size=20, mono_cols=(0, 1))
-        pastes = grid_table([r"id", r"author", r"title"],
-                            [["5c1e", "42", "notes"], ["7a2b", "42", "todo"], ["8e44", "42", "draft"],
-                             ["9d0f", "43", "poem"]], widths=[1.1, 1.2, 1.3], row_h=0.5, font_size=20,
-                            mono_cols=(0, 1, 2))
-        ut = VGroup(label(r"users", font_size=20, color=DATA), users).arrange(DOWN, buff=0.15)
-        pt = VGroup(label(r"pastes", font_size=20, color=DATA), pastes).arrange(DOWN, buff=0.15)
-        left = VGroup(ut, pt).arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to([-4.4, 0.05, 0])
-        ltitle = label(r"normalised: \ each fact once", font_size=23, color=DATA).next_to(left, UP, buff=0.3)
-        join = CurvedArrow(pastes.cells[1][1].get_left() + LEFT * 0.05, users.cells[1][0].get_left() + LEFT * 0.05,
-                           angle=-PI / 2, color=HEAD, stroke_width=2.5, tip_length=0.15)
-        jl = label(r"join", font_size=18, color=HEAD).next_to(join, LEFT, buff=0.1)
-
-        def doc(pid, title, name="Ada"):
-            lines = code_block([f'{{"id": "{pid}",', f' "author": "{name}",', f' "title": "{title}"}}'], size=16)
-            box = RoundedRectangle(width=3.4, height=lines.height + 0.3, corner_radius=0.1, stroke_color=YES,
-                                   stroke_width=1.6)
-            lines.move_to(box)
-            return VGroup(box, lines)
-        docs = VGroup(*[doc(p, t) for p, t in (("5c1e", "notes"), ("7a2b", "todo"), ("8e44", "draft"))])
-        docs.arrange(DOWN, buff=0.22).move_to([0.6, -0.1, 0])
-        rtitle = label(r"denormalised: \ the name copied", font_size=23, color=YES).next_to(docs, UP, buff=0.3)
-        renamed = [doc(p, t, "Ada L.").move_to(d) for (p, t), d in
-                   zip((("5c1e", "notes"), ("7a2b", "todo"), ("8e44", "draft")), docs)]
-        new_name = mono("Ada L.", size=17).move_to(
-            users.cells[1][1]).align_to(users.cells[1][1], LEFT)
-        stale = VGroup(SurroundingRectangle(docs[2], color=NO, buff=0.06),
-                       label(r"missed: \ stale", font_size=18, color=NO))
-        stale[1].next_to(stale[0], DOWN, buff=0.1)
-        notes = VGroup(
-            wrapped_label(r"read: \ one lookup, \ no join \ (key--value and document stores join poorly)", 3.9,
-                          font_size=19, color=YES),
-            wrapped_label(r"rename: \ one row, \ against every copy found and rewritten", 3.9, font_size=19,
-                          color=NO),
-            wrapped_label(r"copy for the reads that dominate; \ keep one source of truth to rebuild the copies "
-                          r"from \ (Part 46's logs)", 3.9, font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([4.85, -0.1, 0])
-        foot = note(r"illustrative", font_size=16).to_edge(DOWN, buff=0.2)
-        with self.voiceover(
-            "A data model also decides where each fact lives. <bookmark mark='a'/> A normalised design stores "
-            "each fact once: the author's name lives in the users table, and a page showing a paste joins the "
-            "two. <bookmark mark='b'/> A denormalised design copies the name into every paste, so a read is a "
-            "single lookup with no join, which key-value and document stores need, since they join poorly. "
-            "<bookmark mark='c'/> The cost moves to the writes. When the author changes her name, the normalised "
-            "table updates one row; the copies must all be found and rewritten, and a copy that is missed is "
-            "wrong. <bookmark mark='d'/> So copy for the reads that dominate, and keep a single source of truth "
-            "to rebuild the copies from."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(foot))
-            vo.wait_until("a")
-            self.play(FadeIn(ltitle), FadeIn(left))
-            self.play(Create(join), FadeIn(jl))
-            vo.wait_until("b")
-            self.play(FadeIn(rtitle), LaggedStart(*[FadeIn(d, shift=LEFT * 0.2) for d in docs], lag_ratio=0.3))
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("c")
-            self.play(Transform(users.cells[1][1], new_name))
-            self.play(Indicate(users.cells[1][1], color=HEAD))
-            self.play(Transform(docs[0], renamed[0]))
-            self.play(Transform(docs[1], renamed[1]))
-            self.play(Create(stale[0]), FadeIn(stale[1]), FadeIn(notes[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ indexes
     def indexes(self):

@@ -14,7 +14,7 @@ def servers_needed(n):
     return math.ceil(n["peak_qps"] / (PER_SERVER * TARGET_UTIL))
 
 
-class Method(VoiceoverScene):
+class Method(WatchScene):
     def construct(self):
         self.card()
         self.steps()
@@ -25,15 +25,17 @@ class Method(VoiceoverScene):
         self.tradeoffs()
 
     def card(self):
-        card = chapter_card(1, r"How a design is made", r"What do you decide, \ and in what order?",
-                            lit=(2017, 2020), extra=((2017, r"Kleppmann: \ \textit{Designing Data-Intensive "
+        self.chapter(1, r"How a design is made", r"What do you decide, \ and in what order?", lit=(2017, 2020), extra=((2017, r"Kleppmann: \ \textit{Designing Data-Intensive "
                                                             r"Applications}"),
-                                                     (2020, r"Xu: \ \textit{System Design Interview}")), part=PART)
-        with self.voiceover("Chapter one. How a design is made."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2020, r"Xu: \ \textit{System Design Interview}")), part=PART, said="Chapter one. How a design is made.")
 
     def steps(self):
+        self.wrong_idea(r"a design starts by drawing boxes",
+                        r"it starts with requirements and numbers: \\ the boxes come fourth",
+                        narration="It is tempting to start a design by drawing boxes: a load balancer, servers, a database.",
+                        right_narration="Boxes come fourth. First what the system must do and how well, then the numbers, then "
+                                        "the data and its API. The boxes follow from those.")
+        self.clear_scene()
         head = label(r"Eight decisions, \ in order", font_size=36).to_edge(UP, buff=0.3)
         names = [r"requirements", r"capacity model", r"data model", r"API", r"high-level design", r"deep dives",
                  r"trade-offs", r"design doc"]
@@ -144,6 +146,10 @@ class Method(VoiceoverScene):
         self.clear_scene()
 
     def capacity(self):
+        self.ask(r"Ten million users, twenty requests a day each. \\ Average requests per second:", [r"about 230",
+                 r"about 2,300", r"about 23,000"], 1,
+                 say="Ten million users make twenty requests a day each. How many requests per second is that, on average?",
+                 reveal="About two thousand three hundred, and three times that at the peak.")
         n = load("napkin")
         peak_factor = n["peak_qps"] / n["avg_qps"]
         reads_per_write = (n["requests_per_day"] - n["writes_per_day"]) / n["writes_per_day"]

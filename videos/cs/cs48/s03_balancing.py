@@ -26,23 +26,18 @@ def maglev_fill(prefs, M):
     return table, claims
 
 
-class Balancing(VoiceoverScene):
+class Balancing(WatchScene):
     def construct(self):
         self.card()
         self.layers()
         self.policies()
         self.ring()
         self.maglev()
-        self.health()
 
     def card(self):
-        card = chapter_card(2, r"Load balancing", r"Which server should take the next request?",
-                            lit=(1997, 2016), extra=((1997, r"Karger et al.: \ consistent hashing"),
+        self.chapter(2, r"Load balancing", r"Which server should take the next request?", lit=(1997, 2016), extra=((1997, r"Karger et al.: \ consistent hashing"),
                                                      (2001, r"Mitzenmacher: \ two choices"),
-                                                     (2016, r"Eisenbud et al.: \ Maglev")), part=PART)
-        with self.voiceover("Chapter two. Load balancing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2016, r"Eisenbud et al.: \ Maglev")), part=PART, said="Chapter two. Load balancing.")
 
     def layers(self):
         head = label(r"Layer 4 \ against layer 7", font_size=36).to_edge(UP, buff=0.3)
@@ -211,6 +206,10 @@ class Balancing(VoiceoverScene):
         self.clear_scene()
 
     def maglev(self):
+        self.ask(r"Remove one of $N$ backends from a Maglev table. \\ Keys that move:", [r"about $1/N$",
+                 r"about half"], 0,
+                 say="One of N backends leaves a Maglev lookup table. How many keys move?",
+                 reveal="About one in N: mostly the keys that backend held.")
         m = load("maglev")
         head = label(r"Maglev hashing", font_size=36).to_edge(UP, buff=0.3)
         M = 7
@@ -286,59 +285,6 @@ class Balancing(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def health(self):
-        head = label(r"Health checks \ and outlier ejection", font_size=36).to_edge(UP, buff=0.3)
-        lb = module_box(r"balancer", HEAD, w=1.9, h=0.8, font=20).move_to([-5.4, 0.1, 0])
-        ys = [2.0, 1.25, 0.5, -0.25, -1.0, -1.75]
-        servers = VGroup(*[module_box(rf"server {k + 1}", DATA, w=1.7, h=0.5, font=17).move_to([-1.6, y, 0])
-                           for k, y in enumerate(ys)])
-        links = VGroup(*[Line(lb[0].get_right(), s[0].get_left(), color=GREY_B, stroke_width=1.8) for s in servers])
-        probes = VGroup(*[Dot(lb[0].get_right(), radius=0.06, color=YES) for _ in servers])
-        dead, bad = 2, 4
-        fails = VGroup(*[label(r"$\times$", font_size=26, color=NO) for _ in range(3)]).arrange(RIGHT, buff=0.08)
-        fails.next_to(servers[dead], RIGHT, buff=0.15)
-        errs = VGroup(*[mono("5xx", size=14, color=NO) for _ in range(3)]).arrange(RIGHT, buff=0.1)
-        errs.next_to(servers[bad], RIGHT, buff=0.15)
-        notes = VGroup(
-            wrapped_label(r"\textbf{active}: \ probe each server every few seconds; \ out after several failures in "
-                          r"a row, \ back after several successes", 5.0, font_size=19, color=YES),
-            wrapped_label(r"\textbf{passive}: \ watch real responses; \ a run of errors ejects the server for a while, "
-                          r"\ longer each time it recurs \ (Envoy's outlier ejection)", 5.0, font_size=19, color=NO),
-            wrapped_label(r"cap the share that may be ejected: \ a bad check must not empty the fleet", 5.0,
-                          font_size=19, color=HEAD),
-            wrapped_label(r"a slow server is often worse than a dead one \ (Part 39's tail): \ watch latency, \ not "
-                          r"just errors", 5.0, font_size=19, color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.2, 0.1, 0])
-        with self.voiceover(
-            "A balancer must also know which servers are healthy. <bookmark mark='a'/> Active health checks probe "
-            "each server every few seconds. After several failures in a row the server is taken out; after "
-            "several successes it comes back. "
-            "<bookmark mark='b'/> Passive checks watch the real traffic instead. Envoy calls this outlier ejection: "
-            "a server that returns a run of errors is ejected for a while, and for longer each time it happens "
-            "again. <bookmark mark='c'/> Two cautions. Cap the share of servers that can be ejected, so that a "
-            "broken check cannot empty the fleet. <bookmark mark='d'/> And remember Part 39: a slow server is often "
-            "worse than a dead one, so watch latency, not just errors."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lb), FadeIn(servers), Create(links))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]))
-            for rnd in range(3):
-                self.play(*[p.animate.move_to(s[0].get_left()) for p, s in zip(probes, servers)], run_time=0.6)
-                self.play(FadeIn(fails[rnd]), *[p.animate.set_opacity(0) for p in probes], run_time=0.3)
-                for p in probes:
-                    p.move_to(lb[0].get_right()).set_opacity(1)
-            self.play(servers[dead].animate.fade(0.75), links[dead].animate.fade(0.85))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]), LaggedStart(*[FadeIn(e) for e in errs], lag_ratio=0.4))
-            keep_s, keep_l = servers[bad].copy(), links[bad].copy()
-            self.play(servers[bad].animate.fade(0.75), links[bad].animate.fade(0.85))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[3]), Transform(servers[bad], keep_s), Transform(links[bad], keep_l),
-                      FadeOut(errs))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (KERN,)

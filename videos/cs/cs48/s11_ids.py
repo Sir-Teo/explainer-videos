@@ -23,7 +23,7 @@ def coloured(s: str, spans, size=16):
     return Text(s, font=MONO, font_size=size, color=GREY_A, t2c={f"[{a}:{b}]": c for a, b, c in spans})
 
 
-class Ids(VoiceoverScene):
+class Ids(WatchScene):
     def construct(self):
         self.card()
         self.counter()
@@ -33,12 +33,8 @@ class Ids(VoiceoverScene):
         self.locality()
 
     def card(self):
-        card = chapter_card(10, r"Unique IDs", r"How do many machines name things without asking each other?",
-                            lit=(2010, 2024), extra=((2010, r"Twitter: \ Snowflake"),
-                                                     (2024, r"RFC 9562: \ UUIDv7")), part=PART)
-        with self.voiceover("Chapter ten. Unique IDs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Unique IDs", r"How do many machines name things without asking each other?", lit=(2010, 2024), extra=((2010, r"Twitter: \ Snowflake"),
+                                                     (2024, r"RFC 9562: \ UUIDv7")), part=PART, said="Chapter ten. Unique IDs.")
 
     # ------------------------------------------------------------------ one counter
     def counter(self):
@@ -88,6 +84,10 @@ class Ids(VoiceoverScene):
 
     # ------------------------------------------------------------------ UUIDv4 and the birthday bound
     def random(self):
+        self.ask(r"Random 122-bit UUIDs, billions of them. \\ A collision is...", [r"likely",
+                 r"astronomically unlikely"], 1,
+                 say="Generate billions of random version-four UUIDs. Will two collide?",
+                 reveal="Astronomically unlikely: the birthday bound for a hundred and twenty-two bits is far away.")
         ids = load("ids")
         rows = load("birthday")["rows"]
         head = label(r"122 random bits", font_size=36).to_edge(UP, buff=0.3)
