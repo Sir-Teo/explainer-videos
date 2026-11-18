@@ -22,7 +22,7 @@ def mini_row(tape: str, head: int | None, cell=0.3) -> VGroup:
     return g
 
 
-class Machine(VoiceoverScene):
+class Machine(WatchScene):
     def construct(self):
         self.card()
         self.analysis()
@@ -32,10 +32,7 @@ class Machine(VoiceoverScene):
         self.forever()
 
     def card(self):
-        card = chapter_card(4, r"Turing's machine", r"What exactly is a mechanical procedure?", lit=(1936,), part=PART)
-        with self.voiceover("Chapter four. Turing's machine."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Turing's machine", r"What exactly is a mechanical procedure?", lit=(1936,), part=PART, said="Chapter four. Turing's machine.")
 
     # ------------------------------------------------------------------
     def analysis(self):
@@ -130,6 +127,10 @@ class Machine(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def adder(self):
+        self.ask(r"A Turing machine adds $3 + 2$ in unary. \\ What must it know about numbers?",
+                 [r"an addition table", r"how to carry", r"nothing at all"], 2,
+                 say="This machine is about to add three and two. What does it need to know about numbers?",
+                 reveal="Nothing at all. It only moves symbols by its table.")
         d = load("adder")
         hist = d["history"]
         lo = d["lo"]

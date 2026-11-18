@@ -4,20 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs1.common import CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, LIMIT, NO, PART, YES
 
 
-class Thesis(VoiceoverScene):
+class Thesis(WatchScene):
     def construct(self):
         self.card()
         self.statement()
         self.evidence()
         self.not_say()
-        self.versions()
 
     def card(self):
-        card = chapter_card(9, r"The Church--Turing thesis", r"Is this what ``computable'' means?", lit=(1936,),
-                            part=PART)
-        with self.voiceover("Chapter nine. The Church-Turing thesis."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"The Church--Turing thesis", r"Is this what ``computable'' means?", lit=(1936,), part=PART, said="Chapter nine. The Church-Turing thesis.")
 
     # ------------------------------------------------------------------
     def statement(self):
@@ -84,6 +79,10 @@ class Thesis(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def not_say(self):
+        self.ask(r"The Church--Turing thesis says your laptop computes...",
+                 [r"more than a Turing machine", r"the same functions", r"the same functions, just as fast"], 1,
+                 say="What does the thesis say about the laptop you are watching on?",
+                 reveal="The same functions as a Turing machine. Nothing about how fast.")
         head = label(r"What the thesis does \textit{not} say", font_size=40).to_edge(UP, buff=0.4)
         items = VGroup(*[VGroup(MathTex(r"\times", font_size=52, color=NO), label(t, font_size=34)).arrange(RIGHT, buff=0.35)
                          for t in (r"that every machine is fast: \ it is about \textit{whether}, \ not \textit{how soon}",
@@ -104,48 +103,3 @@ class Thesis(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def versions(self):
-        head = label(r"Three theses, \ in decreasing order of certainty", font_size=38).to_edge(UP, buff=0.4)
-        rows = [
-            (r"Church--Turing", r"every mechanical procedure \\ can be run by a Turing machine", r"almost universally \\ "
-                                                                                                 r"accepted", YES),
-            (r"physical", r"every physical process \\ can be simulated by a Turing machine", r"widely believed; \\ "
-                                                                                           r"open", HEAD),
-            (r"extended", r"every reasonable machine \\ can be simulated with \\ polynomial slowdown",
-             r"challenged by \\ quantum computers", NO),
-        ]
-        tab = VGroup()
-        for i, (n, c, st, col) in enumerate(rows):
-            r = VGroup(label(n, font_size=30, color=col), label(c, font_size=26, color=GREY_A),
-                       label(st, font_size=26, color=col))
-            r[0].move_to([-4.9, 1.4 - i * 1.55, 0])
-            r[1].move_to([-0.6, 1.4 - i * 1.55, 0])
-            r[2].move_to([4.4, 1.4 - i * 1.55, 0])
-            tab.add(r)
-        lines = VGroup(*[Line([-6.5, 0.62 - i * 1.55, 0], [6.5, 0.62 - i * 1.55, 0], color=GREY_D) for i in range(2)])
-        ptr = VGroup(label(r"Chapter 6: \ robustness, \ measured", font_size=22, color=GREY_B),
-                     label(r"Part 26: \ the basis of complexity theory", font_size=22, color=GREY_B),
-                     label(r"Part 53: \ Shor's algorithm, \ 1994", font_size=22, color=GREY_B))
-        ptr.arrange(RIGHT, buff=0.6).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "In fact there are three theses, and they get bolder. <bookmark mark='a'/> The Church-Turing thesis, about "
-            "procedures, is almost universally accepted. <bookmark mark='b'/> The physical version says every physical "
-            "process can be simulated by a Turing machine. Most physicists believe it, but it is an open claim about "
-            "the universe. <bookmark mark='c'/> The extended version says more: that every reasonable machine can be "
-            "simulated with at most a polynomial slowdown, like the quadratic cost of extra tapes we measured. It is the "
-            "foundation of complexity theory. And it may be false. Quantum computers can factor large numbers in "
-            "polynomial time by Shor's algorithm, and nobody knows how to do that on an ordinary machine. We will build "
-            "one, simulated, in Part 53. <bookmark mark='d'/> What matters for now is that computable has become a "
-            "precise word. And once a word is precise, you can prove things about everything it covers: including that "
-            "some things are not computable at all."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abc", tab):
-                vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.15), *([Create(lines[0])] if mk == "b" else []),
-                          *([Create(lines[1])] if mk == "c" else []))
-            vo.wait_until("d")
-            self.play(FadeIn(ptr))
-        self.wait(0.3)
-        self.clear_scene()

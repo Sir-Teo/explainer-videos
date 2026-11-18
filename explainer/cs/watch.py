@@ -35,6 +35,9 @@ FRAME_W = 14.222222222222221
 CARD_BG = "#0E131D"
 PREDICT = C.CS_HEAD
 LETTERS = "ABCD"
+NUMBER_WORDS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven",
+                "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen", "eighteen", "nineteen", "twenty",
+                "twenty-one", "twenty-two", "twenty-three", "twenty-four", "twenty-five"]
 
 # where a number comes from: the label the screen carries instead of a spoken caveat
 TAGS = {
@@ -230,6 +233,15 @@ class WatchScene(VoiceoverScene, MovingCameraScene):
 
         self.play(frame_home(self), run_time=run_time)
 
+    def ask(self, question: str, options, answer: int, say: str | None = None, reveal: str | None = None,
+            room=None, where: str = "right"):
+        """The retrofit's prediction in one call: ask (``say`` aloud), count down, park the card in a corner, and
+        answer it (``reveal`` aloud) when the section clears, after the section's own run has shown the result."""
+        card = self.predict(question, options, narration=say, room=room, where=where)
+        self.park(card)
+        self.expect(card, answer, narration=reveal)
+        return card
+
     def expect(self, card, answer: int, narration: str | None = None):
         """Answer ``card`` when this section clears: the run between the prediction and the reveal is the section's
         own (``predict``, ``park``, ``expect``, then the section as it was)."""
@@ -252,6 +264,22 @@ class WatchScene(VoiceoverScene, MovingCameraScene):
         moved = abs(f.width - FRAME_W) > 1e-3 or np.linalg.norm(f.get_center()) > 1e-3
         extra = list(extra) + ([frame_home(self)] if home and moved else [])
         super().clear_scene(*keep, extra=extra, run_time=run_time)
+
+    # ------------------------------------------------------------------ chapter cards
+    def chapter(self, number, title: str, question: str = "", lit=(), extra=(), part=None, said: str | None = None,
+                **card_kw):
+        """The chapter card (the tower, the timeline), spoken, then sent off to the left.  ``said`` is the line the
+        narration speaks; by default "Chapter seven. Predicting branches."."""
+        from explainer.cs import chapter_card
+
+        card = chapter_card(number, title, question, lit=lit, extra=extra, part=part, **card_kw)
+        if said is None:
+            plain = " ".join(title.replace("\\\\", " ").replace("\\ ", " ").replace("$", "").split())
+            said = f"Chapter {NUMBER_WORDS[number] if number < len(NUMBER_WORDS) else number}. {plain}."
+        self.mark("card")
+        with self.voiceover(said):
+            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
+        self.play(FadeOut(card, shift=LEFT * 0.6), run_time=0.6)
 
     # ------------------------------------------------------------------ predictions
     def predict(self, question: str, options, narration: str | None = None, seconds: float = 3.0,

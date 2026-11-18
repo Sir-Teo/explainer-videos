@@ -7,27 +7,21 @@ from videos.cs.cs1.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, HIST, INF,
                                   spacetime_mob)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     """The research tier (videos/cs/SYLLABUS.md 1.1): how BB(5) was settled, BB(6) and Antihydra, and the smallest
     machines whose behaviour set theory cannot decide."""
 
     def construct(self):
         self.card()
         self.proof()
-        self.arrows()
         self.antihydra()
         self.walk()
         self.odds()
         self.zfc()
 
     def card(self):
-        card = chapter_card(14, r"Frontier: \ the edge of the knowable", r"Where does mechanical certainty run out?",
-                            lit=(2016, 2024, 2025), part=PART,
-                            extra=((2016, r"a 7{,}910-state machine beyond ZFC"), (2024, r"BB(5) proved; Antihydra"),
-                                   (2025, r"BB(6) $> 10\uparrow\uparrow 10\uparrow\uparrow 10\uparrow\uparrow 8$")))
-        with self.voiceover("Chapter fourteen. Frontier: the edge of the knowable."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frontier: \ the edge of the knowable", r"Where does mechanical certainty run out?", lit=(2016, 2024, 2025), part=PART, extra=((2016, r"a 7{,}910-state machine beyond ZFC"), (2024, r"BB(5) proved; Antihydra"),
+                                   (2025, r"BB(6) $> 10\uparrow\uparrow 10\uparrow\uparrow 10\uparrow\uparrow 8$")), said="Chapter fourteen. Frontier: the edge of the knowable.")
 
     # ------------------------------------------------------------------
     def proof(self):
@@ -82,47 +76,13 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def arrows(self):
-        f = load("frontier")
-        head = label(r"Six states: \ beyond ordinary notation", font_size=36).to_edge(UP, buff=0.35)
-        defs = VGroup(
-            MathTex(r"10 \uparrow 3 = 10^{3}", font_size=34, color=GREY_A),
-            MathTex(r"10 \uparrow\uparrow 3 = 10^{10^{10}}", font_size=34, color=DATA),
-            MathTex(r"10 \uparrow\uparrow 15 = \underbrace{10^{10^{\cdot^{\cdot^{10}}}}}_{15 \text{ tens}}",
-                    font_size=34, color=COST),
-        ).arrange(RIGHT, buff=0.8).move_to(UP * 1.7)
-        rows = VGroup()
-        for k, (yr, who, s) in enumerate(f["bb6"]):
-            y = 0.3 - 0.52 * k
-            rows.add(VGroup(label(str(yr), font_size=22, color=HIST).move_to([-5.0, y, 0]),
-                            label(who, font_size=22, color=GREY_A).move_to([-3.6, y, 0], aligned_edge=LEFT),
-                            MathTex(r"S(6) > " + s, font_size=30, color=COST if k == len(f["bb6"]) - 1 else WHITE
-                                    ).move_to([0.2, y, 0], aligned_edge=LEFT)))
-        note_ = label(r"each $\uparrow$ iterates the one before: \ $a \uparrow\uparrow b$ \ is a tower of $b$ copies of $a$",
-                      font_size=22, color=GREY_B).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "At six states, ordinary notation fails. <bookmark mark='a'/> Donald Knuth's arrows climb it: one arrow is "
-            "a power, ten to the three; two arrows are a tower of powers, so ten double-arrow three is ten to the ten "
-            "to the ten. <bookmark mark='b'/> The six-state record was four hundred and thirty-six steps in 1964, thirteen "
-            "billion in 1990, and a number of twenty-one thousand digits in 2010. In 2022 Pavel Kropitz found a machine "
-            "that runs for more than a tower of fifteen tens. <bookmark mark='c'/> And in June 2025 a contributor known "
-            "as mxdys found one whose running time is a tower of tens whose height is itself a tower whose height is a "
-            "tower, ten double-arrow ten double-arrow ten double-arrow eight. Nobody will ever run it."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d) for d in defs], lag_ratio=0.4), FadeIn(note_), run_time=2.5)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.1) for r in rows[:-1]], lag_ratio=0.3), run_time=2.5)
-            vo.wait_until("c")
-            self.play(FadeIn(rows[-1], shift=RIGHT * 0.1))
-            self.play(Indicate(rows[-1][2], color=COST))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def antihydra(self):
+        self.ask(r"BB(5) was settled in 2024 by checking every machine. \\ BB(6)?",
+                 [r"next, with bigger computers", r"not without new mathematics", r"already known"], 1,
+                 say="Five states were settled by checking every machine. Will six states fall the same way?",
+                 reveal="Not without new mathematics: Antihydra is a Collatz-like problem nobody can solve.")
         f = load("frontier")
         head = label(r"Antihydra, \ a six-state cryptid", font_size=36).to_edge(UP, buff=0.3)
         code = f["table"].split("_")

@@ -21,7 +21,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(box, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -61,6 +61,13 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the universal machine make possible?", r"Software: one machine, any program, given its text"),
+             (r"Can the Church--Turing thesis be proved?", r"No: it equates an intuition with a definition")],
+            narration="Last checkpoint. What did the universal machine make possible? And can the Church-Turing thesis be "
+                      "proved?",
+            answers_narration="Software: one machine runs any program, given its description. And no: it equates an "
+                              "intuition with a definition, so it can only be tested, and so far it always holds.")
 
     def payoffs(self):
         card = payoff_card([

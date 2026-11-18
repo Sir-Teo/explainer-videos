@@ -17,20 +17,16 @@ def ramp(t: np.ndarray) -> np.ndarray:
     return stops[i] * (1 - f) + stops[i + 1] * f
 
 
-class Algorithms(VoiceoverScene, MovingCameraScene):
+class Algorithms(WatchScene):
     def construct(self):
         self.card()
         self.rectangle()
         self.correct()
         self.terminates()
         self.how_long()
-        self.definition()
 
     def card(self):
-        card = chapter_card(1, r"Algorithms before machines", r"What does it mean to follow a rule?", part=PART)
-        with self.voiceover("Chapter one. Algorithms before machines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Algorithms before machines", r"What does it mean to follow a rule?", part=PART, said="Chapter one. Algorithms before machines.")
 
     # ------------------------------------------------------------------
     def rectangle(self):
@@ -207,6 +203,11 @@ class Algorithms(VoiceoverScene, MovingCameraScene):
 
     # ------------------------------------------------------------------
     def how_long(self):
+        self.ask(r"Every pair of numbers up to 233. \\ Which pair takes Euclid the most steps?",
+                 [r"two large primes", r"two neighbouring Fibonacci numbers", r"a number and its double"], 1,
+                 say="Which pair of numbers up to two hundred and thirty-three makes Euclid work hardest? Two big primes? "
+                     "Two neighbouring Fibonacci numbers? A number and its double?",
+                 reveal="Neighbouring Fibonacci numbers: each step takes away only one copy, and that is Lamé's bound.")
         d = load("euclid")
         grid = np.asarray(d["grid"], float)
         N = d["N"]
@@ -259,36 +260,3 @@ class Algorithms(VoiceoverScene, MovingCameraScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def definition(self):
-        hc = history_card(r"c. 825", r"Mu\d{h}ammad ibn M\=us\=a al-Khw\=arizm\=\i",
-                          r"wrote the book on calculating with the Hindu--Arabic numerals; translated into Latin as "
-                          r"\textit{Algoritmi de numero Indorum}. \ His name became \textit{algorithm}.",
-                          width=6.4, font_size=24).to_corner(UL, buff=0.4)
-        defn = definition_card(r"Algorithm (informally)",
-                               r"a finite list of precise instructions \\ that a clerk could carry out without understanding "
-                               r"them, \\ step by step, \ and that stops with the answer.", color=CTRL, width=8.4,
-                               font_size=28)
-        defn.move_to([1.2, -0.4, 0])
-        qs = VGroup(*[label(t, font_size=28, color=NO) for t in
-                      (r"``precise'': \ how precise?", r"``without understanding'': \ who decides?",
-                       r"``a step'': \ how big may a step be?")]).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-        qs.next_to(defn, DOWN, buff=0.45).align_to(defn, LEFT)
-        with self.voiceover(
-            "The word algorithm itself comes from a name. <bookmark mark='a'/> Around eight hundred and twenty-five, "
-            "in Baghdad, Muhammad ibn Musa al-Khwarizmi wrote the book that taught Europe to calculate with Hindu-Arabic "
-            "numerals. In Latin his name became Algoritmi, and a rule for calculating became an algorithm. "
-            "<bookmark mark='b'/> For more than a thousand years that was a word, not a definition: a finite list of "
-            "precise instructions that a clerk could carry out step by step without understanding them, and that stops "
-            "with the answer. <bookmark mark='c'/> Good enough to use. Not good enough to prove anything about. How "
-            "precise is precise? Who decides what needs understanding? How much may one step do? Those questions only "
-            "mattered once someone wanted to prove that no algorithm exists for a problem. That is where this story "
-            "is going."
-        ) as vo:
-            self.play(FadeIn(hc, shift=RIGHT * 0.2))
-            vo.wait_until("b")
-            self.play(FadeIn(defn, shift=UP * 0.2))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(q, shift=RIGHT * 0.15) for q in qs], lag_ratio=0.4), run_time=2.0)
-        self.wait(0.3)
-        self.clear_scene()

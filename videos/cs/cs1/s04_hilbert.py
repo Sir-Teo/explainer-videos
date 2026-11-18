@@ -4,87 +4,17 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs1.common import CODE, CTRL, DATA, HEAD, HIST, LIMIT, NO, PART, YES
 
 
-class Hilbert(VoiceoverScene):
+class Hilbert(WatchScene):
     def construct(self):
         self.card()
-        self.leibniz()
-        self.frege()
         self.program()
         self.godel()
         self.asymmetry()
 
     def card(self):
-        card = chapter_card(3, r"Hilbert's question", r"Could a machine settle every question in mathematics?",
-                            lit=(1879, 1900, 1928, 1931), part=PART)
-        with self.voiceover("Chapter three. Hilbert's question."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Hilbert's question", r"Could a machine settle every question in mathematics?", lit=(1879, 1900, 1928, 1931), part=PART, said="Chapter three. Hilbert's question.")
 
-    # ------------------------------------------------------------------
-    def leibniz(self):
-        hc = history_card(r"c. 1685", r"Gottfried Wilhelm Leibniz",
-                          r"dreams of a universal language of thought, \textit{characteristica universalis}, and a "
-                          r"calculus of reasoning to go with it", width=6.6, font_size=24).to_corner(UL, buff=0.4)
-        q = label(r"``If controversies were to arise, \\ there would be no more need of disputation \\ between two "
-                  r"philosophers than between two accountants. \\ For it would suffice to take their pencils in their "
-                  r"hands, \\ to sit down to their slates, \ and to say to each other: \\ \textit{Calculemus!} \ Let "
-                  r"us calculate.''", font_size=28).move_to([1.4, -1.0, 0])
-        with self.voiceover(
-            "The dream is older than any machine. <bookmark mark='a'/> Around 1685 Gottfried Leibniz imagined a "
-            "language in which every idea could be written exactly, and a calculus for reasoning in it. "
-            "<bookmark mark='b'/> If philosophers disagreed, he wrote, they would not argue. They would sit down with "
-            "their slates and say: let us calculate."
-        ) as vo:
-            calc = label(r"\textit{Calculemus!}", font_size=80, color=C.CS_HEAD).move_to(DOWN * 0.6)
-            self.play(FadeIn(hc, shift=RIGHT * 0.2), FadeIn(calc, scale=0.9))
-            vo.wait_until("b")
-            self.play(FadeOut(calc), FadeIn(q))
-        self.wait(0.3)
-        self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def frege(self):
-        hc = history_card(1879, r"Gottlob Frege, \ \textit{Begriffsschrift}",
-                          r"the first complete formal language for logic: \ statements as strings, \ proofs as "
-                          r"sequences of strings, \ each line following from earlier lines by fixed rules",
-                          width=7.0, font_size=24).to_corner(UL, buff=0.4)
-        lines = [
-            (r"1.", r"\forall x\, (\mathrm{Man}(x) \to \mathrm{Mortal}(x))", r"premise"),
-            (r"2.", r"\mathrm{Man}(\mathrm{Socrates})", r"premise"),
-            (r"3.", r"\mathrm{Man}(\mathrm{Socrates}) \to \mathrm{Mortal}(\mathrm{Socrates})", r"from 1, \ instantiate $x$"),
-            (r"4.", r"\mathrm{Mortal}(\mathrm{Socrates})", r"from 2 and 3, \ modus ponens"),
-        ]
-        rows = VGroup()
-        for n, f, r in lines:
-            rows.add(VGroup(MathTex(n, font_size=30, color=GREY_B), MathTex(f, font_size=32, color=DATA),
-                            label(r, font_size=22, color=GREY_B)))
-        for r in rows:
-            r[1].next_to(r[0], RIGHT, buff=0.3)
-            r[2].next_to(r[1], RIGHT, buff=0.4)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.38).move_to([-0.4, -0.9, 0])
-        for r in rows:
-            r[2].set_x(5.4).align_to(r[1], DOWN)
-        ticks = VGroup(*[MathTex(r"\checkmark", font_size=34, color=YES).next_to(r[0], LEFT, buff=0.25) for r in rows])
-        cap = label(r"checking a proof is mechanical. \ Is \textit{finding} one?", font_size=32, color=HEAD)
-        cap.to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Two centuries later, logic became exact enough to try. <bookmark mark='a'/> In 1879 Gottlob Frege published "
-            "the first complete formal language for logic. A statement is a string of symbols. A proof is a list of "
-            "statements in which every line follows from earlier lines by a small set of fixed rules. "
-            "<bookmark mark='b'/> All men are mortal; Socrates is a man; so, by instantiating the first premise and "
-            "applying modus ponens, Socrates is mortal. <bookmark mark='c'/> Whether each line follows can be checked "
-            "by rule, with no understanding: a clerk, or a machine, could check a proof. <bookmark mark='d'/> The "
-            "question is whether a machine could also find one."
-        ) as vo:
-            self.play(FadeIn(hc, shift=RIGHT * 0.2))
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows], lag_ratio=0.35), run_time=2.6)
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(t, scale=1.5) for t in ticks], lag_ratio=0.2))
-            vo.wait_until("d")
-            self.play(FadeIn(cap, shift=UP * 0.1))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def program(self):
@@ -169,6 +99,11 @@ class Hilbert(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def asymmetry(self):
+        self.ask(r"To prove that \textit{no} procedure decides a problem, \\ what must you do first?",
+                 [r"try every procedure", r"define exactly what a procedure is", r"find one formula it gets wrong"], 1,
+                 say="Proving that a procedure exists is easy: write it down. To prove that none exists, what must you do "
+                     "first?",
+                 reveal="Define, exactly, what a procedure is. That is what Church and Turing did.")
         head = label(r"The decision problem was still open", font_size=40).to_edge(UP, buff=0.4)
         left = VGroup(label(r"to show a procedure \textbf{exists}:", font_size=30, color=YES),
                       label(r"write one down, \\ and check that it works", font_size=28, color=GREY_A)).arrange(

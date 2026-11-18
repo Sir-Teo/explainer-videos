@@ -46,7 +46,7 @@ MOTION_CALLS = {"Transform", "ReplacementTransform", "TransformFromCopy", "Trans
                 "ValueTracker", "always_redraw", "frame_to", "frame_home", "morph", "Wiggle", "CyclicReplace",
                 "Swap", "GrowArrow", "GrowFromEdge", "GrowFromPoint", "GrowFromCenter", "SpinInFromNothing"}
 MOTION_METHODS = {"add_updater", "zoom", "home", "advance", "cycle", "become", "move_camera"}
-NARRATED = {"predict", "reveal", "checkpoint", "wrong_idea"}  # kit calls whose narration= is spoken
+NARRATED = {"predict", "reveal", "checkpoint", "wrong_idea", "ask", "chapter"}  # kit calls that speak
 HEDGES = [r"\bnot a measured\b", r"\bassumed\b", r"\billustrative\b", r"\bthis does not (mean|prove|test)\b",
           r"\bnot an absolute\b", r"\bdoes not prove\b", r"\bnot (necessarily|always)\b", r"\bunder (these|stated) "
           r"assumptions\b", r"\bkeep (measurements|in mind)\b", r"\bto be clear\b", r"\bin this model\b",
@@ -92,17 +92,16 @@ def chapter_stats(path: Path, cls: str) -> dict:
             st["fade"] += 1
         if n in MOTION_CALLS or (isinstance(c.func, ast.Attribute) and n in MOTION_METHODS):
             st["motion"] += 1
-        if n in ("predict", "checkpoint", "wrong_idea", "title") and isinstance(c.func, ast.Attribute):
-            st[n] += 1
+        if n in ("predict", "checkpoint", "wrong_idea", "title", "ask") and isinstance(c.func, ast.Attribute):
+            st["predict" if n == "ask" else n] += 1
         if n == "objectives_card":
             st["objectives"] += 1
         spoken = None
         if n == "voiceover" and c.args:
             spoken = c.args[0]
         elif n in NARRATED:
-            spoken = next((k.value for k in c.keywords if k.arg in ("narration", "right_narration",
-                                                                   "answers_narration")), None)
-            extra = [k.value for k in c.keywords if k.arg in ("right_narration", "answers_narration")]
+            spoken = next((k.value for k in c.keywords if k.arg in ("narration", "say", "said")), None)
+            extra = [k.value for k in c.keywords if k.arg in ("right_narration", "answers_narration", "reveal")]
             for e in extra:
                 st["narration"].append(_strings(e))
         if spoken is not None:

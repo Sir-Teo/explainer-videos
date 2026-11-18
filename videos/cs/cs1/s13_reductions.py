@@ -4,21 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs1.common import ADV, CODE, CTRL, DATA, HEAD, HIST, LIMIT, NO, PART, YES
 
 
-class Reductions(VoiceoverScene):
+class Reductions(WatchScene):
     def construct(self):
         self.card()
         self.idea()
         self.blank()
-        self.gallery()
         self.rice()
-        self.practice()
 
     def card(self):
-        card = chapter_card(12, r"Reductions", r"If one problem is impossible, which others are?", lit=(1936,),
-                            part=PART)
-        with self.voiceover("Chapter twelve. Reductions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Reductions", r"If one problem is impossible, which others are?", lit=(1936,), part=PART, said="Chapter twelve. Reductions.")
 
     # ------------------------------------------------------------------
     def idea(self):
@@ -59,6 +53,10 @@ class Reductions(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def blank(self):
+        self.ask(r"Is there a decider for: \\ does $M$ halt when started on a blank tape?",
+                 [r"yes: just run it", r"no", r"yes, but only slowly"], 1,
+                 say="An easier-looking question: does a machine halt when started on a blank tape? Is there a decider?",
+                 reveal="No. Halting reduces to it, so it inherits the impossibility.")
         head = label(r"Does $M$ halt when started on a blank tape?", font_size=38).to_edge(UP, buff=0.4)
         mw = VGroup(node_box(r"write $w$ \\ on the tape", DATA, font_size=28), node_box(r"rewind", GREY_B, font_size=28),
                     node_box(r"run $M$", CODE, font_size=28)).arrange(RIGHT, buff=0.6)
@@ -90,37 +88,6 @@ class Reductions(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def gallery(self):
-        head = label(r"Each of these has no decider", font_size=40).to_edge(UP, buff=0.4)
-        qs = [
-            (r"does $M$ ever write a $1$?", r"make $M$ write a 1 just when it would halt"),
-            (r"does $M$ accept no input at all?", r"run $M$ on $w$ first, whatever the input"),
-            (r"do $M_1$ and $M_2$ compute the same function?", r"compare with a machine that accepts nothing"),
-            (r"will this program ever divide by zero?", r"divide by zero just when it would halt"),
-            (r"is this program the shortest that does its job?", r"Part 25: \ Kolmogorov complexity"),
-        ]
-        rows = VGroup()
-        for q, h in qs:
-            rows.add(VGroup(label(q, font_size=28), label(r"$\leftarrow$ \ " + h, font_size=22, color=GREY_B)))
-        for r in rows:
-            r[1].next_to(r[0], RIGHT, buff=0.4)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.36).move_to(DOWN * 0.2)
-        if rows.width > 13.4:
-            rows.width = 13.4
-        with self.voiceover(
-            "The same trick spreads impossibility everywhere. <bookmark mark='a'/> Does a machine ever write a one? "
-            "Rig it to write a one exactly when it would have halted. Does it accept nothing at all? Do two programs "
-            "compute the same thing? Will this program ever divide by zero? Is it the shortest program that does its "
-            "job? <bookmark mark='b'/> Each comes with its own reduction from halting, and none has a decider."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in rows], lag_ratio=0.45), run_time=4.0)
-            vo.wait_until("b")
-            self.play(*[Indicate(r[0], color=LIMIT) for r in rows])
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def rice(self):
@@ -154,27 +121,3 @@ class Reductions(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def practice(self):
-        card = practice_card([
-            (r"virus scanners", r"no program detects every virus (Cohen, 1987): \ scanners match known patterns and "
-                                r"guess at behaviour"),
-            (r"static analyzers", r"linters and type checkers must either miss some bugs \ or warn about some correct "
-                                  r"code: \ they approximate (Part 54)"),
-            (r"compilers", r"no compiler can always find the fastest or shortest equivalent program (Parts 13, 25)"),
-            (r"testing", r"tests check some inputs; \ no tool proves every program correct automatically"),
-        ])
-        with self.voiceover(
-            "This is not only theory. <bookmark mark='a'/> It is why no virus scanner can detect every virus, which Fred "
-            "Cohen proved in 1987. It is why every static analyzer and linter either misses some bugs or complains "
-            "about some correct code. It is why compilers cannot always find the best program, and why tests can show "
-            "bugs but never prove their absence in general. <bookmark mark='b'/> Engineers live with this by "
-            "approximating, by restricting what programs may do, and by asking people to supply proofs, which is how "
-            "Part 54 verifies software anyway."
-        ) as vo:
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
-                                                     lag_ratio=0.4), run_time=3.0)
-            vo.wait_until("b")
-            self.play(Indicate(card.head, color=C.CS_PRACTICE))
-        self.wait(0.3)
-        self.clear_scene()

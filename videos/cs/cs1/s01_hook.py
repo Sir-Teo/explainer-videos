@@ -6,13 +6,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs1.common import CTRL, DATA, HEAD, HIST, NO, PART, YES, load, pebble, pebble_pile
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.piles()
-        self.calculus()
         self.hilbert()
         self.turing()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def piles(self):
@@ -88,46 +87,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def calculus(self):
-        word = label(r"\textit{calculus}", font_size=96, color=HEAD).move_to(UP * 1.6)
-        gloss_ = label(r"Latin: \ a small stone, \ a pebble", font_size=36, color=GREY_A).next_to(word, DOWN, buff=0.35)
-        stones = VGroup(*[pebble(0.2, seed=7 + i) for i in range(5)]).arrange(RIGHT, buff=0.25).next_to(gloss_, DOWN,
-                                                                                                      buff=0.5)
-        # a Roman counting board: lines for units, tens, hundreds; pebbles on the lines
-        board = VGroup()
-        lines = VGroup(*[Line(LEFT * 2.6, RIGHT * 2.6, color=GREY_C, stroke_width=2).shift(DOWN * (i * 0.55))
-                         for i in range(4)])
-        names = VGroup(*[label(n, font_size=22, color=GREY_B).next_to(lines[i], LEFT, buff=0.2)
-                         for i, n in enumerate([r"thousands", r"hundreds", r"tens", r"units"])])
-        counts = [1, 9, 2, 8]  # 1928
-        pebs = VGroup()
-        for i, c in enumerate(counts):
-            for j in range(c):
-                p = pebble(0.13, seed=30 + 10 * i + j).move_to(lines[i].get_left() + RIGHT * (0.5 + 0.42 * j))
-                pebs.add(p)
-        board.add(lines, names, pebs)
-        board.move_to(DOWN * 1.9)
-        value = label(r"$1928$", font_size=40, color=DATA).next_to(board, RIGHT, buff=0.5)
-        words = VGroup(*[label(w, font_size=34, color=GREY_A) for w in
-                         (r"calculate", r"calculus", r"calculator")]).arrange(RIGHT, buff=0.7).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Moving pebbles by rule is an old way of thinking. <bookmark mark='a'/> The Latin word for a pebble is "
-            "calculus. Roman merchants reckoned with pebbles on lined counting boards: <bookmark mark='b'/> a pebble on "
-            "the lowest line counts one, on the next line ten, then a hundred, then a thousand. <bookmark mark='c'/> To "
-            "calculate was, literally, to move the stones."
-        ) as vo:
-            self.play(Write(word), LaggedStart(*[FadeIn(s, scale=0.5) for s in stones], lag_ratio=0.15))
-            vo.wait_until("a")
-            self.play(FadeIn(gloss_))
-            vo.wait_until("b")
-            self.play(FadeOut(stones), Create(lines), FadeIn(names))
-            self.play(LaggedStart(*[FadeIn(p, shift=DOWN * 0.2) for p in pebs], lag_ratio=0.05), run_time=2.0)
-            self.play(FadeIn(value))
-            vo.wait_until("c")
-            self.play(FadeOut(board), FadeOut(value), FadeIn(words, shift=UP * 0.2))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def hilbert(self):
@@ -205,30 +164,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ What Is a Computation?", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"algorithms before machines: \ Euclid, \ Babbage's engines, \ Lovelace's program",
-            r"Hilbert's question, \ and Turing's machine: \ tapes, \ heads, \ tables, \ and how to program them",
-            r"why more tapes, \ nondeterminism and other models add no power, \ and the universal machine",
-            r"$\lambda$-calculus, \ counter machines and cellular automata; \ the Church--Turing thesis",
-            r"more problems than programs; \ the halting problem; \ reductions; \ busy beavers",
-            r"and what this series will build: \ a real computer, \ from one gate up",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 1 of Computer Science, Built: sixty-one lectures that start here, with the question of what "
-            "computing is, build a working computer from a single kind of gate, and climb all the way to the systems "
-            "that run the internet. <bookmark mark='a'/> In this part: algorithms before there were machines, and the "
-            "engines of Babbage and Lovelace; Hilbert's question, and Turing's machine, which we will program by hand; "
-            "why extra tapes and other designs add no power, and the universal machine that can run any other; the "
-            "lambda calculus, counter machines and cellular automata, and the Church-Turing thesis; why there are more "
-            "problems than programs, the halting problem, and the busy beavers. And at the end, what this series will "
-            "build."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

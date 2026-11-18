@@ -19,21 +19,15 @@ ACT_LAYERS = [
 ]
 
 
-class Series(VoiceoverScene):
+class Series(WatchScene):
     def construct(self):
         self.card()
         self.lesson()
-        self.tower_tour()
         self.pebble()
         self.job()
-        self.practice()
 
     def card(self):
-        card = chapter_card(15, r"What we will build", r"From Turing's paper machine to a real one", part=PART,
-                            layers=tuple(k for k, _ in __import__("explainer.cs", fromlist=["LAYERS"]).LAYERS))
-        with self.voiceover("Chapter fifteen. What we will build."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"What we will build", r"From Turing's paper machine to a real one", part=PART, layers=tuple(k for k, _ in __import__("explainer.cs", fromlist=["LAYERS"]).LAYERS), said="Chapter fifteen. What we will build.")
 
     # ------------------------------------------------------------------
     def lesson(self):
@@ -55,56 +49,14 @@ class Series(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def tower_tour(self):
-        tw = tower(lit=("math", "limits"), labels="all", height=6.6, width=4.2, font_size=20).move_to(LEFT * 2.6)
-        acts = VGroup()
-        for name, keys in ACT_LAYERS:
-            ys = [tw.layer[k].get_y() if k in tw.layer else tw.column[k].get_y() for k in keys]
-            t = label(name, font_size=22, color=LAYER_COLOR.get(keys[0], C.CS_LIMIT if keys[0] == "limits"
-                                                                  else C.CS_PRACTICE))
-            t.move_to([3.0, float(np.mean(ys)), 0]).set_x(1.6 + t.width / 2 + 0.5)
-            acts.add(t)
-        acts.arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(tw, RIGHT, buff=1.0)
-        research = label(r"XI. \ The Research Frontier (56--61)", font_size=22, color=HEAD)
-        research.next_to(acts, DOWN, buff=0.35).align_to(acts, LEFT)
-        here = label(r"Part 1 stands here: \ the ground floor of ideas", font_size=24, color=C.CS_INF)
-        here.next_to(tw.layer["math"], DOWN, buff=0.15)
-
-        def lit_tower(keys):
-            return tower(lit=keys, labels="all", height=6.6, width=4.2, font_size=20).move_to(tw)
-
-        with self.voiceover(
-            "Now we build. This is the tower the series climbs. <bookmark mark='a'/> At the bottom, mathematics and logic, "
-            "where this part stands, with the limits beside it. <bookmark mark='b'/> Act one builds a computer from "
-            "switches: gates, arithmetic, memory, an instruction set. <bookmark mark='c'/> Act two makes it fast. "
-            "<bookmark mark='d'/> Act three teaches it languages. <bookmark mark='e'/> Act four is algorithms. "
-            "<bookmark mark='f'/> Act five returns to the limits, and turns them into cryptography. "
-            "<bookmark mark='g'/> Act six shares one machine among many programs, act seven connects many machines, "
-            "<bookmark mark='h'/> acts eight and nine are how industry builds and runs software at scale, "
-            "<bookmark mark='i'/> and act ten looks at the horizons, and at whether we can trust the whole thing. "
-            "<bookmark mark='j'/> Act eleven revisits these ideas at research depth: spectral graphs, learning theory, "
-            "semantics, distributed computing, specialized hardware, and how to do research."
-        ) as vo:
-            self.play(FadeIn(tw))
-            vo.wait_until("a")
-            self.play(FadeIn(here))
-            lit = ["math", "limits"]
-            for k, mk in enumerate("bcdefghi"):
-                vo.wait_until(mk)
-                lit += list(ACT_LAYERS[k][1])
-                if mk == "i":
-                    lit += list(ACT_LAYERS[8][1])
-                    self.play(Transform(tw, lit_tower(tuple(lit))), FadeIn(acts[k]), FadeIn(acts[8]), run_time=0.8)
-                else:
-                    self.play(Transform(tw, lit_tower(tuple(lit))), FadeIn(acts[k]), run_time=0.8)
-            vo.wait_until("j")
-            self.play(FadeIn(research, shift=UP * 0.15))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def pebble(self):
+        self.ask(r"Pebble, the computer we will build, runs Euclid \\ on 1071 and 462. It leaves...",
+                 [r"7", r"21", r"42"], 1,
+                 say="Here is Pebble running Euclid's rule on one thousand and seventy-one and four hundred and sixty-two. "
+                     "What does it leave?",
+                 reveal="Twenty-one, the same answer the rectangle gave us.")
         d = load("pebble")
         src = d["source"]
         code = code_block(src, font_size=24, color=GREY_A)
@@ -196,25 +148,3 @@ class Series(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def practice(self):
-        card = practice_card([
-            (r"emulators and VMs", r"QEMU, \ game-console emulators, \ the Java virtual machine, \ WebAssembly: \ "
-                                   r"universal machines in software"),
-            (r"interpreters", r"Python, \ JavaScript, \ spreadsheets with formulas: \ a description and a machine "
-                              r"that runs it"),
-            (r"Turing-completeness", r"surprisingly common, \ and a security risk: \ anything universal can run "
-                                     r"code nobody intended (Part 55)"),
-            (r"undecidability", r"why linters, \ static analyzers and malware scanners must approximate"),
-        ])
-        with self.voiceover(
-            "In practice, the ideas of this part are everywhere. Emulators and virtual machines are universal machines "
-            "in software. Every interpreter is a description and a machine that runs it. Universality turns up in "
-            "places nobody planned, which is a security problem, because anything universal can be made to run code "
-            "nobody intended; we come back to that in Part 55. And undecidability is why every tool "
-            "that checks programs has to approximate."
-        ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
-                                                     lag_ratio=0.4), run_time=3.0)
-        self.wait(0.3)
-        self.clear_scene()

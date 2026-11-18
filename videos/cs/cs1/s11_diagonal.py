@@ -14,7 +14,7 @@ def bit(b, size=0.42, color=None):
     return VGroup(sq, t.move_to(sq))
 
 
-class Diagonal(VoiceoverScene):
+class Diagonal(WatchScene):
     def construct(self):
         self.card()
         self.counting()
@@ -23,11 +23,7 @@ class Diagonal(VoiceoverScene):
         self.problems()
 
     def card(self):
-        card = chapter_card(10, r"More problems than programs", r"Is every problem solved by some program?",
-                            lit=(1874, 1891), part=PART)
-        with self.voiceover("Chapter ten. More problems than programs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"More problems than programs", r"Is every problem solved by some program?", lit=(1874, 1891), part=PART, said="Chapter ten. More problems than programs.")
 
     # ------------------------------------------------------------------
     def counting(self):
@@ -127,6 +123,10 @@ class Diagonal(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def cantor(self):
+        self.ask(r"Programs, \\ or yes-or-no problems about strings: \\ which are there more of?",
+                 [r"programs", r"problems", r"exactly as many of each"], 1,
+                 say="Programs, or yes-or-no problems: which are there more of?",
+                 reveal="Problems, strictly more. So almost every problem has no program at all.")
         rng = np.random.default_rng(11)
         R, K = 7, 10
         M = rng.integers(0, 2, (R, K))
