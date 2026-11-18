@@ -17,7 +17,7 @@ def histogram(counts, width=5.4, height=2.4, color=DATA):
     return VGroup(base, bars)
 
 
-class LasVegas(VoiceoverScene):
+class LasVegas(WatchScene):
     def construct(self):
         self.card()
         self.two_kinds()
@@ -25,13 +25,7 @@ class LasVegas(VoiceoverScene):
         self.amplify()
 
     def card(self):
-        card = chapter_card(1, r"Las Vegas and Monte Carlo", r"What can a coin flip buy?", lit=(1949,),
-                            extra=((1949, r"the Monte Carlo method"),), part=PART)
-        with self.voiceover((
-            'Chapter one. Las Vegas and Monte Carlo.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Las Vegas and Monte Carlo", r"What can a coin flip buy?", lit=(1949,), extra=((1949, r"the Monte Carlo method"),), part=PART, said='Chapter one. Las Vegas and Monte Carlo.')
 
     def two_kinds(self):
         head = label(r"Two ways to gamble", font_size=36).to_edge(UP, buff=0.35)
@@ -125,6 +119,18 @@ class LasVegas(VoiceoverScene):
         self.clear_scene()
 
     def amplify(self):
+        self.wrong_idea(r"An algorithm that flips coins \\ can't be trusted",
+                        r"Its error can be made smaller \\ than the chance of a hardware fault",
+                        narration="An algorithm that flips coins sounds unreliable. How can you trust an answer that's only "
+                                  "probably right?",
+                        right_narration="Because the error can be pushed lower than the chance that the hardware itself fails, "
+                                        "with a few repetitions.")
+        self.clear_scene()
+        self.ask(r"A test that wrongly accepts with probability at most $\tfrac12$. \\ Run it 20 times independently:",
+                 [r"error at most $1/40$", r"error at most one in a million"], 1,
+                 say="A test that wrongly accepts at most half the time. Run it twenty times, independently. What's the error "
+                     "now?",
+                 reveal="At most one in a million: a half to the twentieth.")
         d = load("lasvegas")
         head = label(r"Monte Carlo: \ shrinking the error", font_size=34).to_edge(UP, buff=0.35)
         one = VGroup(

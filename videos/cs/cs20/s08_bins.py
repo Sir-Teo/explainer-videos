@@ -16,7 +16,7 @@ def bins_row(nb, x0, y0, color):
     return g
 
 
-class Bins(VoiceoverScene):
+class Bins(WatchScene):
     def construct(self):
         self.card()
         self.fill()
@@ -24,13 +24,8 @@ class Bins(VoiceoverScene):
         self.why()
 
     def card(self):
-        card = chapter_card(7, r"Balls into bins, \ and the power of two choices", r"How uneven does chance make "
-                            r"things?", lit=(1994,), extra=((1994, r"two choices"),), part=PART)
-        with self.voiceover((
-            'Chapter seven. Balls into bins, and the power of two choices.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Balls into bins, \ and the power of two choices", r"How uneven does chance make "
+                            r"things?", lit=(1994,), extra=((1994, r"two choices"),), part=PART, said='Chapter seven. Balls into bins, and the power of two choices.')
 
     def fill(self):
         d = load("bins")
@@ -79,6 +74,10 @@ class Bins(VoiceoverScene):
         self.clear_scene()
 
     def table(self):
+        self.ask(r"$n$ balls, $n$ bins. Each ball picks the emptier of two random bins. \\ The fullest bin holds about...",
+                 [r"$\log n / \log\log n$", r"$\log\log n$", r"1"], 1,
+                 say="Each ball looks at two random bins and goes into the emptier one. How full is the fullest bin?",
+                 reveal="About log log n: two choices instead of one is an exponential improvement.")
         d = load("bins")
         head = label(r"$n$ balls into $n$ bins: \ the fullest bin", font_size=34).to_edge(UP, buff=0.35)
         rows = [[words(r["n"]), str(r["one"]), f"{r['theory_one']:.1f}", str(r["two"]), f"{r['theory_two']:.1f}"]

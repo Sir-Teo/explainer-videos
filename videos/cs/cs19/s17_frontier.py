@@ -5,7 +5,7 @@ from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.omega()
@@ -14,12 +14,8 @@ class Frontier(VoiceoverScene):
         self.open_()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ how fast can we multiply?", r"Are these algorithms the last word?",
-                            lit=(2024,), extra=((2015, r"edit distance and SETH"), (2019, r"$n \log n$ multiplication"),
-                                                (2026, r"selected dated arithmetic bounds")), part=PART)
-        with self.voiceover("Chapter sixteen. Frontier: how fast can we multiply?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(16, r"Frontier: \ how fast can we multiply?", r"Are these algorithms the last word?", lit=(2024,), extra=((2015, r"edit distance and SETH"), (2019, r"$n \log n$ multiplication"),
+                                                (2026, r"selected dated arithmetic bounds")), part=PART, said="Chapter sixteen. Frontier: how fast can we multiply?")
 
     def omega(self):
         head=label(r"Upper bounds and method barriers",font_size=35).to_edge(UP,buff=.3)
@@ -50,6 +46,9 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def seth(self):
+        self.ask(r"Edit distance in time $n^{2 - \varepsilon}$?", [r"known", r"it would refute SETH"], 1,
+                 say="Could edit distance be computed in truly subquadratic time?",
+                 reveal="Only if the strong exponential time hypothesis is false, by Backurs and Indyk.")
         head=label("Conditional hardness: follow the implication",font_size=34).to_edge(UP,buff=.3)
         hypothesis=VGroup(label("SETH: the hard clause width may depend on epsilon",font_size=22,color=DATA),
             MathTex(r"\forall\varepsilon>0\ \exists k:\quad k\text{-SAT}\notin O^*(2^{(1-\varepsilon)N})",font_size=29,color=DATA)
@@ -69,8 +68,7 @@ class Frontier(VoiceoverScene):
             "epsilon. <bookmark mark='b'/> Backurs and Indyk's reduction shows that a general exact edit-distance "
             'algorithm with a fixed truly subquadratic exponent would contradict this hypothesis, already for a fixed'
             " finite alphabet. <bookmark mark='c'/> Related reductions address LCS and dynamic time warping under "
-            "their respective formulations. <bookmark mark='d'/> This is worst-case conditional evidence, not a proof"
-            " that each practical string pair needs a full quadratic table. <bookmark mark='e'/> Approximate distance"
+            "their respective formulations. <bookmark mark='d'/> <bookmark mark='e'/> Approximate distance"
             ' changes the task and has much faster guarantees in appropriate regimes. The diagram keeps hypothesis, '
             'reduction and conclusion separate.'
         ) as vo:

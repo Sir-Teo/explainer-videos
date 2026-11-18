@@ -5,7 +5,7 @@ from videos.cs.cs20.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    mono, words)
 
 
-class JobSketch(VoiceoverScene):
+class JobSketch(WatchScene):
     def construct(self):
         self.card()
         self.design()
@@ -15,13 +15,7 @@ class JobSketch(VoiceoverScene):
         self.gamble()
 
     def card(self):
-        card = chapter_card(10, r"The Job in kilobytes", 'Can we find top words without retaining the whole vocabulary?',
-                            lit=(2002,), extra=((2002, r"conservative update"),), part=PART)
-        with self.voiceover((
-            'Chapter ten. The Job in kilobytes.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The Job in kilobytes", 'Can we find top words without retaining the whole vocabulary?', lit=(2002,), extra=((2002, r"conservative update"),), part=PART, said='Chapter ten. The Job in kilobytes.')
 
     def design(self):
         head = label(r"The Job v3: \ a sketch and a heap", font_size=34).to_edge(UP, buff=0.35)
@@ -124,6 +118,10 @@ class JobSketch(VoiceoverScene):
         self.clear_scene()
 
     def memory(self):
+        self.ask(r"The Job with a Count-Min sketch. \\ Its memory, against Part 17's exact table?", [r"about the same",
+                 r"kilobytes instead of megabytes"], 1,
+                 say="The Job rebuilt around a sketch. How much memory, against the exact hash table?",
+                 reveal="Kilobytes instead of megabytes, and it still found the top twenty.")
         d = load("job")
         g = d["globals"]
         head = label(r"What the program remembers", font_size=34).to_edge(UP, buff=0.35)
@@ -273,8 +271,7 @@ class JobSketch(VoiceoverScene):
             f', occurring '
             f'{occ}'
             f", but estimated near fifty-nine thousand. Collisions need not respect a word's real frequency. "
-            f"<bookmark mark='c'/> The observed exact shares increased at the wider configurations shown. This corpus"
-            f" does not establish monotonic success for every input. <bookmark mark='d'/> Storage and per-update work"
+            f"<bookmark mark='c'/> The observed exact shares increased at the wider configurations shown. <bookmark mark='d'/> Storage and per-update work"
             f" are bounded by the design, while complete top-twenty correctness has no theorem here. A single item's "
             f"Count-Min bound does not certify the retained candidate set. <bookmark mark='e'/> All true top words "
             f'survived among the thirty-two candidates in these twenty runs. A second pass counting those candidates '
@@ -295,3 +292,8 @@ class JobSketch(VoiceoverScene):
             self.play(FadeIn(notes[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a Bloom filter never do?", r"Give a false negative"),
+             (r"What does two-choice hashing buy?", r"Max load $\log\log n$ instead of $\log n / \log\log n$")],
+            narration="Checkpoint. What mistake does a Bloom filter never make? And what do two choices buy?",
+            answers_narration="A false negative. And a fullest bin of log log n, instead of log n over log log n.")

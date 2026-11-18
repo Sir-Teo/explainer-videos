@@ -13,7 +13,7 @@ def t(s):
     return f"{s * 1e6:.0f} µs" if s < 1e-3 else (f"{s * 1000:.1f} ms" if s < 1 else f"{s:.2f} s")
 
 
-class FftTwo(VoiceoverScene):
+class FftTwo(WatchScene):
     def construct(self):
         self.card()
         self.history()
@@ -22,12 +22,7 @@ class FftTwo(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(6, r"The FFT, \ II: \ butterflies", r"What does the recursion look like unrolled?",
-                            lit=(1965,), extra=((1965, r"Cooley and Tukey"), (1984, r"Gauss's notes found")),
-                            part=PART)
-        with self.voiceover("Chapter six. The fast Fourier transform, part two: butterflies."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The FFT, \ II: \ butterflies", r"What does the recursion look like unrolled?", lit=(1965,), extra=((1965, r"Cooley and Tukey"), (1984, r"Gauss's notes found")), part=PART, said="Chapter six. The fast Fourier transform, part two: butterflies.")
 
     def history(self):
         head = label(r"Twice discovered", font_size=34).to_edge(UP, buff=0.3)
@@ -93,7 +88,7 @@ class FftTwo(VoiceoverScene):
             'stages, each with n over two butterflies. A butterfly forms the sum and difference of one value and a '
             "twiddle-scaled partner. <bookmark mark='c'/> An iterative implementation can overwrite this array in "
             'place with little auxiliary storage. Our simple recursive Python implementation instead allocates slices'
-            " and result arrays; the diagram does not certify that implementation's memory use. <bookmark mark='d'/> "
+            " and result arrays. <bookmark mark='d'/> "
             'The staged communication pattern also suits parallel implementations, though layout and synchronization '
             'costs still matter.'
         ) as vo:
@@ -112,6 +107,10 @@ class FftTwo(VoiceoverScene):
         self.clear_scene()
 
     def inverse(self):
+        self.ask(r"The inverse FFT, against the forward one. \\ Its cost?", [r"much higher",
+                 r"the same, plus dividing by $n$"], 1,
+                 say="Going back from values to coefficients. How much does the inverse FFT cost?",
+                 reveal="The same: conjugate the roots, run the FFT, divide by n.")
         head = label(r"Going back", font_size=34).to_edge(UP, buff=0.3)
         eqs = VGroup(
             MathTex(r"A_k = \sum_{j=0}^{n-1} a_j\,\omega^{jk} \qquad \text{(the DFT, as a matrix } F_{kj} = "
@@ -181,3 +180,9 @@ class FftTwo(VoiceoverScene):
                 self.play(FadeIn(p))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is earliest-finish greedy optimal?", r"Exchange: it never leaves less room than any choice"),
+             (r"What makes the FFT fast?", r"Roots of unity square into half as many points")],
+            narration="Checkpoint. Why is earliest-finish greedy optimal? And what makes the FFT fast?",
+            answers_narration="An exchange argument: its choice never leaves less room than any other. And roots of unity, "
+                              "which square into half as many points at every level.")

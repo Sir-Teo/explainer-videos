@@ -6,21 +6,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs20.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Distinct(VoiceoverScene):
+class Distinct(WatchScene):
     def construct(self):
         self.card()
         self.zeros()
         self.registers()
-        self.measured()
 
     def card(self):
-        card = chapter_card(11, r"Counting distinct things: \ HyperLogLog", r"How many different words, \ with small registers?",
-                            lit=(1985, 2007), extra=((1985, r"Flajolet--Martin"), (2007, r"HyperLogLog")), part=PART)
-        with self.voiceover((
-            'Chapter eleven. Counting distinct things: HyperLogLog.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Counting distinct things: \ HyperLogLog", r"How many different words, \ with small registers?", lit=(1985, 2007), extra=((1985, r"Flajolet--Martin"), (2007, r"HyperLogLog")), part=PART, said='Chapter eleven. Counting distinct things: HyperLogLog.')
 
     def zeros(self):
         head = label(r"A coin-flip record", font_size=34).to_edge(UP, buff=0.35)
@@ -72,6 +65,10 @@ class Distinct(VoiceoverScene):
         self.clear_scene()
 
     def registers(self):
+        self.ask(r"HyperLogLog with 1024 registers. \\ Its typical error?", [r"about 0.3\%", r"about 3\%",
+                 r"about 30\%"], 1,
+                 say="HyperLogLog with a thousand and twenty-four registers. How accurate is its count of distinct words?",
+                 reveal="About three percent: one point zero four over the square root of the register count.")
         d = load("hll")
         reg = d["registers64"]
         head = label(r"HyperLogLog: \ many registers, \ one harmonic mean", font_size=34).to_edge(UP, buff=0.35)
@@ -117,47 +114,3 @@ class Distinct(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def measured(self):
-        d = load("hll")
-        head = label(rf"Measured: \ {words(d['distinct'])} distinct words, \ 30 hash functions", font_size=32
-                     ).to_edge(UP, buff=0.35)
-        rows = [[str(r["m"]), (f"{r['bytes']:.0f} B" if r["bytes"] < 1024 else f"{r['bytes'] / 1024:.0f} KiB"),
-                 f"{r['rmse'] * 100:.1f}\\%", f"{r['theory'] * 100:.1f}\\%"] for r in d["rows"]]
-        tab = grid_table([r"registers $m$", r"packed model", r"30-seed RMSE", r"$1.04/\sqrt{m}$"], rows,
-                         widths=[2.4, 2.0, 2.8, 2.4], row_h=0.42, font_size=20, mono_cols=(),
-                         colors=[[LAM, GREY_A, YES, HEAD]] * len(rows)).next_to(head, DOWN, buff=0.4)
-        big_ = VGroup(
-            label(rf"the whole corpus, \ {words(d['words'])} words, \ $m = 4096$ \ (3 KiB packed model): \ estimate "
-                  rf"{words(round(d['est_corpus']))}", font_size=21, color=YES),
-            label(rf"every five-word phrase: \ {words(d['true_shingles'])} distinct, \ estimate "
-                  rf"{words(round(d['est_shingles']))}, \ same modeled registers", font_size=21, color=YES),
-            label(r"actual NumPy registers: \ 32 KiB at $m=4096$; \ excludes input, hashes and interpreter", font_size=19, color=GREY_A),
-        ).arrange(DOWN, buff=0.22).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            (
-            f"We ran thirty fixed hash seeds per register count on the novel vocabulary. <bookmark mark='a'/> The "
-            f'table compares empirical root-mean-square error with the leading standard-error formula. Three '
-            f'kibibytes for 4096 registers means a modeled six-bit packed representation. The actual NumPy array uses'
-            f" thirty-two kibibytes, eight bytes per register, excluding the input and hashes. <bookmark mark='b'/> "
-            f'On the complete word stream, the estimate was '
-            f"{words(round(d['est_corpus']))}"
-            f' against '
-            f"{words(d['distinct'])}"
-            f" distinct words. <bookmark mark='c'/> The five-word-shingle run uses the same modeled register storage;"
-            f' its error and exact reference are shown separately. Neither this result nor thirty seeds certifies a '
-            f"confidence guarantee. <bookmark mark='d'/> Database engines use carefully engineered variants to trade "
-            f'precision for storage in approximate count-distinct queries.'
-        )
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
-            self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.25))
-            vo.wait_until("a")
-            self.play(*[Indicate(tab.cells[r][2], color=YES) for r in range(1, len(rows) + 1)])
-            vo.wait_until("b")
-            self.play(FadeIn(big_[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(big_[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(big_[2]))
-        self.wait(0.3)
-        self.clear_scene()

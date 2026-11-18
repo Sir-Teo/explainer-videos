@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs20.common import (COST, CTRL, DATA, HEAD, LAM, NO, PART, YES, big, grid_table, load, mono, words)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.kilobytes()
         self.coins()
-        self.plan()
+        self.title(PART)
 
     def kilobytes(self):
         d = load("job")
@@ -79,28 +79,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Randomness as a Resource", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"Las Vegas and Monte Carlo; \ shrinking an error by repetition",
-            r"checking: \ Freivalds, \ Schwartz--Zippel, \ perfect matchings, \ fingerprints",
-            r"Karger's cuts, \ Miller--Rabin's primes, \ random walks for SAT, \ two choices",
-            r"Bloom filters and streams: \ reservoirs, \ Count-Min, \ HyperLogLog, \ AMS, \ MinHash",
-            r"the Job in 18.6 KB: \ ledger row 9, \ and how often it is right",
-            r"the probabilistic method; \ removing the coins; \ where the coins come from",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            (
-            "Part 20 of Computer Science, Built: Randomness as a Resource. <bookmark mark='a'/> In this part: the "
-            'two kinds of randomized algorithm, and how repetition shrinks their errors; checking products and '
-            'polynomials with random points; cuts, primes, random walks and the power of two choices; Bloom filters '
-            'and sketches of streams, ending in the Job in eighteen kilobytes; the probabilistic method; and whether'
-            ' the coins can be removed, and where they come from.'
-        )
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

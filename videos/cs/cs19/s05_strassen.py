@@ -14,7 +14,7 @@ OMEGA = [(1969, 2.8074, r"Strassen"), (1978, 2.796, r"Pan"), (1979, 2.780, r"Bin
          (2024, 2.371339, r"Alman et al."), (2026, 2.371177, r"Dupont et al.")]
 
 
-class Strassen(VoiceoverScene):
+class Strassen(WatchScene):
     def construct(self):
         self.card()
         self.seven()
@@ -23,11 +23,7 @@ class Strassen(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(4, r"Seven products instead of eight", r"Is matrix multiplication really $n^3$?",
-                            lit=(1969,), extra=((1969, r"Strassen"), (1990, r"Coppersmith and Winograd")), part=PART)
-        with self.voiceover("Chapter four. Seven products instead of eight."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Seven products instead of eight", r"Is matrix multiplication really $n^3$?", lit=(1969,), extra=((1969, r"Strassen"), (1990, r"Coppersmith and Winograd")), part=PART, said="Chapter four. Seven products instead of eight.")
 
     def seven(self):
         head = label(r"Strassen \ (1969): \ \textit{Gaussian elimination is not optimal}", font_size=32).to_edge(
@@ -84,6 +80,10 @@ class Strassen(VoiceoverScene):
         self.clear_scene()
 
     def counts(self):
+        self.ask(r"Seven block products instead of eight. \\ The exponent of matrix multiplication becomes...",
+                 [r"3", r"$\log_2 7 \approx 2.81$", r"2"], 1,
+                 say="Seven block products instead of eight, at every level. What exponent does that give?",
+                 reveal="Log base two of seven, about two point eight one.")
         d = load("strassen")
         head = label(r"Counting the operations", font_size=34).to_edge(UP, buff=0.3)
         rows = [[words(r["n"]), f"{r['naive_mults']:,}", f"{r['strassen_mults']:,}", f"{r['naive_adds']:,}",
@@ -104,7 +104,7 @@ class Strassen(VoiceoverScene):
             'step uses eight products and four additions; Strassen uses seven products and eighteen additions or '
             "subtractions. The totals include every recursion node. <bookmark mark='b'/> The linear combination work "
             'is quadratic at one node, but summed over the tree it has the same n-to-log-base-two-seven exponent as '
-            'the leaf products. Reducing multiplication count does not automatically reduce elapsed time. The '
+            'the leaf products. The '
             'practical implementation stops at blocks of size two hundred and fifty-six.'
         ) as vo:
             self.play(FadeIn(head), FadeIn(tab))

@@ -5,7 +5,7 @@ from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Dp(VoiceoverScene):
+class Dp(WatchScene):
     def construct(self):
         self.card()
         self.name()
@@ -13,11 +13,7 @@ class Dp(VoiceoverScene):
         self.dag()
 
     def card(self):
-        card = chapter_card(9, r"Dynamic programming", r"What if the subproblems overlap?", lit=(1957,),
-                            extra=((1957, r"Bellman's book"),), part=PART)
-        with self.voiceover("Chapter nine. Dynamic programming."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Dynamic programming", r"What if the subproblems overlap?", lit=(1957,), extra=((1957, r"Bellman's book"),), part=PART, said="Chapter nine. Dynamic programming.")
 
     def name(self):
         head = label(r"A name chosen to hide the mathematics", font_size=34).to_edge(UP, buff=0.3)
@@ -49,6 +45,9 @@ class Dp(VoiceoverScene):
         self.clear_scene()
 
     def fib(self):
+        self.ask(r"Naive recursive $F(40)$. \\ How many calls?", [r"about 40", r"about 330 million"], 1,
+                 say="Compute the fortieth Fibonacci number by the naive recursion. How many calls?",
+                 reveal="About three hundred and thirty million. Remember each answer, and it's forty.")
         d = load("fib")
         head = label(r"Overlapping subproblems", font_size=34).to_edge(UP, buff=0.3)
         # the call tree of fib(5)
@@ -127,7 +126,7 @@ class Dp(VoiceoverScene):
             "expanded graph acyclic even when the original problem has cycles. <bookmark mark='b'/> Tabulation "
             "evaluates it in topological order. <bookmark mark='c'/> Min-plus or max-plus recurrences with one "
             'predecessor choice describe shortest or longest paths. Fibonacci adds two answers, and tree knapsack can'
-            ' combine several child answers; those dependencies are not automatically a single-path problem. '
+            ' combine several child answers. '
             "<bookmark mark='d'/> Count work by summing the transition cost over all states. A uniform upper bound "
             'can be states times work per state; selecting a sufficient, compact state is the art.'
         ) as vo:

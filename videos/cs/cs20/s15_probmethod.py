@@ -21,22 +21,14 @@ def k_n(n, radius, center, colors=None):
     return VGroup(edges, dots), pts
 
 
-class ProbMethod(VoiceoverScene):
+class ProbMethod(WatchScene):
     def construct(self):
         self.card()
         self.ramsey()
         self.table()
-        self.lll()
 
     def card(self):
-        card = chapter_card(14, r"The probabilistic method", r"Can you prove something exists without finding it?",
-                            lit=(1947, 2010), extra=((1947, r"Erd\H{o}s on Ramsey"), (2010, r"Moser--Tardos")),
-                            part=PART)
-        with self.voiceover((
-            'Chapter fourteen. The probabilistic method.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The probabilistic method", r"Can you prove something exists without finding it?", lit=(1947, 2010), extra=((1947, r"Erd\H{o}s on Ramsey"), (2010, r"Moser--Tardos")), part=PART, said='Chapter fourteen. The probabilistic method.')
 
     def ramsey(self):
         d = load("probmethod")
@@ -78,6 +70,10 @@ class ProbMethod(VoiceoverScene):
         self.clear_scene()
 
     def table(self):
+        self.ask(r"Erdős showed big graphs exist with no large one-colour clique. \\ Did he build one?",
+                 [r"yes", r"no: he showed a random colouring usually works"], 1,
+                 say="Erdős proved that large colourings without big one-colour cliques exist. Did he construct one?",
+                 reveal="No. He showed a random colouring works with positive probability, and nobody can build one as good.")
         d = load("probmethod")
         head = label(r"Erd\H{o}s (1947): \ count, \ don't construct", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
@@ -130,50 +126,3 @@ class ProbMethod(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def lll(self):
-        d = load("probmethod")
-        head = label(r"When bad events are rare and local", font_size=34).to_edge(UP, buff=0.35)
-        lines = VGroup(
-            label(r"bad events $A_1, \dots, A_m$, \ each of probability $\le p$, \ each independent of all but $d$ "
-                  r"others", font_size=21, color=WHITE),
-            MathTex(r"e\,p\,(d + 1) \le 1 \quad\Longrightarrow\quad \Pr[\text{no } A_i \text{ happens}] > 0",
-                    font_size=36, color=YES),
-            label(r"the Lov\'asz local lemma \ (Erd\H{o}s and Lov\'asz, 1975): \ the probability may be "
-                  r"exponentially small, \ but it isn't zero", font_size=20, color=GREY_A),
-            label(r"$k$-SAT: \ a clause fails with $p = 2^{-k}$; \ if each clause shares variables with at most "
-                  r"$2^k/e - 1$ others, \ the formula is satisfiable", font_size=21, color=LAM),
-            label(r"Moser and Tardos (2010): \ while some clause fails, \ re-randomize its variables; \ expected "
-                  r"resamplings $\le m/d$", font_size=21, color=HEAD),
-        ).arrange(DOWN, buff=0.26).next_to(head, DOWN, buff=0.35)
-        rows = [[words(r["n"]), words(r["m"]), str(r["d"]), f"{r['lll']:.2f}", str(r["initial_bad"]),
-                 str(r["resamplings"])] for r in d["mt"]]
-        tab = grid_table([r"variables", r"10-clauses", r"$d$ bound", r"$e p (d + 1)$", r"failing at first",
-                          r"resamplings"], rows, widths=[1.7, 1.8, 0.9, 1.9, 2.4, 2.0], row_h=0.38, font_size=18,
-                         mono_cols=(), colors=[[GREY_A, GREY_A, LAM, YES, NO, HEAD]] * len(rows))
-        tab.next_to(lines, DOWN, buff=0.35).set_x(0)
-        with self.voiceover(
-            (
-            "Sometimes existence needs a dependency argument. <bookmark mark='a'/> Suppose each bad event has "
-            'probability at most p, and is independent of the collection outside its dependency neighborhood, of '
-            "degree at most d. <bookmark mark='b'/> The symmetric local lemma gives positive probability of no bad "
-            "event when e times p times d plus one is at most one. <bookmark mark='c'/> This is the Lovász local "
-            "lemma of Erdős and Lovász. Positive probability need not be large. <bookmark mark='d'/> For k-SAT under"
-            ' independent fair variable assignments, each clause fails with probability at most two to the minus k '
-            "when it contains k distinct variables. Shared variables define a dependency graph. <bookmark mark='e'/>"
-            " Moser and Tardos' 2010 variable-model algorithm resamples all variables of a currently false clause. "
-            'Under the criterion it has an expected resampling bound; exhausting our execution budget would not '
-            "prove unsatisfiability. <bookmark mark='f'/> Each table row starts the algorithm from exactly the "
-            'assignment used to count its initial false clauses. The reported d is a safe dependency-degree upper '
-            "bound; steps and final assignments are checked. The comparison m over d is a theorem's expectation "
-            'bound under the criterion, not a per-run maximum.'
-        )
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, ln in zip("abcde", lines):
-                vo.wait_until(mk)
-                self.play(FadeIn(ln, shift=UP * 0.1))
-            vo.wait_until("f")
-            self.play(FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule),
-                      LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.3))
-        self.wait(0.3)
-        self.clear_scene()

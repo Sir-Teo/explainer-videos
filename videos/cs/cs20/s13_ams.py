@@ -6,21 +6,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs20.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Ams(VoiceoverScene):
+class Ams(WatchScene):
     def construct(self):
         self.card()
         self.moments()
         self.sketch()
-        self.measured()
 
     def card(self):
-        card = chapter_card(12, r"Sketching the second moment", r"How skewed is a stream?", lit=(1996,),
-                            extra=((1996, r"Alon, Matias and Szegedy"),), part=PART)
-        with self.voiceover((
-            'Chapter twelve. Sketching the second moment.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Sketching the second moment", r"How skewed is a stream?", lit=(1996,), extra=((1996, r"Alon, Matias and Szegedy"),), part=PART, said='Chapter twelve. Sketching the second moment.')
 
     def moments(self):
         d = load("ams")
@@ -58,6 +51,10 @@ class Ams(VoiceoverScene):
         self.clear_scene()
 
     def sketch(self):
+        self.ask(r"Give each item a random sign; sum them; square. \\ The expected value is...",
+                 [r"the number of distinct items", r"$\sum_i f_i^2$, the second moment"], 1,
+                 say="Give every item a random sign, add up the signed stream, and square it. What's the expected value?",
+                 reveal="The second frequency moment: cross terms cancel in expectation.")
         head = label(r"Alon, \ Matias and Szegedy: \ one random sign per item", font_size=34).to_edge(UP, buff=0.35)
         lines = VGroup(
             label(r"consistent signs: \ $s_a=+1$, \ $s_b=-1$, \ $s_c=+1$; \ each arrival adds its sign",
@@ -105,53 +102,3 @@ class Ams(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def measured(self):
-        d = load("ams")
-        head = label(r"Measured on the novels", font_size=34).to_edge(UP, buff=0.35)
-        one = np.array(d["single"])
-        hist, edges = np.histogram(one, bins=24, range=(0, 4))
-        top = hist.max()
-        bars = VGroup(*[Rectangle(width=0.2, height=max(2.2 * h / top, 0.02), stroke_width=0, fill_color=LAM,
-                                  fill_opacity=0.85) for h in hist])
-        for i, b in enumerate(bars):
-            b.move_to([-6.2 + i * 0.23, -0.3 + b.height / 2, 0])
-        ax = Line([-6.35, -0.3, 0], [-6.35 + 24 * 0.23, -0.3, 0], color=GREY_C)
-        mean_x = -6.2 + (1.0 / (4 / 24)) * 0.23 - 0.115
-        mean = DashedLine([mean_x, -0.3, 0], [mean_x, 2.1, 0], color=HEAD)
-        ticks = VGroup(*[label(str(v), font_size=16, color=GREY_B).move_to([-6.2 + (v / (4 / 24)) * 0.23 - 0.115,
-                                                                            -0.55, 0]) for v in (0, 1, 2, 3, 4)])
-        cap = label(rf"400 single estimates $Z^2 / F_2$ \ ({int((one > 4).sum())} beyond 4 not shown): \ mean "
-                    rf"{d['single_mean']:.2f}", font_size=19,
-                    color=GREY_A).next_to(ax, DOWN, buff=0.45)
-        rows = [[str(r["k"]), f"{r['rmse_mean'] * 100:.0f}\\%", f"{r['theory'] * 100:.0f}\\%",
-                 f"{r['worst_mean'] * 100:.0f}\\%", f"{r['worst_median9'] * 100:.0f}\\%"] for r in d["rows"]]
-        tab = grid_table([r"$k$", r"RMSE", r"$\sqrt{2/k}$", r"worst mean", r"worst median of 9"], rows,
-                         widths=[0.9, 1.3, 1.4, 1.7, 2.3], row_h=0.42, font_size=18, mono_cols=(),
-                         colors=[[GREY_A, YES, HEAD, NO, YES]] * len(rows)).to_edge(RIGHT, buff=0.4).shift(UP * 0.6)
-        note_ = label('40 trials per row; \\ modeled counters: $9k$ \\\\ exact input count vector stored separately', font_size=18, color=GREY_A
-                      ).next_to(tab, DOWN, buff=0.3)
-        with self.voiceover(
-            (
-            (
-            "On the novels. <bookmark mark='a'/> The histogram contains four hundred single-counter squared "
-            'estimates divided by the exact second moment. Individual estimates vary widely. Their empirical average'
-            " is a finite statistic; unbiasedness refers to expectation over signs. <bookmark mark='b'/> Independent"
-            " averages tighten the spread, consistent with the square-root scale. <bookmark mark='c'/> These "
-            'experiments retain an exact frequency vector as input; the displayed counter budget excludes that '
-            'vector. The table reports forty trials per configuration and the worst errors actually observed, '
-            'including the median of nine groups. Those maxima are not future-error guarantees. The counters form '
-            'linear random projections, so compatible unsquared counters for two streams can be added. Squared '
-            'estimates themselves cannot simply be added.'
-        )
-        )
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(ticks))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, DOWN) for b in bars], lag_ratio=0.04), Create(mean), FadeIn(cap))
-            vo.wait_until("b")
-            self.play(FadeIn(VGroup(*tab.cells[0])), FadeIn(tab.rule))
-            self.play(LaggedStart(*[FadeIn(VGroup(*r[:3])) for r in tab.cells[1:]], lag_ratio=0.25))
-            vo.wait_until("c")
-            self.play(LaggedStart(*[FadeIn(VGroup(*r[3:])) for r in tab.cells[1:]], lag_ratio=0.25), FadeIn(note_))
-        self.wait(0.3)
-        self.clear_scene()

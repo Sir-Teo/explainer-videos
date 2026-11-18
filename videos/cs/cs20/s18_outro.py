@@ -17,11 +17,10 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
-        self.practice()
         self.problems()
         self.next_time()
         self.references()
@@ -49,6 +48,11 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is Fermat's test not enough?", r"Carmichael numbers fool every coprime base"),
+             (r"MinHash agreement estimates...?", r"Jaccard similarity")],
+            narration="Last checkpoint. Why isn't Fermat's test enough? And what does MinHash agreement estimate?",
+            answers_narration="Carmichael numbers fool every coprime base. And the Jaccard similarity of two sets.")
 
     def payoffs(self):
         card = payoff_card([
@@ -76,28 +80,6 @@ class Outro(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def practice(self):
-        card = practice_card([
-            (r"databases", r"Bloom filters in RocksDB, \ Cassandra and Bigtable; \ HyperLogLog in Redis and BigQuery"),
-            (r"networks", r"Count-Min and heavy hitters in routers; \ two random choices in load balancers"),
-            (r"caches", r"W-TinyLFU's Count-Min admission filter \ (Caffeine)"),
-            (r"data", r"MinHash deduplication of web crawls and language-model training sets"),
-            (r"security", r"probable-prime screening where needed; \ operating-system randomness; \ ChaCha20"),
-        ])
-        with self.voiceover(
-            (
-            'In practice, databases use Bloom filters and approximate count-distinct sketches. Routers estimate '
-            'heavy hitters, load balancers sample choices, and caches use frequency summaries. MinHash helps propose'
-            ' near-duplicate documents for verification. Security protocols require strong randomness, and some '
-            'public-key systems generate large primes. Elliptic-curve handshakes show why not every secure '
-            'connection starts with freshly generated primes. Each application must choose its own accuracy, '
-            'confidence and threat model.'
-        )
-        ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
-                                                     lag_ratio=0.35), run_time=3.0)
-        self.wait(0.3)
-        self.clear_scene()
 
     def problems(self):
         ps = problem_set([

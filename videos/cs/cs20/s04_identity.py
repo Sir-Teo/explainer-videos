@@ -4,23 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs20.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, draw_graph, grid_table, load, mono, words)
 
 
-class Identity(VoiceoverScene):
+class Identity(WatchScene):
     def construct(self):
         self.card()
         self.lemma()
         self.claim()
-        self.tutte()
         self.fingerprint()
 
     def card(self):
-        card = chapter_card(3, r"Is this polynomial zero?", r"How do you test an identity you can't expand?",
-                            lit=(1979, 1980), extra=((1979, r"Lov\'asz's matchings"), (1980, r"Schwartz--Zippel")),
-                            part=PART)
-        with self.voiceover((
-            'Chapter three. Is this polynomial zero?'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Is this polynomial zero?", r"How do you test an identity you can't expand?", lit=(1979, 1980), extra=((1979, r"Lov\'asz's matchings"), (1980, r"Schwartz--Zippel")), part=PART, said='Chapter three. Is this polynomial zero?')
 
     def lemma(self):
         head = label(r"The Schwartz--Zippel lemma", font_size=36).to_edge(UP, buff=0.35)
@@ -68,6 +60,11 @@ class Identity(VoiceoverScene):
         self.clear_scene()
 
     def claim(self):
+        self.ask(r"Test a claimed polynomial identity at random points. \\ If it's false, the chance it passes once?",
+                 [r"about a half", r"at most degree over the size of the set"], 1,
+                 say="Test a claimed identity by plugging in random numbers from a large set. If it's false, what's the chance "
+                     "it still passes?",
+                 reveal="At most its degree over the size of the set: the Schwartz-Zippel lemma.")
         d = load("pit")
         head = label(r"Testing an identity without expanding it", font_size=34).to_edge(UP, buff=0.35)
         claim = MathTex(r"(x - y)(y - z)(z - x)", r"\overset{?}{=}",
@@ -115,66 +112,6 @@ class Identity(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def tutte(self):
-        d = load("pit")
-        head = label(r"Perfect matchings from a determinant", font_size=34).to_edge(UP, buff=0.35)
-        pos = {1: (-5.6, 1.2), 2: (-3.8, 1.2), 3: (-3.8, -0.4), 4: (-5.6, -0.4)}
-        g, nodes, es = draw_graph(pos, [(1, 2), (2, 3), (3, 4), (4, 1), (1, 3)], r=0.28)
-        T = MathTex(r"T = \begin{pmatrix} 0 & x_{12} & x_{13} & x_{14} \\ -x_{12} & 0 & x_{23} & 0 \\ "
-                    r"-x_{13} & -x_{23} & 0 & x_{34} \\ -x_{14} & 0 & -x_{34} & 0 \end{pmatrix}", font_size=30,
-                    color=LAM).move_to(RIGHT * 0.4 + UP * 0.4)
-        det = MathTex(r"\det T = (x_{12}x_{34} + x_{14}x_{23})^2", font_size=30, color=YES).next_to(T, RIGHT,
-                                                                                                  buff=0.4)
-        if det.get_right()[0] > 6.9:
-            det.shift(LEFT * (det.get_right()[0] - 6.9))
-            det.next_to(T, DOWN, buff=0.3)
-        pm = VGroup(es[(1, 2)].copy().set_stroke(YES, 6), es[(3, 4)].copy().set_stroke(YES, 6))
-        pm2 = VGroup(es[(4, 1)].copy().set_stroke(HEAD, 6), es[(2, 3)].copy().set_stroke(HEAD, 6))
-        facts = VGroup(
-            label(r"Tutte (1947): \ $\det T \ne 0$ exactly when a perfect matching exists", font_size=21,
-                  color=WHITE),
-            label(r"Lov\'asz (1979): \ put random numbers mod $p$ in for the $x_{ij}$; \ wrong with probability "
-                  r"$\le n/p$", font_size=21, color=YES),
-        ).arrange(DOWN, buff=0.2).to_edge(DOWN, buff=1.3)
-        rows = d["tutte"]
-        tot = sum(r["graphs"] for r in rows)
-        agree = sum(r["agree"] for r in rows)
-        have = sum(r["with_pm"] for r in rows)
-        res = label(rf"{tot} random graphs, \ 40 to 100 vertices: \ {have} have a perfect matching; \ the "
-                    rf"determinant agreed with Edmonds' algorithm on all {agree}", font_size=20, color=HEAD
-                    ).to_edge(DOWN, buff=0.5)
-        if res.width > 13:
-            res.width = 13
-        with self.voiceover(
-            (
-            f"A less obvious polynomial. <bookmark mark='a'/> Take a graph, and build its Tutte matrix: for each edge"
-            f" i j, put a variable x i j above the diagonal and minus x i j below it. <bookmark mark='b'/> For this "
-            f'graph the determinant is a perfect square. Inside that square, each of the two monomials corresponds to'
-            f" a perfect matching, a set of edges that covers every vertex exactly once. <bookmark mark='c'/> William"
-            f' Tutte proved in 1947 that the determinant is a nonzero polynomial exactly when the graph has a perfect'
-            f" matching. But it can have exponentially many terms. <bookmark mark='d'/> László Lovász saw in 1979 "
-            f'that we never need to expand it: substitute random numbers modulo a prime and compute one determinant '
-            f"by elimination, Schwartz–Zippel bounding the error. <bookmark mark='e'/> We tried it on forty-eight "
-            f'random graphs near the threshold where matchings appear. '
-            f'{have}'
-            f" had one, and the determinant agreed with Edmonds' blossom algorithm every time. Determinants "
-            f'parallelize well, so this became the route to fast parallel matching algorithms.'
-        )
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g))
-            vo.wait_until("a")
-            self.play(FadeIn(T))
-            vo.wait_until("b")
-            self.play(FadeIn(det), Create(pm))
-            self.play(FadeOut(pm), Create(pm2))
-            vo.wait_until("c")
-            self.play(FadeIn(facts[0]))
-            vo.wait_until("d")
-            self.play(FadeIn(facts[1]))
-            vo.wait_until("e")
-            self.play(FadeIn(res))
-        self.wait(0.3)
-        self.clear_scene()
 
     def fingerprint(self):
         d = load("pit")

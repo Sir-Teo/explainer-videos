@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, code, load, mono, words)
 
 
-class FftOne(VoiceoverScene):
+class FftOne(WatchScene):
     def construct(self):
         self.card()
         self.two_ways()
@@ -15,13 +15,7 @@ class FftOne(VoiceoverScene):
         self.recursion()
 
     def card(self):
-        card = chapter_card(5, r"The FFT, \ I: \ values instead of coefficients",
-                            r"Where should a polynomial be evaluated?", lit=(1965,),
-                            extra=((1805, r"Gauss, \ on the orbits of asteroids"), (1965, r"Cooley and Tukey")),
-                            part=PART)
-        with self.voiceover("Chapter five. The fast Fourier transform, part one: values instead of coefficients."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The FFT, \ I: \ values instead of coefficients", r"Where should a polynomial be evaluated?", lit=(1965,), extra=((1805, r"Gauss, \ on the orbits of asteroids"), (1965, r"Cooley and Tukey")), part=PART, said="Chapter five. The fast Fourier transform, part one: values instead of coefficients.")
 
     def two_ways(self):
         head = label(r"Two ways to hold a polynomial", font_size=34).to_edge(UP, buff=0.3)
@@ -114,6 +108,10 @@ class FftOne(VoiceoverScene):
         self.clear_scene()
 
     def squaring(self):
+        self.ask(r"Evaluate a degree-$n$ polynomial at $n$ chosen points. \\ With the right points, the cost?",
+                 [r"$n^2$", r"$n \log n$", r"$n$"], 1,
+                 say="Evaluating a polynomial at n points normally costs n squared. Choose the points cleverly. What's the cost?",
+                 reveal="n log n: roots of unity square into each other, so the work halves at every level.")
         head = label(r"The roots of unity", font_size=34).to_edge(UP, buff=0.3)
         c0 = LEFT * 3.0 + DOWN * 0.3
         R = 2.4

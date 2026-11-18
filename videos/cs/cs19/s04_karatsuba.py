@@ -11,7 +11,7 @@ def ms(s):
     return f"{s * 1000:.1f} ms" if s < 1 else f"{s:.2f} s"
 
 
-class Karatsuba(VoiceoverScene):
+class Karatsuba(WatchScene):
     def construct(self):
         self.card()
         self.story()
@@ -20,11 +20,7 @@ class Karatsuba(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(3, r"Three products instead of four", r"Is multiplication really $n^2$?", lit=(1960,),
-                            extra=((1960, r"Karatsuba"), (1963, r"Toom")), part=PART)
-        with self.voiceover("Chapter three. Three products instead of four."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Three products instead of four", r"Is multiplication really $n^2$?", lit=(1960,), extra=((1960, r"Karatsuba"), (1963, r"Toom")), part=PART, said="Chapter three. Three products instead of four.")
 
     def story(self):
         head = label(r"Moscow, \ 1960", font_size=36).to_edge(UP, buff=0.35)
@@ -57,6 +53,10 @@ class Karatsuba(VoiceoverScene):
         self.clear_scene()
 
     def trick(self):
+        self.ask(r"Three half-size products instead of four, recursively. \\ Multiplying $n$ digits takes...",
+                 [r"$n^2$", r"$n^{1.58}$", r"$n \log n$"], 1,
+                 say="Replace four half-size products with three, at every level. How does the cost grow?",
+                 reveal="Like n to the log base two of three, about n to the one point five eight.")
         head = label(r"The trick", font_size=34).to_edge(UP, buff=0.3)
         eqs = VGroup(
             MathTex(r"x = x_1 \cdot 10^m + x_0, \qquad y = y_1 \cdot 10^m + y_0", font_size=34),

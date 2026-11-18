@@ -22,7 +22,7 @@ def first_queens(n):
     return sol
 
 
-class Search(VoiceoverScene):
+class Search(WatchScene):
     def construct(self):
         self.card()
         self.queens()
@@ -31,14 +31,12 @@ class Search(VoiceoverScene):
         self.sudoku()
 
     def card(self):
-        card = chapter_card(14, r"Backtracking and Dancing Links", r"How do you search a space too big to list?",
-                            lit=(2000,), extra=((1848, r"the eight queens"), (2000, r"Knuth: \ Dancing Links")),
-                            part=PART)
-        with self.voiceover("Chapter fourteen. Backtracking and Dancing Links."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Backtracking and Dancing Links", r"How do you search a space too big to list?", lit=(2000,), extra=((1848, r"the eight queens"), (2000, r"Knuth: \ Dancing Links")), part=PART, said="Chapter fourteen. Backtracking and Dancing Links.")
 
     def queens(self):
+        self.ask(r"Eight queens, none attacking another. \\ How many solutions?", [r"1", r"12", r"92"], 2,
+                 say="Eight queens on a chessboard, none attacking another. How many ways?",
+                 reveal="Ninety-two, and twelve up to rotation and reflection.")
         head = label(r"Eight queens \ (Bezzel, \ 1848)", font_size=34).to_edge(UP, buff=0.3)
         n, s = 8, 0.58
         c0 = [-3.6, -0.3, 0]

@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs20.common import (CTRL, DATA, HEAD, LAM, NO, PART, YES, grid_table, load, mono, words)
 
 
-class Lsh(VoiceoverScene):
+class Lsh(WatchScene):
     def construct(self):
         self.card()
         self.jaccard()
@@ -15,14 +15,7 @@ class Lsh(VoiceoverScene):
         self.novels()
 
     def card(self):
-        card = chapter_card(13, r"Near-duplicates: \ MinHash and LSH", r"Which of 600 million pairs are alike?",
-                            lit=(1997, 1998), extra=((1997, r"Broder's MinHash"), (1998, r"Indyk--Motwani LSH")),
-                            part=PART)
-        with self.voiceover((
-            'Chapter thirteen. Near-duplicates: MinHash and locality-sensitive hashing.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Near-duplicates: \ MinHash and LSH", r"Which of 600 million pairs are alike?", lit=(1997, 1998), extra=((1997, r"Broder's MinHash"), (1998, r"Indyk--Motwani LSH")), part=PART, said='Chapter thirteen. Near-duplicates: MinHash and locality-sensitive hashing.')
 
     def jaccard(self):
         head = label(r"How alike are two paragraphs?", font_size=34).to_edge(UP, buff=0.35)
@@ -66,6 +59,9 @@ class Lsh(VoiceoverScene):
         self.clear_scene()
 
     def minhash(self):
+        self.ask(r"Two sets with Jaccard similarity 0.6. \\ The chance their MinHashes agree?", [r"0.36", r"0.6", r"0.8"], 1,
+                 say="Two sets overlap with Jaccard similarity point six. What's the chance their MinHash values are equal?",
+                 reveal="Exactly point six: the minimum lands in the overlap with that probability.")
         head = label(r"MinHash: \ one number that agrees with probability $J$", font_size=34).to_edge(UP, buff=0.35)
         rng = random.Random(7)
         A = set(range(0, 14))

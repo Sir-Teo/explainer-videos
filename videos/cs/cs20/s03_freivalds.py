@@ -22,7 +22,7 @@ def vec(vals, color, s=0.28):
     return cells
 
 
-class Freivalds(VoiceoverScene):
+class Freivalds(WatchScene):
     def construct(self):
         self.card()
         self.trick()
@@ -30,15 +30,12 @@ class Freivalds(VoiceoverScene):
         self.measured()
 
     def card(self):
-        card = chapter_card(2, r"Checking a product with a coin", r"Can you check $AB = C$ faster than computing $AB$?",
-                            lit=(1977,), extra=((1977, r"Freivalds' check"),), part=PART)
-        with self.voiceover((
-            'Chapter two. Checking a product with a coin.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Checking a product with a coin", r"Can you check $AB = C$ faster than computing $AB$?", lit=(1977,), extra=((1977, r"Freivalds' check"),), part=PART, said='Chapter two. Checking a product with a coin.')
 
     def trick(self):
+        self.ask(r"Check a claimed product $C = AB$ \\ with one random vector. The cost?", [r"$n^3$", r"$n^2$"], 1,
+                 say="Someone claims C equals A times B. Check it with one random vector. How much work?",
+                 reveal="n squared: three matrix-vector products, no matrix product at all.")
         head = label(r"Someone hands you $C$ and claims $C = AB$", font_size=34).to_edge(UP, buff=0.35)
         n = 6
         r = [1, 0, 1, 1, 0, 1]

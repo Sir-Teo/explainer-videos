@@ -5,7 +5,7 @@ from videos.cs.cs19.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Edit(VoiceoverScene):
+class Edit(WatchScene):
     def construct(self):
         self.card()
         self.recurrence()
@@ -13,12 +13,8 @@ class Edit(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(10, r"Edit distance", r"How different are two strings?", lit=(1974,),
-                            extra=((1965, r"Levenshtein"), (1970, r"Needleman and Wunsch"),
-                                   (1974, r"Wagner and Fischer")), part=PART)
-        with self.voiceover("Chapter ten. Edit distance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Edit distance", r"How different are two strings?", lit=(1974,), extra=((1965, r"Levenshtein"), (1970, r"Needleman and Wunsch"),
+                                   (1974, r"Wagner and Fischer")), part=PART, said="Chapter ten. Edit distance.")
 
     def recurrence(self):
         head = label(r"Insert, \ delete, \ substitute", font_size=34).to_edge(UP, buff=0.3)
@@ -53,6 +49,9 @@ class Edit(VoiceoverScene):
         self.clear_scene()
 
     def table(self):
+        self.ask(r"Edit distance from \textsf{intention} to \textsf{execution}?", [r"3", r"5", r"8"], 1,
+                 say="How many single-letter edits turn intention into execution?",
+                 reveal="Five, read off the table's last cell.")
         d = load("edit")
         a, b, D = d["a"], d["b"], d["D"]
         head = label(rf"\texttt{{{a}}} \ $\to$ \ \texttt{{{b}}}", font_size=34).to_edge(UP, buff=0.3)

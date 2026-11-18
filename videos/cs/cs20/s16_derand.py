@@ -10,24 +10,21 @@ CUBE_EDGES = [(a, b) for a in range(8) for b in range(a + 1, 8) if bin(a ^ b).co
 CORNERS = np.array([[(i >> 0) & 1, (i >> 1) & 1, (i >> 2) & 1] for i in range(8)], dtype=float)
 
 
-class Derand(VoiceoverScene):
+class Derand(WatchScene):
     def construct(self):
         self.card()
         self.maxcut()
         self.pairwise()
         self.randu()
-        self.sources()
 
     def card(self):
-        card = chapter_card(15, r"Removing the coins, \ and where they come from", r"Can we do without randomness?",
-                            lit=(1968,), extra=((1968, r"RANDU's planes"),), part=PART)
-        with self.voiceover((
-            'Chapter fifteen. Removing the coins, and where they come from.'
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Removing the coins, \ and where they come from", r"Can we do without randomness?", lit=(1968,), extra=((1968, r"RANDU's planes"),), part=PART, said='Chapter fifteen. Removing the coins, and where they come from.')
 
     def maxcut(self):
+        self.ask(r"The random MAX-CUT argument cuts half the edges. \\ Can the coins be removed?", [r"no",
+                 r"yes, by conditional expectations"], 1,
+                 say="A random cut gets half the edges, in expectation. Can you get that without randomness?",
+                 reveal="Yes: place each vertex on the side that keeps the conditional expectation up.")
         d = load("derand")
         head = label(r"The method of conditional expectations", font_size=34).to_edge(UP, buff=0.35)
         example_edges = [(0,1),(1,2),(2,3),(3,0),(0,2)]
@@ -197,44 +194,3 @@ class Derand(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def sources(self):
-        head = label(r"Better generators", font_size=34).to_edge(UP, buff=0.35)
-        rows = VGroup(
-            VGroup(label(r"\textbf{Mersenne Twister} \ (Matsumoto and Nishimura, 1998)", font_size=22, color=DATA),
-                   label(r"period $2^{19937} - 1$, \ passes the usual statistical tests; \ Python's \texttt{random}",
-                         font_size=19, color=GREY_A),
-                   label('linear over $\\mathbb{F}_2$: \\ full observed outputs allow state recovery; \\ not for secrets', font_size=19,
-                         color=NO)),
-            VGroup(label(r"\textbf{PCG}, \ \textbf{xoshiro}", font_size=22, color=LAM),
-                   label(r"small, \ fast, \ statistically strong: \ numpy's default is PCG64", font_size=19,
-                         color=GREY_A)),
-            VGroup(label(r"\textbf{cryptographic generators}: \ ChaCha20, \ AES in counter mode", font_size=22,
-                         color=YES),
-                   label(r"no efficient test can tell them from coins, \ if the cipher is secure: \ Part 29",
-                         font_size=19, color=GREY_A)),
-            VGroup(label('\\textbf{entropy sources and hardware generators}: \\ distinct trust assumptions', font_size=22,
-                         color=HEAD),
-                   label('the OS collects and conditions entropy, then seeds a cryptographic generator', font_size=19, color=GREY_A)),
-        )
-        for r in rows:
-            r.arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        with self.voiceover(
-            (
-            "Modern generators have different goals. <bookmark mark='a'/> Python's Mersenne Twister is a "
-            'deterministic simulation generator, linear over the two-element field. Enough suitably observed full '
-            'outputs expose its state; it is unsuitable for secrets. Passing a statistical test does not prove '
-            "independence. <bookmark mark='b'/> PCG and xoshiro offer other simulation tradeoffs; NumPy's default "
-            "generator uses a PCG variant. <bookmark mark='c'/> Cryptographic generators aim at computational "
-            'indistinguishability for bounded attackers, conditional on their construction and a secret, '
-            'sufficiently unpredictable seed. ChaCha20 is one building block, revisited in Part 29. <bookmark '
-            "mark='d'/> Operating systems collect and condition entropy from available sources. A physical source, a"
-            ' seeded generator and a mathematical independent-coin model are three different objects.'
-        )
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abcd", rows):
-                vo.wait_until(mk)
-                self.play(FadeIn(r, shift=UP * 0.1))
-        self.wait(0.3)
-        self.clear_scene()
