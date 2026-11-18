@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load)
 
 
-class Byzantine(VoiceoverScene):
+class Byzantine(WatchScene):
     def construct(self):
         self.card()
         self.three()
@@ -14,13 +14,9 @@ class Byzantine(VoiceoverScene):
         self.pbft()
 
     def card(self):
-        card = chapter_card(9, r"Byzantine generals", r"Can loyal machines agree when some of them lie?",
-                            lit=(1980, 2019), extra=((1982, r"Lamport, Shostak \\ and Pease"),
+        self.chapter(9, r"Byzantine generals", r"Can loyal machines agree when some of them lie?", lit=(1980, 2019), extra=((1982, r"Lamport, Shostak \\ and Pease"),
                                                      (1999, r"Castro and Liskov: \ PBFT"),
-                                                     (2019, r"Yin et al.: \ HotStuff")), part=PART)
-        with self.voiceover("Chapter nine. Byzantine generals."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2019, r"Yin et al.: \ HotStuff")), part=PART, said="Chapter nine. Byzantine generals.")
 
     def _tri(self, traitor, cmd_to, relay):
         pos = {0: [0, 1.4, 0], 1: [-1.8, -1.1, 0], 2: [1.8, -1.1, 0]}
@@ -39,6 +35,9 @@ class Byzantine(VoiceoverScene):
         return g
 
     def three(self):
+        self.ask(r"Three generals, one a traitor. \\ Can the loyal two agree?", [r"yes", r"no"], 1,
+                 say="Three generals, one of whom may lie. Can the two loyal ones always agree?",
+                 reveal="No. f traitors need at least three f plus one generals.")
         head = label(r"Three generals, \ one traitor", font_size=36).to_edge(UP, buff=0.3)
         left = self._tri(1, {(0, 1): r"attack", (0, 2): r"attack"}, {(1, 2): r"``he said retreat''"})
         right = self._tri(0, {(0, 1): r"retreat", (0, 2): r"attack"}, {(1, 2): r"``he said retreat''"})

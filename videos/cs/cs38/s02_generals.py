@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load, seq_diagram)
 
 
-class Generals(VoiceoverScene):
+class Generals(WatchScene):
     def construct(self):
         self.card()
         self.partial()
@@ -12,12 +12,8 @@ class Generals(VoiceoverScene):
         self.proof()
 
     def card(self):
-        card = chapter_card(1, r"Partial failure", r"Can two parties agree over a link that loses messages?",
-                            lit=(1975, 1978), extra=((1975, r"Akkoyunlu et al.: \ the problem"),
-                                                     (1978, r"Gray: \ the two generals")), part=PART)
-        with self.voiceover("Chapter one. Partial failure."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Partial failure", r"Can two parties agree over a link that loses messages?", lit=(1975, 1978), extra=((1975, r"Akkoyunlu et al.: \ the problem"),
+                                                     (1978, r"Gray: \ the two generals")), part=PART, said="Chapter one. Partial failure.")
 
     def partial(self):
         head = label(r"Three things one computer never faces", font_size=36).to_edge(UP, buff=0.3)
@@ -57,6 +53,10 @@ class Generals(VoiceoverScene):
         self.clear_scene()
 
     def generals(self):
+        self.ask(r"Messengers may be captured. \\ Can the generals ever be \emph{certain} they both attack?",
+                 [r"yes, with enough messengers", r"no, never"], 1,
+                 say="Any messenger may be captured. With enough messengers, can the two generals ever be certain they will both attack?",
+                 reveal="Never. Likely, yes; certain, no.")
         g = load("generals")
         head = label(r"The two generals", font_size=36).to_edge(UP, buff=0.3)
         ev = [(0.0, 1.0, r"attack at dawn", True, DATA), (1.0, 2.0, r"agreed", False, YES),

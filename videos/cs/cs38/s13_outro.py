@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -48,6 +48,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"When is a Raft entry committed?", r"Stored on a majority by its own term's leader"),
+             (r"Why $3f + 1$ for Byzantine faults?", r"Quorums of $2f + 1$ must share an honest member")],
+            narration="Last checkpoint. When is a Raft entry committed? And why do Byzantine faults need three f plus one machines?",
+            answers_narration="When the leader of its term has stored it on a majority. And so that any two quorums of two f "
+                              "plus one share an honest machine.")
 
     def payoffs(self):
         card = payoff_card([

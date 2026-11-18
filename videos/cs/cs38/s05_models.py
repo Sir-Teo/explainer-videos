@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs38.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, box, grid_table, load)
 
 
-class Models(VoiceoverScene):
+class Models(WatchScene):
     def construct(self):
         self.card()
         self.failures()
@@ -14,12 +14,8 @@ class Models(VoiceoverScene):
         self.lower_bound()
 
     def card(self):
-        card = chapter_card(4, r"Models and consensus", r"What exactly must machines agree on, and under what rules?",
-                            lit=(1980, 1988), extra=((1982, r"Dolev and Strong"), (1988, r"Dwork, Lynch \\ and "
-                                                                                          r"Stockmeyer")), part=PART)
-        with self.voiceover("Chapter four. Models and consensus."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Models and consensus", r"What exactly must machines agree on, and under what rules?", lit=(1980, 1988), extra=((1982, r"Dolev and Strong"), (1988, r"Dwork, Lynch \\ and "
+                                                                                          r"Stockmeyer")), part=PART, said="Chapter four. Models and consensus.")
 
     def failures(self):
         head = label(r"How machines fail", font_size=36).to_edge(UP, buff=0.3)
@@ -55,6 +51,12 @@ class Models(VoiceoverScene):
         self.clear_scene()
 
     def timing(self):
+        self.wrong_idea(r"a timeout tells you a machine is dead",
+                        r"a timeout can't tell dead from slow",
+                        narration="A tempting rule: if a machine doesn't answer within a timeout, it has crashed.",
+                        right_narration="In an asynchronous network, a slow machine and a dead one look the same. Every "
+                                        "protocol in this part has to live with that.")
+        self.clear_scene()
         head = label(r"How time behaves", font_size=36).to_edge(UP, buff=0.3)
         rows = [[r"synchronous", r"known bounds on message delay and on relative speed", r"rounds; \ timeouts "
                  r"detect failures exactly"],
@@ -119,6 +121,10 @@ class Models(VoiceoverScene):
         self.clear_scene()
 
     def floodset(self):
+        self.ask(r"Synchronous rounds, up to $f$ crashes. \\ Rounds needed for consensus:", [r"$1$", r"$f$",
+                 r"$f + 1$"], 2,
+                 say="Synchronous rounds, and up to f processes may crash. How many rounds does consensus need?",
+                 reveal="f plus one, and no fewer, ever.")
         f = load("floodset")
         head = label(r"With a clock: \ $f + 1$ rounds", font_size=36).to_edge(UP, buff=0.3)
         alg = wrapped_label(r"\textbf{FloodSet}: \ each round, \ every process sends everything it has seen to "
