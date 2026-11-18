@@ -347,7 +347,7 @@ class Peeking(WatchScene):
         self.clear_scene()
         self.checkpoint(
             [(r"Why does peeking inflate false positives?", r"A watched walk crosses any fixed line"),
-             (r"What do the 1.96 and 0.84 in the sample size mean?", r"5% level, two-sided; 80% power")],
+             (r"What do the 1.96 and 0.84 in the sample size mean?", r"5\% level, two-sided; 80\% power")],
             narration="Checkpoint. Why does peeking inflate false positives? And what are the one point nine six and point eight four in the sample size?",
             answers_narration="A random walk watched for long enough crosses any fixed line. And a five percent two-sided "
                               "level, and eighty percent power.")
