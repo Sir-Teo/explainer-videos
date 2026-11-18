@@ -81,7 +81,7 @@ def polyline(ax, xs, ys, color, width=2.5):
     return VMobject(color=color, stroke_width=width).set_points_as_corners([ax.c2p(x, v) for x, v in zip(xs, ys)])
 
 
-class Boosting(VoiceoverScene):
+class Boosting(WatchScene):
     def construct(self):
         self.card()
         self.weak()
@@ -92,12 +92,8 @@ class Boosting(VoiceoverScene):
         self.noise()
 
     def card(self):
-        card = chapter_card(4, r"Boosting", r"Can many weak rules make a strong one?", lit=(1990, 1997, 2003),
-                            extra=((1990, r"Schapire: \ weak learning is strong"),
-                                   (1997, r"Freund and Schapire: \ AdaBoost"), (2003, r"G\"odel Prize")), part=PART)
-        with self.voiceover("Chapter four. Boosting."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Boosting", r"Can many weak rules make a strong one?", lit=(1990, 1997, 2003), extra=((1990, r"Schapire: \ weak learning is strong"),
+                                   (1997, r"Freund and Schapire: \ AdaBoost"), (2003, r"G\"odel Prize")), part=PART, said="Chapter four. Boosting.")
 
     def weak(self):
         b = load("boost")["clean"]
@@ -374,6 +370,10 @@ class Boosting(VoiceoverScene):
         self.clear_scene()
 
     def margins(self):
+        self.ask(r"AdaBoost's training error is zero. \\ Keep boosting; the test error...", [r"rises: it overfits",
+                 r"keeps falling"], 1,
+                 say="AdaBoost reaches zero training error. Keep adding rounds. What happens to the test error?",
+                 reveal="It keeps falling: the margins keep growing.")
         b = load("boost")["clean"]
         tr, te = b["train"], b["test"]
         T = len(tr)

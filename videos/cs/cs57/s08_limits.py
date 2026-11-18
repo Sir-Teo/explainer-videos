@@ -30,7 +30,7 @@ def arrow(a, b, color=GREY_B):
                  max_tip_length_to_length_ratio=0.18)
 
 
-class Limits(VoiceoverScene):
+class Limits(WatchScene):
     def construct(self):
         self.card()
         self.proper()
@@ -40,12 +40,8 @@ class Limits(VoiceoverScene):
         self.landscape()
 
     def card(self):
-        card = chapter_card(7, r"What cannot be learned", r"When is enough data not enough?", lit=(1988, 1994),
-                            extra=((1988, r"Pitt and Valiant: \ hardness of proper learning"),
-                                   (1994, r"Kearns and Valiant: \ cryptographic limits")), part=PART)
-        with self.voiceover("Chapter seven. What cannot be learned."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"What cannot be learned", r"When is enough data not enough?", lit=(1988, 1994), extra=((1988, r"Pitt and Valiant: \ hardness of proper learning"),
+                                   (1994, r"Kearns and Valiant: \ cryptographic limits")), part=PART, said="Chapter seven. What cannot be learned.")
 
     # ------------------------------------------------------------------ data is not the problem; time is
     def proper(self):
@@ -261,6 +257,10 @@ class Limits(VoiceoverScene):
 
     # ------------------------------------------------------------------ parity, measured
     def parity(self):
+        self.ask(r"A parity of 3 hidden bits among $n$. \\ Does any single bit correlate with the label?", [r"yes",
+                 r"no"], 1,
+                 say="The label is the parity of three hidden bits among n. Does any single bit correlate with the label?",
+                 reveal="No. Statistical queries see nothing until they guess the right three.")
         rows_ = load("parity")["rows"]
         k = rows_[0]["k"]
         head = label(r"Parity: \ easy for algebra, \ hard for statistics", font_size=36).to_edge(UP, buff=0.3)

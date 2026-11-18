@@ -6,11 +6,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs57.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.puzzle()
         self.questions()
-        self.plan()
+        self.title(PART)
 
     def puzzle(self):
         d = load("descent")
@@ -87,29 +87,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Learning Theory", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"PAC learning and the finite-class bound",
-            r"VC dimension, \ Sauer--Shelah, \ and the fundamental theorem",
-            r"margins: \ the perceptron, \ boosting",
-            r"online learning, \ regret and bandits",
-            r"what cannot be learned: \ parity and cryptography",
-            r"double descent, \ and learning as compression",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 57 of Computer Science, Built. <bookmark mark='a'/> We will define probably approximately "
-            "correct learning; prove that the VC dimension decides how many examples are needed; see why margins, "
-            "not dimensions, govern the perceptron and boosting; learn online against an adversary and bound the "
-            "regret; meet problems that cannot be learned efficiently; and return to double descent and to learning "
-            "as compression."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

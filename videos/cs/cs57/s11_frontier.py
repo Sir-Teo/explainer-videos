@@ -13,7 +13,7 @@ def tile(title, body, col, w=4.2, h=3.0):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.compression()
@@ -21,13 +21,8 @@ class Frontier(VoiceoverScene):
         self.open()
 
     def card(self):
-        card = chapter_card(10, r"Frontier: \ compression schemes and in-context learning",
-                            r"Is learning exactly compression?", lit=(1986, 2016),
-                            extra=((1986, r"Littlestone and Warmuth: \ sample compression"),
-                                   (2016, r"Moran and Yehudayoff: \ every VC class compresses")), part=PART)
-        with self.voiceover("Chapter ten, the frontier. Is learning exactly compression?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Frontier: \ compression schemes and in-context learning", r"Is learning exactly compression?", lit=(1986, 2016), extra=((1986, r"Littlestone and Warmuth: \ sample compression"),
+                                   (2016, r"Moran and Yehudayoff: \ every VC class compresses")), part=PART, said="Chapter ten, the frontier. Is learning exactly compression?")
 
     def compression(self):
         c = load("compress")
@@ -78,6 +73,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def incontext(self):
+        self.ask(r"A transformer prompted with examples of a linear function \\ predicts like...", [r"nearest neighbour",
+                 r"least squares"], 1,
+                 say="A transformer trained on prompts of linear-function examples. A new prompt arrives. Whose predictions does it match?",
+                 reveal="Least squares, closely, though nobody programmed it.")
         head = label(r"Learning without updating any weights", font_size=36).to_edge(UP, buff=0.3)
         tiles = VGroup(
             tile(r"in-context learning", r"a trained language model, \ shown a few examples in its prompt, \ "

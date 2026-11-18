@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -50,6 +50,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why can't sparse parities be learned by statistical queries?", r"No query correlates until the right set"),
+             (r"What is implicit regularization?", r"Gradient descent picks the minimum-norm fit")],
+            narration="Last checkpoint. Why do statistical queries fail on sparse parities? And what is implicit regularization?",
+            answers_narration="Every query's answer is the same until it names the right bits. And gradient descent, started "
+                              "at zero, picks the smallest-norm solution by itself.")
 
     def payoffs(self):
         card = payoff_card([

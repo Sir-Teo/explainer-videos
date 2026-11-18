@@ -51,7 +51,7 @@ def beta_pdf(x, a, b):
 ARM = [YES, DATA, LAM, KERN]
 
 
-class Bandits(VoiceoverScene):
+class Bandits(WatchScene):
     def construct(self):
         self.card()
         self.problem()
@@ -62,13 +62,8 @@ class Bandits(VoiceoverScene):
         self.lower()
 
     def card(self):
-        card = chapter_card(6, r"Bandits", r"How do you learn while you earn?", lit=(1933, 1952, 1985, 2002),
-                            extra=((1933, r"Thompson: \ sampling"), (1952, r"Robbins: \ the bandit problem"),
-                                   (1985, r"Lai and Robbins: \ the lower bound"), (2002, r"Auer et al.: \ UCB1")),
-                            part=PART)
-        with self.voiceover("Chapter six. Bandits."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Bandits", r"How do you learn while you earn?", lit=(1933, 1952, 1985, 2002), extra=((1933, r"Thompson: \ sampling"), (1952, r"Robbins: \ the bandit problem"),
+                                   (1985, r"Lai and Robbins: \ the lower bound"), (2002, r"Auer et al.: \ UCB1")), part=PART, said="Chapter six. Bandits.")
 
     # ------------------------------------------------------------------ the problem
     def problem(self):
@@ -207,7 +202,7 @@ class Bandits(VoiceoverScene):
             "its plausible best case, is highest. <bookmark mark='b'/> By Hoeffding, the true mean exceeds the "
             "average by epsilon with probability at most e to the minus two n epsilon squared. <bookmark mark='c'/> "
             "With this bonus, the index falls below the truth with probability at most t to the minus four. "
-            "<bookmark mark='d'/> Watch an illustrative run. The bad arms' bars shrink as they are tried, until they "
+            "<bookmark mark='d'/> The bad arms' bars shrink as they are tried, until they "
             "no longer reach the best arm's; after that they are tried only as often as log t grows."
         ) as vo:
             self.play(FadeIn(head), FadeIn(g), FadeIn(names), FadeIn(ill))
@@ -456,6 +451,10 @@ class Bandits(VoiceoverScene):
 
     # ------------------------------------------------------------------ why ln T, and why sqrt(KT)
     def lower(self):
+        self.ask(r"Bandit arms with fixed gaps. \\ The best possible regret grows like...", [r"a constant",
+                 r"$\log T$", r"$\sqrt{T}$"], 1,
+                 say="A bandit with fixed gaps between its arms. How must the best possible regret grow over T rounds?",
+                 reveal="Like log T: Lai and Robbins' lower bound.")
         head = label(r"Why nobody does better", font_size=36).to_edge(UP, buff=0.3)
         a, bm = 0.45, 0.5
         g, ax = curve_axes([0.2, 0.75, 0.1], [0, 1.05, 0.5], r"average reward after $n$ pulls", None, [0.3, 0.45,
@@ -528,6 +527,12 @@ class Bandits(VoiceoverScene):
             self.play(FadeIn(prac))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does AdaBoost's training error fall fast?", r"It is bounded by a product shrinking each round"),
+             (r"What does UCB's bonus do?", r"Optimism: try arms that might be best")],
+            narration="Checkpoint. Why does AdaBoost's training error fall exponentially? And what does UCB's bonus do?",
+            answers_narration="It is bounded by a product of factors, each below one by an amount set by the weak learner's "
+                              "edge. And it makes the learner optimistic about arms it hasn't tried much.")
 
 
 _ = (BG, NO, mono)
