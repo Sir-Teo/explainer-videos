@@ -11,7 +11,7 @@ def edge_fn(a, b, p):
     return (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0])
 
 
-class Raster(VoiceoverScene):
+class Raster(WatchScene):
     def construct(self):
         self.card()
         self.edges()
@@ -19,16 +19,11 @@ class Raster(VoiceoverScene):
         self.whyw()
         self.persp()
         self.zbuffer()
-        self.ours()
 
     def card(self):
-        card = chapter_card(3, r"Rasterization and the z-buffer", r"Which pixels does a triangle cover, \ and which "
+        self.chapter(3, r"Rasterization and the z-buffer", r"Which pixels does a triangle cover, \ and which "
                             r"triangle wins?", lit=(1974, 1988), extra=((1974, r"Catmull: \ the z-buffer"),
-                                                                       (1988, r"Pineda: \ edge functions")),
-                            part=PART)
-        with self.voiceover("Chapter three. Rasterization and the z-buffer."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                       (1988, r"Pineda: \ edge functions")), part=PART, said="Chapter three. Rasterization and the z-buffer.")
 
     def edges(self):
         b = load("bary")
@@ -230,6 +225,10 @@ class Raster(VoiceoverScene):
         self.clear_scene()
 
     def persp(self):
+        self.ask(r"Interpolate texture coordinates straight across the screen, \\ on a floor that recedes. The checkers...",
+                 [r"look right", r"warp"], 1,
+                 say="Interpolate texture coordinates in straight lines across the screen, on a floor that recedes into the distance. How do the checkers look?",
+                 reveal="Warped. Interpolate u over w and one over w instead, and divide.")
         p = load("persp")
         head = label(r"A floor, \ three ways", font_size=36).to_edge(UP, buff=0.3)
         imgs = Group(*[image(p[k], height=2.9) for k in ("affine", "perspective", "truth")]).arrange(RIGHT, buff=0.3)
@@ -316,51 +315,6 @@ class Raster(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def ours(self):
-        head = label(r"Our rasterizer, \ end to end", font_size=36).to_edge(UP, buff=0.3)
-        steps = [(r"clip coordinates", DATA), (r"clip near plane", KERN), (r"divide by $w$", HEAD),
-                 (r"viewport", DATA), (r"edge functions", KERN), (r"depth test", YES),
-                 (r"interpolate $a/w$, \ $1/w$", HEAD), (r"write pixel", DATA)]
-        boxes = VGroup(*[module_box(t, c, w=2.6, h=0.7, font=19) for t, c in steps])
-        top, bot = boxes[:4], VGroup(*boxes[4:][::-1])          # a snake: the second row runs right to left
-        top.arrange(RIGHT, buff=0.55)
-        bot.arrange(RIGHT, buff=0.55)
-        VGroup(top, bot).arrange(DOWN, buff=0.9).next_to(head, DOWN, buff=0.6)
-        arrows = VGroup(*[Arrow(boxes[i].get_right(), boxes[i + 1].get_left(), buff=0.05, stroke_width=2,
-                                color=GREY_B, max_tip_length_to_length_ratio=0.25) for i in (0, 1, 2)],
-                        *[Arrow(boxes[i].get_left(), boxes[i + 1].get_right(), buff=0.05, stroke_width=2,
-                                color=GREY_B, max_tip_length_to_length_ratio=0.25) for i in (4, 5, 6)])
-        arrows.add(Arrow(boxes[3].get_bottom(), boxes[4].get_top(), buff=0.05, stroke_width=2, color=GREY_B,
-                         max_tip_length_to_length_ratio=0.12))
-        notes = VGroup(
-            wrapped_label(r"clipping happens in homogeneous space, \ before the division, \ so nothing behind the eye "
-                          r"is ever divided by a negative $w$ \ (Sutherland and Hodgman, \ 1974)", 12.4,
-                          font_size=20, color=KERN),
-            wrapped_label(r"vertices are snapped to $1/256$ of a pixel, \ as GPUs do, \ so the edge functions are "
-                          r"computed exactly and two triangles sharing an edge never both own, \ or both miss, \ a "
-                          r"pixel on it", 12.4, font_size=20, color=WHITE),
-            wrapped_label(r"every image in this chapter, \ and the next two, \ came out of this pipeline", 12.4,
-                          font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(VGroup(top, bot), DOWN, buff=0.7)
-        with self.voiceover(
-            "Put together, this is our rasterizer. <bookmark mark='a'/> Vertices arrive in clip coordinates. "
-            "Triangles are clipped against the near plane while still homogeneous, so nothing behind the eye is "
-            "ever divided by a negative w. Then the division, the viewport, the edge functions, the depth test, "
-            "and the perspective-correct blend. <bookmark mark='b'/> One detail matters more than it looks: "
-            "vertices are snapped to a two-hundred-and-fifty-sixth of a pixel, as GPUs do, so the edge tests are "
-            "exact, and two triangles sharing an edge never leave a crack between them. <bookmark mark='c'/> "
-            "Every image in this chapter, and the next two, came out of this pipeline."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(bx) for bx in boxes], lag_ratio=0.25), Create(arrows), FadeIn(notes[0]),
-                      run_time=3)
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

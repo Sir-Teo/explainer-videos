@@ -153,23 +153,18 @@ def tree_mobs(nodes, pos):
     return dots, edges
 
 
-class Bvh(VoiceoverScene):
+class Bvh(WatchScene):
     def construct(self):
         self.card()
         self.brute()
         self.boxes()
         self.traversal()
         self.sah()
-        self.measured()
 
     def card(self):
-        card = chapter_card(8, r"Acceleration structures", r"Must every ray test every triangle?",
-                            lit=(1980, 1986, 1990), extra=((1980, r"Rubin and Whitted: \ boxes in boxes"),
+        self.chapter(8, r"Acceleration structures", r"Must every ray test every triangle?", lit=(1980, 1986, 1990), extra=((1980, r"Rubin and Whitted: \ boxes in boxes"),
                                                            (1986, r"Kay and Kajiya: \ slabs"),
-                                                           (1990, r"MacDonald and Booth: \ the SAH")), part=PART)
-        with self.voiceover("Chapter eight. Acceleration structures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1990, r"MacDonald and Booth: \ the SAH")), part=PART, said="Chapter eight. Acceleration structures.")
 
     def frame(self):
         x0, x1, y0, y1 = FIELD
@@ -245,6 +240,10 @@ class Bvh(VoiceoverScene):
         self.clear_scene()
 
     def boxes(self):
+        self.ask(r"With a hierarchy of bounding boxes, \\ a ray tests about how many of $n$ triangles?",
+                 [r"$n$", r"$n / 2$", r"about $\log n$"], 2,
+                 say="Wrap the triangles in a tree of bounding boxes. Roughly how many of n triangles does a ray then test?",
+                 reveal="About log n, if the tree is good.")
         head = label(r"A bounding volume hierarchy", font_size=36).to_edge(UP, buff=0.3)
         tris = field_tris()
         nodes = build(tris)
@@ -461,82 +460,13 @@ class Bvh(VoiceoverScene):
             self.play(FadeIn(rows[3]), FadeIn(whys[3]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why do mipmaps prevent aliasing?", r"Each pixel reads a pre-filtered level matching its footprint"),
+             (r"What does the surface area heuristic estimate?", r"Expected cost of a split")],
+            narration="Checkpoint. How do mipmaps prevent aliasing? And what does the surface area heuristic estimate?",
+            answers_narration="Each pixel reads a pre-filtered level whose texels match its footprint. And the expected cost "
+                              "of tracing through a split, from the boxes' areas.")
 
-    def measured(self):
-        rows = load("bvh")["rows"]
-        head = label(r"Our BVH, \ measured", font_size=36).to_edge(UP, buff=0.3)
-        lg = [math.log10(r["n"]) for r in rows]
-        ax1 = Axes(x_range=[2, 5, 1], y_range=[0, 5, 1], x_length=5.0, y_length=3.4,
-                   axis_config={"color": GREY_D, "include_ticks": True}).move_to([-3.5, 0.45, 0])
-        xt1 = VGroup(*[label(rf"$10^{v}$", font_size=17, color=GREY_B).next_to(ax1.c2p(v, 0), DOWN, buff=0.1)
-                       for v in (2, 3, 4, 5)])
-        yt1 = VGroup(*[label(rf"$10^{v}$" if v else "1", font_size=17, color=GREY_B).next_to(
-            ax1.c2p(2, v), LEFT, buff=0.1) for v in range(6)])
-        xl1 = label(r"triangles in the mesh", font_size=17, color=GREY_A).next_to(xt1, DOWN, buff=0.1)
-        yl1 = label(r"triangle tests per ray", font_size=17, color=GREY_A).next_to(ax1, UP, buff=0.1).align_to(
-            ax1, LEFT)
-
-        def series(ax, key, col, xs=lg, f=lambda v: math.log10(v)):
-            pts = [ax.c2p(x, f(r[key])) for x, r in zip(xs, rows)]
-            return VGroup(VMobject(color=col, stroke_width=3).set_points_as_corners(pts),
-                          *[Dot(p, radius=0.06, color=col) for p in pts])
-        brute = series(ax1, "brute_tests", NO)
-        med = series(ax1, "median_tests", HEAD)
-        sah = series(ax1, "sah_tests", YES)
-        tags1 = VGroup(label(r"brute force", font_size=17, color=NO).next_to(brute[-1], LEFT, buff=0.15),
-                       label(r"median", font_size=17, color=HEAD).next_to(med[-1], RIGHT, buff=0.12),
-                       label(r"SAH", font_size=17, color=YES).next_to(sah[-1], RIGHT, buff=0.12))
-        l2 = [r["log2_n"] for r in rows]
-        ax2 = Axes(x_range=[0, 18, 3], y_range=[0, 50, 10], x_length=4.4, y_length=3.4,
-                   axis_config={"color": GREY_D, "include_ticks": True}).move_to([3.4, 0.45, 0])
-        xt2 = VGroup(*[label(rf"{v}", font_size=17, color=GREY_B).next_to(ax2.c2p(v, 0), DOWN, buff=0.1)
-                       for v in (0, 6, 12, 18)])
-        yt2 = VGroup(*[label(rf"{v}", font_size=17, color=GREY_B).next_to(ax2.c2p(0, v), LEFT, buff=0.1)
-                       for v in (0, 25, 50)])
-        xl2 = label(r"$\log_2$ of the number of triangles", font_size=17, color=GREY_A).next_to(xt2, DOWN, buff=0.1)
-        yl2 = label(r"boxes visited per ray", font_size=17, color=GREY_A).next_to(ax2, UP, buff=0.1).align_to(
-            ax2, LEFT)
-        v_med = series(ax2, "median_visits", HEAD, xs=l2, f=lambda v: v)
-        v_sah = series(ax2, "sah_visits", YES, xs=l2, f=lambda v: v)
-        tags2 = VGroup(label(r"median", font_size=17, color=HEAD).next_to(v_med[-1], UP, buff=0.12),
-                       label(r"SAH", font_size=17, color=YES).next_to(v_sah[-1], DOWN, buff=0.12))
-        last = rows[-1]
-        incs = [b["sah_visits"] - a["sah_visits"] for a, b in zip(rows, rows[1:])]
-        notes = VGroup(
-            wrapped_label(rf"{last['n']:,} triangles: \ {last['sah_tests']:.1f} triangle tests and "
-                          rf"{last['sah_visits']:.0f} boxes per ray, \ against {last['brute_tests']:,}; \ the same "
-                          rf"nearest hit as brute force on {100 * min(r['agree'] for r in rows):.0f}\% of the rays "
-                          r"checked".replace(",", "{,}"), 12.4, font_size=19, color=YES),
-            wrapped_label(rf"each tenfold increase in triangles adds {min(incs):.0f} to {max(incs):.0f} box visits: "
-                          rf"$O(\log n)$ per ray; \ the SAH tree is deeper \ ({last['sah_depth']} levels against "
-                          rf"{last['median_depth']}) \ yet cheaper to walk", 12.4, font_size=19, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Now our real BVH, in three dimensions, built over random terrain meshes from a hundred to a hundred "
-            "thousand triangles, and traced with a grid of camera rays. <bookmark mark='a'/> Brute force tests "
-            "every triangle, a straight line on this logarithmic plot. <bookmark mark='b'/> With the median split, "
-            "between about seven and ten triangle tests per ray, whatever the size. <bookmark mark='c'/> With the "
-            "surface area heuristic, between two and three. <bookmark mark='d'/> The work moves into the boxes. "
-            "Plotted against the logarithm of the number of triangles, the boxes visited per ray rise in a nearly "
-            "straight line: every tenfold increase adds about nine. That is the logarithm per ray. "
-            "<bookmark mark='e'/> At a hundred thousand triangles, each ray does two and a half triangle tests and "
-            "visits thirty-nine boxes, instead of a hundred thousand tests, and on every ray we checked it finds the "
-            "same nearest hit as brute force."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax1), FadeIn(xt1), FadeIn(yt1), FadeIn(xl1), FadeIn(yl1))
-            vo.wait_until("a")
-            self.play(Create(brute), FadeIn(tags1[0]))
-            vo.wait_until("b")
-            self.play(Create(med), FadeIn(tags1[1]))
-            vo.wait_until("c")
-            self.play(Create(sah), FadeIn(tags1[2]))
-            vo.wait_until("d")
-            self.play(Create(ax2), FadeIn(xt2), FadeIn(yt2), FadeIn(xl2), FadeIn(yl2))
-            self.play(Create(v_med), Create(v_sah), FadeIn(tags2), run_time=2)
-            vo.wait_until("e")
-            self.play(FadeIn(notes))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

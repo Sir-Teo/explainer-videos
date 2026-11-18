@@ -9,22 +9,17 @@ from videos.cs.cs51.common import (BG, DATA, EYE, HEAD, KERN, LAM, NO, PART, X1,
                                    box2d, end_of, image, load, path_mob, random_path, to_display,
                                    to_linear)
 
-class Equation(VoiceoverScene):
+class Equation(WatchScene):
     def construct(self):
         self.card()
         self.balance()
         self.operator()
         self.paths()
         self.bounces()
-        self.decay()
 
     def card(self):
-        card = chapter_card(10, r"The rendering equation", r"Where does all the light in a picture come from?",
-                            lit=(1984, 1986), extra=((1984, r"Goral et al.: \ radiosity, \ the Cornell box"),
-                                                     (1986, r"Kajiya: \ the rendering equation")), part=PART)
-        with self.voiceover("Chapter ten. The rendering equation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"The rendering equation", r"Where does all the light in a picture come from?", lit=(1984, 1986), extra=((1984, r"Goral et al.: \ radiosity, \ the Cornell box"),
+                                                     (1986, r"Kajiya: \ the rendering equation")), part=PART, said="Chapter ten. The rendering equation.")
 
     # ------------------------------------------------------------------ energy balance
     def balance(self):
@@ -168,6 +163,10 @@ class Equation(VoiceoverScene):
 
     # ------------------------------------------------------------------ the terms as paths
     def paths(self):
+        self.ask(r"Expand the rendering equation as a series. \\ Term $k$ is light that...", [r"bounced $k$ times",
+                 r"came from $k$ lights"], 0,
+                 say="Expand the rendering equation into a series. What is its k-th term?",
+                 reveal="Light that bounced exactly k times on its way to the eye.")
         head = label(r"Each term is a set of paths", font_size=36).to_edge(UP, buff=0.3)
         box = box2d()
         lc = np.array([-3.3, Y1])
@@ -273,69 +272,6 @@ class Equation(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ how fast the terms shrink
-    def decay(self):
-        p = load("path")
-        bm = p["bounce_mean"]
-        ref_mean = p["convergence"]["ref_mean"]
-        head = label(r"Each bounce keeps about half", font_size=36).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 7, 1], y_range=[0, 3, 1], x_length=5.6, y_length=4.0, tips=False,
-                  axis_config={"color": GREY_D, "include_ticks": True}).move_to([-3.3, 0.0, 0])
-        xt = VGroup(*[label(f"{k}" if k < 7 else r"7+", font_size=17, color=GREY_B).next_to(
-            ax.c2p(k, 0), DOWN, buff=0.1) for k in range(8)])
-        yt = VGroup(*[label(t, font_size=17, color=GREY_B).next_to(ax.c2p(0, v + 3), LEFT, buff=0.1)
-                      for v, t in ((-3, "0.001"), (-2, "0.01"), (-1, "0.1"), (0, "1"))])
-        xl = label(r"number of reflections", font_size=17, color=GREY_A).next_to(xt, DOWN, buff=0.1)
-        yl = label(r"mean radiance of the bounce image \ (log scale)", font_size=17, color=GREY_A).next_to(
-            ax, UP, buff=0.12).align_to(ax, LEFT)
-        pts = [ax.c2p(k, math.log10(v) + 3) for k, v in enumerate(bm)]
-        line = VMobject(color=HEAD, stroke_width=3).set_points_as_corners(pts[:7])
-        dots = VGroup(*[Dot(q, radius=0.07, color=HEAD if k < 7 else GREY_B) for k, q in enumerate(pts)])
-        vals = VGroup(*[label(f"{v:.3f}", font_size=16, color=GREY_A).next_to(q, UR, buff=0.04)
-                        for v, q in zip(bm[:4], pts[:4])])
-        ratios = [b / a for a, b in zip(bm[1:6], bm[2:7])]
-        indirect = (ref_mean - bm[0] - bm[1]) / (ref_mean - bm[0])
-        bar_w = 5.0
-        bx = 4.0
-        b1 = Rectangle(width=bar_w * (1 - indirect), height=0.45, stroke_width=0, fill_color=YES, fill_opacity=0.85)
-        b2 = Rectangle(width=bar_w * indirect, height=0.45, stroke_width=0, fill_color=DATA, fill_opacity=0.85)
-        bars = VGroup(b1, b2).arrange(RIGHT, buff=0).move_to([bx, -1.35, 0])
-        bl = VGroup(label(rf"direct {100 * (1 - indirect):.0f}\%", font_size=17, color=BLACK).move_to(b1),
-                    label(rf"indirect {100 * indirect:.0f}\%", font_size=17, color=BLACK).move_to(b2))
-        bcap = label(r"light reaching the eye from surfaces", font_size=17, color=GREY_A).next_to(bars, UP,
-                                                                                                buff=0.1)
-        notes = VGroup(
-            wrapped_label(rf"from bounce 1 on, \ each term is {min(ratios):.2f} to {max(ratios):.2f} times the one "
-                          r"before: \ a geometric series, \ as the operator predicts", 5.3, font_size=19,
-                          color=HEAD),
-            wrapped_label(rf"the eight bounce images add up to the reference's mean, \ {ref_mean:.4f}, \ "
-                          rf"exactly", 5.3, font_size=19, color=WHITE),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([bx, 1.3, 0])
-        foot = wrapped_label(r"stopping after direct light \ (Whitted, \ chapter 7) \ loses the indirect share; \ "
-                             r"Goral et al. \ (1984) \ computed it for matte surfaces as radiosity", 5.3,
-                             font_size=18, color=GREY_A).move_to([bx, -2.75, 0])
-        with self.voiceover(
-            "How fast do the terms shrink? <bookmark mark='a'/> On a logarithmic scale the mean brightness of each "
-            "bounce image falls on a nearly straight line. <bookmark mark='b'/> From the first bounce on, each term "
-            "is between nought point three eight and nought point five three times the one before: a geometric "
-            "series, as the operator view predicted. The light lost at each bounce is absorbed by the coloured "
-            "walls, or escapes through the open front. <bookmark mark='c'/> The eight images add up exactly to the "
-            "converged image. <bookmark mark='d'/> And the later terms matter: of the light that reaches the eye "
-            "from surfaces, forty-three per cent took two or more bounces. A renderer that stops at direct light "
-            "loses all of it; the radiosity method of 1984 computed it for matte surfaces, and path tracing "
-            "computes it for everything."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl))
-            vo.wait_until("a")
-            self.play(Create(line), FadeIn(dots), FadeIn(vals), run_time=2)
-            vo.wait_until("b")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(bcap), GrowFromEdge(b1, LEFT), GrowFromEdge(b2, LEFT), FadeIn(bl), FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

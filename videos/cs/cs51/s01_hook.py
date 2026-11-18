@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs51.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, image, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.samples()
         self.two_ways()
-        self.plan()
+        self.title(PART)
 
     def samples(self):
         p = load("path")
@@ -84,29 +84,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Light and Pixels", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"transforms, \ quaternions, \ and perspective as one division",
-            r"rasterization, \ the z-buffer and why $1/w$",
-            r"shading, \ textures and sampling without aliasing",
-            r"ray tracing and bounding volume hierarchies",
-            r"radiometry, \ the rendering equation and path tracing",
-            r"curves and surfaces, \ including the letters on this screen",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 51 of Computer Science, Built, and the first part of Act Ten, Horizons and Trust. "
-            "<bookmark mark='a'/> We will transform and project geometry; rasterize it with a depth buffer and "
-            "perspective-correct interpolation; shade it and texture it without aliasing; trace rays through a "
-            "bounding volume hierarchy; derive the rendering equation and solve it by path tracing; and finish with "
-            "the curves that draw every letter you have read in this series."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM, NO, YES)

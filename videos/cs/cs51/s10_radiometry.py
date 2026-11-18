@@ -31,27 +31,25 @@ def lobe_points(O, fn, scale, n=91):
     return pts
 
 
-class Radiometry(VoiceoverScene):
+class Radiometry(WatchScene):
     def construct(self):
         self.card()
         self.solid_angle()
         self.radiance()
-        self.invariance()
         self.brdf()
         self.microfacets()
         self.furnace()
 
     def card(self):
-        card = chapter_card(9, r"Radiometry and BRDFs", r"How much light leaves a point, \ in one direction?",
-                            lit=(1977, 1982, 2007), extra=((1977, r"Nicodemus et al.: \ the BRDF"),
+        self.chapter(9, r"Radiometry and BRDFs", r"How much light leaves a point, \ in one direction?", lit=(1977, 1982, 2007), extra=((1977, r"Nicodemus et al.: \ the BRDF"),
                                                            (1982, r"Cook and Torrance"),
-                                                           (2007, r"Walter et al.: \ GGX")), part=PART)
-        with self.voiceover("Chapter nine. Radiometry and BRDFs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2007, r"Walter et al.: \ GGX")), part=PART, said="Chapter nine. Radiometry and BRDFs.")
 
     # ------------------------------------------------------------------ solid angle
     def solid_angle(self):
+        self.ask(r"The solid angle of every direction around a point:", [r"$\pi$", r"$2\pi$", r"$4\pi$"], 2,
+                 say="Measure directions by solid angle. How much do all directions around a point add up to?",
+                 reveal="Four pi steradians: the area of the unit sphere.")
         head = label(r"Solid angle: \ area on a sphere", font_size=36).to_edge(UP, buff=0.3)
         S = np.array([-3.9, -0.7, 0])
         R = 2.1
@@ -198,71 +196,6 @@ class Radiometry(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ radiance along a ray
-    def invariance(self):
-        head = label(r"Radiance is constant along a ray", font_size=36).to_edge(UP, buff=0.3)
-        E = np.array([-6.3, 0.2, 0])
-        half = math.radians(9)
-        dist = ValueTracker(1.6)
-        eye = VGroup(Square(side_length=0.22, color=DATA, fill_color=DATA, fill_opacity=0.6).move_to(E),
-                     label(r"pixel", font_size=17, color=DATA).next_to(E, UP, buff=0.2))
-
-        def scene():
-            dd = dist.get_value()
-            x = E[0] + dd
-            wall = Line([x, -1.8, 0], [x, 2.4, 0], color=GREY_B, stroke_width=4)
-            h = dd * math.tan(half)
-            cone = VGroup(Line(E, [x, E[1] + h, 0], color=HEAD, stroke_width=2),
-                          Line(E, [x, E[1] - h, 0], color=HEAD, stroke_width=2))
-            foot = Line([x, E[1] - h, 0], [x, E[1] + h, 0], color=YES, stroke_width=9)
-            return VGroup(wall, cone, foot)
-        sc = always_redraw(scene)
-        d0 = 1.6
-
-        def readout(tex, fn, col, y):
-            t = MathTex(tex, font_size=28, color=col)
-            v = DecimalNumber(fn(), num_decimal_places=2, font_size=28, color=col)
-            VGroup(t, v).arrange(RIGHT, buff=0.15).move_to([-3.6, y, 0]).align_to([-6.4, 0, 0], LEFT)
-            v.add_updater(lambda m: m.set_value(fn()).next_to(t, RIGHT, buff=0.15))
-            return VGroup(t, v)
-        rel = lambda: dist.get_value() / d0
-        ro = VGroup(readout(r"\text{distance} \times", rel, WHITE, -2.25),
-                    readout(r"\text{wall seen} \times", lambda: rel() ** 2, YES, -2.75),
-                    readout(r"\text{light from each bit} \times", lambda: rel() ** -2, NO, -3.25))
-        r0 = MathTex(r"A_{\text{seen}}", r"\propto", r"d^2", font_size=34, color=YES)
-        r1 = MathTex(r"\omega_{\text{pixel, seen from the wall}}", r"\propto", r"1/d^2", font_size=34, color=NO)
-        r2 = MathTex(r"\Phi_{\text{pixel}}", r"\propto", r"L\, d^2 \cdot \frac{1}{d^2}", r"=", r"L", font_size=34)
-        r3 = MathTex(r"L_{\text{pixel}} = L_{\text{surface}}", font_size=36, color=HEAD)
-        rows, notes, blk = rows_with_notes([
-            (r0, r"the patch of wall inside the pixel's cone"),
-            (r1, r"the share of each bit's light that enters the pixel"),
-            (r2, r"the two cancel"),
-            (r3, r"so a ray carries one number back to the eye")], buff=0.4)
-        blk.to_edge(RIGHT, buff=0.4).set_y(0.3)
-        ill = note(r"illustrative geometry", font_size=16).move_to([-3.6, 2.75, 0])
-        with self.voiceover(
-            "Radiance has one property that makes ray tracing possible. <bookmark mark='a'/> A pixel looks along a "
-            "narrow cone. Move the wall away, and the patch of wall inside the cone grows with the square of the "
-            "distance, <bookmark mark='b'/> while the share of each bit's light that enters the pixel falls with the"
-            " inverse square. <bookmark mark='c'/> They cancel: in empty space, radiance is constant along a ray. "
-            "That is why a wall does not darken as you walk away from it. <bookmark mark='d'/> And it is why a ray "
-            "tracer can carry one number, the radiance, from the surface it hits straight back to the eye."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(eye), FadeIn(sc), FadeIn(ill), FadeIn(ro))
-            vo.wait_until("a")
-            self.play(FadeIn(r0), FadeIn(notes[0]))
-            self.play(dist.animate.set_value(4.8), run_time=3)
-            vo.wait_until("b")
-            self.play(FadeIn(r1), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(Write(r2), FadeIn(notes[2]))
-            self.play(dist.animate.set_value(2.6), run_time=2)
-            vo.wait_until("d")
-            self.play(FadeIn(r3), FadeIn(notes[3]))
-        for g in ro:
-            g[1].clear_updaters()
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ the BRDF
     def brdf(self):

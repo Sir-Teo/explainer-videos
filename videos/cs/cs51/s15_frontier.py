@@ -13,21 +13,15 @@ def tile(title, body, col, w=4.2, h=3.4):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.realtime()
         self.neural()
-        self.open()
 
     def card(self):
-        card = chapter_card(14, r"Frontier: \ real time, \ and neural rendering",
-                            r"Can a path tracer run at sixty frames a second?", lit=(2018, 2023),
-                            extra=((2018, r"ray-tracing hardware in consumer GPUs"),
-                                   (2023, r"3D Gaussian splatting")), part=PART)
-        with self.voiceover("Chapter fourteen, the frontier. Can a path tracer run at sixty frames a second?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frontier: \ real time, \ and neural rendering", r"Can a path tracer run at sixty frames a second?", lit=(2018, 2023), extra=((2018, r"ray-tracing hardware in consumer GPUs"),
+                                   (2023, r"3D Gaussian splatting")), part=PART, said="Chapter fourteen, the frontier. Can a path tracer run at sixty frames a second?")
 
     def realtime(self):
         d = load("denoise")
@@ -69,6 +63,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def neural(self):
+        self.ask(r"A neural radiance field stores a scene as...", [r"triangles",
+                 r"a network from position and direction to colour and density"], 1,
+                 say="A neural radiance field stores a scene. As what?",
+                 reveal="A small network mapping a point and a direction to colour and density, rendered by marching rays.")
         head = label(r"Scenes learned from photographs", font_size=36).to_edge(UP, buff=0.3)
         tiles = VGroup(
             tile(r"neural radiance fields", r"Mildenhall et al. \ (2020): \ a network maps a point and a direction to "
@@ -99,39 +97,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Caustics}: \ light through glass onto a diffuse floor, \ seen in a mirror, \ converges slowly for "
-                          r"every known unbiased method.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Denoisers with guarantees}: \ bounds on the bias a filter introduces.", 12.4,
-                          font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Inverse rendering}: \ recovering materials and lights, \ not just "
-                          r"appearance, \ from photographs.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Perceptual error}: \ a measure of image error that matches what people "
-                          r"see.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ an unbiased estimator for "
-                             r"specular--diffuse--specular paths \ (caustics seen in a mirror) \ whose variance is "
-                             r"within a constant factor of the best possible, \ with a proof", 12.4, font_size=23,
-                             color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Caustics: light focused through glass onto a floor and seen in a "
-            "mirror is still slow to converge for every known unbiased method. <bookmark mark='b'/> Denoisers with "
-            "guarantees on the bias they introduce. <bookmark mark='c'/> Inverse rendering that recovers materials "
-            "and lights, and not just appearance. <bookmark mark='d'/> And a measure of image error that matches "
-            "what people actually see. <bookmark mark='e'/> This part's research problem asks for an unbiased "
-            "estimator for those caustic paths whose variance is provably within a constant factor of the best "
-            "possible."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)
