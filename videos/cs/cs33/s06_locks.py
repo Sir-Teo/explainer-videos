@@ -9,7 +9,7 @@ from videos.cs.cs33.common import (BG, COST, HEAD, KERN, LAM, NO, PART, T0C, T1C
 KC = {"tas": NO, "ttas": COST, "backoff": LAM, "ticket": HEAD, "mcs": YES}
 
 
-class Locks(VoiceoverScene):
+class Locks(WatchScene):
     def construct(self):
         self.card()
         self.designs()
@@ -18,12 +18,8 @@ class Locks(VoiceoverScene):
         self.machine()
 
     def card(self):
-        card = chapter_card(5, r"Hardware locks", r"What does a lock cost when many cores want it?",
-                            lit=(1990, 1991), extra=((1990, r"Anderson: \ backoff"),
-                                                     (1991, r"Mellor-Crummey and Scott: \ MCS")), part=PART)
-        with self.voiceover("Chapter five. Hardware locks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Hardware locks", r"What does a lock cost when many cores want it?", lit=(1990, 1991), extra=((1990, r"Anderson: \ backoff"),
+                                                     (1991, r"Mellor-Crummey and Scott: \ MCS")), part=PART, said="Chapter five. Hardware locks.")
 
     def designs(self):
         head = label(r"One atomic instruction, \ four locks", font_size=34).to_edge(UP, buff=0.3)
@@ -120,6 +116,10 @@ class Locks(VoiceoverScene):
         self.clear_scene()
 
     def sim(self):
+        self.ask(r"A test-and-set spinlock. Bus traffic per handoff \\ as more threads wait:",
+                 [r"stays the same", r"grows with the waiters"], 1,
+                 say="Threads spin on a test-and-set lock. As more of them wait, what happens to bus traffic per handoff?",
+                 reveal="It grows with every waiter. A queue lock keeps it constant.")
         d = load("lockssim")
         head = label(r"Coherence traffic per handoff, \ simulated", font_size=34).to_edge(UP, buff=0.3)
         rows = d["rows"]

@@ -13,19 +13,14 @@ def bar(x0, x1, y, color, text="", h=0.55):
     return g
 
 
-class Why(VoiceoverScene):
+class Why(WatchScene):
     def construct(self):
         self.card()
         self.overlap()
         self.threads()
 
     def card(self):
-        card = chapter_card(1, r"Why concurrency", r"Why run more than one thing at a time?", lit=(1965, 2005),
-                            extra=((1965, r"Dijkstra: \ cooperating processes"), (2005, r"multicore for everyone")),
-                            part=PART)
-        with self.voiceover("Chapter one. Why concurrency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Why concurrency", r"Why run more than one thing at a time?", lit=(1965, 2005), extra=((1965, r"Dijkstra: \ cooperating processes"), (2005, r"multicore for everyone")), part=PART, said="Chapter one. Why concurrency.")
 
     def overlap(self):
         head = label(r"Two reasons", font_size=36).to_edge(UP, buff=0.3)
@@ -73,6 +68,10 @@ class Why(VoiceoverScene):
         self.clear_scene()
 
     def threads(self):
+        self.ask(r"Two threads of one process. \\ They share...", [r"nothing, like processes",
+                 r"one address space"], 1,
+                 say="Two processes share nothing unless they ask. What do two threads of one process share?",
+                 reveal="Everything in one address space: the heap, the globals, each other's stacks.")
         d = load("spawn")
         head = label(r"Processes and threads", font_size=36).to_edge(UP, buff=0.3)
 

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (HEAD, NO, PART, T0C, T1C, YES, grid_table, load, mono, num)
 
 
-class Race(VoiceoverScene):
+class Race(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -12,13 +12,12 @@ class Race(VoiceoverScene):
         self.counts()
 
     def card(self):
-        card = chapter_card(2, r"The race", r"How many ways can two threads interleave?", lit=(1981,),
-                            extra=((1981, r"Clarke, \ Emerson; \ Queille, \ Sifakis: \ model checking"),), part=PART)
-        with self.voiceover("Chapter two. The race."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The race", r"How many ways can two threads interleave?", lit=(1981,), extra=((1981, r"Clarke, \ Emerson; \ Queille, \ Sifakis: \ model checking"),), part=PART, said="Chapter two. The race.")
 
     def tree(self):
+        self.ask(r"Two threads, three instructions each. \\ How many interleavings?", [r"$6$", r"$20$", r"$720$"], 1,
+                 say="Two threads each run three instructions: load, add, store. How many ways can they interleave?",
+                 reveal="Twenty: six choose three.")
         d = load("tree")
         sch = d["schedules"]
         head = label(r"Every schedule of two increments", font_size=34).to_edge(UP, buff=0.3)
@@ -80,6 +79,12 @@ class Race(VoiceoverScene):
         self.clear_scene()
 
     def checker(self):
+        self.wrong_idea(r"if the tests pass, there is no race",
+                        r"the bad schedule may be one in millions: \\ check every interleaving",
+                        narration="A tempting belief: run the tests a thousand times, and if they pass, there is no race.",
+                        right_narration="The losing schedule may come once in millions of runs, or only on another machine. "
+                                        "A model checker tries every interleaving.")
+        self.clear_scene()
         head = label(r"A model checker: \ try every interleaving", font_size=34).to_edge(UP, buff=0.3)
         prog = VGroup(
             label(r"a program:", font_size=20, color=GREY_A),

@@ -35,7 +35,7 @@ def timeline(ops, lin, y0=1.2, x0=-5.6, sx=1.45, dy=0.95):
     return VGroup(g, names), ivs, pts
 
 
-class Lin(VoiceoverScene):
+class Lin(WatchScene):
     def construct(self):
         self.card()
         self.idea()
@@ -44,13 +44,13 @@ class Lin(VoiceoverScene):
         self.checker()
 
     def card(self):
-        card = chapter_card(10, r"Linearizability", r"What does it mean for a concurrent queue to be correct?",
-                            lit=(1990,), extra=((1990, r"Herlihy and Wing"),), part=PART)
-        with self.voiceover("Chapter ten. Linearizability."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Linearizability", r"What does it mean for a concurrent queue to be correct?", lit=(1990,), extra=((1990, r"Herlihy and Wing"),), part=PART, said="Chapter ten. Linearizability.")
 
     def idea(self):
+        self.ask(r"Enqueue $x$ and enqueue $y$ overlap in time. \\ A later dequeue returns $y$. Correct?",
+                 [r"no", r"yes"], 1,
+                 say="Two enqueues, of x and of y, overlap in time. Afterwards a dequeue returns y. Is the queue correct?",
+                 reveal="Yes: y could have taken effect first. Overlapping operations may go in either order.")
         d = load("lin")
         h = d["hand"][0]
         head = label(r"Each operation takes effect at one instant", font_size=34).to_edge(UP, buff=0.3)

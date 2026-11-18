@@ -4,19 +4,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (BG, HEAD, LAM, NO, PART, T0C, T1C, T2C, YES, load, mono, num)
 
 
-class Monitors(VoiceoverScene):
+class Monitors(WatchScene):
     def construct(self):
         self.card()
         self.monitor()
         self.mesa()
 
     def card(self):
-        card = chapter_card(7, r"Monitors and condition variables", r"Why \texttt{while} and not \texttt{if}?",
-                            lit=(1974, 1980), extra=((1974, r"Hoare: \ monitors"), (1980, r"Lampson and Redell: \ Mesa")),
-                            part=PART)
-        with self.voiceover("Chapter seven. Monitors and condition variables."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Monitors and condition variables", r"Why \texttt{while} and not \texttt{if}?", lit=(1974, 1980), extra=((1974, r"Hoare: \ monitors"), (1980, r"Lampson and Redell: \ Mesa")), part=PART, said="Chapter seven. Monitors and condition variables.")
 
     def monitor(self):
         head = label(r"A monitor: \ data, \ a lock, \ and conditions", font_size=34).to_edge(UP, buff=0.3)
@@ -54,6 +49,10 @@ class Monitors(VoiceoverScene):
         self.clear_scene()
 
     def mesa(self):
+        self.ask(r"A woken consumer tests the buffer with \texttt{if}, \\ not \texttt{while}. Safe?",
+                 [r"yes", r"no"], 1,
+                 say="A consumer waits on a condition variable, and after waking checks the buffer with if, not while. Is it safe?",
+                 reveal="No. Someone else can take the item between the signal and the wake-up.")
         d = load("monitor")
         head = label(r"Mesa semantics: \ \texttt{if} is a bug", font_size=34).to_edge(UP, buff=0.3)
         code_if = VGroup(mono("lock(m)", 18, GREY_B), mono("if (count == 0)", 18, NO), mono("    wait(nonempty)", 18,

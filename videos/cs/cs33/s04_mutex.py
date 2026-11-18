@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (HEAD, LAM, NO, PART, T0C, T1C, YES, load, mono, num)
 
 
-class Mutex(VoiceoverScene):
+class Mutex(WatchScene):
     def construct(self):
         self.card()
         self.naive()
@@ -14,15 +14,14 @@ class Mutex(VoiceoverScene):
         self.grid()
 
     def card(self):
-        card = chapter_card(3, r"Mutual exclusion from reads and writes", r"Can loads and stores alone build a lock?",
-                            lit=(1965, 1974, 1981), extra=((1965, r"Dijkstra: \ Dekker's algorithm"),
-                                                           (1974, r"Lamport: \ the bakery"), (1981, r"Peterson")),
-                            part=PART)
-        with self.voiceover("Chapter three. Mutual exclusion from nothing but reads and writes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Mutual exclusion from reads and writes", r"Can loads and stores alone build a lock?", lit=(1965, 1974, 1981), extra=((1965, r"Dijkstra: \ Dekker's algorithm"),
+                                                           (1974, r"Lamport: \ the bakery"), (1981, r"Peterson")), part=PART, said="Chapter three. Mutual exclusion from nothing but reads and writes.")
 
     def naive(self):
+        self.ask(r"A lock from flags: look at the other's flag; \\ if it's down, raise yours and enter. Safe?",
+                 [r"yes", r"no"], 1,
+                 say="Build a lock from flags. Look at the other thread's flag; if it is down, raise yours and go in. Is that safe?",
+                 reveal="No: both look, both see down, both enter.")
         d = load("mutex")
         head = label(r"What a lock must do, \ and an obvious one that fails", font_size=32).to_edge(UP, buff=0.3)
         req = VGroup(

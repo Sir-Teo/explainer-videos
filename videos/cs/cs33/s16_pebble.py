@@ -5,7 +5,7 @@ from videos.cs.cs33.common import (HEAD, KERN, NO, PART, YES, code, grid_table,
                                    load, mono, num)
 
 
-class PebbleThreads(VoiceoverScene):
+class PebbleThreads(WatchScene):
     def construct(self):
         self.card()
         self.isa()
@@ -14,11 +14,7 @@ class PebbleThreads(VoiceoverScene):
         self.sweep()
 
     def card(self):
-        card = chapter_card(15, r"PebbleOS gains threads and CAS", r"What does our machine need?", lit=(), extra=(),
-                            part=PART)
-        with self.voiceover("Chapter fifteen. PebbleOS gains threads, and an atomic instruction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"PebbleOS gains threads and CAS", r"What does our machine need?", lit=(), extra=(), part=PART, said="Chapter fifteen. PebbleOS gains threads, and an atomic instruction.")
 
     def isa(self):
         head = label(r"Two new instructions", font_size=36).to_edge(UP, buff=0.3)
@@ -95,6 +91,10 @@ class PebbleThreads(VoiceoverScene):
         self.clear_scene()
 
     def results(self):
+        self.ask(r"Two Pebble threads, $2000$ increments each, \\ with a compare-and-swap loop. The count:",
+                 [r"a little short", r"exactly $4000$"], 1,
+                 say="On our machine, two threads each add one two thousand times, using a compare-and-swap loop. What is the count?",
+                 reveal="Exactly four thousand, under every quantum.")
         d = load("pebble")
         head = label(rf"Two threads, \ {num(d['n'])} increments each", font_size=34).to_edge(UP, buff=0.3)
         by = {(r["kind"], r["quantum"]): r for r in d["rows"]}

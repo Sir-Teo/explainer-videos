@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (DATA, HEAD, NO, PART, YES, grid_table, load, mono, num)
 
 
-class Deadlock(VoiceoverScene):
+class Deadlock(WatchScene):
     def construct(self):
         self.card()
         self.philosophers()
@@ -14,11 +14,7 @@ class Deadlock(VoiceoverScene):
         self.banker()
 
     def card(self):
-        card = chapter_card(8, r"Deadlock", r"When does everyone wait forever?", lit=(1965, 1971),
-                            extra=((1965, r"Dijkstra: \ philosophers, \ banker"), (1971, r"Coffman et al.")), part=PART)
-        with self.voiceover("Chapter eight. Deadlock."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Deadlock", r"When does everyone wait forever?", lit=(1965, 1971), extra=((1965, r"Dijkstra: \ philosophers, \ banker"), (1971, r"Coffman et al.")), part=PART, said="Chapter eight. Deadlock.")
 
     def table_ring(self, n=5, R=1.9, center=(-3.2, -0.2, 0)):
         cx, cy, _ = center
@@ -35,6 +31,9 @@ class Deadlock(VoiceoverScene):
         return phil, forks
 
     def philosophers(self):
+        self.ask(r"Five philosophers each take the left fork first. \\ Can they get stuck?", [r"no", r"yes"], 1,
+                 say="Five philosophers each pick up the fork on their left, then the one on their right. Can they get stuck?",
+                 reveal="Yes: all five hold a left fork and wait forever for a right one.")
         d = load("deadlock")
         head = label(r"The dining philosophers", font_size=36).to_edge(UP, buff=0.3)
         phil, forks = self.table_ring()

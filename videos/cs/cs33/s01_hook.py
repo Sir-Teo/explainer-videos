@@ -4,11 +4,11 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs33.common import (HEAD, NO, PART, T0C, T1C, YES, load, mono, num)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.measured()
         self.lost()
-        self.plan()
+        self.title(PART)
 
     def measured(self):
         d = load("racec")
@@ -108,26 +108,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Concurrency", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the race, \ found by a model checker that tries every interleaving",
-            r"locks from plain reads and writes \ (Peterson, \ proved), \ and how the hardware breaks them",
-            r"real locks, \ semaphores, \ monitors, \ and deadlock",
-            r"memory models, \ linearizability, \ and lock-free data structures",
-            r"consensus numbers: \ why compare-and-swap can build anything",
-            r"PebbleOS gains threads and an atomic instruction",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "Part 33 of Computer Science, Built: Concurrency. <bookmark mark='a'/> In this part: the race, and a model "
-            "checker of our own that tries every interleaving; locks built from nothing but reads and writes, proved "
-            "correct, and then broken by the hardware; real locks, semaphores, monitors and deadlock; memory models, "
-            "linearizability, and data structures without locks; the hierarchy that ranks synchronization by power, "
-            "and why compare-and-swap can build anything; and PebbleOS gains threads and an atomic instruction."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
