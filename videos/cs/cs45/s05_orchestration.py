@@ -5,7 +5,7 @@ from videos.cs.cs45.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axe
                                    module_box, trace)
 
 
-class Orchestration(VoiceoverScene):
+class Orchestration(WatchScene):
     def construct(self):
         self.card()
         self.borg()
@@ -15,13 +15,8 @@ class Orchestration(VoiceoverScene):
         self.etcd()
 
     def card(self):
-        card = chapter_card(4, r"Orchestration and reconciliation",
-                            r"How do ten thousand machines keep doing what they were told?", lit=(2014, 2016),
-                            extra=((2014, r"Kubernetes open-sourced"), (2015, r"Verma et al.: \ Borg"),
-                                   (2016, r"Burns et al.: \ Borg, \ Omega, \ Kubernetes")), part=PART)
-        with self.voiceover("Chapter four. Orchestration and reconciliation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Orchestration and reconciliation", r"How do ten thousand machines keep doing what they were told?", lit=(2014, 2016), extra=((2014, r"Kubernetes open-sourced"), (2015, r"Verma et al.: \ Borg"),
+                                   (2016, r"Burns et al.: \ Borg, \ Omega, \ Kubernetes")), part=PART, said="Chapter four. Orchestration and reconciliation.")
 
     def borg(self):
         head = label(r"From Borg to Kubernetes", font_size=36).to_edge(UP, buff=0.3)
@@ -164,6 +159,10 @@ class Orchestration(VoiceoverScene):
         self.clear_scene()
 
     def levels(self):
+        self.ask(r"Crash events are sometimes lost. Which controller recovers: \\ one reacting to events, or to state?",
+                 [r"events", r"state"], 1,
+                 say="Some crash notifications get lost. Which controller still recovers: one that reacts to events, or one that compares states?",
+                 reveal="The one that compares what is wanted with what is. It never needed the event.")
         r = load("reconcile")
         ser, want, crash = r["series"], r["desired"], r["crash_at"]
         n = len(ser["edge"])
@@ -272,6 +271,12 @@ class Orchestration(VoiceoverScene):
             self.play(Indicate(watchers[1], color=HEAD), FadeIn(lines[2]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is a container made of?", r"Namespaces, cgroups and a layered image"),
+             (r"What does a reconciliation loop do?", r"Compares desired and actual state, and closes the gap")],
+            narration="Checkpoint. What is a container made of? And what does a reconciliation loop do?",
+            answers_narration="Namespaces for its view, control groups for its limits, and a layered image for its files. And "
+                              "it compares what is wanted with what is, and closes the gap.")
 
 
 _ = (BG, DATA, LAM)

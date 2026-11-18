@@ -34,7 +34,7 @@ def pct(r):
     return rf"+{100 * (r - 1):.0f}\%"
 
 
-class Packing(VoiceoverScene):
+class Packing(WatchScene):
     def construct(self):
         self.card()
         self.puzzle()
@@ -45,12 +45,8 @@ class Packing(VoiceoverScene):
         self.preempt()
 
     def card(self):
-        card = chapter_card(5, r"Scheduling as bin packing", r"How few machines can hold this work?",
-                            lit=(1973, 2007), extra=((1973, r"Johnson: \ first fit decreasing analysed"),
-                                                     (2007, r"D\'osa: \ the tight bound")), part=PART)
-        with self.voiceover("Chapter five. Scheduling as bin packing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Scheduling as bin packing", r"How few machines can hold this work?", lit=(1973, 2007), extra=((1973, r"Johnson: \ first fit decreasing analysed"),
+                                                     (2007, r"D\'osa: \ the tight bound")), part=PART, said="Chapter five. Scheduling as bin packing.")
 
     def puzzle(self):
         head = label(r"Containers into machines", font_size=36).to_edge(UP, buff=0.3)
@@ -109,6 +105,10 @@ class Packing(VoiceoverScene):
         self.clear_scene()
 
     def hard(self):
+        self.ask(r"Pack containers into the fewest machines. \\ Exactly, in polynomial time?", [r"yes",
+                 r"NP-hard"], 1,
+                 say="Pack containers onto as few machines as possible, exactly. Can that be done in polynomial time?",
+                 reveal="Not unless P equals NP: partition reduces to it.")
         p = load("partition")
         head = label(r"NP-hard, \ by way of partition", font_size=36).to_edge(UP, buff=0.3)
         H, W = 2.3, 0.8

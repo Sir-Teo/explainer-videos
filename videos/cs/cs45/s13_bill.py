@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs45.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load
 
 
-class Bill(VoiceoverScene):
+class Bill(WatchScene):
     def construct(self):
         self.card()
         self.breakeven()
@@ -15,14 +15,14 @@ class Bill(VoiceoverScene):
         self.carbon()
 
     def card(self):
-        card = chapter_card(12, r"Cost, \ carbon, \ and the Job's bill", r"What does a design cost to run?",
-                            lit=(2009, 2014), extra=((2009, r"EC2 spot instances"),
-                                                     (2014, r"AWS Lambda announced")), part=PART)
-        with self.voiceover("Chapter twelve. Cost, carbon, and the Job's bill."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Cost, \ carbon, \ and the Job's bill", r"What does a design cost to run?", lit=(2009, 2014), extra=((2009, r"EC2 spot instances"),
+                                                     (2014, r"AWS Lambda announced")), part=PART, said="Chapter twelve. Cost, carbon, and the Job's bill.")
 
     def breakeven(self):
+        self.ask(r"Pay per request, or rent a server. \\ Per request wins when...", [r"always",
+                 r"the server would mostly sit idle"], 1,
+                 say="Paying per request costs more per second than renting a server. When does it still win?",
+                 reveal="When the server would sit idle most of the time.")
         s = load("serverless")
         rows = s["rows"]
         head = label(r"Functions or servers?", font_size=36).to_edge(UP, buff=0.3)

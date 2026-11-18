@@ -15,22 +15,17 @@ def layer(text, color, w, h=0.55, font_size=18, fill=0.18):
     return VGroup(r, t.move_to(r))
 
 
-class Microvm(VoiceoverScene):
+class Microvm(WatchScene):
     def construct(self):
         self.card()
         self.split()
         self.devices()
         self.boot()
         self.walls()
-        self.grades()
 
     def card(self):
-        card = chapter_card(2, r"Virtual machines, \ shrunk", r"How small can a virtual machine be?",
-                            lit=(1974, 2020), extra=((1974, r"Popek and Goldberg"), (2007, r"KVM in Linux"),
-                                                     (2020, r"Agache et al.: \ Firecracker")), part=PART)
-        with self.voiceover("Chapter two. Virtual machines, shrunk."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Virtual machines, \ shrunk", r"How small can a virtual machine be?", lit=(1974, 2020), extra=((1974, r"Popek and Goldberg"), (2007, r"KVM in Linux"),
+                                                     (2020, r"Agache et al.: \ Firecracker")), part=PART, said="Chapter two. Virtual machines, shrunk.")
 
     def split(self):
         head = label(r"A hypervisor in two halves", font_size=36).to_edge(UP, buff=0.3)
@@ -142,6 +137,10 @@ class Microvm(VoiceoverScene):
         self.clear_scene()
 
     def boot(self):
+        self.ask(r"A full virtual machine boots in seconds. \\ A Firecracker micro-VM boots in...", [r"about the same",
+                 r"a fraction of a second"], 1,
+                 say="An ordinary virtual machine takes seconds to boot. How long does a minimal micro-VM take?",
+                 reveal="A fraction of a second: almost no devices to pretend to be.")
         head = label(r"Booting in milliseconds", font_size=36).to_edge(UP, buff=0.3)
         x0, w = -4.3, 10.8
         full = [(r"firmware", 2.4, GREY_B), (r"boot loader", 1.0, LAM), (r"kernel, \ probing devices", 2.8, HEAD),
@@ -279,49 +278,6 @@ class Microvm(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def grades(self):
-        head = label(r"Isolation comes in grades", font_size=36).to_edge(UP, buff=0.3)
-        axis = Arrow([-6.2, 0.2, 0], [6.4, 0.2, 0], buff=0, color=GREY_B, stroke_width=3,
-                     max_tip_length_to_length_ratio=0.02)
-        pts = [(r"process", r"shares everything", GREY_A),
-               (r"container", r"shares one kernel: \ about 450 system calls \ (Part 32)", DATA),
-               (r"gVisor \ (2018)", r"a second kernel, \ in user space, \ answers the calls", LAM),
-               (r"microVM", r"shares KVM and a small device model; \ Kata Containers \ (2017) \ put containers "
-                            r"in them", YES),
-               (r"full VM", r"a whole PC, \ emulated", HEAD)]
-        xs = [-5.4, -2.7, 0.0, 2.7, 5.4]
-        marks = VGroup()
-        for k, ((t, d, c), x) in enumerate(zip(pts, xs)):
-            dot = Dot([x, 0.2, 0], radius=0.11, color=c)
-            name = label(t, font_size=23, color=c)
-            desc = wrapped_label(d, 2.5, font_size=19, color=GREY_A)
-            if k % 2 == 0:
-                g = VGroup(name, desc).arrange(DOWN, buff=0.1).next_to(dot, UP, buff=0.3)
-            else:
-                g = VGroup(name, desc).arrange(DOWN, buff=0.1).next_to(dot, DOWN, buff=0.3)
-            marks.add(VGroup(dot, g))
-        ends = VGroup(label(r"$\leftarrow$ \ starts faster, \ packs denser", font_size=21, color=GREY_B),
-                      label(r"stronger walls \ $\rightarrow$", font_size=21, color=GREY_B))
-        ends[0].next_to(axis, DOWN, buff=2.6).to_edge(LEFT, buff=0.5)
-        ends[1].next_to(axis, DOWN, buff=2.6).to_edge(RIGHT, buff=0.5)
-        foot = label(r"next: \ inside the container", font_size=21, color=WHITE).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Isolation comes in grades. <bookmark mark='a'/> A process shares everything with its neighbours. A "
-            "container, as Part 32 showed, shares one kernel and its four hundred and fifty or so system calls. "
-            "Google's gVisor, of 2018, answers those calls with a second kernel in user space. A microVM shares "
-            "only KVM and a small device model; Kata Containers, from 2017, runs containers inside them. A full "
-            "virtual machine pretends to be a whole PC. <bookmark mark='b'/> Each step right buys stronger walls "
-            "with start-up time and memory. <bookmark mark='c'/> Next, we open the container."
-        ) as vo:
-            self.play(FadeIn(head), GrowArrow(axis))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(m) for m in marks], lag_ratio=0.5), run_time=6)
-            vo.wait_until("b")
-            self.play(FadeIn(ends))
-            vo.wait_until("c")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG,)

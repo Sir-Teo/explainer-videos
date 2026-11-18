@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -50,6 +50,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is drift?", r"The real cloud differs from the code"),
+             (r"Why spread replicas across zones?", r"Failures come together within a domain")],
+            narration="Last checkpoint. What is drift? And why spread replicas across zones and racks?",
+            answers_narration="The real infrastructure changing away from its code. And because failures come together "
+                              "inside a failure domain.")
 
     def payoffs(self):
         card = payoff_card([

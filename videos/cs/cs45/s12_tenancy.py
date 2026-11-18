@@ -10,24 +10,16 @@ def cell(color, w=0.34, h=0.34, opacity=0.85):
     return Rectangle(width=w, height=h, stroke_color=GREY_D, stroke_width=1, fill_color=color, fill_opacity=opacity)
 
 
-class Tenancy(VoiceoverScene):
+class Tenancy(WatchScene):
     def construct(self):
         self.card()
         self.neighbours()
-        self.antagonist()
         self.sidechannel()
         self.domains()
         self.placement()
-        self.residency()
 
     def card(self):
-        card = chapter_card(11, r"Neighbours, \ regions and failure domains",
-                            r"Who shares your machine, \ and what fails with it?", lit=(2009, 2020),
-                            extra=((2009, r"Ristenpart et al.: \ co-residence in a cloud"), (2020, r"Schrems II")),
-                            part=PART)
-        with self.voiceover("Chapter eleven. Neighbours, regions and failure domains."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Neighbours, \ regions and failure domains", r"Who shares your machine, \ and what fails with it?", lit=(2009, 2020), extra=((2009, r"Ristenpart et al.: \ co-residence in a cloud"), (2020, r"Schrems II")), part=PART, said="Chapter eleven. Neighbours, regions and failure domains.")
 
     def neighbours(self):
         head = label(r"Noisy neighbours", font_size=36).to_edge(UP, buff=0.3)
@@ -102,62 +94,11 @@ class Tenancy(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def antagonist(self):
-        head = label(r"Finding the antagonist", font_size=36).to_edge(UP, buff=0.3)
-        g = axes([0, 60, 10], [0, 3, 1], x_length=7.2, y_length=3.2, x_label=r"time", y_label=r"",
-                 xticks=[], yticks=[]).move_to([-2.6, 0.6, 0])
-        ax = g.ax
-        cpi = [1.0 + 0.06 * math.sin(1.7 * t) + (1.1 if 24 <= t < 40 else 0) * min(1, (t - 23) / 3) for t in range(61)]
-        cpu = [0.35 + 0.04 * math.cos(1.3 * t) + (1.6 if 22 <= t < 40 else 0) for t in range(61)]
-        thr = 1.5                                     # an illustrative threshold, above the noise
-
-        def piece(vals, col, t0, t1):
-            return VMobject(color=col, stroke_width=3).set_points_as_corners([ax.c2p(t, vals[t])
-                                                                               for t in range(t0, t1 + 1)])
-        victim = [piece(cpi, DATA, 0, 23), piece(cpi, DATA, 23, 40), piece(cpi, DATA, 40, 60)]
-        anta = [piece(cpu, LAM, 0, 40), piece(cpu, LAM, 40, 60)]
-        line_thr = DashedLine(ax.c2p(0, thr), ax.c2p(60, thr), color=HEAD, stroke_width=2)
-        key = VGroup(label(r"victim's cycles per instruction", font_size=18, color=DATA),
-                     label(r"a neighbour's CPU use", font_size=18, color=LAM),
-                     label(r"usual value $+ \ 2\sigma$, \ learned per job and machine type", font_size=18, color=HEAD),
-                     ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(g, DOWN, buff=0.3).align_to(g, LEFT)
-        illus = label(r"illustrative", font_size=16, color=GREY_B).next_to(g, UP, buff=0.05).align_to(g, RIGHT)
-        cap = DashedLine(ax.c2p(40, 0), ax.c2p(40, 3), color=NO, stroke_width=2)
-        capl = label(r"throttled", font_size=17, color=NO).next_to(cap, UP, buff=0.05)
-        notes = VGroup(
-            wrapped_label(r"\textbf{CPI$^2$} \ (Zhang et al., \ Google, \ 2013): \ a task whose cycles per "
-                          r"instruction stray far above its job's usual value is a victim", 4.4, font_size=19,
-                          color=WHITE),
-            wrapped_label(r"the antagonist is the neighbour whose CPU use rose at the same moment; \ cap it, \ and "
-                          r"the victim recovers", 4.4, font_size=19, color=YES),
-            wrapped_label(r"measured clouds vary: \ Schad et al. \ (2010) \ found the same EC2 instance type "
-                          r"running benchmarks at different speeds; \ in a fan-out, \ variation becomes the tail "
-                          r"\ (Part 39)", 4.4, font_size=19, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.4, 0.0, 0])
-        with self.voiceover(
-            "How does a cluster notice? <bookmark mark='a'/> Google's CPI-squared, described by Xiao Zhang and "
-            "colleagues in 2013, watches each task's cycles per instruction, which climb when its data keeps missing "
-            "the cache, and learns the usual value for each job on each kind of machine. <bookmark mark='b'/> When a "
-            "task strays far above it, the system looks for the neighbour whose CPU use rose at the same moment, "
-            "<bookmark mark='c'/> caps it, and the victim recovers. <bookmark mark='d'/> Variation is measurable: "
-            "Jörg Schad and colleagues found in 2010 that the same EC2 instance type ran the same benchmark at "
-            "different speeds, and in a fan-out, as Part 39 showed, variation becomes the tail."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g), FadeIn(illus))
-            vo.wait_until("a")
-            self.play(Create(line_thr), FadeIn(key[2]), FadeIn(key[0]), FadeIn(notes[0]))
-            self.play(Create(victim[0]), run_time=2)
-            vo.wait_until("b")
-            self.play(Create(victim[1]), Create(anta[0]), FadeIn(key[1]), run_time=2.5)
-            vo.wait_until("c")
-            self.play(Create(cap), FadeIn(capl), FadeIn(notes[1]))
-            self.play(Create(victim[2]), Create(anta[1]), run_time=1.5)
-            vo.wait_until("d")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def sidechannel(self):
+        self.ask(r"Two tenants share a processor's cache. \\ Can one learn the other's AES key?", [r"no", r"yes"], 1,
+                 say="Two tenants' virtual machines share one processor's cache. Can one learn the other's AES key?",
+                 reveal="Yes, by prime and probe: timing which cache sets the victim touched.")
         head = label(r"Side channels: \ prime and probe", font_size=36).to_edge(UP, buff=0.3)
         nsets, nways = 4, 8
         grid = VGroup(*[cell(GREY_E, w=0.45, h=0.45) for _ in range(nsets * nways)])
@@ -360,63 +301,6 @@ class Tenancy(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def residency(self):
-        head = label(r"Where data may live", font_size=36).to_edge(UP, buff=0.3)
-
-        def region(name, place, color):
-            fr = RoundedRectangle(width=3.3, height=1.5, corner_radius=0.12, stroke_color=color, stroke_width=2)
-            t = VGroup(label(name, font_size=20, color=color), label(place, font_size=18, color=GREY_A))
-            t.arrange(DOWN, buff=0.08).move_to(fr).shift(UP * 0.2)
-            return VGroup(fr, t)
-        fra = region(r"an EU region", r"Frankfurt", DATA)
-        dub = region(r"an EU region", r"Dublin", DATA)
-        usa = region(r"a US region", r"Virginia", LAM)
-        fra.move_to([-4.6, 1.3, 0])
-        dub.move_to([-4.6, -1.2, 0])
-        usa.move_to([3.9, 1.3, 0])
-        eu = DashedVMobject(SurroundingRectangle(VGroup(fra, dub), buff=0.25, corner_radius=0.15, color=DATA,
-                                                 stroke_width=1.5), num_dashes=60)
-        eut = label(r"the European Economic Area", font_size=17, color=DATA).next_to(eu, DOWN, buff=0.08)
-        doc = tag_box("personal data", color=YES, size=15, h=0.4).move_to(fra[0].get_bottom() + UP * 0.38)
-        copy_eu = doc.copy().move_to(dub[0].get_bottom() + UP * 0.38)
-        to_dub = Arrow(fra[0].get_bottom(), dub[0].get_top(), buff=0.08, color=YES, stroke_width=3)
-        to_us = Arrow(fra[0].get_right(), usa[0].get_left(), buff=0.08, color=NO, stroke_width=3)
-        cross = Cross(scale_factor=0.18, stroke_color=NO, stroke_width=5).move_to(to_us)
-        usl = label(r"only to an adequate country, \ or with safeguards", font_size=17, color=NO).next_to(
-            to_us, DOWN, buff=0.12)
-        light = VGroup(
-            label(r"light in fibre: \ about 200 km per millisecond", font_size=19, color=HEAD),
-            wrapped_label(r"so a write confirmed across an ocean waits tens of milliseconds", 4.6, font_size=19,
-                          color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.1).next_to(usa, DOWN, buff=0.9).align_to(usa, LEFT)
-        notes = VGroup(
-            wrapped_label(r"\textbf{GDPR} \ (applied from 2018): \ personal data leaves the EEA only under an "
-                          r"adequacy decision or safeguards; \ \textbf{Schrems II} \ (Court of Justice of the EU, \ "
-                          r"2020) \ struck down the EU--US Privacy Shield", 12.4, font_size=19, color=WHITE),
-            wrapped_label(r"so replication between regions is usually asynchronous \ (Part 39), \ and a regional "
-                          r"failover can lose the last seconds of writes", 12.4, font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Regions are also legal boundaries. <bookmark mark='a'/> Under the European Union's General Data "
-            "Protection Regulation, applied since 2018, personal data may leave the European Economic Area only for a "
-            "country judged adequate, or under specific safeguards. <bookmark mark='b'/> European data moves freely "
-            "between European regions; a copy in the United States needs a legal basis, and in 2020 the Court of "
-            "Justice of the European Union, in the case called Schrems Two, struck down the Privacy Shield framework. "
-            "<bookmark mark='c'/> Light in fibre covers about two hundred kilometres a millisecond, so a write "
-            "confirmed across an ocean waits tens of milliseconds. Replication between regions is usually "
-            "asynchronous, and a regional failover can lose the last seconds of writes."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(fra), FadeIn(dub), FadeIn(usa), Create(eu), FadeIn(eut))
-            vo.wait_until("a")
-            self.play(FadeIn(doc, scale=0.8), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(GrowArrow(to_dub), TransformFromCopy(doc, copy_eu))
-            self.play(GrowArrow(to_us))
-            self.play(Create(cross), FadeIn(usl))
-            vo.wait_until("c")
-            self.play(FadeIn(light), FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, KERN, mono)

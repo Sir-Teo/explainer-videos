@@ -25,7 +25,7 @@ def setup(a):
     return spike, base, high, cap, target
 
 
-class Autoscale(VoiceoverScene):
+class Autoscale(WatchScene):
     def construct(self):
         self.card()
         self.loop()
@@ -36,12 +36,8 @@ class Autoscale(VoiceoverScene):
         self.predictive()
 
     def card(self):
-        card = chapter_card(6, r"Autoscaling as control", r"How many servers does the load need, and how fast?",
-                            lit=(1868, 1917), extra=((1868, r"Maxwell: \ On Governors"),
-                                                     (1917, r"Erlang: \ waiting at telephone exchanges")), part=PART)
-        with self.voiceover("Chapter six. Autoscaling as control."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Autoscaling as control", r"How many servers does the load need, and how fast?", lit=(1868, 1917), extra=((1868, r"Maxwell: \ On Governors"),
+                                                     (1917, r"Erlang: \ waiting at telephone exchanges")), part=PART, said="Chapter six. Autoscaling as control.")
 
     def loop(self):
         head = label(r"An autoscaler is a feedback loop", font_size=36).to_edge(UP, buff=0.3)
@@ -140,6 +136,9 @@ class Autoscale(VoiceoverScene):
         self.clear_scene()
 
     def stability(self):
+        self.ask(r"An autoscaler with a high gain \\ and a delay. It...", [r"converges faster", r"oscillates"], 1,
+                 say="Turn up the autoscaler's gain, while its measurements arrive late. What happens?",
+                 reveal="It oscillates, overshooting in both directions.")
         a = load("autoscale")
         head = label(r"Why delay makes it ring", font_size=36).to_edge(UP, buff=0.3)
         g = axes([0, 6.3, 1], [0, 2.4, 0.5], x_length=5.6, y_length=4.0, x_label=r"delay $d$ \ (steps)",

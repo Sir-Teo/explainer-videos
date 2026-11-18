@@ -4,12 +4,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs45.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, load
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.utility()
         self.zoom()
         self.price()
-        self.plan()
+        self.title(PART)
 
     def utility(self):
         head = label(r"Computing as a utility", font_size=38).to_edge(UP, buff=0.35)
@@ -127,30 +127,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ The Cloud", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the warehouse-scale computer: \ power, \ cooling, \ failure",
-            r"microVMs and containers: \ isolation, \ shrunk",
-            r"reconciliation loops and bin packing",
-            r"autoscaling as control; \ Erlang C",
-            r"eleven nines from erasure codes, \ derived",
-            r"networks, \ infrastructure as code, \ cost and carbon",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 45 of Computer Science, Built, and the start of Act Nine, Systems at Scale. "
-            "<bookmark mark='a'/> We will open the warehouse-scale computer and its power bill; shrink virtual "
-            "machines into micro-VMs and processes into containers; watch control loops reconcile what is with "
-            "what should be; pack containers into machines, a problem that is NP-hard; scale a service as a "
-            "feedback controller; derive where the famous eleven nines of storage durability come from; and price "
-            "it all."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES)

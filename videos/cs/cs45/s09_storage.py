@@ -20,7 +20,7 @@ def frag(color, s=0.42):
     return Square(side_length=s, stroke_color=color, stroke_width=1.5, fill_color=color, fill_opacity=0.75)
 
 
-class Storage(VoiceoverScene):
+class Storage(WatchScene):
     def construct(self):
         self.card()
         self.shapes()
@@ -30,12 +30,8 @@ class Storage(VoiceoverScene):
         self.nines()
 
     def card(self):
-        card = chapter_card(8, r"Object storage and eleven nines", r"How can data outlive every disk that holds it?",
-                            lit=(2006, 2020), extra=((2006, r"Amazon S3"),
-                                                     (2020, r"S3: \ strong read-after-write")), part=PART)
-        with self.voiceover("Chapter eight. Object storage and eleven nines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Object storage and eleven nines", r"How can data outlive every disk that holds it?", lit=(2006, 2020), extra=((2006, r"Amazon S3"),
+                                                     (2020, r"S3: \ strong read-after-write")), part=PART, said="Chapter eight. Object storage and eleven nines.")
 
     def shapes(self):
         pr = load("serverless")["prices"]
@@ -157,6 +153,10 @@ class Storage(VoiceoverScene):
         self.clear_scene()
 
     def scatter(self):
+        self.ask(r"Ten data fragments and four parity. \\ Fragments that can be lost safely:", [r"$1$", r"$4$",
+                 r"$10$"], 1,
+                 say="An object is cut into ten data fragments and four parity fragments. How many can be lost without losing the object?",
+                 reveal="Four: any ten of the fourteen rebuild it.")
         d = {r["name"]: r for r in load("durability")["schemes"]}
         c = load("correlated")
         rs, three = d["RS(10, 4)"], d["three copies"]
@@ -354,6 +354,12 @@ class Storage(VoiceoverScene):
             self.play(FadeIn(lines[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is first fit decreasing good?", r"Big items first leave small gaps"),
+             (r"Why do pools scale economically?", r"Larger pools need proportionally fewer spare servers")],
+            narration="Checkpoint. Why does sorting help bin packing? And why are large server pools cheaper per request?",
+            answers_narration="Big items placed first leave only small gaps. And Erlang's formula: bigger pools need "
+                              "proportionally fewer spare servers for the same wait.")
 
 
 _ = (KERN, LAM)
