@@ -6,21 +6,16 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs34.common import (FILEC, HEAD, LAM, NO, PART, YES, curve, load, num)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.design_space()
         self.verified()
         self.zoned()
-        self.open_problems()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ storage that can be trusted", r"What is still unsolved?",
-                            lit=(2015, 2017, 2020), extra=((2015, r"FSCQ: \ a verified file system"),
-                                                           (2017, r"Monkey"), (2020, r"zoned namespaces")), part=PART)
-        with self.voiceover("Chapter sixteen. Frontier: storage that can be trusted."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(16, r"Frontier: \ storage that can be trusted", r"What is still unsolved?", lit=(2015, 2017, 2020), extra=((2015, r"FSCQ: \ a verified file system"),
+                                                           (2017, r"Monkey"), (2020, r"zoned namespaces")), part=PART, said="Chapter sixteen. Frontier: storage that can be trusted.")
 
     def design_space(self):
         d = load("frontier")
@@ -75,6 +70,9 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def verified(self):
+        self.ask(r"$k$ writes between flushes. \\ Possible disks after a crash:", [r"$k$", r"$2^k$"], 1,
+                 say="With k writes between flushes, how many different disks can a crash leave behind?",
+                 reveal="Two to the k: any subset may have landed.")
         d = load("frontier")
         head = label(r"Verified crash consistency", font_size=36).to_edge(UP, buff=0.3)
         g = d["grow"]
@@ -168,33 +166,3 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def open_problems(self):
-        head = label(r"Open problems", font_size=36).to_edge(UP, buff=0.3)
-        probs = VGroup(*[label(t, font_size=21, color=WHITE) for t in (
-            r"1. \ A precise, \ portable model of what file systems promise after a crash, \ that programs can rely on",
-            r"2. \ Verified file systems with the performance of the best unverified ones",
-            r"3. \ Choosing and re-tuning an LSM design automatically as the workload changes",
-            r"4. \ Placing data by its lifetime, \ unknown in advance, \ to minimise flash write amplification",
-            r"5. \ General-purpose file systems and databases on zoned devices, \ at full speed",
-            r"6. \ Durability models that match the field: \ correlated failures across disks, \ racks and sites",
-        )]).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=0.8)
-        star = label(r"$\bigstar$ \ the part's research problem takes the fewest flushes that make an operation safe",
-                     font_size=19, color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Six problems at the frontier. <bookmark mark='a'/> A precise, portable model of what a file system "
-            "promises after a crash, one that programs could rely on everywhere. <bookmark mark='b'/> Verified file "
-            "systems that are as fast as the best unverified ones. <bookmark mark='c'/> Choosing, and re-choosing, an "
-            "LSM tree's design automatically as its workload changes. <bookmark mark='d'/> Placing data on flash by "
-            "how long it will live, which nobody knows in advance, so that whole blocks die together. <bookmark "
-            "mark='e'/> File systems and databases that run on zoned devices at full speed. <bookmark mark='f'/> And "
-            "models of durability that match the field, where failures are correlated across disks, racks and sites. "
-            "The research problem at the end of this part asks a small, sharp question of its own: the fewest "
-            "flushes that make an operation safe."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcdef", probs):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
-            self.play(FadeIn(star))
-        self.wait(0.3)
-        self.clear_scene()

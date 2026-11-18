@@ -12,7 +12,7 @@ def page(color=GREY_D, fill=0.0, w=0.62, h=0.4, text=""):
     return g
 
 
-class Flash(VoiceoverScene):
+class Flash(WatchScene):
     def construct(self):
         self.card()
         self.cells()
@@ -21,13 +21,13 @@ class Flash(VoiceoverScene):
         self.wear()
 
     def card(self):
-        card = chapter_card(3, r"Flash", r"How do you rewrite a disk that can only be erased in bulk?",
-                            lit=(1984, 1987), extra=((1984, r"Masuoka: \ flash"), (1987, r"NAND flash")), part=PART)
-        with self.voiceover("Chapter three. Flash."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Flash", r"How do you rewrite a disk that can only be erased in bulk?", lit=(1984, 1987), extra=((1984, r"Masuoka: \ flash"), (1987, r"NAND flash")), part=PART, said="Chapter three. Flash.")
 
     def cells(self):
+        self.ask(r"Can flash overwrite one 4 KiB page in place?", [r"yes",
+                 r"no: a whole block must be erased first"], 1,
+                 say="Can a flash chip overwrite a single four-kilobyte page in place?",
+                 reveal="No. Pages are written once, then a whole block of them must be erased together.")
         head = label(r"Pages, \ erase blocks, \ and wear", font_size=36).to_edge(UP, buff=0.3)
         blocks = VGroup()
         for b in range(4):
@@ -257,3 +257,9 @@ class Flash(VoiceoverScene):
             self.play(FadeIn(nv))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why is a disk slow at random reads?", r"Every read waits for a seek and rotation"),
+             (r"What does a flash translation layer do?", r"Logs writes and remaps pages; cleans blocks")],
+            narration="Checkpoint. Why is a disk so slow at random reads? And what does a flash translation layer do?",
+            answers_narration="Each read waits for a seek and a turn of the platter. And it writes every page to a log, remaps "
+                              "logical pages, and cleans old blocks.")

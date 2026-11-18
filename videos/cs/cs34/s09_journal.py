@@ -8,7 +8,7 @@ KIND = {"data": (r"data", FILEC), "descriptor": (r"descriptor", JRN), "copy": (r
         "commit": (r"commit", YES), "checkpoint": (r"home", META), "clear": (r"clear", GREY_B)}
 
 
-class Journal(VoiceoverScene):
+class Journal(WatchScene):
     def construct(self):
         self.card()
         self.protocol()
@@ -17,11 +17,7 @@ class Journal(VoiceoverScene):
         self.barriers()
 
     def card(self):
-        card = chapter_card(8, r"Journaling", r"Can several block writes be made atomic?", lit=(1987, 2001),
-                            extra=((1987, r"Hagmann: \ Cedar's log"), (2001, r"ext3")), part=PART)
-        with self.voiceover("Chapter eight. Journaling."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Journaling", r"Can several block writes be made atomic?", lit=(1987, 2001), extra=((1987, r"Hagmann: \ Cedar's log"), (2001, r"ext3")), part=PART, said="Chapter eight. Journaling.")
 
     def protocol(self):
         j = load("journal")
@@ -70,6 +66,10 @@ class Journal(VoiceoverScene):
         self.clear_scene()
 
     def recovery(self):
+        self.ask(r"Crash after the journal's commit block, \\ before the real blocks are written. On mount...",
+                 [r"the update is lost", r"the journal replays it"], 1,
+                 say="A crash comes after the journal's commit block, before the real blocks are updated. What happens at the next mount?",
+                 reveal="The journal replays the transaction, and the update survives whole.")
         j = load("journal")
         head = label(r"Crash after any write, \ then mount", font_size=36).to_edge(UP, buff=0.3)
         rows = []
@@ -200,3 +200,9 @@ class Journal(VoiceoverScene):
             self.play(FadeIn(lines[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the journal's commit block mark?", r"The transaction is complete and can be replayed"),
+             (r"Why is the flush before it essential?", r"Otherwise the commit may land before its blocks")],
+            narration="Checkpoint. What does the commit block mark? And why must a flush come before it?",
+            answers_narration="That the whole transaction is in the journal, ready to replay. And without the flush, the disk "
+                              "may write the commit before the blocks it vouches for.")

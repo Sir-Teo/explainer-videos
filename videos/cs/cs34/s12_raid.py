@@ -17,7 +17,7 @@ def layout_grid(lay, w=0.78, h=0.42, font=14):
     return VGroup(heads, g)
 
 
-class Raid(VoiceoverScene):
+class Raid(WatchScene):
     def construct(self):
         self.card()
         self.levels()
@@ -25,11 +25,7 @@ class Raid(VoiceoverScene):
         self.rebuild()
 
     def card(self):
-        card = chapter_card(11, r"RAID", r"Can many cheap disks be faster and safer than one?", lit=(1988,),
-                            extra=((1988, r"Patterson, Gibson and Katz: \ RAID"),), part=PART)
-        with self.voiceover("Chapter eleven. RAID."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"RAID", r"Can many cheap disks be faster and safer than one?", lit=(1988,), extra=((1988, r"Patterson, Gibson and Katz: \ RAID"),), part=PART, said="Chapter eleven. RAID.")
 
     def levels(self):
         d = load("raid")
@@ -119,6 +115,9 @@ class Raid(VoiceoverScene):
         self.clear_scene()
 
     def rebuild(self):
+        self.ask(r"RAID 5 over eight 16 TB disks. One dies. \\ The rebuild reads...", [r"16 TB", r"112 TB"], 1,
+                 say="RAID five over eight sixteen-terabyte disks, and one dies. How much must the rebuild read?",
+                 reveal="All seven survivors: a hundred and twelve terabytes, without one unreadable sector.")
         d = load("raid")
         head = label(r"Eight 16 TB disks, \ one fails: \ the rebuild", font_size=34).to_edge(UP, buff=0.3)
         rk = {(r["label"], r["ure"]): r for r in d["risk"]}
@@ -165,7 +164,7 @@ class Raid(VoiceoverScene):
             "sector is 59 percent, or near certainty. Those are worst-case bounds, and real drives usually do "
             "better, but the lesson stands: the danger is not the second disk, it is the bad sector. <bookmark "
             "mark='c'/> The classic formula for the mean time to data loss, which assumes failures are independent, "
-            "gives RAID 5 tens of thousands of years, and our simulation agrees with the formula's model. <bookmark "
+            "gives RAID 5 tens of thousands of years. <bookmark "
             "mark='d'/> Hence RAID 6, checksums, and scrubbing, which reads everything regularly so that bad sectors "
             "are found and repaired while the redundancy is still there."
         ) as vo:

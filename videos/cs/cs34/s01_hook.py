@@ -6,11 +6,11 @@ from videos.cs.cs34.common import (BITS, FILEC, HEAD, META, NO, PART, YES, blk, 
 ROLE = {"data bitmap": ("bitmap", BITS), "data": ("data", FILEC), "inode table": ("inode", META)}
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.append()
         self.eight()
-        self.plan()
+        self.title(PART)
 
     def append(self):
         h = load("hook")
@@ -139,28 +139,3 @@ class Hook(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Storage", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"disks and flash: \ seeks, \ erase blocks, \ write amplification, \ modelled and simulated",
-            r"a Unix file system: \ inodes, \ directories, \ and where the blocks go",
-            r"every crash point, \ checked: \ fsck, \ ordered writes, \ journaling",
-            r"logs, \ copy-on-write trees and checksums; \ RAID and real failure rates",
-            r"fsync, \ and what applications must do; \ LSM trees",
-            r"PebbleOS reads the novels from its own file system",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 34 of Computer Science, Built: Storage, the last part of the operating systems act. <bookmark "
-            "mark='a'/> We begin at the bottom, with disks and flash, and model the time each takes. We build a Unix file system "
-            "and put its blocks where reading them is fast. Then we crash it, at every point, and check it each time, "
-            "and build the defences one by one: careful ordering, journaling, logs, copy-on-write trees with "
-            "checksums, and RAID, with the failure rates disks really have. We ask what fsync promises and what "
-            "applications must do, meet the LSM trees behind most modern databases, and end with PebbleOS reading "
-            "the thirty novels from a file system of its own."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()

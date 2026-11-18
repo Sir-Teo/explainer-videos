@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs34.common import (DATA, FILEC, HEAD, KERN, NO, PART, YES, code, grid_table, load)
 
 
-class Fsync(VoiceoverScene):
+class Fsync(WatchScene):
     def construct(self):
         self.card()
         self.layers()
@@ -12,14 +12,15 @@ class Fsync(VoiceoverScene):
         self.studies()
 
     def card(self):
-        card = chapter_card(13, r"fsync, \ and what applications must do", r"When is data really on the disk?",
-                            lit=(2009, 2018), extra=((2009, r"ext4's empty files"), (2018, r"``fsyncgate''")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Fsync, and what applications must do."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"fsync, \ and what applications must do", r"When is data really on the disk?", lit=(2009, 2018), extra=((2009, r"ext4's empty files"), (2018, r"``fsyncgate''")), part=PART, said="Chapter thirteen. Fsync, and what applications must do.")
 
     def layers(self):
+        self.wrong_idea(r"when \texttt{write} returns, the data is on disk",
+                        r"it is in the page cache; \\ only \texttt{fsync} waits for the disk",
+                        narration="A natural belief: when write returns, your data is safely on the disk.",
+                        right_narration="It is only in the kernel's page cache. fsync waits for the disk, and a new file's "
+                                        "name needs its directory synced too.")
+        self.clear_scene()
         head = label(r"Where a write waits", font_size=36).to_edge(UP, buff=0.3)
         stages = [(r"the program's buffer", DATA, r"\texttt{fwrite}: \ not even the kernel has it"),
                   (r"the page cache", HEAD, r"\texttt{write} returns here; \ written back within about 30 s"),
@@ -64,6 +65,10 @@ class Fsync(VoiceoverScene):
         self.clear_scene()
 
     def patterns(self):
+        self.ask(r"Replace a config file safely: write a temporary file, then...", [r"rename it over the old one",
+                 r"fsync it, rename, fsync the directory"], 1,
+                 say="To replace a configuration file safely, you write a new temporary file. Then what?",
+                 reveal="fsync it, rename it over the old one, then fsync the directory.")
         d = load("apps")
         head = label(r"Replacing a file's contents, \ crashed at every point", font_size=34).to_edge(UP, buff=0.3)
         src = code([

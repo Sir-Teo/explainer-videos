@@ -11,7 +11,7 @@ def row_of(c, mode, **kw):
     raise KeyError(mode)
 
 
-class Crash(VoiceoverScene):
+class Crash(WatchScene):
     def construct(self):
         self.card()
         self.invariants()
@@ -20,11 +20,7 @@ class Crash(VoiceoverScene):
         self.fsck()
 
     def card(self):
-        card = chapter_card(7, r"Crash consistency", r"What must be true after a crash at any moment?",
-                            lit=(1994,), extra=((1994, r"Ganger and Patt: \ soft updates"),), part=PART)
-        with self.voiceover("Chapter seven. Crash consistency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Crash consistency", r"What must be true after a crash at any moment?", lit=(1994,), extra=((1994, r"Ganger and Patt: \ soft updates"),), part=PART, said="Chapter seven. Crash consistency.")
 
     def invariants(self):
         head = label(r"What \texttt{fsck} checks", font_size=36).to_edge(UP, buff=0.3)
@@ -106,6 +102,10 @@ class Crash(VoiceoverScene):
         self.clear_scene()
 
     def careful(self):
+        self.ask(r"A crash can come between any two writes. \\ Which must reach the disk first?", [r"the pointer",
+                 r"the block it points to"], 1,
+                 say="A crash can come between any two writes. Which should reach the disk first: a pointer, or the block it points to?",
+                 reveal="The block it points to. Then a crash can leak space, but never point at garbage.")
         c = load("crash")
         none, care = row_of(c, "none"), row_of(c, "careful")
         head = label(r"Order the writes: \ never point at something unwritten", font_size=34).to_edge(UP, buff=0.3)

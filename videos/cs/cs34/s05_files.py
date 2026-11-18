@@ -10,7 +10,7 @@ def node(text, color, w=1.9, h=0.5, font=18):
     return VGroup(r, label(text, font_size=font, color=WHITE).move_to(r))
 
 
-class Files(VoiceoverScene):
+class Files(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -18,12 +18,8 @@ class Files(VoiceoverScene):
         self.links()
 
     def card(self):
-        card = chapter_card(4, r"Files and directories", r"What is a file, to the operating system?",
-                            lit=(1965, 1974), extra=((1965, r"Multics: \ a tree of directories"),
-                                                     (1974, r"Ritchie and Thompson: \ Unix")), part=PART)
-        with self.voiceover("Chapter four. Files and directories."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Files and directories", r"What is a file, to the operating system?", lit=(1965, 1974), extra=((1965, r"Multics: \ a tree of directories"),
+                                                     (1974, r"Ritchie and Thompson: \ Unix")), part=PART, said="Chapter four. Files and directories.")
 
     def tree(self):
         d = load("fs")
@@ -123,6 +119,10 @@ class Files(VoiceoverScene):
         self.clear_scene()
 
     def links(self):
+        self.ask(r"A file has two hard links. \\ Remove one name. The file...", [r"is gone",
+                 r"survives under the other"], 1,
+                 say="A file has two names, two hard links. You delete one. What happens to the file?",
+                 reveal="It survives under the other name. It's freed only when its link count reaches zero.")
         head = label(r"Links, \ unlink, \ rename", font_size=36).to_edge(UP, buff=0.3)
         d1 = node(r"\texttt{/home/x}", YES, w=2.4).move_to([-4.0, 1.4, 0])
         d2 = node(r"\texttt{/backup/y}", YES, w=2.4).move_to([-4.0, 0.2, 0])

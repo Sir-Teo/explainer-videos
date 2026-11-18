@@ -5,7 +5,7 @@ from videos.cs.cs34.common import (BITS, FILEC, GREY_B, HEAD, JRN, KERN, META, P
                                    load, mono, num)
 
 
-class SimpleFS(VoiceoverScene):
+class SimpleFS(WatchScene):
     def construct(self):
         self.card()
         self.layout()
@@ -13,11 +13,7 @@ class SimpleFS(VoiceoverScene):
         self.lookup()
 
     def card(self):
-        card = chapter_card(5, r"A simple file system", r"Where do the inodes and the blocks go?", lit=(1974,),
-                            extra=((1974, r"the Unix file system"),), part=PART)
-        with self.voiceover("Chapter five. A simple file system."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"A simple file system", r"Where do the inodes and the blocks go?", lit=(1974,), extra=((1974, r"the Unix file system"),), part=PART, said="Chapter five. A simple file system.")
 
     def layout(self):
         d = load("fs")
@@ -59,6 +55,10 @@ class SimpleFS(VoiceoverScene):
         self.clear_scene()
 
     def inode(self):
+        self.ask(r"Direct pointers, one indirect, one double indirect, \\ 1 KiB blocks. Largest file about...",
+                 [r"1 MB", r"64 MB", r"unlimited"], 1,
+                 say="An inode with direct pointers, one indirect and one double indirect block, and one-kilobyte blocks. How big can a file get?",
+                 reveal="Just over sixty-four megabytes, almost all through the double indirect block.")
         d = load("fs")
         head = label(r"An inode, \ and the largest file", font_size=36).to_edge(UP, buff=0.3)
         fields = [("type", META), ("links", META), ("size", META)] + [(rf"d{i}", FILEC) for i in range(10)] + [
