@@ -19,6 +19,7 @@ import argparse
 import ast
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -113,7 +114,15 @@ def need(video: str) -> list[dict]:
 
 def put(video: str, need_file: Path, zh_file: Path) -> None:
     items = {x["id"]: x for x in json.loads(need_file.read_text())}
-    zh = json.loads(zh_file.read_text())
+    raw = zh_file.read_text()
+    try:
+        zh = json.loads(raw)
+    except json.JSONDecodeError:  # a TeX backslash written once (\; or \,): keep it as a backslash
+        zh = json.loads(re.sub(r"\\(.)", lambda m: m.group(0) if m.group(1) in '\\"/bfnrtu' else
+                               "\\\\" + m.group(1), raw))
+    for i, t in zh.items():
+        if re.search(r"[\t\b\f\r\n]", t):
+            sys.exit(f"{i}: a control character in {t!r}: a TeX command such as \\textit lost its backslash")
     said, shown = {}, {}
     for i, t in zh.items():
         x = items[i]
