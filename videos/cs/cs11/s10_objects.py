@@ -7,7 +7,7 @@ KEEP = (".text", ".text.startup", ".data", ".bss", ".rodata.str1.1", ".data.rel.
         ".rela.text.startup", ".symtab", ".strtab")
 
 
-class Objects(VoiceoverScene):
+class Objects(WatchScene):
     def construct(self):
         self.card()
         self.sources()
@@ -16,11 +16,7 @@ class Objects(VoiceoverScene):
         self.rules()
 
     def card(self):
-        card = chapter_card(9, r"Object files", r"What does the assembler leave for the linker?", lit=(1988,),
-                            extra=((1988, r"System V: \ ELF"),), part=PART)
-        with self.voiceover("Chapter nine. Object files."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Object files", r"What does the assembler leave for the linker?", lit=(1988,), extra=((1988, r"System V: \ ELF"),), part=PART, said="Chapter nine. Object files.")
 
     def sources(self):
         e = load("elf")
@@ -79,6 +75,9 @@ class Objects(VoiceoverScene):
         self.clear_scene()
 
     def symbols(self):
+        self.ask(r"A \texttt{static} variable in a C file. \\ Can another file use it?", [r"yes", r"no"], 1,
+                 say="A variable declared static in one C file. Can another file refer to it?",
+                 reveal="No. It's a local symbol: the linker never offers it to anyone else.")
         e = load("elf")["objects"]
         head = label(r"Symbols and relocations", font_size=34).to_edge(UP, buff=0.3)
         syms = [s for s in e["main"]["symbols"] if s["type"] in ("FUNC", "OBJECT", "NOTYPE") and

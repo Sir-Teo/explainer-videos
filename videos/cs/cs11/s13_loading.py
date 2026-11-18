@@ -5,7 +5,7 @@ from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, S
                                    load, region)
 
 
-class Loading(VoiceoverScene):
+class Loading(WatchScene):
     def construct(self):
         self.card()
         self.maps()
@@ -13,11 +13,7 @@ class Loading(VoiceoverScene):
         self.argv()
 
     def card(self):
-        card = chapter_card(12, r"Loading \ and the address space", r"What does a running process look like?",
-                            lit=(2001,), extra=((2001, r"PaX: \ address-space randomization"),), part=PART)
-        with self.voiceover("Chapter twelve. Loading and the address space."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Loading \ and the address space", r"What does a running process look like?", lit=(2001,), extra=((2001, r"PaX: \ address-space randomization"),), part=PART, said="Chapter twelve. Loading and the address space.")
 
     def maps(self):
         mp = load("maps")["rows"]
@@ -80,6 +76,9 @@ class Loading(VoiceoverScene):
         self.clear_scene()
 
     def aslr(self):
+        self.ask(r"Run the same program three times. \\ Is its stack at the same address each time?", [r"yes", r"no"], 1,
+                 say="Run the same program three times. Does its stack start at the same address?",
+                 reveal="No. Address space layout randomization moves it, to frustrate attacks.")
         a = load("aslr")
         head = label(r"Run it three times", font_size=34).to_edge(UP, buff=0.3)
         rows = [[n] + [r[k] for r in a["runs"]] for k, n in enumerate(a["names"])]
@@ -156,3 +155,9 @@ class Loading(VoiceoverScene):
             self.play(FadeIn(pts[2]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a relocation tell the linker?", r"Where a hole is, and which symbol's address fills it"),
+             (r"Static or dynamic: which lets you swap a library without relinking?", r"Dynamic")],
+            narration="Checkpoint. What does a relocation tell the linker? And which kind of linking lets you swap a library "
+                      "without relinking?",
+            answers_narration="Where a hole is in the code, and which symbol's address fills it. And dynamic linking.")

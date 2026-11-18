@@ -20,7 +20,7 @@ def compositions(n):
         yield parts
 
 
-class Backtrack(VoiceoverScene):
+class Backtrack(WatchScene):
     def construct(self):
         self.card()
         self.how()
@@ -29,14 +29,21 @@ class Backtrack(VoiceoverScene):
         self.backrefs()
 
     def card(self):
-        card = chapter_card(7, r"Backtracking engines", r"Why is \texttt{(a+)+b} slow in Python and instant in grep?",
-                            lit=(2007, 2019), extra=((2007, r"Cox: \ ``simple and fast''"),
-                                                     (2019, r"the Cloudflare outage")), part=PART)
-        with self.voiceover("Chapter seven. Backtracking engines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Backtracking engines", r"Why is \texttt{(a+)+b} slow in Python and instant in grep?", lit=(2007, 2019), extra=((2007, r"Cox: \ ``simple and fast''"),
+                                                     (2019, r"the Cloudflare outage")), part=PART, said="Chapter seven. Backtracking engines.")
 
     def how(self):
+        self.wrong_idea(r"Regex matching is always fast",
+                        r"Backtracking engines can take exponential time. \\ Automata engines stay linear",
+                        narration="A regular expression looks like a tiny thing, so it's natural to assume matching one is "
+                                  "always fast.",
+                        right_narration="It depends on the engine. Automata engines stay linear in the text; backtracking "
+                                        "engines can take exponential time, which is what took a website down.")
+        self.clear_scene()
+        self.ask(r"\texttt{(a+)+b} against 25 a's and no b. \\ A backtracking engine takes...",
+                 [r"about 25 steps", r"about 600 steps", r"tens of millions of steps"], 2,
+                 say="The pattern from the outage, against twenty-five a's and no b. How many steps for a backtracking engine?",
+                 reveal="Tens of millions: it tries every way to split the a's before giving up.")
         head = label(r"A backtracker tries one possibility at a time", font_size=34).to_edge(UP, buff=0.3)
         pat = Text("(a+)+b   against   aaaa", font="DejaVu Sans Mono", font_size=26, color=CODE).next_to(
             head, DOWN, buff=0.35)
@@ -195,7 +202,7 @@ class Backtrack(VoiceoverScene):
             label("choose features, semantics and resource bounds; backtracking is one execution strategy", font_size=21,
                   color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35)
-        with self.voiceover("Why retain backtracking engines? Their features and matching semantics can be useful, but some features go beyond regular languages. <bookmark mark='a'/> This whole-string matcher captures at least two ones and then repeats exactly that captured group. <bookmark mark='b'/> For unary strings of length k at least two, it matches precisely the composite lengths: k has at least two equal groups, each of size at least two. Handle zero and one separately before calling its negation a primality test. <bookmark mark='c'/> A backreference can require an arbitrarily long earlier substring to recur. General backreference patterns can therefore describe nonregular languages; this does not mean every pattern containing one is nonregular. <bookmark mark='d'/> With both the pattern and text supplied as inputs, matching standard backreference expressions is NP-complete. This combined-complexity statement is not a lower bound for every fixed pattern. <bookmark mark='e'/> Choose an engine by its supported features, semantics and resource guarantees. Backtracking is one implementation choice, not the definition of every extended regex language.") as vo:
+        with self.voiceover("Why retain backtracking engines? Their features and matching semantics can be useful, but some features go beyond regular languages. <bookmark mark='a'/> This whole-string matcher captures at least two ones and then repeats exactly that captured group. <bookmark mark='b'/> For unary strings of length k at least two, it matches precisely the composite lengths: k has at least two equal groups, each of size at least two. Handle zero and one separately before calling its negation a primality test. <bookmark mark='c'/> A backreference can require an arbitrarily long earlier substring to recur. General backreference patterns can therefore describe nonregular languages. <bookmark mark='d'/> With both the pattern and text supplied as inputs, matching standard backreference expressions is NP-complete. This combined-complexity statement is not a lower bound for every fixed pattern. <bookmark mark='e'/> Choose an engine by its supported features, semantics and resource guarantees. Backtracking is one implementation choice, not the definition of every extended regex language.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(pat), run_time=0.6)
             vo.wait_until('a')

@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs12.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, load, region)
 
 
-class Pumping(VoiceoverScene):
+class Pumping(WatchScene):
     def construct(self):
         self.card()
         self.lemma()
@@ -14,11 +14,7 @@ class Pumping(VoiceoverScene):
         self.consequence()
 
     def card(self):
-        card = chapter_card(6, r"What regular languages cannot do", r"Can a finite machine count?", lit=(1961,),
-                            extra=((1961, r"Bar-Hillel, \ Perles, \ Shamir"),), part=PART)
-        with self.voiceover("Chapter six. What regular languages cannot do."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"What regular languages cannot do", r"Can a finite machine count?", lit=(1961,), extra=((1961, r"Bar-Hillel, \ Perles, \ Shamir"),), part=PART, said="Chapter six. What regular languages cannot do.")
 
     def lemma(self):
         head = label(r"The pumping lemma", font_size=36).to_edge(UP, buff=0.3)
@@ -59,6 +55,9 @@ class Pumping(VoiceoverScene):
         self.clear_scene()
 
     def anbn(self):
+        self.ask(r"$\\{a^n b^n\\}$: some $a$'s, then the same number of $b$'s. \\ Regular?", [r"yes", r"no"], 1,
+                 say="Some a's followed by the same number of b's. Is that language regular?",
+                 reveal="No. A finite automaton can't count arbitrarily high, and the pumping lemma proves it.")
         pu = load("pumping")
         p = pu["p"]
         head = label(r"$a^n b^n$ is not regular", font_size=36).to_edge(UP, buff=0.3)
@@ -129,3 +128,10 @@ class Pumping(VoiceoverScene):
                 self.play(FadeIn(p, shift=RIGHT * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the subset construction build?", r"A DFA whose states are sets of NFA states"),
+             (r"Why isn't $\\{a^n b^n\\}$ regular?", r"A finite machine can't count without bound: the pumping lemma")],
+            narration="Checkpoint. What does the subset construction build? And why can't a finite automaton recognize a to "
+                      "the n, b to the n?",
+            answers_narration="A deterministic machine whose states are sets of NFA states. And because it would have to "
+                              "count without bound; the pumping lemma makes that precise.")

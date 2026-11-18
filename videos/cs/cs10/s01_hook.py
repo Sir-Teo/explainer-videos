@@ -24,12 +24,12 @@ def trend_dots(ax, pts, color, r=0.035):
     return VGroup(*[Dot(ax.c2p(x, np.log10(max(y, 1))), radius=r, color=color, fill_opacity=0.85) for x, y in pts])
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.trends()
         self.job()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def trends(self):
@@ -114,8 +114,7 @@ class Hook(VoiceoverScene):
         with self.voiceover(
             (
             "And the Job. <bookmark mark='a'/> On one of Part 8's out-of-order cores, the fitted corpus model "
-            "projects about fifty-seven seconds to count thirty novels. Part 9 added a conditional memory "
-            "estimate, not a physical multicore measurement. <bookmark mark='b'/> With four cores, the plan is "
+            "projects about fifty-seven seconds to count thirty novels. <bookmark mark='b'/> With four cores, the plan is "
             "simple: give each core a word-aligned quarter of the text, let each count its own, and combine the "
             "four sets of counts. <bookmark mark='c'/> The obvious way of combining them throws away much of what "
             "the cores gained. <bookmark mark='d'/> With partitioned merging, the cost model projects nearly five "
@@ -161,29 +160,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ Parallel Machines", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"the power wall; \ multicore and shared memory",
-            r"cache coherence: \ MESI; \ false sharing",
-            r"memory consistency: \ store buffers, \ litmus tests, \ fences; \ atomic instructions",
-            r"SIMD and vectors; \ GPUs, \ warps and divergence",
-            r"work and span; \ Brent's theorem; \ parallel prefix; \ sorting networks",
-            r"Amdahl and Gustafson; \ PRAM, \ BSP, \ networks; \ the Job, \ ledger row 4",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 10 of Computer Science, Built, the last part of Act Two, Making It Fast. <bookmark "
-            "mark='a'/> In this part: the power wall, and the multicore chips it forced. Cache coherence, the MESI "
-            "protocol, and false sharing. Memory consistency: store buffers, litmus tests and fences, and the atomic "
-            "instructions that locks are built from. Vector instructions, and graphics processors. The theory of "
-            "parallel algorithms: work and span, Brent's theorem, parallel prefix and sorting networks. Amdahl's law "
-            "and Gustafson's answer, the models of parallel computers and the networks inside supercomputers. And "
-            "the Job, on four cores."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

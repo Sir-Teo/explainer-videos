@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs12.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, load, region, tree)
 
 
-class Languages(VoiceoverScene):
+class Languages(WatchScene):
     def construct(self):
         self.card()
         self.sets()
@@ -12,11 +12,7 @@ class Languages(VoiceoverScene):
         self.memory()
 
     def card(self):
-        card = chapter_card(1, r"Languages as sets of strings", r"What does it mean to recognize a language?",
-                            lit=(1956,), extra=((1956, r"Chomsky: \ three models of language"),), part=PART)
-        with self.voiceover("Chapter one. Languages as sets of strings."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Languages as sets of strings", r"What does it mean to recognize a language?", lit=(1956,), extra=((1956, r"Chomsky: \ three models of language"),), part=PART, said="Chapter one. Languages as sets of strings.")
 
     def sets(self):
         head = label(r"A language is a set of strings", font_size=36).to_edge(UP, buff=0.35)
@@ -91,6 +87,11 @@ class Languages(VoiceoverScene):
         self.clear_scene()
 
     def memory(self):
+        self.ask(r"Recognize binary numbers divisible by 3, \\ one bit at a time. What must you remember?",
+                 [r"the whole number so far", r"just the remainder: one of 3 states", r"the last bit"], 1,
+                 say="Read a binary number one bit at a time and decide whether it's divisible by three. What must you "
+                     "remember?",
+                 reveal="Only the remainder so far: three states, however long the number.")
         head = label(r"How much memory does a recognizer need?", font_size=34).to_edge(UP, buff=0.35)
         rungs = [
             (r"a fixed, \ finite memory", r"a finite automaton", r"divisible by 3", DATA),

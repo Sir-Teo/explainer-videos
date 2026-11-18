@@ -28,18 +28,14 @@ def edges_of(d):
     return out
 
 
-class Kleene(VoiceoverScene):
+class Kleene(WatchScene):
     def construct(self):
         self.card()
         self.eliminate()
         self.closure()
 
     def card(self):
-        card = chapter_card(5, r"Kleene's theorem", r"Can every automaton be written as a regular expression?",
-                            lit=(1956,), extra=((1956, r"Kleene: \ the theorem published"),), part=PART)
-        with self.voiceover("Chapter five. Kleene's theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Kleene's theorem", r"Can every automaton be written as a regular expression?", lit=(1956,), extra=((1956, r"Kleene: \ the theorem published"),), part=PART, said="Chapter five. Kleene's theorem.")
 
     def eliminate(self):
         k = load("kleene")
@@ -82,6 +78,9 @@ class Kleene(VoiceoverScene):
         self.clear_scene()
 
     def closure(self):
+        self.ask(r"If a language is regular, \\ is its complement regular?", [r"yes", r"no", r"only sometimes"], 0,
+                 say="If a language is regular, is everything outside it regular too?",
+                 reveal="Yes: swap the accepting and rejecting states of its DFA.")
         head = label(r"Regular languages are closed under \dots", font_size=34).to_edge(UP, buff=0.3)
         items = VGroup(
             label(r"union, \ concatenation, \ star: \ by definition", font_size=22, color=GREY_A),

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, grid_table, load, region)
 
 
-class Recursion(VoiceoverScene):
+class Recursion(WatchScene):
     def construct(self):
         self.card()
         self.ackermann()
@@ -12,11 +12,7 @@ class Recursion(VoiceoverScene):
         self.limits()
 
     def card(self):
-        card = chapter_card(5, r"Recursion, \ depth and tail calls", r"How deep can the stack go?", lit=(1928,),
-                            extra=((1928, r"Ackermann's function"),), part=PART)
-        with self.voiceover("Chapter five. Recursion, depth, and tail calls."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Recursion, \ depth and tail calls", r"How deep can the stack go?", lit=(1928,), extra=((1928, r"Ackermann's function"),), part=PART, said="Chapter five. Recursion, depth, and tail calls.")
 
     def ackermann(self):
         rows = load("ackermann")["rows"]
@@ -43,6 +39,11 @@ class Recursion(VoiceoverScene):
         self.clear_scene()
 
     def tail(self):
+        self.ask(r"A tail-recursive loop of a million calls, \\ in optimized C. The stack holds...",
+                 [r"a million frames", r"one frame"], 1,
+                 say="A recursive loop that calls itself a million times, with nothing left to do after each call. Compiled with "
+                     "optimization, how many frames?",
+                 reveal="Usually one: the compiler turns the call into a jump. C doesn't promise it, though.")
         st = load("stack")
         a, b = st["sum"], st["sum_tail"]
         head = label("An eligible tail call can reuse a frame", font_size=34).to_edge(UP, buff=0.3)

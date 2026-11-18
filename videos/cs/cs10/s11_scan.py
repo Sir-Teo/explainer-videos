@@ -16,7 +16,7 @@ def cells(vals, color=GREY_C, w=0.8, h=0.5, font_size=20, fill=None):
     return g.arrange(RIGHT, buff=0.08)
 
 
-class Scan(VoiceoverScene):
+class Scan(WatchScene):
     def construct(self):
         self.card()
         self.define()
@@ -26,12 +26,8 @@ class Scan(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(10, r"Parallel prefix", r"How do you keep every running total, \ in parallel?",
-                            lit=(1980, 1990), extra=((1980, r"Ladner and Fischer"), (1990, r"Blelloch: \ scans as "
-                                                                                          r"primitives")), part=PART)
-        with self.voiceover("Chapter ten. Parallel prefix."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Parallel prefix", r"How do you keep every running total, \ in parallel?", lit=(1980, 1990), extra=((1980, r"Ladner and Fischer"), (1990, r"Blelloch: \ scans as "
+                                                                                          r"primitives")), part=PART, said="Chapter ten. Parallel prefix.")
 
     # ------------------------------------------------------------------
     def define(self):
@@ -113,6 +109,10 @@ class Scan(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def hillis(self):
+        self.ask(r"Hillis and Steele's scan of a million elements. \\ Total additions?", [r"about 1 million",
+                 r"about 20 million"], 1,
+                 say="Hillis and Steele's parallel scan of a million numbers. How many additions in total?",
+                 reveal="About twenty million, where one million would do. Blelloch's scan fixes that.")
         sc = load("scan")
         lv = sc["hillis_steele"]
         head = label(r"Hillis and Steele \ (1986): \ $\log_2 n$ steps", font_size=34).to_edge(UP, buff=0.3)
@@ -192,7 +192,7 @@ class Scan(VoiceoverScene):
             "value to its left child and gives its right child the sum of that value and the left child's old "
             "block sum. <bookmark mark='c'/> At the bottom, each position holds the sum of everything before it. "
             "For a power-of-two n, the two sweeps use exactly n minus one additions in each sweep, two n minus "
-            "two altogether, and two log-base-two n levels in this model. That is linear work, about twice the "
+            "two altogether, and two log-base-two n levels. That is linear work, about twice the "
             "serial addition count; exclusive scan also needs an identity element. <bookmark mark='d'/> "
             "Blelloch's point was larger than the algorithm: with a fast scan as a primitive, many problems that "
             "look sequential become parallel."

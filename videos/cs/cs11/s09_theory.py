@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, grid_table, load)
 
 
-class Theory(VoiceoverScene):
+class Theory(WatchScene):
     def construct(self):
         self.card()
         self.fifty()
@@ -12,14 +12,14 @@ class Theory(VoiceoverScene):
         self.robson()
 
     def card(self):
-        card = chapter_card(8, r"Knuth's rule \ and Robson's bound", r"How badly can a heap fragment?",
-                            lit=(1968, 1971), extra=((1968, r"Knuth: \ the fifty-percent rule"),
-                                                     (1971, r"Robson: \ worst-case bounds")), part=PART)
-        with self.voiceover("Chapter eight. Knuth's rule and Robson's bound."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Knuth's rule \ and Robson's bound", r"How badly can a heap fragment?", lit=(1968, 1971), extra=((1968, r"Knuth: \ the fifty-percent rule"),
+                                                     (1971, r"Robson: \ worst-case bounds")), part=PART, said="Chapter eight. Knuth's rule and Robson's bound.")
 
     def fifty(self):
+        self.ask(r"A busy heap with $N$ live blocks. \\ Knuth's rule: about how many free ones?", [r"$N$", r"$N/2$",
+                 r"$2N$"], 1,
+                 say="A long-running heap holds N live blocks. About how many free blocks sit between them?",
+                 reveal="About half as many: Knuth's fifty-percent rule.")
         head = label(r"The fifty-percent rule \ (Knuth, \ 1968)", font_size=34).to_edge(UP, buff=0.3)
         thm = label("stationary coalescing heap, uniform frees: $M \\approx \\tfrac12 p N$ holes",
                     font_size=24, color=HEAD).next_to(head, DOWN, buff=0.3)
@@ -124,7 +124,7 @@ class Theory(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(ax, RIGHT, buff=0.7)
         punch = label("$n =$ largest / smallest block; \\\\ this replay is not a proof against all allocators",
                       font_size=21, color=YES).to_edge(DOWN, buff=0.3)
-        with self.voiceover("Average-case balance does not prevent bad allocation sequences. <bookmark mark='a'/> Robson's classical lower bounds concern online, nonmoving allocation with a bound M on simultaneously live storage and a largest-to-smallest block-size ratio n. The leading growth is proportional to M log n; exact constants and finite corrections depend on the theorem's model. The plotted one plus half log base two n is our illustrative reference curve. <bookmark mark='b'/> Our constructed trace fills with small blocks, frees selected blocks while keeping holes too small for the next size, then doubles that size. <bookmark mark='c'/> On the implemented first-fit and best-fit policies, the measured heap follows this curve: from M to four and a half M as total block size grows from 32 to 4,096 bytes, so n is 128. This finite replay is not a proof against every allocator. <bookmark mark='d'/> The general impossibility result needs a strategy-dependent adversary and its proof. Moving objects, restricting lifetimes or changing the allocation model changes the assumptions. A compacting collector must also find or redirect references safely.") as vo:
+        with self.voiceover("Average-case balance does not prevent bad allocation sequences. <bookmark mark='a'/> Robson's classical lower bounds concern online, nonmoving allocation with a bound M on simultaneously live storage and a largest-to-smallest block-size ratio n. The leading growth is proportional to M log n; exact constants and finite corrections depend on the theorem's model. The plotted one plus half log base two n is our reference curve. <bookmark mark='b'/> Our constructed trace fills with small blocks, frees selected blocks while keeping holes too small for the next size, then doubles that size. <bookmark mark='c'/> On the implemented first-fit and best-fit policies, the measured heap follows this curve: from M to four and a half M as total block size grows from 32 to 4,096 bytes, so n is 128. <bookmark mark='d'/> The general impossibility result needs a strategy-dependent adversary and its proof. Moving objects, restricting lifetimes or changing the allocation model changes the assumptions. A compacting collector must also find or redirect references safely.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), Create(bound), FadeIn(bl), run_time=0.6)
             vo.wait_until('a')

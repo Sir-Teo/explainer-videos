@@ -9,7 +9,7 @@ from videos.cs.cs10.common import (BG, CORE_COLORS, COST, CTRL, DATA, FUNC, HEAD
 MHZ = 884.9557522123894e6
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.pebble()
@@ -17,13 +17,14 @@ class Job(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(14, r"The Job on four cores", r"What do four cores buy the Job?", part=PART)
-        with self.voiceover("Chapter fourteen. The Job on four cores."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The Job on four cores", r"What do four cores buy the Job?", part=PART, said="Chapter fourteen. The Job on four cores.")
 
     # ------------------------------------------------------------------
     def pebble(self):
+        self.ask(r"Cut the text into 64 pieces instead of 4. \\ What happens?", [r"better balance, cheaper merge",
+                 r"better balance, costlier merge"], 1,
+                 say="Cut the text into sixty-four small pieces instead of four. What changes?",
+                 reveal="The cores stay busier, but sixty-four tables have to be merged.")
         sp = load("split")
         four = next(r for r in sp["rows"] if r["p"] == 4)
         cnt = [c / MHZ for c in four["shard_cycles"]]
@@ -57,7 +58,7 @@ class Job(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.3)
         with self.voiceover(
             (
-            "Now the conditional compute-cost projection on four of Part 8's cores, at the assumed clock. "
+            "Now the conditional compute-cost projection on four of Part 8's cores. "
             "<bookmark mark='a'/> Each core counts its word-aligned quarter of the text. They do not finish "
             "together: the last quarter holds books with the largest vocabularies, so its table grows longest. "
             "<bookmark mark='b'/> Then the partitioned merge, a fraction of a second. <bookmark mark='c'/> In "

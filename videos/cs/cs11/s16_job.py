@@ -5,17 +5,14 @@ from videos.cs.cs11.common import (BG, CODE, COST, CTRL, DATA, FILE_COLORS, FUNC
                                    grid_table, load, region)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.design()
         self.compare()
 
     def card(self):
-        card = chapter_card(15, r"The Job, \ linked", r"What does writing it properly cost?", part=PART)
-        with self.voiceover("Chapter fifteen. The Job, linked."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"The Job, \ linked", r"What does writing it properly cost?", part=PART, said="Chapter fifteen. The Job, linked.")
 
     def design(self):
         j = load("job")
@@ -49,6 +46,10 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def compare(self):
+        self.ask(r"The Job as four linked files, \\ against Part 6's one hand-written file. The output?", [r"identical",
+                 r"slightly different"], 0,
+                 say="The Job, rebuilt from four separately compiled files. Does its output change?",
+                 reveal="Identical, every time. Only the speed and the size differ.")
         j = load("job")
         rows = j["rows"]
         head = label(r"Against Part 6's single file", font_size=34).to_edge(UP, buff=0.3)

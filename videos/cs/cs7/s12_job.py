@@ -133,8 +133,8 @@ class Job(WatchScene):
             "instruction path-count formula. <bookmark mark='b'/> The displayed sixteen-thousand-character heldout "
             'text, encoded as sixteen thousand and nineteen bytes, checks one prediction and reports its error. It '
             "does not establish an error bound for the thirty novels. <bookmark mark='c'/> Combining the fitted "
-            'bubbles with the corpus instruction count and assumed eight-hundred-and-eighty-five-megahertz clock gives '
-            'the displayed CPI and projected minutes. We have not simulated the entire corpus cycle by cycle. '
+            'bubbles with the corpus instruction count and eight-hundred-and-eighty-five-megahertz clock gives '
+            'the displayed CPI and projected minutes. '
             "<bookmark mark='d'/> The ledger's speedup is therefore a model-based estimate for the same program. A "
             'full run or broader validation could reveal a different result.'
         ) as vo:

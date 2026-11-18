@@ -6,7 +6,7 @@ from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FILE_COLORS, FUNC, HEAD
                                    load, region)
 
 
-class Linking(VoiceoverScene):
+class Linking(WatchScene):
     def construct(self):
         self.card()
         self.resolve()
@@ -15,12 +15,13 @@ class Linking(VoiceoverScene):
         self.archive()
 
     def card(self):
-        card = chapter_card(10, r"Linking, \ step by step", r"How do four files become one program?", part=PART)
-        with self.voiceover("Chapter ten. Linking, step by step."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Linking, \ step by step", r"How do four files become one program?", part=PART, said="Chapter ten. Linking, step by step.")
 
     def resolve(self):
+        self.ask(r"Two files both define a global \texttt{count}. \\ The linker...", [r"keeps the first",
+                 r"stops: multiple definition"], 1,
+                 say="Two object files both define the same global function. What does the linker do?",
+                 reveal="It stops with a multiple-definition error. Each strong name must be defined exactly once.")
         pl = load("pebblelink")
         head = label(r"Step 1: \ resolve every name", font_size=34).to_edge(UP, buff=0.3)
         cols = VGroup()

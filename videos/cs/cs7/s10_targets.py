@@ -134,8 +134,7 @@ class Targets(WatchScene):
             "buffer, the table records redirects for jumps and returns. <bookmark mark='b'/> A BTB removes many jump "
             "redirects, but a last-target entry still misses many returns. <bookmark mark='c'/> Adding a sixteen-entry "
             "return stack cuts return misses to a few hundred and lowers CPI to about one point one two in this run. "
-            "That comparison isolates the modeled front-end choices; it does not establish a universal return-miss "
-            "rate or hardware speedup."
+            ""
         ) as vo:
             self.play(FadeIn(head), FadeIn(note))
             for mk, r in zip("abc", rows):

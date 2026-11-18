@@ -14,7 +14,7 @@ def act(a):
     return "accept"
 
 
-class BottomUp(VoiceoverScene):
+class BottomUp(WatchScene):
     def construct(self):
         self.card()
         self.shift_reduce()
@@ -23,14 +23,13 @@ class BottomUp(VoiceoverScene):
         self.tools()
 
     def card(self):
-        card = chapter_card(13, r"Bottom-up parsing", r"Can a parser decide \textit{after} seeing the whole phrase?",
-                            lit=(1965, 1975), extra=((1965, r"Knuth: \ LR($k$)"), (1975, r"Johnson: \ yacc")),
-                            part=PART)
-        with self.voiceover("Chapter thirteen. Bottom-up parsing."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Bottom-up parsing", r"Can a parser decide \textit{after} seeing the whole phrase?", lit=(1965, 1975), extra=((1965, r"Knuth: \ LR($k$)"), (1975, r"Johnson: \ yacc")), part=PART, said="Chapter thirteen. Bottom-up parsing.")
 
     def shift_reduce(self):
+        self.ask(r"An LR parser has read $\mathit{id} + \mathit{id}$ and sees $*$. \\ Shift, or reduce the sum?",
+                 [r"reduce", r"shift"], 1,
+                 say="The parser has read id plus id, and the next token is times. Should it reduce the sum, or shift?",
+                 reveal="Shift: multiplication binds tighter, so the sum must wait.")
         lr = load("lr")
         head = label(r"Shift and reduce: \ \texttt{id * id + id}", font_size=34).to_edge(UP, buff=0.3)
         rows = [[" ".join(map(str, s["stack"])), " ".join(s["symbols"]), " ".join(s["input"]), act(s["action"])]

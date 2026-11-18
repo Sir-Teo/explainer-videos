@@ -4,17 +4,14 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, load)
 
 
-class Control(VoiceoverScene):
+class Control(WatchScene):
     def construct(self):
         self.card()
         self.branches()
         self.switch()
 
     def card(self):
-        card = chapter_card(3, r"Control flow in machine code", r"What do if, while and switch become?", part=PART)
-        with self.voiceover("Chapter three. Control flow in machine code."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Control flow in machine code", r"What do if, while and switch become?", part=PART, said="Chapter three. Control flow in machine code.")
 
     def branches(self):
         head = label(r"Ifs and loops are branches", font_size=34).to_edge(UP, buff=0.3)
@@ -43,6 +40,10 @@ class Control(VoiceoverScene):
         self.clear_scene()
 
     def switch(self):
+        self.ask(r"A \texttt{switch} with eight dense cases. \\ The compiler emits...", [r"eight comparisons in a row",
+                 r"one jump through a table"], 1,
+                 say="A switch with eight consecutive cases. What does the compiler turn it into?",
+                 reveal="One bounds check, and one jump through a table of addresses.")
         sw = load("switch")
         head = label(r"A switch becomes a table of jumps \ (gcc -O2, \ this machine)", font_size=32).to_edge(
             UP, buff=0.3)

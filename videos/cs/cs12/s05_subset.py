@@ -21,7 +21,7 @@ def dfa5(delta, accept):
     return StateDiagram(POS5, edges, radius=0.42, font_size=24, edge_font=19, accept=tuple(NAMES[k] for k in accept))
 
 
-class Subset(VoiceoverScene):
+class Subset(WatchScene):
     def construct(self):
         self.card()
         self.subsets()
@@ -31,11 +31,7 @@ class Subset(VoiceoverScene):
         self.lazy()
 
     def card(self):
-        card = chapter_card(4, r"The subset construction", r"Can a deterministic machine do what an NFA does?",
-                            lit=(1959,), extra=((1959, r"Rabin and Scott"),), part=PART)
-        with self.voiceover("Chapter four. The subset construction, and minimization."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The subset construction", r"Can a deterministic machine do what an NFA does?", lit=(1959,), extra=((1959, r"Rabin and Scott"),), part=PART, said="Chapter four. The subset construction, and minimization.")
 
     def subsets(self):
         s = load("subset")
@@ -115,6 +111,10 @@ class Subset(VoiceoverScene):
         self.clear_scene()
 
     def blowup(self):
+        self.ask(r"``The 12th symbol from the end is a 1.'' \\ The smallest DFA has...",
+                 [r"13 states", r"about 144 states", r"4096 states"], 2,
+                 say="Strings whose twelfth symbol from the end is a one. How many states does the smallest DFA need?",
+                 reveal="Four thousand and ninety-six: two to the twelve. The NFA needs thirteen.")
         s = load("subset")
         rows = s["blowup"]
         head = label(r"The price: \ sometimes $2^n$ states", font_size=36).to_edge(UP, buff=0.3)

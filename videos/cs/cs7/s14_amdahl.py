@@ -128,7 +128,7 @@ class Amdahl(WatchScene):
             "clock-rate ratio divided by the CPI ratio. <bookmark mark='b'/> Linear search accounts for ninety-nine "
             "point seven percent of this Job's single-cycle instructions. That is also its time share only in the "
             "uniform-cost single-cycle model. <bookmark mark='c'/> Eliminating that work with no replacement cost "
-            "would give an ideal ceiling of about three hundred and fifty in that model. <bookmark mark='d'/> On a pipeline, measure the time share and new "
+            "would give an ideal ceiling of about three hundred and fifty. <bookmark mark='d'/> On a pipeline, measure the time share and new "
             "costs again. Hardware schedules the work better; algorithms can change how much work remains."
         ) as vo:
             self.play(FadeIn(head))

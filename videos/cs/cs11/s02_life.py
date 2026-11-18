@@ -6,18 +6,14 @@ from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FILE_COLORS, FUNC, HEAD
                                    memory_strip, region)
 
 
-class Life(VoiceoverScene):
+class Life(WatchScene):
     def construct(self):
         self.card()
         self.tower()
         self.journey()
 
     def card(self):
-        card = chapter_card(1, r"A program's life", r"What happens between writing a program and running it?",
-                            part=PART)
-        with self.voiceover("Chapter one. A program's life."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"A program's life", r"What happens between writing a program and running it?", part=PART, said="Chapter one. A program's life.")
 
     def tower(self):
         head = label(r"Five steps from text to process", font_size=34).to_edge(UP, buff=0.3)
@@ -59,6 +55,10 @@ class Life(VoiceoverScene):
         self.clear_scene()
 
     def journey(self):
+        self.ask(r"\texttt{main.c} calls a function defined in \texttt{lookup.c}. \\ Who fills in its address?",
+                 [r"the compiler", r"the assembler", r"the linker"], 2,
+                 say="A call in one file goes to a function in another. Who finally fills in its address?",
+                 reveal="The linker, once it knows where every file's code will sit.")
         pl = load("pebblelink")
         p = next(x for x in pl["patches"] if x["file"] == "main.o" and x["symbol"] == "lookup")
         at, target = p["at"], p["target"]

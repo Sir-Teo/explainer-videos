@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs12.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, grid_table, load, region)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.regex()
@@ -14,14 +14,14 @@ class Frontier(VoiceoverScene):
         self.derivatives()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ how fast can we parse?", r"Is $O(mn)$ the best possible?",
-                            lit=(1975, 2016), extra=((1975, r"Valiant: \ parsing as matrix product"),
-                                                     (2016, r"Backurs and Indyk")), part=PART)
-        with self.voiceover("Chapter fifteen. The frontier."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ how fast can we parse?", r"Is $O(mn)$ the best possible?", lit=(1975, 2016), extra=((1975, r"Valiant: \ parsing as matrix product"),
+                                                     (2016, r"Backurs and Indyk")), part=PART, said="Chapter fifteen. The frontier.")
 
     def regex(self):
+        self.ask(r"Could some algorithm match regular expressions \\ much faster than $m \cdot n$ in the worst case?",
+                 [r"yes, easily", r"probably not: it would break a central conjecture"], 1,
+                 say="Could a clever algorithm match regular expressions much faster than m times n, in the worst case?",
+                 reveal="Probably not. Backurs and Indyk showed it would refute the strong exponential time hypothesis.")
         fr = load("frontier")
         head = label(r"Is $m \times n$ the best possible for regular expressions?", font_size=32).to_edge(UP, buff=0.3)
         g = fr["thompson"]
@@ -41,7 +41,7 @@ class Frontier(VoiceoverScene):
                   font_size=20, color=GREY_B),
             label("Bringmann--Gr\\o nlund--Larsen (2017): bounded-depth homogeneous membership types classified", font_size=21, color=HEAD),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.35)
-        with self.voiceover("For ordinary regular expressions, Thompson simulation gives an O m n upper bound, with pattern size m and text length n. <bookmark mark='a'/> This grid sums active-state counts after input steps on one pattern family: a work proxy, rather than a count of every internal operation. Here doubling either dimension roughly doubles the count; it is not a proof of a universal lower bound. <bookmark mark='b'/> Four-Russians and word-parallel algorithms improve logarithmic factors under their computational-model and preprocessing assumptions. The important question is whether a polynomial improvement is possible. <bookmark mark='c'/> Backurs and Indyk proved conditional hardness for specified pattern types and matching problems. In balanced hard instances, a truly subquadratic algorithm would refute the strong exponential time hypothesis. Easy pattern families still have much faster algorithms. <bookmark mark='d'/> SETH says that for every positive epsilon, some fixed clause width k rules out a k-SAT algorithm taking two to the one-minus-epsilon times the variable count, up to polynomial factors. It remains a conjecture. <bookmark mark='e'/> Bringmann, Gronlund and Larsen later completed a classification for bounded-depth homogeneous membership types, including an intermediate Word Break case. Distinguish that precise result from a blanket classification of all practical regex features.") as vo:
+        with self.voiceover("For ordinary regular expressions, Thompson simulation gives an O m n upper bound, with pattern size m and text length n. <bookmark mark='a'/> This grid sums active-state counts after input steps on one pattern family: a work proxy, rather than a count of every internal operation. Here doubling either dimension roughly doubles the count. <bookmark mark='b'/> Four-Russians and word-parallel algorithms improve logarithmic factors under their computational-model and preprocessing assumptions. The important question is whether a polynomial improvement is possible. <bookmark mark='c'/> Backurs and Indyk proved conditional hardness for specified pattern types and matching problems. In balanced hard instances, a truly subquadratic algorithm would refute the strong exponential time hypothesis. Easy pattern families still have much faster algorithms. <bookmark mark='d'/> SETH says that for every positive epsilon, some fixed clause width k rules out a k-SAT algorithm taking two to the one-minus-epsilon times the variable count, up to polynomial factors. It remains a conjecture. <bookmark mark='e'/> Bringmann, Gronlund and Larsen later completed a classification for bounded-depth homogeneous membership types, including an intermediate Word Break case. Distinguish that precise result from a blanket classification of all practical regex features.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(t), FadeIn(tl), run_time=0.6)
             vo.wait_until('a')
@@ -122,7 +122,7 @@ class Frontier(VoiceoverScene):
                   r"(2011): \ \textit{parsing} with derivatives", font_size=19, color=GREY_A),
             label(".NET NonBacktracking: linear input time for supported fixed patterns; excludes backreferences and lookarounds", font_size=19, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(DOWN, buff=0.3)
-        with self.voiceover("A derivative asks what can follow a character already read. <bookmark mark='a'/> Brzozowski defined this operation in 1964. For the expression any string of a's and b's followed by a b b, deriving by a leaves two possibilities: that a belonged to the arbitrary prefix, or it began the final a b b. The displayed union captures both. <bookmark mark='b'/> A regular language has finitely many distinct left quotients. These residual languages form its minimal DFA. Raw expression syntax can produce redundant forms, so a derivative implementation needs normalization or equivalence reasoning; counting expressions is not automatically counting minimal states. Our examples agree with independently minimized machines. <bookmark mark='c'/> Derivative-based lexers and parsers renewed the idea's practical use. Microsoft's nonbacktracking engine uses this family of methods and guarantees linear processing in input length for a supported fixed pattern. It excludes features such as backreferences and lookarounds; the pattern and initialization costs still matter.") as vo:
+        with self.voiceover("A derivative asks what can follow a character already read. <bookmark mark='a'/> Brzozowski defined this operation in 1964. For the expression any string of a's and b's followed by a b b, deriving by a leaves two possibilities: that a belonged to the arbitrary prefix, or it began the final a b b. The displayed union captures both. <bookmark mark='b'/> A regular language has finitely many distinct left quotients. These residual languages form its minimal DFA. Raw expression syntax can produce redundant forms, so a derivative implementation needs normalization or equivalence reasoning. Our examples agree with independently minimized machines. <bookmark mark='c'/> Derivative-based lexers and parsers renewed the idea's practical use. Microsoft's nonbacktracking engine uses this family of methods and guarantees linear processing in input length for a supported fixed pattern. It excludes features such as backreferences and lookarounds; the pattern and initialization costs still matter.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(defn[0]), FadeIn(defn[1]), run_time=0.6)
             vo.wait_until('a')

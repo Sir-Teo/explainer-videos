@@ -7,20 +7,15 @@ from videos.cs.cs10.common import (BG, CODE, CORE_COLORS, CTRL, DATA, FUNC, HEAD
                                    mono)
 
 
-class Simd(VoiceoverScene):
+class Simd(WatchScene):
     def construct(self):
         self.card()
         self.flynn()
-        self.history()
         self.lanes()
         self.measured()
 
     def card(self):
-        card = chapter_card(7, r"SIMD and vectors", r"Can one instruction do thirty-two things at once?",
-                            lit=(1966, 1976), extra=((1966, r"Flynn's taxonomy"), (1976, r"the Cray-1")), part=PART)
-        with self.voiceover("Chapter seven. SIMD and vectors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"SIMD and vectors", r"Can one instruction do thirty-two things at once?", lit=(1966, 1976), extra=((1966, r"Flynn's taxonomy"), (1976, r"the Cray-1")), part=PART, said="Chapter seven. SIMD and vectors.")
 
     # ------------------------------------------------------------------
     def flynn(self):
@@ -41,7 +36,7 @@ class Simd(VoiceoverScene):
             g, LEFT, buff=0.2)
         xl = VGroup(xl, yl)
         with self.voiceover(
-            "In 1966 Michael Flynn classified computers by instruction streams and data streams. <bookmark mark='a'/> One instruction stream and one data stream is the simple SISD abstraction. A modern CPU can combine this execution model with vector instructions and other forms of parallelism. <bookmark mark='b'/> Multiple independent instruction streams working on different data give MIMD: multiple cores or machines. <bookmark mark='c'/> SIMD applies one instruction to a vector of logical data lanes. It amortizes instruction control across those elements, but thirty-two lanes do not necessarily mean thirty-two independent physical arithmetic units or completion in one cycle. The implementation chooses how wide instructions map onto its execution hardware."
+            "In 1966 Michael Flynn classified computers by instruction streams and data streams. <bookmark mark='a'/> One instruction stream and one data stream is the simple SISD abstraction. A modern CPU can combine this execution model with vector instructions and other forms of parallelism. <bookmark mark='b'/> Multiple independent instruction streams working on different data give MIMD: multiple cores or machines. <bookmark mark='c'/> SIMD applies one instruction to a vector of logical data lanes. It amortizes instruction control across those elements. The implementation chooses how wide instructions map onto its execution hardware."
         ) as vo:
             self.play(FadeIn(head), run_time=0.5)
             for mk, k in zip('abc', (0, 3, 1)):
@@ -54,55 +49,12 @@ class Simd(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def history(self):
-        head = label(r"Vectors, \ from the Cray-1 to today", font_size=34).to_edge(UP, buff=0.3)
-        items = [(1976, r"Cray-1", 64 * 64, r"vector registers of 64 numbers", NO),
-                 (1997, r"MMX", 64, r"64 bits", GREY_B), (1999, r"SSE", 128, r"128 bits", DATA),
-                 (2005, r"Arm NEON", 128, r"128 bits", CTRL),
-                 (2011, r"AVX", 256, r"256 bits", DATA), (2016, r"AVX-512", 512, r"512 bits", DATA),
-                 (2016, r"Arm SVE", 2048, r"128 to 2048 bits, \ chosen by the chip", CTRL),
-                 (2021, r"RISC-V V", 2048, r"vector length chosen by the chip", FUNC)]
-        rows = VGroup()
-        for y, n, bits, d, c in items:
-            w = 0.6 + 0.55 * np.log2(bits / 32)
-            bar = Rectangle(width=w, height=0.32, stroke_width=0, fill_color=c, fill_opacity=0.75)
-            rows.add(VGroup(label(rf"{y}", font_size=19, color=GREY_B), label(n, font_size=21, color=c), bar,
-                            label(d, font_size=18, color=GREY_A)))
-        rows.arrange(DOWN, buff=0.2, aligned_edge=LEFT).move_to(DOWN * 0.2)
-        for r in rows:
-            r[0].move_to([-5.8, r.get_y(), 0])
-            r[1].move_to([-4.9, r.get_y(), 0], aligned_edge=LEFT)
-            r[2].move_to([-2.4, r.get_y(), 0], aligned_edge=LEFT)
-            r[3].next_to(r[2], RIGHT, buff=0.2)
-        cray = note(r"the Cray-1: \ 80 MHz, \ 160 megaflops at peak, \ results chained from one vector unit into the "
-                    r"next", font_size=18).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            (
-            "The idea is old. <bookmark mark='a'/> Seymour Cray's Cray-1, in 1976, had eight vector registers of "
-            "sixty-four numbers each, and one instruction could add two whole vectors, with the results streaming "
-            "from one unit straight into the next. At eighty megahertz its peak was a hundred and sixty million "
-            "floating-point operations a second; that is a peak throughput figure, not an application "
-            "measurement. <bookmark mark='b'/> Twenty years later SIMD came to the desktop as short vectors "
-            "packed into wide registers: Intel's MMX, sixty-four bits, then SSE, AVX and AVX-512, doubling the "
-            "width each time. Arm's phones have NEON. <bookmark mark='c'/> The newest designs, Arm's SVE and "
-            "RISC-V's vector extension, support vector-length-agnostic programming: loops query or adapt to the "
-            "available vector length. That differs from the Cray-1, whose vector-register capacity was fixed at "
-            "sixty-four elements."
-        )
-        ) as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(rows[0]), FadeIn(cray), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(r) for r in rows[1:6]], lag_ratio=0.3), run_time=2.5)
-            vo.wait_until("c")
-            self.play(FadeIn(rows[6]), FadeIn(rows[7]))
-        self.wait(0.3)
-        self.clear_scene()
 
     # ------------------------------------------------------------------
     def lanes(self):
+        self.ask(r"One 256-bit vector instruction compares byte lengths. \\ How many at once?", [r"1", r"8", r"32"], 2,
+                 say="One two-hundred-and-fifty-six-bit vector instruction compares byte-sized lengths. How many at once?",
+                 reveal="Thirty-two.")
         head = label(r"The Job's scan, \ thirty-two entries at a time", font_size=32).to_edge(UP, buff=0.3)
         lens = [3, 5, 2, 4, 7, 3, 5, 9, 4, 2, 6, 5, 3, 8, 4, 5, 2, 3, 6, 4, 5, 7, 3, 2, 4, 10, 5, 3, 6, 4, 2, 5]
         key = 5
@@ -173,7 +125,7 @@ class Simd(VoiceoverScene):
         auto = note(r"linear-scan strategy, \ different layout; \ top twenty checked against the reference",
                     font_size=17).to_edge(DOWN, buff=0.3)
         with self.voiceover(
-            f"We wrote the Job in C with the same linear-scan dictionary strategy but a different data layout and implementation, ran it on all thirty novels on this computer, and checked its top twenty against the reference. <bookmark mark='a'/> The scalar version, one entry per iteration, takes {a:.0f} seconds. <bookmark mark='b'/> The AVX2 version takes {b:.0f}. <bookmark mark='c'/> {a / b:.0f} times faster, not thirty-two, and the reasons are instructive. Entries with the same length as the word still need a letter-by-letter comparison. The lengths array also consumes cache capacity; this benchmark does not isolate which level serves each access. And the rest of the program is not vectorized at all. Early exits and candidate comparisons make automatic vectorization harder. Here we explicitly use AVX2 intrinsics; this result does not prove that every compiler must fail to vectorize such a loop."
+            f"We wrote the Job in C with the same linear-scan dictionary strategy but a different data layout and implementation, ran it on all thirty novels on this computer, and checked its top twenty against the reference. <bookmark mark='a'/> The scalar version, one entry per iteration, takes {a:.0f} seconds. <bookmark mark='b'/> The AVX2 version takes {b:.0f}. <bookmark mark='c'/> {a / b:.0f} times faster, not thirty-two, and the reasons are instructive. Entries with the same length as the word still need a letter-by-letter comparison. And the rest of the program is not vectorized at all. Early exits and candidate comparisons make automatic vectorization harder. Here we explicitly use AVX2 intrinsics."
         ) as vo:
             self.play(FadeIn(head), FadeIn(ch[0]), FadeIn(ch.names), FadeIn(auto))
             vo.wait_until("a")

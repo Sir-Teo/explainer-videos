@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs11.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, load, region)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.capabilities()
@@ -12,14 +12,13 @@ class Frontier(VoiceoverScene):
         self.allocation()
 
     def card(self):
-        card = chapter_card(16, r"Frontier: \ bounds, \ semantics, \ capabilities",
-                            r"Can memory safety be built into the machine?", lit=(2015, 2022),
-                            extra=((2015, r"CHERI"), (2022, r"Arm Morello")), part=PART)
-        with self.voiceover("Chapter sixteen. The frontier."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(16, r"Frontier: \ bounds, \ semantics, \ capabilities", r"Can memory safety be built into the machine?", lit=(2015, 2022), extra=((2015, r"CHERI"), (2022, r"Arm Morello")), part=PART, said="Chapter sixteen. The frontier.")
 
     def capabilities(self):
+        self.ask(r"Pointers that carry their own bounds (CHERI). \\ Can the stack smash still overwrite the return address?",
+                 [r"yes", r"no"], 1,
+                 say="If every pointer carried its own bounds, checked by the hardware, could the stack smash still work?",
+                 reveal="No. The copy stops at the end of the buffer's capability.")
         fr = load("frontier")
         head = label(r"Pointers that carry their bounds", font_size=34).to_edge(UP, buff=0.3)
         ptr = VGroup(region(2.2, 0.6, r"address", DATA, font_size=18), region(1.6, 0.6, r"base", CTRL, font_size=18),
@@ -40,7 +39,7 @@ class Frontier(VoiceoverScene):
                      label(r"the 65th byte, \ before the return address is touched; \ \texttt{Ada} is greeted as "
                            r"before", font_size=19, color=YES)).arrange(DOWN, aligned_edge=LEFT, buff=0.12).to_edge(
             DOWN, buff=0.35)
-        with self.voiceover("Ordinary address arithmetic does not automatically enforce object bounds. <bookmark mark='a'/> CHERI associates capabilities with address, bounds, permissions and a protected validity tag. This diagram is conceptual; encodings vary. Morello uses 128-bit capabilities plus a tag, with compressed bounds rather than these literal separate fields. <bookmark mark='b'/> Capability-based accesses check authority. Derivation cannot increase authority beyond what is held, although the cursor can move within the rules; bounds need not become strictly smaller on every operation. Hybrid systems can also retain ordinary pointers. Arm's Morello prototype arrived in 2022. <bookmark mark='c'/> Pebble's miniature model attaches exact sixty-four-byte bounds to greet's buffer pointer. It is a teaching model, not a complete CHERI implementation. <bookmark mark='d'/> It traps this attack at the sixty-fifth byte and still greets Ada. Spatial bounds alone do not generally solve use-after-free: temporal safety needs additional mechanisms.") as vo:
+        with self.voiceover("Ordinary address arithmetic does not automatically enforce object bounds. <bookmark mark='a'/> CHERI associates capabilities with address, bounds, permissions and a protected validity tag. This diagram is conceptual; encodings vary. Morello uses 128-bit capabilities plus a tag, with compressed bounds rather than these literal separate fields. <bookmark mark='b'/> Capability-based accesses check authority. Derivation cannot increase authority beyond what is held, although the cursor can move within the rules; bounds need not become strictly smaller on every operation. Hybrid systems can also retain ordinary pointers. Arm's Morello prototype arrived in 2022. <bookmark mark='c'/> Pebble's miniature model attaches exact sixty-four-byte bounds to greet's buffer pointer. <bookmark mark='d'/> It traps this attack at the sixty-fifth byte and still greets Ada. Spatial bounds alone do not generally solve use-after-free: temporal safety needs additional mechanisms.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(ptr), FadeIn(pl), run_time=0.6)
             vo.wait_until('a')
@@ -70,13 +69,10 @@ class Frontier(VoiceoverScene):
             "Compiler correctness requires an explicit source semantics and a stated proof boundary. <bookmark "
             "mark='a'/> The theorem connects behaviors in source and target languages, including how undefined "
             "source behavior limits the guarantee. <bookmark mark='b'/> CompCert proves semantic preservation for "
-            "its verified compilation passes and supported C subset. Its theorem relies on assumptions about "
-            "unverified interfaces and tools; it is not a proof of every C program or every surrounding "
-            "component. <bookmark mark='c'/> Cerberus explores executable models of C, including the difficult "
+            "its verified compilation passes and supported C subset. <bookmark mark='c'/> Cerberus explores executable models of C, including the difficult "
             "interactions of pointers, objects and real implementation practice. <bookmark mark='d'/> Pointer "
             "provenance asks which storage instance a pointer may access, even when numeric addresses coincide. "
-            "Standards work and implementation models continue to refine these rules; a proposal is not "
-            "automatically an adopted standard. <bookmark mark='e'/> Research compares formal guarantees, "
+            " <bookmark mark='e'/> Research compares formal guarantees, "
             "compatibility with existing code and optimizer behavior. We should name the particular semantics and "
             "version before claiming that all three agree."
         )

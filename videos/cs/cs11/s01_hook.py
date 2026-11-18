@@ -5,12 +5,12 @@ from videos.cs.cs11.common import (BG, CODE, COST, CTRL, DATA, FILE_COLORS, FUNC
                                    region)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.files()
         self.attack()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     # ------------------------------------------------------------------
     def files(self):
@@ -93,28 +93,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def plan(self):
-        title = label(rf"Part {PART}: \ The Running Program", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"a program's life: \ compiler, \ assembler, \ linker, \ loader",
-            r"bytes, \ endianness, \ alignment; \ control flow and jump tables",
-            r"the call stack, \ calling conventions, \ recursion and tail calls",
-            r"the heap: \ free lists, \ coalescing, \ buddies; \ Knuth's rule, \ Robson's bound",
-            r"object files, \ static and dynamic linking, \ the address space",
-            r"undefined behaviour; \ the stack smash; \ the Job, \ linked",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 11 of Computer Science, Built, and the first part of Act Three, Speaking to the Machine. "
-            "<bookmark mark='a'/> In this part: a program's life from source to process. Bytes, endianness and "
-            "alignment, and control flow as machine code. The call stack, calling conventions, recursion and tail "
-            "calls. The heap and its allocators, with Knuth's fifty-percent rule and Robson's bound. Object files, "
-            "static and dynamic linking, and the address space. Undefined behaviour, the stack smash, and the Job, "
-            "linked from four files."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

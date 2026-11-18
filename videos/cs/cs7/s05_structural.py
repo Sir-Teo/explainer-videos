@@ -79,7 +79,7 @@ class Structural(WatchScene):
         src = tag("assumed", r"a divide holds EX for 16 cycles").to_corner(DR, buff=0.3)
         with self.voiceover(
             "Structural hazards also come from slow units. <bookmark mark='a'/> A divide occupies the execute stage "
-            "for sixteen cycles in our model, two quotient bits at a time, like Part 4's divider. <bookmark mark='b'/> "
+            "for sixteen cycles, two quotient bits at a time, like Part 4's divider. <bookmark mark='b'/> "
             "Watch the add behind it. It has nowhere to go, so it waits in decode, and bubbles flow out ahead of it."
         ) as vo:
             self.play(FadeIn(flow.boxes), FadeIn(flow.regs), FadeIn(flow.readouts), FadeIn(src))

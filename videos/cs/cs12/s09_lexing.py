@@ -7,7 +7,7 @@ from videos.cs.cs12.common import (BG, CODE, CTRL, DATA, FUNC, HEAD, KIND_COLORS
                                    grid_table, load, region)
 
 
-class Lexing(VoiceoverScene):
+class Lexing(WatchScene):
     def construct(self):
         self.card()
         self.rules()
@@ -16,11 +16,7 @@ class Lexing(VoiceoverScene):
         self.indent()
 
     def card(self):
-        card = chapter_card(8, r"Lexing the Pebble language", r"How do characters become words?", lit=(1975,),
-                            extra=((1975, r"Lesk: \ \texttt{lex}"),), part=PART)
-        with self.voiceover("Chapter eight. Lexing the Pebble language."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Lexing the Pebble language", r"How do characters become words?", lit=(1975,), extra=((1975, r"Lesk: \ \texttt{lex}"),), part=PART, said="Chapter eight. Lexing the Pebble language.")
 
     def rules(self):
         lx = load("lexer")
@@ -56,6 +52,10 @@ class Lexing(VoiceoverScene):
         self.clear_scene()
 
     def munch(self):
+        self.ask(r"The lexer reads \texttt{<=}. \\ One token, or two?", [r"two: \texttt{<} and \texttt{=}",
+                 r"one: \texttt{<=}"], 1,
+                 say="The lexer reads less-than, then equals. One token, or two?",
+                 reveal="One. Maximal munch takes the longest token that matches.")
         lx = load("lexer")
         head = label(r"Maximal munch: \ always take the longest token", font_size=34).to_edge(UP, buff=0.3)
         ex = VGroup()

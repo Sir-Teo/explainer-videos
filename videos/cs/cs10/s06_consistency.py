@@ -9,21 +9,16 @@ from videos.cs.cs10.common import (BG, CODE, CORE_COLORS, CTRL, DATA, FUNC, HEAD
                                    grid_table, load, mono, timeline)
 
 
-class Consistency(VoiceoverScene):
+class Consistency(WatchScene):
     def construct(self):
         self.card()
         self.sc()
         self.interleavings()
         self.buffer()
         self.measured()
-        self.models()
 
     def card(self):
-        card = chapter_card(5, r"Memory consistency", r"In what order do other cores see my writes?", lit=(1979,),
-                            extra=((1979, r"Lamport: \ sequential consistency"),), part=PART)
-        with self.voiceover("Chapter five. Memory consistency."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Memory consistency", r"In what order do other cores see my writes?", lit=(1979,), extra=((1979, r"Lamport: \ sequential consistency"),), part=PART, said="Chapter five. Memory consistency.")
 
     # ------------------------------------------------------------------
     def sc(self):
@@ -61,6 +56,10 @@ class Consistency(VoiceoverScene):
 
     # ------------------------------------------------------------------
     def interleavings(self):
+        self.ask(r"$x = y = 0$. \\ Thread 1: $x = 1$, then read $y$. \\ Thread 2: $y = 1$, then read $x$. \\ Can both read 0?",
+                 [r"never", r"not under sequential consistency, but yes on real chips"], 1,
+                 say="Can both threads read zero?",
+                 reveal="Not under sequential consistency. But real processors buffer their stores, and both zeros happen.")
         head = label(r"Every interleaving \ that keeps program order", font_size=34).to_edge(UP, buff=0.3)
         ops0 = [("x = 1", 0), ("r0 = y", 0)]
         ops1 = [("y = 1", 1), ("r1 = x", 1)]
@@ -208,47 +207,3 @@ class Consistency(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    # ------------------------------------------------------------------
-    def models(self):
-        head = label(r"Which reorderings each machine allows", font_size=34).to_edge(UP, buff=0.3)
-        hdr = [r"", r"load, \ load", r"load, \ store", r"store, \ store", r"store, \ load"]
-        Y, N_ = r"kept", r"may swap"
-        rows = [[r"sequential consistency", Y, Y, Y, Y], [r"x86 \ (TSO)", Y, Y, Y, N_],
-                [r"Arm, \ POWER, \ RISC-V", N_, N_, N_, N_]]
-        colors = [[GREY_A] + [YES if c == Y else NO for c in r[1:]] for r in rows]
-        t = grid_table(hdr, rows, [3.8, 1.9, 1.9, 1.9, 1.9], row_h=0.6, font_size=22, colors=colors,
-                       mono_cols=()).move_to(UP * 0.6)
-        cap = note(r"an earlier access, \ then a later one, \ to different addresses: \ may the later one become "
-                   r"visible first?", font_size=18).next_to(t, DOWN, buff=0.3)
-        pts = VGroup(
-            label(r"overview only: \ dependencies, same-address rules and architecture details still apply",
-                  font_size=21, color=GREY_A),
-            label(r"C and C++ (2011), \ Java (2004): \ one portable model, \ mapped to each machine's fences",
-                  font_size=21, color=DATA),
-            label(r"relaxed atomics can be race-free yet non-SC; \ use the language's synchronization rules \ (Part 33)",
-                  font_size=21, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(cap, DOWN, buff=0.35)
-        with self.voiceover(
-            (
-            "This table is a first approximation for ordinary memory accesses to different addresses, without "
-            "dependencies or ordering instructions. <bookmark mark='a'/> SC admits a program-order-preserving "
-            "interleaving. x86 TSO permits a later load to pass an earlier store to a different address. Baseline "
-            "Arm, POWER and RISC-V RVWMO permit more reorderings, with important dependency, same-address and "
-            "architecture-specific constraints; the table is not a complete specification. <bookmark mark='b'/> "
-            "Acquire, release and fences establish selected ordering relationships. Their meanings differ between "
-            "language rules and machine instructions. <bookmark mark='c'/> C, C++ and Java define language memory "
-            "models, and compilers must implement their guarantees on each target. <bookmark mark='d'/> Proper "
-            "locking can give an SC-style reasoning discipline. But merely having no non-atomic data race does "
-            "not make arbitrary C++ relaxed-atomic code SC: our store-buffering test is the counterexample. Part "
-            "33 develops the precise conditions."
-        )
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(VGroup(*t.cells[0])), FadeIn(t.rule), FadeIn(cap))
-            vo.wait_until("a")
-            for r in (1, 2, 3):
-                self.play(FadeIn(VGroup(*t.cells[r])), run_time=0.8)
-            for mk, p in zip("bcd", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
-        self.wait(0.3)
-        self.clear_scene()

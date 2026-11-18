@@ -48,7 +48,7 @@ def fragment(kind):
     return g
 
 
-class Thompson(VoiceoverScene):
+class Thompson(WatchScene):
     def construct(self):
         self.card()
         self.pieces()
@@ -56,11 +56,7 @@ class Thompson(VoiceoverScene):
         self.linear()
 
     def card(self):
-        card = chapter_card(3, r"Thompson's construction", r"How do you run a regular expression?", lit=(1968,),
-                            extra=((1968, r"Thompson: \ regular expression search"),), part=PART)
-        with self.voiceover("Chapter three. Thompson's construction."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Thompson's construction", r"How do you run a regular expression?", lit=(1968,), extra=((1968, r"Thompson: \ regular expression search"),), part=PART, said="Chapter three. Thompson's construction.")
 
     def pieces(self):
         head = label(r"One small machine per operation", font_size=36).to_edge(UP, buff=0.35)
@@ -133,6 +129,10 @@ class Thompson(VoiceoverScene):
         self.clear_scene()
 
     def linear(self):
+        self.ask(r"Simulate an $m$-state Thompson NFA \\ on $n$ characters. The time grows like...",
+                 [r"$m + n$", r"$m \cdot n$", r"$2^m \cdot n$"], 1,
+                 say="Simulate an m-state NFA on n characters, tracking every active state. How does the time grow?",
+                 reveal="Like m times n: never exponential.")
         b = load("blowup")
         head = label("Fixed pattern: linear input-time upper bound", font_size=36).to_edge(UP, buff=0.35)
         pts = VGroup(

@@ -10,7 +10,7 @@ POL = {"first fit": (DATA, r"the lowest-addressed free block that fits"),
        "buddy": (NO, r"only power-of-two blocks: \ split in halves, \ merge with your ``buddy''")}
 
 
-class Allocators(VoiceoverScene):
+class Allocators(WatchScene):
     def construct(self):
         self.card()
         self.policies()
@@ -19,11 +19,7 @@ class Allocators(VoiceoverScene):
         self.real()
 
     def card(self):
-        card = chapter_card(7, r"Five allocators, \ one real trace", r"Which free block should a request get?",
-                            part=PART)
-        with self.voiceover("Chapter seven. Five allocators, one real trace."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Five allocators, \ one real trace", r"Which free block should a request get?", part=PART, said="Chapter seven. Five allocators, one real trace.")
 
     def policies(self):
         head = label(r"Which free block?", font_size=36).to_edge(UP, buff=0.35)
@@ -105,7 +101,7 @@ class Allocators(VoiceoverScene):
         punch = label(rf"peak live {best['peak_live'] / 1e6:.2f} MB: \ first fit needs "
                       rf"{best['peak_heap'] / 1e6:.2f} MB, \ the buddy system {rows[-1]['peak_heap'] / 1e6:.2f} MB",
                       font_size=21, color=HEAD).to_edge(DOWN, buff=0.3)
-        with self.voiceover("These results describe one recorded trace and our simulator's rules. <bookmark mark='a'/> The ratio is peak heap size divided by peak requested live bytes. These peaks need not occur at the same instant. The ratio includes metadata, alignment, rounding and unused holes; it is not external fragmentation alone. <bookmark mark='b'/> First fit, best fit and segregated fits are near 1.13 here. Next fit is slightly larger, and buddy is about 1.82, or 82 percent above peak requested live bytes. The trace does not isolate how much each overhead contributes. A universal quarter-waste rule would require a request-size distribution. <bookmark mark='c'/> The other panel counts blocks examined per allocation. Next fit examines about eighteen, and segregated fits fewer than one on average because some requests extend the heap without a search. These are operation counts, not measured execution times. <bookmark mark='d'/> Size classes can reduce searching, but real performance also depends on synchronization, locality, metadata and workload. One trace does not rank every allocator for every program.") as vo:
+        with self.voiceover("These results describe one recorded trace and our simulator's rules. <bookmark mark='a'/> The ratio is peak heap size divided by peak requested live bytes. These peaks need not occur at the same instant. The ratio includes metadata, alignment, rounding and unused holes; it is not external fragmentation alone. <bookmark mark='b'/> First fit, best fit and segregated fits are near 1.13 here. Next fit is slightly larger, and buddy is about 1.82, or 82 percent above peak requested live bytes. A universal quarter-waste rule would require a request-size distribution. <bookmark mark='c'/> The other panel counts blocks examined per allocation. Next fit examines about eighteen, and segregated fits fewer than one on average because some requests extend the heap without a search. These are operation counts, not measured execution times. <bookmark mark='d'/> Size classes can reduce searching, but real performance also depends on synchronization, locality, metadata and workload. One trace does not rank every allocator for every program.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(ch[0]), FadeIn(ch.names), FadeIn(cl), Create(one), FadeIn(ol), *[GrowFromEdge(b, DOWN) for b in ch.bars], FadeIn(ch.vals), run_time=0.6)
             vo.wait_until('a')
@@ -119,6 +115,10 @@ class Allocators(VoiceoverScene):
         self.clear_scene()
 
     def buddy(self):
+        self.ask(r"A buddy allocator, an 8-byte header. \\ A 16-byte request occupies...", [r"16 bytes", r"24 bytes",
+                 r"32 bytes"], 2,
+                 say="In a buddy allocator, with an eight-byte header, how much does a sixteen-byte request really occupy?",
+                 reveal="Thirty-two bytes: twenty-four rounds up to the next power of two.")
         head = label(r"The buddy system \ (Knowlton, \ 1965)", font_size=34).to_edge(UP, buff=0.3)
         lv = VGroup()
         x0 = -5.0
