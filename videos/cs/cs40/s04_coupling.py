@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, module_box)
 
 
-class Coupling(VoiceoverScene):
+class Coupling(WatchScene):
     def construct(self):
         self.card()
         self.layers()
@@ -13,12 +13,8 @@ class Coupling(VoiceoverScene):
         self.history()
 
     def card(self):
-        card = chapter_card(3, r"Coupling, \ measured", r"How tangled is this repository?", lit=(1974, 1994),
-                            extra=((1974, r"Stevens, Myers and Constantine: \ coupling and cohesion"),
-                                   (1994, r"Martin: \ stability metrics")), part=PART)
-        with self.voiceover("Chapter three. Coupling, measured."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Coupling, \ measured", r"How tangled is this repository?", lit=(1974, 1994), extra=((1974, r"Stevens, Myers and Constantine: \ coupling and cohesion"),
+                                   (1994, r"Martin: \ stability metrics")), part=PART, said="Chapter three. Coupling, measured.")
 
     def layers(self):
         r = load("repo")
@@ -124,6 +120,9 @@ class Coupling(VoiceoverScene):
         self.clear_scene()
 
     def cycles(self):
+        self.ask(r"Import cycles in this repository's library:", [r"none", r"a few"], 1,
+                 say="Does this repository's own library have any cycles of imports?",
+                 reveal="Five, found by Part 18's strongly connected components.")
         r = load("repo")
         head = label(r"Cycles, \ and inverting a dependency", font_size=36).to_edge(UP, buff=0.3)
         cyc = VGroup(*[label(r" $\to$ ".join(rf"\texttt{{{m.split('.')[-1].replace('_', chr(92) + '_')}}}"

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load)
 
 
-class Testing(VoiceoverScene):
+class Testing(WatchScene):
     def construct(self):
         self.card()
         self.pyramid()
@@ -13,15 +13,17 @@ class Testing(VoiceoverScene):
         self.fuzz()
 
     def card(self):
-        card = chapter_card(5, r"Testing, \ and tests that lie", r"When a test fails, what has gone wrong?",
-                            lit=(2009, 2016), extra=((2009, r"Cohn: \ the test pyramid"),
+        self.chapter(5, r"Testing, \ and tests that lie", r"When a test fails, what has gone wrong?", lit=(2009, 2016), extra=((2009, r"Cohn: \ the test pyramid"),
                                                      (2014, r"Luo et al.: \ flaky tests"),
-                                                     (2016, r"Micco: \ flakiness at Google")), part=PART)
-        with self.voiceover("Chapter five. Testing, and tests that lie."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2016, r"Micco: \ flakiness at Google")), part=PART, said="Chapter five. Testing, and tests that lie.")
 
     def pyramid(self):
+        self.wrong_idea(r"high coverage means well-tested",
+                        r"coverage says what ran, \\ not what was checked",
+                        narration="A common belief: if the tests run almost every line, the code is well tested.",
+                        right_narration="Coverage only says which lines ran. A test that runs a line but checks nothing "
+                                        "passes on a wrong program. Chapter six measures that.")
+        self.clear_scene()
         head = label(r"The test pyramid", font_size=36).to_edge(UP, buff=0.3)
         levels = [(r"end-to-end: \\ the whole system", NO, 3.2),
                   (r"integration: \ several modules", HEAD, 5.2),
@@ -106,6 +108,10 @@ class Testing(VoiceoverScene):
         self.clear_scene()
 
     def bisect(self):
+        self.ask(r"One of 159 earlier tests breaks the victim. \\ Runs to find it by bisection:", [r"about $7$",
+                 r"about $80$", r"$159$"], 0,
+                 say="One of a hundred and fifty-nine earlier tests breaks the victim. How many runs to find it by bisection?",
+                 reveal="About seven: log base two of a hundred and fifty-nine.")
         p = load("polluter")
         head = label(r"Finding the polluter", font_size=36).to_edge(UP, buff=0.3)
         n = p["before"]

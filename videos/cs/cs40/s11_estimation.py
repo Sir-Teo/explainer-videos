@@ -8,7 +8,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, trace)
 
 
-class Estimation(VoiceoverScene):
+class Estimation(WatchScene):
     def construct(self):
         self.card()
         self.lognormal()
@@ -17,11 +17,7 @@ class Estimation(VoiceoverScene):
         self.practice()
 
     def card(self):
-        card = chapter_card(10, r"Estimates", r"Why is software always late?", lit=(1979, 1979),
-                            extra=((1979, r"Kahneman and Tversky: \ the planning fallacy"),), part=PART)
-        with self.voiceover("Chapter ten. Estimates."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Estimates", r"Why is software always late?", lit=(1979, 1979), extra=((1979, r"Kahneman and Tversky: \ the planning fallacy"),), part=PART, said="Chapter ten. Estimates.")
 
     def lognormal(self):
         head = label(r"One task", font_size=36).to_edge(UP, buff=0.3)
@@ -71,6 +67,10 @@ class Estimation(VoiceoverScene):
         self.clear_scene()
 
     def schedule(self):
+        self.ask(r"Twenty tasks, each with a median of five days, in a row. \\ The plan says 100. Typical outcome:",
+                 [r"about $100$ days", r"noticeably more"], 1,
+                 say="Twenty tasks in a row, each with a median of five days. The plan says a hundred days. What is typical?",
+                 reveal="More: each task's long right tail adds up, and medians don't.")
         e = load("estimate")
         head = label(r"Twenty tasks, \ a hundred thousand times", font_size=34).to_edge(UP, buff=0.3)
         rows = []

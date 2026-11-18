@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, grid_table, load, module_box)
 
 
-class Parnas(VoiceoverScene):
+class Parnas(WatchScene):
     def construct(self):
         self.card()
         self.complexity()
@@ -13,12 +13,8 @@ class Parnas(VoiceoverScene):
         self.rule()
 
     def card(self):
-        card = chapter_card(1, r"Complexity, \ and Parnas' rule", r"How should a program be divided into modules?",
-                            lit=(1972, 1986), extra=((1972, r"Parnas: \ On the Criteria"),
-                                                     (1986, r"Brooks: \ No Silver Bullet")), part=PART)
-        with self.voiceover("Chapter one. Complexity, and Parnas' rule."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Complexity, \ and Parnas' rule", r"How should a program be divided into modules?", lit=(1972, 1986), extra=((1972, r"Parnas: \ On the Criteria"),
+                                                     (1986, r"Brooks: \ No Silver Bullet")), part=PART, said="Chapter one. Complexity, and Parnas' rule.")
 
     def complexity(self):
         head = label(r"No silver bullet", font_size=36).to_edge(UP, buff=0.3)
@@ -120,6 +116,10 @@ class Parnas(VoiceoverScene):
         self.d1, self.d2, self.heads = d1, d2, VGroup(head, l1, l2)
 
     def changes(self):
+        self.ask(r"Store each word as a number in a vocabulary. \\ Modules to change: flowchart design vs hiding design",
+                 [r"the same", r"three against one"], 1,
+                 say="Change one decision: store each word as a number. How many modules must change in each design?",
+                 reveal="Three in the flowchart design, one in the design that hides the decision.")
         k = load("kwic")
         d1, d2 = self.d1, self.d2
         r0 = k["rows"][0]

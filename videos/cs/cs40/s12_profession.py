@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table)
 
 
-class Profession(VoiceoverScene):
+class Profession(WatchScene):
     def construct(self):
         self.card()
         self.licenses()
@@ -12,12 +12,8 @@ class Profession(VoiceoverScene):
         self.obligations()
 
     def card(self):
-        card = chapter_card(11, r"The profession", r"What do software engineers owe, \ and to whom?",
-                            lit=(1985, 2018), extra=((1989, r"the GNU GPL"), (1992, r"the ACM Code of Ethics"),
-                                                     (2018, r"the GDPR")), part=PART)
-        with self.voiceover("Chapter eleven. The profession."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The profession", r"What do software engineers owe, \ and to whom?", lit=(1985, 2018), extra=((1989, r"the GNU GPL"), (1992, r"the ACM Code of Ethics"),
+                                                     (2018, r"the GDPR")), part=PART, said="Chapter eleven. The profession.")
 
     def licenses(self):
         head = label(r"Licenses and open source", font_size=36).to_edge(UP, buff=0.3)
@@ -97,6 +93,10 @@ class Profession(VoiceoverScene):
         self.clear_scene()
 
     def failures(self):
+        self.ask(r"Horizon showed shortfalls at post office counters. \\ The cause was...", [r"theft",
+                 r"bugs in the software"], 1,
+                 say="The Post Office's Horizon system showed money missing at branch counters, and hundreds were prosecuted. What was the cause?",
+                 reveal="Bugs in the software, which the Post Office insisted were impossible.")
         head = label(r"When software fails people", font_size=36).to_edge(UP, buff=0.3)
         lines = VGroup(
             wrapped_label(r"\textbf{the Post Office Horizon scandal} \ (United Kingdom, \ 1999--2015): \ an "

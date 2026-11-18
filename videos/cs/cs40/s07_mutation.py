@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, grid_table, load)
 
 
-class Mutation(VoiceoverScene):
+class Mutation(WatchScene):
     def construct(self):
         self.card()
         self.idea()
@@ -13,12 +13,8 @@ class Mutation(VoiceoverScene):
         self.criteria()
 
     def card(self):
-        card = chapter_card(6, r"Testing the tests", r"How good is a test suite?", lit=(1978, 2011),
-                            extra=((1978, r"DeMillo, Lipton and Sayward: \ mutation testing"),
-                                   (2011, r"Jia and Harman: \ a survey")), part=PART)
-        with self.voiceover("Chapter six. Testing the tests."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Testing the tests", r"How good is a test suite?", lit=(1978, 2011), extra=((1978, r"DeMillo, Lipton and Sayward: \ mutation testing"),
+                                   (2011, r"Jia and Harman: \ a survey")), part=PART, said="Chapter six. Testing the tests.")
 
     def idea(self):
         head = label(r"Mutants", font_size=36).to_edge(UP, buff=0.3)
@@ -60,6 +56,10 @@ class Mutation(VoiceoverScene):
         self.clear_scene()
 
     def result(self):
+        self.ask(r"Tests run $77\%$ of the assembler's statements. \\ Of 146 small wrong versions, they catch...",
+                 [r"almost all", r"about three in five"], 1,
+                 say="The assembler's tests run seventy-seven percent of its statements. We make a hundred and forty-six slightly wrong versions. How many do the tests catch?",
+                 reveal="Sixty-two percent.")
         d = load("mutation")
         m, c = d["mutation"], d["coverage"]
         head = label(r"Our assembler, \ measured", font_size=36).to_edge(UP, buff=0.3)

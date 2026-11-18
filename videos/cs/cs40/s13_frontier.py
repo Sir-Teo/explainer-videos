@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, load)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.evidence()
@@ -13,13 +13,9 @@ class Frontier(VoiceoverScene):
         self.open()
 
     def card(self):
-        card = chapter_card(12, r"Frontier: \ evidence, \ and machines that code", r"How would we know what works?",
-                            lit=(2012, 2024), extra=((2012, r"Hindle et al.: \ the naturalness of software"),
+        self.chapter(12, r"Frontier: \ evidence, \ and machines that code", r"How would we know what works?", lit=(2012, 2024), extra=((2012, r"Hindle et al.: \ the naturalness of software"),
                                                      (2021, r"Chen et al.: \ HumanEval"),
-                                                     (2023, r"Jimenez et al.: \ SWE-bench")), part=PART)
-        with self.voiceover("Chapter twelve. Frontier: evidence, and machines that write code."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (2023, r"Jimenez et al.: \ SWE-bench")), part=PART, said="Chapter twelve. Frontier: evidence, and machines that write code.")
 
     def evidence(self):
         head = label(r"An evidence base, \ slowly", font_size=36).to_edge(UP, buff=0.3)
@@ -129,6 +125,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def natural(self):
+        self.ask(r"A trigram model: on the novels, or on this repository's code, \\ which is more predictable?",
+                 [r"the novels", r"the code"], 1,
+                 say="Train a model that predicts each word from the two before it. Which is more predictable: the novels, or this repository's code?",
+                 reveal="The code: four and a half bits per token against eight per word.")
         n = load("natural")
         head = label(r"Code is natural", font_size=36).to_edge(UP, buff=0.3)
         top = 9.0

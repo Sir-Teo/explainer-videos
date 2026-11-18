@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs40.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, code_block, load)
 
 
-class Abstraction(VoiceoverScene):
+class Abstraction(WatchScene):
     def construct(self):
         self.card()
         self.adt()
@@ -15,14 +15,9 @@ class Abstraction(VoiceoverScene):
         self.hyrum()
 
     def card(self):
-        card = chapter_card(2, r"Abstraction and contracts", r"What exactly does an interface promise?",
-                            lit=(1974, 1994), extra=((1974, r"Liskov and Zilles: \ abstract data types"),
+        self.chapter(2, r"Abstraction and contracts", r"What exactly does an interface promise?", lit=(1974, 1994), extra=((1974, r"Liskov and Zilles: \ abstract data types"),
                                                      (1986, r"Meyer: \ design by contract"),
-                                                     (1994, r"Liskov and Wing: \ behavioural subtyping")),
-                            part=PART)
-        with self.voiceover("Chapter two. Abstraction and contracts."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (1994, r"Liskov and Wing: \ behavioural subtyping")), part=PART, said="Chapter two. Abstraction and contracts.")
 
     def adt(self):
         head = label(r"Abstract data types", font_size=36).to_edge(UP, buff=0.3)
@@ -103,6 +98,10 @@ class Abstraction(VoiceoverScene):
         self.clear_scene()
 
     def subtyping(self):
+        self.ask(r"\texttt{Square} extends \texttt{Rectangle}; setting its width \\ also sets its height. A valid subtype?",
+                 [r"yes", r"no"], 1,
+                 say="A Square class extends Rectangle, and setting its width also sets its height. Is it a valid subtype?",
+                 reveal="No. Code that sets a rectangle's width expects its height to stay put.")
         r = load("lsp")
         sq = r["square"]
         head = label(r"When is a subtype a subtype?", font_size=36).to_edge(UP, buff=0.3)
