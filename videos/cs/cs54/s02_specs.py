@@ -30,26 +30,25 @@ def listing_lines(rows) -> list[str]:
     return ["    " * r["depth"] + r["code"] for r in rows]
 
 
-class Specs(VoiceoverScene):
+class Specs(WatchScene):
     def construct(self):
         self.card()
         self.contract()
         self.weak()
         self.ghost()
         self.turing()
-        self.columns()
-        self.lineage()
 
     def card(self):
-        card = chapter_card(1, r"Specifications, \ and the first program proof",
-                            r"What does it mean for a program to be right?", lit=(1949, 1984),
-                            extra=((1949, r"Turing: \ Checking a Large Routine"),
-                                   (1984, r"Morris and Jones revive it")), part=PART)
-        with self.voiceover("Chapter one. Specifications, and the first program proof."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Specifications, \ and the first program proof", r"What does it mean for a program to be right?", lit=(1949, 1984), extra=((1949, r"Turing: \ Checking a Large Routine"),
+                                   (1984, r"Morris and Jones revive it")), part=PART, said="Chapter one. Specifications, and the first program proof.")
 
     def contract(self):
+        self.wrong_idea(r"enough tests show a program is correct",
+                        r"testing shows the presence of bugs, \\ never their absence",
+                        narration="A natural hope: run enough tests, and you know the program is correct.",
+                        right_narration="Dijkstra's line: testing can show the presence of bugs, never their absence. Only a "
+                                        "proof covers every input, and a proof needs a specification.")
+        self.clear_scene()
         mx = load("hoare")["programs"]["max"]
         head = label(r"A specification is a contract", font_size=36).to_edge(UP, buff=0.3)
         triple = MathTex(r"\{\,\mathit{true}\,\}", r"\quad m := \max(a, b) \quad",
@@ -93,6 +92,10 @@ class Specs(VoiceoverScene):
         self.clear_scene()
 
     def weak(self):
+        self.ask(r"A sort's postcondition: the output is sorted. \\ Does returning an empty list satisfy it?",
+                 [r"no", r"yes"], 1,
+                 say="A sorting routine's postcondition says only: the output is sorted. Does a routine that returns an empty list satisfy it?",
+                 reveal="Yes. The specification must also say the output is a permutation of the input.")
         head = label(r"A specification can be too weak", font_size=36).to_edge(UP, buff=0.3)
         rows = [["m = a", "no", "no"], ["m = 32767", "yes", "no"], ["m = a if a >= b else b", "yes", "yes"]]
         colors = [[WHITE, YES if r[1] == "yes" else NO, YES if r[2] == "yes" else NO] for r in rows]
@@ -292,127 +295,7 @@ class Specs(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def columns(self):
-        head = label(r"Checking an addition, \ column by column", font_size=36).to_edge(UP, buff=0.3)
-        terms = [1374, 5926, 2085]                 # illustrative
-        total = sum(terms)
-        nd = len(str(total))
-        cw, x_right, y_top, row = 0.6, -2.2, 1.4, 0.65
 
-        def digits(nm, y, col):
-            s = str(nm).rjust(nd)
-            return VGroup(*[mono(ch, size=36, color=col).move_to([x_right - (nd - 1 - i) * cw, y, 0])
-                            for i, ch in enumerate(s) if ch != " "])
-        rows_ = VGroup(*[digits(t, y_top - k * row, WHITE) for k, t in enumerate(terms)])
-        plus = mono("+", size=36, color=GREY_B).move_to([x_right - nd * cw, y_top - 2 * row, 0])
-        bar = Line([x_right - (nd + 0.6) * cw, y_top - 2.55 * row, 0], [x_right + 0.5 * cw, y_top - 2.55 * row, 0],
-                   color=GREY_B, stroke_width=2)
-        res = digits(total, y_top - 3.2 * row, YES)
-        carries, checks = [], []
-        carry = 0
-        for c in range(nd):                        # c = 0 is the units column
-            ds = [(t // 10 ** c) % 10 for t in terms]
-            ssum = sum(ds) + carry
-            parts = " + ".join(str(d) for d in ds) + (f" + {carry}" if carry else "")
-            checks.append(label(rf"${parts} = {ssum}$: \ write {ssum % 10}" +
-                                (rf", \ carry {ssum // 10}" if ssum >= 10 and c < nd - 1 else ""),
-                                font_size=22, color=HEAD))
-            carry = ssum // 10
-            if carry and c < nd - 1:
-                carries.append(mono(str(carry), size=22, color=HEAD).move_to(
-                    [x_right - (c + 1) * cw, y_top + 0.55, 0]))
-            else:
-                carries.append(None)
-        for ch in checks:
-            ch.move_to([-3.6, -1.6, 0])
-        col_box = Rectangle(width=cw * 0.95, height=row * 3.2 + 0.9, stroke_color=HEAD, stroke_width=2).move_to(
-            [x_right, y_top - 1.3 * row + 0.2, 0])
-        notes = VGroup(
-            wrapped_label(r"Turing's analogy: \ checking a long sum in one go is hard; \ given the carries, \ each "
-                          r"column can be checked on its own", 5.6, font_size=20, color=WHITE),
-            wrapped_label(r"each check is small and needs no other; \ together they cover the whole", 5.6,
-                          font_size=20, color=YES),
-            wrapped_label(r"assertions are a program's carries: \ the programmer writes them, \ and each step "
-                          r"between two of them is checked alone \ (paraphrased)", 5.6, font_size=20, color=HEAD),
-            wrapped_label(r"he also argued that the routine stops, \ by a quantity that falls at every step: \ "
-                          r"Chapter 3's variant", 5.6, font_size=20, color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.32).move_to([3.7, -0.1, 0])
-        ill = note(r"illustrative numbers", font_size=16).to_corner(DL, buff=0.3)
-        with self.voiceover(
-            "Why assertions? Turing explained with an analogy. <bookmark mark='a'/> Checking a long addition all "
-            "at once is hard. But if the writer also supplies the carries, each column can be checked on its own:"
-            " four plus six plus five is fifteen, write five, carry one; and so on. <bookmark mark='b'/> Each "
-            "check is small and needs no other, yet together they cover the whole sum. <bookmark mark='c'/> "
-            "Assertions are a program's carries: each step between two of them is checked on its own, and the "
-            "correctness of the whole follows. <bookmark mark='d'/> Turing also argued that the routine stops, by"
-            " a quantity that falls at every step: Chapter three's variant."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rows_), FadeIn(plus), Create(bar), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]))
-            shown = None
-            for c in range(nd):
-                x = x_right - c * cw
-                anims = [col_box.animate.set_x(x)] if c else [Create(col_box.set_x(x))]
-                if shown is not None:
-                    anims.append(FadeOut(shown))
-                self.play(*anims, FadeIn(checks[c]), run_time=0.7)
-                outs = [FadeIn(res[nd - 1 - c])]
-                if carries[c] is not None:
-                    outs.append(FadeIn(carries[c], shift=DOWN * 0.1))
-                self.play(*outs, run_time=0.6)
-                shown = checks[c]
-            vo.wait_until("b")
-            self.play(FadeOut(col_box), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[3]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def lineage(self):
-        head = label(r"From assertions to a logic", font_size=36).to_edge(UP, buff=0.3)
-
-        def tile(year, who, body, col):
-            frame = RoundedRectangle(width=3.9, height=3.0, corner_radius=0.15, stroke_color=col, stroke_width=2,
-                                     fill_color=BG, fill_opacity=1)
-            g = VGroup(label(year, font_size=26, color=col), label(who, font_size=20, color=WHITE),
-                       wrapped_label(body, 3.5, font_size=18, color=GREY_A)).arrange(DOWN, buff=0.18)
-            g.move_to(frame)
-            return VGroup(frame, g)
-        tiles = VGroup(
-            tile(r"1949", r"Turing", r"assertions at points of a flow diagram; \ a decreasing quantity for "
-                 r"termination", GREY_B),
-            tile(r"1967", r"Floyd", r"assertions on the edges of flowcharts; \ a condition for each kind of box; \ "
-                 r"well-founded sets for termination", DATA),
-            tile(r"1969", r"Hoare", r"a logic for program text: \ triples, \ axioms and rules of inference", YES),
-        ).arrange(RIGHT, buff=0.55).next_to(head, DOWN, buff=0.6)
-        links = VGroup(*[Arrow(tiles[i].get_right(), tiles[i + 1].get_left(), buff=0.05, stroke_width=2.5,
-                               color=GREY_B, max_tip_length_to_length_ratio=0.3) for i in range(2)])
-        triple = MathTex(r"\{P\}", r"\ c\ ", r"\{Q\}", font_size=60).next_to(tiles, DOWN, buff=0.55)
-        triple[0].set_color(DATA)
-        triple[1].set_color(HEAD)
-        triple[2].set_color(YES)
-        foot = note(r"Turing's paper was largely overlooked until F.\ L.\ Morris and C.\ B.\ Jones wrote about it in "
-                    r"1984", font_size=17).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Turing's paper was largely overlooked until Morris and Jones wrote about it in 1984. <bookmark "
-            "mark='a'/> Meanwhile the idea returned. In 1967 Robert Floyd attached assertions to the edges of "
-            "flowcharts, gave for each kind of box the condition that makes the step correct, and proved "
-            "termination with well-founded sets. <bookmark mark='b'/> In 1969 Tony Hoare turned this into a logic"
-            " of program text, with triples, axioms and rules of inference. <bookmark mark='c'/> That logic is "
-            "the next chapter."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tiles[0]), FadeIn(foot))
-            vo.wait_until("a")
-            self.play(GrowArrow(links[0]), FadeIn(tiles[1]))
-            vo.wait_until("b")
-            self.play(GrowArrow(links[1]), FadeIn(tiles[2]))
-            vo.wait_until("c")
-            self.play(Write(triple))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (KERN,)

@@ -104,25 +104,19 @@ def full_tree(order, x0, x1, ytop, dy, r=0.17, font=18):
     return g
 
 
-class Symbolic(VoiceoverScene):
+class Symbolic(WatchScene):
     def construct(self):
         self.card()
         self.encode()
         self.diagrams()
-        self.order()
         self.image()
         self.scaling()
         self.bmc()
 
     def card(self):
-        card = chapter_card(7, r"Symbolic and bounded model checking", r"Can we check states we never list?",
-                            lit=(1986, 1990, 1999),
-                            extra=((1986, r"Bryant: \ BDDs"),
+        self.chapter(7, r"Symbolic and bounded model checking", r"Can we check states we never list?", lit=(1986, 1990, 1999), extra=((1986, r"Bryant: \ BDDs"),
                                    (1990, r"Burch, \ Clarke, \ McMillan et al."),
-                                   (1999, r"Biere et al.: \ bounded model checking")), part=PART)
-        with self.voiceover("Chapter seven. Symbolic and bounded model checking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (1999, r"Biere et al.: \ bounded model checking")), part=PART, said="Chapter seven. Symbolic and bounded model checking.")
 
     def encode(self):
         head = label(r"Sets of states as Boolean functions", font_size=36).to_edge(UP, buff=0.3)
@@ -193,6 +187,9 @@ class Symbolic(VoiceoverScene):
         self.clear_scene()
 
     def diagrams(self):
+        self.ask(r"Does a BDD's size depend \\ on the order of its variables?", [r"no", r"yes, exponentially"], 1,
+                 say="Does the size of a binary decision diagram depend on the order of its variables?",
+                 reveal="Exponentially, for some functions: interleave the pairs, and it stays small.")
         od = {r["n"]: r for r in load("bdd")["order"]}[2]
         head = label(r"Binary decision diagrams", font_size=36).to_edge(UP, buff=0.3)
         f = MathTex(r"f = (x_1 = y_1) \wedge (x_2 = y_2)", font_size=34).next_to(head, DOWN, buff=0.25)
@@ -239,68 +236,6 @@ class Symbolic(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def order(self):
-        od = load("bdd")["order"]
-        head = label(r"Variable order matters", font_size=36).to_edge(UP, buff=0.3)
-        ns = [r["n"] for r in od]
-        g = axes([0, 12.5, 2], [0, 4.5, 1], x_length=6.0, y_length=3.9, x_label=r"pairs of bits $n$",
-                 y_label=r"BDD nodes \ (log scale)", xticks=range(2, 13, 2), yticks=range(0, 5),
-                 fy=lambda v: rf"$10^{{{int(v)}}}$")
-        g.move_to([-3.2, -0.2, 0])
-        ax = g.ax
-        ti = trace(ax, [(r["n"], math.log10(r["interleaved"])) for r in od], YES)
-        ts = trace(ax, [(r["n"], math.log10(r["separated"])) for r in od], NO)
-        di = VGroup(*[Dot(ax.c2p(r["n"], math.log10(r["interleaved"])), radius=0.04, color=YES) for r in od])
-        ds = VGroup(*[Dot(ax.c2p(r["n"], math.log10(r["separated"])), radius=0.04, color=NO) for r in od])
-        last = od[-1]
-        li = label(rf"interleaved: \ {last['interleaved']}", font_size=18, color=YES).next_to(
-            ax.c2p(ns[-1], math.log10(last["interleaved"])), UP, buff=0.15).shift(LEFT * 0.8)
-        ls = label(rf"separated: \ {last['separated']:,}", font_size=18, color=NO).next_to(
-            ax.c2p(ns[-1], math.log10(last["separated"])), LEFT, buff=0.2)
-        assert all(r["interleaved"] == r["interleaved_formula"] and r["separated"] == r["separated_formula"]
-                   for r in od)
-        rows = VGroup(
-            MathTex(r"(2^n - 1)", r"+", r"\sum_{k=1}^{n} 2^{\,n-k+1}", font_size=32),
-            MathTex(r"(2^n - 1)", r"+", r"(2^{n+1} - 2)", font_size=32),
-            MathTex(r"3 \cdot 2^n - 3", font_size=34, color=NO),
-        ).arrange(DOWN, buff=0.25).move_to([3.7, 1.35, 0])
-        whys = VGroup(label(r"a full tree on the $x$ bits, \ then the $y$ checks still pending", font_size=17,
-                            color=GREY_A),
-                      label(r"a geometric sum", font_size=17, color=GREY_A),
-                      label(r"separated; \ interleaved needs only $3n$", font_size=17, color=NO))
-        for w, r in zip(whys, rows):
-            w.next_to(r, DOWN, buff=0.06)
-        VGroup(*[VGroup(r, w) for r, w in zip(rows, whys)]).arrange(DOWN, buff=0.18).move_to([3.7, 1.0, 0])
-        notes = VGroup(
-            wrapped_label(r"finding the best order is NP-hard \ (Bollig and Wegener, \ 1996); \ tools reorder "
-                          r"heuristically as they run", 5.6, font_size=19, color=WHITE),
-            wrapped_label(r"and some functions have no good order: \ the middle bit of a product needs exponentially "
-                          r"many nodes under every order \ (Bryant, \ 1991)", 5.6, font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).move_to([3.7, -2.3, 0])
-        with self.voiceover(
-            "How much does order matter? <bookmark mark='a'/> Our package builds the same equality for up to twelve "
-            "pairs. Interleaved, each pair costs three nodes: thirty-six in all. Separated: twelve thousand two "
-            "hundred and eighty-five. <bookmark mark='b'/> With the x bits first, the diagram is a full tree over "
-            "them, and every branch must remember which y values it still expects. <bookmark mark='c'/> Summing the "
-            "levels gives three times two to the n, minus three. <bookmark mark='d'/> Finding the best order is "
-            "NP-hard. And Bryant proved in 1991 that multiplication has no good order at all, the wall our SAT solver"
-            " hit in Chapter 4."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g))
-            vo.wait_until("a")
-            self.play(Create(ti), FadeIn(di), run_time=1.5)
-            self.play(Create(ts), FadeIn(ds), run_time=2)
-            self.play(FadeIn(li), FadeIn(ls))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[0]), FadeIn(whys[0]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[0].copy(), rows[1]), FadeIn(whys[1]))
-            self.play(TransformMatchingTex(rows[1].copy(), rows[2]), FadeIn(whys[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[0]))
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def image(self):
         big = {(r["n"], r["ordered"]): r for r in load("bdd")["symbolic"]}[(16, False)]

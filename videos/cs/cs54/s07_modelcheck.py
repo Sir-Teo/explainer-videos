@@ -88,7 +88,7 @@ def unroll(depth: int):
     return out
 
 
-class Modelcheck(VoiceoverScene):
+class Modelcheck(WatchScene):
     def construct(self):
         self.card()
         self.kripke_()
@@ -96,17 +96,12 @@ class Modelcheck(VoiceoverScene):
         self.fixpoints()
         self.peterson()
         self.fairness()
-        self.counterexamples()
         self.explosion()
 
     def card(self):
-        card = chapter_card(6, r"Model checking", r"Can a machine explore every behaviour?", lit=(1977, 1981, 2007),
-                            extra=((1977, r"Pnueli: \ temporal logic"),
+        self.chapter(6, r"Model checking", r"Can a machine explore every behaviour?", lit=(1977, 1981, 2007), extra=((1977, r"Pnueli: \ temporal logic"),
                                    (1981, r"Clarke and Emerson; \ Queille and Sifakis"),
-                                   (2007, r"Turing Award: \ Clarke, \ Emerson, \ Sifakis")), part=PART)
-        with self.voiceover("Chapter six. Model checking."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (2007, r"Turing Award: \ Clarke, \ Emerson, \ Sifakis")), part=PART, said="Chapter six. Model checking.")
 
     def kripke_(self):
         pt = load("peterson")
@@ -348,6 +343,10 @@ class Modelcheck(VoiceoverScene):
         self.clear_scene()
 
     def fairness(self):
+        self.ask(r"Without any fairness assumption, \\ can process 0 wait for ever at Peterson's lock?", [r"no",
+                 r"yes, if it is never scheduled"], 1,
+                 say="With no assumption about the scheduler, can process zero wait for ever at Peterson's lock?",
+                 reveal="Yes, if it is simply never run. Liveness needs fairness.")
         pt = load("peterson")
         ru = pt["response_unfair"]
         head = label(r"Liveness needs fairness", font_size=36).to_edge(UP, buff=0.3)
@@ -407,66 +406,6 @@ class Modelcheck(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def counterexamples(self):
-        pt = load("peterson")
-        rf = load("raft")
-        br = pt["broken"]
-        head = label(r"Counterexamples", font_size=36).to_edge(UP, buff=0.3)
-        t1 = label(rf"Peterson with the flag raised after the turn: \ {br['states']} states, \ mutual exclusion "
-                   rf"fails", font_size=20, color=NO).next_to(head, DOWN, buff=0.35).to_edge(LEFT, buff=0.5)
-        cards = VGroup()
-        for st in br["counterexample"]:
-            s = st["state"]
-            both = s["pc0"] == "cs" and s["pc1"] == "cs"
-            box = RoundedRectangle(width=1.62, height=1.15, corner_radius=0.08, stroke_color=NO if both else GREY_C,
-                                   stroke_width=2.2 if both else 1.5, fill_color=BG, fill_opacity=1)
-            txt = VGroup(mono(st["action"] or "init", size=13, color=HEAD),
-                         mono(f"{s['pc0']} {s['pc1']}", size=14, color=WHITE),
-                         mono(f"f{s['flag0']}{s['flag1']} t{s['turn']}", size=13, color=GREY_A)
-                         ).arrange(DOWN, buff=0.08).move_to(box)
-            cards.add(VGroup(box, txt))
-        cards.arrange(RIGHT, buff=0.18).next_to(t1, DOWN, buff=0.25).set_x(0)
-        legend = label(r"each box: \ the step taken, \ where P0 and P1 are, \ flags and turn", font_size=17,
-                       color=GREY_B).next_to(cards, DOWN, buff=0.15)
-        t2 = label(rf"Raft-lite election \ (Part 38), \ 3 nodes, \ terms up to {rf['max_term']}: \ "
-                   rf"{rf['states']:,} states, \ at most one leader per term", font_size=20,
-                   color=YES).next_to(legend, DOWN, buff=0.45).to_edge(LEFT, buff=0.5)
-        t3 = label(rf"a voter that forgets its vote: \ {rf['bug']['states']:,} states, \ and two leaders in one "
-                   rf"term after {rf['bug']['length']} steps", font_size=20, color=NO).next_to(t2, DOWN, buff=0.2)
-        t3.align_to(t2, LEFT)
-        acts = [s["action"] for s in rf["bug"]["counterexample"][1:]]
-        chips = VGroup(*[tag_box(a, color=NO if a.startswith("Win") else KERN, size=16) for a in acts])
-        chips.arrange(RIGHT, buff=0.32).next_to(t3, DOWN, buff=0.3).set_x(0)
-        carr = VGroup(*[Arrow(chips[k].get_right(), chips[k + 1].get_left(), buff=0.03, color=GREY_B,
-                              stroke_width=1.8, max_tip_length_to_length_ratio=0.35) for k in range(len(chips) - 1)])
-        last = rf["bug"]["counterexample"][-1]["state"]
-        leaders = [i for i, nd in enumerate(last["nodes"]) if nd["role"] == "leader"]
-        term = last["nodes"][leaders[0]]["term"]
-        fin = label(rf"nodes {leaders[0]} and {leaders[1]} are both leader of term {term}: \ node 0 voted twice in "
-                    rf"one term", font_size=19, color=NO).next_to(chips, DOWN, buff=0.25)
-        assert not br["mutex"] and rf["election_safety"] and not rf["bug"]["election_safety"]
-        with self.voiceover(
-            "A failed check comes with a counterexample. <bookmark mark='a'/> Give away the turn before raising the "
-            "flag, and the checker finds a six-step path to both processes in the critical section. <bookmark "
-            "mark='b'/> The search is breadth first, so no shorter path exists. <bookmark mark='c'/> The same tool "
-            "checks a small Raft election from Part 38: with three nodes and two terms, never two leaders in one "
-            "term. <bookmark mark='d'/> Plant a voter that forgets its vote, and two leaders appear in the same term "
-            "after six steps."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(t1))
-            self.play(LaggedStart(*[FadeIn(c, shift=RIGHT * 0.1) for c in cards], lag_ratio=0.35), run_time=3)
-            vo.wait_until("b")
-            self.play(FadeIn(legend), Indicate(cards[-1], color=NO))
-            vo.wait_until("c")
-            self.play(FadeIn(t2))
-            vo.wait_until("d")
-            self.play(FadeIn(t3))
-            self.play(LaggedStart(*[FadeIn(c) for c in chips], lag_ratio=0.3), Create(carr), run_time=2.5)
-            self.play(FadeIn(fin))
-        self.wait(0.4)
-        self.clear_scene()
 
     def explosion(self):
         ph = load("philosophers")

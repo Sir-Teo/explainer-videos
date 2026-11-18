@@ -21,7 +21,7 @@ def listing_lines(rows) -> list[str]:
     return ["    " * r["depth"] + r["code"] for r in rows]
 
 
-class Hoare(VoiceoverScene):
+class Hoare(WatchScene):
     def construct(self):
         self.card()
         self.triple()
@@ -30,17 +30,11 @@ class Hoare(VoiceoverScene):
         self.consequence()
         self.conditional()
         self.loop()
-        self.soundness()
 
     def card(self):
-        card = chapter_card(2, r"Floyd--Hoare logic", r"Can we calculate with programs as we do with numbers?",
-                            lit=(1967, 1969, 1978),
-                            extra=((1967, r"Floyd: \ Assigning Meanings to Programs"),
+        self.chapter(2, r"Floyd--Hoare logic", r"Can we calculate with programs as we do with numbers?", lit=(1967, 1969, 1978), extra=((1967, r"Floyd: \ Assigning Meanings to Programs"),
                                    (1969, r"Hoare: \ An Axiomatic Basis"),
-                                   (1978, r"Cook: \ relative completeness")), part=PART)
-        with self.voiceover("Chapter two. Floyd–Hoare logic."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (1978, r"Cook: \ relative completeness")), part=PART, said="Chapter two. Floyd–Hoare logic.")
 
     def triple(self):
         head = label(r"The Hoare triple", font_size=36).to_edge(UP, buff=0.3)
@@ -106,6 +100,10 @@ class Hoare(VoiceoverScene):
         self.clear_scene()
 
     def assign(self):
+        self.ask(r"What must hold before \texttt{x := x + 1} \\ so that $x > 5$ after?", [r"$x > 5$", r"$x > 4$",
+                 r"$x > 6$"], 1,
+                 say="What must be true before x becomes x plus one, so that x is greater than five afterwards?",
+                 reveal="x greater than four: substitute x plus one for x in the postcondition.")
         fl = load("hoare")["flow"]["swap"][0]
         head = label(r"Assignment: \ substitute, \ backwards", font_size=36).to_edge(UP, buff=0.3)
         ax = MathTex(r"\{\, Q[e/x] \,\}", r"\quad x := e \quad", r"\{\, Q \,\}", font_size=46)
@@ -374,47 +372,6 @@ class Hoare(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def soundness(self):
-        head = label(r"Sound, \ and complete relative to arithmetic", font_size=36).to_edge(UP, buff=0.3)
-        true_e = Ellipse(width=5.4, height=3.8, color=YES, fill_opacity=0.08).move_to([-3.6, 0.0, 0])
-        der = Ellipse(width=3.0, height=2.0, color=DATA, fill_opacity=0.2).move_to([-3.9, -0.3, 0])
-        lt = label(r"true triples", font_size=20, color=YES).next_to(true_e.get_top(), DOWN, buff=0.3)
-        ld = label(r"derivable triples", font_size=19, color=DATA).move_to(der)
-        oracle = RoundedRectangle(width=3.4, height=0.6, corner_radius=0.1, stroke_color=KERN, fill_color=KERN,
-                                  fill_opacity=0.15).move_to([-3.6, -2.75, 0])
-        ol = label(r"oracle: \ every true assertion", font_size=18, color=KERN).move_to(oracle)
-        der_big = Ellipse(width=5.2, height=3.6, color=DATA, fill_opacity=0.2).move_to(true_e)
-        oarr = Arrow(oracle.get_top(), true_e.get_bottom() + UP * 0.25, buff=0.05, color=KERN, stroke_width=2.5,
-                     max_tip_length_to_length_ratio=0.3)
-        notes = VGroup(
-            wrapped_label(r"\textbf{sound}: \ every derivable triple is true \ (induction on the derivation, \ rule "
-                          r"by rule)", 5.8, font_size=20, color=YES),
-            wrapped_label(r"not absolutely complete: \ $\{\mathit{true}\}\ c\ \{\mathit{false}\}$ holds exactly "
-                          r"when $c$ never halts \ (Part 25), \ and assertions about integers contain all of "
-                          r"arithmetic \ (G\"odel)", 5.8, font_size=20, color=NO),
-            wrapped_label(r"Stephen Cook \ (1978): \ \textbf{relatively complete}: \ every true triple is derivable "
-                          r"if the consequence rule may use every true assertion, \ and the assertion language can "
-                          r"express the assertions a proof needs", 5.8, font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).move_to([3.5, -0.1, 0])
-        with self.voiceover(
-            "Two questions about any logic. <bookmark mark='a'/> Is it sound: is every derived triple true? Yes, "
-            "by induction on the derivation. <bookmark mark='b'/> Is it complete: can every true triple be "
-            "derived? Not absolutely. The triple true, c, false holds exactly when c never halts, which is "
-            "undecidable, and assertions about integers contain all of arithmetic, which Gödel showed no proof "
-            "system captures. <bookmark mark='c'/> Stephen Cook proved in 1978 the best possible result: if the "
-            "consequence rule may consult every true assertion, and assertions can express what proofs need, "
-            "every true triple is derivable. Hoare logic is complete relative to arithmetic."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(true_e), FadeIn(lt))
-            vo.wait_until("a")
-            self.play(FadeIn(der), FadeIn(ld), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(oracle), FadeIn(ol), GrowArrow(oarr), FadeIn(notes[2]))
-            self.play(Transform(der, der_big), ld.animate.move_to(true_e.get_center() + DOWN * 0.3), run_time=1.5)
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, LAM, NO)

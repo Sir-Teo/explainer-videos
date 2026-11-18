@@ -35,7 +35,7 @@ def box(ax, i0, i1, j0, j1, color, opacity=0.15, width=2.5):
     return r.move_to((lo + hi) / 2)
 
 
-class Absint(VoiceoverScene):
+class Absint(WatchScene):
     def construct(self):
         self.card()
         self.approx()
@@ -43,15 +43,10 @@ class Absint(VoiceoverScene):
         self.kleene()
         self.widening()
         self.relational()
-        self.domains()
 
     def card(self):
-        card = chapter_card(8, r"Abstract interpretation", r"Can a proof be computed by approximation?",
-                            lit=(1977, 2003), extra=((1977, r"Cousot and Cousot"),
-                                                     (2003, r"Astr\'ee: \ the Airbus A340")), part=PART)
-        with self.voiceover("Chapter eight. Abstract interpretation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Abstract interpretation", r"Can a proof be computed by approximation?", lit=(1977, 2003), extra=((1977, r"Cousot and Cousot"),
+                                                     (2003, r"Astr\'ee: \ the Airbus A340")), part=PART, said="Chapter eight. Abstract interpretation.")
 
     def approx(self):
         gap = load("absint")["gap"]
@@ -229,6 +224,10 @@ class Absint(VoiceoverScene):
         self.clear_scene()
 
     def widening(self):
+        self.ask(r"Interval analysis of a loop that counts up without bound. \\ Without widening, the analysis...",
+                 [r"finishes", r"never finishes"], 1,
+                 say="Analyse a loop that counts up with no upper bound, using intervals. Without widening, does the analysis finish?",
+                 reveal="Never: the upper bound creeps up for ever. Widening jumps it to infinity.")
         E = load("absint")["examples"]
         tr = E["counter_widen"]["trace"]
         head = label(r"Widening: \ jump, \ then narrow", font_size=36).to_edge(UP, buff=0.3)
@@ -360,62 +359,13 @@ class Absint(VoiceoverScene):
             self.play(Create(line), FadeIn(ll), FadeIn(rel))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the frame rule allow?", r"Proving code on its footprint alone"),
+             (r"Why is abstract interpretation sound?", r"It over-approximates every run")],
+            narration="Checkpoint. What does separation logic's frame rule allow? And why is abstract interpretation sound?",
+            answers_narration="Proving a piece of code on just the heap it touches. And every abstract value over-approximates "
+                              "all concrete runs, so no behaviour is missed.")
 
-    def domains(self):
-        pts = load("absint")["gap"]["reachable"]
-        head = label(r"A ladder of domains", font_size=36).to_edge(UP, buff=0.3)
-        P = plane(i_max=12, j_max=24, w=4.4, h=4.4).move_to([-4.2, -0.2, 0])
-        ax = P.ax
-        dots = VGroup(*[Dot(ax.c2p(i, j), radius=0.055, color=WHITE) for i, j in pts])
-        i0, i1 = min(p[0] for p in pts), max(p[0] for p in pts)
-        j0, j1 = min(p[1] for p in pts), max(p[1] for p in pts)
-        s1 = max(i + j for i, j in pts)
-        d0, d1 = min(j - i for i, j in pts), max(j - i for i, j in pts)
-        bx = box(ax, i0, i1, j0, j1, HEAD, opacity=0.08)
-        # the octagon: the box cut by i + j and j - i bounds; its corners, in order round the boundary
-        corners = []
-        for (a, b) in ((i0, d0 + i0), (i0, min(j1, d1 + i0)), (min(i1, s1 - j1), j1), (i1, min(j1, s1 - i1)),
-                       (i1, max(j0, d0 + i1)), (max(i0, j0 - d1), j0)):
-            corners.append(ax.c2p(a, b))
-        corners = [c for k, c in enumerate(corners) if k == 0 or not np.allclose(c, corners[k - 1])]
-        corners = corners[:-1] if np.allclose(corners[0], corners[-1]) else corners
-        assert len(corners) == 4                       # j = 2i: the octagon is a parallelogram here
-        octo = Polygon(*corners, color=LAM, stroke_width=2.5, fill_color=LAM, fill_opacity=0.12)
-        seg = Line(ax.c2p(i0, j0), ax.c2p(i1, j1), color=YES, stroke_width=5)
-        rows = [[r"intervals", r"$a \le x \le b$", r"linear", r"Astr\'ee, \ compilers"],
-                [r"octagons \ (Min\'e, \ 2006)", r"$\pm x \pm y \le c$", r"cubic", r"Astr\'ee"],
-                [r"polyhedra \ (1978)", r"$\sum_k a_k x_k \le c$", r"exponential", r"research tools"]]
-        tab = grid_table([r"domain", r"facts it keeps", r"cost", r"used in"], rows, widths=[2.5, 1.8, 1.4, 2.2],
-                         row_h=0.6, font_size=19, colors=[[HEAD] * 4, [LAM] * 4, [YES] * 4], mono_cols=())
-        tab.move_to([2.9, 1.3, 0])
-        cap = label(rf"the same {len(pts)} points: \ box, \ octagon, \ and the exact segment", font_size=18,
-                    color=GREY_A).next_to(P, DOWN, buff=0.2)
-        ast = wrapped_label(r"\textbf{Astr\'ee} \ (Cousot's group, \ \'Ecole normale sup\'erieure): \ in 2003 it "
-                            r"proved, \ fully automatically, \ that the primary flight-control software of the Airbus "
-                            r"A340 can raise no run-time error \ (no overflow, \ no division by zero, \ no "
-                            r"out-of-bounds access), \ and later the A380's", 6.6, font_size=19, color=WHITE)
-        ast.next_to(tab, DOWN, buff=0.45).align_to(tab, LEFT)
-        with self.voiceover(
-            "Domains form a ladder of precision and cost. <bookmark mark='a'/> Intervals draw a box, at a cost linear"
-            " in the number of variables. <bookmark mark='b'/> Antoine Miné's octagons also bound sums and "
-            "differences of pairs, at cubic cost; here they cut the box to a parallelogram, but still cannot say that"
-            " j is twice i. <bookmark mark='c'/> Convex polyhedra can: they shrink to the exact segment, but their "
-            "operations can take exponential time. <bookmark mark='d'/> Real analysers mix domains. In 2003 Astrée, "
-            "from the Cousots' group in Paris, proved automatically that the Airbus A340's flight-control software "
-            "can raise no run-time error."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(P), FadeIn(dots), FadeIn(cap))
-            self.play(FadeIn(VGroup(*tab.cells[0], tab.rule)))
-            vo.wait_until("a")
-            self.play(Create(bx), FadeIn(VGroup(*tab.cells[1])))
-            vo.wait_until("b")
-            self.play(Create(octo), FadeIn(VGroup(*tab.cells[2])))
-            vo.wait_until("c")
-            self.play(Create(seg), FadeIn(VGroup(*tab.cells[3])))
-            vo.wait_until("d")
-            self.play(FadeIn(ast))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, mono)

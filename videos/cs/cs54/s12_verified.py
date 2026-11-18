@@ -14,23 +14,17 @@ def chip(text, color, w=None, font=19):
     return VGroup(r, t)
 
 
-class Verified(VoiceoverScene):
+class Verified(WatchScene):
     def construct(self):
         self.card()
         self.compcert()
         self.csmith()
         self.sel4()
         self.square()
-        self.crypto()
-        self.cakeml()
 
     def card(self):
-        card = chapter_card(11, r"Verified systems", r"Can a whole compiler, \ or a kernel, \ be proved?",
-                            lit=(2006, 2009), extra=((2006, r"Leroy: \ CompCert's back end"),
-                                                     (2009, r"seL4 proved")), part=PART)
-        with self.voiceover("Chapter eleven. Verified systems."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Verified systems", r"Can a whole compiler, \ or a kernel, \ be proved?", lit=(2006, 2009), extra=((2006, r"Leroy: \ CompCert's back end"),
+                                                     (2009, r"seL4 proved")), part=PART, said="Chapter eleven. Verified systems.")
 
     def compcert(self):
         head = label(r"CompCert: \ a compiler with a theorem", font_size=36).to_edge(UP, buff=0.3)
@@ -96,6 +90,10 @@ class Verified(VoiceoverScene):
         self.clear_scene()
 
     def csmith(self):
+        self.ask(r"Csmith found hundreds of bugs in GCC and LLVM. \\ In CompCert's verified middle end:", [r"many",
+                 r"none"], 1,
+                 say="Random programs from Csmith found hundreds of bugs in GCC and LLVM. How many in CompCert's verified parts?",
+                 reveal="None. The bugs it found were in unverified parts.")
         head = label(r"Csmith against CompCert", font_size=36).to_edge(UP, buff=0.3)
         gen = module_box(r"Csmith", HEAD, w=1.9, h=0.7, font=22).move_to([-5.4, 0.2, 0])
         gl = wrapped_label(r"random C programs \ with no undefined behaviour", 2.4, font_size=18,
@@ -283,111 +281,7 @@ class Verified(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def crypto(self):
-        head = label(r"Verified cryptography", font_size=36).to_edge(UP, buff=0.3)
-        spec = MathTex(r"\mathit{mul}(a, b) = a \cdot b \bmod p", font_size=34, color=YES)
-        specl = label(r"the specification: \ one line", font_size=18, color=YES)
-        sg = VGroup(spec, specl).arrange(DOWN, buff=0.1).next_to(head, DOWN, buff=0.35).to_edge(LEFT, buff=0.7)
-        rows = VGroup(
-            MathTex(r"p", r"=", r"2^{255} - 19", font_size=32),
-            MathTex(r"2^{255}", r"\equiv", r"19", r"\pmod p", font_size=32),
-            MathTex(r"a", r"=", r"a_0 + a_1 2^{51} + a_2 2^{102} + a_3 2^{153} + a_4 2^{204}", font_size=32),
-            MathTex(r"a_4 b_1\, 2^{255}", r"\equiv", r"19\, a_4 b_1", r"\pmod p", font_size=32),
-        )
-        whys = VGroup(label(r"Curve25519's prime \ (Bernstein, \ 2006)", font_size=18, color=GREY_A),
-                      label(r"so a carry past bit 255 comes back as 19", font_size=18, color=GREY_A),
-                      label(r"fast code: \ five 51-bit limbs per number", font_size=18, color=GREY_A),
-                      label(r"a limb product that reaches $2^{255}$ wraps round", font_size=18, color=GREY_A))
-        lines = VGroup(*[VGroup(r, w).arrange(RIGHT, buff=0.45) for r, w in zip(rows, whys)])
-        lines.arrange(DOWN, buff=0.3, aligned_edge=LEFT).next_to(sg, DOWN, buff=0.4).align_to(sg, LEFT)
-        wx = max(r.get_right()[0] for r in rows) + 0.45
-        for w, r in zip(whys, rows):
-            w.next_to(r, RIGHT, buff=0.45).set_x(wx, direction=LEFT)
-        code = mono("r0 = a0*b0 + 19*(a1*b4 + a2*b3 + a3*b2 + a4*b1)", size=20, color=DATA)
-        codel = label(r"the lowest limb of the product \ (illustrative)", font_size=18, color=GREY_B)
-        cg = VGroup(code, codel).arrange(DOWN, buff=0.1, aligned_edge=LEFT).next_to(lines, DOWN, buff=0.45)
-        cg.align_to(sg, LEFT)
-        proj = VGroup(
-            wrapped_label(r"\textbf{Fiat-Crypto} \ (MIT, \ Coq): \ generates such code from the specification, \ "
-                          r"with a proof", 6.0, font_size=18, color=YES),
-            wrapped_label(r"\textbf{HACL$^*$} \ (F$^*$): \ memory safety, \ correctness, \ and no branch or address "
-                          r"that depends on a secret", 6.0, font_size=18, color=LAM),
-        ).arrange(RIGHT, aligned_edge=UP, buff=0.5).next_to(cg, DOWN, buff=0.35).align_to(cg, LEFT)
-        with self.voiceover(
-            "Cryptography is the code most worth proving. <bookmark mark='a'/> In Curve25519's field, the "
-            "specification of multiplication is one line: multiply, then reduce modulo p, <bookmark mark='b'/> which "
-            "is two to the two hundred and fifty-five, minus nineteen. <bookmark mark='c'/> So a carry past bit two "
-            "hundred and fifty-five comes back as nineteen. <bookmark mark='d'/> Fast code splits each number into "
-            "five fifty-one-bit limbs, <bookmark mark='e'/> and a limb product that reaches that bit wraps round as "
-            "nineteen times itself: the code is full of nineteens. <bookmark mark='f'/> Fiat-Crypto generates such "
-            "code from the specification, with a Coq proof. HACL star proves memory safety, correctness, and that no "
-            "branch or address depends on a secret, closing Part 29's timing channels."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(sg))
-            vo.wait_until("b")
-            self.play(FadeIn(rows[0]), FadeIn(whys[0]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[0].copy(), rows[1]), FadeIn(whys[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(rows[2]), FadeIn(whys[2]))
-            vo.wait_until("e")
-            self.play(TransformMatchingTex(rows[1].copy(), rows[3]), FadeIn(whys[3]))
-            self.play(FadeIn(cg))
-            vo.wait_until("f")
-            self.play(FadeIn(proj[0]))
-            self.play(FadeIn(proj[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def cakeml(self):
-        head = label(r"What is left to trust", font_size=36).to_edge(UP, buff=0.3)
-        lt = label(r"must be trusted", font_size=24, color=NO).move_to([-3.4, 2.5, 0])
-        rt = label(r"proved", font_size=24, color=YES).move_to([3.4, 2.5, 0])
-        div = DashedLine([0, 2.7, 0], [0, -2.6, 0], color=GREY_D, stroke_width=1.5)
-        items = [(r"the compiler's source", r"CompCert"),
-                 (r"extraction from Coq to OCaml", r"CakeML"),
-                 (r"the compiler binary", r"CakeML"),
-                 (r"the proof checker's kernel", None),
-                 (r"the model of the hardware", None),
-                 (r"the specification itself", None)]
-        chips = VGroup(*[chip(t, GREY_B, w=5.0) for t, _ in items]).arrange(DOWN, buff=0.22).move_to([-3.4, 0.0, 0])
-        tags = VGroup(*[label(w or "", font_size=17, color=YES) for _, w in items])
-        foot = wrapped_label(r"whether the specification says what we meant is the one question no proof answers; "
-                             r"\ Part 55: \ when the compiler binary itself is the enemy", 12.6, font_size=19,
-                             color=HEAD).to_edge(DOWN, buff=0.3)
-        cite = note(r"CakeML: \ Kumar, \ Myreen, \ Norrish and Owens, \ POPL 2014", font_size=17).next_to(
-            foot, UP, buff=0.2)
-        moves = {}
-        for k in (0, 1, 2):
-            moves[k] = chips[k].copy().set_x(3.4)
-            moves[k][0].set_stroke(YES)
-            tags[k].next_to(moves[k], RIGHT, buff=0.1)
-            if tags[k].get_right()[0] > 6.85:
-                tags[k].next_to(moves[k], DOWN, buff=0.04).align_to(moves[k], RIGHT)
-        with self.voiceover(
-            "CakeML, from Ramana Kumar, Magnus Myreen, Michael Norrish and Scott Owens in 2014, closes another gap. "
-            "<bookmark mark='a'/> CompCert proves the compiler's source. <bookmark mark='b'/> But its Coq functions "
-            "are extracted to OCaml and compiled by an unverified compiler. <bookmark mark='c'/> CakeML's compiler, "
-            "proved in the HOL4 prover, was run inside the logic on its own source, so its machine code comes with "
-            "the proof. <bookmark mark='d'/> What is left is short: the proof checker's kernel, the hardware model, "
-            "and the specification. Whether the specification says what we meant, no proof can answer, and Part 55 "
-            "asks what happens when the compiler binary is the enemy."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lt), FadeIn(rt), Create(div), FadeIn(cite))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in chips], lag_ratio=0.15))
-            self.play(Transform(chips[0], moves[0]), FadeIn(tags[0]))
-            vo.wait_until("b")
-            self.play(Indicate(chips[1], color=NO))
-            vo.wait_until("c")
-            self.play(Transform(chips[1], moves[1]), Transform(chips[2], moves[2]), FadeIn(tags[1]), FadeIn(tags[2]))
-            vo.wait_until("d")
-            self.play(*[chips[k][0].animate.set_stroke(NO) for k in (3, 4, 5)])
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

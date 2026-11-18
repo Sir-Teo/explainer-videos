@@ -23,23 +23,17 @@ def path_edges(edges, depth, leaf):
     return [edges[(d, leaf >> (depth - d))] for d in range(1, depth + 1)]
 
 
-class Types(VoiceoverScene):
+class Types(WatchScene):
     def construct(self):
         self.card()
         self.theorem()
         self.abstract()
         self.refine()
         self.midpoint()
-        self.liquid()
-        self.spectrum()
 
     def card(self):
-        card = chapter_card(9, r"Types as lightweight proofs", r"What does a type checker prove?",
-                            lit=(1978, 2008), extra=((1978, r"Milner: \ well-typed programs cannot go wrong"),
-                                                     (2008, r"liquid types")), part=PART)
-        with self.voiceover("Chapter nine. Types as lightweight proofs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Types as lightweight proofs", r"What does a type checker prove?", lit=(1978, 2008), extra=((1978, r"Milner: \ well-typed programs cannot go wrong"),
+                                                     (2008, r"liquid types")), part=PART, said="Chapter nine. Types as lightweight proofs.")
 
     def theorem(self):
         head = label(r"A theorem about every run", font_size=36).to_edge(UP, buff=0.3)
@@ -148,6 +142,10 @@ class Types(VoiceoverScene):
         self.clear_scene()
 
     def refine(self):
+        self.ask(r"A divisor of type $\{v : \text{int} \mid v \ne 0\}$. \\ The checker rules out...",
+                 [r"overflow", r"division by zero"], 1,
+                 say="Give a division's divisor the refinement type: integers that are not zero. What has the type checker ruled out?",
+                 reveal="Division by zero, at compile time, for every run.")
         head = label(r"Refinement types: \ a type plus a predicate", font_size=36).to_edge(UP, buff=0.3)
         nl = NumberLine(x_range=[-4, 12, 1], length=8.8, color=GREY_C, include_numbers=False).move_to([-2.1, 1.3, 0])
         nums = VGroup(*[MathTex(str(v), font_size=18, color=GREY_B).next_to(nl.n2p(v), DOWN, buff=0.1)
@@ -277,114 +275,7 @@ class Types(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def liquid(self):
-        head = label(r"Inferring refinements: \ liquid types", font_size=36).to_edge(UP, buff=0.3)
-        code = code_block(["# n : nat,  len(a) == n", "i = 0", "while i < n:      # i : {v | K}",
-                           "    a[i] = 0      # needs 0 <= i < n", "    i = i + 1"], size=20)
-        code.next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.6)
-        quals = [r"0 \le v", r"v = 0", r"v < n", r"v \le n"]
-        chips = VGroup()
-        for q in quals:
-            t = MathTex(q, font_size=30, color=WHITE)
-            box = RoundedRectangle(width=t.width + 0.4, height=0.55, corner_radius=0.08, stroke_color=HEAD,
-                                   stroke_width=1.8, fill_color=BG, fill_opacity=1)
-            t.move_to(box)
-            chips.add(VGroup(box, t))
-        chips.arrange(RIGHT, buff=0.3).next_to(code, RIGHT, buff=0.8).align_to(code, UP)
-        ql = label(r"qualifiers: \ candidate facts for $K$", font_size=18, color=HEAD).next_to(chips, DOWN, buff=0.15)
-        ql.align_to(chips, LEFT)
-        checks = VGroup(
-            MathTex(r"v = 0", r"\;\Rightarrow\;", r"q", font_size=30),
-            MathTex(r"K[i] \wedge i < n \wedge v = i + 1", r"\;\Rightarrow\;", r"q", font_size=30),
-            MathTex(r"K[i] \wedge i < n", r"\;\Rightarrow\;", r"0 \le i < n", font_size=30, color=YES),
-        )
-        cl = VGroup(label(r"on entry: \ $i = 0$; \ $0 < n$ may fail \ ($n = 0$)", font_size=18, color=GREY_A),
-                    label(r"round the loop: \ $i + 1 = 0$ fails; \ a second round removes nothing", font_size=18,
-                          color=GREY_A),
-                    label(r"$K = 0 \le v \wedge v \le n$: \ the access is in bounds", font_size=18, color=YES))
-        col = VGroup(*[VGroup(c, w).arrange(DOWN, buff=0.1, aligned_edge=LEFT) for c, w in zip(checks, cl)])
-        col.arrange(DOWN, buff=0.35, aligned_edge=LEFT).next_to(ql, DOWN, buff=0.5).align_to(chips, LEFT)
-        ill = note(r"illustrative, \ worked by hand over mathematical integers", font_size=17).next_to(code, DOWN,
-                                                                                                    buff=0.35)
-        ill.align_to(code, LEFT)
-        cite = wrapped_label(r"Rondon, \ Kawaguchi and Jhala \ (2008): \ a fixpoint over conjunctions of "
-                             r"qualifiers, \ predicate abstraction \ (chapter 8's iteration, \ with facts in place "
-                             r"of intervals)", 5.4, font_size=18, color=GREY_B).next_to(ill, DOWN, buff=0.35)
-        cite.align_to(code, LEFT)
 
-        def strike(chip):
-            return Line(chip.get_left(), chip.get_right(), color=NO, stroke_width=3)
-        with self.voiceover(
-            "Liquid types, from Patrick Rondon, Ming Kawaguchi and Ranjit Jhala in 2008, infer refinements. <bookmark"
-            " mark='a'/> The loop counter's type is an unknown, K. The programmer supplies candidate facts, called "
-            "qualifiers. <bookmark mark='b'/> Start by assuming all of them. On entry i is zero, which need not be "
-            "less than n, so that one goes. <bookmark mark='c'/> Round the loop, i plus one is not zero, so that one "
-            "goes too. Another round removes nothing: a fixpoint, as in chapter eight. <bookmark mark='d'/> So i lies"
-            " from zero to n, and with the loop's test every access to a of i is in bounds, with no annotation on the"
-            " loop."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(code), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in chips], lag_ratio=0.25), FadeIn(ql))
-            vo.wait_until("b")
-            self.play(FadeIn(col[0]))
-            s1 = strike(chips[2])
-            self.play(Create(s1), chips[2].animate.set_opacity(0.35))
-            vo.wait_until("c")
-            self.play(FadeIn(col[1]))
-            s2 = strike(chips[1])
-            self.play(Create(s2), chips[1].animate.set_opacity(0.35))
-            self.play(chips[0][0].animate.set_stroke(YES), chips[3][0].animate.set_stroke(YES))
-            vo.wait_until("d")
-            self.play(FadeIn(col[2]), FadeIn(cite))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def spectrum(self):
-        head = label(r"How much a type can say", font_size=36).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 10, 1], y_range=[0, 10, 1], x_length=7.4, y_length=5.0,
-                  axis_config={"color": GREY_C, "include_ticks": False, "tip_length": 0.15}).move_to([-2.4, -0.55, 0])
-        xl = label(r"what the programmer must write", font_size=18, color=GREY_A).next_to(ax.x_axis, DOWN, buff=0.2)
-        yl = label(r"what is proved", font_size=18, color=GREY_A).next_to(ax.y_axis.get_end(), RIGHT, buff=0.2)
-        pts = [((1.2, 2.0), DATA, r"simple types", r"no stuck programs \ (Part 14)"),
-               ((3.4, 4.2), KERN, r"ownership types", r"no use after free \ (Rust, \ Part 55)"),
-               ((5.6, 6.4), HEAD, r"refinement types", r"bounds, \ invariants \ (LiquidHaskell, \ F$^*$)"),
-               ((8.2, 8.8), YES, r"dependent types", r"full correctness \ (Rocq, \ Lean, \ Agda)")]
-        dots, tags = VGroup(), VGroup()
-        for (x, y), c, nm, what in pts:
-            d = Dot(ax.c2p(x, y), radius=0.1, color=c)
-            t = VGroup(label(nm, font_size=20, color=c), label(what, font_size=17, color=GREY_A)).arrange(
-                DOWN, buff=0.06, aligned_edge=LEFT).next_to(d, RIGHT, buff=0.2)
-            dots.add(d)
-            tags.add(t)
-        steps = VGroup(*[Line(dots[k].get_center(), dots[k + 1].get_center(), color=GREY_D, stroke_width=2)
-                         for k in range(len(dots) - 1)])
-        sch = note(r"schematic", font_size=17).next_to(ax, UP, buff=0.1).align_to(ax, RIGHT)
-        side = wrapped_label(r"at the top, \ a type is a full specification \ and a program of that type is its "
-                             r"proof: \ the type checker has become a proof checker", 3.2, font_size=19,
-                             color=YES).move_to([5.2, -1.6, 0])
-        for t in tags:
-            if t.get_right()[0] > 6.85:
-                t.shift(LEFT * (t.get_right()[0] - 6.85))
-        with self.voiceover(
-            "Types form a ladder. <bookmark mark='a'/> Simple types, like those of Part 14 and of our own compiler's "
-            "checker, cost almost nothing and rule out stuck programs. <bookmark mark='b'/> Ownership types, Rust's, "
-            "to which Part 55 returns, rule out use after free and data races in safe code. <bookmark mark='c'/> "
-            "Refinement types, in LiquidHaskell and F star, prove bounds and invariants, with a solver doing the "
-            "work. <bookmark mark='d'/> At the top, dependent types can state full functional correctness, and the "
-            "programmer writes the proof. There a type checker is a proof checker, which is the next chapter's "
-            "subject."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(xl), FadeIn(yl), FadeIn(sch))
-            for k, mk in enumerate("abcd"):
-                vo.wait_until(mk)
-                anims = [FadeIn(dots[k], scale=0.5), FadeIn(tags[k])]
-                if k:
-                    anims.append(Create(steps[k - 1]))
-                self.play(*anims)
-            self.play(FadeIn(side))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)
