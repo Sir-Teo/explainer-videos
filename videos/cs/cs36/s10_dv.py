@@ -7,7 +7,7 @@ POS6 = {"u": [-5.4, 0.2, 0], "v": [-4.0, 1.5, 0], "x": [-4.0, -1.1, 0], "w": [-2
         "z": [-0.9, 0.2, 0]}
 
 
-class Dv(VoiceoverScene):
+class Dv(WatchScene):
     def construct(self):
         self.card()
         self.bellman_ford()
@@ -16,11 +16,7 @@ class Dv(VoiceoverScene):
         self.ours()
 
     def card(self):
-        card = chapter_card(9, r"Distance vector", r"Can routers find shortest paths by gossip?", lit=(1957, 1969, 1988),
-                            extra=((1957, r"Bellman"), (1969, r"ARPANET routing"), (1988, r"RIP")), part=PART)
-        with self.voiceover("Chapter nine. Distance vector."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Distance vector", r"Can routers find shortest paths by gossip?", lit=(1957, 1969, 1988), extra=((1957, r"Bellman"), (1969, r"ARPANET routing"), (1988, r"RIP")), part=PART, said="Chapter nine. Distance vector.")
 
     def bellman_ford(self):
         d = load("dv")
@@ -70,6 +66,9 @@ class Dv(VoiceoverScene):
         self.clear_scene()
 
     def count(self):
+        self.ask(r"A--B--C. The link to C fails. \\ Distance vector...", [r"learns at once", r"counts to infinity"], 1,
+                 say="Three routers in a line, A, B, C. The link to C fails. How does distance vector react?",
+                 reveal="Slowly: A and B each believe the other still reaches C, and count up together.")
         d = load("dv")
         head = label(r"Counting to infinity", font_size=36).to_edge(UP, buff=0.3)
         pos = {"A": [-4.5, 1.4, 0], "B": [-2.5, 1.4, 0], "C": [-0.5, 1.4, 0]}

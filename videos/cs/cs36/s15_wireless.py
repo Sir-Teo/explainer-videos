@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load)
 
 
-class Wireless(VoiceoverScene):
+class Wireless(WatchScene):
     def construct(self):
         self.card()
         self.fading()
@@ -14,11 +14,7 @@ class Wireless(VoiceoverScene):
         self.mimo()
 
     def card(self):
-        card = chapter_card(14, r"Wireless", r"How do you send bits through air that fights back?", lit=(1966, 1998),
-                            extra=((1966, r"Chang: \ OFDM"), (1998, r"Foschini and Gans: \ MIMO capacity")), part=PART)
-        with self.voiceover("Chapter fourteen. Wireless."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Wireless", r"How do you send bits through air that fights back?", lit=(1966, 1998), extra=((1966, r"Chang: \ OFDM"), (1998, r"Foschini and Gans: \ MIMO capacity")), part=PART, said="Chapter fourteen. Wireless.")
 
     def fading(self):
         w = load("wireless")
@@ -119,6 +115,10 @@ class Wireless(VoiceoverScene):
         self.clear_scene()
 
     def mimo(self):
+        self.ask(r"Four antennas at each end, rich scattering. \\ Capacity...", [r"the same as one",
+                 r"about four times"], 1,
+                 say="Put four antennas at each end of a radio link, in a room full of reflections. What happens to capacity?",
+                 reveal="About four times: each path becomes its own channel.")
         w = load("wireless")
         head = label(r"MIMO: \ more antennas, \ more channels", font_size=36).to_edge(UP, buff=0.3)
         eq = MathTex(r"C = \mathbb{E} \log_2 \det\!\Big(I + \frac{\text{SNR}}{n_t} H H^{*}\Big)", font_size=38,

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (DATA, HEAD, KERN, LAM, NAMES, NO, PART, YES, grid_table, load, world)
 
 
-class Internet(VoiceoverScene):
+class Internet(WatchScene):
     def construct(self):
         self.card()
         self.matrix()
@@ -12,11 +12,7 @@ class Internet(VoiceoverScene):
         self.failure()
 
     def card(self):
-        card = chapter_card(13, r"Our internet", r"Does it all work together?", lit=(1983,),
-                            extra=((1983, r"the flag day"),), part=PART)
-        with self.voiceover("Chapter thirteen. Our internet."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Our internet", r"Does it all work together?", lit=(1983,), extra=((1983, r"the flag day"),), part=PART, said="Chapter thirteen. Our internet.")
 
     def matrix(self):
         it = load("internet")
@@ -67,6 +63,10 @@ class Internet(VoiceoverScene):
         self.clear_scene()
 
     def load(self):
+        self.ask(r"Load a link to $90\%$ with random packets. \\ Ping times...", [r"barely change",
+                 r"grow, with a long tail"], 1,
+                 say="Load one link of our internet to ninety percent with random packets. What happens to ping times across it?",
+                 reveal="They grow, and the tail grows faster: Part 31's hockey stick.")
         q = load("queueing")
         head = label(r"Delay under load", font_size=36).to_edge(UP, buff=0.3)
         rows = [[f"{r['rho']:.0%}".replace("%", r"\%"), f"{r['mean_ms']:.2f}", f"{r['p99_ms']:.2f}",

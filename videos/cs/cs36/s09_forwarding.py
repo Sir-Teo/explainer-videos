@@ -5,7 +5,7 @@ from videos.cs.cs36.common import (CODE, DATA, HEAD, IPC, KERN, LAM, NO, PART, Y
                                    mono, num)
 
 
-class Forwarding(VoiceoverScene):
+class Forwarding(WatchScene):
     def construct(self):
         self.card()
         self.lpm()
@@ -14,14 +14,14 @@ class Forwarding(VoiceoverScene):
         self.fabric()
 
     def card(self):
-        card = chapter_card(8, r"Forwarding", r"Which way, \ in a nanosecond?", lit=(1997, 1998),
-                            extra=((1997, r"Degermark et al.: \ small forwarding tables"),
-                                   (1998, r"Srinivasan and Varghese: \ multibit tries")), part=PART)
-        with self.voiceover("Chapter eight. Forwarding."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Forwarding", r"Which way, \ in a nanosecond?", lit=(1997, 1998), extra=((1997, r"Degermark et al.: \ small forwarding tables"),
+                                   (1998, r"Srinivasan and Varghese: \ multibit tries")), part=PART, said="Chapter eight. Forwarding.")
 
     def lpm(self):
+        self.ask(r"An address matches \texttt{10.0.0.0/8} and \texttt{10.4.0.0/16}. \\ Which route wins?",
+                 [r"the /8", r"the /16"], 1,
+                 say="A packet's address matches two routes: ten slash eight and ten dot four slash sixteen. Which wins?",
+                 reveal="The longer prefix, slash sixteen: it is more specific.")
         head = label(r"Longest-prefix match", font_size=36).to_edge(UP, buff=0.3)
         rows = [["0.0.0.0/0", "upstream"], ["10.0.0.0/8", "port 1"], ["10.4.0.0/16", "port 3"],
                 ["10.4.0.0/24", "port 7"], ["10.7.0.0/16", "port 2"]]

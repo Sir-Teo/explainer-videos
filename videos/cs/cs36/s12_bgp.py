@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load)
 
 
-class Bgp(VoiceoverScene):
+class Bgp(WatchScene):
     def construct(self):
         self.card()
         self.policy()
@@ -14,12 +14,8 @@ class Bgp(VoiceoverScene):
         self.rpki()
 
     def card(self):
-        card = chapter_card(11, r"BGP", r"How do 75{,}000 independent networks agree on routes?", lit=(1989, 2001, 2008),
-                            extra=((1989, r"BGP"), (2001, r"Gao and Rexford: \ stable policies"),
-                                   (2008, r"YouTube's hijack")), part=PART)
-        with self.voiceover("Chapter eleven. BGP."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"BGP", r"How do 75{,}000 independent networks agree on routes?", lit=(1989, 2001, 2008), extra=((1989, r"BGP"), (2001, r"Gao and Rexford: \ stable policies"),
+                                   (2008, r"YouTube's hijack")), part=PART, said="Chapter eleven. BGP.")
 
     def policy(self):
         b = load("bgp")
@@ -81,6 +77,10 @@ class Bgp(VoiceoverScene):
         self.clear_scene()
 
     def hijack(self):
+        self.ask(r"2008: Pakistan Telecom announces a more specific \\ YouTube prefix. Who loses YouTube?",
+                 [r"Pakistan", r"much of the world"], 1,
+                 say="In 2008 Pakistan Telecom announced a more specific prefix for YouTube, to block it at home. Who lost YouTube?",
+                 reveal="Much of the world, for about two hours. BGP believes what it is told.")
         b = load("bgp")
         head = label(r"Anyone can announce anything", font_size=36).to_edge(UP, buff=0.3)
         story = VGroup(

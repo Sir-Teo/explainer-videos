@@ -5,11 +5,11 @@ from videos.cs.cs36.common import (CODE, ETH, HEAD, IPC, NO, PART, PAY, UDPC, YE
                                    mono, world)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.datagram()
         self.journey()
-        self.plan()
+        self.title(PART)
 
     def datagram(self):
         h = load("hook")
@@ -83,30 +83,6 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Networks I: \ Moving Bits", font_size=44).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"packets instead of circuits, \ and the layers that carry them",
-            r"Shannon's limit, \ and how close real signals get",
-            r"framing, \ checksums, \ and sharing one channel: \ ALOHA to Ethernet",
-            r"switches, \ IP addresses, \ and forwarding at line rate",
-            r"routing: \ distance vector, \ link state, \ and BGP's policies",
-            r"our own internet, \ wireless, \ and programmable networks",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 36 of Computer Science, Built: Networks, moving bits, the first part of the act about many "
-            "machines. <bookmark mark='a'/> We start with the idea of the packet, and the layers that carry it. We "
-            "derive what limits each layer: Shannon's capacity for a wire, a checksum's power, the throughput of a "
-            "shared channel. We build switches, addresses and a forwarding table, then the three ways the Internet "
-            "routes: distance vector, link state, and BGP, the protocol that holds the Internet's networks together "
-            "and that can be hijacked. And we finish with our own internet, wireless, and networks you can program."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (NO,)

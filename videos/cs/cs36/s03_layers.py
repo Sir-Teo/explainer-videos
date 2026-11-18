@@ -5,7 +5,7 @@ from videos.cs.cs36.common import (DATA, ETH, HEAD, IPC, KERN, LAM, NO, PART, PA
                                    header_strip, load)
 
 
-class Layers(VoiceoverScene):
+class Layers(WatchScene):
     def construct(self):
         self.card()
         self.stack()
@@ -13,12 +13,8 @@ class Layers(VoiceoverScene):
         self.end_to_end()
 
     def card(self):
-        card = chapter_card(2, r"Layers", r"How do you build a network out of networks?", lit=(1984, 1988),
-                            extra=((1984, r"Saltzer, \ Reed and Clark: \ end to end"),
-                                   (1988, r"Clark: \ the design philosophy")), part=PART)
-        with self.voiceover("Chapter two. Layers."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Layers", r"How do you build a network out of networks?", lit=(1984, 1988), extra=((1984, r"Saltzer, \ Reed and Clark: \ end to end"),
+                                   (1988, r"Clark: \ the design philosophy")), part=PART, said="Chapter two. Layers.")
 
     def stack(self):
         head = label(r"Each layer talks to its peer, \ through the layer below", font_size=34).to_edge(UP, buff=0.3)
@@ -122,6 +118,10 @@ class Layers(VoiceoverScene):
         self.clear_scene()
 
     def end_to_end(self):
+        self.ask(r"Every link checks its own frames for errors. \\ Does the application still need a check?",
+                 [r"no", r"yes"], 1,
+                 say="Every link on the path checks its frames for errors. Does the application still need its own check?",
+                 reveal="Yes: a router's memory or software can corrupt data between links. Only the ends can vouch.")
         la = load("layers")
         head = label(r"The end-to-end argument", font_size=36).to_edge(UP, buff=0.3)
         quote = label(r"``The function in question can completely and correctly be implemented only with the "

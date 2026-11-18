@@ -5,7 +5,7 @@ from videos.cs.cs36.common import (CODE, DATA, HEAD, IPC, KERN, LAM, NO, PART, Y
                                    mono, num)
 
 
-class Ip(VoiceoverScene):
+class Ip(WatchScene):
     def construct(self):
         self.card()
         self.addresses()
@@ -14,11 +14,7 @@ class Ip(VoiceoverScene):
         self.traceroute()
 
     def card(self):
-        card = chapter_card(7, r"IP", r"How do you name every machine on Earth?", lit=(1981, 1993, 1998),
-                            extra=((1981, r"RFC 791: \ IPv4"), (1993, r"CIDR"), (1998, r"IPv6")), part=PART)
-        with self.voiceover("Chapter seven. IP."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"IP", r"How do you name every machine on Earth?", lit=(1981, 1993, 1998), extra=((1981, r"RFC 791: \ IPv4"), (1993, r"CIDR"), (1998, r"IPv6")), part=PART, said="Chapter seven. IP.")
 
     def addresses(self):
         a = load("ipaddr")
@@ -68,6 +64,12 @@ class Ip(VoiceoverScene):
         self.clear_scene()
 
     def header(self):
+        self.wrong_idea(r"the Internet delivers every packet",
+                        r"IP is best effort: \\ packets are lost, reordered, duplicated",
+                        narration="A common belief: send a packet, and the Internet delivers it.",
+                        right_narration="IP promises nothing. Packets are dropped when queues fill, reordered and duplicated. "
+                                        "Reliability is built at the ends, by TCP, in Part 37.")
+        self.clear_scene()
         a = load("ipaddr")
         head = label(r"The IPv4 header", font_size=36).to_edge(UP, buff=0.3)
         strip = header_strip([("ver, len", 1, IPC), ("TOS", 1, IPC), ("length", 2, IPC), ("ID", 2, KERN),
@@ -158,6 +160,9 @@ class Ip(VoiceoverScene):
         self.clear_scene()
 
     def traceroute(self):
+        self.ask(r"Send a packet with time to live $1$. \\ Who replies?", [r"the destination", r"the first router"], 1,
+                 say="Send a packet with a time to live of one. Who sends something back?",
+                 reveal="The first router, with an error message naming itself. Then try two.")
         h = load("hook")
         head = label(r"Traceroute: \ the TTL trick", font_size=36).to_edge(UP, buff=0.3)
         rows = [[str(t["ttl"]), t["by"], f"{t['ms']:.2f} ms",

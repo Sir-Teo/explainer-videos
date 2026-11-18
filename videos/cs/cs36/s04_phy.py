@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load, num)
 
 
-class Phy(VoiceoverScene):
+class Phy(WatchScene):
     def construct(self):
         self.card()
         self.shannon()
@@ -15,13 +15,13 @@ class Phy(VoiceoverScene):
         self.light()
 
     def card(self):
-        card = chapter_card(3, r"Bits on a wire", r"How many bits can a channel carry?", lit=(1928, 1948),
-                            extra=((1928, r"Nyquist"), (1948, r"Shannon: \ channel capacity")), part=PART)
-        with self.voiceover("Chapter three. Bits on a wire."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Bits on a wire", r"How many bits can a channel carry?", lit=(1928, 1948), extra=((1928, r"Nyquist"), (1948, r"Shannon: \ channel capacity")), part=PART, said="Chapter three. Bits on a wire.")
 
     def shannon(self):
+        self.ask(r"A telephone line: about 3 kHz, signal 30 dB above noise. \\ Capacity:",
+                 [r"3 kbit/s", r"about 36 kbit/s", r"1 Mbit/s"], 1,
+                 say="A telephone line: about three kilohertz of bandwidth, with signal a thousand times the noise. What's its capacity?",
+                 reveal="About thirty-six kilobits a second, which is where dial-up modems stopped.")
         p = load("phy")
         head = label(r"Two limits", font_size=36).to_edge(UP, buff=0.3)
         ny = MathTex(r"\text{symbols per second} \le 2B", font_size=36, color=DATA)

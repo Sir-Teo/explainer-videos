@@ -7,7 +7,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs36.common import (DATA, HEAD, KERN, LAM, NO, PART, YES, bar_chart, grid_table, load)
 
 
-class Packets(VoiceoverScene):
+class Packets(WatchScene):
     def construct(self):
         self.card()
         self.circuits()
@@ -15,12 +15,8 @@ class Packets(VoiceoverScene):
         self.history()
 
     def card(self):
-        card = chapter_card(1, r"Circuits and packets", r"Why cut a message into pieces?", lit=(1964, 1969, 1974),
-                            extra=((1964, r"Baran: \ distributed networks"), (1969, r"ARPANET: \ ``LO''"),
-                                   (1974, r"Cerf and Kahn: \ TCP/IP")), part=PART)
-        with self.voiceover("Chapter one. Circuits and packets."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Circuits and packets", r"Why cut a message into pieces?", lit=(1964, 1969, 1974), extra=((1964, r"Baran: \ distributed networks"), (1969, r"ARPANET: \ ``LO''"),
+                                   (1974, r"Cerf and Kahn: \ TCP/IP")), part=PART, said="Chapter one. Circuits and packets.")
 
     def circuits(self):
         head = label(r"A wire for every call, \ or a share of every wire", font_size=34).to_edge(UP, buff=0.3)
@@ -93,6 +89,10 @@ class Packets(VoiceoverScene):
         self.clear_scene()
 
     def multiplex(self):
+        self.ask(r"Each user is active a tenth of the time. \\ A link carries ten active users. It can serve...",
+                 [r"ten users", r"several times more"], 1,
+                 say="Each user is active a tenth of the time. A link can carry ten at once. How many users can share it?",
+                 reveal="Several times ten, with overload very rare. That's statistical multiplexing.")
         m = load("multiplex")
         head = label(r"Statistical multiplexing, \ computed", font_size=36).to_edge(UP, buff=0.3)
         n, p = m["users"], m["p"]
