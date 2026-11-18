@@ -38,7 +38,7 @@ def stacked(rows, whys, buff=0.22):
     return pairs
 
 
-class Local(VoiceoverScene):
+class Local(WatchScene):
     def construct(self):
         self.card()
         self.view()
@@ -49,12 +49,8 @@ class Local(VoiceoverScene):
         self.scale()
 
     def card(self):
-        card = chapter_card(2, r"Locality: \ colouring a ring", r"How far must a node look to choose its colour?",
-                            lit=(1986, 2000), extra=((1986, r"Cole and Vishkin: \ deterministic coin tossing"),
-                                                     (2000, r"Peleg: \ a locality-sensitive approach")), part=PART)
-        with self.voiceover("Chapter two. Locality: colouring a ring."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Locality: \ colouring a ring", r"How far must a node look to choose its colour?", lit=(1986, 2000), extra=((1986, r"Cole and Vishkin: \ deterministic coin tossing"),
+                                                     (2000, r"Peleg: \ a locality-sensitive approach")), part=PART, said="Chapter two. Locality: colouring a ring.")
 
     def view(self):
         head = label(r"What a node knows after $t$ rounds", font_size=36).to_edge(UP, buff=0.3)
@@ -400,6 +396,9 @@ class Local(VoiceoverScene):
         self.clear_scene()
 
     def scale(self):
+        self.ask(r"$\log^*$ of $2^{65536}$:", [r"$5$", r"$16$", r"$65536$"], 0,
+                 say="Log star counts how many times you take the logarithm before reaching one. What is log star of two to the sixty-five thousand five hundred and thirty-six?",
+                 reveal="Five. Log star is at most five for any number of processes that could exist.")
         ls = load("logstar")["rows"]
         sc = load("cvscale")["rows"]
         head = label(r"$\log^* n$: \ the number of logarithms to reach 1", font_size=36).to_edge(UP, buff=0.3)

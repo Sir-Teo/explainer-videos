@@ -46,7 +46,7 @@ def stacked(rows, whys, buff=0.22):
     return pairs
 
 
-class Detectors(VoiceoverScene):
+class Detectors(WatchScene):
     def construct(self):
         self.card()
         self.oracle()
@@ -55,16 +55,10 @@ class Detectors(VoiceoverScene):
         self.rotating()
         self.partition()
         self.omega()
-        self.accrual()
 
     def card(self):
-        card = chapter_card(8, r"Failure detectors", r"How much must a process know about crashes to agree?",
-                            lit=(1996, 2004),
-                            extra=((1996, r"Chandra and Toueg; \ Chandra, \ Hadzilacos and Toueg"),
-                                   (2004, r"Hayashibara et al.: \ $\varphi$ accrual")), part=PART)
-        with self.voiceover("Chapter eight. Failure detectors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Failure detectors", r"How much must a process know about crashes to agree?", lit=(1996, 2004), extra=((1996, r"Chandra and Toueg; \ Chandra, \ Hadzilacos and Toueg"),
+                                   (2004, r"Hayashibara et al.: \ $\varphi$ accrual")), part=PART, said="Chapter eight. Failure detectors.")
 
     # ------------------------------------------------------------------ the idea
     def oracle(self):
@@ -357,6 +351,10 @@ class Detectors(VoiceoverScene):
 
     # ------------------------------------------------------------------ why a majority
     def partition(self):
+        self.ask(r"An eventually strong failure detector, \\ and half the processes may crash. Consensus?",
+                 [r"possible", r"impossible"], 1,
+                 say="With an eventually strong failure detector, can consensus be solved if half the processes may crash?",
+                 reveal="No: a correct majority is needed, or two halves can decide differently.")
         head = label(r"Why a majority must be correct", font_size=36).to_edge(UP, buff=0.3)
         xs = [-4.0, -2.4, 2.4, 4.0]
         y = 1.45
@@ -509,76 +507,6 @@ class Detectors(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ phi accrual
-    def accrual(self):
-        head = label(r"Suspicion as a number", font_size=36).to_edge(UP, buff=0.3)
-        mu, sd = 1.0, 0.25
-
-        def pdf(x):
-            return math.exp(-0.5 * ((x - mu) / sd) ** 2) / (sd * math.sqrt(2 * math.pi))
-
-        def phi(t):
-            return -math.log10(max(0.5 * math.erfc((t - mu) / (sd * math.sqrt(2))), 1e-12))
-        A = axes([0, 3, 0.5], [0, 1.8, 0.5], x_length=5.0, y_length=2.6, x_label=r"time since the last heartbeat",
-                 y_label=r"how often each gap occurs", xticks=None, yticks=None)
-        A.move_to([-3.7, 0.55, 0])
-        ax = A.ax
-        curve = ax.plot(pdf, x_range=[0, 3, 0.02], color=DATA, stroke_width=3)
-        tk = ValueTracker(0.6)
-        line = always_redraw(lambda: DashedLine(ax.c2p(tk.get_value(), 0), ax.c2p(tk.get_value(), 1.75),
-                                                color=HEAD, stroke_width=2, dash_length=0.08))
-        area = always_redraw(lambda: ax.get_area(curve, x_range=[tk.get_value(), 3], color=NO, opacity=0.45))
-        pl = label(r"$P_{\mathrm{later}}(t)$", font_size=20, color=NO).move_to(ax.c2p(2.2, 0.75))
-        unit = 0.27
-        base = np.array([0.15, -0.95, 0])
-        frame = Rectangle(width=0.4, height=8.6 * unit, stroke_color=GREY_C, stroke_width=1.4).move_to(
-            base + UP * 8.6 * unit / 2)
-        bar = always_redraw(lambda: Rectangle(width=0.36, height=max(0.01, min(8.5, phi(tk.get_value())) * unit),
-                                              stroke_width=0, fill_color=HEAD if phi(tk.get_value()) < 8 else NO,
-                                              fill_opacity=0.9).move_to(
-            base + UP * max(0.01, min(8.5, phi(tk.get_value())) * unit) / 2))
-        thr = DashedLine(base + UP * 8 * unit + LEFT * 0.35, base + UP * 8 * unit + RIGHT * 0.35, color=NO,
-                         stroke_width=2, dash_length=0.06)
-        thl = MathTex(r"\Phi", font_size=26, color=NO).next_to(thr, LEFT, buff=0.08)
-        ml = MathTex(r"\varphi", font_size=30, color=HEAD).next_to(frame, DOWN, buff=0.12)
-        fs = 28
-        rows = [MathTex(r"P_{\mathrm{later}}(t)", r"=", r"1 - F(t)", font_size=fs),
-                MathTex(r"\varphi(t)", r"=", r"-\log_{10}", r"P_{\mathrm{later}}(t)", font_size=fs),
-                MathTex(r"\varphi(t) \ge \Phi", r"\iff", r"P_{\mathrm{later}}(t) \le 10^{-\Phi}", font_size=fs)]
-        whys = [label(r"$F$ fitted to the recent gaps", font_size=18, color=GREY_B),
-                label(r"Hayashibara, \ D\'efago, \ Yared and Katayama \ (2004)", font_size=18, color=GREY_B),
-                label(r"suspect once a mistake would be that unlikely", font_size=18, color=YES)]
-        col = stacked(rows, whys, buff=0.3).move_to([4.15, 0.75, 0])
-        ill = note(r"illustrative gaps", font_size=16).next_to(A, DOWN, buff=0.15)
-        foot = wrapped_label(r"SWIM \ (Das, \ Gupta and Motivala, \ 2002): \ ping a random member; \ if it is "
-                             r"silent, \ ask a few others to ping it; \ spread the verdicts by gossip", 12.4,
-                             font_size=19, color=GREY_A).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Real systems turn suspicion into a number. <bookmark mark='a'/> The phi accrual detector of Naohiro "
-            "Hayashibara and colleagues, from 2004, fits a distribution to the recent gaps between heartbeats. "
-            "<bookmark mark='b'/> As time passes without a heartbeat, the chance that one is still on its way "
-            "shrinks, <bookmark mark='c'/> and phi is minus its logarithm to base ten. <bookmark mark='d'/> "
-            "Suspect when phi passes a threshold: a threshold of eight means a mistake would have probability one "
-            "in a hundred million. <bookmark mark='e'/> And SWIM, from 2002, probes random members and spreads "
-            "its verdicts by gossip, so detection costs each process the same however large the group."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(A), Create(curve), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(col[0]))
-            self.add(area, line)
-            self.play(FadeIn(pl), FadeIn(frame), FadeIn(ml), FadeIn(thr), FadeIn(thl))
-            self.add(bar)
-            vo.wait_until("b")
-            self.play(tk.animate.set_value(1.5), run_time=2.5)
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[0].copy(), rows[1]), FadeIn(whys[1]))
-            vo.wait_until("d")
-            self.play(TransformMatchingTex(rows[1].copy(), rows[2]), FadeIn(whys[2]))
-            self.play(tk.animate.set_value(2.55), run_time=3.0)
-            vo.wait_until("e")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, YES, load)

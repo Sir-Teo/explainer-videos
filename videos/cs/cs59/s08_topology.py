@@ -80,7 +80,7 @@ def vtx(pos, color, val=None, r=0.28, size=26):
     return VGroup(c, MathTex(str(val), font_size=size, color=BLACK).move_to(c))
 
 
-class Topology(VoiceoverScene):
+class Topology(WatchScene):
     def construct(self):
         self.card()
         self.complexes()
@@ -91,13 +91,9 @@ class Topology(VoiceoverScene):
         self.theorem()
 
     def card(self):
-        card = chapter_card(7, r"Topology: \ why $k$-set agreement is impossible", r"What shape is the space of a "
-                            r"protocol's runs?", lit=(1928, 1990, 1993, 2004),
-                            extra=((1928, r"Sperner's lemma"), (1990, r"Chaudhuri: \ $k$-set agreement"),
-                                   (1993, r"three proofs"), (2004, r"G\"odel Prize")), part=PART)
-        with self.voiceover("Chapter seven. Topology: why k-set agreement is impossible."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Topology: \ why $k$-set agreement is impossible", r"What shape is the space of a "
+                            r"protocol's runs?", lit=(1928, 1990, 1993, 2004), extra=((1928, r"Sperner's lemma"), (1990, r"Chaudhuri: \ $k$-set agreement"),
+                                   (1993, r"three proofs"), (2004, r"G\"odel Prize")), part=PART, said="Chapter seven. Topology: why k-set agreement is impossible.")
 
     def complexes(self):
         head = label(r"A task is a map between complexes", font_size=36).to_edge(UP, buff=0.3)
@@ -360,6 +356,10 @@ class Topology(VoiceoverScene):
         self.clear_scene()
 
     def kset(self):
+        self.ask(r"Wait-free $k$-set agreement among $k + 1$ processes, \\ with registers:", [r"possible",
+                 r"impossible"], 1,
+                 say="k plus one processes must decide at most k different values, wait-free, using registers. Possible?",
+                 reveal="Impossible, by Sperner's lemma on the protocol's subdivided triangle.")
         head = label(r"$k$-set agreement is impossible for $k \le f$", font_size=36).to_edge(UP, buff=0.3)
         tris = [s for t in chrom(base_tri(-3.6, -0.1, 5.4)) for s in chrom(t)]
         cx = draw_complex(tris, r=0.06, stroke=0.9)
@@ -474,6 +474,12 @@ class Topology(VoiceoverScene):
             self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does FloodSet need $f + 1$ rounds?", r"A chain of runs, each indistinguishable from the next"),
+             (r"What is a bivalent configuration?", r"One from which both decisions are still reachable")],
+            narration="Checkpoint. Why must synchronous agreement take f plus one rounds? And what is a bivalent configuration?",
+            answers_narration="A chain of runs, each indistinguishable from the next to some process, joins all-zero to all-one. "
+                              "And one from which both decisions can still be reached.")
 
 
 _ = (BG, KERN, LAM, NO, YES)

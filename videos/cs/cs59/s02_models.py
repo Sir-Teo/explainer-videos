@@ -22,7 +22,7 @@ def cross(at, color=NO, s=0.14):
                   Line(at + np.array([-s, s, 0]), at + np.array([s, -s, 0]), color=color, stroke_width=4))
 
 
-class Models(VoiceoverScene):
+class Models(WatchScene):
     def construct(self):
         self.card()
         self.timing()
@@ -32,12 +32,8 @@ class Models(VoiceoverScene):
         self.local()
 
     def card(self):
-        card = chapter_card(1, r"Models and faults", r"What exactly may a distributed system assume?",
-                            lit=(1982, 2000), extra=((1982, r"Lamport, \ Shostak and Pease: \ Byzantine generals"),
-                                                     (2000, r"Peleg: \ the LOCAL and CONGEST models")), part=PART)
-        with self.voiceover("Chapter one. Models and faults."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Models and faults", r"What exactly may a distributed system assume?", lit=(1982, 2000), extra=((1982, r"Lamport, \ Shostak and Pease: \ Byzantine generals"),
+                                                     (2000, r"Peleg: \ the LOCAL and CONGEST models")), part=PART, said="Chapter one. Models and faults.")
 
     def timing(self):
         head = label(r"Synchronous and asynchronous", font_size=36).to_edge(UP, buff=0.3)
@@ -303,6 +299,10 @@ class Models(VoiceoverScene):
         self.clear_scene()
 
     def local(self):
+        self.ask(r"The LOCAL model. After $t$ rounds, \\ a node can know...", [r"the whole network",
+                 r"everything within $t$ hops"], 1,
+                 say="In the LOCAL model, with unlimited messages, what can a node know after t rounds?",
+                 reveal="Everything within t hops, and nothing beyond. Time is distance.")
         head = label(r"LOCAL and CONGEST: \ counting rounds", font_size=36).to_edge(UP, buff=0.3)
         pts = {0: (-5.6, 1.3), 1: (-4.2, 2.0), 2: (-2.7, 1.5), 3: (-1.6, 0.4), 4: (-4.5, 0.5), 5: (-3.2, -0.3),
                6: (-5.4, -0.6), 7: (-2.0, -1.0)}

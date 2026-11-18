@@ -34,7 +34,7 @@ def ladder_rows(rows, whys, x_row, x_why, y_top, dy):
     return VGroup(*rows), VGroup(*whys)
 
 
-class Async(VoiceoverScene):
+class Async(WatchScene):
     def construct(self):
         self.card()
         self.start()
@@ -45,12 +45,8 @@ class Async(VoiceoverScene):
         self.rounds()
 
     def card(self):
-        card = chapter_card(5, r"Asynchrony: \ FLP and randomness", r"What exactly does one crash break, \ and how "
-                            r"do coins repair it?", lit=(1983, 1985),
-                            extra=((1983, r"Ben-Or: \ coins"), (1985, r"Fischer, \ Lynch and Paterson")), part=PART)
-        with self.voiceover("Chapter five. Asynchrony: FLP and randomness."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Asynchrony: \ FLP and randomness", r"What exactly does one crash break, \ and how "
+                            r"do coins repair it?", lit=(1983, 1985), extra=((1983, r"Ben-Or: \ coins"), (1985, r"Fischer, \ Lynch and Paterson")), part=PART, said="Chapter five. Asynchrony: FLP and randomness.")
 
     def start(self):
         head = label(r"Lemma 1: \ a bivalent place to start", font_size=36).to_edge(UP, buff=0.3)
@@ -264,6 +260,9 @@ class Async(VoiceoverScene):
         self.clear_scene()
 
     def endless(self):
+        self.ask(r"In FLP's endless run, \\ how many processes actually crash?", [r"one", r"none"], 1,
+                 say="FLP builds a run in which consensus never finishes. How many processes crash in that run?",
+                 reveal="None. The mere possibility of a crash is enough.")
         head = label(r"Lemma 3: \ a run that never decides", font_size=36).to_edge(UP, buff=0.3)
         n = 8
         xs = [-6.0 + 1.5 * k for k in range(n)]
@@ -307,6 +306,12 @@ class Async(VoiceoverScene):
         self.clear_scene()
 
     def benor(self):
+        self.wrong_idea(r"no protocol can escape FLP",
+                        r"coins escape it: Ben-Or decides \\ with probability one",
+                        narration="After FLP, it can sound as though asynchronous consensus is simply impossible.",
+                        right_narration="FLP rules out deterministic protocols that always finish. Flip coins, and Ben-Or's "
+                                        "protocol is always safe, and finishes with probability one.")
+        self.clear_scene()
         head = label(r"Ben-Or: \ two votes and a coin", font_size=36).to_edge(UP, buff=0.3)
         prog = code_block(["phase r:", "  send x to all", "  wait for n - f values",
                            "  if > n/2 of all n say v:", "    propose v", "  else: propose ?",
