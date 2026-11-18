@@ -161,7 +161,7 @@ class Clock(WatchScene):
 
     # ------------------------------------------------------------------
     def overflow(self):
-        self.ask(r"Signed 4-bit arithmetic: \\ $5 + 4 = \\;?$", [r"$9$", r"$-7$", r"an error"], 1,
+        self.ask(r"Signed 4-bit arithmetic: \\ $5 + 4 = \;?$", [r"$9$", r"$-7$", r"an error"], 1,
                  say="In signed four-bit arithmetic, what is five plus four?",
                  reveal="Minus seven. It ran off the clock's edge and wrapped round.")
         head = label(r"Overflow", font_size=38).to_edge(UP, buff=0.35)

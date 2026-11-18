@@ -14,7 +14,7 @@ def _excerpt():
     return [l[4:] for l in body], [l[4:] for l in src[cons:cons + 4]]
 
 
-class PebbleVM(VoiceoverScene):
+class PebbleVM(WatchScene):
     def construct(self):
         self.card()
         self.source()
@@ -22,11 +22,7 @@ class PebbleVM(VoiceoverScene):
         self.dispatch()
 
     def card(self):
-        card = chapter_card(5, r"The VM, \ on Pebble", r"Can our machine run our language?", lit=(1957,),
-                            extra=((1957, r"FORTRAN"),), part=PART)
-        with self.voiceover("Chapter five. The VM, on Pebble."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The VM, \ on Pebble", r"Can our machine run our language?", lit=(1957,), extra=((1957, r"FORTRAN"),), part=PART, said="Chapter five. The VM, on Pebble.")
 
     def source(self):
         loop, cons = _excerpt()
@@ -87,9 +83,7 @@ class PebbleVM(VoiceoverScene):
             "Two implementations give us an opportunity to cross-check. <bookmark mark='a'/> Run the same "
             "in-range Job passage on the Python reference VM and the Pebble implementation. Their output, "
             "bytecode work, collection counts, copied words and deepest stack are checked as shown. <bookmark "
-            "mark='b'/> This is finite cosimulation evidence for these programs and heap settings. It is not a "
-            "proof of equivalence for every possible program, especially values beyond Pebble's tagged integer "
-            "range. A mismatch would still be valuable: it would identify a concrete counterexample to "
+            "mark='b'/> This is finite cosimulation evidence for these programs and heap settings. A mismatch would still be valuable: it would identify a concrete counterexample to "
             "investigate."
         )
         ) as vo:
@@ -102,6 +96,10 @@ class PebbleVM(VoiceoverScene):
         self.clear_scene()
 
     def dispatch(self):
+        self.ask(r"Choose the next bytecode's handler \\ by a chain of tests, or a jump table?", [r"the chain of tests",
+                 r"the jump table"], 1,
+                 say="Our VM on Pebble finds each bytecode's handler with a chain of tests. Would a jump table be faster?",
+                 reveal="Yes, much: one indexed jump instead of a walk down the chain.")
         d = load("vm")
         head = label(r"The price of dispatch", font_size=34).to_edge(UP, buff=0.3)
         rows = [[o["order"], words(o["steps"]), f"{o['per_bytecode']:.0f}"] for o in d["orders"]]
@@ -143,3 +141,9 @@ class PebbleVM(VoiceoverScene):
             self.play(FadeIn(pts))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is a closure?", r"A function plus the environment it was made in"),
+             (r"What does a proper tail call save?", r"A stack frame: the caller's is reused")],
+            narration="Checkpoint. What is a closure? And what does a proper tail call save?",
+            answers_narration="A function, together with the environment it was made in. And a stack frame: the caller's "
+                              "frame is reused.")

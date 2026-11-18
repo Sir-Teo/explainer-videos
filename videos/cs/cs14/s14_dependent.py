@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, code, grid_table, load, mono
 
 
-class Dependent(VoiceoverScene):
+class Dependent(WatchScene):
     def construct(self):
         self.card()
         self.vectors()
@@ -13,13 +13,14 @@ class Dependent(VoiceoverScene):
         self.rust()
 
     def card(self):
-        card = chapter_card(13, r"Dependent and linear types", r"Can a type say more?", lit=(1984,),
-                            extra=((1984, r"Trusting Trust; \ Martin-L\"of's type theory"),), part=PART)
-        with self.voiceover("Chapter thirteen. Dependent and linear types."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Dependent and linear types", r"Can a type say more?", lit=(1984,), extra=((1984, r"Trusting Trust; \ Martin-L\"of's type theory"),), part=PART, said="Chapter thirteen. Dependent and linear types.")
 
     def vectors(self):
+        self.ask(r"With dependent types, a vector's length is in its type. \\ Taking the head of an empty vector...",
+                 [r"crashes at run time", r"doesn't type-check"], 1,
+                 say="With dependent types a vector's type includes its length. What happens if you take the head of an empty "
+                     "one?",
+                 reveal="The program doesn't type-check: the crash moved from run time to compile time.")
         head = label(r"Types that mention values", font_size=36).to_edge(UP, buff=0.3)
         rows = VGroup(
             MathTex(r"\mathsf{Vec}\;A\;n", font_size=40, color=YES),

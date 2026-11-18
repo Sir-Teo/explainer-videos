@@ -4,21 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs13.common import (CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, grid_table, load, mono, region)
 
 
-class Correct(VoiceoverScene):
+class Correct(WatchScene):
     def construct(self):
         self.card()
         self.stakes()
         self.csmith()
         self.ours()
-        self.rules()
-        self.proofs()
 
     def card(self):
-        card = chapter_card(14, r"Is the compiler right?", r"How would we know if it were not?", lit=(2011,),
-                            extra=((2011, r"Csmith"),), part=PART)
-        with self.voiceover("Chapter fourteen. Is the compiler right?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Is the compiler right?", r"How would we know if it were not?", lit=(2011,), extra=((2011, r"Csmith"),), part=PART, said="Chapter fourteen. Is the compiler right?")
 
     def stakes(self):
         head = label("A miscompilation can silently change a result", font_size=34).to_edge(UP, buff=0.3)
@@ -44,6 +38,10 @@ class Correct(VoiceoverScene):
         self.clear_scene()
 
     def csmith(self):
+        self.ask(r"Random C programs fed to GCC and LLVM (Csmith, 2011). \\ Wrong-code bugs found?", [r"none",
+                 r"hundreds"], 1,
+                 say="Feed random C programs to GCC and LLVM and compare their answers. How many compiler bugs turn up?",
+                 reveal="Hundreds, in compilers used by everyone.")
         head = label(r"Csmith: \ random programs, \ many compilers", font_size=34).to_edge(UP, buff=0.3)
         gen = VGroup(region(3.0, 1.2, r"random C program", DATA, font_size=22),
                      label(r"no undefined behaviour", font_size=18, color=GREY_A))
@@ -66,7 +64,7 @@ class Correct(VoiceoverScene):
                   color=GREY_A),
             label(r"except the proved parts of CompCert: \ no wrong-code bug found there", font_size=21, color=YES),
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.45)
-        with self.voiceover("Csmith turns random source programs into compiler tests. <bookmark mark='a'/> Its generator avoids undefined behavior and the unspecified choices that would undermine a stable expected output. Merely avoiding undefined behavior in an arbitrary C program would not, by itself, guarantee one output. <bookmark mark='b'/> Compile the generated program with several compilers and optimization levels, then compare the observed checksums. These diagram values illustrate the method. <bookmark mark='c'/> A disagreement is a finding to investigate: the source assumptions, harness and reference tools also need checking. Agreement is finite evidence, not a proof of correctness. <bookmark mark='d'/> In their 2011 paper, Yang, Chen, Eide and Regehr reported more than three hundred and twenty-five previously unknown bugs over three years. The study found crashes and wrong code in tested compilers, while reporting no wrong-code finding in CompCert's verified parts. That is a dated study result within a stated testing boundary.") as vo:
+        with self.voiceover("Csmith turns random source programs into compiler tests. <bookmark mark='a'/> Its generator avoids undefined behavior and the unspecified choices that would undermine a stable expected output. Merely avoiding undefined behavior in an arbitrary C program would not, by itself, guarantee one output. <bookmark mark='b'/> Compile the generated program with several compilers and optimization levels, then compare the observed checksums. These diagram values illustrate the method. <bookmark mark='c'/> A disagreement is a finding to investigate: the source assumptions, harness and reference tools also need checking. <bookmark mark='d'/> In their 2011 paper, Yang, Chen, Eide and Regehr reported more than three hundred and twenty-five previously unknown bugs over three years. The study found crashes and wrong code in tested compilers, while reporting no wrong-code finding in CompCert's verified parts. That is a dated study result within a stated testing boundary.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(gen), run_time=0.6)
             vo.wait_until('a')
@@ -124,70 +122,4 @@ class Correct(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def rules(self):
-        so = load("superopt")
-        head = label(r"Proving rewrite rules, \ for all $2^{32}$ inputs", font_size=34).to_edge(UP, buff=0.3)
-        rows, cols = [], []
-        for r in so["rules"]:
-            rows.append([r["rule"].replace(">>u", ">>>"), "holds" if r["holds"] else "false",
-                         "" if r["holds"] else f"x = {r['counterexample'][0]:,}"])
-            cols.append([WHITE, YES if r["holds"] else NO, NO])
-        tab = grid_table([r"rule, \ on 32-bit integers", r"z3 says", r"counterexample"], rows,
-                         widths=[5.2, 1.6, 3.4], row_h=0.55, font_size=19, colors=cols, mono_cols=(0, 2)).next_to(
-            head, DOWN, buff=0.5)
-        how = VGroup(
-            label(r"ask an SMT solver: \ is there any $x$ with \ $\mathrm{lhs}(x) \ne \mathrm{rhs}(x)$?",
-                  font_size=21, color=GREY_A),
-            label("unsat proves the encoding; sat supplies a witness; unknown is inconclusive", font_size=21, color=GREY_A),
-            label(r"Alive \ (Lopes et al., \ 2015): \ 334 of LLVM's peephole rules checked; \ 8 were wrong",
-                  font_size=21, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(tab, DOWN, buff=0.45)
-        with self.voiceover("For a small rewrite, a solver can check more than selected examples. <bookmark mark='a'/> Encode both expressions with the same thirty-two-bit word semantics, then ask whether any input makes them differ. An unsatisfiable result proves equality in that encoding. A satisfiable result supplies a counterexample; unknown supplies neither. <bookmark mark='b'/> Multiplication by eight agrees with a three-bit left shift under wrapping arithmetic. Signed division by two does not always agree with arithmetic right shift: division rounds toward zero. Adding the unsigned sign bit before shifting repairs that rule. The other rows expose signed comparison after wrapping addition and multiplication that overflows before division. The solver's particular witness may vary. <bookmark mark='c'/> The 2015 Alive study translated three hundred and thirty-four of one thousand and twenty-eight LLVM peephole transformations and found eight erroneous ones, which developers confirmed and fixed. Those rules use LLVM's modeled semantics and assumptions. Our word identities do not automatically establish a C, floating-point or whole-machine transformation.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(how[:2]), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]])
-            for r in tab.cells[1:]:
-                self.play(*[FadeIn(c) for c in r], run_time=0.8)
-            vo.wait_until('c')
-            self.play(FadeIn(how[2]))
-        self.wait(0.3)
-        self.clear_scene()
 
-    def proofs(self):
-        head = label(r"From testing to proof", font_size=34).to_edge(UP, buff=0.3)
-        ladder = [
-            (r"differential testing", r"Csmith; \ our fuzzer", r"finds bugs; \ proves nothing", DATA),
-            (r"rule checking", r"Alive; \ our z3 checks", "proves a rewrite under its encoding", CTRL),
-            (r"translation validation", r"Pnueli 1998; \ Necula 2000", "checks this translation under a relation",
-             YES),
-            (r"a verified compiler", r"CompCert \ (Leroy, \ 2006--)", "proves supported AST-to-assembly semantics", FUNC),
-        ]
-        rows = VGroup()
-        for name, who, what, c in ladder:
-            r = VGroup(region(3.4, 0.7, name, c, font_size=20), label(who, font_size=18, color=GREY_A),
-                       label(what, font_size=18, color=WHITE)).arrange(RIGHT, buff=0.4)
-            rows.add(r)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(head, DOWN, buff=0.5)
-        for r in rows:
-            r[1].move_to([-1.1, r[0].get_y(), 0], aligned_edge=LEFT)
-            r[2].move_to([2.2, r[0].get_y(), 0], aligned_edge=LEFT)
-        rows.set_x(0)
-        nxt = VGroup(
-            label(r"CompCert's proof, \ in the Coq proof assistant: \ Part 54", font_size=21, color=HEAD),
-            label(r"and a compiler that lies about \textit{itself} \ (Thompson, \ 1984): \ Part 55", font_size=21,
-                  color=NO),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.4)
-        with self.voiceover("These techniques provide different kinds of evidence. <bookmark mark='a'/> Differential testing can expose disagreement on sampled executions; passing tests does not establish the absence of compiler bugs. <bookmark mark='b'/> Rule checking can prove a rewrite under its encoded semantics and assumptions, while relying on the modeling and proof tools. <bookmark mark='c'/> Translation validation checks a particular input-output compilation against a correctness relation. A validator may reject or fail to establish a correct translation; accepting must be sound for the relation it promises. <bookmark mark='d'/> CompCert mechanically proves its supported compilation passes from a C abstract syntax to assembly abstract syntax. Its parser is also verified, while preprocessing, some front-end work, external assembly and linking remain outside that core proof. The theorem concerns the specified supported language and machine semantics, not arbitrary source, libraries or faulty hardware. <bookmark mark='e'/> Part 54 develops compiler correctness proofs. The later trust discussion returns to Ken Thompson's attack on the compiler used to build a compiler: the trusted boundary matters even when the mathematical theorem is right.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            for mk, r in zip('abcd', rows):
-                if mk != 'a':
-                    vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.1))
-                if mk == 'a':
-                    vo.wait_until(mk)
-            vo.wait_until('e')
-            self.play(FadeIn(nxt))
-        self.wait(0.3)
-        self.clear_scene()

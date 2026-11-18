@@ -19,11 +19,10 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
-        self.practice()
         self.problems()
         self.next_time()
         self.references()
@@ -47,8 +46,7 @@ class Outro(VoiceoverScene):
             "equivalence, while simple types supported progress, preservation and strong normalization in the "
             "specified recursion-free calculus. Random runs checked implementations, not the general proofs. "
             "Hindley Milner inferred the Job's types; shared type graphs distinguished representation blowup from "
-            "typability complexity. Pure System F supplied parametric free theorems, and unrestricted equality "
-            "showed why the same printed type in our toy ML core does not automatically supply them. "
+            "typability complexity. "
             "Propositions-as-types connected proof search with programs, with Kripke countermodels certifying the "
             "displayed intuitionistic non-theorems."
         )
@@ -57,6 +55,11 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Propositions as types: a proof is a...?", r"Program of that type"),
+             (r"What does linearity restrict?", r"How many times a value is used: exactly once")],
+            narration="Last checkpoint. Under propositions as types, what is a proof? And what does a linear type restrict?",
+            answers_narration="A program of that type. And how often a value is used: exactly once.")
 
     def payoffs(self):
         card = payoff_card([
@@ -80,30 +83,6 @@ class Outro(VoiceoverScene):
         self.wait(0.5)
         self.clear_scene()
 
-    def practice(self):
-        card = practice_card([
-            (r"inference", r"OCaml, \ Haskell, \ F\#, \ Rust and Swift's local inference, \ TypeScript"),
-            (r"generics", r"Java, \ C\#, \ Go, \ Rust: \ parametric polymorphism, \ checked once"),
-            (r"data", r"sum types and \texttt{match}: \ Rust, \ Swift, \ Kotlin, \ Scala, \ Python 3.10"),
-            (r"gradual", r"TypeScript, \ mypy, \ Pyright: \ add types to a large codebase a file at a time"),
-            (r"proofs", r"Lean's mathlib, \ CompCert, \ seL4: \ types as specifications"),
-        ])
-        with self.voiceover(
-            (
-            "In practice, inference and annotations are combined differently by OCaml, Haskell, Rust, Swift and "
-            "TypeScript. Generic parameters, bounds, interfaces and runtime operations determine what a "
-            "polymorphic function may observe; a generic-looking signature alone does not establish a pure System "
-            "F free theorem. Sum types and pattern matching help express application invariants, with "
-            "exhaustiveness guarantees that depend on the language and compiler settings. Optional or gradual "
-            "typing lets teams adopt checks incrementally, with different runtime contracts. Dependent proof "
-            "assistants can verify chosen mathematical and software properties, relative to explicit "
-            "specifications, kernels and trusted assumptions."
-        )
-        ):
-            self.play(FadeIn(card.head), LaggedStart(*[FadeIn(r, shift=RIGHT * 0.15) for r in card.rows],
-                                                     lag_ratio=0.35), run_time=3.0)
-        self.wait(0.3)
-        self.clear_scene()
 
     def problems(self):
         ps = problem_set([

@@ -55,7 +55,7 @@ class Pumping(WatchScene):
         self.clear_scene()
 
     def anbn(self):
-        self.ask(r"$\\{a^n b^n\\}$: some $a$'s, then the same number of $b$'s. \\ Regular?", [r"yes", r"no"], 1,
+        self.ask(r"$\{a^n b^n\}$: some $a$'s, then the same number of $b$'s. \\ Regular?", [r"yes", r"no"], 1,
                  say="Some a's followed by the same number of b's. Is that language regular?",
                  reveal="No. A finite automaton can't count arbitrarily high, and the pumping lemma proves it.")
         pu = load("pumping")
@@ -130,7 +130,7 @@ class Pumping(WatchScene):
         self.clear_scene()
         self.checkpoint(
             [(r"What does the subset construction build?", r"A DFA whose states are sets of NFA states"),
-             (r"Why isn't $\\{a^n b^n\\}$ regular?", r"A finite machine can't count without bound: the pumping lemma")],
+             (r"Why isn't $\{a^n b^n\}$ regular?", r"A finite machine can't count without bound: the pumping lemma")],
             narration="Checkpoint. What does the subset construction build? And why can't a finite automaton recognize a to "
                       "the n, b to the n?",
             answers_narration="A deterministic machine whose states are sets of NFA states. And because it would have to "

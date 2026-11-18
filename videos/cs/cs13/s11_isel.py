@@ -16,20 +16,15 @@ def mi_text(ins):
     return f"{op:<5}" + ", ".join(args)
 
 
-class ISel(VoiceoverScene):
+class ISel(WatchScene):
     def construct(self):
         self.card()
         self.tiles()
         self.munch()
-        self.dp()
         self.fusion()
 
     def card(self):
-        card = chapter_card(10, r"Instruction selection", r"Which machine instructions say this?", lit=(1976,),
-                            extra=((1976, r"Aho--Johnson: \ optimal tree tiling"),), part=PART)
-        with self.voiceover("Chapter ten. Instruction selection."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Instruction selection", r"Which machine instructions say this?", lit=(1976,), extra=((1976, r"Aho--Johnson: \ optimal tree tiling"),), part=PART, said="Chapter ten. Instruction selection.")
 
     def node(self, txt, c=GREY_A):
         t = mono(txt, 17, WHITE)
@@ -103,6 +98,9 @@ class ISel(VoiceoverScene):
         self.clear_scene()
 
     def munch(self):
+        self.ask(r"Load the word at \texttt{p + 12} on Pebble. \\ How many instructions?", [r"1", r"2", r"3"], 0,
+                 say="Load the word twelve bytes past p. How many Pebble instructions?",
+                 reveal="One: a load with an offset covers the addition.")
         head = label(r"Maximal munch", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"start at the root", font_size=22, color=GREY_A),
@@ -128,32 +126,6 @@ class ISel(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def dp(self):
-        head = label(r"Optimal tiling, \ by dynamic programming", font_size=34).to_edge(UP, buff=0.3)
-        eq = MathTex(r"\mathrm{cost}(v) \;=\; \min_{\text{tile } T \text{ matching at } v} \Big( c(T) + "
-                     r"\sum_{u \,\in\, \mathrm{leaves}(T)} \mathrm{cost}(u) \Big)", font_size=36).next_to(
-            head, DOWN, buff=0.5)
-        pts = VGroup(
-            label(r"bottom-up: \ every subtree's best cost, \ once", font_size=22, color=GREY_A),
-            label(r"optimal for the given tile costs, \ in linear time for a fixed set of tiles", font_size=22,
-                  color=GREY_A),
-            label(r"Aho and Johnson, \ 1976; \ generated from a grammar of tiles: \ BURS, \ iburg \ (1992)",
-                  font_size=22, color=GREY_A),
-            label("greedy matching need not minimize cost for arbitrary tile sets", font_size=21, color=YES),
-            label(r"real IRs are DAGs, \ not trees: \ optimal DAG tiling is NP-hard", font_size=21, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).next_to(eq, DOWN, buff=0.5)
-        with self.voiceover("The largest matching tile need not have the lowest total cost. <bookmark mark='a'/> For a tree and a specified set of legal tiles, dynamic programming records the cheapest way to produce each required result form at a node: the tile's cost plus the best costs of its uncovered subtrees. <bookmark mark='b'/> Compute those states bottom-up. With fixed patterns and bounded matching work, this takes linear time in the tree size. Aho and Johnson developed optimal expression-tree selection, and tools such as iburg generate selectors from rules. <bookmark mark='c'/> Maximal munch uses a simpler greedy choice. Its quality depends on the tiles and costs; it does not establish minimum cost for arbitrary instruction sets. <bookmark mark='d'/> Shared subexpressions turn a tree into a DAG. General optimal DAG covering is NP-hard under the relevant selection models, so practical compilers combine decomposition and heuristics. That hardness claim does not make every restricted DAG case hard.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(Write(eq), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(pts[:3]))
-            vo.wait_until('c')
-            self.play(FadeIn(pts[3]))
-            vo.wait_until('d')
-            self.play(FadeIn(pts[4]))
-        self.wait(0.3)
-        self.clear_scene()
 
     def fusion(self):
         d = load("isel")

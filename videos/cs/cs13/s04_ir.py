@@ -15,21 +15,16 @@ def demo_source(size=15):
     return code(DEMO_SRC, size=size, color=CODE)
 
 
-class IR(VoiceoverScene):
+class IR(WatchScene):
     def construct(self):
         self.card()
         self.three()
         self.control()
         self.blocks()
-        self.real()
 
     def card(self):
-        card = chapter_card(3, r"Three-address code and the control-flow graph", r"What does the middle of a "
-                            r"compiler see?", lit=(1970,), extra=((1970, r"Allen: \ control-flow analysis"),),
-                            part=PART)
-        with self.voiceover("Chapter three. Three-address code and the control-flow graph."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Three-address code and the control-flow graph", r"What does the middle of a "
+                            r"compiler see?", lit=(1970,), extra=((1970, r"Allen: \ control-flow analysis"),), part=PART, said="Chapter three. Three-address code and the control-flow graph.")
 
     def three(self):
         head = label(r"One operation per line", font_size=36).to_edge(UP, buff=0.3)
@@ -116,6 +111,9 @@ class IR(VoiceoverScene):
         self.clear_scene()
 
     def blocks(self):
+        self.ask(r"A basic block. \\ Where can control enter it?", [r"anywhere", r"only at its first instruction"], 1,
+                 say="A basic block is a straight run of code. Where can control enter it?",
+                 reveal="Only at the top, and it leaves only at the bottom.")
         d = load("ir")
         p = load("pipeline")
         cfg = cfg_view(d["func"], DEMO_POS, size=12, at=RIGHT * 3.0 + DOWN * 0.1)
@@ -163,27 +161,3 @@ class IR(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def real(self):
-        lv = load("llvm")
-        head = label(r"Real compilers do the same", font_size=34).to_edge(UP, buff=0.3)
-        ours = code(["%t8  = %i * 4", "%t9  = %a + %t8", "%t10 = load [%t9]", "%t11 = %t10 > 0",
-                     "if %t11 br then5 else else7"], size=16, color=YES)
-        body = lv["ssa"][lv["ssa"].index("5:"):lv["ssa"].index("10:")]
-        theirs = code(body, size=16, color=FUNC)
-        VGroup(ours, theirs).arrange(DOWN, buff=0.9, aligned_edge=LEFT).move_to(DOWN * 0.1)
-        lo = label(r"ours: \ the body block of \texttt{total}", font_size=20, color=YES).next_to(ours, UP, buff=0.12)
-        lo.align_to(ours, LEFT)
-        lt = label(r"LLVM IR, \ from clang, \ for the same function written in C", font_size=20,
-                   color=FUNC).next_to(theirs, UP, buff=0.12).align_to(theirs, LEFT)
-        foot = label("GIMPLE and LLVM: register-like IR; Java bytecode: stack-based", font_size=21,
-                     color=HEAD).to_edge(DOWN, buff=0.45)
-        with self.voiceover("We can compare the same function in an industrial compiler. <bookmark mark='a'/> Here is our body block. <bookmark mark='b'/> Beside it is the LLVM IR emitted by the recorded Clang build for the C version. It extends the index for this target's pointer arithmetic, computes an element address with getelementptr, loads, compares and branches. The address calculation does not itself access memory. <bookmark mark='c'/> GCC's GIMPLE and LLVM IR also expose simple operations and explicit control flow, though their instructions, types and semantics differ. Java bytecode is stack based; a JIT can translate it into a different internal representation for optimization.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(lo), FadeIn(ours), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(lt), FadeIn(theirs))
-            vo.wait_until('c')
-            self.play(FadeIn(foot))
-        self.wait(0.3)
-        self.clear_scene()

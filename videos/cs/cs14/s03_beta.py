@@ -27,7 +27,7 @@ def marked(tex: str, font_size=30, color=HEAD):
     return m
 
 
-class Beta(VoiceoverScene):
+class Beta(WatchScene):
     def construct(self):
         self.card()
         self.rule()
@@ -36,11 +36,7 @@ class Beta(VoiceoverScene):
         self.omega()
 
     def card(self):
-        card = chapter_card(2, r"Reduction and normal forms", r"How does a function compute?", lit=(1936,),
-                            part=PART)
-        with self.voiceover("Chapter two. Reduction and normal forms."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Reduction and normal forms", r"How does a function compute?", lit=(1936,), part=PART, said="Chapter two. Reduction and normal forms.")
 
     def rule(self):
         head = label(r"One rule: \ $\beta$-reduction", font_size=36).to_edge(UP, buff=0.3)
@@ -130,6 +126,10 @@ class Beta(VoiceoverScene):
         self.clear_scene()
 
     def omega(self):
+        self.ask(r"$(\lambda x.\, x\,x)(\lambda x.\, x\,x)$. \\ Does it reach a normal form?",
+                 [r"yes", r"no: it reduces to itself forever"], 1,
+                 say="Lambda x dot x x, applied to itself. Does it ever reach a normal form?",
+                 reveal="No. One step gives back exactly the same term, forever.")
         b = load("beta")
         head = label(r"Terms that never stop", font_size=36).to_edge(UP, buff=0.3)
         om = MathTex(r"\Omega \;=\; (\lambda x.\, x\,x)\;(\lambda x.\, x\,x)", font_size=44).next_to(head, DOWN,

@@ -4,12 +4,12 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, code, load, mono
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.job()
         self.numbers()
         self.preview()
-        self.plan()
+        self.title(PART)
 
     def job(self):
         h = load("hook")
@@ -107,26 +107,3 @@ class Hook(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Lambda and Types", font_size=46).to_edge(UP, buff=0.4)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"$\lambda$-terms, \ substitution, \ $\beta$-reduction",
-            r"Church encodings; \ the Y combinator",
-            r"evaluation strategies; \ the Church--Rosser theorem",
-            r"simple types; \ progress and preservation; \ normalization",
-            r"Hindley--Milner inference; \ System F and free theorems",
-            r"Curry--Howard; \ dependent, \ linear and gradual types",
-        ], font_size=26).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 14 of Computer Science, Built, in Act Three, Speaking to the Machine. <bookmark "
-            "mark='a'/> In this part: lambda terms, substitution and beta reduction. Church encodings, and the Y "
-            "combinator. Evaluation strategies, and the Church Rosser theorem. Simple types, the safety theorems, "
-            "and normalization. Hindley Milner inference, System F and free theorems. And the Curry Howard "
-            "correspondence, with dependent, linear and gradual types."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.4)
-        self.clear_scene()

@@ -5,7 +5,7 @@ from videos.cs.cs15.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    grid_table, load, mono, words)
 
 
-class Generations(VoiceoverScene):
+class Generations(WatchScene):
     def construct(self):
         self.card()
         self.hypothesis()
@@ -13,13 +13,12 @@ class Generations(VoiceoverScene):
         self.barrier()
 
     def card(self):
-        card = chapter_card(9, r"Generations", r"Do most objects die young?", lit=(1984,),
-                            extra=((1984, r"Ungar: \ generation scavenging"),), part=PART)
-        with self.voiceover("Chapter nine. Generations."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Generations", r"Do most objects die young?", lit=(1984,), extra=((1984, r"Ungar: \ generation scavenging"),), part=PART, said="Chapter nine. Generations.")
 
     def hypothesis(self):
+        self.ask(r"Most objects die...", [r"young", r"old"], 0,
+                 say="In most programs, do objects tend to die young, or live long?",
+                 reveal="Most die young, which is what generational collectors bet on.")
         d = load("gen")
         head = label('Sampling ages, not measuring death', font_size=34).to_edge(UP, buff=.3)
         sv = d["survival"]

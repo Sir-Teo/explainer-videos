@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, bar_chart, load, mono, region
 
 
-class Normalization(VoiceoverScene):
+class Normalization(WatchScene):
     def construct(self):
         self.card()
         self.omega()
@@ -13,15 +13,12 @@ class Normalization(VoiceoverScene):
         self.price()
 
     def card(self):
-        card = chapter_card(9, "Why the typed core terminates", r"What do types cost?", lit=(1967,),
-                            extra=((1967, r"Tait: \ strong normalization"),), part=PART)
-        with self.voiceover((
-            "Chapter nine. Why the typed core terminates."
-        )):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, "Why the typed core terminates", r"What do types cost?", lit=(1967,), extra=((1967, r"Tait: \ strong normalization"),), part=PART, said="Chapter nine. Why the typed core terminates.")
 
     def omega(self):
+        self.ask(r"Can $\lambda x.\, x\, x$ be given a simple type?", [r"yes", r"no"], 1,
+                 say="Can lambda x dot x x be given a simple type?",
+                 reveal="No. x would need to be a function that takes itself, and no finite type does.")
         n = load("normal")
         head = label(r"Can $\Omega$ be typed?", font_size=36).to_edge(UP, buff=0.3)
         t = MathTex(r"\lambda x.\; x\;x", font_size=48).next_to(head, DOWN, buff=0.5)

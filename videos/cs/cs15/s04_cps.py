@@ -5,7 +5,7 @@ from videos.cs.cs15.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    mono, words)
 
 
-class Continuations(VoiceoverScene):
+class Continuations(WatchScene):
     def construct(self):
         self.card()
         self.cps()
@@ -13,11 +13,7 @@ class Continuations(VoiceoverScene):
         self.callcc()
 
     def card(self):
-        card = chapter_card(3, r"Continuations and tail calls", r"Can ``what happens next'' be a value?",
-                            lit=(1975,), extra=((1975, r"Scheme: \ Sussman and Steele"),), part=PART)
-        with self.voiceover("Chapter three. Continuations and tail calls."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Continuations and tail calls", r"Can ``what happens next'' be a value?", lit=(1975,), extra=((1975, r"Scheme: \ Sussman and Steele"),), part=PART, said="Chapter three. Continuations and tail calls.")
 
     def cps(self):
         d = load("cps")
@@ -48,7 +44,7 @@ class Continuations(VoiceoverScene):
             label('CPS is one compiler representation (Steele, 1978; Appel, 1992)', font_size=20,
                   color=GREY_B),
         ).arrange(DOWN, buff=0.12).to_edge(DOWN, buff=0.3)
-        with self.voiceover("A call computes a value and remembers the pending work. <bookmark mark='a'/> In direct factorial, multiplication waits for the recursive result, so our VM keeps frames. <bookmark mark='b'/> In continuation-passing style, k represents what to do next. A new closure remembers multiplication by n and the previous continuation. <bookmark mark='c'/> For factorial of a thousand, the table counts logical stack and heap slots in our Python reference VM. Its arbitrary-precision arithmetic is not Pebble's fixed-width arithmetic; these counts exclude the host's big-integer storage and computation. <bookmark mark='d'/> Pending work moves into closures and becomes explicit data. CPS is a useful compiler representation, including in influential ML and Scheme compilers, but it does not guarantee a universal space or speed saving.") as vo:
+        with self.voiceover("A call computes a value and remembers the pending work. <bookmark mark='a'/> In direct factorial, multiplication waits for the recursive result, so our VM keeps frames. <bookmark mark='b'/> In continuation-passing style, k represents what to do next. A new closure remembers multiplication by n and the previous continuation. <bookmark mark='c'/> For factorial of a thousand, the table counts logical stack and heap slots in our Python reference VM. Its arbitrary-precision arithmetic is not Pebble's fixed-width arithmetic; these counts exclude the host's big-integer storage and computation. <bookmark mark='d'/> Pending work moves into closures and becomes explicit data. CPS is a useful compiler representation, including in influential ML and Scheme compilers.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(dl), FadeIn(direct), run_time=0.6)
             vo.wait_until('a')
@@ -62,6 +58,11 @@ class Continuations(VoiceoverScene):
         self.clear_scene()
 
     def tail(self):
+        self.ask(r"A loop written as a tail call, a million times. \\ With proper tail calls, how many frames?",
+                 [r"a million", r"one"], 1,
+                 say="A loop written as a function that calls itself last, a million times. With proper tail calls, how many "
+                     "frames?",
+                 reveal="One: each call reuses the frame, because nothing waits after it.")
         d = load("cps")
         head = label(r"Tail calls are jumps", font_size=34).to_edge(UP, buff=0.3)
         src = code(["let rec words cs cur acc =", "  match cs with", "    [] -> ...",

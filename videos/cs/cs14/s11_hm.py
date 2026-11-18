@@ -8,7 +8,7 @@ def tick(s: str) -> str:
     return s.replace("'", "'")
 
 
-class Inference(VoiceoverScene):
+class Inference(WatchScene):
     def construct(self):
         self.card()
         self.idea()
@@ -16,16 +16,15 @@ class Inference(VoiceoverScene):
         self.trace()
         self.letpoly()
         self.job()
-        self.worst()
 
     def card(self):
-        card = chapter_card(10, r"Hindley--Milner inference", r"Can the machine find the types itself?",
-                            lit=(1978,), extra=((1978, r"Milner: \ algorithm W"),), part=PART)
-        with self.voiceover("Chapter ten. Hindley Milner inference."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Hindley--Milner inference", r"Can the machine find the types itself?", lit=(1978,), extra=((1978, r"Milner: \ algorithm W"),), part=PART, said="Chapter ten. Hindley Milner inference.")
 
     def idea(self):
+        self.ask(r"$\textsf{twice} = \lambda f.\,\lambda x.\, f\,(f\,x)$, with no annotations. \\ Can the machine find its "
+                 r"type?", [r"no", r"yes"], 1,
+                 say="Twice takes f and x, and applies f twice. Nobody wrote a type. Can the machine work it out?",
+                 reveal="Yes: alpha to alpha, to alpha to alpha, the most general type there is.")
         head = label(r"Types as unknowns", font_size=36).to_edge(UP, buff=0.3)
         src = mono("fun f x -> f (f x)", 28, CODE).next_to(head, DOWN, buff=0.5)
         steps = VGroup(
@@ -175,36 +174,10 @@ class Inference(VoiceoverScene):
             self.play(FadeIn(cap))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What are progress and preservation?", r"Well-typed terms step or are values; steps keep the type"),
+             (r"What does unification do?", r"Solves equations between types by substitution")],
+            narration="Checkpoint. What are progress and preservation? And what does unification do?",
+            answers_narration="A well-typed term is a value or can step, and every step keeps its type. And unification "
+                              "solves equations between types, by substitution.")
 
-    def worst(self):
-        h = load("hm")
-        head = label(r"The worst case: \ types that explode", font_size=34).to_edge(UP, buff=0.3)
-        src = VGroup(*[mono(l, 18, CODE) for l in h["exp_source"]]).arrange(DOWN, aligned_edge=LEFT, buff=0.1)
-        src.next_to(head, DOWN, buff=0.4).to_edge(LEFT, buff=0.8)
-        t1 = VGroup(label(r"type of \texttt{f1}:", font_size=19, color=GREY_B),
-                    mono(h["exp"][0]["shown"], 18, YES)).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-        t1.next_to(src, RIGHT, buff=0.8).align_to(src, UP)
-        rows = [[f"f{r['n']}", f"2^{r['log2_size']}", f"{r['unify_calls']}", f"{1000 * r['seconds']:.2f} ms"]
-                for r in h["exp"]]
-        tab = grid_table([r"function", r"leaves of its type", r"unifications", r"time"], rows,
-                         widths=[1.8, 3.0, 2.2, 1.8], row_h=0.42, font_size=20, mono_cols=(0, 1, 2, 3)).next_to(
-            src, DOWN, buff=0.5).set_x(0)
-        pts = VGroup(
-            label(r"each line squares the type: \ $2^{2^n}$ leaves", font_size=21, color=NO),
-            label(r"kept as a shared graph, \ our engine stays fast; \ printed out, \ \texttt{f5}'s type has four "
-                  r"billion leaves", font_size=21, color=GREY_A),
-            label(r"in general, \ typability in ML is DEXPTIME-complete \ (Mairson; \ Kfoury, Tiuryn, Urzyczyn; \ "
-                  r"1990)", font_size=21, color=HEAD),
-        ).arrange(DOWN, buff=0.15).to_edge(DOWN, buff=0.3)
-        with self.voiceover("Small source programs can describe enormous expanded types. <bookmark mark='a'/> In this family, f zero pairs its argument with itself. Each following function applies its predecessor twice. <bookmark mark='b'/> The number of leaves in the fully expanded result type squares at each level: two to the power two to the n. Count leaves, rather than source characters or stored graph nodes. <bookmark mark='c'/> Sharing keeps repeated subtypes in a graph. Our recorded inference handles the displayed f five without expanding its more than four billion result leaves; host timing is a separate measurement and can vary. This family illustrates representation blowup, not a proof that every implementation spends that much time. <bookmark mark='d'/> Deciding typability in the relevant unrestricted ML let-polymorphism problem is EXPTIME-complete, as the 1990 results show. That decision bound differs from printing a fully expanded principal type. Practical performance depends on the program family, shared representation and implementation.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(src[:2]), FadeIn(t1), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(src[2:]), FadeIn(tab), FadeIn(pts[0]))
-            vo.wait_until('c')
-            self.play(FadeIn(pts[1]))
-            vo.wait_until('d')
-            self.play(FadeIn(pts[2]))
-        self.wait(0.3)
-        self.clear_scene()

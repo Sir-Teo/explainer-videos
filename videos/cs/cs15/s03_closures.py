@@ -5,7 +5,7 @@ from videos.cs.cs15.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    load, mono, ptr)
 
 
-class Closures(VoiceoverScene):
+class Closures(WatchScene):
     def construct(self):
         self.card()
         self.scope()
@@ -13,11 +13,7 @@ class Closures(VoiceoverScene):
         self.conversion()
 
     def card(self):
-        card = chapter_card(2, r"Environments and closures", r"How does a function remember where it was made?",
-                            lit=(1964,), extra=((1964, r"Landin: \ closures and the SECD machine"),), part=PART)
-        with self.voiceover("Chapter two. Environments and closures."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Environments and closures", r"How does a function remember where it was made?", lit=(1964,), extra=((1964, r"Landin: \ closures and the SECD machine"),), part=PART, said="Chapter two. Environments and closures.")
 
     def scope(self):
         d = load("scope")
@@ -60,6 +56,11 @@ class Closures(VoiceoverScene):
         self.clear_scene()
 
     def funarg(self):
+        self.ask(r"\texttt{make\_adder(5)} returns a function that uses \texttt{n}. \\ Where does \texttt{n} live "
+                 r"afterwards?", [r"in the finished call's stack frame", r"in a closure on the heap"], 1,
+                 say="make adder returns a function that still needs n, after make adder itself has returned. Where does n "
+                     "live?",
+                 reveal="In a closure on the heap. The stack frame is long gone.")
         d = load("scope")
         head = label(r"The funarg problem \ (Moses, \ 1970)", font_size=34).to_edge(UP, buff=0.3)
         prog = code(d["adder_source"], size=20, color=CODE).to_edge(LEFT, buff=0.6).shift(UP * 1.4)

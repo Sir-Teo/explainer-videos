@@ -11,23 +11,22 @@ def setstr(xs):
     return "{" + ", ".join(x.replace("%", "") for x in xs) + "}"
 
 
-class Dataflow(VoiceoverScene):
+class Dataflow(WatchScene):
     def construct(self):
         self.card()
         self.liveness()
         self.iterate()
-        self.family()
         self.lattice()
-        self.theorem()
 
     def card(self):
-        card = chapter_card(6, r"Dataflow analysis and fixed points", r"What is true at each point, on every path?",
-                            lit=(1973,), extra=((1973, r"Kildall: \ dataflow on lattices"),), part=PART)
-        with self.voiceover("Chapter six. Dataflow analysis and fixed points."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Dataflow analysis and fixed points", r"What is true at each point, on every path?", lit=(1973,), extra=((1973, r"Kildall: \ dataflow on lattices"),), part=PART, said="Chapter six. Dataflow analysis and fixed points.")
 
     def liveness(self):
+        self.ask(r"Liveness: is this value used later? \\ Which way does the information flow?", [r"forward",
+                 r"backward"], 1,
+                 say="Liveness asks whether a value will be used later. Does that information flow forward through the program, "
+                     "or backward?",
+                 reveal="Backward, from each use towards the definitions.")
         head = label(r"Liveness: \ will this value be needed?", font_size=34).to_edge(UP, buff=0.3)
         defn = label(r"$x$ is \textbf{live} at a point if some path from there uses $x$ before assigning it",
                      font_size=23, color=GREY_A).next_to(head, DOWN, buff=0.35)
@@ -111,51 +110,6 @@ class Dataflow(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def family(self):
-        df = load("dataflow")
-        head = label(r"One framework, \ many analyses", font_size=34).to_edge(UP, buff=0.3)
-        rows = [
-            [r"liveness", r"which variables may still be read?", r"backward", r"$\cup$", rf"{df['liveness']['visits']}"],
-            [r"reaching definitions", r"which assignments may have produced this?", r"forward", r"$\cup$",
-             rf"{df['reaching']['visits']}"],
-            [r"available expressions", r"which values are surely computed already?", r"forward", r"$\cap$",
-             rf"{df['available']['visits']}"],
-        ]
-        tab = grid_table([r"analysis", r"question", r"direction", r"join", r"visits on \texttt{total}"], rows,
-                         widths=[2.6, 4.6, 1.5, 0.9, 2.2], row_h=0.6, font_size=19, mono_cols=()).next_to(
-            head, DOWN, buff=0.5)
-        av = df["available"]["in"]["then5"]
-        ex = VGroup(
-            label(r"available on entry to \texttt{then5}:", font_size=21, color=GREY_A),
-            mono(", ".join(a.replace("%", "").replace(" mul ", " * ").replace(" add ", " + ").replace(" gt ", " > ")
-                           .replace(" lt ", " < ") for a in av), 17, YES),
-            label(r"so \texttt{then5}'s \ \texttt{\%t12 = \%i * 4} \ recomputes a value it already has", font_size=21,
-                  color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(tab, DOWN, buff=0.6).to_edge(LEFT, buff=1.0)
-        must = label(r"``may'' analyses join with $\cup$; \ ``must'' analyses with $\cap$", font_size=21,
-                     color=GREY_A).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Liveness is one member of a family. <bookmark mark='a'/> Reaching definitions asks which assignments "
-            "may have produced the value at a point; it flows forward and joins with union. <bookmark mark='b'/> "
-            "Available expressions asks which values are surely computed already, on every path; it also flows "
-            "forward, but joins with intersection, since an expression is available only if every incoming path "
-            "computed it. <bookmark mark='c'/> On entry to then, i times four and a plus t eight are available: "
-            "the body block computed them on the only way in. So then's own i times four is redundant, and the "
-            "load after it too, if nothing stored to memory in between. <bookmark mark='d'/> May questions join "
-            "with union, must questions with intersection. The machinery is the same."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]],
-                      *[FadeIn(c) for c in tab.cells[1]])
-            vo.wait_until("a")
-            self.play(*[FadeIn(c) for c in tab.cells[2]])
-            vo.wait_until("b")
-            self.play(*[FadeIn(c) for c in tab.cells[3]])
-            vo.wait_until("c")
-            self.play(FadeIn(ex))
-            vo.wait_until("d")
-            self.play(FadeIn(must))
-        self.wait(0.3)
-        self.clear_scene()
 
     def lattice(self):
         df = load("dataflow")
@@ -194,41 +148,10 @@ class Dataflow(VoiceoverScene):
             self.play(FadeIn(side[3]))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does SSA give the optimizer?", r"One definition per name: def-use links are pointers"),
+             (r"Why does a dataflow iteration terminate?", r"Monotone updates on a lattice of finite height")],
+            narration="Checkpoint. What does SSA give the optimizer? And why does a dataflow iteration always stop?",
+            answers_narration="One definition per name, so following a value is following a pointer. And each update only "
+                              "moves up a lattice of finite height.")
 
-    def theorem(self):
-        head = label(r"The least fixed point", font_size=34).to_edge(UP, buff=0.3)
-        kt = VGroup(
-            label(r"\textbf{Knaster--Tarski} \ (1955): \ a monotone function $F$ on a complete lattice", font_size=22,
-                  color=GREY_A),
-            label(r"has a least fixed point", font_size=22, color=GREY_A),
-            MathTex(r"\mathrm{lfp}(F) \;=\; \bigsqcup_{k \ge 0} F^k(\bot) \;=\; \bot \,\sqcup\, F(\bot) \,\sqcup\, "
-                    r"F(F(\bot)) \,\sqcup \cdots", font_size=34),
-            label(r"\textbf{Kleene}: \ and when $F$ is continuous, \ climbing from the bottom reaches it", font_size=22,
-                  color=GREY_A),
-        ).arrange(DOWN, buff=0.22).next_to(head, DOWN, buff=0.45)
-        ours = VGroup(
-            label(r"$F$: \ one application of all the equations; \ \ $\bot$: \ every set empty", font_size=21,
-                  color=YES),
-            label(r"liveness found the \textit{smallest} sets that satisfy the equations: \ nothing live without "
-                  r"reason", font_size=21, color=YES),
-        ).arrange(DOWN, buff=0.15).next_to(kt, DOWN, buff=0.45)
-        mop = VGroup(
-            label("path solution: combine all syntactic CFG paths, including infeasible ones", font_size=20,
-                  color=GREY_A),
-            label("distributivity gives fixed point = path solution under the framework assumptions",
-                  font_size=20, color=GREY_A),
-            label("sound transfer functions can lose precision; feasible paths require further reasoning", font_size=20,
-                  color=NO),
-        ).arrange(DOWN, buff=0.12).next_to(ours, DOWN, buff=0.4)
-        with self.voiceover("There are two different guarantees to separate. <bookmark mark='a'/> Knaster and Tarski give a least fixed point for a monotone function on a complete lattice. On our finite-height lattice, iteration from bottom reaches it after finitely many changes. The general infinite-lattice version of Kleene iteration needs an additional continuity condition. <bookmark mark='b'/> For liveness this is the smallest collection of sets satisfying the equations. No variable is included unless the equations force it from bottom. Other analyses may draw their information order in the opposite direction; the constant lattice next chapter does. <bookmark mark='c'/> Distributive transfer functions make this fixed-point solution equal the combination over all syntactic paths in the control-flow graph. Those paths can include infeasible ones. It is not exact knowledge of every execution. Non-distributive frameworks may lose further precision, while a sound analysis still overapproximates the behaviors relevant to its optimization.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(kt[:2]), run_time=0.6)
-            vo.wait_until('a')
-            self.play(Write(kt[2]), run_time=2)
-            self.play(FadeIn(kt[3]))
-            vo.wait_until('b')
-            self.play(LaggedStart(*[FadeIn(o) for o in ours], lag_ratio=0.5), run_time=2)
-            vo.wait_until('c')
-            self.play(LaggedStart(*[FadeIn(m) for m in mop], lag_ratio=0.5), run_time=3)
-        self.wait(0.3)
-        self.clear_scene()

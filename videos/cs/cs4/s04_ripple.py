@@ -192,7 +192,7 @@ class Ripple(WatchScene):
 
     # ------------------------------------------------------------------
     def slow(self):
-        self.ask(r"An 8-bit ripple adder adds 1 to $0111\\,1111$. \\ How long until the answer settles?",
+        self.ask(r"An 8-bit ripple adder adds 1 to $0111\,1111$. \\ How long until the answer settles?",
                  [r"one full-adder delay", r"eight full-adder delays", r"sixty-four"], 1,
                  say="An eight-bit ripple adder adds one to zero one one one one one one one. How long until the answer is "
                      "ready?",

@@ -5,23 +5,20 @@ from videos.cs.cs14.common import (CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, 
                                    mono)
 
 
-class Recursion(VoiceoverScene):
+class Recursion(WatchScene):
     def construct(self):
         self.card()
         self.problem()
         self.ycomb()
         self.factorial()
-        self.zcomb()
 
     def card(self):
-        card = chapter_card(4, r"Recursion without names", r"How can a nameless function call itself?",
-                            lit=(1941,), extra=((1941, r"Church: \ \textit{The Calculi of Lambda-Conversion}"),),
-                            part=PART)
-        with self.voiceover("Chapter four. Recursion without names."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Recursion without names", r"How can a nameless function call itself?", lit=(1941,), extra=((1941, r"Church: \ \textit{The Calculi of Lambda-Conversion}"),), part=PART, said="Chapter four. Recursion without names.")
 
     def problem(self):
+        self.ask(r"Lambda terms have no names. \\ Can a term still be recursive?", [r"no", r"yes"], 1,
+                 say="A lambda term has no name to call itself by. Can it be recursive anyway?",
+                 reveal="Yes: a fixed-point combinator hands a function to itself.")
         head = label(r"A function that mentions itself", font_size=36).to_edge(UP, buff=0.3)
         want = MathTex(r"\mathit{fact} = \lambda n.\; \mathsf{if}\; (n = 0)\; 1\; (n \times \mathit{fact}\,(n-1))",
                        font_size=34).next_to(head, DOWN, buff=0.5)
@@ -106,44 +103,3 @@ class Recursion(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def zcomb(self):
-        f = load("fix")
-        head = label(r"Call-by-value needs two delays", font_size=34).to_edge(UP, buff=0.3)
-        y = MathTex(r"Y = \lambda f.\;(\lambda x.\,f(x\,x))\;(\lambda x.\,f(x\,x))",
-                    font_size=32, color=NO).next_to(head, DOWN, buff=0.4)
-        z = MathTex(r"Z = \lambda f.\;(\lambda x.\,f(\lambda v.\,x\,x\,v))\;"
-                    r"(\lambda x.\,f(\lambda v.\,x\,x\,v))", font_size=30,
-                    color=YES).next_to(y, DOWN, buff=0.35)
-        observed = VGroup(
-            label(r"$Y\,F$: fuel limit reached", font_size=20, color=NO),
-            label(r"$Z\,F$: closure returned", font_size=20, color=YES),
-            label(r"$Z\,F\,0$: eager branches hit fuel limit", font_size=20, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).move_to(LEFT * 3.4 + DOWN * 0.5)
-        if observed.width > 6: observed.scale_to_fit_width(6)
-        delayed = MathTex(r"F_{\mathrm{delay}}", font_size=24, color=YES).move_to(RIGHT * 3.1 + UP * 1.0)
-        condition = MathTex(r"\mathsf{iszero}\;n", font_size=29, color=HEAD).move_to(RIGHT * 3.1 + UP * 0.4)
-        yes = MathTex(r"\lambda u.\;1", font_size=27, color=YES).move_to(RIGHT * 1.7 + DOWN * 0.65)
-        no = MathTex(r"\lambda u.\;n\times\mathit{self}(\mathsf{pred}\;n)", font_size=25,
-                     color=FUNC).move_to(RIGHT * 4.3 + DOWN * 0.65)
-        if no.width > 3.5: no.scale_to_fit_width(3.5)
-        arrows = VGroup(Arrow(condition.get_bottom(), yes.get_top(), buff=0.12, color=YES),
-                        Arrow(condition.get_bottom(), no.get_top(), buff=0.12, color=FUNC))
-        force = label(r"choose a branch closure, then apply it to unit", font_size=19,
-                      color=HEAD).move_to(RIGHT * 3.1 + DOWN * 1.35)
-        tab = grid_table([r"$n$", r"$Z\,F_{\mathrm{delay}}\,\underline{n}$", r"CBV $\beta$-steps"],
-                         [[str(r['n']),str(r['value']),str(r['beta'])] for r in f['strict_fact']],
-                         widths=[0.7,1.8,2.5], row_h=0.35, font_size=18,
-                         mono_cols=(0,1,2)).move_to(RIGHT * 3.1 + DOWN * 2.5)
-        note = label(r"closure return $\ne$ factorial evaluation; finite fuel is an observation",
-                     font_size=19, color=GREY_A).to_edge(DOWN, buff=0.25)
-        with self.voiceover("A fixed-point equation and an evaluation strategy are different questions. <bookmark mark='a'/> With call-by-value, Y F unfolds its self-application before F can use it. This prevents even obtaining the function closure in the displayed example. <bookmark mark='b'/> Z delays that self-application beneath a lambda. Our first comparison tests Y F and Z F only to weak head: constructing Z F returns a closure. Computing a factorial result needs another condition: in a strict language, Church conditionals must delay their branches, or the recursive branch is evaluated even in the zero case. Z alone does not make every recursive program terminate. <bookmark mark='c'/> In the untyped calculus every term has a fixed point up to beta equality. Related computability ideas lead to Kleene's recursion theorem, developed in Part 25. A program that prints its own source is one application, with a specified encoding and output mechanism; it is not the whole theorem.") as vo:
-            self.play(FadeIn(head), Write(y), run_time=0.8)
-            vo.wait_until('a')
-            self.play(FadeIn(observed[0]))
-            vo.wait_until('b')
-            self.play(Write(z), FadeIn(observed[1:]), FadeIn(delayed), FadeIn(condition), FadeIn(yes), FadeIn(no),
-                      Create(arrows), FadeIn(force), FadeIn(tab))
-            vo.wait_until('c')
-            self.play(FadeIn(note))
-        self.wait(0.3)
-        self.clear_scene()

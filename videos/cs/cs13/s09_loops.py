@@ -13,21 +13,15 @@ def pct(rows, a, b, key="array"):
     return 100 * (rows[b][key] - rows[a][key]) / rows[a][key]
 
 
-class Loops(VoiceoverScene):
+class Loops(WatchScene):
     def construct(self):
         self.card()
         self.natural()
-        self.inversion()
         self.licm()
         self.ivsr()
-        self.unroll()
 
     def card(self):
-        card = chapter_card(8, r"Loops", r"Where does the time go?", lit=(1971,),
-                            extra=((1971, r"Allen--Cocke: \ a catalogue of optimizations"),), part=PART)
-        with self.voiceover("Chapter eight. Loops."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Loops", r"Where does the time go?", lit=(1971,), extra=((1971, r"Allen--Cocke: \ a catalogue of optimizations"),), part=PART, said="Chapter eight. Loops.")
 
     def natural(self):
         lp = load("loops")
@@ -68,41 +62,12 @@ class Loops(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def inversion(self):
-        p = load("passes")
-        head = label(r"Loop inversion: \ test at the bottom", font_size=34).to_edge(UP, buff=0.3)
-
-        def flow(blocks, edges, x):
-            bs = {}
-            for k, (name, lines, c) in enumerate(blocks):
-                bs[name] = ir_block(name, lines, c, 19)
-            col = VGroup(*bs.values()).arrange(DOWN, buff=0.45, aligned_edge=LEFT).move_to([x, -0.4, 0])
-            return bs, col
-        b1, c1 = flow([("test", ["if i >= n br done"], CTRL), ("body", ["...", "i = i + 1", "br test"], DATA),
-                       ("done", ["..."], GREY_B)], None, -3.4)
-        b2, c2 = flow([("guard", ["if i >= n br done"], CTRL), ("body", ["...", "i = i + 1",
-                                                                        "if i < n br body"], DATA),
-                       ("done", ["..."], GREY_B)], None, 3.0)
-        back1 = CurvedArrow(b1["body"].box.get_right(), b1["test"].box.get_right(), angle=1.2, color=NO,
-                            stroke_width=2, tip_length=0.13)
-        back2 = CurvedArrow(b2["body"].box.get_right() + DOWN * 0.25, b2["body"].box.get_right() + UP * 0.25,
-                            angle=2.2, color=YES, stroke_width=2, tip_length=0.13)
-        t1 = label(r"two branches per iteration", font_size=20, color=NO).next_to(c1, UP, buff=0.3)
-        t2 = label(r"one branch per iteration", font_size=20, color=YES).next_to(c2, UP, buff=0.3)
-        meas = label(rf"on the array Job: \ {pct(p['rows'], 1, 2):+.1f}\% instructions; \ on the list Job: \ "
-                     rf"{pct(p['rows'], 1, 2, 'list'):+.1f}\%", font_size=21, color=YES).to_edge(DOWN, buff=0.4)
-        with self.voiceover(f"Loop inversion changes the control-flow shape. <bookmark mark='a'/> In the left sketch, the body jumps to a top test, and the test chooses whether to enter again. <bookmark mark='b'/> In the right sketch, an initial guard preserves the zero-iteration case. The repeated body ends in the conditional back branch. This can remove an unconditional jump from the repeated path, while changing code size and branch behavior. The guard must preserve the original conditions and effects. <bookmark mark='c'/> In this pass sequence, the executed instruction count changes by {pct(p['rows'], 1, 2):+.1f} percent for the array Job and {pct(p['rows'], 1, 2, 'list'):+.1f} percent for the list Job. The transformed loops also provide entry blocks useful for later code motion. Whether fewer instructions save cycles still depends on the machine.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(c1), Create(back1), FadeIn(t1), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(c2), Create(back2), FadeIn(t2))
-            vo.wait_until('c')
-            self.play(FadeIn(meas))
-        self.wait(0.3)
-        self.clear_scene()
 
     def licm(self):
+        self.ask(r"An expression whose inputs never change inside the loop. \\ Compute it...",
+                 [r"every iteration", r"once, before the loop"], 1,
+                 say="An expression inside a loop whose inputs never change there. Where should it be computed?",
+                 reveal="Once, before the loop: loop-invariant code motion.")
         lp = load("loops")
         p = load("passes")
         head = label(r"Loop-invariant code motion", font_size=34).to_edge(UP, buff=0.3)
@@ -195,32 +160,3 @@ class Loops(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def unroll(self):
-        head = label(r"More loop transformations", font_size=34).to_edge(UP, buff=0.3)
-        orig = code(["for i in 0..n:", "    s += a[i]"], size=18)
-        unr = code(["for i in 0..n step 4:", "    s += a[i]", "    s += a[i+1]", "    s += a[i+2]",
-                    "    s += a[i+3]", "(and the leftover iterations)"], size=18, color=YES)
-        VGroup(orig, unr).arrange(RIGHT, buff=1.5, aligned_edge=UP).next_to(head, DOWN, buff=0.6).shift(LEFT * 1.5)
-        arr = Arrow(orig.get_right(), unr.get_left(), buff=0.3, color=GREY_B)
-        ul = label(r"\textbf{unrolling}: \ one test per four iterations; \ room for scheduling; \ more code",
-                   font_size=20, color=GREY_A).next_to(VGroup(orig, unr), DOWN, buff=0.5)
-        more = VGroup(
-            label(r"\textbf{vectorization}: \ four additions in one SIMD instruction \ (Part 10)", font_size=20,
-                  color=GREY_A),
-            label(r"\textbf{interchange and tiling}: \ reorder nested loops for the cache \ (Part 9)", font_size=20,
-                  color=GREY_A),
-            label(r"\textbf{the polyhedral model}: \ loop nests as integer polyhedra; \ transformations as "
-                  r"affine maps", font_size=20, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).next_to(ul, DOWN, buff=0.4)
-        note = label(r"not in our compiler: \ Pebble has no SIMD, \ and the Job's loops exit early", font_size=20,
-                     color=HEAD).to_edge(DOWN, buff=0.4)
-        with self.voiceover("Production compilers consider many other loop transformations. <bookmark mark='a'/> Unrolling copies a body, potentially reducing repeated tests and exposing independent work. The implementation still needs correct handling of leftover iterations, exits and effects; more code can also be costly. <bookmark mark='b'/> SIMD vectorization groups compatible operations into lanes. Interchange and tiling can improve locality when dependencies permit. Polyhedral methods model suitable affine loop domains and accesses as integer sets, then search legal transformations. Arbitrary pointer-dependent control flow does not automatically fit that model. <bookmark mark='c'/> Our compiler implements none of these additional methods. Pebble lacks SIMD instructions. Early exits in the Job make several transformations more complicated, but do not establish that all unrolling or loop restructuring is impossible.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(orig), GrowArrow(arr), FadeIn(unr), FadeIn(ul), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(LaggedStart(*[FadeIn(m) for m in more], lag_ratio=0.5), run_time=3)
-            vo.wait_until('c')
-            self.play(FadeIn(note))
-        self.wait(0.3)
-        self.clear_scene()

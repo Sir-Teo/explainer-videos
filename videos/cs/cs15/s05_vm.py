@@ -5,7 +5,7 @@ from videos.cs.cs15.common import (CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, NO, 
                                    grid_table, load, mono, words)
 
 
-class Bytecode(VoiceoverScene):
+class Bytecode(WatchScene):
     def construct(self):
         self.card()
         self.isa()
@@ -14,13 +14,13 @@ class Bytecode(VoiceoverScene):
         self.registers()
 
     def card(self):
-        card = chapter_card(4, r"A bytecode virtual machine", r"Why not run the tree?", lit=(1973,),
-                            extra=((1973, r"Pascal's P-code"),), part=PART)
-        with self.voiceover("Chapter four. A bytecode virtual machine."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"A bytecode virtual machine", r"Why not run the tree?", lit=(1973,), extra=((1973, r"Pascal's P-code"),), part=PART, said="Chapter four. A bytecode virtual machine.")
 
     def isa(self):
+        self.ask(r"A bytecode VM, \\ or a tree-walking interpreter: which is usually faster?", [r"the tree walker",
+                 r"the bytecode VM"], 1,
+                 say="A bytecode virtual machine, or an interpreter that walks the syntax tree. Which is usually faster?",
+                 reveal="The bytecode VM: a compact instruction stream instead of chasing tree nodes.")
         head = label(r"Our machine's instruction set", font_size=34).to_edge(UP, buff=0.3)
         groups = [
             (r"values", LAM, "CONST LOCAL SETLOCAL FREE GLOBAL SETGLOBAL SELF POP"),

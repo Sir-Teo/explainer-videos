@@ -4,26 +4,26 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs13.common import (CODE, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, grid_table, load, mono, region)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.employment()
         self.superopt()
-        self.cost()
-        self.stochastic()
         self.egraph()
-        self.learned()
         self.open()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ searching for the best program", r"Can a machine find the optimal "
+        self.chapter(15, r"Frontier: \ searching for the best program", r"Can a machine find the optimal "
                             r"code?", lit=(1987, 2009), extra=((1987, r"Massalin's superoptimizer"),
-                                                               (2009, r"equality saturation")), part=PART)
-        with self.voiceover("Chapter fifteen. Frontier: searching for the best program."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                               (2009, r"equality saturation")), part=PART, said="Chapter fifteen. Frontier: searching for the best program.")
 
     def employment(self):
+        self.wrong_idea(r"An optimizing compiler produces \\ the best possible code",
+                        r"It applies rules that usually help. \\ The best program is undecidable in general",
+                        narration="It's easy to believe that an optimizing compiler produces the best possible code.",
+                        right_narration="It doesn't, and in general it can't: finding the best equivalent program is undecidable. "
+                                        "It applies rules that usually help.")
+        self.clear_scene()
         head = label(r"``Optimizing'' compilers do not optimize", font_size=34).to_edge(UP, buff=0.3)
         pts = VGroup(
             label(r"they apply rules that usually help; \ nothing says the result is the best", font_size=22,
@@ -54,6 +54,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def superopt(self):
+        self.ask(r"The shortest program for a small function: \\ can a computer find it?", [r"no",
+                 r"yes, for very short ones"], 1,
+                 say="Can a computer find the shortest program that computes a small function?",
+                 reveal="Yes, for very short ones, by searching; the cost explodes with the length.")
         so = load("superopt")
         head = label("Superoptimization: search candidates, then prove them", font_size=32).to_edge(UP, buff=0.3)
         steps = VGroup(
@@ -90,99 +94,7 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def cost(self):
-        so = load("superopt")
-        head = label(r"Candidate-search cost on this host", font_size=34).to_edge(UP, buff=0.3)
-        best = {}
-        for t in so["targets"]:
-            best[t["length"]] = max(best.get(t["length"], 0), t["seconds"])
-        ks = sorted(best)
-        ch = VGroup()
-        import math
-        assert all(value > 0 for value in best.values())
-        y_max = max(6, math.ceil(max(3 + math.log10(value) for value in best.values()) + 0.75))
-        ax = Axes(x_range=[0.5, 4.5, 1], y_range=[0, y_max, 1], x_length=5.5, y_length=4.0,
-                  axis_config={"color": GREY_D, "include_ticks": True},
-                  y_axis_config={"include_numbers": False}).move_to(LEFT * 2.6 + DOWN * 0.3)
-        ylab = VGroup(*[label(t, font_size=15, color=GREY_B).next_to(ax.c2p(0.5, y), LEFT, buff=0.1)
-                        for y, t in ((1, r"10 ms"), (3, r"1 s"), (5, r"100 s"))])
-        xlab = VGroup(*[label(str(k), font_size=16, color=GREY_B).next_to(ax.c2p(k, 0), DOWN, buff=0.1)
-                        for k in ks])
-        xt = label(r"found body length (different target functions)", font_size=17, color=GREY_B).next_to(ax, DOWN, buff=0.45)
-        import math
-        dots = VGroup(*[Dot(ax.c2p(k, 3 + math.log10(best[k])), color=NO, radius=0.08) for k in ks])
-        line = VMobject(color=NO, stroke_width=2).set_points_as_corners([d.get_center() for d in dots])
-        vals = VGroup(*[label(f"{best[k]:.3f} s" if best[k] < 1 else f"{best[k]:.0f} s", font_size=15,
-                              color=NO).next_to(dots[i], UP + LEFT * 0.3, buff=0.1) for i, k in enumerate(ks)])
-        side = VGroup(
-            label("11 register operations + selected immediate forms; restricted search vocabulary", font_size=19,
-                  color=GREY_A),
-            label("more available operands increase the branching of the candidate search", font_size=19, color=GREY_A),
-            label(r"pruning helps: \ skip any value already computed \ (observational equivalence)", font_size=19,
-                  color=GREY_A),
-            label("this run searches through length 4; no universal five-instruction cutoff", font_size=21, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(RIGHT, buff=0.4)
-        with self.voiceover("Search has a measurable cost. <bookmark mark='a'/> This plot groups the recorded runs by their reported candidate length and takes the longest elapsed time in each group. The vertical axis is logarithmic. These are host measurements for these target functions and this implementation, including the work performed by its proof checks. They are not universal times for all programs of a given length. <bookmark mark='b'/> Each extra candidate instruction introduces choices of operation, operands and selected immediate constants. The search grows rapidly, while finite-test pruning reduces work at the price of completeness. We stop at the configured length bound. Neither four observed lengths nor that chosen limit proves a universal five-instruction barrier.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(Create(ax), FadeIn(ylab), FadeIn(xlab), FadeIn(xt), run_time=0.6)
-            vo.wait_until('a')
-            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.4), Create(line), FadeIn(vals), run_time=2.5)
-            vo.wait_until('b')
-            self.play(LaggedStart(*[FadeIn(s) for s in side], lag_ratio=0.6), run_time=5)
-        self.wait(0.3)
-        self.clear_scene()
 
-    def stochastic(self):
-        head = label(r"Smarter search", font_size=34).to_edge(UP, buff=0.3)
-        rows = VGroup(
-            VGroup(label(r"STOKE", font_size=24, color=YES),
-                   label(r"Schkufza, Sharma, Aiken, \ 2013", font_size=18, color=GREY_B),
-                   label(r"a random walk over x86 programs (Markov chain Monte Carlo), \ cost $=$ wrongness on "
-                         r"tests $+$ estimated time;", font_size=19, color=GREY_A),
-                   label("reported gains on selected kernels, compilers and evaluation machines", font_size=19,
-                         color=GREY_A)),
-            VGroup(label(r"Souper", font_size=24, color=CTRL),
-                   label(r"Sasnauskas, Regehr et al., \ 2017", font_size=18, color=GREY_B),
-                   label(r"synthesizes small replacements for pieces of LLVM IR with an SMT solver;",
-                         font_size=19, color=GREY_A),
-                   label(r"its finds are reported as missing optimizations, \ and many were added to LLVM",
-                         font_size=19, color=GREY_A)),
-            VGroup(label(r"AlphaDev", font_size=24, color=FUNC),
-                   label(r"Mankowitz et al., \ 2023", font_size=18, color=GREY_B),
-                   label(r"reinforcement learning over assembly for sorting 3 to 5 numbers;", font_size=19,
-                         color=GREY_A),
-                   label("particular routines improved; derived code entered LLVM libc++", font_size=19, color=GREY_A)),
-        )
-        for r in rows:
-            r[0].move_to([-5.4, 0, 0], aligned_edge=LEFT)
-            top = VGroup(r[1], r[2], r[3]).arrange(DOWN, aligned_edge=LEFT, buff=0.08)
-            top.move_to([-3.2, 0, 0], aligned_edge=LEFT)
-        rows.arrange(DOWN, aligned_edge=LEFT, buff=0.45).next_to(head, DOWN, buff=0.5)
-        for r in rows:
-            r[0].set_x(-5.4 + r[0].width / 2)
-            VGroup(r[1], r[2], r[3]).set_x(-3.2 + VGroup(r[1], r[2], r[3]).width / 2)
-        with self.voiceover(
-            (
-            "Search can use stronger guidance than plain enumeration. <bookmark mark='a'/> STOKE, introduced in "
-            "2013, explores x86 program fragments stochastically, using test errors and a performance objective "
-            "to guide proposals. Its reported gains belong to selected kernels, comparison compilers and "
-            "evaluation machines. Testing and the applicable validation method remain essential. <bookmark "
-            "mark='b'/> Souper uses solver-guided synthesis to find replacements for fragments of LLVM "
-            "intermediate code. Such findings can expose missed optimizations; neither search method promises the "
-            "best program for every function. <bookmark mark='c'/> AlphaDev's 2023 study searched assembly "
-            "routines for small sorting tasks. It improved particular three- and five-element instruction "
-            "sequences and matched the comparison length for four elements. Derived C++ routines entered LLVM's "
-            "libc++ sorting implementation. The measured latency and library gains depend on the study's routines "
-            "and workloads; this does not prove universal shortest sorting or a speedup for every input and "
-            "machine."
-        )
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abc", rows):
-                vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.1))
-        self.wait(0.3)
-        self.clear_scene()
 
     def eclass(self, items, color, title=None):
         t = VGroup(*[mono(s, 17, WHITE) for s in items]).arrange(DOWN, buff=0.14)
@@ -261,40 +173,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def learned(self):
-        head = label(r"Learning the heuristics", font_size=34).to_edge(UP, buff=0.3)
-        pts = VGroup(
-            label(r"a compiler is full of guesses: \ inline this call? \ spill which value? \ unroll how far?",
-                  font_size=21, color=GREY_A),
-            label(r"\textbf{MLGO} \ (Trofin et al., \ Google, \ 2021): \ a learned inlining policy in LLVM, \ "
-                  r"trained by reinforcement learning", font_size=20, color=GREY_A),
-            label("documented MLGO objectives: inlining for size; register eviction for performance",
-                  font_size=20, color=YES),
-            label(r"the hard part: \ the guess must be cheap, \ and stay good when the code changes", font_size=20,
-                  color=NO),
-            label(r"how such policies are trained: \ \textit{AI, Built}", font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).next_to(head, DOWN, buff=0.6)
-        with self.voiceover(
-            (
-            "Another direction is to learn selected optimization choices. <bookmark mark='a'/> Compilers contain "
-            "heuristics for inlining, register eviction and loop transformations. A learned policy can replace "
-            "one of those choices while the compiler still enforces its correctness constraints. <bookmark "
-            "mark='b'/> Google's MLGO project introduced learned inlining decisions aimed at smaller code. LLVM's "
-            "current documentation also describes a learned greedy register-allocation eviction policy aimed at "
-            "performance. Those are different objectives. <bookmark mark='c'/> Reported code-size savings concern "
-            "particular trained models, software corpora and deployments; they are not a promise for every "
-            "program or for the register policy. <bookmark mark='d'/> The practical challenge is to make each "
-            "decision cheap, measure the result on the target workload, and keep the policy useful as code and "
-            "compilers change. <bookmark mark='e'/> Our companion series, AI, Built, develops the learning "
-            "methods behind such policies."
-        )
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, p in zip("abcde", pts):
-                vo.wait_until(mk)
-                self.play(FadeIn(p, shift=RIGHT * 0.1))
-        self.wait(0.3)
-        self.clear_scene()
 
     def open(self):
         head = label(r"Open questions", font_size=36).to_edge(UP, buff=0.35)

@@ -10,7 +10,7 @@ def box_(text, color, w=2.2, h=0.55, fs=17):
     return VGroup(r, label(text, font_size=fs, color=color).move_to(r))
 
 
-class Dispatch(VoiceoverScene):
+class Dispatch(WatchScene):
     def construct(self):
         self.card()
         self.vtables()
@@ -18,13 +18,12 @@ class Dispatch(VoiceoverScene):
         self.exceptions()
 
     def card(self):
-        card = chapter_card(12, r"Dynamic dispatch and exceptions", r"Which code runs, \ and how does it get out?",
-                            lit=(1967,), extra=((1967, r"Simula 67: \ virtual procedures"),), part=PART)
-        with self.voiceover("Chapter twelve. Dynamic dispatch and exceptions."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Dynamic dispatch and exceptions", r"Which code runs, \ and how does it get out?", lit=(1967,), extra=((1967, r"Simula 67: \ virtual procedures"),), part=PART, said="Chapter twelve. Dynamic dispatch and exceptions.")
 
     def vtables(self):
+        self.ask(r"A C++ virtual call. \\ Extra memory loads before the jump?", [r"0", r"2", r"10"], 1,
+                 say="A virtual call in C++. How many extra memory loads before the jump?",
+                 reveal="Two: the object's table pointer, then the method's address in the table.")
         d = load("dispatch")
         head = label(r"Virtual calls and vtables", font_size=34).to_edge(UP, buff=0.3)
         src = code(["struct Shape { virtual uint64_t area(uint64_t x) const = 0; };",

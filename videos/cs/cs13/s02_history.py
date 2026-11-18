@@ -4,20 +4,15 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs13.common import CODE, COST, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, load, region
 
 
-class History(VoiceoverScene):
+class History(WatchScene):
     def construct(self):
         self.card()
         self.fortran()
         self.shape()
-        self.retarget()
         self.ours()
 
     def card(self):
-        card = chapter_card(1, r"FORTRAN, and the shape of a compiler", r"Can a program write code as good as ours?",
-                            lit=(1952, 1957), part=PART)
-        with self.voiceover("Chapter one. FORTRAN, and the shape of a compiler."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"FORTRAN, and the shape of a compiler", r"Can a program write code as good as ours?", lit=(1952, 1957), part=PART, said="Chapter one. FORTRAN, and the shape of a compiler.")
 
     def fortran(self):
         head = label(r"Automatic programming, \ 1952--1957", font_size=36).to_edge(UP, buff=0.35)
@@ -58,6 +53,11 @@ class History(VoiceoverScene):
         self.clear_scene()
 
     def shape(self):
+        self.ask(r"Five languages, four machines, \\ one shared intermediate representation. \\ How many translators?",
+                 [r"20", r"9", r"1"], 1,
+                 say="Five languages and four machines. With one shared intermediate form in the middle, how many translators "
+                     "must you write?",
+                 reveal="Nine: five front ends and four back ends, instead of twenty direct translators.")
         head = label("A common compiler architecture", font_size=36).to_edge(UP, buff=0.35)
         spec = [
             (r"front end", DATA, [r"lexing and parsing \ (Part 12)", r"names, \ scopes, \ types",
@@ -96,40 +96,6 @@ class History(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def retarget(self):
-        head = label(r"Why the middle: \ $M$ languages, \ $N$ machines", font_size=36).to_edge(UP, buff=0.35)
-        langs = ["C", "C++", "Rust", "Swift", "Fortran"]
-        machs = ["x86-64", "ARM", "RISC-V", "GPU"]
-
-        def side(names, x, c):
-            return VGroup(*[region(1.6, 0.5, n, c, font_size=19) for n in names]).arrange(DOWN, buff=0.22).move_to(
-                [x, -0.3, 0])
-        L1, M1 = side(langs, -5.6, DATA), side(machs, -1.8, FUNC)
-        mesh = VGroup(*[Line(a.get_right(), b.get_left(), color=NO, stroke_width=1.2) for a in L1 for b in M1])
-        t1 = label(rf"${len(langs)} \times {len(machs)} = {len(langs) * len(machs)}$ compilers", font_size=24,
-                   color=NO).next_to(VGroup(L1, M1), DOWN, buff=0.35)
-        L2, M2 = side(langs, 1.6, DATA), side(machs, 5.9, FUNC)
-        hub = region(1.3, 1.0, r"IR", YES, font_size=26).move_to([3.75, -0.3, 0])
-        spokes = VGroup(*[Line(a.get_right(), hub.get_left(), color=YES, stroke_width=1.5) for a in L2],
-                        *[Line(hub.get_right(), b.get_left(), color=YES, stroke_width=1.5) for b in M2])
-        t2 = label(rf"${len(langs)} + {len(machs)} = {len(langs) + len(machs)}$ halves", font_size=24,
-                   color=YES).next_to(VGroup(L2, M2), DOWN, buff=0.35)
-        hist = label(r"proposed as UNCOL in 1958; \ made real by GCC (1987) and LLVM (2004)", font_size=21,
-                     color=GREY_A).to_edge(DOWN, buff=0.4)
-        with self.voiceover("Why use a shared intermediate representation? <bookmark mark='a'/> Five languages and four machines suggest twenty direct translation combinations. Maintaining each separately would duplicate much of the work. <bookmark mark='b'/> A shared IR lets us organize the interfaces as five front ends and four back ends, with reusable analyses and optimizations in between. Nine interfaces do not imply nine equal-sized jobs: language features, runtime support and target constraints still need engineering. <bookmark mark='c'/> UNCOL proposed a universal intermediate language in 1958. Later retargetable systems, including GCC and LLVM, made related ideas practical at scale. Modern language implementations can share compiler infrastructure without having identical semantics or optimization needs.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(L1), FadeIn(M1), run_time=0.6)
-            vo.wait_until('a')
-            self.play(Create(mesh), run_time=1.5)
-            self.play(FadeIn(t1))
-            vo.wait_until('b')
-            self.play(FadeIn(L2), FadeIn(M2), FadeIn(hub))
-            self.play(Create(spokes), run_time=1.2)
-            self.play(FadeIn(t2))
-            vo.wait_until('c')
-            self.play(FadeIn(hist))
-        self.wait(0.3)
-        self.clear_scene()
 
     def ours(self):
         p = load("pipeline")

@@ -5,7 +5,7 @@ from explainer.cs.lam import parse
 from videos.cs.cs14.common import APP, CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, lam_tree, load, mono
 
 
-class Terms(VoiceoverScene):
+class Terms(WatchScene):
     def construct(self):
         self.card()
         self.grammar()
@@ -13,11 +13,7 @@ class Terms(VoiceoverScene):
         self.capture()
 
     def card(self):
-        card = chapter_card(1, r"Terms, variables and substitution", r"What is a function, written down?",
-                            lit=(1936,), part=PART)
-        with self.voiceover("Chapter one. Terms, variables and substitution."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Terms, variables and substitution", r"What is a function, written down?", lit=(1936,), part=PART, said="Chapter one. Terms, variables and substitution.")
 
     def grammar(self):
         head = label(r"Three kinds of term", font_size=36).to_edge(UP, buff=0.3)
@@ -101,6 +97,10 @@ class Terms(VoiceoverScene):
         self.clear_scene()
 
     def capture(self):
+        self.ask(r"Substitute $y$ for $x$ in $\lambda y.\, x$. \\ Naively: $\lambda y.\, y$. Correct?",
+                 [r"correct", r"wrong: the free $y$ was captured"], 1,
+                 say="Substitute y for x inside lambda y dot x. Done naively you get lambda y dot y. Is that right?",
+                 reveal="Wrong. The y you put in was free, and the binder captured it. Rename the bound y first.")
         s = load("subst")
         head = label(r"Substitution, \ and the capture trap", font_size=36).to_edge(UP, buff=0.3)
         q = MathTex(r"(\lambda x.\, \lambda y.\, x)\; y", font_size=44).next_to(head, DOWN, buff=0.5)

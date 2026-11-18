@@ -5,7 +5,7 @@ from videos.cs.cs14.common import (CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, 
                                    mono, term_tex)
 
 
-class Types(VoiceoverScene):
+class Types(WatchScene):
     def construct(self):
         self.card()
         self.why()
@@ -15,13 +15,13 @@ class Types(VoiceoverScene):
         self.evaluation()
 
     def card(self):
-        card = chapter_card(7, r"Simple types", r"Which programs make sense?", lit=(1940,),
-                            extra=((1940, r"Church: \ the simple theory of types"),), part=PART)
-        with self.voiceover("Chapter seven. Simple types."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Simple types", r"Which programs make sense?", lit=(1940,), extra=((1940, r"Church: \ the simple theory of types"),), part=PART, said="Chapter seven. Simple types.")
 
     def why(self):
+        self.ask(r"\texttt{if 0 then true else false}. \\ Run it, or reject it?", [r"run it: the answer is false",
+                 r"reject it before it runs"], 1,
+                 say="If zero then true else false. Should the language run that, or reject it?",
+                 reveal="Reject it. Zero isn't a boolean, and a type checker catches that before the program runs.")
         st = load("stlc")["stuck"]
         head = label(r"Programs that get stuck", font_size=36).to_edge(UP, buff=0.3)
         rows = [[s["term"].replace("\\", "λ"), s["stops_at"]] for s in st]

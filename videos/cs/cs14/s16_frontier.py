@@ -4,21 +4,16 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, grid_table, load, mono
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.inference()
         self.refinement()
         self.hott()
         self.effects()
-        self.open()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ the edges of type theory", r"What can types not yet do?", lit=(2013,),
-                            extra=((2013, r"Homotopy Type Theory"),), part=PART)
-        with self.voiceover("Chapter fifteen. Frontier: the edges of type theory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ the edges of type theory", r"What can types not yet do?", lit=(2013,), extra=((2013, r"Homotopy Type Theory"),), part=PART, said="Chapter fifteen. Frontier: the edges of type theory.")
 
     def inference(self):
         f = load("frontier")
@@ -79,6 +74,10 @@ class Frontier(VoiceoverScene):
         self.clear_scene()
 
     def refinement(self):
+        self.ask(r"Refinement types: \\ can a checker prove $0 \le i < \textsf{len}(a)$ before indexing?",
+                 [r"no", r"yes, with an SMT solver"], 1,
+                 say="Can a type checker prove an index is in bounds before the program runs?",
+                 reveal="Yes, for many programs: refinement types hand the obligation to an SMT solver.")
         head = label(r"Types checked by a solver", font_size=34).to_edge(UP, buff=0.3)
         t = MathTex(r"\mathit{get} : (a : \mathsf{array}) \to \{\, i : \mathsf{int} \mid 0 \le i < \mathit{len}(a)\,\} "
                     r"\to \mathsf{int}", font_size=34, color=YES).next_to(head, DOWN, buff=0.6)
@@ -182,27 +181,3 @@ class Frontier(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open questions", font_size=36).to_edge(UP, buff=0.35)
-        qs = VGroup(
-            label(r"sound gradual typing with a provably small run-time cost", font_size=22, color=GREY_A),
-            label("inference decidability depends on rank, annotations and the exact calculus", font_size=22, color=GREY_A),
-            label(r"dependent types in a mainstream language, \ without a proof for every line", font_size=22,
-                  color=GREY_A),
-            label(r"univalence, \ fast: \ cubical type theory as a practical proof assistant", font_size=22,
-                  color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.6)
-        star = label(r"$\bigstar$ \ the part's research problem takes the first one", font_size=22,
-                     color=HEAD).to_edge(DOWN, buff=0.6)
-        with self.voiceover("Research questions become useful when their model is explicit. <bookmark mark='a'/> For gradual typing, choose a cast semantics, a cost model and a comparison baseline before asking for an overhead bound. Space-efficient coercion composition already addresses some wrapper-chain problems. <bookmark mark='b'/> For polymorphic inference, specify the language, rank convention, available annotations and whether the task is checking, typability or principal inference. Different restricted systems have different decidability results. <bookmark mark='c'/> For dependent types, study a concrete way to reduce proof burden while preserving the intended trusted core. <bookmark mark='d'/> For cubical computation, measure a stated proof workload and identify normalization or representation costs. <bookmark mark='e'/> The starred exercise starts with a small gradual cast calculus, reproduces a known space result, then asks for a precisely scoped extension. Reviewing known work comes before claiming an open problem.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            for mk, q in zip('abcd', qs):
-                if mk != 'a':
-                    vo.wait_until(mk)
-                self.play(FadeIn(q, shift=RIGHT * 0.1))
-                if mk == 'a':
-                    vo.wait_until(mk)
-            vo.wait_until('e')
-            self.play(FadeIn(star))
-        self.wait(0.3)
-        self.clear_scene()

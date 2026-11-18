@@ -5,7 +5,7 @@ from videos.cs.cs15.common import (BG, CODE, COST, CTRL, DATA, FUNC, HEAD, LAM, 
                                    mono, words)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.measure()
@@ -13,11 +13,7 @@ class Job(VoiceoverScene):
         self.where()
 
     def card(self):
-        card = chapter_card(14, r"The Job, \ collected", r"What does a runtime cost?", lit=(1995,),
-                            extra=((1995, r"Java: \ bytecode and a collector for everyone"),), part=PART)
-        with self.voiceover("Chapter fourteen. The Job, collected."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The Job, \ collected", r"What does a runtime cost?", lit=(1995,), extra=((1995, r"Java: \ bytecode and a collector for everyone"),), part=PART, said="Chapter fourteen. The Job, collected.")
 
     def measure(self):
         d = load("job")
@@ -58,6 +54,11 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def ledger(self):
+        self.ask(r"The Job on Pebble's VM, garbage collected, \\ against compiled Pebble code. It runs...",
+                 [r"about as fast", r"several times slower"], 1,
+                 say="The Job on our virtual machine, garbage collected, against the compiled program from Part 13. How does it "
+                     "compare?",
+                 reveal="Several times slower: dispatch and tagged values cost instructions. The comfort has a price.")
         d = load("job")
         led = d["ledger"]
         head = label('Ledger row 6: projection', font_size=38).to_edge(UP, buff=0.35)
@@ -117,8 +118,7 @@ class Job(VoiceoverScene):
             "several Pebble instructions, and tagged heap structures add representation work. <bookmark "
             "mark='b'/> The underlying word-counting algorithm still scans an association list; the runtime has "
             "not removed its quadratic growth. <bookmark mark='c'/> The collector's displayed share is an "
-            "instruction-count difference against a no-collection run. It is not automatically its fraction of "
-            "cycles or elapsed time. <bookmark mark='d'/> A faster collector can save only the work attributable "
+            "instruction-count difference against a no-collection run. <bookmark mark='d'/> A faster collector can save only the work attributable "
             "to collection under that model. Part sixteen changes the algorithm itself, a different source of "
             "improvement."
         )

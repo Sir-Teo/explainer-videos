@@ -22,22 +22,20 @@ def small_cfg(at=LEFT * 4.2, colors=None):
     return cfg_view(load("ir")["func"], DEMO_POS_SMALL, size=14, lines=False, colors=colors, at=at + DOWN * 0.2)
 
 
-class Dominators(VoiceoverScene):
+class Dominators(WatchScene):
     def construct(self):
         self.card()
         self.define()
-        self.iterate()
         self.tree()
         self.frontier()
 
     def card(self):
-        card = chapter_card(4, r"Dominators", r"Which blocks must run before this one?", lit=(1979,),
-                            extra=((1979, r"Lengauer--Tarjan dominators"),), part=PART)
-        with self.voiceover("Chapter four. Dominators."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Dominators", r"Which blocks must run before this one?", lit=(1979,), extra=((1979, r"Lengauer--Tarjan dominators"),), part=PART, said="Chapter four. Dominators.")
 
     def define(self):
+        self.ask(r"Does a loop's header dominate every block in its body?", [r"yes", r"no"], 0,
+                 say="Every path from the entry to the loop's body passes through its header. Does the header dominate the body?",
+                 reveal="Yes. That's what makes it a loop header.")
         head = label(r"$d$ dominates $n$: \ every path from entry to $n$ passes through $d$", font_size=30).to_edge(
             UP, buff=0.3)
         cfg = small_cfg(at=LEFT * 4.7)
@@ -90,43 +88,6 @@ class Dominators(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def iterate(self):
-        d = load("dom")
-        head = label(r"Computing them: \ a fixed point", font_size=34).to_edge(UP, buff=0.3)
-        eq = MathTex(r"\mathrm{Dom}(\text{entry}) = \{\text{entry}\}, \qquad \mathrm{Dom}(n) = \{n\} \;\cup "
-                     r"\bigcap_{p \,\in\, \mathrm{pred}(n)} \mathrm{Dom}(p)", font_size=34).next_to(head, DOWN,
-                                                                                                buff=0.35)
-        cfg = small_cfg(at=LEFT * 4.6 + DOWN * 0.4)
-        sets = dom_sets(d["idom"])
-        preds = {b: [] for b in ORDER}
-        for (a, b) in cfg.edges:
-            preds[b].append(a)
-        rows = [[b, ", ".join(preds[b]) or "--", "{" + ", ".join(sets[b][::-1]) + "}"] for b in ORDER]
-        tab = grid_table(["block", "predecessors", "dominators"], rows, widths=[1.7, 2.4, 3.6], row_h=0.42,
-                         font_size=15, mono_cols=(0, 1, 2)).move_to([2.6, -0.6, 0])
-        rpo = label("reverse postorder helps; irreducible graphs need additional care",
-                    font_size=19, color=GREY_A).next_to(tab, DOWN, buff=0.25)
-        note = label(rf"passes until nothing changes: \ {d['passes']} \ (one to settle, \ one to confirm)",
-                     font_size=20, color=YES).next_to(rpo, DOWN, buff=0.15)
-        job = label(r"every function of the Job: \ " + ", ".join(rf"\texttt{{{r['func']}}} {r['passes']}"
-                                                                 for r in d["job"]), font_size=18,
-                    color=GREY_B).next_to(note, DOWN, buff=0.12)
-        with self.voiceover("Dominance has a useful set equation. <bookmark mark='a'/> The reachable entry is dominated only by itself. For another reachable block n, intersect the dominator sets of its reachable predecessors, then add n. <bookmark mark='b'/> A loop makes those equations circular. Initialize the entry to itself and the other sets to all reachable blocks, then repeatedly intersect until no set changes. This is a descending finite iteration. <bookmark mark='c'/> Reverse postorder is a useful visiting order. In reducible graphs it respects the forward structure apart from loop back edges; an arbitrary irreducible graph needs more care. The displayed example stabilizes quickly. <bookmark mark='d'/> Our implementation uses the related Cooper, Harvey and Kennedy method: intersect immediate-dominator tree paths, rather than explicitly storing every dominator set. Its measured rounds are observations about these graphs. They are not a size-independent bound for every program. Lengauer and Tarjan provide a different, nearly linear theoretical approach. <bookmark mark='e'/> The recurring pattern is an equation solved by iteration to a fixed point.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(Write(eq), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(cfg), FadeIn(tab.rule), *[FadeIn(c) for c in tab.cells[0]])
-            for r in tab.cells[1:]:
-                self.play(*[FadeIn(c) for c in r[:2]], run_time=0.3)
-            vo.wait_until('c')
-            self.play(FadeIn(rpo))
-            for k, r in enumerate(tab.cells[1:]):
-                self.play(FadeIn(r[2]), Indicate(cfg.blocks[ORDER[k]].box, color=HEAD), run_time=0.6)
-            vo.wait_until('d')
-            self.play(FadeIn(note), FadeIn(job))
-        self.wait(0.4)
-        self.clear_scene()
 
     def tree(self):
         d = load("dom")

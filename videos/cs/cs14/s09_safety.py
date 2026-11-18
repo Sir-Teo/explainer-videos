@@ -4,23 +4,27 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs14.common import CODE, CTRL, DATA, FUNC, HEAD, LAM, NO, PART, YES, bar_chart, load, mono
 
 
-class Safety(VoiceoverScene):
+class Safety(WatchScene):
     def construct(self):
         self.card()
         self.statement()
         self.progress()
         self.preservation()
         self.checked()
-        self.beyond()
 
     def card(self):
-        card = chapter_card(8, r"Well-typed programs cannot go wrong", r"What exactly does a type promise?",
-                            lit=(1978,), extra=((1978, r"Lamport's clocks; \ Milner's slogan"),), part=PART)
-        with self.voiceover("Chapter eight. Well-typed programs cannot go wrong."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Well-typed programs cannot go wrong", r"What exactly does a type promise?", lit=(1978,), extra=((1978, r"Lamport's clocks; \ Milner's slogan"),), part=PART, said="Chapter eight. Well-typed programs cannot go wrong.")
 
     def statement(self):
+        self.wrong_idea(r"Types are annotations \\ for the programmer's benefit",
+                        r"A sound type system is a theorem: \\ well-typed programs don't go wrong",
+                        narration="It's common to see types as documentation: notes that help programmers read code.",
+                        right_narration="In a sound language they're far more: a theorem guarantees that well-typed programs "
+                                        "never get stuck.")
+        self.clear_scene()
+        self.ask(r"A well-typed program in the simply typed core. \\ Can it get stuck?", [r"yes", r"no"], 1,
+                 say="Can a well-typed program in the simply typed core ever get stuck?",
+                 reveal="No. Progress and preservation together say it never goes wrong.")
         head = label(r"Safety \ $=$ \ progress \ $+$ \ preservation", font_size=36).to_edge(UP, buff=0.3)
         prog = VGroup(label(r"\textbf{Progress}", font_size=26, color=YES),
                       MathTex(r"\vdash t : T \;\implies\; t \text{ is a value, \ or } t \to t' \text{ for some } t'",
@@ -123,7 +127,7 @@ class Safety(VoiceoverScene):
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(RIGHT, buff=0.5).shift(UP * 0.3)
         note = label("finite regression samples support an implementation check; the theorem needs a proof", font_size=19,
                      color=GREY_B).to_edge(DOWN, buff=0.35)
-        with self.voiceover("Finite checks exercise the implementation of the safety rules. <bookmark mark='a'/> The generator constructs five thousand closed, well-typed terms from its stated grammar and seed. <bookmark mark='b'/> In the recorded run, all finish after fifty thousand five hundred and sixteen small steps in total, with typing checked after every step. <bookmark mark='c'/> No sampled state is stuck and no step changes its type. A failed case would expose a bug in the generator, checker or evaluator; passing this sample is not a proof of the general theorems. <bookmark mark='d'/> The longest sampled run takes forty-seven steps. That bound belongs only to these generated terms. The next chapter's normalization theorem explains why every term in the recursion-free typed calculus terminates, without giving this particular sample bound to all programs.") as vo:
+        with self.voiceover("Finite checks exercise the implementation of the safety rules. <bookmark mark='a'/> The generator constructs five thousand closed, well-typed terms from its stated grammar and seed. <bookmark mark='b'/> In the recorded run, all finish after fifty thousand five hundred and sixteen small steps in total, with typing checked after every step. <bookmark mark='c'/> No sampled state is stuck and no step changes its type. <bookmark mark='d'/> The longest sampled run takes forty-seven steps. That bound belongs only to these generated terms. The next chapter's normalization theorem explains why every term in the recursion-free typed calculus terminates, without giving this particular sample bound to all programs.") as vo:
             self.play(FadeIn(head), run_time=0.5)
             self.play(FadeIn(side[0]), run_time=0.6)
             vo.wait_until('a')
@@ -136,38 +140,3 @@ class Safety(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def beyond(self):
-        head = label(r"Safety, \ in real languages", font_size=34).to_edge(UP, buff=0.3)
-        rows = VGroup(
-            label(r"Standard ML: \ a formal definition \ (Milner, Tofte, Harper, \ 1990), \ its safety later machine-"
-                  r"checked", font_size=21, color=GREY_A),
-            label("Java and C\\#: managed type safety relies on the runtime and native-code boundary", font_size=21,
-                  color=GREY_A),
-            label("RustBelt: a verified Rust subset, with obligations for unsafe libraries (2018)", font_size=21, color=GREY_A),
-            label(r"C and C++: \ not safe: \ a well-typed program can still write past an array \ (Part 11)",
-                  font_size=21, color=NO),
-            label(r"``cannot go wrong'' means: \ never stuck. \ It does not mean: \ terminates, \ or is correct",
-                  font_size=22, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.28).next_to(head, DOWN, buff=0.6).to_edge(LEFT, buff=0.7)
-        with self.voiceover(
-            (
-            "Safety results belong to a language and its operational model. <bookmark mark='a'/> Standard ML has "
-            "a formal definition and machine-checked metatheoretic work; the precise theorem depends on the "
-            "modeled features. <bookmark mark='b'/> Managed Java and C sharp designs enforce important safety "
-            "properties, and the JVM verifies bytecode. Native interfaces, unsafe facilities and implementation "
-            "defects lie outside a simple blanket claim. <bookmark mark='c'/> RustBelt's 2018 work proves "
-            "soundness for a realistic Rust subset and verifies selected unsafe library abstractions against "
-            "explicit contracts. It is not a proof of every Rust feature, library or compiler version. Safe "
-            "clients rely on those contracts being upheld. <bookmark mark='d'/> C and C plus plus permit "
-            "well-typed programs with out-of-bounds accesses and other undefined behavior. Their static types do "
-            "not establish this lesson's safety guarantee. <bookmark mark='e'/> In our calculus, cannot go wrong "
-            "means no reachable stuck term. It does not establish termination, intended answers or the absence of "
-            "every operational failure in a production system."
-        )
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, r in zip("abcde", rows):
-                vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.1))
-        self.wait(0.3)
-        self.clear_scene()

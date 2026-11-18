@@ -4,22 +4,19 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs13.common import CODE, COST, CTRL, DATA, FUNC, HEAD, NO, PART, YES, code, load, mono, region
 
 
-class Semantic(VoiceoverScene):
+class Semantic(WatchScene):
     def construct(self):
         self.card()
         self.scopes()
         self.types()
-        self.layout()
-        self.storage()
 
     def card(self):
-        card = chapter_card(2, r"Names, scopes and types", r"What does each name mean, and how big is each thing?",
-                            lit=(1960,), part=PART)
-        with self.voiceover("Chapter two. Names, scopes and types."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Names, scopes and types", r"What does each name mean, and how big is each thing?", lit=(1960,), part=PART, said="Chapter two. Names, scopes and types.")
 
     def scopes(self):
+        self.ask(r"Can a grammar check \\ that every name is declared before it's used?", [r"yes", r"no"], 1,
+                 say="Can the grammar itself check that every variable was declared before it's used?",
+                 reveal="No. That needs memory of everything declared so far: a symbol table.")
         sem = load("semantic")
         head = label(r"Which $p$ is this? \ The symbol table", font_size=36).to_edge(UP, buff=0.3)
         src = code(["var head: *Node = null;", " ", "fn lookup(w: *char, n: int) -> *Node {",
@@ -119,89 +116,4 @@ class Semantic(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def layout(self):
-        sem = load("semantic")
-        head = label(r"How big is each thing? \ Layout", font_size=36).to_edge(UP, buff=0.3)
-        rules = VGroup(
-            label(r"\texttt{int} \ and pointers: \ 4 bytes, \ aligned to 4", font_size=21, color=GREY_A),
-            label(r"\texttt{char}: \ 1 byte", font_size=21, color=GREY_A),
-            label(r"a struct: \ fields in order, \ each at the next multiple of its alignment; \ size rounded up",
-                  font_size=21, color=GREY_A),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.12).next_to(head, DOWN, buff=0.35)
-        unit = 0.62
-        cols = [DATA, CTRL, YES, FUNC]
 
-        def strip(name, lay):
-            g = VGroup()
-            for k, (f, off, t) in enumerate(lay["fields"]):
-                r = Rectangle(width=4 * unit, height=0.7, stroke_color=cols[k], fill_color=cols[k], fill_opacity=0.2,
-                              stroke_width=1.6)
-                r.move_to([off * unit, 0, 0], aligned_edge=LEFT)
-                t1 = mono(f, 15, WHITE).move_to(r).shift(UP * 0.12)
-                t2 = mono(t, 13, cols[k]).move_to(r).shift(DOWN * 0.15)
-                o = mono(str(off), 13, GREY_B).next_to(r, DOWN, buff=0.08).align_to(r, LEFT)
-                g.add(VGroup(r, t1, t2, o))
-            end = mono(str(lay["size"]), 13, GREY_B).next_to(g[-1][0], DOWN, buff=0.08).align_to(g[-1][0], RIGHT)
-            t = label(rf"\texttt{{{name}}}: \ {lay['size']} bytes", font_size=22, color=HEAD)
-            t.next_to(g, LEFT, buff=0.4)
-            return VGroup(t, g, end)
-        node = strip("Node", sem["layouts"]["Node"])
-        ent = strip("Entry", sem["layouts"]["Entry"])
-        VGroup(node, ent).arrange(DOWN, buff=0.6, aligned_edge=RIGHT).next_to(rules, DOWN, buff=0.55)
-        acc = VGroup(mono("p.count", 18, CODE), MathTex(r"\to", font_size=30),
-                     mono("lw  t, 12(p)", 18, FUNC)).arrange(RIGHT, buff=0.3)
-        acc2 = VGroup(mono("table[i].length", 18, CODE), MathTex(r"\to", font_size=30),
-                      mono("lw  t, 4(table + 12*i)", 18, FUNC)).arrange(RIGHT, buff=0.3)
-        accs = VGroup(acc, acc2).arrange(DOWN, buff=0.2, aligned_edge=LEFT).to_edge(DOWN, buff=0.45)
-        with self.voiceover("The checker also decides how big each thing is, and where each part of it lives. <bookmark mark='a'/> On Pebble, integers and pointers are four bytes and must sit at addresses divisible by four; a character is one byte. A struct's fields are laid out in order, each at the next multiple of its alignment, and the struct's size is rounded up so that arrays of it stay aligned. <bookmark mark='b'/> The list Job's Node is sixteen bytes: next at zero, letters at four, length at eight, count at twelve. <bookmark mark='c'/> The array Job's Entry is twelve bytes, exactly the layout Part 6 chose by hand. <bookmark mark='d'/> From now on a field is only an offset. p dot count becomes a load from twelve bytes past p, and table of i dot length a load from four bytes past the table plus twelve times i. The names are gone; the numbers remain.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(LaggedStart(*[FadeIn(r) for r in rules], lag_ratio=0.4), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(FadeIn(node[0]), LaggedStart(*[FadeIn(c) for c in node[1]], lag_ratio=0.3), FadeIn(node[2]), run_time=2)
-            vo.wait_until('c')
-            self.play(FadeIn(ent))
-            vo.wait_until('d')
-            self.play(FadeIn(acc))
-            self.play(FadeIn(acc2))
-        self.wait(0.3)
-        self.clear_scene()
-
-    def storage(self):
-        head = label(r"Where each variable lives", font_size=36).to_edge(UP, buff=0.3)
-        kinds = [
-            (r"globals", r"\texttt{head}, \ \texttt{tail}, \ \texttt{table}, \ \texttt{pool}",
-             r"a fixed address in the data section", DATA),
-            (r"locals", r"\texttt{p}, \ \texttt{i}, \ \texttt{n}", r"a virtual register: \ the back end decides",
-             YES),
-            (r"address taken", r"\texttt{word} \ in \texttt{main}: \ \texttt{\&word[0]}",
-             "addressable storage in this implementation", FUNC),
-            (r"arrays and structs", r"\texttt{digits[12]}", r"in memory, \ in the stack frame", CTRL),
-        ]
-        rows = VGroup()
-        for name, ex, where, c in kinds:
-            r = VGroup(label(name, font_size=24, color=c), label(ex, font_size=20, color=GREY_A),
-                       label(where, font_size=20, color=WHITE))
-            r[0].move_to([-6.3, 0, 0], aligned_edge=LEFT)
-            r[1].move_to([-3.2, 0, 0], aligned_edge=LEFT)
-            r[2].move_to([1.4, 0, 0], aligned_edge=LEFT)
-            rows.add(r)
-        rows.arrange(DOWN, buff=0.55).next_to(head, DOWN, buff=0.7)
-        for r in rows:
-            r[0].align_to([-6.3, 0, 0], LEFT)
-            r[1].align_to([-3.2, 0, 0], LEFT)
-            r[2].align_to([1.4, 0, 0], LEFT)
-        foot = label("virtual values may be transformed while preserving defined behavior",
-                     font_size=21, color=HEAD).to_edge(DOWN, buff=0.6)
-        with self.voiceover("Our checker also records how locals can be represented. <bookmark mark='a'/> Globals receive storage in the data section, with addresses resolved by the compiler and linker. <bookmark mark='b'/> Ordinary scalar locals become virtual registers. Later, the back end assigns physical registers or stack slots. This is an implementation choice, not a claim that every optimization level keeps them in registers. <bookmark mark='c'/> If a local's address is passed elsewhere, its contents may be accessed through a pointer. Our compiler gives such locals memory storage; a more sophisticated compiler could promote them after proving the pointer uses harmless. <bookmark mark='d'/> Our arrays and structs also use stack storage when local. <bookmark mark='e'/> Separating scalar values from observable memory makes analysis simpler. Moving or deleting a computation still requires preserving its effects, possible traps and required result.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            for mk, r in zip('abcd', rows):
-                if mk != 'a':
-                    vo.wait_until(mk)
-                self.play(FadeIn(r, shift=RIGHT * 0.1))
-                if mk == 'a':
-                    vo.wait_until(mk)
-            vo.wait_until('e')
-            self.play(FadeIn(foot))
-        self.wait(0.3)
-        self.clear_scene()

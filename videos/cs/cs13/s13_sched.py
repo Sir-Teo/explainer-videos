@@ -8,22 +8,15 @@ def sched_row(rows, job, code_, pred):
     return next(r for r in rows if r["job"] == job and r["code"] == code_ and r["predictor"] == pred)
 
 
-class Schedule(VoiceoverScene):
+class Schedule(WatchScene):
     def construct(self):
         self.card()
         self.dag()
         self.listsched()
         self.measure()
-        self.predictors()
-        self.swp()
 
     def card(self):
-        card = chapter_card(12, r"Scheduling and the pipeline", r"In what order should the instructions run?",
-                            lit=(1981,), extra=((1981, r"Chaitin's colouring; \ Rau's modulo scheduling"),),
-                            part=PART)
-        with self.voiceover("Chapter twelve. Scheduling and the pipeline."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Scheduling and the pipeline", r"In what order should the instructions run?", lit=(1981,), extra=((1981, r"Chaitin's colouring; \ Rau's modulo scheduling"),), part=PART, said="Chapter twelve. Scheduling and the pipeline.")
 
     def dag(self):
         lp = load("loops")
@@ -72,6 +65,9 @@ class Schedule(VoiceoverScene):
         self.clear_scene()
 
     def listsched(self):
+        self.ask(r"Reorder independent instructions within a block. \\ Can that hide a load's delay?", [r"no", r"yes"], 1,
+                 say="Move independent instructions between a load and its use. Can that hide the load's delay?",
+                 reveal="Yes: the pipeline keeps working instead of stalling.")
         head = label(r"List scheduling", font_size=34).to_edge(UP, buff=0.3)
         steps = VGroup(
             label(r"keep a list of \textbf{ready} instructions: \ everything they wait for has been placed",
@@ -154,73 +150,4 @@ class Schedule(VoiceoverScene):
         self.wait(0.3)
         self.clear_scene()
 
-    def predictors(self):
-        s = load("sched")
-        R = s["rows"]
-        head = label(r"A compiler assumes a machine", font_size=34).to_edge(UP, buff=0.3)
-        rows, cols = [], []
-        for pred in ("not taken", "two-bit", "tournament"):
-            h = sched_row(R, "hand", "hand-written", pred)
-            a = sched_row(R, "array", "as compiled", pred)
-            l_ = sched_row(R, "list", "as compiled", pred)
-            win = a["cycles"] < h["cycles"]
-            rows.append([pred, f"{h['cycles']:,}", f"{a['cycles']:,}", f"{l_['cycles']:,}",
-                         f"{100 * (a['cycles'] / h['cycles'] - 1):+.0f}\\%"])
-            cols.append([WHITE, WHITE, YES if win else NO, WHITE, YES if win else NO])
-        tab = grid_table([r"predictor \ (Part 7)", r"hand-written", r"compiled, \ array", r"compiled, \ list",
-                          r"compiled vs hand"], rows, widths=[2.8, 2.2, 2.3, 2.2, 2.4], row_h=0.55, font_size=20,
-                         colors=cols, mono_cols=()).next_to(head, DOWN, buff=0.6)
-        cap = label(r"cycles on the same passage", font_size=18, color=GREY_B).next_to(tab, DOWN, buff=0.15)
-        pts = VGroup(
-            label("on this input, the recorded predictors change the cycle comparison", font_size=21,
-                  color=YES),
-            label("loop inversion trades branch behavior, instruction count and code size", font_size=21,
-                  color=GREY_A),
-            label(r"and hardware is designed for the code compilers emit: \ the two evolve together", font_size=21,
-                  color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(cap, DOWN, buff=0.5)
-        with self.voiceover("Now change this simulated pipeline's branch predictor. <bookmark mark='a'/> A two-bit counter can learn the frequently taken loop-back branches, and the recorded cycle counts change. The tournament predictor gives another measured comparison. These gains belong to these programs, inputs and machine configurations. <bookmark mark='b'/> Loop inversion trades tests, jumps, code size and branch behavior. Prediction is one part of that tradeoff; an architecture with a different branch cost may still benefit for other reasons. <bookmark mark='c'/> Compiler heuristics and microarchitecture therefore need compatible cost models. Hardware teams, compiler projects and application developers contribute to that agreement, and they need not belong to the same company.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(FadeIn(tab), FadeIn(cap), run_time=0.6)
-            vo.wait_until('a')
-            self.play(FadeIn(pts[0]))
-            vo.wait_until('b')
-            self.play(FadeIn(pts[1]))
-            vo.wait_until('c')
-            self.play(FadeIn(pts[2]))
-        self.wait(0.3)
-        self.clear_scene()
 
-    def swp(self):
-        head = label(r"Across iterations: \ software pipelining", font_size=34).to_edge(UP, buff=0.3)
-        stages = ["load", "add", "store"]
-        cols = [DATA, YES, FUNC]
-        grid = VGroup()
-        for it in range(4):
-            for st in range(3):
-                r = RoundedRectangle(width=1.2, height=0.5, corner_radius=0.08, stroke_color=cols[st],
-                                     fill_color=cols[st], fill_opacity=0.25)
-                t = label(rf"{stages[st]} {it + 1}", font_size=16, color=WHITE).move_to(r)
-                g = VGroup(r, t).move_to([-4.2 + 1.35 * (it + st), 1.4 - 0.65 * it, 0])
-                grid.add(g)
-        steady = SurroundingRectangle(VGroup(grid[2], grid[4], grid[6]), color=HEAD, buff=0.08)
-        sl = label(r"steady state: \ load $i{+}2$, \ add $i{+}1$, \ store $i$, \ every cycle", font_size=20,
-                   color=HEAD).next_to(grid, DOWN, buff=0.4)
-        pts = VGroup(
-            label(r"modulo scheduling \ (Rau and Glaeser, \ 1981; \ Lam, \ 1988): \ overlap the iterations "
-                  r"themselves", font_size=20, color=GREY_A),
-            label(r"essential for in-order and VLIW machines \ (Itanium, \ DSPs, \ GPUs)", font_size=20,
-                  color=GREY_A),
-            label(r"an out-of-order core does it in hardware, \ at run time \ (Part 8): \ static scheduling matters "
-                  r"less there", font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.35)
-        with self.voiceover("Independent work from different iterations can sometimes overlap. <bookmark mark='a'/> Suppose an iteration loads, adds and stores, and its dependencies permit the next iteration's load before the previous store finishes. Starting iterations at regular intervals creates a software pipeline. <bookmark mark='b'/> On a machine with enough issue width and the required functional units, the steady state can contain a load, an add and a store from different iterations at once. Memory aliases, loop-carried dependencies and available registers limit that overlap; a load-add-store sketch alone does not prove it is legal. <bookmark mark='c'/> Modulo scheduling and related software-pipelining methods are especially useful where hardware exposes scheduling decisions, including VLIW targets. Out-of-order hardware can discover some overlap dynamically, but finite windows, dependencies and resource limits mean it need not reproduce the same schedule or make static optimization irrelevant.") as vo:
-            self.play(FadeIn(head), run_time=0.5)
-            self.play(LaggedStart(*[FadeIn(g) for g in grid], lag_ratio=0.12), run_time=0.6)
-            vo.wait_until('a')
-            vo.wait_until('b')
-            self.play(Create(steady), FadeIn(sl))
-            vo.wait_until('c')
-            self.play(LaggedStart(*[FadeIn(p) for p in pts], lag_ratio=0.5), run_time=3)
-        self.wait(0.3)
-        self.clear_scene()

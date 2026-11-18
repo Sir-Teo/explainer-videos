@@ -9,18 +9,14 @@ def _fields(f):
     return ["p" if isinstance(x, str) and x not in ("f",) else (None if x is None else x) for x in f]
 
 
-class Copying(VoiceoverScene):
+class Copying(WatchScene):
     def construct(self):
         self.card()
         self.cheney()
         self.cost()
 
     def card(self):
-        card = chapter_card(8, r"Cheney's copying collector, \ and what it costs", r"Can we touch only the living?",
-                            lit=(1970,), extra=((1970, r"Cheney's copying collector"),), part=PART)
-        with self.voiceover("Chapter eight. Cheney's copying collector, and what it costs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Cheney's copying collector, \ and what it costs", r"Can we touch only the living?", lit=(1970,), extra=((1970, r"Cheney's copying collector"),), part=PART, said="Chapter eight. Cheney's copying collector, and what it costs.")
 
     def cheney(self):
         tr = load("tracing")["trace"]
@@ -137,6 +133,9 @@ class Copying(VoiceoverScene):
         self.clear_scene()
 
     def cost(self):
+        self.ask(r"A copying collector's work is proportional to...", [r"the size of the heap", r"the live data"], 1,
+                 say="What does a copying collector's work grow with: the size of the heap, or the amount of live data?",
+                 reveal="The live data. Garbage is never touched.")
         d = load("cost")
         head = label(r"The cost: \ live data, \ not garbage", font_size=34).to_edge(UP, buff=0.3)
         rows = [r for r in d["rows"] if not r.get("oom") and r["collections"]]

@@ -59,7 +59,7 @@ class Data(WatchScene):
         self.clear_scene()
 
     def padding(self):
-        self.ask(r"\texttt{struct \\{ char c; int i; \\}} \\ on a typical machine. Its size?", [r"5 bytes", r"8 bytes",
+        self.ask(r"\texttt{struct \{ char c; int i; \}} \\ on a typical machine. Its size?", [r"5 bytes", r"8 bytes",
                  r"16 bytes"], 1,
                  say="A structure holding one char and one int. How many bytes does it take?",
                  reveal="Eight: three bytes of padding keep the int on a four-byte boundary.")
