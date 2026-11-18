@@ -126,7 +126,10 @@ def put(video: str, need_file: Path, zh_file: Path) -> None:
     said, shown = {}, {}
     for i, t in zh.items():
         x = items[i]
-        (said if x["where"] == "said" else shown)[x["en"]] = t
+        if x["where"] == "said":  # a spoken literal is matched with its whitespace normalized, as it is spoken
+            said[x["en"] if x["kind"] == "tpl" else " ".join(x["en"].split())] = t
+        else:
+            shown[x["en"]] = t
     d = video_dir(video)
     if said:
         path = d / "zh_watch.json"
