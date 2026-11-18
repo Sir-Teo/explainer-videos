@@ -5,7 +5,7 @@ from explainer.cs.algo.codes import capacity_bsc, polar_bhattacharyya
 from videos.cs.cs28.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load)
 
 
-class Polar(VoiceoverScene):
+class Polar(WatchScene):
     def construct(self):
         self.card()
         self.butterfly()
@@ -13,11 +13,7 @@ class Polar(VoiceoverScene):
         self.decoding()
 
     def card(self):
-        card = chapter_card(12, r"Polar codes", r"Can a channel be split into perfect ones and useless ones?",
-                            lit=(2009, 2016), extra=((2009, r"Ar\i kan"), (2016, r"5G control channels")), part=PART)
-        with self.voiceover("Chapter twelve. Polar codes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Polar codes", r"Can a channel be split into perfect ones and useless ones?", lit=(2009, 2016), extra=((2009, r"Ar\i kan"), (2016, r"5G control channels")), part=PART, said="Chapter twelve. Polar codes.")
 
     def butterfly(self):
         head = label(r"The polar transform, \ $N = 8$", font_size=34).to_edge(UP, buff=0.3)
@@ -78,6 +74,10 @@ class Polar(VoiceoverScene):
         self.clear_scene()
 
     def fan(self):
+        self.ask(r"Combine copies of a channel that erases half its bits. \\ As the length grows, the new channels become...",
+                 [r"all half-bad", r"nearly perfect or nearly useless"], 1,
+                 say="Combine copies of a channel that loses half its bits, again and again. What do the synthetic channels become?",
+                 reveal="Nearly perfect or nearly useless, almost nothing in between. That's polarization.")
         d = load("polar")
         head = label(r"Channel polarization", font_size=34).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 6.5, 1], y_range=[0, 1.02, 0.25], x_length=6.2, y_length=4.4,
@@ -163,7 +163,7 @@ class Polar(VoiceoverScene):
             "Decoding follows the construction. <bookmark mark='a'/> Decode the bits one at a time, each using the "
             "decisions already made, in time N log N. <bookmark mark='b'/> We sent rate-one-half polar codes over "
             "the binary symmetric channel, using a BEC-based reliability ordering and a min-sum approximation to "
-            "successive cancellation. These finite experiments are not a capacity proof. Well below capacity, "
+            "successive cancellation. Well below capacity, "
             "the longer code makes fewer mistakes; as the channel "
             "approaches capacity, both collapse. <bookmark mark='c'/> At practical lengths, plain successive "
             "cancellation is not the best decoder. Ido Tal and Alexander Vardy keep a short list of candidate paths "

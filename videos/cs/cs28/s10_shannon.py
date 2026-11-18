@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs28.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load)
 
 
-class Shannon(VoiceoverScene):
+class Shannon(WatchScene):
     def construct(self):
         self.card()
         self.capacity()
@@ -12,13 +12,19 @@ class Shannon(VoiceoverScene):
         self.proof()
 
     def card(self):
-        card = chapter_card(9, r"Shannon's theorem", r"What is the price of noise?", lit=(1948, 1948),
-                            extra=((1948, r"``A Mathematical Theory of Communication''"),), part=PART)
-        with self.voiceover("Chapter nine. Shannon's theorem."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Shannon's theorem", r"What is the price of noise?", lit=(1948, 1948), extra=((1948, r"``A Mathematical Theory of Communication''"),), part=PART, said="Chapter nine. Shannon's theorem.")
 
     def capacity(self):
+        self.wrong_idea(r"more reliability always costs rate, \\ down to zero",
+                        r"below capacity, the error goes to zero \\ at a fixed rate",
+                        narration="Engineers in the 1940s believed that every extra bit of reliability costs rate, without limit.",
+                        right_narration="Shannon proved otherwise. Below a channel's capacity, the error can be made as small "
+                                        "as you like at a fixed rate.")
+        self.clear_scene()
+        self.ask(r"Each bit flips with probability $11\%$. \\ Best rate with error going to zero:",
+                 [r"zero", r"about $1/2$", r"$0.89$"], 1,
+                 say="Each bit flips with probability eleven percent. What is the best rate at which the error can be driven to zero?",
+                 reveal="About one half: one minus the entropy of the noise.")
         s = load("shannon")
         head = label(r"Capacity: \ $C = 1 - H(p)$", font_size=34).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 0.5, 0.1], y_range=[0, 1.02, 0.25], x_length=6.0, y_length=4.2,
@@ -162,3 +168,8 @@ class Shannon(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How many errors does Reed--Solomon fix?", r"Half its check symbols; erasures, all of them"),
+             (r"What is capacity on the binary symmetric channel?", r"$1 - H(p)$")],
+            narration="Checkpoint. How many errors can a Reed-Solomon code fix? And what is the capacity of the binary symmetric channel?",
+            answers_narration="Half as many as its check symbols, or as many erasures. And one minus the entropy of p.")

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs28.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load)
 
 
-class ReedSolomon(VoiceoverScene):
+class ReedSolomon(WatchScene):
     def construct(self):
         self.card()
         self.idea()
@@ -13,11 +13,7 @@ class ReedSolomon(VoiceoverScene):
         self.uses()
 
     def card(self):
-        card = chapter_card(6, r"Reed--Solomon codes", r"How do polynomials survive damage?", lit=(1960, 1969),
-                            extra=((1960, r"Reed and Solomon"), (1968, r"Berlekamp"), (1969, r"Massey")), part=PART)
-        with self.voiceover("Chapter six. Reed-Solomon codes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Reed--Solomon codes", r"How do polynomials survive damage?", lit=(1960, 1969), extra=((1960, r"Reed and Solomon"), (1968, r"Berlekamp"), (1969, r"Massey")), part=PART, said="Chapter six. Reed-Solomon codes.")
 
     def axes(self):
         ax = Axes(x_range=[0, 10, 1], y_range=[0, 240, 50], x_length=6.2, y_length=4.4,
@@ -29,6 +25,10 @@ class ReedSolomon(VoiceoverScene):
         return ax, VGroup(xt, yt)
 
     def idea(self):
+        self.ask(r"Two different parabolas. \\ In how many points can they agree?", [r"at most $2$", r"at most $3$",
+                 r"any number"], 0,
+                 say="Two different parabolas. In how many points can they agree?",
+                 reveal="At most two: their difference has degree two and at most two roots. That's the whole code.")
         r = load("rs")
         head = label(r"A message is a polynomial; \ a codeword is its values", font_size=32).to_edge(UP, buff=0.3)
         ax, ticks = self.axes()

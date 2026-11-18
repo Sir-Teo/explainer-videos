@@ -22,7 +22,7 @@ def bitline(text, color, x0, y, pitch=0.27, size=24):
     return VGroup(*[mono(ch, size, color).move_to([x0 + pitch * i, y, 0]) for i, ch in enumerate(text) if ch != " "])
 
 
-class Crc(VoiceoverScene):
+class Crc(WatchScene):
     def construct(self):
         self.card()
         self.division()
@@ -30,12 +30,7 @@ class Crc(VoiceoverScene):
         self.guarantees()
 
     def card(self):
-        card = chapter_card(8, r"Cyclic codes and CRCs", r"How does a network notice a damaged packet?",
-                            lit=(1961, 1975), extra=((1961, r"Peterson and Brown: \ CRC"), (1975, r"CRC-32")),
-                            part=PART)
-        with self.voiceover("Chapter eight. Cyclic codes and CRCs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Cyclic codes and CRCs", r"How does a network notice a damaged packet?", lit=(1961, 1975), extra=((1961, r"Peterson and Brown: \ CRC"), (1975, r"CRC-32")), part=PART, said="Chapter eight. Cyclic codes and CRCs.")
 
     def division(self):
         head = label(r"A checksum by polynomial division", font_size=34).to_edge(UP, buff=0.3)
@@ -157,6 +152,10 @@ class Crc(VoiceoverScene):
         self.clear_scene()
 
     def guarantees(self):
+        self.ask(r"A 32-bit CRC. A burst of flipped bits \\ is always caught when it is at most...",
+                 [r"$8$ bits long", r"$32$ bits long", r"any length"], 1,
+                 say="A thirty-two-bit CRC. How long can a burst of bad bits be and still always be caught?",
+                 reveal="Thirty-two bits: a burst that short is a polynomial the generator can't divide.")
         c = load("crc")
         head = label(r"What a CRC catches, \ measured", font_size=34).to_edge(UP, buff=0.35)
         rows = [[rf"burst of length {b['burst']}", f"{b['undetected'] * 100:.2f}\\%"] for b in c["bursts"]]

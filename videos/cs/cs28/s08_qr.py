@@ -10,7 +10,7 @@ def overlay(g, cells_xy, color, opacity=0.55):
     return VGroup(*[g.cells[y][x].copy().set_fill(color, opacity).set_stroke(width=0) for x, y in cells_xy])
 
 
-class Qr(VoiceoverScene):
+class Qr(WatchScene):
     def construct(self):
         self.card()
         self.anatomy()
@@ -19,13 +19,13 @@ class Qr(VoiceoverScene):
         self.scratches()
 
     def card(self):
-        card = chapter_card(7, r"Our QR code", r"How much damage can a QR code take?", lit=(1994, 2000),
-                            extra=((1994, r"Denso Wave"), (2000, r"ISO/IEC 18004")), part=PART)
-        with self.voiceover("Chapter seven. Our QR code."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Our QR code", r"How much damage can a QR code take?", lit=(1994, 2000), extra=((1994, r"Denso Wave"), (2000, r"ISO/IEC 18004")), part=PART, said="Chapter seven. Our QR code.")
 
     def anatomy(self):
+        self.ask(r"$22$ Reed--Solomon check bytes. \\ Wrong bytes at unknown places it can fix:", [r"$22$", r"$11$",
+                 r"$5$"], 1,
+                 say="Our QR code carries twenty-two check bytes. How many wrong bytes, at unknown places, can it repair?",
+                 reveal="Eleven: each unknown error costs two check symbols. Known erasures cost one.")
         q = load("qr")
         head = label(r"Anatomy of a version-2 QR code", font_size=34).to_edge(UP, buff=0.3)
         g = qr_grid(q["matrix"], side=5.2).to_edge(LEFT, buff=0.8).shift(DOWN * 0.35)

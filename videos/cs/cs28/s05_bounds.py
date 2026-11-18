@@ -4,21 +4,21 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs28.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, load, words)
 
 
-class Bounds(VoiceoverScene):
+class Bounds(WatchScene):
     def construct(self):
         self.card()
         self.plane()
         self.golay()
 
     def card(self):
-        card = chapter_card(4, r"How good can a code be?", r"How much rate must each unit of distance cost?",
-                            lit=(1949, 1977), extra=((1949, r"Golay"), (1957, r"Gilbert--Varshamov"),
-                                                     (1977, r"MRRW")), part=PART)
-        with self.voiceover("Chapter four. How good can a code be?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"How good can a code be?", r"How much rate must each unit of distance cost?", lit=(1949, 1977), extra=((1949, r"Golay"), (1957, r"Gilbert--Varshamov"),
+                                                     (1977, r"MRRW")), part=PART, said="Chapter four. How good can a code be?")
 
     def plane(self):
+        self.ask(r"Random codes reach the Gilbert--Varshamov bound. \\ Does any known long binary family beat them?",
+                 [r"yes", r"nobody knows"], 1,
+                 say="Random codes meet the Gilbert-Varshamov bound. Does any explicit family of long binary codes do better?",
+                 reveal="Nobody knows, since the 1950s.")
         b = load("bounds")
         head = label(r"The rate--distance plane", font_size=34).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 0.52, 0.1], y_range=[0, 1.02, 0.25], x_length=6.2, y_length=4.6,
@@ -147,3 +147,9 @@ class Bounds(VoiceoverScene):
                 self.play(FadeIn(ln, shift=UP * 0.1))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why does Hamming(7,4) correct one flip?", r"Each position has its own syndrome"),
+             (r"What is a perfect code?", r"Its radius balls tile the whole space")],
+            narration="Checkpoint. Why does Hamming's code correct any single flip? And what makes a code perfect?",
+            answers_narration="Each position has its own syndrome, a column of H. And the balls around its codewords tile the "
+                              "space exactly.")

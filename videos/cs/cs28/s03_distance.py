@@ -28,7 +28,7 @@ def tesseract_points(center, s=1.3):
     return pts
 
 
-class Distance(VoiceoverScene):
+class Distance(WatchScene):
     def construct(self):
         self.card()
         self.metric()
@@ -36,11 +36,7 @@ class Distance(VoiceoverScene):
         self.rule()
 
     def card(self):
-        card = chapter_card(2, r"Hamming distance", r"What makes a set of words a good code?", lit=(1950, 1950),
-                            extra=((1950, r"Hamming: \ distance, \ spheres"),), part=PART)
-        with self.voiceover("Chapter two. Hamming distance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Hamming distance", r"What makes a set of words a good code?", lit=(1950, 1950), extra=((1950, r"Hamming: \ distance, \ spheres"),), part=PART, said="Chapter two. Hamming distance.")
 
     def metric(self):
         head = label(r"Counting the differences", font_size=34).to_edge(UP, buff=0.35)
@@ -130,6 +126,10 @@ class Distance(VoiceoverScene):
         self.clear_scene()
 
     def rule(self):
+        self.ask(r"A code has minimum distance $d$. \\ It always corrects how many flips?", [r"$d - 1$",
+                 r"$\lfloor (d - 1)/2 \rfloor$", r"$d$"], 1,
+                 say="A code's codewords are all at least d apart. How many flips can it always correct?",
+                 reveal="Half of d minus one, rounded down: the received word stays closest to the codeword that was sent.")
         head = label(r"Minimum distance decides everything", font_size=34).to_edge(UP, buff=0.35)
         rows = [["1", "0", "0", r"no code: \ every word is a codeword"],
                 ["2", "1", "0", r"a parity bit \ (the even-weight code)"],

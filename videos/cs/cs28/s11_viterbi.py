@@ -12,21 +12,21 @@ def step(state, bit):
     return s & 0b11, out
 
 
-class Viterbi(VoiceoverScene):
+class Viterbi(WatchScene):
     def construct(self):
         self.card()
         self.trellis()
         self.measured()
 
     def card(self):
-        card = chapter_card(10, r"Convolutional codes and Viterbi", r"Can a code be decoded as it streams?",
-                            lit=(1955, 1967), extra=((1955, r"Elias"), (1966, r"Forney: \ concatenation"),
-                                                     (1967, r"Viterbi")), part=PART)
-        with self.voiceover("Chapter ten. Convolutional codes and the Viterbi algorithm."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Convolutional codes and Viterbi", r"Can a code be decoded as it streams?", lit=(1955, 1967), extra=((1955, r"Elias"), (1966, r"Forney: \ concatenation"),
+                                                     (1967, r"Viterbi")), part=PART, said="Chapter ten. Convolutional codes and the Viterbi algorithm.")
 
     def trellis(self):
+        self.ask(r"A 1000-step stream has $2^{1000}$ possible paths. \\ Viterbi keeps...", [r"all of them",
+                 r"one per state"], 1,
+                 say="A stream of a thousand steps has two to the thousand possible paths. How many must the decoder keep?",
+                 reveal="One per state. A path that loses at a state can never win later.")
         v = load("viterbi")
         head = label(r"A code with memory, \ and its trellis", font_size=34).to_edge(UP, buff=0.3)
         bits = v["sample"]

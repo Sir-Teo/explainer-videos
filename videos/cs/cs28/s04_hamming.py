@@ -14,7 +14,7 @@ REGION = {1: (-1.25, 0.85), 2: (1.25, 0.85), 4: (0.0, -1.5), 3: (0.0, 1.3), 5: (
 NAMES = {1: "p_1", 2: "p_2", 3: "d_1", 4: "p_4", 5: "d_2", 6: "d_3", 7: "d_4"}
 
 
-class Hamming(VoiceoverScene):
+class Hamming(WatchScene):
     def construct(self):
         self.card()
         self.venn()
@@ -23,13 +23,13 @@ class Hamming(VoiceoverScene):
         self.curves()
 
     def card(self):
-        card = chapter_card(3, r"Hamming(7,4)", r"How can three check bits find the bad one?", lit=(1947, 1950),
-                            extra=((1950, r"Hamming, \ \textit{Bell System Technical Journal}"),), part=PART)
-        with self.voiceover("Chapter three. Hamming's code."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"Hamming(7,4)", r"How can three check bits find the bad one?", lit=(1947, 1950), extra=((1950, r"Hamming, \ \textit{Bell System Technical Journal}"),), part=PART, said="Chapter three. Hamming's code.")
 
     def venn(self):
+        self.ask(r"Three parity circles over four data bits. \\ One of the seven bits flips. You can...",
+                 [r"only detect it", r"locate it exactly"], 1,
+                 say="Three parity checks guard four data bits. One of the seven bits flips. Can you tell which?",
+                 reveal="Exactly which: every position lies in a different set of circles.")
         h = load("hamming")
         head = label(r"Three overlapping parity checks", font_size=34).to_edge(UP, buff=0.3)
         o = np.array([-3.6, -0.6, 0])

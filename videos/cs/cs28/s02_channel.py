@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs28.common import (BG, CTRL, DATA, HEAD, LAM, NO, PART, YES, fit_right, grid_table, load, mono, sci)
 
 
-class Channel(VoiceoverScene):
+class Channel(WatchScene):
     def construct(self):
         self.card()
         self.bsc()
@@ -14,11 +14,7 @@ class Channel(VoiceoverScene):
         self.picture()
 
     def card(self):
-        card = chapter_card(1, r"Noise and repetition", r"How do you send bits through a noisy wire?",
-                            lit=(1948, 1950), extra=((1948, r"Shannon"), (1950, r"Hamming")), part=PART)
-        with self.voiceover("Chapter one. Noise and repetition."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Noise and repetition", r"How do you send bits through a noisy wire?", lit=(1948, 1950), extra=((1948, r"Shannon"), (1950, r"Hamming")), part=PART, said="Chapter one. Noise and repetition.")
 
     def bsc(self):
         head = label(r"The binary symmetric channel", font_size=34).to_edge(UP, buff=0.35)
@@ -104,6 +100,10 @@ class Channel(VoiceoverScene):
         self.clear_scene()
 
     def repetition(self):
+        self.ask(r"Repetition code: send each bit $n$ times. \\ To push the error towards zero, the rate must...",
+                 [r"stay fixed", r"fall towards zero"], 1,
+                 say="Repeat each bit n times and take a vote. To push the error towards zero, what happens to the rate?",
+                 reveal="It falls towards zero, one over n. For repetition that's true. For codes in general, it's false.")
         r = load("repetition")
         head = label(r"Say it again: \ the repetition code", font_size=34).to_edge(UP, buff=0.35)
         rows = []

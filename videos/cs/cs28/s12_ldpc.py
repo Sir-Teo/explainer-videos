@@ -7,7 +7,7 @@ TANNER = [(0, 0), (0, 1), (0, 2), (0, 3), (1, 2), (1, 3), (1, 4), (1, 5), (2, 4)
           (3, 6), (3, 7), (3, 0), (3, 1)]
 
 
-class Ldpc(VoiceoverScene):
+class Ldpc(WatchScene):
     def construct(self):
         self.card()
         self.tanner()
@@ -16,12 +16,8 @@ class Ldpc(VoiceoverScene):
         self.history()
 
     def card(self):
-        card = chapter_card(11, r"LDPC codes and belief propagation", r"How did codes finally reach Shannon's limit?",
-                            lit=(1962, 2001), extra=((1962, r"Gallager"), (1993, r"turbo codes"),
-                                                     (1996, r"MacKay--Neal")), part=PART)
-        with self.voiceover("Chapter eleven. LDPC codes and belief propagation."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"LDPC codes and belief propagation", r"How did codes finally reach Shannon's limit?", lit=(1962, 2001), extra=((1962, r"Gallager"), (1993, r"turbo codes"),
+                                                     (1996, r"MacKay--Neal")), part=PART, said="Chapter eleven. LDPC codes and belief propagation.")
 
     def tanner(self):
         head = label(r"A sparse code on a graph", font_size=34).to_edge(UP, buff=0.3)
@@ -81,6 +77,9 @@ class Ldpc(VoiceoverScene):
         self.clear_scene()
 
     def rounds(self):
+        self.ask(r"The decoder gets stuck at $9\%$ noise. \\ Does it know it failed?", [r"no", r"yes"], 1,
+                 say="At nine percent noise the decoder gets stuck. Does it know it failed?",
+                 reveal="Yes: some parity checks still fail. It can ask again instead of returning garbage.")
         t = load("bptrace")
         head = label(r"Belief propagation, \ round by round", font_size=34).to_edge(UP, buff=0.3)
         top = max(max(t["good"]), max(t["bad"]))
@@ -165,8 +164,7 @@ class Ldpc(VoiceoverScene):
             "<bookmark mark='a'/> At the lower sampled noise levels all hundred blocks came back perfectly. "
             "At higher noise levels almost none do: the "
             "waterfall. <bookmark mark='b'/> Tom Richardson and Rüdiger Urbanke's density evolution predicts where "
-            "the cliff falls for very long codes of this kind: about eight point four percent. Our small finite "
-            "experiment does not prove that threshold. Shannon's limit for this "
+            "the cliff falls for very long codes of this kind: about eight point four percent. Shannon's limit for this "
             "rate is eleven. <bookmark mark='c'/> On the erasure channel the prediction is a one-line recursion, "
             "and numerical iteration gives about point four two nine four, against a capacity of one half. <bookmark "
             "mark='d'/> Giving different bits different numbers of checks closes most of the remaining gap. In 2001 "
