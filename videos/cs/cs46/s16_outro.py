@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -50,6 +50,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"How do table formats get atomic commits?", r"A new snapshot file, swapped in one pointer"),
+             (r"Why does skew slow a shuffle?", r"A hot key sends its rows to one worker")],
+            narration="Last checkpoint. How do lakehouse tables commit atomically on object storage? And why does skew slow a shuffle?",
+            answers_narration="Each commit writes new metadata and swaps one pointer to it. And a hot key sends all of its "
+                              "rows to a single worker.")
 
     def payoffs(self):
         card = payoff_card([

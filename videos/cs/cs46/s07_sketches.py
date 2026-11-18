@@ -7,7 +7,7 @@ from videos.cs.cs20.compute import load as load20
 from videos.cs.cs46.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, grid_table, load, mono, tag_box
 
 
-class Sketches(VoiceoverScene):
+class Sketches(WatchScene):
     def construct(self):
         self.card()
         self.topk()
@@ -17,13 +17,9 @@ class Sketches(VoiceoverScene):
         self.merging()
 
     def card(self):
-        card = chapter_card(6, r"Streaming algorithms in production", r"What can a stream remember in a few kilobytes?",
-                            lit=(2007, 2016, 2019), extra=((2007, r"Flajolet et al.: \ HyperLogLog"),
+        self.chapter(6, r"Streaming algorithms in production", r"What can a stream remember in a few kilobytes?", lit=(2007, 2016, 2019), extra=((2007, r"Flajolet et al.: \ HyperLogLog"),
                                                            (2016, r"Karnin, Lang and Liberty: \ KLL"),
-                                                           (2019, r"Dunning and Ertl: \ t-digest")), part=PART)
-        with self.voiceover("Chapter six. Streaming algorithms in production."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2019, r"Dunning and Ertl: \ t-digest")), part=PART, said="Chapter six. Streaming algorithms in production.")
 
     def topk(self):
         st = load20("stream")
@@ -86,6 +82,10 @@ class Sketches(VoiceoverScene):
         self.clear_scene()
 
     def distinct(self):
+        self.ask(r"HyperLogLog, a few kilobytes of registers, \\ counting distinct items among billions. Error:",
+                 [r"about $50\%$", r"about $2\%$"], 1,
+                 say="HyperLogLog counts distinct items among billions with a few kilobytes. How accurate is it?",
+                 reveal="Within a percent or two.")
         h = load20("hll")
         rows = h["rows"]
         head = label(r"Distinct counts", font_size=36).to_edge(UP, buff=0.3)

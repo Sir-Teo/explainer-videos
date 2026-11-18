@@ -31,7 +31,7 @@ def mb(x):
     return f"{x / 1e6:.2f}"
 
 
-class Columnar(VoiceoverScene):
+class Columnar(WatchScene):
     def construct(self):
         self.card()
         self.rows_columns()
@@ -41,12 +41,8 @@ class Columnar(VoiceoverScene):
         self.pushdown()
 
     def card(self):
-        card = chapter_card(8, r"Columnar files", r"How small can a table be, \ and how much of it can a query skip?",
-                            lit=(2005, 2013), extra=((2005, r"Stonebraker et al.: \ C-Store"),
-                                                     (2013, r"Parquet")), part=PART)
-        with self.voiceover("Chapter eight. Columnar files."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Columnar files", r"How small can a table be, \ and how much of it can a query skip?", lit=(2005, 2013), extra=((2005, r"Stonebraker et al.: \ C-Store"),
+                                                     (2013, r"Parquet")), part=PART, said="Chapter eight. Columnar files.")
 
     def rows_columns(self):
         head = label(r"Rows or columns", font_size=36).to_edge(UP, buff=0.3)
@@ -300,6 +296,10 @@ class Columnar(VoiceoverScene):
         self.clear_scene()
 
     def pushdown(self):
+        self.ask(r"Ten row groups, each with min and max stats. \\ A query for a narrow range reads...",
+                 [r"all ten", r"one or two"], 1,
+                 say="A million rows in ten row groups, each storing its minimum and maximum. A query asks for a narrow range of x. How many groups must be read?",
+                 reveal="One or two. The statistics rule out the rest without opening them.")
         p = load("pushdown")
         head = label(r"Statistics and predicate pushdown", font_size=36).to_edge(UP, buff=0.3)
         q = mono(f"WHERE x >= {LO} AND x < {HI}", size=18, color=HEAD).next_to(head, DOWN, buff=0.3)

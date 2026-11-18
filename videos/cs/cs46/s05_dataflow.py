@@ -10,7 +10,7 @@ def _late(p):
     return [(et, at, wm, et < wm) for (et, at), (_, wm) in zip(pts, p["watermark"])]
 
 
-class Dataflow(VoiceoverScene):
+class Dataflow(WatchScene):
     def construct(self):
         self.card()
         self.clocks()
@@ -20,12 +20,8 @@ class Dataflow(VoiceoverScene):
         self.triggers()
 
     def card(self):
-        card = chapter_card(4, r"Event time and processing time", r"When has a window seen all its events?",
-                            lit=(2013, 2015), extra=((2013, r"Akidau et al.: \ MillWheel"),
-                                                     (2015, r"Akidau et al.: \ the Dataflow model")), part=PART)
-        with self.voiceover("Chapter four. Event time and processing time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Event time and processing time", r"When has a window seen all its events?", lit=(2013, 2015), extra=((2013, r"Akidau et al.: \ MillWheel"),
+                                                     (2015, r"Akidau et al.: \ the Dataflow model")), part=PART, said="Chapter four. Event time and processing time.")
 
     def _plot(self):
         g = axes([0, 70, 10], [0, 70, 10], x_length=5.4, y_length=4.7,
@@ -155,6 +151,10 @@ class Dataflow(VoiceoverScene):
         self.clear_scene()
 
     def watermark(self):
+        self.ask(r"An event arrives after the watermark has passed its window. \\ It is...", [r"counted as usual",
+                 r"late: dropped, or sent as a correction"], 1,
+                 say="An event arrives after the watermark has passed the end of its window. What becomes of it?",
+                 reveal="It is late. The pipeline drops it, or updates the window's result with a correction.")
         p = load("plot")
         ev = _late(p)
         lag = p["lag"]

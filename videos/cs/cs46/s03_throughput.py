@@ -19,7 +19,7 @@ def tex_time(s: float) -> str:
     return rf"{s * 1e3:.0f} ms"
 
 
-class Throughput(VoiceoverScene):
+class Throughput(WatchScene):
     def construct(self):
         self.card()
         self.budget()
@@ -29,12 +29,8 @@ class Throughput(VoiceoverScene):
         self.pagecache()
 
     def card(self):
-        card = chapter_card(2, r"Moving a gigabyte a second", r"Why is a log on disk so fast?",
-                            lit=(2011, 2014), extra=((2011, r"Kafka: \ batches and \texttt{sendfile}"),
-                                                     (2014, r"Kreps: \ two million writes a second")), part=PART)
-        with self.voiceover("Chapter two. Moving a gigabyte a second."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Moving a gigabyte a second", r"Why is a log on disk so fast?", lit=(2011, 2014), extra=((2011, r"Kafka: \ batches and \texttt{sendfile}"),
+                                                     (2014, r"Kreps: \ two million writes a second")), part=PART, said="Chapter two. Moving a gigabyte a second.")
 
     def budget(self):
         d = load34("disk")
@@ -150,6 +146,10 @@ class Throughput(VoiceoverScene):
         self.clear_scene()
 
     def batching(self):
+        self.ask(r"Send messages in batches of a thousand \\ instead of one at a time. Throughput:", [r"a little higher",
+                 r"many times higher"], 1,
+                 say="A producer sends messages in batches of a thousand instead of one at a time. What happens to throughput?",
+                 reveal="Many times higher: one request's overhead shared by a thousand messages.")
         head = label(r"Batching", font_size=36).to_edge(UP, buff=0.3)
         prod = module_box(r"producer", DATA, w=1.9, h=0.6).move_to([-5.6, 1.6, 0])
         buf = RoundedRectangle(width=3.2, height=0.75, corner_radius=0.08, stroke_color=HEAD, stroke_width=2)
