@@ -28,7 +28,7 @@ def flow(items, width, hbuff=0.12, vbuff=0.18):
     return VGroup(*rows).arrange(DOWN, aligned_edge=LEFT, buff=vbuff)
 
 
-class Text(VoiceoverScene):
+class Text(WatchScene):
     def construct(self):
         self.card()
         self.tokens()
@@ -37,13 +37,9 @@ class Text(VoiceoverScene):
         self.heaps()
 
     def card(self):
-        card = chapter_card(1, r"Words, \ stems and Zipf", r"What is a word, \ to a search engine?",
-                            lit=(1949, 1980), extra=((1949, r"Zipf: \ the principle of least effort"),
+        self.chapter(1, r"Words, \ stems and Zipf", r"What is a word, \ to a search engine?", lit=(1949, 1980), extra=((1949, r"Zipf: \ the principle of least effort"),
                                                      (1978, r"Heaps: \ vocabulary growth"),
-                                                     (1980, r"Porter: \ suffix stripping")), part=PART)
-        with self.voiceover("Chapter one. Words, stems and Zipf."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                     (1980, r"Porter: \ suffix stripping")), part=PART, said="Chapter one. Words, stems and Zipf.")
 
     def tokens(self):
         head = label(r"From characters to terms", font_size=36).to_edge(UP, buff=0.3)
@@ -227,6 +223,9 @@ class Text(VoiceoverScene):
         self.clear_scene()
 
     def heaps(self):
+        self.ask(r"Read twice as much text. \\ The vocabulary...", [r"doubles", r"grows, but much less than double"], 1,
+                 say="Read twice as much of the novels. What happens to the number of different words?",
+                 reveal="It grows much less than double, roughly as a square root: Heaps' law.")
         z = load("zipf")
         ix = load("index")
         head = label(r"Heaps' law", font_size=36).to_edge(UP, buff=0.3)

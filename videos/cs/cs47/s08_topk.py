@@ -46,24 +46,17 @@ def wand_steps():
     return steps
 
 
-class Topk(VoiceoverScene):
+class Topk(WatchScene):
     def construct(self):
         self.card()
         self.everything()
         self.bounds()
         self.wand()
         self.savings()
-        self.blockmax()
-        self.tiers()
 
     def card(self):
-        card = chapter_card(7, r"Top $k$, fast", r"Why score a passage that cannot make the top ten?",
-                            lit=(2003, 2011),
-                            extra=((1995, r"Turtle and Flood: \ max-score"), (2003, r"Broder et al.: \ WAND"),
-                                   (2011, r"Ding and Suel: \ block-max WAND")), part=PART)
-        with self.voiceover("Chapter seven. Top k, fast."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Top $k$, fast", r"Why score a passage that cannot make the top ten?", lit=(2003, 2011), extra=((1995, r"Turtle and Flood: \ max-score"), (2003, r"Broder et al.: \ WAND"),
+                                   (2011, r"Ding and Suel: \ block-max WAND")), part=PART, said="Chapter seven. Top k, fast.")
 
     def everything(self):
         ix = load("index")
@@ -177,6 +170,10 @@ class Topk(VoiceoverScene):
         self.clear_scene()
 
     def wand(self):
+        self.ask(r"WAND skips scoring a passage when...", [r"it contains a rare term",
+                 r"its upper bound can't beat the $k$-th score"], 1,
+                 say="WAND skips passages without scoring them. When is that safe?",
+                 reveal="When the most it could score cannot beat the current tenth best.")
         head = label(r"WAND: \ the pivot", font_size=36).to_edge(UP, buff=0.3)
         x0, dx = -3.0, 0.27
         ys = {"captain": 2.1, "ship": 1.35, "ahab": 0.6}
@@ -316,125 +313,7 @@ class Topk(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def blockmax(self):
-        head = label(r"Block-max WAND", font_size=36).to_edge(UP, buff=0.3)
-        rng = random.Random(7)
-        caps = [0.48, 1.0, 0.42, 0.8]           # each block's best (illustrative)
-        hs = []
-        for c in caps:
-            blk = [rng.uniform(0.08, c * 0.9) for _ in range(8)]
-            blk[rng.randrange(8)] = c
-            hs += blk
-        base, sc, bw = -1.5, 3.0, 0.2
-        x0 = -6.3
-        theta = 0.6
-        bars = VGroup(*[Rectangle(width=bw * 0.75, height=h * sc, stroke_width=0, fill_color=DATA,
-                                  fill_opacity=0.85).move_to([x0 + (i + 0.5) * bw, base + h * sc / 2, 0])
-                        for i, h in enumerate(hs)])
-        axis = Line([x0, base, 0], [x0 + 32 * bw, base, 0], color=GREY_C, stroke_width=1.5)
-        gmax = DashedLine([x0, base + sc, 0], [x0 + 32 * bw, base + sc, 0], color=NO, stroke_width=2)
-        gmax_l = label(r"one bound for the whole list", font_size=17, color=NO).next_to(gmax, UP, buff=0.08).align_to(
-            gmax, LEFT)
-        bmax = VGroup(*[Line([x0 + k * 8 * bw, base + c * sc, 0], [x0 + (k + 1) * 8 * bw, base + c * sc, 0],
-                             color=LAM, stroke_width=4) for k, c in enumerate(caps)])
-        seps = VGroup(*[DashedLine([x0 + k * 8 * bw, base, 0], [x0 + k * 8 * bw, base + sc + 0.2, 0], color=GREY_D,
-                                   stroke_width=1) for k in range(1, 4)])
-        th = DashedLine([x0, base + theta * sc, 0], [x0 + 32 * bw, base + theta * sc, 0], color=HEAD,
-                        stroke_width=2.5)
-        th_l = label(r"$\theta$", font_size=22, color=HEAD).next_to(th, RIGHT, buff=0.1)
-        cap_l = label(r"one term's postings: \ score contributions in blocks \ (illustrative)", font_size=17,
-                      color=GREY_A).next_to(axis, DOWN, buff=0.15).align_to(axis, LEFT)
-        skip = [k for k, c in enumerate(caps) if c < theta]
-        dim = [bars[k * 8 + j] for k in skip for j in range(8)]
-        notes = VGroup(
-            wrapped_label(r"one long list's single maximum is loose: \ one passage that says \textit{whale} forty "
-                          r"times sets the bound for all", 5.0, font_size=19, color=WHITE),
-            wrapped_label(r"Ding and Suel \ (2011): \ store a maximum for every block of postings, \ beside the "
-                          r"skip data", 5.0, font_size=19, color=LAM),
-            wrapped_label(r"after WAND picks a pivot, \ check the block maxima: \ a block whose best cannot reach "
-                          r"$\theta$ is skipped without being decoded", 5.0, font_size=19, color=YES),
-            wrapped_label(r"still safe; \ Lucene adopted it in 2019", 5.0, font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.3).move_to([4.2, 0.1, 0])
-        with self.voiceover(
-            "One maximum per term is loose: a single passage that says whale forty times sets the bound for the whole"
-            " list. <bookmark mark='a'/> Ding and Suel, in 2011, stored a maximum for every block of postings, beside"
-            " the skip data. <bookmark mark='b'/> After WAND picks a pivot, block-max WAND checks these tighter "
-            "maxima, and skips whole blocks that cannot reach theta, without even decoding them. <bookmark mark='c'/>"
-            " It is still safe. Lucene adopted it in 2019; since then Elasticsearch, by default, counts matches "
-            "exactly only up to ten thousand, since counting all would mean visiting all."
-        ) as vo:
-            self.play(FadeIn(head), Create(axis), FadeIn(bars), FadeIn(cap_l), Create(gmax), FadeIn(gmax_l),
-                      FadeIn(notes[0]))
-            self.play(Create(th), FadeIn(th_l))
-            vo.wait_until("a")
-            self.play(FadeIn(seps), Create(bmax), FadeIn(notes[1]))
-            vo.wait_until("b")
-            self.play(*[b.animate.set_fill(GREY_D, opacity=0.5) for b in dim],
-                      *[bmax[k].animate.set_color(GREY_B) for k in skip], FadeIn(notes[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def tiers(self):
-        head = label(r"Tiers and champion lists", font_size=36).to_edge(UP, buff=0.3)
-        terms = [("captain", DATA, 7.0), ("ahab", KERN, 4.5), ("ship", LAM, 8.5)]
-        x0 = -4.2
-        rows = VGroup()
-        t1s, t2s = VGroup(), VGroup()
-        for k, (t, c, w2) in enumerate(terms):
-            y = 1.9 - k * 0.75
-            nm = mono(t, size=16, color=c).move_to([-5.6, y, 0])
-            t1 = Rectangle(width=1.4, height=0.38, stroke_color=c, stroke_width=1.5, fill_color=c,
-                           fill_opacity=0.7).move_to([x0, y, 0], aligned_edge=LEFT)
-            t2 = Rectangle(width=w2 * 0.95, height=0.38, stroke_color=GREY_C, stroke_width=1.5, fill_color=GREY_D,
-                           fill_opacity=0.3).next_to(t1, RIGHT, buff=0.1)
-            if t2.get_right()[0] > 6.8:
-                t2.stretch_to_fit_width(6.8 - t2.get_left()[0]).align_to(t1.get_right() + RIGHT * 0.1, LEFT)
-            rows.add(VGroup(nm, t1, t2))
-            t1s.add(t1)
-            t2s.add(t2)
-        tl1 = label(r"tier 1: \ each term's highest-scoring postings", font_size=17, color=YES).next_to(
-            t1s, UP, buff=0.15).align_to(t1s, LEFT)
-        tl2 = label(r"tier 2: \ the rest", font_size=17, color=GREY_A).next_to(t2s[0], UP, buff=0.15).align_to(
-            t2s[0], RIGHT)
-        ill = label(r"illustrative", font_size=16, color=GREY_B).next_to(rows, DOWN, buff=0.12).align_to(rows, RIGHT)
-        scan = Rectangle(width=0.08, height=2.3, stroke_width=0, fill_color=HEAD, fill_opacity=0.9).move_to(
-            [x0, 1.15, 0])
-        found = label(r"ten good answers in tier 1: \ stop", font_size=19, color=YES).next_to(t1s, DOWN, buff=0.4)
-        found.align_to(t1s, LEFT)
-        lines = VGroup(
-            wrapped_label(r"search tier 1 first; \ go on to tier 2 only if fewer than ten good answers came back",
-                          12.4, font_size=20, color=WHITE),
-            wrapped_label(r"\textbf{champion lists} \ (Manning, Raghavan and Sch\"utze): \ one tier, \ each term's "
-                          r"best $r$ documents", 12.4, font_size=20, color=LAM),
-            wrapped_label(r"\textbf{unsafe}: \ a passage strong only in the combination of its terms can be missed; "
-                          r"\ chapter 6's metrics measure the loss", 12.4, font_size=20, color=NO),
-            wrapped_label(r"the order can also be a quality score for each page: \ next, \ links", 12.4,
-                          font_size=20, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Other shortcuts trade a little exactness for speed. <bookmark mark='a'/> A tiered index splits each "
-            "term's postings: the highest-scoring in tier one, the rest in tier two. <bookmark mark='b'/> A query "
-            "searches tier one, and goes on only if fewer than ten good answers came back. Champion lists, in "
-            "Manning, Raghavan and Schütze's textbook, keep just each term's best few documents. <bookmark mark='c'/>"
-            " These are unsafe: a passage strong only in the combination of its terms can be missed, and chapter "
-            "six's metrics measure the loss. <bookmark mark='d'/> Tiers can also be ordered by a quality score for "
-            "each page, such as one computed from links."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rows), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(tl1), FadeIn(tl2), Indicate(t1s, color=YES))
-            vo.wait_until("b")
-            self.play(FadeIn(scan), FadeIn(lines[0]))
-            self.play(scan.animate.move_to([x0 + 1.4, 1.15, 0]), run_time=1.5, rate_func=linear)
-            self.play(FadeIn(found), FadeOut(scan), FadeIn(lines[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(lines[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, NO)

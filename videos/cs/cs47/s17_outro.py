@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -49,6 +49,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why partition an index by document?", r"Balanced load, local scoring; at the cost of the tail"),
+             (r"How does product quantization save space?", r"Codes for sub-vectors from small codebooks")],
+            narration="Last checkpoint. Why do engines partition by document? And how does product quantization save space?",
+            answers_narration="Each shard scores its own documents with balanced load, at the price of waiting for the "
+                              "slowest. And each vector becomes a few bytes: codes for its pieces from small codebooks.")
 
     def payoffs(self):
         card = payoff_card([

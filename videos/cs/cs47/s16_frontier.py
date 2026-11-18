@@ -13,24 +13,22 @@ def tile(title, body, col, w=4.2, h=3.0):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.graphs()
-        self.learned()
         self.generative()
-        self.open()
 
     def card(self):
-        card = chapter_card(15, r"Frontier: \ retrieval and its limits", r"What should a search engine return now?",
-                            lit=(2018, 2022), extra=((2018, r"HNSW published"),
-                                                     (2022, r"generative retrieval")), part=PART)
-        with self.voiceover("Chapter fifteen, the frontier. What should a search engine return, now that machines "
-                            "can write the answer?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(15, r"Frontier: \ retrieval and its limits", r"What should a search engine return now?", lit=(2018, 2022), extra=((2018, r"HNSW published"),
+                                                     (2022, r"generative retrieval")), part=PART, said="Chapter fifteen, the frontier. What should a search engine return, now that machines "
+                            "can write the answer?")
 
     def graphs(self):
+        self.ask(r"Graph-based nearest-neighbour search. \\ Its guarantees on real data are...",
+                 [r"proved", r"mostly empirical"], 1,
+                 say="Graph-based vector search runs in production everywhere. Is its accuracy proved on real data?",
+                 reveal="Mostly not. Practice is far ahead of theory here.")
         h = load("hnsw")
         rows = h["rows"]
         head = label(r"Fast, \ but without a guarantee", font_size=36).to_edge(UP, buff=0.3)
@@ -78,37 +76,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def learned(self):
-        head = label(r"Learned representations", font_size=36).to_edge(UP, buff=0.3)
-        tiles = VGroup(
-            tile(r"learned sparse", r"a model rewrites each document as weighted terms, \ adding words it does not "
-                 r"contain \ (SPLADE, \ 2021): \ the inverted index survives", HEAD),
-            tile(r"late interaction", r"one vector per token, \ matched token by token at query time \ (ColBERT, \ "
-                 r"2020): \ more precise, \ far larger", DATA),
-            tile(r"hybrid", r"BM25 and a dense retriever, \ scores fused: \ words for names and rare terms, \ "
-                 r"vectors for meaning", YES),
-        ).arrange(RIGHT, buff=0.3).next_to(head, DOWN, buff=0.6)
-        foot = wrapped_label(r"open: \ why BM25 remains so hard to beat on new collections, \ and how to make "
-                             r"learned retrievers generalize beyond the data they were trained on \ (Part 57)", 12.4,
-                             font_size=20, color=NO).to_edge(DOWN, buff=0.6)
-        with self.voiceover(
-            "Between words and vectors, research has found middle grounds. <bookmark mark='a'/> Learned sparse "
-            "retrieval has a model rewrite each document as weighted terms, including words it does not contain, so "
-            "the inverted index of this part keeps working; SPLADE, in 2021, is the best known. "
-            "<bookmark mark='b'/> Late interaction keeps a vector for every token and matches them one by one at "
-            "query time, as ColBERT did in 2020: more precise, and far larger. <bookmark mark='c'/> And hybrid "
-            "systems simply run both, words for names and rare terms, vectors for meaning, and fuse the scores. "
-            "<bookmark mark='d'/> A striking open fact: on collections a model has never seen, BM25 is often still "
-            "hard to beat. Why, and how to make learned retrievers generalize, are open questions."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, t in zip("abc", tiles):
-                vo.wait_until(mk)
-                self.play(FadeIn(t, shift=UP * 0.15))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def generative(self):
         head = label(r"Retrieval for machines that write", font_size=36).to_edge(UP, buff=0.3)
@@ -154,38 +121,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Guarantees for graph search}: \ recall and query-time bounds for "
-                          r"navigable graphs on realistic data.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Generalization}: \ learned retrievers that beat BM25 on collections they "
-                          r"have never seen.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Evaluation without judges}: \ measuring rankings and written answers when "
-                          r"human judgments are too few.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Fresh learned indexes}: \ adding and deleting documents in a generative "
-                          r"index without retraining.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ a graph-based nearest-neighbour index "
-                             r"with provable recall and query time on data with low intrinsic dimension", 12.4,
-                             font_size=23, color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Guarantees for graph-based nearest-neighbour search on the data "
-            "people actually have. <bookmark mark='b'/> Learned retrievers that beat BM25 on collections they have "
-            "never seen. <bookmark mark='c'/> Evaluation when human judgments are too few, for rankings and for "
-            "written answers. <bookmark mark='d'/> And generative indexes that can add and delete documents without "
-            "being retrained. <bookmark mark='e'/> This part's research problem asks for a graph index with provable "
-            "recall and query time on data whose intrinsic dimension is low, the case real collections seem to "
-            "be."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

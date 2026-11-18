@@ -70,24 +70,18 @@ def skip_events(a, b):
     return ev, c
 
 
-class Boolean(VoiceoverScene):
+class Boolean(WatchScene):
     def construct(self):
         self.card()
         self.merge()
-        self.skips()
         self.gallop()
         self.compare()
         self.phrases()
 
     def card(self):
-        card = chapter_card(3, r"Merging postings", r"Which passages contain all the words?", lit=(1976, 2000),
-                            extra=((1976, r"Bentley and Yao: \ unbounded search"),
+        self.chapter(3, r"Merging postings", r"Which passages contain all the words?", lit=(1976, 2000), extra=((1976, r"Bentley and Yao: \ unbounded search"),
                                    (1996, r"Moffat and Zobel: \ skips in postings"),
-                                   (2000, r"Demaine, \ L\'opez-Ortiz and Munro: \ adaptive intersection")),
-                            part=PART)
-        with self.voiceover("Chapter three. Merging postings."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (2000, r"Demaine, \ L\'opez-Ortiz and Munro: \ adaptive intersection")), part=PART, said="Chapter three. Merging postings.")
 
     def merge(self):
         head = label(r"AND is a merge", font_size=36).to_edge(UP, buff=0.3)
@@ -163,87 +157,12 @@ class Boolean(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def skips(self):
-        rows = {tuple(r["terms"]): r for r in load("intersect")["rows"]}
-        tw = rows[("the", "whale")]
-        head = label(r"Skip pointers", font_size=36).to_edge(UP, buff=0.3)
-        L = [3, 5, 9, 12, 16, 20, 23, 27, 31, 36, 40, 44, 48, 53, 57, 62]
-        S = [44, 60]
-        rl = VGroup(*[tag_box(str(v), color=DATA, size=18, w=0.62, h=0.46) for v in L]).arrange(RIGHT, buff=0.12)
-        rl.move_to([0.3, 0.75, 0])
-        rs = VGroup(*[tag_box(str(v), color=LAM, size=18, w=0.62, h=0.46) for v in S]).arrange(RIGHT, buff=0.12)
-        rs.move_to([0, -0.55, 0]).align_to(rl, LEFT)
-        nl = label(r"long", font_size=19, color=DATA).next_to(rl, LEFT, buff=0.2)
-        ns = label(r"short", font_size=19, color=LAM).next_to(rs, LEFT, buff=0.2).align_to(nl, RIGHT)
-        sa = int(math.sqrt(len(L)))
-        arcs = {}
-        for i in range(0, len(L) - sa, sa):
-            arcs[i] = CurvedArrow(rl[i].get_top() + UP * 0.05, rl[i + sa].get_top() + UP * 0.05, angle=-PI / 2.2,
-                                  color=GREY_B, stroke_width=2, tip_length=0.15)
-        illus = note(r"illustrative: \ 16 postings, \ a skip every $\sqrt{16} = 4$", font_size=16).next_to(
-            rs, RIGHT, buff=0.6)
-        fa, fb = finger(), finger()
-        fa.next_to(rl[0], DOWN, buff=0.06)
-        fb.next_to(rs[0], DOWN, buff=0.06)
-        ev, total = skip_events(L, S)
-        plain = merge_events(L, S)[-1][3]
-        cnt = counter(0).move_to([4.3, -1.15, 0])
-        cmp_plain = label(rf"without skips: \ {plain}", font_size=20, color=GREY_A).next_to(cnt, DOWN, buff=0.15)
-        notes = VGroup(
-            wrapped_label(r"every $\sqrt{n}$-th posting points $\sqrt{n}$ ahead; \ jump if the target is still no "
-                          r"larger than the other list's current id", 12.4, font_size=20, color=WHITE),
-            wrapped_label(r"$\sqrt{n}$ balances them: \ more skips cost space and checks, \ longer ones overshoot "
-                          r"more often \ (Moffat and Zobel, \ 1996)", 12.4, font_size=20, color=HEAD),
-            wrapped_label(rf"\texttt{{the}} AND \texttt{{whale}}, \ {tw['sizes'][0]:,} and {tw['sizes'][1]:,} "
-                          rf"postings: \ merge {tw['merge']:,} comparisons, \ with skips {tw['skips']:,}", 12.4,
-                          font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "When one list is much longer than the other, most of the walk along it is wasted. "
-            "<bookmark mark='a'/> So add shortcuts. In a list of n postings, every square-root-of-n-th posting also "
-            "points square root of n places ahead. Before stepping, check the shortcut: if its target is still no "
-            "larger than the other list's current passage, jump. <bookmark mark='b'/> The square root balances the "
-            "costs: more shortcuts take more space and more checks, and longer ones overshoot more often. Alistair "
-            "Moffat and Justin Zobel studied skips in compressed postings in 1996. <bookmark mark='c'/> On the "
-            "novels, the AND whale drops from eleven thousand one hundred and thirty-seven comparisons to one "
-            "thousand seven hundred and ninety."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(rl), FadeIn(rs), FadeIn(nl), FadeIn(ns), FadeIn(illus))
-            vo.wait_until("a")
-            self.play(*[Create(a) for a in arcs.values()], FadeIn(fa), FadeIn(fb), FadeIn(cnt), FadeIn(notes[0]))
-            for kind, x, y, c in ev:
-                if kind == "cmp":
-                    self.play(rl[x][0].animate.set_stroke(HEAD, width=4), rs[y][0].animate.set_stroke(HEAD, width=4),
-                              Transform(cnt, counter(c).move_to(cnt)), run_time=0.3)
-                elif kind == "hit":
-                    self.play(*lit(rl[x]), *lit(rs[y]), run_time=0.4)
-                    anims = [FadeOut(fb)] if y + 1 >= len(S) else [fb.animate.next_to(rs[y + 1], DOWN, buff=0.06)]
-                    if x + 1 < len(L):
-                        anims.append(fa.animate.next_to(rl[x + 1], DOWN, buff=0.06))
-                    self.play(*anims, run_time=0.3)
-                elif kind == "jump":
-                    self.play(arcs[x].animate.set_color(YES), Transform(cnt, counter(c).move_to(cnt)), run_time=0.3)
-                    self.play(fa.animate.next_to(rl[y], DOWN, buff=0.06), rl[x][0].animate.set_stroke(GREY_D, 1.6),
-                              *[rl[k].animate.set_opacity(0.3) for k in range(x + 1, y)], run_time=0.5)
-                elif kind == "nojump":
-                    self.play(arcs[x].animate.set_color(NO), Transform(cnt, counter(c).move_to(cnt)), run_time=0.3)
-                elif kind == "a":
-                    anims = [rl[x][0].animate.set_stroke(GREY_D, width=1.6)]
-                    if y < len(L):
-                        anims.append(fa.animate.next_to(rl[y], DOWN, buff=0.06))
-                    self.play(*anims, run_time=0.3)
-                elif kind in ("b", "bjump"):
-                    nxt = fb.animate.next_to(rs[y], DOWN, buff=0.06) if y < len(S) else FadeOut(fb)
-                    self.play(rs[x][0].animate.set_stroke(GREY_D, width=1.6), nxt, run_time=0.3)
-            self.play(FadeIn(cmp_plain))
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def gallop(self):
+        self.ask(r"Intersect a list of 10 with a list of a million. \\ Galloping costs about...", [r"a million steps",
+                 r"$10 \times \log_2$ a million"], 1,
+                 say="Intersect a list of ten passages with a list of a million. How much work does galloping need?",
+                 reveal="About ten times log of a million: two hundred steps, not a million.")
         rows = {tuple(r["terms"]): r for r in load("intersect")["rows"]}
         tw, lm = rows[("the", "whale")], rows[("love", "marriag")]
         head = label(r"Galloping", font_size=36).to_edge(UP, buff=0.3)

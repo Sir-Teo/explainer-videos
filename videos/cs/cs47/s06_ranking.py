@@ -6,24 +6,19 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs47.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, axes, bar_chart, load, trace
 
 
-class Ranking(VoiceoverScene):
+class Ranking(WatchScene):
     def construct(self):
         self.card()
         self.tfidf()
-        self.cosine()
         self.prp()
         self.bim()
         self.saturation()
         self.length()
 
     def card(self):
-        card = chapter_card(5, r"From tf-idf to BM25", r"Which passage should come first?",
-                            lit=(1972, 1977, 1994), extra=((1972, r"Sp\"arck Jones: \ idf"),
+        self.chapter(5, r"From tf-idf to BM25", r"Which passage should come first?", lit=(1972, 1977, 1994), extra=((1972, r"Sp\"arck Jones: \ idf"),
                                                            (1977, r"the probability ranking principle"),
-                                                           (1994, r"Okapi BM25 at TREC-3")), part=PART)
-        with self.voiceover("Chapter five. From tf-idf to BM25."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (1994, r"Okapi BM25 at TREC-3")), part=PART, said="Chapter five. From tf-idf to BM25.")
 
     def tfidf(self):
         ix = load("index")
@@ -69,64 +64,6 @@ class Ranking(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def cosine(self):
-        head = label(r"Passages as vectors", font_size=36).to_edge(UP, buff=0.3)
-        ax = axes([0, 4, 1], [0, 4, 1], x_length=4.4, y_length=4.4, x_label=r"weight of \texttt{whale}",
-                  y_label=r"weight of \texttt{white}")
-        ax.next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.9)
-        a = ax.ax
-        o = a.c2p(0, 0)
-        vecs = {"q": ((1.2, 1.2), HEAD, r"query"), "d1": ((3.0, 2.4), YES, r"passage A"),
-                "d2": ((3.6, 0.5), DATA, r"passage B")}
-        arrows, names = VGroup(), VGroup()
-        for key, ((x, y), col, nm) in vecs.items():
-            ar = Arrow(o, a.c2p(x, y), buff=0, stroke_width=4, color=col, max_tip_length_to_length_ratio=0.12)
-            arrows.add(ar)
-            names.add(label(nm, font_size=18, color=col).next_to(a.c2p(x, y), {"q": UL, "d1": UR}.get(key, RIGHT),
-                                                                 buff=0.08))
-
-        def ang(v):
-            return math.atan2(v[1], v[0])
-
-        def cos(u, v):
-            return (u[0] * v[0] + u[1] * v[1]) / (math.hypot(*u) * math.hypot(*v))
-        q, d1, d2 = (vecs[k][0] for k in ("q", "d1", "d2"))
-        arcs = VGroup(Arc(radius=1.1, start_angle=ang(d1), angle=ang(q) - ang(d1), arc_center=o, color=YES),
-                      Arc(radius=1.6, start_angle=ang(d2), angle=ang(q) - ang(d2), arc_center=o, color=DATA))
-        ill = note(r"illustrative", font_size=17).next_to(ax, DOWN, buff=0.1).align_to(ax, RIGHT)
-        W = 6.2
-        right = VGroup(
-            MathTex(r"\cos\theta = \frac{\vec q \cdot \vec d}{|\vec q|\,|\vec d|}", font_size=40, color=WHITE),
-            wrapped_label(r"Salton's SMART system: \ one dimension per term, \ tf-idf weights as coordinates; \ the "
-                          r"query is a vector too", W, font_size=19, color=GREY_A),
-            wrapped_label(rf"rank by the angle: \ A {cos(q, d1):.2f}, \ B {cos(q, d2):.2f}", W, font_size=20,
-                          color=YES),
-            wrapped_label(r"dividing by $|\vec d|$ stops a long passage winning by being long; \ our tf-idf divides "
-                          r"by $\sqrt{\text{length}}$, \ a cheap stand-in", W, font_size=19, color=HEAD),
-            wrapped_label(r"but why these weights? \ Nothing so far says", W, font_size=20, color=NO),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35)
-        right.next_to(head, DOWN, buff=0.6).to_edge(RIGHT, buff=0.45)
-        with self.voiceover(
-            "Gerard Salton's SMART system made this geometry. <bookmark mark='a'/> A passage is a vector, one "
-            "dimension per term, with these weights as coordinates; the query is a vector too. <bookmark mark='b'/> "
-            "Rank passages by the cosine of the angle to the query: the dot product over both lengths. <bookmark "
-            "mark='c'/> Dividing by length stops a long passage winning just by being long; our tf-idf divides by the "
-            "square root of the length, a cheap stand-in. <bookmark mark='d'/> But why these weights? Nothing so far "
-            "says."
-        ) as vo:
-            self.play(FadeIn(head), Create(ax), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(GrowArrow(arrows[1]), GrowArrow(arrows[2]), FadeIn(names[1:]), FadeIn(right[1]))
-            self.play(GrowArrow(arrows[0]), FadeIn(names[0]))
-            vo.wait_until("b")
-            self.play(Write(right[0]), Create(arcs))
-            self.play(FadeIn(right[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(right[3]))
-            vo.wait_until("d")
-            self.play(FadeIn(right[4]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def prp(self):
         head = label(r"The probability ranking principle", font_size=36).to_edge(UP, buff=0.3)
@@ -245,6 +182,10 @@ class Ranking(VoiceoverScene):
         self.clear_scene()
 
     def saturation(self):
+        self.ask(r"A passage says whale twenty times, another twice. \\ BM25 scores the first...", [r"ten times higher",
+                 r"only a little higher"], 1,
+                 say="One passage says whale twenty times, another twice. How much higher does BM25 score the first?",
+                 reveal="Only a little: term frequency saturates.")
         s = load("bm25")["saturation"]
         head = label(r"Saturation: \ $k_1$", font_size=36).to_edge(UP, buff=0.3)
         g = axes([0, 20, 5], [0, 6, 1], x_length=6.0, y_length=4.2, x_label=r"term frequency in the passage",

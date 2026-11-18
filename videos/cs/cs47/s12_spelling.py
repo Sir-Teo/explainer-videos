@@ -81,7 +81,7 @@ def tree_layout(parent_of, order, dx, dy, top):
     return {n: [x[n] - mid, top - depth[n] * dy, 0] for n in order}
 
 
-class Spelling(VoiceoverScene):
+class Spelling(WatchScene):
     def construct(self):
         self.card()
         self.channel()
@@ -91,15 +91,14 @@ class Spelling(VoiceoverScene):
         self.complete()
 
     def card(self):
-        card = chapter_card(11, r"Spelling and autocomplete", r"What did the user mean to type?",
-                            lit=(1964, 1973, 1990),
-                            extra=((1964, r"Damerau: \ transpositions"), (1973, r"Burkhard and Keller: \ BK-trees"),
-                                   (1990, r"Kernighan, \ Church and Gale: \ the noisy channel")), part=PART)
-        with self.voiceover("Chapter eleven. Spelling and autocomplete."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Spelling and autocomplete", r"What did the user mean to type?", lit=(1964, 1973, 1990), extra=((1964, r"Damerau: \ transpositions"), (1973, r"Burkhard and Keller: \ BK-trees"),
+                                   (1990, r"Kernighan, \ Church and Gale: \ the noisy channel")), part=PART, said="Chapter eleven. Spelling and autocomplete.")
 
     def channel(self):
+        self.ask(r"A typed word. The best correction maximizes...", [r"the smallest edit distance",
+                 r"$P(\text{word}) \times P(\text{typo} \mid \text{word})$"], 1,
+                 say="A user typed something that is not a word. Which correction should we choose?",
+                 reveal="The one maximizing how common the word is times how likely that typo is for it: Bayes' rule.")
         sp = load("spell")
         row = next(r for r in sp["rows"] if r["typed"] == "captian")
         head = label(r"The noisy channel", font_size=36).to_edge(UP, buff=0.3)

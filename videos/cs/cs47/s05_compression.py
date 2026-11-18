@@ -23,25 +23,23 @@ def _two(a: str, b: str, ca=LAM, cb=DATA, size=17):
     return VGroup(*parts).arrange(RIGHT, buff=0.02)
 
 
-class Compression(VoiceoverScene):
+class Compression(WatchScene):
     def construct(self):
         self.card()
         self.gaps()
         self.vbyte()
-        self.elias()
         self.golomb()
         self.score()
-        self.blocks()
 
     def card(self):
-        card = chapter_card(4, r"Compressing postings", r"How do two million postings fit in a few megabytes?",
-                            lit=(1966, 1975), extra=((1966, r"Golomb: \ run-length codes"),
-                                                     (1975, r"Elias: \ universal codes")), part=PART)
-        with self.voiceover("Chapter four. Compressing postings."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"Compressing postings", r"How do two million postings fit in a few megabytes?", lit=(1966, 1975), extra=((1966, r"Golomb: \ run-length codes"),
+                                                     (1975, r"Elias: \ universal codes")), part=PART, said="Chapter four. Compressing postings.")
 
     def gaps(self):
+        self.ask(r"Why store the gaps between sorted ids, \\ not the ids themselves?", [r"faster lookups",
+                 r"small numbers compress"], 1,
+                 say="A postings list is sorted. Why store the gaps between its ids instead of the ids?",
+                 reveal="Gaps are small numbers, and small numbers take few bits.")
         ix = load("index")
         c = load("codes")
         ids = ix["sample"]["whale"]
@@ -160,82 +158,6 @@ class Compression(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def elias(self):
-        c = load("codes")
-        sm = c["samples"]
-        bpp = c["bits_per_posting"]
-        head = label(r"Elias's $\gamma$ and $\delta$ codes", font_size=36).to_edge(UP, buff=0.3)
-        gs = [int(g) for g in sm]
-        xs = {"g": -6.3, "bin": -5.75, "gamma": -4.25, "delta": -2.2}
-        hdr = VGroup(label(r"$g$", font_size=19, color=GREY_B).move_to([xs["g"], 0, 0]),
-                     label(r"binary", font_size=19, color=GREY_B),
-                     label(r"$\gamma$", font_size=19, color=GREY_B), label(r"$\delta$", font_size=19, color=GREY_B))
-        for m, k in zip(hdr[1:], ("bin", "gamma", "delta")):
-            m.move_to([0, 0, 0]).align_to([xs[k], 0, 0], LEFT)
-        rows = VGroup()
-        for g in gs:
-            b = bin(g)[2:]
-            ga, de = sm[str(g)]["gamma"], sm[str(g)]["delta"]
-            cut = len(de) - (len(b) - 1)
-            r = VGroup(label(f"{g}", font_size=19, color=WHITE).move_to([xs["g"], 0, 0]),
-                       mono(b, size=17, color=GREY_A),
-                       _two(ga[:len(b) - 1], ga[len(b) - 1:]),
-                       _two(de[:cut], de[cut:]))
-            for m, k in zip(r[1:], ("bin", "gamma", "delta")):
-                m.move_to([0, 0, 0]).align_to([xs[k], 0, 0], LEFT)
-            rows.add(r)
-        table = VGroup(hdr, *rows)
-        for i, r in enumerate(table):
-            r.shift(UP * (2.3 - 0.46 * i))
-        rule = Line([-6.6, 2.07, 0], [-0.4, 2.07, 0], color=GREY_D, stroke_width=1.5)
-        key = VGroup(label(r"prefix: \ how many digits", font_size=17, color=LAM),
-                     label(r"payload: \ the digits", font_size=17, color=DATA)).arrange(RIGHT, buff=0.4)
-        key.next_to(rows, DOWN, buff=0.35).align_to(rule, LEFT)
-        W = 6.3
-        right = VGroup(
-            wrapped_label(r"$g$ has $\lfloor \log_2 g \rfloor + 1$ binary digits, \ and the first is always 1", W,
-                          font_size=20, color=WHITE),
-            MathTex(r"|\gamma(g)| = 2\lfloor \log_2 g \rfloor + 1", font_size=34, color=DATA),
-            wrapped_label(r"$\gamma$: \ the count of digits after the first, \ as zeros, \ then the digits", W,
-                          font_size=19, color=GREY_B),
-            wrapped_label(r"a code spending $L$ bits on a value is ideal when its probability is $2^{-L}$ \ (Kraft; "
-                          r"\ \textit{AI, Built} Part 1): \ $\gamma$ is ideal for $P(g) \approx 1/(2g^2)$", W,
-                          font_size=19, color=HEAD),
-            MathTex(r"|\delta(g)| = \lfloor \log_2 g \rfloor + 2\lfloor \log_2(\lfloor \log_2 g \rfloor + 1) "
-                    r"\rfloor + 1", font_size=28, color=DATA),
-            wrapped_label(r"$\delta$: \ the number of digits in $\gamma$, \ then the digits after the leading 1", W,
-                          font_size=19, color=GREY_B),
-            wrapped_label(rf"on our index: \ $\gamma$ {bpp['gamma']:.2f} \ and $\delta$ {bpp['delta']:.2f} bits per "
-                          r"posting", W, font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.24)
-        if right[4].width > W:
-            right[4].width = W
-        right.next_to(head, DOWN, buff=0.45).to_edge(RIGHT, buff=0.35)
-        with self.voiceover(
-            "Now we write bits. <bookmark mark='a'/> A gap g has floor of log two g, plus one, binary "
-            "digits, the first always a one. <bookmark mark='b'/> Peter Elias's gamma code, from 1975, writes how "
-            "many digits follow the first, as zeros, then the digits: twice floor log g, plus one, bits. Thirteen for "
-            "a hundred. <bookmark mark='c'/> Part 1 of AI, Built showed that spending L bits on a value is ideal when "
-            "its probability is two to the minus L. So gamma suits gaps that fall off like one over g squared. "
-            "<bookmark mark='d'/> The delta code writes the digit count itself in gamma: eleven bits for a hundred. "
-            "On our index, gamma spends five point six four bits a posting, and delta five point five four."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(hdr[0]), FadeIn(hdr[1]), Create(rule))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(VGroup(r[0], r[1])) for r in rows], lag_ratio=0.15), FadeIn(right[0]),
-                      run_time=1.5)
-            vo.wait_until("b")
-            self.play(FadeIn(hdr[2]), LaggedStart(*[FadeIn(r[2]) for r in rows], lag_ratio=0.15), FadeIn(key),
-                      run_time=1.5)
-            self.play(Write(right[1]), FadeIn(right[2]))
-            vo.wait_until("c")
-            self.play(FadeIn(right[3]))
-            vo.wait_until("d")
-            self.play(FadeIn(hdr[3]), LaggedStart(*[FadeIn(r[3]) for r in rows], lag_ratio=0.15), run_time=1.5)
-            self.play(Write(right[4]), FadeIn(right[5]))
-            self.play(FadeIn(right[6]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def golomb(self):
         ix = load("index")
@@ -359,50 +281,13 @@ class Compression(VoiceoverScene):
             self.play(GrowFromEdge(chart.bars[4], DOWN), FadeIn(chart.vals[4]), FadeIn(chart.names[4]), FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does an inverted index store?", r"For each term, a sorted list of postings"),
+             (r"Why do Rice codes suit postings?", r"Gaps are roughly geometric")],
+            narration="Checkpoint. What does an inverted index store? And why do Golomb and Rice codes suit postings?",
+            answers_narration="For each term, the sorted list of passages containing it, with positions. And because gaps "
+                              "between them are roughly geometric.")
 
-    def blocks(self):
-        head = label(r"Block codecs and SIMD", font_size=36).to_edge(UP, buff=0.3)
-        gaps = [3, 1, 6, 2, 1, 5, 1, 4]
-        b = max(gaps).bit_length()
-        cells = VGroup(*[tag_box(str(g), color=DATA, size=18, w=0.6) for g in gaps]).arrange(RIGHT, buff=0.1)
-        t1 = label(rf"a block of gaps \ (illustrative): \ the largest needs {b} bits", font_size=20, color=GREY_A)
-        packed = VGroup(*[_bits(format(g, f"0{b}b"), [YES] * b, cell=0.3) for g in gaps]).arrange(RIGHT, buff=0.1)
-        t2 = label(rf"so every gap gets {b} bits, \ packed side by side: \ no flags, \ no unary, \ no branches",
-                   font_size=20, color=YES)
-        lanes = VGroup()
-        for i in range(4):
-            r = RoundedRectangle(width=2.3, height=0.55, corner_radius=0.08, stroke_color=KERN, stroke_width=1.6,
-                                 fill_color=BG, fill_opacity=1)
-            lanes.add(VGroup(r, label(rf"lane {i + 1}: \ {gaps[i]}", font_size=18, color=KERN).move_to(r)))
-        lanes.arrange(RIGHT, buff=0.15)
-        t3 = label(r"one SIMD instruction unpacks four gaps at once \ (Part 24)", font_size=20, color=KERN)
-        VGroup(t1, cells, t2, packed, t3, lanes).arrange(DOWN, buff=0.4).next_to(head, DOWN, buff=0.5)
-        notes = VGroup(
-            wrapped_label(r"PForDelta \ (Zukowski et al., \ 2006): \ pick the width for most of the block, \ and "
-                          r"store the few large gaps separately as exceptions", 6.0, font_size=19, color=WHITE),
-            wrapped_label(r"SIMD-BP128 \ (Lemire \& Boytsov, \ 2015): \ blocks of 128 gaps, \ ``decoding billions "
-                          r"of integers per second''", 6.0, font_size=19, color=WHITE),
-        ).arrange(RIGHT, buff=0.4, aligned_edge=UP).next_to(lanes, DOWN, buff=0.7)
-        with self.voiceover(
-            "Rice codes decode one bit at a time, through branches, so modern engines trade a few bits for speed. "
-            "<bookmark mark='a'/> Take a block of gaps and find the widest. <bookmark mark='b'/> Give every gap that "
-            "many bits, packed side by side: no flags, no unary, no branches. <bookmark mark='c'/> Then the SIMD "
-            "instructions of Part 24 unpack four gaps at once. <bookmark mark='d'/> PForDelta, from 2006, stores the "
-            "rare large gaps as exceptions, and Lemire and Boytsov's codecs of 2015 decode billions of integers a "
-            "second."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(t1), LaggedStart(*[FadeIn(cl) for cl in cells], lag_ratio=0.1))
-            vo.wait_until("b")
-            self.play(FadeIn(t2), LaggedStart(*[FadeIn(p) for p in packed], lag_ratio=0.1))
-            vo.wait_until("c")
-            self.play(FadeIn(t3), LaggedStart(*[FadeIn(ln) for ln in lanes], lag_ratio=0.15))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[0]))
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (HEAD, NO)

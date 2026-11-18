@@ -23,23 +23,18 @@ def _row(grades, size=0.62):
     return g.arrange(RIGHT, buff=0.16)
 
 
-class Evaluation(VoiceoverScene):
+class Evaluation(WatchScene):
     def construct(self):
         self.card()
         self.precision()
         self.average()
         self.ndcg()
-        self.pooling()
         self.ours()
         self.significance()
 
     def card(self):
-        card = chapter_card(6, r"Is the ranking good?", r"How do you know one ranking beats another?",
-                            lit=(1992, 2002), extra=((1992, r"the first TREC, \ at NIST"),
-                                                     (2002, r"J\"arvelin \& Kek\"al\"ainen: \ nDCG")), part=PART)
-        with self.voiceover("Chapter six. Is the ranking good?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Is the ranking good?", r"How do you know one ranking beats another?", lit=(1992, 2002), extra=((1992, r"the first TREC, \ at NIST"),
+                                                     (2002, r"J\"arvelin \& Kek\"al\"ainen: \ nDCG")), part=PART, said="Chapter six. Is the ranking good?")
 
     def precision(self):
         head = label(r"Precision and recall", font_size=36).to_edge(UP, buff=0.3)
@@ -130,6 +125,10 @@ class Evaluation(VoiceoverScene):
         self.clear_scene()
 
     def ndcg(self):
+        self.ask(r"A relevant passage at rank 10, against rank 1. \\ It counts...", [r"the same",
+                 r"less, discounted by the log of its rank"], 1,
+                 say="A relevant passage appears at rank ten instead of rank one. How much does it count?",
+                 reveal="Less, discounted by the logarithm of its rank: readers rarely look that far.")
         head = label(r"Graded relevance: \ nDCG", font_size=36).to_edge(UP, buff=0.3)
         unit, bw, gap = 0.55, 0.42, 0.14
         x0 = -6.3
@@ -202,61 +201,6 @@ class Evaluation(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def pooling(self):
-        head = label(r"Test collections and pooled judgments", font_size=36).to_edge(UP, buff=0.3)
-        runs = [list("ABCDE"), list("BFAGC"), list("HABIF")]
-        relevant = set("ACFH")
-        cols = VGroup()
-        for name, r, c in zip((r"system 1", r"system 2", r"system 3"), runs, (DATA, LAM, KERN)):
-            boxes = VGroup(*[tag_box(x, color=c, size=17, w=0.55, h=0.42) for x in r]).arrange(DOWN, buff=0.1)
-            cols.add(VGroup(label(name, font_size=17, color=c), boxes).arrange(DOWN, buff=0.15))
-        cols.arrange(RIGHT, buff=0.35).next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=0.6)
-        pool_ids = sorted({x for r in runs for x in r})
-        pool = VGroup(*[tag_box(x, color=GREY_A, size=17, w=0.55, h=0.42) for x in pool_ids]).arrange_in_grid(
-            rows=3, buff=0.12)
-        pool_l = label(rf"the pool: \ {len(pool_ids)} distinct", font_size=17, color=GREY_A)
-        pool_g = VGroup(pool_l, pool).arrange(DOWN, buff=0.15).next_to(cols, RIGHT, buff=1.0)
-        judged = VGroup(*[tag_box(x, color=YES if x in relevant else NO, size=17, w=0.55, h=0.42)
-                          for x in pool_ids]).arrange_in_grid(rows=3, buff=0.12)
-        judged_l = label(r"judged by assessors", font_size=17, color=YES)
-        judged_g = VGroup(judged_l, judged).arrange(DOWN, buff=0.15).next_to(pool_g, RIGHT, buff=1.0)
-        a1 = Arrow(cols.get_right(), pool_g.get_left(), buff=0.15, color=GREY_C, stroke_width=2)
-        a2 = Arrow(pool_g.get_right(), judged_g.get_left(), buff=0.15, color=GREY_C, stroke_width=2)
-        ill = note(r"illustrative", font_size=17).next_to(cols, DOWN, buff=0.15).align_to(cols, LEFT)
-        VGroup(cols, pool_g, judged_g, a1, a2, ill).set_x(0)
-        lines = VGroup(
-            wrapped_label(r"a \textbf{test collection}: \ fixed documents, \ fixed queries, \ and judgments \ "
-                          r"(Cleverdon's Cranfield experiments, \ 1960s)", 12.4, font_size=19, color=WHITE),
-            wrapped_label(r"TREC \ (NIST, \ since 1992): \ judge only the pool, \ the top 100 of every submitted run; "
-                          r"\ anything unjudged counts as not relevant", 12.4, font_size=19, color=HEAD),
-            wrapped_label(r"pools miss relevant documents, \ yet comparisons between systems mostly survive \ "
-                          r"(Zobel, \ 1998)", 12.4, font_size=19, color=GREY_A),
-            wrapped_label(r"ours: \ nine queries, \ each meant for one novel; \ rule-based grades, \ not people: \ 2 "
-                          r"if a passage of that novel has every key word, \ 1 if some", 12.4, font_size=19,
-                          color=LAM),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).next_to(ill, DOWN, buff=0.4).set_x(0)
-        with self.voiceover(
-            "All of these need judgments. <bookmark mark='a'/> A test collection fixes documents, queries and "
-            "judgments, so that systems are compared on equal terms, as Cyril Cleverdon's Cranfield experiments did "
-            "in the 1960s. <bookmark mark='b'/> But nobody can judge every document for every query. Since 1992, "
-            "NIST's Text Retrieval Conference has pooled the top hundred results of every submitted system, and "
-            "assessors judge only the pool; anything unjudged counts as not relevant. <bookmark mark='c'/> Pools miss "
-            "relevant documents, but Justin Zobel found in 1998 that comparisons between systems mostly survive. "
-            "<bookmark mark='d'/> Our judgments are cruder: nine queries, each meant for one novel, graded by a rule "
-            "rather than by people."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cols), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(lines[0]))
-            vo.wait_until("b")
-            self.play(GrowArrow(a1), FadeIn(pool_g))
-            self.play(GrowArrow(a2), FadeIn(judged_g), FadeIn(lines[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[2]))
-            vo.wait_until("d")
-            self.play(FadeIn(lines[3]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def ours(self):
         b = load("bm25")
