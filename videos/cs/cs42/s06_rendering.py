@@ -19,7 +19,7 @@ def _stages(lit, w=1.55, h=0.5, font=17, dim=GREY_D):
     return VGroup(g, arrows)
 
 
-class Rendering(VoiceoverScene):
+class Rendering(WatchScene):
     def construct(self):
         self.card()
         self.pipeline()
@@ -28,12 +28,8 @@ class Rendering(VoiceoverScene):
         self.jank()
 
     def card(self):
-        card = chapter_card(5, r"Paint, \ layers and the frame", r"How does a page reach the screen sixty times a "
-                            r"second?", lit=(2011, 2011),
-                            extra=((2011, r"requestAnimationFrame in Firefox and Chrome"),), part=PART)
-        with self.voiceover("Chapter five. Paint, layers and the frame."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Paint, \ layers and the frame", r"How does a page reach the screen sixty times a "
+                            r"second?", lit=(2011, 2011), extra=((2011, r"requestAnimationFrame in Firefox and Chrome"),), part=PART, said="Chapter five. Paint, layers and the frame.")
 
     # ------------------------------------------------------------------ the pipeline and the display list
     def pipeline(self):
@@ -145,6 +141,9 @@ class Rendering(VoiceoverScene):
 
     # ------------------------------------------------------------------ the frame budget and requestAnimationFrame
     def budget(self):
+        self.ask(r"A 60 Hz display. \\ Time to make each frame:", [r"16.7 ms", r"33 ms", r"60 ms"], 0,
+                 say="A sixty hertz display. How long does the browser have to make each frame?",
+                 reveal="Sixteen point seven milliseconds, for script, style, layout and paint together.")
         fr = load("frames")
         frame = fr["budget_ms"]
         r0 = fr["long"]["renders"][0]

@@ -85,7 +85,7 @@ def outline_tree(lines, x0, y0, step=0.4, hi=()):
     return g
 
 
-class Parsing(VoiceoverScene):
+class Parsing(WatchScene):
     def construct(self):
         self.card()
         self.tokenizer()
@@ -95,12 +95,7 @@ class Parsing(VoiceoverScene):
         self.grammar()
 
     def card(self):
-        card = chapter_card(2, r"Parsing HTML", r"How do you parse a language in which nothing is an error?",
-                            lit=(1951, 2014), extra=((2014, r"HTML5: \ the parsing algorithm becomes a standard"),),
-                            part=PART)
-        with self.voiceover("Chapter two. Parsing HTML."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"Parsing HTML", r"How do you parse a language in which nothing is an error?", lit=(1951, 2014), extra=((2014, r"HTML5: \ the parsing algorithm becomes a standard"),), part=PART, said="Chapter two. Parsing HTML.")
 
     def tokenizer(self):
         tk = load("tokenize")
@@ -377,6 +372,10 @@ class Parsing(VoiceoverScene):
         self.clear_scene()
 
     def grammar(self):
+        self.ask(r"Could HTML be parsed by a parser \\ generated from a grammar?", [r"yes",
+                 r"no: every input must become a tree"], 1,
+                 say="Could a browser parse HTML with a parser generated from a grammar, like Part 13's?",
+                 reveal="No. A grammar rejects bad input; the web's parser must build a tree from anything.")
         head = label(r"Why not a grammar?", font_size=36).to_edge(UP, buff=0.3)
 
         def box(t, col, w=2.5, h=0.75):

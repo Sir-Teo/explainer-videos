@@ -22,7 +22,7 @@ PROGRAMS = {
 }
 
 
-class Loop(VoiceoverScene):
+class Loop(WatchScene):
     def construct(self):
         self.card()
         self.model()
@@ -32,14 +32,16 @@ class Loop(VoiceoverScene):
         self.workers()
 
     def card(self):
-        card = chapter_card(6, r"The event loop", r"In what order does a page's code run?", lit=(2015, 2017),
-                            extra=((2015, r"ES2015: \ promises"), (2017, r"ES2017: \ async and await")), part=PART)
-        with self.voiceover("Chapter six. The event loop."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"The event loop", r"In what order does a page's code run?", lit=(2015, 2017), extra=((2015, r"ES2015: \ promises"), (2017, r"ES2017: \ async and await")), part=PART, said="Chapter six. The event loop.")
 
     # ------------------------------------------------------------------ the loop as the standard writes it
     def model(self):
+        self.wrong_idea(r"\texttt{setTimeout(f, 0)} runs \texttt{f} immediately",
+                        r"it queues a task: \texttt{f} runs after the script \\ and all microtasks",
+                        narration="A common belief: a timer of zero milliseconds runs its function right away.",
+                        right_narration="It only queues a task. The function waits until the current script finishes, every "
+                                        "microtask runs, and the loop comes round.")
+        self.clear_scene()
         head = label(r"One thread, \ one loop", font_size=36).to_edge(UP, buff=0.3)
         code = code_block(["while (true) {", "  task = oldestRunnableTask();", "  run(task);   // to completion",
                            "  while (microtasks.length)", "    run(microtasks.shift());", "  if (frameIsDue()) {",
@@ -95,6 +97,10 @@ class Loop(VoiceoverScene):
 
     # ------------------------------------------------------------------ the basic program, animated
     def basic(self):
+        self.ask(r"log A; \\ setTimeout(log B, 0); \\ promise.then(log C); \\ log D. \\ Order?",
+                 [r"A B C D", r"A D C B", r"A D B C"], 1,
+                 say="Log A. Set a timer of zero to log B. Queue a promise reaction to log C. Log D. In what order do they appear?",
+                 reveal="A, D, C, B. The script finishes, then microtasks, then the next task.")
         want = list(load("orderings")["basic"])
         head = label(r"Tasks and microtasks, \ step by step", font_size=36).to_edge(UP, buff=0.3)
         code = code_block(['console.log("A");', 'setTimeout(() => console.log("B"), 0);',

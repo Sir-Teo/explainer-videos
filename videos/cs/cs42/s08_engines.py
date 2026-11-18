@@ -14,10 +14,9 @@ def _shape_name(s: str) -> str:
     return "{" + ", ".join(p for p in s.split(".") if p and p != "{}") + "}"
 
 
-class Engines(VoiceoverScene):
+class Engines(WatchScene):
     def construct(self):
         self.card()
-        self.lazy()
         self.tiers()
         self.shapes()
         self.caches()
@@ -25,51 +24,9 @@ class Engines(VoiceoverScene):
         self.gc()
 
     def card(self):
-        card = chapter_card(7, r"JavaScript engines", r"How does a dynamic language run fast?",
-                            lit=(2008, 2017), extra=((2008, r"V8 ships in Chrome"),
-                                                     (2017, r"V8's Ignition and TurboFan")), part=PART)
-        with self.voiceover("Chapter seven. JavaScript engines."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"JavaScript engines", r"How does a dynamic language run fast?", lit=(2008, 2017), extra=((2008, r"V8 ships in Chrome"),
+                                                     (2017, r"V8's Ignition and TurboFan")), part=PART, said="Chapter seven. JavaScript engines.")
 
-    def lazy(self):
-        head = label(r"Lazy parsing", font_size=36).to_edge(UP, buff=0.3)
-        src = ["function init() { render(); }", "function render() { /* draw */ }",
-               "function onCheckout() { /* 400 lines */ }", "function onRefund() { /* 300 lines */ }", "",
-               "init();"]
-        code = code_block(src, size=22).move_to([-2.6, 0.9, 0])
-        tags = VGroup()
-        for i in range(4):
-            t = label(r"pre-parsed", font_size=20, color=GREY_B).next_to(code[i], RIGHT, buff=0.25)
-            tags.add(t.set_x(code.get_right()[0] + 1.2))
-        full = [label(r"parsed in full", font_size=20, color=YES).move_to(tags[i]) for i in range(2)]
-        ill = note(r"illustrative page", font_size=18).next_to(code, DOWN, buff=0.3).align_to(code, LEFT)
-        notes = VGroup(
-            wrapped_label(r"the \textbf{pre-parser} checks a function body's syntax and notes which outer variables "
-                          r"it uses \ (for closures), \ but builds no tree and emits no code", 12.4, font_size=20,
-                          color=WHITE),
-            wrapped_label(r"the full parse, \ the syntax tree and the bytecode wait until the function is first "
-                          r"called; \ code that never runs costs only the quick scan", 12.4, font_size=20,
-                          color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.45)
-        with self.voiceover(
-            "A page arrives with its JavaScript as text, often far more than this visit will run. "
-            "<bookmark mark='a'/> So the engine pre-parses each function body: a quick scan that checks "
-            "the syntax and notes which outer variables the function uses, for closures, but builds no "
-            "tree. <bookmark mark='b'/> When init is called, it is parsed in full and compiled, and so is"
-            " render when init calls it. The checkout and refund handlers stay as text until someone "
-            "clicks."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(code), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(*[code[i].animate.set_opacity(0.45) for i in range(4)], FadeIn(tags), FadeIn(notes[0]))
-            vo.wait_until("b")
-            self.play(Indicate(code[5], color=HEAD))
-            for i in range(2):
-                self.play(code[i].animate.set_opacity(1), Transform(tags[i], full[i]), run_time=0.7)
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def tiers(self):
         head = label(r"Bytecode, \ then machine code", font_size=36).to_edge(UP, buff=0.3)
@@ -116,6 +73,9 @@ class Engines(VoiceoverScene):
         self.clear_scene()
 
     def shapes(self):
+        self.ask(r"Two objects get $x$ and $y$ in different orders. \\ Same hidden class?", [r"yes", r"no"], 1,
+                 say="Two objects both get properties x and y, but added in different orders. Do they share a hidden class?",
+                 reveal="No. Order matters, and code that sees both is slower.")
         tr = load("ic")["transitions"]
         head = label(r"Hidden classes and transitions", font_size=36).to_edge(UP, buff=0.3)
         src = code_block(["a = {}; a.x = 1; a.y = 2;", "b = {}; b.x = 3; b.y = 4;", "c = {}; c.y = 5; c.x = 6;"],

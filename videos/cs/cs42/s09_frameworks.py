@@ -17,7 +17,7 @@ def _row(text, w=2.3, ticked=False, color=GREY_B):
     return VGroup(r, box, tick, t)
 
 
-class Frameworks(VoiceoverScene):
+class Frameworks(WatchScene):
     def construct(self):
         self.card()
         self.vdom()
@@ -27,12 +27,8 @@ class Frameworks(VoiceoverScene):
         self.signals()
 
     def card(self):
-        card = chapter_card(8, r"UI frameworks", r"How do you redraw only what changed?", lit=(1989, 2024),
-                            extra=((1989, r"Zhang and Shasha: \ tree edit distance"), (2013, r"React"),
-                                   (2024, r"Svelte 5: \ signals")), part=PART)
-        with self.voiceover("Chapter eight. User interface frameworks."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"UI frameworks", r"How do you redraw only what changed?", lit=(1989, 2024), extra=((1989, r"Zhang and Shasha: \ tree edit distance"), (2013, r"React"),
+                                   (2024, r"Svelte 5: \ signals")), part=PART, said="Chapter eight. User interface frameworks.")
 
     def vdom(self):
         head = label(r"Render, \ diff, \ patch", font_size=36).to_edge(UP, buff=0.3)
@@ -152,6 +148,10 @@ class Frameworks(VoiceoverScene):
         self.clear_scene()
 
     def keyed(self):
+        self.ask(r"Rows without keys. A new row goes on top; \\ the user had ticked row b. The tick...",
+                 [r"stays with b", r"moves to another row"], 1,
+                 say="A list of rows without keys. The user ticks row b, then a new row is added at the top. Where does the tick go?",
+                 reveal="To another row: without keys, elements are matched by position.")
         lists = load("vdom")["lists"]
         head = label(r"Keys", font_size=36).to_edge(UP, buff=0.3)
         names = ["a", "b", "c", "d"]

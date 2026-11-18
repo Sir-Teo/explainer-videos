@@ -65,7 +65,7 @@ def tint(box, col):
     return AnimationGroup(box[0].animate.set_stroke(col), box[1].animate.set_color(col))
 
 
-class Css(VoiceoverScene):
+class Css(WatchScene):
     def construct(self):
         self.card()
         self.specificity()
@@ -76,14 +76,13 @@ class Css(VoiceoverScene):
         self.buckets()
 
     def card(self):
-        card = chapter_card(3, r"The cascade", r"When several rules disagree, \ which one wins?",
-                            lit=(1994, 1996), extra=((1994, r"Lie proposes style sheets"), (1996, r"CSS level 1")),
-                            part=PART)
-        with self.voiceover("Chapter three. The cascade."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"The cascade", r"When several rules disagree, \ which one wins?", lit=(1994, 1996), extra=((1994, r"Lie proposes style sheets"), (1996, r"CSS level 1")), part=PART, said="Chapter three. The cascade.")
 
     def specificity(self):
+        self.ask(r"\texttt{\#nav a} against \texttt{.menu .item a}. \\ Which wins?", [r"\texttt{\#nav a}",
+                 r"\texttt{.menu .item a}"], 0,
+                 say="Two rules match a link: hash nav a, and dot menu dot item a. Which one wins?",
+                 reveal="The id: one id outranks any number of classes.")
         ranked = load("specificity")["ranked"]
         head = label(r"Specificity", font_size=36).to_edge(UP, buff=0.3)
         rows = [[s, f"{a}", f"{b}", f"{c}"] for s, (a, b, c) in ranked]

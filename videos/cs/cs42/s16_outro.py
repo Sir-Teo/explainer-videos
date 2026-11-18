@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -50,6 +50,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the same-origin policy stop?", r"Pages reading other origins' responses"),
+             (r"How does CSP limit XSS?", r"Scripts run only from listed sources")],
+            narration="Last checkpoint. What does the same-origin policy prevent? And how does a content security policy limit cross-site scripting?",
+            answers_narration="One origin's page reading another's responses. And the browser runs scripts only from the "
+                              "sources the server lists.")
 
     def payoffs(self):
         card = payoff_card([

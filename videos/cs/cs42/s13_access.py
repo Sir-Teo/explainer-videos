@@ -30,7 +30,7 @@ def _ratio(a: str, b: str) -> float:
     return (la + 0.05) / (lb + 0.05)
 
 
-class Access(VoiceoverScene):
+class Access(WatchScene):
     def construct(self):
         self.card()
         self.tree()
@@ -38,17 +38,11 @@ class Access(VoiceoverScene):
         self.contrast()
         self.palette()
         self.radio()
-        self.ui_thread()
-        self.platforms()
 
     def card(self):
-        card = chapter_card(12, r"Accessibility and mobile", r"Who else must be able to use the page, and on what?",
-                            lit=(2008, 2012, 2023), extra=((2008, r"WCAG 2.0"),
+        self.chapter(12, r"Accessibility and mobile", r"Who else must be able to use the page, and on what?", lit=(2008, 2012, 2023), extra=((2008, r"WCAG 2.0"),
                                                            (2012, r"Huang et al.: \ LTE power"),
-                                                           (2023, r"WCAG 2.2")), part=PART)
-        with self.voiceover("Chapter twelve. Accessibility and mobile."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                           (2023, r"WCAG 2.2")), part=PART, said="Chapter twelve. Accessibility and mobile.")
 
     def tree(self):
         head = label(r"The accessibility tree", font_size=36).to_edge(UP, buff=0.3)
@@ -154,6 +148,9 @@ class Access(VoiceoverScene):
         self.clear_scene()
 
     def contrast(self):
+        self.ask(r"Minimum contrast for normal text, WCAG level AA:", [r"$3:1$", r"$4.5:1$", r"$7:1$"], 1,
+                 say="What contrast ratio must normal text reach for WCAG level AA?",
+                 reveal="Four and a half to one.")
         c = load("contrast")
         row = next(r for r in c["rows"] if r["name"] == "DATA")
         assert abs(_ratio(row["hex"], c["bg"]) - row["ratio"]) < 1e-9 and abs(_lum(c["bg"]) - c["lum_bg"]) < 1e-12
@@ -346,102 +343,7 @@ class Access(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def ui_thread(self):
-        head = label(r"The UI thread", font_size=36).to_edge(UP, buff=0.3)
-        x0, k = -4.4, 0.21                                   # ms -> scene units
 
-        def X(t):
-            return x0 + t * k
-
-        def block(t0, t1, y, col, text):
-            r = Rectangle(width=(t1 - t0) * k, height=0.42, stroke_width=0, fill_color=col,
-                          fill_opacity=0.85).move_to([X((t0 + t1) / 2), y, 0])
-            t = label(text, font_size=16, color=BLACK)
-            if t.width > r.width - 0.08:
-                return VGroup(r)
-            return VGroup(r, t.move_to(r))
-        ys = (1.55, 0.25, -0.4)
-        vs = VGroup()
-        for i, t in enumerate((0, 1000 / 60, 2000 / 60, 3000 / 60)):
-            vs.add(DashedLine([X(t), 2.05, 0], [X(t), -0.75, 0], color=GREY_C, stroke_width=1.5))
-            vs.add(label(rf"{t:.1f} ms" if i else r"0", font_size=16, color=GREY_B).move_to([X(t), -0.95, 0]))
-        frame_t = label(r"a frame is due every 16.7 ms at 60 Hz, \ 8.3 ms at 120 Hz", font_size=18,
-                        color=GREY_A).move_to([0.8, 2.4, 0])
-        before = VGroup(block(1, 5, ys[0], DATA, r"input"), block(5, 11, ys[0], KERN, r"draw"),
-                        block(17, 20, ys[0], DATA, r"input"), block(20, 44, ys[0], NO, r"read a file"),
-                        block(44, 49, ys[0], KERN, r"draw"))
-        miss = VGroup(Cross(scale_factor=0.18, stroke_color=NO, stroke_width=5).move_to([X(2000 / 60), ys[0] + 0.4,
-                                                                                         0]),
-                      label(r"frame missed", font_size=17, color=NO).move_to([X(2000 / 60) + 1.1, ys[0] + 0.45, 0]))
-        after = VGroup(block(1, 5, ys[1], DATA, r"input"), block(5, 11, ys[1], KERN, r"draw"),
-                       block(17, 20, ys[1], DATA, r"input"), block(20, 26, ys[1], KERN, r"draw"),
-                       block(20, 44, ys[2], LAM, r"read a file"), block(44, 47, ys[1], KERN, r"draw"))
-        lane_names = VGroup(label(r"UI thread", font_size=19, color=WHITE).move_to([-5.8, ys[0], 0]),
-                            label(r"UI thread", font_size=19, color=WHITE).move_to([-5.8, ys[1], 0]),
-                            label(r"worker", font_size=19, color=LAM).move_to([-5.8, ys[2], 0]))
-        lines = VGroup(
-            wrapped_label(r"the UI thread handles input and draws; \ disk and network work moves to other threads, "
-                          r"\ as Chapter 5's frame budget demands", 12.6, font_size=19, color=WHITE),
-            wrapped_label(r"Android offers to close an app that ignores input for five seconds: \ "
-                          r"\textit{Application Not Responding}", 12.6, font_size=19, color=NO),
-            note(r"illustrative timings", font_size=17),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.14).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Native apps share the browser's problem. <bookmark mark='a'/> Each has one UI thread, which handles input"
-            " and must deliver a frame every sixteen point seven milliseconds at sixty hertz, as in Chapter 5. A file "
-            "read on that thread misses a frame. <bookmark mark='b'/> So disk and network work move to other threads, "
-            "and Android offers to close an app that ignores input for five seconds."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(vs), FadeIn(frame_t), FadeIn(lane_names[0]))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[GrowFromEdge(b, LEFT) for b in before], lag_ratio=0.5), run_time=2.4)
-            self.play(FadeIn(miss), FadeIn(lines[2]))
-            vo.wait_until("b")
-            self.play(FadeIn(lane_names[1:]), LaggedStart(*[GrowFromEdge(b, LEFT) for b in after], lag_ratio=0.3),
-                      run_time=2)
-            self.play(FadeIn(lines[0]), FadeIn(lines[1]))
-        self.wait(0.4)
-        self.clear_scene()
-
-    def platforms(self):
-        head = label(r"Native and cross-platform", font_size=36).to_edge(UP, buff=0.3)
-        stacks = [(r"the platforms' own toolkits", GREY_A,
-                   [(r"Swift \ or \ Kotlin", DATA), (r"UIKit, \ SwiftUI \ / \ Views, \ Compose", KERN),
-                    (r"the platform's widgets", YES)]),
-                  (r"React Native \ (Facebook, \ 2015)", DATA,
-                   [(r"JavaScript and React", DATA), (r"React Native", KERN), (r"the platform's widgets", YES)]),
-                  (r"Flutter \ (Google, \ 1.0 in 2018)", LAM,
-                   [(r"Dart", DATA), (r"Flutter's widgets and renderer", KERN), (r"pixels it draws itself", LAM)])]
-        cols = VGroup()
-        for title, tcol, boxes in stacks:
-            bx = VGroup(*[module_box(t, c, w=3.9, h=0.75, font=19) for t, c in boxes]).arrange(DOWN, buff=0.6)
-            arr = VGroup(*[Arrow(bx[i].get_bottom(), bx[i + 1].get_top(), buff=0.04, stroke_width=2.5, color=GREY_B,
-                                 max_tip_length_to_length_ratio=0.3) for i in range(2)])
-            t = label(title, font_size=21, color=tcol).next_to(bx, UP, buff=0.25)
-            cols.add(VGroup(t, bx, arr))
-        cols.arrange(RIGHT, buff=0.35, aligned_edge=UP).next_to(head, DOWN, buff=0.5)
-        lines = VGroup(
-            wrapped_label(r"SwiftUI \ (2019) \ and Jetpack Compose \ (2021) \ are declarative, \ like Chapter 8's "
-                          r"frameworks: \ the interface as a function of state", 12.6, font_size=19, color=WHITE),
-            wrapped_label(r"one codebase for two platforms, \ against looking and behaving exactly like each", 12.6,
-                          font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "<bookmark mark='a'/> Each platform has its own toolkit: UIKit and SwiftUI on iOS, Views and Jetpack "
-            "Compose on Android, the newer ones declarative, like Chapter 8's frameworks. <bookmark mark='b'/> "
-            "Cross-platform frameworks share one codebase. React Native, from 2015, drives the platform's own "
-            "widgets from JavaScript; <bookmark mark='c'/> Flutter draws every pixel itself. The trade is one "
-            "codebase against looking and behaving exactly like each platform."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(cols[0]), FadeIn(lines[0]))
-            vo.wait_until("b")
-            self.play(FadeIn(cols[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(cols[2]), FadeIn(lines[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (grid_table, LAM)

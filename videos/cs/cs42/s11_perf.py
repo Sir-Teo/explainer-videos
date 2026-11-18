@@ -5,22 +5,17 @@ from videos.cs.cs42.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, cod
                                    tag_box)
 
 
-class Perf(VoiceoverScene):
+class Perf(WatchScene):
     def construct(self):
         self.card()
         self.crp()
         self.vitals()
         self.cls()
-        self.bytes_()
         self.http()
 
     def card(self):
-        card = chapter_card(10, r"Web performance", r"What does a page wait for before it can paint?",
-                            lit=(2015, 2020, 2022), extra=((2015, r"HTTP/2"), (2020, r"Core Web Vitals"),
-                                                           (2022, r"HTTP/3 over QUIC")), part=PART)
-        with self.voiceover("Chapter ten. Web performance."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Web performance", r"What does a page wait for before it can paint?", lit=(2015, 2020, 2022), extra=((2015, r"HTTP/2"), (2020, r"Core Web Vitals"),
+                                                           (2022, r"HTTP/3 over QUIC")), part=PART, said="Chapter ten. Web performance.")
 
     def crp(self):
         c = load("crp")
@@ -92,7 +87,7 @@ class Perf(VoiceoverScene):
         font_shift = (start("font", pre["finish"]) - st["font"]) * k
         with self.voiceover(
             "Before a page can show anything, the browser must fetch and process everything that blocks rendering. "
-            "Here is one page as a dependency graph, with illustrative timings. <bookmark mark='a'/> The HTML arrives "
+            "Here is one page as a dependency graph. <bookmark mark='a'/> The HTML arrives "
             "first. It names a stylesheet and a synchronous script, and the stylesheet names a font, so each fetch "
             "waits for the file that mentions it. <bookmark mark='b'/> First paint waits for all of them, and the "
             "longest chain, HTML, CSS, font, is the critical path: three hundred and forty-five milliseconds. It is "
@@ -129,6 +124,9 @@ class Perf(VoiceoverScene):
         self.clear_scene()
 
     def vitals(self):
+        self.ask(r"A good Largest Contentful Paint is under...", [r"1 s", r"2.5 s", r"5 s"], 1,
+                 say="Largest Contentful Paint: when the biggest thing on the page is drawn. What counts as good?",
+                 reveal="Under two and a half seconds, for three quarters of real visits.")
         head = label(r"Core Web Vitals", font_size=36).to_edge(UP, buff=0.3)
         specs = [(r"LCP", r"Largest Contentful Paint",
                   r"when the biggest image or block of text is drawn: \ \textbf{loading}", (r"2.5 s", r"4 s"), DATA),
@@ -267,72 +265,6 @@ class Perf(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def bytes_(self):
-        rows = load("compress")["rows"]
-        head = label(r"Fewer bytes", font_size=36).to_edge(UP, buff=0.3)
-        codecs = (("gzip", DATA), ("bz2", LAM), ("xz", KERN))
-        full = 4.0
-        groups = VGroup()
-        for r in rows:
-            title = VGroup(mono(r["file"].split("/")[-1], size=17, color=WHITE),
-                           label(rf"{r['bytes']:,} bytes", font_size=17, color=GREY_B)).arrange(RIGHT, buff=0.25)
-            g = VGroup(title)
-            for c, col in codecs:
-                frac = r[c] / r["bytes"]
-                ref = Rectangle(width=full, height=0.24, stroke_color=GREY_D, stroke_width=1)
-                bar = Rectangle(width=full * frac, height=0.24, stroke_width=0, fill_color=col, fill_opacity=0.85)
-                bar.align_to(ref, LEFT)
-                name = label(c, font_size=17, color=col).next_to(ref, LEFT, buff=0.15)
-                name.align_to(ref.get_left() + LEFT * 0.75, LEFT)
-                val = label(rf"{100 * frac:.1f}\%", font_size=16, color=col).next_to(ref, RIGHT, buff=0.12)
-                g.add(VGroup(name, ref, bar, val))
-            g[1:].arrange(DOWN, buff=0.08, aligned_edge=LEFT)
-            g[0].next_to(g[1:], UP, buff=0.12).align_to(g[1:], LEFT)
-            groups.add(g)
-        groups.arrange(DOWN, buff=0.3, aligned_edge=LEFT).move_to([-3.6, 0.35, 0]).to_edge(LEFT, buff=0.35)
-        src = note(r"measured on this repository's files; \ Brotli is not installed here", font_size=17)
-        src.next_to(groups, DOWN, buff=0.2).align_to(groups, LEFT)
-        # images: one picture in three widths; the browser picks by the layout width and the screen's density
-        ws = (480, 960, 1920)
-        pics = VGroup(*[Rectangle(width=w / 800, height=w / 800 * 9 / 16, stroke_color=YES if w == 480 else GREY_B,
-                                  stroke_width=2, fill_color=YES if w == 480 else GREY_D, fill_opacity=0.25)
-                        for w in ws]).arrange(RIGHT, buff=0.3, aligned_edge=DOWN)
-        plabs = VGroup(*[mono(f"{w}w", size=16, color=YES if w == 480 else GREY_A).next_to(p, DOWN, buff=0.08)
-                         for w, p in zip(ws, pics)])
-        img = code_block(['<img src="cat-960.avif" alt="A cat asleep"', '  srcset="cat-480.avif 480w,',
-                          '          cat-960.avif 960w,', '          cat-1920.avif 1920w"',
-                          '  sizes="100vw" loading="lazy"', '  width="1920" height="1080">'], size=16)
-        right = VGroup(VGroup(pics, plabs), img).arrange(DOWN, buff=0.3, aligned_edge=LEFT)
-        right.move_to([3.6, 0.9, 0]).to_edge(RIGHT, buff=0.35)
-        inotes = VGroup(
-            wrapped_label(r"\textbf{AVIF} and \textbf{WebP}: \ smaller files at the same quality", 5.6,
-                          font_size=18, color=WHITE),
-            wrapped_label(r"\texttt{srcset}: \ a small screen fetches the small file; \ \texttt{loading=lazy}: \ "
-                          r"wait until it is near the viewport; \ \texttt{width}, \texttt{height}: \ reserve its "
-                          r"space, \ no layout shift", 5.6, font_size=18, color=YES),
-            note(r"illustrative markup", font_size=17),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.15).next_to(right, DOWN, buff=0.25).align_to(right, LEFT)
-        syl = rows[1]
-        pct = round(100 * syl["gzip"] / syl["bytes"])
-        with self.voiceover(
-            f"Fewer bytes arrive sooner. <bookmark mark='a'/> We measured three of this series' own files. Gzip, which"
-            f" every browser accepts, shrinks the syllabus to {pct} per cent of its size. Bzip2 and xz do better, but "
-            f"browsers do not accept them, and the web's newer codec, Brotli, is not installed here, so we have no "
-            f"figure for it. <bookmark mark='b'/> Images are usually most of the bytes. AVIF and WebP are smaller at "
-            f"the same quality; a source set lets a small screen fetch a small file; lazy loading waits until an image"
-            f" is near; and a width and height reserve its space."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            for g in groups:
-                self.play(FadeIn(g[0]), *[FadeIn(VGroup(b[0], b[1])) for b in g[1:]], run_time=0.5)
-                self.play(*[GrowFromEdge(b[2], LEFT) for b in g[1:]], *[FadeIn(b[3]) for b in g[1:]], run_time=0.8)
-            self.play(FadeIn(src))
-            vo.wait_until("b")
-            self.play(FadeIn(pics), FadeIn(plabs), FadeIn(img))
-            self.play(FadeIn(inotes))
-        self.wait(0.4)
-        self.clear_scene()
 
     def http(self):
         head = label(r"HTTP/2 and HTTP/3", font_size=36).to_edge(UP, buff=0.3)
