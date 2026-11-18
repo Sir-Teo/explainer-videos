@@ -24,7 +24,7 @@ def fmt(v: float) -> str:
     return f"{v:,.0f}"
 
 
-class Defences(VoiceoverScene):
+class Defences(WatchScene):
     def construct(self):
         self.card()
         self.states()
@@ -35,12 +35,8 @@ class Defences(VoiceoverScene):
         self.degrade()
 
     def card(self):
-        card = chapter_card(5, r"Breakers, bulkheads and load shedding", r"How should a service say no?",
-                            lit=(2007, 2015), extra=((2007, r"Nygard: \ \textit{Release It!}"),
-                                                     (2015, r"Maurer: \ Fail at Scale")), part=PART)
-        with self.voiceover("Chapter five. Breakers, bulkheads, and the art of refusing work."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"Breakers, bulkheads and load shedding", r"How should a service say no?", lit=(2007, 2015), extra=((2007, r"Nygard: \ \textit{Release It!}"),
+                                                     (2015, r"Maurer: \ Fail at Scale")), part=PART, said="Chapter five. Breakers, bulkheads, and the art of refusing work.")
 
     def states(self):
         head = label(r"A circuit breaker", font_size=36).to_edge(UP, buff=0.3)
@@ -159,6 +155,10 @@ class Defences(VoiceoverScene):
         self.clear_scene()
 
     def shedding(self):
+        self.ask(r"Drop requests that have already waited too long. \\ Useful throughput...", [r"falls",
+                 r"recovers"], 1,
+                 say="The server drops requests that have waited longer than the client will wait. What happens to useful throughput?",
+                 reveal="It recovers: no work is wasted on answers nobody will read.")
         sh = load("overload")["shed"]
         t0, t1, frac = sh["trigger"]
         cap = sh["capacity"]

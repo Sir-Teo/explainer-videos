@@ -36,23 +36,21 @@ def load_bar(box, u, col=YES, w=0.32):
     return VGroup(frame, fill)
 
 
-class Redundancy(VoiceoverScene):
+class Redundancy(WatchScene):
     def construct(self):
         self.card()
         self.spares()
         self.modes()
         self.evacuate()
-        self.majority()
 
     def card(self):
-        card = chapter_card(6, r"Redundancy", r"How many spares, \ and where?", lit=(1985, 2014),
-                            extra=((1985, r"Gray: \ \textit{Why Do Computers Stop?}"),
-                                   (2014, r"Ongaro and Ousterhout: \ Raft")), part=PART)
-        with self.voiceover("Chapter six. Redundancy: how many spares, and where to put them."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Redundancy", r"How many spares, \ and where?", lit=(1985, 2014), extra=((1985, r"Gray: \ \textit{Why Do Computers Stop?}"),
+                                   (2014, r"Ongaro and Ousterhout: \ Raft")), part=PART, said="Chapter six. Redundancy: how many spares, and where to put them.")
 
     def spares(self):
+        self.ask(r"Ten machines needed, each up $99\%$. \\ Spares for $99.99\%$:", [r"$1$", r"$3$", r"$10$"], 1,
+                 say="A service needs ten machines, each up ninety-nine percent of the time. How many spares give four nines?",
+                 reveal="Three: losing four at once is rare enough.")
         rows = load("groups")["n_plus_k"]
         need = 10
         head = label(r"N + 1, \ N + 2", font_size=36).to_edge(UP, buff=0.3)
@@ -239,72 +237,6 @@ class Redundancy(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def majority(self):
-        rows = load("groups")["raft"]
-        by = {(r["a"], r["n"]): r for r in rows}
-        head = label(r"A Raft group's availability", font_size=36).to_edge(UP, buff=0.3)
-        C = np.array([-4.3, 0.55, 0])
-        R = 1.25
-        nodes = VGroup()
-        for k in range(5):
-            ang = PI / 2 + k * TAU / 5
-            c = Circle(radius=0.36, stroke_color=YES, stroke_width=2.5, fill_color=YES, fill_opacity=0.2)
-            c.move_to(C + R * np.array([math.cos(ang), math.sin(ang), 0]))
-            nodes.add(VGroup(c, label(rf"{k + 1}", font_size=20, color=WHITE).move_to(c)))
-        crown = label(r"leader", font_size=16, color=HEAD).next_to(nodes[0], UP, buff=0.08)
-        status = label(r"5 of 5 up: \ serving", font_size=20, color=YES).move_to(C + DOWN * 2.0)
-        s2 = label(r"3 of 5 up: \ still a majority", font_size=20, color=YES).move_to(status)
-        s3 = label(r"2 of 5 up: \ no majority, \ no service", font_size=20, color=NO).move_to(status)
-        safe = label(r"but nothing committed is lost", font_size=17, color=GREY_A).next_to(s3, DOWN, buff=0.12)
-
-        def down(k):
-            return [nodes[k][0].animate.set_stroke(NO).set_fill(NO, 0.15), nodes[k][1].animate.set_color(NO)]
-        eq = MathTex(r"A = \sum_{k=\lfloor n/2 \rfloor + 1}^{n} \binom{n}{k}\, a^k (1-a)^{n-k}", font_size=34,
-                     color=HEAD).move_to([2.6, 2.1, 0])
-        eq_l = label(r"the chance that a majority is up, \ for independent nodes each up a fraction $a$",
-                     font_size=18, color=GREY_A).next_to(eq, DOWN, buff=0.15)
-        body = [[rf"{n}", rf"{(n - 1) // 2}", rf"{by[(0.99, n)]['nines']:.1f}", rf"{by[(0.999, n)]['nines']:.1f}"]
-                for n in (1, 3, 5, 7)]
-        tab = grid_table([r"nodes", r"failures survived", r"nines, \ $a = 99\%$", r"nines, \ $a = 99.9\%$"], body,
-                         widths=[1.2, 2.2, 2.0, 2.1], row_h=0.5, font_size=21, mono_cols=())
-        tab.next_to(eq_l, DOWN, buff=0.35).set_x(2.6)
-        hl = SurroundingRectangle(VGroup(*tab.cells[3]), color=HEAD, buff=0.06, stroke_width=2)
-        notes = VGroup(
-            wrapped_label(r"even sizes buy nothing: \ four nodes survive one failure, \ like three, \ and need more "
-                          r"votes", 6.3, font_size=19, color=WHITE),
-            wrapped_label(r"the nines assume independence; \ chapter one's shared causes cap them, \ so the five go in "
-                          r"different zones", 6.3, font_size=19, color=NO),
-        ).arrange(RIGHT, buff=0.3, aligned_edge=UP).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Finally, a group that agrees. <bookmark mark='a'/> Part 38's Raft serves while a majority of its nodes "
-            "is up, because every decision needs a majority of votes. Five nodes survive two failures; "
-            "<bookmark mark='b'/> a third failure takes the majority, and with it the service, though nothing "
-            "committed is lost. <bookmark mark='c'/> If nodes fail independently, the group's availability is the "
-            "chance that more than half are up, a sum over the binomial distribution. <bookmark mark='d'/> At "
-            "ninety-nine percent a node, three nodes give three and a half nines, five give five, and seven give six "
-            "and a half. At ninety-nine point nine, five nodes give eight. <bookmark mark='e'/> Two caveats. Even "
-            "sizes buy nothing: four nodes survive one failure, like three. And the nines assume independence; "
-            "chapter one showed how a shared cause caps them, which is why the five nodes go in different zones."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(nodes), FadeIn(crown), FadeIn(status))
-            vo.wait_until("a")
-            self.play(*down(1), *down(3))
-            self.play(Transform(status, s2))
-            vo.wait_until("b")
-            self.play(*down(0), FadeOut(crown))
-            self.play(Transform(status, s3), FadeIn(safe))
-            vo.wait_until("c")
-            self.play(Write(eq), FadeIn(eq_l))
-            vo.wait_until("d")
-            self.play(FadeIn(VGroup(*tab.cells[0])), Create(tab.rule))
-            self.play(LaggedStart(*[FadeIn(VGroup(*tab.cells[r])) for r in range(1, 5)], lag_ratio=0.3),
-                      run_time=2.0)
-            self.play(Create(hl))
-            vo.wait_until("e")
-            self.play(FadeIn(notes[0]))
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (KERN, LAM)

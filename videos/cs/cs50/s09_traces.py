@@ -50,70 +50,17 @@ def waterfall(tr, x0=-3.0, x1=6.4, top=2.35, row_h=0.46):
     return g
 
 
-class Traces(VoiceoverScene):
+class Traces(WatchScene):
     def construct(self):
         self.card()
-        self.logs()
         self.spans()
         self.waterfall()
         self.critical()
         self.sampling()
 
     def card(self):
-        card = chapter_card(8, r"Logs and traces", r"Where did this request spend its time?", lit=(2010, 2019),
-                            extra=((2010, r"Sigelman et al.: \ Dapper"), (2019, r"OpenTelemetry")), part=PART)
-        with self.voiceover("Chapter eight. Logs and traces: following one request through many services."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Logs and traces", r"Where did this request spend its time?", lit=(2010, 2019), extra=((2010, r"Sigelman et al.: \ Dapper"), (2019, r"OpenTelemetry")), part=PART, said="Chapter eight. Logs and traces: following one request through many services.")
 
-    def logs(self):
-        head = label(r"Structured logs", font_size=36).to_edge(UP, buff=0.3)
-        t1 = label(r"a line of prose", font_size=20, color=GREY_A)
-        prose = mono("2026-11-07 14:03:12 ERROR book 4711 failed after 2310ms (db timeout)", size=17,
-                     color=GREY_A)
-        top = VGroup(t1, prose).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([0, 2.15, 0])
-        regex = mono(r"grep -E 'failed after [0-9]+ms'", size=16, color=NO)
-        regex_l = label(r"breaks when someone rewords the message", font_size=18, color=NO)
-        rx = VGroup(regex, regex_l).arrange(RIGHT, buff=0.35).next_to(top, DOWN, buff=0.3).align_to(top, LEFT)
-        t2 = label(r"the same event as named fields", font_size=20, color=YES)
-        js = code_block(['{"ts": "2026-11-07T14:03:12.481Z",',
-                         ' "level": "error",',
-                         ' "service": "catalog",',
-                         ' "route": "/book/:id",',
-                         ' "book": 4711,',
-                         ' "duration_ms": 2310,',
-                         ' "error": "db timeout",',
-                         ' "trace_id": "4bf92f3577b34da6"}'], size=16)
-        bottom = VGroup(t2, js).arrange(DOWN, aligned_edge=LEFT, buff=0.15).move_to([-3.4, -1.35, 0])
-        hl = SurroundingRectangle(js[-1], color=HEAD, buff=0.05, stroke_width=2)
-        q_t = label(r"questions become queries", font_size=20, color=WHITE)
-        q = code_block(['level = "error"', '| group by route, region', '| count, p99(duration_ms)'], size=16,
-                       color=DATA)
-        qq = VGroup(q_t, q).arrange(DOWN, aligned_edge=LEFT, buff=0.15)
-        qq.move_to([1.5, 0, 0], aligned_edge=LEFT).align_to(bottom, UP)
-        tid = wrapped_label(r"the \textbf{trace id} joins every line one request wrote, \ in every service it "
-                            r"touched", 5.0, font_size=19, color=HEAD).next_to(qq, DOWN, buff=0.45).align_to(qq, LEFT)
-        ill = note(r"illustrative", font_size=16).to_edge(DOWN, buff=0.25).to_edge(RIGHT, buff=0.4)
-        with self.voiceover(
-            "Logs come first. <bookmark mark='a'/> A line of prose is easy to write and hard to use. To count "
-            "failures by route, someone writes a regular expression, and it breaks the day the message is reworded. "
-            "<bookmark mark='b'/> A structured log writes the same event as named fields. <bookmark mark='c'/> Then "
-            "questions become queries over Part 46's append-only streams: errors by route and region, counted, "
-            "with their ninety-ninth percentile. <bookmark mark='d'/> One field matters most: the trace identifier. "
-            "It joins every line that one request wrote, in every service it touched."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(top))
-            self.play(FadeIn(rx))
-            vo.wait_until("b")
-            self.play(FadeIn(t2), LaggedStart(*[FadeIn(x) for x in js], lag_ratio=0.15), run_time=1.5)
-            vo.wait_until("c")
-            self.play(FadeIn(qq))
-            vo.wait_until("d")
-            self.play(Create(hl), FadeIn(tid))
-        self.wait(0.4)
-        self.clear_scene()
 
     def spans(self):
         head = label(r"Spans, \ and the context that links them", font_size=36).to_edge(UP, buff=0.3)
@@ -216,6 +163,10 @@ class Traces(VoiceoverScene):
         self.clear_scene()
 
     def critical(self):
+        self.ask(r"A trace of one slow request. \\ What made it slow?", [r"its longest span",
+                 r"the critical path"], 1,
+                 say="One request's trace has dozens of spans. Where do you look for what made it slow?",
+                 reveal="The critical path: the chain of work the end was actually waiting for.")
         tr = load("trace")
         spans = tr["spans"]
         sp = {s["service"]: s for s in spans}

@@ -23,23 +23,17 @@ def err_col(e: float):
     return YES if e < 0.01 else (HEAD if e < 0.05 else NO)
 
 
-class Metrics(VoiceoverScene):
+class Metrics(WatchScene):
     def construct(self):
         self.card()
         self.kinds()
         self.lies()
         self.fleet()
         self.ddsketch()
-        self.compared()
-        self.cardinality()
 
     def card(self):
-        card = chapter_card(7, r"Metrics, and why averages lie", r"What number describes a latency?",
-                            lit=(2012, 2019), extra=((2012, r"Prometheus, \ at SoundCloud"),
-                                                     (2019, r"Masson, Rim and Lee: \ DDSketch")), part=PART)
-        with self.voiceover("Chapter seven. Metrics, and why averages lie."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Metrics, and why averages lie", r"What number describes a latency?", lit=(2012, 2019), extra=((2012, r"Prometheus, \ at SoundCloud"),
+                                                     (2019, r"Masson, Rim and Lee: \ DDSketch")), part=PART, said="Chapter seven. Metrics, and why averages lie.")
 
     def kinds(self):
         head = label(r"Counters, \ gauges, \ histograms", font_size=36).to_edge(UP, buff=0.3)
@@ -113,6 +107,10 @@ class Metrics(VoiceoverScene):
         self.clear_scene()
 
     def lies(self):
+        self.ask(r"Most requests take 20 ms; a few take seconds. \\ The mean latency describes...", [r"the typical request",
+                 r"neither the typical request nor the tail"], 1,
+                 say="Most requests take twenty milliseconds, and a few take seconds. What does the mean latency describe?",
+                 reveal="Neither: it is far above the typical request and far below the slow ones.")
         s = load("sketches")
         a = load("averages")
         rows = {r["q"]: r for r in s["rows"]}
@@ -294,109 +292,4 @@ class Metrics(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def compared(self):
-        s = load("sketches")
-        names = ("DDSketch", "log-linear", "KLL", "sample of 1000")
-        head = label(r"Four summaries against the true quantiles", font_size=36).to_edge(UP, buff=0.3)
-        qn = {0.5: r"p50", 0.9: r"p90", 0.99: r"p99", 0.999: r"p99.9", 0.9999: r"p99.99"}
-        body, colors = [], []
-        for r in s["rows"]:
-            body.append([qn[r["q"]], ms(r["true"])] + [rf"{100 * r['err ' + n]:.1f}\%" for n in names])
-            colors.append([GREY_A, WHITE] + [err_col(r["err " + n]) for n in names])
-        body.append([r"size", r""] + [rf"{s['size'][n]:,}" for n in names])
-        colors.append([GREY_A, WHITE] + [GREY_A] * 4)
-        tab = grid_table([r"quantile", r"true", r"DDSketch, \ 1\%", r"log-linear \ (HDR)", r"KLL \ (Part 46)",
-                          r"sample of 1{,}000"], body, widths=[1.7, 1.6, 2.2, 2.3, 2.1, 2.3], row_h=0.6,
-                         font_size=21, colors=colors, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.45)
-        sub = label(r"relative error of each estimate; \ size in buckets, \ or values kept", font_size=18,
-                    color=GREY_A).next_to(tab, DOWN, buff=0.15)
-        size_rule = Line(tab.cells[6][0].get_left() + UP * 0.25 + LEFT * 0.1,
-                         [tab.get_right()[0], tab.cells[6][0].get_y() + 0.25, 0], color=GREY_D, stroke_width=1)
-        cols = [VGroup(*[tab.cells[r][c] for r in range(len(tab.cells))]) for c in range(6)]
-        notes = VGroup(
-            wrapped_label(r"KLL bounds the error in \textbf{rank}: \ in a heavy tail, \ neighbouring ranks are far "
-                          r"apart in value", 6.0, font_size=19, color=NO),
-            wrapped_label(r"the log-linear layout of Tene's HdrHistogram: \ each power of two split into 128 parts",
-                          6.0, font_size=19, color=WHITE),
-        ).arrange(RIGHT, buff=0.4, aligned_edge=UP).next_to(sub, DOWN, buff=0.6)
-        with self.voiceover(
-            "Four summaries of the same latencies. <bookmark mark='a'/> DDSketch stays within its one percent "
-            "everywhere. The log-linear layout of Gil Tene's HdrHistogram, each power of two split into a hundred "
-            "and twenty-eight parts, does better still, with three times the buckets. <bookmark mark='b'/> Part "
-            "46's KLL is accurate at the median, but off by almost half at the ninety-nine point ninth "
-            "percentile: it bounds the error in rank, and in a heavy tail neighbouring ranks are far apart in "
-            "value. <bookmark mark='c'/> A random sample of a thousand holds almost none of the tail."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(cols[0]), FadeIn(cols[1]), Create(tab.rule), Create(size_rule),
-                      FadeIn(sub))
-            vo.wait_until("a")
-            self.play(FadeIn(cols[2]))
-            self.play(FadeIn(cols[3]), FadeIn(notes[1]))
-            vo.wait_until("b")
-            self.play(FadeIn(cols[4]), FadeIn(notes[0]))
-            vo.wait_until("c")
-            self.play(FadeIn(cols[5]))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def cardinality(self):
-        head = label(r"Cardinality: \ labels multiply", font_size=36).to_edge(UP, buff=0.3)
-        parts = (("method", 5), ("status", 8), ("route", 40), ("instance", 200))
-        name = mono("http_requests_total", size=24, color=WHITE)
-        tags = VGroup(*[mono(p, size=22, color=DATA) for p, _ in parts])
-        brace_o, brace_c = mono("{", size=24, color=WHITE), mono("}", size=24, color=WHITE)
-        commas = [mono(",", size=22, color=GREY_B) for _ in range(len(parts) - 1)]
-        seq = [name, brace_o]
-        for k, t in enumerate(tags):
-            seq.append(t)
-            if k < len(tags) - 1:
-                seq.append(commas[k])
-        seq.append(brace_c)
-        line = VGroup(*seq).arrange(RIGHT, buff=0.12).move_to([-0.6, 1.9, 0])
-        for k, cm in enumerate(commas):
-            cm.align_to(tags[k], DOWN).shift(DOWN * 0.06)
-        counts = VGroup(*[label(rf"{n}", font_size=26, color=HEAD).next_to(t, DOWN, buff=0.35) for t, (_, n) in
-                          zip(tags, parts)])
-        times = VGroup(*[MathTex(r"\times", font_size=30, color=GREY_B).move_to(
-            (counts[k].get_center() + counts[k + 1].get_center()) / 2) for k in range(len(parts) - 1)])
-        total = 1
-        for _, n in parts:
-            total *= n
-        res = label(rf"$=$ \ {total:,} time series", font_size=28, color=HEAD).next_to(counts, RIGHT, buff=0.35)
-        uid = mono(", user_id", size=22, color=NO)
-        uid_n = label(r"$\times$ \ 1{,}000{,}000 users", font_size=26, color=NO)
-        boom = label(rf"$=$ \ {total * 1_000_000 / 1e11:.1f} $\times 10^{{11}}$ series", font_size=30, color=NO)
-        VGroup(uid_n, boom).arrange(RIGHT, buff=0.35).next_to(counts, DOWN, buff=0.6).set_x(0)
-        # a little grid of series that fills up
-        grid = VGroup(*[Square(0.16, stroke_width=0, fill_color=HEAD, fill_opacity=0.7) for _ in range(160)])
-        grid.arrange_in_grid(rows=4, cols=40, buff=0.05).next_to(boom, DOWN, buff=0.45)
-        g_l = label(r"each series stored and indexed on its own", font_size=17, color=GREY_A).next_to(
-            grid, DOWN, buff=0.12)
-        ill = note(r"illustrative", font_size=16).next_to(line, UP, buff=0.2).align_to(line, LEFT)
-        foot = wrapped_label(r"keep label values few and bounded \ (route templates, \ not paths); \ detail about "
-                             r"single requests belongs in logs and traces", 12.4, font_size=20, color=YES)
-        foot.to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "One more cost. <bookmark mark='a'/> Every distinct combination of label values is a separate time "
-            "series, stored and indexed on its own. <bookmark mark='b'/> Five methods, eight status codes, forty "
-            "routes and two hundred instances make three hundred and twenty thousand series for one metric. "
-            "<bookmark mark='c'/> Add a user identifier, for a million users, and it becomes three hundred and "
-            "twenty billion. <bookmark mark='d'/> So keep label values few and bounded; detail about single "
-            "requests belongs in logs and traces, the next chapter."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(line), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(sq) for sq in grid[:40]], lag_ratio=0.02), FadeIn(g_l), run_time=1.2)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(c) for c in counts], lag_ratio=0.3), FadeIn(times))
-            self.play(FadeIn(res), LaggedStart(*[FadeIn(sq) for sq in grid[40:]], lag_ratio=0.01), run_time=1.5)
-            vo.wait_until("c")
-            uid.next_to(line[-2], RIGHT, buff=0.08).align_to(line[-2], UP)
-            self.play(line[-1].animate.next_to(uid, RIGHT, buff=0.08))
-            self.play(FadeIn(uid), FadeIn(uid_n))
-            self.play(FadeIn(boom), grid.animate.set_fill(NO, 0.8))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()

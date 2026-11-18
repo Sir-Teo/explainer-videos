@@ -13,7 +13,7 @@ def node(text, col, w=2.5, h=0.9, size=19):
     return VGroup(box, t)
 
 
-class Failure(VoiceoverScene):
+class Failure(WatchScene):
     def construct(self):
         self.card()
         self.models()
@@ -22,12 +22,8 @@ class Failure(VoiceoverScene):
         self.loop()
 
     def card(self):
-        card = chapter_card(3, r"How systems fail", r"Why can an overload outlast its cause?", lit=(1983, 2021),
-                            extra=((1983, r"Schlichting and Schneider: \ fail-stop"),
-                                   (2021, r"Bronson et al.: \ metastable failures")), part=PART)
-        with self.voiceover("Chapter three. How systems fail, and why some failures outlast their causes."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"How systems fail", r"Why can an overload outlast its cause?", lit=(1983, 2021), extra=((1983, r"Schlichting and Schneider: \ fail-stop"),
+                                   (2021, r"Bronson et al.: \ metastable failures")), part=PART, said="Chapter three. How systems fail, and why some failures outlast their causes.")
 
     def models(self):
         head = label(r"From fail-stop to gray", font_size=36).to_edge(UP, buff=0.3)
@@ -82,6 +78,10 @@ class Failure(VoiceoverScene):
         self.clear_scene()
 
     def cascade(self):
+        self.ask(r"Five servers, each $72\%$ busy. One fails. \\ The other four are...", [r"comfortable",
+                 r"$90\%$ busy, near the cliff"], 1,
+                 say="Five servers share a load, each seventy-two percent busy. One fails. How busy are the other four?",
+                 reveal="Ninety percent, where queueing delay explodes.")
         head = label(r"A cascading failure", font_size=36).to_edge(UP, buff=0.3)
         n, u0 = 5, 0.72
         BH, BW = 2.2, 1.5
@@ -290,6 +290,12 @@ class Failure(VoiceoverScene):
             self.play(FadeIn(foot))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Series versus parallel availability?", r"Series multiplies; parallel multiplies the downtimes"),
+             (r"What is an error budget?", r"The unreliability the objective allows")],
+            narration="Checkpoint. How do availabilities combine in series and in parallel? And what is an error budget?",
+            answers_narration="In series availabilities multiply; in parallel the unavailabilities do. And the unreliability "
+                              "the objective allows, to be spent on change.")
 
 
 _ = (DATA, LAM)

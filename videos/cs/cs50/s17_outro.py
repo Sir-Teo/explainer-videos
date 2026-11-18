@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -50,6 +50,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a circuit breaker do?", r"Fails fast while a dependency is down, then probes"),
+             (r"Why bound a chaos experiment's blast radius?", r"So the damage is small if the hypothesis is wrong")],
+            narration="Last checkpoint. What does a circuit breaker do? And why bound a chaos experiment's blast radius?",
+            answers_narration="It fails fast while a dependency is down, then lets a probe through to test it. And so that if "
+                              "the hypothesis is wrong, few users notice.")
 
     def payoffs(self):
         card = payoff_card([

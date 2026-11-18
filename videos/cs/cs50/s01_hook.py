@@ -15,11 +15,11 @@ def postmortem(title, when, what, lesson, col, w=4.2, h=3.6):
     return VGroup(frame, t, d, body, les)
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.three()
         self.worst_hour()
-        self.plan()
+        self.title(PART)
 
     def three(self):
         head = label(r"Three post-mortems", font_size=36).to_edge(UP, buff=0.3)
@@ -109,29 +109,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Keeping It Running", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"availability in series and in parallel",
-            r"error budgets, \ and alerts that page only when it matters",
-            r"retries that melt a system, \ and jitter that saves it",
-            r"breakers, \ bulkheads, \ shedding and redundancy",
-            r"metrics, \ traces and profiles that do not lie",
-            r"incidents, \ chaos experiments, \ and the Job under faults",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 50 of Computer Science, Built. <bookmark mark='a'/> We will compose availability in series "
-            "and in parallel; turn reliability into an error budget and derive the alerts that guard it; watch "
-            "retries melt a system and jitter rescue it; build breakers, bulkheads and load shedding; measure with "
-            "metrics, traces and profiles that do not lie; learn how incidents are run and studied; and break the "
-            "Job's own service on purpose, to see what it survives."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES)

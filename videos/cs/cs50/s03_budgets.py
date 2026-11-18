@@ -25,7 +25,7 @@ def defn(title, body, col, w=4.0, h=2.2):
     return VGroup(frame, t, b)
 
 
-class Budgets(VoiceoverScene):
+class Budgets(WatchScene):
     def construct(self):
         self.card()
         self.terms()
@@ -34,12 +34,8 @@ class Budgets(VoiceoverScene):
         self.rules()
 
     def card(self):
-        card = chapter_card(2, r"SLOs and error budgets", r"How unreliable may we be, \ and when should someone wake?",
-                            lit=(2016, 2018), extra=((2016, r"Beyer et al.: \ \textit{Site Reliability Engineering}"),
-                                                     (2018, r"\textit{The Site Reliability Workbook}")), part=PART)
-        with self.voiceover("Chapter two. Objectives, and the budget for failing to meet them."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"SLOs and error budgets", r"How unreliable may we be, \ and when should someone wake?", lit=(2016, 2018), extra=((2016, r"Beyer et al.: \ \textit{Site Reliability Engineering}"),
+                                                     (2018, r"\textit{The Site Reliability Workbook}")), part=PART, said="Chapter two. Objectives, and the budget for failing to meet them.")
 
     def terms(self):
         s = load("slo")
@@ -177,6 +173,10 @@ class Budgets(VoiceoverScene):
         self.clear_scene()
 
     def burn(self):
+        self.ask(r"Errors at ten times the rate the objective allows. \\ A 30-day budget lasts...", [r"30 days",
+                 r"3 days", r"3 hours"], 1,
+                 say="Errors arrive at ten times the rate a thirty-day objective allows. How long does the error budget last?",
+                 reveal="Three days: a burn rate of ten.")
         s = load("slo")
         th = s["thresholds"]
         head = label(r"Burn rate, \ and the thresholds it implies", font_size=36).to_edge(UP, buff=0.3)

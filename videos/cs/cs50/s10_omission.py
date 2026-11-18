@@ -24,7 +24,7 @@ def box(title, body, col, w=5.0, h=1.25):
     return VGroup(r, t, b)
 
 
-class Omission(VoiceoverScene):
+class Omission(WatchScene):
     def construct(self):
         self.card()
         self.stall()
@@ -33,13 +33,9 @@ class Omission(VoiceoverScene):
         self.openclosed()
 
     def card(self):
-        card = chapter_card(9, r"Coordinated omission", r"Why does the load test say the tail is fine?",
-                            lit=(2006,), extra=((2006, r"Schroeder, \ Wierman and Harchol-Balter: \ open versus "
-                                                       r"closed"),), part=PART)
-        with self.voiceover("Chapter nine. Coordinated omission: how a load test can hide the very tail it was "
-                            "built to measure."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Coordinated omission", r"Why does the load test say the tail is fine?", lit=(2006,), extra=((2006, r"Schroeder, \ Wierman and Harchol-Balter: \ open versus "
+                                                       r"closed"),), part=PART, said="Chapter nine. Coordinated omission: how a load test can hide the very tail it was "
+                            "built to measure.")
 
     def stall(self):
         o = load("omission")
@@ -117,6 +113,10 @@ class Omission(VoiceoverScene):
         self.clear_scene()
 
     def reports(self):
+        self.ask(r"A load generator waits for each reply before the next. \\ The server freezes for 4 s. Its 99th percentile...",
+                 [r"shows the freeze", r"hides it"], 1,
+                 say="A load generator waits for each reply before sending the next. The server freezes for four seconds. Does the measured ninety-ninth percentile show it?",
+                 reveal="It hides it: the generator stopped sending during the freeze.")
         o = load("omission")
         cl, tr = o["closed loop"], o["true"]
         head = label(r"What the two measurements report", font_size=36).to_edge(UP, buff=0.3)
@@ -288,6 +288,12 @@ class Omission(VoiceoverScene):
             self.play(FadeIn(notes[3]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What is a metastable failure?", r"Overload that sustains itself after the trigger"),
+             (r"What is coordinated omission?", r"A closed-loop tester skipping the requests a stall delayed")],
+            narration="Checkpoint. What is a metastable failure? And what is coordinated omission?",
+            answers_narration="An overload, often of retries, that keeps itself going after the trigger is gone. And a "
+                              "closed-loop tester that stops sending during a stall, and so never measures it.")
 
 
 _ = (HEAD, LAM, YES)

@@ -9,22 +9,17 @@ CFG = (("naive", r"naive: \ round robin, \ no timeouts", NO),
 FAULT_COL = {"crash": NO, "partition": LAM, "slow": KERN}
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.setup_()
         self.minutes()
         self.budget()
-        self.raft()
         self.ledger()
 
     def card(self):
-        card = chapter_card(14, r"The Job service under faults", r"What does it survive, \ and what does it cost?",
-                            lit=(2011, 2016), extra=((2011, r"Chaos Monkey"), (2016, r"Basiri et al.: \ chaos "
-                                                                                      r"engineering")), part=PART)
-        with self.voiceover("Chapter fourteen. The Job's service, broken on purpose."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"The Job service under faults", r"What does it survive, \ and what does it cost?", lit=(2011, 2016), extra=((2011, r"Chaos Monkey"), (2016, r"Basiri et al.: \ chaos "
+                                                                                      r"engineering")), part=PART, said="Chapter fourteen. The Job's service, broken on purpose.")
 
     def setup_(self):
         c = load("chaos")
@@ -91,6 +86,10 @@ class Job(VoiceoverScene):
         _ = sched
 
     def minutes(self):
+        self.ask(r"One of three replicas crashes. A naive client \\ keeps spreading requests evenly. Lost:",
+                 [r"none", r"about a third"], 1,
+                 say="One of the Job's three replicas crashes, and a naive client keeps spreading requests evenly. How many fail?",
+                 reveal="About a third, until the replica returns.")
         c = load("chaos")
         head = label(r"Good requests, \ minute by minute", font_size=36).to_edge(UP, buff=0.3)
         g = axes([0, 60, 10], [0.6, 1.0, 0.1], x_length=10.5, y_length=4.4, x_label=r"minute",
@@ -167,47 +166,6 @@ class Job(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def raft(self):
-        r = load("raft")
-        head = label(r"The same treatment for Part 38's Raft cluster", font_size=36).to_edge(UP, buff=0.3)
-        n = len(r["per_second"])
-        g = axes([0, n, 10], [0, 1.0, 0.25], x_length=11.0, y_length=3.4, x_label=r"second",
-                 xticks=range(0, n + 1, 10), yticks=(0, 0.5, 1.0), fy=lambda v: rf"{100 * v:.0f}\%")
-        g.next_to(head, DOWN, buff=0.9)
-        ax = g[0]
-        bars = VGroup()
-        for s, v in enumerate(r["per_second"][:-1]):
-            a, b = ax.c2p(s + 0.1, 0), ax.c2p(s + 0.9, max(v, 0.005))
-            bars.add(Rectangle(width=b[0] - a[0], height=b[1] - a[1], stroke_width=0,
-                               fill_color=YES if v > 0.95 else HEAD if v > 0.7 else NO, fill_opacity=0.85).move_to(
-                (a + b) / 2))
-        marks = VGroup()
-        for i, m in enumerate(r["script"]):
-            p = ax.c2p(m["t"], 1.0)
-            ln = DashedLine(ax.c2p(m["t"], 0), p + UP * 0.1, color=GREY_B, stroke_width=1.2)
-            t = label(m["what"], font_size=15, color=GREY_A).next_to(p, UP, buff=0.15 + 0.3 * (i % 2))
-            marks.add(VGroup(ln, t))
-        foot = label(rf"commands committed: \ {r['committed']:,} of {r['sent']:,}; \ safety violations: "
-                     rf"{r['violations']}", font_size=20, color=WHITE).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "Chaos experiments are just as useful on consensus. <bookmark mark='a'/> Here is Part 38's five-node "
-            "Raft cluster taking twenty client commands a second, and the share of each second's commands that "
-            "were eventually committed. <bookmark mark='b'/> When we crash the leader, there is a dip of a fraction "
-            "of a second: the election timeout, then a vote. Cutting the leader off in a minority causes another. "
-            "Crashing two followers costs nothing at all, because three of five is still a majority. "
-            "<bookmark mark='c'/> And through all of it the safety checker found no violation: no committed command "
-            "was ever lost or reordered. The cluster traded a little availability for consistency, exactly as Part "
-            "38 promised it would."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(b) for b in bars], lag_ratio=0.02), run_time=2.5)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(m) for m in marks], lag_ratio=0.3), run_time=2.5)
-            vo.wait_until("c")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def ledger(self):
         j = load("job")

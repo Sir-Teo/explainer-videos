@@ -31,21 +31,15 @@ def flame_graph(frames, x0=-6.3, width=12.6, base=-2.9, row_h=0.56, size=17, nam
     return g
 
 
-class Profiling(VoiceoverScene):
+class Profiling(WatchScene):
     def construct(self):
         self.card()
         self.sampling()
-        self.error()
         self.flame()
-        self.host()
         self.offcpu()
 
     def card(self):
-        card = chapter_card(10, r"Profiling and flame graphs", r"Where does the time go?", lit=(2011,),
-                            extra=((2011, r"Gregg: \ flame graphs"),), part=PART)
-        with self.voiceover("Chapter ten. Profiling: finding where the time goes, and drawing it as a flame graph."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Profiling and flame graphs", r"Where does the time go?", lit=(2011,), extra=((2011, r"Gregg: \ flame graphs"),), part=PART, said="Chapter ten. Profiling: finding where the time goes, and drawing it as a flame graph.")
 
     def sampling(self):
         p = load("profile")
@@ -109,58 +103,11 @@ class Profiling(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def error(self):
-        p = load("profile")
-        head = label(r"How far to trust a sample count", font_size=36).to_edge(UP, buff=0.3)
-        f = MathTex(r"\text{standard error of a share } \hat p \text{ from } n \text{ samples} = "
-                    r"\sqrt{\hat p\,(1-\hat p)\,/\,n}", font_size=30, color=WHITE).next_to(head, DOWN, buff=0.3)
-        by = {r["stack"]: r for r in p["rows"]}
-        keys = ("main;word;scan", "main;word;next", "main;word;cmp", "main;lower", "main;read", "main;word;found",
-                "main;report;printnum;pdig")
-        rows = []
-        for k in keys:
-            r = by[k]
-            c = p["folded"].get(k, 0)
-            rows.append([k, rf"{c:,}", rf"{100 * r['sampled']:.2f}\% $\pm$ {100 * r['se']:.2f}",
-                         rf"{100 * r['true']:.2f}\%", rf"{r['z']:+.1f}"])
-        tab = grid_table([r"stack", r"samples", r"sampled share", r"exact share", r"z"], rows,
-                         widths=[4.2, 1.6, 3.2, 2.0, 1.2], row_h=0.5, font_size=19, mono_cols=(0,))
-        tab.next_to(f, DOWN, buff=0.4)
-        hl_scan = SurroundingRectangle(VGroup(*tab.cells[1][2:4]), color=HEAD, buff=0.06, stroke_width=2)
-        hl_found = SurroundingRectangle(VGroup(*tab.cells[6]), color=LAM, buff=0.05, stroke_width=2)
-        hl_pdig = SurroundingRectangle(VGroup(*tab.cells[7]), color=NO, buff=0.05, stroke_width=2)
-        pdig = p["exact"]["main;report;printnum;pdig"]
-        notes = VGroup(
-            wrapped_label(rf"exact shares: \ every one of the {p['instructions']:,} instructions counted; \ z: \ "
-                          r"the miss in standard errors", 6.0, font_size=19, color=GREY_A),
-            wrapped_label(rf"\texttt{{pdig}} ran {pdig:,} instructions and drew no sample: \ below about $1/n$, \ a "
-                          r"routine can vanish", 6.0, font_size=19, color=NO),
-        ).arrange(RIGHT, buff=0.5, aligned_edge=UP).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "How far can a count of samples be trusted? <bookmark mark='a'/> Each sample lands in a routine with "
-            "some probability p, so the count is binomial: a share from n samples has a standard error of the "
-            "square root of p times one minus p, over n. <bookmark mark='b'/> The emulator also counts every "
-            "instruction exactly. Scan is sampled at forty-two point eight percent, give or take zero point six; "
-            "exactly, it is forty-three point five. <bookmark mark='c'/> Every row but one misses by two standard "
-            "errors or fewer, and that one by just over two, about what a binomial gives across this many rows. <bookmark mark='d'/> The error shrinks only as one over the square root "
-            "of n: four times the samples to halve it. And a routine below one sample's worth of time can vanish: "
-            "the digit printer ran nearly fourteen hundred instructions, and was never sampled."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Write(f), run_time=1.5)
-            vo.wait_until("b")
-            self.play(FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[0])), FadeIn(notes[0]))
-            self.play(LaggedStart(*[FadeIn(VGroup(*r)) for r in tab.cells[1:]], lag_ratio=0.15), run_time=2)
-            self.play(Create(hl_scan))
-            vo.wait_until("c")
-            self.play(Create(hl_found))
-            vo.wait_until("d")
-            self.play(Create(hl_pdig), FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def flame(self):
+        self.ask(r"In a flame graph, the horizontal axis is...", [r"time", r"share of samples"], 1,
+                 say="A flame graph stacks frames on frames. What does its horizontal axis show?",
+                 reveal="Share of samples, sorted alphabetically, not time. Width is cost.")
         p = load("profile")
         fr = p["flame"]
         head = label(r"A flame graph", font_size=36).to_edge(UP, buff=0.3)
@@ -207,49 +154,6 @@ class Profiling(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def host(self):
-        h = load("host")
-        fo = h["folded"]
-        n = h["samples"]
-        head = label(r"The same tool, \ one layer down", font_size=36).to_edge(UP, buff=0.3)
-        short = {"Machine.run": "Machine.run", "Machine.step": "Machine.step", "Machine._decoded": "decode",
-                 "Machine.load": "load", "Machine.store": "", "sext": ""}
-        fg = flame_graph(h["flame"], base=-1.75, row_h=0.8, size=19, names=short)
-        step_self = fo["Machine.run;Machine.step"] / n
-        run_self = fo["Machine.run"] / n
-        dec = fo["Machine.run;Machine.step;Machine._decoded"] / n
-        ld = fo["Machine.run;Machine.step;Machine.load"] / n
-        cap = label(rf"the emulator's own Python stack, \ sampled by a CPU-time timer {h['hz']:,} times a second: \ "
-                    rf"{n} samples", font_size=19, color=GREY_A).next_to(head, DOWN, buff=0.3)
-        notes = VGroup(
-            wrapped_label(rf"\texttt{{step}} itself: \ {100 * step_self:.0f}\%: \ fetch an instruction, \ dispatch "
-                          r"on its opcode, \ do the arithmetic in Python", 4.0, font_size=19, color=KERN),
-            wrapped_label(rf"\texttt{{load}} {100 * ld:.0f}\%, \ the decoded-instruction cache {100 * dec:.0f}\%, \ "
-                          rf"the loop in \texttt{{run}} {100 * run_self:.0f}\%", 4.0, font_size=19, color=HEAD),
-            wrapped_label(r"the guest profile tells the Job's author to change the algorithm; \ this one tells the "
-                          r"emulator's author to change the interpreter", 4.0, font_size=19, color=YES),
-        ).arrange(RIGHT, buff=0.3, aligned_edge=UP).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "The same idea works one layer down. <bookmark mark='a'/> Here a timer signal, firing a thousand times "
-            "a second of processor time, samples the Python stack of the emulator itself. <bookmark mark='b'/> "
-            "Sixty percent of the samples are in step: fetching, dispatching and executing each instruction in "
-            "Python. Memory loads take fifteen percent, and the cache of decoded instructions twelve. <bookmark "
-            "mark='c'/> The guest profile told the Job's author to change the algorithm. This one tells the "
-            "emulator's author where the interpreter is slow."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(FadeIn(cap))
-            for d in fg.depths:
-                self.play(LaggedStart(*[GrowFromEdge(c, DOWN) for c in d], lag_ratio=0.05), run_time=0.6)
-            vo.wait_until("b")
-            self.play(FadeIn(notes[0]), Indicate(fg.boxes["Machine.run;Machine.step"], color=WHITE,
-                                                 scale_factor=1.02))
-            self.play(FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def offcpu(self):
         head = label(r"Off-CPU time, \ and eBPF", font_size=36).to_edge(UP, buff=0.3)

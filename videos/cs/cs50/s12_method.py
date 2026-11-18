@@ -10,23 +10,18 @@ def lamp(col, on=True, s=0.42):
     return Square(side_length=s, stroke_color=col, stroke_width=1.6, fill_color=col, fill_opacity=0.75 if on else 0.08)
 
 
-class Method(VoiceoverScene):
+class Method(WatchScene):
     def construct(self):
         self.card()
         self.use_red()
-        self.roofline()
         self.capacity()
-        self.regressions()
 
     def card(self):
-        card = chapter_card(11, r"Performance method and capacity", r"Where do you look first, \ and how much do you "
+        self.chapter(11, r"Performance method and capacity", r"Where do you look first, \ and how much do you "
                             r"need?", lit=(1917, 2009), extra=((1917, r"Erlang: \ waiting at telephone exchanges"),
                                                                (2009, r"Williams, \ Waterman and Patterson: \ the "
-                                                                      r"roofline")), part=PART)
-        with self.voiceover("Chapter eleven. Performance as a method: where to look first, how much capacity to "
-                            "buy, and how to notice when things get slower."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                                                      r"roofline")), part=PART, said="Chapter eleven. Performance as a method: where to look first, how much capacity to "
+                            "buy, and how to notice when things get slower.")
 
     def use_red(self):
         head = label(r"Checklists: \ USE and RED", font_size=36).to_edge(UP, buff=0.3)
@@ -103,59 +98,12 @@ class Method(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def roofline(self):
-        head = label(r"The roofline, \ again", font_size=36).to_edge(UP, buff=0.3)
-        g = axes([0, 4, 1], [0, 3, 1], x_length=6.6, y_length=4.4,
-                 x_label=r"arithmetic intensity: \ operations per byte from memory",
-                 y_label=r"attainable operations per second", xticks=(0, 1, 2, 3, 4), yticks=(),
-                 fx=lambda v: (r"1/10", r"1", r"10", r"100", r"1000")[int(v)])
-        g.next_to(head, DOWN, buff=0.45).to_edge(LEFT, buff=0.9)
-        ax = g.ax
-        ridge = 2.0                     # in log10 units (+1): where the slanted roof meets the flat one
-        mem = Line(ax.c2p(0, 0.6), ax.c2p(ridge, 2.6), color=DATA, stroke_width=4)
-        cpu = Line(ax.c2p(ridge, 2.6), ax.c2p(4, 2.6), color=KERN, stroke_width=4)
-        d = ax.c2p(ridge, 2.6) - ax.c2p(0, 0.6)
-        mem_l = label(r"memory bandwidth", font_size=18, color=DATA).rotate(math.atan2(d[1], d[0]))
-        mem_l.next_to(mem.get_center(), UL, buff=0.02)
-        cpu_l = label(r"peak arithmetic", font_size=18, color=KERN).next_to(cpu, UP, buff=0.1)
-        rd = Dot(ax.c2p(ridge, 2.6), radius=0.07, color=WHITE)
-        rd_l = label(r"ridge", font_size=17, color=WHITE).next_to(rd, DOWN, buff=0.15)
-        a = Dot(ax.c2p(0.9, 1.0), radius=0.09, color=NO)
-        a_l = label(r"a table scan", font_size=18, color=NO).next_to(a, DOWN, buff=0.15)
-        b = Dot(ax.c2p(3.2, 2.25), radius=0.09, color=YES)
-        b_l = label(r"a tiled matrix multiply", font_size=18, color=YES).next_to(b, DOWN, buff=0.15)
-        ill = note(r"schematic", font_size=16).next_to(ax, UP, buff=0.05).align_to(ax, RIGHT)
-        notes = VGroup(
-            wrapped_label(r"Williams, \ Waterman and Patterson, \ 2009: \ performance is capped by the lower of two "
-                          r"roofs", 4.8, font_size=19, color=WHITE),
-            wrapped_label(r"left of the ridge, \ faster arithmetic buys nothing: \ move fewer bytes \ (Part 9's "
-                          r"caches and tiles)", 4.8, font_size=19, color=DATA),
-            wrapped_label(r"right of it, \ the processor is the limit: \ vectorise, \ or buy a bigger one \ "
-                          r"(\emph{AI, \ Built} 17's accelerators)", 4.8, font_size=19, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(g, RIGHT, buff=0.5).align_to(g, UP)
-        with self.voiceover(
-            "For code that computes, the first question is which resource is the limit, and Part 9's roofline "
-            "answers it on one chart. <bookmark mark='a'/> Samuel Williams, Andrew Waterman and David Patterson "
-            "drew it in 2009. Across, the arithmetic a kernel does per byte it fetches from memory; up, the "
-            "operations per second it can reach. Two roofs cap it: the slope of memory bandwidth, and the flat line "
-            "of peak arithmetic. <bookmark mark='b'/> A table scan does little arithmetic per byte and sits under "
-            "the slope. A faster processor buys it nothing; moving fewer bytes, with Part 9's caches and tiles, buys "
-            "everything. <bookmark mark='c'/> A tiled matrix multiply sits under the flat roof, where only more "
-            "arithmetic helps, the territory of AI, Built's Part 17 accelerators. Measure first where a program "
-            "sits, then decide what to change."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(Create(mem), FadeIn(mem_l), FadeIn(notes[0]))
-            self.play(Create(cpu), FadeIn(cpu_l), FadeIn(rd), FadeIn(rd_l))
-            vo.wait_until("b")
-            self.play(FadeIn(a, scale=1.5), FadeIn(a_l), FadeIn(notes[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(b, scale=1.5), FadeIn(b_l), FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     def capacity(self):
+        self.ask(r"Each book takes 80 ms; 100 books a second; \\ servers kept $70\%$ busy. Servers:", [r"$8$",
+                 r"$12$", r"$100$"], 1,
+                 say="Each book takes eighty milliseconds, a hundred arrive each second, and servers should stay seventy percent busy. How many servers?",
+                 reveal="About twelve: eight servers' worth of work, divided by point seven.")
         rows = load("capacity")["rows"]
         head = label(r"Capacity planning for the Job service", font_size=36).to_edge(UP, buff=0.3)
         sub = label(r"80 ms of work per book; \ target: \ mean wait under 20 ms, \ and at most 20\% of requests "
@@ -211,54 +159,6 @@ class Method(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def regressions(self):
-        c = load("changepoint")
-        xs = c["series"]
-        n = len(xs)
-        head = label(r"Catching a regression in CI", font_size=36).to_edge(UP, buff=0.3)
-        g = axes([0, n, 10], [0.94, 1.09, 0.03], x_length=11.0, y_length=4.2, x_label=r"commit",
-                 y_label=r"benchmark time, \ relative", xticks=range(0, n + 1, 10),
-                 yticks=(0.94, 0.97, 1.0, 1.03, 1.06, 1.09), fy=lambda v: rf"{v:.2f}")
-        g.next_to(head, DOWN, buff=0.35)
-        ax = g.ax
-        dots = VGroup(*[Dot(ax.c2p(i, v), radius=0.045, color=DATA) for i, v in enumerate(xs)])
-        rings = VGroup(*[Circle(radius=0.13, color=NO, stroke_width=2.5).move_to(ax.c2p(i, xs[i]))
-                         for i in c["naive_alerts"]])
-        k = c["found"]
-        split = DashedLine(ax.c2p(k - 0.5, 0.94), ax.c2p(k - 0.5, 1.09), color=YES, stroke_width=2)
-        m1 = Line(ax.c2p(0, c["before"]), ax.c2p(k - 0.5, c["before"]), color=YES, stroke_width=4)
-        m2 = Line(ax.c2p(k - 0.5, c["after"]), ax.c2p(n, c["after"]), color=YES, stroke_width=4)
-        m_l = label(rf"mean {c['before']:.3f} \ $\to$ \ {c['after']:.3f}", font_size=19, color=YES).move_to(
-            ax.c2p(68, 0.955))
-        naive_l = wrapped_label(rf"naive rule, \ alert when a run is 5\% slower than the one before: \ "
-                                rf"{len(c['naive_alerts'])} alerts, \ at commits "
-                                rf"{', '.join(str(i) for i in c['naive_alerts'])}", 6.0, font_size=19, color=NO)
-        cp_l = wrapped_label(rf"change point: \ the split that best separates two means, \ at commit {k}; \ none of "
-                             rf"{round(1 / c['p']) - 1:,} shuffles of the data splits as well", 6.0, font_size=19,
-                             color=YES)
-        VGroup(naive_l, cp_l).arrange(RIGHT, buff=0.5, aligned_edge=UP).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Last, regressions. A team wants to know the day its code got slower, not the month. <bookmark "
-            "mark='a'/> Here are eighty commits, each benchmarked once. Runs vary by about two percent, and from "
-            "commit fifty-two on, the code is three percent slower. <bookmark mark='b'/> A naive rule alerts "
-            "whenever a run is five percent slower than the one before. It fires five times. Four are noise, and "
-            "the real one looks no different from them. <bookmark mark='c'/> Change-point detection asks where one "
-            "split would best separate the series into two different means. It answers commit fifty-two: from one "
-            "point zero zero zero to one point zero three two. <bookmark mark='d'/> Is that luck? Shuffle the "
-            "measurements and search again. In two thousand shuffles, none split as well. MongoDB's engineers "
-            "described running tests of this kind on their benchmarks in continuous integration in 2020."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(g))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(d) for d in dots], lag_ratio=0.03), run_time=2.5)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[Create(r) for r in rings], lag_ratio=0.25), FadeIn(naive_l), run_time=1.8)
-            vo.wait_until("c")
-            self.play(Create(split), Create(m1), Create(m2), FadeIn(m_l))
-            vo.wait_until("d")
-            self.play(FadeIn(cp_l))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, KERN)

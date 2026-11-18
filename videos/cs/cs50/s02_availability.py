@@ -59,7 +59,7 @@ def parallel_bank(n, xl, xr, y, gap=0.8, length=0.8):
     return VGroup(rails, legs, *sws), sws
 
 
-class Availability(VoiceoverScene):
+class Availability(WatchScene):
     def construct(self):
         self.card()
         self.nines()
@@ -69,12 +69,8 @@ class Availability(VoiceoverScene):
         self.common()
 
     def card(self):
-        card = chapter_card(1, r"Availability arithmetic", r"How do the parts' nines make the whole's?",
-                            lit=(1938, 1956), extra=((1938, r"Shannon: \ switching circuits"),
-                                                     (1956, r"Moore and Shannon: \ reliable circuits")), part=PART)
-        with self.voiceover("Chapter one. The arithmetic of availability."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"Availability arithmetic", r"How do the parts' nines make the whole's?", lit=(1938, 1956), extra=((1938, r"Shannon: \ switching circuits"),
+                                                     (1956, r"Moore and Shannon: \ reliable circuits")), part=PART, said="Chapter one. The arithmetic of availability.")
 
     def nines(self):
         rows = load("nines")["rows"]
@@ -118,6 +114,10 @@ class Availability(VoiceoverScene):
         self.clear_scene()
 
     def laws(self):
+        self.ask(r"Four parts in series, each $99.9\%$ available. \\ The whole:", [r"$99.9\%$", r"$99.6\%$",
+                 r"$99\%$"], 1,
+                 say="A request passes through four parts in a row, each up ninety-nine point nine percent of the time. How available is the whole?",
+                 reveal="Ninety-nine point six: in series, availabilities multiply.")
         laws = load("compose")["laws"]
         ser = {r["n"]: r for r in laws["series"]}
         par = {r["n"]: r for r in laws["parallel"]}
