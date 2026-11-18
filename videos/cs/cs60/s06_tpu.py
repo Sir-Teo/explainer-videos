@@ -6,7 +6,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs60.common import (BG, DATA, FRACTION, HEAD, KERN, LAM, NO, PART, YES, LogPlot, commas, grid_table,
                                    load, module_box, say_dec, say_int)
 
-class Tpu(VoiceoverScene):
+class Tpu(WatchScene):
     def construct(self):
         self.card()
         self.chip()
@@ -17,12 +17,8 @@ class Tpu(VoiceoverScene):
         self.errors()
 
     def card(self):
-        card = chapter_card(5, r"The TPU, \ and fewer bits", r"What do the numbers in Google's TPU paper mean?",
-                            lit=(2015, 2017), extra=((2015, r"the TPU in Google's data centres"),
-                                                     (2017, r"Jouppi et al.: \ the TPU paper")), part=PART)
-        with self.voiceover("Chapter five. The TPU, and fewer bits."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"The TPU, \ and fewer bits", r"What do the numbers in Google's TPU paper mean?", lit=(2015, 2017), extra=((2015, r"the TPU in Google's data centres"),
+                                                     (2017, r"Jouppi et al.: \ the TPU paper")), part=PART, said="Chapter five. The TPU, and fewer bits.")
 
     def chip(self):
         t = load("energy")["tpu"]
@@ -340,6 +336,10 @@ class Tpu(VoiceoverScene):
         self.clear_scene()
 
     def errors(self):
+        self.ask(r"Quantize a small classifier to eight-bit integers. \\ Its accuracy...", [r"collapses",
+                 r"barely changes"], 1,
+                 say="Quantize a small classifier's weights and inputs to eight-bit integers, with thirty-two-bit accumulators. What happens to its accuracy?",
+                 reveal="It barely changes.")
         q = load("quant")
         mm, cl = q["matmul"], q["classifier"]
         e = load("energy")

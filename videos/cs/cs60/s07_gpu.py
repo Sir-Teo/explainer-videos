@@ -13,7 +13,7 @@ V100_TENSOR = 125e12
 V100_BW = 900e9
 
 
-class Gpu(VoiceoverScene):
+class Gpu(WatchScene):
     def construct(self):
         self.card()
         self.simt()
@@ -23,13 +23,15 @@ class Gpu(VoiceoverScene):
         self.tiles()
 
     def card(self):
-        card = chapter_card(6, r"GPUs revisited", r"How did a graphics chip become a matrix machine?",
-                            lit=(2006, 2017), extra=((2006, r"CUDA"), (2017, r"Volta: \ tensor cores")), part=PART)
-        with self.voiceover("Chapter six. GPUs revisited."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"GPUs revisited", r"How did a graphics chip become a matrix machine?", lit=(2006, 2017), extra=((2006, r"CUDA"), (2017, r"Volta: \ tensor cores")), part=PART, said="Chapter six. GPUs revisited.")
 
     def simt(self):
+        self.wrong_idea(r"GPUs are fast because their cores are fast",
+                        r"each lane is slow and simple; \\ the win is one instruction for many lanes",
+                        narration="It is easy to assume a GPU is fast because its cores are fast.",
+                        right_narration="Each lane is slower and simpler than a CPU core. The win is that one fetched "
+                                        "instruction drives thirty-two lanes, and one tensor instruction sixty-four multiply-adds.")
+        self.clear_scene()
         head = label(r"One instruction, \ thirty-two lanes", font_size=36).to_edge(UP, buff=0.3)
         lanes = VGroup(*[Square(0.55, stroke_color=GREY_B, stroke_width=1.5, fill_color=BG, fill_opacity=1)
                          for _ in range(32)]).arrange_in_grid(4, 8, buff=0.1)
@@ -86,6 +88,10 @@ class Gpu(VoiceoverScene):
         self.clear_scene()
 
     def tensor(self):
+        self.ask(r"One tensor-core operation on $4 \times 4$ matrices. \\ Multiply-adds:", [r"$1$", r"$16$",
+                 r"$64$"], 2,
+                 say="A tensor core computes D equals A B plus C on four by four matrices. How many multiply-adds is that?",
+                 reveal="Sixty-four, for one instruction's overhead.")
         head = label(r"A tensor core: \ a small matrix multiplier", font_size=36).to_edge(UP, buff=0.3)
         A = [[1, 2, 0, 1], [0, 1, 3, 2], [2, 0, 1, 1], [1, 1, 2, 0]]
         B = [[2, 1, 0, 1], [1, 0, 2, 1], [0, 3, 1, 2], [1, 2, 1, 0]]

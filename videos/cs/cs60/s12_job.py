@@ -36,7 +36,7 @@ def lines(texts, color, size=17):
     return VGroup(*[mono(t, size=size, color=color) for t in texts]).arrange(DOWN, buff=0.1)
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.pipeline()
@@ -48,12 +48,8 @@ class Job(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(11, r"The Job in hardware", r"What if the Job were a circuit?", lit=(1978, 2014),
-                            extra=((1978, r"Kung and Leiserson: \ systolic arrays"),
-                                   (2014, r"Putnam et al.: \ search ranking on FPGAs")), part=PART)
-        with self.voiceover("Chapter eleven. The Job in hardware."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"The Job in hardware", r"What if the Job were a circuit?", lit=(1978, 2014), extra=((1978, r"Kung and Leiserson: \ systolic arrays"),
+                                   (2014, r"Putnam et al.: \ search ranking on FPGAs")), part=PART, said="Chapter eleven. The Job in hardware.")
 
     def _stages(self, w=2.45, h=1.25, gap=0.6, y=1.0):
         boxes = VGroup(*[RoundedRectangle(width=w, height=h, corner_radius=0.12, stroke_color=c, stroke_width=2.4,
@@ -399,6 +395,10 @@ class Job(VoiceoverScene):
         self.clear_scene()
 
     def lanes(self):
+        self.ask(r"Cut the text into lanes, each with its own unit, \\ and merge the tables at the end. Speed:",
+                 [r"the same", r"grows with the lanes"], 1,
+                 say="Cut the novels into lanes at word boundaries, each lane with its own counting unit, and merge the tables at the end. How does speed change?",
+                 reveal="It grows with the number of lanes, until the merge or memory limits it.")
         j = load("job")["job"]
         m = load("roofline")["machine"]
         L = j["lanes"]

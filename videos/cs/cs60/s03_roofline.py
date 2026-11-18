@@ -41,7 +41,7 @@ def sig(x: float) -> str:
     return f"{x:.2g}"
 
 
-class Roofline(VoiceoverScene):
+class Roofline(WatchScene):
     def construct(self):
         self.card()
         self.derive()
@@ -51,13 +51,8 @@ class Roofline(VoiceoverScene):
         self.reading()
 
     def card(self):
-        card = chapter_card(2, r"The roofline model", r"How fast could this kernel possibly run here?",
-                            lit=(1995, 2009), extra=((1995, r"McCalpin: \ STREAM"),
-                                                     (2009, r"Williams, \ Waterman and Patterson: \ the roofline")),
-                            part=PART)
-        with self.voiceover("Chapter two. The roofline model."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(2, r"The roofline model", r"How fast could this kernel possibly run here?", lit=(1995, 2009), extra=((1995, r"McCalpin: \ STREAM"),
+                                                     (2009, r"Williams, \ Waterman and Patterson: \ the roofline")), part=PART, said="Chapter two. The roofline model.")
 
     def derive(self):
         head = label(r"Two limits on every kernel", font_size=36).to_edge(UP, buff=0.3)
@@ -119,6 +114,10 @@ class Roofline(VoiceoverScene):
         self.clear_scene()
 
     def intensity(self):
+        self.ask(r"Axpy: $y \leftarrow a x + y$, in doubles. \\ Flops per byte moved:", [r"about $0.1$",
+                 r"about $1$", r"about $10$"], 0,
+                 say="Axpy sets y to a x plus y, in double precision. How many operations does it do per byte moved?",
+                 reveal="About a twelfth: two flops for every twenty-four bytes. Memory decides its speed.")
         pts = load("roofline")["points"]
         first = {}
         for p in pts:

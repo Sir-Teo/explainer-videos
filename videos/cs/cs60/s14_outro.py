@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -49,6 +49,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does 2:4 sparsity require?", r"Two zeros in every four weights"),
+             (r"Why compute near memory?", r"Moving data costs more than computing on it")],
+            narration="Last checkpoint. What does two-of-four structured sparsity require? And why compute near memory?",
+            answers_narration="At least two zeros in every group of four weights, so the hardware can skip them. And because "
+                              "moving a byte costs far more energy than computing on it.")
 
     def payoffs(self):
         card = payoff_card([

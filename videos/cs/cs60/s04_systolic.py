@@ -11,7 +11,7 @@ def int_matrix(M, color=WHITE, font_size=34, h_buff=1.0):
     return m
 
 
-class Systolic(VoiceoverScene):
+class Systolic(WatchScene):
     def construct(self):
         self.card()
         self.product()
@@ -21,12 +21,8 @@ class Systolic(VoiceoverScene):
         self.verify()
 
     def card(self):
-        card = chapter_card(3, r"A systolic array", r"Can a grid of simple cells multiply matrices with no program?",
-                            lit=(1978, 1982), extra=((1978, r"Kung and Leiserson: \ systolic arrays"),
-                                                     (1982, r"Kung: \ why systolic architectures?")), part=PART)
-        with self.voiceover("Chapter three. A systolic array."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"A systolic array", r"Can a grid of simple cells multiply matrices with no program?", lit=(1978, 1982), extra=((1978, r"Kung and Leiserson: \ systolic arrays"),
+                                                     (1982, r"Kung: \ why systolic architectures?")), part=PART, said="Chapter three. A systolic array.")
 
     def product(self):
         w = load("wave")["os"]
@@ -146,6 +142,10 @@ class Systolic(VoiceoverScene):
         self.clear_scene()
 
     def timing(self):
+        self.ask(r"Row $i$ of $A$ enters the grid $i$ cycles late. \\ Why?", [r"to save power",
+                 r"so matching numbers meet in the right cell"], 1,
+                 say="In the systolic array, row i of A enters i cycles late, and column j of B j cycles late. Why?",
+                 reveal="So that A i k and B k j arrive at cell i j on the same tick.")
         n = load("wave")["os"]["n"]
         head = label(r"When do the numbers meet?", font_size=36).to_edge(UP, buff=0.3)
         cols = [DATA, LAM, YES, HEAD, KERN, NO, GREY_B]
@@ -284,6 +284,12 @@ class Systolic(VoiceoverScene):
             self.play(FadeIn(notes[2]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the roofline's ridge mark?", r"The intensity where compute replaces memory as the limit"),
+             (r"Why do accelerators win?", r"One instruction's overhead buys many operations")],
+            narration="Checkpoint. What does the roofline's ridge point mark? And why do accelerators win?",
+            answers_narration="The arithmetic intensity at which the limit switches from memory to compute. And because one "
+                              "instruction's fetch and decode is spread over many operations.")
 
 
 def say_gates(n: int) -> str:
