@@ -24,7 +24,7 @@ def tile(title, body, col, w=5.8, h=2.2):
     return VGroup(frame, t, b)
 
 
-class Collab(VoiceoverScene):
+class Collab(WatchScene):
     def construct(self):
         self.card()
         self.design()
@@ -34,12 +34,8 @@ class Collab(VoiceoverScene):
         self.cursors()
 
     def card(self):
-        card = chapter_card(9, r"A collaborative editor", r"How do several people type into one document at once?",
-                            lit=(1989, 2011), extra=((1989, r"Ellis and Gibbs: \ transformation"),
-                                                     (2011, r"Shapiro et al.: \ CRDTs")), part=PART)
-        with self.voiceover("Chapter nine. A collaborative editor."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"A collaborative editor", r"How do several people type into one document at once?", lit=(1989, 2011), extra=((1989, r"Ellis and Gibbs: \ transformation"),
+                                                     (2011, r"Shapiro et al.: \ CRDTs")), part=PART, said="Chapter nine. A collaborative editor.")
 
     def design(self):
         head = label(r"Requirements, \ and the design", font_size=36).to_edge(UP, buff=0.3)
@@ -99,6 +95,10 @@ class Collab(VoiceoverScene):
         self.clear_scene()
 
     def positions(self):
+        self.ask(r"A inserts at position 4; B deletes at 2. \\ Applied as they are, in different orders. The copies...",
+                 [r"agree", r"diverge"], 1,
+                 say="One editor inserts at position four while another deletes at position two. Each copy applies both, in a different order. Do they agree?",
+                 reveal="They diverge. Positions only mean something in the state they were made in.")
         o = load("ot")["example"]
         a, b = o["a"], o["b"]
         head = label(r"Concurrent edits: \ positions shift", font_size=36).to_edge(UP, buff=0.3)

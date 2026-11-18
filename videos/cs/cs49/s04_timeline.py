@@ -28,7 +28,7 @@ def post_chip(text, color, w=1.3, h=0.4, size=17):
     return VGroup(r, mono(text, size=size, color=color).move_to(r))
 
 
-class Timeline(VoiceoverScene):
+class Timeline(WatchScene):
     def construct(self):
         self.card()
         self.readpath()
@@ -37,15 +37,13 @@ class Timeline(VoiceoverScene):
         self.ryw()
 
     def card(self):
-        card = chapter_card(3, r"A news feed: \ ranking and reading",
-                            r"Which posts come first, \ and how do you page through a moving list?",
-                            lit=(2010, 2016), extra=((2010, r"EdgeRank described"),
-                                                     (2016, r"Twitter's ranked timeline")), part=PART)
-        with self.voiceover("Chapter three. A news feed, continued: ranking, and reading."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(3, r"A news feed: \ ranking and reading", r"Which posts come first, \ and how do you page through a moving list?", lit=(2010, 2016), extra=((2010, r"EdgeRank described"),
+                                                     (2016, r"Twitter's ranked timeline")), part=PART, said="Chapter three. A news feed, continued: ranking, and reading.")
 
     def readpath(self):
+        self.ask(r"A cached timeline per user keeps...", [r"every post ever", r"the latest few hundred"], 1,
+                 say="Each user's timeline is cached. How many posts does it keep?",
+                 reveal="The latest few hundred. Anything older is rebuilt on demand.")
         f = load("feed")
         head = label(r"The read path", font_size=36).to_edge(UP, buff=0.3)
         y = 1.3

@@ -31,7 +31,7 @@ def big(x):
     return f"{x:,}".replace(",", "{,}")
 
 
-class Shortener(VoiceoverScene):
+class Shortener(WatchScene):
     def construct(self):
         self.card()
         self.napkin()
@@ -41,11 +41,7 @@ class Shortener(VoiceoverScene):
         self.traffic()
 
     def card(self):
-        card = chapter_card(1, r"A URL shortener", r"How short can a link be, \ and how fast can it answer?",
-                            lit=(2002, 2010), extra=((2002, r"TinyURL"), (2010, r"Snowflake IDs")), part=PART)
-        with self.voiceover("Chapter one. A URL shortener."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(1, r"A URL shortener", r"How short can a link be, \ and how fast can it answer?", lit=(2002, 2010), extra=((2002, r"TinyURL"), (2010, r"Snowflake IDs")), part=PART, said="Chapter one. A URL shortener.")
 
     def napkin(self):
         head = label(r"Requirements and the napkin", font_size=36).to_edge(UP, buff=0.3)
@@ -91,6 +87,9 @@ class Shortener(VoiceoverScene):
         self.clear_scene()
 
     def space(self):
+        self.ask(r"Codes from 62 symbols, for a trillion links. \\ Characters needed:", [r"$5$", r"$7$", r"$12$"], 1,
+                 say="Short codes use sixty-two symbols: letters in both cases and digits. How many characters cover a trillion links?",
+                 reveal="Seven: sixty-two to the seventh is three and a half trillion.")
         s = load("shortener")
         ex = s["example"]
         head = label(r"The ID space: \ base 62", font_size=36).to_edge(UP, buff=0.3)

@@ -9,7 +9,7 @@ def _path(points):
     return VMobject().set_points_as_corners([[x, y, 0] for x, y in points])
 
 
-class Crawler(VoiceoverScene):
+class Crawler(WatchScene):
     def construct(self):
         self.card()
         self.napkin()
@@ -18,12 +18,8 @@ class Crawler(VoiceoverScene):
         self.dedup()
 
     def card(self):
-        card = chapter_card(5, r"A web crawler", r"How do you fetch a billion pages, \ politely, \ once each?",
-                            lit=(1999, 2007), extra=((1999, r"Heydon and Najork: \ Mercator"),
-                                                     (2007, r"Manku et al.: \ SimHash dedup")), part=PART)
-        with self.voiceover("Chapter five. A web crawler."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(5, r"A web crawler", r"How do you fetch a billion pages, \ politely, \ once each?", lit=(1999, 2007), extra=((1999, r"Heydon and Najork: \ Mercator"),
+                                                     (2007, r"Manku et al.: \ SimHash dedup")), part=PART, said="Chapter five. A web crawler.")
 
     def napkin(self):
         c = load("crawler")
@@ -237,6 +233,10 @@ class Crawler(VoiceoverScene):
         self.clear_scene()
 
     def dedup(self):
+        self.ask(r"The seen-set is a Bloom filter. \\ A false positive makes the crawler...", [r"fetch a page twice",
+                 r"skip a page it never fetched"], 1,
+                 say="The crawler's set of seen URLs is a Bloom filter. What does a false positive do?",
+                 reveal="Skips a page it never fetched. A Bloom filter never says no wrongly.")
         b = load("bloom")
         c = load("crawler")
         head = label(r"Seen before? \ A Bloom filter", font_size=36).to_edge(UP, buff=0.3)

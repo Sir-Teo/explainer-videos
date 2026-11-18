@@ -13,24 +13,22 @@ def tile(title, body, col, w=4.2, h=3.0):
     return VGroup(frame, t, b)
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.failures()
         self.checklist()
         self.research()
-        self.open()
 
     def card(self):
-        card = chapter_card(13, r"Frontier: \ how designs fail, \ and what is unknown",
-                            r"What do outages teach that designs miss?", lit=(2014, 2016),
-                            extra=((2014, r"Yuan et al.: \ simple testing"),
-                                   (2016, r"Gunawi et al.: \ cloud outages")), part=PART)
-        with self.voiceover("Chapter thirteen, the frontier. What do real outages teach, that designs miss?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Frontier: \ how designs fail, \ and what is unknown", r"What do outages teach that designs miss?", lit=(2014, 2016), extra=((2014, r"Yuan et al.: \ simple testing"),
+                                   (2016, r"Gunawi et al.: \ cloud outages")), part=PART, said="Chapter thirteen, the frontier. What do real outages teach, that designs miss?")
 
     def failures(self):
+        self.ask(r"Catastrophic failures in widely used distributed systems \\ mostly come from...", [r"hardware",
+                 r"mishandled errors in simple code"], 1,
+                 say="Researchers studied catastrophic failures in five widely used distributed systems. Where did most begin?",
+                 reveal="In mishandled errors, often in simple code that a test would have caught.")
         head = label(r"How systems actually fail", font_size=36).to_edge(UP, buff=0.3)
         tiles = VGroup(
             tile(r"error handling", r"Yuan et al. \ (OSDI 2014) \ studied failures of five distributed systems: \ "
@@ -126,38 +124,6 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Composable guarantees}: \ deriving a system's latency and consistency from "
-                          r"its blocks'.", 12.4, font_size=24, color=WHITE),
-            wrapped_label(r"2. \ \textbf{Testing error paths}: \ finding the mishandled non-fatal errors before "
-                          r"production does.", 12.4, font_size=24, color=YES),
-            wrapped_label(r"3. \ \textbf{Feed ranking and fan-out together}: \ the cheapest timeline construction "
-                          r"for a given ranking quality.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Adaptive bitrate}: \ control with guarantees on rebuffering under unknown "
-                          r"bandwidth.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ the fan-out policy, \ per user and per "
-                             r"post, \ that minimizes the total work of a feed for a given power law and read-write "
-                             r"ratio, \ with a proof", 12.4, font_size=23, color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Deriving a whole system's latency and consistency from the "
-            "guarantees of its blocks. <bookmark mark='b'/> Finding the mishandled non-fatal errors before "
-            "production finds them. <bookmark mark='c'/> Building timelines at the least cost for a given quality of "
-            "ranking. <bookmark mark='d'/> And bitrate adaptation with guarantees on rebuffering when the bandwidth "
-            "is unknown. <bookmark mark='e'/> This part's research problem asks for the best fan-out policy, chosen "
-            "per user and per post, for a follower graph with a given power law and a given ratio of reads to "
-            "writes, together with a proof that it is best."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, NO, YES)

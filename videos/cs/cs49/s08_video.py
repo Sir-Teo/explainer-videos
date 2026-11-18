@@ -13,7 +13,7 @@ def steps(ax, pts):
     return VMobject().set_points_as_corners(P)
 
 
-class Video(VoiceoverScene):
+class Video(WatchScene):
     def construct(self):
         self.card()
         self.ladder()
@@ -22,14 +22,14 @@ class Video(VoiceoverScene):
         self.results()
 
     def card(self):
-        card = chapter_card(7, r"A video platform", r"Which quality should the player download next?",
-                            lit=(2014, 2015), extra=((2014, r"Huang et al.: \ buffer-based"),
-                                                     (2015, r"Yin et al.: \ MPC")), part=PART)
-        with self.voiceover("Chapter seven. A video platform."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"A video platform", r"Which quality should the player download next?", lit=(2014, 2015), extra=((2014, r"Huang et al.: \ buffer-based"),
+                                                     (2015, r"Yin et al.: \ MPC")), part=PART, said="Chapter seven. A video platform.")
 
     def ladder(self):
+        self.ask(r"Why encode every upload several times?", [r"as backups",
+                 r"a ladder of bitrates for every connection"], 1,
+                 say="A video platform encodes every upload several times. Why?",
+                 reveal="A ladder of bitrates and resolutions, so each viewer gets the best their connection carries.")
         a = load("abr")
         lad = a["ladder"]
         head = label(r"A ladder of qualities, \ cut into segments", font_size=36).to_edge(UP, buff=0.3)

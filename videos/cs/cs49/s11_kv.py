@@ -25,7 +25,7 @@ def on_ring(g, deg, extra=0.0):
     return g.center_ + (g.r + extra) * np.array([np.cos(a), np.sin(a), 0])
 
 
-class Kv(VoiceoverScene):
+class Kv(WatchScene):
     def construct(self):
         self.card()
         self.requirements()
@@ -35,13 +35,8 @@ class Kv(VoiceoverScene):
         self.conflicts()
 
     def card(self):
-        card = chapter_card(10, r"A Dynamo-style key-value store",
-                            r"How does a store stay writable while machines fail?", lit=(1997, 2007),
-                            extra=((1997, r"Karger et al.: \ consistent hashing"),
-                                   (2007, r"DeCandia et al.: \ Dynamo")), part=PART)
-        with self.voiceover("Chapter ten. A Dynamo-style key-value store."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"A Dynamo-style key-value store", r"How does a store stay writable while machines fail?", lit=(1997, 2007), extra=((1997, r"Karger et al.: \ consistent hashing"),
+                                   (2007, r"DeCandia et al.: \ Dynamo")), part=PART, said="Chapter ten. A Dynamo-style key-value store.")
 
     def packets(self, pairs, color=HEAD, run_time=0.8):
         """Dots travelling from a to b, all at once."""
@@ -298,6 +293,10 @@ class Kv(VoiceoverScene):
         self.clear_scene()
 
     def conflicts(self):
+        self.ask(r"Two clients update one cart during a partition. \\ Dynamo...", [r"keeps the last write",
+                 r"keeps both versions, to merge"], 1,
+                 say="Two clients update the same shopping cart while the network is split. What does Dynamo do?",
+                 reveal="Keeps both versions, tagged with version vectors, and lets the cart merge them.")
         head = label(r"Conflicts, \ and the price of availability", font_size=36).to_edge(UP, buff=0.3)
         specs = [("[X:1]", r"\{book\}", WHITE, [-5.6, 1.6]),
                  ("[X:2]", r"\{book, pen\}", WHITE, [-3.6, 1.6]),

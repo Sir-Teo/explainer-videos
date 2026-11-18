@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs49.common import BG, DATA, HEAD, KERN, LAM, NO, PART, YES, grid_table, load
 
 
-class Job(VoiceoverScene):
+class Job(WatchScene):
     def construct(self):
         self.card()
         self.napkin()
@@ -12,14 +12,13 @@ class Job(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(12, r"The Job at a million books a day", r"What does the series' program cost at scale?",
-                            lit=(1965, 2006), extra=((1965, r"Moore's observation"),
-                                                     (2006, r"computing rented by the hour")), part=PART)
-        with self.voiceover("Chapter twelve. The Job at a million books a day."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"The Job at a million books a day", r"What does the series' program cost at scale?", lit=(1965, 2006), extra=((1965, r"Moore's observation"),
+                                                     (2006, r"computing rented by the hour")), part=PART, said="Chapter twelve. The Job at a million books a day.")
 
     def napkin(self):
+        self.ask(r"A million books a day is about...", [r"1 a second", r"12 a second", r"1000 a second"], 1,
+                 say="The Job receives a million books a day. How many a second is that?",
+                 reveal="About eleven and a half, and a few times that at the peak.")
         j = load("job")
         head = label(r"The napkin", font_size=36).to_edge(UP, buff=0.3)
         rows = [[r"books uploaded", r"1,000,000 a day", rf"{j['uploads_per_s']:.1f} a second"],
