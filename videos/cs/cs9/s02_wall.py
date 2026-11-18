@@ -47,7 +47,7 @@ class Wall(WatchScene):
         quote = label(r"Wulf and McKee, \ 1995: \ ``Hitting the memory wall: \ implications of the obvious''",
                       font_size=22, color=HIST).to_edge(DOWN, buff=0.25)
         with self.voiceover(
-            "These curves illustrate a historical divergence;. <bookmark mark='a'/> Processor performance improved rapidly in the selected "
+            "These curves illustrate a historical divergence. <bookmark mark='a'/> Processor performance improved rapidly in the selected "
             "era, with changes in clocks, parallel execution and other design choices. <bookmark mark='b'/> DRAM "
             "access latency improved more slowly. The red curve represents improvement in latency, so rising means "
             "shorter access time, not increasing delay. <bookmark mark='c'/> Compounding different rates creates a "
