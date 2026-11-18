@@ -29,7 +29,7 @@ def crash_mark(size=0.26):
     return VGroup(s, t)
 
 
-class Data(VoiceoverScene):
+class Data(WatchScene):
     def construct(self):
         self.card()
         self.own()
@@ -40,13 +40,8 @@ class Data(VoiceoverScene):
         self.isolation()
 
     def card(self):
-        card = chapter_card(10, r"Data across services", r"How do services agree on facts without sharing a database?",
-                            lit=(1987, 2018), extra=((1987, r"Garcia-Molina and Salem: \ sagas"),
-                                                     (2018, r"Richardson: \ \textit{Microservices Patterns}")),
-                            part=PART)
-        with self.voiceover("Chapter ten. Data across services."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Data across services", r"How do services agree on facts without sharing a database?", lit=(1987, 2018), extra=((1987, r"Garcia-Molina and Salem: \ sagas"),
+                                                     (2018, r"Richardson: \ \textit{Microservices Patterns}")), part=PART, said="Chapter ten. Data across services.")
 
     def own(self):
         head = label(r"A database per service", font_size=36).to_edge(UP, buff=0.3)
@@ -110,6 +105,10 @@ class Data(VoiceoverScene):
         return VGroup(t, a, b, arr)
 
     def dualwrite(self):
+        self.ask(r"Write the order, then publish its event. \\ $1\%$ crash between them, 10,000 orders. Broken:",
+                 [r"none", r"about a hundred"], 1,
+                 say="A service writes each order to its database, then publishes an event. One time in a hundred it crashes in between. Over ten thousand orders, how many go wrong?",
+                 reveal="About a hundred: orders with no event.")
         o = load("outbox")
         M = o["modes"]
         n = o["orders"]

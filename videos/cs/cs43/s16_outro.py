@@ -17,7 +17,7 @@ def tile(content, caption, color, TW=3.6, TH=2.3):
     return Group(frame, content, cap)
 
 
-class Outro(VoiceoverScene):
+class Outro(WatchScene):
     def construct(self):
         self.recap()
         self.payoffs()
@@ -51,6 +51,12 @@ class Outro(VoiceoverScene):
             self.play(LaggedStart(*[FadeIn(t, shift=UP * 0.15) for t in tiles], lag_ratio=0.25), run_time=4.0)
         self.wait(0.5)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does a transactional outbox fix?", r"Lost events between two writes"),
+             (r"What does a saga give up?", r"Isolation: steps commit one by one")],
+            narration="Last checkpoint. What does a transactional outbox fix? And what does a saga give up?",
+            answers_narration="The crash between writing data and publishing its event. And isolation: each step commits at "
+                              "once, and failures are undone by compensations.")
 
     def payoffs(self):
         card = payoff_card([

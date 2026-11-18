@@ -5,7 +5,7 @@ from videos.cs.cs43.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, gri
                                    module_box, mono)
 
 
-class Micro(VoiceoverScene):
+class Micro(WatchScene):
     def construct(self):
         self.card()
         self.split()
@@ -14,12 +14,8 @@ class Micro(VoiceoverScene):
         self.deadline()
 
     def card(self):
-        card = chapter_card(9, r"Monoliths and microservices", r"When is one program better as many?",
-                            lit=(2003, 2014), extra=((2003, r"Evans: \ \textit{Domain-Driven Design}"),
-                                                     (2014, r"Lewis and Fowler: \ ``Microservices''")), part=PART)
-        with self.voiceover("Chapter nine. Monoliths and microservices."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(9, r"Monoliths and microservices", r"When is one program better as many?", lit=(2003, 2014), extra=((2003, r"Evans: \ \textit{Domain-Driven Design}"),
+                                                     (2014, r"Lewis and Fowler: \ ``Microservices''")), part=PART, said="Chapter nine. Monoliths and microservices.")
 
     def split(self):
         head = label(r"One program, \ or many", font_size=36).to_edge(UP, buff=0.3)
@@ -192,6 +188,10 @@ class Micro(VoiceoverScene):
         self.clear_scene()
 
     def deadline(self):
+        self.ask(r"A request has 150 ms. It passes through three services. \\ Each should wait...",
+                 [r"its own fixed timeout", r"whatever is left of the deadline"], 1,
+                 say="A request must be answered within a hundred and fifty milliseconds, and passes through three services. How long should each wait?",
+                 reveal="Whatever is left of the deadline, carried along with the request.")
         b = load("budget")
         rows, slo = b["rows"], b["slo"]
         head = label(r"A deadline travels with the request", font_size=36).to_edge(UP, buff=0.3)

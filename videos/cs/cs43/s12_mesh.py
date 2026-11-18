@@ -17,23 +17,17 @@ def compact(obj) -> str:
     return json.dumps(obj, separators=(",", ":"))
 
 
-class Mesh(VoiceoverScene):
+class Mesh(WatchScene):
     def construct(self):
         self.card()
         self.discovery()
         self.balance()
-        self.sidecar()
         self.oauth()
         self.jwt()
-        self.macaroons()
 
     def card(self):
-        card = chapter_card(11, r"Finding, routing and trusting services", r"Which server, \ and who is asking?",
-                            lit=(2012, 2014), extra=((2012, r"OAuth 2.0 \ (RFC 6749)"),
-                                                     (2014, r"Birgisson et al.: \ macaroons")), part=PART)
-        with self.voiceover("Chapter eleven. Finding, routing and trusting services."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"Finding, routing and trusting services", r"Which server, \ and who is asking?", lit=(2012, 2014), extra=((2012, r"OAuth 2.0 \ (RFC 6749)"),
+                                                     (2014, r"Birgisson et al.: \ macaroons")), part=PART, said="Chapter eleven. Finding, routing and trusting services.")
 
     def discovery(self):
         head = label(r"Finding a service", font_size=36).to_edge(UP, buff=0.3)
@@ -90,6 +84,10 @@ class Mesh(VoiceoverScene):
         self.clear_scene()
 
     def balance(self):
+        self.ask(r"Send each request to the less loaded of \\ two random servers. The longest queue is...",
+                 [r"about the same", r"dramatically shorter"], 1,
+                 say="Instead of one random server, pick two at random and send the request to the less loaded. What happens to the longest queue?",
+                 reveal="Dramatically shorter: from log n over log log n to log log n.")
         bal = load("balance")
         P = bal["policies"]
         head = label(r"The power of two choices", font_size=36).to_edge(UP, buff=0.3)
@@ -160,65 +158,6 @@ class Mesh(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def sidecar(self):
-        head = label(r"Sidecars and the service mesh", font_size=36).to_edge(UP, buff=0.3)
-
-        def pod(app, color, x):
-            a = module_box(app, color, w=1.9, h=0.6, font=19)
-            s = module_box(r"sidecar", KERN, w=1.9, h=0.6, font=19)
-            g = VGroup(a, s).arrange(DOWN, buff=0.35).move_to([x, 0.55, 0])
-            frame = DashedVMobject(RoundedRectangle(width=2.5, height=g.height + 0.5, corner_radius=0.15,
-                                                    color=GREY_B, stroke_width=1.5), num_dashes=40).move_to(g)
-            link = Line(a.get_bottom(), s.get_top(), color=GREY_B, stroke_width=2)
-            return VGroup(frame, a, s, link)
-        pa = pod(r"orders", HEAD, -5.1)
-        pb = pod(r"payments", YES, 5.1)
-        wire = Line(pa[2].get_right(), pb[2].get_left(), color=YES, stroke_width=3)
-        lock = label(r"mutual TLS", font_size=18, color=YES).next_to(wire, DOWN, buff=0.12)
-        feats = VGroup(*[tag_box(t, KERN, size=15) for t in ("retries", "timeouts", "circuit breaker", "mTLS")])
-        feats.arrange(RIGHT, buff=0.2).next_to(wire, UP, buff=0.25)
-        cp = module_box(r"control plane \ (Istio, \ Linkerd)", LAM, w=4.4, h=0.6, font=19).move_to([0, 2.45, 0])
-        cpl = VGroup(*[DashedLine(cp.get_left() if p is pa else cp.get_right(), p[0].get_top(), color=LAM,
-                                  stroke_width=1.5, dash_length=0.08) for p in (pa, pb)])
-        cpt = label(r"configuration and certificates", font_size=16, color=LAM).next_to(cp, DOWN, buff=0.1)
-        dot = Dot(radius=0.09, color=HEAD).move_to(pa[1])
-        path = [pa[2].get_center(), pb[2].get_center(), pb[1].get_center()]
-        spiffe = VGroup(mono("spiffe://shop.example/ns/prod/sa/orders", size=16, color=YES),
-                        label(r"a workload identity \ (SPIFFE), \ written into the certificate", font_size=18,
-                              color=GREY_A)).arrange(DOWN, buff=0.1).move_to([0, -1.35, 0])
-        notes = VGroup(
-            wrapped_label(r"every call passes through a local proxy \ (Envoy); \ the policy that chapters 5 and 8 "
-                          r"asked of every client lives in one place, \ for every language", 12.4, font_size=20,
-                          color=WHITE),
-            wrapped_label(r"mutual TLS \ (Part 30, \ with certificates on both sides): \ the server learns which "
-                          r"service is calling, \ not just that the line is encrypted", 12.4, font_size=20,
-                          color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.22).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Every service needs retries, timeouts and encryption. <bookmark mark='a'/> A service mesh takes them out"
-            " of the application: beside each service runs a sidecar proxy, such as Envoy, and every call goes "
-            "through it. <bookmark mark='b'/> The sidecar retries with backoff, enforces timeouts, and opens a "
-            "circuit breaker to stop calling a server that keeps failing. <bookmark mark='c'/> Between sidecars runs "
-            "mutual TLS, Part 30's handshake with certificates on both sides, so the server learns which service is "
-            "calling; SPIFFE names each workload. <bookmark mark='d'/> A control plane, such as Istio or Linkerd, "
-            "hands out configuration and certificates."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(pa[0]), FadeIn(pa[1]), FadeIn(pb[0]), FadeIn(pb[1]))
-            vo.wait_until("a")
-            self.play(FadeIn(pa[2]), FadeIn(pb[2]), Create(pa[3]), Create(pb[3]), Create(wire), FadeIn(notes[0]))
-            self.add(dot)
-            for p in path:
-                self.play(dot.animate.move_to(p), run_time=0.7)
-            self.play(FadeOut(dot, scale=0.5), run_time=0.4)
-            vo.wait_until("b")
-            self.play(LaggedStart(*[FadeIn(f) for f in feats[:3]], lag_ratio=0.4), run_time=1.5)
-            vo.wait_until("c")
-            self.play(FadeIn(feats[3]), FadeIn(lock), FadeIn(notes[1]))
-            self.play(FadeIn(spiffe))
-            vo.wait_until("d")
-            self.play(FadeIn(cp), Create(cpl), FadeIn(cpt))
-        self.wait(0.4)
-        self.clear_scene()
 
     def oauth(self):
         head = label(r"OAuth 2.0: \ the authorization-code flow", font_size=36).to_edge(UP, buff=0.3)
@@ -350,55 +289,6 @@ class Mesh(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def macaroons(self):
-        head = label(r"Capabilities and macaroons", font_size=36).to_edge(UP, buff=0.3)
-        chain = [(r"identifier", r"$\sigma_0 = \mathrm{HMAC}(k, \mathrm{id})$", HEAD),
-                 (r"\texttt{service = photos}", r"$\sigma_1 = \mathrm{HMAC}(\sigma_0, c_1)$", DATA),
-                 (r"\texttt{op = read}", r"$\sigma_2 = \mathrm{HMAC}(\sigma_1, c_2)$", DATA),
-                 (r"\texttt{before 2026-12-01}", r"$\sigma_3 = \mathrm{HMAC}(\sigma_2, c_3)$", LAM)]
-        boxes = VGroup()
-        for cav, sig, c in chain:
-            top = label(cav, font_size=18, color=c)
-            bot = label(sig, font_size=18, color=WHITE)
-            g = VGroup(top, bot).arrange(DOWN, buff=0.18)
-            r = RoundedRectangle(width=3.0, height=1.2, corner_radius=0.1, stroke_color=c, stroke_width=2,
-                                 fill_color=BG, fill_opacity=1).move_to(g)
-            boxes.add(VGroup(r, g))
-        boxes.arrange(RIGHT, buff=0.3).move_to([0, 1.3, 0])
-        arr = VGroup(*[Arrow(boxes[i].get_right(), boxes[i + 1].get_left(), buff=0.02, color=GREY_B, stroke_width=2,
-                             max_tip_length_to_length_ratio=0.4) for i in range(3)])
-        who = VGroup(label(r"the issuer, \ with secret key $k$", font_size=17, color=HEAD).next_to(boxes[0], UP,
-                                                                                                 buff=0.15),
-                     label(r"any holder, \ without $k$: \ attenuate", font_size=17, color=LAM).next_to(
-                         VGroup(boxes[2], boxes[3]), UP, buff=0.15))
-        ill = label(r"illustrative", font_size=16, color=GREY_B).next_to(boxes, DOWN, buff=0.12).align_to(boxes, RIGHT)
-        lines = VGroup(
-            wrapped_label(r"a bearer token is a \textbf{capability}: \ holding it is the permission", 12.4,
-                          font_size=20, color=WHITE),
-            wrapped_label(r"adding a caveat needs only the last signature; \ removing one would mean inverting "
-                          r"HMAC, \ so a token can only be weakened", 12.4, font_size=20, color=LAM),
-            wrapped_label(r"the issuer recomputes the chain from $k$ and checks every caveat \ (Birgisson et al., "
-                          r"\ 2014); \ Part 55 builds trust this way", 12.4, font_size=20, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "A bearer token is a capability: whoever holds it may use it. Macaroons, from Birgisson and colleagues in"
-            " 2014, are capabilities any holder can weaken. <bookmark mark='a'/> The issuer signs an identifier with "
-            "its secret key. <bookmark mark='b'/> Each caveat, such as only photos, only reading, only until "
-            "December, is signed with the previous signature, so a holder can narrow a token without the key; "
-            "removing a caveat would mean undoing a hash. <bookmark mark='c'/> The issuer recomputes the chain and "
-            "checks every caveat. Part 55 returns to them."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(lines[0]))
-            vo.wait_until("a")
-            self.play(FadeIn(boxes[0]), FadeIn(who[0]), FadeIn(ill))
-            vo.wait_until("b")
-            for i in (1, 2, 3):
-                self.play(GrowArrow(arr[i - 1]), FadeIn(boxes[i], shift=LEFT * 0.2), run_time=0.7)
-            self.play(FadeIn(who[1]), FadeIn(lines[1]))
-            vo.wait_until("c")
-            self.play(FadeIn(lines[2]), *[Indicate(b[0], color=YES, scale_factor=1.03) for b in boxes])
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG,)

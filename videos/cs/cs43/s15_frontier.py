@@ -12,23 +12,21 @@ def node(name, color, w=2.2):
     return VGroup(r, label(name, font_size=20, color=color).move_to(r))
 
 
-class Frontier(VoiceoverScene):
+class Frontier(WatchScene):
     def construct(self):
         self.card()
         self.choreo()
         self.proofs()
-        self.testing()
-        self.open()
 
     def card(self):
-        card = chapter_card(14, r"Frontier: \ services you can prove", r"Can a system of services be shown correct?",
-                            lit=(1993, 2015), extra=((1993, r"Honda: \ session types"),
-                                                     (2015, r"IronFleet, \ Verdi; \ TLA$^+$ at Amazon")), part=PART)
-        with self.voiceover("Chapter fourteen, the frontier. Can a system of services be shown to be correct?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"Frontier: \ services you can prove", r"Can a system of services be shown correct?", lit=(1993, 2015), extra=((1993, r"Honda: \ session types"),
+                                                     (2015, r"IronFleet, \ Verdi; \ TLA$^+$ at Amazon")), part=PART, said="Chapter fourteen, the frontier. Can a system of services be shown to be correct?")
 
     def choreo(self):
+        self.ask(r"Write the whole conversation once, \\ then generate each service's part. Can they deadlock?",
+                 [r"maybe", r"no, by construction"], 1,
+                 say="Write the conversation between services once, from above, and generate each service's code from it. Can they deadlock?",
+                 reveal="No: that's choreographic programming's guarantee.")
         head = label(r"Protocols as types", font_size=36).to_edge(UP, buff=0.3)
         roles = [(r"client", DATA), (r"orders", HEAD), (r"payments", YES)]
         cols = VGroup(*[node(t, c) for t, c in roles]).arrange(RIGHT, buff=1.8).next_to(head, DOWN, buff=0.35)
@@ -121,82 +119,7 @@ class Frontier(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def testing(self):
-        head = label(r"Testing the whole system", font_size=36).to_edge(UP, buff=0.3)
-        tiles = []
-        for title, body, col in (
-                (r"deterministic simulation", r"FoundationDB runs the whole database in one process against a "
-                 r"simulated network, \ disks and clock: \ every failure reproducible from a seed", YES),
-                (r"Jepsen", r"Kyle Kingsbury's tests partition real clusters and check the histories: \ many "
-                 r"databases broke their published guarantees", NO),
-                (r"chaos engineering", r"Netflix's Chaos Monkey \ (2011) \ kills production machines on purpose, "
-                 r"\ so that recovery is exercised every day", KERN)):
-            frame = RoundedRectangle(width=4.2, height=3.2, corner_radius=0.15, stroke_color=col, stroke_width=2,
-                                     fill_color=BG, fill_opacity=1)
-            t = label(title, font_size=22, color=col)
-            b = wrapped_label(body, 3.8, font_size=18, color=GREY_A)
-            VGroup(t, b).arrange(DOWN, buff=0.3).move_to(frame)
-            tiles.append(VGroup(frame, t, b))
-        VGroup(*tiles).arrange(RIGHT, buff=0.3).next_to(head, DOWN, buff=0.5)
-        foot = wrapped_label(r"our own simulator is the first of these in miniature: \ the Job's network is seeded, "
-                             r"\ so every lost message in this part can be replayed exactly", 12.4, font_size=20,
-                             color=HEAD).to_edge(DOWN, buff=0.5)
-        with self.voiceover(
-            "Between models and production there is testing of the whole system. <bookmark mark='a'/> The team "
-            "behind FoundationDB built their database so that all of it could run in one process against a "
-            "simulated network, simulated disks and a simulated clock, with failures injected and every run "
-            "reproducible from a random seed. <bookmark mark='b'/> Kyle Kingsbury's Jepsen tests partition real "
-            "clusters and check the histories they record; many databases have been shown to break their own "
-            "published guarantees. <bookmark mark='c'/> And chaos engineering, starting with Netflix's Chaos Monkey "
-            "in 2011, kills production machines on purpose so that recovery is exercised every day. "
-            "<bookmark mark='d'/> Our own simulator is the first of these in miniature: its network is seeded, so "
-            "every lost message in this part can be replayed exactly."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, t in zip("abc", tiles):
-                vo.wait_until(mk)
-                self.play(FadeIn(t, shift=UP * 0.15))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
-    def open(self):
-        head = label(r"Open", font_size=36).to_edge(UP, buff=0.3)
-        items = VGroup(
-            wrapped_label(r"1. \ \textbf{Failure-aware protocol types}: \ session types that account for lost "
-                          r"messages, \ retries and crashes, \ and still rule out errors.", 12.4, font_size=24,
-                          color=WHITE),
-            wrapped_label(r"2. \ \textbf{Compatibility you can prove}: \ deciding that a new API version keeps every "
-                          r"existing client working, \ behaviour included, \ not just types.", 12.4, font_size=24,
-                          color=YES),
-            wrapped_label(r"3. \ \textbf{Verification that scales}: \ proofs of real service systems at the cost of "
-                          r"writing tests.", 12.4, font_size=24, color=HEAD),
-            wrapped_label(r"4. \ \textbf{Stable retry policies}: \ retry and timeout rules for a whole call graph "
-                          r"that provably cannot amplify an overload.", 12.4, font_size=24, color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).next_to(head, DOWN, buff=0.45)
-        star = wrapped_label(r"$\bigstar$ \ this part's research problem: \ a compatibility checker for service APIs "
-                             r"that proves every existing client still completes every run of the protocol against "
-                             r"the new version, \ under loss, \ duplication and reordering", 12.4, font_size=23,
-                             color=LAM).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Open problems. <bookmark mark='a'/> Protocol types that account for failure: lost messages, retries "
-            "and crashes, while still ruling out errors. <bookmark mark='b'/> Compatibility you can prove: deciding "
-            "that a new version of an API keeps every existing client working, its behaviour as well as its types. "
-            "<bookmark mark='c'/> Verification that scales to real systems of services at something like the cost "
-            "of writing tests. <bookmark mark='d'/> And retry policies for a whole call graph that provably cannot "
-            "turn a small overload into a large one. <bookmark mark='e'/> This part's research problem asks for a "
-            "compatibility checker that proves every existing client still completes every run of its protocol "
-            "against a new version, even when messages are lost, duplicated and reordered."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, it in zip("abcd", items):
-                vo.wait_until(mk)
-                self.play(FadeIn(it))
-            vo.wait_until("e")
-            self.play(FadeIn(star))
-        self.wait(0.6)
-        self.clear_scene()
 
 
 _ = (DATA, NO, YES)

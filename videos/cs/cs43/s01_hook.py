@@ -8,12 +8,12 @@ FALLACIES = [r"the network is reliable", r"latency is zero", r"bandwidth is infi
              r"the network is homogeneous"]
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.fallacies()
         self.outages()
         self.job()
-        self.plan()
+        self.title(PART)
 
     def fallacies(self):
         head = label(r"Eight things that are not true", font_size=36).to_edge(UP, buff=0.3)
@@ -138,29 +138,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ APIs and Services", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"why a remote call is not a local one",
-            r"Protocol Buffers' bytes, \ derived; \ schemas that evolve",
-            r"REST, \ gRPC, \ GraphQL, \ and pagination that does not lie",
-            r"exactly once $=$ at least once $+$ deduplication",
-            r"queues, \ backpressure and retry storms",
-            r"outboxes, \ sagas, \ meshes, \ tokens and clocks",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 43 of Computer Science, Built, the fourth part of Act Eight. <bookmark mark='a'/> We will "
-            "see why a remote call can never be made to look exactly like a local one; derive the bytes Protocol "
-            "Buffers puts on the wire and the rules for changing a schema safely; compare the styles of API; prove "
-            "that exactly-once delivery is at-least-once delivery plus deduplication; and watch queues, retries, "
-            "outboxes and sagas keep a system of services correct while its network misbehaves."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (DATA, KERN, LAM, YES)

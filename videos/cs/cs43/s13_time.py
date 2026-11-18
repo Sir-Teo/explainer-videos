@@ -19,23 +19,18 @@ def clock_face(color, r=0.95):
     return g
 
 
-class Time(VoiceoverScene):
+class Time(WatchScene):
     def construct(self):
         self.card()
         self.clocks()
         self.dst()
         self.leap()
         self.y2038()
-        self.rules()
         self.skew()
 
     def card(self):
-        card = chapter_card(12, r"Time in APIs", r"What time is it, \ and how long did that take?",
-                            lit=(1972, 2022), extra=((1972, r"the first leap second"),
-                                                     (2022, r"CGPM: \ leap seconds to end by 2035")), part=PART)
-        with self.voiceover("Chapter twelve. Time in APIs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Time in APIs", r"What time is it, \ and how long did that take?", lit=(1972, 2022), extra=((1972, r"the first leap second"),
+                                                     (2022, r"CGPM: \ leap seconds to end by 2035")), part=PART, said="Chapter twelve. Time in APIs.")
 
     def clocks(self):
         head = label(r"Two clocks", font_size=36).to_edge(UP, buff=0.3)
@@ -92,6 +87,9 @@ class Time(VoiceoverScene):
         self.clear_scene()
 
     def dst(self):
+        self.ask(r"New York, 8 March 2026. \\ Does 2:30 a.m. local time exist?", [r"yes", r"no"], 1,
+                 say="New York, the eighth of March 2026. Does two thirty in the morning exist?",
+                 reveal="No: the clocks jump from two straight to three.")
         T = load("time")
         g = T["dst_gap"]
         start = datetime.fromisoformat(g["start"])
@@ -276,49 +274,6 @@ class Time(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def rules(self):
-        T = load("time")
-        start = datetime.fromisoformat(T["dst_gap"]["start"])
-        utc = start.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-        head = label(r"Rules for time in an API", font_size=36).to_edge(UP, buff=0.3)
-        spec = [(r"store instants in UTC", utc, YES),
-                (r"keep the zone \textit{name} for local times, \ not an offset", "America/New_York, not -05:00",
-                 DATA),
-                (r"on the wire, \ ISO 8601 \ (RFC 3339), \ with the offset", start.isoformat(), LAM),
-                (r"measure durations with a monotonic clock", "time.monotonic()", HEAD),
-                (r"never do calendar arithmetic by adding seconds", "8 March 2026 in New York: 23 hours", NO)]
-        rows = VGroup()
-        for i, (r, ex, c) in enumerate(spec):
-            n = label(f"{i + 1}", font_size=24, color=c)
-            t = wrapped_label(r, 5.4, font_size=21, color=WHITE)
-            e = mono(ex, size=16, color=c)
-            rows.add(VGroup(n, t, e))
-        for k, row in enumerate(rows):
-            yy = 2.2 - k * 0.95
-            row[0].move_to([-6.3, yy, 0])
-            row[1].move_to([-5.9, yy, 0], aligned_edge=LEFT)
-            row[2].move_to([0.6, yy, 0], aligned_edge=LEFT)
-        rules_ = VGroup(*[Line([-6.6, 2.2 - k * 0.95 - 0.47, 0], [6.6, 2.2 - k * 0.95 - 0.47, 0], color=GREY_E,
-                               stroke_width=1) for k in range(4)])
-        note = wrapped_label(r"an offset says where a time was, \ once; \ a zone name says how that place's clocks "
-                             r"will change, \ which a meeting next July needs", 12.4, font_size=19,
-                             color=GREY_A).to_edge(DOWN, buff=0.4)
-        with self.voiceover(
-            "So an API that handles time keeps a few rules. <bookmark mark='a'/> Store instants in UTC. "
-            "<bookmark mark='b'/> For a local time, such as a meeting, keep the zone's name, America slash New York, "
-            "rather than an offset: the offset changes twice a year, and the zone's rules change by law. "
-            "<bookmark mark='c'/> On the wire, write ISO 8601, in the RFC 3339 profile, with the offset included. "
-            "<bookmark mark='d'/> Measure durations with the monotonic clock. <bookmark mark='e'/> And never do "
-            "calendar arithmetic by adding seconds: in New York, the eighth of March 2026 had only twenty-three "
-            "hours."
-        ) as vo:
-            self.play(FadeIn(head), Create(rules_))
-            for mk, row in zip("abcde", rows):
-                vo.wait_until(mk)
-                self.play(FadeIn(row[0]), FadeIn(row[1]), FadeIn(row[2], shift=LEFT * 0.2))
-            self.play(FadeIn(note))
-        self.wait(0.4)
-        self.clear_scene()
 
     def skew(self):
         head = label(r"Expiry, \ and clocks that disagree", font_size=36).to_edge(UP, buff=0.3)

@@ -20,24 +20,18 @@ def half_point(p: float) -> float:
     return math.log(2) / -math.log(1 - p)
 
 
-class Design(VoiceoverScene):
+class Design(WatchScene):
     def construct(self):
         self.card()
         self.hyrum()
         self.additive()
         self.versions()
-        self.resources()
         self.contracts()
-        self.postel()
 
     def card(self):
-        card = chapter_card(6, r"Designing and versioning APIs", r"How does an interface change without breaking "
-                            r"its users?", lit=(1981, 2019, 2023),
-                            extra=((1981, r"Postel: \ the robustness principle"), (2019, r"RFC 8594: \ Sunset"),
-                                   (2023, r"RFC 9413")), part=PART)
-        with self.voiceover("Chapter six. Designing and versioning APIs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Designing and versioning APIs", r"How does an interface change without breaking "
+                            r"its users?", lit=(1981, 2019, 2023), extra=((1981, r"Postel: \ the robustness principle"), (2019, r"RFC 8594: \ Sunset"),
+                                   (2023, r"RFC 9413")), part=PART, said="Chapter six. Designing and versioning APIs.")
 
     def hyrum(self):
         head = label(r"Hyrum's law, \ as a model", font_size=36).to_edge(UP, buff=0.3)
@@ -90,6 +84,10 @@ class Design(VoiceoverScene):
         self.clear_scene()
 
     def additive(self):
+        self.ask(r"Add a field to an API's response. \\ Safe?", [r"always",
+                 r"only if clients ignore unknown fields"], 1,
+                 say="An API adds a new field to its responses. Is that a safe change?",
+                 reveal="Only if every client ignores fields it doesn't recognise. Some don't.")
         head = label(r"Changes that break, \ and changes that don't", font_size=36).to_edge(UP, buff=0.3)
         code = code_block(["{", '  "id": 42,', '  "title": "Moby-Dick",', '  "price": 1299,',
                            '  "status": "in_stock",', '  "isbn": "978-..."', "}"], size=21)
@@ -194,55 +192,6 @@ class Design(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def resources(self):
-        head = label(r"Resource-oriented design", font_size=36).to_edge(UP, buff=0.3)
-        chain = VGroup()
-        for t, kind in ((r"publishers", "c"), (r"123", "r"), (r"books", "c"), (r"456", "r")):
-            col = DATA if kind == "c" else HEAD
-            b = module_box(rf"\texttt{{{t}}}", col, w=2.1, h=0.6, font=20)
-            cap = label(r"collection" if kind == "c" else r"resource", font_size=16, color=col).next_to(b, DOWN,
-                                                                                                    buff=0.1)
-            chain.add(VGroup(b, cap))
-        chain.arrange(RIGHT, buff=0.55).next_to(head, DOWN, buff=0.5)
-        links = VGroup(*[Arrow(chain[i][0].get_right(), chain[i + 1][0].get_left(), buff=0.05, color=GREY_B,
-                               stroke_width=2, max_tip_length_to_length_ratio=0.25) for i in range(3)])
-        rname = VGroup(label(r"resource name:", font_size=20, color=GREY_A),
-                       mono("publishers/123/books/456", size=19, color=HEAD)).arrange(RIGHT, buff=0.2)
-        rname.next_to(chain, DOWN, buff=0.25)
-        rows = [[r"List", r"GET", r"/v1/publishers/123/books"], [r"Get", r"GET", r"/v1/publishers/123/books/456"],
-                [r"Create", r"POST", r"/v1/publishers/123/books"],
-                [r"Update", r"PATCH", r"/v1/publishers/123/books/456"],
-                [r"Delete", r"DELETE", r"/v1/publishers/123/books/456"],
-                [r"custom", r"POST", r"/v1/publishers/123/books/456:undelete"]]
-        colors = [[YES, WHITE, WHITE]] * 5 + [[LAM, WHITE, WHITE]]
-        tab = grid_table([r"method", r"HTTP", r"path"], rows, widths=[2.2, 2.0, 7.2], row_h=0.46, font_size=21,
-                         colors=colors, mono_cols=(1, 2))
-        tab.next_to(rname, DOWN, buff=0.35).set_x(0)
-        foot = wrapped_label(r"Google's API design guide: \ many nouns, \ few verbs; \ the same five standard methods "
-                             r"on every collection, \ for REST and gRPC alike, \ so clients, \ permissions and "
-                             r"documentation are built once", 12.4, font_size=20, color=WHITE).to_edge(DOWN, buff=0.35)
-        with self.voiceover(
-            "Google's API design guide turns these lessons into a style. <bookmark mark='a'/> An API is a hierarchy "
-            "of resources, collections and the resources inside them, named by paths like a file system. "
-            "<bookmark mark='b'/> Every collection gets the same standard methods, list, get, create, update and "
-            "delete, mapped onto HTTP's methods with chapter four's safety and idempotency. <bookmark mark='c'/> "
-            "Anything else becomes a custom method after a colon, like undelete. <bookmark mark='d'/> The point is "
-            "predictability: with the same few verbs over different nouns, client libraries, permissions and "
-            "documentation are built once, for every API."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(c) for c in chain], lag_ratio=0.3), Create(links), run_time=2)
-            self.play(FadeIn(rname))
-            vo.wait_until("b")
-            self.play(FadeIn(VGroup(*tab.cells[0])), Create(tab.rule))
-            self.play(LaggedStart(*[FadeIn(VGroup(*tab.cells[r])) for r in range(1, 6)], lag_ratio=0.3), run_time=2)
-            vo.wait_until("c")
-            self.play(FadeIn(VGroup(*tab.cells[6])))
-            vo.wait_until("d")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def contracts(self):
         head = label(r"Consumer-driven contract tests", font_size=36).to_edge(UP, buff=0.3)
@@ -300,53 +249,6 @@ class Design(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def postel(self):
-        head = label(r"Be liberal in what you accept?", font_size=36).to_edge(UP, buff=0.3)
-        c = np.array([-3.7, -0.3, 0])
-        spec = Circle(radius=1.0, color=YES, stroke_width=3).set_fill(YES, 0.15).move_to(c)
-        sl = label(r"the specification", font_size=17, color=YES).move_to(c)
-        acc = Ellipse(width=2.0, height=2.0, color=HEAD, stroke_width=2.5).move_to(c)
-        big = Ellipse(width=5.4, height=3.6, color=HEAD, stroke_width=2.5).move_to(c)
-        al = label(r"what receivers accept", font_size=17, color=HEAD).next_to(big, UP, buff=0.1)
-        bad_pts = [(-1.7, 0.6), (1.6, 0.9), (-2.0, -0.5), (1.8, -0.4), (0.3, -1.4), (-0.9, 1.35)]
-        bad = VGroup(*[Dot(c + np.array([x, y, 0]), radius=0.08, color=NO) for x, y in bad_pts])
-        crosses = VGroup(*[Cross(scale_factor=0.12, stroke_color=NO, stroke_width=4).move_to(d) for d in bad])
-        real = DashedVMobject(Ellipse(width=5.4, height=3.6, color=NO, stroke_width=2.5).move_to(c), num_dashes=40)
-        rl = label(r"the real protocol", font_size=17, color=NO).next_to(big, DOWN, buff=0.1)
-        notes = VGroup(
-            wrapped_label(r"Jon Postel, \ TCP's specification \ (RFC 793, \ 1981): \ ``be conservative in what you do, "
-                          r"\ be liberal in what you accept from others''", 5.4, font_size=21, color=WHITE),
-            wrapped_label(r"every tolerated mistake is observable behaviour: \ senders come to depend on it, \ and "
-                          r"each new receiver must tolerate it too \ (Hyrum's law again)", 5.4, font_size=21,
-                          color=NO),
-            wrapped_label(r"RFC 9413 \ (Thomson and Schinazi, \ 2023): \ maintain protocols actively, \ and reject "
-                          r"what the specification does not allow, \ early and visibly, \ while mistakes are cheap "
-                          r"to fix", 5.4, font_size=21, color=YES),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.35).to_edge(RIGHT, buff=0.4)
-        ill = label(r"schematic", font_size=16, color=GREY_B).to_corner(DL, buff=0.4)
-        with self.voiceover(
-            "One old rule pulls the other way. <bookmark mark='a'/> Jon Postel's robustness principle, from TCP's "
-            "specification of 1981: be conservative in what you do, be liberal in what you accept from others. "
-            "<bookmark mark='b'/> But every tolerated mistake is "
-            "observable behaviour. Senders come to depend on it, every new receiver must tolerate it too, and the "
-            "real protocol becomes the specification plus every accident anyone accepted. <bookmark mark='c'/> RFC "
-            "9413, by Martin Thomson and David Schinazi in 2023, argues for the opposite: maintain protocols "
-            "actively, and reject what they do not allow, early and visibly, while mistakes are cheap to fix."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(spec), FadeIn(sl), FadeIn(ill))
-            vo.wait_until("a")
-            self.play(FadeIn(notes[0]), FadeIn(acc))
-            self.play(Transform(acc, big), FadeIn(al), run_time=1.5)
-            vo.wait_until("b")
-            self.play(FadeIn(notes[1]), LaggedStart(*[FadeIn(d, scale=0.3) for d in bad], lag_ratio=0.25))
-            self.play(Create(real), FadeIn(rl))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[2]))
-            self.play(FadeOut(real), FadeOut(rl), FadeOut(al),
-                      Transform(acc, Ellipse(width=2.0, height=2.0, color=HEAD, stroke_width=2.5).move_to(c)),
-                      ReplacementTransform(bad, crosses), run_time=1.5)
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, KERN, LAM)
