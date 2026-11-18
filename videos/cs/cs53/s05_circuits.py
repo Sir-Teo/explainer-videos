@@ -93,24 +93,18 @@ def circuit(columns, nq, x0, dx, y0, dy, wire_len=None, size=26, box=0.5):
     return wires, cols, ys
 
 
-class Circuits(VoiceoverScene):
+class Circuits(WatchScene):
     def construct(self):
         self.card()
         self.reading()
         self.exact()
         self.dense()
-        self.kitaev()
         self.simulator()
-        self.practice()
 
     def card(self):
-        card = chapter_card(4, r"Circuits and universality", r"Which gates are enough?", lit=(1989, 1995, 1997),
-                            extra=((1989, r"Deutsch: \ quantum circuits"),
+        self.chapter(4, r"Circuits and universality", r"Which gates are enough?", lit=(1989, 1995, 1997), extra=((1989, r"Deutsch: \ quantum circuits"),
                                    (1995, r"Barenco et al.: \ CNOT and one-qubit gates"),
-                                   (1997, r"Kitaev: \ the Solovay--Kitaev theorem")), part=PART)
-        with self.voiceover("Chapter four. Circuits and universality. Which gates are enough?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (1997, r"Kitaev: \ the Solovay--Kitaev theorem")), part=PART, said="Chapter four. Circuits and universality. Which gates are enough?")
 
     def reading(self):
         head = label(r"Reading a circuit", font_size=36).to_edge(UP, buff=0.3)
@@ -213,6 +207,9 @@ class Circuits(VoiceoverScene):
         self.clear_scene()
 
     def dense(self):
+        self.ask(r"Can $H$ and $T$ alone approximate \\ every one-qubit gate?", [r"no", r"yes"], 1,
+                 say="Two fixed gates, H and T. Can products of them approximate every one-qubit rotation?",
+                 reveal="Yes: T H is a rotation by an irrational angle, so its powers come arbitrarily close to anything.")
         head = label(r"Two gates approximate every rotation", font_size=36).to_edge(UP, buff=0.3)
         B = Bloch(center=[-3.4, -0.45, 0], radius=2.35)
         Hm = np.array([[1, 1], [1, -1]], dtype=complex) / math.sqrt(2)
@@ -276,72 +273,6 @@ class Circuits(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def kitaev(self):
-        head = label(r"How many gates for accuracy $\varepsilon$?", font_size=36).to_edge(UP, buff=0.3)
-        names = [r"U_{k-1}", r"W^\dagger", r"V^\dagger", r"W", r"V"]
-        blocks = VGroup()
-        for i, nm in enumerate(names):
-            r = RoundedRectangle(width=1.25, height=0.75, corner_radius=0.1, stroke_color=DATA if i == 0 else LAM,
-                                 stroke_width=2, fill_color=BG, fill_opacity=1)
-            blocks.add(VGroup(r, MathTex(nm, font_size=30, color=DATA if i == 0 else LAM).move_to(r)))
-        blocks.arrange(RIGHT, buff=0.18).move_to([-2.6, 2.2, 0])
-        wire = Line(blocks.get_left() + LEFT * 0.4, blocks.get_right() + RIGHT * 0.4, color=GREY_B, stroke_width=2)
-        lvl = label(r"each block: \ the previous level's approximation", font_size=17, color=GREY_B).next_to(
-            blocks, DOWN, buff=0.15)
-        expl = wrapped_label(r"the leftover error of $U_{k-1}$ is a small rotation; \ write it as a commutator "
-                             r"$V W V^\dagger W^\dagger$ of two rotations of size about $\sqrt{\varepsilon}$, \ each "
-                             r"approximated one level down", 4.6, font_size=18, color=WHITE).move_to([4.4, 2.0, 0])
-        expo = math.log(5) / math.log(1.5)
-        rows = VGroup(
-            MathTex(r"\varepsilon_k", r"\approx", r"\varepsilon_{k-1}^{3/2}", r",\qquad", r"\ell_k", r"=",
-                    r"5\,\ell_{k-1}", font_size=32),
-            MathTex(r"\varepsilon_k", r"\approx", r"\varepsilon_0^{(3/2)^k}", r",\qquad", r"\ell_k", r"=",
-                    r"5^k\,\ell_0", font_size=32),
-            MathTex(r"(3/2)^k", r"\approx", r"\frac{\log(1/\varepsilon)}{\log(1/\varepsilon_0)}", font_size=32),
-            MathTex(r"\ell_k", r"\propto", r"5^k", r"=", r"\big((3/2)^k\big)^{\log 5 / \log(3/2)}", r"\propto",
-                    rf"\log^{{{expo:.2f}}}(1/\varepsilon)", font_size=32),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.42).move_to([-1.6, -0.62, 0])
-        rows[3][6].set_color(HEAD)
-        whys = VGroup(
-            label(r"error to the power $\tfrac32$, \ five times the gates \ (constants ignored)", font_size=18,
-                  color=GREY_B),
-            label(r"unroll $k$ levels", font_size=18, color=GREY_B),
-            label(r"levels needed for accuracy $\varepsilon$", font_size=18, color=GREY_B),
-            label(r"polylogarithmic in $1/\varepsilon$", font_size=18, color=HEAD),
-        )
-        for w, r in zip(whys, rows):
-            w.next_to(r, RIGHT, buff=0.35)
-            if w.get_right()[0] > 6.85:
-                w.next_to(r, DOWN, buff=0.06).align_to(r, LEFT)
-        foot = wrapped_label(r"Solovay and Kitaev, \ independently, \ 1990s; \ this recursion: \ Dawson and Nielsen; "
-                             r"\ for $H$ and $T$, \ number-theoretic methods need only a multiple of "
-                             r"$\log(1/\varepsilon)$ gates \ (Ross and Selinger, \ 2016)", 12.4, font_size=18,
-                             color=GREY_A).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "But we also want few gates. Robert Solovay and Alexei Kitaev showed, independently, that the count "
-            "grows only like a power of log one over the accuracy. <bookmark mark='a'/> The proof is a recursion: "
-            "approximate roughly, then cancel the small leftover error with a commutator of two rotations of about "
-            "its square root, each approximated one level down. <bookmark mark='b'/> Each level raises the error to "
-            "the power three halves and multiplies the length by five. <bookmark mark='c'/> Unroll k levels. "
-            "<bookmark mark='d'/> Reaching accuracy epsilon needs three halves to the k to grow like log one over "
-            "epsilon. <bookmark mark='e'/> So the length grows like that logarithm to the power about four. For H "
-            "and T, later number-theoretic methods need only a multiple of the logarithm."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Create(wire), LaggedStart(*[FadeIn(b) for b in blocks], lag_ratio=0.2), FadeIn(lvl))
-            self.play(FadeIn(expl))
-            vo.wait_until("b")
-            self.play(Write(rows[0]), FadeIn(whys[0]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[0].copy(), rows[1]), FadeIn(whys[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(rows[2]), FadeIn(whys[2]))
-            vo.wait_until("e")
-            self.play(FadeIn(rows[3]), FadeIn(whys[3]))
-            self.play(Circumscribe(rows[3][6], color=HEAD), FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
     def simulator(self):
         head = label(r"Our state-vector simulator", font_size=36).to_edge(UP, buff=0.3)
@@ -410,55 +341,13 @@ class Circuits(VoiceoverScene):
             self.play(FadeIn(notes[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"Why can't an unknown qubit be copied?", r"Cloning isn't linear"),
+             (r"How much memory to simulate $n$ qubits?", r"$2^n$ amplitudes")],
+            narration="Checkpoint. Why can't an unknown quantum state be copied? And how much memory does simulating n qubits take?",
+            answers_narration="A copying machine would have to be linear and square its input, which is impossible. And two "
+                              "to the n complex amplitudes.")
 
-    def practice(self):
-        b = load("bell")
-        head = label(r"The same circuit, \ three ways", font_size=36).to_edge(UP, buff=0.3)
-
-        def panel(title, lines, col, w=4.1):
-            body = code_block(lines, size=14)
-            t = label(title, font_size=20, color=col)
-            inner = VGroup(t, body).arrange(DOWN, aligned_edge=LEFT, buff=0.2)
-            fr = RoundedRectangle(width=w, height=2.3, corner_radius=0.12, stroke_color=col, stroke_width=1.8,
-                                  fill_color=BG, fill_opacity=1)
-            inner.move_to(fr).align_to(fr, LEFT).shift(RIGHT * 0.2)
-            return VGroup(fr, inner)
-        panels = VGroup(
-            panel(r"ours", ["s = State(2)", "s.apply(H, 0)", "s.cnot(0, 1)", "s.probs()"], YES),
-            panel(r"Qiskit \ (IBM)", ["qc = QuantumCircuit(2)", "qc.h(0)", "qc.cx(0, 1)", "qc.measure_all()"], DATA),
-            panel(r"Cirq \ (Google)", ["a, b = cirq.LineQubit.range(2)", "cirq.Circuit(", "    cirq.H(a),",
-                                      "    cirq.CNOT(a, b),", "    cirq.measure(a, b))"], LAM),
-        ).arrange(RIGHT, buff=0.25).next_to(head, DOWN, buff=0.45)
-        amps = ", \\ ".join(f"{a[0]:.3f}" for a in b["amplitudes"])
-        out = label(rf"our amplitudes for $|00\rangle, |01\rangle, |10\rangle, |11\rangle$: \ {amps}", font_size=21,
-                    color=YES).next_to(panels, DOWN, buff=0.4)
-        notes = VGroup(
-            wrapped_label(r"a real device returns only samples of the measured bits, \ about half 00 and half 11, "
-                          r"\ never the amplitudes", 12.4, font_size=19, color=WHITE),
-            wrapped_label(r"before running, \ a compiler rewrites the circuit into the machine's native gates and "
-                          r"routes two-qubit gates to qubits that are physically connected", 12.4, font_size=19,
-                          color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.25).next_to(out, DOWN, buff=0.4)
-        with self.voiceover(
-            "Real programs use libraries that build these same circuits. <bookmark mark='a'/> Here is chapter "
-            "three's Bell circuit on our simulator, in IBM's Qiskit, and in Google's Cirq. <bookmark mark='b'/> Our "
-            "simulator prints the amplitudes: nought point seven zero seven on zero zero and on one one. <bookmark "
-            "mark='c'/> A real device never shows those. It returns samples of the measured bits, about half zero "
-            "zero and half one one. <bookmark mark='d'/> And before a circuit runs, a compiler rewrites it into the "
-            "machine's native gates, routing each two-qubit gate to physically connected qubits, inserting swaps "
-            "where needed."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(LaggedStart(*[FadeIn(p, shift=UP * 0.15) for p in panels], lag_ratio=0.4), run_time=2.4)
-            vo.wait_until("b")
-            self.play(FadeIn(out))
-            vo.wait_until("c")
-            self.play(FadeIn(notes[0]))
-            vo.wait_until("d")
-            self.play(FadeIn(notes[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES, BG, DATA, HEAD)

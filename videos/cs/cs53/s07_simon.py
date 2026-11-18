@@ -47,24 +47,18 @@ def meter(x, y, color=KERN, size=0.55):
     return VGroup(r, arc, Line([x, y - 0.12, 0], [x + 0.15, y + 0.13, 0], color=color, stroke_width=2))
 
 
-class Simon(VoiceoverScene):
+class Simon(WatchScene):
     def construct(self):
         self.card()
         self.bv()
         self.problem()
         self.circuit()
         self.solve()
-        self.separation()
 
     def card(self):
-        card = chapter_card(6, r"Bernstein--Vazirani and Simon", r"Can a quantum computer be exponentially faster?",
-                            lit=(1993, 1994),
-                            extra=((1993, r"Bernstein and Vazirani: \ quantum complexity theory"),
-                                   (1994, r"Simon: \ an exponential separation")), part=PART)
-        with self.voiceover("Chapter six. Bernstein–Vazirani and Simon. Can a quantum computer be exponentially "
-                            "faster?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"Bernstein--Vazirani and Simon", r"Can a quantum computer be exponentially faster?", lit=(1993, 1994), extra=((1993, r"Bernstein and Vazirani: \ quantum complexity theory"),
+                                   (1994, r"Simon: \ an exponential separation")), part=PART, said="Chapter six. Bernstein–Vazirani and Simon. Can a quantum computer be exponentially "
+                            "faster?")
 
     # ------------------------------------------------------------------ Bernstein-Vazirani
     def bv(self):
@@ -151,6 +145,10 @@ class Simon(VoiceoverScene):
 
     # ------------------------------------------------------------------ Simon's problem
     def problem(self):
+        self.ask(r"Simon's problem on $n$ bits. Classically about $2^{n/2}$ queries. \\ Quantum:", [r"the same",
+                 r"about $n$"], 1,
+                 say="Simon's problem: classically about two to the n over two queries. How many does the quantum algorithm need?",
+                 reveal="About n, plus classical linear algebra: an exponential gap.")
         sm = load("simon")
         n, s = sm["n"], sm["secret"]
         N = 2 ** n
@@ -363,72 +361,6 @@ class Simon(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ separation, and Shor
-    def separation(self):
-        head = label(r"An oracle separation, \ and the seed of Shor", font_size=36).to_edge(UP, buff=0.3)
-        ax = Axes(x_range=[0, 64, 16], y_range=[0, 10, 3], x_length=4.2, y_length=3.2,
-                  axis_config={"color": GREY_D, "include_numbers": False, "include_ticks": True})
-        ax.move_to([-4.2, 0.2, 0])
-        xt = VGroup(*[label(f"{v}", font_size=16, color=GREY_B).next_to(ax.c2p(v, 0), DOWN, buff=0.1)
-                      for v in (16, 32, 48, 64)])
-        yt = VGroup(*[MathTex(rf"10^{{{v}}}", font_size=20, color=GREY_B).next_to(ax.c2p(0, v), LEFT, buff=0.1)
-                      for v in (3, 6, 9)])
-        xl = label(r"$n$ \ (bits)", font_size=18, color=GREY_B).next_to(ax.x_axis, DOWN, buff=0.45)
-        yl = label(r"queries \ (log scale)", font_size=18, color=GREY_B).next_to(ax, UP, buff=0.15).align_to(ax, LEFT)
-        cl = ax.plot(lambda v: v / 2 * math.log10(2), x_range=[1, 64], color=NO, stroke_width=3)
-        ql = ax.plot(lambda v: math.log10(v), x_range=[1, 64], color=YES, stroke_width=3)
-        cll = label(r"classical: \ $2^{n/2}$", font_size=19, color=NO).next_to(ax.c2p(64, 64 / 2 * math.log10(2)),
-                                                                             UP, buff=0.1).shift(LEFT * 0.6)
-        qll = label(r"Simon: \ about $n$", font_size=19, color=YES).next_to(ax.c2p(64, math.log10(64)), UP,
-                                                                         buff=0.15).shift(LEFT * 0.6)
-        sh = note(r"the shapes of the two bounds; \ constants omitted", font_size=16).next_to(xl, DOWN, buff=0.1)
-        tab = grid_table(
-            [r"", r"Simon", r"Shor \ (chapter 9)"],
-            [[r"promise", r"$f(x) = f(x \oplus s)$", r"$f(x) = f(x + r)$"],
-             [r"group", r"bit strings, \ XOR", r"integers, \ addition"],
-             [r"transform", r"$H^{\otimes n}$", r"the QFT \ (chapter 7)"],
-             [r"one run gives", r"$y$ with $y \cdot s = 0$", r"$y \approx k \cdot 2^t / r$"],
-             [r"classical finish", r"elimination mod 2", r"continued fractions"]],
-            widths=[1.9, 2.5, 2.6], row_h=0.52, font_size=19, mono_cols=())
-        tab.move_to([3.15, 0.55, 0])
-        for r in range(1, 6):
-            tab.cells[r][0].set_color(GREY_A)
-            tab.cells[r][1].set_color(DATA)
-            tab.cells[r][2].set_color(LAM)
-        foot = VGroup(
-            wrapped_label(r"both find a hidden period of a function on a group: \ the \textbf{hidden subgroup "
-                          r"problem}, \ solved efficiently for abelian groups by the same recipe", 12.4, font_size=19,
-                          color=WHITE),
-            wrapped_label(r"the separation is relative to an oracle, \ a black box: \ it does not prove that quantum "
-                          r"computers beat classical ones on problems with no box \ (chapter 11)", 12.4,
-                          font_size=19, color=HEAD),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.2).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Simon's result was the first exponential separation between quantum and randomized classical "
-            "computation. <bookmark mark='a'/> On a logarithmic scale the gap is plain: the classical cost is two to "
-            "the n over two, a straight line climbing steeply, while the quantum cost grows like n. "
-            "<bookmark mark='b'/> And Simon's algorithm has exactly the shape of the one Peter Shor published the same "
-            "year. Replace exclusive-or by ordinary addition, and the hidden string by a hidden period r; replace "
-            "the Hadamards by the quantum Fourier transform, and linear algebra by continued fractions. "
-            "<bookmark mark='c'/> Both find a hidden period of a function on a group, and the same recipe solves that "
-            "for every abelian group. <bookmark mark='d'/> One caution. The separation is relative to a black box. "
-            "It does not prove that quantum computers beat classical ones on any problem stated without one, as "
-            "chapter eleven explains."
-        ) as vo:
-            self.play(FadeIn(head))
-            vo.wait_until("a")
-            self.play(Create(ax), FadeIn(xt), FadeIn(yt), FadeIn(xl), FadeIn(yl), FadeIn(sh))
-            self.play(Create(cl), Create(ql), FadeIn(cll), FadeIn(qll), run_time=2)
-            vo.wait_until("b")
-            self.play(FadeIn(tab.cells[0][0]), FadeIn(tab.cells[0][1]), FadeIn(tab.cells[0][2]), Create(tab.rule))
-            for r in range(1, 6):
-                self.play(*[FadeIn(c) for c in tab.cells[r]], run_time=0.6)
-            vo.wait_until("c")
-            self.play(FadeIn(foot[0]))
-            vo.wait_until("d")
-            self.play(FadeIn(foot[1]))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES, BG, DATA, HEAD)

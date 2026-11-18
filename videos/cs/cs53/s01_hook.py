@@ -14,11 +14,11 @@ def _bytes(n: int) -> str:
     return rf"{b} bytes"
 
 
-class Hook(VoiceoverScene):
+class Hook(WatchScene):
     def construct(self):
         self.feynman()
         self.thesis()
-        self.plan()
+        self.title(PART)
 
     def feynman(self):
         head = label(r"Simulating nature is exponentially hard", font_size=36).to_edge(UP, buff=0.3)
@@ -102,30 +102,6 @@ class Hook(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    def plan(self):
-        title = label(rf"Part {PART}: \ Quantum Computation", font_size=36).to_edge(UP, buff=0.3)
-        smap = series_map(current=PART, done=PART - 1).scale(0.92).next_to(title, DOWN, buff=0.35)
-        obj = objectives_card([
-            r"reversible computing, \ and the price of forgetting",
-            r"the qubit, \ the Bloch sphere and entanglement",
-            r"interference: \ Deutsch--Jozsa, \ Bernstein--Vazirani, \ Simon",
-            r"the quantum Fourier transform and phase estimation",
-            r"Shor factors 15 and 21; \ Grover searches",
-            r"error correction, \ and what quantum computers cannot do",
-        ], font_size=25).move_to(DOWN * 0.2)
-        with self.voiceover(
-            "This is Part 53 of Computer Science, Built. <bookmark mark='a'/> We start with the energy cost of "
-            "forgetting a bit, and computation that never forgets. Then the qubit, the Bloch sphere and "
-            "entanglement; interference as the resource behind every quantum algorithm; the quantum Fourier "
-            "transform, built from Part 19's butterflies; Shor's algorithm factoring fifteen and twenty-one on our "
-            "own simulator; Grover's search; error correction; and an honest account of what quantum computers "
-            "cannot do."
-        ) as vo:
-            self.play(FadeIn(title), FadeIn(smap))
-            vo.wait_until("a")
-            self.play(FadeOut(smap), FadeIn(obj))
-        self.wait(0.5)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES)

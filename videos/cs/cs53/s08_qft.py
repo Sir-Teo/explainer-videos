@@ -93,24 +93,19 @@ def qft_circuit(n, x0, y0, dx=0.66, dy=0.62, box=0.5, size=22):
     return wires, gates, ys
 
 
-class Qft(VoiceoverScene):
+class Qft(WatchScene):
     def construct(self):
         self.card()
         self.definition()
         self.product()
-        self.butterfly()
         self.count()
         self.catch()
 
     def card(self):
-        card = chapter_card(7, r"The quantum Fourier transform", r"Can $2^n$ amplitudes be transformed with $n^2$ "
-                            r"gates?", lit=(1965, 1994),
-                            extra=((1965, r"Cooley and Tukey: \ the FFT"),
-                                   (1994, r"Coppersmith: \ the QFT circuit")), part=PART)
-        with self.voiceover("Chapter seven. The quantum Fourier transform. Can two to the n amplitudes be transformed "
-                            "with about n squared gates?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"The quantum Fourier transform", r"Can $2^n$ amplitudes be transformed with $n^2$ "
+                            r"gates?", lit=(1965, 1994), extra=((1965, r"Cooley and Tukey: \ the FFT"),
+                                   (1994, r"Coppersmith: \ the QFT circuit")), part=PART, said="Chapter seven. The quantum Fourier transform. Can two to the n amplitudes be transformed "
+                            "with about n squared gates?")
 
     # ------------------------------------------------------------------ the definition
     def definition(self):
@@ -253,76 +248,13 @@ class Qft(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ butterflies and gates
-    def butterfly(self):
-        head = label(r"From Part 19's butterflies to gates", font_size=36).to_edge(UP, buff=0.3)
-        N, nb = 8, 3
-        X = [-6.2, -4.75, -3.3, -1.85]
-        Y = [2.2 - 0.46 * i for i in range(N)]
-        nodes = VGroup(*[VGroup(*[Dot([x, y, 0], radius=0.05, color=GREY_B) for y in Y]) for x in X])
-        stages = VGroup()
-        tw = VGroup()
-        for s in range(nb):
-            d = N >> (s + 1)
-            g = VGroup()
-            for i in range(N):
-                j = i ^ d
-                g.add(Line([X[s], Y[i], 0], [X[s + 1], Y[j], 0], color=HEAD, stroke_width=1.6))
-                if i & d:
-                    g.add(Line([X[s], Y[i], 0], [X[s + 1], Y[i], 0], color=HEAD, stroke_width=1.6))
-                else:
-                    g.add(Line([X[s], Y[i], 0], [X[s + 1], Y[i], 0], color=HEAD, stroke_width=1.6))
-                # twiddles on the difference outputs, where nontrivial
-                block = i % (2 * d)
-                if block >= d and (block - d) > 0:
-                    tw.add(Dot([X[s + 1] - 0.18, Y[i], 0], radius=0.07, color=LAM))
-            stages.add(g)
-        ins = VGroup(*[label(f"{i}", font_size=16, color=GREY_A).next_to([X[0], y, 0], LEFT, buff=0.12)
-                       for i, y in enumerate(Y)])
-        outs = VGroup(*[label(f"{int(format(i, '03b')[::-1], 2)}", font_size=16, color=KERN).next_to(
-            [X[-1], y, 0], RIGHT, buff=0.12) for i, y in enumerate(Y)])
-        bl = label(r"radix-2 FFT, \ $N = 8$", font_size=18, color=GREY_B).next_to(nodes, DOWN, buff=0.2)
-        wires, gates, ys = qft_circuit(3, 0.0, 1.85, dx=0.78, dy=0.75)
-        qk = VGroup(*[MathTex(rf"q_{i}", font_size=24, color=GREY_A).next_to([0.0, y, 0], LEFT, buff=0.1)
-                      for i, y in enumerate(ys)])
-        cl = label(r"the QFT circuit, \ $n = 3$", font_size=18, color=GREY_B).next_to(wires, DOWN, buff=0.35)
-        notes = VGroup(
-            wrapped_label(r"a stage of butterflies pairs entries that differ in one bit: \ exactly a Hadamard on "
-                          r"that qubit \ (chapter 4's simulator)", 12.4, font_size=19, color=HEAD),
-            wrapped_label(r"the twiddle factors $\omega^k$ depend on the other bits: \ controlled phase rotations "
-                          r"$R_k = \mathrm{diag}(1, e^{2\pi i/2^k})$", 12.4, font_size=19, color=LAM),
-            wrapped_label(r"in this form of the FFT the outputs come out in bit-reversed order: \ the final swaps", 12.4,
-                          font_size=19,
-                          color=KERN),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.18).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "The circuit comes straight from Part 19's fast Fourier transform. <bookmark mark='a'/> The FFT works in "
-            "stages. Each stage combines entries in pairs that differ in one bit of their index: a butterfly. "
-            "<bookmark mark='b'/> On a quantum computer, mixing every pair that differs in one bit is a single gate, "
-            "a Hadamard on that qubit, as chapter four's simulator showed. <bookmark mark='c'/> Between stages the FFT "
-            "multiplies by twiddle factors, powers of omega that depend on the other bits of the index. Those become "
-            "phase rotations controlled by the other qubits. <bookmark mark='d'/> And in this form of the FFT the "
-            "outputs emerge in bit-reversed order, which the circuit fixes with swaps at the end. Each stage of N "
-            "over two butterflies has become a single Hadamard."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(nodes), FadeIn(ins))
-            vo.wait_until("a")
-            for st in stages:
-                self.play(Create(st), run_time=0.9)
-            self.play(FadeIn(bl))
-            vo.wait_until("b")
-            self.play(Create(wires), FadeIn(qk), FadeIn(cl))
-            self.play(*[FadeIn(g) for g, op in zip(gates, range(len(gates))) if len(g) == 2], FadeIn(notes[0]),
-                      Indicate(stages[0], color=WHITE))
-            vo.wait_until("c")
-            self.play(FadeIn(tw), *[FadeIn(g) for g in gates if len(g) == 4], FadeIn(notes[1]))
-            vo.wait_until("d")
-            self.play(FadeIn(outs), *[FadeIn(g) for g in gates if len(g) not in (2, 4)], FadeIn(notes[2]))
-        self.wait(0.4)
-        self.clear_scene()
 
     # ------------------------------------------------------------------ counting, and checking
     def count(self):
+        self.ask(r"The quantum Fourier transform on $n$ qubits. \\ Gates:", [r"$2^n$", r"about $n^2$",
+                 r"$n \, 2^n$"], 1,
+                 say="How many gates does the quantum Fourier transform need on n qubits?",
+                 reveal="About n squared over two, against n two to the n for the classical FFT.")
         q = load("qft")["rows"]
         head = label(r"$n(n+1)/2$ gates, \ plus swaps, \ for $2^n$ points", font_size=36).to_edge(UP, buff=0.3)
         n = 4

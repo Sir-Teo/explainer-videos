@@ -37,22 +37,17 @@ def phasor_chain(delta, T, length=4.0, color=HEAD):
     return g, total
 
 
-class Phase(VoiceoverScene):
+class Phase(WatchScene):
     def construct(self):
         self.card()
         self.eigen()
         self.powers()
         self.inverse()
         self.result()
-        self.uses()
 
     def card(self):
-        card = chapter_card(8, r"Phase estimation", r"How do we read an eigenvalue?", lit=(1995, 1998),
-                            extra=((1995, r"Kitaev: \ phase estimation"),
-                                   (1998, r"Cleve et al.: \ with the QFT")), part=PART)
-        with self.voiceover("Chapter eight. Phase estimation. How do we read an eigenvalue?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(8, r"Phase estimation", r"How do we read an eigenvalue?", lit=(1995, 1998), extra=((1995, r"Kitaev: \ phase estimation"),
+                                   (1998, r"Cleve et al.: \ with the QFT")), part=PART, said="Chapter eight. Phase estimation. How do we read an eigenvalue?")
 
     # ------------------------------------------------------------------ an eigenvalue is a phase
     def eigen(self):
@@ -263,6 +258,9 @@ class Phase(VoiceoverScene):
 
     # ------------------------------------------------------------------ our run
     def result(self):
+        self.ask(r"Phase $0.3$, six counting qubits. \\ The likeliest outcome:", [r"$19$", r"$30$", r"$64$"], 0,
+                 say="Estimate the phase point three with six counting qubits, sixty-four outcomes. Which outcome is likeliest?",
+                 reveal="Nineteen: point three times sixty-four is nineteen point two.")
         ph = load("phase")
         th, t, P = ph["theta"], ph["t"], ph["probs"]
         T = 2 ** t
@@ -326,65 +324,13 @@ class Phase(VoiceoverScene):
             self.play(FadeIn(notes[1]))
         self.wait(0.4)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does phase kickback do?", r"Puts $f(x)$ into a phase"),
+             (r"What does phase estimation read?", r"An eigenvalue's angle, in binary")],
+            narration="Checkpoint. What does phase kickback do? And what does phase estimation read out?",
+            answers_narration="It writes f of x into the phase of the input register. And the angle of an eigenvalue, as "
+                              "bits, through the inverse Fourier transform.")
 
-    # ------------------------------------------------------------------ uses, and the cost
-    def uses(self):
-        t = load("phase")["t"]
-        head = label(r"Where phase estimation is used", font_size=36).to_edge(UP, buff=0.3)
-
-        def tile(title, body, col, w=4.1, h=2.45):
-            fr = RoundedRectangle(width=w, height=h, corner_radius=0.12, stroke_color=col, stroke_width=1.8)
-            tt = label(title, font_size=22, color=col)
-            bb = wrapped_label(body, w - 0.4, font_size=18, color=GREY_A)
-            VGroup(tt, bb).arrange(DOWN, buff=0.18).move_to(fr)
-            return VGroup(fr, tt, bb)
-        tiles = VGroup(
-            tile(r"factoring \ (chapter 9)", r"$U|y\rangle = |ay \bmod N\rangle$ has eigenvalues "
-                 r"$e^{2\pi i s/r}$: \ estimate $s/r$, \ then recover the order $r$; \ the powers $U^{2^k}$ are "
-                 r"cheap by repeated squaring \ (Part 30)", YES),
-            tile(r"chemistry \ (chapter 13)", r"$U = e^{-iHt}$ for a molecule's Hamiltonian $H$: \ the phases "
-                 r"give its energy levels, \ the numbers chemists want", DATA),
-            tile(r"counting \ (chapter 10)", r"Grover's step is a rotation; \ estimating its angle counts the "
-                 r"solutions \ (Brassard, \ H{\o}yer and Tapp, \ 1998)", LAM),
-        ).arrange(RIGHT, buff=0.25).next_to(head, DOWN, buff=0.4)
-        # the cost: 2^t - 1 applications of U
-        unit = 0.17
-        segs = VGroup()
-        cols = [DATA, LAM, KERN, YES, HEAD, NO]
-        for k in range(t):
-            segs.add(Rectangle(width=unit * 2 ** k, height=0.4, stroke_color=BG, stroke_width=1.5,
-                               fill_color=cols[k % len(cols)], fill_opacity=0.85))
-        segs.arrange(RIGHT, buff=0).move_to([0, -1.25, 0])
-        segl = VGroup(*[MathTex(rf"2^{{{k}}}", font_size=20, color=cols[k % len(cols)]).next_to(segs[k], UP,
-                                                                                               buff=0.08)
-                        for k in range(t) if 2 ** k * unit > 0.3])
-        cost = label(rf"the controlled powers: \ $1 + 2 + \cdots + 2^{{t-1}} = 2^t - 1 = {2 ** t - 1}$ applications of "
-                     rf"$U$ for $t = {t}$", font_size=20, color=WHITE).next_to(segs, DOWN, buff=0.2)
-        foot = wrapped_label(r"each bit of precision doubles the work unless $U^{2^k}$ has a shortcut; \ Kitaev's "
-                             r"original version \ (1995) \ used one control qubit at a time, \ estimating each "
-                             r"doubled angle from repeated runs and combining them classically", 12.4, font_size=19, color=HEAD).to_edge(DOWN, buff=0.3)
-        with self.voiceover(
-            "Phase estimation is the workhorse of quantum algorithms. <bookmark mark='a'/> Shor's algorithm in the "
-            "next chapter is phase estimation of multiplication by a modulo N, whose eigenvalues reveal the order "
-            "we need. <bookmark mark='b'/> In chemistry, the phases of a molecule's time evolution give its energy "
-            "levels. <bookmark mark='c'/> Applied to Grover's rotation, it counts solutions. <bookmark mark='d'/> But "
-            "precision is not free. The controlled powers apply U one, two, four, and up to thirty-two times: "
-            "sixty-three applications for six bits, and each further bit doubles the work, unless the powers have a "
-            "shortcut, as modular exponentiation does by repeated squaring. <bookmark mark='e'/> Alexei Kitaev's "
-            "original version of 1995 used one control qubit at a time, estimating each doubled angle from repeated "
-            "runs and combining the answers classically."
-        ) as vo:
-            self.play(FadeIn(head))
-            for mk, tl in zip("abc", tiles):
-                vo.wait_until(mk)
-                self.play(FadeIn(tl, shift=UP * 0.15))
-            vo.wait_until("d")
-            self.play(LaggedStart(*[GrowFromEdge(s, LEFT) for s in segs], lag_ratio=0.5), FadeIn(segl), run_time=2.5)
-            self.play(FadeIn(cost))
-            vo.wait_until("e")
-            self.play(FadeIn(foot))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (KERN, LAM, NO, YES, BG, DATA, HEAD, mono, cm)

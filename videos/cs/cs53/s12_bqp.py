@@ -38,23 +38,18 @@ def event_card(year, text, col, w=4.0):
     return VGroup(fr, body)
 
 
-class Bqp(VoiceoverScene):
+class Bqp(WatchScene):
     def construct(self):
         self.card()
         self.definition()
         self.inclusions()
         self.np_complete()
         self.supremacy()
-        self.limits()
 
     def card(self):
-        card = chapter_card(11, r"What quantum computers cannot do", r"Where does BQP sit among the classes?",
-                            lit=(1993, 2019), extra=((1993, r"Bernstein and Vazirani: \ BQP"),
-                                                     (2019, r"a first supremacy claim")), part=PART)
-        with self.voiceover("Chapter eleven. What quantum computers cannot do. Where does BQP sit among the "
-                            "classes?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(11, r"What quantum computers cannot do", r"Where does BQP sit among the classes?", lit=(1993, 2019), extra=((1993, r"Bernstein and Vazirani: \ BQP"),
+                                                     (2019, r"a first supremacy claim")), part=PART, said="Chapter eleven. What quantum computers cannot do. Where does BQP sit among the "
+                            "classes?")
 
     # ------------------------------------------------------------------ the definition
     def definition(self):
@@ -181,6 +176,10 @@ class Bqp(VoiceoverScene):
 
     # ------------------------------------------------------------------ NP-complete problems
     def np_complete(self):
+        self.ask(r"Can quantum computers solve \\ NP-complete problems quickly?", [r"yes",
+                 r"unknown, and believed not"], 1,
+                 say="Can a quantum computer solve NP-complete problems in polynomial time?",
+                 reveal="Nobody knows, and the evidence says no: Grover's square root is optimal for blind search.")
         gs = load("gscale")["rows"][-1]
         head = label(r"NP-complete problems: \ no known quantum shortcut", font_size=36).to_edge(UP, buff=0.3)
         np_box = RoundedRectangle(width=6.6, height=4.6, corner_radius=0.2, stroke_color=DATA, stroke_width=2.4)
@@ -292,88 +291,6 @@ class Bqp(VoiceoverScene):
         self.wait(0.4)
         self.clear_scene()
 
-    # ------------------------------------------------------------------ limits on every quantum algorithm
-    def limits(self):
-        head = label(r"Limits that bind every quantum algorithm", font_size=36).to_edge(UP, buff=0.3)
-        tab = grid_table([r"problem", r"classical queries", r"quantum queries"],
-                         [[r"search \ (OR of $N$ bits)", r"$N$", r"$\Theta(\sqrt N)$ \ (chapter 10)"],
-                          [r"parity of $N$ bits", r"$N$", r"$N/2$"],
-                          [r"Simon \ (a promise)", r"$\Omega(2^{n/2})$", r"$O(n)$ \ (chapter 6)"]],
-                         widths=[2.8, 1.9, 2.4], row_h=0.62, font_size=20, mono_cols=())
-        tab.next_to(head, DOWN, buff=0.5).to_edge(LEFT, buff=0.35)
-        for r in range(1, 4):
-            tab.cells[r][1].set_color(NO)
-            tab.cells[r][2].set_color(YES)
-        tl = wrapped_label(r"without a promise, \ quantum queries save at most a polynomial: \ $D(f) = O(Q(f)^6)$ "
-                           r"\ (Beals, \ Buhrman, \ Cleve, \ Mosca and de Wolf, \ 1998)", 7.0, font_size=20,
-                           color=HEAD).next_to(tab, DOWN, buff=0.3).align_to(tab, LEFT)
-        fs = 31
-        rows = VGroup(
-            MathTex(r"\alpha_y(x)", r":\ \deg", r"\le", r"T", font_size=fs),
-            MathTex(r"P_{\text{acc}}(x) = \sum_y |\alpha_y(x)|^2", r":\ \deg", r"\le", r"2T", font_size=fs),
-            MathTex(r"\text{parity}", r":\ \deg", r"\ge", r"N", r"\;\Rightarrow\; T \ge N/2", font_size=fs),
-        ).arrange(DOWN, aligned_edge=LEFT, buff=0.75)
-        rows.next_to(head, DOWN, buff=0.6).align_to([1.0, 0, 0], LEFT)
-        rows[2][4].set_color(YES)
-        whys = VGroup(
-            wrapped_label(r"each query multiplies by $(-1)^{x_i} = 1 - 2x_i$: \ after $T$ queries, \ amplitudes are "
-                          r"polynomials of degree $\le T$ in the input bits", 5.6, font_size=19, color=GREY_B),
-            label(r"squaring doubles the degree", font_size=19, color=GREY_B),
-            wrapped_label(r"parity flips with every bit: \ any approximation has degree $N$; \ Deutsch's trick on "
-                          r"pairs \ (chapter 5) \ meets the bound", 5.6, font_size=19, color=GREY_B))
-        for w_, r in zip(whys, rows):
-            w_.next_to(r, DOWN, buff=0.1).align_to(r, LEFT).shift(RIGHT * 0.1)
-        n6 = 6
-        pax = Axes(x_range=[0, n6, 1], y_range=[0, 1, 0.5], x_length=4.6, y_length=1.5,
-                   axis_config={"color": GREY_D, "include_numbers": False, "include_ticks": True})
-        pax.next_to(tl, DOWN, buff=0.75).align_to(tab, LEFT).shift(RIGHT * 0.5)
-        pxt = VGroup(*[label(f"{k}", font_size=16, color=GREY_B).next_to(pax.c2p(k, 0), DOWN, buff=0.08)
-                       for k in range(n6 + 1)])
-        pxl = label(r"number of ones in $x$", font_size=17, color=GREY_B).next_to(pxt, DOWN, buff=0.08)
-        half = DashedLine(pax.c2p(0, 0.5), pax.c2p(n6, 0.5), color=GREY_C, dash_length=0.06)
-        hl = MathTex(r"\tfrac12", font_size=20, color=GREY_B).next_to(pax.c2p(0, 0.5), LEFT, buff=0.1)
-        pdots = VGroup(*[Dot(pax.c2p(k, 0.15 if k % 2 == 0 else 0.85), radius=0.07, color=NO if k % 2 == 0 else YES)
-                         for k in range(n6 + 1)])
-        pcurve = pax.plot(lambda t: 0.5 - 0.35 * math.cos(PI * t), x_range=[0, n6, 0.02], color=LAM,
-                          stroke_width=2.5)
-        xmarks = VGroup(*[Dot(pax.c2p(k + 0.5, 0.5), radius=0.05, color=KERN) for k in range(n6)])
-        pcap = wrapped_label(r"$P_{\text{acc}}$ must sit below $\tfrac13$ on even parity and above $\tfrac23$ on "
-                             r"odd, \ so it crosses $\tfrac12$ at least $N$ times: \ degree $\ge N$", 5.6,
-                             font_size=18, color=GREY_A)
-        pill = note(rf"illustrative: \ $N = {n6}$, \ after averaging over inputs with the same number of ones",
-                    font_size=16).next_to(pxl, DOWN, buff=0.08).align_to(pax, LEFT)
-        pcap.next_to(whys[2], DOWN, buff=0.45).align_to(rows, LEFT)
-        hol = wrapped_label(r"\textbf{Holevo} \ (1973): \ $n$ qubits carry at most $n$ classical bits; \ the $2^n$ "
-                            r"amplitudes are real, \ but a measurement yields $n$ bits", 12.4, font_size=20,
-                            color=LAM).to_edge(DOWN, buff=0.25)
-        with self.voiceover(
-            "Two limits bind every quantum algorithm. <bookmark mark='a'/> The first is the polynomial "
-            "method of Beals, Buhrman, Cleve, Mosca and de Wolf, from 1998. Each query multiplies amplitudes by "
-            "something linear in one input bit, so after T queries every amplitude is a polynomial of degree at most "
-            "T in the input bits, <bookmark mark='b'/> and the acceptance probability has degree at most two T. "
-            "<bookmark mark='c'/> Parity flips with every bit, so approximating it needs degree N, and computing "
-            "the parity of N bits needs N over two queries. Deutsch's trick from chapter five achieves exactly that. "
-            "<bookmark mark='d'/> Without a promise, quantum queries save at most a polynomial factor. Exponential "
-            "speedups, like Simon's and Shor's, need structure. <bookmark mark='e'/> The second is Holevo's bound: n "
-            "qubits carry at most n classical bits."
-        ) as vo:
-            self.play(FadeIn(head), FadeIn(tab.rule), FadeIn(VGroup(*tab.cells[0])),
-                      LaggedStart(*[FadeIn(VGroup(*c)) for c in tab.cells[1:]], lag_ratio=0.3))
-            vo.wait_until("a")
-            self.play(Write(rows[0]), FadeIn(whys[0]))
-            vo.wait_until("b")
-            self.play(TransformMatchingTex(rows[0].copy(), rows[1]), FadeIn(whys[1]))
-            vo.wait_until("c")
-            self.play(TransformMatchingTex(rows[1].copy(), rows[2]), FadeIn(whys[2]))
-            self.play(Create(pax), FadeIn(pxt), FadeIn(pxl), Create(half), FadeIn(hl), FadeIn(pdots), FadeIn(pill))
-            self.play(Create(pcurve), run_time=1.5)
-            self.play(LaggedStart(*[FadeIn(m_) for m_ in xmarks], lag_ratio=0.2), FadeIn(pcap))
-            vo.wait_until("d")
-            self.play(FadeIn(tl))
-            vo.wait_until("e")
-            self.play(FadeIn(hol))
-        self.wait(0.4)
-        self.clear_scene()
 
 
 _ = (BG, DATA, HEAD, KERN, LAM, NO, YES)

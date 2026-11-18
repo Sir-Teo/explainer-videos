@@ -46,7 +46,7 @@ def wires(ys, x0, x1):
     return VGroup(*[Line([x0, y, 0], [x1, y, 0], color=GREY_B, stroke_width=2) for y in ys])
 
 
-class Interference(VoiceoverScene):
+class Interference(WatchScene):
     def construct(self):
         self.card()
         self.twice()
@@ -56,17 +56,18 @@ class Interference(VoiceoverScene):
         self.resource()
 
     def card(self):
-        card = chapter_card(5, r"Interference as a resource", r"Where does a quantum speed-up come from?",
-                            lit=(1985, 1992, 1998),
-                            extra=((1985, r"Deutsch: \ one query for two values"),
+        self.chapter(5, r"Interference as a resource", r"Where does a quantum speed-up come from?", lit=(1985, 1992, 1998), extra=((1985, r"Deutsch: \ one query for two values"),
                                    (1992, r"Deutsch and Jozsa: \ $n$ bits"),
-                                   (1998, r"Cleve et al.: \ phase kickback")), part=PART)
-        with self.voiceover("Chapter five. Interference as a resource. Where does a quantum speed-up come from?"):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+                                   (1998, r"Cleve et al.: \ phase kickback")), part=PART, said="Chapter five. Interference as a resource. Where does a quantum speed-up come from?")
 
     # ------------------------------------------------------------------ two paths
     def twice(self):
+        self.wrong_idea(r"a quantum computer tries every answer in parallel",
+                        r"measurement shows one outcome: \\ interference must cancel the wrong ones",
+                        narration="The popular picture: a quantum computer tries every possible answer at once.",
+                        right_narration="A superposition holds every input, but a measurement shows only one outcome. An "
+                                        "algorithm works only if interference cancels the wrong answers first.")
+        self.clear_scene()
         head = label(r"A coin flipped twice, \ a Hadamard applied twice", font_size=36).to_edge(UP, buff=0.3)
 
         def tree(x0, root_tex, mid_tex, leaf_tex, edge_tex, edge_col, dx=1.75):
@@ -203,6 +204,10 @@ class Interference(VoiceoverScene):
 
     # ------------------------------------------------------------------ Deutsch
     def deutsch(self):
+        self.ask(r"$f$ takes one bit to one bit. Constant or balanced? \\ Classically 2 queries. Quantum:", [r"$2$",
+                 r"$1$"], 1,
+                 say="A function from one bit to one bit. Classically you need two queries to tell constant from balanced. Quantumly?",
+                 reveal="One, by interference.")
         head = label(r"Deutsch's problem: \ is $f(0) = f(1)$?", font_size=36).to_edge(UP, buff=0.3)
         ys = (2.25, 1.35)
         w = wires(ys, -6.0, -1.5)
