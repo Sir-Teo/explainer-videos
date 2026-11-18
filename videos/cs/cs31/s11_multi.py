@@ -13,19 +13,14 @@ def core(name, color, jobs, pos):
     return VGroup(c, t, q)
 
 
-class Multi(VoiceoverScene):
+class Multi(WatchScene):
     def construct(self):
         self.card()
         self.queues()
         self.stealing()
 
     def card(self):
-        card = chapter_card(10, r"Many processors", r"How do you schedule a machine with many cores?",
-                            lit=(1995, 1999), extra=((1995, r"Cilk"), (1999, r"work stealing, \ proved")),
-                            part=PART)
-        with self.voiceover("Chapter ten. Many processors."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(10, r"Many processors", r"How do you schedule a machine with many cores?", lit=(1995, 1999), extra=((1995, r"Cilk"), (1999, r"work stealing, \ proved")), part=PART, said="Chapter ten. Many processors.")
 
     def queues(self):
         sw = load("switch")
@@ -81,6 +76,10 @@ class Multi(VoiceoverScene):
         self.clear_scene()
 
     def stealing(self):
+        self.ask(r"Work stealing: an idle worker steals from \\ which end of a victim's deque?",
+                 [r"the newest task", r"the oldest task"], 1,
+                 say="An idle worker steals from another worker's queue of tasks. Which end does it take from?",
+                 reveal="The oldest, at the top: usually the biggest piece of work, and far from where the owner is busy.")
         d = load("smp")
         head = label(r"Work stealing", font_size=36).to_edge(UP, buff=0.3)
         rows = [[str(r["P"]), f"{r['makespan']:,}".replace(",", "{,}"), f"{r['bound']:,.0f}".replace(",", "{,}"),

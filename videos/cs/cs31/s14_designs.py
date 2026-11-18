@@ -23,21 +23,21 @@ def design(title, user, kernel, color, note):
     return VGroup(t, g, hw, n)
 
 
-class Designs(VoiceoverScene):
+class Designs(WatchScene):
     def construct(self):
         self.card()
         self.shapes()
         self.debate()
 
     def card(self):
-        card = chapter_card(13, r"Kernel designs", r"How much belongs inside the kernel?", lit=(1985, 1992, 1995, 2009),
-                            extra=((1985, r"Mach"), (1992, r"Tanenbaum--Torvalds"), (1995, r"L4; \ exokernel"),
-                                   (2009, r"seL4, \ verified")), part=PART)
-        with self.voiceover("Chapter thirteen. Kernel designs."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(13, r"Kernel designs", r"How much belongs inside the kernel?", lit=(1985, 1992, 1995, 2009), extra=((1985, r"Mach"), (1992, r"Tanenbaum--Torvalds"), (1995, r"L4; \ exokernel"),
+                                   (2009, r"seL4, \ verified")), part=PART, said="Chapter thirteen. Kernel designs.")
 
     def shapes(self):
+        self.ask(r"A microkernel keeps in kernel mode...", [r"everything", r"drivers and file systems",
+                 r"only IPC, scheduling and address spaces"], 2,
+                 say="A microkernel moves most of the operating system out of kernel mode. What stays in?",
+                 reveal="Little more than messages, scheduling and address spaces. Drivers and file systems become processes.")
         head = label(r"Four answers", font_size=36).to_edge(UP, buff=0.3)
         ds = VGroup(
             design(r"monolithic", [r"apps"], [r"file systems", r"drivers", r"network", r"memory, \ scheduling"], KERN,

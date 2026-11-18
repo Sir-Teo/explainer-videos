@@ -5,18 +5,14 @@ from videos.cs.cs31.common import (BG, CODE, DATA, HEAD, KERN, LAM, NO, PART, YE
                                    state_node)
 
 
-class Process(VoiceoverScene):
+class Process(WatchScene):
     def construct(self):
         self.card()
         self.anatomy()
         self.states()
 
     def card(self):
-        card = chapter_card(4, r"The process", r"What exactly is a running program?",
-                            lit=(1965, 1969), extra=((1965, r"Multics: \ processes"), (1969, r"Unix")), part=PART)
-        with self.voiceover("Chapter four. The process."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(4, r"The process", r"What exactly is a running program?", lit=(1965, 1969), extra=((1965, r"Multics: \ processes"), (1969, r"Unix")), part=PART, said="Chapter four. The process.")
 
     def anatomy(self):
         d = load("process")
@@ -81,6 +77,10 @@ class Process(VoiceoverScene):
         self.clear_scene()
 
     def states(self):
+        self.ask(r"A process waits for the disk. \\ Does it use the processor meanwhile?", [r"yes, it spins",
+                 r"no, it is blocked"], 1,
+                 say="A process asks for a block from the disk. While it waits, does it use the processor?",
+                 reveal="No. It is blocked, and the scheduler runs someone else.")
         d = load("pebbleos")["short"]
         head = label(r"The life of a process", font_size=36).to_edge(UP, buff=0.3)
         new = state_node(r"new", GREY_B, [-5.6, 1.2, 0], font=24)

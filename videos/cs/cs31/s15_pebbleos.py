@@ -6,7 +6,7 @@ from videos.cs.cs31.common import (BG, COST, DATA, HEAD, KERN, LAM, NO, PART, YE
 from videos.cs.cs31.compute import TOK
 
 
-class PebbleOS(VoiceoverScene):
+class PebbleOS(WatchScene):
     def construct(self):
         self.card()
         self.pipeline()
@@ -15,13 +15,12 @@ class PebbleOS(VoiceoverScene):
         self.ledger()
 
     def card(self):
-        card = chapter_card(14, r"PebbleOS runs the Job", r"What does a kernel cost the Job?", lit=(1973,),
-                            extra=((1973, r"pipes"),), part=PART)
-        with self.voiceover("Chapter fourteen. PebbleOS runs the Job."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(14, r"PebbleOS runs the Job", r"What does a kernel cost the Job?", lit=(1973,), extra=((1973, r"pipes"),), part=PART, said="Chapter fourteen. PebbleOS runs the Job.")
 
     def pipeline(self):
+        self.ask(r"Split the Job into two processes and a pipe. \\ Total instructions...", [r"go down", r"go up"], 1,
+                 say="We split the Job into two processes joined by a pipe. Do the total instructions go down or up?",
+                 reveal="Up: every word now crosses the pipe, through system calls and switches.")
         head = label(r"The Job as two processes: \ \texttt{tok | job}", font_size=34).to_edge(UP, buff=0.3)
         y = 1.7
         tape = flow_box(r"the tape", GREY_B, 1.5, 0.7, 19).move_to([-5.6, y, 0])

@@ -4,7 +4,7 @@ from explainer.cs import *  # noqa: F403
 from videos.cs.cs31.common import (BG, DATA, HEAD, KERN, LAM, NO, PART, YES, code, fit_right, load, mono)
 
 
-class Fork(VoiceoverScene):
+class Fork(WatchScene):
     def construct(self):
         self.card()
         self.api()
@@ -12,14 +12,12 @@ class Fork(VoiceoverScene):
         self.costs()
 
     def card(self):
-        card = chapter_card(6, r"fork, \ exec and wait", r"How does one process start another?",
-                            lit=(1969, 1973, 2019), extra=((1973, r"pipes"), (2019, r"``A fork() in the road''")),
-                            part=PART)
-        with self.voiceover("Chapter six. Fork, exec, and wait."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(6, r"fork, \ exec and wait", r"How does one process start another?", lit=(1969, 1973, 2019), extra=((1973, r"pipes"), (2019, r"``A fork() in the road''")), part=PART, said="Chapter six. Fork, exec, and wait.")
 
     def api(self):
+        self.ask(r"A process calls \texttt{fork()}. \\ How many times does it return?", [r"once", r"twice"], 1,
+                 say="A process calls fork. How many times does fork return?",
+                 reveal="Twice: once in the parent, with the child's id, and once in the child, with zero.")
         head = label(r"Unix's three calls", font_size=36).to_edge(UP, buff=0.3)
         y0 = 1.6
         sh = Line([-6, y0, 0], [5.8, y0, 0], color=DATA, stroke_width=5)
@@ -169,3 +167,9 @@ class Fork(VoiceoverScene):
                 self.play(FadeIn(ln))
         self.wait(0.3)
         self.clear_scene()
+        self.checkpoint(
+            [(r"What does the mode bit protect?", r"Privileged instructions, memory bounds, the timer"),
+             (r"Why separate fork from exec?", r"The child can rearrange its files before exec")],
+            narration="Checkpoint. What does the mode bit protect? And why does Unix separate fork from exec?",
+            answers_narration="Privileged instructions, memory bounds and the timer. And in between, the child can rewire its "
+                              "own files, which is how a shell builds pipes and redirections.")

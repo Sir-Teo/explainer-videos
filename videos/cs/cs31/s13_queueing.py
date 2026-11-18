@@ -19,7 +19,7 @@ def fcfs(arr, svc):
     return out
 
 
-class Queueing(VoiceoverScene):
+class Queueing(WatchScene):
     def construct(self):
         self.card()
         self.little()
@@ -30,11 +30,7 @@ class Queueing(VoiceoverScene):
         self.srpt()
 
     def card(self):
-        card = chapter_card(12, r"Queueing theory", r"Why is a busy server so slow?", lit=(1909, 1961, 1968),
-                            extra=((1909, r"Erlang"), (1961, r"Little's law"), (1968, r"SRPT is optimal")), part=PART)
-        with self.voiceover("Chapter twelve. Queueing theory."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(12, r"Queueing theory", r"Why is a busy server so slow?", lit=(1909, 1961, 1968), extra=((1909, r"Erlang"), (1961, r"Little's law"), (1968, r"SRPT is optimal")), part=PART, said="Chapter twelve. Queueing theory.")
 
     def little(self):
         q = load("queue")
@@ -152,6 +148,10 @@ class Queueing(VoiceoverScene):
         self.clear_scene()
 
     def hockey(self):
+        self.ask(r"One server at $90\%$ load, random arrivals. \\ Mean response time, in service times:",
+                 [r"$1.1$", r"$2$", r"$10$"], 2,
+                 say="One server, random arrivals, ninety percent busy. How many service times does a request take on average?",
+                 reveal="Ten: one over one minus rho.")
         q = load("queue")
         head = label(r"The hockey stick", font_size=36).to_edge(UP, buff=0.3)
         ax = Axes(x_range=[0, 1.0, 0.1], y_range=[0, 22, 5], x_length=6.6, y_length=4.0,

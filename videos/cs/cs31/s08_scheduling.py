@@ -8,7 +8,7 @@ def mean_tag(m, color, g):
     return label(rf"mean turnaround {m['turnaround']:.0f}", font_size=20, color=color).next_to(g, RIGHT, buff=0.3)
 
 
-class Scheduling(VoiceoverScene):
+class Scheduling(WatchScene):
     def construct(self):
         self.card()
         self.metrics()
@@ -17,12 +17,8 @@ class Scheduling(VoiceoverScene):
         self.preempt()
 
     def card(self):
-        card = chapter_card(7, r"Scheduling: \ FCFS, \ SJF, \ SRTF", r"Which job should run next?",
-                            lit=(1968,), extra=((1968, r"Schrage: \ SRPT is optimal"),), part=PART)
-        with self.voiceover("Chapter seven. Scheduling: first come first served, shortest job first, and shortest "
-                            "remaining time."):
-            self.play(FadeIn(card[0], shift=UP * 0.2), FadeIn(card[1]), FadeIn(card[2]))
-        self.play(FadeOut(card))
+        self.chapter(7, r"Scheduling: \ FCFS, \ SJF, \ SRTF", r"Which job should run next?", lit=(1968,), extra=((1968, r"Schrage: \ SRPT is optimal"),), part=PART, said="Chapter seven. Scheduling: first come first served, shortest job first, and shortest "
+                            "remaining time.")
 
     def metrics(self):
         head = label(r"What should a scheduler optimise?", font_size=36).to_edge(UP, buff=0.3)
@@ -53,6 +49,10 @@ class Scheduling(VoiceoverScene):
         self.clear_scene()
 
     def convoy(self):
+        self.ask(r"Jobs of 100, 10 and 10 ticks arrive together. \\ Run short ones first. Mean turnaround...",
+                 [r"about the same", r"less than half"], 1,
+                 say="A long job and two short ones arrive together. Run the short ones first. What happens to the mean turnaround?",
+                 reveal="It falls by more than half, and the long job finishes no later.")
         d = load("sched")
         head = label(r"First come, \ first served, \ and the convoy", font_size=34).to_edge(UP, buff=0.3)
         g1 = gantt(d["convoy_fcfs"]["segments"], 0, 120, width=9.0, h=0.6).move_to([-1.2, 1.3, 0])
