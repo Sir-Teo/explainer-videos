@@ -15,6 +15,13 @@ Translations live in each part's `zh_lines.py` (templates for lines computed fro
 - On-screen text lives in `videos/cs/cs_text_zh.json` (exact `strings`, `phrases` inside `\text{}`, regex
   `patterns`); `python tools/collect_text.py --check csN` lists what is still English, and
   `python tools/collect_text.py --lang zh csN` dry-runs the Chinese build.
+- The watch retrofit's set pieces (`self.ask`, `self.wrong_idea`, `self.checkpoint`, `self.chapter(said=...)`)
+  speak through keywords and show their question and options as TeX. `python tools/zh_watch.py csN` lists what of
+  them has no Chinese; `--need need.json` writes the list and `--put need.json zh.json` merges a
+  `{"id": "中文"}` file: spoken lines go to `videos/cs/csN/zh_watch.json` (which `zh_lines.py` folds into its
+  table), on-screen strings to the part's own `videos/cs/csN/text_zh.json`, which wins over the series table (short
+  options such as "the same" read differently from part to part). Keep the English line break `\\` in options, so
+  the card keeps its shape.
 
 ## Glossary
 

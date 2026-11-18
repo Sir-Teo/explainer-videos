@@ -28,8 +28,10 @@ The chapter-by-chapter plan, the production standard, and the maps onto a CS deg
 are in [`SYLLABUS.md`](SYLLABUS.md).
 
 **Status:** plan of record, draft 4 (2026-11-18: the watch standard, [`SYLLABUS.md`](SYLLABUS.md) §1.2, with Part 7
-as its pilot); Parts 1–61 are built or in progress (480p previews reviewed for Parts 1–42, to be retrofitted to the
-watch standard; narrated masters pending; instruments and computations exist for every part; see §8).
+as its pilot); Parts 1–61 are built or in progress, and all sixty-one are retrofitted to the watch standard's
+structure (cold opens, a prediction in every chapter, checkpoints, a refuted misconception, 44–60 minutes each, about
+57 hours in all, with Chinese for every new line); fade-in chapters are still being rebuilt as motion; narrated
+masters pending; instruments and computations exist for every part; see §8.
 
 **Course site.** `python tools/series_site.py --series cs` builds this course's GitHub Pages site into `_site/cs/`: a course
 map and a page per part with its chapters, notes, problems and sources, generated from this README's table of parts,
